@@ -1,91 +1,124 @@
 /* ============================================================
-   LOGIN — pick your name, then enter (or first-time set) a password.
-   No typing of names: the roster is preloaded; learners tap a name.
+   SIGN UP / LOG IN  (self-registration)
+   Learners create their own account: name, username, password.
+   Logging back in needs only username + password. If a teacher has
+   reset a password, the next login prompts the learner to set a new
+   one. No name picker, no readable passwords.
    ============================================================ */
 import { api } from "./api.js";
 import { setSession } from "./session.js";
 import { el, clear } from "./ui.js";
 
-const errMsg = code =>
-  code === "wrong_password" ? "That password isn’t right. Try again, or ask your teacher."
-  : code === "too_short" ? "Use at least 4 characters."
-  : code === "no_such_user" ? "Name not found — ask your teacher."
-  : "Something went wrong. Try again.";
+const errMsg = c => ({
+  wrong_password: "That password isn’t right. Try again, or ask your teacher to reset it.",
+  no_such_user: "No account with that username. New here? Tap Sign up.",
+  too_short: "Use at least 4 characters for your password.",
+  username_taken: "That username is taken — pick another.",
+  username_short: "Usernames need at least 3 characters.",
+  username_chars: "Usernames can only use letters, numbers, dots and underscores.",
+  no_name: "Please enter your name.",
+})[c] || "Something went wrong. Try again.";
 
 export function renderLogin(app, host) {
   clear(host);
   const wrap = el("div", "login");
-  wrap.innerHTML = `<div class="login-head"><div class="login-logo">σ</div><div><h1>Maths Quest</h1><p class="muted small">Grade 11 · homework</p></div></div>`;
+  wrap.innerHTML = `<div class="login-head"><div class="login-logo">π</div><div><h1>Maths Quest</h1><p class="muted small">Grade 11 · homework</p></div></div>`;
   const body = el("div", "login-body");
   wrap.appendChild(body);
   host.appendChild(wrap);
 
-  let students = [];
-  pickName();
+  showLogin();
 
-  async function pickName() {
-    clear(body);
-    body.appendChild(el("p", "login-prompt", "Who are you?"));
-    const search = el("input", "login-search");
-    search.type = "text"; search.placeholder = "Search your name…"; search.autocomplete = "off";
-    body.appendChild(search);
-    const listEl = el("div", "login-list");
-    body.appendChild(listEl);
-    const status = el("p", "muted small center", "Loading names…");
-    body.appendChild(status);
-    try { students = await api.listStudents(); status.remove(); }
-    catch { status.textContent = "Can’t reach the server. Check your connection."; return; }
+  function field(ph, type = "text") { const i = el("input", "login-input"); i.type = type; i.placeholder = ph; i.autocomplete = "off"; i.autocapitalize = "off"; return i; }
+  function errBox() { const e = el("p", "login-err"); e.hidden = true; return e; }
 
-    const paint = (filter) => {
-      clear(listEl);
-      const f = (filter || "").toLowerCase();
-      students.filter(s => s.display_name.toLowerCase().includes(f)).forEach(s => {
-        const b = el("button", "login-name", `${s.display_name}${s.has_password ? "" : ' <span class="newtag">new</span>'}`);
-        b.addEventListener("click", () => password(s));
-        listEl.appendChild(b);
-      });
-      if (!listEl.children.length) listEl.appendChild(el("p", "muted small center", "No match."));
-    };
-    paint("");
-    search.addEventListener("input", () => paint(search.value));
+  async function finishLogin(username, password, err, btn) {
+    setSession(username, password);
+    const ok = await app.refresh();
+    if (!ok) { err.hidden = false; err.textContent = "Something went wrong. Try again."; btn.disabled = false; return; }
+    app.go("hub");
   }
 
-  function password(student) {
+  /* ---- LOG IN ---- */
+  function showLogin() {
     clear(body);
-    const back = el("button", "link-btn back", "← Back");
-    back.addEventListener("click", pickName);
-    body.appendChild(back);
-    body.appendChild(el("p", "login-prompt", student.display_name));
-    const first = !student.has_password;
-    body.appendChild(el("p", "muted small", first
-      ? "First time here — create a password you’ll remember (at least 4 characters). You’ll use it every time you log in."
-      : "Enter your password."));
-    const pw = el("input", "login-input"); pw.type = "password"; pw.placeholder = "Password"; body.appendChild(pw);
-    let pw2 = null;
-    if (first) { pw2 = el("input", "login-input"); pw2.type = "password"; pw2.placeholder = "Confirm password"; body.appendChild(pw2); }
-    const err = el("p", "login-err"); err.hidden = true; body.appendChild(err);
-    const go = el("button", "btn primary big", first ? "Create & start" : "Log in");
-    body.appendChild(go);
-    const fail = m => { err.hidden = false; err.textContent = m; go.disabled = false; };
+    body.appendChild(el("p", "login-prompt", "Log in"));
+    const user = field("Username");
+    const pw = field("Password", "password");
+    const err = errBox();
+    const btn = el("button", "btn primary big", "Log in");
+    const swap = el("button", "link-btn login-swap", "New here? Sign up");
+    [user, pw, err, btn, swap].forEach(n => body.appendChild(n));
+    swap.addEventListener("click", showSignup);
+
+    async function submit() {
+      const u = user.value.trim(), p = pw.value;
+      if (!u) { err.hidden = false; err.textContent = "Enter your username."; return; }
+      if (!p) { err.hidden = false; err.textContent = "Enter your password."; return; }
+      err.hidden = true; btn.disabled = true;
+      let r;
+      try { r = await api.login(u, p); } catch { err.hidden = false; err.textContent = "Can’t reach the server."; btn.disabled = false; return; }
+      if (r.ok) return finishLogin(u, p, err, btn);
+      if (r.needsReset) { btn.disabled = false; return showReset(u); }
+      err.hidden = false; err.textContent = errMsg(r.error); btn.disabled = false;
+    }
+    btn.addEventListener("click", submit);
+    pw.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+  }
+
+  /* ---- SIGN UP ---- */
+  function showSignup() {
+    clear(body);
+    body.appendChild(el("p", "login-prompt", "Sign up"));
+    body.appendChild(el("p", "muted small", "Pick a name to show, a username to log in with, and a password (4+ characters)."));
+    const name = field("Your name (e.g. Jane S)");
+    const user = field("Username");
+    const pw = field("Password", "password");
+    const err = errBox();
+    const btn = el("button", "btn primary big", "Create account");
+    const swap = el("button", "link-btn login-swap", "Already have an account? Log in");
+    [name, user, pw, err, btn, swap].forEach(n => body.appendChild(n));
+    swap.addEventListener("click", showLogin);
+
+    async function submit() {
+      const nm = name.value.trim(), u = user.value.trim(), p = pw.value;
+      if (!nm) { err.hidden = false; err.textContent = "Enter your name."; return; }
+      if (u.length < 3) { err.hidden = false; err.textContent = errMsg("username_short"); return; }
+      if (p.length < 4) { err.hidden = false; err.textContent = errMsg("too_short"); return; }
+      err.hidden = true; btn.disabled = true;
+      let r;
+      try { r = await api.signup(u, nm, p); } catch { err.hidden = false; err.textContent = "Can’t reach the server."; btn.disabled = false; return; }
+      if (!r.ok) { err.hidden = false; err.textContent = errMsg(r.error); btn.disabled = false; return; }
+      return finishLogin(u, p, err, btn);   // log straight in
+    }
+    btn.addEventListener("click", submit);
+    pw.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+  }
+
+  /* ---- SET A NEW PASSWORD after the teacher reset it ---- */
+  function showReset(username) {
+    clear(body);
+    body.appendChild(el("p", "login-prompt", "Set a new password"));
+    body.appendChild(el("p", "muted small", `Your teacher reset the password for "${username}". Choose a new one (4+ characters).`));
+    const pw = field("New password", "password");
+    const pw2 = field("Confirm new password", "password");
+    const err = errBox();
+    const btn = el("button", "btn primary big", "Save & log in");
+    const back = el("button", "link-btn login-swap", "← Back");
+    [pw, pw2, err, btn, back].forEach(n => body.appendChild(n));
+    back.addEventListener("click", showLogin);
 
     async function submit() {
       const p = pw.value;
-      if (first) {
-        if (p.length < 4) return fail("Use at least 4 characters.");
-        if (pw2.value !== p) return fail("The two passwords don’t match.");
-      } else if (!p) return fail("Enter your password.");
-      go.disabled = true;
-      try {
-        const r = first ? await api.firstLogin(student.display_name, p) : await api.login(student.display_name, p);
-        if (!r.ok) return fail(first ? errMsg(r.error) : (r.firstLogin ? "Set a password first." : errMsg(r.error)));
-      } catch { return fail("Can’t reach the server."); }
-      setSession(student.display_name, p);
-      const ok = await app.refresh();
-      if (!ok) return fail("Something went wrong. Try again.");
-      app.go("hub");
+      if (p.length < 4) { err.hidden = false; err.textContent = errMsg("too_short"); return; }
+      if (pw2.value !== p) { err.hidden = false; err.textContent = "The two passwords don’t match."; return; }
+      err.hidden = true; btn.disabled = true;
+      let r;
+      try { r = await api.setPassword(username, p); } catch { err.hidden = false; err.textContent = "Can’t reach the server."; btn.disabled = false; return; }
+      if (!r.ok) { err.hidden = false; err.textContent = errMsg(r.error); btn.disabled = false; return; }
+      return finishLogin(username, p, err, btn);
     }
-    go.addEventListener("click", submit);
-    pw.addEventListener("keydown", e => { if (e.key === "Enter" && !first) submit(); });
-    if (pw2) pw2.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+    btn.addEventListener("click", submit);
+    pw2.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
   }
 }

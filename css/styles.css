@@ -91,6 +91,8 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .newtag{font-family:var(--font-display);font-weight:600;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#04241a;background:var(--good);padding:2px 7px;border-radius:99px;margin-left:6px}
 .login-err{color:var(--bad);font-size:13.5px;margin-bottom:10px}
 .login-body .back{align-self:flex-start;margin-bottom:4px;font-size:14px}
+.login-swap{display:block;margin:14px auto 0;color:var(--muted);font-size:14px;background:none;border:0;cursor:pointer}
+.login-swap:hover{color:var(--ink)}
 
 /* ---------- cards ---------- */
 .card{background:var(--panel);border:1px solid var(--brd);border-radius:var(--r-lg);padding:16px;backdrop-filter:blur(8px)}

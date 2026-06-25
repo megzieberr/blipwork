@@ -99,17 +99,10 @@ function learnerSection(rows, inactiveDays) {
   head.appendChild(csv);
   sec.appendChild(head);
 
-  const add = el("div", "adm-add");
-  const ai = el("input", "login-input"); ai.placeholder = "Add a learner (e.g. Jane S)";
-  const ab = el("button", "btn primary small", "Add");
-  const addNow = async () => { const n = ai.value.trim(); if (!n) return; ab.disabled = true; await api.adminAddStudent(pw, n); reload(); };
-  ab.addEventListener("click", addNow);
-  ai.addEventListener("keydown", e => { if (e.key === "Enter") addNow(); });
-  add.appendChild(ai); add.appendChild(ab);
-  sec.appendChild(add);
+  sec.appendChild(el("p", "muted small", "Learners sign themselves up. You never see their passwords — reset a forgotten one (they set a new one next login, progress kept) or remove a learner."));
 
   const table = el("table", "adm-table");
-  table.innerHTML = `<thead><tr><th>Name</th><th>Password</th><th>XP</th><th>Passed</th><th>Last active</th><th></th></tr></thead>`;
+  table.innerHTML = `<thead><tr><th>Name</th><th>Username</th><th>Password</th><th>XP</th><th>Passed</th><th>Last active</th><th></th></tr></thead>`;
   const tb = el("tbody");
   rows.forEach(r => {
     const passed = Object.entries(r.quests || {}).filter(([, p]) => p.passed).map(([q]) => q.replace("q", "")).sort();
@@ -117,13 +110,14 @@ function learnerSection(rows, inactiveDays) {
     const tr = el("tr");
     tr.innerHTML = `
       <td>${r.name}</td>
-      <td class="mono">${r.password != null ? r.password : '<span class="muted">— not set —</span>'}</td>
+      <td class="mono">${r.username}</td>
+      <td>${r.hasPassword ? '<span class="muted">•••• set</span>' : '<span class="adm-inactive">reset — awaiting new</span>'}</td>
       <td class="mono">${r.totalXp || 0}</td>
       <td class="mono">${passed.length ? passed.join(", ") : "—"}</td>
       <td class="${inactive ? "adm-inactive" : ""}">${fmtDate(r.lastActive)}${inactive ? " ⚠" : ""}</td>`;
     const act = el("td", "adm-actions");
     const rpw = el("button", "btn ghost small", "Reset pw");
-    rpw.addEventListener("click", async () => { if (!confirm(`Clear ${r.name}'s password so they pick a new one?`)) return; await api.adminResetPassword(pw, r.id); reload(); });
+    rpw.addEventListener("click", async () => { if (!confirm(`Reset ${r.name}'s password? They'll set a new one next login (progress kept).`)) return; await api.adminResetPassword(pw, r.id); reload(); });
     const rm = el("button", "btn ghost small danger", "Remove");
     rm.addEventListener("click", async () => { if (!confirm(`Remove ${r.name}? This deletes their progress.`)) return; await api.adminRemoveStudent(pw, r.id); reload(); });
     act.appendChild(rpw); act.appendChild(rm);
@@ -137,10 +131,10 @@ function learnerSection(rows, inactiveDays) {
 }
 
 function exportCsv(rows) {
-  const lines = [["Name", "Password", "Total XP", "Last active", "Passed quests"].join(",")];
+  const lines = [["Name", "Username", "Total XP", "Last active", "Passed quests"].join(",")];
   rows.forEach(r => {
     const passed = Object.entries(r.quests || {}).filter(([, p]) => p.passed).map(([q]) => q).join(" ");
-    const cells = [r.name, r.password || "", r.totalXp || 0, r.lastActive ? new Date(r.lastActive).toISOString() : "", passed];
+    const cells = [r.name, r.username, r.totalXp || 0, r.lastActive ? new Date(r.lastActive).toISOString() : "", passed];
     lines.push(cells.map(c => `"${String(c).replace(/"/g, '""')}"`).join(","));
   });
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });

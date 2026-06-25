@@ -31,7 +31,7 @@ export function renderPlay(app, host, params) {
   mount(screen, top, bar, xpPop, qhost);
   host.appendChild(screen);
 
-  const logStruggle = (concept) => { try { api.logStruggle(sess.name, sess.password, concept).catch(() => {}); } catch { /* fire and forget */ } };
+  const logStruggle = (concept) => { try { api.logStruggle(sess.username, sess.password, concept).catch(() => {}); } catch { /* fire and forget */ } };
 
   const st = { i: 0, firstTry: 0, xp: 0, streak: 0, total: skills.length };
   let attempt = 0;
@@ -76,7 +76,7 @@ export function renderPlay(app, host, params) {
     bar.querySelector("i").style.width = "100%";
     const score = st.total ? st.firstTry / st.total : 0;
     let res = { badgeEarned: false, alreadyPassed: false };
-    try { res = await api.submitQuest(sess.name, sess.password, quest.id, { score, xp: st.xp, total: st.total, correct: st.firstTry }); }
+    try { res = await api.submitQuest(sess.username, sess.password, quest.id, { score, xp: st.xp, total: st.total, correct: st.firstTry }); }
     catch { /* offline — still show results locally */ }
     await app.refresh();
     app.go("results", { chapter, quest, accent, score, xp: st.xp, firstTry: st.firstTry, total: st.total, badgeEarned: !!(res && res.badgeEarned), alreadyPassed: !!(res && res.alreadyPassed) });

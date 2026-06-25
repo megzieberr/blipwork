@@ -21,7 +21,7 @@ const app = {
   async refresh() {
     const s = getSession();
     if (!s) return false;
-    try { const r = await api.getState(s.name, s.password); if (!r || !r.ok) return false; this.state = r; return true; }
+    try { const r = await api.getState(s.username, s.password); if (!r || !r.ok) return false; this.state = r; return true; }
     catch { return false; }
   },
 
