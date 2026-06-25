@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#04101a">
+<title>Maths Quest · Admin</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%238b5cf6'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='bold'%3E%CF%83%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .view.adm{max-width:800px}
+  .adm-head{margin-bottom:14px}
+  .adm-section{margin-bottom:16px}
+  .adm-section h2{font-size:18px;margin-bottom:4px}
+  .adm-quests,.adm-strug{display:flex;flex-direction:column;margin-top:10px}
+  .adm-qrow,.adm-srow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 4px;border-bottom:1px solid var(--brd)}
+  .adm-qrow:last-child,.adm-srow:last-child{border-bottom:none}
+  .switch{position:relative;display:inline-block;width:46px;height:26px;flex:0 0 auto}
+  .switch input{opacity:0;width:0;height:0}
+  .switch .slider{position:absolute;inset:0;background:rgba(255,255,255,.14);border-radius:99px;transition:.18s;cursor:pointer}
+  .switch .slider::before{content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.18s}
+  .switch input:checked + .slider{background:var(--good)}
+  .switch input:checked + .slider::before{transform:translateX(20px)}
+  .adm-lhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .adm-add{display:flex;gap:8px;margin-bottom:12px}
+  .adm-add .login-input{flex:1;margin-bottom:0}
+  .adm-tablewrap{overflow-x:auto}
+  .adm-table{width:100%;border-collapse:collapse;font-size:13px;min-width:580px}
+  .adm-table th,.adm-table td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--brd);vertical-align:middle}
+  .adm-table th{color:var(--muted);font-weight:500;font-size:12px}
+  .adm-table .mono{font-family:var(--font-num)}
+  .adm-actions{display:flex;gap:6px;white-space:nowrap}
+  .adm-inactive{color:var(--warn)}
+  .btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+  .btn.danger:hover{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--panel))}
+</style>
+</head>
+<body>
+  <div id="admin"><main class="view"><p class="muted center" style="padding:48px 0">Loading…</p></main></div>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

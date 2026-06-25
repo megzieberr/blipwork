@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths Quest · Design Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN LAB — futuristic look exploration for the Maths Quest hub.
+   Two themes (toggle top-right). Not production code — a mockup so
+   we can lock the visual identity before building the real app.
+   ============================================================ */
+:root{
+  --font-display:"Space Grotesk",system-ui,sans-serif;
+  --font-body:"Sora",system-ui,sans-serif;
+  --font-num:"JetBrains Mono",ui-monospace,monospace;
+}
+
+/* ---------- THEME A: NEON ARCADE (deep indigo, glowy) ---------- */
+[data-theme="arcade"]{
+  --bg:#070817; --bg2:#0c0e26;
+  --panel:rgba(20,23,56,.66); --panel-brd:rgba(124,131,255,.18);
+  --ink:#eef0ff; --muted:#9095d6; --faint:#5a5f9e;
+  --grid:rgba(118,124,255,.06);
+  --glow:.9;
+  --c1:#22d3ee; --c2:#a3e635; --c3:#a855f7; --c4:#f472b6;
+  --c5:#fbbf24; --c6:#2dd4bf; --c7:#fb923c; --c8:#f43f5e;
+  --chapter:#a855f7;
+}
+/* ---------- THEME B: HOLO GRID (teal-black, crisp, glassy) ---------- */
+[data-theme="holo"]{
+  --bg:#04101a; --bg2:#06182440;
+  --panel:rgba(10,30,42,.6); --panel-brd:rgba(56,224,210,.16);
+  --ink:#eafcff; --muted:#7fb6c4; --faint:#4d8493;
+  --grid:rgba(56,224,210,.06);
+  --glow:.5;
+  --c1:#38e0d2; --c2:#7dd3fc; --c3:#818cf8; --c4:#e879f9;
+  --c5:#fcd34d; --c6:#34d399; --c7:#fb7185; --c8:#f87171;
+  --chapter:#38e0d2;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font-body); color:var(--ink);
+  background:
+    radial-gradient(1200px 700px at 80% -10%, color-mix(in srgb,var(--chapter) 16%,transparent), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, color-mix(in srgb,var(--c3) 14%,transparent), transparent 55%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+  background-attachment:fixed;
+  min-height:100vh; padding:28px 20px 80px;
+  -webkit-font-smoothing:antialiased;
+}
+/* faint scan-grid overlay for the techy feel */
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(circle at 50% 30%,#000,transparent 85%);
+}
+.wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto}
+
+/* ---------- lab chrome ---------- */
+.labbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+.labtitle{font-family:var(--font-display);font-weight:700;letter-spacing:.5px;font-size:20px}
+.labtitle b{color:var(--chapter)}
+.labtitle span{color:var(--muted);font-weight:400;font-size:13px;font-family:var(--font-body);display:block;letter-spacing:0}
+.toggles{display:flex;gap:10px;align-items:center}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--panel-brd);border-radius:999px;padding:4px;backdrop-filter:blur(8px)}
+.seg button{font-family:var(--font-display);font-weight:600;font-size:12.5px;letter-spacing:.4px;color:var(--muted);background:none;border:0;padding:8px 14px;border-radius:999px;cursor:pointer;transition:.18s}
+.seg button.on{color:#08060f;background:var(--chapter);box-shadow:0 0 calc(20px*var(--glow)) color-mix(in srgb,var(--chapter) 70%,transparent)}
+
+/* ---------- phone frames ---------- */
+.frames{display:flex;gap:30px;flex-wrap:wrap;justify-content:center}
+.phone{width:384px;flex:0 0 auto}
+.phone h4{font-family:var(--font-display);font-weight:600;letter-spacing:.5px;text-align:center;color:var(--muted);font-size:12.5px;text-transform:uppercase;margin-bottom:10px}
+.screen{
+  position:relative;border-radius:34px;padding:18px 16px 22px;overflow:hidden;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--bg2) 80%,#000),var(--bg));
+  border:1px solid var(--panel-brd);
+  box-shadow:0 30px 70px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.notch{width:120px;height:6px;border-radius:99px;background:rgba(255,255,255,.12);margin:0 auto 16px}
+
+/* ---------- shared bits ---------- */
+.eyebrow{font-family:var(--font-display);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:10.5px;color:var(--muted)}
+.h1{font-family:var(--font-display);font-weight:700;font-size:23px;letter-spacing:.3px;line-height:1.1;margin:3px 0 2px}
+.sub{color:var(--muted);font-size:13px}
+.num{font-family:var(--font-num)}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.avatar{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;color:#08060f;background:var(--chapter);box-shadow:0 0 calc(16px*var(--glow)) color-mix(in srgb,var(--chapter) 60%,transparent)}
+.xpchip{font-family:var(--font-num);font-size:12px;color:var(--ink);background:var(--panel);border:1px solid var(--panel-brd);padding:6px 11px;border-radius:999px}
+.xpchip b{color:var(--c5)}
+
+/* ---------- hub chapter cards ---------- */
+.cards{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.card{
+  position:relative;border-radius:20px;padding:18px;overflow:hidden;cursor:pointer;
+  border:1px solid var(--cc-brd,var(--panel-brd));
+  background:linear-gradient(135deg,color-mix(in srgb,var(--cc,#888) 26%,transparent),color-mix(in srgb,var(--cc,#888) 6%,transparent));
+  transition:transform .2s, box-shadow .2s;
+}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(140px 90px at 88% 10%,color-mix(in srgb,var(--cc,#888) 30%,transparent),transparent 70%);pointer-events:none}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 40px color-mix(in srgb,var(--cc,#888) 28%,transparent)}
+.card.locked{opacity:.5;filter:saturate(.5)}
+.card .ico{font-size:26px;filter:drop-shadow(0 0 calc(10px*var(--glow)) color-mix(in srgb,var(--cc,#888) 80%,transparent))}
+.card .ctitle{font-family:var(--font-display);font-weight:700;font-size:19px;margin-top:8px}
+.card .cmeta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;color:var(--ink)}
+.card .cmeta .num{color:#fff}
+.prog{height:7px;border-radius:99px;background:rgba(255,255,255,.12);margin-top:8px;overflow:hidden}
+.prog i{display:block;height:100%;width:var(--p,0%);border-radius:99px;background:var(--cc,#888);box-shadow:0 0 calc(12px*var(--glow)) var(--cc,#888)}
+.cbtn{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);font-weight:600;font-size:13px;color:#08060f;background:var(--cc,#888);padding:9px 15px;border-radius:11px;box-shadow:0 0 calc(16px*var(--glow)) color-mix(in srgb,var(--cc,#888) 55%,transparent)}
+.pill{font-family:var(--font-display);font-weight:600;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 9px;border-radius:99px}
+.pill.live{color:#062b14;background:var(--c2)}
+.pill.soon{color:var(--muted);background:rgba(255,255,255,.07);border:1px solid var(--panel-brd)}
+
+/* ---------- quest grid (chapter view) ---------- */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.quest{
+  position:relative;border-radius:16px;padding:13px 13px 14px;overflow:hidden;cursor:pointer;
+  border:1px solid color-mix(in srgb,var(--qc) 34%,transparent);
+  background:linear-gradient(160deg,color-mix(in srgb,var(--qc) 20%,transparent),color-mix(in srgb,var(--qc) 4%,transparent));
+  transition:transform .18s,box-shadow .18s;min-height:120px;display:flex;flex-direction:column;
+}
+.quest:hover{transform:translateY(-3px);box-shadow:0 12px 28px color-mix(in srgb,var(--qc) 26%,transparent)}
+.quest.lock{opacity:.45;filter:saturate(.45)}
+.qn{font-family:var(--font-num);font-weight:700;font-size:12px;color:var(--qc);width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--qc) 16%,transparent);border:1px solid color-mix(in srgb,var(--qc) 40%,transparent)}
+.qttl{font-family:var(--font-display);font-weight:600;font-size:13.5px;line-height:1.18;margin-top:9px}
+.qdot{margin-top:auto;display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted);padding-top:9px}
+.qdot .led{width:7px;height:7px;border-radius:99px;background:var(--qc);box-shadow:0 0 8px var(--qc)}
+.qcheck{position:absolute;top:11px;right:11px;color:var(--qc);font-size:14px}
+
+/* ---------- play screen ---------- */
+.qcount{font-family:var(--font-num);font-size:12px;color:var(--muted)}
+.pbar{height:6px;border-radius:99px;background:rgba(255,255,255,.1);margin:12px 0 16px;overflow:hidden}
+.pbar i{display:block;height:100%;width:42%;background:linear-gradient(90deg,var(--c1),var(--chapter));box-shadow:0 0 calc(12px*var(--glow)) var(--chapter)}
+.prompt{font-size:15px;line-height:1.5;margin-bottom:13px}
+.prompt b{color:var(--c1)}
+.graphbox{border-radius:16px;background:rgba(255,255,255,.025);border:1px solid var(--panel-brd);padding:12px 10px 6px;margin-bottom:14px}
+.gcap{font-family:var(--font-num);font-size:10.5px;color:var(--faint);text-align:center;margin-top:2px}
+
+/* number keypad */
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.kdisp{grid-column:1/4;display:flex;align-items:center;justify-content:flex-end;gap:8px;font-family:var(--font-num);font-size:26px;font-weight:500;background:rgba(255,255,255,.03);border:1px solid var(--panel-brd);border-radius:13px;padding:12px 16px;min-height:56px}
+.kdisp .cur{width:2px;height:26px;background:var(--c1);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.kdisp small{color:var(--faint);font-size:13px;font-family:var(--font-body)}
+.key{font-family:var(--font-num);font-weight:500;font-size:20px;color:var(--ink);background:var(--panel);border:1px solid var(--panel-brd);border-radius:13px;padding:15px 0;cursor:pointer;transition:.12s;text-align:center}
+.key:hover{border-color:color-mix(in srgb,var(--c1) 60%,transparent);background:color-mix(in srgb,var(--c1) 12%,transparent)}
+.key.ok{color:#06210f;background:var(--c2);border-color:transparent;box-shadow:0 0 calc(14px*var(--glow)) color-mix(in srgb,var(--c2) 55%,transparent)}
+.key.del{color:var(--c4)}
+
+.helprow{display:flex;gap:9px;margin-top:14px}
+.hbtn{flex:1;font-family:var(--font-display);font-weight:600;font-size:12.5px;color:var(--muted);background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;padding:11px;text-align:center;cursor:pointer;transition:.15s}
+.hbtn:hover{color:var(--ink);border-color:var(--panel-brd)}
+.hbtn.lost{color:var(--c4);border-color:color-mix(in srgb,var(--c4) 40%,transparent)}
+
+.legend{margin-top:34px;color:var(--muted);font-size:12.5px;line-height:1.7;text-align:center;max-width:760px;margin-left:auto;margin-right:auto}
+.legend code{font-family:var(--font-num);color:var(--c1);font-size:12px}
+.swatches{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.sw{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);font-family:var(--font-num)}
+.sw i{width:13px;height:13px;border-radius:5px;box-shadow:0 0 8px currentColor}
+</style>
+</head>
+<body data-theme="arcade">
+<div class="wrap">
+
+  <div class="labbar">
+    <div class="labtitle">MATHS <b>QUEST</b> · design lab
+      <span>Futuristic homework hub — Statistics chapter · pick a direction</span>
+    </div>
+    <div class="toggles">
+      <div class="seg" id="themeSeg">
+        <button data-theme="arcade" class="on">Neon Arcade</button>
+        <button data-theme="holo">Holo Grid</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="frames">
+
+    <!-- ============ SCREEN 1 · THE HUB ============ -->
+    <div class="phone">
+      <h4>1 · The hub</h4>
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Grade 11 · Paper 2</div>
+            <div class="h1">My chapters</div>
+          </div>
+          <div class="avatar">M</div>
+        </div>
+        <div class="cards">
+          <div class="card" style="--cc:#a855f7;--cc-brd:rgba(168,85,247,.4)">
+            <div class="ico">📊</div>
+            <div style="display:flex;align-items:center;gap:10px"><div class="ctitle">Statistics</div><span class="pill live">Open</span></div>
+            <div class="cmeta"><span>8 quests</span><span class="num">3 / 8 done</span></div>
+            <div class="prog" style="--p:38%"><i></i></div>
+            <div class="cbtn">Enter chapter →</div>
+          </div>
+          <div class="card locked" style="--cc:#38bdf8;--cc-brd:rgba(56,189,248,.4)">
+            <div class="ico">📐</div>
+            <div style="display:flex;align-items:center;gap:10px"><div class="ctitle">Trigonometry</div><span class="pill soon">Soon</span></div>
+            <div class="cmeta"><span>Opens once taught</span></div>
+          </div>
+          <div class="card locked" style="--cc:#34d399;--cc-brd:rgba(52,211,153,.4)">
+            <div class="ico">📈</div>
+            <div style="display:flex;align-items:center;gap:10px"><div class="ctitle">Analytical Geometry</div><span class="pill soon">Soon</span></div>
+            <div class="cmeta"><span>Opens once taught</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 2 · STATISTICS QUEST MAP ============ -->
+    <div class="phone">
+      <h4>2 · Statistics · quest map</h4>
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="topbar">
+          <div>
+            <div class="eyebrow" style="color:#a855f7">📊 Statistics</div>
+            <div class="h1">Quests</div>
+          </div>
+          <div class="xpchip">★ <b>740</b> XP</div>
+        </div>
+        <div class="qgrid" id="qgrid"></div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 3 · PLAY (graph + keypad) ============ -->
+    <div class="phone">
+      <h4>3 · Play · read the graph</h4>
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="topbar" style="margin-bottom:8px">
+          <div class="eyebrow" style="color:var(--c6)">⬢ Quest 6 · Ogives</div>
+          <div class="qcount">Q 4 / 12</div>
+        </div>
+        <div class="pbar"><i></i></div>
+        <div class="prompt">Read the <b>median</b> off the ogive. 300 learners wrote the test — find the mark at the 150th value.</div>
+        <div class="graphbox">
+          <div id="ogive"></div>
+          <div class="gcap">cumulative frequency · n = 300</div>
+        </div>
+        <div class="keypad">
+          <div class="kdisp"><span id="kval">33</span><span class="cur"></span><small>marks</small></div>
+          <div class="key">7</div><div class="key">8</div><div class="key">9</div>
+          <div class="key">4</div><div class="key">5</div><div class="key">6</div>
+          <div class="key">1</div><div class="key">2</div><div class="key">3</div>
+          <div class="key">,</div><div class="key">0</div><div class="key del">⌫</div>
+          <div class="key ok" style="grid-column:1/4">Submit ✓</div>
+        </div>
+        <div class="helprow">
+          <div class="hbtn">💡 Hint</div>
+          <div class="hbtn lost">🆘 I'm lost</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 4 · PLAY (box plot, tap) ============ -->
+    <div class="phone">
+      <h4>4 · Play · box-and-whisker</h4>
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="topbar" style="margin-bottom:8px">
+          <div class="eyebrow" style="color:var(--c3)">◆ Quest 3 · Quartiles</div>
+          <div class="qcount">Q 7 / 14</div>
+        </div>
+        <div class="pbar"><i style="width:64%"></i></div>
+        <div class="prompt">Tap the part of the plot that shows the <b>interquartile range</b>.</div>
+        <div class="graphbox">
+          <div id="box"></div>
+          <div class="gcap">five-number summary · 12 · 34 · 48 · 67 · 89</div>
+        </div>
+        <div class="prompt" style="font-size:13px;color:var(--muted);margin:2px 0 12px">The IQR is the box itself — from Q1 to Q3.</div>
+        <div class="keypad" style="grid-template-columns:1fr 1fr">
+          <div class="key" style="font-family:var(--font-body);font-size:14px">📏 The whiskers</div>
+          <div class="key ok" style="font-family:var(--font-body);font-size:14px;grid-column:auto">📦 The box</div>
+        </div>
+        <div class="helprow">
+          <div class="hbtn">💡 Hint</div>
+          <div class="hbtn lost">🆘 I'm lost</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    Each <b style="color:var(--ink)">chapter</b> owns a colour family; inside it each <b style="color:var(--ink)">quest</b> gets its own neon so the map reads at a glance. Graphs are drawn from real five-number summaries / cumulative-frequency points and animate in — the same "to-scale, self-checked" idea as Circle Quest's diagram engine. Decimal comma on the keypad (<code>,</code>), no device keyboard, no free typing.
+    <div class="swatches" id="swatches"></div>
+  </div>
+
+</div>
+
+<script>
+/* ---- the 8 Statistics quests, each with its own accent ---- */
+const QUESTS = [
+  {n:1, t:"Calculator skills",            c:"var(--c1)", done:true},
+  {n:2, t:"Centre & spread",              c:"var(--c2)", done:true},
+  {n:3, t:"Quartiles & box plots",        c:"var(--c3)", done:true},
+  {n:4, t:"Skewness & shape",             c:"var(--c4)", done:false, current:true},
+  {n:5, t:"Grouped data",                 c:"var(--c5)", lock:true},
+  {n:6, t:"Ogives",                       c:"var(--c6)", lock:true},
+  {n:7, t:"Standard deviation",           c:"var(--c7)", lock:true},
+  {n:8, t:"Mixed exam favourites",        c:"var(--c8)", lock:true},
+];
+const grid = document.getElementById('qgrid');
+grid.innerHTML = QUESTS.map(q=>`
+  <div class="quest ${q.lock?'lock':''}" style="--qc:${q.c}">
+    <div class="qn">${q.n}</div>
+    ${q.done?'<div class="qcheck">✓</div>':''}
+    <div class="qttl">${q.t}</div>
+    <div class="qdot"><span class="led"></span>${q.lock?'Locked':q.done?'Mastered':q.current?'Up next':'Open'}</div>
+  </div>`).join('');
+
+document.getElementById('swatches').innerHTML = QUESTS.map(q=>
+  `<span class="sw" style="color:${q.c}"><i style="background:${q.c}"></i>${q.n}. ${q.t}</span>`).join('');
+
+/* ---- THEME TOGGLE ---- */
+document.querySelectorAll('#themeSeg button').forEach(b=>{
+  b.onclick=()=>{
+    document.body.dataset.theme=b.dataset.theme;
+    document.querySelectorAll('#themeSeg button').forEach(x=>x.classList.toggle('on',x===b));
+    draw();
+  };
+});
+
+/* ============================================================
+   TINY "TO-SCALE" GRAPH ENGINE (preview of the real one)
+   Everything is mapped from real values; a console check confirms
+   each drawn marker sits where its value says it should.
+   ============================================================ */
+const cssv = n => getComputedStyle(document.body).getPropertyValue(n).trim();
+
+function ogiveSVG(){
+  const W=336,H=176, padL=30,padR=12,padT=10,padB=24;
+  const x0=20,x1=90, y0=0,y1=300;                       // axes ranges
+  const sx=v=>padL+(v-x0)/(x1-x0)*(W-padL-padR);
+  const sy=v=>H-padB-(v-y0)/(y1-y0)*(H-padT-padB);
+  const pts=[[20,0],[30,80],[40,220],[50,240],[60,250],[70,255],[80,255],[90,300]]; // (upper bnd; cum freq)
+  const c1=cssv('--c1'), ch=cssv('--chapter'), muted=cssv('--faint'), brd='rgba(255,255,255,.12)';
+  const poly=pts.map(p=>`${sx(p[0]).toFixed(1)},${sy(p[1]).toFixed(1)}`).join(' ');
+  // gridlines
+  let g='';
+  for(let v=0;v<=300;v+=75) g+=`<line x1="${sx(20)}" y1="${sy(v)}" x2="${sx(90)}" y2="${sy(v)}" stroke="${brd}" stroke-width=".5"/><text x="${sx(20)-5}" y="${sy(v)+3}" fill="${muted}" font-size="8" text-anchor="end" font-family="JetBrains Mono">${v}</text>`;
+  for(let v=20;v<=90;v+=10) g+=`<text x="${sx(v)}" y="${H-padB+12}" fill="${muted}" font-size="8" text-anchor="middle" font-family="JetBrains Mono">${v}</text>`;
+  // median read-off (150 -> ~33)
+  const med=33;
+  const read=`<line x1="${sx(20)}" y1="${sy(150)}" x2="${sx(med)}" y2="${sy(150)}" stroke="${c1}" stroke-width="1.3" stroke-dasharray="3 3"/>
+    <line x1="${sx(med)}" y1="${sy(150)}" x2="${sx(med)}" y2="${sy(0)}" stroke="${c1}" stroke-width="1.3" stroke-dasharray="3 3"/>
+    <circle cx="${sx(med)}" cy="${sy(150)}" r="3.4" fill="${c1}"/>`;
+  const dots=pts.slice(1).map(p=>`<circle cx="${sx(p[0])}" cy="${sy(p[1])}" r="2.4" fill="${ch}"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">
+    ${g}
+    <polyline points="${poly}" fill="none" stroke="${ch}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"
+      pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" class="draw"/>
+    ${dots}${read}
+    <text x="${sx(med)}" y="${sy(0)+9}" fill="${c1}" font-size="8.5" text-anchor="middle" font-family="JetBrains Mono">≈33</text>
+  </svg>`;
+}
+
+function boxSVG(){
+  const W=336,H=120, padL=18,padR=18,padT=20,padB=30;
+  const lo=0,hi=100;
+  const sx=v=>padL+(v-lo)/(hi-lo)*(W-padL-padR);
+  const five={min:12,q1:34,med:48,q3:67,max:89};
+  const cy=padT+24, qc=cssv('--c3'), muted=cssv('--faint'), brd='rgba(255,255,255,.18)';
+  let axis=`<line x1="${sx(0)}" y1="${H-padB}" x2="${sx(100)}" y2="${H-padB}" stroke="${brd}" stroke-width=".8"/>`;
+  for(let v=0;v<=100;v+=20) axis+=`<line x1="${sx(v)}" y1="${H-padB}" x2="${sx(v)}" y2="${H-padB+4}" stroke="${brd}"/><text x="${sx(v)}" y="${H-padB+15}" fill="${muted}" font-size="8.5" text-anchor="middle" font-family="JetBrains Mono">${v}</text>`;
+  const wh=14;
+  const box=`<rect x="${sx(five.q1)}" y="${cy-wh}" width="${sx(five.q3)-sx(five.q1)}" height="${wh*2}" rx="3"
+      fill="${qc}22" stroke="${qc}" stroke-width="2" class="grow"/>
+    <line x1="${sx(five.med)}" y1="${cy-wh}" x2="${sx(five.med)}" y2="${cy+wh}" stroke="${qc}" stroke-width="2.4"/>`;
+  const whisk=`<line x1="${sx(five.min)}" y1="${cy}" x2="${sx(five.q1)}" y2="${cy}" stroke="${qc}" stroke-width="1.6"/>
+    <line x1="${sx(five.q3)}" y1="${cy}" x2="${sx(five.max)}" y2="${cy}" stroke="${qc}" stroke-width="1.6"/>
+    <line x1="${sx(five.min)}" y1="${cy-9}" x2="${sx(five.min)}" y2="${cy+9}" stroke="${qc}" stroke-width="1.6"/>
+    <line x1="${sx(five.max)}" y1="${cy-9}" x2="${sx(five.max)}" y2="${cy+9}" stroke="${qc}" stroke-width="1.6"/>`;
+  const labs=Object.entries({Min:five.min,Q1:five.q1,M:five.med,Q3:five.q3,Max:five.max})
+    .map(([k,v])=>`<text x="${sx(v)}" y="${cy-wh-6}" fill="${muted}" font-size="8" text-anchor="middle" font-family="JetBrains Mono">${v}</text>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">${axis}${whisk}${box}${labs}</svg>`;
+}
+
+function draw(){
+  document.getElementById('ogive').innerHTML=ogiveSVG();
+  document.getElementById('box').innerHTML=boxSVG();
+  // replay animations
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.draw').forEach(p=>{p.style.transition='none';p.style.strokeDashoffset='1';
+      requestAnimationFrame(()=>{p.style.transition='stroke-dashoffset 1.1s ease';p.style.strokeDashoffset='0';});});
+    document.querySelectorAll('.grow').forEach(r=>{r.style.transformOrigin='left center';r.style.transform='scaleX(0)';
+      requestAnimationFrame(()=>{r.style.transition='transform .7s cubic-bezier(.2,.9,.3,1)';r.style.transform='scaleX(1)';});});
+  });
+}
+draw();
+</script>
+</body>
+</html>
