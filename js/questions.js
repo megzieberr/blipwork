@@ -12,11 +12,12 @@
 
    handlers = { onResult(isCorrect, chosen), onContinue(), onSibling(), onLost() }
 
-   q.type: "mc" | "reason" | "yesno" | "calc" | "tap"
+   q.type: "mc" | "reason" | "yesno" | "calc" | "tap" | "calcdo"
    ============================================================ */
 import { el, clear } from "./ui.js";
 import { renderGraph, computeBox } from "./engine/stats-graph.js";
 import { mountKeypad } from "./keypad.js";
+import { mountCalculator } from "./calculator.js";
 import { answerCorrect, fmtComma } from "./check.js";
 
 const SVGNS = "http://www.w3.org/2000/svg";
@@ -125,6 +126,40 @@ export function mountQuestion(host, q, handlers = {}) {
         if (!Number.isFinite(v)) return;          // ignore empty submit
         kp.disable();
         commit(answerCorrect(v, q.expected, { dp: q.dp, tol: q.tol }), fmtComma(v, q.dp));
+      },
+    });
+  }
+
+  // hands-on calculator task: the learner must actually perform the step on
+  // an embedded Casio. We watch its milestone events to decide win/lose.
+  else if (q.type === "calcdo") {
+    if (q.task) inputHost.appendChild(el("p", "q-task", q.task));
+    const calcBox = el("div", "q-calc");
+    inputHost.appendChild(calcBox);
+    let done = false;
+    const ms = a => a.slice().sort((x, y) => x - y).join(",");
+    const evalGoal = (g, type, p) => {
+      if (g.type === "clear")    return type === "clear" ? "win" : null;
+      if (g.type === "statMode") return type === "statMode" ? "win" : null;
+      if (g.type === "freq")     return (type === "freq" && p === !!g.on) ? "win" : null;
+      if (g.type === "data")     return (type === "data" && ms(p) === ms(g.expect)) ? "win" : null;
+      if (g.type === "stat") {
+        if (type !== "stat") return null;
+        const tol = g.tol == null ? 1e-6 : g.tol;
+        const right = p && p.tok === g.tok && p.value != null && Math.abs(p.value - g.value) <= tol;
+        return right ? "win" : "lose";     // computing the WRONG measure/value counts as a wrong attempt
+      }
+      return null;
+    };
+    mountCalculator(calcBox, {
+      setup: q.setup,
+      onEvent(type, p) {
+        if (answered || done) return;
+        const r = evalGoal(q.goal, type, p);
+        if (!r) return;
+        done = true;
+        calcBox.classList.add("locked");
+        commit(r === "win", type);
       },
     });
   }

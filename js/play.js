@@ -31,15 +31,14 @@ export function renderPlay(app, host, params) {
   mount(screen, top, bar, xpPop, qhost);
   host.appendChild(screen);
 
-  // Quest 1: nudge the learner to open the on-screen calculator (once).
+  // Quest 1: one-time intro to the hands-on format.
   if (quest.id === "q1") {
     let seen = false;
-    try { seen = localStorage.getItem("mhq.tip.q1calc") === "1"; } catch { /* ignore */ }
+    try { seen = localStorage.getItem("mhq.tip.q1hands") === "1"; } catch { /* ignore */ }
     if (!seen) {
-      const tip = el("div", "play-tip", `Tip: tap <button class="tip-calc">🧮</button> any time to open the calculator and try these steps yourself.`);
+      const tip = el("div", "play-tip", `Hands-on quest: press the keys on the calculator in each step to complete it. Stuck? Tap 💡 Hint.`);
       const close = el("button", "tip-close", "Got it");
-      const dismiss = () => { tip.remove(); try { localStorage.setItem("mhq.tip.q1calc", "1"); } catch { /* ignore */ } };
-      tip.querySelector(".tip-calc").addEventListener("click", () => { openCalculator(); });
+      const dismiss = () => { tip.remove(); try { localStorage.setItem("mhq.tip.q1hands", "1"); } catch { /* ignore */ } };
       close.addEventListener("click", dismiss);
       tip.appendChild(close);
       top.after(tip);

@@ -156,6 +156,11 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .play-tip .tip-calc{font-size:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:1px 6px;cursor:pointer;line-height:1.4}
 .play-tip .tip-close{margin-left:auto;font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--accent);background:none;border:none;cursor:pointer;padding:2px 4px}
 
+/* hands-on calculator task (Quest 1) */
+.q-task{font-size:13px;color:var(--muted);margin:-2px 0 10px}
+.q-calc{max-width:340px;margin:8px auto 4px}
+.q-calc.locked{opacity:.55;pointer-events:none;filter:saturate(.55)}
+
 .q-prompt{font-size:16px;line-height:1.55;margin-bottom:14px}
 .q-prompt b,.q-prompt .hl{color:var(--accent);font-weight:600}
 .q-graph{background:rgba(255,255,255,.025);border:1px solid var(--brd);border-radius:var(--r-md);padding:12px 10px 8px;margin-bottom:16px}

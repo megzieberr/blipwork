@@ -31,12 +31,25 @@ const KEYS = [
 const escapeHtml = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const fmtNum = v => (v == null ? "" : String(Math.round(v * 1e8) / 1e8).replace(".", ","));   // comma decimal (ZA locale, verified on the device)
 
-export function mountCalculator(host) {
+export function mountCalculator(host, opts = {}) {
+  // Optional milestone signal — lets the quest engine see when a learner
+  // actually performs a step (cleared, freq on, entered stat mode, captured
+  // data, computed a value). Fire-and-forget; never throws into the calc.
+  const emit = (t, p) => { try { opts.onEvent && opts.onEvent(t, p); } catch { /* ignore */ } };
+
   const S = {
     shift: false, mode: "COMP", screen: "comp", freqOn: false,
     line: "", result: null, pendingStat: null,
     data: [], cell: "", row: 0, col: 0, menu: null,
   };
+
+  // Optional pre-load: start a read-off task with the data already captured
+  // in 1-VAR STAT mode (so the learner focuses on the read-off sequence).
+  if (opts.setup) {
+    const su = opts.setup;
+    if (su.data && su.data.length) { S.mode = "STAT"; S.freqOn = !!su.freq; S.data = su.data.map(x => ({ x, f: 1 })); S.screen = "comp"; }
+    else if (su.statMode) { S.mode = "STAT"; S.screen = "comp"; }
+  }
 
   // ---- scaffold ----
   const wrap = el("div", "calc");
@@ -94,7 +107,7 @@ export function mountCalculator(host) {
     openMenu({ items: [["1", "1-VAR"], ["2", "A+BX"], ["3", "_+CX²"], ["4", "ln X"], ["5", "e^X"], ["6", "A·B^X"], ["7", "A·X^B"], ["8", "1/X"]], ret: "comp",
       onNum(n) { if (n === 1) startStat(); } });
   }
-  function startStat() { S.mode = "STAT"; S.data = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput"; }
+  function startStat() { S.mode = "STAT"; S.data = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput"; emit("statMode"); }
 
   function setupMenu() {
     const p1 = [["1", "MthIO"], ["2", "LineIO"], ["3", "Deg"], ["4", "Rad"], ["5", "Gra"], ["6", "Fix"], ["7", "Sci"]];
@@ -106,7 +119,7 @@ export function mountCalculator(host) {
   }
   function freqMenu() {
     openMenu({ title: "Frequency?", items: [["1", "ON"], ["2", "OFF"]], ret: "comp",
-      onNum(n) { if (n === 1) S.freqOn = true; else if (n === 2) S.freqOn = false; S.menu = null; S.screen = "comp"; } });
+      onNum(n) { if (n !== 1 && n !== 2) return; S.freqOn = (n === 1); S.menu = null; S.screen = "comp"; emit("freq", n === 1); } });
   }
   function clrMenu() {
     openMenu({ items: [["1", "Setup"], ["2", "Memory"], ["3", "All"]], ret: "comp",
@@ -114,7 +127,7 @@ export function mountCalculator(host) {
   }
   function clrConfirm() {
     openMenu({ title: "Reset All?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { S.data = []; S.line = ""; S.result = null; S.pendingStat = null; S.mode = "COMP"; S.freqOn = false; S.menu = null; S.screen = "comp"; } });
+      onEq() { S.data = []; S.line = ""; S.result = null; S.pendingStat = null; S.mode = "COMP"; S.freqOn = false; S.menu = null; S.screen = "comp"; emit("clear"); } });
   }
   function statMenu() {
     openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", "Distr"], ["6", "MinMax"]], ret: "comp",
@@ -149,6 +162,7 @@ export function mountCalculator(host) {
     else if (S.col === 0) { S.data[S.row] = { x: v, f: (S.data[S.row] && S.data[S.row].f) ?? 1 }; S.col = 1; }
     else { if (S.data[S.row]) S.data[S.row].f = v; S.col = 0; S.row++; }
     S.cell = "";
+    emit("data", S.data.map(d => d.x));
   }
 
   // ---- key dispatch ----
@@ -178,7 +192,7 @@ export function mountCalculator(host) {
     if (key === "ac") { S.line = ""; S.result = null; S.pendingStat = null; return; }
     if (key === "del") { S.line = S.line.slice(0, -1); S.pendingStat = null; return; }
     if (key === "eq") {
-      if (S.pendingStat) { const v = statValue(S.pendingStat); S.result = v == null ? "Math ERROR" : fmtNum(v); S.pendingStat = null; }
+      if (S.pendingStat) { const tok = S.pendingStat; const v = statValue(tok); S.result = v == null ? "Math ERROR" : fmtNum(v); S.pendingStat = null; emit("stat", { tok, value: v }); }
       else if (S.line) { try { S.result = fmtNum(evalArith(S.line)); } catch { S.result = "Syntax ERROR"; } }
       return;
     }
