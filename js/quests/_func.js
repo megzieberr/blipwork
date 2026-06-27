@@ -90,7 +90,7 @@ export function parabolaGraph(cv, { accent, label, showTP = true, showRoots = tr
   const win = winFor(feat);
   const points = [];
   if (showRoots) roots.forEach((r) => { if (Math.abs(r) > 1e-6) points.push({ x: r, y: 0, on: 0, label: lab(Math.round(r * 100) / 100, 0) }); });
-  if (showTP) points.push({ x: tp.x, y: tp.y, on: 0, label: lab(Math.round(tp.x * 100) / 100, Math.round(tp.y * 100) / 100), ly: cv.a > 0 ? undefined : undefined });
+  if (showTP) points.push({ x: tp.x, y: tp.y, on: 0, label: lab(Math.round(tp.x * 100) / 100, Math.round(tp.y * 100) / 100), place: "above" });
   if (showY && Math.abs(yi) > 1e-6 && Math.abs(tp.x) > 0.4) points.push({ x: 0, y: yi, on: 0, label: lab(0, yi) });
   return {
     spec: { type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? (cv.a > 0 ? win.xmax - 1.2 : win.xmin + 1.2) : undefined }], points },

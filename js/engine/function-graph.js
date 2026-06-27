@@ -112,16 +112,16 @@ export function renderFunction(spec) {
     out += `<path class="fg-arrow" d="M ${N(X(xmax))} ${N(y0px)} l -7 -3.5 l 0 7 z"/>`;
     out += `<path class="fg-arrow" d="M ${N(X(xmin))} ${N(y0px)} l 7 -3.5 l 0 7 z"/>`;
     out += text(X(xmax) - 4, y0px - 9, "x", "fg-axlab");
-    obstacles.push(box(X(xmax) - 4, y0px - 9, 12, 14));
+    obstacles.push(box(X(xmax) - 4, y0px - 9, 15, 17));
   }
   if (showY) {
     out += `<line class="fg-axis" x1="${N(x0px)}" y1="${N(Y(ymin))}" x2="${N(x0px)}" y2="${N(Y(ymax))}"/>`;
     out += `<path class="fg-arrow" d="M ${N(x0px)} ${N(Y(ymax))} l -3.5 7 l 7 0 z"/>`;
     out += `<path class="fg-arrow" d="M ${N(x0px)} ${N(Y(ymin))} l -3.5 -7 l 7 0 z"/>`;
     out += text(x0px + 9, Y(ymax) + 4, "y", "fg-axlab");
-    obstacles.push(box(x0px + 9, Y(ymax) + 4, 12, 14));
+    obstacles.push(box(x0px + 9, Y(ymax) + 4, 15, 17));
   }
-  if (showX && showY) { out += text(x0px - 8, y0px + 10, "O", "fg-axlab"); obstacles.push(box(x0px - 8, y0px + 10, 12, 14)); }
+  if (showX && showY) { out += text(x0px - 8, y0px + 10, "O", "fg-axlab"); obstacles.push(box(x0px - 8, y0px + 10, 15, 17)); }
 
   // ---- the curves ----
   (spec.curves || []).forEach((cv) => {
@@ -133,7 +133,7 @@ export function renderFunction(spec) {
       const f = makeFn(cv), lx = cv.labelAt, ly = f(lx);
       if (Number.isFinite(ly) && ly >= ymin && ly <= ymax) {
         out += `<text class="fg-flab" x="${N(X(lx) + 10)}" y="${N(Y(ly) - 6)}" text-anchor="middle" dominant-baseline="middle" style="fill:${stroke}">${cv.label}</text>`;
-        obstacles.push(box(X(lx) + 10, Y(ly) - 6, String(cv.label).length * 9 + 4, 16));
+        obstacles.push(box(X(lx) + 10, Y(ly) - 6, String(cv.label).length * 10 + 8, 19));
       }
     }
   });
@@ -162,7 +162,7 @@ export function renderFunction(spec) {
     if (p.dashTo === "x" || p.dashTo === "both") out += `<line class="fg-drop" x1="${N(px)}" y1="${N(py)}" x2="${N(px)}" y2="${N(Y(0))}"/>`;
     if (p.dashTo === "y" || p.dashTo === "both") out += `<line class="fg-drop" x1="${N(px)}" y1="${N(py)}" x2="${N(X(0))}" y2="${N(py)}"/>`;
     out += `<circle class="fg-dot${p.open ? " open" : ""}" cx="${N(px)}" cy="${N(py)}" r="3.2"/>`;
-    if (p.label != null) labelReqs.push({ px, py, label: p.label });
+    if (p.label != null) labelReqs.push({ px, py, label: p.label, place: p.place });
   });
   out += placeLabels(labelReqs, spec, g, obstacles);
 
@@ -192,35 +192,59 @@ function placeLabels(reqs, spec, g, obstacles = []) {
     }
   });
 
-  const CW = 6.0, CH = 14, GAP = 8, PAD = 2;          // char width, line height, gap, slack
+  const CW = 6.5, CH = 17, GAP = 8, PAD = 2;          // char width, line height, gap, slack (with halo)
   const placed = obstacles.slice();                   // axis letters / curve names are pre-occupied
-  const candidates = (px, py, w) => [
-    { x: px, y: py - 13, a: "middle", bx: px - w / 2 },     // above
-    { x: px + GAP, y: py - 13, a: "start", bx: px + GAP },  // above-right
-    { x: px - GAP, y: py - 13, a: "end", bx: px - GAP - w },// above-left
-    { x: px + GAP, y: py, a: "start", bx: px + GAP },       // right
-    { x: px - GAP, y: py, a: "end", bx: px - GAP - w },     // left
-    { x: px, y: py + 14, a: "middle", bx: px - w / 2 },     // below
-    { x: px + GAP, y: py + 14, a: "start", bx: px + GAP },  // below-right
-    { x: px - GAP, y: py + 14, a: "end", bx: px - GAP - w },// below-left
-  ].map((o) => ({ ...o, box: [o.bx, o.y - CH / 2, o.bx + w, o.y + CH / 2] }));
+  const slot = (px, py, w) => ({
+    above:      { x: px, y: py - 13, a: "middle", bx: px - w / 2 },
+    aboveRight: { x: px + GAP, y: py - 13, a: "start", bx: px + GAP },
+    aboveLeft:  { x: px - GAP, y: py - 13, a: "end", bx: px - GAP - w },
+    right:      { x: px + GAP, y: py, a: "start", bx: px + GAP },
+    left:       { x: px - GAP, y: py, a: "end", bx: px - GAP - w },
+    below:      { x: px, y: py + 14, a: "middle", bx: px - w / 2 },
+    belowRight: { x: px + GAP, y: py + 14, a: "start", bx: px + GAP },
+    belowLeft:  { x: px - GAP, y: py + 14, a: "end", bx: px - GAP - w },
+  });
+  const DEFAULT = ["above", "aboveRight", "aboveLeft", "right", "left", "below", "belowRight", "belowLeft"];
 
   const inFrame = (b) => b[0] >= 2 && b[2] <= W - 2 && b[1] >= 2 && b[3] <= H - 2;
+  const olArea = (b, q) => Math.max(0, Math.min(b[2], q[2]) - Math.max(b[0], q[0])) * Math.max(0, Math.min(b[3], q[3]) - Math.max(b[1], q[1]));
   const overBoxes = (b) => placed.some((q) => !(b[2] < q[0] || b[0] > q[2] || b[3] < q[1] || b[1] > q[3]));
   const overCurve = (b) => cpts.some((p) => p.x >= b[0] - PAD && p.x <= b[2] + PAD && p.y >= b[1] - PAD && p.y <= b[3] + PAD);
+  const boxScore = (b) => placed.reduce((s, q) => s + olArea(b, q), 0) + (inFrame(b) ? 0 : 1e5);
 
-  let out = "";
-  reqs.forEach((r) => {
-    const w = r.label.length * CW;
-    const opts = candidates(r.px, r.py, w);
-    const chosen =
+  // a point with a placement preference (e.g. a turning point → "above") is laid
+  // down first so it claims its spot before the other labels flow around it.
+  const ordered = reqs.map((r, i) => ({ r, i })).sort((a, b) => (b.r.place ? 1 : 0) - (a.r.place ? 1 : 0));
+  const drawn = new Array(reqs.length);
+  const withBox = (s, w) => ({ ...s, box: [s.bx, s.y - CH / 2, s.bx + w, s.y + CH / 2] });
+  ordered.forEach(({ r, i }) => {
+    const w = r.label.length * CW, m = slot(r.px, r.py, w);
+    const order = r.place && m[r.place] ? [r.place, ...DEFAULT.filter((k) => k !== r.place)] : DEFAULT;
+    const opts = order.map((k) => withBox(m[k], w));
+    let chosen;
+    // an explicit preference (e.g. a turning point → "above") wins as long as it
+    // stays in frame and clear of the other labels — even if the curve runs near
+    // it (the label halo keeps it readable). Keeps the TP coordinate on top; if the
+    // exact slot is blocked by another label, the diagonals on the same side are
+    // tried before giving up on "on top".
+    if (r.place) {
+      const prefKeys = r.place === "above" ? ["above", "aboveRight", "aboveLeft"]
+        : r.place === "below" ? ["below", "belowRight", "belowLeft"] : [r.place];
+      for (const k of prefKeys) {
+        if (!m[k]) continue;
+        const o = withBox(m[k], w);
+        if (inFrame(o.box) && !overBoxes(o.box)) { chosen = o; break; }
+      }
+    }
+    chosen = chosen ||
       opts.find((o) => inFrame(o.box) && !overCurve(o.box) && !overBoxes(o.box)) ||
       opts.find((o) => inFrame(o.box) && !overBoxes(o.box)) ||
-      opts.find((o) => inFrame(o.box)) || opts[0];
+      // nothing fully clear → take the least-overlapping in-frame candidate
+      opts.slice().sort((a, b) => boxScore(a.box) - boxScore(b.box))[0];
     placed.push(chosen.box);
-    out += text(chosen.x, chosen.y, r.label, "fg-plab", chosen.a);
+    drawn[i] = text(chosen.x, chosen.y, r.label, "fg-plab", chosen.a);
   });
-  return out;
+  return drawn.join("");
 }
 
 /* ============================================================
