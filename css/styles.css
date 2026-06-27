@@ -326,10 +326,10 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 /* triangle engine (.t2-*) — strong ink outline like the workbook,
    accent only on the angle marks; all label text stays upright */
 .t2{width:100%;height:auto;display:block;font-family:var(--font-num)}
-.t2-edge{fill:rgba(255,255,255,.02);stroke:var(--g-ink);stroke-width:2.1;stroke-linejoin:round}
-.t2-seg{stroke:var(--g-ink);stroke-width:1.7}
+.t2-edge{fill:rgba(255,255,255,.02);stroke:#eaf7fb;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
+.t2-seg{stroke:#d4eef5;stroke-width:2}
 .t2-seg.dash{stroke-dasharray:4 3;opacity:.85}
-.t2-tick{stroke:var(--g-ink);stroke-width:1.6}
+.t2-tick{stroke:#eaf7fb;stroke-width:1.8}
 .t2-arc{stroke:var(--accent);stroke-width:1.8}
 .t2-right{stroke:var(--accent);stroke-width:1.6}
 .t2-dot{fill:var(--g-ink)}
