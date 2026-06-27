@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trig Graphs · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Trig Graphs · verification</h1>
+<div id="banner">running…</div>
+
+<h2>Trig-graph engine — every figure re-derives its window & re-checks amplitude / period / asymptotes</h2>
+<div class="grid" id="engine"></div>
+
+<h2>Quests — 7 quests, fresh-number generations</h2>
+<pre id="quests">…</pre>
+
+<script type="module">
+import { renderTrig, verifyTrig } from "./js/engine/trig-graph.js";
+import { trigGraph, ampRangeGraph, periodGraph, twoTrigGraph } from "./js/quests/_tgraph.js";
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+import { answerCorrect } from "./js/check.js";
+
+const ACC = "#6366f1";
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+/* ---------- 1) representative engine figures ---------- */
+const ENGINE = [
+  { title: "y = sin x", spec: trigGraph({ fn: "sin", a: 1, b: 1, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "y = cos x", spec: trigGraph({ fn: "cos", a: 1, b: 1, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "y = tan x", spec: trigGraph({ fn: "tan", a: 1, b: 1, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "y = 2sin 3x", spec: trigGraph({ fn: "sin", a: 2, b: 3, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "y = −3cos ½x", spec: trigGraph({ fn: "cos", a: -3, b: 0.5, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "y = 2sin x − 1 (shift)", spec: trigGraph({ fn: "sin", a: 2, b: 1, p: 0, q: -1 }, { accent: ACC, midline: true }).spec },
+  { title: "y = cos(x − 60°)", spec: trigGraph({ fn: "cos", a: 1, b: 1, p: 60, q: 0 }, { accent: ACC }).spec },
+  { title: "y = −2tan 2x", spec: trigGraph({ fn: "tan", a: -2, b: 2, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "amplitude read-off (2cos x + 1)", spec: ampRangeGraph({ fn: "cos", a: 2, b: 1, p: 0, q: 1 }, { accent: ACC }).spec },
+  { title: "amplitude read-off (3sin 2x)", spec: ampRangeGraph({ fn: "sin", a: 3, b: 2, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "period read-off (cos 3x)", spec: periodGraph({ fn: "cos", a: 1, b: 3, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "period read-off (sin x)", spec: periodGraph({ fn: "sin", a: 2, b: 1, p: 0, q: 0 }, { accent: ACC }).spec },
+  { title: "two curves (sin & cos)", spec: twoTrigGraph({ fn: "sin", a: 1, b: 1, p: 0, q: 0 }, { fn: "cos", a: 1, b: 1, p: 0, q: 0 }, { accent: ACC, win: { xmin: 0, xmax: 360, ymin: -1.6, ymax: 1.6 }, labelA: "f", labelAtA: 90, labelB: "g", labelAtB: 360 }).spec },
+];
+const eg = document.getElementById("engine");
+ENGINE.forEach(t => {
+  const checks = verifyTrig(t.spec);
+  checks.forEach(c => tick(c.ok, `${t.title}: ${c.label}`));
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.setProperty("--accent", ACC);
+  card.innerHTML = `<h3>${t.title}</h3><div>${renderTrig(t.spec)}</div>
+    <ul class="checks">${checks.map(c => `<li class="${c.ok ? "ok" : "bad"}">${c.ok ? "✓" : "✗"} ${c.label}</li>`).join("")}</ul>`;
+  eg.appendChild(card);
+});
+
+/* ---------- 2) quests: generate each skill many times and validate ---------- */
+const chapter = CHAPTERS.find(c => c.id === "tgraph");
+const RUNS = 200;
+const lines = [];
+let qTotalChecks = 0, qFails = 0;
+
+function checkGraph(g) {
+  if (!g) return true;
+  if (g.type === "trigg") return verifyTrig(g).every(c => c.ok);
+  return true;
+}
+
+chapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const skillIssues = {};
+  def.skills.forEach(skill => {
+    if (!getConcept(skill.concept)) skillIssues[skill.id] = `missing concept "${skill.concept}"`;
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); }
+      catch (e) { skillIssues[skill.id] = "threw: " + e.message; break; }
+      qTotalChecks++;
+      if (q.concept && !getConcept(q.concept)) { skillIssues[skill.id] = `q.concept "${q.concept}" not found`; qFails++; }
+      if (q.type === "mc" || q.type === "reason") {
+        const labels = q.options.map(o => o.label);
+        const corrects = q.options.filter(o => o.correct).length;
+        if (corrects !== 1) { skillIssues[skill.id] = `has ${corrects} correct options`; qFails++; }
+        if (labels.length !== new Set(labels).size) { skillIssues[skill.id] = `duplicate options: ${labels.join(" | ")}`; qFails++; }
+        if (q.options.length < 2) { skillIssues[skill.id] = "too few options"; qFails++; }
+      } else if (q.type === "calc") {
+        if (!Number.isFinite(q.expected)) { skillIssues[skill.id] = "non-finite expected"; qFails++; }
+        else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) { skillIssues[skill.id] = "expected fails its own check"; qFails++; }
+      } else if (q.type === "yesno") {
+        if (typeof q.yes !== "boolean") { skillIssues[skill.id] = "q.yes not boolean"; qFails++; }
+      } else if (q.type === "tap") {
+        if (!q.tap || q.tap.correctId == null) { skillIssues[skill.id] = "tap without correctId"; qFails++; }
+        const ids = (q.graph.points || []).map(p => p.id);
+        if (!ids.includes(q.tap.correctId)) { skillIssues[skill.id] = "correctId not among points"; qFails++; }
+      }
+      if (!checkGraph(q.graph)) { skillIssues[skill.id] = "graph not to scale / dishonest label"; qFails++; }
+    }
+  });
+  const bad = Object.keys(skillIssues);
+  tick(bad.length === 0, `${qmeta.id} ${qmeta.title}`);
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.map(b => `${b}: ${skillIssues[b]}`).join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${qTotalChecks} generations checked · ${qFails} integrity failures\n\n` + lines.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total && qFails === 0;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} engine/quest checks passed, ${qTotalChecks} generations clean`
+  : `✗ ${total - passed} check group(s) failed; ${qFails} generation failures — see below`;
+
+window.__VERIFY__ = { total, passed, qTotalChecks, qFails, ok, fails };
+console.log(`[verify-tgraph] engine&quest ${passed}/${total}, generations ${qTotalChecks}, failures ${qFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

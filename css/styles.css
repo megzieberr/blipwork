@@ -29,6 +29,8 @@
   --g-grid:rgba(127,182,196,.16); --g-read:#fcd34d; --g-out:#fb7185;
   /* function-graph curve colours (f / g / a third) */
   --fg-a:#7dd3fc; --fg-b:#fb7185; --fg-c:#c4b5fd;
+  /* trig-graph curve colours (f / g) */
+  --tg-a:#818cf8; --tg-b:#fb7185;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -360,6 +362,29 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .fg-plab{font-size:10.5px;font-weight:700;fill:var(--g-ink);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
 .fg-flab{font-size:13px;font-weight:700;font-style:italic;fill:var(--accent)}
 .fg-tappable .fg-plab,.fg-tappable .fg-flab{pointer-events:none}
+
+/* trig-graph engine (.tg-*) — degree-axis plane, sin/cos/tan to scale,
+   dashed asymptotes & midline, period/amplitude span arrows. */
+.tg{width:100%;height:auto;display:block;font-family:var(--font-num)}
+.tg-grid{stroke:var(--g-grid);stroke-width:.5}
+.tg-axis{stroke:var(--g-axis);stroke-width:1.2}
+.tg-arrow{fill:var(--g-axis)}
+.tg-arrow.tg-mar{fill:var(--g-read)}
+.tg-axlab{font-size:11px;font-style:italic;fill:var(--g-muted)}
+.tg-tick{stroke:var(--g-axis);stroke-width:1}
+.tg-tlab{font-size:9px;fill:var(--g-muted);paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+.tg-curve{stroke:var(--accent);stroke-width:2.4;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.tg-curve.dash{stroke-dasharray:5 4}
+.tg-asym{stroke:var(--g-muted);stroke-width:1.1;stroke-dasharray:5 4;opacity:.7}
+.tg-mid{stroke:var(--g-read);stroke-width:1;stroke-dasharray:6 4;opacity:.65}
+.tg-drop{stroke:var(--g-read);stroke-width:1;stroke-dasharray:3 3;opacity:.8}
+.tg-dot{fill:var(--g-ink)}
+.tg-dot.open{fill:var(--bg);stroke:var(--g-ink);stroke-width:1.4}
+.tg-measure{stroke:var(--g-read);stroke-width:1.6}
+.tg-mlab{font-size:11px;font-weight:700;fill:var(--g-read);paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+.tg-plab{font-size:10.5px;font-weight:700;fill:var(--g-ink);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
+.tg-flab{font-size:13px;font-weight:700;font-style:italic;fill:var(--accent)}
+.tg-tappable .tg-plab,.tg-tappable .tg-flab{pointer-events:none}
 
 /* inline stacked fraction (used in equations like a hyperbola) */
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-0.45em;margin:0 .15em;line-height:1.06}

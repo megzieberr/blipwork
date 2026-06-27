@@ -42,6 +42,13 @@ import { questFn4 } from "./questfn4-read-graph.js";
 import { questFn5 } from "./questfn5-inequalities.js";
 import { questFn6 } from "./questfn6-transformations.js";
 import { questFn7 } from "./questfn7-together.js";
+import { questTg1 } from "./questtg1-parents.js";
+import { questTg2 } from "./questtg2-params.js";
+import { questTg3 } from "./questtg3-period-amp-range.js";
+import { questTg4 } from "./questtg4-shifts.js";
+import { questTg5 } from "./questtg5-tan.js";
+import { questTg6 } from "./questtg6-find-equation.js";
+import { questTg7 } from "./questtg7-mixed.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -55,5 +62,7 @@ export const QUEST_DEFS = {
   m1: questM1, m2: questM2, m3: questM3, m4: questM4, m5: questM5, m6: questM6,
   fn1: questFn1, fn2: questFn2, fn3: questFn3, fn4: questFn4,
   fn5: questFn5, fn6: questFn6, fn7: questFn7,
+  tg1: questTg1, tg2: questTg2, tg3: questTg3, tg4: questTg4,
+  tg5: questTg5, tg6: questTg6, tg7: questTg7,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

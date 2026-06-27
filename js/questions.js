@@ -22,6 +22,7 @@ import { renderTree, computeTree } from "./engine/tree-graph.js";
 import { renderTriangle, computeTriangle } from "./engine/triangle-graph.js";
 import { renderSolid, computeSolid } from "./engine/solid-graph.js";
 import { renderFunction } from "./engine/function-graph.js";
+import { renderTrig, computeTrig } from "./engine/trig-graph.js";
 import { mountKeypad } from "./keypad.js";
 import { mountCalculator } from "./calculator.js";
 import { answerCorrect, fmtComma } from "./check.js";
@@ -45,6 +46,7 @@ export function mountQuestion(host, q, handlers = {}) {
       q.graph.type === "triangle" ? renderTriangle(q.graph) :
       q.graph.type === "solid"    ? renderSolid(q.graph) :
       q.graph.type === "function" ? renderFunction(q.graph) :
+      q.graph.type === "trigg"    ? renderTrig(q.graph) :
       renderGraph(q.graph);
     gw.innerHTML = svg + (q.graphCap ? `<div class="cap">${q.graphCap}</div>` : "");
     svgNode = gw.querySelector("svg");
@@ -241,6 +243,14 @@ export function mountQuestion(host, q, handlers = {}) {
     });
   }
 
+  else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "trigg") {
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", q.tapHint));
+    addTrigHits(svgNode, computeTrig(q.graph), q.graph, q.tap, (id) => {
+      if (answered) return;
+      commit(id === q.tap.correctId, id);
+    });
+  }
+
   else if (q.type === "tap" && svgNode) {
     if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", q.tapHint));
     addBoxHits(svgNode, computeBox(q.graph), q.tap, (id) => {
@@ -359,6 +369,29 @@ function addTriangleHits(svg, geo, tap, onPick) {
       });
       if (sp.id !== tap.correctId) node.classList.add("show-wrong");
       onPick(sp.id);
+    });
+    svg.appendChild(node);
+  });
+}
+
+/* ------------------------------------------------------------
+   Tappable points on a trig graph. Each marked point that carries
+   an id (peak / trough / intersection / decoy) gets a circular
+   hot-spot at its exact (X,Y) pixel; id is matched to correctId.
+   ------------------------------------------------------------ */
+function addTrigHits(svg, geo, spec, tap, onPick) {
+  const targets = tap.targets || (spec.points || []).map(p => p.id).filter(x => x != null);
+  (spec.points || []).forEach(p => {
+    if (p.id == null || !targets.includes(p.id)) return;
+    const node = svgEl("circle", { cx: geo.X(p.x), cy: geo.Y(p.y), r: 16, class: "hit", "data-id": String(p.id) });
+    node.addEventListener("click", () => {
+      if (node.classList.contains("locked")) return;
+      svg.querySelectorAll(".hit").forEach(h => {
+        h.classList.add("locked");
+        if (h.dataset.id === String(tap.correctId)) h.classList.add("show-correct");
+      });
+      if (p.id !== tap.correctId) node.classList.add("show-wrong");
+      onPick(p.id);
     });
     svg.appendChild(node);
   });

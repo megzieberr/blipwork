@@ -41,6 +41,11 @@ const FUNC_SHADES = [
   "#5eead4", "#2dd4bf", "#14b8a6", "#0d9488", "#0f766e", "#115e59", "#134e4a",
 ];
 
+/* seven indigo shades, light → deep (Trig Graphs quests 1 → 7) */
+const TGRAPH_SHADES = [
+  "#a5b4fc", "#818cf8", "#6366f1", "#5b54e0", "#4f46e5", "#4338ca", "#3730a3",
+];
+
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊", term: "term3",
@@ -125,6 +130,20 @@ export const CHAPTERS = [
       { id: "fn5", n: 5, title: "Inequalities off a graph", blurb: "Increasing/decreasing, f(x) > 0 or < 0, and the f·g and x·f sign rules.", built: true },
       { id: "fn6", n: 6, title: "Transformations", blurb: "Shifts, reflections and stretches — the rule and what it does.", built: true },
       { id: "fn7", n: 7, title: "Graphs together", blurb: "Intersections, f vs g, nature of roots, average gradient, max length.", built: true },
+    ],
+  },
+  {
+    id: "tgraph", name: "Trig Graphs", paper: "Paper 2", icon: "〰️", term: "revision",
+    hue: TGRAPH_SHADES, signature: "#6366f1", open: true,
+    blurb: "Sine, cosine and tangent graphs — period, amplitude, range, shifts, drawn to scale.",
+    quests: [
+      { id: "tg1", n: 1, title: "The three parent graphs", blurb: "Recognise sin, cos & tan and their key features.", built: true },
+      { id: "tg2", n: 2, title: "What a, b and q do", blurb: "Reflect, stretch, squash and slide the graph.", built: true },
+      { id: "tg3", n: 3, title: "Period, amplitude & range", blurb: "Find all three — from the equation and off the graph.", built: true },
+      { id: "tg4", n: 4, title: "Horizontal & vertical shifts", blurb: "Which way and how far — and factoring b out first.", built: true },
+      { id: "tg5", n: 5, title: "The tangent graph", blurb: "Asymptotes, intercepts, period 180° and finding a.", built: true },
+      { id: "tg6", n: 6, title: "Find the equation", blurb: "Read a, b and q off a graph and write the equation.", built: true },
+      { id: "tg7", n: 7, title: "Putting it together", blurb: "Two graphs at once: higher/lower, positive, intersections.", built: true },
     ],
   },
   // future chapters appear as locked "coming soon" blocks on the hub
