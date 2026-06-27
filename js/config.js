@@ -13,6 +13,12 @@ const STATS_SHADES = [
   "#7c54f0", "#7044e6", "#6a3bd6", "#5a2fbe",
 ];
 
+/* seven amber/gold shades, light → deep (Finance quests 1 → 7) */
+const FIN_SHADES = [
+  "#fcd34d", "#fbbf24", "#f59e0b", "#ea9a0a",
+  "#e08708", "#cf7506", "#b8650a",
+];
+
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊",
@@ -27,6 +33,20 @@ export const CHAPTERS = [
       { id: "q6", n: 6, title: "Ogives", blurb: "Plot points, read median, quartiles, percentiles.", built: true },
       { id: "q7", n: 7, title: "Standard deviation", blurb: "σ, variance, values within one σ.", built: true },
       { id: "q8", n: 8, title: "Mixed exam favourites", blurb: "Compare plots, effect of changes, the tough ones.", built: true },
+    ],
+  },
+  {
+    id: "finance", name: "Finance", paper: "Paper 1", icon: "💰",
+    hue: FIN_SHADES, signature: "#f59e0b", open: true,
+    blurb: "Interest, growth and the time value of money.",
+    quests: [
+      { id: "f1", n: 1, title: "Words & formulas", blurb: "P, A, i, n and which formula fits.", built: true },
+      { id: "f2", n: 2, title: "Simple, compound & depreciation", blurb: "Interest on the original vs the growing balance; the two depreciation graphs.", built: true },
+      { id: "f3", n: 3, title: "Compounding periods", blurb: "Rate per period and the exponent — monthly, quarterly, …", built: true },
+      { id: "f4", n: 4, title: "Timelines: counting moves", blurb: "How many periods, forward or backward.", built: true },
+      { id: "f5", n: 5, title: "Timelines: building the move", blurb: "× or ÷, the exponent's sign, and rate changes.", built: true },
+      { id: "f6", n: 6, title: "Deposits & hire purchase", blurb: "The deposit and what's still owed.", built: true },
+      { id: "f7", n: 7, title: "Effective vs nominal", blurb: "Annual vs a frequency, and the conversion formula.", built: true },
     ],
   },
   // future chapters appear as locked "coming soon" blocks on the hub

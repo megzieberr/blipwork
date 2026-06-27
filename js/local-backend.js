@@ -7,12 +7,19 @@ const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
-const QUEST_IDS = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"];
-const DEFAULT_OPEN = ["q1", "q2", "q3"];
+const QUEST_IDS = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8",
+  "f1", "f2", "f3", "f4", "f5", "f6", "f7"];
+/* offline sandbox opens stats q1–q3 and all Finance quests so the whole new
+   chapter is playable locally; on the live backend the teacher opens each. */
+const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7"];
 
 function seed() {
   if (!read(LS.students, null)) write(LS.students, {});
-  if (!read(LS.quests, null)) write(LS.quests, Object.fromEntries(QUEST_IDS.map((q, i) => [q, { is_open: DEFAULT_OPEN.includes(q), sort: i + 1 }])));
+  // create the quests store, and merge in any quest ids added since (e.g. a new chapter)
+  const q = read(LS.quests, null) || {};
+  let changed = !read(LS.quests, null);
+  QUEST_IDS.forEach((id, i) => { if (!q[id]) { q[id] = { is_open: DEFAULT_OPEN.includes(id), sort: i + 1 }; changed = true; } });
+  if (changed) write(LS.quests, q);
   if (!read(LS.progress, null)) write(LS.progress, {});
   if (!read(LS.struggles, null)) write(LS.struggles, {});
   if (!read(LS.meta, null)) write(LS.meta, { adminPassword: "admin" });

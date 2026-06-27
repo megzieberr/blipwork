@@ -18,7 +18,7 @@ export function renderHub(app, host) {
   setTheme("#8b5cf6", "#8b5cf6");
   const name = ((app.state && app.state.student && app.state.student.name) || "").split(" ")[0];
   const head = el("div", "hub-head");
-  head.innerHTML = `<span class="eyebrow">Grade 11 · Paper 2</span><h1>Hi, ${name || "there"} 👋</h1><p class="muted small">Pick a chapter to practise.</p>`;
+  head.innerHTML = `<span class="eyebrow">Grade 11 Maths</span><h1>Hi, ${name || "there"} 👋</h1><p class="muted small">Pick a chapter to practise.</p>`;
   host.appendChild(head);
 
   try { maybeShowInstall(host); } catch { /* non-critical */ }

@@ -175,6 +175,98 @@ export const CONCEPTS = {
       </ul>
       <p>A narrower box / shorter whiskers means the data is more consistent.</p>`,
   },
+
+  /* ---------------- FINANCE ---------------- */
+  finFormulas: {
+    title: "Which finance formula?",
+    body: `
+      <p>Match the situation to the formula. <b>i</b> is the rate as a fraction (÷100), <b>n</b> the number of periods.</p>
+      <ul>
+        <li><b>Hire purchase</b> → simple interest: <b>A = P(1 + i·n)</b></li>
+        <li><b>Inflation, population growth, savings</b> → compound: <b>A = P(1 + i)ⁿ</b></li>
+        <li><b>Straight-line depreciation</b> → <b>A = P(1 − i·n)</b></li>
+        <li><b>Reducing-balance depreciation</b> → <b>A = P(1 − i)ⁿ</b></li>
+      </ul>
+      <p><b>P</b> is the starting amount, <b>A</b> the end amount. Turn a % into i by dividing by 100 (8% → 0,08).</p>`,
+  },
+  simpleCompound: {
+    title: "Simple vs compound interest",
+    body: `
+      <p><b>Simple interest</b> is worked out on the <b>original P only</b>, so the same amount is added each period.</p>
+      <div class="formula">A = P(1 + i·n)</div>
+      <p><b>Compound interest</b> is worked out on the <b>growing balance</b>, so each period earns a little more than the last.</p>
+      <div class="formula">A = P(1 + i)ⁿ</div>
+      <div class="eg">Over time compound always pulls ahead of simple, because it earns "interest on interest".</div>`,
+  },
+  depreciation: {
+    title: "Depreciation: the two methods",
+    body: `
+      <p>Depreciation is when something <b>loses</b> value over time.</p>
+      <ul>
+        <li><b>Linear (straight-line):</b> <b>A = P(1 − i·n)</b>. Loses the <b>same rand amount</b> each year — its graph is a <b>straight line</b> sloping down.</li>
+        <li><b>Reducing-balance:</b> <b>A = P(1 − i)ⁿ</b>. Loses a fixed <b>percentage of its current</b> value each year — its graph is a <b>curve</b> that drops steeply then flattens.</li>
+      </ul>`,
+  },
+  compounding: {
+    title: "Different compounding periods",
+    body: `
+      <p>If interest is added more than once a year, split the year up:</p>
+      <ul>
+        <li><b>rate per period</b> = annual rate ÷ (times per year)</li>
+        <li><b>exponent</b> = years × (times per year)</li>
+      </ul>
+      <div class="formula">A = P(1 + i/k)^(n·k)</div>
+      <p>Times per year k: annually 1 · half-yearly 2 · quarterly 4 · monthly 12 · weekly 52 · daily 365.</p>
+      <div class="eg">12% p.a. compounded quarterly for 5 years → i = 0,12/4 = 0,03 and exponent = 5×4 = 20.</div>`,
+  },
+  timelineMove: {
+    title: "Moving money along a timeline",
+    body: `
+      <p>Money has a different value at different times. To re-value an amount, slide it along the timeline:</p>
+      <ul>
+        <li><b>Forward</b> (to a later date) → <b>multiply</b> by (1 + i) once per period → a <b>positive</b> exponent.</li>
+        <li><b>Backward</b> (to an earlier date) → <b>divide</b> by (1 + i) once per period → a <b>negative</b> exponent.</li>
+      </ul>
+      <div class="formula">value = amount × (1 + i)^(±periods)</div>
+      <p>Count the periods between the two T-points. Forward T2 → T5 is 3 periods (+3); backward T5 → T2 is 3 periods (−3).</p>`,
+  },
+  timelineCount: {
+    title: "Counting periods on a timeline",
+    body: `
+      <p>The number of periods is just how many <b>gaps</b> you jump between the two T-points — count the spaces, not the dots.</p>
+      <ul>
+        <li>T0 → T4 is <b>4</b> periods.</li>
+        <li>T5 → T2 is <b>3</b> periods (going back).</li>
+      </ul>
+      <p>The <b>direction</b> tells you ×　or ÷: later = ×, earlier = ÷.</p>`,
+  },
+  rateChange: {
+    title: "When the interest rate changes",
+    body: `
+      <p>If the rate or compounding frequency changes part-way, split the timeline into segments. For one lump sum, use <b>one bracket per segment</b>:</p>
+      <div class="formula">A = P(1 + i₁/k₁)^(n₁·k₁) (1 + i₂/k₂)^(n₂·k₂)</div>
+      <p>Work out each segment's rate-per-period and number-of-periods separately, then multiply the brackets together.</p>`,
+  },
+  deposits: {
+    title: "Deposits & hire purchase",
+    body: `
+      <p>A <b>deposit</b> is paid upfront and earns no interest.</p>
+      <div class="formula">deposit = (% ÷ 100) × price</div>
+      <p>The amount still owed (the new P that interest is charged on) is the rest of the price:</p>
+      <div class="formula">amount owed = ((100 − %) ÷ 100) × price</div>
+      <div class="eg">15% deposit on R8 000 → deposit = R1 200, still owed = R6 800.</div>`,
+  },
+  effNom: {
+    title: "Effective vs nominal rates",
+    body: `
+      <p>Both are <b>compound</b> interest, just quoted differently.</p>
+      <ul>
+        <li><b>Effective</b> rate is always an <b>annual</b> rate (the true yearly growth).</li>
+        <li><b>Nominal</b> rate is quoted with a <b>compounding frequency</b> (monthly, quarterly, …).</li>
+      </ul>
+      <div class="formula">1 + i_eff = (1 + i_nom / n)ⁿ</div>
+      <p>Here n is the number of compounding periods <b>per year</b> (12 for monthly).</p>`,
+  },
 };
 
 export function getConcept(id) { return CONCEPTS[id] || null; }

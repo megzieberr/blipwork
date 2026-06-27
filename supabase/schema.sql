@@ -303,7 +303,10 @@ to anon, authenticated;
 insert into public.quests (quest_id, chapter, is_open, sort) values
   ('q1','stats',true ,1), ('q2','stats',true ,2), ('q3','stats',true ,3),
   ('q4','stats',false,4), ('q5','stats',false,5), ('q6','stats',false,6),
-  ('q7','stats',false,7), ('q8','stats',false,8)
+  ('q7','stats',false,7), ('q8','stats',false,8),
+  ('f1','finance',false, 9), ('f2','finance',false,10), ('f3','finance',false,11),
+  ('f4','finance',false,12), ('f5','finance',false,13), ('f6','finance',false,14),
+  ('f7','finance',false,15)
 on conflict (quest_id) do nothing;
 
 insert into public.app_config (key, value) values ('admin_password', crypt('admin', gen_salt('bf')))
