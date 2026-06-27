@@ -1,7 +1,7 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
 import { CHAPTERS, chapterById, questAccent, PASS } from "./config.js";
 import { questDef } from "./quests/index.js";
-import { el } from "./ui.js";
+import { el, clear } from "./ui.js";
 import { openCalculator } from "./calculator.js";
 import { maybeShowInstall } from "./install.js";
 
@@ -14,6 +14,39 @@ const progressOf = (app, id) => (app.state && app.state.progress && app.state.pr
 const openSet = app => new Set((app.state && app.state.openQuests) || []);
 
 /* ---------------- HUB ---------------- */
+/* the two tabs; current term first, revision (already-taught chapters) below */
+const TABS = [
+  { id: "term3", label: "Term 3", sub: "This term’s homework" },
+  { id: "revision", label: "Revision", sub: "Earlier chapters to revise" },
+];
+let hubTab = "term3";                                   // remembered across hub visits
+
+function chapterCard(app, ch, open) {
+  const live = ch.open && !ch.comingSoon;
+  const card = el("div", "ch-card" + (live ? "" : " locked"));
+  card.style.setProperty("--cc", ch.signature);
+  card.style.setProperty("--accent", ch.signature);
+  if (live) {
+    const openQ = (ch.quests || []).filter(q => open.has(q.id));
+    const total = openQ.length;
+    const done = openQ.filter(q => progressOf(app, q.id).passed).length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+    card.innerHTML = `
+      <div class="ico">${ch.icon}</div>
+      <h2>${ch.name} <span class="pill open">Open</span></h2>
+      <p>${ch.blurb || ""}</p>
+      <div class="ch-meta"><span>${total ? `${total} quest${total > 1 ? "s" : ""} open` : "Opening soon"}</span>${total ? `<span class="num">${done} / ${total} done</span>` : ""}</div>
+      ${total ? `<div class="ch-prog" style="--p:${pct}%"><i></i></div>` : ""}
+      <div class="ch-foot"></div>`;
+    const btn = el("button", "btn primary", "Enter chapter →");
+    btn.addEventListener("click", () => app.go("chapter", { chapterId: ch.id }));
+    card.querySelector(".ch-foot").appendChild(btn);
+  } else {
+    card.innerHTML = `<div class="ico">${ch.icon}</div><h2>${ch.name} <span class="pill soon">Soon</span></h2><p>Opens once we’ve covered it in class.</p>`;
+  }
+  return card;
+}
+
 export function renderHub(app, host) {
   setTheme("#8b5cf6", "#8b5cf6");
   const name = ((app.state && app.state.student && app.state.student.name) || "").split(" ")[0];
@@ -24,33 +57,32 @@ export function renderHub(app, host) {
   try { maybeShowInstall(host); } catch { /* non-critical */ }
 
   const open = openSet(app);
+  const byTerm = (t) => CHAPTERS.filter(ch => (ch.term || "term3") === t);
+
+  // only show tabs that actually have chapters
+  const tabs = TABS.filter(t => byTerm(t.id).length);
+  if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "term3";
+
+  const tabbar = el("div", "hub-tabs");
   const cards = el("div", "chapter-cards");
-  CHAPTERS.forEach(ch => {
-    const live = ch.open && !ch.comingSoon;
-    const card = el("div", "ch-card" + (live ? "" : " locked"));
-    card.style.setProperty("--cc", ch.signature);
-    card.style.setProperty("--accent", ch.signature);
-    if (live) {
-      const openQ = (ch.quests || []).filter(q => open.has(q.id));
-      const total = openQ.length;
-      const done = openQ.filter(q => progressOf(app, q.id).passed).length;
-      const pct = total ? Math.round(done / total * 100) : 0;
-      card.innerHTML = `
-        <div class="ico">${ch.icon}</div>
-        <h2>${ch.name} <span class="pill open">Open</span></h2>
-        <p>${ch.blurb || ""}</p>
-        <div class="ch-meta"><span>${total ? `${total} quest${total > 1 ? "s" : ""} open` : "Opening soon"}</span>${total ? `<span class="num">${done} / ${total} done</span>` : ""}</div>
-        ${total ? `<div class="ch-prog" style="--p:${pct}%"><i></i></div>` : ""}
-        <div class="ch-foot"></div>`;
-      const btn = el("button", "btn primary", "Enter chapter →");
-      btn.addEventListener("click", () => app.go("chapter", { chapterId: ch.id }));
-      card.querySelector(".ch-foot").appendChild(btn);
-    } else {
-      card.innerHTML = `<div class="ico">${ch.icon}</div><h2>${ch.name} <span class="pill soon">Soon</span></h2><p>Opens once we’ve covered it in class.</p>`;
-    }
-    cards.appendChild(card);
+  const draw = () => {
+    clear(cards);
+    byTerm(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
+  };
+  tabs.forEach(t => {
+    const b = el("button", "hub-tab" + (t.id === hubTab ? " active" : ""));
+    b.innerHTML = `${t.label}<span class="ht-sub">${t.sub}</span>`;
+    b.addEventListener("click", () => {
+      hubTab = t.id;
+      [...tabbar.children].forEach(c => c.classList.remove("active"));
+      b.classList.add("active");
+      draw();
+    });
+    tabbar.appendChild(b);
   });
+  if (tabs.length > 1) host.appendChild(tabbar);
   host.appendChild(cards);
+  draw();
 }
 
 /* ---------------- CHAPTER · quest map (only OPEN quests show) ---------------- */

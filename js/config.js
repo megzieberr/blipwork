@@ -36,9 +36,14 @@ const MEAS_SHADES = [
   "#bef264", "#a3e635", "#84cc16", "#65a30d", "#4d7c0f", "#3f6212",
 ];
 
+/* seven teal shades, light → deep (Functions quests 1 → 7) */
+const FUNC_SHADES = [
+  "#5eead4", "#2dd4bf", "#14b8a6", "#0d9488", "#0f766e", "#115e59", "#134e4a",
+];
+
 export const CHAPTERS = [
   {
-    id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊",
+    id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊", term: "term3",
     hue: STATS_SHADES, signature: "#8b5cf6", open: true,
     blurb: "Data, spread, graphs and the shape of a distribution.",
     quests: [
@@ -53,7 +58,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: "finance", name: "Finance", paper: "Paper 1", icon: "💰",
+    id: "finance", name: "Finance", paper: "Paper 1", icon: "💰", term: "term3",
     hue: FIN_SHADES, signature: "#f59e0b", open: true,
     blurb: "Interest, growth and the time value of money.",
     quests: [
@@ -67,7 +72,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: "prob", name: "Probability", paper: "Paper 1", icon: "🎲",
+    id: "prob", name: "Probability", paper: "Paper 1", icon: "🎲", term: "term3",
     hue: PROB_SHADES, signature: "#ec4899", open: true,
     blurb: "Chance, Venn diagrams, tree diagrams and the rules that tie them together.",
     quests: [
@@ -81,7 +86,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: "trig", name: "2D Trigonometry", paper: "Paper 2", icon: "📐",
+    id: "trig", name: "2D Trigonometry", paper: "Paper 2", icon: "📐", term: "term3",
     hue: TRIG_SHADES, signature: "#0ea5e9", open: true,
     blurb: "Sine, cosine and area rules — solving any triangle, drawn to scale.",
     quests: [
@@ -95,7 +100,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: "meas", name: "Measurement", paper: "Paper 2", icon: "📦",
+    id: "meas", name: "Measurement", paper: "Paper 2", icon: "📦", term: "term3",
     hue: MEAS_SHADES, signature: "#84cc16", open: true,
     blurb: "Surface area and volume — read the solid, then choose the right formula.",
     quests: [
@@ -107,8 +112,23 @@ export const CHAPTERS = [
       { id: "m5", n: 6, title: "Mixed: read it & pick the formula", blurb: "All of it, plus scaling: ×k → area ×k², volume ×k³.", built: true },
     ],
   },
+  // ---- REVISION tab: chapters already taught this year, open for revision ----
+  {
+    id: "func", name: "Functions", paper: "Paper 1", icon: "📈", term: "revision",
+    hue: FUNC_SHADES, signature: "#14b8a6", open: true,
+    blurb: "The four graphs — read them, transform them, and solve inequalities off them.",
+    quests: [
+      { id: "fn1", n: 1, title: "The four families", blurb: "Line, parabola, hyperbola, exponential — from the equation and the graph.", built: true },
+      { id: "fn2", n: 2, title: "Line & parabola", blurb: "Gradient, intercepts, happy/sad, turning point, axis of symmetry, range.", built: true },
+      { id: "fn3", n: 3, title: "Hyperbola & exponential", blurb: "Asymptotes, branches, growth vs decay, domain & range.", built: true },
+      { id: "fn4", n: 4, title: "Reading a graph", blurb: "Read intercepts, turning point, asymptotes, domain & range straight off the graph.", built: true },
+      { id: "fn5", n: 5, title: "Inequalities off a graph", blurb: "Increasing/decreasing, f(x) > 0 or < 0, and the f·g and x·f sign rules.", built: true },
+      { id: "fn6", n: 6, title: "Transformations", blurb: "Shifts, reflections and stretches — the rule and what it does.", built: true },
+      { id: "fn7", n: 7, title: "Graphs together", blurb: "Intersections, f vs g, nature of roots, average gradient, max length.", built: true },
+    ],
+  },
   // future chapters appear as locked "coming soon" blocks on the hub
-  { id: "analytical", name: "Analytical Geometry", paper: "Paper 2", icon: "📈", signature: "#34d399", open: false, comingSoon: true },
+  { id: "analytical", name: "Analytical Geometry", paper: "Paper 2", icon: "📍", term: "revision", signature: "#f97316", open: false, comingSoon: true },
 ];
 
 export function chapterById(id) { return CHAPTERS.find(c => c.id === id) || null; }

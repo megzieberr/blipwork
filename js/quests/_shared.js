@@ -25,9 +25,15 @@ export function mcNum(correct, decoys) {
   return shuffled(opts);
 }
 
-/* generic MC question from a correct label + wrong labels */
+/* generic MC question from a correct label + wrong labels.
+   Wrong options are de-duplicated against the correct answer and each other,
+   so an edge-case collision (e.g. a coordinate of 0) can never produce two
+   identical buttons. */
 export function mc(concept, prompt, correct, wrongs, opts = {}) {
-  const options = shuffled([{ label: correct, correct: true }, ...wrongs.map(w => ({ label: w, correct: false }))]);
+  const seen = new Set([String(correct)]);
+  const uniqWrong = [];
+  for (const w of wrongs) { const l = String(w); if (!seen.has(l)) { seen.add(l); uniqWrong.push({ label: l, correct: false }); } }
+  const options = shuffled([{ label: correct, correct: true }, ...uniqWrong]);
   return {
     type: "mc", concept, prompt, options,
     answerLabel: opts.answerLabel || correct,

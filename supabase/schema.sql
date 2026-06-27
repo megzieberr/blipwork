@@ -314,7 +314,10 @@ insert into public.quests (quest_id, chapter, is_open, sort) values
   ('t4','trig',false,26), ('t5','trig',false,27), ('t6','trig',false,28),
   ('t7','trig',false,29),
   ('m1','meas',false,30), ('m2','meas',false,31), ('m3','meas',false,32),
-  ('m4','meas',false,33), ('m6','meas',false,34), ('m5','meas',false,35)
+  ('m4','meas',false,33), ('m6','meas',false,34), ('m5','meas',false,35),
+  ('fn1','func',false,36), ('fn2','func',false,37), ('fn3','func',false,38),
+  ('fn4','func',false,39), ('fn5','func',false,40), ('fn6','func',false,41),
+  ('fn7','func',false,42)
 on conflict (quest_id) do nothing;
 
 insert into public.app_config (key, value) values ('admin_password', crypt('admin', gen_salt('bf')))

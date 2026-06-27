@@ -35,6 +35,13 @@ import { questM3 } from "./questm3-open.js";
 import { questM4 } from "./questm4-composite.js";
 import { questM5 } from "./questm5-mixed.js";
 import { questM6 } from "./questm6-height.js";
+import { questFn1 } from "./questfn1-families.js";
+import { questFn2 } from "./questfn2-line-parabola.js";
+import { questFn3 } from "./questfn3-hyperbola-exp.js";
+import { questFn4 } from "./questfn4-read-graph.js";
+import { questFn5 } from "./questfn5-inequalities.js";
+import { questFn6 } from "./questfn6-transformations.js";
+import { questFn7 } from "./questfn7-together.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -46,5 +53,7 @@ export const QUEST_DEFS = {
   t1: questT1, t2: questT2, t3: questT3, t4: questT4,
   t5: questT5, t6: questT6, t7: questT7,
   m1: questM1, m2: questM2, m3: questM3, m4: questM4, m5: questM5, m6: questM6,
+  fn1: questFn1, fn2: questFn2, fn3: questFn3, fn4: questFn4,
+  fn5: questFn5, fn6: questFn6, fn7: questFn7,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

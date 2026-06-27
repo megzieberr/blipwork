@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functions · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Functions · verification</h1>
+<div id="banner">running…</div>
+
+<h2>Function-graph engine — every figure re-derives its window & re-checks its labels</h2>
+<div class="grid" id="engine"></div>
+
+<h2>Quests — 7 quests, fresh-number generations</h2>
+<pre id="quests">…</pre>
+
+<script type="module">
+import { renderFunction, verifyFunction } from "./js/engine/function-graph.js";
+import { lineGraph, parabolaGraph, hyperbolaGraph, expGraph, winFor } from "./js/quests/_func.js";
+import { parabolaFromRoots, makeFn, paraTP } from "./js/funclib.js";
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+import { answerCorrect } from "./js/check.js";
+
+const ACC = "#14b8a6";
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+/* ---------- 1) representative engine figures ---------- */
+const twoLines = (() => {
+  const ix = 1, iy = -1;
+  const f = { kind: "line", a: 2, q: iy - 2 * ix }, g = { kind: "line", a: -1, q: iy + 1 * ix };
+  const win = winFor([{ x: ix, y: iy }, { x: 0, y: f.q }, { x: 0, y: g.q }]);
+  return { type: "function", accent: ACC, grid: true, win,
+    curves: [{ ...f, tone: "a", label: "f", labelAt: win.xmax - 1.4 }, { ...g, tone: "b", label: "g", labelAt: win.xmin + 1.4 }],
+    points: [{ x: ix, y: iy, on: [0, 1], dashTo: "both" }] };
+})();
+const maxLen = (() => {
+  const f = parabolaFromRoots(1, -2, 3), g = { kind: "line", a: 1, q: 5 };
+  const tp = paraTP(f), xStar = (g.a - f.b) / 2;
+  const win = winFor([tp, { x: xStar, y: makeFn(f)(xStar) }, { x: xStar, y: makeFn(g)(xStar) }]);
+  return { type: "function", accent: ACC, grid: true, win,
+    curves: [{ ...f, tone: "a", label: "f", labelAt: win.xmin + 1.2 }, { ...g, tone: "b", label: "g", labelAt: win.xmax - 1.4 }],
+    segment: { x: xStar, fromCurve: 1, toCurve: 0, label: "AB" } };
+})();
+
+const ENGINE = [
+  { title: "Straight line y = 2x − 3", spec: lineGraph({ kind: "line", a: 2, q: -3 }, { accent: ACC, label: "f" }).spec },
+  { title: "Parabola (roots −2, 3)", spec: parabolaGraph(parabolaFromRoots(1, -2, 3), { accent: ACC, label: "f" }).spec },
+  { title: "Sad parabola (roots −1, 4)", spec: parabolaGraph(parabolaFromRoots(-1, -1, 4), { accent: ACC, label: "f" }).spec },
+  { title: "Hyperbola a=2, p=1, q=−1", spec: hyperbolaGraph({ kind: "hyperbola", a: 2, p: 1, q: -1 }, { accent: ACC, label: "f" }).spec },
+  { title: "Exponential 2·2ˣ − 1", spec: expGraph({ kind: "exp", a: 2, b: 2, p: 0, q: -1 }, { accent: ACC, label: "f" }).spec },
+  { title: "Decay ½ˣ + 2", spec: expGraph({ kind: "exp", a: 1, b: 0.5, p: 0, q: 2 }, { accent: ACC, label: "f" }).spec },
+  { title: "Two lines + intersection", spec: twoLines },
+  { title: "Max length between graphs", spec: maxLen },
+];
+const eg = document.getElementById("engine");
+ENGINE.forEach(t => {
+  const checks = verifyFunction(t.spec);
+  checks.forEach(c => tick(c.ok, `${t.title}: ${c.label}`));
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.setProperty("--accent", ACC);
+  card.innerHTML = `<h3>${t.title}</h3><div>${renderFunction(t.spec)}</div>
+    <ul class="checks">${checks.map(c => `<li class="${c.ok ? "ok" : "bad"}">${c.ok ? "✓" : "✗"} ${c.label}</li>`).join("")}</ul>`;
+  eg.appendChild(card);
+});
+
+/* ---------- 2) quests: generate each skill many times and validate ---------- */
+const chapter = CHAPTERS.find(c => c.id === "func");
+const RUNS = 150;
+const lines = [];
+let qTotalChecks = 0, qFails = 0;
+
+function checkGraph(g) {
+  if (!g) return true;
+  if (g.type === "function") return verifyFunction(g).every(c => c.ok);
+  return true;
+}
+
+chapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const skillIssues = {};
+  def.skills.forEach(skill => {
+    if (!getConcept(skill.concept)) { skillIssues[skill.id] = `missing concept "${skill.concept}"`; }
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); }
+      catch (e) { skillIssues[skill.id] = "threw: " + e.message; break; }
+      qTotalChecks++;
+      if (q.concept && !getConcept(q.concept)) { skillIssues[skill.id] = `q.concept "${q.concept}" not found`; qFails++; }
+      if (q.type === "mc" || q.type === "reason") {
+        const labels = q.options.map(o => o.label);
+        const corrects = q.options.filter(o => o.correct).length;
+        const dupes = labels.length !== new Set(labels).size;
+        if (corrects !== 1) { skillIssues[skill.id] = `has ${corrects} correct options`; qFails++; }
+        if (dupes) { skillIssues[skill.id] = `duplicate option labels: ${labels.join(" | ")}`; qFails++; }
+        if (q.options.length < 2) { skillIssues[skill.id] = "too few options"; qFails++; }
+      } else if (q.type === "calc") {
+        if (!Number.isFinite(q.expected)) { skillIssues[skill.id] = "non-finite expected"; qFails++; }
+        else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) { skillIssues[skill.id] = "expected fails its own check"; qFails++; }
+      } else if (q.type === "yesno") {
+        if (typeof q.yes !== "boolean") { skillIssues[skill.id] = "q.yes not boolean"; qFails++; }
+      }
+      if (!checkGraph(q.graph)) { skillIssues[skill.id] = "graph not to scale / dishonest label"; qFails++; }
+    }
+  });
+  const bad = Object.keys(skillIssues);
+  tick(bad.length === 0, `${qmeta.id} ${qmeta.title}`);
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.map(b => `${b}: ${skillIssues[b]}`).join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${qTotalChecks} generations checked · ${qFails} integrity failures\n\n` + lines.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total && qFails === 0;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} engine/quest checks passed, ${qTotalChecks} generations clean`
+  : `✗ ${total - passed} check group(s) failed; ${qFails} generation failures — see below`;
+
+window.__VERIFY__ = { total, passed, qTotalChecks, qFails, ok, fails };
+console.log(`[verify-func] engine&quest ${passed}/${total}, generations ${qTotalChecks}, failures ${qFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>
