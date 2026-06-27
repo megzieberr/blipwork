@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Measurement · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Measurement · verification</h1>
+<div id="banner">running…</div>
+
+<h2>Solid engine — faithful isometric: axis edges to one scale, circles as real iso ellipses</h2>
+<div class="grid" id="engine"></div>
+
+<h2>Quests — fresh-number generations</h2>
+<pre id="quests">…</pre>
+
+<script type="module">
+import { renderSolid, verifySolid } from "./js/engine/solid-graph.js";
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+import { answerCorrect } from "./js/check.js";
+
+const ACC = "#84cc16";
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const ENGINE = [
+  { title: "Rectangular prism ℓ8 b5 h6", spec: { type: "solid", shape: "box", accent: ACC, l: 8, b: 5, h: 6 } },
+  { title: "Cube (side ℓ)", spec: { type: "solid", shape: "cube", accent: ACC, s: 6 } },
+  { title: "Cylinder — CLOSED (r4 h9)", spec: { type: "solid", shape: "cylinder", accent: ACC, r: 4, h: 9, open: "none" } },
+  { title: "Cylinder — OPEN TOP", spec: { type: "solid", shape: "cylinder", accent: ACC, r: 4, h: 9, open: "top" } },
+  { title: "Cylinder — OPEN TOP & BOTTOM (pipe)", spec: { type: "solid", shape: "cylinder", accent: ACC, r: 4, h: 10, open: "both" } },
+  { title: "Tall thin cylinder (r2 h12)", spec: { type: "solid", shape: "cylinder", accent: ACC, r: 2, h: 12, open: "none" } },
+  { title: "Cone (r5 h8, slant+perp)", spec: { type: "solid", shape: "cone", accent: ACC, r: 5, h: 8, showPerp: true, showSlant: true } },
+  { title: "Square pyramid (s7 h8, slant+perp)", spec: { type: "solid", shape: "pyramid", accent: ACC, s: 7, h: 8, showPerp: true, showSlant: true } },
+  { title: "Triangular prism (b6 ⊥h5 H9)", spec: { type: "solid", shape: "triPrism", accent: ACC, b: 6, th: 5, L: 9 } },
+  { title: "Sphere (r5)", spec: { type: "solid", shape: "sphere", accent: ACC, r: 5 } },
+  { title: "Hemisphere (r5)", spec: { type: "solid", shape: "hemisphere", accent: ACC, r: 5 } },
+  { title: "Composite — cylinder + cone (silo)", spec: { type: "solid", shape: "composite", accent: ACC, r: 4, hCyl: 7, top: "cone", hTop: 6, showHcyl: true, showHtop: true } },
+  { title: "Composite — cylinder + hemisphere", spec: { type: "solid", shape: "composite", accent: ACC, r: 4, hCyl: 8, top: "hemi", showHcyl: true } },
+  { title: "Cone ★height triangle (r5 H12 ℓ13)", spec: { type: "solid", shape: "cone", accent: ACC, r: 5, h: 12, heightTri: true, rLabel: "5", hLabel: "H = ?", slantLabel: "13" } },
+  { title: "Pyramid ★height triangle (ℓ10 H12 slant13)", spec: { type: "solid", shape: "pyramid", accent: ACC, s: 10, h: 12, heightTri: true, sLabel: "10", hLabel: "H = ?", slantLabel: "13", halfLabel: "½ℓ = 5" } },
+];
+
+const eg = document.getElementById("engine");
+ENGINE.forEach(t => {
+  const checks = verifySolid(t.spec);
+  checks.forEach(c => tick(c.ok, `${t.title}: ${c.label}`));
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.setProperty("--accent", ACC);
+  card.innerHTML = `<h3>${t.title}</h3><div>${renderSolid(t.spec)}</div>
+    <ul class="checks">${checks.map(c => `<li class="${c.ok ? "ok" : "bad"}">${c.ok ? "✓" : "✗"} ${c.label}</li>`).join("")}</ul>`;
+  eg.appendChild(card);
+});
+
+/* ---------- quests: generate each skill many times and validate ---------- */
+const measChapter = CHAPTERS.find(c => c.id === "meas");
+const RUNS = 200;
+const lines = [];
+let qTotalChecks = 0, qFails = 0;
+
+function checkGraph(g) {
+  if (!g) return true;
+  if (g.type === "solid") return verifySolid(g).every(c => c.ok);
+  return true;
+}
+
+measChapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const skillIssues = {};
+  def.skills.forEach(skill => {
+    if (!getConcept(skill.concept)) skillIssues[skill.id] = `missing concept "${skill.concept}"`;
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); }
+      catch (e) { skillIssues[skill.id] = "threw: " + e.message; break; }
+      qTotalChecks++;
+      if (q.concept && !getConcept(q.concept)) { skillIssues[skill.id] = `q.concept "${q.concept}" not found`; qFails++; }
+      if (q.type === "mc" || q.type === "reason") {
+        const labels = q.options.map(o => o.label);
+        const corrects = q.options.filter(o => o.correct).length;
+        if (corrects !== 1) { skillIssues[skill.id] = `has ${corrects} correct options`; qFails++; }
+        if (labels.length !== new Set(labels).size) { skillIssues[skill.id] = `duplicate options: ${labels.join(" | ")}`; qFails++; }
+        if (q.options.length < 3) { skillIssues[skill.id] = `only ${q.options.length} options`; qFails++; }
+      } else if (q.type === "yesno") {
+        if (typeof q.yes !== "boolean") { skillIssues[skill.id] = "q.yes not boolean"; qFails++; }
+      } else if (q.type === "calc") {
+        if (!Number.isFinite(q.expected)) { skillIssues[skill.id] = "non-finite expected"; qFails++; }
+        else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) { skillIssues[skill.id] = "expected fails its own check"; qFails++; }
+      }
+      if (!checkGraph(q.graph)) { skillIssues[skill.id] = "graph not to scale"; qFails++; }
+    }
+  });
+  const bad = Object.keys(skillIssues);
+  tick(bad.length === 0, `${qmeta.id} ${qmeta.title}`);
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.map(b => `${b}: ${skillIssues[b]}`).join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${qTotalChecks} generations checked · ${qFails} integrity failures\n\n` + lines.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total && qFails === 0;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} engine/quest checks, ${qTotalChecks} generations clean`
+  : `✗ ${total - passed} check group(s) failed; ${qFails} generation failures — see below`;
+window.__VERIFY__ = { total, passed, qTotalChecks, qFails, ok, fails };
+console.log(`[verify-meas] ${passed}/${total}, generations ${qTotalChecks}, failures ${qFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

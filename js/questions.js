@@ -20,6 +20,7 @@ import { renderTimeline, computeTimeline } from "./engine/timeline-graph.js";
 import { renderVenn, computeVenn } from "./engine/venn-graph.js";
 import { renderTree, computeTree } from "./engine/tree-graph.js";
 import { renderTriangle, computeTriangle } from "./engine/triangle-graph.js";
+import { renderSolid, computeSolid } from "./engine/solid-graph.js";
 import { mountKeypad } from "./keypad.js";
 import { mountCalculator } from "./calculator.js";
 import { answerCorrect, fmtComma } from "./check.js";
@@ -41,6 +42,7 @@ export function mountQuestion(host, q, handlers = {}) {
       q.graph.type === "venn"     ? renderVenn(q.graph) :
       q.graph.type === "tree"     ? renderTree(q.graph) :
       q.graph.type === "triangle" ? renderTriangle(q.graph) :
+      q.graph.type === "solid"    ? renderSolid(q.graph) :
       renderGraph(q.graph);
     gw.innerHTML = svg + (q.graphCap ? `<div class="cap">${q.graphCap}</div>` : "");
     svgNode = gw.querySelector("svg");

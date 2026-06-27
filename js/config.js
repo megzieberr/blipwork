@@ -31,6 +31,11 @@ const TRIG_SHADES = [
   "#0284c7", "#0369a1", "#075985",
 ];
 
+/* six lime shades, light → deep (Measurement quests 1 → 6) */
+const MEAS_SHADES = [
+  "#bef264", "#a3e635", "#84cc16", "#65a30d", "#4d7c0f", "#3f6212",
+];
+
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊",
@@ -87,6 +92,19 @@ export const CHAPTERS = [
       { id: "t5", n: 5, title: "Cosine rule: angles", blurb: "All three sides → any angle, acute or obtuse.", built: true },
       { id: "t6", n: 6, title: "Area rule", blurb: "Triangles, quadrilaterals and regular polygons.", built: true },
       { id: "t7", n: 7, title: "Mixed problems", blurb: "Pick the rule, combine steps, shortest-distance and area.", built: true },
+    ],
+  },
+  {
+    id: "meas", name: "Measurement", paper: "Paper 2", icon: "📦",
+    hue: MEAS_SHADES, signature: "#84cc16", open: true,
+    blurb: "Surface area and volume — read the solid, then choose the right formula.",
+    quests: [
+      { id: "m1", n: 1, title: "Name it & its formula", blurb: "Recognise each solid and match its volume / surface-area formula.", built: true },
+      { id: "m2", n: 2, title: "Slant vs perpendicular height", blurb: "Which height goes where — volume uses H, the slanted face uses h.", built: true },
+      { id: "m3", n: 3, title: "Open tops & bottoms", blurb: "Closed, open-top, or a pipe — add a circle only for each closed end.", built: true },
+      { id: "m4", n: 4, title: "Composite solids", blurb: "Join two solids: add volumes, but leave out the hidden joining face.", built: true },
+      { id: "m6", n: 5, title: "Find the perpendicular height", blurb: "Slant vs perpendicular — find H with the hidden right-angled triangle (cone & pyramid).", built: true },
+      { id: "m5", n: 6, title: "Mixed: read it & pick the formula", blurb: "All of it, plus scaling: ×k → area ×k², volume ×k³.", built: true },
     ],
   },
   // future chapters appear as locked "coming soon" blocks on the hub

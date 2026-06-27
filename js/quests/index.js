@@ -29,6 +29,12 @@ import { questT4 } from "./questt4-cosine-sides.js";
 import { questT5 } from "./questt5-cosine-angles.js";
 import { questT6 } from "./questt6-area.js";
 import { questT7 } from "./questt7-mixed.js";
+import { questM1 } from "./questm1-name-formula.js";
+import { questM2 } from "./questm2-heights.js";
+import { questM3 } from "./questm3-open.js";
+import { questM4 } from "./questm4-composite.js";
+import { questM5 } from "./questm5-mixed.js";
+import { questM6 } from "./questm6-height.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -39,5 +45,6 @@ export const QUEST_DEFS = {
   p5: questP5, p6: questP6, p7: questP7,
   t1: questT1, t2: questT2, t3: questT3, t4: questT4,
   t5: questT5, t6: questT6, t7: questT7,
+  m1: questM1, m2: questM2, m3: questM3, m4: questM4, m5: questM5, m6: questM6,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

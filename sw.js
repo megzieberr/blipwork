@@ -2,7 +2,7 @@
    Same-origin GETs are served cache-first (and refreshed in the background);
    everything cross-origin (Supabase, the supabase-js CDN, Google Fonts) goes
    straight to the network, since scores need the internet. */
-const CACHE = "mhq-v9";   // bump on a shippable change to evict stale module caches
+const CACHE = "mhq-v10";   // bump on a shippable change to evict stale module caches
 const SHELL = ["./", "./index.html", "./admin.html", "./css/styles.css", "./js/app.js", "./manifest.json",
   "./icon-192.png", "./icon-512.png"];
 
