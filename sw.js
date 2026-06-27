@@ -1,8 +1,14 @@
-/* Service worker — caches the app shell so it opens fast and works offline.
-   Same-origin GETs are served cache-first (and refreshed in the background);
-   everything cross-origin (Supabase, the supabase-js CDN, Google Fonts) goes
-   straight to the network, since scores need the internet. */
-const CACHE = "mhq-v10";   // bump on a shippable change to evict stale module caches
+/* Service worker — keeps the app fast and offline-capable WITHOUT serving
+   stale code. Strategy:
+     • app code (HTML / JS / CSS) and page navigations → NETWORK-FIRST:
+       always fetch the latest when online, fall back to cache only offline.
+       (This is the fix for the recurring "old version still shows" problem —
+       a fresh deploy now lands on the very next load.)
+     • images / icons / manifest → cache-first (they rarely change).
+     • cross-origin (Supabase, supabase-js CDN, Google Fonts) → straight to
+       the network; scores need the internet.
+   Bump CACHE on a shippable change to evict the old cache on activate. */
+const CACHE = "mhq-v11";
 const SHELL = ["./", "./index.html", "./admin.html", "./css/styles.css", "./js/app.js", "./manifest.json",
   "./icon-192.png", "./icon-512.png"];
 
@@ -16,10 +22,30 @@ self.addEventListener("activate", e => {
   self.clients.claim();
 });
 
+const isAppCode = url => /\.(?:js|css|html)$/.test(url.pathname) || url.pathname.endsWith("/");
+
 self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
-  if (new URL(req.url).origin !== location.origin) return;   // network for Supabase / CDN / fonts
+  const url = new URL(req.url);
+  if (url.origin !== location.origin) return;   // network for Supabase / CDN / fonts
+
+  // NETWORK-FIRST for app code + navigations: fresh when online, cache offline.
+  if (req.mode === "navigate" || isAppCode(url)) {
+    e.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      try {
+        const res = await fetch(req);
+        if (res && res.status === 200) cache.put(req, res.clone());
+        return res;
+      } catch {
+        return (await cache.match(req)) || (req.mode === "navigate" ? cache.match("./index.html") : Response.error());
+      }
+    })());
+    return;
+  }
+
+  // CACHE-FIRST for images / icons / manifest (refresh quietly in the background).
   e.respondWith(caches.open(CACHE).then(async cache => {
     const cached = await cache.match(req);
     const network = fetch(req).then(res => { if (res && res.status === 200) cache.put(req, res.clone()); return res; }).catch(() => cached);
