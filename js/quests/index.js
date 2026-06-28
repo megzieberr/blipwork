@@ -49,6 +49,13 @@ import { questTg4 } from "./questtg4-shifts.js";
 import { questTg5 } from "./questtg5-tan.js";
 import { questTg6 } from "./questtg6-find-equation.js";
 import { questTg7 } from "./questtg7-mixed.js";
+import { questAg1 } from "./questag1-formulas.js";
+import { questAg2 } from "./questag2-gradient.js";
+import { questAg3 } from "./questag3-parallel-perp.js";
+import { questAg4 } from "./questag4-inclination.js";
+import { questAg5 } from "./questag5-perp-bisector.js";
+import { questAg6 } from "./questag6-triangle-area.js";
+import { questAg7 } from "./questag7-mixed.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -64,5 +71,7 @@ export const QUEST_DEFS = {
   fn5: questFn5, fn6: questFn6, fn7: questFn7,
   tg1: questTg1, tg2: questTg2, tg3: questTg3, tg4: questTg4,
   tg5: questTg5, tg6: questTg6, tg7: questTg7,
+  ag1: questAg1, ag2: questAg2, ag3: questAg3, ag4: questAg4,
+  ag5: questAg5, ag6: questAg6, ag7: questAg7,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

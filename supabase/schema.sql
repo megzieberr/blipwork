@@ -320,7 +320,10 @@ insert into public.quests (quest_id, chapter, is_open, sort) values
   ('fn7','func',false,42),
   ('tg1','tgraph',false,43), ('tg2','tgraph',false,44), ('tg3','tgraph',false,45),
   ('tg4','tgraph',false,46), ('tg5','tgraph',false,47), ('tg6','tgraph',false,48),
-  ('tg7','tgraph',false,49)
+  ('tg7','tgraph',false,49),
+  ('ag1','analytical',false,50), ('ag2','analytical',false,51), ('ag3','analytical',false,52),
+  ('ag4','analytical',false,53), ('ag5','analytical',false,54), ('ag6','analytical',false,55),
+  ('ag7','analytical',false,56)
 on conflict (quest_id) do nothing;
 
 insert into public.app_config (key, value) values ('admin_password', crypt('admin', gen_salt('bf')))

@@ -46,6 +46,11 @@ const TGRAPH_SHADES = [
   "#a5b4fc", "#818cf8", "#6366f1", "#5b54e0", "#4f46e5", "#4338ca", "#3730a3",
 ];
 
+/* seven orange shades, light → deep (Analytical Geometry quests 1 → 7) */
+const AG_SHADES = [
+  "#fdba74", "#fb923c", "#f97316", "#ea6a0c", "#dd5c0a", "#c2480a", "#9a3412",
+];
+
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊", term: "term3",
@@ -146,8 +151,20 @@ export const CHAPTERS = [
       { id: "tg7", n: 7, title: "Putting it together", blurb: "Two graphs at once: higher/lower, positive, intersections.", built: true },
     ],
   },
-  // future chapters appear as locked "coming soon" blocks on the hub
-  { id: "analytical", name: "Analytical Geometry", paper: "Paper 2", icon: "📍", term: "revision", signature: "#f97316", open: false, comingSoon: true },
+  {
+    id: "analytical", name: "Analytical Geometry", paper: "Paper 2", icon: "📍", term: "revision",
+    hue: AG_SHADES, signature: "#f97316", open: true,
+    blurb: "Points, lines and gradients on the grid — the right formula, drawn to scale.",
+    quests: [
+      { id: "ag1", n: 1, title: "Which formula, and what it tells you", blurb: "Gradient, distance or midpoint — and what each answer looks like.", built: true },
+      { id: "ag2", n: 2, title: "Gradient: sign & special lines", blurb: "Positive, negative, zero or undefined — and the horizontal/vertical traps.", built: true },
+      { id: "ag3", n: 3, title: "Parallel & perpendicular", blurb: "Equal gradients vs the −1 product, and the negative reciprocal.", built: true },
+      { id: "ag4", n: 4, title: "Angle of inclination", blurb: "Acute or obtuse? When to use 180° − tan⁻¹, and don’t type the negative in.", built: true },
+      { id: "ag5", n: 5, title: "Perpendicular bisector", blurb: "Through the midpoint AND at right angles — spot it and tap it.", built: true },
+      { id: "ag6", n: 6, title: "Area of a triangle", blurb: "Read the base and the ⊥height — altitude vs median.", built: true },
+      { id: "ag7", n: 7, title: "Putting it together", blurb: "Median/altitude/bisector, and the ‘to prove…, show…’ table.", built: true },
+    ],
+  },
 ];
 
 export function chapterById(id) { return CHAPTERS.find(c => c.id === id) || null; }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytical Geometry · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Analytical Geometry · verification</h1>
+<div id="banner">running…</div>
+
+<h2>Engine — uniform scale, true right angles, inclination arcs to the real slope</h2>
+<div class="grid" id="engine"></div>
+
+<h2>Quests — 7 quests, fresh-number generations</h2>
+<pre id="quests">…</pre>
+
+<script type="module">
+import { renderAnalytic, verifyAnalytic } from "./js/engine/analytical-graph.js";
+import { inclinationDiagram, triangleAltitude, bisectorCandidate, winFor } from "./js/quests/_analytical.js";
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+import { answerCorrect } from "./js/check.js";
+
+const ACC = "#f97316";
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+/* ---------- 1) representative engine figures ---------- */
+const triP = { A: { x: -3, y: -1 }, B: { x: 4, y: 0 }, C: { x: 1, y: 5 } };
+const ENGINE = [
+  { title: "θ acute (m = 7/6)", spec: inclinationDiagram(7, 6, { accent: ACC }).spec },
+  { title: "θ obtuse (m = −4/5)", spec: inclinationDiagram(-4, 5, { accent: ACC }).spec },
+  { title: "θ = 45° (m = 1)", spec: inclinationDiagram(1, 1, { accent: ACC }).spec },
+  { title: "θ = 135° (m = −1)", spec: inclinationDiagram(-1, 1, { accent: ACC }).spec },
+  { title: "triangle + altitude (base AB)", spec: triangleAltitude(triP, "AB", { accent: ACC }).spec },
+  { title: "triangle + altitude (base BC)", spec: triangleAltitude(triP, "BC", { accent: ACC }).spec },
+  { title: "perp bisector — true (marks)", spec: bisectorCandidate({ x: -3, y: -1 }, { x: 3, y: 3 }, { accent: ACC, throughMid: true, perpendicular: true }).spec },
+  { title: "perp bisector — perp, off midpoint", spec: bisectorCandidate({ x: -3, y: -1 }, { x: 3, y: 3 }, { accent: ACC, throughMid: false, perpendicular: true, marks: false }).spec },
+  { title: "perp bisector — through mid, not perp", spec: bisectorCandidate({ x: -3, y: -1 }, { x: 3, y: 3 }, { accent: ACC, throughMid: true, perpendicular: false, marks: false }).spec },
+  { title: "two ⊥ lines (2/3 & −3/2)", spec: { type: "analytic", accent: ACC, grid: true, win: winFor([{ x: 6, y: 4 }, { x: -6, y: -4 }, { x: 4, y: -6 }, { x: -4, y: 6 }]), segs: [{ a: { x: -6, y: -4 }, b: { x: 6, y: 4 }, kind: "line", perp: 1, tone: "a" }, { a: { x: 4, y: -6 }, b: { x: -4, y: 6 }, kind: "line", tone: "b" }] } },
+];
+const eg = document.getElementById("engine");
+ENGINE.forEach(t => {
+  const checks = verifyAnalytic(t.spec);
+  checks.forEach(c => tick(c.ok, `${t.title}: ${c.label}`));
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.setProperty("--accent", ACC);
+  card.innerHTML = `<h3>${t.title}</h3><div>${renderAnalytic(t.spec)}</div>
+    <ul class="checks">${checks.map(c => `<li class="${c.ok ? "ok" : "bad"}">${c.ok ? "✓" : "✗"} ${c.label}</li>`).join("")}</ul>`;
+  eg.appendChild(card);
+});
+
+/* ---------- 2) quests: generate each skill many times and validate ---------- */
+const chapter = CHAPTERS.find(c => c.id === "analytical");
+const RUNS = 250;
+const lines = [];
+let qTotalChecks = 0, qFails = 0;
+
+function checkGraph(g) {
+  if (!g) return true;
+  if (g.type === "analytic") return verifyAnalytic(g).every(c => c.ok);
+  return true;
+}
+
+chapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const skillIssues = {};
+  def.skills.forEach(skill => {
+    if (!getConcept(skill.concept)) skillIssues[skill.id] = `missing concept "${skill.concept}"`;
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); }
+      catch (e) { skillIssues[skill.id] = "threw: " + e.message; break; }
+      qTotalChecks++;
+      if (q.concept && !getConcept(q.concept)) { skillIssues[skill.id] = `q.concept "${q.concept}" not found`; qFails++; }
+      if (q.type === "mc" || q.type === "reason") {
+        const labels = q.options.map(o => o.label);
+        const corrects = q.options.filter(o => o.correct).length;
+        if (corrects !== 1) { skillIssues[skill.id] = `has ${corrects} correct options`; qFails++; }
+        if (labels.length !== new Set(labels).size) { skillIssues[skill.id] = `duplicate options: ${labels.join(" | ")}`; qFails++; }
+        if (q.options.length < 2) { skillIssues[skill.id] = "too few options"; qFails++; }
+      } else if (q.type === "calc") {
+        if (!Number.isFinite(q.expected)) { skillIssues[skill.id] = "non-finite expected"; qFails++; }
+        else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) { skillIssues[skill.id] = "expected fails its own check"; qFails++; }
+      } else if (q.type === "yesno") {
+        if (typeof q.yes !== "boolean") { skillIssues[skill.id] = "q.yes not boolean"; qFails++; }
+      } else if (q.type === "tap") {
+        if (!q.tap || q.tap.correctId == null) { skillIssues[skill.id] = "tap without correctId"; qFails++; }
+        const mode = (q.tap && q.tap.mode) || "point";
+        const ids = mode === "seg" ? (q.graph.segs || []).map(s => s.id) : (q.graph.points || []).map(p => p.id);
+        if (!ids.includes(q.tap.correctId)) { skillIssues[skill.id] = `correctId "${q.tap.correctId}" not among ${mode}s`; qFails++; }
+        if (q.tap.targets && !q.tap.targets.every(t => ids.includes(t))) { skillIssues[skill.id] = "a target id is missing from the graph"; qFails++; }
+      }
+      if (!checkGraph(q.graph)) { skillIssues[skill.id] = "graph not to scale / dishonest label"; qFails++; }
+    }
+  });
+  const bad = Object.keys(skillIssues);
+  tick(bad.length === 0, `${qmeta.id} ${qmeta.title}`);
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.map(b => `${b}: ${skillIssues[b]}`).join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${qTotalChecks} generations checked · ${qFails} integrity failures\n\n` + lines.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total && qFails === 0;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} engine/quest checks passed, ${qTotalChecks} generations clean`
+  : `✗ ${total - passed} check group(s) failed; ${qFails} generation failures — see below`;
+
+window.__VERIFY__ = { total, passed, qTotalChecks, qFails, ok, fails };
+console.log(`[verify-analytical] engine&quest ${passed}/${total}, generations ${qTotalChecks}, failures ${qFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.slice(0, 40).join("\n"));
+</script>
+</body>
+</html>

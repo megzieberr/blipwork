@@ -386,6 +386,24 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .tg-flab{font-size:13px;font-weight:700;font-style:italic;fill:var(--accent)}
 .tg-tappable .tg-plab,.tg-tappable .tg-flab{pointer-events:none}
 
+/* analytical-geometry engine (.ag-*) — a uniform-scale Cartesian plane so a
+   right angle looks square and the angle-of-inclination arc matches the slope */
+.ag-grid{stroke:var(--g-grid);stroke-width:.5}
+.ag-axis{stroke:var(--g-axis);stroke-width:1.2}
+.ag-arrow{fill:var(--g-axis)}
+.ag-axlab{font-size:11px;font-style:italic;fill:var(--g-muted)}
+.ag-poly{stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round}
+.ag-seg{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linecap:round}
+.ag-seg.dash{stroke-dasharray:5 4}
+.ag-slab{font-size:11px;font-weight:700;fill:var(--g-ink);paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+.ag-tick{stroke:var(--g-ink);stroke-width:1.6}
+.ag-right{stroke:var(--g-read);stroke-width:1.4;fill:none}
+.ag-arc{stroke:var(--g-read);stroke-width:1.6;fill:none}
+.ag-ang{font-size:12px;font-weight:700;fill:var(--g-read);paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+.ag-dot{fill:var(--g-ink)}
+.ag-plab{font-size:10.5px;font-weight:700;fill:var(--g-ink);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
+.ag-tappable .ag-plab,.ag-tappable .ag-slab,.ag-tappable .ag-ang{pointer-events:none}
+
 /* inline stacked fraction (used in equations like a hyperbola) */
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-0.45em;margin:0 .15em;line-height:1.06}
 .frac .fr-n{display:block;padding:0 .35em;border-bottom:1.6px solid currentColor}
