@@ -396,6 +396,8 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .ag-seg{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linecap:round}
 .ag-seg.dash{stroke-dasharray:5 4}
 .ag-slab{font-size:11px;font-weight:700;fill:var(--g-ink);paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+/* line letter (A / B / 1 / 2) for "which line?" multiple-choice — bold, with a halo */
+.ag-llab{font-size:15px;font-weight:800;fill:var(--accent);paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
 .ag-tick{stroke:var(--g-ink);stroke-width:1.6}
 .ag-right{stroke:var(--g-read);stroke-width:1.4;fill:none}
 .ag-arc{stroke:var(--g-read);stroke-width:1.6;fill:none}

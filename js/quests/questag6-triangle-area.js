@@ -8,7 +8,7 @@
    median. The altitude in every diagram is drawn truly perpendicular.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { tapQ, yesnoQ, triangleAltitude, winFor, AG } from "./_analytical.js";
+import { yesnoQ, triangleAltitude, winFor, AG } from "./_analytical.js";
 import { triArea, randPoint, pick } from "../analyticslib.js";
 
 const ACC = AG[5];
@@ -42,25 +42,27 @@ const SKILLS = {
         answerLabel: "Area = ½ × base × ⊥height." });
   },
 
-  /* tap the base the height is measured to */
-  tapBase: () => {
+  /* which side is the base the height is measured to */
+  whichBase: () => {
     const { P, base } = niceTriangle();
     const t = triangleAltitude(P, base, { accent: ACC });
-    return tapQ("triangleArea",
-      `The dashed line is the perpendicular height (drawn from <b>${t.apex}</b>). Tap the <b>base</b> it is measured to.`,
-      t.spec, { mode: "seg", targets: t.sideIds, correctId: t.baseId },
-      { tapHint: "The base is the side the dashed height makes a right angle with.",
+    return mc("triangleArea",
+      `The dashed line is the perpendicular height (drawn from <b>${t.apex}</b>). Which <b>side</b> is the base it is measured to?`,
+      `side ${t.baseId}`, t.sideIds.filter((id) => id !== t.baseId).map((id) => `side ${id}`),
+      { graph: t.spec,
+        hint: "The base is the side the dashed height makes a right angle with.",
         answerLabel: `The base is side ${t.baseId}.` });
   },
 
-  /* tap the perpendicular height itself */
-  tapHeight: () => {
+  /* which line is the perpendicular height itself */
+  whichHeight: () => {
     const { P, base } = niceTriangle();
     const t = triangleAltitude(P, base, { accent: ACC });
-    return tapQ("triangleArea",
-      "Tap the <b>perpendicular height</b> (the altitude) of this triangle.",
-      t.spec, { mode: "seg", targets: [...t.sideIds, "alt"], correctId: "alt" },
-      { tapHint: "It runs from a vertex and meets the opposite side at 90° (look for the right-angle mark).",
+    return mc("triangleArea",
+      "Which line is the <b>perpendicular height</b> (the altitude) of this triangle?",
+      "the dashed line (with the right-angle mark)", t.sideIds.map((id) => `side ${id}`),
+      { graph: t.spec,
+        hint: "It runs from a vertex and meets the opposite side at 90° — look for the right-angle mark.",
         answerLabel: "The dashed segment with the right-angle mark is the perpendicular height." });
   },
 
@@ -84,14 +86,15 @@ const SKILLS = {
         answerLabel: "The altitude (perpendicular to the base)." });
   },
 
-  /* the height comes from the opposite vertex (tap it) */
+  /* the height comes from the opposite vertex */
   whichVertex: () => {
     const { P, base } = niceTriangle();
     const t = triangleAltitude(P, base, { accent: ACC, showAlt: false });
-    return tapQ("triangleArea",
-      `If side <b>${t.baseId}</b> is the base, tap the <b>vertex</b> the perpendicular height must be drawn from.`,
-      t.spec, { mode: "point", targets: ["A", "B", "C"], correctId: t.apex },
-      { tapHint: "The height drops from the corner OPPOSITE the base.",
+    return mc("triangleArea",
+      `If side <b>${t.baseId}</b> is the base, which <b>vertex</b> must the perpendicular height be drawn from?`,
+      t.apex, ["A", "B", "C"].filter((v) => v !== t.apex),
+      { graph: t.spec,
+        hint: "The height drops from the corner OPPOSITE the base.",
         answerLabel: `From the opposite vertex, ${t.apex}.` });
   },
 

@@ -9,7 +9,7 @@
    The arc in every diagram is drawn to the line's REAL slope.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { tapQ, yesnoQ, inclinationDiagram, winFor, AG } from "./_analytical.js";
+import { yesnoQ, inclinationDiagram, winFor, letterLines, AG } from "./_analytical.js";
 import { inclinationCase, gradFrac, neg, Cdp, pick } from "../analyticslib.js";
 
 const ACC = AG[3];
@@ -97,24 +97,26 @@ const SKILLS = {
         answerLabel: `θ = ${deg0(ex.theta)}.` });
   },
 
-  /* tap the line with an obtuse angle of inclination */
-  tapObtuse: () => {
+  /* which lettered line has an obtuse angle of inclination (pick A or B) */
+  whichObtuse: () => {
     const up = inclinationCase({ negative: false }), down = inclinationCase({ negative: true });
     const d1 = dirOf(up), d2 = dirOf(down), k = 4;
     const segs = [
       { a: { x: -d1.x * k, y: -d1.y * k }, b: { x: d1.x * k, y: d1.y * k }, kind: "line", id: "acute", tone: "a" },
       { a: { x: -d2.x * k, y: -d2.y * k }, b: { x: d2.x * k, y: d2.y * k }, kind: "line", id: "obtuse", tone: "b" },
     ];
+    const letter = letterLines(segs, ["A", "B"]);
     const graph = {
       type: "analytic", accent: ACC, grid: true,
       win: winFor(segs.flatMap((s) => [s.a, s.b]), { min: 9 }),
       segs, points: [{ x: 0, y: 0 }],
     };
-    return tapQ("angleInclination",
-      "Tap the line whose <b>angle of inclination is obtuse</b> (more than 90°).", graph,
-      { mode: "seg", targets: ["acute", "obtuse"], correctId: "obtuse" },
-      { tapHint: "Obtuse inclination ⇔ the line falls left → right (negative gradient).",
-        answerLabel: "The falling line (negative gradient) has the obtuse angle of inclination." });
+    return mc("angleInclination",
+      "Which line has an <b>obtuse</b> angle of inclination (more than 90°)?",
+      `Line ${letter.obtuse}`, [`Line ${letter.acute}`],
+      { graph,
+        hint: "Obtuse inclination ⇔ the line falls left → right (negative gradient).",
+        answerLabel: `Line ${letter.obtuse} — the falling (negative-gradient) line has the obtuse angle.` });
   },
 };
 

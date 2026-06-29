@@ -6,7 +6,7 @@
    tap it, and know its gradient is the negative reciprocal.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { tapQ, yesnoQ, bisectorCandidate, winFor, AG } from "./_analytical.js";
+import { yesnoQ, bisectorCandidate, winFor, letterLines, AG } from "./_analytical.js";
 import { midpoint, gradFracOf, gradFrac, randSegment, ptStr, pick } from "../analyticslib.js";
 
 const ACC = AG[4];
@@ -73,8 +73,8 @@ const SKILLS = {
         answerLabel: `Through the midpoint M${ptStr(M)}.` });
   },
 
-  /* tap the perpendicular bisector among candidates */
-  tapBisector: () => {
+  /* which candidate line is the perpendicular bisector (pick line 1 or 2) */
+  whichBisector: () => {
     const { A, B } = randSegment(-4, 4, 4);
     const M = midpoint(A, B);
     const d = { x: B.x - A.x, y: B.y - A.y };
@@ -82,21 +82,23 @@ const SKILLS = {
     const perpDir = u({ x: -d.y, y: d.x });
     const skewDir = u({ x: -d.y + d.x * 0.8, y: d.x + d.y * 0.8 });
     const L = 3;
-    // candidate 1: true perpendicular bisector (through M, perpendicular)
+    // candidate: true perpendicular bisector (through M, perpendicular)
     const pb = { a: { x: M.x - perpDir.x * L, y: M.y - perpDir.y * L }, b: { x: M.x + perpDir.x * L, y: M.y + perpDir.y * L }, kind: "line", id: "pb", tone: "b", perp: 0 };
-    // candidate 2: through M but NOT perpendicular (a decoy bisector)
+    // candidate: through M but NOT perpendicular (a decoy bisector)
     const decoy = { a: { x: M.x - skewDir.x * L, y: M.y - skewDir.y * L }, b: { x: M.x + skewDir.x * L, y: M.y + skewDir.y * L }, kind: "line", id: "skew", tone: "c" };
+    const letter = letterLines([pb, decoy], ["1", "2"]);   // "1"/"2" so they don't clash with points A, B
     const graph = {
       type: "analytic", accent: ACC, grid: true,
       win: winFor([A, B, pb.a, pb.b, decoy.a, decoy.b], { min: 9 }),
       segs: [{ a: A, b: B, id: "AB", tone: "a" }, pb, decoy],
       points: [{ x: A.x, y: A.y, label: "A", place: "auto" }, { x: B.x, y: B.y, label: "B", place: "auto" }],
     };
-    return tapQ("perpBisector",
-      "Both orange lines cut AB in half. Tap the one that is the <b>perpendicular bisector</b>.", graph,
-      { mode: "seg", targets: ["pb", "skew"], correctId: "pb" },
-      { tapHint: "The perpendicular bisector also crosses AB at a right angle.",
-        answerLabel: "The one that meets AB at 90° is the perpendicular bisector." });
+    return mc("perpBisector",
+      "Both lines <b>1</b> and <b>2</b> cut AB in half. Which one is the <b>perpendicular bisector</b>?",
+      `Line ${letter.pb}`, [`Line ${letter.skew}`],
+      { graph,
+        hint: "The perpendicular bisector also crosses AB at a right angle (90°).",
+        answerLabel: `Line ${letter.pb} — the one that meets AB at 90°.` });
   },
 
   /* the equidistant property */

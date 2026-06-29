@@ -6,7 +6,7 @@
    has gradient 0, a vertical line has an undefined gradient.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { tapQ, yesnoQ, winFor, AG } from "./_analytical.js";
+import { yesnoQ, winFor, letterLines, AG } from "./_analytical.js";
 import { randInt, pick, gradient } from "../analyticslib.js";
 
 const ACC = AG[1];
@@ -43,22 +43,23 @@ const SKILLS = {
         answerLabel: `The gradient is ${correct}.` });
   },
 
-  /* tap the line with a chosen sign (two lines drawn) */
-  tapBySign: () => {
+  /* which of two lettered lines has a chosen sign (pick A or B) */
+  whichBySign: () => {
     const want = pick(["pos", "neg"]);
     const p1 = pointsFor("pos"), p2 = pointsFor("neg");
     const win = winFor([p1.A, p1.B, p2.A, p2.B], { min: 11 });
-    const graph = {
-      type: "analytic", accent: ACC, grid: true, win,
-      segs: [
-        { a: p1.A, b: p1.B, kind: "line", id: "pos", tone: "a" },
-        { a: p2.A, b: p2.B, kind: "line", id: "neg", tone: "b" },
-      ],
-    };
-    return tapQ("gradientSign", `Tap the line with a <b>${KINDLAB[want]}</b> gradient.`, graph,
-      { mode: "seg", targets: ["pos", "neg"], correctId: want },
-      { tapHint: "A negative-gradient line falls as you read left → right.",
-        answerLabel: `The ${KINDLAB[want]}-gradient line ${want === "pos" ? "rises" : "falls"} left → right.` });
+    const segs = [
+      { a: p1.A, b: p1.B, kind: "line", id: "pos", tone: "a" },
+      { a: p2.A, b: p2.B, kind: "line", id: "neg", tone: "b" },
+    ];
+    const letter = letterLines(segs, ["A", "B"]);
+    const graph = { type: "analytic", accent: ACC, grid: true, win, segs };
+    return mc("gradientSign",
+      `Which line has a <b>${KINDLAB[want]}</b> gradient?`,
+      `Line ${letter[want]}`, [`Line ${letter[want === "pos" ? "neg" : "pos"]}`],
+      { graph,
+        hint: "A positive-gradient line rises ↗ and a negative one falls ↘ as you read left → right.",
+        answerLabel: `Line ${letter[want]} — the ${KINDLAB[want]}-gradient line ${want === "pos" ? "rises ↗" : "falls ↘"}.` });
   },
 
   /* horizontal line */

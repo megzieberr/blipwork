@@ -132,9 +132,11 @@ export function renderAnalytic(spec) {
       out += `<path class="ag-arrow" d="M ${N(ax)} ${N(ay)} l ${N(u.x * 8 - u.y * 4)} ${N(u.y * 8 + u.x * 4)} l ${N(u.y * 8)} ${N(-u.x * 8)} z" style="fill:${stroke}"/>`;
     }
     if (sg.label != null) {
-      const m = { x: (ax + bx) / 2, y: (ay + by) / 2 };
+      // labelPt (maths-space) lets a full line be lettered near its end, clear of the
+      // crossing in the middle; otherwise the label sits at the segment's midpoint.
+      const at = sg.labelPt ? { x: X(sg.labelPt.x), y: Y(sg.labelPt.y) } : { x: (ax + bx) / 2, y: (ay + by) / 2 };
       const nrm = unit({ x: -(by - ay), y: bx - ax });
-      out += text(m.x + nrm.x * 13, m.y + nrm.y * 13, sg.label, "ag-slab");
+      out += text(at.x + nrm.x * 12, at.y + nrm.y * 12, sg.label, sg.labelPt ? "ag-llab" : "ag-slab");
     }
   });
 

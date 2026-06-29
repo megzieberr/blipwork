@@ -7,7 +7,7 @@
    just choosing the tool. Diagram-backed where it helps.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { tapQ, winFor, AG } from "./_analytical.js";
+import { winFor, AG } from "./_analytical.js";
 import { randSegment, randPoint, distance, ptStr, pick } from "../analyticslib.js";
 
 const ACC = AG[0];
@@ -90,8 +90,8 @@ const SKILLS = {
         answerLabel: "x<sub>A</sub> — same point first, top and bottom." });
   },
 
-  /* read a coordinate off the plane (tap) */
-  tapPoint: () => {
+  /* read a coordinate off the plane (pick the labelled point) */
+  readPoint: () => {
     const pts = [];
     while (pts.length < 3) {
       const p = randPoint(-6, 6);
@@ -103,9 +103,11 @@ const SKILLS = {
       type: "analytic", accent: ACC, grid: true, win: winFor(pts),
       points: pts.map((p, i) => ({ x: p.x, y: p.y, id: ids[i], label: ids[i], place: "auto" })),
     };
-    return tapQ("whichFormula", `Tap the point at <b>${ptStr(target.p)}</b>.`, graph,
-      { mode: "point", targets: ids, correctId: target.id },
-      { tapHint: "Count across for x, then up/down for y.", answerLabel: `${target.id} is at ${ptStr(target.p)}.` });
+    return mc("whichFormula", `Which point is at <b>${ptStr(target.p)}</b>?`,
+      target.id, ids.filter((i) => i !== target.id),
+      { graph,
+        hint: "Count across for x, then up/down for y.",
+        answerLabel: `${target.id} is at ${ptStr(target.p)}.` });
   },
 };
 

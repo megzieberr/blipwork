@@ -10,6 +10,24 @@
 import {
   midpoint, footOfPerp, gradient, inclination, distance, ptStr, C,
 } from "../analyticslib.js";
+import { shuffled } from "../ui.js";
+
+/* Letter a set of line segments (A, B, …) for "which line?" multiple-choice —
+   easier on a phone than tapping a line that crosses another near the origin.
+   Each line gets its letter drawn near its UPPER end (clear of the crossing),
+   in a random order, and we return a map from each line's id to its letter. */
+export function letterLines(segs, letters = ["A", "B", "C", "D"]) {
+  const map = {};
+  shuffled(segs.map((_, i) => i)).forEach((idx, k) => {
+    const sg = segs[idx], L = letters[k];
+    map[sg.id] = L;
+    const c = { x: (sg.a.x + sg.b.x) / 2, y: (sg.a.y + sg.b.y) / 2 };
+    const end = sg.a.y >= sg.b.y ? sg.a : sg.b;          // the higher endpoint
+    sg.label = L;
+    sg.labelPt = { x: c.x + (end.x - c.x) * 0.8, y: c.y + (end.y - c.y) * 0.8 };
+  });
+  return map;
+}
 
 /* the seven orange shades (matches AG_SHADES in config) */
 export const AG = ["#fdba74", "#fb923c", "#f97316", "#ea6a0c", "#dd5c0a", "#c2480a", "#9a3412"];
