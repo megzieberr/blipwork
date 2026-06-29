@@ -20,7 +20,7 @@ const SKILLS = {
     return calcQ("patArithmetic",
       `Find the common difference of <b>${list(seq)}</b>.`,
       d,
-      { graph: pyramid(seq, { showFirst: true, accent: ACC }),
+      { graph: pyramid(seq, { showFirst: true, blankFirst: true, accent: ACC }),
         hint: "d = any term minus the term before it.",
         answerLabel: `d = ${C(seq[1])} − ${C(seq[0])} = ${C(d)}.` });
   },

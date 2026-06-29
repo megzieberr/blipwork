@@ -23,8 +23,8 @@ const SKILLS = {
     return mc("patClassify",
       `Look at the pattern:<br><b>${list(seq)}</b><br>What kind of pattern is it?`,
       "arithmetic (linear)", wrongsFor("arithmetic (linear)"),
-      { graph: pyramid(seq, { showFirst: true, accent: ACC }),
-        hint: "Find the FIRST differences. If they are all the same, it is arithmetic.",
+      { graph: pyramid(seq, { accent: ACC }),
+        hint: "Find the FIRST differences yourself. If they are all the same, it is arithmetic.",
         answerLabel: "Arithmetic — the first difference is constant." });
   },
 
@@ -34,8 +34,8 @@ const SKILLS = {
     return mc("patClassify",
       `Look at the pattern:<br><b>${list(seq)}</b><br>What kind of pattern is it?`,
       "quadratic", wrongsFor("quadratic"),
-      { graph: pyramid(seq, { showFirst: true, showSecond: true, accent: ACC }),
-        hint: "The first differences change, but the SECOND differences are constant → quadratic.",
+      { graph: pyramid(seq, { accent: ACC }),
+        hint: "Work out the first differences — they change. Their differences (the second differences) are constant → quadratic.",
         answerLabel: "Quadratic — the second difference is constant." });
   },
 
@@ -56,8 +56,8 @@ const SKILLS = {
       `For the quadratic pattern <b>${list(seq)}</b>, which differences are constant?`,
       "the second differences",
       ["the first differences", "the terms themselves", "none of them"],
-      { graph: pyramid(seq, { showFirst: true, showSecond: true, accent: ACC }),
-        hint: "First differences change; go one row deeper.",
+      { graph: pyramid(seq, { accent: ACC }),
+        hint: "Work out the first differences (they change), then their differences (those stay the same).",
         answerLabel: "The second differences are constant." });
   },
 
@@ -67,7 +67,7 @@ const SKILLS = {
     return calcQ("patClassify",
       `What is the constant first difference of <b>${list(seq)}</b>?`,
       d,
-      { graph: pyramid(seq, { showFirst: true, accent: ACC }),
+      { graph: pyramid(seq, { showFirst: true, blankFirst: true, accent: ACC }),
         hint: "Subtract any term from the one after it (next − previous).",
         answerLabel: `d = ${C(seq[1])} − ${C(seq[0])} = ${C(d)}.` });
   },

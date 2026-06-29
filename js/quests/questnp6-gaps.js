@@ -49,8 +49,8 @@ const SKILLS = {
       "The first differences (gaps) of a quadratic pattern form what kind of pattern?",
       "an arithmetic (linear) pattern",
       ["another quadratic pattern", "a geometric pattern", "a constant pattern"],
-      { graph: pyramid(seq, { showFirst: true, showSecond: true, accent: ACC }),
-        hint: "Look at the first-difference row: it goes up (or down) by the same amount each time.",
+      { graph: pyramid(seq, { showFirst: true, accent: ACC }),
+        hint: "Look at the gaps (first-difference row): do they change by the same amount each time?",
         answerLabel: "Arithmetic — the gaps change by the constant second difference each time." });
   },
 
@@ -61,7 +61,7 @@ const SKILLS = {
     return calcQ("patConsecDiff",
       `By how much does each gap change in <b>${list(seq)}</b>? (the common difference of the gap-pattern)`,
       sd,
-      { graph: pyramid(seq, { showFirst: true, showSecond: true, accent: ACC }),
+      { graph: pyramid(seq, { showFirst: true, showSecond: true, blankSecond: true, accent: ACC }),
         hint: "That is exactly the constant second difference.",
         answerLabel: `The gaps change by ${C(sd)} each time (the second difference).` });
   },

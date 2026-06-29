@@ -22,6 +22,8 @@
      termLabels?:[ … ],           // override the text shown in a term cell (e.g. "x")
      showFirst?:bool,             // draw the first-difference row
      showSecond?:bool,            // draw the second-difference row (needs showFirst)
+     blankFirst?:bool,            // show the first-difference cells as "?" (don't reveal the answer)
+     blankSecond?:bool,           // show the second-difference cells as "?"
      accent?, w?, h?,
      tap?:{ targets:[cellId], correctId }   // cellId: "t0" | "d1_0" | "d2_0"
    }
@@ -69,8 +71,9 @@ export function computePattern(spec) {
     const text = labels[i] != null ? labels[i] : (finite(v) ? comma(v) : "?");
     cells.push({ id: "t" + i, kind: finite(v) ? "term" : "blank", cx: xTerm(i), cy: yRow(0), w: TW, h: TH, text, numeric: finite(v) });
   });
-  fd.forEach((v, j) => cells.push({ id: "d1_" + j, kind: "d1", cx: (xTerm(j) + xTerm(j + 1)) / 2, cy: yRow(1), w: DW, h: DH, text: signed(v), numeric: true }));
-  sd.forEach((v, j) => cells.push({ id: "d2_" + j, kind: "d2", cx: xTerm(j + 1), cy: yRow(2), w: DW, h: DH, text: signed(v), numeric: true }));
+  const bF = !!spec.blankFirst, bS = !!spec.blankSecond;
+  fd.forEach((v, j) => cells.push({ id: "d1_" + j, kind: "d1", blank: bF, cx: (xTerm(j) + xTerm(j + 1)) / 2, cy: yRow(1), w: DW, h: DH, text: bF ? "?" : signed(v), numeric: !bF }));
+  sd.forEach((v, j) => cells.push({ id: "d2_" + j, kind: "d2", blank: bS, cx: xTerm(j + 1), cy: yRow(2), w: DW, h: DH, text: bS ? "?" : signed(v), numeric: !bS }));
 
   // connector lines: each diff cell joins to its two parents (cell centres → cell centre)
   const links = [];
@@ -91,7 +94,8 @@ export function renderPattern(spec) {
   g.links.forEach(([a, b]) => { out += `<line class="np-link" x1="${N(a.cx)}" y1="${N(a.cy + a.h / 2 - 2)}" x2="${N(b.cx)}" y2="${N(b.cy - b.h / 2 + 2)}"/>`; });
   // cells
   g.cells.forEach((c) => {
-    const cls = c.kind === "term" ? "np-term" : c.kind === "blank" ? "np-blank" : c.kind === "d2" ? "np-d2" : "np-d1";
+    const cls = c.kind === "term" ? "np-term" : c.kind === "blank" ? "np-blank"
+      : c.blank ? "np-dblank" : c.kind === "d2" ? "np-d2" : "np-d1";
     out += `<g class="np-cell ${cls}">` +
       `<rect x="${N(c.cx - c.w / 2)}" y="${N(c.cy - c.h / 2)}" width="${c.w}" height="${c.h}" rx="7"/>` +
       `<text x="${N(c.cx)}" y="${N(c.cy)}" text-anchor="middle" dominant-baseline="central">${c.text}</text>` +
@@ -109,15 +113,18 @@ export function verifyPattern(spec, tol = 1e-6) {
 
   r.push({ label: "has at least two terms", ok: terms.length >= 2 });
 
-  // 1) every first-difference cell equals terms[j+1] − terms[j]
+  // 1) every VISIBLE first-difference cell equals terms[j+1] − terms[j]
+  //    (blanked "?" cells are deliberately hidden so they don't reveal the answer)
   g.fd.forEach((v, j) => {
     const cell = byId["d1_" + j];
+    if (cell.blank) return;
     const shown = parseCell(cell.text), real = terms[j + 1] - terms[j];
     r.push({ label: `d1_${j} shown ${cell.text} = T${j + 2}−T${j + 1}`, ok: Math.abs(shown - real) < tol });
   });
-  // 2) every second-difference cell equals fd[j+1] − fd[j]
+  // 2) every VISIBLE second-difference cell equals fd[j+1] − fd[j]
   g.sd.forEach((v, j) => {
     const cell = byId["d2_" + j];
+    if (cell.blank) return;
     const shown = parseCell(cell.text), real = g.fd[j + 1] - g.fd[j];
     r.push({ label: `d2_${j} shown ${cell.text} = gap of the two first differences`, ok: Math.abs(shown - real) < tol });
   });

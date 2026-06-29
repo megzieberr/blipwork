@@ -25,7 +25,7 @@ const SKILLS = {
     return calcQ("patQuadratic",
       `What is the constant second difference of <b>${list(seq)}</b>?`,
       sd,
-      { graph: full(seq),
+      { graph: pyramid(seq, { showFirst: true, showSecond: true, blankSecond: true, accent: ACC }),
         hint: "Take the differences of the first differences (bottom row of the pyramid).",
         answerLabel: `The second difference is ${C(sd)}.` });
   },

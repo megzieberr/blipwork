@@ -493,3 +493,6 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .sg.np .np-d2 text{font-size:12px;font-weight:700}
 .sg.np .np-blank rect{fill:transparent;stroke:var(--accent);stroke-dasharray:4 3}
 .sg.np .np-blank text{font-weight:700;font-style:italic;fill:var(--accent)}
+/* a difference cell deliberately left blank ("?") so the diagram never reveals the answer */
+.sg.np .np-dblank rect{fill:transparent;stroke:var(--brd-2);stroke-dasharray:4 3}
+.sg.np .np-dblank text{font-weight:700;fill:var(--muted)}

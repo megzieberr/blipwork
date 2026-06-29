@@ -10,8 +10,8 @@ import { C, quadTn } from "../patternlib.js";
 export const PAT = ["#94a3b8", "#8493a8", "#73849b", "#64748b", "#556074", "#475569", "#334155"];
 
 /* a difference-pyramid graph spec */
-export function pyramid(terms, { showFirst = false, showSecond = false, accent = PAT[3], termLabels, tap } = {}) {
-  return { type: "pattern", terms, termLabels, showFirst, showSecond, accent, tap };
+export function pyramid(terms, { showFirst = false, showSecond = false, blankFirst = false, blankSecond = false, accent = PAT[3], termLabels, tap } = {}) {
+  return { type: "pattern", terms, termLabels, showFirst, showSecond, blankFirst, blankSecond, accent, tap };
 }
 
 /* a parabola of the pattern's terms (Tₙ vs n) with the turning point marked,
