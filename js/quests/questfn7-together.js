@@ -8,7 +8,7 @@ import { mc } from "./_shared.js";
 import { winFor, randParabola, ptDecoys } from "./_func.js";
 import {
   makeFn, lineThrough, paraTP, paraStd, parabolaFromRoots,
-  avgGradient, ptStr, fix, C, pick, randInt,
+  avgGradient, eqStr, ptStr, fix, C, pick, randInt,
 } from "../funclib.js";
 
 const ACC = "#115e59";
@@ -76,20 +76,36 @@ const SKILLS = {
         answerLabel: k.c });
   },
 
-  /* average gradient (calc) */
+  /* average gradient (calc) — the function is shown as an equation AND a graph,
+     with the two points joined by the dashed average-gradient (secant) line */
   avgGradient: () => {
     const cv = randParabola();
     let x1 = randInt(-3, 1), x2 = x1 + randInt(2, 4);
+    const f = makeFn(cv);
+    const p1 = { x: x1, y: f(x1) }, p2 = { x: x2, y: f(x2) };
     const m = avgGradient(cv, x1, x2);
+    const secant = lineThrough(p1, p2);
+    const win = winFor([p1, p2, paraTP(cv)]);
+    const spec = {
+      type: "function", accent: ACC, grid: true, win,
+      curves: [
+        { ...cv, tone: "a", label: "f", labelAt: win.xmin + 1.2 },
+        { ...secant, tone: "b", dash: true },
+      ],
+      points: [
+        { x: p1.x, y: p1.y, on: 0, label: ptStr(p1.x, p1.y), dashTo: "x" },
+        { x: p2.x, y: p2.y, on: 0, label: ptStr(p2.x, p2.y), dashTo: "x" },
+      ],
+    };
     return {
       type: "calc", concept: "avgGradient",
-      prompt: `Calculate the <b>average gradient</b> of f between x = ${C(x1)} and x = ${C(x2)} (2 decimals).`,
-      expected: m, dp: 2, allowNeg: true,
-      hint: "Average gradient = (y₂ − y₁) / (x₂ − x₁). Substitute each x into f to get its y first.",
+      prompt: `For <b>${eqStr(cv, "f")}</b>, calculate the <b>average gradient</b> between x = ${C(x1)} and x = ${C(x2)} (2 decimals).`,
+      graph: spec, expected: m, dp: 2, allowNeg: true,
+      hint: "Average gradient = (y₂ − y₁) / (x₂ − x₁) — the slope of the dashed line joining the two points. Substitute each x into f to get its y first.",
       answerLabel: `average gradient = ${fix(m, 2)}`,
       solution: [
-        { s: `f(${C(x1)}) = ${C(makeFn(cv)(x1))} and f(${C(x2)}) = ${C(makeFn(cv)(x2))}` },
-        { s: `gradient = (${C(makeFn(cv)(x2))} − ${C(makeFn(cv)(x1))}) / (${C(x2)} − ${C(x1)}) = ${fix(m, 2)}` },
+        { s: `f(${C(x1)}) = ${C(f(x1))} and f(${C(x2)}) = ${C(f(x2))}` },
+        { s: `gradient = (${C(f(x2))} − ${C(f(x1))}) / (${C(x2)} − ${C(x1)}) = ${fix(m, 2)}` },
       ],
     };
   },

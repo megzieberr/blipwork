@@ -407,7 +407,7 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .ag-tappable .ag-plab,.ag-tappable .ag-slab,.ag-tappable .ag-ang{pointer-events:none}
 
 /* inline stacked fraction (used in equations like a hyperbola) */
-.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-0.45em;margin:0 .15em;line-height:1.06}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em;line-height:1.06}
 .frac .fr-n{display:block;padding:0 .35em;border-bottom:1.6px solid currentColor}
 .frac .fr-d{display:block;padding:0 .35em}
 
