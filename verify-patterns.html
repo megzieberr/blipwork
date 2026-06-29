@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Patterns · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Number Patterns · verification</h1>
+<div id="banner">running…</div>
+
+<h2>Engine — difference pyramid (honest differences) + min/max term-parabola (to scale)</h2>
+<div class="grid" id="engine"></div>
+
+<h2>Quests — 7 quests, fresh-number generations</h2>
+<pre id="quests">…</pre>
+
+<script type="module">
+import { renderPattern, verifyPattern } from "./js/engine/pattern-graph.js";
+import { renderFunction, verifyFunction } from "./js/engine/function-graph.js";
+import { pyramid, termParabola } from "./js/quests/_patterns.js";
+import { randArith, randQuad, randGeo, randQuadExtreme, quadSeq } from "./js/patternlib.js";
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+import { answerCorrect } from "./js/check.js";
+
+const ACC = "#64748b";
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+/* ---------- 1) representative engine figures ---------- */
+const aSeq = randArith().seq;
+const qSeq = quadSeq(2, -3, 2, 5);
+const hid = [1, 4, null, 22, 37];
+const ext = randQuadExtreme();
+const extMax = (() => { let e; do { e = randQuadExtreme(); } while (e.a > 0); return e; })();
+const extMin = (() => { let e; do { e = randQuadExtreme(); } while (e.a < 0); return e; })();
+
+const ENGINE = [
+  { kind: "pattern", title: "arithmetic — first diffs", spec: pyramid(aSeq, { showFirst: true, accent: ACC }) },
+  { kind: "pattern", title: "quadratic — full pyramid", spec: pyramid(qSeq, { showFirst: true, showSecond: true, accent: ACC }) },
+  { kind: "pattern", title: "missing term (x hidden)", spec: pyramid(hid, { termLabels: ["1", "4", "x", "22", "37"], accent: ACC }) },
+  { kind: "pattern", title: "tap a first difference", spec: pyramid(qSeq.slice(0, 4), { showFirst: true, accent: ACC, tap: { targets: ["d1_0", "d1_1", "d1_2"], correctId: "d1_1" } }) },
+  { kind: "function", title: "min parabola (a>0)", spec: termParabola(extMin.a, extMin.b, extMin.c, extMin.k, extMin.value, extMin.seq.length, ACC) },
+  { kind: "function", title: "max parabola (a<0)", spec: termParabola(extMax.a, extMax.b, extMax.c, extMax.k, extMax.value, extMax.seq.length, ACC) },
+];
+const eg = document.getElementById("engine");
+ENGINE.forEach(t => {
+  const checks = t.kind === "pattern" ? verifyPattern(t.spec) : verifyFunction(t.spec);
+  checks.forEach(c => tick(c.ok, `${t.title}: ${c.label}`));
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.setProperty("--accent", ACC);
+  card.innerHTML = `<h3>${t.title}</h3><div>${t.kind === "pattern" ? renderPattern(t.spec) : renderFunction(t.spec)}</div>
+    <ul class="checks">${checks.map(c => `<li class="${c.ok ? "ok" : "bad"}">${c.ok ? "✓" : "✗"} ${c.label}</li>`).join("")}</ul>`;
+  eg.appendChild(card);
+});
+
+/* ---------- 2) quests: generate each skill many times and validate ---------- */
+const chapter = CHAPTERS.find(c => c.id === "pat");
+const RUNS = 250;
+const lines = [];
+let qTotalChecks = 0, qFails = 0;
+
+function checkGraph(g) {
+  if (!g) return true;
+  if (g.type === "pattern") return verifyPattern(g).every(c => c.ok);
+  if (g.type === "function") return verifyFunction(g).every(c => c.ok);
+  return true;
+}
+
+chapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const skillIssues = {};
+  def.skills.forEach(skill => {
+    if (!getConcept(skill.concept)) skillIssues[skill.id] = `missing concept "${skill.concept}"`;
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); }
+      catch (e) { skillIssues[skill.id] = "threw: " + e.message; break; }
+      qTotalChecks++;
+      if (!q.prompt || !String(q.prompt).trim()) { skillIssues[skill.id] = "empty prompt"; qFails++; }
+      if (q.concept && !getConcept(q.concept)) { skillIssues[skill.id] = `q.concept "${q.concept}" not found`; qFails++; }
+      if (q.type === "mc" || q.type === "reason") {
+        const labels = q.options.map(o => o.label);
+        const corrects = q.options.filter(o => o.correct).length;
+        if (corrects !== 1) { skillIssues[skill.id] = `has ${corrects} correct options`; qFails++; }
+        if (labels.length !== new Set(labels).size) { skillIssues[skill.id] = `duplicate options: ${labels.join(" | ")}`; qFails++; }
+        if (q.options.length < 2) { skillIssues[skill.id] = "too few options"; qFails++; }
+      } else if (q.type === "calc") {
+        if (!Number.isFinite(q.expected)) { skillIssues[skill.id] = "non-finite expected"; qFails++; }
+        else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) { skillIssues[skill.id] = "expected fails its own check"; qFails++; }
+      } else if (q.type === "yesno") {
+        if (typeof q.yes !== "boolean") { skillIssues[skill.id] = "q.yes not boolean"; qFails++; }
+      } else if (q.type === "tap") {
+        if (!q.tap || q.tap.correctId == null) { skillIssues[skill.id] = "tap without correctId"; qFails++; }
+        const ids = (q.graph.terms || []).map((_, j) => "t" + j)
+          .concat((q.graph.terms || []).slice(1).map((_, j) => "d1_" + j))
+          .concat((q.graph.terms || []).slice(2).map((_, j) => "d2_" + j));
+        // only assert correctId is a plausible cell id string; full membership is proven by verifyPattern
+        if (typeof q.tap.correctId !== "string") { skillIssues[skill.id] = "tap correctId not a string"; qFails++; }
+      }
+      if (!checkGraph(q.graph)) { skillIssues[skill.id] = "graph not to scale / dishonest label"; qFails++; }
+    }
+  });
+  const bad = Object.keys(skillIssues);
+  tick(bad.length === 0, `${qmeta.id} ${qmeta.title}`);
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.map(b => `${b}: ${skillIssues[b]}`).join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${qTotalChecks} generations checked · ${qFails} integrity failures\n\n` + lines.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total && qFails === 0;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} engine/quest checks passed, ${qTotalChecks} generations clean`
+  : `✗ ${total - passed} check group(s) failed; ${qFails} generation failures — see below`;
+
+window.__VERIFY__ = { total, passed, qTotalChecks, qFails, ok, fails };
+console.log(`[verify-patterns] engine&quest ${passed}/${total}, generations ${qTotalChecks}, failures ${qFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.slice(0, 40).join("\n"));
+</script>
+</body>
+</html>

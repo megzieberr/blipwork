@@ -51,6 +51,11 @@ const AG_SHADES = [
   "#fdba74", "#fb923c", "#f97316", "#ea6a0c", "#dd5c0a", "#c2480a", "#9a3412",
 ];
 
+/* seven slate/steel shades, light → deep (Number Patterns quests 1 → 7) */
+const PAT_SHADES = [
+  "#94a3b8", "#8493a8", "#73849b", "#64748b", "#556074", "#475569", "#334155",
+];
+
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊", term: "term3",
@@ -163,6 +168,20 @@ export const CHAPTERS = [
       { id: "ag5", n: 5, title: "Perpendicular bisector", blurb: "Through the midpoint AND at right angles — spot it and tap it.", built: true },
       { id: "ag6", n: 6, title: "Area of a triangle", blurb: "Read the base and the ⊥height — altitude vs median.", built: true },
       { id: "ag7", n: 7, title: "Putting it together", blurb: "Median/altitude/bisector, and the ‘to prove…, show…’ table.", built: true },
+    ],
+  },
+  {
+    id: "pat", name: "Number Patterns", paper: "Paper 1", icon: "🔢", term: "revision",
+    hue: PAT_SHADES, signature: "#64748b", open: true,
+    blurb: "Linear, quadratic and geometric patterns — the difference pyramid and the general term.",
+    quests: [
+      { id: "np1", n: 1, title: "Spot the pattern", blurb: "First & second differences, constant ratio — arithmetic, quadratic or geometric?", built: true },
+      { id: "np2", n: 2, title: "Arithmetic patterns", blurb: "Constant difference, Tₙ = an + c, find a term and which term.", built: true },
+      { id: "np3", n: 3, title: "Quadratic patterns", blurb: "The difference pyramid → a, b, c and Tₙ = an² + bn + c.", built: true },
+      { id: "np4", n: 4, title: "Find a missing term", blurb: "The second difference is constant — use it to fill the gap.", built: true },
+      { id: "np5", n: 5, title: "Minimum & maximum", blurb: "The turning point of the pattern: which term, and its value.", built: true },
+      { id: "np6", n: 6, title: "Gaps between terms", blurb: "The first differences are their own linear pattern.", built: true },
+      { id: "np7", n: 7, title: "Geometric patterns", blurb: "Constant ratio, Tₙ = a·rⁿ⁻¹, and the r-as-a-fraction traps.", built: true },
     ],
   },
 ];

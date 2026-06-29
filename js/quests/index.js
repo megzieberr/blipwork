@@ -56,6 +56,13 @@ import { questAg4 } from "./questag4-inclination.js";
 import { questAg5 } from "./questag5-perp-bisector.js";
 import { questAg6 } from "./questag6-triangle-area.js";
 import { questAg7 } from "./questag7-mixed.js";
+import { questNp1 } from "./questnp1-spot.js";
+import { questNp2 } from "./questnp2-arithmetic.js";
+import { questNp3 } from "./questnp3-quadratic.js";
+import { questNp4 } from "./questnp4-missing.js";
+import { questNp5 } from "./questnp5-minmax.js";
+import { questNp6 } from "./questnp6-gaps.js";
+import { questNp7 } from "./questnp7-geometric.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -73,5 +80,7 @@ export const QUEST_DEFS = {
   tg5: questTg5, tg6: questTg6, tg7: questTg7,
   ag1: questAg1, ag2: questAg2, ag3: questAg3, ag4: questAg4,
   ag5: questAg5, ag6: questAg6, ag7: questAg7,
+  np1: questNp1, np2: questNp2, np3: questNp3, np4: questNp4,
+  np5: questNp5, np6: questNp6, np7: questNp7,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

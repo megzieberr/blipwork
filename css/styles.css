@@ -475,3 +475,19 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 /* "open calculator" button */
 .calc-btn{background:var(--panel);border:1px solid var(--brd-2);color:var(--ink);font-size:18px;width:42px;height:42px;border-radius:12px;cursor:pointer;display:grid;place-items:center;transition:.15s}
 .calc-btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
+
+/* ============================================================
+   NUMBER PATTERNS — the difference pyramid
+   ============================================================ */
+.sg.np{max-width:520px}
+.sg.np .np-link{stroke:var(--brd-2);stroke-width:1.4;opacity:.7}
+.sg.np .np-cell rect{stroke-width:1.4}
+.sg.np .np-cell text{font-family:var(--font-num);font-size:14px;fill:var(--ink)}
+.sg.np .np-term rect{fill:color-mix(in srgb,var(--accent) 22%,var(--panel));stroke:var(--accent)}
+.sg.np .np-term text{font-weight:700}
+.sg.np .np-d1 rect{fill:color-mix(in srgb,var(--accent) 9%,transparent);stroke:var(--brd-2)}
+.sg.np .np-d1 text{font-size:12px;fill:var(--muted)}
+.sg.np .np-d2 rect{fill:color-mix(in srgb,var(--accent) 32%,var(--panel));stroke:var(--accent)}
+.sg.np .np-d2 text{font-size:12px;font-weight:700}
+.sg.np .np-blank rect{fill:transparent;stroke:var(--accent);stroke-dasharray:4 3}
+.sg.np .np-blank text{font-weight:700;font-style:italic;fill:var(--accent)}

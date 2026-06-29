@@ -24,6 +24,7 @@ import { renderSolid, computeSolid } from "./engine/solid-graph.js";
 import { renderFunction } from "./engine/function-graph.js";
 import { renderTrig, computeTrig } from "./engine/trig-graph.js";
 import { renderAnalytic, computeAnalytic } from "./engine/analytical-graph.js";
+import { renderPattern, computePattern } from "./engine/pattern-graph.js";
 import { mountKeypad } from "./keypad.js";
 import { mountCalculator } from "./calculator.js";
 import { answerCorrect, fmtComma } from "./check.js";
@@ -49,6 +50,7 @@ export function mountQuestion(host, q, handlers = {}) {
       q.graph.type === "function" ? renderFunction(q.graph) :
       q.graph.type === "trigg"    ? renderTrig(q.graph) :
       q.graph.type === "analytic" ? renderAnalytic(q.graph) :
+      q.graph.type === "pattern"  ? renderPattern(q.graph) :
       renderGraph(q.graph);
     gw.innerHTML = svg + (q.graphCap ? `<div class="cap">${q.graphCap}</div>` : "");
     svgNode = gw.querySelector("svg");
@@ -261,6 +263,14 @@ export function mountQuestion(host, q, handlers = {}) {
     });
   }
 
+  else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "pattern") {
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", q.tapHint));
+    addPatternHits(svgNode, computePattern(q.graph), q.tap, (id) => {
+      if (answered) return;
+      commit(id === q.tap.correctId, id);
+    });
+  }
+
   else if (q.type === "tap" && svgNode) {
     if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", q.tapHint));
     addBoxHits(svgNode, computeBox(q.graph), q.tap, (id) => {
@@ -446,6 +456,28 @@ function addAnalyticHits(svg, geo, spec, tap, onPick) {
       });
       if (sp.id !== tap.correctId) node.classList.add("show-wrong");
       onPick(sp.id);
+    });
+    svg.appendChild(node);
+  });
+}
+
+/* ------------------------------------------------------------
+   Tappable cells of a difference pyramid. Each target cell id
+   ("t0", "d1_2", "d2_0", …) gets a hot-spot at its centre, sized
+   to the cell. correctId is matched exactly.
+   ------------------------------------------------------------ */
+function addPatternHits(svg, geo, tap, onPick) {
+  const targets = tap.targets || geo.cells.map((c) => c.id);
+  geo.cells.filter((c) => targets.includes(c.id)).forEach((c) => {
+    const node = svgEl("rect", { x: c.cx - c.w / 2 - 3, y: c.cy - c.h / 2 - 3, width: c.w + 6, height: c.h + 6, rx: 9, class: "hit", "data-id": c.id });
+    node.addEventListener("click", () => {
+      if (node.classList.contains("locked")) return;
+      svg.querySelectorAll(".hit").forEach((h) => {
+        h.classList.add("locked");
+        if (h.dataset.id === tap.correctId) h.classList.add("show-correct");
+      });
+      if (c.id !== tap.correctId) node.classList.add("show-wrong");
+      onPick(c.id);
     });
     svg.appendChild(node);
   });
