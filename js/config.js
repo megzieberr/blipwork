@@ -56,6 +56,12 @@ const PAT_SHADES = [
   "#94a3b8", "#8493a8", "#73849b", "#64748b", "#556074", "#475569", "#334155",
 ];
 
+/* eight rose/red shades, light → deep (Exponents & Surds quests 1 → 8) */
+const EXP_SHADES = [
+  "#fda4af", "#fb7185", "#f43f5e", "#e11d48",
+  "#c81e3a", "#be123c", "#9f1239", "#881337",
+];
+
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊", term: "term3",
@@ -182,6 +188,21 @@ export const CHAPTERS = [
       { id: "np5", n: 5, title: "Minimum & maximum", blurb: "The turning point of the pattern: which term, and its value.", built: true },
       { id: "np6", n: 6, title: "Gaps between terms", blurb: "The first differences are their own linear pattern.", built: true },
       { id: "np7", n: 7, title: "Geometric patterns", blurb: "Constant ratio, Tₙ = a·rⁿ⁻¹, and the r-as-a-fraction traps.", built: true },
+    ],
+  },
+  {
+    id: "exp", name: "Exponents & Surds", paper: "Paper 1", icon: "ⁿ√", term: "revision",
+    hue: EXP_SHADES, signature: "#e11d48", open: true,
+    blurb: "The laws, the traps, and the theory — which rule, which factorising, the conjugate, and when there's no solution.",
+    quests: [
+      { id: "es1", n: 1, title: "The exponent laws", blurb: "Name the law and say what happens to the exponents — zero, negative, fractional, brackets.", built: true },
+      { id: "es2", n: 2, title: "Spot the trap", blurb: "Is this step legal? The base that mustn't change, x⁰, negative ≠ negative, (x+y)² ≠ x²+y².", built: true },
+      { id: "es3", n: 3, title: "First step & which method", blurb: "Prime factors first; one-term simplify vs factorise when there's a + or −; the cancelling rule.", built: true },
+      { id: "es4", n: 4, title: "Which “divorce”?", blurb: "Classify the factorising: common factor, difference of squares, trinomial or grouping — and let k = baseˣ.", built: true },
+      { id: "es5", n: 5, title: "Surd laws & traps", blurb: "Same-root × and ÷, the BIG NO-NO, like surds, inside/outside, non-real roots and ± answers.", built: true },
+      { id: "es6", n: 6, title: "Conjugates & rationalising", blurb: "What the conjugate is, why it works, rationalising one- and two-term denominators, the a + b√c form.", built: true },
+      { id: "es7", n: 7, title: "Rational-exponent equations", blurb: "Raise to the reciprocal; when the answer is ±, a single (negative) value, or no real solution.", built: true },
+      { id: "es8", n: 8, title: "No-solution & strategy", blurb: "Exponential & surd equations: same base, common factor, let k, isolate-square-TEST, and every no-solution trap.", built: true },
     ],
   },
 ];

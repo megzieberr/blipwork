@@ -15,10 +15,11 @@ const QUEST_IDS = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8",
   "fn1", "fn2", "fn3", "fn4", "fn5", "fn6", "fn7",
   "tg1", "tg2", "tg3", "tg4", "tg5", "tg6", "tg7",
   "ag1", "ag2", "ag3", "ag4", "ag5", "ag6", "ag7",
-  "np1", "np2", "np3", "np4", "np5", "np6", "np7"];
+  "np1", "np2", "np3", "np4", "np5", "np6", "np7",
+  "es1", "es2", "es3", "es4", "es5", "es6", "es7", "es8"];
 /* offline sandbox opens stats q1–q3 and all Finance + Probability + Trig + Measurement
-   + Functions + Trig-Graphs + Analytical-Geometry + Number-Patterns quests so the whole
-   new chapter is playable locally; on the live backend the teacher opens each. */
+   + Functions + Trig-Graphs + Analytical-Geometry + Number-Patterns + Exponents&Surds
+   quests so the whole new chapter is playable locally; on the live backend the teacher opens each. */
 const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7",
   "p1", "p2", "p3", "p4", "p5", "p6", "p7",
   "t1", "t2", "t3", "t4", "t5", "t6", "t7",
@@ -26,7 +27,8 @@ const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7"
   "fn1", "fn2", "fn3", "fn4", "fn5", "fn6", "fn7",
   "tg1", "tg2", "tg3", "tg4", "tg5", "tg6", "tg7",
   "ag1", "ag2", "ag3", "ag4", "ag5", "ag6", "ag7",
-  "np1", "np2", "np3", "np4", "np5", "np6", "np7"];
+  "np1", "np2", "np3", "np4", "np5", "np6", "np7",
+  "es1", "es2", "es3", "es4", "es5", "es6", "es7", "es8"];
 
 function seed() {
   if (!read(LS.students, null)) write(LS.students, {});

@@ -63,6 +63,14 @@ import { questNp4 } from "./questnp4-missing.js";
 import { questNp5 } from "./questnp5-minmax.js";
 import { questNp6 } from "./questnp6-gaps.js";
 import { questNp7 } from "./questnp7-geometric.js";
+import { questEs1 } from "./queses1-laws.js";
+import { questEs2 } from "./queses2-traps.js";
+import { questEs3 } from "./queses3-method.js";
+import { questEs4 } from "./queses4-divorce.js";
+import { questEs5 } from "./queses5-surds.js";
+import { questEs6 } from "./queses6-conjugates.js";
+import { questEs7 } from "./queses7-ratexp.js";
+import { questEs8 } from "./queses8-nosolution.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -82,5 +90,7 @@ export const QUEST_DEFS = {
   ag5: questAg5, ag6: questAg6, ag7: questAg7,
   np1: questNp1, np2: questNp2, np3: questNp3, np4: questNp4,
   np5: questNp5, np6: questNp6, np7: questNp7,
+  es1: questEs1, es2: questEs2, es3: questEs3, es4: questEs4,
+  es5: questEs5, es6: questEs6, es7: questEs7, es8: questEs8,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

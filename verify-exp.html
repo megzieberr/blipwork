@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exponents &amp; Surds · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  .sample{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:12px;padding:12px;margin:8px 0}
+  .sample .p{font-size:14px;margin-bottom:8px}
+  .sample .o{font-size:12px;color:var(--muted)} .sample .o b{color:var(--good)}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Exponents &amp; Surds · verification</h1>
+<div id="banner">running…</div>
+
+<h2>Quests — 8 theory quests (mc / yesno), many fresh generations each</h2>
+<pre id="quests">…</pre>
+
+<h2>One live sample per skill (eyeball the maths &amp; the marked answer)</h2>
+<div id="samples"></div>
+
+<script type="module">
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const chapter = CHAPTERS.find(c => c.id === "exp");
+const RUNS = 400;
+const lines = [];
+let qTotalChecks = 0, qFails = 0;
+const samples = [];
+
+chapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const skillIssues = {};
+  if (!def) { tick(false, `${qmeta.id} has no def`); lines.push(`✗ ${qmeta.id} — no quest def registered`); return; }
+  def.skills.forEach(skill => {
+    if (!getConcept(skill.concept)) skillIssues[skill.id] = `missing concept "${skill.concept}"`;
+    let firstQ = null;
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); }
+      catch (e) { skillIssues[skill.id] = "threw: " + e.message; break; }
+      if (!firstQ) firstQ = q;
+      qTotalChecks++;
+      if (!q.prompt || !String(q.prompt).trim()) { skillIssues[skill.id] = "empty prompt"; qFails++; }
+      if (!q.answerLabel) { skillIssues[skill.id] = "no answerLabel"; qFails++; }
+      if (q.concept && !getConcept(q.concept)) { skillIssues[skill.id] = `q.concept "${q.concept}" not found`; qFails++; }
+      if (q.type === "mc" || q.type === "reason") {
+        const labels = q.options.map(o => o.label);
+        const corrects = q.options.filter(o => o.correct).length;
+        if (corrects !== 1) { skillIssues[skill.id] = `has ${corrects} correct options`; qFails++; }
+        if (labels.length !== new Set(labels).size) { skillIssues[skill.id] = `duplicate options: ${labels.join(" | ")}`; qFails++; }
+        if (q.options.length < 3) { skillIssues[skill.id] = `only ${q.options.length} options`; qFails++; }
+      } else if (q.type === "yesno") {
+        if (typeof q.yes !== "boolean") { skillIssues[skill.id] = "q.yes not boolean"; qFails++; }
+      } else {
+        skillIssues[skill.id] = `unexpected type "${q.type}" (theory chapter expects mc/yesno)`; qFails++;
+      }
+    }
+    if (firstQ) samples.push({ quest: qmeta.id, skill: skill.id, q: firstQ });
+  });
+  const bad = Object.keys(skillIssues);
+  tick(bad.length === 0, `${qmeta.id} ${qmeta.title}`);
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.map(b => `${b}: ${skillIssues[b]}`).join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${qTotalChecks} generations checked · ${qFails} integrity failures\n\n` + lines.join("\n");
+
+// render one sample per skill so the author can sanity-check the maths
+const shost = document.getElementById("samples");
+samples.forEach(s => {
+  const card = document.createElement("div");
+  card.className = "sample";
+  let opts = "";
+  if (s.q.type === "yesno") {
+    opts = `<div class="o">Yes / No → correct: <b>${s.q.yes ? "Yes" : "No"}</b></div>`;
+  } else {
+    opts = `<div class="o">` + s.q.options.map(o => `${o.correct ? "<b>✓ " : "· "}${o.label}${o.correct ? "</b>" : ""}`).join("<br>") + `</div>`;
+  }
+  card.innerHTML = `<div class="p"><b>${s.quest}·${s.skill}</b> — ${s.q.prompt}</div>${opts}`
+    + `<div class="o" style="margin-top:8px">answer: ${s.q.answerLabel || "—"}</div>`;
+  shost.appendChild(card);
+});
+
+const banner = document.getElementById("banner");
+const ok = passed === total && qFails === 0;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} quest checks passed, ${qTotalChecks} generations clean`
+  : `✗ ${total - passed} quest(s) failed; ${qFails} generation failures — see below`;
+
+window.__VERIFY__ = { total, passed, qTotalChecks, qFails, ok, fails };
+console.log(`[verify-exp] quests ${passed}/${total}, generations ${qTotalChecks}, failures ${qFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.slice(0, 40).join("\n"));
+</script>
+</body>
+</html>
