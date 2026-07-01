@@ -78,10 +78,22 @@ const SKILLS = {
       { q: "Rule of thumb: the equation's highest power is <b>x⁴</b>. AT MOST how many real solutions?", correct: "4", wrongs: ["2", "3", "8"], ans: "The highest power tells you the maximum: x⁴ → up to 4 real solutions (equal roots count as one value)." },
       { q: "Rule of thumb: the equation's highest power is <b>x²</b>. AT MOST how many real solutions?", correct: "2", wrongs: ["1", "4", "3"], ans: "A square → up to 2 real solutions." },
       { q: "Rule of thumb: the equation's highest power is <b>x³</b>. AT MOST how many real solutions?", correct: "3", wrongs: ["2", "6", "1"], ans: "A cube → up to 3 real solutions." },
+      { q: "Solving gives <b>x = 2, x = 2 and x = −1</b>. How many DIFFERENT solutions is that?", correct: "2 — equal roots count as ONE value", wrongs: ["3 — every answer counts", "1 — only the repeated one", "4 — the repeat doubles"], ans: "x = 2 twice is still just the value 2. Different solutions: x = 2 and x = −1 — two of them." },
     ];
     const it = pick(items);
     return mc(CON, it.q, it.correct, it.wrongs,
-      { hint: "Highest power = the most real answers you can expect.", answerLabel: it.ans });
+      { hint: "Highest power = the most real answers you can expect; a repeated answer counts once.", answerLabel: it.ans });
+  },
+
+  /* the repeat can hide behind a common factor — rearrange to SEE it */
+  hiddenRepeat: () => {
+    const items = [
+      { q: "The equation contains <b>(y² − 2y)²</b> … and later the terms <b>−2y² + 4y</b>. Where is the second copy of the bracket?", correct: "−2y² + 4y = −2(y² − 2y) — factor out −2 and the repeat appears", wrongs: ["There is no second copy — the k-method can't be used", "−2y² + 4y is already (y² − 2y)", "Swap it to 4y − 2y² and it becomes the bracket"], ans: "Take out the common factor −2: −2y² + 4y = −2(y² − 2y). Now (y² − 2y) appears twice, so let k = y² − 2y." },
+      { q: "Before deciding an equation has no repeated bracket, what should you try?", correct: "Factor a constant out of the loose terms — the repeat often hides behind a −2 or a 3", wrongs: ["Multiply all the brackets out", "Substitute x = 0", "Take the square root of every term"], ans: "A repeated expression often hides behind a common factor: −2y² + 4y hides (y² − 2y). Factor constants out FIRST, then look again." },
+    ];
+    const it = pick(items);
+    return mc(CON, it.q, it.correct, it.wrongs,
+      { hint: "Factor a number out of the loose x-terms and compare with the bracket.", answerLabel: it.ans });
   },
 
   /* restrictions ride along on k */

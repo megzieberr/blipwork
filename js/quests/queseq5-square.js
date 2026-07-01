@@ -57,7 +57,7 @@ const SKILLS = {
     const odd = pick([5, 7, 9, 11, 13]);
     const prompt = `If <b>x² − ${C(odd)}x + c = (x + k)²</b>, what is k?`;
     const correct = `k = −${frac(odd, 2)}`;
-    const wrongs = [`k = ${frac(odd, 2)}`, `k = −${C(odd)}`, `k = ${C(odd * odd)}/4`];
+    const wrongs = [`k = ${frac(odd, 2)}`, `k = −${C(odd)}`, `k = ${frac(String(odd * odd), 4)}`];
     return mc(PSQ, prompt, correct, wrongs,
       { hint: "Expand (x + k)² = x² + 2kx + k² and MATCH the middle terms — sign included.",
         answerLabel: `2k = −${C(odd)}, so k = −${frac(odd, 2)} (negative, because the middle term is −${C(odd)}x). And c = k² = ${frac(String(odd * odd), 4)}.` });
@@ -101,7 +101,8 @@ const SKILLS = {
   happySad: () => {
     const a = randInt(1, 4) * pick([1, -1]);
     const up = a > 0;
-    const prompt = `In <b>y = ${C(a)}(x − 1)² + 3</b>, is the turning point a minimum or a maximum?`;
+    const aStr = a === 1 ? "" : a === -1 ? "−" : C(a);
+    const prompt = `In <b>y = ${aStr}(x − 1)² + 3</b>, is the turning point a minimum or a maximum?`;
     const correct = up ? "A minimum — a > 0 makes a happy parabola (opens up)" : "A maximum — a < 0 makes a sad parabola (opens down)";
     const wrongs = [
       up ? "A maximum — a > 0 makes a sad parabola" : "A minimum — a < 0 makes a happy parabola",
@@ -119,6 +120,7 @@ const SKILLS = {
       { q: "Solving <b>−x² + 10x − 22 = 0</b> by completing the square. FIRST step?", correct: "Divide every term by −1 (no negative may sit in front of x²)", wrongs: ["Add (10/2)² to both sides immediately", "Take the 22 across first, keep the −x²", "Square-root both sides"], ans: "Kill the negative first: x² − 10x + 22 = 0. Only then take the constant across and add (b/2)² to both sides." },
       { q: "You've reached <b>x² − 10x = −22</b>. What is the next step?", correct: "Add (10/2)² = 25 to BOTH sides", wrongs: ["Add 25 to the left side only", "Square-root both sides now", "Factor out x"], ans: "Add (b/2)² to BOTH sides: x² − 10x + 25 = 3, which packs into (x − 5)² = 3." },
       { q: "You've reached <b>(x − 5)² = 3</b>. What is the next step?", correct: "Square-root both sides and keep the ±: x − 5 = ±√3", wrongs: ["Square both sides", "x − 5 = √3 only", "Expand the bracket again"], ans: "√ both sides (remember ±): x − 5 = ±√3, so x = 5 ± √3." },
+      { q: "You rewrote <b>x² − 8x</b> as <b>(x − 4)² − 16</b>. How do you CHECK the rewrite?", correct: "Multiply the bracket back out — it must return exactly x² − 8x", wrongs: ["Substitute x = 4 and see if you get 0", "No check is possible", "Square-root both sides"], ans: "(x − 4)² − 16 = x² − 8x + 16 − 16 = x² − 8x ✓. Completing the square only REWRITES the expression — expanding back must give the original, or something was changed." },
     ];
     const it = pick(items);
     return mc(PSQ, it.q, it.correct, it.wrongs,

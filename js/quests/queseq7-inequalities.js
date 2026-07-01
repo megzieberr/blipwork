@@ -20,6 +20,7 @@ const SKILLS = {
   flipWhen: () => {
     const items = [
       { q: "When solving an inequality, WHEN must you switch the direction of the sign?", correct: "When you multiply or divide both sides by a NEGATIVE number", wrongs: ["Whenever you move a term across", "When you add a negative number to both sides", "Every time there is a fraction"], ans: "Only × or ÷ by a negative flips the sign. Adding/subtracting anything, or ×/÷ by a positive, leaves the sign alone." },
+      { q: "You divide both sides of <b>6x &lt; 18</b> by 6. Does the sign flip?", correct: "No — dividing by a POSITIVE number never flips the sign", wrongs: ["Yes — dividing always flips", "Yes — 18 is bigger than 6", "Only if x is negative"], ans: "6 is positive, so nothing flips: x < 3. The flip is reserved for × or ÷ by a NEGATIVE." },
       ynQ(LIN,
         "Subtracting 9x from both sides of an inequality flips the sign. True?",
         false,
@@ -33,7 +34,9 @@ const SKILLS = {
 
   /* apply the flip — fresh numbers */
   flipApply: () => {
-    const a = randInt(2, 6), bb = randInt(1, 9);
+    const gcd = (x, y) => (y ? gcd(y, x % y) : x);
+    let a = randInt(2, 6), bb = randInt(1, 9);
+    while (gcd(a, bb) !== 1) bb = randInt(1, 9);        // the fraction −b/a arrives already simplified
     const prompt = `Solve for x: <b>−${C(a)}x &lt; ${C(bb)}</b>`;
     const correct = `x > −${frac(bb, a)}`;
     const wrongs = [
@@ -156,6 +159,23 @@ const SKILLS = {
     const it = pick(items);
     return it.type ? it : mc(QUA, it.q, it.correct, it.wrongs,
       { hint: "(a − x) hides −x². Take out −1 and flip.", answerLabel: it.ans });
+  },
+
+  /* fractions inside an inequality — the square denominator & the restriction */
+  fracIneq: () => {
+    const m = randInt(2, 5);
+    const items = [
+      { q: `Why may <b>(${C(m * m)} − x²)/x² ≥ 0</b> be read straight off the NUMERATOR (${C(m * m)} − x² ≥ 0)?`, correct: "x² is positive for every x ≠ 0, so the fraction's sign IS the numerator's sign", wrongs: ["The denominator always cancels the numerator", "Fractions in inequalities may always be ignored", "Because the numerator is bigger"], ans: `A square denominator is positive for every non-zero x, so dividing by it never changes the sign. Solve ${C(m * m)} − x² ≥ 0 — but CARRY x ≠ 0 into the final answer.` },
+      { q: "An inequality has x in a DENOMINATOR. What must ride along into the final answer?", correct: "The restriction (e.g. x ≠ 0) — even if the rest of the interval includes it", wrongs: ["Nothing — restrictions are only for equations", "A ± sign", "The LCD"], ans: "A denominator's restriction belongs to the original inequality, so the final answer must exclude it: e.g. −3 ≤ x ≤ 3 with x ≠ 0." },
+      ynQ(QUA,
+        "A factor that appears in BOTH the numerator and the denominator simplifies away (it equals 1 for any non-zero value). True?",
+        true,
+        { hint: "Anything non-zero over itself is 1.",
+          answerLabel: "True — e.g. (x³ − 2x² − 3x)/x simplifies to x² − 2x − 3 for x ≠ 0. Simplify first, keep the restriction." }),
+    ];
+    const it = pick(items);
+    return it.type ? it : mc(QUA, it.q, it.correct, it.wrongs,
+      { hint: "A square denominator can't change the sign; a denominator's restriction always survives.", answerLabel: it.ans });
   },
 
   /* the repeated factor / perfect square special case */

@@ -12,8 +12,17 @@
    ============================================================ */
 import { mc } from "./_shared.js";
 import { pick, shuffled, randInt } from "../ui.js";
-import { parabolaFromRoots, parabolaFromTP, paraTP, C, ineqBetween, ineqOutside } from "../funclib.js";
+import {
+  parabolaFromRoots, parabolaFromTP, paraTP, neg,
+  C as CF, ineqBetween as IB, ineqOutside as IO,
+} from "../funclib.js";
 import { winFor } from "./_func.js";
+
+/* SA style everywhere in this chapter: decimal comma AND a real minus (−),
+   also inside strings built by funclib (whose own C keeps the ASCII hyphen). */
+export const C = (v) => neg(CF(v));
+export const ineqBetween = (a, b) => neg(IB(a, b));
+export const ineqOutside = (a, b) => neg(IO(a, b));
 
 /* eight emerald shades, light → deep (Equations & Inequalities quests 1 → 8) —
    matches EQN_SHADES in config.js */
@@ -28,7 +37,7 @@ export const pw = (b, e) => `${b}<sup>${e}</sup>`;            // power:  x²  �
 export const frac = (n, d) => `<span class="efrac"><sup>${n}</sup>⁄<sub>${d}</sub></span>`;
 export const b = (s) => `<b>${s}</b>`;
 
-export { mc, pick, shuffled, randInt, C, ineqBetween, ineqOutside };
+export { mc, pick, shuffled, randInt };
 
 /* yes/no trap builder — render reads {type:"yesno", yes, prompt, ...}.
    `yes` is whether the STATEMENT is correct, not whether the maths is "yes". */

@@ -65,7 +65,8 @@ const SKILLS = {
 
   /* read the solutions straight off the brackets — fresh numbers */
   bracketsZero: () => {
-    const p = randInt(1, 8), q = randInt(1, 8);
+    const p = randInt(1, 8);
+    let q = randInt(1, 8); if (q === p) q = p + 1;   // p ≠ q, else "x = −p or x = q" duplicates the correct answer set
     const prompt = `Solve: <b>(x − ${C(p)})(x + ${C(q)}) = 0</b>`;
     const correct = `x = ${C(p)} or x = ${C(-q)}`;
     const wrongs = [
@@ -80,7 +81,8 @@ const SKILLS = {
 
   /* three factors → three solutions (don't drop the lonely x) */
   threeFactors: () => {
-    const a = pick([2, 3]), bb = pick([1, 3, 5, 7]), c = randInt(2, 5);
+    const a = pick([2, 3]), c = randInt(2, 5);
+    let bb = pick([1, 3, 5, 7]); if (bb === a) bb = 5;   // keep the fraction b/a a REAL fraction
     const prompt = `Solve: <b>x(${C(a)}x − ${C(bb)})(−x + ${C(c)}) = 0</b>`;
     const correct = `x = 0, x = ${frac(bb, a)} or x = ${C(c)}`;
     const wrongs = [
