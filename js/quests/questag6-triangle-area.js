@@ -18,14 +18,29 @@ function footT(apex, b1, b2) {
   const dx = b2.x - b1.x, dy = b2.y - b1.y;
   return ((apex.x - b1.x) * dx + (apex.y - b1.y) * dy) / (dx * dx + dy * dy);
 }
-/* a fat-enough integer triangle + a base whose altitude foot lands inside it */
+/* |cos of the angle| between directions u and v (0 = perpendicular, 1 = parallel) */
+function absCos(u, v) {
+  return Math.abs(u.x * v.x + u.y * v.y) / (Math.hypot(u.x, u.y) * Math.hypot(v.x, v.y));
+}
+/* a fat-enough integer triangle + a base whose altitude foot lands inside it,
+   where the altitude is CLEARLY not perpendicular to either other side (so no
+   "which side is the base?" decoy can be defended by eye) */
 function niceTriangle() {
   for (let i = 0; i < 300; i++) {
     const A = randPoint(-5, 5), B = randPoint(-5, 5), C = randPoint(-5, 5);
     if (triArea(A, B, C) < 7) continue;
     const P = { A, B, C };
     const bases = [["B", "C", "A"], ["C", "A", "B"], ["A", "B", "C"]]
-      .filter(([b1, b2, ap]) => { const t = footT(P[ap], P[b1], P[b2]); return t > 0.2 && t < 0.8; });
+      .filter(([b1, b2, ap]) => {
+        const t = footT(P[ap], P[b1], P[b2]);
+        if (t <= 0.2 || t >= 0.8) return false;
+        // the altitude ⊥ another side ⇔ that side ∥ the base — keep the
+        // other two sides at least ~14° away from parallel to the base
+        const base = { x: P[b2].x - P[b1].x, y: P[b2].y - P[b1].y };
+        const s1 = { x: P[ap].x - P[b1].x, y: P[ap].y - P[b1].y };
+        const s2 = { x: P[ap].x - P[b2].x, y: P[ap].y - P[b2].y };
+        return absCos(base, s1) < 0.97 && absCos(base, s2) < 0.97;
+      });
     if (bases.length) { const [b1, b2] = pick(bases); return { P, base: `${b1}${b2}` }; }
   }
   return { P: { A: { x: -3, y: -1 }, B: { x: 4, y: -1 }, C: { x: 1, y: 4 } }, base: "AB" };
@@ -101,10 +116,10 @@ const SKILLS = {
   /* is the height one of the sides? */
   notASide: () => {
     return yesnoQ("triangleArea",
-      "In a triangle that is <b>not</b> right-angled, is the perpendicular height usually one of the three sides?",
+      "In a triangle that is <b>not</b> right-angled, is the perpendicular height ever one of the three sides?",
       false,
-      { hint: "Usually you must drop a NEW segment (the altitude) inside the triangle. Only in a right-angled triangle is a side already the height.",
-        answerLabel: "No — you usually draw the altitude; it isn’t one of the sides." });
+      { hint: "A side can only BE the height if it meets the base at 90° — and that makes the triangle right-angled.",
+        answerLabel: "No — you must draw a NEW segment (the altitude). Only in a right-angled triangle is a side already the height." });
   },
 };
 

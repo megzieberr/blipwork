@@ -32,7 +32,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle(target, "θ")],
         sides: [t.side("B", "C", String(a)), t.side("A", "C", String(b)), t.side("A", "B", String(c))] },
-      expected: val, dp: 1,
+      expected: val, dp: 1, tol: 0.1,   // accept the neighbouring tenth from 4-dp cosine working
       hint: "The side opposite θ is the one that gets subtracted: cosθ = (sum of the other two squared − opposite²)/(2·those two).",
       answerLabel: `θ = ${ang(val)}`,
       solution: [
@@ -56,7 +56,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("C", "θ")],
         sides: [t.side("B", "C", String(a)), t.side("A", "C", String(b)), t.side("A", "B", String(c))] },
-      expected: val, dp: 1,
+      expected: val, dp: 1, tol: 0.1,
       hint: "θ is opposite the longest side. cosθ comes out negative — your calculator gives the obtuse angle directly.",
       answerLabel: `θ = ${ang(val)}`,
       solution: [

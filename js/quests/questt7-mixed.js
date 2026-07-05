@@ -5,7 +5,7 @@
    word problems. Everything to scale.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { placeTri } from "./_trig.js";
+import { placeTri, segStartClear } from "./_trig.js";
 import {
   sineRuleSide, cosineRuleSide, cosineRuleAngle, areaSAS, areaSSS,
   footOfPerp, dist, sinD, fix, ang, randInt, pick,
@@ -27,7 +27,7 @@ const SKILLS = {
         graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
           angles: [t.angle("A", `${A}°`), t.angle("B", `${B}°`)],
           sides: [t.side("B", "C", String(a)), t.side("A", "C", "x")] },
-        expected: x, dp: 2,
+        expected: x, dp: 2, tol: 0.015,   // absorb the last-cent flip from 4-dp sines/cosines
         hint: "A side paired with its opposite angle → sine rule.",
         answerLabel: `x = ${fix(x, 2)} (sine rule)`,
         solution: [{ s: "two angles + a side → sine rule" }, { s: `x = ${a}·sin ${B}°/sin ${A}° = ${fix(x, 2)}` }],
@@ -43,7 +43,7 @@ const SKILLS = {
         graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
           angles: [t.angle("A", `${A}°`)],
           sides: [t.side("A", "C", String(b)), t.side("A", "B", String(c)), t.side("B", "C", "x")] },
-        expected: x, dp: 2,
+        expected: x, dp: 2, tol: 0.015,
         hint: "Two sides + the angle between them → cosine rule.",
         answerLabel: `x = ${fix(x, 2)} (cosine rule)`,
         solution: [{ s: "two sides + included angle → cosine rule" }, { s: `x² = ${b}²+${c}²−2(${b})(${c})cos ${A}° → x = ${fix(x, 2)}` }],
@@ -61,7 +61,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", "θ")],
         sides: [t.side("B", "C", String(a)), t.side("A", "C", String(b)), t.side("A", "B", String(c))] },
-      expected: val, dp: 1,
+      expected: val, dp: 1, tol: 0.1,
       hint: "All three sides, finding an angle → cosine rule (rearranged).",
       answerLabel: `θ = ${ang(val)} (cosine rule)`,
       solution: [{ s: "three sides → cosine rule for the angle" }, { s: `cosθ = (${b}²+${c}²−${a}²)/(2·${b}·${c}) → θ = ${ang(val)}` }],
@@ -78,14 +78,18 @@ const SKILLS = {
     const h = 2 * area / a;                                   // perpendicular from A to BC
     const F = footOfPerp(t.pts[t.L("A")], t.pts[t.L("B")], t.pts[t.L("C")]);
     const pts = { ...t.pts, F };
+    const graph = { type: "triangle", accent: ACC, pts, poly: t.poly,
+      angles: [t.angle("A", `${A}°`), { at: "F", right: true, between: [t.L("A"), t.L("B")] }],
+      sides: [t.side("A", "C", String(b)), t.side("A", "B", String(c))] };
+    // the altitude runs almost along the bisector here, so start the dash
+    // just below the angle label instead of striking straight through it
+    graph.pts = { ...pts, A0: segStartClear(graph, t.L("A"), "F") };
+    graph.segs = [{ from: "A0", to: "F", dash: true }];
     return {
       type: "calc", concept: "shortestDistance",
       prompt: `Calculate the <b>shortest distance</b> from ${t.L("A")} to ${t.L("B")}${t.L("C")} (2 decimals).`,
-      graph: { type: "triangle", accent: ACC, pts, poly: t.poly,
-        angles: [t.angle("A", `${A}°`), { at: "F", right: true, between: [t.L("A"), t.L("B")] }],
-        sides: [t.side("A", "C", String(b)), t.side("A", "B", String(c))],
-        segs: [{ from: t.L("A"), to: "F", dash: true }] },
-      expected: h, dp: 2,
+      graph,
+      expected: h, dp: 2, tol: 0.015,
       hint: "Shortest distance = the perpendicular height. Area = ½·base·height, so height = 2·Area / base.",
       answerLabel: `shortest distance = ${fix(h, 2)}`,
       solution: [
@@ -109,12 +113,12 @@ const SKILLS = {
       prompt: "Calculate the <b>area</b> of this triangle (2 decimals). You only have the three sides.",
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         sides: [t.side("B", "C", String(a)), t.side("A", "C", String(b)), t.side("A", "B", String(c))] },
-      expected: area, dp: 2,
+      expected: area, dp: 2, tol: 0.1,   // accept working that carries the 1-dp rounded angle
       hint: "First find an angle with the cosine rule, then use the area rule with the two sides around it.",
       answerLabel: `Area = ${fix(area, 2)} square units`,
       solution: [
         { s: `cos Â = (${b}²+${c}²−${a}²)/(2·${b}·${c}) → Â = ${ang(A)}`, r: "cosine rule" },
-        { s: `Area = ½·${b}·${c}·sin Â = ${fix(area, 2)}`, r: "area rule" },
+        { s: `Area = ½·${b}·${c}·sin Â = ${fix(area, 2)}`, r: "area rule — keep Â unrounded" },
       ],
     };
   },
@@ -125,8 +129,8 @@ const SKILLS = {
     const dapart = cosineRuleSide(b, c, A);
     return {
       type: "calc", concept: "mixedStrategy",
-      prompt: `Two hikers leave the same point. One walks ${b} m on a bearing, the other ${c} m, and the angle between their paths is ${A}°. How far apart are they (2 decimals)?`,
-      expected: dapart, dp: 2,
+      prompt: `Two hikers leave the same point along straight paths. One walks ${b} m, the other ${c} m, and the angle between their paths is ${A}°. How far apart are they (2 decimals)?`,
+      expected: dapart, dp: 2, tol: 0.015,
       hint: "The two distances and the angle between them are SAS → cosine rule for the third side.",
       answerLabel: `${fix(dapart, 2)} m apart`,
       solution: [

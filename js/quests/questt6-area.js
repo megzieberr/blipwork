@@ -23,7 +23,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`)],
         sides: [t.side("A", "C", String(b)), t.side("A", "B", String(c))] },
-      expected: area, dp: 2,
+      expected: area, dp: 2, tol: 0.015,   // absorb the last-cent flip if a learner works with a 4-dp sine
       hint: "Area = ½ × (side) × (side) × sin(angle between them).",
       answerLabel: `Area = ${fix(area, 2)} square units`,
       solution: [
@@ -40,7 +40,7 @@ const SKILLS = {
     return {
       type: "calc", concept: NOTE,
       prompt: `In △MNP, MN = ${c}, MP = ${b} and M̂ = ${A}°. Calculate the area of △MNP (2 decimals).`,
-      expected: area, dp: 2,
+      expected: area, dp: 2, tol: 0.015,
       hint: "M̂ is between the two given sides, so Area = ½·MN·MP·sinM̂.",
       answerLabel: `Area = ${fix(area, 2)} square units`,
       solution: [{ s: `Area = ½ · ${c} · ${b} · sin ${A}° = ${fix(area, 2)}` }],
@@ -57,12 +57,13 @@ const SKILLS = {
       type: "calc", concept: "areaPolygon",
       prompt: `Calculate the area of this regular <b>${name}</b> with side length ${s} (2 decimals).`,
       graph: regularPolygonFigure(n, s, ACC),
-      expected: area, dp: 2,
+      expected: area, dp: 2, tol: 0.5,   // triangle-method answers drift if R is rounded — accept them
       hint: `Split it into ${n} equal triangles from the centre. Each has a centre angle of 360°/${n} = ${fix(360 / n, 0)}°.`,
       answerLabel: `Area = ${fix(area, 2)} square units`,
       solution: [
-        { s: `${n} triangles, each centre angle 360°/${n} = ${fix(360 / n, 0)}°` },
-        { s: `Area = n·s² / (4·tan(180°/n)) = ${n}·${s}² / (4·tan ${fix(180 / n, 1)}°)` },
+        { s: `${n} isosceles triangles from the centre, each with apex angle 360°/${n} = ${fix(360 / n, 0)}°` },
+        { s: `equal legs R = (s/2) / sin(180°/${n}), then each triangle = ½·R²·sin ${fix(360 / n, 0)}°`, r: "keep R unrounded" },
+        { s: `in one step: Area = n·s² / (4·tan(180°/n)) = ${n}·${s}² / (4·tan ${fix(180 / n, 1)}°)` },
         { s: `Area = ${fix(area, 2)} square units` },
       ],
     };
@@ -78,12 +79,12 @@ const SKILLS = {
       type: "calc", concept: "areaQuad",
       prompt: `Find the total <b>area</b> of the figure (2 decimals): a rectangle below an isosceles-triangle roof.`,
       graph: fig.graph,
-      expected: total, dp: 2,
+      expected: total, dp: 2, tol: 0.06,   // accept working that carries the 2-dp rounded base
       hint: "Roof area = ½·r²·sinθ. For the rectangle you first need its width — the roof's base, by the cosine rule.",
       answerLabel: `Area = ${fix(total, 2)} square units`,
       solution: [
         { s: `base² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°  →  base = ${fix(base, 2)}`, r: "cosine rule" },
-        { s: `rectangle = base · ${h} = ${fix(fig.areaWall, 2)}` },
+        { s: `rectangle = base · ${h} = ${fix(fig.areaWall, 2)}`, r: "keep the unrounded base" },
         { s: `roof = ½·${r}²·sin ${theta}° = ${fix(fig.areaRoof, 2)}` },
         { s: `total = ${fix(total, 2)} square units` },
       ],

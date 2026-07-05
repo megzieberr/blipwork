@@ -54,6 +54,23 @@ const SKILLS = {
     { hint: "You can never cancel a single term out of a sum like (3ˣ + 1).",
       answerLabel: "True — cancel only common FACTORS of the whole line, never one term out of a sum." }),
 
+  /* the k-method for huge exponents */
+  kMethod: () => {
+    const items = [
+      { q: "Simplify <b>(5²⁰⁰⁷ + 5²⁰¹⁰) / (5²⁰⁰⁸ + 5²⁰⁰⁹)</b>. The exponents are huge but close together. Which method?",
+        correct: "The k-method: let k = 2008, rewrite each exponent as k−1, k, k+1 …, then factor out 5ᵏ",
+        wrongs: ["Type it straight into the calculator", "Cancel 5²⁰⁰⁷ against 5²⁰⁰⁸", "Equate the exponents"],
+        ans: "Let k = 2008: the exponents become k−1, k+2, k and k+1. Divorce each power, take out 5ᵏ top and bottom, and it cancels — the calculator can’t hold numbers this big, and you may never cancel single terms across a +." },
+      { q: "Simplify <b>(3¹⁰⁰ + 3¹⁰²) / 3¹⁰¹</b>. The exponents are huge but close together. Which method?",
+        correct: "The k-method: let k = 101, rewrite each exponent as k−1, k, k+1 …, then factor out 3ᵏ",
+        wrongs: ["Type it straight into the calculator", "Cancel 3¹⁰⁰ against 3¹⁰¹", "Equate the exponents"],
+        ans: "Let k = 101: (3ᵏ⁻¹ + 3ᵏ⁺¹)/3ᵏ = 3ᵏ(3⁻¹ + 3)/3ᵏ = ⅓ + 3 = 10/3. Factor out the k-power; never cancel one term out of a sum." },
+    ];
+    const it = pick(items);
+    return mc(CON, it.q, it.correct, it.wrongs,
+      { hint: "The exponents differ by tiny amounts — call the middle one k and write the rest relative to it.", answerLabel: it.ans });
+  },
+
   /* order the steps */
   order: () => {
     const correct = "① prime factors  ②  multiply out / add exponents  ③ simplify";

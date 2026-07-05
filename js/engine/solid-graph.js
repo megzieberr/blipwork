@@ -282,7 +282,7 @@ function buildCone(spec) {
     lines.push({ pts: [apex, F], dashed: false });        // slant (hypotenuse)
     dims.push({ a: cB, b: F, label: spec.rLabel || "r", lab: { dx: 2, dy: 14 } });
     dims.push({ a: apex, b: cB, label: spec.hLabel || "H", lab: { dx: -13, dy: 0 }, dash: true });
-    dims.push({ a: apex, b: F, label: spec.slantLabel || "ℓ", lab: { dx: 14, dy: -2 } });
+    dims.push({ a: apex, b: F, label: spec.slantLabel || "h", lab: { dx: 14, dy: -2 } });
     rights.push({ c: cB, a: F, b: apex });
     axisEdges.push({ a: cB, b: F, real: r, axis: "x" });
     samples.push(F);

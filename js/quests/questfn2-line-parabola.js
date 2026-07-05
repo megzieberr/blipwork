@@ -5,7 +5,7 @@
    ============================================================ */
 import { mc } from "./_shared.js";
 import { lineGraph, parabolaGraph, randLine, randParabola, ptDecoys } from "./_func.js";
-import { eqStr, paraTP, paraStd, lineXInt, lineYInt, rangeStr, ptStr, C, pick } from "../funclib.js";
+import { eqStr, paraTP, paraStd, paraTPString, lineXInt, lineYInt, rangeStr, ptStr, C, pick, randInt } from "../funclib.js";
 
 const ACC = "#0d9488";
 
@@ -15,7 +15,7 @@ const SKILLS = {
     const cv = randLine();
     const g = lineGraph(cv, { accent: ACC, label: "f" });
     const inc = cv.a > 0;
-    return mc("linearGraph", `For <b>${eqStr(cv, "f")}</b>, the line is…`,
+    return mc("linearGraph", `For <b>${eqStr(cv, "f(x)")}</b>, the line is…`,
       inc ? "increasing (slopes up)" : "decreasing (slopes down)",
       [inc ? "decreasing (slopes down)" : "increasing (slopes up)", "horizontal", "vertical"],
       { graph: g.spec,
@@ -26,15 +26,15 @@ const SKILLS = {
   /* read the intercepts of a line */
   lineIntercepts: () => {
     let cv = randLine();
-    while (cv.a === 0 || lineXInt(cv) == null) cv = randLine();
+    while (cv.a === 0 || cv.q === 0 || lineXInt(cv) == null) cv = randLine();   // q ≠ 0: intercepts away from the origin
     const xi = lineXInt(cv), yi = lineYInt(cv);
     const askX = pick([true, false]);
     const g = lineGraph(cv, { accent: ACC, label: "f" });
     return askX
-      ? mc("linearGraph", `What is the <b>x-intercept</b> of ${eqStr(cv, "f")}?`,
+      ? mc("linearGraph", `What is the <b>x-intercept</b> of ${eqStr(cv, "f(x)")}?`,
           ptStr(xi, 0), ptDecoys(xi, 0),
           { graph: g.spec, hint: "x-intercept: let y = 0 and solve for x.", answerLabel: `x-intercept ${ptStr(xi, 0)}.` })
-      : mc("linearGraph", `What is the <b>y-intercept</b> of ${eqStr(cv, "f")}?`,
+      : mc("linearGraph", `What is the <b>y-intercept</b> of ${eqStr(cv, "f(x)")}?`,
           ptStr(0, yi), ptDecoys(0, yi),
           { graph: g.spec, hint: "y-intercept: let x = 0. For y = ax + q that is just q.", answerLabel: `y-intercept ${ptStr(0, yi)}.` });
   },
@@ -44,7 +44,7 @@ const SKILLS = {
     const cv = randParabola();
     const g = parabolaGraph(cv, { accent: ACC, label: "f" });
     const happy = paraStd(cv).a > 0;
-    return mc("parabolaShape", `The parabola <b>${eqStr(cv, "f")}</b> is…`,
+    return mc("parabolaShape", `The parabola <b>${eqStr(cv, "f(x)")}</b> is…`,
       happy ? "“happy” (opens up) — it has a minimum" : "“sad” (opens down) — it has a maximum",
       [happy ? "“sad” (opens down) — it has a maximum" : "“happy” (opens up) — it has a minimum",
        "a straight line", "always increasing"],
@@ -58,11 +58,24 @@ const SKILLS = {
     const cv = randParabola();
     const tp = paraTP(cv);
     const g = parabolaGraph(cv, { accent: ACC, label: "f" });
-    return mc("parabolaShape", `What is the <b>turning point</b> of ${eqStr(cv, "f")}?`,
+    return mc("parabolaShape", `What is the <b>turning point</b> of ${eqStr(cv, "f(x)")}?`,
       ptStr(tp.x, tp.y), ptDecoys(tp.x, tp.y),
       { graph: g.spec,
         hint: "x of the turning point = −b/(2a); substitute it back to get the y-value.",
         answerLabel: `Turning point ${ptStr(tp.x, tp.y)}.` });
+  },
+
+  /* turning point straight from turning-point form — the p-sign trap */
+  tpFormRead: () => {
+    let p = randInt(-3, 3), q = randInt(-4, 4);
+    while (p === 0 || q === 0 || p === q) { p = randInt(-3, 3); q = randInt(-4, 4); }
+    const cv = { kind: "parabola", a: pick([1, -1, 2, -2]), p, q };
+    const g = parabolaGraph(cv, { accent: ACC, label: "f" });
+    return mc("parabolaShape", `<b>${paraTPString(cv)}</b> is in turning-point form. What is its <b>turning point</b>?`,
+      ptStr(p, q), [ptStr(-p, q), ptStr(q, p), ptStr(p, -q)],
+      { graph: g.spec,
+        hint: "In y = a(x − p)² + q the turning point is (p ; q) — the sign inside the bracket flips: (x − 2)² turns at x = +2, (x + 2)² at x = −2.",
+        answerLabel: `Turning point ${ptStr(p, q)}.` });
   },
 
   /* axis of symmetry */
@@ -70,8 +83,11 @@ const SKILLS = {
     const cv = randParabola();
     const tp = paraTP(cv);
     const g = parabolaGraph(cv, { accent: ACC, label: "f" });
-    return mc("parabolaShape", `What is the <b>axis of symmetry</b> of ${eqStr(cv, "f")}?`,
-      `x = ${C(tp.x)}`, [`y = ${C(tp.x)}`, `x = ${C(-tp.x)}`, `x = ${C(tp.x + 1)}`],
+    return mc("parabolaShape", `What is the <b>axis of symmetry</b> of ${eqStr(cv, "f(x)")}?`,
+      `x = ${C(tp.x)}`,
+      [`y = ${C(tp.x)}`,
+       tp.x === 0 ? `x = ${C(tp.x - 1)}` : `x = ${C(-tp.x)}`,                    // sign-flip decoy (or an offset when the TP is on the y-axis)
+       -tp.x === tp.x + 1 ? `x = ${C(tp.x - 1)}` : `x = ${C(tp.x + 1)}`],        // avoid colliding with the sign-flip decoy at x = −0,5
       { graph: g.spec,
         hint: "The axis of symmetry is the vertical line through the turning point: x = (the x of the TP).",
         answerLabel: `x = ${C(tp.x)}.` });
@@ -88,7 +104,7 @@ const SKILLS = {
       `y ∈ ℝ`,
       a > 0 ? `y ≥ ${C(-tp.y)}` : `y ≤ ${C(-tp.y)}`,
     ];
-    return mc("domainRange", `What is the <b>range</b> of ${eqStr(cv, "f")}?`,
+    return mc("domainRange", `What is the <b>range</b> of ${eqStr(cv, "f(x)")}?`,
       correct, wrongs,
       { graph: g.spec,
         hint: "Range = the y-values covered. A happy parabola starts at its minimum y and goes up (y ≥ min); a sad one (y ≤ max).",

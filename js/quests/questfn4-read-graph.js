@@ -31,7 +31,9 @@ const SKILLS = {
       () => lineGraph(randLine(), { accent: ACC }),
       () => parabolaGraph(randParabola(), { accent: ACC }),
     ];
-    const g = pick(builders)();
+    // need a y-intercept OFF the origin that is actually marked on the sketch
+    let g = pick(builders)();
+    while (g.yi === 0 || !g.spec.points.some((p) => p.x === 0 && Math.abs(p.y - g.yi) < 1e-9)) g = pick(builders)();
     const yi = g.yi;
     const spec = blank(g.spec, [{ x: 0, y: yi }]);
     return mc("readGraph", "Read the <b>y-intercept</b> off the graph.",
@@ -55,8 +57,8 @@ const SKILLS = {
 
   /* read the turning point */
   readTP: () => {
-    const cv = randParabola();
-    const tp = paraTP(cv);
+    let cv = randParabola(), tp = paraTP(cv);
+    while (!Number.isInteger(tp.x) || !Number.isInteger(tp.y)) { cv = randParabola(); tp = paraTP(cv); }   // read-offs sit on gridlines
     const g = parabolaGraph(cv, { accent: ACC });
     const spec = blank(g.spec, [{ x: tp.x, y: tp.y }]);
     return mc("readGraph", "Read the <b>turning point</b> off the graph.",
@@ -68,7 +70,8 @@ const SKILLS = {
   /* read the asymptotes */
   readAsymptotes: () => {
     const isHyp = pick([true, false]);
-    const cv = isHyp ? randHyperbola() : randExp();
+    let cv = isHyp ? randHyperbola() : randExp();
+    while (isHyp && cv.p === cv.q) cv = randHyperbola(); // p ≠ q keeps the swapped decoy distinct
     const g = isHyp ? hyperbolaGraph(cv, { accent: ACC }) : expGraph(cv, { accent: ACC });
     g.spec.curves.forEach((c) => { delete c.label; delete c.labelAt; });
     g.spec.points = [];

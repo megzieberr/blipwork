@@ -14,14 +14,34 @@ import { coneTriple, pyramidTriple, figConeHeight, figPyramidHeight } from "../m
 const ACC = "#4d7c0f";
 const sq = n => n * n;
 
+/* Drawing-safe triples: the engine's fixed label offsets put "H"/"h" ON the
+   dashed back rim (k·[3,4,5] tall cones, where H ≈ 1,41r so the rim passes
+   through the middle of the H line) or on the silhouette (very narrow
+   cones). Wide cones always draw clean; the tall 8-15-17 draws clean in a
+   slightly taller frame. Verified against solid-graph geometry — review. */
+function safeConeTriple() {
+  for (;;) { const t = coneTriple(); if (t.r > t.H || (t.r === 8 && t.H === 15)) return t; }
+}
+function coneFig(t, unknown, letters = false) {
+  const g = figConeHeight(ACC, t, unknown, letters);
+  if (t.H > t.r) g.h2 = 300;                                   // tall cone → taller frame
+  else if (unknown === "H" && t.slant >= 2 * t.H) g.w = 360;   // very wide cone → wider frame
+  return g;
+}
+/* the 16-base pyramid projects a base corner onto the middle of the H line —
+   its labels always sit on hidden edges, so skip that one triple */
+function safePyramidTriple() {
+  for (;;) { const t = pyramidTriple(); if (t.half < 8) return t; }
+}
+
 const SKILLS = {
   /* cone: given r and slant h, find the perpendicular height H */
   coneFindH: () => {
-    const t = coneTriple();
+    const t = safeConeTriple();
     return {
       type: "calc", concept: "findHeight",
       prompt: "Calculate the <b>perpendicular height H</b> of this cone.",
-      graph: figConeHeight(ACC, t, "H"),
+      graph: coneFig(t, "H"),
       expected: t.H, dp: 0,
       hint: "r, H and the slant h make a right-angled triangle with the slant as the hypotenuse: h² = H² + r². So H = √(h² − r²).",
       answerLabel: `H = √(${t.slant}² − ${t.r}²) = √${sq(t.slant) - sq(t.r)} = ${t.H}`,
@@ -35,11 +55,11 @@ const SKILLS = {
 
   /* cone: given r and H, find the slant height h */
   coneFindSlant: () => {
-    const t = coneTriple();
+    const t = safeConeTriple();
     return {
       type: "calc", concept: "findHeight",
       prompt: "Calculate the <b>slant height h</b> of this cone.",
-      graph: figConeHeight(ACC, t, "slant"),
+      graph: coneFig(t, "slant"),
       expected: t.slant, dp: 0,
       hint: "The slant is the hypotenuse, so it sits alone: h² = H² + r², giving h = √(H² + r²).",
       answerLabel: `h = √(${t.H}² + ${t.r}²) = √${sq(t.H) + sq(t.r)} = ${t.slant}`,
@@ -53,7 +73,7 @@ const SKILLS = {
 
   /* pyramid: given base ℓ and slant h, find H — the trap is using HALF the base */
   pyramidFindH: () => {
-    const t = pyramidTriple();
+    const t = safePyramidTriple();
     return {
       type: "calc", concept: "findHeight",
       prompt: "Calculate the <b>perpendicular height H</b> of this square-based pyramid.",
@@ -73,7 +93,7 @@ const SKILLS = {
   coneRelation: () => mc("findHeight",
     "For a cone, how are the radius r, perpendicular height H and slant height h related?",
     "h² = H² + r²", ["H² = h² + r²", "h² = H² − r²", "h = H + r"],
-    { graph: figConeHeight(ACC, coneTriple(), null, true), layout: "grid2",
+    { graph: coneFig(safeConeTriple(), null, true), layout: "grid2",
       hint: "The slant h is the longest side (opposite the right angle), so it sits alone as the c in a² + b² = c².",
       answerLabel: "h² = H² + r² — the slant is the hypotenuse.",
       solution: [{ s: "legs r and H, hypotenuse h → h² = H² + r²" }] }),
@@ -82,7 +102,7 @@ const SKILLS = {
   pyramidWhichLeg: () => mc("findHeight",
     "To find a square pyramid's perpendicular height from the slant height of a face, what is the <b>bottom</b> of the right-angled triangle?",
     "half the base side (½ℓ)", ["the full base side (ℓ)", "the diagonal of the base", "the slant height (h)"],
-    { graph: figPyramidHeight(ACC, pyramidTriple(), null, true),
+    { graph: figPyramidHeight(ACC, safePyramidTriple(), null, true),
       hint: "The slant runs to the MIDDLE of a base edge, so the bottom leg only reaches halfway across — ½ℓ.",
       answerLabel: "Half the base side, ½ℓ — the slant meets the base at the midpoint of an edge.",
       solution: [{ s: "h² = H² + (ℓ/2)²  →  bottom leg is ½ℓ, not the whole ℓ" }] }),
@@ -91,7 +111,7 @@ const SKILLS = {
   hypIs: () => ({
     type: "yesno", concept: "findHeight",
     prompt: "In the right-angled triangle inside this solid, is the <b>slant height</b> the hypotenuse (the longest side)?",
-    graph: figConeHeight(ACC, coneTriple(), null, true),
+    graph: coneFig(safeConeTriple(), null, true),
     yes: true,
     hint: "The right angle sits between the radius and the perpendicular height, so the side opposite it is the slant.",
     answerLabel: "Yes — the slant is opposite the right angle, so it is the hypotenuse and the longest of the three.",

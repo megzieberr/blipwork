@@ -84,8 +84,7 @@ const SKILLS = {
   /* clean exact values 45° / 135° */
   cleanValue: () => {
     const negative = pick([true, false]);
-    const c = inclinationCase({ negative });
-    // force one of the exact pairs
+    // one of the exact pairs
     const ex = negative ? { dy: -1, dx: 1, theta: 135 } : { dy: 1, dx: 1, theta: 45 };
     const d = inclinationDiagram(ex.dy, ex.dx, { accent: ACC });
     return mc("angleInclination",

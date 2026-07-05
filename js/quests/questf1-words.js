@@ -44,7 +44,7 @@ const SKILLS = {
   whichCompoundScenario: () => mc(CL,
     "Which of these is worked out with <b>compound</b> interest?",
     "Money growing in a savings account",
-    ["A hire-purchase agreement", "A once-off deposit paid upfront", "The deposit on a loan"],
+    ["A hire-purchase agreement", "A once-off deposit paid upfront", "An asset losing the same rand amount each year"],
     { hint: "Savings, inflation and population growth all use compound interest." }),
 
   pickCompoundFormula: () => mc(CL,

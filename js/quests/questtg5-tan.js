@@ -46,8 +46,9 @@ const SKILLS = {
   /* range of tan */
   tanRange: () => {
     const cv = tanCv();
+    const aT = Math.abs(cv.a), qT = cv.q || 0, half = 90 / Math.abs(cv.b);
     return mc("trigRange", `${eqStr(cv)}<br>What is the <b>range</b>?`,
-      "y ∈ ℝ", pick3("y ∈ ℝ", [intervalStr(-Math.abs(cv.a), Math.abs(cv.a)), intervalStr((cv.q || 0) - 1, (cv.q || 0) + 1), "y ∈ [−1 ; 1]", "undefined"]),
+      "y ∈ ℝ", pick3("y ∈ ℝ", [intervalStr(qT - aT, qT + aT), "y ∈ [−1 ; 1]", "undefined", `y ∈ (−${half}° ; ${half}°)`]),
       { graph: trigGraph(cv, { accent: ACC }).spec,
         hint: "Tangent climbs without bound between its asymptotes, so it reaches every real value.",
         answerLabel: "Range: y ∈ ℝ (any a, b, p, q)." });
@@ -72,7 +73,7 @@ const SKILLS = {
   tanSteeperYesNo: () => {
     return {
       type: "yesno", concept: "tanAValue",
-      prompt: "For a tan graph, does a <b>larger</b> value of a make the branches steeper?",
+      prompt: "For a tan graph, does a <b>larger size</b> of a make the branches steeper?",
       yes: true,
       hint: "Tangent has no amplitude, but a still stretches it vertically — that makes each branch steeper.",
       answerLabel: "Yes — a bigger a makes a tan graph steeper (it has no amplitude, but a sets the steepness).",

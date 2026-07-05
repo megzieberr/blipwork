@@ -13,7 +13,7 @@ const CON = "eqKMethod";
 /* a repeated bracket like "x² − x" with small random coefficients */
 function repBracket() {
   const m = randInt(1, 3), sign = pick(["−", "+"]);
-  return `x² ${sign} ${C(m)}x`;
+  return `x² ${sign} ${m === 1 ? "" : C(m)}x`;   // never show "1x"
 }
 
 const SKILLS = {

@@ -97,11 +97,22 @@ const SKILLS = {
     const vowels = letters.filter(l => "AEIOU".includes(l));
     const cons = letters.filter(l => !"AEIOU".includes(l));
     const f = frac(vowels.length, letters.length);
+    // decoys are numerically filtered so none can ever equal the answer
+    const cands = [
+      frac(cons.length, letters.length),                                          // counted the consonants
+      { str: `${letters.length}/${vowels.length}`, val: letters.length / vowels.length }, // inverted
+      frac(vowels.length, letters.length - 1),                                    // miscounted the total
+      frac(vowels.length - 1, letters.length),                                    // missed a vowel
+    ];
+    const seen = new Set([f.str]); const wrongs = [];
+    for (const c of cands) {
+      if (Math.abs(c.val - f.val) < 1e-9 || seen.has(c.str)) continue;
+      seen.add(c.str); wrongs.push(c.str);
+      if (wrongs.length === 3) break;
+    }
     return mc("probBasics",
       `One card of the word <b>${word}</b> is drawn at random. Using the diagram, write <b>P(vowel)</b> as a fraction in simplest form.`,
-      f.str,
-      [frac(cons.length, letters.length).str, `${letters.length}/${vowels.length}`, frac(vowels.length, letters.length - 1).str]
-        .filter((w, i, a) => w !== f.str && a.indexOf(w) === i).slice(0, 3),
+      f.str, wrongs,
       { graph: { type: "venn", mode: "one", A: "vowel", s: `n(S) = ${letters.length}`,
                  regions: { inside: vowels.join("  "), out: cons.join("  ") } },
         hint: "Count the vowels inside the circle over the total number of letters.",

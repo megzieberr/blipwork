@@ -9,8 +9,21 @@ import { mc } from "./_shared.js";
 import { figCone, figPyramid, pick } from "../measlib.js";
 
 const ACC = "#65a30d";
-const bothCone = () => figCone(ACC, { showPerp: true, showSlant: true });
-const bothPyr = () => figPyramid(ACC, { showPerp: true, showSlant: true });
+/* both heights drawn; squat proportions put the "H"/"h" letters on the back
+   rim or a hidden edge (engine label offsets are fixed — see the chapter
+   review), so nudge just those. Still to scale. */
+const bothCone = () => {
+  const g = figCone(ACC, { showPerp: true, showSlant: true });
+  if (g.r === 5 && g.h === 7) g.h = 8;
+  else if (g.r === 6 && g.h <= 8) g.h = 9;
+  return g;
+};
+const bothPyr = () => {
+  const g = figPyramid(ACC, { showPerp: true, showSlant: true });
+  if (g.h === g.s + 1) g.h += 1;
+  else if (g.s === 8 && g.h === 7) g.h = 8;
+  return g;
+};
 
 const SKILLS = {
   /* volume uses the PERPENDICULAR height */
@@ -21,7 +34,8 @@ const SKILLS = {
     const vol = cone ? "⅓πr²H" : "⅓ℓ²H";
     return mc("slantPerp",
       `For the <b>volume</b> of this ${shape} (${vol}), which height do you use?`,
-      "H — the perpendicular height", ["h — the slant height", "neither; you use the radius", "you may use either one"],
+      "H — the perpendicular height",
+      ["h — the slant height", cone ? "neither; you use the radius r" : "neither; you use the base side ℓ", "you may use either one"],
       { graph: g,
         hint: "Volume is about how much fills the inside, so you need the true straight-up height H, not the longer slanted one.",
         answerLabel: "The perpendicular height H — it runs straight from the apex down to the centre of the base.",
@@ -36,7 +50,8 @@ const SKILLS = {
     const face = cone ? "curved surface (πrh)" : "triangular side faces (½·p·h)";
     return mc("slantPerp",
       `For the <b>${face}</b> of this ${shape}, which height do you use?`,
-      "h — the slant height", ["H — the perpendicular height", "the radius r", "the base side ℓ"],
+      "h — the slant height",
+      ["H — the perpendicular height", cone ? "the radius r" : "the base side ℓ", "you may use either one"],
       { graph: g,
         hint: "The slanted face lies along the slope, so its area needs the length measured along that slope — the slant height h.",
         answerLabel: "The slant height h — it runs along the sloping face, from the apex to the edge of the base.",

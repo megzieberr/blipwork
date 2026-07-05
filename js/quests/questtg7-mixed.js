@@ -56,7 +56,7 @@ const SKILLS = {
     const X = pick([0, 90, 180, 270, 360]);
     const trueY = Math.round(f(X));
     const onIt = pick([true, false]);
-    const Y = onIt ? trueY : pick([trueY + 1, trueY - 1].filter((v) => v >= -1 && v <= 1).concat(trueY === 0 ? [1, -1] : [0]))[0];
+    const Y = onIt ? trueY : pick([trueY + 1, trueY - 1].filter((v) => v >= -1 && v <= 1).concat(trueY === 0 ? [1, -1] : [0]));
     return {
       type: "yesno", concept: "trigTogether",
       prompt: `Does the point (${X}° ; ${nstr(Y)}) lie on y = ${fn} x?`,
@@ -75,7 +75,7 @@ const SKILLS = {
     const iy = sind(45);                    // sin45 = cos45
     const spec = {
       type: "trigg", accent: ACC, grid: true, win, showAsym: true,
-      curves: [{ ...f, tone: "a", label: "f", labelAt: 20 }, { ...g, tone: "b", label: "g", labelAt: 150 }],
+      curves: [{ ...f, tone: "a", label: "f", labelAt: 120 }, { ...g, tone: "b", label: "g", labelAt: 150 }],
       points: [
         { x: 45, y: iy, on: [0, 1], id: "int" },          // the real intersection
         { x: 90, y: 1, on: 0, id: "d1" },                  // on f only

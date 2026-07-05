@@ -79,10 +79,10 @@ const SKILLS = {
     const p = pick(twoDrawPaths(env.b, true));
     const f = frac(p.n, p.d);
     const without = twoDrawPaths(env.b, false).find(q => q.path === p.path);  // the classic slip
-    const wrongs = [frac(without.n, without.d).str, frac(p.n1 + p.n2, p.d).str, frac(p.n, p.d * 2).str]
+    const wrongs = [frac(without.n, without.d).str, frac(p.n1 + p.n2, p.d).str, frac(p.n, p.d * 2).str, frac(p.n1, p.d1).str]
       .filter((w, i, a) => w !== f.str && a.indexOf(w) === i).slice(0, 3);
     return mc(TREE,
-      `${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>with replacement</b>. Using the tree, find <b>P(${p.k1}, ${p.k2})</b> in simplest form.`,
+      `A bag holds ${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>with replacement</b>. Using the tree, find <b>P(${p.k1}, ${p.k2})</b> in simplest form.`,
       f.str, wrongs,
       { graph: treeSpec(env, true),
         hint: "With replacement, both draws use the same total. Multiply along the path.",
@@ -94,10 +94,10 @@ const SKILLS = {
     const p = pick(twoDrawPaths(env.b, false));
     const f = frac(p.n, p.d);
     const withVal = twoDrawPaths(env.b, true).find(q => q.path === p.path);   // the classic slip
-    const wrongs = [frac(withVal.n, withVal.d).str, frac(p.n1 + p.n2, p.d).str, frac(p.n, p.d * 2).str]
+    const wrongs = [frac(withVal.n, withVal.d).str, frac(p.n1 + p.n2, p.d).str, frac(p.n, p.d * 2).str, frac(p.n1, p.d1).str]
       .filter((w, i, a) => w !== f.str && a.indexOf(w) === i).slice(0, 3);
     return mc(TREE,
-      `${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>without replacement</b>. Using the tree, find <b>P(${p.k1}, ${p.k2})</b> in simplest form.`,
+      `A bag holds ${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>without replacement</b>. Using the tree, find <b>P(${p.k1}, ${p.k2})</b> in simplest form.`,
       f.str, wrongs,
       { graph: treeSpec(env, false),
         hint: "Without replacement, the second denominator is one smaller — and the first colour drops by one.",
@@ -110,7 +110,7 @@ const SKILLS = {
     const replace = pick([true, false]);
     const res = atLeastOne(env.b, c.k, replace);
     return mc(ALO,
-      `${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>${replace ? "with" : "without"} replacement</b>. Find <b>P(at least one ${c.name})</b>.`,
+      `A bag holds ${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>${replace ? "with" : "without"} replacement</b>. Find <b>P(at least one ${c.name})</b> in simplest form.`,
       res.pAtLeast.str,
       [res.pNone.str, frac(env.b.counts[c.k], env.b.total).str, frac(env.b.counts[c.k] * 2, env.b.total).str]
         .filter((w, i, a) => w !== res.pAtLeast.str && a.indexOf(w) === i).slice(0, 3),

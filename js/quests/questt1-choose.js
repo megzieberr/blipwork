@@ -66,7 +66,11 @@ const SKILLS = {
 
   /* biggest angle is opposite the longest side */
   biggestAngle: () => {
-    const t = genSSS();
+    let t, sorted;                                       // one side must be STRICTLY longest,
+    do {                                                 // or "the biggest angle" would be a tie
+      t = genSSS();
+      sorted = [t.sides.a, t.sides.b, t.sides.c].map(Math.round).sort((x, y) => y - x);
+    } while (sorted[0] === sorted[1]);
     const s = t.sides;                                   // a opp A, b opp B, c opp C
     const longest = (["A", "B", "C"]).reduce((m, k) => (s[k.toLowerCase()] > s[m.toLowerCase()] ? k : m), "A");
     return mc("labelling",

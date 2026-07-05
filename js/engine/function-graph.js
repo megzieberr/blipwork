@@ -111,17 +111,22 @@ export function renderFunction(spec) {
     out += `<line class="fg-axis" x1="${N(X(xmin))}" y1="${N(y0px)}" x2="${N(X(xmax))}" y2="${N(y0px)}"/>`;
     out += `<path class="fg-arrow" d="M ${N(X(xmax))} ${N(y0px)} l -7 -3.5 l 0 7 z"/>`;
     out += `<path class="fg-arrow" d="M ${N(X(xmin))} ${N(y0px)} l 7 -3.5 l 0 7 z"/>`;
-    out += text(X(xmax) - 4, y0px - 9, "x", "fg-axlab");
-    obstacles.push(box(X(xmax) - 4, y0px - 9, 15, 17));
+    const xlY = y0px - 9 < 9 ? y0px + 13 : y0px - 9;   // axis on the top edge → label below it
+    out += text(X(xmax) - 4, xlY, "x", "fg-axlab");
+    obstacles.push(box(X(xmax) - 4, xlY, 15, 17));
   }
   if (showY) {
     out += `<line class="fg-axis" x1="${N(x0px)}" y1="${N(Y(ymin))}" x2="${N(x0px)}" y2="${N(Y(ymax))}"/>`;
     out += `<path class="fg-arrow" d="M ${N(x0px)} ${N(Y(ymax))} l -3.5 7 l 7 0 z"/>`;
     out += `<path class="fg-arrow" d="M ${N(x0px)} ${N(Y(ymin))} l -3.5 -7 l 7 0 z"/>`;
-    out += text(x0px + 9, Y(ymax) + 4, "y", "fg-axlab");
-    obstacles.push(box(x0px + 9, Y(ymax) + 4, 15, 17));
+    const ylX = x0px + 9 > W - 6 ? x0px - 9 : x0px + 9;   // axis on the right edge → label to its left
+    out += text(ylX, Y(ymax) + 4, "y", "fg-axlab");
+    obstacles.push(box(ylX, Y(ymax) + 4, 15, 17));
   }
-  if (showX && showY) { out += text(x0px - 8, y0px + 10, "O", "fg-axlab"); obstacles.push(box(x0px - 8, y0px + 10, 15, 17)); }
+  if (showX && showY) {
+    const oY = y0px + 10 > H - 5 ? y0px - 9 : y0px + 10;  // axis on the bottom edge → O above it
+    out += text(x0px - 8, oY, "O", "fg-axlab"); obstacles.push(box(x0px - 8, oY, 15, 17));
+  }
 
   // ---- the curves ----
   (spec.curves || []).forEach((cv) => {

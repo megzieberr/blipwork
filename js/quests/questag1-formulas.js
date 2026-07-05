@@ -7,7 +7,7 @@
    just choosing the tool. Diagram-backed where it helps.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { winFor, AG } from "./_analytical.js";
+import { winFor, layoutPointLabels, AG } from "./_analytical.js";
 import { randSegment, randPoint, distance, ptStr, pick } from "../analyticslib.js";
 
 const ACC = AG[0];
@@ -20,11 +20,13 @@ const F = {
 };
 
 function segDiagram(A, B) {
-  return {
-    type: "analytic", accent: ACC, grid: true, win: winFor([A, B]),
+  // pad 2: the full coordinate labels are ~2 units wide, so they need room
+  // inside the frame; layoutPointLabels then picks a side clear of the segment.
+  return layoutPointLabels({
+    type: "analytic", accent: ACC, grid: true, win: winFor([A, B], { pad: 2 }),
     segs: [{ a: A, b: B }],
     points: [{ x: A.x, y: A.y, label: `A${ptStr(A)}`, place: "auto" }, { x: B.x, y: B.y, label: `B${ptStr(B)}`, place: "auto" }],
-  };
+  });
 }
 
 const SKILLS = {

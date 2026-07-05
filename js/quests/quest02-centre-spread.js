@@ -27,11 +27,12 @@ function genMean() {
   const n = randInt(5, 8);
   const data = rawset(n, 2, 20);
   const m = mean(data), dp = Number.isInteger(m) ? 0 : 1;
+  const mR = Math.round(m * 10) / 10;   // shown to the same dp the keypad marks at
   return {
-    type: "calc", concept: "mean", dp, expected: m, answerLabel: C(Math.round(m * 10) / 10),
-    prompt: `Calculate the <b>mean</b> of:<br><span class="num">${list(data)}</span>`,
+    type: "calc", concept: "mean", dp, expected: m, answerLabel: C(mR),
+    prompt: `Calculate the <b>mean</b> of:<br><span class="num">${list(data)}</span>${dp ? "<br>(round to 1 decimal place)" : ""}`,
     hint: "Add all the values, then divide by how many there are.",
-    solution: [{ s: `x̄ = Σx / n = ${sum(data)} / ${n} = ${C(Math.round(m * 100) / 100)}`, r: "mean" }],
+    solution: [{ s: `x̄ = Σx / n = ${sum(data)} / ${n} ${mR === m ? "=" : "≈"} ${C(mR)}`, r: "mean" }],
   };
 }
 
@@ -51,10 +52,12 @@ function genMedian() {
   const n = pick([5, 7, 9]);
   const data = dataset(n, 3, 45);
   const med = median(data);
+  const mid = (n - 1) / 2;   // lead with the median's neighbours (a miscount by one), then other values
+  const decoys = [...shuffled([data[mid - 1], data[mid + 1]]), ...shuffled(data.filter(v => v !== med))];
   return {
     type: "mc", concept: "mean", layout: "grid2",
     prompt: `Find the <b>median</b> of:<br><span class="num">${list(data)}</span>`,
-    options: mcNum(med, shuffled(data.filter(v => v !== med)).slice(0, 3)),
+    options: mcNum(med, decoys),
     answerLabel: `median = ${C(med)}`,
     hint: "The data is already in order — the median is the middle value.",
     solution: [{ s: `n = ${n}, middle position = ${(n + 1) / 2} → median = ${C(med)}`, r: "median" }],

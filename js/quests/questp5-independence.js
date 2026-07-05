@@ -84,25 +84,49 @@ const SKILLS = {
   tableReadFeature: () => {
     const t = table(pick([true, false]));
     const x = t.ctx;
+    const f = frac(t.R0, t.grand);
+    // decoys by VALUE-filter so none can equal the answer, topped up to three
+    const cands = [
+      frac(t.C0, t.grand),                                  // read a column instead of the row
+      frac(t.c00, t.grand),                                 // used the overlap cell only
+      { str: `${t.grand}/${t.R0}`, val: t.grand / t.R0 },   // inverted
+      frac(t.R0, t.grand - t.R0),                           // part-to-part, not part-to-whole
+    ];
+    const seen = new Set([f.str]); const wrongs = [];
+    for (const c of cands) {
+      if (Math.abs(c.val - f.val) < 1e-9 || seen.has(c.str)) continue;
+      seen.add(c.str); wrongs.push(c.str);
+      if (wrongs.length === 3) break;
+    }
     return mc(TAB,
       `${tableHTML(t)}One person is chosen at random. Write <b>P(${x.rL})</b> as a fraction in simplest form.`,
-      frac(t.R0, t.grand).str,
-      [frac(t.C0, t.grand).str, frac(t.c00, t.grand).str, frac(t.grand, t.R0).str]
-        .filter((w, i, a) => w !== frac(t.R0, t.grand).str && a.indexOf(w) === i).slice(0, 3),
+      f.str, wrongs,
       { hint: `P(${x.rL}) = that row's total ÷ the grand total.`,
-        answerLabel: `${t.R0}/${t.grand} = ${frac(t.R0, t.grand).str}` });
+        answerLabel: `${t.R0}/${t.grand} = ${f.str}` });
   },
 
   tableReadOverlap: () => {
     const t = table(pick([true, false]));
     const x = t.ctx;
+    const f = frac(t.c00, t.grand);
+    const cands = [
+      frac(t.R0, t.grand),                                  // whole row instead of the one cell
+      frac(t.C0, t.grand),                                  // whole column
+      frac(t.c00, t.R0),                                    // divided by the row total, not the grand total
+      frac(t.R0 + t.C0 - t.c00, t.grand),                   // found "or" instead of "and"
+      frac(t.c00, t.grand - t.c00),                         // part-to-part
+    ];
+    const seen = new Set([f.str]); const wrongs = [];
+    for (const c of cands) {
+      if (Math.abs(c.val - f.val) < 1e-9 || seen.has(c.str)) continue;
+      seen.add(c.str); wrongs.push(c.str);
+      if (wrongs.length === 3) break;
+    }
     return mc(TAB,
       `${tableHTML(t)}Write <b>P(${x.rL} and ${x.cL})</b> as a fraction in simplest form.`,
-      frac(t.c00, t.grand).str,
-      [frac(t.R0, t.grand).str, frac(t.C0, t.grand).str, frac(t.c00, t.R0).str]
-        .filter((w, i, a) => w !== frac(t.c00, t.grand).str && a.indexOf(w) === i).slice(0, 3),
+      f.str, wrongs,
       { hint: "Use the single overlap cell ÷ the grand total.",
-        answerLabel: `${t.c00}/${t.grand} = ${frac(t.c00, t.grand).str}` });
+        answerLabel: `${t.c00}/${t.grand} = ${f.str}` });
   },
 
   tableIndependent: () => {

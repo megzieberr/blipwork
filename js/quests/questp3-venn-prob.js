@@ -34,12 +34,20 @@ const vennCounts = (sc) => ({
 /* an empty venn (labels only) — used when the learner must sort it themselves */
 const vennEmpty = () => ({ type: "venn", mode: "two", A: "A", B: "B", s: "S" });
 
-/* a fraction MC: correct = n/N, decoys built from other plausible counts */
+/* a fraction MC: correct = n/N, decoys built from other plausible counts.
+   Decoys are filtered by VALUE (never numerically equal to the answer) and
+   topped up with near-miss counts so there are always four buttons. */
 function fracMC(prompt, n, N, graph, opts, decoyCounts = []) {
   const f = frac(n, N);
-  const wrongs = decoyCounts.map(c => frac(c, N).str)
-    .concat([`${N}/${n}`])
-    .filter((w, i, a) => w !== f.str && a.indexOf(w) === i).slice(0, 3);
+  const cands = decoyCounts.map(c => frac(c, N))
+    .concat([{ str: `${N}/${n}`, val: N / n }])                          // inverted
+    .concat([n + 1, n - 1, n + 2].filter(c => c >= 0 && c <= N).map(c => frac(c, N))); // off-by-one counts
+  const seen = new Set([f.str]); const wrongs = [];
+  for (const c of cands) {
+    if (Math.abs(c.val - f.val) < 1e-9 || seen.has(c.str)) continue;
+    seen.add(c.str); wrongs.push(c.str);
+    if (wrongs.length === 3) break;
+  }
   return mc(READ, prompt, f.str, wrongs, { graph, ...opts, answerLabel: opts.answerLabel || `${n}/${N} = ${f.str}` });
 }
 
@@ -115,7 +123,7 @@ const SKILLS = {
 
   pNeither: () => {
     const sc = scenario();
-    return fracMC(`Use the Venn diagram. Write <b>P((A ∪ B)′)</b> — in neither A nor B — as a fraction.`,
+    return fracMC(`Use the Venn diagram. Write <b>P((A ∪ B)′)</b> — in neither A nor B — as a fraction in simplest form.`,
       sc.r.nOutside, sc.N, vennCounts(sc),
       { hint: "“Neither” is the count OUTSIDE both circles ÷ n(S).",
         answerLabel: `P(neither) = ${sc.r.nOutside}/${sc.N} = ${frac(sc.r.nOutside, sc.N).str}` },
@@ -124,7 +132,7 @@ const SKILLS = {
 
   pOnlyB: () => {
     const sc = scenario();
-    return fracMC(`Use the Venn diagram. Write <b>P(only B)</b> — in B but not A — as a fraction.`,
+    return fracMC(`Use the Venn diagram. Write <b>P(only B)</b> — in B but not A — as a fraction in simplest form.`,
       sc.r.nOnlyB, sc.N, vennCounts(sc),
       { hint: "Take the part of B that is OUTSIDE the overlap ÷ n(S).",
         answerLabel: `P(only B) = ${sc.r.nOnlyB}/${sc.N} = ${frac(sc.r.nOnlyB, sc.N).str}` },

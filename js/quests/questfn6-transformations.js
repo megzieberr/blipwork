@@ -64,6 +64,23 @@ const SKILLS = {
         answerLabel: "A vertical stretch by a factor of k." });
   },
 
+  /* apply a reflection to a parabola's turning point */
+  applyReflect: () => {
+    let cv = randParabola(), tp = paraTP(cv);
+    while (Math.abs(tp.x) < 0.4 || Math.abs(tp.y) < 0.4) { cv = randParabola(); tp = paraTP(cv); }   // both coords non-zero → all four options distinct
+    const inX = pick([true, false]);
+    const g = parabolaGraph(cv, { accent: ACC, label: "f" });
+    const nx = inX ? tp.x : -tp.x, ny = inX ? -tp.y : tp.y;
+    return mc("transformations",
+      `f has turning point ${ptStr(tp.x, tp.y)}. After reflecting f in the <b>${inX ? "x-axis" : "y-axis"}</b>, the new turning point is…`,
+      ptStr(nx, ny),
+      [ptStr(inX ? -tp.x : tp.x, inX ? tp.y : -tp.y), ptStr(-tp.x, -tp.y), ptStr(tp.x, tp.y)],
+      { graph: g.spec,
+        hint: inX ? "Reflection in the x-axis is −f(x): only the y-coordinate changes sign."
+                  : "Reflection in the y-axis is f(−x): only the x-coordinate changes sign.",
+        answerLabel: `New turning point ${ptStr(nx, ny)}.` });
+  },
+
   /* apply a shift to a parabola's turning point */
   applyToParabola: () => {
     const cv = randParabola(), tp = paraTP(cv);

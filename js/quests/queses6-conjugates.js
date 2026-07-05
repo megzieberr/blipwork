@@ -14,9 +14,9 @@ const SKILLS = {
   /* what is the conjugate */
   findConjugate: () => {
     const items = [
-      { q: "What is the <b>conjugate</b> of √3 + 1?", correct: "√3 − 1", wrongs: ["1 − √3", "√3 + 1", "−√3 − 1"], ans: "Flip the middle sign: the conjugate of √3 + 1 is √3 − 1." },
-      { q: "What is the <b>conjugate</b> of √5 − √2?", correct: "√5 + √2", wrongs: ["√2 − √5", "−√5 − √2", "√5 − √2"], ans: "Flip the middle sign: √5 − √2 → √5 + √2." },
-      { q: "What is the <b>conjugate</b> of 2 + √7?", correct: "2 − √7", wrongs: ["√7 − 2", "−2 − √7", "2 + √7"], ans: "Same two terms, opposite middle sign: 2 − √7." },
+      { q: "What is the <b>conjugate</b> of √3 + 1?", correct: "√3 − 1", wrongs: ["√3 + 1", "−√3 − 1", "2"], ans: "Flip the middle sign: the conjugate of √3 + 1 is √3 − 1. (The 2 is the conjugate PRODUCT (√3+1)(√3−1), not the conjugate itself.)" },
+      { q: "What is the <b>conjugate</b> of √5 − √2?", correct: "√5 + √2", wrongs: ["√2 − √5", "√5 − √2", "3"], ans: "Flip the middle sign: √5 − √2 → √5 + √2. (3 is the conjugate PRODUCT (√5)² − (√2)², not the conjugate.)" },
+      { q: "What is the <b>conjugate</b> of 2 + √7?", correct: "2 − √7", wrongs: ["−2 − √7", "2 + √7", "−3"], ans: "Same two terms, opposite middle sign: 2 − √7. (−3 is the conjugate PRODUCT 2² − (√7)², not the conjugate.)" },
     ];
     const it = pick(items);
     return mc(CONJ, it.q, it.correct, it.wrongs, { hint: "Keep both terms exactly the same; just change the + to − (or − to +).", answerLabel: it.ans });
@@ -54,7 +54,7 @@ const SKILLS = {
   /* rationalise two terms */
   rationaliseTwo: () => {
     const items = [
-      { q: "To rationalise <b>2/(1 + √3)</b>, multiply top and bottom by:", correct: "(1 − √3)/(1 − √3)", wrongs: ["(1 + √3)/(1 + √3)", "√3/√3", "(√3 − 1)/(√3 − 1)"], ans: "Multiply by the conjugate over itself: (1 − √3)/(1 − √3)." },
+      { q: "To rationalise <b>2/(1 + √3)</b>, multiply top and bottom by:", correct: "(1 − √3)/(1 − √3)", wrongs: ["(1 + √3)/(1 + √3)", "√3/√3", "(1 − √3)/(1 + √3)"], ans: "Multiply by the conjugate over itself: (1 − √3)/(1 − √3). It must be the SAME thing top and bottom (×1), or the value changes." },
       { q: "To rationalise <b>5/(√2 − 3)</b>, multiply top and bottom by:", correct: "(√2 + 3)/(√2 + 3)", wrongs: ["(√2 − 3)/(√2 − 3)", "√2/√2", "(3 − √2)/(3 − √2)"], ans: "Use the conjugate of √2 − 3, which is √2 + 3." },
     ];
     const it = pick(items);

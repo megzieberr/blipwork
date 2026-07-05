@@ -43,9 +43,11 @@ const SKILLS = {
       { e: "2²ˣ − 5·2ˣ + 4", k: "Let k = 2ˣ", wrongs: ["Let k = 2²ˣ", "Let k = x", "Let k = 4"], ans: "Let k = 2ˣ; then 2²ˣ = k², giving k² − 5k + 4." },
       { e: "9ˣ + 3ˣ − 12", k: "Let k = 3ˣ", wrongs: ["Let k = 9ˣ", "Let k = 9", "Let k = x"], ans: "9ˣ = (3ˣ)², so let k = 3ˣ → k² + k − 12." },
       { e: "3²ˣ − 3ˣ − 6", k: "Let k = 3ˣ", wrongs: ["Let k = 3²ˣ", "Let k = 6", "Let k = x"], ans: "Let k = 3ˣ; 3²ˣ = k², giving k² − k − 6." },
+      { e: "x − √x − 6", k: "Let k = √x", wrongs: ["Let k = x", "Let k = x²", "Let k = 6"], ans: "x = (√x)², so let k = √x → k² − k − 6. (Remember √x = k can never be negative when you solve.)" },
+      { e: "√x + ⁴√x − 2", k: "Let k = ⁴√x", wrongs: ["Let k = √x", "Let k = x", "Let k = 2"], ans: "√x = (⁴√x)², so let k = ⁴√x → k² + k − 2." },
     ];
     const it = pick(items);
-    return mc(CON, `Which substitution turns <b>${it.e}</b> into an ordinary quadratic?`, it.k, it.wrongs, { hint: "Let k be the SINGLE power (baseˣ); then base²ˣ becomes k².", answerLabel: it.ans });
+    return mc(CON, `Which substitution turns <b>${it.e}</b> into an ordinary quadratic?`, it.k, it.wrongs, { hint: "Let k be the SMALLER power — the other term must be its square, k². (For baseˣ shapes, k = baseˣ.)", answerLabel: it.ans });
   },
 
   /* the restriction after factorising */

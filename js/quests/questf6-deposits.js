@@ -4,7 +4,7 @@
    ============================================================ */
 import { mc, mcNum, C } from "./_shared.js";
 import { pick } from "../ui.js";
-import { depositAmount, balanceAfterDeposit, toFrac, rand } from "../finlib.js";
+import { depositAmount, balanceAfterDeposit, simpleAmount, toFrac, rand } from "../finlib.js";
 
 const CL = "deposits";
 const PRICES = [4000, 5000, 6000, 8000, 10000, 12000];
@@ -32,6 +32,10 @@ const SKILLS = {
       expected: owed,
       hint: "Amount owed = price − deposit = ((100 − %) ÷ 100) × price.",
       answerLabel: `R${money0(price)} − R${money0(depositAmount(toFrac(p), price))} = R${money0(owed)}`,
+      solution: [
+        { s: `Deposit = ${C(toFrac(p))} × ${price} = ${depositAmount(toFrac(p), price)}` },
+        { s: `Still owed = ${price} − ${depositAmount(toFrac(p), price)} = ${owed}` },
+      ],
     };
   },
 
@@ -65,6 +69,25 @@ const SKILLS = {
     "Simple interest",
     ["Compound interest", "Reducing-balance", "Effective interest"],
     { hint: "Hire purchase is the simple-interest case: A = P(1 + i·n).", answerLabel: "Simple interest" }),
+
+  hpTotal: () => {
+    const p = pick(PCTS), price = pick(PRICES), r = pick([10, 15, 20]), n = pick([2, 4]);
+    /* these combos always give whole rand; round away float noise at source */
+    const owed = Math.round(balanceAfterDeposit(toFrac(p), price));
+    const A = Math.round(simpleAmount(owed, toFrac(r), n));
+    return {
+      type: "calc", concept: CL, dp: 0,
+      prompt: `A fridge costs <b>R${money0(price)}</b>. A <b>${p}%</b> deposit is paid, and the balance is bought on hire purchase at <b>${r}% p.a. simple interest</b> for <b>${n} years</b>. How much is repaid on the balance in total (in rand, deposit not included)?`,
+      expected: A,
+      hint: `First find the balance after the deposit, then use A = P(1 + i·n) on that balance.`,
+      answerLabel: `A = R${money0(owed)}(1 + ${C(toFrac(r))}×${n}) = R${money0(A)}`,
+      solution: [
+        { s: `Balance = ${C(toFrac(100 - p))} × ${price} = ${owed}`, r: "interest is charged on what is still owed" },
+        { s: `A = P(1 + i·n) = ${owed}(1 + ${C(toFrac(r))} × ${n})`, r: "hire purchase → simple interest" },
+        { s: `A = ${owed} × ${C(1 + toFrac(r) * n)} = ${A}` },
+      ],
+    };
+  },
 };
 
 export const questF6 = {

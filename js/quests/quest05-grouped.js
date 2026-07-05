@@ -24,7 +24,8 @@ function genTotal() {
   const classes = groupedSet(), n = totalFreq(classes);
   return {
     type: "calc", concept: "groupedMean", dp: 0, expected: n, answerLabel: `${n}`,
-    prompt: `${freqTable(classes)}What is <b>n</b> (the total frequency, Σf)?`,
+    // total:false — the Total row would print the answer
+    prompt: `${freqTable(classes, { total: false })}What is <b>n</b> (the total frequency, Σf)?`,
     hint: "Add up the frequency column.",
     solution: [{ s: `n = Σf = ${classes.map(c => c.freq).join(" + ")} = ${n}`, r: "total frequency" }],
   };
@@ -76,8 +77,17 @@ function genModalClass() {
       solution: [{ s: `${correct} has the highest frequency → modal class.` }] });
 }
 
+/* true if the running total lands EXACTLY on n/2 at an internal class
+   boundary — the median class would then be arguable either side, so re-roll */
+function hitsHalfBoundary(classes) {
+  let c = 0;
+  const tot = totalFreq(classes);
+  return classes.slice(0, -1).some(cl => (c += cl.freq) * 2 === tot);
+}
+
 function genMedianClass() {
-  const classes = groupedSet();
+  let classes = groupedSet();
+  while (hitsHalfBoundary(classes)) classes = groupedSet();
   const n = totalFreq(classes), pos = n / 2;
   const mClass = medianClass(classes);
   const correct = classInterval(mClass);

@@ -42,13 +42,13 @@ const SKILLS = {
     const graph = trigGraph(cv, { accent: ACC }).spec;
     if (cv.fn === "tan") {
       return mc("trigAmplitude", `${eqStr(cv)}<br>What is the <b>amplitude</b>?`,
-        "undefined", pick3("undefined", [nstr(Math.abs(cv.a)), "1", degLabel(periodOf(cv))]),
+        "undefined", pick3("undefined", [nstr(Math.abs(cv.a)), "1", degLabel(periodOf(cv)), nstr(2 * Math.abs(cv.a))]),
         { graph, hint: "Tangent has no maximum or minimum, so it has no amplitude.",
           answerLabel: "Amplitude: undefined (tan has no max/min)." });
     }
     const A = amplitudeOf(cv);
     return mc("trigAmplitude", `${eqStr(cv)}<br>What is the <b>amplitude</b>?`,
-      ampStr(cv), pick3(ampStr(cv), [nstr(2 * A), nstr(Math.abs(cv.b)), nstr(A + Math.abs(cv.q || 0)), nstr(A + 1), "1", "undefined"]),
+      ampStr(cv), pick3(ampStr(cv), [nstr(2 * A), nstr(Math.abs(cv.b)), nstr(A + Math.abs(cv.q || 0)), nstr(A + 1), nstr(A + 2), "1", "undefined"]),
       { graph, hint: "Amplitude = |a| (always positive). The sign of a only flips the graph.",
         answerLabel: `Amplitude = ${ampStr(cv)}.` });
   },
@@ -58,8 +58,9 @@ const SKILLS = {
     const cv = pick([randSC, randSC, randTanC])();
     const graph = trigGraph(cv, { accent: ACC, midline: true }).spec;
     if (cv.fn === "tan") {
+      const aT = Math.abs(cv.a), qT = cv.q || 0, half = 90 / Math.abs(cv.b);
       return mc("trigRange", `${eqStr(cv)}<br>What is the <b>range</b>?`,
-        "y ∈ ℝ", pick3("y ∈ ℝ", [intervalStr(-Math.abs(cv.a), Math.abs(cv.a)), intervalStr((cv.q || 0) - 1, (cv.q || 0) + 1), "y ∈ [−1 ; 1]"]),
+        "y ∈ ℝ", pick3("y ∈ ℝ", [intervalStr(qT - aT, qT + aT), "y ∈ [−1 ; 1]", "undefined", `y ∈ (−${half}° ; ${half}°)`]),
         { graph, hint: "Tangent reaches every real y-value.", answerLabel: "Range: y ∈ ℝ." });
     }
     const A = amplitudeOf(cv), q = cv.q || 0;
@@ -74,7 +75,7 @@ const SKILLS = {
     const cv = randSC({ q: pick([2, 3, -2, -3, 1, -1]) });
     const A = amplitudeOf(cv), q = cv.q;
     return mc("trigRange", `${eqStr(cv)}<br>What is the <b>range</b>?`,
-      rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q, q + A), intervalStr(q + A, q - A)]),
+      rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q, q + A), intervalStr(q - 1, q + 1)]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
         hint: `Midline is y = ${nstr(q)}. Range = [${nstr(q)} − ${A} ; ${nstr(q)} + ${A}].`,
         answerLabel: `Range: ${rangeStr(cv)} (midline ${nstr(q)}, amplitude ${A}).` });
@@ -110,7 +111,7 @@ const SKILLS = {
     const cv = randSC({ a: pick([1, 2, 3]), b: pick([1, 2]), q: pick([0, 1, -1, 2]) });
     const A = amplitudeOf(cv), q = cv.q || 0;
     return mc("trigAmplitude", "Read the <b>amplitude</b> off the graph (use the marked peak and trough).",
-      nstr(A), pick3(nstr(A), [nstr(2 * A), nstr(q + A), nstr(Math.abs(q)), nstr(A + 1), nstr(2 * A + 1)]),
+      nstr(A), pick3(nstr(A), [nstr(2 * A), nstr(q + A), nstr(Math.abs(q)), nstr(A + 1), nstr(2 * A + 1), nstr(2 * A + 2)]),
       { graph: ampRangeGraph(cv, { accent: ACC }).spec,
         hint: "Amplitude = (y max − y min) ÷ 2. Read y max and y min off the y-axis (the dashed guides).",
         answerLabel: `Amplitude = (${nstr(q + A)} − (${nstr(q - A)})) ÷ 2 = ${A}.` });
@@ -121,7 +122,7 @@ const SKILLS = {
     const cv = randSC({ a: pick([1, 2, 3]), b: pick([1, 2]), q: pick([0, 1, -1, 2]) });
     const A = amplitudeOf(cv), q = cv.q || 0;
     return mc("trigRange", "Read the <b>range</b> off the graph (the marked peak and trough).",
-      rangeStr(cv), pick3(rangeStr(cv), [intervalStr(q - A, q + A + 1), intervalStr(q + A, q - A), intervalStr(-A, A), "y ∈ ℝ"]),
+      rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - A - 1, q + A + 1), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q, q + A), "y ∈ ℝ"]),
       { graph: ampRangeGraph(cv, { accent: ACC }).spec,
         hint: "Range = from the lowest y-value (trough) up to the highest (peak).",
         answerLabel: `Range: ${rangeStr(cv)}.` });

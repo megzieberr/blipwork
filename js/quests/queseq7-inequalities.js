@@ -161,6 +161,22 @@ const SKILLS = {
       { hint: "(a − x) hides −x². Take out −1 and flip.", answerLabel: it.ans });
   },
 
+  /* brackets that are NOT against 0 — expand first, factorise again */
+  expandFirst: () => {
+    const items = [
+      { q: "<b>(x + 1)(x + 2) ≤ 20</b>. The left side is already in brackets. May you take the critical points straight from them?", correct: "No — the brackets equal 20, not 0. Multiply out, bring the 20 across, factorise AGAIN", wrongs: ["Yes — the CPs are x = −1 and x = −2", "Yes, as long as you flip the inequality sign first", "No — first divide both sides by (x + 1)"], ans: "Brackets only speak against 0. Expand: x² + 3x + 2 ≤ 20 → x² + 3x − 18 ≤ 0 → (x + 6)(x − 3) ≤ 0 → −6 ≤ x ≤ 3. (Notice −1 and −2 appear nowhere in the real answer!)" },
+      { q: "When brackets multiply to something OTHER than 0 (like … ≤ 20), what is the routine?", correct: "Expand, bring everything to the left so 0 sits on the right, then factorise the NEW trinomial", wrongs: ["Read the CPs off the brackets as they stand", "Set each bracket ≤ 20 on its own", "Divide both sides by one of the brackets"], ans: "Same discipline as equations: the zero-product idea (and the bowl's CPs) only work against 0. Expand → 0 on the right → factorise again → CPs → sketch." },
+      ynQ(QUA,
+        "For <b>(x + 1)(x + 2) ≤ 20</b> a learner writes “x + 1 ≤ 20 or x + 2 ≤ 20”. Is that method legal?",
+        false,
+        { hint: "Does splitting a product over its factors work against 20?",
+          answerLabel: "No — splitting up brackets is only legal against 0 (zero-product rule). Expand and rearrange: x² + 3x − 18 ≤ 0 → (x + 6)(x − 3) ≤ 0 → −6 ≤ x ≤ 3." }),
+    ];
+    const it = pick(items);
+    return it.type ? it : mc(QUA, it.q, it.correct, it.wrongs,
+      { hint: "Brackets = 20 is NOT brackets = 0. Expand, rearrange to 0, factorise again.", answerLabel: it.ans });
+  },
+
   /* fractions inside an inequality — the square denominator & the restriction */
   fracIneq: () => {
     const m = randInt(2, 5);

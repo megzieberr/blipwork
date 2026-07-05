@@ -131,7 +131,7 @@ export function verifyTree(spec, tol = 1e-6) {
   const gaps = ys.slice(1).map((y, i) => y - ys[i]);
   r.push({ label: "leaves equally spaced", ok: gaps.every(d => Math.abs(d - gaps[0]) <= 0.5) && (gaps.length === 0 || gaps[0] > 0) });
   // 4) leaf count = stage1 × stage2
-  const expect = g.twoStage ? spec.stage1.length * (spec.stage2[0] ? spec.stage2[0].length : 0) : spec.stage1.length;
+  const expect = g.twoStage ? spec.stage2.reduce((s, k) => s + k.length, 0) : spec.stage1.length;
   r.push({ label: `leaf count is ${expect}`, ok: g.leaves.length === expect });
   // 5) columns advance left → right
   r.push({ label: "root → stage 1 → leaves advance rightward", ok: g.rootX < g.stage1X && g.stage1X <= g.leafX });

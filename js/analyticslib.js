@@ -22,7 +22,7 @@ export { randInt, pick, shuffled };
 /* a true minus sign for display */
 export const neg = (s) => String(s).replace(/-/g, "−");
 /* an ordered pair "(2 ; −3)" with comma decimals + real minus */
-export const ptStr = (P) => `(${C(P.x)} ; ${C(P.y)})`;
+export const ptStr = (P) => `(${neg(C(P.x))} ; ${neg(C(P.y))})`;
 export const P = (x, y) => ({ x, y });
 
 export function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }

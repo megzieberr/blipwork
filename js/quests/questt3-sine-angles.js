@@ -14,9 +14,12 @@ const NOTE = "sineRuleAngle";
 const SKILLS = {
   /* find an angle, unambiguous because it is opposite the SHORTER side */
   findAngle: () => {
-    const A = randInt(45, 80), a = randInt(13, 20);
-    const b = randInt(7, a - 3);                       // b < a → θ acute & unique
-    const B = sineRuleAngle(A, a, b);                  // θ, opposite b
+    let A, a, b, B;
+    do {
+      A = randInt(45, 80); a = randInt(13, 20);
+      b = randInt(7, a - 3);                           // b < a → θ acute & unique
+      B = sineRuleAngle(A, a, b);                      // θ, opposite b
+    } while (B < 24);                                  // wedge wide enough for its θ label
     const t = placeTri({ angles: { A, B }, sides: { a } }, ["A", "B", "C"], randInt(-22, 22));
     return {
       type: "calc", concept: NOTE,
@@ -24,7 +27,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`), t.angle("B", "θ")],
         sides: [t.side("B", "C", String(a)), t.side("A", "C", String(b))] },
-      expected: B, dp: 1,
+      expected: B, dp: 1, tol: 0.1,   // accept the neighbouring tenth from 4-dp sine working
       hint: "θ is opposite b. Sines on top: sinθ/b = sinÂ/a, so sinθ = b·sinÂ/a.",
       answerLabel: `θ = ${ang(B)}`,
       solution: [
@@ -53,8 +56,32 @@ const SKILLS = {
     return mc("ambiguousCase",
       `Â = ${A}°, the side opposite Â is a = ${a}, and another side b = ${b}. How many triangles fit this data?`,
       word, ["no triangle", "one triangle", "two triangles"].filter(w => w !== word),
-      { hint: "Compare a with h = b·sinÂ. a < h → none; h ≤ a < b → two; a ≥ b → one.",
-        answerLabel: `h = b·sinÂ = ${fix(res.h, 2)}. Here ${res.count === 0 ? `a (${a}) < h` : res.count === 2 ? `h ≤ a (${a}) < b (${b})` : `a (${a}) ≥ b (${b})`}, so ${word}.` });
+      { hint: "Compare a with h = b·sinÂ. a < h → none; a = h → one (right-angled); h < a < b → two; a ≥ b → one.",
+        answerLabel: `h = b·sinÂ = ${fix(res.h, 2)}. Here ${res.count === 0 ? `a (${a}) < h` : res.count === 2 ? `h < a (${a}) < b (${b})` : `a (${a}) ≥ b (${b})`}, so ${word}.` });
+  },
+
+  /* the full ambiguous calculation: sine rule for the acute angle, then 180° − it */
+  ambiguousBoth: () => {
+    let A, a, b, res;
+    do {
+      A = randInt(25, 50); b = randInt(12, 20);
+      a = randInt(Math.ceil(b * sinD(A)) + 1, b - 1);   // h < a < b → two triangles
+      res = ambiguousCase(A, a, b);
+    } while (res.count !== 2);
+    const obtuse = 180 - res.acute;
+    return {
+      type: "calc", concept: "ambiguousCase",
+      prompt: `In △ABC, Â = ${A}°, a = ${a} (opposite Â) and b = ${b}. Two triangles are possible. Calculate the <b>obtuse</b> possibility of B̂ (1 decimal).`,
+      expected: obtuse, dp: 1, tol: 0.1,
+      hint: "Sine rule first: sinB̂ = b·sinÂ/a gives the ACUTE B̂. The obtuse partner is 180° − (that angle).",
+      answerLabel: `obtuse B̂ = ${ang(obtuse)}`,
+      solution: [
+        { s: `sin B̂ / ${b} = sin ${A}° / ${a}`, r: "sines on top" },
+        { s: `sin B̂ = ${b} · sin ${A}° / ${a} = ${fix(b * sinD(A) / a, 4)}` },
+        { s: `acute B̂ = ${ang(res.acute)}` },
+        { s: `obtuse B̂ = 180° − ${ang(res.acute)} = ${ang(obtuse)}`, r: "supplementary pair" },
+      ],
+    };
   },
 
   /* the obtuse partner */
@@ -91,6 +118,6 @@ const SKILLS = {
 export const questT3 = {
   id: "t3",
   skills: Object.entries(SKILLS).map(([id, gen]) => ({
-    id, concept: (id === "ambiguousCount" || id === "obtusePartner" || id === "ambiguousWhen") ? "ambiguousCase" : NOTE, gen,
+    id, concept: (id === "ambiguousCount" || id === "ambiguousBoth" || id === "obtusePartner" || id === "ambiguousWhen") ? "ambiguousCase" : NOTE, gen,
   })),
 };

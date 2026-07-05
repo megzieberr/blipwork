@@ -16,7 +16,9 @@ const SKILLS = {
     const half = randInt(2, 6), bb = 2 * half, sign = pick(["+", "−"]);
     const prompt = `Which constant completes the square?<br><b>x² ${sign} ${C(bb)}x + □</b>`;
     const correct = `${C(half * half)}`;
-    const wrongs = [`${C(bb * bb)}`, `${C(half)}`, `${C(2 * bb)}`];
+    /* decoys: squared without halving; halved without squaring; squared THEN
+       halved (b²/2) — always distinct from (b/2)², unlike 2b which collides at b = 8 */
+    const wrongs = [`${C(bb * bb)}`, `${C(half)}`, `${C(bb * bb / 2)}`];
     return mc(PSQ, prompt, correct, wrongs,
       { hint: "Half the middle coefficient, then square it: (b/2)².",
         answerLabel: `(${C(bb)} ÷ 2)² = ${C(half)}² = ${C(half * half)}. Then x² ${sign} ${C(bb)}x + ${C(half * half)} = (x ${sign} ${C(half)})².` });

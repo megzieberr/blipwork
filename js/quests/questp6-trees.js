@@ -59,6 +59,24 @@ const SKILLS = {
     };
   },
 
+  exactlyOneHead: () => {
+    const pH = pick([0.5, 0.6, 0.7, 0.4, 0.3, 0.8]);
+    const v = 2 * pH * (1 - pH);
+    return {
+      type: "calc", concept: TREE, dp: 2,
+      prompt: `A coin with P(H) = <b>${dec(pH)}</b> is tossed twice. Using the tree, find <b>P(exactly one head)</b>.`,
+      graph: coinTree(pH),
+      expected: v,
+      hint: "Exactly one head = the HT path OR the TH path. Multiply along each path, then ADD the two paths.",
+      answerLabel: `P(HT) + P(TH) = ${dec(pH * (1 - pH), 2)} + ${dec((1 - pH) * pH, 2)} = ${dec(v, 2)}`,
+      solution: [
+        { s: `P(HT) = ${dec(pH)} × ${dec(1 - pH)} = ${dec(pH * (1 - pH), 2)}` },
+        { s: `P(TH) = ${dec(1 - pH)} × ${dec(pH)} = ${dec((1 - pH) * pH, 2)}` },
+        { s: `P(exactly one H) = ${dec(pH * (1 - pH), 2)} + ${dec((1 - pH) * pH, 2)} = ${dec(v, 2)}` },
+      ],
+    };
+  },
+
   atLeastOneHead: () => ({
     type: "calc", concept: ALO, dp: 2,
     prompt: `A fair coin is tossed <b>twice</b>. Using the tree, find <b>P(at least one head)</b>.`,
@@ -97,7 +115,7 @@ const SKILLS = {
       type: "calc", concept: TREE, dp: 2,
       prompt: `Two identical biased coins are tossed. It is found that <b>P(both heads) = ${dec(pHH)}</b>. Find <b>P(both tails)</b>.`,
       expected: pTT,
-      hint: `Since the coins are identical, P(H) = √${dec(pHH)} = ${dec(pH)}, so P(T) = ${dec(1 - pH)}.`,
+      hint: `The coins are identical, so P(H) × P(H) = ${dec(pHH)} — take the square root to find P(H) first.`,
       answerLabel: `P(H) = √${dec(pHH)} = ${dec(pH)} → P(TT) = ${dec(1 - pH)}² = ${dec(pTT, 2)}`,
       solution: [{ s: `P(H) × P(H) = ${dec(pHH)} → P(H) = ${dec(pH)}` }, { s: `P(T) = 1 − ${dec(pH)} = ${dec(1 - pH)}` }, { s: `P(TT) = ${dec(1 - pH)} × ${dec(1 - pH)} = ${dec(pTT, 2)}` }],
     };

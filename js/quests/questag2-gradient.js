@@ -6,8 +6,8 @@
    has gradient 0, a vertical line has an undefined gradient.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { yesnoQ, winFor, letterLines, AG } from "./_analytical.js";
-import { randInt, pick, gradient } from "../analyticslib.js";
+import { yesnoQ, winFor, letterLines, layoutPointLabels, AG } from "./_analytical.js";
+import { randInt, pick, randSegment, gradFrac, gradFracOf, ptStr, C, neg } from "../analyticslib.js";
 
 const ACC = AG[1];
 
@@ -89,14 +89,49 @@ const SKILLS = {
         answerLabel: "A horizontal line has gradient 0 (a vertical line is undefined)." });
   },
 
-  /* increasing / decreasing from the sign */
+  /* increasing / decreasing from the sign — sometimes stated WRONG, so the
+     answer isn't always "yes" */
   incDec: () => {
-    const neg = pick([true, false]);
+    const negative = pick([true, false]);
+    const saysFalls = pick([true, false]);
+    const truth = negative === saysFalls;
+    const really = negative ? "falls ↘" : "rises ↗";
     return yesnoQ("gradientSign",
-      `A line with a <b>${neg ? "negative" : "positive"}</b> gradient ${neg ? "falls" : "rises"} as you read from left to right. True?`,
-      true,
+      `A line with a <b>${negative ? "negative" : "positive"}</b> gradient <b>${saysFalls ? "falls" : "rises"}</b> as you read from left to right. True?`,
+      truth,
       { hint: "Positive gradient climbs ↗, negative gradient drops ↘.",
-        answerLabel: `Yes — a ${neg ? "negative" : "positive"} gradient ${neg ? "falls ↘" : "rises ↗"}.` });
+        answerLabel: truth
+          ? `Yes — a ${negative ? "negative" : "positive"} gradient ${really}.`
+          : `No — a ${negative ? "negative" : "positive"} gradient ${really}.` });
+  },
+
+  /* compute the gradient from two labelled points (the bread-and-butter skill) */
+  fromPoints: () => {
+    let A, B;
+    do { ({ A, B } = randSegment(-5, 5, 3)); }
+    while (B.y === A.y || Math.abs(B.y - A.y) === Math.abs(B.x - A.x));  // keep m ≠ 0, |m| ≠ 1 so every decoy stays distinct
+    const dy = B.y - A.y, dx = B.x - A.x;
+    const correct = gradFracOf(A, B).str;
+    const wrap = (v) => (v < 0 ? `(${neg(C(v))})` : C(v));
+    const graph = layoutPointLabels({
+      type: "analytic", accent: ACC, grid: true, win: winFor([A, B], { pad: 2 }),
+      segs: [{ a: A, b: B }],
+      points: [{ x: A.x, y: A.y, label: `A${ptStr(A)}`, place: "auto" }, { x: B.x, y: B.y, label: `B${ptStr(B)}`, place: "auto" }],
+    });
+    return mc("whichFormula",
+      `A${ptStr(A)} and B${ptStr(B)} lie on a line. The gradient of AB is…`,
+      correct,
+      [gradFrac(dx, dy).str,      // flipped: run over rise
+       gradFrac(-dy, dx).str,     // mixed the subtraction order → wrong sign
+       gradFrac(dx, -dy).str],    // flipped AND wrong sign
+      { graph,
+        hint: "m = (y<sub>B</sub> − y<sub>A</sub>) / (x<sub>B</sub> − x<sub>A</sub>) — keep the points in the SAME order top and bottom.",
+        answerLabel: `m<sub>AB</sub> = ${correct}.`,
+        solution: [
+          { s: "m<sub>AB</sub> = (y<sub>B</sub> − y<sub>A</sub>) / (x<sub>B</sub> − x<sub>A</sub>)" },
+          { s: `= (${neg(C(B.y))} − ${wrap(A.y)}) / (${neg(C(B.x))} − ${wrap(A.x)})`, r: "substitute B then A, top and bottom" },
+          { s: `= ${neg(C(dy))} / ${neg(C(dx))} = ${correct}` },
+        ] });
   },
 
   /* which is steeper (bigger |m|) */
@@ -118,6 +153,9 @@ const SKILLS = {
 export const questAg2 = {
   id: "ag2",
   skills: Object.entries(SKILLS).map(([id, gen]) => ({
-    id, concept: (id === "horizontal" || id === "vertical" || id === "zeroVsUndef") ? "specialLines" : "gradientSign", gen,
+    id,
+    concept: (id === "horizontal" || id === "vertical" || id === "zeroVsUndef") ? "specialLines"
+      : id === "fromPoints" ? "whichFormula" : "gradientSign",
+    gen,
   })),
 };

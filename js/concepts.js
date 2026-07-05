@@ -238,7 +238,7 @@ export const CONCEPTS = {
         <li>T0 → T4 is <b>4</b> periods.</li>
         <li>T5 → T2 is <b>3</b> periods (going back).</li>
       </ul>
-      <p>The <b>direction</b> tells you ×　or ÷: later = ×, earlier = ÷.</p>`,
+      <p>The <b>direction</b> tells you × or ÷: later = ×, earlier = ÷.</p>`,
   },
   rateChange: {
     title: "When the interest rate changes",
@@ -358,7 +358,7 @@ export const CONCEPTS = {
         <li><b>Multiply</b> the probabilities <b>along</b> a path to get that full outcome.</li>
         <li><b>Add</b> the path probabilities to combine paths into one event.</li>
       </ul>
-      <div class="eg">e.g. two coins: P(H,T) = 0,5 × 0,5 = 0,25; P(one head) = P(HT) + P(TH) = 0,25 + 0,25 = 0,5.</div>`,
+      <div class="eg">e.g. two coins: P(H,T) = 0,5 × 0,5 = 0,25; P(exactly one head) = P(HT) + P(TH) = 0,25 + 0,25 = 0,5.</div>`,
   },
   atLeastOne: {
     title: "The ‘at least one’ shortcut",
@@ -424,7 +424,8 @@ export const CONCEPTS = {
       <p>Compare the side <b>a</b> opposite the known angle Â with <b>h = b·sinÂ</b>:</p>
       <ul>
         <li>a &lt; h → <b>no</b> triangle</li>
-        <li>h ≤ a &lt; b → <b>two</b> triangles (acute and obtuse)</li>
+        <li>a = h → <b>one</b> triangle (right-angled)</li>
+        <li>h &lt; a &lt; b → <b>two</b> triangles (acute and obtuse)</li>
         <li>a ≥ b → <b>one</b> triangle</li>
       </ul>
       <div class="formula">obtuse angle = 180° − (acute angle)</div>`,
@@ -494,7 +495,7 @@ export const CONCEPTS = {
         <li><b>Cone</b> — one circle rising to an apex (curved side).</li>
         <li><b>Sphere</b> — a ball; <b>hemisphere</b> — half a ball.</li>
       </ul>
-      <div class="eg">A curved face means cylinder / cone / sphere; only flat faces means prism / pyramid.</div>`,
+      <div class="eg">A curved face means cylinder / cone / sphere / hemisphere; only flat faces means prism / pyramid.</div>`,
   },
   volFormula: {
     title: "Volume — which formula",
@@ -515,7 +516,7 @@ export const CONCEPTS = {
         <li>a cylinder's side opens into a rectangle 2πr wide and h tall → 2πrh;</li>
         <li>each closed circular end is πr².</li>
       </ul>
-      <div class="formula">cube 6ℓ² · prism 2(ℓb+ℓh+bh) · closed cylinder 2πr²+2πrh · cone πr²+πrh · sphere 4πr²</div>`,
+      <div class="formula">cube 6ℓ² · prism 2(ℓb+ℓh+bh) · closed cylinder 2πr²+2πrh · cone πr²+πrh · square pyramid ℓ²+2ℓh · sphere 4πr²</div>`,
   },
   thirdFamily: {
     title: "The ‘one third’ family",
@@ -532,7 +533,7 @@ export const CONCEPTS = {
         <li><b>H — perpendicular height:</b> straight up the middle, apex to base centre. Used for <b>volume</b>.</li>
         <li><b>h — slant height:</b> along the sloping face, apex to the edge of the base. Used for the <b>slanted surface area</b>.</li>
       </ul>
-      <p>They sit in a right-angled triangle with the radius:</p>
+      <p>They sit in a right-angled triangle with the radius (for a pyramid: with <b>half the base side</b>, ℓ/2):</p>
       <div class="formula">h² = H² + r²   →   the slant h is the hypotenuse, so h &gt; H</div>`,
   },
   saVsVol: {
@@ -765,7 +766,7 @@ export const CONCEPTS = {
       <ul>
         <li><b>y = sin x</b> — starts at 0, peak +1 at 90°, back to 0 at 180°, low −1 at 270°.</li>
         <li><b>y = cos x</b> — starts at its peak +1 at 0°, 0 at 90°, low −1 at 180°. Cosine is sine shifted 90° left.</li>
-        <li><b>y = tan x</b> — climbs through 0 at 0° and 180°, with vertical <b>asymptotes</b> at 90° and 270°.</li>
+        <li><b>y = tan x</b> — climbs through 0 at 0°, 180° and 360°, with vertical <b>asymptotes</b> at 90° and 270°.</li>
       </ul>
       <p>Sine and cosine are "identical twins": same amplitude (1), same period (360°), same range [−1 ; 1].</p>`,
   },
@@ -774,7 +775,7 @@ export const CONCEPTS = {
     body: `
       <p>Every graph is written as <b>y = a·sin b(x − p) + q</b> (cos and tan use the same form):</p>
       <ul>
-        <li><b>a</b> — the amplitude (height from the midline to a peak). A <b>negative a</b> flips the graph upside-down.</li>
+        <li><b>a</b> — sets the amplitude: its <b>size</b> |a| is the height from the midline to a peak. A <b>negative a</b> flips the graph upside-down.</li>
         <li><b>b</b> — squashes the graph sideways: a bigger b means more cycles (a shorter graph).</li>
         <li><b>q</b> — slides the whole graph up (q &gt; 0) or down (q &lt; 0). The midline becomes y = q.</li>
       </ul>
@@ -876,7 +877,7 @@ export const CONCEPTS = {
         <li><b>Midpoint</b> → a <b>coordinate</b> (x ; y): M = ( (x<sub>A</sub>+x<sub>B</sub>)/2 ; (y<sub>A</sub>+y<sub>B</sub>)/2 )</li>
         <li><b>Gradient</b> → a <b>slope number</b>: m = (y<sub>B</sub>−y<sub>A</sub>)/(x<sub>B</sub>−x<sub>A</sub>)</li>
       </ul>
-      <p>Small <b>m</b> = gradient. Capital <b>M</b> = midpoint. Keep the points in the SAME order top and bottom in the gradient and distance formulas.</p>`,
+      <p>Small <b>m</b> = gradient. Capital <b>M</b> = midpoint. Keep the points in the SAME order: top and bottom in the gradient formula, and in BOTH brackets of the distance formula.</p>`,
   },
   gradientSign: {
     title: "The sign of a gradient",
@@ -1105,6 +1106,7 @@ export const CONCEPTS = {
         <li><b>Grouping</b> — four terms in two matching pairs, e.g. a·2ˣ + a + 2ˣ + 1. Group and take out a common bracket.</li>
       </ul>
       <p>The substitution <b>let k = (the base)ˣ</b> turns a difference-of-squares or trinomial into an ordinary quadratic.</p>
+      <p>Roots work the same way: for x − √x − 6, <b>let k = √x</b> (the smaller power — the other term is then k²).</p>
       <div class="eg">After factorising, remember (the base)ˣ can never be negative or zero — a root like 2ˣ = −4 is rejected.</div>`,
   },
   surdLaws: {
@@ -1112,7 +1114,7 @@ export const CONCEPTS = {
     body: `
       <p>A surd is a root written with the radical sign. The index sits on the root; powers inside convert to a fraction.</p>
       <div class="formula">ⁿ√(xᵃ) = x^(a/n) &nbsp;— inside power on TOP, index on the BOTTOM<br>
-        √a · √b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(same root)</div>
+        √a · √b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(same root; a, b ≥ 0)</div>
       <ul>
         <li><b>Like surds add like terms:</b> 5√x − 2√x = 3√x; √x + √x = 2√x.</li>
         <li><b>BIG NO-NO:</b> √a + √b ≠ √(a+b). You cannot add the insides.</li>
@@ -1333,6 +1335,7 @@ export const CONCEPTS = {
         <li>≤ / ≥ keep the CPs in the answer.</li>
         <li><b>Look out for (4 − x):</b> it hides a −x². Take out −1 and FLIP: (x − 3)(4 − x) ≥ 0 → (x − 3)(x − 4) ≤ 0.</li>
         <li><b>A repeated bracket:</b> (x − 3)² &gt; 0 has one CP only → true everywhere except there → x ∈ ℝ, x ≠ 3.</li>
+        <li><b>Brackets with a number on the right,</b> e.g. (x + 1)(x + 2) ≤ 20: the CPs are NOT −1 and −2! Multiply out, bring the 20 across, and factorise again.</li>
       </ul>`,
   },
   eqDiscriminant: {

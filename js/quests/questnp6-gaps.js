@@ -8,7 +8,7 @@
        gap between Tₖ and Tₖ₊₁ = the kth term of the gap-pattern
    ============================================================ */
 import { mc } from "./_shared.js";
-import { pyramid, calcQ, PAT } from "./_patterns.js";
+import { pyramid, calcQ, PAT, ord } from "./_patterns.js";
 import { randQuad, secondDiffs, firstDiffs, list, C, pick, randInt } from "../patternlib.js";
 
 const ACC = PAT[5];
@@ -21,10 +21,10 @@ const SKILLS = {
     const g1 = firstDiffs(seq)[0], sd = secondDiffs(seq)[0];
     const k = pick([10, 12, 15, 18, 20]);
     return calcQ("patConsecDiff",
-      `For the quadratic pattern <b>${list(seq)} ; …</b>, find the gap between T${C(k)} and T${C(k + 1)}.`,
+      `For the quadratic pattern <b>${list(seq)} ; …</b>, find the gap between T${C(k)} and T${C(k + 1)}, that is T${C(k + 1)} − T${C(k)}.`,
       gapAt(g1, sd, k),
       { graph: pyramid(seq, { showFirst: true, showSecond: true, accent: ACC }),
-        hint: `The gaps form a linear pattern: first gap = ${C(g1)}, growing by ${C(sd)} each time. Gap between Tₖ and Tₖ₊₁ = ${C(g1)} + (k − 1)(${C(sd)}).`,
+        hint: `The gaps form a linear pattern: first gap = ${C(g1)}, changing by ${C(sd)} each time. Gap between Tₖ and Tₖ₊₁ = ${C(g1)} + (k − 1)(${C(sd)}).`,
         answerLabel: `Gap = ${C(g1)} + (${C(k)} − 1)(${C(sd)}) = ${C(gapAt(g1, sd, k))}.` });
   },
 
@@ -35,7 +35,7 @@ const SKILLS = {
     const n = pick([6, 7, 8, 9, 10, 11]);
     const value = gapAt(g1, sd, n);
     return calcQ("patConsecDiff",
-      `For <b>${list(seq)} ; …</b>, the gap between two consecutive terms is ${C(value)}. Between Tₙ and Tₙ₊₁ — find n.`,
+      `For <b>${list(seq)} ; …</b>, the gap Tₙ₊₁ − Tₙ between two consecutive terms is ${C(value)}. Find n.`,
       n,
       { allowNeg: false,
         hint: `Set the gap-formula equal: ${C(g1)} + (n − 1)(${C(sd)}) = ${C(value)}, then solve for n.`,
@@ -71,10 +71,10 @@ const SKILLS = {
     const k = randInt(3, 7);
     return mc("patConsecDiff",
       `The gap between T${C(k)} and T${C(k + 1)} is which term of the gap-pattern?`,
-      `the ${C(k)}th term`,
-      [`the ${C(k + 1)}th term`, `the ${C(k - 1)}th term`, "the 1st term"],
+      `the ${ord(k)} term`,
+      [`the ${ord(k + 1)} term`, `the ${ord(k - 1)} term`, "the 1st term"],
       { hint: "The gap between Tₖ and Tₖ₊₁ is the kth gap.",
-        answerLabel: `The gap between T${C(k)} and T${C(k + 1)} is the ${C(k)}th term of the gap-pattern.` });
+        answerLabel: `The gap between T${C(k)} and T${C(k + 1)} is the ${ord(k)} term of the gap-pattern.` });
   },
 };
 

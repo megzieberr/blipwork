@@ -41,7 +41,7 @@ const SKILLS = {
     const items = [
       { q: "What is <b>x⁰</b> &nbsp;(x ≠ 0)?", correct: "1", wrongs: ["0", "x", "undefined"], ans: "Anything non-zero to the zero power is 1." },
       { q: "Simplify <b>7x⁰</b> &nbsp;(x ≠ 0).", correct: "7", wrongs: ["0", "7x", "1"], ans: "Only x is raised to the 0, so x⁰ = 1 and 7·1 = 7." },
-      { q: "What is <b>(5ab)⁰</b>?", correct: "1", wrongs: ["0", "5ab", "5"], ans: "The WHOLE bracket is to the power 0, so the answer is 1." },
+      { q: "What is <b>(5ab)⁰</b> &nbsp;(a, b ≠ 0)?", correct: "1", wrongs: ["0", "5ab", "5"], ans: "The WHOLE bracket is to the power 0, so the answer is 1." },
     ];
     const it = pick(items);
     return mc(CON, it.q, it.correct, it.wrongs, { hint: "Zero exponent → 1. Watch what the exponent is actually sitting on.", answerLabel: it.ans });

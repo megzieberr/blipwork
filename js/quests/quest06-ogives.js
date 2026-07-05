@@ -23,7 +23,9 @@ function uniqueMax(classes) {
 const totalFreq = classes => classes.reduce((s, c) => s + c.freq, 0);
 
 function genWhichPoint() {
-  const lo = pick([10, 20, 30, 40]), up = lo + 10, cf = randInt(20, 120);
+  const lo = pick([10, 20, 30, 40]), up = lo + 10;
+  let cf;   // cf may not equal the upper boundary, or the swapped decoy = the answer
+  do { cf = randInt(20, 120); } while (cf === up);
   return mc("ogivePlot",
     `For the class <b>${lo} &lt; x ≤ ${up}</b> with a cumulative frequency of <b>${cf}</b>, which point do you plot on the ogive?`,
     `(${up} ; ${cf})`, [`(${lo} ; ${cf})`, `(${(lo + up) / 2} ; ${cf})`, `(${cf} ; ${up})`],
@@ -46,7 +48,8 @@ function genCumFreq() {
   const cum = classes.slice(0, k).reduce((s, c) => s + c.freq, 0);
   return {
     type: "calc", concept: "ogivePlot", dp: 0, expected: cum, answerLabel: `${cum}`,
-    prompt: `${freqTable(classes, { notation: "lt" })}What is the <b>cumulative frequency</b> up to and including the class ${classInterval(classes[k - 1], "lt")}?`,
+    // total:false — when the last class is asked, the Total row would print the answer
+    prompt: `${freqTable(classes, { notation: "lt", total: false })}What is the <b>cumulative frequency</b> up to and including the class ${classInterval(classes[k - 1], "lt")}?`,
     hint: "Cumulative frequency is the running total of the frequencies.",
     solution: [{ s: `Add the frequencies up to that class = ${cum}.`, r: "cumulative frequency" }],
   };

@@ -26,7 +26,7 @@ const SKILLS = {
     const fn = pick(["sin", "cos"]);
     const a = pick([2, 3, -2, -3]);
     const cv = { fn, a, b: 1, p: 0, q: pick([0, 1, -1]) };
-    return mc("findTrigEquation", "Read the value of <b>a</b> off the graph (watch the sign).",
+    return mc("findTrigEquation", `The graph shows y = a·${fn} x + q.<br>Read the value of <b>a</b> (watch the sign).`,
       nstr(a), pick3(nstr(a), [nstr(-a), nstr(2 * a), nstr(Math.abs(a)), nstr(a + (a > 0 ? 1 : -1))]),
       { graph: ampRangeGraph(cv, { accent: ACC }).spec,
         hint: "a = (y max − y min) ÷ 2, made negative if the graph is flipped (starts the wrong way up).",
@@ -38,7 +38,7 @@ const SKILLS = {
     const fn = pick(["sin", "cos"]);
     const q = pick([1, 2, -1, -2]);
     const cv = { fn, a: pick([2, 3]), b: 1, p: 0, q };
-    return mc("findTrigEquation", "Read the value of <b>q</b> (the vertical shift) off the graph.",
+    return mc("findTrigEquation", `The graph shows y = a·${fn} x + q.<br>Read the value of <b>q</b> (the vertical shift).`,
       nstr(q), pick3(nstr(q), ["0", nstr(-q), nstr(q + 1), nstr(q - 1), nstr(amplitudeOf(cv))]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
         hint: "q = (y max + y min) ÷ 2 — the height of the midline (the dashed line).",
@@ -50,7 +50,7 @@ const SKILLS = {
     const fn = pick(["sin", "cos"]);
     const b = pick([2, 3]);
     const cv = { fn, a: pick([1, 2]), b, p: 0, q: 0 };
-    return mc("findTrigEquation", "Read the value of <b>b</b> off the graph (use the marked cycle to find the period first).",
+    return mc("findTrigEquation", `The graph shows y = a·${fn} bx.<br>Read the value of <b>b</b> (use the marked cycle to find the period first).`,
       nstr(b), pick3(nstr(b), [nstr(periodOf(cv)), nstr(b + 1), nstr(b - 1), nstr(2 * b)]),
       { graph: periodGraph(cv, { accent: ACC }).spec,
         hint: "First read the period, then b = 360° ÷ period.",
@@ -82,7 +82,7 @@ const SKILLS = {
   findTanB: () => {
     const b = pick([2, 3]);
     const cv = { fn: "tan", a: pick([1, 2]), b, p: 0, q: 0 };
-    return mc("findTrigEquation", "Read the value of <b>b</b> off this tan graph (use the spacing of the asymptotes).",
+    return mc("findTrigEquation", `The graph shows y = a·tan bx.<br>Read the value of <b>b</b> (use the spacing of the asymptotes).`,
       nstr(b), pick3(nstr(b), [nstr(periodOf(cv)), nstr(b + 1), nstr(b - 1), nstr(2 * b)]),
       { graph: trigGraph(cv, { accent: ACC }).spec,
         hint: "Tangent's asymptotes are one period apart. Period = 180° ÷ b, so b = 180° ÷ period.",

@@ -39,11 +39,13 @@ const SKILLS = {
 
   /* choose the general term */
   generalTerm: () => {
-    const a1 = pick([1, 2, 3, 4, 5]);
+    // a1 ≥ 2: with a1 = 1 the "merged a·r" trap (a·r)ⁿ⁻¹ would EQUAL a·rⁿ⁻¹,
+    // making a wrong button mathematically correct.
+    const a1 = pick([2, 3, 4, 5]);
     const r = pick([2, 3]);
     const seq = geoSeq(a1, r, 4);
     const correct = geoStr(a1, r);
-    const lead1 = a1 === 1 ? "" : `${C(a1)} · `;
+    const lead1 = `${C(a1)} · `;
     const wrongs = [
       SUP(`(${C(a1 * r)})`, `n ${MINUS} 1`),         // merged a and r (the trap)
       `${lead1}${SUP(C(r), "n")}`,                    // exponent n instead of n−1

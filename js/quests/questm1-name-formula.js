@@ -13,9 +13,23 @@ import {
 
 const ACC = "#65a30d";
 
+/* Label-safe figure tweaks: the solid engine places its dimension letters
+   at fixed pixel offsets, and a few proportions land a letter ON an edge
+   (measured against solid-graph geometry — see the chapter review). Nudge
+   just those proportions; everything stays to scale. */
+const figPrismSafe = a => { const g = figPrism(a); if (g.h === g.b + 3) g.h -= 1; return g; };  // "h" off the hidden base edge
+const figTriPrismSafe = a => {
+  const g = figTriPrism(a);
+  [g.b, g.th] = pick([[5, 5], [6, 4], [7, 4], [6, 6], [7, 5]]);          // "⊥h"/"H" clear of the sloping faces
+  if (g.L === 9 && g.b + g.th === 12) g.L = 10;
+  if (g.L === 8 && g.b === 7 && g.th === 4) g.L = 9;
+  return g;
+};
+const figConePerp = a => { const g = figCone(a, { showPerp: true }); if ((g.r === 5 && g.h === 7) || (g.r === 6 && g.h === 8)) g.h += 2; return g; };  // "H" off the back rim
+
 /* a solid key → its to-scale figure (closed, plain letter labels) */
 const FIG = {
-  cube: figCube, prism: figPrism, triPrism: figTriPrism, cylinder: a => figCylinder(a, "none"),
+  cube: figCube, prism: figPrismSafe, triPrism: figTriPrismSafe, cylinder: a => figCylinder(a, "none"),
   cone: figCone, pyramid: figPyramid, sphere: figSphere, hemisphere: figHemisphere,
 };
 const NAMES = Object.keys(SOLID).map(k => SOLID[k].name);
@@ -65,7 +79,7 @@ const SKILLS = {
   baseTimesHeight: () => ({
     type: "yesno", concept: "volFormula",
     prompt: "For <b>any</b> prism or a cylinder, is the volume always (area of the base) × (perpendicular height)?",
-    graph: pick([figPrism, figTriPrism, a => figCylinder(a, "none")])(ACC),
+    graph: pick([figPrismSafe, figTriPrismSafe, a => figCylinder(a, "none")])(ACC),
     yes: true,
     hint: "A prism keeps the same cross-section all the way up, so you just stack the base area through the height.",
     answerLabel: "Yes — for a prism or cylinder, V = base area × height.",
@@ -76,7 +90,7 @@ const SKILLS = {
   thirdFamily: () => mc("thirdFamily",
     "A cone holds how much of a cylinder that has the <b>same base and height</b>?",
     "one third (⅓)", ["one half (½)", "two thirds (⅔)", "the same amount"],
-    { graph: figCone(ACC, { showPerp: true }),
+    { graph: figConePerp(ACC),
       hint: "Cones and pyramids are the ‘pointy’ third — V = ⅓ × (matching prism or cylinder).",
       answerLabel: "⅓ — a cone is ⅓ of the cylinder with the same base and height, so V = ⅓πr²H.",
       solution: [{ s: "V(cone) = ⅓ × V(cylinder) = ⅓πr²H" }] }),

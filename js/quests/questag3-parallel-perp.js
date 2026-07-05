@@ -7,26 +7,30 @@
    on judging it straight off a to-scale diagram.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { tapQ, yesnoQ, winFor, AG } from "./_analytical.js";
+import { yesnoQ, winFor, AG } from "./_analytical.js";
 import { gradFrac, isPerpendicular, gradFromStandard, pick } from "../analyticslib.js";
 
 const ACC = AG[2];
 
-/* a tidy gradient as small rise/run, never 0 */
-function cleanGrad() {
+/* a tidy gradient as small rise/run, never 0.
+   noOne: skip |m| = 1 — for m = ±1 the "switched only" and "changed sign only"
+   decoys collapse into the answer/original, leaving a 2-button question. */
+function cleanGrad({ noOne = false } = {}) {
   const opts = [[1, 1], [2, 1], [3, 1], [1, 2], [2, 3], [3, 2], [3, 4], [1, 3], [4, 3], [1, 4]];
-  const [rise, run] = pick(opts);
+  const [rise, run] = pick(noOne ? opts.filter(([a, b]) => a !== b) : opts);
   return { dy: rise * pick([1, -1]), dx: run };
 }
 const mOf = (g) => g.dy / g.dx;
 
-/* two full lines through the origin with the given gradients */
+/* two full lines through the origin with the given gradients — endpoints at a
+   FIXED distance from O so a steep rise/run can't blow the window up and
+   shrink the picture (the lines are clipped to the window either way) */
 function twoLines(g1, g2, perp) {
-  const d1 = { x: g1.dx, y: g1.dy }, d2 = { x: g2.dx, y: g2.dy };
-  const k = 4;
+  const stretch = (d) => { const k = 6.5 / Math.hypot(d.x, d.y); return { x: d.x * k, y: d.y * k }; };
+  const d1 = stretch({ x: g1.dx, y: g1.dy }), d2 = stretch({ x: g2.dx, y: g2.dy });
   const segs = [
-    { a: { x: -d1.x * k, y: -d1.y * k }, b: { x: d1.x * k, y: d1.y * k }, kind: "line", id: "l1", tone: "a" },
-    { a: { x: -d2.x * k, y: -d2.y * k }, b: { x: d2.x * k, y: d2.y * k }, kind: "line", id: "l2", tone: "b" },
+    { a: { x: -d1.x, y: -d1.y }, b: { x: d1.x, y: d1.y }, kind: "line", id: "l1", tone: "a" },
+    { a: { x: -d2.x, y: -d2.y }, b: { x: d2.x, y: d2.y }, kind: "line", id: "l2", tone: "b" },
   ];
   if (perp) segs[0].perp = 1;                          // verify will confirm the 90°
   return {
@@ -68,7 +72,7 @@ const SKILLS = {
 
   /* the negative reciprocal */
   perpGradient: () => {
-    const g = cleanGrad();
+    const g = cleanGrad({ noOne: true });
     const right = perpFrac(g);
     const correct = gradFrac(right.dy, right.dx).str;
     const decoys = [
@@ -113,7 +117,9 @@ const SKILLS = {
 
   /* read a gradient from standard form */
   fromStandard: () => {
-    const a = pick([1, 2, 3, 5, 7]) * pick([1, -1]), b = pick([2, 3, 4, 5]);
+    let a, b;
+    do { a = pick([1, 2, 3, 5, 7]) * pick([1, -1]); b = pick([2, 3, 4, 5]); }
+    while (Math.abs(a) === b);                         // |a| = b makes m = ±1 and the decoys collapse to 2 buttons
     const m = gradFromStandard(a, b);                  // −a/b
     const correct = gradFrac(-a, b).str;
     return mc("perpGradient",

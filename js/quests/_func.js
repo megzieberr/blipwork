@@ -18,8 +18,8 @@ const nz = (lo, hi) => { let v = 0; while (v === 0) v = randInt(lo, hi); return 
 export function randLine() { return { kind: "line", a: nz(-3, 3), q: randInt(-4, 4) }; }
 export function randParabola() {                        // from two integer roots → integer a,b,c
   const a = pick([1, 1, -1, -1, 2, -2]);
-  let r1 = randInt(-4, 3), r2 = randInt(-3, 4);
-  if (r2 <= r1) r2 = r1 + randInt(1, 4);
+  let r1 = randInt(-4, 2), r2 = randInt(-2, 4);
+  if (r2 - r1 < 2) r2 = r1 + randInt(2, 4);             // roots ≥ 2 apart → the hump is never a sliver
   return parabolaFromRoots(a, r1, r2);
 }
 export function randHyperbola() {
@@ -38,7 +38,7 @@ export const FAMILY = {
    (swap, sign flips) first, then small offsets as guaranteed-distinct fallback
    so the answer is always exactly one of ≥3 different options. */
 export function ptDecoys(x, y) {
-  const cand = [[y, x], [x, -y], [-x, y], [-x, -y], [x + 1, y], [x, y + 1], [y, -x]];
+  const cand = [[y, x], [x, -y], [-x, y], [-x, -y], [x + 1, y], [x, y + 1], [y, -x], [x - 1, y], [x, y - 1], [x + 1, y + 1]];
   const seen = new Set([`${x},${y}`]); const out = [];
   for (const [a, b] of cand) {
     const k = `${a},${b}`;
@@ -67,6 +67,24 @@ export function winFor(pts, { pad = 1, minX = 8, minY = 8 } = {}) {
 /* label "(2 ; 0)" but compact for an axis intercept */
 const lab = (x, y) => `(${C(x)} ; ${C(y)})`;
 
+/* an x where the curve sits comfortably INSIDE the window, so the engine's
+   curve-name label (drawn at the curve's own y-value) is never silently
+   dropped. Scans outward from the preferred x in quarter steps. */
+export function labelX(cv, win, prefer) {
+  const f = makeFn(cv);
+  const { xmin, xmax, ymin, ymax } = win;
+  const m = (ymax - ymin) * 0.12;                       // stay clear of the top/bottom edge
+  const lo = xmin + 0.9, hi = xmax - 0.9;
+  const start = Math.max(lo, Math.min(hi, prefer));
+  const ok = (x) => { const y = f(x); return Number.isFinite(y) && y >= ymin + m && y <= ymax - m; };
+  if (ok(start)) return start;
+  for (let d = 0.25; d <= hi - lo; d += 0.25) {
+    if (start - d >= lo && ok(start - d)) return start - d;
+    if (start + d <= hi && ok(start + d)) return start + d;
+  }
+  return prefer;                                        // nothing safe — same as before
+}
+
 /* ---- single-curve graphs with their standard labelled features ---- */
 
 export function lineGraph(cv, { accent, showInts = true, label } = {}) {
@@ -79,7 +97,7 @@ export function lineGraph(cv, { accent, showInts = true, label } = {}) {
   if (showInts && xi != null && xi !== 0) points.push({ x: xi, y: 0, on: 0, label: lab(xi, 0) });
   points.push({ x: 0, y: yi, on: 0, label: lab(0, yi) });
   return {
-    spec: { type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? win.xmax - 1.5 : undefined }], points },
+    spec: { type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? labelX(cv, win, win.xmax - 1.5) : undefined }], points },
     xi, yi,
   };
 }
@@ -93,7 +111,7 @@ export function parabolaGraph(cv, { accent, label, showTP = true, showRoots = tr
   if (showTP) points.push({ x: tp.x, y: tp.y, on: 0, label: lab(Math.round(tp.x * 100) / 100, Math.round(tp.y * 100) / 100), place: "above" });
   if (showY && Math.abs(yi) > 1e-6 && Math.abs(tp.x) > 0.4) points.push({ x: 0, y: yi, on: 0, label: lab(0, yi) });
   return {
-    spec: { type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? (cv.a > 0 ? win.xmax - 1.2 : win.xmin + 1.2) : undefined }], points },
+    spec: { type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? labelX(cv, win, cv.a > 0 ? win.xmax - 1.2 : win.xmin + 1.2) : undefined }], points },
     tp, roots, yi,
   };
 }
@@ -107,10 +125,12 @@ export function hyperbolaGraph(cv, { accent, label, showAsym = true, showInts = 
   const win = winFor(feat, { pad: 1 });
   const points = [];
   if (showInts && xi != null && xi >= win.xmin && xi <= win.xmax) points.push({ x: xi, y: 0, on: 0, label: lab(Math.round(xi * 100) / 100, 0) });
-  if (showInts && yi != null && yi >= win.ymin && yi <= win.ymax) points.push({ x: 0, y: yi, on: 0, label: lab(0, Math.round(yi * 100) / 100) });
+  if (showInts && yi != null && yi >= win.ymin && yi <= win.ymax &&
+      !points.some((pt) => Math.abs(pt.x) < 1e-9 && Math.abs(pt.y - yi) < 1e-9))   // both intercepts at the origin → one dot
+    points.push({ x: 0, y: yi, on: 0, label: lab(0, Math.round(yi * 100) / 100) });
   return {
     spec: {
-      type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? cv.p + 2.2 : undefined }],
+      type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? labelX(cv, win, cv.p + 2.2) : undefined }],
       asymptotes: showAsym ? [{ x: cv.p, of: 0 }, { y: cv.q, of: 0 }] : [], points,
     },
     yi, xi,
@@ -125,7 +145,7 @@ export function expGraph(cv, { accent, label, showAsym = true, showY = true } = 
   if (showY && yi >= win.ymin && yi <= win.ymax) points.push({ x: 0, y: yi, on: 0, label: lab(0, Math.round(yi * 100) / 100) });
   return {
     spec: {
-      type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? (cv.b > 1 ? 1.6 : -1.6) : undefined }],
+      type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? labelX(cv, win, cv.b > 1 ? 1.6 : -1.6) : undefined }],
       asymptotes: showAsym ? [{ y: cv.q, of: 0 }] : [], points,
     },
     yi,

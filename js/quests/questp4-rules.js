@@ -89,17 +89,18 @@ const SKILLS = {
 
   exclusiveFromVenn: () => {
     const excl = pick([true, false]);
-    // overlap present? use a venn that either overlaps (engine default) or sits apart visually via shading cue
-    const graph = { type: "venn", mode: "two", A: "A", B: "B", s: "S",
-      regions: excl ? { onlyA: "3", onlyB: "4", inter: "0", outside: "2" } : { onlyA: "3", onlyB: "4", inter: "2", outside: "1" } };
-    return mc(MUT,
-      `The Venn diagram shows the counts in each region. Are A and B <b>mutually exclusive</b>?`,
-      excl ? "Yes" : "No",
-      excl ? ["No"] : ["Yes"],
-      { graph,
-        layout: "grid2",
-        hint: "Mutually exclusive means the overlap (A ∩ B) is empty — a 0 in the middle.",
-        answerLabel: excl ? "The overlap is 0, so yes — mutually exclusive." : "The overlap is not 0, so no — they can happen together." });
+    const onlyA = randInt(2, 6), onlyB = randInt(2, 6), inter = excl ? 0 : randInt(1, 4), outside = randInt(1, 3);
+    const graph = { type: "venn", mode: "two", A: "A", B: "B", s: `n(S) = ${onlyA + inter + onlyB + outside}`,
+      regions: { onlyA: String(onlyA), inter: String(inter), onlyB: String(onlyB), outside: String(outside) } };
+    return {
+      type: "yesno", concept: MUT,
+      prompt: `The Venn diagram shows the counts in each region. Are A and B <b>mutually exclusive</b>?`,
+      graph,
+      yes: excl,
+      hint: "Mutually exclusive means the overlap (A ∩ B) is empty — a 0 in the middle.",
+      answerLabel: excl ? "The overlap is 0, so yes — mutually exclusive." : "The overlap is not 0, so no — they can happen together.",
+      solution: [{ s: excl ? `n(A ∩ B) = 0 → A and B cannot happen together → mutually exclusive.` : `n(A ∩ B) = ${inter} ≠ 0 → A and B can happen together → NOT mutually exclusive.` }],
+    };
   },
 
   exhaustiveDef: () => mc(MUT,

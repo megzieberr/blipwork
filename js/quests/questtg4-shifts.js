@@ -5,7 +5,7 @@
    shift never changes the period.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { trigGraph, pick3 } from "./_tgraph.js";
+import { trigGraph, twoTrigGraph, pick3 } from "./_tgraph.js";
 import { eqStr, rangeStr, intervalStr, amplitudeOf, nstr, pick } from "../tgraphlib.js";
 
 const ACC = "#5b54e0";
@@ -36,6 +36,29 @@ const SKILLS = {
       eqStr(left), [eqStr(right), `y = ${fn} x + ${mag}`, `y = ${fn} x − ${mag}`],
       { hint: "Left means the bracket reads (x + …). A vertical (+ outside the function) does not move it sideways.",
         answerLabel: `${eqStr(left)} shifts ${mag}° left.` });
+  },
+
+  /* the 90° twin-shift between sine and cosine */
+  sinCosTwin: () => {
+    const toCos = pick([true, false]);
+    const from = toCos ? "sin" : "cos", to = toCos ? "cos" : "sin";
+    const dir = toCos ? "left" : "right";
+    const f = { fn: "sin", a: 1, b: 1, p: 0, q: 0 }, g = { fn: "cos", a: 1, b: 1, p: 0, q: 0 };
+    const graph = twoTrigGraph(f, g, {
+      accent: ACC, win: { xmin: 0, xmax: 360, ymin: -1.6, ymax: 1.6 },
+      labelA: "f", labelAtA: 90, labelB: "g", labelAtB: 360,
+    }).spec;
+    return mc("trigParents",
+      `f = sin x and g = cos x are drawn. How must y = ${from} x be shifted to give y = ${to} x?`,
+      `90° to the ${dir}`,
+      [`90° to the ${toCos ? "right" : "left"}`, `180° to the ${dir}`, "1 unit up"],
+      { graph,
+        hint: "Cosine peaks at 0°, sine only at 90° — cosine is 90° 'ahead'. Slide the peaks onto each other.",
+        answerLabel: toCos ? "cos x = sin(x + 90°): shift sin x 90° left." : "sin x = cos(x − 90°): shift cos x 90° right.",
+        solution: [
+          { s: toCos ? "sin x peaks at 90°; cos x peaks at 0°" : "cos x peaks at 0°; sin x peaks at 90°" },
+          { s: toCos ? "every feature must move 90° left: cos x = sin(x + 90°)" : "every feature must move 90° right: sin x = cos(x − 90°)" },
+        ] });
   },
 
   /* factor b out first */
@@ -76,7 +99,7 @@ const SKILLS = {
     const A = amplitudeOf(cv);
     return mc("trigRange",
       `Start with y = ${a}${fn} x, then shift it ${Math.abs(q)} ${q > 0 ? "up" : "down"}. What is the new <b>range</b>?`,
-      rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q + A, q - A), "y ∈ ℝ"]),
+      rangeStr(cv), pick3(rangeStr(cv), [intervalStr(-A, A), intervalStr(q - 2 * A, q + 2 * A), intervalStr(q - 1, q + 1), "y ∈ ℝ"]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
         hint: `Amplitude stays ${A}; the midline moves to y = ${nstr(q)}. Range = [${nstr(q - A)} ; ${nstr(q + A)}].`,
         answerLabel: `New range: ${rangeStr(cv)}.` });
@@ -100,6 +123,7 @@ export const questTg4 = {
   skills: [
     { id: "hShiftDir", concept: "trigShifts", gen: SKILLS.hShiftDir },
     { id: "whichShiftsLeft", concept: "trigShifts", gen: SKILLS.whichShiftsLeft },
+    { id: "sinCosTwin", concept: "trigParents", gen: SKILLS.sinCosTwin },
     { id: "factorB", concept: "trigShifts", gen: SKILLS.factorB },
     { id: "vShiftDir", concept: "trigShifts", gen: SKILLS.vShiftDir },
     { id: "shiftRange", concept: "trigRange", gen: SKILLS.shiftRange },

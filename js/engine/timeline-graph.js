@@ -61,7 +61,12 @@ export function renderTimeline(spec) {
     out += line(node.x, g.cy - 6, node.x, g.cy + 6, "tl-tick");
     out += text(node.x, g.cy + 20, node.label, "tl-tlab");
     if (node.role) out += text(node.x, g.cy - 24, node.role, "tl-role");
-    if (node.amountLabel) out += text(node.x, g.cy - 38, node.amountLabel, "tl-amt");
+    if (node.amountLabel) {
+      // clamp the centred label into the viewBox (end nodes can carry labels wider than the margin)
+      const half = String(node.amountLabel).length * 0.5 * 6.3;   // ≈0.6 × 10.5px per glyph
+      const lx = Math.max(half + 2, Math.min(g.W - half - 2, node.x));
+      out += text(lx, g.cy - 38, node.amountLabel, "tl-amt");
+    }
   });
 
   // optional arc (a curved arrow from→to)

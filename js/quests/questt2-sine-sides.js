@@ -30,7 +30,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`), t.angle("B", `${B}°`)],
         sides: [t.side("B", "C", fix(t.sides.a, 0)), t.side("A", "C", "x")] },
-      expected: x, dp: 2,
+      expected: x, dp: 2, tol: 0.015,   // absorb the last-cent flip if a learner works with 4-dp sines
       hint: "x is opposite B̂. Pair it with the side you know and its opposite angle: x/sinB̂ = a/sinÂ.",
       answerLabel: `x = ${fix(x, 2)}`,
       solution: [
@@ -53,7 +53,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`), t.angle("B", `${B}°`)],
         sides: [t.side("B", "C", fix(t.sides.a, 0)), t.side("A", "B", "x")] },
-      expected: x, dp: 2,
+      expected: x, dp: 2, tol: 0.015,
       hint: "First Ĉ = 180° − Â − B̂. Then x/sinĈ = a/sinÂ.",
       answerLabel: `x = ${fix(x, 2)}`,
       solution: [
@@ -73,7 +73,7 @@ const SKILLS = {
     return {
       type: "calc", concept: NOTE,
       prompt: `In △ABC, Â = ${A}°, Ĉ = ${C}° and b = ${b}. Calculate <b>a</b> (2 decimals).`,
-      expected: a, dp: 2,
+      expected: a, dp: 2, tol: 0.015,
       hint: "B̂ = 180° − Â − Ĉ. Then a/sinÂ = b/sinB̂.",
       answerLabel: `a = ${fix(a, 2)}`,
       solution: [

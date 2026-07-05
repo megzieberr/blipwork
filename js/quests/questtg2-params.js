@@ -4,7 +4,7 @@
    the sign & size of a, the squash of b, the slide of q.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { trigGraph } from "./_tgraph.js";
+import { trigGraph, pick3 } from "./_tgraph.js";
 import { eqStr, pick, randInt } from "../tgraphlib.js";
 
 const ACC = "#818cf8";
@@ -69,9 +69,9 @@ const SKILLS = {
     const a = pick([1, 2]);
     const q = pick([-2, -1, 1, 2, 3]);
     const cv = { fn, a, b: 1, p: 0, q };
+    const yl = (v) => `y = ${String(v).replace("-", "−")}`;
     return mc("trigParams", `${eqStr(cv)}<br>What is the equation of the <b>midline</b>?`,
-      `y = ${String(q).replace("-", "−")}`,
-      [`y = ${a}`, "y = 0", `y = ${String(q + a).replace("-", "−")}`],
+      yl(q), pick3(yl(q), [yl(a), "y = 0", yl(q + a), yl(-q), yl(q - a)]),
       { graph: trigGraph(cv, { accent: ACC, midline: true }).spec,
         hint: "The midline runs through the middle of the wave at y = q (the dashed line).",
         answerLabel: `Midline: y = ${String(q).replace("-", "−")}.` });

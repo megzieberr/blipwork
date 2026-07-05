@@ -259,6 +259,11 @@ export function renderOgive(spec) {
   const g = computeOgive(spec);
   let out = "";
 
+  // vertical gridlines at the x ticks (q6 read-offs are judged against these)
+  for (let v = g.xAxis.min; v <= g.xAxis.max + 1e-9; v += g.xAxis.step) {
+    const x = g.sx.toPx(v);
+    out += line(x, g.sy.toPx(g.yAxis.max), x, g.yBase, "sg-grid");
+  }
   // y gridlines + labels
   for (let v = 0; v <= g.yAxis.max + 1e-9; v += g.yAxis.step) {
     const y = g.sy.toPx(v);

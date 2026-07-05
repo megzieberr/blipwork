@@ -28,7 +28,7 @@ const SKILLS = {
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`)],
         sides: [t.side("A", "C", String(b)), t.side("A", "B", String(c)), t.side("B", "C", "x")] },
-      expected: x, dp: 2,
+      expected: x, dp: 2, tol: 0.015,   // absorb the last-cent flip if a learner works with a 4-dp cosine
       hint: "x is opposite the known angle. x² = b² + c² − 2bc·cos(angle).",
       answerLabel: `x = ${fix(x, 2)}`,
       solution: [
@@ -46,7 +46,7 @@ const SKILLS = {
     return {
       type: "calc", concept: NOTE,
       prompt: `In △ABC, b = ${b}, c = ${c} and Â = ${A}°. Calculate <b>a</b> (2 decimals).`,
-      expected: a, dp: 2,
+      expected: a, dp: 2, tol: 0.015,
       hint: "Â sits between b and c, so a is opposite it: a² = b² + c² − 2bc·cosÂ.",
       answerLabel: `a = ${fix(a, 2)}`,
       solution: [

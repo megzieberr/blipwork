@@ -20,8 +20,9 @@ const boxAxis = max => { const step = 10, m = Math.ceil((max + 6) / step) * step
 function skewBox(skew) {
   const med = randInt(52, 62);
   if (skew === "normal") { const d = randInt(11, 15), w = randInt(11, 15); return { min: med - d - w, q1: med - d, med, q3: med + d, max: med + d + w }; }
-  if (skew === "right") { const dl = randInt(6, 9), dr = randInt(15, 20), wl = randInt(4, 7), wr = randInt(16, 22); return { min: med - dl - wl, q1: med - dl, med, q3: med + dr, max: med + dr + wr }; }
-  const dr = randInt(6, 9), dl = randInt(15, 20), wr = randInt(4, 7), wl = randInt(16, 22);
+  // the short whisker stays ≥ 6 units so adjacent value labels never touch on the drawn scale
+  if (skew === "right") { const dl = randInt(6, 9), dr = randInt(15, 20), wl = randInt(6, 9), wr = randInt(16, 22); return { min: med - dl - wl, q1: med - dl, med, q3: med + dr, max: med + dr + wr }; }
+  const dr = randInt(6, 9), dl = randInt(15, 20), wr = randInt(6, 9), wl = randInt(16, 22);
   return { min: med - dl - wl, q1: med - dl, med, q3: med + dr, max: med + dr + wr };
 }
 

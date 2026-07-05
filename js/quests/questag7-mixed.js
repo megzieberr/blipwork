@@ -8,8 +8,8 @@
    it helps you tell a median from an altitude.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { tapQ, triangleAltitude, winFor, AG } from "./_analytical.js";
-import { midpoint, triArea, randPoint, pick } from "../analyticslib.js";
+import { triangleAltitude, winFor, layoutPointLabels, AG } from "./_analytical.js";
+import { midpoint, footOfPerp, triArea, randPoint, pick } from "../analyticslib.js";
 
 const ACC = AG[6];
 
@@ -18,7 +18,7 @@ function medianDiagram(P, base) {
   const [b1, b2] = base.split("");
   const apex = ["A", "B", "C"].find((k) => k !== b1 && k !== b2);
   const M = midpoint(P[b1], P[b2]);
-  return {
+  return layoutPointLabels({
     type: "analytic", accent: ACC, grid: true,
     win: winFor(["A", "B", "C"].map((k) => P[k]), { min: 9 }),
     polys: [{ pts: [P[b1], P[b2], P[apex]], fill: true }],
@@ -28,14 +28,37 @@ function medianDiagram(P, base) {
     ],
     ticks: [{ a: P[b1], b: M, n: 1 }, { a: M, b: P[b2], n: 1 }],
     points: ["A", "B", "C"].map((k) => ({ x: P[k].x, y: P[k].y, label: k, place: "auto" })),
-  };
+  });
 }
+/* |cos of the angle| between directions u and v (0 = perpendicular, 1 = parallel) */
+function absCos(u, v) {
+  return Math.abs(u.x * v.x + u.y * v.y) / (Math.hypot(u.x, u.y) * Math.hypot(v.x, v.y));
+}
+/* a triangle where median and altitude from the apex are CLEARLY different:
+   the altitude's foot lands well inside the base, well away from the midpoint,
+   and the median is nowhere near perpendicular — otherwise "median or
+   altitude?" is ambiguous (in an isosceles triangle they coincide!) */
 function niceTri() {
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 400; i++) {
     const A = randPoint(-5, 5), B = randPoint(-5, 5), C = randPoint(-5, 5);
-    if (triArea(A, B, C) >= 7) return { P: { A, B, C }, base: pick(["AB", "BC", "CA"]) };
+    if (triArea(A, B, C) < 7) continue;
+    const P = { A, B, C };
+    const bases = ["AB", "BC", "CA"].filter((base) => {
+      const [b1, b2] = base.split("");
+      const apex = ["A", "B", "C"].find((k) => k !== b1 && k !== b2);
+      const foot = footOfPerp(P[apex], P[b1], P[b2]);
+      const M = midpoint(P[b1], P[b2]);
+      const side = { x: P[b2].x - P[b1].x, y: P[b2].y - P[b1].y };
+      const sideLen = Math.hypot(side.x, side.y);
+      const t = ((foot.x - P[b1].x) * side.x + (foot.y - P[b1].y) * side.y) / (sideLen * sideLen);
+      if (t <= 0.2 || t >= 0.8) return false;                          // altitude foot inside the base
+      if (Math.hypot(foot.x - M.x, foot.y - M.y) < 0.8) return false;  // foot not near the midpoint
+      const med = { x: M.x - P[apex].x, y: M.y - P[apex].y };
+      return absCos(side, med) >= 0.25;                                // median ≥ ~15° off perpendicular
+    });
+    if (bases.length) return { P: { A, B, C }, base: pick(bases) };
   }
-  return { P: { A: { x: -3, y: -1 }, B: { x: 4, y: -1 }, C: { x: 1, y: 4 } }, base: "AB" };
+  return { P: { A: { x: -3, y: -1 }, B: { x: 4, y: -1 }, C: { x: 2, y: 4 } }, base: "AB" };
 }
 
 const SKILLS = {

@@ -17,14 +17,14 @@ const SKILLS = {
     return {
       type: "mc", concept: CL,
       prompt: `How many times a year is interest added when it is compounded <b>${o.label}</b>?`,
-      options: mcNum(o.k, [o.k === 12 ? 6 : 12, o.k === 1 ? 2 : 1, o.k * 2]),
+      options: mcNum(o.k, [o.k === 12 ? 6 : 12, o.k === 1 ? 2 : 1, o.k * 2, o.k + 3]),
       answerLabel: `${o.label} → ${o.k} time${o.k > 1 ? "s" : ""} a year`,
       hint: "Annually 1, half-yearly 2, quarterly 4, monthly 12.",
     };
   },
 
   ratePerPeriod: () => {
-    const o = pick(OPTS), annual = pick([6, 8, 12, 18, 9, 15]);
+    const o = pick(OPTS), annual = pick([6, 9, 12, 18, 15]);   // all divide exactly by 2, 4 and 12 — no rounded rate labels
     const i = toFrac(annual) / o.k;
     return {
       type: "mc", concept: CL,
@@ -42,7 +42,7 @@ const SKILLS = {
     return {
       type: "mc", concept: CL,
       prompt: `Compounded <b>${o.label}</b> for <b>${years} years</b>. What is the exponent (power)?`,
-      options: mcNum(e, [years, o.k, years + o.k]),
+      options: mcNum(e, [years, o.k, years + o.k, e + 1, e * 2]),   // backstops: when years = k, the first two collide AND years+k = years×k = e
       answerLabel: `${years} × ${o.k} = ${e}`,
       hint: "Exponent = years × times-per-year.",
       solution: [{ s: `${years} years × ${o.k} per year = ${e}` }],

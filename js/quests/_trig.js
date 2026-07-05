@@ -5,6 +5,7 @@
    numeric label; unknowns are letters (x / y / θ) — so the engine's
    to-scale checks only ever see exact values. */
 import { solveTriangle, rotatePts, sinD, cosD } from "../triglib.js";
+import { computeTriangle } from "../engine/triangle-graph.js";
 
 /* Solve + place a triangle, bound to display letters.
    given:  { sides:{a,b,c}, angles:{A,B,C} }   (side a is opposite A …)
@@ -24,6 +25,20 @@ export function placeTri(given, letters = ["A", "B", "C"], rotate = 0) {
     angle(g, label, opts = {}) { return { at: map[g], label, ...opts }; },
     L(g) { return map[g]; },
   };
+}
+
+/* Start point for a cevian drawn from vertex `from` towards `to`,
+   nudged `px` PIXELS down the segment (converted to real units via the
+   engine's own scale) so a dashed altitude never strikes through the
+   angle label the engine hangs ≈27px out from the vertex.
+   `spec` must already hold its final pts/poly (the nudged point lies on
+   the segment, so adding it afterwards cannot change the fitted scale). */
+export function segStartClear(spec, from, to, px = 40) {
+  const g = computeTriangle(spec);
+  const F = spec.pts[from], T = spec.pts[to];
+  const L = Math.hypot(T.x - F.x, T.y - F.y) || 1e-6;
+  const k = Math.min(0.45, px / (g.scale * L));
+  return { x: F.x + (T.x - F.x) * k, y: F.y + (T.y - F.y) * k };
 }
 
 /* A "house" pentagon (rectangle + isosceles roof) — the Area-rule

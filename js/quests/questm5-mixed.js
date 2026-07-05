@@ -12,9 +12,27 @@ import {
 } from "../measlib.js";
 
 const ACC = "#65a30d";
+/* Label-safe figure tweaks — same as quest m1: a few proportions land a
+   dimension letter ON an edge (fixed engine label offsets, measured against
+   solid-graph geometry — see the chapter review). Still to scale. */
+const figPrismSafe = a => { const g = figPrism(a); if (g.h === g.b + 3) g.h -= 1; return g; };
+const figTriPrismSafe = a => {
+  const g = figTriPrism(a);
+  [g.b, g.th] = pick([[5, 5], [6, 4], [7, 4], [6, 6], [7, 5]]);
+  if (g.L === 9 && g.b + g.th === 12) g.L = 10;
+  if (g.L === 8 && g.b === 7 && g.th === 4) g.L = 9;
+  return g;
+};
 const FIG = {
-  cube: figCube, prism: figPrism, triPrism: figTriPrism, cylinder: a => figCylinder(a, "none"),
+  cube: figCube, prism: figPrismSafe, triPrism: figTriPrismSafe, cylinder: a => figCylinder(a, "none"),
   cone: figCone, pyramid: figPyramid, sphere: figSphere, hemisphere: figHemisphere,
+};
+/* for SURFACE-AREA questions the slant height h is part of the cone/pyramid
+   formula, so those figures draw it (with the same label-safe nudges) */
+const FIG_SA = {
+  ...FIG,
+  cone: a => { const g = figCone(a, { showSlant: true }); if (g.r === 6 && g.h === 7) g.h = 8; return g; },
+  pyramid: a => { const g = figPyramid(a, { showSlant: true }); if (g.h === g.s + 1) g.h += 1; return g; },
 };
 const NAMES = Object.keys(SOLID).map(k => SOLID[k].name);
 
@@ -43,11 +61,11 @@ const SKILLS = {
 
   /* surface-area formula, any solid */
   mixSA: () => {
-    const key = pick(["cube", "prism", "triPrism", "cylinder", "cone", "sphere", "hemisphere"]);
+    const key = pick(["cube", "prism", "triPrism", "cylinder", "cone", "pyramid", "sphere", "hemisphere"]);
     const s = SOLID[key];
     return mc("saFormula", `Pick the <b>total surface area</b> formula for this closed ${s.name}.`,
       s.sa, wrongs(SA_WRONG[key], s.sa),
-      { graph: FIG[key](ACC), layout: "grid2",
+      { graph: FIG_SA[key](ACC), layout: "grid2",
         hint: "Add every outside face. Curved sides unroll into rectangles; round ends are circles.",
         answerLabel: `SA = ${s.sa}.`, solution: [{ s: `SA = ${s.sa}`, r: s.name }] });
   },
@@ -56,9 +74,14 @@ const SKILLS = {
   mixOpen: () => {
     const open = pick(["none", "top", "both"]);
     const { correct, wrongs: w } = cylSaOptions(open);
+    // open cylinders must stay wide enough for the engine's "r" label (see m3)
+    const g = figCylinder(ACC, open);
+    if (open !== "none" && !((g.r === 4 && g.h === 7) || (g.r === 5 && g.h <= 9))) {
+      [g.r, g.h] = pick([[4, 7], [5, 7], [5, 8], [5, 9], [6, 9], [6, 10], [6, 11]]);
+    }
     return mc("openSurfaces", "Read the diagram — which surface-area formula fits this cylinder?",
       correct, w,
-      { graph: figCylinder(ACC, open), layout: "grid2",
+      { graph: g, layout: "grid2",
         hint: "Curved side 2πrh always; add πr² for each CLOSED end.",
         answerLabel: `${CYL_SA_LABEL[open]} → ${correct}.`,
         solution: [{ s: `${CYL_SA_LABEL[open]} → SA = ${correct}` }] });

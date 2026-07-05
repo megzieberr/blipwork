@@ -10,7 +10,7 @@ import { mc, ynQ, pick } from "./_exp.js";
 const CON = "ratExpEq";
 
 const A = "x = ± (two answers)";
-const B = "one real answer (it can be negative)";
+const B = "exactly one real answer (no ±)";
 const C = "no real solution";
 const D = "only x = 0";
 
@@ -19,9 +19,11 @@ const POOL = [
   { e: "x^(2/3) = 4", cat: A, why: "Numerator 2 is even and the right side is positive → x = ±8 (two answers)." },
   { e: "x^(2/3) = 9", cat: A, why: "Even numerator, positive right side → x = ±27 (two answers)." },
   { e: "x^(2/5) = 16", cat: A, why: "Even numerator, positive right side → ± two answers." },
-  { e: "x^(3/5) = −2", cat: B, why: "Top and bottom both odd → a single real answer, and it may be negative." },
+  { e: "x^(3/5) = −2", cat: B, why: "Top and bottom both odd → a single real answer, and here it is negative." },
   { e: "x^(1/3) = −2", cat: B, why: "Odd top and odd bottom → one real (negative) answer: x = −8." },
   { e: "x^(3/7) = −5", cat: B, why: "All odd → one real, negative answer." },
+  { e: "x^(3/2) = 8", cat: B, why: "Odd numerator (3) → one answer: raise to 2/3 → x = 4. The even denominator only means x can’t be negative — it does NOT give ±." },
+  { e: "x^(3/5) = 2", cat: B, why: "Top and bottom both odd → exactly one real answer: x = 2^(5/3) (positive, because the right side is positive)." },
   { e: "x^(1/2) = −5", cat: C, why: "Even root (denominator 2) of a negative → non-real → no solution." },
   { e: "x^(3/4) = −8", cat: C, why: "Even root (denominator 4) of a negative → no real solution." },
   { e: "x^(2/5) = −4", cat: C, why: "Even power (numerator 2) can’t equal a negative → no real solution." },

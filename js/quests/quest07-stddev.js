@@ -55,14 +55,16 @@ function genBoundary() {
 }
 
 function genWithin() {
-  let data, m, sd, lo, hi, count, tries = 0;
+  let data, m, sd, lo, hi, count, countR, mR, sdR, tries = 0;
   do {
     data = sortAsc(rawset(randInt(6, 9), 10, 30));
     m = mean(data); sd = stdDev(data); lo = m - sd; hi = m + sd;
     count = data.filter(x => x >= lo - 1e-9 && x <= hi + 1e-9).length;
+    // the learner works from the DISPLAYED rounded x̄ and σ — the count must agree
+    mR = Math.round(m * 10) / 10; sdR = Math.round(sd * 10) / 10;
+    countR = data.filter(x => x >= mR - sdR - 1e-9 && x <= mR + sdR + 1e-9).length;
     tries++;
-  } while (tries < 60 && data.some(x => Math.abs(x - lo) < 0.8 || Math.abs(x - hi) < 0.8));
-  const mR = Math.round(m * 10) / 10, sdR = Math.round(sd * 10) / 10;
+  } while (tries < 60 && (count !== countR || data.some(x => Math.abs(x - lo) < 0.8 || Math.abs(x - hi) < 0.8)));
   return {
     type: "calc", concept: "withinSD", dp: 0, expected: count, answerLabel: `${count}`,
     prompt: `A data set:<br><span class="num">${list(data)}</span><br>Here x̄ ≈ ${C(mR)} and σ ≈ ${C(sdR)}. How many values lie <b>within one standard deviation</b> of the mean?`,

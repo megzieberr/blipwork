@@ -53,7 +53,7 @@ const SKILLS = {
 
   /* a, b, c with their signs — fresh, with the workbook's c-trap */
   signsIn: () => {
-    const bb = randInt(1, 6), cc = randInt(1, 8);
+    const bb = randInt(2, 6), cc = randInt(1, 8);   // bb ≥ 2: never show "1x"
     const prompt = `For <b>x² − ${C(bb)}x − ${C(cc)} = 0</b>, what are a, b and c?`;
     const correct = `a = 1, b = −${C(bb)}, c = −${C(cc)}`;
     const wrongs = [

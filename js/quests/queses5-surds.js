@@ -14,8 +14,8 @@ const SKILLS = {
   /* multiply / divide same root */
   multiplyDivide: () => {
     const items = [
-      { q: "Simplify <b>√a · √b</b> (same root).", correct: "√(ab)", wrongs: ["√(a+b)", "ab", "√a + √b"], ans: "Same root: multiply the insides — √a·√b = √(ab)." },
-      { q: "Simplify <b>√a ÷ √b</b> (same root).", correct: "√(a/b)", wrongs: ["√(a−b)", "a/b", "√a − √b"], ans: "Same root: divide the insides — √a ÷ √b = √(a/b)." },
+      { q: "Simplify <b>√a · √b</b> (same root; a, b ≥ 0).", correct: "√(ab)", wrongs: ["√(a+b)", "ab", "√a + √b"], ans: "Same root: multiply the insides — √a·√b = √(ab)." },
+      { q: "Simplify <b>√a ÷ √b</b> (same root; a ≥ 0, b &gt; 0).", correct: "√(a/b)", wrongs: ["√(a−b)", "a/b", "√a − √b"], ans: "Same root: divide the insides — √a ÷ √b = √(a/b)." },
     ];
     const it = pick(items);
     return mc(LAW, it.q, it.correct, it.wrongs, { hint: "Same root → you may combine the insides under one root for × and ÷.", answerLabel: it.ans });
@@ -53,8 +53,8 @@ const SKILLS = {
   /* sign / non-real */
   signRules: () => {
     const items = [
-      { q: "What is <b>(−x)^even</b> (e.g. (−5)²)?", correct: "Positive", wrongs: ["Negative", "Zero", "Non-real"], ans: "An even power of a negative is positive: (−5)² = 25." },
-      { q: "What is <b>(−x)^odd</b> (e.g. (−5)³)?", correct: "Negative", wrongs: ["Positive", "Zero", "Non-real"], ans: "An odd power of a negative is negative: (−5)³ = −125." },
+      { q: "A <b>negative</b> number is raised to an <b>even</b> power (e.g. (−5)²). The result is:", correct: "Positive", wrongs: ["Negative", "Zero", "Non-real"], ans: "An even power of a negative is positive: (−5)² = 25." },
+      { q: "A <b>negative</b> number is raised to an <b>odd</b> power (e.g. (−5)³). The result is:", correct: "Negative", wrongs: ["Positive", "Zero", "Non-real"], ans: "An odd power of a negative is negative: (−5)³ = −125." },
       { q: "What kind of value is <b>√(−4)</b> (an even root of a negative)?", correct: "Non-real", wrongs: ["Positive", "Negative", "Zero"], ans: "An even root of a negative number is non-real." },
       { q: "What is <b>³√(−8)</b> (an odd root of a negative)?", correct: "−2 (real and negative)", wrongs: ["Non-real", "+2", "±2"], ans: "An odd root of a negative is real and negative: ³√(−8) = −2." },
     ];

@@ -8,7 +8,14 @@ import { mc } from "./_shared.js";
 import { figComposite, pick } from "../measlib.js";
 
 const ACC = "#65a30d";
-const silo = (o = {}) => figComposite(ACC, "cone", { showHcyl: true, showHtop: true, ...o });
+/* silo: nudge proportions where the cone-height "H" letter lands on the
+   dashed joining rim (fixed engine label offsets — see the chapter review) */
+const silo = (o = {}) => {
+  const g = figComposite(ACC, "cone", { showHcyl: true, showHtop: true, ...o });
+  if (g.r === 4 && g.hTop <= 6) g.hTop = pick([7, 8]);
+  else if (g.r === 5 && g.hTop === 7) g.hTop = 8;
+  return g;
+};
 const dome = (o = {}) => figComposite(ACC, "hemi", { showHcyl: true, ...o });
 
 const SKILLS = {

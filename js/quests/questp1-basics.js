@@ -52,22 +52,33 @@ const SKILLS = {
 
   probFraction: () => {
     const N = pick([6, 8, 10, 12]); const e = evt(N);
-    const f = frac(e.set.length, N);
-    const wrongs = [
-      `${N}/${e.set.length}`,                           // inverted
-      `${e.set.length}/${N}`,                            // unsimplified (if it simplified) — else drop
-      frac(e.set.length, N - 1).str,                     // wrong denominator
-    ].filter((w, i, a) => w !== f.str && a.indexOf(w) === i).slice(0, 3);
+    const n = e.set.length;
+    const f = frac(n, N);
+    // each decoy is a specific slip — and never numerically equal to the answer
+    const cands = [
+      frac(N - n, N),                                    // counted the complement
+      { str: `${N}/${n}`, val: N / n },                  // inverted: n(S)/n(E)
+      frac(n, N - 1),                                    // wrong denominator (left an outcome out)
+      frac(n, N - n),                                    // part-to-part “odds”, not a probability
+    ];
+    const seen = new Set([f.str]); const wrongs = [];
+    for (const c of cands) {
+      if (Math.abs(c.val - f.val) < 1e-9 || seen.has(c.str)) continue;
+      seen.add(c.str); wrongs.push(c.str);
+      if (wrongs.length === 3) break;
+    }
     return mc(BASICS,
       `A fair ${N}-sided die is rolled. Write <b>P(${e.desc})</b> as a fraction in simplest form.`,
       f.str, wrongs,
       { hint: "P(E) = n(E) / n(S). Then simplify.",
-        answerLabel: `P = ${e.set.length}/${N} = ${f.str}`,
-        solution: [{ s: `n(E) = ${e.set.length}, n(S) = ${N}` }, { s: `P = ${e.set.length}/${N} = ${f.str}` }] });
+        answerLabel: `P = ${n}/${N} = ${f.str}`,
+        solution: [{ s: `n(E) = ${n}, n(S) = ${N}` }, { s: `P = ${n}/${N} = ${f.str}` }] });
   },
 
   probDecimal: () => {
-    const N = pick([8, 10, 12, 20]); const e = evt(N);
+    // keep the decimal EXACT at 2 places, so "P = n/N = 0,25" is a true equality
+    let N, e;
+    do { N = pick([8, 10, 12, 20]); e = evt(N); } while ((e.set.length * 100) % N !== 0);
     const v = e.set.length / N;
     return {
       type: "calc", concept: BASICS, dp: 2,
@@ -82,13 +93,14 @@ const SKILLS = {
   probPercent: () => {
     const N = pick([8, 10, 20]); const e = evt(N);
     const v = e.set.length / N;
+    const pdp = Math.round(v * 1000) % 10 === 0 ? 0 : 1;   // eighths give e.g. 37,5%
     return {
-      type: "calc", concept: BASICS, dp: 0, unit: "%",
-      prompt: `A fair ${N}-sided die is rolled. Write <b>P(${e.desc})</b> as a percentage.`,
+      type: "calc", concept: BASICS, dp: pdp, unit: "%",
+      prompt: `A fair ${N}-sided die is rolled. Write <b>P(${e.desc})</b> as a percentage${pdp ? " (1 decimal place)" : ""}.`,
       expected: v * 100,
       hint: "Find P as a decimal, then × 100 for a percentage.",
-      answerLabel: `P = ${dec(v, 2)} = ${pctOf(v, 0)}`,
-      solution: [{ s: `P = ${e.set.length}/${N} = ${dec(v, 2)} = ${pctOf(v, 0)}` }],
+      answerLabel: `P = ${dec(v)} = ${pctOf(v, pdp)}`,
+      solution: [{ s: `P = ${e.set.length}/${N} = ${dec(v)} = ${pctOf(v, pdp)}` }],
     };
   },
 

@@ -6,7 +6,7 @@
    a given value.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { pyramid, calcQ, PAT } from "./_patterns.js";
+import { pyramid, calcQ, PAT, P, ord } from "./_patterns.js";
 import {
   randArith, arithSeq, arithTn, whichTermArith, linStr, list, C, pick, randInt,
 } from "../patternlib.js";
@@ -22,7 +22,7 @@ const SKILLS = {
       d,
       { graph: pyramid(seq, { showFirst: true, blankFirst: true, accent: ACC }),
         hint: "d = any term minus the term before it.",
-        answerLabel: `d = ${C(seq[1])} − ${C(seq[0])} = ${C(d)}.` });
+        answerLabel: `d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}.` });
   },
 
   /* next term */
@@ -32,7 +32,7 @@ const SKILLS = {
       `What is the next term of <b>${list(seq)}</b>?`,
       seq[seq.length - 1] + d,
       { hint: `Add the common difference (${C(d)}) to the last term.`,
-        answerLabel: `${C(seq[seq.length - 1])} + ${C(d)} = ${C(seq[seq.length - 1] + d)}.` });
+        answerLabel: `${C(seq[seq.length - 1])} + ${P(d)} = ${C(seq[seq.length - 1] + d)}.` });
   },
 
   /* choose the general term Tₙ = an + c */
@@ -47,7 +47,7 @@ const SKILLS = {
       correct, wrongs,
       { layout: "grid2", graph: pyramid(seq, { showFirst: true, accent: ACC }),
         hint: "Tₙ = an + c with a = the common difference and c = T₀ (the term before T₁).",
-        answerLabel: `a = ${C(d)} and c = T₀ = ${C(a1)} − ${C(d)} = ${C(c)}, so Tₙ = ${correct}.` });
+        answerLabel: `a = ${C(d)} and c = T₀ = ${C(a1)} − ${P(d)} = ${C(c)}, so Tₙ = ${correct}.` });
   },
 
   /* a specific term from the formula */
@@ -85,7 +85,7 @@ const SKILLS = {
       whichTermArith(a1, d, value),
       { allowNeg: false,
         hint: "Set Tₙ = the value and solve for n:  value = a + (n − 1)d.",
-        answerLabel: `${C(value)} = ${C(a1)} + (n − 1)(${C(d)})  →  n = ${C(n)} (the ${C(n)}th term).` });
+        answerLabel: `${C(value)} = ${C(a1)} + (n − 1)(${C(d)})  →  n = ${C(n)} (the ${ord(n)} term).` });
   },
 
   /* what does c mean in Tₙ = an + c? */

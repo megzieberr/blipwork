@@ -6,7 +6,7 @@
    SECOND difference) or geometric (constant RATIO).
    ============================================================ */
 import { mc } from "./_shared.js";
-import { pyramid, tapQ, calcQ, PAT } from "./_patterns.js";
+import { pyramid, tapQ, calcQ, PAT, P } from "./_patterns.js";
 import {
   randArith, randQuad, randGeo, classify, classifyName, firstDiffs, geoRatio,
   list, C, pick,
@@ -69,7 +69,7 @@ const SKILLS = {
       d,
       { graph: pyramid(seq, { showFirst: true, blankFirst: true, accent: ACC }),
         hint: "Subtract any term from the one after it (next − previous).",
-        answerLabel: `d = ${C(seq[1])} − ${C(seq[0])} = ${C(d)}.` });
+        answerLabel: `d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}.` });
   },
 
   /* read a specific first difference off the pyramid (tap) */
@@ -80,7 +80,7 @@ const SKILLS = {
       pyramid(seq, { showFirst: true, accent: ACC }),
       { targets: ["d1_0", "d1_1", "d1_2"], correctId: "d1_1" },
       { tapHint: "First differences sit between two terms. The one between the 2nd and 3rd terms is the middle cell.",
-        answerLabel: `It is ${C(seq[2])} − ${C(seq[1])} = ${C(seq[2] - seq[1])}.` });
+        answerLabel: `It is ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}.` });
   },
 
   /* read the ratio of a geometric pattern */

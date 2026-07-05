@@ -5,7 +5,7 @@
    between two graphs.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { winFor, randParabola, ptDecoys } from "./_func.js";
+import { winFor, labelX, randParabola, ptDecoys } from "./_func.js";
 import {
   makeFn, lineThrough, paraTP, paraStd, parabolaFromRoots,
   avgGradient, eqStr, ptStr, fix, C, pick, randInt,
@@ -17,7 +17,8 @@ const A = "var(--fg-a)", B = "var(--fg-b)";
 const SKILLS = {
   /* read the intersection of two lines off the graph */
   intersectionRead: () => {
-    const ix = randInt(-3, 3), iy = randInt(-3, 3);
+    let ix = randInt(-3, 3), iy = randInt(-3, 3);
+    while (ix === 0 && iy === 0) { ix = randInt(-3, 3); iy = randInt(-3, 3); }   // not the origin — nothing to read there
     let a1 = randInt(-3, 3), a2 = randInt(-3, 3);
     while (a1 === a2 || a1 === 0 || a2 === 0) { a1 = randInt(-3, 3); a2 = randInt(-3, 3); }
     const f = { kind: "line", a: a1, q: iy - a1 * ix };
@@ -25,7 +26,7 @@ const SKILLS = {
     const win = winFor([{ x: ix, y: iy }, { x: 0, y: f.q }, { x: 0, y: g.q }]);
     const spec = {
       type: "function", accent: ACC, grid: true, win,
-      curves: [{ ...f, tone: "a", label: "f", labelAt: win.xmax - 1.4 }, { ...g, tone: "b", label: "g", labelAt: win.xmin + 1.4 }],
+      curves: [{ ...f, tone: "a", label: "f", labelAt: labelX(f, win, win.xmax - 1.4) }, { ...g, tone: "b", label: "g", labelAt: labelX(g, win, win.xmin + 1.4) }],
       points: [{ x: ix, y: iy, on: [0, 1], dashTo: "both" }],
     };
     return mc("intersections", "Read the <b>point of intersection</b> of f and g off the graph.",
@@ -47,7 +48,7 @@ const SKILLS = {
     const win = winFor([{ x: ix, y: iy }, { x: 0, y: f.q }, { x: 0, y: g.q }]);
     const spec = {
       type: "function", accent: ACC, grid: true, win,
-      curves: [{ ...f, tone: "a", label: "f", labelAt: win.xmax - 1.4 }, { ...g, tone: "b", label: "g", labelAt: win.xmin + 1.4 }],
+      curves: [{ ...f, tone: "a", label: "f", labelAt: labelX(f, win, win.xmax - 1.4) }, { ...g, tone: "b", label: "g", labelAt: labelX(g, win, win.xmin + 1.4) }],
       points: [{ x: ix, y: iy, on: [0, 1], label: ptStr(ix, iy) }],
     };
     return mc("intersections", "Use the graph. For which x-values is <b>f(x) &gt; g(x)</b> (f above g)?",
@@ -67,8 +68,8 @@ const SKILLS = {
       { p: "A parabola that <b>never reaches</b> the x-axis has…", c: "non-real roots (Δ &lt; 0)",
         w: ["two equal roots (Δ = 0)", "two real roots (Δ &gt; 0)", "a gradient of 0"] },
       happy
-        ? { p: `f has a minimum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &gt; ${C(tp.y)}`, w: [`k &lt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k = 0`] }
-        : { p: `f has a maximum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &lt; ${C(tp.y)}`, w: [`k &gt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k = 0`] },
+        ? { p: `f has a minimum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &gt; ${C(tp.y)}`, w: [`k &lt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k ≥ ${C(tp.y)}`] }
+        : { p: `f has a maximum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &lt; ${C(tp.y)}`, w: [`k &gt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k ≤ ${C(tp.y)}`] },
     ];
     const k = pick(cases);
     return mc("natureRoots", k.p, k.c, k.w,
@@ -79,8 +80,14 @@ const SKILLS = {
   /* average gradient (calc) — the function is shown as an equation AND a graph,
      with the two points joined by the dashed average-gradient (secant) line */
   avgGradient: () => {
-    const cv = randParabola();
-    let x1 = randInt(-3, 1), x2 = x1 + randInt(2, 4);
+    // keep every feature within a modest y-band so the sketch stays readable
+    let cv = randParabola(), x1, x2;
+    for (;;) {
+      x1 = randInt(-3, 1); x2 = x1 + randInt(2, 4);
+      const fn = makeFn(cv);
+      if (Math.max(Math.abs(fn(x1)), Math.abs(fn(x2)), Math.abs(paraTP(cv).y)) <= 12) break;
+      cv = randParabola();
+    }
     const f = makeFn(cv);
     const p1 = { x: x1, y: f(x1) }, p2 = { x: x2, y: f(x2) };
     const m = avgGradient(cv, x1, x2);
@@ -89,7 +96,7 @@ const SKILLS = {
     const spec = {
       type: "function", accent: ACC, grid: true, win,
       curves: [
-        { ...cv, tone: "a", label: "f", labelAt: win.xmin + 1.2 },
+        { ...cv, tone: "a", label: "f", labelAt: labelX(cv, win, win.xmin + 1.2) },
         { ...secant, tone: "b", dash: true },
       ],
       points: [
@@ -99,7 +106,7 @@ const SKILLS = {
     };
     return {
       type: "calc", concept: "avgGradient",
-      prompt: `For <b>${eqStr(cv, "f")}</b>, calculate the <b>average gradient</b> between x = ${C(x1)} and x = ${C(x2)} (2 decimals).`,
+      prompt: `For <b>${eqStr(cv, "f(x)")}</b>, calculate the <b>average gradient</b> between x = ${C(x1)} and x = ${C(x2)} (2 decimals).`,
       graph: spec, expected: m, dp: 2, allowNeg: true,
       hint: "Average gradient = (y₂ − y₁) / (x₂ − x₁) — the slope of the dashed line joining the two points. Substitute each x into f to get its y first.",
       answerLabel: `average gradient = ${fix(m, 2)}`,
@@ -125,7 +132,7 @@ const SKILLS = {
     const win = winFor([tp, { x: xStar, y: makeFn(f)(xStar) }, { x: xStar, y: makeFn(g)(xStar) }, { x: r1, y: 0 }, { x: r2, y: 0 }]);
     const spec = {
       type: "function", accent: ACC, grid: true, win,
-      curves: [{ ...f, tone: "a", label: "f", labelAt: win.xmin + 1.2 }, { ...g, tone: "b", label: "g", labelAt: win.xmax - 1.4 }],
+      curves: [{ ...f, tone: "a", label: "f", labelAt: labelX(f, win, win.xmin + 1.2) }, { ...g, tone: "b", label: "g", labelAt: labelX(g, win, win.xmax - 1.4) }],
       segment: { x: xStar, fromCurve: 1, toCurve: 0, label: "AB" },
     };
     return {
@@ -135,7 +142,8 @@ const SKILLS = {
       hint: "AB = (top graph) − (bottom graph) = g(x) − f(x). That makes a new parabola; its maximum is at x = −b/(2a), then substitute back.",
       answerLabel: `maximum AB = ${fix(length, 2)} units`,
       solution: [
-        { s: "AB = g(x) − f(x) — keep the brackets when subtracting", r: "a new parabola" },
+        { s: "AB = g(x) − f(x) — keep the brackets when subtracting", r: "top − bottom" },
+        { s: eqStr({ kind: "parabola", a: -1, b: m - fb, c: k - fc }, "AB"), r: "a new (sad) parabola" },
         { s: `it turns at x = ${fix(xStar, 2)}`, r: "−b/(2a)" },
         { s: `max AB = ${fix(length, 2)} units`, r: "substitute back" },
       ],

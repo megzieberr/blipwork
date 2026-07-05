@@ -11,9 +11,10 @@
    Results are computed from the entered data via statlib, so they
    are real. Basic +−×÷ arithmetic works on the COMP home screen.
 
-   NOTE: Q1/med/Q3 use the school (n+1)/4 method (matching what the
-   course teaches). Casio's own quartile algorithm can differ by a
-   value or two — calibrate against the desktop emulator to lock it.
+   NOTE: Q1/med/Q3 deliberately use quartilesExclusive — the method
+   the real fx-991ZA Plus II uses — so the on-screen device always
+   agrees with the learner's calculator. Do NOT "fix" this to the
+   school (n+1)/4 position method.
    ============================================================ */
 import { el } from "./ui.js";
 import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";

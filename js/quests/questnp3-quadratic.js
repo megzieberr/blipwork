@@ -9,7 +9,7 @@
    to get Tₙ = an² + bn + c.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { pyramid, calcQ, PAT } from "./_patterns.js";
+import { pyramid, calcQ, PAT, P } from "./_patterns.js";
 import {
   randQuad, quadStr, secondDiffs, quadTn, list, C, pick, randInt,
 } from "../patternlib.js";
@@ -49,7 +49,7 @@ const SKILLS = {
       b,
       { graph: full(seq),
         hint: `3a + b = T₂ − T₁. So b = (T₂ − T₁) − 3a = ${C(seq[1] - seq[0])} − 3(${C(a)}).`,
-        answerLabel: `b = ${C(seq[1] - seq[0])} − ${C(3 * a)} = ${C(b)}.` });
+        answerLabel: `b = ${C(seq[1] - seq[0])} − ${P(3 * a)} = ${C(b)}.` });
   },
 
   /* c from a + b + c = T₁ */
@@ -60,15 +60,20 @@ const SKILLS = {
       c,
       { graph: full(seq),
         hint: `a + b + c = T₁. So c = T₁ − a − b = ${C(seq[0])} − (${C(a)}) − (${C(b)}).`,
-        answerLabel: `c = ${C(seq[0])} − ${C(a)} − ${C(b)} = ${C(c)}.` });
+        answerLabel: `c = ${C(seq[0])} − ${P(a)} − ${P(b)} = ${C(c)}.` });
   },
 
   /* choose the general term */
   generalTerm: () => {
     const { a, b, c, seq } = randQuad();
     const correct = quadStr(a, b, c);
-    const wrongs = [quadStr(a, -b, c), quadStr(2 * a, b, c), quadStr(a, b + a, c)]
-      .filter((s) => s !== correct);
+    // each decoy is a specific misconception; when b = 0 the sign-of-b decoy
+    // collapses into the correct answer, so a fourth (c found without
+    // subtracting a) keeps the count at 4 buttons.
+    const wrongs = [quadStr(a, -b, c), quadStr(2 * a, b, c), quadStr(a, b + a, c), quadStr(a, b, c - a)]
+      .filter((s) => s !== correct)
+      .filter((s, i, arr) => arr.indexOf(s) === i)
+      .slice(0, 3);
     return mc("patQuadratic",
       `Find the general term Tₙ of <b>${list(seq)}</b>.`,
       correct, wrongs,

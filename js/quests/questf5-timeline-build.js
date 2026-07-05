@@ -49,7 +49,7 @@ const SKILLS = {
     type: "yesno", concept: MOVE,
     prompt: "R1 000 at T0 is worth R2 100,34 at T5. Moving <b>forward 4</b> from T0 and moving <b>back 1</b> from T5 give the <b>same</b> value at T4.",
     yes: true,
-    graph: tl(5, [{ t: 0, amount: 1000, dp: 0 }, { t: 4, label: "?", role: "" }, { t: 5, amount: 2100.34 }]),
+    graph: tl(5, [{ t: 0, amount: 1000, dp: 0 }, { t: 4, label: "?", role: "" }, { t: 5, amount: 2100.34, dp: 0 }]),   // dp 0: the full "R2 100,34" is wider than the engine's edge margin and gets clipped
     hint: "The same money has ONE value at each date, no matter which way you travel to it.",
     answerLabel: "True — both routes give the same value at T4",
   }),
@@ -71,10 +71,35 @@ const SKILLS = {
     return {
       type: "mc", concept: RATE,
       prompt: `One segment: ${C(annual)}% p.a. compounded <b>${o.label}</b> for <b>${yrs} years</b>. The exponent on that bracket is…`,
-      options: mcNum(e, [yrs, o.k, yrs + o.k]),
+      options: mcNum(e, [yrs, o.k, yrs + o.k, e + 1, e * 2]),   // backstops: when yrs = k, the first two collide AND yrs+k = yrs×k = e
       hint: "Exponent for the segment = years × times-per-year.",
       answerLabel: `${yrs} × ${o.k} = ${e}`,
     };
+  },
+
+  rateChangeExpr: () => {
+    const o1 = pick(OPTS), o2 = pick(OPTS.filter(o => o.k !== o1.k));
+    const y1 = randInt(2, 3), y2 = randInt(2, 4);
+    const r1 = pick([10, 12, 18]), r2 = pick([8, 9, 15]);
+    const i1 = C(toFrac(r1)), i2 = C(toFrac(r2));
+    const P = pick([10000, 20000, 50000]);
+    const Pd = P.toLocaleString("en-ZA").replace(/,/g, " ");
+    const b1 = `(1 + ${i1}/${o1.k})^(${y1}×${o1.k})`;
+    const b2 = `(1 + ${i2}/${o2.k})^(${y2}×${o2.k})`;
+    return mc(RATE,
+      `<b>R${Pd}</b> grows at ${C(r1)}% p.a. compounded <b>${o1.label}</b> for ${y1} years, then at ${C(r2)}% p.a. compounded <b>${o2.label}</b> for ${y2} years. Which expression gives its value at the end of the ${y1 + y2} years?`,
+      `${P}${b1}${b2}`,
+      [`${P}(1 + ${i1}/${o1.k})^(${y1 + y2}×${o1.k})`,
+       `${P}${b1} + ${P}${b2}`,
+       `${P}${b1}(1 + ${i2}/${o2.k})^(−${y2}×${o2.k})`],
+      { graph: tl(y1 + y2, [{ t: 0, amount: P, dp: 0 }, { t: y1, label: "rate changes" }, { t: y1 + y2, label: "?", role: "A" }]),
+        hint: "Split the timeline where the rate changes: ONE bracket per segment, multiplied together.",
+        answerLabel: `${P}${b1}${b2}`,
+        solution: [
+          { s: `Segment 1: rate per period = ${i1}/${o1.k}, periods = ${y1}×${o1.k}` },
+          { s: `Segment 2: rate per period = ${i2}/${o2.k}, periods = ${y2}×${o2.k}` },
+          { s: `A = ${P}${b1}${b2}`, r: "one bracket per segment, multiplied — the money keeps moving forward" },
+        ] });
   },
 };
 

@@ -51,7 +51,7 @@ function genSdShifted() {
   const sd = randInt(25, 80) / 10, k = randInt(2, 9);
   return mc("effect",
     `A data set has standard deviation σ = <b>${C(sd)}</b>. Every value is increased by <b>${k}</b>. What is the new standard deviation?`,
-    C(sd), [C(sd + k), C(Math.round(sd * 10) / 10 + 1), C(Math.max(0, sd - k))],
+    C(sd), [C(sd + k), C(Math.round(sd * k * 10) / 10), C(Math.max(0, sd - k))],   // decoys: shifted, multiplied, shrunk
     { hint: "Shifting every value sideways does not change how spread out the data is.",
       solution: [{ s: `Adding a constant leaves the spread unchanged → σ stays ${C(sd)}.` }] });
 }

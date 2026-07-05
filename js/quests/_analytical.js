@@ -10,6 +10,7 @@
 import {
   midpoint, footOfPerp, gradient, inclination, distance, ptStr, C,
 } from "../analyticslib.js";
+import { computeAnalytic } from "../engine/analytical-graph.js";
 import { shuffled } from "../ui.js";
 
 /* Letter a set of line segments (A, B, …) for "which line?" multiple-choice —
@@ -46,6 +47,68 @@ export function winFor(pts, { pad = 1, min = 9 } = {}) {
 
 export const labelPt = (P, name) => `${name}${ptStr(P)}`;
 
+/* ---- point-label layout: pick above/below/left/right for every labelled
+   point so the text stays inside the frame and off the drawn lines.
+   Mirrors the engine's own offsets (±12 above/below, ±9 left/right at
+   10.5px font) and scores each spot: out-of-frame is worst, then sitting
+   on a segment, then clashing with an already-placed label. ---- */
+function clipToWin(A, B, win) {
+  const { xmin, xmax, ymin, ymax } = win;
+  const dx = B.x - A.x, dy = B.y - A.y, ts = [];
+  if (dx !== 0) { ts.push((xmin - A.x) / dx, (xmax - A.x) / dx); }
+  if (dy !== 0) { ts.push((ymin - A.y) / dy, (ymax - A.y) / dy); }
+  const inside = (t) => { const x = A.x + t * dx, y = A.y + t * dy; return x >= xmin - 1e-6 && x <= xmax + 1e-6 && y >= ymin - 1e-6 && y <= ymax + 1e-6; };
+  const hits = ts.filter(inside).sort((p, q) => p - q);
+  if (hits.length < 2) return null;
+  return [{ x: A.x + hits[0] * dx, y: A.y + hits[0] * dy }, { x: A.x + hits[hits.length - 1] * dx, y: A.y + hits[hits.length - 1] * dy }];
+}
+function segHitsBox(a, b, box) {
+  const x0 = box.x + 1, y0 = box.y + 1, x1 = box.x + box.w - 1, y1 = box.y + box.h - 1;
+  if (x1 <= x0 || y1 <= y0) return false;
+  for (let t = 0; t <= 1; t += 0.02) {
+    const x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t;
+    if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return true;
+  }
+  return false;
+}
+export function layoutPointLabels(spec) {
+  const g = computeAnalytic(spec), { X, Y, W, H } = g;
+  const obstacles = [];
+  (spec.segs || []).forEach((sg) => {
+    let A = sg.a, B = sg.b;
+    if (sg.kind === "line") { const c = clipToWin(A, B, spec.win); if (!c) return; [A, B] = c; }
+    obstacles.push([{ x: X(A.x), y: Y(A.y) }, { x: X(B.x), y: Y(B.y) }]);
+  });
+  (spec.polys || []).forEach((poly) => poly.pts.forEach((p, i) => {
+    const q = poly.pts[(i + 1) % poly.pts.length];
+    obstacles.push([{ x: X(p.x), y: Y(p.y) }, { x: X(q.x), y: Y(q.y) }]);
+  }));
+  const placedBoxes = [];
+  const fs = 10.5, lh = fs * 1.1;
+  (spec.points || []).forEach((p) => {
+    if (p.label == null || p.label === "") return;
+    const px = X(p.x), py = Y(p.y), w = 0.62 * fs * String(p.label).length;
+    let best = null, bestScore = -Infinity;
+    for (const pl of ["above", "below", "right", "left"]) {
+      let cx, cy;
+      if (pl === "above") { cx = px; cy = py - 12; }
+      else if (pl === "below") { cx = px; cy = py + 12; }
+      else if (pl === "left") { cx = px - 9 - w / 2; cy = py - 9; }
+      else { cx = px + 9 + w / 2; cy = py - 9; }
+      const box = { x: cx - w / 2, y: cy - lh / 2, w, h: lh };
+      let score = 0;
+      if (box.x < 2 || box.y < 2 || box.x + box.w > W - 2 || box.y + box.h > H - 2) score -= 100;
+      for (const [a, b] of obstacles) if (segHitsBox(a, b, box)) score -= 10;
+      for (const other of placedBoxes)
+        if (box.x < other.x + other.w && other.x < box.x + box.w && box.y < other.y + other.h && other.y < box.y + box.h) score -= 10;
+      if (score > bestScore) { bestScore = score; best = { pl, box }; }
+    }
+    p.place = best.pl;
+    placedBoxes.push(best.box);
+  });
+  return spec;
+}
+
 /* ---- tiny question-object builders (tap / yesno) so the quests stay terse ---- */
 export function tapQ(concept, prompt, graph, tap, opts = {}) {
   graph.tap = tap;                                   // marks the svg tappable in render
@@ -70,15 +133,17 @@ export function inclinationDiagram(dy, dx, { accent = AG[3], showTheta = true, l
   // the line's UPWARD ray (positive y component) — that is the side θ opens to
   let ux = dx, uy = dy;
   if (uy < 0) { ux = -ux; uy = -uy; }
-  // a couple of points along the line, both directions, for a tidy window
-  const far = 4;
+  // two points along the line at a FIXED distance from O, so the window stays
+  // compact whatever the rise/run — otherwise a 7/6 slope blows the window up
+  // to ±28 and the θ arc shrinks to a few pixels.
+  const far = 6.5 / Math.hypot(ux, uy);
   const A = { x: ux * far, y: uy * far }, B = { x: -ux * far, y: -uy * far };
   const win = winFor([A, B, { x: 3, y: 0 }, { x: -3, y: 0 }], { pad: 1, min: 9 });
   const theta = inclination(m);
   const spec = {
     type: "analytic", accent, grid: true, win,
     segs: [{ a: A, b: B, kind: "line", id: "line" }],
-    points: [{ x: 0, y: 0, dot: true, label: "" }],
+    points: [{ x: 0, y: 0, dot: true }],
     arcs: showTheta ? [{
       at: { x: 0, y: 0 }, from: { x: 1, y: 0 }, to: { x: ux, y: uy },
       label, expect: theta, r: 1.3,
@@ -111,6 +176,7 @@ export function triangleAltitude(P, base, { accent = AG[3], showAlt = true } = {
     points: names.map((k) => ({ x: P[k].x, y: P[k].y, id: k, label: k, place: "auto" })),
     rights: showAlt ? [{ at: foot, to1: P[apex], to2: P[b1] }] : [],
   };
+  layoutPointLabels(spec);
   return { spec, apex, base, foot, sideIds, baseId: `${b1}${b2}`, altId: "alt" };
 }
 
@@ -144,6 +210,7 @@ export function bisectorCandidate(A, B, { accent = AG[3], throughMid = true, per
     ticks: marks && throughMid ? [{ a: A, b: M, n: 1 }, { a: M, b: B, n: 1 }] : [],
     rights: marks && perpendicular && throughMid ? [{ at: M, to1: B, to2: c2 }] : [],
   };
+  layoutPointLabels(spec);
   const isBisector = throughMid && perpendicular;
   return { spec, M, isBisector };
 }

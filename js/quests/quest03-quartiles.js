@@ -65,7 +65,21 @@ function genValue() {
   const which = pick(["q1", "q2", "q3"]);
   const pos = quartilePos(n, which);
   const val = quartileValue(data, which);
-  const decoys = shuffled(data.filter(v => C(v) !== C(val))).slice(0, 4);
+  /* misconception decoys: the rounding rule applied wrong (a neighbour of the
+     true spot, or the average of the wrong pair) and the other two quartiles —
+     so a ,5 answer isn't the only decimal on the buttons. Random data values
+     back-fill so there are always 4 buttons. */
+  const fl = Math.floor(pos), fr = pos - fl;
+  const near = [];
+  if (Math.abs(fr - 0.5) < 1e-6) near.push(data[fl - 1], data[fl], (data[fl - 2] + data[fl - 1]) / 2, (data[fl] + data[fl + 1]) / 2);
+  else if (Math.abs(fr - 0.25) < 1e-6) near.push(data[fl], (data[fl - 1] + data[fl]) / 2);
+  else if (Math.abs(fr - 0.75) < 1e-6) near.push(data[fl - 1], (data[fl - 1] + data[fl]) / 2);
+  else near.push(data[fl - 2], data[fl]);
+  const otherQ = ["q1", "q2", "q3"].filter(w => w !== which).map(w => quartileValue(data, w));
+  const decoys = [
+    ...shuffled([...near.filter(Number.isFinite), ...otherQ]),
+    ...shuffled(data.filter(v => C(v) !== C(val))),
+  ];
   return {
     type: "mc", concept: "quartiles", layout: "grid2",
     prompt: `An ordered data set:<br><span class="num">${list(data)}</span><br>Find ${QLABEL[which]}.`,
@@ -106,6 +120,22 @@ function genIqrFromList() {
     solution: [
       { s: `Q1 = ${C(q1)} and Q3 = ${C(q3)}`, r: "quartiles" },
       { s: `IQR = Q3 − Q1 = ${C(q3)} − ${C(q1)} = ${C(ans)}`, r: "interquartile range" },
+    ],
+  };
+}
+
+/* ---------- 4b · semi-quartile range ---------- */
+function genSemiIqr() {
+  const q1 = randInt(12, 45), q3 = q1 + 2 * randInt(4, 14);   // even IQR → whole-number answer
+  const iqrV = q3 - q1, ans = iqrV / 2;
+  return {
+    type: "calc", concept: "iqr", dp: 0,
+    prompt: `For a data set, <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Calculate the <b>semi-quartile range</b>.`,
+    expected: ans, answerLabel: `${ans}`,
+    hint: "The semi-quartile range is HALF the interquartile range: (Q3 − Q1) ÷ 2.",
+    solution: [
+      { s: `IQR = Q3 − Q1 = ${q3} − ${q1} = ${iqrV}`, r: "interquartile range" },
+      { s: `semi-quartile range = IQR / 2 = ${iqrV} / 2 = ${ans}`, r: "semi-quartile range" },
     ],
   };
 }
@@ -233,6 +263,7 @@ export const quest03 = {
     { id: "value", concept: "quartiles", gen: genValue },
     { id: "iqr", concept: "iqr", gen: genIqr },
     { id: "iqrList", concept: "iqr", gen: genIqrFromList },
+    { id: "semiIqr", concept: "iqr", gen: genSemiIqr },
     { id: "readBox", concept: "boxplot", gen: genReadBox },
     { id: "tapBox", concept: "boxplot", gen: genTapBox },
     { id: "outBound", concept: "outliers", gen: genOutBound },
