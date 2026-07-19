@@ -560,7 +560,7 @@ begin
   if p_colour is not null then
     if p_colour not in ('cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender')
       then return jsonb_build_object('ok', false, 'error', 'bad_colour'); end if;
-    if p_colour <> 'cream' and slot = 1 and st.xp <= 0
+    if p_colour <> 'cream' and v_slot = 1 and st.xp <= 0
       then return jsonb_build_object('ok', false, 'error', 'colour_locked'); end if;
     update public.blips set colour = p_colour where student_id = sid and slot = v_slot;
   end if;

@@ -473,7 +473,7 @@ begin
       then return jsonb_build_object('ok', false, 'error', 'bad_colour'); end if;
     -- the FIRST blip's first non-cream colour still requires xp>0 (first-round reward);
     -- the second blip may be any colour at hatch, so only gate slot 1.
-    if p_colour <> 'cream' and slot = 1 and st.xp <= 0
+    if p_colour <> 'cream' and v_slot = 1 and st.xp <= 0
       then return jsonb_build_object('ok', false, 'error', 'colour_locked'); end if;
     update public.blips set colour = p_colour where student_id = sid and slot = v_slot;
   end if;
