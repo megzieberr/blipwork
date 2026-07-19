@@ -1,6 +1,46 @@
-# Project status — updated 2026-07-19 (evening: Phase 2 built)
+# Project status — updated 2026-07-19 (night: SL restyle SHIPPED)
 
-## Where we are — PHASE 2 SHIPPED & LIVE (same evening)
+## Where we are — SOLO LEVELING RESTYLE SHIPPED & LIVE (third ship today)
+After playing the rounds Megan saw the cream Study-Bunny theme clashed with the quest
+content (authored for dark panels) — full pivot, built by 7 agents across two fan-outs
+(theme/copy/icons, then blue-body+accessories(Opus)/catalogue/sparkle, + animations +
+2 fix agents), supervised with seam-stitches. Commit `290b375`, sw **v28**,
+**migration-sl-restyle.sql APPLIED live via MCP + smoke-tested** (new signup hatches
+'blue', colour gate re-anchored blue, active catalogue = the 6 techy items; throwaway
+student cleaned up). Verified live: all new assets 200, mhq-v28 serving.
+
+What it is now:
+- **Theme**: Solo Leveling "system windows" — near-black navy #070b16, electric blue
+  #3aa0ff luminous borders, violet #7b5cf6 for rare moments only, sharp corners, Space
+  Grotesk/Sora/JetBrains Mono, chapter accents = game-rarity cycle (blue/violet/cyan/
+  gold/fuchsia in js/config.js). System copy: STATUS/SHOP/PHARMACY/GALLERY, "LEVEL UP"
+  notice, reward drop lines. Sickness copy deliberately stays warm/human. Sparkle pass:
+  glow pedestal under Blip, ✦ flourishes, gold displayed as 💎 crystals (server data
+  still says gold — display-only). html has a solid dark base (overscroll never white).
+- **Blip is BLUE now**: base = her art from SL Blip Design.png → assets/companion/
+  blip-base-blue.png (cream file kept on disk; cream demoted to a colour). Blue = free
+  default; first-colour-change gate re-anchored cream→blue. Recolour retuned: navy
+  outline preserved across all 11 colours. Face sits lower than cream body — ATTACH
+  fractions re-measured (eyes y 0.569).
+- **Techy catalogue** (from HER "Blip Shop Idea.png" mockup): star-shades 40/L1,
+  heart-eyes 45/L1 (both glasses; widthPct 90 so lenses land on the eyes — the 0.4286
+  lens-separation maths is commented in renderer.js), headphones 60/L2 (ears, attached,
+  cups measured onto the silhouette edges), halo 80/L3 (hat, floaty — literally), 
+  power-gloves 100/L4 (arms), aurora-wings 150/L6. Old 5 retired active=false, NEVER
+  confiscated (equip checks owned_items, not shop_items.active — verified).
+- **ANIMATIONS**: her 3 sprite sheets sliced → assets/companion/anim/<state>-1..4.png
+  (24 frames, 480×600 ground-aligned). Frame-cycler in renderer.js (setInterval, never
+  rAF, WeakMap-keyed, leak-safe, prefers-reduced-motion freezes frame 1). Idle map:
+  hungry (canFeedToday) / sleeping (stage1) / sick (stage2, blanket+props on top) /
+  veryill (stage3, monitor beside). playMoment(handle,'excited'|'jumping'): excited on
+  feed, jumping on passed results. Healthy loops recolour with the body; sick loops
+  render as-authored ("sickness overrides colour"). Sheet 2's very-ill row REJECTED
+  (read dead); sheet 3's re-rolled row used. Recovering = static path, no sheet yet.
+- **Icons/logo**: her SL Blip Icon.png artwork → all 5 PWA icons; header/login logos
+  point at blip-base-blue.png.
+- Phase 2 mechanics (feeding/growth/sickness/pharmacy/2nd blip) all unchanged underneath.
+
+## Previous ship today — PHASE 2 (same evening)
 Phone-approved rulings folded in (accessories hidden during recovering confirmed), then
 shipped: committed, **migration-phase2-blip-care.sql APPLIED to live Supabase via MCP**
 and smoke-tested on the real DB (throwaway student: signup → state shape → buy cosmetic →
@@ -133,24 +173,24 @@ registration may linger harmlessly — Defender is active.
   grows with feedings — renderer is size-agnostic so growth = a scale factor).
 
 ## Pending on Megan
-- **Reinstall the PWA from https://megzieberr.github.io/blipwork/** — the repo rename
-  killed the old Pages URL (no redirect), so the installed app points at a dead address.
-  Close/reopen twice for the v27 worker.
-- Phone play of Phase 2: live app for the healthy loop (feed/shop/treats work on real
-  Supabase now); the sickness ladder is easiest at
-  https://megzieberr.github.io/blipwork/companion-test.html (all growth × health states,
-  TEMP code-drawn placeholders) or `?local=1` + `__BLIP_DEV__.skipDays(n)` in a console.
-- Generate the sick-scene + baby art in the ORIGINAL Blip GPT chat
-  (homework-hub-companion/gpt-prompts-sick-scenes.md) and drop the PNGs into
-  assets/companion/ under the exact filenames listed there (needs a small ship after).
-- At term start: switch the **term-running toggle ON in admin** — the sickness clock is
-  frozen until she does (deliberate default). NO other SQL outstanding.
+- **Reinstall the PWA from https://megzieberr.github.io/blipwork/** if not done yet (repo
+  rename killed the old URL, no redirect). Close/reopen twice for the v28 worker — the
+  new icon (blue Blip in shades) should appear on the home screen.
+- Phone play-through of the full SL app on live; sickness ladder easiest at
+  companion-test.html (animated state gallery) or `?local=1` + `__BLIP_DEV__.skipDays(n)`.
+- Optional art, whenever: a "recovering" sprite row (weak smile, blanket on lap — prompt
+  guidance in gpt-prompts-sick-scenes.md) and the baby-face PNG (blip-baby.png) — both
+  have graceful fallbacks until then; each lands with a tiny asset-only ship.
+- At term start: **term-running toggle ON in admin** — sickness clock frozen until then
+  (deliberate). NO SQL outstanding — both today's migrations are applied live.
 
 ## Next up
-- Fix whatever the Phase 2 phone review surfaces; swap in the real art when generated.
-- Ship ritual for Phase 2 (commit + migration handshake + sw v27 + push + verify live).
-- Sick-stage push warnings (reuse Circle Quest VAPID) — designed but NOT built this
-  round; do with or after Phase 3.
+- Fix whatever the phone review of the SL app surfaces.
+- Sick-stage push warnings (reuse Circle Quest VAPID) — designed, not built; do with or
+  after Phase 3.
 - Phase 3 (original plan): teacher-assigned homework + treasure box + notifications.
-- All prices/thresholds (soup 15/med 20/treat 8, growth 10/25/45, 2nd-blip level 10)
-  are tunables — revisit on real play data.
+- Mockup-derived backlog (recorded in homework-hub-companion/plan.md): FACE tab (her
+  4-frame expression sheets exist!), EFFECTS tab (auras), PATTERNS tab, randomize/undo
+  customize flow.
+- All prices/thresholds (accessories 40-150, soup 15/med 20/treat 8, growth 10/25/45,
+  2nd-blip level 10) are tunables — revisit on real play data.
