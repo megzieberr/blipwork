@@ -484,12 +484,12 @@ end; $$;
 -- The pharmacy (soup/medicine) stays open at EVERY sickness stage.
 create or replace function public.mhq_buy_item(p_username text, p_password text, p_item text, p_slot integer default 1)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; itm record; st record; lvl int; stg int; slot int := coalesce(p_slot, 1);
+declare sid uuid; itm record; st record; lvl int; stg int; v_slot int := coalesce(p_slot, 1);
         pan jsonb; cnt int; owned jsonb; new_gold int;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
-  if slot not in (1, 2) then slot := 1; end if;
+  if v_slot not in (1, 2) then v_slot := 1; end if;
   perform public._mhq_ensure_blip(sid);
   select * into itm from public.shop_items where item_id = p_item and active;
   if not found then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
@@ -515,15 +515,15 @@ begin
   -- cosmetic accessory, on the given blip slot
   if stg >= 3 then return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK'); end if;
   lvl := (public._mhq_level(st.xp)->>'level')::int;
-  select owned_items into owned from public.blips where student_id = sid and slot = slot;
+  select owned_items into owned from public.blips where student_id = sid and slot = v_slot;
   if owned is null then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
   if owned ? p_item then return jsonb_build_object('ok', false, 'error', 'owned'); end if;
   if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
   if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
-  update public.blips set owned_items = owned_items || to_jsonb(p_item) where student_id = sid and slot = slot
+  update public.blips set owned_items = owned_items || to_jsonb(p_item) where student_id = sid and slot = v_slot
     returning owned_items into owned;
   update public.students set gold = gold - itm.price where id = sid returning gold into new_gold;
-  return jsonb_build_object('ok', true, 'gold', new_gold, 'owned', owned, 'slot', slot);
+  return jsonb_build_object('ok', true, 'gold', new_gold, 'owned', owned, 'slot', v_slot);
 end; $$;
 
 -- Equip / recolour / rename — PER BLIP (p_slot). Blocked while sick (stage>=2):
@@ -535,17 +535,17 @@ create or replace function public.mhq_equip(
   p_username text, p_password text, p_equipped jsonb default null,
   p_colour text default null, p_blip_name text default null, p_slot integer default 1)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; b record; st record; bad int; nm text; slot int := coalesce(p_slot, 1);
+declare sid uuid; b record; st record; bad int; nm text; v_slot int := coalesce(p_slot, 1);
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
-  if slot not in (1, 2) then slot := 1; end if;
+  if v_slot not in (1, 2) then v_slot := 1; end if;
   perform public._mhq_ensure_blip(sid);
   select last_fed_day, care_streak, xp into st from public.students where id = sid;
   if (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int >= 2 then
     return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK');
   end if;
-  select owned_items into b from public.blips where student_id = sid and slot = slot;
+  select owned_items into b from public.blips where student_id = sid and slot = v_slot;
   if not found then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
 
   if p_equipped is not null then
@@ -554,7 +554,7 @@ begin
      where k not in ('hat','ears','glasses','wings','arms')
         or (coalesce(v, '') <> '' and not b.owned_items ? v);
     if bad > 0 then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
-    update public.blips set equipped = p_equipped where student_id = sid and slot = slot;
+    update public.blips set equipped = p_equipped where student_id = sid and slot = v_slot;
   end if;
 
   if p_colour is not null then
@@ -562,18 +562,18 @@ begin
       then return jsonb_build_object('ok', false, 'error', 'bad_colour'); end if;
     if p_colour <> 'cream' and slot = 1 and st.xp <= 0
       then return jsonb_build_object('ok', false, 'error', 'colour_locked'); end if;
-    update public.blips set colour = p_colour where student_id = sid and slot = slot;
+    update public.blips set colour = p_colour where student_id = sid and slot = v_slot;
   end if;
 
   if p_blip_name is not null then
     nm := left(btrim(p_blip_name), 24);
     if nm = '' then return jsonb_build_object('ok', false, 'error', 'bad_name'); end if;
-    update public.blips set name = nm where student_id = sid and slot = slot;
+    update public.blips set name = nm where student_id = sid and slot = v_slot;
   end if;
 
-  return (select jsonb_build_object('ok', true, 'slot', slot, 'blip', jsonb_build_object(
+  return (select jsonb_build_object('ok', true, 'slot', v_slot, 'blip', jsonb_build_object(
     'name', name, 'colour', colour, 'owned', owned_items, 'equipped', equipped))
-    from public.blips where student_id = sid and slot = slot);
+    from public.blips where student_id = sid and slot = v_slot);
 end; $$;
 
 -- Showcase gallery: usernames only (never blip nicknames), builds + level, no scores,
