@@ -1,7 +1,7 @@
 {
   "name": "Blipwork",
   "short_name": "Blipwork",
-  "description": "Grade 11 maths homework quests — practise each section, earn XP and badges.",
+  "description": "Grade 11 maths homework quests — practise each section, earn XP and gold, and raise your Blip.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

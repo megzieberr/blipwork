@@ -88,7 +88,8 @@ resetting forgotten passwords. All 11 chapters are built and live.
 - **Deploy target 1 — the app**: GitHub Pages, served straight from the
   `main` branch (`.nojekyll` keeps every file as-is). **Pushing to `main` IS
   the deploy** — no workflow, no build. Live at
-  https://megzieberr.github.io/maths-homework-quest/
+  https://megzieberr.github.io/blipwork/ (repo renamed from `maths-homework-quest`
+  2026-07-19; the old Pages URL 404s — it does NOT redirect)
 - **Deploy target 2 — the database**: pushing code does NOT touch Supabase.
   Schema changes ship as an additive `supabase/migration-*.sql` file that
   must be **pasted into the Supabase SQL editor by hand**.
