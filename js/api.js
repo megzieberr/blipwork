@@ -3,6 +3,21 @@
    Uses Supabase when js/supabase-config.js has keys; otherwise (or
    with ?local=1) the offline LocalBackend. Same method signatures,
    so nothing else in the app changes.
+
+   `api` IS the chosen backend object, so every method a backend
+   exposes is available on `api` unchanged. Surface (both backends):
+     auth/quests: signup, login, setPassword, getState, submitQuest,
+                  logStruggle
+     blip:        buyItem(u,p,item,slot=1)  — item may be a cosmetic id
+                    OR a food id ('soup','medicine','treat')
+                  equip(u,p,{equipped,colour,blipName,slot=1})
+                  gallery
+     Phase 2:     feed(u,p), care(u,p),
+                  claimSecondBlip(u,p,name,colour)
+     admin:       adminLogin, adminData, adminSetQuestOpen,
+                  adminResetPassword, adminRemoveStudent,
+                  adminResetProgress, adminResolveStruggle,
+                  setTerm(pw,running)  (alias: adminSetTerm)
    ============================================================ */
 import { SupabaseBackend, hasSupabase } from "./supabase.js";
 import { LocalBackend } from "./local-backend.js";

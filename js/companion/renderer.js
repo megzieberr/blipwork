@@ -13,6 +13,16 @@
      }
    Returns { el, stage, layers, colour, accessories } for inspection/tests.
 
+   PHASE 2 — renderBlip(el, opts), near the bottom of this file, is the
+   growth/health-aware entry point added for feeding & sickness
+   (PHASE-2-PLAN.md). It wraps renderCompanion (still the base
+   compositor) and layers on: a growth-stage size scale, health-stage
+   art (swapping to a dedicated sick/baby PNG once Megan draws one, or
+   a code-drawn placeholder from health-fx.js until then), and the
+   "he won't get up" dress-up lock. renderCompanion itself is
+   unchanged and every existing call site (blip.js, gallery.js,
+   screens.js, unlock-modal.js) keeps working exactly as before.
+
    Layer stack (back → front), per spec:
      wings (behind body) → body PNG → ears → glasses → hat → arms
    Attachment points (ATTACH, below) are fractions (0..1) of the stage box,
@@ -31,12 +41,28 @@
    and smile on recoloured bodies. Results are cached per colour id (as
    data-URLs) so repeated renders/tests never reprocess a colour twice.
    ============================================================ */
+import { healthOverlaySpec, blipMood as _blipMood, HEALTH_ROTATE_DEG } from "./health-fx.js";
+export { blipMood } from "./health-fx.js";
 
 const BASE_SRC = "assets/companion/blip-base.png";
 
 /* Natural size of the downscaled art (kept at the source's 1080:1350 = 4:5
    ratio). Used only for the offscreen canvas — on-page sizing is all %. */
 const BASE_W = 480, BASE_H = 600;
+
+/* ---------- Phase 2: growth/health base-image variants ----------
+   All optional. Until Megan draws them, every one of these 404s and
+   resolveRawBody() below falls back to BASE_SRC (grown/healthy) or,
+   for growth, to the plain base at a smaller scale. Filenames are the
+   contract with her art — see PHASE-2-PLAN.md §6. */
+const IMAGE_SOURCES = {
+  base: BASE_SRC,
+  baby: "assets/companion/blip-baby.png",
+  tired: "assets/companion/blip-tired.png",
+  bedridden: "assets/companion/blip-bedridden.png",
+  critical: "assets/companion/blip-critical.png",
+  recovering: "assets/companion/blip-recovering.png",
+};
 
 /* Sampled directly from Blip Blank.png: the outline/eye/pupil dark brown,
    and the flat "cream" body fill it's drawn over. */
@@ -225,23 +251,40 @@ function smoothstep(lo, hi, x) {
   return t * t * (3 - 2 * t);
 }
 
-let baseImagePromise = null;
-function loadBaseImage() {
-  if (!baseImagePromise) {
-    baseImagePromise = new Promise((resolve, reject) => {
+const baseImagePromises = new Map(); // src -> Promise<HTMLImageElement>
+function loadBaseImage(src = BASE_SRC) {
+  if (!baseImagePromises.has(src)) {
+    baseImagePromises.set(src, new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error("blip-base.png failed to load"));
-      img.src = BASE_SRC;
-    });
+      img.onerror = () => reject(new Error(src + " failed to load"));
+      img.src = src;
+    }));
   }
-  return baseImagePromise;
+  return baseImagePromises.get(src);
 }
 
-const recolourCache = new Map(); // colourId -> Promise<string dataURL>
+/* Phase 2: does an optional growth/health art variant actually exist?
+   Cached per src (one network request per filename for the page's
+   whole lifetime) and never throws — a missing file just resolves
+   false so callers can fall back gracefully. */
+const imageExistCache = new Map(); // src -> Promise<boolean>
+function imageExists(src) {
+  if (!imageExistCache.has(src)) {
+    imageExistCache.set(src, new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src;
+    }));
+  }
+  return imageExistCache.get(src);
+}
 
-function buildRecolouredDataUrl(colourId) {
-  return loadBaseImage().then((img) => {
+const recolourCache = new Map(); // "baseSrc::colourId" -> Promise<string dataURL>
+
+function buildRecolouredDataUrl(colourId, baseSrc = BASE_SRC) {
+  return loadBaseImage(baseSrc).then((img) => {
     const canvas = document.createElement("canvas");
     canvas.width = img.naturalWidth || BASE_W;
     canvas.height = img.naturalHeight || BASE_H;
@@ -280,16 +323,52 @@ export function bodyFlatColour(colourId) {
 }
 
 /* Returns a Promise<string> resolving to the image src to use for `colourId`
-   (the plain base PNG path for "cream"/unknown, else a cached recoloured
-   data-URL — built once per colour and reused forever). */
-export function getBodySrc(colourId) {
+   on top of `baseSrc` (the plain base PNG path for "cream"/unknown, else a
+   cached recoloured data-URL — built once per base+colour pair and reused
+   forever). `baseSrc` defaults to the normal grown/healthy body so every
+   pre-Phase-2 call site (`getBodySrc(colour)`) is unaffected; Phase 2 passes
+   whichever growth/health base won (see resolveRawBody below) so baby/sick
+   art recolours through the exact same pixel math as the normal body. */
+export function getBodySrc(colourId, baseSrc = BASE_SRC) {
   if (!colourId || colourId === "cream" || !COLOURS[colourId]) {
-    return Promise.resolve(BASE_SRC);
+    return Promise.resolve(baseSrc);
   }
-  if (!recolourCache.has(colourId)) {
-    recolourCache.set(colourId, buildRecolouredDataUrl(colourId));
+  const key = baseSrc + "::" + colourId;
+  if (!recolourCache.has(key)) {
+    recolourCache.set(key, buildRecolouredDataUrl(colourId, baseSrc));
   }
-  return recolourCache.get(colourId);
+  return recolourCache.get(key);
+}
+
+/* ---------- Phase 2: which UNCOLOURED base PNG to actually paint ----------
+   Priority per PHASE-2-PLAN.md: a dedicated sick/recovery PNG (full
+   swap, drawn by Megan to already show the scene) beats a code-drawn
+   placeholder; growth stage 0 additionally prefers blip-baby.png over
+   the normal body. Both checks gracefully no-op (imageExists → false)
+   until the matching file exists, so this is safe to call today.
+   Returns { src, needsOverlay } — needsOverlay tells the caller a
+   code-drawn health-fx overlay is needed to stand in for missing art
+   (only true when a sick/recovering state was requested but its PNG
+   isn't there yet). */
+function healthArtKey(healthStage, recovering) {
+  if (recovering) return "recovering";
+  if (healthStage === 1) return "tired";
+  if (healthStage === 2) return "bedridden";
+  if (healthStage === 3) return "critical";
+  return null;
+}
+async function resolveRawBody({ growthStage, healthStage, recovering }) {
+  const sickKey = healthArtKey(healthStage, recovering);
+  if (sickKey) {
+    const ok = await imageExists(IMAGE_SOURCES[sickKey]);
+    if (ok) return { src: IMAGE_SOURCES[sickKey], needsOverlay: false };
+  }
+  let src = IMAGE_SOURCES.base;
+  if (growthStage === 0) {
+    const ok = await imageExists(IMAGE_SOURCES.baby);
+    if (ok) src = IMAGE_SOURCES.baby;
+  }
+  return { src, needsOverlay: !!sickKey };
 }
 
 /* ============================================================
@@ -354,6 +433,25 @@ function makeAccessoryLayer(accId, side) {
   return wrap;
 }
 
+/* Phase 2: mounts one health-fx overlay spec (see health-fx.js — same
+   {x, y, anchor, widthPct, tiltDeg?, svg} shape as an ACCESSORIES
+   entry, just not keyed through ATTACH/ACCESSORIES since these aren't
+   equippable items). `host` is normally the stage, or the rotated
+   bed-group div for face overlays on the bedridden/critical layout. */
+function makeFxLayer(spec, extraClass) {
+  const wrap = document.createElement("div");
+  wrap.className = `blip-layer blip-health-fx${extraClass ? " " + extraClass : ""}`;
+  const anchor = spec.anchor || { x: 0.5, y: 0.5 };
+  wrap.style.left = spec.x * 100 + "%";
+  wrap.style.top = spec.y * 100 + "%";
+  wrap.style.width = spec.widthPct + "%";
+  const tilt = spec.tiltDeg ? ` rotate(${spec.tiltDeg}deg)` : "";
+  wrap.style.transform = `translate(-${anchor.x * 100}%, -${anchor.y * 100}%)${tilt}`;
+  wrap.style.transformOrigin = `${anchor.x * 100}% ${anchor.y * 100}%`;
+  wrap.innerHTML = spec.svg;
+  return wrap;
+}
+
 /* ============================================================
    public API
    ============================================================ */
@@ -404,4 +502,122 @@ export function renderCompanion(el, state = {}) {
   }
 
   return { el, stage, layers, colour, accessories };
+}
+
+/* ============================================================
+   renderBlip — Phase 2 entry point (feeding/growth/sickness)
+   ------------------------------------------------------------
+   Wraps renderCompanion and layers on:
+     - a growth-stage size scale (0.60/0.75/0.88/1.00 of the host size,
+       PHASE-2-PLAN.md §3), applied via CSS transform on `el` itself
+       (NOT on `stage` — stage already carries the blip-bop keyframe
+       animation on `transform`, and a plain inline transform on the
+       same property would just be clobbered by the running animation
+       every frame rather than composing with it);
+     - health-stage art: swaps to a dedicated sick/recovery PNG once
+       Megan draws one (full-swap, same style as blip-baby.png), else
+       falls back to the normal grown/baby body plus a code-drawn
+       health-fx overlay (droopy eyes, bed + blanket + thermometer,
+       heart monitor, recovering sit-up — see health-fx.js);
+     - the "he won't get up" dress-up lock: while healthStage>=2 (or
+       recovering) equipped accessories are never rendered, colour
+       always is (PHASE-2-PLAN.md §2 refusal behaviours).
+
+   renderBlip(el, {
+     colour?: string (see COLOURS),
+     equipped?: {slot: accessoryId} (server/local shape) OR a flat
+                accessoryId[] — either is accepted,
+     size?: number — px. The "host size" the growth/sick scale
+            multiplies. Omit to let the host's own CSS size `el`
+            (unscaled — same as renderCompanion has always worked).
+     growthStage?: 0-3, default 3 (grown) — matches PHASE-2-PLAN.md's
+                   Baby/Small/Medium/Grown table.
+     healthStage?: 0-3, default 0 (healthy) — matches the sickness
+                   ladder (0 healthy, 1 tired, 2 bedridden, 3 critical).
+     recovering?: boolean, default false.
+   })
+   Defaults are healthy/grown/undressed-lock-off, so every existing
+   call site that still calls renderCompanion directly is completely
+   unaffected — nothing about renderCompanion changed.
+   Returns { ...renderCompanion's result, growthStage, healthStage,
+             recovering, scale, mood }. `mood` is blipMood()'s output,
+   handed back ready-made so callers don't need a second import.
+   ============================================================ */
+const GROWTH_SCALE = [0.60, 0.75, 0.88, 1.00]; // index = growthStage, PHASE-2-PLAN.md §3
+const SICK_SHRINK = 0.85; // temporary shrink while bedridden/critical, PHASE-2-PLAN.md §1 ("definitely a bit smaller")
+
+function clampStage(v, fallback) {
+  const n = Math.round(Number(v));
+  if (!Number.isFinite(n)) return fallback;
+  return Math.min(3, Math.max(0, n));
+}
+
+/* {slot: accessoryId} (server/local `equipped` shape) -> flat id[]
+   renderCompanion expects. Also accepts an already-flat array as a
+   convenience (renderBlip's `equipped` option is documented as either
+   shape). Deliberately NOT imported from blip-ui.js's identical
+   equippedToAccessories — blip-ui.js imports FROM renderer.js already,
+   so importing back would be a circular edge for four lines. */
+function toAccessoryList(equipped) {
+  if (Array.isArray(equipped)) return equipped;
+  if (!equipped || typeof equipped !== "object") return [];
+  return Object.values(equipped).filter(Boolean);
+}
+
+function mountHealthOverlay(stage, layers, spec) {
+  const faceHost = spec.rotate ? document.createElement("div") : stage;
+  if (spec.rotate) {
+    faceHost.className = "blip-layer blip-bed-group";
+    faceHost.style.position = "absolute";
+    faceHost.style.inset = "0";
+    faceHost.style.transform = `rotate(${HEALTH_ROTATE_DEG}deg)`;
+    faceHost.style.transformOrigin = "50% 50%";
+    stage.insertBefore(faceHost, layers.body); // keep the body's original z-order slot (after wings, before ears/glasses/hat/arms)
+    faceHost.appendChild(layers.body); // move the body img INTO the rotated group so the face tilts as one piece
+  }
+  spec.faceOverlays.forEach((o) => faceHost.appendChild(makeFxLayer(o)));
+  spec.envOverlays.forEach((o) => stage.appendChild(makeFxLayer(o)));
+}
+
+export function renderBlip(el, opts = {}) {
+  if (!el) throw new Error("renderBlip: el is required");
+  const growthStage = clampStage(opts.growthStage, 3);
+  const healthStage = clampStage(opts.healthStage, 0);
+  const recovering = !!opts.recovering;
+  // "he won't get up": bedridden/critical (and the still-fragile
+  // recovering state right after) never show equipped accessories.
+  // Colour is untouched by this — it flows through renderCompanion
+  // below exactly as normal.
+  const hideAccessories = healthStage >= 2 || recovering;
+  const accessories = hideAccessories ? [] : toAccessoryList(opts.equipped);
+
+  const result = renderCompanion(el, { colour: opts.colour, accessories });
+  const { stage, layers, colour } = result;
+
+  // ---- size + growth/sick scale ----
+  // Applied to `el`, not `stage` — see the big comment above this
+  // function for why stage's own bop animation rules that out.
+  if (typeof opts.size === "number" && opts.size > 0) {
+    el.style.width = opts.size + "px";
+  }
+  const scale = GROWTH_SCALE[growthStage] * (healthStage >= 2 ? SICK_SHRINK : 1);
+  el.style.transform = scale === 1 ? "" : `scale(${scale})`;
+  el.style.transformOrigin = "50% 100%"; // shrink toward the ground line, not the centre, so smaller stages don't float upward
+  stage.dataset.growthStage = String(growthStage);
+  stage.dataset.healthStage = String(healthStage);
+  if (recovering) stage.dataset.recovering = "true";
+
+  // ---- body art: paint now with the default grown/healthy body
+  // (already done by renderCompanion above), then swap once the real
+  // growth/health art is resolved — same "paint immediately, swap
+  // once ready" pattern renderCompanion already uses for colour, so
+  // there's no extra flash beyond what colour recolouring already does. ----
+  resolveRawBody({ growthStage, healthStage, recovering }).then(({ src: rawSrc, needsOverlay }) => {
+    getBodySrc(colour, rawSrc).then((finalSrc) => { layers.body.src = finalSrc; });
+    if (!needsOverlay) return; // dedicated art exists for this state now — no placeholder needed
+    const spec = healthOverlaySpec(healthStage, recovering, bodyFlatColour(colour));
+    if (spec) mountHealthOverlay(stage, layers, spec);
+  });
+
+  return { ...result, growthStage, healthStage, recovering, scale, mood: _blipMood(healthStage, recovering) };
 }

@@ -33,16 +33,27 @@ export const SupabaseBackend = {
   async logStruggle(username, password, concept) { return rpc("mhq_log_struggle", { p_username: username, p_password: password, p_concept: concept }); },
 
   // ---- Blip: shop / equip / gallery ----
-  async buyItem(username, password, item) { return rpc("mhq_buy_item", { p_username: username, p_password: password, p_item: item }); },
-  async equip(username, password, { equipped, colour, blipName } = {}) {
-    return rpc("mhq_equip", { p_username: username, p_password: password, p_equipped: equipped ?? null, p_colour: colour ?? null, p_blip_name: blipName ?? null });
+  // buyItem now also takes food ids ('soup','medicine','treat'); slot (default 1)
+  // targets which blip a cosmetic accessory is bought for.
+  async buyItem(username, password, item, slot = 1) { return rpc("mhq_buy_item", { p_username: username, p_password: password, p_item: item, p_slot: slot }); },
+  async equip(username, password, { equipped, colour, blipName, slot = 1 } = {}) {
+    return rpc("mhq_equip", { p_username: username, p_password: password, p_equipped: equipped ?? null, p_colour: colour ?? null, p_blip_name: blipName ?? null, p_slot: slot });
   },
   async gallery(username, password) { return rpc("mhq_gallery", { p_username: username, p_password: password }); },
+
+  // ---- Blip: Phase 2 feeding / care / second blip ----
+  async feed(username, password) { return rpc("mhq_feed", { p_username: username, p_password: password }); },
+  async care(username, password) { return rpc("mhq_care", { p_username: username, p_password: password }); },
+  async claimSecondBlip(username, password, name, colour) {
+    return rpc("mhq_claim_second_blip", { p_username: username, p_password: password, p_name: name, p_colour: colour });
+  },
 
   // ---- admin ----
   async adminLogin(pw) { return rpc("mhq_admin_login", { p_admin_password: pw }); },
   async adminData(pw) { return rpc("mhq_admin_data", { p_admin_password: pw }); },
   async adminSetQuestOpen(pw, quest, open) { return rpc("mhq_admin_set_quest_open", { p_admin_password: pw, p_quest: quest, p_open: open }); },
+  async adminSetTerm(pw, running) { return rpc("mhq_admin_set_term", { p_admin_password: pw, p_running: running }); },
+  async setTerm(pw, running) { return rpc("mhq_admin_set_term", { p_admin_password: pw, p_running: running }); },
   async adminResetPassword(pw, id) { return rpc("mhq_admin_reset_password", { p_admin_password: pw, p_id: id }); },
   async adminRemoveStudent(pw, id) { return rpc("mhq_admin_remove_student", { p_admin_password: pw, p_id: id }); },
   async adminResetProgress(pw, id) { return rpc("mhq_admin_reset_progress", { p_admin_password: pw, p_id: id }); },

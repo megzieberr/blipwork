@@ -1,12 +1,68 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
 import { CHAPTERS, chapterById, questAccent, PASS } from "./config.js";
 import { questDef } from "./quests/index.js";
-import { el, clear } from "./ui.js";
+import { api } from "./api.js";
+import { getSession } from "./session.js";
+import { el, clear, showToast } from "./ui.js";
 import { openCalculator } from "./calculator.js";
 import { maybeShowInstall } from "./install.js";
-import { renderCompanion } from "./companion/renderer.js";
-import { equippedToAccessories, itemLabel } from "./companion/blip-ui.js";
+import { renderBlip } from "./companion/renderer.js";
+import { itemLabel } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
+
+/* ---------------- Phase 2 helpers (mirrors blip.js's normalizers —
+   duplicated rather than shared, since this file and blip.js are each
+   owned independently; keep both in sync if the contract shifts).
+   renderBlip (companion/renderer.js) owns growth/health scaling and
+   sick-accessory-hiding itself, applied via `transform` on whatever
+   element it's given — so mountBlip just needs a plain nested div,
+   not a sizing helper of our own. */
+function mountBlip(hostEl, opts) {
+  const inner = el("div");
+  hostEl.appendChild(inner);
+  return renderBlip(inner, opts);
+}
+function normalizeBlips(state) {
+  const legacy = (state && state.blip) || { name: "Blip", colour: "cream", owned: [], equipped: {} };
+  if (Array.isArray(state.blips) && state.blips.length) {
+    return state.blips.map((b, i) => ({
+      slot: b.slot != null ? b.slot : i,
+      name: b.name || "Blip",
+      colour: b.colour || "cream",
+      growthStage: b.growthStage || 0,
+      equipped: (b.equipped && typeof b.equipped === "object") ? b.equipped : (i === 0 ? (legacy.equipped || {}) : {}),
+    }));
+  }
+  return [{ slot: 0, name: legacy.name, colour: legacy.colour, growthStage: 0, equipped: legacy.equipped || {} }];
+}
+function normalizeHealth(state) {
+  const h = (state && state.health) || {};
+  const locks = h.locks || {};
+  return {
+    stage: h.stage || 0,
+    recovering: !!h.recovering,
+    careStreak: Math.max(0, Math.min(3, h.careStreak || 0)),
+    locks: { dress: !!locks.dress, shop: !!locks.shop, gallery: !!locks.gallery },
+  };
+}
+const readyFlag = (v) => (v === undefined ? true : !!v);
+
+/* Sick-state login warning: dismissible per stage, not per render — a
+   fresh escalation (e.g. stage 1 -> 3) shows again even if the
+   learner dismissed the earlier, gentler line. Resets on page reload. */
+let dismissedForStage = null;
+function sickBanner(health) {
+  if (health.stage < 1 || dismissedForStage === health.stage) return null;
+  const stage = health.stage;
+  const msg = stage >= 3
+    ? "Blip really needs you today — soup and medicine would help a lot."
+    : stage === 2 ? "Blip isn't feeling great and is resting in bed."
+    : "Blip isn't feeling great…";
+  const banner = el("div", "card sick-banner");
+  banner.innerHTML = `<span class="sb-icon">${stage >= 3 ? "💔" : "😴"}</span><span class="sb-text">${msg}</span><button class="sb-x" aria-label="Dismiss">✕</button>`;
+  banner.querySelector(".sb-x").addEventListener("click", () => { dismissedForStage = stage; banner.remove(); });
+  return banner;
+}
 
 function setTheme(chapterSig, accent) {
   const r = document.documentElement.style;
@@ -57,13 +113,46 @@ export function renderHub(app, host) {
   head.innerHTML = `<span class="eyebrow">Grade 11 Maths</span><h1>Hi, ${name || "there"} 👋</h1><p class="muted small">Pick a chapter to practise.</p>`;
   host.appendChild(head);
 
-  if (app.state && app.state.blip) {
-    const blip = app.state.blip;
+  const health = normalizeHealth(app.state || {});
+  const banner = sickBanner(health);
+  if (banner) host.appendChild(banner);
+
+  if (app.state && (app.state.blip || app.state.blips)) {
+    const blips = normalizeBlips(app.state);
     const tile = el("div", "hub-blip");
-    tile.innerHTML = `<div class="hb-stage"></div>
-      <div class="hb-info"><div class="hb-name">${blip.name || "Blip"}</div><div class="hb-cta">Tap to visit Blip →</div></div>`;
-    renderCompanion(tile.querySelector(".hb-stage"), { colour: blip.colour, accessories: equippedToAccessories(blip.equipped) });
+    tile.innerHTML = `<div class="hb-stages${blips.length > 1 ? " two" : ""}"></div>
+      <div class="hb-info"><div class="hb-name">${blips.map(b => b.name).join(" & ")}</div><div class="hb-cta">Tap to visit Blip →</div></div>`;
+    const stagesHost = tile.querySelector(".hb-stages");
+    blips.forEach((b) => {
+      const s = el("div", "hb-stage");
+      stagesHost.appendChild(s);
+      mountBlip(s, { colour: b.colour, equipped: b.equipped, growthStage: b.growthStage, healthStage: health.stage, recovering: health.recovering });
+    });
     tile.addEventListener("click", () => app.go("blip"));
+
+    // gentle, non-nagging feed prompt — a small badge, not a popup
+    const canFeedToday = readyFlag(app.state.canFeedToday);
+    if (canFeedToday) {
+      const badge = el("button", "cookie-badge", "🍪");
+      badge.type = "button";
+      badge.title = "Feed Blip";
+      badge.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        badge.disabled = true;
+        const sess = getSession();
+        try {
+          const r = await api.feed(sess.username, sess.password);
+          if (!r || !r.ok) {
+            const code = r && r.error;
+            showToast(code === "REFUSES_FOOD" ? `${blips[0].name} doesn't feel like eating right now.` : "Something went wrong — try again.", "error");
+            badge.disabled = false; return;
+          }
+          showToast(blips.length > 1 ? `${blips[0].name} and ${blips[1].name} shared a cookie!` : `${blips[0].name} enjoyed a cookie!`, "good");
+          await app.refresh(); app.render();
+        } catch { showToast("Can't reach the server — try again.", "error"); badge.disabled = false; }
+      });
+      tile.appendChild(badge);
+    }
     host.appendChild(tile);
   }
 

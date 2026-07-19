@@ -202,3 +202,25 @@ export const TOL = {
 
 export const PASS = 0.8;           // 80% (first-try) to pass a quest and earn its badge
 export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
+
+/* ============================================================
+   BLIP — Phase 2 feeding/growth/sickness constants (2026-07-19).
+   THESE ARE A DISPLAY MIRROR ONLY. The server (supabase/schema.sql +
+   migration-phase2-blip-care.sql) is the single source of truth for
+   health, growth, prices, and every guard — the same relationship
+   level.js has with _mhq_level. local-backend.js imports these so the
+   offline (?local=1) mirror computes the identical numbers; never let
+   the UI trust a client-side recompute over a backend reply.
+   ============================================================ */
+export const BLIP = {
+  // cumulative free-cookie feedings needed for growth stage 1 / 2 / 3
+  // (stage 0 = baby). growthStage = count of thresholds <= feedCount.
+  growthThresholds: [10, 25, 45],
+  // days_unfed (qualifying weekdays) at which each sickness stage begins:
+  // 0 healthy 0–2 · 1 tired 3–4 · 2 bedridden 5–6 · 3 critical 7+.
+  sickThresholds: { tired: 3, bedridden: 5, critical: 7 },
+  // pharmacy / grocery prices — MIRROR of the server shop_items rows.
+  food: { soup: 15, medicine: 20, treat: 8 },
+  secondBlipLevel: 10,             // level milestone that unlocks the 2nd blip
+  careDaysToHeal: 3,               // consecutive qualifying care days to fully heal
+};

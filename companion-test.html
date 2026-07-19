@@ -35,6 +35,24 @@
   .cell .stage-wrap { width: 84px; margin: 0 auto 4px; }
   .cell .cap { font-size: .68rem; color: #6b5638; line-height: 1.2; }
 
+  /* ---- Phase 2: growth/health state gallery ----
+     .stage-wrap here only sets WIDTH, same convention as the hero/grid
+     stages above — renderCompanion's own .blip-stage rule locks height
+     via aspect-ratio, so forcing a height here would fight that and
+     either clip or letterbox the art. */
+  .growth-row { display: flex; gap: 22px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 8px; }
+  .growth-row .cell .stage-wrap { width: 96px; }
+
+  .matrix-table { display: grid; grid-template-columns: 64px repeat(5, 1fr); gap: 12px 8px; align-items: end; margin-bottom: 10px; }
+  .matrix-table .colhead { font-size: .68rem; font-weight: 600; color: #6b5638; text-align: center; }
+  .matrix-table .rowhead { font-size: .7rem; color: #6b5638; align-self: center; }
+  .matrix-cell { text-align: center; }
+  .matrix-cell .stage-wrap { width: 74px; margin: 0 auto 4px; }
+  .matrix-cell .cap { font-size: .6rem; color: #8a7458; line-height: 1.2; }
+
+  .household-row { display: flex; gap: 46px; align-items: flex-end; margin: 10px 0 8px; }
+  .household-row .cell .stage-wrap { width: 120px; }
+
   #freeze-toggle { position: fixed; top: 18px; right: 24px; }
 </style>
 </head>
@@ -62,8 +80,20 @@
   <h2>Grid — colour &times; accessory-set combos</h2>
   <div class="grid" id="grid"></div>
 
+  <h2>Phase 2 — growth stages</h2>
+  <p class="sub">renderBlip, growthStage 0&ndash;3, same colour/accessories, healthy. Same host box for all four — only the scale transform differs.</p>
+  <div class="growth-row" id="growth-row"></div>
+
+  <h2>Phase 2 — full state gallery (growth &times; health &times; recovering)</h2>
+  <p class="sub">Every growthStage (rows) &times; every healthStage 0&ndash;3 plus a recovering column. Every cell starts equipped with a hat + ears so accessory-hiding at healthStage&ge;2 / recovering is visible at a glance. Sick/recovery art files don't exist yet, so stages 1&ndash;3 and the recovering column show the code-drawn health-fx placeholders (droopy eyes, bed + blanket + thermometer, heart monitor, sit-up + lap blanket).</p>
+  <div class="matrix-table" id="matrix"></div>
+
+  <h2>Phase 2 — two-blip household row</h2>
+  <p class="sub">Two independent renderBlip instances, different colours and growth stages, rendered together — checks there's no shared-canvas/cache bleed between instances.</p>
+  <div class="household-row" id="household"></div>
+
   <script type="module">
-    import { renderCompanion, COLOURS, ACCESSORIES, ATTACH, getBodySrc } from "./js/companion/renderer.js";
+    import { renderCompanion, renderBlip, blipMood, COLOURS, ACCESSORIES, ATTACH, getBodySrc } from "./js/companion/renderer.js";
 
     const colourIds = Object.keys(COLOURS);
     const accessoryIds = Object.keys(ACCESSORIES);
@@ -164,8 +194,11 @@
 
     window.__COMPANION__ = {
       COLOURS, ACCESSORIES, ATTACH, getBodySrc, scanForCreamSpeckles, checkAttachment,
+      renderBlip, blipMood,
       hero: null,
       instances: [],
+      matrix: [],      // filled below: {growthStage, healthCol, result, cellEl}
+      household: [],   // filled below: {colourId, growthStage, result}
     };
 
     /* ---------------- hero ---------------- */
@@ -238,6 +271,114 @@
         window.__COMPANION__.instances.push({ colourId, comboLabel: combo.label, state, ...result });
       });
     });
+
+    /* ---------------- Phase 2: growth-stage row ---------------- */
+    const growthHost = document.getElementById("growth-row");
+    const GROWTH_LABELS = ["0 baby (60%)", "1 small (75%)", "2 medium (88%)", "3 grown (100%)"];
+    window.__COMPANION__.growthInstances = [0, 1, 2, 3].map((g) => {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "stage-wrap";
+      cell.appendChild(stageWrap);
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      cap.textContent = GROWTH_LABELS[g];
+      cell.appendChild(cap);
+      growthHost.appendChild(cell);
+      const result = renderBlip(stageWrap, { colour: "peach", equipped: ["cat-ears"], growthStage: g, healthStage: 0 });
+      return { growthStage: g, result, cellEl: stageWrap };
+    });
+
+    /* ---------------- Phase 2: full growth x health(+recovering) matrix ---------------- */
+    const matrixHost = document.getElementById("matrix");
+    const HEALTH_COLS = [
+      { key: "h0", label: "0 healthy", healthStage: 0, recovering: false },
+      { key: "h1", label: "1 tired", healthStage: 1, recovering: false },
+      { key: "h2", label: "2 bedridden", healthStage: 2, recovering: false },
+      { key: "h3", label: "3 critical", healthStage: 3, recovering: false },
+      { key: "recovering", label: "recovering", healthStage: 0, recovering: true },
+    ];
+    const MATRIX_COLOURS = ["mint", "sky", "lilac", "coral"]; // one per row, just so rows are visually distinguishable
+
+    // header row
+    matrixHost.appendChild(document.createElement("div")); // blank corner
+    HEALTH_COLS.forEach((c) => {
+      const h = document.createElement("div");
+      h.className = "colhead";
+      h.textContent = c.label;
+      matrixHost.appendChild(h);
+    });
+
+    [0, 1, 2, 3].forEach((g) => {
+      const rowhead = document.createElement("div");
+      rowhead.className = "rowhead";
+      rowhead.textContent = `growth ${g}`;
+      matrixHost.appendChild(rowhead);
+      HEALTH_COLS.forEach((c) => {
+        const cell = document.createElement("div");
+        cell.className = "matrix-cell";
+        const stageWrap = document.createElement("div");
+        stageWrap.className = "stage-wrap";
+        cell.appendChild(stageWrap);
+        const cap = document.createElement("div");
+        cap.className = "cap";
+        cap.textContent = blipMood(c.healthStage, c.recovering);
+        cell.appendChild(cap);
+        matrixHost.appendChild(cell);
+
+        const result = renderBlip(stageWrap, {
+          colour: MATRIX_COLOURS[g],
+          equipped: ["party-hat", "cat-ears"], // deliberately equipped, so the healthStage>=2/recovering hide is visible
+          growthStage: g,
+          healthStage: c.healthStage,
+          recovering: c.recovering,
+        });
+        window.__COMPANION__.matrix.push({ growthStage: g, healthCol: c.key, result, cellEl: stageWrap });
+      });
+    });
+
+    /* ---------------- Phase 2: two-blip household row ---------------- */
+    const householdHost = document.getElementById("household");
+    const HOUSEHOLD = [
+      { label: "Blip 1 — grown, mint", colour: "mint", growthStage: 3, healthStage: 0, equipped: ["party-hat"] },
+      { label: "Blip 2 — baby, coral", colour: "coral", growthStage: 0, healthStage: 0, equipped: ["round-glasses"] },
+    ];
+    HOUSEHOLD.forEach((spec) => {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "stage-wrap";
+      cell.appendChild(stageWrap);
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      cap.textContent = spec.label;
+      cell.appendChild(cap);
+      householdHost.appendChild(cell);
+      const result = renderBlip(stageWrap, spec);
+      window.__COMPANION__.household.push({ colourId: spec.colour, growthStage: spec.growthStage, result, cellEl: stageWrap });
+    });
+
+    /* Verification helper: compares rendered footprint of growthStage 0
+       vs 3 in the growth row (same host box for both) — should read
+       close to the 0.60 ratio from PHASE-2-PLAN.md §3. */
+    window.__COMPANION__.checkGrowthScale = function () {
+      const a = window.__COMPANION__.growthInstances[0].result.el.getBoundingClientRect();
+      const b = window.__COMPANION__.growthInstances[3].result.el.getBoundingClientRect();
+      return { babyWidth: a.width, grownWidth: b.width, ratio: +(a.width / b.width).toFixed(3) };
+    };
+
+    /* Verification helper: for every matrix cell, whether accessory
+       layers exist — should be false for healthCol h2/h3/recovering,
+       true for h0/h1 (per the "he won't get up" lock). */
+    window.__COMPANION__.checkAccessoryLocks = function () {
+      return window.__COMPANION__.matrix.map((m) => ({
+        growthStage: m.growthStage,
+        healthCol: m.healthCol,
+        accessoriesRendered: m.result.accessories.length,
+        expectedHidden: m.healthCol === "h2" || m.healthCol === "h3" || m.healthCol === "recovering",
+      }));
+    };
 
     /* ---------------- freeze toggle (for verification without rAF) ---------------- */
     const freezeBtn = document.getElementById("freeze-toggle");

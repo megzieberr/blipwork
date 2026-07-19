@@ -1,6 +1,37 @@
-# Project status — updated 2026-07-19
+# Project status — updated 2026-07-19 (evening: Phase 2 built)
 
-## Where we are
+## Where we are — PHASE 2 BUILT, UNCOMMITTED, pending phone review
+Same-day second build (3 agents: Opus backend + 2 Sonnet, supervised): **feeding, growth,
+sickness ladder, pharmacy, and the second Blip are all built and e2e-verified** on
+`?local=1` (full loop driven in-browser: signup → free cookie → term-on → neglect to
+tired(3d)/bedridden(5d)/critical(7d) with weekend exclusion → cookie REFUSES_FOOD →
+accessory buy BLIP_TOO_SICK → pharmacy stays open under lock → 3 care days heal, growth
+kept → level 10 → claim 2nd Blip "any colour" → per-slot wardrobe → household feed +1 to
+both). Zero console errors. **Nothing committed; migration-phase2-blip-care.sql written
+but NOT applied to live Supabase** — both happen at ship after Megan's phone review.
+Repo renamed to **megzieberr/blipwork** earlier today (old Pages URL 404s — phone PWA
+must be reinstalled from https://megzieberr.github.io/blipwork/).
+
+Key Phase 2 facts:
+- Health clock: qualifying day = weekday AND term_running (admin toggle in admin.html;
+  **seeds OFF** — Megan must switch it on when term starts). Toggling ON forgives
+  accrued sickness. Server-computed, tamper-proof; local mirror has
+  `__BLIP_DEV__.skipDays(n)` for testing.
+- Economy: soup 15 / medicine 20 (pantry: buy then care), treat 8 (instant, no growth);
+  free daily cookie = the ONLY growth credit (+1 to every blip, household). Growth
+  stages at 10/25/45 feedings → 60/75/88/100% scale; sick shrink ×0.85 is temporary.
+- Locks: stage2 = dress; stage3 = shop+gallery too (pharmacy always open); maths never
+  locked. Recovery = 3 consecutive qualifying care days (weekends/term-off don't break).
+- 2nd Blip: level 10, one ever, any colour at hatch, own wardrobe (cosmetics per-blip,
+  buyItem/equip take a slot param); feeding+health household-wide.
+- Sick art: renderer expects assets/companion/ blip-baby.png, blip-tired.png,
+  blip-bedridden.png, blip-critical.png, blip-recovering.png (all optional, code-drawn
+  placeholders until then; companion-test.html is the full state gallery). GPT prompts:
+  homework-hub-companion/gpt-prompts-sick-scenes.md.
+- Integration fixes made at the seam: UI food list now reads state.foodShop (backend
+  keeps it separate from cosmetic shop); accessory buys pass the ACTIVE blip's slot.
+
+## Where we were this morning
 **The app is now BLIPWORK and it is SHIPPED.** Megan's phone play-through passed, so the
 whole rebrand was committed (`eb6de94`), sw.js bumped v25→v26, and pushed. Verified live:
 https://megzieberr.github.io/maths-homework-quest/ serves `<title>Blipwork · Grade 11</title>`,
@@ -91,16 +122,25 @@ registration may linger harmlessly — Defender is active.
   grows with feedings — renderer is size-agnostic so growth = a scale factor).
 
 ## Pending on Megan
-- Open the PWA on the phone and close/reopen it twice so the v26 service worker takes
-  over (the usual double-load), then confirm the live site looks like the local build.
-- No SQL outstanding — the Blipwork migrations are already applied live via MCP.
-- Optional, whenever: decide whether to rename the GitHub repo/URL to `blipwork`.
+- **Reinstall the PWA from https://megzieberr.github.io/blipwork/** — the repo rename
+  killed the old Pages URL (no redirect), so the installed app points at a dead address.
+- Phone review of Phase 2 on the laptop server (`?local=1`; use
+  `__BLIP_DEV__.skipDays(n)` in the console to walk the sickness ladder), plus eyeball
+  companion-test.html — the full growth × health state gallery with the TEMP code-drawn
+  sick placeholders.
+- Generate the sick-scene + baby art in the ORIGINAL Blip GPT chat
+  (homework-hub-companion/gpt-prompts-sick-scenes.md) and drop the PNGs into
+  assets/companion/ under the exact filenames listed there.
+- Then: ship go-ahead → commit, **run migration-phase2-blip-care.sql in the Supabase SQL
+  editor** (or via MCP with her ok), sw bump v26→v27, push.
+- At term start: switch the **term-running toggle ON in admin** — the sickness clock is
+  frozen until she does (deliberate default).
 
 ## Next up
-- **Phase 2 — feeding, growth, grocery shop** (design notes in
-  homework-hub-companion/plan.md). Open design decisions before building: cookie
-  economics (free daily cookie as a gentle streak vs gold-priced), number of growth
-  stages + feedings per stage + baby start size, what an unfed Blip looks like (must
-  stay cute-hungry, never guilt-inducing), and the rest of the grocery range.
-- After Phase 2: teacher-assigned homework + treasure box + notifications.
-- Shop prices/level gates are still placeholders — tune on real play data.
+- Fix whatever the Phase 2 phone review surfaces; swap in the real art when generated.
+- Ship ritual for Phase 2 (commit + migration handshake + sw v27 + push + verify live).
+- Sick-stage push warnings (reuse Circle Quest VAPID) — designed but NOT built this
+  round; do with or after Phase 3.
+- Phase 3 (original plan): teacher-assigned homework + treasure box + notifications.
+- All prices/thresholds (soup 15/med 20/treat 8, growth 10/25/45, 2nd-blip level 10)
+  are tunables — revisit on real play data.

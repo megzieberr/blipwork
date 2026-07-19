@@ -18,6 +18,19 @@ const conceptTitle = id => (CONCEPTS[id] && CONCEPTS[id].title) || id;
 const fmtDate = v => { if (!v) return "never"; const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleDateString(); };
 const daysSince = v => { if (!v) return Infinity; const d = new Date(v); return isNaN(d) ? Infinity : (Date.now() - d.getTime()) / 864e5; };
 
+// Phase 2 roster labels — health stage + growth stage (server-computed).
+const HEALTH_LABELS = ["Healthy", "Tired", "Bedridden", "Critical"];
+const GROWTH_LABELS = ["Baby", "Small", "Medium", "Grown"];
+function healthCell(h) {
+  if (!h) return "—";
+  const stage = h.stage || 0;
+  let label = HEALTH_LABELS[stage] || "—";
+  if (h.recovering) label = "Recovering";
+  const warn = stage >= 2 || h.recovering;
+  const extra = stage > 0 ? ` (${h.daysUnfed}d)` : "";
+  return `<span class="${warn ? "adm-inactive" : ""}">${label}${extra}</span>`;
+}
+
 boot();
 function boot() { clear(root()); const view = el("main", "view"); root().appendChild(view); renderLogin(view); }
 
@@ -48,11 +61,36 @@ async function dashboard() {
   try { data = await api.adminData(pw); } catch { status.textContent = "Can’t load. Check your connection."; return; }
   if (!data || !data.ok) { status.textContent = "Couldn’t load the dashboard."; return; }
   status.remove();
+  view.appendChild(termSection(!!data.termRunning));
   view.appendChild(questSection(data.quests || []));
   view.appendChild(struggleSection(data.struggles || []));
   view.appendChild(learnerSection(data.rows || [], data.inactiveDays || 7));
 }
 const reload = () => dashboard();
+
+// The term toggle IS the sickness pause. While OFF, no blip gets ill (weekends
+// are always excluded too). Turning it ON forgives any accrued sickness — the
+// clock restarts from today — so flip it on when the term starts and off for
+// holidays. Never affects the maths: quests stay fully playable either way.
+function termSection(running) {
+  const sec = el("div", "card adm-section");
+  sec.appendChild(el("h2", "", "Term status"));
+  sec.appendChild(el("p", "muted small", "While the term is ON, a blip that goes unfed on school days (Mon–Fri) gradually gets ill. Weekends never count. Turn it OFF for holidays — turning it back ON forgives any illness that built up. This never touches the quests."));
+  const row = el("div", "adm-qrow", `<span>Term is running <b class="mono">${running ? "ON" : "OFF"}</b></span>`);
+  const sw = el("label", "switch");
+  const cb = el("input"); cb.type = "checkbox"; cb.checked = running;
+  cb.addEventListener("change", async () => {
+    cb.disabled = true;
+    if (cb.checked && !confirm("Turn the term ON? This forgives any sickness that built up (the clock restarts from today).")) { cb.checked = false; cb.disabled = false; return; }
+    try { await api.setTerm(pw, cb.checked); } catch { /* reload shows the true state */ }
+    reload();
+  });
+  sw.appendChild(cb); sw.appendChild(el("span", "slider"));
+  row.appendChild(sw);
+  const list = el("div", "adm-quests"); list.appendChild(row);
+  sec.appendChild(list);
+  return sec;
+}
 
 function questSection(quests) {
   const sec = el("div", "card adm-section");
@@ -102,17 +140,20 @@ function learnerSection(rows, inactiveDays) {
   sec.appendChild(el("p", "muted small", "Learners sign themselves up. You never see their passwords — reset a forgotten one (they set a new one next login, progress kept) or remove a learner."));
 
   const table = el("table", "adm-table");
-  table.innerHTML = `<thead><tr><th>Name</th><th>Username</th><th>Password</th><th>XP</th><th>Passed</th><th>Last active</th><th></th></tr></thead>`;
+  table.innerHTML = `<thead><tr><th>Name</th><th>Username</th><th>Password</th><th>XP</th><th>Blip</th><th>Passed</th><th>Last active</th><th></th></tr></thead>`;
   const tb = el("tbody");
   rows.forEach(r => {
     const passed = Object.entries(r.quests || {}).filter(([, p]) => p.passed).map(([q]) => q.replace("q", "")).sort();
     const inactive = r.lastActive && daysSince(r.lastActive) >= inactiveDays;
+    const growth = GROWTH_LABELS[r.growthStage || 0] || "Baby";
+    const blipCell = `${healthCell(r.health)} · <span class="muted">${growth}</span>${r.blipCount > 1 ? ` ×${r.blipCount}` : ""}`;
     const tr = el("tr");
     tr.innerHTML = `
       <td>${r.name}</td>
       <td class="mono">${r.username}</td>
       <td>${r.hasPassword ? '<span class="muted">•••• set</span>' : '<span class="adm-inactive">reset — awaiting new</span>'}</td>
       <td class="mono">${r.totalXp || 0}</td>
+      <td>${blipCell}</td>
       <td class="mono">${passed.length ? passed.join(", ") : "—"}</td>
       <td class="${inactive ? "adm-inactive" : ""}">${fmtDate(r.lastActive)}${inactive ? " ⚠" : ""}</td>`;
     const act = el("td", "adm-actions");

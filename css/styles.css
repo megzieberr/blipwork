@@ -598,6 +598,76 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .unlock-modal .unlock-stage{width:150px;margin:0 auto 16px}
 .unlock-modal .swatch-grid{margin-bottom:18px}
 
+/* ============================================================
+   PHASE 2 — feeding, growth, sickness, pharmacy, second Blip
+   ============================================================ */
+
+/* Growth/health sizing itself is owned by companion/renderer.js's
+   renderBlip() (applies `transform:scale()` to the element it's
+   given) — nothing to declare here for that.
+
+   mood chip (Blip screen hero) */
+.blip-mood{display:inline-block;margin:8px auto 2px;padding:5px 12px;border-radius:999px;
+  font-family:var(--font-display);font-weight:600;font-size:12.5px;color:var(--warn);
+  background:color-mix(in srgb,var(--warn) 12%,var(--panel))}
+
+/* refusal / happy micro-animations, applied to the growth wrapper */
+@keyframes blip-refuse-turn{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-6deg)}50%{transform:rotate(0deg)}75%{transform:rotate(6deg)}}
+.blip-refuse{animation:blip-refuse-turn .6s ease-in-out}
+@keyframes blip-happy-pop{0%{transform:scale(1)}30%{transform:scale(1.08)}60%{transform:scale(.97)}100%{transform:scale(1)}}
+.blip-happy{animation:blip-happy-pop .7s ease-in-out}
+
+/* two-blip slot switcher (Blip screen) */
+.blip-slot-tabs{display:flex;gap:8px;margin-bottom:14px}
+.blip-slot-tab{flex:1;padding:9px 12px;border-radius:var(--r-md);font-family:var(--font-display);font-weight:600;font-size:13.5px;
+  color:var(--muted);background:var(--panel);border:1px solid var(--brd);cursor:pointer;transition:.15s}
+.blip-slot-tab:hover{color:var(--ink)}
+.blip-slot-tab.active{color:var(--ink);background:color-mix(in srgb,var(--accent) 16%,var(--panel));border-color:color-mix(in srgb,var(--accent) 45%,var(--panel))}
+
+/* feed card */
+.feed-card{padding:14px;margin-bottom:16px}
+
+/* second-Blip unlock prompt */
+.second-blip-card{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px 16px}
+.second-blip-card .sb-icon{font-size:30px;flex:none}
+.second-blip-card h3{font-size:15px}
+.second-blip-card p{margin-top:2px}
+.second-blip-card .btn{margin-left:auto;flex:none}
+
+/* grocery / pharmacy */
+.pharmacy-card{margin:10px 0}
+.pharmacy-card h3{margin-bottom:4px}
+.care-hearts{font-size:15px;margin:8px 0 12px;display:flex;align-items:center;gap:6px}
+.pharmacy-grid{display:flex;flex-direction:column;gap:10px}
+.pharmacy-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:var(--r-md);
+  background:color-mix(in srgb,var(--good) 8%,var(--panel));border:1px solid var(--brd)}
+.pharmacy-item .ph-name{font-family:var(--font-display);font-weight:600;font-size:14px}
+.pharmacy-item .ph-price{font-family:var(--font-num);font-size:12.5px;color:var(--muted)}
+
+/* hub Blip tile: cookie feed badge + two-blip stage row */
+.hub-blip{position:relative}
+.hub-blip .hb-stages{display:flex;gap:6px;flex:none}
+.hub-blip .hb-stages .hb-stage{width:56px}
+.hub-blip .hb-stages.two .hb-stage{width:46px}
+.cookie-badge{position:absolute;top:8px;right:10px;background:var(--accent);border:none;border-radius:999px;
+  width:30px;height:30px;font-size:15px;display:grid;place-items:center;cursor:pointer;
+  box-shadow:0 3px 8px -4px rgba(43,32,22,.4);animation:cookie-pulse 1.8s ease-in-out infinite}
+@keyframes cookie-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.cookie-badge:disabled{opacity:.5;animation:none;cursor:default}
+
+/* sick-state login warning banner (hub) */
+.sick-banner{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:12px 14px;
+  background:color-mix(in srgb,var(--warn) 10%,var(--panel));border-color:color-mix(in srgb,var(--warn) 30%,var(--panel))}
+.sick-banner .sb-icon{font-size:20px;flex:none}
+.sick-banner .sb-text{flex:1;font-size:13.5px;color:var(--ink)}
+.sick-banner .sb-x{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;padding:2px 6px}
+.sick-banner .sb-x:hover{color:var(--ink)}
+
+/* gallery sick-lock state */
+.gallery-locked{padding:26px 20px;text-align:center}
+.gallery-locked .gl-icon{font-size:34px;margin-bottom:8px}
+.gallery-locked p{margin-top:6px}
+
 /* ---------- toasts ---------- */
 .toast-host{position:fixed;left:0;right:0;bottom:18px;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:80;pointer-events:none;padding:0 16px}
 .toast{pointer-events:auto;font-family:var(--font-display);font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:999px;

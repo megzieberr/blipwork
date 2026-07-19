@@ -21,6 +21,7 @@
 create extension if not exists pgcrypto with schema extensions;
 
 -- fresh start for the account tables (drops the old roster-based ones)
+drop table if exists public.blips      cascade;
 drop table if exists public.struggles cascade;
 drop table if exists public.progress  cascade;
 drop table if exists public.students  cascade;
@@ -41,7 +42,30 @@ create table public.students (
   blip_name      text not null default 'Blip', -- free-form nickname, never shown publicly
   blip_colour    text not null default 'cream',
   owned_items    jsonb not null default '[]'::jsonb, -- array of shop item_ids
-  equipped       jsonb not null default '{}'::jsonb  -- slot -> item_id ('' = empty)
+  equipped       jsonb not null default '{}'::jsonb, -- slot -> item_id ('' = empty)
+  -- Phase 2 (2026-07-19) feeding/care bookkeeping. HEALTH itself is never
+  -- stored — it is computed from these + the term toggle (see _mhq_health).
+  -- The blip_* / owned_items / equipped columns above are kept but the RPCs
+  -- now treat the `blips` table as the source of truth (per-blip state).
+  last_fed_day   date,                            -- last FREE-cookie day (growth + sickness anchor)
+  care_streak    integer not null default 0,      -- consecutive qualifying care days
+  last_care_day  date,                            -- last day soup+medicine were given
+  pantry         jsonb not null default '{}'::jsonb -- consumables: {soup:n, medicine:n}
+);
+
+-- Per-blip companion state (slot 1 = the original, slot 2 = the reward baby).
+-- A table (not blip2_* columns) so a third blip needs no migration.
+create table public.blips (
+  id          uuid primary key default gen_random_uuid(),
+  student_id  uuid    not null references public.students(id) on delete cascade,
+  slot        integer not null check (slot in (1, 2)),
+  name        text    not null default 'Blip',
+  colour      text    not null default 'cream',
+  feed_count  integer not null default 0,         -- cumulative free-cookie feedings (growth)
+  owned_items jsonb   not null default '[]'::jsonb,
+  equipped    jsonb   not null default '{}'::jsonb,
+  created_at  timestamptz not null default now(),
+  unique (student_id, slot)
 );
 
 create table public.progress (
@@ -75,23 +99,30 @@ create table if not exists public.quests (
 create table if not exists public.app_config (key text primary key, value text);
 
 -- Shop catalogue: prices/level gates MUST live server-side (client is tamperable).
+-- category 'cosmetic' = accessories (per-blip, slot-gated); 'food' = pharmacy /
+-- grocery consumables (soup, medicine) + instant treats.
 create table if not exists public.shop_items (
   item_id   text primary key,
-  slot      text    not null check (slot in ('hat','ears','glasses','wings','arms')),
+  slot      text    not null,
   price     integer not null check (price >= 0),
   min_level integer not null default 1,
   active    boolean not null default true,
-  sort      integer not null default 0
+  sort      integer not null default 0,
+  category  text    not null default 'cosmetic',
+  constraint shop_items_slot_cat_check check (
+       (category = 'cosmetic' and slot in ('hat','ears','glasses','wings','arms'))
+    or (category = 'food'     and slot = 'food'))
 );
 
 -- ---------- lock everything down ----------
 alter table public.students   enable row level security;
+alter table public.blips      enable row level security;
 alter table public.quests     enable row level security;
 alter table public.progress   enable row level security;
 alter table public.struggles  enable row level security;
 alter table public.app_config enable row level security;
 alter table public.shop_items enable row level security;
-revoke all on public.students, public.quests, public.progress, public.struggles, public.app_config, public.shop_items from anon, authenticated;
+revoke all on public.students, public.blips, public.quests, public.progress, public.struggles, public.app_config, public.shop_items from anon, authenticated;
 
 -- drop old-version functions first. Some are recreated below with renamed
 -- parameters (p_name -> p_username), which create-or-replace cannot do.
@@ -103,6 +134,9 @@ drop function if exists public.mhq_login(text, text);
 drop function if exists public.mhq_get_state(text, text);
 drop function if exists public.mhq_submit_quest(text, text, text, numeric, int, int, int);
 drop function if exists public.mhq_log_struggle(text, text, text);
+-- Phase 2 renamed/re-typed signatures (buy/equip gained a p_slot arg):
+drop function if exists public.mhq_buy_item(text, text, text);
+drop function if exists public.mhq_equip(text, text, jsonb, text, text);
 
 -- ============================================================
 --  HELPERS
@@ -136,12 +170,70 @@ begin
     'nextCost', case when lvl >= 20 then null else to_jsonb(cost) end);
 end; $$;
 
+-- ---------- Phase 2 (feeding / growth / sickness) helpers ----------
+-- Ensure a slot-1 blip exists (lazy backfill for any pre-blips-table student).
+create or replace function public._mhq_ensure_blip(p_sid uuid)
+returns void language plpgsql security definer set search_path = public, extensions as $$
+begin
+  insert into public.blips (student_id, slot, name, colour, owned_items, equipped)
+  select s.id, 1, s.blip_name, s.blip_colour, s.owned_items, s.equipped
+    from public.students s where s.id = p_sid
+  on conflict (student_id, slot) do nothing;
+end; $$;
+
+-- Growth stage 0..3 from cumulative feedings (thresholds 10/25/45).
+create or replace function public._mhq_growth(p_feed integer)
+returns integer language sql immutable as $$
+  select case when coalesce(p_feed,0) >= 45 then 3
+              when coalesce(p_feed,0) >= 25 then 2
+              when coalesce(p_feed,0) >= 10 then 1
+              else 0 end;
+$$;
+
+-- Is TODAY a qualifying day? (weekday Mon–Fri AND the term toggle is ON)
+create or replace function public._mhq_is_qual_day()
+returns boolean language plpgsql stable security definer set search_path = public, extensions as $$
+declare running boolean;
+begin
+  select (value = 'true') into running from public.app_config where key = 'term_running';
+  return coalesce(running, false) and extract(isodow from current_date) < 6;
+end; $$;
+
+-- Household health, COMPUTED (never stored/trusted). window_start =
+-- GREATEST(last_fed_day, term_on_since); days_unfed = qualifying (weekday) days
+-- in (window_start, today]. Term OFF -> nothing qualifies -> 0 (the pause rule).
+-- Stages: 0 healthy 0–2 · 1 tired 3–4 · 2 bedridden 5–6 · 3 critical 7+.
+create or replace function public._mhq_health(p_last_fed date, p_care_streak integer)
+returns jsonb language plpgsql stable security definer set search_path = public, extensions as $$
+declare running boolean; on_since date; wstart date; du int; stg int; rec boolean;
+begin
+  select (value = 'true') into running from public.app_config where key = 'term_running';
+  running := coalesce(running, false);
+  select value::date into on_since from public.app_config where key = 'term_on_since';
+
+  if not running or on_since is null then
+    du := 0;
+  else
+    wstart := greatest(coalesce(p_last_fed, on_since), on_since);
+    select count(*) into du
+      from generate_series((wstart + 1)::timestamp, current_date::timestamp, interval '1 day') g(d)
+     where extract(isodow from g.d) < 6;
+  end if;
+
+  stg := case when du >= 7 then 3 when du >= 5 then 2 when du >= 3 then 1 else 0 end;
+  rec := (coalesce(p_care_streak, 0) >= 1 and stg >= 2);
+  return jsonb_build_object(
+    'stage', stg, 'daysUnfed', du, 'recovering', rec,
+    'careStreak', coalesce(p_care_streak, 0),
+    'locks', jsonb_build_object('dress', stg >= 2, 'shop', stg >= 3, 'gallery', stg >= 3));
+end; $$;
+
 -- ============================================================
 --  LEARNER RPC
 -- ============================================================
 create or replace function public.mhq_signup(p_username text, p_name text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare uname text := lower(trim(p_username));
+declare uname text := lower(trim(p_username)); new_id uuid;
 begin
   if length(uname) < 3 then return jsonb_build_object('ok', false, 'error', 'username_short'); end if;
   if uname !~ '^[a-z0-9_.]+$' then return jsonb_build_object('ok', false, 'error', 'username_chars'); end if;
@@ -151,7 +243,10 @@ begin
     return jsonb_build_object('ok', false, 'error', 'username_taken');
   end if;
   insert into public.students (username, display_name, password, last_active_at)
-  values (uname, trim(p_name), crypt(p_password, gen_salt('bf')), now());
+  values (uname, trim(p_name), crypt(p_password, gen_salt('bf')), now())
+  returning id into new_id;
+  insert into public.blips (student_id, slot, name, colour) values (new_id, 1, 'Blip', 'cream')
+  on conflict (student_id, slot) do nothing;
   return jsonb_build_object('ok', true);
 end; $$;
 
@@ -182,11 +277,14 @@ end; $$;
 
 create or replace function public.mhq_get_state(p_username text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb;
+declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb; food jsonb;
+        blips_j jsonb; blip1 jsonb; health jsonb; stg int; is_qual boolean;
+        can_feed boolean; can_care boolean;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
   update public.students set last_active_at = now() where id = sid;
+  perform public._mhq_ensure_blip(sid);
   select * into st from public.students where id = sid;
 
   select coalesce(jsonb_object_agg(quest_id, jsonb_build_object(
@@ -195,17 +293,143 @@ begin
     into prog from public.progress where student_id = sid;
   select coalesce(sum(total_xp), 0) into total from public.progress where student_id = sid;
   select coalesce(jsonb_agg(quest_id order by sort), '[]'::jsonb) into open_q from public.quests where is_open;
+  -- cosmetics only, exact existing shape
   select coalesce(jsonb_agg(jsonb_build_object(
             'id', item_id, 'slot', slot, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
-    into shop from public.shop_items where active;
+    into shop from public.shop_items where active and category = 'cosmetic';
+  -- pharmacy / grocery, separate array so `shop` keeps its shape
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'id', item_id, 'kind', item_id, 'price', price) order by sort), '[]'::jsonb)
+    into food from public.shop_items where active and category = 'food';
+
+  health := public._mhq_health(st.last_fed_day, st.care_streak);
+  stg := (health->>'stage')::int;
+
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
+            'growthStage', public._mhq_growth(feed_count),
+            'owned', owned_items, 'equipped', equipped) order by slot), '[]'::jsonb)
+    into blips_j from public.blips where student_id = sid;
+  -- back-compat: `blip` = slot 1 (the existing UI reads this object)
+  select jsonb_build_object('name', name, 'colour', colour, 'owned', owned_items, 'equipped', equipped)
+    into blip1 from public.blips where student_id = sid and slot = 1;
+
+  is_qual  := public._mhq_is_qual_day();
+  can_feed := (stg < 2) and (st.last_fed_day is null or st.last_fed_day < current_date);
+  can_care := (stg >= 2) and is_qual and (st.last_care_day is null or st.last_care_day < current_date);
 
   return jsonb_build_object('ok', true,
     'student', jsonb_build_object('id', sid, 'name', st.display_name, 'username', lower(p_username)),
     'progress', prog, 'totalXp', total, 'openQuests', open_q,
     'gold', st.gold, 'xp', st.xp, 'levelInfo', public._mhq_level(st.xp),
-    'blip', jsonb_build_object('name', st.blip_name, 'colour', st.blip_colour,
-      'owned', st.owned_items, 'equipped', st.equipped),
-    'shop', shop);
+    'blip', blip1, 'blips', blips_j, 'shop', shop, 'foodShop', food,
+    'pantry', st.pantry, 'health', health,
+    'canFeedToday', can_feed, 'canCareToday', can_care,
+    'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'));
+end; $$;
+
+-- ---------- Phase 2: feed / care / second blip ----------
+create or replace function public.mhq_feed(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare sid uuid; st record; stg int; blips_j jsonb;
+begin
+  sid := public._mhq_auth(p_username, p_password);
+  if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  perform public._mhq_ensure_blip(sid);
+  select last_fed_day, care_streak into st from public.students where id = sid for update;
+  stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
+  if stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
+  if st.last_fed_day is not null and st.last_fed_day >= current_date then
+    return jsonb_build_object('ok', false, 'error', 'already_fed');
+  end if;
+  update public.blips set feed_count = feed_count + 1 where student_id = sid;  -- household
+  update public.students set last_fed_day = current_date, last_active_at = now() where id = sid;
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
+            'growthStage', public._mhq_growth(feed_count)) order by slot), '[]'::jsonb)
+    into blips_j from public.blips where student_id = sid;
+  return jsonb_build_object('ok', true, 'blips', blips_j,
+    'health', public._mhq_health(current_date, st.care_streak), 'canFeedToday', false);
+end; $$;
+
+create or replace function public.mhq_care(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare sid uuid; st record; stg int; on_since date; skipped int; new_streak int;
+        healed boolean := false; pan jsonb; n_soup int; n_med int;
+        new_last_fed date; new_care date;
+begin
+  sid := public._mhq_auth(p_username, p_password);
+  if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  select last_fed_day, care_streak, last_care_day, pantry into st
+    from public.students where id = sid for update;
+  stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
+  if stg < 2 then return jsonb_build_object('ok', false, 'error', 'not_sick'); end if;
+  if not public._mhq_is_qual_day() then return jsonb_build_object('ok', false, 'error', 'not_care_day'); end if;
+  if st.last_care_day is not null and st.last_care_day >= current_date then
+    return jsonb_build_object('ok', false, 'error', 'already_cared');
+  end if;
+
+  pan    := coalesce(st.pantry, '{}'::jsonb);
+  n_soup := coalesce((pan->>'soup')::int, 0);
+  n_med  := coalesce((pan->>'medicine')::int, 0);
+  if n_soup < 1 or n_med < 1 then
+    return jsonb_build_object('ok', false, 'error', 'need_supplies',
+      'needSoup', (n_soup < 1), 'needMedicine', (n_med < 1));
+  end if;
+  pan := jsonb_set(pan, '{soup}',     to_jsonb(n_soup - 1), true);
+  pan := jsonb_set(pan, '{medicine}', to_jsonb(n_med  - 1), true);
+
+  select value::date into on_since from public.app_config where key = 'term_on_since';
+  if st.last_care_day is null then
+    new_streak := 1;
+  else
+    select count(*) into skipped
+      from generate_series((greatest(st.last_care_day, coalesce(on_since, st.last_care_day)) + 1)::timestamp,
+                           (current_date - 1)::timestamp, interval '1 day') g(d)
+     where extract(isodow from g.d) < 6;
+    new_streak := case when skipped = 0 then coalesce(st.care_streak, 0) + 1 else 1 end;
+  end if;
+
+  new_care := current_date;
+  if new_streak >= 3 then
+    healed := true; new_streak := 0; new_last_fed := current_date;   -- back to healthy; growth kept
+  else
+    new_last_fed := st.last_fed_day;
+  end if;
+
+  update public.students
+     set pantry = pan, care_streak = new_streak, last_care_day = new_care,
+         last_fed_day = new_last_fed, last_active_at = now()
+   where id = sid;
+  return jsonb_build_object('ok', true, 'healed', healed, 'pantry', pan,
+    'health', public._mhq_health(new_last_fed, new_streak));
+end; $$;
+
+create or replace function public.mhq_claim_second_blip(p_username text, p_password text, p_name text, p_colour text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare sid uuid; lvl int; nm text; col text; blips_j jsonb;
+begin
+  sid := public._mhq_auth(p_username, p_password);
+  if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  lvl := (public._mhq_level((select xp from public.students where id = sid))->>'level')::int;
+  if lvl < 10 then return jsonb_build_object('ok', false, 'error', 'level_locked', 'minLevel', 10); end if;
+  if exists (select 1 from public.blips where student_id = sid and slot = 2) then
+    return jsonb_build_object('ok', false, 'error', 'already_claimed');
+  end if;
+  col := coalesce(p_colour, 'cream');
+  if col not in ('cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender') then
+    return jsonb_build_object('ok', false, 'error', 'bad_colour');
+  end if;
+  nm := left(btrim(coalesce(p_name, '')), 24);
+  if nm = '' then return jsonb_build_object('ok', false, 'error', 'bad_name'); end if;
+  insert into public.blips (student_id, slot, name, colour, feed_count, owned_items, equipped)
+  values (sid, 2, nm, col, 0, '[]'::jsonb, '{}'::jsonb);
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
+            'growthStage', public._mhq_growth(feed_count),
+            'owned', owned_items, 'equipped', equipped) order by slot), '[]'::jsonb)
+    into blips_j from public.blips where student_id = sid;
+  return jsonb_build_object('ok', true, 'blips', blips_j);
 end; $$;
 
 -- First completion of a quest = full XP; replays = 25% XP (revision always pays,
@@ -255,78 +479,133 @@ begin
 end; $$;
 
 -- Buy: server-authoritative gold/level/ownership checks; row-locked to stop double-spend.
-create or replace function public.mhq_buy_item(p_username text, p_password text, p_item text)
+-- category 'cosmetic' = per-blip accessory (on p_slot); 'food' = pharmacy/grocery
+-- (soup/medicine into the pantry; 'treat' = instant gold sink, refused while sick).
+-- The pharmacy (soup/medicine) stays open at EVERY sickness stage.
+create or replace function public.mhq_buy_item(p_username text, p_password text, p_item text, p_slot integer default 1)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; itm record; st record; lvl int;
+declare sid uuid; itm record; st record; lvl int; stg int; slot int := coalesce(p_slot, 1);
+        pan jsonb; cnt int; owned jsonb; new_gold int;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  if slot not in (1, 2) then slot := 1; end if;
+  perform public._mhq_ensure_blip(sid);
   select * into itm from public.shop_items where item_id = p_item and active;
   if not found then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
-  select xp, gold, owned_items into st from public.students where id = sid for update;
+  select xp, gold, pantry, last_fed_day, care_streak into st from public.students where id = sid for update;
+  stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
+
+  if itm.category = 'food' then
+    if p_item = 'treat' then
+      if stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
+      if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
+      update public.students set gold = gold - itm.price where id = sid returning gold into new_gold;
+      return jsonb_build_object('ok', true, 'gold', new_gold, 'treat', true);
+    else
+      if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
+      pan := coalesce(st.pantry, '{}'::jsonb);
+      cnt := coalesce((pan->>p_item)::int, 0) + 1;
+      pan := jsonb_set(pan, array[p_item], to_jsonb(cnt), true);
+      update public.students set gold = gold - itm.price, pantry = pan where id = sid returning gold into new_gold;
+      return jsonb_build_object('ok', true, 'gold', new_gold, 'pantry', pan);
+    end if;
+  end if;
+
+  -- cosmetic accessory, on the given blip slot
+  if stg >= 3 then return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK'); end if;
   lvl := (public._mhq_level(st.xp)->>'level')::int;
-  if st.owned_items ? p_item then return jsonb_build_object('ok', false, 'error', 'owned'); end if;
+  select owned_items into owned from public.blips where student_id = sid and slot = slot;
+  if owned is null then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
+  if owned ? p_item then return jsonb_build_object('ok', false, 'error', 'owned'); end if;
   if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
   if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
-  update public.students
-     set gold = gold - itm.price, owned_items = owned_items || to_jsonb(p_item)
-   where id = sid
-   returning gold, owned_items into st.gold, st.owned_items;
-  return jsonb_build_object('ok', true, 'gold', st.gold, 'owned', st.owned_items);
+  update public.blips set owned_items = owned_items || to_jsonb(p_item) where student_id = sid and slot = slot
+    returning owned_items into owned;
+  update public.students set gold = gold - itm.price where id = sid returning gold into new_gold;
+  return jsonb_build_object('ok', true, 'gold', new_gold, 'owned', owned, 'slot', slot);
 end; $$;
 
--- Equip / recolour / rename. Equipped items must be owned; slots from the known set
--- ('' = unequip); non-cream colour needs xp > 0 (first-round reward); nickname is
--- free-form (never shown publicly), trimmed, max 24 chars.
-create or replace function public.mhq_equip(p_username text, p_password text, p_equipped jsonb default null, p_colour text default null, p_blip_name text default null)
+-- Equip / recolour / rename — PER BLIP (p_slot). Blocked while sick (stage>=2):
+-- he won't get up to be dressed (error BLIP_TOO_SICK). Equipped items must be
+-- owned by THAT blip; slots from the known set ('' = unequip); slot-1's first
+-- non-cream colour needs xp > 0 (the second blip may be any colour at hatch);
+-- nickname is free-form (never shown publicly), trimmed, max 24 chars.
+create or replace function public.mhq_equip(
+  p_username text, p_password text, p_equipped jsonb default null,
+  p_colour text default null, p_blip_name text default null, p_slot integer default 1)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; st record; bad int; nm text;
+declare sid uuid; b record; st record; bad int; nm text; slot int := coalesce(p_slot, 1);
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
-  select xp, owned_items into st from public.students where id = sid;
+  if slot not in (1, 2) then slot := 1; end if;
+  perform public._mhq_ensure_blip(sid);
+  select last_fed_day, care_streak, xp into st from public.students where id = sid;
+  if (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int >= 2 then
+    return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK');
+  end if;
+  select owned_items into b from public.blips where student_id = sid and slot = slot;
+  if not found then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
 
   if p_equipped is not null then
     if jsonb_typeof(p_equipped) <> 'object' then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     select count(*) into bad from jsonb_each_text(p_equipped) e(k, v)
      where k not in ('hat','ears','glasses','wings','arms')
-        or (coalesce(v, '') <> '' and not st.owned_items ? v);
+        or (coalesce(v, '') <> '' and not b.owned_items ? v);
     if bad > 0 then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
-    update public.students set equipped = p_equipped where id = sid;
+    update public.blips set equipped = p_equipped where student_id = sid and slot = slot;
   end if;
 
   if p_colour is not null then
     if p_colour not in ('cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender')
       then return jsonb_build_object('ok', false, 'error', 'bad_colour'); end if;
-    if p_colour <> 'cream' and st.xp <= 0
+    if p_colour <> 'cream' and slot = 1 and st.xp <= 0
       then return jsonb_build_object('ok', false, 'error', 'colour_locked'); end if;
-    update public.students set blip_colour = p_colour where id = sid;
+    update public.blips set colour = p_colour where student_id = sid and slot = slot;
   end if;
 
   if p_blip_name is not null then
     nm := left(btrim(p_blip_name), 24);
     if nm = '' then return jsonb_build_object('ok', false, 'error', 'bad_name'); end if;
-    update public.students set blip_name = nm where id = sid;
+    update public.blips set name = nm where student_id = sid and slot = slot;
   end if;
 
-  return (select jsonb_build_object('ok', true, 'blip', jsonb_build_object(
-    'name', blip_name, 'colour', blip_colour, 'owned', owned_items, 'equipped', equipped))
-    from public.students where id = sid);
+  return (select jsonb_build_object('ok', true, 'slot', slot, 'blip', jsonb_build_object(
+    'name', name, 'colour', colour, 'owned', owned_items, 'equipped', equipped))
+    from public.blips where student_id = sid and slot = slot);
 end; $$;
 
 -- Showcase gallery: usernames only (never blip nicknames), builds + level, no scores,
--- alphabetical (deliberately NOT ranked — no rank-shaming).
+-- alphabetical (deliberately NOT ranked — no rank-shaming). Returns ALL of each
+-- student's blips. Blocked for the VIEWER while they are critical (stage 3).
 create or replace function public.mhq_gallery(p_username text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; g jsonb;
+declare sid uuid; g jsonb; my_stg int; st record;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
-  select coalesce(jsonb_agg(jsonb_build_object(
-      'username', username, 'colour', blip_colour, 'equipped', equipped,
-      'level', (public._mhq_level(xp)->>'level')::int,
-      'me', (id = sid)) order by lower(username)), '[]'::jsonb)
-    into g from public.students;
+  perform public._mhq_ensure_blip(sid);
+  select last_fed_day, care_streak into st from public.students where id = sid;
+  my_stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
+  if my_stg >= 3 then return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK'); end if;
+
+  select coalesce(jsonb_agg(grow order by lower(grow->>'username')), '[]'::jsonb) into g
+  from (
+    select jsonb_build_object(
+      'username', s.username,
+      'level', (public._mhq_level(s.xp)->>'level')::int,
+      'me', (s.id = sid),
+      'stage', (public._mhq_health(s.last_fed_day, s.care_streak)->>'stage')::int,
+      'colour', (select colour from public.blips b where b.student_id = s.id and b.slot = 1),
+      'equipped', coalesce((select equipped from public.blips b where b.student_id = s.id and b.slot = 1), '{}'::jsonb),
+      'blips', coalesce((select jsonb_agg(jsonb_build_object(
+                  'slot', b.slot, 'colour', b.colour, 'equipped', b.equipped,
+                  'feedCount', b.feed_count, 'growthStage', public._mhq_growth(b.feed_count)) order by b.slot)
+                from public.blips b where b.student_id = s.id), '[]'::jsonb)
+    ) grow
+    from public.students s
+  ) t;
   return jsonb_build_object('ok', true, 'gallery', g);
 end; $$;
 
@@ -351,7 +630,7 @@ $$;
 
 create or replace function public.mhq_admin_data(p_admin_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare rows jsonb; qs jsonb; strug jsonb;
+declare rows jsonb; qs jsonb; strug jsonb; term_on boolean; term_since text;
 begin
   if not public._mhq_admin_ok(p_admin_password) then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
 
@@ -360,6 +639,10 @@ begin
       'hasPassword', (s.password is not null),       -- never the hash
       'lastActive', s.last_active_at,
       'totalXp', coalesce((select sum(total_xp) from public.progress p where p.student_id = s.id), 0),
+      -- Phase 2: household health + primary-blip growth for the roster column
+      'health', public._mhq_health(s.last_fed_day, s.care_streak),
+      'growthStage', (select public._mhq_growth(b.feed_count) from public.blips b where b.student_id = s.id and b.slot = 1),
+      'blipCount', (select count(*) from public.blips b where b.student_id = s.id),
       'quests', coalesce((select jsonb_object_agg(quest_id, jsonb_build_object(
                   'best_score', best_score, 'attempts', attempts, 'passed', passed,
                   'last_played_at', last_played_at)) from public.progress p where p.student_id = s.id), '{}'::jsonb)
@@ -373,7 +656,27 @@ begin
   from (select jsonb_build_object('concept', concept, 'count', sum(count), 'students', count(distinct student_id)) j
         from public.struggles group by concept) t;
 
-  return jsonb_build_object('ok', true, 'rows', rows, 'quests', qs, 'struggles', strug, 'inactiveDays', 7);
+  select coalesce((value = 'true'), false) into term_on from public.app_config where key = 'term_running';
+  select value into term_since from public.app_config where key = 'term_on_since';
+
+  return jsonb_build_object('ok', true, 'rows', rows, 'quests', qs, 'struggles', strug,
+    'inactiveDays', 7, 'termRunning', coalesce(term_on, false), 'termOnSince', term_since);
+end; $$;
+
+-- Term toggle. Turning ON resets term_on_since = today, which forgives all
+-- accrued sickness (the holiday-proof pause + forgiveness mechanism).
+create or replace function public.mhq_admin_set_term(p_admin_password text, p_running boolean)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+begin
+  if not public._mhq_admin_ok(p_admin_password) then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  insert into public.app_config (key, value) values ('term_running', case when p_running then 'true' else 'false' end)
+    on conflict (key) do update set value = excluded.value;
+  if p_running then
+    insert into public.app_config (key, value) values ('term_on_since', current_date::text)
+      on conflict (key) do update set value = excluded.value;
+  end if;
+  return jsonb_build_object('ok', true, 'termRunning', p_running,
+    'termOnSince', (select value from public.app_config where key = 'term_on_since'));
 end; $$;
 
 create or replace function public.mhq_admin_set_quest_open(p_admin_password text, p_quest text, p_open boolean)
@@ -432,12 +735,16 @@ grant execute on function
   public.mhq_get_state(text, text),
   public.mhq_submit_quest(text, text, text, numeric, int, int, int),
   public.mhq_log_struggle(text, text, text),
-  public.mhq_buy_item(text, text, text),
-  public.mhq_equip(text, text, jsonb, text, text),
+  public.mhq_buy_item(text, text, text, integer),
+  public.mhq_equip(text, text, jsonb, text, text, integer),
   public.mhq_gallery(text, text),
+  public.mhq_feed(text, text),
+  public.mhq_care(text, text),
+  public.mhq_claim_second_blip(text, text, text, text),
   public.mhq_admin_login(text),
   public.mhq_admin_data(text),
   public.mhq_admin_set_quest_open(text, text, boolean),
+  public.mhq_admin_set_term(text, boolean),
   public.mhq_admin_reset_password(text, uuid),
   public.mhq_admin_remove_student(text, uuid),
   public.mhq_admin_reset_progress(text, uuid),
@@ -487,12 +794,26 @@ on conflict (quest_id) do nothing;
 insert into public.app_config (key, value) values ('admin_password', crypt('admin', gen_salt('bf')))
 on conflict (key) do nothing;
 
+-- Phase 2: the term toggle starts OFF (no sickness accrues until the teacher
+-- turns the term on; that toggle also stamps term_on_since = today).
+insert into public.app_config (key, value) values ('term_running', 'false')
+on conflict (key) do nothing;
+
 -- Shop starter set; placeholder prices, tune once the full accessory set is scoped.
 -- item_ids match js/companion/renderer.js ACCESSORIES keys exactly (hyphenated).
-insert into public.shop_items (item_id, slot, price, min_level, active, sort) values
-  ('round-glasses','glasses', 40, 1, true, 10),
-  ('cat-ears',     'ears',    60, 2, true, 20),
-  ('party-hat',    'hat',     80, 3, true, 30),
-  ('stubby-arms',  'arms',   100, 4, true, 40),
-  ('angel-wings',  'wings',  150, 6, true, 50)
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('round-glasses','glasses', 40, 1, true, 10, 'cosmetic'),
+  ('cat-ears',     'ears',    60, 2, true, 20, 'cosmetic'),
+  ('party-hat',    'hat',     80, 3, true, 30, 'cosmetic'),
+  ('stubby-arms',  'arms',   100, 4, true, 40, 'cosmetic'),
+  ('angel-wings',  'wings',  150, 6, true, 50, 'cosmetic')
+on conflict (item_id) do nothing;
+
+-- Phase 2: pharmacy / grocery. item_id doubles as the "kind". soup/medicine are
+-- pantry consumables used by mhq_care; 'treat' is an instant paid gold sink.
+-- Prices TUNABLE (soup 15 / medicine 20 / treat 8) — kept server-side.
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('soup',     'food', 15, 1, true, 100, 'food'),
+  ('medicine', 'food', 20, 1, true, 101, 'food'),
+  ('treat',    'food',  8, 1, true, 102, 'food')
 on conflict (item_id) do nothing;
