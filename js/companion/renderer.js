@@ -523,9 +523,14 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
    ============================================================ */
 const ANIM_DIR = "assets/companion/anim";
 const ANIM_FRAME_COUNT = 4;
+/* Per-state overrides. The baby rows hold five drawings each, but only
+   three per row are the same expression (the others wake up or cry —
+   see tools/slice_sprites.py), so those loops are three frames. */
+const ANIM_FRAME_COUNTS = { "baby-sleeping": 3, "baby-happy": 3 };
 function animFramePaths(state) {
   const paths = [];
-  for (let i = 1; i <= ANIM_FRAME_COUNT; i++) paths.push(`${ANIM_DIR}/${state}-${i}.png`);
+  const n = ANIM_FRAME_COUNTS[state] || ANIM_FRAME_COUNT;
+  for (let i = 1; i <= n; i++) paths.push(`${ANIM_DIR}/${state}-${i}.png`);
   return paths;
 }
 /* Which loops recolour through the SAME getBodySrc() cache the static
@@ -540,6 +545,7 @@ function animFramePaths(state) {
    blanket toward the body hue along with everything else. */
 const ANIM_RECOLOURS = {
   sleeping: true, excited: true, jumping: true, hungry: true, wink: true,
+  "baby-sleeping": true, "baby-happy": true,
   sick: false, veryill: false, recovering: false,
 };
 
@@ -603,13 +609,23 @@ function runFrameLoop(bodyImg, frames, { colour, recolour, loops = Infinity, onD
      healthStage 1 -> sleeping, 2 -> sick, 3 -> veryill;
      healthy + hungry -> hungry loop as the idle instead of the static
      base; otherwise null (static base, exactly today's behaviour). */
-function idleAnimState({ healthStage, recovering, hungry }) {
+function idleAnimState({ healthStage, recovering, hungry, growthStage }) {
+  // BABY (growthStage 0) has its own drawn body — squatter than the grown
+  // one — but only for two states: asleep, and happy-and-fed. Everything
+  // else falls through to the grown loops, which is exactly what
+  // growthStage 0 already showed before the baby art landed (scaled down
+  // by GROWTH_SCALE), so nothing regresses. Note this deliberately does
+  // NOT introduce a blip-baby.png static: resolveRawBody would then serve
+  // a beaming baby face for a SICK baby, which is worse than the grown
+  // body it uses today.
+  const baby = growthStage === 0;
   if (recovering) return "recovering";
-  if (healthStage === 1) return "sleeping";
+  if (healthStage === 1) return baby ? "baby-sleeping" : "sleeping";
   if (healthStage === 2) return "sick";
   if (healthStage >= 3) return "veryill";
   if (hungry) return "hungry";
-  return null;
+  // the grown body is a STATIC base when healthy and fed; the baby wriggles.
+  return baby ? "baby-happy" : null;
 }
 
 /* One-shot "moment" animations — feed success (excited) / round passed
@@ -962,7 +978,7 @@ export function renderBlip(el, opts = {}) {
   // playMoment's onDone can call the exact same "what should be showing
   // right now" resolution once a one-shot moment finishes.
   const hungry = !!opts.hungry;
-  const animState = idleAnimState({ healthStage, recovering, hungry });
+  const animState = idleAnimState({ healthStage, recovering, hungry, growthStage });
 
   function applyIdleBodyArt() {
     if (animState) {

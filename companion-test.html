@@ -421,6 +421,8 @@
       // shape the backend actually reports (recovering = careStreak>=1
       // AND stage>=2), and it proves idleAnimState checks recovering
       // before health rather than falling through to the sick loop.
+      { label: "baby-happy (growthStage 0, fed)", opts: { growthStage: 0, healthStage: 0 } },
+      { label: "baby-sleeping (growthStage 0 + healthStage 1)", opts: { growthStage: 0, healthStage: 1 } },
       { label: "recovering (healthStage 2 + recovering)", opts: { healthStage: 2, recovering: true } },
       { label: "sleeping (healthStage 1)", opts: { healthStage: 1 } },
       { label: "sick (healthStage 2)", opts: { healthStage: 2 } },

@@ -16,6 +16,7 @@ Run:  python tools/slice_sprites.py
 Writes into assets/companion/anim/ (and assets/companion/ for statics).
 """
 import os
+from collections import deque
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -74,13 +75,70 @@ def split_row(sheet, y0, y1, expect):
     return [row.crop((x0, 0, x1, row.height)) for x0, x1 in runs]
 
 
-def emit(frames, name, start=1):
-    """Scale a row by one shared factor, ground-align, write the PNGs."""
+def body_fit_scale(frames):
+    """One scale factor sizing the biggest BODY in `frames` to the box."""
+    bw = bh = 0
+    for f in frames:
+        b = body_box(f)
+        if b:
+            bw = max(bw, b[2] - b[0])
+            bh = max(bh, b[3] - b[1])
+    return min(BOX_W / bw, BOX_H / bh)
+
+
+def body_box(img):
+    """Bounding box of the BODY only — the largest blob of bright blue.
+
+    The raw alpha box also contains zZ marks, motion lines, sweat drops
+    and heat squiggles, which differ frame to frame and between rows. If
+    the scale is derived from that box, a row whose frames happen to have
+    tall zZ marks gets a SMALLER body than a row without them: the baby
+    came out 441px tall asleep and 317px happy, visibly resizing when he
+    woke up. Scaling off the body fixes that.
+    """
+    a = img.convert("RGBA")
+    w, h = a.size
+    px = a.load()
+    solid = lambda x, y: (lambda p: p[3] > 120 and p[2] > 140)(px[x, y])
+    seen = bytearray(w * h)
+    best, bb = 0, None
+    for sy in range(0, h, 3):
+        for sx in range(0, w, 3):
+            if not solid(sx, sy) or seen[sy * w + sx]:
+                continue
+            q = deque([(sx, sy)])
+            seen[sy * w + sx] = 1
+            n, box = 0, [sx, sy, sx, sy]
+            while q:
+                x, y = q.popleft()
+                n += 1
+                box[0] = min(box[0], x); box[1] = min(box[1], y)
+                box[2] = max(box[2], x); box[3] = max(box[3], y)
+                for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and solid(nx, ny):
+                        seen[ny * w + nx] = 1
+                        q.append((nx, ny))
+            if n > best:
+                best, bb = n, box
+    return bb
+
+
+def emit(frames, name, start=1, shared_scale=None, by_body=False):
+    """Scale a row by one shared factor, ground-align, write the PNGs.
+
+    shared_scale lets several rows that must look like the SAME character
+    (the two baby rows) be sized by one factor computed across all of them.
+    """
     boxes = [f.getchannel("A").getbbox() for f in frames]
     trimmed = [f.crop(b) for f, b in zip(frames, boxes)]
-    widest = max(t.width for t in trimmed)
-    tallest = max(t.height for t in trimmed)
-    scale = min(BOX_W / widest, BOX_H / tallest)   # ONE factor for the row
+    if shared_scale is not None:
+        scale = shared_scale
+    elif by_body:
+        scale = body_fit_scale(frames)
+    else:
+        widest = max(t.width for t in trimmed)
+        tallest = max(t.height for t in trimmed)
+        scale = min(BOX_W / widest, BOX_H / tallest)   # ONE factor for the row
 
     os.makedirs(OUT, exist_ok=True)
     for i, t in enumerate(trimmed):
@@ -104,6 +162,39 @@ JOBS = [
     # sheet is left in images/ as history.
     ("Recovering Blip 2.png", 344, 580, 4, "recovering"),
     ("Winking blip.png", 345, 568, 4, "wink"),
+    # Baby rows carry FIVE drawings, not four — GPT numbered them 1,2,2,3,4
+    # and 1,2,3,3,4. All five are distinct enough to keep, so the renderer
+    # reads its frame count per state rather than assuming 4.
+    # Verified before use: measuring the BODY ONLY (the raw bounding box is
+    # inflated by the zZ marks and motion lines, which made these rows look
+    # inconsistent), sleeping is 1.207-1.256 and happy 1.196-1.243 — 4%
+    # spread each, and they match each other, so it is one character. Both
+    # are squatter than the adult body (1.046), which is the point.
+    # NOT used: "Baby Blip.png" (measures 1.09-1.12 — adult proportions, and
+    # it is a sad/feverish face, not a neutral baby) and "Baby Blip
+    # Winking.png" (blanket-wrapped, and in this app a blanket means sick).
+]
+
+# Rows that must read as the SAME body get one scale factor across all of
+# them, measured off the body rather than the alpha box (see body_box).
+GROUPS = [
+    [
+        # y0 is 262, not the 207 the alpha row-profile suggests: this
+        # sheet puts its numbered badges BELOW the row label (y210-258)
+        # with no blank gap before the zZ marks, so a naive band bakes a
+        # big "4" into the corner of frame 5.
+        #
+        # PICK: each row holds five drawings, but the EXPRESSIONS inside a
+        # row are not one state — GPT drew a sequence, not a loop. The
+        # sleeping row runs asleep, asleep, asleep, winking, wide awake;
+        # the "happy" row is crying, happy, happy, happy, crying. Looping
+        # either one whole would make the baby blink awake or burst into
+        # tears every few frames, so each keeps only its coherent frames.
+        # (The BODY is consistent across all ten — that was measured
+        # separately and is why both rows share one scale.)
+        ("Baby Blip Sprite.png", 262, 465, 5, "baby-sleeping", [0, 1, 2]),
+        ("Baby Blip Sprite.png", 637, 817, 5, "baby-happy", [1, 2, 3]),
+    ],
 ]
 
 if __name__ == "__main__":
@@ -111,3 +202,16 @@ if __name__ == "__main__":
         sheet = Image.open(os.path.join(SRC, fname)).convert("RGBA")
         print("--", fname, "row y%d-%d ->" % (y0, y1), name)
         emit(split_row(sheet, y0, y1, n), name)
+
+    for group in GROUPS:
+        cut = []
+        for fname, y0, y1, n, name, pick in group:
+            sheet = Image.open(os.path.join(SRC, fname)).convert("RGBA")
+            frames = split_row(sheet, y0, y1, n)
+            cut.append((name, [frames[i] for i in pick]))
+            print("-- %s: kept frames %s of %d" % (name, [i + 1 for i in pick], n))
+        # scale off the KEPT frames only, and off the body (see body_box)
+        scale = body_fit_scale([f for _, frames in cut for f in frames])
+        print("-- group scale %.4f across %s" % (scale, ", ".join(n for n, _ in cut)))
+        for name, frames in cut:
+            emit(frames, name, shared_scale=scale)
