@@ -1,133 +1,42 @@
-# Project status — updated 2026-07-19 (night: SL restyle SHIPPED)
+# Project status — updated 2026-07-19 (late: sprite loops + tap + icon rebuild)
 
-## Where we are — SOLO LEVELING RESTYLE SHIPPED & LIVE (third ship today)
-After playing the rounds Megan saw the cream Study-Bunny theme clashed with the quest
-content (authored for dark panels) — full pivot, built by 7 agents across two fan-outs
-(theme/copy/icons, then blue-body+accessories(Opus)/catalogue/sparkle, + animations +
-2 fix agents), supervised with seam-stitches. Commit `290b375`, sw **v28**,
-**migration-sl-restyle.sql APPLIED live via MCP + smoke-tested** (new signup hatches
-'blue', colour gate re-anchored blue, active catalogue = the 6 techy items; throwaway
-student cleaned up). Verified live: all new assets 200, mhq-v28 serving.
+## Where we are — THREE more ships, all live
+Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v31**.
+Today's later session shipped, in order:
 
-What it is now:
-- **Theme**: Solo Leveling "system windows" — near-black navy #070b16, electric blue
-  #3aa0ff luminous borders, violet #7b5cf6 for rare moments only, sharp corners, Space
-  Grotesk/Sora/JetBrains Mono, chapter accents = game-rarity cycle (blue/violet/cyan/
-  gold/fuchsia in js/config.js). System copy: STATUS/SHOP/PHARMACY/GALLERY, "LEVEL UP"
-  notice, reward drop lines. Sickness copy deliberately stays warm/human. Sparkle pass:
-  glow pedestal under Blip, ✦ flourishes, gold displayed as 💎 crystals (server data
-  still says gold — display-only). html has a solid dark base (overscroll never white).
-- **Blip is BLUE now**: base = her art from SL Blip Design.png → assets/companion/
-  blip-base-blue.png (cream file kept on disk; cream demoted to a colour). Blue = free
-  default; first-colour-change gate re-anchored cream→blue. Recolour retuned: navy
-  outline preserved across all 11 colours. Face sits lower than cream body — ATTACH
-  fractions re-measured (eyes y 0.569).
-- **Techy catalogue** (from HER "Blip Shop Idea.png" mockup): star-shades 40/L1,
-  heart-eyes 45/L1 (both glasses; widthPct 90 so lenses land on the eyes — the 0.4286
-  lens-separation maths is commented in renderer.js), headphones 60/L2 (ears, attached,
-  cups measured onto the silhouette edges), halo 80/L3 (hat, floaty — literally), 
-  power-gloves 100/L4 (arms), aurora-wings 150/L6. Old 5 retired active=false, NEVER
-  confiscated (equip checks owned_items, not shop_items.active — verified).
-- **ANIMATIONS**: her 3 sprite sheets sliced → assets/companion/anim/<state>-1..4.png
-  (24 frames, 480×600 ground-aligned). Frame-cycler in renderer.js (setInterval, never
-  rAF, WeakMap-keyed, leak-safe, prefers-reduced-motion freezes frame 1). Idle map:
-  hungry (canFeedToday) / sleeping (stage1) / sick (stage2, blanket+props on top) /
-  veryill (stage3, monitor beside). playMoment(handle,'excited'|'jumping'): excited on
-  feed, jumping on passed results. Healthy loops recolour with the body; sick loops
-  render as-authored ("sickness overrides colour"). Sheet 2's very-ill row REJECTED
-  (read dead); sheet 3's re-rolled row used. Recovering = static path, no sheet yet.
-- **Icons/logo**: her SL Blip Icon.png artwork → all 5 PWA icons; header/login logos
-  point at blip-base-blue.png.
-- Phase 2 mechanics (feeding/growth/sickness/pharmacy/2nd blip) all unchanged underneath.
+1. `c5be5dd` — bigger app icon, recovering + wink sprite loops, tap-to-react Blip
+2. `530b7e7` — baby Blip sprite loops (asleep / happy) at growthStage 0
+3. `b64d001` — app icons rebuilt from her new logo artwork
 
-## Previous ship today — PHASE 2 (same evening)
-Phone-approved rulings folded in (accessories hidden during recovering confirmed), then
-shipped: committed, **migration-phase2-blip-care.sql APPLIED to live Supabase via MCP**
-and smoke-tested on the real DB (throwaway student: signup → state shape → buy cosmetic →
-equip → feed → buy soup → deleted), sw v27, pushed, verified live (all new files 200,
-mhq-v27 serving). ⚠️ Ship caught a REAL SQL bug the local mirror couldn't: PL/pgSQL
-variable/column ambiguity on `blips.slot` in mhq_buy_item/mhq_equip (fixed by renaming
-to v_slot in migration + schema.sql, commits 880e822/1852-style pair). Lesson recorded:
-the JS local-backend mirror does NOT exercise the SQL — always smoke the RPCs on live
-at ship.
+**No SQL in any of them** — this was all client + assets. Nothing outstanding.
 
-## The build (earlier this evening)
-Same-day second build (3 agents: Opus backend + 2 Sonnet, supervised): **feeding, growth,
-sickness ladder, pharmacy, and the second Blip are all built and e2e-verified** on
-`?local=1` (full loop driven in-browser: signup → free cookie → term-on → neglect to
-tired(3d)/bedridden(5d)/critical(7d) with weekend exclusion → cookie REFUSES_FOOD →
-accessory buy BLIP_TOO_SICK → pharmacy stays open under lock → 3 care days heal, growth
-kept → level 10 → claim 2nd Blip "any colour" → per-slot wardrobe → household feed +1 to
-both). Zero console errors. **Nothing committed; migration-phase2-blip-care.sql written
-but NOT applied to live Supabase** — both happen at ship after Megan's phone review.
-Repo renamed to **megzieberr/blipwork** earlier today (old Pages URL 404s — phone PWA
-must be reinstalled from https://megzieberr.github.io/blipwork/).
+### Sprite loops now on disk
+`assets/companion/anim/<state>-<n>.png`, cut by the new **`tools/slice_sprites.py`**
+(the earlier rows were cut by a scratchpad script that was never kept — re-cutting
+is now reproducible; edit `JOBS`/`GROUPS` and re-run).
 
-Key Phase 2 facts:
-- Health clock: qualifying day = weekday AND term_running (admin toggle in admin.html;
-  **seeds OFF** — Megan must switch it on when term starts). Toggling ON forgives
-  accrued sickness. Server-computed, tamper-proof; local mirror has
-  `__BLIP_DEV__.skipDays(n)` for testing.
-- Economy: soup 15 / medicine 20 (pantry: buy then care), treat 8 (instant, no growth);
-  free daily cookie = the ONLY growth credit (+1 to every blip, household). Growth
-  stages at 10/25/45 feedings → 60/75/88/100% scale; sick shrink ×0.85 is temporary.
-- Locks: stage2 = dress; stage3 = shop+gallery too (pharmacy always open); maths never
-  locked. Recovery = 3 consecutive qualifying care days (weekends/term-off don't break).
-- 2nd Blip: level 10, one ever, any colour at hatch, own wardrobe (cosmetics per-blip,
-  buyItem/equip take a slot param); feeding+health household-wide.
-- Sick art: renderer expects assets/companion/ blip-baby.png, blip-tired.png,
-  blip-bedridden.png, blip-critical.png, blip-recovering.png (all optional, code-drawn
-  placeholders until then; companion-test.html is the full state gallery). GPT prompts:
-  homework-hub-companion/gpt-prompts-sick-scenes.md.
-- Integration fixes made at the seam: UI food list now reads state.foodShop (backend
-  keeps it separate from cosmetic shop); accessory buys pass the ACTIVE blip's slot.
+| state | frames | source | recolours? |
+|---|---|---|---|
+| sleeping, hungry, excited, jumping | 4 | earlier sheets | yes |
+| sick, veryill | 4 | earlier sheets | no (sickness overrides colour) |
+| **recovering** | 4 | `Recovering Blip 2.png` | no |
+| **wink** | 4 | `Winking blip.png` | yes |
+| **baby-sleeping** | 3 | `Baby Blip Sprite.png` row 1, frames 1-3 | yes |
+| **baby-happy** | 3 | `Baby Blip Sprite.png` row 2, frames 2-4 | yes |
 
-## Where we were this morning
-**The app is now BLIPWORK and it is SHIPPED.** Megan's phone play-through passed, so the
-whole rebrand was committed (`eb6de94`), sw.js bumped v25→v26, and pushed. Verified live:
-https://megzieberr.github.io/maths-homework-quest/ serves `<title>Blipwork · Grade 11</title>`,
-`mhq-v26`, and all new companion/gallery/asset files return 200. The repo and URL still
-say "maths-homework-quest" — renaming was deliberately deferred (app was never shared, so
-it can be done any time; GitHub auto-redirects). Quest content, engines, and maths libs are
-untouched. Focus now moves to Phase 2 (feeding / growth / grocery shop).
+### Tap-to-react
+Tapping the hero on the Blip screen alternates a **wink** and a **hop** (the hop is
+the jumping loop played twice). Opt-in via `renderBlip`'s `tappable: true`; the
+listener binds once to the host `el` and reads the current handle from a WeakMap,
+because every re-render wipes everything inside. Ignored while sleeping / sick /
+recovering. **Not** enabled on the hub tile — that tile's own click navigates here.
 
-Note: the push needed a rebase onto `aa1bfd6` — a cloud-dispatch commit adding CLAUDE.md
-and an /explain skill. That's intentional per the standing rule; it is now the parent of
-the rebrand commit.
-
-What changed:
-- **Identity/theme**: solid Study-Bunny look (cream #f6e2b3 bg, brown ink #2b2016, flat
-  fills, Quicksand/Nunito + JetBrains Mono for maths, 5 solid accents cycled across the
-  11 chapters — honey/coral/sage/sky/rose, NO purple, NO Holo hues). Diagrams + Casio sit
-  in dark "device screen" panels (deliberate — engines untouched). Blip mascot = logo,
-  favicon, and full PWA icon set (regenerated from assets/companion/blip-base.png).
-- **Companion system**: js/companion/renderer.js (layered blob + code-drawn SVG
-  accessories + 10-colour recolour with cached canvas recolouring), js/companion/level.js
-  (THE level-curve mirror of SQL `_mhq_level` — nothing else may recompute it),
-  blip-ui.js, unlock-modal.js, js/blip.js (shop/equip/rename screen), js/gallery.js.
-  Standalone proof page companion-test.html (hero 190px per phone review).
-- **Game loop, live + local parity**: XP (lifetime, full on first completion / 25% on
-  replays) + flat 10 gold per completed round; level-gated shop (5 starter items,
-  hyphenated ids matching renderer ACCESSORIES); first-round colour unlock; HUD
-  (level + XP bar + gold); results screen shows real awards + quiet level-up line;
-  gallery (usernames only, alphabetical, no scores). Local backend (?local=1) mirrors
-  everything incl. 3 hardcoded fake classmates for gallery layout (local-only).
-- **Supabase (project "homework-hub" pjpwhalcifywjrwtjknd)**: RESTORED from pause and
-  MIGRATED live — new students columns (gold/xp/blip_name/blip_colour/owned_items/
-  equipped), shop_items table, `_mhq_level`, extended submit/get_state, new
-  buy_item/equip/gallery RPCs, reset_progress zeroes xp but keeps gold/items/colour/name.
-  Existing data survived (1 test student backfilled to 4 580 XP = level 6, 79 quests,
-  progress intact). supabase/migration-blipwork.sql = record of what ran (all design
-  rulings in its header); schema.sql updated as canonical.
-
-Phone testing (today's saga, still relevant tonight): Store-Python/preview server 5191 is
-localhost-only for agents; PHONE uses the node server `phone-server.js` (session
-scratchpad — recreate from git-shy memory: any static server rooted at the repo on
-0.0.0.0 works) — port 5599, http://<laptop-ip>:5599/?local=1. ⚠️ The home network has TWO
-subnets both named "BerrSpace" (fibre router 192.168.101.x + TP-Link mesh 192.168.68.x);
-laptop AND phone must be on the same one, and the laptop's IP changes when it swaps.
-McAfee was MCPR-removed today (it was blocking inbound LAN); one stale SecurityCenter
-registration may linger harmlessly — Defender is active.
+### Baby
+growthStage 0 uses her drawn baby body for **asleep** and **happy-and-fed** only.
+Hungry / sick / very-ill / recovering still fall through to the grown loops scaled
+down, which is what growthStage 0 already showed before any baby art existed.
+There is deliberately **no `blip-baby.png` static** — `resolveRawBody` would then
+serve a beaming baby face for a sick baby.
 
 ## Decisions
 - 2026-07-06: App identity = low-intimidation QUICK RECAP tool (revise the week's work /
@@ -171,26 +80,53 @@ registration may linger harmlessly — Defender is active.
 - 2026-07-19: Backlog phase 2 (recorded in homework-hub-companion/plan.md): grocery-store
   food shop, daily cookie feeding on login, and Pou-style GROWTH (Blip starts baby-small,
   grows with feedings — renderer is size-agnostic so growth = a scale factor).
+- 2026-07-19 (late): **Recovering joins the sick family for rendering** — as-authored, no
+  recolour. Its blanket is drawn INTO her frames, so `animatedHealthOverlaySpec` returns
+  null for it. It is also checked BEFORE health in `idleAnimState`, because the backend
+  reports `recovering` while healthStage is still 2-3.
+- 2026-07-19 (late): The **wink is a double-wink** — her frame 3 winks the opposite eye
+  and grins. Shipped as drawn (all four frames, in order). If a single wink is ever
+  wanted, that is a re-roll of the row, not a code change.
+- 2026-07-19 (late): Recovering uses **`Recovering Blip 2.png`**, not the first sheet —
+  cleaner blink rhythm, no stray sweat drop in frame 4.
+- 2026-07-19 (late): Baby loops keep only the frames whose EXPRESSION matches the state.
+  Her rows are sequences, not loops (sleeping ends wide awake; "happy" is book-ended by
+  crying), so looping them whole would make him blink awake or burst into tears.
+- 2026-07-19 (late): **Taps are ignored while he is sleeping / sick / recovering** — a
+  bedridden Blip cheerfully hopping undercuts the care mechanic.
+- 2026-07-19 (late): App icons are generated from **`New Logo.png`** (Blip + glow, no
+  tile). The previous artwork nested a glowing tile inside the launcher's own container,
+  which is why Blip read tiny on the home screen.
 
 ## Pending on Megan
-- **Reinstall the PWA from https://megzieberr.github.io/blipwork/** if not done yet (repo
-  rename killed the old URL, no redirect). Close/reopen twice for the v28 worker — the
-  new icon (blue Blip in shades) should appear on the home screen.
-- Phone play-through of the full SL app on live; sickness ladder easiest at
-  companion-test.html (animated state gallery) or `?local=1` + `__BLIP_DEV__.skipDays(n)`.
-- Optional art, whenever: a "recovering" sprite row (weak smile, blanket on lap — prompt
-  guidance in gpt-prompts-sick-scenes.md) and the baby-face PNG (blip-baby.png) — both
-  have graceful fallbacks until then; each lands with a tiny asset-only ship.
-- At term start: **term-running toggle ON in admin** — sickness clock frozen until then
-  (deliberate). NO SQL outstanding — both today's migrations are applied live.
+- **Reinstall the PWA one more time** to pick up the new icon. Home-screen icons are
+  baked in at install time and never refresh — this is the only reason a reinstall is
+  needed, and it will not be needed again for ordinary updates. Remove the app (not just
+  the shortcut), then install fresh from https://megzieberr.github.io/blipwork/.
+- Phone play-through: tap Blip on his screen (wink/hop), and eyeball the recovering and
+  baby loops. Easiest at `companion-test.html`, or `?local=1` + `__BLIP_DEV__.skipDays(n)`.
+- At term start: **term-running toggle ON in admin** — the sickness clock is frozen until
+  then, deliberately.
+- Optional art, whenever: a single-wink re-roll, and baby loops with one held expression
+  if the 3-frame loops feel short. Both are asset-only ships.
 
 ## Next up
-- Fix whatever the phone review of the SL app surfaces.
-- Sick-stage push warnings (reuse Circle Quest VAPID) — designed, not built; do with or
-  after Phase 3.
-- Phase 3 (original plan): teacher-assigned homework + treasure box + notifications.
-- Mockup-derived backlog (recorded in homework-hub-companion/plan.md): FACE tab (her
-  4-frame expression sheets exist!), EFFECTS tab (auras), PATTERNS tab, randomize/undo
-  customize flow.
-- All prices/thresholds (accessories 40-150, soup 15/med 20/treat 8, growth 10/25/45,
-  2nd-blip level 10) are tunables — revisit on real play data.
+- Sick-stage push warnings (reuse Circle Quest VAPID) — designed, not built.
+- Phase 3: teacher-assigned homework + treasure box + notifications.
+- Link Circle Quest → this hub (pencilled for the week of 20 Jul; the pinger entry is
+  already done).
+- Mockup-derived backlog (homework-hub-companion/plan.md): FACE / EFFECTS / PATTERNS
+  shop tabs, randomize/undo customise flow.
+- Unused baby art, if ever wanted: a baby-hungry row exists in `Blip Recovery Sprite.png`
+  but is blanket-wrapped, and in this app a blanket reads as sick.
+
+## Tooling notes (new today)
+- `tools/slice_sprites.py` — cuts her sheets into frames. Scale is computed off the
+  **body**, not the alpha box: the box includes zZ marks and motion lines, which differ
+  per row and once gave a baby 441px tall asleep and 317px happy. Rows that must read as
+  the same character share one scale via `GROUPS`.
+- `tools/make_icons.py` — builds all five icons. Keys off **alpha**, not brightness: his
+  sunglasses are near-black and span his full width, so a brightness test cuts him in
+  half. Header records the approaches that failed on the older artwork.
+- Preview: another chat often holds port 5191, so there is now a `maths-quest-alt` entry
+  on **5202** in the global `~/.claude/.claude/launch.json`.
