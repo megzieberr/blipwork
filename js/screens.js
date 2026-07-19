@@ -6,7 +6,7 @@ import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
 import { openCalculator } from "./calculator.js";
 import { maybeShowInstall } from "./install.js";
-import { renderBlip } from "./companion/renderer.js";
+import { renderBlip, playMoment } from "./companion/renderer.js";
 import { itemLabel } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
 
@@ -107,7 +107,7 @@ function chapterCard(app, ch, open) {
 }
 
 export function renderHub(app, host) {
-  setTheme("#b17f22", "#b17f22");
+  setTheme("#3aa0ff", "#3aa0ff"); // hub neutral = the system's own electric blue
   const name = ((app.state && app.state.student && app.state.student.name) || "").split(" ")[0];
   const head = el("div", "hub-head");
   head.innerHTML = `<span class="eyebrow">Grade 11 Maths</span><h1>Hi, ${name || "there"} 👋</h1><p class="muted small">Pick a chapter to practise.</p>`;
@@ -122,16 +122,19 @@ export function renderHub(app, host) {
     const tile = el("div", "hub-blip");
     tile.innerHTML = `<div class="hb-stages${blips.length > 1 ? " two" : ""}"></div>
       <div class="hb-info"><div class="hb-name">${blips.map(b => b.name).join(" & ")}</div><div class="hb-cta">Tap to visit Blip →</div></div>`;
+    // gentle, non-nagging feed prompt — a small badge, not a popup
+    // (hoisted above the stage mounts — they need it too, for the idle
+    // hungry-loop hint)
+    const canFeedToday = readyFlag(app.state.canFeedToday);
     const stagesHost = tile.querySelector(".hb-stages");
-    blips.forEach((b) => {
+    const blipHandles = blips.map((b) => {
       const s = el("div", "hb-stage");
+      s.innerHTML = `<div class="blip-pedestal"><i></i></div>`;
       stagesHost.appendChild(s);
-      mountBlip(s, { colour: b.colour, equipped: b.equipped, growthStage: b.growthStage, healthStage: health.stage, recovering: health.recovering });
+      return mountBlip(s, { colour: b.colour, equipped: b.equipped, growthStage: b.growthStage, healthStage: health.stage, recovering: health.recovering, hungry: canFeedToday });
     });
     tile.addEventListener("click", () => app.go("blip"));
 
-    // gentle, non-nagging feed prompt — a small badge, not a popup
-    const canFeedToday = readyFlag(app.state.canFeedToday);
     if (canFeedToday) {
       const badge = el("button", "cookie-badge", "🍪");
       badge.type = "button";
@@ -147,6 +150,7 @@ export function renderHub(app, host) {
             showToast(code === "REFUSES_FOOD" ? `${blips[0].name} doesn't feel like eating right now.` : "Something went wrong — try again.", "error");
             badge.disabled = false; return;
           }
+          blipHandles.forEach((h) => playMoment(h, "excited"));
           showToast(blips.length > 1 ? `${blips[0].name} and ${blips[1].name} shared a cookie!` : `${blips[0].name} enjoyed a cookie!`, "good");
           await app.refresh(); app.render();
         } catch { showToast("Can't reach the server — try again.", "error"); badge.disabled = false; }
@@ -249,12 +253,37 @@ export function renderResults(app, host, params) {
     <h1>Quest complete</h1>
     <div class="big-score">${pct}%</div>
     <p class="muted">${firstTry} / ${total} right first time</p>
-    <div class="result-reward">★ +${xpAwarded ?? 0} XP · 🪙 +${goldAwarded ?? 0} gold</div>
+    <div class="result-reward system-notice"><span class="sys-label">Reward</span><div class="sys-value">+${xpAwarded ?? 0} XP · +${goldAwarded ?? 0} <span class="crystal">💎</span></div></div>
     <div class="result-msg ${passed ? "good" : "warn"}">${passed ? "Quest passed — badge earned!" : "So close! Get 80% right first-time to earn the badge."}</div>
     ${badgeEarned ? `<div class="badge-pop"><span class="bi">${chapter.icon}</span>${quest.title} mastered</div>` : ""}
     ${alreadyPassed ? `<div class="result-msg">Replay — already mastered, so this round paid a smaller XP top-up.</div>` : ""}
-    ${levelUp ? `<div class="result-levelup">Level ${level}!${unlockedItem ? ` New in the shop: ${itemLabel(unlockedItem)}.` : ""}</div>` : ""}
+    ${levelUp ? `<div class="result-levelup system-notice"><span class="sys-label">System</span><div class="sys-value"><span class="sparkle tw">✦</span> LEVEL UP — LV. ${level} <span class="sparkle tw">✦</span></div>${unlockedItem ? `<div class="sys-sub">New unlock: ${itemLabel(unlockedItem)}</div>` : ""}</div>` : ""}
     <div class="result-actions"></div>`;
+
+  // Results screen mounts no Blip normally (unlike the hub/blip screens),
+  // so a pass here gets its own small celebratory mount beside the
+  // reward notice, playing the jumping moment once — matches the brief's
+  // "plays on the results-screen blip if one is rendered there; if the
+  // results screen renders no blip, mount a small one" ruling. Uses the
+  // household's PRIMARY blip (slot 0) — this screen has no slot-switcher
+  // concept of its own the way blip.js does.
+  if (passed && app.state && (app.state.blip || app.state.blips)) {
+    const blips = normalizeBlips(app.state);
+    const health = normalizeHealth(app.state);
+    const primary = blips[0];
+    const rewardNotice = card.querySelector(".result-reward");
+    const miniWrap = el("div", "result-blip-mini");
+    const miniStage = el("div");
+    miniWrap.appendChild(miniStage);
+    if (rewardNotice) rewardNotice.insertAdjacentElement("afterend", miniWrap);
+    else card.insertBefore(miniWrap, card.querySelector(".result-actions"));
+    const miniHandle = renderBlip(miniStage, {
+      colour: primary.colour, equipped: primary.equipped, growthStage: primary.growthStage,
+      healthStage: health.stage, recovering: health.recovering, size: 90,
+    });
+    playMoment(miniHandle, "jumping");
+  }
+
   const actions = card.querySelector(".result-actions");
   const mk = (label, primary, fn) => { const b = el("button", "btn " + (primary ? "primary" : "ghost"), label); b.addEventListener("click", fn); actions.appendChild(b); };
   const replay = () => app.go("play", { chapter, quest, def: questDef(quest.id), accent });

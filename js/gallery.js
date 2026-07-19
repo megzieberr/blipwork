@@ -26,7 +26,7 @@ export function renderGallery(app, host) {
   const sess = getSession();
 
   const head = el("div", "blip-head");
-  head.innerHTML = `<div><span class="eyebrow">Showcase</span><h1>Everyone's Blips</h1></div>
+  head.innerHTML = `<div><span class="eyebrow">System</span><h1><span class="sparkle">✦</span> GALLERY <span class="sparkle">✦</span></h1><p class="muted small">Everyone's Blips — just for fun, no ranking.</p></div>
     <button class="link-btn back" aria-label="Back">←</button>`;
   head.querySelector(".back").addEventListener("click", () => app.go("blip"));
   host.appendChild(head);

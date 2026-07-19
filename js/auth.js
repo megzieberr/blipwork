@@ -22,7 +22,7 @@ const errMsg = c => ({
 export function renderLogin(app, host) {
   clear(host);
   const wrap = el("div", "login");
-  wrap.innerHTML = `<div class="login-head"><div class="login-logo"><img src="assets/companion/blip-base.png" alt=""></div><div><h1>Blipwork</h1><p class="muted small">Grade 11 · homework</p></div></div>`;
+  wrap.innerHTML = `<div class="login-head"><div class="login-logo"><img src="assets/companion/blip-base-blue.png" alt=""></div><div><h1>Blipwork</h1><p class="muted small">Grade 11 · homework</p></div></div>`;
   const body = el("div", "login-body");
   wrap.appendChild(body);
   host.appendChild(wrap);

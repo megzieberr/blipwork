@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blip companion — renderer proof</title>
+<title>SYSTEM // Blip Renderer Diagnostics</title>
 <style>
-  :root { color-scheme: light; }
-  body { font-family: system-ui, sans-serif; background: #fdf6ec; color: #2e1b0d; margin: 0 auto; padding: 24px 28px 64px; max-width: 1100px; }
-  h1 { font-size: 1.3rem; margin: 0 0 4px; }
-  h2 { font-size: 1rem; margin: 36px 0 12px; border-bottom: 2px solid #eadfc9; padding-bottom: 6px; }
-  p.sub { margin: 0 0 20px; color: #8a7458; font-size: .9rem; }
+  :root { color-scheme: dark; }
+  body { font-family: system-ui, sans-serif; background: #070b16; color: #dce9ff; margin: 0 auto; padding: 24px 28px 64px; max-width: 1100px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; text-transform: uppercase; letter-spacing: .04em; color: #eaf4ff; text-shadow: 0 0 12px rgba(58,160,255,.45); }
+  h2 { font-size: 1rem; margin: 36px 0 12px; border-bottom: 1px solid #3aa0ff55; padding-bottom: 6px; text-transform: uppercase; letter-spacing: .03em; color: #6fb8ff; }
+  p.sub { margin: 0 0 20px; color: #7d93b8; font-size: .9rem; }
 
   .hero-row { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
   /* hard cap: sized per Megan's phone review 2026-07-19 ("wayy too big" at 340px).
@@ -19,21 +19,21 @@
      and otherwise overlaps the section heading (Megan's phone review) */
   .hero-stage { width: min(190px, 100%); max-width: 190px; flex: none; margin: 80px auto 24px; }
   .hero-controls { flex: 1; min-width: 260px; }
-  fieldset { border: 1px solid #eadfc9; border-radius: 10px; margin: 0 0 14px; padding: 10px 12px; }
-  legend { font-size: .8rem; font-weight: 600; color: #6b5638; padding: 0 6px; }
+  fieldset { border: 1px solid #3aa0ff40; border-radius: 10px; margin: 0 0 14px; padding: 10px 12px; background: #0d1526; }
+  legend { font-size: .8rem; font-weight: 600; color: #6fb8ff; padding: 0 6px; text-transform: uppercase; letter-spacing: .03em; }
   .btn-row { display: flex; flex-wrap: wrap; gap: 6px; }
   button.opt {
-    border: 2px solid #d9c8a5; background: #fff; border-radius: 8px; padding: 6px 10px;
-    font-size: .8rem; cursor: pointer; color: #2e1b0d;
+    border: 1px solid #3aa0ff40; background: #0d1526; border-radius: 8px; padding: 6px 10px;
+    font-size: .8rem; cursor: pointer; color: #dce9ff;
   }
-  button.opt.active { border-color: #2e1b0d; background: #ffe9b8; font-weight: 600; }
+  button.opt.active { border-color: #3aa0ff; background: #142a44; font-weight: 600; box-shadow: 0 0 8px rgba(58,160,255,.35); }
   button.opt.swatch { display: flex; align-items: center; gap: 6px; }
-  .swatch i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.25); }
+  .swatch i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(220,233,255,.25); }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 14px 10px; }
   .cell { text-align: center; }
   .cell .stage-wrap { width: 84px; margin: 0 auto 4px; }
-  .cell .cap { font-size: .68rem; color: #6b5638; line-height: 1.2; }
+  .cell .cap { font-size: .68rem; color: #7d93b8; line-height: 1.2; }
 
   /* ---- Phase 2: growth/health state gallery ----
      .stage-wrap here only sets WIDTH, same convention as the hero/grid
@@ -44,11 +44,11 @@
   .growth-row .cell .stage-wrap { width: 96px; }
 
   .matrix-table { display: grid; grid-template-columns: 64px repeat(5, 1fr); gap: 12px 8px; align-items: end; margin-bottom: 10px; }
-  .matrix-table .colhead { font-size: .68rem; font-weight: 600; color: #6b5638; text-align: center; }
-  .matrix-table .rowhead { font-size: .7rem; color: #6b5638; align-self: center; }
+  .matrix-table .colhead { font-size: .68rem; font-weight: 600; color: #6fb8ff; text-align: center; text-transform: uppercase; letter-spacing: .03em; }
+  .matrix-table .rowhead { font-size: .7rem; color: #7d93b8; align-self: center; }
   .matrix-cell { text-align: center; }
   .matrix-cell .stage-wrap { width: 74px; margin: 0 auto 4px; }
-  .matrix-cell .cap { font-size: .6rem; color: #8a7458; line-height: 1.2; }
+  .matrix-cell .cap { font-size: .6rem; color: #7d93b8; line-height: 1.2; }
 
   .household-row { display: flex; gap: 46px; align-items: flex-end; margin: 10px 0 8px; }
   .household-row .cell .stage-wrap { width: 120px; }
@@ -57,7 +57,7 @@
 </style>
 </head>
 <body>
-  <h1>Blip companion — renderer proof</h1>
+  <h1>System // Blip Renderer Diagnostics</h1>
   <p class="sub">Standalone test harness for <code>js/companion/renderer.js</code>. Does not touch any existing app file.</p>
 
   <button class="opt" id="freeze-toggle" type="button">Freeze bop animation</button>
@@ -77,6 +77,10 @@
     </div>
   </div>
 
+  <h2>SL catalogue — each new item solo on the blue base</h2>
+  <p class="sub">The six new techy accessories, one per stage, on the default blue body — for eyeballing per-item placement (glasses/hat/wings float; ears/arms attach).</p>
+  <div class="grid" id="catalogue"></div>
+
   <h2>Grid — colour &times; accessory-set combos</h2>
   <div class="grid" id="grid"></div>
 
@@ -88,12 +92,18 @@
   <p class="sub">Every growthStage (rows) &times; every healthStage 0&ndash;3 plus a recovering column. Every cell starts equipped with a hat + ears so accessory-hiding at healthStage&ge;2 / recovering is visible at a glance. Sick/recovery art files don't exist yet, so stages 1&ndash;3 and the recovering column show the code-drawn health-fx placeholders (droopy eyes, bed + blanket + thermometer, heart monitor, sit-up + lap blanket).</p>
   <div class="matrix-table" id="matrix"></div>
 
+  <h2>ANIMATIONS — frame-cycler idle loops + moments (2026-07-19)</h2>
+  <p class="sub">Sliced from Megan's hand-drawn sheets (assets/companion/anim/&lt;state&gt;-&lt;n&gt;.png). Idle loops swap automatically from renderBlip's existing healthStage/recovering options plus the new `hungry` hint. Sick loops (sick, veryill) render as-authored — no recolour, "sickness overrides colour". Healthy loops (sleeping, hungry) DO recolour through the same cache as the static body — the mint cell below proves it.</p>
+  <div class="grid" id="anim-states"></div>
+  <h3>Moments (one-shot, ~2 loops then back to idle)</h3>
+  <div class="grid" id="anim-moments"></div>
+
   <h2>Phase 2 — two-blip household row</h2>
   <p class="sub">Two independent renderBlip instances, different colours and growth stages, rendered together — checks there's no shared-canvas/cache bleed between instances.</p>
   <div class="household-row" id="household"></div>
 
   <script type="module">
-    import { renderCompanion, renderBlip, blipMood, COLOURS, ACCESSORIES, ATTACH, getBodySrc } from "./js/companion/renderer.js";
+    import { renderCompanion, renderBlip, blipMood, COLOURS, ACCESSORIES, ATTACH, getBodySrc, playMoment } from "./js/companion/renderer.js";
 
     const colourIds = Object.keys(COLOURS);
     const accessoryIds = Object.keys(ACCESSORIES);
@@ -157,7 +167,7 @@
     async function checkAttachment(instance) {
       if (!baseAlphaCtx) {
         const img = new Image();
-        await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = "assets/companion/blip-base.png"; });
+        await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = "assets/companion/blip-base-blue.png"; });
         const cv = document.createElement("canvas");
         cv.width = img.naturalWidth; cv.height = img.naturalHeight;
         baseAlphaCtx = cv.getContext("2d");
@@ -202,7 +212,11 @@
     };
 
     /* ---------------- hero ---------------- */
-    const heroState = { colour: "mint", accessories: accessoryIds.slice() };
+    // Default to the SL blue base + the six new catalogue items (one per
+    // slot, no double-stacking) so the hero reads clean. Toggle buttons
+    // still expose all 11 ids (new six + legacy five) for back-compat checks.
+    const CATALOGUE = ["star-shades", "headphones", "halo", "aurora-wings", "power-gloves"];
+    const heroState = { colour: "blue", accessories: CATALOGUE.slice() };
     const heroEl = document.getElementById("hero");
 
     function renderHero() {
@@ -244,12 +258,30 @@
 
     renderHero();
 
+    /* ---------------- SL catalogue: each new item solo ---------------- */
+    const NEW_ITEMS = ["star-shades", "heart-eyes", "headphones", "halo", "aurora-wings", "power-gloves"];
+    const catHost = document.getElementById("catalogue");
+    NEW_ITEMS.forEach((id) => {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "stage-wrap";
+      cell.appendChild(stageWrap);
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      cap.textContent = id;
+      cell.appendChild(cap);
+      catHost.appendChild(cell);
+      const result = renderCompanion(stageWrap, { colour: "blue", accessories: [id] });
+      window.__COMPANION__.instances.push({ colourId: "blue", comboLabel: id, ...result });
+    });
+
     /* ---------------- grid ---------------- */
     const comboSets = [
       { label: "bare", accessories: [] },
-      { label: "party-hat", accessories: ["party-hat"] },
-      { label: "cat-ears + glasses", accessories: ["cat-ears", "round-glasses"] },
-      { label: "wings + arms", accessories: ["angel-wings", "stubby-arms"] },
+      { label: "star-shades + halo", accessories: ["star-shades", "halo"] },
+      { label: "heart-eyes + headphones", accessories: ["heart-eyes", "headphones"] },
+      { label: "aurora-wings + power-gloves", accessories: ["aurora-wings", "power-gloves"] },
     ];
 
     const gridHost = document.getElementById("grid");
@@ -286,7 +318,7 @@
       cap.textContent = GROWTH_LABELS[g];
       cell.appendChild(cap);
       growthHost.appendChild(cell);
-      const result = renderBlip(stageWrap, { colour: "peach", equipped: ["cat-ears"], growthStage: g, healthStage: 0 });
+      const result = renderBlip(stageWrap, { colour: "peach", equipped: ["headphones"], growthStage: g, healthStage: 0 });
       return { growthStage: g, result, cellEl: stageWrap };
     });
 
@@ -299,7 +331,7 @@
       { key: "h3", label: "3 critical", healthStage: 3, recovering: false },
       { key: "recovering", label: "recovering", healthStage: 0, recovering: true },
     ];
-    const MATRIX_COLOURS = ["mint", "sky", "lilac", "coral"]; // one per row, just so rows are visually distinguishable
+    const MATRIX_COLOURS = ["blue", "sky", "lilac", "coral"]; // one per row, just so rows are visually distinguishable (blue = the SL default)
 
     // header row
     matrixHost.appendChild(document.createElement("div")); // blank corner
@@ -329,7 +361,7 @@
 
         const result = renderBlip(stageWrap, {
           colour: MATRIX_COLOURS[g],
-          equipped: ["party-hat", "cat-ears"], // deliberately equipped, so the healthStage>=2/recovering hide is visible
+          equipped: ["halo", "headphones"], // deliberately equipped, so the healthStage>=2/recovering hide is visible
           growthStage: g,
           healthStage: c.healthStage,
           recovering: c.recovering,
@@ -341,8 +373,8 @@
     /* ---------------- Phase 2: two-blip household row ---------------- */
     const householdHost = document.getElementById("household");
     const HOUSEHOLD = [
-      { label: "Blip 1 — grown, mint", colour: "mint", growthStage: 3, healthStage: 0, equipped: ["party-hat"] },
-      { label: "Blip 2 — baby, coral", colour: "coral", growthStage: 0, healthStage: 0, equipped: ["round-glasses"] },
+      { label: "Blip 1 — grown, blue", colour: "blue", growthStage: 3, healthStage: 0, equipped: ["halo"] },
+      { label: "Blip 2 — baby, coral", colour: "coral", growthStage: 0, healthStage: 0, equipped: ["star-shades"] },
     ];
     HOUSEHOLD.forEach((spec) => {
       const cell = document.createElement("div");
@@ -378,6 +410,117 @@
         accessoriesRendered: m.result.accessories.length,
         expectedHidden: m.healthCol === "h2" || m.healthCol === "h3" || m.healthCol === "recovering",
       }));
+    };
+
+    /* ---------------- ANIMATIONS: idle loops ---------------- */
+    // one cell per state loop — healthStage/recovering/hungry drive the
+    // mapping automatically (renderBlip's own idleAnimState()), nothing
+    // animation-specific to pass beyond the existing options.
+    const ANIM_STATE_CELLS = [
+      { label: "sleeping (healthStage 1)", opts: { healthStage: 1 } },
+      { label: "sick (healthStage 2)", opts: { healthStage: 2 } },
+      { label: "veryill (healthStage 3)", opts: { healthStage: 3 } },
+      { label: "hungry (idle hint)", opts: { healthStage: 0, hungry: true } },
+      { label: "excited (as an idle preview — normally a moment only)", opts: { healthStage: 0, hungry: false }, previewMoment: "excited" },
+      { label: "jumping (as an idle preview — normally a moment only)", opts: { healthStage: 0, hungry: false }, previewMoment: "jumping" },
+    ];
+    const animStatesHost = document.getElementById("anim-states");
+    window.__COMPANION__.animInstances = [];
+    ANIM_STATE_CELLS.forEach(({ label, opts, previewMoment }) => {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "stage-wrap";
+      cell.appendChild(stageWrap);
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      cap.textContent = label;
+      cell.appendChild(cap);
+      animStatesHost.appendChild(cell);
+      const result = renderBlip(stageWrap, { colour: "blue", equipped: ["halo"], growthStage: 3, ...opts });
+      if (previewMoment) playMoment(result, previewMoment); // loops twice then reverts to idle — just to eyeball the sheet in this gallery, not how the real app triggers it
+      window.__COMPANION__.animInstances.push({ label, result, cellEl: stageWrap, mountOpts: { colour: "blue", equipped: ["halo"], growthStage: 3, ...opts } });
+    });
+
+    // hungry + mint recolour proof — sick/veryill cells above are the
+    // "as-authored, no recolour" proof; this is the "healthy loops DO
+    // recolour" proof, same getBodySrc cache the static body uses.
+    {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "stage-wrap";
+      cell.appendChild(stageWrap);
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      cap.textContent = "hungry loop, mint recolour";
+      cell.appendChild(cap);
+      animStatesHost.appendChild(cell);
+      const mountOpts = { colour: "mint", growthStage: 3, healthStage: 0, hungry: true };
+      const result = renderBlip(stageWrap, mountOpts);
+      window.__COMPANION__.animInstances.push({ label: "hungry-mint", result, cellEl: stageWrap, mountOpts });
+    }
+
+    /* ---------------- ANIMATIONS: moments ---------------- */
+    const momentHost = document.getElementById("anim-moments");
+    const momentCell = document.createElement("div");
+    momentCell.className = "cell";
+    const momentStage = document.createElement("div");
+    momentStage.className = "stage-wrap";
+    momentCell.appendChild(momentStage);
+    const momentCap = document.createElement("div");
+    momentCap.className = "cap";
+    momentCap.textContent = "click a button to trigger a moment";
+    momentCell.appendChild(momentCap);
+    momentHost.appendChild(momentCell);
+    let momentHandle = renderBlip(momentStage, { colour: "peach", growthStage: 3, healthStage: 0 });
+    window.__COMPANION__.momentHandle = momentHandle;
+
+    const momentBtns = document.createElement("div");
+    momentBtns.className = "btn-row";
+    momentBtns.style.marginTop = "6px";
+    ["excited", "jumping"].forEach((name) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt";
+      b.textContent = "play " + name;
+      b.addEventListener("click", () => playMoment(window.__COMPANION__.momentHandle, name));
+      momentBtns.appendChild(b);
+    });
+    momentCell.appendChild(momentBtns);
+
+    /* Verification helper: samples every anim-loop instance's body <img>
+       src twice ~700ms apart (frame interval is 520ms, so two samples
+       700ms apart land on different frames essentially always) —
+       confirms the frame-cycler is actually swapping src, not just
+       painting once and sitting still. */
+    window.__COMPANION__.checkFramesCycling = async function () {
+      const insts = window.__COMPANION__.animInstances;
+      const before = insts.map((i) => i.result.layers.body.src);
+      await new Promise((r) => setTimeout(r, 700));
+      const after = insts.map((i) => i.result.layers.body.src);
+      return insts.map((i, idx) => ({ label: i.label, changed: before[idx] !== after[idx] }));
+    };
+
+    /* Verification helper: re-mounts every anim instance's own host IN
+       PLACE (same call renderHub/renderBlip make on every app.render())
+       and confirms the PREVIOUS body <img> is detached afterward — that
+       detachment is exactly what runFrameLoop's isConnected self-check
+       (and renderCompanion's explicit stopFrameLoop-on-prevBody) relies
+       on to guarantee no interval survives past its own element. */
+    window.__COMPANION__.checkNoLeakOnRerender = function () {
+      const insts = window.__COMPANION__.animInstances;
+      return insts.map((i) => {
+        const oldBody = i.result.layers.body;
+        const wasConnectedBefore = oldBody.isConnected;
+        const newResult = renderBlip(i.cellEl, i.mountOpts);
+        i.result = newResult;
+        return {
+          label: i.label,
+          oldBodyWasConnectedBeforeRerender: wasConnectedBefore,
+          oldBodyDetachedAfterRerender: !oldBody.isConnected,
+        };
+      });
     };
 
     /* ---------------- freeze toggle (for verification without rAF) ---------------- */

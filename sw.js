@@ -8,7 +8,7 @@
      • cross-origin (Supabase, supabase-js CDN, Google Fonts) → straight to
        the network; scores need the internet.
    Bump CACHE on a shippable change to evict the old cache on activate. */
-const CACHE = "mhq-v27";
+const CACHE = "mhq-v28";
 const SHELL = ["./", "./index.html", "./admin.html", "./css/styles.css", "./js/app.js", "./manifest.json",
   "./icon-192.png", "./icon-512.png"];
 

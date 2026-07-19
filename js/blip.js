@@ -29,7 +29,7 @@ import { el, clear, showToast } from "./ui.js";
    renderHub/renderChapter/renderGallery elsewhere), which collides with
    the companion module's new renderBlip(el, opts) if imported under its
    own name into the same module scope. */
-import { renderCompanion, renderBlip as mountCompanionBlip, blipMood } from "./companion/renderer.js";
+import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment } from "./companion/renderer.js";
 import { renderSwatchGrid, equippedToAccessories, itemLabel } from "./companion/blip-ui.js";
 
 /* renderBlip (companion/renderer.js, landed 2026-07-19) owns the
@@ -133,7 +133,7 @@ function foodErrMsg(code, r) {
   return ({
     auth: "Session problem — try logging in again.",
     no_item: "That item isn't available.",
-    gold: `Not enough gold — you have ${(r && r.gold) || 0}, it costs ${(r && r.price) || "?"}.`,
+    gold: `Not enough crystals — you have ${(r && r.gold) || 0} 💎, it costs ${(r && r.price) || "?"} 💎.`,
     REFUSES_FOOD: "Blip doesn't feel like eating right now.",
     BLIP_TOO_SICK: "Blip won't get up right now…",
   })[code] || "Something went wrong — try again.";
@@ -167,14 +167,14 @@ async function maybeLogCareDay(app, sess, itemId) {
 function pharmacyCard(app, sess, state, health) {
   const card = el("div", "card pharmacy-card");
   const hearts = Array.from({ length: 3 }, (_, i) => (i < health.careStreak ? "❤️" : "🤍")).join(" ");
-  card.innerHTML = `<h3>Grocery &amp; Pharmacy</h3>
-    <p class="muted small">Soup and medicine together make one care day — 3 care days and Blip's back to himself.</p>
+  card.innerHTML = `<h3>PHARMACY</h3>
+    <p class="muted small">Grocery run — soup and medicine together make one care day — 3 care days and Blip's back to himself.</p>
     <div class="care-hearts">${hearts} <span class="muted small">(${health.careStreak}/3 care days)</span></div>
     <div class="pharmacy-grid"></div>`;
   const grid = card.querySelector(".pharmacy-grid");
   pharmacyItems(state).forEach((item) => {
     const row = el("div", "pharmacy-item");
-    row.innerHTML = `<div class="ph-name">${item.icon} ${item.label}</div><div class="ph-price">🪙 ${item.price}</div>`;
+    row.innerHTML = `<div class="ph-name">${item.icon} ${item.label}</div><div class="ph-price"><span class="crystal">💎</span> ${item.price}</div>`;
     const btn = el("button", "btn small primary", `Give ${item.label.toLowerCase()}`);
     btn.addEventListener("click", async () => {
       btn.disabled = true;
@@ -256,9 +256,13 @@ export function renderBlip(app, host) {
   const xp = state.xp || 0;
   if (!blips.some((b) => b.slot === activeSlot)) activeSlot = blips[0].slot;
   const activeBlip = blips.find((b) => b.slot === activeSlot) || blips[0];
+  // hoisted above the hero mount (was computed down by the feed card) —
+  // the hero's idle animation needs it too, to show the hungry loop
+  // instead of the static base when healthy + feedable today.
+  const canFeedToday = readyFlag(state.canFeedToday);
 
   const head = el("div", "blip-head");
-  head.innerHTML = `<div><span class="eyebrow">Your companion</span><h1>Blip</h1></div>
+  head.innerHTML = `<div><span class="eyebrow">System</span><h1><span class="sparkle">✦</span> STATUS <span class="sparkle">✦</span></h1><p class="muted small">Your companion, Blip</p></div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="link-btn gallery-link" title="Everyone's Blips" aria-label="Gallery">👥</button>
       <button class="link-btn back" aria-label="Back">←</button>
@@ -283,14 +287,15 @@ export function renderBlip(app, host) {
 
   // ---- hero preview + mood + nickname ----
   const hero = el("div", "card blip-hero-card");
-  hero.innerHTML = `<div class="blip-hero-stage"></div>`;
+  hero.innerHTML = `<div class="blip-hero-stage"><div class="blip-pedestal"><i></i></div></div>`;
   const heroStage = hero.querySelector(".blip-hero-stage");
-  mountBlip(heroStage, {
+  const heroHandle = mountBlip(heroStage, {
     colour: activeBlip.colour,
     equipped: activeBlip.equipped,
     growthStage: activeBlip.growthStage,
     healthStage: health.stage,
     recovering: health.recovering,
+    hungry: canFeedToday,
   });
 
   const mood = moodCopy(health);
@@ -321,7 +326,8 @@ export function renderBlip(app, host) {
   });
 
   // ---- feed (household action — one cookie feeds every Blip) ----
-  const canFeedToday = readyFlag(state.canFeedToday);
+  // (canFeedToday itself is computed up near activeBlip now — the hero
+  // mount needs it for the idle hungry-loop hint)
   const feedCard = el("div", "card feed-card");
   const feedBtn = el("button", "btn primary big" + (canFeedToday ? "" : " ghost"), canFeedToday ? "🍪 Feed Blip" : "Fed today — come back tomorrow");
   feedBtn.disabled = !canFeedToday;
@@ -339,6 +345,7 @@ export function renderBlip(app, host) {
         feedBtn.disabled = false; return;
       }
       triggerHappy(heroStage);
+      playMoment(heroHandle, "excited");
       showToast(blips.length > 1 ? `${blips[0].name} and ${blips[1].name} shared a cookie!` : `${blips[0].name} enjoyed a cookie!`, "good");
       await app.refresh();
       app.go("blip");
@@ -357,11 +364,11 @@ export function renderBlip(app, host) {
   }
 
   // ---- colour ----
-  host.appendChild(el("h2", "", "Colour"));
+  host.appendChild(el("h2", "", "COLOUR"));
   const colourCard = el("div", "card colour-card");
   const xpLocked = xp <= 0;
   const colourLocked = xpLocked || health.locks.dress;
-  if (xpLocked) colourCard.appendChild(el("p", "colour-hint", "🔒 Finish your first round to unlock colours — cream stays free any time."));
+  if (xpLocked) colourCard.appendChild(el("p", "colour-hint", "🔒 Finish your first round to unlock colours — blue stays free any time."));
   if (!xpLocked && health.locks.dress) colourCard.appendChild(el("p", "colour-hint", "🛌 Blip won't get up to change today — try again once he's feeling better."));
   const swatches = renderSwatchGrid({
     current: activeBlip.colour, locked: colourLocked,
@@ -379,7 +386,7 @@ export function renderBlip(app, host) {
   host.appendChild(colourCard);
 
   // ---- shop ----
-  host.appendChild(el("h2", "", "Shop"));
+  host.appendChild(el("h2", "", "SHOP"));
   if (health.stage >= 2) {
     // Critical-adjacent: the cosmetic layer steps aside for the pharmacy.
     host.appendChild(el("p", "muted small", "The shop's quiet for now — Blip needs some care first."));
@@ -395,7 +402,7 @@ export function renderBlip(app, host) {
       const card = el("div", "shop-item" + (equippedHere ? " equipped" : ""));
       card.innerHTML = `<div class="si-stage"></div>
         <div class="si-name">${itemLabel(item.id)}</div>
-        <div class="si-meta">${owned ? (equippedHere ? "Equipped" : "Owned") : `🪙 ${item.price}${lockedByLevel ? ` · unlocks at level ${item.minLevel}` : ""}`}</div>`;
+        <div class="si-meta">${owned ? (equippedHere ? "Equipped" : "Owned") : `<span class="crystal">💎</span> ${item.price}${lockedByLevel ? ` · unlocks at level ${item.minLevel}` : ""}`}</div>`;
       renderCompanion(card.querySelector(".si-stage"), { colour: activeBlip.colour, accessories: [item.id] });
 
       const actionBtn = el("button", "btn small");
@@ -420,7 +427,7 @@ export function renderBlip(app, host) {
         actionBtn.disabled = true;
         actionBtn.className = "btn small ghost";
       } else {
-        actionBtn.textContent = lockedByShop ? "Shop's closed for now" : `Buy for ${item.price} gold`;
+        actionBtn.innerHTML = lockedByShop ? "Shop's closed for now" : `Buy · ${item.price} <span class="crystal">💎</span>`;
         actionBtn.className = "btn small primary";
         actionBtn.disabled = lockedByShop;
         if (!lockedByShop) actionBtn.addEventListener("click", async () => {
@@ -443,15 +450,15 @@ export function renderBlip(app, host) {
     // treats (paid, cosmetic-food — animate him but never accelerate growth)
     const treats = treatItems(state);
     if (treats.length) {
-      host.appendChild(el("h3", "", "Treats"));
+      host.appendChild(el("h3", "", "TREATS"));
       const tgrid = el("div", "shop-grid");
       treats.forEach((item) => {
         const lockedByShop = health.locks.shop;
         const card = el("div", "shop-item");
         card.innerHTML = `<div class="si-stage" style="font-size:30px;display:grid;place-items:center">${item.icon}</div>
           <div class="si-name">${item.label}</div>
-          <div class="si-meta">🪙 ${item.price}</div>`;
-        const btn = el("button", "btn small primary", lockedByShop ? "Shop's closed for now" : `Buy for ${item.price} gold`);
+          <div class="si-meta"><span class="crystal">💎</span> ${item.price}</div>`;
+        const btn = el("button", "btn small primary", lockedByShop ? "Shop's closed for now" : `Buy · ${item.price} <span class="crystal">💎</span>`);
         btn.disabled = lockedByShop;
         if (!lockedByShop) btn.addEventListener("click", async () => {
           btn.disabled = true;
@@ -494,7 +501,7 @@ function buyErrMsg(code, r) {
     no_item: "That item isn't available.",
     owned: "You already own that.",
     locked: `Unlocks at level ${(r && r.minLevel) || "?"}.`,
-    gold: `Not enough gold — you have ${(r && r.gold) || 0}, it costs ${(r && r.price) || "?"}.`,
+    gold: `Not enough crystals — you have ${(r && r.gold) || 0} 💎, it costs ${(r && r.price) || "?"} 💎.`,
     BLIP_TOO_SICK: "Blip won't get up right now…",
   })[code] || "Something went wrong — try again.";
 }

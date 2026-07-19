@@ -7,7 +7,7 @@
 
    renderCompanion(el, state) mounts a full character into `el`:
      state = {
-       colour?: one of the COLOURS keys below (default "cream"),
+       colour?: one of the COLOURS keys below (default "blue" — the SL art),
        accessories?: array of accessory ids from ACCESSORIES (any order —
                      each accessory carries its own slot/z-order)
      }
@@ -32,22 +32,30 @@
    never px.
 
    COLOUR SYSTEM: the base PNG is recoloured on an offscreen canvas.
-   Every non-dark pixel gets the target HUE with saturation scaled
-   relative to the body cream's (so the paler eye-highlight stays paler
-   in the new colour) while keeping its own brightness (V); dark
-   outline/pupil/smile pixels are untouched, with a smoothstep blend at
-   the boundary instead of a hard cutoff — a hard classify-or-skip left
-   the source art's anti-alias fringe as yellow speckles around the eyes
-   and smile on recoloured bodies. Results are cached per colour id (as
-   data-URLs) so repeated renders/tests never reprocess a colour twice.
+   Every bright body pixel gets the target HUE with saturation scaled
+   relative to the body blue's (so the paler gloss highlight stays paler
+   in the new colour) while keeping its own brightness (V); the dark navy
+   outline + navy eyes are untouched, with a smoothstep blend at the
+   boundary instead of a hard cutoff — a hard classify-or-skip would leave
+   the source art's anti-alias fringe as speckles around the strokes.
+   Results are cached per colour id (as data-URLs) so repeated renders/
+   tests never reprocess a colour twice.
    ============================================================ */
-import { healthOverlaySpec, blipMood as _blipMood, HEALTH_ROTATE_DEG } from "./health-fx.js";
+import { healthOverlaySpec, animatedHealthOverlaySpec, blipMood as _blipMood, HEALTH_ROTATE_DEG } from "./health-fx.js";
 export { blipMood } from "./health-fx.js";
 
-const BASE_SRC = "assets/companion/blip-base.png";
+/* SL restyle 2026-07-19: base body swapped from the cream art to Megan's
+   dark-Solo-Leveling blue art (assets/companion/blip-base-blue.png,
+   extracted from "SL Blip Design.png"). The old cream PNG is kept on disk
+   at assets/companion/blip-base.png as history/fallback but nothing points
+   at it any more. Her blue body is used as-is (house rule — never redraw
+   her character); accessories below are still code-drawn SVG. */
+const BASE_SRC = "assets/companion/blip-base-blue.png";
 
-/* Natural size of the downscaled art (kept at the source's 1080:1350 = 4:5
-   ratio). Used only for the offscreen canvas — on-page sizing is all %. */
+/* Natural size of the SL blue base canvas (480x600, aspect-ratio 4:5 —
+   unchanged from the cream base so the stage box, all ATTACH fractions,
+   and every host CSS width keep working). Used only for the offscreen
+   recolour canvas — on-page sizing is all %. */
 const BASE_W = 480, BASE_H = 600;
 
 /* ---------- Phase 2: growth/health base-image variants ----------
@@ -64,19 +72,26 @@ const IMAGE_SOURCES = {
   recovering: "assets/companion/blip-recovering.png",
 };
 
-/* Sampled directly from Blip Blank.png: the outline/eye/pupil dark brown,
-   and the flat "cream" body fill it's drawn over. */
-export const OUTLINE = "#2e1b0d";
-const BASE_CREAM = "#fddb93";
+/* Sampled directly from Megan's SL blue art (SL Blip Design.png): the
+   navy outline/eye stroke, and the flat electric-blue body fill it's drawn
+   over. The whole character is now monochromatic navy-on-blue, so this
+   navy doubles as the shared accessory outline (matches her art's stroke
+   weight — the SL restyle brief calls for exactly this hex on the
+   code-drawn accessories too). */
+export const OUTLINE = "#0062ac";
+const BASE_BODY = "#62ceff";
 
 /* ---------- colour presets ----------
-   Soft pastel targets; "cream" is the untouched original art (no canvas
-   work needed — it's the base PNG's own colour). Every other preset is
-   just a target hex: recolouring derives that hex's hue+saturation and
-   keeps each source pixel's own brightness, so one code path serves all
-   nine recolours. */
+   "blue" is the untouched original SL art (no canvas work — it's the base
+   PNG's own colour) and the DEFAULT (slot-1 blips hatch blue; the server &
+   local backend agree on the id "blue"). Every other preset is a target
+   hex: recolouring derives that hex's hue+saturation and keeps each source
+   pixel's own brightness, so one code path serves all recolours. NOTE
+   "cream" is now a real recolour target (the base is no longer cream), so
+   the old cream look is still reachable as a chosen colour. */
 export const COLOURS = {
-  cream: null,
+  blue: null,
+  cream: "#fddb93",
   pink: "#ffc2d6",
   mint: "#bff7e0",
   sky: "#c0e4fb",
@@ -89,37 +104,45 @@ export const COLOURS = {
 };
 
 /* ---------- attachment points ----------
-   Fractions of the stage box (which mirrors the full 1080x1350 canvas,
-   not just the drawn blob's own tighter bounding box). Measured off
-   Blip Blank.png: body bbox x11–1057/y110–1201, eyes centred at
-   y0.494 (x0.300 / x0.689), mouth centred (0.494, 0.571).
-   PLACEMENT RULING — per-accessory (Megan's phone review 2026-07-19):
+   Fractions of the stage box (480x600, mirrors the full base canvas, not
+   just the drawn blob's tighter bbox). RE-MEASURED 2026-07-19 off the SL
+   blue base (blip-base-blue.png), where the face sits LOWER than the old
+   cream art: eyes centred at y0.569 (x0.302 / x0.691), mouth centred
+   (0.499, 0.644). (Old cream numbers were y0.494 eyes / 0.571 mouth — the
+   blue body is squatter and bottom-aligned, so everything face-and-below
+   shifted down ~0.075.) Body opaque bbox x0.023–0.975 / y0.155–0.880.
+   Silhouette left edge by row (frac): x0.333@y0.25, x0.260@y0.30,
+   x0.138@y0.40, x0.058@y0.50, x0.025@y0.60–0.68, x0.052@y0.75, x0.123@y0.82.
+
+   PLACEMENT RULING — per-accessory (Megan's phone review 2026-07-19,
+   carried over to the SL body):
    - hat, wings, glasses: FLOATY BY DESIGN — they hover clear of the
-     body outline with visible gaps; she finds these cute as-is. Don't
-     "fix" them by pulling them in to touch the outline.
+     body outline with visible gaps; she finds these cute as-is. (glasses
+     still sit over the eyes — "floaty" here just means not force-welded.)
+     Don't "fix" them by pulling them in to touch the outline.
    - ears, arms: ATTACHED BY DESIGN — they must visibly overlap the
-     body outline (ears grow from the sloping upper sides like real cat
-     ears, arm shoulders merge into the lower sides; style reference:
-     "Blip with Hat.png" outline-on-outline joins). Don't float them.
-   Body silhouette measurements used below: opaque bbox x0.012–0.977 /
-   y0.083–0.887; left edge ≈ x0.289 at y0.195, ≈ x0.02 at y0.68.
+     body outline (ears from the sloping upper sides, arm shoulders merge
+     into the lower sides). Don't float them.
+   An accessory may override its slot's point with its own `attach`
+   (headphones and halo do — see ACCESSORIES) without disturbing the
+   others sharing that slot.
    Single point = one centred accessory (hat, glasses).
    [left, right] pair = a symmetric accessory mirrored to both sides
    (ears, wings, arms). */
 export const ATTACH = {
-  hat: { x: 0.5, y: 0.05 },
-  glasses: { x: 0.5, y: 0.487 },
+  hat: { x: 0.5, y: 0.10 },
+  glasses: { x: 0.5, y: 0.569 }, // eye level on the blue base
   ears: [
-    { x: 0.31, y: 0.195 }, // base straddles the upper-side outline (edge x≈0.289 here)
-    { x: 0.69, y: 0.195 },
+    { x: 0.315, y: 0.255 }, // base straddles the upper-side outline (edge x≈0.30 here)
+    { x: 0.685, y: 0.255 },
   ],
   wings: [
-    { x: 0.05, y: 0.52 },
-    { x: 0.95, y: 0.52 },
+    { x: 0.05, y: 0.55 },
+    { x: 0.95, y: 0.55 },
   ],
   arms: [
-    { x: 0.115, y: 0.68 }, // shoulder buried inside the lower-side outline (edge x≈0.02 here); hand pokes out below
-    { x: 0.885, y: 0.68 },
+    { x: 0.115, y: 0.70 }, // shoulder buried inside the lower-side outline (edge x≈0.025 here); hand pokes out below
+    { x: 0.885, y: 0.70 },
   ],
 };
 
@@ -157,7 +180,7 @@ export const ACCESSORIES = {
     anchor: { x: 0.5, y: 0.86 },
     tiltDeg: -25, // lean the ear outward along the sloping outline (mirrored side flips automatically)
     svg: `<svg viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
-      <path d="M30 4 C10 20 4 46 10 64 C16 60 22 56 30 56 C38 56 44 60 50 64 C56 46 50 20 30 4 Z" fill="var(--blip-fill, ${BASE_CREAM})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M30 4 C10 20 4 46 10 64 C16 60 22 56 30 56 C38 56 44 60 50 64 C56 46 50 20 30 4 Z" fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
       <path d="M30 20 C20 30 17 44 20 54 C24 51 27 49 30 49 C33 49 36 51 40 54 C43 44 40 30 30 20 Z" fill="#ffb6c9"/>
     </svg>`,
   },
@@ -188,11 +211,153 @@ export const ACCESSORIES = {
     anchor: { x: 0.76, y: 0.1 }, // top (shoulder) end of the capsule — buried in the body's lower side
     svg: `<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
       <rect x="14" y="6" width="32" height="80" rx="16" transform="rotate(24 30 45)"
-        fill="var(--blip-fill, ${BASE_CREAM})" stroke="${OUTLINE}" stroke-width="6"/>
+        fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="6"/>
     </svg>`,
     // a plain rounded capsule angled ~24° outward-down: the earlier
     // comma/claw path read as a hook once attached to the body (Megan's
     // "look a bit odd" review); a simple stub reads as a limb
+  },
+
+  /* ============================================================
+     SL techy catalogue (2026-07-19) — the six items the shop now
+     sells, code-drawn to match her blue art: navy ${OUTLINE} strokes,
+     flat fills + restrained translucent glow accents (soft outer
+     strokes, not SVG filters — the preview pane is flaky with those).
+     Slots + floaty/attached follow the brief's per-item ruling.
+     ============================================================ */
+
+  // gold star-shaped sunglasses (glasses slot, FLOATY / sits over eyes)
+  // widthPct sized so the lens centres (0.4286 of viewBox apart) land on the
+  // eyes (0.389 of stage apart): 0.389/0.4286 ≈ 0.91 of the stage.
+  "star-shades": {
+    slot: "glasses",
+    widthPct: 90,
+    anchor: { x: 0.5, y: 0.5 },
+    svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
+      <line x1="86" y1="48" x2="124" y2="48" stroke="${OUTLINE}" stroke-width="7"/>
+      <line x1="20" y1="40" x2="4" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
+      <line x1="190" y1="40" x2="206" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
+      <g stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round">
+        <path d="M60.0,8.0 L70.0,34.2 L98.0,35.6 L76.2,53.3 L83.5,80.4 L60.0,65.0 L36.5,80.4 L43.8,53.3 L22.0,35.6 L50.0,34.2 Z" fill="#ffd23f"/>
+        <path d="M150.0,8.0 L160.0,34.2 L188.0,35.6 L166.2,53.3 L173.5,80.4 L150.0,65.0 L126.5,80.4 L133.8,53.3 L112.0,35.6 L140.0,34.2 Z" fill="#ffd23f"/>
+      </g>
+      <path d="M60.0,20 L66.5,36.5 L84,37.5 L70.5,48.5 L75,66 L60,56 L45,66 L49.5,48.5 L36,37.5 L53.5,36.5 Z" fill="#fff0a8" opacity="0.55"/>
+      <path d="M150.0,20 L156.5,36.5 L174,37.5 L160.5,48.5 L165,66 L150,56 L135,66 L139.5,48.5 L126,37.5 L143.5,36.5 Z" fill="#fff0a8" opacity="0.55"/>
+    </svg>`,
+  },
+
+  // pink heart-shaped shades (glasses slot, FLOATY / sits over eyes)
+  // same lens-centre maths as star-shades: 0.389/0.4286 ≈ 0.91 of the stage.
+  "heart-eyes": {
+    slot: "glasses",
+    widthPct: 90,
+    anchor: { x: 0.5, y: 0.5 },
+    svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
+      <line x1="92" y1="44" x2="118" y2="44" stroke="${OUTLINE}" stroke-width="7"/>
+      <line x1="20" y1="40" x2="4" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
+      <line x1="190" y1="40" x2="206" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
+      <g stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round">
+        <path d="M60.0,41.4 C60.0,23.8 20.4,15.0 20.4,37.0 C20.4,56.8 44.6,70.0 60.0,82.3 C75.4,70.0 99.6,56.8 99.6,37.0 C99.6,15.0 60.0,23.8 60.0,41.4 Z" fill="#ff6fa5"/>
+        <path d="M150.0,41.4 C150.0,23.8 110.4,15.0 110.4,37.0 C110.4,56.8 134.6,70.0 150.0,82.3 C165.4,70.0 189.6,56.8 189.6,37.0 C189.6,15.0 150.0,23.8 150.0,41.4 Z" fill="#ff6fa5"/>
+      </g>
+      <ellipse cx="42" cy="34" rx="9" ry="6" fill="#ffd0e2" opacity="0.7" transform="rotate(-30 42 34)"/>
+      <ellipse cx="132" cy="34" rx="9" ry="6" fill="#ffd0e2" opacity="0.7" transform="rotate(-30 132 34)"/>
+    </svg>`,
+  },
+
+  // blue gamer headset (ears slot, ATTACHED). Drawn as one half — band
+  // arcs from the crown down to an ear cup at the side; the paired-slot
+  // mirror makes the second half, the two bands meeting over the top.
+  // Own `attach`: cups sit lower than the cat-ears point (side-of-head,
+  // not crown), so this overrides ATTACH.ears without moving cat-ears.
+  //
+  // BUGFIX 2026-07-19 (Megan's phone review — cups were rendering in the
+  // MIDDLE of the face): the old attach x=0.235/y=0.52 landed the cup
+  // rect fully inside the body silhouette (measured: 100% of the cup
+  // rect was opaque body pixels — i.e. it sat ON the face, not the
+  // side). Re-measured the silhouette programmatically (Python+Pillow
+  // over assets/companion/blip-base-blue.png): the body's left/right
+  // edges at y=0.50 sit at x=0.058 / x=0.935, vs the old cup centre
+  // 0.235 which is well inside that (near the eyes, x0.302). New attach
+  // (x=0.06/0.94, y=0.50 — just above eye height y0.569 per the
+  // headphone-as-ear-level convention) puts the cup CENTRE on the edge,
+  // so ~55% of the cup rect overlaps the silhouette and the rest pokes
+  // outward — the same "straddles the outline" treatment ATTACH.ears
+  // already uses (see its comment above), just measured fresh for the
+  // headphone cup's own size. viewBox widened 120->160 and the band's
+  // far end pushed out to x=150 (widthPct 35->60) so the two mirrored
+  // bands still reach up and meet over the crown instead of stopping
+  // short once the cups moved outward — pure "cup at eye-x" moves would
+  // leave a ~20%-of-stage gap in the band at the top.
+  "headphones": {
+    slot: "ears",
+    widthPct: 60,
+    anchor: { x: 0.175, y: 0.62 }, // the ear cup (lower-left of the box) lands on the attach point; band sweeps up-and-inward to the box's top-right (= crown centre once mirrored)
+    attach: [
+      { x: 0.06, y: 0.50 },
+      { x: 0.94, y: 0.50 },
+    ],
+    svg: `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg">
+      <path d="M28 58 C25 22 77 6 150 10" fill="none" stroke="#2f8fe0" stroke-width="17" stroke-linecap="round"/>
+      <path d="M28 58 C25 22 77 6 150 10" fill="none" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
+      <rect x="6" y="56" width="44" height="74" rx="18" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="7"/>
+      <rect x="18" y="72" width="20" height="42" rx="10" fill="#0e2a4a"/>
+      <rect x="24" y="76" width="6" height="34" rx="3" fill="#57c9ff" opacity="0.85"/>
+    </svg>`,
+  },
+
+  // glowing golden halo (hat slot, FLOATY — the "floaty" ruling made
+  // literal: a ring floating clear above the head)
+  "halo": {
+    slot: "hat",
+    widthPct: 36,
+    anchor: { x: 0.5, y: 0.78 }, // anchor below the ring so it floats just above the head with a clear gap (still in-frame)
+    svg: `<svg viewBox="0 0 120 54" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="#ffe08a" stroke-width="16" opacity="0.35"/>
+      <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="#ffd23f" stroke-width="8"/>
+      <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="${OUTLINE}" stroke-width="2.5"/>
+      <ellipse cx="42" cy="18" rx="10" ry="3.5" fill="#fff6d6" opacity="0.8" transform="rotate(-18 42 18)"/>
+    </svg>`,
+  },
+
+  // luminous aurora wings (wings slot, FLOATY — her "Rainbow Glow"
+  // folded into the wings slot; gradient fill + soft glow, the one place
+  // the brief green-lights gradients for the SL world). {{UID}} keeps
+  // each mirrored copy's gradient id unique.
+  "aurora-wings": {
+    slot: "wings",
+    widthPct: 34,
+    anchor: { x: 0.82, y: 0.30 },
+    svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="aurora-{{UID}}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#5be0ff"/>
+          <stop offset="0.5" stop-color="#7b5cf6"/>
+          <stop offset="1" stop-color="#ff7fd0"/>
+        </linearGradient>
+      </defs>
+      <path d="M92 20 C70 10 40 20 22 46 C40 42 52 46 58 56 C38 58 24 70 16 92 C34 84 48 84 56 90 C40 98 30 112 26 132 C46 122 64 108 74 90 C82 68 88 44 92 20 Z"
+        fill="#7b5cf6" opacity="0.30" transform="translate(-3 3)"/>
+      <path d="M92 20 C70 10 40 20 22 46 C40 42 52 46 58 56 C38 58 24 70 16 92 C34 84 48 84 56 90 C40 98 30 112 26 132 C46 122 64 108 74 90 C82 68 88 44 92 20 Z"
+        fill="url(#aurora-{{UID}})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M80 34 C64 34 48 44 40 60" fill="none" stroke="#eafcff" stroke-width="3" opacity="0.5" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // small techy gauntlets (arms slot, ATTACHED — capsule-based like
+  // stubby-arms but armoured with a plated cuff + glow seam)
+  "power-gloves": {
+    slot: "arms",
+    widthPct: 17,
+    anchor: { x: 0.76, y: 0.1 }, // top (shoulder) end — buried in the body's lower side, matches stubby-arms
+    svg: `<svg viewBox="0 0 64 96" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(24 32 48)">
+        <rect x="14" y="6" width="34" height="82" rx="17" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6"/>
+        <rect x="12" y="40" width="38" height="16" rx="6" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="5"/>
+        <line x1="31" y1="42" x2="31" y2="54" stroke="#57c9ff" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="31" cy="74" r="6" fill="#57c9ff" opacity="0.9"/>
+      </g>
+    </svg>`,
   },
 };
 
@@ -229,23 +394,29 @@ function hsvToRgb(h, s, v) {
   return [Math.round((r1 + m) * 255), Math.round((g1 + m) * 255), Math.round((b1 + m) * 255)];
 }
 
-/* Recolour tuning (0..1 HSV scale), measured off the art: the dark
-   outline/pupils/smile sit at V≈0.18, body cream at V≈0.99 S≈0.42, the
-   eye-highlight dot at V≈0.99 S≈0.33 (a paler cream, not white).
-   The pass replaces HUE on every non-dark pixel and scales SATURATION
-   proportionally (new_s = target_s * s / CREAM_S), keeping each pixel's
-   own V. So: cream → exact target colour; the highlight keeps its
-   "paler than the body" identity in the new hue; and the source art's
-   anti-alias/ringing fringe hugging the dark strokes (≈1300 desaturated
-   cream pixels — a hard classify-or-skip left them as yellow speckles
-   on recoloured bodies) is pulled into the target hue too, so no cream
-   can survive anywhere. Near-dark pixels blend on a smoothstep ramp
-   over V (DARK_LO..DARK_HI) instead of a hard cutoff, keeping the
-   stroke edges smooth. */
-const CREAM_S = 0.419; // saturation of the flat body cream (253,219,147)
-const CREAM_V = 253 / 255; // value of the flat body cream
-const DARK_LO = 0.3; // V at/below this: outline / pupils — kept exactly
-const DARK_HI = 0.6; // V at/above this: fully recoloured; between = smoothstep blend
+/* Recolour tuning (0..1 HSV scale), RE-MEASURED off the SL blue art:
+   the whole character is monochromatic navy-on-blue, so the value ladder
+   is different from the old cream art —
+     - flat body fill  #62ceff : V≈1.00  S≈0.616  (≈115k px)
+     - body gloss highlight     : V≈1.00  S≈0.49   (paler blue)
+     - navy outline    #0062ac : V≈0.65  S≈0.99   (≈18k px)
+     - eye ring / pupil         : V≈0.31  S≈0.88
+     - white eye dot            : V≈0.99  S≈0.01
+   The pass keeps the SAME idea as the cream version — recolour the bright
+   body, preserve the fixed dark strokes — but the threshold sits BETWEEN
+   the navy outline (V0.65) and the body/highlight (V1.0). So the navy
+   outline + navy eyes are PRESERVED for every colour (the SL body keeps
+   its signature navy line, matching the navy-outlined accessories), while
+   body fill + gloss get the target HUE with SATURATION scaled relative to
+   the body's own (new_s = target_s * s / BODY_S) at each pixel's own V —
+   body → exact target, gloss stays "paler than the body" in the new hue,
+   the near-white eye dot (s≈0) stays white. The anti-alias fringe between
+   navy and body (V0.68..0.85) rides a smoothstep ramp instead of a hard
+   cutoff, so no speckles form at the stroke edges. */
+const BODY_S = 0.616; // saturation of the flat body blue (98,206,255)
+const BODY_V = 1.0; // value of the flat body blue
+const DARK_LO = 0.68; // V at/below this: navy outline / eyes — kept exactly
+const DARK_HI = 0.85; // V at/above this: fully recoloured; between = smoothstep blend
 function smoothstep(lo, hi, x) {
   const t = Math.min(1, Math.max(0, (x - lo) / (hi - lo)));
   return t * t * (3 - 2 * t);
@@ -299,7 +470,7 @@ function buildRecolouredDataUrl(colourId, baseSrc = BASE_SRC) {
       const [, s, v] = rgbToHsv(data[i], data[i + 1], data[i + 2]);
       const w = smoothstep(DARK_LO, DARK_HI, v);
       if (w === 0) continue; // dark outline / pupils / smile — untouched
-      const ns = Math.min(1, ts * (s / CREAM_S)); // saturation scaled relative to cream, so paler-than-cream stays paler-than-body
+      const ns = Math.min(1, ts * (s / BODY_S)); // saturation scaled relative to body blue, so paler-than-body stays paler-than-body
       const [nr, ng, nb] = hsvToRgb(th, ns, v);
       data[i] = Math.round(data[i] + (nr - data[i]) * w);
       data[i + 1] = Math.round(data[i + 1] + (ng - data[i + 1]) * w);
@@ -315,10 +486,10 @@ function buildRecolouredDataUrl(colourId, baseSrc = BASE_SRC) {
    own V can differ by a few %, which reads as a seam where attached
    accessories like ears/arms overlap the body). Used for --blip-fill. */
 export function bodyFlatColour(colourId) {
-  if (!colourId || colourId === "cream" || !COLOURS[colourId]) return BASE_CREAM;
+  if (!colourId || colourId === "blue" || !COLOURS[colourId]) return BASE_BODY;
   const t = hexToRgb(COLOURS[colourId]);
   const [th, ts] = rgbToHsv(t.r, t.g, t.b);
-  const [r, g, b] = hsvToRgb(th, ts, CREAM_V);
+  const [r, g, b] = hsvToRgb(th, ts, BODY_V);
   return `rgb(${r},${g},${b})`;
 }
 
@@ -330,7 +501,7 @@ export function bodyFlatColour(colourId) {
    whichever growth/health base won (see resolveRawBody below) so baby/sick
    art recolours through the exact same pixel math as the normal body. */
 export function getBodySrc(colourId, baseSrc = BASE_SRC) {
-  if (!colourId || colourId === "cream" || !COLOURS[colourId]) {
+  if (!colourId || colourId === "blue" || !COLOURS[colourId]) {
     return Promise.resolve(baseSrc);
   }
   const key = baseSrc + "::" + colourId;
@@ -338,6 +509,121 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
     recolourCache.set(key, buildRecolouredDataUrl(colourId, baseSrc));
   }
   return recolourCache.get(key);
+}
+
+/* ============================================================
+   Animation frame-cycler (2026-07-19) — Megan's hand-drawn 4-frame
+   sprite-sheet animations, sliced (scratchpad script, not part of the
+   repo) into assets/companion/anim/<state>-<n>.png, canvased to the same
+   480x600 / ground-line convention as blip-base-blue.png so swapping the
+   body img's src between a static base and an animation frame never
+   shifts scale or position.
+   ============================================================ */
+const ANIM_DIR = "assets/companion/anim";
+const ANIM_FRAME_COUNT = 4;
+function animFramePaths(state) {
+  const paths = [];
+  for (let i = 1; i <= ANIM_FRAME_COUNT; i++) paths.push(`${ANIM_DIR}/${state}-${i}.png`);
+  return paths;
+}
+/* Which loops recolour through the SAME getBodySrc() cache the static
+   body uses (so a pink Blip stays pink while jumping — the sheets are
+   monochromatic in the same navy-on-blue palette the tuned recolour
+   thresholds were measured against) vs render exactly as Megan drew
+   them. SICK STATES (sick, veryill) are deliberately NOT recoloured —
+   "sickness overrides colour": the pale/green tint on those two sheets
+   is part of what reads as sick, and would look wrong forced into a
+   custom hue. */
+const ANIM_RECOLOURS = { sleeping: true, excited: true, jumping: true, hungry: true, sick: false, veryill: false };
+
+const FRAME_INTERVAL_MS = 520; // "gentle loop", 450-600ms/frame per spec
+const reducedMotion = () =>
+  typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* One entry per currently-animating <img>, so a second runFrameLoop call
+   on the SAME element (e.g. playMoment finishing and handing back to the
+   idle loop) always clears its own previous interval first. Keyed by the
+   element itself (WeakMap, not the stage or a module-level id) so two
+   Blips on screen — each with their own <img> — animate independently
+   and never see each other's interval. */
+const frameLoopState = new WeakMap();
+function stopFrameLoop(bodyImg) {
+  const running = frameLoopState.get(bodyImg);
+  if (running) { clearInterval(running.intervalId); frameLoopState.delete(bodyImg); }
+}
+
+/* Runs (or one-shots, via `loops`) a frame loop on `bodyImg`.
+   NEVER requestAnimationFrame — the preview pane never fires rAF (recorded
+   browser-pane gotcha), so this is setInterval, same as the existing
+   blip-bop CSS keyframe sidesteps rAF entirely via CSS instead.
+   Self-cleans on unmount: every tick checks bodyImg.isConnected — once
+   renderCompanion's el.innerHTML="" (a fresh render/re-render) or a
+   screen navigation detaches this exact <img> from the document, the
+   very next tick notices and clears itself. No caller anywhere needs to
+   remember to call an unmount hook — verified by the DOM/interval-count
+   checks in companion-test.html's ANIMATIONS section. */
+function runFrameLoop(bodyImg, frames, { colour, recolour, loops = Infinity, onDone } = {}) {
+  stopFrameLoop(bodyImg);
+  const resolved = frames.map((src) => (recolour ? getBodySrc(colour, src) : Promise.resolve(src)));
+  let i = 0;
+  let completedLoops = 0;
+  const showFrame = () => { resolved[i].then((src) => { if (bodyImg.isConnected) bodyImg.src = src; }); };
+
+  if (reducedMotion()) {
+    showFrame(); // freeze on frame 1, no interval at all
+    if (onDone) onDone();
+    return;
+  }
+  showFrame();
+  const intervalId = setInterval(() => {
+    if (!bodyImg.isConnected) { stopFrameLoop(bodyImg); return; } // self-clean on unmount
+    i++;
+    if (i >= frames.length) {
+      i = 0;
+      completedLoops++;
+      if (completedLoops >= loops) { stopFrameLoop(bodyImg); if (onDone) onDone(); return; }
+    }
+    showFrame();
+  }, FRAME_INTERVAL_MS);
+  frameLoopState.set(bodyImg, { intervalId });
+}
+
+/* Automatic idle-loop mapping from renderBlip's existing health/growth
+   options plus the new `hungry` hint (host passes canFeedToday):
+     healthStage 1 -> sleeping, 2 -> sick, 3 -> veryill (recovering keeps
+     the pre-animation rendering untouched — no sheet for it yet);
+     healthy + hungry -> hungry loop as the idle instead of the static
+     base; otherwise null (static base, exactly today's behaviour). */
+function idleAnimState({ healthStage, recovering, hungry }) {
+  if (recovering) return null;
+  if (healthStage === 1) return "sleeping";
+  if (healthStage === 2) return "sick";
+  if (healthStage >= 3) return "veryill";
+  if (hungry) return "hungry";
+  return null;
+}
+
+/* One-shot "moment" animations — feed success (excited) / round passed
+   (jumping). `handle` is renderBlip's own return value: it already
+   carries `layers.body` (the <img> to animate) and `colour` (for the
+   recolour cache), plus a stashed `_applyIdleBodyArt` callback (set by
+   renderBlip below) that puts the right idle art back once the moment's
+   two loops finish — reusing the exact same idle-resolution code path
+   renderBlip used on mount, so a moment always hands back to whatever
+   was actually showing (static base, hungry loop, or a sick loop),
+   never hard-coding "back to the plain base". Both moments are
+   healthy-only actions (feeding / passing a quest can't happen while
+   locked out sick), so both always recolour. */
+const MOMENT_LOOPS = 2;
+export function playMoment(handle, name) {
+  if (!handle || !handle.layers || !handle.layers.body) return;
+  if (name !== "excited" && name !== "jumping") return;
+  runFrameLoop(handle.layers.body, animFramePaths(name), {
+    colour: handle.colour,
+    recolour: true,
+    loops: MOMENT_LOOPS,
+    onDone: () => { if (typeof handle._applyIdleBodyArt === "function") handle._applyIdleBodyArt(); },
+  });
 }
 
 /* ---------- Phase 2: which UNCOLOURED base PNG to actually paint ----------
@@ -406,9 +692,13 @@ function nextUid() { return "u" + (uidCounter++); }
 function makeAccessoryLayer(accId, side) {
   const def = ACCESSORIES[accId];
   if (!def) return null;
-  const point = Array.isArray(ATTACH[def.slot])
-    ? ATTACH[def.slot][side === "right" ? 1 : 0]
-    : ATTACH[def.slot];
+  // an accessory may carry its own `attach` (single point or [L,R] pair)
+  // to override its slot's shared ATTACH point without disturbing the
+  // other items in that slot (e.g. headphones cups sit lower than cat-ears).
+  const attachSpec = def.attach || ATTACH[def.slot];
+  const point = Array.isArray(attachSpec)
+    ? attachSpec[side === "right" ? 1 : 0]
+    : attachSpec;
   const anchor = def.anchor || { x: 0.5, y: 0.5 };
   const wrap = document.createElement("div");
   wrap.className = `blip-layer blip-acc blip-acc-${accId}${side ? ` blip-side-${side}` : ""}`;
@@ -459,7 +749,18 @@ export function renderCompanion(el, state = {}) {
   if (!el) throw new Error("renderCompanion: el is required");
   ensureStyles();
 
-  const colour = state.colour && Object.prototype.hasOwnProperty.call(COLOURS, state.colour) ? state.colour : "cream";
+  // Stop any frame-cycler running on a PREVIOUSLY mounted body <img> in
+  // this host before el.innerHTML="" below detaches it — belt-and-
+  // suspenders alongside runFrameLoop's own isConnected self-check: that
+  // check only fires on the NEXT tick (up to FRAME_INTERVAL_MS later),
+  // this makes cleanup immediate/deterministic for the common case (the
+  // same host re-rendering via app.render()), which is also what makes
+  // the interval-count leak check in companion-test.html reliable
+  // without an artificial wait.
+  const prevBody = el.querySelector && el.querySelector(".blip-body");
+  if (prevBody) stopFrameLoop(prevBody);
+
+  const colour = state.colour && Object.prototype.hasOwnProperty.call(COLOURS, state.colour) ? state.colour : "blue";
   const requested = Array.isArray(state.accessories) ? state.accessories : [];
   const accessories = requested.filter((id) => ACCESSORIES[id]);
 
@@ -495,7 +796,7 @@ export function renderCompanion(el, state = {}) {
       bodyImg.src = BASE_SRC; // paint immediately with the base art; swapped below once recoloured (cached after the first time per colour)
       stage.appendChild(bodyImg);
       layers.body = bodyImg;
-      if (colour !== "cream") {
+      if (colour !== "blue") {
         getBodySrc(colour).then((src) => { bodyImg.src = src; });
       }
     }
@@ -607,17 +908,48 @@ export function renderBlip(el, opts = {}) {
   stage.dataset.healthStage = String(healthStage);
   if (recovering) stage.dataset.recovering = "true";
 
-  // ---- body art: paint now with the default grown/healthy body
-  // (already done by renderCompanion above), then swap once the real
-  // growth/health art is resolved — same "paint immediately, swap
-  // once ready" pattern renderCompanion already uses for colour, so
-  // there's no extra flash beyond what colour recolouring already does. ----
-  resolveRawBody({ growthStage, healthStage, recovering }).then(({ src: rawSrc, needsOverlay }) => {
-    getBodySrc(colour, rawSrc).then((finalSrc) => { layers.body.src = finalSrc; });
-    if (!needsOverlay) return; // dedicated art exists for this state now — no placeholder needed
-    const spec = healthOverlaySpec(healthStage, recovering, bodyFlatColour(colour));
-    if (spec) mountHealthOverlay(stage, layers, spec);
-  });
+  // ---- body art ----
+  // Animation (2026-07-19) takes priority over the old static/placeholder
+  // path whenever idleAnimState() has a loop for this combination
+  // (sleeping/sick/veryill/hungry) — the pre-animation resolveRawBody +
+  // health-fx placeholder path is left COMPLETELY INTACT below for every
+  // other case (healthy+not-hungry static base, recovering, or a future
+  // dedicated bedridden.png/critical.png landing on disk), so nothing
+  // about pre-animation behaviour changes when idleAnimState() is null.
+  // Factored into a named function (not an inline .then chain) so
+  // playMoment's onDone can call the exact same "what should be showing
+  // right now" resolution once a one-shot moment finishes.
+  const hungry = !!opts.hungry;
+  const animState = idleAnimState({ healthStage, recovering, hungry });
 
-  return { ...result, growthStage, healthStage, recovering, scale, mood: _blipMood(healthStage, recovering) };
+  function applyIdleBodyArt() {
+    if (animState) {
+      runFrameLoop(layers.body, animFramePaths(animState), { colour, recolour: ANIM_RECOLOURS[animState] });
+      // clear any previously-mounted health-fx props before remounting —
+      // applyIdleBodyArt can run twice on the same stage (initial mount,
+      // then again from playMoment's onDone), and mountHealthOverlay has
+      // no built-in idempotency of its own (renderCompanion's own
+      // el.innerHTML="" wipe is what normally keeps it a one-shot).
+      stage.querySelectorAll(".blip-health-fx").forEach((n) => n.remove());
+      const spec = animatedHealthOverlaySpec(healthStage);
+      if (spec) mountHealthOverlay(stage, layers, spec);
+    } else {
+      // paint now with the default grown/healthy body (already done by
+      // renderCompanion above), then swap once the real growth/health
+      // art is resolved — same "paint immediately, swap once ready"
+      // pattern renderCompanion already uses for colour.
+      stopFrameLoop(layers.body);
+      resolveRawBody({ growthStage, healthStage, recovering }).then(({ src: rawSrc, needsOverlay }) => {
+        getBodySrc(colour, rawSrc).then((finalSrc) => { layers.body.src = finalSrc; });
+        if (!needsOverlay) return; // dedicated art exists for this state now — no placeholder needed
+        const spec = healthOverlaySpec(healthStage, recovering, bodyFlatColour(colour));
+        if (spec) mountHealthOverlay(stage, layers, spec);
+      });
+    }
+  }
+  applyIdleBodyArt();
+
+  const out = { ...result, growthStage, healthStage, recovering, scale, mood: _blipMood(healthStage, recovering) };
+  out._applyIdleBodyArt = applyIdleBodyArt;
+  return out;
 }

@@ -6,6 +6,17 @@
    BLIPWORK ADDITION (2026-07-19): mirrors the gold/XP/level/shop/
    equip/gallery RPCs added in supabase/migration-blipwork.sql.
 
+   SL RESTYLE ADDITION (2026-07-19): mirrors supabase/migration-sl-
+   restyle.sql — blue is now the free starting blip colour (cream is
+   just a normal selectable colour; the first-completion xp>0 gate
+   still applies, just re-anchored from cream to blue), and the
+   cosmetic catalogue is the techy set from Megan's mockup. Old items
+   are removed from the buyable SHOP_ITEMS list (mirrors active=false
+   server-side) but are NEVER stripped from anyone's owned_items, and
+   equip() never consults SHOP_ITEMS for ownership — only the blip's
+   own owned_items array — so an already-owned old item keeps
+   equipping fine, exactly like the server.
+
    PHASE 2 ADDITION (2026-07-19): mirrors supabase/migration-phase2-
    blip-care.sql 1:1 so `?local=1` behaves like production —
    feeding + growth, the computed sickness clock, pharmacy/recovery,
@@ -63,13 +74,20 @@ const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7"
   "es1", "es2", "es3", "es4", "es5", "es6", "es7", "es8",
   "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8"];
 
-/* Cosmetic shop — identical ids/slots/prices/minLevel to the live seed. */
+/* Cosmetic shop — identical ids/slots/prices/minLevel to the live seed.
+   SL restyle (2026-07-19): the techy catalogue from Megan's mockup. The old
+   5 ids (round-glasses, cat-ears, party-hat, stubby-arms, angel-wings) are
+   deliberately NOT listed here (mirrors active=false server-side, so they
+   can't be bought) but are never stripped from anyone's owned_items, and
+   equip() below never consults this list for ownership — so an
+   already-owned old item still equips fine. */
 const SHOP_ITEMS = [
-  { id: "round-glasses", slot: "glasses", price: 40, minLevel: 1 },
-  { id: "cat-ears", slot: "ears", price: 60, minLevel: 2 },
-  { id: "party-hat", slot: "hat", price: 80, minLevel: 3 },
-  { id: "stubby-arms", slot: "arms", price: 100, minLevel: 4 },
-  { id: "angel-wings", slot: "wings", price: 150, minLevel: 6 },
+  { id: "star-shades", slot: "glasses", price: 40, minLevel: 1 },
+  { id: "heart-eyes", slot: "glasses", price: 45, minLevel: 1 },
+  { id: "headphones", slot: "ears", price: 60, minLevel: 2 },
+  { id: "halo", slot: "hat", price: 80, minLevel: 3 },
+  { id: "power-gloves", slot: "arms", price: 100, minLevel: 4 },
+  { id: "aurora-wings", slot: "wings", price: 150, minLevel: 6 },
 ];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows. */
 const FOOD_ITEMS = [
@@ -77,27 +95,30 @@ const FOOD_ITEMS = [
   { id: "medicine", kind: "medicine", price: BLIP.food.medicine },
   { id: "treat", kind: "treat", price: BLIP.food.treat },
 ];
-const VALID_COLOURS = ["cream", "pink", "mint", "sky", "lilac", "peach", "lemon", "seafoam", "coral", "lavender"];
+const VALID_COLOURS = ["blue", "cream", "pink", "mint", "sky", "lilac", "peach", "lemon", "seafoam", "coral", "lavender"];
 const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms"];
 
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a
-   bedridden learner. Never persisted, never real, purely for testing the grid. */
+   bedridden learner. Never persisted, never real, purely for testing the grid.
+   SL restyle (2026-07-19): dressed in the new techy catalogue, in blue-era
+   colours (blue itself plus the rest of the palette — cream is no longer
+   special so nobody needs to wear it here). */
 const FAKE_CLASSMATES = [
   {
     username: "keabetswe", level: 8, stage: 0,
-    blips: [{ slot: 1, colour: "mint", equipped: { hat: "party-hat" }, feedCount: 47, growthStage: 3 }],
+    blips: [{ slot: 1, colour: "blue", equipped: { hat: "halo" }, feedCount: 47, growthStage: 3 }],
   },
   {
     username: "sipho", level: 12, stage: 1,
     blips: [
-      { slot: 1, colour: "sky", equipped: { glasses: "round-glasses", ears: "cat-ears" }, feedCount: 30, growthStage: 2 },
-      { slot: 2, colour: "coral", equipped: {}, feedCount: 4, growthStage: 0 },
+      { slot: 1, colour: "sky", equipped: { glasses: "star-shades", ears: "headphones" }, feedCount: 30, growthStage: 2 },
+      { slot: 2, colour: "coral", equipped: { arms: "power-gloves" }, feedCount: 4, growthStage: 0 },
     ],
   },
   {
     username: "amahle", level: 5, stage: 2,
-    blips: [{ slot: 1, colour: "lilac", equipped: {}, feedCount: 12, growthStage: 1 }],
+    blips: [{ slot: 1, colour: "lilac", equipped: { glasses: "heart-eyes" }, feedCount: 12, growthStage: 1 }],
   },
 ];
 
@@ -135,7 +156,7 @@ function ensureBlipFields(s) {
   if (typeof s.gold !== "number") { s.gold = 0; changed = true; }
   if (typeof s.xp !== "number") { s.xp = 0; changed = true; }
   if (typeof s.blip_name !== "string" || !s.blip_name) { s.blip_name = "Blip"; changed = true; }
-  if (typeof s.blip_colour !== "string" || !VALID_COLOURS.includes(s.blip_colour)) { s.blip_colour = "cream"; changed = true; }
+  if (typeof s.blip_colour !== "string" || !VALID_COLOURS.includes(s.blip_colour)) { s.blip_colour = "blue"; changed = true; }
   if (!Array.isArray(s.owned_items)) { s.owned_items = []; changed = true; }
   if (!s.equipped || typeof s.equipped !== "object" || Array.isArray(s.equipped)) { s.equipped = {}; changed = true; }
   // Phase 2 care/feeding bookkeeping
@@ -154,7 +175,7 @@ function ensureBlip(sid, rec) {
   const store = read(LS.blips, {});
   const arr = store[sid] || [];
   if (!arr.some(b => b.slot === 1)) {
-    arr.push({ slot: 1, name: rec.blip_name || "Blip", colour: rec.blip_colour || "cream", feed_count: 0, owned_items: Array.isArray(rec.owned_items) ? rec.owned_items.slice() : [], equipped: (rec.equipped && typeof rec.equipped === "object") ? { ...rec.equipped } : {} });
+    arr.push({ slot: 1, name: rec.blip_name || "Blip", colour: rec.blip_colour || "blue", feed_count: 0, owned_items: Array.isArray(rec.owned_items) ? rec.owned_items.slice() : [], equipped: (rec.equipped && typeof rec.equipped === "object") ? { ...rec.equipped } : {} });
     store[sid] = arr; write(LS.blips, store);
   }
   return arr.slice().sort((a, b) => a.slot - b.slot);
@@ -223,7 +244,7 @@ export const LocalBackend = {
     const id = "s" + (Math.max(0, ...Object.keys(st).map(k => +k.slice(1) || 0)) + 1);
     st[id] = {
       id, username: u, display_name: String(name).trim(), password, last_active_at: Date.now(),
-      gold: 0, xp: 0, blip_name: "Blip", blip_colour: "cream", owned_items: [], equipped: {},
+      gold: 0, xp: 0, blip_name: "Blip", blip_colour: "blue", owned_items: [], equipped: {},
       last_fed_day: null, care_streak: 0, last_care_day: null, pantry: {},
     };
     write(LS.students, st);
@@ -267,7 +288,7 @@ export const LocalBackend = {
     return {
       ok: true, student: { id: s.id, name: s.display_name, username: s.username }, progress, totalXp, openQuests: openQuests(),
       gold: rec.gold, xp: rec.xp, levelInfo: levelInfo(rec.xp),
-      blip: slot1 ? { name: slot1.name, colour: slot1.colour, owned: slot1.owned, equipped: slot1.equipped } : { name: "Blip", colour: "cream", owned: [], equipped: {} },
+      blip: slot1 ? { name: slot1.name, colour: slot1.colour, owned: slot1.owned, equipped: slot1.equipped } : { name: "Blip", colour: "blue", owned: [], equipped: {} },
       blips, shop: shopCatalogue(), foodShop: foodCatalogue(), pantry: rec.pantry || {},
       health, canFeedToday, canCareToday, termRunning: running,
     };
@@ -373,8 +394,9 @@ export const LocalBackend = {
     }
     if (colour != null) {
       if (!VALID_COLOURS.includes(colour)) return { ok: false, error: "bad_colour" };
-      // slot-1's first non-cream colour needs xp>0; the 2nd blip is any colour at hatch
-      if (colour !== "cream" && slot === 1 && rec.xp <= 0) return { ok: false, error: "colour_locked" };
+      // slot-1's first non-blue colour needs xp>0 (blue is the free starting
+      // colour; the 2nd blip is any colour at hatch)
+      if (colour !== "blue" && slot === 1 && rec.xp <= 0) return { ok: false, error: "colour_locked" };
       blip.colour = colour;
     }
     if (blipName != null) {
@@ -464,7 +486,7 @@ export const LocalBackend = {
     const blips = ensureBlip(s.id, rec);
     if (levelInfo(rec.xp).level < BLIP.secondBlipLevel) return { ok: false, error: "level_locked", minLevel: BLIP.secondBlipLevel };
     if (blips.some(b => b.slot === 2)) return { ok: false, error: "already_claimed" };
-    const col = colour || "cream";
+    const col = colour || "blue";
     if (!VALID_COLOURS.includes(col)) return { ok: false, error: "bad_colour" };
     const nm = String(name || "").trim().slice(0, 24);
     if (!nm) return { ok: false, error: "bad_name" };

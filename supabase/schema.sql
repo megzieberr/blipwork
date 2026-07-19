@@ -40,7 +40,7 @@ create table public.students (
   gold           int not null default 0,
   xp             int not null default 0,
   blip_name      text not null default 'Blip', -- free-form nickname, never shown publicly
-  blip_colour    text not null default 'cream',
+  blip_colour    text not null default 'blue', -- SL restyle (2026-07-19): blue is the free starting colour
   owned_items    jsonb not null default '[]'::jsonb, -- array of shop item_ids
   equipped       jsonb not null default '{}'::jsonb, -- slot -> item_id ('' = empty)
   -- Phase 2 (2026-07-19) feeding/care bookkeeping. HEALTH itself is never
@@ -60,7 +60,7 @@ create table public.blips (
   student_id  uuid    not null references public.students(id) on delete cascade,
   slot        integer not null check (slot in (1, 2)),
   name        text    not null default 'Blip',
-  colour      text    not null default 'cream',
+  colour      text    not null default 'blue',    -- SL restyle: blue is the free starting colour
   feed_count  integer not null default 0,         -- cumulative free-cookie feedings (growth)
   owned_items jsonb   not null default '[]'::jsonb,
   equipped    jsonb   not null default '{}'::jsonb,
@@ -245,7 +245,7 @@ begin
   insert into public.students (username, display_name, password, last_active_at)
   values (uname, trim(p_name), crypt(p_password, gen_salt('bf')), now())
   returning id into new_id;
-  insert into public.blips (student_id, slot, name, colour) values (new_id, 1, 'Blip', 'cream')
+  insert into public.blips (student_id, slot, name, colour) values (new_id, 1, 'Blip', 'blue')
   on conflict (student_id, slot) do nothing;
   return jsonb_build_object('ok', true);
 end; $$;
@@ -416,8 +416,8 @@ begin
   if exists (select 1 from public.blips where student_id = sid and slot = 2) then
     return jsonb_build_object('ok', false, 'error', 'already_claimed');
   end if;
-  col := coalesce(p_colour, 'cream');
-  if col not in ('cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender') then
+  col := coalesce(p_colour, 'blue');
+  if col not in ('blue','cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender') then
     return jsonb_build_object('ok', false, 'error', 'bad_colour');
   end if;
   nm := left(btrim(coalesce(p_name, '')), 24);
@@ -529,8 +529,10 @@ end; $$;
 -- Equip / recolour / rename — PER BLIP (p_slot). Blocked while sick (stage>=2):
 -- he won't get up to be dressed (error BLIP_TOO_SICK). Equipped items must be
 -- owned by THAT blip; slots from the known set ('' = unequip); slot-1's first
--- non-cream colour needs xp > 0 (the second blip may be any colour at hatch);
--- nickname is free-form (never shown publicly), trimmed, max 24 chars.
+-- non-BLUE colour needs xp > 0 (SL restyle: blue is the free starting colour,
+-- cream is now just a normal selectable colour; the second blip may be any
+-- colour at hatch); nickname is free-form (never shown publicly), trimmed,
+-- max 24 chars.
 create or replace function public.mhq_equip(
   p_username text, p_password text, p_equipped jsonb default null,
   p_colour text default null, p_blip_name text default null, p_slot integer default 1)
@@ -558,9 +560,11 @@ begin
   end if;
 
   if p_colour is not null then
-    if p_colour not in ('cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender')
+    if p_colour not in ('blue','cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender')
       then return jsonb_build_object('ok', false, 'error', 'bad_colour'); end if;
-    if p_colour <> 'cream' and v_slot = 1 and st.xp <= 0
+    -- blue is the free starting colour (SL restyle); the first CHANGE away from
+    -- it still requires xp > 0 (the original first-completion reward gate).
+    if p_colour <> 'blue' and v_slot = 1 and st.xp <= 0
       then return jsonb_build_object('ok', false, 'error', 'colour_locked'); end if;
     update public.blips set colour = p_colour where student_id = sid and slot = v_slot;
   end if;
@@ -799,14 +803,25 @@ on conflict (key) do nothing;
 insert into public.app_config (key, value) values ('term_running', 'false')
 on conflict (key) do nothing;
 
--- Shop starter set; placeholder prices, tune once the full accessory set is scoped.
--- item_ids match js/companion/renderer.js ACCESSORIES keys exactly (hyphenated).
+-- Shop catalogue — SL restyle (2026-07-19, migration-sl-restyle.sql): the
+-- original 5 items are kept as rows (inactive, never confiscated from anyone
+-- who already owns one) and replaced in the active catalogue by a techy set
+-- from Megan's own mockup. item_ids match js/companion/renderer.js
+-- ACCESSORIES keys exactly (hyphenated).
 insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
-  ('round-glasses','glasses', 40, 1, true, 10, 'cosmetic'),
-  ('cat-ears',     'ears',    60, 2, true, 20, 'cosmetic'),
-  ('party-hat',    'hat',     80, 3, true, 30, 'cosmetic'),
-  ('stubby-arms',  'arms',   100, 4, true, 40, 'cosmetic'),
-  ('angel-wings',  'wings',  150, 6, true, 50, 'cosmetic')
+  -- retired (owned-but-inactive only; never buyable again)
+  ('round-glasses','glasses', 40, 1, false, 10, 'cosmetic'),
+  ('cat-ears',     'ears',    60, 2, false, 20, 'cosmetic'),
+  ('party-hat',    'hat',     80, 3, false, 30, 'cosmetic'),
+  ('stubby-arms',  'arms',   100, 4, false, 40, 'cosmetic'),
+  ('angel-wings',  'wings',  150, 6, false, 50, 'cosmetic'),
+  -- current techy catalogue
+  ('star-shades',  'glasses', 40, 1, true, 11, 'cosmetic'),
+  ('heart-eyes',   'glasses', 45, 1, true, 12, 'cosmetic'),
+  ('headphones',   'ears',    60, 2, true, 21, 'cosmetic'),
+  ('halo',         'hat',     80, 3, true, 31, 'cosmetic'),
+  ('power-gloves', 'arms',   100, 4, true, 41, 'cosmetic'),
+  ('aurora-wings', 'wings',  150, 6, true, 51, 'cosmetic')
 on conflict (item_id) do nothing;
 
 -- Phase 2: pharmacy / grocery. item_id doubles as the "kind". soup/medicine are

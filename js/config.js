@@ -1,26 +1,27 @@
 /* ============================================================
    CONFIG — chapters, the shared colour palette, XP rules.
    ------------------------------------------------------------
-   Colour system (revised — Study Bunny style): a small curated set
-   of SOLID flat accents (no per-chapter hue families, no light→deep
-   quest ramps). Chapter identity comes from its icon + name, not a
-   unique hue; the 5 accents just cycle down the chapter list so
-   neighbouring chapters read as visually distinct. Every quest in a
-   chapter shares its chapter's one accent.
+   Colour system (revised again — Solo Leveling "system" style): a
+   small curated set of luminous game-rarity accents on the near-black
+   navy shell (see css/styles.css tokens). Same structure as before —
+   no per-chapter hue families, the 5 accents cycle down the chapter
+   list so neighbouring chapters read as visually distinct; every
+   quest in a chapter shares its chapter's one accent. Values chosen
+   to glow cleanly on #070b16 next to the electric-blue chrome.
    ============================================================ */
 const PALETTE = {
-  honey: "#b17f22",   // primary — honey/mustard yellow
-  coral: "#d9714a",   // secondary — soft coral / red-orange
-  sage:  "#7f9a6d",   // muted sage green
-  sky:   "#5f9ab5",   // muted sky blue
-  rose:  "#c17b83",   // dusty rose
+  blue:    "#3aa0ff",   // primary — the system's own electric blue
+  violet:  "#8b5cf6",   // arcane violet (matches --accent2 family)
+  cyan:    "#22d3ee",   // ice cyan
+  gold:    "#fbbf24",   // legendary gold
+  fuchsia: "#e879f9",   // rare-drop fuchsia
 };
-const CYCLE = [PALETTE.honey, PALETTE.coral, PALETTE.sage, PALETTE.sky, PALETTE.rose];
+const CYCLE = [PALETTE.blue, PALETTE.violet, PALETTE.cyan, PALETTE.gold, PALETTE.fuchsia];
 
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊", term: "term3",
-    signature: PALETTE.honey, open: true,
+    signature: PALETTE.blue, open: true,
     blurb: "Data, spread, graphs and the shape of a distribution.",
     quests: [
       { id: "q1", n: 1, title: "Calculator skills", blurb: "Clear it, frequency on/off, read values back.", built: true },
@@ -35,7 +36,7 @@ export const CHAPTERS = [
   },
   {
     id: "finance", name: "Finance", paper: "Paper 1", icon: "💰", term: "term3",
-    signature: PALETTE.coral, open: true,
+    signature: PALETTE.violet, open: true,
     blurb: "Interest, growth and the time value of money.",
     quests: [
       { id: "f1", n: 1, title: "Words & formulas", blurb: "P, A, i, n and which formula fits.", built: true },
@@ -49,7 +50,7 @@ export const CHAPTERS = [
   },
   {
     id: "prob", name: "Probability", paper: "Paper 1", icon: "🎲", term: "term3",
-    signature: PALETTE.sage, open: true,
+    signature: PALETTE.cyan, open: true,
     blurb: "Chance, Venn diagrams, tree diagrams and the rules that tie them together.",
     quests: [
       { id: "p1", n: 1, title: "Chance & the scale", blurb: "Sample space, theoretical probability, relative frequency.", built: true },
@@ -63,7 +64,7 @@ export const CHAPTERS = [
   },
   {
     id: "trig", name: "2D Trigonometry", paper: "Paper 2", icon: "📐", term: "term3",
-    signature: PALETTE.sky, open: true,
+    signature: PALETTE.gold, open: true,
     blurb: "Sine, cosine and area rules — solving any triangle, drawn to scale.",
     quests: [
       { id: "t1", n: 1, title: "Which rule fits?", blurb: "Label the friends; choose sine, cosine or area for the given case.", built: true },
@@ -77,7 +78,7 @@ export const CHAPTERS = [
   },
   {
     id: "meas", name: "Measurement", paper: "Paper 2", icon: "📦", term: "term3",
-    signature: PALETTE.rose, open: true,
+    signature: PALETTE.fuchsia, open: true,
     blurb: "Surface area and volume — read the solid, then choose the right formula.",
     quests: [
       { id: "m1", n: 1, title: "Name it & its formula", blurb: "Recognise each solid and match its volume / surface-area formula.", built: true },
@@ -91,7 +92,7 @@ export const CHAPTERS = [
   // ---- REVISION tab: chapters already taught this year, open for revision ----
   {
     id: "func", name: "Functions", paper: "Paper 1", icon: "📈", term: "revision",
-    signature: PALETTE.honey, open: true,
+    signature: PALETTE.blue, open: true,
     blurb: "The four graphs — read them, transform them, and solve inequalities off them.",
     quests: [
       { id: "fn1", n: 1, title: "The four families", blurb: "Line, parabola, hyperbola, exponential — from the equation and the graph.", built: true },
@@ -105,7 +106,7 @@ export const CHAPTERS = [
   },
   {
     id: "tgraph", name: "Trig Graphs", paper: "Paper 2", icon: "〰️", term: "revision",
-    signature: PALETTE.coral, open: true,
+    signature: PALETTE.violet, open: true,
     blurb: "Sine, cosine and tangent graphs — period, amplitude, range, shifts, drawn to scale.",
     quests: [
       { id: "tg1", n: 1, title: "The three parent graphs", blurb: "Recognise sin, cos & tan and their key features.", built: true },
@@ -119,7 +120,7 @@ export const CHAPTERS = [
   },
   {
     id: "analytical", name: "Analytical Geometry", paper: "Paper 2", icon: "📍", term: "revision",
-    signature: PALETTE.sage, open: true,
+    signature: PALETTE.cyan, open: true,
     blurb: "Points, lines and gradients on the grid — the right formula, drawn to scale.",
     quests: [
       { id: "ag1", n: 1, title: "Which formula, and what it tells you", blurb: "Gradient, distance or midpoint — and what each answer looks like.", built: true },
@@ -133,7 +134,7 @@ export const CHAPTERS = [
   },
   {
     id: "pat", name: "Number Patterns", paper: "Paper 1", icon: "🔢", term: "revision",
-    signature: PALETTE.sky, open: true,
+    signature: PALETTE.gold, open: true,
     blurb: "Linear, quadratic and geometric patterns — the difference pyramid and the general term.",
     quests: [
       { id: "np1", n: 1, title: "Spot the pattern", blurb: "First & second differences, constant ratio — arithmetic, quadratic or geometric?", built: true },
@@ -147,7 +148,7 @@ export const CHAPTERS = [
   },
   {
     id: "exp", name: "Exponents & Surds", paper: "Paper 1", icon: "ⁿ√", term: "revision",
-    signature: PALETTE.rose, open: true,
+    signature: PALETTE.fuchsia, open: true,
     blurb: "The laws, the traps, and the theory — which rule, which factorising, the conjugate, and when there's no solution.",
     quests: [
       { id: "es1", n: 1, title: "The exponent laws", blurb: "Name the law and say what happens to the exponents — zero, negative, fractional, brackets.", built: true },
@@ -162,7 +163,7 @@ export const CHAPTERS = [
   },
   {
     id: "eqn", name: "Equations & Inequalities", paper: "Paper 1", icon: "±", term: "revision",
-    signature: PALETTE.honey, open: true,
+    signature: PALETTE.blue, open: true,
     blurb: "Which method, which move — brackets = 0, the k-method, restrictions, the bowl, and Δ. Theory and traps, no crunching.",
     quests: [
       { id: "eq1", n: 1, title: "Standard form & brackets = 0", blurb: "Everything to one side; each bracket = 0 (don't multiply out!); roots ↔ factors; EQN mode.", built: true },
@@ -181,7 +182,7 @@ export function chapterById(id) { return CHAPTERS.find(c => c.id === id) || null
 /* every quest in a chapter shares its chapter's one flat accent —
    no per-quest shade ramp in the solid-colour palette. */
 export function questAccent(chapter) {
-  return (chapter && chapter.signature) || PALETTE.honey;
+  return (chapter && chapter.signature) || PALETTE.blue;
 }
 
 /* XP economy — small, understanding-first. Streak multiplier caps low (×1–×3)

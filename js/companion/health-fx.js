@@ -19,20 +19,20 @@
    can mount either kind.
    ============================================================ */
 
-/* Must match renderer.js's exported OUTLINE constant. Duplicated as a
-   literal (not imported) so this file has zero dependency on
+/* Must match renderer.js's exported OUTLINE constant (SL navy). Duplicated
+   as a literal (not imported) so this file has zero dependency on
    renderer.js — renderer.js already imports FROM here, and a mutual
    import would be a needless circular edge for one hex string. */
-const OUTLINE_HEX = "#2e1b0d";
+const OUTLINE_HEX = "#0062ac";
 
-/* Face landmarks, fractions of the stage box — mirrors the
-   measurements documented in renderer.js's ATTACH comment (eyes
-   centred at y0.494, x0.300/x0.689; mouth centred 0.494/0.571). The
-   body art these sit on doesn't move, so these never need retuning
-   unless the base PNG itself is redrawn. */
-const EYE_L = { x: 0.300, y: 0.494 };
-const EYE_R = { x: 0.689, y: 0.494 };
-const MOUTH = { x: 0.494, y: 0.571 };
+/* Face landmarks, fractions of the stage box — RE-MEASURED 2026-07-19 off
+   the SL blue base (blip-base-blue.png), where the face sits lower than
+   the old cream art (eyes y0.569 x0.302/x0.691; mouth 0.499/0.644 — the
+   ATTACH comment in renderer.js documents the same numbers). If the base
+   PNG is redrawn again these must be re-measured. */
+const EYE_L = { x: 0.302, y: 0.569 };
+const EYE_R = { x: 0.691, y: 0.569 };
+const MOUTH = { x: 0.499, y: 0.644 };
 
 /* Rotation applied to the body+face-overlay group for the bedridden/
    critical placeholder ("rotate composition to horizontal" per the
@@ -65,15 +65,27 @@ function thermometerSvg() {
 }
 function blanketSvg(lapOnly) {
   // lapOnly (recovering, sitting up): a shallow drape across the lap.
-  // full (bedridden/critical, lying down): a taller drape with one
-  // soft fold line, sized to cover most of the horizontal body.
+  // full (bedridden/critical): BUGFIX 2026-07-19 — re-drawn wide-and-flat
+  // (was a tall dome, viewBox 220x130) for the new upright sick/veryill
+  // animation frames. Measured the frown's actual on-canvas position in
+  // Megan's hand-drawn sheets (Python+Pillow dark-pixel scan across all
+  // 8 sick-*/veryill-* frames): the frown band runs y0.65-0.76 (deepest
+  // in sick-3.png), well below where the old code-drawn placeholder's
+  // MOUTH constant (y0.644) assumed. A dome sized/centred for that old
+  // constant covered the face outright. This shape only needs to read
+  // as "covers the lower body", not reach the ground, so it's now a
+  // short wide band anchored by its TOP edge (see the two call sites in
+  // healthOverlaySpec/animatedHealthOverlaySpec — anchor {x:0.5,y:0},
+  // y:0.79) — comfortably below every frame's measured frown bottom.
+  // SL restyle: the old light-blue blanket vanished against the blue body,
+  // so it's now the violet accent (reads clearly on #62ceff, on-theme).
   return lapOnly
     ? `<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 14 Q100 -6 196 14 L196 56 Q100 70 4 56 Z" fill="#bcd8f5" stroke="${OUTLINE_HEX}" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M4 14 Q100 -6 196 14 L196 56 Q100 70 4 56 Z" fill="#7b5cf6" stroke="${OUTLINE_HEX}" stroke-width="5" stroke-linejoin="round"/>
       </svg>`
-    : `<svg viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 30 Q110 -10 216 30 L216 122 Q110 140 4 122 Z" fill="#bcd8f5" stroke="${OUTLINE_HEX}" stroke-width="5" stroke-linejoin="round"/>
-        <path d="M22 46 Q110 68 198 46" fill="none" stroke="${OUTLINE_HEX}" stroke-width="3" opacity="0.35" stroke-linecap="round"/>
+    : `<svg viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 22 Q150 -10 294 22 L294 52 Q150 64 6 52 Z" fill="#7b5cf6" stroke="${OUTLINE_HEX}" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M26 34 Q150 46 274 34" fill="none" stroke="#b9a9ff" stroke-width="3" opacity="0.5" stroke-linecap="round"/>
       </svg>`;
 }
 function heartMonitorSvg() {
@@ -123,17 +135,73 @@ export function healthOverlaySpec(healthStage, recovering, bodyFill) {
   // 2 (bedridden) and 3 (critical): lying down + blanket + thermometer;
   // 3 additionally gets the heart-rate monitor (the darker bag variant
   // is already selected above via the healthStage>=3 check).
+  // Thermometer stays here (unlike animatedHealthOverlaySpec below) —
+  // this placeholder path paints the PLAIN base body with no drawn sick
+  // expression of its own, so it still needs the thermometer prop to
+  // read as sick; MOUTH.y (0.644) is the right anchor for it here
+  // because it's genuinely the plain base body's mouth, not one of
+  // Megan's hand-drawn frames (whose frown sits lower — see the
+  // blanket's own bugfix comment).
   const faceOverlays = [
     ...droopy,
     { x: MOUTH.x, y: MOUTH.y + 0.02, anchor: { x: 0.15, y: 1 }, widthPct: 9, tiltDeg: -18, svg: thermometerSvg() },
   ];
+  // Blanket/monitor geometry BUGFIX 2026-07-19 — see blanketSvg()'s and
+  // animatedHealthOverlaySpec()'s comments; kept identical to the live
+  // animated path for consistency even though this rotate:true branch
+  // is currently unreachable via renderBlip (idleAnimState always picks
+  // the sick/veryill sprite loop for healthStage>=2, see renderer.js).
   const envOverlays = [
-    { x: 0.5, y: 0.62, anchor: { x: 0.5, y: 0.5 }, widthPct: 78, svg: blanketSvg(false) },
+    { x: 0.5, y: 0.79, anchor: { x: 0.5, y: 0 }, widthPct: 90, svg: blanketSvg(false) },
   ];
   if (healthStage >= 3) {
-    envOverlays.push({ x: 0.87, y: 0.30, anchor: { x: 0.5, y: 0.5 }, widthPct: 24, svg: heartMonitorSvg() });
+    envOverlays.push({ x: 0.86, y: 0.20, anchor: { x: 0.5, y: 0.5 }, widthPct: 24, svg: heartMonitorSvg() });
   }
   return { rotate: true, faceOverlays, envOverlays };
+}
+
+/* ============================================================
+   Animation-era overlay spec (2026-07-19) — for the NEW sick/veryill
+   sprite-sheet animation loops (renderer.js's frame-cycler, sliced from
+   Megan's hand-drawn sheets). Those frames already draw the droopy/
+   closed eyes and eye-bags themselves, so this drops the code-drawn
+   eyelid+eyebag placeholder (redundant with the real art now) and keeps
+   only the PHYSICAL PROPS a sick Blip still needs regardless of which
+   body art is under them: blanket, thermometer, heart monitor. Always
+   rotate:false — unlike the old "lying flat" placeholder body, the new
+   animated frames are drawn upright (sitting/standing), so there's
+   nothing to rotate into a bed composition.
+   healthOverlaySpec() above is UNCHANGED and still serves: the
+   recovering state (no sheet for it yet, brief says leave it alone) and
+   as a graceful fallback if a caller ever renders healthStage>=1 without
+   opting into animation. */
+export function animatedHealthOverlaySpec(healthStage) {
+  if (!healthStage || healthStage < 2) return null; // stage 1 = sleeping loop only, no props
+  // BUGFIX 2026-07-19 (Megan's phone review — "featureless triangle
+  // poking out of a purple blob"): the old blanket (y0.62 centre,
+  // widthPct 78, tall dome) covered from mid-chest to well past the
+  // chin, burying the sick face the new frames draw as the centrepiece.
+  // Re-measured the frown's actual position across all 8 sick-*/
+  // veryill-*.png frames (Python+Pillow dark-pixel row scan): deepest
+  // extent is y0.65-0.76 (sick-3.png), not the base body's plain-face
+  // MOUTH constant (y0.644) the old numbers were built around. New
+  // blanket is anchored by its TOP edge at y0.79 — clears every frame's
+  // measured frown with margin — and re-drawn wide-and-flat (blanketSvg)
+  // so it still reads as wrapping the lower body instead of a thin
+  // strip. Thermometer DROPPED per the brief ("the drawn frames already
+  // read sick" — the old mouth-level prop was calibrated to the base
+  // body's y0.644 mouth and would sit mid-frown on the real art anyway).
+  // Monitor moved up from y0.30 to y0.20 — verified via a Pillow
+  // silhouette-overlap check that the old box's LOWER edge (body widens
+  // fast through y0.30) clipped into the body; y0.20's box clears the
+  // silhouette at every row with margin.
+  const envOverlays = [
+    { x: 0.5, y: 0.79, anchor: { x: 0.5, y: 0 }, widthPct: 90, svg: blanketSvg(false) },
+  ];
+  if (healthStage >= 3) {
+    envOverlays.push({ x: 0.86, y: 0.20, anchor: { x: 0.5, y: 0.5 }, widthPct: 24, svg: heartMonitorSvg() });
+  }
+  return { rotate: false, faceOverlays: [], envOverlays };
 }
 
 /* Short mood string for the UI (e.g. a caption under the hub tile). */

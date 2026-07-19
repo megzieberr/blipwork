@@ -74,7 +74,7 @@ export function renderPlay(app, host, params) {
           const gained = XP.perCorrect * Math.min(st.streak, XP.streakCap) + (ft ? XP.firstTryBonus : 0);
           st.xp += gained;
           xpPop.className = "xp-pop good";
-          xpPop.textContent = `+${gained} XP${ft ? " · first try!" : ""}`;
+          xpPop.textContent = `+${gained} XP${ft ? " · FIRST TRY" : ""}`;
         } else {
           st.streak = 0;
           xpPop.className = "xp-pop bad";
