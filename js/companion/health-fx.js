@@ -171,11 +171,17 @@ export function healthOverlaySpec(healthStage, recovering, bodyFill) {
    rotate:false — unlike the old "lying flat" placeholder body, the new
    animated frames are drawn upright (sitting/standing), so there's
    nothing to rotate into a bed composition.
-   healthOverlaySpec() above is UNCHANGED and still serves: the
-   recovering state (no sheet for it yet, brief says leave it alone) and
-   as a graceful fallback if a caller ever renders healthStage>=1 without
-   opting into animation. */
-export function animatedHealthOverlaySpec(healthStage) {
+   healthOverlaySpec() above is UNCHANGED and still serves as a graceful
+   fallback if a caller ever renders healthStage>=1 without opting into
+   animation.
+   RECOVERING (2026-07-19, later): her recovering row landed, and she drew
+   the blanket INTO those four frames. Recovering is reported while
+   healthStage is still 2-3 (local-backend: `recovering: cs >= 1 && stage
+   >= 2`), so without this guard the stage-2 blanket below would mount a
+   second, code-drawn blanket on top of the drawn one — and at stage 3 a
+   heart monitor beside a Blip who is visibly sitting up and smiling. */
+export function animatedHealthOverlaySpec(healthStage, recovering) {
+  if (recovering) return null; // props are part of the recovering art itself
   if (!healthStage || healthStage < 2) return null; // stage 1 = sleeping loop only, no props
   // BUGFIX 2026-07-19 (Megan's phone review — "featureless triangle
   // poking out of a purple blob"): the old blanket (y0.62 centre,

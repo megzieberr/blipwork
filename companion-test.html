@@ -89,11 +89,11 @@
   <div class="growth-row" id="growth-row"></div>
 
   <h2>Phase 2 — full state gallery (growth &times; health &times; recovering)</h2>
-  <p class="sub">Every growthStage (rows) &times; every healthStage 0&ndash;3 plus a recovering column. Every cell starts equipped with a hat + ears so accessory-hiding at healthStage&ge;2 / recovering is visible at a glance. Sick/recovery art files don't exist yet, so stages 1&ndash;3 and the recovering column show the code-drawn health-fx placeholders (droopy eyes, bed + blanket + thermometer, heart monitor, sit-up + lap blanket).</p>
+  <p class="sub">Every growthStage (rows) &times; every healthStage 0&ndash;3 plus a recovering column. Every cell starts equipped with a hat + ears so accessory-hiding at healthStage&ge;2 / recovering is visible at a glance. Stages 1&ndash;3 and the recovering column now run Megan's drawn sprite loops; the code-drawn health-fx placeholders (droopy eyes, bed + blanket + thermometer, heart monitor, sit-up + lap blanket) survive only as the fallback for a caller that renders healthStage&ge;1 without animation.</p>
   <div class="matrix-table" id="matrix"></div>
 
   <h2>ANIMATIONS — frame-cycler idle loops + moments (2026-07-19)</h2>
-  <p class="sub">Sliced from Megan's hand-drawn sheets (assets/companion/anim/&lt;state&gt;-&lt;n&gt;.png). Idle loops swap automatically from renderBlip's existing healthStage/recovering options plus the new `hungry` hint. Sick loops (sick, veryill) render as-authored — no recolour, "sickness overrides colour". Healthy loops (sleeping, hungry) DO recolour through the same cache as the static body — the mint cell below proves it.</p>
+  <p class="sub">Sliced from Megan's hand-drawn sheets (assets/companion/anim/&lt;state&gt;-&lt;n&gt;.png). Idle loops swap automatically from renderBlip's existing healthStage/recovering options plus the new `hungry` hint. Sick loops (recovering, sick, veryill) render as-authored — no recolour, "sickness overrides colour". Healthy loops (sleeping, hungry) DO recolour through the same cache as the static body — the mint cell below proves it. The recovering row landed 2026-07-19 with the blanket drawn INTO the frames, so its code-drawn blanket overlay is suppressed.</p>
   <div class="grid" id="anim-states"></div>
   <h3>Moments (one-shot, ~2 loops then back to idle)</h3>
   <div class="grid" id="anim-moments"></div>
@@ -417,6 +417,11 @@
     // mapping automatically (renderBlip's own idleAnimState()), nothing
     // animation-specific to pass beyond the existing options.
     const ANIM_STATE_CELLS = [
+      // recovering is passed WITH healthStage 2 on purpose: that is the
+      // shape the backend actually reports (recovering = careStreak>=1
+      // AND stage>=2), and it proves idleAnimState checks recovering
+      // before health rather than falling through to the sick loop.
+      { label: "recovering (healthStage 2 + recovering)", opts: { healthStage: 2, recovering: true } },
       { label: "sleeping (healthStage 1)", opts: { healthStage: 1 } },
       { label: "sick (healthStage 2)", opts: { healthStage: 2 } },
       { label: "veryill (healthStage 3)", opts: { healthStage: 3 } },

@@ -4,6 +4,7 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+__pycache__/
 
 # never commit private seeds with real learner data
 supabase/seed-private-real.sql

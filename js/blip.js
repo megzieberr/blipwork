@@ -296,6 +296,11 @@ export function renderBlip(app, host) {
     healthStage: health.stage,
     recovering: health.recovering,
     hungry: canFeedToday,
+    // poke him: alternates a wink and a hop (renderer ignores taps while
+    // he's sleeping/sick/recovering). Deliberately NOT set on the hub
+    // tile's Blips — that tile's own click navigates here, and a tap
+    // that both hops and changes screen reads as a misfire.
+    tappable: true,
   });
 
   const mood = moodCopy(health);

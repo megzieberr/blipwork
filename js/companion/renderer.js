@@ -513,8 +513,10 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
 
 /* ============================================================
    Animation frame-cycler (2026-07-19) — Megan's hand-drawn 4-frame
-   sprite-sheet animations, sliced (scratchpad script, not part of the
-   repo) into assets/companion/anim/<state>-<n>.png, canvased to the same
+   sprite-sheet animations, sliced by tools/slice_sprites.py (the first
+   rows were cut by a scratchpad script that was never kept — the tool is
+   now in the repo, so re-cutting a row is reproducible) into
+   assets/companion/anim/<state>-<n>.png, canvased to the same
    480x600 / ground-line convention as blip-base-blue.png so swapping the
    body img's src between a static base and an animation frame never
    shifts scale or position.
@@ -530,11 +532,16 @@ function animFramePaths(state) {
    body uses (so a pink Blip stays pink while jumping — the sheets are
    monochromatic in the same navy-on-blue palette the tuned recolour
    thresholds were measured against) vs render exactly as Megan drew
-   them. SICK STATES (sick, veryill) are deliberately NOT recoloured —
-   "sickness overrides colour": the pale/green tint on those two sheets
-   is part of what reads as sick, and would look wrong forced into a
-   custom hue. */
-const ANIM_RECOLOURS = { sleeping: true, excited: true, jumping: true, hungry: true, sick: false, veryill: false };
+   them. SICK STATES (sick, veryill, recovering) are deliberately NOT
+   recoloured — "sickness overrides colour": the pale/green tint on those
+   sheets is part of what reads as sick, and would look wrong forced into
+   a custom hue. Recovering is in that family for a second reason too —
+   its drawn blanket is cream, and the recolour thresholds would drag the
+   blanket toward the body hue along with everything else. */
+const ANIM_RECOLOURS = {
+  sleeping: true, excited: true, jumping: true, hungry: true, wink: true,
+  sick: false, veryill: false, recovering: false,
+};
 
 const FRAME_INTERVAL_MS = 520; // "gentle loop", 450-600ms/frame per spec
 const reducedMotion = () =>
@@ -590,12 +597,14 @@ function runFrameLoop(bodyImg, frames, { colour, recolour, loops = Infinity, onD
 
 /* Automatic idle-loop mapping from renderBlip's existing health/growth
    options plus the new `hungry` hint (host passes canFeedToday):
-     healthStage 1 -> sleeping, 2 -> sick, 3 -> veryill (recovering keeps
-     the pre-animation rendering untouched — no sheet for it yet);
+     recovering -> recovering (checked FIRST: it is reported while
+     healthStage is still 2-3, so testing health first would show a sick
+     loop for a Blip who is meant to be visibly on the mend);
+     healthStage 1 -> sleeping, 2 -> sick, 3 -> veryill;
      healthy + hungry -> hungry loop as the idle instead of the static
      base; otherwise null (static base, exactly today's behaviour). */
 function idleAnimState({ healthStage, recovering, hungry }) {
-  if (recovering) return null;
+  if (recovering) return "recovering";
   if (healthStage === 1) return "sleeping";
   if (healthStage === 2) return "sick";
   if (healthStage >= 3) return "veryill";
@@ -615,14 +624,47 @@ function idleAnimState({ healthStage, recovering, hungry }) {
    healthy-only actions (feeding / passing a quest can't happen while
    locked out sick), so both always recolour. */
 const MOMENT_LOOPS = 2;
+/* Per-moment loop counts. "jumping" doubling up is what reads as Megan's
+   "small hop hop"; a wink repeated twice reads twitchy, so it plays once. */
+const MOMENT_LOOP_OVERRIDES = { wink: 1 };
+const MOMENTS = ["excited", "jumping", "wink"];
 export function playMoment(handle, name) {
   if (!handle || !handle.layers || !handle.layers.body) return;
-  if (name !== "excited" && name !== "jumping") return;
+  if (!MOMENTS.includes(name)) return;
   runFrameLoop(handle.layers.body, animFramePaths(name), {
     colour: handle.colour,
     recolour: true,
-    loops: MOMENT_LOOPS,
+    loops: MOMENT_LOOP_OVERRIDES[name] || MOMENT_LOOPS,
     onDone: () => { if (typeof handle._applyIdleBodyArt === "function") handle._applyIdleBodyArt(); },
+  });
+}
+
+/* ---------- tap-to-react (2026-07-19) ----------
+   Tapping Blip anywhere he's shown makes him react: a wink, then a hop,
+   alternating so repeat taps don't feel canned.
+
+   The wink row may not be on disk yet (it is a separate GPT generation
+   from the recovering row). Rather than 404 four <img> loads and flash a
+   broken frame, the wink is probed ONCE with the same imageExists helper
+   resolveRawBody uses, and simply isn't offered until the frames land —
+   at which point it starts working with no further code change.
+
+   Taps are ignored while Blip is sick, sleeping or recovering: a
+   bedridden Blip cheerfully hopping undercuts the whole care mechanic,
+   and playMoment would hand back to the sick loop a beat later anyway. */
+let winkAvailable = null; // null = not probed yet, then a Promise<boolean>
+function hasWinkArt() {
+  if (winkAvailable === null) winkAvailable = imageExists(animFramePaths("wink")[0]);
+  return winkAvailable;
+}
+let tapIndex = 0;
+const tapHandles = new WeakMap(); // host el -> its most recent renderBlip handle
+export function playTapReaction(handle) {
+  if (!handle || !handle.layers || !handle.layers.body) return;
+  if (handle.recovering || handle.healthStage > 0) return; // let him rest
+  hasWinkArt().then((wink) => {
+    const choices = wink ? ["wink", "jumping"] : ["jumping"];
+    playMoment(handle, choices[tapIndex++ % choices.length]);
   });
 }
 
@@ -911,11 +953,11 @@ export function renderBlip(el, opts = {}) {
   // ---- body art ----
   // Animation (2026-07-19) takes priority over the old static/placeholder
   // path whenever idleAnimState() has a loop for this combination
-  // (sleeping/sick/veryill/hungry) — the pre-animation resolveRawBody +
-  // health-fx placeholder path is left COMPLETELY INTACT below for every
-  // other case (healthy+not-hungry static base, recovering, or a future
-  // dedicated bedridden.png/critical.png landing on disk), so nothing
-  // about pre-animation behaviour changes when idleAnimState() is null.
+  // (recovering/sleeping/sick/veryill/hungry) — the pre-animation
+  // resolveRawBody + health-fx placeholder path is left COMPLETELY INTACT
+  // below for every other case (healthy+not-hungry static base, or a
+  // future dedicated bedridden.png/critical.png landing on disk), so
+  // nothing about pre-animation behaviour changes when it returns null.
   // Factored into a named function (not an inline .then chain) so
   // playMoment's onDone can call the exact same "what should be showing
   // right now" resolution once a one-shot moment finishes.
@@ -931,7 +973,7 @@ export function renderBlip(el, opts = {}) {
       // no built-in idempotency of its own (renderCompanion's own
       // el.innerHTML="" wipe is what normally keeps it a one-shot).
       stage.querySelectorAll(".blip-health-fx").forEach((n) => n.remove());
-      const spec = animatedHealthOverlaySpec(healthStage);
+      const spec = animatedHealthOverlaySpec(healthStage, recovering);
       if (spec) mountHealthOverlay(stage, layers, spec);
     } else {
       // paint now with the default grown/healthy body (already done by
@@ -951,5 +993,22 @@ export function renderBlip(el, opts = {}) {
 
   const out = { ...result, growthStage, healthStage, recovering, scale, mood: _blipMood(healthStage, recovering) };
   out._applyIdleBodyArt = applyIdleBodyArt;
+
+  // ---- tap-to-react opt-in ----
+  // The listener goes on `el` (the host's own box), NOT on anything
+  // renderCompanion builds: every re-render wipes el.innerHTML, so a
+  // listener on the stage or body img would die on the next state
+  // change. `el` survives, so it is bound exactly once and reads the
+  // CURRENT handle out of tapHandles each time it fires — otherwise a
+  // re-rendered Blip would keep reacting through its stale first handle
+  // and animate an <img> that is no longer in the document.
+  if (opts.tappable) {
+    tapHandles.set(el, out);
+    if (!el.dataset.blipTappable) {
+      el.dataset.blipTappable = "1";
+      el.style.cursor = "pointer";
+      el.addEventListener("click", () => playTapReaction(tapHandles.get(el)));
+    }
+  }
   return out;
 }
