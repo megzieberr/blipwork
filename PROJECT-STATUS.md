@@ -1,11 +1,17 @@
 # Project status — updated 2026-07-19
 
 ## Where we are
-**The app is now BLIPWORK** — full rebrand from "Maths Homework Quest" executed today
-(orchestrated session, 3 Sonnet agents + supervisor). ALL of it is **UNCOMMITTED in the
-working tree by Megan's instruction** — nothing pushed, sw.js cache still v25; commit +
-bump happen at ship after her phone play-through. Quest content, engines, and maths libs
-are untouched (git status confirms zero changes under js/quests/, js/engine/, libs).
+**The app is now BLIPWORK and it is SHIPPED.** Megan's phone play-through passed, so the
+whole rebrand was committed (`eb6de94`), sw.js bumped v25→v26, and pushed. Verified live:
+https://megzieberr.github.io/maths-homework-quest/ serves `<title>Blipwork · Grade 11</title>`,
+`mhq-v26`, and all new companion/gallery/asset files return 200. The repo and URL still
+say "maths-homework-quest" — renaming was deliberately deferred (app was never shared, so
+it can be done any time; GitHub auto-redirects). Quest content, engines, and maths libs are
+untouched. Focus now moves to Phase 2 (feeding / growth / grocery shop).
+
+Note: the push needed a rebase onto `aa1bfd6` — a cloud-dispatch commit adding CLAUDE.md
+and an /explain skill. That's intentional per the standing rule; it is now the parent of
+the rebrand commit.
 
 What changed:
 - **Identity/theme**: solid Study-Bunny look (cream #f6e2b3 bg, brown ink #2b2016, flat
@@ -85,18 +91,16 @@ registration may linger harmlessly — Defender is active.
   grows with feedings — renderer is size-agnostic so growth = a scale factor).
 
 ## Pending on Megan
-- Phone play-through of the full loop at http://<laptop-ip>:5599/?local=1 (signup → round
-  → +XP/+gold → colour unlock → shop → equip → gallery), plus eyeball: attached ears/arms
-  (tilt −25°, arm angle 24° are single tunable values), lemon/peach recolours, hub-tile
-  and Blip-screen sizes, level-up line, shop-card previews.
-- Then: give the ship go-ahead (commit + sw bump + push) in the next session.
-- No SQL left to run — today's migrations are already applied live via MCP.
+- Open the PWA on the phone and close/reopen it twice so the v26 service worker takes
+  over (the usual double-load), then confirm the live site looks like the local build.
+- No SQL outstanding — the Blipwork migrations are already applied live via MCP.
+- Optional, whenever: decide whether to rename the GitHub repo/URL to `blipwork`.
 
 ## Next up
-- Fix whatever the phone play-through surfaces; tune shop prices/level gates if wanted.
-- Ship ritual: bump sw.js cache v25→v26, rename remaining "Maths Quest" strings in
-  README.md + design/design-lab.html, decide whether to rename the GitHub repo/URL
-  (app never shared — free to change; GitHub auto-redirects), commit + push, verify live.
-- Phase 2 when Megan schedules it: feeding/growth/grocery shop (design notes in
-  homework-hub-companion/plan.md), then teacher-assigned homework + treasure box +
-  notifications from the original plan.
+- **Phase 2 — feeding, growth, grocery shop** (design notes in
+  homework-hub-companion/plan.md). Open design decisions before building: cookie
+  economics (free daily cookie as a gentle streak vs gold-priced), number of growth
+  stages + feedings per stage + baby start size, what an unfed Blip looks like (must
+  stay cute-hungry, never guilt-inducing), and the rest of the grocery range.
+- After Phase 2: teacher-assigned homework + treasure box + notifications.
+- Shop prices/level gates are still placeholders — tune on real play data.
