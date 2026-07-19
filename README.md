@@ -1,12 +1,20 @@
-# Maths Quest — Grade 11 homework hub
+# Blipwork — Grade 11 homework hub
 
 A gamified homework app for Grade 11 maths. Learners log in on their phones, work
 through the **quests their teacher has opened**, and get reactive help only when
 they're stuck. The teacher opens/closes quests and tracks the class from an admin
 dashboard. Installs to the phone like an app.
 
-The first chapter is **Statistics** (8 quests). The hub is built to grow to more
-chapters.
+Eleven chapters ship today (Statistics, Finance, Probability, 2D Trigonometry,
+Measurement, Functions, Trig Graphs, Analytical Geometry, Number Patterns,
+Exponents & Surds, Equations & Inequalities), split across a **Term 3** and a
+**Revision** tab.
+
+## Blip, the companion
+Every learner has a blob companion called **Blip** (renameable). Completed rounds pay
+**XP** (levelling only) and **gold** (shop only) — the two never mix. Gold buys
+level-gated accessories; the first colour unlocks after the first completed round. The
+**gallery** shows everyone's builds alphabetically, with no scores and no ranking.
 
 ## How it works
 - **No teaching up front.** A learner goes straight into questions. Help is reactive:
@@ -37,12 +45,14 @@ backend; append `?local=1` to force it.
   key is safe to commit; the secret/service-role key never goes in the repo).
 
 Security: the public key can only execute the RPC functions; every read/write verifies
-the password server-side. Learner passwords are stored readable on purpose so the teacher
-can read a forgotten one back from the admin panel.
+the password server-side. Learner passwords are **bcrypt-hashed server-side** — nobody,
+including the teacher, can read one back. A forgotten password is *cleared* from the
+admin panel; the learner then sets a new one at next login and keeps all progress.
 
 ## Admin
-`/admin.html` — open/close each quest, see struggle flags by concept, read back/reset
-passwords, add/remove learners, export CSV.
+`/admin.html` — open/close each quest, see struggle flags by concept, clear passwords,
+add/remove learners, export CSV. Resetting a learner's progress zeroes their XP but
+never confiscates their Blip's gold, items, colour or name.
 
 ## Deploy
 Static — hosted on GitHub Pages from `main`. `.nojekyll` serves every file as-is.

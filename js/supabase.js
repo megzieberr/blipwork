@@ -32,6 +32,13 @@ export const SupabaseBackend = {
   },
   async logStruggle(username, password, concept) { return rpc("mhq_log_struggle", { p_username: username, p_password: password, p_concept: concept }); },
 
+  // ---- Blip: shop / equip / gallery ----
+  async buyItem(username, password, item) { return rpc("mhq_buy_item", { p_username: username, p_password: password, p_item: item }); },
+  async equip(username, password, { equipped, colour, blipName } = {}) {
+    return rpc("mhq_equip", { p_username: username, p_password: password, p_equipped: equipped ?? null, p_colour: colour ?? null, p_blip_name: blipName ?? null });
+  },
+  async gallery(username, password) { return rpc("mhq_gallery", { p_username: username, p_password: password }); },
+
   // ---- admin ----
   async adminLogin(pw) { return rpc("mhq_admin_login", { p_admin_password: pw }); },
   async adminData(pw) { return rpc("mhq_admin_data", { p_admin_password: pw }); },

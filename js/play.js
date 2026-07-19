@@ -96,11 +96,28 @@ export function renderPlay(app, host, params) {
   async function finish() {
     bar.querySelector("i").style.width = "100%";
     const score = st.total ? st.firstTry / st.total : 0;
-    let res = { badgeEarned: false, alreadyPassed: false };
+    const priorXp = (app.state && typeof app.state.xp === "number") ? app.state.xp : 0;
+    let res = { badgeEarned: false, alreadyPassed: false, xpAwarded: st.xp, goldAwarded: 0, levelUp: false };
     try { res = await api.submitQuest(sess.username, sess.password, quest.id, { score, xp: st.xp, total: st.total, correct: st.firstTry }); }
     catch { /* offline — still show results locally */ }
     await app.refresh();
-    app.go("results", { chapter, quest, accent, score, xp: st.xp, firstTry: st.firstTry, total: st.total, badgeEarned: !!(res && res.badgeEarned), alreadyPassed: !!(res && res.alreadyPassed) });
+
+    const newXp = (res && typeof res.xp === "number") ? res.xp : priorXp;
+    const newLevel = (res && res.levelInfo && res.levelInfo.level) || (res && res.level) || null;
+    const firstUnlock = priorXp <= 0 && newXp > 0;
+    let unlockedItem = null;
+    if (res && res.levelUp && newLevel && app.state && Array.isArray(app.state.shop)) {
+      const found = app.state.shop.find(it => it.minLevel === newLevel);
+      unlockedItem = found ? found.id : null;
+    }
+
+    app.go("results", {
+      chapter, quest, accent, score, firstTry: st.firstTry, total: st.total,
+      badgeEarned: !!(res && res.badgeEarned), alreadyPassed: !!(res && res.alreadyPassed),
+      xpAwarded: (res && typeof res.xpAwarded === "number") ? res.xpAwarded : st.xp,
+      goldAwarded: (res && typeof res.goldAwarded === "number") ? res.goldAwarded : 0,
+      levelUp: !!(res && res.levelUp), level: newLevel, firstUnlock, unlockedItem,
+    });
   }
 
   showSkill();

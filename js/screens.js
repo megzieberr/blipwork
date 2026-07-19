@@ -4,6 +4,9 @@ import { questDef } from "./quests/index.js";
 import { el, clear } from "./ui.js";
 import { openCalculator } from "./calculator.js";
 import { maybeShowInstall } from "./install.js";
+import { renderCompanion } from "./companion/renderer.js";
+import { equippedToAccessories, itemLabel } from "./companion/blip-ui.js";
+import { openColourUnlock } from "./companion/unlock-modal.js";
 
 function setTheme(chapterSig, accent) {
   const r = document.documentElement.style;
@@ -48,11 +51,21 @@ function chapterCard(app, ch, open) {
 }
 
 export function renderHub(app, host) {
-  setTheme("#8b5cf6", "#8b5cf6");
+  setTheme("#b17f22", "#b17f22");
   const name = ((app.state && app.state.student && app.state.student.name) || "").split(" ")[0];
   const head = el("div", "hub-head");
   head.innerHTML = `<span class="eyebrow">Grade 11 Maths</span><h1>Hi, ${name || "there"} 👋</h1><p class="muted small">Pick a chapter to practise.</p>`;
   host.appendChild(head);
+
+  if (app.state && app.state.blip) {
+    const blip = app.state.blip;
+    const tile = el("div", "hub-blip");
+    tile.innerHTML = `<div class="hb-stage"></div>
+      <div class="hb-info"><div class="hb-name">${blip.name || "Blip"}</div><div class="hb-cta">Tap to visit Blip →</div></div>`;
+    renderCompanion(tile.querySelector(".hb-stage"), { colour: blip.colour, accessories: equippedToAccessories(blip.equipped) });
+    tile.addEventListener("click", () => app.go("blip"));
+    host.appendChild(tile);
+  }
 
   try { maybeShowInstall(host); } catch { /* non-critical */ }
 
@@ -131,7 +144,10 @@ export function renderChapter(app, host, params) {
 
 /* ---------------- RESULTS ---------------- */
 export function renderResults(app, host, params) {
-  const { chapter, quest, accent, score, xp, firstTry, total, badgeEarned, alreadyPassed } = params;
+  const {
+    chapter, quest, accent, score, firstTry, total, badgeEarned, alreadyPassed,
+    xpAwarded, goldAwarded, levelUp, level, firstUnlock, unlockedItem,
+  } = params;
   setTheme(chapter.signature, accent);
   const pct = Math.round(score * 100);
   const passed = score >= PASS;
@@ -143,15 +159,24 @@ export function renderResults(app, host, params) {
     <div class="result-emoji">${passed ? "🎉" : "💪"}</div>
     <h1>Quest complete</h1>
     <div class="big-score">${pct}%</div>
-    <p class="muted">${firstTry} / ${total} right first time · <span class="num">★ +${xp} XP</span></p>
+    <p class="muted">${firstTry} / ${total} right first time</p>
+    <div class="result-reward">★ +${xpAwarded ?? 0} XP · 🪙 +${goldAwarded ?? 0} gold</div>
     <div class="result-msg ${passed ? "good" : "warn"}">${passed ? "Quest passed — badge earned!" : "So close! Get 80% right first-time to earn the badge."}</div>
     ${badgeEarned ? `<div class="badge-pop"><span class="bi">${chapter.icon}</span>${quest.title} mastered</div>` : ""}
-    ${alreadyPassed ? `<div class="result-msg">Replay — already mastered, so no new XP this time.</div>` : ""}
+    ${alreadyPassed ? `<div class="result-msg">Replay — already mastered, so this round paid a smaller XP top-up.</div>` : ""}
+    ${levelUp ? `<div class="result-levelup">Level ${level}!${unlockedItem ? ` New in the shop: ${itemLabel(unlockedItem)}.` : ""}</div>` : ""}
     <div class="result-actions"></div>`;
   const actions = card.querySelector(".result-actions");
   const mk = (label, primary, fn) => { const b = el("button", "btn " + (primary ? "primary" : "ghost"), label); b.addEventListener("click", fn); actions.appendChild(b); };
   const replay = () => app.go("play", { chapter, quest, def: questDef(quest.id), accent });
   const toChapter = () => app.go("chapter", { chapterId: chapter.id });
+
+  if (firstUnlock) {
+    const cta = el("button", "btn primary big result-unlock-btn", "🎨 Pick Blip's colour");
+    cta.addEventListener("click", () => openColourUnlock(app, () => { app.refresh().then(() => app.render()); }));
+    card.insertBefore(cta, actions);
+  }
+
   if (passed) { mk("Back to quests", true, toChapter); mk("Play again", false, replay); }
   else { mk("Try again", true, replay); mk("Back to quests", false, toChapter); }
   screen.appendChild(card);

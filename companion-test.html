@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blip companion — renderer proof</title>
+<style>
+  :root { color-scheme: light; }
+  body { font-family: system-ui, sans-serif; background: #fdf6ec; color: #2e1b0d; margin: 0 auto; padding: 24px 28px 64px; max-width: 1100px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1rem; margin: 36px 0 12px; border-bottom: 2px solid #eadfc9; padding-bottom: 6px; }
+  p.sub { margin: 0 0 20px; color: #8a7458; font-size: .9rem; }
+
+  .hero-row { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+  /* hard cap: sized per Megan's phone review 2026-07-19 ("wayy too big" at 340px).
+     Sized off the container, not vw (the preview pane reports viewport 0). The floaty
+     accessories overhang the stage box, so the row's gap provides the breathing room. */
+  /* top margin = headroom for the floaty hat, which overhangs the stage box upward
+     and otherwise overlaps the section heading (Megan's phone review) */
+  .hero-stage { width: min(190px, 100%); max-width: 190px; flex: none; margin: 80px auto 24px; }
+  .hero-controls { flex: 1; min-width: 260px; }
+  fieldset { border: 1px solid #eadfc9; border-radius: 10px; margin: 0 0 14px; padding: 10px 12px; }
+  legend { font-size: .8rem; font-weight: 600; color: #6b5638; padding: 0 6px; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  button.opt {
+    border: 2px solid #d9c8a5; background: #fff; border-radius: 8px; padding: 6px 10px;
+    font-size: .8rem; cursor: pointer; color: #2e1b0d;
+  }
+  button.opt.active { border-color: #2e1b0d; background: #ffe9b8; font-weight: 600; }
+  button.opt.swatch { display: flex; align-items: center; gap: 6px; }
+  .swatch i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.25); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 14px 10px; }
+  .cell { text-align: center; }
+  .cell .stage-wrap { width: 84px; margin: 0 auto 4px; }
+  .cell .cap { font-size: .68rem; color: #6b5638; line-height: 1.2; }
+
+  #freeze-toggle { position: fixed; top: 18px; right: 24px; }
+</style>
+</head>
+<body>
+  <h1>Blip companion — renderer proof</h1>
+  <p class="sub">Standalone test harness for <code>js/companion/renderer.js</code>. Does not touch any existing app file.</p>
+
+  <button class="opt" id="freeze-toggle" type="button">Freeze bop animation</button>
+
+  <h2>Hero — every slot equipped</h2>
+  <div class="hero-row">
+    <div class="hero-stage" id="hero"></div>
+    <div class="hero-controls">
+      <fieldset>
+        <legend>Colour</legend>
+        <div class="btn-row" id="colour-buttons"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Accessories</legend>
+        <div class="btn-row" id="accessory-buttons"></div>
+      </fieldset>
+    </div>
+  </div>
+
+  <h2>Grid — colour &times; accessory-set combos</h2>
+  <div class="grid" id="grid"></div>
+
+  <script type="module">
+    import { renderCompanion, COLOURS, ACCESSORIES, ATTACH, getBodySrc } from "./js/companion/renderer.js";
+
+    const colourIds = Object.keys(COLOURS);
+    const accessoryIds = Object.keys(ACCESSORIES);
+
+    /* Speckle scan: renders a recoloured preset to canvas and counts pixels
+       near dark (outline/eye/smile) regions that still carry a visible
+       cream/yellow hue — i.e. un-recoloured fringe grit. Should be ~0 for
+       presets whose target hue is far from cream (mint/sky/lilac/coral…).
+       Not meaningful for lemon/peach (their target hue IS in the band). */
+    async function scanForCreamSpeckles(colourId, nearPx = 3) {
+      const src = await getBodySrc(colourId);
+      const img = new Image();
+      await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = src; });
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const W = canvas.width, H = canvas.height;
+      const dark = new Uint8Array(W * H);
+      for (let p = 0, i = 0; p < W * H; p++, i += 4) {
+        if (data[i + 3] > 128) {
+          const v = Math.max(data[i], data[i + 1], data[i + 2]) / 255;
+          if (v < 0.32) dark[p] = 1;
+        }
+      }
+      let speckles = 0;
+      const samples = [];
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          const i = (y * W + x) * 4;
+          if (data[i + 3] <= 128) continue;
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+          const v = mx / 255, s = mx ? (mx - mn) / mx : 0;
+          if (v < 0.5 || s < 0.16 || mx !== r) continue;
+          const hue = ((g - b) / Math.max(mx - mn, 1)) * 60; // max==r branch
+          if (hue < 28 || hue > 55) continue; // not cream/yellow-hued
+          let nearDark = false;
+          for (let dy = -nearPx; dy <= nearPx && !nearDark; dy++) {
+            for (let dx = -nearPx; dx <= nearPx; dx++) {
+              const nx = x + dx, ny = y + dy;
+              if (nx >= 0 && ny >= 0 && nx < W && ny < H && dark[ny * W + nx]) { nearDark = true; break; }
+            }
+          }
+          if (!nearDark) continue;
+          speckles++;
+          if (samples.length < 8) samples.push({ x, y, rgb: [r, g, b], hue: Math.round(hue), s: +s.toFixed(2), v: +v.toFixed(2) });
+        }
+      }
+      return { colourId, canvasSize: [W, H], speckleCount: speckles, samples };
+    }
+
+    /* Attachment check (for the ATTACHED-by-design slots: ears, arms):
+       converts each side's rendered client rect to stage fractions, maps
+       that onto the base PNG, and counts body-OPAQUE pixels inside it —
+       a real overlap-with-the-body test, not bbox-vs-bbox proximity
+       (the body's bbox spans nearly the whole stage, so bbox overlap
+       alone is vacuous). overlapFrac = opaque pixels / rect pixels. */
+    let baseAlphaCtx = null;
+    async function checkAttachment(instance) {
+      if (!baseAlphaCtx) {
+        const img = new Image();
+        await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = "assets/companion/blip-base.png"; });
+        const cv = document.createElement("canvas");
+        cv.width = img.naturalWidth; cv.height = img.naturalHeight;
+        baseAlphaCtx = cv.getContext("2d");
+        baseAlphaCtx.drawImage(img, 0, 0);
+      }
+      const W = baseAlphaCtx.canvas.width, H = baseAlphaCtx.canvas.height;
+      const stageRect = instance.stage.getBoundingClientRect();
+      const out = { stageWidthPx: Math.round(stageRect.width), slots: {} };
+      for (const slot of ["ears", "arms"]) {
+        const pair = instance.layers[slot];
+        if (!pair) continue;
+        out.slots[slot] = pair.map((el) => {
+          const r = el.getBoundingClientRect();
+          const fx0 = (r.left - stageRect.left) / stageRect.width, fx1 = (r.right - stageRect.left) / stageRect.width;
+          const fy0 = (r.top - stageRect.top) / stageRect.height, fy1 = (r.bottom - stageRect.top) / stageRect.height;
+          const x0 = Math.max(0, Math.round(fx0 * W)), x1 = Math.min(W, Math.round(fx1 * W));
+          const y0 = Math.max(0, Math.round(fy0 * H)), y1 = Math.min(H, Math.round(fy1 * H));
+          let opaque = 0, total = Math.max(0, (x1 - x0)) * Math.max(0, (y1 - y0));
+          if (total > 0) {
+            const d = baseAlphaCtx.getImageData(x0, y0, x1 - x0, y1 - y0).data;
+            for (let i = 3; i < d.length; i += 4) if (d[i] > 128) opaque++;
+          }
+          return {
+            side: el.dataset.side,
+            rectFrac: [+fx0.toFixed(3), +fy0.toFixed(3), +fx1.toFixed(3), +fy1.toFixed(3)],
+            opaqueBodyPxInRect: opaque,
+            overlapFrac: total ? +(opaque / total).toFixed(3) : 0,
+            overlapsBody: opaque > 0,
+          };
+        });
+      }
+      return out;
+    }
+
+    window.__COMPANION__ = {
+      COLOURS, ACCESSORIES, ATTACH, getBodySrc, scanForCreamSpeckles, checkAttachment,
+      hero: null,
+      instances: [],
+    };
+
+    /* ---------------- hero ---------------- */
+    const heroState = { colour: "mint", accessories: accessoryIds.slice() };
+    const heroEl = document.getElementById("hero");
+
+    function renderHero() {
+      const result = renderCompanion(heroEl, heroState);
+      window.__COMPANION__.hero = result;
+    }
+
+    const colourBtnsHost = document.getElementById("colour-buttons");
+    colourIds.forEach((id) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt swatch" + (id === heroState.colour ? " active" : "");
+      b.dataset.colour = id;
+      const swatchHex = COLOURS[id] || "#fddb93";
+      b.innerHTML = `<i style="background:${swatchHex}"></i>${id}`;
+      b.addEventListener("click", () => {
+        heroState.colour = id;
+        [...colourBtnsHost.children].forEach((c) => c.classList.toggle("active", c.dataset.colour === id));
+        renderHero();
+      });
+      colourBtnsHost.appendChild(b);
+    });
+
+    const accBtnsHost = document.getElementById("accessory-buttons");
+    accessoryIds.forEach((id) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt" + (heroState.accessories.includes(id) ? " active" : "");
+      b.dataset.accessory = id;
+      b.textContent = id;
+      b.addEventListener("click", () => {
+        const i = heroState.accessories.indexOf(id);
+        if (i === -1) heroState.accessories.push(id); else heroState.accessories.splice(i, 1);
+        b.classList.toggle("active");
+        renderHero();
+      });
+      accBtnsHost.appendChild(b);
+    });
+
+    renderHero();
+
+    /* ---------------- grid ---------------- */
+    const comboSets = [
+      { label: "bare", accessories: [] },
+      { label: "party-hat", accessories: ["party-hat"] },
+      { label: "cat-ears + glasses", accessories: ["cat-ears", "round-glasses"] },
+      { label: "wings + arms", accessories: ["angel-wings", "stubby-arms"] },
+    ];
+
+    const gridHost = document.getElementById("grid");
+    colourIds.forEach((colourId) => {
+      comboSets.forEach((combo) => {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        const stageWrap = document.createElement("div");
+        stageWrap.className = "stage-wrap";
+        cell.appendChild(stageWrap);
+        const cap = document.createElement("div");
+        cap.className = "cap";
+        cap.textContent = `${colourId} · ${combo.label}`;
+        cell.appendChild(cap);
+        gridHost.appendChild(cell);
+
+        const state = { colour: colourId, accessories: combo.accessories };
+        const result = renderCompanion(stageWrap, state);
+        window.__COMPANION__.instances.push({ colourId, comboLabel: combo.label, state, ...result });
+      });
+    });
+
+    /* ---------------- freeze toggle (for verification without rAF) ---------------- */
+    const freezeBtn = document.getElementById("freeze-toggle");
+    let frozen = false;
+    freezeBtn.addEventListener("click", () => {
+      frozen = !frozen;
+      document.querySelectorAll(".blip-bop").forEach((elm) => {
+        elm.style.animationPlayState = frozen ? "paused" : "running";
+      });
+      freezeBtn.textContent = frozen ? "Unfreeze bop animation" : "Freeze bop animation";
+      freezeBtn.classList.toggle("active", frozen);
+    });
+  </script>
+</body>
+</html>

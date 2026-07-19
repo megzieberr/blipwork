@@ -16,3 +16,20 @@ export function shuffled(arr) {
 }
 export function randInt(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
 export function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+/* Small toast for surfacing shop/equip results (and their errors) —
+   never fail silently on a buy/equip/rename. Stacks; auto-dismisses. */
+let toastHost = null;
+export function showToast(message, kind = "info") {
+  if (!toastHost) {
+    toastHost = el("div", "toast-host");
+    document.body.appendChild(toastHost);
+  }
+  const t = el("div", "toast" + (kind === "error" ? " err" : kind === "good" ? " good" : ""), message);
+  toastHost.appendChild(t);
+  requestAnimationFrame(() => t.classList.add("show"));
+  setTimeout(() => {
+    t.classList.remove("show");
+    setTimeout(() => t.remove(), 300);
+  }, 2600);
+}

@@ -22,7 +22,7 @@ export function maybeShowInstall(host) {
     <button class="install-x" aria-label="Dismiss">✕</button>
     <div class="install-ico">📲</div>
     <div class="install-body">
-      <b>Add Maths Quest to your phone</b>
+      <b>Add Blipwork to your phone</b>
       <p class="muted small">${isiOS() ? "Tap the Share button, then “Add to Home Screen”." : "Install it like an app for one-tap access."}</p>
     </div>
     <div class="install-foot"></div>`;

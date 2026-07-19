@@ -5,6 +5,8 @@ import { el, clear } from "./ui.js";
 import { renderLogin } from "./auth.js";
 import { renderHub, renderChapter, renderResults } from "./screens.js";
 import { renderPlay } from "./play.js";
+import { renderBlip } from "./blip.js";
+import { renderGallery } from "./gallery.js";
 import { registerServiceWorker } from "./pwa.js";
 
 const app = {
@@ -30,7 +32,8 @@ const app = {
 
   render() {
     clear(this.root);
-    if ((this.screen === "hub" || this.screen === "chapter") && this.state) this.root.appendChild(chrome(this));
+    const chromeScreens = ["hub", "chapter", "blip", "gallery"];
+    if (chromeScreens.includes(this.screen) && this.state) this.root.appendChild(chrome(this));
     const view = el("main", "view");
     this.root.appendChild(view);
     switch (this.screen) {
@@ -39,21 +42,34 @@ const app = {
       case "chapter": renderChapter(this, view, this.params); break;
       case "play": renderPlay(this, view, this.params); break;
       case "results": renderResults(this, view, this.params); break;
+      case "blip": renderBlip(this, view); break;
+      case "gallery": renderGallery(this, view); break;
       default: renderHub(this, view);
     }
   },
 };
 
+/* Top HUD: gold (shop currency) + level with a mini XP-to-next-level bar.
+   Tapping the level/gold chip is a quick way into the Blip screen. XP shown
+   here is the lifetime levelling counter (state.xp), never the old
+   per-quest totalXp badge — gold and XP are deliberately decoupled. */
 function chrome(app) {
   const c = el("div", "chrome");
-  c.innerHTML = `<div class="brand"><span class="dot"></span> Maths Quest</div>
+  const levelInfo = app.state.levelInfo || { level: 1, intoLevel: 0, nextCost: 300 };
+  const pct = levelInfo.nextCost ? Math.min(100, Math.round((levelInfo.intoLevel / levelInfo.nextCost) * 100)) : 100;
+  c.innerHTML = `<div class="brand"><img class="brand-logo" src="assets/companion/blip-base.png" alt=""> Blipwork</div>
     <div class="chrome-right">
-      <span class="xpchip">★ <b>${app.state.totalXp || 0}</b> XP</span>
+      <button class="hud" title="Visit Blip">
+        <span class="hud-level">Lv ${levelInfo.level}</span>
+        <span class="hud-bar"><i style="width:${pct}%"></i></span>
+        <span class="goldchip">🪙 <b>${app.state.gold || 0}</b></span>
+      </button>
       <button class="link-btn logout" title="Log out" aria-label="Log out">⎋</button>
     </div>`;
   const brand = c.querySelector(".brand");
   brand.style.cursor = "pointer";
   brand.addEventListener("click", () => app.go("hub"));
+  c.querySelector(".hud").addEventListener("click", () => app.go("blip"));
   c.querySelector(".logout").addEventListener("click", () => app.logout());
   return c;
 }

@@ -1,13 +1,13 @@
 {
-  "name": "Maths Quest",
-  "short_name": "Maths Quest",
+  "name": "Blipwork",
+  "short_name": "Blipwork",
   "description": "Grade 11 maths homework quests — practise each section, earn XP and badges.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#04101a",
-  "theme_color": "#04101a",
+  "background_color": "#f6e2b3",
+  "theme_color": "#f6e2b3",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

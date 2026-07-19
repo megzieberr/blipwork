@@ -1,77 +1,26 @@
 /* ============================================================
-   CONFIG — chapters, the per-chapter colour family, XP rules.
+   CONFIG — chapters, the shared colour palette, XP rules.
    ------------------------------------------------------------
-   Colour system (locked decision): each CHAPTER owns one hue
-   family; its quests are shades of that hue, light → deep, so a
-   quest map reads as one cohesive "world" while still letting
-   each quest be told apart. Statistics owns violet.
+   Colour system (revised — Study Bunny style): a small curated set
+   of SOLID flat accents (no per-chapter hue families, no light→deep
+   quest ramps). Chapter identity comes from its icon + name, not a
+   unique hue; the 5 accents just cycle down the chapter list so
+   neighbouring chapters read as visually distinct. Every quest in a
+   chapter shares its chapter's one accent.
    ============================================================ */
-
-/* eight violet shades, light → deep (quest 1 → quest 8) */
-const STATS_SHADES = [
-  "#b9a8ff", "#a78bfa", "#9a78f6", "#8b5cf6",
-  "#7c54f0", "#7044e6", "#6a3bd6", "#5a2fbe",
-];
-
-/* seven amber/gold shades, light → deep (Finance quests 1 → 7) */
-const FIN_SHADES = [
-  "#fcd34d", "#fbbf24", "#f59e0b", "#ea9a0a",
-  "#e08708", "#cf7506", "#b8650a",
-];
-
-/* seven fuchsia/pink shades, light → deep (Probability quests 1 → 7) */
-const PROB_SHADES = [
-  "#f9a8d4", "#f472b6", "#ec4899", "#e22a86",
-  "#db2777", "#be185d", "#9d174d",
-];
-
-/* seven sky-blue shades, light → deep (Trigonometry quests 1 → 7) */
-const TRIG_SHADES = [
-  "#7dd3fc", "#38bdf8", "#0ea5e9", "#0d8fce",
-  "#0284c7", "#0369a1", "#075985",
-];
-
-/* six lime shades, light → deep (Measurement quests 1 → 6) */
-const MEAS_SHADES = [
-  "#bef264", "#a3e635", "#84cc16", "#65a30d", "#4d7c0f", "#3f6212",
-];
-
-/* seven teal shades, light → deep (Functions quests 1 → 7) */
-const FUNC_SHADES = [
-  "#5eead4", "#2dd4bf", "#14b8a6", "#0d9488", "#0f766e", "#115e59", "#134e4a",
-];
-
-/* seven indigo shades, light → deep (Trig Graphs quests 1 → 7) */
-const TGRAPH_SHADES = [
-  "#a5b4fc", "#818cf8", "#6366f1", "#5b54e0", "#4f46e5", "#4338ca", "#3730a3",
-];
-
-/* seven orange shades, light → deep (Analytical Geometry quests 1 → 7) */
-const AG_SHADES = [
-  "#fdba74", "#fb923c", "#f97316", "#ea6a0c", "#dd5c0a", "#c2480a", "#9a3412",
-];
-
-/* seven slate/steel shades, light → deep (Number Patterns quests 1 → 7) */
-const PAT_SHADES = [
-  "#94a3b8", "#8493a8", "#73849b", "#64748b", "#556074", "#475569", "#334155",
-];
-
-/* eight rose/red shades, light → deep (Exponents & Surds quests 1 → 8) */
-const EXP_SHADES = [
-  "#fda4af", "#fb7185", "#f43f5e", "#e11d48",
-  "#c81e3a", "#be123c", "#9f1239", "#881337",
-];
-
-/* eight emerald shades, light → deep (Equations & Inequalities quests 1 → 8) */
-const EQN_SHADES = [
-  "#6ee7b7", "#34d399", "#10b981", "#0ca678",
-  "#059669", "#047857", "#065f46", "#064e3b",
-];
+const PALETTE = {
+  honey: "#b17f22",   // primary — honey/mustard yellow
+  coral: "#d9714a",   // secondary — soft coral / red-orange
+  sage:  "#7f9a6d",   // muted sage green
+  sky:   "#5f9ab5",   // muted sky blue
+  rose:  "#c17b83",   // dusty rose
+};
+const CYCLE = [PALETTE.honey, PALETTE.coral, PALETTE.sage, PALETTE.sky, PALETTE.rose];
 
 export const CHAPTERS = [
   {
     id: "stats", name: "Statistics", paper: "Paper 2", icon: "📊", term: "term3",
-    hue: STATS_SHADES, signature: "#8b5cf6", open: true,
+    signature: PALETTE.honey, open: true,
     blurb: "Data, spread, graphs and the shape of a distribution.",
     quests: [
       { id: "q1", n: 1, title: "Calculator skills", blurb: "Clear it, frequency on/off, read values back.", built: true },
@@ -86,7 +35,7 @@ export const CHAPTERS = [
   },
   {
     id: "finance", name: "Finance", paper: "Paper 1", icon: "💰", term: "term3",
-    hue: FIN_SHADES, signature: "#f59e0b", open: true,
+    signature: PALETTE.coral, open: true,
     blurb: "Interest, growth and the time value of money.",
     quests: [
       { id: "f1", n: 1, title: "Words & formulas", blurb: "P, A, i, n and which formula fits.", built: true },
@@ -100,7 +49,7 @@ export const CHAPTERS = [
   },
   {
     id: "prob", name: "Probability", paper: "Paper 1", icon: "🎲", term: "term3",
-    hue: PROB_SHADES, signature: "#ec4899", open: true,
+    signature: PALETTE.sage, open: true,
     blurb: "Chance, Venn diagrams, tree diagrams and the rules that tie them together.",
     quests: [
       { id: "p1", n: 1, title: "Chance & the scale", blurb: "Sample space, theoretical probability, relative frequency.", built: true },
@@ -114,7 +63,7 @@ export const CHAPTERS = [
   },
   {
     id: "trig", name: "2D Trigonometry", paper: "Paper 2", icon: "📐", term: "term3",
-    hue: TRIG_SHADES, signature: "#0ea5e9", open: true,
+    signature: PALETTE.sky, open: true,
     blurb: "Sine, cosine and area rules — solving any triangle, drawn to scale.",
     quests: [
       { id: "t1", n: 1, title: "Which rule fits?", blurb: "Label the friends; choose sine, cosine or area for the given case.", built: true },
@@ -128,7 +77,7 @@ export const CHAPTERS = [
   },
   {
     id: "meas", name: "Measurement", paper: "Paper 2", icon: "📦", term: "term3",
-    hue: MEAS_SHADES, signature: "#84cc16", open: true,
+    signature: PALETTE.rose, open: true,
     blurb: "Surface area and volume — read the solid, then choose the right formula.",
     quests: [
       { id: "m1", n: 1, title: "Name it & its formula", blurb: "Recognise each solid and match its volume / surface-area formula.", built: true },
@@ -142,7 +91,7 @@ export const CHAPTERS = [
   // ---- REVISION tab: chapters already taught this year, open for revision ----
   {
     id: "func", name: "Functions", paper: "Paper 1", icon: "📈", term: "revision",
-    hue: FUNC_SHADES, signature: "#14b8a6", open: true,
+    signature: PALETTE.honey, open: true,
     blurb: "The four graphs — read them, transform them, and solve inequalities off them.",
     quests: [
       { id: "fn1", n: 1, title: "The four families", blurb: "Line, parabola, hyperbola, exponential — from the equation and the graph.", built: true },
@@ -156,7 +105,7 @@ export const CHAPTERS = [
   },
   {
     id: "tgraph", name: "Trig Graphs", paper: "Paper 2", icon: "〰️", term: "revision",
-    hue: TGRAPH_SHADES, signature: "#6366f1", open: true,
+    signature: PALETTE.coral, open: true,
     blurb: "Sine, cosine and tangent graphs — period, amplitude, range, shifts, drawn to scale.",
     quests: [
       { id: "tg1", n: 1, title: "The three parent graphs", blurb: "Recognise sin, cos & tan and their key features.", built: true },
@@ -170,7 +119,7 @@ export const CHAPTERS = [
   },
   {
     id: "analytical", name: "Analytical Geometry", paper: "Paper 2", icon: "📍", term: "revision",
-    hue: AG_SHADES, signature: "#f97316", open: true,
+    signature: PALETTE.sage, open: true,
     blurb: "Points, lines and gradients on the grid — the right formula, drawn to scale.",
     quests: [
       { id: "ag1", n: 1, title: "Which formula, and what it tells you", blurb: "Gradient, distance or midpoint — and what each answer looks like.", built: true },
@@ -184,7 +133,7 @@ export const CHAPTERS = [
   },
   {
     id: "pat", name: "Number Patterns", paper: "Paper 1", icon: "🔢", term: "revision",
-    hue: PAT_SHADES, signature: "#64748b", open: true,
+    signature: PALETTE.sky, open: true,
     blurb: "Linear, quadratic and geometric patterns — the difference pyramid and the general term.",
     quests: [
       { id: "np1", n: 1, title: "Spot the pattern", blurb: "First & second differences, constant ratio — arithmetic, quadratic or geometric?", built: true },
@@ -198,7 +147,7 @@ export const CHAPTERS = [
   },
   {
     id: "exp", name: "Exponents & Surds", paper: "Paper 1", icon: "ⁿ√", term: "revision",
-    hue: EXP_SHADES, signature: "#e11d48", open: true,
+    signature: PALETTE.rose, open: true,
     blurb: "The laws, the traps, and the theory — which rule, which factorising, the conjugate, and when there's no solution.",
     quests: [
       { id: "es1", n: 1, title: "The exponent laws", blurb: "Name the law and say what happens to the exponents — zero, negative, fractional, brackets.", built: true },
@@ -213,7 +162,7 @@ export const CHAPTERS = [
   },
   {
     id: "eqn", name: "Equations & Inequalities", paper: "Paper 1", icon: "±", term: "revision",
-    hue: EQN_SHADES, signature: "#10b981", open: true,
+    signature: PALETTE.honey, open: true,
     blurb: "Which method, which move — brackets = 0, the k-method, restrictions, the bowl, and Δ. Theory and traps, no crunching.",
     quests: [
       { id: "eq1", n: 1, title: "Standard form & brackets = 0", blurb: "Everything to one side; each bracket = 0 (don't multiply out!); roots ↔ factors; EQN mode.", built: true },
@@ -229,9 +178,10 @@ export const CHAPTERS = [
 ];
 
 export function chapterById(id) { return CHAPTERS.find(c => c.id === id) || null; }
-export function questAccent(chapter, questN) {
-  const arr = chapter.hue || [];
-  return arr[(questN - 1) % arr.length] || chapter.signature || "#8b5cf6";
+/* every quest in a chapter shares its chapter's one flat accent —
+   no per-quest shade ramp in the solid-colour palette. */
+export function questAccent(chapter) {
+  return (chapter && chapter.signature) || PALETTE.honey;
 }
 
 /* XP economy — small, understanding-first. Streak multiplier caps low (×1–×3)

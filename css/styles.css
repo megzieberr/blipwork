@@ -1,52 +1,63 @@
 /* ============================================================
-   MATHS QUEST — Holo Grid theme
-   Dark teal base · glass panels · per-chapter hue · low glow.
-   Fonts: Space Grotesk (display) · Sora (body) · JetBrains Mono (numbers).
+   BLIPWORK — companion theme (formerly "Holo Grid")
+   Warm cream base · soft pastel chapter accents · chunky rounded
+   cards · gentle drop shadows. Friendly but not babyish (16-17y).
+   Fonts: Quicksand (display) · Nunito (body) · JetBrains Mono (numbers).
    Set --chapter (chapter hue) and --accent (current quest shade) on a
    container; components read those for all colour accents.
+
+   Diagram engines (js/engine/*.js) and the in-app Casio calculator
+   assume a DARK backdrop for contrast (light strokes/curves). Rather
+   than rewrite them, every diagram/table sits inside a dark rounded
+   "device screen" panel (.q-graph / .gpane) that locally re-declares
+   --bg/--panel/--brd/--muted/--faint/--accent/--good/--bad so the
+   same engine CSS classes keep working, just inside a screen frame
+   embedded in the soft cream UI. The Casio calculator keeps its own
+   dark hardware colours untouched.
    ============================================================ */
 :root{
-  --font-display:"Space Grotesk",system-ui,sans-serif;
-  --font-body:"Sora",system-ui,sans-serif;
+  --font-display:"Quicksand",system-ui,sans-serif;
+  --font-body:"Nunito",system-ui,sans-serif;
   --font-num:"JetBrains Mono",ui-monospace,monospace;
 
-  --bg:#04101a; --bg2:#06182a;
-  --panel:rgba(12,30,44,.62); --panel-solid:#0b2030;
-  --brd:rgba(86,200,210,.16); --brd-2:rgba(86,200,210,.30);
-  --ink:#eafcff; --muted:#86b4c2; --faint:#4d8493;
+  /* page + card surfaces — warm cream family. Solid flat fills only:
+     every tint below is a color-mix against an OPAQUE base (--panel or
+     --bg), never against "transparent" — so nothing here is a glassy/
+     alpha surface, only genuinely flat colours. */
+  --bg:#f6e2b3;                               /* NOTE: overridden to dark inside diagram screens, see below */
+  --panel:#fffaf0; --panel-solid:#fffaf0;
+  --brd:color-mix(in srgb,var(--ink) 14%,var(--bg)); --brd-2:color-mix(in srgb,var(--ink) 26%,var(--bg));
+  --ink:#2b2016; --muted:#5c4c39; --faint:#7c6a4e;
 
-  --accent:#38e0d2;          /* current quest shade (overridden per screen) */
-  --chapter:#8b5cf6;         /* current chapter hue (overridden per screen) */
+  --accent:#b17f22;          /* current quest shade (overridden per screen) */
+  --chapter:#b17f22;         /* current chapter hue (overridden per screen) */
 
-  --good:#34d399; --good-bg:rgba(52,211,153,.12);
-  --bad:#fb7185;  --bad-bg:rgba(251,113,133,.12);
-  --warn:#fcd34d;
+  --good:#2f6b47; --good-bg:color-mix(in srgb,var(--good) 14%,var(--panel));
+  --bad:#a13d2a;  --bad-bg:color-mix(in srgb,var(--bad) 14%,var(--panel));
+  --warn:#7d5814;
 
-  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px;
+  --r-sm:12px; --r-md:16px; --r-lg:22px; --r-xl:30px;
 
-  /* graph element colours (used by .sg-* below) */
+  /* graph element colours (used by .sg-* below) — tuned for the dark
+     "device screen" that diagrams render inside; left as the original
+     bright-on-dark palette so curves/labels stay legible there */
   --g-ink:#cfeef4; --g-muted:#86b4c2; --g-axis:rgba(180,230,240,.45);
   --g-grid:rgba(127,182,196,.16); --g-read:#fcd34d; --g-out:#fb7185;
   /* function-graph curve colours (f / g / a third) */
   --fg-a:#7dd3fc; --fg-b:#fb7185; --fg-c:#c4b5fd;
   /* trig-graph curve colours (f / g) */
   --tg-a:#818cf8; --tg-b:#fb7185;
+
+  /* the dark diagram/device screen itself */
+  --screen:#0b2030; --screen2:#04141f;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   font-family:var(--font-body); color:var(--ink); line-height:1.5;
-  background:
-    radial-gradient(1000px 620px at 82% -8%, color-mix(in srgb,var(--chapter) 14%,transparent), transparent 60%),
-    radial-gradient(820px 560px at -10% 108%, color-mix(in srgb,var(--accent) 12%,transparent), transparent 55%),
-    linear-gradient(180deg,var(--bg),var(--bg2));
-  background-attachment:fixed; min-height:100vh;
+  background:var(--bg);                      /* solid flat cream — no gradient */
+  min-height:100vh;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-}
-body::before{                                  /* faint scan grid */
-  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background-image:linear-gradient(rgba(86,200,210,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(86,200,210,.05) 1px,transparent 1px);
-  background-size:36px 36px; mask-image:radial-gradient(circle at 50% 22%,#000,transparent 88%);
 }
 #app{position:relative;z-index:1}
 .view{max-width:520px;margin:0 auto;padding:22px 16px 96px;min-height:100vh}
@@ -61,12 +72,13 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 
 /* ---------- buttons ---------- */
 .btn{font-family:var(--font-display);font-weight:600;font-size:15px;border:1px solid var(--brd-2);background:var(--panel);color:var(--ink);
-  padding:13px 18px;border-radius:var(--r-md);cursor:pointer;transition:.15s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  padding:13px 18px;border-radius:var(--r-md);cursor:pointer;transition:.15s;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 3px 10px -6px rgba(43,32,22,.22)}
 .btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
-.btn:disabled{opacity:.5;cursor:default}
-.btn.primary{color:#04141a;background:var(--accent);border-color:transparent;box-shadow:0 6px 22px -8px color-mix(in srgb,var(--accent) 80%,transparent)}
-.btn.primary:hover{filter:brightness(1.06)}
-.btn.ghost{background:transparent}
+.btn:disabled{opacity:.5;cursor:default;box-shadow:none}
+.btn.primary{color:var(--ink);background:var(--accent);border-color:transparent;box-shadow:0 4px 12px -6px rgba(43,32,22,.3)}
+.btn.primary:hover{filter:brightness(1.04)}
+.btn.ghost{background:transparent;box-shadow:none}
 .btn.big{width:100%;padding:16px;font-size:16px}
 .btn.small{padding:9px 13px;font-size:13px}
 .link-btn{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:8px}
@@ -74,8 +86,8 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 
 /* ---------- top bar / chrome ---------- */
 .chrome{display:flex;align-items:center;justify-content:space-between;max-width:520px;margin:0 auto;padding:14px 16px 0}
-.brand{font-family:var(--font-display);font-weight:700;letter-spacing:.5px;font-size:15px;display:flex;align-items:center;gap:8px}
-.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--chapter);box-shadow:0 0 12px var(--chapter)}
+.brand{font-family:var(--font-display);font-weight:700;letter-spacing:.5px;font-size:15px;display:flex;align-items:center;gap:8px;color:var(--ink)}
+.brand .brand-logo{width:24px;height:24px;object-fit:contain;display:block}
 .xpchip{font-family:var(--font-num);font-size:13px;color:var(--ink);background:var(--panel);border:1px solid var(--brd);padding:6px 12px;border-radius:999px}
 .xpchip b{color:var(--warn)}
 .chrome-right{display:flex;align-items:center;gap:10px}
@@ -83,7 +95,8 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 /* ---------- LOGIN ---------- */
 .login{max-width:420px;margin:0 auto;padding-top:6px}
 .login-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
-.login-logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-family:var(--font-num);font-weight:700;font-size:26px;color:#04141a;background:var(--chapter);box-shadow:0 0 18px color-mix(in srgb,var(--chapter) 60%,transparent)}
+.login-logo{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--brd);box-shadow:0 4px 12px -6px rgba(43,32,22,.22);overflow:hidden;padding:5px}
+.login-logo img{width:100%;height:100%;object-fit:contain;display:block}
 .login-head h1{font-size:24px}
 .login-body{display:flex;flex-direction:column}
 .login-prompt{font-family:var(--font-display);font-weight:600;font-size:18px;margin:6px 0 12px}
@@ -92,14 +105,14 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .login-list{display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow-y:auto;margin-bottom:10px}
 .login-name{font-family:var(--font-body);font-weight:500;font-size:16px;text-align:left;color:var(--ink);background:var(--panel);border:1px solid var(--brd-2);border-radius:var(--r-md);padding:14px 16px;cursor:pointer;transition:.13s}
 .login-name:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
-.newtag{font-family:var(--font-display);font-weight:600;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#04241a;background:var(--good);padding:2px 7px;border-radius:99px;margin-left:6px}
+.newtag{font-family:var(--font-display);font-weight:600;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#fff;background:var(--good);padding:2px 7px;border-radius:99px;margin-left:6px}
 .login-err{color:var(--bad);font-size:13.5px;margin-bottom:10px}
 .login-body .back{align-self:flex-start;margin-bottom:4px;font-size:14px}
 .login-swap{display:block;margin:14px auto 0;color:var(--muted);font-size:14px;background:none;border:0;cursor:pointer}
 .login-swap:hover{color:var(--ink)}
 
 /* ---------- cards ---------- */
-.card{background:var(--panel);border:1px solid var(--brd);border-radius:var(--r-lg);padding:16px;backdrop-filter:blur(8px)}
+.card{background:var(--panel);border:1px solid var(--brd);border-radius:var(--r-lg);padding:16px;box-shadow:0 4px 16px -8px rgba(43,32,22,.16)}
 
 /* ---------- HUB · chapter blocks ---------- */
 .hub-head{margin:6px 0 18px}
@@ -114,51 +127,52 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .install-x{position:absolute;top:7px;right:10px;background:none;border:0;color:var(--muted);font-size:13px;cursor:pointer;line-height:1}
 .install-x:hover{color:var(--ink)}
 .chapter-cards{display:flex;flex-direction:column;gap:14px}
-.ch-card{position:relative;border-radius:var(--r-lg);padding:18px;overflow:hidden;cursor:pointer;color:#fff;
-  border:1px solid color-mix(in srgb,var(--cc) 42%,transparent);
-  background:linear-gradient(135deg,color-mix(in srgb,var(--cc) 30%,#0a1822),color-mix(in srgb,var(--cc) 8%,#0a1822));
+.ch-card{position:relative;border-radius:var(--r-lg);padding:18px;cursor:pointer;color:var(--ink);
+  border:1px solid color-mix(in srgb,var(--cc) 40%,var(--panel));
+  background:color-mix(in srgb,var(--cc) 16%,var(--panel));
+  box-shadow:0 4px 14px -8px rgba(43,32,22,.18);
   transition:transform .2s,box-shadow .2s}
-.ch-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(160px 100px at 88% 8%,color-mix(in srgb,var(--cc) 34%,transparent),transparent 70%)}
-.ch-card:hover{transform:translateY(-3px);box-shadow:0 16px 44px -16px color-mix(in srgb,var(--cc) 60%,transparent)}
-.ch-card.locked{opacity:.5;filter:saturate(.55);cursor:default}
+.ch-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px -10px rgba(43,32,22,.28)}
+.ch-card.locked{opacity:.55;filter:saturate(.6);cursor:default}
 .ch-card .ico{font-size:26px}
-.ch-card h2{margin-top:8px;display:flex;align-items:center;gap:10px}
-.ch-card p{color:rgba(255,255,255,.82);font-size:13px;margin-top:4px}
-.ch-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12.5px;color:rgba(255,255,255,.9)}
-.ch-prog{height:7px;border-radius:99px;background:rgba(255,255,255,.14);margin-top:8px;overflow:hidden}
-.ch-prog i{display:block;height:100%;width:var(--p,0%);border-radius:99px;background:#fff;opacity:.92}
+.ch-card h2{margin-top:8px;display:flex;align-items:center;gap:10px;color:var(--ink)}
+.ch-card p{color:var(--muted);font-size:13px;margin-top:4px}
+.ch-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12.5px;color:var(--muted)}
+.ch-prog{height:7px;border-radius:99px;background:color-mix(in srgb,var(--ink) 12%,var(--panel));margin-top:8px;overflow:hidden}
+.ch-prog i{display:block;height:100%;width:var(--p,0%);border-radius:99px;background:var(--ink)}
 .ch-foot{margin-top:14px}
 .pill{font-family:var(--font-display);font-weight:600;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:999px}
-.pill.open{color:#04241a;background:var(--good)}
-.pill.soon{color:rgba(255,255,255,.75);background:rgba(255,255,255,.12)}
+.pill.open{color:#fff;background:var(--good)}
+.pill.soon{color:var(--muted);background:color-mix(in srgb,var(--ink) 10%,var(--panel))}
 
 /* ---------- CHAPTER · quest map ---------- */
 .chap-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:6px 0 18px}
 .quest-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.quest{position:relative;border-radius:var(--r-md);padding:13px;overflow:hidden;cursor:pointer;min-height:128px;display:flex;flex-direction:column;
-  border:1px solid color-mix(in srgb,var(--qc) 36%,transparent);
-  background:linear-gradient(160deg,color-mix(in srgb,var(--qc) 22%,#08161f),color-mix(in srgb,var(--qc) 5%,#08161f));
+.quest{position:relative;border-radius:var(--r-md);padding:13px;cursor:pointer;min-height:128px;display:flex;flex-direction:column;
+  border:1px solid color-mix(in srgb,var(--qc) 32%,var(--panel));
+  background:color-mix(in srgb,var(--qc) 13%,var(--panel));
+  box-shadow:0 3px 10px -6px rgba(43,32,22,.14);
   transition:transform .16s,box-shadow .16s}
-.quest:hover{transform:translateY(-3px);box-shadow:0 12px 28px -12px color-mix(in srgb,var(--qc) 55%,transparent)}
-.quest.locked{opacity:.5;filter:saturate(.5);cursor:default}
-.quest .qn{font-family:var(--font-num);font-weight:700;font-size:13px;color:var(--qc);width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
-  background:color-mix(in srgb,var(--qc) 18%,transparent);border:1px solid color-mix(in srgb,var(--qc) 42%,transparent)}
-.quest h3{font-size:14px;margin-top:10px;line-height:1.2}
+.quest:hover{transform:translateY(-3px);box-shadow:0 8px 18px -10px rgba(43,32,22,.24)}
+.quest.locked{opacity:.55;filter:saturate(.55);cursor:default}
+.quest .qn{font-family:var(--font-num);font-weight:700;font-size:13px;color:color-mix(in srgb,var(--qc) 65%,var(--ink) 35%);width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--qc) 22%,var(--panel));border:1px solid color-mix(in srgb,var(--qc) 40%,var(--panel))}
+.quest h3{font-size:14px;margin-top:10px;line-height:1.2;color:var(--ink)}
 .quest p{font-size:11.5px;color:var(--muted);margin-top:4px}
 .quest .qstate{margin-top:auto;display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted);padding-top:10px}
-.quest .qstate .led{width:7px;height:7px;border-radius:99px;background:var(--qc);box-shadow:0 0 8px var(--qc)}
-.quest .qcheck{position:absolute;top:11px;right:12px;color:var(--qc);font-size:15px}
+.quest .qstate .led{width:7px;height:7px;border-radius:99px;background:var(--qc)}
+.quest .qcheck{position:absolute;top:11px;right:12px;color:color-mix(in srgb,var(--qc) 65%,var(--ink) 35%);font-size:15px}
 
 /* ---------- PLAY screen ---------- */
 .play-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.play-top .ptitle{flex:1;font-family:var(--font-display);font-weight:600;font-size:14px}
+.play-top .ptitle{flex:1;font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink)}
 .play-top .pcount{font-family:var(--font-num);font-size:12px;color:var(--muted)}
-.pbar{height:7px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:18px}
-.pbar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 55%,#fff),var(--accent));transition:width .35s}
+.pbar{height:7px;border-radius:99px;background:color-mix(in srgb,var(--ink) 12%,var(--panel));overflow:hidden;margin-bottom:18px}
+.pbar i{display:block;height:100%;width:0;border-radius:99px;background:var(--accent);transition:width .35s}
 
-.play-tip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;line-height:1.5;color:var(--muted);background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);border-radius:12px;padding:9px 12px;margin-bottom:14px}
-.play-tip .tip-calc{font-size:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:1px 6px;cursor:pointer;line-height:1.4}
-.play-tip .tip-close{margin-left:auto;font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--accent);background:none;border:none;cursor:pointer;padding:2px 4px}
+.play-tip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;line-height:1.5;color:var(--muted);background:color-mix(in srgb,var(--accent) 12%,var(--panel));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--panel));border-radius:12px;padding:9px 12px;margin-bottom:14px}
+.play-tip .tip-calc{font-size:14px;background:color-mix(in srgb,var(--ink) 6%,var(--panel));border:1px solid color-mix(in srgb,var(--ink) 14%,var(--panel));border-radius:8px;padding:1px 6px;cursor:pointer;line-height:1.4}
+.play-tip .tip-close{margin-left:auto;font-family:var(--font-display);font-size:12px;font-weight:600;color:color-mix(in srgb,var(--accent) 60%,var(--ink) 40%);background:none;border:none;cursor:pointer;padding:2px 4px}
 
 /* hands-on calculator task (Quest 1) */
 .q-task{font-size:13px;color:var(--muted);margin:-2px 0 10px}
@@ -169,9 +183,25 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .feedback .fb-foot{display:flex;gap:10px;flex-wrap:wrap}
 .feedback .fb-sub{margin-top:2px}
 
-.q-prompt{font-size:16px;line-height:1.55;margin-bottom:14px}
-.q-prompt b,.q-prompt .hl{color:var(--accent);font-weight:600}
-.q-graph{background:rgba(255,255,255,.025);border:1px solid var(--brd);border-radius:var(--r-md);padding:12px 10px 8px;margin-bottom:16px}
+.q-prompt{font-size:16px;line-height:1.55;margin-bottom:14px;color:var(--ink)}
+.q-prompt b,.q-prompt .hl{color:color-mix(in srgb,var(--accent) 60%,var(--ink) 40%);font-weight:600}
+
+/* ---------- diagram / device screen (dark, framed) ----------
+   locally re-declares the tokens the engines' CSS reads, so the
+   same .sg- , .fg- , .tg- , .t2- , .sd- , .ag- , .vn- , .tr- , .tl-
+   prefixed rules below keep working unmodified against a dark backdrop. */
+.q-graph,.q-graphs .gpane{
+  --bg:var(--screen); --bg2:var(--screen2);
+  --panel:color-mix(in srgb, white 8%, var(--screen));
+  --brd:color-mix(in srgb,#cfeaf2 20%,var(--screen)); --brd-2:color-mix(in srgb,#cfeaf2 36%,var(--screen));
+  --muted:#bcdce4; --faint:#86b4c2; --ink:#eafcff;
+  --accent:color-mix(in srgb, var(--accent) 55%, #eaf7fb 45%);
+  --good:color-mix(in srgb, var(--good) 55%, #eaf7fb 45%);
+  --bad:color-mix(in srgb, var(--bad) 55%, #eaf7fb 45%);
+  background:var(--screen);                  /* flat "device screen" — no gradient */
+  border:1px solid var(--screen2); border-radius:var(--r-lg);
+  box-shadow:0 6px 16px -10px rgba(43,32,22,.4);
+  padding:12px 10px 8px; margin-bottom:16px}
 .q-graph .cap{font-family:var(--font-num);font-size:11px;color:var(--faint);text-align:center;margin-top:4px}
 
 /* options (mc / reason / yesno) */
@@ -183,10 +213,10 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .opt:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
 .opt:disabled{cursor:default}
 .opt.big{text-align:center;font-size:17px;padding:18px}
-.opt.is-correct{border-color:var(--good);background:var(--good-bg);color:#bff3df}
-.opt.is-wrong{border-color:var(--bad);background:var(--bad-bg);color:#ffd0d8}
+.opt.is-correct{border-color:var(--good);background:var(--good-bg);color:var(--ink)}
+.opt.is-wrong{border-color:var(--bad);background:var(--bad-bg);color:var(--ink)}
 
-/* tap targets on a graph */
+/* tap targets on a graph (inside the dark screen — brightened accent/good/bad apply) */
 .q-tap-hint{font-size:13px;color:var(--muted);margin-bottom:8px}
 .hit{cursor:pointer;fill:transparent;stroke:transparent;transition:.12s}
 .hit[data-shape="stroke"]{stroke:transparent}
@@ -197,10 +227,10 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .hit.show-correct[data-shape="stroke"]{stroke:var(--good);fill:none}
 .hit.show-wrong{fill:color-mix(in srgb,var(--bad) 26%,transparent);stroke:var(--bad)}
 
-/* keypad */
+/* keypad — cream skin, numerals stay monospace for maths legibility */
 .keypad{margin-top:4px}
 .kdisp{display:flex;align-items:center;justify-content:flex-end;gap:8px;font-family:var(--font-num);font-size:28px;font-weight:500;
-  background:rgba(255,255,255,.03);border:1px solid var(--brd-2);border-radius:var(--r-md);padding:14px 18px;min-height:62px;margin-bottom:10px}
+  background:var(--panel);border:1px solid var(--brd-2);border-radius:var(--r-md);padding:14px 18px;min-height:62px;margin-bottom:10px}
 .kdisp .unit{color:var(--faint);font-size:15px;font-family:var(--font-body)}
 .kdisp.empty .kval{color:var(--faint)}
 .kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
@@ -210,19 +240,19 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .key:active{transform:scale(.96)}
 .key.wide{grid-column:span 3}
 .key.del{color:var(--warn)}
-.key.submit{color:#04141a;background:var(--accent);border-color:transparent;font-family:var(--font-display);font-weight:600;font-size:16px}
+.key.submit{color:var(--ink);background:var(--accent);border-color:transparent;font-family:var(--font-display);font-weight:600;font-size:16px}
 
 /* help: hint bar, feedback / explanation, I'm lost */
 .help-row{display:flex;gap:9px;margin-top:16px}
 .help-row .btn{flex:1}
-.hbtn-lost{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
-.hint-box{margin-top:14px;border-radius:var(--r-md);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);
-  background:color-mix(in srgb,var(--warn) 8%,transparent);padding:12px 14px;font-size:14px;line-height:1.5}
+.hbtn-lost{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 40%,var(--panel))}
+.hint-box{margin-top:14px;border-radius:var(--r-md);border:1px solid color-mix(in srgb,var(--warn) 35%,var(--panel));
+  background:color-mix(in srgb,var(--warn) 8%,var(--panel));padding:12px 14px;font-size:14px;line-height:1.5}
 .hint-box .tag{font-family:var(--font-display);font-weight:600;color:var(--warn);font-size:12px;letter-spacing:.5px;margin-right:6px}
 
 .feedback{margin-top:16px;border-radius:var(--r-md);padding:14px 16px;border:1px solid var(--brd)}
-.feedback.good{background:var(--good-bg);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
-.feedback.bad{background:var(--bad-bg);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+.feedback.good{background:var(--good-bg);border-color:color-mix(in srgb,var(--good) 40%,var(--panel))}
+.feedback.bad{background:var(--bad-bg);border-color:color-mix(in srgb,var(--bad) 40%,var(--panel))}
 .fb-head{font-family:var(--font-display);font-weight:700;font-size:16px;margin-bottom:6px}
 .feedback.good .fb-head{color:var(--good)} .feedback.bad .fb-head{color:var(--bad)}
 .fb-answer{font-size:14px;margin-bottom:8px}
@@ -232,17 +262,17 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .sol-step .s{color:var(--ink)} .sol-step .r{color:var(--muted);font-style:italic;font-size:12px;text-align:right;white-space:nowrap}
 .fb-foot{margin-top:12px}
 
-/* concept modal ("I'm lost") */
-.modal-scrim{position:fixed;inset:0;z-index:50;background:rgba(2,10,16,.72);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;padding:0}
+/* concept modal ("I'm lost") — light card, same skin as the rest of the app */
+.modal-scrim{position:fixed;inset:0;z-index:50;background:rgba(35,24,14,.45);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;padding:0}
 .modal{width:100%;max-width:520px;max-height:88vh;overflow-y:auto;background:var(--panel-solid);border:1px solid var(--brd-2);
-  border-radius:var(--r-xl) var(--r-xl) 0 0;padding:22px 20px 28px;box-shadow:0 -20px 60px -20px #000}
+  border-radius:var(--r-xl) var(--r-xl) 0 0;padding:22px 20px 28px;box-shadow:0 -14px 44px -18px rgba(43,32,22,.4)}
 .modal .mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .modal .meyebrow{font-family:var(--font-display);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-size:10.5px;color:var(--warn)}
 .modal h2{margin:2px 0 12px}
-.concept p{font-size:14.5px;line-height:1.62;margin-bottom:11px;color:#dff1f6}
-.concept b{color:#fff}
-.concept .formula{font-family:var(--font-num);background:rgba(255,255,255,.05);border:1px solid var(--brd);border-radius:var(--r-sm);
-  padding:10px 12px;margin:4px 0 12px;font-size:14px;color:var(--accent)}
+.concept p{font-size:14.5px;line-height:1.62;margin-bottom:11px;color:var(--ink)}
+.concept b{color:var(--ink)}
+.concept .formula{font-family:var(--font-num);background:color-mix(in srgb,var(--ink) 5%,var(--panel));border:1px solid var(--brd);border-radius:var(--r-sm);
+  padding:10px 12px;margin:4px 0 12px;font-size:14px;color:color-mix(in srgb,var(--accent) 60%,var(--ink) 40%)}
 .concept ul{margin:0 0 12px 18px;font-size:14px;line-height:1.6}
 .concept .eg{border-left:2px solid var(--accent);padding:2px 0 2px 12px;margin:0 0 12px;color:var(--muted);font-size:13.5px}
 
@@ -254,27 +284,27 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .result-card{text-align:center;padding:26px 20px}
 .result-emoji{font-size:46px}
 .result-card h1{margin:6px 0}
-.big-score{font-family:var(--font-num);font-size:50px;font-weight:700;color:var(--accent);margin:4px 0}
+.big-score{font-family:var(--font-num);font-size:50px;font-weight:700;color:color-mix(in srgb,var(--accent) 60%,var(--ink) 40%);margin:4px 0}
 .result-msg{margin:14px 0;border-radius:var(--r-md);padding:11px 14px;font-size:14px}
-.result-msg.good{background:var(--good-bg);color:#bff3df} .result-msg.warn{background:color-mix(in srgb,var(--warn) 10%,transparent);color:var(--warn)}
-.badge-pop{margin:14px auto;display:inline-flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--font-display);font-weight:700;color:var(--accent)}
+.result-msg.good{background:var(--good-bg);color:var(--good)} .result-msg.warn{background:color-mix(in srgb,var(--warn) 10%,var(--panel));color:var(--warn)}
+.badge-pop{margin:14px auto;display:inline-flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--font-display);font-weight:700;color:color-mix(in srgb,var(--accent) 60%,var(--ink) 40%)}
 .badge-pop .bi{font-size:34px}
 .result-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
 
 /* data table (grouped-data questions) */
 .q-table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-family:var(--font-num);font-size:13px}
 .q-table th,.q-table td{border:1px solid var(--brd);padding:7px 9px;text-align:center}
-.q-table th{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--ink);font-weight:500}
+.q-table th{background:color-mix(in srgb,var(--accent) 14%,var(--panel));color:var(--ink);font-weight:500}
 .q-table td{color:var(--muted)}
 .q-table tr:last-child td{color:var(--ink);font-weight:500}
 
 /* a row of graphs side by side (e.g. comparing two box plots) */
 .q-graphs{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.q-graphs .gpane{background:rgba(255,255,255,.025);border:1px solid var(--brd);border-radius:var(--r-md);padding:10px 8px 4px}
 .q-graphs .glabel{font-family:var(--font-num);font-size:11px;color:var(--muted);text-align:center;margin-bottom:2px}
 
 /* ============================================================
-   STATS GRAPH ENGINE element styles (.sg-*)
+   STATS GRAPH ENGINE element styles (.sg-*) — unmodified, reads the
+   dark-screen tokens re-declared on .q-graph/.gpane above.
    ============================================================ */
 .sg{width:100%;height:auto;display:block;font-family:var(--font-num)}
 .sg text{fill:var(--g-muted)}
@@ -414,13 +444,13 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 /* hub tabs (Term 3 / Revision) */
 .hub-tabs{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .hub-tab{flex:1 1 0;min-width:140px;display:flex;flex-direction:column;gap:2px;text-align:left;
-  padding:11px 15px;border-radius:var(--r-md);cursor:pointer;font-family:var(--font-head);
+  padding:11px 15px;border-radius:var(--r-md);cursor:pointer;font-family:var(--font-display);
   font-weight:600;font-size:15px;color:var(--muted);
-  background:rgba(255,255,255,.03);border:1px solid var(--brd);transition:.15s}
+  background:var(--panel);border:1px solid var(--brd);transition:.15s}
 .hub-tab .ht-sub{font-family:var(--font-body);font-weight:400;font-size:11px;color:var(--faint)}
 .hub-tab:hover{color:var(--ink);border-color:color-mix(in srgb,var(--chapter) 45%,var(--brd))}
-.hub-tab.active{color:var(--ink);background:color-mix(in srgb,var(--chapter) 16%,transparent);
-  border-color:color-mix(in srgb,var(--chapter) 55%,transparent)}
+.hub-tab.active{color:var(--ink);background:color-mix(in srgb,var(--chapter) 16%,var(--panel));
+  border-color:color-mix(in srgb,var(--chapter) 55%,var(--panel))}
 
 /* solid engine (.sd-*) — isometric 3D solids, ink outline like the
    workbook. Hidden edges dashed; open rims read as hollow, closed
@@ -439,6 +469,8 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 
 /* ============================================================
    IN-APP CALCULATOR (Casio fx-991ZA Plus II replica)
+   Kept as a dark physical device — untouched by the cream reskin.
+   Key labels use the mono numeral font (maths legibility first).
    ============================================================ */
 .calc-scrim{align-items:center;padding:16px}
 .calc-wrap{width:100%;max-width:344px;background:#2a2f3a;border:1px solid #11141b;border-radius:18px;padding:12px;box-shadow:0 26px 64px rgba(0,0,0,.6)}
@@ -462,7 +494,7 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .lcd-tab u{text-decoration:none;border-bottom:2px solid #1c241a;padding-bottom:1px}
 .calc-pad{display:flex;flex-direction:column;gap:7px}
 .calc-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
-.calc-key{position:relative;background:#3b4250;border:1px solid #20242e;border-radius:8px;color:#eef1f6;font-family:var(--font-body);font-weight:500;font-size:15px;padding:13px 0 8px;cursor:pointer;transition:transform .08s,background .1s;min-height:44px}
+.calc-key{position:relative;background:#3b4250;border:1px solid #20242e;border-radius:8px;color:#eef1f6;font-family:var(--font-num);font-weight:500;font-size:15px;padding:13px 0 8px;cursor:pointer;transition:transform .08s,background .1s;min-height:44px}
 .calc-key:hover{background:#454d5d}
 .calc-key:active{transform:scale(.94)}
 .calc-key .kmain{display:block;line-height:1}
@@ -479,7 +511,8 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 .calc-btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
 
 /* ============================================================
-   NUMBER PATTERNS — the difference pyramid
+   NUMBER PATTERNS — the difference pyramid (renders inside the
+   dark diagram screen too, so --panel/--brd-2/--accent above apply)
    ============================================================ */
 .sg.np{max-width:520px}
 .sg.np .np-link{stroke:var(--brd-2);stroke-width:1.4;opacity:.7}
@@ -496,3 +529,79 @@ h1{font-size:26px} h2{font-size:20px} h3{font-size:17px}
 /* a difference cell deliberately left blank ("?") so the diagram never reveals the answer */
 .sg.np .np-dblank rect{fill:transparent;stroke:var(--brd-2);stroke-dasharray:4 3}
 .sg.np .np-dblank text{font-weight:700;fill:var(--muted)}
+
+/* ============================================================
+   BLIP — HUD, hub tile, Blip (shop/equip) screen, gallery, toasts.
+   Gold and XP/level are deliberately separate chips: gold is spent,
+   the level bar never moves backward and never gets spent down.
+   ============================================================ */
+
+/* ---------- top HUD (gold + level + mini xp bar) ---------- */
+.hud{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--brd);border-radius:999px;padding:6px 12px 6px 14px;cursor:pointer;font-family:var(--font-num);transition:.15s}
+.hud:hover{border-color:var(--accent)}
+.hud-level{font-size:12.5px;font-weight:700;color:var(--ink)}
+.hud-bar{width:44px;height:6px;border-radius:99px;background:color-mix(in srgb,var(--ink) 14%,var(--panel));overflow:hidden;display:inline-block}
+.hud-bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.goldchip{font-size:13px;color:var(--ink)}
+.goldchip b{color:var(--warn)}
+
+/* ---------- hub Blip tile ---------- */
+.hub-blip{display:flex;align-items:center;gap:14px;padding:14px 16px;margin-bottom:16px;border-radius:var(--r-lg);cursor:pointer;
+  background:var(--panel);border:1px solid var(--brd);box-shadow:0 4px 14px -8px rgba(43,32,22,.16);transition:transform .2s,box-shadow .2s}
+.hub-blip:hover{transform:translateY(-2px);box-shadow:0 8px 18px -10px rgba(43,32,22,.24)}
+.hub-blip .hb-stage{width:56px;flex:none}
+.hub-blip .hb-info{flex:1;min-width:0}
+.hub-blip .hb-name{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--ink)}
+.hub-blip .hb-cta{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ---------- Blip screen ---------- */
+.blip-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:6px 0 18px}
+.blip-hero-card{text-align:center;padding:20px}
+.blip-hero-stage{width:150px;margin:0 auto 14px}
+.blip-name-row{display:flex;gap:8px}
+.blip-name-input{flex:1;font-family:var(--font-body);font-size:15px;color:var(--ink);background:var(--panel-solid);border:1px solid var(--brd-2);border-radius:var(--r-md);padding:10px 13px;outline:none}
+.blip-name-input:focus{border-color:var(--accent)}
+.blip-name-hint{margin-top:8px}
+.colour-card{padding:16px}
+.colour-hint{font-size:13px;color:var(--warn);margin-bottom:12px}
+.swatch-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.swatch-btn{width:100%;aspect-ratio:1;border-radius:50%;border:3px solid var(--brd);cursor:pointer;transition:.15s;position:relative}
+.swatch-btn:hover{border-color:var(--accent)}
+.swatch-btn.active{border-color:var(--ink);box-shadow:0 0 0 2px var(--panel) inset}
+.swatch-btn.locked{opacity:.35;cursor:not-allowed}
+.swatch-btn.locked:hover{border-color:var(--brd)}
+.swatch-btn.locked::after{content:"🔒";position:absolute;inset:0;display:grid;place-items:center;font-size:13px}
+
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.shop-item{border-radius:var(--r-md);padding:12px;text-align:center;background:var(--panel);border:1px solid var(--brd);display:flex;flex-direction:column;gap:6px}
+.shop-item.equipped{border-color:var(--good);background:color-mix(in srgb,var(--good) 10%,var(--panel))}
+.shop-item .si-stage{width:66px;margin:0 auto}
+.shop-item .si-name{font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--ink)}
+.shop-item .si-meta{font-size:11px;color:var(--muted)}
+.shop-item .btn{width:100%;margin-top:2px}
+
+/* ---------- gallery ---------- */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 10px}
+.gallery-card{text-align:center;border-radius:var(--r-md);padding:8px 4px}
+.gallery-card.me{background:color-mix(in srgb,var(--accent) 14%,var(--panel));border:1px solid color-mix(in srgb,var(--accent) 40%,var(--panel))}
+.gallery-card .gc-stage{width:100%;max-width:78px;margin:0 auto}
+.gallery-card .gc-name{font-family:var(--font-display);font-weight:600;font-size:11.5px;color:var(--ink);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gallery-card .gc-level{font-family:var(--font-num);font-size:10px;color:var(--muted)}
+
+/* ---------- results: reward line + level-up moment ---------- */
+.result-reward{font-family:var(--font-num);font-size:15px;color:var(--ink);margin:2px 0 10px}
+.result-levelup{margin:12px 0 0;padding:10px 14px;border-radius:var(--r-md);background:color-mix(in srgb,var(--accent) 16%,var(--panel));
+  font-family:var(--font-display);font-weight:600;font-size:13.5px;color:color-mix(in srgb,var(--accent) 65%,var(--ink) 35%)}
+.result-unlock-btn{margin-top:14px}
+
+/* first-round colour-unlock modal */
+.unlock-modal .unlock-stage{width:150px;margin:0 auto 16px}
+.unlock-modal .swatch-grid{margin-bottom:18px}
+
+/* ---------- toasts ---------- */
+.toast-host{position:fixed;left:0;right:0;bottom:18px;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:80;pointer-events:none;padding:0 16px}
+.toast{pointer-events:auto;font-family:var(--font-display);font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:999px;
+  background:var(--ink);color:var(--panel-solid);box-shadow:0 8px 20px -8px rgba(0,0,0,.4);opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.err{background:var(--bad)}
+.toast.good{background:var(--good)}
