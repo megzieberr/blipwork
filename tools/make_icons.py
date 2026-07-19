@@ -44,11 +44,25 @@ from PIL import Image, ImageDraw, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 SRC = os.path.normpath(
-    os.path.join(ROOT, "..", "homework-hub-companion", "images", "SL Blip Icon.png")
+    os.path.join(ROOT, "..", "homework-hub-companion", "images", "New Logo.png")
 )
 
+# Fraction trimmed off each side of the flood-fill box. The previous
+# source ("SL Blip Icon.png") drew Blip inside a glowing TILE whose ring
+# his aura touched in the corners, so 6% was needed to stop four blue
+# ticks appearing on the maskable icon. "New Logo.png" has no tile and no
+# ring — just Blip and his glow — so nothing needs trimming.
+TRIM = 0.0
+
 BG = (7, 11, 22, 255)      # #070b16 — the SL theme colour, matches manifest
-INK_MIN = 60               # permissive: grabs Blip AND the aura as one blob (see header)
+# "New Logo.png" is drawn on a TRANSPARENT background (87% of it is fully
+# clear; the grey vignette you see in a viewer is masked-out RGB), so the
+# flood fill keys off ALPHA. It must not key off brightness: his
+# sunglasses are near-black and span the full width of his body, so a
+# brightness test cuts him in half and the fill returns only his chin
+# (a 529x280 sliver). Measured stable at every threshold from 40 to 160,
+# and the vignette never leaks in.
+ALPHA_MIN = 120
 
 
 def fill_holes(mask, w, h):
@@ -87,8 +101,7 @@ def isolate_blip(im):
     px = im.load()
 
     def ink(x, y):
-        r, g, b, a = px[x, y]
-        return a > 40 and (r + g + b) / 3 > INK_MIN
+        return px[x, y][3] > ALPHA_MIN
 
     # Seed at the centre of the tile — that is Blip's body in her art.
     sx, sy = w // 2, h // 2
@@ -113,13 +126,8 @@ def isolate_blip(im):
 
     # Crop the ORIGINAL pixels (not a masked copy) to the blob's box, so
     # Blip keeps her aura and it runs off all four edges.
-    # TRIM: his aura touches the tile's glow ring in the corners, so the
-    # raw blob box catches four little arcs of ring. They're invisible on
-    # the cover-scaled "any" icons but showed up as blue corner ticks on
-    # the maskable one. 6% off each side clears them without biting into
-    # Blip (measured: he sits ~60px clear of the box on every side).
     tw, th = maxx - minx, maxy - miny
-    tx, ty = round(tw * 0.06), round(th * 0.06)
+    tx, ty = round(tw * TRIM), round(th * TRIM)
     blip = im.crop((minx + tx, miny + ty, maxx + 1 - tx, maxy + 1 - ty))
     print("cropped to Blip + aura: %dx%d (from %dx%d source)" % (blip.width, blip.height, w, h))
     return blip
@@ -153,13 +161,16 @@ def make(blip, size, name, *, maskable=False, inset=1.0):
 
 if __name__ == "__main__":
     blip = isolate_blip(Image.open(SRC))
-    # "any" icons: the launcher draws these roughly as-is, so the art
-    # covers the whole card.
-    make(blip, 192, "icon-192.png")
-    make(blip, 512, "icon-512.png")
+    # Unlike the old tile art, this crop is tight to Blip's own silhouette
+    # (plus his glow) with transparency around it — there is no artwork
+    # background to bleed off the edges. So these are inset, not covered:
+    # at 1.0 he would touch all four sides and lose his outline to the
+    # rounded corners.
+    make(blip, 192, "icon-192.png", inset=0.84)
+    make(blip, 512, "icon-512.png", inset=0.84)
     # maskable: the OS may crop to a circle/squircle inside an 80% safe
-    # zone, so pull the art in — his shades sit wide and clip first.
-    make(blip, 512, "icon-512-maskable.png", maskable=True, inset=0.78)
+    # zone, so pull him in further — his shades sit wide and clip first.
+    make(blip, 512, "icon-512-maskable.png", maskable=True, inset=0.66)
     # Apple applies its own rounded mask to a full-bleed square.
-    make(blip, 180, "apple-touch-icon.png", maskable=True, inset=0.9)
-    make(blip, 32, "favicon-32.png")
+    make(blip, 180, "apple-touch-icon.png", maskable=True, inset=0.78)
+    make(blip, 32, "favicon-32.png", inset=0.92)   # tiny — needs the most size
