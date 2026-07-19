@@ -1,6 +1,17 @@
 # Project status — updated 2026-07-19 (evening: Phase 2 built)
 
-## Where we are — PHASE 2 BUILT, UNCOMMITTED, pending phone review
+## Where we are — PHASE 2 SHIPPED & LIVE (same evening)
+Phone-approved rulings folded in (accessories hidden during recovering confirmed), then
+shipped: committed, **migration-phase2-blip-care.sql APPLIED to live Supabase via MCP**
+and smoke-tested on the real DB (throwaway student: signup → state shape → buy cosmetic →
+equip → feed → buy soup → deleted), sw v27, pushed, verified live (all new files 200,
+mhq-v27 serving). ⚠️ Ship caught a REAL SQL bug the local mirror couldn't: PL/pgSQL
+variable/column ambiguity on `blips.slot` in mhq_buy_item/mhq_equip (fixed by renaming
+to v_slot in migration + schema.sql, commits 880e822/1852-style pair). Lesson recorded:
+the JS local-backend mirror does NOT exercise the SQL — always smoke the RPCs on live
+at ship.
+
+## The build (earlier this evening)
 Same-day second build (3 agents: Opus backend + 2 Sonnet, supervised): **feeding, growth,
 sickness ladder, pharmacy, and the second Blip are all built and e2e-verified** on
 `?local=1` (full loop driven in-browser: signup → free cookie → term-on → neglect to
@@ -124,17 +135,16 @@ registration may linger harmlessly — Defender is active.
 ## Pending on Megan
 - **Reinstall the PWA from https://megzieberr.github.io/blipwork/** — the repo rename
   killed the old Pages URL (no redirect), so the installed app points at a dead address.
-- Phone review of Phase 2 on the laptop server (`?local=1`; use
-  `__BLIP_DEV__.skipDays(n)` in the console to walk the sickness ladder), plus eyeball
-  companion-test.html — the full growth × health state gallery with the TEMP code-drawn
-  sick placeholders.
+  Close/reopen twice for the v27 worker.
+- Phone play of Phase 2: live app for the healthy loop (feed/shop/treats work on real
+  Supabase now); the sickness ladder is easiest at
+  https://megzieberr.github.io/blipwork/companion-test.html (all growth × health states,
+  TEMP code-drawn placeholders) or `?local=1` + `__BLIP_DEV__.skipDays(n)` in a console.
 - Generate the sick-scene + baby art in the ORIGINAL Blip GPT chat
   (homework-hub-companion/gpt-prompts-sick-scenes.md) and drop the PNGs into
-  assets/companion/ under the exact filenames listed there.
-- Then: ship go-ahead → commit, **run migration-phase2-blip-care.sql in the Supabase SQL
-  editor** (or via MCP with her ok), sw bump v26→v27, push.
+  assets/companion/ under the exact filenames listed there (needs a small ship after).
 - At term start: switch the **term-running toggle ON in admin** — the sickness clock is
-  frozen until she does (deliberate default).
+  frozen until she does (deliberate default). NO other SQL outstanding.
 
 ## Next up
 - Fix whatever the Phase 2 phone review surfaces; swap in the real art when generated.
