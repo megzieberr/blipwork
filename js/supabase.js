@@ -48,6 +48,11 @@ export const SupabaseBackend = {
     return rpc("mhq_claim_second_blip", { p_username: username, p_password: password, p_name: name, p_colour: colour });
   },
 
+  // ---- Phase 3: push reminders + treasure box ----
+  async pushSubscribe(username, password, sub) { return rpc("mhq_push_subscribe", { p_username: username, p_password: password, p_sub: sub }); },
+  async pushUnsubscribe(username, password, endpoint) { return rpc("mhq_push_unsubscribe", { p_username: username, p_password: password, p_endpoint: endpoint }); },
+  async openBox(username, password) { return rpc("mhq_open_box", { p_username: username, p_password: password }); },
+
   // ---- admin ----
   async adminLogin(pw) { return rpc("mhq_admin_login", { p_admin_password: pw }); },
   async adminData(pw) { return rpc("mhq_admin_data", { p_admin_password: pw }); },
@@ -58,4 +63,10 @@ export const SupabaseBackend = {
   async adminRemoveStudent(pw, id) { return rpc("mhq_admin_remove_student", { p_admin_password: pw, p_id: id }); },
   async adminResetProgress(pw, id) { return rpc("mhq_admin_reset_progress", { p_admin_password: pw, p_id: id }); },
   async adminResolveStruggle(pw, concept) { return rpc("mhq_admin_resolve_struggle", { p_admin_password: pw, p_concept: concept }); },
+  // Phase 3 — `due` and `note` are both optional; send null, not "", so the
+  // date column stays null rather than failing to parse an empty string.
+  async adminSetAssignment(pw, questId, due, note) {
+    return rpc("mhq_admin_set_assignment", { p_admin_password: pw, p_quest_id: questId, p_due: due || null, p_note: note || null });
+  },
+  async adminClearAssignment(pw) { return rpc("mhq_admin_clear_assignment", { p_admin_password: pw }); },
 };

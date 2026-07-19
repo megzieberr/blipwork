@@ -1,0 +1,27 @@
+/* ============================================================
+   Reminder opt-in card (js/push.js).
+   Deliberately the same skeleton as .install-banner in styles.css —
+   icon / body / action, dismiss ✕ pinned top-right — so the two never
+   look like they came from different apps when both happen to show.
+   Kept in its own file only because push is an agent-owned slice;
+   there is nothing here that couldn't live in styles.css later.
+   ============================================================ */
+.push-card{display:flex;align-items:center;gap:12px;position:relative;margin:0 0 14px;padding:14px 16px}
+.push-ico{font-size:24px;flex:0 0 auto;line-height:1}
+.push-body b{font-family:var(--font-display);font-weight:600;font-size:15px}
+.push-body p{margin-top:2px}
+.push-foot{margin-left:auto;flex:0 0 auto}
+.push-x{position:absolute;top:7px;right:10px;background:none;border:0;color:var(--muted);font-size:13px;cursor:pointer;line-height:1}
+.push-x:hover{color:var(--ink)}
+
+/* The ON state is a status line, not an offer — so it recedes: no
+   accent border, dimmer icon. It must stay visible (it carries the
+   off-switch) without competing with the feed button above it. */
+.push-card.is-on{opacity:.82}
+.push-card.is-on .push-ico{filter:grayscale(.35)}
+
+/* The ✕ is a comfortable tap target on a phone without changing the
+   card's visual weight. */
+@media (max-width:600px){
+  .push-x{top:4px;right:6px;padding:6px 8px}
+}

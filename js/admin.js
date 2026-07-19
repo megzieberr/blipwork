@@ -62,6 +62,7 @@ async function dashboard() {
   if (!data || !data.ok) { status.textContent = "Couldn’t load the dashboard."; return; }
   status.remove();
   view.appendChild(termSection(!!data.termRunning));
+  view.appendChild(assignmentSection(data));
   view.appendChild(questSection(data.quests || []));
   view.appendChild(struggleSection(data.struggles || []));
   view.appendChild(learnerSection(data.rows || [], data.inactiveDays || 7));
@@ -89,6 +90,105 @@ function termSection(running) {
   row.appendChild(sw);
   const list = el("div", "adm-quests"); list.appendChild(row);
   sec.appendChild(list);
+  return sec;
+}
+
+/* ---------- Today's homework (Phase 3) ----------
+   One active assignment at a time — a spotlight on one quest, pinned to
+   the top of the learner's hub.
+
+   RULING (PHASE-3-PLAN.md §2): setting homework does NOT open a closed
+   quest, so this picker only ever lists quests that are already open —
+   assigning a closed one would pin a card the learner cannot play. The
+   list is data.quests (is_open) intersected with the CHAPTERS metadata,
+   so the labels stay readable and a quest id that config.js no longer
+   knows about simply doesn't appear.
+
+   There is no penalty for missing it and no overdue state anywhere in
+   the learner UI — the due date is a soft "by Friday" line only. */
+function assignmentSection(data) {
+  const a = data.assignment || null;
+  const sec = el("div", "card adm-section");
+  sec.appendChild(el("h2", "", "Today’s homework"));
+  sec.appendChild(el("p", "muted small", "Pins one quest to the top of every learner’s hub. Only quests you’ve already opened can be set — setting homework never opens a closed quest. There’s no penalty for missing it: the due date shows as a gentle “by Friday” line, never a countdown or a late warning. One at a time; setting a new one replaces the old."));
+
+  // current state
+  const cur = el("div", "adm-qrow");
+  if (a && a.questId) {
+    const bits = [];
+    if (a.dueOn) bits.push(`due ${a.dueOn}`);
+    if (a.note) bits.push(`“${a.note}”`);
+    cur.innerHTML = `<span><b>${questTitle(a.questId)}</b>${bits.length ? `<div class="muted small">${bits.join(" · ")}</div>` : ""}</span>`;
+    const clr = el("button", "btn ghost small", "Clear");
+    clr.addEventListener("click", async () => {
+      if (!confirm("Clear the homework card from everyone’s hub? Their progress on that quest is untouched.")) return;
+      clr.disabled = true;
+      try { await api.adminClearAssignment(pw); } catch { /* reload shows the true state */ }
+      reload();
+    });
+    cur.appendChild(clr);
+  } else {
+    cur.innerHTML = `<span class="muted">None set</span>`;
+  }
+  const list = el("div", "adm-quests"); list.appendChild(cur);
+  sec.appendChild(list);
+
+  // picker — open quests only, grouped by chapter
+  const openIds = new Set((data.quests || []).filter(q => q.is_open).map(q => q.quest_id));
+  const select = el("select", "login-input");
+  select.style.marginBottom = "0";
+  select.appendChild(el("option", "", "Choose a quest…"));
+  select.firstChild.value = "";
+  let anyOpen = false;
+  CHAPTERS.forEach(ch => {
+    const qs = (ch.quests || []).filter(q => openIds.has(q.id));
+    if (!qs.length) return;
+    anyOpen = true;
+    const grp = document.createElement("optgroup");
+    grp.label = `${ch.icon} ${ch.name}`;
+    qs.forEach(q => {
+      const opt = el("option", "", `${q.n}. ${q.title}`);
+      opt.value = q.id;
+      if (a && a.questId === q.id) opt.selected = true;
+      grp.appendChild(opt);
+    });
+    select.appendChild(grp);
+  });
+
+  if (!anyOpen) {
+    sec.appendChild(el("p", "muted small", "No quests are open yet — open one below first, then come back."));
+    return sec;
+  }
+
+  const due = el("input", "login-input");
+  due.type = "date"; due.style.marginBottom = "0";
+  due.min = new Date().toISOString().slice(0, 10);   // a due date in the past would only ever be a typo
+  if (a && a.dueOn) due.value = a.dueOn;
+
+  const note = el("input", "login-input");
+  note.type = "text"; note.maxLength = 80; note.style.marginBottom = "0";
+  note.placeholder = "Optional one-line note (e.g. “do this before Friday”)";
+  if (a && a.note) note.value = a.note;
+
+  const form = el("div");
+  form.style.cssText = "display:flex;flex-direction:column;gap:8px;margin-top:12px";
+  form.appendChild(select);
+  const row = el("div");
+  row.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+  due.style.flex = "0 0 auto"; note.style.flex = "1 1 220px";
+  row.appendChild(due); row.appendChild(note);
+  form.appendChild(row);
+
+  const save = el("button", "btn primary", a && a.questId ? "Replace homework" : "Set homework");
+  save.addEventListener("click", async () => {
+    if (!select.value) { alert("Pick a quest first."); return; }
+    save.disabled = true;
+    try { await api.adminSetAssignment(pw, select.value, due.value || null, note.value.trim() || null); }
+    catch { /* reload shows the true state */ }
+    reload();
+  });
+  form.appendChild(save);
+  sec.appendChild(form);
   return sec;
 }
 

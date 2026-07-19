@@ -14,10 +14,18 @@
                   gallery
      Phase 2:     feed(u,p), care(u,p),
                   claimSecondBlip(u,p,name,colour)
+     Phase 3:     pushSubscribe(u,p,sub), pushUnsubscribe(u,p,endpoint),
+                  openBox(u,p)
+                  — the two push methods are honest no-ops on the local
+                    backend: ?local=1 has no push service to talk to, so
+                    they return {ok:true, local:true} and the UI stays
+                    hidden. openBox is fully mirrored, as everything else is.
      admin:       adminLogin, adminData, adminSetQuestOpen,
                   adminResetPassword, adminRemoveStudent,
                   adminResetProgress, adminResolveStruggle,
-                  setTerm(pw,running)  (alias: adminSetTerm)
+                  setTerm(pw,running)  (alias: adminSetTerm),
+                  adminSetAssignment(pw,questId,due,note),
+                  adminClearAssignment(pw)
    ============================================================ */
 import { SupabaseBackend, hasSupabase } from "./supabase.js";
 import { LocalBackend } from "./local-backend.js";

@@ -9,6 +9,7 @@ import { maybeShowInstall } from "./install.js";
 import { renderBlip, playMoment } from "./companion/renderer.js";
 import { itemLabel } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
+import { renderAssignmentCard } from "./assignment.js";
 
 /* ---------------- Phase 2 helpers (mirrors blip.js's normalizers —
    duplicated rather than shared, since this file and blip.js are each
@@ -116,6 +117,10 @@ export function renderHub(app, host) {
   const health = normalizeHealth(app.state || {});
   const banner = sickBanner(health);
   if (banner) host.appendChild(banner);
+
+  // Phase 3: teacher-assigned homework — pinned above the blip tile and the
+  // chapter tabs. Appends nothing and returns null when nothing is assigned.
+  renderAssignmentCard(app, host);
 
   if (app.state && (app.state.blip || app.state.blips)) {
     const blips = normalizeBlips(app.state);

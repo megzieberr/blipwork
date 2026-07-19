@@ -1,0 +1,176 @@
+/* ============================================================
+   TREASURE BOX — Phase 3 (PHASE-3-PLAN.md §3)
+   Owned by js/companion/treasure.js. Nothing else loads these
+   classes, and this file never redefines anything in styles.css.
+
+   Theme: the same dark "System Window" language as .card /
+   .system-notice / .sys-label — near-black navy surfaces, thin
+   luminous electric-blue (--accent) borders, low outer glow.
+   Violet (--accent2) is the app's reserved RARE colour (level-ups,
+   the second-Blip hatch), so it marks exactly one thing here: a
+   guaranteed-new cosmetic.
+
+   MOTION: transitions + keyframes only. No requestAnimationFrame
+   and no IntersectionObserver exist in this app's preview pane, so
+   every animation below must be able to start the moment its class
+   lands — nothing may wait to be scrolled into view.
+   ============================================================ */
+
+/* ---------- the modal shell ----------
+   .treasure-modal rides on .unlock-modal (styles.css), which already
+   gives the violet-tinged border/glow of a celebratory modal. Only
+   the centring and a slightly roomier reveal area are added here. */
+.treasure-modal { text-align: center; }
+.treasure-modal h2 { margin-bottom: 4px; }
+.treasure-modal .tb-hint { margin-bottom: 10px; }
+
+/* ---------- stage ----------
+   Fixed aspect box so the chest never reflows when the reveal appears
+   underneath it. Sparkles are absolutely positioned over the same box. */
+.treasure-modal .tb-stage {
+  position: relative;
+  width: 190px;
+  margin: 6px auto 4px;
+  aspect-ratio: 200 / 176;
+}
+
+/* the chest itself is a button — it is the one thing to tap */
+.treasure-modal .tb-chest {
+  display: block; width: 100%; height: 100%;
+  padding: 0; border: 0; background: none;
+  cursor: pointer;
+  filter: drop-shadow(0 8px 22px rgba(58, 160, 255, .28));
+  animation: tb-idle 2.6s ease-in-out infinite;
+}
+.treasure-modal .tb-chest:disabled { cursor: default; animation: none; }
+.treasure-modal .tb-chest-svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* Invite the tap without shouting: a slow breath, opacity+scale only
+   (never a transform that ends on `none` — the recorded scale-centring
+   bug in the explainer decks came from exactly that). */
+@keyframes tb-idle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-4px) scale(1.015); }
+}
+
+/* the lock plate glints, so the eye lands on the thing to press */
+.treasure-modal .tb-lock { animation: tb-glint 3.1s ease-in-out infinite; transform-box: view-box; transform-origin: 100px 89px; }
+@keyframes tb-glint {
+  0%, 78%, 100% { opacity: 1; }
+  86%           { opacity: .62; }
+}
+
+/* nudge on tap while the server is answering — reads as "it's stuck,
+   something's about to give" rather than as a dead button */
+.treasure-modal .tb-stage.tb-shaking .tb-chest { animation: tb-shake .45s ease-in-out infinite; }
+@keyframes tb-shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25%      { transform: translateX(-3px) rotate(-1.4deg); }
+  75%      { transform: translateX(3px) rotate(1.4deg); }
+}
+
+/* ---------- opening ----------
+   The lid lifts and tilts about its LEFT hinge; the interior and the
+   escaping-light group fade up behind it. transform-box:view-box lets
+   transform-origin be written in plain viewBox user units. */
+.treasure-modal .tb-lid,
+.treasure-modal .tb-glow,
+.treasure-modal .tb-inside {
+  transform-box: view-box;
+  transition: transform .45s cubic-bezier(.2, 1.25, .5, 1), opacity .35s ease;
+}
+.treasure-modal .tb-lid { transform-origin: 30px 88px; }
+.treasure-modal .tb-glow { opacity: 0; transform-origin: 100px 88px; transform: scale(.7); }
+.treasure-modal .tb-inside { opacity: 0; }
+
+.treasure-modal .tb-stage.open .tb-chest { animation: none; }
+.treasure-modal .tb-stage.open .tb-lid { transform: translateY(-34px) rotate(-11deg); }
+.treasure-modal .tb-stage.open .tb-inside { opacity: 1; }
+.treasure-modal .tb-stage.open .tb-glow { opacity: 1; transform: scale(1); }
+
+/* ---------- sparkle burst ----------
+   ✦ is the repo's existing flourish glyph (.sparkle in styles.css).
+   Each node carries its own --dx/--dy/--rot, so one keyframe serves
+   the whole burst and no JS runs per frame. pointer-events:none keeps
+   them from swallowing the tap on the way out. */
+.treasure-modal .tb-sparkles {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  display: grid; place-items: center;
+}
+.treasure-modal .tb-spark {
+  position: absolute;
+  font-size: 15px; line-height: 1;
+  color: color-mix(in srgb, var(--accent) 55%, #fff 45%);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent);
+  opacity: 0;
+  animation: tb-spark 1.1s ease-out forwards;
+}
+.treasure-modal.tb-rare .tb-spark {
+  color: color-mix(in srgb, var(--accent2) 50%, #fff 50%);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--accent2) 75%, transparent);
+}
+@keyframes tb-spark {
+  0%   { opacity: 0; transform: translate(0, 0) scale(.4) rotate(0); }
+  18%  { opacity: 1; transform: translate(calc(var(--dx) * .28), calc(var(--dy) * .28)) scale(1.15) rotate(calc(var(--rot) * .3)); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.55) rotate(var(--rot)); }
+}
+
+/* ---------- the reveal ----------
+   Hidden until the lid has settled, then it rises into place. Kept out
+   of the layout flow's way by min-height so the modal doesn't jump. */
+.treasure-modal .tb-reveal {
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.treasure-modal .tb-reveal.shown { opacity: 1; transform: translateY(0); }
+
+/* .tb-notice inherits .system-notice (and .rare, already defined in
+   styles.css for the violet level-up treatment) — only spacing and a
+   larger value line are added. */
+.treasure-modal .tb-notice { margin: 4px auto 16px; max-width: 320px; }
+.treasure-modal .tb-notice .sys-value { font-size: 19px; margin-top: 1px; }
+.treasure-modal .tb-notice .sys-sub { line-height: 1.5; margin-top: 5px; }
+
+/* cosmetic preview — the same small companion mount the shop grid uses
+   for a buyable item, sized to sit comfortably above the notice */
+.treasure-modal .tb-preview { width: 116px; margin: 2px auto 8px; }
+
+.treasure-modal .tb-done { margin-top: 2px; }
+
+/* ---------- the "🎁 N" badge ----------
+   Same size and placement language as .cookie-badge (styles.css): a
+   pill pinned to a card corner with the accent glow and a slow pulse.
+   It sits on the LEFT so a card already carrying the cookie badge on
+   the right can show both without overlapping. */
+.tb-badge-host { position: relative; }
+.treasure-badge {
+  position: absolute; top: 8px; left: 10px;
+  height: 30px; min-width: 30px; padding: 0 10px;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-display); font-weight: 600; font-size: 13px;
+  color: #04101a; background: var(--accent); border: none; border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 0 14px -3px color-mix(in srgb, var(--accent) 70%, transparent);
+  animation: tb-badge-pulse 1.8s ease-in-out infinite;
+}
+.treasure-badge:disabled { opacity: .5; animation: none; cursor: default; }
+@keyframes tb-badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+
+/* ---------- reduced motion ----------
+   Everything decorative stops; the chest still OPENS (that state change
+   is information, not decoration) — it just arrives instantly. */
+@media (prefers-reduced-motion: reduce) {
+  .treasure-modal .tb-chest,
+  .treasure-modal .tb-lock,
+  .treasure-modal .tb-stage.tb-shaking .tb-chest,
+  .treasure-badge { animation: none; }
+  .treasure-modal .tb-lid,
+  .treasure-modal .tb-glow,
+  .treasure-modal .tb-inside,
+  .treasure-modal .tb-reveal { transition: none; }
+  .treasure-modal .tb-spark { display: none; }
+}

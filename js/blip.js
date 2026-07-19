@@ -31,6 +31,8 @@ import { el, clear, showToast } from "./ui.js";
    own name into the same module scope. */
 import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment } from "./companion/renderer.js";
 import { renderSwatchGrid, equippedToAccessories, itemLabel } from "./companion/blip-ui.js";
+import { treasureBadge } from "./companion/treasure.js";
+import { maybeShowReminderCard } from "./push.js";
 
 /* renderBlip (companion/renderer.js, landed 2026-07-19) owns the
    growth/health scale itself — applied via `transform` on whatever
@@ -317,6 +319,10 @@ export function renderBlip(app, host) {
   hero.appendChild(el("p", "muted small blip-name-hint", "Only you see this nickname — it never shows to other players."));
   host.appendChild(hero);
 
+  // Phase 3: unopened treasure boxes ride on the hero card (top-left, so the
+  // right-hand cookie badge never collides). Returns null when there are none.
+  try { treasureBadge(app, hero); } catch { /* non-critical */ }
+
   saveNameBtn.addEventListener("click", async () => {
     const nm = nameInput.value.trim();
     if (!nm) { showToast("Give Blip a name first.", "error"); return; }
@@ -338,6 +344,10 @@ export function renderBlip(app, host) {
   feedBtn.disabled = !canFeedToday;
   feedCard.appendChild(feedBtn);
   host.appendChild(feedCard);
+  // Daily-reminder opt-in sits under the feed button: the reminder is ABOUT
+  // feeding, and this is the screen with the emotional context. Stays hidden
+  // until the VAPID key is set, so it is dormant until Megan finishes setup.
+  try { maybeShowReminderCard(host); } catch { /* non-critical */ }
   feedBtn.addEventListener("click", async () => {
     feedBtn.disabled = true;
     try {

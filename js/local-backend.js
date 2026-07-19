@@ -44,7 +44,7 @@
    sick states can be tested without waiting a week; .reset() clears it.
    ============================================================ */
 import { levelInfo } from "./companion/level.js";
-import { BLIP } from "./config.js";
+import { BLIP, CHAPTERS } from "./config.js";
 
 const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq.struggles", quests: "mhq.quests", meta: "mhq.meta", blips: "mhq.blips" };
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
@@ -131,6 +131,60 @@ function isWeekday(dayIdx) { const dow = new Date(dayIdx * DAY_MS).getUTCDay(); 
 function countQualWeekdays(fromExcl, toIncl) { let n = 0; for (let d = fromExcl + 1; d <= toIncl; d++) if (isWeekday(d)) n++; return n; }
 function growthStage(feed) { return BLIP.growthThresholds.filter(t => (feed || 0) >= t).length; }
 
+/* ---------- Phase 3: assignments ----------
+   The assignment stores assigned_on as a DAY INDEX (this file's own clock, so
+   __BLIP_DEV__.skipDays still works on it), but the contract hands the client
+   ISO dates — convert on the way out. dayIdx*DAY_MS is UTC midnight, so the
+   slice is exactly that day.
+   The quest -> chapter lookup mirrors what the card does client-side; config
+   is the single source of truth for the mapping, and the live `assignments`
+   table deliberately stores no chapter column for the same reason. */
+function isoDay(dayIdx) { return new Date(dayIdx * DAY_MS).toISOString().slice(0, 10); }
+function questChapterId(questId) {
+  for (const ch of CHAPTERS) if ((ch.quests || []).some(q => q.id === questId)) return ch.id;
+  return null;
+}
+function activeAssignment() { return read(LS.meta, {}).assignment || null; }
+/* Identity of one assignment, used as the box-grant key. Includes the day it
+   was set, so re-assigning the same quest next week is a NEW assignment and
+   legitimately earns a second box — matching the server, where a fresh row
+   means a fresh assignment_id. */
+function assignmentKey(a) { return a ? `${a.quest_id}@${a.assigned_on}` : null; }
+/* Mirrors mhq_get_state's `assignment` key. `done` reads the grant, NOT
+   progress.passed — passed stays true forever once earned, so it cannot say
+   whether THIS assignment was completed. */
+function assignmentView(rec) {
+  const a = activeAssignment();
+  if (!a || !a.quest_id) return null;
+  const grants = (rec && Array.isArray(rec.box_grants)) ? rec.box_grants : [];
+  return {
+    questId: a.quest_id,
+    chapterId: questChapterId(a.quest_id),
+    note: a.note || null,
+    assignedOn: isoDay(a.assigned_on),
+    dueOn: a.due_on || null,
+    done: grants.includes(assignmentKey(a)),
+  };
+}
+
+/* ---------- Phase 3: treasure-box loot (mirrors loot_table + mhq_open_box) ----------
+   In production the weights live in the `loot_table` table and never reach the
+   client; these constants exist purely so ?local=1 behaves the same offline.
+   Food loot is soup/medicine ONLY — the cookie is the free daily feed(), not a
+   pantry item, so a cookie dropped in the pantry would be dead inventory with
+   nothing to spend it on. Boxes stocking the pharmacy is also a kinder safety
+   net for a learner whose Blip has fallen ill. */
+const LOOT_WEIGHTS = { gold: 55, food: 30, cosmetic: 15 };
+const LOOT_GOLD = { min: 15, max: 40 };
+const LOOT_FOOD = ["soup", "medicine"];
+function rollLootKind() {
+  const total = Object.values(LOOT_WEIGHTS).reduce((a, w) => a + w, 0);
+  let r = Math.random() * total;
+  for (const [kind, w] of Object.entries(LOOT_WEIGHTS)) { r -= w; if (r < 0) return kind; }
+  return "gold";
+}
+const pickOne = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
 /* ---------- term config (mirrors app_config) ---------- */
 function termConfig() { const m = read(LS.meta, {}); return { running: !!m.term_running, onSince: (typeof m.term_on_since === "number" ? m.term_on_since : null) }; }
 function isQualDay() { const { running } = termConfig(); return running && isWeekday(today()); }
@@ -164,6 +218,11 @@ function ensureBlipFields(s) {
   if (typeof s.care_streak !== "number") { s.care_streak = 0; changed = true; }
   if (!("last_care_day" in s)) { s.last_care_day = null; changed = true; }
   if (!s.pantry || typeof s.pantry !== "object" || Array.isArray(s.pantry)) { s.pantry = {}; changed = true; }
+  // Phase 3: treasure boxes. box_grants mirrors the server's box_grants TABLE
+  // (one entry per assignment completed) and is what makes `done` and the box
+  // count agree — see assignmentView.
+  if (typeof s.boxes_pending !== "number") { s.boxes_pending = 0; changed = true; }
+  if (!Array.isArray(s.box_grants)) { s.box_grants = []; changed = true; }
   return changed;
 }
 
@@ -198,6 +257,7 @@ function seed() {
   if (!("term_running" in meta)) { meta.term_running = false; metaChanged = true; }   // starts OFF, like live
   if (!("term_on_since" in meta)) { meta.term_on_since = null; metaChanged = true; }
   if (!("dayOffset" in meta)) { meta.dayOffset = 0; metaChanged = true; }
+  if (!("assignment" in meta)) { meta.assignment = null; metaChanged = true; }   // Phase 3
   if (metaChanged) write(LS.meta, meta);
   if (!read(LS.blips, null)) write(LS.blips, {});
 
@@ -229,6 +289,18 @@ globalThis.__BLIP_DEV__ = {
   skipDays(n) { const m = read(LS.meta, {}); m.dayOffset = (m.dayOffset || 0) + (Number(n) || 0); write(LS.meta, m); return { dayOffset: m.dayOffset, today: today() }; },
   reset() { const m = read(LS.meta, {}); m.dayOffset = 0; write(LS.meta, m); return { dayOffset: 0, today: today() }; },
   today,
+  /* Phase 3: hand yourself a box so the treasure modal can be exercised
+     offline without setting an assignment and playing it. Takes the first
+     student if no username is given (the usual ?local=1 case). */
+  grantBox(n = 1, username) {
+    const stAll = read(LS.students, {});
+    const rec = username ? Object.values(stAll).find(s => s.username === String(username).toLowerCase()) : Object.values(stAll)[0];
+    if (!rec) return { error: "no student — log in once first" };
+    ensureBlipFields(rec);
+    rec.boxes_pending = (rec.boxes_pending || 0) + (Number(n) || 1);
+    write(LS.students, stAll);
+    return { username: rec.username, boxesPending: rec.boxes_pending };
+  },
 };
 
 export const LocalBackend = {
@@ -291,6 +363,9 @@ export const LocalBackend = {
       blip: slot1 ? { name: slot1.name, colour: slot1.colour, owned: slot1.owned, equipped: slot1.equipped } : { name: "Blip", colour: "blue", owned: [], equipped: {} },
       blips, shop: shopCatalogue(), foodShop: foodCatalogue(), pantry: rec.pantry || {},
       health, canFeedToday, canCareToday, termRunning: running,
+      // Phase 3
+      assignment: assignmentView(rec),
+      boxes: { pending: rec.boxes_pending || 0 },
     };
   },
   async submitQuest(username, password, quest, { score, xp }) {
@@ -312,12 +387,28 @@ export const LocalBackend = {
     const oldLevel = levelInfo(rec.xp).level;
     rec.xp += xpGain;
     rec.gold += goldGain;
+
+    // Phase 3: one treasure box the first time she PASSES the assigned quest.
+    // The grant list is the dedupe (mirrors the server's box_grants primary
+    // key), so replays award nothing.
+    let boxAwarded = false;
+    const asg = activeAssignment();
+    if (passed && asg && asg.quest_id === quest) {
+      const key = assignmentKey(asg);
+      if (!rec.box_grants.includes(key)) {
+        rec.box_grants.push(key);
+        rec.boxes_pending = (rec.boxes_pending || 0) + 1;
+        boxAwarded = true;
+      }
+    }
+
     write(LS.students, stAll);
     const info = levelInfo(rec.xp);
 
     return {
       ok: true, passed, badgeEarned: passed && !wasPassed, xpAwarded: xpGain, alreadyPassed: wasPassed,
       goldAwarded: goldGain, xp: rec.xp, gold: rec.gold, level: info.level, levelUp: info.level > oldLevel, levelInfo: info,
+      boxAwarded, boxes: { pending: rec.boxes_pending || 0 },
     };
   },
   async logStruggle(username, password, concept) {
@@ -477,6 +568,60 @@ export const LocalBackend = {
     write(LS.students, stAll);
     return { ok: true, healed, pantry: rec.pantry, health: computeHealth(rec.last_fed_day, rec.care_streak) };
   },
+
+  /* ---- Phase 3: treasure box ----
+     Mirrors mhq_open_box. The box count is authoritative state (server-owned
+     in production), so this refuses rather than improvising when there is
+     no box: the UI must never decrement a count of its own. */
+  async openBox(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const stAll = read(LS.students, {});
+    const rec = stAll[s.id];
+    ensureBlipFields(rec);
+    const blips = ensureBlip(s.id, rec);
+    if (!(rec.boxes_pending > 0)) return { ok: false, error: "no_box" };
+
+    const level = levelInfo(rec.xp).level;
+    const blip = blips.find(b => b.slot === 1) || blips[0];
+    let kind = rollLootKind();
+    let loot = null;
+
+    if (kind === "cosmetic") {
+      // GUARANTEED-NEW: the pool is filtered to unowned items at or below her
+      // level, so isNew is true by construction. A box that hands back a hat
+      // she already owns is a punishment, not a prize — empty pool pays gold.
+      // Cosmetics are per-blip since Phase 2; slot 1 receives, matching the SQL.
+      const pool = SHOP_ITEMS.filter(it => it.minLevel <= level && !(blip.owned_items || []).includes(it.id));
+      if (pool.length) {
+        const item = pickOne(pool);
+        blip.owned_items = [...(blip.owned_items || []), item.id];
+        writeBlips(s.id, blips);
+        loot = { kind: "cosmetic", id: item.id, amount: 1, isNew: true };
+      } else {
+        kind = "gold";
+      }
+    }
+    if (kind === "food") {
+      const id = pickOne(LOOT_FOOD);
+      rec.pantry = { ...(rec.pantry || {}) };
+      rec.pantry[id] = (rec.pantry[id] || 0) + 1;
+      loot = { kind: "food", id, amount: 1, isNew: false };
+    }
+    if (kind === "gold") {
+      const amount = LOOT_GOLD.min + Math.floor(Math.random() * (LOOT_GOLD.max - LOOT_GOLD.min + 1));
+      rec.gold += amount;
+      loot = { kind: "gold", id: "gold", amount, isNew: false };
+    }
+
+    rec.boxes_pending = Math.max(0, (rec.boxes_pending || 0) - 1);
+    write(LS.students, stAll);
+    return {
+      ok: true, loot, boxes: { pending: rec.boxes_pending },
+      gold: rec.gold, pantry: rec.pantry || {}, blips: blipsView(s.id),
+    };
+  },
+
   async claimSecondBlip(username, password, name, colour) {
     const s = verify(username, password);
     if (!s) return { ok: false, error: "auth" };
@@ -520,9 +665,51 @@ export const LocalBackend = {
       g.count += v.count; g.students += 1;
     }));
     const { running, onSince } = termConfig();
+    // Phase 3: the teacher's real question is "who has done it?", and the
+    // box-grant list already knows — same shape the server returns, `done`
+    // swapped for `doneCount` because this is a class-wide view.
+    const asgA = activeAssignment();
+    const asgV = asgA ? assignmentView(null) : null;
+    const assignment = asgV ? {
+      questId: asgV.questId, chapterId: asgV.chapterId, note: asgV.note,
+      assignedOn: asgV.assignedOn, dueOn: asgV.dueOn,
+      doneCount: Object.values(students).filter(s => Array.isArray(s.box_grants) && s.box_grants.includes(assignmentKey(asgA))).length,
+    } : null;
     return { ok: true, rows, quests: qs, struggles: Object.values(cByConcept).sort((a, b) => b.count - a.count), inactiveDays: 7,
-      termRunning: running, termOnSince: onSince };
+      termRunning: running, termOnSince: onSince, assignment };
   },
+  /* Phase 3 — one active assignment at a time; setting a new one replaces it.
+     Refuses a closed quest exactly as the server does: assigning must never
+     open a quest, and a card pointing at something she cannot play would be
+     worse than no card at all. */
+  async adminSetAssignment(pw, questId, due, note) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    const q = read(LS.quests, {});
+    if (!q[questId]) return { ok: false, error: "unknown_quest" };
+    if (!q[questId].is_open) return { ok: false, error: "quest_closed" };
+    const m = read(LS.meta, {});
+    m.assignment = {
+      quest_id: questId,
+      note: note ? String(note).trim().slice(0, 80) || null : null,
+      due_on: due ? String(due).slice(0, 10) : null,
+      assigned_on: today(),
+    };
+    write(LS.meta, m);
+    const a = assignmentView(null);
+    return { ok: true, assignment: { questId: a.questId, chapterId: a.chapterId, note: a.note, assignedOn: a.assignedOn, dueOn: a.dueOn } };
+  },
+  async adminClearAssignment(pw) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    const m = read(LS.meta, {}); m.assignment = null; write(LS.meta, m);
+    return { ok: true };
+  },
+
+  /* Push is a no-op offline: ?local=1 has no push service and no VAPID key,
+     so the reminder card stays hidden. Honest {ok:true} keeps every caller
+     from needing a backend check of its own. */
+  async pushSubscribe() { return { ok: true, local: true }; },
+  async pushUnsubscribe() { return { ok: true, local: true }; },
+
   async adminSetQuestOpen(pw, quest, open) {
     if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
     const q = read(LS.quests, {}); if (q[quest]) { q[quest].is_open = !!open; write(LS.quests, q); } return { ok: true };

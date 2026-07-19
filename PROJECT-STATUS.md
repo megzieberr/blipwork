@@ -1,42 +1,23 @@
-# Project status — updated 2026-07-19 (late: sprite loops + tap + icon rebuild)
+# Project status — updated 2026-07-19 (Phase 3: push, homework, treasure box)
 
-## Where we are — THREE more ships, all live
-Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v31**.
-Today's later session shipped, in order:
+## Where we are
+Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v32**.
+Phase 3 shipped as one commit, built by three parallel agents against a frozen
+contract (`homework-hub-companion/PHASE-3-PLAN.md`) with the SQL and all
+shared-file splices written by the lead session so nothing collided.
 
-1. `c5be5dd` — bigger app icon, recovering + wink sprite loops, tap-to-react Blip
-2. `530b7e7` — baby Blip sprite loops (asleep / happy) at growthStage 0
-3. `b64d001` — app icons rebuilt from her new logo artwork
+Three features, all client-complete:
+1. **Sick-stage push warnings** — dormant until the VAPID key is set.
+2. **Teacher-assigned homework** — one active assignment, pinned to the hub.
+3. **Treasure box** — one per completed assignment, opened on the Blip screen.
 
-**No SQL in any of them** — this was all client + assets. Nothing outstanding.
+⚠️ **`supabase/migration-phase3.sql` has NOT been run yet.** Until it is, all
+three features are invisible on live — verified deliberately, not assumed: with
+`assignment` and `boxes` deleted from the state (simulating the old RPC), the hub
+and Blip screens render clean with zero runtime errors. So the deploy is safe
+ahead of the migration; the features simply switch on when it runs.
 
-### Sprite loops now on disk
-`assets/companion/anim/<state>-<n>.png`, cut by the new **`tools/slice_sprites.py`**
-(the earlier rows were cut by a scratchpad script that was never kept — re-cutting
-is now reproducible; edit `JOBS`/`GROUPS` and re-run).
-
-| state | frames | source | recolours? |
-|---|---|---|---|
-| sleeping, hungry, excited, jumping | 4 | earlier sheets | yes |
-| sick, veryill | 4 | earlier sheets | no (sickness overrides colour) |
-| **recovering** | 4 | `Recovering Blip 2.png` | no |
-| **wink** | 4 | `Winking blip.png` | yes |
-| **baby-sleeping** | 3 | `Baby Blip Sprite.png` row 1, frames 1-3 | yes |
-| **baby-happy** | 3 | `Baby Blip Sprite.png` row 2, frames 2-4 | yes |
-
-### Tap-to-react
-Tapping the hero on the Blip screen alternates a **wink** and a **hop** (the hop is
-the jumping loop played twice). Opt-in via `renderBlip`'s `tappable: true`; the
-listener binds once to the host `el` and reads the current handle from a WeakMap,
-because every re-render wipes everything inside. Ignored while sleeping / sick /
-recovering. **Not** enabled on the hub tile — that tile's own click navigates here.
-
-### Baby
-growthStage 0 uses her drawn baby body for **asleep** and **happy-and-fed** only.
-Hungry / sick / very-ill / recovering still fall through to the grown loops scaled
-down, which is what growthStage 0 already showed before any baby art existed.
-There is deliberately **no `blip-baby.png` static** — `resolveRawBody` would then
-serve a beaming baby face for a sick baby.
+The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 
 ## Decisions
 - 2026-07-06: App identity = low-intimidation QUICK RECAP tool (revise the week's work /
@@ -97,36 +78,88 @@ serve a beaming baby face for a sick baby.
 - 2026-07-19 (late): App icons are generated from **`New Logo.png`** (Blip + glow, no
   tile). The previous artwork nested a glowing tile inside the launcher's own container,
   which is why Blip read tiny on the home screen.
+- 2026-07-19 (Phase 3): **Circle Quest → Blipwork link DEFERRED** (Megan): the kids get
+  to finish their current CQ rounds first. Nothing in `circle-geometry-game` was touched
+  — its push stack was copied out read-only, and its clean tree was verified after.
+- 2026-07-19 (Phase 3): Push nudges fire on stage **transitions only** — day 3 (tired),
+  day 5 (bedridden), day 6 (last warning) — and are **silent at critical**. She has
+  already been told twice by then; nagging a learner who has disengaged is the wrong
+  move. Skipped if already fed today, and gated by `_mhq_is_qual_day` so weekends and
+  holidays are silent. One push per learner per day, enforced server-side.
+- 2026-07-19 (Phase 3): `push_subscriptions.last_push_stage` stores the **message level**
+  (1/2/3), NOT the health stage — health stage 2 spans days 5 AND 6, so day 6's final
+  warning is invisible at health-stage granularity.
+- 2026-07-19 (Phase 3): **One active assignment at a time, and no penalty for missing
+  it.** A spotlight, not a deadline: optional due date renders as a soft "by Friday",
+  never a countdown or an overdue badge. Setting homework NEVER opens a closed quest —
+  admin only offers open ones.
+- 2026-07-19 (Phase 3): Assignment `done` is read from **box_grants, not
+  progress.passed** — passed stays true forever once earned, so it cannot say whether
+  THIS assignment was completed. Re-assigning the same quest is a genuinely new
+  assignment and legitimately earns a second box.
+- 2026-07-19 (Phase 3): **One box per completed assignment**, deduped by the
+  `box_grants` primary key so replays cannot farm boxes. Loot weights live in the
+  `loot_table` table (gold 55 / food 30 / cosmetic 15) and never reach the client.
+- 2026-07-19 (Phase 3): Cosmetic drops are **guaranteed-new** — the pool is filtered to
+  unowned items at or below her level, granted to blip slot 1; an empty pool pays gold
+  instead. A box handing back a hat she already owns is a punishment, not a prize.
+- 2026-07-19 (Phase 3): Box food loot is **soup/medicine only, never cookies** — the
+  cookie is the free daily `feed()`, not a pantry item, so a pantry cookie would be dead
+  inventory. Boxes stocking the pharmacy also helps a learner whose Blip has fallen ill.
+- 2026-07-19 (Phase 3): Phase-3 CSS lives in **separate stylesheets** (`assignment.css`,
+  `treasure.css`, `push.css`) rather than growing `styles.css` — they were built by
+  parallel agents and separate files meant no merge conflicts. All three load after
+  styles.css and depend on its tokens.
 
 ## Pending on Megan
-- **Reinstall the PWA one more time** to pick up the new icon. Home-screen icons are
-  baked in at install time and never refresh — this is the only reason a reinstall is
-  needed, and it will not be needed again for ordinary updates. Remove the app (not just
-  the shortcut), then install fresh from https://megzieberr.github.io/blipwork/.
-- Phone play-through: tap Blip on his screen (wink/hop), and eyeball the recovering and
-  baby loops. Easiest at `companion-test.html`, or `?local=1` + `__BLIP_DEV__.skipDays(n)`.
-- At term start: **term-running toggle ON in admin** — the sickness clock is frozen until
-  then, deliberately.
-- Optional art, whenever: a single-wink re-roll, and baby loops with one held expression
-  if the 3-frame loops feel short. Both are asset-only ships.
+- **Run `supabase/migration-phase3.sql`** in the SQL editor (project
+  pjpwhalcifywjrwtjknd). Until then Phase 3 is invisible on live — safe, but off.
+  The file ends with a SMOKE TEST block: run those statements right after, on live.
+  This matters because the local JS backend does not exercise the SQL — a PL/pgSQL
+  ambiguity got through that way in Phase 2.
+- **Work through `PUSH-SETUP.md`** (~20–30 min, no rush): pg_cron + pg_net extensions,
+  four secrets, deploy the `send-push` function with Verify JWT **OFF**, run `cron.sql`.
+  You can reuse the Circle Quest VAPID keypair — Part 1 offers that as Option A.
+- **Set a first homework assignment** in admin once Term 3 quests are open.
+- At term start: **term-running toggle ON in admin** — the sickness clock is frozen
+  until then, deliberately.
+- Optional art, whenever: a single-wink re-roll, and baby loops with one held
+  expression if the 3-frame loops feel short. Both are asset-only ships.
 
 ## Next up
-- Sick-stage push warnings (reuse Circle Quest VAPID) — designed, not built.
-- Phase 3: teacher-assigned homework + treasure box + notifications.
-- Link Circle Quest → this hub (pencilled for the week of 20 Jul; the pinger entry is
-  already done).
+- Smoke-test the Phase 3 RPCs on live once the migration is in.
+- **Link Circle Quest → this hub** — deferred to after the kids finish their CQ rounds.
+- Phase 3 remainder: teacher-assigned homework is done; the treasure box is done;
+  sick-stage push needs only the manual setup above.
 - Mockup-derived backlog (homework-hub-companion/plan.md): FACE / EFFECTS / PATTERNS
   shop tabs, randomize/undo customise flow.
 - Unused baby art, if ever wanted: a baby-hungry row exists in `Blip Recovery Sprite.png`
   but is blanket-wrapped, and in this app a blanket reads as sick.
 
-## Tooling notes (new today)
+## How Phase 3 was verified (and what wasn't)
+- **Headless harness** (33 assertions, all green) exercising the local backend for real:
+  box awarded once and only once, replays award nothing, `no_box` on a second open,
+  re-assignment earns a fresh box, loot distribution sane over 300 boxes, admin
+  `doneCount` correct, closed/unknown quests refused.
+- **Browser DOM verification**: homework card renders with the soft due line; treasure
+  badge → chest → reveal → close reconciles both the box count and gold; all three new
+  stylesheets load with real rules; every new module imports cleanly.
+- **Pre-migration safety** verified by deleting `assignment`/`boxes` from the state and
+  re-rendering: no errors, features simply absent.
+- **NOT verified**: the SQL itself (needs the migration run — see the smoke-test block),
+  and push delivery (needs a phone plus the manual setup). Both are called out above
+  rather than assumed working.
+- Screenshots still time out in the Browser pane (known); DOM inspection stands in.
+- One agent reported an escaped-closing-tag bug in `screens.js` — checked against the
+  actual bytes and it was a **false positive**. The markup is fine; nothing was changed.
+
+## Tooling notes
 - `tools/slice_sprites.py` — cuts her sheets into frames. Scale is computed off the
-  **body**, not the alpha box: the box includes zZ marks and motion lines, which differ
-  per row and once gave a baby 441px tall asleep and 317px happy. Rows that must read as
-  the same character share one scale via `GROUPS`.
-- `tools/make_icons.py` — builds all five icons. Keys off **alpha**, not brightness: his
-  sunglasses are near-black and span his full width, so a brightness test cuts him in
-  half. Header records the approaches that failed on the older artwork.
-- Preview: another chat often holds port 5191, so there is now a `maths-quest-alt` entry
+  **body**, not the alpha box.
+- `tools/make_icons.py` — builds all five icons. Keys off **alpha**, not brightness.
+- Preview: another chat often holds port 5191, so there is a `maths-quest-alt` entry
   on **5202** in the global `~/.claude/.claude/launch.json`.
+- `globalThis.__BLIP_DEV__.grantBox(n)` hands you treasure boxes offline so the modal
+  can be exercised without setting an assignment and playing it; `.skipDays(n)` still
+  drives the sickness clock.
+</content>
