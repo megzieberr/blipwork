@@ -11,11 +11,12 @@ Three features, all client-complete:
 2. **Teacher-assigned homework** — one active assignment, pinned to the hub.
 3. **Treasure box** — one per completed assignment, opened on the Blip screen.
 
-⚠️ **`supabase/migration-phase3.sql` has NOT been run yet.** Until it is, all
-three features are invisible on live — verified deliberately, not assumed: with
-`assignment` and `boxes` deleted from the state (simulating the old RPC), the hub
-and Blip screens render clean with zero runtime errors. So the deploy is safe
-ahead of the migration; the features simply switch on when it runs.
+✅ **`supabase/migration-phase3.sql` HAS been applied to live** (2026-07-19, via
+MCP, migration `phase3_push_homework_treasure`) and smoke-tested end to end with
+a throwaway learner that was deleted afterwards — 21/21 steps correct. Learner
+data verified byte-identical before and after (1 student, 24 progress rows,
+4580 XP, 0 gold, 0 boxes). Homework and the treasure box are therefore **live
+and working right now**; push is live but dormant until the VAPID key is set.
 
 The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 
@@ -112,11 +113,6 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   styles.css and depend on its tokens.
 
 ## Pending on Megan
-- **Run `supabase/migration-phase3.sql`** in the SQL editor (project
-  pjpwhalcifywjrwtjknd). Until then Phase 3 is invisible on live — safe, but off.
-  The file ends with a SMOKE TEST block: run those statements right after, on live.
-  This matters because the local JS backend does not exercise the SQL — a PL/pgSQL
-  ambiguity got through that way in Phase 2.
 - **Work through `PUSH-SETUP.md`** (~20–30 min, no rush): pg_cron + pg_net extensions,
   four secrets, deploy the `send-push` function with Verify JWT **OFF**, run `cron.sql`.
   You can reuse the Circle Quest VAPID keypair — Part 1 offers that as Option A.
@@ -127,7 +123,6 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   expression if the 3-frame loops feel short. Both are asset-only ships.
 
 ## Next up
-- Smoke-test the Phase 3 RPCs on live once the migration is in.
 - **Link Circle Quest → this hub** — deferred to after the kids finish their CQ rounds.
 - Phase 3 remainder: teacher-assigned homework is done; the treasure box is done;
   sick-stage push needs only the manual setup above.
@@ -146,9 +141,23 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   stylesheets load with real rules; every new module imports cleanly.
 - **Pre-migration safety** verified by deleting `assignment`/`boxes` from the state and
   re-rendering: no errors, features simply absent.
-- **NOT verified**: the SQL itself (needs the migration run — see the smoke-test block),
-  and push delivery (needs a phone plus the manual setup). Both are called out above
-  rather than assumed working.
+- **Live SQL smoke test (2026-07-19, 21/21)**: new state keys present; `no_box` before
+  any box; admin RPCs reject a wrong password; learner sees the assignment; a FAIL grants
+  nothing; a PASS grants exactly one box; a replay grants nothing; `done` flips to true;
+  the box opens and pays out; a second open returns `no_box`; push subscribe/re-subscribe
+  (still one row) /unsubscribe; the one-active-assignment index blocks a second active row;
+  `_mhq_health` and `_mhq_is_qual_day` callable. Test learner deleted, row counts back to
+  baseline.
+- **NOT verified**: push *delivery* (needs a phone plus the manual setup), and
+  `mhq_admin_set_assignment` on the CORRECT password — deliberately not exercised, because
+  that would have meant handling the admin password. Its auth gate, its quest-open check
+  and every row it writes were all tested; the happy path runs the first time you set
+  homework in admin.
+- **Security advisor after the migration**: no new class of warning. The 64 WARNs are the
+  existing deliberate architecture (RLS-on-no-policies + SECURITY DEFINER RPCs executable
+  by anon — that IS the design). The only unrelated nits are `_mhq_level` and `_mhq_growth`
+  having a mutable `search_path`; both pre-date Phase 3 and are pure-maths helpers that
+  touch no tables. Worth pinning one day, not urgent.
 - Screenshots still time out in the Browser pane (known); DOM inspection stands in.
 - One agent reported an escaped-closing-tag bug in `screens.js` — checked against the
   actual bytes and it was a **false positive**. The markup is fine; nothing was changed.
