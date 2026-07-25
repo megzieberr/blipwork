@@ -1,4 +1,4 @@
-# Project status — updated 2026-07-19 (Phase 3: push, homework, treasure box)
+# Project status — updated 2026-07-25 (amnesty: pending resequenced behind the migration)
 
 ## Where we are
 Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v32**.
@@ -113,16 +113,21 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   styles.css and depend on its tokens.
 
 ## Pending on Megan
-- **Work through `PUSH-SETUP.md`** (~20–30 min, no rush): pg_cron + pg_net extensions,
-  four secrets, deploy the `send-push` function with Verify JWT **OFF**, run `cron.sql`.
-  You can reuse the Circle Quest VAPID keypair — Part 1 offers that as Option A.
-- **Set a first homework assignment** in admin once Term 3 quests are open.
-- At term start: **term-running toggle ON in admin** — the sickness clock is frozen
-  until then, deliberately.
-- Optional art, whenever: a single-wink re-roll, and baby loops with one held
-  expression if the 3-frame loops feel short. Both are asset-only ships.
+- 📱 whenever: play through ALL Blipwork levels yourself — your own gate before the kids
+  ever see it. Everything else below waits on this.
+  (2026-07-25 amnesty: nothing else. Term toggle, first assignment and PUSH-SETUP.md all
+  moved to "Next up" — they only make sense AFTER the migration, see the sequence below.
+  Optional art re-rolls killed: superseded by the free-tier-bundles store direction.)
 
 ## Next up
+**The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
+1. Megan's full play-through of all levels (pending item above).
+2. **Store upgrade: free-tier bundles that include accessories** — so kids get outfit
+   variety without gold-gating everything. Design session needed (companion plan.md).
+3. **Migrate the Circle Quest class → Blipwork.** Only when she calls it.
+4. Only then, the go-live trio: term toggle ON + first homework assignment + the
+   PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
+   pointless before the kids are actually here, which is why it waits).
 - **Link Circle Quest → this hub** — deferred to after the kids finish their CQ rounds.
 - Phase 3 remainder: teacher-assigned homework is done; the treasure box is done;
   sick-stage push needs only the manual setup above.
