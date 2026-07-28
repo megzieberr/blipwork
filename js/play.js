@@ -105,10 +105,16 @@ export function renderPlay(app, host, params) {
     const newXp = (res && typeof res.xp === "number") ? res.xp : priorXp;
     const newLevel = (res && res.levelInfo && res.levelInfo.level) || (res && res.level) || null;
     const firstUnlock = priorXp <= 0 && newXp > 0;
-    let unlockedItem = null;
+    // Since the 2026-07-28 store expansion several items can unlock at the
+    // same level, so this names the best one and counts the rest — the old
+    // `.find()` silently announced whichever happened to come first.
+    let unlockedItem = null, unlockedCount = 0;
     if (res && res.levelUp && newLevel && app.state && Array.isArray(app.state.shop)) {
-      const found = app.state.shop.find(it => it.minLevel === newLevel);
-      unlockedItem = found ? found.id : null;
+      const found = app.state.shop.filter(it => it.minLevel === newLevel);
+      unlockedCount = found.length;
+      unlockedItem = found.length
+        ? found.slice().sort((a, b) => (b.price || 0) - (a.price || 0))[0].id
+        : null;
     }
 
     app.go("results", {
@@ -116,7 +122,7 @@ export function renderPlay(app, host, params) {
       badgeEarned: !!(res && res.badgeEarned), alreadyPassed: !!(res && res.alreadyPassed),
       xpAwarded: (res && typeof res.xpAwarded === "number") ? res.xpAwarded : st.xp,
       goldAwarded: (res && typeof res.goldAwarded === "number") ? res.goldAwarded : 0,
-      levelUp: !!(res && res.levelUp), level: newLevel, firstUnlock, unlockedItem,
+      levelUp: !!(res && res.levelUp), level: newLevel, firstUnlock, unlockedItem, unlockedCount,
     });
   }
 

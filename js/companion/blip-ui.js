@@ -17,6 +17,23 @@ export const ITEM_LABELS = {
   "halo": "Halo",
   "power-gloves": "Power gloves",
   "aurora-wings": "Aurora wings",
+  // store expansion (2026-07-28)
+  "study-specs": "Study specs",
+  "beanie": "Beanie",
+  "ear-tufts": "Ear tufts",
+  "mitts": "Mitts",
+  "nub-wings": "Nub wings",
+  "cape": "Cape",
+  "sleepy-eyes": "Sleepy eyes",
+  "visor": "Visor",
+  "bolt-antenna": "Bolt antenna",
+  "horns": "Horns",
+  "bunny-ears": "Bunny ears",
+  "boxing-gloves": "Boxing gloves",
+  "schoolbag": "Schoolbag",
+  "bat-wings": "Bat wings",
+  "crown": "Crown",
+  "jetpack": "Jetpack",
   // legacy items (still owned by some blips)
   "round-glasses": "Round glasses",
   "cat-ears": "Cat ears",
@@ -25,6 +42,22 @@ export const ITEM_LABELS = {
   "angel-wings": "Angel wings",
 };
 export function itemLabel(id) { return ITEM_LABELS[id] || id; }
+
+/* Slot display names + the order the closet/shop tabs run in. `back` is
+   new in the 2026-07-28 store expansion. Kept here (not in blip.js) so
+   the gallery and treasure reveal can label a slot the same way. */
+export const SLOT_LABELS = {
+  hat: "Hat", glasses: "Eyes", ears: "Ears", arms: "Arms", wings: "Wings", back: "Back",
+};
+export const COSMETIC_SLOTS = ["hat", "glasses", "ears", "arms", "wings", "back"];
+
+/* Rarity is DERIVED from price rather than stored — 0 is the free tier,
+   120+ is rare (the theme's violet frame), everything between is common.
+   One place to change if the price bands are ever retuned. */
+export function itemRarity(price) {
+  if (!price) return "free";
+  return price >= 120 ? "rare" : "common";
+}
 
 /* {hat:'party-hat', ears:'', ...} -> ['party-hat'] (server/local equip
    shape -> the flat id array renderCompanion expects). */
@@ -55,3 +88,9 @@ export function renderSwatchGrid({ current, locked, onPick }) {
 }
 
 export function accessoryExists(id) { return !!ACCESSORIES[id]; }
+
+/* Which slot an owned id belongs to. Needed for the closet, which lists
+   what a blip OWNS — including retired items (party-hat, cat-ears…) that
+   are no longer in the shop payload and so have no slot coming from the
+   server. Reads it off the renderer's own catalogue instead. */
+export function accessorySlot(id) { return ACCESSORIES[id] ? ACCESSORIES[id].slot : null; }

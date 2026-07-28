@@ -144,9 +144,20 @@ export const ATTACH = {
     { x: 0.115, y: 0.70 }, // shoulder buried inside the lower-side outline (edge x≈0.025 here); hand pokes out below
     { x: 0.885, y: 0.70 },
   ],
+  // BACK slot (2026-07-28) — a single centred point BEHIND the body, so a
+  // back item is only ever visible where it clears the silhouette. Measured
+  // the blue base's alpha channel to place these honestly (fractions of the
+  // stage; the body spans y 0.15→0.885):
+  //   y 0.20 → x 0.408–0.610   y 0.30 → 0.260–0.744   y 0.40 → 0.138–0.860
+  //   y 0.50 → 0.058–0.935     y 0.65 → 0.027–0.969   y 0.85 → 0.198–0.798
+  // i.e. he is a wide egg: narrow at the crown, near stage-wide at the belly.
+  // So back items are designed to read from what PEEKS — shoulders up top
+  // and a sweep below y=0.885 — never from the middle, which is always
+  // hidden. That is also how a cape on a round character actually looks.
+  back: { x: 0.5, y: 0.42 },
 };
 
-const SLOT_ORDER = ["wings", "ears", "glasses", "hat", "arms"]; // paint order relative to the body, which is inserted between "wings" and "ears"
+const SLOT_ORDER = ["back", "wings", "ears", "glasses", "hat", "arms"]; // paint order relative to the body, which is inserted between "wings" and "ears"
 
 /* ---------- accessory library ----------
    Each accessory is a self-contained inline SVG in its own local viewBox,
@@ -356,6 +367,298 @@ export const ACCESSORIES = {
         <rect x="12" y="40" width="38" height="16" rx="6" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="5"/>
         <line x1="31" y1="42" x2="31" y2="54" stroke="#57c9ff" stroke-width="4" stroke-linecap="round"/>
         <circle cx="31" cy="74" r="6" fill="#57c9ff" opacity="0.9"/>
+      </g>
+    </svg>`,
+  },
+
+  /* ============================================================
+     STORE EXPANSION (2026-07-28) — sixteen more items so every slot
+     offers a real choice, plus the new BACK slot (cape / schoolbag /
+     jetpack). Same rules as above: code-drawn, flat matte fills,
+     ${OUTLINE} strokes, no gradients except where already licensed
+     (aurora-wings). Six of these are FREE (price 0 in shop_items) so a
+     level-1 learner can dress Blip head to toe on day one.
+
+     GLASSES CONVENTION (measured off blip-base-blue.png, not guessed):
+     the painted eyes sit at stage x 0.308 / 0.688 — 0.38 apart — and
+     span y 0.487–0.63. Every glasses item therefore uses viewBox width
+     210 with lens centres at x=60 / x=150 (0.4286 apart) at widthPct 90,
+     which lands them 0.386 apart. Matches star-shades/heart-eyes; copy
+     these three numbers for any future eyewear rather than re-deriving.
+     ============================================================ */
+
+  // plain study specs (glasses, FREE) — the "you own something" starter
+  "study-specs": {
+    slot: "glasses",
+    widthPct: 90,
+    anchor: { x: 0.5, y: 0.5 },
+    svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
+      <line x1="98" y1="46" x2="112" y2="46" stroke="${OUTLINE}" stroke-width="6"/>
+      <line x1="22" y1="38" x2="4" y2="32" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
+      <line x1="188" y1="38" x2="206" y2="32" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
+      <rect x="22" y="18" width="76" height="56" rx="16" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
+      <rect x="112" y="18" width="76" height="56" rx="16" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
+      <line x1="34" y1="32" x2="48" y2="32" stroke="#eafcff" stroke-width="5" opacity="0.55" stroke-linecap="round"/>
+      <line x1="124" y1="32" x2="138" y2="32" stroke="#eafcff" stroke-width="5" opacity="0.55" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // contented closed eyes (glasses slot, 30g). NOTE the body-coloured
+  // mask ellipses: unlike the shades, an eye SHAPE has to HIDE the
+  // painted eyes underneath or you get open eyes peeking around the
+  // arcs. rx/ry are sized off the measured eye box (0.125 stage wide,
+  // 0.143 stage tall => 29 x 42 in this viewBox) with a little margin,
+  // and filled with --blip-fill, the exact flat on-body colour the
+  // stage publishes, so the patch is invisible at every colour.
+  "sleepy-eyes": {
+    slot: "glasses",
+    widthPct: 90,
+    anchor: { x: 0.5, y: 0.5 },
+    svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="60" cy="46" rx="20" ry="26" fill="var(--blip-fill, ${BASE_BODY})"/>
+      <ellipse cx="150" cy="46" rx="20" ry="26" fill="var(--blip-fill, ${BASE_BODY})"/>
+      <path d="M38 40 Q60 68 82 40" fill="none" stroke="${OUTLINE}" stroke-width="9" stroke-linecap="round"/>
+      <path d="M128 40 Q150 68 172 40" fill="none" stroke="${OUTLINE}" stroke-width="9" stroke-linecap="round"/>
+      <line x1="36" y1="54" x2="27" y2="62" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
+      <line x1="174" y1="54" x2="183" y2="62" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // single-band tech visor (glasses, 35g) — opaque by design, so it
+  // needs no mask: the band itself covers both painted eyes.
+  "visor": {
+    slot: "glasses",
+    widthPct: 90,
+    anchor: { x: 0.5, y: 0.5 },
+    svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="18" width="190" height="58" rx="27" fill="#0e2a4a" stroke="${OUTLINE}" stroke-width="6"/>
+      <rect x="26" y="34" width="158" height="16" rx="8" fill="#57c9ff" opacity="0.9"/>
+      <rect x="34" y="37" width="42" height="8" rx="4" fill="#eafcff" opacity="0.75"/>
+      <circle cx="176" cy="62" r="5" fill="#57c9ff" opacity="0.8"/>
+    </svg>`,
+  },
+
+  // knit beanie (hat, FREE). Given its own lower `attach` on purpose:
+  // ATTACH.hat is the FLOATY point (party-hat/halo hover above the head
+  // by Megan's 2026-07-19 ruling, which stands) but a beanie that floats
+  // reads as a mistake rather than as cute, so this one sits ON the
+  // crown. Same reasoning as the headphones override.
+  "beanie": {
+    slot: "hat",
+    widthPct: 40,
+    anchor: { x: 0.5, y: 0.86 },
+    attach: { x: 0.5, y: 0.255 },
+    svg: `<svg viewBox="0 0 120 86" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="13" r="12" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="5"/>
+      <path d="M12 66 C12 34 32 22 60 22 C88 22 108 34 108 66 Z" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="6" y="60" width="108" height="22" rx="11" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="5"/>
+      <line x1="40" y1="34" x2="34" y2="58" stroke="#1c5fa0" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
+      <line x1="60" y1="28" x2="60" y2="58" stroke="#1c5fa0" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
+      <line x1="80" y1="34" x2="86" y2="58" stroke="#1c5fa0" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // little horns (hat, 50g) — perched on the crown, both drawn in one
+  // centred SVG because the hat slot is a single point, not a pair.
+  "horns": {
+    slot: "hat",
+    widthPct: 32,
+    anchor: { x: 0.5, y: 1.0 },
+    attach: { x: 0.5, y: 0.235 },
+    svg: `<svg viewBox="0 0 120 54" xmlns="http://www.w3.org/2000/svg">
+      <path d="M46 52 C30 50 16 38 12 16 C28 18 42 30 48 52 Z" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M74 52 C90 50 104 38 108 16 C92 18 78 30 72 52 Z" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M24 24 C32 30 38 38 42 48" fill="none" stroke="#b79bff" stroke-width="3.5" opacity="0.7" stroke-linecap="round"/>
+      <path d="M96 24 C88 30 82 38 78 48" fill="none" stroke="#b79bff" stroke-width="3.5" opacity="0.7" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // bolt antenna (hat, 45g) — a stalk with a lightning bolt, the one
+  // overtly "system window" flourish in the hat slot.
+  "bolt-antenna": {
+    slot: "hat",
+    widthPct: 14,
+    anchor: { x: 0.5, y: 1.0 },
+    attach: { x: 0.5, y: 0.20 },
+    svg: `<svg viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 84 C30 66 24 58 24 48" fill="none" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
+      <path d="M34 4 L12 44 L26 44 L22 80 L48 36 L32 36 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M32 12 L20 38 L29 38" fill="none" stroke="#fff0a8" stroke-width="4" opacity="0.7" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // crown (hat, 180g, RARE) — the top-end hat, violet jewels to match
+  // the theme's rare colour.
+  "crown": {
+    slot: "hat",
+    widthPct: 36,
+    anchor: { x: 0.5, y: 0.95 },
+    attach: { x: 0.5, y: 0.245 },
+    svg: `<svg viewBox="0 0 130 76" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 66 L6 12 L34 34 L65 6 L96 34 L124 12 L120 66 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="8" y="58" width="114" height="16" rx="8" fill="#f0b429" stroke="${OUTLINE}" stroke-width="5"/>
+      <circle cx="65" cy="46" r="8" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="4"/>
+      <circle cx="30" cy="50" r="5.5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="3.5"/>
+      <circle cx="100" cy="50" r="5.5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="3.5"/>
+      <path d="M18 22 L20 44" fill="none" stroke="#fff0a8" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // soft ear tufts (ears, FREE) — body-coloured so they read as part of
+  // him, the gentlest possible first accessory.
+  "ear-tufts": {
+    slot: "ears",
+    widthPct: 12,
+    anchor: { x: 0.5, y: 0.88 },
+    tiltDeg: -20,
+    svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <path d="M28 4 C10 12 4 32 10 50 C16 46 22 43 28 43 C34 43 40 46 46 50 C52 32 46 12 28 4 Z"
+        fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M28 18 C20 24 18 34 20 42 C24 40 26 39 28 39 C30 39 32 40 36 42 C38 34 36 24 28 18 Z"
+        fill="#eafcff" opacity="0.45"/>
+    </svg>`,
+  },
+
+  // bunny ears (ears, 55g) — tall ovals with a pink inner.
+  "bunny-ears": {
+    slot: "ears",
+    widthPct: 12,
+    anchor: { x: 0.5, y: 0.92 },
+    tiltDeg: -12,
+    svg: `<svg viewBox="0 0 50 112" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25 4 C40 4 45 30 45 62 C45 90 37 106 25 106 C13 106 5 90 5 62 C5 30 10 4 25 4 Z"
+        fill="#fff7e8" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M25 20 C34 20 37 40 37 62 C37 84 32 94 25 94 C18 94 13 84 13 62 C13 40 16 20 25 20 Z"
+        fill="#ffb6c9"/>
+    </svg>`,
+  },
+
+  // plain mitts (arms, FREE) — the capsule limb from stubby-arms (which
+  // is retired and unbuyable) brought back free, with a cuff ring so it
+  // is its own item rather than a re-issue.
+  "mitts": {
+    slot: "arms",
+    widthPct: 16,
+    anchor: { x: 0.76, y: 0.1 },
+    svg: `<svg viewBox="0 0 64 96" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(24 32 48)">
+        <rect x="15" y="6" width="34" height="82" rx="17" fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="6"/>
+        <path d="M17 56 L47 56" stroke="${OUTLINE}" stroke-width="5" opacity="0.5" stroke-linecap="round"/>
+      </g>
+    </svg>`,
+  },
+
+  // boxing gloves (arms, 60g) — a chunky glove on the end of the limb.
+  "boxing-gloves": {
+    slot: "arms",
+    widthPct: 19,
+    anchor: { x: 0.78, y: 0.09 },
+    svg: `<svg viewBox="0 0 72 104" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(24 36 52)">
+        <rect x="20" y="4" width="32" height="46" rx="15" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="6"/>
+        <path d="M14 62 C14 46 24 40 36 40 C48 40 58 46 58 62 C58 82 48 94 36 94 C24 94 14 82 14 62 Z"
+          fill="#ff6f5e" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
+        <path d="M14 66 C10 66 6 70 6 76 C6 82 10 86 15 85" fill="#ff6f5e" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
+        <line x1="26" y1="50" x2="46" y2="50" stroke="${OUTLINE}" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M24 60 C30 56 42 56 48 60" fill="none" stroke="#ffb3a8" stroke-width="4" opacity="0.7" stroke-linecap="round"/>
+      </g>
+    </svg>`,
+  },
+
+  // starter nub wings (wings, FREE) — small, rounded, unmistakably the
+  // cheap pair, which is the point: everyone can fly a little.
+  "nub-wings": {
+    slot: "wings",
+    widthPct: 15,
+    anchor: { x: 0.86, y: 0.32 },
+    svg: `<svg viewBox="0 0 70 76" xmlns="http://www.w3.org/2000/svg">
+      <path d="M62 10 C40 4 16 14 8 34 C22 32 30 36 34 44 C22 50 14 58 10 70 C28 62 48 46 58 30 C62 24 63 16 62 10 Z"
+        fill="#fff7e8" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M54 20 C42 22 32 28 26 38" fill="none" stroke="#cfe6f5" stroke-width="3.5" opacity="0.8" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // bat wings (wings, 140g, RARE) — scalloped membrane, violet for rare.
+  "bat-wings": {
+    slot: "wings",
+    widthPct: 33,
+    anchor: { x: 0.86, y: 0.30 },
+    svg: `<svg viewBox="0 0 100 124" xmlns="http://www.w3.org/2000/svg">
+      <path d="M94 14 C68 8 34 20 14 44 C24 46 32 48 38 54 C26 62 16 76 12 94 C24 90 34 90 42 94 C34 102 28 112 26 122 C46 112 66 94 80 72 C90 56 94 34 94 14 Z"
+        fill="#6b46d6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M90 20 C74 34 58 52 46 74" fill="none" stroke="#b79bff" stroke-width="4" opacity="0.65" stroke-linecap="round"/>
+      <path d="M88 30 C72 40 56 54 44 70" fill="none" stroke="#3a1f78" stroke-width="3.5" opacity="0.45" stroke-linecap="round"/>
+      <path d="M86 46 C74 58 66 74 60 88" fill="none" stroke="#3a1f78" stroke-width="3.5" opacity="0.45" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  /* ---- BACK slot (drawn behind the body — see ATTACH.back) ---- */
+
+  // cape (back, FREE). Flares from a narrow collar to a hem wider than
+  // he is, which is what makes it legible: the shoulders show above the
+  // silhouette and the hem sweeps out below y=0.885 where the body ends.
+  // The middle is hidden behind him, exactly as a real cape would be.
+  "cape": {
+    slot: "back",
+    widthPct: 100,
+    anchor: { x: 0.5, y: 0.285 },
+    // Drawn as ONE continuous piece with angular shoulders rather than a
+    // separate rounded collar band: the first version's collar was a pale
+    // rounded rect poking out either side of the crown, and at Blip's
+    // proportions that read as a second pair of ears, not as fabric.
+    svg: `<svg viewBox="0 0 200 202" xmlns="http://www.w3.org/2000/svg">
+      <path d="M66 0 L134 0 L143 30 L194 190 Q160 176 130 192 Q100 206 70 192 Q40 176 6 190 L57 30 Z"
+        fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M84 12 L116 12 L152 176 Q126 168 100 180 Q74 168 48 176 Z"
+        fill="#57c9ff" opacity="0.32"/>
+      <path d="M57 30 L143 30" stroke="${OUTLINE}" stroke-width="5" opacity="0.35" stroke-linecap="round"/>
+    </svg>`,
+  },
+
+  // schoolbag (back, 50g) — a wink at what the app is actually for. Rides
+  // high so the pack, its flap and both buckles clear his shoulders.
+  "schoolbag": {
+    slot: "back",
+    widthPct: 68,
+    anchor: { x: 0.5, y: 0.612 },
+    // Amber, not blue. The first pass used the accessory blues (#2f8fe0 /
+    // #1c5fa0) and simply vanished behind him — a back item has only his
+    // silhouette edges to be seen against, so it has to CONTRAST with the
+    // body, not match the palette. Also sized up (56% -> 68%) so the pack
+    // clears his shoulders instead of hiding behind the crown.
+    svg: `<svg viewBox="0 0 140 122" xmlns="http://www.w3.org/2000/svg">
+      <path d="M54 16 C54 2 86 2 86 16" fill="none" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
+      <rect x="8" y="14" width="124" height="102" rx="22" fill="#e8a33d" stroke="${OUTLINE}" stroke-width="6"/>
+      <path d="M8 42 C8 26 20 14 34 14 L106 14 C120 14 132 26 132 42 L132 60 L8 60 Z"
+        fill="#c9822a" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
+      <rect x="34" y="50" width="18" height="22" rx="5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="5"/>
+      <rect x="88" y="50" width="18" height="22" rx="5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="5"/>
+      <rect x="28" y="84" width="84" height="22" rx="11" fill="#c9822a" opacity="0.6"/>
+    </svg>`,
+  },
+
+  // jetpack (back, 200g, RARE) — the most expensive item in the shop.
+  // Tanks peek over the shoulders; the thrust cones are placed to emerge
+  // BELOW y=0.885, past the bottom of the body, so the flames are the
+  // part you actually see.
+  "jetpack": {
+    slot: "back",
+    widthPct: 100,
+    anchor: { x: 0.5, y: 0.274 },
+    svg: `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <rect x="12" y="6" width="48" height="116" rx="24" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6"/>
+        <rect x="24" y="26" width="10" height="70" rx="5" fill="#57c9ff" opacity="0.85"/>
+        <rect x="20" y="120" width="32" height="30" rx="7" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="6"/>
+        <path d="M22 152 Q12 180 36 208 Q60 180 50 152 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M29 158 Q24 178 36 196 Q48 178 43 158 Z" fill="#57c9ff" opacity="0.85"/>
+      </g>
+      <g transform="translate(128 0)">
+        <rect x="12" y="6" width="48" height="116" rx="24" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6"/>
+        <rect x="24" y="26" width="10" height="70" rx="5" fill="#57c9ff" opacity="0.85"/>
+        <rect x="20" y="120" width="32" height="30" rx="7" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="6"/>
+        <path d="M22 152 Q12 180 36 208 Q60 180 50 152 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M29 158 Q24 178 36 196 Q48 178 43 158 Z" fill="#57c9ff" opacity="0.85"/>
       </g>
     </svg>`,
   },

@@ -110,7 +110,7 @@ create table if not exists public.shop_items (
   sort      integer not null default 0,
   category  text    not null default 'cosmetic',
   constraint shop_items_slot_cat_check check (
-       (category = 'cosmetic' and slot in ('hat','ears','glasses','wings','arms'))
+       (category = 'cosmetic' and slot in ('hat','ears','glasses','wings','arms','back'))
     or (category = 'food'     and slot = 'food'))
 );
 
@@ -553,7 +553,7 @@ begin
   if p_equipped is not null then
     if jsonb_typeof(p_equipped) <> 'object' then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     select count(*) into bad from jsonb_each_text(p_equipped) e(k, v)
-     where k not in ('hat','ears','glasses','wings','arms')
+     where k not in ('hat','ears','glasses','wings','arms','back')
         or (coalesce(v, '') <> '' and not b.owned_items ? v);
     if bad > 0 then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     update public.blips set equipped = p_equipped where student_id = sid and slot = v_slot;
@@ -821,7 +821,26 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('headphones',   'ears',    60, 2, true, 21, 'cosmetic'),
   ('halo',         'hat',     80, 3, true, 31, 'cosmetic'),
   ('power-gloves', 'arms',   100, 4, true, 41, 'cosmetic'),
-  ('aurora-wings', 'wings',  150, 6, true, 51, 'cosmetic')
+  ('aurora-wings', 'wings',  150, 6, true, 51, 'cosmetic'),
+  -- store expansion 2026-07-28: free tier (price 0, one per slot) +
+  -- commons + rares + the new 'back' slot. Rarity is derived from price
+  -- on the client (0 = free, >= 120 = rare), not stored.
+  ('study-specs',  'glasses',   0,  1, true,  1, 'cosmetic'),
+  ('beanie',       'hat',       0,  1, true,  2, 'cosmetic'),
+  ('ear-tufts',    'ears',      0,  1, true,  3, 'cosmetic'),
+  ('mitts',        'arms',      0,  1, true,  4, 'cosmetic'),
+  ('nub-wings',    'wings',     0,  1, true,  5, 'cosmetic'),
+  ('cape',         'back',      0,  1, true,  6, 'cosmetic'),
+  ('sleepy-eyes',  'glasses',  30,  1, true, 13, 'cosmetic'),
+  ('visor',        'glasses',  35,  2, true, 14, 'cosmetic'),
+  ('bolt-antenna', 'hat',      45,  2, true, 32, 'cosmetic'),
+  ('horns',        'hat',      50,  2, true, 33, 'cosmetic'),
+  ('bunny-ears',   'ears',     55,  2, true, 22, 'cosmetic'),
+  ('boxing-gloves','arms',     60,  3, true, 42, 'cosmetic'),
+  ('schoolbag',    'back',     50,  2, true, 61, 'cosmetic'),
+  ('bat-wings',    'wings',   140,  6, true, 52, 'cosmetic'),
+  ('crown',        'hat',     180,  8, true, 34, 'cosmetic'),
+  ('jetpack',      'back',    200, 10, true, 62, 'cosmetic')
 on conflict (item_id) do nothing;
 
 -- Phase 2: pharmacy / grocery. item_id doubles as the "kind". soup/medicine are

@@ -82,12 +82,32 @@ const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7"
    equip() below never consults this list for ownership — so an
    already-owned old item still equips fine. */
 const SHOP_ITEMS = [
+  // free tier (2026-07-28) — price 0, one per slot, so a level-1 learner
+  // can dress Blip completely before earning a single crystal
+  { id: "study-specs", slot: "glasses", price: 0, minLevel: 1 },
+  { id: "beanie", slot: "hat", price: 0, minLevel: 1 },
+  { id: "ear-tufts", slot: "ears", price: 0, minLevel: 1 },
+  { id: "mitts", slot: "arms", price: 0, minLevel: 1 },
+  { id: "nub-wings", slot: "wings", price: 0, minLevel: 1 },
+  { id: "cape", slot: "back", price: 0, minLevel: 1 },
+  // common
+  { id: "sleepy-eyes", slot: "glasses", price: 30, minLevel: 1 },
+  { id: "visor", slot: "glasses", price: 35, minLevel: 2 },
   { id: "star-shades", slot: "glasses", price: 40, minLevel: 1 },
   { id: "heart-eyes", slot: "glasses", price: 45, minLevel: 1 },
+  { id: "bolt-antenna", slot: "hat", price: 45, minLevel: 2 },
+  { id: "horns", slot: "hat", price: 50, minLevel: 2 },
+  { id: "schoolbag", slot: "back", price: 50, minLevel: 2 },
+  { id: "bunny-ears", slot: "ears", price: 55, minLevel: 2 },
   { id: "headphones", slot: "ears", price: 60, minLevel: 2 },
+  { id: "boxing-gloves", slot: "arms", price: 60, minLevel: 3 },
   { id: "halo", slot: "hat", price: 80, minLevel: 3 },
   { id: "power-gloves", slot: "arms", price: 100, minLevel: 4 },
+  // rare (>= 120 — the client frames these in the theme's rare violet)
+  { id: "bat-wings", slot: "wings", price: 140, minLevel: 6 },
   { id: "aurora-wings", slot: "wings", price: 150, minLevel: 6 },
+  { id: "crown", slot: "hat", price: 180, minLevel: 8 },
+  { id: "jetpack", slot: "back", price: 200, minLevel: 10 },
 ];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows. */
 const FOOD_ITEMS = [
@@ -96,7 +116,7 @@ const FOOD_ITEMS = [
   { id: "treat", kind: "treat", price: BLIP.food.treat },
 ];
 const VALID_COLOURS = ["blue", "cream", "pink", "mint", "sky", "lilac", "peach", "lemon", "seafoam", "coral", "lavender"];
-const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms"];
+const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back"];
 
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a
@@ -592,7 +612,10 @@ export const LocalBackend = {
       // level, so isNew is true by construction. A box that hands back a hat
       // she already owns is a punishment, not a prize — empty pool pays gold.
       // Cosmetics are per-blip since Phase 2; slot 1 receives, matching the SQL.
-      const pool = SHOP_ITEMS.filter(it => it.minLevel <= level && !(blip.owned_items || []).includes(it.id));
+      // price > 0 (2026-07-28): free-tier items are excluded from the loot
+      // pool — a treasure box handing you something the shop gives away is
+      // the same let-down as a duplicate, which the pool already guards.
+      const pool = SHOP_ITEMS.filter(it => it.price > 0 && it.minLevel <= level && !(blip.owned_items || []).includes(it.id));
       if (pool.length) {
         const item = pickOne(pool);
         blip.owned_items = [...(blip.owned_items || []), item.id];

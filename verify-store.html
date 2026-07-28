@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store &amp; closet · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1180px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:10px;text-align:center}
+  .card h3{font-size:12px;margin-bottom:4px}
+  .card .meta{font-size:10px;color:var(--muted)}
+  .stage{width:120px;margin:0 auto 6px}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:24px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Store &amp; closet · verification</h1>
+<div id="banner">running…</div>
+
+<h2>Assertions</h2>
+<pre id="log">…</pre>
+
+<h2>Every accessory, alone on the body (eyeball these)</h2>
+<div class="grid" id="solo"></div>
+
+<h2>Full outfits — one item in every slot at once</h2>
+<div class="grid" id="outfits"></div>
+
+<script type="module">
+import { ACCESSORIES, ATTACH, COLOURS, renderCompanion } from "./js/companion/renderer.js";
+import { ITEM_LABELS, itemRarity, accessorySlot, COSMETIC_SLOTS, SLOT_LABELS } from "./js/companion/blip-ui.js";
+import { LocalBackend } from "./js/local-backend.js";
+
+let total = 0; const fails = [];
+const tick = (cond, label) => { total++; if (!cond) fails.push(label); return cond; };
+const lines = [];
+const say = (s) => lines.push(s);
+
+/* ---------- the client's own catalogue mirror ---------- */
+// local-backend keeps SHOP_ITEMS module-private, so read the catalogue the
+// way the app does: through a real signed-up learner's state payload.
+const uname = "verify_store_" + Math.random().toString(36).slice(2, 8);
+await LocalBackend.signup(uname, "Verify", "pw12");
+const state = await LocalBackend.getState(uname, "pw12");
+const shop = (state.shop || []);
+say(`shop payload: ${shop.length} cosmetic items`);
+
+/* ---------- 1. every sellable id can actually be drawn ---------- */
+for (const it of shop) {
+  tick(!!ACCESSORIES[it.id], `shop item "${it.id}" has no ACCESSORIES entry (would render as an empty card)`);
+  tick(!!ITEM_LABELS[it.id], `shop item "${it.id}" has no friendly label (would show its raw id)`);
+  if (ACCESSORIES[it.id]) {
+    tick(ACCESSORIES[it.id].slot === it.slot,
+      `slot mismatch for "${it.id}": shop says ${it.slot}, renderer says ${ACCESSORIES[it.id].slot}`);
+  }
+}
+
+/* ---------- 2. every drawable accessory has a home ---------- */
+for (const [id, def] of Object.entries(ACCESSORIES)) {
+  tick(!!ATTACH[def.slot], `accessory "${id}" uses slot "${def.slot}" with no ATTACH point`);
+  tick(!!ITEM_LABELS[id], `accessory "${id}" has no friendly label`);
+  tick(/viewBox="0 0 \d+ \d+"/.test(def.svg), `accessory "${id}" svg has no plain viewBox`);
+  tick(typeof def.widthPct === "number" && def.widthPct > 0, `accessory "${id}" has no widthPct`);
+  // {{UID}} placeholders must be paired with an internal id, else a stray
+  // token ends up in the DOM
+  tick(!def.svg.includes("{{UID}}") || /id="[^"]*\{\{UID\}\}/.test(def.svg),
+    `accessory "${id}" uses {{UID}} but defines no id with it`);
+}
+
+/* ---------- 3. the free tier really does cover every slot ---------- */
+for (const slot of COSMETIC_SLOTS) {
+  const inSlot = shop.filter((it) => it.slot === slot);
+  tick(inSlot.length >= 2, `slot "${slot}" sells ${inSlot.length} item(s) — the point of this work was a real choice in every slot`);
+  const free = inSlot.filter((it) => it.price === 0 && it.minLevel === 1);
+  tick(free.length >= 1, `slot "${slot}" has no free level-1 item — a new learner can't fill it`);
+}
+say(`slots: ${COSMETIC_SLOTS.map((s) => `${SLOT_LABELS[s]} ${shop.filter((i) => i.slot === s).length}`).join(" · ")}`);
+
+/* ---------- 4. rarity bands ---------- */
+tick(itemRarity(0) === "free" && itemRarity(50) === "common" && itemRarity(120) === "rare" && itemRarity(200) === "rare",
+  "itemRarity bands are wrong");
+const rare = shop.filter((it) => itemRarity(it.price) === "rare");
+tick(rare.every((it) => it.minLevel >= 6), "a rare item is buyable below level 6");
+say(`rares: ${rare.map((r) => `${r.id}(L${r.minLevel}/${r.price})`).join(", ")}`);
+
+/* ---------- 5. free items must not be treasure-box loot ---------- */
+// The box pool is `price > 0 && minLevel <= level && !owned`. Rebuilt here
+// from the same payload the backend filters, so a free item creeping back
+// into the pool shows up as a failure rather than as a sad box on a phone.
+const freeIds = new Set(shop.filter((it) => it.price === 0).map((it) => it.id));
+tick(freeIds.size === COSMETIC_SLOTS.length,
+  `expected one free item per slot (${COSMETIC_SLOTS.length}), found ${freeIds.size}`);
+const levelOnePool = shop.filter((it) => it.price > 0 && it.minLevel <= 1);
+tick(levelOnePool.every((it) => !freeIds.has(it.id)), "a free item is inside the level-1 loot pool");
+tick(levelOnePool.length > 0, "the level-1 loot pool is empty — every box would pay gold instead");
+say(`level-1 loot pool: ${levelOnePool.length} paid items (${levelOnePool.map((i) => i.id).join(", ")})`);
+
+/* ---------- 6. the SQL seed and the client mirror agree ---------- */
+// This is the drift that bites: a new item added to one side only. Parse the
+// ids straight out of the migration and compare sets.
+try {
+  const sql = await (await fetch("./supabase/migration-store-expansion.sql")).text();
+  const seeded = [...sql.matchAll(/^\s*\('([a-z0-9-]+)',\s*'([a-z]+)',\s*(\d+),\s*(\d+),\s*true/gim)]
+    .map((m) => ({ id: m[1], slot: m[2], price: +m[3], minLevel: +m[4] }));
+  tick(seeded.length === 16, `migration seeds ${seeded.length} rows, expected 16`);
+  for (const row of seeded) {
+    const mirror = shop.find((it) => it.id === row.id);
+    tick(!!mirror, `"${row.id}" is in the SQL migration but not in the client shop mirror`);
+    if (mirror) {
+      tick(mirror.price === row.price, `"${row.id}" price differs: SQL ${row.price}, client ${mirror.price}`);
+      tick(mirror.minLevel === row.minLevel, `"${row.id}" minLevel differs: SQL ${row.minLevel}, client ${mirror.minLevel}`);
+      tick(mirror.slot === row.slot, `"${row.id}" slot differs: SQL ${row.slot}, client ${mirror.slot}`);
+    }
+  }
+  say(`migration parsed: ${seeded.length} rows, all cross-checked against the client mirror`);
+} catch (e) {
+  tick(false, "could not read supabase/migration-store-expansion.sql: " + e.message);
+}
+
+/* ---------- 7. buying, wearing and taking off actually work ---------- */
+{
+  const freeCape = shop.find((it) => it.id === "cape");
+  tick(!!freeCape && freeCape.price === 0, "the free cape is missing from the shop");
+  const before = (await LocalBackend.getState(uname, "pw12")).gold;
+  const buy = await LocalBackend.buyItem(uname, "pw12", "cape", 1);
+  tick(buy && buy.ok, "buying the free cape failed: " + JSON.stringify(buy));
+  const after = await LocalBackend.getState(uname, "pw12");
+  tick(after.gold === before, `a free item changed the gold balance (${before} -> ${after.gold})`);
+  tick((after.blip.owned || []).includes("cape"), "cape not in owned_items after buying");
+
+  const wear = await LocalBackend.equip(uname, "pw12", { slot: 1, equipped: { back: "cape" } });
+  tick(wear && wear.ok, "equipping to the new BACK slot was rejected: " + JSON.stringify(wear));
+  const worn = await LocalBackend.getState(uname, "pw12");
+  tick(worn.blip.equipped && worn.blip.equipped.back === "cape", "cape did not stick in the back slot");
+
+  const off = await LocalBackend.equip(uname, "pw12", { slot: 1, equipped: { back: "" } });
+  tick(off && off.ok, "taking the cape off failed");
+
+  const bogus = await LocalBackend.equip(uname, "pw12", { slot: 1, equipped: { back: "not-a-real-item" } });
+  tick(bogus && !bogus.ok, "the back slot accepted an item the learner does not own");
+}
+
+/* ---------- 8. every accessory renders a real, sized layer ---------- */
+const soloHost = document.getElementById("solo");
+const ids = Object.keys(ACCESSORIES);
+for (const id of ids) {
+  const def = ACCESSORIES[id];
+  const shopRow = shop.find((it) => it.id === id);
+  const card = document.createElement("div");
+  card.className = "card";
+  const price = shopRow ? (shopRow.price === 0 ? "FREE" : shopRow.price + " 💎") : "retired";
+  card.innerHTML = `<div class="stage"></div><h3>${ITEM_LABELS[id] || id}</h3>
+    <div class="meta">${SLOT_LABELS[def.slot] || def.slot} · ${price}${shopRow ? " · L" + shopRow.minLevel : ""}</div>`;
+  soloHost.appendChild(card);
+  renderCompanion(card.querySelector(".stage"), { colour: "blue", accessories: [id] });
+  const layers = card.querySelectorAll(`[data-accessory="${id}"]`);
+  const paired = Array.isArray(ATTACH[def.slot]);
+  tick(layers.length === (paired ? 2 : 1),
+    `"${id}" rendered ${layers.length} layer(s); ${paired ? "paired" : "single"} slot expects ${paired ? 2 : 1}`);
+  for (const l of layers) {
+    const svg = l.querySelector("svg");
+    tick(!!svg, `"${id}" layer has no <svg>`);
+    tick(!l.innerHTML.includes("{{UID}}"), `"${id}" left an unreplaced {{UID}} in the DOM`);
+  }
+}
+
+/* ---------- 9. a whole outfit at once, in a few colours ---------- */
+const outfitHost = document.getElementById("outfits");
+const oneOf = (slot, prefer) => prefer.find((id) => ACCESSORIES[id] && ACCESSORIES[id].slot === slot)
+  || ids.find((id) => ACCESSORIES[id].slot === slot);
+const outfits = [
+  { label: "Free tier, every slot", colour: "blue",
+    items: ["beanie", "study-specs", "ear-tufts", "mitts", "nub-wings", "cape"] },
+  { label: "All rares", colour: "lilac",
+    items: ["crown", "visor", "bunny-ears", "boxing-gloves", "bat-wings", "jetpack"] },
+  { label: "Techy set", colour: "mint",
+    items: ["bolt-antenna", "star-shades", "headphones", "power-gloves", "aurora-wings", "schoolbag"] },
+  { label: "Sleepy + horns", colour: "peach",
+    items: ["horns", "sleepy-eyes", "ear-tufts", "mitts", "nub-wings", "schoolbag"] },
+];
+for (const o of outfits) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<div class="stage" style="width:150px"></div><h3>${o.label}</h3>
+    <div class="meta">${o.colour}</div>`;
+  outfitHost.appendChild(card);
+  renderCompanion(card.querySelector(".stage"), { colour: o.colour, accessories: o.items });
+  // one layer per requested item, and nothing silently dropped
+  for (const id of o.items) {
+    const paired = Array.isArray(ATTACH[ACCESSORIES[id].slot]);
+    tick(card.querySelectorAll(`[data-accessory="${id}"]`).length === (paired ? 2 : 1),
+      `outfit "${o.label}" lost "${id}"`);
+  }
+  // the body must sit BETWEEN the back/wings layers and the face layers
+  const kids = [...card.querySelector(".blip-stage").children];
+  const bodyAt = kids.findIndex((k) => k.classList.contains("blip-body"));
+  const backAt = kids.findIndex((k) => k.dataset && k.dataset.slot === "back");
+  const hatAt = kids.findIndex((k) => k.dataset && k.dataset.slot === "hat");
+  tick(backAt >= 0 && backAt < bodyAt, `outfit "${o.label}": back item is not painted behind the body`);
+  tick(hatAt > bodyAt, `outfit "${o.label}": hat is not painted in front of the body`);
+}
+
+/* ---------- report ---------- */
+const banner = document.getElementById("banner");
+banner.className = fails.length ? "fail" : "pass";
+banner.textContent = fails.length
+  ? `${fails.length} of ${total} checks FAILED`
+  : `all ${total} checks passed`;
+say("");
+say(fails.length ? "FAILURES:\n" + fails.map((f) => "  ✗ " + f).join("\n") : "no failures");
+document.getElementById("log").textContent = lines.join("\n");
+</script>
+</body>
+</html>

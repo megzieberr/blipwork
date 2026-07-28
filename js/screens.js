@@ -244,7 +244,7 @@ export function renderChapter(app, host, params) {
 export function renderResults(app, host, params) {
   const {
     chapter, quest, accent, score, firstTry, total, badgeEarned, alreadyPassed,
-    xpAwarded, goldAwarded, levelUp, level, firstUnlock, unlockedItem,
+    xpAwarded, goldAwarded, levelUp, level, firstUnlock, unlockedItem, unlockedCount,
   } = params;
   setTheme(chapter.signature, accent);
   const pct = Math.round(score * 100);
@@ -262,7 +262,7 @@ export function renderResults(app, host, params) {
     <div class="result-msg ${passed ? "good" : "warn"}">${passed ? "Quest passed — badge earned!" : "So close! Get 80% right first-time to earn the badge."}</div>
     ${badgeEarned ? `<div class="badge-pop"><span class="bi">${chapter.icon}</span>${quest.title} mastered</div>` : ""}
     ${alreadyPassed ? `<div class="result-msg">Replay — already mastered, so this round paid a smaller XP top-up.</div>` : ""}
-    ${levelUp ? `<div class="result-levelup system-notice"><span class="sys-label">System</span><div class="sys-value"><span class="sparkle tw">✦</span> LEVEL UP — LV. ${level} <span class="sparkle tw">✦</span></div>${unlockedItem ? `<div class="sys-sub">New unlock: ${itemLabel(unlockedItem)}</div>` : ""}</div>` : ""}
+    ${levelUp ? `<div class="result-levelup system-notice"><span class="sys-label">System</span><div class="sys-value"><span class="sparkle tw">✦</span> LEVEL UP — LV. ${level} <span class="sparkle tw">✦</span></div>${unlockedItem ? `<div class="sys-sub">New unlock: ${itemLabel(unlockedItem)}${unlockedCount > 1 ? ` +${unlockedCount - 1} more in the shop` : ""}</div>` : ""}</div>` : ""}
     <div class="result-actions"></div>`;
 
   // Results screen mounts no Blip normally (unlike the hub/blip screens),

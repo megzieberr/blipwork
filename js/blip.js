@@ -30,9 +30,18 @@ import { el, clear, showToast } from "./ui.js";
    the companion module's new renderBlip(el, opts) if imported under its
    own name into the same module scope. */
 import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment } from "./companion/renderer.js";
-import { renderSwatchGrid, equippedToAccessories, itemLabel } from "./companion/blip-ui.js";
+import {
+  renderSwatchGrid, equippedToAccessories, itemLabel,
+  SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot,
+} from "./companion/blip-ui.js";
 import { treasureBadge } from "./companion/treasure.js";
 import { maybeShowReminderCard } from "./push.js";
+
+/* Which slot tab the closet/shop is filtered to ("all" or a slot id).
+   Module scope on purpose: every buy/wear action re-renders the whole
+   screen via app.go("blip"), and losing the filter on each tap would
+   make dressing Blip in one slot infuriating. */
+let activeSlotTab = "all";
 
 /* renderBlip (companion/renderer.js, landed 2026-07-19) owns the
    growth/health scale itself — applied via `transform` on whatever
@@ -400,29 +409,81 @@ export function renderBlip(app, host) {
   colourCard.appendChild(swatches);
   host.appendChild(colourCard);
 
-  // ---- shop ----
-  host.appendChild(el("h2", "", "SHOP"));
+  // ---- closet + shop ----
   if (health.stage >= 2) {
     // Critical-adjacent: the cosmetic layer steps aside for the pharmacy.
+    host.appendChild(el("h2", "", "SHOP"));
     host.appendChild(el("p", "muted small", "The shop's quiet for now — Blip needs some care first."));
     host.appendChild(pharmacyCard(app, sess, state, health));
   } else {
-    const grid = el("div", "shop-grid");
-    (state.shop || []).filter((it) => ["hat", "ears", "glasses", "wings", "arms"].includes(it.slot)).forEach((item) => {
-      const owned = (activeBlip.owned || []).includes(item.id);
+    /* Store expansion 2026-07-28: this used to be ONE flat grid holding
+       owned, buyable and level-locked items together. That was fine at
+       six items; at twenty-two it is a scroll wall on a phone. Split in
+       two — CLOSET (what you own, tap to wear or take off) and SHOP
+       (what you can still get) — with a slot filter across the top. */
+    const shopItems = (state.shop || []).filter((it) => COSMETIC_SLOTS.includes(it.slot));
+    const shopById = new Map(shopItems.map((it) => [it.id, it]));
+
+    // The closet is driven by owned_items, NOT by the shop payload, so
+    // retired items (party-hat, cat-ears…) still show up and stay
+    // wearable — they were bought fairly and are never confiscated.
+    const closetItems = (activeBlip.owned || [])
+      .map((id) => shopById.get(id) || { id, slot: accessorySlot(id), price: null, minLevel: 1, retired: true })
+      .filter((it) => it.slot && COSMETIC_SLOTS.includes(it.slot));
+    const buyableItems = shopItems.filter((it) => !(activeBlip.owned || []).includes(it.id));
+
+    // Which slots to offer as tabs: only ones that actually have something
+    // in them, so a tab never opens onto an empty grid.
+    const liveSlots = COSMETIC_SLOTS.filter((s) =>
+      closetItems.some((it) => it.slot === s) || buyableItems.some((it) => it.slot === s));
+    if (!liveSlots.includes(activeSlotTab)) activeSlotTab = "all";
+
+    const tabs = el("div", "slot-tabs");
+    [["all", "All"], ...liveSlots.map((s) => [s, SLOT_LABELS[s]])].forEach(([id, label]) => {
+      const t = el("button", "slot-tab" + (id === activeSlotTab ? " active" : ""), label);
+      t.type = "button";
+      t.addEventListener("click", () => { activeSlotTab = id; app.go("blip"); });
+      tabs.appendChild(t);
+    });
+    host.appendChild(tabs);
+    // The strip scrolls sideways, so after a re-render the selected tab can
+    // sit off the right edge — "Back" is last and was doing exactly that on
+    // a 430px phone. inline:"center" only moves the strip, block:"nearest"
+    // keeps it from yanking the page vertically.
+    const activeTabEl = tabs.querySelector(".slot-tab.active");
+    if (activeTabEl && activeSlotTab !== "all") {
+      // setTimeout, not requestAnimationFrame: the preview pane never fires
+      // rAF (known, see the browser-pane note in PROJECT-STATUS), so an rAF
+      // here would silently do nothing every time we test it.
+      setTimeout(() => activeTabEl.scrollIntoView({ block: "nearest", inline: "center" }), 0);
+    }
+
+    const inTab = (it) => activeSlotTab === "all" || it.slot === activeSlotTab;
+
+    /* One card renderer for both sections — the only difference between a
+       closet card and a shop card is which button it gets. */
+    const cosmeticCard = (item, owned) => {
       const equippedHere = activeBlip.equipped && activeBlip.equipped[item.slot] === item.id;
       const lockedByLevel = level < item.minLevel;
       const lockedByDress = health.locks.dress;
       const lockedByShop = health.locks.shop;
-      const card = el("div", "shop-item" + (equippedHere ? " equipped" : ""));
+      const rarity = item.retired ? "common" : itemRarity(item.price);
+      const card = el("div", "shop-item rarity-" + rarity + (equippedHere ? " equipped" : ""));
+      const meta = owned
+        ? (equippedHere ? "Equipped" : (item.retired ? "Owned · no longer sold" : "Owned"))
+        : (rarity === "free"
+            ? "Free"
+            : `<span class="crystal">💎</span> ${item.price}${lockedByLevel ? ` · unlocks at level ${item.minLevel}` : ""}`);
       card.innerHTML = `<div class="si-stage"></div>
+        ${rarity === "rare" ? '<div class="si-tag rare">RARE</div>' : rarity === "free" && !owned ? '<div class="si-tag free">FREE</div>' : ""}
         <div class="si-name">${itemLabel(item.id)}</div>
-        <div class="si-meta">${owned ? (equippedHere ? "Equipped" : "Owned") : `<span class="crystal">💎</span> ${item.price}${lockedByLevel ? ` · unlocks at level ${item.minLevel}` : ""}`}</div>`;
+        <div class="si-meta">${meta}</div>`;
+      // preview the item on the learner's OWN colour, alone on the body
       renderCompanion(card.querySelector(".si-stage"), { colour: activeBlip.colour, accessories: [item.id] });
 
       const actionBtn = el("button", "btn small");
       if (owned) {
-        actionBtn.textContent = lockedByDress ? "Blip won't get up…" : (equippedHere ? "Unequip" : "Equip");
+        actionBtn.textContent = lockedByDress ? "Blip won't get up…" : (equippedHere ? "Take off" : "Wear");
         actionBtn.className = "btn small" + (lockedByDress ? " ghost" : equippedHere ? " ghost" : " primary");
         actionBtn.disabled = lockedByDress;
         if (!lockedByDress) actionBtn.addEventListener("click", async () => {
@@ -432,7 +493,7 @@ export function renderBlip(app, host) {
           try {
             const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, equipped: nextEquipped });
             if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); actionBtn.disabled = false; return; }
-            showToast(equippedHere ? `${itemLabel(item.id)} unequipped.` : `${itemLabel(item.id)} equipped!`, "good");
+            showToast(equippedHere ? `${itemLabel(item.id)} taken off.` : `${itemLabel(item.id)} on!`, "good");
             await app.refresh();
             app.go("blip");
           } catch { showToast("Can't reach the server — try again.", "error"); actionBtn.disabled = false; }
@@ -442,7 +503,11 @@ export function renderBlip(app, host) {
         actionBtn.disabled = true;
         actionBtn.className = "btn small ghost";
       } else {
-        actionBtn.innerHTML = lockedByShop ? "Shop's closed for now" : `Buy · ${item.price} <span class="crystal">💎</span>`;
+        // free-tier items still go through buy() — one tap at 0 gold — so
+        // nobody's owned_items needed backfilling when these shipped.
+        actionBtn.innerHTML = lockedByShop
+          ? "Shop's closed for now"
+          : (rarity === "free" ? "Get it free" : `Buy · ${item.price} <span class="crystal">💎</span>`);
         actionBtn.className = "btn small primary";
         actionBtn.disabled = lockedByShop;
         if (!lockedByShop) actionBtn.addEventListener("click", async () => {
@@ -451,16 +516,37 @@ export function renderBlip(app, host) {
             // cosmetics are per-blip server-side — buy onto the ACTIVE blip's slot
             const r = await api.buyItem(sess.username, sess.password, item.id, activeBlip.slot);
             if (!r || !r.ok) { showToast(buyErrMsg(r && r.error, r), "error"); actionBtn.disabled = false; return; }
-            showToast(`Bought ${itemLabel(item.id)}!`, "good");
+            showToast(rarity === "free" ? `${itemLabel(item.id)} is yours!` : `Bought ${itemLabel(item.id)}!`, "good");
             await app.refresh();
             app.go("blip");
           } catch { showToast("Can't reach the server — try again.", "error"); actionBtn.disabled = false; }
         });
       }
       card.appendChild(actionBtn);
-      grid.appendChild(card);
-    });
-    host.appendChild(grid);
+      return card;
+    };
+
+    const closetShown = closetItems.filter(inTab);
+    host.appendChild(el("h2", "", "CLOSET"));
+    if (closetShown.length) {
+      const cgrid = el("div", "shop-grid");
+      closetShown.forEach((item) => cgrid.appendChild(cosmeticCard(item, true)));
+      host.appendChild(cgrid);
+    } else {
+      host.appendChild(el("p", "muted small", closetItems.length
+        ? "Nothing in this part of the closet yet."
+        : "The closet's empty — everything marked FREE below costs nothing."));
+    }
+
+    const buyShown = buyableItems.filter(inTab);
+    host.appendChild(el("h2", "", "SHOP"));
+    if (buyShown.length) {
+      const grid = el("div", "shop-grid");
+      buyShown.forEach((item) => grid.appendChild(cosmeticCard(item, false)));
+      host.appendChild(grid);
+    } else {
+      host.appendChild(el("p", "muted small", "You own everything here — nice."));
+    }
 
     // treats (paid, cosmetic-food — animate him but never accelerate growth)
     const treats = treatItems(state);

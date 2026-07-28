@@ -1,7 +1,25 @@
-# Project status — updated 2026-07-25 (amnesty: pending resequenced behind the migration)
+# Project status — updated 2026-07-28 (store expansion shipped, migration applied)
 
 ## Where we are
-Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v32**.
+Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v33**.
+
+**STORE EXPANSION shipped 2026-07-28 — ✅ migration APPLIED to live and smoke-tested
+(14/14).** The shop
+went from 6 buyable items to **22**, across **6** slots — the new one being **back**
+(cape / schoolbag / jetpack). Four of the five old slots sold exactly ONE item, so
+there was nothing to choose between; the whole catalogue also cost 475 gold, about a
+week of play, after which gold had no purpose.
+
+- **16 new accessories**, all code-drawn SVG per the 2026-07-19 ruling (no imported
+  art — see Decisions for why the free-asset route was rejected).
+- **Free tier**: one item per slot at 0 gold / level 1, so a brand-new learner can
+  dress Blip head to toe before earning anything.
+- **Closet / Shop split** with a scrolling slot filter (All · Hat · Eyes · Ears ·
+  Arms · Wings · Back). The old single flat grid was fine at 6 items and a scroll
+  wall at 22.
+- `verify-store.html` — **428 assertions, all green**, including a parse of the
+  migration SQL cross-checked against the client's catalogue mirror (that is the
+  drift that bites: an item added to one side only).
 Phase 3 shipped as one commit, built by three parallel agents against a frozen
 contract (`homework-hub-companion/PHASE-3-PLAN.md`) with the SQL and all
 shared-file splices written by the lead session so nothing collided.
@@ -107,6 +125,36 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - 2026-07-19 (Phase 3): Box food loot is **soup/medicine only, never cookies** — the
   cookie is the free daily `feed()`, not a pantry item, so a pantry cookie would be dead
   inventory. Boxes stocking the pharmacy also helps a learner whose Blip has fallen ill.
+- 2026-07-28 (store): **Free accessory art was researched and rejected.** game-icons.net
+  (CC BY 3.0, 4180 icons) is the best-fitting library, but its files are single white
+  silhouettes in a 512 box with no outline or internal detail, its wings/capes are drawn
+  as one two-sided object (useless for our mirrored paired slots), and using it puts a
+  permanent credit line in a learner-facing app. Refitting one is about the same work as
+  drawing a simple shape from scratch. OpenMoji was ruled out separately — CC BY-SA is
+  viral onto derived art. Verdict: keep drawing them, use icon libraries only as visual
+  reference. Megan's call, after the research.
+- 2026-07-28 (store): **A back item can only be read from what peeks.** Blip is a wide
+  egg — measured off the blue base's alpha: y0.20 → 0.202 wide, y0.65 → 0.94 wide, body
+  ends y0.885. So anything behind him is completely hidden between roughly y0.35 and
+  y0.85. All three back items are designed around that: shoulders/collar above, hem or
+  thrust flames below, nothing that matters in the middle. Don't "fix" the hidden middle.
+- 2026-07-28 (store): **A back item must CONTRAST with the body, not match the palette.**
+  The schoolbag's first pass used the accessory blues and simply vanished; it is amber
+  now. Anything new in the back slot needs a non-blue fill.
+- 2026-07-28 (store): **Rarity is derived from price, not stored** — 0 = free badge,
+  ≥120 = the theme's violet rare frame. No new column, no backfill. Retune the bands in
+  `itemRarity()` in blip-ui.js, one place.
+- 2026-07-28 (store): **Free items are bought, not granted** — they sit in the shop at
+  price 0 and take one tap. That avoided backfilling owned_items for every existing
+  learner. They are also excluded from treasure-box loot (`price > 0` in the pool):
+  a box handing over something the shop gives away is the same let-down as a duplicate.
+- 2026-07-28 (store): The glasses convention is now measured, not guessed — the painted
+  eyes sit at stage x 0.308 / 0.688 spanning y 0.487–0.63, so every eyewear item uses
+  viewBox width 210, lens centres x=60/x=150, widthPct 90. An eye-SHAPE item (sleepy
+  eyes) additionally needs body-coloured mask ellipses or the painted eyes show through.
+- 2026-07-28 (store): The beanie gets its own lower `attach`. The hat/wings/glasses
+  FLOATY ruling from 2026-07-19 stands for party-hat and halo, but a floating beanie
+  reads as a bug rather than as cute.
 - 2026-07-19 (Phase 3): Phase-3 CSS lives in **separate stylesheets** (`assignment.css`,
   `treasure.css`, `push.css`) rather than growing `styles.css` — they were built by
   parallel agents and separate files meant no merge conflicts. All three load after
@@ -114,20 +162,28 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 
 ## Pending on Megan
 - 📱 whenever: play through ALL Blipwork levels yourself — your own gate before the kids
-  ever see it. Everything else below waits on this.
-  (2026-07-25 amnesty: nothing else. Term toggle, first assignment and PUSH-SETUP.md all
-  moved to "Next up" — they only make sense AFTER the migration, see the sequence below.
-  Optional art re-rolls killed: superseded by the free-tier-bundles store direction.)
+  ever see it. (The store migration is done — nothing else is waiting on you.)
 
 ## Next up
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
 1. Megan's full play-through of all levels (pending item above).
-2. **Store upgrade: free-tier bundles that include accessories** — so kids get outfit
-   variety without gold-gating everything. Design session needed (companion plan.md).
+2. ~~Store upgrade: free-tier bundles that include accessories~~ — **BUILT 2026-07-28**,
+   waiting only on the SQL above. 22 items, free tier in every slot, new back slot,
+   closet/shop split.
 3. **Migrate the Circle Quest class → Blipwork.** Only when she calls it.
 4. Only then, the go-live trio: term toggle ON + first homework assignment + the
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
+
+**Store, if she wants more later** (in rough order of payoff per hour):
+- EFFECTS tab — auras/glows as their own slot. Cheapest of the three mockup tabs: it is
+  a back-style centred layer, no new machinery beyond an ATTACH point.
+- PATTERNS tab — body patterns. Needs a masked overlay following the body shape, so it
+  touches the recolour pipeline.
+- FACE tab — hardest, and last for a reason: the sprite animation frames have their own
+  faces drawn in, so a swappable face has to reconcile with every animated state.
+- Prices are still guesses. Worth retuning once the kids have actually played — the
+  bands live in one function (`itemRarity`) and one migration.
 - **Link Circle Quest → this hub** — deferred to after the kids finish their CQ rounds.
 - Phase 3 remainder: teacher-assigned homework is done; the treasure box is done;
   sick-stage push needs only the manual setup above.
@@ -166,6 +222,37 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - Screenshots still time out in the Browser pane (known); DOM inspection stands in.
 - One agent reported an escaped-closing-tag bug in `screens.js` — checked against the
   actual bytes and it was a **false positive**. The markup is fine; nothing was changed.
+
+## How the store expansion was verified (2026-07-28)
+- **`verify-store.html`, 428 assertions, all green.** Every sellable id has renderer art
+  AND a friendly label AND a matching slot; every accessory has an ATTACH point, a
+  viewBox and a widthPct; every slot sells ≥2 items and has a free level-1 one; rares are
+  all level 6+; free items are outside the loot pool; buying the free cape leaves gold
+  unchanged; equipping/unequipping the NEW back slot round-trips; the back slot rejects an
+  unowned id; every accessory renders the right number of layers (2 for paired slots) with
+  no unreplaced `{{UID}}`; four full outfits keep every item and paint back-behind-body
+  and hat-in-front-of-body.
+- **The migration SQL is parsed by the verify page** and each row cross-checked (price,
+  minLevel, slot) against the client's own catalogue mirror in local-backend.js. That
+  drift — an item added to one side only — is the failure this is built to catch.
+- **Seen, not assumed.** Screenshots time out in the Browser pane (known), so the art was
+  reviewed through headless Chromium via Playwright. Two items failed that review and were
+  redrawn: the schoolbag was invisible (blue on blue → amber, 56%→68%) and the cape's pale
+  rounded collar read as a second pair of ears (→ one continuous piece, angular shoulders).
+- **Live SQL smoke test (2026-07-28, 14/14)** — migration `store_expansion_back_slot_and_
+  free_tier`, run via MCP against a throwaway learner that was deleted afterwards. Steps:
+  signup; state shows 22 cosmetics; back slot has cape/schoolbag/jetpack; six free items
+  across six distinct slots; the free cape buys OK and leaves gold unchanged; equipping to
+  the NEW back slot succeeds and sticks; back REJECTS an unowned item; a bogus slot key is
+  still rejected; taking it off works; a level-10 rare is refused at level 1; 60 boxes
+  opened, all 13 cosmetic drops were paid items (never a free one); throwaway deleted.
+- **Learner data verified byte-identical before and after**: 2 students, 2 blips, 24
+  progress rows, 4580 XP, 0 gold, 0 boxes — unchanged. shop_items 14 → 30, active
+  cosmetics 6 → 22, back items 3.
+- **Security advisors after the migration**: 64 WARNs, the same count and the same three
+  classes as before Phase 3 — no new category. The two `function_search_path_mutable` nits
+  are still the pre-existing `_mhq_level` / `_mhq_growth`; both functions this migration
+  replaced pin their own `search_path`.
 
 ## Tooling notes
 - `tools/slice_sprites.py` — cuts her sheets into frames. Scale is computed off the
