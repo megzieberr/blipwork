@@ -161,12 +161,11 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   styles.css and depend on its tokens.
 
 ## Pending on Megan
-- 📱 whenever: play through ALL Blipwork levels yourself — your own gate before the kids
-  ever see it. (The store migration is done — nothing else is waiting on you.)
+- Nothing. (2026-07-31: full play-through of all Blipwork levels done.)
 
 ## Next up
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
-1. Megan's full play-through of all levels (pending item above).
+1. ~~Megan's full play-through of all levels~~ — **DONE 2026-07-31.**
 2. ~~Store upgrade: free-tier bundles that include accessories~~ — **BUILT 2026-07-28**,
    waiting only on the SQL above. 22 items, free tier in every slot, new back slot,
    closet/shop split.
@@ -189,8 +188,14 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   sick-stage push needs only the manual setup above.
 - Mockup-derived backlog (homework-hub-companion/plan.md): FACE / EFFECTS / PATTERNS
   shop tabs, randomize/undo customise flow.
-- Unused baby art, if ever wanted: a baby-hungry row exists in `Blip Recovery Sprite.png`
-  but is blanket-wrapped, and in this app a blanket reads as sick.
+- ~~Unused baby art, if ever wanted~~ — superseded by the Baby Blip retirement below.
+
+**Companion art rework (Megan's call, 2026-08-02) — for a future session:**
+- **Retire Baby Blip entirely** — she's unhappy with how it looks. Replace the baby stage
+  with a **small version of adult Blip that grows bigger** as the companion levels up.
+  Same grow-with-progress idea, one body design instead of two.
+- Her original art (sprite sheets, logo, design images) is now backed up in `art-source/`
+  in this repo — use those masters, never redraw.
 
 ## How Phase 3 was verified (and what wasn't)
 - **Headless harness** (33 assertions, all green) exercising the local backend for real:
