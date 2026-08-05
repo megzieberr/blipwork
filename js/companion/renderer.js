@@ -155,9 +155,17 @@ export const ATTACH = {
   // and a sweep below y=0.885 — never from the middle, which is always
   // hidden. That is also how a cape on a round character actually looks.
   back: { x: 0.5, y: 0.42 },
+  // EFFECTS slot (2026-08-05) — auras/glows, painted behind EVERYTHING
+  // including the back slot. Centred on the upper body: an effect only
+  // reads if it is WIDER than he is (he measures 0.94 of the stage at his
+  // widest, y0.65), so effects run widthPct ~110 and are seen as the ring
+  // that clears his silhouette left and right. An effect that is a compact
+  // solid mass instead of a ring must sit LOW and carry its own `attach`
+  // (see shadow-crown) or the body swallows it whole.
+  effects: { x: 0.5, y: 0.46 },
 };
 
-const SLOT_ORDER = ["back", "wings", "ears", "glasses", "hat", "arms"]; // paint order relative to the body, which is inserted between "wings" and "ears"
+const SLOT_ORDER = ["effects", "back", "wings", "ears", "glasses", "hat", "arms"]; // paint order relative to the body, which is inserted between "wings" and "ears"
 
 /* ---------- accessory library ----------
    Each accessory is a self-contained inline SVG in its own local viewBox,
@@ -662,6 +670,111 @@ export const ACCESSORIES = {
       </g>
     </svg>`,
   },
+
+  /* ---------- Tripo-sourced items (2026-08-05) ----------
+     These carry `img` instead of `svg`: a transparent PNG under
+     assets/companion/items/, keyed out of Megan's flat-magenta Tripo
+     sheets by tools/tripo_sheet.py. Everything else about them is
+     identical to an SVG accessory — same ATTACH point, anchor, widthPct,
+     and the same automatic mirroring for paired slots.
+
+     They are deliberately NOT recoloured with the body: accessories have
+     always kept their own colours (the 2026-07-28 ruling that a back item
+     must CONTRAST rather than match — the blue schoolbag vanished). */
+
+  // --- effects (new slot). Rings run wide so they clear the silhouette.
+  "light-ring": {           // free tier, 0g / L1
+    slot: "effects", img: "light-ring.png", widthPct: 110, anchor: { x: 0.5, y: 0.5 },
+  },
+  "flame-ring": {
+    slot: "effects", img: "flame-ring.png", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
+  },
+  // Taller than the others (crystals stacked above their ring), so it is
+  // sized DOWN rather than up — at ring width it overflowed the stage top
+  // and bottom and the ring sagged to his belly like a belt.
+  "crystal-orbit": {
+    slot: "effects", img: "crystal-orbit.png", widthPct: 95,
+    anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.5, y: 0.44 },
+  },
+  "spark-halo": {
+    slot: "effects", img: "spark-halo.png", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
+  },
+  // RARE. A compact mass, not a ring — so it gets its own LOW attach and
+  // pools around his base like rising mist. Centred behind him at the
+  // shared effects point it would be almost entirely hidden by the body.
+  "shadow-crown": {
+    slot: "effects", img: "shadow-crown.png", widthPct: 112,
+    // Anchored near its BOTTOM and dropped to y0.96 so the mass pools at
+    // his base and stays inside the stage; centring it instead pushed a
+    // quarter of it below the stage floor. What reads: the sweep under his
+    // hem (body ends y0.885), the sides where it is wider than he is, and
+    // the top wisps just clearing his shoulders.
+    // ⚠️ TUNE ME against the real art — this trio (widthPct/anchor/attach)
+    // was set against a square placeholder.
+    anchor: { x: 0.5, y: 0.9 }, attach: { x: 0.5, y: 0.96 },
+  },
+
+  // --- hats
+  // Both carry their OWN lower `attach`, following the beanie precedent
+  // (2026-07-28): the shared hat point sits at y0.10, above the top of the
+  // body at y0.15, which suits the code-drawn cones but leaves a solid hat
+  // hovering with a visible gap. He is a teardrop, so a hat has to come
+  // down far enough to wrap his point or it touches nothing at all. The
+  // hat/wings/glasses FLOATY ruling still stands for the items it was made
+  // for — a floating crown just reads as a bug rather than as cute.
+  "wizard-hat": {
+    slot: "hat", img: "wizard-hat.png", widthPct: 36,
+    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.19 },
+  },
+  // NB `crown` is already taken by the code-drawn 180g hat, so this one is
+  // royal-crown. Same for cyber-visor vs the existing `visor`.
+  "royal-crown": {
+    slot: "hat", img: "royal-crown.png", widthPct: 34,
+    anchor: { x: 0.5, y: 0.9 }, attach: { x: 0.5, y: 0.21 },
+  },
+
+  // --- eyewear. Sized to the measured eye band (eyes sit at stage x
+  // 0.308/0.688, y 0.487-0.63), same convention as the SVG eyewear.
+  "cyber-visor": {
+    slot: "glasses", img: "cyber-visor.png", widthPct: 52, anchor: { x: 0.5, y: 0.5 },
+  },
+  // The mask has real cut-out eye holes, so his painted eyes show THROUGH
+  // it — which is what makes it read as a mask, and which means the holes
+  // must land ON his eyes. So both numbers below are MEASURED, not chosen:
+  // the holes sit 0.478 of the item's width apart, his eyes are 0.380 of
+  // the stage apart, so widthPct = 0.380/0.478 = 80; and the anchor is the
+  // midpoint BETWEEN the holes (0.501, 0.493), not the middle of the image.
+  // Anchoring by the image centre at a guessed 54 made the holes narrower
+  // than his eyes, which clipped them and read as "sits weird".
+  // If the art is ever re-rolled, re-measure rather than nudge.
+  "eye-mask": {
+    slot: "glasses", img: "eye-mask.png", widthPct: 80, anchor: { x: 0.501, y: 0.493 },
+  },
+
+  // --- back. Diagonal, so the hilt clears his shoulder and the scabbard
+  // tip clears his hem; the strap across the middle is hidden by the body
+  // and that is correct, not a bug (same as the cape and the schoolbag).
+  "back-sword": {
+    slot: "back", img: "back-sword.png", widthPct: 96, anchor: { x: 0.5, y: 0.5 },
+  },
+
+  // --- wings. Megan draws ONE wing; the renderer mirrors it for the other
+  // side, so these must stay single-sided art.
+  // The anchor is the wing's ROOT, and it must sit far enough across the
+  // art that the piece hangs OUTSIDE the silhouette rather than behind it
+  // (wings paint behind the body, so anything overlapping him is simply
+  // invisible). Her art roots at the lower left, hence flipX — see
+  // makeAccessoryLayer. Same widthPct as the code-drawn wings.
+  // ⚠️ TUNE ME against the real art: anchor is the one number here that
+  // depends on exactly where the feathers meet the shoulder.
+  "gold-wings": {
+    slot: "wings", img: "gold-wings.png", widthPct: 34,
+    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  },
+  "dragon-wings": {
+    slot: "wings", img: "dragon-wings.png", widthPct: 34,
+    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  },
 };
 
 /* ============================================================
@@ -824,6 +937,7 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
    body img's src between a static base and an animation frame never
    shifts scale or position.
    ============================================================ */
+const ITEM_DIR = "assets/companion/items"; // Tripo-sourced PNG accessories (see tools/tripo_sheet.py)
 const ANIM_DIR = "assets/companion/anim";
 const ANIM_FRAME_COUNT = 4;
 /* Per-state overrides. The baby rows hold five drawings each, but only
@@ -1032,6 +1146,7 @@ function ensureStyles() {
 .blip-stage { position: relative; width: 100%; aspect-ratio: ${BASE_W} / ${BASE_H}; }
 .blip-layer { position: absolute; pointer-events: none; }
 .blip-layer svg { display: block; width: 100%; height: auto; overflow: visible; }
+.blip-layer img { display: block; width: 100%; height: auto; } /* PNG accessories (Tripo art) size exactly like the inline SVGs do */
 .blip-body { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .blip-bop { animation: blip-bop 2.1s ease-in-out infinite; transform-origin: 50% 100%; }
 @keyframes blip-bop {
@@ -1069,7 +1184,15 @@ function makeAccessoryLayer(accId, side) {
   wrap.style.left = point.x * 100 + "%";
   wrap.style.top = point.y * 100 + "%";
   wrap.style.width = def.widthPct + "%";
-  const mirror = side === "right" ? " scaleX(-1)" : "";
+  // Paired slots draw ONE piece and mirror it for the other side. By
+  // default the left is as-drawn and the right is flipped, which suits art
+  // whose root sits top-right (every code-drawn wing does). Megan's Tripo
+  // wings are drawn the other way round — root at the lower LEFT, sweeping
+  // up and out to the right — i.e. they are right-hand pieces. `flipX`
+  // inverts which side gets mirrored so such art hangs outward on both
+  // sides instead of folding back over the body.
+  const flipSide = def.flipX ? "left" : "right";
+  const mirror = side === flipSide ? " scaleX(-1)" : "";
   // tilt is listed AFTER the mirror so it applies in mirrored space —
   // the right-hand copy of a paired accessory leans symmetrically without
   // needing a per-side angle. Pivot = the anchor (transform-origin below),
@@ -1077,6 +1200,20 @@ function makeAccessoryLayer(accId, side) {
   const tilt = def.tiltDeg ? ` rotate(${def.tiltDeg}deg)` : "";
   wrap.style.transform = `translate(-${anchor.x * 100}%, -${anchor.y * 100}%)${mirror}${tilt}`;
   wrap.style.transformOrigin = `${anchor.x * 100}% ${anchor.y * 100}%`;
+  if (def.img) {
+    // Tripo-sourced PNG accessory. Same geometry contract as an SVG one —
+    // the wrapper above already positioned/anchored/mirrored it.
+    const im = document.createElement("img");
+    im.alt = "";
+    im.decoding = "async";
+    // A missing file must not leave an invisible box sitting on the stage
+    // (and must not stall the rest of the outfit) — drop the layer instead.
+    // This is also what lets the app run normally before the art lands.
+    im.addEventListener("error", () => wrap.remove());
+    im.src = `${ITEM_DIR}/${def.img}`;
+    wrap.appendChild(im);
+    return wrap;
+  }
   // {{UID}} lets an accessory's own SVG carry internal ids (e.g. a <clipPath>)
   // without colliding with every other instance of it rendered on the page —
   // url(#id) references resolve document-wide, not scoped to their own <svg>.

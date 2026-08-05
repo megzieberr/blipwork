@@ -108,6 +108,22 @@ const SHOP_ITEMS = [
   { id: "aurora-wings", slot: "wings", price: 150, minLevel: 6 },
   { id: "crown", slot: "hat", price: 180, minLevel: 8 },
   { id: "jetpack", slot: "back", price: 200, minLevel: 10 },
+  // Tripo wave 1 (2026-08-05) — new `effects` slot + top-ups. MUST stay in
+  // step with supabase/migration-effects-slot.sql; verify-store.html parses
+  // that SQL and cross-checks it against this list, because an item added
+  // to only one side is the failure that actually happens.
+  { id: "light-ring", slot: "effects", price: 0, minLevel: 1 },
+  { id: "eye-mask", slot: "glasses", price: 40, minLevel: 2 },
+  { id: "flame-ring", slot: "effects", price: 45, minLevel: 2 },
+  { id: "wizard-hat", slot: "hat", price: 55, minLevel: 2 },
+  { id: "crystal-orbit", slot: "effects", price: 60, minLevel: 3 },
+  { id: "cyber-visor", slot: "glasses", price: 65, minLevel: 3 },
+  { id: "spark-halo", slot: "effects", price: 90, minLevel: 4 },
+  { id: "back-sword", slot: "back", price: 130, minLevel: 6 },
+  { id: "dragon-wings", slot: "wings", price: 145, minLevel: 6 },
+  { id: "gold-wings", slot: "wings", price: 150, minLevel: 6 },
+  { id: "shadow-crown", slot: "effects", price: 160, minLevel: 7 },
+  { id: "royal-crown", slot: "hat", price: 170, minLevel: 8 },
 ];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows. */
 const FOOD_ITEMS = [
@@ -116,7 +132,10 @@ const FOOD_ITEMS = [
   { id: "treat", kind: "treat", price: BLIP.food.treat },
 ];
 const VALID_COLOURS = ["blue", "cream", "pink", "mint", "sky", "lilac", "peach", "lemon", "seafoam", "coral", "lavender"];
-const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back"];
+// Mirrors mhq_equip's hard-coded key list on the server. Adding a slot means
+// changing BOTH, plus shop_items_slot_cat_check — miss one and equipping the
+// new slot returns bad_equipped (that is exactly how `back` broke in July).
+const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects"];
 
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a

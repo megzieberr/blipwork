@@ -1,7 +1,28 @@
-# Project status — updated 2026-07-28 (store expansion shipped, migration applied)
+# Project status — updated 2026-08-05 (effects slot + Tripo wave 1 SHIPPED, migration applied)
 
 ## Where we are
-Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v33**.
+Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v34**.
+
+**EFFECTS SLOT + TRIPO WAVE 1 — SHIPPED 2026-08-05, ✅ migration APPLIED to live
+and smoke-tested 16/16.**
+A seventh cosmetic slot (`effects` — auras/glows painted behind everything)
+plus top-ups for hat/eyes/wings/back: 12 new items, shop 22 → 34.
+All twelve are Megan's own Tripo art rather than code-drawn SVG.
+`verify-store.html` is **685/685 green** with the real art in place, and every
+item has been LOOKED at on Blip via headless Chromium, not just asserted.
+
+- `tools/tripo_sheet.py` — keys the flat-magenta background out of a Tripo
+  sheet and cuts it into per-item transparent PNGs. Tested by
+  `tools/test_tripo_sheet.py` (synthetic sheet, exact-recovery assertions).
+- PNG accessories are a new renderer path (`img:` instead of `svg:`) sharing
+  the existing attach/anchor/widthPct/mirror machinery.
+- `supabase/migration-effects-slot.sql` — **NOT yet applied.**
+
+Verified end-to-end on the local backend with placeholders: all five effects
+in the shop payload, the free one buys at 0 gold, it equips to the NEW slot
+and sticks, a bogus id is refused with `bad_equipped`, the Effects chip
+renders in the real shop UI, and layer order is effects → back → wings →
+body → ears → eyes → hat → arms.
 
 **STORE EXPANSION shipped 2026-07-28 — ✅ migration APPLIED to live and smoke-tested
 (14/14).** The shop
@@ -155,13 +176,57 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - 2026-07-28 (store): The beanie gets its own lower `attach`. The hat/wings/glasses
   FLOATY ruling from 2026-07-19 stands for party-hat and halo, but a floating beanie
   reads as a bug rather than as cute.
+- 2026-08-05 (Tripo): **Tripo IS a proven art source** — Megan makes sprites with
+  it daily (Re:Lefela's Katse cats). Accessories therefore come from her Tripo
+  image tool as 2D PNGs, not from 3D models: accessories never animate, so 3D
+  buys nothing for them. Do not re-litigate this.
+- 2026-08-05 (Tripo): the drift-killer is her **locked-reference prompt** —
+  "use the attached picture as a locked reference, same shapes, same
+  proportions, same outline" with one reference image reused for the whole
+  wave. Same reference every batch or the set stops matching.
+- 2026-08-05 (Tripo): the image tool does **not** emit real alpha, it paints a
+  fake checkerboard. So sheets are generated on flat **#FF00FF with no drop
+  shadows** and keyed in `tools/tripo_sheet.py`. No more Canva by hand.
+- 2026-08-05 (Tripo): **do not fill interior holes when keying.** It is the
+  obvious way to stop dark items going see-through and it destroys ring
+  effects (annulus) and the eye mask (cut-out eye holes). A per-pixel
+  distance test keeps solids opaque without touching topology.
+- 2026-08-05 (effects): an effect only reads if it is **wider than he is**
+  (0.94 of the stage at his widest), hence widthPct ~110. A compact mass
+  instead of a ring must carry its own LOW `attach` or the body swallows it
+  — that is why `shadow-crown` pools at his base.
+- 2026-08-05 (effects): effects paint behind **everything**, back item
+  included — an aura over the cape reads as a sticker, not a glow.
+- 2026-08-05 (keying): the background is NOT one exact colour — a "magenta"
+  sheet measures rgb(253,16,248) and wanders a few units. So a channel only
+  gets a vote if its divisor beats its own measured wobble; a fixed threshold
+  is not enough (two sheets had green at 42 ±10, which read as 60% opaque).
+- 2026-08-05 (keying): split items by **connected components**, not row/column
+  projection. On the back+wings sheet the golden wing's tip and the dragon
+  wing share columns with no blank gap, so no projection split exists.
+- 2026-08-05 (keying): drop specks BEFORE working out reading order — the row
+  grouping sizes itself off the median box height, and a few 5x5 specks made
+  every item its own "row", so the sheet read top-to-bottom and silently
+  renamed the wizard hat to "crystal-orbit".
+- 2026-08-05 (hats): Blip is a TEARDROP with a pointed top, so a solid hat at
+  the shared hat point (y0.10, above the body at y0.15) touches nothing and
+  hovers. Both Tripo hats carry their own lower `attach`, per the beanie
+  precedent. The floaty ruling still stands for the items it was made for.
+- 2026-08-05 (Tripo): her wing art roots at the LOWER-LEFT, i.e. it is a
+  RIGHT-hand piece, the opposite of every code-drawn wing. Handled by a
+  `flipX` flag that inverts which side gets mirrored — her art is never
+  edited to suit the code.
+- 2026-08-05 (Tripo): 3D Blip is parked as a separate decision (Track 2 in
+  BLIP-3D-POC.md) and blocks none of this. Community Tripo models export for
+  5 tokens (GLB/FBX/OBJ/STL/USD/3MF) if that route is ever taken.
 - 2026-07-19 (Phase 3): Phase-3 CSS lives in **separate stylesheets** (`assignment.css`,
   `treasure.css`, `push.css`) rather than growing `styles.css` — they were built by
   parallel agents and separate files meant no merge conflicts. All three load after
   styles.css and depend on its tokens.
 
 ## Pending on Megan
-- Nothing. (2026-07-31: full play-through of all Blipwork levels done.)
+- 📱 1 min: close and reopen the Blipwork PWA twice so the new service worker
+  (v34) takes, then look at the Effects tab on the real site **[whenever]**
 
 ## Next up
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
@@ -174,9 +239,12 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
 
+**Immediately next (2026-08-05):** her verdict on the twelve items, then the
+migration + ship. Placements were tuned against the REAL art (see Decisions),
+so the "TUNE ME" notes in renderer.js are now advisory rather than outstanding.
+
 **Store, if she wants more later** (in rough order of payoff per hour):
-- EFFECTS tab — auras/glows as their own slot. Cheapest of the three mockup tabs: it is
-  a back-style centred layer, no new machinery beyond an ATTACH point.
+- ~~EFFECTS tab~~ — **BUILT 2026-08-05**, waiting on art + SQL.
 - PATTERNS tab — body patterns. Needs a masked overlay following the body shape, so it
   touches the recolour pipeline.
 - FACE tab — hardest, and last for a reason: the sprite animation frames have their own

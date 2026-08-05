@@ -34,6 +34,21 @@ export const ITEM_LABELS = {
   "bat-wings": "Bat wings",
   "crown": "Crown",
   "jetpack": "Jetpack",
+  // Tripo wave 1 (2026-08-05) — Megan's own art, keyed out of her magenta
+  // sheets. `royal-crown`/`cyber-visor` are named around the existing
+  // `crown` and `visor` ids, which are different (code-drawn) items.
+  "light-ring": "Light ring",
+  "flame-ring": "Flame ring",
+  "crystal-orbit": "Crystal orbit",
+  "spark-halo": "Spark halo",
+  "shadow-crown": "Monarch's shadow",
+  "wizard-hat": "Wizard hat",
+  "royal-crown": "Royal crown",
+  "cyber-visor": "Cyber visor",
+  "eye-mask": "Eye mask",
+  "back-sword": "Sword and scabbard",
+  "gold-wings": "Golden wings",
+  "dragon-wings": "Dragon wings",
   // legacy items (still owned by some blips)
   "round-glasses": "Round glasses",
   "cat-ears": "Cat ears",
@@ -48,8 +63,9 @@ export function itemLabel(id) { return ITEM_LABELS[id] || id; }
    the gallery and treasure reveal can label a slot the same way. */
 export const SLOT_LABELS = {
   hat: "Hat", glasses: "Eyes", ears: "Ears", arms: "Arms", wings: "Wings", back: "Back",
+  effects: "Effects", // 2026-08-05
 };
-export const COSMETIC_SLOTS = ["hat", "glasses", "ears", "arms", "wings", "back"];
+export const COSMETIC_SLOTS = ["hat", "glasses", "ears", "arms", "wings", "back", "effects"];
 
 /* Rarity is DERIVED from price rather than stored — 0 is the free tier,
    120+ is rare (the theme's violet frame), everything between is common.

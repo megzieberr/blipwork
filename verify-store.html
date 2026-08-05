@@ -64,12 +64,39 @@ for (const it of shop) {
 for (const [id, def] of Object.entries(ACCESSORIES)) {
   tick(!!ATTACH[def.slot], `accessory "${id}" uses slot "${def.slot}" with no ATTACH point`);
   tick(!!ITEM_LABELS[id], `accessory "${id}" has no friendly label`);
-  tick(/viewBox="0 0 \d+ \d+"/.test(def.svg), `accessory "${id}" svg has no plain viewBox`);
   tick(typeof def.widthPct === "number" && def.widthPct > 0, `accessory "${id}" has no widthPct`);
-  // {{UID}} placeholders must be paired with an internal id, else a stray
-  // token ends up in the DOM
-  tick(!def.svg.includes("{{UID}}") || /id="[^"]*\{\{UID\}\}/.test(def.svg),
-    `accessory "${id}" uses {{UID}} but defines no id with it`);
+  // An accessory is drawn EITHER as inline SVG or as a Tripo PNG, never both.
+  tick(!!def.svg !== !!def.img, `accessory "${id}" must have exactly one of svg / img`);
+  if (def.svg) {
+    tick(/viewBox="0 0 \d+ \d+"/.test(def.svg), `accessory "${id}" svg has no plain viewBox`);
+    // {{UID}} placeholders must be paired with an internal id, else a stray
+    // token ends up in the DOM
+    tick(!def.svg.includes("{{UID}}") || /id="[^"]*\{\{UID\}\}/.test(def.svg),
+      `accessory "${id}" uses {{UID}} but defines no id with it`);
+  } else {
+    tick(/^[a-z0-9-]+\.png$/.test(def.img), `accessory "${id}" img must be a bare .png filename`);
+  }
+}
+
+/* ---------- 2b. every Tripo PNG accessory's art is actually there ----------
+   The renderer drops a layer whose image 404s (so a missing file is silent
+   in the app on purpose). That makes this the only place it gets caught. */
+{
+  const pngItems = Object.entries(ACCESSORIES).filter(([, d]) => d.img);
+  const missing = [];
+  await Promise.all(pngItems.map(async ([id, d]) => {
+    try {
+      // Cache-bust: sw.js serves images CACHE-FIRST and its cache.match does
+      // not ignore search params, so a unique query is the only way to ask
+      // the network. Without it a deleted file still reported present.
+      const r = await fetch(`./assets/companion/items/${d.img}?v=${Date.now()}`, { method: "HEAD" });
+      if (!r.ok) missing.push(id);
+    } catch { missing.push(id); }
+  }));
+  tick(missing.length === 0,
+    `${missing.length} Tripo item PNG(s) missing: ${missing.join(", ")} — ` +
+    `run tools/tripo_sheet.py over the sheets in art-source/tripo/`);
+  say(`Tripo PNG items: ${pngItems.length - missing.length}/${pngItems.length} present`);
 }
 
 /* ---------- 3. the free tier really does cover every slot ---------- */
@@ -103,23 +130,38 @@ say(`level-1 loot pool: ${levelOnePool.length} paid items (${levelOnePool.map((i
 /* ---------- 6. the SQL seed and the client mirror agree ---------- */
 // This is the drift that bites: a new item added to one side only. Parse the
 // ids straight out of the migration and compare sets.
-try {
-  const sql = await (await fetch("./supabase/migration-store-expansion.sql")).text();
+for (const [file, expected] of [
+  ["migration-store-expansion.sql", 16],
+  ["migration-effects-slot.sql", 12],
+]) try {
+  const sql = await (await fetch(`./supabase/${file}`)).text();
   const seeded = [...sql.matchAll(/^\s*\('([a-z0-9-]+)',\s*'([a-z]+)',\s*(\d+),\s*(\d+),\s*true/gim)]
     .map((m) => ({ id: m[1], slot: m[2], price: +m[3], minLevel: +m[4] }));
-  tick(seeded.length === 16, `migration seeds ${seeded.length} rows, expected 16`);
+  tick(seeded.length === expected, `${file} seeds ${seeded.length} rows, expected ${expected}`);
   for (const row of seeded) {
     const mirror = shop.find((it) => it.id === row.id);
-    tick(!!mirror, `"${row.id}" is in the SQL migration but not in the client shop mirror`);
+    tick(!!mirror, `"${row.id}" is in ${file} but not in the client shop mirror`);
     if (mirror) {
       tick(mirror.price === row.price, `"${row.id}" price differs: SQL ${row.price}, client ${mirror.price}`);
       tick(mirror.minLevel === row.minLevel, `"${row.id}" minLevel differs: SQL ${row.minLevel}, client ${mirror.minLevel}`);
       tick(mirror.slot === row.slot, `"${row.id}" slot differs: SQL ${row.slot}, client ${mirror.slot}`);
     }
   }
-  say(`migration parsed: ${seeded.length} rows, all cross-checked against the client mirror`);
+  // A slot is never just new rows: mhq_equip hard-codes the allowed equipped
+  // keys and shop_items_slot_cat_check hard-codes the slots. Missing either
+  // is what made an equipped cape return bad_equipped in July, so assert
+  // that every slot this migration seeds is named in BOTH.
+  for (const slot of new Set(seeded.map((r) => r.slot))) {
+    const inConstraint = new RegExp(`slot in \\([^)]*'${slot}'`).test(sql);
+    const inEquip = new RegExp(`k not in \\([^)]*'${slot}'`).test(sql);
+    tick(inConstraint || !sql.includes("shop_items_slot_cat_check"),
+      `${file} seeds slot "${slot}" but does not allow it in shop_items_slot_cat_check`);
+    tick(inEquip || !sql.includes("mhq_equip"),
+      `${file} seeds slot "${slot}" but does not allow it in mhq_equip's key list`);
+  }
+  say(`${file}: ${seeded.length} rows, all cross-checked against the client mirror`);
 } catch (e) {
-  tick(false, "could not read supabase/migration-store-expansion.sql: " + e.message);
+  tick(false, `could not read supabase/${file}: ` + e.message);
 }
 
 /* ---------- 7. buying, wearing and taking off actually work ---------- */
@@ -163,9 +205,15 @@ for (const id of ids) {
   tick(layers.length === (paired ? 2 : 1),
     `"${id}" rendered ${layers.length} layer(s); ${paired ? "paired" : "single"} slot expects ${paired ? 2 : 1}`);
   for (const l of layers) {
-    const svg = l.querySelector("svg");
-    tick(!!svg, `"${id}" layer has no <svg>`);
-    tick(!l.innerHTML.includes("{{UID}}"), `"${id}" left an unreplaced {{UID}} in the DOM`);
+    if (def.img) {
+      const im = l.querySelector("img");
+      tick(!!im, `"${id}" layer has no <img>`);
+      tick(!!im && im.getAttribute("src").endsWith(`/${def.img}`),
+        `"${id}" layer points at the wrong file`);
+    } else {
+      tick(!!l.querySelector("svg"), `"${id}" layer has no <svg>`);
+      tick(!l.innerHTML.includes("{{UID}}"), `"${id}" left an unreplaced {{UID}} in the DOM`);
+    }
   }
 }
 
@@ -182,6 +230,11 @@ const outfits = [
     items: ["bolt-antenna", "star-shades", "headphones", "power-gloves", "aurora-wings", "schoolbag"] },
   { label: "Sleepy + horns", colour: "peach",
     items: ["horns", "sleepy-eyes", "ear-tufts", "mitts", "nub-wings", "schoolbag"] },
+  // Tripo wave 1: a full PNG outfit, and the rare effect at the same time.
+  { label: "Tripo set", colour: "blue",
+    items: ["wizard-hat", "cyber-visor", "ear-tufts", "mitts", "gold-wings", "back-sword", "spark-halo"] },
+  { label: "Monarch", colour: "lilac",
+    items: ["royal-crown", "eye-mask", "bunny-ears", "power-gloves", "dragon-wings", "jetpack", "shadow-crown"] },
 ];
 for (const o of outfits) {
   const card = document.createElement("div");
@@ -203,6 +256,12 @@ for (const o of outfits) {
   const hatAt = kids.findIndex((k) => k.dataset && k.dataset.slot === "hat");
   tick(backAt >= 0 && backAt < bodyAt, `outfit "${o.label}": back item is not painted behind the body`);
   tick(hatAt > bodyAt, `outfit "${o.label}": hat is not painted in front of the body`);
+  // effects sit behind EVERYTHING, back item included — an aura painted
+  // over the cape would read as a sticker rather than as a glow
+  const fxAt = kids.findIndex((k) => k.dataset && k.dataset.slot === "effects");
+  if (o.items.some((id) => ACCESSORIES[id] && ACCESSORIES[id].slot === "effects")) {
+    tick(fxAt >= 0 && fxAt < backAt, `outfit "${o.label}": effect is not painted behind the back item`);
+  }
 }
 
 /* ---------- report ---------- */
