@@ -239,9 +239,13 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
 
-**Immediately next (2026-08-05):** her verdict on the twelve items, then the
-migration + ship. Placements were tuned against the REAL art (see Decisions),
-so the "TUNE ME" notes in renderer.js are now advisory rather than outstanding.
+**Immediately next: TRIPO WAVE 2 — techy, 15 items, prompts already written**
+in `art-source/tripo/WAVE-2-PROMPTS.md` (5 sheets of 3, plus suggested prices
+and the slicer commands). Megan generates and curates; the build side is then
+small — rows, labels, a placement pass — because **no new slot is needed**, so
+none of the July back-slot / August effects-slot machinery has to change.
+Priority is ears and arms: after wave 1 they are the thin slots at 3 items
+each, against Hat 7 / Eyes 7 / Wings 5 / Effects 5 / Back 4.
 
 **Store, if she wants more later** (in rough order of payoff per hour):
 - ~~EFFECTS tab~~ — **BUILT 2026-08-05**, waiting on art + SQL.
