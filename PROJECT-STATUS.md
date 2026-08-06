@@ -1,7 +1,30 @@
-# Project status — updated 2026-08-05 (effects slot + Tripo wave 1 SHIPPED, migration applied)
+# Project status — updated 2026-08-06 (Tripo wave 2 SHIPPED, migration applied)
 
 ## Where we are
-Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v34**.
+Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v35**.
+
+**TRIPO WAVE 2 — SHIPPED 2026-08-06, ✅ migration APPLIED to live and smoke-tested.**
+Shop **34 → 43** items. The thin slots are fixed: ears and arms go 3 → 6.
+No new slot, so `mhq_equip` and `shop_items_slot_cat_check` were untouched.
+`verify-store.html` is **886/886 green**.
+
+Megan drew 15 and **kept 10**. She cut five on sight — scanner band, energy
+core, circuit ring, grid ring, plasma ring — and retired wave 1's
+**shadow-crown** at the same time. Those are gone from the renderer, labels,
+catalogue, migration and disk; shadow-crown was DELETED from live rather than
+deactivated, because the app is not with any learner yet (verified: 0 blips
+owned or wore it). Once kids are on it, retire with `active = false` instead.
+
+**The slicer had a real bug and wave 1 was quietly carrying it.**
+`tools/tripo_sheet.py` judged how solid a pixel was only by how much magenta
+could be unmixed out of it. That is genuinely ambiguous for mid-grey — opaque
+steel and half-opaque green over magenta are the same colour — so wave 2's
+brushed steel came out green and half-transparent (measured: rgb(136,148,160)
+read as 54% opaque, unmixed to rgb(37,247,82), a third of each item). It now
+ALSO judges by distance from the background colour, and masks each crop to its
+own connected component. **All twelve wave-1 items were re-cut**: the green
+edging on cyber-visor (2.9% of visible pixels), shadow-crown, back-sword and
+dragon-wings is gone.
 
 **EFFECTS SLOT + TRIPO WAVE 1 — SHIPPED 2026-08-05, ✅ migration APPLIED to live
 and smoke-tested 16/16.**
@@ -16,7 +39,7 @@ item has been LOOKED at on Blip via headless Chromium, not just asserted.
   `tools/test_tripo_sheet.py` (synthetic sheet, exact-recovery assertions).
 - PNG accessories are a new renderer path (`img:` instead of `svg:`) sharing
   the existing attach/anchor/widthPct/mirror machinery.
-- `supabase/migration-effects-slot.sql` — **NOT yet applied.**
+- `supabase/migration-effects-slot.sql` — applied 2026-08-05.
 
 Verified end-to-end on the local backend with placeholders: all five effects
 in the shop payload, the free one buys at 0 gold, it equips to the NEW slot
@@ -219,6 +242,38 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - 2026-08-05 (Tripo): 3D Blip is parked as a separate decision (Track 2 in
   BLIP-3D-POC.md) and blocks none of this. Community Tripo models export for
   5 tokens (GLB/FBX/OBJ/STL/USD/3MF) if that route is ever taken.
+- 2026-08-06 (keying): solidity is judged by **two** tests, and a pixel is only
+  left translucent when BOTH agree it could be. The minimum-alpha reading alone
+  is ambiguous for mid-grey, which is most of wave 2. Do not remove the distance
+  test to "simplify" — `tools/test_tripo_sheet.py` has a brushed-steel item that
+  fails loudly if you do.
+- 2026-08-06 (keying): do NOT exclude the outline from the distance test. It
+  halves the 1-2% pink rim on real anti-aliased art and is WRONG on hard-edged
+  art, where the outermost pixel is genuinely solid and gets thrown back to the
+  reading that turns it green. The rim is invisible at the size Blip renders —
+  you only see it at 3x zoom. Fix it by keying, not by eroding.
+- 2026-08-06 (keying): the plasma-ring wisps came out green-teal and were NOT
+  fixed: those pixels sit at distance-ratio 0.10-0.24, exactly where a genuine
+  soft glow lives (0.23). No threshold separates them, so anything that fixes
+  the wisps flattens every real glow. That item is cut now, but the finding
+  stands for any future violet art on magenta.
+- 2026-08-06 (slicing): reading order is the ONE thing the slicer cannot verify.
+  A staggered sheet reads by rows, so an item floating higher than the others
+  comes FIRST — that is how the crown and monocle got each other's names. The
+  slicer now prints each item's x,y; check it against the sheet before trusting
+  the names.
+- 2026-08-06 (art review): five of fifteen new items were cut ON SIGHT, after
+  they passed every assertion. Assertions prove structure; only looking proves
+  art. Budget for a look-and-cut pass on every wave — it is not rework, it is
+  the review.
+- 2026-08-06 (cape): the cape sits LOWER than the shared back point (its own
+  attach at y0.50, widthPct 92). Its collar is the narrow top edge of the art
+  and at the shared point it cleared the silhouette either side of his crown.
+- 2026-08-06 (retiring): while the app is with NO learner, a cut item is deleted
+  outright. Once kids are on it, use `active = false` instead so nothing is
+  confiscated from a closet. An applied migration is never edited — the removal
+  goes in the NEW migration, and verify-store.html knows to stop expecting a
+  retired id in the client mirror.
 - 2026-07-19 (Phase 3): Phase-3 CSS lives in **separate stylesheets** (`assignment.css`,
   `treasure.css`, `push.css`) rather than growing `styles.css` — they were built by
   parallel agents and separate files meant no merge conflicts. All three load after
@@ -226,7 +281,10 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 
 ## Pending on Megan
 - 📱 1 min: close and reopen the Blipwork PWA twice so the new service worker
-  (v34) takes, then look at the Effects tab on the real site **[whenever]**
+  (v35) takes, then look at the shop **[whenever]**
+- 💻 2 min: the GitHub Pages build for this ship was still QUEUED on GitHub's
+  side when the session ended — open https://megzieberr.github.io/blipwork/
+  and check the shop shows the new arms/ears items **[whenever]**
 
 ## Next up
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
@@ -239,13 +297,15 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
 
-**Immediately next: TRIPO WAVE 2 — techy, 15 items, prompts already written**
-in `art-source/tripo/WAVE-2-PROMPTS.md` (5 sheets of 3, plus suggested prices
-and the slicer commands). Megan generates and curates; the build side is then
-small — rows, labels, a placement pass — because **no new slot is needed**, so
-none of the July back-slot / August effects-slot machinery has to change.
-Priority is ears and arms: after wave 1 they are the thin slots at 3 items
-each, against Hat 7 / Eyes 7 / Wings 5 / Effects 5 / Back 4.
+**Wave 2 is DONE (2026-08-06).** Two gaps it left, both visible only once the
+whole catalogue was laid out side by side:
+- **Wings jumps from free straight to 140g.** Six of its seven items are rare
+  L6, so between level 1 and level 6 there is nothing to buy in that slot.
+- **Eyes has no aspirational item** — it tops out at 65g, so a high-level
+  learner with gold saved has nothing to want there.
+- Effects is down to 4 and Back to 4 after the cuts. Both still have a free
+  item and a real choice, so neither is urgent.
+A wave 3 aimed at cheap wings + one rare eye item would fix all three.
 
 **Store, if she wants more later** (in rough order of payoff per hour):
 - ~~EFFECTS tab~~ — **BUILT 2026-08-05**, waiting on art + SQL.
