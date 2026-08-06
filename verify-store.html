@@ -130,15 +130,42 @@ say(`level-1 loot pool: ${levelOnePool.length} paid items (${levelOnePool.map((i
 /* ---------- 6. the SQL seed and the client mirror agree ---------- */
 // This is the drift that bites: a new item added to one side only. Parse the
 // ids straight out of the migration and compare sets.
-for (const [file, expected] of [
+const MIGRATIONS = [
   ["migration-store-expansion.sql", 16],
   ["migration-effects-slot.sql", 12],
-]) try {
-  const sql = await (await fetch(`./supabase/${file}`)).text();
+  ["migration-tripo-wave2.sql", 10],
+];
+// An applied migration is never edited — it is the record of what actually
+// ran — so an item that is seeded by one migration and later dropped by a
+// newer one is STILL in the older file, and must not be demanded of the
+// client mirror. Collect those first (shadow-crown went this way).
+const retired = new Set();
+for (const [file] of MIGRATIONS) {
+  try {
+    const t = (await (await fetch(`./supabase/${file}`)).text()).replace(/--[^\n]*/g, "");
+    for (const m of t.matchAll(/delete\s+from\s+public\.shop_items\s+where\s+item_id\s*=\s*'([a-z0-9-]+)'/gi)) retired.add(m[1]);
+    for (const m of t.matchAll(/set\s+active\s*=\s*false[^;]*?item_id\s+in\s*\(([^)]*)\)/gis))
+      for (const q of m[1].matchAll(/'([a-z0-9-]+)'/g)) retired.add(q[1]);
+  } catch { /* reported per-file below */ }
+}
+if (retired.size) say(`retired by a later migration (not expected in the client): ${[...retired].join(", ")}`);
+for (const id of retired) {
+  tick(!shop.some((it) => it.id === id), `"${id}" is retired in SQL but still in the client shop mirror`);
+}
+
+for (const [file, expected] of MIGRATIONS) try {
+  const raw = await (await fetch(`./supabase/${file}`)).text();
+  // Strip -- comments first. Every one of these migrations EXPLAINS in prose
+  // what it does or deliberately does not do to shop_items_slot_cat_check and
+  // mhq_equip, and the slot checks below look for those names — reading the
+  // comments made a migration that correctly leaves both alone (wave 2 adds
+  // no slot) fail all seven of its slots.
+  const sql = raw.replace(/--[^\n]*/g, "");
   const seeded = [...sql.matchAll(/^\s*\('([a-z0-9-]+)',\s*'([a-z]+)',\s*(\d+),\s*(\d+),\s*true/gim)]
     .map((m) => ({ id: m[1], slot: m[2], price: +m[3], minLevel: +m[4] }));
   tick(seeded.length === expected, `${file} seeds ${seeded.length} rows, expected ${expected}`);
   for (const row of seeded) {
+    if (retired.has(row.id)) continue;
     const mirror = shop.find((it) => it.id === row.id);
     tick(!!mirror, `"${row.id}" is in ${file} but not in the client shop mirror`);
     if (mirror) {
@@ -234,7 +261,7 @@ const outfits = [
   { label: "Tripo set", colour: "blue",
     items: ["wizard-hat", "cyber-visor", "ear-tufts", "mitts", "gold-wings", "back-sword", "spark-halo"] },
   { label: "Monarch", colour: "lilac",
-    items: ["royal-crown", "eye-mask", "bunny-ears", "power-gloves", "dragon-wings", "jetpack", "shadow-crown"] },
+    items: ["royal-crown", "eye-mask", "bunny-ears", "power-gloves", "dragon-wings", "jetpack", "crystal-orbit"] },
 ];
 for (const o of outfits) {
   const card = document.createElement("div");
@@ -245,6 +272,7 @@ for (const o of outfits) {
   renderCompanion(card.querySelector(".stage"), { colour: o.colour, accessories: o.items });
   // one layer per requested item, and nothing silently dropped
   for (const id of o.items) {
+    if (!tick(!!ACCESSORIES[id], `outfit "${o.label}" names "${id}", which is not an accessory`)) continue;
     const paired = Array.isArray(ATTACH[ACCESSORIES[id].slot]);
     tick(card.querySelectorAll(`[data-accessory="${id}"]`).length === (paired ? 2 : 1),
       `outfit "${o.label}" lost "${id}"`);

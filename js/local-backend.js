@@ -122,8 +122,21 @@ const SHOP_ITEMS = [
   { id: "back-sword", slot: "back", price: 130, minLevel: 6 },
   { id: "dragon-wings", slot: "wings", price: 145, minLevel: 6 },
   { id: "gold-wings", slot: "wings", price: 150, minLevel: 6 },
-  { id: "shadow-crown", slot: "effects", price: 160, minLevel: 7 },
   { id: "royal-crown", slot: "hat", price: 170, minLevel: 8 },
+  // Tripo wave 2 (2026-08-06) — 15 techy items, NO new slot this time, so
+  // there is nothing to add to VALID_SLOTS or mhq_equip. Mirrors
+  // supabase/migration-tripo-wave2.sql; verify-store.html parses that file
+  // and cross-checks every row against this list.
+  { id: "tech-antenna", slot: "ears", price: 40, minLevel: 2 },
+  { id: "hud-monocle", slot: "glasses", price: 55, minLevel: 2 },
+  { id: "mech-gauntlet", slot: "arms", price: 70, minLevel: 3 },
+  { id: "headset-cup", slot: "ears", price: 70, minLevel: 3 },
+  { id: "grapple-claw", slot: "arms", price: 85, minLevel: 4 },
+  { id: "data-fin", slot: "ears", price: 95, minLevel: 4 },
+  { id: "energy-blade", slot: "arms", price: 135, minLevel: 6 },
+  { id: "drone-wings", slot: "wings", price: 140, minLevel: 6 },
+  { id: "plasma-wings", slot: "wings", price: 155, minLevel: 6 },
+  { id: "neural-crown", slot: "hat", price: 165, minLevel: 7 },
 ];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows. */
 const FOOD_ITEMS = [

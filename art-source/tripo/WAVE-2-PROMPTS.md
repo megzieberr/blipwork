@@ -1,4 +1,4 @@
-# Tripo wave 2 — techy accessories (15 items, 5 sheets)
+# Tripo wave 2 — techy accessories (15 drawn, 14 shipped, 5 sheets)
 
 Written 2026-08-05. Wave 1 shipped the same day; this is the follow-up Megan
 asked for, aimed at the SL/techy look.
@@ -119,11 +119,23 @@ python tools/tripo_sheet.py "art-source/tripo/<sheet>.png" --names a,b,c
 | A arms | `mech-gauntlet,energy-blade,grapple-claw` |
 | B ears | `tech-antenna,headset-cup,data-fin` |
 | C effects | `circuit-ring,grid-ring,plasma-ring` |
-| D head/eyes | `neural-crown,hud-monocle,scanner-band` |
+| D head/eyes | `hud-monocle,neural-crown,scanner-band` |
 | E back/wings | `energy-core,plasma-wings,drone-wings` |
+
+**scanner-band was CUT** (Megan, 2026-08-06): as a visor across the eyes it
+read as a mouth, and moved up as a headband it still did not work. The sheet
+still contains it — keep the three names above so re-slicing sheet D works —
+but it is in no catalogue, no migration and no renderer entry, and its PNG is
+deleted. Wave 2 shipped 14 items, not 15.
 
 Run it once with no `--names` first if you want to check it found 3 items
 before anything is written.
+
+⚠️ Sheet D's names are **not** in the order this file first guessed. Tripo
+drew the monocle floating high and to the right, so it counts as its own row
+and is read FIRST — monocle, then crown, then band. Names are handed out by
+position, so always check the `at x…,y…` the slicer prints against the sheet
+rather than assuming the order you asked for.
 
 ## Suggested prices (bands unchanged: 0 free, >=120 rare and always L6+)
 
@@ -140,11 +152,10 @@ before anything is written.
 | plasma-ring | effects | 150 | 7 |
 | neural-crown | hat | 165 | 7 |
 | hud-monocle | glasses | 55 | 2 |
-| scanner-band | glasses | 90 | 4 |
 | energy-core | back | 110 | 5 |
 | plasma-wings | wings | 155 | 6 |
 | drone-wings | wings | 140 | 6 |
 
-That would take the shop to 49 items and even the slots out at roughly
+That would have taken the shop to 49 items; with the band cut it is 48 and even the slots out at roughly
 6-8 each. No new SLOT is needed, so wave 2 is a much smaller job than wave 1
 — rows, labels, art, and the placement pass.

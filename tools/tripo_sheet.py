@@ -43,13 +43,19 @@ from scipy import ndimage
 
 # Opacity ramp. alpha_from_background() reads the SMALLEST alpha that can
 # explain a pixel, which is right for genuinely translucent pixels and
-# under-reads opaque ones. Luckily the two separate well in practice: that
-# reading is only low when the colour is itself near-magenta, so any opaque
-# cartoon colour scores high (measured: gold 0.78, near-black 0.89, pale
-# blue 0.96, worst-case pale lavender ~0.78) while real glow falloff sits
-# below ~0.6. Above OPAQUE_HI a pixel is taken as solid — alpha 1, colour
-# used exactly as photographed. Below OPAQUE_LO it is taken as translucent
-# and the background is unmixed out of its colour.
+# under-reads opaque ones. Above OPAQUE_HI a pixel is taken as solid — alpha
+# 1, colour used exactly as photographed. Below OPAQUE_LO it is taken as
+# translucent and the background is unmixed out of its colour.
+#
+# ⚠️ This reading ALONE is not enough, and wave 1 hid that. It separates the
+# saturated, glowy items well (gold reads 0.78, near-black 0.89, pale blue
+# 0.96) but it is genuinely ambiguous for MID-GREY: an opaque steel pixel and
+# a half-opaque green pixel over magenta are the same colour, and the minimum
+# reading picks the green. Measured on wave 2's brushed-steel arms, rgb(136,
+# 148,160) read as 54% opaque and unmixed to rgb(37,247,82) — bright green,
+# half see-through, on a third of the item. So solidity is decided by
+# DISTANCE from the background colour as well (see solidity below), which is
+# the one thing grey is unambiguous about.
 #
 # RESIDUAL, known and accepted: the brightest ~20% of a soft glow falloff
 # sits inside the ramp and comes out slightly warm (a little magenta left
@@ -132,6 +138,44 @@ def alpha_from_background(rgb, bg, spread):
     return np.clip(np.max(np.stack(bounds), axis=0), 0.0, 1.0)
 
 
+# How far from the background a colour must sit before it is taken as solid,
+# as a fraction of the furthest any colour COULD be from it (measured to the
+# RGB cube's corners, so it adapts to whatever background the sheet used).
+# Against magenta: opaque steel lands at 0.45, gold 0.51, near-black 0.72,
+# while the outer falloff of a soft glow — the thing that must stay soft —
+# sits near 0.23, because a translucent pixel's distance is scaled by its own
+# alpha. The gap between those two is what this test lives in.
+SOLID_LO = 0.28
+SOLID_HI = 0.42
+
+
+def solidity(rgb, bg):
+    """1 where a pixel is too far from the background to be a faded one.
+
+    This is the test the header calls for: the background is a colour no
+    accessory contains, so anything far from it is the item, at full opacity,
+    whatever the minimum-alpha reading believes. It is per-pixel, so it never
+    touches topology — a ring's hole and the eye mask's cut-outs are exactly
+    background-coloured and stay transparent, which is why this is used here
+    instead of filling interior holes.
+    """
+    d = np.sqrt(((rgb.astype(np.float64) - bg[None, None, :]) ** 2).sum(axis=2))
+    corners = np.array([(r, g, b) for r in (0.0, 255.0)
+                        for g in (0.0, 255.0) for b in (0.0, 255.0)])
+    far = np.sqrt(((corners - bg[None, :]) ** 2).sum(axis=1)).max()
+    # KNOWN RESIDUAL: an anti-aliased outline pixel is half item and half
+    # background, and for a DARK item that blend is still far enough from
+    # magenta to be called solid, so a little magenta stays in it — a one-pixel
+    # pink rim, measured at 1-2% of the visible pixels on the eye mask and the
+    # sword. Excluding the outline (eroding this mask by one pixel) halves that
+    # on real art and is WRONG on hard-edged art, where the outermost pixel is
+    # genuinely solid and gets thrown back to the reading that turns it green —
+    # test_tripo_sheet.py fails exactly that way if you try it. Left in: at the
+    # size Blip renders (a 400px item drawn ~100px wide) one rim pixel averages
+    # away to nothing. Fix it by keying, not by eroding, if it ever shows.
+    return smoothstep(SOLID_LO, SOLID_HI, d / far)
+
+
 def noise_floor(border, bg, spread):
     """How much alpha the BACKGROUND ITSELF produces, from its own pixels.
 
@@ -161,7 +205,11 @@ def resolve(rgb, bg, alpha_min):
     pink halo.
     """
     c = rgb.astype(np.float64)
-    w = smoothstep(OPAQUE_LO, OPAQUE_HI, alpha_min)  # 1 = certainly solid
+    # 1 = certainly solid. Either test may say so: the minimum-alpha reading
+    # catches saturated colours, the distance test catches the mid-greys it
+    # under-reads. Taking the max means a pixel is only left translucent when
+    # BOTH agree it could be, which is the honest reading of the ambiguity.
+    w = np.maximum(smoothstep(OPAQUE_LO, OPAQUE_HI, alpha_min), solidity(rgb, bg))
     alpha = w + (1.0 - w) * alpha_min
 
     # Unmix with the FINAL alpha, not the provisional one. That keeps the
@@ -193,9 +241,9 @@ def smoothstep(lo, hi, x):
 #  see-through in the middle, and it is WRONG for this catalogue: a ring
 #  effect is an annulus whose middle is genuinely background, and the eye
 #  mask has cut-out eye holes. Filling turned both into solid blobs. The
-#  per-pixel SOLID_DISTANCE test below already keeps solid items opaque
-#  (near-black reads ~310 away from magenta, gold ~242), so topology never
-#  needs to come into it.
+#  per-pixel solidity() test above already keeps solid items opaque
+#  (near-black reads ~306 away from magenta, gold ~216, steel ~191), so
+#  topology never needs to come into it.
 #  (Aside, if a flood fill is ever genuinely needed: PIL's
 #  ImageDraw.floodfill is a silent no-op in Pillow 12 — it still exists and
 #  still returns cleanly while changing nothing.)
@@ -232,7 +280,10 @@ def drop_specks(boxes, min_size):
 
 
 def find_items(alpha, min_gap, min_size=24, floor=0.06):
-    """Item boxes in reading order, via connected components.
+    """(boxes in reading order, specks dropped, label image), via components.
+
+    Each box is (x0, y0, x1, y1, label) and the label indexes the returned
+    label image, so a caller can tell this item's pixels from a neighbour's.
 
     Row/column projection is the tempting approach and it is not enough:
     on the back+wings sheet the golden wing's tip and the dragon wing are
@@ -250,15 +301,21 @@ def find_items(alpha, min_gap, min_size=24, floor=0.06):
     labels, n = ndimage.label(grouped)
     labels = np.where(solid, labels, 0)  # measure the real pixels, not the halo
     boxes = []
-    for y_sl, x_sl in ndimage.find_objects(labels, max_label=n):
-        boxes.append((x_sl.start, y_sl.start, x_sl.stop - 1, y_sl.stop - 1))
+    for lab, obj in enumerate(ndimage.find_objects(labels, max_label=n), start=1):
+        if obj is None:
+            continue
+        y_sl, x_sl = obj
+        # The label travels with the box: a box is only a RECTANGLE, and when
+        # items are staggered diagonally one item's rectangle overlaps the
+        # next one, so the crop has to know which pixels are actually its own.
+        boxes.append((x_sl.start, y_sl.start, x_sl.stop - 1, y_sl.stop - 1, lab))
     # Specks MUST go before reading_order, not after: it sizes its row
     # tolerance off the median box height, and a handful of 5x5 specks drag
     # that median so low that every real item lands in a row of its own and
     # the sheet reads top-to-bottom instead of left-to-right. That silently
     # renamed a wizard hat to "crystal-orbit".
     boxes, dropped = drop_specks(boxes, min_size)
-    return reading_order(boxes), dropped
+    return reading_order(boxes), dropped, labels
 
 
 def main(argv=None):
@@ -293,7 +350,7 @@ def main(argv=None):
     raw = alpha_from_background(rgb, bg, spread)
     alpha, fore = resolve(rgb, bg, np.where(raw <= dead, 0.0, raw))
 
-    boxes, dropped = find_items(alpha, args.min_gap, args.min_size)
+    boxes, dropped, labels = find_items(alpha, args.min_gap, args.min_size)
     names = [n.strip() for n in args.names.split(",") if n.strip()]
 
     print(f"{os.path.basename(args.sheet)}: background rgb"
@@ -308,15 +365,33 @@ def main(argv=None):
     if not args.dry_run and names:
         os.makedirs(args.out, exist_ok=True)
 
-    for i, (x0, y0, x1, y1) in enumerate(boxes):
+    for i, (x0, y0, x1, y1, lab) in enumerate(boxes):
         px0, py0 = max(0, x0 - args.pad), max(0, y0 - args.pad)
         px1 = min(rgba.shape[1] - 1, x1 + args.pad)
         py1 = min(rgba.shape[0] - 1, y1 + args.pad)
-        crop = Image.fromarray(rgba[py0:py1 + 1, px0:px1 + 1], "RGBA")
+        tile = rgba[py0:py1 + 1, px0:px1 + 1].copy()
+        # Erase any NEIGHBOUR that shares this rectangle, plus the halo around
+        # it that sits below the component floor. Only pixels belonging to
+        # another item are touched, so nothing of this item's own soft edge
+        # is cut.
+        near = labels[py0:py1 + 1, px0:px1 + 1]
+        intruder = (near != lab) & (near != 0)
+        if intruder.any():
+            spill = ndimage.binary_dilation(intruder, iterations=max(1, args.min_gap // 2))
+            tile[..., 3] = np.where(spill & (near != lab), 0, tile[..., 3])
+        crop = Image.fromarray(tile, "RGBA")
         if args.max and max(crop.size) > args.max:
             crop.thumbnail((args.max, args.max), Image.LANCZOS)
         name = names[i] if i < len(names) else f"item{i + 1}"
-        label = f"  [{i + 1}] {name:<16} {crop.size[0]}x{crop.size[1]}"
+        # Print WHERE each item sat. Reading order is the one thing this tool
+        # cannot verify for you — it has twice handed a name to the wrong item
+        # on a staggered sheet (a wizard hat became "crystal-orbit"; a crown
+        # and a monocle swapped, because the monocle floated high enough to
+        # count as its own row). Seeing the positions makes that checkable
+        # without opening the sheet.
+        label = (f"  [{i + 1}] {name:<16} {crop.size[0]}x{crop.size[1]}"
+                 f" at x{(x0 + x1) // 2},y{(y0 + y1) // 2}"
+                 + ("  (neighbour masked out)" if intruder.any() else ""))
         if args.dry_run or not names:
             print(label + "   (not written)")
             continue

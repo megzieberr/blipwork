@@ -608,7 +608,15 @@ export const ACCESSORIES = {
   // The middle is hidden behind him, exactly as a real cape would be.
   "cape": {
     slot: "back",
-    widthPct: 100,
+    // Sits LOWER than the shared back point and slightly smaller (Megan,
+    // 2026-08-06 — the collar was poking up over his head). The collar is
+    // the narrow top edge of the art, spanning 0.33-0.67 of its own box; at
+    // the old height that landed where the body is only 0.408-0.610 wide, so
+    // its corners cleared the silhouette either side of his crown. At y0.50
+    // the collar sits where the body is wide enough to hide it, and 92
+    // rather than 100 keeps the hem on the stage instead of clipping it.
+    widthPct: 92,
+    attach: { x: 0.5, y: 0.50 },
     anchor: { x: 0.5, y: 0.285 },
     // Drawn as ONE continuous piece with angular shoulders rather than a
     // separate rounded collar band: the first version's collar was a pale
@@ -699,20 +707,6 @@ export const ACCESSORIES = {
   "spark-halo": {
     slot: "effects", img: "spark-halo.png", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
   },
-  // RARE. A compact mass, not a ring — so it gets its own LOW attach and
-  // pools around his base like rising mist. Centred behind him at the
-  // shared effects point it would be almost entirely hidden by the body.
-  "shadow-crown": {
-    slot: "effects", img: "shadow-crown.png", widthPct: 112,
-    // Anchored near its BOTTOM and dropped to y0.96 so the mass pools at
-    // his base and stays inside the stage; centring it instead pushed a
-    // quarter of it below the stage floor. What reads: the sweep under his
-    // hem (body ends y0.885), the sides where it is wider than he is, and
-    // the top wisps just clearing his shoulders.
-    // ⚠️ TUNE ME against the real art — this trio (widthPct/anchor/attach)
-    // was set against a square placeholder.
-    anchor: { x: 0.5, y: 0.9 }, attach: { x: 0.5, y: 0.96 },
-  },
 
   // --- hats
   // Both carry their OWN lower `attach`, following the beanie precedent
@@ -773,6 +767,96 @@ export const ACCESSORIES = {
   },
   "dragon-wings": {
     slot: "wings", img: "dragon-wings.png", widthPct: 34,
+    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  },
+
+  /* ---------- Tripo wave 2 — techy (2026-08-06) ----------
+     Fifteen items, no new slot. Aimed at the thin slots: ears and arms
+     had 3 items each against Hat 7 / Eyes 7 / Wings 5 / Effects 5.
+
+     SIZING NOTE that applies to every entry below: the stage is 480x600,
+     so `widthPct` is a percentage of the stage WIDTH and an item's
+     rendered HEIGHT works out as widthPct x (art h/w) x 0.8. Tall art at
+     a wide widthPct overflows the stage and is clipped — that is what
+     sized crystal-orbit DOWN in wave 1, and it is why the rings below are
+     not all on the same number. */
+
+  // --- arms (paired, ATTACHED by the 2026-07-19 ruling). Her art is drawn
+  // shoulder-at-top-right / hand-at-lower-left, which is the same handedness
+  // as the code-drawn arms, so no flipX. They carry their own attach, moved
+  // INWARD from the slot's shared point: these are full forearms whose hand
+  // reaches the far corner of the art, and from x0.115 that corner lands off
+  // the stage. The shoulder end stays buried inside the body outline (the
+  // body spans 0.027-0.969 at this height), which is what "attached" means.
+  // The attach x is not a free choice: the hand sits in the far corner of the
+  // art, so from the shoulder anchor the piece reaches 0.78 x widthPct to the
+  // left. Any attach nearer the edge than that hangs the hand off the stage.
+  // At widthPct 28 that means x >= 0.22, hence 0.23 — which also buries the
+  // shoulder inside the outline (the body spans 0.027-0.969 at this height),
+  // as the ATTACHED ruling wants.
+  "mech-gauntlet": {
+    slot: "arms", img: "mech-gauntlet.png", widthPct: 28,
+    anchor: { x: 0.78, y: 0.10 }, attach: [{ x: 0.23, y: 0.68 }, { x: 0.77, y: 0.68 }],
+  },
+  "energy-blade": {           // RARE
+    slot: "arms", img: "energy-blade.png", widthPct: 28,
+    anchor: { x: 0.78, y: 0.10 }, attach: [{ x: 0.23, y: 0.68 }, { x: 0.77, y: 0.68 }],
+  },
+  "grapple-claw": {
+    slot: "arms", img: "grapple-claw.png", widthPct: 27,
+    anchor: { x: 0.78, y: 0.10 }, attach: [{ x: 0.23, y: 0.68 }, { x: 0.77, y: 0.68 }],
+  },
+
+  // --- ears (paired, ATTACHED). Drawn upright with the base at the bottom,
+  // so they anchor by their own bottom-centre onto the shared ears point.
+  // The antenna is the extreme case: its art is nearly 6x taller than it is
+  // wide, so a normal ears widthPct would push it clean off the top of the
+  // stage. At 5 it stands ~0.24 of the stage tall, which is a tall aerial
+  // without leaving the frame.
+  "tech-antenna": {
+    slot: "ears", img: "tech-antenna.png", widthPct: 5,
+    anchor: { x: 0.5, y: 0.95 },
+  },
+  // A headphone cup belongs over the ear, not on top of the head, so this
+  // one drops to its own lower attach and anchors by its middle — the same
+  // move the code-drawn headphones make.
+  "headset-cup": {
+    slot: "ears", img: "headset-cup.png", widthPct: 20,
+    anchor: { x: 0.5, y: 0.5 }, attach: [{ x: 0.30, y: 0.34 }, { x: 0.70, y: 0.34 }],
+  },
+  "data-fin": {
+    slot: "ears", img: "data-fin.png", widthPct: 15,
+    anchor: { x: 0.5, y: 0.95 }, attach: [{ x: 0.30, y: 0.30 }, { x: 0.70, y: 0.30 }],
+  },
+
+
+  // --- hat. Same treatment as royal-crown: its own lower attach, because
+  // he is a teardrop and the shared hat point leaves a solid crown hovering.
+  "neural-crown": {           // RARE
+    slot: "hat", img: "neural-crown.png", widthPct: 44,
+    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.25 },
+  },
+
+  // --- eyewear. The monocle is a ONE-EYE item, so it does not use the
+  // slot's centred point: it sits on his RIGHT eye (stage x0.688, eye band
+  // y0.487-0.63). Both numbers are MEASURED off the art, like the eye mask —
+  // the amber lens centres at (0.408, 0.288) of the image and is 0.634 of
+  // its width, so widthPct 25 makes the lens 0.16 of the stage, a little
+  // larger than the eye it covers. Re-measure if the art is ever re-rolled.
+  "hud-monocle": {
+    slot: "glasses", img: "hud-monocle.png", widthPct: 28,
+    anchor: { x: 0.408, y: 0.288 }, attach: { x: 0.688, y: 0.5585 },
+  },
+
+
+  // --- wings. Single-sided art rooted at the LOWER-LEFT, same as wave 1,
+  // so both need flipX or they fold back over the body.
+  "plasma-wings": {           // RARE
+    slot: "wings", img: "plasma-wings.png", widthPct: 34,
+    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  },
+  "drone-wings": {            // RARE
+    slot: "wings", img: "drone-wings.png", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
   },
 };

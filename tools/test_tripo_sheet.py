@@ -25,11 +25,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import tripo_sheet as T  # noqa: E402
 
-W, H = 900, 400
-NAMES = ["gold-disc", "dark-mask", "glow-ring"]
+W, H = 1200, 400
+NAMES = ["gold-disc", "dark-mask", "glow-ring", "steel-plate"]
 # a solid mid-tone (under-reads its own alpha), a near-black (must not go
-# see-through), and a soft glow ring (must keep its falloff, and its HOLE
-# must stay transparent).
+# see-through), a soft glow ring (must keep its falloff, and its HOLE must
+# stay transparent), and BRUSHED STEEL — the case wave 2 exposed, where the
+# minimum-alpha reading calls an opaque grey "half-transparent green". Every
+# item in that wave was steel or grey, and every one came out green; there
+# was no grey in this file to catch it.
 ITEMS = [
     (lambda xx, yy: (((xx - 150) ** 2 + (yy - 200) ** 2) < 90 ** 2).astype(float), (240, 200, 120)),
     (lambda xx, yy: ((np.abs(xx - 450) < 80) & (np.abs(yy - 200) < 55)).astype(float), (28, 30, 46)),
@@ -37,6 +40,7 @@ ITEMS = [
         np.clip(1.0 - np.abs(np.hypot(xx - 750.0, yy - 200.0) - 60) / 14.0, 0, 1),
         np.clip(1.0 - np.abs(np.hypot(xx - 750.0, yy - 200.0) - 60) / 55.0, 0, 1) * 0.45),
      (222, 244, 255)),
+    (lambda xx, yy: ((np.abs(xx - 1050) < 70) & (np.abs(yy - 200) < 70)).astype(float), (136, 148, 160)),
 ]
 
 
@@ -90,12 +94,12 @@ def run_case(label, bg_field, tmp, fails):
     dead = T.noise_floor(border, bg, spread)
     raw = T.alpha_from_background(rgb, bg, spread)
     a_tool, _ = T.resolve(rgb, bg, np.where(raw <= dead, 0.0, raw))
-    boxes, _ = T.find_items(a_tool, 12, 24)
-    if len(boxes) != 3:
-        fails.append(f"[{label}] split into {len(boxes)} items, expected 3")
+    boxes, _, _ = T.find_items(a_tool, 12, 24)
+    if len(boxes) != len(NAMES):
+        fails.append(f"[{label}] split into {len(boxes)} items, expected {len(NAMES)}")
         return
 
-    for name, (x0, y0, x1, y1) in zip(NAMES, boxes):
+    for name, (x0, y0, x1, y1, _lab) in zip(NAMES, boxes):
         im = np.asarray(Image.open(os.path.join(out, name + ".png")).convert("RGBA")).astype(float)
         ta, tf = truth_a[y0:y1 + 1, x0:x1 + 1], truth_f[y0:y1 + 1, x0:x1 + 1]
         if im.shape[:2] != ta.shape:
@@ -131,6 +135,18 @@ def run_case(label, bg_field, tmp, fails):
     d = np.asarray(Image.open(os.path.join(out, "dark-mask.png")).convert("RGBA"))
     if d[d.shape[0] // 2, d.shape[1] // 2][3] != 255:
         fails.append(f"[{label}] dark item is see-through in the middle")
+
+    # Steel is checked over its WHOLE area, not one centre pixel: the wave-2
+    # failure was patchy — a third of the item went translucent and green
+    # while the rest stayed correct, so a single probe can miss it entirely.
+    s = np.asarray(Image.open(os.path.join(out, "steel-plate.png")).convert("RGBA")).astype(int)
+    see_through = (s[..., 3] < 250).mean()
+    greenish = ((s[..., 3] > 128) & (s[..., 1] > s[..., 0] + 20) & (s[..., 1] > s[..., 2] + 20)).sum()
+    print(f"  steel: {see_through:.1%} of the plate under full opacity, {greenish} green px")
+    if see_through > 0.02:
+        fails.append(f"[{label}] steel went see-through over {see_through:.1%} of the item")
+    if greenish:
+        fails.append(f"[{label}] {greenish} steel px came out green")
 
     gl = np.asarray(Image.open(os.path.join(out, "glow-ring.png")).convert("RGBA")).astype(int)
     hole = gl[gl.shape[0] // 2, gl.shape[1] // 2][3]
