@@ -1,7 +1,30 @@
-# Project status — updated 2026-08-06 (Tripo wave 2 SHIPPED, migration applied)
+# Project status — updated 2026-08-06 night (Baby Blip retired; 3 commits UNPUSHED)
 
 ## Where we are
-Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v35**.
+⚠️ **THREE COMMITS ARE COMMITTED LOCALLY BUT NOT PUSHED** (`7cbf08c`, `5532e56`,
+`f77e53f`). Megan chose to ship tomorrow morning rather than fight a stuck build.
+Working tree is clean; nothing is at risk. Tomorrow: push, then WATCH the Pages
+build go green before believing anything is live.
+
+⚠️ **GitHub's Pages build is broken/stuck, not our code.** The wave-2 build ERRORED
+at 17:58 UTC ("Page build failed", no detail). Its retry at 18:15 was still
+"building" 75+ minutes later. That is why the live site serves sw **v34** and the
+OLD cape placement while the repo is correct on v35 (now v36). Tomorrow's push
+starts a fresh build, which is the most likely thing to shake it loose.
+**Lesson: when a live site looks a ship behind, check
+`gh api repos/megzieberr/blipwork/pages/builds` BEFORE debugging code.**
+
+**BABY BLIP IS RETIRED** (built + verified tonight, in commit `7cbf08c`). Growth is
+size only now — one body design at 0.60/0.75/0.88/1.00. See the Decisions entry.
+
+**The eating sprite sheet is DRAWN and is good** — `art-source/Blip eating/image (1).png`,
+the generic no-food version. Measured: all four frames are 300-301 x 285 px with an
+identical ground line at y=417 and body ratio 1.053-1.056 (the base body is 1.046, so
+within 1%). That is the cleanest sheet on this project — no scale drift, no vertical
+shift between frames. It slices with `tools/slice_sprites.py` as a normal 4-frame row.
+NOT yet sliced or wired up.
+
+Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v36** in repo.
 
 **TRIPO WAVE 2 — SHIPPED 2026-08-06, ✅ migration APPLIED to live and smoke-tested.**
 Shop **34 → 43** items. The thin slots are fixed: ears and arms go 3 → 6.
@@ -285,14 +308,44 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   free item must get a real price.** That is a migration (prices) plus a re-tune of the
   "free" band in `itemRarity()`, and it also un-blocks free items from treasure-box loot
   (the pool currently filters on `price > 0`). See Next up.
+- 2026-08-06 (feeding, Megan's idea): **the KID drags the food to Blip — the drag IS
+  the animation.** We had been designing a floating-food layer that flies into his
+  mouth on its own (a motion+scale timeline running in step with his body frames).
+  Her call killed that entirely: if the child drags the food and lets go near him,
+  their finger does the movement, and the app only has to notice the drop and play
+  his four frames while the food disappears. No motion path, no per-food position
+  tuning, and no risk of the food reading as "evaporating in mid-air". It is also
+  more fun — feeding becomes something you DO, not something you watch after a tap.
+- 2026-08-06 (art): the eating sheet is **GENERIC — no food drawn in it**, so ONE
+  sheet covers every food in the shop forever. The food picture comes from the shop
+  item art. Per-food sheets were considered and rejected: 18 foods = 18 generations,
+  18 slicing runs and ~72 PNGs in a PWA, versus 4. Her later strawberry sheet proved
+  per-food CAN come out clean first try, so this was a cost call, not a quality one.
+- 2026-08-06 (art): the eating prompt's **gaze instruction is load-bearing.** Frames
+  1-2 say "eyes looking down and slightly to one side" — that is where the dragged
+  food will be. Without it he stares straight ahead while food hovers past his chin
+  and the two layers read as unrelated. Frame 4 releases the look; the food is gone.
+- 2026-08-06 (art): **Blip must never be drawn with arms.** Arms are an accessory
+  slot (stubby-arms / mitts / power-gloves), so arms baked into the body double up
+  the moment a learner equips one. Megan's own instinct, and the code agrees.
+- 2026-08-06 (art): free asset libraries were sampled again FOR FOOD and rejected
+  again. **Kenney's Food Kit is 3D models**, not sprites. Kenney's 2D pack (Generic
+  Items, CC0) has **no outlines at all** and is tools/electronics rather than food.
+  itch.io's food packs are **pixel art**. Blip's whole look is a thick navy outline
+  on flat electric blue; nothing free sits next to that. Same wall as the July
+  accessory search — do not re-litigate. Food comes from Tripo.
 - 2026-07-19 (Phase 3): Phase-3 CSS lives in **separate stylesheets** (`assignment.css`,
   `treasure.css`, `push.css`) rather than growing `styles.css` — they were built by
   parallel agents and separate files meant no merge conflicts. All three load after
   styles.css and depend on its tokens.
 
 ## Pending on Megan
-- 📱 1 min: close and reopen the Blipwork PWA twice so the new service worker
-  takes, then check the cape sits below his head **[whenever]**
+- 💻 2 min: **push the three local commits** (that IS tomorrow's ship), then watch
+  the Pages build go green before believing it **[blocking]**
+- 📱 1 min: after that build is green, close and reopen the Blipwork PWA twice, then
+  check the cape sits below his head **[whenever]**
+- 🎨 20 min: generate the three FOOD sheets in Tripo — fruit, pastries, sweets.
+  Prompts are ready in `art-source/tripo/FOOD-AND-EATING-PROMPTS.md` **[whenever]**
 
 ⚠️ **GitHub's own Pages build for the wave-2 ship FAILED** (2026-08-06 17:58 UTC,
 "Page build failed", no detail — GitHub's side, not our code; nothing was wrong with
@@ -318,6 +371,24 @@ BEFORE debugging the code — a red build looks exactly like a bad deploy.
 5. Only then, the go-live trio: term toggle ON + first homework assignment + the
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
+
+**THE FOOD SHOP / DRAG-TO-FEED (next build job, designed 2026-08-06 night):**
+Everything needed is decided; nothing is built. In order:
+1. **Slice the eating sheet.** `art-source/Blip eating/image (1).png` → four frames.
+   Measured clean (see Where we are), so it is a normal `JOBS` row in
+   `tools/slice_sprites.py`, no group scaling needed. Suggested state name: `eating`.
+   It is a MOMENT (plays once then hands back), like `excited`/`jumping` — add it to
+   `MOMENTS` and `ANIM_RECOLOURS: true` so a pink Blip still chews pink.
+2. **Generate + slice the food art** (3 sheets, 18 items, prompts written).
+3. **Drag-to-feed**: the child drags a food item from the pantry to Blip; on release
+   near him, the food disappears and the `eating` moment plays. Pointer events, NOT
+   rAF (the browser pane never fires rAF — recorded gotcha). Open question for the
+   day: what happens if they drop it somewhere random — proposed answer is it floats
+   back with no penalty, but confirm with her.
+4. **Shop rows + a migration** for the food items, mirrored in local-backend.js.
+   ⚠️ Food already has a `category = 'food'` path in `mhq_get_state` (`foodShop`), so
+   this may need NO new slot — check before assuming, and remember a new COLUMN would
+   need its own GRANT.
 
 **Wave 2 is DONE (2026-08-06).** Two gaps it left, both visible only once the
 whole catalogue was laid out side by side:
