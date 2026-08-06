@@ -102,34 +102,24 @@ Worth knowing so the prompt below makes sense:
 - The 2×2 grids are riskier to slice than a single row — reading order has
   already misnamed items twice on this project.
 
-## The prompt
+## The prompt — 769 characters
+
+Megan's image tool caps the prompt at 1000 characters, so this is the one to
+paste. Swap `[FOOD]` for the actual item both times it appears.
 
 ```
-Use the attached picture of the blue droplet character as a locked reference:
-same body shape, same proportions, same thick navy outline, same colours,
-same face style. Draw a 4-frame sprite sheet as ONE horizontal row, left to
-right, each frame the same size, with the character at the same scale and the
-same position inside every frame — no zooming, drifting or resizing between
-frames.
+Use the attached image as a locked reference: same body shape, proportions, outline, colours and face style. Draw a 4-frame sprite sheet in ONE horizontal row, every frame the same size, the character at the same scale and position in each.
 
-The character has NO ARMS and NO HANDS. He never holds anything. The food
-floats in the air in front of him and he eats it straight from the air.
+He has NO ARMS and NO HANDS. The food floats in the air and he eats it from the air. Keep the food LOW, below his eyes and slightly to one side, never centred between his eyes. No lines or whiskers radiating from his mouth.
 
-Place the food LOW — in front of the lower half of his body, below his eyes
-and slightly to one side. Never centre the food between his eyes, and never
-draw lines, whiskers or streaks radiating out from his mouth.
+Frames: 1) whole [FOOD] floating at his mouth, happy; 2) mouth open mid-bite, [FOOD] half eaten; 3) food gone, eyes closed, cheeks full, chewing; 4) finished, happy smile, nothing in front of him.
 
-The four frames:
-1) a whole [FOOD] floating just in front of his mouth, he looks at it, happy;
-2) his mouth open in a bite, the [FOOD] now half-eaten;
-3) the food is gone, his eyes are closed and his cheeks are a little full as
-   he chews, a small contented smile;
-4) finished — eyes open, happy relaxed smile, nothing in front of him.
-
-Flat solid bright magenta background (#FF00FF). No drop shadows, no glow, no
-aura, no sparkles. No text, no speech bubbles, no sound effect words. Keep his
-expression friendly in every frame — no angry eyebrows.
+Flat solid magenta #FF00FF background. No shadows, glow, sparkles or text. Keep him friendly throughout.
 ```
+
+Every clause in there is load-bearing — the earlier long version said the same
+things at more length, and there is ~230 characters of headroom if a
+particular food needs describing (e.g. "a plaited koeksister").
 
 ## Worth considering: one sheet for ALL foods
 
