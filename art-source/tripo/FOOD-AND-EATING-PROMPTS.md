@@ -121,6 +121,27 @@ Every clause in there is load-bearing — the earlier long version said the same
 things at more length, and there is ~230 characters of headroom if a
 particular food needs describing (e.g. "a plaited koeksister").
 
+## The GENERIC prompt (no food drawn) — 744 characters
+
+This is the one to use if the food is layered in by the app rather than drawn
+into the frames — one sheet then covers every food in the shop. See the
+section below for the trade-off.
+
+```
+Use the attached image as a locked reference: same body shape, proportions, outline, colours and face style. Draw a 4-frame sprite sheet in ONE horizontal row, every frame the same size, the character at the same scale and position in each.
+
+He has NO ARMS and NO HANDS. Draw NO food and NO object at all — the space in front of his lower body stays empty background in every frame.
+
+Frames: 1) mouth closed, happy, eyes looking down and slightly to one side; 2) mouth open wide in a bite, still looking that way; 3) mouth closed, eyes closed, cheeks full, chewing, small smile; 4) finished, eyes open, happy relaxed smile, looking ahead.
+
+Flat solid magenta #FF00FF background. No shadows, glow, sparkles or text. Keep him friendly throughout.
+```
+
+**Why the gaze instruction matters.** Frames 1 and 2 tell him to look DOWN and
+to one side, which is where the food layer will sit. Without it he stares
+straight ahead while a strawberry hovers past his chin, and the two layers
+read as unrelated. Frame 4 releases the look because the food is gone by then.
+
 ## Worth considering: one sheet for ALL foods
 
 If the food is a SEPARATE floating layer rather than drawn into his frames,
