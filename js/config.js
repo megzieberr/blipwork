@@ -215,7 +215,7 @@ export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
    ============================================================ */
 export const BLIP = {
   // cumulative free-cookie feedings needed for growth stage 1 / 2 / 3
-  // (stage 0 = baby). growthStage = count of thresholds <= feedCount.
+  // (stage 0 = tiny). growthStage = count of thresholds <= feedCount.
   growthThresholds: [10, 25, 45],
   // days_unfed (qualifying weekdays) at which each sickness stage begins:
   // 0 healthy 0–2 · 1 tired 3–4 · 2 bedridden 5–6 · 3 critical 7+.

@@ -20,7 +20,7 @@ const daysSince = v => { if (!v) return Infinity; const d = new Date(v); return 
 
 // Phase 2 roster labels — health stage + growth stage (server-computed).
 const HEALTH_LABELS = ["Healthy", "Tired", "Bedridden", "Critical"];
-const GROWTH_LABELS = ["Baby", "Small", "Medium", "Grown"];
+const GROWTH_LABELS = ["Tiny", "Small", "Medium", "Grown"];
 function healthCell(h) {
   if (!h) return "—";
   const stage = h.stage || 0;
@@ -245,7 +245,7 @@ function learnerSection(rows, inactiveDays) {
   rows.forEach(r => {
     const passed = Object.entries(r.quests || {}).filter(([, p]) => p.passed).map(([q]) => q.replace("q", "")).sort();
     const inactive = r.lastActive && daysSince(r.lastActive) >= inactiveDays;
-    const growth = GROWTH_LABELS[r.growthStage || 0] || "Baby";
+    const growth = GROWTH_LABELS[r.growthStage || 0] || "Tiny";
     const blipCell = `${healthCell(r.health)} · <span class="muted">${growth}</span>${r.blipCount > 1 ? ` ×${r.blipCount}` : ""}`;
     const tr = el("tr");
     tr.innerHTML = `

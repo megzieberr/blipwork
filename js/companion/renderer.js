@@ -17,7 +17,7 @@
    growth/health-aware entry point added for feeding & sickness
    (PHASE-2-PLAN.md). It wraps renderCompanion (still the base
    compositor) and layers on: a growth-stage size scale, health-stage
-   art (swapping to a dedicated sick/baby PNG once Megan draws one, or
+   art (swapping to a dedicated sick PNG once Megan draws one, or
    a code-drawn placeholder from health-fx.js until then), and the
    "he won't get up" dress-up lock. renderCompanion itself is
    unchanged and every existing call site (blip.js, gallery.js,
@@ -65,7 +65,6 @@ const BASE_W = 480, BASE_H = 600;
    contract with her art — see PHASE-2-PLAN.md §6. */
 const IMAGE_SOURCES = {
   base: BASE_SRC,
-  baby: "assets/companion/blip-baby.png",
   tired: "assets/companion/blip-tired.png",
   bedridden: "assets/companion/blip-bedridden.png",
   critical: "assets/companion/blip-critical.png",
@@ -998,8 +997,8 @@ export function bodyFlatColour(colourId) {
    cached recoloured data-URL — built once per base+colour pair and reused
    forever). `baseSrc` defaults to the normal grown/healthy body so every
    pre-Phase-2 call site (`getBodySrc(colour)`) is unaffected; Phase 2 passes
-   whichever growth/health base won (see resolveRawBody below) so baby/sick
-   art recolours through the exact same pixel math as the normal body. */
+   whichever health base won (see resolveRawBody below) so sick art
+   recolours through the exact same pixel math as the normal body. */
 export function getBodySrc(colourId, baseSrc = BASE_SRC) {
   if (!colourId || colourId === "blue" || !COLOURS[colourId]) {
     return Promise.resolve(baseSrc);
@@ -1024,10 +1023,9 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
 const ITEM_DIR = "assets/companion/items"; // Tripo-sourced PNG accessories (see tools/tripo_sheet.py)
 const ANIM_DIR = "assets/companion/anim";
 const ANIM_FRAME_COUNT = 4;
-/* Per-state overrides. The baby rows hold five drawings each, but only
-   three per row are the same expression (the others wake up or cry —
-   see tools/slice_sprites.py), so those loops are three frames. */
-const ANIM_FRAME_COUNTS = { "baby-sleeping": 3, "baby-happy": 3 };
+/* Per-state overrides for any sheet that isn't four frames. Empty today:
+   every live loop is four. */
+const ANIM_FRAME_COUNTS = {};
 function animFramePaths(state) {
   const paths = [];
   const n = ANIM_FRAME_COUNTS[state] || ANIM_FRAME_COUNT;
@@ -1046,7 +1044,6 @@ function animFramePaths(state) {
    blanket toward the body hue along with everything else. */
 const ANIM_RECOLOURS = {
   sleeping: true, excited: true, jumping: true, hungry: true, wink: true,
-  "baby-sleeping": true, "baby-happy": true,
   sick: false, veryill: false, recovering: false,
 };
 
@@ -1109,24 +1106,17 @@ function runFrameLoop(bodyImg, frames, { colour, recolour, loops = Infinity, onD
      loop for a Blip who is meant to be visibly on the mend);
      healthStage 1 -> sleeping, 2 -> sick, 3 -> veryill;
      healthy + hungry -> hungry loop as the idle instead of the static
-     base; otherwise null (static base, exactly today's behaviour). */
-function idleAnimState({ healthStage, recovering, hungry, growthStage }) {
-  // BABY (growthStage 0) has its own drawn body — squatter than the grown
-  // one — but only for two states: asleep, and happy-and-fed. Everything
-  // else falls through to the grown loops, which is exactly what
-  // growthStage 0 already showed before the baby art landed (scaled down
-  // by GROWTH_SCALE), so nothing regresses. Note this deliberately does
-  // NOT introduce a blip-baby.png static: resolveRawBody would then serve
-  // a beaming baby face for a SICK baby, which is worse than the grown
-  // body it uses today.
-  const baby = growthStage === 0;
+     base; otherwise null (static base, exactly today's behaviour).
+   Every growth stage shares these loops: there is ONE body design, shown
+   smaller when young (GROWTH_SCALE). Baby Blip was retired 2026-08-06 —
+   don't reintroduce a per-stage art branch here. */
+function idleAnimState({ healthStage, recovering, hungry }) {
   if (recovering) return "recovering";
-  if (healthStage === 1) return baby ? "baby-sleeping" : "sleeping";
+  if (healthStage === 1) return "sleeping";
   if (healthStage === 2) return "sick";
   if (healthStage >= 3) return "veryill";
   if (hungry) return "hungry";
-  // the grown body is a STATIC base when healthy and fed; the baby wriggles.
-  return baby ? "baby-happy" : null;
+  return null;
 }
 
 /* One-shot "moment" animations — feed success (excited) / round passed
@@ -1188,9 +1178,9 @@ export function playTapReaction(handle) {
 /* ---------- Phase 2: which UNCOLOURED base PNG to actually paint ----------
    Priority per PHASE-2-PLAN.md: a dedicated sick/recovery PNG (full
    swap, drawn by Megan to already show the scene) beats a code-drawn
-   placeholder; growth stage 0 additionally prefers blip-baby.png over
-   the normal body. Both checks gracefully no-op (imageExists → false)
-   until the matching file exists, so this is safe to call today.
+   placeholder. Growth never changes the art — one body, scaled.
+   The check gracefully no-ops (imageExists → false) until the matching
+   file exists, so this is safe to call today.
    Returns { src, needsOverlay } — needsOverlay tells the caller a
    code-drawn health-fx overlay is needed to stand in for missing art
    (only true when a sick/recovering state was requested but its PNG
@@ -1202,18 +1192,13 @@ function healthArtKey(healthStage, recovering) {
   if (healthStage === 3) return "critical";
   return null;
 }
-async function resolveRawBody({ growthStage, healthStage, recovering }) {
+async function resolveRawBody({ healthStage, recovering }) {
   const sickKey = healthArtKey(healthStage, recovering);
   if (sickKey) {
     const ok = await imageExists(IMAGE_SOURCES[sickKey]);
     if (ok) return { src: IMAGE_SOURCES[sickKey], needsOverlay: false };
   }
-  let src = IMAGE_SOURCES.base;
-  if (growthStage === 0) {
-    const ok = await imageExists(IMAGE_SOURCES.baby);
-    if (ok) src = IMAGE_SOURCES.baby;
-  }
-  return { src, needsOverlay: !!sickKey };
+  return { src: IMAGE_SOURCES.base, needsOverlay: !!sickKey };
 }
 
 /* ============================================================
@@ -1398,8 +1383,8 @@ export function renderCompanion(el, state = {}) {
        same property would just be clobbered by the running animation
        every frame rather than composing with it);
      - health-stage art: swaps to a dedicated sick/recovery PNG once
-       Megan draws one (full-swap, same style as blip-baby.png), else
-       falls back to the normal grown/baby body plus a code-drawn
+       Megan draws one (full-swap, same style as the base art), else
+       falls back to the normal body plus a code-drawn
        health-fx overlay (droopy eyes, bed + blanket + thermometer,
        heart monitor, recovering sit-up — see health-fx.js);
      - the "he won't get up" dress-up lock: while healthStage>=2 (or
@@ -1413,8 +1398,8 @@ export function renderCompanion(el, state = {}) {
      size?: number — px. The "host size" the growth/sick scale
             multiplies. Omit to let the host's own CSS size `el`
             (unscaled — same as renderCompanion has always worked).
-     growthStage?: 0-3, default 3 (grown) — matches PHASE-2-PLAN.md's
-                   Baby/Small/Medium/Grown table.
+     growthStage?: 0-3, default 3 (grown) — Tiny/Small/Medium/Grown.
+                   Size only: one body design at four scales.
      healthStage?: 0-3, default 0 (healthy) — matches the sickness
                    ladder (0 healthy, 1 tired, 2 bedridden, 3 critical).
      recovering?: boolean, default false.
@@ -1502,7 +1487,7 @@ export function renderBlip(el, opts = {}) {
   // playMoment's onDone can call the exact same "what should be showing
   // right now" resolution once a one-shot moment finishes.
   const hungry = !!opts.hungry;
-  const animState = idleAnimState({ healthStage, recovering, hungry, growthStage });
+  const animState = idleAnimState({ healthStage, recovering, hungry });
 
   function applyIdleBodyArt() {
     if (animState) {
@@ -1521,7 +1506,7 @@ export function renderBlip(el, opts = {}) {
       // art is resolved — same "paint immediately, swap once ready"
       // pattern renderCompanion already uses for colour.
       stopFrameLoop(layers.body);
-      resolveRawBody({ growthStage, healthStage, recovering }).then(({ src: rawSrc, needsOverlay }) => {
+      resolveRawBody({ healthStage, recovering }).then(({ src: rawSrc, needsOverlay }) => {
         getBodySrc(colour, rawSrc).then((finalSrc) => { layers.body.src = finalSrc; });
         if (!needsOverlay) return; // dedicated art exists for this state now — no placeholder needed
         const spec = healthOverlaySpec(healthStage, recovering, bodyFlatColour(colour));

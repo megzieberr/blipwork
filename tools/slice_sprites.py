@@ -162,40 +162,18 @@ JOBS = [
     # sheet is left in images/ as history.
     ("Recovering Blip 2.png", 344, 580, 4, "recovering"),
     ("Winking blip.png", 345, 568, 4, "wink"),
-    # Baby rows carry FIVE drawings, not four — GPT numbered them 1,2,2,3,4
-    # and 1,2,3,3,4. All five are distinct enough to keep, so the renderer
-    # reads its frame count per state rather than assuming 4.
-    # Verified before use: measuring the BODY ONLY (the raw bounding box is
-    # inflated by the zZ marks and motion lines, which made these rows look
-    # inconsistent), sleeping is 1.207-1.256 and happy 1.196-1.243 — 4%
-    # spread each, and they match each other, so it is one character. Both
-    # are squatter than the adult body (1.046), which is the point.
-    # NOT used: "Baby Blip.png" (measures 1.09-1.12 — adult proportions, and
-    # it is a sad/feverish face, not a neutral baby) and "Baby Blip
-    # Winking.png" (blanket-wrapped, and in this app a blanket means sick).
 ]
 
 # Rows that must read as the SAME body get one scale factor across all of
 # them, measured off the body rather than the alpha box (see body_box).
-GROUPS = [
-    [
-        # y0 is 262, not the 207 the alpha row-profile suggests: this
-        # sheet puts its numbered badges BELOW the row label (y210-258)
-        # with no blank gap before the zZ marks, so a naive band bakes a
-        # big "4" into the corner of frame 5.
-        #
-        # PICK: each row holds five drawings, but the EXPRESSIONS inside a
-        # row are not one state — GPT drew a sequence, not a loop. The
-        # sleeping row runs asleep, asleep, asleep, winking, wide awake;
-        # the "happy" row is crying, happy, happy, happy, crying. Looping
-        # either one whole would make the baby blink awake or burst into
-        # tears every few frames, so each keeps only its coherent frames.
-        # (The BODY is consistent across all ten — that was measured
-        # separately and is why both rows share one scale.)
-        ("Baby Blip Sprite.png", 262, 465, 5, "baby-sleeping", [0, 1, 2]),
-        ("Baby Blip Sprite.png", 637, 817, 5, "baby-happy", [1, 2, 3]),
-    ],
-]
+# Each entry is (sheet, y0, y1, frame count, output name, frames to keep).
+# The pick list exists because a sheet row is usually a SEQUENCE, not a loop:
+# only the frames sharing one expression belong in a looping idle.
+#
+# Empty since 2026-08-06. Its only members were the two Baby Blip rows, and
+# Baby Blip is retired — growth is size only now, one body at four scales.
+# The mechanism stays for the next sheet whose rows must match each other.
+GROUPS = []
 
 if __name__ == "__main__":
     for fname, y0, y1, n, name in JOBS:

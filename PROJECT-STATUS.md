@@ -274,6 +274,17 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   confiscated from a closet. An applied migration is never edited — the removal
   goes in the NEW migration, and verify-store.html knows to stop expecting a
   retired id in the client mirror.
+- 2026-08-06 (growth): **Baby Blip is retired.** Growth is SIZE ONLY — one body design
+  shown at 0.60/0.75/0.88/1.00, never a second drawing. `idleAnimState` and
+  `resolveRawBody` no longer branch on `growthStage` at all, so a tiny Blip uses the
+  ordinary base and the ordinary loops. Do not reintroduce per-stage art. The admin
+  growth label for stage 0 is now "Tiny", not "Baby".
+- 2026-08-06 (shop, Megan): **nothing may be free once the kids are actually playing.**
+  The 0-gold free tier exists so a brand-new learner can dress Blip before earning
+  anything, and it is fine while the app is with no learner — but **before go-live every
+  free item must get a real price.** That is a migration (prices) plus a re-tune of the
+  "free" band in `itemRarity()`, and it also un-blocks free items from treasure-box loot
+  (the pool currently filters on `price > 0`). See Next up.
 - 2026-07-19 (Phase 3): Phase-3 CSS lives in **separate stylesheets** (`assignment.css`,
   `treasure.css`, `push.css`) rather than growing `styles.css` — they were built by
   parallel agents and separate files meant no merge conflicts. All three load after
@@ -281,10 +292,14 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 
 ## Pending on Megan
 - 📱 1 min: close and reopen the Blipwork PWA twice so the new service worker
-  (v35) takes, then look at the shop **[whenever]**
-- 💻 2 min: the GitHub Pages build for this ship was still QUEUED on GitHub's
-  side when the session ended — open https://megzieberr.github.io/blipwork/
-  and check the shop shows the new arms/ears items **[whenever]**
+  takes, then check the cape sits below his head **[whenever]**
+
+⚠️ **GitHub's own Pages build for the wave-2 ship FAILED** (2026-08-06 17:58 UTC,
+"Page build failed", no detail — GitHub's side, not our code; nothing was wrong with
+the commit). A retry started 18:15 UTC. That is why the live site was still serving
+sw **v34** and the OLD cape placement while the repo was correctly on v35. If a live
+site ever looks a ship behind, check `gh api repos/<owner>/<repo>/pages/builds`
+BEFORE debugging the code — a red build looks exactly like a bad deploy.
 
 ## Next up
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
@@ -293,7 +308,14 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
    waiting only on the SQL above. 22 items, free tier in every slot, new back slot,
    closet/shop split.
 3. **Migrate the Circle Quest class → Blipwork.** Only when she calls it.
-4. Only then, the go-live trio: term toggle ON + first homework assignment + the
+4. **Price the free tier before any learner arrives** (her ruling, 2026-08-06):
+   nothing may be free once the kids are playing. Seven items sit at price 0 today
+   (one per slot). Needs a migration setting real prices, a re-tune of the "free"
+   band in `itemRarity()` (blip-ui.js), and a decision on whether ex-free items
+   should now be eligible for treasure-box loot (the pool filters `price > 0`).
+   Also worth doing at the same time: the shop lists all seven free items FIRST,
+   so the whole first phone screen reads as "everything is free".
+5. Only then, the go-live trio: term toggle ON + first homework assignment + the
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
 
@@ -322,10 +344,17 @@ A wave 3 aimed at cheap wings + one rare eye item would fix all three.
   shop tabs, randomize/undo customise flow.
 - ~~Unused baby art, if ever wanted~~ — superseded by the Baby Blip retirement below.
 
-**Companion art rework (Megan's call, 2026-08-02) — for a future session:**
-- **Retire Baby Blip entirely** — she's unhappy with how it looks. Replace the baby stage
-  with a **small version of adult Blip that grows bigger** as the companion levels up.
-  Same grow-with-progress idea, one body design instead of two.
+**Companion art rework — ✅ BABY BLIP RETIRED 2026-08-06 (built + verified, NOT yet pushed).**
+- ~~Retire Baby Blip entirely~~ — **DONE.** Growth is now SIZE ONLY: one body design at
+  0.60 / 0.75 / 0.88 / 1.00, which is exactly what `GROWTH_SCALE` already did, so the
+  retirement was a removal rather than a rebuild. Gone: the baby art swap in
+  `resolveRawBody`, both baby branches in `idleAnimState`, the baby entries in
+  `ANIM_FRAME_COUNTS` / `ANIM_RECOLOURS`, the six derived frames in
+  `assets/companion/anim/`, and the two baby rows in `tools/slice_sprites.py`.
+  Her master sheets stay in `art-source/` as archive.
+  **Verified** in companion-test.html: growth ratio still exactly 0.600, growthStage 0
+  now renders the ordinary base when fed and the ordinary `sleeping` loop when asleep,
+  zero network requests for any `baby-*` file, no console errors.
 - Her original art (sprite sheets, logo, design images) is now backed up in `art-source/`
   in this repo — use those masters, never redraw.
 

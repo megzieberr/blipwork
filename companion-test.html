@@ -306,7 +306,7 @@
 
     /* ---------------- Phase 2: growth-stage row ---------------- */
     const growthHost = document.getElementById("growth-row");
-    const GROWTH_LABELS = ["0 baby (60%)", "1 small (75%)", "2 medium (88%)", "3 grown (100%)"];
+    const GROWTH_LABELS = ["0 tiny (60%)", "1 small (75%)", "2 medium (88%)", "3 grown (100%)"];
     window.__COMPANION__.growthInstances = [0, 1, 2, 3].map((g) => {
       const cell = document.createElement("div");
       cell.className = "cell";
@@ -374,7 +374,7 @@
     const householdHost = document.getElementById("household");
     const HOUSEHOLD = [
       { label: "Blip 1 — grown, blue", colour: "blue", growthStage: 3, healthStage: 0, equipped: ["halo"] },
-      { label: "Blip 2 — baby, coral", colour: "coral", growthStage: 0, healthStage: 0, equipped: ["star-shades"] },
+      { label: "Blip 2 — tiny, coral", colour: "coral", growthStage: 0, healthStage: 0, equipped: ["star-shades"] },
     ];
     HOUSEHOLD.forEach((spec) => {
       const cell = document.createElement("div");
@@ -397,7 +397,7 @@
     window.__COMPANION__.checkGrowthScale = function () {
       const a = window.__COMPANION__.growthInstances[0].result.el.getBoundingClientRect();
       const b = window.__COMPANION__.growthInstances[3].result.el.getBoundingClientRect();
-      return { babyWidth: a.width, grownWidth: b.width, ratio: +(a.width / b.width).toFixed(3) };
+      return { tinyWidth: a.width, grownWidth: b.width, ratio: +(a.width / b.width).toFixed(3) };
     };
 
     /* Verification helper: for every matrix cell, whether accessory
@@ -421,8 +421,11 @@
       // shape the backend actually reports (recovering = careStreak>=1
       // AND stage>=2), and it proves idleAnimState checks recovering
       // before health rather than falling through to the sick loop.
-      { label: "baby-happy (growthStage 0, fed)", opts: { growthStage: 0, healthStage: 0 } },
-      { label: "baby-sleeping (growthStage 0 + healthStage 1)", opts: { growthStage: 0, healthStage: 1 } },
+      // Baby Blip was retired 2026-08-06: growth is SIZE ONLY, one body
+      // design at four scales. These two cells exist to prove no per-stage
+      // art branch creeps back in — both must show the ordinary loops.
+      { label: "tiny + fed (growthStage 0 → static base, no baby loop)", opts: { growthStage: 0, healthStage: 0 } },
+      { label: "tiny + sleeping (growthStage 0 → the ordinary sleeping loop)", opts: { growthStage: 0, healthStage: 1 } },
       { label: "recovering (healthStage 2 + recovering)", opts: { healthStage: 2, recovering: true } },
       { label: "sleeping (healthStage 1)", opts: { healthStage: 1 } },
       { label: "sick (healthStage 2)", opts: { healthStage: 2 } },
