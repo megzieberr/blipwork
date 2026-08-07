@@ -1,30 +1,34 @@
-# Project status — updated 2026-08-06 night (Baby Blip retired; 3 commits UNPUSHED)
+# Project status — updated 2026-08-07 (NECK slot live; 26 new food; sw v37 pushed)
 
 ## Where we are
-⚠️ **THREE COMMITS ARE COMMITTED LOCALLY BUT NOT PUSHED** (`7cbf08c`, `5532e56`,
-`f77e53f`). Megan chose to ship tomorrow morning rather than fight a stuck build.
-Working tree is clean; nothing is at risk. Tomorrow: push, then WATCH the Pages
-build go green before believing anything is live.
+**ALL COMMITS PUSHED 2026-08-07 ~17:41 UTC** (`a1a9102`, on top of last night's
+four). A fresh Pages build started for it; last night's two stuck builds both
+ended "errored" (GitHub's side, never our code). If live still serves v36 later,
+check `gh api repos/megzieberr/blipwork/pages/builds` BEFORE debugging code.
+Uncommitted on purpose: `FABLE-AUDIT-2026-08-06.md` (public repo — Megan hasn't
+said whether the audit notes may be published).
 
-⚠️ **GitHub's Pages build is broken/stuck, not our code.** The wave-2 build ERRORED
-at 17:58 UTC ("Page build failed", no detail). Its retry at 18:15 was still
-"building" 75+ minutes later. That is why the live site serves sw **v34** and the
-OLD cape placement while the repo is correct on v35 (now v36). Tomorrow's push
-starts a fresh build, which is the most likely thing to shake it loose.
-**Lesson: when a live site looks a ship behind, check
-`gh api repos/megzieberr/blipwork/pages/builds` BEFORE debugging code.**
+**NECK SLOT (8th cosmetic slot) — BUILT + 3 MIGRATIONS APPLIED TO LIVE, smoke-
+tested 10/10.** Shop 43 → **49 active cosmetics**. Neck sells 6: bead-necklace
+(FREE L1), flower-garland 60/L3, star-chain 80/L4, heart-chain 95/L5,
+medal-choker 125/L6, chunky-chain 160/L7. Learner rows verified byte-identical
+after every migration (2 students, 24 progress, 4580 XP).
 
-**BABY BLIP IS RETIRED** (built + verified tonight, in commit `7cbf08c`). Growth is
-size only now — one body design at 0.60/0.75/0.88/1.00. See the Decisions entry.
+**EATING + SAD moments are sliced, wired and verified in-app** (play once, both
+recolour). Sad plays when a dragged food is dropped away from Blip — her ruling:
+the food floats back to the pantry, no penalty, and Blip pulls the sad face.
 
-**The eating sprite sheet is DRAWN and is good** — `art-source/Blip eating/image (1).png`,
-the generic no-food version. Measured: all four frames are 300-301 x 285 px with an
-identical ground line at y=417 and body ratio 1.053-1.056 (the base body is 1.046, so
-within 1%). That is the cleanest sheet on this project — no scale drift, no vertical
-shift between frames. It slices with `tools/slice_sprites.py` as a normal 4-frame row.
-NOT yet sliced or wired up.
+**26 MORE FOOD PNGs cut** (hot meals, braai, veggies, drinks — the drinks sheet
+gave 8, two free extras), joining the first 18 in `assets/companion/food/`.
+**44 food items ready; NONE are in the shop yet** — that's the next build job.
 
-Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v36** in repo.
+**Wave-3 accessory art is cut but NOT wired**: fairy (fairy-wing, star-wand,
+flower-crown), girly (hair-bow, tiara, butterfly-wing), tomboy (backwards-cap,
+sport-shades, bucket-hat), gangster (gold-shades, snapback), and six eye pairs
+(star/angry/happy/lash/dreamy/wink-eyes). All pass structure checks; placement
+passes + shop rows still to do. `happy-eyes` is weak (Megan may re-roll).
+
+Live at https://megzieberr.github.io/blipwork/, service worker **mhq-v37** pushed.
 
 **TRIPO WAVE 2 — SHIPPED 2026-08-06, ✅ migration APPLIED to live and smoke-tested.**
 Shop **34 → 43** items. The thin slots are fixed: ears and arms go 3 → 6.
@@ -338,21 +342,59 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   `treasure.css`, `push.css`) rather than growing `styles.css` — they were built by
   parallel agents and separate files meant no merge conflicts. All three load after
   styles.css and depend on its tokens.
+- 2026-08-07 (slicer): **dust is dropped BEFORE the dilation that groups an item's
+  pieces**, min area 256 px. The pastries sheet's background speckle chained four
+  pastries into one 944x704 blob; filtering after grouping cannot undo a bridge.
+- 2026-08-07 (slicer): **`--opaque` is a declaration, not a detection.** Opaque pink
+  icing and grape purple sit at distance-ratio 0.31-0.33; genuine wave-1 glows run to
+  0.366 — the distributions OVERLAP, so no threshold exists (same wall as the plasma
+  ring). The sheet AUTHOR knows whether translucent art was prompted; food/accessory
+  sheets say "no glow" so everything inside the rim is solid. Applied to the INTERIOR
+  only (2px inset) — forcing the anti-aliased rim solid left a pink halo. Never use
+  --opaque on effects sheets.
+- 2026-08-07 (slicer): **`--group "1+2,3+4"`** merges components by dry-run index, for
+  items whose pieces sit FURTHER apart than two different items do (the eye pairs:
+  eyes ~480px apart, rows ~250px). Anything not listed is dropped — that is how the
+  stray mouth Tripo drew between the happy-eyes pair was cut without a re-roll.
+- 2026-08-07 (slicer): **`--whole`** keys a character sheet to one RGBA PNG without
+  cropping — slice_sprites.py ground-aligns rows off a shared baseline, and per-item
+  crops would destroy it. This is how Tripo sheets feed the sprite pipeline now.
+- 2026-08-07 (neck): **Blip has no neck, so neck art must be ~5x wider than tall.**
+  Eyes end at y 0.63, body ends at 0.885, and he is 0.954 wide at y 0.63-0.66 — a
+  deep U whose arms clear his eyes is taller than his whole body (measured; the
+  gangster chain proved it at every size). The wide set (2.5-2.8:1) works at the
+  slot's shared attach 0.60 / widthPct 104.
+- 2026-08-07 (neck): **widthPct 104 — wider than the stage — on purpose.** At 88 the
+  arc's ends stopped inside his silhouette and read as "lying on him" (her exact
+  complaint); the ends must pass THROUGH his widest point to read as wrapping behind.
+  112 leaves the ends floating in mid-air. The chunky-chain (1.75:1, medallion drop)
+  carries its own attach 0.50 or the medallion falls off the stage.
+- 2026-08-07 (retiring): **a deleted item's ID never returns.** verify-store's
+  retired-scan reads deletes out of every migration and asserts those ids are absent
+  from the client. The regenerated gangster chain is therefore `chunky-chain` (label
+  still "Gold chain"), not a re-seeded `gold-chain`. Applied migrations stay unedited.
+- 2026-08-07 (drag-to-feed, Megan): **a food dropped away from Blip floats back to
+  the pantry, no penalty, and Blip plays the `sad` moment.** Sad art exists and is
+  wired; the drag interaction itself is still to build (pointer events, never rAF).
+- 2026-08-07 (art): the eating prompt's gaze instruction ("eyes looking down") did
+  NOT survive generation — frames look straight ahead. Shipped anyway: the child's
+  own finger drags the food to his mouth, which does the connecting the gaze was for.
+- 2026-08-07 (tooling): **tools/preview_accessory.py** composites an item onto Blip
+  with the renderer's exact geometry (x/width against stage WIDTH, y against HEIGHT,
+  anchor as fraction of the item's own box). Placement by eye in seconds instead of
+  headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
-- 💻 2 min: **push the three local commits** (that IS tomorrow's ship), then watch
-  the Pages build go green before believing it **[blocking]**
-- 📱 1 min: after that build is green, close and reopen the Blipwork PWA twice, then
-  check the cape sits below his head **[whenever]**
-- 🎨 20 min: generate the three FOOD sheets in Tripo — fruit, pastries, sweets.
-  Prompts are ready in `art-source/tripo/FOOD-AND-EATING-PROMPTS.md` **[whenever]**
+- 📱 2 min: close and reopen the Blipwork PWA twice (sw v34 → v37 is a big jump),
+  then check the cape sits low AND a shop necklace wraps around him **[whenever]**
+- 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
+  PUBLIC, so it stays uncommitted until you decide **[whenever]**
+- 🎨 5 min: re-roll `happy-eyes` if you want it better (the weakest of the six eye
+  pairs; Tripo drew an unwanted mouth that had to be masked out) **[whenever]**
 
-⚠️ **GitHub's own Pages build for the wave-2 ship FAILED** (2026-08-06 17:58 UTC,
-"Page build failed", no detail — GitHub's side, not our code; nothing was wrong with
-the commit). A retry started 18:15 UTC. That is why the live site was still serving
-sw **v34** and the OLD cape placement while the repo was correctly on v35. If a live
-site ever looks a ship behind, check `gh api repos/<owner>/<repo>/pages/builds`
-BEFORE debugging the code — a red build looks exactly like a bad deploy.
+(2026-08-06's stuck-Pages saga resolved 2026-08-07: both stuck builds ended
+"errored" on GitHub's side, and the fresh push built green in ~40s. The lesson
+stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 
 ## Next up
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
@@ -372,23 +414,31 @@ BEFORE debugging the code — a red build looks exactly like a bad deploy.
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
 
-**THE FOOD SHOP / DRAG-TO-FEED (next build job, designed 2026-08-06 night):**
-Everything needed is decided; nothing is built. In order:
-1. **Slice the eating sheet.** `art-source/Blip eating/image (1).png` → four frames.
-   Measured clean (see Where we are), so it is a normal `JOBS` row in
-   `tools/slice_sprites.py`, no group scaling needed. Suggested state name: `eating`.
-   It is a MOMENT (plays once then hands back), like `excited`/`jumping` — add it to
-   `MOMENTS` and `ANIM_RECOLOURS: true` so a pink Blip still chews pink.
-2. **Generate + slice the food art** (3 sheets, 18 items, prompts written).
-3. **Drag-to-feed**: the child drags a food item from the pantry to Blip; on release
-   near him, the food disappears and the `eating` moment plays. Pointer events, NOT
-   rAF (the browser pane never fires rAF — recorded gotcha). Open question for the
-   day: what happens if they drop it somewhere random — proposed answer is it floats
-   back with no penalty, but confirm with her.
+**THE FOOD SHOP / DRAG-TO-FEED (next build job — art side now DONE 2026-08-07):**
+1. ~~Slice the eating sheet~~ — **DONE**, `eating` moment wired + verified (plays
+   once, recolours). Ditto **`sad`** (top row of `art-source/tripo/sad blip.png`;
+   the bottom row is an eyebrows-no-tear alternative, unused).
+2. ~~Generate + slice the food art~~ — **DONE, 44 items** in `assets/companion/food/`
+   (fruit, pastries, sweets, hot meals, braai, veggies, drinks).
+3. **Drag-to-feed** (the actual build): the child drags a food from the pantry to
+   Blip; on release near him the food disappears and `eating` plays. Dropped
+   anywhere else: the food floats back to the pantry, no penalty, and `sad` plays
+   (her ruling 2026-08-07). Pointer events, NOT rAF (browser pane never fires rAF).
 4. **Shop rows + a migration** for the food items, mirrored in local-backend.js.
    ⚠️ Food already has a `category = 'food'` path in `mhq_get_state` (`foodShop`), so
    this may need NO new slot — check before assuming, and remember a new COLUMN would
-   need its own GRANT.
+   need its own GRANT. Also decide prices/level gates for 44 foods — probably tiered
+   by sheet (fruit cheap, braai mid, drinks/sweets treats).
+
+**WAVE-3 ACCESSORY PLACEMENT (second build job):** the fairy/girly/tomboy/gangster
+items and six eye pairs are cut and committed but have NO renderer entries, labels
+or shop rows yet. Notes that matter, measured this session:
+- eye pairs are drawn wider than his painted eyes — widthPct ~70 (happy-eyes ~54),
+  not the eyewear convention's 90; code must hide the painted eyes underneath
+  (never bake a body-coloured patch into the art — recolouring would break it).
+- star-wand has NO slot (Blip has no hands) — needs a decision, not art.
+- both wings root lower-left like her other wing art, so `flipX: true`.
+- preview EVERYTHING with tools/preview_accessory.py before trusting numbers.
 
 **Wave 2 is DONE (2026-08-06).** Two gaps it left, both visible only once the
 whole catalogue was laid out side by side:
