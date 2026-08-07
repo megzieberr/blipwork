@@ -35,6 +35,13 @@ ALPHA_ON = 40           # a pixel counts as "ink" above this alpha
 COL_GAP = 6             # blank columns that separate two frames
 
 
+def sheet_path(fname):
+    """Her GPT sheets live in the un-gitted companion folder; keyed Tripo
+    sheets live in this repo. Accept either, repo first."""
+    in_repo = os.path.join(ROOT, fname)
+    return in_repo if os.path.exists(in_repo) else os.path.join(SRC, fname)
+
+
 def bands(mask_counts, min_run, gap_max):
     """Group indices whose ink-count is non-trivial into runs."""
     out, start, blank = [], None, 0
@@ -162,6 +169,25 @@ JOBS = [
     # sheet is left in images/ as history.
     ("Recovering Blip 2.png", 344, 580, 4, "recovering"),
     ("Winking blip.png", 345, 568, 4, "wink"),
+    # The eating row is a TRIPO sheet, so unlike the GPT sheets above it
+    # arrives on flat magenta with no alpha at all. It is keyed FIRST, whole
+    # and uncropped, by:
+    #   python tools/tripo_sheet.py "art-source/tripo/image (4).png" \
+    #          --opaque --whole "art-source/Blip eating/eating-keyed.png"
+    # Whole matters: this file ground-aligns a row off one shared baseline,
+    # and cutting each frame to its own bounds first would throw that away.
+    # Measured on the keyed sheet — all four frames 300-301 x 285 with an
+    # identical ground line at y=417, the cleanest row on the project.
+    ("art-source/Blip eating/eating-keyed.png", 120, 430, 4, "eating"),
+    # Sad, for a food dropped somewhere that isn't Blip. Keyed the same way:
+    #   python tools/tripo_sheet.py "art-source/tripo/sad blip.png" \
+    #          --opaque --whole "art-source/Blip eating/sad-keyed.png"
+    # The sheet holds TWO takes of the sequence. Row 1 (y93-379) is the one
+    # used: it has the single tear in frame 3, and its frames measure
+    # 300x285 — the eating row's exact size — so the two moments read as the
+    # same character at the same scale. Row 2 (y429-718) is an alternative
+    # with eyebrows and no tear, left in the sheet as history.
+    ("art-source/Blip eating/sad-keyed.png", 85, 390, 4, "sad"),
 ]
 
 # Rows that must read as the SAME body get one scale factor across all of
@@ -177,14 +203,14 @@ GROUPS = []
 
 if __name__ == "__main__":
     for fname, y0, y1, n, name in JOBS:
-        sheet = Image.open(os.path.join(SRC, fname)).convert("RGBA")
+        sheet = Image.open(sheet_path(fname)).convert("RGBA")
         print("--", fname, "row y%d-%d ->" % (y0, y1), name)
         emit(split_row(sheet, y0, y1, n), name)
 
     for group in GROUPS:
         cut = []
         for fname, y0, y1, n, name, pick in group:
-            sheet = Image.open(os.path.join(SRC, fname)).convert("RGBA")
+            sheet = Image.open(sheet_path(fname)).convert("RGBA")
             frames = split_row(sheet, y0, y1, n)
             cut.append((name, [frames[i] for i in pick]))
             print("-- %s: kept frames %s of %d" % (name, [i + 1 for i in pick], n))

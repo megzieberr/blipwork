@@ -59,6 +59,13 @@ export const ITEM_LABELS = {
   "hud-monocle": "HUD monocle",
   "plasma-wings": "Plasma wings",
   "drone-wings": "Drone wings",
+  // neck (2026-08-07)
+  "chunky-chain": "Gold chain",
+  "heart-chain": "Heart chain",
+  "star-chain": "Star chain",
+  "bead-necklace": "Bead necklace",
+  "flower-garland": "Flower garland",
+  "medal-choker": "Medal choker",
   // legacy items (still owned by some blips)
   "round-glasses": "Round glasses",
   "cat-ears": "Cat ears",
@@ -74,8 +81,9 @@ export function itemLabel(id) { return ITEM_LABELS[id] || id; }
 export const SLOT_LABELS = {
   hat: "Hat", glasses: "Eyes", ears: "Ears", arms: "Arms", wings: "Wings", back: "Back",
   effects: "Effects", // 2026-08-05
+  neck: "Neck", // 2026-08-07
 };
-export const COSMETIC_SLOTS = ["hat", "glasses", "ears", "arms", "wings", "back", "effects"];
+export const COSMETIC_SLOTS = ["hat", "glasses", "ears", "arms", "wings", "back", "effects", "neck"];
 
 /* Rarity is DERIVED from price rather than stored — 0 is the free tier,
    120+ is rare (the theme's violet frame), everything between is common.

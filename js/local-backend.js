@@ -137,6 +137,24 @@ const SHOP_ITEMS = [
   { id: "drone-wings", slot: "wings", price: 140, minLevel: 6 },
   { id: "plasma-wings", slot: "wings", price: 155, minLevel: 6 },
   { id: "neural-crown", slot: "hat", price: 165, minLevel: 7 },
+  // NECK slot (2026-08-07) — the first slot added since effects, and the same
+  // three-place change: VALID_SLOTS above, mhq_equip's key list below, and
+  // shop_items_slot_cat_check in the migration. Mirrors
+  // supabase/migration-neck-slot.sql.
+  // The wide necklaces (2026-08-07). bead-necklace is the slot's FREE tier
+  // item, so a brand-new learner can fill neck like every other slot.
+  // Mirrors supabase/migration-neck-necklaces.sql, which also DELETES the
+  // gold-chain that migration-neck-slot.sql seeded — an applied migration is
+  // never edited, so the removal lives in the newer file.
+  { id: "bead-necklace", slot: "neck", price: 0, minLevel: 1 },
+  { id: "flower-garland", slot: "neck", price: 60, minLevel: 3 },
+  { id: "star-chain", slot: "neck", price: 80, minLevel: 4 },
+  { id: "heart-chain", slot: "neck", price: 95, minLevel: 5 },
+  { id: "medal-choker", slot: "neck", price: 125, minLevel: 6 },
+  // The regenerated gangster chain (2026-08-07, wide brief). NEW id — the
+  // old 'gold-chain' is on the retired list and a retired id never returns.
+  // Mirrors supabase/migration-neck-chunky-chain.sql.
+  { id: "chunky-chain", slot: "neck", price: 160, minLevel: 7 },
 ];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows. */
 const FOOD_ITEMS = [
@@ -148,7 +166,7 @@ const VALID_COLOURS = ["blue", "cream", "pink", "mint", "sky", "lilac", "peach",
 // Mirrors mhq_equip's hard-coded key list on the server. Adding a slot means
 // changing BOTH, plus shop_items_slot_cat_check — miss one and equipping the
 // new slot returns bad_equipped (that is exactly how `back` broke in July).
-const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects"];
+const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects", "neck"];
 
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a

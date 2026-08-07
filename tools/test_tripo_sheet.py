@@ -94,7 +94,7 @@ def run_case(label, bg_field, tmp, fails):
     dead = T.noise_floor(border, bg, spread)
     raw = T.alpha_from_background(rgb, bg, spread)
     a_tool, _ = T.resolve(rgb, bg, np.where(raw <= dead, 0.0, raw))
-    boxes, _, _ = T.find_items(a_tool, 12, 24)
+    boxes, _, _, _ = T.find_items(a_tool, 12, 24)
     if len(boxes) != len(NAMES):
         fails.append(f"[{label}] split into {len(boxes)} items, expected {len(NAMES)}")
         return

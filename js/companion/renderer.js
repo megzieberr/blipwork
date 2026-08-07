@@ -154,6 +154,28 @@ export const ATTACH = {
   // and a sweep below y=0.885 — never from the middle, which is always
   // hidden. That is also how a cape on a round character actually looks.
   back: { x: 0.5, y: 0.42 },
+  // NECK slot (2026-08-07) — anchored by its TOP centre (anchor y 0), not its
+  // middle, because a necklace is hung FROM a point rather than centred on
+  // one. y 0.47 puts that hanging point just under the eye band (0.487-0.63)
+  // so the drop falls across his mouth and the pendant lands at his base.
+  //
+  // ⚠️ A necklace on a face-blob is a genuine squeeze, and the number above is
+  // a compromise rather than a free choice. He has no neck: his eyes occupy
+  // y 0.487-0.63 and his body ends at 0.885, so there is only 0.255 of height
+  // below the eyes to hang anything in. Meanwhile the arms of a U have to be
+  // about 0.55 of the stage apart to pass OUTSIDE his eyes at x 0.308/0.688 —
+  // and at the gold chain's 1.34 aspect that makes it taller than his whole
+  // body. Measured, not guessed. So neck art wants to be WIDE AND SHALLOW
+  // (twice as wide as tall, choker-like); a deep U cannot be placed well at
+  // any size. Preview a new one with tools/preview_accessory.py before
+  // trusting a number here.
+  // Settled 2026-08-07 on the wide art: y 0.60 with widthPct 104, anchored by
+  // the arc's TOP CENTRE. That drops the whole necklace below the eye band
+  // (which ends at 0.63) so his face stays completely clear, and carries the
+  // ends out past his widest point so it reads as going AROUND him rather
+  // than lying on him. Checked across the set's two extremes, the shallow
+  // ribbon choker and the chunky beads.
+  neck: { x: 0.5, y: 0.60 },
   // EFFECTS slot (2026-08-05) — auras/glows, painted behind EVERYTHING
   // including the back slot. Centred on the upper body: an effect only
   // reads if it is WIDER than he is (he measures 0.94 of the stage at his
@@ -164,7 +186,12 @@ export const ATTACH = {
   effects: { x: 0.5, y: 0.46 },
 };
 
-const SLOT_ORDER = ["effects", "back", "wings", "ears", "glasses", "hat", "arms"]; // paint order relative to the body, which is inserted between "wings" and "ears"
+// Paint order relative to the body, which is inserted at the END of the
+// "wings" pass — so everything listed BEFORE "wings" (and wings itself) is
+// behind him, and everything after is in front. "neck" therefore sits
+// immediately after wings: a necklace lies ON his front, but under the arms,
+// which is where a hand would be.
+const SLOT_ORDER = ["effects", "back", "wings", "neck", "ears", "glasses", "hat", "arms"];
 
 /* ---------- accessory library ----------
    Each accessory is a self-contained inline SVG in its own local viewBox,
@@ -751,6 +778,44 @@ export const ACCESSORIES = {
     slot: "back", img: "back-sword.png", widthPct: 96, anchor: { x: 0.5, y: 0.5 },
   },
 
+  // --- neck. Anchored by the TOP CENTRE (y 0), the point the necklace hangs
+  // from, so a re-rolled shape drops from the same place instead of needing
+  // the attach point re-found. widthPct 40 was chosen by eye over 36/40/44
+  // in tools/preview_accessory.py: it is the widest the chain goes before the
+  // pendant falls past his hem, and his eyes and mouth both stay readable.
+  // See the ⚠️ on ATTACH.neck for why a deep U can never sit perfectly here.
+  // The wide arcs. All five share the slot's attach and widthPct — they were
+  // drawn to one brief and measure 2.5:1 to 2.8:1, close enough that a single
+  // number suits the whole set. A future necklace much deeper than 2.5:1
+  // needs its own `attach`, or it will hang past his hem.
+  //
+  // widthPct 104 is deliberately WIDER THAN THE STAGE. At 88 the arc's ends
+  // stopped inside his silhouette and it read as a necklace lying on him;
+  // Megan's note was that it still was not going around the body. His widest
+  // point is 0.954 of the stage, so the ends have to pass THROUGH that edge
+  // to read as wrapping behind him. Checked at 96 / 104 / 112: 96 still stops
+  // short, 112 leaves the ends floating off him in mid-air.
+  "heart-chain":    { slot: "neck", img: "heart-chain.png",    widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "star-chain":     { slot: "neck", img: "star-chain.png",     widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "bead-necklace":  { slot: "neck", img: "bead-necklace.png",  widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "flower-garland": { slot: "neck", img: "flower-garland.png", widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "medal-choker":   { slot: "neck", img: "medal-choker.png",   widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  // `pearls` was cut on sight (2026-08-07) and `gold-chain` deleted with it —
+  // the chain was a deep U that crossed his eyes at every size tried. Both
+  // are gone from the renderer, the labels, the catalogue and disk; the
+  // delete is recorded in migration-neck-necklaces.sql.
+  //
+  // The gangster chain REGENERATED to the wide brief (aspect 1.75:1 — deeper
+  // than the other five because of the medallion drop, hence its own attach:
+  // hung from 0.50 the links wrap his cheeks and the medallion dangles just
+  // past his hem, which is the look; at the slot's 0.60 the medallion fell
+  // off the stage). New id on purpose: the old id is on verify-store's
+  // retired list, and a retired id never comes back.
+  "chunky-chain": {
+    slot: "neck", img: "chunky-chain.png", widthPct: 104,
+    anchor: { x: 0.5, y: 0.0 }, attach: { x: 0.5, y: 0.50 },
+  },
+
   // --- wings. Megan draws ONE wing; the renderer mirrors it for the other
   // side, so these must stay single-sided art.
   // The anchor is the wing's ROOT, and it must sit far enough across the
@@ -1044,6 +1109,7 @@ function animFramePaths(state) {
    blanket toward the body hue along with everything else. */
 const ANIM_RECOLOURS = {
   sleeping: true, excited: true, jumping: true, hungry: true, wink: true,
+  eating: true, sad: true,
   sick: false, veryill: false, recovering: false,
 };
 
@@ -1133,8 +1199,12 @@ function idleAnimState({ healthStage, recovering, hungry }) {
 const MOMENT_LOOPS = 2;
 /* Per-moment loop counts. "jumping" doubling up is what reads as Megan's
    "small hop hop"; a wink repeated twice reads twitchy, so it plays once. */
-const MOMENT_LOOP_OVERRIDES = { wink: 1 };
-const MOMENTS = ["excited", "jumping", "wink"];
+/* Eating plays ONCE for the same reason the wink does, only more strongly:
+   the row is a sequence, not a cycle — mouth closed, bite, chew, finished.
+   Looping it twice would have him bite a second time after he has already
+   swallowed, for one piece of food. */
+const MOMENT_LOOP_OVERRIDES = { wink: 1, eating: 1, sad: 1 };
+const MOMENTS = ["excited", "jumping", "wink", "eating", "sad"];
 export function playMoment(handle, name) {
   if (!handle || !handle.layers || !handle.layers.body) return;
   if (!MOMENTS.includes(name)) return;

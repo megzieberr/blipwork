@@ -24,6 +24,8 @@ USAGE
 
   --bg auto|#RRGGBB   background colour (default auto = median of the border)
   --min-gap N         blank px needed to call it a gap between items (default 12)
+  --min-area N        blobs under N px are background dust, not art (default 256)
+  --opaque            sheet has no see-through art (food/accessories, NOT effects)
   --pad N             transparent padding kept around each item (default 2)
   --max N             cap the longest side of each item, px (default 512)
   --dry-run           report what it found, write nothing
@@ -148,8 +150,39 @@ def alpha_from_background(rgb, bg, spread):
 SOLID_LO = 0.28
 SOLID_HI = 0.42
 
+# --opaque: how far INSIDE the silhouette a pixel must sit before the sheet
+# author's "nothing here is see-through" is applied to it.
+#
+# WHY THIS HAS TO BE DECLARED RATHER THAN DETECTED. A pixel's distance from the
+# background cannot tell opaque pink from a half-opaque glow — measured on real
+# sheets, opaque icing and grape purple sit at 0.306-0.327, while the genuine
+# soft glows in wave 1 have their 90th percentile at 0.32-0.34 and run to 0.366.
+# The distributions OVERLAP, so no threshold exists. That is the same wall the
+# plasma ring hit on 2026-08-06, and it is not a tuning failure: an opaque pink
+# and a half-opaque yellow-green over magenta are genuinely the same pixel.
+# Untreated, the pink doughnut glaze came out at 52% alpha unmixed to
+# rgb(247,235,92) — yellow-green — across a third of the item; the grapes were
+# 49% wrong, the cupcake 22%, the watermelon 17%.
+#
+# What breaks the tie is knowledge the image does not carry: whether the sheet
+# was prompted for translucent art. Food and accessory sheets say "no glow, no
+# aura, no sparkles", so on those every pixel well inside an item is solid.
+# Effects sheets ARE glows — run those without the flag. Getting it wrong is
+# visible either way: a wrongly-soft opaque item unmixes to green, and a
+# wrongly-hard glow loses its falloff.
+#
+# ⚠️ Applied to the WHOLE silhouette this trades one artefact for another. The
+# anti-aliased rim is genuinely half-background, so forcing it solid keeps the
+# magenta in it — a pink halo, measured at ~800 px per item and plainly visible
+# around the pale ones (the marshmallow's grey outline went mauve). So the
+# declaration is applied only to the INTERIOR, and the rim keeps the ordinary
+# soft reading that unmixes it correctly. That is an erosion, not a hole fill:
+# the doughnut's centre hole is not in the silhouette to begin with, so it
+# erodes like any other edge and stays open. Verified: centre alpha 0.
+OPAQUE_INSET = 2
 
-def solidity(rgb, bg):
+
+def solidity(rgb, bg, lo=SOLID_LO, hi=SOLID_HI):
     """1 where a pixel is too far from the background to be a faded one.
 
     This is the test the header calls for: the background is a colour no
@@ -173,7 +206,7 @@ def solidity(rgb, bg):
     # test_tripo_sheet.py fails exactly that way if you try it. Left in: at the
     # size Blip renders (a 400px item drawn ~100px wide) one rim pixel averages
     # away to nothing. Fix it by keying, not by eroding, if it ever shows.
-    return smoothstep(SOLID_LO, SOLID_HI, d / far)
+    return smoothstep(lo, hi, d / far)
 
 
 def noise_floor(border, bg, spread):
@@ -195,7 +228,7 @@ def noise_floor(border, bg, spread):
 FRINGE_ALPHA = 0.12
 
 
-def resolve(rgb, bg, alpha_min):
+def resolve(rgb, bg, alpha_min, opaque=False):
     """Turn the minimum-alpha reading into the final (alpha, colour) pair.
 
     Solid pixels (alpha_min above OPAQUE_HI) keep their photographed colour
@@ -210,6 +243,12 @@ def resolve(rgb, bg, alpha_min):
     # under-reads. Taking the max means a pixel is only left translucent when
     # BOTH agree it could be, which is the honest reading of the ambiguity.
     w = np.maximum(smoothstep(OPAQUE_LO, OPAQUE_HI, alpha_min), solidity(rgb, bg))
+    if opaque:
+        # The author says nothing here is see-through, so anything properly
+        # inside an item is solid whatever its colour reads as. Only the rim,
+        # which really is part background, keeps the ordinary reading.
+        inside = ndimage.binary_erosion(alpha_min > 0.06, iterations=OPAQUE_INSET)
+        w = np.maximum(w, inside.astype(np.float64))
     alpha = w + (1.0 - w) * alpha_min
 
     # Unmix with the FINAL alpha, not the provisional one. That keeps the
@@ -271,6 +310,73 @@ def reading_order(boxes):
     return out
 
 
+# Smallest blob, in pixels, that is allowed to be part of an item. Below this
+# a component is compression dust off the background, not art.
+#
+# ⚠️ This runs BEFORE the dilation that groups an item's detached pieces, and
+# that ordering is the whole point. The alpha gate is a PERCENTILE of the
+# border's own noise, so by construction it lets roughly 0.1% of background
+# pixels through. On a clean sheet that is a handful of stray pixels and the
+# old bounding-box speck filter mopped them up afterwards. On a noisy one it
+# is thousands, scattered evenly — and dilating by min_gap//2 CHAINS them into
+# a bridge between items. Measured on the pastries sheet: six items at
+# 56 000-74 000 px each, largest dust blob 185 px, and the sheet came back as
+# ONE 944x704 "item" spanning four of them, with the other two lost among 29
+# fragments. Filtering after the dilation cannot undo a bridge that has
+# already merged two items into one component.
+#
+# The margin is enormous — three orders of magnitude between dust and art —
+# so this needs no tuning. It is deliberately well under any genuinely
+# detached art piece (a floating crystal, a glow's spark) and well over any
+# dust: at the size items render, a 16x16 fragment of a 400px sheet lands at
+# about 4 px on screen, so nothing visible is ever at risk here.
+MIN_AREA = 256
+
+
+def drop_dust(solid, min_area):
+    """Remove components too small to be art. Returns (mask, pixels removed).
+
+    Per-component AREA, not bounding box: dust is compact, and a genuinely
+    thin-but-long piece of art (an antenna wire, a whisker) has a small box
+    on one side while carrying plenty of pixels.
+    """
+    labels, n = ndimage.label(solid)
+    if not n:
+        return solid, 0
+    areas = np.bincount(labels.ravel())
+    areas[0] = 0
+    keep = areas >= min_area
+    cleaned = keep[labels]
+    return cleaned, int(solid.sum() - cleaned.sum())
+
+
+def apply_groups(boxes, spec):
+    """Merge components the OPERATOR says belong to one item.
+
+    `spec` is "1+2,3+4+5,7+9" over the indices a --dry-run printed. Each group
+    becomes one item: the union of its boxes, carrying every member's label so
+    the crop keeps all of them and still erases anything else.
+
+    The automatic dilation grouping in find_items cannot do this job. It joins
+    pieces that are CLOSE, and on the eye sheets the two eyes of one pair sit
+    ~480 px apart while the pairs themselves are only ~250 px apart — the gap
+    within an item is bigger than the gap between items, so no dilation radius
+    separates them. Stating it beats guessing.
+
+    Anything not listed is DROPPED, and the caller says so. That is a feature:
+    it is how the stray mouth drawn between the happy-eyes pair was left out,
+    without a re-generation.
+    """
+    out = []
+    for part in spec.split(","):
+        idx = [int(n) - 1 for n in part.split("+") if n.strip()]
+        members = [boxes[i] for i in idx]
+        out.append((min(b[0] for b in members), min(b[1] for b in members),
+                    max(b[2] for b in members), max(b[3] for b in members),
+                    set().union(*(b[4] for b in members))))
+    return out
+
+
 def drop_specks(boxes, min_size):
     """Discard boxes too small to be a real accessory. Returns (kept, dropped)
     so the caller can SAY what it threw away — a silent truncation here would
@@ -279,8 +385,8 @@ def drop_specks(boxes, min_size):
     return kept, len(boxes) - len(kept)
 
 
-def find_items(alpha, min_gap, min_size=24, floor=0.06):
-    """(boxes in reading order, specks dropped, label image), via components.
+def find_items(alpha, min_gap, min_size=24, floor=0.06, min_area=MIN_AREA):
+    """(boxes in reading order, specks dropped, dust px, label image).
 
     Each box is (x0, y0, x1, y1, label) and the label indexes the returned
     label image, so a caller can tell this item's pixels from a neighbour's.
@@ -297,6 +403,7 @@ def find_items(alpha, min_gap, min_size=24, floor=0.06):
     never pads the crop.
     """
     solid = alpha > floor
+    solid, dust = drop_dust(solid, min_area)
     grouped = ndimage.binary_dilation(solid, iterations=max(1, min_gap // 2))
     labels, n = ndimage.label(grouped)
     labels = np.where(solid, labels, 0)  # measure the real pixels, not the halo
@@ -315,7 +422,7 @@ def find_items(alpha, min_gap, min_size=24, floor=0.06):
     # the sheet reads top-to-bottom instead of left-to-right. That silently
     # renamed a wizard hat to "crystal-orbit".
     boxes, dropped = drop_specks(boxes, min_size)
-    return reading_order(boxes), dropped, labels
+    return reading_order(boxes), dropped, dust, labels
 
 
 def main(argv=None):
@@ -328,8 +435,27 @@ def main(argv=None):
     ap.add_argument("--min-gap", type=int, default=12)
     ap.add_argument("--min-size", type=int, default=24,
                     help="discard blobs smaller than this on BOTH sides (px)")
+    ap.add_argument("--min-area", type=int, default=MIN_AREA,
+                    help=f"treat components under this many px as background "
+                         f"dust (default {MIN_AREA})")
     ap.add_argument("--pad", type=int, default=2)
     ap.add_argument("--max", type=int, default=512)
+    ap.add_argument("--group", default="",
+                    help="merge components into items by their --dry-run index, "
+                         "e.g. \"1+2,3+4+5,7+9\". Anything not listed is left "
+                         "out. Use when one item's pieces sit further apart "
+                         "than two different items do (the eye pairs).")
+    ap.add_argument("--opaque", action="store_true",
+                    help="nothing on this sheet is see-through (food, accessories) "
+                         "— keeps pink/purple art from unmixing to green. Do NOT "
+                         "use on effects sheets, whose glows are meant to be soft.")
+    ap.add_argument("--whole", metavar="PATH",
+                    help="key the WHOLE sheet to one RGBA PNG at PATH and stop, "
+                         "instead of cutting it into items. For CHARACTER sheets: "
+                         "slice_sprites.py needs the frames still on their shared "
+                         "canvas, because it ground-aligns them off a common "
+                         "baseline — cropping each frame to its own bounds first "
+                         "throws that away and the loop jitters.")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)
 
@@ -348,14 +474,43 @@ def main(argv=None):
     # is the one thing that stops the result recompositing losslessly.
     dead = noise_floor(border, bg, spread)
     raw = alpha_from_background(rgb, bg, spread)
-    alpha, fore = resolve(rgb, bg, np.where(raw <= dead, 0.0, raw))
+    alpha, fore = resolve(rgb, bg, np.where(raw <= dead, 0.0, raw), opaque=args.opaque)
 
-    boxes, dropped, labels = find_items(alpha, args.min_gap, args.min_size)
+    if args.whole:
+        keep, dust = drop_dust(alpha > 0.06, args.min_area)
+        alpha = np.where(keep, alpha, 0.0)
+        os.makedirs(os.path.dirname(os.path.abspath(args.whole)), exist_ok=True)
+        Image.fromarray(np.dstack([fore, alpha * 255.0]).astype(np.uint8),
+                        "RGBA").save(args.whole)
+        print(f"{os.path.basename(args.sheet)}: background rgb"
+              f"({int(bg[0])},{int(bg[1])},{int(bg[2])}) noise {dead:.3f}"
+              f" — whole sheet keyed"
+              + (f", {dust} px of background dust erased" if dust else "")
+              + f" -> {args.whole}")
+        return 0
+
+    boxes, dropped, dust, labels = find_items(alpha, args.min_gap, args.min_size,
+                                              min_area=args.min_area)
+    boxes = [(x0, y0, x1, y1, {lab}) for x0, y0, x1, y1, lab in boxes]
+    if args.group:
+        found = len(boxes)
+        boxes = apply_groups(boxes, args.group)
+        used = len({i for b in boxes for i in b[4]})
+        if used < found:
+            print(f"  grouped {found} components into {len(boxes)} item(s); "
+                  f"{found - used} not listed and left out")
+
     names = [n.strip() for n in args.names.split(",") if n.strip()]
+
+    # Erase the dust from the OUTPUT too, not just from the item hunt. A crop
+    # is a rectangle around one component, so background speckle sitting inside
+    # that rectangle would otherwise ride along into the PNG.
+    alpha = np.where((alpha > 0.06) & (labels == 0), 0.0, alpha)
 
     print(f"{os.path.basename(args.sheet)}: background rgb"
           f"({int(bg[0])},{int(bg[1])},{int(bg[2])}) noise {dead:.3f}"
           f" — {len(boxes)} item(s)"
+          + (f", {dust} px of background dust erased" if dust else "")
           + (f", {dropped} speck(s) below --min-size discarded" if dropped else ""))
     if names and len(names) != len(boxes):
         print(f"  ! {len(names)} name(s) given for {len(boxes)} item(s). "
@@ -365,7 +520,7 @@ def main(argv=None):
     if not args.dry_run and names:
         os.makedirs(args.out, exist_ok=True)
 
-    for i, (x0, y0, x1, y1, lab) in enumerate(boxes):
+    for i, (x0, y0, x1, y1, labs) in enumerate(boxes):
         px0, py0 = max(0, x0 - args.pad), max(0, y0 - args.pad)
         px1 = min(rgba.shape[1] - 1, x1 + args.pad)
         py1 = min(rgba.shape[0] - 1, y1 + args.pad)
@@ -375,10 +530,11 @@ def main(argv=None):
         # another item are touched, so nothing of this item's own soft edge
         # is cut.
         near = labels[py0:py1 + 1, px0:px1 + 1]
-        intruder = (near != lab) & (near != 0)
+        mine = np.isin(near, list(labs))
+        intruder = (~mine) & (near != 0)
         if intruder.any():
             spill = ndimage.binary_dilation(intruder, iterations=max(1, args.min_gap // 2))
-            tile[..., 3] = np.where(spill & (near != lab), 0, tile[..., 3])
+            tile[..., 3] = np.where(spill & ~mine, 0, tile[..., 3])
         crop = Image.fromarray(tile, "RGBA")
         if args.max and max(crop.size) > args.max:
             crop.thumbnail((args.max, args.max), Image.LANCZOS)
