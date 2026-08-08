@@ -64,6 +64,12 @@
     border-radius:10px;pointer-events:none}
   #bounds.hide{display:none}
   #blipstage{width:100%}
+  /* Where Blip's own painted eyes and mouth sit. Needed because every eye
+     accessory paints a body-coloured patch over his eyes first, so while
+     you are positioning one you cannot see the face you are lining up
+     against. Sits ON TOP of everything so it stays visible over the art. */
+  #eyeguide{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  #eyeguide.hide{display:none}
 
   .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.6}
   .key{background:rgba(255,255,255,.08);border-radius:4px;padding:1px 5px;font-size:10px}
@@ -133,6 +139,23 @@
     <div id="stagewrap" tabindex="0">
       <div id="blipstage"></div>
       <div id="bounds"></div>
+      <!-- Measured off blip-base-blue.png by isolating the dark navy shapes
+           (his eye navy is much darker than his outline navy, so the two
+           separate cleanly): eyes centred at x 0.302 / 0.691, y 0.571;
+           mouth at 0.498 / 0.642. In this 480x600 box that is the numbers
+           below. Re-measure if her body art is ever redrawn. -->
+      <svg id="eyeguide" class="hide" viewBox="0 0 480 600" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#0b1220" stroke-width="6" opacity=".55">
+          <ellipse cx="145" cy="343" rx="33" ry="38.5"/>
+          <ellipse cx="332" cy="343" rx="33.5" ry="38.5"/>
+          <ellipse cx="239" cy="385" rx="33" ry="9"/>
+        </g>
+        <g fill="none" stroke="#ff3ea5" stroke-width="2.5" stroke-dasharray="7 5">
+          <ellipse cx="145" cy="343" rx="33" ry="38.5"/>
+          <ellipse cx="332" cy="343" rx="33.5" ry="38.5"/>
+          <ellipse cx="239" cy="385" rx="33" ry="9"/>
+        </g>
+      </svg>
     </div>
 
     <div class="sizerow">
@@ -147,6 +170,10 @@
       nudge · hold <span class="key">Shift</span> for bigger steps
       <label style="display:block;margin-top:9px">
         <input type="checkbox" id="showbounds" checked> show the edge of the picture
+      </label>
+      <label style="display:block;margin-top:5px">
+        <input type="checkbox" id="showeyes"> show where his real eyes are
+        <span style="color:#ff3ea5">▮</span>
       </label>
     </div>
 
@@ -416,6 +443,7 @@ $("flipx").addEventListener("change", () => {
   draw(); analyse();
 });
 $("showbounds").addEventListener("change", () => $("bounds").classList.toggle("hide", !$("showbounds").checked));
+$("showeyes").addEventListener("change", () => $("eyeguide").classList.toggle("hide", !$("showeyes").checked));
 
 $("resetbtn").addEventListener("click", () => {
   if (!currentId) return;
@@ -490,31 +518,56 @@ $("copybtn").addEventListener("click", async () => {
         Blip fills 96% of the width, so a wing there is arithmetically
         unable to show at any size.
    ============================================================ */
-const PAD = 1;                                   // one stage of margin each side
-const CW = 480 * (1 + PAD * 2), CH = 600 * (1 + PAD * 2);
-const OX = 480 * PAD, OY = 600 * PAD;            // where the real stage starts
+/* The checks work on a SMALL copy of the stage with a margin round it, so
+   the parts falling outside can still be counted instead of being clipped
+   away. 240x300 is ample — every answer below is a percentage, and a half
+   stage of margin catches anything worth warning about.
+
+   ⚠️ Sized and reused deliberately. The first version made a fresh
+   1440x1800 canvas (10 MB) on EVERY check and threw it away; after a few
+   dozen checks the tab stopped responding altogether and the checks just
+   silently produced nothing. One canvas, one ninth the pixels, reused. */
+const AW = 240, AH = 300;                        // analysis size of the stage
+const PAD = 0.5;                                 // half a stage of margin each side
+const CW = Math.round(AW * (1 + PAD * 2));       // 480
+const CH = Math.round(AH * (1 + PAD * 2));       // 600
+const OX = Math.round(AW * PAD), OY = Math.round(AH * PAD);  // where the stage starts
+
+const workCanvas = document.createElement("canvas");
+workCanvas.width = CW; workCanvas.height = CH;
+const workCtx = workCanvas.getContext("2d", { willReadFrequently: true });
+
+/* ⚠️ Load images with the old load/error events, NOT img.decode().
+   decode() never settles in a page that is not painting — which is exactly
+   what this project's preview pane is (see the rAF/screenshot note in
+   PROJECT-STATUS). Every picture check below hung forever on it and left an
+   empty verdict box, which reads as "nothing to report". Measured: the
+   canvas work takes 5ms; decode() sat there past 30 seconds. onload fires
+   either way, in every browser, painting or not. */
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.addEventListener("load", () => resolve(img), { once: true });
+    img.addEventListener("error", () => reject(new Error("could not load " + src)), { once: true });
+    img.src = src;
+  });
+}
 
 let bodyAlpha = null;
 async function loadBodyAlpha() {
   if (bodyAlpha) return bodyAlpha;
-  const img = new Image();
-  img.src = "assets/companion/blip-base-blue.png";
-  await img.decode();
+  const img = await loadImage("assets/companion/blip-base-blue.png");
   const c = document.createElement("canvas");
-  c.width = 480; c.height = 600;
+  c.width = AW; c.height = AH;
   const x = c.getContext("2d", { willReadFrequently: true });
-  x.drawImage(img, 0, 0, 480, 600);
-  bodyAlpha = x.getImageData(0, 0, 480, 600).data;
+  x.drawImage(img, 0, 0, AW, AH);
+  bodyAlpha = x.getImageData(0, 0, AW, AH).data;
   return bodyAlpha;
 }
 
 const artCache = new Map();
 async function loadArt(file) {
-  if (!artCache.has(file)) {
-    const img = new Image();
-    img.src = `assets/companion/items/${file}`;
-    artCache.set(file, img.decode().then(() => img));
-  }
+  if (!artCache.has(file)) artCache.set(file, loadImage(`assets/companion/items/${file}`));
   return artCache.get(file);
 }
 
@@ -525,7 +578,28 @@ function flag(cls, html) {
   $("flags").appendChild(d);
 }
 
+/* Never let a check fail in silence. An empty verdict box looks exactly
+   like "nothing to report", which is how a stalled canvas went unnoticed
+   here for several rounds — say so on screen instead. */
+/* Every check run gets a ticket number. Clicking down the item list starts
+   a new run before the last has finished, and an older run finishing late
+   used to append ITS verdict to the new item's box — one item showed
+   nothing and the next showed two items' worth. Anything holding a stale
+   ticket now stops quietly. */
+let runTicket = 0;
 async function analyse() {
+  const my = ++runTicket;
+  try {
+    await runChecks(my);
+  } catch (e) {
+    if (my !== runTicket) return;
+    $("flags").innerHTML = "";
+    flag("bad", `The checks could not run: <b>${e && e.message ? e.message : e}</b>. `
+      + "The picture above is still correct — only the advice is missing.");
+  }
+}
+
+async function runChecks(my) {
   if (!currentId || !handle) return;
   const def = ACCESSORIES[currentId];
   $("flags").innerHTML = "";
@@ -540,20 +614,25 @@ async function analyse() {
      reports an empty item. (Found by running this page, which is rather
      the point of it.) */
   await Promise.all([...layer.querySelectorAll("img")].map((im) =>
-    im.complete && im.naturalWidth
+    im.complete
       ? null
+      // `complete` is also true after a FAILED load, so a plain wait on
+      // load/error can never settle for an image that already errored —
+      // hence the timeout. A stuck check must not stall the whole page.
       : new Promise((res) => { im.addEventListener("load", res, { once: true });
-                               im.addEventListener("error", res, { once: true }); })));
+                               im.addEventListener("error", res, { once: true });
+                               setTimeout(res, 3000); })));
   // one frame for layout to settle after the images sized themselves
   await new Promise((res) => setTimeout(res, 0));
+  if (my !== runTicket) return;
 
   const sRect = handle.stage.getBoundingClientRect();
   const lRect = layer.getBoundingClientRect();
   const box = {
-    x: (lRect.left - sRect.left) / sRect.width * 480,
-    y: (lRect.top - sRect.top) / sRect.height * 600,
-    w: lRect.width / sRect.width * 480,
-    h: lRect.height / sRect.height * 600,
+    x: (lRect.left - sRect.left) / sRect.width * AW,
+    y: (lRect.top - sRect.top) / sRect.height * AH,
+    w: lRect.width / sRect.width * AW,
+    h: lRect.height / sRect.height * AH,
   };
 
   if (!def.img) {
@@ -564,35 +643,35 @@ async function analyse() {
 
   let art;
   try { art = await loadArt(def.img); } catch { flag("bad", `Could not load ${def.img}.`); return; }
+  if (my !== runTicket) return;
 
-  // Paint the accessory onto a padded canvas so the parts that fall OUTSIDE
-  // the stage are still measurable rather than silently clipped away.
-  const c = document.createElement("canvas");
-  c.width = CW; c.height = CH;
-  const ctx = c.getContext("2d", { willReadFrequently: true });
+  // Paint the accessory onto the padded work canvas so the parts that fall
+  // OUTSIDE the stage are still measurable rather than silently clipped.
   const mirrored = (def.flipX ? "left" : "right") === "right";
-  ctx.save();
-  ctx.translate(OX + box.x, OY + box.y);
-  if (mirrored) { ctx.translate(box.w, 0); ctx.scale(-1, 1); }
-  ctx.drawImage(art, 0, 0, box.w, box.h);
-  ctx.restore();
+  workCtx.clearRect(0, 0, CW, CH);
+  workCtx.save();
+  workCtx.translate(OX + box.x, OY + box.y);
+  if (mirrored) { workCtx.translate(box.w, 0); workCtx.scale(-1, 1); }
+  workCtx.drawImage(art, 0, 0, box.w, box.h);
+  workCtx.restore();
 
   let data;
-  try { data = ctx.getImageData(0, 0, CW, CH).data; }
+  try { data = workCtx.getImageData(0, 0, CW, CH).data; }
   catch { flag("warn", "Can't inspect the picture here — open the page through the dev server."); return; }
   const body = await loadBodyAlpha();
+  if (my !== runTicket) return;
 
   let total = 0, offStage = 0, hidden = 0;
   let minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
-  for (let py = 0; py < CH; py += 2) {
-    for (let px = 0; px < CW; px += 2) {
+  for (let py = 0; py < CH; py++) {
+    for (let px = 0; px < CW; px++) {
       if (data[(py * CW + px) * 4 + 3] <= 24) continue;
       total++;
       const sx = px - OX, sy = py - OY;
-      if (sx < 0 || sx >= 480 || sy < 0 || sy >= 600) { offStage++; continue; }
+      if (sx < 0 || sx >= AW || sy < 0 || sy >= AH) { offStage++; continue; }
       if (sx < minX) minX = sx; if (sx > maxX) maxX = sx;
       if (sy < minY) minY = sy; if (sy > maxY) maxY = sy;
-      if (body[((sy | 0) * 480 + (sx | 0)) * 4 + 3] > 24) hidden++;
+      if (body[(sy * AW + sx) * 4 + 3] > 24) hidden++;
     }
   }
   if (!total) {
@@ -631,7 +710,7 @@ async function analyse() {
   else if (showPct > 0 && offPct < 15 && !BEHIND.has(def.slot)) flag("ok", `${showPct}% of it is on show.`);
 
   if (maxX > minX) {
-    const wFrac = (maxX - minX) / 480;
+    const wFrac = (maxX - minX) / AW;
     if (wFrac * 66 < 5) flag("warn", `On a shop card it is only about ${Math.round(wFrac * 66)} pixels wide — check the small picture above; it may be too tiny to make out.`);
   }
 

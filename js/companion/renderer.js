@@ -205,7 +205,7 @@ const SLOT_ORDER = ["effects", "back", "wings", "neck", "ears", "glasses", "hat"
 export const ACCESSORIES = {
   "party-hat": {
     slot: "hat",
-    widthPct: 26,
+    widthPct: 25,
     anchor: { x: 0.5, y: 0.92 },
     svg: `<svg viewBox="0 0 100 118" xmlns="http://www.w3.org/2000/svg">
       <defs><clipPath id="blip-hat-cone-{{UID}}"><path d="M50 5 L79 96 L21 96 Z"/></clipPath></defs>
@@ -218,6 +218,7 @@ export const ACCESSORIES = {
       <path d="M14 91 Q50 108 86 91 L86 98 Q50 116 14 98 Z" fill="#fce7a6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
       <path d="M50 5 L79 96 L21 96 Z" fill="none" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>`,
+    attach: { x: 0.518, y: 0.143 },
   },
   "cat-ears": {
     slot: "ears",
@@ -228,10 +229,11 @@ export const ACCESSORIES = {
       <path d="M30 4 C10 20 4 46 10 64 C16 60 22 56 30 56 C38 56 44 60 50 64 C56 46 50 20 30 4 Z" fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
       <path d="M30 20 C20 30 17 44 20 54 C24 51 27 49 30 49 C33 49 36 51 40 54 C43 44 40 30 30 20 Z" fill="#ffb6c9"/>
     </svg>`,
+    attach: [{ x: 0.313, y: 0.3 }, { x: 0.687, y: 0.3 }],
   },
   "round-glasses": {
     slot: "glasses",
-    widthPct: 44,
+    widthPct: 87,
     anchor: { x: 0.5, y: 0.5 },
     svg: `<svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
       <line x1="86" y1="40" x2="114" y2="40" stroke="${OUTLINE}" stroke-width="6"/>
@@ -240,6 +242,7 @@ export const ACCESSORIES = {
       <circle cx="55" cy="45" r="38" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
       <circle cx="145" cy="45" r="38" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
     </svg>`,
+    attach: { x: 0.496, y: 0.569 },
   },
   "angel-wings": {
     slot: "wings",
@@ -249,6 +252,7 @@ export const ACCESSORIES = {
       <path d="M92 20 C70 10 40 20 22 46 C40 42 52 46 58 56 C38 58 24 70 16 92 C34 84 48 84 56 90 C40 98 30 112 26 132 C46 122 64 108 74 90 C82 68 88 44 92 20 Z"
         fill="#fff7e8" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>`,
+    attach: [{ x: 0.078, y: 0.526 }, { x: 0.922, y: 0.526 }],
   },
   "stubby-arms": {
     slot: "arms",
@@ -261,6 +265,7 @@ export const ACCESSORIES = {
     // a plain rounded capsule angled ~24° outward-down: the earlier
     // comma/claw path read as a hook once attached to the body (Megan's
     // "look a bit odd" review); a simple stub reads as a limb
+    attach: [{ x: 0.141, y: 0.727 }, { x: 0.859, y: 0.727 }],
   },
 
   /* ============================================================
@@ -308,6 +313,7 @@ export const ACCESSORIES = {
       <ellipse cx="42" cy="34" rx="9" ry="6" fill="#ffd0e2" opacity="0.7" transform="rotate(-30 42 34)"/>
       <ellipse cx="132" cy="34" rx="9" ry="6" fill="#ffd0e2" opacity="0.7" transform="rotate(-30 132 34)"/>
     </svg>`,
+    attach: { x: 0.498, y: 0.545 },
   },
 
   // blue gamer headset (ears slot, ATTACHED). Drawn as one half — band
@@ -363,6 +369,7 @@ export const ACCESSORIES = {
       <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="${OUTLINE}" stroke-width="2.5"/>
       <ellipse cx="42" cy="18" rx="10" ry="3.5" fill="#fff6d6" opacity="0.8" transform="rotate(-18 42 18)"/>
     </svg>`,
+    attach: { x: 0.514, y: 0.126 },
   },
 
   // luminous aurora wings (wings slot, FLOATY — her "Rainbow Glow"
@@ -403,6 +410,7 @@ export const ACCESSORIES = {
         <circle cx="31" cy="74" r="6" fill="#57c9ff" opacity="0.9"/>
       </g>
     </svg>`,
+    attach: [{ x: 0.159, y: 0.751 }, { x: 0.841, y: 0.751 }],
   },
 
   /* ============================================================
@@ -496,9 +504,9 @@ export const ACCESSORIES = {
   // centred SVG because the hat slot is a single point, not a pair.
   "horns": {
     slot: "hat",
-    widthPct: 32,
-    anchor: { x: 0.5, y: 1.0 },
-    attach: { x: 0.5, y: 0.235 },
+    widthPct: 41,
+    anchor: { x: 0.5, y: 1 },
+    attach: { x: 0.508, y: 0.257 },
     svg: `<svg viewBox="0 0 120 54" xmlns="http://www.w3.org/2000/svg">
       <path d="M46 52 C30 50 16 38 12 16 C28 18 42 30 48 52 Z" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
       <path d="M74 52 C90 50 104 38 108 16 C92 18 78 30 72 52 Z" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
@@ -511,9 +519,9 @@ export const ACCESSORIES = {
   // overtly "system window" flourish in the hat slot.
   "bolt-antenna": {
     slot: "hat",
-    widthPct: 14,
-    anchor: { x: 0.5, y: 1.0 },
-    attach: { x: 0.5, y: 0.20 },
+    widthPct: 19,
+    anchor: { x: 0.5, y: 1 },
+    attach: { x: 0.508, y: 0.243 },
     svg: `<svg viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
       <path d="M30 84 C30 66 24 58 24 48" fill="none" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
       <path d="M34 4 L12 44 L26 44 L22 80 L48 36 L32 36 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
@@ -551,6 +559,7 @@ export const ACCESSORIES = {
       <path d="M28 18 C20 24 18 34 20 42 C24 40 26 39 28 39 C30 39 32 40 36 42 C38 34 36 24 28 18 Z"
         fill="#eafcff" opacity="0.45"/>
     </svg>`,
+    attach: [{ x: 0.299, y: 0.321 }, { x: 0.701, y: 0.321 }],
   },
 
   // bunny ears (ears, 55g) — tall ovals with a pink inner.
@@ -565,6 +574,7 @@ export const ACCESSORIES = {
       <path d="M25 20 C34 20 37 40 37 62 C37 84 32 94 25 94 C18 94 13 84 13 62 C13 40 16 20 25 20 Z"
         fill="#ffb6c9"/>
     </svg>`,
+    attach: [{ x: 0.341, y: 0.289 }, { x: 0.659, y: 0.289 }],
   },
 
   // plain mitts (arms, FREE) — the capsule limb from stubby-arms (which
@@ -580,6 +590,7 @@ export const ACCESSORIES = {
         <path d="M17 56 L47 56" stroke="${OUTLINE}" stroke-width="5" opacity="0.5" stroke-linecap="round"/>
       </g>
     </svg>`,
+    attach: [{ x: 0.141, y: 0.721 }, { x: 0.859, y: 0.721 }],
   },
 
   // boxing gloves (arms, 60g) — a chunky glove on the end of the limb.
@@ -641,8 +652,8 @@ export const ACCESSORIES = {
     // its corners cleared the silhouette either side of his crown. At y0.50
     // the collar sits where the body is wide enough to hide it, and 92
     // rather than 100 keeps the hem on the stage instead of clipping it.
-    widthPct: 92,
-    attach: { x: 0.5, y: 0.50 },
+    widthPct: 97,
+    attach: { x: 0.492, y: 0.572 },
     anchor: { x: 0.5, y: 0.285 },
     // Drawn as ONE continuous piece with angular shoulders rather than a
     // separate rounded collar band: the first version's collar was a pale
@@ -677,6 +688,7 @@ export const ACCESSORIES = {
       <rect x="88" y="50" width="18" height="22" rx="5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="5"/>
       <rect x="28" y="84" width="84" height="22" rx="11" fill="#c9822a" opacity="0.6"/>
     </svg>`,
+    attach: { x: 0.508, y: 0.338 },
   },
 
   // jetpack (back, 200g, RARE) — the most expensive item in the shop.
@@ -723,13 +735,11 @@ export const ACCESSORIES = {
   "flame-ring": {
     slot: "effects", img: "flame-ring.png", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
   },
-  // Taller than the others (crystals stacked above their ring), so it is
-  // sized DOWN rather than up — at ring width it overflowed the stage top
-  // and bottom and the ring sagged to his belly like a belt.
-  "crystal-orbit": {
-    slot: "effects", img: "crystal-orbit.png", widthPct: 95,
-    anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.5, y: 0.44 },
-  },
+  // `crystal-orbit` was CUT on sight (Megan, 2026-08-08 — "it looks dumb"),
+  // the same call that retired shadow-crown and pearls. Gone from here, the
+  // labels, the catalogue mirror and disk; deleted from live by
+  // migration-cut-crystal-orbit.sql. Its id never returns — verify-store's
+  // retired scan enforces that.
   "spark-halo": {
     slot: "effects", img: "spark-halo.png", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
   },
@@ -750,13 +760,14 @@ export const ACCESSORIES = {
   // royal-crown. Same for cyber-visor vs the existing `visor`.
   "royal-crown": {
     slot: "hat", img: "royal-crown.png", widthPct: 34,
-    anchor: { x: 0.5, y: 0.9 }, attach: { x: 0.5, y: 0.21 },
+    anchor: { x: 0.5, y: 0.9 }, attach: { x: 0.51, y: 0.229 },
   },
 
   // --- eyewear. Sized to the measured eye band (eyes sit at stage x
   // 0.308/0.688, y 0.487-0.63), same convention as the SVG eyewear.
   "cyber-visor": {
-    slot: "glasses", img: "cyber-visor.png", widthPct: 52, anchor: { x: 0.5, y: 0.5 },
+    slot: "glasses", img: "cyber-visor.png", widthPct: 67, anchor: { x: 0.5, y: 0.5 },
+    attach: { x: 0.496, y: 0.547 },
   },
   // The mask has real cut-out eye holes, so his painted eyes show THROUGH
   // it — which is what makes it read as a mask, and which means the holes
@@ -769,13 +780,15 @@ export const ACCESSORIES = {
   // If the art is ever re-rolled, re-measure rather than nudge.
   "eye-mask": {
     slot: "glasses", img: "eye-mask.png", widthPct: 80, anchor: { x: 0.501, y: 0.493 },
+    attach: { x: 0.504, y: 0.556 },
   },
 
   // --- back. Diagonal, so the hilt clears his shoulder and the scabbard
   // tip clears his hem; the strap across the middle is hidden by the body
   // and that is correct, not a bug (same as the cape and the schoolbag).
   "back-sword": {
-    slot: "back", img: "back-sword.png", widthPct: 96, anchor: { x: 0.5, y: 0.5 },
+    slot: "back", img: "back-sword.png", widthPct: 59, anchor: { x: 0.5, y: 0.5 },
+    attach: { x: 0.65, y: 0.372 },
   },
 
   // --- neck. Anchored by the TOP CENTRE (y 0), the point the necklace hangs
@@ -828,10 +841,12 @@ export const ACCESSORIES = {
   "gold-wings": {
     slot: "wings", img: "gold-wings.png", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
+    attach: [{ x: 0.286, y: 0.395 }, { x: 0.714, y: 0.395 }],
   },
   "dragon-wings": {
     slot: "wings", img: "dragon-wings.png", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
+    attach: [{ x: 0.276, y: 0.334 }, { x: 0.724, y: 0.334 }],
   },
 
   /* ---------- Tripo wave 2 — techy (2026-08-06) ----------
@@ -861,15 +876,15 @@ export const ACCESSORIES = {
   // as the ATTACHED ruling wants.
   "mech-gauntlet": {
     slot: "arms", img: "mech-gauntlet.png", widthPct: 28,
-    anchor: { x: 0.78, y: 0.10 }, attach: [{ x: 0.23, y: 0.68 }, { x: 0.77, y: 0.68 }],
+    anchor: { x: 0.78, y: 0.1 }, attach: [{ x: 0.22, y: 0.746 }, { x: 0.78, y: 0.746 }],
   },
   "energy-blade": {           // RARE
     slot: "arms", img: "energy-blade.png", widthPct: 28,
-    anchor: { x: 0.78, y: 0.10 }, attach: [{ x: 0.23, y: 0.68 }, { x: 0.77, y: 0.68 }],
+    anchor: { x: 0.78, y: 0.1 }, attach: [{ x: 0.22, y: 0.731 }, { x: 0.78, y: 0.731 }],
   },
   "grapple-claw": {
     slot: "arms", img: "grapple-claw.png", widthPct: 27,
-    anchor: { x: 0.78, y: 0.10 }, attach: [{ x: 0.23, y: 0.68 }, { x: 0.77, y: 0.68 }],
+    anchor: { x: 0.78, y: 0.1 }, attach: [{ x: 0.224, y: 0.728 }, { x: 0.776, y: 0.728 }],
   },
 
   // --- ears (paired, ATTACHED). Drawn upright with the base at the bottom,
@@ -881,6 +896,7 @@ export const ACCESSORIES = {
   "tech-antenna": {
     slot: "ears", img: "tech-antenna.png", widthPct: 5,
     anchor: { x: 0.5, y: 0.95 },
+    attach: [{ x: 0.315, y: 0.277 }, { x: 0.685, y: 0.277 }],
   },
   // A headphone cup belongs over the ear, not on top of the head, so this
   // one drops to its own lower attach and anchors by its middle — the same
@@ -891,7 +907,7 @@ export const ACCESSORIES = {
   },
   "data-fin": {
     slot: "ears", img: "data-fin.png", widthPct: 15,
-    anchor: { x: 0.5, y: 0.95 }, attach: [{ x: 0.30, y: 0.30 }, { x: 0.70, y: 0.30 }],
+    anchor: { x: 0.5, y: 0.95 }, attach: [{ x: 0.314, y: 0.314 }, { x: 0.686, y: 0.314 }],
   },
 
 
@@ -923,12 +939,14 @@ export const ACCESSORIES = {
   // --- wings. Single-sided art rooted at the LOWER-LEFT, same as wave 1,
   // so both need flipX or they fold back over the body.
   "plasma-wings": {           // RARE
-    slot: "wings", img: "plasma-wings.png", widthPct: 34,
+    slot: "wings", img: "plasma-wings.png", widthPct: 25,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
+    attach: [{ x: 0.214, y: 0.337 }, { x: 0.786, y: 0.337 }],
   },
   "drone-wings": {            // RARE
     slot: "wings", img: "drone-wings.png", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
+    attach: [{ x: 0.3, y: 0.353 }, { x: 0.7, y: 0.353 }],
   },
 
   /* ---------- Room build S3 (2026-08-08) — wave-3 themed collections ----------
@@ -965,9 +983,9 @@ export const ACCESSORIES = {
      Checked at 34/40/45 and y0.36-0.50 in tools/preview_accessory.py; these
      are the largest values that keep the whole wing inside the stage box. */
   "fairy-wing": {
-    slot: "wings", img: "fairy-wing.png", widthPct: 45,
+    slot: "wings", img: "fairy-wing.png", widthPct: 35,
     anchor: { x: 0.03, y: 0.676 }, flipX: true,
-    attach: [{ x: 0.44, y: 0.40 }, { x: 0.56, y: 0.40 }],
+    attach: [{ x: 0.344, y: 0.278 }, { x: 0.656, y: 0.278 }],
   },
   // Own lower attach, same as wizard-hat/royal-crown/neural-crown — he is a
   // teardrop, so a solid crown-like item needs to come down far enough to
@@ -986,19 +1004,19 @@ export const ACCESSORIES = {
   // of his head rather than hovering above the crown.
   "hair-bow": {
     slot: "hat", img: "hair-bow.png", widthPct: 26,
-    anchor: { x: 0.5, y: 0.88 }, attach: { x: 0.5, y: 0.225 },
+    anchor: { x: 0.5, y: 0.88 }, attach: { x: 0.516, y: 0.276 },
   },
   "tiara": {           // RARE (silver + gems, priced to match)
     slot: "hat", img: "tiara.png", widthPct: 34,
-    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.24 },
+    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.506, y: 0.243 },
   },
   // Same treatment as fairy-wing above (read its ⚠️ comment first). Its own
   // root measures x0.006/y0.558, and it is a shallower piece, so it hangs
   // 0.04 lower than the fairy wing to sit level with it on the body.
   "butterfly-wing": {
-    slot: "wings", img: "butterfly-wing.png", widthPct: 45,
+    slot: "wings", img: "butterfly-wing.png", widthPct: 35,
     anchor: { x: 0.03, y: 0.558 }, flipX: true,
-    attach: [{ x: 0.44, y: 0.44 }, { x: 0.56, y: 0.44 }],
+    attach: [{ x: 0.33, y: 0.299 }, { x: 0.67, y: 0.299 }],
   },
 
   // --- tomboy (Lv9). Megan's phone review (2026-08-08): "hats should be
@@ -1007,17 +1025,18 @@ export const ACCESSORIES = {
   // the cap sits ON his head instead of perching above the point.
   "backwards-cap": {
     slot: "hat", img: "backwards-cap.png", widthPct: 38,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.31 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.498, y: 0.32 },
   },
   // Drawn straight-on like the code-drawn eyewear, so it uses the shared
   // glasses convention as-is (widthPct 90, lens centres land on his eyes) —
   // no override needed.
   "sport-shades": {
-    slot: "glasses", img: "sport-shades.png", widthPct: 90, anchor: { x: 0.5, y: 0.5 },
+    slot: "glasses", img: "sport-shades.png", widthPct: 83, anchor: { x: 0.5, y: 0.5 },
+    attach: { x: 0.496, y: 0.555 },
   },
   "bucket-hat": {
     slot: "hat", img: "bucket-hat.png", widthPct: 40,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.25 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.504, y: 0.272 },
   },
 
   // --- gangster (Lv20 — chunky-chain, shipped 2026-08-07, joins this
@@ -1028,7 +1047,7 @@ export const ACCESSORIES = {
   },
   "snapback": {
     slot: "hat", img: "snapback.png", widthPct: 38,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.235 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.502, y: 0.272 },
   },
 
   /* --- eye pairs (collections.js gate: Lv5). art-source/tripo/
@@ -1044,22 +1063,27 @@ export const ACCESSORIES = {
      ~54 (its closed-arc-and-cheek art reads too big at 70) — both numbers
      from the S3 brief in PROJECT-STATUS "Next up", not re-measured here. */
   "star-eyes": {           // sheet M item 1 — shining eyes + white star
-    slot: "glasses", img: "star-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "star-eyes.png", widthPct: 59, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    attach: { x: 0.508, y: 0.519 },
   },
   "angry-eyes": {          // sheet M item 2 — narrow eyes + angled brows
-    slot: "glasses", img: "angry-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "angry-eyes.png", widthPct: 66, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    attach: { x: 0.498, y: 0.491 },
   },
   "happy-eyes": {          // sheet M item 3 — closed arcs + rosy cheeks (weakest of the six, Megan may re-roll)
     slot: "glasses", img: "happy-eyes.png", widthPct: 54, anchor: { x: 0.5, y: 0.5 }, mask: true,
   },
   "lash-eyes": {           // sheet L item 1 — big round eyes, curled lashes, pink eyeshadow
     slot: "glasses", img: "lash-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    attach: { x: 0.5, y: 0.542 },
   },
   "dreamy-eyes": {         // sheet L item 2 — half-closed sleepy eyes, lilac lid
     slot: "glasses", img: "dreamy-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    attach: { x: 0.496, y: 0.547 },
   },
   "wink-eyes": {           // sheet L item 3 — one closed, one open
     slot: "glasses", img: "wink-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    attach: { x: 0.5, y: 0.542 },
   },
 };
 

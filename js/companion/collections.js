@@ -52,7 +52,7 @@ export const COLLECTIONS = {
     unlockLevel: 6,
     items: [
       // Tripo wave 1 (2026-08-05) — effects slot + the visor
-      "light-ring", "flame-ring", "crystal-orbit", "spark-halo", "cyber-visor",
+      "light-ring", "flame-ring", "spark-halo", "cyber-visor",
       // Tripo wave 2 (2026-08-06)
       "tech-antenna", "hud-monocle", "mech-gauntlet", "headset-cup", "grapple-claw",
       "data-fin", "energy-blade", "drone-wings", "plasma-wings", "neural-crown",

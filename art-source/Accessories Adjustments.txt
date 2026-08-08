@@ -1,0 +1,245 @@
+"angry-eyes": {
+  slot: "glasses", img: "angry-eyes.png", widthPct: 66,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.498, y: 0.491 },
+},
+
+"cyber-visor": {
+  slot: "glasses", img: "cyber-visor.png", widthPct: 67,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.496, y: 0.547 },
+},
+
+"dreamy-eyes": {
+  slot: "glasses", img: "dreamy-eyes.png", widthPct: 70,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.496, y: 0.547 },
+},
+
+"eye-mask": {
+  slot: "glasses", img: "eye-mask.png", widthPct: 80,
+  anchor: { x: 0.501, y: 0.493 },
+  attach: { x: 0.504, y: 0.556 },
+},
+
+"heart-eyes": {
+  slot: "glasses", svg: `…unchanged…`, widthPct: 90,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.498, y: 0.545 },
+},
+
+"lash-eyes": {
+  slot: "glasses", img: "lash-eyes.png", widthPct: 70,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.5, y: 0.542 },
+},
+
+"round-glasses": {
+  slot: "glasses", svg: `…unchanged…`, widthPct: 87,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.496, y: 0.569 },
+},
+
+"sport-shades": {
+  slot: "glasses", img: "sport-shades.png", widthPct: 83,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.496, y: 0.555 },
+},
+
+"star-eyes": {
+  slot: "glasses", img: "star-eyes.png", widthPct: 59,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.508, y: 0.519 },
+},
+
+"wink-eyes": {
+  slot: "glasses", img: "wink-eyes.png", widthPct: 70,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.5, y: 0.542 },
+},
+
+"backwards-cap": {
+  slot: "hat", img: "backwards-cap.png", widthPct: 38,
+  anchor: { x: 0.5, y: 0.85 },
+  attach: { x: 0.498, y: 0.32 },
+},
+
+"bolt-antenna": {
+  slot: "hat", svg: `…unchanged…`, widthPct: 19,
+  anchor: { x: 0.5, y: 1 },
+  attach: { x: 0.508, y: 0.243 },
+},
+
+"bucket-hat": {
+  slot: "hat", img: "bucket-hat.png", widthPct: 40,
+  anchor: { x: 0.5, y: 0.85 },
+  attach: { x: 0.504, y: 0.272 },
+},
+
+"hair-bow": {
+  slot: "hat", img: "hair-bow.png", widthPct: 26,
+  anchor: { x: 0.5, y: 0.88 },
+  attach: { x: 0.516, y: 0.276 },
+},
+
+"halo": {
+  slot: "hat", svg: `…unchanged…`, widthPct: 36,
+  anchor: { x: 0.5, y: 0.78 },
+  attach: { x: 0.514, y: 0.126 },
+},
+
+"horns": {
+  slot: "hat", svg: `…unchanged…`, widthPct: 41,
+  anchor: { x: 0.5, y: 1 },
+  attach: { x: 0.508, y: 0.257 },
+},
+
+"party-hat": {
+  slot: "hat", svg: `…unchanged…`, widthPct: 25,
+  anchor: { x: 0.5, y: 0.92 },
+  attach: { x: 0.518, y: 0.143 },
+},
+
+"royal-crown": {
+  slot: "hat", img: "royal-crown.png", widthPct: 34,
+  anchor: { x: 0.5, y: 0.9 },
+  attach: { x: 0.51, y: 0.229 },
+},
+
+"snapback": {
+  slot: "hat", img: "snapback.png", widthPct: 38,
+  anchor: { x: 0.5, y: 0.85 },
+  attach: { x: 0.502, y: 0.272 },
+},
+
+"tiara": {
+  slot: "hat", img: "tiara.png", widthPct: 34,
+  anchor: { x: 0.5, y: 0.95 },
+  attach: { x: 0.506, y: 0.243 },
+},
+
+"bunny-ears": {
+  slot: "ears", svg: `…unchanged…`, widthPct: 12,
+  anchor: { x: 0.5, y: 0.92 }, tiltDeg: -12,
+  attach: [{ x: 0.341, y: 0.289 }, { x: 0.659, y: 0.289 }],
+},
+
+"cat-ears": {
+  slot: "ears", svg: `…unchanged…`, widthPct: 17,
+  anchor: { x: 0.5, y: 0.86 }, tiltDeg: -25,
+  attach: [{ x: 0.313, y: 0.3 }, { x: 0.687, y: 0.3 }],
+},
+
+"data-fin": {
+  slot: "ears", img: "data-fin.png", widthPct: 15,
+  anchor: { x: 0.5, y: 0.95 },
+  attach: [{ x: 0.314, y: 0.314 }, { x: 0.686, y: 0.314 }],
+},
+
+"ear-tufts": {
+  slot: "ears", svg: `…unchanged…`, widthPct: 12,
+  anchor: { x: 0.5, y: 0.88 }, tiltDeg: -20,
+  attach: [{ x: 0.299, y: 0.321 }, { x: 0.701, y: 0.321 }],
+},
+
+"tech-antenna": {
+  slot: "ears", img: "tech-antenna.png", widthPct: 5,
+  anchor: { x: 0.5, y: 0.95 },
+  attach: [{ x: 0.315, y: 0.277 }, { x: 0.685, y: 0.277 }],
+},
+
+"energy-blade": {
+  slot: "arms", img: "energy-blade.png", widthPct: 28,
+  anchor: { x: 0.78, y: 0.1 },
+  attach: [{ x: 0.22, y: 0.731 }, { x: 0.78, y: 0.731 }],
+},
+
+"grapple-claw": {
+  slot: "arms", img: "grapple-claw.png", widthPct: 27,
+  anchor: { x: 0.78, y: 0.1 },
+  attach: [{ x: 0.224, y: 0.728 }, { x: 0.776, y: 0.728 }],
+},
+
+"mech-gauntlet": {
+  slot: "arms", img: "mech-gauntlet.png", widthPct: 28,
+  anchor: { x: 0.78, y: 0.1 },
+  attach: [{ x: 0.22, y: 0.746 }, { x: 0.78, y: 0.746 }],
+},
+
+"mitts": {
+  slot: "arms", svg: `…unchanged…`, widthPct: 16,
+  anchor: { x: 0.76, y: 0.1 },
+  attach: [{ x: 0.141, y: 0.721 }, { x: 0.859, y: 0.721 }],
+},
+
+"power-gloves": {
+  slot: "arms", svg: `…unchanged…`, widthPct: 17,
+  anchor: { x: 0.76, y: 0.1 },
+  attach: [{ x: 0.159, y: 0.751 }, { x: 0.841, y: 0.751 }],
+},
+
+"stubby-arms": {
+  slot: "arms", svg: `…unchanged…`, widthPct: 15,
+  anchor: { x: 0.76, y: 0.1 },
+  attach: [{ x: 0.141, y: 0.727 }, { x: 0.859, y: 0.727 }],
+},
+
+"angel-wings": {
+  slot: "wings", svg: `…unchanged…`, widthPct: 32,
+  anchor: { x: 0.82, y: 0.28 },
+  attach: [{ x: 0.078, y: 0.526 }, { x: 0.922, y: 0.526 }],
+},
+
+"butterfly-wing": {
+  slot: "wings", img: "butterfly-wing.png", widthPct: 35,
+  anchor: { x: 0.03, y: 0.558 }, flipX: true,
+  attach: [{ x: 0.33, y: 0.299 }, { x: 0.67, y: 0.299 }],
+},
+
+"dragon-wings": {
+  slot: "wings", img: "dragon-wings.png", widthPct: 34,
+  anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  attach: [{ x: 0.276, y: 0.334 }, { x: 0.724, y: 0.334 }],
+},
+
+"drone-wings": {
+  slot: "wings", img: "drone-wings.png", widthPct: 34,
+  anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  attach: [{ x: 0.3, y: 0.353 }, { x: 0.7, y: 0.353 }],
+},
+
+"fairy-wing": {
+  slot: "wings", img: "fairy-wing.png", widthPct: 35,
+  anchor: { x: 0.03, y: 0.676 }, flipX: true,
+  attach: [{ x: 0.344, y: 0.278 }, { x: 0.656, y: 0.278 }],
+},
+
+"gold-wings": {
+  slot: "wings", img: "gold-wings.png", widthPct: 34,
+  anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  attach: [{ x: 0.286, y: 0.395 }, { x: 0.714, y: 0.395 }],
+},
+
+"plasma-wings": {
+  slot: "wings", img: "plasma-wings.png", widthPct: 25,
+  anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  attach: [{ x: 0.214, y: 0.337 }, { x: 0.786, y: 0.337 }],
+},
+
+"back-sword": {
+  slot: "back", img: "back-sword.png", widthPct: 59,
+  anchor: { x: 0.5, y: 0.5 },
+  attach: { x: 0.65, y: 0.372 },
+},
+
+"cape": {
+  slot: "back", svg: `…unchanged…`, widthPct: 97,
+  anchor: { x: 0.5, y: 0.285 },
+  attach: { x: 0.492, y: 0.572 },
+},
+
+"schoolbag": {
+  slot: "back", svg: `…unchanged…`, widthPct: 68,
+  anchor: { x: 0.5, y: 0.612 },
+  attach: { x: 0.508, y: 0.338 },
+},

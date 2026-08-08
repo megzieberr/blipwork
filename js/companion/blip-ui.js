@@ -39,7 +39,6 @@ export const ITEM_LABELS = {
   // `crown` and `visor` ids, which are different (code-drawn) items.
   "light-ring": "Light ring",
   "flame-ring": "Flame ring",
-  "crystal-orbit": "Crystal orbit",
   "spark-halo": "Spark halo",
   "wizard-hat": "Wizard hat",
   "royal-crown": "Royal crown",

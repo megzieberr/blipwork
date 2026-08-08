@@ -116,7 +116,6 @@ const SHOP_ITEMS = [
   { id: "eye-mask", slot: "glasses", price: 40, minLevel: 2 },
   { id: "flame-ring", slot: "effects", price: 45, minLevel: 2 },
   { id: "wizard-hat", slot: "hat", price: 55, minLevel: 2 },
-  { id: "crystal-orbit", slot: "effects", price: 60, minLevel: 3 },
   { id: "cyber-visor", slot: "glasses", price: 65, minLevel: 3 },
   { id: "spark-halo", slot: "effects", price: 90, minLevel: 4 },
   { id: "back-sword", slot: "back", price: 130, minLevel: 6 },

@@ -939,7 +939,6 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('back-sword',             'back',  130,  6, true,    63, 'cosmetic'),
   ('light-ring',          'effects',    0,  1, true,    70, 'cosmetic'),
   ('flame-ring',          'effects',   45,  2, true,    71, 'cosmetic'),
-  ('crystal-orbit',       'effects',   60,  3, true,    72, 'cosmetic'),
   ('spark-halo',          'effects',   90,  4, true,    73, 'cosmetic'),
   ('bead-necklace',          'neck',    0,  1, true,    81, 'cosmetic'),
   ('flower-garland',         'neck',   60,  3, true,    83, 'cosmetic'),

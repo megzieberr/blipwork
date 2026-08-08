@@ -120,6 +120,56 @@ from a sibling item instead of measuring the new art and the body it lands
 on.** Round 1 copied dragon-wings' anchor. Round 2 measured the ART's root
 but never asked whether the BODY had room at that height. Measure both.
 
+## ✅ 2026-08-08 (late) — Megan re-placed the WHOLE catalogue herself
+
+The dressing room did its job on day one. She positioned **41 accessories by
+hand** and handed back `art-source/Accessories Adjustments.txt` (kept in the
+repo as the record). All 41 applied to `renderer.js` and machine-verified
+value-for-value against her file — `verify-store.html` **1727/1727 green**.
+
+Worth knowing about what she changed:
+- **Most items now carry their OWN `attach`.** Items that used to share
+  their slot's point (bunny-ears, cat-ears, ear-tufts, mitts, power-gloves,
+  stubby-arms, angel-wings, halo, horns, party-hat, round-glasses,
+  heart-eyes, bolt-antenna, schoolbag, cape…) now override it. The shared
+  `ATTACH[slot]` points are increasingly just a fallback for anything new.
+- **She fixed the OLD Tripo wings too** — gold-wings, dragon-wings,
+  drone-wings and plasma-wings all got their own higher attach, exactly the
+  latent problem flagged in the ⚠️ block below. That item is now closed.
+  plasma-wings also went 34 → 25 wide.
+- **back-sword is now off-centre** (`attach.x` 0.65) and much smaller
+  (96 → 59). Deliberate, hers, don't "correct" it back to centred.
+- A batch re-check through the dressing room covered 39 of the 69 items
+  before the preview pane stalled (a pane limitation, not the page):
+  **zero red flags**, one amber — `wizard-hat` 4% over the edge, which is
+  moot because she is re-rolling that art anyway. She also saw every one of
+  these warnings live while placing them.
+
+### ✂️ `crystal-orbit` CUT (her call — "it looks dumb")
+Same treatment as shadow-crown and pearls: deleted outright, because the app
+is still with no learner. Gone from renderer, labels, collections,
+local-backend, schema.sql and the "Monarch" outfit in verify-store;
+`supabase/migration-cut-crystal-orbit.sql` removes it from live.
+`migration-effects-slot.sql` (which seeded it) is left untouched — an applied
+migration records what actually ran. **Effects is down to 3 items**
+(light-ring free / flame-ring / spark-halo), which still satisfies the
+"≥2 items and a free level-1 one" rule, but it is now the thinnest slot.
+
+### ⏳ Waiting on her Tripo re-rolls (nothing broken meanwhile)
+- `art-source/tripo/WAVE-3B-EYE-BLIPS-PROMPTS.md` — four whole Blips drawn
+  WITH the rejected eyes (star / angry / dreamy / wink).
+- `art-source/tripo/WAVE-3C-FRONT-VIEW-HATS-PROMPTS.md` — **NEW.**
+  flower-crown, neural-crown and wizard-hat re-drawn **front-on**. All three
+  are currently drawn at an angle so the far side of the ring shows, which
+  reads as a second object floating above his head. That is a drawing
+  problem, not a placement one — no attach value fixes it, which is why
+  flower-crown resisted three rounds of nudging.
+- Her **`art-source/blip_no eyes.png`** is measured and matches the real
+  base to within 0.1% at every height. Not wired to anything yet; the
+  obvious use is as the Tripo canvas for the eye prompts above.
+
+---
+
 ## 🪞 2026-08-08 — `dressing-room.html`: Megan places accessories herself
 
 Her call, after three rounds of corrections in one afternoon: *"is there not
@@ -147,6 +197,23 @@ double-click; canvas reads are blocked on `file://` and it says so).
   slots — effects/back/wings). Verified against the real history: the
   round-1 wing placement reports **"80% falls off the edge"**, round-2
   reports **52%**, and the shipped fix reports **"49% on show"**.
+
+**Three real bugs were found by actually running it** — all now fixed, all
+worth knowing because each failed SILENTLY (an empty verdict box reads as
+"nothing to report"):
+1. **`img.decode()` never settles in a page that isn't painting** — which
+   is exactly what this project's preview pane is. Every picture check hung
+   forever on it. Measured: the canvas work takes 5 ms, `decode()` sat there
+   past 30 seconds. Now uses plain `onload`, which fires either way.
+2. **A fresh 1440×1800 canvas (10 MB) was allocated per check** and thrown
+   away; after a few dozen the tab stopped responding. One reused canvas,
+   one ninth the pixels.
+3. **Late results leaked between items** — clicking down the list, an older
+   run finishing late appended its verdict to the new item's box, so one
+   item showed nothing and the next showed two items' worth. Runs now carry
+   a ticket number and stale ones stop quietly.
+`analyse()` also wraps everything now, so a failure says so on screen
+instead of leaving the box empty.
 
 **`tools/preview_accessory.py` is now the second-best tool and a known
 liar** — it pastes a paired accessory ONCE, which is why Megan saw a single
