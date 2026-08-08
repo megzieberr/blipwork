@@ -91,6 +91,61 @@ wooden ruler with both halves side by side.
 
 ---
 
+# REVISION 2026-08-08 afternoon — the ISOMETRIC room
+
+Megan redirected the room to an isometric two-wall corner view (see
+ROOM-BUILD-PLAN.md's REVISION section). The three flat furniture prompts
+above are SUPERSEDED — use the sheets below. Attach the ISOMETRIC ROOM
+CONCEPT picture (the sci-fi corner room with the droplet) as the locked
+reference for these, so the angles and style match. The empty shell
+(`room-shell.png`) and window sheet (`windows.png`) prompts were issued in
+chat; the shell is used WHOLE (never keyed, no magenta), windows are keyed.
+
+Angle rule: LEFT-wall items (desk) lean like the reference's desk;
+RIGHT-wall items (bed, window) lean like the reference's bed. The closet
+sits on the back-left wall like the reference's tall cupboard.
+
+## Sheet R1 — `furniture-iso-basic.png` (bed, desk, closet)
+
+## Sheet R2 — `furniture-iso-techy.png` (capsule bed, holo desk)
+
+## Sheet R3 — `furniture-iso-princess.png` (canopy bed, vanity desk)
+
+(The three prompts live in the session chat of 2026-08-08 and are pasted
+verbatim by Megan into Tripo; kept out of this file to avoid drift — this
+table is the canonical record of filenames and slicing names.)
+
+## Slicing (revision) — all sheets `--opaque`
+
+⚠️ **THESE ARE THE COMMANDS THAT ACTUALLY RAN** (S5v2, 2026-08-08). Three of
+the six differ from what was written here in advance, every one caught by
+reading the `at x…,y…` the slicer prints — which is the whole reason that
+warning exists. Corrected in place so the next session inherits the truth.
+
+| sheet | command that worked |
+|---|---|
+| furniture-iso-basic | `--names basic-desk,basic-bed,unused-wardrobe` — ⚠️ **desk reads FIRST**, and the third item is the old wardrobe, which the door replaces: it is sliced and then **deleted**, not shipped |
+| furniture-iso-techy | `--group "1+2,3" --names techy-desk,techy-bed` — ⚠️ the holo screen floats DETACHED above the desk, so `--group` joins components 1+2 into one item; desk is LEFT on the sheet, bed RIGHT |
+| furniture-iso-princess | `--names princess-desk,princess-bed` — ⚠️ **desk reads FIRST**, not the bed |
+| windows | `--names city-window,space-window,mountain-window` (as written) |
+| door | `--names door` — from **`door 2.png`**, not `door.png`. Her first door faces down-RIGHT (a left-wall object); the second faces down-LEFT, which is what the RIGHT wall needs, and the right wall is where the door ended up |
+| trinkets | `--min-area 9000 --names old-sock,smooth-rock,paper-clip,pen,rubber-duck,broken-ruler --out assets/companion/trinkets` — ⚠️ **two surprises**: the PEN reads FOURTH (it is drawn tall enough to span both rows, so its centre lands in the second row band), and this sheet's magenta is noisy (0.182), which at the default `--min-area 256` broke it into **39 "items"**, 33 of them speckle |
+
+Furniture goes to `--out assets/companion/furniture`; trinkets to
+`assets/companion/trinkets`.
+
+`room-shell.png` is NEVER sliced. It is **not magenta either** — it came
+back on WHITE, so it is keyed by flooding the border-connected white
+(scipy, not `ImageDraw.floodfill`, which is a no-op in Pillow 12), trimmed
+to its own bounds, downscaled to 768px and palette-quantised to 128
+colours: **597 KB → 51 KB**, and it is the one asset on screen 100% of the
+time. There is no interior white pixel in the drawing, so the flood is
+provably safe. The room's CSS pins `.room` to that picture's exact
+768×762 aspect ratio, because every placement fraction in
+`js/companion/furniture.js` is measured against it.
+
+---
+
 ## Slicing (run by the build sessions, listed here for reference)
 
 ```

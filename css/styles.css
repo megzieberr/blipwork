@@ -796,23 +796,51 @@ h2{font-size:20px} h3{font-size:17px}
   width:100%;max-width:220px}
 .room-subtitle{margin-top:2px}
 
-/* the room itself — furniture pinned to fixed corners, Blip centred low */
-.room{position:relative;width:100%;aspect-ratio:1/1.05;margin:14px 0 16px;border-radius:var(--r-xl);
-  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 7%,var(--panel)) 0%,var(--panel) 100%);
-  border:1px solid var(--brd);overflow:hidden;padding:14px}
-.room-furniture{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;
-  transition:transform .15s;background:none;border:0;padding:0}
-.room-furniture:hover{transform:translateY(-2px)}
-.room-furniture .rf-art{width:100%}
-.room-furniture .rf-art svg{width:100%;height:auto;display:block}
-.room-furniture .rf-label{font-family:var(--font-display);font-weight:600;font-size:10px;color:var(--muted);
-  letter-spacing:.03em;text-transform:uppercase}
-.room-furniture.bed{top:4%;right:5%;width:44%;max-width:170px}
-.room-furniture.closet{bottom:10%;left:4%;width:24%;max-width:96px}
-.room-furniture.desk{bottom:10%;right:4%;width:24%;max-width:96px}
+/* ---- the room, room build S5v2 (2026-08-08) ----
+   The box IS Megan's isometric shell drawing. aspect-ratio is the picture's
+   own 768/762 and the background is stretched to exactly 100% 100%, so every
+   placement fraction in js/companion/furniture.js lands on the surface it was
+   measured against — if this ratio and the art ever disagree, every piece of
+   furniture drifts at once. No padding, no border, no gradient: the drawing
+   has its own walls and its own edge. */
+.room{position:relative;width:100%;aspect-ratio:768/762;margin:14px 0 10px;overflow:hidden;
+  background:url("../assets/companion/room-shell.png") center/100% 100% no-repeat}
+
+/* One equipped piece, laid on the shell. Sized as a % of the room's WIDTH;
+   the height follows the picture's own aspect, and the anchor is applied as
+   a translate of the element's own size (set inline by furnitureLayer), so
+   nothing here needs to know how tall a canopy bed is. */
+.room-furn{position:absolute;cursor:pointer;transition:filter .15s ease}
+.room-furn .furn-art{width:100%}
+.room-furn .furn-art img{width:100%;height:auto;display:block;user-select:none;-webkit-user-drag:none}
+.room-furn:hover,.room-furn:focus-visible{filter:brightness(1.12);outline:none}
+.room-furn:focus-visible .furn-art{filter:drop-shadow(0 0 3px var(--accent))}
+/* the wiggle is on the INNER art so it never fights the layer's own
+   anchor transform (which is what positions the piece at all) */
 @keyframes rf-wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
-.room-furniture.rf-wiggle{animation:rf-wiggle .5s ease-in-out}
-.room-blip-stage{position:absolute;left:50%;bottom:20%;width:38%;max-width:160px;transform:translateX(-50%)}
+.room-furn.rf-wiggle .furn-art{animation:rf-wiggle .5s ease-in-out}
+
+/* Blip stands centre-front on the floor diamond (its centre is y≈0.72, its
+   front vertex y=1.0), so his baseline sits at 0.88 — in front of the desk
+   and bed, which is why he is mounted after them. */
+.room .room-blip-stage{position:absolute;left:50%;bottom:12%;width:30%;max-width:150px;transform:translateX(-50%)}
+
+/* ---- the STYLE stage (her ruling 6: "don't throw that away") ----
+   The flat dark stage the app had before the room build, kept alive as the
+   dress-him-up view: same box, no shell, Blip much bigger. Everything else
+   on the screen — header, cookie, tray, dock, every sheet — is the same
+   markup either way. */
+.room.stage-plain{aspect-ratio:1/1.05;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 7%,var(--panel)) 0%,var(--panel) 100%);
+  border:1px solid var(--brd);border-radius:var(--r-xl);overflow:hidden;padding:14px}
+.room.stage-plain .room-blip-stage{bottom:14%;width:58%;max-width:230px}
+
+/* the one control that swaps the two stages */
+.stage-toggle{display:block;margin:0 auto 14px;padding:7px 16px;border-radius:999px;
+  background:var(--panel);border:1px solid var(--brd);color:var(--muted);cursor:pointer;
+  font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.02em;transition:.15s}
+.stage-toggle:hover{border-color:var(--accent);color:var(--ink)}
+.stage-toggle .st-ic{font-size:14px}
 
 /* bottom dock — colours / shop / food / pharmacy / furniture */
 .room-dock{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:4px 0 18px}
@@ -913,9 +941,18 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .stash-item .si-count{font-family:var(--font-num);color:var(--muted)}
 .room-soon-note{margin-top:10px}
 
-/* Furniture sheet — placeholder until S5 */
-.furniture-placeholder{border:1px dashed var(--brd-2);border-radius:var(--r-md);padding:22px 16px;text-align:center;
-  font-size:13.5px;color:var(--muted)}
+/* Furniture sheet (room build S5v2) — reuses .shop-grid / .shop-item /
+   .collection-locked, so a locked furniture collection looks exactly like a
+   locked cosmetic collection or a locked food tier. Furniture pictures are
+   wide (a bed is wider than it is tall), so their card stage is a landscape
+   box rather than the square a food tile uses. */
+.furniture-item .si-stage.furn-stage{width:100%;aspect-ratio:4/3;max-height:92px;display:grid;place-items:center}
+.furniture-item .furn-art{width:100%;height:100%;display:grid;place-items:center}
+.furniture-item .furn-art img{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+.furniture-item .si-meta{font-size:11px}
+
+/* the trinket shelf now carries Megan's own drawings, which are not square */
+.trinket-item .tk-art img{object-fit:contain}
 
 /* sick-state login warning banner (hub) — reads as a system alert line */
 .sick-banner{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:12px 14px;

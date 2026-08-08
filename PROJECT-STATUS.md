@@ -1,11 +1,198 @@
-# Project status — updated 2026-08-08 (room build S4b DONE, committed locally, NOT pushed)
+# Project status — updated 2026-08-08 (room build S5v2 DONE, committed locally, NOT pushed)
 
-## ⏳ ONE MIGRATION NOW PENDING: `supabase/migration-food-shop.sql`
+## ⏳ TWO MIGRATIONS NOW PENDING, AND THE ORDER MATTERS
 
-S4 wrote it, S4b revised it in place (still unrun — **it has NOT been run**).
-It goes in AFTER `migration-level-curve-40.sql` (it re-creates two of that
-file's functions). Additive, idempotent, touches no learner row. The review
-session at the end of the room build applies it.
+Run them in this order, both unrun, both additive and idempotent, neither
+touches a learner row:
+
+1. **`supabase/migration-food-shop.sql`** — S4 wrote it, S4b revised it in
+   place. Goes in AFTER `migration-level-curve-40.sql` (it re-creates two of
+   that file's functions).
+2. **`supabase/migration-furniture-slots.sql`** — S5v2. Goes in AFTER the
+   food shop, because it re-creates `mhq_get_state` and `mhq_buy_item` from
+   *that* file's bodies. Running it first would silently un-ship the tray.
+
+The review session at the end of the room build applies both.
+
+---
+
+## 🛋️ 2026-08-08 — ROOM BUILD S5v2: the isometric room, furniture, windows, door
+
+Per the REVISION section of `homework-hub-companion/ROOM-BUILD-PLAN.md`,
+**with a layout re-call from Megan mid-session** (see below). Nothing pushed,
+`sw.js` untouched (still v38), **no SQL run against live**.
+`verify-store.html` is **green, 2918 checks** (was 2434 — S5v2 adds ~484).
+
+**THE ROOM IS HER ART NOW.** `assets/companion/room-shell.png` is the
+background of `.room`, and the four EQUIPPED pieces are laid on top of it.
+`js/companion/room-art.js` — S1's four placeholder SVGs — is **deleted**, its
+whole job done.
+
+### ⚠️ HER LAYOUT RE-CALL (2026-08-08 evening) — this overrides REVISION ruling 4
+The plan put the door back-LEFT with the window upper-right. She stopped the
+session mid-build and moved it:
+
+> *"Put the door against the other wall, then the bed next to it, study table
+> still as it is with the window above the table."*
+
+So: **door + bed share the RIGHT wall** (door at the back, bed beside it);
+**desk keeps the LEFT wall with its window directly above it.** She also
+supplied a second door drawing (`art-source/tripo/door 2.png`).
+
+**Both of her changes fixed real faults the first arrangement had**, and both
+were visible in `tools/preview_room.py`'s output:
+1. The desk had been **burying the door** — the door is the tap target for
+   the Inventory sheet, so that mattered.
+2. **The window art was drawn for the LEFT wall all along.** Measured, not
+   guessed: its major axis slopes UP to the right (left column mid-y 0.619,
+   right column 0.371), which is the left wall's rake. On the right wall it
+   leaned against the room. Her instinct put it where the art belongs.
+3. Her **door 2** faces down-LEFT, which is a right-wall object; the first
+   door faced down-RIGHT. The new art and the new wall agree.
+
+### What shipped
+- **`supabase/migration-furniture-slots.sql`** — four new equip slots
+  (`bed` / `desk` / `window` / `door`), the known dance done in BOTH places
+  (`shop_items_slot_cat_check` AND `mhq_equip`'s hard-coded key list), plus
+  `mhq_buy_item` widened to accept the new category and `mhq_get_state`
+  gaining a `furnitureShop` array. 18 rows. Mirrored in `schema.sql`.
+- **`js/companion/furniture.js`** (new) — labels, art files, code tints and
+  the placement fractions, measured off the shell's own alpha channel.
+- **`js/companion/collections.js`** — `FURNITURE_COLLECTIONS`: basic Lv 1
+  (free) · techy Lv 8 · princess Lv 14 · **Door colours Lv 1, `noMysteryCard`**
+  (her ruling — the front door is never a "?").
+- **Furniture panel** with the same locked-"?" card the cosmetic shop and the
+  grocery tiers use. It shows OWNED pieces in place with "Put it in the room" —
+  there is deliberately no separate furniture inventory, because one bed is in
+  the room and the others are in storage, and splitting that across two sheets
+  would make swapping back a hunt.
+- **The STYLE view** (her ruling 6, "don't throw that away"). One module-level
+  `roomView` flag in `js/blip.js` swaps the STAGE only — the nickname header,
+  the cookie + tray, the dock and every bottom sheet are built once and serve
+  both. Verified: in the style view the colours sheet still shows 11 swatches
+  and the furniture sheet still shows 12 cards, from the same code.
+- **The trinket shelf is her art.** The six placeholder SVGs are gone.
+- **`dressing-room.html` gained a Furniture mode** — the room shell as the
+  stage, drag a piece to its spot, copy the numbers back. See below.
+
+### Deviations and judgement calls (rule 9 — recorded, not silently redesigned)
+1. **⚠️ FURNITURE IS ITS OWN CATEGORY, `furniture`, NOT `cosmetic`.** The plan
+   says "four new equip slots" without naming a category, and `cosmetic` looks
+   like the smaller change. It is not: `category = 'cosmetic'` is load-bearing
+   in three places that have nothing to do with rooms — `mhq_get_state`'s
+   `shop` payload (the cosmetic panels would have started listing beds),
+   **`mhq_open_box`'s RARE pool for milestone boxes** (`price >= 120` at ANY
+   level: a mystery box would have paid out "Canopy bed" as a rare cosmetic,
+   which the reveal UI cannot even draw on Blip), and the assignment chest's
+   pool. Trinkets set the precedent in this schema. Cost: one more payload
+   array and two small function edits. `verify-store.html` now asserts
+   furniture appears in *none* of the three.
+2. **Furniture is PER BLIP, so a two-blip household has two rooms.** It rides
+   `blips.equipped` / `blips.owned_items` through the mhq_equip machinery the
+   plan explicitly told this session to reuse. Trinkets went household-wide
+   because a shelf has no equip slot to ride; making furniture household-wide
+   would mean a new column, a new RPC and a new GRANT. Worth a look before
+   go-live — it is defensible either way, and it is her call.
+3. **An empty slot draws its free default rather than a hole.** The four
+   price-0 rows exist and are really bought (the panel says "Get it free"),
+   but `roomFurniture()` falls back to them, so a brand-new learner walks into
+   a complete room and "Take it out" means "put the plain one back". Buying
+   the free item is what makes a slot *switchable*, not what makes it appear.
+4. **The door tint could not call the Blip recolour pipeline as-is.** Her
+   ruling is one drawing tinted in code, and the obvious move was
+   `getBodySrc`. It would have returned the same grey door nine times: that
+   pass computes `ns = ts * (s / BODY_S)`, i.e. it scales saturation
+   *relative to the body blue's*, which is zero for grey art (the door's
+   panels measure s ≈ 0.02–0.06). New `tintedImageSrc` in renderer.js shares
+   the same offscreen canvas, the same cache-per-(file,colour) and the same
+   smoothstep-on-VALUE that preserves the outline, but applies the target
+   saturation FLAT at each pixel's own brightness. Thresholds were **measured
+   off door.png** (outline V<0.45 · ramp 0.45–0.65 · panels 0.65–1.00), not
+   copied from the body's — that was the wings lesson.
+5. **The door tints are not the COLOURS palette**, though the names match.
+   Blip's pastels are barely saturated (mint is 0.23); flat on a pale grey
+   door at 26% of the room width they were indistinguishable from each other.
+   Same hues, roughly double the saturation. Blip's own palette is untouched.
+6. **The room shell IS keyed, despite the plan's "never keyed".** That
+   instruction meant "don't run the magenta slicer over it" — it would have
+   tried to cut it into items. It arrived on WHITE, and a white square behind
+   an isometric room on a navy page is not shippable. Flooded from the border
+   with scipy (`ImageDraw.floodfill` is a no-op in Pillow 12), trimmed,
+   downscaled to 768px and quantised to 128 colours: **597 KB → 51 KB** on the
+   one asset that is on screen 100% of the time. There is **no interior
+   near-white pixel** in the drawing, so the flood is provably safe.
+7. **Bed/desk/window taps open the Furniture panel** (the door opens
+   Inventory, per her ruling). The brief only specified the door. A wiggle and
+   nothing else would be a dead end now that the pieces are shoppable, and
+   "tappable furniture opens the panel it belongs to" is S1's own convention.
+
+### Verified
+- **`verify-store.html` green, 2918/2918.** New section 6j: 18 rows
+  cross-checked SQL↔client on price/minLevel/slot; every piece has a label,
+  art and exactly one collection whose gate equals its own `min_level`; the
+  four free defaults exist at price 0 / Lv 1; `roomFurniture({})` and an
+  unknown id both fall back; **the nine doors resolve to ONE png file** and to
+  eight distinct tint hexes; `tintedImageSrc` really returns a data-URL, a
+  null tint really returns the file unchanged, and the cache returns the same
+  object twice; all 10 PNGs + the shell fetch 200; and then, for real against
+  the backend, **buy → equip → unequip on all four slots** (this is the July
+  cape bug's exact shape), an unowned bed rejected, a Lv 8 bed refused at
+  Lv 1, door colours priced correctly, and **a trinket still unbuyable and
+  unequippable** — the guard that let furniture through must not have widened
+  further.
+- **Walked in the browser** (`?local=1`, **zero console errors throughout**):
+  the room renders all four pieces at the measured fractions with the right
+  art; the room box is 1.008 — the shell's own ratio; tapping the door opens
+  INVENTORY and the bed opens FURNITURE; at Lv 1 the panel shows Basics and
+  Door colours open with techy/princess as "?" cards reading Lv 8 / Lv 14;
+  buying the coral door took 400 → 382 💎, "Put it in the room" equipped it
+  and **the door's `<img>` really is a tinted data-URL**; "Take it out"
+  dropped it back to `door-white`; and the Style toggle swaps to the flat
+  stage (Blip 51% wide vs 30% in the room, zero furniture) where the colours
+  and furniture sheets still work from the same components.
+- **Looked at it.** Screenshots time out in this pane (the rAF/compositing
+  limitation), so `tools/preview_room.py` (new) re-does the CSS's own maths in
+  PIL and writes a PNG of the whole room. That is what caught the desk/door
+  and bed/window collisions in the first arrangement, and what confirmed
+  hers. Previews for all three sets + the nine-door strip are in the session
+  scratchpad and were sent to her.
+
+### The dressing room's Furniture mode
+`dressing-room.html` now has a mode switch. Furniture mode drives the REAL
+code — the stage is the app's own `.room` element with the app's own
+`furnitureLayer()` pieces in it, so the shell art, the aspect ratio, the
+clipping and the placement arithmetic are all the app's. Its own module, not
+more branches in the accessory script: the data shapes genuinely differ
+(**placement is per SLOT — all three beds share one spot — while SIZE is per
+piece**), and the accessory flow is the one she has already used on 41 items.
+- A checkbox decides whether a drag moves the whole slot (default, nearly
+  always right) or gives one piece its own override. The snippet emits both
+  halves and omits whatever did not move.
+- The other three pieces stay visible, dimmed, and can be swapped from
+  dropdowns — a canopy bed crowds the door in a way the plain one does not.
+- Four checks, all exercised for real: off the edge, floating up the wall,
+  walked off the front of the floor, and hidden behind a piece painted later.
+- **It hit the same trap the accessory checks already fixed** — a furniture
+  layer's height comes from the picture's aspect, so measuring before the
+  `<img>` loads reports nothing. Same fix (await load, never `decode()`, plus
+  a run ticket so a late run cannot write into the next piece's box).
+
+### ⚠️ Placement numbers are BEST GUESSES — hers to settle
+Every `attach`/`anchor`/`widthPct` in `furniture.js` is measured against the
+shell's geometry and looks right in the previews, but she has not sat with it.
+That is exactly what the Furniture mode is for. The one to look at first: the
+**door's base against the sloping wall/floor junction** — a rectangular
+picture anchored at one y cannot follow a diagonal, so it seats well at its
+centre and slightly less well at its corners.
+
+### Not done / punted
+- **Not smoke-tested against live** — the migrations are unrun. Same position
+  every room-build session has left its work in.
+- **The 18 prices are first guesses**, like every other price in the app. They
+  belong in the "price the free tier before go-live" pass already on the list.
+- **`art-source/tripo/door.png` (the first door) is now unused**, as are the
+  four `furniture-techy 2/3/4` and `furniture-princess 2` alternates she
+  generated. Left on disk — they are her source art, not build output.
 
 ---
 

@@ -35,11 +35,18 @@
 --  students.tray_day, the _mhq_tray helper, and the whole mhq_eat_food
 --  function. It touches no phase-3 object, so nothing about it is missing
 --  from this file.
+--  Room build S5v2 (2026-08-08) — FURNITURE — IS fully mirrored here too:
+--  the four new slots in shop_items_slot_cat_check AND in mhq_equip's key
+--  list (the known dance — both, or equipping returns bad_equipped), the
+--  'furniture' category allowed through mhq_buy_item's non-cosmetic guard,
+--  the `furnitureShop` array in mhq_get_state, and all 18 rows. Like S4 it
+--  touches no phase-3 object, so nothing about it is missing.
 --  To rebuild a project from scratch, run in this order:
 --      schema.sql  →  migration-phase3.sql  →  migration-level-curve-40.sql
---      →  migration-food-shop.sql
---  (S4's rows and functions are already in schema.sql, so that last file is
---   a no-op on a fresh build — run it anyway, so the order matches live.)
+--      →  migration-food-shop.sql  →  migration-furniture-slots.sql
+--  (S4's and S5v2's rows and functions are already in schema.sql, so those
+--   last two files are a no-op on a fresh build — run them anyway, so the
+--   order matches live.)
 --
 --  (It REPLACES the old roster-based login with self sign-up: learners create
 --   their own account.)
@@ -159,8 +166,12 @@ create table if not exists public.app_config (key text primary key, value text);
 -- grocery consumables (soup, medicine) + instant treats; 'trinket' = the junk
 -- loot from milestone mystery boxes (2026-08-08) — never sold, never worn, so
 -- it gets its own category AND its own slot value and is deliberately absent
--- from mhq_equip's allowed keys. The shop payload filters on
--- category = 'cosmetic', which is what keeps trinkets out of the shop for free.
+-- from mhq_equip's allowed keys; 'furniture' = the isometric room's bed / desk
+-- / window / door (2026-08-08, room build S5v2) — sold and equipped exactly
+-- like a cosmetic, but on its own category so it stays out of the cosmetic
+-- shop payload and out of BOTH treasure-box loot pools.
+-- The shop payload filters on category = 'cosmetic', which is what keeps
+-- trinkets and furniture out of the shop for free.
 create table if not exists public.shop_items (
   item_id   text primary key,
   slot      text    not null,
@@ -170,9 +181,10 @@ create table if not exists public.shop_items (
   sort      integer not null default 0,
   category  text    not null default 'cosmetic',
   constraint shop_items_slot_cat_check check (
-       (category = 'cosmetic' and slot in ('hat','ears','glasses','wings','arms','back','effects','neck'))
-    or (category = 'food'     and slot = 'food')
-    or (category = 'trinket'  and slot = 'trinket'))
+       (category = 'cosmetic'  and slot in ('hat','ears','glasses','wings','arms','back','effects','neck'))
+    or (category = 'food'      and slot = 'food')
+    or (category = 'trinket'   and slot = 'trinket')
+    or (category = 'furniture' and slot in ('bed','desk','window','door')))
 );
 
 -- Room build S2 (2026-08-08): one grant per (student, milestone), ever. The
@@ -369,7 +381,7 @@ end; $$;
 
 create or replace function public.mhq_get_state(p_username text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb; food jsonb;
+declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb; food jsonb; furn jsonb;
         blips_j jsonb; blip1 jsonb; health jsonb; stg int; is_qual boolean;
         can_feed boolean; can_care boolean;
 begin
@@ -404,6 +416,13 @@ begin
   select coalesce(jsonb_agg(jsonb_build_object(
             'id', item_id, 'kind', item_id, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
     into food from public.shop_items where active and category = 'food';
+  -- Room build S5v2 (2026-08-08): the furniture catalogue, in its own array
+  -- for the same reason foodShop is separate — `shop` keeps its exact shape,
+  -- so the cosmetic panels never learn what a bed is. Same four fields as
+  -- `shop`, so the furniture panel can reuse the cards the shop already draws.
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'id', item_id, 'slot', slot, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
+    into furn from public.shop_items where active and category = 'furniture';
 
   health := public._mhq_health(st.last_fed_day, st.care_streak);
   stg := (health->>'stage')::int;
@@ -427,7 +446,7 @@ begin
     'student', jsonb_build_object('id', sid, 'name', st.display_name, 'username', lower(p_username)),
     'progress', prog, 'totalXp', total, 'openQuests', open_q,
     'gold', st.gold, 'xp', st.xp, 'levelInfo', public._mhq_level(st.xp),
-    'blip', blip1, 'blips', blips_j, 'shop', shop, 'foodShop', food,
+    'blip', blip1, 'blips', blips_j, 'shop', shop, 'foodShop', food, 'furnitureShop', furn,
     'pantry', st.pantry, 'tray', coalesce(st.tray, '{}'::jsonb), 'health', health,
     'canFeedToday', can_feed, 'canCareToday', can_care,
     'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'));
@@ -713,14 +732,18 @@ begin
     end if;
   end if;
 
-  -- Trinkets (and any future non-cosmetic category) are not purchasable at all
-  -- (2026-08-08). Without this guard the function falls through to the cosmetic
-  -- branch for ANY non-food row, so a crafted request could "buy" a price-0
+  -- Trinkets (and any future non-buyable category) are not purchasable at all
+  -- (2026-08-08). Without this guard the function falls through to the branch
+  -- below for ANY non-food row, so a crafted request could "buy" a price-0
   -- trinket. Nothing in the app ever asks for one — but "never in the shop"
   -- belongs on the server, not in the client not offering it.
-  if itm.category <> 'cosmetic' then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
+  -- S5v2 lets FURNITURE through: a bed really is bought, owned and equipped
+  -- exactly like a hat, so it wants the whole branch below unchanged.
+  if itm.category not in ('cosmetic', 'furniture') then
+    return jsonb_build_object('ok', false, 'error', 'no_item');
+  end if;
 
-  -- cosmetic accessory, on the given blip slot
+  -- cosmetic accessory or furniture, on the given blip slot
   if stg >= 3 then return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK'); end if;
   select owned_items into owned from public.blips where student_id = sid and slot = v_slot;
   if owned is null then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
@@ -760,7 +783,11 @@ begin
   if p_equipped is not null then
     if jsonb_typeof(p_equipped) <> 'object' then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     select count(*) into bad from jsonb_each_text(p_equipped) e(k, v)
-     where k not in ('hat','ears','glasses','wings','arms','back','effects','neck')
+     where k not in ('hat','ears','glasses','wings','arms','back','effects','neck',
+                     -- room build S5v2 (2026-08-08): the four furniture slots.
+                     -- BOTH this list and shop_items_slot_cat_check above, or
+                     -- an equipped bed comes back 'bad_equipped' (the July bug).
+                     'bed','desk','window','door')
         or (coalesce(v, '') <> '' and not b.owned_items ? v);
     if bad > 0 then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     update public.blips set equipped = p_equipped where student_id = sid and slot = v_slot;
@@ -1182,4 +1209,37 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('cola',           'food', 32, 17, true, 175, 'food'),
   ('hot-chocolate',  'food', 38, 17, true, 176, 'food'),
   ('milkshake',      'food', 45, 17, true, 177, 'food')
+on conflict (item_id) do nothing;
+
+-- Room build S5v2 (2026-08-08): FURNITURE — 18 category-'furniture' rows
+-- across four new slots (bed/desk/window/door). Sold and equipped exactly
+-- like a cosmetic; on its own category so it stays out of the cosmetic shop
+-- payload and out of both treasure-box loot pools. Which COLLECTION a piece
+-- belongs to (and so which locked "?" card hides it) is a CLIENT grouping in
+-- js/companion/collections.js; labels, art and placement on the room shell
+-- are in js/companion/furniture.js. See supabase/migration-furniture-slots.sql.
+--   basic Lv 1 (free) · techy Lv 8 · princess Lv 14 · door colours Lv 1
+-- ⚠️ THE DOOR COLOURS ALL SHARE ONE PICTURE (assets/companion/furniture/
+-- door.png), tinted in code through the same offscreen-canvas pipeline Blip's
+-- recolouring uses. Her ruling: never one PNG per colour. Nothing about that
+-- is visible from here, which is exactly why it is written down here.
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('basic-bed',       'bed',      0,  1, true, 200, 'furniture'),
+  ('basic-desk',      'desk',     0,  1, true, 201, 'furniture'),
+  ('city-window',     'window',   0,  1, true, 202, 'furniture'),
+  ('door-white',      'door',     0,  1, true, 203, 'furniture'),
+  ('techy-bed',       'bed',    150,  8, true, 210, 'furniture'),
+  ('techy-desk',      'desk',   130,  8, true, 211, 'furniture'),
+  ('space-window',    'window', 110,  8, true, 212, 'furniture'),
+  ('princess-bed',    'bed',    180, 14, true, 220, 'furniture'),
+  ('princess-desk',   'desk',   160, 14, true, 221, 'furniture'),
+  ('mountain-window', 'window', 130, 14, true, 222, 'furniture'),
+  ('door-mint',       'door',    10,  1, true, 230, 'furniture'),
+  ('door-sky',        'door',    10,  1, true, 231, 'furniture'),
+  ('door-pink',       'door',    12,  1, true, 232, 'furniture'),
+  ('door-lemon',      'door',    12,  1, true, 233, 'furniture'),
+  ('door-peach',      'door',    15,  1, true, 234, 'furniture'),
+  ('door-lilac',      'door',    15,  1, true, 235, 'furniture'),
+  ('door-coral',      'door',    18,  1, true, 236, 'furniture'),
+  ('door-seafoam',    'door',    20,  1, true, 237, 'furniture')
 on conflict (item_id) do nothing;

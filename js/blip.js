@@ -1,6 +1,5 @@
 /* ============================================================
-   BLIP SCREEN — his ROOM (room build S1, 2026-08-08): a bed,
-   closet and desk around Blip on his glow pedestal, an
+   BLIP SCREEN — his ROOM (room build S1, 2026-08-08): an
    inline-editable nickname, a top-right daily cookie + today's
    grocery tray, and five round dock buttons (colours/shop/food/
    pharmacy/furniture) that each open a bottom sheet over the
@@ -8,6 +7,21 @@
    mhq_get_state/local getState); every action re-asks the
    backend and never trusts a locally-guessed outcome — errors
    always toast, never fail silently.
+
+   ROOM BUILD S5v2 (2026-08-08 revision) — THE ISOMETRIC ROOM.
+   The room is Megan's own shell drawing (assets/companion/
+   room-shell.png) with four EQUIPPED pieces laid on it: a
+   sliding door back-left (tap → Inventory; its colour is
+   shoppable, one drawing tinted in code), a window on the upper
+   right wall, a desk on the left and a bed on the right. Blip
+   stands front-on in the middle. The catalogue, the art and the
+   placement fractions are in js/companion/furniture.js; the S1
+   placeholder SVGs (js/companion/room-art.js) are gone with the
+   art they stood in for.
+   The flat dark stage SURVIVES as the STYLE view (her ruling —
+   "don't throw that away"): the `roomView` flag below swaps the
+   STAGE only, so there is exactly one copy of the colours /
+   inventory / shop / food / pharmacy sheet logic serving both.
 
    ROOM BUILD S4b (2026-08-08 revision) — the fridge is GONE.
    A bought grocery now lands on TODAY'S TRAY, shown top-right
@@ -31,8 +45,7 @@
    ROOM BUILD S1 (2026-08-08) — UI restructure only, no DB changes.
    Closet/Shop/Colour/Pharmacy content is the same data + API calls
    as before, just moved into bottom sheets (see ROOM-BUILD-PLAN.md
-   in homework-hub-companion/). Furniture art is PLACEHOLDER
-   (js/companion/room-art.js), swapped for Megan's Tripo art later.
+   in homework-hub-companion/).
    ============================================================ */
 import { api } from "./api.js";
 import { getSession } from "./session.js";
@@ -51,12 +64,16 @@ import { treasureBadge } from "./companion/treasure.js";
 import {
   COLLECTIONS, COLLECTION_ORDER,
   FOOD_COLLECTIONS, FOOD_COLLECTION_ORDER,
+  FURNITURE_COLLECTIONS, FURNITURE_COLLECTION_ORDER,
 } from "./companion/collections.js";
 import { TRINKET_IDS, trinketExists, trinketTile } from "./companion/trinkets.js";
 import { FOOD_IDS, foodExists, foodLabel, foodArt } from "./companion/food.js";
+import {
+  FURNITURE_SLOTS, FURNITURE_SLOT_LABELS,
+  furnitureExists, furnitureLabel, furnitureArt, furnitureLayer, roomFurniture,
+} from "./companion/furniture.js";
 import { makeDraggable } from "./companion/drag-feed.js";
 import { maybeShowReminderCard } from "./push.js";
-import { BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
 
 /* Which slot tab the closet/shop is filtered to ("all" or a slot id).
    Module scope on purpose: every buy/wear action re-renders the whole
@@ -64,6 +81,22 @@ import { BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
    make dressing Blip in one slot infuriating. Shared between the
    Inventory and Shop sheets, same as the old closet/shop split. */
 let activeSlotTab = "all";
+
+/* ---------- which STAGE the screen is showing (room build S5v2) ----------
+   "room"  = the isometric bedroom: Megan's room-shell art, the equipped
+             door/window/desk/bed on it, Blip front-on in the middle.
+   "style" = the flat dark stage the app had before the room build — just
+             Blip on his glow pedestal, big and clear.
+
+   Her ruling (ROOM-BUILD-PLAN.md REVISION 6, 2026-08-08): "don't throw
+   that away". The bedroom is home; the style view is where a kid dresses
+   him without the furniture around him. They are TWO STAGES, not two
+   screens — the nickname header, the cookie + tray, the dock and every
+   bottom sheet below are built once and serve both, so there is exactly
+   one copy of the colours / inventory / shop logic. Module scope, so the
+   view survives the app.go("blip") remount every buy and equip triggers;
+   a fresh page load starts at home, in the room. */
+let roomView = "room";
 
 /* ---------------- room bottom-sheet machinery ----------------
    One shared bottom-sheet convention (reuses the app's existing
@@ -456,28 +489,48 @@ export function renderBlip(app, host) {
   const roomCard = el("div", "card room-card");
   host.appendChild(roomCard);
 
-  // ---- room layout: bed / closet / desk / Blip on his pedestal ----
+  // ---- the stage: the isometric room, or the flat "style" stage ----
   // Built before the header so the header's cookie button can trigger the
   // same happy/refuse shake on the Blip stage the old feed button used.
-  const room = el("div", "room");
-  const mkFurniture = (cls, svg, label) => {
-    const f = el("div", "room-furniture " + cls);
-    f.tabIndex = 0;
-    f.setAttribute("role", "button");
-    f.setAttribute("aria-label", label);
-    f.title = label;
-    f.innerHTML = `<div class="rf-art">${svg}</div><span class="rf-label">${label}</span>`;
-    return f;
-  };
   const bindTap = (elm, fn) => {
     elm.addEventListener("click", fn);
     elm.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } });
   };
 
-  const bedEl = mkFurniture("bed", BED_SVG, "Bed");
-  const closetEl = mkFurniture("closet", CLOSET_SVG, "Closet");
-  const deskEl = mkFurniture("desk", DESK_SVG, "Desk");
-  room.append(bedEl, closetEl, deskEl);
+  /* Room build S5v2: the room is Megan's own isometric shell art
+     (assets/companion/room-shell.png, set as the .room background in CSS,
+     which pins the box to that picture's exact aspect ratio) with the four
+     EQUIPPED pieces laid on top of it. Slot geography is fixed by her
+     ruling — door back-left, desk left, bed right, window upper-right —
+     and only the picture in each spot is shoppable; the placement numbers
+     live in js/companion/furniture.js.
+
+     roomFurniture() fills an empty slot with that slot's free default, so
+     the room is never a bare shell with holes in it. */
+  const room = el("div", roomView === "room" ? "room" : "room stage-plain");
+  const equippedFurn = roomFurniture(activeBlip.equipped);
+  if (roomView === "room") {
+    FURNITURE_SLOTS.forEach((slot) => {
+      const id = equippedFurn[slot];
+      const layer = furnitureLayer(id);
+      layer.tabIndex = 0;
+      layer.setAttribute("role", "button");
+      // The DOOR is the way into the closet (her ruling: the sliding door
+      // replaces the wardrobe entirely); the other three open the panel
+      // that sells them, which is the S1 convention for tappable furniture.
+      const opensInventory = slot === "door";
+      const label = opensInventory
+        ? `${furnitureLabel(id)} — open the inventory`
+        : `${furnitureLabel(id)} — change the furniture`;
+      layer.setAttribute("aria-label", label);
+      layer.title = label;
+      bindTap(layer, () => {
+        triggerAnim(layer, "rf-wiggle", 500);
+        openPanel(opensInventory ? "inventory" : "furniture", !opensInventory);
+      });
+      room.appendChild(layer);
+    });
+  }
 
   const roomStage = el("div", "room-blip-stage");
   roomStage.innerHTML = `<div class="blip-pedestal"><i></i></div>`;
@@ -493,10 +546,6 @@ export function renderBlip(app, host) {
     // he's sleeping/sick/recovering).
     tappable: true,
   });
-
-  bindTap(closetEl, () => openPanel("inventory", false));
-  bindTap(bedEl, () => triggerAnim(bedEl, "rf-wiggle", 500));
-  bindTap(deskEl, () => triggerAnim(deskEl, "rf-wiggle", 500));
 
   // ---- header: nickname (tap to edit), subtitle, mood chip ----
   const titleWrap = el("div", "room-titlewrap");
@@ -573,6 +622,27 @@ export function renderBlip(app, host) {
   try { treasureBadge(app, roomCard); } catch { /* non-critical */ }
 
   roomCard.appendChild(room);
+
+  /* ---- Style / Room toggle (room build S5v2, her ruling 6) ----
+     One button, under the stage and above the dock, so it is in the same
+     place whichever view is showing and can never collide with a piece of
+     furniture or with the treasure badge top-left. It only swaps the
+     STAGE: app.render() redraws this screen with the other stage while
+     every sheet, the dock, the tray and the cookie stay exactly as they
+     are — which is the whole point of keeping one set of components. */
+  const viewToggle = el("button", "stage-toggle");
+  viewToggle.type = "button";
+  viewToggle.innerHTML = roomView === "room"
+    ? '<span class="st-ic">🎨</span> Style'
+    : '<span class="st-ic">🏠</span> Back to the room';
+  viewToggle.title = roomView === "room"
+    ? "See Blip on his own, big and clear"
+    : "Back to Blip's room";
+  viewToggle.addEventListener("click", () => {
+    roomView = roomView === "room" ? "style" : "room";
+    app.render();
+  });
+  roomCard.appendChild(viewToggle);
 
   // Daily-reminder opt-in — was under the old feed button; the room card
   // is the closest equivalent home for it now. Stays hidden until the
@@ -1000,9 +1070,118 @@ export function renderBlip(app, host) {
     }
   }
 
+  /* ============================================================
+     FURNITURE sheet — room build S5v2 (2026-08-08).
+     Grouped by collection exactly like the cosmetic Shop and the grocery
+     store, with the same locked-"?" card for a collection below the
+     learner's level (basic Lv 1 · techy Lv 8 · princess Lv 14). The Door
+     colours group is Lv 1 and flagged noMysteryCard — her ruling, the
+     front door is never a mystery.
+
+     Unlike the cosmetic Shop this panel shows OWNED items too, in place,
+     with a "Put it in the room" button. There is no separate furniture
+     inventory: one bed is in the room and the others are in storage, and
+     splitting that across two sheets would make swapping back a hunt.
+     ============================================================ */
   function renderFurniturePanel(container) {
     container.appendChild(el("h2", "", "FURNITURE"));
-    container.appendChild(el("div", "furniture-placeholder", "🛋️ New beds, desks and wallpaper are coming in a later update."));
+    const st = app.state || {};
+    const lvl = (st.levelInfo && st.levelInfo.level) || 1;
+    const hl = normalizeHealth(st);
+    container.appendChild(el("p", "muted small",
+      "Every room starts with the basics. What you put in a slot stays there until you swap it."));
+    if (hl.locks.dress) {
+      container.appendChild(el("p", "muted small", "🛌 Blip won't get up to rearrange today — try again once he's feeling better."));
+    }
+
+    const rows = (st.furnitureShop || []).filter((it) => furnitureExists(it.id));
+    const byId = new Map(rows.map((it) => [it.id, it]));
+    let shownAny = false;
+    FURNITURE_COLLECTION_ORDER.forEach((key) => {
+      const coll = FURNITURE_COLLECTIONS[key];
+      const collRows = coll.items.map((id) => byId.get(id)).filter(Boolean);
+      if (!collRows.length) return;
+      shownAny = true;
+      if (lvl < coll.unlockLevel && !coll.noMysteryCard) {
+        const group = el("div", "shop-grid collection-group");
+        group.appendChild(collectionLockedCard(coll));
+        container.appendChild(group);
+      } else {
+        container.appendChild(el("h3", "collection-label", coll.label));
+        const grid = el("div", "shop-grid furniture-grid");
+        collRows.forEach((it) => grid.appendChild(furnitureCard(it, lvl, hl)));
+        container.appendChild(grid);
+      }
+    });
+    if (!shownAny) container.appendChild(el("p", "muted small", "The furniture shop is empty — that shouldn't happen; try reloading."));
+  }
+
+  /* One furniture card. Three states, in the order a learner meets them:
+     locked by level → buyable → owned (in the room, or ready to go in).
+     Buying and equipping both close the sheet and do the app's normal full
+     refresh + re-render, the S1 convention — and here it earns its keep,
+     because the thing you just changed is the room behind the sheet. */
+  function furnitureCard(item, lvl, hl) {
+    const owned = (activeBlip.owned || []).includes(item.id);
+    const inRoom = (activeBlip.equipped || {})[item.slot] === item.id;
+    const lockedByLevel = lvl < item.minLevel;
+    const card = el("div", "shop-item furniture-item" + (inRoom ? " equipped" : ""));
+    const meta = owned
+      ? (inRoom ? "In the room" : "Owned")
+      : (item.price === 0
+          ? "Free"
+          : `<span class="crystal">💎</span> ${item.price}${lockedByLevel ? ` · unlocks at level ${item.minLevel}` : ""}`);
+    card.innerHTML = `<div class="si-stage furn-stage"></div>
+      ${item.price === 0 && !owned ? '<div class="si-tag free">FREE</div>' : ""}
+      <div class="si-name">${furnitureLabel(item.id)}</div>
+      <div class="si-meta">${FURNITURE_SLOT_LABELS[item.slot] || item.slot} · ${meta}</div>`;
+    card.querySelector(".furn-stage").appendChild(furnitureArt(item.id));
+
+    const btn = el("button", "btn small");
+    if (!owned && lockedByLevel) {
+      btn.textContent = `Unlocks at level ${item.minLevel}`;
+      btn.disabled = true;
+      btn.className = "btn small ghost";
+    } else if (!owned) {
+      btn.innerHTML = hl.locks.shop
+        ? "Shop's closed for now"
+        : (item.price === 0 ? "Get it free" : `Buy · ${item.price} <span class="crystal">💎</span>`);
+      btn.className = "btn small primary";
+      btn.disabled = hl.locks.shop;
+      if (!hl.locks.shop) btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          const r = await api.buyItem(sess.username, sess.password, item.id, activeBlip.slot);
+          if (!r || !r.ok) { showToast(buyErrMsg(r && r.error, r), "error"); btn.disabled = false; return; }
+          showToast(item.price === 0 ? `${furnitureLabel(item.id)} is yours!` : `Bought ${furnitureLabel(item.id)}!`, "good");
+          closeRoomSheet();
+          await app.refresh();
+          app.go("blip");
+        } catch { showToast("Can't reach the server — try again.", "error"); btn.disabled = false; }
+      });
+    } else {
+      /* Taking a piece OUT does not leave a hole: the slot falls back to
+         its free default (roomFurniture in furniture.js), so "Take it out"
+         reads as "put the plain one back", which is what happens. */
+      btn.textContent = hl.locks.dress ? "Blip won't get up…" : (inRoom ? "Take it out" : "Put it in the room");
+      btn.className = "btn small" + (hl.locks.dress || inRoom ? " ghost" : " primary");
+      btn.disabled = hl.locks.dress;
+      if (!hl.locks.dress) btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        const nextEquipped = { ...(activeBlip.equipped || {}) };
+        nextEquipped[item.slot] = inRoom ? "" : item.id;
+        try {
+          const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, equipped: nextEquipped });
+          if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); btn.disabled = false; return; }
+          showToast(inRoom ? `${furnitureLabel(item.id)} put away.` : `${furnitureLabel(item.id)} is in the room!`, "good");
+          closeRoomSheet();
+          await app.refresh();
+          app.go("blip");
+        } catch { showToast("Can't reach the server — try again.", "error"); btn.disabled = false; }
+      });
+    }
+    card.appendChild(btn);
+    return card;
   }
 
   function renderPanelContent(id, container) {

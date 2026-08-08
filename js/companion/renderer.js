@@ -1248,6 +1248,73 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
 }
 
 /* ============================================================
+   GENERIC IMAGE TINT (room build S5v2, 2026-08-08)
+
+   Same machinery as the body recolour above — one offscreen canvas, one
+   cached data-URL per (file, colour) pair, dark strokes preserved by a
+   smoothstep on VALUE — but tuned for art that is PALE GREY rather than
+   Megan's electric blue. Built for the sliding door: her ruling is that
+   the door colours all share ONE drawing
+   (assets/companion/furniture/door.png), tinted in code, never one PNG
+   per colour.
+
+   WHY IT COULD NOT JUST CALL getBodySrc (rule 9 — recorded, not silently
+   redesigned). The body pass computes the new saturation as
+       ns = ts * (s / BODY_S)
+   i.e. it scales each pixel's saturation RELATIVE to the body blue's. That
+   is exactly right for recolouring something already coloured, and gives
+   zero for something grey: the door's panels measure s ≈ 0.02-0.06, so the
+   body pass would have returned the same grey door eight times over. Here
+   the target saturation is applied FLAT at each pixel's own value, so the
+   source's light/shade ladder survives and the whole object takes the new
+   hue.
+
+   The thresholds are the OTHER difference, and they were measured off
+   door.png rather than copied (the lesson from the wings):
+     outline / seams   V < 0.45   (~12.5k px, saturated navy) — kept exactly
+     transition band   V 0.45-0.65 (~3.2k px) — smoothstep ramp
+     panels            V 0.65-1.00 (~117k px, s 0.02-0.06) — fully tinted
+   Callers can override both for art with a different ladder.
+   ============================================================ */
+const tintCache = new Map(); // "src::hex::lo::hi" -> Promise<string dataURL>
+
+function buildTintedDataUrl(src, hex, lo, hi) {
+  return loadBaseImage(src).then((img) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    const t = hexToRgb(hex);
+    const [th, ts] = rgbToHsv(t.r, t.g, t.b);
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] === 0) continue;
+      const [, , v] = rgbToHsv(data[i], data[i + 1], data[i + 2]);
+      const w = smoothstep(lo, hi, v);
+      if (w === 0) continue; // outline / seams — untouched
+      const [nr, ng, nb] = hsvToRgb(th, ts, v);
+      data[i] = Math.round(data[i] + (nr - data[i]) * w);
+      data[i + 1] = Math.round(data[i + 1] + (ng - data[i + 1]) * w);
+      data[i + 2] = Math.round(data[i + 2] + (nb - data[i + 2]) * w);
+    }
+    ctx.putImageData(imgData, 0, 0);
+    return canvas.toDataURL("image/png");
+  });
+}
+
+/* Promise<string> of a tinted copy of `src`. A null/empty `hex` resolves to
+   `src` unchanged, so an untinted item (door-white) costs no canvas work at
+   all. Built once per (file, colour, thresholds) and reused forever. */
+export function tintedImageSrc(src, hex, { darkLo = 0.45, darkHi = 0.65 } = {}) {
+  if (!hex) return Promise.resolve(src);
+  const key = `${src}::${hex}::${darkLo}::${darkHi}`;
+  if (!tintCache.has(key)) tintCache.set(key, buildTintedDataUrl(src, hex, darkLo, darkHi));
+  return tintCache.get(key);
+}
+
+/* ============================================================
    Animation frame-cycler (2026-07-19) — Megan's hand-drawn 4-frame
    sprite-sheet animations, sliced by tools/slice_sprites.py (the first
    rows were cut by a scratchpad script that was never kept — the tool is

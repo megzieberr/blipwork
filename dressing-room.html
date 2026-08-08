@@ -115,12 +115,40 @@
 
   #filebanner{background:var(--bad-bg);color:var(--bad);padding:11px 14px;border-radius:12px;
     margin-bottom:14px;font-size:12.5px;line-height:1.6;display:none}
+
+  /* ---- mode switch: accessories on Blip / furniture in the room (S5v2) ---- */
+  .modes{display:flex;gap:8px;margin-bottom:14px}
+  .modes button{padding:9px 18px;border-radius:999px;border:1px solid var(--brd);background:var(--panel);
+    color:var(--muted);cursor:pointer;font-family:inherit;font-size:12.5px}
+  .modes button.active{background:color-mix(in srgb,var(--accent) 28%,var(--panel));
+    border-color:color-mix(in srgb,var(--accent) 60%,var(--panel));color:var(--ink)}
+  [hidden]{display:none !important}
+
+  /* The furniture stage is the app's OWN .room element, so the shell art, the
+     aspect ratio and the clipping are whatever the app does — this page never
+     re-draws the room for itself. */
+  #roomwrap{position:relative;width:100%;max-width:460px;margin:0 auto;touch-action:none;cursor:grab;outline:none}
+  #roomwrap.dragging{cursor:grabbing}
+  #roomwrap:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+  /* everything except the piece being placed fades back, so you can see what
+     you are lining up against without it competing for attention */
+  #roomwrap .room-furn{opacity:.42;transition:opacity .12s}
+  #roomwrap .room-furn.picked{opacity:1;filter:drop-shadow(0 0 6px var(--accent))}
+  /* Blip stands in the room at the size the app draws him, for scale */
+  #roomwrap .room-blip-stage{opacity:.75}
+  .fslotgroup{font-size:10px;letter-spacing:.08em;color:var(--muted);margin:12px 0 5px;text-transform:uppercase}
+  .fslotgroup:first-child{margin-top:0}
 </style>
 </head>
 <body>
 
 <h1>Dressing room</h1>
-<div class="sub">Drag the accessory onto Blip. Copy the numbers when it looks right.</div>
+<div class="sub">Drag the thing where you want it. Copy the numbers when it looks right.</div>
+
+<div class="modes">
+  <button type="button" id="mode-acc-btn" class="active">👕 Accessories on Blip</button>
+  <button type="button" id="mode-furn-btn">🛋️ Furniture in the room</button>
+</div>
 
 <div id="filebanner">
   <b>Open this through the dev server, not by double-clicking the file.</b><br>
@@ -160,7 +188,7 @@
 })();
 </script>
 
-<div class="dr">
+<div class="dr" id="mode-accessories">
 
   <!-- ============ picker ============ -->
   <aside class="pane" id="picker"></aside>
@@ -242,6 +270,74 @@
     <div class="swatches" id="swatches"></div>
     <div class="sub" style="margin:7px 0 0;font-size:10.5px;line-height:1.55">
       Worth a check on eye items — the patch that hides his painted eyes has to vanish in every colour.
+    </div>
+  </aside>
+</div>
+
+<!-- ============================================================
+     FURNITURE MODE (room build S5v2, 2026-08-08)
+     Same idea, same rule: it drives the REAL code. The stage below is the
+     app's own .room element with the app's own furnitureLayer() pieces
+     mounted into it, so the shell art, the aspect ratio, the clipping and
+     the placement arithmetic are all whatever the app does. Nothing in
+     here recomputes a position.
+     ============================================================ -->
+<div class="dr" id="mode-furniture" hidden>
+
+  <aside class="pane" id="fpicker"></aside>
+
+  <main class="pane">
+    <div id="roomwrap" tabindex="0"><div class="room" id="roomstage"></div></div>
+
+    <div class="sizerow">
+      <button type="button" id="fsmaller" title="Smaller">−</button>
+      <div class="val" id="fsizeval">—</div>
+      <button type="button" id="fbigger" title="Bigger">+</button>
+    </div>
+
+    <div class="hint">
+      Drag the bright piece · scroll or <span class="key">+</span> <span class="key">−</span> to resize<br>
+      <span class="key">↑</span><span class="key">↓</span><span class="key">←</span><span class="key">→</span>
+      nudge · hold <span class="key">Shift</span> for bigger steps
+      <label style="display:block;margin-top:9px">
+        <input type="checkbox" id="fmoveslot" checked> move everything in this spot together
+      </label>
+      <div class="sub" style="margin:5px 0 0;font-size:10.5px;line-height:1.55;text-align:left">
+        Every bed shares one spot on the floor, every door shares one spot on the wall, and so on —
+        so moving the spot moves all three beds at once, which is nearly always what you want.
+        Untick it only when ONE piece needs to sit somewhere of its own.
+        <b>Size is always just the piece you picked.</b>
+      </div>
+      <label style="display:block;margin-top:9px">
+        <input type="checkbox" id="fshowblip" checked> show Blip, for scale
+      </label>
+    </div>
+  </main>
+
+  <aside class="pane" id="freadout">
+    <h2>How it looks</h2>
+    <div id="fflags"></div>
+
+    <h2>Paste this to Claude</h2>
+    <pre id="fsnippet">Pick a piece on the left.</pre>
+    <div class="btnrow">
+      <button type="button" class="primary" id="fcopybtn">Copy</button>
+      <button type="button" id="fresetbtn">Back to shipped</button>
+    </div>
+
+    <h2>What's in the room with it</h2>
+    <div id="fothers"></div>
+    <div class="sub" style="margin:7px 0 0;font-size:10.5px;line-height:1.55">
+      Swap the other three so you can check a piece against the set it will really stand next to —
+      a canopy bed crowds the door in a way the plain one does not.
+    </div>
+
+    <h2>Fine tuning</h2>
+    <div class="num"><label>anchor x</label><input type="number" id="fanchorx" step="0.01" min="0" max="1"></div>
+    <div class="num"><label>anchor y</label><input type="number" id="fanchory" step="0.01" min="0" max="1"></div>
+    <div class="sub" style="margin:6px 0 0;font-size:10.5px;line-height:1.55">
+      The anchor is the spot ON THE PICTURE that lands where you drag. Floor pieces anchor near
+      their bottom edge (that is what makes them stand on the floor); wall pieces anchor at their middle.
     </div>
   </aside>
 </div>
@@ -774,6 +870,383 @@ function reportPair(def) {
 
 /* start on something with a story attached */
 select(ACCESSORIES["fairy-wing"] ? "fairy-wing" : Object.keys(ACCESSORIES)[0]);
+</script>
+
+
+<script type="module">
+/* ============================================================
+   FURNITURE MODE — room build S5v2 (2026-08-08)
+
+   Deliberately its OWN module rather than more branches inside the
+   accessory script above. The two jobs share a look and a workflow but
+   nothing else: different catalogue, different stage, different snippet
+   shape, and — the part that matters — different DATA SHAPES. Accessory
+   placement is per item; furniture placement is per SLOT (all three beds
+   share one spot on the floor) with per-item SIZE. Folding that into the
+   accessory script's `def.attach` logic would have meant a flag on every
+   line of it, and the accessory flow is the one Megan has already used to
+   place 41 items. Two modules cannot break each other.
+
+   THE RULE IS THE SAME: drive the real code. The stage is the app's own
+   `.room` element (so the shell art, the 768/762 aspect ratio and the
+   overflow clipping are the app's), and every piece is mounted with the
+   app's own furnitureLayer(). Nothing here computes a position.
+   ============================================================ */
+import {
+  FURNITURE, FURNITURE_SLOTS, FURNITURE_SLOT_LABELS, SLOT_PLACEMENT,
+  DEFAULT_FURNITURE, furnitureLabel, furnitureLayer, placementFor,
+} from "./js/companion/furniture.js";
+import { renderBlip as mountBlip } from "./js/companion/renderer.js";
+
+const $$ = (id) => document.getElementById(id);
+const r3 = (n) => Math.round(n * 1000) / 1000;
+
+/* Shipped values, snapshotted before anything is touched — per slot for the
+   placement, per item for the size, matching how furniture.js stores them. */
+const SHIPPED_SLOT = JSON.parse(JSON.stringify(SLOT_PLACEMENT));
+const SHIPPED_ITEM = {};
+for (const [id, d] of Object.entries(FURNITURE)) {
+  SHIPPED_ITEM[id] = { widthPct: d.widthPct, attach: d.attach ? JSON.parse(JSON.stringify(d.attach)) : null,
+                       anchor: d.anchor ? JSON.parse(JSON.stringify(d.anchor)) : null };
+}
+
+let fId = null;                                  // the piece being placed
+let others = { ...DEFAULT_FURNITURE };           // what else is standing in the room
+let showBlip = true;
+
+/* ---------- mode switch ---------- */
+function setMode(which) {
+  $$("mode-accessories").hidden = which !== "acc";
+  $$("mode-furniture").hidden = which !== "furn";
+  $$("mode-acc-btn").classList.toggle("active", which === "acc");
+  $$("mode-furn-btn").classList.toggle("active", which === "furn");
+  if (which === "furn" && !fId) selectFurn("basic-bed");
+}
+$$("mode-acc-btn").addEventListener("click", () => setMode("acc"));
+$$("mode-furn-btn").addEventListener("click", () => setMode("furn"));
+
+/* ---------- picker, grouped by the spot each piece lives in ---------- */
+{
+  const p = $$("fpicker");
+  p.innerHTML = "<h2>Furniture</h2>";
+  for (const slot of FURNITURE_SLOTS) {
+    const ids = Object.keys(FURNITURE).filter((id) => FURNITURE[id].slot === slot);
+    if (!ids.length) continue;
+    const h = document.createElement("div");
+    h.className = "fslotgroup";
+    h.textContent = FURNITURE_SLOT_LABELS[slot] || slot;
+    p.appendChild(h);
+    for (const id of ids) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "itembtn";
+      b.dataset.id = id;
+      b.innerHTML = `${furnitureLabel(id)} <span class="moved" data-fmoved></span>`;
+      b.addEventListener("click", () => selectFurn(id));
+      p.appendChild(b);
+    }
+  }
+}
+
+/* ---------- "what else is in the room" pickers ---------- */
+{
+  const host = $$("fothers");
+  for (const slot of FURNITURE_SLOTS) {
+    const row = document.createElement("div");
+    row.className = "num";
+    const lab = document.createElement("label");
+    lab.textContent = FURNITURE_SLOT_LABELS[slot] || slot;
+    const sel = document.createElement("select");
+    sel.style.cssText = "flex:1;background:var(--panel);border:1px solid var(--brd);color:var(--ink);"
+      + "border-radius:7px;padding:5px 7px;font-family:inherit;font-size:12px";
+    for (const id of Object.keys(FURNITURE).filter((i) => FURNITURE[i].slot === slot)) {
+      const o = document.createElement("option");
+      o.value = id; o.textContent = furnitureLabel(id);
+      if (id === others[slot]) o.selected = true;
+      sel.appendChild(o);
+    }
+    sel.addEventListener("change", () => { others[slot] = sel.value; drawRoom(); });
+    row.append(lab, sel);
+    host.appendChild(row);
+  }
+}
+
+/* ---------- drawing ---------- */
+function drawRoom() {
+  const stage = $$("roomstage");
+  stage.innerHTML = "";
+  // whatever is standing in the room, plus the piece being placed in its own
+  // slot — mounted in FURNITURE_SLOTS order, which IS the app's paint order
+  const shown = { ...others };
+  if (fId) shown[FURNITURE[fId].slot] = fId;
+  for (const slot of FURNITURE_SLOTS) {
+    const layer = furnitureLayer(shown[slot]);
+    if (fId && shown[slot] === fId) layer.classList.add("picked");
+    stage.appendChild(layer);
+  }
+  if (showBlip) {
+    const bs = document.createElement("div");
+    bs.className = "room-blip-stage";
+    stage.appendChild(bs);
+    const inner = document.createElement("div");
+    bs.appendChild(inner);
+    mountBlip(inner, { colour: "blue", equipped: {} });
+  }
+  if (fId) {
+    $$("fsizeval").textContent = `size ${Math.round(FURNITURE[fId].widthPct)}`;
+    writeFSnippet();
+    markFMoved();
+    flagRoom();
+  }
+}
+
+function selectFurn(id) {
+  fId = id;
+  document.querySelectorAll("#fpicker .itembtn").forEach((b) => b.classList.toggle("active", b.dataset.id === id));
+  // keep the "others" selection honest: the piece being placed IS what stands
+  // in its slot, so the dropdown for that slot follows it
+  others[FURNITURE[id].slot] = id;
+  const sels = $$("fothers").querySelectorAll("select");
+  sels[FURNITURE_SLOTS.indexOf(FURNITURE[id].slot)].value = id;
+  const p = placementFor(id);
+  $$("fanchorx").value = r3(p.anchor.x);
+  $$("fanchory").value = r3(p.anchor.y);
+  drawRoom();
+}
+
+function markFMoved() {
+  document.querySelectorAll("#fpicker .itembtn").forEach((b) => {
+    const span = b.querySelector("[data-fmoved]");
+    if (span) span.textContent = fChanged(b.dataset.id) ? "●" : "";
+  });
+}
+function fChanged(id) {
+  const d = FURNITURE[id], s = SHIPPED_ITEM[id];
+  if (!d || !s) return false;
+  if (Math.round(d.widthPct) !== Math.round(s.widthPct)) return true;
+  const slot = d.slot, ss = SHIPPED_SLOT[slot], cs = SLOT_PLACEMENT[slot];
+  const same = (a, b) => a && b && r3(a.x) === r3(b.x) && r3(a.y) === r3(b.y);
+  if (!same(cs.attach, ss.attach) || !same(cs.anchor, ss.anchor)) return true;
+  const cur = placementFor(id);
+  return !same(cur.attach, d.attach || cs.attach) ? false
+    : !!(d.attach && !same(d.attach, s.attach || cs.attach));
+}
+
+/* ---------- moving it ----------
+   Which OBJECT gets edited is the checkbox's decision: the slot's shared
+   point (so every bed moves together — nearly always right) or this one
+   piece's own override. */
+function targetPlacement() {
+  const d = FURNITURE[fId];
+  if ($$("fmoveslot").checked) return SLOT_PLACEMENT[d.slot];
+  if (!d.attach) d.attach = JSON.parse(JSON.stringify(SLOT_PLACEMENT[d.slot].attach));
+  if (!d.anchor) d.anchor = JSON.parse(JSON.stringify(SLOT_PLACEMENT[d.slot].anchor));
+  return d;
+}
+function fNudge(dx, dy) {
+  const t = targetPlacement();
+  t.attach = { x: t.attach.x + dx, y: t.attach.y + dy };
+  drawRoom();
+}
+
+let fdrag = null;
+const roomWrap = $$("roomwrap");
+roomWrap.addEventListener("pointerdown", (e) => {
+  if (!fId) return;
+  try { roomWrap.setPointerCapture(e.pointerId); } catch { /* fine without it */ }
+  roomWrap.classList.add("dragging");
+  const r = roomWrap.getBoundingClientRect();
+  fdrag = { x: e.clientX, y: e.clientY, w: r.width, h: r.height };
+});
+roomWrap.addEventListener("pointermove", (e) => {
+  if (!fdrag) return;
+  // x against the room's WIDTH, y against its HEIGHT — the same asymmetry
+  // the renderer warns about, and the same one the accessory drag uses
+  fNudge((e.clientX - fdrag.x) / fdrag.w, (e.clientY - fdrag.y) / fdrag.h);
+  fdrag.x = e.clientX; fdrag.y = e.clientY;
+});
+const endFDrag = () => { if (fdrag) { fdrag = null; roomWrap.classList.remove("dragging"); } };
+roomWrap.addEventListener("pointerup", endFDrag);
+roomWrap.addEventListener("pointercancel", endFDrag);
+
+function fResize(delta) {
+  if (!fId) return;
+  FURNITURE[fId].widthPct = Math.max(4, Math.min(90, FURNITURE[fId].widthPct + delta));
+  drawRoom();
+}
+$$("fbigger").addEventListener("click", () => fResize(1));
+$$("fsmaller").addEventListener("click", () => fResize(-1));
+roomWrap.addEventListener("wheel", (e) => {
+  if (!fId) return;
+  e.preventDefault();
+  fResize(e.deltaY < 0 ? 1 : -1);
+}, { passive: false });
+roomWrap.addEventListener("keydown", (e) => {
+  if (!fId) return;
+  const step = e.shiftKey ? 0.02 : 0.004;
+  const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+  if (moves[e.key]) { e.preventDefault(); fNudge(moves[e.key][0], moves[e.key][1]); }
+  else if (e.key === "+" || e.key === "=") { e.preventDefault(); fResize(1); }
+  else if (e.key === "-" || e.key === "_") { e.preventDefault(); fResize(-1); }
+});
+
+for (const [el, key] of [[$$("fanchorx"), "x"], [$$("fanchory"), "y"]]) {
+  el.addEventListener("input", () => {
+    if (!fId) return;
+    const v = parseFloat(el.value);
+    if (!Number.isFinite(v)) return;
+    const t = targetPlacement();
+    t.anchor = { ...t.anchor, [key]: v };
+    drawRoom();
+  });
+}
+$$("fshowblip").addEventListener("change", () => { showBlip = $$("fshowblip").checked; drawRoom(); });
+
+$$("fresetbtn").addEventListener("click", () => {
+  if (!fId) return;
+  const d = FURNITURE[fId], s = SHIPPED_ITEM[fId];
+  d.widthPct = s.widthPct;
+  if (s.attach) d.attach = JSON.parse(JSON.stringify(s.attach)); else delete d.attach;
+  if (s.anchor) d.anchor = JSON.parse(JSON.stringify(s.anchor)); else delete d.anchor;
+  SLOT_PLACEMENT[d.slot].attach = { ...SHIPPED_SLOT[d.slot].attach };
+  SLOT_PLACEMENT[d.slot].anchor = { ...SHIPPED_SLOT[d.slot].anchor };
+  selectFurn(fId);
+});
+
+/* ---------- the snippet ----------
+   Emits BOTH halves, because that is how furniture.js is organised: the
+   spot lives on the slot, the size lives on the piece. Anything unchanged
+   is left out, so a paste only ever carries what actually moved. */
+function writeFSnippet() {
+  const d = FURNITURE[fId], slot = d.slot;
+  const cs = SLOT_PLACEMENT[slot], ss = SHIPPED_SLOT[slot], si = SHIPPED_ITEM[fId];
+  const same = (a, b) => a && b && r3(a.x) === r3(b.x) && r3(a.y) === r3(b.y);
+  const out = [];
+
+  if (!same(cs.attach, ss.attach) || !same(cs.anchor, ss.anchor)) {
+    out.push("// js/companion/furniture.js — SLOT_PLACEMENT (moves every "
+      + `${(FURNITURE_SLOT_LABELS[slot] || slot).toLowerCase()})`);
+    out.push(`  ${slot}: { anchor: { x: ${r3(cs.anchor.x)}, y: ${r3(cs.anchor.y)} },`
+      + ` attach: { x: ${r3(cs.attach.x)}, y: ${r3(cs.attach.y)} } },`);
+  }
+  const sizeMoved = Math.round(d.widthPct) !== Math.round(si.widthPct);
+  const ownPlace = !!d.attach || !!d.anchor;
+  if (sizeMoved || ownPlace) {
+    if (out.length) out.push("");
+    out.push("// js/companion/furniture.js — FURNITURE (this piece only)");
+    let line = `  "${fId}": { slot: "${slot}", label: "${d.label}", img: "${d.img}", widthPct: ${Math.round(d.widthPct)}`;
+    if (d.tint !== undefined) line += `, tint: ${d.tint ? `"${d.tint}"` : "null"}`;
+    if (d.anchor) line += `, anchor: { x: ${r3(d.anchor.x)}, y: ${r3(d.anchor.y)} }`;
+    if (d.attach) line += `, attach: { x: ${r3(d.attach.x)}, y: ${r3(d.attach.y)} }`;
+    out.push(line + " },");
+  }
+  $$("fsnippet").textContent = out.length ? out.join("\n") : "Nothing moved yet — drag it or resize it.";
+}
+
+$$("fcopybtn").addEventListener("click", async () => {
+  const btn = $$("fcopybtn");
+  try {
+    await navigator.clipboard.writeText($$("fsnippet").textContent);
+    btn.textContent = "Copied ✓";
+  } catch {
+    const rng = document.createRange();
+    rng.selectNodeContents($$("fsnippet"));
+    getSelection().removeAllRanges(); getSelection().addRange(rng);
+    btn.textContent = "Selected — press Ctrl+C";
+  }
+  setTimeout(() => { btn.textContent = "Copy"; }, 1600);
+});
+
+/* ---------- the checks ----------
+   Measured off the layer's REAL on-screen rectangle, like the accessory
+   checks. Two things go wrong when placing furniture, and neither is
+   obvious while you are dragging:
+     1. OFF THE PICTURE — `.room` is overflow:hidden, so a bed pushed past
+        the edge is genuinely chopped on a phone.
+     2. SITTING ON NOTHING — the shell is a hexagon inside a square box, so
+        a piece can be well inside the box and still be floating in the
+        dark corner outside the room. The floor/wall it should stand on is
+        worked out from the shell's own geometry (furniture.js documents
+        the same numbers) rather than from a picture read, because the
+        walls are one flat navy and a pixel test cannot tell wall from
+        outside. */
+/* ⚠️ A furniture layer's WIDTH comes from widthPct but its HEIGHT comes from
+   the picture's own aspect, so measuring before the <img> has loaded gives a
+   zero-height box and every check below reports nothing useful. The accessory
+   checks above hit this exact trap and solved it the same way. Each run takes
+   a ticket, so clicking down the list cannot let a late run write its verdict
+   into the next piece's box (the other bug this page has already had). */
+let froomTicket = 0;
+async function flagRoom() {
+  const my = ++froomTicket;
+  const host = $$("fflags");
+  const add = (cls, html) => { const d = document.createElement("div"); d.className = "flag " + cls; d.innerHTML = html; host.appendChild(d); };
+
+  const stage = $$("roomstage");
+  const layer = stage.querySelector(".room-furn.picked");
+  if (!layer) { host.innerHTML = ""; add("bad", "That piece did not render — its picture file is probably missing."); return; }
+
+  // `complete` is true after a FAILED load too, so the timeout is what stops
+  // a missing file stalling the page (never img.decode() — it never settles
+  // in a pane that is not painting; see the accessory checks' note).
+  await Promise.all([...stage.querySelectorAll("img")].map((im) => im.complete ? null
+    : new Promise((res) => { im.addEventListener("load", res, { once: true });
+                             im.addEventListener("error", res, { once: true });
+                             setTimeout(res, 3000); })));
+  await new Promise((res) => setTimeout(res, 0));   // let layout settle
+  if (my !== froomTicket) return;
+  host.innerHTML = "";
+
+  const sr = stage.getBoundingClientRect(), lr = layer.getBoundingClientRect();
+  if (!lr.width || !lr.height) { add("warn", "The picture has not loaded yet — nudge it once."); return; }
+  const box = { x: (lr.left - sr.left) / sr.width, y: (lr.top - sr.top) / sr.height,
+                w: lr.width / sr.width, h: lr.height / sr.height };
+
+  const over = Math.max(0, -box.x) + Math.max(0, box.x + box.w - 1);
+  const overY = Math.max(0, -box.y) + Math.max(0, box.y + box.h - 1);
+  const offPct = Math.round(Math.max(over / box.w, overY / box.h) * 100);
+  if (offPct >= 12) add("bad", `<b>${offPct}% of it hangs off the edge</b> and will be cut off in the room. Drag it in or make it smaller.`);
+  else if (offPct > 0) add("warn", `${offPct}% pokes over the edge — a sliver, usually fine.`);
+
+  /* Where the surface under this piece actually is. Shell geometry, in
+     fractions of the room box: the floor is the diamond between
+     (0.5,0.423) (1,0.67) (0.5,1) (0,0.67); the walls sit above it. */
+  const slot = FURNITURE[fId].slot;
+  const cx = box.x + box.w / 2;
+  const onLeft = cx < 0.5;
+  const wallBottom = onLeft ? 0.67 - 0.247 * (cx / 0.5) : 0.423 + 0.247 * ((cx - 0.5) / 0.5);
+  const wallTop = onLeft ? 0.30 * (1 - cx / 0.5) : 0.30 * ((cx - 0.5) / 0.5);
+  const floorBottom = 0.67 + 0.33 * (1 - Math.abs(cx - 0.5) / 0.5);
+
+  if (slot === "desk" || slot === "bed") {
+    const base = box.y + box.h;
+    if (base < wallBottom - 0.02) add("warn", `It is floating — its feet are up the wall, not on the floor. Drag it down about ${Math.round((wallBottom - base) * 100)}%.`);
+    else if (base > floorBottom + 0.01) add("bad", "<b>It has walked off the front of the floor.</b> Drag it back up.");
+    else add("ok", "Standing on the floor.");
+    if (cx < 0.5 && slot === "bed") add("warn", "The bed is on the LEFT half — the desk lives there. Was that meant?");
+    if (cx > 0.5 && slot === "desk") add("warn", "The desk is on the RIGHT half — the bed lives there. Was that meant?");
+  } else {
+    const top = box.y, base = box.y + box.h;
+    if (base > wallBottom + 0.03) add("warn", "Its bottom is below the wall — it is hanging over the floor.");
+    else if (top < wallTop - 0.01) add("bad", "<b>Its top is above the wall</b> — that bit is outside the room.");
+    else add("ok", "Sitting on the wall.");
+  }
+
+  // and the one thing a picture cannot tell you: is it hidden behind
+  // something painted after it?
+  const order = FURNITURE_SLOTS.indexOf(slot);
+  const later = FURNITURE_SLOTS.slice(order + 1)
+    .map((s) => stage.querySelector(`.room-furn[data-slot="${s}"]`))
+    .filter(Boolean);
+  for (const l of later) {
+    const o = l.getBoundingClientRect();
+    const ox = Math.max(0, Math.min(lr.right, o.right) - Math.max(lr.left, o.left));
+    const oy = Math.max(0, Math.min(lr.bottom, o.bottom) - Math.max(lr.top, o.top));
+    const pct = Math.round((ox * oy) / (lr.width * lr.height) * 100);
+    if (pct >= 45) add("bad", `<b>${pct}% of it is behind the ${(FURNITURE_SLOT_LABELS[l.dataset.slot] || l.dataset.slot).toLowerCase()}</b>, which is painted in front of it.`);
+    else if (pct >= 18) add("warn", `${pct}% of it sits behind the ${(FURNITURE_SLOT_LABELS[l.dataset.slot] || l.dataset.slot).toLowerCase()} — that reads as depth, but check the doors are still clear.`);
+  }
+}
 </script>
 </body>
 </html>

@@ -45,6 +45,13 @@
    (js/config.js BLIP) and level maths from js/companion/level.js —
    never recompute either curve here.
 
+   S5v2 ADDITION (2026-08-08): mirrors supabase/migration-furniture-
+   slots.sql — four new equip slots (bed/desk/window/door) carrying
+   category-'furniture' rows. Bought and equipped through the SAME paths a
+   cosmetic uses (per-blip owned_items, level gate, sick lock); served in
+   their own `furnitureShop` payload array so the cosmetic shop and both
+   treasure-box loot pools never see them.
+
    DEV: globalThis.__BLIP_DEV__.skipDays(n) advances the local clock so
    sick states can be tested without waiting a week; .reset() clears it.
    ============================================================ */
@@ -195,6 +202,45 @@ const TRINKET_ITEMS = [
   { id: "rubber-duck", price: 0, minLevel: 1 },
   { id: "broken-ruler", price: 0, minLevel: 1 },
 ];
+/* Furniture — room build S5v2 (2026-08-08). category 'furniture' server-side,
+   four new slots (bed/desk/window/door). Mirrors
+   supabase/migration-furniture-slots.sql row for row; verify-store.html
+   parses that file and cross-checks every price and minLevel against this
+   list. Which COLLECTION each belongs to (and so which locked "?" card hides
+   it) lives in js/companion/collections.js; labels, art and placement live in
+   js/companion/furniture.js.
+
+   ⚠️ KEPT OUT OF SHOP_ITEMS ON PURPOSE, exactly like TRINKET_ITEMS. That list
+   feeds the cosmetic shop payload AND both treasure-box loot pools — a
+   milestone box's rare pool is "price >= 120, any level", which the canopy
+   bed and both premium beds would have walked straight into. A box paying
+   out a bed the reveal UI cannot draw on Blip is the bug this separation
+   prevents; the server prevents it the same way, with category = 'cosmetic'
+   on the payload query. */
+const FURNITURE_ITEMS = [
+  // basic — the free tier every room starts furnished with
+  { id: "basic-bed", slot: "bed", price: 0, minLevel: 1 },
+  { id: "basic-desk", slot: "desk", price: 0, minLevel: 1 },
+  { id: "city-window", slot: "window", price: 0, minLevel: 1 },
+  { id: "door-white", slot: "door", price: 0, minLevel: 1 },
+  // techy, Lv 8
+  { id: "techy-bed", slot: "bed", price: 150, minLevel: 8 },
+  { id: "techy-desk", slot: "desk", price: 130, minLevel: 8 },
+  { id: "space-window", slot: "window", price: 110, minLevel: 8 },
+  // princess, Lv 14
+  { id: "princess-bed", slot: "bed", price: 180, minLevel: 14 },
+  { id: "princess-desk", slot: "desk", price: 160, minLevel: 14 },
+  { id: "mountain-window", slot: "window", price: 130, minLevel: 14 },
+  // door colours, Lv 1 — one drawing, tinted in code (never one PNG each)
+  { id: "door-mint", slot: "door", price: 10, minLevel: 1 },
+  { id: "door-sky", slot: "door", price: 10, minLevel: 1 },
+  { id: "door-pink", slot: "door", price: 12, minLevel: 1 },
+  { id: "door-lemon", slot: "door", price: 12, minLevel: 1 },
+  { id: "door-peach", slot: "door", price: 15, minLevel: 1 },
+  { id: "door-lilac", slot: "door", price: 15, minLevel: 1 },
+  { id: "door-coral", slot: "door", price: 18, minLevel: 1 },
+  { id: "door-seafoam", slot: "door", price: 20, minLevel: 1 },
+];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows.
    `kind` is the item's own id on the server too (mhq_get_state builds the
    foodShop payload with 'kind', shop_items.item_id), so the two always
@@ -269,7 +315,10 @@ const VALID_COLOURS = ["blue", "cream", "pink", "mint", "sky", "lilac", "peach",
 // Mirrors mhq_equip's hard-coded key list on the server. Adding a slot means
 // changing BOTH, plus shop_items_slot_cat_check — miss one and equipping the
 // new slot returns bad_equipped (that is exactly how `back` broke in July).
-const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects", "neck"];
+// S5v2 (2026-08-08) added the four furniture slots to the same list: a bed is
+// equipped through exactly the machinery a hat is.
+const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects", "neck",
+  "bed", "desk", "window", "door"];
 
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a
@@ -487,6 +536,10 @@ function shopCatalogue() { return SHOP_ITEMS.map(it => ({ id: it.id, slot: it.sl
    food card can say "Unlocks at Lv N" and the grocery tiers can be shown
    the same way the cosmetic collections are. */
 function foodCatalogue() { return FOOD_ITEMS.map(it => ({ id: it.id, kind: it.kind, price: it.price, minLevel: it.minLevel })); }
+/* S5v2: its own payload array (mhq_get_state's furnitureShop), same four
+   fields as the cosmetic shop, so the furniture panel can reuse the cards
+   the cosmetic shop already draws. */
+function furnitureCatalogue() { return FURNITURE_ITEMS.map(it => ({ id: it.id, slot: it.slot, price: it.price, minLevel: it.minLevel })); }
 function blipsView(sid) { return getBlips(sid).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feed_count, growthStage: growthStage(b.feed_count), owned: b.owned_items, equipped: b.equipped })); }
 
 /* dev clock control — advance/reset the local "today" so sick states are testable */
@@ -587,7 +640,8 @@ export const LocalBackend = {
       ok: true, student: { id: s.id, name: s.display_name, username: s.username }, progress, totalXp, openQuests: openQuests(),
       gold: rec.gold, xp: rec.xp, levelInfo: levelInfo(rec.xp),
       blip: slot1 ? { name: slot1.name, colour: slot1.colour, owned: slot1.owned, equipped: slot1.equipped } : { name: "Blip", colour: "blue", owned: [], equipped: {} },
-      blips, shop: shopCatalogue(), foodShop: foodCatalogue(), pantry: rec.pantry || {}, tray: rec.tray || {},
+      blips, shop: shopCatalogue(), foodShop: foodCatalogue(), furnitureShop: furnitureCatalogue(),
+      pantry: rec.pantry || {}, tray: rec.tray || {},
       health, canFeedToday, canCareToday, termRunning: running,
       // Phase 3
       assignment: assignmentView(rec),
@@ -719,7 +773,11 @@ export const LocalBackend = {
       return { ok: true, gold: rec.gold, tray: rec.tray };
     }
 
-    const itm = SHOP_ITEMS.find(x => x.id === item);
+    /* S5v2: furniture is bought exactly like a cosmetic — same per-blip
+       owned_items, same level gate, same sick lock — so the two lists are
+       simply searched in turn. A TRINKET is in neither, and so still comes
+       back `no_item`, which is what mhq_buy_item's category guard does. */
+    const itm = SHOP_ITEMS.find(x => x.id === item) || FURNITURE_ITEMS.find(x => x.id === item);
     if (!itm) return { ok: false, error: "no_item" };
     if (stage >= 3) return { ok: false, error: "BLIP_TOO_SICK" };
     const blips = ensureBlip(s.id, rec);

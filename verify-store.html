@@ -32,7 +32,7 @@
 <div class="grid" id="outfits"></div>
 
 <script type="module">
-import { ACCESSORIES, ATTACH, COLOURS, renderCompanion } from "./js/companion/renderer.js";
+import { ACCESSORIES, ATTACH, COLOURS, renderCompanion, tintedImageSrc } from "./js/companion/renderer.js";
 import { ITEM_LABELS, itemRarity, accessorySlot, COSMETIC_SLOTS, SLOT_LABELS } from "./js/companion/blip-ui.js";
 import { LocalBackend } from "./js/local-backend.js";
 import { levelInfo, costForLevel, MAX_LEVEL, MILESTONE_LEVELS } from "./js/companion/level.js";
@@ -40,7 +40,12 @@ import { TRINKETS, TRINKET_IDS, trinketLabel } from "./js/companion/trinkets.js"
 import {
   COLLECTIONS, COLLECTION_ORDER, collectionForItem,
   FOOD_COLLECTIONS, FOOD_COLLECTION_ORDER, foodCollectionForItem,
+  FURNITURE_COLLECTIONS, FURNITURE_COLLECTION_ORDER, furnitureCollectionForItem,
 } from "./js/companion/collections.js";
+import {
+  FURNITURE, FURNITURE_IDS, FURNITURE_SLOTS, DEFAULT_FURNITURE, SLOT_PLACEMENT,
+  furnitureLabel, furnitureImgSrc, placementFor, roomFurniture,
+} from "./js/companion/furniture.js";
 import { FOODS, FOOD_IDS, NON_GROCERY_FOOD, foodLabel, foodImgSrc } from "./js/companion/food.js";
 import { makeDraggable, isOverTarget, DEFAULT_DROP_PAD_PX } from "./js/companion/drag-feed.js";
 
@@ -59,7 +64,11 @@ const shop = (state.shop || []);
 // S4: the pharmacy/grocery array. Separate payload key, separate mirror —
 // a food row must never turn up in `shop` and vice versa.
 const foodShop = (state.foodShop || []);
-say(`shop payload: ${shop.length} cosmetic items · ${foodShop.length} food items`);
+// S5v2: the furniture array. Third separate payload key, third separate
+// mirror — furniture must never turn up in `shop` (it would be offered as a
+// wearable AND land in both treasure-box loot pools) and vice versa.
+const furnShop = (state.furnitureShop || []);
+say(`shop payload: ${shop.length} cosmetic items · ${foodShop.length} food items · ${furnShop.length} furniture items`);
 
 /* ---------- 1. every sellable id can actually be drawn ---------- */
 for (const it of shop) {
@@ -163,6 +172,10 @@ const MIGRATIONS = [
   // 'food', so they are cross-checked against the foodShop payload, NOT the
   // cosmetic shop — and against their ABSENCE from it.
   ["migration-food-shop.sql", 44],
+  // S5v2 (2026-08-08): furniture. Four NEW SLOTS, so this file gets the full
+  // "is the slot named in BOTH shop_items_slot_cat_check AND mhq_equip?"
+  // treatment below — that pair is what the July cape bug was.
+  ["migration-furniture-slots.sql", 18],
 ];
 // An applied migration is never edited — it is the record of what actually
 // ran — so an item that is seeded by one migration and later dropped by a
@@ -193,12 +206,17 @@ for (const [file, expected] of MIGRATIONS) try {
   const seeded = [...sql.matchAll(/^\s*\('([a-z0-9-]+)',\s*'([a-z]+)',\s*(\d+),\s*(\d+),\s*true/gim)]
     .map((m) => ({ id: m[1], slot: m[2], price: +m[3], minLevel: +m[4] }));
   tick(seeded.length === expected, `${file} seeds ${seeded.length} rows, expected ${expected}`);
-  // Neither a trinket nor a food is a cosmetic: neither reaches the `shop`
-  // payload, so each is checked against its own mirror — and against its
-  // ABSENCE from the shop.
-  const cosmeticRows = seeded.filter((r) => r.slot !== "trinket" && r.slot !== "food");
+  // Neither a trinket, a food nor a piece of furniture is a cosmetic: none of
+  // them reaches the `shop` payload, so each is checked against its own
+  // mirror — and against its ABSENCE from the shop. Furniture is matched by
+  // SLOT rather than by anything cleverer, so a fifth furniture slot added
+  // one day without touching this line lands in `cosmeticRows` and fails
+  // loudly against the cosmetic mirror instead of being waved through.
+  const FURN_SLOT_IDS = ["bed", "desk", "window", "door"];
+  const cosmeticRows = seeded.filter((r) => r.slot !== "trinket" && r.slot !== "food" && !FURN_SLOT_IDS.includes(r.slot));
   const trinketRows = seeded.filter((r) => r.slot === "trinket");
   const foodRows = seeded.filter((r) => r.slot === "food");
+  const furnRows = seeded.filter((r) => FURN_SLOT_IDS.includes(r.slot));
   for (const row of cosmeticRows) {
     if (retired.has(row.id)) continue;
     const mirror = shop.find((it) => it.id === row.id);
@@ -230,11 +248,30 @@ for (const [file, expected] of MIGRATIONS) try {
     tick(!ACCESSORIES[row.id], `food "${row.id}" is also an ACCESSORY — it would become wearable`);
     tick(!!FOODS[row.id], `food "${row.id}" is in ${file} but has no js/companion/food.js entry (no label, no art)`);
   }
+  /* S5v2 — the same drift check as food, one category along: a furniture
+     price or level gate changed in the SQL and not in js/local-backend.js
+     (or the other way round) would make ?local=1 quietly disagree with
+     live. Plus the two absences that matter: furniture must not reach the
+     cosmetic shop payload (where it would be offered as wearable AND land
+     in both treasure-box loot pools) and must not be an ACCESSORY. */
+  for (const row of furnRows) {
+    const mirror = furnShop.find((it) => it.id === row.id);
+    tick(!!mirror, `"${row.id}" is in ${file} but not in the client furnitureShop mirror`);
+    if (mirror) {
+      tick(mirror.price === row.price, `furniture "${row.id}" price differs: SQL ${row.price}, client ${mirror.price}`);
+      tick(mirror.minLevel === row.minLevel, `furniture "${row.id}" minLevel differs: SQL ${row.minLevel}, client ${mirror.minLevel}`);
+      tick(mirror.slot === row.slot, `furniture "${row.id}" slot differs: SQL ${row.slot}, client ${mirror.slot}`);
+    }
+    tick(!shop.some((it) => it.id === row.id), `furniture "${row.id}" leaked into the cosmetic shop payload`);
+    tick(!foodShop.some((it) => it.id === row.id), `furniture "${row.id}" leaked into the foodShop payload`);
+    tick(!ACCESSORIES[row.id], `furniture "${row.id}" is also an ACCESSORY — it would be worn on Blip`);
+    tick(!!FURNITURE[row.id], `furniture "${row.id}" is in ${file} but has no js/companion/furniture.js entry (no label, no art, nowhere to stand)`);
+  }
   // A slot is never just new rows: mhq_equip hard-codes the allowed equipped
   // keys and shop_items_slot_cat_check hard-codes the slots. Missing either
   // is what made an equipped cape return bad_equipped in July, so assert
   // that every slot this migration seeds is named in BOTH.
-  for (const slot of new Set(cosmeticRows.map((r) => r.slot))) {
+  for (const slot of new Set([...cosmeticRows, ...furnRows].map((r) => r.slot))) {
     const inConstraint = new RegExp(`slot in \\([^)]*'${slot}'`).test(sql);
     const inEquip = new RegExp(`k not in \\([^)]*'${slot}'`).test(sql);
     tick(inConstraint || !sql.includes("shop_items_slot_cat_check"),
@@ -251,7 +288,7 @@ for (const [file, expected] of MIGRATIONS) try {
     tick(!/k not in \([^)]*'trinket'/.test(sql),
       `${file} added 'trinket' to mhq_equip's key list — trinkets must not be equippable`);
   }
-  say(`${file}: ${seeded.length} rows (${cosmeticRows.length} cosmetic, ${trinketRows.length} trinket, ${foodRows.length} food), all cross-checked`);
+  say(`${file}: ${seeded.length} rows (${cosmeticRows.length} cosmetic, ${trinketRows.length} trinket, ${foodRows.length} food, ${furnRows.length} furniture), all cross-checked`);
 } catch (e) {
   tick(false, `could not read supabase/${file}: ` + e.message);
 }
@@ -298,7 +335,18 @@ for (const [file, expected] of MIGRATIONS) try {
     tick(!ACCESSORIES[id], `trinket "${id}" is also in ACCESSORIES — it would be wearable`);
     tick(!shop.some((it) => it.id === id), `trinket "${id}" is in the shop payload`);
   }
-  say(`trinkets: ${TRINKET_IDS.map(trinketLabel).join(", ")} (PLACEHOLDER art until art-source/tripo/trinkets.png lands)`);
+  /* S5v2: Megan's own drawings replaced the six placeholder SVGs, so the art
+     can now go missing — and a missing shelf tile is silent in the app (an
+     empty 52px box reads as "that one just isn't drawn yet"). */
+  const missingTk = [];
+  await Promise.all(TRINKET_IDS.filter((id) => TRINKETS[id].img).map(async (id) => {
+    try {
+      const r = await fetch(`./assets/companion/trinkets/${TRINKETS[id].img}?v=${Date.now()}`, { method: "HEAD" });
+      if (!r.ok) missingTk.push(id);
+    } catch { missingTk.push(id); }
+  }));
+  tick(missingTk.length === 0, `${missingTk.length} trinket PNG(s) missing: ${missingTk.join(", ")}`);
+  say(`trinkets: ${TRINKET_IDS.map(trinketLabel).join(", ")} — ${TRINKET_IDS.length - missingTk.length}/${TRINKET_IDS.length} of Megan's drawings present`);
 }
 
 /* ---------- 6d. milestone mystery boxes, end to end ----------
@@ -779,6 +827,203 @@ for (const [file, expected] of MIGRATIONS) try {
 
   host.remove();
   say("drag-to-feed: tap · drop-on · drop-away (flies home, no penalty) · cancel · disabled · keyboard · destroy");
+}
+
+/* ---------- 6j. FURNITURE (room build S5v2) ----------
+   Four new equip slots. The failure this guards above all others is the
+   July cape bug: rows seeded, slot NOT added to mhq_equip's key list, so
+   everything looks right until you try to put the bed in the room and get
+   `bad_equipped`. That is asserted twice over — statically against the SQL
+   text (section 6 above) and for real against the local backend here. */
+{
+  tick(FURNITURE_IDS.length === 18, `expected 18 furniture pieces in js/companion/furniture.js, found ${FURNITURE_IDS.length}`);
+  tick(furnShop.length === 18, `furnitureShop should carry 18 rows, got ${furnShop.length}`);
+  tick(FURNITURE_SLOTS.join(",") === "door,window,desk,bed",
+    `FURNITURE_SLOTS is "${FURNITURE_SLOTS.join(",")}" — it is also the PAINT ORDER, back to front (walls, then floor)`);
+
+  // every piece: label, art, a slot, a home collection, and a placement that
+  // actually lands somewhere on the shell
+  const seenFurn = new Map();
+  for (const key of FURNITURE_COLLECTION_ORDER) {
+    for (const id of FURNITURE_COLLECTIONS[key].items) {
+      tick(!seenFurn.has(id), `"${id}" is in both furniture collections "${seenFurn.get(id)}" and "${key}"`);
+      seenFurn.set(id, key);
+    }
+  }
+  for (const id of FURNITURE_IDS) {
+    const def = FURNITURE[id];
+    const row = furnShop.find((it) => it.id === id);
+    tick(!!row, `furniture "${id}" has a catalogue entry but no shop row — it can never be bought`);
+    tick(furnitureLabel(id) !== id, `furniture "${id}" has no friendly label`);
+    tick(FURNITURE_SLOTS.includes(def.slot), `furniture "${id}" has slot "${def.slot}", which is not one of the four`);
+    if (row) tick(row.slot === def.slot, `"${id}" slot differs: payload ${row.slot}, catalogue ${def.slot}`);
+    tick(/^[a-z0-9-]+\.png$/.test(def.img), `furniture "${id}" img must be a bare .png filename`);
+    tick(!ACCESSORIES[id], `furniture "${id}" is also an ACCESSORY — it would be worn on Blip`);
+    // exactly one collection, and its gate must equal the row's own min_level
+    const key = furnitureCollectionForItem(id);
+    tick(!!key, `furniture "${id}" belongs to no collection — it would never render in the panel`);
+    if (key && row) {
+      tick(FURNITURE_COLLECTIONS[key].unlockLevel === row.minLevel,
+        `"${id}": collection "${key}" unlocks at Lv ${FURNITURE_COLLECTIONS[key].unlockLevel} but the row says min_level ${row.minLevel}`);
+    }
+    // placement: on the picture, and anchored somewhere inside its own box
+    const p = placementFor(id);
+    tick(p.widthPct > 0 && p.widthPct <= 100, `"${id}" widthPct ${p.widthPct} is not a sane % of the room`);
+    tick(p.attach.x > 0 && p.attach.x < 1 && p.attach.y > 0 && p.attach.y < 1,
+      `"${id}" attaches at (${p.attach.x}, ${p.attach.y}) — off the room shell`);
+    tick(p.anchor.x >= 0 && p.anchor.x <= 1 && p.anchor.y >= 0 && p.anchor.y <= 1,
+      `"${id}" anchor (${p.anchor.x}, ${p.anchor.y}) is outside its own picture`);
+  }
+  // and the reverse: a collection must not claim an id with no shop row
+  const furnShopIds = new Set(furnShop.map((it) => it.id));
+  for (const key of FURNITURE_COLLECTION_ORDER) {
+    for (const id of FURNITURE_COLLECTIONS[key].items) {
+      tick(furnShopIds.has(id), `furniture collection "${key}" lists "${id}", which is not in the furnitureShop payload`);
+    }
+  }
+  for (const it of furnShop) {
+    tick(!!furnitureCollectionForItem(it.id), `furnitureShop item "${it.id}" belongs to no collection in collections.js`);
+  }
+
+  /* THE FREE DEFAULTS. One per slot, price 0 at level 1, so a brand-new
+     learner has a complete room and can fill every slot before earning a
+     crystal — the same rule the cosmetic free tier lives under. */
+  tick(Object.keys(DEFAULT_FURNITURE).length === 4, "DEFAULT_FURNITURE must name all four slots");
+  for (const slot of FURNITURE_SLOTS) {
+    const id = DEFAULT_FURNITURE[slot];
+    const row = furnShop.find((it) => it.id === id);
+    tick(!!row, `slot "${slot}" has no default furniture row (${id})`);
+    if (row) {
+      tick(row.price === 0 && row.minLevel === 1, `the "${slot}" default (${id}) is not free at level 1: ${row.price}💎 / Lv ${row.minLevel}`);
+      tick(row.slot === slot, `the "${slot}" default (${id}) is actually a ${row.slot}`);
+    }
+    tick(furnShop.filter((it) => it.slot === slot).length >= 2,
+      `slot "${slot}" sells ${furnShop.filter((it) => it.slot === slot).length} piece(s) — every slot wants a real choice`);
+  }
+  /* An EMPTY room is never a hole: roomFurniture() fills each slot with its
+     free default, and an unknown id (a retired piece still sitting in an old
+     equipped blob) falls back the same way rather than rendering nothing. */
+  const bare = roomFurniture({});
+  tick(FURNITURE_SLOTS.every((s) => bare[s] === DEFAULT_FURNITURE[s]), `an empty room did not fall back to the defaults: ${JSON.stringify(bare)}`);
+  const junk = roomFurniture({ bed: "not-a-real-bed", desk: "techy-desk" });
+  tick(junk.bed === DEFAULT_FURNITURE.bed, "an unknown equipped id did not fall back to the free default");
+  tick(junk.desk === "techy-desk", "roomFurniture dropped a perfectly good equipped desk");
+
+  /* ⚠️ HER RULING: THE DOOR COLOURS ALL SHARE ONE PICTURE. Nine door items,
+     ONE png between them, tinted in code. This is the check that catches a
+     future session "fixing" it by generating door-mint.png. */
+  const doors = FURNITURE_IDS.filter((id) => FURNITURE[id].slot === "door");
+  tick(doors.length === 9, `expected 9 doors (white + 8 colours), found ${doors.length}`);
+  tick(new Set(doors.map((id) => FURNITURE[id].img)).size === 1,
+    `the door colours use ${new Set(doors.map((id) => FURNITURE[id].img)).size} different PNGs — her ruling is ONE drawing tinted in code`);
+  tick(doors.filter((id) => !FURNITURE[id].tint).length === 1, "exactly one door (door-white) should be untinted");
+  tick(!FURNITURE["door-white"].tint, "door-white must be the untinted one");
+  for (const id of doors.filter((d) => d !== "door-white")) {
+    tick(/^#[0-9a-f]{6}$/i.test(FURNITURE[id].tint || ""), `door "${id}" has no usable tint hex`);
+  }
+  tick(new Set(doors.filter((d) => d !== "door-white").map((id) => FURNITURE[id].tint)).size === 8,
+    "two door colours share a tint hex — they would be indistinguishable");
+  // the tint really produces a DIFFERENT picture, and a null tint really is free
+  {
+    const src = furnitureImgSrc("door-white");
+    const plain = await tintedImageSrc(src, null);
+    tick(plain === src, "an untinted item did not resolve straight to its own file (that path must cost no canvas work)");
+    const tinted = await tintedImageSrc(src, FURNITURE["door-mint"].tint);
+    tick(typeof tinted === "string" && tinted.startsWith("data:image/png"), `tinting produced ${String(tinted).slice(0, 24)}…, expected a data URL`);
+    tick(tinted !== src, "the tinted door came back as the original file");
+    const again = await tintedImageSrc(src, FURNITURE["door-mint"].tint);
+    tick(again === tinted, "the tint cache handed back a different result for the same (file, colour)");
+  }
+
+  /* The art. Same trap as the accessories and the food: a missing PNG is
+     silent in the app (a piece of furniture simply does not appear, which
+     reads as "that slot is empty"), so this is the only place it is caught.
+     Distinct FILES, not items — the nine doors share one. */
+  const furnFiles = [...new Set(FURNITURE_IDS.map((id) => furnitureImgSrc(id)))];
+  const missingFurn = [];
+  await Promise.all(furnFiles.map(async (src) => {
+    try {
+      const r = await fetch(`${src}?v=${Date.now()}`, { method: "HEAD" });
+      if (!r.ok) missingFurn.push(src);
+    } catch { missingFurn.push(src); }
+  }));
+  tick(missingFurn.length === 0, `${missingFurn.length} furniture PNG(s) missing: ${missingFurn.join(", ")} — run tools/tripo_sheet.py over art-source/tripo/furniture-iso-*.png, windows.png and door.png`);
+  // the shell itself, which is the whole room's backdrop
+  {
+    let shellOk = false;
+    try { shellOk = (await fetch(`./assets/companion/room-shell.png?v=${Date.now()}`, { method: "HEAD" })).ok; } catch { shellOk = false; }
+    tick(shellOk, "assets/companion/room-shell.png is missing — the room would render as an empty box");
+  }
+  say(`furniture: ${FURNITURE_COLLECTION_ORDER.map((k) => `${FURNITURE_COLLECTIONS[k].label}(Lv${FURNITURE_COLLECTIONS[k].unlockLevel}, ${FURNITURE_COLLECTIONS[k].items.length})`).join(" · ")}`);
+  say(`furniture art: ${furnFiles.length - missingFurn.length}/${furnFiles.length} PNGs present (9 doors share 1 file)`);
+
+  /* ---- and now for real, against the backend ---- */
+  const wu = "verify_furn_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(wu, "Furniture", "pw12");
+  // flat 10 gold a round, no XP, so this learner stays at level 1 and the
+  // level-gate check below means what it says (the S2 flake lesson).
+  for (let i = 0; i < 30; i++) await LocalBackend.submitQuest(wu, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
+  let fs = await LocalBackend.getState(wu, "pw12");
+  tick(fs.levelInfo.level === 1, `the furniture learner should still be level 1, got ${fs.levelInfo.level}`);
+
+  // a level gate the server owns, not the panel
+  const tooHigh = await LocalBackend.buyItem(wu, "pw12", "techy-bed");
+  tick(!tooHigh.ok && tooHigh.error === "locked" && tooHigh.minLevel === 8,
+    `a level-1 learner bought a Lv 8 capsule bed: ${JSON.stringify(tooHigh)}`);
+  // equipping something you do not own is refused — this is the check that
+  // would pass for the WRONG reason if the slot were missing from
+  // VALID_SLOTS, so the owned case below is what really proves the slot.
+  const unowned = await LocalBackend.equip(wu, "pw12", { slot: 1, equipped: { bed: "princess-bed" } });
+  tick(!unowned.ok && unowned.error === "bad_equipped", `an unowned bed was equipped: ${JSON.stringify(unowned)}`);
+
+  // buy + equip + unequip, on ALL FOUR slots
+  for (const slot of FURNITURE_SLOTS) {
+    const id = DEFAULT_FURNITURE[slot];
+    const goldBefore = (await LocalBackend.getState(wu, "pw12")).gold;
+    const buy = await LocalBackend.buyItem(wu, "pw12", id);
+    tick(buy.ok, `buying the free ${slot} (${id}) failed: ${JSON.stringify(buy)}`);
+    tick(buy.gold === goldBefore, `a free ${slot} changed the gold balance (${goldBefore} -> ${buy.gold})`);
+    tick((buy.owned || []).includes(id), `${id} is not in owned_items after buying`);
+
+    const on = await LocalBackend.equip(wu, "pw12", { slot: 1, equipped: { [slot]: id } });
+    tick(on.ok, `equipping the "${slot}" slot was REJECTED — this is the July cape bug: ${JSON.stringify(on)}`);
+    const worn = await LocalBackend.getState(wu, "pw12");
+    tick(worn.blip.equipped && worn.blip.equipped[slot] === id, `${id} did not stick in the ${slot} slot`);
+    // and it must NOT have become something Blip wears
+    tick(!(worn.blip.equipped.hat === id || worn.blip.equipped.back === id), `${id} ended up in a cosmetic slot`);
+
+    const off = await LocalBackend.equip(wu, "pw12", { slot: 1, equipped: { [slot]: "" } });
+    tick(off.ok, `taking the ${slot} out failed: ${JSON.stringify(off)}`);
+    const bareAgain = await LocalBackend.getState(wu, "pw12");
+    tick(roomFurniture(bareAgain.blip.equipped)[slot] === DEFAULT_FURNITURE[slot],
+      `an emptied "${slot}" slot did not fall back to its free default`);
+  }
+
+  // a door colour costs what it says, and a trinket is STILL not buyable
+  // (the same guard in mhq_buy_item lets furniture through and must not
+  // have widened any further than that)
+  {
+    const before = (await LocalBackend.getState(wu, "pw12")).gold;
+    const buy = await LocalBackend.buyItem(wu, "pw12", "door-mint");
+    tick(buy.ok && buy.gold === before - 10, `the mint door cost ${before - buy.gold}, expected 10`);
+    const again = await LocalBackend.buyItem(wu, "pw12", "door-mint");
+    tick(!again.ok && again.error === "owned", `the mint door was bought twice: ${JSON.stringify(again)}`);
+    const trinket = await LocalBackend.buyItem(wu, "pw12", "rubber-duck");
+    tick(!trinket.ok && trinket.error === "no_item", `a trinket became purchasable when furniture did: ${JSON.stringify(trinket)}`);
+    const wearTrinket = await LocalBackend.equip(wu, "pw12", { slot: 1, equipped: { bed: "rubber-duck" } });
+    tick(!wearTrinket.ok, "a trinket was equippable into a furniture slot");
+  }
+
+  // furniture must never touch the cosmetic side of the closet: a bed is in
+  // owned_items (that is how ownership works) but it is not an accessory, so
+  // the Inventory panel — which filters by COSMETIC_SLOTS — must not show it
+  {
+    const after = await LocalBackend.getState(wu, "pw12");
+    const closetish = (after.blip.owned || []).filter((id) => COSMETIC_SLOTS.includes(accessorySlot(id)));
+    tick(!closetish.some((id) => FURNITURE_IDS.includes(id)), "a piece of furniture would show up in the cosmetic Inventory");
+    tick(!after.shop.some((it) => FURNITURE_IDS.includes(it.id)), "furniture leaked into the cosmetic shop payload");
+  }
+  say("furniture round-trip: all four slots buy → equip → unequip (falls back to the free default); unowned rejected; Lv 8 gate held at Lv 1; door colours priced; trinkets still unbuyable");
 }
 
 /* ---------- 7. buying, wearing and taking off actually work ---------- */

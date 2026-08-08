@@ -27,8 +27,7 @@
    nothing like "techy", so those join "basics" alongside the pre-Tripo
    SL catalogue, the store-expansion set and the neck necklaces (except
    chunky-chain, which the plan's table explicitly places in "gangster").
-   Furniture collections (basic/techy/princess, S5 scope) are NOT listed
-   here yet — no furniture shop_items exist until S5 ships them. */
+   Furniture has its own map at the bottom of this file (S5v2). */
 
 export const COLLECTIONS = {
   basics: {
@@ -154,6 +153,63 @@ export const FOOD_COLLECTION_ORDER = ["fresh", "bakery", "hotmeals", "braai", "s
 export function foodCollectionForItem(id) {
   for (const key of FOOD_COLLECTION_ORDER) {
     if (FOOD_COLLECTIONS[key].items.includes(id)) return key;
+  }
+  return null;
+}
+
+/* ============================================================
+   FURNITURE COLLECTIONS — room build S5v2 (2026-08-08), per
+   ROOM-BUILD-PLAN.md's REVISION ruling 5. Third map, same pattern as the
+   two above: the Furniture panel groups by collection, and a collection
+   below the learner's level collapses to ONE locked card (grey silhouette,
+   "?", "Unlocks at Lv N") — no names, no prices, no count.
+
+   A window belongs to the SAME collection as the bed and desk it matches
+   (ruling 5), so a set arrives together rather than in pieces.
+
+   `unlockLevel` MUST equal the min_level on those rows in
+   supabase/migration-furniture-slots.sql. The server enforces min_level;
+   this map only decides what is SHOWN. verify-store.html asserts the two
+   agree, item by item.
+
+   ⚠️ THE DOOR COLOURS ARE DELIBERATELY NOT A MYSTERY (her ruling: "their
+   own 'Door colours' group, Lv 1, no mystery card"). They unlock at level
+   1, so the locked-card branch can never fire on them anyway —
+   `noMysteryCard` records the intent so a future retune does not quietly
+   gate the one group that is meant to be open from the first minute. The
+   door is the room's front door and the cheapest thing in the game to
+   personalise; hiding it behind a "?" would be the opposite of the point.
+   ============================================================ */
+export const FURNITURE_COLLECTIONS = {
+  basic: {
+    label: "Basics",
+    unlockLevel: 1,
+    items: ["basic-bed", "basic-desk", "city-window"],
+  },
+  techy: {
+    label: "Techy",
+    unlockLevel: 8,
+    items: ["techy-bed", "techy-desk", "space-window"],
+  },
+  princess: {
+    label: "Princess",
+    unlockLevel: 14,
+    items: ["princess-bed", "princess-desk", "mountain-window"],
+  },
+  doors: {
+    label: "Door colours",
+    unlockLevel: 1,
+    noMysteryCard: true,
+    items: ["door-white", "door-mint", "door-sky", "door-pink", "door-lemon",
+      "door-peach", "door-lilac", "door-coral", "door-seafoam"],
+  },
+};
+
+export const FURNITURE_COLLECTION_ORDER = ["basic", "techy", "princess", "doors"];
+
+export function furnitureCollectionForItem(id) {
+  for (const key of FURNITURE_COLLECTION_ORDER) {
+    if (FURNITURE_COLLECTIONS[key].items.includes(id)) return key;
   }
   return null;
 }
