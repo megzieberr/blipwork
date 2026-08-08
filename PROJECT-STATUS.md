@@ -1,4 +1,65 @@
-# Project status — updated 2026-08-07 PM (audit fixes applied, NOT committed)
+# Project status — updated 2026-08-08 (room build S1, committed locally, NOT pushed)
+
+## 🏠 2026-08-08 — ROOM BUILD S1: room shell, hub button, inline nickname
+
+Per `homework-hub-companion/ROOM-BUILD-PLAN.md` (frozen design, Fable +
+Megan). UI only, no DB/SQL changes, nothing pushed, sw.js untouched.
+`verify-store.html` unaffected: **988/988 still green** (same count as
+before — S1 touched no catalogue data).
+
+- **Hub**: the rectangular "Blip — tap to visit Blip" card is gone. A
+  small pulsing circular button now sits beside "Hi, `<name>`" — same
+  `app.go("blip")` target. The hub's cookie-feed badge is also gone
+  (feeding is now exclusively on the room screen's top-right cookie
+  button) — a deliberate simplification not spelled out in the plan, but
+  the natural corollary of "the card is gone entirely" once feeding moved.
+- **Blip screen → his ROOM**: nickname is now tap-to-edit inline (a plain
+  button that becomes an `<input>`; Enter/blur saves, Escape cancels) —
+  the old permanent input + Save button is gone. "Your study companion"
+  subtitle added. Daily cookie moved to a top-right button on the room
+  card (dims to ✅ once fed), reusing the old hub cookie badge's CSS/
+  animation. Room layout: fridge top-left, bed top-right (wide), closet
+  bottom-left, desk bottom-right, Blip centred on his existing glow
+  pedestal — all PLACEHOLDER code-drawn SVG (`js/companion/room-art.js`),
+  swapped for Megan's Tripo art in S5.
+- **Tappable furniture**: closet opens the Inventory panel (renamed from
+  Closet, now with an empty "shelf" strip placeholder for trinkets — S2
+  fills it with milestone-box loot); fridge opens the Food stash panel
+  (pantry soup/medicine counts + a "shop coming" note — same content the
+  bottom FOOD button opens). Bed/desk just wiggle (no panel yet).
+- **Bottom sheets**: five round dock buttons (colours/shop/food/pharmacy/
+  furniture) open a shared bottom-sheet component (reuses the app's
+  existing `.modal-scrim`/`.modal` convention, lighter backdrop so the
+  room stays visible behind — `.room-sheet-scrim`). "Next →" cycles that
+  fixed order, wrapping; "Done" closes. Colours/Shop/Pharmacy content is
+  the exact same data + API calls as before, just relocated. Furniture
+  sheet is a placeholder card (S5 fills it).
+- **Sheet convention (a judgement call, worth knowing before S2-S5 touch
+  these files)**: every backend-mutating action inside a sheet (buy, wear,
+  equip colour, feed treat) **closes the sheet** before the app's normal
+  full refresh + re-render — matching how every other action in this file
+  already worked pre-room-build (`await app.refresh(); app.go("blip")`).
+  Non-mutating interactions (the slot-tab filter inside Inventory/Shop)
+  redraw the sheet's body in place via `activeSheetRerender()` without
+  closing it. This means a purchase closes the shop sheet rather than
+  staying open — simplest-safe choice for S1; worth smoothing later if
+  Megan wants to stay in the shop after a buy.
+- New file `js/companion/room-art.js` — four PLACEHOLDER furniture SVGs
+  (fridge/bed/closet/desk), navy/electric line art, explicitly marked
+  PLACEHOLDER in comments.
+- Verified live in the browser pane (`?local=1`, fresh signup): hub
+  button navigates to the room; nickname edits and saves (blur path —
+  the pane's synthetic Enter keydown didn't route to the focused input,
+  a known pane limitation, but Enter calls the identical `save()` as
+  blur, both wired); fridge/closet open their panels non-cycling; the
+  five dock buttons cycle in order and wrap; buying a free shop item
+  closes the sheet, and the item then shows owned in Inventory; desk
+  wiggles on tap; the cookie button feeds and dims to done. Zero console
+  errors throughout.
+
+---
+
+# (previous) Project status — updated 2026-08-07 PM (audit fixes applied, NOT committed)
 
 ## 🔧 2026-08-07 — overnight audit fixes (local; `verify-store.html` 988 checks green)
 
@@ -42,9 +103,17 @@ Off `FABLE-AUDIT-2026-08-06.md`. Nothing committed, nothing run against live.
 
 ### ⏳ Pending on Megan
 1. **Run `supabase/migration-search-path-pin.sql`** in the SQL editor (optional, tidy-up).
-2. **Confirm the empty `quests` table is expected.** Live has **0 quest rows** — so
-   nothing is seeded open OR closed. The teacher toggle can only open a row that
-   exists, so this needs seeding before any learner gets the app.
+2. ~~Confirm the empty `quests` table is expected — live has 0 quest rows.~~
+   ❌ **THIS WAS FALSE, withdrawn 2026-08-07.** Live holds all **79 quests** across
+   11 chapters (stats 8 · finance 7 · prob 7 · trig 7 · meas 6 · func 7 · tgraph 7 ·
+   analytical 7 · pat 7 · exp 8 · eqn 8), and **all 79 are open**. Nothing to do.
+   ⚠️ **The number came from the MCP's `list_tables`, whose row counts are Postgres
+   PLANNER ESTIMATES (`reltuples`) — 0 for a table filled by a migration and never
+   analysed since.** It was relayed into the audit and repeated three times before
+   anyone ran `count(*)`. **Never quote a row count from `list_tables`.**
+   (Worth a glance whenever convenient, but not a defect: the house habit is to seed
+   a new chapter CLOSED and open it per class — all 79 sitting open is presumably
+   deliberate from testing, and it is hers to set either way.)
 
 **Not changed (accepted risk, recorded once):** the client computes its own score and
 XP; the server caps XP at 1000 per submit and pays a flat 10 gold per submitted round,

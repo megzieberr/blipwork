@@ -1,12 +1,12 @@
 /* ============================================================
-   BLIP SCREEN — the companion's home: preview, nickname, colour
-   picker (locked with a hint before the first completed round),
-   the accessory shop (buy/equip, level-gated, gold-gated), the
-   grocery/pharmacy (feeding + sickness recovery), and the second-
-   Blip unlock. All state comes from app.state (a fresh
-   mhq_get_state/local getState); every action re-asks the backend
-   and never trusts a locally-guessed outcome — errors always toast,
-   never fail silently.
+   BLIP SCREEN — his ROOM (room build S1, 2026-08-08): a fridge,
+   bed, closet and desk around Blip on his glow pedestal, an
+   inline-editable nickname, a top-right daily cookie, and five
+   round dock buttons (colours/shop/food/pharmacy/furniture) that
+   each open a bottom sheet over the lower room. All state comes
+   from app.state (a fresh mhq_get_state/local getState); every
+   action re-asks the backend and never trusts a locally-guessed
+   outcome — errors always toast, never fail silently.
 
    PHASE 2 (2026-07-19) — feeding / growth / sickness / pharmacy /
    second Blip. Coded against the contract in PHASE-2-PLAN.md and
@@ -18,8 +18,13 @@
      api.buyItem(id) also accepts 'soup' | 'medicine' | treat ids
    Every read of these is defensive (normalizeBlips/normalizeHealth
    below) so this screen degrades gracefully to the pre-Phase-2
-   single-blip shape if the backend hasn't shipped yet. See
-   PROJECT-STATUS / the hand-off note for exact contract gaps found.
+   single-blip shape if the backend hasn't shipped yet.
+
+   ROOM BUILD S1 (2026-08-08) — UI restructure only, no DB changes.
+   Closet/Shop/Colour/Pharmacy content is the same data + API calls
+   as before, just moved into bottom sheets (see ROOM-BUILD-PLAN.md
+   in homework-hub-companion/). Furniture art is PLACEHOLDER
+   (js/companion/room-art.js), swapped for Megan's Tripo art later.
    ============================================================ */
 import { api } from "./api.js";
 import { getSession } from "./session.js";
@@ -31,17 +36,67 @@ import { el, clear, showToast } from "./ui.js";
    own name into the same module scope. */
 import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment } from "./companion/renderer.js";
 import {
-  renderSwatchGrid, equippedToAccessories, itemLabel,
+  renderSwatchGrid, itemLabel,
   SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot,
 } from "./companion/blip-ui.js";
 import { treasureBadge } from "./companion/treasure.js";
 import { maybeShowReminderCard } from "./push.js";
+import { FRIDGE_SVG, BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
 
 /* Which slot tab the closet/shop is filtered to ("all" or a slot id).
    Module scope on purpose: every buy/wear action re-renders the whole
    screen via app.go("blip"), and losing the filter on each tap would
-   make dressing Blip in one slot infuriating. */
+   make dressing Blip in one slot infuriating. Shared between the
+   Inventory and Shop sheets, same as the old closet/shop split. */
 let activeSlotTab = "all";
+
+/* ---------------- room bottom-sheet machinery ----------------
+   One shared bottom-sheet convention (reuses the app's existing
+   .modal-scrim/.modal pattern — see css/styles.css "concept modal").
+   Only one sheet is ever open; opening a new one replaces the old.
+   activeSheetRerender lets an in-sheet control (slot-tab filter) redraw
+   the sheet's body WITHOUT closing it or touching app state; any
+   backend-mutating action inside a sheet instead closes it and does the
+   app's normal full refresh + re-render — same convention every other
+   action in this file already used before the room build. */
+let activeSheetScrim = null;
+let activeSheetRerender = null;
+function closeRoomSheet() {
+  if (activeSheetScrim) { activeSheetScrim.remove(); activeSheetScrim = null; }
+  activeSheetRerender = null;
+}
+function openRoomSheet({ id, renderContent, cycleOrder, onCycle }) {
+  closeRoomSheet();
+  const scrim = el("div", "modal-scrim room-sheet-scrim");
+  const modal = el("div", "modal room-sheet");
+  const body = el("div", "room-sheet-body");
+  modal.appendChild(body);
+  const foot = el("div", "room-sheet-foot");
+  if (cycleOrder) {
+    const nextBtn = el("button", "btn ghost small", "Next →");
+    nextBtn.type = "button";
+    nextBtn.addEventListener("click", () => {
+      const i = cycleOrder.indexOf(id);
+      onCycle(cycleOrder[(i + 1) % cycleOrder.length]);
+    });
+    foot.appendChild(nextBtn);
+  }
+  const doneBtn = el("button", "btn primary small", "Done");
+  doneBtn.type = "button";
+  doneBtn.addEventListener("click", closeRoomSheet);
+  foot.appendChild(doneBtn);
+  modal.appendChild(foot);
+  scrim.appendChild(modal);
+  scrim.addEventListener("click", (e) => { if (e.target === scrim) closeRoomSheet(); });
+
+  activeSheetRerender = () => { clear(body); renderContent(body); };
+  activeSheetRerender();
+
+  document.body.appendChild(scrim);
+  activeSheetScrim = scrim;
+}
+const PANEL_ORDER = ["colours", "shop", "food", "pharmacy", "furniture"];
+const PANEL_TITLES = { colours: "COLOURS", shop: "SHOP", food: "FOOD", pharmacy: "PHARMACY", furniture: "FURNITURE", inventory: "INVENTORY" };
 
 /* renderBlip (companion/renderer.js, landed 2026-07-19) owns the
    growth/health scale itself — applied via `transform` on whatever
@@ -175,6 +230,11 @@ async function maybeLogCareDay(app, sess, itemId) {
   } catch { /* non-fatal — soup/medicine already landed; next visit can retry the care day */ }
 }
 
+/* Pharmacy is now ONLY reached from inside the PHARMACY sheet (room
+   build S1) — a successful buy closes the sheet before the usual
+   full refresh + re-render, same convention as every other sheet
+   action below. closeRoomSheet() is a no-op if nothing is open, so
+   this stays safe if pharmacyCard is ever mounted outside a sheet. */
 function pharmacyCard(app, sess, state, health) {
   const card = el("div", "card pharmacy-card");
   const hearts = Array.from({ length: 3 }, (_, i) => (i < health.careStreak ? "❤️" : "🤍")).join(" ");
@@ -194,6 +254,7 @@ function pharmacyCard(app, sess, state, health) {
         if (!r || !r.ok) { showToast(foodErrMsg(r && r.error, r), "error"); btn.disabled = false; return; }
         showToast(`Gave Blip ${item.label.toLowerCase()}.`, "good");
         await maybeLogCareDay(app, sess, item.id);
+        closeRoomSheet();
         await app.refresh(); app.go("blip");
       } catch { showToast("Can't reach the server — try again.", "error"); btn.disabled = false; }
     });
@@ -255,10 +316,59 @@ function openSecondBlipModal(app) {
   document.body.appendChild(scrim);
 }
 
+/* ---------------- inline-edit nickname ----------------
+   Replaces the old permanent input + Save button: a plain button
+   showing the name, tap it and it becomes an input; Enter/blur saves,
+   Escape cancels and collapses back. Same api.equip(...blipName) call
+   as before — only the chrome around it changed. */
+function mountNameEditor(container, app, sess, activeBlip) {
+  const renderView = () => {
+    clear(container);
+    const btn = el("button", "room-name-btn");
+    btn.type = "button";
+    btn.innerHTML = `${activeBlip.name || "Blip"} <span class="rn-edit-ic">✎</span>`;
+    btn.setAttribute("aria-label", "Edit Blip's nickname");
+    btn.addEventListener("click", renderEdit);
+    container.appendChild(btn);
+  };
+  const renderEdit = () => {
+    clear(container);
+    const input = el("input", "room-name-input");
+    input.maxLength = 24;
+    input.value = activeBlip.name || "Blip";
+    input.setAttribute("aria-label", "Blip's nickname");
+    container.appendChild(input);
+    input.focus();
+    input.select();
+    let settled = false;
+    const save = async () => {
+      if (settled) return;
+      const nm = input.value.trim();
+      if (!nm || nm === (activeBlip.name || "Blip")) { settled = true; renderView(); return; }
+      settled = true;
+      input.disabled = true;
+      try {
+        const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, blipName: nm });
+        if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); settled = false; input.disabled = false; return; }
+        showToast("Nickname saved!", "good");
+        await app.refresh();
+        app.go("blip");
+      } catch { showToast("Can't reach the server — try again.", "error"); settled = false; input.disabled = false; }
+    };
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); save(); }
+      else if (e.key === "Escape") { settled = true; renderView(); }
+    });
+    input.addEventListener("blur", save);
+  };
+  renderView();
+}
+
 let activeSlot = 0; // which blip's name/colour/equip panel is showing (two-blip households)
 
 export function renderBlip(app, host) {
   clear(host);
+  closeRoomSheet(); // a fresh screen render always starts with no sheet open
   const sess = getSession();
   const state = app.state || {};
   const blips = normalizeBlips(state);
@@ -267,13 +377,10 @@ export function renderBlip(app, host) {
   const xp = state.xp || 0;
   if (!blips.some((b) => b.slot === activeSlot)) activeSlot = blips[0].slot;
   const activeBlip = blips.find((b) => b.slot === activeSlot) || blips[0];
-  // hoisted above the hero mount (was computed down by the feed card) —
-  // the hero's idle animation needs it too, to show the hungry loop
-  // instead of the static base when healthy + feedable today.
   const canFeedToday = readyFlag(state.canFeedToday);
 
   const head = el("div", "blip-head");
-  head.innerHTML = `<div><span class="eyebrow">System</span><h1><span class="sparkle">✦</span> STATUS <span class="sparkle">✦</span></h1><p class="muted small">Your companion, Blip</p></div>
+  head.innerHTML = `<div><span class="eyebrow">System</span></div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="link-btn gallery-link" title="Everyone's Blips" aria-label="Gallery">👥</button>
       <button class="link-btn back" aria-label="Back">←</button>
@@ -296,11 +403,40 @@ export function renderBlip(app, host) {
     host.appendChild(tabs);
   }
 
-  // ---- hero preview + mood + nickname ----
-  const hero = el("div", "card blip-hero-card");
-  hero.innerHTML = `<div class="blip-hero-stage"><div class="blip-pedestal"><i></i></div></div>`;
-  const heroStage = hero.querySelector(".blip-hero-stage");
-  const heroHandle = mountBlip(heroStage, {
+  // ============================================================
+  // THE ROOM
+  // ============================================================
+  const roomCard = el("div", "card room-card");
+  host.appendChild(roomCard);
+
+  // ---- room layout: fridge / bed / closet / desk / Blip on his pedestal ----
+  // Built before the header so the header's cookie button can trigger the
+  // same happy/refuse shake on the Blip stage the old feed button used.
+  const room = el("div", "room");
+  const mkFurniture = (cls, svg, label) => {
+    const f = el("div", "room-furniture " + cls);
+    f.tabIndex = 0;
+    f.setAttribute("role", "button");
+    f.setAttribute("aria-label", label);
+    f.title = label;
+    f.innerHTML = `<div class="rf-art">${svg}</div><span class="rf-label">${label}</span>`;
+    return f;
+  };
+  const bindTap = (elm, fn) => {
+    elm.addEventListener("click", fn);
+    elm.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } });
+  };
+
+  const fridgeEl = mkFurniture("fridge", FRIDGE_SVG, "Fridge");
+  const bedEl = mkFurniture("bed", BED_SVG, "Bed");
+  const closetEl = mkFurniture("closet", CLOSET_SVG, "Closet");
+  const deskEl = mkFurniture("desk", DESK_SVG, "Desk");
+  room.append(fridgeEl, bedEl, closetEl, deskEl);
+
+  const roomStage = el("div", "room-blip-stage");
+  roomStage.innerHTML = `<div class="blip-pedestal"><i></i></div>`;
+  room.appendChild(roomStage);
+  const blipHandle = mountBlip(roomStage, {
     colour: activeBlip.colour,
     equipped: activeBlip.equipped,
     growthStage: activeBlip.growthStage,
@@ -308,73 +444,61 @@ export function renderBlip(app, host) {
     recovering: health.recovering,
     hungry: canFeedToday,
     // poke him: alternates a wink and a hop (renderer ignores taps while
-    // he's sleeping/sick/recovering). Deliberately NOT set on the hub
-    // tile's Blips — that tile's own click navigates here, and a tap
-    // that both hops and changes screen reads as a misfire.
+    // he's sleeping/sick/recovering).
     tappable: true,
   });
 
+  bindTap(fridgeEl, () => openPanel("food", false));
+  bindTap(closetEl, () => openPanel("inventory", false));
+  bindTap(bedEl, () => triggerAnim(bedEl, "rf-wiggle", 500));
+  bindTap(deskEl, () => triggerAnim(deskEl, "rf-wiggle", 500));
+
+  // ---- header: nickname (tap to edit), subtitle, mood chip ----
+  const titleWrap = el("div", "room-titlewrap");
+  const nameWrap = el("div", "room-name-wrap");
+  mountNameEditor(nameWrap, app, sess, activeBlip);
+  titleWrap.appendChild(nameWrap);
+  titleWrap.appendChild(el("p", "muted small room-subtitle", "Your study companion"));
   const mood = moodCopy(health);
-  if (mood) hero.appendChild(el("div", "blip-mood", `${mood.icon} ${mood.text}`));
+  if (mood) titleWrap.appendChild(el("div", "blip-mood", `${mood.icon} ${mood.text}`));
+  roomCard.appendChild(titleWrap);
 
-  const nameRow = el("div", "blip-name-row");
-  const nameInput = el("input", "blip-name-input");
-  nameInput.maxLength = 24;
-  nameInput.value = activeBlip.name || "Blip";
-  nameInput.setAttribute("aria-label", "Blip's nickname");
-  const saveNameBtn = el("button", "btn small", "Save");
-  nameRow.append(nameInput, saveNameBtn);
-  hero.appendChild(nameRow);
-  hero.appendChild(el("p", "muted small blip-name-hint", "Only you see this nickname — it never shows to other players."));
-  host.appendChild(hero);
-
-  // Phase 3: unopened treasure boxes ride on the hero card (top-left, so the
-  // right-hand cookie badge never collides). Returns null when there are none.
-  try { treasureBadge(app, hero); } catch { /* non-critical */ }
-
-  saveNameBtn.addEventListener("click", async () => {
-    const nm = nameInput.value.trim();
-    if (!nm) { showToast("Give Blip a name first.", "error"); return; }
-    saveNameBtn.disabled = true;
-    try {
-      const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, blipName: nm });
-      if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); saveNameBtn.disabled = false; return; }
-      showToast("Nickname saved!", "good");
-      await app.refresh();
-      app.go("blip");
-    } catch { showToast("Can't reach the server — try again.", "error"); saveNameBtn.disabled = false; }
-  });
-
-  // ---- feed (household action — one cookie feeds every Blip) ----
-  // (canFeedToday itself is computed up near activeBlip now — the hero
-  // mount needs it for the idle hungry-loop hint)
-  const feedCard = el("div", "card feed-card");
-  const feedBtn = el("button", "btn primary big" + (canFeedToday ? "" : " ghost"), canFeedToday ? "🍪 Feed Blip" : "Fed today — come back tomorrow");
-  feedBtn.disabled = !canFeedToday;
-  feedCard.appendChild(feedBtn);
-  host.appendChild(feedCard);
-  // Daily-reminder opt-in sits under the feed button: the reminder is ABOUT
-  // feeding, and this is the screen with the emotional context. Stays hidden
-  // until the VAPID key is set, so it is dormant until Megan finishes setup.
-  try { maybeShowReminderCard(host); } catch { /* non-critical */ }
-  feedBtn.addEventListener("click", async () => {
-    feedBtn.disabled = true;
+  // ---- daily cookie (top-right) — the household's one free daily feed ----
+  const cookieBtn = el("button", "cookie-badge" + (canFeedToday ? "" : " done"), canFeedToday ? "🍪" : "✅");
+  cookieBtn.type = "button";
+  cookieBtn.title = canFeedToday ? "Feed Blip" : "Fed today — come back tomorrow";
+  cookieBtn.setAttribute("aria-label", cookieBtn.title);
+  cookieBtn.disabled = !canFeedToday;
+  cookieBtn.addEventListener("click", async () => {
+    cookieBtn.disabled = true;
     try {
       const r = await api.feed(sess.username, sess.password);
       if (!r || !r.ok) {
         const code = r && r.error;
-        if (code === "REFUSES_FOOD") { triggerRefuse(heroStage); showToast(`${blips[0].name} doesn't feel like eating… maybe soup?`, "error"); }
+        if (code === "REFUSES_FOOD") { triggerRefuse(roomStage); showToast(`${blips[0].name} doesn't feel like eating… maybe soup?`, "error"); }
         else if (code === "BLIP_TOO_SICK") { showToast("Blip won't get up right now…", "error"); }
         else showToast("Something went wrong — try again.", "error");
-        feedBtn.disabled = false; return;
+        cookieBtn.disabled = false; return;
       }
-      triggerHappy(heroStage);
-      playMoment(heroHandle, "excited");
+      triggerHappy(roomStage);
+      playMoment(blipHandle, "excited");
       showToast(blips.length > 1 ? `${blips[0].name} and ${blips[1].name} shared a cookie!` : `${blips[0].name} enjoyed a cookie!`, "good");
       await app.refresh();
       app.go("blip");
-    } catch { showToast("Can't reach the server — try again.", "error"); feedBtn.disabled = false; }
+    } catch { showToast("Can't reach the server — try again.", "error"); cookieBtn.disabled = false; }
   });
+  roomCard.appendChild(cookieBtn);
+
+  // Phase 3: unopened treasure boxes ride top-left of the room card, so
+  // they never collide with the cookie button top-right.
+  try { treasureBadge(app, roomCard); } catch { /* non-critical */ }
+
+  roomCard.appendChild(room);
+
+  // Daily-reminder opt-in — was under the old feed button; the room card
+  // is the closest equivalent home for it now. Stays hidden until the
+  // VAPID key is set, so it is dormant until Megan finishes setup.
+  try { maybeShowReminderCard(roomCard); } catch { /* non-critical */ }
 
   // ---- second Blip unlock (quiet moment, not a nag) ----
   if (level >= 10 && blips.length < 2) {
@@ -387,171 +511,149 @@ export function renderBlip(app, host) {
     host.appendChild(sb);
   }
 
-  // ---- colour ----
-  host.appendChild(el("h2", "", "COLOUR"));
-  const colourCard = el("div", "card colour-card");
-  const xpLocked = xp <= 0;
-  const colourLocked = xpLocked || health.locks.dress;
-  if (xpLocked) colourCard.appendChild(el("p", "colour-hint", "🔒 Finish your first round to unlock colours — blue stays free any time."));
-  if (!xpLocked && health.locks.dress) colourCard.appendChild(el("p", "colour-hint", "🛌 Blip won't get up to change today — try again once he's feeling better."));
-  const swatches = renderSwatchGrid({
-    current: activeBlip.colour, locked: colourLocked,
-    onPick: async (id) => {
-      try {
-        const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, colour: id });
-        if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); return; }
-        showToast("Colour updated!", "good");
-        await app.refresh();
-        app.go("blip");
-      } catch { showToast("Can't reach the server — try again.", "error"); }
-    },
-  });
-  colourCard.appendChild(swatches);
-  host.appendChild(colourCard);
+  // ============================================================
+  // shared catalogue data — same computation as the old closet/shop
+  // split, now feeding the Inventory sheet (owned) and Shop sheet
+  // (buyable) instead of two stacked page sections.
+  // ============================================================
+  const shopItems = (state.shop || []).filter((it) => COSMETIC_SLOTS.includes(it.slot));
+  const shopById = new Map(shopItems.map((it) => [it.id, it]));
+  const closetItems = (activeBlip.owned || [])
+    .map((id) => shopById.get(id) || { id, slot: accessorySlot(id), price: null, minLevel: 1, retired: true })
+    .filter((it) => it.slot && COSMETIC_SLOTS.includes(it.slot));
+  const buyableItems = shopItems.filter((it) => !(activeBlip.owned || []).includes(it.id));
+  const liveSlots = COSMETIC_SLOTS.filter((s) =>
+    closetItems.some((it) => it.slot === s) || buyableItems.some((it) => it.slot === s));
+  const inTab = (it) => activeSlotTab === "all" || it.slot === activeSlotTab;
 
-  // ---- closet + shop ----
-  if (health.stage >= 2) {
-    // Critical-adjacent: the cosmetic layer steps aside for the pharmacy.
-    host.appendChild(el("h2", "", "SHOP"));
-    host.appendChild(el("p", "muted small", "The shop's quiet for now — Blip needs some care first."));
-    host.appendChild(pharmacyCard(app, sess, state, health));
-  } else {
-    /* Store expansion 2026-07-28: this used to be ONE flat grid holding
-       owned, buyable and level-locked items together. That was fine at
-       six items; at twenty-two it is a scroll wall on a phone. Split in
-       two — CLOSET (what you own, tap to wear or take off) and SHOP
-       (what you can still get) — with a slot filter across the top. */
-    const shopItems = (state.shop || []).filter((it) => COSMETIC_SLOTS.includes(it.slot));
-    const shopById = new Map(shopItems.map((it) => [it.id, it]));
+  /* One card renderer for both Inventory and Shop sheets — the only
+     difference is which action button it gets. */
+  const cosmeticCard = (item, owned) => {
+    const equippedHere = activeBlip.equipped && activeBlip.equipped[item.slot] === item.id;
+    const lockedByLevel = level < item.minLevel;
+    const lockedByDress = health.locks.dress;
+    const lockedByShop = health.locks.shop;
+    const rarity = item.retired ? "common" : itemRarity(item.price);
+    const card = el("div", "shop-item rarity-" + rarity + (equippedHere ? " equipped" : ""));
+    const meta = owned
+      ? (equippedHere ? "Equipped" : (item.retired ? "Owned · no longer sold" : "Owned"))
+      : (rarity === "free"
+          ? "Free"
+          : `<span class="crystal">💎</span> ${item.price}${lockedByLevel ? ` · unlocks at level ${item.minLevel}` : ""}`);
+    card.innerHTML = `<div class="si-stage"></div>
+      ${rarity === "rare" ? '<div class="si-tag rare">RARE</div>' : rarity === "free" && !owned ? '<div class="si-tag free">FREE</div>' : ""}
+      <div class="si-name">${itemLabel(item.id)}</div>
+      <div class="si-meta">${meta}</div>`;
+    renderCompanion(card.querySelector(".si-stage"), { colour: activeBlip.colour, accessories: [item.id] });
 
-    // The closet is driven by owned_items, NOT by the shop payload, so
-    // retired items (party-hat, cat-ears…) still show up and stay
-    // wearable — they were bought fairly and are never confiscated.
-    const closetItems = (activeBlip.owned || [])
-      .map((id) => shopById.get(id) || { id, slot: accessorySlot(id), price: null, minLevel: 1, retired: true })
-      .filter((it) => it.slot && COSMETIC_SLOTS.includes(it.slot));
-    const buyableItems = shopItems.filter((it) => !(activeBlip.owned || []).includes(it.id));
+    const actionBtn = el("button", "btn small");
+    if (owned) {
+      actionBtn.textContent = lockedByDress ? "Blip won't get up…" : (equippedHere ? "Take off" : "Wear");
+      actionBtn.className = "btn small" + (lockedByDress ? " ghost" : equippedHere ? " ghost" : " primary");
+      actionBtn.disabled = lockedByDress;
+      if (!lockedByDress) actionBtn.addEventListener("click", async () => {
+        actionBtn.disabled = true;
+        const nextEquipped = { ...(activeBlip.equipped || {}) };
+        nextEquipped[item.slot] = equippedHere ? "" : item.id;
+        try {
+          const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, equipped: nextEquipped });
+          if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); actionBtn.disabled = false; return; }
+          showToast(equippedHere ? `${itemLabel(item.id)} taken off.` : `${itemLabel(item.id)} on!`, "good");
+          closeRoomSheet();
+          await app.refresh();
+          app.go("blip");
+        } catch { showToast("Can't reach the server — try again.", "error"); actionBtn.disabled = false; }
+      });
+    } else if (lockedByLevel) {
+      actionBtn.textContent = `Unlocks at level ${item.minLevel}`;
+      actionBtn.disabled = true;
+      actionBtn.className = "btn small ghost";
+    } else {
+      actionBtn.innerHTML = lockedByShop
+        ? "Shop's closed for now"
+        : (rarity === "free" ? "Get it free" : `Buy · ${item.price} <span class="crystal">💎</span>`);
+      actionBtn.className = "btn small primary";
+      actionBtn.disabled = lockedByShop;
+      if (!lockedByShop) actionBtn.addEventListener("click", async () => {
+        actionBtn.disabled = true;
+        try {
+          const r = await api.buyItem(sess.username, sess.password, item.id, activeBlip.slot);
+          if (!r || !r.ok) { showToast(buyErrMsg(r && r.error, r), "error"); actionBtn.disabled = false; return; }
+          showToast(rarity === "free" ? `${itemLabel(item.id)} is yours!` : `Bought ${itemLabel(item.id)}!`, "good");
+          closeRoomSheet();
+          await app.refresh();
+          app.go("blip");
+        } catch { showToast("Can't reach the server — try again.", "error"); actionBtn.disabled = false; }
+      });
+    }
+    card.appendChild(actionBtn);
+    return card;
+  };
 
-    // Which slots to offer as tabs: only ones that actually have something
-    // in them, so a tab never opens onto an empty grid.
-    const liveSlots = COSMETIC_SLOTS.filter((s) =>
-      closetItems.some((it) => it.slot === s) || buyableItems.some((it) => it.slot === s));
+  const renderCosmeticList = (container, owned) => {
     if (!liveSlots.includes(activeSlotTab)) activeSlotTab = "all";
-
     const tabs = el("div", "slot-tabs");
     [["all", "All"], ...liveSlots.map((s) => [s, SLOT_LABELS[s]])].forEach(([id, label]) => {
       const t = el("button", "slot-tab" + (id === activeSlotTab ? " active" : ""), label);
       t.type = "button";
-      t.addEventListener("click", () => { activeSlotTab = id; app.go("blip"); });
+      t.addEventListener("click", () => { activeSlotTab = id; if (activeSheetRerender) activeSheetRerender(); });
       tabs.appendChild(t);
     });
-    host.appendChild(tabs);
-    // The strip scrolls sideways, so after a re-render the selected tab can
-    // sit off the right edge — "Back" is last and was doing exactly that on
-    // a 430px phone. inline:"center" only moves the strip, block:"nearest"
-    // keeps it from yanking the page vertically.
+    container.appendChild(tabs);
     const activeTabEl = tabs.querySelector(".slot-tab.active");
     if (activeTabEl && activeSlotTab !== "all") {
       // setTimeout, not requestAnimationFrame: the preview pane never fires
-      // rAF (known, see the browser-pane note in PROJECT-STATUS), so an rAF
-      // here would silently do nothing every time we test it.
+      // rAF (known, see the browser-pane note in PROJECT-STATUS).
       setTimeout(() => activeTabEl.scrollIntoView({ block: "nearest", inline: "center" }), 0);
     }
-
-    const inTab = (it) => activeSlotTab === "all" || it.slot === activeSlotTab;
-
-    /* One card renderer for both sections — the only difference between a
-       closet card and a shop card is which button it gets. */
-    const cosmeticCard = (item, owned) => {
-      const equippedHere = activeBlip.equipped && activeBlip.equipped[item.slot] === item.id;
-      const lockedByLevel = level < item.minLevel;
-      const lockedByDress = health.locks.dress;
-      const lockedByShop = health.locks.shop;
-      const rarity = item.retired ? "common" : itemRarity(item.price);
-      const card = el("div", "shop-item rarity-" + rarity + (equippedHere ? " equipped" : ""));
-      const meta = owned
-        ? (equippedHere ? "Equipped" : (item.retired ? "Owned · no longer sold" : "Owned"))
-        : (rarity === "free"
-            ? "Free"
-            : `<span class="crystal">💎</span> ${item.price}${lockedByLevel ? ` · unlocks at level ${item.minLevel}` : ""}`);
-      card.innerHTML = `<div class="si-stage"></div>
-        ${rarity === "rare" ? '<div class="si-tag rare">RARE</div>' : rarity === "free" && !owned ? '<div class="si-tag free">FREE</div>' : ""}
-        <div class="si-name">${itemLabel(item.id)}</div>
-        <div class="si-meta">${meta}</div>`;
-      // preview the item on the learner's OWN colour, alone on the body
-      renderCompanion(card.querySelector(".si-stage"), { colour: activeBlip.colour, accessories: [item.id] });
-
-      const actionBtn = el("button", "btn small");
-      if (owned) {
-        actionBtn.textContent = lockedByDress ? "Blip won't get up…" : (equippedHere ? "Take off" : "Wear");
-        actionBtn.className = "btn small" + (lockedByDress ? " ghost" : equippedHere ? " ghost" : " primary");
-        actionBtn.disabled = lockedByDress;
-        if (!lockedByDress) actionBtn.addEventListener("click", async () => {
-          actionBtn.disabled = true;
-          const nextEquipped = { ...(activeBlip.equipped || {}) };
-          nextEquipped[item.slot] = equippedHere ? "" : item.id;
-          try {
-            const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, equipped: nextEquipped });
-            if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); actionBtn.disabled = false; return; }
-            showToast(equippedHere ? `${itemLabel(item.id)} taken off.` : `${itemLabel(item.id)} on!`, "good");
-            await app.refresh();
-            app.go("blip");
-          } catch { showToast("Can't reach the server — try again.", "error"); actionBtn.disabled = false; }
-        });
-      } else if (lockedByLevel) {
-        actionBtn.textContent = `Unlocks at level ${item.minLevel}`;
-        actionBtn.disabled = true;
-        actionBtn.className = "btn small ghost";
-      } else {
-        // free-tier items still go through buy() — one tap at 0 gold — so
-        // nobody's owned_items needed backfilling when these shipped.
-        actionBtn.innerHTML = lockedByShop
-          ? "Shop's closed for now"
-          : (rarity === "free" ? "Get it free" : `Buy · ${item.price} <span class="crystal">💎</span>`);
-        actionBtn.className = "btn small primary";
-        actionBtn.disabled = lockedByShop;
-        if (!lockedByShop) actionBtn.addEventListener("click", async () => {
-          actionBtn.disabled = true;
-          try {
-            // cosmetics are per-blip server-side — buy onto the ACTIVE blip's slot
-            const r = await api.buyItem(sess.username, sess.password, item.id, activeBlip.slot);
-            if (!r || !r.ok) { showToast(buyErrMsg(r && r.error, r), "error"); actionBtn.disabled = false; return; }
-            showToast(rarity === "free" ? `${itemLabel(item.id)} is yours!` : `Bought ${itemLabel(item.id)}!`, "good");
-            await app.refresh();
-            app.go("blip");
-          } catch { showToast("Can't reach the server — try again.", "error"); actionBtn.disabled = false; }
-        });
-      }
-      card.appendChild(actionBtn);
-      return card;
-    };
-
-    const closetShown = closetItems.filter(inTab);
-    host.appendChild(el("h2", "", "CLOSET"));
-    if (closetShown.length) {
-      const cgrid = el("div", "shop-grid");
-      closetShown.forEach((item) => cgrid.appendChild(cosmeticCard(item, true)));
-      host.appendChild(cgrid);
-    } else {
-      host.appendChild(el("p", "muted small", closetItems.length
-        ? "Nothing in this part of the closet yet."
-        : "The closet's empty — everything marked FREE below costs nothing."));
-    }
-
-    const buyShown = buyableItems.filter(inTab);
-    host.appendChild(el("h2", "", "SHOP"));
-    if (buyShown.length) {
+    const items = (owned ? closetItems : buyableItems).filter(inTab);
+    if (items.length) {
       const grid = el("div", "shop-grid");
-      buyShown.forEach((item) => grid.appendChild(cosmeticCard(item, false)));
-      host.appendChild(grid);
+      items.forEach((item) => grid.appendChild(cosmeticCard(item, owned)));
+      container.appendChild(grid);
     } else {
-      host.appendChild(el("p", "muted small", "You own everything here — nice."));
+      container.appendChild(el("p", "muted small", owned
+        ? (closetItems.length ? "Nothing in this part of the closet yet." : "The closet's empty — everything marked FREE below costs nothing.")
+        : "You own everything here — nice."));
     }
+  };
 
-    // treats (paid, cosmetic-food — animate him but never accelerate growth)
+  // ============================================================
+  // sheet content builders
+  // ============================================================
+  function renderColoursPanel(container) {
+    container.appendChild(el("h2", "", "COLOUR"));
+    const xpLocked = xp <= 0;
+    const colourLocked = xpLocked || health.locks.dress;
+    if (xpLocked) container.appendChild(el("p", "colour-hint", "🔒 Finish your first round to unlock colours — blue stays free any time."));
+    if (!xpLocked && health.locks.dress) container.appendChild(el("p", "colour-hint", "🛌 Blip won't get up to change today — try again once he's feeling better."));
+    const swatches = renderSwatchGrid({
+      current: activeBlip.colour, locked: colourLocked,
+      onPick: async (id) => {
+        try {
+          const r = await api.equip(sess.username, sess.password, { slot: activeBlip.slot, colour: id });
+          if (!r || !r.ok) { showToast(equipErrMsg(r && r.error), "error"); return; }
+          showToast("Colour updated!", "good");
+          closeRoomSheet();
+          await app.refresh();
+          app.go("blip");
+        } catch { showToast("Can't reach the server — try again.", "error"); }
+      },
+    });
+    container.appendChild(swatches);
+  }
+
+  function renderShopPanel(container) {
+    container.appendChild(el("h2", "", "SHOP"));
+    if (health.stage >= 2) {
+      container.appendChild(el("p", "muted small", "The shop's quiet for now — Blip needs some care first. Try Pharmacy for soup and medicine."));
+      return;
+    }
+    renderCosmeticList(container, false);
+
     const treats = treatItems(state);
     if (treats.length) {
-      host.appendChild(el("h3", "", "TREATS"));
+      container.appendChild(el("h3", "", "TREATS"));
       const tgrid = el("div", "shop-grid");
       treats.forEach((item) => {
         const lockedByShop = health.locks.shop;
@@ -567,23 +669,86 @@ export function renderBlip(app, host) {
             const r = await api.buyItem(sess.username, sess.password, item.id);
             if (!r || !r.ok) {
               const code = r && r.error;
-              if (code === "REFUSES_FOOD") { triggerRefuse(heroStage); showToast(`${blips[0].name} doesn't feel like eating right now.`, "error"); }
+              if (code === "REFUSES_FOOD") { triggerRefuse(roomStage); showToast(`${blips[0].name} doesn't feel like eating right now.`, "error"); }
               else showToast(foodErrMsg(code, r), "error");
               btn.disabled = false; return;
             }
-            triggerHappy(heroStage);
+            triggerHappy(roomStage);
             showToast(`${blips[0].name} loved that treat!`, "good");
+            closeRoomSheet();
             await app.refresh(); app.go("blip");
           } catch { showToast("Can't reach the server — try again.", "error"); btn.disabled = false; }
         });
         card.appendChild(btn);
         tgrid.appendChild(card);
       });
-      host.appendChild(tgrid);
+      container.appendChild(tgrid);
     }
-
-    host.appendChild(pharmacyCard(app, sess, state, health));
   }
+
+  function renderInventoryPanel(container) {
+    container.appendChild(el("h2", "", "INVENTORY"));
+    renderCosmeticList(container, true);
+    container.appendChild(el("h3", "", "SHELF"));
+    container.appendChild(el("div", "trinket-shelf", "Trinkets will land on this shelf in a later update."));
+  }
+
+  function renderFoodPanel(container) {
+    container.appendChild(el("h2", "", "FOOD"));
+    const pantry = state.pantry || {};
+    container.appendChild(el("p", "muted small", "What's in the fridge right now:"));
+    const stash = el("div", "stash-grid");
+    [["soup", "🍲", "Soup"], ["medicine", "💊", "Medicine"]].forEach(([id, icon, label]) => {
+      const n = pantry[id] || 0;
+      const row = el("div", "stash-item");
+      row.innerHTML = `<span class="si-icon">${icon}</span><span class="si-label">${label}</span><span class="si-count">×${n}</span>`;
+      stash.appendChild(row);
+    });
+    container.appendChild(stash);
+    container.appendChild(el("p", "muted small room-soon-note", "🛒 A proper grocery shop is coming in a later update — for now, stock up on soup and medicine from the Pharmacy."));
+  }
+
+  function renderFurniturePanel(container) {
+    container.appendChild(el("h2", "", "FURNITURE"));
+    container.appendChild(el("div", "furniture-placeholder", "🛋️ New beds, desks and wallpaper are coming in a later update."));
+  }
+
+  function renderPanelContent(id, container) {
+    if (id === "colours") return renderColoursPanel(container);
+    if (id === "shop") return renderShopPanel(container);
+    if (id === "food") return renderFoodPanel(container);
+    if (id === "pharmacy") return void container.appendChild(pharmacyCard(app, sess, state, health));
+    if (id === "furniture") return renderFurniturePanel(container);
+    if (id === "inventory") return renderInventoryPanel(container);
+  }
+
+  function openPanel(id, cycle) {
+    openRoomSheet({
+      id,
+      renderContent: (body) => renderPanelContent(id, body),
+      cycleOrder: cycle ? PANEL_ORDER : null,
+      onCycle: (nextId) => openPanel(nextId, true),
+    });
+  }
+
+  // ---- bottom dock: colours / shop / food / pharmacy / furniture ----
+  const dock = el("div", "room-dock");
+  const DOCK_BUTTONS = [
+    ["colours", "🎨", "Colours"],
+    ["shop", "🛍️", "Shop"],
+    ["food", "🍽️", "Food"],
+    ["pharmacy", "💊", "Pharmacy"],
+    ["furniture", "🛋️", "Furniture"],
+  ];
+  DOCK_BUTTONS.forEach(([id, icon, label]) => {
+    const b = el("button", "dock-btn");
+    b.type = "button";
+    b.innerHTML = `<span class="db-icon">${icon}</span><span class="db-label">${label}</span>`;
+    b.setAttribute("aria-label", label);
+    b.addEventListener("click", () => openPanel(id, true));
+    dock.appendChild(b);
+  });
+  host.appendChild(dock);
 }
 
 function equipErrMsg(code) {

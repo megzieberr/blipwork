@@ -111,58 +111,39 @@ export function renderHub(app, host) {
   setTheme("#3aa0ff", "#3aa0ff"); // hub neutral = the system's own electric blue
   const name = ((app.state && app.state.student && app.state.student.name) || "").split(" ")[0];
   const head = el("div", "hub-head");
-  head.innerHTML = `<span class="eyebrow">Grade 11 Maths</span><h1>Hi, ${name || "there"} 👋</h1><p class="muted small">Pick a chapter to practise.</p>`;
+  head.innerHTML = `<span class="eyebrow">Grade 11 Maths</span>
+    <div class="hub-head-row"><h1>Hi, ${name || "there"} 👋</h1></div>
+    <p class="muted small">Pick a chapter to practise.</p>`;
   host.appendChild(head);
 
   const health = normalizeHealth(app.state || {});
   const banner = sickBanner(health);
   if (banner) host.appendChild(banner);
 
-  // Phase 3: teacher-assigned homework — pinned above the blip tile and the
+  // Phase 3: teacher-assigned homework — pinned above the blip button and the
   // chapter tabs. Appends nothing and returns null when nothing is assigned.
   renderAssignmentCard(app, host);
 
+  // Room build S1 (2026-08-08): the rectangular "tap to visit Blip" card is
+  // gone — a small pulsing button beside the greeting is the only entry
+  // point now. Feeding moved entirely onto the Blip screen (now his room),
+  // which has its own top-right daily cookie button — the hub no longer
+  // shows a cookie badge at all.
   if (app.state && (app.state.blip || app.state.blips)) {
     const blips = normalizeBlips(app.state);
-    const tile = el("div", "hub-blip");
-    tile.innerHTML = `<div class="hb-stages${blips.length > 1 ? " two" : ""}"></div>
-      <div class="hb-info"><div class="hb-name">${blips.map(b => b.name).join(" & ")}</div><div class="hb-cta">Tap to visit Blip →</div></div>`;
-    // gentle, non-nagging feed prompt — a small badge, not a popup
-    // (hoisted above the stage mounts — they need it too, for the idle
-    // hungry-loop hint)
-    const canFeedToday = readyFlag(app.state.canFeedToday);
-    const stagesHost = tile.querySelector(".hb-stages");
-    const blipHandles = blips.map((b) => {
-      const s = el("div", "hb-stage");
-      s.innerHTML = `<div class="blip-pedestal"><i></i></div>`;
-      stagesHost.appendChild(s);
-      return mountBlip(s, { colour: b.colour, equipped: b.equipped, growthStage: b.growthStage, healthStage: health.stage, recovering: health.recovering, hungry: canFeedToday });
+    const primary = blips[0];
+    const btn = el("button", "hub-blip-btn", "");
+    btn.type = "button";
+    btn.title = "Visit Blip";
+    btn.setAttribute("aria-label", "Visit Blip");
+    btn.innerHTML = `<div class="hbb-stage"><div class="blip-pedestal"><i></i></div></div>`;
+    mountBlip(btn.querySelector(".hbb-stage"), {
+      colour: primary.colour, equipped: primary.equipped, growthStage: primary.growthStage,
+      healthStage: health.stage, recovering: health.recovering,
     });
-    tile.addEventListener("click", () => app.go("blip"));
-
-    if (canFeedToday) {
-      const badge = el("button", "cookie-badge", "🍪");
-      badge.type = "button";
-      badge.title = "Feed Blip";
-      badge.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        badge.disabled = true;
-        const sess = getSession();
-        try {
-          const r = await api.feed(sess.username, sess.password);
-          if (!r || !r.ok) {
-            const code = r && r.error;
-            showToast(code === "REFUSES_FOOD" ? `${blips[0].name} doesn't feel like eating right now.` : "Something went wrong — try again.", "error");
-            badge.disabled = false; return;
-          }
-          blipHandles.forEach((h) => playMoment(h, "excited"));
-          showToast(blips.length > 1 ? `${blips[0].name} and ${blips[1].name} shared a cookie!` : `${blips[0].name} enjoyed a cookie!`, "good");
-          await app.refresh(); app.render();
-        } catch { showToast("Can't reach the server — try again.", "error"); badge.disabled = false; }
-      });
-      tile.appendChild(badge);
-    }
-    host.appendChild(tile);
+    btn.addEventListener("click", () => app.go("blip"));
+    const row = head.querySelector(".hub-head-row");
+    row.appendChild(btn);
   }
 
   try { maybeShowInstall(host); } catch { /* non-critical */ }
