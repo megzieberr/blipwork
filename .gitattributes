@@ -1,0 +1,9 @@
+# Windows batch files MUST keep CRLF line endings. With plain LF, cmd.exe
+# reports "'dressing-room.bat' is not recognized as an internal or external
+# command" and the launcher simply does not run — which is exactly how it
+# was first written, and it took a real debugging pass to spot (2026-08-08).
+#
+# core.autocrlf is currently true on this machine so a checkout would fix it
+# anyway, but that is a per-machine setting and not something to rely on.
+*.bat text eol=crlf
+*.cmd text eol=crlf
