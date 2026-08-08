@@ -1534,10 +1534,27 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 
 ## Next up
-**TOMORROW (her plan, stated 2026-08-08 at ship time): a few SHELVES, an
-optional POOFY CHAIR, and WALLPAPER.** Notes for that session before it
-starts: shelves/chair are new furniture slots (the known `mhq_equip` +
-constraint dance, four→six keys) with her Tripo art at the room's wall
+**TOMORROW (her plan, stated 2026-08-08 at ship time), two jobs:**
+
+**1. THE ROOM BECOMES THE HOME SCREEN (her words, verbatim intent: "blip's
+room is the first thing the kids see when they open the app, then when they
+click on the study desk, that takes them to the blipwork quests").** This
+inverts today's navigation: login lands IN the room, and the STUDY DESK is
+the tap that opens the chapter/quest hub. Things the planning pass must
+decide before building:
+- Where the hub's furniture moves: the assignment card, the sick banner, the
+  install prompt and the Term 3/Revision tabs all live on the hub today —
+  they need homes (in the room, on the desk sheet, or kept on the hub screen
+  one tap deeper).
+- The desk needs to READ as the way to the maths (kids won't guess) — maybe
+  a small books/exclamation cue on it, and the back arrow's meaning flips
+  (quests → room instead of room → hub).
+- The pulsing hub Blip button becomes redundant the moment the room IS the
+  hub — plan its removal with it.
+
+**2. A few SHELVES, an optional POOFY CHAIR, and WALLPAPER.** Notes for that
+session: shelves/chair are new furniture slots (the known `mhq_equip` +
+constraint dance, four→more keys) with her Tripo art at the room's wall
 angles; wallpaper was DROPPED from the room build because the wall is baked
 into `room-shell.png` — the door-tint trick (one art file, tinted in code)
 is the likely shape for wall colour, but plan it against the shell before
