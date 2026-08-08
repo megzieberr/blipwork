@@ -28,6 +28,9 @@
 --  active cosmetic with price >= 120, any level", so fairy-wing and tiara
 --  join the milestone loot table on their own, same as every other rare.
 --
+--  ✅ APPLIED TO LIVE 2026-08-08 (migration `room_build_s3_wave3_collections_
+--  sixteen_items`). Kept as the record of what ran.
+--
 --  ROLLBACK: `update public.shop_items set active = false where item_id in
 --  (...the sixteen ids below...);`
 -- ============================================================

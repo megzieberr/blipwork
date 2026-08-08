@@ -2,7 +2,11 @@
 --  BLIPWORK — LEVEL CURVE (cap 40) + MILESTONE MYSTERY BOXES + TRINKETS
 --  Room build S2 (2026-08-08), per homework-hub-companion/ROOM-BUILD-PLAN.md
 --
---  ⚠️ NOT YET RUN ON LIVE. Run the WHOLE file in the Supabase SQL editor
+--  ✅ APPLIED TO LIVE 2026-08-08 (migration `room_build_s2_level_curve_40_
+--  milestone_boxes_trinkets`). Learner rows verified byte-identical before
+--  and after. Do not run again; kept as the record of what ran.
+--
+--  (original note) Run the WHOLE file in the Supabase SQL editor
 --  (project pjpwhalcifywjrwtjknd) AFTER migration-phase3.sql, which this
 --  file extends. Additive and idempotent: safe to run more than once, and
 --  it never drops or rewrites a learner row. XP is stored RAW, so the new

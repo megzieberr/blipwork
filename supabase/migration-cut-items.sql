@@ -33,5 +33,6 @@
 --  Both PNGs stay on disk, referenced by nothing.
 -- ============================================================
 
+-- ✅ APPLIED TO LIVE 2026-08-08 (migration `cut_crystal_orbit_and_neural_crown`).
 delete from public.shop_items where item_id = 'crystal-orbit';
 delete from public.shop_items where item_id = 'neural-crown';

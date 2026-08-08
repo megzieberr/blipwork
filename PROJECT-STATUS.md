@@ -1,19 +1,48 @@
 # Project status — updated 2026-08-08 (room build S3 DONE, committed locally, NOT pushed)
 
-## ⏳ WHAT'S WAITING ON MEGAN (read this first — everything else is done)
+## ✅ ALL SQL IS APPLIED TO LIVE (2026-08-08, by Claude at her request)
 
-1. 💻 **Run `supabase/migration-cut-items.sql`** — removes crystal-orbit and
-   neural-crown from live. Safe, no learner data touched. **[with the others below]**
-2. 💻 **Run `supabase/migration-wave3-collections.sql`** — the 16 wave-3
-   items. Must go in AFTER migration-level-curve-40.sql. **[same sitting]**
-3. 💻 **Still unrun from earlier sessions**, in this order:
-   `migration-level-curve-40.sql`, then `migration-search-path-pin.sql`
-   (optional tidy-up). **[same sitting]**
+**There is no SQL pending any more.** Applied in order, via MCP:
+1. `room_build_s2_level_curve_40_milestone_boxes_trinkets`
+2. `room_build_s3_wave3_collections_sixteen_items`
+3. `cut_crystal_orbit_and_neural_crown`
 
-Everything above is one SQL session, in this order:
-`level-curve-40 → wave3-collections → cut-items` (+ search-path-pin whenever).
+`migration-search-path-pin.sql` turned out to be **already applied**
+(20260808072203) — it had been sitting on the pending list wrongly. Re-check
+pending items, don't inherit them.
 
-Nothing is pushed. `sw.js` is still v38 — the review session bumps it once.
+**Learner data byte-identical before and after** — 2 students (lize,
+megzieberr), 2 blips, 24 progress rows, 4,580 XP, 0 gold, 79 quests all
+open. shop_items 57 → 77 (+6 trinkets, +16 wave-3, −2 cut); active cosmetics
+49 → **63**, which matches `verify-store.html`'s payload exactly.
+
+**Smoke tests, all correct on live:** the curve returns L1@0 · L1@199 ·
+L2@200 · L9@3959 · L10@3960 · L20@14060 · L30@30160 · L40@52260 · capped at
+40 with `nextCost` null; the test account's 4,580 XP re-maps 6 → **10** as
+predicted; loot_table splits 3 milestone / 5 assignment rows (phase-3 rows
+untouched); rare pool 15 items; trinkets 6, none leaking into the cosmetic
+payload; `milestone_grants` exists with RLS on; no student row has a null
+in either new column; effects 3 / hats 13 after the cuts.
+
+**Security advisors: 74, in the same three pre-existing classes** (31+31
+SECURITY-DEFINER-executable-by-anon, 12 RLS-on-no-policy). **No new class.**
+
+### ⚠️ NOT verified on live (be honest about this)
+The **box-grant and box-open paths were not exercised against live** — that
+needs a throwaway learner account, which is a bigger step than "run the
+SQL" and was not done. The identical logic passes headlessly in
+`verify-store.html`, but that tests `js/local-backend.js`, which is a
+MIRROR of the SQL, not the SQL itself. Nobody can reach these paths until
+the client is pushed, so there is time — but the house habit is a
+throwaway-learner smoke test (see "How Phase 3 was verified"), and it is
+still owed.
+
+### Noted, not urgent
+- `migration-level-curve-40.sql` §9 claims `_mhq_roll_loot` is "deliberately
+  NOT granted to anon". It contains no REVOKE, so the recreated function is
+  anon-executable like **every other** `_mhq_*` helper (31 of them). Not a
+  regression and it leaks nothing — it returns a loot-row id — but the
+  comment and reality disagree, so either add the REVOKE or fix the comment.
 
 ### Not urgent, but noted
 - **`wizard-hat` has 7% of it over the top edge** at the position she chose
