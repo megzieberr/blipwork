@@ -1,0 +1,37 @@
+-- ============================================================
+--  Blipwork — cut two cosmetics   (2026-08-08)
+-- ------------------------------------------------------------
+--  Both Megan's call, on seeing them worn:
+--    • crystal-orbit  — "it looks dumb".
+--    • neural-crown   — drawn at an angle, so the far side of the band
+--      shows and it reads as a second object floating above his head. She
+--      chose to drop it rather than re-roll the art. (flower-crown and
+--      wizard-hat had the same fault and WERE re-rolled — see
+--      art-source/tripo/WAVE-3C-FRONT-VIEW-HATS-PROMPTS.md.)
+--
+--  Same kind of decision as shadow-crown (wave 2) and pearls/gold-chain
+--  (the neck wave): assertions prove structure, only looking proves art.
+--
+--  PLAIN DELETES are safe because the app is still with no learner, so
+--  nobody can own or have equipped either one. Once kids are on it, retire
+--  with `update public.shop_items set active = false ...` instead, so an
+--  item leaves the shop without being confiscated from anyone's closet.
+--
+--  The migrations that SEEDED them (migration-effects-slot.sql and
+--  migration-tripo-wave2.sql) are deliberately left untouched — an applied
+--  migration records what actually ran. Removals live here, in the newer
+--  file, and verify-store.html reads deletes out of every migration to
+--  enforce that a cut id never reappears in the client mirror.
+--
+--  WHAT THIS LEAVES:
+--    • effects  3 items — light-ring (free, L1), flame-ring, spark-halo.
+--      Still ≥2 with a free level-1 one, but now the thinnest slot.
+--    • hat     13 items. No concern.
+--
+--  Also removed from js/companion/renderer.js, js/companion/blip-ui.js,
+--  js/companion/collections.js, js/local-backend.js and supabase/schema.sql.
+--  Both PNGs stay on disk, referenced by nothing.
+-- ============================================================
+
+delete from public.shop_items where item_id = 'crystal-orbit';
+delete from public.shop_items where item_id = 'neural-crown';

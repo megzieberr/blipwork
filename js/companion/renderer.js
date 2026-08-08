@@ -752,9 +752,15 @@ export const ACCESSORIES = {
   // down far enough to wrap his point or it touches nothing at all. The
   // hat/wings/glasses FLOATY ruling still stands for the items it was made
   // for — a floating crown just reads as a bug rather than as cute.
+  // ART RE-ROLLED 2026-08-08 (front-on, flat cut-out with a straight bar
+  // brim — the old one was drawn at an angle so the brim read as an oval
+  // seen from above and the hat never sat on him). New art is 512x451, so
+  // the old numbers no longer mean anything. These are a STARTING POINT
+  // for the dressing room, not a measured placement: anchored on the brim
+  // (bottom centre) so it rests on his head.
   "wizard-hat": {
-    slot: "hat", img: "wizard-hat.png", widthPct: 36,
-    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.19 },
+    slot: "hat", img: "wizard-hat.png", widthPct: 45,
+    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.32 },
   },
   // NB `crown` is already taken by the code-drawn 180g hat, so this one is
   // royal-crown. Same for cyber-visor vs the existing `visor`.
@@ -911,12 +917,11 @@ export const ACCESSORIES = {
   },
 
 
-  // --- hat. Same treatment as royal-crown: its own lower attach, because
-  // he is a teardrop and the shared hat point leaves a solid crown hovering.
-  "neural-crown": {           // RARE
-    slot: "hat", img: "neural-crown.png", widthPct: 44,
-    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.25 },
-  },
+  // `neural-crown` was RETIRED (Megan, 2026-08-08). It was drawn at an angle
+  // so the far side of the band showed, which reads as a second object above
+  // his head; she chose to drop it rather than re-roll the art. Gone from
+  // here, the labels, the catalogue mirror and collections; deleted from live
+  // by migration-cut-items.sql. Its id never returns.
 
   // --- eyewear. The monocle is a ONE-EYE item, so it does not use the
   // slot's centred point: it sits on his RIGHT eye (stage x0.688, eye band
@@ -994,9 +999,14 @@ export const ACCESSORIES = {
   // crown shows THROUGH the ring rather than the ring floating above it.
   // Swept 0.235/0.275/0.31/0.35 — 0.31 is where the point clears the ring
   // and the flowers still rest on his head; 0.35 starts burying the point.
+  // ART RE-ROLLED 2026-08-08 (front-on — the old one showed the far side of
+  // the ring, which is why three rounds of moving it never helped: it was a
+  // drawing problem, not a placement one). New art is a wide shallow arc,
+  // 512x232, so the old numbers no longer mean anything. STARTING POINT for
+  // the dressing room, not a measured placement.
   "flower-crown": {
-    slot: "hat", img: "flower-crown.png", widthPct: 36,
-    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.31 },
+    slot: "hat", img: "flower-crown.png", widthPct: 52,
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.30 },
   },
 
   // --- girly (Lv12)

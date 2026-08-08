@@ -145,15 +145,35 @@ Worth knowing about what she changed:
   moot because she is re-rolling that art anyway. She also saw every one of
   these warnings live while placing them.
 
-### ✂️ `crystal-orbit` CUT (her call — "it looks dumb")
+### 🎩 Front-view re-rolls landed; `neural-crown` retired instead
+The three angled headpieces are resolved (2026-08-08, end of session):
+- **`flower-crown` and `wizard-hat` RE-ROLLED front-on and sliced in**, from
+  `art-source/tripo/flower crown.png` and `wizard hat.png` per
+  WAVE-3C-FRONT-VIEW-HATS-PROMPTS.md. Both keyed clean as a single component
+  with `--opaque`. New shapes: flower-crown **512×232** (wide shallow arc),
+  wizard-hat **512×451** (flat cut-out, straight bar brim). Same ids and
+  filenames, so this is a pure art swap — **no migration, no shop change.**
+  ⚠️ Their old `widthPct`/`anchor`/`attach` are meaningless against the new
+  art; the values in `renderer.js` now are a deliberate STARTING POINT
+  (flower-crown 52 / 0.5,0.85 / 0.5,0.30 · wizard-hat 45 / 0.5,0.95 /
+  0.5,0.32), marked as such in the comments, for Megan to settle in the
+  dressing room.
+- **`neural-crown` RETIRED rather than re-rolled** — her call. Same angled-
+  band fault; she chose to drop it. Hat slot 14 → 13.
+- ⚠️ **The filenames did not change**, so a browser will happily serve the
+  OLD picture from cache. Hard-refresh the dressing room (Ctrl+Shift+R)
+  after an art swap or you will be positioning the previous art.
+
+### ✂️ `crystal-orbit` and `neural-crown` CUT (her calls)
 Same treatment as shadow-crown and pearls: deleted outright, because the app
 is still with no learner. Gone from renderer, labels, collections,
-local-backend, schema.sql and the "Monarch" outfit in verify-store;
-`supabase/migration-cut-crystal-orbit.sql` removes it from live.
-`migration-effects-slot.sql` (which seeded it) is left untouched — an applied
-migration records what actually ran. **Effects is down to 3 items**
-(light-ring free / flame-ring / spark-halo), which still satisfies the
-"≥2 items and a free level-1 one" rule, but it is now the thinnest slot.
+local-backend, schema.sql and the "Monarch" outfit in verify-store.
+**Both cuts share ONE file — `supabase/migration-cut-items.sql`** — because
+neither had been run yet, so folding them together keeps her pending list to
+one item rather than two. (The migrations that SEEDED them stay untouched;
+an applied migration records what actually ran.) **Effects is down to 3
+items** (light-ring free / flame-ring / spark-halo), which still satisfies
+the "≥2 items and a free level-1 one" rule, but it is now the thinnest slot.
 
 ### ⏳ Waiting on her Tripo re-rolls (nothing broken meanwhile)
 - `art-source/tripo/WAVE-3B-EYE-BLIPS-PROMPTS.md` — four whole Blips drawn

@@ -54,7 +54,6 @@ export const ITEM_LABELS = {
   "tech-antenna": "Tech antennae",
   "headset-cup": "Headset cups",
   "data-fin": "Data fins",
-  "neural-crown": "Neural crown",
   "hud-monocle": "HUD monocle",
   "plasma-wings": "Plasma wings",
   "drone-wings": "Drone wings",

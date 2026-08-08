@@ -922,7 +922,6 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('crown',                   'hat',  180,  8, true,    34, 'cosmetic'),
   ('wizard-hat',              'hat',   55,  2, true,    35, 'cosmetic'),
   ('royal-crown',             'hat',  170,  8, true,    36, 'cosmetic'),
-  ('neural-crown',            'hat',  165,  7, true,    37, 'cosmetic'),
   ('power-gloves',           'arms',  100,  4, true,    41, 'cosmetic'),
   ('boxing-gloves',          'arms',   60,  3, true,    42, 'cosmetic'),
   ('mech-gauntlet',          'arms',   70,  3, true,    44, 'cosmetic'),

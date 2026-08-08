@@ -55,7 +55,7 @@ export const COLLECTIONS = {
       "light-ring", "flame-ring", "spark-halo", "cyber-visor",
       // Tripo wave 2 (2026-08-06)
       "tech-antenna", "hud-monocle", "mech-gauntlet", "headset-cup", "grapple-claw",
-      "data-fin", "energy-blade", "drone-wings", "plasma-wings", "neural-crown",
+      "data-fin", "energy-blade", "drone-wings", "plasma-wings",
     ],
   },
   eyes: {

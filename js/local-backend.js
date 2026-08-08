@@ -136,7 +136,6 @@ const SHOP_ITEMS = [
   { id: "energy-blade", slot: "arms", price: 135, minLevel: 6 },
   { id: "drone-wings", slot: "wings", price: 140, minLevel: 6 },
   { id: "plasma-wings", slot: "wings", price: 155, minLevel: 6 },
-  { id: "neural-crown", slot: "hat", price: 165, minLevel: 7 },
   // NECK slot (2026-08-07) — the first slot added since effects, and the same
   // three-place change: VALID_SLOTS above, mhq_equip's key list below, and
   // shop_items_slot_cat_check in the migration. Mirrors

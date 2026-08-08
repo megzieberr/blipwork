@@ -147,9 +147,10 @@ const MIGRATIONS = [
   // S3 (2026-08-08): wave-3 themed collections. star-wand is deliberately
   // NOT among these 16 — see the "star-wand stays cut" check below.
   ["migration-wave3-collections.sql", 16],
-  // Seeds nothing — it only DELETES crystal-orbit, which the retired scan
-  // above picks up and then enforces is absent from the client mirror.
-  ["migration-cut-crystal-orbit.sql", 0],
+  // Seeds nothing — it only DELETES crystal-orbit and neural-crown, which
+  // the retired scan above picks up and then enforces are absent from the
+  // client mirror.
+  ["migration-cut-items.sql", 0],
 ];
 // An applied migration is never edited — it is the record of what actually
 // ran — so an item that is seeded by one migration and later dropped by a
