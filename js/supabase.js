@@ -44,7 +44,8 @@ export const SupabaseBackend = {
   // ---- Blip: Phase 2 feeding / care / second blip ----
   async feed(username, password) { return rpc("mhq_feed", { p_username: username, p_password: password }); },
   async care(username, password) { return rpc("mhq_care", { p_username: username, p_password: password }); },
-  /* S4 (2026-08-08): eat one grocery out of the pantry. `item` must be a
+  /* S4b (2026-08-08 revision): eat one grocery off today's tray (soup and
+     medicine live in the pantry instead, via care()). `item` must be a
      category-'food' row that is NOT soup / medicine / treat — the server
      refuses those three by name (not_edible). */
   async eatFood(username, password, item) { return rpc("mhq_eat_food", { p_username: username, p_password: password, p_item: item }); },

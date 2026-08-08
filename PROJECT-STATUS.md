@@ -1,11 +1,96 @@
-# Project status — updated 2026-08-08 (room build S4 DONE, committed locally, NOT pushed)
+# Project status — updated 2026-08-08 (room build S4b DONE, committed locally, NOT pushed)
 
 ## ⏳ ONE MIGRATION NOW PENDING: `supabase/migration-food-shop.sql`
 
-S4 wrote it; **it has NOT been run.** It goes in AFTER
-`migration-level-curve-40.sql` (it re-creates two of that file's functions).
-Additive, idempotent, touches no learner row. The review session at the end
-of the room build applies it.
+S4 wrote it, S4b revised it in place (still unrun — **it has NOT been run**).
+It goes in AFTER `migration-level-curve-40.sql` (it re-creates two of that
+file's functions). Additive, idempotent, touches no learner row. The review
+session at the end of the room build applies it.
+
+---
+
+## 🍱 2026-08-08 — ROOM BUILD S4b: the fridge is gone, groceries live on a same-day tray
+
+Per the REVISION section of `homework-hub-companion/ROOM-BUILD-PLAN.md`
+(rulings 2 and 4), written after Megan saw an isometric Tripo room concept
+and redirected S4's food shop mid-build. Nothing pushed, `sw.js` untouched
+(still v38), no SQL run against live. `verify-store.html` is **green,
+2434/2434 checks** (was ~2418 — S4b adds the tray round-trip + day-roll
+expiry test, section 6h2).
+
+**HER RULING (verbatim): "they can't just buy and buy and buy and expect to
+be refunded."** Groceries no longer live in `students.pantry` — they land
+on a new `students.tray` (same `{item_id: count}` shape), day-stamped by
+`students.tray_day`. Any function that touches the tray (buy, eat, or a
+plain state read) calls a new helper, `_mhq_tray()`, which returns the
+stored tray unchanged if it was written today, or an empty one if it
+wasn't — **a stale tray is never restored, and there is no code path that
+refunds gold for it.** Soup, medicine and the daily cookie are completely
+untouched: soup/medicine still buy into the pantry (never expire, `mhq_care`
+not touched) and the cookie still has its own stamp from S4.
+
+**Since `migration-food-shop.sql` had never been run, it was EDITED IN
+PLACE rather than superseded by a new file** — same basis S2/S3 used for
+in-place edits of their own still-pending work. `schema.sql` mirrors
+everything: the two new columns, the `_mhq_tray` helper, and the revised
+`mhq_get_state` / `mhq_buy_item` / `mhq_eat_food` bodies.
+
+**UI: the fridge is gone from the room** (bed/closet/desk stay). What's on
+today's tray now renders beside the daily cookie, top-right of the room
+card — every tile draggable onto Blip exactly like the old fridge tiles
+(`js/companion/drag-feed.js` reused untouched, per the brief). Buying a
+grocery updates the tray display live even while the Food sheet stays open
+(the S1 "shopping trip keeps the sheet open" convention), the same
+fresh-read trick `renderFoodPanel` already used for its own counts. The
+Food panel's grocery store now says, right under the heading: *"Whatever
+you buy lands on today's tray, top-right — give it to Blip TODAY. Anything
+left there at midnight is gone, no refund."* The soup/medicine stash
+readout moved from the (now fridge-less) Food panel into the Pharmacy
+panel, with its own note that they never expire.
+
+### Verified
+- **`verify-store.html` green, 2434/2434.** New section 6h2 exercises the
+  full round-trip against the local backend: buy apple + banana → both land
+  on the tray; buy soup → lands in the pantry; `__BLIP_DEV__.skipDays(1)` →
+  the SAME row now reads an empty tray with the SAME gold balance (no
+  refund) and the pantry's soup untouched; the expired apple reports
+  `none_left` when eaten; a fresh buy the next day starts a clean tray with
+  no trace of yesterday's apple.
+- **Walked in the browser** (`?local=1`, fresh signup, zero console errors
+  throughout): room shows Bed/Closet/Desk only, no fridge; buying an apple
+  in the Food sheet shows the toast *"Apple is on today's tray — give it to
+  him today!"*, the sheet stays open, and a new draggable tile appears
+  top-right beside the cookie in the same render (no page reload needed);
+  tapping the tray tile (dispatched as real pointer events, same convention
+  `verify-store.html` uses, since this pane's synthetic clicks don't always
+  reach pointer listeners) fed him — gold spent, tray cleared, `last_fed_day`
+  updated, but `last_cookie_day` and `feed_count` both untouched, matching
+  the ruling exactly; the Pharmacy panel now shows the Soup/Medicine stash
+  counts with a "never expire" note.
+
+### Deviations and judgement calls (rule 9)
+1. **`_mhq_tray` follows every other `_mhq_*` helper's convention of no
+   explicit GRANT** (see the "noted, not urgent" item on `_mhq_roll_loot`
+   below) — it's called only from within other SECURITY DEFINER functions,
+   never directly by the client.
+2. **`mhq_get_state` writes back a cleared tray the first time it notices
+   staleness**, not just computes an empty view of one — "any read that
+   touches the tray first discards a stale one" was read as making the
+   clearing a fact on the row, not merely a display-time illusion.
+3. **The top-right tray reads `app.state` fresh, exactly like
+   `renderFoodPanel` already did**, rather than the `state` closure
+   captured at screen-render time — needed because a grocery buy
+   deliberately keeps the Food sheet open (S1's convention), and the old
+   fridge display lived *inside* that sheet where the fresh-read trick
+   already existed; the tray had to earn the same trick since it now lives
+   outside the sheet, in the room header.
+
+### Not done / punted
+- Not smoke-tested against live (the migration is still unrun) — same
+  position every room-build session has left its work in.
+- `.room-titlewrap`'s clearance for the wider tray (96px, was 44px for just
+  the cookie) is a best guess, not measured against a full tray of several
+  items on a real phone — worth a look once S5's real room art lands.
 
 ---
 

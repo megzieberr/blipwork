@@ -29,9 +29,11 @@
      • FREE cookie: one/day (guarded by its OWN last_cookie_day since
        S4), the ONLY thing that grows a blip (feed_count, +1 to EVERY
        blip), and it resets the sickness clock. Refused while sick.
-     • S4 grocery (eatFood): consumes one pantry food and resets the
-       sickness clock (last_fed_day), but NEVER touches the cookie stamp
-       and NEVER grows him — her ruling, so growth stays unbuyable.
+     • S4b grocery (eatFood): consumes one food off TODAY'S TRAY (not the
+       pantry — that's soup/medicine only) and resets the sickness clock
+       (last_fed_day), but NEVER touches the cookie stamp and NEVER grows
+       him — her ruling, so growth stays unbuyable. A stale tray (day
+       rolled) reads as empty — no refund.
      • Paid treat: gold sink, no growth, no clock, refused while sick.
      • Care = soup + medicine (bought into the pantry, prices server-
        side); 3 consecutive qualifying care days fully heal; a skipped
@@ -404,6 +406,11 @@ function ensureBlipFields(s) {
   if (typeof s.care_streak !== "number") { s.care_streak = 0; changed = true; }
   if (!("last_care_day" in s)) { s.last_care_day = null; changed = true; }
   if (!s.pantry || typeof s.pantry !== "object" || Array.isArray(s.pantry)) { s.pantry = {}; changed = true; }
+  // S4b (2026-08-08 revision): groceries moved OFF the pantry onto a
+  // same-day tray, day-stamped the same way as last_cookie_day. `tray_day`
+  // is this file's own day-index (see today()), not a calendar date.
+  if (!s.tray || typeof s.tray !== "object" || Array.isArray(s.tray)) { s.tray = {}; changed = true; }
+  if (!("tray_day" in s)) { s.tray_day = null; changed = true; }
   // Phase 3: treasure boxes. box_grants mirrors the server's box_grants TABLE
   // (one entry per assignment completed) and is what makes `done` and the box
   // count agree — see assignmentView.
@@ -560,6 +567,12 @@ export const LocalBackend = {
     const rec = stAll[s.id];
     if (ensureBlipFields(rec)) write(LS.students, stAll);
     ensureBlip(s.id, rec);
+    // S4b: a stale tray (yesterday's groceries) is discarded here too — no
+    // refund — and the clearing is persisted, mirroring mhq_get_state.
+    if (rec.tray_day != null && rec.tray_day < today() && Object.keys(rec.tray || {}).length) {
+      rec.tray = {};
+      write(LS.students, stAll);
+    }
     const progress = read(LS.progress, {})[s.id] || {};
     const totalXp = Object.values(progress).reduce((a, p) => a + (p.total_xp || 0), 0);
     const health = computeHealth(rec.last_fed_day, rec.care_streak);
@@ -574,7 +587,7 @@ export const LocalBackend = {
       ok: true, student: { id: s.id, name: s.display_name, username: s.username }, progress, totalXp, openQuests: openQuests(),
       gold: rec.gold, xp: rec.xp, levelInfo: levelInfo(rec.xp),
       blip: slot1 ? { name: slot1.name, colour: slot1.colour, owned: slot1.owned, equipped: slot1.equipped } : { name: "Blip", colour: "blue", owned: [], equipped: {} },
-      blips, shop: shopCatalogue(), foodShop: foodCatalogue(), pantry: rec.pantry || {},
+      blips, shop: shopCatalogue(), foodShop: foodCatalogue(), pantry: rec.pantry || {}, tray: rec.tray || {},
       health, canFeedToday, canCareToday, termRunning: running,
       // Phase 3
       assignment: assignmentView(rec),
@@ -682,15 +695,28 @@ export const LocalBackend = {
         rec.gold -= food.price; write(LS.students, stAll);
         return { ok: true, gold: rec.gold, treat: true };
       }
-      // soup / medicine — pharmacy is ALWAYS open, even at critical (both are
-      // minLevel 1, so S4's grocery gate below can never fire on them).
+      if (food.id === "soup" || food.id === "medicine") {
+        // pharmacy supplies — the PANTRY, unchanged by S4b, never expire.
+        // Pharmacy is ALWAYS open, even at critical (both are minLevel 1).
+        if (levelInfo(rec.xp).level < (food.minLevel || 1)) return { ok: false, error: "locked", minLevel: food.minLevel };
+        if (rec.gold < food.price) return { ok: false, error: "gold", price: food.price, gold: rec.gold };
+        rec.gold -= food.price;
+        rec.pantry = { ...(rec.pantry || {}) };
+        rec.pantry[food.id] = (rec.pantry[food.id] || 0) + 1;
+        write(LS.students, stAll);
+        return { ok: true, gold: rec.gold, pantry: rec.pantry };
+      }
+      // S4b: a grocery lands on TODAY'S TRAY. A stale tray (yesterday's
+      // leftovers) is discarded first — no refund, her ruling.
       if (levelInfo(rec.xp).level < (food.minLevel || 1)) return { ok: false, error: "locked", minLevel: food.minLevel };
       if (rec.gold < food.price) return { ok: false, error: "gold", price: food.price, gold: rec.gold };
       rec.gold -= food.price;
-      rec.pantry = { ...(rec.pantry || {}) };
-      rec.pantry[food.id] = (rec.pantry[food.id] || 0) + 1;
+      const tray = (rec.tray_day != null && rec.tray_day >= today()) ? { ...(rec.tray || {}) } : {};
+      tray[food.id] = (tray[food.id] || 0) + 1;
+      rec.tray = tray;
+      rec.tray_day = today();
       write(LS.students, stAll);
-      return { ok: true, gold: rec.gold, pantry: rec.pantry };
+      return { ok: true, gold: rec.gold, tray: rec.tray };
     }
 
     const itm = SHOP_ITEMS.find(x => x.id === item);
@@ -782,9 +808,11 @@ export const LocalBackend = {
     return { ok: true, blips: blipsView(s.id).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feedCount, growthStage: b.growthStage })),
       health: computeHealth(rec.last_fed_day, rec.care_streak), canFeedToday: false };
   },
-  /* ---- S4: eat a grocery out of the pantry (mirrors mhq_eat_food) ----
-     The pantry is server state, so "the food disappeared" has to be a
-     server fact — the drag gesture only asks for it.
+  /* ---- S4b: eat a grocery off TODAY'S TRAY (mirrors mhq_eat_food) ----
+     The tray is server state, so "the food disappeared" has to be a
+     server fact — the drag gesture only asks for it. A stale tray (day
+     rolled since the buy) reads as empty here, same as a fresh state read
+     — none_left, no refund.
 
      HER RULING (2026-08-08): eating a bought grocery
        DOES     consume the food and reset the SICKNESS CLOCK (it is real
@@ -808,18 +836,20 @@ export const LocalBackend = {
     const stage = computeHealth(rec.last_fed_day, rec.care_streak).stage;
     if (stage >= 2) return { ok: false, error: "REFUSES_FOOD" };
 
-    const have = (rec.pantry && rec.pantry[item]) || 0;
+    const tray = (rec.tray_day != null && rec.tray_day >= today()) ? { ...(rec.tray || {}) } : {};
+    const have = tray[item] || 0;
     if (have < 1) return { ok: false, error: "none_left" };
-    rec.pantry = { ...(rec.pantry || {}) };
-    if (have - 1 <= 0) delete rec.pantry[item];
-    else rec.pantry[item] = have - 1;
+    if (have - 1 <= 0) delete tray[item];
+    else tray[item] = have - 1;
+    rec.tray = tray;
+    rec.tray_day = today();
 
     // the clock resets; the cookie stamp and feed_count are left alone
     rec.last_fed_day = today();
 
     write(LS.students, stAll); writeBlips(s.id, blips);
     return {
-      ok: true, item, pantry: rec.pantry,
+      ok: true, item, tray: rec.tray,
       blips: blipsView(s.id),
       health: computeHealth(rec.last_fed_day, rec.care_streak),
       // the cookie survives a grocery feeding — that is the whole point

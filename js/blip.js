@@ -1,12 +1,20 @@
 /* ============================================================
-   BLIP SCREEN — his ROOM (room build S1, 2026-08-08): a fridge,
-   bed, closet and desk around Blip on his glow pedestal, an
-   inline-editable nickname, a top-right daily cookie, and five
-   round dock buttons (colours/shop/food/pharmacy/furniture) that
-   each open a bottom sheet over the lower room. All state comes
-   from app.state (a fresh mhq_get_state/local getState); every
-   action re-asks the backend and never trusts a locally-guessed
-   outcome — errors always toast, never fail silently.
+   BLIP SCREEN — his ROOM (room build S1, 2026-08-08): a bed,
+   closet and desk around Blip on his glow pedestal, an
+   inline-editable nickname, a top-right daily cookie + today's
+   grocery tray, and five round dock buttons (colours/shop/food/
+   pharmacy/furniture) that each open a bottom sheet over the
+   lower room. All state comes from app.state (a fresh
+   mhq_get_state/local getState); every action re-asks the
+   backend and never trusts a locally-guessed outcome — errors
+   always toast, never fail silently.
+
+   ROOM BUILD S4b (2026-08-08 revision) — the fridge is GONE.
+   A bought grocery now lands on TODAY'S TRAY, shown top-right
+   beside the daily cookie, draggable onto Blip the same way a
+   fridge tile always was. Unfed groceries expire at midnight
+   with no refund (her ruling) — see js/local-backend.js and
+   supabase/migration-food-shop.sql.
 
    PHASE 2 (2026-07-19) — feeding / growth / sickness / pharmacy /
    second Blip. Coded against the contract in PHASE-2-PLAN.md and
@@ -48,7 +56,7 @@ import { TRINKET_IDS, trinketExists, trinketTile } from "./companion/trinkets.js
 import { FOOD_IDS, foodExists, foodLabel, foodArt } from "./companion/food.js";
 import { makeDraggable } from "./companion/drag-feed.js";
 import { maybeShowReminderCard } from "./push.js";
-import { FRIDGE_SVG, BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
+import { BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
 
 /* Which slot tab the closet/shop is filtered to ("all" or a slot id).
    Module scope on purpose: every buy/wear action re-renders the whole
@@ -213,16 +221,16 @@ function foodErrMsg(code, r) {
     BLIP_TOO_SICK: "Blip won't get up right now…",
   })[code] || "Something went wrong — try again.";
 }
-/* S4: eating (mhq_eat_food) has two failures of its own. `none_left` can
-   only happen if two taps race the same last apple, which the per-render
-   `feeding` guard already prevents — but the server is the authority on
-   what is in the fridge, so the message exists. */
+/* S4b: eating (mhq_eat_food) has two failures of its own. `none_left` can
+   mean two taps raced the same last apple (the per-render `feeding` guard
+   already prevents that) or that the tray expired overnight — the server
+   is the authority on what's on the tray, so the message stays generic. */
 function eatErrMsg(code) {
   return ({
     auth: "Session problem — try logging in again.",
     no_item: "That isn't food.",
     not_edible: "That's medicine, not a snack — the Pharmacy gives those together.",
-    none_left: "There's none of that left in the fridge.",
+    none_left: "There's none of that left on the tray.",
     REFUSES_FOOD: "Blip doesn't feel like eating right now.",
   })[code] || "Something went wrong — try again.";
 }
@@ -269,7 +277,18 @@ function pharmacyCard(app, sess, state, health) {
   card.innerHTML = `<h3>PHARMACY</h3>
     <p class="muted small">Grocery run — soup and medicine together make one care day — 3 care days and Blip's back to himself.</p>
     <div class="care-hearts">${hearts} <span class="muted small">(${health.careStreak}/3 care days)</span></div>
+    <div class="stash-grid"></div>
+    <p class="muted small">Soup and medicine are given together when Blip is ill — they aren't snacks, and unlike groceries, they never expire.</p>
     <div class="pharmacy-grid"></div>`;
+  // room build S4b: moved here from the (now fridge-less) Food panel — soup
+  // and medicine live in the pantry, not today's tray, and stay put forever.
+  const stashGrid = card.querySelector(".stash-grid");
+  const pantry = state.pantry || {};
+  [["soup", "🍲", "Soup"], ["medicine", "💊", "Medicine"]].forEach(([id, icon, label]) => {
+    const row = el("div", "stash-item");
+    row.innerHTML = `<span class="si-icon">${icon}</span><span class="si-label">${label}</span><span class="si-count">×${pantry[id] || 0}</span>`;
+    stashGrid.appendChild(row);
+  });
   const grid = card.querySelector(".pharmacy-grid");
   pharmacyItems(state).forEach((item) => {
     const row = el("div", "pharmacy-item");
@@ -437,7 +456,7 @@ export function renderBlip(app, host) {
   const roomCard = el("div", "card room-card");
   host.appendChild(roomCard);
 
-  // ---- room layout: fridge / bed / closet / desk / Blip on his pedestal ----
+  // ---- room layout: bed / closet / desk / Blip on his pedestal ----
   // Built before the header so the header's cookie button can trigger the
   // same happy/refuse shake on the Blip stage the old feed button used.
   const room = el("div", "room");
@@ -455,11 +474,10 @@ export function renderBlip(app, host) {
     elm.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } });
   };
 
-  const fridgeEl = mkFurniture("fridge", FRIDGE_SVG, "Fridge");
   const bedEl = mkFurniture("bed", BED_SVG, "Bed");
   const closetEl = mkFurniture("closet", CLOSET_SVG, "Closet");
   const deskEl = mkFurniture("desk", DESK_SVG, "Desk");
-  room.append(fridgeEl, bedEl, closetEl, deskEl);
+  room.append(bedEl, closetEl, deskEl);
 
   const roomStage = el("div", "room-blip-stage");
   roomStage.innerHTML = `<div class="blip-pedestal"><i></i></div>`;
@@ -476,7 +494,6 @@ export function renderBlip(app, host) {
     tappable: true,
   });
 
-  bindTap(fridgeEl, () => openPanel("food", false));
   bindTap(closetEl, () => openPanel("inventory", false));
   bindTap(bedEl, () => triggerAnim(bedEl, "rf-wiggle", 500));
   bindTap(deskEl, () => triggerAnim(deskEl, "rf-wiggle", 500));
@@ -498,7 +515,7 @@ export function renderBlip(app, host) {
   cookieBtn.setAttribute("aria-label", cookieBtn.title);
   cookieBtn.disabled = !canFeedToday;
   /* S4: the cookie is DRAGGABLE too, with exactly the same rules as a
-     fridge tile — drop it on him and he eats it, drop it elsewhere and it
+     tray tile — drop it on him and he eats it, drop it elsewhere and it
      floats back with the sad face. Tap still works (bindFeedDrag treats a
      press that never moved as a tap), and so does keyboard Enter/Space.
      A spent cookie is a disabled <button>, which dispatches no pointer
@@ -525,7 +542,31 @@ export function renderBlip(app, host) {
     } catch { showToast("Can't reach the server — try again.", "error"); cookieBtn.disabled = false; }
   };
   bindFeedDrag(cookieBtn, eatCookie, () => el("div", "fg-emoji", "🍪"));
-  roomCard.appendChild(cookieBtn);
+
+  /* Room build S4b (2026-08-08 revision): the fridge is gone. A bought
+     grocery lands on TODAY'S TRAY instead, shown here beside the cookie —
+     every tile draggable onto Blip exactly like the old fridge tiles
+     (stashTile/bindFeedDrag, unchanged). Read app.state FRESH (not the
+     outer `state` closure) so a purchase made while the Food sheet is
+     still open (it deliberately stays open — see foodCard below) shows up
+     here the moment it lands, same reasoning renderFoodPanel already uses
+     for its own reads. */
+  const trayWrap = el("div", "room-tray");
+  function renderTray() {
+    clear(trayWrap);
+    trayWrap.appendChild(cookieBtn);
+    const st = app.state || {};
+    const trayObj = st.tray || {};
+    const hl = normalizeHealth(st);
+    const trayIds = FOOD_IDS.filter((id) => (trayObj[id] || 0) > 0);
+    if (trayIds.length) {
+      const strip = el("div", "tray-strip" + (hl.stage >= 2 ? " is-locked" : ""));
+      trayIds.forEach((id) => strip.appendChild(stashTile(id, trayObj[id], hl.stage >= 2)));
+      trayWrap.appendChild(strip);
+    }
+  }
+  renderTray();
+  roomCard.appendChild(trayWrap);
 
   // Phase 3: unopened treasure boxes ride top-left of the room card, so
   // they never collide with the cookie button top-right.
@@ -796,53 +837,28 @@ export function renderBlip(app, host) {
   }
 
   /* ============================================================
-     FOOD sheet — room build S4 (2026-08-08): the fridge stash on top
-     (drag one of these onto Blip) and the grocery store under it,
-     tiered with the same locked-"?" card the cosmetic shop uses.
+     FOOD sheet — room build S4b (2026-08-08 revision): the fridge is
+     gone; this panel is now the grocery store only. What's currently on
+     the tray shows top-right of the room (renderTray above), and the
+     soup/medicine readout moved to the Pharmacy panel.
 
      ⚠️ This panel reads app.state FRESH on every render rather than the
      `state` captured at screen-render time, because a grocery buy
      deliberately KEEPS THE SHEET OPEN and re-renders only the sheet body
      (see the buy handler). Reading the stale closure would show the old
-     fridge counts the moment you bought a second apple.
+     tray counts the moment you bought a second apple.
      ============================================================ */
   function renderFoodPanel(container) {
     const st = app.state || {};
-    const pantry = st.pantry || {};
+    const tray = st.tray || {};
     const lvl = (st.levelInfo && st.levelInfo.level) || 1;
     const hl = normalizeHealth(st);
-    const tooSick = hl.stage >= 2;
 
     container.appendChild(el("h2", "", "FOOD"));
-
-    // ---- the fridge stash: the only things he can be fed right now ----
-    const stashIds = FOOD_IDS.filter((id) => (pantry[id] || 0) > 0);
-    container.appendChild(el("p", "muted small", tooSick
-      ? "Blip is too poorly for snacks — the Pharmacy has soup and medicine."
-      : stashIds.length
-        ? "In the fridge — drag one onto Blip to feed him."
-        : "The fridge is empty. Buy something below, then drag it onto Blip."));
-
-    if (stashIds.length) {
-      const stash = el("div", "fridge-stash" + (tooSick ? " is-locked" : ""));
-      stashIds.forEach((id) => stash.appendChild(stashTile(id, pantry[id], tooSick)));
-      container.appendChild(stash);
-    }
-
-    // soup / medicine share the fridge but are NOT snacks: mhq_care eats
-    // them as a pair to make one care day, and mhq_eat_food refuses both
-    // by name. Shown as plain counts, deliberately not draggable.
-    const supplies = el("div", "stash-grid");
-    [["soup", "🍲", "Soup"], ["medicine", "💊", "Medicine"]].forEach(([id, icon, label]) => {
-      const row = el("div", "stash-item");
-      row.innerHTML = `<span class="si-icon">${icon}</span><span class="si-label">${label}</span><span class="si-count">×${pantry[id] || 0}</span>`;
-      supplies.appendChild(row);
-    });
-    container.appendChild(supplies);
-    container.appendChild(el("p", "muted small", "Soup and medicine are given together from the Pharmacy when Blip is ill — they aren't snacks."));
-
-    // ---- the grocery store ----
     container.appendChild(el("h3", "", "GROCERY STORE"));
+    container.appendChild(el("p", "muted small",
+      "⏰ Whatever you buy lands on today's tray, top-right — give it to Blip TODAY. Anything left there at midnight is gone, no refund."));
+
     if (hl.locks.shop) {
       container.appendChild(el("p", "muted small", "The shop's quiet for now — Blip needs some care first."));
       return;
@@ -862,7 +878,7 @@ export function renderBlip(app, host) {
       } else {
         container.appendChild(el("h3", "collection-label", tier.label));
         const grid = el("div", "shop-grid food-grid");
-        rows.forEach((it) => grid.appendChild(foodCard(it, pantry[it.id] || 0, lvl)));
+        rows.forEach((it) => grid.appendChild(foodCard(it, tray[it.id] || 0, lvl)));
         container.appendChild(grid);
       }
     });
@@ -880,7 +896,7 @@ export function renderBlip(app, host) {
       <div class="si-name">${foodLabel(item.id)}</div>
       <div class="si-meta">${lockedByLevel
         ? `unlocks at level ${item.minLevel}`
-        : `<span class="crystal">💎</span> ${item.price}`}${owned ? ` · ×${owned} in the fridge` : ""}</div>`;
+        : `<span class="crystal">💎</span> ${item.price}`}${owned ? ` · ×${owned} on today's tray` : ""}</div>`;
     card.querySelector(".food-stage").appendChild(foodArt(item.id));
 
     const btn = el("button", "btn small");
@@ -896,8 +912,9 @@ export function renderBlip(app, host) {
         try {
           const r = await api.buyItem(sess.username, sess.password, item.id);
           if (!r || !r.ok) { showToast(foodErrMsg(r && r.error, r), "error"); btn.disabled = false; return; }
-          showToast(`${foodLabel(item.id)} is in the fridge.`, "good");
+          showToast(`${foodLabel(item.id)} is on today's tray — give it to him today!`, "good");
           await app.refresh();
+          renderTray();
           if (activeSheetRerender) activeSheetRerender();   // stay in the shop
         } catch { showToast("Can't reach the server — try again.", "error"); btn.disabled = false; }
       });
@@ -906,7 +923,8 @@ export function renderBlip(app, host) {
     return card;
   }
 
-  /* One fridge tile — the thing the child actually drags.
+  /* One tray tile — the thing the child actually drags (room build S4b:
+     used only in the top-right tray now, the fridge is gone).
      Tap (and keyboard Enter/Space) feeds him too: a drag-only control is
      unusable with a keyboard, and the daily cookie was always tappable. */
   function stashTile(id, count, tooSick) {
@@ -923,7 +941,7 @@ export function renderBlip(app, host) {
   }
 
   /* ---------------- drag-to-feed ----------------
-     Shared by every fridge tile AND the daily cookie, so both behave
+     Shared by every tray tile AND the daily cookie, so both behave
      identically: drop him and he eats it, drop anywhere else and it
      floats home with no penalty while he pulls the sad face (Megan's
      ruling, 2026-08-07). Pointer events only — rAF never fires in the

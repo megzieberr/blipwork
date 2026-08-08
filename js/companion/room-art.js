@@ -5,15 +5,11 @@
    everywhere else — --panel-solid / --accent), swapped for
    Megan's Tripo art in a later session (S5). Everything exported
    from this file is a PLACEHOLDER — do not treat it as final art.
-   ============================================================ */
 
-/* PLACEHOLDER: fridge — rounded box, shelf line, two door handles */
-export const FRIDGE_SVG = `<svg viewBox="0 0 100 130" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="8" y="4" width="84" height="122" rx="12" fill="var(--panel-solid)" stroke="var(--accent)" stroke-width="3"/>
-  <line x1="8" y1="46" x2="92" y2="46" stroke="var(--accent)" stroke-width="2.5"/>
-  <rect x="76" y="14" width="6" height="20" rx="3" fill="var(--accent)"/>
-  <rect x="76" y="58" width="6" height="24" rx="3" fill="var(--accent)"/>
-</svg>`;
+   S4b (2026-08-08 revision): the fridge is gone — groceries live
+   on a same-day tray now (see js/blip.js), not a piece of room
+   furniture — so FRIDGE_SVG was removed rather than left unused.
+   ============================================================ */
 
 /* PLACEHOLDER: wide bed — headboard, frame, pillow block, blanket line */
 export const BED_SVG = `<svg viewBox="0 0 220 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

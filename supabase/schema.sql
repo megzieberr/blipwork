@@ -29,10 +29,12 @@
 --  the level curve, the trinket category and rows, the two new `students`
 --  columns, `milestone_grants`, and mhq_buy_item's non-cosmetic guard — IS
 --  mirrored below.
---  Room build S4 (2026-08-08) IS fully mirrored here — the 44 grocery rows,
---  the minLevel in mhq_get_state's foodShop payload, the level gate on
---  mhq_buy_item's food branch, and the whole mhq_eat_food function. It
---  touches no phase-3 object, so nothing about it is missing from this file.
+--  Room build S4 (2026-08-08), REVISED same day as S4b, IS fully mirrored
+--  here — the 44 grocery rows, the minLevel in mhq_get_state's foodShop
+--  payload, the level gate on mhq_buy_item's food branch, students.tray /
+--  students.tray_day, the _mhq_tray helper, and the whole mhq_eat_food
+--  function. It touches no phase-3 object, so nothing about it is missing
+--  from this file.
 --  To rebuild a project from scratch, run in this order:
 --      schema.sql  →  migration-phase3.sql  →  migration-level-curve-40.sql
 --      →  migration-food-shop.sql
@@ -90,7 +92,12 @@ create table public.students (
   last_cookie_day date,                           -- last day the FREE cookie was claimed (growth)
   care_streak    integer not null default 0,      -- consecutive qualifying care days
   last_care_day  date,                            -- last day soup+medicine were given
-  pantry         jsonb not null default '{}'::jsonb, -- consumables: {soup:n, medicine:n}
+  pantry         jsonb not null default '{}'::jsonb, -- consumables: {soup:n, medicine:n} — never expire
+  -- Room build S4b (2026-08-08 revision): groceries moved OFF the pantry
+  -- onto a same-day tray. Same shape, but day-stamped and lazily wiped —
+  -- EXPIRED FOOD IS GONE, NO REFUND. See _mhq_tray below.
+  tray           jsonb not null default '{}'::jsonb, -- today's groceries: {apple:n, ...}
+  tray_day       date,                              -- the day `tray` was last written
   -- Room build S2 (2026-08-08). Both are household-wide, not per blip.
   -- trinkets        = the junk loot on the Inventory shelf, e.g. ["old-sock"].
   --                   A shelf belongs to the ROOM, so it is not per blip: a
@@ -265,6 +272,16 @@ returns integer language sql immutable set search_path = '' as $$
               else 0 end;
 $$;
 
+-- Room build S4b (2026-08-08): today's tray, lazily expired. Returns the
+-- stored tray unchanged if it was written today, else an empty one — a
+-- stale tray is never restored (no refund). See supabase/migration-food-
+-- shop.sql §1c for the full reasoning.
+create or replace function public._mhq_tray(p_tray jsonb, p_tray_day date)
+returns jsonb language sql stable security definer set search_path = public, extensions as $$
+  select case when p_tray_day is null or p_tray_day < current_date
+              then '{}'::jsonb else coalesce(p_tray, '{}'::jsonb) end;
+$$;
+
 -- Is TODAY a qualifying day? (weekday Mon–Fri AND the term toggle is ON)
 create or replace function public._mhq_is_qual_day()
 returns boolean language plpgsql stable security definer set search_path = public, extensions as $$
@@ -362,6 +379,13 @@ begin
   perform public._mhq_ensure_blip(sid);
   select * into st from public.students where id = sid;
 
+  -- S4b: a stale tray (yesterday's groceries) is discarded here too — no
+  -- refund — and the clearing is written back so it is a fact on the row.
+  if st.tray_day is not null and st.tray_day < current_date then
+    update public.students set tray = '{}'::jsonb where id = sid;
+    st.tray := '{}'::jsonb;
+  end if;
+
   select coalesce(jsonb_object_agg(quest_id, jsonb_build_object(
             'best_score', best_score, 'attempts', attempts, 'total_xp', total_xp,
             'passed', passed, 'last_played_at', last_played_at)), '{}'::jsonb)
@@ -404,7 +428,7 @@ begin
     'progress', prog, 'totalXp', total, 'openQuests', open_q,
     'gold', st.gold, 'xp', st.xp, 'levelInfo', public._mhq_level(st.xp),
     'blip', blip1, 'blips', blips_j, 'shop', shop, 'foodShop', food,
-    'pantry', st.pantry, 'health', health,
+    'pantry', st.pantry, 'tray', coalesce(st.tray, '{}'::jsonb), 'health', health,
     'canFeedToday', can_feed, 'canCareToday', can_care,
     'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'));
 end; $$;
@@ -438,14 +462,18 @@ begin
     'health', public._mhq_health(current_date, st.care_streak), 'canFeedToday', false);
 end; $$;
 
--- ---------- Room build S4 (2026-08-08): eat a grocery ----------
--- Consumes one food from the pantry. The client plays the eating moment;
--- the server decides whether it happened, because the pantry is server
+-- ---------- Room build S4 (2026-08-08, revised S4b): eat a grocery ----------
+-- Consumes one food from TODAY'S TRAY. The client plays the eating moment;
+-- the server decides whether it happened, because the tray is server
 -- state. Shape follows mhq_feed / mhq_care exactly.
 --
 -- NOT EDIBLE: soup and medicine (mhq_care consumes those as a PAIR to make
--- one care day — eating the soup on its own would break the streak) and
--- 'treat' (a gold sink that never lands in the pantry).
+-- one care day — eating the soup on its own would break the streak, and
+-- they live in the pantry, not the tray) and 'treat' (a gold sink that
+-- never lands anywhere).
+--
+-- A STALE TRAY READS AS EMPTY (via _mhq_tray) — yesterday's uneaten
+-- groceries report `none_left`, exactly like never having bought them.
 --
 -- WHAT EATING DOES AND DOES NOT DO (her ruling, 2026-08-08):
 --   DOES     — consume the food and reset the SICKNESS CLOCK (last_fed_day).
@@ -454,11 +482,11 @@ end; $$;
 --   DOES NOT — touch the free cookie (that lives on its own stamp,
 --              last_cookie_day) and does NOT grow him. Growth stays
 --              cookie-only, so growth can never be bought.
--- See supabase/migration-food-shop.sql §1b for why the column was split.
+-- See supabase/migration-food-shop.sql §1b/§1c for why the columns split.
 create or replace function public.mhq_eat_food(p_username text, p_password text, p_item text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare v_sid uuid; v_st record; v_itm record; v_stg int;
-        v_pan jsonb; v_cnt int; v_blips jsonb; v_can_feed boolean;
+        v_tray jsonb; v_cnt int; v_blips jsonb; v_can_feed boolean;
 begin
   v_sid := public._mhq_auth(p_username, p_password);
   if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -471,25 +499,25 @@ begin
     return jsonb_build_object('ok', false, 'error', 'not_edible');
   end if;
 
-  select students.pantry, students.last_fed_day, students.last_cookie_day, students.care_streak
+  select students.tray, students.tray_day, students.last_fed_day, students.last_cookie_day, students.care_streak
     into v_st from public.students where students.id = v_sid for update;
 
   v_stg := (public._mhq_health(v_st.last_fed_day, v_st.care_streak)->>'stage')::int;
   if v_stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
 
-  v_pan := coalesce(v_st.pantry, '{}'::jsonb);
-  v_cnt := coalesce((v_pan->>p_item)::int, 0);
+  v_tray := public._mhq_tray(v_st.tray, v_st.tray_day);
+  v_cnt := coalesce((v_tray->>p_item)::int, 0);
   if v_cnt < 1 then return jsonb_build_object('ok', false, 'error', 'none_left'); end if;
   if v_cnt - 1 <= 0 then
-    v_pan := v_pan - p_item;                       -- `jsonb - text` drops the key
+    v_tray := v_tray - p_item;                     -- `jsonb - text` drops the key
   else
-    v_pan := jsonb_set(v_pan, array[p_item], to_jsonb(v_cnt - 1), true);
+    v_tray := jsonb_set(v_tray, array[p_item], to_jsonb(v_cnt - 1), true);
   end if;
 
-  -- last_fed_day only: the clock resets, the cookie stamp is untouched,
-  -- and feed_count (growth) is untouched.
+  -- last_fed_day resets the clock; the cookie stamp and feed_count
+  -- (growth) stay untouched.
   update public.students
-     set pantry = v_pan, last_fed_day = current_date, last_active_at = now()
+     set tray = v_tray, tray_day = current_date, last_fed_day = current_date, last_active_at = now()
    where students.id = v_sid;
 
   select coalesce(jsonb_agg(jsonb_build_object(
@@ -501,7 +529,7 @@ begin
 
   v_can_feed := (v_st.last_cookie_day is null or v_st.last_cookie_day < current_date);
 
-  return jsonb_build_object('ok', true, 'item', p_item, 'pantry', v_pan, 'blips', v_blips,
+  return jsonb_build_object('ok', true, 'item', p_item, 'tray', v_tray, 'blips', v_blips,
     'health', public._mhq_health(current_date, v_st.care_streak),
     -- the cookie survives a grocery feeding — that is the whole point
     'canFeedToday', v_can_feed);
@@ -634,13 +662,14 @@ begin
 end; $$;
 
 -- Buy: server-authoritative gold/level/ownership checks; row-locked to stop double-spend.
--- category 'cosmetic' = per-blip accessory (on p_slot); 'food' = pharmacy/grocery
--- (soup/medicine into the pantry; 'treat' = instant gold sink, refused while sick).
--- The pharmacy (soup/medicine) stays open at EVERY sickness stage.
+-- category 'cosmetic' = per-blip accessory (on p_slot); 'food' = pharmacy/grocery.
+-- soup/medicine -> the pantry (never expire); groceries -> today's TRAY (S4b,
+-- expires with no refund, see _mhq_tray); 'treat' = instant gold sink, refused
+-- while sick. The pharmacy (soup/medicine) stays open at EVERY sickness stage.
 create or replace function public.mhq_buy_item(p_username text, p_password text, p_item text, p_slot integer default 1)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare sid uuid; itm record; st record; lvl int; stg int; v_slot int := coalesce(p_slot, 1);
-        pan jsonb; cnt int; owned jsonb; new_gold int;
+        pan jsonb; cnt int; v_tray jsonb; owned jsonb; new_gold int;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -648,7 +677,8 @@ begin
   perform public._mhq_ensure_blip(sid);
   select * into itm from public.shop_items where item_id = p_item and active;
   if not found then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
-  select xp, gold, pantry, last_fed_day, care_streak into st from public.students where id = sid for update;
+  select xp, gold, pantry, tray, tray_day, last_fed_day, care_streak
+    into st from public.students where id = sid for update;
   stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
   -- S4 (2026-08-08): moved ABOVE the food branch so the grocery tiers can
   -- use it. The cosmetic branch below reads the same value.
@@ -660,10 +690,8 @@ begin
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
       update public.students set gold = gold - itm.price where id = sid returning gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'treat', true);
-    else
-      -- S4: the 44 groceries are level-gated like cosmetics. soup and
-      -- medicine are min_level 1, so the pharmacy is untouched — this
-      -- check can never fire on them, at any level or sickness stage.
+    elsif p_item in ('soup', 'medicine') then
+      -- pharmacy supplies: the PANTRY, unchanged by S4b — never expire.
       if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
       pan := coalesce(st.pantry, '{}'::jsonb);
@@ -671,6 +699,17 @@ begin
       pan := jsonb_set(pan, array[p_item], to_jsonb(cnt), true);
       update public.students set gold = gold - itm.price, pantry = pan where id = sid returning gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'pantry', pan);
+    else
+      -- S4b: the 44 groceries are level-gated like cosmetics, and land on
+      -- TODAY'S TRAY. A stale tray (yesterday's leftovers) is discarded
+      -- first via _mhq_tray — no refund, her ruling.
+      if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
+      if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
+      v_tray := public._mhq_tray(st.tray, st.tray_day);
+      v_tray := jsonb_set(v_tray, array[p_item], to_jsonb(coalesce((v_tray->>p_item)::int, 0) + 1), true);
+      update public.students set gold = gold - itm.price, tray = v_tray, tray_day = current_date
+        where id = sid returning gold into new_gold;
+      return jsonb_build_object('ok', true, 'gold', new_gold, 'tray', v_tray);
     end if;
   end if;
 

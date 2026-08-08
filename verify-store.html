@@ -557,7 +557,7 @@ for (const [file, expected] of MIGRATIONS) try {
   tick(buy.ok, `buying an apple failed: ${JSON.stringify(buy)}`);
   tick(buy.gold === goldBefore - 5, `an apple cost ${goldBefore - buy.gold}, expected 5`);
   st = await LocalBackend.getState(fu, "pw12");
-  tick((st.pantry || {}).apple === 1, `the apple did not land in the fridge: ${JSON.stringify(st.pantry)}`);
+  tick((st.tray || {}).apple === 1, `the apple did not land on today's tray: ${JSON.stringify(st.tray)}`);
   tick(st.canFeedToday === true, "buying food should not use up the daily cookie");
 
   /* Eating: consumed, resets the sickness clock, and — HER RULING
@@ -567,7 +567,7 @@ for (const [file, expected] of MIGRATIONS) try {
   const feedBefore = st.blips[0].feedCount;
   const eat = await LocalBackend.eatFood(fu, "pw12", "apple");
   tick(eat.ok && eat.item === "apple", `eating the apple failed: ${JSON.stringify(eat)}`);
-  tick(eat.pantry.apple === undefined, `an eaten apple is still in the fridge: ${JSON.stringify(eat.pantry)}`);
+  tick(eat.tray.apple === undefined, `an eaten apple is still on the tray: ${JSON.stringify(eat.tray)}`);
   tick(eat.blips[0].feedCount === feedBefore, "eating a bought grocery grew him — growth is cookie-only, or it becomes buyable");
   tick(eat.canFeedToday === true, "eating a grocery ate the free cookie — her ruling is that it never may");
   const stEat = await LocalBackend.getState(fu, "pw12");
@@ -628,7 +628,49 @@ for (const [file, expected] of MIGRATIONS) try {
   // buying a grocery must never touch the cosmetic closet
   const after = await LocalBackend.getState(fu, "pw12");
   tick(!(after.blip.owned || []).includes("apple"), "an apple ended up in the cosmetic closet");
-  say(`food round-trip: bought apple (5 💎) → fridge → eaten (clock reset, cookie untouched, no growth) → cookie still claimable and IS what grows him`);
+  say(`food round-trip: bought apple (5 💎) → tray → eaten (clock reset, cookie untouched, no growth) → cookie still claimable and IS what grows him`);
+}
+
+/* ---------- 6h2. the tray expires at day-roll — NO REFUND (S4b) ----------
+   Her ruling, 2026-08-08: "they can't just buy and buy and expect a
+   refund." A stale tray is discarded lazily, the next time anything
+   touches it — buy, eat, or a plain state read — and never restored.
+   Soup/medicine (the pantry) are exercised alongside it to prove they are
+   genuinely untouched by the day roll, not just uninvolved by luck. */
+{
+  const tu = "verify_tray_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(tu, "Tray", "pw12");
+  for (let i = 0; i < 10; i++) await LocalBackend.submitQuest(tu, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
+
+  const buyA = await LocalBackend.buyItem(tu, "pw12", "apple");
+  tick(buyA.ok && buyA.tray.apple === 1, `the apple did not land on today's tray: ${JSON.stringify(buyA)}`);
+  const buyB = await LocalBackend.buyItem(tu, "pw12", "banana");
+  tick(buyB.ok && buyB.tray.banana === 1, `the banana did not join it: ${JSON.stringify(buyB)}`);
+  const buySoup = await LocalBackend.buyItem(tu, "pw12", "soup");
+  tick(buySoup.ok, `soup purchase failed: ${JSON.stringify(buySoup)}`);
+
+  const before = await LocalBackend.getState(tu, "pw12");
+  tick((before.tray || {}).apple === 1 && (before.tray || {}).banana === 1, "getState lost today's tray before the roll");
+  tick((before.pantry || {}).soup === 1, "soup did not land in the pantry");
+
+  globalThis.__BLIP_DEV__.skipDays(1);
+  const after = await LocalBackend.getState(tu, "pw12");
+  tick(Object.keys(after.tray || {}).length === 0, `the tray should be empty after a day roll, got ${JSON.stringify(after.tray)}`);
+  tick((after.pantry || {}).soup === 1, "soup vanished across the day roll — only groceries expire");
+
+  const eatStale = await LocalBackend.eatFood(tu, "pw12", "apple");
+  tick(!eatStale.ok && eatStale.error === "none_left", `yesterday's apple was still edible: ${JSON.stringify(eatStale)}`);
+
+  // no gold refund for the expired food — she was explicit about this
+  tick(after.gold === before.gold, `the day roll changed the gold balance: before ${before.gold}, after ${after.gold}`);
+
+  // a fresh buy the next day starts a fresh tray, unaffected by yesterday's
+  const buyC = await LocalBackend.buyItem(tu, "pw12", "grapes");
+  tick(buyC.ok && buyC.tray.grapes === 1 && buyC.tray.apple === undefined,
+    `today's tray carried over yesterday's apple: ${JSON.stringify(buyC)}`);
+
+  globalThis.__BLIP_DEV__.reset();
+  say("tray expiry: buy apple+banana → day rolls → both gone, no refund, apple un-eatable; soup survives in the pantry; a fresh buy the next day starts clean");
 }
 
 /* ---------- 6i. the drag gesture itself (room build S4) ----------

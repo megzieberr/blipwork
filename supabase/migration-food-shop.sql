@@ -1,6 +1,8 @@
 -- ============================================================
 --  BLIPWORK — THE FOOD SHOP (44 groceries) + EATING
 --  Room build S4 (2026-08-08), per homework-hub-companion/ROOM-BUILD-PLAN.md
+--  REVISED same day for S4b (the isometric-room ruling): groceries no
+--  longer live in the pantry — see the TRAY block below.
 --
 --  ⏳ NOT RUN YET. Run the WHOLE file in the Supabase SQL editor (project
 --  pjpwhalcifywjrwtjknd) AFTER migration-level-curve-40.sql, whose
@@ -11,23 +13,33 @@
 --  WHAT THIS DOES
 --    1. Seeds 44 grocery rows into shop_items — category 'food', slot
 --       'food', exactly like soup/medicine/treat. NO new category, NO new
---       slot, NO new column, so nothing needs a new GRANT and
---       shop_items_slot_cat_check is untouched.
+--       slot, so shop_items_slot_cat_check is untouched.
 --    2. mhq_get_state's `foodShop` array now also carries `minLevel`. The
 --       column (shop_items.min_level) already existed — only the payload
---       is wider, so again no GRANT and no schema change.
---    3. mhq_buy_item's FOOD branch now honours min_level, the same way its
---       cosmetic branch always has. soup / medicine / treat are all
---       min_level 1, so the pharmacy is unchanged in every case.
+--       is wider, so again no GRANT and no schema change there.
+--    3. mhq_buy_item's FOOD branch now honours min_level on groceries, the
+--       same way its cosmetic branch always has. soup / medicine / treat
+--       stay min_level 1, so the pharmacy is unchanged in every case.
 --    4. NEW RPC mhq_eat_food(username, password, item) — consumes one
---       grocery from the pantry server-side and feeds him for the day.
---    5. NEW COLUMN students.last_cookie_day — see the ruling below. It
---       needs no GRANT of its own: `revoke all on public.students from
---       anon, authenticated` is already in force and every read goes
---       through a SECURITY DEFINER RPC (same basis as S2's two columns).
+--       grocery from TODAY'S TRAY server-side and feeds him for the day.
+--    5. NEW COLUMNS students.last_cookie_day, students.tray, students.tray_day
+--       — see the rulings below. None needs a GRANT of its own:
+--       `revoke all on public.students from anon, authenticated` is
+--       already in force and every read goes through a SECURITY DEFINER
+--       RPC (same basis as S2's two columns).
 --
---  WHY EATING IS NOT JUST A CLIENT ANIMATION: the pantry is server state,
---  so "the food disappeared" has to be a server fact. mhq_eat_food follows
+--  ⚠️ HER RULING (2026-08-08, S4b — the isometric-room revision): GROCERIES
+--  LIVE ON A SAME-DAY TRAY, NOT THE PANTRY. "They can't just buy and buy
+--  and buy and expect to be refunded." A grocery bought today sits on
+--  students.tray until it is fed to him or midnight passes, whichever
+--  comes first — EXPIRED FOOD IS GONE, NO REFUND. Soup, medicine and treat
+--  are UNCHANGED: soup/medicine still land in the pantry (mhq_care, not
+--  touched here, still eats them as a pair) and never expire; treat is
+--  still a pure gold sink. See the TRAY block (§1c) for the shape and the
+--  lazy-expiry rule.
+--
+--  WHY EATING IS NOT JUST A CLIENT ANIMATION: the tray is server state, so
+--  "the food disappeared" has to be a server fact. mhq_eat_food follows
 --  the shape mhq_feed / mhq_care already set — auth, row lock, refuse while
 --  sick, consume, return the fresh state.
 --
@@ -53,11 +65,13 @@
 --  every local variable here is v_-prefixed and every column reference is
 --  table-qualified.
 --
---  Mirrored in: supabase/schema.sql (rows + all three function changes),
---  js/local-backend.js (everything, for ?local=1), js/companion/food.js
---  (labels + art) and js/companion/collections.js (the tier gates).
---  verify-store.html parses THIS FILE and cross-checks all 44 rows against
---  the client mirror.
+--  Mirrored in: supabase/schema.sql (rows + all function changes + the
+--  tray columns), js/local-backend.js (everything, for ?local=1, including
+--  lazy tray expiry), js/companion/food.js (labels + art) and
+--  js/companion/collections.js (the tier gates). verify-store.html parses
+--  THIS FILE and cross-checks all 44 rows against the client mirror, and
+--  exercises the tray round-trip (buy -> on tray -> eat -> gone -> day
+--  rolls -> tray empties with no refund) against the local backend.
 -- ============================================================
 
 
@@ -157,7 +171,34 @@ update public.students
 
 
 -- ============================================================
---  1c. FEED — the free daily cookie, now guarded by its OWN stamp
+--  1c. TODAY'S TRAY (S4b, 2026-08-08 revision)
+--
+--  Groceries no longer live in students.pantry — that column stays exactly
+--  what it always was, soup/medicine counts for mhq_care. A bought grocery
+--  now lands on students.tray, same {item_id: count} shape as the pantry,
+--  day-stamped by students.tray_day.
+--
+--  LAZY EXPIRY: nothing runs at midnight. Instead, every function that
+--  touches the tray (buy, eat, or a plain state read) calls _mhq_tray()
+--  first, which returns the stored tray UNCHANGED if tray_day = today, or
+--  an empty one if tray_day is null or in the past. A stale tray is never
+--  restored — EXPIRED FOOD IS GONE, NO REFUND (her ruling: "they can't
+--  just buy and buy and expect a refund"). mhq_get_state additionally
+--  WRITES the cleared tray back the first time it notices it is stale, so
+--  the clearing is a fact on the row, not just a view of one.
+-- ============================================================
+alter table public.students add column if not exists tray jsonb not null default '{}'::jsonb;
+alter table public.students add column if not exists tray_day date;
+
+create or replace function public._mhq_tray(p_tray jsonb, p_tray_day date)
+returns jsonb language sql stable security definer set search_path = public, extensions as $$
+  select case when p_tray_day is null or p_tray_day < current_date
+              then '{}'::jsonb else coalesce(p_tray, '{}'::jsonb) end;
+$$;
+
+
+-- ============================================================
+--  1d. FEED — the free daily cookie, now guarded by its OWN stamp
 --
 --  Phase-2 body with two lines changed: the once-a-day check reads
 --  last_cookie_day, and the update writes BOTH stamps (the cookie is still
@@ -200,12 +241,12 @@ end; $$;
 
 
 -- ============================================================
---  2. STATE — the S2 body, with `minLevel` added to foodShop
+--  2. STATE — the S2 body, with `minLevel` added to foodShop and (S4b)
+--     TODAY'S TRAY discarded-if-stale and added to the payload.
 --
---  ONE line changes (the v_food select). Everything else is
---  migration-level-curve-40.sql §7 verbatim, because a create-or-replace
---  replaces the WHOLE function: leaving a line out here would silently
---  un-ship S2.
+--  Everything else is migration-level-curve-40.sql §7 verbatim, because a
+--  create-or-replace replaces the WHOLE function: leaving a line out here
+--  would silently un-ship S2.
 -- ============================================================
 create or replace function public.mhq_get_state(p_username text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
@@ -221,6 +262,15 @@ begin
   update public.students set last_active_at = now() where students.id = v_sid;
   perform public._mhq_ensure_blip(v_sid);
   select * into v_st from public.students where students.id = v_sid;
+
+  -- S4b: a stale tray (yesterday's groceries) is discarded HERE too — no
+  -- refund — and the clearing is written back so it is a fact on the row,
+  -- not just a view of it. A fresh tray costs nothing extra: v_st.tray is
+  -- already '{}' and this simply confirms it.
+  if v_st.tray_day is not null and v_st.tray_day < current_date then
+    update public.students set tray = '{}'::jsonb where students.id = v_sid;
+    v_st.tray := '{}'::jsonb;
+  end if;
 
   select coalesce(jsonb_object_agg(progress.quest_id, jsonb_build_object(
             'best_score', progress.best_score, 'attempts', progress.attempts,
@@ -282,7 +332,7 @@ begin
     'progress', v_prog, 'totalXp', v_total, 'openQuests', v_open_q,
     'gold', v_st.gold, 'xp', v_st.xp, 'levelInfo', public._mhq_level(v_st.xp),
     'blip', v_blip1, 'blips', v_blips_j, 'shop', v_shop, 'foodShop', v_food,
-    'pantry', v_st.pantry, 'health', v_health,
+    'pantry', v_st.pantry, 'tray', coalesce(v_st.tray, '{}'::jsonb), 'health', v_health,
     'canFeedToday', v_can_feed, 'canCareToday', v_can_care,
     'termRunning', (select coalesce((app_config.value = 'true'), false)
                       from public.app_config where app_config.key = 'term_running'),
@@ -295,20 +345,22 @@ end; $$;
 
 
 -- ============================================================
---  3. BUY — the S2 body, with a level gate on the FOOD branch
+--  3. BUY — the S2 body, with a level gate on the FOOD branch and (S4b)
+--     groceries landing on TODAY'S TRAY instead of the pantry.
 --
 --  The cosmetic branch has always refused an item above the learner's
 --  level; food never needed it because every food row was min_level 1.
 --  With 44 tiered groceries it does, and "the client only offers what it
 --  should" is not a rule — the server has to say no.
 --
---  soup / medicine / treat stay min_level 1, so the pharmacy is completely
---  unaffected: this check can never fire on them.
+--  soup / medicine stay min_level 1 and still land in the PANTRY —
+--  unchanged, never expire — so the pharmacy is completely unaffected by
+--  any of this.
 -- ============================================================
 create or replace function public.mhq_buy_item(p_username text, p_password text, p_item text, p_slot integer default 1)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare sid uuid; itm record; st record; lvl int; stg int; v_slot int := coalesce(p_slot, 1);
-        pan jsonb; cnt int; owned jsonb; new_gold int;
+        pan jsonb; cnt int; v_tray jsonb; owned jsonb; new_gold int;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -316,7 +368,8 @@ begin
   perform public._mhq_ensure_blip(sid);
   select * into itm from public.shop_items where shop_items.item_id = p_item and shop_items.active;
   if not found then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
-  select students.xp, students.gold, students.pantry, students.last_fed_day, students.care_streak
+  select students.xp, students.gold, students.pantry, students.tray, students.tray_day,
+         students.last_fed_day, students.care_streak
     into st from public.students where students.id = sid for update;
   stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
   -- moved ABOVE the food branch (S4) so the grocery tiers can use it too
@@ -328,9 +381,8 @@ begin
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
       update public.students set gold = students.gold - itm.price where students.id = sid returning students.gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'treat', true);
-    else
-      -- S4: the grocery tiers are level-gated. soup/medicine are min_level 1,
-      -- so the pharmacy stays open at every level and every health stage.
+    elsif p_item in ('soup', 'medicine') then
+      -- pharmacy supplies: the PANTRY, exactly as before S4b — never expire.
       if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
       pan := coalesce(st.pantry, '{}'::jsonb);
@@ -338,6 +390,16 @@ begin
       pan := jsonb_set(pan, array[p_item], to_jsonb(cnt), true);
       update public.students set gold = students.gold - itm.price, pantry = pan where students.id = sid returning students.gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'pantry', pan);
+    else
+      -- S4b: a grocery lands on TODAY'S TRAY. A stale tray (yesterday's
+      -- leftovers) is discarded first via _mhq_tray — no refund, her ruling.
+      if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
+      if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
+      v_tray := public._mhq_tray(st.tray, st.tray_day);
+      v_tray := jsonb_set(v_tray, array[p_item], to_jsonb(coalesce((v_tray->>p_item)::int, 0) + 1), true);
+      update public.students set gold = students.gold - itm.price, tray = v_tray, tray_day = current_date
+        where students.id = sid returning students.gold into new_gold;
+      return jsonb_build_object('ok', true, 'gold', new_gold, 'tray', v_tray);
     end if;
   end if;
 
@@ -359,7 +421,7 @@ end; $$;
 
 
 -- ============================================================
---  4. EAT — consume one grocery from the pantry
+--  4. EAT — consume one grocery from TODAY'S TRAY (S4b)
 --
 --  Follows mhq_feed / mhq_care exactly: auth, ensure blip, row lock,
 --  refuse while sick, consume, return the fresh state. The client plays
@@ -367,8 +429,13 @@ end; $$;
 --
 --  NOT EDIBLE HERE: soup and medicine (mhq_care consumes those, together,
 --  as one care day — eating the soup separately would break the streak
---  mechanic) and 'treat' (a pure gold sink that never lands in the
---  pantry, so there is nothing to consume).
+--  mechanic, and they live in the pantry, not the tray) and 'treat' (a
+--  pure gold sink that never lands anywhere, so there is nothing to
+--  consume).
+--
+--  A STALE TRAY READS AS EMPTY — via _mhq_tray, same as buy and state — so
+--  yesterday's uneaten groceries report `none_left`, exactly like never
+--  having bought them. No refund; that is the whole point of the tray.
 --
 --  WHAT EATING DOES AND DOES NOT DO (her ruling, see the header):
 --    DOES  — consume the food, and reset the sickness clock. It is real
@@ -381,7 +448,7 @@ end; $$;
 create or replace function public.mhq_eat_food(p_username text, p_password text, p_item text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare v_sid uuid; v_st record; v_itm record; v_stg int;
-        v_pan jsonb; v_cnt int; v_blips jsonb; v_can_feed boolean;
+        v_tray jsonb; v_cnt int; v_blips jsonb; v_can_feed boolean;
 begin
   v_sid := public._mhq_auth(p_username, p_password);
   if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -394,25 +461,26 @@ begin
     return jsonb_build_object('ok', false, 'error', 'not_edible');
   end if;
 
-  select students.pantry, students.last_fed_day, students.last_cookie_day, students.care_streak
+  select students.tray, students.tray_day, students.last_fed_day, students.last_cookie_day, students.care_streak
     into v_st from public.students where students.id = v_sid for update;
 
   v_stg := (public._mhq_health(v_st.last_fed_day, v_st.care_streak)->>'stage')::int;
   if v_stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
 
-  v_pan := coalesce(v_st.pantry, '{}'::jsonb);
-  v_cnt := coalesce((v_pan->>p_item)::int, 0);
+  v_tray := public._mhq_tray(v_st.tray, v_st.tray_day);
+  v_cnt := coalesce((v_tray->>p_item)::int, 0);
   if v_cnt < 1 then return jsonb_build_object('ok', false, 'error', 'none_left'); end if;
   if v_cnt - 1 <= 0 then
-    v_pan := v_pan - p_item;                       -- `jsonb - text` drops the key
+    v_tray := v_tray - p_item;                     -- `jsonb - text` drops the key
   else
-    v_pan := jsonb_set(v_pan, array[p_item], to_jsonb(v_cnt - 1), true);
+    v_tray := jsonb_set(v_tray, array[p_item], to_jsonb(v_cnt - 1), true);
   end if;
 
-  -- last_fed_day only: the clock resets, the cookie stamp is not touched,
-  -- and feed_count (growth) is not touched.
+  -- last_fed_day resets the clock; the cookie stamp and feed_count (growth)
+  -- stay untouched. tray_day is set for completeness — it can only still be
+  -- today's here, since a stale tray would have already returned none_left.
   update public.students
-     set pantry = v_pan, last_fed_day = current_date, last_active_at = now()
+     set tray = v_tray, tray_day = current_date, last_fed_day = current_date, last_active_at = now()
    where students.id = v_sid;
 
   select coalesce(jsonb_agg(jsonb_build_object(
@@ -424,7 +492,7 @@ begin
 
   v_can_feed := (v_st.last_cookie_day is null or v_st.last_cookie_day < current_date);
 
-  return jsonb_build_object('ok', true, 'item', p_item, 'pantry', v_pan, 'blips', v_blips,
+  return jsonb_build_object('ok', true, 'item', p_item, 'tray', v_tray, 'blips', v_blips,
     'health', public._mhq_health(current_date, v_st.care_streak),
     -- the cookie survives a grocery feeding — that is the whole point
     'canFeedToday', v_can_feed);
@@ -451,9 +519,9 @@ grant execute on function public.mhq_eat_food(text, text, text) to anon, authent
 --    select public.mhq_get_state('someuser','somepassword') -> 'foodShop' -> 3;
 --
 --    -- a level-1 learner can buy an apple but not a steak
---    select public.mhq_buy_item('someuser','somepassword','apple');    -- ok, pantry.apple = 1
+--    select public.mhq_buy_item('someuser','somepassword','apple');    -- ok, tray.apple = 1
 --    select public.mhq_buy_item('someuser','somepassword','steak');    -- locked, minLevel 11
---    select public.mhq_buy_item('someuser','somepassword','soup');     -- ok (pharmacy unchanged)
+--    select public.mhq_buy_item('someuser','somepassword','soup');     -- ok, pantry.soup = 1 (unchanged)
 --
 --    -- eating consumes it, feeds the CLOCK, and leaves the cookie alone
 --    select public.mhq_eat_food('someuser','somepassword','apple');    -- ok, canFeedToday TRUE
@@ -470,4 +538,14 @@ grant execute on function public.mhq_eat_food(text, text, text) to anon, authent
 --    -- …and eating again afterwards still does not hand the cookie back
 --    select public.mhq_buy_item('someuser','somepassword','banana');
 --    select public.mhq_eat_food('someuser','somepassword','banana') -> 'canFeedToday';  -- false
+--
+--    -- S4b: THE TRAY EXPIRES, NO REFUND. Buy something, then move the
+--    -- server's clock forward a day (there is no clock to move on live —
+--    -- this is what verify-store.html exercises instead via __BLIP_DEV__)
+--    -- and confirm the SAME row shows an empty tray and the same gold:
+--    select public.mhq_buy_item('someuser','somepassword','grapes');
+--    select public.mhq_get_state('someuser','somepassword') -> 'tray';               -- {"grapes":1}
+--    -- … a day later, on live, with no action taken …
+--    select public.mhq_get_state('someuser','somepassword') -> 'tray';               -- {}
+--    select public.mhq_eat_food('someuser','somepassword','grapes');   -- none_left, no refund
 -- ============================================================

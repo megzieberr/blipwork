@@ -92,8 +92,8 @@ export function foodExists(id) { return Object.prototype.hasOwnProperty.call(FOO
 export function foodLabel(id) { return FOODS[id] || id; }
 export function foodImgSrc(id) { return `${DIR}/${id}.png`; }
 
-/* One picture, sized by its container. Used by the shop card, the fridge
-   stash tile and the drag ghost, so all three always show the same art. */
+/* One picture, sized by its container. Used by the shop card, the tray
+   tile and the drag ghost, so all three always show the same art. */
 export function foodArt(id) {
   const wrap = el("div", "food-art");
   const img = document.createElement("img");
