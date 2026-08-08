@@ -1388,6 +1388,25 @@ export function playMoment(handle, name) {
   });
 }
 
+/* How long a moment runs, in ms. Exported (S4, 2026-08-08) so a caller can
+   let the animation finish before it tears the screen down: drag-to-feed
+   plays `eating` and then does the app's usual refresh + re-render, which
+   REPLACES the <img> the frames are running on. Without this the eating
+   moment was over in one frame — the whole point of the gesture.
+
+   Not a hard-coded number at the call site on purpose: the frame interval
+   and the per-moment loop count both live here, so this stays right if
+   either is ever retuned. runFrameLoop's own onDone can't be used for it —
+   it deliberately does NOT fire when the element unmounts mid-loop, which
+   is exactly the case a caller would be waiting on. */
+export function momentDurationMs(name) {
+  if (!MOMENTS.includes(name)) return 0;
+  if (reducedMotion()) return 0;
+  const loops = MOMENT_LOOP_OVERRIDES[name] || MOMENT_LOOPS;
+  const frames = ANIM_FRAME_COUNTS[name] || ANIM_FRAME_COUNT;
+  return loops * frames * FRAME_INTERVAL_MS;
+}
+
 /* ---------- tap-to-react (2026-07-19) ----------
    Tapping Blip anywhere he's shown makes him react: a wink, then a hop,
    alternating so repeat taps don't feel canned.

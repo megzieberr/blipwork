@@ -11,11 +11,15 @@
      auth/quests: signup, login, setPassword, getState, submitQuest,
                   logStruggle
      blip:        buyItem(u,p,item,slot=1)  — item may be a cosmetic id
-                    OR a food id ('soup','medicine','treat')
+                    OR a food id ('soup','medicine','treat', or any of the
+                    44 groceries added in S4)
                   equip(u,p,{equipped,colour,blipName,slot=1})
                   gallery
      Phase 2:     feed(u,p), care(u,p),
                   claimSecondBlip(u,p,name,colour)
+     S4 food:     eatFood(u,p,item) — consumes one grocery from the pantry
+                    and counts as today's feeding. Refuses soup/medicine/
+                    treat (not_edible) and an empty stash (none_left).
      Phase 3:     pushSubscribe(u,p,sub), pushUnsubscribe(u,p,endpoint),
                   openBox(u,p)
                   — the two push methods are honest no-ops on the local

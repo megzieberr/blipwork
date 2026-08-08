@@ -29,8 +29,15 @@
 --  the level curve, the trinket category and rows, the two new `students`
 --  columns, `milestone_grants`, and mhq_buy_item's non-cosmetic guard — IS
 --  mirrored below.
+--  Room build S4 (2026-08-08) IS fully mirrored here — the 44 grocery rows,
+--  the minLevel in mhq_get_state's foodShop payload, the level gate on
+--  mhq_buy_item's food branch, and the whole mhq_eat_food function. It
+--  touches no phase-3 object, so nothing about it is missing from this file.
 --  To rebuild a project from scratch, run in this order:
 --      schema.sql  →  migration-phase3.sql  →  migration-level-curve-40.sql
+--      →  migration-food-shop.sql
+--  (S4's rows and functions are already in schema.sql, so that last file is
+--   a no-op on a fresh build — run it anyway, so the order matches live.)
 --
 --  (It REPLACES the old roster-based login with self sign-up: learners create
 --   their own account.)
@@ -361,9 +368,13 @@ begin
   select coalesce(jsonb_agg(jsonb_build_object(
             'id', item_id, 'slot', slot, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
     into shop from public.shop_items where active and category = 'cosmetic';
-  -- pharmacy / grocery, separate array so `shop` keeps its shape
+  -- pharmacy / grocery, separate array so `shop` keeps its shape.
+  -- S4 (2026-08-08): `minLevel` joined the payload when the 44 groceries
+  -- landed — the tiers are level-gated, and without it a food card cannot
+  -- say "Unlocks at Lv N". No new column: shop_items.min_level was always
+  -- there, so nothing needed a new GRANT.
   select coalesce(jsonb_agg(jsonb_build_object(
-            'id', item_id, 'kind', item_id, 'price', price) order by sort), '[]'::jsonb)
+            'id', item_id, 'kind', item_id, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
     into food from public.shop_items where active and category = 'food';
 
   health := public._mhq_health(st.last_fed_day, st.care_streak);
@@ -414,6 +425,75 @@ begin
     into blips_j from public.blips where student_id = sid;
   return jsonb_build_object('ok', true, 'blips', blips_j,
     'health', public._mhq_health(current_date, st.care_streak), 'canFeedToday', false);
+end; $$;
+
+-- ---------- Room build S4 (2026-08-08): eat a grocery ----------
+-- Consumes one food from the pantry. The client plays the eating moment;
+-- the server decides whether it happened, because the pantry is server
+-- state. Shape follows mhq_feed / mhq_care exactly.
+--
+-- NOT EDIBLE: soup and medicine (mhq_care consumes those as a PAIR to make
+-- one care day — eating the soup on its own would break the streak) and
+-- 'treat' (a gold sink that never lands in the pantry).
+--
+-- THE DAILY-FEEDING RULE: eating IS the daily feeding. It resets the
+-- sickness clock and pays the growth credit — but that credit is capped at
+-- once a day, exactly like the free cookie, so GROWTH CAN NEVER BE BOUGHT.
+-- A later snack the same day is still eaten and still animates; it just
+-- grows nothing and moves no clock. See supabase/migration-food-shop.sql.
+create or replace function public.mhq_eat_food(p_username text, p_password text, p_item text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_st record; v_itm record; v_stg int;
+        v_pan jsonb; v_cnt int; v_last date; v_fed boolean := false; v_blips jsonb;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  perform public._mhq_ensure_blip(v_sid);
+
+  select * into v_itm from public.shop_items
+   where shop_items.item_id = p_item and shop_items.active and shop_items.category = 'food';
+  if not found then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
+  if p_item in ('soup', 'medicine', 'treat') then
+    return jsonb_build_object('ok', false, 'error', 'not_edible');
+  end if;
+
+  select students.pantry, students.last_fed_day, students.care_streak
+    into v_st from public.students where students.id = v_sid for update;
+
+  v_stg := (public._mhq_health(v_st.last_fed_day, v_st.care_streak)->>'stage')::int;
+  if v_stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
+
+  v_pan := coalesce(v_st.pantry, '{}'::jsonb);
+  v_cnt := coalesce((v_pan->>p_item)::int, 0);
+  if v_cnt < 1 then return jsonb_build_object('ok', false, 'error', 'none_left'); end if;
+  if v_cnt - 1 <= 0 then
+    v_pan := v_pan - p_item;                       -- `jsonb - text` drops the key
+  else
+    v_pan := jsonb_set(v_pan, array[p_item], to_jsonb(v_cnt - 1), true);
+  end if;
+
+  if v_st.last_fed_day is null or v_st.last_fed_day < current_date then
+    update public.blips set feed_count = blips.feed_count + 1 where blips.student_id = v_sid;
+    v_last := current_date;
+    v_fed  := true;
+  else
+    v_last := v_st.last_fed_day;
+  end if;
+
+  update public.students
+     set pantry = v_pan, last_fed_day = v_last, last_active_at = now()
+   where students.id = v_sid;
+
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'slot', blips.slot, 'name', blips.name, 'colour', blips.colour,
+            'feedCount', blips.feed_count,
+            'growthStage', public._mhq_growth(blips.feed_count),
+            'owned', blips.owned_items, 'equipped', blips.equipped) order by blips.slot), '[]'::jsonb)
+    into v_blips from public.blips where blips.student_id = v_sid;
+
+  return jsonb_build_object('ok', true, 'item', p_item, 'pantry', v_pan, 'blips', v_blips,
+    'grewToday', v_fed,
+    'health', public._mhq_health(v_last, v_st.care_streak), 'canFeedToday', false);
 end; $$;
 
 create or replace function public.mhq_care(p_username text, p_password text)
@@ -559,6 +639,9 @@ begin
   if not found then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
   select xp, gold, pantry, last_fed_day, care_streak into st from public.students where id = sid for update;
   stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
+  -- S4 (2026-08-08): moved ABOVE the food branch so the grocery tiers can
+  -- use it. The cosmetic branch below reads the same value.
+  lvl := (public._mhq_level(st.xp)->>'level')::int;
 
   if itm.category = 'food' then
     if p_item = 'treat' then
@@ -567,6 +650,10 @@ begin
       update public.students set gold = gold - itm.price where id = sid returning gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'treat', true);
     else
+      -- S4: the 44 groceries are level-gated like cosmetics. soup and
+      -- medicine are min_level 1, so the pharmacy is untouched — this
+      -- check can never fire on them, at any level or sickness stage.
+      if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
       pan := coalesce(st.pantry, '{}'::jsonb);
       cnt := coalesce((pan->>p_item)::int, 0) + 1;
@@ -585,7 +672,6 @@ begin
 
   -- cosmetic accessory, on the given blip slot
   if stg >= 3 then return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK'); end if;
-  lvl := (public._mhq_level(st.xp)->>'level')::int;
   select owned_items into owned from public.blips where student_id = sid and slot = v_slot;
   if owned is null then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
   if owned ? p_item then return jsonb_build_object('ok', false, 'error', 'owned'); end if;
@@ -814,6 +900,7 @@ grant execute on function
   public.mhq_equip(text, text, jsonb, text, text, integer),
   public.mhq_gallery(text, text),
   public.mhq_feed(text, text),
+  public.mhq_eat_food(text, text, text),
   public.mhq_care(text, text),
   public.mhq_claim_second_blip(text, text, text, text),
   public.mhq_admin_login(text),
@@ -990,4 +1077,59 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('hair-bow',      'hat',      75, 12, true, 103, 'cosmetic'),
   ('butterfly-wing','wings',    95, 12, true, 104, 'cosmetic'),
   ('fairy-wing',    'wings',   150, 16, true, 105, 'cosmetic')
+on conflict (item_id) do nothing;
+
+-- Room build S4 (2026-08-08): the grocery store — 44 more category-'food'
+-- rows beside soup/medicine/treat. No new category, no new slot, no new
+-- column. min_level is the tier gate and mhq_buy_item enforces it; which
+-- tier a food belongs to (and therefore which locked "?" card hides it in
+-- the shop) is a CLIENT grouping in js/companion/collections.js, so Megan
+-- can retune a threshold without a migration. Labels and art:
+-- js/companion/food.js. See supabase/migration-food-shop.sql.
+--   Fresh Lv 1 · Bakery Lv 4 · Hot meals Lv 7 · Braai Lv 11 · Sweets Lv 14 · Drinks Lv 17
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('apple',          'food',  5,  1, true, 110, 'food'),
+  ('banana',         'food',  5,  1, true, 111, 'food'),
+  ('grapes',         'food',  8,  1, true, 112, 'food'),
+  ('naartjie',       'food',  6,  1, true, 113, 'food'),
+  ('strawberry',     'food',  7,  1, true, 114, 'food'),
+  ('watermelon',     'food',  9,  1, true, 115, 'food'),
+  ('broccoli',       'food',  4,  1, true, 116, 'food'),
+  ('carrot',         'food',  4,  1, true, 117, 'food'),
+  ('green-pepper',   'food',  5,  1, true, 118, 'food'),
+  ('mielie',         'food',  6,  1, true, 119, 'food'),
+  ('peas',           'food',  4,  1, true, 120, 'food'),
+  ('tomato',         'food',  5,  1, true, 121, 'food'),
+  ('choc-cookie',    'food', 12,  4, true, 130, 'food'),
+  ('croissant',      'food', 14,  4, true, 131, 'food'),
+  ('doughnut',       'food', 15,  4, true, 132, 'food'),
+  ('cupcake',        'food', 16,  4, true, 133, 'food'),
+  ('custard-tart',   'food', 18,  4, true, 134, 'food'),
+  ('koeksister',     'food', 20,  4, true, 135, 'food'),
+  ('toastie',        'food', 22,  7, true, 140, 'food'),
+  ('hot-dog',        'food', 24,  7, true, 141, 'food'),
+  ('nuggets',        'food', 26,  7, true, 142, 'food'),
+  ('spaghetti',      'food', 28,  7, true, 143, 'food'),
+  ('burger',         'food', 30,  7, true, 144, 'food'),
+  ('pizza',          'food', 32,  7, true, 145, 'food'),
+  ('biltong',        'food', 34, 11, true, 150, 'food'),
+  ('drumstick',      'food', 36, 11, true, 151, 'food'),
+  ('boerewors',      'food', 38, 11, true, 152, 'food'),
+  ('sosatie',        'food', 40, 11, true, 153, 'food'),
+  ('lamb-chop',      'food', 44, 11, true, 154, 'food'),
+  ('steak',          'food', 48, 11, true, 155, 'food'),
+  ('lollipop',       'food', 18, 14, true, 160, 'food'),
+  ('gummy-bear',     'food', 20, 14, true, 161, 'food'),
+  ('marshmallow',    'food', 22, 14, true, 162, 'food'),
+  ('jelly-beans',    'food', 24, 14, true, 163, 'food'),
+  ('toffee',         'food', 26, 14, true, 164, 'food'),
+  ('chocolate-bar',  'food', 30, 14, true, 165, 'food'),
+  ('water-bottle',   'food', 20, 17, true, 170, 'food'),
+  ('milk',           'food', 24, 17, true, 171, 'food'),
+  ('juice-box',      'food', 26, 17, true, 172, 'food'),
+  ('cold-drink',     'food', 28, 17, true, 173, 'food'),
+  ('orange-juice',   'food', 30, 17, true, 174, 'food'),
+  ('cola',           'food', 32, 17, true, 175, 'food'),
+  ('hot-chocolate',  'food', 38, 17, true, 176, 'food'),
+  ('milkshake',      'food', 45, 17, true, 177, 'food')
 on conflict (item_id) do nothing;

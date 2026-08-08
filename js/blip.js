@@ -34,14 +34,19 @@ import { el, clear, showToast } from "./ui.js";
    renderHub/renderChapter/renderGallery elsewhere), which collides with
    the companion module's new renderBlip(el, opts) if imported under its
    own name into the same module scope. */
-import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment } from "./companion/renderer.js";
+import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment, momentDurationMs } from "./companion/renderer.js";
 import {
   renderSwatchGrid, itemLabel,
   SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot,
 } from "./companion/blip-ui.js";
 import { treasureBadge } from "./companion/treasure.js";
-import { COLLECTIONS, COLLECTION_ORDER } from "./companion/collections.js";
+import {
+  COLLECTIONS, COLLECTION_ORDER,
+  FOOD_COLLECTIONS, FOOD_COLLECTION_ORDER,
+} from "./companion/collections.js";
 import { TRINKET_IDS, trinketExists, trinketTile } from "./companion/trinkets.js";
+import { FOOD_IDS, foodExists, foodLabel, foodArt } from "./companion/food.js";
+import { makeDraggable } from "./companion/drag-feed.js";
 import { maybeShowReminderCard } from "./push.js";
 import { FRIDGE_SVG, BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
 
@@ -66,6 +71,7 @@ let activeSheetRerender = null;
 function closeRoomSheet() {
   if (activeSheetScrim) { activeSheetScrim.remove(); activeSheetScrim = null; }
   activeSheetRerender = null;
+  setDragging(false);   // a sheet can close mid-drag (a feed succeeds); never leave the class on
 }
 function openRoomSheet({ id, renderContent, cycleOrder, onCycle }) {
   closeRoomSheet();
@@ -201,11 +207,31 @@ function foodErrMsg(code, r) {
   return ({
     auth: "Session problem — try logging in again.",
     no_item: "That item isn't available.",
+    locked: `Unlocks at level ${(r && r.minLevel) || "?"}.`,
     gold: `Not enough crystals — you have ${(r && r.gold) || 0} 💎, it costs ${(r && r.price) || "?"} 💎.`,
     REFUSES_FOOD: "Blip doesn't feel like eating right now.",
     BLIP_TOO_SICK: "Blip won't get up right now…",
   })[code] || "Something went wrong — try again.";
 }
+/* S4: eating (mhq_eat_food) has two failures of its own. `none_left` can
+   only happen if two taps race the same last apple, which the per-render
+   `feeding` guard already prevents — but the server is the authority on
+   what is in the fridge, so the message exists. */
+function eatErrMsg(code) {
+  return ({
+    auth: "Session problem — try logging in again.",
+    no_item: "That isn't food.",
+    not_edible: "That's medicine, not a snack — the Pharmacy gives those together.",
+    none_left: "There's none of that left in the fridge.",
+    REFUSES_FOOD: "Blip doesn't feel like eating right now.",
+  })[code] || "Something went wrong — try again.";
+}
+
+/* Drag-to-feed puts the open bottom sheet out of the way while a food is
+   in the air, so the child can actually see Blip to aim at (the sheet
+   covers the lower 2/3 of the screen). One body class, one CSS rule — see
+   `body.feeding-drag` in css/styles.css. */
+function setDragging(on) { document.body.classList.toggle("feeding-drag", !!on); }
 
 /* Soup + medicine together make one care day (PHASE-2-PLAN §2). Kept
    as a module-level flag (not per-render) so it survives the
@@ -471,7 +497,14 @@ export function renderBlip(app, host) {
   cookieBtn.title = canFeedToday ? "Feed Blip" : "Fed today — come back tomorrow";
   cookieBtn.setAttribute("aria-label", cookieBtn.title);
   cookieBtn.disabled = !canFeedToday;
-  cookieBtn.addEventListener("click", async () => {
+  /* S4: the cookie is DRAGGABLE too, with exactly the same rules as a
+     fridge tile — drop it on him and he eats it, drop it elsewhere and it
+     floats back with the sad face. Tap still works (bindFeedDrag treats a
+     press that never moved as a tap), and so does keyboard Enter/Space.
+     A spent cookie is a disabled <button>, which dispatches no pointer
+     events at all, so "fed today" needs no separate drag guard. */
+  const eatCookie = async () => {
+    if (cookieBtn.disabled) return;
     cookieBtn.disabled = true;
     try {
       const r = await api.feed(sess.username, sess.password);
@@ -483,12 +516,15 @@ export function renderBlip(app, host) {
         cookieBtn.disabled = false; return;
       }
       triggerHappy(roomStage);
-      playMoment(blipHandle, "excited");
+      playMoment(blipHandle, "eating");
       showToast(blips.length > 1 ? `${blips[0].name} and ${blips[1].name} shared a cookie!` : `${blips[0].name} enjoyed a cookie!`, "good");
+      // wait for the eating frames before the re-render swaps the <img> out
+      await new Promise((res) => setTimeout(res, momentDurationMs("eating")));
       await app.refresh();
       app.go("blip");
     } catch { showToast("Can't reach the server — try again.", "error"); cookieBtn.disabled = false; }
-  });
+  };
+  bindFeedDrag(cookieBtn, eatCookie, () => el("div", "fg-emoji", "🍪"));
   roomCard.appendChild(cookieBtn);
 
   // Phase 3: unopened treasure boxes ride top-left of the room card, so
@@ -759,19 +795,191 @@ export function renderBlip(app, host) {
     }
   }
 
+  /* ============================================================
+     FOOD sheet — room build S4 (2026-08-08): the fridge stash on top
+     (drag one of these onto Blip) and the grocery store under it,
+     tiered with the same locked-"?" card the cosmetic shop uses.
+
+     ⚠️ This panel reads app.state FRESH on every render rather than the
+     `state` captured at screen-render time, because a grocery buy
+     deliberately KEEPS THE SHEET OPEN and re-renders only the sheet body
+     (see the buy handler). Reading the stale closure would show the old
+     fridge counts the moment you bought a second apple.
+     ============================================================ */
   function renderFoodPanel(container) {
+    const st = app.state || {};
+    const pantry = st.pantry || {};
+    const lvl = (st.levelInfo && st.levelInfo.level) || 1;
+    const hl = normalizeHealth(st);
+    const tooSick = hl.stage >= 2;
+
     container.appendChild(el("h2", "", "FOOD"));
-    const pantry = state.pantry || {};
-    container.appendChild(el("p", "muted small", "What's in the fridge right now:"));
-    const stash = el("div", "stash-grid");
+
+    // ---- the fridge stash: the only things he can be fed right now ----
+    const stashIds = FOOD_IDS.filter((id) => (pantry[id] || 0) > 0);
+    container.appendChild(el("p", "muted small", tooSick
+      ? "Blip is too poorly for snacks — the Pharmacy has soup and medicine."
+      : stashIds.length
+        ? "In the fridge — drag one onto Blip to feed him."
+        : "The fridge is empty. Buy something below, then drag it onto Blip."));
+
+    if (stashIds.length) {
+      const stash = el("div", "fridge-stash" + (tooSick ? " is-locked" : ""));
+      stashIds.forEach((id) => stash.appendChild(stashTile(id, pantry[id], tooSick)));
+      container.appendChild(stash);
+    }
+
+    // soup / medicine share the fridge but are NOT snacks: mhq_care eats
+    // them as a pair to make one care day, and mhq_eat_food refuses both
+    // by name. Shown as plain counts, deliberately not draggable.
+    const supplies = el("div", "stash-grid");
     [["soup", "🍲", "Soup"], ["medicine", "💊", "Medicine"]].forEach(([id, icon, label]) => {
-      const n = pantry[id] || 0;
       const row = el("div", "stash-item");
-      row.innerHTML = `<span class="si-icon">${icon}</span><span class="si-label">${label}</span><span class="si-count">×${n}</span>`;
-      stash.appendChild(row);
+      row.innerHTML = `<span class="si-icon">${icon}</span><span class="si-label">${label}</span><span class="si-count">×${pantry[id] || 0}</span>`;
+      supplies.appendChild(row);
     });
-    container.appendChild(stash);
-    container.appendChild(el("p", "muted small room-soon-note", "🛒 A proper grocery shop is coming in a later update — for now, stock up on soup and medicine from the Pharmacy."));
+    container.appendChild(supplies);
+    container.appendChild(el("p", "muted small", "Soup and medicine are given together from the Pharmacy when Blip is ill — they aren't snacks."));
+
+    // ---- the grocery store ----
+    container.appendChild(el("h3", "", "GROCERY STORE"));
+    if (hl.locks.shop) {
+      container.appendChild(el("p", "muted small", "The shop's quiet for now — Blip needs some care first."));
+      return;
+    }
+    const groceries = (st.foodShop || []).filter((it) => foodExists(it.id));
+    const byId = new Map(groceries.map((it) => [it.id, it]));
+    let shownAny = false;
+    FOOD_COLLECTION_ORDER.forEach((key) => {
+      const tier = FOOD_COLLECTIONS[key];
+      const rows = tier.items.map((id) => byId.get(id)).filter(Boolean);
+      if (!rows.length) return;
+      shownAny = true;
+      if (lvl < tier.unlockLevel) {
+        const group = el("div", "shop-grid collection-group");
+        group.appendChild(collectionLockedCard(tier));
+        container.appendChild(group);
+      } else {
+        container.appendChild(el("h3", "collection-label", tier.label));
+        const grid = el("div", "shop-grid food-grid");
+        rows.forEach((it) => grid.appendChild(foodCard(it, pantry[it.id] || 0, lvl)));
+        container.appendChild(grid);
+      }
+    });
+    if (!shownAny) container.appendChild(el("p", "muted small", "The grocery store is empty — that shouldn't happen; try reloading."));
+  }
+
+  /* One grocery card. Buying KEEPS THE SHEET OPEN (a shopping trip is
+     several items — the S1 "every mutation closes the sheet" convention
+     was already flagged as worth smoothing, and this is the panel where
+     it hurt) and re-renders the sheet body from the refreshed state. */
+  function foodCard(item, owned, lvl) {
+    const lockedByLevel = lvl < item.minLevel;
+    const card = el("div", "shop-item food-item");
+    card.innerHTML = `<div class="si-stage food-stage"></div>
+      <div class="si-name">${foodLabel(item.id)}</div>
+      <div class="si-meta">${lockedByLevel
+        ? `unlocks at level ${item.minLevel}`
+        : `<span class="crystal">💎</span> ${item.price}`}${owned ? ` · ×${owned} in the fridge` : ""}</div>`;
+    card.querySelector(".food-stage").appendChild(foodArt(item.id));
+
+    const btn = el("button", "btn small");
+    if (lockedByLevel) {
+      btn.textContent = `Unlocks at level ${item.minLevel}`;
+      btn.disabled = true;
+      btn.className = "btn small ghost";
+    } else {
+      btn.innerHTML = `Buy · ${item.price} <span class="crystal">💎</span>`;
+      btn.className = "btn small primary";
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          const r = await api.buyItem(sess.username, sess.password, item.id);
+          if (!r || !r.ok) { showToast(foodErrMsg(r && r.error, r), "error"); btn.disabled = false; return; }
+          showToast(`${foodLabel(item.id)} is in the fridge.`, "good");
+          await app.refresh();
+          if (activeSheetRerender) activeSheetRerender();   // stay in the shop
+        } catch { showToast("Can't reach the server — try again.", "error"); btn.disabled = false; }
+      });
+    }
+    card.appendChild(btn);
+    return card;
+  }
+
+  /* One fridge tile — the thing the child actually drags.
+     Tap (and keyboard Enter/Space) feeds him too: a drag-only control is
+     unusable with a keyboard, and the daily cookie was always tappable. */
+  function stashTile(id, count, tooSick) {
+    const tile = el("div", "stash-food");
+    tile.tabIndex = 0;
+    tile.setAttribute("role", "button");
+    tile.setAttribute("aria-label", `Feed ${activeBlip.name || "Blip"} a ${foodLabel(id).toLowerCase()}`);
+    tile.title = tooSick ? "Blip won't eat right now" : `Drag ${foodLabel(id).toLowerCase()} onto Blip`;
+    tile.appendChild(foodArt(id));
+    tile.appendChild(el("span", "sf-name", foodLabel(id)));
+    tile.appendChild(el("span", "sf-count", "×" + count));
+    if (!tooSick) bindFeedDrag(tile, () => feedFood(id), () => foodArt(id));
+    return tile;
+  }
+
+  /* ---------------- drag-to-feed ----------------
+     Shared by every fridge tile AND the daily cookie, so both behave
+     identically: drop him and he eats it, drop anywhere else and it
+     floats home with no penalty while he pulls the sad face (Megan's
+     ruling, 2026-08-07). Pointer events only — rAF never fires in the
+     preview pane, so an rAF drag would be untestable. */
+  function bindFeedDrag(handleEl, act, makeArt) {
+    makeDraggable(handleEl, {
+      target: () => roomStage,
+      ghost: () => {
+        const g = el("div");
+        const inner = el("div", "fg-inner");
+        inner.appendChild(makeArt());
+        g.appendChild(inner);
+        return g;
+      },
+      onStart: () => setDragging(true),
+      onEnd: () => setDragging(false),
+      onTap: act,
+      onDropOn: act,
+      onDropAway: () => {
+        playMoment(blipHandle, "sad");
+        showToast(`${activeBlip.name || "Blip"} was hoping for that…`, "info");
+      },
+    });
+  }
+
+  /* One feed at a time. Set BEFORE the await, per the double-submit rule:
+     two quick drags of the last apple would otherwise both be in flight,
+     and the second would come back `none_left` after the first had already
+     played the eating moment. */
+  let feeding = false;
+  async function feedFood(id) {
+    if (feeding) return;
+    feeding = true;
+    try {
+      const r = await api.eatFood(sess.username, sess.password, id);
+      if (!r || !r.ok) {
+        const code = r && r.error;
+        if (code === "REFUSES_FOOD") triggerRefuse(roomStage);
+        showToast(eatErrMsg(code), "error");
+        feeding = false;
+        return;
+      }
+      closeRoomSheet();                       // get out of the way and watch him
+      triggerHappy(roomStage);
+      playMoment(blipHandle, "eating");
+      showToast(`${activeBlip.name || "Blip"} ate the ${foodLabel(id).toLowerCase()}!`, "good");
+      // Let the eating moment finish before the re-render replaces the <img>
+      // it is animating — without this the whole point of the gesture is a
+      // single frame. (Same reason the cookie waits, below.)
+      await new Promise((res) => setTimeout(res, momentDurationMs("eating")));
+      await app.refresh();
+      app.go("blip");
+    } catch {
+      showToast("Can't reach the server — try again.", "error");
+      feeding = false;
+    }
   }
 
   function renderFurniturePanel(container) {

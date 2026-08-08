@@ -836,6 +836,70 @@ h2{font-size:20px} h3{font-size:17px}
 .trinket-item .tk-art svg,.trinket-item .tk-art img{width:100%;height:100%;display:block}
 .trinket-item .tk-name{font-size:10px;line-height:1.15;color:var(--muted);text-align:center}
 
+/* ============================================================
+   FOOD SHEET + DRAG-TO-FEED — room build S4 (2026-08-08)
+   The fridge stash is a horizontal strip of draggable tiles; the grocery
+   store under it reuses .shop-grid / .shop-item / .collection-locked so a
+   locked food tier looks exactly like a locked cosmetic collection.
+   ============================================================ */
+.fridge-stash{display:flex;gap:10px;overflow-x:auto;padding:12px 12px 10px;margin:8px 0;
+  border:1px solid var(--brd);border-radius:var(--r-md);background:rgba(255,255,255,.03);
+  box-shadow:inset 0 -3px 0 color-mix(in srgb,var(--accent) 22%,transparent)}
+.fridge-stash.is-locked{opacity:.45}
+.stash-food{flex:0 0 auto;width:70px;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 4px;border-radius:var(--r-md);cursor:grab;touch-action:none;   /* pointer drag owns the gesture */
+  border:1px solid transparent;transition:border-color .12s ease,transform .12s ease}
+.stash-food:hover,.stash-food:focus-visible{border-color:var(--accent);transform:translateY(-2px);outline:none}
+.stash-food:active{cursor:grabbing}
+.fridge-stash.is-locked .stash-food{cursor:default}
+.stash-food .food-art{width:48px;height:48px}
+.stash-food .sf-name{font-size:9.5px;line-height:1.15;color:var(--muted);text-align:center}
+.stash-food .sf-count{font-family:var(--font-num);font-size:11px;color:var(--ink)}
+
+.food-art{display:grid;place-items:center}
+.food-art img{width:100%;height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none}
+.food-item .si-stage.food-stage{width:100%;aspect-ratio:1/1;max-height:76px}
+.food-item .si-meta{font-size:11px}
+
+/* the piece of food that follows the finger. Fixed + pointer-events:none so
+   it never becomes its own drop target or blocks the one underneath. */
+.feed-ghost{position:fixed;left:0;top:0;z-index:90;width:78px;height:78px;pointer-events:none;
+  display:grid;place-items:center;filter:drop-shadow(0 10px 16px rgba(0,0,0,.55))}
+.feed-ghost .fg-inner{width:100%;height:100%;display:grid;place-items:center;transition:transform .12s ease}
+.feed-ghost .food-art{width:100%;height:100%}
+.feed-ghost .fg-emoji{font-size:52px;line-height:1}
+.feed-ghost.over .fg-inner{transform:scale(1.2)}
+/* the fly-home when it was dropped away from him. A CSS transition, torn
+   down by setTimeout — `transitionend` depends on the compositor, and this
+   project's preview pane does not paint (same reason rAF is banned). */
+.feed-ghost.flying-home{transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .32s ease}
+@media (prefers-reduced-motion:reduce){
+  .feed-ghost.flying-home{transition:none}
+  .feed-ghost .fg-inner{transition:none}
+}
+
+/* the cookie is draggable too (S4), so the browser must not treat a
+   press-and-move on it as a page scroll — same reason .stash-food does it. */
+.cookie-badge{touch-action:none}
+
+/* Blip lights up when the food is near enough to land. The base transform
+   is translateX(-50%) (see .room-blip-stage) so it must be repeated here. */
+.room-blip-stage{transition:transform .15s ease}
+.room-blip-stage.feed-target-over{transform:translateX(-50%) scale(1.06)}
+.room-blip-stage.feed-target-over::before{content:"";position:absolute;inset:-16px -10px;
+  border:2px dashed var(--accent);border-radius:50%;opacity:.75;pointer-events:none}
+
+/* While a food is in the air the open sheet slides down out of the way —
+   it covers the lower two thirds of the screen, and you cannot aim at a
+   Blip you cannot see. Restored the moment the drag ends. */
+body.feeding-drag .room-sheet-scrim{background:transparent}
+/* calc, NOT a percentage: the sheet's height changes with its contents (a
+   full fridge is much taller than an empty one), and a percentage that
+   cleared Blip with 2 groceries in stock stopped clearing him with 12.
+   This always leaves exactly the same 52px lip showing at the bottom. */
+body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.22;pointer-events:none}
+.room-sheet{transition:transform .18s ease,opacity .18s ease}
+
 /* Food sheet (also opened by tapping the fridge) — what's in stock now */
 .stash-grid{display:flex;flex-direction:column;gap:8px;margin:8px 0}
 .stash-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--r-md);

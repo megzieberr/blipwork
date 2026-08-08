@@ -190,12 +190,76 @@ const TRINKET_ITEMS = [
   { id: "rubber-duck", price: 0, minLevel: 1 },
   { id: "broken-ruler", price: 0, minLevel: 1 },
 ];
-/* Pharmacy / grocery — prices mirror the server shop_items 'food' rows. */
+/* Pharmacy / grocery — prices mirror the server shop_items 'food' rows.
+   `kind` is the item's own id on the server too (mhq_get_state builds the
+   foodShop payload with 'kind', shop_items.item_id), so the two always
+   coincide; it is kept as its own field because the client reads it. */
 const FOOD_ITEMS = [
-  { id: "soup", kind: "soup", price: BLIP.food.soup },
-  { id: "medicine", kind: "medicine", price: BLIP.food.medicine },
-  { id: "treat", kind: "treat", price: BLIP.food.treat },
+  { id: "soup", kind: "soup", price: BLIP.food.soup, minLevel: 1 },
+  { id: "medicine", kind: "medicine", price: BLIP.food.medicine, minLevel: 1 },
+  { id: "treat", kind: "treat", price: BLIP.food.treat, minLevel: 1 },
+  /* Room build S4 (2026-08-08) — the 44 groceries. Mirrors
+     supabase/migration-food-shop.sql row for row; verify-store.html parses
+     that file and cross-checks every price and minLevel against this list,
+     because an item added to only one side is the drift that actually
+     happens. Which TIER each belongs to (and therefore which locked "?"
+     card hides it) lives in js/companion/collections.js, not here — this
+     list is only the server's own price/min_level. */
+  // Fresh — fruit & veg, Lv 1
+  { id: "apple", kind: "apple", price: 5, minLevel: 1 },
+  { id: "banana", kind: "banana", price: 5, minLevel: 1 },
+  { id: "grapes", kind: "grapes", price: 8, minLevel: 1 },
+  { id: "naartjie", kind: "naartjie", price: 6, minLevel: 1 },
+  { id: "strawberry", kind: "strawberry", price: 7, minLevel: 1 },
+  { id: "watermelon", kind: "watermelon", price: 9, minLevel: 1 },
+  { id: "broccoli", kind: "broccoli", price: 4, minLevel: 1 },
+  { id: "carrot", kind: "carrot", price: 4, minLevel: 1 },
+  { id: "green-pepper", kind: "green-pepper", price: 5, minLevel: 1 },
+  { id: "mielie", kind: "mielie", price: 6, minLevel: 1 },
+  { id: "peas", kind: "peas", price: 4, minLevel: 1 },
+  { id: "tomato", kind: "tomato", price: 5, minLevel: 1 },
+  // Bakery — pastries, Lv 4
+  { id: "choc-cookie", kind: "choc-cookie", price: 12, minLevel: 4 },
+  { id: "croissant", kind: "croissant", price: 14, minLevel: 4 },
+  { id: "doughnut", kind: "doughnut", price: 15, minLevel: 4 },
+  { id: "cupcake", kind: "cupcake", price: 16, minLevel: 4 },
+  { id: "custard-tart", kind: "custard-tart", price: 18, minLevel: 4 },
+  { id: "koeksister", kind: "koeksister", price: 20, minLevel: 4 },
+  // Hot meals, Lv 7
+  { id: "toastie", kind: "toastie", price: 22, minLevel: 7 },
+  { id: "hot-dog", kind: "hot-dog", price: 24, minLevel: 7 },
+  { id: "nuggets", kind: "nuggets", price: 26, minLevel: 7 },
+  { id: "spaghetti", kind: "spaghetti", price: 28, minLevel: 7 },
+  { id: "burger", kind: "burger", price: 30, minLevel: 7 },
+  { id: "pizza", kind: "pizza", price: 32, minLevel: 7 },
+  // Braai, Lv 11
+  { id: "biltong", kind: "biltong", price: 34, minLevel: 11 },
+  { id: "drumstick", kind: "drumstick", price: 36, minLevel: 11 },
+  { id: "boerewors", kind: "boerewors", price: 38, minLevel: 11 },
+  { id: "sosatie", kind: "sosatie", price: 40, minLevel: 11 },
+  { id: "lamb-chop", kind: "lamb-chop", price: 44, minLevel: 11 },
+  { id: "steak", kind: "steak", price: 48, minLevel: 11 },
+  // Sweets, Lv 14
+  { id: "lollipop", kind: "lollipop", price: 18, minLevel: 14 },
+  { id: "gummy-bear", kind: "gummy-bear", price: 20, minLevel: 14 },
+  { id: "marshmallow", kind: "marshmallow", price: 22, minLevel: 14 },
+  { id: "jelly-beans", kind: "jelly-beans", price: 24, minLevel: 14 },
+  { id: "toffee", kind: "toffee", price: 26, minLevel: 14 },
+  { id: "chocolate-bar", kind: "chocolate-bar", price: 30, minLevel: 14 },
+  // Drinks, Lv 17
+  { id: "water-bottle", kind: "water-bottle", price: 20, minLevel: 17 },
+  { id: "milk", kind: "milk", price: 24, minLevel: 17 },
+  { id: "juice-box", kind: "juice-box", price: 26, minLevel: 17 },
+  { id: "cold-drink", kind: "cold-drink", price: 28, minLevel: 17 },
+  { id: "orange-juice", kind: "orange-juice", price: 30, minLevel: 17 },
+  { id: "cola", kind: "cola", price: 32, minLevel: 17 },
+  { id: "hot-chocolate", kind: "hot-chocolate", price: 38, minLevel: 17 },
+  { id: "milkshake", kind: "milkshake", price: 45, minLevel: 17 },
 ];
+/* The three category-'food' rows that are NOT groceries and can never be
+   eaten by mhq_eat_food: soup and medicine are care supplies consumed as a
+   PAIR by care(), and `treat` is a gold sink that never enters the pantry. */
+const NOT_EDIBLE = ["soup", "medicine", "treat"];
 const VALID_COLOURS = ["blue", "cream", "pink", "mint", "sky", "lilac", "peach", "lemon", "seafoam", "coral", "lavender"];
 // Mirrors mhq_equip's hard-coded key list on the server. Adding a slot means
 // changing BOTH, plus shop_items_slot_cat_check — miss one and equipping the
@@ -402,7 +466,10 @@ function verify(u, pw) { const s = findByUser(u); return (s && s.password != nul
 function touch(id) { const st = read(LS.students, {}); if (st[id]) { st[id].last_active_at = Date.now(); write(LS.students, st); } }
 const openQuests = () => { const q = read(LS.quests, {}); return Object.keys(q).filter(id => q[id].is_open).sort((a, b) => q[a].sort - q[b].sort); };
 function shopCatalogue() { return SHOP_ITEMS.map(it => ({ id: it.id, slot: it.slot, price: it.price, minLevel: it.minLevel })); }
-function foodCatalogue() { return FOOD_ITEMS.map(it => ({ id: it.id, kind: it.kind, price: it.price })); }
+/* S4: `minLevel` joins the payload (mhq_get_state's foodShop select) so a
+   food card can say "Unlocks at Lv N" and the grocery tiers can be shown
+   the same way the cosmetic collections are. */
+function foodCatalogue() { return FOOD_ITEMS.map(it => ({ id: it.id, kind: it.kind, price: it.price, minLevel: it.minLevel })); }
 function blipsView(sid) { return getBlips(sid).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feed_count, growthStage: growthStage(b.feed_count), owned: b.owned_items, equipped: b.equipped })); }
 
 /* dev clock control — advance/reset the local "today" so sick states are testable */
@@ -597,13 +664,15 @@ export const LocalBackend = {
 
     const food = FOOD_ITEMS.find(f => f.id === item);
     if (food) {
-      if (food.kind === "treat") {
+      if (food.id === "treat") {
         if (stage >= 2) return { ok: false, error: "REFUSES_FOOD" };
         if (rec.gold < food.price) return { ok: false, error: "gold", price: food.price, gold: rec.gold };
         rec.gold -= food.price; write(LS.students, stAll);
         return { ok: true, gold: rec.gold, treat: true };
       }
-      // soup / medicine — pharmacy is ALWAYS open, even at critical
+      // soup / medicine — pharmacy is ALWAYS open, even at critical (both are
+      // minLevel 1, so S4's grocery gate below can never fire on them).
+      if (levelInfo(rec.xp).level < (food.minLevel || 1)) return { ok: false, error: "locked", minLevel: food.minLevel };
       if (rec.gold < food.price) return { ok: false, error: "gold", price: food.price, gold: rec.gold };
       rec.gold -= food.price;
       rec.pantry = { ...(rec.pantry || {}) };
@@ -697,6 +766,50 @@ export const LocalBackend = {
     write(LS.students, stAll); writeBlips(s.id, blips);
     return { ok: true, blips: blipsView(s.id).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feedCount, growthStage: b.growthStage })),
       health: computeHealth(rec.last_fed_day, rec.care_streak), canFeedToday: false };
+  },
+  /* ---- S4: eat a grocery out of the pantry (mirrors mhq_eat_food) ----
+     The pantry is server state, so "the food disappeared" has to be a
+     server fact — the drag gesture only asks for it.
+
+     THE DAILY-FEEDING RULE: eating IS the daily feeding. It resets the
+     sickness clock and pays the growth credit, but that credit is capped
+     at once a day exactly like the free cookie, so growth can never be
+     bought. A second snack the same day is still eaten (and still plays
+     the eating moment) and simply grows nothing. */
+  async eatFood(username, password, item) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const stAll = read(LS.students, {});
+    const rec = stAll[s.id];
+    ensureBlipFields(rec);
+    const blips = ensureBlip(s.id, rec);
+
+    const food = FOOD_ITEMS.find(f => f.id === item);
+    if (!food) return { ok: false, error: "no_item" };
+    if (NOT_EDIBLE.includes(item)) return { ok: false, error: "not_edible" };
+
+    const stage = computeHealth(rec.last_fed_day, rec.care_streak).stage;
+    if (stage >= 2) return { ok: false, error: "REFUSES_FOOD" };
+
+    const have = (rec.pantry && rec.pantry[item]) || 0;
+    if (have < 1) return { ok: false, error: "none_left" };
+    rec.pantry = { ...(rec.pantry || {}) };
+    if (have - 1 <= 0) delete rec.pantry[item];
+    else rec.pantry[item] = have - 1;
+
+    let grewToday = false;
+    if (rec.last_fed_day == null || rec.last_fed_day < today()) {
+      blips.forEach(b => { b.feed_count = (b.feed_count || 0) + 1; });   // household growth
+      rec.last_fed_day = today();
+      grewToday = true;
+    }
+
+    write(LS.students, stAll); writeBlips(s.id, blips);
+    return {
+      ok: true, item, grewToday, pantry: rec.pantry,
+      blips: blipsView(s.id),
+      health: computeHealth(rec.last_fed_day, rec.care_streak), canFeedToday: false,
+    };
   },
   async care(username, password) {
     const s = verify(username, password);

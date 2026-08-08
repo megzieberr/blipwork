@@ -1,8 +1,156 @@
-# Project status — updated 2026-08-08 (room build S3 DONE, committed locally, NOT pushed)
+# Project status — updated 2026-08-08 (room build S4 DONE, committed locally, NOT pushed)
 
-## ✅ ALL SQL IS APPLIED TO LIVE (2026-08-08, by Claude at her request)
+## ⏳ ONE MIGRATION NOW PENDING: `supabase/migration-food-shop.sql`
 
-**There is no SQL pending any more.** Applied in order, via MCP:
+S4 wrote it; **it has NOT been run.** It goes in AFTER
+`migration-level-curve-40.sql` (it re-creates two of that file's functions).
+Additive, idempotent, touches no learner row. The review session at the end
+of the room build applies it.
+
+---
+
+## 🍎 2026-08-08 — ROOM BUILD S4: the food shop, the fridge, drag-to-feed
+
+Per `homework-hub-companion/ROOM-BUILD-PLAN.md`. Nothing pushed, `sw.js`
+untouched (still v38), **no SQL run against live**. `verify-store.html` is
+**green, ~2418 checks** (see the note on the wobbling count below).
+
+**44 GROCERIES IN THE SHOP.** `supabase/migration-food-shop.sql` seeds every
+food already cut into `assets/companion/food/`, as ordinary `category='food'`
+rows beside soup/medicine/treat. **No new category, no new slot, no new
+column** — so nothing needed a GRANT and `shop_items_slot_cat_check` was not
+touched. Six price tiers, gated by level:
+
+| tier | items | level | price band |
+|---|---|---|---|
+| Fresh (fruit & veg) | 12 | 1 | 4–9 |
+| Bakery (pastries) | 6 | 4 | 12–20 |
+| Hot meals | 6 | 7 | 22–32 |
+| Braai | 6 | 11 | 34–48 |
+| Sweets | 6 | 14 | 18–30 |
+| Drinks | 8 | 17 | 20–45 |
+
+Sweets and drinks are gated ABOVE the hot meals they undercut on price —
+they are treats, and the *level* is what makes them one.
+
+**REUSED, NOT FORKED.** Buying a grocery already worked: `mhq_buy_item`'s
+food branch puts any non-`treat` food row into the pantry, so the 44 rows
+needed no new buy path. Three small changes were needed and no more:
+1. `mhq_get_state`'s `foodShop` array now carries **`minLevel`** (the
+   `min_level` column always existed — only the payload got wider).
+2. `mhq_buy_item`'s food branch now **honours `min_level`**, which it never
+   had to before because every food row was level 1. soup/medicine/treat are
+   all still level 1, so **the pharmacy is provably unaffected** — the new
+   check can never fire on them, at any level or sickness stage.
+3. A new RPC **`mhq_eat_food(username, password, item)`**, shaped exactly
+   like `mhq_feed`/`mhq_care`: auth → ensure blip → row lock → refuse while
+   sick → consume → return fresh state. Granted to anon like every other RPC.
+
+**DRAG-TO-FEED IS BUILT.** New `js/companion/drag-feed.js` — the gesture
+only, knowing nothing about food, Blip or the backend, so the whole path can
+be exercised in `verify-store.html` against two plain divs. Pointer events
+throughout; the fly-home is a CSS transition torn down by `setTimeout`
+(`transitionend` needs the compositor, which this project's preview pane does
+not run — same reason rAF is banned here).
+- Drop **on him**: eaten server-side, the `eating` moment plays, the fridge
+  count drops.
+- Drop **anywhere else**: floats back to exactly where it started, **no
+  penalty**, and the `sad` moment plays (her ruling, 2026-08-07).
+- A `pointercancel` (the browser taking the gesture away) flies home
+  **silently** — that is not the child missing.
+- **The open sheet slides down out of the way while a food is in the air**
+  and comes back after. It covers the lower two-thirds of the screen, and you
+  cannot aim at a Blip you cannot see. Measured on a 375×812 phone with a full
+  fridge: 284px of clear space above the lowered sheet.
+- **The daily cookie is draggable too**, same rules, and tap still works.
+
+### Deviations and judgement calls (rule 9 — recorded, not silently redesigned)
+1. **⚠️ EATING IS THE DAILY FEEDING — the one real design call.** The brief
+   said eating "counts as a feeding". Taken literally that could mean growth
+   is buyable: 45 cookies' worth of growth costs about 200 gold in apples.
+   So eating resets the sickness clock and pays the growth credit, **but that
+   credit is capped at once a day, exactly like the free cookie.** A second
+   snack the same day is really eaten and really animates; it just grows
+   nothing. The corollary, which is worth knowing before she plays it:
+   **feeding him an apple uses up today's cookie** (they share
+   `last_fed_day`). That is the honest reading of "he has been fed today",
+   and the alternative — two separate daily feedings — is the double-dip this
+   avoids. Easy to change if she wants the cookie kept separate.
+2. **Growth from eating is household-wide** (+1 to every blip), because
+   `mhq_feed` already works that way and splitting the two would make a
+   two-blip household behave differently depending on which food you used.
+3. **The grocery shop KEEPS THE SHEET OPEN after a buy**, unlike every other
+   sheet action (the S1 convention). A shopping trip is several items, and
+   S1 itself flagged that convention as "worth smoothing later" — this is the
+   panel where it hurt. The Food panel therefore reads `app.state` fresh on
+   each render instead of the captured closure, so the fridge counts update
+   in place. Feeding still closes the sheet (you want to watch him eat).
+4. **A fridge tile can also be TAPPED (and Enter/Space'd) to feed**, not only
+   dragged. The brief only required that for the cookie, but a drag-only
+   control is unreachable by keyboard, and the tap path is the same call.
+5. **The daily cookie now plays `eating`, not `excited`.** It is food; the
+   eating art exists for exactly this and did not when the cookie was built.
+   Both cookie and grocery feeds now WAIT for the moment to finish (~2.1s)
+   before the refresh + re-render — the re-render replaces the `<img>` the
+   frames run on, so without the wait the animation was one frame. New export
+   `momentDurationMs()` in renderer.js keeps that number in one place.
+6. **A locked food tier reuses the S3 Blip-silhouette card**, not a food
+   silhouette. "The S3 locked-card pattern" is what the brief asked for, and
+   one card style for both shops reads as one system.
+7. **`soup` / `medicine` / `treat` are refused by name** by `mhq_eat_food`
+   (`not_edible`). Soup and medicine are consumed as a PAIR by `mhq_care` to
+   make one care day; eating the soup on its own would quietly break the
+   recovery streak.
+
+### Verified
+- **`verify-store.html` green**, ~2418 checks (was ~1700). Eight consecutive
+  runs, zero failures. New coverage: all 44 SQL rows cross-checked against the
+  client mirror on price / minLevel / kind; every grocery has a label, art
+  (44/44 PNGs fetched), and exactly one tier; every tier gate equals its rows'
+  `min_level`; soup/medicine/treat are in no tier; buy → fridge → eat →
+  consumed → grew once → second snack ate but did not grow; the free cookie
+  reports `already_fed` after a grocery feed; `not_edible` for all three
+  supplies; `no_item` for a cosmetic; a level-1 learner is refused a Lv 11
+  steak while soup still sells; and the whole drag gesture (tap · drop-on ·
+  drop-away · cancel · disabled · keyboard · destroy).
+- **⚠️ THE CHECK COUNT WOBBLES BY A FEW, AND ALWAYS HAS.** Section 6d asserts
+  a different number of things per milestone box depending on which of the
+  three loot branches it rolls, so the total drifts run to run. Measured: this
+  suite 2417–2420, and the **pre-S4 file re-run today reads 1699–1702, not the
+  "1736" recorded above** — that number was one sample, not a constant. Don't
+  go hunting for 36 missing checks.
+- **Walked in the browser pane** (`?local=1`, fresh signup, **zero console
+  errors**): the fridge opens the Food sheet; at level 1 only Fresh is open
+  and the other five tiers show as "?" cards reading Lv 4 / 7 / 11 / 14 / 17;
+  buying an apple leaves the sheet open and the count goes to "×2 in the
+  fridge"; at level 8 Fresh + Bakery + Hot meals are open (24 cards) and pizza
+  buys for 32; dragging an apple onto Blip plays `eating-1.png`, drops the
+  pantry 2 → 1, grows him 0 → 1 and dims the cookie to ✅; dragging it away
+  leaves the pantry untouched and the cookie still available; the cookie
+  drags both ways with the same result and still feeds on a plain tap; Enter
+  on a fridge tile feeds; and at sickness stage 2 the stash greys out, says
+  "Blip is too poorly for snacks" and eats nothing.
+- **The sheet-slide and the drop highlight were verified with transitions
+  forced off**, because the preview pane never advances a CSS transition (no
+  animation frames — the rAF limitation again), so a computed transform read
+  mid-drag sits at the transition's START value and looks like the rule never
+  applied. With `transition:none` the sheet really does move down to leave a
+  52px lip and Blip really does scale 1.06 with the dashed drop ring. **Worth
+  remembering: in this pane a frozen-looking transition is the pane, not
+  necessarily a bug — but prove it that way rather than assuming.**
+
+### Not done / punted
+- **Not smoke-tested against live**, because the migration is not run. Same
+  position S2 and S3 left their work in.
+- **`js/companion/room-art.js` furniture is still PLACEHOLDER** — S5's job.
+- The 44 prices are first guesses, like every other price in the app. They
+  belong in the "price the free tier before go-live" pass already on the list.
+
+---
+
+## ✅ ALL EARLIER SQL IS APPLIED TO LIVE (2026-08-08, by Claude at her request)
+
+**Nothing before S4 is pending.** Applied in order, via MCP:
 1. `room_build_s2_level_curve_40_milestone_boxes_trinkets`
 2. `room_build_s3_wave3_collections_sixteen_items`
 3. `cut_crystal_orbit_and_neural_crown`
@@ -719,6 +867,30 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - 2026-08-08 (S2): **`loot_table` gained a `box` column rather than a second table.**
   Phase-3 rows default to 'assignment', so the homework chest's weights are untouched
   and both boxes stay tunable in one place, server-side, as the phase-3 ruling requires.
+- 2026-08-08 (S4): **Eating a bought grocery IS the daily feeding.** It resets the
+  sickness clock and pays the growth credit, but that credit stays capped at once a
+  day exactly like the free cookie, so growth can never be bought (45 cookies' worth
+  of growth would otherwise cost about 200 gold in apples). Consequence to know:
+  feeding him an apple uses up today's cookie — they share `last_fed_day`. Later
+  snacks the same day are still eaten and still animate.
+- 2026-08-08 (S4): **The 44 groceries are ordinary `category='food'` rows.** No new
+  category, no new slot, no new column — `mhq_buy_item`'s food branch already put any
+  non-`treat` food into the pantry. Only three things had to change: `minLevel` joins
+  the `foodShop` payload, the food branch honours `min_level` (soup/medicine/treat are
+  level 1, so the pharmacy cannot be affected), and `mhq_eat_food` is new.
+- 2026-08-08 (S4): **soup / medicine / treat are refused by name as snacks**
+  (`not_edible`). `mhq_care` consumes soup and medicine as a PAIR to make one care
+  day; eating the soup alone would silently break the recovery streak.
+- 2026-08-08 (S4): **The grocery panel keeps its sheet OPEN after a buy**, breaking
+  S1's "every mutation closes the sheet" convention on purpose — a shopping trip is
+  several items, and S1 itself flagged that convention as worth smoothing. It reads
+  `app.state` fresh on each render so the fridge counts update in place. Feeding
+  still closes the sheet: you want to watch him eat.
+- 2026-08-08 (S4): **A moment must be waited out before the screen re-renders.** The
+  refresh replaces the `<img>` the frames animate, so `playMoment` + immediate
+  `app.go("blip")` showed exactly one frame. Both feed paths now wait
+  `momentDurationMs("eating")` (~2.1s) first. The daily cookie also switched from
+  `excited` to `eating` — the eating art did not exist when the cookie was built.
 - 2026-07-19: **NO daily cap** (Megan overrode the planned cap): the app doubles as exam
   revision, so unlimited rounds count — replays pay 25% XP + full gold; pacing comes from
   the curve + level-gated shop items.
@@ -971,6 +1143,9 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
+- 💻 **`supabase/migration-food-shop.sql` — NOT RUN.** Goes in AFTER
+  `migration-level-curve-40.sql`. The end-of-room-build review session runs it
+  with S5's, so there is nothing to do until then. **[with S5]**
 - 📱 2 min: close and reopen the Blipwork PWA twice (sw v34 → v37 is a big jump),
   then check the cape sits low AND a shop necklace wraps around him **[whenever]**
 - 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
@@ -1000,21 +1175,13 @@ stands: a live site a ship behind = check `gh api .../pages/builds` first.)
    PUSH-SETUP.md walkthrough (~25 min, do it together in a session — reminders are
    pointless before the kids are actually here, which is why it waits).
 
-**THE FOOD SHOP / DRAG-TO-FEED (next build job — art side now DONE 2026-08-07):**
-1. ~~Slice the eating sheet~~ — **DONE**, `eating` moment wired + verified (plays
-   once, recolours). Ditto **`sad`** (top row of `art-source/tripo/sad blip.png`;
-   the bottom row is an eyebrows-no-tear alternative, unused).
-2. ~~Generate + slice the food art~~ — **DONE, 44 items** in `assets/companion/food/`
-   (fruit, pastries, sweets, hot meals, braai, veggies, drinks).
-3. **Drag-to-feed** (the actual build): the child drags a food from the pantry to
-   Blip; on release near him the food disappears and `eating` plays. Dropped
-   anywhere else: the food floats back to the pantry, no penalty, and `sad` plays
-   (her ruling 2026-08-07). Pointer events, NOT rAF (browser pane never fires rAF).
-4. **Shop rows + a migration** for the food items, mirrored in local-backend.js.
-   ⚠️ Food already has a `category = 'food'` path in `mhq_get_state` (`foodShop`), so
-   this may need NO new slot — check before assuming, and remember a new COLUMN would
-   need its own GRANT. Also decide prices/level gates for 44 foods — probably tiered
-   by sheet (fruit cheap, braai mid, drinks/sweets treats).
+**~~THE FOOD SHOP / DRAG-TO-FEED~~ — ✅ BUILT 2026-08-08 (room build S4).**
+All four parts are done: the eating + sad moments were wired 2026-08-07, the
+44 food PNGs were cut the same day, and S4 added the shop rows
+(`supabase/migration-food-shop.sql`, **still to run**), the tiered grocery
+panel and the drag gesture. The guess in point 4 was right — food needed no
+new slot, no new category and no new column, so nothing needed a GRANT. Full
+write-up at the top of this file.
 
 **WAVE-3 ACCESSORY PLACEMENT (second build job):** the fairy/girly/tomboy/gangster
 items and six eye pairs are cut and committed but have NO renderer entries, labels

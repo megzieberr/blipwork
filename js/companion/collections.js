@@ -97,3 +97,63 @@ export function collectionForItem(id) {
   }
   return null;
 }
+
+/* ============================================================
+   FOOD TIERS — room build S4 (2026-08-08).
+   The grocery store uses the SAME locked-card pattern as the cosmetic
+   shop: a tier below the learner's level collapses to one card (grey
+   silhouette, "?", "Unlocks at Lv N"). Same reason it lives here rather
+   than in SQL — Megan can move a gate without a migration.
+
+   `unlockLevel` MUST equal the min_level on those rows in
+   supabase/migration-food-shop.sql. The server enforces min_level (a
+   client that offered a locked food would just get `locked` back); this
+   map only decides what is SHOWN. verify-store.html asserts the two
+   agree, item by item.
+
+   soup / medicine / treat are category 'food' server-side but are not
+   groceries and appear in no tier — the Pharmacy sells those, unchanged.
+   ============================================================ */
+export const FOOD_COLLECTIONS = {
+  fresh: {
+    label: "Fresh",
+    unlockLevel: 1,
+    items: ["apple", "banana", "grapes", "naartjie", "strawberry", "watermelon",
+      "broccoli", "carrot", "green-pepper", "mielie", "peas", "tomato"],
+  },
+  bakery: {
+    label: "Bakery",
+    unlockLevel: 4,
+    items: ["choc-cookie", "croissant", "doughnut", "cupcake", "custard-tart", "koeksister"],
+  },
+  hotmeals: {
+    label: "Hot meals",
+    unlockLevel: 7,
+    items: ["toastie", "hot-dog", "nuggets", "spaghetti", "burger", "pizza"],
+  },
+  braai: {
+    label: "Braai",
+    unlockLevel: 11,
+    items: ["biltong", "drumstick", "boerewors", "sosatie", "lamb-chop", "steak"],
+  },
+  sweets: {
+    label: "Sweets",
+    unlockLevel: 14,
+    items: ["lollipop", "gummy-bear", "marshmallow", "jelly-beans", "toffee", "chocolate-bar"],
+  },
+  drinks: {
+    label: "Drinks",
+    unlockLevel: 17,
+    items: ["water-bottle", "milk", "juice-box", "cold-drink", "orange-juice",
+      "cola", "hot-chocolate", "milkshake"],
+  },
+};
+
+export const FOOD_COLLECTION_ORDER = ["fresh", "bakery", "hotmeals", "braai", "sweets", "drinks"];
+
+export function foodCollectionForItem(id) {
+  for (const key of FOOD_COLLECTION_ORDER) {
+    if (FOOD_COLLECTIONS[key].items.includes(id)) return key;
+  }
+  return null;
+}

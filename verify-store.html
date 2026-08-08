@@ -37,7 +37,12 @@ import { ITEM_LABELS, itemRarity, accessorySlot, COSMETIC_SLOTS, SLOT_LABELS } f
 import { LocalBackend } from "./js/local-backend.js";
 import { levelInfo, costForLevel, MAX_LEVEL, MILESTONE_LEVELS } from "./js/companion/level.js";
 import { TRINKETS, TRINKET_IDS, trinketLabel } from "./js/companion/trinkets.js";
-import { COLLECTIONS, COLLECTION_ORDER, collectionForItem } from "./js/companion/collections.js";
+import {
+  COLLECTIONS, COLLECTION_ORDER, collectionForItem,
+  FOOD_COLLECTIONS, FOOD_COLLECTION_ORDER, foodCollectionForItem,
+} from "./js/companion/collections.js";
+import { FOODS, FOOD_IDS, NON_GROCERY_FOOD, foodLabel, foodImgSrc } from "./js/companion/food.js";
+import { makeDraggable, isOverTarget, DEFAULT_DROP_PAD_PX } from "./js/companion/drag-feed.js";
 
 let total = 0; const fails = [];
 const tick = (cond, label) => { total++; if (!cond) fails.push(label); return cond; };
@@ -51,7 +56,10 @@ const uname = "verify_store_" + Math.random().toString(36).slice(2, 8);
 await LocalBackend.signup(uname, "Verify", "pw12");
 const state = await LocalBackend.getState(uname, "pw12");
 const shop = (state.shop || []);
-say(`shop payload: ${shop.length} cosmetic items`);
+// S4: the pharmacy/grocery array. Separate payload key, separate mirror —
+// a food row must never turn up in `shop` and vice versa.
+const foodShop = (state.foodShop || []);
+say(`shop payload: ${shop.length} cosmetic items · ${foodShop.length} food items`);
 
 /* ---------- 1. every sellable id can actually be drawn ---------- */
 for (const it of shop) {
@@ -151,6 +159,10 @@ const MIGRATIONS = [
   // the retired scan above picks up and then enforces are absent from the
   // client mirror.
   ["migration-cut-items.sql", 0],
+  // S4 (2026-08-08): the grocery store. These are category 'food' / slot
+  // 'food', so they are cross-checked against the foodShop payload, NOT the
+  // cosmetic shop — and against their ABSENCE from it.
+  ["migration-food-shop.sql", 44],
 ];
 // An applied migration is never edited — it is the record of what actually
 // ran — so an item that is seeded by one migration and later dropped by a
@@ -181,10 +193,12 @@ for (const [file, expected] of MIGRATIONS) try {
   const seeded = [...sql.matchAll(/^\s*\('([a-z0-9-]+)',\s*'([a-z]+)',\s*(\d+),\s*(\d+),\s*true/gim)]
     .map((m) => ({ id: m[1], slot: m[2], price: +m[3], minLevel: +m[4] }));
   tick(seeded.length === expected, `${file} seeds ${seeded.length} rows, expected ${expected}`);
-  // A trinket is not a cosmetic: it never reaches the shop payload, so it is
-  // checked against a different mirror (and against its ABSENCE from the shop).
-  const cosmeticRows = seeded.filter((r) => r.slot !== "trinket");
+  // Neither a trinket nor a food is a cosmetic: neither reaches the `shop`
+  // payload, so each is checked against its own mirror — and against its
+  // ABSENCE from the shop.
+  const cosmeticRows = seeded.filter((r) => r.slot !== "trinket" && r.slot !== "food");
   const trinketRows = seeded.filter((r) => r.slot === "trinket");
+  const foodRows = seeded.filter((r) => r.slot === "food");
   for (const row of cosmeticRows) {
     if (retired.has(row.id)) continue;
     const mirror = shop.find((it) => it.id === row.id);
@@ -200,6 +214,21 @@ for (const [file, expected] of MIGRATIONS) try {
     tick(row.price === 0, `trinket "${row.id}" is priced ${row.price} — trinkets are never sold`);
     tick(!shop.some((it) => it.id === row.id), `trinket "${row.id}" leaked into the shop payload`);
     tick(!ACCESSORIES[row.id], `trinket "${row.id}" is also an ACCESSORY — it would become wearable`);
+  }
+  /* S4 — the drift this catches is a grocery whose price or level gate was
+     changed in the SQL and not in js/local-backend.js (or the other way
+     round), which would make ?local=1 quietly disagree with live. */
+  for (const row of foodRows) {
+    const mirror = foodShop.find((it) => it.id === row.id);
+    tick(!!mirror, `"${row.id}" is in ${file} but not in the client foodShop mirror`);
+    if (mirror) {
+      tick(mirror.price === row.price, `food "${row.id}" price differs: SQL ${row.price}, client ${mirror.price}`);
+      tick(mirror.minLevel === row.minLevel, `food "${row.id}" minLevel differs: SQL ${row.minLevel}, client ${mirror.minLevel}`);
+      tick(mirror.kind === row.id, `food "${row.id}" kind is "${mirror.kind}" — the server sends item_id as the kind`);
+    }
+    tick(!shop.some((it) => it.id === row.id), `food "${row.id}" leaked into the cosmetic shop payload`);
+    tick(!ACCESSORIES[row.id], `food "${row.id}" is also an ACCESSORY — it would become wearable`);
+    tick(!!FOODS[row.id], `food "${row.id}" is in ${file} but has no js/companion/food.js entry (no label, no art)`);
   }
   // A slot is never just new rows: mhq_equip hard-codes the allowed equipped
   // keys and shop_items_slot_cat_check hard-codes the slots. Missing either
@@ -222,7 +251,7 @@ for (const [file, expected] of MIGRATIONS) try {
     tick(!/k not in \([^)]*'trinket'/.test(sql),
       `${file} added 'trinket' to mhq_equip's key list — trinkets must not be equippable`);
   }
-  say(`${file}: ${seeded.length} rows (${cosmeticRows.length} cosmetic, ${trinketRows.length} trinket), all cross-checked`);
+  say(`${file}: ${seeded.length} rows (${cosmeticRows.length} cosmetic, ${trinketRows.length} trinket, ${foodRows.length} food), all cross-checked`);
 } catch (e) {
   tick(false, `could not read supabase/${file}: ` + e.message);
 }
@@ -429,6 +458,248 @@ for (const [file, expected] of MIGRATIONS) try {
         `"${id}": the eye mask is not painted BEFORE (underneath) the eye art`);
     }
   }
+}
+
+/* ---------- 6g. the grocery store (room build S4) ----------
+   44 groceries beside the 3 pharmacy rows. The failure modes guarded here:
+   a food with no label/art (it renders as a broken image), a food in no
+   tier (it silently never appears in the panel, exactly like an
+   uncollected cosmetic), and a tier gate that disagrees with the row's own
+   min_level (the shop would offer something the server then refuses). */
+{
+  tick(FOOD_IDS.length === 44, `expected 44 groceries in js/companion/food.js, found ${FOOD_IDS.length}`);
+  tick(foodShop.length === 47, `foodShop should carry 44 groceries + soup + medicine + treat = 47, got ${foodShop.length}`);
+
+  // soup / medicine / treat are food rows but NOT groceries: no label entry,
+  // no tier, and mhq_eat_food refuses them by name.
+  for (const id of NON_GROCERY_FOOD) {
+    tick(!!foodShop.find((it) => it.id === id), `the pharmacy row "${id}" vanished from foodShop`);
+    tick(!FOODS[id], `"${id}" is listed as a grocery in food.js — it is a care supply, not a snack`);
+    tick(!foodCollectionForItem(id), `"${id}" was put in a food tier — the Pharmacy sells it, not the grocery store`);
+  }
+
+  // every grocery: label, exactly one tier, and the tier gate == its min_level
+  const seenFood = new Map();
+  for (const key of FOOD_COLLECTION_ORDER) {
+    for (const id of FOOD_COLLECTIONS[key].items) {
+      tick(!seenFood.has(id), `"${id}" is in both food tiers "${seenFood.get(id)}" and "${key}"`);
+      seenFood.set(id, key);
+    }
+  }
+  for (const id of FOOD_IDS) {
+    const row = foodShop.find((it) => it.id === id);
+    tick(!!row, `grocery "${id}" has a label but no shop row — it can never be bought`);
+    tick(foodLabel(id) !== id, `grocery "${id}" has no friendly label`);
+    const key = foodCollectionForItem(id);
+    tick(!!key, `grocery "${id}" belongs to no food tier — it would never render in the panel`);
+    if (key && row) {
+      tick(FOOD_COLLECTIONS[key].unlockLevel === row.minLevel,
+        `"${id}": tier "${key}" unlocks at Lv ${FOOD_COLLECTIONS[key].unlockLevel} but the row says min_level ${row.minLevel}`);
+    }
+    if (row) tick(row.price > 0, `grocery "${id}" is free — food is a gold sink, nothing in the shop may be free`);
+  }
+  // and the reverse: a tier must not claim an id that has no shop row
+  const foodShopIds = new Set(foodShop.map((it) => it.id));
+  for (const key of FOOD_COLLECTION_ORDER) {
+    for (const id of FOOD_COLLECTIONS[key].items) {
+      tick(foodShopIds.has(id), `food tier "${key}" lists "${id}", which is not in the foodShop payload`);
+    }
+  }
+  // and every grocery in the payload has a tier (the mirror of the above)
+  for (const it of foodShop) {
+    if (NON_GROCERY_FOOD.includes(it.id)) continue;
+    tick(!!foodCollectionForItem(it.id), `foodShop item "${it.id}" belongs to no tier in collections.js`);
+  }
+  say(`food tiers: ${FOOD_COLLECTION_ORDER.map((k) => `${FOOD_COLLECTIONS[k].label}(Lv${FOOD_COLLECTIONS[k].unlockLevel}, ${FOOD_COLLECTIONS[k].items.length})`).join(" · ")}`);
+
+  /* The art. Same trap as the Tripo accessories: a missing PNG is silent in
+     the app (a broken <img> in a small tile reads as "the art is just
+     plain"), so this is the only place it gets caught. */
+  const missingFood = [];
+  await Promise.all(FOOD_IDS.map(async (id) => {
+    try {
+      const r = await fetch(`${foodImgSrc(id)}?v=${Date.now()}`, { method: "HEAD" });
+      if (!r.ok) missingFood.push(id);
+    } catch { missingFood.push(id); }
+  }));
+  tick(missingFood.length === 0, `${missingFood.length} food PNG(s) missing from assets/companion/food/: ${missingFood.join(", ")}`);
+  say(`food art: ${FOOD_IDS.length - missingFood.length}/${FOOD_IDS.length} PNGs present`);
+}
+
+/* ---------- 6h. buy a grocery, eat it, and the rules around eating ----------
+   Exercised for real against the local backend, because every one of these
+   is a server decision the client must not second-guess: the level gate,
+   the consume, "eating is today's feeding", and the three things that are
+   food rows but are not snacks. */
+{
+  const fu = "verify_food_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(fu, "Fridge", "pw12");
+  /* Gold, deterministically: a submitted round pays a flat 10 gold, and
+     with xp 0 it pays no XP at all, so this learner stays at level 1 and
+     the level-gate check below means what it says. (Opening treasure boxes
+     for gold would have been random — and a check that is right 99.99% of
+     the time is exactly how the S2 flake got in.) */
+  for (let i = 0; i < 10; i++) await LocalBackend.submitQuest(fu, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
+  let st = await LocalBackend.getState(fu, "pw12");
+  tick(st.levelInfo.level === 1, `the food learner should still be level 1, got ${st.levelInfo.level}`);
+  tick(st.gold === 100, `10 rounds should pay 100 💎, got ${st.gold}`);
+
+  // the level gate is the SERVER's, not the panel's
+  const locked = await LocalBackend.buyItem(fu, "pw12", "steak");
+  tick(!locked.ok && locked.error === "locked" && locked.minLevel === 11,
+    `a level-1 learner bought a Lv 11 steak: ${JSON.stringify(locked)}`);
+  // …and the pharmacy is untouched by it (soup is min_level 1, always open)
+  const soup = await LocalBackend.buyItem(fu, "pw12", "soup");
+  tick(soup.ok, `the pharmacy stopped selling soup: ${JSON.stringify(soup)}`);
+
+  const goldBefore = (await LocalBackend.getState(fu, "pw12")).gold;
+  const buy = await LocalBackend.buyItem(fu, "pw12", "apple");
+  tick(buy.ok, `buying an apple failed: ${JSON.stringify(buy)}`);
+  tick(buy.gold === goldBefore - 5, `an apple cost ${goldBefore - buy.gold}, expected 5`);
+  st = await LocalBackend.getState(fu, "pw12");
+  tick((st.pantry || {}).apple === 1, `the apple did not land in the fridge: ${JSON.stringify(st.pantry)}`);
+  tick(st.canFeedToday === true, "buying food should not use up the daily cookie");
+
+  // eating: consumed, and it IS the daily feeding
+  const feedBefore = st.blips[0].feedCount;
+  const eat = await LocalBackend.eatFood(fu, "pw12", "apple");
+  tick(eat.ok && eat.item === "apple", `eating the apple failed: ${JSON.stringify(eat)}`);
+  tick(eat.grewToday === true, "the first feeding of the day should pay the growth credit");
+  tick(eat.pantry.apple === undefined, `an eaten apple is still in the fridge: ${JSON.stringify(eat.pantry)}`);
+  tick(eat.blips[0].feedCount === feedBefore + 1, "eating did not grow him");
+  tick(eat.canFeedToday === false, "eating should use up today's feeding");
+  const gone = await LocalBackend.eatFood(fu, "pw12", "apple");
+  tick(!gone.ok && gone.error === "none_left", `eating an apple we do not have: ${JSON.stringify(gone)}`);
+  const cookie = await LocalBackend.feed(fu, "pw12");
+  tick(!cookie.ok && cookie.error === "already_fed", "the free cookie survived a grocery feeding — growth would be buyable");
+
+  // a SECOND snack the same day is still eaten, but grows nothing
+  await LocalBackend.buyItem(fu, "pw12", "banana");
+  const snack = await LocalBackend.eatFood(fu, "pw12", "banana");
+  tick(snack.ok, `a second snack was refused: ${JSON.stringify(snack)}`);
+  tick(snack.grewToday === false, "a second snack paid growth credit — growth must be capped at once a day");
+  tick(snack.blips[0].feedCount === feedBefore + 1, "a second snack grew him again");
+
+  // the three food rows that are not snacks, and one that is not food at all
+  for (const id of NON_GROCERY_FOOD) {
+    const r = await LocalBackend.eatFood(fu, "pw12", id);
+    tick(!r.ok && r.error === "not_edible", `"${id}" was eaten as a snack: ${JSON.stringify(r)}`);
+  }
+  const notFood = await LocalBackend.eatFood(fu, "pw12", "beanie");
+  tick(!notFood.ok && notFood.error === "no_item", `a cosmetic was eaten: ${JSON.stringify(notFood)}`);
+
+  // buying a grocery must never touch the cosmetic closet
+  const after = await LocalBackend.getState(fu, "pw12");
+  tick(!(after.blip.owned || []).includes("apple"), "an apple ended up in the cosmetic closet");
+  say(`food round-trip: bought apple (5 💎) → fridge → eaten → grew once → second snack ate but did not grow`);
+}
+
+/* ---------- 6i. the drag gesture itself (room build S4) ----------
+   Exercised by dispatching real pointer events at two plain divs, because
+   the whole reason drag-feed.js knows nothing about food or Blip is so
+   this could be tested without mounting the Blip screen.
+
+   ⚠️ POINTER EVENTS, NOT rAF — the preview pane never fires
+   requestAnimationFrame (PROJECT-STATUS), which is exactly why the drag is
+   built this way, and why the fly-home is torn down on a timer. */
+{
+  const host = document.createElement("div");
+  host.style.cssText = "position:fixed;left:0;top:0;width:420px;height:340px;opacity:0;z-index:-1";
+  const src = document.createElement("div");
+  src.style.cssText = "position:absolute;left:10px;top:280px;width:44px;height:44px";
+  const tgt = document.createElement("div");
+  tgt.style.cssText = "position:absolute;left:200px;top:40px;width:80px;height:80px";
+  host.append(src, tgt);
+  document.body.appendChild(host);
+
+  const pe = (type, x, y) => new PointerEvent(type,
+    { bubbles: true, cancelable: true, clientX: x, clientY: y, pointerId: 1, button: 0, isPrimary: true, pointerType: "touch" });
+
+  let log = [];
+  let blocked = false;
+  const destroy = makeDraggable(src, {
+    target: () => tgt,
+    ghost: () => { const g = document.createElement("div"); g.className = "test-ghost"; return g; },
+    disabled: () => blocked,
+    onStart: () => log.push("start"),
+    onEnd: () => log.push("end"),
+    onTap: () => log.push("tap"),
+    onDropOn: () => log.push("on"),
+    onDropAway: () => log.push("away"),
+  });
+  const ghostsInBody = () => document.querySelectorAll("body > .feed-ghost").length;
+
+  // the pad maths, on its own
+  tick(isOverTarget(tgt, 240, 80), "a point in the middle of the target did not register");
+  tick(isOverTarget(tgt, 240, 120 + DEFAULT_DROP_PAD_PX - 2), "the drop pad below the target is missing");
+  tick(!isOverTarget(tgt, 240, 120 + DEFAULT_DROP_PAD_PX + 30), "the drop pad extends further than it should");
+  tick(!isOverTarget(null, 240, 80), "a missing target counted as a hit");
+
+  // 1. a press that never moves is a TAP, not a drag (this is what keeps
+  //    the daily cookie tappable now that it is also draggable)
+  log = [];
+  src.dispatchEvent(pe("pointerdown", 30, 300));
+  src.dispatchEvent(pe("pointerup", 32, 301));
+  tick(log.join(",") === "end,tap", `a still press should be a tap, got [${log}]`);
+  tick(ghostsInBody() === 0, "a tap left a ghost behind");
+
+  // 2. dragged ONTO him: eaten. No ghost survives — it does not fly anywhere.
+  log = [];
+  src.dispatchEvent(pe("pointerdown", 30, 300));
+  src.dispatchEvent(pe("pointermove", 70, 270));
+  tick(log.join(",") === "start", `the drag did not begin after crossing the threshold: [${log}]`);
+  tick(ghostsInBody() === 1, "no ghost followed the finger");
+  src.dispatchEvent(pe("pointermove", 240, 80));
+  tick(tgt.classList.contains("feed-target-over"), "Blip did not light up when the food was over him");
+  src.dispatchEvent(pe("pointerup", 240, 80));
+  tick(log.join(",") === "start,end,on", `dropping on the target should feed him, got [${log}]`);
+  tick(!tgt.classList.contains("feed-target-over"), "the drop highlight was left on");
+  tick(ghostsInBody() === 0, "the eaten food is still on screen");
+
+  // 3. dropped ANYWHERE else: no penalty, the sad face, and it flies home
+  log = [];
+  src.dispatchEvent(pe("pointerdown", 30, 300));
+  src.dispatchEvent(pe("pointermove", 70, 270));
+  src.dispatchEvent(pe("pointermove", 20, 100));      // well clear of target + pad
+  tick(!tgt.classList.contains("feed-target-over"), "Blip lit up for a food that was nowhere near him");
+  src.dispatchEvent(pe("pointerup", 20, 100));
+  tick(log.join(",") === "start,end,away", `dropping away should be a miss, got [${log}]`);
+  const flying = document.querySelector("body > .feed-ghost.flying-home");
+  tick(!!flying, "the missed food did not fly home");
+  await new Promise((r) => setTimeout(r, 460));
+  tick(ghostsInBody() === 0, "the flown-home ghost was never cleaned up");
+
+  // 4. a cancelled gesture flies home SILENTLY — no sad face. A cancel is
+  //    the browser taking the gesture away, not the child missing.
+  log = [];
+  src.dispatchEvent(pe("pointerdown", 30, 300));
+  src.dispatchEvent(pe("pointermove", 70, 270));
+  src.dispatchEvent(pe("pointercancel", 70, 270));
+  tick(log.join(",") === "start,end", `a cancel should not report a miss, got [${log}]`);
+  await new Promise((r) => setTimeout(r, 460));
+  tick(ghostsInBody() === 0, "a cancelled drag left a ghost behind");
+
+  // 5. disabled() is honoured (this is how a sick Blip refuses the gesture)
+  log = []; blocked = true;
+  src.dispatchEvent(pe("pointerdown", 30, 300));
+  src.dispatchEvent(pe("pointerup", 30, 300));
+  tick(log.length === 0, `a disabled handle still reacted: [${log}]`);
+  blocked = false;
+
+  // 6. keyboard: Enter feeds him, so the gesture is not the only way in
+  log = [];
+  src.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }));
+  tick(log.join(",") === "tap", `Enter should feed him, got [${log}]`);
+
+  // 7. destroy() really unbinds
+  destroy();
+  log = [];
+  src.dispatchEvent(pe("pointerdown", 30, 300));
+  src.dispatchEvent(pe("pointerup", 30, 300));
+  tick(log.length === 0, `destroy() left a live listener: [${log}]`);
+
+  host.remove();
+  say("drag-to-feed: tap · drop-on · drop-away (flies home, no penalty) · cancel · disabled · keyboard · destroy");
 }
 
 /* ---------- 7. buying, wearing and taking off actually work ---------- */
