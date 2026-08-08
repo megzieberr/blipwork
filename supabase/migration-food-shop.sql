@@ -4,7 +4,11 @@
 --  REVISED same day for S4b (the isometric-room ruling): groceries no
 --  longer live in the pantry — see the TRAY block below.
 --
---  ⏳ NOT RUN YET. Run the WHOLE file in the Supabase SQL editor (project
+--  ✅ APPLIED TO LIVE 2026-08-08 (migration `room_build_s4_food_shop_tray_
+--  cookie_split`, via MCP at ship time). Learner rows verified byte-identical.
+--  Do not run again; kept as the record of what ran.
+--
+--  (original note) Run the WHOLE file in the Supabase SQL editor (project
 --  pjpwhalcifywjrwtjknd) AFTER migration-level-curve-40.sql, whose
 --  mhq_get_state / mhq_buy_item bodies this file re-creates with two small
 --  additions. Additive and idempotent: safe to run more than once, and it

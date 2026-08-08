@@ -3,7 +3,11 @@
 --  Room build S5v2 (2026-08-08), per the REVISION section of
 --  homework-hub-companion/ROOM-BUILD-PLAN.md (the isometric room).
 --
---  ⏳ NOT RUN YET. Run the WHOLE file in the Supabase SQL editor (project
+--  ✅ APPLIED TO LIVE 2026-08-08 (migration `room_build_s5v2_furniture_slots`,
+--  via MCP at ship time). Learner rows verified byte-identical. Do not run
+--  again; kept as the record of what ran.
+--
+--  (original note) Run the WHOLE file in the Supabase SQL editor (project
 --  pjpwhalcifywjrwtjknd) AFTER migration-food-shop.sql, whose
 --  mhq_get_state / mhq_buy_item bodies this file re-creates with one small
 --  addition each. Additive and idempotent: safe to run more than once, and

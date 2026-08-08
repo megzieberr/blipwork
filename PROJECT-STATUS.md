@@ -1,18 +1,24 @@
-# Project status — updated 2026-08-08 (room build S5v2 DONE, committed locally, NOT pushed)
+# Project status — updated 2026-08-08 (ROOM BUILD SHIPPED — live, pushed, sw v39)
 
-## ⏳ TWO MIGRATIONS NOW PENDING, AND THE ORDER MATTERS
+## ✅ 2026-08-08 evening — THE WHOLE ROOM BUILD IS LIVE
 
-Run them in this order, both unrun, both additive and idempotent, neither
-touches a learner row:
+The Fable review session shipped the day: **all migrations are applied to
+live** (food-shop → furniture-slots → ship-fixes, in that order, via MCP),
+sw bumped v38 → v39, everything pushed. Learner rows verified byte-identical
+before and after (md5 over students-core / blips / progress — all three
+hashes unchanged). Live smoke test with a throwaway learner (deleted after,
+cascade verified): category counts cosmetic 63 / food 47 / furniture 18 /
+trinket 6; tray buy→eat→none_left; free bed bought + equipped; unowned and
+trinket equips rejected; techy-bed locked at minLevel 8; door-mint bought
+and equipped; soup → pantry; **milestone box granted at level 10, deduped
+on replay, opened as boxKind=milestone and paid out a trinket (the old
+sock, live and sincere)**.
 
-1. **`supabase/migration-food-shop.sql`** — S4 wrote it, S4b revised it in
-   place. Goes in AFTER `migration-level-curve-40.sql` (it re-creates two of
-   that file's functions).
-2. **`supabase/migration-furniture-slots.sql`** — S5v2. Goes in AFTER the
-   food shop, because it re-creates `mhq_get_state` and `mhq_buy_item` from
-   *that* file's bodies. Running it first would silently un-ship the tray.
-
-The review session at the end of the room build applies both.
+**`supabase/migration-ship-fixes.sql`** (new, applied): revokes public
+execute on `_mhq_roll_loot(text)` (the curve migration's "not granted"
+comment is now true) and makes `mhq_submit_quest`'s milestone-queue append
+atomic (the read-modify-write race from the S2 review). The migration files
+all carry "applied" stamps in their headers now.
 
 ---
 
@@ -1515,11 +1521,9 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
-- 💻 **`supabase/migration-food-shop.sql` — NOT RUN.** Goes in AFTER
-  `migration-level-curve-40.sql`. The end-of-room-build review session runs it
-  with S5's, so there is nothing to do until then. **[with S5]**
-- 📱 2 min: close and reopen the Blipwork PWA twice (sw v34 → v37 is a big jump),
-  then check the cape sits low AND a shop necklace wraps around him **[whenever]**
+- 📱 3 min: reopen the Blipwork PWA twice (v34 → v39 is a big jump), then walk the
+  room once — drag a food onto Blip, buy a door colour, open the Style view
+  **[blocking — the go-live eyeball]**
 - 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
   PUBLIC, so it stays uncommitted until you decide **[whenever]**
 - 🎨 5 min: re-roll `happy-eyes` if you want it better (the weakest of the six eye
@@ -1530,6 +1534,15 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 
 ## Next up
+**TOMORROW (her plan, stated 2026-08-08 at ship time): a few SHELVES, an
+optional POOFY CHAIR, and WALLPAPER.** Notes for that session before it
+starts: shelves/chair are new furniture slots (the known `mhq_equip` +
+constraint dance, four→six keys) with her Tripo art at the room's wall
+angles; wallpaper was DROPPED from the room build because the wall is baked
+into `room-shell.png` — the door-tint trick (one art file, tinted in code)
+is the likely shape for wall colour, but plan it against the shell before
+promising it. The trinket shelf on the Inventory sheet is NOT these shelves.
+
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
 1. ~~Megan's full play-through of all levels~~ — **DONE 2026-07-31.**
 2. ~~Store upgrade: free-tier bundles that include accessories~~ — **BUILT 2026-07-28**,
