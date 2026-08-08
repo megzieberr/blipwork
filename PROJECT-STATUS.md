@@ -160,9 +160,19 @@ The three angled headpieces are resolved (2026-08-08, end of session):
   dressing room.
 - **`neural-crown` RETIRED rather than re-rolled** — her call. Same angled-
   band fault; she chose to drop it. Hat slot 14 → 13.
-- ⚠️ **The filenames did not change**, so a browser will happily serve the
-  OLD picture from cache. Hard-refresh the dressing room (Ctrl+Shift+R)
-  after an art swap or you will be positioning the previous art.
+- ⚠️ **The filenames did not change**, so a browser happily serves the OLD
+  picture from cache. This is not theoretical — it bit immediately: the tab
+  reported the flower crown as 432×325 (the previous art) when the real file
+  is 512×232. **The dressing room now defends itself**: the first time an
+  item is picked it re-fetches that PNG with `cache: "reload"`, so you can
+  never position against stale art. Elsewhere (the app, preview scripts),
+  hard-refresh after an art swap.
+- **The page now says so when it fails to start.** Opening it mid-edit left
+  an empty shell — no items, no Blip, no explanation — which is the same
+  silent-failure trap as the checks. A plain (non-module) guard script now
+  shows a red box after 2.5s with what to try and the actual error. Verified
+  by loading a copy with a deliberately broken import: the box appears with
+  the real message, and stays hidden on a healthy load.
 
 ### ✂️ `crystal-orbit` and `neural-crown` CUT (her calls)
 Same treatment as shadow-crown and pearls: deleted outright, because the app

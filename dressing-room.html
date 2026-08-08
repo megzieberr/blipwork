@@ -125,9 +125,40 @@
 <div id="filebanner">
   <b>Open this through the dev server, not by double-clicking the file.</b><br>
   Colours and the off-stage checks both need to read the picture data, and a browser blocks that
-  on a file opened directly. Start the server, then visit
-  <code>http://localhost:5191/dressing-room.html</code>.
+  on a file opened directly. Double-click <code>dressing-room.bat</code> instead.
 </div>
+
+<!-- If the page's script never runs, everything below renders as an EMPTY
+     SHELL: no item list, no Blip, no colours — and no clue why. That
+     happened once (the page was opened while the accessory files were
+     mid-edit, so the script died on a half-written file) and it just looked
+     broken. This says so out loud instead. Deliberately a PLAIN script, not
+     a module: it has to survive whatever killed the module. -->
+<div id="bootfail" style="display:none;background:var(--bad-bg);color:var(--bad);padding:12px 15px;
+  border-radius:12px;margin-bottom:14px;font-size:12.5px;line-height:1.65"></div>
+<script>
+(function () {
+  var firstError = null;
+  window.addEventListener("error", function (e) {
+    if (!firstError) firstError = (e && e.message) || "a script error";
+  });
+  window.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+      if (document.querySelectorAll(".itembtn").length) return;   // it started fine
+      var el = document.getElementById("bootfail");
+      el.innerHTML =
+        "<b>The page did not start up.</b><br>"
+        + "Nothing below will work until this is sorted. Two things to try, in order:<br>"
+        + "&nbsp;&nbsp;1. Press <b>Ctrl+Shift+R</b> to force a fresh copy — this fixes it most of the time, "
+        + "especially if the files were being edited when you opened the page.<br>"
+        + "&nbsp;&nbsp;2. If that does not help, close this tab, double-click "
+        + "<b>dressing-room.bat</b> again, and tell Claude what the message below says."
+        + (firstError ? "<br><br>What went wrong: <b>" + firstError + "</b>" : "");
+      el.style.display = "block";
+    }, 2500);
+  });
+})();
+</script>
 
 <div class="dr">
 
@@ -312,10 +343,25 @@ function draw() {
   markMoved();
 }
 
-function select(id) {
+/* Re-rolled art keeps the SAME FILENAME, so a browser happily serves the
+   previous picture from cache and you end up carefully positioning art that
+   is no longer there — the numbers would then be wrong for the real file.
+   Caught exactly that with the new flower crown (cache said 432x325, the
+   real file is 512x232). So the first time an item is picked, ask the
+   network for its picture and refresh the cache entry. Once per item per
+   page load; the drag loop never pays for it. */
+const refreshedArt = new Set();
+async function refreshArt(def) {
+  if (!def || !def.img || refreshedArt.has(def.img)) return;
+  refreshedArt.add(def.img);
+  try { await fetch(`assets/companion/items/${def.img}`, { cache: "reload" }); } catch { /* offline is fine */ }
+}
+
+async function select(id) {
   currentId = id;
   document.querySelectorAll(".itembtn").forEach((b) => b.classList.toggle("active", b.dataset.id === id));
   const def = ACCESSORIES[id];
+  await refreshArt(def);
   // Materialise an editable attach. Whether it ends up in the snippet is
   // decided later by comparing against the shipped value.
   if (!def.attach) def.attach = JSON.parse(JSON.stringify(ATTACH[def.slot]));
