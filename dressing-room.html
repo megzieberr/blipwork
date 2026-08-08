@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dressing room · place an accessory on Blip</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  /* ============================================================
+     DRESSING ROOM (2026-08-08) — Megan's tool for placing accessories
+     BY HAND instead of a session guessing numbers at her.
+
+     WHY IT EXISTS: placement is judged by eye, but until now the only eye
+     in the loop at placement time belonged to whoever was writing the
+     code. Three rounds of wave-3 wing corrections in one afternoon, and
+     one of those rounds was caused by the preview SCRIPT itself (it pastes
+     a paired accessory once, so both wings looked like one wing).
+
+     THE RULE THIS PAGE OBEYS: it drives the REAL renderer. Every layer on
+     screen comes from renderCompanion() in js/companion/renderer.js, with
+     the item's own ACCESSORIES entry temporarily overwritten. Nothing here
+     re-implements the placement arithmetic, so this page cannot disagree
+     with the app the way tools/preview_accessory.py could. If you ever feel
+     tempted to hand-compute a position in here — don't. Ask the renderer.
+
+     Changes nothing on disk. Nothing here ships to a learner.
+     ============================================================ */
+  body{font-family:"JetBrains Mono",monospace;padding:16px;max-width:1400px;margin:0 auto}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:20px;margin-bottom:2px}
+  .sub{color:var(--muted);font-size:12px;margin-bottom:14px}
+
+  .dr{display:grid;grid-template-columns:230px minmax(280px,1fr) 340px;gap:16px;align-items:start}
+  @media (max-width:1050px){.dr{grid-template-columns:1fr}}
+  /* A grid child refuses to shrink below its content's natural width unless
+     told to, and the snippet box is a wide <pre> — without this the whole
+     page scrolls sideways on her phone instead of the snippet scrolling
+     inside its own box. */
+  .dr > *{min-width:0}
+
+  .pane{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .pane h2{font-size:12px;letter-spacing:.06em;color:var(--muted);margin:0 0 8px;font-family:'Space Grotesk',sans-serif}
+  .pane h2:not(:first-child){margin-top:16px}
+
+  /* ---- item picker ---- */
+  #picker{max-height:78vh;overflow-y:auto}
+  .slotgroup{font-size:10px;letter-spacing:.08em;color:var(--muted);margin:12px 0 5px;text-transform:uppercase}
+  .slotgroup:first-child{margin-top:0}
+  .itembtn{display:block;width:100%;text-align:left;padding:6px 9px;margin-bottom:3px;border-radius:8px;
+    border:1px solid transparent;background:none;color:var(--ink);font-size:12px;cursor:pointer;font-family:inherit}
+  .itembtn:hover{background:rgba(255,255,255,.06)}
+  .itembtn.active{background:color-mix(in srgb,var(--accent) 22%,transparent);
+    border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+  .itembtn .moved{color:var(--accent2);font-weight:700}
+
+  /* ---- the draggable stage ---- */
+  #stagewrap{position:relative;width:100%;max-width:400px;margin:0 auto;touch-action:none;cursor:grab;
+    border-radius:14px;outline:none}
+  #stagewrap.dragging{cursor:grabbing}
+  #stagewrap:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+  /* The bounds box is the POINT of this page: .room is overflow:hidden in
+     the real app, so anything outside this rectangle is genuinely chopped
+     off on a learner's phone — not merely off-centre. */
+  #bounds{position:absolute;inset:0;border:1px dashed color-mix(in srgb,var(--accent) 55%,transparent);
+    border-radius:10px;pointer-events:none}
+  #bounds.hide{display:none}
+  #blipstage{width:100%}
+
+  .hint{font-size:11px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.6}
+  .key{background:rgba(255,255,255,.08);border-radius:4px;padding:1px 5px;font-size:10px}
+
+  .sizerow{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:10px;flex-wrap:wrap}
+  .sizerow button{width:52px;height:46px;font-size:21px;border-radius:10px;border:1px solid var(--brd);
+    background:var(--panel);color:var(--ink);cursor:pointer;font-family:inherit}
+  .sizerow button:hover{background:rgba(255,255,255,.08)}
+  .sizerow .val{font-size:13px;color:var(--ink);min-width:96px;text-align:center}
+
+  /* ---- real-size checks ---- */
+  #realsizes{display:flex;gap:22px;justify-content:center;align-items:flex-end;margin-top:8px}
+  #realsizes figure{margin:0;text-align:center}
+  #realsizes figcaption{font-size:10px;color:var(--muted);margin-top:5px}
+  .rs-room{width:160px}   /* .room-blip-stage is 38% / max 160px */
+  .rs-shop{width:66px}    /* .shop-item .si-stage is 66px */
+
+  /* ---- readout ---- */
+  .num{display:flex;align-items:center;gap:7px;margin-bottom:6px;font-size:12px}
+  .num label{color:var(--muted);width:74px;flex:0 0 auto}
+  .num input{width:70px;background:var(--panel);border:1px solid var(--brd);color:var(--ink);
+    border-radius:7px;padding:5px 7px;font-family:inherit;font-size:12px}
+  .num input[type=checkbox]{width:auto}
+
+  pre#snippet{white-space:pre;font-size:11px;color:var(--ink);background:var(--panel-solid,#0d1526);
+    padding:11px;border-radius:10px;border:1px solid var(--brd);overflow-x:auto;line-height:1.55}
+  .btnrow{display:flex;gap:8px;margin-top:9px}
+  .btnrow button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--brd);background:var(--panel);
+    color:var(--ink);cursor:pointer;font-family:inherit;font-size:12px}
+  .btnrow button.primary{background:color-mix(in srgb,var(--accent) 30%,var(--panel));
+    border-color:color-mix(in srgb,var(--accent) 60%,var(--panel))}
+  .btnrow button:hover{filter:brightness(1.18)}
+
+  .flag{font-size:11.5px;line-height:1.55;padding:9px 11px;border-radius:10px;margin-bottom:7px}
+  .flag.ok{background:var(--good-bg);color:var(--good)}
+  .flag.warn{background:rgba(255,190,80,.13);color:#ffbe50}
+  .flag.bad{background:var(--bad-bg);color:var(--bad)}
+  .flag b{font-weight:700}
+
+  .swatches{display:flex;flex-wrap:wrap;gap:6px}
+  .sw{width:24px;height:24px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
+  .sw.active{border-color:var(--ink)}
+
+  #filebanner{background:var(--bad-bg);color:var(--bad);padding:11px 14px;border-radius:12px;
+    margin-bottom:14px;font-size:12.5px;line-height:1.6;display:none}
+</style>
+</head>
+<body>
+
+<h1>Dressing room</h1>
+<div class="sub">Drag the accessory onto Blip. Copy the numbers when it looks right.</div>
+
+<div id="filebanner">
+  <b>Open this through the dev server, not by double-clicking the file.</b><br>
+  Colours and the off-stage checks both need to read the picture data, and a browser blocks that
+  on a file opened directly. Start the server, then visit
+  <code>http://localhost:5191/dressing-room.html</code>.
+</div>
+
+<div class="dr">
+
+  <!-- ============ picker ============ -->
+  <aside class="pane" id="picker"></aside>
+
+  <!-- ============ stage ============ -->
+  <main class="pane">
+    <div id="stagewrap" tabindex="0">
+      <div id="blipstage"></div>
+      <div id="bounds"></div>
+    </div>
+
+    <div class="sizerow">
+      <button type="button" id="smaller" title="Smaller">−</button>
+      <div class="val" id="sizeval">—</div>
+      <button type="button" id="bigger" title="Bigger">+</button>
+    </div>
+
+    <div class="hint">
+      Drag to move · scroll or <span class="key">+</span> <span class="key">−</span> to resize<br>
+      <span class="key">↑</span><span class="key">↓</span><span class="key">←</span><span class="key">→</span>
+      nudge · hold <span class="key">Shift</span> for bigger steps
+      <label style="display:block;margin-top:9px">
+        <input type="checkbox" id="showbounds" checked> show the edge of the picture
+      </label>
+    </div>
+
+    <h2 style="margin-top:18px">At the sizes he really appears</h2>
+    <div id="realsizes">
+      <figure><div class="rs-room" id="rsroom"></div><figcaption>in his room</figcaption></figure>
+      <figure><div class="rs-shop" id="rsshop"></div><figcaption>on a shop card</figcaption></figure>
+    </div>
+  </main>
+
+  <!-- ============ readout ============ -->
+  <aside class="pane" id="readout">
+    <h2>How it looks</h2>
+    <div id="flags"></div>
+
+    <h2>Paste this to Claude</h2>
+    <pre id="snippet">Pick an item on the left.</pre>
+    <div class="btnrow">
+      <button type="button" class="primary" id="copybtn">Copy</button>
+      <button type="button" id="resetbtn">Back to shipped</button>
+    </div>
+
+    <h2>Fine tuning</h2>
+    <div class="num"><label>anchor x</label><input type="number" id="anchorx" step="0.01" min="0" max="1"></div>
+    <div class="num"><label>anchor y</label><input type="number" id="anchory" step="0.01" min="0" max="1"></div>
+    <div class="num"><label>tilt°</label><input type="number" id="tilt" step="1"></div>
+    <div class="num"><label>flip sides</label><input type="checkbox" id="flipx"></div>
+    <div class="sub" style="margin:6px 0 0;font-size:10.5px;line-height:1.55">
+      The anchor is the spot ON THE ART that lands where you drag. Moving it is only needed
+      if the art was re-drawn and its shape shifted. <b>Flip sides</b> is for a single wing or
+      arm drawn facing the wrong way.
+    </div>
+
+    <h2>Blip's colour</h2>
+    <div class="swatches" id="swatches"></div>
+    <div class="sub" style="margin:7px 0 0;font-size:10.5px;line-height:1.55">
+      Worth a check on eye items — the patch that hides his painted eyes has to vanish in every colour.
+    </div>
+  </aside>
+</div>
+
+<script type="module">
+import { ACCESSORIES, ATTACH, COLOURS, renderCompanion } from "./js/companion/renderer.js";
+import { ITEM_LABELS, SLOT_LABELS, COSMETIC_SLOTS } from "./js/companion/blip-ui.js";
+
+if (location.protocol === "file:") document.getElementById("filebanner").style.display = "block";
+
+/* Slots painted BEHIND the body (renderer.js SLOT_ORDER puts the body in
+   right after "wings"). For these, "how much is hidden" is the number that
+   actually decides whether an item reads — it is what nobody measured
+   before shipping four Tripo wings into a 4%-clear gap. */
+const BEHIND = new Set(["effects", "back", "wings"]);
+
+/* Snapshot every item's shipped placement BEFORE anything is touched, so
+   "Back to shipped" is exact and so the picker can mark what has moved.
+   `hadOwnAttach` matters: an item with no `attach` of its own inherits its
+   slot's shared ATTACH point, and the generated snippet must only add an
+   `attach` line if the item genuinely needs to override the slot. */
+const SHIPPED = {};
+for (const [id, def] of Object.entries(ACCESSORIES)) {
+  SHIPPED[id] = {
+    hadOwnAttach: !!def.attach,
+    attach: JSON.parse(JSON.stringify(def.attach || ATTACH[def.slot])),
+    anchor: JSON.parse(JSON.stringify(def.anchor || { x: 0.5, y: 0.5 })),
+    widthPct: def.widthPct,
+    flipX: !!def.flipX,
+    tiltDeg: def.tiltDeg || 0,
+  };
+}
+
+let currentId = null;
+let colour = "blue";
+let handle = null;
+
+const $ = (id) => document.getElementById(id);
+const stageWrap = $("stagewrap");
+const isPaired = (def) => Array.isArray(ATTACH[def.slot]);
+const r3 = (n) => Math.round(n * 1000) / 1000;
+
+/* ============================================================
+   picker
+   ============================================================ */
+{
+  const picker = $("picker");
+  picker.innerHTML = "<h2>Accessory</h2>";
+  const bySlot = {};
+  for (const [id, def] of Object.entries(ACCESSORIES)) (bySlot[def.slot] ||= []).push(id);
+  const slotOrder = [...COSMETIC_SLOTS, ...Object.keys(bySlot).filter((s) => !COSMETIC_SLOTS.includes(s))];
+  for (const slot of slotOrder) {
+    if (!bySlot[slot]) continue;
+    const h = document.createElement("div");
+    h.className = "slotgroup";
+    h.textContent = `${SLOT_LABELS[slot] || slot}${isPaired({ slot }) ? " · pair" : ""}`;
+    picker.appendChild(h);
+    for (const id of bySlot[slot].sort()) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "itembtn";
+      b.dataset.id = id;
+      b.innerHTML = `${ITEM_LABELS[id] || id} <span class="moved" data-moved></span>`;
+      b.addEventListener("click", () => select(id));
+      picker.appendChild(b);
+    }
+  }
+}
+
+/* colour swatches */
+{
+  const host = $("swatches");
+  for (const id of Object.keys(COLOURS)) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "sw" + (id === colour ? " active" : "");
+    b.title = id;
+    b.style.background = COLOURS[id] || "#62ceff";
+    b.addEventListener("click", () => {
+      colour = id;
+      host.querySelectorAll(".sw").forEach((s) => s.classList.toggle("active", s.title === id));
+      draw();
+    });
+    host.appendChild(b);
+  }
+}
+
+/* ============================================================
+   drawing — always through the real renderer
+   ============================================================ */
+function draw() {
+  if (!currentId) return;
+  handle = renderCompanion($("blipstage"), { colour, accessories: [currentId] });
+  renderCompanion($("rsroom"), { colour, accessories: [currentId] });
+  renderCompanion($("rsshop"), { colour, accessories: [currentId] });
+  const def = ACCESSORIES[currentId];
+  $("sizeval").textContent = `size ${Math.round(def.widthPct)}`;
+  writeSnippet();
+  markMoved();
+}
+
+function select(id) {
+  currentId = id;
+  document.querySelectorAll(".itembtn").forEach((b) => b.classList.toggle("active", b.dataset.id === id));
+  const def = ACCESSORIES[id];
+  // Materialise an editable attach. Whether it ends up in the snippet is
+  // decided later by comparing against the shipped value.
+  if (!def.attach) def.attach = JSON.parse(JSON.stringify(ATTACH[def.slot]));
+  if (!def.anchor) def.anchor = { x: 0.5, y: 0.5 };
+  $("anchorx").value = r3(def.anchor.x);
+  $("anchory").value = r3(def.anchor.y);
+  $("tilt").value = def.tiltDeg || 0;
+  $("flipx").checked = !!def.flipX;
+  draw();
+  analyse();
+}
+
+function markMoved() {
+  document.querySelectorAll(".itembtn").forEach((b) => {
+    const span = b.querySelector("[data-moved]");
+    if (span) span.textContent = changed(b.dataset.id) ? "●" : "";
+  });
+}
+
+function changed(id) {
+  const def = ACCESSORIES[id], s = SHIPPED[id];
+  if (!def || !s) return false;
+  if (Math.round(def.widthPct) !== Math.round(s.widthPct)) return true;
+  if (!!def.flipX !== s.flipX || (def.tiltDeg || 0) !== s.tiltDeg) return true;
+  const same = (a, b) => a && b && r3(a.x) === r3(b.x) && r3(a.y) === r3(b.y);
+  const cur = def.attach || ATTACH[def.slot];
+  if (Array.isArray(s.attach)) {
+    if (!Array.isArray(cur) || !same(cur[0], s.attach[0]) || !same(cur[1], s.attach[1])) return true;
+  } else if (!same(cur, s.attach)) return true;
+  return !same(def.anchor, s.anchor);
+}
+
+/* ============================================================
+   moving it about
+   ------------------------------------------------------------
+   Dragging edits the ATTACH point (where the item sits), never the anchor.
+   For a paired slot the two points are kept MIRRORED — every paired
+   accessory in this app is symmetric — and the side you grabbed decides
+   the sign, so dragging the left wing leftwards moves it outward rather
+   than sending both wings inward. Getting that backwards was one of the
+   ways today's session confused itself.
+   ============================================================ */
+function nudge(dx, dy, grabbedSide) {
+  const def = ACCESSORIES[currentId];
+  if (isPaired(def)) {
+    const right = def.attach[1];
+    right.x += (grabbedSide === "left" ? -dx : dx);
+    right.y += dy;
+    def.attach = [{ x: 1 - right.x, y: right.y }, { x: right.x, y: right.y }];
+  } else {
+    def.attach.x += dx;
+    def.attach.y += dy;
+  }
+  draw();
+}
+
+let drag = null;
+stageWrap.addEventListener("pointerdown", (e) => {
+  if (!currentId) return;
+  // capture keeps the drag alive if her finger leaves the picture; it can
+  // throw if the pointer is already gone, and that must not kill the drag
+  try { stageWrap.setPointerCapture(e.pointerId); } catch { /* fine without it */ }
+  stageWrap.classList.add("dragging");
+  const r = stageWrap.getBoundingClientRect();
+  drag = { x: e.clientX, y: e.clientY, w: r.width, h: r.height,
+           side: (e.clientX - r.left) / r.width < 0.5 ? "left" : "right" };
+});
+stageWrap.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  // x and width are measured against the stage's WIDTH, y against its
+  // HEIGHT — the asymmetry the renderer's own comment warns about.
+  nudge((e.clientX - drag.x) / drag.w, (e.clientY - drag.y) / drag.h, drag.side);
+  drag.x = e.clientX; drag.y = e.clientY;
+});
+const endDrag = () => { if (drag) { drag = null; stageWrap.classList.remove("dragging"); analyse(); } };
+stageWrap.addEventListener("pointerup", endDrag);
+stageWrap.addEventListener("pointercancel", endDrag);
+
+function resize(delta) {
+  if (!currentId) return;
+  const def = ACCESSORIES[currentId];
+  def.widthPct = Math.max(2, Math.min(200, def.widthPct + delta));
+  draw();
+  analyse();
+}
+$("bigger").addEventListener("click", () => resize(1));
+$("smaller").addEventListener("click", () => resize(-1));
+stageWrap.addEventListener("wheel", (e) => {
+  if (!currentId) return;
+  e.preventDefault();
+  resize(e.deltaY < 0 ? 1 : -1);
+}, { passive: false });
+
+stageWrap.addEventListener("keydown", (e) => {
+  if (!currentId) return;
+  const step = e.shiftKey ? 0.02 : 0.004;
+  const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+  if (moves[e.key]) {
+    e.preventDefault();
+    // keyboard always treats it as grabbing the RIGHT side, so left/right
+    // means left/right on screen for the copy you can see moving outward
+    nudge(moves[e.key][0], moves[e.key][1], "right");
+    analyse();
+  } else if (e.key === "+" || e.key === "=") { e.preventDefault(); resize(1); }
+  else if (e.key === "-" || e.key === "_") { e.preventDefault(); resize(-1); }
+});
+
+/* fine-tuning inputs */
+for (const [el, apply] of [
+  [$("anchorx"), (d, v) => { d.anchor = { x: v, y: d.anchor.y }; }],
+  [$("anchory"), (d, v) => { d.anchor = { x: d.anchor.x, y: v }; }],
+  [$("tilt"), (d, v) => { d.tiltDeg = v; }],
+]) {
+  el.addEventListener("input", () => {
+    if (!currentId) return;
+    const v = parseFloat(el.value);
+    if (!Number.isFinite(v)) return;
+    apply(ACCESSORIES[currentId], v);
+    draw(); analyse();
+  });
+}
+$("flipx").addEventListener("change", () => {
+  if (!currentId) return;
+  ACCESSORIES[currentId].flipX = $("flipx").checked;
+  draw(); analyse();
+});
+$("showbounds").addEventListener("change", () => $("bounds").classList.toggle("hide", !$("showbounds").checked));
+
+$("resetbtn").addEventListener("click", () => {
+  if (!currentId) return;
+  const def = ACCESSORIES[currentId], s = SHIPPED[currentId];
+  def.attach = JSON.parse(JSON.stringify(s.attach));
+  def.anchor = JSON.parse(JSON.stringify(s.anchor));
+  def.widthPct = s.widthPct;
+  def.flipX = s.flipX;
+  def.tiltDeg = s.tiltDeg;
+  if (!s.tiltDeg) delete def.tiltDeg;
+  if (!s.flipX) delete def.flipX;
+  select(currentId);
+});
+
+/* ============================================================
+   the snippet — paste-ready, in the same shape renderer.js already uses
+   ============================================================ */
+function writeSnippet() {
+  const def = ACCESSORIES[currentId], s = SHIPPED[currentId];
+  const art = def.img ? `img: "${def.img}"` : `svg: \`…unchanged…\``;
+  const lines = [`  slot: "${def.slot}", ${art}, widthPct: ${Math.round(def.widthPct)},`];
+  let line2 = `  anchor: { x: ${r3(def.anchor.x)}, y: ${r3(def.anchor.y)} },`;
+  if (def.flipX) line2 += " flipX: true,";
+  if (def.tiltDeg) line2 += ` tiltDeg: ${def.tiltDeg},`;
+  lines.push(line2);
+
+  // Only emit `attach` if this item really does need its own point —
+  // either it shipped with one, or it has now been moved off the slot's
+  // shared point. Emitting it needlessly would quietly detach the item
+  // from a future retune of ATTACH[slot].
+  const sameAsSlot = (() => {
+    const shared = ATTACH[def.slot];
+    const eq = (a, b) => r3(a.x) === r3(b.x) && r3(a.y) === r3(b.y);
+    return Array.isArray(shared)
+      ? eq(def.attach[0], shared[0]) && eq(def.attach[1], shared[1])
+      : eq(def.attach, shared);
+  })();
+  if (!sameAsSlot || s.hadOwnAttach) {
+    lines.push(Array.isArray(def.attach)
+      ? `  attach: [{ x: ${r3(def.attach[0].x)}, y: ${r3(def.attach[0].y)} }, { x: ${r3(def.attach[1].x)}, y: ${r3(def.attach[1].y)} }],`
+      : `  attach: { x: ${r3(def.attach.x)}, y: ${r3(def.attach.y)} },`);
+  }
+  $("snippet").textContent = `"${currentId}": {\n${lines.join("\n")}\n},`;
+}
+
+$("copybtn").addEventListener("click", async () => {
+  const btn = $("copybtn");
+  try {
+    await navigator.clipboard.writeText($("snippet").textContent);
+    btn.textContent = "Copied ✓";
+  } catch {
+    // clipboard is blocked on some setups — select it so she can copy by hand
+    const rng = document.createRange();
+    rng.selectNodeContents($("snippet"));
+    getSelection().removeAllRanges(); getSelection().addRange(rng);
+    btn.textContent = "Selected — press Ctrl+C";
+  }
+  setTimeout(() => { btn.textContent = "Copy"; }, 1600);
+});
+
+/* ============================================================
+   the checks that would have caught today's mistakes
+   ------------------------------------------------------------
+   Both work off the layer's REAL on-screen rectangle, so the placement
+   being measured is whatever the renderer actually did — this page never
+   recomputes a position for itself.
+
+     1. OFF THE PICTURE. `.room` is overflow:hidden, so art outside the
+        stage box is chopped on a phone, not merely off-centre.
+     2. HIDDEN BEHIND HIM. Only meaningful for the behind-the-body slots,
+        and it is the check nobody ran: at the wings slot's shipped height
+        Blip fills 96% of the width, so a wing there is arithmetically
+        unable to show at any size.
+   ============================================================ */
+const PAD = 1;                                   // one stage of margin each side
+const CW = 480 * (1 + PAD * 2), CH = 600 * (1 + PAD * 2);
+const OX = 480 * PAD, OY = 600 * PAD;            // where the real stage starts
+
+let bodyAlpha = null;
+async function loadBodyAlpha() {
+  if (bodyAlpha) return bodyAlpha;
+  const img = new Image();
+  img.src = "assets/companion/blip-base-blue.png";
+  await img.decode();
+  const c = document.createElement("canvas");
+  c.width = 480; c.height = 600;
+  const x = c.getContext("2d", { willReadFrequently: true });
+  x.drawImage(img, 0, 0, 480, 600);
+  bodyAlpha = x.getImageData(0, 0, 480, 600).data;
+  return bodyAlpha;
+}
+
+const artCache = new Map();
+async function loadArt(file) {
+  if (!artCache.has(file)) {
+    const img = new Image();
+    img.src = `assets/companion/items/${file}`;
+    artCache.set(file, img.decode().then(() => img));
+  }
+  return artCache.get(file);
+}
+
+function flag(cls, html) {
+  const d = document.createElement("div");
+  d.className = "flag " + cls;
+  d.innerHTML = html;
+  $("flags").appendChild(d);
+}
+
+async function analyse() {
+  if (!currentId || !handle) return;
+  const def = ACCESSORIES[currentId];
+  $("flags").innerHTML = "";
+
+  const layers = handle.layers[def.slot];
+  const layer = Array.isArray(layers) ? layers[1] : layers;   // the right-hand copy
+  if (!layer) { flag("bad", "That item did not render at all — its picture file is probably missing."); return; }
+
+  /* Wait for the art to load before measuring. A PNG layer's WIDTH comes
+     from widthPct, but its HEIGHT comes from the image's own aspect — so
+     measuring too early gives a zero-height box and every check below
+     reports an empty item. (Found by running this page, which is rather
+     the point of it.) */
+  await Promise.all([...layer.querySelectorAll("img")].map((im) =>
+    im.complete && im.naturalWidth
+      ? null
+      : new Promise((res) => { im.addEventListener("load", res, { once: true });
+                               im.addEventListener("error", res, { once: true }); })));
+  // one frame for layout to settle after the images sized themselves
+  await new Promise((res) => setTimeout(res, 0));
+
+  const sRect = handle.stage.getBoundingClientRect();
+  const lRect = layer.getBoundingClientRect();
+  const box = {
+    x: (lRect.left - sRect.left) / sRect.width * 480,
+    y: (lRect.top - sRect.top) / sRect.height * 600,
+    w: lRect.width / sRect.width * 480,
+    h: lRect.height / sRect.height * 600,
+  };
+
+  if (!def.img) {
+    flag("ok", "Code-drawn item — the picture checks below only run on Megan's own art.");
+    reportPair(def);
+    return;
+  }
+
+  let art;
+  try { art = await loadArt(def.img); } catch { flag("bad", `Could not load ${def.img}.`); return; }
+
+  // Paint the accessory onto a padded canvas so the parts that fall OUTSIDE
+  // the stage are still measurable rather than silently clipped away.
+  const c = document.createElement("canvas");
+  c.width = CW; c.height = CH;
+  const ctx = c.getContext("2d", { willReadFrequently: true });
+  const mirrored = (def.flipX ? "left" : "right") === "right";
+  ctx.save();
+  ctx.translate(OX + box.x, OY + box.y);
+  if (mirrored) { ctx.translate(box.w, 0); ctx.scale(-1, 1); }
+  ctx.drawImage(art, 0, 0, box.w, box.h);
+  ctx.restore();
+
+  let data;
+  try { data = ctx.getImageData(0, 0, CW, CH).data; }
+  catch { flag("warn", "Can't inspect the picture here — open the page through the dev server."); return; }
+  const body = await loadBodyAlpha();
+
+  let total = 0, offStage = 0, hidden = 0;
+  let minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+  for (let py = 0; py < CH; py += 2) {
+    for (let px = 0; px < CW; px += 2) {
+      if (data[(py * CW + px) * 4 + 3] <= 24) continue;
+      total++;
+      const sx = px - OX, sy = py - OY;
+      if (sx < 0 || sx >= 480 || sy < 0 || sy >= 600) { offStage++; continue; }
+      if (sx < minX) minX = sx; if (sx > maxX) maxX = sx;
+      if (sy < minY) minY = sy; if (sy > maxY) maxY = sy;
+      if (body[((sy | 0) * 480 + (sx | 0)) * 4 + 3] > 24) hidden++;
+    }
+  }
+  if (!total) {
+    flag("bad", box.w < 1 || box.h < 1
+      ? "The item's picture has not loaded yet — give it a second, then nudge it once."
+      : "Nothing of this item is visible anywhere.");
+    return;
+  }
+
+  const offPct = Math.round(offStage / total * 100);
+  const onStage = total - offStage;
+  const hidPct = onStage ? Math.round(hidden / onStage * 100) : 100;
+  /* Overlapping his body only COSTS you on the slots painted behind him.
+     A hat, a pair of eyes or a necklace is meant to sit on top of him, so
+     counting that overlap as "hidden" scored every front item at 0% on
+     show and left it with no verdict at all. */
+  const lost = BEHIND.has(def.slot) ? hidden : 0;
+  const showing = total - offStage - lost;
+  const showPct = Math.round(showing / total * 100);
+
+  if (offPct >= 15) {
+    flag("bad", `<b>${offPct}% of it falls off the edge of the picture</b> and will be cut off in his room. Drag it inward or make it smaller.`);
+  } else if (offPct > 0) {
+    flag("warn", `${offPct}% pokes over the edge — a sliver, usually fine, but worth a look.`);
+  }
+
+  if (BEHIND.has(def.slot)) {
+    if (hidPct >= 90) {
+      flag("bad", `<b>${hidPct}% of it is hidden behind Blip.</b> This slot sits behind his body, and he is very wide here — try moving it higher, where there is more room beside him.`);
+    } else if (hidPct >= 70) {
+      flag("warn", `${hidPct}% is hidden behind him. That may be the look you want, but only ${100 - hidPct}% actually shows.`);
+    }
+  }
+
+  if (showPct >= 25 && offPct < 15) flag("ok", `Looks good — <b>${showPct}% of it is on show</b>.`);
+  else if (showPct > 0 && offPct < 15 && !BEHIND.has(def.slot)) flag("ok", `${showPct}% of it is on show.`);
+
+  if (maxX > minX) {
+    const wFrac = (maxX - minX) / 480;
+    if (wFrac * 66 < 5) flag("warn", `On a shop card it is only about ${Math.round(wFrac * 66)} pixels wide — check the small picture above; it may be too tiny to make out.`);
+  }
+
+  reportPair(def);
+}
+
+function reportPair(def) {
+  if (!isPaired(def)) return;
+  const layers = handle.layers[def.slot];
+  const n = Array.isArray(layers) ? layers.length : 1;
+  flag(n === 2 ? "ok" : "bad", n === 2
+    ? "Paired slot — <b>both copies are on screen</b>, exactly as the app draws them."
+    : `Paired slot but only ${n} copy rendered — that is a bug, tell Claude.`);
+}
+
+/* start on something with a story attached */
+select(ACCESSORIES["fairy-wing"] ? "fairy-wing" : Object.keys(ACCESSORIES)[0]);
+</script>
+</body>
+</html>

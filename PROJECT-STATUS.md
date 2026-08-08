@@ -120,6 +120,52 @@ from a sibling item instead of measuring the new art and the body it lands
 on.** Round 1 copied dragon-wings' anchor. Round 2 measured the ART's root
 but never asked whether the BODY had room at that height. Measure both.
 
+## 🪞 2026-08-08 — `dressing-room.html`: Megan places accessories herself
+
+Her call, after three rounds of corrections in one afternoon: *"is there not
+a way I can position the accessories on blip, so we can stop this cycle of
+claude getting the positions wrong?"* There is, and this is it.
+
+Open `http://localhost:5191/dressing-room.html` (serve it — don't
+double-click; canvas reads are blocked on `file://` and it says so).
+
+- Pick any accessory, **drag it onto Blip**, scroll or ± to resize, arrow
+  keys to nudge (Shift = coarser). Paste-ready `ACCESSORIES` entry updates
+  live with a **Copy** button, and "Back to shipped" restores exactly.
+- **It drives the REAL renderer.** Every layer comes from
+  `renderCompanion()` with the item's own entry temporarily overwritten;
+  nothing in the page re-implements placement maths. That is the whole
+  design rule — `tools/preview_accessory.py` re-implements it, and that is
+  precisely how it lied (see below).
+- **Paired slots show BOTH mirrored copies**, and dragging keeps them
+  symmetric with the grabbed side deciding the direction.
+- Renders at the **sizes he actually appears** — 160px (room) and 66px
+  (shop card) — so "too small to read" is visible before shipping.
+- **Two checks that would have caught every mistake this session:**
+  *off the picture* (`.room` is `overflow:hidden`, so overflow is genuinely
+  chopped) and *hidden behind him* (only counted for the behind-the-body
+  slots — effects/back/wings). Verified against the real history: the
+  round-1 wing placement reports **"80% falls off the edge"**, round-2
+  reports **52%**, and the shipped fix reports **"49% on show"**.
+
+**`tools/preview_accessory.py` is now the second-best tool and a known
+liar** — it pastes a paired accessory ONCE, which is why Megan saw a single
+wing and reasonably concluded the mirroring was broken (it was not; the app
+draws two, and `verify-store.html` asserts two). Prefer the dressing room.
+The script is still handy for a quick option-strip of several values in one
+image, which the page does not do. **If you use it on a paired slot, say so
+out loud, or you will hand her a picture of one wing again.**
+
+### Also fixed: `verify-store.html` had a ~25% flaky check
+"the shelf and the drops disagree" failed sporadically — it passed several
+times today and then went red with nothing relevant changed. The app was
+never wrong. The level-10 milestone box is opened before the 60-box loop,
+and a quarter of the time it pays a **trinket**, which lands on the shelf
+without being recorded in the loop's `seenTrinkets` set; the final tally
+then compared N+1 against N. Both `seen*` sets are now seeded from that
+first box. Confirmed with **six consecutive green runs**. A flaky check is
+worse than no check — it teaches you to ignore a red banner.
+
 ### Worth a look before go-live (not changed — her call)
 - **`happy-eyes`** is still the weakest of the six eye pairs by Megan's own
   earlier note (unwanted mouth masked out of the source sheet) — placement

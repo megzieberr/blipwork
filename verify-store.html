@@ -314,6 +314,17 @@ for (const [file, expected] of MIGRATIONS) try {
      20 so the diamond payout (10 x milestone) is distinguishable from the
      homework chest's 15-40 roll. */
   const seenTrinkets = new Set(), seenCosmetics = new Set();
+  /* ⚠️ SEED THESE FROM THE LEVEL-10 BOX OPENED ABOVE. That box has already
+     paid out, and a quarter of the time it pays a TRINKET — which lands on
+     the shelf without being recorded here. The "shelf and the drops
+     disagree" check at the end then compares a shelf of N+1 against N
+     recorded drops and fails.
+     This made the check ~25% flaky from S2 onward; it passed several runs
+     today and then failed, which is exactly how a flaky check trains you to
+     ignore a red banner. The app was never wrong — only the bookkeeping in
+     here was. (Found 2026-08-08 while re-running the suite.) */
+  if (open.loot.kind === "trinket") seenTrinkets.add(open.loot.id);
+  if (open.loot.kind === "cosmetic") seenCosmetics.add(open.loot.id);
   const kinds = { gold: 0, cosmetic: 0, trinket: 0 };
   for (let i = 0; i < 60; i++) {
     globalThis.__BLIP_DEV__.grantMysteryBox(20, mu);
