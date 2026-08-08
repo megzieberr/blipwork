@@ -64,22 +64,45 @@ learner's own owned items are never collection-gated, only the shop is.
    locked cards interspersed, and an unlabelled run of grids read
    confusing in testing. Easy to remove if Megan disagrees.
 
+### Round 2 — phone-review fixes (same session, 2026-08-08)
+Megan's actual phone review of the round-1 previews caught real placement
+misses. All fixed in `renderer.js`, re-verified (`verify-store.html` stays
+1736/1736), re-previewed and re-sent:
+- **flower-crown, hair-bow**: lowered (`attach.y` 0.20→0.235, 0.19→0.225)
+  so the crown wraps his pointy head instead of hovering above it, and the
+  bow sits on the front of his head. Backwards-cap, bucket-hat, snapback
+  lowered too, same ask ("hats should be lowered as well").
+- **tiara**: confirmed perfect, unchanged.
+- **fairy-wing / butterfly-wing were the real bug**: "I don't see anything
+  with the butterfly." The first pass anchored on the art's MEASURED true
+  root (leftmost opaque pixel) — but the maths for a right-side wing means
+  anchoring exactly on the root pushes ~94% of the wing off the right edge
+  of the stage; only a ~6%-of-stage sliver survives, invisible at Blip's
+  size. Fixed by anchoring further INTO the wing body (`anchor.x` 0.03→0.35)
+  — sacrifices showing the true root tip (hidden behind him anyway) for
+  showing the actual visible lobe. Confirmed via `tools/preview_accessory.py`
+  that the OLD numbers on the SAME test also make the already-shipped
+  dragon-wings/gold-wings show only a thin sliver — so this whole Tripo
+  wing family reads as more subtle than intended; fairy/butterfly are now
+  fixed, dragon/gold-wings were NOT touched (out of scope, not reported
+  broken) but the same fix would apply if she ever flags them too.
+
 ### Worth a look before go-live (not changed — her call)
-- **Two wave-3 wings (fairy-wing, butterfly-wing) read as small — most of
-  the wing is hidden behind Blip's silhouette, with only a corner peeking
-  out at the bottom-left.** Verified this is the SAME behaviour the
-  already-shipped dragon-wings/gold-wings show at the identical
-  anchor/attach (`tools/preview_accessory.py` renders both the same way),
-  so it's the established wing convention, not a bug introduced here — but
-  butterfly-wing's actual art root sits noticeably higher in its frame
-  than fairy/dragon/gold, so it's worth her own glance rather than trusting
-  the analogy blindly. Preview PNGs for all 16 items sent directly and
-  saved to
-  `C:\Users\megzi\AppData\Local\Temp\claude\C--Users-megzi--claude\bb30f55a-21e5-4550-a574-5820b8637517\scratchpad\wave3-previews\`
-  (session-scoped scratch — copy anything worth keeping before it clears).
 - **`happy-eyes`** is still the weakest of the six eye pairs by Megan's own
   earlier note (unwanted mouth masked out of the source sheet) — placement
   itself previews fine at widthPct 54, this is an art-quality call only.
+- **Eye pairs, her call (2026-08-08 phone review)**: only the two "pink
+  makeup" pairs (lash-eyes' eyeshadow, happy-eyes' rosy cheeks) read as
+  aligned correctly to her; the other four (star/angry/dreamy/wink) "look
+  odd". Her plan is to regenerate those four in Tripo against a fresh Blip
+  reference rather than have placement re-tuned — **nothing changed here,
+  waiting on her new art.** When it lands: re-measure widthPct/anchor per
+  item rather than reusing today's numbers (per the wing lesson above,
+  don't copy a sibling's number without checking the new art's own pixels).
+
+Preview PNGs (both rounds) saved to
+`C:\Users\megzi\AppData\Local\Temp\claude\C--Users-megzi--claude\bb30f55a-21e5-4550-a574-5820b8637517\scratchpad\wave3-previews\`
+(session-scoped scratch — copy anything worth keeping before it clears).
 
 ---
 

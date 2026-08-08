@@ -943,36 +943,53 @@ export const ACCESSORIES = {
   // --- fairy (collections.js gate: Lv16). Both wings in this wave root at
   // the LOWER-LEFT like every other Tripo wing, hence flipX — see the
   // 2026-08-05 wing ruling in ATTACH's header comment.
+  // anchor.x MEASURED then DELIBERATELY moved inward from the art's true
+  // root (its alpha-channel leftmost pixel sits at x0.006/y0.676 of the
+  // PNG) — anchoring exactly on the root pushed almost the whole wing off
+  // the right edge of the stage (only ~6% of stage width landed on-screen,
+  // which is what Megan's "I don't see anything" review caught). Anchoring
+  // further INTO the wing body (x0.35) sacrifices showing the true root
+  // tip — invisible behind him anyway — in exchange for the wing's actual
+  // visible lobe landing on-stage. y kept at the measured root height.
   "fairy-wing": {
-    slot: "wings", img: "fairy-wing.png", widthPct: 34,
-    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+    slot: "wings", img: "fairy-wing.png", widthPct: 36,
+    anchor: { x: 0.35, y: 0.676 }, flipX: true,
   },
   // Own lower attach, same as wizard-hat/royal-crown/neural-crown — he is a
   // teardrop, so a solid crown-like item needs to come down far enough to
   // wrap the point or it just hovers with a gap.
+  // Megan's phone review (2026-08-08): lower still, so his pointy crown
+  // shows THROUGH the ring rather than the ring floating clear above it.
   "flower-crown": {
     slot: "hat", img: "flower-crown.png", widthPct: 36,
-    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.20 },
+    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.235 },
   },
 
   // --- girly (Lv12)
+  // Megan's phone review (2026-08-08): lower, so the bow sits on the FRONT
+  // of his head rather than hovering above the crown.
   "hair-bow": {
     slot: "hat", img: "hair-bow.png", widthPct: 26,
-    anchor: { x: 0.5, y: 0.88 }, attach: { x: 0.5, y: 0.19 },
+    anchor: { x: 0.5, y: 0.88 }, attach: { x: 0.5, y: 0.225 },
   },
   "tiara": {           // RARE (silver + gems, priced to match)
     slot: "hat", img: "tiara.png", widthPct: 34,
     anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.24 },
   },
+  // Same fix as fairy-wing above: root measured at x0.006/y0.558, anchor
+  // moved inward to x0.35 so the actual wing lobe lands on-stage instead of
+  // clipping off the right edge — this is what "I don't see anything with
+  // the butterfly" (Megan's phone review, 2026-08-08) was catching.
   "butterfly-wing": {
-    slot: "wings", img: "butterfly-wing.png", widthPct: 30,
-    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+    slot: "wings", img: "butterfly-wing.png", widthPct: 36,
+    anchor: { x: 0.35, y: 0.558 }, flipX: true,
   },
 
-  // --- tomboy (Lv9)
+  // --- tomboy (Lv9). Megan's phone review (2026-08-08): "hats should be
+  // lowered as well" — bumped alongside flower-crown/hair-bow.
   "backwards-cap": {
     slot: "hat", img: "backwards-cap.png", widthPct: 38,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.20 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.235 },
   },
   // Drawn straight-on like the code-drawn eyewear, so it uses the shared
   // glasses convention as-is (widthPct 90, lens centres land on his eyes) —
@@ -982,7 +999,7 @@ export const ACCESSORIES = {
   },
   "bucket-hat": {
     slot: "hat", img: "bucket-hat.png", widthPct: 40,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.22 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.25 },
   },
 
   // --- gangster (Lv20 — chunky-chain, shipped 2026-08-07, joins this
@@ -993,7 +1010,7 @@ export const ACCESSORIES = {
   },
   "snapback": {
     slot: "hat", img: "snapback.png", widthPct: 38,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.20 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.235 },
   },
 
   /* --- eye pairs (collections.js gate: Lv5). art-source/tripo/
