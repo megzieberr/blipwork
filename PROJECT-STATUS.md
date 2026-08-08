@@ -1,4 +1,29 @@
-# Project status — updated 2026-08-08 (room build S3, committed locally, NOT pushed)
+# Project status — updated 2026-08-08 (room build S3 DONE, committed locally, NOT pushed)
+
+## ⏳ WHAT'S WAITING ON MEGAN (read this first — everything else is done)
+
+1. 💻 **Run `supabase/migration-cut-items.sql`** — removes crystal-orbit and
+   neural-crown from live. Safe, no learner data touched. **[with the others below]**
+2. 💻 **Run `supabase/migration-wave3-collections.sql`** — the 16 wave-3
+   items. Must go in AFTER migration-level-curve-40.sql. **[same sitting]**
+3. 💻 **Still unrun from earlier sessions**, in this order:
+   `migration-level-curve-40.sql`, then `migration-search-path-pin.sql`
+   (optional tidy-up). **[same sitting]**
+
+Everything above is one SQL session, in this order:
+`level-curve-40 → wave3-collections → cut-items` (+ search-path-pin whenever).
+
+Nothing is pushed. `sw.js` is still v38 — the review session bumps it once.
+
+### Not urgent, but noted
+- **`wizard-hat` has 7% of it over the top edge** at the position she chose
+  (its tip). The dressing room flagged it amber and she shipped it anyway,
+  which is her call — recorded so nobody "fixes" it, and so it is easy to
+  nudge down later if the clipped tip ever bothers her in the room.
+- Four eye pairs (star / angry / dreamy / wink) still want re-rolling — the
+  prompts are written and waiting, see below.
+
+---
 
 ## 🎨 2026-08-08 — ROOM BUILD S3: shop collections + mystery cards + wave-3 wiring
 
@@ -153,11 +178,11 @@ The three angled headpieces are resolved (2026-08-08, end of session):
   with `--opaque`. New shapes: flower-crown **512×232** (wide shallow arc),
   wizard-hat **512×451** (flat cut-out, straight bar brim). Same ids and
   filenames, so this is a pure art swap — **no migration, no shop change.**
-  ⚠️ Their old `widthPct`/`anchor`/`attach` are meaningless against the new
-  art; the values in `renderer.js` now are a deliberate STARTING POINT
-  (flower-crown 52 / 0.5,0.85 / 0.5,0.30 · wizard-hat 45 / 0.5,0.95 /
-  0.5,0.32), marked as such in the comments, for Megan to settle in the
-  dressing room.
+  **Both are now placed by Megan in the dressing room and settled**:
+  flower-crown `widthPct 52 · anchor 0.5,0.85 · attach 0.5,0.385`;
+  wizard-hat `widthPct 41 · anchor 0.5,0.95 · attach 0.516,0.234`.
+  flower-crown reports 100% on show; wizard-hat 93%, with 7% of its tip over
+  the top edge — amber, seen, and accepted by her.
 - **`neural-crown` RETIRED rather than re-rolled** — her call. Same angled-
   band fault; she chose to drop it. Hat slot 14 → 13.
 - ⚠️ **The filenames did not change**, so a browser happily serves the OLD

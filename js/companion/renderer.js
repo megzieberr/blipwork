@@ -759,8 +759,8 @@ export const ACCESSORIES = {
   // for the dressing room, not a measured placement: anchored on the brim
   // (bottom centre) so it rests on his head.
   "wizard-hat": {
-    slot: "hat", img: "wizard-hat.png", widthPct: 45,
-    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.32 },
+    slot: "hat", img: "wizard-hat.png", widthPct: 41,
+    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.516, y: 0.234 },
   },
   // NB `crown` is already taken by the code-drawn 180g hat, so this one is
   // royal-crown. Same for cyber-visor vs the existing `visor`.
@@ -1006,7 +1006,7 @@ export const ACCESSORIES = {
   // the dressing room, not a measured placement.
   "flower-crown": {
     slot: "hat", img: "flower-crown.png", widthPct: 52,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.30 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.385 },
   },
 
   // --- girly (Lv12)
