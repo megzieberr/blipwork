@@ -33,9 +33,16 @@ touched. Six price tiers, gated by level:
 Sweets and drinks are gated ABOVE the hot meals they undercut on price —
 they are treats, and the *level* is what makes them one.
 
+**⚠️ THE FREE COOKIE IS NEVER USED UP BY BOUGHT FOOD** (her ruling — the
+first draft got this wrong). Feeding him an apple leaves the 🍪 sitting
+there. Bought food resets the sickness clock but does **not** grow him; the
+free cookie is still the only thing that does, so growth stays unbuyable.
+That needed one new column, `students.last_cookie_day` — full reasoning in
+the deviations below.
+
 **REUSED, NOT FORKED.** Buying a grocery already worked: `mhq_buy_item`'s
 food branch puts any non-`treat` food row into the pantry, so the 44 rows
-needed no new buy path. Three small changes were needed and no more:
+needed no new buy path. These changes were needed and no more:
 1. `mhq_get_state`'s `foodShop` array now carries **`minLevel`** (the
    `min_level` column always existed — only the payload got wider).
 2. `mhq_buy_item`'s food branch now **honours `min_level`**, which it never
@@ -45,6 +52,10 @@ needed no new buy path. Three small changes were needed and no more:
 3. A new RPC **`mhq_eat_food(username, password, item)`**, shaped exactly
    like `mhq_feed`/`mhq_care`: auth → ensure blip → row lock → refuse while
    sick → consume → return fresh state. Granted to anon like every other RPC.
+4. One new column, **`students.last_cookie_day`**, so the free cookie has a
+   day-stamp of its own — and `mhq_feed` re-created to read it. It needs no
+   GRANT (all privileges on `students` are already revoked from anon; access
+   is RPC-only), the same basis S2 used for its two columns.
 
 **DRAG-TO-FEED IS BUILT.** New `js/companion/drag-feed.js` — the gesture
 only, knowing nothing about food, Blip or the backend, so the whole path can
@@ -65,39 +76,47 @@ not run — same reason rAF is banned here).
 - **The daily cookie is draggable too**, same rules, and tap still works.
 
 ### Deviations and judgement calls (rule 9 — recorded, not silently redesigned)
-1. **⚠️ EATING IS THE DAILY FEEDING — the one real design call.** The brief
-   said eating "counts as a feeding". Taken literally that could mean growth
-   is buyable: 45 cookies' worth of growth costs about 200 gold in apples.
-   So eating resets the sickness clock and pays the growth credit, **but that
-   credit is capped at once a day, exactly like the free cookie.** A second
-   snack the same day is really eaten and really animates; it just grows
-   nothing. The corollary, which is worth knowing before she plays it:
-   **feeding him an apple uses up today's cookie** (they share
-   `last_fed_day`). That is the honest reading of "he has been fed today",
-   and the alternative — two separate daily feedings — is the double-dip this
-   avoids. Easy to change if she wants the cookie kept separate.
-2. **Growth from eating is household-wide** (+1 to every blip), because
-   `mhq_feed` already works that way and splitting the two would make a
-   two-blip household behave differently depending on which food you used.
-3. **The grocery shop KEEPS THE SHEET OPEN after a buy**, unlike every other
+1. **⚠️ THE FREE COOKIE IS NEVER USED UP BY BOUGHT FOOD — her ruling, and
+   it needed a NEW COLUMN.** The first draft had eating share the cookie's
+   day-stamp, so feeding him an apple quietly cost him his cookie. She said
+   no. `last_fed_day` was doing two jobs — "has the cookie been claimed
+   today?" and "when did he last eat?" (which drives the sickness clock) —
+   so the first job moved to its own column, **`students.last_cookie_day`**.
+   After the split:
+   - **Free cookie**: unchanged. Once a day, free, grows him, resets the
+     clock — and now nothing else can consume it.
+   - **Bought food**: consumed, plays the eating moment, and **resets the
+     sickness clock** (it is real food; feeding him a steak must not leave
+     him starving) — but pays **no growth** and leaves the cookie sitting
+     there.
+   Growth therefore stays exactly what phase 2 always said it was: **the
+   free daily cookie is the only thing that grows a blip**, so growth can
+   never be bought. The once-a-day growth cap the first draft needed is gone
+   with it.
+   **The new column needs no GRANT** — `revoke all on public.students from
+   anon, authenticated` is already in force and every read goes through a
+   SECURITY DEFINER RPC, the same basis S2 used for its two columns. It is
+   backfilled from `last_fed_day` so nobody who already had a cookie today
+   is handed a second one the moment it lands.
+2. **The grocery shop KEEPS THE SHEET OPEN after a buy**, unlike every other
    sheet action (the S1 convention). A shopping trip is several items, and
    S1 itself flagged that convention as "worth smoothing later" — this is the
    panel where it hurt. The Food panel therefore reads `app.state` fresh on
    each render instead of the captured closure, so the fridge counts update
    in place. Feeding still closes the sheet (you want to watch him eat).
-4. **A fridge tile can also be TAPPED (and Enter/Space'd) to feed**, not only
+3. **A fridge tile can also be TAPPED (and Enter/Space'd) to feed**, not only
    dragged. The brief only required that for the cookie, but a drag-only
    control is unreachable by keyboard, and the tap path is the same call.
-5. **The daily cookie now plays `eating`, not `excited`.** It is food; the
+4. **The daily cookie now plays `eating`, not `excited`.** It is food; the
    eating art exists for exactly this and did not when the cookie was built.
    Both cookie and grocery feeds now WAIT for the moment to finish (~2.1s)
    before the refresh + re-render — the re-render replaces the `<img>` the
    frames run on, so without the wait the animation was one frame. New export
    `momentDurationMs()` in renderer.js keeps that number in one place.
-6. **A locked food tier reuses the S3 Blip-silhouette card**, not a food
+5. **A locked food tier reuses the S3 Blip-silhouette card**, not a food
    silhouette. "The S3 locked-card pattern" is what the brief asked for, and
    one card style for both shops reads as one system.
-7. **`soup` / `medicine` / `treat` are refused by name** by `mhq_eat_food`
+6. **`soup` / `medicine` / `treat` are refused by name** by `mhq_eat_food`
    (`not_edible`). Soup and medicine are consumed as a PAIR by `mhq_care` to
    make one care day; eating the soup on its own would quietly break the
    recovery streak.
@@ -108,8 +127,13 @@ not run — same reason rAF is banned here).
   client mirror on price / minLevel / kind; every grocery has a label, art
   (44/44 PNGs fetched), and exactly one tier; every tier gate equals its rows'
   `min_level`; soup/medicine/treat are in no tier; buy → fridge → eat →
-  consumed → grew once → second snack ate but did not grow; the free cookie
-  reports `already_fed` after a grocery feed; `not_edible` for all three
+  consumed; **eating leaves `canFeedToday` TRUE and `feedCount` unchanged**,
+  the cookie afterwards still works and IS what grows him, and a second claim
+  of it reports `already_fed`; a real meal given to a genuinely tired Blip
+  puts `daysUnfed` back to 0 **without costing the cookie** (the term is
+  toggled on and days are stepped ONE at a time until he is tired — a fixed
+  6-day jump lands him bedridden, where he correctly refuses food, and that
+  failed for the wrong reason first time); `not_edible` for all three
   supplies; `no_item` for a cosmetic; a level-1 learner is refused a Lv 11
   steak while soup still sells; and the whole drag gesture (tap · drop-on ·
   drop-away · cancel · disabled · keyboard · destroy).
@@ -119,6 +143,11 @@ not run — same reason rAF is banned here).
   suite 2417–2420, and the **pre-S4 file re-run today reads 1699–1702, not the
   "1736" recorded above** — that number was one sample, not a constant. Don't
   go hunting for 36 missing checks.
+- **The cookie rule was walked in the browser too**: dragged an apple onto
+  him — apple gone from the fridge, cookie still 🍪 and tappable,
+  `canFeedToday` true, `feedCount` unmoved at 4 — then tapped the cookie:
+  ✅, disabled, `feedCount` 4 → 5. Growth comes from the cookie and nothing
+  else.
 - **Walked in the browser pane** (`?local=1`, fresh signup, **zero console
   errors**): the fridge opens the Food sheet; at level 1 only Fresh is open
   and the other five tiers show as "?" cards reading Lv 4 / 7 / 11 / 14 / 17;
@@ -867,17 +896,24 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - 2026-08-08 (S2): **`loot_table` gained a `box` column rather than a second table.**
   Phase-3 rows default to 'assignment', so the homework chest's weights are untouched
   and both boxes stay tunable in one place, server-side, as the phase-3 ruling requires.
-- 2026-08-08 (S4): **Eating a bought grocery IS the daily feeding.** It resets the
-  sickness clock and pays the growth credit, but that credit stays capped at once a
-  day exactly like the free cookie, so growth can never be bought (45 cookies' worth
-  of growth would otherwise cost about 200 gold in apples). Consequence to know:
-  feeding him an apple uses up today's cookie — they share `last_fed_day`. Later
-  snacks the same day are still eaten and still animate.
+- 2026-08-08 (S4, **her ruling**): **The free cookie is NEVER used up by bought
+  food.** A first draft had the two share `last_fed_day`, so feeding him an apple
+  quietly cost him his cookie; she said no. `last_fed_day` was doing two jobs, so
+  the cookie's got its own column, **`students.last_cookie_day`** (no GRANT needed —
+  all privileges on `students` are revoked and access is RPC-only, as for S2's two
+  columns; backfilled from `last_fed_day` so nobody gets a second cookie on day one).
+  Now: bought food is consumed and **resets the sickness clock** (real food must
+  actually feed him) but **pays no growth and leaves the cookie alone**; the free
+  cookie is still the ONLY thing that grows a blip, so growth can never be bought.
+  ⚠️ Anyone tempted to fold those two columns back together re-creates the bug —
+  verify-store asserts `canFeedToday` stays true and `feedCount` unchanged after a
+  grocery feeding.
 - 2026-08-08 (S4): **The 44 groceries are ordinary `category='food'` rows.** No new
-  category, no new slot, no new column — `mhq_buy_item`'s food branch already put any
-  non-`treat` food into the pantry. Only three things had to change: `minLevel` joins
-  the `foodShop` payload, the food branch honours `min_level` (soup/medicine/treat are
-  level 1, so the pharmacy cannot be affected), and `mhq_eat_food` is new.
+  category and no new slot — `mhq_buy_item`'s food branch already put any non-`treat`
+  food into the pantry. Only these had to change: `minLevel` joins the `foodShop`
+  payload, the food branch honours `min_level` (soup/medicine/treat are level 1, so
+  the pharmacy cannot be affected), `mhq_eat_food` is new, and `mhq_feed` now reads
+  the `last_cookie_day` column added for the ruling above.
 - 2026-08-08 (S4): **soup / medicine / treat are refused by name as snacks**
   (`not_edible`). `mhq_care` consumes soup and medicine as a PAIR to make one care
   day; eating the soup alone would silently break the recovery streak.

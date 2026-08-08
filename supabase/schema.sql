@@ -83,7 +83,11 @@ create table public.students (
   -- stored — it is computed from these + the term toggle (see _mhq_health).
   -- The blip_* / owned_items / equipped columns above are kept but the RPCs
   -- now treat the `blips` table as the source of truth (per-blip state).
-  last_fed_day   date,                            -- last FREE-cookie day (growth + sickness anchor)
+  -- S4 (2026-08-08) SPLIT these two apart. They used to be one column, and
+  -- then feeding him a bought apple silently ate his free cookie. Her
+  -- ruling: it must not. So —
+  last_fed_day    date,                           -- last day he ate ANYTHING (the sickness-clock anchor)
+  last_cookie_day date,                           -- last day the FREE cookie was claimed (growth)
   care_streak    integer not null default 0,      -- consecutive qualifying care days
   last_care_day  date,                            -- last day soup+medicine were given
   pantry         jsonb not null default '{}'::jsonb, -- consumables: {soup:n, medicine:n}
@@ -390,7 +394,9 @@ begin
     into blip1 from public.blips where student_id = sid and slot = 1;
 
   is_qual  := public._mhq_is_qual_day();
-  can_feed := (stg < 2) and (st.last_fed_day is null or st.last_fed_day < current_date);
+  -- S4: the cookie reads its OWN stamp, so eating a bought grocery (which
+  -- sets last_fed_day) leaves the free cookie sitting there waiting.
+  can_feed := (stg < 2) and (st.last_cookie_day is null or st.last_cookie_day < current_date);
   can_care := (stg >= 2) and is_qual and (st.last_care_day is null or st.last_care_day < current_date);
 
   return jsonb_build_object('ok', true,
@@ -411,14 +417,19 @@ begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
   perform public._mhq_ensure_blip(sid);
-  select last_fed_day, care_streak into st from public.students where id = sid for update;
+  select last_fed_day, last_cookie_day, care_streak into st from public.students where id = sid for update;
   stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
   if stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
-  if st.last_fed_day is not null and st.last_fed_day >= current_date then
+  -- S4: guarded by the cookie's OWN stamp. A bought apple sets last_fed_day
+  -- (it resets the sickness clock) but must never consume the free cookie.
+  if st.last_cookie_day is not null and st.last_cookie_day >= current_date then
     return jsonb_build_object('ok', false, 'error', 'already_fed');
   end if;
+  -- the cookie is still the ONLY thing that grows a blip, so growth can
+  -- never be bought (phase-2 ruling, unchanged by the food shop)
   update public.blips set feed_count = feed_count + 1 where student_id = sid;  -- household
-  update public.students set last_fed_day = current_date, last_active_at = now() where id = sid;
+  update public.students set last_cookie_day = current_date, last_fed_day = current_date,
+                             last_active_at = now() where id = sid;
   select coalesce(jsonb_agg(jsonb_build_object(
             'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
             'growthStage', public._mhq_growth(feed_count)) order by slot), '[]'::jsonb)
@@ -436,15 +447,18 @@ end; $$;
 -- one care day — eating the soup on its own would break the streak) and
 -- 'treat' (a gold sink that never lands in the pantry).
 --
--- THE DAILY-FEEDING RULE: eating IS the daily feeding. It resets the
--- sickness clock and pays the growth credit — but that credit is capped at
--- once a day, exactly like the free cookie, so GROWTH CAN NEVER BE BOUGHT.
--- A later snack the same day is still eaten and still animates; it just
--- grows nothing and moves no clock. See supabase/migration-food-shop.sql.
+-- WHAT EATING DOES AND DOES NOT DO (her ruling, 2026-08-08):
+--   DOES     — consume the food and reset the SICKNESS CLOCK (last_fed_day).
+--              It is real food; a learner who feeds him a steak must not
+--              still find him starving.
+--   DOES NOT — touch the free cookie (that lives on its own stamp,
+--              last_cookie_day) and does NOT grow him. Growth stays
+--              cookie-only, so growth can never be bought.
+-- See supabase/migration-food-shop.sql §1b for why the column was split.
 create or replace function public.mhq_eat_food(p_username text, p_password text, p_item text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare v_sid uuid; v_st record; v_itm record; v_stg int;
-        v_pan jsonb; v_cnt int; v_last date; v_fed boolean := false; v_blips jsonb;
+        v_pan jsonb; v_cnt int; v_blips jsonb; v_can_feed boolean;
 begin
   v_sid := public._mhq_auth(p_username, p_password);
   if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -457,7 +471,7 @@ begin
     return jsonb_build_object('ok', false, 'error', 'not_edible');
   end if;
 
-  select students.pantry, students.last_fed_day, students.care_streak
+  select students.pantry, students.last_fed_day, students.last_cookie_day, students.care_streak
     into v_st from public.students where students.id = v_sid for update;
 
   v_stg := (public._mhq_health(v_st.last_fed_day, v_st.care_streak)->>'stage')::int;
@@ -472,16 +486,10 @@ begin
     v_pan := jsonb_set(v_pan, array[p_item], to_jsonb(v_cnt - 1), true);
   end if;
 
-  if v_st.last_fed_day is null or v_st.last_fed_day < current_date then
-    update public.blips set feed_count = blips.feed_count + 1 where blips.student_id = v_sid;
-    v_last := current_date;
-    v_fed  := true;
-  else
-    v_last := v_st.last_fed_day;
-  end if;
-
+  -- last_fed_day only: the clock resets, the cookie stamp is untouched,
+  -- and feed_count (growth) is untouched.
   update public.students
-     set pantry = v_pan, last_fed_day = v_last, last_active_at = now()
+     set pantry = v_pan, last_fed_day = current_date, last_active_at = now()
    where students.id = v_sid;
 
   select coalesce(jsonb_agg(jsonb_build_object(
@@ -491,9 +499,12 @@ begin
             'owned', blips.owned_items, 'equipped', blips.equipped) order by blips.slot), '[]'::jsonb)
     into v_blips from public.blips where blips.student_id = v_sid;
 
+  v_can_feed := (v_st.last_cookie_day is null or v_st.last_cookie_day < current_date);
+
   return jsonb_build_object('ok', true, 'item', p_item, 'pantry', v_pan, 'blips', v_blips,
-    'grewToday', v_fed,
-    'health', public._mhq_health(v_last, v_st.care_streak), 'canFeedToday', false);
+    'health', public._mhq_health(current_date, v_st.care_streak),
+    -- the cookie survives a grocery feeding — that is the whole point
+    'canFeedToday', v_can_feed);
 end; $$;
 
 create or replace function public.mhq_care(p_username text, p_password text)

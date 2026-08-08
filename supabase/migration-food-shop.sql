@@ -20,22 +20,34 @@
 --       cosmetic branch always has. soup / medicine / treat are all
 --       min_level 1, so the pharmacy is unchanged in every case.
 --    4. NEW RPC mhq_eat_food(username, password, item) — consumes one
---       grocery from the pantry server-side and counts as a feeding.
+--       grocery from the pantry server-side and feeds him for the day.
+--    5. NEW COLUMN students.last_cookie_day — see the ruling below. It
+--       needs no GRANT of its own: `revoke all on public.students from
+--       anon, authenticated` is already in force and every read goes
+--       through a SECURITY DEFINER RPC (same basis as S2's two columns).
 --
 --  WHY EATING IS NOT JUST A CLIENT ANIMATION: the pantry is server state,
 --  so "the food disappeared" has to be a server fact. mhq_eat_food follows
 --  the shape mhq_feed / mhq_care already set — auth, row lock, refuse while
 --  sick, consume, return the fresh state.
 --
---  ⚠️ THE ONE DESIGN CALL IN HERE (recorded in PROJECT-STATUS.md):
---  eating a grocery IS the daily feeding. It resets the sickness clock and
---  pays the growth credit — but that credit is still capped at once a day,
---  exactly like the free cookie. A second snack on the same day is really
---  eaten (and really plays the eating moment) yet grows nothing and moves
---  no clock, so GROWTH CAN NEVER BE BOUGHT. Feeding him an apple therefore
---  uses up today's cookie, which is the honest reading of "he has been fed
---  today" — the alternative (two separate daily feedings) would let a
---  learner double-dip growth for 5 gold.
+--  ⚠️ HER RULING (2026-08-08): THE FREE COOKIE IS NEVER USED UP BY FOOD.
+--  Feeding him a bought apple must not cost him his daily cookie. Those two
+--  things were sharing `last_fed_day`, which did double duty:
+--    (a) "has the free cookie been claimed today?"   and
+--    (b) "when did he last eat?" — which drives the sickness clock.
+--  So (a) moves to its OWN column, `last_cookie_day`, and `last_fed_day`
+--  goes back to meaning only (b). After the split:
+--    • The free cookie is once a day, free, grows him, and resets the clock
+--      — exactly as before, and now nothing else can consume it.
+--    • Eating a grocery consumes the food and RESETS THE SICKNESS CLOCK
+--      (it is real food; a learner who feeds him a steak must not still
+--      find him starving), but pays NO growth credit and leaves the cookie
+--      sitting there.
+--  Growth therefore stays what the phase-2 design always said it was —
+--  the free daily cookie is the ONLY thing that grows a blip — so growth
+--  can never be bought. (An earlier draft had eating pay growth with a
+--  once-a-day cap; her ruling makes that unnecessary and it is gone.)
 --
 --  ⚠️ PL/pgSQL house rule (a bare `slot = slot` once matched every row):
 --  every local variable here is v_-prefixed and every column reference is
@@ -125,6 +137,69 @@ on conflict (item_id) do update
 
 
 -- ============================================================
+--  1b. THE COOKIE GETS ITS OWN DAY-STAMP
+--
+--  `last_fed_day` was doing two jobs at once; this splits off the first.
+--    last_cookie_day — has the FREE daily cookie been claimed today?
+--    last_fed_day    — when did he last eat ANYTHING? (drives the sickness
+--                      clock, via _mhq_health)
+--  Backfilled from last_fed_day so nobody who already had their cookie
+--  today is handed a second one the moment this lands. Nullable, because
+--  "never claimed one" is a real state and must not read as 1970-01-01.
+--
+--  No GRANT: `revoke all on public.students from anon, authenticated` is
+--  already in force and every read goes through a SECURITY DEFINER RPC.
+-- ============================================================
+alter table public.students add column if not exists last_cookie_day date;
+update public.students
+   set last_cookie_day = students.last_fed_day
+ where students.last_cookie_day is null;
+
+
+-- ============================================================
+--  1c. FEED — the free daily cookie, now guarded by its OWN stamp
+--
+--  Phase-2 body with two lines changed: the once-a-day check reads
+--  last_cookie_day, and the update writes BOTH stamps (the cookie is still
+--  food, so it still resets the sickness clock). It remains the ONLY thing
+--  that grows a blip.
+-- ============================================================
+create or replace function public.mhq_feed(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_st record; v_stg int; v_blips jsonb;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  perform public._mhq_ensure_blip(v_sid);
+  select students.last_fed_day, students.last_cookie_day, students.care_streak
+    into v_st from public.students where students.id = v_sid for update;
+
+  v_stg := (public._mhq_health(v_st.last_fed_day, v_st.care_streak)->>'stage')::int;
+  -- refuse normal food while sick — he turns his head away
+  if v_stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
+  -- one free cookie a day, on its OWN stamp: a bought apple no longer eats it
+  if v_st.last_cookie_day is not null and v_st.last_cookie_day >= current_date then
+    return jsonb_build_object('ok', false, 'error', 'already_fed');
+  end if;
+
+  -- the cookie is the ONLY thing that grows a blip (phase-2 ruling, kept)
+  update public.blips set feed_count = blips.feed_count + 1 where blips.student_id = v_sid;
+  update public.students
+     set last_cookie_day = current_date, last_fed_day = current_date, last_active_at = now()
+   where students.id = v_sid;
+
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'slot', blips.slot, 'name', blips.name, 'colour', blips.colour,
+            'feedCount', blips.feed_count,
+            'growthStage', public._mhq_growth(blips.feed_count)) order by blips.slot), '[]'::jsonb)
+    into v_blips from public.blips where blips.student_id = v_sid;
+
+  return jsonb_build_object('ok', true, 'blips', v_blips,
+    'health', public._mhq_health(current_date, v_st.care_streak), 'canFeedToday', false);
+end; $$;
+
+
+-- ============================================================
 --  2. STATE — the S2 body, with `minLevel` added to foodShop
 --
 --  ONE line changes (the v_food select). Everything else is
@@ -185,7 +260,9 @@ begin
     into v_blip1 from public.blips where blips.student_id = v_sid and blips.slot = 1;
 
   v_is_qual  := public._mhq_is_qual_day();
-  v_can_feed := (v_stg < 2) and (v_st.last_fed_day is null or v_st.last_fed_day < current_date);
+  -- S4: the cookie's availability now reads its OWN stamp, so eating a
+  -- bought grocery (which sets last_fed_day) leaves the cookie waiting.
+  v_can_feed := (v_stg < 2) and (v_st.last_cookie_day is null or v_st.last_cookie_day < current_date);
   v_can_care := (v_stg >= 2) and v_is_qual and (v_st.last_care_day is null or v_st.last_care_day < current_date);
 
   select * into v_asg from public.assignments where assignments.active limit 1;
@@ -293,14 +370,18 @@ end; $$;
 --  mechanic) and 'treat' (a pure gold sink that never lands in the
 --  pantry, so there is nothing to consume).
 --
---  THE DAILY-FEEDING RULE — see the header. Eating is a feeding, but the
---  growth credit and the clock reset are capped at once a day, exactly
---  like the free cookie. Later snacks the same day are still eaten.
+--  WHAT EATING DOES AND DOES NOT DO (her ruling, see the header):
+--    DOES  — consume the food, and reset the sickness clock. It is real
+--            food; a learner who feeds him a steak must not still find
+--            him starving.
+--    DOES NOT — touch the free cookie (its own stamp, last_cookie_day),
+--            and does NOT grow him. Growth stays cookie-only, so it can
+--            never be bought.
 -- ============================================================
 create or replace function public.mhq_eat_food(p_username text, p_password text, p_item text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare v_sid uuid; v_st record; v_itm record; v_stg int;
-        v_pan jsonb; v_cnt int; v_last date; v_fed boolean := false; v_blips jsonb;
+        v_pan jsonb; v_cnt int; v_blips jsonb; v_can_feed boolean;
 begin
   v_sid := public._mhq_auth(p_username, p_password);
   if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -313,7 +394,7 @@ begin
     return jsonb_build_object('ok', false, 'error', 'not_edible');
   end if;
 
-  select students.pantry, students.last_fed_day, students.care_streak
+  select students.pantry, students.last_fed_day, students.last_cookie_day, students.care_streak
     into v_st from public.students where students.id = v_sid for update;
 
   v_stg := (public._mhq_health(v_st.last_fed_day, v_st.care_streak)->>'stage')::int;
@@ -328,16 +409,10 @@ begin
     v_pan := jsonb_set(v_pan, array[p_item], to_jsonb(v_cnt - 1), true);
   end if;
 
-  if v_st.last_fed_day is null or v_st.last_fed_day < current_date then
-    update public.blips set feed_count = blips.feed_count + 1 where blips.student_id = v_sid;
-    v_last := current_date;
-    v_fed  := true;
-  else
-    v_last := v_st.last_fed_day;
-  end if;
-
+  -- last_fed_day only: the clock resets, the cookie stamp is not touched,
+  -- and feed_count (growth) is not touched.
   update public.students
-     set pantry = v_pan, last_fed_day = v_last, last_active_at = now()
+     set pantry = v_pan, last_fed_day = current_date, last_active_at = now()
    where students.id = v_sid;
 
   select coalesce(jsonb_agg(jsonb_build_object(
@@ -347,9 +422,12 @@ begin
             'owned', blips.owned_items, 'equipped', blips.equipped) order by blips.slot), '[]'::jsonb)
     into v_blips from public.blips where blips.student_id = v_sid;
 
+  v_can_feed := (v_st.last_cookie_day is null or v_st.last_cookie_day < current_date);
+
   return jsonb_build_object('ok', true, 'item', p_item, 'pantry', v_pan, 'blips', v_blips,
-    'grewToday', v_fed,
-    'health', public._mhq_health(v_last, v_st.care_streak), 'canFeedToday', false);
+    'health', public._mhq_health(current_date, v_st.care_streak),
+    -- the cookie survives a grocery feeding — that is the whole point
+    'canFeedToday', v_can_feed);
 end; $$;
 
 
@@ -377,11 +455,19 @@ grant execute on function public.mhq_eat_food(text, text, text) to anon, authent
 --    select public.mhq_buy_item('someuser','somepassword','steak');    -- locked, minLevel 11
 --    select public.mhq_buy_item('someuser','somepassword','soup');     -- ok (pharmacy unchanged)
 --
---    -- eating consumes it and counts as today's feeding
---    select public.mhq_eat_food('someuser','somepassword','apple');    -- ok, grewToday true
+--    -- eating consumes it, feeds the CLOCK, and leaves the cookie alone
+--    select public.mhq_eat_food('someuser','somepassword','apple');    -- ok, canFeedToday TRUE
 --    select public.mhq_eat_food('someuser','somepassword','apple');    -- none_left
 --    select public.mhq_eat_food('someuser','somepassword','soup');     -- not_edible
 --    select public.mhq_eat_food('someuser','somepassword','beanie');   -- no_item
---    select public.mhq_get_state('someuser','somepassword') -> 'canFeedToday';   -- false
+--    select public.mhq_get_state('someuser','somepassword') -> 'canFeedToday';   -- TRUE
+--    select feed_count from public.blips where student_id = ... ;      -- UNCHANGED by eating
+--
+--    -- the free cookie is still there, and IT is what grows him
+--    select public.mhq_feed('someuser','somepassword');                -- ok
 --    select public.mhq_feed('someuser','somepassword');                -- already_fed
+--    select public.mhq_get_state('someuser','somepassword') -> 'canFeedToday';   -- false
+--    -- …and eating again afterwards still does not hand the cookie back
+--    select public.mhq_buy_item('someuser','somepassword','banana');
+--    select public.mhq_eat_food('someuser','somepassword','banana') -> 'canFeedToday';  -- false
 -- ============================================================

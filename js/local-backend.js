@@ -26,9 +26,12 @@
        max(last_fed_day, term_on_since). Stages 0/1/2/3 at 0–2/3–4/5–6/7+.
        Turning the term ON stamps term_on_since = today (forgives all
        accrued sickness). Health is household-wide.
-     • FREE cookie: one/day (guarded by last_fed_day), the ONLY thing
-       that grows a blip (feed_count, +1 to EVERY blip), and it resets
-       the sickness clock. Refused while sick (REFUSES_FOOD).
+     • FREE cookie: one/day (guarded by its OWN last_cookie_day since
+       S4), the ONLY thing that grows a blip (feed_count, +1 to EVERY
+       blip), and it resets the sickness clock. Refused while sick.
+     • S4 grocery (eatFood): consumes one pantry food and resets the
+       sickness clock (last_fed_day), but NEVER touches the cookie stamp
+       and NEVER grows him — her ruling, so growth stays unbuyable.
      • Paid treat: gold sink, no growth, no clock, refused while sick.
      • Care = soup + medicine (bought into the pantry, prices server-
        side); 3 consecutive qualifying care days fully heal; a skipped
@@ -391,6 +394,13 @@ function ensureBlipFields(s) {
   if (!s.equipped || typeof s.equipped !== "object" || Array.isArray(s.equipped)) { s.equipped = {}; changed = true; }
   // Phase 2 care/feeding bookkeeping
   if (!("last_fed_day" in s)) { s.last_fed_day = null; changed = true; }
+  /* S4 (2026-08-08): the free cookie got its OWN day-stamp, because eating a
+     bought grocery used to consume it (they shared last_fed_day). Now
+     last_fed_day = "when did he last eat anything" (the sickness clock) and
+     last_cookie_day = "has the free cookie been claimed today". Backfilled
+     from last_fed_day, mirroring the migration, so nobody who already had
+     their cookie today is handed a second one. */
+  if (!("last_cookie_day" in s)) { s.last_cookie_day = s.last_fed_day ?? null; changed = true; }
   if (typeof s.care_streak !== "number") { s.care_streak = 0; changed = true; }
   if (!("last_care_day" in s)) { s.last_care_day = null; changed = true; }
   if (!s.pantry || typeof s.pantry !== "object" || Array.isArray(s.pantry)) { s.pantry = {}; changed = true; }
@@ -518,7 +528,7 @@ export const LocalBackend = {
     st[id] = {
       id, username: u, display_name: String(name).trim(), password, last_active_at: Date.now(),
       gold: 0, xp: 0, blip_name: "Blip", blip_colour: "blue", owned_items: [], equipped: {},
-      last_fed_day: null, care_streak: 0, last_care_day: null, pantry: {},
+      last_fed_day: null, last_cookie_day: null, care_streak: 0, last_care_day: null, pantry: {},
     };
     write(LS.students, st);
     ensureBlip(id, st[id]); // create the slot-1 blip up front
@@ -556,7 +566,9 @@ export const LocalBackend = {
     const blips = blipsView(s.id);
     const slot1 = blips.find(b => b.slot === 1) || null;
     const { running } = termConfig();
-    const canFeedToday = health.stage < 2 && (rec.last_fed_day == null || rec.last_fed_day < today());
+    // S4: the cookie's availability reads its OWN stamp, so eating a bought
+    // grocery (which sets last_fed_day) leaves the free cookie waiting.
+    const canFeedToday = health.stage < 2 && (rec.last_cookie_day == null || rec.last_cookie_day < today());
     const canCareToday = health.stage >= 2 && isQualDay() && (rec.last_care_day == null || rec.last_care_day < today());
     return {
       ok: true, student: { id: s.id, name: s.display_name, username: s.username }, progress, totalXp, openQuests: openQuests(),
@@ -760,8 +772,11 @@ export const LocalBackend = {
     const blips = ensureBlip(s.id, rec);
     const stage = computeHealth(rec.last_fed_day, rec.care_streak).stage;
     if (stage >= 2) return { ok: false, error: "REFUSES_FOOD" };
-    if (rec.last_fed_day != null && rec.last_fed_day >= today()) return { ok: false, error: "already_fed" };
+    // S4: guarded by the cookie's OWN stamp — a bought apple sets
+    // last_fed_day (it resets the sickness clock) but never eats the cookie.
+    if (rec.last_cookie_day != null && rec.last_cookie_day >= today()) return { ok: false, error: "already_fed" };
     blips.forEach(b => { b.feed_count = (b.feed_count || 0) + 1; }); // household growth
+    rec.last_cookie_day = today();
     rec.last_fed_day = today();
     write(LS.students, stAll); writeBlips(s.id, blips);
     return { ok: true, blips: blipsView(s.id).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feedCount, growthStage: b.growthStage })),
@@ -771,11 +786,13 @@ export const LocalBackend = {
      The pantry is server state, so "the food disappeared" has to be a
      server fact — the drag gesture only asks for it.
 
-     THE DAILY-FEEDING RULE: eating IS the daily feeding. It resets the
-     sickness clock and pays the growth credit, but that credit is capped
-     at once a day exactly like the free cookie, so growth can never be
-     bought. A second snack the same day is still eaten (and still plays
-     the eating moment) and simply grows nothing. */
+     HER RULING (2026-08-08): eating a bought grocery
+       DOES     consume the food and reset the SICKNESS CLOCK (it is real
+                food — a learner who feeds him a steak must not still find
+                him starving), and
+       DOES NOT touch the free daily cookie (its own stamp,
+                last_cookie_day) and does NOT grow him. Growth stays
+                cookie-only, so growth can never be bought. */
   async eatFood(username, password, item) {
     const s = verify(username, password);
     if (!s) return { ok: false, error: "auth" };
@@ -797,18 +814,16 @@ export const LocalBackend = {
     if (have - 1 <= 0) delete rec.pantry[item];
     else rec.pantry[item] = have - 1;
 
-    let grewToday = false;
-    if (rec.last_fed_day == null || rec.last_fed_day < today()) {
-      blips.forEach(b => { b.feed_count = (b.feed_count || 0) + 1; });   // household growth
-      rec.last_fed_day = today();
-      grewToday = true;
-    }
+    // the clock resets; the cookie stamp and feed_count are left alone
+    rec.last_fed_day = today();
 
     write(LS.students, stAll); writeBlips(s.id, blips);
     return {
-      ok: true, item, grewToday, pantry: rec.pantry,
+      ok: true, item, pantry: rec.pantry,
       blips: blipsView(s.id),
-      health: computeHealth(rec.last_fed_day, rec.care_streak), canFeedToday: false,
+      health: computeHealth(rec.last_fed_day, rec.care_streak),
+      // the cookie survives a grocery feeding — that is the whole point
+      canFeedToday: (rec.last_cookie_day == null || rec.last_cookie_day < today()),
     };
   },
   async care(username, password) {

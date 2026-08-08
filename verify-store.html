@@ -560,25 +560,34 @@ for (const [file, expected] of MIGRATIONS) try {
   tick((st.pantry || {}).apple === 1, `the apple did not land in the fridge: ${JSON.stringify(st.pantry)}`);
   tick(st.canFeedToday === true, "buying food should not use up the daily cookie");
 
-  // eating: consumed, and it IS the daily feeding
+  /* Eating: consumed, resets the sickness clock, and — HER RULING
+     2026-08-08 — leaves the free cookie completely alone. These four are
+     the check that would fail if `last_cookie_day` ever got folded back
+     into `last_fed_day`, which is exactly how the bug happened once. */
   const feedBefore = st.blips[0].feedCount;
   const eat = await LocalBackend.eatFood(fu, "pw12", "apple");
   tick(eat.ok && eat.item === "apple", `eating the apple failed: ${JSON.stringify(eat)}`);
-  tick(eat.grewToday === true, "the first feeding of the day should pay the growth credit");
   tick(eat.pantry.apple === undefined, `an eaten apple is still in the fridge: ${JSON.stringify(eat.pantry)}`);
-  tick(eat.blips[0].feedCount === feedBefore + 1, "eating did not grow him");
-  tick(eat.canFeedToday === false, "eating should use up today's feeding");
+  tick(eat.blips[0].feedCount === feedBefore, "eating a bought grocery grew him — growth is cookie-only, or it becomes buyable");
+  tick(eat.canFeedToday === true, "eating a grocery ate the free cookie — her ruling is that it never may");
+  const stEat = await LocalBackend.getState(fu, "pw12");
+  tick(stEat.canFeedToday === true, "getState says the cookie is gone after a grocery feeding");
   const gone = await LocalBackend.eatFood(fu, "pw12", "apple");
   tick(!gone.ok && gone.error === "none_left", `eating an apple we do not have: ${JSON.stringify(gone)}`);
-  const cookie = await LocalBackend.feed(fu, "pw12");
-  tick(!cookie.ok && cookie.error === "already_fed", "the free cookie survived a grocery feeding — growth would be buyable");
 
-  // a SECOND snack the same day is still eaten, but grows nothing
+  // …and the cookie, still sitting there, is what grows him
+  const cookie = await LocalBackend.feed(fu, "pw12");
+  tick(cookie.ok, `the free cookie was refused after a grocery feeding: ${JSON.stringify(cookie)}`);
+  tick(cookie.blips[0].feedCount === feedBefore + 1, "the free cookie did not grow him");
+  const twice = await LocalBackend.feed(fu, "pw12");
+  tick(!twice.ok && twice.error === "already_fed", "the free cookie was claimed twice in one day");
+
+  // a snack AFTER the cookie is still eaten, and still hands nothing back
   await LocalBackend.buyItem(fu, "pw12", "banana");
   const snack = await LocalBackend.eatFood(fu, "pw12", "banana");
-  tick(snack.ok, `a second snack was refused: ${JSON.stringify(snack)}`);
-  tick(snack.grewToday === false, "a second snack paid growth credit — growth must be capped at once a day");
-  tick(snack.blips[0].feedCount === feedBefore + 1, "a second snack grew him again");
+  tick(snack.ok, `a snack after the cookie was refused: ${JSON.stringify(snack)}`);
+  tick(snack.canFeedToday === false, "a snack handed the already-claimed cookie back");
+  tick(snack.blips[0].feedCount === feedBefore + 1, "a snack grew him on top of the cookie");
 
   // the three food rows that are not snacks, and one that is not food at all
   for (const id of NON_GROCERY_FOOD) {
@@ -588,10 +597,38 @@ for (const [file, expected] of MIGRATIONS) try {
   const notFood = await LocalBackend.eatFood(fu, "pw12", "beanie");
   tick(!notFood.ok && notFood.error === "no_item", `a cosmetic was eaten: ${JSON.stringify(notFood)}`);
 
+  /* Eating REALLY resets the sickness clock. Worth doing properly: the
+     sandbox's term toggle starts OFF, so daysUnfed is 0 no matter what and
+     a naive "is it 0?" check proves nothing. Turn the term on, let days
+     pass until he is genuinely tired, then feed him a grocery. Everything
+     is put back afterwards — this clock is global to the sandbox. */
+  {
+    await LocalBackend.adminSetTerm("admin", true);
+    /* One day at a time until he is TIRED (stage 1), not a fixed jump:
+       weekends do not count toward days_unfed, so "skip 6" lands on a
+       different stage depending on what weekday it happens to be today —
+       and at stage 2 he refuses food outright, which is correct behaviour
+       and made a fixed jump fail for the wrong reason. */
+    let sick = await LocalBackend.getState(fu, "pw12");
+    for (let d = 0; d < 14 && sick.health.stage < 1; d++) {
+      globalThis.__BLIP_DEV__.skipDays(1);
+      sick = await LocalBackend.getState(fu, "pw12");
+    }
+    tick(sick.health.stage === 1 && sick.health.daysUnfed >= 3,
+      `stepping days should have stopped at tired (stage 1), got ${JSON.stringify(sick.health)}`);
+    await LocalBackend.buyItem(fu, "pw12", "carrot");
+    const fed = await LocalBackend.eatFood(fu, "pw12", "carrot");
+    tick(fed.ok && fed.health.daysUnfed === 0 && fed.health.stage === 0,
+      `a real meal did not reset the sickness clock: ${JSON.stringify(fed.health)}`);
+    tick(fed.canFeedToday === true, "the clock reset cost him his cookie");
+    globalThis.__BLIP_DEV__.reset();
+    await LocalBackend.adminSetTerm("admin", false);
+  }
+
   // buying a grocery must never touch the cosmetic closet
   const after = await LocalBackend.getState(fu, "pw12");
   tick(!(after.blip.owned || []).includes("apple"), "an apple ended up in the cosmetic closet");
-  say(`food round-trip: bought apple (5 💎) → fridge → eaten → grew once → second snack ate but did not grow`);
+  say(`food round-trip: bought apple (5 💎) → fridge → eaten (clock reset, cookie untouched, no growth) → cookie still claimable and IS what grows him`);
 }
 
 /* ---------- 6i. the drag gesture itself (room build S4) ----------
