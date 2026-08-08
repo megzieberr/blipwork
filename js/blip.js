@@ -40,6 +40,7 @@ import {
   SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot,
 } from "./companion/blip-ui.js";
 import { treasureBadge } from "./companion/treasure.js";
+import { TRINKET_IDS, trinketExists, trinketTile } from "./companion/trinkets.js";
 import { maybeShowReminderCard } from "./push.js";
 import { FRIDGE_SVG, BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
 
@@ -690,7 +691,25 @@ export function renderBlip(app, host) {
     container.appendChild(el("h2", "", "INVENTORY"));
     renderCosmeticList(container, true);
     container.appendChild(el("h3", "", "SHELF"));
-    container.appendChild(el("div", "trinket-shelf", "Trinkets will land on this shelf in a later update."));
+    /* Trinkets are HOUSEHOLD property (state.trinkets), not per-blip, so the
+       shelf reads the same whichever blip is showing — a shelf belongs to the
+       room. They are never worn and never sold, so there is no action button:
+       the shelf is a display case, and that is the whole joke. */
+    const owned = (state.trinkets || []).filter(trinketExists);
+    if (owned.length) {
+      const shelf = el("div", "trinket-shelf has-items");
+      // TRINKET_IDS order (= the SQL `sort` order), not arrival order, so the
+      // shelf doesn't reshuffle itself every time a box is opened.
+      TRINKET_IDS.filter((id) => owned.includes(id)).forEach((id) => shelf.appendChild(trinketTile(id)));
+      container.appendChild(shelf);
+      container.appendChild(el("p", "muted small",
+        owned.length === TRINKET_IDS.length
+          ? "Every last piece of junk. Magnificent."
+          : `${owned.length} of ${TRINKET_IDS.length} — mystery boxes hold the rest.`));
+    } else {
+      container.appendChild(el("div", "trinket-shelf",
+        "The shelf is empty. Milestone mystery boxes leave odd little things up here."));
+    }
   }
 
   function renderFoodPanel(container) {

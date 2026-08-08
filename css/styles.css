@@ -812,10 +812,18 @@ h2{font-size:20px} h3{font-size:17px}
 .room-sheet-foot{display:flex;gap:10px;margin-top:16px}
 .room-sheet-foot .btn{flex:1}
 
-/* Inventory sheet — empty trinket shelf placeholder (trinkets land in a
-   later session's milestone-box loot) */
+/* Inventory sheet — the trinket shelf. Empty it is a dashed outline with a
+   line of copy; with junk on it, a real (scrollable) shelf with a lip under
+   the tiles. Trinkets are display-only: no buttons, nothing to equip. */
 .trinket-shelf{border:1px dashed var(--brd-2);border-radius:var(--r-md);padding:16px;text-align:center;
   font-size:12.5px;color:var(--muted)}
+.trinket-shelf.has-items{display:flex;gap:10px;overflow-x:auto;padding:12px 12px 10px;text-align:left;
+  border-style:solid;border-color:var(--brd);background:rgba(255,255,255,.03);
+  box-shadow:inset 0 -3px 0 color-mix(in srgb,var(--accent) 22%,transparent)}
+.trinket-item{flex:0 0 auto;width:66px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.trinket-item .tk-art{width:52px;height:52px;display:grid;place-items:center}
+.trinket-item .tk-art svg,.trinket-item .tk-art img{width:100%;height:100%;display:block}
+.trinket-item .tk-name{font-size:10px;line-height:1.15;color:var(--muted);text-align:center}
 
 /* Food sheet (also opened by tapping the fridge) — what's in stock now */
 .stash-grid{display:flex;flex-direction:column;gap:8px;margin:8px 0}

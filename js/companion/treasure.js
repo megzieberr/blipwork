@@ -33,6 +33,7 @@ import { getSession } from "../session.js";
 import { el, showToast } from "../ui.js";
 import { renderCompanion, OUTLINE } from "./renderer.js";
 import { itemLabel, accessoryExists } from "./blip-ui.js";
+import { trinketLabel, trinketLine, trinketExists, TRINKETS } from "./trinkets.js";
 
 /* ---------- chest art ----------
    One SVG holding both states: the lid is its own <g> that CSS lifts
@@ -150,14 +151,25 @@ const prefersReducedMotion = () =>
 export function openTreasureBox(app, onDone) {
   const sess = getSession();
 
+  /* S2: which box is next. The SERVER decides — but it always opens
+     milestone boxes first, and hands the count of them out in
+     state.boxes.mystery, so the client can read the same rule and title
+     the modal BEFORE the tap. (The tap is what calls openBox, so the
+     title cannot wait for the answer.) The response carries `boxKind`
+     too, and the reveal re-reads it, so a disagreement corrects itself
+     rather than mislabelling the loot. */
+  const isMystery = Number((((app && app.state) || {}).boxes || {}).mystery) > 0;
+
   const scrim = el("div", "modal-scrim");
-  const modal = el("div", "modal unlock-modal treasure-modal");
+  const modal = el("div", "modal unlock-modal treasure-modal" + (isMystery ? " mystery-modal" : ""));
   modal.innerHTML = `
-    <div class="mhead"><span class="meyebrow">Treasure</span><button class="link-btn close" aria-label="Close">✕</button></div>
-    <h2><span class="sparkle">✦</span> Treasure box <span class="sparkle">✦</span></h2>
-    <p class="muted small tb-hint">Homework done — tap the chest to open it.</p>
+    <div class="mhead"><span class="meyebrow">${isMystery ? "Milestone" : "Treasure"}</span><button class="link-btn close" aria-label="Close">✕</button></div>
+    <h2><span class="sparkle">✦</span> ${isMystery ? "Mystery box" : "Treasure box"} <span class="sparkle">✦</span></h2>
+    <p class="muted small tb-hint">${isMystery
+      ? "You hit a milestone — tap to see what's inside."
+      : "Homework done — tap the chest to open it."}</p>
     <div class="tb-stage">
-      <button class="tb-chest" type="button" aria-label="Open the treasure box">${CHEST_SVG}</button>
+      <button class="tb-chest" type="button" aria-label="${isMystery ? "Open the mystery box" : "Open the treasure box"}">${CHEST_SVG}</button>
       <div class="tb-sparkles" aria-hidden="true"></div>
     </div>
     <div class="tb-reveal" role="status" aria-live="polite"></div>`;
@@ -218,11 +230,11 @@ export function openTreasureBox(app, onDone) {
       return;
     }
 
-    playOpen(r.loot);
+    playOpen(r.loot, r.boxKind === "milestone", r.milestone);
   });
 
   /* The reveal timeline. Pure setTimeout + CSS classes — no rAF. */
-  function playOpen(loot) {
+  function playOpen(loot, mystery, milestone) {
     const rare = !!(loot && loot.kind === "cosmetic" && loot.isNew);
     stage.classList.remove("tb-shaking");
     stage.classList.add("open");
@@ -230,16 +242,17 @@ export function openTreasureBox(app, onDone) {
     hint.remove();
 
     const reduced = prefersReducedMotion();
-    if (!reduced) burstSparkles(sparkHost, rare ? 16 : 10); // a rare find gets the bigger burst
+    // a rare find — or any milestone box — gets the bigger burst
+    if (!reduced) burstSparkles(sparkHost, rare || mystery ? 16 : 10);
 
     // lid lift is .45s; the reveal lands just after it settles
     setTimeout(() => {
-      renderReveal(loot, rare);
+      renderReveal(loot, rare, mystery, milestone);
       reveal.classList.add("shown");
     }, reduced ? 0 : 520);
   }
 
-  function renderReveal(loot, rare) {
+  function renderReveal(loot, rare, mystery, milestone) {
     const kind = (loot && loot.kind) || "gold";
     const amount = Number(loot && loot.amount) || 0;
     const id = loot && loot.id;
@@ -254,7 +267,21 @@ export function openTreasureBox(app, onDone) {
       // "gold" in code, crystals on screen — the app-wide display reskin.
       label = "Crystals";
       value = `+${amount} <span class="crystal">💎</span>`;
-      sub = "Straight into your stash.";
+      sub = mystery && milestone
+        ? `Level ${milestone}. That's a proper pile.`
+        : "Straight into your stash.";
+    } else if (kind === "trinket") {
+      // The joke loot. Played completely straight — the gag only works if
+      // the reveal treats a sock with total sincerity.
+      label = "For the shelf";
+      value = trinketLabel(id);
+      sub = trinketLine(id);
+      if (trinketExists(id)) {
+        preview = el("div", "tb-preview tb-trinket-preview");
+        preview.innerHTML = TRINKETS[id].img
+          ? `<img src="./assets/companion/trinkets/${TRINKETS[id].img}" alt="">`
+          : TRINKETS[id].svg;
+      }
     } else if (kind === "food") {
       const f = foodCopy(id);
       label = "For the pantry";
@@ -312,12 +339,19 @@ function openErrMsg(code) {
    another component's CSS to add position:relative.
    ============================================================ */
 export function treasureBadge(app, hostEl) {
-  const pending = Number((((app && app.state) || {}).boxes || {}).pending) || 0;
+  const boxes = (((app && app.state) || {}).boxes) || {};
+  const pending = Number(boxes.pending) || 0;
   if (!hostEl || pending <= 0) return null;
 
-  const badge = el("button", "treasure-badge", `🎁 ${pending}`);
+  // `pending` is the total; `mystery` is how many of those are milestone
+  // boxes, and those open first — so if there is one, that is what the next
+  // tap opens and what the badge should be promising.
+  const mystery = Number(boxes.mystery) || 0;
+  const noun = mystery > 0 ? "mystery box" : "treasure box";
+
+  const badge = el("button", "treasure-badge" + (mystery > 0 ? " mystery" : ""), `🎁 ${pending}`);
   badge.type = "button";
-  badge.title = pending === 1 ? "A treasure box is waiting" : `${pending} treasure boxes are waiting`;
+  badge.title = pending === 1 ? `A ${noun} is waiting` : `${pending} boxes are waiting — a ${noun} is next`;
   badge.setAttribute("aria-label", badge.title);
 
   badge.addEventListener("click", (e) => {

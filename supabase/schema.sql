@@ -19,6 +19,19 @@
 --  neck slot), so this file silently stopped matching live and a rebuild from it
 --  would have reproduced the July `bad_equipped` bug. Re-synced 2026-08-07.
 --
+--  ⚠️ WHAT THIS FILE DOES *NOT* CARRY (known gap, stated rather than hidden):
+--  PHASE 3 (2026-07-19) never landed here — the `assignments`, `box_grants`,
+--  `loot_table` and `push_subscriptions` tables, `students.boxes_pending`, and
+--  the treasure-box / homework RPCs live only in migration-phase3.sql. The room
+--  build's milestone-box logic (2026-08-08) sits on top of those, so the parts
+--  of it that touch phase-3 objects are only in migration-level-curve-40.sql.
+--  Everything in that migration which touches an object THIS file does define —
+--  the level curve, the trinket category and rows, the two new `students`
+--  columns, `milestone_grants`, and mhq_buy_item's non-cosmetic guard — IS
+--  mirrored below.
+--  To rebuild a project from scratch, run in this order:
+--      schema.sql  →  migration-phase3.sql  →  migration-level-curve-40.sql
+--
 --  (It REPLACES the old roster-based login with self sign-up: learners create
 --   their own account.)
 --
@@ -66,7 +79,16 @@ create table public.students (
   last_fed_day   date,                            -- last FREE-cookie day (growth + sickness anchor)
   care_streak    integer not null default 0,      -- consecutive qualifying care days
   last_care_day  date,                            -- last day soup+medicine were given
-  pantry         jsonb not null default '{}'::jsonb -- consumables: {soup:n, medicine:n}
+  pantry         jsonb not null default '{}'::jsonb, -- consumables: {soup:n, medicine:n}
+  -- Room build S2 (2026-08-08). Both are household-wide, not per blip.
+  -- trinkets        = the junk loot on the Inventory shelf, e.g. ["old-sock"].
+  --                   A shelf belongs to the ROOM, so it is not per blip: a
+  --                   learner browsing her second blip still sees her shelf.
+  -- milestone_boxes = the QUEUE of unopened mystery boxes, as milestone
+  --                   levels, e.g. [10, 20]. A plain counter could not say
+  --                   how many diamonds each one owes.
+  trinkets        jsonb not null default '[]'::jsonb,
+  milestone_boxes jsonb not null default '[]'::jsonb
 );
 
 -- Per-blip companion state (slot 1 = the original, slot 2 = the reward baby).
@@ -116,7 +138,11 @@ create table if not exists public.app_config (key text primary key, value text);
 
 -- Shop catalogue: prices/level gates MUST live server-side (client is tamperable).
 -- category 'cosmetic' = accessories (per-blip, slot-gated); 'food' = pharmacy /
--- grocery consumables (soup, medicine) + instant treats.
+-- grocery consumables (soup, medicine) + instant treats; 'trinket' = the junk
+-- loot from milestone mystery boxes (2026-08-08) — never sold, never worn, so
+-- it gets its own category AND its own slot value and is deliberately absent
+-- from mhq_equip's allowed keys. The shop payload filters on
+-- category = 'cosmetic', which is what keeps trinkets out of the shop for free.
 create table if not exists public.shop_items (
   item_id   text primary key,
   slot      text    not null,
@@ -127,7 +153,21 @@ create table if not exists public.shop_items (
   category  text    not null default 'cosmetic',
   constraint shop_items_slot_cat_check check (
        (category = 'cosmetic' and slot in ('hat','ears','glasses','wings','arms','back','effects','neck'))
-    or (category = 'food'     and slot = 'food'))
+    or (category = 'food'     and slot = 'food')
+    or (category = 'trinket'  and slot = 'trinket'))
+);
+
+-- Room build S2 (2026-08-08): one grant per (student, milestone), ever. The
+-- primary key IS the dedupe, exactly like phase 3's box_grants — a replay at
+-- the same level finds the row already there and awards nothing.
+-- Deliberately NOT cleared by mhq_admin_reset_progress: a reset drops XP so the
+-- gates re-lock, but a prize already won is never confiscated (2026-07-19 reset
+-- ruling), and re-climbing must not re-farm boxes.
+create table if not exists public.milestone_grants (
+  student_id uuid    not null references public.students(id) on delete cascade,
+  milestone  integer not null,
+  granted_at timestamptz not null default now(),
+  primary key (student_id, milestone)
 );
 
 -- ---------- lock everything down ----------
@@ -138,7 +178,8 @@ alter table public.progress   enable row level security;
 alter table public.struggles  enable row level security;
 alter table public.app_config enable row level security;
 alter table public.shop_items enable row level security;
-revoke all on public.students, public.blips, public.quests, public.progress, public.struggles, public.app_config, public.shop_items from anon, authenticated;
+alter table public.milestone_grants enable row level security;
+revoke all on public.students, public.blips, public.quests, public.progress, public.struggles, public.app_config, public.shop_items, public.milestone_grants from anon, authenticated;
 
 -- drop old-version functions first. Some are recreated below with renamed
 -- parameters (p_name -> p_username), which create-or-replace cannot do.
@@ -172,6 +213,12 @@ $$;
 --   cost(L) = round(300 * 1.5^(L-1) / 10) * 10   XP to go from level L to L+1
 -- bar resets each level; cap 20. Sized for real quest payouts (110-260 XP each):
 -- all 79 quests ≈ level 9, heavy revision lands 10-12.
+-- Level curve, cap 40 (room build S2, 2026-08-08 — replaces the old
+-- 300 * 1.5^(L-1) cap-20 curve, which needed ~120 rounds to reach level 10).
+-- cost(L) = XP to go from level L to L+1; the bar resets each level.
+-- Anchors: L10 = 3,960 XP · L20 = 14,060 · L30 = 30,160 · L40 = 52,260.
+-- Mirrored ONLY in js/companion/level.js. Mirrored in SQL by
+-- supabase/migration-level-curve-40.sql.
 create or replace function public._mhq_level(p_xp integer) returns jsonb
 language plpgsql immutable
 set search_path = ''
@@ -179,12 +226,12 @@ as $$
 declare lvl int := 1; cost int; rem int := greatest(coalesce(p_xp, 0), 0);
 begin
   loop
-    cost := (round(300 * power(1.5, lvl - 1) / 10))::int * 10;
-    exit when rem < cost or lvl >= 20;
+    cost := 200 + 60 * (lvl - 1);
+    exit when rem < cost or lvl >= 40;
     rem := rem - cost; lvl := lvl + 1;
   end loop;
   return jsonb_build_object('level', lvl, 'intoLevel', rem,
-    'nextCost', case when lvl >= 20 then null else to_jsonb(cost) end);
+    'nextCost', case when lvl >= 40 then null else to_jsonb(cost) end);
 end; $$;
 
 -- ---------- Phase 2 (feeding / growth / sickness) helpers ----------
@@ -528,6 +575,13 @@ begin
       return jsonb_build_object('ok', true, 'gold', new_gold, 'pantry', pan);
     end if;
   end if;
+
+  -- Trinkets (and any future non-cosmetic category) are not purchasable at all
+  -- (2026-08-08). Without this guard the function falls through to the cosmetic
+  -- branch for ANY non-food row, so a crafted request could "buy" a price-0
+  -- trinket. Nothing in the app ever asks for one — but "never in the shop"
+  -- belongs on the server, not in the client not offering it.
+  if itm.category <> 'cosmetic' then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
 
   -- cosmetic accessory, on the given blip slot
   if stg >= 3 then return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK'); end if;
@@ -902,4 +956,17 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('soup',                   'food',   15,  1, true,   100, 'food'),
   ('medicine',               'food',   20,  1, true,   101, 'food'),
   ('treat',                  'food',    8,  1, true,   102, 'food')
+on conflict (item_id) do nothing;
+
+-- Room build S2 (2026-08-08): the junk loot from milestone mystery boxes.
+-- Price 0 and min_level 1 are bookkeeping only — a trinket is never sold and
+-- never gated; it only ever arrives inside a box. Labels and (placeholder) art
+-- live in js/companion/trinkets.js; js/local-backend.js mirrors this list.
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('pen',                 'trinket',    0,  1, true,   200, 'trinket'),
+  ('old-sock',            'trinket',    0,  1, true,   201, 'trinket'),
+  ('smooth-rock',         'trinket',    0,  1, true,   202, 'trinket'),
+  ('paper-clip',          'trinket',    0,  1, true,   203, 'trinket'),
+  ('rubber-duck',         'trinket',    0,  1, true,   204, 'trinket'),
+  ('broken-ruler',        'trinket',    0,  1, true,   205, 'trinket')
 on conflict (item_id) do nothing;

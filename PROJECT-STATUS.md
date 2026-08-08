@@ -1,4 +1,95 @@
-# Project status — updated 2026-08-08 (room build S1, committed locally, NOT pushed)
+# Project status — updated 2026-08-08 (room build S2, committed locally, NOT pushed)
+
+## 🎁 2026-08-08 — ROOM BUILD S2: level curve (cap 40), milestone mystery boxes, trinkets
+
+Per `homework-hub-companion/ROOM-BUILD-PLAN.md`. Nothing pushed, `sw.js`
+untouched (still v38 — the review session bumps once), **no SQL run against
+live**. `verify-store.html` is **1243/1243 green** (was 988 — S2 adds 255
+checks: the curve, the trinket mirror, and the whole milestone grant path).
+
+### ⏳ Pending on Megan
+- 💻 **Run `supabase/migration-level-curve-40.sql`** — NOT YET RUN. It must go
+  in **after** `migration-phase3.sql` (it extends phase 3's box machinery).
+  The review session at the end of the room build applies it. **[with S3-S5]**
+- 🎨 **The trinket art is PLACEHOLDER.** `art-source/tripo/trinkets.png`
+  (prompt 4 in ROOM-PROMPTS.md) doesn't exist yet, so all six are code-drawn
+  stand-ins. Swapping in your Tripo art is a one-line change per item in
+  `js/companion/trinkets.js` and needs **no migration**. **[whenever]**
+
+**THE NEW CURVE.** `cost(L) = 200 + 60·(L−1)`, cap **40** — replacing
+`round(300·1.5^(L−1)/10)·10` cap 20. XP is stored raw, so **no data
+migration**: every account just re-maps, and the test account's 4,580 XP goes
+from level 6 to **level 10**. Anchors L10 = 3,960 · L20 = 14,060 · L30 =
+30,160 · L40 = 52,260 XP (~21 / ~74 / ~159 / ~275 rounds at the measured ~190
+XP per fresh round). Only two places hold the curve: SQL `_mhq_level` and
+`js/companion/level.js`. Everything else reads `levelInfo` off the payload,
+so nothing else hard-coded 20 — checked, and the only remaining "cap 20"
+strings are historical comments and **already-applied migrations, which are
+never edited**.
+
+**MILESTONE MYSTERY BOXES** at levels 10/20/30/40, granted in
+`mhq_submit_quest`, deduped by the new `milestone_grants` primary key (one per
+learner per milestone, ever). Loot is server-side, in phase 3's own
+`loot_table` extended with a `box` column — **not a fork**, so the homework
+chest keeps its exact gold 55 / food 30 / cosmetic 15 split untouched:
+- **50% diamonds** = 10 × the milestone level (100 at L10 … 400 at L40).
+- **25% rare cosmetic**, guaranteed-new, pool = unowned actives priced ≥ 120 at
+  **any level** — a rare above your level is the fun of it; it waits in the
+  closet until the gate opens.
+- **25% trinket** (see below). Either pool running dry pays diamonds instead,
+  never a duplicate and never a dud.
+
+**TRINKETS** — pen · odd sock · smooth rock · paper clip · rubber duck · broken
+ruler. `shop_items` category `trinket`, price 0, invisible in the shop (the
+payload filters `category = 'cosmetic'`, so no "hidden" flag was needed), not
+equippable, and they live on the **student** rather than a blip — a shelf
+belongs to the room, so browsing your second Blip still shows your own shelf.
+They fill the SHELF strip S1 left empty in the Inventory panel, and are
+display-only: no buttons, nothing to wear. That is the whole joke.
+
+**Verified in the browser (`?local=1`, fresh signup, zero console errors):**
+the 🎁 badge appears and now says "a mystery box is next" when one is queued;
+the modal titles itself **Mystery box / Milestone** before the tap (it reads
+`boxes.mystery`, sharing the server's milestone-first rule) and falls back to
+the ordinary Treasure box wording when only a homework box is waiting; sixteen
+consecutive milestone boxes produced all three branches — `+200 💎` at
+milestone 20, five rares (Jetpack, Bat wings, Neural crown, Medal choker,
+Plasma wings — all above the test account's level, as designed), and two
+trinkets which then appeared on the shelf reading "2 of 6 — mystery boxes hold
+the rest"; the HUD reads Lv 10 with a 32% bar at 4,200 XP (240 of 740) and
+Lv 40 / 100% / `nextCost: null` at the cap. **Headless (verify-store.html):**
+crossing level 10 grants exactly one box, replaying grants nothing, 60
+milestone boxes obeyed every pool rule, and the homework chest still pays its
+own 15–40 band and never a trinket.
+
+### Deviations from the plan (rule 9 — recorded, not silently redesigned)
+1. **The milestone test is `level >= milestone`, not "crossed on this
+   submit".** The curve change re-maps the existing test account to *exactly*
+   level 10 without any submit ever crossing it, so a strict crossing test
+   would owe that account a box it could never receive. The primary key gives
+   the identical one-box-ever guarantee, so `>=` is just kinder to anyone
+   already past a milestone when this lands.
+2. **`milestone_grants` is keyed per STUDENT, not per blip.** The plan says
+   "per blip", but XP and level live on `students`, not on a blip — per-student
+   is the only reading that can work.
+3. **`schema.sql` could only be mirrored in part.** Phase 3 never landed in
+   that file (a pre-existing gap, not one this session widened), so the pieces
+   of this migration that touch `loot_table` / `box_grants` / `boxes_pending`
+   have nowhere to go there. Everything touching an object `schema.sql` *does*
+   define IS mirrored, and its header now states the gap and the correct
+   rebuild order: `schema.sql → migration-phase3.sql → migration-level-curve-40.sql`.
+
+### Worth a look before go-live (not changed — her call)
+- **`secondBlipLevel` is 10**, and level 10 is now ~21 rounds away instead of
+  ~120. So hatching a second Blip and the first mystery box now land in the
+  same moment, quite early. That reads as a good moment rather than a clash,
+  but it is a real pacing change and the number is hers to move (`js/config.js`).
+- **Item level gates were tuned to the old curve.** `jetpack` at L10 used to be
+  a season's work; it is now about three weeks. Retuning is a migration plus
+  the mirror, and belongs with the "price the free tier" job already on the
+  list — worth doing in one pass rather than twice.
+
+---
 
 ## 🏠 2026-08-08 — ROOM BUILD S1: room shell, hub button, inline nickname
 
@@ -254,9 +345,38 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - 2026-07-19: Base body art = Megan's GPT-generated PNG, used as-is; accessories are
   CODE-DRAWN SVG composited at attachment points (never GPT-drawn onto the body).
 - 2026-07-19: XP and Gold decoupled. XP = levelling only, never spent; Gold = shop only,
-  never rank. Level curve cost(L) = round(300·1.5^(L−1)/10)·10, bar resets per level,
-  cap 20 — single source of truth is SQL `_mhq_level` mirrored ONLY in
-  js/companion/level.js.
+  never rank. ~~Level curve cost(L) = round(300·1.5^(L−1)/10)·10, bar resets per level,
+  cap 20~~ — **curve SUPERSEDED 2026-08-08, see below**; the XP/Gold split and the
+  "single source of truth is SQL `_mhq_level`, mirrored ONLY in js/companion/level.js"
+  rule both still stand.
+- 2026-08-08 (S2): **Level curve is cost(L) = 200 + 60·(L−1), cap 40.** The old
+  exponential curve needed ~120 rounds for level 10 and put level 20 out of reach, so
+  no milestone pacing was possible. XP is stored raw — a curve change is therefore
+  never a data migration, just a re-map. Changed the day zero learners had the app,
+  which is the only cheap moment to do it.
+- 2026-08-08 (S2): **Milestone boxes are deduped by a primary key, and that key is
+  never cleared by a progress reset.** A reset drops XP so the gates re-lock (the
+  2026-07-19 ruling), but a prize already won is never confiscated and re-climbing
+  must not re-farm boxes. Same shape as phase 3's `box_grants`.
+- 2026-08-08 (S2): **The milestone rare pool ignores min_level.** Every other pool in
+  the app filters to what she can already wear; this one deliberately doesn't, because
+  a rare above your level is the fun of a milestone box — it sits in the closet as
+  something to climb toward. It is also why the pool floor is price ≥ 120 rather than
+  price > 0: a milestone must not pay out a 30-gold pair of sleepy eyes.
+- 2026-08-08 (S2): **Trinkets belong to the STUDENT, not to a blip.** Cosmetics are
+  per-blip because they are worn; a shelf belongs to the room, so a learner browsing
+  her second Blip must still see her own junk. That also keeps trinket ids out of
+  `blips.owned_items`, so they can never leak into a cosmetic loot pool or a closet grid.
+- 2026-08-08 (S2): **Trinkets are guaranteed-new, like cosmetics.** Six of them against
+  four milestone boxes makes duplicates genuinely likely, and a second identical sock is
+  the same let-down as a duplicate hat. All six owned → the box pays diamonds instead.
+- 2026-08-08 (S2): **`mhq_buy_item` now refuses any non-cosmetic, non-food category.**
+  It fell through to the cosmetic branch for anything that wasn't food, so a crafted
+  request could have "bought" a price-0 trinket. Nothing in the app asks for one — but
+  "never in the shop" belongs on the server, not in the client not offering it.
+- 2026-08-08 (S2): **`loot_table` gained a `box` column rather than a second table.**
+  Phase-3 rows default to 'assignment', so the homework chest's weights are untouched
+  and both boxes stay tunable in one place, server-side, as the phase-3 ruling requires.
 - 2026-07-19: **NO daily cap** (Megan overrode the planned cap): the app doubles as exam
   revision, so unlimited rounds count — replays pay 25% XP + full gold; pacing comes from
   the curve + level-gated shop items.

@@ -43,7 +43,7 @@
    DEV: globalThis.__BLIP_DEV__.skipDays(n) advances the local clock so
    sick states can be tested without waiting a week; .reset() clears it.
    ============================================================ */
-import { levelInfo } from "./companion/level.js";
+import { levelInfo, MILESTONE_LEVELS } from "./companion/level.js";
 import { BLIP, CHAPTERS } from "./config.js";
 
 const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq.struggles", quests: "mhq.quests", meta: "mhq.meta", blips: "mhq.blips" };
@@ -157,6 +157,20 @@ const SHOP_ITEMS = [
   // Mirrors supabase/migration-neck-chunky-chain.sql.
   { id: "chunky-chain", slot: "neck", price: 160, minLevel: 7 },
 ];
+/* Trinkets — room build S2 (2026-08-08). category 'trinket' server-side:
+   never in the shop payload, never equippable, price 0. They arrive only as
+   milestone-box loot and live on the STUDENT (household-wide), not on a blip.
+   Kept OUT of SHOP_ITEMS on purpose: that list feeds the shop payload AND the
+   assignment-box cosmetic pool, and a trinket belongs in neither. Mirrors
+   supabase/migration-level-curve-40.sql; labels/art in js/companion/trinkets.js. */
+const TRINKET_ITEMS = [
+  { id: "pen", price: 0, minLevel: 1 },
+  { id: "old-sock", price: 0, minLevel: 1 },
+  { id: "smooth-rock", price: 0, minLevel: 1 },
+  { id: "paper-clip", price: 0, minLevel: 1 },
+  { id: "rubber-duck", price: 0, minLevel: 1 },
+  { id: "broken-ruler", price: 0, minLevel: 1 },
+];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows. */
 const FOOD_ITEMS = [
   { id: "soup", kind: "soup", price: BLIP.food.soup },
@@ -248,12 +262,20 @@ function assignmentView(rec) {
 const LOOT_WEIGHTS = { gold: 55, food: 30, cosmetic: 15 };
 const LOOT_GOLD = { min: 15, max: 40 };
 const LOOT_FOOD = ["soup", "medicine"];
-function rollLootKind() {
-  const total = Object.values(LOOT_WEIGHTS).reduce((a, w) => a + w, 0);
+/* Milestone-box weights (S2). Mirrors the loot_table rows whose `box` column
+   is 'milestone': 50% diamonds / 25% rare cosmetic / 25% trinket. The gold
+   figure is a RATE per milestone level, not a flat amount — 10 pays 100
+   diamonds at level 10 and 400 at level 40, exactly like amount_min in SQL. */
+const MILESTONE_WEIGHTS = { gold: 50, cosmetic: 25, trinket: 25 };
+const MILESTONE_GOLD_PER_LEVEL = 10;
+const MILESTONE_RARE_PRICE = 120;   // the rare pool's price floor (itemRarity's band)
+function rollKind(weights) {
+  const total = Object.values(weights).reduce((a, w) => a + w, 0);
   let r = Math.random() * total;
-  for (const [kind, w] of Object.entries(LOOT_WEIGHTS)) { r -= w; if (r < 0) return kind; }
+  for (const [kind, w] of Object.entries(weights)) { r -= w; if (r < 0) return kind; }
   return "gold";
 }
+function rollLootKind() { return rollKind(LOOT_WEIGHTS); }
 const pickOne = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 /* ---------- term config (mirrors app_config) ---------- */
@@ -294,6 +316,15 @@ function ensureBlipFields(s) {
   // count agree — see assignmentView.
   if (typeof s.boxes_pending !== "number") { s.boxes_pending = 0; changed = true; }
   if (!Array.isArray(s.box_grants)) { s.box_grants = []; changed = true; }
+  // S2 (2026-08-08): milestone mystery boxes + the trinket shelf. Both are
+  // household-wide, mirroring students.milestone_boxes / students.trinkets.
+  // milestone_boxes is a QUEUE of milestone LEVELS ([10, 20]), not a count —
+  // each box owes diamonds scaled to its own milestone. milestone_grants is
+  // the dedupe list (mirrors the milestone_grants table's primary key) and is
+  // never cleared by a progress reset, so re-climbing cannot re-farm boxes.
+  if (!Array.isArray(s.milestone_boxes)) { s.milestone_boxes = []; changed = true; }
+  if (!Array.isArray(s.milestone_grants)) { s.milestone_grants = []; changed = true; }
+  if (!Array.isArray(s.trinkets)) { s.trinkets = []; changed = true; }
   return changed;
 }
 
@@ -372,6 +403,19 @@ globalThis.__BLIP_DEV__ = {
     write(LS.students, stAll);
     return { username: rec.username, boxesPending: rec.boxes_pending };
   },
+  /* S2: queue a MILESTONE mystery box without grinding to level 10, so the
+     "Mystery box" variant of the modal can be exercised offline. Does NOT
+     write a milestone_grants entry — this is a test prop, not a real grant,
+     so it can be used over and over. */
+  grantMysteryBox(milestone = 10, username) {
+    const stAll = read(LS.students, {});
+    const rec = username ? Object.values(stAll).find(s => s.username === String(username).toLowerCase()) : Object.values(stAll)[0];
+    if (!rec) return { error: "no student — log in once first" };
+    ensureBlipFields(rec);
+    rec.milestone_boxes.push(Number(milestone) || 10);
+    write(LS.students, stAll);
+    return { username: rec.username, milestoneBoxes: rec.milestone_boxes.slice() };
+  },
 };
 
 export const LocalBackend = {
@@ -436,7 +480,15 @@ export const LocalBackend = {
       health, canFeedToday, canCareToday, termRunning: running,
       // Phase 3
       assignment: assignmentView(rec),
-      boxes: { pending: rec.boxes_pending || 0 },
+      // S2: `pending` is the TOTAL number of unopened boxes so the existing
+      // 🎁 badge keeps working untouched; `mystery` is how many of those are
+      // milestone boxes, which is what titles the modal (milestone boxes are
+      // always opened first — the server and this file share that rule).
+      boxes: {
+        pending: (rec.boxes_pending || 0) + (rec.milestone_boxes || []).length,
+        mystery: (rec.milestone_boxes || []).length,
+      },
+      trinkets: (rec.trinkets || []).slice(),
     };
   },
   async submitQuest(username, password, quest, { score, xp }) {
@@ -473,13 +525,34 @@ export const LocalBackend = {
       }
     }
 
-    write(LS.students, stAll);
     const info = levelInfo(rec.xp);
+
+    /* S2: milestone mystery boxes at 10/20/30/40. Mirrors mhq_submit_quest —
+       and note the test is `>=`, not "crossed on this submit". The curve
+       change re-maps the existing test account to exactly level 10 without
+       any submit ever crossing it, so a strict crossing test would owe that
+       account a box it could never receive. The grant list gives the same
+       one-box-per-milestone-ever guarantee, so `>=` is simply kinder to
+       anyone already past a milestone. A replay awards nothing. */
+    let mysteryAwarded = 0;
+    for (const ms of MILESTONE_LEVELS) {
+      if (info.level < ms) break;                       // MILESTONE_LEVELS is ascending
+      if (rec.milestone_grants.includes(ms)) continue;
+      rec.milestone_grants.push(ms);
+      rec.milestone_boxes.push(ms);
+      mysteryAwarded += 1;
+    }
+
+    write(LS.students, stAll);
 
     return {
       ok: true, passed, badgeEarned: passed && !wasPassed, xpAwarded: xpGain, alreadyPassed: wasPassed,
       goldAwarded: goldGain, xp: rec.xp, gold: rec.gold, level: info.level, levelUp: info.level > oldLevel, levelInfo: info,
-      boxAwarded, boxes: { pending: rec.boxes_pending || 0 },
+      boxAwarded, mysteryAwarded,
+      boxes: {
+        pending: (rec.boxes_pending || 0) + rec.milestone_boxes.length,
+        mystery: rec.milestone_boxes.length,
+      },
     };
   },
   async logStruggle(username, password, concept) {
@@ -651,13 +724,33 @@ export const LocalBackend = {
     const rec = stAll[s.id];
     ensureBlipFields(rec);
     const blips = ensureBlip(s.id, rec);
-    if (!(rec.boxes_pending > 0)) return { ok: false, error: "no_box" };
+
+    /* S2: MILESTONE BOXES OPEN FIRST. That rule is shared with the server so
+       the modal can title itself "Mystery box" BEFORE the learner taps — the
+       tap is what calls this, so the title cannot wait for the answer. */
+    const boxKind = rec.milestone_boxes.length ? "milestone" : "assignment";
+    const milestone = boxKind === "milestone" ? rec.milestone_boxes[0] : null;
+    if (boxKind === "assignment" && !(rec.boxes_pending > 0)) return { ok: false, error: "no_box" };
 
     const level = levelInfo(rec.xp).level;
     const blip = blips.find(b => b.slot === 1) || blips[0];
-    let kind = rollLootKind();
+    let kind = boxKind === "milestone" ? rollKind(MILESTONE_WEIGHTS) : rollLootKind();
     let loot = null;
 
+    if (kind === "trinket") {
+      // Guaranteed-new, like cosmetics: six trinkets against four milestone
+      // boxes makes duplicates genuinely likely, and a second identical sock
+      // on the shelf is the same let-down as a duplicate hat. Empty pool
+      // pays diamonds.
+      const pool = TRINKET_ITEMS.filter(it => !rec.trinkets.includes(it.id));
+      if (pool.length) {
+        const item = pickOne(pool);
+        rec.trinkets = [...rec.trinkets, item.id];
+        loot = { kind: "trinket", id: item.id, amount: 1, isNew: true };
+      } else {
+        kind = "gold";
+      }
+    }
     if (kind === "cosmetic") {
       // GUARANTEED-NEW: the pool is filtered to unowned items at or below her
       // level, so isNew is true by construction. A box that hands back a hat
@@ -666,7 +759,12 @@ export const LocalBackend = {
       // price > 0 (2026-07-28): free-tier items are excluded from the loot
       // pool — a treasure box handing you something the shop gives away is
       // the same let-down as a duplicate, which the pool already guards.
-      const pool = SHOP_ITEMS.filter(it => it.price > 0 && it.minLevel <= level && !(blip.owned_items || []).includes(it.id));
+      // S2: the two boxes draw from different pools. A milestone box pays a
+      // RARE (price >= 120) at ANY level — a rare above your level is the fun
+      // of it; it waits in the closet until the gate opens.
+      const pool = SHOP_ITEMS.filter(it => (boxKind === "milestone"
+        ? it.price >= MILESTONE_RARE_PRICE
+        : (it.price > 0 && it.minLevel <= level)) && !(blip.owned_items || []).includes(it.id));
       if (pool.length) {
         const item = pickOne(pool);
         blip.owned_items = [...(blip.owned_items || []), item.id];
@@ -683,16 +781,26 @@ export const LocalBackend = {
       loot = { kind: "food", id, amount: 1, isNew: false };
     }
     if (kind === "gold") {
-      const amount = LOOT_GOLD.min + Math.floor(Math.random() * (LOOT_GOLD.max - LOOT_GOLD.min + 1));
+      // A milestone box pays a flat 10 diamonds per milestone level (100 at
+      // level 10 … 400 at level 40); the homework chest keeps its 15–40 roll.
+      const amount = boxKind === "milestone"
+        ? MILESTONE_GOLD_PER_LEVEL * milestone
+        : LOOT_GOLD.min + Math.floor(Math.random() * (LOOT_GOLD.max - LOOT_GOLD.min + 1));
       rec.gold += amount;
       loot = { kind: "gold", id: "gold", amount, isNew: false };
     }
 
-    rec.boxes_pending = Math.max(0, (rec.boxes_pending || 0) - 1);
+    if (boxKind === "milestone") rec.milestone_boxes = rec.milestone_boxes.slice(1);
+    else rec.boxes_pending = Math.max(0, (rec.boxes_pending || 0) - 1);
     write(LS.students, stAll);
     return {
-      ok: true, loot, boxes: { pending: rec.boxes_pending },
-      gold: rec.gold, pantry: rec.pantry || {}, blips: blipsView(s.id),
+      ok: true, loot, boxKind, milestone,
+      boxes: {
+        pending: (rec.boxes_pending || 0) + rec.milestone_boxes.length,
+        mystery: rec.milestone_boxes.length,
+      },
+      gold: rec.gold, pantry: rec.pantry || {}, trinkets: rec.trinkets.slice(),
+      blips: blipsView(s.id),
     };
   },
 

@@ -35,6 +35,8 @@
 import { ACCESSORIES, ATTACH, COLOURS, renderCompanion } from "./js/companion/renderer.js";
 import { ITEM_LABELS, itemRarity, accessorySlot, COSMETIC_SLOTS, SLOT_LABELS } from "./js/companion/blip-ui.js";
 import { LocalBackend } from "./js/local-backend.js";
+import { levelInfo, costForLevel, MAX_LEVEL, MILESTONE_LEVELS } from "./js/companion/level.js";
+import { TRINKETS, TRINKET_IDS, trinketLabel } from "./js/companion/trinkets.js";
 
 let total = 0; const fails = [];
 const tick = (cond, label) => { total++; if (!cond) fails.push(label); return cond; };
@@ -137,6 +139,10 @@ const MIGRATIONS = [
   ["migration-neck-slot.sql", 1],
   ["migration-neck-necklaces.sql", 5],
   ["migration-neck-chunky-chain.sql", 1],
+  // S2 (2026-08-08): six TRINKET rows. These are category 'trinket', so they
+  // are cross-checked against js/companion/trinkets.js rather than against the
+  // shop payload — a trinket must never appear in the shop.
+  ["migration-level-curve-40.sql", 6],
 ];
 // An applied migration is never edited — it is the record of what actually
 // ran — so an item that is seeded by one migration and later dropped by a
@@ -167,7 +173,11 @@ for (const [file, expected] of MIGRATIONS) try {
   const seeded = [...sql.matchAll(/^\s*\('([a-z0-9-]+)',\s*'([a-z]+)',\s*(\d+),\s*(\d+),\s*true/gim)]
     .map((m) => ({ id: m[1], slot: m[2], price: +m[3], minLevel: +m[4] }));
   tick(seeded.length === expected, `${file} seeds ${seeded.length} rows, expected ${expected}`);
-  for (const row of seeded) {
+  // A trinket is not a cosmetic: it never reaches the shop payload, so it is
+  // checked against a different mirror (and against its ABSENCE from the shop).
+  const cosmeticRows = seeded.filter((r) => r.slot !== "trinket");
+  const trinketRows = seeded.filter((r) => r.slot === "trinket");
+  for (const row of cosmeticRows) {
     if (retired.has(row.id)) continue;
     const mirror = shop.find((it) => it.id === row.id);
     tick(!!mirror, `"${row.id}" is in ${file} but not in the client shop mirror`);
@@ -177,11 +187,17 @@ for (const [file, expected] of MIGRATIONS) try {
       tick(mirror.slot === row.slot, `"${row.id}" slot differs: SQL ${row.slot}, client ${mirror.slot}`);
     }
   }
+  for (const row of trinketRows) {
+    tick(!!TRINKETS[row.id], `trinket "${row.id}" is in ${file} but has no js/companion/trinkets.js entry`);
+    tick(row.price === 0, `trinket "${row.id}" is priced ${row.price} — trinkets are never sold`);
+    tick(!shop.some((it) => it.id === row.id), `trinket "${row.id}" leaked into the shop payload`);
+    tick(!ACCESSORIES[row.id], `trinket "${row.id}" is also an ACCESSORY — it would become wearable`);
+  }
   // A slot is never just new rows: mhq_equip hard-codes the allowed equipped
   // keys and shop_items_slot_cat_check hard-codes the slots. Missing either
   // is what made an equipped cape return bad_equipped in July, so assert
   // that every slot this migration seeds is named in BOTH.
-  for (const slot of new Set(seeded.map((r) => r.slot))) {
+  for (const slot of new Set(cosmeticRows.map((r) => r.slot))) {
     const inConstraint = new RegExp(`slot in \\([^)]*'${slot}'`).test(sql);
     const inEquip = new RegExp(`k not in \\([^)]*'${slot}'`).test(sql);
     tick(inConstraint || !sql.includes("shop_items_slot_cat_check"),
@@ -189,9 +205,160 @@ for (const [file, expected] of MIGRATIONS) try {
     tick(inEquip || !sql.includes("mhq_equip"),
       `${file} seeds slot "${slot}" but does not allow it in mhq_equip's key list`);
   }
-  say(`${file}: ${seeded.length} rows, all cross-checked against the client mirror`);
+  // The trinket slot is the mirror image: it MUST be allowed by the category
+  // constraint and MUST NOT appear in mhq_equip's key list. A trinket that
+  // became equippable would need an ATTACH point it does not have.
+  if (trinketRows.length) {
+    tick(/category = 'trinket'\s+and slot = 'trinket'/.test(sql),
+      `${file} seeds trinkets but shop_items_slot_cat_check does not allow the trinket category`);
+    tick(!/k not in \([^)]*'trinket'/.test(sql),
+      `${file} added 'trinket' to mhq_equip's key list — trinkets must not be equippable`);
+  }
+  say(`${file}: ${seeded.length} rows (${cosmeticRows.length} cosmetic, ${trinketRows.length} trinket), all cross-checked`);
 } catch (e) {
   tick(false, `could not read supabase/${file}: ` + e.message);
+}
+
+/* ---------- 6b. the level curve (room build S2) ----------
+   cost(L) = 200 + 60*(L-1), cap 40. The SQL is the source of truth and
+   js/companion/level.js is its ONLY mirror, so both the arithmetic and the
+   agreement between the two files are asserted here. The anchors are the
+   ones ROOM-BUILD-PLAN.md's pacing was designed around — if they move, the
+   milestone levels and every shop level gate quietly mean something else. */
+{
+  tick(MAX_LEVEL === 40, `MAX_LEVEL is ${MAX_LEVEL}, expected 40`);
+  tick(costForLevel(1) === 200 && costForLevel(2) === 260 && costForLevel(10) === 740,
+    `cost(L) is not 200 + 60*(L-1): got ${costForLevel(1)}/${costForLevel(2)}/${costForLevel(10)}`);
+  const ANCHORS = [[0, 1], [199, 1], [200, 2], [3959, 9], [3960, 10], [14060, 20], [30160, 30], [52260, 40]];
+  for (const [xp, lvl] of ANCHORS) {
+    tick(levelInfo(xp).level === lvl, `levelInfo(${xp}).level is ${levelInfo(xp).level}, expected ${lvl}`);
+  }
+  tick(levelInfo(3960).intoLevel === 0, "level 10 should land exactly on the boundary (intoLevel 0)");
+  tick(levelInfo(52260).nextCost === null, "nextCost must be null at the cap — there is no level 41");
+  tick(levelInfo(999999).level === 40, "the cap does not hold above the last anchor");
+  tick(levelInfo(-50).level === 1 && levelInfo(null).level === 1, "negative/absent xp must read as level 1");
+  say(`curve: L10 ${3960} XP · L20 ${14060} · L30 ${30160} · L40 ${52260} (cap ${MAX_LEVEL})`);
+
+  // Same curve in SQL, in both places a schema change is meant to land.
+  for (const f of ["migration-level-curve-40.sql", "schema.sql"]) try {
+    const sql = (await (await fetch(`./supabase/${f}`)).text()).replace(/--[^\n]*/g, "");
+    tick(/cost\s*:=\s*200\s*\+\s*60\s*\*\s*\(\s*lvl\s*-\s*1\s*\)/.test(sql),
+      `supabase/${f} does not carry cost(L) = 200 + 60*(lvl-1)`);
+    tick(/lvl\s*>=\s*40/.test(sql), `supabase/${f} does not cap _mhq_level at 40`);
+    tick(!/power\(1\.5/.test(sql), `supabase/${f} still has the old 1.5^(L-1) curve in it`);
+  } catch (e) { tick(false, `could not read supabase/${f}: ` + e.message); }
+}
+
+/* ---------- 6c. trinkets are complete, and are not cosmetics ---------- */
+{
+  tick(TRINKET_IDS.length === 6, `expected 6 trinkets, found ${TRINKET_IDS.length}`);
+  for (const id of TRINKET_IDS) {
+    const def = TRINKETS[id];
+    tick(!!def.label && trinketLabel(id) === def.label, `trinket "${id}" has no label`);
+    tick(!!def.line, `trinket "${id}" has no reveal line`);
+    tick(!!def.svg !== !!def.img, `trinket "${id}" must have exactly one of svg / img`);
+    if (def.svg) tick(/viewBox="0 0 100 100"/.test(def.svg), `trinket "${id}" is not drawn in the shared 100x100 box`);
+    tick(!ACCESSORIES[id], `trinket "${id}" is also in ACCESSORIES — it would be wearable`);
+    tick(!shop.some((it) => it.id === id), `trinket "${id}" is in the shop payload`);
+  }
+  say(`trinkets: ${TRINKET_IDS.map(trinketLabel).join(", ")} (PLACEHOLDER art until art-source/tripo/trinkets.png lands)`);
+}
+
+/* ---------- 6d. milestone mystery boxes, end to end ----------
+   The grant path is the part that can silently pay twice (or never), so it
+   is exercised for real against the local backend rather than asserted from
+   the source: cross level 10, get exactly ONE box; replay, get nothing. */
+{
+  const mu = "verify_ms_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(mu, "Milestone", "pw12");
+  tick(MILESTONE_LEVELS.join(",") === "10,20,30,40", "MILESTONE_LEVELS is not 10/20/30/40");
+
+  // 3 fresh rounds at the 1000-XP cap = 3,000 XP — level 8, no milestone yet.
+  for (const q of ["q1", "q2", "q3"]) {
+    const r = await LocalBackend.submitQuest(mu, "pw12", q, { score: 0.9, xp: 1000 });
+    tick(r.mysteryAwarded === 0, `a milestone box was awarded at level ${r.level} — too early`);
+  }
+  const pre = await LocalBackend.getState(mu, "pw12");
+  tick(pre.levelInfo.level === 8, `3,000 XP should be level 8, got ${pre.levelInfo.level}`);
+  tick(pre.boxes.mystery === 0, "a mystery box exists before level 10");
+
+  // the 4th round crosses 3,960 XP -> level 10 -> exactly one box
+  const cross = await LocalBackend.submitQuest(mu, "pw12", "q4", { score: 0.9, xp: 1000 });
+  tick(cross.level === 10, `4,000 XP should be level 10, got ${cross.level}`);
+  tick(cross.mysteryAwarded === 1, `crossing level 10 awarded ${cross.mysteryAwarded} boxes, expected exactly 1`);
+  tick(cross.boxes.mystery === 1 && cross.boxes.pending === 1,
+    `box counts after crossing are wrong: ${JSON.stringify(cross.boxes)}`);
+
+  // a replay of the same quest must award nothing (the grant list is the dedupe)
+  const replay = await LocalBackend.submitQuest(mu, "pw12", "q4", { score: 0.9, xp: 1000 });
+  tick(replay.mysteryAwarded === 0, "replaying at level 10 awarded another milestone box");
+  tick(replay.boxes.mystery === 1, "the replay changed the mystery-box count");
+
+  // opening it: milestone boxes come first, and the loot obeys the S2 rules
+  const st1 = await LocalBackend.getState(mu, "pw12");
+  tick(st1.boxes.mystery === 1, "getState lost the mystery box");
+  tick(Array.isArray(st1.trinkets) && st1.trinkets.length === 0, "a new learner starts with an empty shelf");
+  const open = await LocalBackend.openBox(mu, "pw12");
+  tick(open.ok && open.boxKind === "milestone", `expected a milestone box, got ${JSON.stringify(open.boxKind)}`);
+  tick(open.milestone === 10, `the box should be stamped milestone 10, got ${open.milestone}`);
+  tick(["gold", "cosmetic", "trinket"].includes(open.loot.kind), `milestone loot kind "${open.loot.kind}" is not one of the three`);
+  tick(open.boxes.mystery === 0 && open.boxes.pending === 0, "opening did not consume the box");
+  const empty = await LocalBackend.openBox(mu, "pw12");
+  tick(!empty.ok && empty.error === "no_box", "a second open should report no_box");
+
+  /* Loot pool rules, over enough boxes to see all three branches. Milestone
+     20 so the diamond payout (10 x milestone) is distinguishable from the
+     homework chest's 15-40 roll. */
+  const seenTrinkets = new Set(), seenCosmetics = new Set();
+  const kinds = { gold: 0, cosmetic: 0, trinket: 0 };
+  for (let i = 0; i < 60; i++) {
+    globalThis.__BLIP_DEV__.grantMysteryBox(20, mu);
+    const r = await LocalBackend.openBox(mu, "pw12");
+    if (!tick(r.ok && r.boxKind === "milestone", "a granted mystery box did not open as one")) break;
+    kinds[r.loot.kind] = (kinds[r.loot.kind] || 0) + 1;
+    if (r.loot.kind === "gold") {
+      tick(r.loot.amount === 200, `milestone-20 diamonds paid ${r.loot.amount}, expected 10 x 20 = 200`);
+    } else if (r.loot.kind === "cosmetic") {
+      const row = shop.find((it) => it.id === r.loot.id);
+      tick(!!row && row.price >= 120, `milestone box paid "${r.loot.id}" (price ${row && row.price}) — the pool is price >= 120`);
+      tick(r.loot.isNew && !seenCosmetics.has(r.loot.id), `milestone box handed back a duplicate: ${r.loot.id}`);
+      seenCosmetics.add(r.loot.id);
+    } else if (r.loot.kind === "trinket") {
+      tick(TRINKET_IDS.includes(r.loot.id), `unknown trinket "${r.loot.id}"`);
+      tick(!seenTrinkets.has(r.loot.id), `the shelf received a duplicate ${r.loot.id}`);
+      seenTrinkets.add(r.loot.id);
+      tick((r.trinkets || []).includes(r.loot.id), `"${r.loot.id}" was not added to the shelf`);
+    }
+  }
+  tick(kinds.cosmetic > 0 && kinds.trinket > 0 && kinds.gold > 0,
+    `60 milestone boxes did not hit all three branches: ${JSON.stringify(kinds)}`);
+  say(`60 milestone boxes: ${kinds.gold} diamonds · ${kinds.cosmetic} rares · ${kinds.trinket} trinkets`);
+
+  // a trinket is on the shelf, and is still not buyable or wearable
+  const st2 = await LocalBackend.getState(mu, "pw12");
+  tick(st2.trinkets.length === seenTrinkets.size, "the shelf and the drops disagree");
+  const oneTrinket = [...seenTrinkets][0];
+  if (oneTrinket) {
+    const buy = await LocalBackend.buyItem(mu, "pw12", oneTrinket);
+    tick(!buy.ok && buy.error === "no_item", `a trinket was purchasable: ${JSON.stringify(buy)}`);
+    const wear = await LocalBackend.equip(mu, "pw12", { slot: 1, equipped: { hat: oneTrinket } });
+    tick(!wear.ok, "a trinket was equippable");
+  }
+
+  /* The homework chest must be untouched by all of this: same 15-40 gold
+     roll, same at-or-below-level cosmetic pool, and it only opens once the
+     mystery queue is empty. */
+  globalThis.__BLIP_DEV__.grantBox(1, mu);
+  const hw = await LocalBackend.openBox(mu, "pw12");
+  tick(hw.ok && hw.boxKind === "assignment", `the homework chest reported boxKind ${JSON.stringify(hw.boxKind)}`);
+  tick(hw.milestone === null, "an assignment box should carry no milestone stamp");
+  if (hw.loot.kind === "gold") tick(hw.loot.amount >= 15 && hw.loot.amount <= 40,
+    `the homework chest paid ${hw.loot.amount} — its band is 15-40`);
+  if (hw.loot.kind === "cosmetic") {
+    const row = shop.find((it) => it.id === hw.loot.id);
+    tick(!!row && row.price > 0 && row.minLevel <= 10, `the homework chest paid an out-of-pool item: ${hw.loot.id}`);
+  }
+  tick(hw.loot.kind !== "trinket", "the homework chest paid a trinket — trinkets are milestone-only");
 }
 
 /* ---------- 7. buying, wearing and taking off actually work ---------- */

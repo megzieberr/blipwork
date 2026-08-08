@@ -136,6 +136,12 @@
    for a buyable item, sized to sit comfortably above the notice */
 .treasure-modal .tb-preview { width: 116px; margin: 2px auto 8px; }
 
+/* A trinket previews as itself, not on Blip — it is never worn. Smaller than
+   the cosmetic preview because these are little objects, not an outfit. */
+.treasure-modal .tb-trinket-preview { width: 84px; }
+.treasure-modal .tb-trinket-preview svg,
+.treasure-modal .tb-trinket-preview img { width: 100%; height: auto; display: block; }
+
 .treasure-modal .tb-done { margin-top: 2px; }
 
 /* ---------- the "🎁 N" badge ----------
