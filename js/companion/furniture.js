@@ -133,9 +133,12 @@ export const FURNITURE = {
   "space-window": { slot: "window", label: "Space window", img: "space-window.png", widthPct: 20 },
 
   // ---- princess (Lv 14) — furniture-iso-princess.png ----
-  // Both are TALL (the canopy, the vanity mirror), so they run narrower
-  // than their siblings or they overrun the wall behind them.
-  "princess-bed": { slot: "bed", label: "Canopy bed", img: "princess-bed.png", widthPct: 33 },
+  // The canopy bed sits at 41, matching the wooden one — HER CALL
+  // (2026-08-08): a four-poster that reads smaller than the plain bed it is
+  // meant to be an upgrade from looks wrong, and at Megan's placement it has
+  // the room for it. The vanity stays narrower: it is the tallest thing in
+  // the catalogue (mirror included) and does not need the width.
+  "princess-bed": { slot: "bed", label: "Canopy bed", img: "princess-bed.png", widthPct: 41 },
   "princess-desk": { slot: "desk", label: "Vanity desk", img: "princess-desk.png", widthPct: 30 },
   "mountain-window": { slot: "window", label: "Mountain window", img: "mountain-window.png", widthPct: 20 },
 

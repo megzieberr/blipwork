@@ -197,12 +197,33 @@ the middle of the floor so Blip stands *between* the desk and the bed instead
 of in front of the bed. Re-previewed in all three sets and re-walked in the
 app — the live DOM reports her exact fractions.
 
-Worth knowing (not changed, hers to call): **the desk slot is now far enough
-left that the two WIDER desks slightly overhang the floor's left edge** —
-techy (36%) reaches x 0.041 and princess (30%) x 0.071, where the floor at
-that height starts around x 0.121. Nothing is clipped and the basic desk she
-placed against sits fine; it is a per-item `widthPct` nudge in the same tool
-if either bothers her.
+She then called one more size: **`princess-bed` 33 → 41**, matching the wooden
+bed. A four-poster that reads *smaller* than the plain bed it is an upgrade
+from looks wrong, and at her placement it has the room. (It had been shrunk to
+33 during the first draft to keep it off the window — a constraint her layout
+removed, which nobody noticed until she said so.) The vanity stays at 30: it
+is the tallest thing in the catalogue and does not need the width.
+
+### ⚠️ A CLAIM MADE HERE THAT WAS WRONG — "the wider desks overhang the floor"
+An earlier draft of this entry warned that the techy and princess desks hang
+over the floor's left edge at her desk position. **They do not.** Megan
+queried it; measured against the shell's own silhouette, every piece is
+0 px outside the room:
+
+| | outside the shell | left-most pixel |
+|---|---|---|
+| Study desk 33% | 0 / 41,374 | x 0.057 |
+| Holo desk 36% | 0 / 38,150 | x 0.043 |
+| Vanity desk 30% | 0 / 42,616 | x 0.074 |
+| all three beds | 0 / 54k–76k | — |
+
+The reasoning was wrong in two ways at once, and both are worth remembering
+because they will recur: it compared the desk's BOUNDING-BOX corner (which for
+an isometric desk is empty space — the drawn pixels nearest the left are its
+back-top corner, higher up where the room is wider) against where the FLOOR
+starts at that height — but left of the floor is the WALL, which is still
+inside the room. A desk touching a wall is a desk against a wall.
+**Measure against the shell's alpha, not against a computed floor line.**
 
 ### Not done / punted
 - **Not smoke-tested against live** — the migrations are unrun. Same position
