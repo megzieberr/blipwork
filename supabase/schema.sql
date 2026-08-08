@@ -970,3 +970,26 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('rubber-duck',         'trinket',    0,  1, true,   204, 'trinket'),
   ('broken-ruler',        'trinket',    0,  1, true,   205, 'trinket')
 on conflict (item_id) do nothing;
+
+-- Room build S3 (2026-08-08): wave-3 themed collections. Sixteen more
+-- cosmetics, no new slot. See migration-wave3-collections.sql for the full
+-- rationale; js/companion/collections.js is the client-side grouping that
+-- gates these behind their collection's level, not this table.
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('sport-shades',  'glasses',  65,  9, true,  90, 'cosmetic'),
+  ('gold-shades',   'glasses',  85, 20, true,  91, 'cosmetic'),
+  ('star-eyes',     'glasses',  50,  5, true,  92, 'cosmetic'),
+  ('angry-eyes',    'glasses',  45,  5, true,  93, 'cosmetic'),
+  ('happy-eyes',    'glasses',  40,  5, true,  94, 'cosmetic'),
+  ('lash-eyes',     'glasses',  55,  5, true,  95, 'cosmetic'),
+  ('dreamy-eyes',   'glasses',  50,  5, true,  96, 'cosmetic'),
+  ('wink-eyes',     'glasses',  60,  5, true,  97, 'cosmetic'),
+  ('backwards-cap', 'hat',      70,  9, true,  98, 'cosmetic'),
+  ('bucket-hat',    'hat',      60,  9, true,  99, 'cosmetic'),
+  ('snapback',      'hat',      80, 20, true, 100, 'cosmetic'),
+  ('tiara',         'hat',     130, 12, true, 101, 'cosmetic'),
+  ('flower-crown',  'hat',      90, 16, true, 102, 'cosmetic'),
+  ('hair-bow',      'hat',      75, 12, true, 103, 'cosmetic'),
+  ('butterfly-wing','wings',    95, 12, true, 104, 'cosmetic'),
+  ('fairy-wing',    'wings',   150, 16, true, 105, 'cosmetic')
+on conflict (item_id) do nothing;

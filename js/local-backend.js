@@ -156,6 +156,27 @@ const SHOP_ITEMS = [
   // old 'gold-chain' is on the retired list and a retired id never returns.
   // Mirrors supabase/migration-neck-chunky-chain.sql.
   { id: "chunky-chain", slot: "neck", price: 160, minLevel: 7 },
+  // Room build S3 (2026-08-08) — wave-3 themed collections. Mirrors
+  // supabase/migration-wave3-collections.sql; collection gates (which of
+  // these render as a locked "?" card below what level) live in
+  // js/companion/collections.js, not here — this list is unchanged from
+  // the server's own per-item price/minLevel.
+  { id: "backwards-cap", slot: "hat", price: 70, minLevel: 9 },
+  { id: "sport-shades", slot: "glasses", price: 65, minLevel: 9 },
+  { id: "bucket-hat", slot: "hat", price: 60, minLevel: 9 },
+  { id: "hair-bow", slot: "hat", price: 75, minLevel: 12 },
+  { id: "tiara", slot: "hat", price: 130, minLevel: 12 },
+  { id: "butterfly-wing", slot: "wings", price: 95, minLevel: 12 },
+  { id: "fairy-wing", slot: "wings", price: 150, minLevel: 16 },
+  { id: "flower-crown", slot: "hat", price: 90, minLevel: 16 },
+  { id: "gold-shades", slot: "glasses", price: 85, minLevel: 20 },
+  { id: "snapback", slot: "hat", price: 80, minLevel: 20 },
+  { id: "star-eyes", slot: "glasses", price: 50, minLevel: 5 },
+  { id: "angry-eyes", slot: "glasses", price: 45, minLevel: 5 },
+  { id: "happy-eyes", slot: "glasses", price: 40, minLevel: 5 },
+  { id: "lash-eyes", slot: "glasses", price: 55, minLevel: 5 },
+  { id: "dreamy-eyes", slot: "glasses", price: 50, minLevel: 5 },
+  { id: "wink-eyes", slot: "glasses", price: 60, minLevel: 5 },
 ];
 /* Trinkets — room build S2 (2026-08-08). category 'trinket' server-side:
    never in the shop payload, never equippable, price 0. They arrive only as

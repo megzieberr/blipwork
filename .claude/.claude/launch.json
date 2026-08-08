@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "5191"],
       "port": 5191
+    },
+    {
+      "name": "maths-quest-s3",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5213"],
+      "port": 5213
     }
   ]
 }

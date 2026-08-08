@@ -37,6 +37,7 @@ import { ITEM_LABELS, itemRarity, accessorySlot, COSMETIC_SLOTS, SLOT_LABELS } f
 import { LocalBackend } from "./js/local-backend.js";
 import { levelInfo, costForLevel, MAX_LEVEL, MILESTONE_LEVELS } from "./js/companion/level.js";
 import { TRINKETS, TRINKET_IDS, trinketLabel } from "./js/companion/trinkets.js";
+import { COLLECTIONS, COLLECTION_ORDER, collectionForItem } from "./js/companion/collections.js";
 
 let total = 0; const fails = [];
 const tick = (cond, label) => { total++; if (!cond) fails.push(label); return cond; };
@@ -143,6 +144,9 @@ const MIGRATIONS = [
   // are cross-checked against js/companion/trinkets.js rather than against the
   // shop payload — a trinket must never appear in the shop.
   ["migration-level-curve-40.sql", 6],
+  // S3 (2026-08-08): wave-3 themed collections. star-wand is deliberately
+  // NOT among these 16 — see the "star-wand stays cut" check below.
+  ["migration-wave3-collections.sql", 16],
 ];
 // An applied migration is never edited — it is the record of what actually
 // ran — so an item that is seeded by one migration and later dropped by a
@@ -361,6 +365,57 @@ for (const [file, expected] of MIGRATIONS) try {
   tick(hw.loot.kind !== "trinket", "the homework chest paid a trinket — trinkets are milestone-only");
 }
 
+/* ---------- 6e. mystery collections (room build S3) ----------
+   Every active, sellable cosmetic must belong to EXACTLY ONE collection —
+   the failure mode this guards is a new item shipped without a home,
+   which would silently vanish from the grouped shop panel (buyableItems
+   would never match any collection's item list, so it just never renders,
+   not even as an error). */
+{
+  const seen = new Map(); // id -> collection key, to also catch duplicates
+  for (const key of COLLECTION_ORDER) {
+    for (const id of COLLECTIONS[key].items) {
+      tick(!seen.has(id), `"${id}" is listed in both "${seen.get(id)}" and "${key}" — must be exactly one collection`);
+      seen.set(id, key);
+    }
+  }
+  for (const it of shop) {
+    const key = collectionForItem(it.id);
+    tick(!!key, `shop item "${it.id}" belongs to no collection in js/companion/collections.js`);
+  }
+  // and the reverse: a collection must never claim an id that isn't an
+  // actual active cosmetic (a retired or mistyped id would otherwise sit
+  // there silently, never rendering, never caught anywhere else)
+  const shopIds = new Set(shop.map((it) => it.id));
+  for (const key of COLLECTION_ORDER) {
+    for (const id of COLLECTIONS[key].items) {
+      tick(shopIds.has(id), `collection "${key}" lists "${id}", which is not an active cosmetic in the shop payload`);
+    }
+  }
+  tick(!ACCESSORIES["star-wand"], `"star-wand" was wired into ACCESSORIES — it has no slot and must stay cut`);
+  say(`collections: ${COLLECTION_ORDER.map((k) => `${COLLECTIONS[k].label}(Lv${COLLECTIONS[k].unlockLevel}, ${COLLECTIONS[k].items.length})`).join(" · ")}`);
+}
+
+/* ---------- 6f. eye-pair overlays hide the painted eyes underneath ----------
+   The six eye-pair items are PNG art (not inline SVG), so they can't bake a
+   mask into their own `svg` field like sleepy-eyes does — renderCompanion
+   is expected to mount a SEPARATE generic mask layer (blip-eye-mask) first. */
+{
+  const EYE_PAIR_IDS = ["star-eyes", "angry-eyes", "happy-eyes", "lash-eyes", "dreamy-eyes", "wink-eyes"];
+  for (const id of EYE_PAIR_IDS) {
+    tick(!!ACCESSORIES[id] && ACCESSORIES[id].mask === true, `eye pair "${id}" is not flagged mask:true — the painted eyes would show through`);
+    const host = document.createElement("div");
+    renderCompanion(host, { colour: "blue", accessories: [id] });
+    tick(!!host.querySelector(".blip-eye-mask"), `equipping "${id}" did not mount the eye-mask layer`);
+    const maskEl = host.querySelector(".blip-eye-mask");
+    const artEl = host.querySelector(`[data-accessory="${id}"]`);
+    if (maskEl && artEl) {
+      tick(Array.from(artEl.parentNode.children).indexOf(maskEl) < Array.from(artEl.parentNode.children).indexOf(artEl),
+        `"${id}": the eye mask is not painted BEFORE (underneath) the eye art`);
+    }
+  }
+}
+
 /* ---------- 7. buying, wearing and taking off actually work ---------- */
 {
   const freeCape = shop.find((it) => it.id === "cape");
@@ -432,6 +487,11 @@ const outfits = [
     items: ["wizard-hat", "cyber-visor", "ear-tufts", "mitts", "gold-wings", "back-sword", "spark-halo"] },
   { label: "Monarch", colour: "lilac",
     items: ["royal-crown", "eye-mask", "bunny-ears", "power-gloves", "dragon-wings", "jetpack", "crystal-orbit"] },
+  // Room build S3: one item per new collection, in one shot.
+  { label: "Wave 3 mix", colour: "pink",
+    items: ["tiara", "star-eyes", "mitts", "fairy-wing", "cape"] },
+  { label: "Gangster + tomboy", colour: "sky",
+    items: ["snapback", "gold-shades", "bunny-ears", "boxing-gloves", "chunky-chain", "schoolbag"] },
 ];
 for (const o of outfits) {
   const card = document.createElement("div");

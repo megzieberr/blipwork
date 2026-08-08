@@ -730,6 +730,17 @@ h2{font-size:20px} h3{font-size:17px}
 .si-tag.rare{color:#eae2ff;background:color-mix(in srgb,var(--accent2) 55%,transparent)}
 .si-tag.free{color:var(--ink);background:color-mix(in srgb,var(--good) 32%,transparent)}
 
+/* mystery collections — room build S3 (2026-08-08). A locked collection is
+   one card spanning the shop grid's full width (not a 2-up tile like a
+   normal item), so it reads as "the whole group" rather than "one item". */
+.collection-label{margin:14px 0 8px;font-family:var(--font-display);font-size:13px;color:var(--muted)}
+.collection-group{grid-template-columns:1fr}
+.shop-item.collection-locked{align-items:center;padding:18px 12px}
+.shop-item.collection-locked .si-stage{width:64px;opacity:.9}
+.shop-item.collection-locked .si-stage.silhouette{filter:grayscale(1) brightness(.5)}
+.shop-item.collection-locked .si-question{font-family:var(--font-display);font-weight:700;font-size:26px;color:var(--muted)}
+.shop-item.collection-locked .si-meta{font-weight:600;color:var(--ink)}
+
 /* second-Blip unlock prompt — a rare event, violet accent */
 .second-blip-card{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px 16px;
   border-color:color-mix(in srgb,var(--accent2) 40%,var(--brd));

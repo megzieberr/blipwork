@@ -1,4 +1,87 @@
-# Project status — updated 2026-08-08 (room build S2, committed locally, NOT pushed)
+# Project status — updated 2026-08-08 (room build S3, committed locally, NOT pushed)
+
+## 🎨 2026-08-08 — ROOM BUILD S3: shop collections + mystery cards + wave-3 wiring
+
+Per `homework-hub-companion/ROOM-BUILD-PLAN.md`. Nothing pushed, `sw.js`
+untouched (still v38), no SQL run against live. `verify-store.html` is
+**1736/1736 green** (was 1243 — S3 adds 493 checks: 16 new items × their
+usual battery, the collections completeness assertion, and the eye-mask
+DOM check).
+
+**WAVE-3 WIRED.** All ten themed accessories (fairy-wing, flower-crown,
+hair-bow, tiara, butterfly-wing, backwards-cap, sport-shades, bucket-hat,
+gold-shades, snapback) plus the six eye pairs (star/angry/happy/lash/
+dreamy/wink-eyes) now have renderer entries, labels and shop rows —
+`supabase/migration-wave3-collections.sql`, mirrored in `schema.sql` and
+`js/local-backend.js`. `star-wand` stays CUT (Blip has no hands) — not
+seeded, not wired, asserted absent from ACCESSORIES.
+
+- **Eye pairs** use `widthPct` 70 (happy-eyes 54, per the S3 brief) and a
+  NEW mechanism: `mask: true` on an accessory tells `renderCompanion` to
+  mount a generic body-coloured mask layer (`makeEyeMaskLayer` in
+  renderer.js, same ellipse geometry sleepy-eyes' SVG already used)
+  UNDERNEATH the PNG art, hiding the painted eyes without baking a patch
+  into Megan's art (which would break on recolour). This is new because
+  every earlier masked item (sleepy-eyes) was inline SVG and could mask
+  itself; a PNG accessory couldn't until now.
+- **Both wings** (fairy-wing, butterfly-wing) use `flipX: true` — her art
+  roots at the lower-left like every other Tripo wing.
+- **Prices/levels match the collection gates**: tomboy items L9, girly L12,
+  fairy L16, gangster (gold-shades, snapback) L20, eye pairs L5. One rare
+  (≥120g) per collection where the plan implied one: tiara 130g, fairy-wing
+  150g.
+
+**MYSTERY COLLECTIONS shipped.** New `js/companion/collections.js` — one
+tunable file mapping every active, sellable cosmetic id to a collection +
+unlock level. The Shop panel (`js/blip.js` `renderShopCosmetics`) now
+groups buyable items by collection; a collection below the learner's level
+collapses to ONE locked card (grey silhouette + "?" + "Unlocks at Lv N",
+CSS in `css/styles.css`) — no names, prices or counts leak. An unlocked
+collection shows its items exactly as the flat list always did, with a
+small label header. The **Inventory** panel (closet) is UNCHANGED — a
+learner's own owned items are never collection-gated, only the shop is.
+
+### Deviations from the plan (rule 9 — recorded, not silently redesigned)
+1. **"basics" and "techy" required a judgement call.** The plan's
+   collection table names "wave 1+2 tech items (visors, mech arms,
+   effects…)" without listing all ~49 pre-S3 ids. Read literally against
+   the real catalogue, Tripo waves 1+2 mixed genuinely sci-fi pieces (the
+   whole effects slot, both visors, the mech arms/ears, both tech-styled
+   wings, both tech crowns) with unmistakably FANTASY pieces from the same
+   waves (wizard-hat, royal-crown, back-sword, gold-wings, dragon-wings,
+   eye-mask). The 15 sci-fi ones went to "techy" (Lv6); the 6 fantasy ones
+   joined "basics" (Lv1) alongside the pre-Tripo SL catalogue, the
+   store-expansion set, and the five plain necklaces (excluding
+   chunky-chain, which the plan's table explicitly places in "gangster").
+   Full split lives in `js/companion/collections.js`'s header comment.
+2. **Furniture collections (basic/techy/princess) are not in
+   collections.js yet.** No furniture shop_items exist until S5 ships
+   them — adding empty placeholder entries seemed more likely to drift
+   silently than to help, so they're deferred to S5 entirely.
+3. **Unlocked collections get a small label header** ("Basics", "Techy",
+   …) the plan's "shows its items as now" didn't explicitly ask for. Kept
+   because several unlocked groups can render in the same scroll with
+   locked cards interspersed, and an unlabelled run of grids read
+   confusing in testing. Easy to remove if Megan disagrees.
+
+### Worth a look before go-live (not changed — her call)
+- **Two wave-3 wings (fairy-wing, butterfly-wing) read as small — most of
+  the wing is hidden behind Blip's silhouette, with only a corner peeking
+  out at the bottom-left.** Verified this is the SAME behaviour the
+  already-shipped dragon-wings/gold-wings show at the identical
+  anchor/attach (`tools/preview_accessory.py` renders both the same way),
+  so it's the established wing convention, not a bug introduced here — but
+  butterfly-wing's actual art root sits noticeably higher in its frame
+  than fairy/dragon/gold, so it's worth her own glance rather than trusting
+  the analogy blindly. Preview PNGs for all 16 items sent directly and
+  saved to
+  `C:\Users\megzi\AppData\Local\Temp\claude\C--Users-megzi--claude\bb30f55a-21e5-4550-a574-5820b8637517\scratchpad\wave3-previews\`
+  (session-scoped scratch — copy anything worth keeping before it clears).
+- **`happy-eyes`** is still the weakest of the six eye pairs by Megan's own
+  earlier note (unwanted mouth masked out of the source sheet) — placement
+  itself previews fine at widthPct 54, this is an art-quality call only.
+
+---
 
 ## 🎁 2026-08-08 — ROOM BUILD S2: level curve (cap 40), milestone mystery boxes, trinkets
 

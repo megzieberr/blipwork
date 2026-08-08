@@ -40,6 +40,7 @@ import {
   SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot,
 } from "./companion/blip-ui.js";
 import { treasureBadge } from "./companion/treasure.js";
+import { COLLECTIONS, COLLECTION_ORDER } from "./companion/collections.js";
 import { TRINKET_IDS, trinketExists, trinketTile } from "./companion/trinkets.js";
 import { maybeShowReminderCard } from "./push.js";
 import { FRIDGE_SVG, BED_SVG, CLOSET_SVG, DESK_SVG } from "./companion/room-art.js";
@@ -591,7 +592,7 @@ export function renderBlip(app, host) {
     return card;
   };
 
-  const renderCosmeticList = (container, owned) => {
+  const renderSlotTabs = (container) => {
     if (!liveSlots.includes(activeSlotTab)) activeSlotTab = "all";
     const tabs = el("div", "slot-tabs");
     [["all", "All"], ...liveSlots.map((s) => [s, SLOT_LABELS[s]])].forEach(([id, label]) => {
@@ -607,6 +608,10 @@ export function renderBlip(app, host) {
       // rAF (known, see the browser-pane note in PROJECT-STATUS).
       setTimeout(() => activeTabEl.scrollIntoView({ block: "nearest", inline: "center" }), 0);
     }
+  };
+
+  const renderCosmeticList = (container, owned) => {
+    renderSlotTabs(container);
     const items = (owned ? closetItems : buyableItems).filter(inTab);
     if (items.length) {
       const grid = el("div", "shop-grid");
@@ -617,6 +622,48 @@ export function renderBlip(app, host) {
         ? (closetItems.length ? "Nothing in this part of the closet yet." : "The closet's empty — everything marked FREE below costs nothing.")
         : "You own everything here — nice."));
     }
+  };
+
+  /* Room build S3 (2026-08-08): a whole locked collection renders as ONE
+     card — grey silhouette, "?", "Unlocks at Lv N" — no names, no prices,
+     no item count, per ROOM-BUILD-PLAN.md. The silhouette reuses the real
+     renderer (undressed, colour "blue") rather than a fake drawing, then
+     desaturates it with CSS, so it always matches Blip's actual shape. */
+  const collectionLockedCard = (coll) => {
+    const card = el("div", "shop-item collection-locked");
+    card.innerHTML = `<div class="si-stage silhouette"></div>
+      <div class="si-question">?</div>
+      <div class="si-meta">Unlocks at Lv ${coll.unlockLevel}</div>`;
+    renderCompanion(card.querySelector(".si-stage"), { colour: "blue", accessories: [] });
+    return card;
+  };
+
+  /* Shop-only: groups buyable cosmetics by collection (js/companion/
+     collections.js). A collection the learner hasn't reached yet collapses
+     to one locked card; an unlocked collection shows its items exactly as
+     the flat list always has (per-item minLevel still applies inside it).
+     Inventory (renderCosmeticList above, owned=true) is UNCHANGED — a
+     learner's own closet is never collection-gated, only the shop is. */
+  const renderShopCosmetics = (container) => {
+    renderSlotTabs(container);
+    let shownAny = false;
+    COLLECTION_ORDER.forEach((key) => {
+      const coll = COLLECTIONS[key];
+      const collBuyable = buyableItems.filter((it) => coll.items.includes(it.id) && inTab(it));
+      if (!collBuyable.length) return;
+      shownAny = true;
+      if (level < coll.unlockLevel) {
+        const group = el("div", "shop-grid collection-group");
+        group.appendChild(collectionLockedCard(coll));
+        container.appendChild(group);
+      } else {
+        container.appendChild(el("h3", "collection-label", coll.label));
+        const grid = el("div", "shop-grid");
+        collBuyable.forEach((item) => grid.appendChild(cosmeticCard(item, false)));
+        container.appendChild(grid);
+      }
+    });
+    if (!shownAny) container.appendChild(el("p", "muted small", "You own everything here — nice."));
   };
 
   // ============================================================
@@ -650,7 +697,7 @@ export function renderBlip(app, host) {
       container.appendChild(el("p", "muted small", "The shop's quiet for now — Blip needs some care first. Try Pharmacy for soup and medicine."));
       return;
     }
-    renderCosmeticList(container, false);
+    renderShopCosmetics(container);
 
     const treats = treatItems(state);
     if (treats.length) {

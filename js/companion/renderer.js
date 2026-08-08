@@ -930,6 +930,102 @@ export const ACCESSORIES = {
     slot: "wings", img: "drone-wings.png", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
   },
+
+  /* ---------- Room build S3 (2026-08-08) — wave-3 themed collections ----------
+     Ten accessories (fairy/girly/tomboy/gangster, per art-source/tripo/
+     WAVE-3-PROMPTS.md sheets H-K) plus six eye pairs (sheets L-M), all
+     Megan's own Tripo art. NO new slot — every id below uses hat/glasses/
+     wings, which already exist. Collection gates (level, not min_level)
+     live in js/companion/collections.js, not here.
+     `star-wand` (sheet H item 2) stays CUT — Blip has no hands, no slot,
+     not wired, per PROJECT-STATUS "Next up" and the S3 brief. */
+
+  // --- fairy (collections.js gate: Lv16). Both wings in this wave root at
+  // the LOWER-LEFT like every other Tripo wing, hence flipX — see the
+  // 2026-08-05 wing ruling in ATTACH's header comment.
+  "fairy-wing": {
+    slot: "wings", img: "fairy-wing.png", widthPct: 34,
+    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  },
+  // Own lower attach, same as wizard-hat/royal-crown/neural-crown — he is a
+  // teardrop, so a solid crown-like item needs to come down far enough to
+  // wrap the point or it just hovers with a gap.
+  "flower-crown": {
+    slot: "hat", img: "flower-crown.png", widthPct: 36,
+    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.20 },
+  },
+
+  // --- girly (Lv12)
+  "hair-bow": {
+    slot: "hat", img: "hair-bow.png", widthPct: 26,
+    anchor: { x: 0.5, y: 0.88 }, attach: { x: 0.5, y: 0.19 },
+  },
+  "tiara": {           // RARE (silver + gems, priced to match)
+    slot: "hat", img: "tiara.png", widthPct: 34,
+    anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.24 },
+  },
+  "butterfly-wing": {
+    slot: "wings", img: "butterfly-wing.png", widthPct: 30,
+    anchor: { x: 0.15, y: 0.85 }, flipX: true,
+  },
+
+  // --- tomboy (Lv9)
+  "backwards-cap": {
+    slot: "hat", img: "backwards-cap.png", widthPct: 38,
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.20 },
+  },
+  // Drawn straight-on like the code-drawn eyewear, so it uses the shared
+  // glasses convention as-is (widthPct 90, lens centres land on his eyes) —
+  // no override needed.
+  "sport-shades": {
+    slot: "glasses", img: "sport-shades.png", widthPct: 90, anchor: { x: 0.5, y: 0.5 },
+  },
+  "bucket-hat": {
+    slot: "hat", img: "bucket-hat.png", widthPct: 40,
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.22 },
+  },
+
+  // --- gangster (Lv20 — chunky-chain, shipped 2026-08-07, joins this
+  // collection too; see collections.js. Nothing to add here, it already
+  // has an ACCESSORIES entry.)
+  "gold-shades": {
+    slot: "glasses", img: "gold-shades.png", widthPct: 90, anchor: { x: 0.5, y: 0.5 },
+  },
+  "snapback": {
+    slot: "hat", img: "snapback.png", widthPct: 38,
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.20 },
+  },
+
+  /* --- eye pairs (collections.js gate: Lv5). art-source/tripo/
+     WAVE-3-PROMPTS.md sheets L/M: "each item is one pair of eyes side by
+     side... no head, no body". They are OVERLAYS on his painted face like
+     sleepy-eyes, but as a Tripo PNG rather than inline SVG, so the painted
+     eyes underneath need hiding a different way: `mask: true` tells
+     renderCompanion to mount a generic body-coloured mask layer (see
+     makeEyeMaskLayer below, same ellipse geometry sleepy-eyes uses)
+     UNDERNEATH the art — never baked into the art itself, so it still
+     works after a recolour.
+     widthPct ~70 (drawn wider than his painted eyes) except happy-eyes at
+     ~54 (its closed-arc-and-cheek art reads too big at 70) — both numbers
+     from the S3 brief in PROJECT-STATUS "Next up", not re-measured here. */
+  "star-eyes": {           // sheet M item 1 — shining eyes + white star
+    slot: "glasses", img: "star-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+  },
+  "angry-eyes": {          // sheet M item 2 — narrow eyes + angled brows
+    slot: "glasses", img: "angry-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+  },
+  "happy-eyes": {          // sheet M item 3 — closed arcs + rosy cheeks (weakest of the six, Megan may re-roll)
+    slot: "glasses", img: "happy-eyes.png", widthPct: 54, anchor: { x: 0.5, y: 0.5 }, mask: true,
+  },
+  "lash-eyes": {           // sheet L item 1 — big round eyes, curled lashes, pink eyeshadow
+    slot: "glasses", img: "lash-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+  },
+  "dreamy-eyes": {         // sheet L item 2 — half-closed sleepy eyes, lilac lid
+    slot: "glasses", img: "dreamy-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+  },
+  "wink-eyes": {           // sheet L item 3 — one closed, one open
+    slot: "glasses", img: "wink-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+  },
 };
 
 /* ============================================================
@@ -1367,6 +1463,29 @@ function makeAccessoryLayer(accId, side) {
   return wrap;
 }
 
+/* Room build S3 (2026-08-08): the eye-pair PNG overlays (see the
+   `mask: true` accessories above) need the painted eyes hidden underneath
+   them, same as sleepy-eyes does with body-coloured ellipses — but they
+   are PNG art, not inline SVG, so that mask can't be baked into their own
+   `svg` field. This mounts a SEPARATE generic mask layer, using the exact
+   same geometry the sleepy-eyes SVG uses (viewBox 210x96, ellipses at
+   cx=60/150, ATTACH.glasses, widthPct 90) — never baked into her art, so a
+   recolour still shows the mask in --blip-fill correctly. */
+function makeEyeMaskLayer() {
+  const wrap = document.createElement("div");
+  wrap.className = "blip-layer blip-eye-mask";
+  const point = ATTACH.glasses;
+  wrap.style.left = point.x * 100 + "%";
+  wrap.style.top = point.y * 100 + "%";
+  wrap.style.width = "90%";
+  wrap.style.transform = "translate(-50%, -50%)";
+  wrap.innerHTML = `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="60" cy="46" rx="24" ry="30" fill="var(--blip-fill, ${BASE_BODY})"/>
+    <ellipse cx="150" cy="46" rx="24" ry="30" fill="var(--blip-fill, ${BASE_BODY})"/>
+  </svg>`;
+  return wrap;
+}
+
 /* Phase 2: mounts one health-fx overlay spec (see health-fx.js — same
    {x, y, anchor, widthPct, tiltDeg?, svg} shape as an ACCESSORIES
    entry, just not keyed through ATTACH/ACCESSORIES since these aren't
@@ -1428,6 +1547,11 @@ export function renderCompanion(el, state = {}) {
         stage.appendChild(right);
         layers[slot] = [left, right];
       } else {
+        // eye-pair items carry `mask: true` — mount the generic eye-hiding
+        // layer BEFORE the art so it paints underneath (see makeEyeMaskLayer).
+        if (ACCESSORIES[accId] && ACCESSORIES[accId].mask) {
+          stage.appendChild(makeEyeMaskLayer());
+        }
         const single = makeAccessoryLayer(accId, null);
         stage.appendChild(single);
         layers[slot] = single;
