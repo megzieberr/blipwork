@@ -189,7 +189,7 @@ day, and the whole reason the mode was built. Applied verbatim and
 | window | 0.5, 0.5 | **0.311, 0.287** |
 | desk | 0.5, 0.95 | **0.221, 0.736** |
 | bed | 0.5, 0.95 | **0.750, 0.816** |
-| door | 0.5, 1 | 0.650, 0.520 (unchanged — she left it) |
+| door | 0.5, 1 | **0.650, 0.542** (see the hanging-closet note below) |
 
 plus `basic-bed` **widthPct 40 → 41**. Her arrangement is visibly better than
 the shipped guess: everything moved outward toward its own wall, which opens
@@ -203,6 +203,30 @@ from looks wrong, and at her placement it has the room. (It had been shrunk to
 33 during the first draft to keep it off the window — a constraint her layout
 removed, which nobody noticed until she said so.) The vanity stays at 30: it
 is the tallest thing in the catalogue and does not need the width.
+
+### 🚪 THE CLOSET WAS HANGING — twice, and she caught it both times
+She sent a screenshot: *"you have the closet hanging again, it must be
+positioned on the floor please."* She was right. Measured along the door's own
+bottom edge against the right wall's floor line, **the entire base was above
+it** — 0.027 of the room height clear at the left end and more toward the
+right — so a strip of dark wall showed underneath and it read as a cupboard
+bolted to the wall. `door` attach.y 0.520 → **0.542**.
+
+Two things made this one hard to reason to in a single pass, and both are
+worth knowing before placing any other boxy iso piece:
+- **The drawing's lowest pixel is at 72% across** — the depth face's back
+  corner — not at either front corner. So anchoring by the picture's bottom
+  edge (anchor y=1) seats a corner nobody looks at, and the front face, which
+  is what the eye reads as "the bottom", floats.
+- **The art's base slopes slightly shallower than the floor line**, so no
+  single y sits flush along the whole edge. 0.542 seats the FRONT face and
+  lets the far corner sit a touch forward on the floor, which reads correctly.
+
+The first "fix" for this (0.497 → 0.520, earlier in the session) moved it by
+eye off a full-room preview and only took out about a third of the gap. The
+lesson is the S3 wings lesson again: **measure the art's own edge against the
+surface it lands on** — a full-room preview is too zoomed-out to show a 2%
+gap, so crop and enlarge the piece before calling it seated.
 
 ### ⚠️ A CLAIM MADE HERE THAT WAS WRONG — "the wider desks overhang the floor"
 An earlier draft of this entry warned that the techy and princess desks hang

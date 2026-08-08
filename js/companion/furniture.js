@@ -67,9 +67,23 @@ export const SLOT_PLACEMENT = {
   // these are her numbers, pasted back and applied verbatim, exactly like the
   // 41 hand-placed accessories. Don't hand-tune them; run the page.
   //
-  // RIGHT wall, back end. Her layout call: the door and the bed share this
-  // wall, the door at the back. Tap target for the Inventory sheet.
-  door: { anchor: { x: 0.5, y: 1 }, attach: { x: 0.650, y: 0.520 } },
+  // RIGHT wall, back end, STANDING ON THE FLOOR. Her layout call: the door
+  // and the bed share this wall, the door at the back. Tap target for the
+  // Inventory sheet.
+  //
+  // ⚠️ y=0.542 IS A SEATED NUMBER, NOT A TASTEFUL ONE — she caught it hanging
+  // twice. Measured along the door's own bottom edge against the right wall's
+  // floor line (y = 0.423 + 0.247*(x-0.5)/0.5): at 0.520 the whole base was
+  // above that line, by 0.027 at the left end and more toward the right, so a
+  // strip of dark wall showed underneath and it read as a cupboard bolted to
+  // the wall. Two things make this NOT a number you can reason to in one go:
+  // the drawing's lowest pixel is at 72% across (the depth face's corner),
+  // NOT at either front corner, so anchoring by the picture's bottom edge
+  // seats a corner nobody looks at; and the art's base slopes slightly
+  // shallower than the floor line, so no single y sits flush along the whole
+  // edge. 0.542 seats the FRONT face — the doors, which is what the eye
+  // reads as the bottom — and lets the far corner sit a touch forward.
+  door: { anchor: { x: 0.5, y: 1 }, attach: { x: 0.650, y: 0.542 } },
   // LEFT wall, ABOVE the desk. ⚠️ MEASURED, NOT CHOSEN: the porthole art's
   // major axis slopes UP to the right (left column mid-y 0.619, right column
   // 0.371), which is the LEFT wall's rake — it was drawn for this wall. It
