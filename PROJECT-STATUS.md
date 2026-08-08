@@ -1552,7 +1552,30 @@ decide before building:
 - The pulsing hub Blip button becomes redundant the moment the room IS the
   hub — plan its removal with it.
 
-**2. A few SHELVES, an optional POOFY CHAIR, and WALLPAPER.** Notes for that
+**2. PHONE-WALK POLISH LIST (her screenshots, 2026-08-08 21:30 — the room
+itself looks right; these are the faults she found in one look):**
+- **Food cards are WAY too big** — one grocery card fills half the phone
+  screen and the item's name renders on top of the artwork. They're 5-💎
+  groceries, not hero art: small tiles, several per row, name clear of the
+  picture. (The cosmetic shop's card size is probably also worth a look on
+  a real phone while in there.)
+- **Buying an accessory must equip it immediately** (her ruling). Today the
+  kid buys a hat and then has to find it in the Inventory and tap Wear —
+  buy → he's wearing it, one step. Server side `mhq_buy_item` doesn't
+  equip; simplest is the client chaining equip after a successful cosmetic
+  buy (furniture too — buy a bed, see the bed). Mind the sheet-close +
+  refresh convention, and the BLIP_TOO_SICK dress-lock edge (stage ≥ 2
+  can buy-but-not-wear: don't let the chained equip turn a good buy into
+  an error toast).
+- **No visible way OUT of the food sheet without buying** — the next→/done
+  footer scrolls away with the content. The footer must stay pinned and
+  visible however long the list is, on every sheet.
+- **Food needs real categories** — the tier heading ("Fresh") exists but
+  reads as one endless scroll. Give the food panel the same tabbed/sectioned
+  navigation the cosmetic shop has (Fresh · Bakery · Hot meals · Braai ·
+  Sweets · Drinks), locked tiers keeping their "?" cards.
+
+**3. A few SHELVES, an optional POOFY CHAIR, and WALLPAPER.** Notes for that
 session: shelves/chair are new furniture slots (the known `mhq_equip` +
 constraint dance, four→more keys) with her Tripo art at the room's wall
 angles; wallpaper was DROPPED from the room build because the wall is baked
