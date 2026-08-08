@@ -13,8 +13,10 @@ WHAT IT DOES
   2. Builds an alpha channel by UNMIXING the background out of every pixel
      (see alpha_from_background below) — this is what saves soft glow edges
      that a plain "delete near-magenta pixels" threshold would chew up.
-  3. Splits the sheet into items by row/column projection (the items are
-     drawn spaced apart, so gaps of blank background separate them).
+  3. Splits the sheet into items by CONNECTED COMPONENTS (scipy.ndimage.label).
+     It used to use row/column projection, which merged any two items that
+     shared a row or a column — components handle a scattered sheet, which is
+     what Tripo actually returns.
   4. Trims each item to its own bounds and writes a PNG with real alpha.
 
 USAGE

@@ -1,8 +1,11 @@
 /* ============================================================
    ADMIN DASHBOARD  (teacher view, behind the admin password)
    Open/close each quest, see where the class is stuck (struggle
-   flags by concept), and manage learners — readable passwords,
-   reset password, add/remove, CSV export. Uses the same api layer,
+   flags by concept), and manage learners — reset a forgotten
+   password, add/remove, CSV export. Uses the same api layer,
+   ⚠️ Passwords are bcrypt-hashed and CANNOT be read, by anyone. An old
+   version of this comment said "readable passwords", which was alarming
+   and untrue; "reset" clears the hash so the learner picks a new one.
    so it works against Supabase (live) or the local backend (?local=1).
    ============================================================ */
 import { api } from "./api.js";

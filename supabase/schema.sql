@@ -1,10 +1,26 @@
 -- ============================================================
 --  BLIPWORK (formerly Maths Quest) — Supabase schema, security & RPC API
---  Run this whole file once in the Supabase SQL editor.
---  NOTE: the live project is already migrated (see migration-blipwork.sql);
---  this file is the canonical from-scratch schema.
---  (Safe to re-run. It REPLACES the old roster-based login with
---   self sign-up: learners create their own account.)
+--  ⚠️⚠️  NEVER RUN THIS FILE ON THE LIVE DATABASE.  ⚠️⚠️
+--
+--  It DROPS students, progress, struggles and blips a few lines below. On live
+--  that deletes every learner account, every quest they have passed and every
+--  Blip they have dressed — with no undo. This header used to say "safe to
+--  re-run", which was true only while the database was empty.
+--
+--  FRESH PROJECTS ONLY. To change the live database, write a
+--  migration-*.sql file and run that instead.
+--
+--  This is the canonical from-scratch schema: run it once, in order, on a NEW
+--  Supabase project. The live project was built this way and then migrated
+--  (see migration-blipwork.sql and the migration-* files beside it).
+--
+--  ⚠️ KEEPING IT HONEST: a schema change goes in TWO places — this file AND a
+--  migration. That "AND" was skipped three times (effects slot, Tripo wave 2,
+--  neck slot), so this file silently stopped matching live and a rebuild from it
+--  would have reproduced the July `bad_equipped` bug. Re-synced 2026-08-07.
+--
+--  (It REPLACES the old roster-based login with self sign-up: learners create
+--   their own account.)
 --
 --  AUTH MODEL (like the Times Table game):
 --   • Learners SIGN UP themselves: own name + username + password.
@@ -110,7 +126,7 @@ create table if not exists public.shop_items (
   sort      integer not null default 0,
   category  text    not null default 'cosmetic',
   constraint shop_items_slot_cat_check check (
-       (category = 'cosmetic' and slot in ('hat','ears','glasses','wings','arms','back'))
+       (category = 'cosmetic' and slot in ('hat','ears','glasses','wings','arms','back','effects','neck'))
     or (category = 'food'     and slot = 'food'))
 );
 
@@ -158,6 +174,7 @@ $$;
 -- all 79 quests ≈ level 9, heavy revision lands 10-12.
 create or replace function public._mhq_level(p_xp integer) returns jsonb
 language plpgsql immutable
+set search_path = ''
 as $$
 declare lvl int := 1; cost int; rem int := greatest(coalesce(p_xp, 0), 0);
 begin
@@ -183,7 +200,7 @@ end; $$;
 
 -- Growth stage 0..3 from cumulative feedings (thresholds 10/25/45).
 create or replace function public._mhq_growth(p_feed integer)
-returns integer language sql immutable as $$
+returns integer language sql immutable set search_path = '' as $$
   select case when coalesce(p_feed,0) >= 45 then 3
               when coalesce(p_feed,0) >= 25 then 2
               when coalesce(p_feed,0) >= 10 then 1
@@ -553,7 +570,7 @@ begin
   if p_equipped is not null then
     if jsonb_typeof(p_equipped) <> 'object' then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     select count(*) into bad from jsonb_each_text(p_equipped) e(k, v)
-     where k not in ('hat','ears','glasses','wings','arms','back')
+     where k not in ('hat','ears','glasses','wings','arms','back','effects','neck')
         or (coalesce(v, '') <> '' and not b.owned_items ? v);
     if bad > 0 then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     update public.blips set equipped = p_equipped where student_id = sid and slot = v_slot;
@@ -803,51 +820,86 @@ on conflict (key) do nothing;
 insert into public.app_config (key, value) values ('term_running', 'false')
 on conflict (key) do nothing;
 
--- Shop catalogue — SL restyle (2026-07-19, migration-sl-restyle.sql): the
--- original 5 items are kept as rows (inactive, never confiscated from anyone
--- who already owns one) and replaced in the active catalogue by a techy set
--- from Megan's own mockup. item_ids match js/companion/renderer.js
--- ACCESSORIES keys exactly (hyphenated).
+-- ── SHOP CATALOGUE ──────────────────────────────────────────────────────────
+-- ⚠️ REGENERATED FROM LIVE on 2026-08-07 (read-only query), because this block
+-- had fallen three ships behind: the effects slot, the Tripo wave-2 items and
+-- the neck slot were all seeded by migrations and never folded back in here. A
+-- rebuild from this file would have produced a half-empty shop where equipping
+-- an effect returned 'bad_equipped' — the July cape bug, pre-baked.
+--
+-- 54 cosmetics + 3 food = 57 rows, matching live exactly.
+--
+-- The five INACTIVE rows at the top are retired items (SL restyle, 2026-07-19)
+-- and shadow-crown is deliberately absent (deleted by the wave-2 migration).
+-- A retired row is kept so nobody who already owns one has it confiscated;
+-- inactive means "not buyable", never "taken away".
+--
+-- item_ids match js/companion/renderer.js ACCESSORIES keys exactly (hyphenated),
+-- and js/local-backend.js mirrors this list for ?local=1. verify-store.html
+-- cross-checks all three — an item added on one side only is exactly the drift
+-- that check exists to catch.
 insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
-  -- retired (owned-but-inactive only; never buyable again)
-  ('round-glasses','glasses', 40, 1, false, 10, 'cosmetic'),
-  ('cat-ears',     'ears',    60, 2, false, 20, 'cosmetic'),
-  ('party-hat',    'hat',     80, 3, false, 30, 'cosmetic'),
-  ('stubby-arms',  'arms',   100, 4, false, 40, 'cosmetic'),
-  ('angel-wings',  'wings',  150, 6, false, 50, 'cosmetic'),
-  -- current techy catalogue
-  ('star-shades',  'glasses', 40, 1, true, 11, 'cosmetic'),
-  ('heart-eyes',   'glasses', 45, 1, true, 12, 'cosmetic'),
-  ('headphones',   'ears',    60, 2, true, 21, 'cosmetic'),
-  ('halo',         'hat',     80, 3, true, 31, 'cosmetic'),
-  ('power-gloves', 'arms',   100, 4, true, 41, 'cosmetic'),
-  ('aurora-wings', 'wings',  150, 6, true, 51, 'cosmetic'),
-  -- store expansion 2026-07-28: free tier (price 0, one per slot) +
-  -- commons + rares + the new 'back' slot. Rarity is derived from price
-  -- on the client (0 = free, >= 120 = rare), not stored.
-  ('study-specs',  'glasses',   0,  1, true,  1, 'cosmetic'),
-  ('beanie',       'hat',       0,  1, true,  2, 'cosmetic'),
-  ('ear-tufts',    'ears',      0,  1, true,  3, 'cosmetic'),
-  ('mitts',        'arms',      0,  1, true,  4, 'cosmetic'),
-  ('nub-wings',    'wings',     0,  1, true,  5, 'cosmetic'),
-  ('cape',         'back',      0,  1, true,  6, 'cosmetic'),
-  ('sleepy-eyes',  'glasses',  30,  1, true, 13, 'cosmetic'),
-  ('visor',        'glasses',  35,  2, true, 14, 'cosmetic'),
-  ('bolt-antenna', 'hat',      45,  2, true, 32, 'cosmetic'),
-  ('horns',        'hat',      50,  2, true, 33, 'cosmetic'),
-  ('bunny-ears',   'ears',     55,  2, true, 22, 'cosmetic'),
-  ('boxing-gloves','arms',     60,  3, true, 42, 'cosmetic'),
-  ('schoolbag',    'back',     50,  2, true, 61, 'cosmetic'),
-  ('bat-wings',    'wings',   140,  6, true, 52, 'cosmetic'),
-  ('crown',        'hat',     180,  8, true, 34, 'cosmetic'),
-  ('jetpack',      'back',    200, 10, true, 62, 'cosmetic')
+  ('round-glasses',       'glasses',   40,  1, false,   10, 'cosmetic'),
+  ('cat-ears',               'ears',   60,  2, false,   20, 'cosmetic'),
+  ('party-hat',               'hat',   80,  3, false,   30, 'cosmetic'),
+  ('stubby-arms',            'arms',  100,  4, false,   40, 'cosmetic'),
+  ('angel-wings',           'wings',  150,  6, false,   50, 'cosmetic'),
+  ('study-specs',         'glasses',    0,  1, true,     1, 'cosmetic'),
+  ('beanie',                  'hat',    0,  1, true,     2, 'cosmetic'),
+  ('ear-tufts',              'ears',    0,  1, true,     3, 'cosmetic'),
+  ('mitts',                  'arms',    0,  1, true,     4, 'cosmetic'),
+  ('nub-wings',             'wings',    0,  1, true,     5, 'cosmetic'),
+  ('cape',                   'back',    0,  1, true,     6, 'cosmetic'),
+  ('star-shades',         'glasses',   40,  1, true,    11, 'cosmetic'),
+  ('heart-eyes',          'glasses',   45,  1, true,    12, 'cosmetic'),
+  ('sleepy-eyes',         'glasses',   30,  1, true,    13, 'cosmetic'),
+  ('visor',               'glasses',   35,  2, true,    14, 'cosmetic'),
+  ('eye-mask',            'glasses',   40,  2, true,    15, 'cosmetic'),
+  ('cyber-visor',         'glasses',   65,  3, true,    16, 'cosmetic'),
+  ('hud-monocle',         'glasses',   55,  2, true,    17, 'cosmetic'),
+  ('headphones',             'ears',   60,  2, true,    21, 'cosmetic'),
+  ('bunny-ears',             'ears',   55,  2, true,    22, 'cosmetic'),
+  ('tech-antenna',           'ears',   40,  2, true,    23, 'cosmetic'),
+  ('headset-cup',            'ears',   70,  3, true,    24, 'cosmetic'),
+  ('data-fin',               'ears',   95,  4, true,    25, 'cosmetic'),
+  ('halo',                    'hat',   80,  3, true,    31, 'cosmetic'),
+  ('bolt-antenna',            'hat',   45,  2, true,    32, 'cosmetic'),
+  ('horns',                   'hat',   50,  2, true,    33, 'cosmetic'),
+  ('crown',                   'hat',  180,  8, true,    34, 'cosmetic'),
+  ('wizard-hat',              'hat',   55,  2, true,    35, 'cosmetic'),
+  ('royal-crown',             'hat',  170,  8, true,    36, 'cosmetic'),
+  ('neural-crown',            'hat',  165,  7, true,    37, 'cosmetic'),
+  ('power-gloves',           'arms',  100,  4, true,    41, 'cosmetic'),
+  ('boxing-gloves',          'arms',   60,  3, true,    42, 'cosmetic'),
+  ('mech-gauntlet',          'arms',   70,  3, true,    44, 'cosmetic'),
+  ('grapple-claw',           'arms',   85,  4, true,    45, 'cosmetic'),
+  ('energy-blade',           'arms',  135,  6, true,    46, 'cosmetic'),
+  ('aurora-wings',          'wings',  150,  6, true,    51, 'cosmetic'),
+  ('bat-wings',             'wings',  140,  6, true,    52, 'cosmetic'),
+  ('dragon-wings',          'wings',  145,  6, true,    53, 'cosmetic'),
+  ('gold-wings',            'wings',  150,  6, true,    54, 'cosmetic'),
+  ('drone-wings',           'wings',  140,  6, true,    55, 'cosmetic'),
+  ('plasma-wings',          'wings',  155,  6, true,    56, 'cosmetic'),
+  ('schoolbag',              'back',   50,  2, true,    61, 'cosmetic'),
+  ('jetpack',                'back',  200, 10, true,    62, 'cosmetic'),
+  ('back-sword',             'back',  130,  6, true,    63, 'cosmetic'),
+  ('light-ring',          'effects',    0,  1, true,    70, 'cosmetic'),
+  ('flame-ring',          'effects',   45,  2, true,    71, 'cosmetic'),
+  ('crystal-orbit',       'effects',   60,  3, true,    72, 'cosmetic'),
+  ('spark-halo',          'effects',   90,  4, true,    73, 'cosmetic'),
+  ('bead-necklace',          'neck',    0,  1, true,    81, 'cosmetic'),
+  ('flower-garland',         'neck',   60,  3, true,    83, 'cosmetic'),
+  ('star-chain',             'neck',   80,  4, true,    84, 'cosmetic'),
+  ('heart-chain',            'neck',   95,  5, true,    85, 'cosmetic'),
+  ('medal-choker',           'neck',  125,  6, true,    86, 'cosmetic'),
+  ('chunky-chain',           'neck',  160,  7, true,    87, 'cosmetic')
 on conflict (item_id) do nothing;
 
 -- Phase 2: pharmacy / grocery. item_id doubles as the "kind". soup/medicine are
 -- pantry consumables used by mhq_care; 'treat' is an instant paid gold sink.
 -- Prices TUNABLE (soup 15 / medicine 20 / treat 8) — kept server-side.
 insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
-  ('soup',     'food', 15, 1, true, 100, 'food'),
-  ('medicine', 'food', 20, 1, true, 101, 'food'),
-  ('treat',    'food',  8, 1, true, 102, 'food')
+  ('soup',                   'food',   15,  1, true,   100, 'food'),
+  ('medicine',               'food',   20,  1, true,   101, 'food'),
+  ('treat',                  'food',    8,  1, true,   102, 'food')
 on conflict (item_id) do nothing;

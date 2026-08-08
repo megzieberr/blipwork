@@ -123,7 +123,8 @@ const SHOP_ITEMS = [
   { id: "dragon-wings", slot: "wings", price: 145, minLevel: 6 },
   { id: "gold-wings", slot: "wings", price: 150, minLevel: 6 },
   { id: "royal-crown", slot: "hat", price: 170, minLevel: 8 },
-  // Tripo wave 2 (2026-08-06) — 15 techy items, NO new slot this time, so
+  // Tripo wave 2 (2026-08-06) — 10 techy items shipped (15 were designed,
+  // 5 cut on sight), NO new slot this time, so
   // there is nothing to add to VALID_SLOTS or mhq_equip. Mirrors
   // supabase/migration-tripo-wave2.sql; verify-store.html parses that file
   // and cross-checks every row against this list.

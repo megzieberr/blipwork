@@ -39,8 +39,8 @@ backend; append `?local=1` to force it.
 ## Backend (Supabase)
 - `supabase/schema.sql` — tables, row-level security (on, no policies) and the
   `SECURITY DEFINER` RPC API. Run once in the SQL editor.
-- `supabase/seed-private.sql` — set your real admin password and class list **privately**
-  (never committed).
+- `supabase/seed-private.sql` — set your real admin password **privately**
+  (never committed). There is no class list to seed: learners sign themselves up.
 - Put your project URL + **publishable** key in `js/supabase-config.js` (the publishable
   key is safe to commit; the secret/service-role key never goes in the repo).
 

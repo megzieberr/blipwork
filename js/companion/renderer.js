@@ -835,8 +835,9 @@ export const ACCESSORIES = {
   },
 
   /* ---------- Tripo wave 2 — techy (2026-08-06) ----------
-     Fifteen items, no new slot. Aimed at the thin slots: ears and arms
-     had 3 items each against Hat 7 / Eyes 7 / Wings 5 / Effects 5.
+     Ten items shipped, no new slot (fifteen were designed and five were cut
+     on sight). Aimed at the thin slots: ears and arms had 3 items each
+     against Hat 7 / Eyes 7 / Wings 5 / Effects 5.
 
      SIZING NOTE that applies to every entry below: the stage is 480x600,
      so `widthPct` is a percentage of the stage WIDTH and an item's
@@ -903,10 +904,16 @@ export const ACCESSORIES = {
 
   // --- eyewear. The monocle is a ONE-EYE item, so it does not use the
   // slot's centred point: it sits on his RIGHT eye (stage x0.688, eye band
-  // y0.487-0.63). Both numbers are MEASURED off the art, like the eye mask —
+  // y0.487-0.63). The ANCHOR is MEASURED off the art, like the eye mask —
   // the amber lens centres at (0.408, 0.288) of the image and is 0.634 of
-  // its width, so widthPct 25 makes the lens 0.16 of the stage, a little
-  // larger than the eye it covers. Re-measure if the art is ever re-rolled.
+  // its width.
+  //
+  // ⚠️ The SIZE is not the measured number. Measuring says widthPct 25 (lens
+  // ≈0.16 of the stage); what ships is 28 (lens ≈0.18), nudged up by eye
+  // because 25 read as too small on his face. Recorded because the comment
+  // used to claim 25 WAS the shipped value, which would send the next
+  // re-tune chasing a bug that is not there. If the art is re-rolled,
+  // re-measure the anchor and re-judge the size.
   "hud-monocle": {
     slot: "glasses", img: "hud-monocle.png", widthPct: 28,
     anchor: { x: 0.408, y: 0.288 }, attach: { x: 0.688, y: 0.5585 },

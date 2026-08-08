@@ -93,7 +93,9 @@ resetting forgotten passwords. All 11 chapters are built and live.
 - **Deploy target 2 — the database**: pushing code does NOT touch Supabase.
   Schema changes ship as an additive `supabase/migration-*.sql` file that
   must be **pasted into the Supabase SQL editor by hand**.
-- **Service worker**: `sw.js`, cache name currently `mhq-v25`. Network-first
+- **Service worker**: `sw.js` — read the version out of the file rather than
+  trusting this line (it was stale at v25 while the repo shipped v37).
+  Network-first
   for app code (so deploys land on the next load), cache-first for images.
   **Bump the cache version on every shippable change.**
 - **Local dev**: `python -m http.server 5191` in the repo root, then open
@@ -178,9 +180,11 @@ resetting forgotten passwords. All 11 chapters are built and live.
 5. **Hyphen vs real minus.** South African learners see a proper minus sign
    (−); plain hyphens leaked into options in 6 skills before the `neg()`
    wrapper fixed it. Use the existing helpers for negative numbers.
-6. **The README lags the code.** It still says passwords are readable by the
-   teacher and mentions seeding a class list — both replaced by self-signup
-   + bcrypt (e3ec374). Trust the code (and this file) over the README.
+6. **Docs lag the code, and this entry lagged too.** The README's "passwords
+   are readable" claim was fixed long ago; what was still stale on 2026-08-07
+   was `js/admin.js`'s own header comment (now corrected) and a mention of
+   seeding a class list — self-signup means there is no class list. Passwords
+   are bcrypt-hashed and unreadable by anyone, including the teacher.
 7. **Local mode ≠ live mode.** Local backend opens all quests and stores to
    localStorage; live seeds new quests CLOSED and stores to Supabase. Test
    in both before declaring something done.

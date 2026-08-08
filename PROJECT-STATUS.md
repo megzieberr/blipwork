@@ -1,4 +1,59 @@
-# Project status — updated 2026-08-07 (NECK slot live; 26 new food; sw v37 pushed)
+# Project status — updated 2026-08-07 PM (audit fixes applied, NOT committed)
+
+## 🔧 2026-08-07 — overnight audit fixes (local; `verify-store.html` 988 checks green)
+
+Off `FABLE-AUDIT-2026-08-06.md`. Nothing committed, nothing run against live.
+
+- **🔴 `?local=1` was a one-way trap — now it lets go.** `js/api.js` set
+  `mhq.forceLocal` if the parameter merely EXISTED, so even `?local=0` deepened the
+  trap, and nothing ever cleared it. Any phone that opened a testing link was stuck
+  in the demo world for good: real progress apparently gone, nothing saving, and no
+  cure short of devtools on the learner's own phone. **`?local=0` (also `false`/
+  `off`/`no`) now clears the flag.** Proven in the browser: flag cleared, backend
+  resolved back to `supabase`. **That URL is the fix to text a learner** if a phone
+  ever lands in demo mode. Harmless today (no learner has the app) — which is exactly
+  why it was worth fixing now.
+- **🔴 `schema.sql` was THREE ships behind, not two**, and its header said "safe to
+  re-run" four lines above `drop table students`. Fixed:
+  - `effects` **and** `neck` added to `shop_items_slot_cat_check` **and** to
+    `mhq_equip`'s allowed keys (the audit only caught `effects`; the neck ship landed
+    after it ran). Both are needed — seeding rows alone leaves equip returning
+    `bad_equipped`, which is the July cape bug.
+  - **Catalogue regenerated from live** by a read-only query: exactly **57 rows
+    (54 cosmetics + 3 food)**, no duplicates, `shadow-crown` correctly absent. This
+    replaced the old hand-maintained block, so the file now provably matches live.
+  - Header replaced with **⚠️ NEVER RUN THIS ON THE LIVE DATABASE** and a note that a
+    schema change goes in TWO places — this file AND a migration. That "AND" got
+    skipped three times, which is how it drifted.
+- **`search_path` pinned** on `_mhq_level` / `_mhq_growth` in schema.sql, plus a new
+  **`supabase/migration-search-path-pin.sql`** for live. ⏳ **NOT RUN — pending on
+  Megan.** Safe, idempotent, changes no data; both functions use only pg_catalog
+  built-ins so `search_path = ''` is safe (checked line by line).
+- **Stale comments fixed**: `js/admin.js` no longer says "readable passwords" (they
+  are bcrypt-hashed and unreadable by anyone); `js/supabase-config.js` said the key
+  was `cgg.forceLocal`, it is `mhq.forceLocal`; wave 2 is "10 shipped, 5 cut", not 15
+  (local-backend + renderer); `tools/tripo_sheet.py` describes connected components,
+  not row/column projection; README no longer mentions seeding a class list;
+  CLAUDE.md's cache-version line pointed at v25 while the repo shipped v37.
+- **hud-monocle**: the comment claimed widthPct 25 was the measured shipped value
+  while the code says 28. Now recorded honestly — measuring gives 25 (lens ≈0.16 of
+  the stage), 28 ships (≈0.18) because 25 read as too small. Otherwise the next
+  re-tune chases a bug that is not there.
+
+### ⏳ Pending on Megan
+1. **Run `supabase/migration-search-path-pin.sql`** in the SQL editor (optional, tidy-up).
+2. **Confirm the empty `quests` table is expected.** Live has **0 quest rows** — so
+   nothing is seeded open OR closed. The teacher toggle can only open a row that
+   exists, so this needs seeding before any learner gets the app.
+
+**Not changed (accepted risk, recorded once):** the client computes its own score and
+XP; the server caps XP at 1000 per submit and pays a flat 10 gold per submitted round,
+pass or fail. Inherent to the no-JWT architecture, fine for a class that does not know
+it is possible — worth saying out loud before go-live.
+
+---
+
+# (previous) Project status — 2026-08-07 (NECK slot live; 26 new food; sw v37 pushed)
 
 ## Where we are
 **ALL COMMITS PUSHED 2026-08-07 ~17:41 UTC** (`a1a9102`, on top of last night's
