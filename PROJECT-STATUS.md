@@ -21,7 +21,8 @@ The review session at the end of the room build applies both.
 Per the REVISION section of `homework-hub-companion/ROOM-BUILD-PLAN.md`,
 **with a layout re-call from Megan mid-session** (see below). Nothing pushed,
 `sw.js` untouched (still v38), **no SQL run against live**.
-`verify-store.html` is **green, 2918 checks** (was 2434 — S5v2 adds ~484).
+`verify-store.html` is **green, ~2914 checks** (was 2434 — S5v2 adds ~480;
+the total wobbles by a few run to run, as it always has — see the S4 note).
 
 **THE ROOM IS HER ART NOW.** `assets/companion/room-shell.png` is the
 background of `.room`, and the four EQUIPPED pieces are laid on top of it.
@@ -177,13 +178,31 @@ piece**), and the accessory flow is the one she has already used on 41 items.
   `<img>` loads reports nothing. Same fix (await load, never `decode()`, plus
   a run ticket so a late run cannot write into the next piece's box).
 
-### ⚠️ Placement numbers are BEST GUESSES — hers to settle
-Every `attach`/`anchor`/`widthPct` in `furniture.js` is measured against the
-shell's geometry and looks right in the previews, but she has not sat with it.
-That is exactly what the Furniture mode is for. The one to look at first: the
-**door's base against the sloping wall/floor junction** — a rectangular
-picture anchored at one y cannot follow a diagonal, so it seats well at its
-centre and slightly less well at its corners.
+### ✅ Placement SETTLED BY MEGAN, same session (2026-08-08)
+She opened the new Furniture mode and placed it herself, then pasted the
+numbers back — the same loop that settled the 41 accessories earlier the same
+day, and the whole reason the mode was built. Applied verbatim and
+**machine-verified value-for-value against her paste**:
+
+| slot | anchor | attach |
+|---|---|---|
+| window | 0.5, 0.5 | **0.311, 0.287** |
+| desk | 0.5, 0.95 | **0.221, 0.736** |
+| bed | 0.5, 0.95 | **0.750, 0.816** |
+| door | 0.5, 1 | 0.650, 0.520 (unchanged — she left it) |
+
+plus `basic-bed` **widthPct 40 → 41**. Her arrangement is visibly better than
+the shipped guess: everything moved outward toward its own wall, which opens
+the middle of the floor so Blip stands *between* the desk and the bed instead
+of in front of the bed. Re-previewed in all three sets and re-walked in the
+app — the live DOM reports her exact fractions.
+
+Worth knowing (not changed, hers to call): **the desk slot is now far enough
+left that the two WIDER desks slightly overhang the floor's left edge** —
+techy (36%) reaches x 0.041 and princess (30%) x 0.071, where the floor at
+that height starts around x 0.121. Nothing is clipped and the basic desk she
+placed against sits fine; it is a per-item `widthPct` nudge in the same tool
+if either bothers her.
 
 ### Not done / punted
 - **Not smoke-tested against live** — the migrations are unrun. Same position

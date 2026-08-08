@@ -27,11 +27,10 @@
    tinted through renderer.js's `tintedImageSrc` — the offscreen-canvas
    pipeline Blip's own recolouring uses. Never add a second door PNG.
 
-   ⚠️ THE PLACEMENT NUMBERS BELOW ARE BEST GUESSES, measured off the room
-   shell's geometry rather than eyeballed, but NOT settled by Megan yet.
-   She places furniture herself in dressing-room.html (Furniture mode) and
-   hands back the numbers, exactly as she did for the 41 accessories on
-   2026-08-08 — see PROJECT-STATUS.md. Don't hand-tune these; run the page.
+   ⚠️ THE PLACEMENT NUMBERS BELOW ARE MEGAN'S. She placed the door, window,
+   desk and bed herself in dressing-room.html (Furniture mode) on 2026-08-08
+   and handed the numbers back, the same way she settled the 41 accessories
+   the same day. Don't hand-tune them — run the page and ask her.
    ============================================================ */
 import { el } from "../ui.js";
 import { tintedImageSrc } from "./renderer.js";
@@ -64,24 +63,27 @@ const DIR = "./assets/companion/furniture";
    longer buries the door, and the window's art turned out to have been
    drawn for the LEFT wall all along (see the window note below). */
 export const SLOT_PLACEMENT = {
-  // RIGHT wall, back end, standing on the wall/floor junction (at x=0.65
-  // that junction is y=0.497). Her layout call, 2026-08-08 evening — and
-  // her second door drawing ("door 2.png") faces down-LEFT, which is a
-  // right-wall object, so the art and the wall now agree. Tap target for
-  // the Inventory sheet.
+  // ⚠️ SETTLED BY MEGAN in dressing-room.html (Furniture mode), 2026-08-08 —
+  // these are her numbers, pasted back and applied verbatim, exactly like the
+  // 41 hand-placed accessories. Don't hand-tune them; run the page.
+  //
+  // RIGHT wall, back end. Her layout call: the door and the bed share this
+  // wall, the door at the back. Tap target for the Inventory sheet.
   door: { anchor: { x: 0.5, y: 1 }, attach: { x: 0.650, y: 0.520 } },
   // LEFT wall, ABOVE the desk. ⚠️ MEASURED, NOT CHOSEN: the porthole art's
-  // major axis slopes UP to the right (left column mid-y 0.619, right
-  // column 0.371), which is the LEFT wall's rake — it was drawn for this
-  // wall. It spent the first draft of S5v2 on the right wall, where it
-  // leaned against the room. At x=0.28 that wall spans y 0.132-0.532.
-  window: { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.280, y: 0.255 } },
+  // major axis slopes UP to the right (left column mid-y 0.619, right column
+  // 0.371), which is the LEFT wall's rake — it was drawn for this wall. It
+  // spent the first draft of S5v2 on the right wall, where it leaned against
+  // the room. At x=0.311 that wall spans y 0.113-0.516.
+  window: { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.311, y: 0.287 } },
   // floor, LEFT side, under its window (the reference room's desk lean).
-  desk: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.27, y: 0.715 } },
-  // floor, RIGHT side, NEXT TO THE DOOR (her layout call). The headboard
-  // passes in front of the door's lower third, which is depth, not a
-  // collision — the doors themselves stay clear and tappable.
-  bed: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.760, y: 0.765 } },
+  // At x=0.221 the floor spans y 0.561-0.816.
+  desk: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.221, y: 0.736 } },
+  // floor, RIGHT side, NEXT TO THE DOOR (her layout call). At x=0.75 the
+  // floor spans y 0.547-0.835, and she has put the bed's feet right on that
+  // front lip — deliberate, it is what puts him and the bed side by side
+  // rather than the bed behind him.
+  bed: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.750, y: 0.816 } },
 };
 
 /* Paint order, BACK to FRONT. The two wall pieces go down first, then the
@@ -120,7 +122,7 @@ const DOOR_TINTS = {
    same way an accessory may override its slot's ATTACH point. */
 export const FURNITURE = {
   // ---- basic (Lv 1, free) — art-source/tripo/furniture-iso-basic.png ----
-  "basic-bed": { slot: "bed", label: "Wooden bed", img: "basic-bed.png", widthPct: 40 },
+  "basic-bed": { slot: "bed", label: "Wooden bed", img: "basic-bed.png", widthPct: 41 },
   "basic-desk": { slot: "desk", label: "Study desk", img: "basic-desk.png", widthPct: 33 },
   "city-window": { slot: "window", label: "City window", img: "city-window.png", widthPct: 20 },
 
