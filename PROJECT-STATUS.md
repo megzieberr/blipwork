@@ -73,19 +73,52 @@ misses. All fixed in `renderer.js`, re-verified (`verify-store.html` stays
   bow sits on the front of his head. Backwards-cap, bucket-hat, snapback
   lowered too, same ask ("hats should be lowered as well").
 - **tiara**: confirmed perfect, unchanged.
-- **fairy-wing / butterfly-wing were the real bug**: "I don't see anything
-  with the butterfly." The first pass anchored on the art's MEASURED true
-  root (leftmost opaque pixel) — but the maths for a right-side wing means
-  anchoring exactly on the root pushes ~94% of the wing off the right edge
-  of the stage; only a ~6%-of-stage sliver survives, invisible at Blip's
-  size. Fixed by anchoring further INTO the wing body (`anchor.x` 0.03→0.35)
-  — sacrifices showing the true root tip (hidden behind him anyway) for
-  showing the actual visible lobe. Confirmed via `tools/preview_accessory.py`
-  that the OLD numbers on the SAME test also make the already-shipped
-  dragon-wings/gold-wings show only a thin sliver — so this whole Tripo
-  wing family reads as more subtle than intended; fairy/butterfly are now
-  fixed, dragon/gold-wings were NOT touched (out of scope, not reported
-  broken) but the same fix would apply if she ever flags them too.
+- **fairy-wing / butterfly-wing** — first attempt was wrong twice, then
+  measured properly. See the ⚠️ block below, it is the finding that matters.
+
+### ⚠️ THE WINGS SLOT CANNOT SHOW A TRIPO WING AT ITS SHARED POINT
+Round 2 tried to fix the invisible wings by moving the anchor sideways. Megan
+came back with "the wings are being cut off, I can't see anything" — the
+right answer, and the reason is arithmetic, not taste. Measured off
+`blip-base-blue.png`, the stage left clear beside Blip by height:
+
+| y (of stage) | clear each side |
+|---|---|
+| 0.25 | 0.32 |
+| 0.30 | 0.26 |
+| 0.35 | 0.19 |
+| 0.40 | 0.14 |
+| 0.50 | 0.065 |
+| **0.55 (ATTACH.wings)** | **0.042** |
+
+`ATTACH.wings` sits at **y0.55, where only 4% of the stage is clear.** Wings
+paint BEHIND the body, so at that height a solid wing has nowhere to exist:
+pull it in and the body swallows it, push it out and it leaves the stage —
+and `.room` is `overflow:hidden`, so it is genuinely chopped, not merely
+off-canvas in the preview tool. No `widthPct` or `anchor` rescues it.
+
+The **code-drawn** wings survive y0.55 only because they are drawn to sweep
+UP from a low root, so their visible mass ends up high regardless. Megan's
+Tripo wing art is a solid lobe AROUND its root, so the root itself has to
+move to where the clear space is.
+
+Fix: both wave-3 wings carry their **own higher `attach`** (fairy y0.40,
+butterfly y0.44) with the root tucked at x0.56 — inside the silhouette,
+which is correct for a wing root — at widthPct 45, the largest that keeps
+the whole wing inside the stage box. Swept 34/40/45 × y0.36–0.50 in
+`tools/preview_accessory.py`.
+
+**This applies to the already-shipped `gold-wings` / `dragon-wings` /
+`plasma-wings` / `drone-wings` too** — all four sit at the shared y0.55 and
+show only a sliver. NOT changed this session (out of S3 scope, and Megan has
+not flagged them), but the same one-line `attach` override fixes each, and it
+is worth doing in one pass if she ever says the Tripo wings look weak.
+
+### The lesson (worth reading before the next wave)
+Both wing mistakes came from the same habit: **copying a placement number
+from a sibling item instead of measuring the new art and the body it lands
+on.** Round 1 copied dragon-wings' anchor. Round 2 measured the ART's root
+but never asked whether the BODY had room at that height. Measure both.
 
 ### Worth a look before go-live (not changed — her call)
 - **`happy-eyes`** is still the weakest of the six eye pairs by Megan's own
@@ -94,11 +127,17 @@ misses. All fixed in `renderer.js`, re-verified (`verify-store.html` stays
 - **Eye pairs, her call (2026-08-08 phone review)**: only the two "pink
   makeup" pairs (lash-eyes' eyeshadow, happy-eyes' rosy cheeks) read as
   aligned correctly to her; the other four (star/angry/dreamy/wink) "look
-  odd". Her plan is to regenerate those four in Tripo against a fresh Blip
-  reference rather than have placement re-tuned — **nothing changed here,
-  waiting on her new art.** When it lands: re-measure widthPct/anchor per
-  item rather than reusing today's numbers (per the wing lesson above,
-  don't copy a sibling's number without checking the new art's own pixels).
+  odd". Her plan is to regenerate those four in Tripo — drawn **on a whole
+  Blip** this time, not as free-floating pairs, so the eye size and spacing
+  are matched to his real face rather than guessed. **Nothing changed in
+  code, waiting on her new art.**
+  ⏳ **Prompts are written and ready**: `art-source/tripo/
+  WAVE-3B-EYE-BLIPS-PROMPTS.md` — four prompts, one whole Blip each, plus
+  what to do with the results (crop the eye region for the existing overlay
+  system, or keep the whole face, which is the much bigger FACE-tab job).
+  The four current `star/angry/dreamy/wink-eyes` items stay shipped and
+  wired in the meantime; replacing the art is a file swap plus a re-measure,
+  no migration.
 
 Preview PNGs (both rounds) saved to
 `C:\Users\megzi\AppData\Local\Temp\claude\C--Users-megzi--claude\bb30f55a-21e5-4550-a574-5820b8637517\scratchpad\wave3-previews\`

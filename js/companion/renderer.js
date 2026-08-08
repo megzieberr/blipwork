@@ -943,26 +943,42 @@ export const ACCESSORIES = {
   // --- fairy (collections.js gate: Lv16). Both wings in this wave root at
   // the LOWER-LEFT like every other Tripo wing, hence flipX — see the
   // 2026-08-05 wing ruling in ATTACH's header comment.
-  // anchor.x MEASURED then DELIBERATELY moved inward from the art's true
-  // root (its alpha-channel leftmost pixel sits at x0.006/y0.676 of the
-  // PNG) — anchoring exactly on the root pushed almost the whole wing off
-  // the right edge of the stage (only ~6% of stage width landed on-screen,
-  // which is what Megan's "I don't see anything" review caught). Anchoring
-  // further INTO the wing body (x0.35) sacrifices showing the true root
-  // tip — invisible behind him anyway — in exchange for the wing's actual
-  // visible lobe landing on-stage. y kept at the measured root height.
+  /* ⚠️ THE WINGS SLOT'S SHARED POINT DOES NOT WORK FOR THESE TWO — they
+     carry their own, MUCH HIGHER `attach`. Measured off the base art's
+     alpha (2026-08-08, after Megan reported "the wings are being cut off,
+     I can't see anything"), the clear stage either side of Blip is:
+         y0.25 → 0.32   y0.30 → 0.26   y0.35 → 0.19
+         y0.40 → 0.14   y0.50 → 0.065  y0.55 → 0.042
+     ATTACH.wings sits at y0.55, where only **4% of the stage** is clear.
+     Wings paint behind the body, so at that height a wing is arithmetically
+     unable to show: pull it inward and the body swallows it, push it outward
+     and it leaves the stage (and `.room` is `overflow:hidden`, so it really
+     is chopped, not merely off-canvas in the preview tool).
+     The code-drawn wings get away with y0.55 because they are drawn to
+     sweep UP from a low root, so their visible mass ends up high anyway.
+     Her Tripo wing art is a solid lobe around its root, so the ROOT itself
+     has to move up to where the clear space is.
+     Hence attach y0.40 (fairy) / y0.44 (butterfly) with the root tucked at
+     x0.56 — inside the silhouette, which is correct for a wing root — and a
+     bigger widthPct so the lobe reaches the clear space above his shoulder.
+     Anchored on the art's own measured root (leftmost opaque pixel).
+     Checked at 34/40/45 and y0.36-0.50 in tools/preview_accessory.py; these
+     are the largest values that keep the whole wing inside the stage box. */
   "fairy-wing": {
-    slot: "wings", img: "fairy-wing.png", widthPct: 36,
-    anchor: { x: 0.35, y: 0.676 }, flipX: true,
+    slot: "wings", img: "fairy-wing.png", widthPct: 45,
+    anchor: { x: 0.03, y: 0.676 }, flipX: true,
+    attach: [{ x: 0.44, y: 0.40 }, { x: 0.56, y: 0.40 }],
   },
   // Own lower attach, same as wizard-hat/royal-crown/neural-crown — he is a
   // teardrop, so a solid crown-like item needs to come down far enough to
   // wrap the point or it just hovers with a gap.
-  // Megan's phone review (2026-08-08): lower still, so his pointy crown
-  // shows THROUGH the ring rather than the ring floating clear above it.
+  // Megan's phone review (2026-08-08, twice): lower still, so his pointy
+  // crown shows THROUGH the ring rather than the ring floating above it.
+  // Swept 0.235/0.275/0.31/0.35 — 0.31 is where the point clears the ring
+  // and the flowers still rest on his head; 0.35 starts burying the point.
   "flower-crown": {
     slot: "hat", img: "flower-crown.png", widthPct: 36,
-    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.235 },
+    anchor: { x: 0.5, y: 0.92 }, attach: { x: 0.5, y: 0.31 },
   },
 
   // --- girly (Lv12)
@@ -976,20 +992,22 @@ export const ACCESSORIES = {
     slot: "hat", img: "tiara.png", widthPct: 34,
     anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.5, y: 0.24 },
   },
-  // Same fix as fairy-wing above: root measured at x0.006/y0.558, anchor
-  // moved inward to x0.35 so the actual wing lobe lands on-stage instead of
-  // clipping off the right edge — this is what "I don't see anything with
-  // the butterfly" (Megan's phone review, 2026-08-08) was catching.
+  // Same treatment as fairy-wing above (read its ⚠️ comment first). Its own
+  // root measures x0.006/y0.558, and it is a shallower piece, so it hangs
+  // 0.04 lower than the fairy wing to sit level with it on the body.
   "butterfly-wing": {
-    slot: "wings", img: "butterfly-wing.png", widthPct: 36,
-    anchor: { x: 0.35, y: 0.558 }, flipX: true,
+    slot: "wings", img: "butterfly-wing.png", widthPct: 45,
+    anchor: { x: 0.03, y: 0.558 }, flipX: true,
+    attach: [{ x: 0.44, y: 0.44 }, { x: 0.56, y: 0.44 }],
   },
 
   // --- tomboy (Lv9). Megan's phone review (2026-08-08): "hats should be
   // lowered as well" — bumped alongside flower-crown/hair-bow.
+  // 0.31 for the same reason flower-crown uses it (Megan, 2026-08-08) —
+  // the cap sits ON his head instead of perching above the point.
   "backwards-cap": {
     slot: "hat", img: "backwards-cap.png", widthPct: 38,
-    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.235 },
+    anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.31 },
   },
   // Drawn straight-on like the code-drawn eyewear, so it uses the shared
   // glasses convention as-is (widthPct 90, lens centres land on his eyes) —
