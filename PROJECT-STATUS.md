@@ -1,4 +1,69 @@
-# Project status — updated 2026-08-09 (THE ROOM IS HOME — committed, NOT pushed, sw v40)
+# Project status — updated 2026-08-09 (ROOM=HOME + POLISH + TUTORIAL SHIPPED, sw v42)
+
+## 🚀 2026-08-09 (later) — THE WHOLE DAY SHIPPED: foreman day, three build sessions
+
+Foreman pattern (2nd run, same shape as the 2026-08-08 room build): Fable
+planned + reviewed, Sonnet built, Megan dispatched. **No SQL today** — the
+whole day is client-side, so the ship was commit + push only. All three
+sessions reviewed green before the next started; `verify-store.html` ended
+at **2,972 checks green**, zero console errors on every walk.
+
+**Session 1 — the room becomes the home screen** (full write-up in the next
+section). Review fixes on top (commit `04b889b`): a DONE assignment no
+longer badges the desk (the card's own header ruling — "no nagging repeat
+once it's done" — applied to a cue that can only nag), and
+`verify-store.html` now wipes `mhq.*` localStorage before every run —
+stale local-backend state (a leftover pending milestone box) was making 3
+box checks read false-red in a used browser, a diagnosis that cost real
+review time today. Clean-slate-per-run is always correct on a dev page.
+
+**Session 2 — the phone-walk polish list** (commit `e9746f8`), all four of
+her 2026-08-08 21:30 rulings: food + cosmetic cards are small tiles
+(~3-per-row at 375px, name clear of the art; furniture cards deliberately
+stay big — a bed needs the room); **buying wears it immediately** (client
+chains the existing `api.equip` after a successful buy — cosmetics AND
+furniture; at dress-lock stage ≥ 2 the chained equip skips QUIETLY, and
+verify asserts the specific `BLIP_TOO_SICK` code so nothing else slips
+past that quiet-skip); the sheet footer is **pinned** on every sheet (one
+shared sheet builder — `.room-sheet` overflow moved onto
+`.room-sheet-body`, the `min-height:0` flex gotcha documented in the CSS);
+food got the cosmetic shop's tab strip (Fresh · Bakery · Hot meals · Braai
+· Sweets · Drinks, locked tiers keep their "?" card on their own tab).
+Walked live at 375px: bought Sleepy eyes → worn same render; bought the
+wooden bed → in the room same render; apple buy kept the sheet open, tray
+tile appeared.
+
+**Session 3 — the room tutorial** (commit `27e0a84`). WhenWorks'
+`app/tour.js` mechanism PORTED, not reinvented (`js/companion/tour.js`):
+spotlight hole + bubble, no rAF anywhere, steps drop themselves when
+their anchor is off-screen (the tray step only exists when the tray has
+food), versioned seen-flag `mhq.tourSeen` (inside the verify wipe
+namespace on purpose, so verify always exercises the first-run path).
+Auto-fires ONCE on first landing (her ruling — the ambush is intentional
+here, unlike WhenWorks R11), never again; the ❓ replay button lives
+permanently next to the gallery button. Six steps on an empty tray, seven
+with food. Review note: the pane's synthetic clicks were flaky and its
+spotlight-rect reads lag mid-transition — chased hard, concluded
+measurement artifacts of THIS pane (three clean probes advanced
+perfectly, style-attribute reads always correct, and it's the same code
+WhenWorks parents use daily); **her real-phone tap-through is the final
+confirmation** (in Pending).
+
+**Art day (commits `f2e0f79`, `3724633`):** her 2026-08-09 Tripo drop
+sliced and committed — bean bag, 4 shelf designs × both walls (all 8
+slopes MEASURED correct per wall), emo/nerdy/sport bed+desk+window (all
+orientations measured against the shipped pieces), and **4 wallpaper
+shells that PROVED the shell-swap approach**: Tripo held the room's
+geometry to 99.7% silhouette overlap with floor lines aligned (checked by
+edge-overlay), so wallpaper = alternative `room-shell-*.png`, no tint
+trick needed. The nerdy desk came back as a wrong-rake corner L-desk and
+was re-rolled to a straight desk (correct rake, measured). Assets sit in
+the repo UNWIRED — the shelves/beanbag/wallpaper build session does the
+`mhq_equip` constraint dance. Wallpaper shells are 139–234 KB vs the
+plain shell's 51 KB (patterned walls don't quantise small; one equipped
+at a time, acceptable). Slicing scripts in the session scratchpad, keyed
+on border-median flood (the 1080×1350 Tripo exports have off-white
+backgrounds — plain white-threshold keying reads them as 100% subject).
 
 ## 🏠 2026-08-09 — THE ROOM BECOMES THE HOME SCREEN (Next up §1)
 
@@ -1306,6 +1371,26 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   no milestone pacing was possible. XP is stored raw — a curve change is therefore
   never a data migration, just a re-map. Changed the day zero learners had the app,
   which is the only cheap moment to do it.
+- 2026-08-09: **The room IS the home screen** (her words: "blip's room is the first
+  thing the kids see… click on the study desk, that takes them to the blipwork
+  quests"). Desk tap = the maths, NEVER health-locked; bed/window take over the
+  furniture-panel job; the hub keeps everything else and the pulsing Blip button is
+  the way back. The logo tap also goes home-to-the-room.
+- 2026-08-09: **Homework badge = her red book-with-"!" on the desk, active
+  assignments only** — a DONE assignment must never badge the desk (the "no nagging
+  repeat" ruling extended to cues). Card keeps its gentle ✓ done-state on the hub.
+- 2026-08-09: **Buying wears it immediately** (cosmetics and furniture) — chained
+  client-side equip after a successful buy; quiet skip at dress-lock, a successful
+  buy never surfaces an error.
+- 2026-08-09: **Tutorial = ported WhenWorks tour, ambush-on-first-login by design**
+  (kids, not parents — the R11 invite rule deliberately NOT ported), plus a
+  permanent ❓ replay button in the room header. Bubble copy is hers to edit in
+  js/companion/tour.js stepsFor().
+- 2026-08-09: **Wallpaper = whole-shell swaps** (`room-shell-<name>.png`), proven
+  geometry-safe (99.7% silhouette overlap, floor lines aligned). The door-tint
+  fallback is dead. Angled/isometric TRIPO ART RULE confirmed both ways: badge-type
+  floats over iso furniture SHOULD be angled; wall pieces must match their wall's
+  rake (measure, don't eyeball — the L-desk re-roll proved it again).
 - 2026-08-08 (S2): **Milestone boxes are deduped by a primary key, and that key is
   never cleared by a progress reset.** A reset drops XP so the gates re-lock (the
   2026-07-19 ruling), but a prize already won is never confiscated and re-climbing
@@ -1612,9 +1697,9 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
-- 📱 3 min: reopen the Blipwork PWA twice (v34 → v39 is a big jump), then walk the
-  room once — drag a food onto Blip, buy a door colour, open the Style view
-  **[blocking — the go-live eyeball]**
+- 📱 5 min: reopen the Blipwork PWA twice (v34 → v42 now), then one walk: land in the
+  room, tap through the tutorial once, tap the desk → quests, buy something → he's
+  wearing it, check the badge's spot by the window **[blocking — the go-live eyeball]**
 - 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
   PUBLIC, so it stays uncommitted until you decide **[whenever]**
 - 🎨 5 min: re-roll `happy-eyes` if you want it better (the weakest of the six eye
@@ -1630,36 +1715,28 @@ stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 **1. ✅ DONE 2026-08-09 — THE ROOM BECOMES THE HOME SCREEN.** See the
 2026-08-09 entry above. Committed, not yet pushed/deployed.
 
-**2. PHONE-WALK POLISH LIST (her screenshots, 2026-08-08 21:30 — the room
-itself looks right; these are the faults she found in one look):**
-- **Food cards are WAY too big** — one grocery card fills half the phone
-  screen and the item's name renders on top of the artwork. They're 5-💎
-  groceries, not hero art: small tiles, several per row, name clear of the
-  picture. (The cosmetic shop's card size is probably also worth a look on
-  a real phone while in there.)
-- **Buying an accessory must equip it immediately** (her ruling). Today the
-  kid buys a hat and then has to find it in the Inventory and tap Wear —
-  buy → he's wearing it, one step. Server side `mhq_buy_item` doesn't
-  equip; simplest is the client chaining equip after a successful cosmetic
-  buy (furniture too — buy a bed, see the bed). Mind the sheet-close +
-  refresh convention, and the BLIP_TOO_SICK dress-lock edge (stage ≥ 2
-  can buy-but-not-wear: don't let the chained equip turn a good buy into
-  an error toast).
-- **No visible way OUT of the food sheet without buying** — the next→/done
-  footer scrolls away with the content. The footer must stay pinned and
-  visible however long the list is, on every sheet.
-- **Food needs real categories** — the tier heading ("Fresh") exists but
-  reads as one endless scroll. Give the food panel the same tabbed/sectioned
-  navigation the cosmetic shop has (Fresh · Bakery · Hot meals · Braai ·
-  Sweets · Drinks), locked tiers keeping their "?" cards.
+**2. ✅ DONE 2026-08-09 — PHONE-WALK POLISH LIST** (all four rulings built,
+reviewed, shipped — see the day summary at the top of this file). Also the
+**tutorial** shipped the same day (session 3).
 
-**3. A few SHELVES, an optional POOFY CHAIR, and WALLPAPER.** Notes for that
-session: shelves/chair are new furniture slots (the known `mhq_equip` +
-constraint dance, four→more keys) with her Tripo art at the room's wall
-angles; wallpaper was DROPPED from the room build because the wall is baked
-into `room-shell.png` — the door-tint trick (one art file, tinted in code)
-is the likely shape for wall colour, but plan it against the shell before
-promising it. The trinket shelf on the Inventory sheet is NOT these shelves.
+**3. NEXT BUILD SESSION — wire SHELVES, BEAN BAG, WALLPAPER + the three
+THEMED SETS.** The art is ALL sliced, committed and measured
+(assets/companion/furniture/: `beanbag`, `shelf-{wood,glossy,bracket,panel}-{left,right}`,
+`{emo,nerdy,sport}-{bed,desk,window}`; assets/companion/:
+`room-shell-{cloud,cloudy,sky,stripes}`). What the session decides/builds:
+- Shelves + bean bag = NEW slots → the known `mhq_equip` + constraint
+  dance (`shop_items_slot_cat_check`, key allow-list, grants) — the FIRST
+  SQL since the room build; migration seeds everything CLOSED as usual.
+  Two shelf slots (left wall / right wall)? Her call. The trinket shelf on
+  the Inventory sheet is NOT these shelves.
+- Wallpaper = a `wall` slot whose equip swaps the `.room` background art
+  between `room-shell-*.png` — the shell-swap approach is PROVEN
+  geometry-safe (see 2026-08-09 decision). Aspect deltas ≤1px, harmless.
+- Themed sets = plain new furniture shop rows on the EXISTING slots
+  (bed/desk/window), one collection label per theme, unlock levels her
+  call. No new slots, no constraint change for these nine.
+- Placement numbers for shelves/beanbag: her dressing-room pass, same as
+  the room build (her numbers are rulings).
 
 **The sequence (Megan's ruling, 2026-07-25) — in this order, nothing skips ahead:**
 1. ~~Megan's full play-through of all levels~~ — **DONE 2026-07-31.**
