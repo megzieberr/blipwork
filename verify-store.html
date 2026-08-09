@@ -1283,6 +1283,111 @@ for (const o of outfits) {
   }
 }
 
+/* ---------- 10. the room tutorial (bubble walkthrough, 2026-08-09) ----------
+   Ported from WhenWorks' app/tour.js — the mechanism itself (spotlight
+   positioning, resize handling) is proven there and isn't re-tested here;
+   what's asserted is the port's own behaviour: a step whose control isn't
+   on screen drops silently, skip/Escape/tap-the-dim-area all count as
+   "seen", the seen flag is a VERSION NUMBER under the "mhq." prefix (so
+   this page's own storage wipe above always exercises the first-run
+   path), and the always-on "?" replay plus the auto-fire call are really
+   wired into js/blip.js — not just present in tour.js in isolation. */
+{
+  const { TOUR_VERSION, startTour, maybeStartTour, tourSeen } = await import("./js/companion/tour.js");
+  const TKEY = "mhq.tourSeen";
+
+  tick(TOUR_VERSION === 1, `TOUR_VERSION is ${TOUR_VERSION}, expected 1 (bump it, don't add a boolean flag, to re-show a rewritten tour)`);
+  localStorage.removeItem(TKEY);
+  tick(tourSeen() === 0, "tourSeen() should read 0 with no stored value");
+
+  // A throwaway room, off-screen, with only SOME of the seven anchors —
+  // the same "plain divs, not the real screen" approach section 6i uses
+  // for the drag gesture, so this doesn't need to mount the whole room.
+  const mount = document.createElement("div");
+  mount.style.cssText = "position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;z-index:-1;overflow:visible";
+  const PRESENT = ["blip", "desk", "cookie", "door", "gallery"]; // 5 of 7 — tray + furniture omitted on purpose
+  for (const tag of PRESENT) {
+    const anchor = document.createElement("div");
+    anchor.dataset.tour = tag;
+    anchor.style.cssText = "position:fixed;left:10px;top:10px;width:20px;height:20px";
+    mount.appendChild(anchor);
+  }
+  document.body.appendChild(mount);
+
+  // ---- step-dropping: a step whose control isn't on screen is silently skipped ----
+  let handle = startTour(mount);
+  tick(!!handle, "startTour returned nothing with 5 real anchors present");
+  tick(handle && handle.length === PRESENT.length,
+    `startTour should keep exactly ${PRESENT.length} steps (tray/furniture have no anchor here), got ${handle && handle.length}`);
+  tick(!!document.querySelector(".tour"), "startTour did not mount the overlay");
+  tick(!!document.querySelector(".tour__bubble .tour__title"), "the first step's bubble never rendered");
+
+  // ---- Escape closes, and closing (even by Escape) counts as seen ----
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  await new Promise((res) => setTimeout(res, 250)); // the .tour fade-out is a real 200ms CSS transition, not rAF-driven
+  tick(!document.querySelector(".tour"), "Escape did not remove the tour overlay");
+  tick(tourSeen() === TOUR_VERSION, "closing via Escape did not mark the tour as seen");
+  tick(localStorage.getItem(TKEY) === String(TOUR_VERSION),
+    `the seen flag must live under "${TKEY}" so this page's own mhq.* wipe covers it, got raw value ${JSON.stringify(localStorage.getItem(TKEY))}`);
+
+  // ---- a device that has already seen this version gets nothing automatically ----
+  tick(maybeStartTour(mount) === null, "maybeStartTour ran again on a device that already saw this TOUR_VERSION");
+  tick(!document.querySelector(".tour"), "maybeStartTour mounted an overlay it should have suppressed");
+
+  // ---- a version bump re-shows it (the whole reason it's a number, not a flag) ----
+  localStorage.removeItem(TKEY);
+  const auto = maybeStartTour(mount);
+  tick(!!auto, "maybeStartTour did not run for a device with no stored version");
+  tick(!!document.querySelector(".tour"), "maybeStartTour (fresh device) did not mount the overlay");
+
+  // ---- skipping counts as seen too, and the skip button is reachable by a tap ----
+  const skipBtn = document.querySelector(".tour__skip");
+  tick(!!skipBtn && !skipBtn.hidden, "the Skip button should be visible on a non-final step");
+  skipBtn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  await new Promise((res) => setTimeout(res, 250));
+  tick(!document.querySelector(".tour"), "Skip did not remove the tour overlay");
+  tick(tourSeen() === TOUR_VERSION, "Skip did not mark the tour as seen");
+
+  // ---- tapping the dimmed area advances instead of closing ----
+  localStorage.removeItem(TKEY);
+  handle = startTour(mount);
+  const before = document.querySelector(".tour__count").textContent;
+  document.querySelector(".tour").dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  tick(document.querySelector(".tour__count").textContent !== before,
+    `tapping the dimmed area should advance to the next step, count stayed "${before}"`);
+  handle.close();
+  await new Promise((res) => setTimeout(res, 250));
+
+  // ---- an empty room (no anchors at all) starts nothing ----
+  localStorage.removeItem(TKEY);
+  const emptyMount = document.createElement("div");
+  tick(startTour(emptyMount) === null, "startTour should return null when not one of the seven controls is on screen");
+  tick(maybeStartTour(emptyMount) === null, "maybeStartTour should return null on an anchorless mount too");
+
+  document.body.removeChild(mount);
+  localStorage.removeItem(TKEY); // leave storage clean for anything that runs after this section
+
+  // ---- the port is really wired into js/blip.js, not just present in tour.js ----
+  const blipSrc = await (await fetch("./js/blip.js")).text();
+  tick(blipSrc.includes('from "./companion/tour.js"'), "js/blip.js no longer imports the tour module");
+  tick(blipSrc.includes("tour-replay-btn"), 'js/blip.js: the always-available "?" replay button is missing from the room header (her ruling 4 — it must never be first-open-only)');
+  tick(blipSrc.includes('data-tour="gallery"'), "js/blip.js: the gallery button lost its tour anchor");
+  tick(/dataset\.tour\s*=\s*"desk"/.test(blipSrc), "js/blip.js: the desk furniture layer lost its tour anchor");
+  tick(/dataset\.tour\s*=\s*"door"/.test(blipSrc), "js/blip.js: the door furniture layer lost its tour anchor");
+  tick(/dataset\.tour\s*=\s*"furniture"/.test(blipSrc), "js/blip.js: the bed (redecorate step) lost its tour anchor");
+  tick(blipSrc.includes('dataset.tour = "cookie"'), "js/blip.js: the daily cookie lost its tour anchor");
+  tick(blipSrc.includes('dataset.tour = "tray"'), "js/blip.js: the tray strip lost its tour anchor");
+  tick(blipSrc.includes("maybeStartTour(host)"), "js/blip.js: the room screen no longer auto-fires the tutorial on first landing");
+  // The desk step's own copy is the one place the homework badge is
+  // explained in words (her ruling: no separate step anchored to the
+  // badge, since it's usually absent) — assert the mention survives.
+  const tourSrc = await (await fetch("./js/companion/tour.js")).text();
+  tick(/desk[\s\S]{0,400}homework/i.test(tourSrc), 'the desk step\'s copy should mention homework (the red "!" badge), per the brief');
+  tick(!/requestAnimationFrame\s*\(/.test(tourSrc), "js/companion/tour.js must never CALL requestAnimationFrame — this project's preview pane never fires it (mentioning the name in a comment is fine)");
+
+  say(`room tutorial: TOUR_VERSION ${TOUR_VERSION} · step-drop verified (5/7 anchors -> ${PRESENT.length} steps) · Escape/Skip/tap-dim all mark "mhq.tourSeen" · a version bump re-shows it · wired into js/blip.js's header ("?") and first-landing auto-fire`);
+}
+
 /* ---------- report ---------- */
 const banner = document.getElementById("banner");
 banner.className = fails.length ? "fail" : "pass";

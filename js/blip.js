@@ -77,6 +77,7 @@ import { makeDraggable } from "./companion/drag-feed.js";
 import { maybeShowReminderCard } from "./push.js";
 import { hasActiveAssignment } from "./assignment.js";
 import { maybeShowInstall } from "./install.js";
+import { startTour, maybeStartTour } from "./companion/tour.js";
 
 /* Which slot tab the closet/shop is filtered to ("all" or a slot id).
    Module scope on purpose: every buy/wear action re-renders the whole
@@ -476,8 +477,12 @@ export function renderBlip(app, host) {
   const head = el("div", "blip-head");
   head.innerHTML = `<div><span class="eyebrow">System</span></div>
     <div style="display:flex;gap:8px;align-items:center">
-      <button class="link-btn gallery-link" title="Everyone's Blips" aria-label="Gallery">👥</button>
+      <button class="link-btn tour-replay-btn" type="button" title="How this works" aria-label="How this works">❓</button>
+      <button class="link-btn gallery-link" data-tour="gallery" title="Everyone's Blips" aria-label="Gallery">👥</button>
     </div>`;
+  // Room tutorial §4 (2026-08-09, her ruling): always available, never only
+  // on first open — a kid who skips it in class can still find it later.
+  head.querySelector(".tour-replay-btn").addEventListener("click", () => startTour(host));
   const galleryBtn = head.querySelector(".gallery-link");
   if (health.locks.gallery) { galleryBtn.title = "Blip is too sick to go out"; galleryBtn.style.opacity = ".5"; }
   galleryBtn.addEventListener("click", () => app.go("gallery"));
@@ -531,6 +536,13 @@ export function renderBlip(app, host) {
       const layer = furnitureLayer(id);
       layer.tabIndex = 0;
       layer.setAttribute("role", "button");
+      // Room tutorial anchors (2026-08-09): desk and door get their own
+      // step each; bed and window share one "redecorate" step (her
+      // ruling), so only the bed carries the "furniture" tag — one
+      // querySelector match is all the tour needs.
+      if (slot === "desk") layer.dataset.tour = "desk";
+      else if (slot === "door") layer.dataset.tour = "door";
+      else if (slot === "bed") layer.dataset.tour = "furniture";
       if (slot === "desk") {
         // Room build §1 (her ruling): the desk is the way to the maths now,
         // replacing its old "open the furniture panel" job (bed/window keep
@@ -568,6 +580,7 @@ export function renderBlip(app, host) {
   }
 
   const roomStage = el("div", "room-blip-stage");
+  roomStage.dataset.tour = "blip";
   roomStage.innerHTML = `<div class="blip-pedestal"><i></i></div>`;
   room.appendChild(roomStage);
   const blipHandle = mountBlip(roomStage, {
@@ -595,6 +608,7 @@ export function renderBlip(app, host) {
   // ---- daily cookie (top-right) — the household's one free daily feed ----
   const cookieBtn = el("button", "cookie-badge" + (canFeedToday ? "" : " done"), canFeedToday ? "🍪" : "✅");
   cookieBtn.type = "button";
+  cookieBtn.dataset.tour = "cookie";
   cookieBtn.title = canFeedToday ? "Feed Blip" : "Fed today — come back tomorrow";
   cookieBtn.setAttribute("aria-label", cookieBtn.title);
   cookieBtn.disabled = !canFeedToday;
@@ -645,6 +659,9 @@ export function renderBlip(app, host) {
     const trayIds = FOOD_IDS.filter((id) => (trayObj[id] || 0) > 0);
     if (trayIds.length) {
       const strip = el("div", "tray-strip" + (hl.stage >= 2 ? " is-locked" : ""));
+      // Room tutorial (2026-08-09): a droppable step, only when the tray
+      // actually has something on it — tour.js drops the step otherwise.
+      strip.dataset.tour = "tray";
       trayIds.forEach((id) => strip.appendChild(stashTile(id, trayObj[id], hl.stage >= 2)));
       trayWrap.appendChild(strip);
     }
@@ -1293,6 +1310,18 @@ export function renderBlip(app, host) {
     dock.appendChild(b);
   });
   host.appendChild(dock);
+
+  // Room tutorial §3 (2026-08-09, her ruling: "a tutorial with bubbles at
+  // the start"): fires itself once, on first landing, never again after —
+  // same versioned-seen flag the "?" replay button reads. Called last, so
+  // every control it points at already exists in the DOM. Gated to the
+  // room stage only (desk/door/bed/window only exist there) — a fresh
+  // session always lands in room view, so this never actually skips the
+  // first-run tour; it just keeps the tour from reaching for furniture
+  // that isn't on screen if it were ever somehow reached from Style.
+  if (roomView === "room") {
+    try { maybeStartTour(host); } catch { /* non-critical */ }
+  }
 }
 
 function equipErrMsg(code) {

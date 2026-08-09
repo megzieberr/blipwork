@@ -1010,3 +1010,34 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.err{background:color-mix(in srgb,var(--bad) 24%,var(--panel-solid));border-color:color-mix(in srgb,var(--bad) 50%,transparent)}
 .toast.good{background:color-mix(in srgb,var(--good) 24%,var(--panel-solid));border-color:color-mix(in srgb,var(--good) 50%,transparent)}
+
+/* ---------- room tutorial (bubble walkthrough, ported from WhenWorks) ----
+   The dimming is one giant box-shadow spread from the spotlight hole
+   rather than a clip-path or four separate panels: one element, no
+   geometry to get wrong, correct at any screen size. z-index sits above
+   .modal-scrim (50) so the tour can still spotlight a control even if a
+   sheet was somehow left open, and below .toast-host (80) / .feed-ghost
+   (90) so neither is ever hidden behind it. */
+.tour{position:fixed;inset:0;z-index:70;opacity:0;transition:opacity .2s ease}
+.tour.is-in{opacity:1}
+.tour__hole{
+  position:absolute;border-radius:var(--r-lg);
+  box-shadow:0 0 0 9999px rgba(3,6,14,.74);
+  outline:2px solid var(--accent);outline-offset:2px;
+  pointer-events:none;
+  transition:top .18s ease,left .18s ease,width .18s ease,height .18s ease;
+}
+.tour__bubble{
+  position:absolute;width:min(300px,calc(100vw - 20px));
+  background:var(--panel-solid);border:1px solid var(--brd-2);border-radius:var(--r-xl);
+  box-shadow:0 -20px 60px -20px #000,0 0 24px -6px color-mix(in srgb,var(--accent) 35%,transparent);
+  padding:16px;transition:top .18s ease,left .18s ease;
+}
+.tour__count{font-family:var(--font-display);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-size:10px;color:var(--muted);margin-bottom:6px}
+.tour__title{font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--ink);margin-bottom:6px}
+.tour__body{font-size:13.5px;line-height:1.45;color:var(--ink)}
+.tour__actions{display:flex;align-items:center;gap:8px;margin-top:14px}
+.tour__spacer{flex:1}
+.tour__skip{background:none;border:0;padding:8px 4px;font-family:var(--font-body);font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
+.tour__skip:hover{color:var(--ink)}
+@media (prefers-reduced-motion: reduce){.tour,.tour__hole,.tour__bubble{transition:none}}
