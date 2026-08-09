@@ -69,16 +69,18 @@ function dueLine(dueOn) {
 }
 
 /**
- * Same decision renderAssignmentCard makes about whether there is
- * something to pin — factored out so the room's desk badge (room build
- * §1) can ask the identical question without mounting a card. Keep this
- * in step with renderAssignmentCard's own early-outs below.
+ * Whether the room's desk badge (room build §1) should show. Mirrors
+ * renderAssignmentCard's "something to pin" early-outs below — keep them
+ * in step — EXCEPT for `done`: the card still pins a finished assignment
+ * (as its gentle ✓ state), but the badge is a red "!" with no done state,
+ * so it hides once the homework is done. That's the header ruling — "no
+ * nagging repeat once it's done" — applied to a cue that can only nag.
  * @param {object} app
  * @returns {boolean}
  */
 export function hasActiveAssignment(app) {
   const a = app && app.state && app.state.assignment;
-  return !!(a && a.questId && locate(a.questId, a.chapterId));
+  return !!(a && a.questId && !a.done && locate(a.questId, a.chapterId));
 }
 
 /**
