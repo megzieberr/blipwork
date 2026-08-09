@@ -85,6 +85,14 @@ import { maybeShowInstall } from "./install.js";
    Inventory and Shop sheets, same as the old closet/shop split. */
 let activeSlotTab = "all";
 
+/* Which FOOD TIER the grocery store is showing (room build 2026-08-09,
+   her ruling: "food gets real tabs" — the tier headings used to all render
+   at once as one long scroll; this is the food-panel equivalent of
+   activeSlotTab above, same module-scope-survives-a-re-render reasoning).
+   Defaults to the first tier so a fresh learner opening Food lands
+   somewhere real rather than on a blank "pick a tab" state. */
+let activeFoodTab = FOOD_COLLECTION_ORDER[0];
+
 /* ---------- which STAGE the screen is showing (room build S5v2) ----------
    "room"  = the isometric bedroom: Megan's room-shell art, the equipped
              door/window/desk/bed on it, Blip front-on in the middle.
@@ -756,6 +764,18 @@ export function renderBlip(app, host) {
           const r = await api.buyItem(sess.username, sess.password, item.id, activeBlip.slot);
           if (!r || !r.ok) { showToast(buyErrMsg(r && r.error, r), "error"); actionBtn.disabled = false; return; }
           showToast(rarity === "free" ? `${itemLabel(item.id)} is yours!` : `Bought ${itemLabel(item.id)}!`, "good");
+          /* Phone-walk polish (2026-08-09, her ruling): buying wears it —
+             mhq_buy_item doesn't equip server-side, so chain the existing
+             equip call here. Skip QUIETLY (no error toast) at dress-lock
+             stage — a successful buy must never surface an error; she can
+             still wear it once he's up. Never gated on the equip's own
+             result: this is best-effort, the buy already succeeded and
+             already toasted. */
+          if (!lockedByDress) {
+            const nextEquipped = { ...(activeBlip.equipped || {}) };
+            nextEquipped[item.slot] = item.id;
+            try { await api.equip(sess.username, sess.password, { slot: activeBlip.slot, equipped: nextEquipped }); } catch { /* best-effort */ }
+          }
           closeRoomSheet();
           await app.refresh();
           app.go("blip");
@@ -788,7 +808,7 @@ export function renderBlip(app, host) {
     renderSlotTabs(container);
     const items = (owned ? closetItems : buyableItems).filter(inTab);
     if (items.length) {
-      const grid = el("div", "shop-grid");
+      const grid = el("div", "shop-grid cosmetic-grid");
       items.forEach((item) => grid.appendChild(cosmeticCard(item, owned)));
       container.appendChild(grid);
     } else {
@@ -827,12 +847,12 @@ export function renderBlip(app, host) {
       if (!collBuyable.length) return;
       shownAny = true;
       if (level < coll.unlockLevel) {
-        const group = el("div", "shop-grid collection-group");
+        const group = el("div", "shop-grid cosmetic-grid collection-group");
         group.appendChild(collectionLockedCard(coll));
         container.appendChild(group);
       } else {
         container.appendChild(el("h3", "collection-label", coll.label));
-        const grid = el("div", "shop-grid");
+        const grid = el("div", "shop-grid cosmetic-grid");
         collBuyable.forEach((item) => grid.appendChild(cosmeticCard(item, false)));
         container.appendChild(grid);
       }
@@ -876,7 +896,7 @@ export function renderBlip(app, host) {
     const treats = treatItems(state);
     if (treats.length) {
       container.appendChild(el("h3", "", "TREATS"));
-      const tgrid = el("div", "shop-grid");
+      const tgrid = el("div", "shop-grid cosmetic-grid");
       treats.forEach((item) => {
         const lockedByShop = health.locks.shop;
         const card = el("div", "shop-item");
@@ -945,6 +965,27 @@ export function renderBlip(app, host) {
      (see the buy handler). Reading the stale closure would show the old
      tray counts the moment you bought a second apple.
      ============================================================ */
+  /* Tier tab strip — reuses the exact .slot-tabs/.slot-tab markup the
+     cosmetic shop's slot filter uses (her ask: "the same tabbed navigation
+     the cosmetic shop has"), keyed by FOOD_COLLECTION_ORDER instead of
+     equip slot. Every tier gets a tab regardless of lock state — tapping a
+     locked one shows its own "?" card, same as scrolling to it used to. */
+  function renderFoodTabs(container) {
+    const tabs = el("div", "slot-tabs");
+    FOOD_COLLECTION_ORDER.forEach((key) => {
+      const t = el("button", "slot-tab" + (key === activeFoodTab ? " active" : ""), FOOD_COLLECTIONS[key].label);
+      t.type = "button";
+      t.addEventListener("click", () => { activeFoodTab = key; if (activeSheetRerender) activeSheetRerender(); });
+      tabs.appendChild(t);
+    });
+    container.appendChild(tabs);
+    const activeTabEl = tabs.querySelector(".slot-tab.active");
+    if (activeTabEl) {
+      // setTimeout, not requestAnimationFrame — see renderSlotTabs above.
+      setTimeout(() => activeTabEl.scrollIntoView({ block: "nearest", inline: "center" }), 0);
+    }
+  }
+
   function renderFoodPanel(container) {
     const st = app.state || {};
     const tray = st.tray || {};
@@ -962,24 +1003,22 @@ export function renderBlip(app, host) {
     }
     const groceries = (st.foodShop || []).filter((it) => foodExists(it.id));
     const byId = new Map(groceries.map((it) => [it.id, it]));
-    let shownAny = false;
-    FOOD_COLLECTION_ORDER.forEach((key) => {
-      const tier = FOOD_COLLECTIONS[key];
-      const rows = tier.items.map((id) => byId.get(id)).filter(Boolean);
-      if (!rows.length) return;
-      shownAny = true;
-      if (lvl < tier.unlockLevel) {
-        const group = el("div", "shop-grid collection-group");
-        group.appendChild(collectionLockedCard(tier));
-        container.appendChild(group);
-      } else {
-        container.appendChild(el("h3", "collection-label", tier.label));
-        const grid = el("div", "shop-grid food-grid");
-        rows.forEach((it) => grid.appendChild(foodCard(it, tray[it.id] || 0, lvl)));
-        container.appendChild(grid);
-      }
-    });
-    if (!shownAny) container.appendChild(el("p", "muted small", "The grocery store is empty — that shouldn't happen; try reloading."));
+    if (!FOOD_COLLECTION_ORDER.includes(activeFoodTab)) activeFoodTab = FOOD_COLLECTION_ORDER[0];
+    renderFoodTabs(container);
+
+    const tier = FOOD_COLLECTIONS[activeFoodTab];
+    const rows = tier.items.map((id) => byId.get(id)).filter(Boolean);
+    if (!rows.length) {
+      container.appendChild(el("p", "muted small", "The grocery store is empty — that shouldn't happen; try reloading."));
+    } else if (lvl < tier.unlockLevel) {
+      const group = el("div", "shop-grid food-grid collection-group");
+      group.appendChild(collectionLockedCard(tier));
+      container.appendChild(group);
+    } else {
+      const grid = el("div", "shop-grid food-grid");
+      rows.forEach((it) => grid.appendChild(foodCard(it, tray[it.id] || 0, lvl)));
+      container.appendChild(grid);
+    }
   }
 
   /* One grocery card. Buying KEEPS THE SHEET OPEN (a shopping trip is
@@ -1181,6 +1220,13 @@ export function renderBlip(app, host) {
           const r = await api.buyItem(sess.username, sess.password, item.id, activeBlip.slot);
           if (!r || !r.ok) { showToast(buyErrMsg(r && r.error, r), "error"); btn.disabled = false; return; }
           showToast(item.price === 0 ? `${furnitureLabel(item.id)} is yours!` : `Bought ${furnitureLabel(item.id)}!`, "good");
+          /* Same chained-equip as cosmeticCard above — buying a bed puts it
+             in the room immediately. Same quiet-skip at the dress lock. */
+          if (!hl.locks.dress) {
+            const nextEquipped = { ...(activeBlip.equipped || {}) };
+            nextEquipped[item.slot] = item.id;
+            try { await api.equip(sess.username, sess.password, { slot: activeBlip.slot, equipped: nextEquipped }); } catch { /* best-effort */ }
+          }
           closeRoomSheet();
           await app.refresh();
           app.go("blip");

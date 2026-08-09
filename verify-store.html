@@ -1115,6 +1115,91 @@ for (const [file, expected] of MIGRATIONS) try {
   tick(bogus && !bogus.ok, "the back slot accepted an item the learner does not own");
 }
 
+/* ---------- 7b. buying wears it immediately (phone-walk polish, 2026-08-09) ----------
+   mhq_buy_item never equips server-side (unchanged) — js/blip.js's cosmeticCard
+   and furnitureCard buy handlers now CHAIN an equip call right after a
+   successful buy, so the learner sees it worn in the same render instead of
+   having to open Inventory/Furniture and tap Wear separately. This headless
+   harness can't drive the DOM buy button itself, so it replicates blip.js's
+   exact call shape — buyItem() then equip({slot, equipped: {...current,
+   [slot]: id}}), built from the equipped set as it stood BEFORE the buy,
+   exactly like the closure in cosmeticCard/furnitureCard does — on both a
+   cosmetic and a furniture slot: the July cape bug's exact shape (buy ->
+   equip -> unequip), extended one step further to prove the CHAINED equip
+   sticks, not just a manually-triggered one.
+   Second half: her explicit edge case — at dress-lock (health stage >= 2)
+   a learner can still buy but must NOT end up wearing it, and the failed
+   equip must be the specific BLIP_TOO_SICK error the UI's quiet-skip
+   depends on, never some other code that would slip past it unnoticed. */
+{
+  const bu = "verify_buyequip_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(bu, "BuyEquip", "pw12");
+  for (let i = 0; i < 10; i++) await LocalBackend.submitQuest(bu, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
+
+  // cosmetic: buy the free beanie, chain-equip it exactly like cosmeticCard's
+  // buy handler does.
+  {
+    const before = await LocalBackend.getState(bu, "pw12");
+    tick(!(before.blip.equipped || {}).hat, "the buy-equip learner should start with no hat equipped");
+    const buy = await LocalBackend.buyItem(bu, "pw12", "beanie", 1);
+    tick(buy && buy.ok, `buying the free beanie failed: ${JSON.stringify(buy)}`);
+    const nextEquipped = { ...(before.blip.equipped || {}), hat: "beanie" };
+    const chained = await LocalBackend.equip(bu, "pw12", { slot: 1, equipped: nextEquipped });
+    tick(chained && chained.ok, `the chained equip after buying the beanie was REJECTED — this is the July cape bug: ${JSON.stringify(chained)}`);
+    const worn = await LocalBackend.getState(bu, "pw12");
+    tick(worn.blip.equipped && worn.blip.equipped.hat === "beanie", "the beanie did not stick after the chained buy->equip");
+    const off = await LocalBackend.equip(bu, "pw12", { slot: 1, equipped: { ...worn.blip.equipped, hat: "" } });
+    tick(off && off.ok, "taking the chain-equipped beanie back off failed");
+  }
+
+  // furniture: same chain, on the door slot (a paid item, unlike the free
+  // furniture defaults every other furniture test in this file reaches for).
+  {
+    const before = await LocalBackend.getState(bu, "pw12");
+    const goldBefore = before.gold;
+    const buy = await LocalBackend.buyItem(bu, "pw12", "door-mint", 1);
+    tick(buy && buy.ok && buy.gold === goldBefore - 10, `buying the mint door failed or charged the wrong amount: ${JSON.stringify(buy)}`);
+    const nextEquipped = { ...(before.blip.equipped || {}), door: "door-mint" };
+    const chained = await LocalBackend.equip(bu, "pw12", { slot: 1, equipped: nextEquipped });
+    tick(chained && chained.ok, `the chained equip after buying the mint door was REJECTED — this is the July cape bug, on furniture: ${JSON.stringify(chained)}`);
+    const worn = await LocalBackend.getState(bu, "pw12");
+    tick(roomFurniture(worn.blip.equipped).door === "door-mint", "the mint door did not stick after the chained buy->equip");
+    const off = await LocalBackend.equip(bu, "pw12", { slot: 1, equipped: { ...worn.blip.equipped, door: "" } });
+    tick(off && off.ok, "taking the chain-equipped door back off failed");
+    tick(roomFurniture((await LocalBackend.getState(bu, "pw12")).blip.equipped).door === DEFAULT_FURNITURE.door,
+      "emptying the door slot did not fall back to the free default");
+  }
+
+  // the dress-lock edge case: buy must still succeed, the chained equip must
+  // fail QUIETLY (BLIP_TOO_SICK specifically) and the item must stay unworn.
+  {
+    await LocalBackend.adminSetTerm("admin", true);
+    let sick = await LocalBackend.getState(bu, "pw12");
+    for (let d = 0; d < 21 && sick.health.stage < 2; d++) {
+      globalThis.__BLIP_DEV__.skipDays(1);
+      sick = await LocalBackend.getState(bu, "pw12");
+    }
+    tick(sick.health.stage >= 2 && sick.health.locks.dress === true,
+      `could not reach the dress-locked stage to test the quiet-skip guard, stuck at ${JSON.stringify(sick.health)}`);
+
+    const buy = await LocalBackend.buyItem(bu, "pw12", "door-sky", 1);
+    tick(buy && buy.ok, `buying while dress-locked should still succeed (her ruling: can buy, just not wear): ${JSON.stringify(buy)}`);
+
+    const nextEquipped = { ...(sick.blip.equipped || {}), door: "door-sky" };
+    const chained = await LocalBackend.equip(bu, "pw12", { slot: 1, equipped: nextEquipped });
+    tick(chained && !chained.ok && chained.error === "BLIP_TOO_SICK",
+      `equip while dress-locked should refuse with BLIP_TOO_SICK specifically (that is the error js/blip.js's lockedByDress check pre-empts), got: ${JSON.stringify(chained)}`);
+    const afterSick = await LocalBackend.getState(bu, "pw12");
+    tick(roomFurniture(afterSick.blip.equipped).door !== "door-sky",
+      "a door bought while dress-locked must NOT end up worn — the chained equip must be skipped, this is the edge case her brief called out");
+    tick((afterSick.blip.owned || []).includes("door-sky"), "the sky door should still be owned even though it could not be equipped");
+
+    globalThis.__BLIP_DEV__.reset();
+    await LocalBackend.adminSetTerm("admin", false);
+  }
+  say("buy-now-equips: a free beanie and a paid door both chain-equip right after buying (the July cape bug's shape, extended to the chained call) and unequip cleanly; while dress-locked the buy still succeeds but the chained equip is refused with BLIP_TOO_SICK and the item stays unworn");
+}
+
 /* ---------- 8. every accessory renders a real, sized layer ---------- */
 const soloHost = document.getElementById("solo");
 const ids = Object.keys(ACCESSORIES);
