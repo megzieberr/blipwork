@@ -1,4 +1,95 @@
-# Project status — updated 2026-08-08 (ROOM BUILD SHIPPED — live, pushed, sw v39)
+# Project status — updated 2026-08-09 (THE ROOM IS HOME — committed, NOT pushed, sw v40)
+
+## 🏠 2026-08-09 — THE ROOM BECOMES THE HOME SCREEN (Next up §1)
+
+Her ruling, verbatim intent: *"blip's room is the first thing the kids see
+when they open the app, then when they click on the study desk, that
+takes them to the blipwork quests."* Committed, **not pushed** — the ship
+happens later from the foreman session, per her scope fence for today.
+`verify-store.html` green, **2927/2927** (was 2918; +9 net — a new section
+plus the documented per-run wobble in the milestone-loot checks, see the
+S4 note below in this file).
+
+**Routing flip:**
+- `js/app.js` `boot()` and `js/auth.js` `finishLogin()` both now
+  `go("blip")` instead of `go("hub")` — login/refresh lands in the room.
+- The chrome "Blipwork" brand tap (`js/app.js`) now goes `blip` too — the
+  logo means "go home", and home is the room. The HUD Lv/💎 chip already
+  went to the room; left alone.
+- `js/blip.js`'s ← back arrow is **removed** (home has no back) — the 👥
+  gallery button is the only thing left in that corner. The hub's own ←
+  keeps going to `hub` unchanged (the chapter screen still needs it), and
+  the hub's pulsing Blip button is untouched — it already called
+  `go("blip")`, so it needed no code change to become "the way back to
+  the room".
+
+**The desk is the way to the maths, replacing its old "open the furniture
+panel" job** (bed and window keep that job — the desk piece itself is
+still shoppable from there, nothing lost). `js/blip.js`'s furniture-tap
+loop special-cases `slot === "desk"`: a bare `app.go("hub")`, aria-label/
+title now read *"— open your maths quests"*. **⚠️ Deliberately never
+wrapped in a `health.locks` check** — every other room action gates on
+Blip's sickness stage, this one must not, so homework stays reachable
+even bedridden (stage 3, all three locks true). Verified live: forced
+the local backend to stage 3 (`adminSetTerm` + `__BLIP_DEV__.skipDays`)
+and the desk still opened the hub.
+
+**Homework badge on the desk.** New `homeworkBadgeLayer()` in
+`js/companion/furniture.js`, appended to the desk's own `.room-furn` div
+only when `hasActiveAssignment(app)` (new export in `js/assignment.js`,
+factored out of `renderAssignmentCard`'s own "nothing to pin" check so
+the two can never silently drift apart). **The art exists** —
+`art-source/tripo/badge.png` (her red book + "!") was already sitting in
+the repo, unused; cropped to its alpha bbox and downsized to
+`assets/companion/homework-badge.png` (235×400, 85 KB). Hides itself on
+a failed image load (`img.onerror` → `badge.remove()`) — no drawn
+placeholder, no broken-image icon, so the feature would have shipped
+safely even if the art had never turned up. Positioned as a CHILD of the
+desk's own box (`right:-6%; top:-8%; width:28%` of the desk element, new
+CSS `.room-furn-badge`) rather than separate room-fraction maths, so it
+automatically rides along if the desk ever moves — nothing to keep in
+sync by hand. **Placement is a judgement call, not measured against a
+live phone** — checked with `tools/preview_room.py`'s own compositing
+math (screenshots time out in this pane) and it reads clearly without
+crowding the window or bed; worth one look on her phone before it ships.
+
+`maybeShowInstall` moved from the hub (`js/screens.js`) to the room
+(`js/blip.js`) — the install prompt now lives on the landing screen. The
+sick banner stayed on the hub (his room already shows his state in
+person). The assignment card, Term 3/Revision tabs, chapter cards and
+greeting all stayed on the hub, unchanged — the hub is now "the page the
+desk opens".
+
+**`sw.js`** bumped v39 → v40. No new SHELL entries — the badge PNG is
+cache-first on-demand, same as every other companion art file (none of
+which are in SHELL either).
+
+**Verified live** (`?local=1`, fresh signup, zero console errors): login
+lands in the room; desk tap opens the hub (aria-label confirmed); the
+hub's pulsing Blip button returns to the room; a chapter's own back arrow
+still returns to the hub; the results screen's two buttons are unchanged
+and "Back to quests" still goes to `chapter`, not `hub`; the desk→hub
+path survives a forced stage-3/bedridden state with all three
+`health.locks` true; the homework badge attaches when an assignment is
+active and its real image loads (200, not 404).
+
+**Deviations / judgement calls:**
+1. Found `art-source/tripo/badge.png` already in the repo (untracked,
+   not mentioned in the brief) — it is exactly the art the brief
+   described ("her red book with an !"), so it was cropped/downsized and
+   wired in rather than leaving the badge to ship invisible. If this
+   wasn't the art she meant, the fallback (hide on load failure) still
+   holds — swap the file and nothing else needs to change.
+2. Badge size/offset (28% of the desk box, top-right, slightly
+   overlapping) is a first guess from the Python room-compositor, not
+   from her own eyes on a phone — flag it if she wants it bigger/smaller.
+
+### Not done / punted (today's scope fence)
+- Food card size, buy→equip-immediately, pinned sheet footer, food shop
+  tabs — **Next up §2** below, explicitly out of scope for this session.
+- Not pushed, not deployed — foreman ships it later.
+
+---
 
 ## ✅ 2026-08-08 evening — THE WHOLE ROOM BUILD IS LIVE
 
@@ -1534,23 +1625,10 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 
 ## Next up
-**TOMORROW (her plan, stated 2026-08-08 at ship time), two jobs:**
+**Her plan, stated 2026-08-08 at ship time, two jobs:**
 
-**1. THE ROOM BECOMES THE HOME SCREEN (her words, verbatim intent: "blip's
-room is the first thing the kids see when they open the app, then when they
-click on the study desk, that takes them to the blipwork quests").** This
-inverts today's navigation: login lands IN the room, and the STUDY DESK is
-the tap that opens the chapter/quest hub. Things the planning pass must
-decide before building:
-- Where the hub's furniture moves: the assignment card, the sick banner, the
-  install prompt and the Term 3/Revision tabs all live on the hub today —
-  they need homes (in the room, on the desk sheet, or kept on the hub screen
-  one tap deeper).
-- The desk needs to READ as the way to the maths (kids won't guess) — maybe
-  a small books/exclamation cue on it, and the back arrow's meaning flips
-  (quests → room instead of room → hub).
-- The pulsing hub Blip button becomes redundant the moment the room IS the
-  hub — plan its removal with it.
+**1. ✅ DONE 2026-08-09 — THE ROOM BECOMES THE HOME SCREEN.** See the
+2026-08-09 entry above. Committed, not yet pushed/deployed.
 
 **2. PHONE-WALK POLISH LIST (her screenshots, 2026-08-08 21:30 — the room
 itself looks right; these are the faults she found in one look):**

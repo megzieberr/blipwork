@@ -233,6 +233,39 @@ export function furnitureArt(id) {
   return wrap;
 }
 
+/* ---------- the homework badge (room build §1, 2026-08-09) ----------
+   A small "you have homework" cue that sits on the desk when an
+   assignment is active — Megan's own red book-with-an-"!" drawing, never
+   drawn by us. It is NOT a furniture piece: never bought, never in a
+   shop row, never falls back to a placeholder. If the art is missing or
+   fails to load it simply removes itself — no drawn substitute, no
+   broken-image icon (her art rule).
+
+   Positioned as a child of the desk's OWN .room-furn box (see
+   furnitureLayer below), not as separate room-fraction maths — the desk
+   element already carries every placement number from SLOT_PLACEMENT.desk
+   and the equipped desk item's own widthPct, so nesting inside it is what
+   makes the badge ride along automatically if Megan ever moves the desk
+   or swaps its size; there is nothing here to keep in sync by hand. The
+   offset (top-right corner, slightly overlapping) is the only number that
+   belongs to the badge itself. */
+const HOMEWORK_BADGE_SRC = "./assets/companion/homework-badge.png";
+const HOMEWORK_BADGE_OFFSET = { widthPct: 28, right: -6, top: -8 }; // % of the desk's own box
+
+export function homeworkBadgeLayer() {
+  const badge = el("div", "room-furn-badge");
+  badge.style.width = HOMEWORK_BADGE_OFFSET.widthPct + "%";
+  badge.style.right = HOMEWORK_BADGE_OFFSET.right + "%";
+  badge.style.top = HOMEWORK_BADGE_OFFSET.top + "%";
+  const img = document.createElement("img");
+  img.alt = "";
+  img.draggable = false;
+  img.addEventListener("error", () => badge.remove());
+  img.src = HOMEWORK_BADGE_SRC;
+  badge.appendChild(img);
+  return badge;
+}
+
 /* One piece, positioned on the room shell. Percentages throughout (the room
    box is fluid), and the anchor is applied as a translate of the element's
    OWN size, so an item's height never has to be known in advance — the

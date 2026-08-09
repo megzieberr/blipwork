@@ -820,6 +820,13 @@ h2{font-size:20px} h3{font-size:17px}
 @keyframes rf-wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
 .room-furn.rf-wiggle .furn-art{animation:rf-wiggle .5s ease-in-out}
 
+/* Homework badge (room build §1) — a child of the desk's OWN .room-furn
+   box, positioned by furnitureLayer's homeworkBadgeLayer() in
+   js/companion/furniture.js. pointer-events:none so it never steals the
+   tap from the desk it's sitting on. */
+.room-furn-badge{position:absolute;pointer-events:none}
+.room-furn-badge img{width:100%;height:auto;display:block}
+
 /* Blip stands centre-front on the floor diamond (its centre is y≈0.72, its
    front vertex y=1.0), so his baseline sits at 0.88 — in front of the desk
    and bed, which is why he is mounted after them. */

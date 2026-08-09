@@ -16,7 +16,9 @@ const app = {
     this.root = document.getElementById("app");
     registerServiceWorker();                     // make the app installable (fire-and-forget)
     if (isLoggedIn()) { const ok = await this.refresh(); if (!ok) clearSession(); }
-    this.go(isLoggedIn() ? "hub" : "login");
+    // Room build §1 (2026-08-09, her ruling): the room is home. Login lands
+    // Blip's room, not the hub — the study desk is what opens the quests now.
+    this.go(isLoggedIn() ? "blip" : "login");
   },
 
   // pull the learner's state (progress, XP, open quests) from the backend
@@ -68,7 +70,8 @@ function chrome(app) {
     </div>`;
   const brand = c.querySelector(".brand");
   brand.style.cursor = "pointer";
-  brand.addEventListener("click", () => app.go("hub"));
+  // The logo means "go home" — home is the room now (room build §1).
+  brand.addEventListener("click", () => app.go("blip"));
   c.querySelector(".hud").addEventListener("click", () => app.go("blip"));
   c.querySelector(".logout").addEventListener("click", () => app.logout());
   return c;

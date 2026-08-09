@@ -71,9 +71,12 @@ import { FOOD_IDS, foodExists, foodLabel, foodArt } from "./companion/food.js";
 import {
   FURNITURE_SLOTS, FURNITURE_SLOT_LABELS,
   furnitureExists, furnitureLabel, furnitureArt, furnitureLayer, roomFurniture,
+  homeworkBadgeLayer,
 } from "./companion/furniture.js";
 import { makeDraggable } from "./companion/drag-feed.js";
 import { maybeShowReminderCard } from "./push.js";
+import { hasActiveAssignment } from "./assignment.js";
+import { maybeShowInstall } from "./install.js";
 
 /* Which slot tab the closet/shop is filtered to ("all" or a slot id).
    Module scope on purpose: every buy/wear action re-renders the whole
@@ -459,13 +462,14 @@ export function renderBlip(app, host) {
   const activeBlip = blips.find((b) => b.slot === activeSlot) || blips[0];
   const canFeedToday = readyFlag(state.canFeedToday);
 
+  // Room build §1 (2026-08-09, her ruling): home has no back arrow — this
+  // IS the landing screen now. The gallery button is the only thing left
+  // in the corner.
   const head = el("div", "blip-head");
   head.innerHTML = `<div><span class="eyebrow">System</span></div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="link-btn gallery-link" title="Everyone's Blips" aria-label="Gallery">👥</button>
-      <button class="link-btn back" aria-label="Back">←</button>
     </div>`;
-  head.querySelector(".back").addEventListener("click", () => app.go("hub"));
   const galleryBtn = head.querySelector(".gallery-link");
   if (health.locks.gallery) { galleryBtn.title = "Blip is too sick to go out"; galleryBtn.style.opacity = ".5"; }
   galleryBtn.addEventListener("click", () => app.go("gallery"));
@@ -482,6 +486,10 @@ export function renderBlip(app, host) {
     });
     host.appendChild(tabs);
   }
+
+  // Room build §1 (2026-08-09): moved here from the hub — the room is the
+  // landing screen now, so the install prompt belongs on it.
+  try { maybeShowInstall(host); } catch { /* non-critical */ }
 
   // ============================================================
   // THE ROOM
@@ -515,19 +523,38 @@ export function renderBlip(app, host) {
       const layer = furnitureLayer(id);
       layer.tabIndex = 0;
       layer.setAttribute("role", "button");
-      // The DOOR is the way into the closet (her ruling: the sliding door
-      // replaces the wardrobe entirely); the other three open the panel
-      // that sells them, which is the S1 convention for tappable furniture.
-      const opensInventory = slot === "door";
-      const label = opensInventory
-        ? `${furnitureLabel(id)} — open the inventory`
-        : `${furnitureLabel(id)} — change the furniture`;
-      layer.setAttribute("aria-label", label);
-      layer.title = label;
-      bindTap(layer, () => {
-        triggerAnim(layer, "rf-wiggle", 500);
-        openPanel(opensInventory ? "inventory" : "furniture", !opensInventory);
-      });
+      if (slot === "desk") {
+        // Room build §1 (her ruling): the desk is the way to the maths now,
+        // replacing its old "open the furniture panel" job (bed/window keep
+        // that — the desk's own piece is still shoppable from there).
+        // ⚠️ This tap is a BARE app.go("hub") — never wrap it in a
+        // health.locks check. Every other action on this screen gates on
+        // Blip's sickness stage (dress/shop/gallery); homework must stay
+        // reachable at every stage, including bedridden, so this one
+        // deliberately reads no lock at all.
+        const label = `${furnitureLabel(id)} — open your maths quests`;
+        layer.setAttribute("aria-label", label);
+        layer.title = label;
+        if (hasActiveAssignment(app)) layer.appendChild(homeworkBadgeLayer());
+        bindTap(layer, () => {
+          triggerAnim(layer, "rf-wiggle", 500);
+          app.go("hub");
+        });
+      } else {
+        // The DOOR is the way into the closet (her ruling: the sliding door
+        // replaces the wardrobe entirely); the window and bed still open the
+        // panel that sells them, the S1 convention for tappable furniture.
+        const opensInventory = slot === "door";
+        const label = opensInventory
+          ? `${furnitureLabel(id)} — open the inventory`
+          : `${furnitureLabel(id)} — change the furniture`;
+        layer.setAttribute("aria-label", label);
+        layer.title = label;
+        bindTap(layer, () => {
+          triggerAnim(layer, "rf-wiggle", 500);
+          openPanel(opensInventory ? "inventory" : "furniture", !opensInventory);
+        });
+      }
       room.appendChild(layer);
     });
   }

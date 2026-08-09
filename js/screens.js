@@ -5,7 +5,6 @@ import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
 import { openCalculator } from "./calculator.js";
-import { maybeShowInstall } from "./install.js";
 import { renderBlip, playMoment } from "./companion/renderer.js";
 import { itemLabel } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
@@ -145,8 +144,6 @@ export function renderHub(app, host) {
     const row = head.querySelector(".hub-head-row");
     row.appendChild(btn);
   }
-
-  try { maybeShowInstall(host); } catch { /* non-critical */ }
 
   const open = openSet(app);
   const byTerm = (t) => CHAPTERS.filter(ch => (ch.term || "term3") === t);

@@ -44,10 +44,11 @@ import {
 } from "./js/companion/collections.js";
 import {
   FURNITURE, FURNITURE_IDS, FURNITURE_SLOTS, DEFAULT_FURNITURE, SLOT_PLACEMENT,
-  furnitureLabel, furnitureImgSrc, placementFor, roomFurniture,
+  furnitureLabel, furnitureImgSrc, placementFor, roomFurniture, homeworkBadgeLayer,
 } from "./js/companion/furniture.js";
 import { FOODS, FOOD_IDS, NON_GROCERY_FOOD, foodLabel, foodImgSrc } from "./js/companion/food.js";
 import { makeDraggable, isOverTarget, DEFAULT_DROP_PAD_PX } from "./js/companion/drag-feed.js";
+import { hasActiveAssignment } from "./js/assignment.js";
 
 let total = 0; const fails = [];
 const tick = (cond, label) => { total++; if (!cond) fails.push(label); return cond; };
@@ -1024,6 +1025,47 @@ for (const [file, expected] of MIGRATIONS) try {
     tick(!after.shop.some((it) => FURNITURE_IDS.includes(it.id)), "furniture leaked into the cosmetic shop payload");
   }
   say("furniture round-trip: all four slots buy → equip → unequip (falls back to the free default); unowned rejected; Lv 8 gate held at Lv 1; door colours priced; trinkets still unbuyable");
+}
+
+/* ---------- 6k. THE ROOM IS HOME (room build §1, 2026-08-09) ----------
+   The routing itself (app.js/auth.js -> go("blip"); the desk's tap ->
+   go("hub")) lives in blip.js/app.js/auth.js, which this page does not
+   import — DOM screens are the browser-walk's job, not this file's (see
+   PROJECT-STATUS.md). What IS assertable here without a full render:
+     - hasActiveAssignment() is the exact condition the desk badge uses,
+       and it must agree with renderAssignmentCard's own "nothing to pin"
+       logic — they are two hand-synced copies in assignment.js, and this
+       is what would catch them drifting apart.
+     - homeworkBadgeLayer() really disappears on a failed image load — no
+       drawn placeholder, no broken-image icon, per her art rule (the
+       badge art, assets/companion/homework-badge.png, may not even be in
+       the repo yet — this must stay green either way). */
+{
+  const fakeApp = (assignment) => ({ state: { assignment } });
+  tick(hasActiveAssignment(fakeApp(null)) === false, "hasActiveAssignment(null) should be false");
+  tick(hasActiveAssignment(fakeApp(undefined)) === false, "hasActiveAssignment(undefined) should be false");
+  tick(hasActiveAssignment(fakeApp({})) === false, "an assignment with no questId should be false");
+  tick(hasActiveAssignment(fakeApp({ questId: "not-a-real-quest" })) === false,
+    "an assignment pointing at an unknown quest id should be false — matches renderAssignmentCard's 'unknown quest id — fail quiet' rule");
+  // "stats" / "q1" are real ids from config.js (CHAPTERS) — a genuinely resolvable assignment
+  tick(hasActiveAssignment(fakeApp({ questId: "q1", chapterId: "stats" })) === true,
+    "a real, resolvable assignment should read as active");
+  tick(hasActiveAssignment({}) === false && hasActiveAssignment(null) === false,
+    "hasActiveAssignment must not throw on a bare/missing app");
+
+  const host = document.createElement("div");
+  document.body.appendChild(host);
+  const badge = homeworkBadgeLayer();
+  host.appendChild(badge);
+  tick(host.contains(badge), "homeworkBadgeLayer() did not attach to its host");
+  const img = badge.querySelector("img");
+  tick(!!img, "homeworkBadgeLayer() has no <img>");
+  tick(!!img && /(^|\/)assets\/companion\/homework-badge\.png$/.test(img.getAttribute("src") || ""),
+    `homework badge points at "${img && img.getAttribute("src")}", expected assets/companion/homework-badge.png`);
+  if (img) img.dispatchEvent(new Event("error"));
+  tick(!host.contains(badge), "a failed homework-badge image load should remove the badge, not leave a broken-image icon");
+  host.remove();
+  say("room home screen: hasActiveAssignment() matches renderAssignmentCard's own decision; homework badge hides itself on a failed image load");
 }
 
 /* ---------- 7. buying, wearing and taking off actually work ---------- */

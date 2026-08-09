@@ -36,7 +36,8 @@ export function renderLogin(app, host) {
     setSession(username, password);
     const ok = await app.refresh();
     if (!ok) { err.hidden = false; err.textContent = "Something went wrong. Try again."; btn.disabled = false; return; }
-    app.go("hub");
+    // Room build §1 (her ruling): login lands in Blip's room, not the hub.
+    app.go("blip");
   }
 
   /* ---- LOG IN ---- */

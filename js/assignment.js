@@ -69,6 +69,19 @@ function dueLine(dueOn) {
 }
 
 /**
+ * Same decision renderAssignmentCard makes about whether there is
+ * something to pin — factored out so the room's desk badge (room build
+ * §1) can ask the identical question without mounting a card. Keep this
+ * in step with renderAssignmentCard's own early-outs below.
+ * @param {object} app
+ * @returns {boolean}
+ */
+export function hasActiveAssignment(app) {
+  const a = app && app.state && app.state.assignment;
+  return !!(a && a.questId && locate(a.questId, a.chapterId));
+}
+
+/**
  * Render the pinned homework card.
  * @param {object} app   the app controller (app.state, app.go)
  * @param {Element} [hostEl]  appended to when supplied
