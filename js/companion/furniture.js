@@ -32,9 +32,16 @@
    rightly so. Same reasoning as trinkets.js and food.js.
 
    ⚠️ THE DOOR COLOURS ALL SHARE ONE PICTURE (her ruling). There is exactly
-   one door drawing, door.png, and every colour below is that same file
-   tinted through renderer.js's `tintedImageSrc` — the offscreen-canvas
-   pipeline Blip's own recolouring uses. Never add a second door PNG.
+   one door drawing, door.png, and every COLOUR is that same file tinted
+   through renderer.js's `tintedImageSrc` — the offscreen-canvas pipeline
+   Blip's own recolouring uses. Never add a second door PNG for a colour.
+   ⚠️ REWORDED 2026-08-12, because the original said "never add a second
+   door PNG" flat and that is now too broad: the six CLOSET DESIGNS below
+   are six separate files, and rightly so. The rule is about colours — mint
+   and coral are one drawing tinted twice and must stay that way. A
+   patterned closet is a different piece of furniture that happens to share
+   the slot, like a canopy bed against a wooden one. Colour → tint. Design
+   → its own file.
 
    ⚠️ THE PLACEMENT NUMBERS BELOW ARE MEGAN'S. She placed the door, window,
    desk and bed herself in dressing-room.html (Furniture mode) on 2026-08-08
@@ -224,6 +231,38 @@ export const FURNITURE = {
   "door-lilac": { slot: "door", label: "Lilac door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.lilac },
   "door-coral": { slot: "door", label: "Coral door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.coral },
   "door-seafoam": { slot: "door", label: "Seafoam door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.seafoam },
+
+  /* ---- closet designs (2026-08-12) — her six Tripo closets ----
+     ⚠️ THESE DO NOT BREAK THE "ONE DOOR PICTURE" RULE ABOVE — read it again
+     before touching either. That ruling is about the nine COLOURS: mint and
+     coral are the same drawing tinted, and must never become nine PNGs.
+     A patterned closet is not a colour, it is a different piece of
+     furniture that happens to live in the same slot, exactly like a canopy
+     bed against a wooden one. So: nine colours, one file, tinted; six
+     designs, six files, untinted. Adding a seventh COLOUR still means a
+     tint, not a PNG.
+
+     ⚠️ EACH ONE'S SEAT WAS SOLVED, NOT COPIED. `attach.y` 0.542 is the
+     number that seats DOOR.PNG's front face on the right wall's floor line
+     (y = 0.423 + 0.247(x-0.5)/0.5) — it is specific to that drawing's own
+     bottom edge, and she caught the closet hanging TWICE before it was
+     right. Four of these six have a different bottom edge and sink into the
+     floor at 0.542, so each one's attach.y was solved until its front face
+     sits flush and then verified. `lines` and `emo` came out at 0.543 and
+     0.542, i.e. the slot default, so they carry no override. The three
+     with legs or a plinth (`lines`, `emo`, `flower`) also float between
+     their feet, which is correct and is why the seat is measured on the
+     FRONT FACE only, not on the lowest pixel.
+
+     widthPct is per piece for the same reason: all seven drawings are 512
+     tall, so their widths are pure aspect, and matching rendered HEIGHT to
+     the shipped door means scaling widthPct by each one's own width. */
+  "closet-nerdy": { slot: "door", label: "Bookshelf closet", img: "closet-nerdy.png", widthPct: 22, attach: { x: 0.650, y: 0.529 } },
+  "closet-sport": { slot: "door", label: "Locker closet", img: "closet-sport.png", widthPct: 23, attach: { x: 0.650, y: 0.537 } },
+  "closet-lines": { slot: "door", label: "Striped closet", img: "closet-lines.png", widthPct: 22 },
+  "closet-starry": { slot: "door", label: "Starry closet", img: "closet-starry.png", widthPct: 21, attach: { x: 0.650, y: 0.533 } },
+  "closet-flower": { slot: "door", label: "Daisy closet", img: "closet-flower.png", widthPct: 24, attach: { x: 0.650, y: 0.506 } },
+  "closet-emo": { slot: "door", label: "Midnight closet", img: "closet-emo.png", widthPct: 24 },
 
   /* ---- room decor (2026-08-12) — her 2026-08-09 Tripo drop, wired ----
      ⚠️ EVERY widthPct BELOW IS PROVISIONAL. The three themed sets reuse the

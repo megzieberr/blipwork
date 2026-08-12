@@ -282,6 +282,19 @@ const FURNITURE_ITEMS = [
   { id: "wall-moons", slot: "wall", price: 100, minLevel: 10 },
   { id: "wall-mountains", slot: "wall", price: 140, minLevel: 16 },
   { id: "wall-stripes", slot: "wall", price: 170, minLevel: 22 },
+
+  /* ---- closet designs (2026-08-12) — six of her Tripo closets ----
+     The EXISTING door slot, so no VALID_SLOTS change and no constraint
+     change: six new pictures for a slot that already works.
+     ⚠️ Not a breach of "the door colours share one picture" — that is about
+     COLOURS (one drawing tinted nine ways). A patterned closet is a
+     different piece of furniture in the same slot. */
+  { id: "closet-nerdy", slot: "door", price: 40, minLevel: 3 },
+  { id: "closet-sport", slot: "door", price: 60, minLevel: 7 },
+  { id: "closet-flower", slot: "door", price: 70, minLevel: 10 },
+  { id: "closet-lines", slot: "door", price: 80, minLevel: 13 },
+  { id: "closet-starry", slot: "door", price: 100, minLevel: 16 },
+  { id: "closet-emo", slot: "door", price: 120, minLevel: 20 },
 ];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows.
    `kind` is the item's own id on the server too (mhq_get_state builds the

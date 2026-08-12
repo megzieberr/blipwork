@@ -1,4 +1,81 @@
-# Project status — updated 2026-08-12 (ROOM DECOR ✅ SHIPPED, sw v43, migration LIVE)
+# Project status — updated 2026-08-12 (ROOM DECOR + CLOSETS + EGG ✅ SHIPPED, sw v44)
+
+## 🚪🥚 2026-08-12 (later) — SIX CLOSET DESIGNS, THE EGG, AND HATCH AT LEVEL 20
+
+Three of her asks in one pass, all live. `migration-closets-and-hatch-20.sql`
+applied via MCP (`closet_designs_and_second_blip_level_20`), sw v43 → **v44**.
+`verify-store.html` green at **3,748 checks**. Learner rows byte-identical
+again (2 students, 2 blips, 24 progress, 4,580 XP); active furniture 41 →
+**47**, door slot 9 → **15**.
+
+**1. Her six closets are wired.** `tools/key_item.py` (new) cuts a SINGLE
+Tripo export off its background — a different job from `tripo_sheet.py`,
+which keys a magenta SHEET and slices it. It floods from the border rather
+than thresholding, so an off-white door panel in the middle of a picture on
+an off-white background survives; the flood only removes background that is
+CONNECTED to the edge. Five keyed at tol 40; the emo one needed 100 because
+its backdrop is a lavender gradient, and it is stable from 100 to 160, which
+is what says the flood is stopping at the outline rather than eating in.
+
+⚠️ **EACH CLOSET'S SEAT WAS SOLVED, NOT COPIED.** `door` attach.y 0.542 is
+specific to `door.png`'s own bottom edge — she caught that closet hanging
+TWICE. Four of the six sink into the floor at 0.542, so each was solved
+against the right wall's floor line until its FRONT FACE sits flush, then
+verified: nerdy 0.529, sport 0.537, starry 0.533, flower 0.506; lines and
+emo landed on the slot default and carry no override. The three with legs
+or a plinth also float BETWEEN their feet, which is correct — the seat is
+measured on the front face, never on the lowest pixel.
+
+⚠️ **THE "NEVER ADD A SECOND DOOR PNG" RULE WAS REWORDED, NOT BROKEN.** As
+written it forbade this outright. The ruling was always about COLOURS —
+door-mint and door-coral are one drawing tinted, and must stay that way. A
+patterned closet is a different piece of furniture that happens to share the
+slot, like a canopy bed against a wooden one. **Colour → tint. Design → its
+own file.** verify-store now asserts BOTH halves separately, so neither can
+drift into the other.
+
+**2. The hatch prompt is an egg beside the nickname** (her ruling). It was a
+full-width card under the room — a heading, a line of copy and a button —
+which made a quiet optional thing look like the most important item on the
+screen and shoved the room up the page whenever it appeared.
+
+⚠️ **TWO THINGS WENT WRONG BUILDING IT, both silent, both worth knowing.**
+First: the egg was appended to `.room-name-wrap`, and `mountNameEditor`
+calls `clear(container)` on EVERY render — so the egg rendered once and
+vanished the moment the name drew. No error, just no egg. It now lives in a
+new `.room-name-row` wrapper as a SIBLING, so the name editor can keep
+clearing its own box. Second: the first CSS held the name still with a
+negative margin, which pulled the egg 35px ON TOP of the name (measured, not
+eyeballed). It is now `position:absolute; right:100%`, out of flow entirely
+— verified that the name sits at the same offset with the egg present and
+removed, so it will not jump when a second Blip is hatched.
+
+**3. The second Blip now needs level 20** (was 10). Her call: 10 arrives too
+soon now the curve caps at 40 and the milestone boxes land at 10/20/30/40.
+
+⚠️ **THE GATE LIVED IN THREE PLACES AND ONE WAS ALREADY WRONG.**
+`js/config.js secondBlipLevel` is the client's copy, `js/local-backend.js`
+reads it, and `mhq_claim_second_blip` is what actually enforces — but
+`js/blip.js` hard-coded `level >= 10` instead of reading the constant, so
+after any change the card could appear at a level the server would refuse.
+Fixed in the same pass; blip.js now reads the constant.
+
+**Nobody lost anything**: checked on live BEFORE applying — 0 second blips
+existed and the highest learner level was 10. Worth knowing that her own
+test account sits exactly on level 10, so it *was* being offered a second
+Blip and now is not until 20.
+
+### Not done / punted
+- **The closet prices and levels (40–120 💎, Lv 3/7/10/13/16/20) are mine,
+  not hers** — she gave no numbers for these. Priced above the colours
+  (10–20) because a colour is a tint of the closet you already own and a
+  design is a new one. One line each to retune.
+- The egg's 22px size and its bob are a first pass, never seen on a real
+  phone.
+
+---
+
+## (earlier the same day) ROOM DECOR — sw v43
 
 ## 🛋️ 2026-08-12 — SHELVES, BEAN BAG, WALLPAPER + THREE THEMED SETS — ✅ LIVE
 
@@ -1903,11 +1980,11 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
-- 📱 5 min: reopen the Blipwork PWA twice (v34 → v43 now), then one walk: land in the
-  room, buy a shelf and a wallpaper, check the bean bag's corner and the panel shelf's
-  height **[blocking — the go-live eyeball, now two ships behind]**
-- 🎨 2 min: say whether the six new **closet designs** get wired next (all six face the
-  right way; five need keying first) **[whenever]**
+- 📱 5 min: reopen the Blipwork PWA twice (v34 → v44 now), then one walk: buy a closet
+  and a wallpaper, check the panel shelf's height and the 🥚 beside Blip's name
+  **[blocking — the go-live eyeball, now three ships behind]**
+- 💻 2 min: say whether the closet prices/levels suit you (40–120 💎 at Lv 3/7/10/13/16/20
+  — my numbers, you gave none) **[whenever]**
 - 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
   PUBLIC, so it stays uncommitted until you decide **[whenever]**
 

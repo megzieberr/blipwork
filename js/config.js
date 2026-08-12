@@ -222,6 +222,16 @@ export const BLIP = {
   sickThresholds: { tired: 3, bedridden: 5, critical: 7 },
   // pharmacy / grocery prices — MIRROR of the server shop_items rows.
   food: { soup: 15, medicine: 20, treat: 8 },
-  secondBlipLevel: 10,             // level milestone that unlocks the 2nd blip
+  /* Level milestone that unlocks the 2nd blip. HER CALL 2026-08-12: 10 -> 20.
+     Level 10 arrived too soon once the curve capped at 40 and the milestone
+     boxes landed at 10/20/30/40 — a second Blip at 20 is a milestone reward
+     rather than something that turns up while the first one is still new.
+     ⚠️ THIS CONSTANT IS NOT THE ENFORCED ONE. mhq_claim_second_blip's own
+     `lvl < 20` is what actually refuses, and js/local-backend.js mirrors it
+     by reading this value. Change one, change both — and js/blip.js must
+     READ this rather than hard-code a number, which it used to do (it said
+     `level >= 10` outright, so the card could appear at a level the server
+     would refuse). */
+  secondBlipLevel: 20,
   careDaysToHeal: 3,               // consecutive qualifying care days to fully heal
 };

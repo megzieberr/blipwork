@@ -48,6 +48,7 @@
    in homework-hub-companion/).
    ============================================================ */
 import { api } from "./api.js";
+import { BLIP } from "./config.js";
 import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
 /* renderBlip is aliased on import — this file's own exported screen
@@ -607,9 +608,39 @@ export function renderBlip(app, host) {
 
   // ---- header: nickname (tap to edit), subtitle, mood chip ----
   const titleWrap = el("div", "room-titlewrap");
+  /* The second-Blip offer is an EGG BESIDE THE NAME, not a card down the
+     page (her ruling, 2026-08-12). It used to be a full-width block under
+     the room with a heading, a line of copy and a button — which made a
+     quiet, optional thing look like the most important item on the screen,
+     and pushed the room up the page every time it appeared. As an egg on
+     the left of the nickname it is noticeable and ignorable, which is what
+     an optional reward should be.
+
+     ⚠️ THE EGG IS A SIBLING OF nameWrap, NOT A CHILD OF IT. mountNameEditor
+     owns nameWrap outright and calls clear(container) on EVERY render —
+     once on mount and again each time she opens or closes the rename box —
+     so an egg appended inside it renders once and then silently vanishes
+     the moment the name draws. That is exactly what happened on the first
+     attempt: no error, no warning, just no egg. The row wrapper keeps the
+     two apart, so the name editor can keep clearing its own box forever.
+
+     ⚠️ The level test reads BLIP.secondBlipLevel. It used to hard-code
+     `level >= 10` while the constant said 10 and the SQL said 10 — three
+     copies, and this was the one that could silently disagree with the
+     server after a change. It is now the constant, once. */
+  const nameRow = el("div", "room-name-row");
+  if (level >= BLIP.secondBlipLevel && blips.length < 2) {
+    const egg = el("button", "hatch-egg", "🥚");
+    egg.type = "button";
+    egg.title = "Blip would love a friend — hatch a second Blip";
+    egg.setAttribute("aria-label", egg.title);
+    egg.addEventListener("click", () => openSecondBlipModal(app));
+    nameRow.appendChild(egg);
+  }
   const nameWrap = el("div", "room-name-wrap");
   mountNameEditor(nameWrap, app, sess, activeBlip);
-  titleWrap.appendChild(nameWrap);
+  nameRow.appendChild(nameWrap);
+  titleWrap.appendChild(nameRow);
   titleWrap.appendChild(el("p", "muted small room-subtitle", "Your study companion"));
   const mood = moodCopy(health);
   if (mood) titleWrap.appendChild(el("div", "blip-mood", `${mood.icon} ${mood.text}`));
@@ -711,16 +742,10 @@ export function renderBlip(app, host) {
   // VAPID key is set, so it is dormant until Megan finishes setup.
   try { maybeShowReminderCard(roomCard); } catch { /* non-critical */ }
 
-  // ---- second Blip unlock (quiet moment, not a nag) ----
-  if (level >= 10 && blips.length < 2) {
-    const sb = el("div", "card second-blip-card");
-    sb.innerHTML = `<div class="sb-icon">🥚</div>
-      <div><h3>Blip would love a friend…</h3><p class="muted small">You've reached level ${level} — hatch a second Blip to join the household.</p></div>`;
-    const hatchBtn = el("button", "btn primary small", "Hatch a friend");
-    hatchBtn.addEventListener("click", () => openSecondBlipModal(app));
-    sb.appendChild(hatchBtn);
-    host.appendChild(sb);
-  }
+  /* The second-Blip unlock used to be a `.second-blip-card` block here.
+     It is now the 🥚 beside the nickname, built with the room header
+     above — her ruling, 2026-08-12. Nothing else took its place; the
+     bottom of the room screen is deliberately shorter now. */
 
   // ============================================================
   // shared catalogue data — same computation as the old closet/shop

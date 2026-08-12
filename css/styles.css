@@ -741,14 +741,35 @@ h2{font-size:20px} h3{font-size:17px}
 .shop-item.collection-locked .si-question{font-family:var(--font-display);font-weight:700;font-size:26px;color:var(--muted)}
 .shop-item.collection-locked .si-meta{font-weight:600;color:var(--ink)}
 
-/* second-Blip unlock prompt — a rare event, violet accent */
-.second-blip-card{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px 16px;
-  border-color:color-mix(in srgb,var(--accent2) 40%,var(--brd));
-  box-shadow:0 0 0 1px rgba(58,160,255,.03),0 0 20px -8px color-mix(in srgb,var(--accent2) 40%,transparent)}
-.second-blip-card .sb-icon{font-size:30px;flex:none;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--accent2) 55%,transparent))}
-.second-blip-card h3{font-size:15px}
-.second-blip-card p{margin-top:2px}
-.second-blip-card .btn{margin-left:auto;flex:none}
+/* second-Blip unlock — the 🥚 beside the nickname (her ruling, 2026-08-12).
+   It replaced a full-width `.second-blip-card` block under the room: a
+   heading, a line of copy and a button, which made a quiet optional thing
+   look like the most important item on the screen and shoved the room up
+   the page whenever it appeared. Now it sits in .room-name-wrap, which is
+   an inline-flex row, so it rides beside the name at any name length.
+
+   ⚠️ IT IS ABSOLUTELY POSITIONED, so it takes NO part in layout. The name
+   must not move when the egg appears — or when it disappears for good the
+   moment a second Blip is hatched — and .room-titlewrap already carries
+   padding-right:96px to clear the cookie and the tray, which is what
+   optically centres the name in the space that is left. The first attempt
+   used a negative margin to give the egg zero net width in the flex row;
+   that held the name still but pulled the egg 35px ON TOP of it (measured,
+   not guessed — gap was -34.8px). Out of flow entirely is the honest fix:
+   `right:100%` parks it just left of the name at any name length.
+
+   The bob keyframes carry the -50% translate themselves, because an
+   animation on `transform` overwrites the centring transform outright. */
+.hatch-egg{position:absolute;right:100%;top:50%;margin-right:7px;
+  background:none;border:0;padding:0;font-size:22px;line-height:1;cursor:pointer;
+  filter:drop-shadow(0 0 8px color-mix(in srgb,var(--accent2) 55%,transparent));
+  transform:translateY(-50%);
+  animation:hatch-bob 2.4s ease-in-out infinite}
+.hatch-egg:hover,.hatch-egg:focus-visible{filter:drop-shadow(0 0 12px color-mix(in srgb,var(--accent2) 85%,transparent))}
+@keyframes hatch-bob{
+  0%,100%{transform:translateY(-50%) rotate(-5deg)}
+  50%{transform:translateY(calc(-50% - 3px)) rotate(5deg)}}
+@media (prefers-reduced-motion:reduce){.hatch-egg{animation:none}}
 
 /* grocery / pharmacy — an SL "SHOP" system window */
 .pharmacy-card{margin:10px 0}
@@ -787,6 +808,9 @@ h2{font-size:20px} h3{font-size:17px}
 .room-card{position:relative;padding:18px 18px 14px}
 .room-titlewrap{text-align:center;padding-right:96px}   /* clears the cookie + tray (S4b) */
 .room-name-wrap{display:inline-flex;justify-content:center;min-height:38px}
+/* Holds the 🥚 and the name side by side. It exists because mountNameEditor
+   clears .room-name-wrap on every render, so nothing else may live in there. */
+.room-name-row{position:relative;display:inline-flex;align-items:center;justify-content:center}
 .room-name-btn{background:none;border:0;cursor:pointer;font-family:var(--font-display);font-weight:700;font-size:22px;
   color:var(--ink);padding:2px 4px;display:inline-flex;align-items:center;gap:6px}
 .room-name-btn .rn-edit-ic{font-size:13px;opacity:.55}

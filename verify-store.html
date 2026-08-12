@@ -206,6 +206,12 @@ const MIGRATIONS = [
   // [a-z]+; with the old pattern every shelf row silently failed to parse
   // and the seeded-row count was the only thing that noticed.
   ["migration-room-decor.sql", 23],
+  // Closets + the level-20 hatch gate (2026-08-12). Six rows on the EXISTING
+  // `door` slot, so this file correctly does NOT touch
+  // shop_items_slot_cat_check or mhq_equip — and the slot check below only
+  // demands that pair from a migration that seeds a slot NEW to itself, so
+  // it passes for the right reason rather than being waved through.
+  ["migration-closets-and-hatch-20.sql", 6],
 ];
 // An applied migration is never edited — it is the record of what actually
 // ran — so an item that is seeded by one migration and later dropped by a
@@ -867,8 +873,8 @@ for (const [file, expected] of MIGRATIONS) try {
    `bad_equipped`. That is asserted twice over — statically against the SQL
    text (section 6 above) and for real against the local backend here. */
 {
-  tick(FURNITURE_IDS.length === 41, `expected 41 furniture pieces in js/companion/furniture.js, found ${FURNITURE_IDS.length}`);
-  tick(furnShop.length === 41, `furnitureShop should carry 41 rows, got ${furnShop.length}`);
+  tick(FURNITURE_IDS.length === 47, `expected 47 furniture pieces in js/companion/furniture.js, found ${FURNITURE_IDS.length}`);
+  tick(furnShop.length === 47, `furnitureShop should carry 47 rows, got ${furnShop.length}`);
   /* ⚠️ PAINT ORDER, back to front — and the shelves MUST come before the
      door. A shelf hangs on the right wall; the door stands on the floor in
      front of it, so if they overlap the door has to win. Reordering this
@@ -1070,19 +1076,41 @@ for (const [file, expected] of MIGRATIONS) try {
     }
   }
 
-  /* ⚠️ HER RULING: THE DOOR COLOURS ALL SHARE ONE PICTURE. Nine door items,
-     ONE png between them, tinted in code. This is the check that catches a
-     future session "fixing" it by generating door-mint.png. */
-  const doors = FURNITURE_IDS.filter((id) => FURNITURE[id].slot === "door");
-  tick(doors.length === 9, `expected 9 doors (white + 8 colours), found ${doors.length}`);
-  tick(new Set(doors.map((id) => FURNITURE[id].img)).size === 1,
-    `the door colours use ${new Set(doors.map((id) => FURNITURE[id].img)).size} different PNGs — her ruling is ONE drawing tinted in code`);
-  tick(doors.filter((id) => !FURNITURE[id].tint).length === 1, "exactly one door (door-white) should be untinted");
+  /* ⚠️ HER RULING: THE DOOR **COLOURS** ALL SHARE ONE PICTURE. Nine colour
+     items, ONE png between them, tinted in code. This is the check that
+     catches a future session "fixing" it by generating door-mint.png.
+
+     ⚠️ SPLIT INTO COLOURS vs DESIGNS on 2026-08-12, when her six closets
+     landed in the same slot. The old check was `every door item shares one
+     PNG`, which the designs would have failed — correctly by its own words
+     and wrongly by her intent. The rule was never "one picture in the door
+     slot", it was "a COLOUR is a tint, not a drawing". So: the nine
+     `door-*` ids must still resolve to exactly one file, and the six
+     `closet-*` ids must each have their own. Both halves are asserted, so
+     neither can drift into the other. */
+  const doorSlot = FURNITURE_IDS.filter((id) => FURNITURE[id].slot === "door");
+  const doorColours = doorSlot.filter((id) => id.startsWith("door-"));
+  const closets = doorSlot.filter((id) => id.startsWith("closet-"));
+  tick(doorSlot.length === 15, `expected 15 door-slot pieces (9 colours + 6 designs), found ${doorSlot.length}`);
+  tick(doorColours.length === 9, `expected 9 door colours (white + 8), found ${doorColours.length}`);
+  tick(closets.length === 6, `expected 6 closet designs, found ${closets.length}`);
+  tick(doorColours.length + closets.length === doorSlot.length,
+    "a door-slot piece is neither a door-* colour nor a closet-* design — it would escape both halves of this check");
+  tick(new Set(doorColours.map((id) => FURNITURE[id].img)).size === 1,
+    `the door colours use ${new Set(doorColours.map((id) => FURNITURE[id].img)).size} different PNGs — her ruling is ONE drawing tinted in code`);
+  tick(doorColours.filter((id) => !FURNITURE[id].tint).length === 1, "exactly one door colour (door-white) should be untinted");
   tick(!FURNITURE["door-white"].tint, "door-white must be the untinted one");
-  for (const id of doors.filter((d) => d !== "door-white")) {
+  // and the designs: own file each, and never tinted (they carry their own colours)
+  tick(new Set(closets.map((id) => FURNITURE[id].img)).size === 6,
+    "two closet designs share one drawing — a design is its own picture, unlike a colour");
+  for (const id of closets) {
+    tick(!FURNITURE[id].tint, `closet "${id}" is tinted — a patterned design must never be recoloured, it would flatten the pattern`);
+    tick(FURNITURE[id].img !== "door.png", `closet "${id}" points at door.png rather than its own art`);
+  }
+  for (const id of doorColours.filter((d) => d !== "door-white")) {
     tick(/^#[0-9a-f]{6}$/i.test(FURNITURE[id].tint || ""), `door "${id}" has no usable tint hex`);
   }
-  tick(new Set(doors.filter((d) => d !== "door-white").map((id) => FURNITURE[id].tint)).size === 8,
+  tick(new Set(doorColours.filter((d) => d !== "door-white").map((id) => FURNITURE[id].tint)).size === 8,
     "two door colours share a tint hex — they would be indistinguishable");
   // the tint really produces a DIFFERENT picture, and a null tint really is free
   {

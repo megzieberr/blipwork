@@ -260,6 +260,21 @@ export const FURNITURE_COLLECTIONS = {
     unlockLevel: 6,
     items: ["beanbag"],
   },
+  /* Her six Tripo closet designs (2026-08-12). Its OWN group, kept apart
+     from "Door colours" deliberately: the colours are the cheapest fiddle
+     in the game and are meant to be open from the first minute, so folding
+     six levelled designs in beside them would put a "?" over a group whose
+     whole point is that it never has one. Per-item gates, same shape as
+     shelves and wallpaper — the designs ladder 3/7/10/13/16/20 while the
+     group itself opens at 3. */
+  closets: {
+    label: "Closet designs",
+    unlockLevel: 3,
+    noMysteryCard: true,
+    perItemGate: true,
+    items: ["closet-nerdy", "closet-sport", "closet-flower",
+      "closet-lines", "closet-starry", "closet-emo"],
+  },
   /* Wallpaper: same per-item shape as shelves. The plain walls are free at
      Lv 1 (they are the room that shipped), so the group is open from the
      start and each patterned shell carries its own gate. */
@@ -276,7 +291,7 @@ export const FURNITURE_COLLECTIONS = {
    three original sets, then the new themed ones in level order, then the
    surfaces and decor, with the door colours last as the cheapest fiddle. */
 export const FURNITURE_COLLECTION_ORDER = ["basic", "nerdy", "techy", "sport",
-  "princess", "emo", "wallpaper", "shelves", "beanbag", "doors"];
+  "princess", "emo", "wallpaper", "shelves", "beanbag", "closets", "doors"];
 
 export function furnitureCollectionForItem(id) {
   for (const key of FURNITURE_COLLECTION_ORDER) {

@@ -622,7 +622,12 @@ begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
   lvl := (public._mhq_level((select xp from public.students where id = sid))->>'level')::int;
-  if lvl < 10 then return jsonb_build_object('ok', false, 'error', 'level_locked', 'minLevel', 10); end if;
+  -- Her call, 2026-08-12: 10 -> 20. Level 10 arrived too soon once the curve
+  -- capped at 40 and the milestone boxes landed at 10/20/30/40; a second Blip
+  -- at 20 is a milestone reward rather than something that turns up while the
+  -- first one is still new. Mirrored in js/config.js `secondBlipLevel`, which
+  -- js/blip.js must READ rather than hard-code (it used to hard-code 10).
+  if lvl < 20 then return jsonb_build_object('ok', false, 'error', 'level_locked', 'minLevel', 20); end if;
   if exists (select 1 from public.blips where student_id = sid and slot = 2) then
     return jsonb_build_object('ok', false, 'error', 'already_claimed');
   end if;
@@ -1296,4 +1301,20 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('wall-moons',         'wall',        100, 10, true, 292, 'furniture'),
   ('wall-mountains',     'wall',        140, 16, true, 293, 'furniture'),
   ('wall-stripes',       'wall',        170, 22, true, 294, 'furniture')
+on conflict (item_id) do nothing;
+
+-- Closet designs (2026-08-12): six of Megan's Tripo closets on the EXISTING
+-- `door` slot. No slot dance — `door` has been in both the constraint and
+-- mhq_equip's key list since S5v2, so six new pictures are just six rows.
+-- ⚠️ These do NOT break "the door colours share one picture": that ruling is
+-- about COLOURS (door-mint and door-coral are one drawing tinted, and must
+-- stay that way). A patterned closet is a different piece of furniture that
+-- happens to share the slot. Colour -> tint. Design -> its own file.
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('closet-nerdy',   'door',  40,  3, true, 300, 'furniture'),
+  ('closet-sport',   'door',  60,  7, true, 301, 'furniture'),
+  ('closet-flower',  'door',  70, 10, true, 302, 'furniture'),
+  ('closet-lines',   'door',  80, 13, true, 303, 'furniture'),
+  ('closet-starry',  'door', 100, 16, true, 304, 'furniture'),
+  ('closet-emo',     'door', 120, 20, true, 305, 'furniture')
 on conflict (item_id) do nothing;
