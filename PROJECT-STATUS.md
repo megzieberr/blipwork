@@ -1516,12 +1516,18 @@ it is possible — worth saying out loud before go-live.
 # (previous) Project status — 2026-08-07 (NECK slot live; 26 new food; sw v37 pushed)
 
 ## Where we are
-**ALL COMMITS PUSHED 2026-08-07 ~17:41 UTC** (`a1a9102`, on top of last night's
-four). A fresh Pages build started for it; last night's two stuck builds both
-ended "errored" (GitHub's side, never our code). If live still serves v36 later,
-check `gh api repos/megzieberr/blipwork/pages/builds` BEFORE debugging code.
-Uncommitted on purpose: `FABLE-AUDIT-2026-08-06.md` (public repo — Megan hasn't
-said whether the audit notes may be published).
+**CURRENT AS OF 2026-08-12 — everything below this paragraph is history, kept
+for the record.** Blipwork is fully live at https://megzieberr.github.io/blipwork/
+on **sw v44**, with every migration applied. Blip's room is the home screen; the
+desk opens the quests. The room now sells **47 furniture pieces across 8 slots**
+(bed · desk · window · door · shelf-left · shelf-right · beanbag · wall), the
+door slot carries 9 tinted colours plus 6 patterned closet designs, and the
+second Blip hatches from an 🥚 beside his name at **level 20**. `verify-store.html`
+runs **3,748 checks green**. Learner data has been hash-verified byte-identical
+across all three of today's ships (2 students, 2 blips, 24 progress, 4,580 XP).
+**No learner has the app yet**, so a cut item is still deleted outright rather
+than deactivated. Uncommitted on purpose: `FABLE-AUDIT-2026-08-06.md` (public
+repo — Megan hasn't said whether the audit notes may be published).
 
 **NECK SLOT (8th cosmetic slot) — BUILT + 3 MIGRATIONS APPLIED TO LIVE, smoke-
 tested 10/10.** Shop 43 → **49 active cosmetics**. Neck sells 6: bead-necklace
@@ -1625,6 +1631,23 @@ and working right now**; push is live but dormant until the VAPID key is set.
 The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 
 ## Decisions
+- 2026-08-12: **Two shelf slots, one per wall** (her call), and she placed the shelves
+  and bean bag herself in the dressing room. Her numbers are the rulings, as always.
+- 2026-08-12: **Themed furniture sets unlock at nerdy 4 · sport 11 · emo 18** — she asked
+  for a recommendation and took it. Furniture now unlocks at 1·4·8·11·14·18, matching the
+  food tiers' rhythm.
+- 2026-08-12: **Shelves and the bean bag have NO free default and can be genuinely empty.**
+  A bed you can't remove makes sense; a shelf you can't take down doesn't.
+- 2026-08-12: **`wall` is an ordinary equip slot that draws no layer** — a wallpaper
+  replaces the room shell rather than sitting on it. Client-side distinction only.
+- 2026-08-12: **"Never add a second door PNG" reworded, not broken.** The ruling is about
+  COLOURS (one drawing tinted nine ways). A patterned closet is its own design and its own
+  file. Colour → tint. Design → its own file.
+- 2026-08-12: **The second Blip moves to level 20** (was 10), and the hatch prompt becomes
+  an 🥚 beside the nickname instead of a card at the bottom of the room screen. Her ruling
+  on both. Nobody lost anything — checked live first: 0 second blips, highest level 10.
+- 2026-08-12: **Closet prices/levels APPROVED by her as proposed** — 40/60/70/80/100/120 💎
+  at Lv 3/7/10/13/16/20. ("Closet prices are fine.") They were my numbers, now hers.
 - 2026-07-06: App identity = low-intimidation QUICK RECAP tool (revise the week's work /
   a fast round before past papers) — NOT a full homework session. Keep quests short and
   atomic; don't grow them into long worked-problem sets.
@@ -1983,13 +2006,12 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 - 📱 5 min: reopen the Blipwork PWA twice (v34 → v44 now), then one walk: buy a closet
   and a wallpaper, check the panel shelf's height and the 🥚 beside Blip's name
   **[blocking — the go-live eyeball, now three ships behind]**
-- 💻 2 min: say whether the closet prices/levels suit you (40–120 💎 at Lv 3/7/10/13/16/20
-  — my numbers, you gave none) **[whenever]**
 - 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
   PUBLIC, so it stays uncommitted until you decide **[whenever]**
+- 🎨 5 min: re-roll `happy-eyes` if you want it better (the weakest of the six eye
+  pairs; Tripo drew an unwanted mouth that had to be masked out) **[whenever]**
 
-(The rest — the `FABLE-AUDIT-2026-08-06.md` commit decision and the optional
-`happy-eyes` re-roll — are in the full list; `/pending` prints it.)
+(Closet prices settled 2026-08-12 — she approved them as proposed.)
 
 (2026-08-06's stuck-Pages saga resolved 2026-08-07: both stuck builds ended
 "errored" on GitHub's side, and the fresh push built green in ~40s. The lesson
@@ -2011,17 +2033,17 @@ sw v43, pushed. Her calls: **two shelf slots, one per wall, placed by her**,
 and **nerdy Lv 4 · sport Lv 11 · emo Lv 18**. The original brief is kept
 below for the record.
 
-**4. NEXT — her six CLOSET designs** (emo, flower, lines, nerdy, sporty,
-starry), generated 2026-08-12 from this session's Tripo prompts and sitting
-in `art-source/tripo/`. All six measured to the shipped door's rake, so none
-need a re-roll. The session is: key five of them (the flower one is already
-transparent, the emo one has a gradient background and needs care), then
-rows + labels on the EXISTING door slot — no new slot, no constraint change.
-⚠️ They are the first doors that are not the one tinted drawing, so
-furniture.js's "never add a second door PNG" note must be reworded, not
-broken: the nine COLOURS stay one tinted file; a patterned closet is a
-different design. Likely its own "Closet designs" collection so the colours
-group stays the cheap Lv-1 fiddle it is.
+**4. ✅ SHIPPED 2026-08-12 — her six CLOSET designs**, the 🥚 hatch prompt,
+and the second Blip moving to level 20. See the entry at the top of this
+file. Applied to live and pushed on sw v44; prices approved by her as
+proposed.
+
+**5. NEXT — nothing is queued.** The room is feature-complete against every
+plan she has given: home screen, tutorial, furniture, food, decor, closets,
+wallpaper. What remains is the go-live sequence already written below —
+price the free tier, then the term toggle + first homework assignment +
+PUSH-SETUP walkthrough — and whatever she asks for next. Her phone eyeball
+on v44 is the only open blocking item.
 
 **~~3 (original brief).~~** The art is ALL sliced, committed and measured
 (assets/companion/furniture/: `beanbag`, `shelf-{wood,glossy,bracket,panel}-{left,right}`,
