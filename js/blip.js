@@ -71,7 +71,7 @@ import { FOOD_IDS, foodExists, foodLabel, foodArt } from "./companion/food.js";
 import {
   FURNITURE_SLOTS, FURNITURE_SLOT_LABELS,
   furnitureExists, furnitureLabel, furnitureArt, furnitureLayer, roomFurniture,
-  homeworkBadgeLayer,
+  roomShellSrc, homeworkBadgeLayer,
 } from "./companion/furniture.js";
 import { makeDraggable } from "./companion/drag-feed.js";
 import { maybeShowReminderCard } from "./push.js";
@@ -526,13 +526,23 @@ export function renderBlip(app, host) {
      and only the picture in each spot is shoppable; the placement numbers
      live in js/companion/furniture.js.
 
-     roomFurniture() fills an empty slot with that slot's free default, so
-     the room is never a bare shell with holes in it. */
+     roomFurniture() fills an empty bed/desk/window/door slot with that
+     slot's free default, so the room is never a bare shell with holes in
+     it — but it returns NULL for the three decor slots added on
+     2026-08-12 (shelf-left, shelf-right, beanbag), which have no default
+     on purpose. An empty wall really is an empty wall. */
   const room = el("div", roomView === "room" ? "room" : "room stage-plain");
   const equippedFurn = roomFurniture(activeBlip.equipped);
   if (roomView === "room") {
+    /* The wallpaper is not a layer — it IS the room. CSS already paints the
+       plain shell, so this only ever overrides it, and only in the room
+       view (the flat "style" stage has no walls to paper). */
+    room.style.backgroundImage = `url("${roomShellSrc(activeBlip.equipped)}")`;
     FURNITURE_SLOTS.forEach((slot) => {
       const id = equippedFurn[slot];
+      // null = an optional slot with nothing in it (see roomFurniture).
+      // Skipping is the whole point: no layer, no tap target, bare wall.
+      if (!id) return;
       const layer = furnitureLayer(id);
       layer.tabIndex = 0;
       layer.setAttribute("role", "button");
@@ -1250,9 +1260,13 @@ export function renderBlip(app, host) {
         } catch { showToast("Can't reach the server — try again.", "error"); btn.disabled = false; }
       });
     } else {
-      /* Taking a piece OUT does not leave a hole: the slot falls back to
-         its free default (roomFurniture in furniture.js), so "Take it out"
-         reads as "put the plain one back", which is what happens. */
+      /* "Take it out" means two different things depending on the slot, and
+         both are correct. For bed / desk / window / door / wall the slot
+         falls back to its free default (roomFurniture in furniture.js), so
+         it reads as "put the plain one back" — which is what happens. For a
+         shelf or the bean bag there IS no default, so it really does leave
+         the wall bare. One button, one word, and the room shows which one
+         it was. */
       btn.textContent = hl.locks.dress ? "Blip won't get up…" : (inRoom ? "Take it out" : "Put it in the room");
       btn.className = "btn small" + (hl.locks.dress || inRoom ? " ghost" : " primary");
       btn.disabled = hl.locks.dress;

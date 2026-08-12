@@ -1,4 +1,167 @@
-# Project status — updated 2026-08-09 (ROOM=HOME + POLISH + TUTORIAL SHIPPED, sw v42)
+# Project status — updated 2026-08-12 (ROOM DECOR BUILT — sw v43, SQL NOT RUN)
+
+## 🛋️ 2026-08-12 — SHELVES, BEAN BAG, WALLPAPER + THREE THEMED SETS
+
+"Next up §3" built. **Committed, NOT pushed. `supabase/migration-room-decor.sql`
+is NOT applied to live** — same position every room-build session leaves its
+work in. `verify-store.html` green, **3,595–3,596 checks** (was 2,972; the
+few-check wobble is the documented milestone-loot branch, see the S4 note).
+Zero console errors on every walk.
+
+**Her two calls this session:** two shelf slots, one per wall, **placed by
+her** (the art already came as `-left`/`-right` pairs, so the slots match the
+drawings); and the themed-set levels, where she asked for a recommendation
+and took it — **nerdy Lv 4 · sport Lv 11 · emo Lv 18**, which puts a new room
+look at 1 · 4 · 8 · 11 · 14 · 18, the same rhythm the food tiers run on.
+
+### What shipped
+- **`supabase/migration-room-decor.sql`** (new, UNRUN) — four new slots
+  (`shelf-left`, `shelf-right`, `beanbag`, `wall`) through the known dance in
+  BOTH places (`shop_items_slot_cat_check` AND `mhq_equip`'s key list), plus
+  **23 rows**. Mirrored in `schema.sql` and `js/local-backend.js`.
+- **It re-creates only `mhq_equip`.** `mhq_buy_item` already accepted
+  category 'furniture' (S5v2 widened that guard) and `mhq_get_state` already
+  builds `furnitureShop` from every furniture row, so both were left alone —
+  every copy-forward of those bodies is a chance to silently un-ship S4b's
+  tray. Two functions untouched is the smaller, safer change.
+- **Three themed sets** = nine ordinary rows on the EXISTING bed/desk/window
+  slots. No slot, no constraint change; independent of the four new slots if
+  those ever have to be rolled back.
+- **Wallpaper swaps the room shell**, proven geometry-safe on 2026-08-09.
+  Five shells (plain + 4), one equipped at a time.
+- **`tools/preview_room.py`** learned the new slots, the wallpaper swap and
+  the three new sets (`--shelf-left`, `--shelf-right`, `--beanbag`, `--wall`).
+  ⚠️ Its two regexes both had `\w+` where a slot name goes, so hyphenated
+  slots silently did not parse and the shelves just vanished from the
+  preview — no error, just an incomplete room. Fixed; worth knowing before
+  the next slot with a hyphen in it.
+
+### Decisions and judgement calls (rule 9 — recorded, not silently redesigned)
+1. **⚠️ SHELVES AND THE BEAN BAG HAVE NO FREE DEFAULT — the first furniture
+   slots that can legitimately be EMPTY.** Every slot S5v2 shipped falls back
+   to a price-0 piece, so it is never bare. A bed you cannot remove makes
+   sense; a shelf you cannot take down does not. `shelf-wood-left/right` ARE
+   price-0 rows, which makes their absence from `DEFAULT_FURNITURE` look like
+   an oversight — so it is stated in three places and asserted in
+   `verify-store.html`, because the "fix" is a one-line edit that would
+   silently make shelves permanent the moment a learner bought one.
+   `roomFurniture()` now returns **null** for those slots and `js/blip.js`
+   skips them.
+2. **`wall` is an ordinary equip slot that draws NO layer.** Server-side the
+   distinction does not exist and must not — a wallpaper is bought, owned and
+   equipped exactly like a bed, so it inherits the level gate and the
+   ownership test for free. Only the client knows: `roomShellSrc()` swaps the
+   `.room` background and `wall` is deliberately absent from
+   `FURNITURE_SLOTS`, which is the paint order for LAYERS. Putting it there
+   would append a picture of a whole room on top of the room.
+3. **⚠️ THE SHELVES PAINT BEFORE THE DOOR, and the door moved from first to
+   fourth in the paint order to make that true.** A shelf hangs ON the right
+   wall; the closet STANDS on the floor in front of it. If they overlap the
+   closet has to win, or a plank floats in front of the furniture standing in
+   front of it. Asserted, so a future tidy-up of that list fails loudly.
+4. **A shelf is priced PER SIDE, not per pair** (60/90/120 each), because the
+   two walls are independent slots — which is what lets a room mix two shelf
+   designs, the whole reason she asked for two. The pairs are asserted to
+   share a price and a level so half a shelf can never unlock.
+5. **⚠️ THE `-left`/`-right` SUFFIX IS THE WALL, NOT A MIRROR FLAG.** Measured
+   off the alpha before wiring anything: every `-left` piece slopes UP to the
+   right (the left wall's rake — the same one all six windows carry) and
+   every `-right` piece slopes DOWN to the right. There is no `flipX`
+   shortcut and none is wanted; mirroring would mirror the wood grain and the
+   brackets too. Asserted both ways.
+6. **⚠️ THE WALLPAPER FILE NAMES DO NOT DESCRIBE THE DRAWINGS.** Tripo named
+   the exports before anyone looked at them: `room-shell-sky.png` is the TEAL
+   one with moons and clouds, `room-shell-cloudy.png` is the dark navy one
+   with line-drawn mountains. So `wall-moons` reads `room-shell-sky.png` and
+   `wall-mountains` reads `room-shell-cloudy.png`, on purpose. Open the PNGs
+   before "correcting" either mapping.
+7. **Shelves and wallpaper gate PER ITEM, not per collection** (`perItemGate`
+   in collections.js) — a shelf is a pair of rows that must never unlock on
+   different levels, so all eight live in one group whose `unlockLevel` is
+   the FIRST gate. Both set `noMysteryCard`: their free tier is Lv 1, so the
+   locked-card branch could never fire on them anyway. verify checks those
+   two as a floor and every other collection as an equality.
+8. **The bean bag is one piece at Lv 6 / 90💎 with no free version** — a
+   single ornament, not a surface that has to be filled. That breaks the
+   "every slot has a free way in and a real choice" assertion, so it is
+   declared in a `SINGLE_PIECE_SLOTS` list rather than the assertion being
+   loosened; a slot that accidentally ends up with one item still fails.
+9. **The dressing room shows a FULL room even where the app would show a bare
+   wall.** Its `others` map now falls back to each slot's first catalogue
+   piece, because a shelf you cannot see is a shelf you cannot place. It
+   differs from the app deliberately: it is a placement tool, not a preview.
+
+### ⚠️ PLACEMENT FOR THE THREE NEW SLOTS IS PROVISIONAL — HER PASS IS NEXT
+`shelf-left` (0.130, 0.420), `shelf-right` (0.865, 0.335) and `beanbag`
+(0.360, 0.870) are **first guesses computed from the shell's own geometry**,
+not chosen by eye and NOT run through `dressing-room.html`. Same for every
+new `widthPct` (shelves 26, bean bag 22; the themed sets reuse the shipped
+sets' 41/33/20 because their drawings measure the same — all six windows are
+~320×375 and the desks share basic-desk's aspect to three decimals). They
+are good enough to look at, and they are hers to replace.
+
+Measured, so the first look is honest: **every new piece is 0 pixels outside
+the shell's silhouette** (checked against the shell's alpha, not a computed
+floor line — the lesson from the wrong desk-overhang claim). The left
+shelf's BOUNDING BOX starts at x 0.000, but its drawn pixels are all inboard
+of that corner, which is the same "the bbox corner is empty space" fact that
+made the desk claim wrong.
+
+### Verified
+- **`verify-store.html` green, 3,595–3,596** over repeated runs. New coverage:
+  all 23 SQL rows cross-checked against the client mirror on price/minLevel/
+  slot; the migration names each new slot in BOTH the constraint and
+  mhq_equip; the paint order, including shelves-before-door; every piece has
+  a label, art and exactly one collection whose gate matches its row; all 41
+  furniture PNGs and all 5 shells fetch 200; `roomFurniture` returns null for
+  the three optional slots and falls back for the rest, including for an
+  unknown id; `roomShellSrc` falls back to the plain shell for an empty slot,
+  an unknown id AND a non-shell furniture id; the shelf pairs share a price
+  and a level; the four shelf designs use eight distinct drawings with no
+  flipX; and, against the backend, **buy → equip → unequip on all eight
+  slots**, with the bean bag bought past its Lv 6 gate using crystals the
+  test learner actually earned.
+  - ⚠️ **Two of my own new assertions were wrong first** and are worth the
+    note: the bean bag failed "every slot sells something free at Lv 1" and
+    "every slot sells 2+ pieces" — both true of every other slot, neither
+    true of a single deliberate ornament. Fixed by declaring the exception,
+    not by weakening the rule.
+  - ⚠️ **A REPLAY PAYS 25% XP, and it broke a check.** A one-shot
+    `submitQuest(..., xp: 1700)` was meant to land the test learner on level
+    6 (1,600 XP) and landed on level 2 — the learner had already replayed
+    q1-q3, so it banked 425. The loop now submits until the level is reached,
+    bounded. Any future test that needs a level must not compute it as one
+    XP number.
+- **Walked at 375px** (`?local=1`, fresh signup, **zero console errors, zero
+  broken images**): a brand-new learner's room shows exactly the four
+  original pieces, bare walls, plain shell — the empty-slot rule working;
+  buying and equipping a wooden left shelf, a glossy right shelf, the bean
+  bag, the cloud wallpaper and the nerdy bed puts all five in the room at
+  once, every image loaded, every piece inside the room box, painted in the
+  asserted order; the panel shows Basics/Nerdy/Techy/Sporty/Wallpaper/
+  Shelves/Bean bag/Door colours open at Lv 11 with Princess and Midnight as
+  "?" cards at Lv 14 and Lv 18, and the per-item cards carry their own
+  "unlocks at level 13/16/19/22"; and taking the shelves, bean bag and
+  wallpaper back out really does leave bare walls and the plain shell.
+- **Looked at it.** Four full rooms composited with `tools/preview_room.py`
+  (screenshots still time out in this pane) — basic, nerdy, sporty and
+  midnight, each with a different shelf design on both walls, the bean bag,
+  and three of the four wallpapers. Shelf rakes match their walls in every
+  one; nothing leans, nothing floats, nothing is cut off.
+
+### Not done / punted
+- **Not pushed, not deployed, SQL NOT RUN.** Her call.
+- **Her placement pass** on the three new slots (above) — dressing-room.html
+  Furniture mode already lists them.
+- The 23 prices are first guesses, like every other price in the app; they
+  belong in the "price the free tier before go-live" pass already on the list.
+- The wallpaper shells are 139–234 KB against the plain shell's 51 KB
+  (patterned walls do not quantise small). One is loaded at a time, and it is
+  the one asset on screen 100% of the time — accepted, not ideal.
+
+---
+
+# Project status — earlier entry: 2026-08-09 (ROOM=HOME + POLISH + TUTORIAL SHIPPED, sw v42)
 
 ## 🚀 2026-08-09 (later) — THE WHOLE DAY SHIPPED: foreman day, three build sessions
 
@@ -1697,13 +1860,17 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
-- 📱 5 min: reopen the Blipwork PWA twice (v34 → v42 now), then one walk: land in the
+- 💻 10 min: open `dressing-room.html` → Furniture mode → place the **left shelf, right
+  shelf and bean bag**, paste the numbers back **[blocking — the decor can't ship on a
+  guess]**
+- 💻 2 min: say go, then the SQL below gets run and the day gets pushed —
+  `supabase/migration-room-decor.sql`, 4 new slots + 23 rows **[blocking]**
+- 📱 5 min: reopen the Blipwork PWA twice (v34 → v43 now), then one walk: land in the
   room, tap through the tutorial once, tap the desk → quests, buy something → he's
   wearing it, check the badge's spot by the window **[blocking — the go-live eyeball]**
-- 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
-  PUBLIC, so it stays uncommitted until you decide **[whenever]**
-- 🎨 5 min: re-roll `happy-eyes` if you want it better (the weakest of the six eye
-  pairs; Tripo drew an unwanted mouth that had to be masked out) **[whenever]**
+
+(The rest — the `FABLE-AUDIT-2026-08-06.md` commit decision and the optional
+`happy-eyes` re-roll — are in the full list; `/pending` prints it.)
 
 (2026-08-06's stuck-Pages saga resolved 2026-08-07: both stuck builds ended
 "errored" on GitHub's side, and the fresh push built green in ~40s. The lesson
@@ -1719,8 +1886,14 @@ stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 reviewed, shipped — see the day summary at the top of this file). Also the
 **tutorial** shipped the same day (session 3).
 
-**3. NEXT BUILD SESSION — wire SHELVES, BEAN BAG, WALLPAPER + the three
-THEMED SETS.** The art is ALL sliced, committed and measured
+**3. ✅ BUILT 2026-08-12 — SHELVES, BEAN BAG, WALLPAPER + the three THEMED
+SETS.** See the entry at the top of this file. Committed, NOT pushed, SQL
+NOT run; her placement pass on the three new slots is the blocking item.
+Her calls on the open questions: **two shelf slots, one per wall, placed by
+her**, and **nerdy Lv 4 · sport Lv 11 · emo Lv 18**. The original brief is
+kept below for the record.
+
+**~~3 (original brief).~~** The art is ALL sliced, committed and measured
 (assets/companion/furniture/: `beanbag`, `shelf-{wood,glossy,bracket,panel}-{left,right}`,
 `{emo,nerdy,sport}-{bed,desk,window}`; assets/companion/:
 `room-shell-{cloud,cloudy,sky,stripes}`). What the session decides/builds:

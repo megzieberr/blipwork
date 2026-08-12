@@ -911,7 +911,24 @@ for (const [id, d] of Object.entries(FURNITURE)) {
 }
 
 let fId = null;                                  // the piece being placed
+
+/* What else is standing in the room while you place a piece.
+
+   ⚠️ DEFAULT_FURNITURE IS NOT ENOUGH ON ITS OWN any more (room decor,
+   2026-08-12). The app's optional slots — shelf-left, shelf-right, beanbag —
+   deliberately have NO default, because in the app an empty shelf slot means
+   a bare wall. In HERE that would mean the shelves are invisible until you
+   pick one, and a shelf you cannot see is a shelf you cannot place. So every
+   slot without a default falls back to its FIRST catalogue piece: this page
+   always shows a full room, which is the only way to judge whether a new
+   piece collides with what is already there. This differs from the app on
+   purpose; it is a placement tool, not a preview of an empty room. */
 let others = { ...DEFAULT_FURNITURE };           // what else is standing in the room
+for (const slot of FURNITURE_SLOTS) {
+  if (others[slot]) continue;
+  const first = Object.keys(FURNITURE).find((id) => FURNITURE[id].slot === slot);
+  if (first) others[slot] = first;
+}
 let showBlip = true;
 
 /* ---------- mode switch ---------- */

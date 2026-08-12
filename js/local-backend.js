@@ -240,6 +240,48 @@ const FURNITURE_ITEMS = [
   { id: "door-lilac", slot: "door", price: 15, minLevel: 1 },
   { id: "door-coral", slot: "door", price: 18, minLevel: 1 },
   { id: "door-seafoam", slot: "door", price: 20, minLevel: 1 },
+
+  /* ---- room decor (2026-08-12) — mirrors migration-room-decor.sql ----
+     Three themed SETS on the slots that already exist, plus four NEW slots.
+
+     ⚠️ SHELVES AND THE BEAN BAG HAVE NO FREE DEFAULT. shelf-wood-* is free
+     but is NOT a fallback: an empty shelf slot draws nothing (see
+     DEFAULT_FURNITURE in js/companion/furniture.js). A bed you cannot remove
+     makes sense; a shelf you cannot take down does not.
+     ⚠️ A SHELF IS PRICED PER SIDE — left and right walls are two independent
+     slots, which is what lets a room mix two shelf designs.
+     ⚠️ `wall` is an ordinary equip slot that draws no LAYER: a wallpaper
+     replaces the room shell rather than sitting on it. Only the client knows
+     that; here it is a furniture row like any other. */
+  // nerdy, Lv 4 — the gentlest step up from basic, filling the 1-to-8 gap
+  { id: "nerdy-bed", slot: "bed", price: 80, minLevel: 4 },
+  { id: "nerdy-desk", slot: "desk", price: 70, minLevel: 4 },
+  { id: "nerdy-window", slot: "window", price: 60, minLevel: 4 },
+  // sport, Lv 11 — between techy (8) and princess (14)
+  { id: "sport-bed", slot: "bed", price: 160, minLevel: 11 },
+  { id: "sport-desk", slot: "desk", price: 140, minLevel: 11 },
+  { id: "sport-window", slot: "window", price: 120, minLevel: 11 },
+  // emo, Lv 18 — past princess, something to aim at before the Lv 20 box
+  { id: "emo-bed", slot: "bed", price: 200, minLevel: 18 },
+  { id: "emo-desk", slot: "desk", price: 175, minLevel: 18 },
+  { id: "emo-window", slot: "window", price: 145, minLevel: 18 },
+  // shelves — per side, one drawing per wall (the suffix is the WALL)
+  { id: "shelf-wood-left", slot: "shelf-left", price: 0, minLevel: 1 },
+  { id: "shelf-wood-right", slot: "shelf-right", price: 0, minLevel: 1 },
+  { id: "shelf-glossy-left", slot: "shelf-left", price: 60, minLevel: 7 },
+  { id: "shelf-glossy-right", slot: "shelf-right", price: 60, minLevel: 7 },
+  { id: "shelf-bracket-left", slot: "shelf-left", price: 90, minLevel: 13 },
+  { id: "shelf-bracket-right", slot: "shelf-right", price: 90, minLevel: 13 },
+  { id: "shelf-panel-left", slot: "shelf-left", price: 120, minLevel: 19 },
+  { id: "shelf-panel-right", slot: "shelf-right", price: 120, minLevel: 19 },
+  // bean bag, Lv 6 — one piece, no free version
+  { id: "beanbag", slot: "beanbag", price: 90, minLevel: 6 },
+  // wallpaper — plain is the shell the room has always had, and is free
+  { id: "wall-plain", slot: "wall", price: 0, minLevel: 1 },
+  { id: "wall-cloud", slot: "wall", price: 70, minLevel: 5 },
+  { id: "wall-moons", slot: "wall", price: 100, minLevel: 10 },
+  { id: "wall-mountains", slot: "wall", price: 140, minLevel: 16 },
+  { id: "wall-stripes", slot: "wall", price: 170, minLevel: 22 },
 ];
 /* Pharmacy / grocery — prices mirror the server shop_items 'food' rows.
    `kind` is the item's own id on the server too (mhq_get_state builds the
@@ -317,8 +359,13 @@ const VALID_COLOURS = ["blue", "cream", "pink", "mint", "sky", "lilac", "peach",
 // new slot returns bad_equipped (that is exactly how `back` broke in July).
 // S5v2 (2026-08-08) added the four furniture slots to the same list: a bed is
 // equipped through exactly the machinery a hat is.
+// Room decor (2026-08-12) added four more: two shelf walls, the bean bag and
+// wallpaper. `wall` is here for the same reason it is in mhq_equip's list —
+// a wallpaper is equipped exactly like a bed; that it swaps the room's
+// background instead of painting a layer on it is a client-side detail.
 const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects", "neck",
-  "bed", "desk", "window", "door"];
+  "bed", "desk", "window", "door",
+  "shelf-left", "shelf-right", "beanbag", "wall"];
 
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a

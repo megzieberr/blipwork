@@ -802,7 +802,15 @@ h2{font-size:20px} h3{font-size:17px}
    placement fraction in js/companion/furniture.js lands on the surface it was
    measured against — if this ratio and the art ever disagree, every piece of
    furniture drifts at once. No padding, no border, no gradient: the drawing
-   has its own walls and its own edge. */
+   has its own walls and its own edge.
+
+   Room decor (2026-08-12): the plain shell stays the CSS default so a room
+   with no wallpaper equipped needs no JS to look right, but an equipped
+   wallpaper overrides background-image INLINE (roomShellSrc + js/blip.js).
+   All five shells are the same 768x762 drawing with different walls — Tripo
+   held the geometry to 99.7% silhouette overlap with the floor lines
+   aligned — so the aspect-ratio above stays correct for every one of them
+   and no placement fraction moves when the paper changes. */
 .room{position:relative;width:100%;aspect-ratio:768/762;margin:14px 0 10px;overflow:hidden;
   background:url("../assets/companion/room-shell.png") center/100% 100% no-repeat}
 

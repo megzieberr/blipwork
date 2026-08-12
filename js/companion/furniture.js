@@ -3,12 +3,21 @@
    Room build S5v2 (2026-08-08), per the REVISION section of
    ROOM-BUILD-PLAN.md.
 
-   Four equip slots: door · window · desk · bed. Server-side these are
-   `shop_items` rows with category 'furniture' (seeded by
-   supabase/migration-furniture-slots.sql, mirrored in
-   js/local-backend.js); they are bought and equipped through the SAME
-   mhq_buy_item / mhq_equip machinery a hat uses, so ownership and level
-   gates are the server's business, not this file's.
+   Eight equip slots: door · window · desk · bed (room build S5v2) and
+   shelf-left · shelf-right · beanbag · wall (room decor, 2026-08-12).
+   Server-side these are `shop_items` rows with category 'furniture' (seeded
+   by supabase/migration-furniture-slots.sql then
+   supabase/migration-room-decor.sql, mirrored in js/local-backend.js); they
+   are bought and equipped through the SAME mhq_buy_item / mhq_equip
+   machinery a hat uses, so ownership and level gates are the server's
+   business, not this file's.
+
+   Two of those eight behave unlike the rest, and both differences live in
+   this file alone — the server treats all eight identically:
+     • shelf-left / shelf-right / beanbag have NO free default, so they can
+       be genuinely EMPTY (roomFurniture returns null for them).
+     • wall draws no layer at all: it swaps the room's background picture
+       (roomShellSrc), which is why it is absent from FURNITURE_SLOTS.
 
    This file holds only what the client owns: the LABEL, the ART FILE, the
    optional code TINT, and WHERE ON THE ROOM SHELL each piece is drawn.
@@ -36,6 +45,10 @@ import { el } from "../ui.js";
 import { tintedImageSrc } from "./renderer.js";
 
 const DIR = "./assets/companion/furniture";
+/* Wallpapers are the ROOM SHELL itself, so they live one level up beside
+   room-shell.png rather than in furniture/. An entry marked `shell: true`
+   reads from here — see furnitureImgSrc. */
+const SHELL_DIR = "./assets/companion";
 
 /* ---------- where the shell's surfaces are ----------
    Fractions of the room box, which is exactly the shape of
@@ -98,17 +111,66 @@ export const SLOT_PLACEMENT = {
   // front lip — deliberate, it is what puts him and the bed side by side
   // rather than the bed behind him.
   bed: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.750, y: 0.816 } },
+
+  /* ---- room decor (2026-08-12) — PROVISIONAL, awaiting Megan's pass ----
+     ⚠️ THESE THREE ARE FIRST GUESSES, unlike the four above, which are hers.
+     They are computed from the shell's own geometry (the quads at the top of
+     this comment block), not chosen by eye, and they are deliberately placed
+     clear of the pieces that are already there — but they have NOT been
+     through dressing-room.html yet. Her numbers replace them wholesale; that
+     is the whole reason Furniture mode exists. Do not polish them by hand.
+
+     shelf-left  sits on the LEFT wall, low and outboard of the window
+                 (which is at x0.311). At x=0.13 that wall spans y 0.222
+                 to 0.606, so 0.42 is comfortably inside it.
+     shelf-right sits on the RIGHT wall ABOVE the door — the door is a
+                 floor-standing piece painted later, so an overlap resolves
+                 in the door's favour, which is the correct depth order.
+     beanbag     stands on the floor, front-left, out of the desk's corner
+                 and well clear of centre-front where Blip stands. At x=0.36
+                 the floor spans y 0.492 to 0.908. */
+  "shelf-left": { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.130, y: 0.420 } },
+  "shelf-right": { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.865, y: 0.335 } },
+  beanbag: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.360, y: 0.870 } },
 };
 
-/* Paint order, BACK to FRONT. The two wall pieces go down first, then the
-   floor pieces; Blip is mounted after all four, so he stands in front of
-   the desk and bed (he is centre-front on the floor, they are behind him).
-   Also the order the furniture panel lists its slots in. */
-export const FURNITURE_SLOTS = ["door", "window", "desk", "bed"];
+/* Paint order, BACK to FRONT. Wall pieces go down first, then the floor
+   pieces; Blip is mounted after all of them, so he stands in front of the
+   desk and bed (he is centre-front on the floor, they are behind him).
+
+   ⚠️ THE SHELVES PAINT BEFORE THE DOOR, and that ordering is load-bearing.
+   A shelf hangs ON the right wall; the door STANDS on the floor against it,
+   nearer the viewer. If the two ever overlap, the door has to win — paint
+   the shelf later and a wall-mounted plank appears to float in front of a
+   piece of furniture standing in front of it. The door moved from first to
+   fourth in this list for exactly that reason (2026-08-12); nothing else
+   depends on its old position, and the two wall pieces above it cannot
+   overlap each other because they are on opposite walls.
+
+   ⚠️ `wall` IS DELIBERATELY NOT IN THIS LIST. A wallpaper is a real equip
+   slot server-side, but it draws no layer — it replaces the room shell
+   itself. See roomShellSrc() below. Adding it here would append an <img> of
+   a whole room on top of the room. */
+export const FURNITURE_SLOTS = ["window", "shelf-left", "shelf-right", "door",
+  "desk", "bed", "beanbag"];
+
+/* The `wall` slot exists in FURNITURE and in the shop, just not in the paint
+   order above — kept as its own named export so nothing has to hard-code the
+   string in three files. */
+export const WALL_SLOT = "wall";
 
 export const FURNITURE_SLOT_LABELS = {
   bed: "Bed", desk: "Desk", window: "Window", door: "Door",
+  "shelf-left": "Left shelf", "shelf-right": "Right shelf",
+  beanbag: "Bean bag", wall: "Wallpaper",
 };
+
+/* ⚠️ SLOTS THAT MAY LEGITIMATELY BE EMPTY. Every slot the room build shipped
+   has a free default that fills it, so those slots are never bare. These
+   three are decor a learner ADDS: "Take it out" has to really take it out,
+   or a shelf becomes a thing you can never take off your wall. shelf-wood-*
+   is free, but free is not the same as default — see DEFAULT_FURNITURE. */
+export const OPTIONAL_FURNITURE_SLOTS = ["shelf-left", "shelf-right", "beanbag"];
 
 /* ---------- the door tints ----------
    Deliberately NOT renderer.js's COLOURS palette, even though the names
@@ -166,22 +228,115 @@ export const FURNITURE = {
   "door-lilac": { slot: "door", label: "Lilac door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.lilac },
   "door-coral": { slot: "door", label: "Coral door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.coral },
   "door-seafoam": { slot: "door", label: "Seafoam door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.seafoam },
+
+  /* ---- room decor (2026-08-12) — her 2026-08-09 Tripo drop, wired ----
+     ⚠️ EVERY widthPct BELOW IS PROVISIONAL. The three themed sets reuse the
+     shipped sets' numbers because their drawings measure the same (all six
+     windows are ~320x375; the desks are within 12% of basic-desk and share
+     its aspect to three decimal places), but "measures the same" is not
+     "looks right in the room", and only looking proves art. Checked with
+     tools/preview_room.py, not on a phone. */
+
+  // ---- nerdy (Lv 4) — space-duvet bed, books-and-cactus desk, telescope
+  //      porthole. Sized to the basic set: nerdy-desk is 380x369 against
+  //      basic-desk's 338x327, the same shape 12% bigger, so 33 holds.
+  "nerdy-bed": { slot: "bed", label: "Space bed", img: "nerdy-bed.png", widthPct: 41 },
+  "nerdy-desk": { slot: "desk", label: "Study bench", img: "nerdy-desk.png", widthPct: 33 },
+  "nerdy-window": { slot: "window", label: "Telescope window", img: "nerdy-window.png", widthPct: 20 },
+
+  // ---- sport (Lv 11) — ball-print bed, trophy desk, stadium porthole ----
+  "sport-bed": { slot: "bed", label: "Team bed", img: "sport-bed.png", widthPct: 41 },
+  "sport-desk": { slot: "desk", label: "Trophy desk", img: "sport-desk.png", widthPct: 33 },
+  "sport-window": { slot: "window", label: "Stadium window", img: "sport-window.png", widthPct: 20 },
+
+  // ---- emo (Lv 18) — black four-poster with bat pillows, candle desk,
+  //      curtained moon window ----
+  "emo-bed": { slot: "bed", label: "Midnight bed", img: "emo-bed.png", widthPct: 41 },
+  "emo-desk": { slot: "desk", label: "Candle desk", img: "emo-desk.png", widthPct: 33 },
+  "emo-window": { slot: "window", label: "Moon window", img: "emo-window.png", widthPct: 20 },
+
+  /* ---- shelves ----
+     ⚠️ THE SUFFIX IS THE WALL, NOT A MIRROR FLAG. Each side is its own
+     drawing and they are NOT interchangeable. Measured off the alpha
+     (mid-y of the leftmost tenth vs the rightmost tenth): every `-left`
+     piece slopes UP to the right — the left wall's rake, the same one all
+     six windows carry — and every `-right` piece slopes DOWN to the right.
+     Hang one on the other wall and it leans against the room, which is the
+     exact fault that moved the window walls during S5v2. There is no flipX
+     shortcut here and none is wanted: `flipX` mirrors an accessory about
+     its own centre, which would also mirror the wood grain and the
+     brackets. */
+  "shelf-wood-left": { slot: "shelf-left", label: "Wooden shelf", img: "shelf-wood-left.png", widthPct: 26 },
+  "shelf-wood-right": { slot: "shelf-right", label: "Wooden shelf", img: "shelf-wood-right.png", widthPct: 26 },
+  "shelf-glossy-left": { slot: "shelf-left", label: "Glossy shelf", img: "shelf-glossy-left.png", widthPct: 26 },
+  "shelf-glossy-right": { slot: "shelf-right", label: "Glossy shelf", img: "shelf-glossy-right.png", widthPct: 26 },
+  "shelf-bracket-left": { slot: "shelf-left", label: "Bracket shelf", img: "shelf-bracket-left.png", widthPct: 26 },
+  "shelf-bracket-right": { slot: "shelf-right", label: "Bracket shelf", img: "shelf-bracket-right.png", widthPct: 26 },
+  "shelf-panel-left": { slot: "shelf-left", label: "Panel shelf", img: "shelf-panel-left.png", widthPct: 26 },
+  "shelf-panel-right": { slot: "shelf-right", label: "Panel shelf", img: "shelf-panel-right.png", widthPct: 26 },
+
+  // ---- bean bag (Lv 6) — one floor piece, no free version ----
+  "beanbag": { slot: "beanbag", label: "Bean bag", img: "beanbag.png", widthPct: 22 },
+
+  /* ---- wallpaper ----
+     ⚠️ THESE DRAW NO LAYER. `shell: true` means the art IS the room shell:
+     roomShellSrc() hands it to the .room background and no furnitureLayer is
+     ever built for this slot. The swap is geometry-safe because Tripo held
+     the room's shape across the whole drop — 99.7% silhouette overlap with
+     the floor lines aligned, checked by edge-overlay on 2026-08-09 — so
+     every placement number in this file still means the same thing whichever
+     wallpaper is up. The patterned shells are 139-234 KB against the plain
+     one's 51 KB (patterned walls do not quantise small); one is loaded at a
+     time and it is the only art on screen 100% of the time, so that is
+     accepted rather than ideal.
+
+     ⚠️ THE FILE NAMES DO NOT DESCRIBE THE DRAWINGS — the ids below do. Tripo
+     named the exports before anyone looked at them: room-shell-sky.png is
+     the TEAL one with moons and clouds, and room-shell-cloudy.png is the
+     dark navy one with line-drawn mountains. So `wall-moons` reads
+     room-shell-sky.png and `wall-mountains` reads room-shell-cloudy.png, on
+     purpose. Do not "correct" either mapping to match the file name; open
+     the two PNGs first. (`room-shell-cloud.png` really is the cloud-and-star
+     one and `room-shell-stripes.png` really is the striped one.) */
+  "wall-plain": { slot: "wall", label: "Plain walls", img: "room-shell.png", shell: true },
+  "wall-cloud": { slot: "wall", label: "Clouds & stars", img: "room-shell-cloud.png", shell: true },
+  "wall-moons": { slot: "wall", label: "Moons & clouds", img: "room-shell-sky.png", shell: true },
+  "wall-mountains": { slot: "wall", label: "Misty mountains", img: "room-shell-cloudy.png", shell: true },
+  "wall-stripes": { slot: "wall", label: "Sky stripes", img: "room-shell-stripes.png", shell: true },
 };
 
 export const FURNITURE_IDS = Object.keys(FURNITURE);
 
-/* The four free level-1 rows. A room with an EMPTY slot draws these rather
-   than a hole — see roomFurniture() below for why that is not the same as
-   owning them. Must stay in step with the price-0 rows in
-   supabase/migration-furniture-slots.sql; verify-store.html asserts it. */
+/* The free level-1 rows that FILL AN EMPTY SLOT. A room with an empty bed
+   slot draws the wooden bed rather than a hole — see roomFurniture() below
+   for why that is not the same as owning it. Must stay in step with the
+   price-0 rows in the migrations; verify-store.html asserts it.
+
+   ⚠️ SHELF-LEFT, SHELF-RIGHT AND BEANBAG ARE ABSENT ON PURPOSE (2026-08-12),
+   and their absence is the feature. shelf-wood-left/right ARE price-0 rows,
+   so it looks like an oversight — it is not. A bed, desk, window and door
+   are what a room IS; a shelf and a bean bag are things you put in one, and
+   "Take it out" has to be able to leave the wall bare. Adding either id here
+   would silently make shelves permanent the moment a learner bought one.
+   OPTIONAL_FURNITURE_SLOTS above is the same fact, stated positively.
+
+   `wall` IS here: the plain shell is the room the app has always had, so an
+   empty wall slot is the original room rather than no room at all. */
 export const DEFAULT_FURNITURE = {
   bed: "basic-bed", desk: "basic-desk", window: "city-window", door: "door-white",
+  wall: "wall-plain",
 };
 
 export function furnitureExists(id) { return Object.prototype.hasOwnProperty.call(FURNITURE, id); }
 export function furnitureLabel(id) { return (FURNITURE[id] && FURNITURE[id].label) || id; }
 export function furnitureSlot(id) { return FURNITURE[id] ? FURNITURE[id].slot : null; }
-export function furnitureImgSrc(id) { return `${DIR}/${(FURNITURE[id] || {}).img || ""}`; }
+/* Wallpapers read from assets/companion (they ARE room shells); everything
+   else reads from assets/companion/furniture. */
+export function furnitureImgSrc(id) {
+  const def = FURNITURE[id] || {};
+  return `${def.shell ? SHELL_DIR : DIR}/${def.img || ""}`;
+}
+export function furnitureIsShell(id) { return !!(FURNITURE[id] && FURNITURE[id].shell); }
 
 /* widthPct + anchor + attach for one item, slot defaults filled in. This is
    the exact shape dressing-room.html edits and hands back. */
@@ -208,9 +363,30 @@ export function roomFurniture(equipped) {
   const out = {};
   for (const slot of FURNITURE_SLOTS) {
     const id = eq[slot];
-    out[slot] = furnitureExists(id) ? id : DEFAULT_FURNITURE[slot];
+    /* ⚠️ `?? null`, NOT the old bare lookup. Three slots have no default
+       (see DEFAULT_FURNITURE), so this now returns null for an empty shelf
+       or bean-bag slot and the caller must skip it — that null IS "the wall
+       is bare", which is a legitimate room, not a missing picture. An
+       unknown id still falls back the same way it always did, so a build
+       that has never heard of an item a learner owns degrades to the plain
+       piece rather than to a hole (for slots that HAVE a plain piece). */
+    out[slot] = furnitureExists(id) ? id : (DEFAULT_FURNITURE[slot] ?? null);
   }
   return out;
+}
+
+/* ---------- the wallpaper ----------
+   The `wall` slot's whole job: which room shell the .room element paints as
+   its background. Deliberately NOT part of roomFurniture() — that function
+   answers "what layers go on the room", and a wallpaper is not a layer, it
+   is the room. Falls back to the plain shell, which is the background CSS
+   has always set, so a learner who owns no wallpaper sees exactly the room
+   that shipped and nothing here has to run for that to be true. */
+export function roomShellSrc(equipped) {
+  const eq = (equipped && typeof equipped === "object") ? equipped : {};
+  const id = eq[WALL_SLOT];
+  const useId = (furnitureExists(id) && furnitureIsShell(id)) ? id : DEFAULT_FURNITURE[WALL_SLOT];
+  return furnitureImgSrc(useId);
 }
 
 /* One picture. The untinted file is set immediately and a tinted copy swaps

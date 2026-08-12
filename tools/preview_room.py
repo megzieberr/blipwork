@@ -29,14 +29,20 @@ def read_catalogue():
     this script can never drift from the app's own numbers."""
     src = open(os.path.join(ROOT, "js/companion/furniture.js"), encoding="utf-8").read()
     place = {}
-    for m in re.finditer(r"(\w+):\s*\{\s*anchor:\s*\{\s*x:\s*([\d.]+),\s*y:\s*([\d.]+)\s*\},\s*attach:\s*\{\s*x:\s*([\d.]+),\s*y:\s*([\d.]+)\s*\}", src):
+    # ⚠️ slot keys may be QUOTED and HYPHENATED since the 2026-08-12 decor
+    # slots ("shelf-left"). With the old \w+ pattern they simply did not
+    # parse and the shelves silently vanished from the preview.
+    for m in re.finditer(r"\"?([\w-]+)\"?:\s*\{\s*anchor:\s*\{\s*x:\s*([\d.]+),\s*y:\s*([\d.]+)\s*\},\s*attach:\s*\{\s*x:\s*([\d.]+),\s*y:\s*([\d.]+)\s*\}", src):
         place[m.group(1)] = dict(anchor=(float(m.group(2)), float(m.group(3))),
                                  attach=(float(m.group(4)), float(m.group(5))))
     # DOOR_TINTS is a named map in the JS; resolve it so `tint: DOOR_TINTS.pink`
     # is not silently read as "no tint" (it was, and every door previewed white)
     tints = dict(re.findall(r"^\s*(\w+):\s*\"(#[0-9a-fA-F]{6})\",", src, re.M))
     items = {}
-    for m in re.finditer(r'"([a-z-]+)":\s*\{\s*slot:\s*"(\w+)",\s*label:\s*"([^"]+)",\s*img:\s*"([^"]+)",\s*widthPct:\s*(\d+)(?:,\s*tint:\s*(null|DOOR_TINTS\.\w+|"#[0-9a-fA-F]{6}"))?', src):
+    # slot values may be hyphenated too ("shelf-left"); wallpapers carry no
+    # widthPct and are deliberately NOT matched here — they are the shell,
+    # not a piece standing in the room (see --wall below).
+    for m in re.finditer(r'"([a-z0-9-]+)":\s*\{\s*slot:\s*"([\w-]+)",\s*label:\s*"([^"]+)",\s*img:\s*"([^"]+)",\s*widthPct:\s*(\d+)(?:,\s*tint:\s*(null|DOOR_TINTS\.\w+|"#[0-9a-fA-F]{6}"))?', src):
         raw = m.group(6)
         if raw in (None, "null"):
             tint = None
@@ -76,14 +82,21 @@ def tint(im, hex_col, lo=0.45, hi=0.65):
     return im
 
 
-def compose(equipped, width=768):
+def compose(equipped, width=768, wall=None):
     items, place = read_catalogue()
-    shell = Image.open(SHELL).convert("RGBA")
+    # `wall` names a room-shell PNG beside room-shell.png (the wallpaper
+    # slot). All five shells are the same 768x762 drawing with different
+    # walls, so nothing else in here changes when it swaps.
+    shell_path = os.path.join(os.path.dirname(SHELL), wall) if wall else SHELL
+    shell = Image.open(shell_path).convert("RGBA")
     H = round(width * shell.height / shell.width)
     canvas = shell.resize((width, H), Image.LANCZOS)
-    # same paint order as FURNITURE_SLOTS: walls, then floor, then Blip
-    for slot in ("door", "window", "desk", "bed"):
-        fid = equipped[slot]
+    # same paint order as FURNITURE_SLOTS — shelves BEFORE the door, which
+    # stands on the floor in front of the right wall
+    for slot in ("window", "shelf-left", "shelf-right", "door", "desk", "bed", "beanbag"):
+        fid = equipped.get(slot)
+        if not fid:
+            continue          # an optional slot with nothing in it: bare wall
         d = items[fid]
         p = place[d["slot"]]
         art = Image.open(os.path.join(FURN, d["img"])).convert("RGBA")
@@ -108,6 +121,10 @@ SETS = {
     "basic": dict(door="door-white", window="city-window", desk="basic-desk", bed="basic-bed"),
     "techy": dict(door="door-sky", window="space-window", desk="techy-desk", bed="techy-bed"),
     "princess": dict(door="door-pink", window="mountain-window", desk="princess-desk", bed="princess-bed"),
+    # room decor (2026-08-12)
+    "nerdy": dict(door="door-sky", window="nerdy-window", desk="nerdy-desk", bed="nerdy-bed"),
+    "sport": dict(door="door-coral", window="sport-window", desk="sport-desk", bed="sport-bed"),
+    "emo": dict(door="door-lilac", window="emo-window", desk="emo-desk", bed="emo-bed"),
 }
 
 if __name__ == "__main__":
@@ -115,8 +132,17 @@ if __name__ == "__main__":
     ap.add_argument("--set", default="basic", choices=list(SETS))
     ap.add_argument("--out", default="room.png")
     ap.add_argument("--width", type=int, default=768)
+    # decor: any of these may be omitted, which is what an empty slot looks like
+    ap.add_argument("--shelf-left", default=None)
+    ap.add_argument("--shelf-right", default=None)
+    ap.add_argument("--beanbag", default=None)
+    ap.add_argument("--wall", default=None, help="a room-shell-*.png filename")
     a = ap.parse_args()
-    img = compose(SETS[a.set], a.width)
+    eq = dict(SETS[a.set])
+    for k, v in (("shelf-left", a.shelf_left), ("shelf-right", a.shelf_right), ("beanbag", a.beanbag)):
+        if v:
+            eq[k] = v
+    img = compose(eq, a.width, a.wall)
     # the app draws the room on the app's own dark page, not on nothing
     bgd = Image.new("RGBA", img.size, (11, 16, 32, 255))
     bgd.alpha_composite(img)

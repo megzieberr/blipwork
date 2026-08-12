@@ -41,12 +41,19 @@
 --  'furniture' category allowed through mhq_buy_item's non-cosmetic guard,
 --  the `furnitureShop` array in mhq_get_state, and all 18 rows. Like S4 it
 --  touches no phase-3 object, so nothing about it is missing.
+--  ROOM DECOR (2026-08-12) is mirrored here as well: the four extra slots
+--  (shelf-left, shelf-right, beanbag, wall) in BOTH shop_items_slot_cat_check
+--  and mhq_equip's key list, and all 23 rows. It needed no change to
+--  mhq_buy_item or mhq_get_state — the 'furniture' category was already
+--  allowed through the buy guard and already drives the furnitureShop
+--  payload — so those two functions are untouched by it here too.
 --  To rebuild a project from scratch, run in this order:
 --      schema.sql  →  migration-phase3.sql  →  migration-level-curve-40.sql
 --      →  migration-food-shop.sql  →  migration-furniture-slots.sql
---  (S4's and S5v2's rows and functions are already in schema.sql, so those
---   last two files are a no-op on a fresh build — run them anyway, so the
---   order matches live.)
+--      →  migration-room-decor.sql
+--  (S4's, S5v2's and the decor rows and functions are already in schema.sql,
+--   so those last three files are a no-op on a fresh build — run them anyway,
+--   so the order matches live.)
 --
 --  (It REPLACES the old roster-based login with self sign-up: learners create
 --   their own account.)
@@ -184,7 +191,8 @@ create table if not exists public.shop_items (
        (category = 'cosmetic'  and slot in ('hat','ears','glasses','wings','arms','back','effects','neck'))
     or (category = 'food'      and slot = 'food')
     or (category = 'trinket'   and slot = 'trinket')
-    or (category = 'furniture' and slot in ('bed','desk','window','door')))
+    or (category = 'furniture' and slot in ('bed','desk','window','door',
+                                            'shelf-left','shelf-right','beanbag','wall')))
 );
 
 -- Room build S2 (2026-08-08): one grant per (student, milestone), ever. The
@@ -787,7 +795,12 @@ begin
                      -- room build S5v2 (2026-08-08): the four furniture slots.
                      -- BOTH this list and shop_items_slot_cat_check above, or
                      -- an equipped bed comes back 'bad_equipped' (the July bug).
-                     'bed','desk','window','door')
+                     'bed','desk','window','door',
+                     -- room decor (2026-08-12): two shelf walls, the bean bag
+                     -- and wallpaper. `wall` is an ordinary equip slot here on
+                     -- purpose — only the CLIENT knows it swaps the room's
+                     -- background instead of painting a layer on it.
+                     'shelf-left','shelf-right','beanbag','wall')
         or (coalesce(v, '') <> '' and not b.owned_items ? v);
     if bad > 0 then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     update public.blips set equipped = p_equipped where student_id = sid and slot = v_slot;
@@ -1242,4 +1255,45 @@ insert into public.shop_items (item_id, slot, price, min_level, active, sort, ca
   ('door-lilac',      'door',    15,  1, true, 235, 'furniture'),
   ('door-coral',      'door',    18,  1, true, 236, 'furniture'),
   ('door-seafoam',    'door',    20,  1, true, 237, 'furniture')
+on conflict (item_id) do nothing;
+
+-- Room decor (2026-08-12): 23 more furniture rows — three themed SETS on the
+-- existing bed/desk/window slots, plus FOUR new slots (shelf-left, shelf-right,
+-- beanbag, wall). See supabase/migration-room-decor.sql for the full reasoning.
+--   nerdy Lv 4 · sport Lv 11 · emo Lv 18 · shelves Lv 1/7/13/19
+--   · bean bag Lv 6 · wallpaper Lv 1/5/10/16/22
+-- ⚠️ SHELVES AND THE BEAN BAG HAVE NO FREE DEFAULT, unlike every slot S5v2
+-- shipped: an empty shelf slot draws NOTHING (a bed you cannot remove makes
+-- sense, a shelf you cannot take down does not). `shelf-wood-*` is free but is
+-- not a fallback — DEFAULT_FURNITURE in js/companion/furniture.js has no entry
+-- for those three slots. That rule is the client's; nothing here enforces it.
+-- ⚠️ `wall` IS AN ORDINARY EQUIP SLOT THAT DRAWS NO LAYER. A wallpaper is
+-- bought, owned and equipped exactly like a bed — it just REPLACES the room
+-- shell instead of sitting on it, which only the client knows about.
+-- ⚠️ THE `-left`/`-right` SUFFIX IS THE WALL, NOT A MIRROR FLAG: each side is
+-- its own drawing, measured to that wall's rake, and they are not swappable.
+insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
+  ('nerdy-bed',          'bed',          80,  4, true, 240, 'furniture'),
+  ('nerdy-desk',         'desk',         70,  4, true, 241, 'furniture'),
+  ('nerdy-window',       'window',       60,  4, true, 242, 'furniture'),
+  ('sport-bed',          'bed',         160, 11, true, 250, 'furniture'),
+  ('sport-desk',         'desk',        140, 11, true, 251, 'furniture'),
+  ('sport-window',       'window',      120, 11, true, 252, 'furniture'),
+  ('emo-bed',            'bed',         200, 18, true, 260, 'furniture'),
+  ('emo-desk',           'desk',        175, 18, true, 261, 'furniture'),
+  ('emo-window',         'window',      145, 18, true, 262, 'furniture'),
+  ('shelf-wood-left',    'shelf-left',    0,  1, true, 270, 'furniture'),
+  ('shelf-wood-right',   'shelf-right',   0,  1, true, 271, 'furniture'),
+  ('shelf-glossy-left',  'shelf-left',   60,  7, true, 272, 'furniture'),
+  ('shelf-glossy-right', 'shelf-right',  60,  7, true, 273, 'furniture'),
+  ('shelf-bracket-left', 'shelf-left',   90, 13, true, 274, 'furniture'),
+  ('shelf-bracket-right','shelf-right',  90, 13, true, 275, 'furniture'),
+  ('shelf-panel-left',   'shelf-left',  120, 19, true, 276, 'furniture'),
+  ('shelf-panel-right',  'shelf-right', 120, 19, true, 277, 'furniture'),
+  ('beanbag',            'beanbag',      90,  6, true, 280, 'furniture'),
+  ('wall-plain',         'wall',          0,  1, true, 290, 'furniture'),
+  ('wall-cloud',         'wall',         70,  5, true, 291, 'furniture'),
+  ('wall-moons',         'wall',        100, 10, true, 292, 'furniture'),
+  ('wall-mountains',     'wall',        140, 16, true, 293, 'furniture'),
+  ('wall-stripes',       'wall',        170, 22, true, 294, 'furniture')
 on conflict (item_id) do nothing;

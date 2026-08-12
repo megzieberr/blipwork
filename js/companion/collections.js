@@ -203,9 +203,80 @@ export const FURNITURE_COLLECTIONS = {
     items: ["door-white", "door-mint", "door-sky", "door-pink", "door-lemon",
       "door-peach", "door-lilac", "door-coral", "door-seafoam"],
   },
+
+  /* ---- room decor (2026-08-12) ----
+     THE THREE THEMED SETS slot into the gaps between the sets that already
+     exist, so a new room look arrives roughly every 3-4 levels: 1 (basic),
+     4, 8 (techy), 11, 14 (princess), 18. That is the same rhythm the food
+     tiers run on (1/4/7/11/14/17), and it was the deciding argument — Megan
+     asked what the levels should be and this is the answer she took. Each
+     set is bed + desk + window, so it arrives whole (ruling 5). */
+  nerdy: {
+    label: "Nerdy",
+    unlockLevel: 4,
+    items: ["nerdy-bed", "nerdy-desk", "nerdy-window"],
+  },
+  sport: {
+    label: "Sporty",
+    unlockLevel: 11,
+    items: ["sport-bed", "sport-desk", "sport-window"],
+  },
+  emo: {
+    label: "Midnight",
+    unlockLevel: 18,
+    items: ["emo-bed", "emo-desk", "emo-window"],
+  },
+
+  /* ⚠️ SHELVES ARE ONE COLLECTION SPANNING FOUR LEVELS, which every other
+     collection in this file is not — the rest gate as a block. A shelf is a
+     PAIR of rows (one per wall) and the two must never be split across two
+     unlock levels, or a learner unlocks half a shelf. Grouping all eight in
+     one collection and letting `unlockLevel` be the FIRST gate keeps that
+     honest at the cost of the mystery card being wrong for the later
+     designs — which is why this collection sets noMysteryCard: the wooden
+     pair is free at Lv 1, so the group is open from the first minute and
+     the locked-card branch could never fire on it anyway. Individual cards
+     still show "Unlocks at level N" from their own min_level, which is the
+     server's number and the one that is enforced.
+
+     ⚠️ THE GATE ASSERTION IS PER ITEM, NOT PER COLLECTION, for this group.
+     verify-store.html checks unlockLevel == min_level for every collection
+     whose items share one gate; shelves and wallpaper are checked against
+     their own rows instead. If that check is ever tightened to "every
+     collection's items share its unlockLevel", these two are the exceptions
+     it will trip on — that is a known and deliberate shape, not a bug. */
+  shelves: {
+    label: "Shelves",
+    unlockLevel: 1,
+    noMysteryCard: true,
+    perItemGate: true,
+    items: ["shelf-wood-left", "shelf-wood-right",
+      "shelf-glossy-left", "shelf-glossy-right",
+      "shelf-bracket-left", "shelf-bracket-right",
+      "shelf-panel-left", "shelf-panel-right"],
+  },
+  beanbag: {
+    label: "Bean bag",
+    unlockLevel: 6,
+    items: ["beanbag"],
+  },
+  /* Wallpaper: same per-item shape as shelves. The plain walls are free at
+     Lv 1 (they are the room that shipped), so the group is open from the
+     start and each patterned shell carries its own gate. */
+  wallpaper: {
+    label: "Wallpaper",
+    unlockLevel: 1,
+    noMysteryCard: true,
+    perItemGate: true,
+    items: ["wall-plain", "wall-cloud", "wall-moons", "wall-mountains", "wall-stripes"],
+  },
 };
 
-export const FURNITURE_COLLECTION_ORDER = ["basic", "techy", "princess", "doors"];
+/* Panel order — roughly "the room itself, then what you put in it": the
+   three original sets, then the new themed ones in level order, then the
+   surfaces and decor, with the door colours last as the cheapest fiddle. */
+export const FURNITURE_COLLECTION_ORDER = ["basic", "nerdy", "techy", "sport",
+  "princess", "emo", "wallpaper", "shelves", "beanbag", "doors"];
 
 export function furnitureCollectionForItem(id) {
   for (const key of FURNITURE_COLLECTION_ORDER) {
