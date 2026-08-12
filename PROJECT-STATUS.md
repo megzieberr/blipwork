@@ -1,12 +1,48 @@
-# Project status — updated 2026-08-12 (ROOM DECOR BUILT — sw v43, SQL NOT RUN)
+# Project status — updated 2026-08-12 (ROOM DECOR ✅ SHIPPED, sw v43, migration LIVE)
 
-## 🛋️ 2026-08-12 — SHELVES, BEAN BAG, WALLPAPER + THREE THEMED SETS
+## 🛋️ 2026-08-12 — SHELVES, BEAN BAG, WALLPAPER + THREE THEMED SETS — ✅ LIVE
 
-"Next up §3" built. **Committed, NOT pushed. `supabase/migration-room-decor.sql`
-is NOT applied to live** — same position every room-build session leaves its
-work in. `verify-store.html` green, **3,595–3,596 checks** (was 2,972; the
-few-check wobble is the documented milestone-loot branch, see the S4 note).
-Zero console errors on every walk.
+"Next up §3" built, placed by Megan, applied and pushed the same day.
+**`supabase/migration-room-decor.sql` IS applied to live**
+(`room_decor_shelves_beanbag_wallpaper_themed_sets`, via MCP), sw bumped
+v42 → v43, everything pushed. `verify-store.html` green, **3,595–3,596
+checks** (was 2,972; the few-check wobble is the documented milestone-loot
+branch, see the S4 note). Zero console errors on every walk.
+
+**Learner rows verified byte-identical before and after** — students-core,
+blips and progress hashes all unchanged (2 students, 2 blips, 24 progress,
+4,580 XP). Active furniture 18 → **41**; cosmetic 63, food 47 and trinket 6
+untouched. Live smoke test with a throwaway learner (deleted after): the
+payload reads 41/63/47, buy + equip works on all four new slots and on the
+emo bed, unequip empties an optional slot, an unowned shelf is refused, a
+trinket is still both unbuyable and unequippable, and the level gate fires
+at Lv 1.
+
+### ✅ PLACEMENT SETTLED BY MEGAN, same session
+She opened Furniture mode and placed the three new slots herself, then
+pasted the numbers back — the same loop that settled the four room-build
+slots and the 41 accessories. Applied verbatim:
+
+| slot | anchor | attach | widthPct |
+|---|---|---|---|
+| shelf-left | 0.5, 0.5 | **0.137, 0.383** | **16** |
+| shelf-right | 0.5, 0.5 | **0.862, 0.403** | **16** |
+| beanbag | 0.5, 0.95 | **0.457, 0.537** | **17** |
+
+Her arrangement is better than the guess in every direction: both shelves
+came DOWN in size (26 → 16, so they read as shelves rather than as planks),
+the left one dropped and the right one rose so the two sit at different
+heights instead of mirroring each other, and the bean bag moved right across
+the room — from the front-left floor into the BACK CORNER, tucked behind
+where Blip stands rather than beside him.
+
+⚠️ **She sized only the WOODEN pair, and widthPct is per PIECE.** The other
+three shelf designs kept the provisional 26 and would have rendered 60%
+wider than the shelf she had just sized — same object, same spot, two
+different sizes. All four drawings are 400px wide at the same scale, so all
+eight are now 16. **That is an inference from her measurement, not a number
+she gave**; the panel shelf is the one to look at first, because its art is
+348px tall against the others' ~305, so at the same width it hangs lower.
 
 **Her two calls this session:** two shelf slots, one per wall, **placed by
 her** (the art already came as `-left`/`-right` pairs, so the slots match the
@@ -91,16 +127,14 @@ look at 1 · 4 · 8 · 11 · 14 · 18, the same rhythm the food tiers run on.
    piece, because a shelf you cannot see is a shelf you cannot place. It
    differs from the app deliberately: it is a placement tool, not a preview.
 
-### ⚠️ PLACEMENT FOR THE THREE NEW SLOTS IS PROVISIONAL — HER PASS IS NEXT
-`shelf-left` (0.130, 0.420), `shelf-right` (0.865, 0.335) and `beanbag`
-(0.360, 0.870) are **first guesses computed from the shell's own geometry**,
-not chosen by eye and NOT run through `dressing-room.html`. Same for every
-new `widthPct` (shelves 26, bean bag 22; the themed sets reuse the shipped
-sets' 41/33/20 because their drawings measure the same — all six windows are
-~320×375 and the desks share basic-desk's aspect to three decimals). They
-are good enough to look at, and they are hers to replace.
+### The themed sets' sizes are still first guesses
+The three sets reuse the shipped sets' `widthPct` (41 bed / 33 desk / 20
+window) because their drawings measure the same — all six windows are
+~320×375 and the new desks share basic-desk's aspect to three decimals — and
+they sit at her existing bed/desk/window placement, which is already settled.
+Not re-checked on a phone; worth a glance.
 
-Measured, so the first look is honest: **every new piece is 0 pixels outside
+Measured, so the look is honest: **every new piece is 0 pixels outside
 the shell's silhouette** (checked against the shell's alpha, not a computed
 floor line — the lesson from the wrong desk-overhang claim). The left
 shelf's BOUNDING BOX starts at x 0.000, but its drawn pixels are all inboard
@@ -150,9 +184,18 @@ made the desk claim wrong.
   one; nothing leans, nothing floats, nothing is cut off.
 
 ### Not done / punted
-- **Not pushed, not deployed, SQL NOT RUN.** Her call.
-- **Her placement pass** on the three new slots (above) — dressing-room.html
-  Furniture mode already lists them.
+- **Her six new CLOSET designs are cut but NOT wired** (emo, flower, lines,
+  nerdy, sporty, starry — `art-source/tripo/*closet*.png`, generated from
+  this session's prompts). Measured: **all six carry the shipped door's rake**,
+  so every one drops onto the right wall with no re-roll. The flower one
+  already exports with a transparent background; the other five need keying,
+  and the emo one needs the most care because its background is a gradient
+  rather than one flat colour. Wiring them is rows + labels + a slice pass,
+  no new slot and no constraint change — the door slot already exists.
+  ⚠️ They would be the first doors that are NOT the one tinted drawing, so
+  the "never add a second door PNG" rule in furniture.js needs rewording
+  rather than breaking: the nine COLOURS stay one tinted file; a patterned
+  closet is a different design, which is a different item.
 - The 23 prices are first guesses, like every other price in the app; they
   belong in the "price the free tier before go-live" pass already on the list.
 - The wallpaper shells are 139–234 KB against the plain shell's 51 KB
@@ -1860,14 +1903,13 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
-- 💻 10 min: open `dressing-room.html` → Furniture mode → place the **left shelf, right
-  shelf and bean bag**, paste the numbers back **[blocking — the decor can't ship on a
-  guess]**
-- 💻 2 min: say go, then the SQL below gets run and the day gets pushed —
-  `supabase/migration-room-decor.sql`, 4 new slots + 23 rows **[blocking]**
 - 📱 5 min: reopen the Blipwork PWA twice (v34 → v43 now), then one walk: land in the
-  room, tap through the tutorial once, tap the desk → quests, buy something → he's
-  wearing it, check the badge's spot by the window **[blocking — the go-live eyeball]**
+  room, buy a shelf and a wallpaper, check the bean bag's corner and the panel shelf's
+  height **[blocking — the go-live eyeball, now two ships behind]**
+- 🎨 2 min: say whether the six new **closet designs** get wired next (all six face the
+  right way; five need keying first) **[whenever]**
+- 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
+  PUBLIC, so it stays uncommitted until you decide **[whenever]**
 
 (The rest — the `FABLE-AUDIT-2026-08-06.md` commit decision and the optional
 `happy-eyes` re-roll — are in the full list; `/pending` prints it.)
@@ -1886,12 +1928,23 @@ stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 reviewed, shipped — see the day summary at the top of this file). Also the
 **tutorial** shipped the same day (session 3).
 
-**3. ✅ BUILT 2026-08-12 — SHELVES, BEAN BAG, WALLPAPER + the three THEMED
-SETS.** See the entry at the top of this file. Committed, NOT pushed, SQL
-NOT run; her placement pass on the three new slots is the blocking item.
-Her calls on the open questions: **two shelf slots, one per wall, placed by
-her**, and **nerdy Lv 4 · sport Lv 11 · emo Lv 18**. The original brief is
-kept below for the record.
+**3. ✅ SHIPPED 2026-08-12 — SHELVES, BEAN BAG, WALLPAPER + the three THEMED
+SETS.** See the entry at the top of this file. Migration applied to live,
+sw v43, pushed. Her calls: **two shelf slots, one per wall, placed by her**,
+and **nerdy Lv 4 · sport Lv 11 · emo Lv 18**. The original brief is kept
+below for the record.
+
+**4. NEXT — her six CLOSET designs** (emo, flower, lines, nerdy, sporty,
+starry), generated 2026-08-12 from this session's Tripo prompts and sitting
+in `art-source/tripo/`. All six measured to the shipped door's rake, so none
+need a re-roll. The session is: key five of them (the flower one is already
+transparent, the emo one has a gradient background and needs care), then
+rows + labels on the EXISTING door slot — no new slot, no constraint change.
+⚠️ They are the first doors that are not the one tinted drawing, so
+furniture.js's "never add a second door PNG" note must be reworded, not
+broken: the nine COLOURS stay one tinted file; a patterned closet is a
+different design. Likely its own "Closet designs" collection so the colours
+group stays the cheap Lv-1 fiddle it is.
 
 **~~3 (original brief).~~** The art is ALL sliced, committed and measured
 (assets/companion/furniture/: `beanbag`, `shelf-{wood,glossy,bracket,panel}-{left,right}`,

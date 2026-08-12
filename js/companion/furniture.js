@@ -112,26 +112,22 @@ export const SLOT_PLACEMENT = {
   // rather than the bed behind him.
   bed: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.750, y: 0.816 } },
 
-  /* ---- room decor (2026-08-12) — PROVISIONAL, awaiting Megan's pass ----
-     ⚠️ THESE THREE ARE FIRST GUESSES, unlike the four above, which are hers.
-     They are computed from the shell's own geometry (the quads at the top of
-     this comment block), not chosen by eye, and they are deliberately placed
-     clear of the pieces that are already there — but they have NOT been
-     through dressing-room.html yet. Her numbers replace them wholesale; that
-     is the whole reason Furniture mode exists. Do not polish them by hand.
+  /* ---- room decor (2026-08-12) ----
+     ⚠️ SETTLED BY MEGAN in dressing-room.html (Furniture mode), 2026-08-12 —
+     her numbers, pasted back and applied verbatim, exactly like the four
+     slots above and the 41 accessories before them. Don't hand-tune them;
+     run the page.
 
-     shelf-left  sits on the LEFT wall, low and outboard of the window
-                 (which is at x0.311). At x=0.13 that wall spans y 0.222
-                 to 0.606, so 0.42 is comfortably inside it.
-     shelf-right sits on the RIGHT wall ABOVE the door — the door is a
-                 floor-standing piece painted later, so an overlap resolves
-                 in the door's favour, which is the correct depth order.
-     beanbag     stands on the floor, front-left, out of the desk's corner
-                 and well clear of centre-front where Blip stands. At x=0.36
-                 the floor spans y 0.492 to 0.908. */
-  "shelf-left": { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.130, y: 0.420 } },
-  "shelf-right": { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.865, y: 0.335 } },
-  beanbag: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.360, y: 0.870 } },
+     Her arrangement is tighter than the first guess in every direction: both
+     shelves came DOWN in size (widthPct 26 -> 16, so they read as shelves
+     rather than as planks), the left one dropped and the right one rose so
+     the two sit at different heights instead of mirroring each other, and
+     the bean bag moved right across the room — from the front-left floor
+     into the BACK CORNER at (0.457, 0.537), tucked behind where Blip stands
+     rather than beside him. */
+  "shelf-left": { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.137, y: 0.383 } },
+  "shelf-right": { anchor: { x: 0.5, y: 0.5 }, attach: { x: 0.862, y: 0.403 } },
+  beanbag: { anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.457, y: 0.537 } },
 };
 
 /* Paint order, BACK to FRONT. Wall pieces go down first, then the floor
@@ -265,18 +261,29 @@ export const FURNITURE = {
      exact fault that moved the window walls during S5v2. There is no flipX
      shortcut here and none is wanted: `flipX` mirrors an accessory about
      its own centre, which would also mirror the wood grain and the
-     brackets. */
-  "shelf-wood-left": { slot: "shelf-left", label: "Wooden shelf", img: "shelf-wood-left.png", widthPct: 26 },
-  "shelf-wood-right": { slot: "shelf-right", label: "Wooden shelf", img: "shelf-wood-right.png", widthPct: 26 },
-  "shelf-glossy-left": { slot: "shelf-left", label: "Glossy shelf", img: "shelf-glossy-left.png", widthPct: 26 },
-  "shelf-glossy-right": { slot: "shelf-right", label: "Glossy shelf", img: "shelf-glossy-right.png", widthPct: 26 },
-  "shelf-bracket-left": { slot: "shelf-left", label: "Bracket shelf", img: "shelf-bracket-left.png", widthPct: 26 },
-  "shelf-bracket-right": { slot: "shelf-right", label: "Bracket shelf", img: "shelf-bracket-right.png", widthPct: 26 },
-  "shelf-panel-left": { slot: "shelf-left", label: "Panel shelf", img: "shelf-panel-left.png", widthPct: 26 },
-  "shelf-panel-right": { slot: "shelf-right", label: "Panel shelf", img: "shelf-panel-right.png", widthPct: 26 },
+     brackets.
 
-  // ---- bean bag (Lv 6) — one floor piece, no free version ----
-  "beanbag": { slot: "beanbag", label: "Bean bag", img: "beanbag.png", widthPct: 22 },
+     ⚠️ ALL EIGHT SHELVES ARE 16, AND SHE SIZED ONLY THE WOODEN PAIR
+     (2026-08-12). widthPct is per PIECE, so the other three designs kept the
+     provisional 26 and would have rendered 60% wider than the shelf she had
+     just sized — the same object, the same spot, two different sizes. All
+     four drawings are 400px wide at the same scale, so one widthPct gives
+     them one rendered width, which is what she was choosing when she picked
+     16. This is an inference from her measurement, not a number she gave;
+     if any single design wants its own size, that is a one-line override.
+     The PANEL shelf is the one to look at first — its art is 348px tall
+     against the others' ~305, so at the same width it hangs lower. */
+  "shelf-wood-left": { slot: "shelf-left", label: "Wooden shelf", img: "shelf-wood-left.png", widthPct: 16 },
+  "shelf-wood-right": { slot: "shelf-right", label: "Wooden shelf", img: "shelf-wood-right.png", widthPct: 16 },
+  "shelf-glossy-left": { slot: "shelf-left", label: "Glossy shelf", img: "shelf-glossy-left.png", widthPct: 16 },
+  "shelf-glossy-right": { slot: "shelf-right", label: "Glossy shelf", img: "shelf-glossy-right.png", widthPct: 16 },
+  "shelf-bracket-left": { slot: "shelf-left", label: "Bracket shelf", img: "shelf-bracket-left.png", widthPct: 16 },
+  "shelf-bracket-right": { slot: "shelf-right", label: "Bracket shelf", img: "shelf-bracket-right.png", widthPct: 16 },
+  "shelf-panel-left": { slot: "shelf-left", label: "Panel shelf", img: "shelf-panel-left.png", widthPct: 16 },
+  "shelf-panel-right": { slot: "shelf-right", label: "Panel shelf", img: "shelf-panel-right.png", widthPct: 16 },
+
+  // ---- bean bag (Lv 6) — one floor piece, no free version. Size hers. ----
+  "beanbag": { slot: "beanbag", label: "Bean bag", img: "beanbag.png", widthPct: 17 },
 
   /* ---- wallpaper ----
      ⚠️ THESE DRAW NO LAYER. `shell: true` means the art IS the room shell:

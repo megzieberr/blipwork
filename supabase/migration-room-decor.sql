@@ -2,7 +2,17 @@
 --  BLIPWORK — ROOM DECOR: shelves, bean bag, wallpaper + three themed sets
 --  Room build follow-up (2026-08-12), per PROJECT-STATUS "Next up §3".
 --
---  ⚠️ NOT YET APPLIED TO LIVE. Run the WHOLE file in the Supabase SQL editor
+--  ✅ APPLIED TO LIVE 2026-08-12 (migration
+--  `room_decor_shelves_beanbag_wallpaper_themed_sets`, via MCP at ship time).
+--  Learner rows verified byte-identical before and after — students-core,
+--  blips and progress hashes all unchanged, 2 students / 2 blips / 24
+--  progress / 4,580 XP; active furniture 18 -> 41 with cosmetic 63, food 47
+--  and trinket 6 untouched. Smoke-tested on live with a throwaway learner
+--  (deleted after): buy + equip on all four new slots, unequip, an unowned
+--  shelf refused, a trinket still unbuyable AND unequippable, and the level
+--  gate holding at Lv 1. Do not run again; kept as the record of what ran.
+--
+--  (original note) Run the WHOLE file in the Supabase SQL editor
 --  (project pjpwhalcifywjrwtjknd) AFTER migration-furniture-slots.sql, whose
 --  mhq_equip body this file re-creates with one small addition. Additive and
 --  idempotent: safe to run more than once, and it never drops or rewrites a
