@@ -1,4 +1,6 @@
 -- ============================================================
+--  ✅ APPLIED TO LIVE 2026-08-21 via MCP (price_the_free_tier_and_close_gaps)
+--  by the foreman session, same ship as the two bridge migrations.
 --  Blipwork — price the free tier                          (2026-08-21)
 -- ------------------------------------------------------------
 --  WHY: Megan's ruling, 2026-08-06 (PROJECT-STATUS.md "Next up" #4):

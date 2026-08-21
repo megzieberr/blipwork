@@ -1,4 +1,6 @@
 -- ============================================================
+--  ✅ APPLIED TO LIVE 2026-08-21 via MCP (roster_login_picker_replaces_signup)
+--  by the foreman session; roster seeded the same day. NEVER RE-RUN (see below).
 --  BLIPWORK — ROSTER LOGIN  (CQ-BRIDGE-PLAN.md Part 1, build session 1)
 --  Replaces self sign-up with a Circle-Quest-style name picker.
 --

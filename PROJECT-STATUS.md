@@ -1,4 +1,74 @@
-# Project status — updated 2026-08-12 (ROOM DECOR + CLOSETS + EGG ✅ SHIPPED, sw v44)
+# Project status — updated 2026-08-21 (CQ BRIDGE DAY ✅ SHIPPED, sw v45)
+
+## 🌉 2026-08-21 — THE WHOLE CQ↔BLIPWORK BRIDGE DAY, SHIPPED (sw v45)
+
+Foreman day (3rd run): Fable planned/briefed/reviewed, four Sonnet agents
+built, Fable shipped. All three migrations applied via MCP
+(`roster_login_picker_replaces_signup` → `cq_bridge_watermark_and_credit` →
+`price_the_free_tier_and_close_gaps`), **the 19-learner roster seeded from
+CQ via MCP** (both adult test accounts excluded, her ruling; spellings
+copied verbatim, verified 1:1), the `collect-cq` edge function deployed
+(verify_jwt OFF — the client's `sb_publishable_` key is not a JWT; the
+function's real auth is the username+password bcrypt check inside).
+verify-store ended **~3,999 green** (3,747 at day start). Learner-data
+checks: blips/progress counts and gold/xp sums byte-stable through all
+three migrations; students changed only by design (new columns, 2 test
+rows hidden, 19 seeded rows).
+
+**What the app now is:** login is the CQ-style NAME PICKER (self-signup is
+gone, `mhq_signup` dropped); the hub has a third **⭕ Circle Geo** tab with
+an "Open Circle Quest" out-link; a **💎 Collect** button pays CQ XP as
+diamonds at `app_config.cq_rate = 30` (delta/watermark design — replays
+and future CQ chapters flow through forever, remainder banks); and
+**nothing in the cosmetic shop is free any more** (8–15💎 starter band,
+butterfly-wing 60/L4 fills the wings gap, gold-shades 130/L8 is Eyes'
+first rare; all 63 rows re-sorted price-ascending per slot).
+
+### ⏳ Pending on Megan
+- 🌐 3 min **[blocking — Collect fails soft until done]**: Blipwork
+  dashboard → Edge Functions → collect-cq → Secrets → add `CQ_URL` =
+  `https://vlelxvhlyydwxnhbijco.supabase.co` and `CQ_SERVICE_KEY` = CQ
+  dashboard → Settings → API → service_role key. Then tell the session so
+  the throwaway smoke test can run.
+- 📱 5 min **[blocking — the go-live eyeball, now four ships behind]**:
+  reopen the PWA twice (v34 → v45), then: picker shows 19 names and NONE of
+  your accounts; `?u=1` gets you into your test account; ⭕ tab opens CQ;
+  shop shows no "Free" anywhere.
+
+### Decisions (2026-08-21, all hers unless marked)
+1. **Dispatch mode: Fable ran the build agents** (her call at day start —
+   the /go block + ~500-700k estimate was the day's fan-out gate).
+2. **Michaela M is the second adult** — excluded from the roster with Megan.
+3. **RATE 30** (≈203💎 median learner on first collect) — approved at ship.
+4. **The price table** (8–15 starter band + the two gap moves) — approved.
+5. Foreman defaults she ratified by shipping: ex-free cosmetics ENTER the
+   treasure-box loot pool (price>0 is the one rule); gold-shades joins the
+   milestone rare pool; butterfly-wing/gold-shades moved girly/gangster →
+   basics (their old collections' "?" cards would have hidden the new
+   levels).
+6. **`?u=1` login fallback** (session-1 review rider): hidden test accounts
+   are otherwise unreachable from a fresh device. URL-only, no UI hint.
+7. ⚠️ `migration-roster-login.sql` is **ONE-SHOT** — a re-run after the
+   seed would hide the whole class from the picker (header says so now).
+
+### Known issues / for a future session
+- 🐛 **Tour overlay survives logout** (pre-existing, confirmed twice today):
+  log out and "Meet Blip 1 OF 6" can sit on the login screen. Learners
+  share devices — worth fixing soon. `js/companion/tour.js` / `js/app.js`.
+- ⚠️ **Port 5191's browser cache poisons module loads** (bit two agents AND
+  the foreman today): fresh screens.js + stale config.js = SyntaxError
+  "does not provide an export named CQ_URL", or worse, silently stale
+  behaviour that mimics data bugs. Recipe: `fetch(url,{cache:'reload'})`
+  EVERY changed file (transitive imports too), then full navigation; or
+  use the maths-quest-s3 config (port 5213) for a clean origin.
+- chunky-chain (L7) still hides behind gangster's L20 collection card —
+  pre-existing quirk, deliberately not touched by the pricing pass.
+- The smoke test of the full paid-collect path waits on the secrets (the
+  auth / not_linked / cq_down paths were tested live at ship).
+
+---
+
+# (previous head) Project status — updated 2026-08-12 (ROOM DECOR + CLOSETS + EGG ✅ SHIPPED, sw v44)
 
 ## 🚪🥚 2026-08-12 (later) — SIX CLOSET DESIGNS, THE EGG, AND HATCH AT LEVEL 20
 
@@ -2003,13 +2073,14 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
-- 📱 5 min: reopen the Blipwork PWA twice (v34 → v44 now), then one walk: buy a closet
-  and a wallpaper, check the panel shelf's height and the 🥚 beside Blip's name
-  **[blocking — the go-live eyeball, now three ships behind]**
+(The two BLOCKING items — the collect-cq secrets and the phone eyeball, now
+v34 → v45 — live in the 2026-08-21 entry at the top of this file.)
 - 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
   PUBLIC, so it stays uncommitted until you decide **[whenever]**
 - 🎨 5 min: re-roll `happy-eyes` if you want it better (the weakest of the six eye
   pairs; Tripo drew an unwanted mouth that had to be masked out) **[whenever]**
+- 📱 while eyeballing v45, the older decor asks still stand: buy a closet and a
+  wallpaper, check the panel shelf's height and the 🥚 beside Blip's name **[whenever]**
 
 (Closet prices settled 2026-08-12 — she approved them as proposed.)
 
@@ -2038,12 +2109,12 @@ and the second Blip moving to level 20. See the entry at the top of this
 file. Applied to live and pushed on sw v44; prices approved by her as
 proposed.
 
-**5. NEXT — nothing is queued.** The room is feature-complete against every
-plan she has given: home screen, tutorial, furniture, food, decor, closets,
-wallpaper. What remains is the go-live sequence already written below —
-price the free tier, then the term toggle + first homework assignment +
-PUSH-SETUP walkthrough — and whatever she asks for next. Her phone eyeball
-on v44 is the only open blocking item.
+**5. ✅ SHIPPED 2026-08-21 — THE CQ↔BLIPWORK BRIDGE DAY** (see the entry at
+the top of this file): roster login, ⭕ Circle Geo tab, 💎 Collect bridge,
+AND the price-the-free-tier pass (sequence item 4 below) all live on sw
+v45. **NEXT — the go-live trio is the ONLY gate left** (sequence item 5
+below: term toggle ON + first homework assignment + the PUSH-SETUP
+walkthrough), then the kids get invited.
 
 **~~3 (original brief).~~** The art is ALL sliced, committed and measured
 (assets/companion/furniture/: `beanbag`, `shelf-{wood,glossy,bracket,panel}-{left,right}`,
@@ -2068,8 +2139,10 @@ on v44 is the only open blocking item.
 2. ~~Store upgrade: free-tier bundles that include accessories~~ — **BUILT 2026-07-28**,
    waiting only on the SQL above. 22 items, free tier in every slot, new back slot,
    closet/shop split.
-3. **Migrate the Circle Quest class → Blipwork.** Only when she calls it.
-4. **Price the free tier before any learner arrives** (her ruling, 2026-08-06):
+3. ~~Migrate the Circle Quest class → Blipwork~~ — **SHIPPED 2026-08-21**
+   (she called it; see the entry at the top of this file).
+4. ~~**Price the free tier before any learner arrives**~~ — **SHIPPED
+   2026-08-21** in the same day (her ruling, 2026-08-06):
    nothing may be free once the kids are playing. Seven items sit at price 0 today
    (one per slot). Needs a migration setting real prices, a re-tune of the "free"
    band in `itemRarity()` (blip-ui.js), and a decision on whether ex-free items

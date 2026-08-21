@@ -1,4 +1,6 @@
 -- ============================================================
+--  ✅ APPLIED TO LIVE 2026-08-21 via MCP (cq_bridge_watermark_and_credit)
+--  by the foreman session; collect-cq deployed the same day.
 --  BLIPWORK — THE XP -> DIAMONDS BRIDGE  (CQ-BRIDGE-PLAN.md Part 3,
 --  build session 3, 2026-08-21)
 --
