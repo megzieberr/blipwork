@@ -205,12 +205,15 @@ export const PASS = 0.8;           // 80% (first-try) to pass a quest and earn i
 export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
 
 /* DICE-PLAN.md — chapters where the 🎲 dice (generative practice rounds)
-   shows on the chapter screen. Ships EMPTY: a chapter id only ever belongs
-   here once it has BOTH a real recipe pool wired into
-   js/quests/dice-pools.js AND Megan's phone-test green light (her rhythm,
-   one chapter at a time — see DICE-PLAN's build order). Session 0b
-   (2026-08-21) built the infrastructure only; nothing is switched on. */
-export const DICE_CHAPTERS = [];
+   shows on the chapter screen. A chapter id only ever belongs here once
+   it has BOTH a real recipe pool wired into js/quests/dice-pools.js AND
+   Megan's phone-test green light (her rhythm, one chapter at a time —
+   see DICE-PLAN's build order). Session 0b (2026-08-21) built the
+   infrastructure only. Session 1 (2026-08-21) wires the real Statistics
+   pool and flips it on here — the STATISTICS PILOT going live at the
+   next ship; Megan phone-tests on live before any other chapter lights
+   up (DICE-PLAN's rhythm — this is not a green light for chapter 2). */
+export const DICE_CHAPTERS = ["stats"];
 
 /* Circle Geo tab (CQ-BRIDGE-PLAN.md Part 2, 2026-08-21). Circle Quest stays
    its own app, reached by a plain out-link — never merged, never iframed. */

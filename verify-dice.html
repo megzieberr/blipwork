@@ -20,26 +20,42 @@
 </head>
 <body>
 <h1 style="font-family:'Space Grotesk',sans-serif">Dice infrastructure · verification</h1>
-<p class="muted small">Tests js/dice.js + js/quests/dice-stub.js (the TEST-ONLY stub pool wired at chapterId
-  "stats" in js/quests/dice-pools.js). Session 1 adds a real verify-dice-&lt;chapter&gt;.html-style suite once
-  a real recipe pool exists; this page proves the dealing/seed/resume machinery itself, chapter-agnostic.</p>
+<p class="muted small">Part 1 tests js/dice.js + js/quests/dice-stub.js (a TEST-ONLY 4-skill fixture, no longer wired
+  into the app — js/quests/dice-pools.js now points "stats" at the real pool). It proves the generic dealing/seed/
+  resume/rng-restore machinery in isolation from any real recipe content. Part 2 (session 1, 2026-08-21) tests the
+  REAL Statistics pool (js/quests/dice-stats.js, all 58 q1–q8 skills) end to end: generation integrity, independent
+  recompute against statlib/the stats-graph engine, graph honesty, no-spoiler, and dealing/determinism/resume at
+  full pool size.</p>
 <div id="banner">running…</div>
 
-<h2>Per-entry generation integrity</h2>
+<h2>Part 1 · generic machinery (stub pool) — per-entry generation integrity</h2>
 <div class="grid" id="entries"></div>
 
-<h2>Determinism, resume &amp; dealing</h2>
+<h2>Part 1 · determinism, resume &amp; dealing</h2>
 <pre id="mechanics">…</pre>
 
+<h2>Part 2 · Statistics pool (real recipes) — per-entry generation integrity</h2>
+<p class="muted small">js/quests/dice-stats.js — all 58 q1–q8 skills, 200 seeded rolls each. Each card also folds in graph
+  honesty (verifyGraph) and the no-spoiler check for its skill, where applicable.</p>
+<div class="grid" id="statsEntries"></div>
+
+<h2>Part 2 · independent recompute (statlib / stats-graph engine)</h2>
+<pre id="statsRecompute">…</pre>
+
+<h2>Part 2 · dealing, determinism &amp; resume at full pool size (58 kinds, roundLength 7)</h2>
+<pre id="statsMechanics">…</pre>
+
 <script type="module">
-import { pool } from "./js/quests/dice-stub.js";
+import { pool as stubPool } from "./js/quests/dice-stub.js";
+import { pool as statsPool } from "./js/quests/dice-stats.js";
 import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
 import { answerCorrect, fmtComma } from "./js/check.js";
+import { mean, median, mode, range, stdDev, quartileValue, quartilePos, percentilePos, outlierBounds } from "./js/statlib.js";
+import { verifyGraph, ogiveAnswerAtCum, ogiveAnswerAtVal } from "./js/engine/stats-graph.js";
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
 
-const RUNS = 300;
 const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
 
 /* parse a formatted label (comma decimal) back to a number, or NaN if the
@@ -51,9 +67,15 @@ function numOf(label) {
   return /^-?\d+(\.\d+)?$/.test(cleaned) ? Number(cleaned) : NaN;
 }
 
-/* ---------- 1) per-entry generation integrity ---------- */
+/* ============================================================
+   PART 1 — generic machinery, proven against the stub pool (kept
+   exactly as session 0b built it — this is regression coverage for
+   js/dice.js itself, decoupled from any real recipe content).
+   ============================================================ */
+const RUNS = 300;
+
 const entriesHost = document.getElementById("entries");
-pool.entries.forEach(entry => {
+stubPool.entries.forEach(entry => {
   const issues = [];
   let sawMethod = false;
   for (let i = 0; i < RUNS; i++) {
@@ -86,8 +108,6 @@ pool.entries.forEach(entry => {
       const ids = q.tap.targets || [];
       if (!ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
     }
-    // calcdo: no extra structural check here (Statistics quest 1's own
-    // gen()s are the real proof of that shape — the stub pool doesn't use it).
   }
   const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} rolls)`);
   const card = document.createElement("div");
@@ -101,83 +121,342 @@ pool.entries.forEach(entry => {
   entriesHost.appendChild(card);
 });
 
-/* ---------- 2) determinism: same seed → same question, twice ---------- */
-const lines = [];
 {
+  const lines = [];
   const seed = newRoundSeed();
-  const skill = pool.entries[0];
+  const skill = stubPool.entries[0];
   const a = genAt(seed, 0, skill), b = genAt(seed, 0, skill);
   const same = JSON.stringify(a) === JSON.stringify(b);
   tick(same, "determinism: genAt(seed,0,skill) called twice is byte-identical");
   lines.push(`determinism (same seed, same index, twice): ${same ? "OK — identical" : "FAIL — drifted"}`);
-}
 
-/* ---------- 3) resume property: regenerating at a saved index, after
-   other indices were generated in between, reproduces the SAME question
-   — this is the actual resume path (js/dice-play.js re-derives from the
-   save's index, not a replay of the whole round). ---------- */
-{
-  const seed = newRoundSeed();
-  const dealt = dealRound(pool.entries, pool.roundLength, []);
+  const dealt = dealRound(stubPool.entries, stubPool.roundLength, []);
   const first = {};
-  dealt.forEach((skill, i) => { first[i] = genAt(seed, i, skill); });
-  // simulate "closing the tab mid-round" — re-derive index 1 (say) again,
-  // as a resume would, well after every other index was already generated.
+  dealt.forEach((sk, i) => { first[i] = genAt(seed, i, sk); });
   let allMatch = true;
-  dealt.forEach((skill, i) => {
-    const again = genAt(seed, i, skill);
-    if (JSON.stringify(again) !== JSON.stringify(first[i])) allMatch = false;
-  });
+  dealt.forEach((sk, i) => { if (JSON.stringify(genAt(seed, i, sk)) !== JSON.stringify(first[i])) allMatch = false; });
   tick(allMatch, "resume: re-deriving every index after the fact reproduces the original question");
   lines.push(`resume (regenerate at index = same question, for all ${dealt.length} dealt questions): ${allMatch ? "OK" : "FAIL"}`);
-}
 
-/* ---------- 4) determinism does NOT leak into static play: rng() must be
-   back on Math.random after withSeed/genAt return. ---------- */
-{
   const before = Math.random;
-  genAt(newRoundSeed(), 0, pool.entries[0]);
+  genAt(newRoundSeed(), 0, stubPool.entries[0]);
   const restored = (Math.random === before);
   tick(restored, "rng restored to Math.random after genAt (static play unaffected)");
   lines.push(`rng restore after genAt: ${restored ? "OK" : "FAIL — Math.random was left patched"}`);
-}
 
-/* ---------- 5) dealing: coverage-first, then fully random ---------- */
-{
-  // fresh learner (no kinds met yet): roundLength === pool size here, so the
-  // very first deal should be an exact permutation — every kind once, none twice.
-  const deck = dealRound(pool.entries, pool.roundLength, []);
+  const deck = dealRound(stubPool.entries, stubPool.roundLength, []);
   const kinds = deck.map(e => e.kind);
-  const coverAll = kinds.length === pool.entries.length && new Set(kinds).size === pool.entries.length;
+  const coverAll = kinds.length === stubPool.entries.length && new Set(kinds).size === stubPool.entries.length;
   tick(coverAll, "dealing: a fresh learner's first round covers every kind exactly once");
   lines.push(`dealing (fresh learner, first round): [${kinds.join(", ")}] — ${coverAll ? "OK, full coverage no repeats" : "FAIL"}`);
 
-  // partial coverage: 2 of 4 kinds already met — the other 2 MUST appear.
-  const metSome = pool.entries.slice(0, 2).map(e => e.kind);
-  const unmetSome = pool.entries.slice(2).map(e => e.kind);
-  const deck2 = dealRound(pool.entries, pool.roundLength, metSome);
+  const metSome = stubPool.entries.slice(0, 2).map(e => e.kind);
+  const unmetSome = stubPool.entries.slice(2).map(e => e.kind);
+  const deck2 = dealRound(stubPool.entries, stubPool.roundLength, metSome);
   const kinds2 = new Set(deck2.map(e => e.kind));
   const gotUnmet = unmetSome.every(k => kinds2.has(k));
   tick(gotUnmet, "dealing: with partial coverage, every still-unmet kind is dealt");
   lines.push(`dealing (2/4 kinds met): unmet [${unmetSome.join(", ")}] present in deck → ${gotUnmet ? "OK" : "FAIL"}`);
 
-  // full coverage: every kind met — dealing must still return a full round
-  // (fully random now), never crash, never come up short.
-  const allKinds = pool.entries.map(e => e.kind);
-  const deck3 = dealRound(pool.entries, pool.roundLength, allKinds);
-  const fullLen = deck3.length === pool.roundLength;
+  const allKinds = stubPool.entries.map(e => e.kind);
+  const deck3 = dealRound(stubPool.entries, stubPool.roundLength, allKinds);
+  const fullLen = deck3.length === stubPool.roundLength;
   tick(fullLen, "dealing: full coverage still deals a complete round (fully random)");
-  lines.push(`dealing (full coverage): dealt ${deck3.length}/${pool.roundLength} — ${fullLen ? "OK" : "FAIL"}`);
+  lines.push(`dealing (full coverage): dealt ${deck3.length}/${stubPool.roundLength} — ${fullLen ? "OK" : "FAIL"}`);
 
-  // roundLength can safely exceed the pool size (a thin early pool) without
-  // crashing or returning short — proves dealRound's padding fallback.
-  const deck4 = dealRound(pool.entries, pool.roundLength + 3, []);
-  const noCrash = deck4.length === pool.roundLength + 3;
+  const deck4 = dealRound(stubPool.entries, stubPool.roundLength + 3, []);
+  const noCrash = deck4.length === stubPool.roundLength + 3;
   tick(noCrash, "dealing: roundLength > pool size pads without crashing or coming up short");
-  lines.push(`dealing (roundLength ${pool.roundLength + 3} > pool ${pool.entries.length}): dealt ${deck4.length} — ${noCrash ? "OK" : "FAIL"}`);
+  lines.push(`dealing (roundLength ${stubPool.roundLength + 3} > pool ${stubPool.entries.length}): dealt ${deck4.length} — ${noCrash ? "OK" : "FAIL"}`);
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
 }
 
-document.getElementById("mechanics").textContent = lines.join("\n");
+/* ============================================================
+   PART 2 — the real Statistics pool.
+   ============================================================ */
+const RUNS_REAL = 200;
+const near = (a, b, tol = 0.02) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
+
+/* ---------- tiny parsers over a question's OWN rendered HTML/fields ----------
+   Used for the independent-recompute checks below. Reading straight off
+   q.prompt (rather than trusting the generator's internal variables) is
+   what makes this "independent": if a generator's arithmetic ever drifted
+   from what it actually displays, these would catch it. Graph-bearing
+   skills use the STRUCTURED q.graph.five / q.graph.classes fields instead
+   of text-parsing wherever one exists — much more robust. */
+function numsFromSpan(html) {
+  const m = html.match(/<span class="num">([\s\S]*?)<\/span>/);
+  if (!m) return null;
+  const nums = m[1].split(/\s*;\s*/).map(s => Number(s.trim().replace(",", "."))).filter(Number.isFinite);
+  return nums.length ? nums : null;
+}
+function boldNums(html) {
+  const inner = [...html.matchAll(/<b>([\s\S]*?)<\/b>/g)].map(m => m[1]).join(" ");
+  // negative lookbehind: a digit immediately after a letter is a label like
+  // "Q1"/"Q3" (genOutBound/genIsOutlier/genFindUnknown's "Q1 = 23" style
+  // bold text), not a rolled number — skip it, or "Q1 = 23" would parse as
+  // [1, 23] instead of [23].
+  return [...inner.matchAll(/(?<![A-Za-z])-?\d+(?:,\d+)?/g)].map(m => Number(m[0].replace(",", ".")));
+}
+function parseFreqRows(html) {
+  const rows = [...html.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(r => [...r[1].matchAll(/<td>([\s\S]*?)<\/td>/g)].map(c => c[1].trim()));
+  return rows.filter(tds => tds.length >= 2 && !/^Total$/i.test(tds[0]));
+}
+function correctOptionLabel(q) { const c = q.options.find(o => o.correct); return c ? c.label : null; }
+function correctOptionNum(q) { const l = correctOptionLabel(q); return l == null ? NaN : Number(String(l).replace(",", ".")); }
+const QLABEL = { q1: "Q1 (the lower quartile)", q2: "the median (Q2)", q3: "Q3 (the upper quartile)" };
+function detectQuartile(html) { for (const k of ["q1", "q2", "q3"]) if (html.includes(QLABEL[k])) return k; return null; }
+
+/* one recompute function per skillId that can be checked cheaply — "at
+   minimum" the mean/median/SD/quartile/IQR family DICE-PLAN names, plus
+   every other skill where an independent recompute is cheap and the data
+   is exposed (structured field or a simple, stable prompt pattern). Skills
+   without an entry here (mostly q4's qualitative skew classification, and
+   pure-recall mc with no numbers) are still covered by the generic
+   per-entry checks + graph-verify above/below — see the report for the
+   explicit coverage tally. */
+const RECOMPUTE = {
+  // q1 — calcdo: structured fields (q.setup.data, q.goal), no text-parsing needed.
+  "q1.readN":      q => q.setup.data.length === q.goal.value,
+  "q1.readMean":   q => near(mean(q.setup.data), q.goal.value, 1e-6),
+  "q1.readSd":     q => near(stdDev(q.setup.data), q.goal.value, 1e-6),
+  "q1.readMedian": q => near(median(q.setup.data), q.goal.value, 1e-6), // n is always 5 (odd) — school & Casio "exclusive" medians agree exactly
+  "q1.capture":    q => Array.isArray(q.goal.expect) && q.goal.expect.length === 5,
+
+  // q2 — centre & spread
+  "q2.mean":   q => { const d = numsFromSpan(q.prompt); return !!d && near(mean(d), q.expected, 1e-6); },
+  "q2.median": q => { const d = numsFromSpan(q.prompt); return !!d && near(median(d), correctOptionNum(q), 1e-6); },
+  "q2.mode":   q => { const d = numsFromSpan(q.prompt); return !!d && near(mode(d), correctOptionNum(q), 1e-6); },
+  "q2.range":  q => { const d = numsFromSpan(q.prompt); return !!d && near(range(d), q.expected, 1e-6); },
+  "q2.total":  q => { const [n, m] = boldNums(q.prompt); return near(n * m, q.expected, 1e-6); },
+
+  // q3 — quartiles, box plots, outliers
+  "q3.pos":       q => { const [n] = boldNums(q.prompt); const w = detectQuartile(q.prompt); return !!w && near(quartilePos(n, w), correctOptionNum(q), 1e-6); },
+  "q3.value":     q => { const d = numsFromSpan(q.prompt); const w = detectQuartile(q.prompt); return !!d && !!w && near(quartileValue(d, w), correctOptionNum(q), 1e-6); },
+  "q3.iqr":       q => { const [a, b] = boldNums(q.prompt); return near(b - a, q.expected, 1e-6); },
+  "q3.iqrList":   q => { const d = numsFromSpan(q.prompt); return !!d && near(quartileValue(d, "q3") - quartileValue(d, "q1"), q.expected, 1e-6); },
+  "q3.semiIqr":   q => { const [a, b] = boldNums(q.prompt); return near((b - a) / 2, q.expected, 1e-6); },
+  "q3.readBox":   q => { const names = { median: "median", q1: "lower quartile (Q1)", q3: "upper quartile (Q3)", min: "minimum", max: "maximum" };
+                          const which = Object.keys(names).find(k => q.prompt.includes(names[k]));
+                          if (!which) return false;
+                          const key = which === "median" ? "med" : which;
+                          return near(q.graph.five[key], q.expected, 1e-6) && q.graph.showValues === false; /* no-spoiler, folded in */ },
+  "q3.outBound":  q => { const [a, b] = boldNums(q.prompt); const { lower, upper } = outlierBounds(a, b); const want = q.prompt.includes("lower boundary") ? lower : upper; return near(want, q.expected, 1e-6); },
+  "q3.isOutlier": q => { const [q1, q3, x] = boldNums(q.prompt); const { lower, upper } = outlierBounds(q1, q3); return ((x < lower || x > upper)) === q.yes; },
+  "q3.percentile": q => { const [n] = boldNums(q.prompt); const pm = q.prompt.match(/(\d+)th percentile/); return !!pm && near(percentilePos(n, Number(pm[1])), q.expected, 1e-6); },
+
+  // q5 — grouped data
+  "q5.total":       q => { const rows = parseFreqRows(q.prompt); const sum = rows.reduce((s, r) => s + Number(r[1]), 0); return near(sum, q.expected, 1e-6) && !/<td>Total<\/td>/i.test(q.prompt); /* no-spoiler */ },
+  "q5.midpoint":    q => { const [lo, up] = boldNums(q.prompt); return near((lo + up) / 2, q.expected, 1e-6); },
+  "q5.fx":          q => { const [lo, up, f] = boldNums(q.prompt); return near(f * (lo + up) / 2, q.expected, 1e-6); },
+  "q5.estMean":     q => { const rows = parseFreqRows(q.prompt); let fx = 0, n = 0; rows.forEach(r => { fx += Number(r[1]) * Number(r[2]); n += Number(r[1]); }); return near(fx / n, q.expected, 0.02); },
+  "q5.modalClass":  q => { const rows = parseFreqRows(q.prompt); const mx = Math.max(...rows.map(r => Number(r[1]))); const winners = rows.filter(r => Number(r[1]) === mx); return winners.length === 1 && winners[0][0] === correctOptionLabel(q); },
+  "q5.medianClass": q => { const rows = parseFreqRows(q.prompt); const n = rows.reduce((s, r) => s + Number(r[1]), 0); let cum = 0, hit = null; for (const r of rows) { cum += Number(r[1]); if (cum >= n / 2) { hit = r; break; } } return !!hit && hit[0] === correctOptionLabel(q); },
+
+  // q6 — ogives (classes come off the STRUCTURED q.graph.classes field)
+  "q6.cumFreq": q => {
+    const rows = parseFreqRows(q.prompt);
+    const m = q.prompt.match(/up to and including the class ([\s\S]*?)\?/);
+    if (!m) return false;
+    const idx = rows.findIndex(r => r[0] === m[1]);
+    if (idx < 0) return false;
+    return near(rows.slice(0, idx + 1).reduce((s, r) => s + Number(r[1]), 0), q.expected, 1e-6) && !/<td>Total<\/td>/i.test(q.prompt); /* no-spoiler */
+  },
+  "q6.readQuartile": q => {
+    const classes = q.graph.classes, n = classes.reduce((s, c) => s + c.freq, 0);
+    const which = q.prompt.includes("median") ? "median" : q.prompt.includes("Q1") ? "q1" : "q3";
+    const level = which === "median" ? n / 2 : which === "q1" ? n / 4 : 3 * n / 4;
+    return near(ogiveAnswerAtCum({ classes }, level), q.expected, 1e-6);
+  },
+  "q6.readPercentile": q => {
+    const classes = q.graph.classes, n = classes.reduce((s, c) => s + c.freq, 0);
+    const pm = q.prompt.match(/(\d+)th percentile/);
+    return !!pm && near(ogiveAnswerAtCum({ classes }, n * Number(pm[1]) / 100), q.expected, 1e-6);
+  },
+  "q6.valueAtMost": q => {
+    const m = q.prompt.match(/at most (-?\d+(?:,\d+)?)/);
+    if (!m) return false;
+    return near(ogiveAnswerAtVal({ classes: q.graph.classes }, Number(m[1].replace(",", "."))), q.expected, 1e-6);
+  },
+
+  // q7 — standard deviation & variance
+  "q7.varFromSd": q => { const [sd] = boldNums(q.prompt); return near(sd * sd, q.expected, 1e-6); },
+  "q7.sdFromVar": q => { const [v] = boldNums(q.prompt); return near(Math.sqrt(v), q.expected, 1e-6); },
+  "q7.boundary":  q => { const [m, sd] = boldNums(q.prompt); const want = q.prompt.includes("below the mean") ? m - sd : m + sd; return near(want, q.expected, 1e-6); },
+  "q7.within":    q => {
+    const d = numsFromSpan(q.prompt);
+    if (!d) return false;
+    const mR = Math.round(mean(d) * 10) / 10, sdR = Math.round(stdDev(d) * 10) / 10;
+    const count = d.filter(x => x >= mR - sdR - 1e-9 && x <= mR + sdR + 1e-9).length;
+    return count === q.expected;
+  },
+
+  // q8 — mixed exam favourites
+  "q8.effectMean":  q => { const [M, k] = boldNums(q.prompt); const want = q.prompt.includes("added to") ? M + k : M - k; return near(want, q.expected, 1e-6); },
+  "q8.findUnknown": q => {
+    const [a, b] = boldNums(q.prompt);
+    if (q.prompt.includes("Find <b>Q3</b>")) return near(a + b, q.expected, 1e-6);
+    if (q.prompt.includes("Find <b>Q1</b>")) return near(b - a, q.expected, 1e-6);
+    return false;
+  },
+  "q8.varShift": q => { const [v] = boldNums(q.prompt); return near(v, q.expected, 1e-6); },
+};
+const recomputeCoverage = Object.keys(RECOMPUTE);
+
+/* graph honesty, generic across every skill (q.graph OR q.graphs) — no
+   per-skill code needed, verifyGraph already independently re-derives
+   every drawn feature back out of the pixel geometry (js/engine/stats-
+   graph.js's "graphs cannot lie" contract). */
+function graphIssues(q) {
+  const out = [];
+  if (q.graph) verifyGraph(q.graph).forEach(r => { if (!r.ok) out.push(`graph: ${r.label}`); });
+  if (Array.isArray(q.graphs)) q.graphs.forEach((g, i) => verifyGraph(g.spec || g).forEach(r => { if (!r.ok) out.push(`graphs[${i}]: ${r.label}`); }));
+  return out;
+}
+
+const statsHost = document.getElementById("statsEntries");
+const recomputeLines = [];
+let sawMethodCount = 0;
+
+statsPool.entries.forEach(entry => {
+  const issues = [];
+  let sawMethod = false, recomputeRuns = 0, recomputeFails = 0;
+  const hasRecompute = !!RECOMPUTE[entry.skillId];
+
+  for (let i = 0; i < RUNS_REAL; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.push(`threw: ${e.message}`); break; }
+
+    if (!INPUT_LAW.has(q.type)) { issues.push(`type "${q.type}" violates the input law`); continue; }
+    if (q.method) sawMethod = true;
+    // dot-decimal regression guard: everything rendered to the learner
+    // must be comma decimal (SA convention), never a stray English dot.
+    if (/\d\.\d/.test(String(q.prompt))) issues.push("prompt contains a dot-decimal number (should be comma)");
+    if (q.answerLabel != null && /\d\.\d/.test(String(q.answerLabel))) issues.push("answerLabel contains a dot-decimal number (should be comma)");
+
+    if (q.type === "mc" || q.type === "reason") {
+      const labels = q.options.map(o => o.label);
+      const corrects = q.options.filter(o => o.correct);
+      if (corrects.length !== 1) issues.push(`${corrects.length} correct options (want exactly 1)`);
+      // NOT hard-requiring exactly 4: q7.consistency, q8.compareMedian and
+      // q8.compareSpread ship with 3 options by design (same in static
+      // play) — the real rule enforced here is DICE-PLAN's: every option
+      // distinct BY VALUE, exactly one correct, at least 2 to choose from.
+      if (labels.length < 2) issues.push("fewer than 2 options");
+      if (new Set(labels).size !== labels.length) issues.push(`duplicate option labels: ${labels.join(" | ")}`);
+      const correctNum = numOf(corrects[0] && corrects[0].label);
+      if (Number.isFinite(correctNum)) {
+        q.options.filter(o => !o.correct).forEach(o => {
+          const n = numOf(o.label);
+          if (Number.isFinite(n) && Math.abs(n - correctNum) < 1e-9) issues.push(`decoy "${o.label}" equals the answer BY VALUE`);
+        });
+      }
+    } else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.push("non-finite expected");
+      else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) issues.push("expected fails its own check");
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.push("q.yes not boolean");
+    } else if (q.type === "tap") {
+      const ids = q.tap.targets || [];
+      if (!ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
+    } else if (q.type === "calcdo") {
+      if (!q.goal || typeof q.goal.type !== "string") issues.push("calcdo missing a goal");
+    }
+
+    graphIssues(q).forEach(g => issues.push(g));
+
+    if (hasRecompute) {
+      recomputeRuns++;
+      let ok = false;
+      try { ok = !!RECOMPUTE[entry.skillId](q); } catch (e) { ok = false; issues.push(`recompute threw: ${e.message}`); }
+      if (!ok) { recomputeFails++; issues.push("recompute mismatch"); }
+    }
+  }
+
+  if (sawMethod) sawMethodCount++;
+  const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS_REAL} rolls)`);
+  if (hasRecompute) {
+    tick(recomputeFails === 0, `${entry.skillId} recompute (${recomputeRuns} rolls, independent of the generator's own code path)`);
+    recomputeLines.push(`${entry.skillId}: ${recomputeRuns - recomputeFails}/${recomputeRuns} recompute matches`);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...new Set(issues)].slice(0, 5).join("; ")}</li>
+      <li class="${entry.concept ? "ok" : ""}">${entry.concept ? "has a concept id (I'm lost card testable)" : "no concept (tests the no-concept path)"}</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method (method-reveal link testable)" : "no q.method"}</li>
+      <li class="${hasRecompute ? "ok" : ""}">${hasRecompute ? `independent recompute checked (${recomputeRuns} rolls)` : "no independent recompute (structural checks only — see report)"}</li>
+    </ul>`;
+  statsHost.appendChild(card);
+});
+
+recomputeLines.unshift(`Independent recompute wired for ${recomputeCoverage.length}/${statsPool.entries.length} skills (the mean/median/SD/quartile/IQR family named in the brief, plus every other skill where the rolled data is cheaply recoverable from the question's own structured fields or rendered text). Skills without a recompute entry (q4's qualitative skew classification, and pure-recall mc with no numbers) still get every generic + graph-honesty check above.`);
+recomputeLines.push(`Method-text coverage: ${sawMethodCount}/${statsPool.entries.length} skills carry q.method.`);
+document.getElementById("statsRecompute").textContent = recomputeLines.join("\n");
+
+/* ---------- dealing / determinism / resume at full pool size ---------- */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+
+  // determinism + resume, checked across EVERY entry (not just one) —
+  // this is the property js/dice-play.js's resume path depends on for
+  // every one of the 58 skills, not just a sample.
+  let detAll = true, resumeAll = true;
+  statsPool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    const c = genAt(seed, i, skill); // a third derive, "after other indices were generated" in spirit
+    if (JSON.stringify(a) !== JSON.stringify(c)) resumeAll = false;
+  });
+  tick(detAll, "determinism: genAt(seed,i,skill) is byte-identical on repeat, for all 58 skills");
+  tick(resumeAll, "resume: re-deriving any index reproduces the original question, for all 58 skills");
+  lines.push(`determinism (all 58 skills, same seed/index twice): ${detAll ? "OK" : "FAIL"}`);
+  lines.push(`resume (all 58 skills): ${resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, statsPool.entries[0]);
+  const restored = (Math.random === before);
+  tick(restored, "rng restored to Math.random after genAt on the real pool");
+  lines.push(`rng restore after genAt (real pool): ${restored ? "OK" : "FAIL"}`);
+
+  // fresh learner: first round (7) must be 7 DISTINCT unmet kinds.
+  const deck1 = dealRound(statsPool.entries, statsPool.roundLength, []);
+  const distinct1 = new Set(deck1.map(e => e.kind)).size === deck1.length && deck1.length === statsPool.roundLength;
+  tick(distinct1, "dealing: a fresh learner's first round is 7 distinct, all-unmet kinds");
+  lines.push(`dealing (fresh learner, first round of ${statsPool.roundLength}): [${deck1.map(e => e.kind).join(", ")}] — ${distinct1 ? "OK" : "FAIL"}`);
+
+  // simulate successive rounds (coverage-first) until every kind has been
+  // met — proves DICE-PLAN's "first play(s) deal one of each kind, then
+  // fully random" ruling actually converges to full coverage, not just on
+  // round 1.
+  let met = [];
+  let rounds = 0;
+  const maxRounds = Math.ceil(statsPool.entries.length / statsPool.roundLength) + 2; // generous slack
+  while (met.length < statsPool.entries.length && rounds < maxRounds) {
+    const deck = dealRound(statsPool.entries, statsPool.roundLength, met);
+    const metSet = new Set(met);
+    deck.forEach(e => metSet.add(e.kind));
+    met = [...metSet];
+    rounds++;
+  }
+  const fullCoverage = met.length === statsPool.entries.length;
+  tick(fullCoverage, `dealing: successive rounds reach full 58-kind coverage (took ${rounds} rounds, expected ≤ ${maxRounds})`);
+  lines.push(`dealing (successive rounds to full coverage): ${met.length}/${statsPool.entries.length} kinds met after ${rounds} rounds — ${fullCoverage ? "OK" : "FAIL"}`);
+
+  // once every kind is met, dealing must still return a complete, valid round.
+  const allKinds = statsPool.entries.map(e => e.kind);
+  const deckFull = dealRound(statsPool.entries, statsPool.roundLength, allKinds);
+  const fullLen = deckFull.length === statsPool.roundLength;
+  tick(fullLen, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage, fully random): dealt ${deckFull.length}/${statsPool.roundLength} — ${fullLen ? "OK" : "FAIL"}`);
+
+  document.getElementById("statsMechanics").textContent = lines.join("\n");
+}
 
 const banner = document.getElementById("banner");
 const ok = passed === total;
