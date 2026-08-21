@@ -22,8 +22,13 @@
 //      roster seed copies spellings verbatim from CQ, no fuzzing.
 //      Missing/unreachable/misconfigured -> {ok:false, error:"cq_down"},
 //      soft fail, nothing on the Blipwork side is touched.
-//   4. Sum xp_events.xp for that CQ student (~100 rows/learner, fine to
-//      do in-process rather than a CQ-side aggregate RPC we don't have).
+//   4. Sum xp_events.xp for that CQ student, in-process rather than a
+//      CQ-side aggregate RPC we don't have — PAGED (limit/offset, 1000
+//      rows/page), because Supabase's REST layer silently caps an unpaged
+//      response at its own max-rows setting. Today's top learner is only
+//      ~100 rows deep, but this bridge is specced to run forever over
+//      replays and every future CQ chapter, so >1000 is a real future, not
+//      a hypothetical one — see the fuller reasoning inline at the fetch.
 //   5. Call mhq_credit_cq(student_id, cqTotal) — OUR OWN service-role-only
 //      RPC — and return its jsonb straight through. All the delta/
 //      watermark/row-lock maths lives there, not here.
@@ -118,16 +123,32 @@ Deno.serve(async (req) => {
     return json({ ok: false, error: "cq_down" });
   }
 
+  // xp_events is unbounded — a learner accumulates one row per round played,
+  // forever, across replays and every future CQ chapter (that's the whole
+  // point of the bridge). Supabase's REST layer silently CAPS an unpaged
+  // response at its max-rows setting (default 1000) — no error, just a
+  // truncated array — so an unpaged fetch would quietly underpay any
+  // learner who ever crosses that line, permanently (the watermark would
+  // bank the truncated total as if it were the real one). Page explicitly
+  // and sum every page; treat hitting the page cap as cq_down, never as a
+  // partial sum — an undercounted total must never reach mhq_credit_cq.
   let cqTotal = 0;
+  const XP_PAGE_SIZE = 1000;
+  const XP_MAX_PAGES = 50; // absurd-but-finite: 50k events/learner
   try {
-    const r = await fetch(
-      `${CQ_URL}/rest/v1/xp_events?student_id=eq.${encodeURIComponent(cqStudentId)}&select=xp`,
-      { headers: cqHeaders },
-    );
-    if (!r.ok) return json({ ok: false, error: "cq_down" });
-    const rows = (await r.json()) as Array<{ xp?: number }>;
-    if (!Array.isArray(rows)) return json({ ok: false, error: "cq_down" });
-    cqTotal = rows.reduce((sum, row) => sum + (Number(row.xp) || 0), 0);
+    for (let page = 0; page < XP_MAX_PAGES; page++) {
+      const offset = page * XP_PAGE_SIZE;
+      const r = await fetch(
+        `${CQ_URL}/rest/v1/xp_events?student_id=eq.${encodeURIComponent(cqStudentId)}&select=xp&limit=${XP_PAGE_SIZE}&offset=${offset}`,
+        { headers: cqHeaders },
+      );
+      if (!r.ok) return json({ ok: false, error: "cq_down" });
+      const rows = (await r.json()) as Array<{ xp?: number }>;
+      if (!Array.isArray(rows)) return json({ ok: false, error: "cq_down" });
+      cqTotal += rows.reduce((sum, row) => sum + (Number(row.xp) || 0), 0);
+      if (rows.length < XP_PAGE_SIZE) break; // short page = that was the last one
+      if (page === XP_MAX_PAGES - 1) return json({ ok: false, error: "cq_down" }); // filled the cap — more rows exist, don't guess
+    }
   } catch {
     return json({ ok: false, error: "cq_down" });
   }

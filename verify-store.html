@@ -1851,6 +1851,31 @@ for (const o of outfits) {
       "collect-cq: does not read CQ_URL / CQ_SERVICE_KEY from the environment");
     tick(/display_name=eq\./.test(fnSrc) && /xp_events\?student_id=eq\./.test(fnSrc),
       "collect-cq: does not read CQ's students (by display_name) then xp_events (by student_id) over REST");
+
+    // ---- xp_events paging (foreman review, 2026-08-21): Supabase's REST
+    // layer silently caps an unpaged response at its own max-rows setting —
+    // no error, just a truncated array — so the xp_events read MUST page
+    // (limit/offset) rather than trust one fetch, or a learner who ever
+    // crosses that line is permanently underpaid with no error anywhere. ----
+    tick(/xp_events[\s\S]{0,120}limit=\$\{?XP_PAGE_SIZE\}?[\s\S]{0,60}offset=\$\{?offset\}?/.test(fnSrc),
+      "collect-cq: the xp_events fetch does not page with limit=/offset= — an unpaged fetch silently truncates at Supabase's REST max-rows setting");
+    tick(/for \(let page = 0; page < XP_MAX_PAGES; page\+\+\)/.test(fnSrc),
+      "collect-cq: the xp_events read is missing its paging loop (for (let page = 0; page < XP_MAX_PAGES; page++))");
+    tick(/rows\.length < XP_PAGE_SIZE\)\s*break;/.test(fnSrc),
+      "collect-cq: the paging loop does not terminate on a short page (rows.length < XP_PAGE_SIZE)");
+    // hitting the cap must be treated as cq_down, NEVER as a partial sum —
+    // the whole point of the fix is that an undercounted total must never
+    // reach mhq_credit_cq, so this line has to be a return, not a fallthrough.
+    tick(/page === XP_MAX_PAGES - 1\)\s*return json\(\{\s*ok:\s*false,\s*error:\s*"cq_down"\s*\}\)/.test(fnSrc),
+      'collect-cq: filling the page cap must return {ok:false, error:"cq_down"} — crediting a partial (truncated) total would be a silent, permanent underpay');
+    tick(/const XP_MAX_PAGES = 50/.test(fnSrc) && /const XP_PAGE_SIZE = 1000/.test(fnSrc),
+      "collect-cq: expected XP_PAGE_SIZE = 1000 and XP_MAX_PAGES = 50 (absurd-but-finite cap, 50k events/learner)");
+    // the page-cap return must sit INSIDE the xp_events try block, so a page
+    // that throws (not just a bad status) is still caught as cq_down too
+    const xpBlock = (/let cqTotal = 0;[\s\S]*?\n  \}\n/.exec(fnSrc) || [""])[0];
+    tick(xpBlock.includes("XP_MAX_PAGES") && xpBlock.includes("catch"),
+      "collect-cq: the paging loop and its cap-check must live inside the same try/catch as the rest of the xp_events read");
+
     // never logs either credential (the header's own rule)
     const loggingLines = fnSrc.split("\n").filter((l) => /console\./.test(l));
     const leaky = loggingLines.filter((l) => /username|password/i.test(l));
