@@ -51,6 +51,14 @@ function setSeen(v) {
 // its raw key from outside this file.
 export function tourSeen() { return getSeen(); }
 
+// The one tour overlay currently mounted on <body>, if any. Tracked here
+// (not just returned to the caller) because the overlay is NOT inside the
+// screen's mount — app.js's render() only clears #app, so a tour left open
+// across a navigation (logout, or any other screen swap) would otherwise
+// sit on <body> forever, on top of whatever renders next. closeActiveTour()
+// below is the teardown app.js calls on every navigation.
+let active = null;
+
 /* The seven stops, in Megan's order. Each `find` is re-run every time a
    step is (re)shown, never cached — the room re-renders under the tour
    on every buy/equip, and a stale element reference would point at a
@@ -107,8 +115,15 @@ export function startTour(mount) {
   const steps = stepsFor(mount);
   if (!steps.length) return null;
 
+  // Only one tour overlay should ever be live. Starting a fresh one (the
+  // "?" replay button pressed while an auto-fired tour is somehow still up)
+  // always retires whatever came before it first, rather than stacking a
+  // second <body>-level overlay.
+  if (active) active.close();
+
   let index = 0;
   let repositionTimer = null;
+  let closed = false;
 
   const hole = el("div", "tour__hole");
   hole.setAttribute("aria-hidden", "true");
@@ -120,6 +135,8 @@ export function startTour(mount) {
   overlay.append(hole, bubble);
 
   const close = () => {
+    if (closed) return; // idempotent — closeActiveTour() may race a click
+    closed = true;
     window.removeEventListener("resize", schedule);
     window.removeEventListener("scroll", schedule, true);
     document.removeEventListener("keydown", onKey);
@@ -128,8 +145,10 @@ export function startTour(mount) {
     setTimeout(() => overlay.remove(), 200);
     // Seeing it through OR skipping both count as seen — re-ambushing a
     // kid who skipped every time they open the room is how a tutorial
-    // gets ignored for good.
+    // gets ignored for good. A navigation-driven close (logout mid-tour)
+    // counts the same way: it's still one fewer first-run ambush later.
     setSeen(TOUR_VERSION);
+    if (active === handle) active = null;
   };
 
   const next = () => {
@@ -214,7 +233,21 @@ export function startTour(mount) {
   document.addEventListener("keydown", onKey);
 
   show();
-  return { close, get step() { return index; }, get length() { return steps.length; } };
+  const handle = { close, get step() { return index; }, get length() { return steps.length; } };
+  active = handle;
+  return handle;
+}
+
+/**
+ * Tears down whatever tour overlay is currently mounted, if any — a no-op
+ * when none is running. Call this on every navigation away from the room
+ * (blip.js is the only screen with data-tour anchors): the overlay lives on
+ * <body>, not inside the screen's own mount, so app.js's render() swapping
+ * screens never touches it on its own. Without this, a tour left open at
+ * logout (or any other nav mid-tour) sits on top of whatever renders next.
+ */
+export function closeActiveTour() {
+  if (active) active.close();
 }
 
 /**

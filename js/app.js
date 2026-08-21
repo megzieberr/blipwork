@@ -6,6 +6,7 @@ import { renderLogin } from "./auth.js";
 import { renderHub, renderChapter, renderResults } from "./screens.js";
 import { renderPlay } from "./play.js";
 import { renderBlip } from "./blip.js";
+import { closeActiveTour } from "./companion/tour.js";
 import { renderGallery } from "./gallery.js";
 import { registerServiceWorker } from "./pwa.js";
 
@@ -29,7 +30,13 @@ const app = {
     catch { return false; }
   },
 
-  go(screen, params) { this.screen = screen; this.params = params || {}; window.scrollTo(0, 0); this.render(); },
+  // Room tutorial fix (session 6, 2026-08-21): the tour overlay mounts on
+  // <body>, outside #app, so render()'s clear(this.root) never reaches it.
+  // go() is the one choke point every navigation runs through (logout
+  // included, via this.go("login")) — closing any live tour here means a
+  // screen swap mid-tour can never leave it stranded on top of whatever
+  // renders next.
+  go(screen, params) { closeActiveTour(); this.screen = screen; this.params = params || {}; window.scrollTo(0, 0); this.render(); },
   logout() { clearSession(); this.state = null; this.go("login"); },
 
   render() {
