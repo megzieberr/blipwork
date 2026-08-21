@@ -33,7 +33,10 @@
 --  usernames were never secret in this app's model, only passwords are.
 --
 --  Mirrored in schema.sql (fresh-install source of truth).
---  SAFE TO RE-RUN: every statement below is idempotent.
+--  ⚠️ ONE-SHOT, NOT RE-RUNNABLE: the `update … set hidden = true` below has
+--  no where clause on purpose (every row today is a test account), so a
+--  re-run AFTER the roster is seeded would hide the whole class from the
+--  picker. Apply once, before the seed, never again.
 -- ============================================================
 
 -- ---------- 1. columns ----------
