@@ -66,6 +66,14 @@
 --   mhq_cq_link (both service_role ONLY — never anon/authenticated, see
 --   their grants below), and mhq_get_state's one new field, cqLinked.)
 --
+--  (2026-08-21, foreman build day session B: MOOD METER + CRAVINGS — see
+--   migration-mood-cravings.sql, WRITTEN NOT RUN as of this session.
+--   blips.mood / blips.mood_day, the two new helpers _mhq_mood_effective
+--   and _mhq_craving, and the `mood`/`craving` fields added to every
+--   entry of mhq_get_state's `blips` array. mhq_feed, mhq_eat_food and
+--   mhq_care each gained a mood-gain line — no other logic in any of the
+--   three changed. Growth stays cookie-only; mood is its own thing.)
+--
 --  AUTH MODEL (roster login, like Circle Quest):
 --   • The teacher seeds the roster (mhq_admin_add_student, or bulk insert);
 --     learners never create their own account (mhq_signup is gone).
@@ -158,6 +166,12 @@ create table public.blips (
   feed_count  integer not null default 0,         -- cumulative free-cookie feedings (growth)
   owned_items jsonb   not null default '[]'::jsonb,
   equipped    jsonb   not null default '{}'::jsonb,
+  -- MOOD METER (2026-08-21, supabase/migration-mood-cravings.sql). `mood` is
+  -- the last value WRITTEN (0-5), never the decayed value — decay is
+  -- read-time only, via _mhq_mood_effective. `mood_day` is the day it was
+  -- last topped up; null means "never fed", which reads as effective 0.
+  mood        int     not null default 0,
+  mood_day    date,
   created_at  timestamptz not null default now(),
   unique (student_id, slot)
 );
@@ -357,6 +371,35 @@ returns integer language sql immutable set search_path = '' as $$
               else 0 end;
 $$;
 
+-- MOOD METER (2026-08-21, migration-mood-cravings.sql): the decay formula,
+-- read-time only — mood is never stored decayed. Pure math, no table
+-- access; `stable` not `immutable` because it reads current_date.
+create or replace function public._mhq_mood_effective(p_mood int, p_mood_day date)
+returns int language sql stable set search_path = '' as $$
+  select case when p_mood_day is null then 0
+              else greatest(0, coalesce(p_mood, 0) - 2 * greatest(0, current_date - p_mood_day))
+         end;
+$$;
+
+-- MOOD METER + CRAVINGS: the day's ONE deterministic craved food for one
+-- blip. Called from mhq_get_state (read) and mhq_eat_food (award) — ONE
+-- place the computation lives, so it cannot drift or be spoofed
+-- client-side. Excludes soup/medicine (care items) AND treat (a pure gold
+-- sink mhq_eat_food already refuses as not_edible — if craving ever picked
+-- it the +2 bonus could never be earned).
+create or replace function public._mhq_craving(p_blip_id uuid, p_level int)
+returns text language sql stable security definer set search_path = public, extensions as $$
+  select item_id from (
+    select item_id,
+           row_number() over (order by item_id) - 1 as rn,
+           count(*) over () as cnt
+      from public.shop_items
+     where active and category = 'food' and min_level <= coalesce(p_level, 1)
+       and item_id not in ('soup', 'medicine', 'treat')
+  ) t
+  where cnt > 0 and rn = abs(hashtext(p_blip_id::text || ':' || current_date::text)) % cnt;
+$$;
+
 -- Room build S4b (2026-08-08): today's tray, lazily expired. Returns the
 -- stored tray unchanged if it was written today, else an empty one — a
 -- stale tray is never restored (no refund). See supabase/migration-food-
@@ -475,7 +518,7 @@ create or replace function public.mhq_get_state(p_username text, p_password text
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb; food jsonb; furn jsonb;
         blips_j jsonb; blip1 jsonb; health jsonb; stg int; is_qual boolean;
-        can_feed boolean; can_care boolean; dice_j jsonb;
+        can_feed boolean; can_care boolean; dice_j jsonb; lvl int;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -518,11 +561,18 @@ begin
 
   health := public._mhq_health(st.last_fed_day, st.care_streak);
   stg := (health->>'stage')::int;
+  lvl := (public._mhq_level(st.xp)->>'level')::int;
 
+  -- MOOD METER + CRAVINGS (2026-08-21): the two new per-blip fields. Mood
+  -- is decayed at READ time (never stored decayed); craving reads the
+  -- shared _mhq_craving helper, the SAME one mhq_eat_food uses to award
+  -- the +2, so it cannot be spoofed client-side.
   select coalesce(jsonb_agg(jsonb_build_object(
             'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
             'growthStage', public._mhq_growth(feed_count),
-            'owned', owned_items, 'equipped', equipped) order by slot), '[]'::jsonb)
+            'owned', owned_items, 'equipped', equipped,
+            'mood', public._mhq_mood_effective(mood, mood_day),
+            'craving', public._mhq_craving(id, lvl)) order by slot), '[]'::jsonb)
     into blips_j from public.blips where student_id = sid;
   -- back-compat: `blip` = slot 1 (the existing UI reads this object)
   select jsonb_build_object('name', name, 'colour', colour, 'owned', owned_items, 'equipped', equipped)
@@ -615,12 +665,12 @@ grant execute on function public.mhq_cq_link(text, text) to service_role;
 -- ---------- Phase 2: feed / care / second blip ----------
 create or replace function public.mhq_feed(p_username text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; st record; stg int; blips_j jsonb;
+declare sid uuid; st record; stg int; blips_j jsonb; lvl int;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
   perform public._mhq_ensure_blip(sid);
-  select last_fed_day, last_cookie_day, care_streak into st from public.students where id = sid for update;
+  select last_fed_day, last_cookie_day, care_streak, xp into st from public.students where id = sid for update;
   stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
   if stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
   -- S4: guarded by the cookie's OWN stamp. A bought apple sets last_fed_day
@@ -629,13 +679,23 @@ begin
     return jsonb_build_object('ok', false, 'error', 'already_fed');
   end if;
   -- the cookie is still the ONLY thing that grows a blip, so growth can
-  -- never be bought (phase-2 ruling, unchanged by the food shop)
-  update public.blips set feed_count = feed_count + 1 where student_id = sid;  -- household
+  -- never be bought (phase-2 ruling, unchanged by the food shop).
+  -- MOOD (2026-08-21): the cookie is also worth +1 mood (MOOD.cookieGain),
+  -- same household-wide update as feed_count — this RPC has never taken a
+  -- blip-slot parameter.
+  update public.blips
+     set feed_count = feed_count + 1,
+         mood = least(5, public._mhq_mood_effective(mood, mood_day) + 1),
+         mood_day = current_date
+   where student_id = sid;  -- household
   update public.students set last_cookie_day = current_date, last_fed_day = current_date,
                              last_active_at = now() where id = sid;
+  lvl := (public._mhq_level(st.xp)->>'level')::int;
   select coalesce(jsonb_agg(jsonb_build_object(
             'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
-            'growthStage', public._mhq_growth(feed_count)) order by slot), '[]'::jsonb)
+            'growthStage', public._mhq_growth(feed_count),
+            'mood', public._mhq_mood_effective(mood, mood_day),
+            'craving', public._mhq_craving(id, lvl)) order by slot), '[]'::jsonb)
     into blips_j from public.blips where student_id = sid;
   return jsonb_build_object('ok', true, 'blips', blips_j,
     'health', public._mhq_health(current_date, st.care_streak), 'canFeedToday', false);
@@ -666,6 +726,7 @@ create or replace function public.mhq_eat_food(p_username text, p_password text,
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare v_sid uuid; v_st record; v_itm record; v_stg int;
         v_tray jsonb; v_cnt int; v_blips jsonb; v_can_feed boolean;
+        v_lvl int; v_craved boolean; v_gain int;
 begin
   v_sid := public._mhq_auth(p_username, p_password);
   if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -678,7 +739,8 @@ begin
     return jsonb_build_object('ok', false, 'error', 'not_edible');
   end if;
 
-  select students.tray, students.tray_day, students.last_fed_day, students.last_cookie_day, students.care_streak
+  select students.tray, students.tray_day, students.last_fed_day, students.last_cookie_day,
+         students.care_streak, students.xp
     into v_st from public.students where students.id = v_sid for update;
 
   v_stg := (public._mhq_health(v_st.last_fed_day, v_st.care_streak)->>'stage')::int;
@@ -699,11 +761,31 @@ begin
      set tray = v_tray, tray_day = current_date, last_fed_day = current_date, last_active_at = now()
    where students.id = v_sid;
 
+  -- MOOD + CRAVINGS (2026-08-21): any bought food is +1 mood (MOOD.foodGain),
+  -- the day's CRAVED food is +2 (MOOD.cravingGain) instead. Household-wide,
+  -- same shape as mhq_feed — this RPC has never taken a blip-slot parameter.
+  -- Cravings are genuinely per-BLIP; eating the craved item for EITHER
+  -- blip counts as a hit for the whole household feed (judgement call —
+  -- see migration-mood-cravings.sql's header note c).
+  v_lvl := (public._mhq_level(v_st.xp)->>'level')::int;
+  select exists (
+    select 1 from public.blips where blips.student_id = v_sid
+      and public._mhq_craving(blips.id, v_lvl) = p_item
+  ) into v_craved;
+  v_gain := case when v_craved then 2 else 1 end;
+
+  update public.blips
+     set mood = least(5, public._mhq_mood_effective(mood, mood_day) + v_gain),
+         mood_day = current_date
+   where blips.student_id = v_sid;
+
   select coalesce(jsonb_agg(jsonb_build_object(
             'slot', blips.slot, 'name', blips.name, 'colour', blips.colour,
             'feedCount', blips.feed_count,
             'growthStage', public._mhq_growth(blips.feed_count),
-            'owned', blips.owned_items, 'equipped', blips.equipped) order by blips.slot), '[]'::jsonb)
+            'owned', blips.owned_items, 'equipped', blips.equipped,
+            'mood', public._mhq_mood_effective(blips.mood, blips.mood_day),
+            'craving', public._mhq_craving(blips.id, v_lvl)) order by blips.slot), '[]'::jsonb)
     into v_blips from public.blips where blips.student_id = v_sid;
 
   v_can_feed := (v_st.last_cookie_day is null or v_st.last_cookie_day < current_date);
@@ -711,7 +793,10 @@ begin
   return jsonb_build_object('ok', true, 'item', p_item, 'tray', v_tray, 'blips', v_blips,
     'health', public._mhq_health(current_date, v_st.care_streak),
     -- the cookie survives a grocery feeding — that is the whole point
-    'canFeedToday', v_can_feed);
+    'canFeedToday', v_can_feed,
+    -- MOOD + CRAVINGS: lets the client show +1 vs +2 and play the excited
+    -- moment on a craving hit without re-deriving hashtext client-side.
+    'moodGain', v_gain, 'craved', v_craved);
 end; $$;
 
 create or replace function public.mhq_care(p_username text, p_password text)
@@ -763,6 +848,15 @@ begin
      set pantry = pan, care_streak = new_streak, last_care_day = new_care,
          last_fed_day = new_last_fed, last_active_at = now()
    where id = sid;
+
+  -- MOOD (2026-08-21): a genuine care day (every guard above passed, both
+  -- supplies actually consumed) is worth +1 mood too — "being cared for
+  -- feels good". Household-wide, same shape as mhq_feed/mhq_eat_food.
+  -- Nothing else in this function changed.
+  update public.blips
+     set mood = least(5, public._mhq_mood_effective(mood, mood_day) + 1), mood_day = current_date
+   where student_id = sid;
+
   return jsonb_build_object('ok', true, 'healed', healed, 'pantry', pan,
     'health', public._mhq_health(new_last_fed, new_streak));
 end; $$;

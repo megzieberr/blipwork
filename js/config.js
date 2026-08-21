@@ -250,3 +250,28 @@ export const BLIP = {
   secondBlipLevel: 20,
   careDaysToHeal: 3,               // consecutive qualifying care days to fully heal
 };
+
+/* ============================================================
+   MOOD METER + CRAVINGS (build day 2026-08-21, session B).
+   THIS IS A DISPLAY MIRROR ONLY — the server (supabase/migration-mood-
+   cravings.sql, WRITTEN NOT RUN as of this session; supabase/schema.sql
+   mirrors it) is the single source of truth. Same relationship BLIP
+   above has with the real health/growth RPCs: never let the UI trust a
+   client-side recompute over a backend reply.
+
+   Design (her ruling, 2026-08-21): buying food changed nothing visible
+   — growth stays cookie-only (can never be bought, standing rule) — so
+   food needed its own job. That job is MOOD: 0-5 hearts, per blip.
+   Effective mood decays `dailyDecay` per day since it was last topped
+   up (never below 0), computed at READ time, never stored. Gains are
+   applied server-side at eat time: any bought food is `foodGain`, the
+   day's ONE deterministic CRAVED food (js/local-backend.js /
+   _mhq_craving in the SQL) is `cravingGain`, the free daily cookie is
+   `cookieGain`. Capped at `max`. */
+export const MOOD = {
+  max: 5,
+  dailyDecay: 2,
+  foodGain: 1,
+  cravingGain: 2,
+  cookieGain: 1,
+};

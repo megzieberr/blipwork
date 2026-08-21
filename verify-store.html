@@ -68,6 +68,7 @@ import {
   roomShellSrc, homeworkBadgeLayer,
 } from "./js/companion/furniture.js";
 import { FOODS, FOOD_IDS, NON_GROCERY_FOOD, foodLabel, foodImgSrc } from "./js/companion/food.js";
+import { MOOD } from "./js/config.js";
 import { makeDraggable, isOverTarget, DEFAULT_DROP_PAD_PX } from "./js/companion/drag-feed.js";
 import { hasActiveAssignment } from "./js/assignment.js";
 
@@ -1931,12 +1932,19 @@ for (const o of outfits) {
     // DICE-PLAN.md, session 0b (2026-08-21): mhq_get_state was re-created
     // AGAIN, by migration-dice.sql (adds the `dice` field on top of
     // everything this section already checks for above) — so schema.sql's
-    // copy is now compared against THAT file, the new latest carrier, not
-    // this section's own migration-cq-bridge.sql. mhq_credit_cq/mhq_cq_link
-    // are untouched by dice and still compare against migration-cq-bridge.sql.
+    // copy was compared against THAT file for a while, not this section's
+    // own migration-cq-bridge.sql.
+    // Foreman build day, session B (2026-08-21): mhq_get_state was
+    // re-created a THIRD time, by migration-mood-cravings.sql (adds
+    // `mood`/`craving` to every blips[] entry, on top of dice's own `dice`
+    // field and everything before it) — so schema.sql's copy is now
+    // compared against THAT file, the new latest carrier in the chain
+    // (cq-bridge -> dice -> mood-cravings). mhq_credit_cq/mhq_cq_link are
+    // untouched by either later migration and still compare against
+    // migration-cq-bridge.sql.
     const schemaRaw = await (await fetch("./supabase/schema.sql")).text();
-    const diceRaw = await (await fetch("./supabase/migration-dice.sql")).text();
-    const bodySrc = { mhq_get_state: { text: diceRaw, name: "migration-dice.sql" },
+    const moodRaw = await (await fetch("./supabase/migration-mood-cravings.sql")).text();
+    const bodySrc = { mhq_get_state: { text: moodRaw, name: "migration-mood-cravings.sql" },
                        mhq_credit_cq: { text: raw, name: "migration-cq-bridge.sql" },
                        mhq_cq_link:   { text: raw, name: "migration-cq-bridge.sql" } };
     for (const fn of ["mhq_get_state", "mhq_credit_cq", "mhq_cq_link"]) {
@@ -2090,6 +2098,156 @@ for (const o of outfits) {
   tick(/circleGeoCard\(app\)/.test(screensSrc2), "js/screens.js: circleGeoCard is not called with app (it needs app.state.cqLinked)");
 
   say("Collect panel wiring: mounts only when cqLinked, disable-before-await on the button, HUD gold chip patched in place (not a full app.refresh()), both the paid and paid:0 reveal copy present, wired into circleGeoCard()");
+}
+
+/* ---------- 6m. MOOD METER + CRAVINGS (foreman build day session B,
+   2026-08-21) ----------
+   supabase/migration-mood-cravings.sql is WRITTEN NOT RUN — this section
+   parses it (like section 6's SQL<->client cross-checks) and exercises
+   the whole round-trip against the local backend (like 6h/6h2). */
+{
+  // ---- SQL cross-checks ----
+  let moodSql = "";
+  try {
+    moodSql = (await (await fetch("./supabase/migration-mood-cravings.sql")).text()).replace(/--[^\n]*/g, "");
+  } catch (e) { tick(false, "could not read supabase/migration-mood-cravings.sql: " + e.message); }
+
+  tick(/alter table public\.blips add column if not exists mood int not null default 0;/.test(moodSql),
+    "migration-mood-cravings.sql should add blips.mood (int not null default 0)");
+  tick(/alter table public\.blips add column if not exists mood_day date;/.test(moodSql),
+    "migration-mood-cravings.sql should add blips.mood_day (date)");
+
+  const moodFnCount = (moodSql.match(/create or replace function public\./g) || []).length;
+  const moodSpCount = (moodSql.match(/set search_path/g) || []).length;
+  /* ⚠️ SIX, not the brief's "exactly three [copy-forward] functions" — a
+     documented deviation. Two brand-new helpers (_mhq_mood_effective,
+     _mhq_craving) plus FOUR re-created RPCs: mhq_get_state/mhq_feed/
+     mhq_eat_food (the three named in the brief) PLUS mhq_care, which the
+     design section separately requires ("soup/medicine also +1 when
+     consumed via care") and which has no other home. Flagged loudly in
+     the migration's own header for the foreman to review. */
+  tick(moodFnCount === 6, `migration-mood-cravings.sql should define 6 functions (2 new helpers + mhq_get_state/mhq_feed/mhq_eat_food/mhq_care re-created), got ${moodFnCount}`);
+  tick(moodSpCount >= moodFnCount, `migration-mood-cravings.sql: ${moodFnCount} functions but only ${moodSpCount} search_path pins — every one must be pinned (house rule)`);
+  tick(/create or replace function public\.mhq_care/.test(moodSql),
+    'migration-mood-cravings.sql should re-create mhq_care too (the +1-on-a-care-day gain has no other home) — see the header\'s judgement-call note');
+
+  // literals: the SQL must agree with js/config.js's MOOD block, not a
+  // copy of the numbers frozen at write time.
+  tick(new RegExp(`least\\(${MOOD.max},`).test(moodSql), `migration-mood-cravings.sql should cap mood at MOOD.max (${MOOD.max}) via least(${MOOD.max}, ...)`);
+  tick(new RegExp(`${MOOD.dailyDecay} \\* greatest`).test(moodSql), `_mhq_mood_effective should decay by MOOD.dailyDecay (${MOOD.dailyDecay}) per day`);
+  tick(new RegExp(`then ${MOOD.cravingGain} else ${MOOD.foodGain} end`).test(moodSql), `mhq_eat_food's gain should be MOOD.cravingGain (${MOOD.cravingGain}) on a hit, else MOOD.foodGain (${MOOD.foodGain})`);
+  tick(/item_id not in \('soup', 'medicine', 'treat'\)/.test(moodSql), "_mhq_craving should exclude soup/medicine/treat from the craving pool (treat is never edible via mhq_eat_food, so craving it would make the bonus unearnable)");
+  tick(/order by item_id/.test(moodSql), "_mhq_craving should order by item_id for a stable index (shop_items has no bare `id` column)");
+
+  say(`SQL: migration-mood-cravings.sql — ${moodFnCount} functions (2 helpers + get_state/feed/eat_food/care), ${moodSpCount} search_path pins, columns + MOOD literals present`);
+
+  // ---- local-backend round trip ----
+  const mu = "verify_mood_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(mu, "Moodling", "pw12");
+  // stay level 1 the same deterministic way section 6h does: 0-xp rounds
+  for (let i = 0; i < 10; i++) await LocalBackend.submitQuest(mu, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
+  let st = await LocalBackend.getState(mu, "pw12");
+  tick(st.blips && st.blips[0] && typeof st.blips[0].mood === "number", `a fresh blip should carry a numeric mood field, got ${JSON.stringify(st.blips && st.blips[0])}`);
+  tick(st.blips[0].mood === 0, `a never-fed blip should read mood 0, got ${st.blips[0].mood}`);
+  tick(typeof st.blips[0].craving === "string" && !!st.blips[0].craving, `a fresh Lv1 blip should still have a craving of the day, got ${JSON.stringify(st.blips[0].craving)}`);
+  tick(!NON_GROCERY_FOOD.includes(st.blips[0].craving), `the craving must never be soup/medicine/treat, got "${st.blips[0].craving}"`);
+  const cravedRow0 = (st.foodShop || []).find((f) => f.id === st.blips[0].craving);
+  tick(!!cravedRow0 && cravedRow0.minLevel <= 1, `the craving must come from an UNLOCKED tier (Lv1 learner) — "${st.blips[0].craving}" has minLevel ${cravedRow0 && cravedRow0.minLevel}`);
+
+  // deterministic for a fixed day: two reads, same craving, no day skip
+  const stAgain = await LocalBackend.getState(mu, "pw12");
+  tick(stAgain.blips[0].craving === st.blips[0].craving, `the craving should be stable within the same day, got "${st.blips[0].craving}" then "${stAgain.blips[0].craving}"`);
+
+  // ---- eat NON-craved food: +MOOD.foodGain, economy untouched ----
+  const craving = st.blips[0].craving;
+  const plainFood = FOOD_IDS.find((id) => id !== craving);
+  await LocalBackend.buyItem(mu, "pw12", plainFood);
+  const beforeEat = await LocalBackend.getState(mu, "pw12");
+  const eatPlain = await LocalBackend.eatFood(mu, "pw12", plainFood);
+  tick(eatPlain.ok && eatPlain.craved === false && eatPlain.moodGain === MOOD.foodGain,
+    `eating a non-craved food should pay MOOD.foodGain (${MOOD.foodGain}) and report craved:false, got ${JSON.stringify(eatPlain)}`);
+  tick(eatPlain.blips[0].mood === Math.min(MOOD.max, beforeEat.blips[0].mood + MOOD.foodGain),
+    `mood after a plain eat should be beforeEat.mood + MOOD.foodGain (capped), got ${eatPlain.blips[0].mood} (was ${beforeEat.blips[0].mood})`);
+  const afterEat = await LocalBackend.getState(mu, "pw12");
+  tick(afterEat.xp === beforeEat.xp && afterEat.gold === beforeEat.gold && afterEat.levelInfo.level === beforeEat.levelInfo.level
+    && afterEat.blips[0].feedCount === beforeEat.blips[0].feedCount && afterEat.blips[0].growthStage === beforeEat.blips[0].growthStage,
+    `eating must not touch xp/gold/level/growth — mood is not allowed to leak into the economy. before ${JSON.stringify({ xp: beforeEat.xp, gold: beforeEat.gold, lvl: beforeEat.levelInfo.level, fc: beforeEat.blips[0].feedCount })}, after ${JSON.stringify({ xp: afterEat.xp, gold: afterEat.gold, lvl: afterEat.levelInfo.level, fc: afterEat.blips[0].feedCount })}`);
+
+  // ---- eat the CRAVED food: +MOOD.cravingGain ----
+  const beforeCraved = await LocalBackend.getState(mu, "pw12");
+  await LocalBackend.buyItem(mu, "pw12", craving);
+  const eatCraved = await LocalBackend.eatFood(mu, "pw12", craving);
+  tick(eatCraved.ok && eatCraved.craved === true && eatCraved.moodGain === MOOD.cravingGain,
+    `eating the day's craved food ("${craving}") should pay MOOD.cravingGain (${MOOD.cravingGain}) and report craved:true, got ${JSON.stringify(eatCraved)}`);
+  tick(eatCraved.blips[0].mood === Math.min(MOOD.max, beforeCraved.blips[0].mood + MOOD.cravingGain),
+    `mood after a craved eat should be beforeCraved.mood + MOOD.cravingGain (capped), got ${eatCraved.blips[0].mood} (was ${beforeCraved.blips[0].mood})`);
+
+  // ---- cap at MOOD.max, however many gains stack up ----
+  for (let i = 0; i < 6; i++) {
+    await LocalBackend.buyItem(mu, "pw12", plainFood);
+    await LocalBackend.eatFood(mu, "pw12", plainFood);
+  }
+  const capped = await LocalBackend.getState(mu, "pw12");
+  tick(capped.blips[0].mood === MOOD.max, `mood should cap at MOOD.max (${MOOD.max}) after repeated feeding, got ${capped.blips[0].mood}`);
+
+  // ---- decay: skip days, mood falls by MOOD.dailyDecay per day, floored at 0 ----
+  globalThis.__BLIP_DEV__.skipDays(1);
+  const oneDayOn = await LocalBackend.getState(mu, "pw12");
+  tick(oneDayOn.blips[0].mood === Math.max(0, MOOD.max - MOOD.dailyDecay),
+    `after 1 day with no feed, mood should decay by MOOD.dailyDecay (${MOOD.dailyDecay}), got ${oneDayOn.blips[0].mood} (was ${MOOD.max})`);
+  globalThis.__BLIP_DEV__.skipDays(10);
+  const longGone = await LocalBackend.getState(mu, "pw12");
+  tick(longGone.blips[0].mood === 0, `mood should never decay below 0, got ${longGone.blips[0].mood} after a 10-day skip`);
+  globalThis.__BLIP_DEV__.reset();
+
+  // ---- the free cookie is +MOOD.cookieGain too ----
+  const beforeCookie = await LocalBackend.getState(mu, "pw12");
+  const cookie = await LocalBackend.feed(mu, "pw12");
+  tick(cookie.ok && cookie.blips[0].mood === Math.min(MOOD.max, beforeCookie.blips[0].mood + MOOD.cookieGain),
+    `the free cookie should pay MOOD.cookieGain (${MOOD.cookieGain}), got ${JSON.stringify(cookie.blips && cookie.blips[0])} (was ${beforeCookie.blips[0].mood})`);
+
+  say(`local round-trip (${mu}): fresh blip mood 0, craving from an unlocked non-care tier and stable within a day · plain eat +${MOOD.foodGain} · craved eat +${MOOD.cravingGain} (xp/gold/level/growth untouched by either) · caps at ${MOOD.max} · decays ${MOOD.dailyDecay}/day, floors at 0 · cookie +${MOOD.cookieGain}`);
+
+  // ---- a genuine care day is +1 mood too (mhq_care, the 4th re-created function) ----
+  {
+    const cu = "verify_mood_care_" + Math.random().toString(36).slice(2, 8);
+    await LocalBackend.signup(cu, "Careling", "pw12");
+    for (let i = 0; i < 10; i++) await LocalBackend.submitQuest(cu, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
+    await LocalBackend.buyItem(cu, "pw12", "soup");
+    await LocalBackend.buyItem(cu, "pw12", "medicine");
+    await LocalBackend.adminSetTerm("admin", true);
+    let sick = await LocalBackend.getState(cu, "pw12");
+    for (let d = 0; d < 14 && sick.health.stage < 2; d++) {
+      globalThis.__BLIP_DEV__.skipDays(1);
+      sick = await LocalBackend.getState(cu, "pw12");
+    }
+    tick(sick.health.stage >= 2, `stepping days should have made him sick enough for care, got ${JSON.stringify(sick.health)}`);
+    const beforeCare = sick.blips[0].mood;
+    const care = await LocalBackend.care(cu, "pw12");
+    tick(care.ok, `a fully-supplied, genuinely sick, qualifying-day care should succeed, got ${JSON.stringify(care)}`);
+    const afterCare = await LocalBackend.getState(cu, "pw12");
+    tick(afterCare.blips[0].mood === Math.min(MOOD.max, beforeCare + 1),
+      `a real care day should pay +1 mood ("being cared for feels good"), got ${afterCare.blips[0].mood} (was ${beforeCare})`);
+    globalThis.__BLIP_DEV__.reset();
+    await LocalBackend.adminSetTerm("admin", false);
+    say(`care-day mood (${cu}): genuinely sick + supplied + qualifying day -> care() succeeds and pays +1 mood, streak/heal logic itself untouched`);
+  }
+
+  // ---- client wiring (static): hearts are their own sibling, never inside
+  // the name-editor's cleared container; feed feedback fires on both paths;
+  // spontaneous moments reuse playTapReaction's own sick/sleep/recovering
+  // guards rather than re-implementing them ----
+  const blipSrc = await (await fetch("./js/blip.js")).text();
+  tick(/titleWrap\.appendChild\(nameRow\);\s*[\s\S]{0,400}titleWrap\.appendChild\(moodHeartsRow\(activeBlip\.mood\)\)/.test(blipSrc),
+    "js/blip.js: the hearts row must be appended to titleWrap AFTER nameRow, as nameRow's sibling — never inside nameWrap (mountNameEditor clears that container every render)");
+  tick(/function moodHeartsRow/.test(blipSrc) && /function floatMoodGain/.test(blipSrc) && /function cravingBubble/.test(blipSrc),
+    "js/blip.js is missing one of moodHeartsRow/floatMoodGain/cravingBubble");
+  tick(/floatMoodGain\(roomStage, MOOD\.cookieGain\)/.test(blipSrc), "js/blip.js: the cookie feed path must call floatMoodGain(roomStage, MOOD.cookieGain)");
+  tick(/floatMoodGain\(roomStage, gain\)/.test(blipSrc), "js/blip.js: the grocery feed path must call floatMoodGain with the server-reported gain");
+  tick(/playTapReaction\(blipHandle\)/.test(blipSrc), "js/blip.js: spontaneous mood expression should reuse playTapReaction (its own sick/sleep/recovering guards), not a hand-rolled animation call");
+  tick(/\(activeBlip\.mood \|\| 0\) >= 4/.test(blipSrc), "js/blip.js: spontaneous moments should be gated on mood >= 4, per the brief");
+  tick(/host\.isConnected/.test(blipSrc) && /spontaneousMoodTimer/.test(blipSrc), "js/blip.js: the spontaneous-moment interval must self-clear (no unmount hook exists on this screen) and be cleared again on every fresh render");
+  say("client wiring: hearts row is nameRow's sibling (never cleared by mountNameEditor), feed feedback wired on both the cookie and grocery paths, spontaneous moments reuse playTapReaction's guards and are gated on mood>=4, the interval self-clears");
 }
 
 /* ---------- report ---------- */

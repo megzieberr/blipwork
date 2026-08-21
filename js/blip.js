@@ -48,7 +48,7 @@
    in homework-hub-companion/).
    ============================================================ */
 import { api } from "./api.js";
-import { BLIP } from "./config.js";
+import { BLIP, MOOD } from "./config.js";
 import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
 /* renderBlip is aliased on import — this file's own exported screen
@@ -56,7 +56,7 @@ import { el, clear, showToast } from "./ui.js";
    renderHub/renderChapter/renderGallery elsewhere), which collides with
    the companion module's new renderBlip(el, opts) if imported under its
    own name into the same module scope. */
-import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment, momentDurationMs } from "./companion/renderer.js";
+import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment, momentDurationMs, playTapReaction } from "./companion/renderer.js";
 import {
   renderSwatchGrid, itemLabel,
   SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot,
@@ -196,9 +196,15 @@ function normalizeBlips(state) {
       growthStage: b.growthStage || 0,
       owned: Array.isArray(b.owned) ? b.owned : (legacy.owned || []),
       equipped: (b.equipped && typeof b.equipped === "object") ? b.equipped : (i === 0 ? (legacy.equipped || {}) : {}),
+      // MOOD METER + CRAVINGS (2026-08-21): defensive like every other
+      // field here — a backend that hasn't shipped the migration yet
+      // (mood/craving simply absent) reads as 0 hearts / no craving,
+      // never as a crash.
+      mood: typeof b.mood === "number" ? b.mood : 0,
+      craving: b.craving || null,
     }));
   }
-  return [{ slot: 0, name: legacy.name, colour: legacy.colour, feedCount: 0, growthStage: 0, owned: legacy.owned || [], equipped: legacy.equipped || {} }];
+  return [{ slot: 0, name: legacy.name, colour: legacy.colour, feedCount: 0, growthStage: 0, owned: legacy.owned || [], equipped: legacy.equipped || {}, mood: 0, craving: null }];
 }
 function normalizeHealth(state) {
   const h = (state && state.health) || {};
@@ -232,6 +238,52 @@ function triggerAnim(stageEl, cls, ms) {
 }
 const triggerRefuse = (elm) => triggerAnim(elm, "blip-refuse", 700);
 const triggerHappy = (elm) => triggerAnim(elm, "blip-happy", 900);
+
+/* ---------------- MOOD METER hearts (2026-08-21, foreman build day
+   session B) ----------------
+   Distinct from the SICKNESS status chip above (MOOD_ICON/moodCopy) —
+   these are the 0-5 hearts fed by eating, cravings and being cared for
+   (js/config.js MOOD). THE SERVER IS AUTHORITATIVE: state.blips[i].mood
+   is already the decayed, capped value mhq_get_state computes — this
+   file only draws it and floats a +1/+2 on a successful feed. */
+const HEART_FILLED = "💙", HEART_EMPTY = "🤍";
+function moodHeartsRow(mood) {
+  const row = el("div", "mood-hearts");
+  const m = Math.max(0, Math.min(MOOD.max, mood || 0));
+  for (let i = 1; i <= MOOD.max; i++) {
+    row.appendChild(el("span", "mood-heart" + (i <= m ? " filled" : ""), i <= m ? HEART_FILLED : HEART_EMPTY));
+  }
+  row.setAttribute("aria-label", `Mood: ${m} of ${MOOD.max} hearts`);
+  row.title = row.getAttribute("aria-label");
+  return row;
+}
+/* A small floating "+1"/"+2" over Blip on a successful feed — appended as
+   its OWN child of `stageEl`, never a class/keyframe on .room-blip-stage
+   itself (that element centres via transform:translateX(-50%); a
+   keyframe there that drops the translateX teleports it — see
+   css/styles.css's blip-refuse/blip-happy comment for the exact bug this
+   avoids repeating). Self-removing well before the eating/excited moment
+   it rides alongside finishes. */
+function floatMoodGain(stageEl, amount) {
+  if (!stageEl || !amount) return;
+  const f = el("div", "mood-float", `+${amount} 💙`);
+  stageEl.appendChild(f);
+  setTimeout(() => f.remove(), 1100);
+}
+/* Craving thought-bubble — near Blip, showing the day's craved food's
+   EXISTING art (js/companion/food.js). Tap opens the Food sheet. Hidden
+   while he refuses food outright (health.stage >= 2) — the caller gates
+   this, mirroring the same rule mhq_eat_food enforces server-side. */
+function cravingBubble(craving, blipName, onTap) {
+  if (!craving || !foodExists(craving)) return null;
+  const b = el("button", "craving-bubble");
+  b.type = "button";
+  b.title = `${blipName || "Blip"} is craving ${foodLabel(craving).toLowerCase()} today — tap to open the shop`;
+  b.setAttribute("aria-label", b.title);
+  b.appendChild(foodArt(craving));
+  b.addEventListener("click", onTap);
+  return b;
+}
 
 /* ---------------- pharmacy / treats catalogue ----------------
    The backend serves food in state.foodShop ([{id, kind, price}]),
@@ -459,9 +511,17 @@ function mountNameEditor(container, app, sess, activeBlip) {
 
 let activeSlot = 0; // which blip's name/colour/equip panel is showing (two-blip households)
 
+/* MOOD ≥ 4 spontaneous wink/hop (session B, 2026-08-21): module scope so a
+   re-render can always find and clear the PREVIOUS interval before maybe
+   starting a new one — this screen has no unmount hook to call on
+   navigation away, so the interval also self-clears the moment its own
+   host element leaves the document (see where it is started, below). */
+let spontaneousMoodTimer = null;
+
 export function renderBlip(app, host) {
   clear(host);
   closeRoomSheet(); // a fresh screen render always starts with no sheet open
+  if (spontaneousMoodTimer) { clearInterval(spontaneousMoodTimer); spontaneousMoodTimer = null; }
   const sess = getSession();
   const state = app.state || {};
   const blips = normalizeBlips(state);
@@ -606,6 +666,28 @@ export function renderBlip(app, host) {
     tappable: true,
   });
 
+  // ---- craving thought-bubble (session B, 2026-08-21) ----
+  // Hidden while he refuses food outright — the same gate mhq_eat_food
+  // itself enforces server-side, mirrored here rather than a new one.
+  if (health.stage < 2) {
+    const bubble = cravingBubble(activeBlip.craving, activeBlip.name, () => openPanel("food", true));
+    if (bubble) roomStage.appendChild(bubble);
+  }
+
+  // ---- MOOD ≥ 4: occasional spontaneous wink/hop (session B, 2026-08-21) ----
+  // Reuses playTapReaction's own guards (never while sleeping/sick/
+  // recovering) — the only extra condition here is the mood threshold.
+  // Mood <= 1 gets none (the single `>= 4` condition already leaves 2-3
+  // spontaneous-free too). setInterval, never rAF (browser-pane gotcha);
+  // self-clears the moment this exact host leaves the document, mirroring
+  // renderer.js's own runFrameLoop self-clean pattern.
+  if ((activeBlip.mood || 0) >= 4) {
+    spontaneousMoodTimer = setInterval(() => {
+      if (!host.isConnected) { clearInterval(spontaneousMoodTimer); spontaneousMoodTimer = null; return; }
+      if (Math.random() < 0.4) playTapReaction(blipHandle);
+    }, 15000);
+  }
+
   // ---- header: nickname (tap to edit), subtitle, mood chip ----
   const titleWrap = el("div", "room-titlewrap");
   /* The second-Blip offer is an EGG BESIDE THE NAME, not a card down the
@@ -641,6 +723,11 @@ export function renderBlip(app, host) {
   mountNameEditor(nameWrap, app, sess, activeBlip);
   nameRow.appendChild(nameWrap);
   titleWrap.appendChild(nameRow);
+  /* MOOD METER hearts (session B, 2026-08-21) — its OWN sibling element,
+     never appended inside nameWrap: mountNameEditor clears that container
+     on every render (see the ⚠️ note above the egg, same trap), so
+     anything put inside it would render once and silently vanish. */
+  titleWrap.appendChild(moodHeartsRow(activeBlip.mood));
   titleWrap.appendChild(el("p", "muted small room-subtitle", "Your study companion"));
   const mood = moodCopy(health);
   if (mood) titleWrap.appendChild(el("div", "blip-mood", `${mood.icon} ${mood.text}`));
@@ -673,6 +760,7 @@ export function renderBlip(app, host) {
       }
       triggerHappy(roomStage);
       playMoment(blipHandle, "eating");
+      floatMoodGain(roomStage, MOOD.cookieGain);
       showToast(blips.length > 1 ? `${blips[0].name} and ${blips[1].name} shared a cookie!` : `${blips[0].name} enjoyed a cookie!`, "good");
       // wait for the eating frames before the re-render swaps the <img> out
       await new Promise((res) => setTimeout(res, momentDurationMs("eating")));
@@ -1174,12 +1262,24 @@ export function renderBlip(app, host) {
       }
       closeRoomSheet();                       // get out of the way and watch him
       triggerHappy(roomStage);
-      playMoment(blipHandle, "eating");
-      showToast(`${activeBlip.name || "Blip"} ate the ${foodLabel(id).toLowerCase()}!`, "good");
-      // Let the eating moment finish before the re-render replaces the <img>
-      // it is animating — without this the whole point of the gesture is a
+      /* MOOD + CRAVINGS (session B, 2026-08-21): the server already decided
+         whether this hit the day's craving (r.craved) and how much mood it
+         paid (r.moodGain) — never re-derive that client-side (it can't:
+         the craving pick uses Postgres's hashtext). A craving hit reuses
+         the EXISTING "excited" moment in place of plain "eating"; either
+         way a floating heart shows the exact gain. */
+      const craved = !!r.craved;
+      const gain = r.moodGain || (craved ? MOOD.cravingGain : MOOD.foodGain);
+      const momentName = craved ? "excited" : "eating";
+      playMoment(blipHandle, momentName);
+      floatMoodGain(roomStage, gain);
+      showToast(craved
+        ? `${activeBlip.name || "Blip"} was CRAVING ${foodLabel(id).toLowerCase()}!`
+        : `${activeBlip.name || "Blip"} ate the ${foodLabel(id).toLowerCase()}!`, "good");
+      // Let the moment finish before the re-render replaces the <img> it is
+      // animating — without this the whole point of the gesture is a
       // single frame. (Same reason the cookie waits, below.)
-      await new Promise((res) => setTimeout(res, momentDurationMs("eating")));
+      await new Promise((res) => setTimeout(res, momentDurationMs(momentName)));
       await app.refresh();
       app.go("blip");
     } catch {

@@ -52,11 +52,28 @@
    their own `furnitureShop` payload array so the cosmetic shop and both
    treasure-box loot pools never see them.
 
+   MOOD METER + CRAVINGS ADDITION (2026-08-21, foreman build day session B):
+   mirrors supabase/migration-mood-cravings.sql (WRITTEN NOT RUN there —
+   this file is the only place either currently executes). Two new fields
+   per blip, `mood` (0-5, the last value WRITTEN) and `mood_day` (this
+   file's own day-index, see today() below — NOT a calendar date, same
+   convention as last_cookie_day/tray_day). Effective mood is computed at
+   READ time, never stored decayed: moodEffective() below mirrors the
+   server's _mhq_mood_effective exactly (decay MOOD.dailyDecay per day
+   since mood_day, floored at 0). The day's craving is picked by
+   cravingFor() — deterministic per blip per day, but its hash does NOT
+   need to match Postgres hashtext (the migration says so explicitly):
+   any deterministic per-day pick is correct offline, since the server is
+   the sole authority on live. Gains: feed() +MOOD.cookieGain, eatFood()
+   +MOOD.foodGain or +MOOD.cravingGain on a hit, care() +1 on a genuine
+   care day — all household-wide, mirroring feed_count's existing shape
+   (none of these RPCs has ever taken a blip-slot parameter).
+
    DEV: globalThis.__BLIP_DEV__.skipDays(n) advances the local clock so
    sick states can be tested without waiting a week; .reset() clears it.
    ============================================================ */
 import { levelInfo, MILESTONE_LEVELS } from "./companion/level.js";
-import { BLIP, CHAPTERS, XP } from "./config.js";
+import { BLIP, CHAPTERS, XP, MOOD } from "./config.js";
 
 const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq.struggles", quests: "mhq.quests", meta: "mhq.meta", blips: "mhq.blips",
   // DICE-PLAN.md (session 0b, 2026-08-21): mirrors supabase's dice_plays
@@ -450,6 +467,45 @@ function isWeekday(dayIdx) { const dow = new Date(dayIdx * DAY_MS).getUTCDay(); 
 function countQualWeekdays(fromExcl, toIncl) { let n = 0; for (let d = fromExcl + 1; d <= toIncl; d++) if (isWeekday(d)) n++; return n; }
 function growthStage(feed) { return BLIP.growthThresholds.filter(t => (feed || 0) >= t).length; }
 
+/* ---------- MOOD METER + CRAVINGS (mirrors _mhq_mood_effective / _mhq_craving) ---------- */
+/* Effective mood, read-time only — `mood` on the stored blip record is
+   always the last value WRITTEN, never the decayed value. Mirrors the
+   server's greatest(0, mood - dailyDecay * days_since) exactly, using
+   this file's own day-index clock so __BLIP_DEV__.skipDays exercises it
+   the same way it exercises the sickness clock. */
+function moodEffective(mood, moodDay) {
+  if (moodDay == null) return 0;
+  return Math.max(0, (mood || 0) - MOOD.dailyDecay * Math.max(0, today() - moodDay));
+}
+/* A plain string hash — NOT Postgres's hashtext, and it does not need to
+   be: migration-mood-cravings.sql is explicit that the local pick only
+   needs to be deterministic per (blip, day), since the server is the
+   sole authority once live. Keyed by student id + slot (this file's blip
+   records have no separate uuid of their own) + today's day-index. */
+function simpleDayHash(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  return h;
+}
+/* The day's ONE deterministic craved food for one blip: active groceries
+   (never soup/medicine/treat — see the migration's judgement-call note b;
+   treat can never be eaten via eatFood, so craving it would make the
+   cravingGain bonus unearnable) at or below the learner's level. */
+function cravingFor(sid, slot, level) {
+  const pool = FOOD_ITEMS.filter(f => !NOT_EDIBLE.includes(f.id) && (f.minLevel || 1) <= (level || 1));
+  if (!pool.length) return null;
+  const idx = simpleDayHash(`${sid}:${slot}:${today()}`) % pool.length;
+  return pool[idx].id;
+}
+/* Backfills mood/mood_day on a blip record read from an older localStorage
+   save (mirrors ensureBlipFields' role for the student record — but blips
+   are always rewritten whole via writeBlips on any mutation, so a
+   read-time default here is enough; nothing needs a one-time persisted
+   migration pass). */
+function withMoodFields(b) {
+  return { ...b, mood: typeof b.mood === "number" ? b.mood : 0, mood_day: ("mood_day" in b) ? b.mood_day : null };
+}
+
 /* ---------- Phase 3: assignments ----------
    The assignment stores assigned_on as a DAY INDEX (this file's own clock, so
    __BLIP_DEV__.skipDays still works on it), but the contract hands the client
@@ -584,16 +640,16 @@ function ensureBlipFields(s) {
 
 /* ---------- blips store: { [studentId]: [ {slot,name,colour,feed_count,owned_items,equipped} ] } ---------- */
 function allBlips() { return read(LS.blips, {}); }
-function getBlips(sid) { return (read(LS.blips, {})[sid] || []).slice().sort((a, b) => a.slot - b.slot); }
+function getBlips(sid) { return (read(LS.blips, {})[sid] || []).slice().sort((a, b) => a.slot - b.slot).map(withMoodFields); }
 function ensureBlip(sid, rec) {
   // create the slot-1 blip from the (migrated) student record if missing
   const store = read(LS.blips, {});
   const arr = store[sid] || [];
   if (!arr.some(b => b.slot === 1)) {
-    arr.push({ slot: 1, name: rec.blip_name || "Blip", colour: rec.blip_colour || "blue", feed_count: 0, owned_items: Array.isArray(rec.owned_items) ? rec.owned_items.slice() : [], equipped: (rec.equipped && typeof rec.equipped === "object") ? { ...rec.equipped } : {} });
+    arr.push({ slot: 1, name: rec.blip_name || "Blip", colour: rec.blip_colour || "blue", feed_count: 0, owned_items: Array.isArray(rec.owned_items) ? rec.owned_items.slice() : [], equipped: (rec.equipped && typeof rec.equipped === "object") ? { ...rec.equipped } : {}, mood: 0, mood_day: null });
     store[sid] = arr; write(LS.blips, store);
   }
-  return arr.slice().sort((a, b) => a.slot - b.slot);
+  return arr.slice().sort((a, b) => a.slot - b.slot).map(withMoodFields);
 }
 function writeBlips(sid, arr) { const store = read(LS.blips, {}); store[sid] = arr; write(LS.blips, store); }
 
@@ -668,7 +724,19 @@ function foodCatalogue() { return FOOD_ITEMS.map(it => ({ id: it.id, kind: it.ki
    fields as the cosmetic shop, so the furniture panel can reuse the cards
    the cosmetic shop already draws. */
 function furnitureCatalogue() { return FURNITURE_ITEMS.map(it => ({ id: it.id, slot: it.slot, price: it.price, minLevel: it.minLevel })); }
-function blipsView(sid) { return getBlips(sid).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feed_count, growthStage: growthStage(b.feed_count), owned: b.owned_items, equipped: b.equipped })); }
+/* MOOD + CRAVINGS: reads the owning student's level straight from the
+   students store (mirrors mhq_get_state's own lvl lookup) so callers don't
+   have to thread it through — blipsView(sid) keeps its original one-arg
+   shape every existing caller already uses. */
+function blipsView(sid) {
+  const rec = read(LS.students, {})[sid];
+  const lvl = rec ? levelInfo(rec.xp || 0).level : 1;
+  return getBlips(sid).map(b => ({
+    slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feed_count, growthStage: growthStage(b.feed_count),
+    owned: b.owned_items, equipped: b.equipped,
+    mood: moodEffective(b.mood, b.mood_day), craving: cravingFor(sid, b.slot, lvl),
+  }));
+}
 
 /* dev clock control — advance/reset the local "today" so sick states are testable */
 globalThis.__BLIP_DEV__ = {
@@ -1125,11 +1193,17 @@ export const LocalBackend = {
     // S4: guarded by the cookie's OWN stamp — a bought apple sets
     // last_fed_day (it resets the sickness clock) but never eats the cookie.
     if (rec.last_cookie_day != null && rec.last_cookie_day >= today()) return { ok: false, error: "already_fed" };
-    blips.forEach(b => { b.feed_count = (b.feed_count || 0) + 1; }); // household growth
+    blips.forEach(b => {
+      b.feed_count = (b.feed_count || 0) + 1; // household growth
+      // MOOD (2026-08-21): the cookie is also worth +MOOD.cookieGain,
+      // same household-wide update as feed_count — mirrors mhq_feed.
+      b.mood = Math.min(MOOD.max, moodEffective(b.mood, b.mood_day) + MOOD.cookieGain);
+      b.mood_day = today();
+    });
     rec.last_cookie_day = today();
     rec.last_fed_day = today();
     write(LS.students, stAll); writeBlips(s.id, blips);
-    return { ok: true, blips: blipsView(s.id).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feedCount, growthStage: b.growthStage })),
+    return { ok: true, blips: blipsView(s.id).map(b => ({ slot: b.slot, name: b.name, colour: b.colour, feedCount: b.feedCount, growthStage: b.growthStage, mood: b.mood, craving: b.craving })),
       health: computeHealth(rec.last_fed_day, rec.care_streak), canFeedToday: false };
   },
   /* ---- S4b: eat a grocery off TODAY'S TRAY (mirrors mhq_eat_food) ----
@@ -1171,6 +1245,19 @@ export const LocalBackend = {
     // the clock resets; the cookie stamp and feed_count are left alone
     rec.last_fed_day = today();
 
+    // MOOD + CRAVINGS (2026-08-21): any bought food is +MOOD.foodGain, the
+    // day's CRAVED food (for EITHER blip in the household — mirrors
+    // mhq_eat_food's judgement call, see migration-mood-cravings.sql's
+    // header note c) is +MOOD.cravingGain instead. Household-wide, same
+    // shape as feed() above.
+    const lvl = levelInfo(rec.xp || 0).level;
+    const craved = blips.some(b => cravingFor(s.id, b.slot, lvl) === item);
+    const moodGain = craved ? MOOD.cravingGain : MOOD.foodGain;
+    blips.forEach(b => {
+      b.mood = Math.min(MOOD.max, moodEffective(b.mood, b.mood_day) + moodGain);
+      b.mood_day = today();
+    });
+
     write(LS.students, stAll); writeBlips(s.id, blips);
     return {
       ok: true, item, tray: rec.tray,
@@ -1178,6 +1265,8 @@ export const LocalBackend = {
       health: computeHealth(rec.last_fed_day, rec.care_streak),
       // the cookie survives a grocery feeding — that is the whole point
       canFeedToday: (rec.last_cookie_day == null || rec.last_cookie_day < today()),
+      // lets the client show +1 vs +2 and play the excited moment on a hit
+      moodGain, craved,
     };
   },
   async care(username, password) {
@@ -1186,6 +1275,7 @@ export const LocalBackend = {
     const stAll = read(LS.students, {});
     const rec = stAll[s.id];
     ensureBlipFields(rec);
+    const blips = ensureBlip(s.id, rec);
     const stage = computeHealth(rec.last_fed_day, rec.care_streak).stage;
     if (stage < 2) return { ok: false, error: "not_sick" };
     if (!isQualDay()) return { ok: false, error: "not_care_day" };
@@ -1210,7 +1300,17 @@ export const LocalBackend = {
       healed = true; newStreak = 0; rec.last_fed_day = today(); // back to healthy; growth kept
     }
     rec.care_streak = newStreak;
-    write(LS.students, stAll);
+
+    // MOOD (2026-08-21): a genuine care day (every guard above passed, both
+    // supplies actually consumed) is worth +1 mood too — "being cared for
+    // feels good". Household-wide, same shape as feed()/eatFood(). Nothing
+    // else about care/heal changed.
+    blips.forEach(b => {
+      b.mood = Math.min(MOOD.max, moodEffective(b.mood, b.mood_day) + 1);
+      b.mood_day = today();
+    });
+
+    write(LS.students, stAll); writeBlips(s.id, blips);
     return { ok: true, healed, pantry: rec.pantry, health: computeHealth(rec.last_fed_day, rec.care_streak) };
   },
 
@@ -1318,7 +1418,7 @@ export const LocalBackend = {
     if (!VALID_COLOURS.includes(col)) return { ok: false, error: "bad_colour" };
     const nm = String(name || "").trim().slice(0, 24);
     if (!nm) return { ok: false, error: "bad_name" };
-    blips.push({ slot: 2, name: nm, colour: col, feed_count: 0, owned_items: [], equipped: {} });
+    blips.push({ slot: 2, name: nm, colour: col, feed_count: 0, owned_items: [], equipped: {}, mood: 0, mood_day: null });
     writeBlips(s.id, blips);
     return { ok: true, blips: blipsView(s.id) };
   },

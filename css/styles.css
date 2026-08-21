@@ -737,6 +737,14 @@ h2{font-size:20px} h3{font-size:17px}
   font-family:var(--font-num);font-weight:600;font-size:12.5px;letter-spacing:.3px;color:var(--warn);
   background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid color-mix(in srgb,var(--warn) 32%,transparent)}
 
+/* MOOD METER hearts (session B, 2026-08-21) — its own sibling row beside
+   the nickname, NOT the sickness chip above. A filled heart glows the
+   electric-blue --accent (her ask: "a blue heart reads right on Blip");
+   an empty one just sits quiet. CSS/emoji only, no new art. */
+.mood-hearts{display:flex;justify-content:center;gap:3px;margin:6px 0 0;font-size:15px;line-height:1}
+.mood-heart{opacity:.5}
+.mood-heart.filled{opacity:1;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 70%,transparent))}
+
 /* refusal / happy micro-animations, applied directly to .room-blip-stage
    (playtest fix, 2026-08-21 — Megan: "whenever blip eats his cookie, he
    teleports a few inches to the right and then teleports back"). ROOT
@@ -923,6 +931,36 @@ h2{font-size:20px} h3{font-size:17px}
    front vertex y=1.0), so his baseline sits at 0.88 — in front of the desk
    and bed, which is why he is mounted after them. */
 .room .room-blip-stage{position:absolute;left:50%;bottom:12%;width:30%;max-width:150px;transform:translateX(-50%)}
+
+/* floating "+1"/"+2" mood gain on a successful feed (session B,
+   2026-08-21) — its OWN child of .room-blip-stage with its OWN transform,
+   deliberately never a class added to .room-blip-stage itself: that
+   element centres with transform:translateX(-50%), and a keyframe there
+   that drops the translateX teleports it half its own width (see the
+   .blip-refuse/.blip-happy comment above for the exact bug this avoids
+   repeating). Self-removed by JS well before it could pile up. */
+.mood-float{position:absolute;left:50%;top:6%;transform:translateX(-50%);pointer-events:none;
+  font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--accent);
+  text-shadow:0 0 8px color-mix(in srgb,var(--accent) 60%,transparent);
+  animation:mood-float-rise 1.05s ease-out forwards;white-space:nowrap;z-index:3}
+@keyframes mood-float-rise{
+  0%{opacity:0;transform:translateX(-50%) translateY(0) scale(.9)}
+  20%{opacity:1;transform:translateX(-50%) translateY(-6px) scale(1)}
+  100%{opacity:0;transform:translateX(-50%) translateY(-38px) scale(1)}}
+@media (prefers-reduced-motion:reduce){.mood-float{animation:none;opacity:0}}
+
+/* craving thought-bubble (session B, 2026-08-21) — top-right of the stage,
+   near Blip, showing the day's craved food's existing art. Tap opens the
+   Food sheet. Small enough to never collide with the cookie/tray up in
+   .room-tray (top:8px there; this sits lower, against the stage itself). */
+.craving-bubble{position:absolute;right:2%;top:4%;width:34px;height:34px;padding:3px;
+  background:var(--panel);border:1px solid var(--brd-2);border-radius:999px;cursor:pointer;
+  box-shadow:0 0 10px -2px color-mix(in srgb,var(--accent) 55%,transparent);
+  animation:craving-bob 2.6s ease-in-out infinite;z-index:2}
+.craving-bubble .food-art{width:100%;height:100%}
+.craving-bubble:hover,.craving-bubble:focus-visible{border-color:var(--accent)}
+@keyframes craving-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.craving-bubble{animation:none}}
 
 /* ---- the STYLE stage (her ruling 6: "don't throw that away") ----
    The flat dark stage the app had before the room build, kept alive as the
