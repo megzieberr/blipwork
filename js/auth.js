@@ -14,7 +14,7 @@
    ============================================================ */
 import { api } from "./api.js";
 import { setSession } from "./session.js";
-import { el, clear } from "./ui.js";
+import { el, clear, pwToggle } from "./ui.js";
 
 const errMsg = c => ({
   wrong_password: "That password isn’t right. Try again, or ask your teacher to reset it.",
@@ -59,7 +59,7 @@ export async function renderLogin(app, host) {
     body.appendChild(u);
     const p = el("input", "login-input"); p.type = "password"; p.autocomplete = "off";
     p.placeholder = "Password";
-    body.appendChild(p);
+    body.appendChild(pwToggle(p));
     const err = el("p", "login-err"); err.hidden = true; body.appendChild(err);
     const btn = el("button", "btn primary big", "Log in");
     body.appendChild(btn);
@@ -130,12 +130,12 @@ export async function renderLogin(app, host) {
 
     const p1 = el("input", "login-input"); p1.type = "password"; p1.autocomplete = "off";
     p1.placeholder = isFirst ? "New password" : "Password";
-    body.appendChild(p1);
+    body.appendChild(pwToggle(p1));
     let p2 = null;
     if (isFirst) {
       p2 = el("input", "login-input"); p2.type = "password"; p2.autocomplete = "off";
       p2.placeholder = "Confirm password";
-      body.appendChild(p2);
+      body.appendChild(pwToggle(p2));
     }
 
     const err = el("p", "login-err"); err.hidden = true; body.appendChild(err);

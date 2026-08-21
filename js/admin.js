@@ -11,7 +11,7 @@
 import { api } from "./api.js";
 import { CHAPTERS, DICE_CHAPTERS } from "./config.js";
 import { CONCEPTS } from "./concepts.js";
-import { el, clear } from "./ui.js";
+import { el, clear, pwToggle } from "./ui.js";
 
 const root = () => document.getElementById("admin");
 let pw = null;
@@ -55,7 +55,7 @@ function renderLogin(host) {
   const input = el("input", "login-input"); input.type = "password"; input.placeholder = "Admin password";
   const err = el("p", "login-err"); err.hidden = true;
   const btn = el("button", "btn primary big", "Log in");
-  card.appendChild(input); card.appendChild(err); card.appendChild(btn);
+  card.appendChild(pwToggle(input)); card.appendChild(err); card.appendChild(btn);
   host.appendChild(card);
   async function submit() {
     btn.disabled = true; err.hidden = true;

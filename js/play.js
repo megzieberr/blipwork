@@ -8,7 +8,7 @@ import { getSession } from "./session.js";
 import { mountQuestion } from "./questions.js";
 import { openConcept } from "./modal.js";
 import { openCalculator } from "./calculator.js";
-import { el, clear, mount } from "./ui.js";
+import { el, clear, mount, xbarHtml } from "./ui.js";
 import { genAt } from "./dice.js";
 
 /* DICE-PLAN.md (session 0b, 2026-08-21): renderPlay is reused, not forked,
@@ -87,10 +87,16 @@ export function renderPlay(app, host, params) {
   function present(regen = true) {
     attempt++;
     const skill = skills[st.i];
-    // dice: SEEDED regeneration (js/dice.js genAt) — same call fresh or on
-    // resume, so re-deriving at the saved index always reproduces the exact
-    // question. Static play is untouched (regen/currentQ path, unchanged).
-    const q = dice ? genAt(dice.roundSeed, st.i, skill) : (regen ? skill.gen() : currentQ);
+    // dice: SEEDED regeneration (js/dice.js genAt) — the FIRST present() of
+    // an index (attempt 1, salt 0) always reproduces the exact question, so
+    // resume (a fresh showSkill()->present() at the saved index) is exactly
+    // as before. A same-index RE-present — "Try again" after a wrong calcdo
+    // answer (onRetry), or returning from "I'm lost" (onLost) — is attempt
+    // 2, 3, … , salted so it rolls a genuinely different "similar one"
+    // instead of the identical values genAt would otherwise reproduce
+    // (playtest fix, 2026-08-21 — DICE-PLAN's "fresh numbers every roll"
+    // promise). Static play is untouched (regen/currentQ path, unchanged).
+    const q = dice ? genAt(dice.roundSeed, st.i, skill, attempt - 1) : (regen ? skill.gen() : currentQ);
     currentQ = q;
     window.__Q__ = q;                          // expose current question (debug / headless checks)
     // dice is stat-free and has no mastery loop: every question is answered
@@ -142,7 +148,7 @@ export function renderPlay(app, host, params) {
     if (dice && q.method) {
       const mbtn = el("button", "btn ghost small", "📖 Show me the method");
       const mbox = el("div", "hint-box"); mbox.hidden = true;
-      mbox.innerHTML = `<span class="tag">METHOD</span>${q.method}`;
+      mbox.innerHTML = `<span class="tag">METHOD</span>${xbarHtml(q.method)}`;
       mbtn.addEventListener("click", () => { mbox.hidden = false; mbtn.disabled = true; });
       qhost.appendChild(mbtn); qhost.appendChild(mbox);
     }

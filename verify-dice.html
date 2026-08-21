@@ -45,6 +45,15 @@
 <h2>Part 2 · dealing, determinism &amp; resume at full pool size (58 kinds, roundLength 7)</h2>
 <pre id="statsMechanics">…</pre>
 
+<h2>Part 2 · attempt-salted retry (playtest fix, 2026-08-21)</h2>
+<p class="muted small">js/play.js's dice branch now salts genAt() by the in-round attempt counter, so a
+  same-index re-present — "Try again" after a wrong calcdo answer, or returning from "I'm lost" — rolls a genuinely
+  different "similar one" instead of reproducing the exact question genAt(roundSeed,index,skill) would otherwise
+  give (Megan's playtest: identical values on retry). Checked on q2.mean and q3.iqrList — both have real numeric
+  variation, so a same-salt-vs-different-salt comparison can't legitimately collide by chance the way a fixed-recall
+  skill could.</p>
+<pre id="saltMechanics">…</pre>
+
 <script type="module">
 import { pool as stubPool } from "./js/quests/dice-stub.js";
 import { pool as statsPool } from "./js/quests/dice-stats.js";
@@ -456,6 +465,62 @@ document.getElementById("statsRecompute").textContent = recomputeLines.join("\n"
   lines.push(`dealing (full coverage, fully random): dealt ${deckFull.length}/${statsPool.roundLength} — ${fullLen ? "OK" : "FAIL"}`);
 
   document.getElementById("statsMechanics").textContent = lines.join("\n");
+}
+
+/* ---------- attempt-salted retry (playtest fix, 2026-08-21) ---------- */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+  const byId = new Map(statsPool.entries.map(e => [e.skillId, e]));
+  const numericSkills = ["q2.mean", "q3.iqrList"]; // real numeric variation — a same-salt-vs-different-salt
+  // comparison can't legitimately collide by chance the way a fixed-recall skill (e.g. q4's skew classification) could.
+
+  // (a) a different salt at the SAME index gives a DIFFERENT question, for
+  // every numeric skill, at several indices (not just index 0).
+  let diffOk = true;
+  numericSkills.forEach(id => {
+    const skill = byId.get(id);
+    for (let idx = 0; idx < 3; idx++) {
+      const base = genAt(seed, idx, skill, 0);
+      const retry1 = genAt(seed, idx, skill, 1);
+      const retry2 = genAt(seed, idx, skill, 2);
+      if (JSON.stringify(base) === JSON.stringify(retry1)) diffOk = false;
+      if (JSON.stringify(base) === JSON.stringify(retry2)) diffOk = false;
+      if (JSON.stringify(retry1) === JSON.stringify(retry2)) diffOk = false;
+    }
+  });
+  tick(diffOk, "salted retry: salt 0/1/2 at the same index give three DIFFERENT questions (q2.mean, q3.iqrList, indices 0-2)");
+  lines.push(`different salts, same index → different question (q2.mean, q3.iqrList, indices 0-2): ${diffOk ? "OK" : "FAIL"}`);
+
+  // (b) the SAME salt, called twice, is byte-identical — a retry's "similar
+  // one" is itself reproducible (e.g. if present() re-runs for any reason
+  // without the attempt counter advancing).
+  let sameSaltOk = true;
+  numericSkills.forEach(id => {
+    const skill = byId.get(id);
+    for (let salt = 0; salt <= 2; salt++) {
+      const a = genAt(seed, 0, skill, salt), b = genAt(seed, 0, skill, salt);
+      if (JSON.stringify(a) !== JSON.stringify(b)) sameSaltOk = false;
+    }
+  });
+  tick(sameSaltOk, "salted retry: the same (seed, index, salt) is byte-identical on repeat, for salt 0/1/2");
+  lines.push(`same salt called twice → identical (q2.mean, q3.iqrList, salt 0/1/2): ${sameSaltOk ? "OK" : "FAIL"}`);
+
+  // (c) resume/base-question is UNCHANGED: genAt with no salt arg at all
+  // (every existing call site, including js/dice-play.js's resume) must
+  // still equal explicit salt 0, for EVERY skill in the pool — this is the
+  // backward-compatibility guarantee that keeps resume showing exactly
+  // what it showed before this fix.
+  let baseUnchanged = true;
+  statsPool.entries.forEach((skill, i) => {
+    const noSaltArg = genAt(seed, i, skill);
+    const explicitZero = genAt(seed, i, skill, 0);
+    if (JSON.stringify(noSaltArg) !== JSON.stringify(explicitZero)) baseUnchanged = false;
+  });
+  tick(baseUnchanged, "salted retry: genAt() with no salt arg still equals salt 0 explicitly, for all 58 skills (resume unaffected)");
+  lines.push(`no-salt-arg === explicit salt 0 (all 58 skills, resume/base-question path): ${baseUnchanged ? "OK" : "FAIL"}`);
+
+  document.getElementById("saltMechanics").textContent = lines.join("\n");
 }
 
 const banner = document.getElementById("banner");

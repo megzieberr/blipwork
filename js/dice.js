@@ -90,9 +90,22 @@ export function withSeed(seed, fn) {
    a fresh deal and a resume call — so they can never drift apart.
    `dealtSkill` is one of the entries returned by dealRound() (or the
    equivalent {id, gen} shape play.js builds from it — see js/dice-
-   play.js), matched to the save's skillIds[index] by the caller. */
-export function genAt(roundSeed, index, dealtSkill) {
-  const seed = hashSeed(roundSeed, index, dealtSkill.id || dealtSkill.skillId);
+   play.js), matched to the save's skillIds[index] by the caller.
+
+   `salt` (playtest fix, 2026-08-21): an optional per-question attempt
+   counter. salt 0 (the default, and what every existing call site —
+   resume included — still passes) reproduces the EXACT same hash as
+   before this parameter existed, so nothing about resume changes.
+   salt N>0 folds the attempt count into the hash, giving a genuinely
+   DIFFERENT-but-still-deterministic question — used by js/play.js's
+   dice branch so a same-index re-present (wrong-answer retry, or
+   returning from "I'm lost") rolls a fresh "similar one" instead of
+   reproducing byte-identical values. Determinism holds per (roundSeed,
+   index, salt): calling genAt with the same three always reproduces
+   the same question twice. */
+export function genAt(roundSeed, index, dealtSkill, salt = 0) {
+  const id = dealtSkill.id || dealtSkill.skillId;
+  const seed = salt ? hashSeed(roundSeed, index, id, salt) : hashSeed(roundSeed, index, id);
   return withSeed(seed, () => dealtSkill.gen());
 }
 

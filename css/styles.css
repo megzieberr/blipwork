@@ -135,6 +135,15 @@ h2{font-size:20px} h3{font-size:17px}
 .login-prompt{font-family:var(--font-display);font-weight:600;font-size:18px;margin:6px 0 12px}
 .login-search,.login-input{font-family:var(--font-body);font-size:16px;color:var(--ink);background:var(--panel);border:1px solid var(--brd-2);border-radius:var(--r-md);padding:13px 15px;margin-bottom:12px;width:100%;outline:none}
 .login-search:focus,.login-input:focus{border-color:var(--accent)}
+/* show/hide toggle on a password field (playtest fix, 2026-08-21) — wraps the
+   input, which keeps its own margin-bottom:0 here so the WRAPPER carries the
+   12px gap instead; padding-right on the input clears the 44px button so the
+   eye sits inside the existing box without shifting the field's width/position. */
+.pw-field{position:relative;margin-bottom:12px}
+.pw-field .login-input{margin-bottom:0;padding-right:44px}
+.pw-eye{position:absolute;top:0;right:0;bottom:0;width:44px;display:flex;align-items:center;justify-content:center;background:none;border:0;padding:0;font-size:17px;line-height:1;color:var(--muted);cursor:pointer;opacity:.75}
+.pw-eye:hover,.pw-eye:focus-visible{opacity:1;color:var(--ink)}
+.pw-eye.is-on{opacity:1;color:var(--accent)}
 .login-list{display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow-y:auto;margin-bottom:10px}
 .login-name{font-family:var(--font-body);font-weight:500;font-size:16px;text-align:left;color:var(--ink);background:var(--panel);border:1px solid var(--brd-2);border-radius:var(--r-md);padding:14px 16px;cursor:pointer;transition:.13s}
 .login-name:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
@@ -228,6 +237,12 @@ h2{font-size:20px} h3{font-size:17px}
 
 .q-prompt{font-size:16px;line-height:1.55;margin-bottom:14px;color:var(--ink)}
 .q-prompt b,.q-prompt .hl{color:var(--accent);font-weight:600}
+/* mean symbol x̄, everywhere except the calculator LCD (which has its own
+   .lcd-ov — same recipe, its own colour context): a CSS border-top on an
+   inline-block sits centred over the x by construction (box width = glyph
+   width), unlike the combining macron character, which this app's fonts
+   don't reliably stack (playtest fix, 2026-08-21; see js/ui.js xbarHtml). */
+.xbar{border-top:1px solid currentColor;display:inline-block;line-height:1.05}
 
 /* ---------- diagram "device screen" panel ----------
    The whole app is dark, so this is just the same low-glow system
@@ -722,13 +737,30 @@ h2{font-size:20px} h3{font-size:17px}
   font-family:var(--font-num);font-weight:600;font-size:12.5px;letter-spacing:.3px;color:var(--warn);
   background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid color-mix(in srgb,var(--warn) 32%,transparent)}
 
-/* refusal / happy micro-animations, applied to the growth wrapper.
-   Transform-only (rotate/scale), never touching opacity or ending
-   on transform:none — safe to layer over the .blip-bop keyframe
-   (renderer.js) that already animates the same element's transform. */
-@keyframes blip-refuse-turn{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-6deg)}50%{transform:rotate(0deg)}75%{transform:rotate(6deg)}}
+/* refusal / happy micro-animations, applied directly to .room-blip-stage
+   (playtest fix, 2026-08-21 — Megan: "whenever blip eats his cookie, he
+   teleports a few inches to the right and then teleports back"). ROOT
+   CAUSE (measured live, not guessed): .room-blip-stage centres itself with
+   transform:translateX(-50%) (see the rule below). `transform` is ONE CSS
+   property — an active animation on it replaces the base rule's value
+   entirely for its duration, it does not compose. These keyframes used to
+   write bare scale()/rotate() with no translateX component, so for the
+   animation's whole run the centring offset vanished and the stage
+   snapped to its un-centred position (left edge at 50%, instead of centre
+   at 50%) — a jump of exactly half the stage's own width, then a snap
+   back when the class was removed. Confirmed on this exact element: adding
+   .blip-happy moved its rect from x=141.75 to x=187.5, a 45.75px jump
+   (== half of its own 91.5px width) — then removing the class moved it
+   straight back. The OLD comment here claimed this was "applied to the
+   growth wrapper" and "safe to layer over blip-bop" — that wrapper doesn't
+   exist for this element; blip.js applies both classes straight to
+   roomStage (.room-blip-stage). Fix: every keyframe now carries
+   translateX(-50%) alongside its own scale/rotate, exactly like the
+   working .room-blip-stage.feed-target-over rule already does a few lines
+   down — so the centring rides along instead of being clobbered. */
+@keyframes blip-refuse-turn{0%,100%{transform:translateX(-50%) rotate(0deg)}25%{transform:translateX(-50%) rotate(-6deg)}50%{transform:translateX(-50%) rotate(0deg)}75%{transform:translateX(-50%) rotate(6deg)}}
 .blip-refuse{animation:blip-refuse-turn .6s ease-in-out}
-@keyframes blip-happy-pop{0%{transform:scale(1)}30%{transform:scale(1.08)}60%{transform:scale(.97)}100%{transform:scale(1)}}
+@keyframes blip-happy-pop{0%{transform:translateX(-50%) scale(1)}30%{transform:translateX(-50%) scale(1.08)}60%{transform:translateX(-50%) scale(.97)}100%{transform:translateX(-50%) scale(1)}}
 .blip-happy{animation:blip-happy-pop .7s ease-in-out}
 
 /* two-blip slot switcher (Blip screen) */
