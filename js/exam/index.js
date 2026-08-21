@@ -22,10 +22,16 @@
    js/quests/dice-pools.js).
    ============================================================ */
 import { validateQuestion } from "./_schema.js";
+import { eqnNatureOfRootsQuestions } from "./eqn-nature-of-roots.js";
 
+/* PILOT TOPIC seeded (EXAM-FOCUS-PLAN.md build order step 1, session D,
+   2026-08-21): eqn / nature-of-roots, four questions — see
+   eqn-nature-of-roots.js's own header for sourcing and method notes.
+   Every other chapter stays an empty array until its own seeding
+   session lands, exactly as session 0 shipped it. */
 const REGISTRY = {
   stats: [], finance: [], prob: [], trig: [], meas: [],
-  func: [], tgraph: [], analytical: [], pat: [], exp: [], eqn: [],
+  func: [], tgraph: [], analytical: [], pat: [], exp: [], eqn: eqnNatureOfRootsQuestions,
 };
 
 /* Every question every future seeding session adds MUST pass

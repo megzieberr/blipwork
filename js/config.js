@@ -282,11 +282,16 @@ export const MOOD = {
    a chapter id only ever belongs here once BOTH real seeded questions
    exist for it (js/exam/index.js's registry) AND Megan's phone-test green
    light on the pilot topic (EXAM-FOCUS-PLAN.md's build order — session 1
-   seeds the pilot, session 2+ goes topic by topic). Empty today: the hub
-   grows NO Exam Focus tab, and every exam-focus screen/RPC is unreachable
-   from the client, until this list is non-empty.
-   ============================================================ */
-export const EXAM_CHAPTERS = [];
+   seeds the pilot, session 2+ goes topic by topic).
+
+   PILOT SEEDED (session D, 2026-08-21): eqn / nature-of-roots, four
+   questions (js/exam/eqn-nature-of-roots.js). Flag flipped to ["eqn"] as
+   part of that same session, per the build brief — but the class is NOT
+   yet invited to the app at all (a separate, earlier gate), so nothing
+   here is learner-visible on live regardless. Megan phone-tests this
+   pilot before any other chapter gets seeded — same rhythm as
+   DICE_CHAPTERS above; this is not a green light for topic 2. */
+export const EXAM_CHAPTERS = ["eqn"];
 
 /* Pay-per-completed-question, her kickoff ruling (2026-08-21): flat 75 XP +
    10 gold, ONCE per question ever (re-opening an already-completed

@@ -19,20 +19,21 @@
 </head>
 <body>
 <h1 style="font-family:'Space Grotesk',sans-serif">Exam focus infrastructure · verification</h1>
-<p class="muted small">EXAM-FOCUS-PLAN.md, session 0 build (2026-08-21). Tests the machinery ONLY — js/exam/_harness-stub.js
-  is a fully-worked stub question, never registered/never learner-reachable (js/exam/index.js's real registry stays
-  empty until a paper-build session seeds it). This page forces ?local=1-equivalent behaviour via localStorage before
-  any module import runs, so the REAL js/api.js singleton (used by js/screens.js and js/exam-play.js exactly as the
-  live app uses it) resolves to LocalBackend for the whole page.</p>
+<p class="muted small">EXAM-FOCUS-PLAN.md, session 0 build (2026-08-21) + session D pilot content (2026-08-21). Tests the
+  machinery (js/exam/_harness-stub.js is a fully-worked stub, never registered/never learner-reachable) AND, from
+  Part 6 onward, the real seeded pilot (eqn / nature-of-roots, js/exam/eqn-nature-of-roots.js). This page forces
+  ?local=1-equivalent behaviour via localStorage before any module import runs, so the REAL js/api.js singleton
+  (used by js/screens.js and js/exam-play.js exactly as the live app uses it) resolves to LocalBackend for the
+  whole page.</p>
 <div id="banner">running…</div>
 
 <h2>Part 1 · js/exam/_schema.js — validateQuestion()</h2>
 <div id="schemaChecks"></div>
 
-<h2>Part 2 · registry (js/exam/index.js) stays empty, flag (js/config.js EXAM_CHAPTERS) stays off</h2>
+<h2>Part 2 · registry (js/exam/index.js) — eqn seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn"]</h2>
 <pre id="registryChecks">…</pre>
 
-<h2>Part 3 · hub navigation — flag off, then forced on in-harness</h2>
+<h2>Part 3 · hub navigation — flag off (simulated), then the real shipped flag state</h2>
 <pre id="hubChecks">…</pre>
 
 <h2>Part 4 · the part player (js/exam-play.js) driven directly against the stub, real local-backend round trip</h2>
@@ -41,14 +42,24 @@
 <h2>Part 5 · SQL ↔ config literal cross-check (supabase/migration-exam-focus.sql vs js/config.js EXAM)</h2>
 <pre id="sqlChecks">…</pre>
 
+<h2>Part 6 · scope-wall check — every seeded question's topic belongs to its chapter's allowed list</h2>
+<pre id="scopeWallChecks">…</pre>
+
+<h2>Part 7 · nature-of-roots content — independent recompute of every discriminant, root and k-value</h2>
+<pre id="recomputeChecks">…</pre>
+
+<h2>Part 8 · the part player driven against a REAL seeded question (eqn.nor.q1), end to end</h2>
+<pre id="realPlayerChecks">…</pre>
+
 <div id="harnessHost"></div>
 
 <script>try { localStorage.setItem("mhq.forceLocal", "1"); } catch (e) {}</script>
 <script type="module">
-import { EXAM, EXAM_CHAPTERS, chapterById } from "./js/config.js";
+import { EXAM, EXAM_CHAPTERS, CHAPTERS, chapterById } from "./js/config.js";
 import { validateQuestion } from "./js/exam/_schema.js";
 import { stubQuestion } from "./js/exam/_harness-stub.js";
 import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
+import { eqnNatureOfRootsQuestions } from "./js/exam/eqn-nature-of-roots.js";
 import { renderHub, renderExamChapter, renderExamTopic } from "./js/screens.js";
 import { renderExamPlay } from "./js/exam-play.js";
 import { getExamLang, setExamLang } from "./js/exam/lang.js";
@@ -163,21 +174,32 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 }
 
 /* ============================================================
-   PART 2 — registry + flag stay empty/off, exactly as shipped.
+   PART 2 — registry + flag reflect the PILOT SEEDED state (session D,
+   2026-08-21): eqn/nature-of-roots has 4 real questions and
+   EXAM_CHAPTERS is ["eqn"]; every other chapter is still an empty array,
+   exactly as session 0 shipped it. (Originally this section asserted
+   everything was empty/off — updated here because seeding the pilot is
+   this session's actual job, not a regression.)
    ============================================================ */
 {
   const lines = [];
-  tick(Array.isArray(EXAM_CHAPTERS) && EXAM_CHAPTERS.length === 0, "js/config.js EXAM_CHAPTERS is [] as shipped");
-  lines.push(`EXAM_CHAPTERS (before this page forces it on below): [${EXAM_CHAPTERS.join(",")}] — ${EXAM_CHAPTERS.length === 0 ? "OK, empty" : "FAIL"}`);
+  tick(Array.isArray(EXAM_CHAPTERS) && EXAM_CHAPTERS.length === 1 && EXAM_CHAPTERS[0] === "eqn", 'js/config.js EXAM_CHAPTERS is ["eqn"] — the pilot flag, and only the pilot flag');
+  lines.push(`EXAM_CHAPTERS: [${EXAM_CHAPTERS.join(",")}] — ${EXAM_CHAPTERS.length === 1 && EXAM_CHAPTERS[0] === "eqn" ? "OK, pilot only" : "FAIL"}`);
 
   const allChapterIds = ["stats", "finance", "prob", "trig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn"];
-  let registryEmpty = true;
-  allChapterIds.forEach(id => { if (examQuestionsForChapter(id).length) registryEmpty = false; });
-  tick(registryEmpty, "js/exam/index.js's registry has zero questions in every chapter");
-  lines.push(`registry question counts, every chapter: ${allChapterIds.map(id => `${id}=${examQuestionsForChapter(id).length}`).join(", ")} — ${registryEmpty ? "OK, all empty" : "FAIL"}`);
+  let othersEmpty = true;
+  allChapterIds.forEach(id => { if (id !== "eqn" && examQuestionsForChapter(id).length) othersEmpty = false; });
+  tick(othersEmpty, "every chapter OTHER than eqn still has zero questions in the registry");
+  const eqnCount = examQuestionsForChapter("eqn").length;
+  tick(eqnCount === 4, `eqn has exactly 4 seeded questions, got ${eqnCount}`);
+  lines.push(`registry question counts, every chapter: ${allChapterIds.map(id => `${id}=${examQuestionsForChapter(id).length}`).join(", ")} — non-eqn all empty? ${othersEmpty}, eqn=4? ${eqnCount === 4}`);
 
-  tick(examTopicsForChapter("stats").length === 0, "examTopicsForChapter derives zero topics from an empty chapter");
+  tick(examTopicsForChapter("stats").length === 0, "examTopicsForChapter derives zero topics from an empty chapter (stats, untouched by this session)");
   lines.push(`examTopicsForChapter("stats") with nothing registered: [${examTopicsForChapter("stats").map(t => t.id).join(",")}] — ${examTopicsForChapter("stats").length === 0 ? "OK" : "FAIL"}`);
+
+  const eqnTopics = examTopicsForChapter("eqn");
+  tick(eqnTopics.length === 1 && eqnTopics[0].id === "nature-of-roots", `examTopicsForChapter("eqn") derives exactly one topic, "nature-of-roots" — got [${eqnTopics.map(t => t.id).join(",")}]`);
+  lines.push(`examTopicsForChapter("eqn"): ${JSON.stringify(eqnTopics)}`);
 
   tick(typeof EXAM.xpPerQuestion === "number" && typeof EXAM.goldPerQuestion === "number", "js/config.js EXAM block has numeric xpPerQuestion/goldPerQuestion");
   lines.push(`EXAM block: xpPerQuestion=${EXAM.xpPerQuestion}, goldPerQuestion=${EXAM.goldPerQuestion}`);
@@ -186,15 +208,21 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 }
 
 /* ============================================================
-   PART 3 — hub navigation: flag OFF first (real, unmodified
-   EXAM_CHAPTERS), then forced ON in-harness (EXAM_CHAPTERS is a plain
-   array — every importer, including js/screens.js, shares the SAME
-   array object, so pushing onto it here is visible there too, without
-   ever editing js/config.js's shipped value).
+   PART 3 — hub navigation: flag OFF (temporarily cleared — simulates
+   pre-pilot), then flag ON with the REAL shipped state, ["eqn"], which
+   now has real seeded content. (Originally this tested against "stats"
+   pushed onto an empty array, because nothing was seeded yet; now that
+   eqn/nature-of-roots is real, this exercises the actual topic-grid
+   render instead of the empty-registry placeholder — a strictly better
+   test. EXAM_CHAPTERS is a plain array — every importer, including
+   js/screens.js, shares the SAME array object, so mutating it here is
+   visible there too, without ever editing js/config.js's shipped value
+   — restored to its real shipped contents at the end either way.)
    ============================================================ */
 {
   const lines = [];
   const host = document.getElementById("harnessHost");
+  const shippedChapters = EXAM_CHAPTERS.slice(); // capture the REAL shipped value (["eqn"]) to restore at the end
 
   function renderCurrent(app) {
     clear(host);
@@ -212,46 +240,49 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     return app;
   }
 
-  // ---- flag OFF: hub must be pixel-identical to before this build — no
-  // Exam Focus tab button anywhere, no way to reach it. ----
+  // ---- flag OFF (simulated pre-pilot: clear the array): hub must show
+  // no Exam Focus tab and no way to reach it. ----
+  EXAM_CHAPTERS.length = 0;
   const appOff = makeTestApp();
   renderCurrent(appOff);
   const tabsOff = [...host.querySelectorAll(".hub-tab")].map(b => b.textContent);
   const hasExamTabOff = tabsOff.some(t => /exam focus/i.test(t));
-  tick(!hasExamTabOff, "flag OFF: no 'Exam Focus' tab button in the hub");
-  lines.push(`flag OFF — hub tabs: [${tabsOff.join(" | ")}] — Exam Focus present? ${hasExamTabOff} (want false)`);
+  tick(!hasExamTabOff, "flag OFF (simulated): no 'Exam Focus' tab button in the hub");
+  lines.push(`flag OFF (simulated) — hub tabs: [${tabsOff.join(" | ")}] — Exam Focus present? ${hasExamTabOff} (want false)`);
   const cardsOff = host.querySelectorAll(".chapter-cards .ch-card, .chapter-cards .cg-card").length;
   tick(cardsOff > 0, "flag OFF: hub still renders its normal chapter cards (nothing broken by this build)");
   lines.push(`flag OFF — chapter cards rendered: ${cardsOff} (want > 0, proves the hub itself still works)`);
 
-  // ---- flag ON, forced: the tab appears, its chapter card navigates into
-  // examChapter, which — with an empty registry — shows the "no topics
-  // yet" placeholder rather than crashing. ----
-  EXAM_CHAPTERS.push("stats");
+  // ---- flag ON, REAL shipped state (["eqn"]): the tab appears, its
+  // chapter card navigates into examChapter, which now shows the REAL
+  // "Nature Of Roots" topic card (not the empty-registry placeholder,
+  // because there's real content to show). ----
+  EXAM_CHAPTERS.push(...shippedChapters);
   const appOn = makeTestApp();
   renderCurrent(appOn);
   const tabsOn = [...host.querySelectorAll(".hub-tab")].map(b => b.textContent);
   const examTabBtn = [...host.querySelectorAll(".hub-tab")].find(b => /exam focus/i.test(b.textContent));
-  tick(!!examTabBtn, "flag ON (forced): 'Exam Focus' tab button now present");
+  tick(!!examTabBtn, "flag ON (real, [\"eqn\"]): 'Exam Focus' tab button now present");
   lines.push(`flag ON — hub tabs: [${tabsOn.join(" | ")}] — Exam Focus present? ${!!examTabBtn}`);
 
   if (examTabBtn) examTabBtn.click();
   const examCard = host.querySelector(".chapter-cards .ch-card");
-  tick(!!examCard && /statistics/i.test(examCard.textContent), "flag ON: clicking the Exam Focus tab shows the flagged chapter's card");
+  tick(!!examCard && /equations/i.test(examCard.textContent), "flag ON: clicking the Exam Focus tab shows the flagged chapter's card (Equations & Inequalities)");
   lines.push(`exam chapter card rendered: ${examCard ? examCard.querySelector("h2").textContent.trim() : "(none)"}`);
 
   if (examCard) examCard.querySelector("button").click();
-  tick(appOn.screen === "examChapter" && appOn.params.chapterId === "stats", "clicking the chapter card navigates to examChapter with the right chapterId");
-  const placeholder = host.querySelector(".card p");
-  tick(!!placeholder && /no topics/i.test(placeholder.textContent), "examChapter screen shows the empty-registry placeholder rather than crashing");
-  lines.push(`examChapter screen (empty registry) placeholder: "${placeholder ? placeholder.textContent : "(missing)"}"`);
+  tick(appOn.screen === "examChapter" && appOn.params.chapterId === "eqn", "clicking the chapter card navigates to examChapter with chapterId \"eqn\"");
+  const topicCard = host.querySelector(".exam-topic-card");
+  tick(!!topicCard && /nature/i.test(topicCard.textContent), "examChapter screen shows the REAL seeded topic card (Nature Of Roots), not the empty placeholder");
+  lines.push(`examChapter screen topic card: "${topicCard ? topicCard.querySelector("h3").textContent.trim() : "(missing)"}"`);
 
   const backBtn = host.querySelector(".back");
   if (backBtn) backBtn.click();
   tick(appOn.screen === "hub", "the back button on examChapter returns to the hub");
   lines.push(`back button navigation: screen is now "${appOn.screen}" (want "hub")`);
 
-  EXAM_CHAPTERS.length = 0; // restore — leave the shared array exactly as shipped for anything else on this page
+  EXAM_CHAPTERS.length = 0;
+  EXAM_CHAPTERS.push(...shippedChapters); // restore — leave the shared array exactly as shipped for anything else on this page
 
   clear(host);
   say("hubChecks", lines);
@@ -436,6 +467,197 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   lines.push("schema.sql: exam_progress table + both RPC grants present.");
 
   say("sqlChecks", lines);
+}
+
+/* ============================================================
+   PART 6 — scope-wall check (deferred by session 0 to "a future
+   seeding session that can actually verify a topic against its
+   chapter's wall" — js/exam/_schema.js's own header). Every seeded
+   question's topic must belong to its chapter's allowed topic list.
+
+   Sourcing note: GR11-IEB-PAPER-BANK.md's own "Grade 11 scope walls"
+   section covers Finance / Euclidean geometry / Trig / Statistics /
+   Probability / Measurement only — it has no dedicated Equations &
+   Inequalities entry. So the eqn wall below is instead Blipwork's own
+   eq1–eq8 quest topic breakdown (js/config.js CHAPTERS "eqn" .quests[]
+   blurbs — itself built from the paper bank's Paper 1 archetype menu +
+   METHODS-algebra.md's B0 routing table, EQ p41), cross-checked against
+   METHODS-algebra.md's "Part E — Skills the notes do NOT cover" list
+   (sum/product of roots as a named formula, logarithms, non-linear
+   simultaneous systems, three-variable systems, word problems, cubic
+   equations, absolute-value (in)equalities, interval/set-builder
+   notation, simultaneous inequalities — none of those appear below).
+   Future chapters: add their wall here when their first seeding session
+   lands — an unlisted chapter is simply not checked, the same
+   "empty until seeded" relationship the registry itself has.
+   ============================================================ */
+{
+  const lines = [];
+  const SCOPE_WALLS = {
+    eqn: [
+      "standard-form-and-factorising",
+      "special-cases",
+      "k-method",
+      "fractions-and-restrictions",
+      "perfect-square-and-turning-point",
+      "formula-and-simultaneous",
+      "inequalities",
+      "nature-of-roots",
+    ],
+  };
+
+  const allChapterIds = CHAPTERS.map(c => c.id);
+  let allInWall = true;
+  const perChapterLines = [];
+  allChapterIds.forEach(chapterId => {
+    const qs = examQuestionsForChapter(chapterId);
+    if (!qs.length) return; // nothing seeded yet in this chapter — nothing to check
+    const wall = SCOPE_WALLS[chapterId];
+    if (!wall) {
+      allInWall = false;
+      perChapterLines.push(`  ${chapterId}: HAS ${qs.length} seeded question(s) but NO scope wall defined — add one`);
+      return;
+    }
+    const offenders = qs.filter(q => !wall.includes(q.topic));
+    if (offenders.length) allInWall = false;
+    perChapterLines.push(`  ${chapterId}: ${qs.length} question(s), topics=[${[...new Set(qs.map(q => q.topic))].join(",")}] — ${offenders.length ? "FAIL: " + offenders.map(q => `${q.id} (topic "${q.topic}")`).join(", ") : "OK, all within wall"}`);
+  });
+  tick(allInWall, "every seeded question's topic belongs to its chapter's scope wall");
+  lines.push(`scope-wall check, per chapter with seeded content:\n${perChapterLines.join("\n")}`);
+  lines.push(`eqn wall: [${SCOPE_WALLS.eqn.join(", ")}]`);
+
+  // deliberately-broken case: prove the membership test actually catches an out-of-wall topic
+  const caught = !SCOPE_WALLS.eqn.includes("logarithms");
+  tick(caught, 'sanity check: the wall membership test correctly rejects an out-of-scope topic ("logarithms" — METHODS-algebra.md Part E, explicitly not covered)');
+  lines.push(`sanity check — "logarithms" against the eqn wall: ${caught ? "correctly rejected" : "FAIL, not caught"}`);
+
+  say("scopeWallChecks", lines);
+}
+
+/* ============================================================
+   PART 7 — nature-of-roots content: independent recompute. Per the
+   build brief's "verify before reporting" instruction — every numeric
+   answer baked into the seeded memos (discriminants, roots, k-values) is
+   recalculated here from first principles (plain arithmetic, not copied
+   from js/exam/eqn-nature-of-roots.js's own memo text) and asserted
+   equal, the same precedent as verify-dice.html's recompute checks.
+   ============================================================ */
+{
+  const lines = [];
+  const disc = (a, b, c) => b * b - 4 * a * c;
+  const isPerfectSquare = n => n >= 0 && Number.isInteger(Math.sqrt(n));
+
+  // ---- q1: 2x² − 7x + 3 = 0 ----
+  {
+    const D = disc(2, -7, 3);
+    tick(D === 25, `q1: independently recomputed Δ = ${D} (memo claims 25)`);
+    tick(isPerfectSquare(D), `q1: Δ=${D} is a perfect square → rational roots (memo claims "real, rational, unequal")`);
+    const r1 = (7 + Math.sqrt(D)) / 4, r2 = (7 - Math.sqrt(D)) / 4;
+    const hasRoot = v => Math.abs(r1 - v) < 1e-9 || Math.abs(r2 - v) < 1e-9;
+    tick(hasRoot(3) && hasRoot(0.5), `q1: recomputed roots {${r1}, ${r2}} include 3 and 1/2 (memo's (d) answer)`);
+    lines.push(`q1 (2x²−7x+3=0): Δ=${D}, roots={${r1},${r2}} — matches memo's Δ=25, x=3 or x=1/2`);
+  }
+
+  // ---- q2: x² − 4x − 3 = 0, then x² − 4x − k = 0 with equal roots ----
+  {
+    const D = disc(1, -4, -3);
+    tick(D === 28, `q2: independently recomputed Δ = ${D} (memo claims 28)`);
+    tick(!isPerfectSquare(D), `q2: Δ=${D} is NOT a perfect square → irrational roots (memo claims "real, irrational, unequal")`);
+    const r1 = 2 + Math.sqrt(7), r2 = 2 - Math.sqrt(7);
+    tick(Math.abs(r1 + r2 - 4) < 1e-9 && Math.abs(r1 * r2 + 3) < 1e-9, "q2: recomputed roots sum to 4 (−b/a) and multiply to −3 (c/a)");
+    const kEqual = -16 / 4; // solving 16 + 4k = 0
+    tick(kEqual === -4, `q2(d): independently solved 16 + 4k = 0 → k = ${kEqual} (memo claims −4)`);
+    tick(disc(1, -4, -kEqual) === 0, `q2(d): Δ at k=${kEqual} recomputes to 0, confirming equal roots`);
+    const equalRoot = -(-4) / (2 * 1);
+    tick(equalRoot === 2, `q2(d): equal root recomputes to x = ${equalRoot} (memo claims 2)`);
+    lines.push(`q2 (x²−4x−3=0): Δ=${D} (not a perfect square) · equal-roots k=${kEqual}, root x=${equalRoot}`);
+  }
+
+  // ---- q3: 2x² − 4x + k = 0 ladder ----
+  {
+    const kEqual = 16 / 8; // solving 16 − 8k = 0
+    tick(kEqual === 2, `q3(a): independently solved 16 − 8k = 0 → k = ${kEqual} (memo claims 2)`);
+    const Dbelow = disc(2, -4, 1), Dabove = disc(2, -4, 3);
+    tick(Dbelow > 0, `q3(b): Δ at k=1 (< 2) recomputes to ${Dbelow} > 0, confirming k<2 gives real & unequal`);
+    tick(Dabove < 0, `q3(c): Δ at k=3 (> 2) recomputes to ${Dabove} < 0, confirming k>2 gives non-real`);
+    const D1 = disc(2, -4, 1), D0 = disc(2, -4, 0);
+    tick(D1 === 8 && !isPerfectSquare(D1), `q3(d): Δ at k=1 recomputes to ${D1}, not a perfect square — correctly rejected`);
+    tick(D0 === 16 && isPerfectSquare(D0), `q3(d): Δ at k=0 recomputes to ${D0}, a perfect square — correctly accepted, largest integer k=0`);
+    lines.push(`q3 (2x²−4x+k=0): equal-roots k=${kEqual} · Δ(k=1)=${D1} reject · Δ(k=0)=${D0} accept → largest integer k=0`);
+  }
+
+  // ---- q4: x² + px + (p−2) = 0, Δ(p) = p² − 4p + 8 ≡ (p−2)² + 4 ----
+  {
+    const deltaOf = p => disc(1, p, p - 2);
+    const completedForm = p => Math.pow(p - 2, 2) + 4;
+    let identityHolds = true;
+    for (let p = -20; p <= 20; p++) { if (deltaOf(p) !== completedForm(p)) identityHolds = false; }
+    tick(identityHolds, "q4(b): Δ(p) = p²−4p+8 matches the completed-square form (p−2)²+4 for every tested integer p from −20 to 20");
+    let minDelta = Infinity;
+    for (let p = -20; p <= 20; p += 0.001) { const d = deltaOf(p); if (d < minDelta) minDelta = d; }
+    tick(minDelta > 3.99 && minDelta < 4.01, `q4(c)/(d): numerically minimised Δ over p ∈ [−20, 20] is ≈${minDelta.toFixed(4)}, confirming the true minimum is 4 (never ≤ 0, and never reaches 0)`);
+    lines.push(`q4 (x²+px+(p−2)=0): Δ(p) ≡ (p−2)²+4 confirmed over a wide range; numeric minimum ≈ ${minDelta.toFixed(4)} (memo: minimum is exactly 4) — real for every p, never equal`);
+  }
+
+  say("recomputeChecks", lines);
+}
+
+/* ============================================================
+   PART 8 — the part player driven against a REAL seeded question
+   (eqn.nor.q1), not the stub — end-to-end proof that real content
+   plays through js/exam-play.js exactly like the harness stub does in
+   Part 4 (same double-submit/pay-once/EN-AF machinery, now exercised
+   against actual pilot content instead of fixture data).
+   ============================================================ */
+{
+  const lines = [];
+  const host = document.getElementById("harnessHost");
+  const realQ1 = eqnNatureOfRootsQuestions.find(q => q.id === "eqn.nor.q1");
+  const uname = "verify_exam_real_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(uname, "Verify Real", "pw12");
+  setSession(uname, "pw12");
+
+  const chapter = chapterById("eqn");
+  const app = { state: await api.getState(uname, "pw12"), go() {}, async refresh() { app.state = await api.getState(uname, "pw12"); } };
+
+  clear(host);
+  renderExamPlay(app, host, { chapter, question: realQ1, accent: chapter.signature });
+  await new Promise(r => setTimeout(r, 30));
+
+  function btnByText(text) { return [...host.querySelectorAll("button")].find(b => b.textContent.trim() === text); }
+  function activeCard() { return host.querySelector(".exam-part.active"); }
+
+  tick(!!activeCard() && activeCard().querySelector(".exam-part-id").textContent.includes("a"), "real eqn.nor.q1: part (a) is active on first load");
+
+  for (let i = 0; i < realQ1.parts.length; i++) {
+    const btn = btnByText("Done! Show me the answer");
+    if (!tick(!!btn, `real eqn.nor.q1: Done button present before revealing part ${i + 1} of ${realQ1.parts.length}`)) break;
+    btn.click();
+    await new Promise(r => setTimeout(r, 30));
+  }
+
+  const finalState = await api.examState(uname, "pw12");
+  const row = finalState.progress["eqn.nor.q1"];
+  tick(!!row && row.completed === true && row.partsOpened.length === 4, "real eqn.nor.q1: server marks the question completed with all 4 parts recorded");
+
+  const afterState = await api.getState(uname, "pw12");
+  tick(afterState.xp === EXAM.xpPerQuestion && afterState.gold === EXAM.goldPerQuestion, `real eqn.nor.q1: fresh student paid exactly EXAM.xpPerQuestion/goldPerQuestion once (xp=${afterState.xp}, gold=${afterState.gold})`);
+
+  const starCount = host.querySelectorAll(".exam-star").length;
+  tick(starCount === 0, `real eqn.nor.q1: no ★ badge anywhere (q1 has no level-4 part by design — got ${starCount})`);
+
+  const promptEn = host.querySelector(".exam-part-prompt").textContent;
+  const langBtn = host.querySelector(".exam-lang-btn");
+  langBtn.click();
+  const promptAf = host.querySelector(".exam-part-prompt").textContent;
+  tick(promptEn !== promptAf, "real eqn.nor.q1: EN/AF toggle changes rendered prompt text on real seeded content");
+  langBtn.click();
+
+  lines.push(`real eqn.nor.q1 played end to end: partsOpened=${JSON.stringify(row && row.partsOpened)}, completed=${row && row.completed}, xp=${afterState.xp}, gold=${afterState.gold}, ★ count=${starCount}`);
+
+  clearSession();
+  clear(host);
+  say("realPlayerChecks", lines);
 }
 
 const banner = document.getElementById("banner");
