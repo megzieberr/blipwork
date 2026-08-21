@@ -50,10 +50,24 @@ first rare; all 63 rows re-sorted price-ascending per slot).
 7. ⚠️ `migration-roster-login.sql` is **ONE-SHOT** — a re-run after the
    seed would hide the whole class from the picker (header says so now).
 
+### Later the same day (sw v46) — admin restyle + tour fix
+- **Admin dashboard restyled to the G7 pattern** (session 5, her ask after
+  seeing the comma-list): learner rounds render as per-chapter chip
+  clusters (green passed / orange tried / grey untouched, tooltip = chapter
+  · title · best% · played date), and Quests open/close is grouped per
+  chapter with "N / M open" + Open all / Close all (client-side loop over
+  the existing per-quest RPC — no chapter RPC exists, none added).
+- ✅ **Tour-survives-logout FIXED** (session 6): root cause was the overlay
+  mounting on `<body>` above `#app`'s z-index with no teardown on
+  navigation. `closeActiveTour()` now runs at the top of `app.go()` — every
+  navigation clears a live tour. A nav-driven close counts as "seen", same
+  as skip. Auto-fire-once + ❓ replay unchanged.
+- ⚠️ Process note: session 5's agent REFUSED a mid-session task relayed by
+  SendMessage even with approval described — a fresh spawn with the /go
+  block at the top of the brief worked. Mid-session scope extensions want
+  a new stamped brief, not a chat relay.
+
 ### Known issues / for a future session
-- 🐛 **Tour overlay survives logout** (pre-existing, confirmed twice today):
-  log out and "Meet Blip 1 OF 6" can sit on the login screen. Learners
-  share devices — worth fixing soon. `js/companion/tour.js` / `js/app.js`.
 - ⚠️ **Port 5191's browser cache poisons module loads** (bit two agents AND
   the foreman today): fresh screens.js + stale config.js = SyntaxError
   "does not provide an export named CQ_URL", or worse, silently stale
