@@ -1,4 +1,31 @@
-# Project status — updated 2026-08-21 evening (🎲 DICE DAY ✅ SHIPPED, sw v49)
+# Project status — updated 2026-08-21 night (🎲 DICE DAY + playtest fixes ✅ SHIPPED, sw v50)
+
+## 🔧 2026-08-21 (night) — her playtest's four fixes, SHIPPED same evening (sw v50)
+
+Her phone test passed except four finds, all fixed + foreman-verified
+(verify-dice **114/114**, verify-store all green, both my own runs):
+1. **Dice retry dealt identical values** — genAt() gained an attempt `salt`
+   (0 = old hash byte-for-byte, so resume untouched); play.js passes
+   attempt−1. ⚠️ The foreman brief's root cause was WRONG — "similar one"
+   advances fine; the bug was the same-index re-present paths (calcdo "Try
+   again" + the "I'm lost" return). The fix session refuted-and-fixed.
+2. **👁 password eye** on all 4 password inputs (first-login pair, ?u=1,
+   admin) — her ask after nearly locking herself out setting a password blind.
+3. **x̄ macron skew** — calculator.js's `.lcd-ov` border-top recipe extended
+   app-wide (`xbarHtml()`), every render boundary incl. MC option labels.
+4. **Blip's cookie teleport** — MEASURED root cause: `.blip-happy`/`.blip-refuse`
+   keyframes set `transform` without the stage's `translateX(-50%)`, replacing
+   (not composing) the centring for the animation's duration — a 45.75px jump
+   = exactly half the stage width. Every keyframe step now carries the
+   translate (matching `.feed-target-over`'s existing precedent). Zero jump
+   after; sprite frames proven innocent (centroids sub-pixel stable).
+Also that evening: **her picker name unhidden for playtests** (see Pending —
+re-hide before the class invite) and the ⚠️ record fix: the second hidden
+adult account is **`lize`**, not "Michaela M" as the bridge-day notes said.
+
+---
+
+# (previous head, same day) Project status — updated 2026-08-21 evening (🎲 DICE DAY ✅ SHIPPED, sw v49)
 
 ## 🎲 2026-08-21 (evening) — THE DICE PILOT, SHIPPED (sw v49)
 
@@ -62,6 +89,11 @@ confetti, local-backend loot).
 ### ⏳ Pending on Megan
 - 📱 3 min **[blocking dice chapter 2]**: open Blipwork → Statistics → tap 🎲
   → play a round → close mid-round and reopen (same question should return).
+- 🌐 1 min **[blocking — BEFORE the class is invited]**: re-hide her picker
+  name (one SQL line: `update students set hidden = true where username =
+  'megzieberr'`) — unhidden 2026-08-21 evening at her request FOR PLAYTESTS
+  ONLY. The other hidden account (`lize`) was never unhidden. Any session
+  doing the go-live/invite work must check this first.
 - 💻 2 min **[whenever]**: two METHODS-algebra calls — the `√9 = ±3` box, and
   which road shows first (rational exponents; surd equations).
 
