@@ -21,6 +21,19 @@ const conceptTitle = id => (CONCEPTS[id] && CONCEPTS[id].title) || id;
 const fmtDate = v => { if (!v) return "never"; const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleDateString(); };
 const daysSince = v => { if (!v) return Infinity; const d = new Date(v); return isNaN(d) ? Infinity : (Date.now() - d.getTime()) / 864e5; };
 
+/* every built quest, grouped per chapter — the per-learner grid clusters by
+   this instead of one flat comma-list, and each entry carries what a chip
+   needs to render + its tooltip. Ported from maths-quest-grade7/js/admin.js
+   (ROUND_LIST / chipFor / clusterFor). */
+const ROUND_LIST = (() => {
+  const out = [];
+  CHAPTERS.forEach(ch => (ch.quests || []).filter(q => q.built).forEach(q => {
+    out.push({ id: q.id, title: q.title, ch: ch.name, chId: ch.id, chIcon: ch.icon, chColor: ch.signature });
+  }));
+  return out;
+})();
+const KNOWN_QUEST_IDS = new Set(ROUND_LIST.map(rd => rd.id));
+
 // Phase 2 roster labels — health stage + growth stage (server-computed).
 const HEALTH_LABELS = ["Healthy", "Tired", "Bedridden", "Critical"];
 const GROWTH_LABELS = ["Tiny", "Small", "Medium", "Grown"];
@@ -195,21 +208,70 @@ function assignmentSection(data) {
   return sec;
 }
 
+/* Grouped by chapter (CHAPTERS order), each with an "N / M open" count and
+   Open all / Close all — ported from maths-quest-grade7's buildChapterBlock.
+   Blipwork has no chapter-level RPC, so the bulk buttons just loop the
+   existing adminSetQuestOpen over that chapter's quests, one reload() at
+   the end. A quest id the payload carries but config.js doesn't know about
+   (shouldn't happen) is appended in a plain "Other" block, not dropped. */
 function questSection(quests) {
   const sec = el("div", "card adm-section");
   sec.appendChild(el("h2", "", "Quests — open / close"));
   sec.appendChild(el("p", "muted small", "Learners only see open quests. Open each one once you’ve taught it."));
-  const list = el("div", "adm-quests");
-  quests.forEach(q => {
-    const row = el("div", "adm-qrow", `<span>${questTitle(q.quest_id)}</span>`);
+  if (!quests || !quests.length) {
+    sec.appendChild(el("p", "muted small", "No quests found."));
+    return sec;
+  }
+  const openById = {}; quests.forEach(q => { openById[q.quest_id] = !!q.is_open; });
+
+  function questRow(qid) {
+    const row = el("div", "adm-qrow", `<span>${questTitle(qid)}</span>`);
     const sw = el("label", "switch");
-    const cb = el("input"); cb.type = "checkbox"; cb.checked = q.is_open;
-    cb.addEventListener("change", async () => { cb.disabled = true; await api.adminSetQuestOpen(pw, q.quest_id, cb.checked); reload(); });
+    const cb = el("input"); cb.type = "checkbox"; cb.checked = !!openById[qid];
+    cb.addEventListener("change", async () => { cb.disabled = true; await api.adminSetQuestOpen(pw, qid, cb.checked); reload(); });
     sw.appendChild(cb); sw.appendChild(el("span", "slider"));
     row.appendChild(sw);
-    list.appendChild(row);
-  });
-  sec.appendChild(list);
+    return row;
+  }
+
+  function buildChapterBlock(ch) {
+    const built = (ch.quests || []).filter(q => q.built);
+    if (!built.length) return null;
+    const block = el("div", "adm-qchap");
+    const openCount = built.filter(q => openById[q.id]).length;
+    const head = el("div", "adm-qchead",
+      `<span class="adm-qctitle">${ch.icon} ${ch.name}</span><span class="muted small adm-qcount">${openCount} / ${built.length} open</span>`);
+    const btns = el("div", "adm-qcbtns");
+    const openAll = el("button", "btn ghost small", "Open all");
+    const closeAll = el("button", "btn ghost small", "Close all");
+    async function bulkSet(open) {
+      openAll.disabled = true; closeAll.disabled = true;
+      for (const q of built) { await api.adminSetQuestOpen(pw, q.id, open); }
+      reload();
+    }
+    openAll.addEventListener("click", () => bulkSet(true));
+    closeAll.addEventListener("click", () => bulkSet(false));
+    btns.appendChild(openAll); btns.appendChild(closeAll);
+    head.appendChild(btns);
+    block.appendChild(head);
+    const list = el("div", "adm-qlist");
+    built.forEach(q => list.appendChild(questRow(q.id)));
+    block.appendChild(list);
+    return block;
+  }
+
+  CHAPTERS.forEach(ch => { const block = buildChapterBlock(ch); if (block) sec.appendChild(block); });
+
+  const otherIds = quests.map(q => q.quest_id).filter(id => !KNOWN_QUEST_IDS.has(id));
+  if (otherIds.length) {
+    const block = el("div", "adm-qchap");
+    block.appendChild(el("div", "adm-qchead", `<span class="adm-qctitle">Other</span>`));
+    const list = el("div", "adm-qlist");
+    otherIds.forEach(id => list.appendChild(questRow(id)));
+    block.appendChild(list);
+    sec.appendChild(block);
+  }
+
   return sec;
 }
 
@@ -240,16 +302,35 @@ function learnerSection(rows, inactiveDays) {
   head.appendChild(csv);
   sec.appendChild(head);
 
-  sec.appendChild(el("p", "muted small", "Learners sign themselves up. You never see their passwords — reset a forgotten one (they set a new one next login, progress kept) or remove a learner."));
+  sec.appendChild(el("p", "muted small", "Learners sign themselves up. Rounds are grouped by chapter — green = passed (80%+) · orange = attempted, not yet passed · grey = not started. Hover a chip for the chapter, best score and when it was last played. You never see their passwords — reset a forgotten one (they set a new one next login, progress kept) or remove a learner."));
 
   const table = el("table", "adm-table");
-  table.innerHTML = `<thead><tr><th>Name</th><th>Username</th><th>Password</th><th>XP</th><th>Blip</th><th>Passed</th><th>Last active</th><th></th></tr></thead>`;
+  table.innerHTML = `<thead><tr><th>Name</th><th>Username</th><th>Password</th><th>XP</th><th>Blip</th><th>Rounds (by chapter)</th><th>Last active</th><th></th></tr></thead>`;
   const tb = el("tbody");
   rows.forEach(r => {
-    const passed = Object.entries(r.quests || {}).filter(([, p]) => p.passed).map(([q]) => q.replace("q", "")).sort();
+    const learnerQuests = r.quests || {};
     const inactive = r.lastActive && daysSince(r.lastActive) >= inactiveDays;
     const growth = GROWTH_LABELS[r.growthStage || 0] || "Tiny";
     const blipCell = `${healthCell(r.health)} · <span class="muted">${growth}</span>${r.blipCount > 1 ? ` ×${r.blipCount}` : ""}`;
+    const chipFor = rd => {
+      const p = learnerQuests[rd.id];
+      const best = p ? Math.round((p.best_score || 0) * 100) : 0;
+      const cls = p && p.passed ? "ok" : (p && p.attempts ? "try" : "none");
+      const played = p && p.last_played_at ? fmtDate(p.last_played_at) : null;
+      const tip = p
+        ? `${rd.ch} · ${rd.title} — ${best}%${played ? ` — played ${played}` : ""}`
+        : `${rd.ch} · ${rd.title} — not started yet`;
+      return `<span class="rchip ${cls}" title="${tip}">${rd.id}</span>`;
+    };
+    const clusterFor = ch => {
+      const round = ROUND_LIST.filter(rd => rd.chId === ch.id);
+      if (!round.length) return "";
+      return `<div class="rcluster" style="--cc:${ch.signature}">
+        <div class="rch-head"><span class="rch-ico">${ch.icon}</span><span class="rch-name">${ch.name}</span></div>
+        <div class="rgrid">${round.map(chipFor).join("")}</div>
+      </div>`;
+    };
+    const clusters = CHAPTERS.map(clusterFor).join("");
     const tr = el("tr");
     tr.innerHTML = `
       <td>${r.name}</td>
@@ -257,7 +338,7 @@ function learnerSection(rows, inactiveDays) {
       <td>${r.hasPassword ? '<span class="muted">•••• set</span>' : '<span class="adm-inactive">reset — awaiting new</span>'}</td>
       <td class="mono">${r.totalXp || 0}</td>
       <td>${blipCell}</td>
-      <td class="mono">${passed.length ? passed.join(", ") : "—"}</td>
+      <td class="chips"><div class="rclusters">${clusters}</div></td>
       <td class="${inactive ? "adm-inactive" : ""}">${fmtDate(r.lastActive)}${inactive ? " ⚠" : ""}</td>`;
     const act = el("td", "adm-actions");
     const rpw = el("button", "btn ghost small", "Reset pw");
