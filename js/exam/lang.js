@@ -9,23 +9,31 @@
    strings, without screens.js importing from "the player" module for
    something that isn't playing a question.
 
-   Her kickoff ruling (2026-08-21): "EN/AF toggle: exam tab header,
-   remembered per device (localStorage), applies to the whole tab —
-   prompts, hints, memos, Esplain." Read literally, "the whole tab" is
-   wider than just the four seeded-content fields those are — it's also
-   why the tab's own fixed chrome (button labels, the pen-and-paper
-   opener, the marking-laws footer, "worked N of M") is translated here
-   too, as a small static dictionary, rather than only the question data.
-   "Esplain" is her coined in-app term, not English or Afrikaans — it
-   stays "Esplain" in both languages on purpose (her ruling: not a typo,
-   never "fixed").
+   Her kickoff ruling (2026-08-21) built an EN/AF toggle, remembered per
+   device (localStorage), applying to the whole tab. SESSION E RULING
+   (2026-08-21, same evening, her live review of the shipped pilot): AF
+   was too much work to keep fresh for now — the tab is ENGLISH-ONLY
+   until she supplies proper Afrikaans material (next year, her word).
+   The toggle is GONE from every exam screen (js/screens.js's chapter/
+   topic headers, js/exam-play.js's player header); getExamLang() below
+   is PINNED to "en" and no longer reads localStorage. The AF string set
+   below, the localStorage key, and setExamLang() all stay as DORMANT
+   CODE on purpose — nothing calls setExamLang() any more, but deleting
+   the machinery would turn AF's eventual return into a rebuild instead
+   of a one-line re-flip. "Esplain" is her coined in-app term, not
+   English or Afrikaans — it stays "Esplain" in both languages on
+   purpose (her ruling: not a typo, never "fixed").
    ============================================================ */
-const LS_KEY = "mhq.examLang";
+const LS_KEY = "mhq.examLang";   // dormant — nothing writes this key any more (session E)
 
-export function getExamLang() {
-  try { const v = localStorage.getItem(LS_KEY); return v === "af" ? "af" : "en"; }
-  catch { return "en"; }
-}
+/* PINNED to "en" (session E, 2026-08-21, her ruling) — was a localStorage
+   read. Kept as a function, not a bare constant, so every existing
+   caller (js/screens.js, js/exam-play.js) needed no further change, and
+   flipping AF back on later is a one-line edit here, not a re-plumb. */
+export function getExamLang() { return "en"; }
+
+/* DORMANT — no caller remains after session E's toggle removal. Left in
+   place for when AF returns (her word: next year). */
 export function setExamLang(lang) {
   const v = lang === "af" ? "af" : "en";
   try { localStorage.setItem(LS_KEY, v); } catch { /* private browsing etc — toggle still works for this load */ }

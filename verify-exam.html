@@ -51,6 +51,12 @@
 <h2>Part 8 · the part player driven against a REAL seeded question (eqn.nor.q1), end to end</h2>
 <pre id="realPlayerChecks">…</pre>
 
+<h2>Part 9 · teacher-gate eligibility — flagged chapter WITH vs WITHOUT an open quest (session E, 2026-08-21)</h2>
+<pre id="gateChecks">…</pre>
+
+<h2>Part 10 · English-only removal + the "I'm lost" reteach link (session E, 2026-08-21)</h2>
+<pre id="lostLinkChecks">…</pre>
+
 <div id="harnessHost"></div>
 
 <script>try { localStorage.setItem("mhq.forceLocal", "1"); } catch (e) {}</script>
@@ -60,7 +66,7 @@ import { validateQuestion } from "./js/exam/_schema.js";
 import { stubQuestion } from "./js/exam/_harness-stub.js";
 import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
 import { eqnNatureOfRootsQuestions } from "./js/exam/eqn-nature-of-roots.js";
-import { renderHub, renderExamChapter, renderExamTopic } from "./js/screens.js";
+import { renderHub, renderExamChapter, renderExamTopic, examChapterEligible } from "./js/screens.js";
 import { renderExamPlay } from "./js/exam-play.js";
 import { getExamLang, setExamLang } from "./js/exam/lang.js";
 import { api } from "./js/api.js";
@@ -84,15 +90,35 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   tick(good.ok, `validateQuestion(stub) is clean — got issues: ${good.issues.join("; ")}`);
   lines.push(`stub question: ${good.ok ? "OK, no issues" : "FAIL — " + good.issues.join("; ")}`);
 
-  // en/af presence on every field, checked directly against the stub's own
-  // data (belt-and-braces alongside validateQuestion above).
+  // en required + af optional-but-non-empty-when-present (session E,
+  // 2026-08-21 — af is no longer mandatory), checked directly against the
+  // stub's own data (belt-and-braces alongside validateQuestion above).
+  // The stub itself still carries dormant af text on every field, so this
+  // also happens to prove nothing regressed to actually-empty af strings.
   let pairsOk = true;
   stubQuestion.parts.forEach(p => {
-    ["prompt", "hint", "esplain"].forEach(f => { if (!p[f] || !p[f].en || !p[f].af) pairsOk = false; });
-    p.memo.forEach(b => { if (!b.text || !b.text.en || !b.text.af) pairsOk = false; });
+    ["prompt", "hint", "esplain"].forEach(f => {
+      if (!p[f] || !p[f].en) pairsOk = false;
+      if (p[f] && p[f].af !== undefined && !p[f].af) pairsOk = false;
+    });
+    p.memo.forEach(b => {
+      if (!b.text || !b.text.en) pairsOk = false;
+      if (b.text && b.text.af !== undefined && !b.text.af) pairsOk = false;
+    });
   });
-  tick(pairsOk, "every part's prompt/hint/esplain and every memo block's text carries BOTH en and af");
-  lines.push(`EN+AF pairs on every field: ${pairsOk ? "OK" : "FAIL"}`);
+  tick(pairsOk, "every part's prompt/hint/esplain and every memo block's text carries a non-empty en (af optional, non-empty when present)");
+  lines.push(`en required + af optional-but-non-empty-when-present, on stub content: ${pairsOk ? "OK" : "FAIL"}`);
+
+  // af-optional regression (session E, 2026-08-21): an EN-only field must
+  // still validate CLEAN — proves the schema change actually loosened the
+  // rule, not just that it kept requiring en.
+  {
+    const afOmitted = JSON.parse(JSON.stringify(stubQuestion));
+    delete afOmitted.parts[0].prompt.af;
+    const r = validateQuestion(afOmitted);
+    tick(r.ok, `validateQuestion accepts a prompt with af entirely omitted (EN-only, session E) — got issues: ${r.issues.join("; ")}`);
+    lines.push(`af-optional regression: prompt.af omitted entirely → ${r.ok ? "OK, still validates clean" : "FAIL — " + r.issues.join("; ")}`);
+  }
 
   // marks sum
   const partSum = stubQuestion.parts.reduce((s, p) => s + p.marks, 0);
@@ -135,8 +161,14 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   let c = base(); c.marks = 999;
   cases.push(["question marks != sum of part marks", c, r => !r.ok && r.issues.some(i => /sum to/.test(i))]);
 
-  c = base(); delete c.parts[0].prompt.af;
-  cases.push(["missing af on a prompt", c, r => !r.ok && r.issues.some(i => /prompt\.af/.test(i))]);
+  c = base(); delete c.parts[0].prompt.en;
+  cases.push(["missing en on a prompt (en is required even though af is now optional, session E)", c, r => !r.ok && r.issues.some(i => /prompt\.en/.test(i))]);
+
+  c = base(); delete c.lostQuest;
+  cases.push(["missing lostQuest entirely (required, session E — the \"I'm lost\" reteach target)", c, r => !r.ok && r.issues.some(i => /missing lostQuest/.test(i))]);
+
+  c = base(); c.lostQuest = { chapter: "eqn" }; // .quest omitted
+  cases.push(["lostQuest present but missing .quest", c, r => !r.ok && r.issues.some(i => /lostQuest\.quest missing/.test(i))]);
 
   c = base(); c.parts[1].memo[0].ticks = ["ca", "ca"]; // was ["s/f"] on a 3-mark part — now inflates the tick count
   cases.push(["memo ticks no longer sum to part marks", c, r => !r.ok && r.issues.some(i => /memo ticks sum to/.test(i))]);
@@ -204,6 +236,26 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   tick(typeof EXAM.xpPerQuestion === "number" && typeof EXAM.goldPerQuestion === "number", "js/config.js EXAM block has numeric xpPerQuestion/goldPerQuestion");
   lines.push(`EXAM block: xpPerQuestion=${EXAM.xpPerQuestion}, goldPerQuestion=${EXAM.goldPerQuestion}`);
 
+  // lostQuest existence check (session E, 2026-08-21) — js/exam/_schema.js
+  // only checks {chapter,quest} are non-empty strings; this harness is
+  // what resolves them against js/config.js CHAPTERS, the same "structure
+  // here, cross-file existence in the harness" split index.js's own
+  // registry check already uses for q.chapter.
+  const eqnQuestions = examQuestionsForChapter("eqn");
+  let lostQuestOk = true;
+  const lostQuestLines = [];
+  eqnQuestions.forEach(q => {
+    const lq = q.lostQuest;
+    const lqChapter = lq && CHAPTERS.find(c => c.id === lq.chapter);
+    const lqQuest = lqChapter && (lqChapter.quests || []).find(qq => qq.id === lq.quest);
+    const ok = !!lqChapter && !!lqQuest;
+    if (!ok) lostQuestOk = false;
+    lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} → chapter found? ${!!lqChapter}, quest found? ${!!lqQuest} — ${ok ? "OK" : "FAIL"}`);
+  });
+  tick(lostQuestOk, "every eqn pilot question's lostQuest resolves to a real chapter and quest in js/config.js CHAPTERS");
+  tick(eqnQuestions.every(q => q.lostQuest && q.lostQuest.chapter === "eqn" && q.lostQuest.quest === "eq8"), 'every eqn pilot question points lostQuest at {chapter:"eqn", quest:"eq8"} — the confirmed right round');
+  lines.push(`lostQuest existence check:\n${lostQuestLines.join("\n")}`);
+
   say("registryChecks", lines);
 }
 
@@ -230,9 +282,14 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     else if (app.screen === "examChapter") renderExamChapter(app, host, app.params);
     else if (app.screen === "examTopic") renderExamTopic(app, host, app.params);
   }
-  function makeTestApp() {
+  // openQuests param (session E, 2026-08-21): examChapterEligible() now
+  // ALSO requires an open quest in the flagged chapter — this test
+  // wasn't about that gate originally (Part 9 below covers it directly),
+  // so it opens "eq8" (the pilot's own reteach round) to keep exercising
+  // exactly what it always exercised, under the new stricter rule.
+  function makeTestApp(openQuests) {
     const app = {
-      state: { xp: 0, gold: 0, levelInfo: { level: 1, intoLevel: 0, nextCost: 300 } },
+      state: { xp: 0, gold: 0, levelInfo: { level: 1, intoLevel: 0, nextCost: 300 }, openQuests: openQuests || [] },
       screen: "hub", params: {},
       go(screen, params) { app.screen = screen; app.params = params || {}; renderCurrent(app); },
       async refresh() { return true; },
@@ -258,7 +315,7 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   // "Nature Of Roots" topic card (not the empty-registry placeholder,
   // because there's real content to show). ----
   EXAM_CHAPTERS.push(...shippedChapters);
-  const appOn = makeTestApp();
+  const appOn = makeTestApp(["eq8"]);
   renderCurrent(appOn);
   const tabsOn = [...host.querySelectorAll(".hub-tab")].map(b => b.textContent);
   const examTabBtn = [...host.querySelectorAll(".hub-tab")].find(b => /exam focus/i.test(b.textContent));
@@ -307,7 +364,13 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   tick(before.ok && before.xp === 0 && before.gold === 0, "fresh test student starts at 0 xp / 0 gold");
   lines.push(`fresh student: xp=${before.xp}, gold=${before.gold}`);
 
-  const chapter = chapterById("stats");
+  // chapter is "eqn", not "stats" (session E, 2026-08-21): renderExamPlay
+  // now guards on examChapterEligible(app, chapter) — "stats" isn't in
+  // EXAM_CHAPTERS, so the guard would bounce this direct harness call to
+  // the hub before it ever rendered the stub. The stub's OWN content
+  // (chapter:"stats" inside the question object) is unaffected — that
+  // field only labels the fixture, the player never reads it for gating.
+  const chapter = chapterById("eqn");
   const app = { state: before, go() {}, async refresh() { app.state = await api.getState(uname, "pw12"); } };
 
   clear(host);
@@ -353,16 +416,11 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 
   tick(activeCard() && activeCard().querySelector(".exam-part-id").textContent.includes("b"), "part (b) is now the active part");
 
-  // ---- EN/AF toggle flips the CURRENT active part's prompt text ----
-  const promptEnB = activeCard().querySelector(".exam-part-prompt").textContent;
-  const langBtn = host.querySelector(".exam-lang-btn");
-  langBtn.click();
-  const promptAfB = activeCard().querySelector(".exam-part-prompt").textContent;
-  tick(promptEnB !== promptAfB, "toggling EN/AF changes the rendered prompt text");
-  tick(getExamLang() === "af", "the toggle persisted to localStorage (mhq.examLang)");
-  langBtn.click(); // back to EN for the rest of this run
-  tick(getExamLang() === "en", "toggling back to EN persists too");
-  lines.push(`EN/AF toggle: EN prompt ≠ AF prompt (${promptEnB !== promptAfB}), persisted via getExamLang()`);
+  // ---- EN-only (session E, 2026-08-21): no toggle button anywhere on
+  // the player, and getExamLang() stays pinned to "en" ----
+  tick(!host.querySelector(".exam-lang-btn"), "no EN/AF toggle button renders on the part player");
+  tick(getExamLang() === "en", "getExamLang() reads \"en\" while the player is live");
+  lines.push(`EN-only: exam-lang-btn present? ${!!host.querySelector(".exam-lang-btn")} (want false), getExamLang()="${getExamLang()}" (want "en")`);
 
   // ---- reveal (b) and (c), then the ★ level-4 note on (d) ----
   btnByText("Done! Show me the answer").click();
@@ -646,18 +704,173 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   const starCount = host.querySelectorAll(".exam-star").length;
   tick(starCount === 0, `real eqn.nor.q1: no ★ badge anywhere (q1 has no level-4 part by design — got ${starCount})`);
 
-  const promptEn = host.querySelector(".exam-part-prompt").textContent;
-  const langBtn = host.querySelector(".exam-lang-btn");
-  langBtn.click();
-  const promptAf = host.querySelector(".exam-part-prompt").textContent;
-  tick(promptEn !== promptAf, "real eqn.nor.q1: EN/AF toggle changes rendered prompt text on real seeded content");
-  langBtn.click();
+  // EN-only (session E, 2026-08-21): no toggle anywhere, even on real content
+  tick(!host.querySelector(".exam-lang-btn"), "real eqn.nor.q1: no EN/AF toggle button anywhere on the player");
+  tick(getExamLang() === "en", "getExamLang() reads \"en\" while real content is live");
 
   lines.push(`real eqn.nor.q1 played end to end: partsOpened=${JSON.stringify(row && row.partsOpened)}, completed=${row && row.completed}, xp=${afterState.xp}, gold=${afterState.gold}, ★ count=${starCount}`);
 
   clearSession();
   clear(host);
   say("realPlayerChecks", lines);
+}
+
+/* ============================================================
+   PART 9 — teacher-gate eligibility (session E ruling, 2026-08-21): "if
+   Probability is closed, then the Probability Exam Focus rounds should
+   also be closed." examChapterEligible() (js/screens.js) requires BOTH
+   the build flag (EXAM_CHAPTERS) AND at least one open quest in that
+   chapter. Covers the function itself, the hub tab, renderExamChapter's
+   route guard, and renderExamPlay's own guard (it's driven directly by
+   this harness too, so it needs the same protection navigation gives it
+   for real, not just a trust-the-caller assumption).
+   ============================================================ */
+{
+  const lines = [];
+  const host = document.getElementById("harnessHost");
+  const eqnChapter = chapterById("eqn");
+
+  // ---- examChapterEligible() itself ----
+  const noneOpen = { state: { openQuests: [] } };
+  const eq8Open = { state: { openQuests: ["eq8"] } };
+  const eq1Open = { state: { openQuests: ["eq1"] } };
+  tick(examChapterEligible(noneOpen, eqnChapter) === false, "examChapterEligible: flagged chapter with NO open quests is NOT eligible");
+  tick(examChapterEligible(eq8Open, eqnChapter) === true, "examChapterEligible: flagged chapter with eq8 open IS eligible");
+  tick(examChapterEligible(eq1Open, eqnChapter) === true, "examChapterEligible: flagged chapter is eligible via ANY of its open quests, not just eq8");
+  tick(examChapterEligible({ state: { openQuests: ["eq8"] } }, chapterById("stats")) === false, "examChapterEligible: an open quest in a DIFFERENT, unflagged chapter (stats) does not make eqn eligible");
+  lines.push(`examChapterEligible: none-open=${examChapterEligible(noneOpen, eqnChapter)} (want false), eq8-open=${examChapterEligible(eq8Open, eqnChapter)} (want true), eq1-open=${examChapterEligible(eq1Open, eqnChapter)} (want true)`);
+
+  // ---- hub tab visibility + renderExamChapter route guard ----
+  function renderCurrent9(app) {
+    clear(host);
+    if (app.screen === "hub") renderHub(app, host);
+    else if (app.screen === "examChapter") renderExamChapter(app, host, app.params);
+  }
+  function makeApp9(openQuests) {
+    const app = {
+      state: { xp: 0, gold: 0, levelInfo: { level: 1, intoLevel: 0, nextCost: 300 }, openQuests: openQuests || [] },
+      screen: "hub", params: {},
+      go(screen, params) { app.screen = screen; app.params = params || {}; renderCurrent9(app); },
+      async refresh() { return true; },
+    };
+    return app;
+  }
+
+  const appHidden = makeApp9([]); // flagged (eqn IS in EXAM_CHAPTERS) but nothing open
+  renderCurrent9(appHidden);
+  const tabHidden = [...host.querySelectorAll(".hub-tab")].some(b => /exam focus/i.test(b.textContent));
+  tick(!tabHidden, "hub: flagged chapter with NO open quest → 'Exam Focus' tab is hidden entirely");
+  lines.push(`hub, eqn flagged + 0 open quests → Exam Focus tab present? ${tabHidden} (want false)`);
+
+  const appShownTab = makeApp9(["eq8"]);
+  renderCurrent9(appShownTab);
+  const tabShown = [...host.querySelectorAll(".hub-tab")].some(b => /exam focus/i.test(b.textContent));
+  tick(tabShown, "hub: flagged chapter with eq8 open → 'Exam Focus' tab is shown");
+  lines.push(`hub, eqn flagged + eq8 open → Exam Focus tab present? ${tabShown} (want true)`);
+
+  const appBounce = makeApp9([]);
+  appBounce.go("examChapter", { chapterId: "eqn" });
+  tick(appBounce.screen === "hub", "renderExamChapter: flagged chapter with NO open quest bounces straight back to the hub");
+  lines.push(`renderExamChapter guard, 0 open quests → screen is now "${appBounce.screen}" (want "hub")`);
+
+  const appReach = makeApp9(["eq8"]);
+  appReach.go("examChapter", { chapterId: "eqn" });
+  tick(appReach.screen === "examChapter", "renderExamChapter: flagged chapter WITH eq8 open is reachable");
+  lines.push(`renderExamChapter guard, eq8 open → screen is now "${appReach.screen}" (want "examChapter")`);
+
+  clear(host);
+
+  // ---- renderExamPlay's own guard (driven directly, like Parts 4/8) ----
+  const realQ1for9 = eqnNatureOfRootsQuestions.find(q => q.id === "eqn.nor.q1");
+  function makePlayerApp9(openQuests) {
+    const app = { state: { openQuests: openQuests || [] }, screen: "examPlay",
+      go(screen, params) { app.screen = screen; app.params = params || {}; },
+      async refresh() {} };
+    return app;
+  }
+  const playerBounce = makePlayerApp9([]);
+  renderExamPlay(playerBounce, host, { chapter: eqnChapter, question: realQ1for9, accent: eqnChapter.signature });
+  tick(playerBounce.screen === "hub", "renderExamPlay: flagged chapter with NO open quest bounces to the hub instead of rendering the question");
+  tick(host.children.length === 0, "renderExamPlay: nothing is appended to the host when it bounces");
+  lines.push(`renderExamPlay guard, 0 open quests → screen="${playerBounce.screen}" (want "hub"), host children=${host.children.length} (want 0)`);
+
+  clear(host);
+  const playerReach = makePlayerApp9(["eq8"]);
+  renderExamPlay(playerReach, host, { chapter: eqnChapter, question: realQ1for9, accent: eqnChapter.signature });
+  tick(playerReach.screen === "examPlay", "renderExamPlay: flagged chapter WITH eq8 open renders normally (no bounce)");
+  tick(host.children.length > 0, "renderExamPlay: the question actually rendered into the host");
+  lines.push(`renderExamPlay guard, eq8 open → screen="${playerReach.screen}" (unchanged, want "examPlay"), host children=${host.children.length} (want > 0)`);
+
+  clear(host);
+  say("gateChecks", lines);
+}
+
+/* ============================================================
+   PART 10 — session E's two learner-facing changes: (1) the EN/AF
+   toggle is gone everywhere in the tab, getExamLang() is pinned to
+   "en"; (2) every active part shows a gated "I'm lost" reteach link
+   that routes into its lostQuest exactly the way renderChapter's own
+   quest card click does.
+   ============================================================ */
+{
+  const lines = [];
+  const host = document.getElementById("harnessHost");
+  const eqnChapter = chapterById("eqn");
+
+  // ---- EN-only: getExamLang() is pinned, ignores the dormant setExamLang() ----
+  tick(getExamLang() === "en", "getExamLang() returns \"en\"");
+  setExamLang("af");
+  tick(getExamLang() === "en", "getExamLang() still returns \"en\" after calling the dormant setExamLang(\"af\") — the pin ignores it");
+  lines.push(`getExamLang() before/after calling dormant setExamLang("af"): both "en"? ${getExamLang() === "en"}`);
+
+  // ---- no lang-toggle button anywhere in the tab's nav screens ----
+  const navApp = { state: { openQuests: ["eq8"] }, screen: "hub", params: {},
+    go(screen, params) { navApp.screen = screen; navApp.params = params || {}; }, async refresh() {} };
+  clear(host);
+  renderExamChapter(navApp, host, { chapterId: "eqn" });
+  tick(!host.querySelector(".exam-lang-btn"), "renderExamChapter: no EN/AF toggle button anywhere in the header");
+  clear(host);
+  renderExamTopic(navApp, host, { chapterId: "eqn", topicId: "nature-of-roots" });
+  tick(!host.querySelector(".exam-lang-btn"), "renderExamTopic: no EN/AF toggle button anywhere in the header");
+  lines.push("EN/AF toggle button absent from both nav screens: confirmed");
+
+  // ---- the "I'm lost" link: real eqn.nor.q1, gated per-quest ----
+  const realQ1for10 = eqnNatureOfRootsQuestions.find(q => q.id === "eqn.nor.q1");
+  tick(!!realQ1for10.lostQuest && realQ1for10.lostQuest.chapter === "eqn" && realQ1for10.lostQuest.quest === "eq8", 'eqn.nor.q1 declares lostQuest {chapter:"eqn", quest:"eq8"}');
+
+  function findLostLink() { return [...host.querySelectorAll("button")].find(b => b.textContent.trim().startsWith("I'm lost")); }
+
+  // eq8 CLOSED but the chapter is still otherwise eligible (eq1 open) —
+  // proves the link is gated on the SPECIFIC lostQuest.quest, not just on
+  // chapter eligibility.
+  clear(host);
+  const appEq1Only = { state: { openQuests: ["eq1"] }, go() {}, async refresh() {} };
+  renderExamPlay(appEq1Only, host, { chapter: eqnChapter, question: realQ1for10, accent: eqnChapter.signature });
+  await new Promise(r => setTimeout(r, 30));
+  tick(!findLostLink(), "\"I'm lost\" link does NOT render when eq8 itself is closed, even though the chapter is otherwise eligible (eq1 open)");
+  lines.push(`eq1 open, eq8 closed → link present? ${!!findLostLink()} (want false)`);
+
+  // eq8 OPEN — link renders with the exact copy and routes correctly
+  clear(host);
+  const goCalls = [];
+  const appEq8Open2 = { state: { openQuests: ["eq8"] }, go(screen, params) { goCalls.push({ screen, params }); }, async refresh() {} };
+  renderExamPlay(appEq8Open2, host, { chapter: eqnChapter, question: realQ1for10, accent: eqnChapter.signature });
+  await new Promise(r => setTimeout(r, 30));
+  const lostBtn = findLostLink();
+  tick(!!lostBtn && lostBtn.textContent.trim() === "I'm lost — take me to the round that teaches this", "\"I'm lost\" link renders on the active part with the brief's exact copy, when eq8 is open");
+  tick(!!lostBtn && lostBtn.className.includes("exam-lost-link") && !lostBtn.className.includes("btn"), "\"I'm lost\" link uses its own quiet style, not the primary/ghost .btn classes");
+
+  lostBtn.click();
+  const lastGo = goCalls[goCalls.length - 1];
+  tick(!!lastGo && lastGo.screen === "play", "\"I'm lost\" click navigates via app.go(\"play\", …) — the same route renderChapter's quest card uses");
+  const eq8Quest = eqnChapter.quests.find(q => q.id === "eq8");
+  tick(!!lastGo && lastGo.params.chapter === eqnChapter && lastGo.params.quest === eq8Quest, "\"I'm lost\" routes with the real eqn chapter object and the real eq8 quest object");
+  tick(!!lastGo && !!lastGo.params.def, "\"I'm lost\" resolves a real quest def (questDef(\"eq8\")) — never routes to a dead quest");
+  tick(!!lastGo && lastGo.params.accent === eqnChapter.signature, "\"I'm lost\" carries the destination chapter's own accent colour");
+  lines.push(`eq8 open → link renders, click routes to: ${JSON.stringify({ screen: lastGo && lastGo.screen, chapter: lastGo && lastGo.params.chapter.id, quest: lastGo && lastGo.params.quest.id })}`);
+
+  clear(host);
+  say("lostLinkChecks", lines);
 }
 
 const banner = document.getElementById("banner");

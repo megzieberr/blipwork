@@ -4,7 +4,7 @@ import { questDef } from "./quests/index.js";
 import { dicePool } from "./quests/dice-pools.js";
 import { openDiceRound } from "./dice-play.js";
 import { examTopicsForChapter, examQuestionsForTopic } from "./exam/index.js";
-import { getExamLang, setExamLang, uiStr } from "./exam/lang.js";
+import { getExamLang, uiStr } from "./exam/lang.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
@@ -77,6 +77,19 @@ function setTheme(chapterSig, accent) {
 const progressOf = (app, id) => (app.state && app.state.progress && app.state.progress[id]) || { best_score: 0, attempts: 0, passed: false, total_xp: 0 };
 const openSet = app => new Set((app.state && app.state.openQuests) || []);
 
+/* EXAM FOCUS · teacher-gate eligibility (session E ruling, 2026-08-21):
+   "if Probability is closed, then the Probability Exam Focus rounds
+   should also be closed." A chapter's exam focus is reachable only when
+   BOTH the build switch (js/config.js EXAM_CHAPTERS) includes it AND at
+   least one of its quests is open (state.openQuests) — replaces session
+   0's flag-only gate. Exported so js/exam-play.js's player guard can
+   reuse the identical rule rather than re-deriving it. */
+export function examChapterEligible(app, ch) {
+  if (!ch || !EXAM_CHAPTERS.includes(ch.id)) return false;
+  const open = openSet(app);
+  return (ch.quests || []).some(q => open.has(q.id));
+}
+
 /* ---------------- HUB ---------------- */
 /* the three tabs; current term first, revision (already-taught chapters)
    below, Circle Geo last. Circle Geo isn't chapter-based (CQ-BRIDGE-PLAN.md
@@ -86,11 +99,13 @@ const TABS = [
   { id: "term3", label: "Term 3", sub: "This term’s homework" },
   { id: "revision", label: "Revision", sub: "Earlier chapters to revise" },
   // EXAM-FOCUS-PLAN.md, session 0 (2026-08-21): the tab only ever shows
-  // when at least one chapter is flagged on (js/config.js EXAM_CHAPTERS)
-  // — with the flag empty (today), the hub stays pixel-identical to
-  // before this build. NOT chapter-based the way term3/revision are (a
-  // chapter here is exam-focus content, not a quest chapter), so it's
-  // excluded from the byTerm() filter below, same as Circle Geo.
+  // when at least one chapter is ELIGIBLE — session E ruling (2026-08-21)
+  // widened this from "flagged on" to "flagged on AND has an open quest"
+  // (examChapterEligible() above) — "if Probability is closed, its Exam
+  // Focus rounds are closed too." NOT chapter-based the way term3/
+  // revision are (a chapter here is exam-focus content, not a quest
+  // chapter), so it's excluded from the byTerm() filter below, same as
+  // Circle Geo.
   { id: "exam", label: "📝 Exam Focus", sub: "Real exam questions, one part at a time" },
   { id: "cgeo", label: "⭕ Circle Geo", sub: "Circle Quest" },
 ];
@@ -142,13 +157,15 @@ function circleGeoCard(app) {
   return card;
 }
 
-/* ---------------- HUB · Exam Focus tab (EXAM-FOCUS-PLAN.md, session 0)
-   ---------------- One card per flagged chapter — NOT gated by the
-   teacher's per-quest open/closed toggle the way chapterCard() above is;
-   exam focus is purely EXAM_CHAPTERS-flag-gated (her design: it's a
-   curated shelf sitting beside the quest chapters, not a quest itself).
-   Shows the topic COUNT only — "worked N of M" lives one screen deeper,
-   per topic, where it actually means something. */
+/* ---------------- HUB · Exam Focus tab (EXAM-FOCUS-PLAN.md, session 0;
+   gating widened session E, 2026-08-21) ---------------- One card per
+   ELIGIBLE chapter (examChapterEligible() above) — session 0 shipped
+   this gated purely on EXAM_CHAPTERS ("NOT gated by the teacher's
+   per-quest open/closed toggle"); her ruling that same evening replaced
+   that reading: exam focus now DOES follow the teacher's per-quest gate,
+   same as chapterCard() above, on top of the build flag. Shows the
+   topic COUNT only — "worked N of M" lives one screen deeper, per
+   topic, where it actually means something. */
 function examChapterCard(app, ch) {
   const card = el("div", "ch-card");
   card.style.setProperty("--cc", ch.signature);
@@ -210,11 +227,13 @@ export function renderHub(app, host) {
 
   // only show tabs that actually have chapters — except Circle Geo, which
   // isn't chapter-based and always shows (CQ-BRIDGE-PLAN.md Part 2); Exam
-  // Focus is EXAM_CHAPTERS-flag-gated instead (EXAM-FOCUS-PLAN.md, session
-  // 0) — empty today, so the tab is entirely absent, not just empty. (The
-  // `t.id === "cgeo" || byTerm(t.id).length` prefix is kept byte-for-byte
-  // — verify-store.html regex-checks that exact substring.)
-  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && EXAM_CHAPTERS.length));
+  // Focus is examChapterEligible()-gated instead (EXAM-FOCUS-PLAN.md,
+  // session 0's flag-only gate, widened session E, 2026-08-21, to also
+  // require an open quest) — hidden entirely, not just empty, when no
+  // flagged chapter has one. (The `t.id === "cgeo" || byTerm(t.id).length`
+  // prefix is kept byte-for-byte — verify-store.html regex-checks that
+  // exact substring.)
+  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && CHAPTERS.some(ch => examChapterEligible(app, ch))));
   if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "term3";
 
   const tabbar = el("div", "hub-tabs");
@@ -222,7 +241,7 @@ export function renderHub(app, host) {
   const draw = () => {
     clear(cards);
     if (hubTab === "cgeo") { cards.appendChild(circleGeoCard(app)); return; }
-    if (hubTab === "exam") { CHAPTERS.filter(ch => EXAM_CHAPTERS.includes(ch.id)).forEach(ch => cards.appendChild(examChapterCard(app, ch))); return; }
+    if (hubTab === "exam") { CHAPTERS.filter(ch => examChapterEligible(app, ch)).forEach(ch => cards.appendChild(examChapterCard(app, ch))); return; }
     byTerm(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
   };
   tabs.forEach(t => {
@@ -321,7 +340,7 @@ export function renderChapter(app, host, params) {
    screen has no per-part state worth preserving across a toggle. */
 export function renderExamChapter(app, host, params) {
   const ch = chapterById(params.chapterId);
-  if (!ch || !EXAM_CHAPTERS.includes(ch.id)) return app.go("hub");
+  if (!examChapterEligible(app, ch)) return app.go("hub");   // build flag AND an open quest (session E)
   setTheme(ch.signature, ch.signature);
   const lang = getExamLang();
   const ui = uiStr(lang);
@@ -329,11 +348,9 @@ export function renderExamChapter(app, host, params) {
   const head = el("div", "chap-head");
   head.innerHTML = `<div><span class="eyebrow">${ch.icon} ${ch.name}</span><h1>${ui.tabLabel}</h1></div>
     <div style="display:flex;gap:8px;align-items:center">
-      <button class="btn ghost small exam-lang-btn">${ui.langToggle}</button>
       <button class="link-btn back" aria-label="Back">←</button>
     </div>`;
   head.querySelector(".back").addEventListener("click", () => app.go("hub"));
-  head.querySelector(".exam-lang-btn").addEventListener("click", () => { setExamLang(lang === "af" ? "en" : "af"); app.go("examChapter", params); });
   host.appendChild(head);
 
   const topics = examTopicsForChapter(ch.id);
@@ -382,7 +399,7 @@ async function fillWorkedCounts(chapterId, topics, grid, ui) {
    player never has to know how to look a question up. */
 export function renderExamTopic(app, host, params) {
   const ch = chapterById(params.chapterId);
-  if (!ch || !EXAM_CHAPTERS.includes(ch.id)) return app.go("hub");
+  if (!examChapterEligible(app, ch)) return app.go("hub");   // build flag AND an open quest (session E)
   const topic = examTopicsForChapter(ch.id).find(tp => tp.id === params.topicId);
   if (!topic) return app.go("examChapter", { chapterId: ch.id });
   setTheme(ch.signature, ch.signature);
@@ -392,11 +409,9 @@ export function renderExamTopic(app, host, params) {
   const head = el("div", "chap-head");
   head.innerHTML = `<div><span class="eyebrow">${ch.icon} ${ch.name}</span><h1>${topic.label}</h1></div>
     <div style="display:flex;gap:8px;align-items:center">
-      <button class="btn ghost small exam-lang-btn">${ui.langToggle}</button>
       <button class="link-btn back" aria-label="Back">←</button>
     </div>`;
   head.querySelector(".back").addEventListener("click", () => app.go("examChapter", { chapterId: ch.id }));
-  head.querySelector(".exam-lang-btn").addEventListener("click", () => { setExamLang(lang === "af" ? "en" : "af"); app.go("examTopic", params); });
   host.appendChild(head);
 
   const questions = examQuestionsForTopic(ch.id, topic.id);

@@ -30,18 +30,54 @@
 import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { el, clear, showToast, xbarHtml } from "./ui.js";
-import { getExamLang, setExamLang, uiStr, pick } from "./exam/lang.js";
+import { getExamLang, uiStr, pick } from "./exam/lang.js";
+import { chapterById, questAccent } from "./config.js";
+import { questDef } from "./quests/index.js";
+import { examChapterEligible } from "./screens.js";
+
+/* "I'm lost" — REteach, not a hint (her ruling, session E, 2026-08-21):
+   "don't just give a hint, reteach the concept — take them to the
+   specific round in Blipwork where that is taught and drilled." Every
+   seeded question carries a REQUIRED lostQuest {chapter, quest} (see
+   js/exam/_schema.js) naming that round. GATED (her ruling): exam focus
+   never opens a closed round — the link only renders when that quest is
+   currently open (app.state.openQuests), the exact same "open" set
+   js/screens.js's chapter screen already gates quest cards on. Routes
+   the SAME way renderChapter's quest card click does (app.go("play",
+   {chapter, quest, def, accent})) — no new navigation mechanism, and
+   never a dead-end (bails out silently if the chapter/quest/def can't
+   all be resolved, rather than rendering a link that goes nowhere). */
+function lostQuestLink(app, question) {
+  const lq = question.lostQuest;
+  if (!lq) return null;
+  const openQuests = new Set((app.state && app.state.openQuests) || []);
+  if (!openQuests.has(lq.quest)) return null;
+  const lostChapter = chapterById(lq.chapter);
+  const lostQ = lostChapter && (lostChapter.quests || []).find(q => q.id === lq.quest);
+  const def = lostQ && questDef(lostQ.id);
+  if (!lostChapter || !lostQ || !def) return null;
+  const btn = el("button", "exam-lost-link", "I'm lost — take me to the round that teaches this");
+  btn.addEventListener("click", () => app.go("play", { chapter: lostChapter, quest: lostQ, def, accent: questAccent(lostChapter) }));
+  return btn;
+}
 
 export function renderExamPlay(app, host, params) {
   const { chapter, question, accent } = params;
   const onBack = params.onBack || (() => app.go("hub"));
+  // SESSION E RULING (2026-08-21): exam focus follows the teacher's
+  // per-quest gates, same rule as renderExamChapter/renderExamTopic's
+  // guards (js/screens.js examChapterEligible()). A learner only ever
+  // reaches this screen via those two, but verify-exam.html's harness
+  // drives the player directly too, so it needs its own guard rather
+  // than trusting the caller already checked.
+  if (!examChapterEligible(app, chapter)) return app.go("hub");
   const sess = getSession();
 
   const root = el("div", "exam-play");
   if (accent) root.style.setProperty("--accent", accent);
   host.appendChild(root);
 
-  let lang = getExamLang();
+  const lang = getExamLang();
   let revealed = new Set();          // part ids whose memo is currently shown
   let esplainOpen = new Set();       // part ids with the 🤔 walkthrough expanded
   let hintOpen = new Set();          // part ids with the hint expanded (local only, never recorded)
@@ -112,6 +148,7 @@ export function renderExamPlay(app, host, params) {
       // anything, and is never reported to the server — only a DONE
       // reveal is.
       stuckBtn.addEventListener("click", () => { hintOpen.add(part.id); redraw(); });
+      const lostLink = lostQuestLink(app, question);
       doneBtn.addEventListener("click", async () => {
         if (doneBtn.disabled) return;
         doneBtn.disabled = true; stuckBtn.disabled = true;   // double-submit rule: disable before await
@@ -130,6 +167,7 @@ export function renderExamPlay(app, host, params) {
       });
       actions.appendChild(doneBtn);
       actions.appendChild(stuckBtn);
+      if (lostLink) actions.appendChild(lostLink);
       card.appendChild(actions);
     }
     return card;
@@ -141,11 +179,9 @@ export function renderExamPlay(app, host, params) {
     const head = el("div", "chap-head exam-play-head");
     head.innerHTML = `<div><span class="eyebrow">${(chapter && chapter.icon) || ""} ${(chapter && chapter.name) || ""}</span><h1>Exam question <span class="num small muted">· ${question.marks} marks</span></h1></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn ghost small exam-lang-btn">${t("langToggle")}</button>
         <button class="link-btn back" aria-label="Back">←</button>
       </div>`;
     head.querySelector(".back").addEventListener("click", onBack);
-    head.querySelector(".exam-lang-btn").addEventListener("click", () => { lang = setExamLang(lang === "af" ? "en" : "af"); redraw(); });
     root.appendChild(head);
 
     root.appendChild(el("div", "exam-opener", t("opener")));

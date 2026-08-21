@@ -49,6 +49,19 @@
 }
 .exam-part-actions{display:flex;flex-direction:column;gap:9px;margin-top:14px}
 
+/* "I'm lost" reteach link (session E, 2026-08-21) — deliberately QUIETER
+   than the two .btn actions above it: no border, no fill, small
+   underlined text, so it reads as an escape hatch, not a third equally-
+   weighted choice. Only ever appended when the target round is open
+   (js/exam-play.js's lostQuestLink()) — never a dead-end. */
+.exam-lost-link{
+  background:none;border:0;padding:4px 2px;margin-top:2px;
+  font-family:var(--font-display);font-size:12.5px;color:var(--muted);
+  text-decoration:underline;text-underline-offset:2px;cursor:pointer;
+  align-self:center;
+}
+.exam-lost-link:hover{color:var(--accent)}
+
 /* ---------- the colour memo reveal ---------- */
 .exam-memo{margin-top:12px;padding-top:12px;border-top:1px dashed var(--brd)}
 .exam-memo-framing{

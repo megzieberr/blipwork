@@ -39,6 +39,7 @@ const q1 = {
   chapter: "eqn",
   topic: "nature-of-roots",
   archetype: "nor-basic-discriminant",
+  lostQuest: { chapter: "eqn", quest: "eq8" },
   marks: 11,
   parts: [
     {
@@ -139,6 +140,7 @@ const q2 = {
   chapter: "eqn",
   topic: "nature-of-roots",
   archetype: "nor-irrational-and-equal-k",
+  lostQuest: { chapter: "eqn", quest: "eq8" },
   marks: 12,
   parts: [
     {
@@ -245,6 +247,7 @@ const q3 = {
   chapter: "eqn",
   topic: "nature-of-roots",
   archetype: "nor-k-inequality-ladder",
+  lostQuest: { chapter: "eqn", quest: "eq8" },
   marks: 13,
   parts: [
     {
@@ -352,6 +355,7 @@ const q4 = {
   chapter: "eqn",
   topic: "nature-of-roots",
   archetype: "nor-prove-real-for-all-p",
+  lostQuest: { chapter: "eqn", quest: "eq8" },
   marks: 13,
   parts: [
     {

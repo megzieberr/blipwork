@@ -28,6 +28,11 @@ export const stubQuestion = {
   chapter: "stats",
   topic: "harness-stub",
   archetype: "HARNESS_ONLY_FIXTURE",
+  // structural fixture only (schema requires lostQuest — session E,
+  // 2026-08-21); q2 "Centre & spread" is real and DEFAULT_OPEN in local
+  // mode, so a harness driving this stub can exercise the "I'm lost"
+  // link's routing without needing a real seeded-content match.
+  lostQuest: { chapter: "stats", quest: "q2" },
   marks: 12,
   parts: [
     {

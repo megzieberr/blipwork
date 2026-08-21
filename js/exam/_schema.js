@@ -13,11 +13,15 @@
    worked reference example (HARNESS-ONLY — never registered, never
    learner-reachable — see that file's own header).
 
-   Every learner-facing text field is a { en, af } pair — her AF wording
-   rules apply to every `af` string (no "frase"; "Trek"/"Skuif" for drag,
-   "Klik op" for taps; reasons in words) even though nothing in this tab
-   is draggable or tappable — the convention travels with the pair, not
-   the interaction.
+   Every learner-facing text field is a { en, af? } pair — en REQUIRED,
+   af OPTIONAL (session E, 2026-08-21, her ruling: AF was too much work
+   to keep fresh for now — the tab is English-only until she supplies
+   proper Afrikaans material, her word, next year). Her AF wording rules
+   (no "frase"; "Trek"/"Skuif" for drag, "Klik op" for taps; reasons in
+   words) still apply to every `af` string WHEN ONE IS PRESENT — an
+   omitted af is now normal, a present-but-wrong-style one is still
+   caught. The four pilot questions' Afrikaans text stays in the file,
+   dormant, her call — future seeding sessions compose EN-only.
 
    ---------------------------------------------------------------
    QUESTION
@@ -31,6 +35,18 @@
                 composed from (coverage tracking only; NEVER shown to
                 a learner).
      marks      number — MUST equal the sum of every part's marks.
+     lostQuest  { chapter, quest } — REQUIRED (session E, 2026-08-21, her
+                ruling: "I'm lost" reteaches, it doesn't just hint — take
+                the learner to the specific Blipwork round that teaches
+                and drills this). `chapter`/`quest` are ids into
+                js/config.js CHAPTERS — this file only checks they're
+                non-empty strings; verify-exam.html additionally asserts
+                they resolve to a real chapter and quest (the same
+                "structure here, cross-file existence in the harness"
+                split q.chapter/index.js's registry check already uses).
+                js/exam-play.js renders the reteach link ONLY when that
+                quest is currently open (state.openQuests) — never a
+                bypass, never a dead-end.
      parts      Part[], at least one.
 
    PART
@@ -87,14 +103,15 @@ const ALLOWED_MEMO_TYPES = new Set(["step", "answer", "trap"]);
 
 function isNonEmptyString(v) { return typeof v === "string" && v.trim().length > 0; }
 
-/* A {en,af} pair: both sides present and non-empty. Partial pairs (one
-   language seeded, the other not) are exactly the drift EN+AF-from-day-one
-   is meant to prevent — flagged as an issue, not silently tolerated. */
+/* A {en,af} pair: en REQUIRED and non-empty; af OPTIONAL (session E,
+   2026-08-21 — see this file's header). An OMITTED af is fine; a
+   present-but-empty af is still flagged, same as a genuinely broken
+   field. */
 function isTextPair(v, label, issues) {
   if (!v || typeof v !== "object") { issues.push(`${label}: missing {en,af} pair`); return false; }
   let ok = true;
   if (!isNonEmptyString(v.en)) { issues.push(`${label}.en: missing or empty`); ok = false; }
-  if (!isNonEmptyString(v.af)) { issues.push(`${label}.af: missing or empty`); ok = false; }
+  if (v.af !== undefined && !isNonEmptyString(v.af)) { issues.push(`${label}.af: present but empty`); ok = false; }
   return ok;
 }
 
@@ -171,6 +188,13 @@ export function validateQuestion(q) {
   if (!isNonEmptyString(q.topic)) issues.push(`question "${q.id}": missing topic`);
   if (!isNonEmptyString(q.archetype)) issues.push(`question "${q.id}": missing archetype tag`);
   if (typeof q.marks !== "number" || q.marks <= 0) issues.push(`question "${q.id}": marks must be a positive number`);
+
+  if (!q.lostQuest || typeof q.lostQuest !== "object") {
+    issues.push(`question "${q.id}": missing lostQuest {chapter, quest} — the round "I'm lost" reteaches into`);
+  } else {
+    if (!isNonEmptyString(q.lostQuest.chapter)) issues.push(`question "${q.id}": lostQuest.chapter missing`);
+    if (!isNonEmptyString(q.lostQuest.quest)) issues.push(`question "${q.id}": lostQuest.quest missing`);
+  }
 
   if (!Array.isArray(q.parts) || !q.parts.length) {
     issues.push(`question "${q.id}": parts must be a non-empty array`);
