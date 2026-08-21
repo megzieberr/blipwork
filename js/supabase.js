@@ -1,8 +1,10 @@
 /* ============================================================
    SUPABASE BACKEND — calls the SECURITY DEFINER RPC functions.
-   Self sign-up: learners create their own account (username + name +
-   password). Passwords are hashed server-side; the teacher never sees
-   them. supabase-js is loaded lazily from a CDN on first use.
+   Roster login (2026-08-21, CQ-BRIDGE-PLAN.md Part 1): the teacher seeds
+   the class list; a learner picks their name (listStudents) and sets a
+   password on first login (firstLogin) or enters it (login, unchanged).
+   Passwords are hashed server-side; the teacher never sees them.
+   supabase-js is loaded lazily from a CDN on first use.
    ============================================================ */
 import { SUPABASE, hasSupabase as _has } from "./supabase-config.js";
 
@@ -23,7 +25,12 @@ async function rpc(fn, params) {
 }
 
 export const SupabaseBackend = {
-  async signup(username, name, password) { return rpc("mhq_signup", { p_username: username, p_name: name, p_password: password }); },
+  // Picker payload — {username, display_name, has_password}[], non-hidden rows only.
+  async listStudents() { return rpc("mhq_list_students"); },
+  // Sets a password only if the row's is currently NULL (first login, or after
+  // a teacher reset). Returns {ok:true, username} on success — the client uses
+  // that username for every subsequent call, exactly like a normal login.
+  async firstLogin(name, password) { return rpc("mhq_first_login", { p_name: name, p_password: password }); },
   async login(username, password) { return rpc("mhq_login", { p_username: username, p_password: password }); },
   async setPassword(username, password) { return rpc("mhq_set_password", { p_username: username, p_password: password }); },
   async getState(username, password) { return rpc("mhq_get_state", { p_username: username, p_password: password }); },

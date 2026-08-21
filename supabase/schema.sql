@@ -55,14 +55,21 @@
 --   so those last three files are a no-op on a fresh build — run them anyway,
 --   so the order matches live.)
 --
---  (It REPLACES the old roster-based login with self sign-up: learners create
---   their own account.)
+--  (2026-08-21, CQ-BRIDGE-PLAN.md Part 1: REPLACED self sign-up with a
+--   Circle-Quest-style roster picker — see migration-roster-login.sql. This
+--   file used to say the opposite, because self sign-up itself had replaced
+--   an earlier roster login; the wheel has now turned twice.)
 --
---  AUTH MODEL (like the Times Table game):
---   • Learners SIGN UP themselves: own name + username + password.
+--  AUTH MODEL (roster login, like Circle Quest):
+--   • The teacher seeds the roster (mhq_admin_add_student, or bulk insert);
+--     learners never create their own account (mhq_signup is gone).
+--   • A learner picks their name from mhq_list_students and either sets a
+--     password (first login / after a teacher reset — mhq_first_login) or
+--     enters it (mhq_login, unchanged, still username + password).
 --   • Passwords are stored BCRYPT-HASHED — the teacher never sees them.
---   • Forgot a password? The teacher "resets" it (clears it); the learner
---     then sets a new one on their next login. Their progress is kept.
+--   • Forgot a password? The teacher "resets" it (clears it); the learner's
+--     name then shows as "new" again in the picker and they set a fresh
+--     one. Their progress is kept.
 --
 --  SECURITY: every table has RLS on with NO policies, so the publishable
 --  key can't touch tables directly. All access goes through SECURITY
@@ -120,7 +127,14 @@ create table public.students (
   --                   levels, e.g. [10, 20]. A plain counter could not say
   --                   how many diamonds each one owes.
   trinkets        jsonb not null default '[]'::jsonb,
-  milestone_boxes jsonb not null default '[]'::jsonb
+  milestone_boxes jsonb not null default '[]'::jsonb,
+  -- Roster login (2026-08-21, CQ-BRIDGE-PLAN.md Part 1). cq_name is the
+  -- account-mapping link to CIRCLE QUEST's roster (nullable — a learner who
+  -- never played CQ simply has no link); hidden keeps a row out of the
+  -- mhq_list_students picker without deleting it (the two pre-existing test
+  -- rows are hidden by migration-roster-login.sql, never dropped).
+  cq_name         text unique,
+  hidden          boolean not null default false
 );
 
 -- Per-blip companion state (slot 1 = the original, slot 2 = the reward baby).
@@ -343,23 +357,42 @@ end; $$;
 -- ============================================================
 --  LEARNER RPC
 -- ============================================================
-create or replace function public.mhq_signup(p_username text, p_name text, p_password text)
+
+-- ---------- Roster login (2026-08-21, CQ-BRIDGE-PLAN.md Part 1) ----------
+-- Self sign-up (mhq_signup) is retired — see migration-roster-login.sql for
+-- the drop and the reasoning. Learners now pick their name from a roster
+-- seeded by the teacher; mhq_list_students is the picker's payload.
+--
+-- ⚠️ Returns `username`, not just display_name + has_password (unlike Circle
+-- Quest's cgg_list_students). Every other mhq_* RPC still authenticates via
+-- _mhq_auth(p_username, p_password) — that is deliberately unchanged — so
+-- the picker needs the username to reach them after a name is picked.
+-- Usernames are not secret in this app's model regardless: mhq_gallery
+-- already shows every logged-in student's username to every classmate.
+create or replace function public.mhq_list_students()
+returns table (username text, display_name text, has_password boolean)
+language sql stable security definer set search_path = public, extensions as $$
+  select username, display_name, (password is not null)
+  from public.students
+  where hidden = false
+  order by display_name;
+$$;
+
+-- Mirrors Circle Quest's cgg_first_login. Only ever sets a password that is
+-- currently NULL — which is also the after-admin-reset state (a reset
+-- clears the password, so the learner looks "new" again here and sets a
+-- fresh one). Matches a NON-HIDDEN row only, so a hidden test account can't
+-- be re-claimed through the picker.
+create or replace function public.mhq_first_login(p_name text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare uname text := lower(trim(p_username)); new_id uuid;
+declare s public.students;
 begin
-  if length(uname) < 3 then return jsonb_build_object('ok', false, 'error', 'username_short'); end if;
-  if uname !~ '^[a-z0-9_.]+$' then return jsonb_build_object('ok', false, 'error', 'username_chars'); end if;
   if length(coalesce(p_password,'')) < 4 then return jsonb_build_object('ok', false, 'error', 'too_short'); end if;
-  if length(coalesce(trim(p_name),'')) < 1 then return jsonb_build_object('ok', false, 'error', 'no_name'); end if;
-  if exists (select 1 from public.students where username = uname) then
-    return jsonb_build_object('ok', false, 'error', 'username_taken');
-  end if;
-  insert into public.students (username, display_name, password, last_active_at)
-  values (uname, trim(p_name), crypt(p_password, gen_salt('bf')), now())
-  returning id into new_id;
-  insert into public.blips (student_id, slot, name, colour) values (new_id, 1, 'Blip', 'blue')
-  on conflict (student_id, slot) do nothing;
-  return jsonb_build_object('ok', true);
+  select * into s from public.students where display_name = p_name and hidden = false;
+  if not found then return jsonb_build_object('ok', false, 'error', 'no_such_user'); end if;
+  if s.password is not null then return jsonb_build_object('ok', false, 'error', 'already_set'); end if;
+  update public.students set password = crypt(p_password, gen_salt('bf')), last_active_at = now() where id = s.id;
+  return jsonb_build_object('ok', true, 'username', s.username);
 end; $$;
 
 create or replace function public.mhq_login(p_username text, p_password text)
@@ -952,6 +985,29 @@ begin
   return jsonb_build_object('ok', true);
 end; $$;
 
+-- Mid-year arrival, or any learner added by hand (roster login, 2026-08-21).
+-- Same admin-password gate as every other mhq_admin_* function. Inserts a
+-- NON-hidden row with a NULL password, so the new name appears in the
+-- picker as "new" immediately. p_cq_name is optional — a learner who never
+-- played Circle Quest simply has no bridge link.
+create or replace function public.mhq_admin_add_student(
+  p_admin_password text, p_display_name text, p_username text, p_cq_name text default null)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare uname text := lower(trim(p_username)); new_id uuid;
+begin
+  if not public._mhq_admin_ok(p_admin_password) then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  if length(uname) < 3 then return jsonb_build_object('ok', false, 'error', 'username_short'); end if;
+  if uname !~ '^[a-z0-9_.]+$' then return jsonb_build_object('ok', false, 'error', 'username_chars'); end if;
+  if length(coalesce(trim(p_display_name),'')) < 1 then return jsonb_build_object('ok', false, 'error', 'no_name'); end if;
+  if exists (select 1 from public.students where username = uname) then
+    return jsonb_build_object('ok', false, 'error', 'username_taken');
+  end if;
+  insert into public.students (username, display_name, cq_name, password)
+  values (uname, trim(p_display_name), nullif(trim(coalesce(p_cq_name, '')), ''), null)
+  returning id into new_id;
+  return jsonb_build_object('ok', true, 'id', new_id, 'username', uname);
+end; $$;
+
 create or replace function public.mhq_admin_remove_student(p_admin_password text, p_id uuid)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 begin
@@ -985,7 +1041,8 @@ end; $$;
 --  GRANTS — the publishable/anon key may only EXECUTE the API
 -- ============================================================
 grant execute on function
-  public.mhq_signup(text, text, text),
+  public.mhq_list_students(),
+  public.mhq_first_login(text, text),
   public.mhq_login(text, text),
   public.mhq_set_password(text, text),
   public.mhq_get_state(text, text),
@@ -1005,13 +1062,16 @@ grant execute on function
   public.mhq_admin_reset_password(text, uuid),
   public.mhq_admin_remove_student(text, uuid),
   public.mhq_admin_reset_progress(text, uuid),
-  public.mhq_admin_resolve_struggle(text, text)
+  public.mhq_admin_resolve_struggle(text, text),
+  public.mhq_admin_add_student(text, text, text, text)
 to anon, authenticated;
 
 -- ============================================================
 --  SEED — quests (q1–q3 open) + admin password (default 'admin').
---  No learner roster: learners sign themselves up. CHANGE the admin
---  password via seed-private.sql.
+--  No learner roster here (public repo — never real names). The teacher
+--  seeds the real roster separately (mhq_admin_add_student, or a bulk
+--  insert) — see supabase/seed-private.sql for the shape. CHANGE the admin
+--  password via seed-private.sql too.
 -- ============================================================
 insert into public.quests (quest_id, chapter, is_open, sort) values
   ('q1','stats',true ,1), ('q2','stats',true ,2), ('q3','stats',true ,3),

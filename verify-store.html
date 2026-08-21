@@ -1633,6 +1633,88 @@ for (const o of outfits) {
   say(`room tutorial: TOUR_VERSION ${TOUR_VERSION} · step-drop verified (5/7 anchors -> ${PRESENT.length} steps) · Escape/Skip/tap-dim all mark "mhq.tourSeen" · a version bump re-shows it · wired into js/blip.js's header ("?") and first-landing auto-fire`);
 }
 
+/* ---------- 6j. roster login (CQ-BRIDGE-PLAN.md Part 1, 2026-08-21) ----------
+   Self sign-up is retired; a learner now picks their name from a
+   teacher-seeded roster. Exercises the LocalBackend mirror of
+   mhq_list_students / mhq_first_login end to end, and cross-checks the
+   migration file for the objects it must define. */
+{
+  // ---- the picker payload: FAKE_ROSTER, hidden rows excluded ----
+  const roster = await LocalBackend.listStudents();
+  const thabo = roster.find((s) => s.display_name === "Thabo Test");
+  const lerato = roster.find((s) => s.display_name === "Lerato Test");
+  tick(!!thabo, `the picker mirror is missing the seeded "Thabo Test" fixture: ${JSON.stringify(roster.map((s) => s.display_name))}`);
+  tick(!!lerato, `the picker mirror is missing the seeded "Lerato Test" fixture: ${JSON.stringify(roster.map((s) => s.display_name))}`);
+  if (thabo) tick(thabo.has_password === false, `"Thabo Test" should read has_password:false (the "new" tag case), got ${JSON.stringify(thabo)}`);
+  if (lerato) tick(lerato.has_password === true, `"Lerato Test" should read has_password:true (the returning-login case), got ${JSON.stringify(lerato)}`);
+
+  // ---- payload shape: no password ever leaks, and nothing beyond the spec ----
+  // The brief spec'd display_name + has_password only, mirroring Circle Quest's
+  // cgg_list_students. This build adds `username` too — a deliberate, documented
+  // deviation (see migration-roster-login.sql's header): every OTHER mhq_* RPC
+  // still authenticates via _mhq_auth(p_username, ...), unchanged, so the picker
+  // needs a username to reach mhq_login for a RETURNING student. The invariant
+  // that actually matters — no password, no extra fields — is what this asserts.
+  for (const s of roster) {
+    const keys = Object.keys(s).sort().join(",");
+    tick(keys === "display_name,has_password,username",
+      `mhq_list_students mirror entry for "${s.display_name}" has keys [${keys}] — expected exactly display_name, has_password, username (no password, nothing else)`);
+  }
+  say(`picker payload: ${roster.length} visible row(s), keys [username, display_name, has_password] on every row — no password field, hidden rows excluded`);
+
+  // ---- first login: sets the password exactly once ----
+  const first = await LocalBackend.firstLogin("Thabo Test", "pw1234");
+  tick(first.ok && first.username === "thabo_test", `first login for "Thabo Test" should succeed with username "thabo_test", got ${JSON.stringify(first)}`);
+  const rosterAfter = await LocalBackend.listStudents();
+  const thaboAfter = rosterAfter.find((s) => s.display_name === "Thabo Test");
+  tick(!!thaboAfter && thaboAfter.has_password === true, `"Thabo Test" should read has_password:true immediately after first login, got ${JSON.stringify(thaboAfter)}`);
+
+  // a second first-login attempt on the same name must be refused
+  const second = await LocalBackend.firstLogin("Thabo Test", "anotherpw");
+  tick(!second.ok && second.error === "already_set", `a second first-login on "Thabo Test" should be refused as already_set, got ${JSON.stringify(second)}`);
+
+  // and the password it actually set is the real one, usable to log in
+  const loginOk = await LocalBackend.login("thabo_test", "pw1234");
+  tick(loginOk.ok, `logging in with the password first_login just set failed: ${JSON.stringify(loginOk)}`);
+
+  // ---- wrong password on an account that already has one is refused ----
+  const wrong = await LocalBackend.login("lerato_test", "not-the-password");
+  tick(!wrong.ok && wrong.error === "wrong_password", `a wrong password for "Lerato Test" should be refused as wrong_password, got ${JSON.stringify(wrong)}`);
+  const right = await LocalBackend.login("lerato_test", "demo1234");
+  tick(right.ok, `the real password for "Lerato Test" (seeded in FAKE_ROSTER) was refused: ${JSON.stringify(right)}`);
+
+  say(`roster login round-trip: picker -> first login (sets password once, a replay is refused) -> log in with it; a wrong password on an existing account is refused, the real one works`);
+
+  // ---- no client code path still calls the retired mhq_signup RPC ----
+  // Not literally every file in js/ — the files that could plausibly still
+  // reference an auth RPC by name: the two backends, the login screen, the
+  // api layer's doc comment, the app shell and the admin panel.
+  const SIGNUP_SCAN_FILES = ["js/supabase.js", "js/local-backend.js", "js/auth.js", "js/api.js", "js/app.js", "js/admin.js"];
+  for (const f of SIGNUP_SCAN_FILES) {
+    try {
+      const src = await (await fetch(`./${f}`)).text();
+      tick(!src.includes("mhq_signup"), `${f} still references the retired mhq_signup RPC`);
+    } catch (e) { tick(false, `could not read ${f}: ` + e.message); }
+  }
+
+  // ---- the migration file names every new object, with search_path pinned ----
+  try {
+    const raw = await (await fetch("./supabase/migration-roster-login.sql")).text();
+    const sql = raw.replace(/--[^\n]*/g, "");
+    tick(/add column if not exists cq_name\s+text\s+unique/i.test(sql), "migration-roster-login.sql does not add students.cq_name (text unique)");
+    tick(/add column if not exists hidden\s+boolean\s+not null default false/i.test(sql), "migration-roster-login.sql does not add students.hidden (boolean not null default false)");
+    for (const fn of ["mhq_list_students", "mhq_first_login", "mhq_admin_add_student"]) {
+      const re = new RegExp(`create or replace function public\\.${fn}\\([^)]*\\)[\\s\\S]{0,260}?set search_path = public, extensions`, "i");
+      tick(re.test(sql), `migration-roster-login.sql: ${fn} is missing or does not pin search_path = public, extensions`);
+    }
+    tick(/drop function if exists public\.mhq_signup\(text,\s*text,\s*text\)/i.test(sql), "migration-roster-login.sql does not drop mhq_signup(text, text, text) by its exact signature");
+    tick(/grant execute on function[\s\S]*?public\.mhq_list_students\(\)[\s\S]*?to anon, authenticated/i.test(sql), "mhq_list_students is not granted to anon, authenticated");
+    tick(/grant execute on function[\s\S]*?public\.mhq_first_login\(text, text\)[\s\S]*?to anon, authenticated/i.test(sql), "mhq_first_login is not granted to anon, authenticated");
+    tick(/grant execute on function[\s\S]*?public\.mhq_admin_add_student\(text, text, text, text\)[\s\S]*?to anon, authenticated/i.test(sql), "mhq_admin_add_student is not granted to anon, authenticated");
+    say("migration-roster-login.sql: both new columns present, all three new RPCs pin search_path, mhq_signup is dropped by exact signature, all three new RPCs are granted");
+  } catch (e) { tick(false, "could not read supabase/migration-roster-login.sql: " + e.message); }
+}
+
 /* ---------- report ---------- */
 const banner = document.getElementById("banner");
 banner.className = fails.length ? "fail" : "pass";

@@ -380,6 +380,19 @@ const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects
   "bed", "desk", "window", "door",
   "shelf-left", "shelf-right", "beanbag", "wall"];
 
+/* Roster login (2026-08-21, CQ-BRIDGE-PLAN.md Part 1). Mirrors
+   mhq_list_students / mhq_first_login so ?local=1 exercises the CQ-style
+   picker offline. Fake names only, never persisted beyond localStorage —
+   one already has a password (exercises the "enter your password" /
+   returning-login branch), one does not (exercises first login / the "new"
+   tag). Seeded into the students store (below, in seed()), merge-only —
+   an account already promoted past first-login in this browser is never
+   overwritten. */
+const FAKE_ROSTER = [
+  { username: "thabo_test", display_name: "Thabo Test", password: null },
+  { username: "lerato_test", display_name: "Lerato Test", password: "demo1234" },
+];
+
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a
    bedridden learner. Never persisted, never real, purely for testing the grid.
@@ -572,6 +585,27 @@ function seed() {
   if (metaChanged) write(LS.meta, meta);
   if (!read(LS.blips, null)) write(LS.blips, {});
 
+  // Roster login (2026-08-21): merge in the FAKE_ROSTER, never overwriting an
+  // account that already exists (e.g. one already promoted past first login
+  // in this browser). Mirrors migration-roster-login.sql seeding a class list
+  // server-side; `hidden` defaults false, exactly like the SQL column default.
+  {
+    const stR = read(LS.students, {});
+    let rosterChanged = false;
+    FAKE_ROSTER.forEach((r) => {
+      if (Object.values(stR).some((s) => s.username === r.username)) return;
+      const id = "s" + (Math.max(0, ...Object.keys(stR).map((k) => +k.slice(1) || 0)) + 1);
+      stR[id] = {
+        id, username: r.username, display_name: r.display_name, password: r.password, hidden: false,
+        last_active_at: null,
+        gold: 0, xp: 0, blip_name: "Blip", blip_colour: "blue", owned_items: [], equipped: {},
+        last_fed_day: null, last_cookie_day: null, care_streak: 0, last_care_day: null, pantry: {},
+      };
+      rosterChanged = true;
+    });
+    if (rosterChanged) write(LS.students, stR);
+  }
+
   // Blipwork field migration + blips-table backfill (mirrors the live migrations).
   const st = read(LS.students, {});
   const progress = read(LS.progress, {});
@@ -635,6 +669,31 @@ globalThis.__BLIP_DEV__ = {
 };
 
 export const LocalBackend = {
+  // ---- Roster login (2026-08-21) — mirrors mhq_list_students / mhq_first_login ----
+  async listStudents() {
+    seed();
+    const st = read(LS.students, {});
+    return Object.values(st)
+      .filter((s) => !s.hidden)
+      .map((s) => ({ username: s.username, display_name: s.display_name, has_password: s.password != null }))
+      .sort((a, b) => a.display_name.localeCompare(b.display_name));
+  },
+  async firstLogin(name, password) {
+    seed();
+    if ((password || "").length < 4) return { ok: false, error: "too_short" };
+    const st = read(LS.students, {});
+    const s = Object.values(st).find((x) => x.display_name === name && !x.hidden);
+    if (!s) return { ok: false, error: "no_such_user" };
+    if (s.password != null) return { ok: false, error: "already_set" };
+    s.password = password; s.last_active_at = Date.now(); write(LS.students, st);
+    ensureBlip(s.id, s); // create the slot-1 blip up front, mirroring signup()
+    return { ok: true, username: s.username };
+  },
+  /* Kept for the several existing fixtures in verify-store.html, which use it
+     purely as a test-account creator — it never called the retired sign-up
+     RPC (that call lived only in js/supabase.js, now removed) and is
+     untouched by the roster-login change. Real learners never reach this
+     path any more: the picker only calls listStudents/firstLogin above. */
   async signup(username, name, password) {
     seed();
     const u = String(username).trim().toLowerCase();

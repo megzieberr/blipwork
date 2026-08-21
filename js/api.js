@@ -8,8 +8,11 @@
 
    `api` IS the chosen backend object, so every method a backend
    exposes is available on `api` unchanged. Surface (both backends):
-     auth/quests: signup, login, setPassword, getState, submitQuest,
+     auth/quests: listStudents, firstLogin, login, getState, submitQuest,
                   logStruggle
+                  (roster login, 2026-08-21 — self sign-up is gone;
+                  listStudents is the picker payload, firstLogin sets a
+                  password the first time / after a teacher reset)
      blip:        buyItem(u,p,item,slot=1)  — item may be a cosmetic id
                     OR a food id ('soup','medicine','treat', or any of the
                     44 groceries added in S4)
