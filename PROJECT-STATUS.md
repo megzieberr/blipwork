@@ -1,4 +1,81 @@
-# Project status — updated 2026-08-21 (CQ BRIDGE DAY ✅ SHIPPED, sw v45)
+# Project status — updated 2026-08-21 evening (🎲 DICE DAY ✅ SHIPPED, sw v49)
+
+## 🎲 2026-08-21 (evening) — THE DICE PILOT, SHIPPED (sw v49)
+
+Foreman day (4th run): Fable briefed/reviewed, three Sonnet builds + one Opus
+digest, ~1.55M agent tokens (re-approved mid-day when the first estimate
+proved 2× light). **`migration-dice.sql` applied to live via MCP**, sw v48 →
+**v49**, pushed. The 🎲 dice deals freshly generated rounds — **Statistics
+only** (`DICE_CHAPTERS = ["stats"]` is the switch; every other chapter off).
+
+**What shipped, in order:**
+- `DICE-AUDIT.md` (0a): all 530 skills classified — 370 CLEAN / 143 CARE /
+  17 STATIC. Headline: Blipwork already rolls fresh numbers per play; the
+  dice's real job is dealing outside the teacher-gated sequence. Trig Graphs
+  (45/46 CLEAN) is pilot #2; ⚠️ Measurement has a real engine blocker (fixed
+  label offsets → curated "safe proportions" lists) — her call before its turn.
+- `METHODS-algebra.md` (Opus digest, 196 handwritten pages): 28 skills in her
+  own language (TIP Chips, guns/helmets, divorce, KFC), page-cited, memo tick
+  cues, 15 flags (2 need her: the `√9 = ±3` box vs her practice; two-roads
+  ordering for rational exponents + surd equations), 12 not-covered items.
+- Dice infrastructure (0b): seeded regeneration (mulberry32; save = seed +
+  skillIds + index, NEVER serialized questions — resume regenerates), rng
+  indirection in `js/rng.js` (static play byte-identical), coverage-first
+  dealing in `js/dice.js`, stat-free player branches in `play.js`, always-on
+  "Show me the method" link (`q.method`), admin 🎲+count cell,
+  `verify-dice.html`. `_mhq_dice_xp` mirrors config.js's 10×min(streak,3)+5.
+- Statistics pool (1): all 58 skills REUSED from quest01–08 (guards ride
+  free), roundLength 7 (median), kind = skillId (58 kinds, coverage in 9
+  rounds), method text 58/58 from existing solution arrays.
+
+**Foreman review, fresh-proof:** copy-forward diffs of the re-created
+`mhq_get_state` (base: migration-cq-bridge) and `mhq_admin_data` (base:
+migration-phase3 — schema.sql's copy was ALREADY stale pre-day, missing
+`assignment`) verified mechanically — only the dice blocks differ. My own
+harness runs on a clean origin: verify-dice **111/111**, verify-store
+**"all 3990 checks passed"** (a session-1 report line saying "4/3998 wobble"
+was the known count-wobble, misworded — nothing red). Math.random sweep: quest
+generation fully routed; remaining direct calls deliberate (deal shuffle,
+confetti, local-backend loot).
+
+### Decisions (2026-08-21, hers unless marked)
+1. Fable dispatched the build agents; mid-day spend re-approval ~1.4–1.7M.
+2. Dice round length = same as the chapter's static rounds (7 for stats).
+3. Dice is STAT-FREE learner-side; dashboard gets 🎲 + play count only.
+4. **EXAM-FOCUS-PLAN.md written and fully ruled** (the fear-first pen-and-paper
+   tab; colour-memo reveal; ⚖️ "Esplain" is her term, NOT a typo; XP yes; no
+   Euclidean chapter — CQ covers it; progress remembered; EN+AF pairs).
+   She runs that build "tomorrow".
+5. Foreman default she ratified at ship: dice XP pays per-question
+   streak-capped (every play like a first play) — full-XP ruling, no replay
+   discount.
+
+### ⚠️ Known / accepted
+- A dev-tools kid could stuff a fake save to farm dice XP/gold — same surface
+  class as replay-farming; her DICE-PLAN watchpoint stance applies (raise
+  once WITH DATA if the shop distorts; do not nag).
+- Stale service workers poisoned test origins THREE times today (5213
+  included). Recipe: unregister SW + delete Cache Storage + cache-reload every
+  changed file + full navigation, or a genuinely new port.
+- `dice-stub.js` stays as a harness-only fixture, unreachable from the app.
+
+### ⏳ Pending on Megan
+- 📱 3 min **[blocking dice chapter 2]**: open Blipwork → Statistics → tap 🎲
+  → play a round → close mid-round and reopen (same question should return).
+- 💻 2 min **[whenever]**: two METHODS-algebra calls — the `√9 = ±3` box, and
+  which road shows first (rational exponents; surd equations).
+
+### Next up
+- **Tomorrow (her word): the exam focus build day** — EXAM-FOCUS-PLAN.md is
+  ready; kickoff details = XP amount, EN/AF toggle placement.
+- Dice chapter 2 = **Trig Graphs** after her phone test — needs the Soek die
+  fout mechanic coordinated with graph-quest (build once, share).
+- Later: Measurement's engine-label decision; Finance needs a verify harness
+  before its dice turn; f5 `anyPoint`/p6 `atLeastOneHead` need generalizing.
+
+---
+
+# (previous head) Project status — updated 2026-08-21 (CQ BRIDGE DAY ✅ SHIPPED, sw v45)
 
 ## 🌉 2026-08-21 — THE WHOLE CQ↔BLIPWORK BRIDGE DAY, SHIPPED (sw v45)
 
@@ -29,10 +106,9 @@ first rare; all 63 rows re-sorted price-ascending per slot).
   Blipwork project; full paid-collect smoke test then ran green: 100 CQ XP
   → 3💎, replay → 0, +35 XP → 1 more with the remainder banked exactly;
   throwaways deleted from both sides, counts verified back to baseline).
-- 📱 5 min **[blocking — the go-live eyeball, now four ships behind]**:
-  reopen the PWA twice (v34 → v45), then: picker shows 19 names and NONE of
-  your accounts; `?u=1` gets you into your test account; ⭕ tab opens CQ;
-  shop shows no "Free" anywhere.
+- ~~📱 the go-live eyeball~~ — **DONE 2026-08-21** (she reopened the PWA
+  through v45–v48 and confirmed: picker shows the 19 names and none of hers,
+  `?u=1` works, ⭕ tab opens CQ, no "Free" in the shop). Nothing pending.
 
 ### Decisions (2026-08-21, all hers unless marked)
 1. **Dispatch mode: Fable ran the build agents** (her call at day start —
