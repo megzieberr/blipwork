@@ -147,6 +147,13 @@ returns text language sql stable security definer set search_path = public, exte
   where cnt > 0 and rn = abs(hashtext(p_blip_id::text || ':' || current_date::text)) % cnt;
 $$;
 
+-- Foreman review fix (2026-08-21): helpers are internal — callable only
+-- from inside the security-definer RPCs, never as PostgREST endpoints
+-- (the _mhq_roll_loot / mhq_credit_cq precedent). Without this, function
+-- EXECUTE defaults to PUBLIC and anon could probe _mhq_craving directly.
+revoke execute on function public._mhq_mood_effective(int, date) from public, anon, authenticated;
+revoke execute on function public._mhq_craving(uuid, int) from public, anon, authenticated;
+
 
 -- ============================================================
 --  4. mhq_get_state — adds `mood` (effective) and `craving` (item id)
