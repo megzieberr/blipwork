@@ -50,6 +50,18 @@ first rare; all 63 rows re-sorted price-ascending per slot).
 7. ⚠️ `migration-roster-login.sql` is **ONE-SHOT** — a re-run after the
    seed would hide the whole class from the picker (header says so now).
 
+### Even later (sw v47/v48) — admin wide view, her two layout calls
+- v47: admin container 800px → laptop width (min(96vw,1500px)); learner
+  chip clusters flow side by side; action buttons stack vertically.
+- v48: the Quests open/close chapters sit NEXT TO each other as compact
+  grid cards (330px min) — toggles beside their rounds, ~⅓ the scrolling.
+- Her question answered, no change made: kids can't rename usernames or
+  display names, BY DESIGN (display name = the picker/roster label; the
+  username shows in the gallery per her old ruling; the CQ bridge keys on
+  cq_name so renames could never break it anyway). The kids' outlet is
+  the Blip nickname. A playful-gallery-handles idea = its own future
+  design talk, name filter included.
+
 ### Later the same day (sw v46) — admin restyle + tour fix
 - **Admin dashboard restyled to the G7 pattern** (session 5, her ask after
   seeing the comma-list): learner rounds render as per-chapter chip
