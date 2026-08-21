@@ -1,4 +1,136 @@
-# Project status — updated 2026-08-21 night (🎲 DICE DAY + playtest fixes ✅ SHIPPED, sw v50)
+# Project status — updated 2026-08-21 (FOREMAN DAY #5 ✅ SHIPPED: dice-sibling fix + 💙 MOOD/CRAVINGS + 📝 EXAM FOCUS pilot, sw v51)
+
+## 🛠 2026-08-21 (late night) — foreman day #5: four sessions, reviewed + SHIPPED
+
+Fable foreman, four Sonnet builds (~1.46M agent tokens, inside the 1.5–2M
+estimate she approved). Commits `d08100e` → `a097bcc` → `d0bc37c` (foreman
+review fix) → `c252197` → `ce5e491` → the ship commit. Every session
+foreman-reviewed with fresh proof: mechanical copy-forward diffs, own harness
+runs on clean ports, own 375px walks.
+
+**THE SHIP (her "yebo", same night):** both migrations applied to live via MCP
+(`mood_meter_and_cravings`, `exam_focus_infrastructure`). Learner-row hashes
+(students/blips/progress) **byte-identical before and after** (21 students,
+3 blips, 24 progress, 4,760 XP); mood columns landed default-closed on all 3
+blips. migration-check all-PASS: both new helpers revoked from anon AND
+PUBLIC (acl = postgres + service_role only), both learner RPCs open, zero
+unpinned search_path in the whole schema, no direct anon table reads.
+Throwaway-learner smoke on live, deleted after with counts+hashes verified
+back to baseline: craved food (mielie) paid +2 mood, broccoli +1, cookie +1
+(mood 0→2→3→4), decay formula 5→3→0, exam q1 parts a–c paid 0, part d paid
+exactly 75 XP + 10 💎 (gold arithmetic verified to the item prices), replay
+paid 0, wrong password refused. sw v50 → **v51**, pushed, live-verified.
+
+**A — dice "Try a similar one" FIXED.** Her live find: the button skipped to a
+different concept (mean wrong → std dev next). Root cause: session-0b's
+`onSibling` shortcut deliberately advanced in dice mode while the label
+promised a similar one. Now it re-presents the SAME skill salted (fresh
+values), and **first-answer-counts** governs XP/record: retries are free
+practice, can't farm, and the fix also closed a real pre-existing hole where a
+calcdo wrong→retry-correct overwrote the saved false and paid full XP.
+Resume-mid-retry traced safe (save checkpoints on the first answer).
+verify-dice 114 → **134** checks.
+
+**B — 💙 MOOD METER + CRAVINGS** (her 1+2 pick from the morning's food
+brainstorm — bought food finally DOES something). Hearts 0–5 per blip by the
+nickname; overnight −2; cookie +1, any food +1, the day's craved food +2
+(craving = deterministic per blip per day via hashtext, server-side in ONE
+helper so it can't be spoofed; only from tiers the learner has unlocked, never
+soup/medicine/treat). Craving = thought bubble by Blip (tap → food sheet,
+hidden while he refuses food); craved feed plays the existing *excited*
+moment + floating +2. Mood ≥4 → occasional spontaneous wink/hop (existing
+moments only, NO new art); ≤1 → quieter. Mood touches NOTHING mechanical —
+growth stays cookie-only, XP/gold untouched. Server: 2 columns on blips,
+helpers `_mhq_mood_effective`/`_mhq_craving`, re-creates
+mhq_get_state/mhq_feed/mhq_eat_food/mhq_care (4th = the care-day +1, a
+flagged deviation the foreman accepted). Foreman review fix `d0bc37c`:
+execute REVOKED on both new helpers (the _mhq_roll_loot precedent — B forgot).
+⚠️ mhq_feed's body was restyled (v_-prefixes dropped) — verified functionally
+identical to its base line by line; future copy-forwards of mhq_feed should
+base on THIS migration's copy. verify-store ~3,990 → **~4,030**.
+
+**C — 📝 EXAM FOCUS infrastructure** (EXAM-FOCUS-PLAN.md session 0), shipped
+flag-off. Hub tab (only renders when EXAM_CHAPTERS is non-empty) → chapter →
+topic ("worked N of M") → question → the part player: pen-and-paper opener,
+ONE part at a time with the chain kept visible, Done!/I'm-stuck buttons, hint
+local-only (never reported — no policing), colour-memo reveal (✓a/✓ca/✓s/f
+tick pills per method line, ANSWER bar, amber trap card), the two marking
+laws under every memo, ★+bank-the-marks note on ACTIVE level-4 parts (note
+correctly disappears once revealed), Esplain 🤔, EN/AF toggle in the tab
+header remembered per device (`mhq.examLang`). Supabase: `exam_progress`
+table + `mhq_exam_state`/`mhq_exam_open_part` (⚠️ brief said "three RPCs" —
+two exist, completion+pay folded into open_part, correct reading). Pay = 75
+XP + 10 💎 per completed question ONCE ever (her kickoff ruling; server
+literals, config `EXAM` block is display mirror, harness cross-checks).
+mhq_get_state deliberately NOT touched (A/B already re-created functions
+today — C stayed order-safe). New harness verify-exam.html.
+
+**D — pilot topic seeded: eqn / nature-of-roots** (foreman's pick inside her
+September-T1 steer; Functions is blocked by her own digest-first rule — no
+methods digest exists for it). Four fresh questions (11/12/13/13 marks, 4
+parts each, easy → hard, ★ tails on q3/q4), composed from GR11-IEB-PAPER-BANK
+archetypes with all-new numbers, memos in her METHODS-algebra.md language
+(B11 table wording, B12's three k-shapes, ∴ habit), EN+AF throughout.
+**Foreman re-derived every number by hand — all correct** (Δ = 25/28/16−8k/
+16+4k/p²−4p+8; k = −4 with root 2; the k<2 ladder; largest-integer k = 0
+after k=1 rejects; (p−2)²+4 never-equal proof). Neither of the digest's two
+open flags is touched. `EXAM_CHAPTERS = ["eqn"]` is COMMITTED ON — safe
+because the class is not yet invited; her phone test gates everything
+further. verify-exam **101**, scope-wall + independent-recompute checks in.
+
+### Decisions (2026-08-21 evening, hers unless marked)
+1. Fix the dice similar-one bug FIRST; fold mood+cravings into the day.
+2. Mood design = brainstorm options 1+2 (mood meter + craving of the day).
+3. Exam pay: **75 XP + 10 💎, once per question ever** (kickoff pick).
+4. EN/AF toggle: **tab header, remembered on device** (kickoff pick).
+5. Dispatch mode: Fable ran the agents (day gate = the ~1.5–2M estimate).
+6. **Her picker name stays UNHIDDEN until the app is completely done** — the
+   re-hide moved out of [blocking]; do it with the go-live/invite work.
+7. Foreman defaults awaiting her nod (retune = one line each): mood numbers
+   (cap 5, decay 2/day, gains cookie 1 / food 1 / craving 2 / care 1);
+   craving also excludes treat (unearnable otherwise); mood/craving hit is
+   household-wide (matches feed_count's shape); pilot topic choice; the eqn
+   scope wall sourced from eq1–eq8 + METHODS Part E (bank has no eqn wall).
+
+### ⚠️ Known / accepted
+- **Exam RPC trust model = mhq_submit_quest's exact model** (client-named
+  question ids; submit_quest even takes client-named XP ≤1000/call — checked
+  during review). Same dev-tools-farming watchpoint class she ruled on for
+  dice: raise once WITH DATA if the shop distorts, don't nag, don't harden
+  one door while the older bigger one stays open.
+- Local python test servers throw one benign "unknown error fetching script"
+  (service-worker registration) — environmental, not app code; live Pages
+  registers fine.
+- verify-store's schema↔migration byte-compare now tracks
+  migration-mood-cravings.sql as the latest carrier of those function bodies.
+
+### ⏳ Pending on Megan
+- 📱 5 min **[blocking exam focus going further]** (after the ship): Blipwork
+  → 📝 Exam Focus → Nature of Roots → work/skim one question EN and AF —
+  the vetting pass is hers (esp. the AF wording, agent-composed to her rules).
+- 📱 3 min **[blocking dice chapter 2]**: Statistics → 🎲 → get one wrong →
+  "Try a similar one" should now give the SAME concept, new numbers; also
+  close mid-round + reopen (same question returns).
+- 📱 2 min **[whenever]** (after the ship): feed Blip something and look —
+  hearts by the name, thought bubble craving, +2 on the craved food.
+- 💻 2 min **[whenever]**: the two METHODS-algebra calls (√9 = ±3 box; which
+  road first for rational exponents / surd equations).
+- 🌐 **[at go-live, not before]**: re-hide `megzieberr` in the picker (her
+  ruling today: stays visible until completely done).
+
+### Next up
+- **The ship** (this session, on her yes): apply both migrations via MCP with
+  before/after learner-row hashes + throwaway-learner smoke, bump sw v50→v51,
+  push, verify live.
+- Her pilot vetting → then more exam topics (paper-build sessions feeding the
+  shelf, topic by topic per the bank's weights).
+- Dice chapter 2 = Trig Graphs (after her phone test; needs the shared
+  Soek-die-fout mechanic coordinated with graph-quest).
+- Mood numbers retune if her phone-feel disagrees with the defaults.
+
+---
+
+# (previous head) Project status — updated 2026-08-21 night (🎲 DICE DAY + playtest fixes ✅ SHIPPED, sw v50)
 
 ## 🔧 2026-08-21 (night) — her playtest's four fixes, SHIPPED same evening (sw v50)
 

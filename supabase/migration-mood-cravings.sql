@@ -1,7 +1,10 @@
 -- ============================================================
---  ⚠️ WRITTEN, NOT RUN. Nothing in this file has touched the live
---  database — foreman build day 2026-08-21, session B (MOOD METER +
---  CRAVINGS). The foreman applies it (via MCP) at ship time.
+--  ✅ APPLIED to live 2026-08-21 via MCP by the foreman session
+--  (migration name mood_meter_and_cravings, WITH the review-fix revokes
+--  below). Learner-row hashes byte-identical before/after; throwaway
+--  smoke green (craved +2 / other +1 / cookie +1 / decay 5→3→0).
+--  Originally: foreman build day 2026-08-21, session B (MOOD METER +
+--  CRAVINGS).
 --
 --  Migration name: mood_meter_and_cravings
 --

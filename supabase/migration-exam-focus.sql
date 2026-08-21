@@ -1,9 +1,10 @@
 -- ============================================================
---  ⚠️ WRITTEN, NOT RUN. Nothing in this file has touched the live
---  database — foreman build day 2026-08-21, session C (EXAM FOCUS
---  INFRASTRUCTURE). SQL files may be written today but must never be
---  applied; the foreman runs this later, once EXAM-FOCUS-PLAN.md's
---  build order actually reaches a chapter going live.
+--  ✅ APPLIED to live 2026-08-21 via MCP by the foreman session
+--  (migration name exam_focus_infrastructure). Learner-row hashes
+--  byte-identical before/after; throwaway smoke green (3 parts pay 0,
+--  4th pays 75 XP + 10 gold once, replay pays 0, bad auth refused).
+--  Originally: foreman build day 2026-08-21, session C (EXAM FOCUS
+--  INFRASTRUCTURE).
 --
 --  Migration name: exam_focus_infrastructure
 --
