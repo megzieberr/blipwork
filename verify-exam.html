@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam focus infrastructure · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<link rel="stylesheet" href="./css/exam.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .checks{list-style:none;font-size:11px;line-height:1.6;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  #harnessHost{position:fixed;left:-9999px;top:0;width:380px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Exam focus infrastructure · verification</h1>
+<p class="muted small">EXAM-FOCUS-PLAN.md, session 0 build (2026-08-21). Tests the machinery ONLY — js/exam/_harness-stub.js
+  is a fully-worked stub question, never registered/never learner-reachable (js/exam/index.js's real registry stays
+  empty until a paper-build session seeds it). This page forces ?local=1-equivalent behaviour via localStorage before
+  any module import runs, so the REAL js/api.js singleton (used by js/screens.js and js/exam-play.js exactly as the
+  live app uses it) resolves to LocalBackend for the whole page.</p>
+<div id="banner">running…</div>
+
+<h2>Part 1 · js/exam/_schema.js — validateQuestion()</h2>
+<div id="schemaChecks"></div>
+
+<h2>Part 2 · registry (js/exam/index.js) stays empty, flag (js/config.js EXAM_CHAPTERS) stays off</h2>
+<pre id="registryChecks">…</pre>
+
+<h2>Part 3 · hub navigation — flag off, then forced on in-harness</h2>
+<pre id="hubChecks">…</pre>
+
+<h2>Part 4 · the part player (js/exam-play.js) driven directly against the stub, real local-backend round trip</h2>
+<pre id="playerChecks">…</pre>
+
+<h2>Part 5 · SQL ↔ config literal cross-check (supabase/migration-exam-focus.sql vs js/config.js EXAM)</h2>
+<pre id="sqlChecks">…</pre>
+
+<div id="harnessHost"></div>
+
+<script>try { localStorage.setItem("mhq.forceLocal", "1"); } catch (e) {}</script>
+<script type="module">
+import { EXAM, EXAM_CHAPTERS, chapterById } from "./js/config.js";
+import { validateQuestion } from "./js/exam/_schema.js";
+import { stubQuestion } from "./js/exam/_harness-stub.js";
+import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
+import { renderHub, renderExamChapter, renderExamTopic } from "./js/screens.js";
+import { renderExamPlay } from "./js/exam-play.js";
+import { getExamLang, setExamLang } from "./js/exam/lang.js";
+import { api } from "./js/api.js";
+import { LocalBackend } from "./js/local-backend.js";
+import { setSession, clearSession } from "./js/session.js";
+import { el, clear } from "./js/ui.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const say = (id, lines) => { document.getElementById(id).textContent = lines.join("\n"); };
+
+/* ============================================================
+   PART 1 — schema validator, against the stub (should be clean) and a
+   battery of deliberately-broken variants (should each be caught).
+   ============================================================ */
+{
+  const host = document.getElementById("schemaChecks");
+  const lines = [];
+
+  const good = validateQuestion(stubQuestion);
+  tick(good.ok, `validateQuestion(stub) is clean — got issues: ${good.issues.join("; ")}`);
+  lines.push(`stub question: ${good.ok ? "OK, no issues" : "FAIL — " + good.issues.join("; ")}`);
+
+  // en/af presence on every field, checked directly against the stub's own
+  // data (belt-and-braces alongside validateQuestion above).
+  let pairsOk = true;
+  stubQuestion.parts.forEach(p => {
+    ["prompt", "hint", "esplain"].forEach(f => { if (!p[f] || !p[f].en || !p[f].af) pairsOk = false; });
+    p.memo.forEach(b => { if (!b.text || !b.text.en || !b.text.af) pairsOk = false; });
+  });
+  tick(pairsOk, "every part's prompt/hint/esplain and every memo block's text carries BOTH en and af");
+  lines.push(`EN+AF pairs on every field: ${pairsOk ? "OK" : "FAIL"}`);
+
+  // marks sum
+  const partSum = stubQuestion.parts.reduce((s, p) => s + p.marks, 0);
+  tick(partSum === stubQuestion.marks, `part marks sum to the question total (${partSum} vs ${stubQuestion.marks})`);
+  lines.push(`part marks sum to question total: ${partSum} vs ${stubQuestion.marks} — ${partSum === stubQuestion.marks ? "OK" : "FAIL"}`);
+
+  // tick sum per part
+  let ticksOk = true; const tickLines = [];
+  stubQuestion.parts.forEach(p => {
+    const n = p.memo.reduce((s, b) => s + (b.type === "trap" ? 0 : (b.ticks || []).length), 0);
+    if (n !== p.marks) ticksOk = false;
+    tickLines.push(`  (${p.id}) ticks=${n} marks=${p.marks} ${n === p.marks ? "OK" : "MISMATCH"}`);
+  });
+  tick(ticksOk, "every part's memo ticks sum to that part's marks");
+  lines.push(`memo ticks sum to part marks:\n${tickLines.join("\n")}`);
+
+  // ★ exactly on level-4 parts (data-level check; Part 4 re-checks this at the DOM level)
+  const level4Ids = stubQuestion.parts.filter(p => p.level === 4).map(p => p.id);
+  tick(level4Ids.length === 1 && level4Ids[0] === "d", `★ belongs on exactly the level-4 part(s): got [${level4Ids.join(",")}]`);
+  lines.push(`level-4 parts: [${level4Ids.join(",")}] (stub is designed to have exactly one, "d")`);
+
+  // glyph hygiene on the stub itself
+  let glyphOk = true;
+  const allText = [];
+  stubQuestion.parts.forEach(p => { allText.push(p.prompt, p.hint, p.esplain); p.memo.forEach(b => allText.push(b.text)); });
+  allText.forEach(pair => { ["en", "af"].forEach(lang => {
+    const s = pair[lang];
+    if (/\d\.\d/.test(s)) glyphOk = false;
+    if (/-\d/.test(s)) glyphOk = false;
+    if (lang === "af" && /\bfrase\b/i.test(s)) glyphOk = false;
+  }); });
+  tick(glyphOk, "stub content is glyph-clean (no dot-decimal, no hyphen-before-digit, no \"frase\" in AF)");
+  lines.push(`glyph hygiene on stub content: ${glyphOk ? "OK" : "FAIL"}`);
+
+  /* ---------- deliberately-broken variants: proves the validator ACTUALLY
+     catches problems, not just that it approves good content ---------- */
+  const base = () => JSON.parse(JSON.stringify(stubQuestion));
+  const cases = [];
+
+  let c = base(); c.marks = 999;
+  cases.push(["question marks != sum of part marks", c, r => !r.ok && r.issues.some(i => /sum to/.test(i))]);
+
+  c = base(); delete c.parts[0].prompt.af;
+  cases.push(["missing af on a prompt", c, r => !r.ok && r.issues.some(i => /prompt\.af/.test(i))]);
+
+  c = base(); c.parts[1].memo[0].ticks = ["ca", "ca"]; // was ["s/f"] on a 3-mark part — now inflates the tick count
+  cases.push(["memo ticks no longer sum to part marks", c, r => !r.ok && r.issues.some(i => /memo ticks sum to/.test(i))]);
+
+  c = base(); c.parts[2].level = 5;
+  cases.push(["level out of range (5)", c, r => !r.ok && r.issues.some(i => /level must be/.test(i))]);
+
+  c = base(); c.parts[3].memo.push({ type: "trap", text: { en: "x", af: "x" }, ticks: ["a"] });
+  cases.push(["a trap card carrying ticks", c, r => !r.ok && r.issues.some(i => /trap card must not carry ticks/.test(i))]);
+
+  c = base(); c.parts[0].memo[0].ticks = ["zz"];
+  cases.push(["an unknown tick code", c, r => !r.ok && r.issues.some(i => /unknown tick/.test(i))]);
+
+  c = base(); c.parts[0].prompt.en = "The value is -5.";
+  cases.push(["hyphen directly before a digit (should be −)", c, r => !r.ok && r.issues.some(i => /hyphen directly before a digit/.test(i))]);
+
+  c = base(); c.parts[0].prompt.en = "The value is 0.42.";
+  cases.push(["dot-decimal (should be comma)", c, r => !r.ok && r.issues.some(i => /dot-decimal/.test(i))]);
+
+  c = base(); c.parts[0].prompt.af = "Trek die frase na die regte plek.";
+  cases.push(["banned word \"frase\" in af text", c, r => !r.ok && r.issues.some(i => /banned word/.test(i))]);
+
+  c = base(); c.parts.push({ ...JSON.parse(JSON.stringify(c.parts[0])) }); // duplicate id "a"
+  cases.push(["duplicate part id", c, r => !r.ok && r.issues.some(i => /duplicate part id/.test(i))]);
+
+  const brokenLines = [];
+  cases.forEach(([label, q, predicate]) => {
+    const r = validateQuestion(q);
+    const ok = tick(predicate(r), `validator catches: ${label}`);
+    brokenLines.push(`${ok ? "✓" : "✗"} ${label}${ok ? "" : " — got: " + r.issues.join("; ")}`);
+  });
+  lines.push(`deliberately-broken variants, each should fail validation for the RIGHT reason:\n${brokenLines.map(l => "  " + l).join("\n")}`);
+
+  host.innerHTML = `<pre>${lines.join("\n\n")}</pre>`;
+}
+
+/* ============================================================
+   PART 2 — registry + flag stay empty/off, exactly as shipped.
+   ============================================================ */
+{
+  const lines = [];
+  tick(Array.isArray(EXAM_CHAPTERS) && EXAM_CHAPTERS.length === 0, "js/config.js EXAM_CHAPTERS is [] as shipped");
+  lines.push(`EXAM_CHAPTERS (before this page forces it on below): [${EXAM_CHAPTERS.join(",")}] — ${EXAM_CHAPTERS.length === 0 ? "OK, empty" : "FAIL"}`);
+
+  const allChapterIds = ["stats", "finance", "prob", "trig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn"];
+  let registryEmpty = true;
+  allChapterIds.forEach(id => { if (examQuestionsForChapter(id).length) registryEmpty = false; });
+  tick(registryEmpty, "js/exam/index.js's registry has zero questions in every chapter");
+  lines.push(`registry question counts, every chapter: ${allChapterIds.map(id => `${id}=${examQuestionsForChapter(id).length}`).join(", ")} — ${registryEmpty ? "OK, all empty" : "FAIL"}`);
+
+  tick(examTopicsForChapter("stats").length === 0, "examTopicsForChapter derives zero topics from an empty chapter");
+  lines.push(`examTopicsForChapter("stats") with nothing registered: [${examTopicsForChapter("stats").map(t => t.id).join(",")}] — ${examTopicsForChapter("stats").length === 0 ? "OK" : "FAIL"}`);
+
+  tick(typeof EXAM.xpPerQuestion === "number" && typeof EXAM.goldPerQuestion === "number", "js/config.js EXAM block has numeric xpPerQuestion/goldPerQuestion");
+  lines.push(`EXAM block: xpPerQuestion=${EXAM.xpPerQuestion}, goldPerQuestion=${EXAM.goldPerQuestion}`);
+
+  say("registryChecks", lines);
+}
+
+/* ============================================================
+   PART 3 — hub navigation: flag OFF first (real, unmodified
+   EXAM_CHAPTERS), then forced ON in-harness (EXAM_CHAPTERS is a plain
+   array — every importer, including js/screens.js, shares the SAME
+   array object, so pushing onto it here is visible there too, without
+   ever editing js/config.js's shipped value).
+   ============================================================ */
+{
+  const lines = [];
+  const host = document.getElementById("harnessHost");
+
+  function renderCurrent(app) {
+    clear(host);
+    if (app.screen === "hub") renderHub(app, host);
+    else if (app.screen === "examChapter") renderExamChapter(app, host, app.params);
+    else if (app.screen === "examTopic") renderExamTopic(app, host, app.params);
+  }
+  function makeTestApp() {
+    const app = {
+      state: { xp: 0, gold: 0, levelInfo: { level: 1, intoLevel: 0, nextCost: 300 } },
+      screen: "hub", params: {},
+      go(screen, params) { app.screen = screen; app.params = params || {}; renderCurrent(app); },
+      async refresh() { return true; },
+    };
+    return app;
+  }
+
+  // ---- flag OFF: hub must be pixel-identical to before this build — no
+  // Exam Focus tab button anywhere, no way to reach it. ----
+  const appOff = makeTestApp();
+  renderCurrent(appOff);
+  const tabsOff = [...host.querySelectorAll(".hub-tab")].map(b => b.textContent);
+  const hasExamTabOff = tabsOff.some(t => /exam focus/i.test(t));
+  tick(!hasExamTabOff, "flag OFF: no 'Exam Focus' tab button in the hub");
+  lines.push(`flag OFF — hub tabs: [${tabsOff.join(" | ")}] — Exam Focus present? ${hasExamTabOff} (want false)`);
+  const cardsOff = host.querySelectorAll(".chapter-cards .ch-card, .chapter-cards .cg-card").length;
+  tick(cardsOff > 0, "flag OFF: hub still renders its normal chapter cards (nothing broken by this build)");
+  lines.push(`flag OFF — chapter cards rendered: ${cardsOff} (want > 0, proves the hub itself still works)`);
+
+  // ---- flag ON, forced: the tab appears, its chapter card navigates into
+  // examChapter, which — with an empty registry — shows the "no topics
+  // yet" placeholder rather than crashing. ----
+  EXAM_CHAPTERS.push("stats");
+  const appOn = makeTestApp();
+  renderCurrent(appOn);
+  const tabsOn = [...host.querySelectorAll(".hub-tab")].map(b => b.textContent);
+  const examTabBtn = [...host.querySelectorAll(".hub-tab")].find(b => /exam focus/i.test(b.textContent));
+  tick(!!examTabBtn, "flag ON (forced): 'Exam Focus' tab button now present");
+  lines.push(`flag ON — hub tabs: [${tabsOn.join(" | ")}] — Exam Focus present? ${!!examTabBtn}`);
+
+  if (examTabBtn) examTabBtn.click();
+  const examCard = host.querySelector(".chapter-cards .ch-card");
+  tick(!!examCard && /statistics/i.test(examCard.textContent), "flag ON: clicking the Exam Focus tab shows the flagged chapter's card");
+  lines.push(`exam chapter card rendered: ${examCard ? examCard.querySelector("h2").textContent.trim() : "(none)"}`);
+
+  if (examCard) examCard.querySelector("button").click();
+  tick(appOn.screen === "examChapter" && appOn.params.chapterId === "stats", "clicking the chapter card navigates to examChapter with the right chapterId");
+  const placeholder = host.querySelector(".card p");
+  tick(!!placeholder && /no topics/i.test(placeholder.textContent), "examChapter screen shows the empty-registry placeholder rather than crashing");
+  lines.push(`examChapter screen (empty registry) placeholder: "${placeholder ? placeholder.textContent : "(missing)"}"`);
+
+  const backBtn = host.querySelector(".back");
+  if (backBtn) backBtn.click();
+  tick(appOn.screen === "hub", "the back button on examChapter returns to the hub");
+  lines.push(`back button navigation: screen is now "${appOn.screen}" (want "hub")`);
+
+  EXAM_CHAPTERS.length = 0; // restore — leave the shared array exactly as shipped for anything else on this page
+
+  clear(host);
+  say("hubChecks", lines);
+}
+
+/* ============================================================
+   PART 4 — the part player, driven directly against the stub (per
+   js/exam-play.js's own documented harness contract — it is NOT
+   registered, so navigation can never reach it; only a direct call, or
+   the real registry once a seeding session lands, can). Real session,
+   real js/api.js singleton (forced local by the inline script at the top
+   of this page), real js/local-backend.js round trip.
+   ============================================================ */
+{
+  const lines = [];
+  const host = document.getElementById("harnessHost");
+  const uname = "verify_exam_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(uname, "Verify Exam", "pw12");
+  setSession(uname, "pw12");
+
+  const before = await api.getState(uname, "pw12");
+  tick(before.ok && before.xp === 0 && before.gold === 0, "fresh test student starts at 0 xp / 0 gold");
+  lines.push(`fresh student: xp=${before.xp}, gold=${before.gold}`);
+
+  const chapter = chapterById("stats");
+  const app = { state: before, go() {}, async refresh() { app.state = await api.getState(uname, "pw12"); } };
+
+  clear(host);
+  renderExamPlay(app, host, { chapter, question: stubQuestion, accent: "#3aa0ff" });
+  // renderExamPlay kicks an async loadProgress() — let it settle before reading the DOM.
+  await new Promise(r => setTimeout(r, 30));
+
+  function btnByText(text) { return [...host.querySelectorAll("button")].find(b => b.textContent.trim() === text); }
+  function activeCard() { return host.querySelector(".exam-part.active"); }
+
+  // ---- opener + first part ----
+  tick(!!host.querySelector(".exam-opener"), "pen-and-paper opener line is rendered");
+  const a1 = activeCard();
+  tick(!!a1 && a1.querySelector(".exam-part-id").textContent.includes("a"), "part (a) is the active part on first load");
+  tick(!a1.querySelector(".exam-memo"), "part (a) shows no memo before it's revealed");
+  lines.push(`initial state: active part = ${a1 && a1.querySelector(".exam-part-id").textContent}, memo shown? ${!!(a1 && a1.querySelector(".exam-memo"))} (want false)`);
+
+  // ---- "I'm stuck" never advances/records anything ----
+  const stuckBtn = btnByText("I'm stuck, give me a hint");
+  tick(!!stuckBtn, "the stuck button is present with the exact copy from the brief");
+  stuckBtn.click();
+  const stateAfterHint = await api.examState(uname, "pw12");
+  tick(!stateAfterHint.progress["harness.stub.q1"], "clicking 'I'm stuck' records NOTHING server-side (hints are local-only)");
+  tick(!!activeCard().querySelector(".exam-hint"), "the hint text is now visible inline");
+  tick(activeCard().querySelector(".exam-part-id").textContent.includes("a"), "part (a) is STILL the active part after viewing the hint (no lockout, no advance)");
+  lines.push(`stuck/hint: server progress after hint = ${JSON.stringify(stateAfterHint.progress)} (want {}), still on part (a)`);
+
+  // ---- reveal (a): "Done!" pays nothing yet (not the last part) ----
+  const done1 = btnByText("Done! Show me the answer");
+  tick(!!done1, "the done button carries the exact copy from the brief");
+  const doneBtnDisabledDuringAwait = (() => { done1.click(); return done1.disabled; })();
+  tick(doneBtnDisabledDuringAwait, "the Done button disables itself BEFORE the await resolves (double-submit rule)");
+  await new Promise(r => setTimeout(r, 30));
+
+  tick(!!host.querySelector(".exam-memo-line"), "part (a)'s memo now renders after Done");
+  const aTicks = host.querySelectorAll(".exam-part:nth-of-type(1) .exam-tick, .exam-memo .exam-tick").length;
+  const midProgress = await api.examState(uname, "pw12");
+  const row1 = midProgress.progress["harness.stub.q1"];
+  tick(!!row1 && row1.partsOpened.length === 1 && row1.partsOpened[0] === "a" && row1.completed === false, "server recorded exactly 1 part opened ('a'), not yet completed");
+  const midXp = (await api.getState(uname, "pw12")).xp;
+  tick(midXp === 0, "no XP paid yet — only 1 of 4 parts revealed");
+  lines.push(`after revealing (a): server partsOpened=${JSON.stringify(row1 && row1.partsOpened)}, completed=${row1 && row1.completed}, xp=${midXp} (want 0)`);
+
+  tick(activeCard() && activeCard().querySelector(".exam-part-id").textContent.includes("b"), "part (b) is now the active part");
+
+  // ---- EN/AF toggle flips the CURRENT active part's prompt text ----
+  const promptEnB = activeCard().querySelector(".exam-part-prompt").textContent;
+  const langBtn = host.querySelector(".exam-lang-btn");
+  langBtn.click();
+  const promptAfB = activeCard().querySelector(".exam-part-prompt").textContent;
+  tick(promptEnB !== promptAfB, "toggling EN/AF changes the rendered prompt text");
+  tick(getExamLang() === "af", "the toggle persisted to localStorage (mhq.examLang)");
+  langBtn.click(); // back to EN for the rest of this run
+  tick(getExamLang() === "en", "toggling back to EN persists too");
+  lines.push(`EN/AF toggle: EN prompt ≠ AF prompt (${promptEnB !== promptAfB}), persisted via getExamLang()`);
+
+  // ---- reveal (b) and (c), then the ★ level-4 note on (d) ----
+  btnByText("Done! Show me the answer").click();
+  await new Promise(r => setTimeout(r, 30));
+  btnByText("Done! Show me the answer").click();
+  await new Promise(r => setTimeout(r, 30));
+
+  const dCard = activeCard();
+  tick(!!dCard && dCard.querySelector(".exam-part-id").textContent.includes("d"), "part (d) — the level-4 part — is now active");
+  tick(!!dCard.querySelector(".exam-star"), "★ badge renders on the level-4 part");
+  tick(!!dCard.querySelector(".exam-star-note"), "'bank the earlier marks first' note renders on the level-4 part");
+  const nonStarParts = [...host.querySelectorAll(".exam-part")].filter(c => c !== dCard);
+  tick(nonStarParts.every(c => !c.querySelector(".exam-star")), "★ does NOT render on any non-level-4 part");
+  lines.push(`level-4 handling: ★ on (d) only = ${!!dCard.querySelector(".exam-star") && nonStarParts.every(c => !c.querySelector(".exam-star"))}`);
+
+  // ---- marking-laws footer + esplain toggle, on an already-revealed part ----
+  const firstMemo = host.querySelector(".exam-memo");
+  tick(!!firstMemo.querySelector(".exam-laws"), "the two marking laws print with the memo");
+  tick(!!firstMemo.querySelector(".exam-memo-framing"), "her framing line ('grab your pen…') shows on the first-ever revealed memo");
+  const esBtn = firstMemo.querySelector(".exam-esplain-btn");
+  tick(!!esBtn && esBtn.textContent.includes("Esplain"), "the Esplain 🤔 button uses her exact coined term (not translated/'fixed')");
+  esBtn.click();
+  // esBtn.click() triggers a full redraw() (clear + rebuild) inside
+  // renderExamPlay — `firstMemo` is now a DETACHED reference to the old
+  // DOM, so re-query fresh from `host` rather than reusing it.
+  tick(!!host.querySelector(".exam-memo .exam-esplain"), "Esplain reveals the plain-words walkthrough on click");
+
+  // ---- reveal (d): the LAST part — this is the pay-out ----
+  const beforeLastXp = (await api.getState(uname, "pw12")).xp;
+  btnByText("Done! Show me the answer").click();
+  await new Promise(r => setTimeout(r, 40));
+
+  const finalState = await api.examState(uname, "pw12");
+  const finalRow = finalState.progress["harness.stub.q1"];
+  tick(!!finalRow && finalRow.completed === true && finalRow.partsOpened.length === 4, "server marks the question completed with all 4 parts recorded");
+  const afterState = await api.getState(uname, "pw12");
+  tick(afterState.xp === beforeLastXp + EXAM.xpPerQuestion, `XP increased by exactly EXAM.xpPerQuestion (${EXAM.xpPerQuestion}) on completion`);
+  tick(afterState.gold === EXAM.goldPerQuestion, `gold increased by exactly EXAM.goldPerQuestion (${EXAM.goldPerQuestion}) on completion`);
+  lines.push(`completion pay: xp ${beforeLastXp} -> ${afterState.xp} (+${EXAM.xpPerQuestion} expected), gold -> ${afterState.gold} (+${EXAM.goldPerQuestion} expected)`);
+
+  tick(!!host.querySelector(".exam-complete"), "the 'Question complete' footer renders");
+  const rewardNotice = host.querySelector(".exam-complete .result-reward");
+  tick(!!rewardNotice && rewardNotice.textContent.includes(`+${EXAM.xpPerQuestion}`), "the reward notice shows the XP just paid");
+  lines.push(`UI reward notice text: "${rewardNotice ? rewardNotice.textContent.trim() : "(missing)"}"`);
+
+  // ---- re-opening a completed question pays NOTHING (idempotent replay) ----
+  const replay = await api.examOpenPart(uname, "pw12", "harness.stub.q1", "a", 4);
+  tick(replay.ok && replay.completed === true && replay.justCompleted === false && replay.xpAwarded === 0 && replay.goldAwarded === 0, "re-opening any part of an already-completed question pays 0 xp / 0 gold");
+  const afterReplay = await api.getState(uname, "pw12");
+  tick(afterReplay.xp === afterState.xp && afterReplay.gold === afterState.gold, "xp/gold are UNCHANGED after the replayed call — paid once, ever");
+  lines.push(`replay after completion: xpAwarded=${replay.xpAwarded}, goldAwarded=${replay.goldAwarded}, xp still ${afterReplay.xp}, gold still ${afterReplay.gold}`);
+
+  // ---- idempotent re-reveal of the SAME part mid-question doesn't inflate the array ----
+  const uname2 = "verify_exam_idem_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(uname2, "Verify Idem", "pw12");
+  await api.examOpenPart(uname2, "pw12", "idem.q1", "a", 4);
+  const dup = await api.examOpenPart(uname2, "pw12", "idem.q1", "a", 4);
+  tick(dup.ok && dup.partsOpened.length === 1, "opening the SAME part id twice does not duplicate it in partsOpened");
+  lines.push(`idempotent re-reveal: partsOpened after opening 'a' twice = ${JSON.stringify(dup.partsOpened)} (want length 1)`);
+
+  clearSession();
+  clear(host);
+  say("playerChecks", lines);
+}
+
+/* ============================================================
+   PART 5 — SQL ↔ config literal cross-check (mirrors verify-store.html's
+   MOOD-block pattern). Also a light structural check on the migration
+   file (function count, search_path pins).
+   ============================================================ */
+{
+  const lines = [];
+  let sql = "";
+  try { sql = (await (await fetch("./supabase/migration-exam-focus.sql")).text()).replace(/--[^\n]*/g, ""); }
+  catch (e) { tick(false, "could not read supabase/migration-exam-focus.sql: " + e.message); }
+
+  tick(/create table if not exists public\.exam_progress/.test(sql), "migration-exam-focus.sql creates exam_progress");
+  tick(/revoke all on public\.exam_progress from anon, authenticated/.test(sql), "exam_progress is revoked from anon/authenticated (RPC-only access)");
+
+  const fnCount = (sql.match(/create or replace function/g) || []).length;
+  const spCount = (sql.match(/set search_path/g) || []).length;
+  tick(fnCount === 2, `migration-exam-focus.sql defines exactly 2 functions (mhq_exam_state, mhq_exam_open_part), got ${fnCount}`);
+  tick(spCount >= fnCount, `every function has its search_path pinned (house rule): ${spCount} pins for ${fnCount} functions`);
+  tick(/security definer/.test(sql) && (sql.match(/security definer/g) || []).length >= fnCount, "both functions are security definer");
+  tick(/_mhq_auth\(p_username, p_password\)/.test(sql), "auth goes through the shared _mhq_auth helper, like every other mhq_* RPC");
+
+  tick(new RegExp(`v_xp_gain := ${EXAM.xpPerQuestion};`).test(sql), `SQL's literal XP payout matches js/config.js EXAM.xpPerQuestion (${EXAM.xpPerQuestion})`);
+  tick(new RegExp(`v_gold_gain := ${EXAM.goldPerQuestion};`).test(sql), `SQL's literal gold payout matches js/config.js EXAM.goldPerQuestion (${EXAM.goldPerQuestion})`);
+
+  tick(/grant execute on function[\s\S]*?mhq_exam_state\(text, text\)[\s\S]*?mhq_exam_open_part/.test(sql), "both learner RPCs are explicitly granted to anon/authenticated");
+  tick(!/mhq_get_state/.test(sql), "this migration never touches mhq_get_state (kept fully independent, per the brief)");
+
+  lines.push(`functions: ${fnCount} (want 2) · search_path pins: ${spCount} · XP literal: ${EXAM.xpPerQuestion} · gold literal: ${EXAM.goldPerQuestion}`);
+  lines.push("mhq_get_state untouched: confirmed absent from this file's text.");
+
+  // schema.sql mirror — same checks, lighter touch (the migration already proved the logic).
+  let schema = "";
+  try { schema = (await (await fetch("./supabase/schema.sql")).text()); }
+  catch (e) { tick(false, "could not read supabase/schema.sql: " + e.message); }
+  tick(/create table if not exists public\.exam_progress/.test(schema), "schema.sql mirrors the exam_progress table");
+  tick(/public\.mhq_exam_state\(text, text\)/.test(schema) && /public\.mhq_exam_open_part/.test(schema), "schema.sql mirrors both RPC signatures in its GRANTS block");
+  lines.push("schema.sql: exam_progress table + both RPC grants present.");
+
+  say("sqlChecks", lines);
+}
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — see below`;
+
+if (fails.length) {
+  const pre = document.createElement("pre");
+  pre.textContent = "FAILS:\n" + fails.join("\n");
+  document.body.insertBefore(pre, banner.nextSibling);
+}
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-exam] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

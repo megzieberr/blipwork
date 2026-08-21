@@ -69,16 +69,32 @@
    care day — all household-wide, mirroring feed_count's existing shape
    (none of these RPCs has ever taken a blip-slot parameter).
 
+   EXAM FOCUS ADDITION (2026-08-21, foreman build day session C): mirrors
+   supabase/migration-exam-focus.sql (WRITTEN NOT RUN there — this file is
+   the only place either RPC currently executes). examState/examOpenPart
+   below are a straight 1:1 port of mhq_exam_state/mhq_exam_open_part —
+   same dedupe (the row's own `completed` flag), same flat pay (EXAM.
+   xpPerQuestion/goldPerQuestion from js/config.js, never a number this
+   file invents on its own), same "content-shape, not an amount" trust
+   note on totalParts. EXAM_CHAPTERS starts empty and js/exam/index.js's
+   registry starts empty, so none of this is reachable through normal
+   navigation yet either way — only verify-exam.html's local round-trip
+   test and a harness-driven exam-play.js call these two directly.
+
    DEV: globalThis.__BLIP_DEV__.skipDays(n) advances the local clock so
    sick states can be tested without waiting a week; .reset() clears it.
    ============================================================ */
 import { levelInfo, MILESTONE_LEVELS } from "./companion/level.js";
-import { BLIP, CHAPTERS, XP, MOOD } from "./config.js";
+import { BLIP, CHAPTERS, XP, MOOD, EXAM } from "./config.js";
 
 const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq.struggles", quests: "mhq.quests", meta: "mhq.meta", blips: "mhq.blips",
   // DICE-PLAN.md (session 0b, 2026-08-21): mirrors supabase's dice_plays
   // table — { [studentId]: { [chapterId]: { plays, metKinds, save } } }.
-  dicePlays: "mhq.dicePlays" };
+  dicePlays: "mhq.dicePlays",
+  // EXAM-FOCUS-PLAN.md (session 0, 2026-08-21): mirrors supabase's
+  // exam_progress table — { [studentId]: { [questionId]: { partsOpened,
+  // completed, completedAt } } }.
+  examProgress: "mhq.examProgress" };
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
@@ -1027,6 +1043,65 @@ export const LocalBackend = {
     return {
       ok: true, xpAwarded: xpGain, goldAwarded: goldGain, correct, total: save.skillIds.length,
       xp: rec.xp, gold: rec.gold, level: info.level, levelUp: info.level > oldLevel, levelInfo: info, plays: row.plays,
+    };
+  },
+
+  // ---- EXAM-FOCUS-PLAN.md: the tab's server surface (session 0,
+  // 2026-08-21). Mirrors supabase/migration-exam-focus.sql's
+  // mhq_exam_state / mhq_exam_open_part (WRITTEN, NOT RUN there — this
+  // file is the ONLY place either currently executes). exam_progress row
+  // shape here: { partsOpened, completed, completedAt }. No correctness
+  // signal anywhere — the app never marks, by design.
+  async examState(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    return { ok: true, progress: read(LS.examProgress, {})[s.id] || {} };
+  },
+  async examOpenPart(username, password, questionId, partId, totalParts) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    if (!questionId || !partId) return { ok: false, error: "bad_request" };
+    // content-shape data, not an amount — see migration-exam-focus.sql's
+    // header judgement-call note (same posture mirrored here).
+    const total = Math.max(1, Math.min(Number(totalParts) || 1, 40));
+
+    const all = read(LS.examProgress, {});
+    const forStudent = all[s.id] || (all[s.id] = {});
+    const row = forStudent[questionId] || (forStudent[questionId] = { partsOpened: [], completed: false, completedAt: null });
+
+    // the completed flag IS the dedupe — a replayed call after completion
+    // records nothing further and pays nothing (her ruling: paid once
+    // per question ever).
+    if (row.completed) {
+      return { ok: true, partsOpened: row.partsOpened.slice(), completed: true, justCompleted: false, xpAwarded: 0, goldAwarded: 0 };
+    }
+
+    if (!row.partsOpened.includes(partId)) row.partsOpened.push(partId);
+    const justCompleted = row.partsOpened.length >= total;
+
+    let xpGain = 0, goldGain = 0;
+    const stAll = read(LS.students, {});
+    const rec = stAll[s.id];
+    ensureBlipFields(rec);
+    const oldLevel = levelInfo(rec.xp).level;
+
+    if (justCompleted) {
+      row.completed = true;
+      row.completedAt = Date.now();
+      xpGain = EXAM.xpPerQuestion;
+      goldGain = EXAM.goldPerQuestion;
+      rec.xp += xpGain;
+      rec.gold += goldGain;
+      write(LS.students, stAll);
+    }
+    write(LS.examProgress, all);
+    touch(s.id);
+
+    const info = levelInfo(rec.xp);
+    return {
+      ok: true, partsOpened: row.partsOpened.slice(), completed: row.completed, justCompleted,
+      xpAwarded: xpGain, goldAwarded: goldGain,
+      xp: rec.xp, gold: rec.gold, level: info.level, levelUp: info.level > oldLevel, levelInfo: info,
     };
   },
 

@@ -74,6 +74,18 @@
 --   mhq_care each gained a mood-gain line — no other logic in any of the
 --   three changed. Growth stays cookie-only; mood is its own thing.)
 --
+--  (2026-08-21, foreman build day session C: EXAM FOCUS INFRASTRUCTURE —
+--   see migration-exam-focus.sql, WRITTEN NOT RUN as of this session.
+--   ONE new table (exam_progress: per student × question, which parts
+--   have been opened, completed, completed_at) + TWO new learner RPCs
+--   (mhq_exam_state, mhq_exam_open_part) — fully additive, mhq_get_state
+--   is deliberately UNTOUCHED (see that migration's header for why).
+--   Pays a flat 75 XP + 10 gold once a question's every part has been
+--   opened, exactly once ever — no correctness signal anywhere, by
+--   design. js/config.js's EXAM_CHAPTERS stays [] and js/exam/index.js's
+--   registry stays empty until a real paper-build session seeds content,
+--   so none of this is reachable from the client yet either way.)
+--
 --  AUTH MODEL (roster login, like Circle Quest):
 --   • The teacher seeds the roster (mhq_admin_add_student, or bulk insert);
 --     learners never create their own account (mhq_signup is gone).
@@ -264,6 +276,24 @@ create table if not exists public.dice_plays (
 );
 create index if not exists dice_plays_student_idx on public.dice_plays (student_id);
 
+-- EXAM-FOCUS-PLAN.md (session 0, 2026-08-21) — the exam focus tab's ONLY
+-- server-side state: per student × question, which part ids have been
+-- revealed, whether the question is complete, and when. No correctness
+-- signal anywhere — the app never marks, see migration-exam-focus.sql's
+-- header for the full design note. ⚠️ WRITTEN, NOT RUN on live; this is
+-- the from-scratch mirror only.
+create table if not exists public.exam_progress (
+  student_id    uuid not null references public.students(id) on delete cascade,
+  question_id   text not null,
+  parts_opened  jsonb not null default '[]'::jsonb,
+  completed     boolean not null default false,
+  completed_at  timestamptz,
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now(),
+  primary key (student_id, question_id)
+);
+create index if not exists exam_progress_student_idx on public.exam_progress (student_id);
+
 -- ---------- lock everything down ----------
 alter table public.students   enable row level security;
 alter table public.blips      enable row level security;
@@ -274,7 +304,8 @@ alter table public.app_config enable row level security;
 alter table public.shop_items enable row level security;
 alter table public.milestone_grants enable row level security;
 alter table public.dice_plays enable row level security;
-revoke all on public.students, public.blips, public.quests, public.progress, public.struggles, public.app_config, public.shop_items, public.milestone_grants, public.dice_plays from anon, authenticated;
+alter table public.exam_progress enable row level security;
+revoke all on public.students, public.blips, public.quests, public.progress, public.struggles, public.app_config, public.shop_items, public.milestone_grants, public.dice_plays, public.exam_progress from anon, authenticated;
 
 -- drop old-version functions first. Some are recreated below with renamed
 -- parameters (p_name -> p_username), which create-or-replace cannot do.
@@ -1347,6 +1378,93 @@ begin
 end; $$;
 
 -- ============================================================
+--  EXAM FOCUS INFRASTRUCTURE (session C, 2026-08-21) — see
+--  migration-exam-focus.sql for the full design note, the total_parts
+--  judgement call, and why mhq_get_state is deliberately untouched.
+--  Body below is that migration's, byte-for-byte.
+-- ============================================================
+create or replace function public.mhq_exam_state(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_progress jsonb;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  select coalesce(jsonb_object_agg(question_id, jsonb_build_object(
+            'partsOpened', parts_opened, 'completed', completed, 'completedAt', completed_at)), '{}'::jsonb)
+    into v_progress from public.exam_progress where student_id = v_sid;
+
+  return jsonb_build_object('ok', true, 'progress', v_progress);
+end; $$;
+
+create or replace function public.mhq_exam_open_part(
+  p_username text, p_password text, p_question_id text, p_part_id text, p_total_parts int)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_row record; v_parts jsonb; v_total int;
+        v_now_completed boolean := false;
+        v_xp_gain int := 0; v_gold_gain int := 0;
+        v_old_xp int; v_new_xp int; v_new_gold int; v_old_lvl int; v_new_lvl int;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  if p_question_id is null or p_question_id = '' or p_part_id is null or p_part_id = '' then
+    return jsonb_build_object('ok', false, 'error', 'bad_request');
+  end if;
+  v_total := greatest(1, least(coalesce(p_total_parts, 1), 40));
+
+  insert into public.exam_progress (student_id, question_id, parts_opened, updated_at)
+  values (v_sid, p_question_id, '[]'::jsonb, now())
+  on conflict (student_id, question_id) do nothing;
+
+  select * into v_row from public.exam_progress
+   where student_id = v_sid and question_id = p_question_id for update;
+
+  if v_row.completed then
+    return jsonb_build_object('ok', true, 'partsOpened', v_row.parts_opened,
+      'completed', true, 'justCompleted', false, 'xpAwarded', 0, 'goldAwarded', 0);
+  end if;
+
+  v_parts := v_row.parts_opened;
+  if not (v_parts @> to_jsonb(p_part_id)) then
+    v_parts := v_parts || to_jsonb(p_part_id);
+  end if;
+
+  v_now_completed := (jsonb_array_length(v_parts) >= v_total);
+
+  if v_now_completed then
+    v_xp_gain := 75;    -- EXAM.xpPerQuestion (js/config.js)
+    v_gold_gain := 10;  -- EXAM.goldPerQuestion (js/config.js)
+  end if;
+
+  update public.exam_progress
+     set parts_opened = v_parts, completed = v_now_completed,
+         completed_at = case when v_now_completed then now() else completed_at end,
+         updated_at = now()
+   where student_id = v_sid and question_id = p_question_id;
+
+  if v_xp_gain > 0 or v_gold_gain > 0 then
+    select xp into v_old_xp from public.students where id = v_sid for update;
+    update public.students
+       set xp = xp + v_xp_gain, gold = gold + v_gold_gain, last_active_at = now()
+     where id = v_sid
+     returning xp, gold into v_new_xp, v_new_gold;
+    v_old_lvl := (public._mhq_level(v_old_xp)->>'level')::int;
+    v_new_lvl := (public._mhq_level(v_new_xp)->>'level')::int;
+  else
+    select xp, gold into v_new_xp, v_new_gold from public.students where id = v_sid;
+    v_old_lvl := (public._mhq_level(v_new_xp)->>'level')::int;
+    v_new_lvl := v_old_lvl;
+    update public.students set last_active_at = now() where id = v_sid;
+  end if;
+
+  return jsonb_build_object('ok', true, 'partsOpened', v_parts,
+    'completed', v_now_completed, 'justCompleted', v_now_completed,
+    'xpAwarded', v_xp_gain, 'goldAwarded', v_gold_gain,
+    'xp', v_new_xp, 'gold', v_new_gold, 'level', v_new_lvl,
+    'levelUp', (v_new_lvl > v_old_lvl), 'levelInfo', public._mhq_level(v_new_xp));
+end; $$;
+
+-- ============================================================
 --  GRANTS — the publishable/anon key may only EXECUTE the API
 -- ============================================================
 grant execute on function
@@ -1375,7 +1493,10 @@ grant execute on function
   public.mhq_admin_add_student(text, text, text, text),
   -- DICE-PLAN.md, session 0b
   public.mhq_dice_save(text, text, text, jsonb),
-  public.mhq_submit_dice(text, text, text)
+  public.mhq_submit_dice(text, text, text),
+  -- EXAM-FOCUS-PLAN.md, session C
+  public.mhq_exam_state(text, text),
+  public.mhq_exam_open_part(text, text, text, text, integer)
 to anon, authenticated;
 
 -- ============================================================

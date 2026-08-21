@@ -1,0 +1,74 @@
+/* ============================================================
+   EXAM FOCUS — the registry: per-chapter arrays of seeded questions
+   (EXAM-FOCUS-PLAN.md, session 0 infrastructure build, 2026-08-21).
+   ------------------------------------------------------------
+   Every array starts EMPTY — content is seeded topic by topic in later
+   build sessions (EXAM-FOCUS-PLAN.md's build order: session 1 seeds the
+   pilot topic, session 2+ goes on from there). One key per js/config.js
+   CHAPTERS[].id — Euclidean geometry has no key here on purpose (Circle
+   Quest already covers it, her ruling — see the plan's "NO Euclidean
+   chapter" line).
+
+   The HARNESS-ONLY stub (js/exam/_harness-stub.js) is deliberately NOT
+   imported or registered here — it must stay unreachable through normal
+   navigation even once a chapter's real questions land. Only
+   verify-exam.html imports it, driving js/exam-play.js directly with it.
+
+   Nothing in this file is gated by js/config.js's EXAM_CHAPTERS — that
+   flag controls NAVIGATION (whether a chapter's exam-focus screens are
+   reachable from the hub), not which questions exist. A chapter could in
+   principle be seeded here before its flag flips on; the flag is what
+   makes it learner-visible (same relationship DICE_CHAPTERS has with
+   js/quests/dice-pools.js).
+   ============================================================ */
+import { validateQuestion } from "./_schema.js";
+
+const REGISTRY = {
+  stats: [], finance: [], prob: [], trig: [], meas: [],
+  func: [], tgraph: [], analytical: [], pat: [], exp: [], eqn: [],
+};
+
+/* Every question every future seeding session adds MUST pass
+   validateQuestion() — checked once here, at import time, so a broken
+   seed fails loudly (a thrown error, in dev) rather than shipping a
+   silently-invalid question. Empty today: nothing to check yet. */
+Object.entries(REGISTRY).forEach(([chapterId, questions]) => {
+  questions.forEach(q => {
+    const { ok, issues } = validateQuestion(q);
+    if (!ok) throw new Error(`js/exam/index.js: question "${q && q.id}" in chapter "${chapterId}" failed validation:\n${issues.join("\n")}`);
+    if (q.chapter !== chapterId) throw new Error(`js/exam/index.js: question "${q.id}" is registered under "${chapterId}" but declares chapter "${q.chapter}"`);
+  });
+});
+
+export function examQuestionsForChapter(chapterId) {
+  return REGISTRY[chapterId] || [];
+}
+
+export function examQuestionById(id) {
+  for (const arr of Object.values(REGISTRY)) {
+    const q = arr.find(q => q.id === id);
+    if (q) return q;
+  }
+  return null;
+}
+
+function titleCaseSlug(slug) {
+  return String(slug || "").replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/* Topic list for a chapter, derived from whatever's actually registered
+   — id + a title-cased fallback label. Real, hand-written topic labels
+   are a seeding-session concern (nothing here blocks a future session
+   from carrying a nicer label alongside the slug if that turns out to
+   be worth the extra field); until then the slug reads fine title-cased
+   ("angle-of-inclination" -> "Angle Of Inclination"). */
+export function examTopicsForChapter(chapterId) {
+  const qs = examQuestionsForChapter(chapterId);
+  const seen = new Map();
+  qs.forEach(q => { if (!seen.has(q.topic)) seen.set(q.topic, { id: q.topic, label: titleCaseSlug(q.topic) }); });
+  return [...seen.values()];
+}
+
+export function examQuestionsForTopic(chapterId, topicId) {
+  return examQuestionsForChapter(chapterId).filter(q => q.topic === topicId);
+}

@@ -3,8 +3,9 @@ import { api } from "./api.js";
 import { getSession, isLoggedIn, clearSession } from "./session.js";
 import { el, clear } from "./ui.js";
 import { renderLogin } from "./auth.js";
-import { renderHub, renderChapter, renderResults, renderDiceResults } from "./screens.js";
+import { renderHub, renderChapter, renderResults, renderDiceResults, renderExamChapter, renderExamTopic } from "./screens.js";
 import { renderPlay } from "./play.js";
+import { renderExamPlay } from "./exam-play.js";
 import { renderBlip } from "./blip.js";
 import { closeActiveTour } from "./companion/tour.js";
 import { renderGallery } from "./gallery.js";
@@ -41,7 +42,11 @@ const app = {
 
   render() {
     clear(this.root);
-    const chromeScreens = ["hub", "chapter", "blip", "gallery"];
+    // EXAM-FOCUS-PLAN.md, session 0: examChapter/examTopic are nav screens
+    // (topic list / question list), same posture as "chapter" — they get
+    // the top chrome. examPlay does NOT, matching "play" — the part player
+    // is the focused, distraction-free pen-and-paper screen (no HUD).
+    const chromeScreens = ["hub", "chapter", "blip", "gallery", "examChapter", "examTopic"];
     if (chromeScreens.includes(this.screen) && this.state) this.root.appendChild(chrome(this));
     const view = el("main", "view");
     this.root.appendChild(view);
@@ -55,6 +60,9 @@ const app = {
       case "results": (this.params && this.params.dice) ? renderDiceResults(this, view, this.params) : renderResults(this, view, this.params); break;
       case "blip": renderBlip(this, view); break;
       case "gallery": renderGallery(this, view); break;
+      case "examChapter": renderExamChapter(this, view, this.params); break;
+      case "examTopic": renderExamTopic(this, view, this.params); break;
+      case "examPlay": renderExamPlay(this, view, this.params); break;
       default: renderHub(this, view);
     }
   },

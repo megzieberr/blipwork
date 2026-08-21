@@ -49,6 +49,16 @@
                     payload additionally carries `dice`: { [chapterId]: {
                     plays, metKinds, save } }, and adminData()'s carries
                     `dicePlays`: { [chapterId]: totalPlaysAcrossClass }.
+     exam focus:  examState(u,p) — the learner's whole exam-focus progress
+                    map: { [questionId]: { partsOpened, completed,
+                    completedAt } }. NOT part of getState()'s payload —
+                    mhq_get_state is deliberately untouched by
+                    EXAM-FOCUS-PLAN.md's build (see its migration's header).
+                  examOpenPart(u,p,questionId,partId,totalParts) — records
+                    one part reveal, idempotently; pays a flat, server-side
+                    literal reward (js/config.js EXAM block) exactly once,
+                    the moment a question's every part has been opened.
+                    Takes NO xp/gold amount from the client, ever.
    ============================================================ */
 import { SupabaseBackend, hasSupabase } from "./supabase.js";
 import { LocalBackend } from "./local-backend.js";

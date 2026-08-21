@@ -1,8 +1,10 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
-import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS } from "./config.js";
+import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, EXAM_CHAPTERS } from "./config.js";
 import { questDef } from "./quests/index.js";
 import { dicePool } from "./quests/dice-pools.js";
 import { openDiceRound } from "./dice-play.js";
+import { examTopicsForChapter, examQuestionsForTopic } from "./exam/index.js";
+import { getExamLang, setExamLang, uiStr } from "./exam/lang.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
@@ -83,6 +85,13 @@ const openSet = app => new Set((app.state && app.state.openQuests) || []);
 const TABS = [
   { id: "term3", label: "Term 3", sub: "This term’s homework" },
   { id: "revision", label: "Revision", sub: "Earlier chapters to revise" },
+  // EXAM-FOCUS-PLAN.md, session 0 (2026-08-21): the tab only ever shows
+  // when at least one chapter is flagged on (js/config.js EXAM_CHAPTERS)
+  // — with the flag empty (today), the hub stays pixel-identical to
+  // before this build. NOT chapter-based the way term3/revision are (a
+  // chapter here is exam-focus content, not a quest chapter), so it's
+  // excluded from the byTerm() filter below, same as Circle Geo.
+  { id: "exam", label: "📝 Exam Focus", sub: "Real exam questions, one part at a time" },
   { id: "cgeo", label: "⭕ Circle Geo", sub: "Circle Quest" },
 ];
 let hubTab = "term3";                                   // remembered across hub visits
@@ -133,6 +142,30 @@ function circleGeoCard(app) {
   return card;
 }
 
+/* ---------------- HUB · Exam Focus tab (EXAM-FOCUS-PLAN.md, session 0)
+   ---------------- One card per flagged chapter — NOT gated by the
+   teacher's per-quest open/closed toggle the way chapterCard() above is;
+   exam focus is purely EXAM_CHAPTERS-flag-gated (her design: it's a
+   curated shelf sitting beside the quest chapters, not a quest itself).
+   Shows the topic COUNT only — "worked N of M" lives one screen deeper,
+   per topic, where it actually means something. */
+function examChapterCard(app, ch) {
+  const card = el("div", "ch-card");
+  card.style.setProperty("--cc", ch.signature);
+  card.style.setProperty("--accent", ch.signature);
+  const topics = examTopicsForChapter(ch.id);
+  card.innerHTML = `
+    <div class="ico">${ch.icon}</div>
+    <h2>${ch.name}</h2>
+    <p>${ch.blurb || ""}</p>
+    <div class="ch-meta"><span>${topics.length} topic${topics.length === 1 ? "" : "s"}</span></div>
+    <div class="ch-foot"></div>`;
+  const btn = el("button", "btn primary", "Enter chapter →");
+  btn.addEventListener("click", () => app.go("examChapter", { chapterId: ch.id }));
+  card.querySelector(".ch-foot").appendChild(btn);
+  return card;
+}
+
 export function renderHub(app, host) {
   setTheme("#3aa0ff", "#3aa0ff"); // hub neutral = the system's own electric blue
   const name = ((app.state && app.state.student && app.state.student.name) || "").split(" ")[0];
@@ -176,8 +209,12 @@ export function renderHub(app, host) {
   const byTerm = (t) => CHAPTERS.filter(ch => (ch.term || "term3") === t);
 
   // only show tabs that actually have chapters — except Circle Geo, which
-  // isn't chapter-based and always shows (CQ-BRIDGE-PLAN.md Part 2).
-  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length);
+  // isn't chapter-based and always shows (CQ-BRIDGE-PLAN.md Part 2); Exam
+  // Focus is EXAM_CHAPTERS-flag-gated instead (EXAM-FOCUS-PLAN.md, session
+  // 0) — empty today, so the tab is entirely absent, not just empty. (The
+  // `t.id === "cgeo" || byTerm(t.id).length` prefix is kept byte-for-byte
+  // — verify-store.html regex-checks that exact substring.)
+  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && EXAM_CHAPTERS.length));
   if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "term3";
 
   const tabbar = el("div", "hub-tabs");
@@ -185,6 +222,7 @@ export function renderHub(app, host) {
   const draw = () => {
     clear(cards);
     if (hubTab === "cgeo") { cards.appendChild(circleGeoCard(app)); return; }
+    if (hubTab === "exam") { CHAPTERS.filter(ch => EXAM_CHAPTERS.includes(ch.id)).forEach(ch => cards.appendChild(examChapterCard(app, ch))); return; }
     byTerm(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
   };
   tabs.forEach(t => {
@@ -269,6 +307,135 @@ export function renderChapter(app, host, params) {
     grid.appendChild(card);
   });
   host.appendChild(grid);
+}
+
+/* ---------------- EXAM FOCUS · topic list (EXAM-FOCUS-PLAN.md, session 0)
+   ---------------- tab -> CHAPTER -> topic -> question -> player. This
+   screen is the chapter step: one card per topic registered in
+   js/exam/index.js for this chapter, "N questions" up front and "worked
+   N of M" filled in after a round trip (mhq_exam_state) resolves — the
+   list never blocks its first paint on the network. EN/AF toggle lives
+   here (and on every screen deeper in the tab) and re-renders the WHOLE
+   screen on flip via app.go(), same route the card clicks already take —
+   simpler than hand-patching every localized string in place, and this
+   screen has no per-part state worth preserving across a toggle. */
+export function renderExamChapter(app, host, params) {
+  const ch = chapterById(params.chapterId);
+  if (!ch || !EXAM_CHAPTERS.includes(ch.id)) return app.go("hub");
+  setTheme(ch.signature, ch.signature);
+  const lang = getExamLang();
+  const ui = uiStr(lang);
+
+  const head = el("div", "chap-head");
+  head.innerHTML = `<div><span class="eyebrow">${ch.icon} ${ch.name}</span><h1>${ui.tabLabel}</h1></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn ghost small exam-lang-btn">${ui.langToggle}</button>
+      <button class="link-btn back" aria-label="Back">←</button>
+    </div>`;
+  head.querySelector(".back").addEventListener("click", () => app.go("hub"));
+  head.querySelector(".exam-lang-btn").addEventListener("click", () => { setExamLang(lang === "af" ? "en" : "af"); app.go("examChapter", params); });
+  host.appendChild(head);
+
+  const topics = examTopicsForChapter(ch.id);
+  if (!topics.length) {
+    host.appendChild(el("div", "card", `<p class="muted center" style="padding:20px 0">${ui.noTopicsYet}</p>`));
+    return;
+  }
+
+  const grid = el("div", "exam-topic-grid");
+  topics.forEach(topic => {
+    const qs = examQuestionsForTopic(ch.id, topic.id);
+    const card = el("div", "quest exam-topic-card");
+    card.style.setProperty("--qc", ch.signature);
+    card.innerHTML = `<h3>${topic.label}</h3><p class="muted small exam-topic-count">${qs.length} question${qs.length === 1 ? "" : "s"}</p>`;
+    card.addEventListener("click", () => app.go("examTopic", { chapterId: ch.id, topicId: topic.id }));
+    grid.appendChild(card);
+  });
+  host.appendChild(grid);
+
+  fillWorkedCounts(ch.id, topics, grid, ui);
+}
+
+async function fillWorkedCounts(chapterId, topics, grid, ui) {
+  const sess = getSession();
+  if (!sess) return;
+  let progress;
+  try {
+    const res = await api.examState(sess.username, sess.password);
+    if (!res || !res.ok) return;
+    progress = res.progress || {};
+  } catch { return; }
+  const cards = [...grid.querySelectorAll(".exam-topic-card")];
+  topics.forEach((topic, i) => {
+    const qs = examQuestionsForTopic(chapterId, topic.id);
+    const done = qs.filter(q => progress[q.id] && progress[q.id].completed).length;
+    const line = cards[i] && cards[i].querySelector(".exam-topic-count");
+    if (line) line.textContent = ui.workedOf(done, qs.length);
+  });
+}
+
+/* ---------------- EXAM FOCUS · question list ---------------- one card
+   per seeded question in this topic; a ✓ badge (mirrors .qcheck's look
+   from the quest grid) marks a question already completed. Clicking a
+   question resolves the real question OBJECT here (not just an id) and
+   hands it straight to renderExamPlay via app.go("examPlay", …) — the
+   player never has to know how to look a question up. */
+export function renderExamTopic(app, host, params) {
+  const ch = chapterById(params.chapterId);
+  if (!ch || !EXAM_CHAPTERS.includes(ch.id)) return app.go("hub");
+  const topic = examTopicsForChapter(ch.id).find(tp => tp.id === params.topicId);
+  if (!topic) return app.go("examChapter", { chapterId: ch.id });
+  setTheme(ch.signature, ch.signature);
+  const lang = getExamLang();
+  const ui = uiStr(lang);
+
+  const head = el("div", "chap-head");
+  head.innerHTML = `<div><span class="eyebrow">${ch.icon} ${ch.name}</span><h1>${topic.label}</h1></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn ghost small exam-lang-btn">${ui.langToggle}</button>
+      <button class="link-btn back" aria-label="Back">←</button>
+    </div>`;
+  head.querySelector(".back").addEventListener("click", () => app.go("examChapter", { chapterId: ch.id }));
+  head.querySelector(".exam-lang-btn").addEventListener("click", () => { setExamLang(lang === "af" ? "en" : "af"); app.go("examTopic", params); });
+  host.appendChild(head);
+
+  const questions = examQuestionsForTopic(ch.id, topic.id);
+  if (!questions.length) {
+    host.appendChild(el("div", "card", `<p class="muted center" style="padding:20px 0">${ui.noQuestionsYet}</p>`));
+    return;
+  }
+
+  const grid = el("div", "exam-question-grid");
+  questions.forEach((q, i) => {
+    const card = el("div", "quest exam-question-card");
+    card.style.setProperty("--qc", ch.signature);
+    card.innerHTML = `<div class="qn">${i + 1}</div><h3>${q.marks} marks</h3><p class="muted small">${q.parts.length} part${q.parts.length === 1 ? "" : "s"}</p>`;
+    card.addEventListener("click", () => app.go("examPlay", {
+      chapter: ch, topicId: topic.id, question: q, accent: ch.signature,
+      onBack: () => app.go("examTopic", params),
+    }));
+    grid.appendChild(card);
+  });
+  host.appendChild(grid);
+
+  fillCompletedChecks(questions, grid);
+}
+
+async function fillCompletedChecks(questions, grid) {
+  const sess = getSession();
+  if (!sess) return;
+  let progress;
+  try {
+    const res = await api.examState(sess.username, sess.password);
+    if (!res || !res.ok) return;
+    progress = res.progress || {};
+  } catch { return; }
+  const cards = [...grid.querySelectorAll(".exam-question-card")];
+  questions.forEach((q, i) => {
+    if (progress[q.id] && progress[q.id].completed && cards[i]) {
+      cards[i].insertAdjacentHTML("afterbegin", `<div class="qcheck">✓</div>`);
+    }
+  });
 }
 
 /* ---------------- RESULTS ---------------- */

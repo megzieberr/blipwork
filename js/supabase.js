@@ -109,4 +109,19 @@ export const SupabaseBackend = {
   async submitDice(username, password, chapter) {
     return rpc("mhq_submit_dice", { p_username: username, p_password: password, p_chapter: chapter });
   },
+
+  // ---- EXAM-FOCUS-PLAN.md: the tab's server surface (session 0,
+  // 2026-08-21). examOpenPart takes NO xp/gold amount — the server pays a
+  // fixed literal (js/config.js's EXAM block mirrors it for display only)
+  // the moment a question's every part has been reported opened, exactly
+  // once ever. See supabase/migration-exam-focus.sql (WRITTEN, NOT RUN).
+  async examState(username, password) {
+    return rpc("mhq_exam_state", { p_username: username, p_password: password });
+  },
+  async examOpenPart(username, password, questionId, partId, totalParts) {
+    return rpc("mhq_exam_open_part", {
+      p_username: username, p_password: password,
+      p_question_id: questionId, p_part_id: partId, p_total_parts: totalParts,
+    });
+  },
 };

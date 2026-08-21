@@ -275,3 +275,32 @@ export const MOOD = {
   cravingGain: 2,
   cookieGain: 1,
 };
+
+/* ============================================================
+   EXAM FOCUS — infrastructure build (EXAM-FOCUS-PLAN.md, session 0,
+   2026-08-21). THIS FLAG IS THE SWITCH, exactly like DICE_CHAPTERS above:
+   a chapter id only ever belongs here once BOTH real seeded questions
+   exist for it (js/exam/index.js's registry) AND Megan's phone-test green
+   light on the pilot topic (EXAM-FOCUS-PLAN.md's build order — session 1
+   seeds the pilot, session 2+ goes topic by topic). Empty today: the hub
+   grows NO Exam Focus tab, and every exam-focus screen/RPC is unreachable
+   from the client, until this list is non-empty.
+   ============================================================ */
+export const EXAM_CHAPTERS = [];
+
+/* Pay-per-completed-question, her kickoff ruling (2026-08-21): flat 75 XP +
+   10 gold, ONCE per question ever (re-opening an already-completed
+   question pays nothing — the served RPC's `completed` flag is the
+   dedupe). THIS IS A DISPLAY MIRROR ONLY, same relationship BLIP/MOOD
+   above have with their RPCs — supabase/migration-exam-focus.sql
+   (WRITTEN NOT RUN) carries the real, server-side literal amounts;
+   js/local-backend.js's offline mirror and verify-exam.html's SQL↔config
+   literal cross-check both read THIS block, never a hardcoded number of
+   their own. "Completed" = every part's memo has been revealed (the
+   client reports each part-reveal as it happens; the server derives
+   completion and pays once — there is no correctness signal, by design:
+   the app never marks the learner's own work). */
+export const EXAM = {
+  xpPerQuestion: 75,
+  goldPerQuestion: 10,
+};
