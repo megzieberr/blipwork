@@ -1,4 +1,32 @@
-# Project status — updated 2026-08-21 (FOREMAN DAY #5 ✅ SHIPPED: dice-sibling fix + 💙 MOOD/CRAVINGS + 📝 EXAM FOCUS pilot, sw v51)
+# Project status — updated 2026-08-21 (FOREMAN DAY #5 ✅ SHIPPED end to end: dice-sibling fix + 💙 MOOD/CRAVINGS + 📝 EXAM FOCUS pilot + session E rulings, sw v52)
+
+## 🔧 2026-08-21 (even later) — SESSION E: her three live-review rulings, SHIPPED (sw v52)
+
+She walked the shipped pilot on her phone the same night: dice "Try a similar
+one" **confirmed working**, mood/cravings **confirmed** ("I fed blip, it's
+adorable"), exam focus "looks amazing" — with three change rulings, built as
+session E (commit `a82f011`) and foreman-reviewed (verify-exam 130/130, my own
+walk: link lands inside eq8's real round):
+1. **English-only for now** — EN/AF toggle CUT (too much AF work without
+   proper material; AF returns next year). Schema: `af` optional; the pilot's
+   dormant AF stays; future seeding composes EN-only.
+2. **"I'm lost" reteaches** — required `lostQuest {chapter, quest}` per
+   question (pilot → eq8); a quiet link under Done/Stuck jumps into that round,
+   shown ONLY while the round is open. Exam focus never opens a closed round.
+3. **Exam focus follows the teacher's gates** — chapter eligible = build flag
+   AND ≥1 open quest (`examChapterEligible()` in screens.js, used by tab,
+   cards, both nav guards and the player). Checked live: all eq1–eq8 are open,
+   so the tab stays visible for her.
+Also her model confirmation (option A): ONE hub Exam Focus tab holding every
+chapter's paper questions, chapter → topic → question. And the plan's content
+law is corrected in **EXAM-FOCUS-PLAN.md's ADDENDUM** (read it before ANY
+exam-focus content session): content = practice-paper questions from the bank
+recipe; her built memo corpus is the method authority; EVERY chapter eligible
+— the digest-first rule stays dice-only.
+
+---
+
+# (earlier the same night)
 
 ## 🛠 2026-08-21 (late night) — foreman day #5: four sessions, reviewed + SHIPPED
 
@@ -105,26 +133,29 @@ further. verify-exam **101**, scope-wall + independent-recompute checks in.
   migration-mood-cravings.sql as the latest carrier of those function bodies.
 
 ### ⏳ Pending on Megan
-- 📱 5 min **[blocking exam focus going further]** (after the ship): Blipwork
-  → 📝 Exam Focus → Nature of Roots → work/skim one question EN and AF —
-  the vetting pass is hers (esp. the AF wording, agent-composed to her rules).
-- 📱 3 min **[blocking dice chapter 2]**: Statistics → 🎲 → get one wrong →
-  "Try a similar one" should now give the SAME concept, new numbers; also
-  close mid-round + reopen (same question returns).
-- 📱 2 min **[whenever]** (after the ship): feed Blip something and look —
-  hearts by the name, thought bubble craving, +2 on the craved food.
+- ~~dice "Try a similar one"~~ — **CONFIRMED working by her, same night.**
+- ~~mood/cravings phone look~~ — **CONFIRMED by her, same night** ("adorable").
+- 📱 3 min **[before more exam chapters ship]**: proper examiner pass on the
+  four nature-of-roots questions (EN only now) — maths, wording, memo lines.
+  Her UX verdict ("looks amazing") is in; this is the content vet.
+- 📱 1 min **[blocking dice chapter 2]**: the remaining half of the dice test —
+  close a 🎲 round mid-question, reopen, same question should return.
 - 💻 2 min **[whenever]**: the two METHODS-algebra calls (√9 = ±3 box; which
-  road first for rational exponents / surd equations).
+  road first for rational exponents / surd equations) — no longer blocking
+  exam content (memo corpus is the authority there), still worth answering.
 - 🌐 **[at go-live, not before]**: re-hide `megzieberr` in the picker (her
   ruling today: stays visible until completely done).
 
 ### Next up
-- **The ship** (this session, on her yes): apply both migrations via MCP with
-  before/after learner-row hashes + throwaway-learner smoke, bump sw v50→v51,
-  push, verify live.
-- Her pilot vetting → then more exam topics (paper-build sessions feeding the
-  shelf, topic by topic per the bank's weights).
-- Dice chapter 2 = Trig Graphs (after her phone test; needs the shared
+- **THE OVERNIGHT EXAM-CONTENT BATCH (her stated plan)**: separate session(s)
+  build exam focus content for every chapter with the paper recipe
+  (GR11-IEB-PAPER-BANK.md + survey + her built memo corpus as method
+  authority). ⚠️ Read EXAM-FOCUS-PLAN.md's ADDENDUM first — EN-only, required
+  lostQuest per question, fresh numbers, scope walls. One session per chapter;
+  suggested order: Term 3 first (stats/finance/prob/trig/meas, ~1.2–1.8M
+  tokens) then the rest (full sweep ~2.5–3.5M). Flags per chapter flip after
+  her examiner pass; the class invite stays the real gate.
+- Dice chapter 2 = Trig Graphs (after her resume phone-check; needs the shared
   Soek-die-fout mechanic coordinated with graph-quest).
 - Mood numbers retune if her phone-feel disagrees with the defaults.
 

@@ -1,5 +1,35 @@
 # EXAM-FOCUS-PLAN — the exam focus tab for Blipwork
 
+## ⚠️ ADDENDUM — 2026-08-21 late night (session E rulings; these SUPERSEDE matching lines below)
+
+Megan's live review of the shipped pilot produced four rulings. Where this
+addendum conflicts with the original text below, THE ADDENDUM WINS:
+
+1. **English-only for now.** The EN/AF toggle was built and then CUT the same
+   night (her call: too much AF work without proper material). Seed all content
+   EN-only; the schema keeps `af` optional and the pilot's dormant Afrikaans
+   stays in place. AF returns when she supplies real Afrikaans material (next
+   year, her word). The "EN+AF pairs from day one" ruling below is superseded.
+2. **"I'm lost" reteaches, it doesn't hint.** Every seeded question carries a
+   REQUIRED `lostQuest: {chapter, quest}` — the Blipwork round that teaches and
+   drills its topic (schema-enforced; the harness checks the ids exist). The
+   player shows a quiet link into that round, ONLY while the round is open —
+   exam focus never opens a closed round (her gating ruling).
+3. **Exam focus follows the teacher's gates.** A chapter's exam focus is
+   reachable only when EXAM_CHAPTERS includes it AND at least one of that
+   chapter's quests is open ("if Probability is closed, then the Probability
+   Exam Focus rounds should also be closed"). `examChapterEligible()` in
+   js/screens.js is the one shared rule.
+4. **Content = practice-paper questions; her memo corpus is the method
+   authority.** Her words: the tab is LITERALLY the questions from a practice
+   paper, shown one by one, with the colour memo structure — composed with the
+   SAME bank + recipe as her built papers (GR11-IEB-PAPER-BANK.md + survey,
+   fresh numbers always). This supersedes the "future chapters get their digest
+   before their questions are seeded" line below FOR EXAM FOCUS ONLY (the dice
+   keeps its digest-first rule): the methods shown in her built paper memos are
+   the source, so EVERY chapter is eligible, and where METHODS-algebra's two
+   open flags touch a topic, the built memos win (both roads under OR).
+
 Written 2026-08-21 from Megan's design conversation (the dice foreman day, while the
 dice infrastructure built in the background). Status: **DESIGN APPROVED, build
 scheduled for the day after the dice work finishes** — her words: "I will run that
