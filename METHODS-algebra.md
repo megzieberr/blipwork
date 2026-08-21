@@ -1125,11 +1125,11 @@ document follows her pages, and where two pages disagree the conflict is named.
 
 | # | Where | The issue | What the doc currently does |
 |---|---|---|---|
-| **F1** | `ESMEMO p05 (4a)` vs `EQ p42` | `3ˣ = −1`: the memo concludes **"undefined"**; the KNOW THE DIFFERENCE box says **"no solution"**. | Follows `EQ p42` (**no solution**). Needs her ruling. |
-| **F2** | `EXP p14` vs everywhere else | The "two answers" box says `^even√(+x) = ± answer`, `√9 = ±3`. But `T11 p03`, `REVMEMO p13`, `T23 p04` all simplify `√9 = 3`, `√4 = 2` with no `±`. | Rule recorded as: `±` only when **solving**, never when **simplifying**. Needs her confirmation. |
+| **F1** | `ESMEMO p05 (4a)` vs `EQ p42` | `3ˣ = −1`: the memo concludes **"undefined"**; the KNOW THE DIFFERENCE box says **"no solution"**. | ✅ **RULED by Megan 2026-08-21: "no solution."** Undefined is reserved for division by zero. |
+| **F2** | `EXP p14` vs everywhere else | The "two answers" box says `^even√(+x) = ± answer`, `√9 = ±3`. But `T11 p03`, `REVMEMO p13`, `T23 p04` all simplify `√9 = 3`, `√4 = 2` with no `±`. | ✅ **CONFIRMED by Megan 2026-08-21:** `±` only when **solving**, never when **simplifying** (the ± comes from the equation having two solutions — her parabola-x-intercepts picture — not from the √ symbol). |
 | **F3** | `EXP p17` | The surd laws are numbered **①②④⑤⑥** — no ③. Either a law is missing or the numbering skipped. | Recorded as-is with the gap noted. |
 | **F4** | `EXP p30` | `5ˣ = 25 → 5ˣ = 5² → x = 5`. Should be `x = 2`. | Transcribed as written and flagged. **Do not generate this example.** |
-| **F5** | `EXP p39` vs `EXP p40`; `EXP p42` vs `EXP p47` | **Two roads, both hers.** Rational exponents: reciprocal-power vs raise-then-root. Surd equations: `let K = √x` vs isolate-and-square. | Both recorded. **Her call which one the app shows first** — the other stays available as the "OR" route. |
+| **F5** | `EXP p39` vs `EXP p40`; `EXP p42` vs `EXP p47` | **Two roads, both hers.** Rational exponents: reciprocal-power vs raise-then-root. Surd equations: `let K = √x` vs isolate-and-square. | ✅ **RULED by Megan 2026-08-21: ALWAYS show both.** Reciprocal-power leads for rational exponents; `let K` substitution leads for surd equations; the other rides under OR every time (some of her kids prefer road 2 — never drop it). |
 | **F6** | `EQ p39` | `c = 6 × 7 = −42` — the sign is dropped mid-line (should be `6 × −7`). Answer is right. | Transcribed as written. |
 | **F7** | `EQ p23` | The calculator inset shows `a=1, b=−2, c=1`; the equation is `x² − 2x − 1 = 0`, so `c = −1`. | Transcribed as written, flagged. |
 | **F8** | `REVMEMO p16 (5.2)` | Exponents sum to 4, so `2⁴ = 16`; the page writes **`= 8`**. | Flagged, not used as an example. |

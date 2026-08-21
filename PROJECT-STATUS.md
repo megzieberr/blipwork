@@ -1,4 +1,60 @@
-# Project status — updated 2026-08-21 (FOREMAN DAY #5 ✅ SHIPPED end to end: dice-sibling fix + 💙 MOOD/CRAVINGS + 📝 EXAM FOCUS pilot + session E rulings, sw v52)
+# Project status — updated 2026-08-22 early hours (📝 EXAM FOCUS SPEC CORRECTED + OVERNIGHT RUN #1 ✅ DONE, local commit only)
+
+## ⚖️ 2026-08-21 LATE NIGHT — THE CORRECTIONS SESSION (read EXAM-FOCUS-PLAN.md's Corrections before ANY exam work; it SUPERSEDES the session-E head below where they clash)
+
+Megan came in in tears after a day of sessions defending "rulings" SHE NEVER MADE.
+Direct hearing with Fable → EXAM-FOCUS-PLAN.md rewritten. The three corrections,
+now law: **(1) "NO Euclidean chapter" was never her ruling** — CQ owns circle-geo
+drills, but Euclidean EXAM questions belong in Exam Focus (diagrams via a port of
+CQ's `engine.js`, which already has `o.hl` marker-pen highlighting; tap-interactivity
+banked for next year). **(2) No "digest-first rule" ever existed — exam focus AND
+dice** (the session-E note "digest-first stays dice-only" below is superseded) —
+her methods govern exactly three chapters via files that all already exist:
+algebra `METHODS-algebra.md`, finance `FINANCE-METHOD.md`, functions
+`graph-quest\reference\GR11-FUNCTIONS-NOTES-DIGEST.md`. Everything else: standard
+Gr11 methods, her memo STYLE universal. **(3) Per-question vetting gate REMOVED** —
+weeks of Gr12/physci papers proved the engine; the harness is the gate, she
+spot-checks at will. Also ruled: one-pipeline-two-outputs (print paper + seeded
+modules; "by topic" + "practice paper" doors), 5 questions/topic to start, Sept
+scope first, ENGLISH ONLY incl. print (AF = December), overnight sessions are the
+standing production mode. Her three METHODS flag answers recorded in that file:
+F1 no solution · F2 ± only when solving · F5 both roads, hers leading.
+
+## 🌙 2026-08-22 (early hours) — OVERNIGHT RUN #1, Fable foreman + 2 Opus writers ✅
+
+Full report: `OVERNIGHT-1-REPORT.md` (start there). Delivered: **Sept T1 + T2
+practice tests** (50 marks each, QP + colour memo PDFs + blueprints + re-runnable
+verify scripts) in `Desktop\Eksamen Vraestelle\Gr11 IEB Nov\Sept Practice\`, and
+**17 exam modules in `js/exam/`, all UNREGISTERED** (5 = T1 paper, 4 = T2
+non-Euclidean, 6 fresh top-ups incl. nature-of-roots #5 on the perfect-square-Δ
+skeleton; 2 Euclidean modules + CQ diagram specs wait in
+`js/exam/_pending-engine-port/`). Every number derived twice by independent routes;
+module harness 325/325; foreman re-derived both papers by hand. One print-memo digit
+fixed (83,4466→83,4465, final answer was always right). ⚠️ Durable finds: **nothing
+in the app teaches reductions/general solutions** (trig chapter is 2D-trig only) —
+2 trig modules carry safe lostQuest placeholders (verified: degrades to no link,
+never a throw); **no euclid chapter exists** and `examChapterEligible()` requires an
+open quest, so Euclidean seeding needs her ruling; `js/exam/index.js`'s header still
+carries the stale "NO Euclidean, her ruling" comment — fix on registration day.
+
+### ⏳ Pending on Megan (this run)
+- 💻 2 min **[blocks Euclidean seeding]**: pick the Euclidean home (small euclid
+  chapter vs gate exception) — see OVERNIGHT-1-REPORT.
+- 💻 1 min **[blocks 2 reteach links]**: want reduction/general-solution drill
+  rounds built, or ship those two questions linkless?
+- 🖨 whenever: print the two papers (say if trig graphs should swap into T2 — a
+  5-mark swap is pre-designed — or if the folder should move to Graad 11 Curro).
+
+### Next up
+- Day session: seed + register the 15 non-Euclidean modules (file headers carry the
+  exact steps; 6 pilot-era harness assertions need updating).
+- Day build: port CQ engine.js + wire the 2 pending Euclidean modules (2 known gaps
+  in their README). Then practice-paper mode UI.
+- Overnight #2: menu at the bottom of OVERNIGHT-1-REPORT.md.
+
+---
+
+# (previous head) Project status — updated 2026-08-21 (FOREMAN DAY #5 ✅ SHIPPED end to end: dice-sibling fix + 💙 MOOD/CRAVINGS + 📝 EXAM FOCUS pilot + session E rulings, sw v52)
 
 ## 🔧 2026-08-21 (even later) — SESSION E: her three live-review rulings, SHIPPED (sw v52)
 
