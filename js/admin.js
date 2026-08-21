@@ -260,7 +260,11 @@ function questSection(quests) {
     return block;
   }
 
-  CHAPTERS.forEach(ch => { const block = buildChapterBlock(ch); if (block) sec.appendChild(block); });
+  // Wide view (2026-08-21): chapter blocks live in a grid so they sit next
+  // to each other as compact cards instead of full-width stacked strips.
+  const grid = el("div", "adm-qgrid");
+  sec.appendChild(grid);
+  CHAPTERS.forEach(ch => { const block = buildChapterBlock(ch); if (block) grid.appendChild(block); });
 
   const otherIds = quests.map(q => q.quest_id).filter(id => !KNOWN_QUEST_IDS.has(id));
   if (otherIds.length) {
@@ -269,7 +273,7 @@ function questSection(quests) {
     const list = el("div", "adm-qlist");
     otherIds.forEach(id => list.appendChild(questRow(id)));
     block.appendChild(list);
-    sec.appendChild(block);
+    grid.appendChild(block);
   }
 
   return sec;

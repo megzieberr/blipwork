@@ -42,9 +42,13 @@
   .adm-inactive{color:var(--warn)}
   .btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
   .btn.danger:hover{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--panel))}
-  /* quests grouped by chapter — Open all / Close all per cluster (session 5) */
-  .adm-qchap{margin-top:16px;padding-top:14px;border-top:1px solid var(--brd)}
-  .adm-qchap:first-of-type{margin-top:10px;padding-top:0;border-top:none}
+  /* quests grouped by chapter — Open all / Close all per cluster (session 5).
+     2026-08-21 wide view: chapters sit NEXT TO each other as compact cards
+     (her ask — full-width rows put every toggle a screen away from its
+     label and made the section endless). */
+  .adm-qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:start;margin-top:10px}
+  .adm-qchap{margin:0;padding:12px 14px;border:1px solid var(--brd);border-radius:var(--r-md);background:rgba(11,20,40,.35)}
+  .adm-qchap .adm-qrow{padding:7px 0}
   .adm-qchead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
   .adm-qctitle{font-family:var(--font-display);font-weight:600;font-size:15px}
   .adm-qcount{margin-left:2px}
