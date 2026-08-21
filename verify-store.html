@@ -141,33 +141,76 @@ for (const [id, def] of Object.entries(ACCESSORIES)) {
   say(`Tripo PNG items: ${pngItems.length - missing.length}/${pngItems.length} present`);
 }
 
-/* ---------- 3. the free tier really does cover every slot ---------- */
+/* ---------- 3. every slot's cheapest item is real but day-one-affordable
+   ----------
+   REPLACES the old "every slot has a free level-1 item" check — Megan's
+   ruling, 2026-08-06 (priced 2026-08-21): "nothing may be free once the
+   kids are playing." No active cosmetic may be priced 0 any more; each
+   slot's cheapest item must still sit at level 1 (so a level-1 learner can
+   fill every slot) and at <=15💎 (a round pays a flat 10💎, an early Circle
+   Quest collect pays ~170-400💎 once — 8-15 is real but affordable on day
+   one). Do not "fix" this back — the old free-tier invariant is gone on
+   purpose. See supabase/migration-price-the-free-tier.sql. */
 for (const slot of COSMETIC_SLOTS) {
   const inSlot = shop.filter((it) => it.slot === slot);
   tick(inSlot.length >= 2, `slot "${slot}" sells ${inSlot.length} item(s) — the point of this work was a real choice in every slot`);
-  const free = inSlot.filter((it) => it.price === 0 && it.minLevel === 1);
-  tick(free.length >= 1, `slot "${slot}" has no free level-1 item — a new learner can't fill it`);
+  tick(inSlot.every((it) => it.price > 0), `slot "${slot}" still sells a free (price 0) cosmetic — nothing may be free once kids are playing`);
+  const cheapest = inSlot.reduce((a, b) => (b.price < a.price ? b : a));
+  tick(cheapest.minLevel === 1, `slot "${slot}"'s cheapest item (${cheapest.id}) isn't level 1 — a new learner can't fill it`);
+  tick(cheapest.price <= 15, `slot "${slot}"'s cheapest item (${cheapest.id}) is ${cheapest.price}💎 — above the 8-15 day-one-affordable band`);
 }
 say(`slots: ${COSMETIC_SLOTS.map((s) => `${SLOT_LABELS[s]} ${shop.filter((i) => i.slot === s).length}`).join(" · ")}`);
+
+/* ---------- 3b. per-slot display order is ascending by price ----------
+   The "free tier" complaint (PROJECT-STATUS "Next up" #4) was seven "Free"
+   labels stacked at the top of every shop tab. LocalBackend carries no
+   explicit `sort` column — the shop array's OWN declaration order is its
+   display order — so this checks the actual thing a learner would see:
+   scrolling a slot tab never gets cheaper after it gets pricier. */
+for (const slot of COSMETIC_SLOTS) {
+  const inSlot = shop.filter((it) => it.slot === slot);
+  for (let i = 1; i < inSlot.length; i++) {
+    tick(inSlot[i].price >= inSlot[i - 1].price,
+      `slot "${slot}" is not ascending by price: "${inSlot[i - 1].id}" (${inSlot[i - 1].price}) is shown before "${inSlot[i].id}" (${inSlot[i].price})`);
+  }
+}
 
 /* ---------- 4. rarity bands ---------- */
 tick(itemRarity(0) === "free" && itemRarity(50) === "common" && itemRarity(120) === "rare" && itemRarity(200) === "rare",
   "itemRarity bands are wrong");
+// itemRarity keys "free" strictly on price === 0 (furniture defaults still
+// use that band; nothing to change there). Since section 3 already proved
+// no active cosmetic is priced 0, no cosmetic can render "Free" any more —
+// this re-proves it through the actual band function instead of just price.
+tick(shop.every((it) => itemRarity(it.price) !== "free"), "a cosmetic still renders the 'Free' rarity label");
 const rare = shop.filter((it) => itemRarity(it.price) === "rare");
 tick(rare.every((it) => it.minLevel >= 6), "a rare item is buyable below level 6");
 say(`rares: ${rare.map((r) => `${r.id}(L${r.minLevel}/${r.price})`).join(", ")}`);
+// gold-shades: glasses' first rare-band item this session (was 85💎, never
+// rare) — confirm it actually landed in the band, not just above 120 in name.
+const goldShades = shop.find((it) => it.id === "gold-shades");
+tick(!!goldShades && goldShades.price === 130 && goldShades.minLevel === 8, `gold-shades should be 130💎/L8, got ${goldShades && goldShades.price}💎/L${goldShades && goldShades.minLevel}`);
+tick(!!goldShades && itemRarity(goldShades.price) === "rare", "gold-shades did not land in the rare band");
+const butterflyWing = shop.find((it) => it.id === "butterfly-wing");
+tick(!!butterflyWing && butterflyWing.price === 60 && butterflyWing.minLevel === 4, `butterfly-wing should be 60💎/L4, got ${butterflyWing && butterflyWing.price}💎/L${butterflyWing && butterflyWing.minLevel}`);
 
-/* ---------- 5. free items must not be treasure-box loot ---------- */
-// The box pool is `price > 0 && minLevel <= level && !owned`. Rebuilt here
-// from the same payload the backend filters, so a free item creeping back
-// into the pool shows up as a failure rather than as a sad box on a phone.
-const freeIds = new Set(shop.filter((it) => it.price === 0).map((it) => it.id));
-tick(freeIds.size === COSMETIC_SLOTS.length,
-  `expected one free item per slot (${COSMETIC_SLOTS.length}), found ${freeIds.size}`);
+/* ---------- 5. every active cosmetic is loot-eligible (Megan's ruling,
+   2026-08-06 / priced 2026-08-21) ----------
+   REPLACES the old "free items excluded from loot pool" check — there is
+   no free item left to exclude. mhq_open_box's homework-chest pool is
+   `price > 0 && minLevel <= level`; since every active cosmetic is now
+   priced, that guard is permanently true for cosmetics — INTENDED, not
+   dead code (see the migration header): every ex-free item is now
+   loot-eligible with no code change. The milestone rare pool (price >=
+   120) gains gold-shades the same way. */
+tick(shop.every((it) => it.price > 0), "an active cosmetic is priced 0 — it should have been loot-ineligible and now isn't");
 const levelOnePool = shop.filter((it) => it.price > 0 && it.minLevel <= 1);
-tick(levelOnePool.every((it) => !freeIds.has(it.id)), "a free item is inside the level-1 loot pool");
+tick(levelOnePool.length === shop.filter((it) => it.minLevel <= 1).length,
+  "a level-1 cosmetic is missing from the loot-eligible pool (price>0 should now cover all of them)");
 tick(levelOnePool.length > 0, "the level-1 loot pool is empty — every box would pay gold instead");
-say(`level-1 loot pool: ${levelOnePool.length} paid items (${levelOnePool.map((i) => i.id).join(", ")})`);
+say(`level-1 loot pool: ${levelOnePool.length} items (${levelOnePool.map((i) => i.id).join(", ")})`);
+tick(rare.some((it) => it.id === "gold-shades"), "gold-shades should now be in the milestone rare pool (price >= 120)");
+say(`milestone rare pool: ${rare.length} items (${rare.map((r) => r.id).join(", ")})`);
 
 /* ---------- 6. the SQL seed and the client mirror agree ---------- */
 // This is the drift that bites: a new item added to one side only. Parse the
@@ -231,6 +274,22 @@ for (const id of retired) {
   tick(!shop.some((it) => it.id === id), `"${id}" is retired in SQL but still in the client shop mirror`);
 }
 
+// The same "an applied migration is never edited" rule means
+// migration-price-the-free-tier.sql (2026-08-21) does NOT rewrite the
+// original seed rows above (study-specs' own migration-store-expansion.sql
+// row still, correctly, says price 0 forever) — it UPDATEs them afterwards.
+// So the per-file cross-check below must compare against each id's LATEST
+// price/minLevel, not blindly against whichever migration first seeded it.
+// Pre-parse the repricing file's updates into a lookup, same shape as the
+// `retired` pre-scan just above.
+const REPRICED = new Map(); // id -> { price, minLevel }
+let repricedFileText = "";
+try {
+  repricedFileText = (await (await fetch(`./supabase/migration-price-the-free-tier.sql`)).text()).replace(/--[^\n]*/g, "");
+  for (const m of repricedFileText.matchAll(/update\s+public\.shop_items\s+set\s+price\s*=\s*(\d+)\s*,\s*min_level\s*=\s*(\d+)\s+where\s+item_id\s*=\s*'([a-z0-9-]+)'/gi))
+    REPRICED.set(m[3], { price: +m[1], minLevel: +m[2] });
+} catch { /* reported by the 6a2 block below, which re-reads this file */ }
+
 for (const [file, expected] of MIGRATIONS) try {
   const raw = await (await fetch(`./supabase/${file}`)).text();
   // Strip -- comments first. Every one of these migrations EXPLAINS in prose
@@ -259,8 +318,14 @@ for (const [file, expected] of MIGRATIONS) try {
     const mirror = shop.find((it) => it.id === row.id);
     tick(!!mirror, `"${row.id}" is in ${file} but not in the client shop mirror`);
     if (mirror) {
-      tick(mirror.price === row.price, `"${row.id}" price differs: SQL ${row.price}, client ${mirror.price}`);
-      tick(mirror.minLevel === row.minLevel, `"${row.id}" minLevel differs: SQL ${row.minLevel}, client ${mirror.minLevel}`);
+      // REPRICED overrides this row's own seeded price/minLevel with
+      // whatever migration-price-the-free-tier.sql later set it to — see
+      // the note above the MIGRATIONS loop.
+      const rp = REPRICED.get(row.id);
+      const wantPrice = rp ? rp.price : row.price;
+      const wantLevel = rp ? rp.minLevel : row.minLevel;
+      tick(mirror.price === wantPrice, `"${row.id}" price differs: SQL ${wantPrice}${rp ? " (repriced)" : ""}, client ${mirror.price}`);
+      tick(mirror.minLevel === wantLevel, `"${row.id}" minLevel differs: SQL ${wantLevel}${rp ? " (repriced)" : ""}, client ${mirror.minLevel}`);
       tick(mirror.slot === row.slot, `"${row.id}" slot differs: SQL ${row.slot}, client ${mirror.slot}`);
     }
   }
@@ -328,6 +393,33 @@ for (const [file, expected] of MIGRATIONS) try {
   say(`${file}: ${seeded.length} rows (${cosmeticRows.length} cosmetic, ${trinketRows.length} trinket, ${foodRows.length} food, ${furnRows.length} furniture), all cross-checked`);
 } catch (e) {
   tick(false, `could not read supabase/${file}: ` + e.message);
+}
+
+/* ---------- 6a2. migration-price-the-free-tier.sql <-> client mirror
+   (2026-08-21) ----------
+   This migration is plain `update ... set price = X, min_level = Y where
+   item_id = '...'` statements, not the `insert ... values (...)` shape the
+   MIGRATIONS loop above parses — a NOT-YET-APPLIED migration (it changes
+   rows that already exist; nothing to seed), so it gets its own small
+   parser rather than being forced into that one's row shape. Reuses the
+   REPRICED map built before the MIGRATIONS loop (same file, parsed once). */
+tick(repricedFileText.length > 0, `could not read supabase/migration-price-the-free-tier.sql`);
+if (repricedFileText.length > 0) {
+  tick(REPRICED.size === 10, `migration-price-the-free-tier.sql should reprice/relevel 10 rows, found ${REPRICED.size}`);
+  for (const [id, want] of REPRICED) {
+    const mirror = shop.find((it) => it.id === id);
+    tick(!!mirror, `"${id}" is updated in migration-price-the-free-tier.sql but not in the client shop mirror`);
+    if (mirror) {
+      tick(mirror.price === want.price, `"${id}" price differs: migration ${want.price}, client ${mirror.price}`);
+      tick(mirror.minLevel === want.minLevel, `"${id}" minLevel differs: migration ${want.minLevel}, client ${mirror.minLevel}`);
+    }
+  }
+  const EX_FREE = ["study-specs", "beanie", "ear-tufts", "mitts", "nub-wings", "cape", "light-ring", "bead-necklace"];
+  for (const id of EX_FREE) tick(REPRICED.has(id), `"${id}" (an ex-free item) has no update statement in migration-price-the-free-tier.sql`);
+  const bw = REPRICED.get("butterfly-wing"), gs = REPRICED.get("gold-shades");
+  tick(!!bw && bw.price === 60 && bw.minLevel === 4, "migration-price-the-free-tier.sql should move butterfly-wing to 60/L4");
+  tick(!!gs && gs.price === 130 && gs.minLevel === 8, "migration-price-the-free-tier.sql should move gold-shades to 130/L8");
+  say(`migration-price-the-free-tier.sql: ${REPRICED.size} rows cross-checked against the client mirror`);
 }
 
 /* ---------- 6b. the level curve (room build S2) ----------
@@ -522,6 +614,14 @@ for (const [file, expected] of MIGRATIONS) try {
     }
   }
   tick(!ACCESSORIES["star-wand"], `"star-wand" was wired into ACCESSORIES — it has no slot and must stay cut`);
+  // price-the-free-tier (2026-08-21): both moved to "basics" (unlockLevel 1)
+  // so their new, much lower min_level is actually reachable — left in
+  // "girly"/"gangster" (unlockLevel 12/20) they would stay behind a locked
+  // "?" card until well past their own gate, silently undoing the reprice.
+  tick(collectionForItem("butterfly-wing") === "basics", `butterfly-wing should be in "basics" (was "girly", whose L12 group-gate would out-rank its new L4 min_level)`);
+  tick(collectionForItem("gold-shades") === "basics", `gold-shades should be in "basics" (was "gangster", whose L20 group-gate would out-rank its new L8 min_level)`);
+  tick(!COLLECTIONS.girly.items.includes("butterfly-wing"), `"girly" should no longer list butterfly-wing`);
+  tick(!COLLECTIONS.gangster.items.includes("gold-shades"), `"gangster" should no longer list gold-shades`);
   say(`collections: ${COLLECTION_ORDER.map((k) => `${COLLECTIONS[k].label}(Lv${COLLECTIONS[k].unlockLevel}, ${COLLECTIONS[k].items.length})`).join(" · ")}`);
 }
 
@@ -1337,15 +1437,21 @@ for (const [file, expected] of MIGRATIONS) try {
   say("room home screen: hasActiveAssignment() matches renderAssignmentCard's own decision; homework badge hides itself on a failed image load");
 }
 
-/* ---------- 7. buying, wearing and taking off actually work ---------- */
+/* ---------- 7. buying, wearing and taking off actually work ----------
+   Was "the free cape" — cape is priced now (price-the-free-tier, 2026-08-21),
+   so this buys it for real gold instead, using the same deterministic gold
+   source as section 6h (a submitted round pays a flat 10💎 with xp:0, which
+   keeps this account at level 1 so nothing else unlocks underfoot). */
 {
-  const freeCape = shop.find((it) => it.id === "cape");
-  tick(!!freeCape && freeCape.price === 0, "the free cape is missing from the shop");
+  const capeRow = shop.find((it) => it.id === "cape");
+  tick(!!capeRow && capeRow.price > 0, "cape should be a real, priced item now — nothing may be free once kids are playing");
+  for (let i = 0; i < 2; i++) await LocalBackend.submitQuest(uname, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
   const before = (await LocalBackend.getState(uname, "pw12")).gold;
+  tick(before >= capeRow.price, `test account has ${before}💎, needs ${capeRow.price} to buy the cape`);
   const buy = await LocalBackend.buyItem(uname, "pw12", "cape", 1);
-  tick(buy && buy.ok, "buying the free cape failed: " + JSON.stringify(buy));
+  tick(buy && buy.ok, "buying the cape failed: " + JSON.stringify(buy));
   const after = await LocalBackend.getState(uname, "pw12");
-  tick(after.gold === before, `a free item changed the gold balance (${before} -> ${after.gold})`);
+  tick(after.gold === before - capeRow.price, `buying the cape (${capeRow.price}💎) charged the wrong amount (${before} -> ${after.gold})`);
   tick((after.blip.owned || []).includes("cape"), "cape not in owned_items after buying");
 
   const wear = await LocalBackend.equip(uname, "pw12", { slot: 1, equipped: { back: "cape" } });
@@ -1381,13 +1487,13 @@ for (const [file, expected] of MIGRATIONS) try {
   await LocalBackend.signup(bu, "BuyEquip", "pw12");
   for (let i = 0; i < 10; i++) await LocalBackend.submitQuest(bu, "pw12", "q" + ((i % 3) + 1), { score: 0.9, xp: 0 });
 
-  // cosmetic: buy the free beanie, chain-equip it exactly like cosmeticCard's
-  // buy handler does.
+  // cosmetic: buy the beanie (priced 2026-08-21; this account earned 100💎
+  // above, plenty), chain-equip it exactly like cosmeticCard's buy handler does.
   {
     const before = await LocalBackend.getState(bu, "pw12");
     tick(!(before.blip.equipped || {}).hat, "the buy-equip learner should start with no hat equipped");
     const buy = await LocalBackend.buyItem(bu, "pw12", "beanie", 1);
-    tick(buy && buy.ok, `buying the free beanie failed: ${JSON.stringify(buy)}`);
+    tick(buy && buy.ok, `buying the beanie failed: ${JSON.stringify(buy)}`);
     const nextEquipped = { ...(before.blip.equipped || {}), hat: "beanie" };
     const chained = await LocalBackend.equip(bu, "pw12", { slot: 1, equipped: nextEquipped });
     tick(chained && chained.ok, `the chained equip after buying the beanie was REJECTED — this is the July cape bug: ${JSON.stringify(chained)}`);
@@ -1480,7 +1586,7 @@ const outfitHost = document.getElementById("outfits");
 const oneOf = (slot, prefer) => prefer.find((id) => ACCESSORIES[id] && ACCESSORIES[id].slot === slot)
   || ids.find((id) => ACCESSORIES[id].slot === slot);
 const outfits = [
-  { label: "Free tier, every slot", colour: "blue",
+  { label: "Starter tier, every slot", colour: "blue", // was "Free tier" — priced 2026-08-21, still the cheapest per slot
     items: ["beanie", "study-specs", "ear-tufts", "mitts", "nub-wings", "cape"] },
   { label: "All rares", colour: "lilac",
     items: ["crown", "visor", "bunny-ears", "boxing-gloves", "bat-wings", "jetpack"] },

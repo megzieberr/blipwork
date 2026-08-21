@@ -44,6 +44,14 @@ export const COLLECTIONS = {
       "eye-mask", "wizard-hat", "royal-crown", "back-sword", "gold-wings", "dragon-wings",
       // neck necklaces (2026-08-07), excluding chunky-chain (-> gangster)
       "bead-necklace", "flower-garland", "star-chain", "heart-chain", "medal-choker",
+      // price-the-free-tier (2026-08-21): butterfly-wing (L4) and
+      // gold-shades (L8) moved OUT of "girly"/"gangster" — those collections
+      // gate their whole group behind one locked "?" card at their own
+      // (much higher, L12/L20) unlockLevel, which would have hidden each
+      // item's new lower min_level completely. "basics" (unlockLevel 1,
+      // never mystery-carded) already holds L1-L10 items shown individually
+      // gated — the pattern that actually makes an L4/L8 reveal visible.
+      "butterfly-wing", "gold-shades",
     ],
   },
   techy: {
@@ -70,7 +78,9 @@ export const COLLECTIONS = {
   girly: {
     label: "Girly",
     unlockLevel: 12,
-    items: ["hair-bow", "tiara", "butterfly-wing"],
+    // butterfly-wing moved to "basics" 2026-08-21 (price-the-free-tier: its
+    // min_level dropped to 4, below this collection's own L12 gate).
+    items: ["hair-bow", "tiara"],
   },
   fairy: {
     label: "Fairy",
@@ -81,7 +91,9 @@ export const COLLECTIONS = {
   gangster: {
     label: "Gangster",
     unlockLevel: 20,
-    items: ["gold-shades", "snapback", "chunky-chain"],
+    // gold-shades moved to "basics" 2026-08-21 (price-the-free-tier: its
+    // min_level dropped to 8, below this collection's own L20 gate).
+    items: ["snapback", "chunky-chain"],
   },
 };
 

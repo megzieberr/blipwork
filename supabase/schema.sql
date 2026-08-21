@@ -1211,59 +1211,67 @@ on conflict (key) do nothing;
 -- and js/local-backend.js mirrors this list for ?local=1. verify-store.html
 -- cross-checks all three — an item added on one side only is exactly the drift
 -- that check exists to catch.
+-- Prices/levels/sort as of migration-price-the-free-tier.sql (2026-08-21,
+-- Megan's ruling 2026-08-06: "nothing may be free once the kids are
+-- playing"). The eight rows that used to read price 0 / sort 1-6,70,81
+-- (study-specs, beanie, ear-tufts, mitts, nub-wings, cape, light-ring,
+-- bead-necklace) are real, cheap (8-15), still-cheapest-in-slot prices
+-- now. `sort` is re-based per slot (100=glasses/200=hat/300=ears/
+-- 400=arms/500=wings/600=back/700=effects/800=neck) so every slot tab
+-- reads ascending by price — see that migration for the full rationale.
 insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
   ('round-glasses',       'glasses',   40,  1, false,   10, 'cosmetic'),
   ('cat-ears',               'ears',   60,  2, false,   20, 'cosmetic'),
   ('party-hat',               'hat',   80,  3, false,   30, 'cosmetic'),
   ('stubby-arms',            'arms',  100,  4, false,   40, 'cosmetic'),
   ('angel-wings',           'wings',  150,  6, false,   50, 'cosmetic'),
-  ('study-specs',         'glasses',    0,  1, true,     1, 'cosmetic'),
-  ('beanie',                  'hat',    0,  1, true,     2, 'cosmetic'),
-  ('ear-tufts',              'ears',    0,  1, true,     3, 'cosmetic'),
-  ('mitts',                  'arms',    0,  1, true,     4, 'cosmetic'),
-  ('nub-wings',             'wings',    0,  1, true,     5, 'cosmetic'),
-  ('cape',                   'back',    0,  1, true,     6, 'cosmetic'),
-  ('star-shades',         'glasses',   40,  1, true,    11, 'cosmetic'),
-  ('heart-eyes',          'glasses',   45,  1, true,    12, 'cosmetic'),
-  ('sleepy-eyes',         'glasses',   30,  1, true,    13, 'cosmetic'),
-  ('visor',               'glasses',   35,  2, true,    14, 'cosmetic'),
-  ('eye-mask',            'glasses',   40,  2, true,    15, 'cosmetic'),
-  ('cyber-visor',         'glasses',   65,  3, true,    16, 'cosmetic'),
-  ('hud-monocle',         'glasses',   55,  2, true,    17, 'cosmetic'),
-  ('headphones',             'ears',   60,  2, true,    21, 'cosmetic'),
-  ('bunny-ears',             'ears',   55,  2, true,    22, 'cosmetic'),
-  ('tech-antenna',           'ears',   40,  2, true,    23, 'cosmetic'),
-  ('headset-cup',            'ears',   70,  3, true,    24, 'cosmetic'),
-  ('data-fin',               'ears',   95,  4, true,    25, 'cosmetic'),
-  ('halo',                    'hat',   80,  3, true,    31, 'cosmetic'),
-  ('bolt-antenna',            'hat',   45,  2, true,    32, 'cosmetic'),
-  ('horns',                   'hat',   50,  2, true,    33, 'cosmetic'),
-  ('crown',                   'hat',  180,  8, true,    34, 'cosmetic'),
-  ('wizard-hat',              'hat',   55,  2, true,    35, 'cosmetic'),
-  ('royal-crown',             'hat',  170,  8, true,    36, 'cosmetic'),
-  ('power-gloves',           'arms',  100,  4, true,    41, 'cosmetic'),
-  ('boxing-gloves',          'arms',   60,  3, true,    42, 'cosmetic'),
-  ('mech-gauntlet',          'arms',   70,  3, true,    44, 'cosmetic'),
-  ('grapple-claw',           'arms',   85,  4, true,    45, 'cosmetic'),
-  ('energy-blade',           'arms',  135,  6, true,    46, 'cosmetic'),
-  ('aurora-wings',          'wings',  150,  6, true,    51, 'cosmetic'),
-  ('bat-wings',             'wings',  140,  6, true,    52, 'cosmetic'),
-  ('dragon-wings',          'wings',  145,  6, true,    53, 'cosmetic'),
-  ('gold-wings',            'wings',  150,  6, true,    54, 'cosmetic'),
-  ('drone-wings',           'wings',  140,  6, true,    55, 'cosmetic'),
-  ('plasma-wings',          'wings',  155,  6, true,    56, 'cosmetic'),
-  ('schoolbag',              'back',   50,  2, true,    61, 'cosmetic'),
-  ('jetpack',                'back',  200, 10, true,    62, 'cosmetic'),
-  ('back-sword',             'back',  130,  6, true,    63, 'cosmetic'),
-  ('light-ring',          'effects',    0,  1, true,    70, 'cosmetic'),
-  ('flame-ring',          'effects',   45,  2, true,    71, 'cosmetic'),
-  ('spark-halo',          'effects',   90,  4, true,    73, 'cosmetic'),
-  ('bead-necklace',          'neck',    0,  1, true,    81, 'cosmetic'),
-  ('flower-garland',         'neck',   60,  3, true,    83, 'cosmetic'),
-  ('star-chain',             'neck',   80,  4, true,    84, 'cosmetic'),
-  ('heart-chain',            'neck',   95,  5, true,    85, 'cosmetic'),
-  ('medal-choker',           'neck',  125,  6, true,    86, 'cosmetic'),
-  ('chunky-chain',           'neck',  160,  7, true,    87, 'cosmetic')
+  ('study-specs',         'glasses',   10,  1, true,   100, 'cosmetic'),
+  ('beanie',                  'hat',   12,  1, true,   200, 'cosmetic'),
+  ('ear-tufts',              'ears',    9,  1, true,   300, 'cosmetic'),
+  ('mitts',                  'arms',   13,  1, true,   400, 'cosmetic'),
+  ('nub-wings',             'wings',    8,  1, true,   500, 'cosmetic'),
+  ('cape',                   'back',   15,  1, true,   600, 'cosmetic'),
+  ('star-shades',         'glasses',   40,  1, true,   103, 'cosmetic'),
+  ('heart-eyes',          'glasses',   45,  1, true,   106, 'cosmetic'),
+  ('sleepy-eyes',         'glasses',   30,  1, true,   101, 'cosmetic'),
+  ('visor',               'glasses',   35,  2, true,   102, 'cosmetic'),
+  ('eye-mask',            'glasses',   40,  2, true,   104, 'cosmetic'),
+  ('cyber-visor',         'glasses',   65,  3, true,   113, 'cosmetic'),
+  ('hud-monocle',         'glasses',   55,  2, true,   110, 'cosmetic'),
+  ('headphones',             'ears',   60,  2, true,   303, 'cosmetic'),
+  ('bunny-ears',             'ears',   55,  2, true,   302, 'cosmetic'),
+  ('tech-antenna',           'ears',   40,  2, true,   301, 'cosmetic'),
+  ('headset-cup',            'ears',   70,  3, true,   304, 'cosmetic'),
+  ('data-fin',               'ears',   95,  4, true,   305, 'cosmetic'),
+  ('halo',                    'hat',   80,  3, true,   207, 'cosmetic'),
+  ('bolt-antenna',            'hat',   45,  2, true,   201, 'cosmetic'),
+  ('horns',                   'hat',   50,  2, true,   202, 'cosmetic'),
+  ('crown',                   'hat',  180,  8, true,   212, 'cosmetic'),
+  ('wizard-hat',              'hat',   55,  2, true,   203, 'cosmetic'),
+  ('royal-crown',             'hat',  170,  8, true,   211, 'cosmetic'),
+  ('power-gloves',           'arms',  100,  4, true,   404, 'cosmetic'),
+  ('boxing-gloves',          'arms',   60,  3, true,   401, 'cosmetic'),
+  ('mech-gauntlet',          'arms',   70,  3, true,   402, 'cosmetic'),
+  ('grapple-claw',           'arms',   85,  4, true,   403, 'cosmetic'),
+  ('energy-blade',           'arms',  135,  6, true,   405, 'cosmetic'),
+  ('aurora-wings',          'wings',  150,  6, true,   505, 'cosmetic'),
+  ('bat-wings',             'wings',  140,  6, true,   502, 'cosmetic'),
+  ('dragon-wings',          'wings',  145,  6, true,   504, 'cosmetic'),
+  ('gold-wings',            'wings',  150,  6, true,   506, 'cosmetic'),
+  ('drone-wings',           'wings',  140,  6, true,   503, 'cosmetic'),
+  ('plasma-wings',          'wings',  155,  6, true,   508, 'cosmetic'),
+  ('schoolbag',              'back',   50,  2, true,   601, 'cosmetic'),
+  ('jetpack',                'back',  200, 10, true,   603, 'cosmetic'),
+  ('back-sword',             'back',  130,  6, true,   602, 'cosmetic'),
+  ('light-ring',          'effects',   11,  1, true,   700, 'cosmetic'),
+  ('flame-ring',          'effects',   45,  2, true,   701, 'cosmetic'),
+  ('spark-halo',          'effects',   90,  4, true,   702, 'cosmetic'),
+  ('bead-necklace',          'neck',   14,  1, true,   800, 'cosmetic'),
+  ('flower-garland',         'neck',   60,  3, true,   801, 'cosmetic'),
+  ('star-chain',             'neck',   80,  4, true,   802, 'cosmetic'),
+  ('heart-chain',            'neck',   95,  5, true,   803, 'cosmetic'),
+  ('medal-choker',           'neck',  125,  6, true,   804, 'cosmetic'),
+  ('chunky-chain',           'neck',  160,  7, true,   805, 'cosmetic')
 on conflict (item_id) do nothing;
 
 -- Phase 2: pharmacy / grocery. item_id doubles as the "kind". soup/medicine are
@@ -1292,23 +1300,30 @@ on conflict (item_id) do nothing;
 -- cosmetics, no new slot. See migration-wave3-collections.sql for the full
 -- rationale; js/companion/collections.js is the client-side grouping that
 -- gates these behind their collection's level, not this table.
+-- gold-shades and butterfly-wing: repriced/relevelled by
+-- migration-price-the-free-tier.sql (2026-08-21) — was 85/L20 and 95/L12
+-- respectively. Both also moved out of their old collections ("gangster",
+-- "girly") into "basics" in js/companion/collections.js, because those two
+-- collections gate their WHOLE group behind one locked card at their own
+-- (much higher) unlockLevel, which would have hidden the new, lower
+-- min_level regardless of what this table says.
 insert into public.shop_items (item_id, slot, price, min_level, active, sort, category) values
-  ('sport-shades',  'glasses',  65,  9, true,  90, 'cosmetic'),
-  ('gold-shades',   'glasses',  85, 20, true,  91, 'cosmetic'),
-  ('star-eyes',     'glasses',  50,  5, true,  92, 'cosmetic'),
-  ('angry-eyes',    'glasses',  45,  5, true,  93, 'cosmetic'),
-  ('happy-eyes',    'glasses',  40,  5, true,  94, 'cosmetic'),
-  ('lash-eyes',     'glasses',  55,  5, true,  95, 'cosmetic'),
-  ('dreamy-eyes',   'glasses',  50,  5, true,  96, 'cosmetic'),
-  ('wink-eyes',     'glasses',  60,  5, true,  97, 'cosmetic'),
-  ('backwards-cap', 'hat',      70,  9, true,  98, 'cosmetic'),
-  ('bucket-hat',    'hat',      60,  9, true,  99, 'cosmetic'),
-  ('snapback',      'hat',      80, 20, true, 100, 'cosmetic'),
-  ('tiara',         'hat',     130, 12, true, 101, 'cosmetic'),
-  ('flower-crown',  'hat',      90, 16, true, 102, 'cosmetic'),
-  ('hair-bow',      'hat',      75, 12, true, 103, 'cosmetic'),
-  ('butterfly-wing','wings',    95, 12, true, 104, 'cosmetic'),
-  ('fairy-wing',    'wings',   150, 16, true, 105, 'cosmetic')
+  ('sport-shades',  'glasses',  65,  9, true, 114, 'cosmetic'),
+  ('gold-shades',   'glasses', 130,  8, true, 115, 'cosmetic'),
+  ('star-eyes',     'glasses',  50,  5, true, 108, 'cosmetic'),
+  ('angry-eyes',    'glasses',  45,  5, true, 107, 'cosmetic'),
+  ('happy-eyes',    'glasses',  40,  5, true, 105, 'cosmetic'),
+  ('lash-eyes',     'glasses',  55,  5, true, 111, 'cosmetic'),
+  ('dreamy-eyes',   'glasses',  50,  5, true, 109, 'cosmetic'),
+  ('wink-eyes',     'glasses',  60,  5, true, 112, 'cosmetic'),
+  ('backwards-cap', 'hat',      70,  9, true, 205, 'cosmetic'),
+  ('bucket-hat',    'hat',      60,  9, true, 204, 'cosmetic'),
+  ('snapback',      'hat',      80, 20, true, 208, 'cosmetic'),
+  ('tiara',         'hat',     130, 12, true, 210, 'cosmetic'),
+  ('flower-crown',  'hat',      90, 16, true, 209, 'cosmetic'),
+  ('hair-bow',      'hat',      75, 12, true, 206, 'cosmetic'),
+  ('butterfly-wing','wings',    60,  4, true, 501, 'cosmetic'),
+  ('fairy-wing',    'wings',   150, 16, true, 507, 'cosmetic')
 on conflict (item_id) do nothing;
 
 -- Room build S4 (2026-08-08): the grocery store — 44 more category-'food'

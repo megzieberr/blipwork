@@ -92,101 +92,110 @@ const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7"
    deliberately NOT listed here (mirrors active=false server-side, so they
    can't be bought) but are never stripped from anyone's owned_items, and
    equip() below never consults this list for ownership — so an
-   already-owned old item still equips fine. */
+   already-owned old item still equips fine.
+
+   PRICE THE FREE TIER (2026-08-21) — Megan's ruling, 2026-08-06: "nothing
+   may be free once the kids are playing." No learner has the app yet.
+   Two changes, mirroring supabase/migration-price-the-free-tier.sql:
+     - the eight rows that used to sit at price 0 (one per slot: study-specs,
+       beanie, ear-tufts, mitts, nub-wings, cape, light-ring, bead-necklace)
+       now carry a real 8-15💎 price, still the cheapest in their own slot,
+       same min_level 1.
+     - two catalogue gaps closed: butterfly-wing 95/L12 -> 60/L4 (fills the
+       gap between the new ex-free wings item and the L6 wings cluster);
+       gold-shades 85/L20 -> 130/L8 (glasses' first rare-band item, was
+       stuck below 120 with no aspirational top end). Both also moved out
+       of their old collections ("girly"/"gangster" — whole-group mystery
+       cards gated at L12/L20, which would have hidden the new lower level
+       regardless of what this row says) into "basics" — see
+       js/companion/collections.js.
+   This array is also REGROUPED BY SLOT below (it used to be grouped by
+   the historical order items shipped in — SL set / Tripo wave 1/2/3 —
+   which is what put every free item first in its slot by accident and
+   left real ordering violations everywhere else, e.g. star-shades 40
+   ahead of sleepy-eyes 30). Each slot block here reads price-ascending,
+   matching `sort` in the SQL and what the shop actually displays — array
+   declaration order IS this mirror's display order, since (unlike the
+   server) it carries no explicit sort column. itemRarity() (blip-ui.js)
+   keys "free" strictly on price === 0, so once nothing below is priced 0
+   no cosmetic can show a "Free" label — verified, not changed. */
 const SHOP_ITEMS = [
-  // free tier (2026-07-28) — price 0, one per slot, so a level-1 learner
-  // can dress Blip completely before earning a single crystal
-  { id: "study-specs", slot: "glasses", price: 0, minLevel: 1 },
-  { id: "beanie", slot: "hat", price: 0, minLevel: 1 },
-  { id: "ear-tufts", slot: "ears", price: 0, minLevel: 1 },
-  { id: "mitts", slot: "arms", price: 0, minLevel: 1 },
-  { id: "nub-wings", slot: "wings", price: 0, minLevel: 1 },
-  { id: "cape", slot: "back", price: 0, minLevel: 1 },
-  // common
+  // ---- hat ----
+  { id: "beanie", slot: "hat", price: 12, minLevel: 1 },          // ex-free
+  { id: "bolt-antenna", slot: "hat", price: 45, minLevel: 2 },
+  { id: "horns", slot: "hat", price: 50, minLevel: 2 },
+  { id: "wizard-hat", slot: "hat", price: 55, minLevel: 2 },
+  { id: "bucket-hat", slot: "hat", price: 60, minLevel: 9 },
+  { id: "backwards-cap", slot: "hat", price: 70, minLevel: 9 },
+  { id: "hair-bow", slot: "hat", price: 75, minLevel: 12 },
+  { id: "halo", slot: "hat", price: 80, minLevel: 3 },
+  { id: "snapback", slot: "hat", price: 80, minLevel: 20 },
+  { id: "flower-crown", slot: "hat", price: 90, minLevel: 16 },
+  { id: "tiara", slot: "hat", price: 130, minLevel: 12 },         // rare
+  { id: "royal-crown", slot: "hat", price: 170, minLevel: 8 },    // rare
+  { id: "crown", slot: "hat", price: 180, minLevel: 8 },          // rare
+  // ---- glasses ----
+  { id: "study-specs", slot: "glasses", price: 10, minLevel: 1 }, // ex-free
   { id: "sleepy-eyes", slot: "glasses", price: 30, minLevel: 1 },
   { id: "visor", slot: "glasses", price: 35, minLevel: 2 },
   { id: "star-shades", slot: "glasses", price: 40, minLevel: 1 },
+  { id: "eye-mask", slot: "glasses", price: 40, minLevel: 2 },
+  { id: "happy-eyes", slot: "glasses", price: 40, minLevel: 5 },
   { id: "heart-eyes", slot: "glasses", price: 45, minLevel: 1 },
-  { id: "bolt-antenna", slot: "hat", price: 45, minLevel: 2 },
-  { id: "horns", slot: "hat", price: 50, minLevel: 2 },
-  { id: "schoolbag", slot: "back", price: 50, minLevel: 2 },
+  { id: "angry-eyes", slot: "glasses", price: 45, minLevel: 5 },
+  { id: "star-eyes", slot: "glasses", price: 50, minLevel: 5 },
+  { id: "dreamy-eyes", slot: "glasses", price: 50, minLevel: 5 },
+  { id: "hud-monocle", slot: "glasses", price: 55, minLevel: 2 },
+  { id: "lash-eyes", slot: "glasses", price: 55, minLevel: 5 },
+  { id: "wink-eyes", slot: "glasses", price: 60, minLevel: 5 },
+  { id: "cyber-visor", slot: "glasses", price: 65, minLevel: 3 },
+  { id: "sport-shades", slot: "glasses", price: 65, minLevel: 9 },
+  { id: "gold-shades", slot: "glasses", price: 130, minLevel: 8 }, // rare (was 85/L20)
+  // ---- ears ----
+  { id: "ear-tufts", slot: "ears", price: 9, minLevel: 1 },       // ex-free
+  { id: "tech-antenna", slot: "ears", price: 40, minLevel: 2 },
   { id: "bunny-ears", slot: "ears", price: 55, minLevel: 2 },
   { id: "headphones", slot: "ears", price: 60, minLevel: 2 },
-  { id: "boxing-gloves", slot: "arms", price: 60, minLevel: 3 },
-  { id: "halo", slot: "hat", price: 80, minLevel: 3 },
-  { id: "power-gloves", slot: "arms", price: 100, minLevel: 4 },
-  // rare (>= 120 — the client frames these in the theme's rare violet)
-  { id: "bat-wings", slot: "wings", price: 140, minLevel: 6 },
-  { id: "aurora-wings", slot: "wings", price: 150, minLevel: 6 },
-  { id: "crown", slot: "hat", price: 180, minLevel: 8 },
-  { id: "jetpack", slot: "back", price: 200, minLevel: 10 },
-  // Tripo wave 1 (2026-08-05) — new `effects` slot + top-ups. MUST stay in
-  // step with supabase/migration-effects-slot.sql; verify-store.html parses
-  // that SQL and cross-checks it against this list, because an item added
-  // to only one side is the failure that actually happens.
-  { id: "light-ring", slot: "effects", price: 0, minLevel: 1 },
-  { id: "eye-mask", slot: "glasses", price: 40, minLevel: 2 },
-  { id: "flame-ring", slot: "effects", price: 45, minLevel: 2 },
-  { id: "wizard-hat", slot: "hat", price: 55, minLevel: 2 },
-  { id: "cyber-visor", slot: "glasses", price: 65, minLevel: 3 },
-  { id: "spark-halo", slot: "effects", price: 90, minLevel: 4 },
-  { id: "back-sword", slot: "back", price: 130, minLevel: 6 },
-  { id: "dragon-wings", slot: "wings", price: 145, minLevel: 6 },
-  { id: "gold-wings", slot: "wings", price: 150, minLevel: 6 },
-  { id: "royal-crown", slot: "hat", price: 170, minLevel: 8 },
-  // Tripo wave 2 (2026-08-06) — 10 techy items shipped (15 were designed,
-  // 5 cut on sight), NO new slot this time, so
-  // there is nothing to add to VALID_SLOTS or mhq_equip. Mirrors
-  // supabase/migration-tripo-wave2.sql; verify-store.html parses that file
-  // and cross-checks every row against this list.
-  { id: "tech-antenna", slot: "ears", price: 40, minLevel: 2 },
-  { id: "hud-monocle", slot: "glasses", price: 55, minLevel: 2 },
-  { id: "mech-gauntlet", slot: "arms", price: 70, minLevel: 3 },
   { id: "headset-cup", slot: "ears", price: 70, minLevel: 3 },
-  { id: "grapple-claw", slot: "arms", price: 85, minLevel: 4 },
   { id: "data-fin", slot: "ears", price: 95, minLevel: 4 },
-  { id: "energy-blade", slot: "arms", price: 135, minLevel: 6 },
-  { id: "drone-wings", slot: "wings", price: 140, minLevel: 6 },
-  { id: "plasma-wings", slot: "wings", price: 155, minLevel: 6 },
-  // NECK slot (2026-08-07) — the first slot added since effects, and the same
-  // three-place change: VALID_SLOTS above, mhq_equip's key list below, and
-  // shop_items_slot_cat_check in the migration. Mirrors
-  // supabase/migration-neck-slot.sql.
-  // The wide necklaces (2026-08-07). bead-necklace is the slot's FREE tier
-  // item, so a brand-new learner can fill neck like every other slot.
-  // Mirrors supabase/migration-neck-necklaces.sql, which also DELETES the
-  // gold-chain that migration-neck-slot.sql seeded — an applied migration is
-  // never edited, so the removal lives in the newer file.
-  { id: "bead-necklace", slot: "neck", price: 0, minLevel: 1 },
+  // ---- arms ----
+  { id: "mitts", slot: "arms", price: 13, minLevel: 1 },          // ex-free
+  { id: "boxing-gloves", slot: "arms", price: 60, minLevel: 3 },
+  { id: "mech-gauntlet", slot: "arms", price: 70, minLevel: 3 },
+  { id: "grapple-claw", slot: "arms", price: 85, minLevel: 4 },
+  { id: "power-gloves", slot: "arms", price: 100, minLevel: 4 },
+  { id: "energy-blade", slot: "arms", price: 135, minLevel: 6 },  // rare
+  // ---- wings ----
+  { id: "nub-wings", slot: "wings", price: 8, minLevel: 1 },      // ex-free
+  { id: "butterfly-wing", slot: "wings", price: 60, minLevel: 4 }, // was 95/L12
+  { id: "bat-wings", slot: "wings", price: 140, minLevel: 6 },    // rare
+  { id: "drone-wings", slot: "wings", price: 140, minLevel: 6 },  // rare
+  { id: "dragon-wings", slot: "wings", price: 145, minLevel: 6 }, // rare
+  { id: "aurora-wings", slot: "wings", price: 150, minLevel: 6 }, // rare
+  { id: "gold-wings", slot: "wings", price: 150, minLevel: 6 },   // rare
+  { id: "fairy-wing", slot: "wings", price: 150, minLevel: 16 },  // rare
+  { id: "plasma-wings", slot: "wings", price: 155, minLevel: 6 }, // rare
+  // ---- back ----
+  { id: "cape", slot: "back", price: 15, minLevel: 1 },           // ex-free
+  { id: "schoolbag", slot: "back", price: 50, minLevel: 2 },
+  { id: "back-sword", slot: "back", price: 130, minLevel: 6 },    // rare
+  { id: "jetpack", slot: "back", price: 200, minLevel: 10 },      // rare
+  // ---- effects (Tripo wave 1, 2026-08-05 — new slot; mirrors
+  // supabase/migration-effects-slot.sql, verify-store.html cross-checks it) ----
+  { id: "light-ring", slot: "effects", price: 11, minLevel: 1 },  // ex-free
+  { id: "flame-ring", slot: "effects", price: 45, minLevel: 2 },
+  { id: "spark-halo", slot: "effects", price: 90, minLevel: 4 },  // rare
+  // ---- neck (2026-08-07 — new slot; mirrors migration-neck-slot.sql /
+  // migration-neck-necklaces.sql / migration-neck-chunky-chain.sql, the
+  // last of which also DELETES the old 'gold-chain' seeded by the first —
+  // an applied migration is never edited, so that removal lives there,
+  // not here; 'gold-chain' has never been in this array) ----
+  { id: "bead-necklace", slot: "neck", price: 14, minLevel: 1 }, // ex-free
   { id: "flower-garland", slot: "neck", price: 60, minLevel: 3 },
   { id: "star-chain", slot: "neck", price: 80, minLevel: 4 },
   { id: "heart-chain", slot: "neck", price: 95, minLevel: 5 },
-  { id: "medal-choker", slot: "neck", price: 125, minLevel: 6 },
-  // The regenerated gangster chain (2026-08-07, wide brief). NEW id — the
-  // old 'gold-chain' is on the retired list and a retired id never returns.
-  // Mirrors supabase/migration-neck-chunky-chain.sql.
-  { id: "chunky-chain", slot: "neck", price: 160, minLevel: 7 },
-  // Room build S3 (2026-08-08) — wave-3 themed collections. Mirrors
-  // supabase/migration-wave3-collections.sql; collection gates (which of
-  // these render as a locked "?" card below what level) live in
-  // js/companion/collections.js, not here — this list is unchanged from
-  // the server's own per-item price/minLevel.
-  { id: "backwards-cap", slot: "hat", price: 70, minLevel: 9 },
-  { id: "sport-shades", slot: "glasses", price: 65, minLevel: 9 },
-  { id: "bucket-hat", slot: "hat", price: 60, minLevel: 9 },
-  { id: "hair-bow", slot: "hat", price: 75, minLevel: 12 },
-  { id: "tiara", slot: "hat", price: 130, minLevel: 12 },
-  { id: "butterfly-wing", slot: "wings", price: 95, minLevel: 12 },
-  { id: "fairy-wing", slot: "wings", price: 150, minLevel: 16 },
-  { id: "flower-crown", slot: "hat", price: 90, minLevel: 16 },
-  { id: "gold-shades", slot: "glasses", price: 85, minLevel: 20 },
-  { id: "snapback", slot: "hat", price: 80, minLevel: 20 },
-  { id: "star-eyes", slot: "glasses", price: 50, minLevel: 5 },
-  { id: "angry-eyes", slot: "glasses", price: 45, minLevel: 5 },
-  { id: "happy-eyes", slot: "glasses", price: 40, minLevel: 5 },
-  { id: "lash-eyes", slot: "glasses", price: 55, minLevel: 5 },
-  { id: "dreamy-eyes", slot: "glasses", price: 50, minLevel: 5 },
-  { id: "wink-eyes", slot: "glasses", price: 60, minLevel: 5 },
+  { id: "medal-choker", slot: "neck", price: 125, minLevel: 6 }, // rare
+  { id: "chunky-chain", slot: "neck", price: 160, minLevel: 7 }, // rare
 ];
 /* Trinkets — room build S2 (2026-08-08). category 'trinket' server-side:
    never in the shop payload, never equippable, price 0. They arrive only as
