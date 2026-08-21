@@ -25,11 +25,10 @@ butterfly-wing 60/L4 fills the wings gap, gold-shades 130/L8 is Eyes'
 first rare; all 63 rows re-sorted price-ascending per slot).
 
 ### ⏳ Pending on Megan
-- 🌐 3 min **[blocking — Collect fails soft until done]**: Blipwork
-  dashboard → Edge Functions → collect-cq → Secrets → add `CQ_URL` =
-  `https://vlelxvhlyydwxnhbijco.supabase.co` and `CQ_SERVICE_KEY` = CQ
-  dashboard → Settings → API → service_role key. Then tell the session so
-  the throwaway smoke test can run.
+- ~~the collect-cq secrets~~ — **DONE same day** (she set both in the
+  Blipwork project; full paid-collect smoke test then ran green: 100 CQ XP
+  → 3💎, replay → 0, +35 XP → 1 more with the remainder banked exactly;
+  throwaways deleted from both sides, counts verified back to baseline).
 - 📱 5 min **[blocking — the go-live eyeball, now four ships behind]**:
   reopen the PWA twice (v34 → v45), then: picker shows 19 names and NONE of
   your accounts; `?u=1` gets you into your test account; ⭕ tab opens CQ;
@@ -63,8 +62,9 @@ first rare; all 63 rows re-sorted price-ascending per slot).
   use the maths-quest-s3 config (port 5213) for a clean origin.
 - chunky-chain (L7) still hides behind gangster's L20 collection card —
   pre-existing quirk, deliberately not touched by the pricing pass.
-- The smoke test of the full paid-collect path waits on the secrets (the
-  auth / not_linked / cq_down paths were tested live at ship).
+- ~~The smoke test of the full paid-collect path waits on the secrets~~ —
+  **DONE same day**, all paths now tested live: auth / not_linked /
+  cq_down / paid / replay-pays-zero / remainder-banks.
 
 ---
 
