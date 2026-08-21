@@ -11,6 +11,7 @@
    ============================================================ */
 import { fmtComma, roundTo } from "./check.js";
 import { randInt, pick } from "./ui.js";
+import { rng } from "./rng.js";
 
 /* ---- degree-based trig (the calculator and CAPS work in degrees) ---- */
 export const rad = d => d * Math.PI / 180;
@@ -28,7 +29,7 @@ export const ang = (v, dp = 1) => `${fix(v, dp)}°`;       // angle with the deg
 
 /* random helpers (vary by quest run) */
 export { randInt, pick };
-export const randf = (lo, hi, dp = 1) => roundTo(lo + Math.random() * (hi - lo), dp);
+export const randf = (lo, hi, dp = 1) => roundTo(lo + rng() * (hi - lo), dp);
 
 /* ============================================================
    THE RULES

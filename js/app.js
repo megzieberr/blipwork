@@ -3,7 +3,7 @@ import { api } from "./api.js";
 import { getSession, isLoggedIn, clearSession } from "./session.js";
 import { el, clear } from "./ui.js";
 import { renderLogin } from "./auth.js";
-import { renderHub, renderChapter, renderResults } from "./screens.js";
+import { renderHub, renderChapter, renderResults, renderDiceResults } from "./screens.js";
 import { renderPlay } from "./play.js";
 import { renderBlip } from "./blip.js";
 import { closeActiveTour } from "./companion/tour.js";
@@ -50,7 +50,9 @@ const app = {
       case "hub": renderHub(this, view); break;
       case "chapter": renderChapter(this, view, this.params); break;
       case "play": renderPlay(this, view, this.params); break;
-      case "results": renderResults(this, view, this.params); break;
+      // DICE-PLAN.md: dice rounds route to the SAME "results" screen id, just
+      // a different renderer (params.dice flag) — no pass/fail language.
+      case "results": (this.params && this.params.dice) ? renderDiceResults(this, view, this.params) : renderResults(this, view, this.params); break;
       case "blip": renderBlip(this, view); break;
       case "gallery": renderGallery(this, view); break;
       default: renderHub(this, view);

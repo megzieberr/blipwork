@@ -5,7 +5,7 @@
    the harder "find the unknown" ones.
    ============================================================ */
 import { randInt, pick } from "../ui.js";
-import { C, mc } from "./_shared.js";
+import { C, mc, rng } from "./_shared.js";
 
 const boxAxis = max => { const step = 10, m = Math.ceil((max + 6) / step) * step; return { min: 0, max: m, step }; };
 function randBox() {
@@ -36,7 +36,7 @@ function genEffectChange() {
 
 /* ---------- effect on the mean (value) ---------- */
 function genEffectMean() {
-  const M = randInt(20, 60), k = randInt(2, 9), add = Math.random() < 0.6;
+  const M = randInt(20, 60), k = randInt(2, 9), add = rng() < 0.6;
   const exp = add ? M + k : M - k;
   return {
     type: "calc", concept: "effect", dp: 0, allowNeg: true, expected: exp, answerLabel: `${exp}`,

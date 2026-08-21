@@ -9,9 +9,16 @@ import { mountQuestion } from "./questions.js";
 import { openConcept } from "./modal.js";
 import { openCalculator } from "./calculator.js";
 import { el, clear, mount } from "./ui.js";
+import { genAt } from "./dice.js";
 
+/* DICE-PLAN.md (session 0b, 2026-08-21): renderPlay is reused, not forked,
+   for dice rounds — params.dice (built by js/dice-play.js) is the only
+   thing that changes below. When it's absent every branch here is byte-
+   for-byte what it was before dice existed. See the `dice` shape in
+   js/dice-play.js: { roundSeed, resumeIndex, resumeAnswered, resumeXp,
+   answeredCorrect, recordAnswer(index, ok, xpSoFar), finish(st) }. */
 export function renderPlay(app, host, params) {
-  const { chapter, quest, def, accent } = params;
+  const { chapter, quest, def, accent, dice } = params;
   const skills = def.skills;
   const sess = getSession();
 
@@ -45,9 +52,25 @@ export function renderPlay(app, host, params) {
     }
   }
 
-  const logStruggle = (concept) => { try { api.logStruggle(sess.username, sess.password, concept).catch(() => {}); } catch { /* fire and forget */ } };
+  // Dice is stat-free (DICE-PLAN ruling): no struggle flags feed the
+  // teacher's panel from a generated round — only the static mastery loop
+  // logs struggles. Guarded here, not in the caller, so every existing
+  // logStruggle(...) call-site below stays untouched.
+  const logStruggle = (concept) => { if (dice) return; try { api.logStruggle(sess.username, sess.password, concept).catch(() => {}); } catch { /* fire and forget */ } };
 
-  const st = { i: 0, firstTry: 0, xp: 0, streak: 0, total: skills.length };
+  // Resume: reconstruct the in-round counters from the saved answeredCorrect
+  // array so the streak/first-try display picks up exactly where it left
+  // off. xp is taken from the save directly (recomputing it would just
+  // reproduce the same number via the same formula below).
+  let initI = 0, initFirstTry = 0, initXp = 0, initStreak = 0;
+  if (dice) {
+    initI = dice.resumeIndex || 0;
+    const ans = dice.resumeAnswered || [];
+    initFirstTry = ans.filter(Boolean).length;
+    initXp = dice.resumeXp || 0;
+    for (let k = ans.length - 1; k >= 0 && ans[k]; k--) initStreak++;
+  }
+  const st = { i: initI, firstTry: initFirstTry, xp: initXp, streak: initStreak, total: skills.length };
   let attempt = 0;
 
   function showSkill() {
@@ -58,17 +81,27 @@ export function renderPlay(app, host, params) {
     present();
   }
 
+  function advance() { st.i++; window.scrollTo(0, 0); (st.i < st.total) ? showSkill() : finish(); }
+
   let currentQ = null;
   function present(regen = true) {
     attempt++;
     const skill = skills[st.i];
-    const q = regen ? skill.gen() : currentQ;  // calcdo "Try again" replays the SAME task (regen=false)
+    // dice: SEEDED regeneration (js/dice.js genAt) — same call fresh or on
+    // resume, so re-deriving at the saved index always reproduces the exact
+    // question. Static play is untouched (regen/currentQ path, unchanged).
+    const q = dice ? genAt(dice.roundSeed, st.i, skill) : (regen ? skill.gen() : currentQ);
     currentQ = q;
     window.__Q__ = q;                          // expose current question (debug / headless checks)
+    // dice is stat-free and has no mastery loop: every question is answered
+    // once, so a correct answer always counts as "first try" for the XP
+    // bonus — matches supabase/migration-dice.sql's _mhq_dice_xp, which
+    // pays the mechanism, not a client-reported total (DICE-PLAN "never
+    // names an amount").
     mountQuestion(qhost, q, {
       onResult(ok) {
+        const ft = dice ? true : (attempt === 1);
         if (ok) {
-          const ft = attempt === 1;
           if (ft) st.firstTry++;
           st.streak++;
           const gained = XP.perCorrect * Math.min(st.streak, XP.streakCap) + (ft ? XP.firstTryBonus : 0);
@@ -81,20 +114,47 @@ export function renderPlay(app, host, params) {
           xpPop.textContent = "Let’s try a similar one";
           if (attempt >= 2) logStruggle(skill.concept);     // repeated miss on this skill
         }
+        if (dice) dice.recordAnswer(st.i, ok, st.xp);       // fire-and-forget checkpoint for resume
       },
       // calcdo wrong answer: break the streak (and flag a struggle on a repeat miss),
       // but keep the SAME task — the panel offers Try again / Show me the steps.
-      onWrong() { st.streak = 0; xpPop.className = "xp-pop bad"; xpPop.textContent = "Not quite"; if (attempt >= 2) logStruggle(skill.concept); },
+      onWrong() {
+        st.streak = 0; xpPop.className = "xp-pop bad"; xpPop.textContent = "Not quite";
+        if (attempt >= 2) logStruggle(skill.concept);
+        if (dice && attempt === 1) dice.recordAnswer(st.i, false, st.xp);
+      },
       onSteps() { logStruggle(skill.concept); },
       onRetry() { window.scrollTo(0, 0); xpPop.textContent = ""; xpPop.className = "xp-pop"; present(false); },
-      onContinue() { st.i++; window.scrollTo(0, 0); (st.i < st.total) ? showSkill() : finish(); },
-      onSibling() { window.scrollTo(0, 0); xpPop.textContent = ""; xpPop.className = "xp-pop"; present(); },
+      onContinue() { advance(); },
+      // static: "Try a similar one" regenerates the SAME skill (mastery loop).
+      // dice: no mastery loop — a wrong answer already showed the worked
+      // solution (mountQuestion's existing behaviour), so Continue just
+      // moves to the next dealt question, same as a correct answer.
+      onSibling() {
+        if (dice) { advance(); return; }
+        window.scrollTo(0, 0); xpPop.textContent = ""; xpPop.className = "xp-pop"; present();
+      },
       onLost() { logStruggle(skill.concept); openConcept(skill.concept, () => { window.scrollTo(0, 0); present(false); }); },
     });
+    // dice's always-available method reveal (DICE-PLAN): a recipe MAY set
+    // q.method (plain HTML). Rendered here, not in questions.js, so static
+    // rounds are completely untouched by this feature. Tolerates absence.
+    if (dice && q.method) {
+      const mbtn = el("button", "btn ghost small", "📖 Show me the method");
+      const mbox = el("div", "hint-box"); mbox.hidden = true;
+      mbox.innerHTML = `<span class="tag">METHOD</span>${q.method}`;
+      mbtn.addEventListener("click", () => { mbox.hidden = false; mbtn.disabled = true; });
+      qhost.appendChild(mbtn); qhost.appendChild(mbox);
+    }
   }
 
   async function finish() {
     bar.querySelector("i").style.width = "100%";
+    // dice: no progress-table write, no score/streak/mastery bookkeeping —
+    // js/dice-play.js's finish(st) calls mhq_submit_dice (server computes
+    // XP from the stored answeredCorrect[]) and routes to the dice results
+    // screen itself. Everything below this is the static path, unchanged.
+    if (dice) { await dice.finish(st); return; }
     const score = st.total ? st.firstTry / st.total : 0;
     const priorXp = (app.state && typeof app.state.xp === "number") ? app.state.xp : 0;
     let res = { badgeEarned: false, alreadyPassed: false, xpAwarded: st.xp, goldAwarded: 0, levelUp: false };

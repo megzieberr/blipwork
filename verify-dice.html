@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice infrastructure · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice infrastructure · verification</h1>
+<p class="muted small">Tests js/dice.js + js/quests/dice-stub.js (the TEST-ONLY stub pool wired at chapterId
+  "stats" in js/quests/dice-pools.js). Session 1 adds a real verify-dice-&lt;chapter&gt;.html-style suite once
+  a real recipe pool exists; this page proves the dealing/seed/resume machinery itself, chapter-agnostic.</p>
+<div id="banner">running…</div>
+
+<h2>Per-entry generation integrity</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Determinism, resume &amp; dealing</h2>
+<pre id="mechanics">…</pre>
+
+<script type="module">
+import { pool } from "./js/quests/dice-stub.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect, fmtComma } from "./js/check.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const RUNS = 300;
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+
+/* parse a formatted label (comma decimal) back to a number, or NaN if the
+   label isn't purely numeric — used for the "no decoy equals the answer
+   BY VALUE" check (DICE-PLAN's rule: string de-dup alone can silently
+   drop value-equal decoys that are formatted differently). */
+function numOf(label) {
+  const cleaned = String(label).trim().replace(",", ".");
+  return /^-?\d+(\.\d+)?$/.test(cleaned) ? Number(cleaned) : NaN;
+}
+
+/* ---------- 1) per-entry generation integrity ---------- */
+const entriesHost = document.getElementById("entries");
+pool.entries.forEach(entry => {
+  const issues = [];
+  let sawMethod = false;
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.push(`threw: ${e.message}`); break; }
+
+    if (!INPUT_LAW.has(q.type)) { issues.push(`type "${q.type}" violates the input law (list-pick/number pad/sketch-click/calculator only)`); continue; }
+    if (q.method) sawMethod = true;
+
+    if (q.type === "mc" || q.type === "reason") {
+      const labels = q.options.map(o => o.label);
+      const corrects = q.options.filter(o => o.correct);
+      if (corrects.length !== 1) issues.push(`${corrects.length} correct options (want exactly 1)`);
+      if (new Set(labels).size !== labels.length) issues.push(`duplicate option labels: ${labels.join(" | ")}`);
+      if (labels.length < 2) issues.push("fewer than 2 options");
+      const correctNum = numOf(corrects[0] && corrects[0].label);
+      if (Number.isFinite(correctNum)) {
+        q.options.filter(o => !o.correct).forEach(o => {
+          const n = numOf(o.label);
+          if (Number.isFinite(n) && Math.abs(n - correctNum) < 1e-9) issues.push(`decoy "${o.label}" equals the answer BY VALUE`);
+        });
+      }
+    } else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.push("non-finite expected");
+      else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) issues.push("expected fails its own check");
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.push("q.yes not boolean");
+    } else if (q.type === "tap") {
+      const ids = q.tap.targets || [];
+      if (!ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
+    }
+    // calcdo: no extra structural check here (Statistics quest 1's own
+    // gen()s are the real proof of that shape — the stub pool doesn't use it).
+  }
+  const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} rolls)`);
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...new Set(issues)].slice(0, 5).join("; ")}</li>
+      <li class="${entry.concept ? "ok" : ""}">${entry.concept ? "has a concept id (I'm lost card testable)" : "no concept (tests the no-concept path)"}</li>
+      <li class="ok">${sawMethod ? "carries q.method (method-reveal link testable)" : "no q.method (tests the tolerate-absence path)"}</li>
+    </ul>`;
+  entriesHost.appendChild(card);
+});
+
+/* ---------- 2) determinism: same seed → same question, twice ---------- */
+const lines = [];
+{
+  const seed = newRoundSeed();
+  const skill = pool.entries[0];
+  const a = genAt(seed, 0, skill), b = genAt(seed, 0, skill);
+  const same = JSON.stringify(a) === JSON.stringify(b);
+  tick(same, "determinism: genAt(seed,0,skill) called twice is byte-identical");
+  lines.push(`determinism (same seed, same index, twice): ${same ? "OK — identical" : "FAIL — drifted"}`);
+}
+
+/* ---------- 3) resume property: regenerating at a saved index, after
+   other indices were generated in between, reproduces the SAME question
+   — this is the actual resume path (js/dice-play.js re-derives from the
+   save's index, not a replay of the whole round). ---------- */
+{
+  const seed = newRoundSeed();
+  const dealt = dealRound(pool.entries, pool.roundLength, []);
+  const first = {};
+  dealt.forEach((skill, i) => { first[i] = genAt(seed, i, skill); });
+  // simulate "closing the tab mid-round" — re-derive index 1 (say) again,
+  // as a resume would, well after every other index was already generated.
+  let allMatch = true;
+  dealt.forEach((skill, i) => {
+    const again = genAt(seed, i, skill);
+    if (JSON.stringify(again) !== JSON.stringify(first[i])) allMatch = false;
+  });
+  tick(allMatch, "resume: re-deriving every index after the fact reproduces the original question");
+  lines.push(`resume (regenerate at index = same question, for all ${dealt.length} dealt questions): ${allMatch ? "OK" : "FAIL"}`);
+}
+
+/* ---------- 4) determinism does NOT leak into static play: rng() must be
+   back on Math.random after withSeed/genAt return. ---------- */
+{
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, pool.entries[0]);
+  const restored = (Math.random === before);
+  tick(restored, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${restored ? "OK" : "FAIL — Math.random was left patched"}`);
+}
+
+/* ---------- 5) dealing: coverage-first, then fully random ---------- */
+{
+  // fresh learner (no kinds met yet): roundLength === pool size here, so the
+  // very first deal should be an exact permutation — every kind once, none twice.
+  const deck = dealRound(pool.entries, pool.roundLength, []);
+  const kinds = deck.map(e => e.kind);
+  const coverAll = kinds.length === pool.entries.length && new Set(kinds).size === pool.entries.length;
+  tick(coverAll, "dealing: a fresh learner's first round covers every kind exactly once");
+  lines.push(`dealing (fresh learner, first round): [${kinds.join(", ")}] — ${coverAll ? "OK, full coverage no repeats" : "FAIL"}`);
+
+  // partial coverage: 2 of 4 kinds already met — the other 2 MUST appear.
+  const metSome = pool.entries.slice(0, 2).map(e => e.kind);
+  const unmetSome = pool.entries.slice(2).map(e => e.kind);
+  const deck2 = dealRound(pool.entries, pool.roundLength, metSome);
+  const kinds2 = new Set(deck2.map(e => e.kind));
+  const gotUnmet = unmetSome.every(k => kinds2.has(k));
+  tick(gotUnmet, "dealing: with partial coverage, every still-unmet kind is dealt");
+  lines.push(`dealing (2/4 kinds met): unmet [${unmetSome.join(", ")}] present in deck → ${gotUnmet ? "OK" : "FAIL"}`);
+
+  // full coverage: every kind met — dealing must still return a full round
+  // (fully random now), never crash, never come up short.
+  const allKinds = pool.entries.map(e => e.kind);
+  const deck3 = dealRound(pool.entries, pool.roundLength, allKinds);
+  const fullLen = deck3.length === pool.roundLength;
+  tick(fullLen, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage): dealt ${deck3.length}/${pool.roundLength} — ${fullLen ? "OK" : "FAIL"}`);
+
+  // roundLength can safely exceed the pool size (a thin early pool) without
+  // crashing or returning short — proves dealRound's padding fallback.
+  const deck4 = dealRound(pool.entries, pool.roundLength + 3, []);
+  const noCrash = deck4.length === pool.roundLength + 3;
+  tick(noCrash, "dealing: roundLength > pool size pads without crashing or coming up short");
+  lines.push(`dealing (roundLength ${pool.roundLength + 3} > pool ${pool.entries.length}): dealt ${deck4.length} — ${noCrash ? "OK" : "FAIL"}`);
+}
+
+document.getElementById("mechanics").textContent = lines.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

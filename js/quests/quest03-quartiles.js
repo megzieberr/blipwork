@@ -9,6 +9,7 @@
 import { randInt, pick, shuffled } from "../ui.js";
 import { fmtComma } from "../check.js";
 import { TOL } from "../config.js";
+import { rng } from "../rng.js";
 import {
   sortAsc, quartilePos, quartileValue, iqr, outlierBounds, percentilePos, roundNote,
 } from "../statlib.js";
@@ -222,9 +223,9 @@ function genIsOutlier() {
   const q1 = randInt(15, 40), q3 = q1 + randInt(8, 22);
   const { iqr: range, lower, upper } = outlierBounds(q1, q3);
   let x, isOut;
-  if (Math.random() < 0.5) {
+  if (rng() < 0.5) {
     isOut = true;
-    x = Math.random() < 0.5 ? Math.round(lower) - randInt(1, 6) : Math.round(upper) + randInt(1, 6);
+    x = rng() < 0.5 ? Math.round(lower) - randInt(1, 6) : Math.round(upper) + randInt(1, 6);
   } else {
     isOut = false;
     x = randInt(Math.ceil(lower) + 2, Math.floor(upper) - 2);

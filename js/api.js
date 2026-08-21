@@ -41,6 +41,14 @@
                   setTerm(pw,running)  (alias: adminSetTerm),
                   adminSetAssignment(pw,questId,due,note),
                   adminClearAssignment(pw)
+     dice:        diceSave(u,p,chapter,save) — persist/clear the in-progress
+                    round blob (resume checkpoint; save may be null to clear)
+                  submitDice(u,p,chapter) — pays out the round. Takes NO xp;
+                    the server recomputes it from the saved answeredCorrect[]
+                    (DICE-PLAN.md "never names an amount"). getState()'s
+                    payload additionally carries `dice`: { [chapterId]: {
+                    plays, metKinds, save } }, and adminData()'s carries
+                    `dicePlays`: { [chapterId]: totalPlaysAcrossClass }.
    ============================================================ */
 import { SupabaseBackend, hasSupabase } from "./supabase.js";
 import { LocalBackend } from "./local-backend.js";

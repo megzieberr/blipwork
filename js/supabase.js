@@ -97,4 +97,16 @@ export const SupabaseBackend = {
     return rpc("mhq_admin_set_assignment", { p_admin_password: pw, p_quest_id: questId, p_due: due || null, p_note: note || null });
   },
   async adminClearAssignment(pw) { return rpc("mhq_admin_clear_assignment", { p_admin_password: pw }); },
+
+  // ---- DICE-PLAN.md: generative practice rounds (session 0b, 2026-08-21) ----
+  // diceSave persists/clears the in-progress round blob (resume checkpoint);
+  // submitDice takes NO xp/amount — the server recomputes it from the saved
+  // answeredCorrect[] (mhq_submit_dice), so the client can never name a
+  // payment. See supabase/migration-dice.sql (WRITTEN, NOT RUN).
+  async diceSave(username, password, chapter, save) {
+    return rpc("mhq_dice_save", { p_username: username, p_password: password, p_chapter: chapter, p_save: save ?? null });
+  },
+  async submitDice(username, password, chapter) {
+    return rpc("mhq_submit_dice", { p_username: username, p_password: password, p_chapter: chapter });
+  },
 };

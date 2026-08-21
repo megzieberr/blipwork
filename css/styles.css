@@ -197,6 +197,14 @@ h2{font-size:20px} h3{font-size:17px}
 .quest .qstate{margin-top:auto;display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted);padding-top:10px}
 .quest .qstate .led{width:7px;height:7px;border-radius:99px;background:var(--qc);box-shadow:0 0 8px var(--qc)}
 .quest .qcheck{position:absolute;top:11px;right:12px;color:var(--qc);font-size:15px}
+/* DICE-PLAN.md 🎲 card — same .quest look, just spans the full grid width
+   and sits above the quest list (session 0b, 2026-08-21). Not a restyle. */
+.dice-card{grid-column:1/-1;min-height:auto;flex-direction:row;align-items:center;gap:12px}
+.dice-card .qn{font-size:18px}
+.dice-card h3{margin-top:0}
+.dice-card p{margin-top:1px}
+.dice-card .qstate{margin-top:0;padding-top:0;margin-left:auto;flex:0 0 auto}
+.dice-card.busy{opacity:.6;pointer-events:none}
 
 /* ---------- PLAY screen ---------- */
 .play-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}

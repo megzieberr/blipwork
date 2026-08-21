@@ -9,7 +9,7 @@
    so it works against Supabase (live) or the local backend (?local=1).
    ============================================================ */
 import { api } from "./api.js";
-import { CHAPTERS } from "./config.js";
+import { CHAPTERS, DICE_CHAPTERS } from "./config.js";
 import { CONCEPTS } from "./concepts.js";
 import { el, clear } from "./ui.js";
 
@@ -79,7 +79,7 @@ async function dashboard() {
   status.remove();
   view.appendChild(termSection(!!data.termRunning));
   view.appendChild(assignmentSection(data));
-  view.appendChild(questSection(data.quests || []));
+  view.appendChild(questSection(data.quests || [], data.dicePlays || {}));
   view.appendChild(struggleSection(data.struggles || []));
   view.appendChild(learnerSection(data.rows || [], data.inactiveDays || 7));
 }
@@ -214,7 +214,7 @@ function assignmentSection(data) {
    existing adminSetQuestOpen over that chapter's quests, one reload() at
    the end. A quest id the payload carries but config.js doesn't know about
    (shouldn't happen) is appended in a plain "Other" block, not dropped. */
-function questSection(quests) {
+function questSection(quests, dicePlays) {
   const sec = el("div", "card adm-section");
   sec.appendChild(el("h2", "", "Quests — open / close"));
   sec.appendChild(el("p", "muted small", "Learners only see open quests. Open each one once you’ve taught it."));
@@ -239,8 +239,14 @@ function questSection(quests) {
     if (!built.length) return null;
     const block = el("div", "adm-qchap");
     const openCount = built.filter(q => openById[q.id]).length;
+    // DICE-PLAN.md 🎲 + play count — additive, one small cell, gated by the
+    // same DICE_CHAPTERS allowlist the learner-facing card uses (session
+    // 0b, 2026-08-21). Ships invisible: DICE_CHAPTERS is empty until a
+    // chapter both has a pool and Megan's phone-test green light.
+    const diceCell = DICE_CHAPTERS.includes(ch.id)
+      ? `<span class="muted small adm-qcount" title="Dice rounds played this chapter, whole class">🎲 ${dicePlays[ch.id] || 0}</span>` : "";
     const head = el("div", "adm-qchead",
-      `<span class="adm-qctitle">${ch.icon} ${ch.name}</span><span class="muted small adm-qcount">${openCount} / ${built.length} open</span>`);
+      `<span class="adm-qctitle">${ch.icon} ${ch.name}</span><span class="muted small adm-qcount">${openCount} / ${built.length} open</span>${diceCell}`);
     const btns = el("div", "adm-qcbtns");
     const openAll = el("button", "btn ghost small", "Open all");
     const closeAll = el("button", "btn ghost small", "Close all");

@@ -56,9 +56,12 @@
    sick states can be tested without waiting a week; .reset() clears it.
    ============================================================ */
 import { levelInfo, MILESTONE_LEVELS } from "./companion/level.js";
-import { BLIP, CHAPTERS } from "./config.js";
+import { BLIP, CHAPTERS, XP } from "./config.js";
 
-const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq.struggles", quests: "mhq.quests", meta: "mhq.meta", blips: "mhq.blips" };
+const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq.struggles", quests: "mhq.quests", meta: "mhq.meta", blips: "mhq.blips",
+  // DICE-PLAN.md (session 0b, 2026-08-21): mirrors supabase's dice_plays
+  // table — { [studentId]: { [chapterId]: { plays, metKinds, save } } }.
+  dicePlays: "mhq.dicePlays" };
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
@@ -813,6 +816,9 @@ export const LocalBackend = {
       // CQ-BRIDGE-PLAN.md Part 3: mirrors mhq_get_state's one new field —
       // the Collect panel renders only when this is true.
       cqLinked: !!rec.cq_name,
+      // DICE-PLAN.md (session 0b): { [chapterId]: { plays, metKinds, save } }
+      // — mirrors mhq_get_state's additive `dice` field.
+      dice: read(LS.dicePlays, {})[s.id] || {},
       // Phase 3
       assignment: assignmentView(rec),
       // S2: `pending` is the TOTAL number of unopened boxes so the existing
@@ -890,6 +896,72 @@ export const LocalBackend = {
       },
     };
   },
+
+  // ---- DICE-PLAN.md: generative practice rounds (session 0b, 2026-08-21) ----
+  // Mirrors supabase/migration-dice.sql's mhq_dice_save / mhq_submit_dice
+  // (WRITTEN, NOT RUN there — this file is the ONLY place either currently
+  // executes). dice_plays row shape here: { plays, metKinds, save }.
+  async diceSave(username, password, chapter, save) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const all = read(LS.dicePlays, {});
+    const forStudent = all[s.id] || (all[s.id] = {});
+    const row = forStudent[chapter] || (forStudent[chapter] = { plays: 0, metKinds: [], save: null });
+    row.save = save || null;
+    write(LS.dicePlays, all);
+    touch(s.id);
+    return { ok: true };
+  },
+  async submitDice(username, password, chapter) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const all = read(LS.dicePlays, {});
+    const forStudent = all[s.id] || (all[s.id] = {});
+    const row = forStudent[chapter] || (forStudent[chapter] = { plays: 0, metKinds: [], save: null });
+    const save = row.save;
+    if (!save || !Array.isArray(save.skillIds) || !save.skillIds.length) return { ok: false, error: "no_active_round" };
+    const answered = Array.isArray(save.answeredCorrect) ? save.answeredCorrect : [];
+    if (answered.length < save.skillIds.length) return { ok: false, error: "round_incomplete" };
+
+    // THE mechanism, mirrored from js/play.js's onResult accumulator (and
+    // supabase/migration-dice.sql's _mhq_dice_xp) — NOT a client-reported
+    // total (DICE-PLAN.md "the client never names an amount"): every
+    // correct answer counts as first-try in dice mode (no mastery loop),
+    // so the streak-capped bonus always applies.
+    let streak = 0, xpGain = 0;
+    for (let i = 0; i < save.skillIds.length; i++) {
+      if (answered[i]) { streak++; xpGain += XP.perCorrect * Math.min(streak, XP.streakCap) + XP.firstTryBonus; }
+      else streak = 0;
+    }
+    const goldGain = 10;   // flat, every completed dice round — matches mhq_submit_quest's flat gold
+
+    const stAll = read(LS.students, {});
+    const rec = stAll[s.id];
+    ensureBlipFields(rec);
+    const oldLevel = levelInfo(rec.xp).level;
+    rec.xp += xpGain;
+    rec.gold += goldGain;
+    write(LS.students, stAll);
+
+    const metKinds = new Set(row.metKinds || []);
+    // save.kinds is the coverage bucket per dealt question (parallel to
+    // skillIds — a pool MAY group several skillIds under one kind); falls
+    // back to skillIds for a save written before this field existed.
+    (save.kinds && save.kinds.length === save.skillIds.length ? save.kinds : save.skillIds).forEach(k => metKinds.add(k));
+    row.plays = (row.plays || 0) + 1;
+    row.metKinds = [...metKinds];
+    row.save = null;
+    write(LS.dicePlays, all);
+    touch(s.id);
+
+    const info = levelInfo(rec.xp);
+    const correct = answered.filter(Boolean).length;
+    return {
+      ok: true, xpAwarded: xpGain, goldAwarded: goldGain, correct, total: save.skillIds.length,
+      xp: rec.xp, gold: rec.gold, level: info.level, levelUp: info.level > oldLevel, levelInfo: info, plays: row.plays,
+    };
+  },
+
   async logStruggle(username, password, concept) {
     const s = verify(username, password);
     if (!s) return { ok: false, error: "auth" };
@@ -1286,8 +1358,17 @@ export const LocalBackend = {
       assignedOn: asgV.assignedOn, dueOn: asgV.dueOn,
       doneCount: Object.values(students).filter(s => Array.isArray(s.box_grants) && s.box_grants.includes(assignmentKey(asgA))).length,
     } : null;
+    // DICE-PLAN.md (session 0b): per-chapter play totals ACROSS the whole
+    // class — mirrors mhq_admin_data's additive `dicePlays` field. One
+    // sum per chapter id that has ANY dice_plays rows, nothing per-student.
+    const dicePlays = {};
+    Object.values(read(LS.dicePlays, {})).forEach(byChapter => {
+      Object.entries(byChapter).forEach(([chId, row]) => {
+        dicePlays[chId] = (dicePlays[chId] || 0) + (row.plays || 0);
+      });
+    });
     return { ok: true, rows, quests: qs, struggles: Object.values(cByConcept).sort((a, b) => b.count - a.count), inactiveDays: 7,
-      termRunning: running, termOnSince: onSince, assignment };
+      termRunning: running, termOnSince: onSince, assignment, dicePlays };
   },
   /* Phase 3 — one active assignment at a time; setting a new one replaces it.
      Refuses a closed quest exactly as the server does: assigning must never

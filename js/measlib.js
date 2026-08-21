@@ -17,6 +17,7 @@
    bites. The skill is the formula, read off the picture.
    ============================================================ */
 import { randInt, pick, shuffled } from "./ui.js";
+import { rng } from "./rng.js";
 
 /* ---- the correct formulas, in the chapter's own notation ---- */
 export const SOLID = {
@@ -117,7 +118,7 @@ export const HEIGHT_TRIPLES = [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], 
 
 /* a triple as a cone {r, H, slant}; randomly choose which leg is the radius */
 export function coneTriple() {
-  const t = pick(HEIGHT_TRIPLES), sw = Math.random() < 0.5;
+  const t = pick(HEIGHT_TRIPLES), sw = rng() < 0.5;
   return { r: sw ? t[1] : t[0], H: sw ? t[0] : t[1], slant: t[2] };
 }
 /* a triple as a square pyramid {half, s, H, slant}; half-base ≤ 8 keeps ℓ sensible */

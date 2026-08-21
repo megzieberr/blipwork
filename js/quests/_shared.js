@@ -3,6 +3,12 @@
 import { randInt, pick, shuffled } from "../ui.js";
 import { fmtComma } from "../check.js";
 import { sortAsc, midpoint } from "../statlib.js";
+/* DICE-PLAN.md infrastructure (2026-08-21): re-exported so a recipe/gen()
+   that needs a direct Math.random()-style call (rare — randInt/pick/dataset/
+   rawset already route through it) can write `rng() < 0.5` instead and stay
+   seedable. See js/rng.js for what installs a seeded value during a dice
+   round; static play is unaffected (rng() defaults to Math.random). */
+export { rng } from "../rng.js";
 
 export const C = v => fmtComma(v);
 export const list = a => a.join("  ;  ");

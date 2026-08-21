@@ -1,6 +1,8 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
-import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL } from "./config.js";
+import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS } from "./config.js";
 import { questDef } from "./quests/index.js";
+import { dicePool } from "./quests/dice-pools.js";
+import { openDiceRound } from "./dice-play.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
@@ -225,6 +227,30 @@ export function renderChapter(app, host, params) {
   }
 
   const grid = el("div", "quest-grid");
+
+  // DICE-PLAN.md 🎲 — visible only when this chapter is BOTH allow-listed
+  // (config.js DICE_CHAPTERS) AND has a pool wired (js/quests/dice-pools.js).
+  // NEVER locked, regardless of quest gating above — a kid who skips
+  // straight to dice practice is a kid practising maths (her ruling).
+  // Learner-facing and deliberately stat-free: no best score, no streak —
+  // just the card itself and the round's own results screen after.
+  if (DICE_CHAPTERS.includes(ch.id) && dicePool(ch.id)) {
+    const dcard = el("div", "quest dice-card");
+    dcard.style.setProperty("--qc", ch.signature);
+    dcard.innerHTML = `
+      <div class="qn">🎲</div>
+      <h3>Dice round</h3>
+      <p>Fresh numbers every roll — practise as many rounds as you like.</p>
+      <div class="qstate"><span class="led"></span>Always open</div>`;
+    dcard.addEventListener("click", () => {
+      if (dcard.classList.contains("busy")) return;
+      dcard.classList.add("busy");
+      Promise.resolve(openDiceRound(app, ch)).catch(() => showToast("Couldn’t start the dice round — check your connection.", "error"))
+        .finally(() => dcard.classList.remove("busy"));
+    });
+    grid.appendChild(dcard);
+  }
+
   quests.forEach(q => {
     const accent = questAccent(ch, q.n);
     const def = questDef(q.id);
@@ -307,6 +333,40 @@ export function renderResults(app, host, params) {
 
   if (passed) { mk("Back to quests", true, toChapter); mk("Play again", false, replay); }
   else { mk("Try again", true, replay); mk("Back to quests", false, toChapter); }
+  screen.appendChild(card);
+  host.appendChild(screen);
+}
+
+/* ---------------- DICE RESULTS (DICE-PLAN.md, session 0b) ----------------
+   Deliberately NOT renderResults with a `dice` flag bolted on — dice has no
+   pass/fail, no badge, no mastery language, so a separate small screen
+   keeps that ruling honest instead of a maze of `passed ? … : …` branches
+   for a mode with nothing to pass. Stat-free ruling only covers the
+   CHAPTER page (no best score/streak there) — the round's own results
+   screen is explicitly fine (DICE-PLAN). */
+export function renderDiceResults(app, host, params) {
+  const { chapter, accent, correct, total, ok, xpAwarded, goldAwarded, levelUp, level } = params;
+  setTheme(chapter.signature, accent);
+  const pct = total ? Math.round((correct / total) * 100) : 0;
+
+  const screen = el("div", "results");
+  screen.style.setProperty("--accent", accent);
+  const card = el("div", "card result-card");
+  card.innerHTML = `
+    <div class="result-emoji">🎲</div>
+    <h1>Dice round complete</h1>
+    <div class="big-score">${pct}%</div>
+    <p class="muted">${correct} / ${total} right</p>
+    <div class="result-reward system-notice"><span class="sys-label">Reward</span><div class="sys-value">+${xpAwarded ?? 0} XP · +${goldAwarded ?? 0} <span class="crystal">💎</span></div></div>
+    ${ok ? "" : `<div class="result-msg warn">Couldn’t reach the server to pay this round out — check your connection and try again later; your progress in this round wasn’t lost.</div>`}
+    ${levelUp ? `<div class="result-levelup system-notice"><span class="sys-label">System</span><div class="sys-value"><span class="sparkle tw">✦</span> LEVEL UP — LV. ${level} <span class="sparkle tw">✦</span></div></div>` : ""}
+    <div class="result-actions"></div>`;
+
+  const actions = card.querySelector(".result-actions");
+  const mk = (label, primary, fn) => { const b = el("button", "btn " + (primary ? "primary" : "ghost"), label); b.addEventListener("click", fn); actions.appendChild(b); };
+  mk("Roll again", true, () => openDiceRound(app, chapter));
+  mk("Back to quests", false, () => app.go("chapter", { chapterId: chapter.id }));
+
   screen.appendChild(card);
   host.appendChild(screen);
 }

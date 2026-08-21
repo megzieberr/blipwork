@@ -1928,14 +1928,25 @@ for (const o of outfits) {
     // schema.sql is supposed to carry the exact SAME bodies, byte-for-byte.
     // Pulled in raw (not comment-stripped) since a dropped/changed COMMENT
     // is still real drift between the two files. ----
+    // DICE-PLAN.md, session 0b (2026-08-21): mhq_get_state was re-created
+    // AGAIN, by migration-dice.sql (adds the `dice` field on top of
+    // everything this section already checks for above) — so schema.sql's
+    // copy is now compared against THAT file, the new latest carrier, not
+    // this section's own migration-cq-bridge.sql. mhq_credit_cq/mhq_cq_link
+    // are untouched by dice and still compare against migration-cq-bridge.sql.
     const schemaRaw = await (await fetch("./supabase/schema.sql")).text();
+    const diceRaw = await (await fetch("./supabase/migration-dice.sql")).text();
+    const bodySrc = { mhq_get_state: { text: diceRaw, name: "migration-dice.sql" },
+                       mhq_credit_cq: { text: raw, name: "migration-cq-bridge.sql" },
+                       mhq_cq_link:   { text: raw, name: "migration-cq-bridge.sql" } };
     for (const fn of ["mhq_get_state", "mhq_credit_cq", "mhq_cq_link"]) {
-      const migBody = isolateFn(raw, fn);
+      const src = bodySrc[fn];
+      const migBody = isolateFn(src.text, fn);
       const schemaBody = isolateFn(schemaRaw, fn);
-      tick(!!migBody && !!schemaBody, `could not isolate ${fn} in both migration-cq-bridge.sql and schema.sql`);
+      tick(!!migBody && !!schemaBody, `could not isolate ${fn} in both ${src.name} and schema.sql`);
       if (migBody && schemaBody) {
         tick(migBody === schemaBody,
-          `${fn}'s body differs between migration-cq-bridge.sql and schema.sql — the mirror-back must be byte-identical (comments included), or schema.sql silently stops matching live`);
+          `${fn}'s body differs between ${src.name} and schema.sql — the mirror-back must be byte-identical (comments included), or schema.sql silently stops matching live`);
       }
     }
 

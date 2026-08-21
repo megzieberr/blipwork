@@ -232,6 +232,24 @@ create table if not exists public.milestone_grants (
   primary key (student_id, milestone)
 );
 
+-- DICE-PLAN.md (session 0b, 2026-08-21) — generative practice rounds.
+-- ⚠️ WRITTEN, NOT RUN on live (see supabase/migration-dice.sql's header for
+-- the full design note; this is the from-scratch mirror only). met_kinds
+-- is the coverage-first-dealing memory (js/dice.js's dealRound() reads it
+-- back through mhq_get_state's `dice` field); save is the in-progress
+-- round's resume checkpoint, null when none.
+create table if not exists public.dice_plays (
+  student_id  uuid not null references public.students(id) on delete cascade,
+  chapter     text not null,
+  plays       integer not null default 0,
+  met_kinds   jsonb not null default '[]'::jsonb,
+  save        jsonb,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now(),
+  primary key (student_id, chapter)
+);
+create index if not exists dice_plays_student_idx on public.dice_plays (student_id);
+
 -- ---------- lock everything down ----------
 alter table public.students   enable row level security;
 alter table public.blips      enable row level security;
@@ -241,7 +259,8 @@ alter table public.struggles  enable row level security;
 alter table public.app_config enable row level security;
 alter table public.shop_items enable row level security;
 alter table public.milestone_grants enable row level security;
-revoke all on public.students, public.blips, public.quests, public.progress, public.struggles, public.app_config, public.shop_items, public.milestone_grants from anon, authenticated;
+alter table public.dice_plays enable row level security;
+revoke all on public.students, public.blips, public.quests, public.progress, public.struggles, public.app_config, public.shop_items, public.milestone_grants, public.dice_plays from anon, authenticated;
 
 -- drop old-version functions first. Some are recreated below with renamed
 -- parameters (p_name -> p_username), which create-or-replace cannot do.
@@ -294,6 +313,28 @@ begin
   end loop;
   return jsonb_build_object('level', lvl, 'intoLevel', rem,
     'nextCost', case when lvl >= 40 then null else to_jsonb(cost) end);
+end; $$;
+
+-- DICE-PLAN.md (session 0b, 2026-08-21): mirrors js/config.js's XP economy
+-- (perCorrect 10 · firstTryBonus 5 · streakCap 3) over a stored true/false
+-- array — see supabase/migration-dice.sql's header for why this exists
+-- (payment is recomputed here, never trusted from the client).
+create or replace function public._mhq_dice_xp(p_answered jsonb)
+returns integer language plpgsql immutable set search_path = '' as $$
+declare v_streak int := 0; v_xp int := 0; v_i int; v_n int; v_ok boolean;
+begin
+  if p_answered is null or jsonb_typeof(p_answered) <> 'array' then return 0; end if;
+  v_n := jsonb_array_length(p_answered);
+  for v_i in 0 .. v_n - 1 loop
+    v_ok := (p_answered->>v_i)::boolean;
+    if v_ok then
+      v_streak := v_streak + 1;
+      v_xp := v_xp + 10 * least(v_streak, 3) + 5;
+    else
+      v_streak := 0;
+    end if;
+  end loop;
+  return v_xp;
 end; $$;
 
 -- ---------- Phase 2 (feeding / growth / sickness) helpers ----------
@@ -434,7 +475,7 @@ create or replace function public.mhq_get_state(p_username text, p_password text
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb; food jsonb; furn jsonb;
         blips_j jsonb; blip1 jsonb; health jsonb; stg int; is_qual boolean;
-        can_feed boolean; can_care boolean;
+        can_feed boolean; can_care boolean; dice_j jsonb;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -493,6 +534,11 @@ begin
   can_feed := (stg < 2) and (st.last_cookie_day is null or st.last_cookie_day < current_date);
   can_care := (stg >= 2) and is_qual and (st.last_care_day is null or st.last_care_day < current_date);
 
+  -- DICE-PLAN.md, session 0b: the ONE new field.
+  select coalesce(jsonb_object_agg(chapter, jsonb_build_object(
+            'plays', plays, 'metKinds', met_kinds, 'save', save)), '{}'::jsonb)
+    into dice_j from public.dice_plays where student_id = sid;
+
   return jsonb_build_object('ok', true,
     'student', jsonb_build_object('id', sid, 'name', st.display_name, 'username', lower(p_username)),
     'progress', prog, 'totalXp', total, 'openQuests', open_q,
@@ -504,6 +550,7 @@ begin
     -- (select * above), so no extra query — the Collect panel renders only
     -- when this is true (session 3's client-side rule).
     'cqLinked', (st.cq_name is not null),
+    'dice', dice_j,
     'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'));
 end; $$;
 
@@ -798,6 +845,82 @@ begin
     'levelUp', (new_lvl > old_lvl), 'levelInfo', public._mhq_level(new_xp));
 end; $$;
 
+-- ---------- DICE-PLAN.md (session 0b, 2026-08-21): generative practice
+-- rounds. See supabase/migration-dice.sql's header for the full design
+-- note (⚠️ WRITTEN, NOT RUN there either — from-scratch mirror only). ----------
+create or replace function public.mhq_dice_save(p_username text, p_password text, p_chapter text, p_save jsonb)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  insert into public.dice_plays (student_id, chapter, save, updated_at)
+  values (v_sid, p_chapter, p_save, now())
+  on conflict (student_id, chapter) do update
+    set save = excluded.save, updated_at = now();
+  return jsonb_build_object('ok', true);
+end; $$;
+
+-- Takes NO xp/amount from the client (DICE-PLAN "never names an amount") —
+-- recomputes it from the save's own answeredCorrect[] via _mhq_dice_xp.
+-- Row-locked; refuses a missing or incomplete round rather than paying it.
+create or replace function public.mhq_submit_dice(p_username text, p_password text, p_chapter text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_row record; v_save jsonb; v_skill_ids jsonb; v_kinds jsonb; v_answered jsonb;
+        v_n int; v_answered_n int; v_xp_gain int; v_gold_gain int := 10;
+        v_old_xp int; v_new_xp int; v_new_gold int; v_old_lvl int; v_new_lvl int;
+        v_met jsonb; v_correct int; v_plays int;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  select * into v_row from public.dice_plays
+   where student_id = v_sid and chapter = p_chapter for update;
+  if not found or v_row.save is null then
+    return jsonb_build_object('ok', false, 'error', 'no_active_round');
+  end if;
+
+  v_save := v_row.save;
+  v_skill_ids := coalesce(v_save->'skillIds', '[]'::jsonb);
+  v_answered  := coalesce(v_save->'answeredCorrect', '[]'::jsonb);
+  v_n := jsonb_array_length(v_skill_ids);
+  v_answered_n := jsonb_array_length(v_answered);
+  if v_n = 0 or v_answered_n < v_n then
+    return jsonb_build_object('ok', false, 'error', 'round_incomplete');
+  end if;
+
+  v_xp_gain := public._mhq_dice_xp(v_answered);
+  select count(*) into v_correct from jsonb_array_elements_text(v_answered) t(val) where val = 'true';
+
+  select xp into v_old_xp from public.students where id = v_sid for update;
+  update public.students set xp = xp + v_xp_gain, gold = gold + v_gold_gain, last_active_at = now()
+   where id = v_sid
+   returning xp, gold into v_new_xp, v_new_gold;
+
+  v_kinds := case when jsonb_typeof(v_save->'kinds') = 'array'
+                    and jsonb_array_length(v_save->'kinds') = v_n
+                  then v_save->'kinds' else v_skill_ids end;
+  select coalesce(jsonb_agg(distinct k), '[]'::jsonb) into v_met
+    from (
+      select val as k from jsonb_array_elements_text(coalesce(v_row.met_kinds, '[]'::jsonb)) t(val)
+      union
+      select val as k from jsonb_array_elements_text(v_kinds) t(val)
+    ) u;
+
+  update public.dice_plays
+     set plays = plays + 1, met_kinds = v_met, save = null, updated_at = now()
+   where student_id = v_sid and chapter = p_chapter
+   returning plays into v_plays;
+
+  v_old_lvl := (public._mhq_level(v_old_xp)->>'level')::int;
+  v_new_lvl := (public._mhq_level(v_new_xp)->>'level')::int;
+
+  return jsonb_build_object('ok', true, 'xpAwarded', v_xp_gain, 'goldAwarded', v_gold_gain,
+    'correct', v_correct, 'total', v_n,
+    'xp', v_new_xp, 'gold', v_new_gold, 'level', v_new_lvl,
+    'levelUp', (v_new_lvl > v_old_lvl), 'levelInfo', public._mhq_level(v_new_xp), 'plays', v_plays);
+end; $$;
+
 -- Buy: server-authoritative gold/level/ownership checks; row-locked to stop double-spend.
 -- category 'cosmetic' = per-blip accessory (on p_slot); 'food' = pharmacy/grocery.
 -- soup/medicine -> the pantry (never expire); groceries -> today's TRAY (S4b,
@@ -989,9 +1112,16 @@ returns jsonb language sql security definer set search_path = public, extensions
   select jsonb_build_object('ok', public._mhq_admin_ok(p_admin_password));
 $$;
 
+-- ⚠️ This from-scratch copy predates Phase 3 (see this file's own header) and
+-- is still missing the `assignment` field admin.js actually reads on live —
+-- a real, pre-existing gap, NOT something this session introduced or fixed
+-- (out of scope here; supabase/migration-dice.sql's header names the TRUE
+-- live body — migration-phase3.sql's — for the foreman to re-check). Only
+-- `dicePlays` is added below, additively, on top of whatever this copy's
+-- shape already was.
 create or replace function public.mhq_admin_data(p_admin_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare rows jsonb; qs jsonb; strug jsonb; term_on boolean; term_since text;
+declare rows jsonb; qs jsonb; strug jsonb; term_on boolean; term_since text; dice_totals jsonb;
 begin
   if not public._mhq_admin_ok(p_admin_password) then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
 
@@ -1020,8 +1150,14 @@ begin
   select coalesce((value = 'true'), false) into term_on from public.app_config where key = 'term_running';
   select value into term_since from public.app_config where key = 'term_on_since';
 
+  -- DICE-PLAN.md, session 0b: the ONE new field — per-chapter total across
+  -- the whole class (her admin ruling: "🎲 icon + play count, nothing more").
+  select coalesce(jsonb_object_agg(chapter, total_plays), '{}'::jsonb) into dice_totals
+    from (select chapter, sum(plays) as total_plays from public.dice_plays group by chapter) t;
+
   return jsonb_build_object('ok', true, 'rows', rows, 'quests', qs, 'struggles', strug,
-    'inactiveDays', 7, 'termRunning', coalesce(term_on, false), 'termOnSince', term_since);
+    'inactiveDays', 7, 'termRunning', coalesce(term_on, false), 'termOnSince', term_since,
+    'dicePlays', dice_totals);
 end; $$;
 
 -- Term toggle. Turning ON resets term_on_since = today, which forgives all
@@ -1135,7 +1271,10 @@ grant execute on function
   public.mhq_admin_remove_student(text, uuid),
   public.mhq_admin_reset_progress(text, uuid),
   public.mhq_admin_resolve_struggle(text, text),
-  public.mhq_admin_add_student(text, text, text, text)
+  public.mhq_admin_add_student(text, text, text, text),
+  -- DICE-PLAN.md, session 0b
+  public.mhq_dice_save(text, text, text, jsonb),
+  public.mhq_submit_dice(text, text, text)
 to anon, authenticated;
 
 -- ============================================================
