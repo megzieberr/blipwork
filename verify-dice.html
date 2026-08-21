@@ -54,6 +54,16 @@
   skill could.</p>
 <pre id="saltMechanics">…</pre>
 
+<h2>Part 3 · js/play.js dice wiring — "Try a similar one" + first-answer-counts (session-A build, 2026-08-21)</h2>
+<p class="muted small">Parts 1–2 prove js/dice.js's genAt salting in isolation. This drives the REAL renderPlay() from
+  js/play.js against a tiny 1-skill stub, with a fake `dice` options object that logs every recordAnswer() call —
+  so these checks fail if play.js's WIRING regresses (e.g. onSibling reverting to the old `if (dice) { advance();
+  return; }` shortcut), not just if genAt's own salting breaks. Covers: wrong→sibling re-presents the same skill
+  with different (salted) values instead of skipping to the next question; a retry (correct or wrong) pays no XP
+  and never re-touches the saved record; and the calcdo wrong→retry→correct hole the brief called out (the retry
+  used to overwrite the saved false with true and pay full XP).</p>
+<pre id="playWiring">…</pre>
+
 <script type="module">
 import { pool as stubPool } from "./js/quests/dice-stub.js";
 import { pool as statsPool } from "./js/quests/dice-stats.js";
@@ -61,6 +71,8 @@ import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
 import { answerCorrect, fmtComma } from "./js/check.js";
 import { mean, median, mode, range, stdDev, quartileValue, quartilePos, percentilePos, outlierBounds } from "./js/statlib.js";
 import { verifyGraph, ogiveAnswerAtCum, ogiveAnswerAtVal } from "./js/engine/stats-graph.js";
+import { renderPlay } from "./js/play.js";
+import { rng } from "./js/rng.js";
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
@@ -522,6 +534,148 @@ document.getElementById("statsRecompute").textContent = recomputeLines.join("\n"
 
   document.getElementById("saltMechanics").textContent = lines.join("\n");
 }
+
+/* ============================================================
+   PART 3 — js/play.js's dice wiring: "Try a similar one" +
+   first-answer-counts (session-A build, 2026-08-21). See the h2
+   intro above for why this drives the REAL renderPlay() instead of
+   just re-testing genAt().
+   ============================================================ */
+function btnByText(host, text) {
+  return [...host.querySelectorAll("button")].find(b => b.textContent.trim() === text);
+}
+
+// a tiny mc skill whose two option VALUES vary with the seeded rng (via
+// genAt's withSeed), so "same skill, different values" is directly
+// checkable. Option order is fixed (0 = correct, 1 = wrong) regardless
+// of salt, so tests can click by index.
+function makeSibSkill() {
+  return {
+    id: "sib.mc", concept: "sib-test",
+    gen: () => {
+      const n = Math.floor(rng() * 100000);
+      return {
+        type: "mc", concept: "sib-test", prompt: "Pick the right number.",
+        options: [{ label: String(n), correct: true }, { label: String(n + 1), correct: false }],
+      };
+    },
+  };
+}
+function makeCalcdoSkill() {
+  return {
+    id: "sib.calcdo", concept: "sib-calcdo",
+    gen: () => ({
+      type: "calcdo", concept: "sib-calcdo",
+      task: "Enter 1-VAR stat mode.", goal: { type: "statMode" },
+      answerLabel: "MODE 3 1", solution: [{ s: "Press MODE, 3 (STAT), 1 (1-VAR)." }],
+    }),
+  };
+}
+
+// off-screen but real, attached DOM — renderPlay/mountQuestion need a
+// live document to append into and read layout-free structure from.
+function makeHarness(skill) {
+  const calls = [];           // recordAnswer(index, ok, xpSoFar) log
+  let finishCalls = 0;
+  const host = document.createElement("div");
+  host.style.cssText = "position:fixed;left:-9999px;top:0";
+  document.body.appendChild(host);
+  const roundSeed = newRoundSeed();
+  const dice = {
+    chapterId: "verify", roundSeed, skillIds: [skill.id],
+    resumeIndex: 0, resumeAnswered: [], resumeXp: 0,
+    answeredCorrect: [],
+    async recordAnswer(index, ok, xpSoFar) { calls.push({ index, ok, xpSoFar }); this.answeredCorrect[index] = ok; },
+    async finish() { finishCalls++; },
+  };
+  const app = { state: {}, go() {}, refresh: async () => {} };
+  renderPlay(app, host, {
+    chapter: { id: "verify", name: "Verify" }, accent: "#3aa0ff",
+    quest: { id: "dice", n: "🎲", title: "Verify · Dice round" },
+    def: { skills: [skill] }, dice,
+  });
+  return { host, dice, calls, roundSeed, finishOf: () => finishCalls, cleanup: () => host.remove() };
+}
+
+// drives: fresh present -> WRONG first answer -> click "Try a similar
+// one" -> returns the harness parked right after the sibling re-present,
+// unanswered, ready for the caller to finish the scenario either way.
+function wrongThenSibling() {
+  const skill = makeSibSkill();
+  const h = makeHarness(skill);
+  const q0 = window.__Q__;
+  const opts0 = [...h.host.querySelectorAll(".opt")];
+  opts0[1].click();                                    // the WRONG option (index 1, by construction)
+  const sib = btnByText(h.host, "Try a similar one →");
+  if (sib) sib.click();
+  const opts1 = [...h.host.querySelectorAll(".opt")];
+  return { h, skill, q0, q1: window.__Q__, opts0, opts1, sibFound: !!sib };
+}
+
+const pw = [];
+
+/* ---- (a) wrong -> sibling -> CORRECT retry ---- */
+{
+  const { h, skill, q0, q1, opts1, sibFound } = wrongThenSibling();
+  tick(h.calls.length === 1 && h.calls[0].index === 0 && h.calls[0].ok === false,
+    "play.js dice: first WRONG answer records index 0 = false exactly once");
+  tick(sibFound, "play.js dice: a wrong answer offers “Try a similar one →”");
+  tick(opts1.length === 2, "play.js dice: “Try a similar one” re-presents an mc question (not the results/finish screen)");
+  tick(h.finishOf() === 0, "play.js dice: “Try a similar one” must NOT advance/finish (the bug this session fixes)");
+  tick(JSON.stringify(q1) !== JSON.stringify(q0), "play.js dice: sibling question has DIFFERENT values from the original (salted regen)");
+  const expected = genAt(h.roundSeed, 0, skill, 1);      // 2nd present() at this index => attempt 2 => salt = attempt-1 = 1
+  tick(JSON.stringify(q1) === JSON.stringify(expected), "play.js dice: sibling question matches genAt(roundSeed,0,skill,1) exactly — same skillId, still deterministic per (seed,index,salt)");
+  tick(h.calls.length === 1, "play.js dice: merely presenting the sibling recorded nothing new");
+
+  opts1[0].click();                                     // CORRECT retry (index 0, by construction)
+  const pop = h.host.querySelector(".xp-pop");
+  tick(pop.textContent === "Got it!", "retry-correct: pop reads “Got it!” (no XP amount named)");
+  tick(h.calls.length === 1, "retry-correct: NO 2nd recordAnswer call (no XP paid, first-answer-counts)");
+  tick(h.dice.answeredCorrect[0] === false, "retry-correct: answeredCorrect[0] stays false — the FIRST answer was wrong, and that's what's recorded");
+  pw.push(`(a) wrong→sibling→correct-retry: sibling is same-skill/different-values and matches genAt(...,salt=1) exactly; recordAnswer calls total = ${h.calls.length} (want 1); finish() calls = ${h.finishOf()} (want 0); pop = "${pop.textContent}"; answeredCorrect[0] = ${h.dice.answeredCorrect[0]} (want false)`);
+  h.cleanup();
+}
+
+/* ---- (b) wrong -> sibling -> WRONG retry ---- */
+{
+  const { h, opts1 } = wrongThenSibling();
+  opts1[1].click();                                     // WRONG again (index 1, by construction)
+  const pop = h.host.querySelector(".xp-pop");
+  tick(pop.textContent === "Let’s try a similar one", "retry-wrong: pop keeps the existing “Let’s try a similar one” text");
+  tick(h.calls.length === 1, "retry-wrong: no 2nd recordAnswer call");
+  tick(h.dice.answeredCorrect[0] === false, "retry-wrong: answeredCorrect[0] stays false");
+  pw.push(`(b) wrong→sibling→wrong-retry: recordAnswer calls total = ${h.calls.length} (want 1); answeredCorrect[0] = ${h.dice.answeredCorrect[0]} (want false); pop = "${pop.textContent}"`);
+  h.cleanup();
+}
+
+/* ---- (c) calcdo: wrong -> Try again -> CORRECT retry (the brief's
+   named hole — used to overwrite the saved false with true and pay
+   full XP on the retry) ---- */
+{
+  const skill = makeCalcdoSkill();
+  const h = makeHarness(skill);
+  const check = () => btnByText(h.host, "Check my answer");
+
+  check().click();                                       // 1st attempt: goal untouched -> wrong
+  tick(h.calls.length === 1 && h.calls[0].ok === false, "calcdo dice: first WRONG attempt records index 0 = false");
+  tick(h.dice.answeredCorrect[0] === false, "calcdo dice: answeredCorrect[0] = false after the first wrong attempt");
+  const again = btnByText(h.host, "Try again");
+  tick(!!again, "calcdo wrong offers “Try again”");
+  again.click();                                         // onRetry -> present(false) -> fresh calcdo render (still index 0)
+
+  const calc = h.host.querySelector(".q-calc").__CALC__;
+  calc.press("mode"); calc.press("d3"); calc.press("d1");  // MODE -> 3 (STAT) -> 1 (1-VAR): satisfies goal.type "statMode"
+  tick(calc.state().mode === "STAT", "calcdo retry: the real calculator emulator actually entered STAT mode");
+  check().click();                                       // 2nd attempt: goal now met -> correct
+  const pop = h.host.querySelector(".xp-pop");
+  tick(pop.textContent === "Got it!", "calcdo retry-correct: pop reads “Got it!”");
+  tick(h.calls.length === 1, "calcdo retry-correct: NO 2nd recordAnswer call — closes the brief's named hole (was: overwrite false→true, pay full XP)");
+  tick(h.dice.answeredCorrect[0] === false, "calcdo retry-correct: answeredCorrect[0] STAYS false (the recorded answer is the first one, not the retry)");
+  pw.push(`(c) calcdo wrong→Try again→correct: recordAnswer calls total = ${h.calls.length} (want 1, was 2 before this fix); answeredCorrect[0] = ${h.dice.answeredCorrect[0]} (want false); pop = "${pop.textContent}"`);
+  h.cleanup();
+}
+
+document.getElementById("playWiring").textContent = pw.join("\n\n");
 
 const banner = document.getElementById("banner");
 const ok = passed === total;

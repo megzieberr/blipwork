@@ -75,6 +75,7 @@ export function renderPlay(app, host, params) {
 
   function showSkill() {
     attempt = 0;
+    firstAnswered = false;
     top.querySelector(".pcount").textContent = `${st.i + 1} / ${st.total}`;
     bar.querySelector("i").style.width = Math.round((st.i / st.total) * 100) + "%";
     xpPop.textContent = ""; xpPop.className = "xp-pop";
@@ -84,6 +85,12 @@ export function renderPlay(app, host, params) {
   function advance() { st.i++; window.scrollTo(0, 0); (st.i < st.total) ? showSkill() : finish(); }
 
   let currentQ = null;
+  // dice only (session-A build, 2026-08-21): has THIS index's first answer
+  // already been recorded? First-answer-counts rule — once true, any
+  // further onResult/onWrong at this index is a "Try a similar one" RETRY:
+  // pure practice, no XP, no dice.recordAnswer, firstTry/streak untouched.
+  // Reset per-index in showSkill(), never inside present().
+  let firstAnswered = false;
   function present(regen = true) {
     attempt++;
     const skill = skills[st.i];
@@ -99,13 +106,22 @@ export function renderPlay(app, host, params) {
     const q = dice ? genAt(dice.roundSeed, st.i, skill, attempt - 1) : (regen ? skill.gen() : currentQ);
     currentQ = q;
     window.__Q__ = q;                          // expose current question (debug / headless checks)
-    // dice is stat-free and has no mastery loop: every question is answered
-    // once, so a correct answer always counts as "first try" for the XP
-    // bonus — matches supabase/migration-dice.sql's _mhq_dice_xp, which
-    // pays the mechanism, not a client-reported total (DICE-PLAN "never
-    // names an amount").
+    // dice is stat-free (no struggle-logged mastery loop), and only ONE
+    // answer per index is ever paid or recorded (the firstAnswered gate in
+    // onResult/onWrong below) — so whichever answer that is always counts
+    // as "first try" for the XP bonus. Matches supabase/migration-dice.sql's
+    // _mhq_dice_xp, which pays the mechanism, not a client-reported total
+    // (DICE-PLAN "never names an amount").
     mountQuestion(qhost, q, {
       onResult(ok) {
+        // dice retry (this index's first answer is already recorded):
+        // PRACTICE only — no XP, no dice.recordAnswer, firstTry/streak
+        // untouched. First-answer-counts rule, session-A build 2026-08-21.
+        if (dice && firstAnswered) {
+          xpPop.className = ok ? "xp-pop good" : "xp-pop bad";
+          xpPop.textContent = ok ? "Got it!" : "Let’s try a similar one";
+          return;
+        }
         const ft = dice ? true : (attempt === 1);
         if (ok) {
           if (ft) st.firstTry++;
@@ -120,24 +136,28 @@ export function renderPlay(app, host, params) {
           xpPop.textContent = "Let’s try a similar one";
           if (attempt >= 2) logStruggle(skill.concept);     // repeated miss on this skill
         }
-        if (dice) dice.recordAnswer(st.i, ok, st.xp);       // fire-and-forget checkpoint for resume
+        if (dice) { dice.recordAnswer(st.i, ok, st.xp); firstAnswered = true; }   // fire-and-forget checkpoint for resume
       },
       // calcdo wrong answer: break the streak (and flag a struggle on a repeat miss),
       // but keep the SAME task — the panel offers Try again / Show me the steps.
       onWrong() {
         st.streak = 0; xpPop.className = "xp-pop bad"; xpPop.textContent = "Not quite";
         if (attempt >= 2) logStruggle(skill.concept);
-        if (dice && attempt === 1) dice.recordAnswer(st.i, false, st.xp);
+        // dice, same flag onResult uses: record only THIS index's first
+        // answer. Closes a real hole — without this, a calcdo answer wrong
+        // then retried correct hit onResult(true) and OVERWROTE the
+        // recorded false with true, paying full XP on the retry.
+        if (dice && !firstAnswered) { dice.recordAnswer(st.i, false, st.xp); firstAnswered = true; }
       },
       onSteps() { logStruggle(skill.concept); },
       onRetry() { window.scrollTo(0, 0); xpPop.textContent = ""; xpPop.className = "xp-pop"; present(false); },
       onContinue() { advance(); },
-      // static: "Try a similar one" regenerates the SAME skill (mastery loop).
-      // dice: no mastery loop — a wrong answer already showed the worked
-      // solution (mountQuestion's existing behaviour), so Continue just
-      // moves to the next dealt question, same as a correct answer.
+      // "Try a similar one" re-presents the SAME skill (mastery loop) with
+      // fresh values — static via skill.gen(), dice via genAt's salted
+      // regen (present() ignores `regen` in dice mode; see its comment
+      // above). This IS the retry: onResult/onWrong above already gate
+      // dice's XP/record on firstAnswered, so nothing here pays twice.
       onSibling() {
-        if (dice) { advance(); return; }
         window.scrollTo(0, 0); xpPop.textContent = ""; xpPop.className = "xp-pop"; present();
       },
       onLost() { logStruggle(skill.concept); openConcept(skill.concept, () => { window.scrollTo(0, 0); present(false); }); },
