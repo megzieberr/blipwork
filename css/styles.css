@@ -471,6 +471,13 @@ h2{font-size:20px} h3{font-size:17px}
 .frac .fr-n{display:block;padding:0 .35em;border-bottom:1.6px solid currentColor}
 .frac .fr-d{display:block;padding:0 .35em}
 
+/* Circle Geo tab card (CQ-BRIDGE-PLAN.md Part 2) — plain .card, no
+   per-chapter accent since this card isn't tied to a chapter. */
+.cg-card .ico{font-size:26px}
+.cg-card h2{margin-top:8px;color:var(--ink)}
+.cg-card p{color:var(--muted);font-size:13px;margin:4px 0 16px}
+.cg-open{text-decoration:none}
+
 /* hub tabs (Term 3 / Revision) */
 .hub-tabs{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .hub-tab{flex:1 1 0;min-width:140px;display:flex;flex-direction:column;gap:2px;text-align:left;

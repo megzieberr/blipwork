@@ -23,6 +23,18 @@ const errMsg = c => ({
   already_set: "Looks like a password is already set for that name — enter it instead.",
 })[c] || "Something went wrong. Try again.";
 
+/* Session-1 review rider (2026-08-21): the roster migration hides Megan's
+   two test accounts from the picker (students.hidden = true), and a teacher
+   on a fresh device has no `mhq.session` in localStorage to fall back on —
+   so there is otherwise NO path into a hidden account. ?u=1 renders the
+   classic username+password form instead, reachable by URL only (no link
+   or hint anywhere in the UI). Composes with ?local=1 (?local=1&u=1) since
+   each query param is read independently, same as api.js's forceLocal(). */
+function wantsClassicLogin() {
+  try { return new URLSearchParams(location.search).get("u") === "1"; }
+  catch { return false; }
+}
+
 export async function renderLogin(app, host) {
   clear(host);
   const wrap = el("div", "login");
@@ -31,10 +43,6 @@ export async function renderLogin(app, host) {
   wrap.appendChild(body);
   host.appendChild(wrap);
 
-  let students = [];
-  try { students = await api.listStudents(); }
-  catch { body.appendChild(el("p", "login-err", "Can’t reach the server.")); return; }
-
   async function finishLogin(username, password, err, btn) {
     setSession(username, password);
     const ok = await app.refresh();
@@ -42,6 +50,43 @@ export async function renderLogin(app, host) {
     // Room build §1 (her ruling): login lands in Blip's room, not the hub.
     app.go("blip");
   }
+
+  function renderClassicLogin() {
+    clear(body);
+    body.appendChild(el("p", "login-prompt", "Log in"));
+    const u = el("input", "login-input"); u.type = "text"; u.autocomplete = "off"; u.autocapitalize = "off";
+    u.placeholder = "Username";
+    body.appendChild(u);
+    const p = el("input", "login-input"); p.type = "password"; p.autocomplete = "off";
+    p.placeholder = "Password";
+    body.appendChild(p);
+    const err = el("p", "login-err"); err.hidden = true; body.appendChild(err);
+    const btn = el("button", "btn primary big", "Log in");
+    body.appendChild(btn);
+
+    function showErr(m) { err.hidden = false; err.textContent = m; }
+
+    async function submit() {
+      const username = u.value.trim();
+      const pw = p.value;
+      if (!username || !pw) return showErr("Enter your username and password.");
+      err.hidden = true; btn.disabled = true;
+      try {
+        const r = await api.login(username, pw);
+        if (!r.ok) { btn.disabled = false; return showErr(errMsg(r.error || "wrong_password")); }
+        return finishLogin(username, pw, err, btn);
+      } catch { btn.disabled = false; showErr("Can’t reach the server."); }
+    }
+    btn.addEventListener("click", submit);
+    [u, p].forEach(inp => inp.addEventListener("keydown", e => { if (e.key === "Enter") submit(); }));
+    setTimeout(() => u.focus(), 50);
+  }
+
+  if (wantsClassicLogin()) return renderClassicLogin();
+
+  let students = [];
+  try { students = await api.listStudents(); }
+  catch { body.appendChild(el("p", "login-err", "Can’t reach the server.")); return; }
 
   function pickName() {
     clear(body);

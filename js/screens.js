@@ -1,5 +1,5 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
-import { CHAPTERS, chapterById, questAccent, PASS } from "./config.js";
+import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL } from "./config.js";
 import { questDef } from "./quests/index.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
@@ -73,10 +73,14 @@ const progressOf = (app, id) => (app.state && app.state.progress && app.state.pr
 const openSet = app => new Set((app.state && app.state.openQuests) || []);
 
 /* ---------------- HUB ---------------- */
-/* the two tabs; current term first, revision (already-taught chapters) below */
+/* the three tabs; current term first, revision (already-taught chapters)
+   below, Circle Geo last. Circle Geo isn't chapter-based (CQ-BRIDGE-PLAN.md
+   Part 2 — it's an out-link, not a chapter), so it's excluded from the
+   byTerm() filter below and drawn by circleGeoCard() instead. */
 const TABS = [
   { id: "term3", label: "Term 3", sub: "This term’s homework" },
   { id: "revision", label: "Revision", sub: "Earlier chapters to revise" },
+  { id: "cgeo", label: "⭕ Circle Geo", sub: "Circle Quest" },
 ];
 let hubTab = "term3";                                   // remembered across hub visits
 
@@ -103,6 +107,26 @@ function chapterCard(app, ch, open) {
   } else {
     card.innerHTML = `<div class="ico">${ch.icon}</div><h2>${ch.name} <span class="pill soon">Soon</span></h2><p>Opens once we’ve covered it in class.</p>`;
   }
+  return card;
+}
+
+/* ---------------- HUB · Circle Geo tab (CQ-BRIDGE-PLAN.md Part 2) ----------------
+   One plain card, not a chapter card — no per-chapter accent to key off.
+   Circle Quest is reached by a plain out-link (a new tab, her ruling: never
+   merged, never iframed); the learner logs in there with their own CQ
+   password, same as always. The .cg-collect div is an empty, deliberately
+   unbuilt mount point — session 3 (the XP -> diamonds bridge) fills it with
+   the Collect panel. Build nothing inside it here. */
+function circleGeoCard() {
+  const card = el("div", "card cg-card");
+  card.innerHTML = `
+    <div class="ico">⭕</div>
+    <h2>Circle Quest</h2>
+    <p>Your circle geometry quests live in Circle Quest.</p>
+    <a class="btn primary big cg-open" href="${CQ_URL}" target="_blank" rel="noopener">Open Circle Quest</a>`;
+  // Session 3 mounts the Collect panel here — nothing built inside it yet.
+  card.appendChild(el("div", "cg-collect"));
+  card.querySelector(".cg-collect").setAttribute("data-mount", "cq-collect");
   return card;
 }
 
@@ -148,14 +172,16 @@ export function renderHub(app, host) {
   const open = openSet(app);
   const byTerm = (t) => CHAPTERS.filter(ch => (ch.term || "term3") === t);
 
-  // only show tabs that actually have chapters
-  const tabs = TABS.filter(t => byTerm(t.id).length);
+  // only show tabs that actually have chapters — except Circle Geo, which
+  // isn't chapter-based and always shows (CQ-BRIDGE-PLAN.md Part 2).
+  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length);
   if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "term3";
 
   const tabbar = el("div", "hub-tabs");
   const cards = el("div", "chapter-cards");
   const draw = () => {
     clear(cards);
+    if (hubTab === "cgeo") { cards.appendChild(circleGeoCard()); return; }
     byTerm(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
   };
   tabs.forEach(t => {

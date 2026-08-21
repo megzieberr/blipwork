@@ -1715,6 +1715,59 @@ for (const o of outfits) {
   } catch (e) { tick(false, "could not read supabase/migration-roster-login.sql: " + e.message); }
 }
 
+/* ---------- 6k. Circle Geo tab + login fallback (CQ-BRIDGE-PLAN.md Part 2
+   + the session-1 review rider, 2026-08-21) ----------
+   Both pieces are UI wiring with no server round-trip to exercise, so —
+   matching this file's existing convention for that case (see the room
+   tutorial's blip.js/tour.js wiring checks above) — these are static
+   source-pattern checks, not live DOM/backend assertions. */
+{
+  // ---- config.js: the CQ out-link is a real, exact constant ----
+  const configSrc = await (await fetch("./js/config.js")).text();
+  tick(/export const CQ_URL\s*=\s*"https:\/\/megzieberr\.github\.io\/circle-geo-quest\/"/.test(configSrc),
+    "js/config.js does not export CQ_URL as the exact Circle Quest URL");
+
+  // ---- screens.js: the third hub tab, always shown, one plain card ----
+  const screensSrc = await (await fetch("./js/screens.js")).text();
+  tick(/import\s*\{[^}]*\bCQ_URL\b[^}]*\}\s*from\s*"\.\/config\.js"/.test(screensSrc),
+    "js/screens.js does not import CQ_URL from ./config.js");
+  tick(/id:\s*"cgeo"/.test(screensSrc), 'js/screens.js: TABS is missing the "cgeo" tab');
+  tick(/label:\s*"⭕ Circle Geo"/.test(screensSrc), 'js/screens.js: the cgeo tab is missing its "⭕ Circle Geo" label');
+  tick(/t\.id === "cgeo" \|\| byTerm\(t\.id\)\.length/.test(screensSrc),
+    "js/screens.js: the cgeo tab must always show — it should bypass the byTerm() chapter-count filter other tabs use");
+  tick(/function circleGeoCard/.test(screensSrc), "js/screens.js is missing circleGeoCard()");
+  tick(/href="\$\{CQ_URL\}"[^>]*target="_blank"[^>]*rel="noopener"/.test(screensSrc),
+    'js/screens.js: the "Open Circle Quest" anchor must have href={CQ_URL}, target="_blank" and rel="noopener" together');
+  tick(/el\("div",\s*"cg-collect"\)/.test(screensSrc), "js/screens.js is missing the .cg-collect mount div");
+  tick(/setAttribute\("data-mount",\s*"cq-collect"\)/.test(screensSrc),
+    'js/screens.js: the mount div is missing data-mount="cq-collect"');
+  say('Circle Geo tab: third hub tab (always shown), one .cg-card with the CQ out-link (new tab, noopener) and an empty .cg-collect[data-mount="cq-collect"] for session 3 to fill');
+
+  // ---- auth.js: the ?u=1 classic-login fallback ----
+  const authSrc = await (await fetch("./js/auth.js")).text();
+  tick(/function wantsClassicLogin/.test(authSrc), "js/auth.js is missing wantsClassicLogin()");
+  tick(/URLSearchParams\(location\.search\)\.get\("u"\)\s*===\s*"1"/.test(authSrc),
+    'js/auth.js: wantsClassicLogin() should read ?u=1 the same way api.js\'s forceLocal() reads ?local — a plain URLSearchParams check, so the two compose');
+  tick(/if \(wantsClassicLogin\(\)\) return renderClassicLogin\(\)/.test(authSrc),
+    "js/auth.js: renderLogin() does not branch to renderClassicLogin() on wantsClassicLogin()");
+  const classicBody = (/function renderClassicLogin\(\)\s*\{([\s\S]*?)\n  \}\n/.exec(authSrc) || [])[1] || "";
+  tick(!!classicBody, "js/auth.js: could not isolate renderClassicLogin()'s body — check it wasn't renamed or reshaped");
+  tick(/btn\.disabled = true;[\s\S]*await api\.login\(/.test(classicBody),
+    "js/auth.js: renderClassicLogin() must disable its button BEFORE the api.login() await (the double-submit rule)");
+  tick(/errMsg\(r\.error \|\| "wrong_password"\)/.test(classicBody),
+    "js/auth.js: renderClassicLogin() should show the same errMsg() wrong-password copy as the picker");
+  say("?u=1 classic login: wantsClassicLogin() branches renderLogin() to a plain username+password form calling api.login() directly, disable-before-await, same error copy as the picker");
+
+  // ---- nowhere in the UI points at it (URL-only, by design) ----
+  const NOLINK_SCAN_FILES = ["index.html", "js/app.js", "js/screens.js", "js/blip.js", "js/ui.js"];
+  for (const f of NOLINK_SCAN_FILES) {
+    try {
+      const src = await (await fetch(`./${f}`)).text();
+      tick(!/wantsClassicLogin|[?&]u=1/.test(src), `${f} references the ?u=1 fallback — it must be reachable by URL only, never linked or hinted at`);
+    } catch (e) { tick(false, `could not read ${f}: ` + e.message); }
+  }
+}
+
 /* ---------- report ---------- */
 const banner = document.getElementById("banner");
 banner.className = fails.length ? "fail" : "pass";

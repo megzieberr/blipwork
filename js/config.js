@@ -204,6 +204,10 @@ export const TOL = {
 export const PASS = 0.8;           // 80% (first-try) to pass a quest and earn its badge
 export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
 
+/* Circle Geo tab (CQ-BRIDGE-PLAN.md Part 2, 2026-08-21). Circle Quest stays
+   its own app, reached by a plain out-link — never merged, never iframed. */
+export const CQ_URL = "https://megzieberr.github.io/circle-geo-quest/";
+
 /* ============================================================
    BLIP — Phase 2 feeding/growth/sickness constants (2026-07-19).
    THESE ARE A DISPLAY MIRROR ONLY. The server (supabase/schema.sql +
