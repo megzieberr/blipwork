@@ -478,6 +478,19 @@ h2{font-size:20px} h3{font-size:17px}
 .cg-card p{color:var(--muted);font-size:13px;margin:4px 0 16px}
 .cg-open{text-decoration:none}
 
+/* Collect panel (CQ-BRIDGE-PLAN.md Part 3) — mounts into .cg-collect.
+   The reveal reuses .system-notice/.sys-value wholesale (see cq-collect.js);
+   this file only adds the panel's own spacing and its pop-in. */
+.cg-collect{margin-top:14px}
+.cq-collect-inner{display:flex;flex-direction:column;align-items:center;gap:10px}
+.cq-collect-btn{width:100%}
+.cq-collect-reveal:empty{display:none}
+.cq-collect-notice{width:100%;box-sizing:border-box;text-align:center;animation:cq-collect-pop .35s ease-out}
+.cq-collect-notice.cq-collect-err{border-color:color-mix(in srgb,var(--bad) 40%,var(--brd-2));
+  box-shadow:0 0 16px -6px color-mix(in srgb,var(--bad) 40%,transparent)}
+.cq-collect-notice.cq-collect-err .sys-value{color:var(--bad);text-shadow:none}
+@keyframes cq-collect-pop{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+
 /* hub tabs (Term 3 / Revision) */
 .hub-tabs{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .hub-tab{flex:1 1 0;min-width:140px;display:flex;flex-direction:column;gap:2px;text-align:left;

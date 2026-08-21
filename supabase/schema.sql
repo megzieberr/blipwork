@@ -60,6 +60,12 @@
 --   file used to say the opposite, because self sign-up itself had replaced
 --   an earlier roster login; the wheel has now turned twice.)
 --
+--  (2026-08-21, CQ-BRIDGE-PLAN.md Part 3: the XP -> diamonds bridge — see
+--   migration-cq-bridge.sql. students.cq_xp_credited (the collect
+--   watermark), app_config.cq_rate (seeded 30), mhq_credit_cq and
+--   mhq_cq_link (both service_role ONLY — never anon/authenticated, see
+--   their grants below), and mhq_get_state's one new field, cqLinked.)
+--
 --  AUTH MODEL (roster login, like Circle Quest):
 --   • The teacher seeds the roster (mhq_admin_add_student, or bulk insert);
 --     learners never create their own account (mhq_signup is gone).
@@ -134,7 +140,11 @@ create table public.students (
   -- mhq_list_students picker without deleting it (the two pre-existing test
   -- rows are hidden by migration-roster-login.sql, never dropped).
   cq_name         text unique,
-  hidden          boolean not null default false
+  hidden          boolean not null default false,
+  -- XP -> diamonds bridge (2026-08-21, CQ-BRIDGE-PLAN.md Part 3): how much
+  -- of this learner's CQ XP has already been converted to diamonds (gold).
+  -- The collect watermark — only ever moves forward. See mhq_credit_cq.
+  cq_xp_credited  int not null default 0
 );
 
 -- Per-blip companion state (slot 1 = the original, slot 2 = the reward baby).
@@ -490,8 +500,70 @@ begin
     'blip', blip1, 'blips', blips_j, 'shop', shop, 'foodShop', food, 'furnitureShop', furn,
     'pantry', st.pantry, 'tray', coalesce(st.tray, '{}'::jsonb), 'health', health,
     'canFeedToday', can_feed, 'canCareToday', can_care,
+    -- CQ-BRIDGE-PLAN.md Part 3: the ONE new field. cq_name lives on `st`
+    -- (select * above), so no extra query — the Collect panel renders only
+    -- when this is true (session 3's client-side rule).
+    'cqLinked', (st.cq_name is not null),
     'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'));
 end; $$;
+
+-- ---------- XP -> diamonds bridge (2026-08-21, CQ-BRIDGE-PLAN.md Part 3) ----------
+-- Both of the following are SECURITY DEFINER and service_role ONLY (see
+-- their grants) — neither is ever callable from the browser's
+-- anon/publishable key. The edge function supabase/functions/collect-cq
+-- is their only caller. See migration-cq-bridge.sql for the full design
+-- note (watermark delta-pay, row-locked, remainder banked never lost).
+
+-- Mints diamonds. Row-locked (FOR UPDATE) — the double-submit rule applies
+-- server-side too, so a retried/duplicate call can never pay twice for the
+-- same CQ XP. p_cq_total lower than the watermark (can't normally happen)
+-- pays nothing and moves nothing, rather than erroring.
+create or replace function public.mhq_credit_cq(p_student_id uuid, p_cq_total int)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare st record; rate int; delta int; diamonds int; new_gold int; new_credited int;
+begin
+  select id, gold, cq_xp_credited into st from public.students where id = p_student_id for update;
+  if not found then return jsonb_build_object('ok', false, 'error', 'no_such_student'); end if;
+
+  rate := greatest(1, coalesce((select value::int from public.app_config where key = 'cq_rate'), 30));
+  -- p_cq_total lower than the watermark (can't normally happen — CQ totals
+  -- only grow) pays nothing and moves nothing, rather than erroring.
+  delta := greatest(0, coalesce(p_cq_total, 0) - coalesce(st.cq_xp_credited, 0));
+  diamonds := delta / rate;   -- integer division = floor for non-negatives
+
+  if diamonds > 0 then
+    update public.students
+       set gold = gold + diamonds,
+           cq_xp_credited = cq_xp_credited + diamonds * rate
+     where id = p_student_id
+     returning gold, cq_xp_credited into new_gold, new_credited;
+  else
+    -- nothing to pay: report the row exactly as it stands, watermark untouched
+    new_gold := st.gold;
+    new_credited := st.cq_xp_credited;
+  end if;
+
+  return jsonb_build_object('ok', true, 'paid', diamonds, 'gold', new_gold);
+end; $$;
+
+revoke execute on function public.mhq_credit_cq(uuid, int) from public, anon, authenticated;
+grant execute on function public.mhq_credit_cq(uuid, int) to service_role;
+
+-- The edge function's internal "who is this, and are they linked" read.
+-- The learner's password reaches this only through the edge function
+-- (called over HTTPS with the publishable key) — never directly as an RPC.
+create or replace function public.mhq_cq_link(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare sid uuid; s record;
+begin
+  sid := public._mhq_auth(p_username, p_password);
+  if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  select cq_name, cq_xp_credited into s from public.students where id = sid;
+  return jsonb_build_object('ok', true, 'student_id', sid, 'cq_name', s.cq_name, 'cq_xp_credited', s.cq_xp_credited);
+end; $$;
+
+revoke execute on function public.mhq_cq_link(text, text) from public, anon, authenticated;
+grant execute on function public.mhq_cq_link(text, text) to service_role;
 
 -- ---------- Phase 2: feed / care / second blip ----------
 create or replace function public.mhq_feed(p_username text, p_password text)
@@ -1114,6 +1186,11 @@ on conflict (key) do nothing;
 -- Phase 2: the term toggle starts OFF (no sickness accrues until the teacher
 -- turns the term on; that toggle also stamps term_on_since = today).
 insert into public.app_config (key, value) values ('term_running', 'false')
+on conflict (key) do nothing;
+
+-- CQ-BRIDGE-PLAN.md Part 3: diamonds-per-CQ-XP rate for mhq_credit_cq.
+-- Retuning is one UPDATE, no deploy.
+insert into public.app_config (key, value) values ('cq_rate', '30')
 on conflict (key) do nothing;
 
 -- ── SHOP CATALOGUE ──────────────────────────────────────────────────────────

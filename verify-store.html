@@ -1768,6 +1768,188 @@ for (const o of outfits) {
   }
 }
 
+/* ---------- 6l. XP -> diamonds bridge (CQ-BRIDGE-PLAN.md Part 3, build
+   session 3, 2026-08-21) ----------
+   Three layers: the migration's SQL objects (static parse, same idiom as
+   6j), the local round-trip (a live exercise of the watermark maths, via
+   a fresh isolated test account — never thabo_test/lerato_test, so this
+   section has no ordering dependency on 6j/6k), and the Collect panel's
+   client wiring (static source-pattern, same idiom as 6k — there is no
+   server round-trip to exercise for the UI shell itself). */
+{
+  // ================= migration-cq-bridge.sql =================
+  let sql = "";
+  try {
+    const raw = await (await fetch("./supabase/migration-cq-bridge.sql")).text();
+    sql = raw.replace(/--[^\n]*/g, "");
+    tick(/add column if not exists cq_xp_credited\s+int\s+not null default 0/i.test(sql),
+      "migration-cq-bridge.sql does not add students.cq_xp_credited (int not null default 0)");
+    tick(/insert into public\.app_config \(key, value\) values \('cq_rate',\s*'30'\)[\s\S]{0,60}on conflict \(key\) do nothing/i.test(sql),
+      "migration-cq-bridge.sql does not seed app_config.cq_rate = '30' (idempotent, on conflict do nothing)");
+
+    for (const fn of [
+      { name: "mhq_credit_cq", args: "p_student_id uuid, p_cq_total int", sig: "uuid, int" },
+      { name: "mhq_cq_link", args: "p_username text, p_password text", sig: "text, text" },
+    ]) {
+      const bodyRe = new RegExp(`create or replace function public\\.${fn.name}\\([^)]*\\)[\\s\\S]{0,260}?set search_path = public, extensions`, "i");
+      tick(bodyRe.test(sql), `migration-cq-bridge.sql: ${fn.name} is missing or does not pin search_path = public, extensions`);
+
+      // ⚠️ THE CHECK THAT MATTERS MOST IN THIS SESSION: both new RPCs must
+      // be revoked from public/anon/authenticated AND granted to
+      // service_role ONLY — Postgres grants EXECUTE to PUBLIC by default on
+      // CREATE FUNCTION, so a missing revoke would let anyone mint diamonds.
+      const revokeRe = new RegExp(`revoke execute on function public\\.${fn.name}\\(${fn.sig}\\) from public,\\s*anon,\\s*authenticated;`, "i");
+      const grantRe = new RegExp(`grant execute on function public\\.${fn.name}\\(${fn.sig}\\) to service_role;`, "i");
+      tick(revokeRe.test(sql), `migration-cq-bridge.sql: ${fn.name}(${fn.sig}) is missing "revoke execute ... from public, anon, authenticated" — without it, PUBLIC's default EXECUTE grant would let anon mint diamonds`);
+      tick(grantRe.test(sql), `migration-cq-bridge.sql: ${fn.name}(${fn.sig}) is missing "grant execute ... to service_role" — without it, nothing (not even the edge function) could call it`);
+    }
+
+    // ---- mhq_get_state: carries the ONE new field, and the copy-forward
+    // tripwire (sentinel fields from the pre-existing body must survive) ----
+    const isolateFn = (text, name) => (new RegExp(`create or replace function public\\.${name}[\\s\\S]*?\\nend; \\$\\$;`).exec(text) || [null])[0];
+    const migGetState = isolateFn(sql, "mhq_get_state");
+    tick(!!migGetState, "migration-cq-bridge.sql: could not isolate the re-created mhq_get_state body");
+    if (migGetState) {
+      tick(migGetState.includes("'cqLinked'") && /cqLinked['"]?,\s*\(st\.cq_name is not null\)/.test(migGetState),
+        "migration-cq-bridge.sql: mhq_get_state's re-created body is missing the new cqLinked field (boolean, st.cq_name is not null)");
+      for (const sentinel of ["furnitureShop", "termRunning", "canFeedToday", "levelInfo"]) {
+        tick(migGetState.includes(sentinel),
+          `migration-cq-bridge.sql: mhq_get_state's re-created body lost "${sentinel}" — the copy-forward tripwire (a past real incident, see schema.sql's header)`);
+      }
+    }
+
+    // ---- the strongest form of "diff against schema.sql before committing":
+    // schema.sql is supposed to carry the exact SAME bodies, byte-for-byte.
+    // Pulled in raw (not comment-stripped) since a dropped/changed COMMENT
+    // is still real drift between the two files. ----
+    const schemaRaw = await (await fetch("./supabase/schema.sql")).text();
+    for (const fn of ["mhq_get_state", "mhq_credit_cq", "mhq_cq_link"]) {
+      const migBody = isolateFn(raw, fn);
+      const schemaBody = isolateFn(schemaRaw, fn);
+      tick(!!migBody && !!schemaBody, `could not isolate ${fn} in both migration-cq-bridge.sql and schema.sql`);
+      if (migBody && schemaBody) {
+        tick(migBody === schemaBody,
+          `${fn}'s body differs between migration-cq-bridge.sql and schema.sql — the mirror-back must be byte-identical (comments included), or schema.sql silently stops matching live`);
+      }
+    }
+
+    say("migration-cq-bridge.sql: cq_xp_credited column + cq_rate=30 seed present; mhq_credit_cq/mhq_cq_link both pin search_path AND are revoked from public/anon/authenticated + granted to service_role only; mhq_get_state carries cqLinked without losing its existing fields; all three re-created function bodies are byte-identical to schema.sql");
+  } catch (e) { tick(false, "could not read/parse supabase/migration-cq-bridge.sql: " + e.message); }
+
+  // ================= the collect-cq edge function =================
+  try {
+    const fnSrc = await (await fetch("./supabase/functions/collect-cq/index.ts")).text();
+    tick(/req\.method === "OPTIONS"/.test(fnSrc), "collect-cq: missing an OPTIONS/CORS preflight branch");
+    tick(/Access-Control-Allow-Origin/.test(fnSrc), "collect-cq: missing CORS headers — the browser calls this directly, unlike send-push");
+    tick(/req\.method !== "POST"/.test(fnSrc) && /405/.test(fnSrc), "collect-cq: missing the 405-on-non-POST guard");
+    tick(/admin\.rpc\(\s*["']mhq_cq_link["']/.test(fnSrc), "collect-cq: does not call mhq_cq_link via the service-role client");
+    tick(/admin\.rpc\(\s*["']mhq_credit_cq["']/.test(fnSrc), "collect-cq: does not call mhq_credit_cq via the service-role client");
+    tick(/error:\s*"not_linked"/.test(fnSrc), 'collect-cq: missing the {ok:false, error:"not_linked"} branch for an unlinked learner');
+    tick((fnSrc.match(/error:\s*"cq_down"/g) || []).length >= 3,
+      'collect-cq: expected at least 3 cq_down soft-fail sites (missing env, CQ fetch failing/non-200, CQ payload shape) — got fewer');
+    tick(/Deno\.env\.get\("CQ_URL"\)/.test(fnSrc) && /Deno\.env\.get\("CQ_SERVICE_KEY"\)/.test(fnSrc),
+      "collect-cq: does not read CQ_URL / CQ_SERVICE_KEY from the environment");
+    tick(/display_name=eq\./.test(fnSrc) && /xp_events\?student_id=eq\./.test(fnSrc),
+      "collect-cq: does not read CQ's students (by display_name) then xp_events (by student_id) over REST");
+    // never logs either credential (the header's own rule)
+    const loggingLines = fnSrc.split("\n").filter((l) => /console\./.test(l));
+    const leaky = loggingLines.filter((l) => /username|password/i.test(l));
+    tick(leaky.length === 0, `collect-cq: ${leaky.length} console call(s) appear to reference username/password — neither may ever be logged: ${JSON.stringify(leaky)}`);
+    say("collect-cq edge function: CORS + OPTIONS handled, POST-only, calls mhq_cq_link then mhq_credit_cq via the service-role client, soft-fails cq_down on a missing/unreachable/malformed CQ read, never logs the learner's credentials");
+  } catch (e) { tick(false, "could not read supabase/functions/collect-cq/index.ts: " + e.message); }
+
+  // ================= client: nothing calls the service-role RPCs directly =================
+  // A bare substring ban would false-positive on the explanatory comments in
+  // js/api.js and js/supabase.js (which name these RPCs to say WHY they are
+  // never called directly) — so this checks for an actual rpc()-style
+  // invocation, not the name appearing at all.
+  const RPC_CALL_SCAN_FILES = ["js/supabase.js", "js/local-backend.js", "js/cq-collect.js", "js/screens.js", "js/api.js", "js/blip.js", "js/app.js"];
+  for (const f of RPC_CALL_SCAN_FILES) {
+    try {
+      const src = await (await fetch(`./${f}`)).text();
+      tick(!/rpc\(\s*["']mhq_credit_cq["']/.test(src), `${f} calls mhq_credit_cq via rpc() — that RPC is service_role-only; only the collect-cq edge function may call it`);
+      tick(!/rpc\(\s*["']mhq_cq_link["']/.test(src), `${f} calls mhq_cq_link via rpc() — that RPC is service_role-only; only the collect-cq edge function may call it`);
+    } catch (e) { tick(false, `could not read ${f}: ` + e.message); }
+  }
+  // and the client DOES reach the function the intended way
+  const supabaseSrc = await (await fetch("./js/supabase.js")).text();
+  tick(/functions\.invoke\(\s*name/.test(supabaseSrc) || /functions\.invoke\(/.test(supabaseSrc),
+    "js/supabase.js: collectCq should reach collect-cq via supabase-js's functions.invoke(), not a hand-rolled fetch");
+  tick(/invokeFn\("collect-cq"/.test(supabaseSrc), 'js/supabase.js: collectCq does not invoke the "collect-cq" function by name');
+
+  // ================= local round-trip (live exercise) =================
+  // A FRESH, isolated test account — never thabo_test/lerato_test — so this
+  // section has no ordering dependency on 6j. setCqTotal() both links
+  // cq_name (to the display_name, mirroring the seed's "copied verbatim"
+  // rule) on first call and re-sets the fake CQ total on later calls;
+  // calling it again with the SAME total is used purely as a read-back
+  // (cq_xp_credited/cq_total are otherwise private to the local store).
+  {
+    const cqUser = "verify_cq_" + Math.random().toString(36).slice(2, 8);
+    await LocalBackend.signup(cqUser, "Verify CQ", "pw1234");
+
+    const beforeLink = await LocalBackend.getState(cqUser, "pw1234");
+    tick(beforeLink.ok && beforeLink.cqLinked === false,
+      `a freshly signed-up account should read cqLinked:false before any CQ link exists, got ${JSON.stringify(beforeLink && beforeLink.cqLinked)}`);
+
+    const seeded = globalThis.__BLIP_DEV__.setCqTotal(250, cqUser);
+    tick(seeded.cqName === "Verify CQ", `setCqTotal should link cq_name to the display_name, got ${JSON.stringify(seeded)}`);
+    tick(seeded.cqTotal === 250 && seeded.cqXpCredited === 0, `fresh link should start at total 250, watermark 0, got ${JSON.stringify(seeded)}`);
+
+    const afterLink = await LocalBackend.getState(cqUser, "pw1234");
+    tick(afterLink.ok && afterLink.cqLinked === true,
+      `after setCqTotal links the account, getState should read cqLinked:true, got ${JSON.stringify(afterLink && afterLink.cqLinked)}`);
+
+    // rate 30, fake total 250, watermark 0 -> pays 8 (240 spent), gold +8
+    const r1 = await LocalBackend.collectCq(cqUser, "pw1234");
+    tick(r1.ok && r1.paid === 8, `rate 30 / total 250 / watermark 0 should pay 8 diamonds, got ${JSON.stringify(r1)}`);
+    tick(r1.gold === 8, `first collect should leave gold at 8 (started at 0), got ${JSON.stringify(r1)}`);
+    let peek = globalThis.__BLIP_DEV__.setCqTotal(250, cqUser); // read-back, total unchanged
+    tick(peek.cqXpCredited === 240, `watermark should advance to 240 (8 * 30), got ${peek.cqXpCredited}`);
+
+    // second collect, same total -> pays 0, moves nothing (double-tap safety)
+    const r2 = await LocalBackend.collectCq(cqUser, "pw1234");
+    tick(r2.ok && r2.paid === 0, `a second collect at the same total should pay 0, got ${JSON.stringify(r2)}`);
+    tick(r2.gold === 8, `a zero-pay collect must not move gold, got ${JSON.stringify(r2)}`);
+    peek = globalThis.__BLIP_DEV__.setCqTotal(250, cqUser);
+    tick(peek.cqXpCredited === 240, `a zero-pay collect must not move the watermark, got ${peek.cqXpCredited}`);
+
+    // raise the fake total to 275 -> delta 35 -> pays 1, remainder (5) banked
+    globalThis.__BLIP_DEV__.setCqTotal(275, cqUser);
+    const r3 = await LocalBackend.collectCq(cqUser, "pw1234");
+    tick(r3.ok && r3.paid === 1, `total 275 (delta 35 from watermark 240) should pay 1 diamond (35/30 floored), got ${JSON.stringify(r3)}`);
+    tick(r3.gold === 9, `third collect should leave gold at 9, got ${JSON.stringify(r3)}`);
+    peek = globalThis.__BLIP_DEV__.setCqTotal(275, cqUser);
+    tick(peek.cqXpCredited === 270, `watermark should be 270 (240 + 30) — the remaining 5 XP banked, never lost, got ${peek.cqXpCredited}`);
+
+    // an unlinked account is refused with not_linked, never crediting anything
+    const unlinkedUser = "verify_cq_unlinked_" + Math.random().toString(36).slice(2, 8);
+    await LocalBackend.signup(unlinkedUser, "Verify Unlinked", "pw1234");
+    const r4 = await LocalBackend.collectCq(unlinkedUser, "pw1234");
+    tick(!r4.ok && r4.error === "not_linked", `collecting on an unlinked account should return {ok:false, error:"not_linked"}, got ${JSON.stringify(r4)}`);
+
+    say("local round-trip: rate 30 · total 250, watermark 0 -> pays 8, gold +8, watermark 240 · repeat pays 0, moves nothing · total raised to 275 -> pays 1, watermark 270 (5 XP banked) · an unlinked account is refused not_linked");
+  }
+
+  // ================= Collect panel: client wiring (static, no server round-trip) =================
+  const collectSrc = await (await fetch("./js/cq-collect.js")).text();
+  tick(/if \(!app \|\| !app\.state \|\| !app\.state\.cqLinked\) return;/.test(collectSrc),
+    "js/cq-collect.js: mountCqCollect must render nothing (return early) unless app.state.cqLinked — the plan's 'no broken collect UI' rule");
+  tick(/btn\.disabled = true;[\s\S]*await api\.collectCq\(/.test(collectSrc),
+    "js/cq-collect.js: the Collect button must disable BEFORE the api.collectCq() await (the double-submit rule)");
+  tick(/app\.state\.gold = r\.gold/.test(collectSrc) && /\.goldchip b/.test(collectSrc),
+    "js/cq-collect.js: a paid collect should patch app.state.gold AND the .goldchip b HUD text node in place");
+  tick(/Nothing new to collect — go play a round!/.test(collectSrc), 'js/cq-collect.js: missing the paid:0 copy ("Nothing new to collect — go play a round!")');
+  tick(/Couldn't reach Circle Quest — try again later\./.test(collectSrc), 'js/cq-collect.js: missing the cq_down soft-fail copy');
+
+  const screensSrc2 = await (await fetch("./js/screens.js")).text();
+  tick(/import\s*\{\s*mountCqCollect\s*\}\s*from\s*"\.\/cq-collect\.js"/.test(screensSrc2), "js/screens.js does not import mountCqCollect from ./cq-collect.js");
+  tick(/mountCqCollect\(app,\s*card\.querySelector\(["']\.cg-collect["']\)\)/.test(screensSrc2), "js/screens.js: circleGeoCard() does not mount the Collect panel into .cg-collect");
+  tick(/circleGeoCard\(app\)/.test(screensSrc2), "js/screens.js: circleGeoCard is not called with app (it needs app.state.cqLinked)");
+
+  say("Collect panel wiring: mounts only when cqLinked, disable-before-await on the button, HUD gold chip patched in place (not a full app.refresh()), both the paid and paid:0 reveal copy present, wired into circleGeoCard()");
+}
+
 /* ---------- report ---------- */
 const banner = document.getElementById("banner");
 banner.className = fails.length ? "fail" : "pass";

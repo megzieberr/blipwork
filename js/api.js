@@ -29,6 +29,12 @@
                     backend: ?local=1 has no push service to talk to, so
                     they return {ok:true, local:true} and the UI stays
                     hidden. openBox is fully mirrored, as everything else is.
+     CQ bridge:   collectCq(u,p) — CQ-BRIDGE-PLAN.md Part 3. Supabase calls
+                  the collect-cq EDGE FUNCTION (never mhq_credit_cq/
+                  mhq_cq_link directly — those are service_role-only); the
+                  local backend mirrors the same watermark maths against a
+                  fake per-student CQ total. {ok, paid, gold} on success,
+                  {ok:false, error} on auth / not_linked / cq_down.
      admin:       adminLogin, adminData, adminSetQuestOpen,
                   adminResetPassword, adminRemoveStudent,
                   adminResetProgress, adminResolveStruggle,

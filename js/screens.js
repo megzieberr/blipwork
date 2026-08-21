@@ -9,6 +9,7 @@ import { renderBlip, playMoment } from "./companion/renderer.js";
 import { itemLabel } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
 import { renderAssignmentCard } from "./assignment.js";
+import { mountCqCollect } from "./cq-collect.js";
 
 /* ---------------- Phase 2 helpers (mirrors blip.js's normalizers —
    duplicated rather than shared, since this file and blip.js are each
@@ -110,23 +111,23 @@ function chapterCard(app, ch, open) {
   return card;
 }
 
-/* ---------------- HUB · Circle Geo tab (CQ-BRIDGE-PLAN.md Part 2) ----------------
+/* ---------------- HUB · Circle Geo tab (CQ-BRIDGE-PLAN.md Part 2 + 3) ----------------
    One plain card, not a chapter card — no per-chapter accent to key off.
    Circle Quest is reached by a plain out-link (a new tab, her ruling: never
    merged, never iframed); the learner logs in there with their own CQ
-   password, same as always. The .cg-collect div is an empty, deliberately
-   unbuilt mount point — session 3 (the XP -> diamonds bridge) fills it with
-   the Collect panel. Build nothing inside it here. */
-function circleGeoCard() {
+   password, same as always. The .cg-collect div is the mount point for the
+   session-3 Collect panel (js/cq-collect.js) — it renders nothing itself
+   when the learner has no cq_name link (mountCqCollect's own rule). */
+function circleGeoCard(app) {
   const card = el("div", "card cg-card");
   card.innerHTML = `
     <div class="ico">⭕</div>
     <h2>Circle Quest</h2>
     <p>Your circle geometry quests live in Circle Quest.</p>
     <a class="btn primary big cg-open" href="${CQ_URL}" target="_blank" rel="noopener">Open Circle Quest</a>`;
-  // Session 3 mounts the Collect panel here — nothing built inside it yet.
   card.appendChild(el("div", "cg-collect"));
   card.querySelector(".cg-collect").setAttribute("data-mount", "cq-collect");
+  mountCqCollect(app, card.querySelector(".cg-collect"));
   return card;
 }
 
@@ -181,7 +182,7 @@ export function renderHub(app, host) {
   const cards = el("div", "chapter-cards");
   const draw = () => {
     clear(cards);
-    if (hubTab === "cgeo") { cards.appendChild(circleGeoCard()); return; }
+    if (hubTab === "cgeo") { cards.appendChild(circleGeoCard(app)); return; }
     byTerm(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
   };
   tabs.forEach(t => {

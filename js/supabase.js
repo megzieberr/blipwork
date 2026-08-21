@@ -23,6 +23,16 @@ async function rpc(fn, params) {
   if (error) throw new Error(error.message || "rpc_error");
   return data;
 }
+/* Edge functions (not an RPC — mhq_credit_cq / mhq_cq_link are
+   service_role-only, unreachable from the browser by design). supabase-js's
+   functions.invoke() attaches the publishable key the same way rpc() above
+   attaches it, targeting <SUPABASE.url>/functions/v1/<name>. */
+async function invokeFn(name, body) {
+  const c = await client();
+  const { data, error } = await c.functions.invoke(name, { body: body || {} });
+  if (error) throw new Error(error.message || "function_error");
+  return data;
+}
 
 export const SupabaseBackend = {
   // Picker payload — {username, display_name, has_password}[], non-hidden rows only.
@@ -47,6 +57,12 @@ export const SupabaseBackend = {
     return rpc("mhq_equip", { p_username: username, p_password: password, p_equipped: equipped ?? null, p_colour: colour ?? null, p_blip_name: blipName ?? null, p_slot: slot });
   },
   async gallery(username, password) { return rpc("mhq_gallery", { p_username: username, p_password: password }); },
+
+  // ---- CQ-BRIDGE-PLAN.md Part 3: the XP -> diamonds bridge ----
+  // Calls the collect-cq EDGE FUNCTION, never mhq_credit_cq/mhq_cq_link
+  // directly — those two RPCs are service_role-only (see schema.sql's
+  // grants) and reject a publishable-key caller outright.
+  async collectCq(username, password) { return invokeFn("collect-cq", { username, password }); },
 
   // ---- Blip: Phase 2 feeding / care / second blip ----
   async feed(username, password) { return rpc("mhq_feed", { p_username: username, p_password: password }); },

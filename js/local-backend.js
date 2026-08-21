@@ -388,10 +388,22 @@ const VALID_SLOTS = ["hat", "ears", "glasses", "wings", "arms", "back", "effects
    tag). Seeded into the students store (below, in seed()), merge-only —
    an account already promoted past first-login in this browser is never
    overwritten. */
+/* CQ-BRIDGE-PLAN.md Part 3 (2026-08-21): Thabo stays UNLINKED (no cq_name)
+   so the Collect panel's "no broken UI" rule is exercisable — Lerato is
+   LINKED with a fake CQ total, so tapping Collect twice in a row exercises
+   BOTH the "linked, something to collect" and "linked, nothing new" states
+   on one account (250 XP at the seeded rate 30 pays 8, banking 10; the
+   second tap has only that banked 10, which is short of another diamond).
+   _cq_total is this file's own stand-in for "what Circle Quest would
+   report" — real CQ is a separate project the edge function reads over
+   REST; the local mirror has no second database to model, so it keeps the
+   fake total on the same row. See collectCq() below and __BLIP_DEV__
+   .setCqTotal() for the verify-store round-trip. */
 const FAKE_ROSTER = [
-  { username: "thabo_test", display_name: "Thabo Test", password: null },
-  { username: "lerato_test", display_name: "Lerato Test", password: "demo1234" },
+  { username: "thabo_test", display_name: "Thabo Test", password: null, cq_name: null, cq_total: 0 },
+  { username: "lerato_test", display_name: "Lerato Test", password: "demo1234", cq_name: "Lerato Test", cq_total: 250 },
 ];
+const CQ_RATE = 30; // mirrors app_config.cq_rate's seeded value (migration-cq-bridge.sql)
 
 /* Three fake classmates with VARIED blips + health, so the gallery has real
    layout content: a healthy solo grown blip, a tired two-blip household, and a
@@ -547,6 +559,14 @@ function ensureBlipFields(s) {
   if (!Array.isArray(s.milestone_boxes)) { s.milestone_boxes = []; changed = true; }
   if (!Array.isArray(s.milestone_grants)) { s.milestone_grants = []; changed = true; }
   if (!Array.isArray(s.trinkets)) { s.trinkets = []; changed = true; }
+  // CQ-BRIDGE-PLAN.md Part 3: cq_name mirrors the roster-login column
+  // (nullable — most students never played CQ); cq_xp_credited is the
+  // collect watermark; cq_total is this file's own fake "what CQ would
+  // report" stand-in (see FAKE_ROSTER's comment above) — real CQ is a
+  // separate project with no local mirror of its own.
+  if (!("cq_name" in s)) { s.cq_name = null; changed = true; }
+  if (typeof s.cq_xp_credited !== "number") { s.cq_xp_credited = 0; changed = true; }
+  if (typeof s.cq_total !== "number") { s.cq_total = 0; changed = true; }
   return changed;
 }
 
@@ -600,6 +620,8 @@ function seed() {
         last_active_at: null,
         gold: 0, xp: 0, blip_name: "Blip", blip_colour: "blue", owned_items: [], equipped: {},
         last_fed_day: null, last_cookie_day: null, care_streak: 0, last_care_day: null, pantry: {},
+        // CQ-BRIDGE-PLAN.md Part 3 — see FAKE_ROSTER's comment above.
+        cq_name: r.cq_name ?? null, cq_xp_credited: 0, cq_total: r.cq_total || 0,
       };
       rosterChanged = true;
     });
@@ -665,6 +687,23 @@ globalThis.__BLIP_DEV__ = {
     rec.milestone_boxes.push(Number(milestone) || 10);
     write(LS.students, stAll);
     return { username: rec.username, milestoneBoxes: rec.milestone_boxes.slice() };
+  },
+  /* CQ-BRIDGE-PLAN.md Part 3: set (or link) a student's fake "what Circle
+     Quest would report" total for verify-store's controlled round-trip —
+     raising it between two collectCq() calls is how the remainder-banked
+     case is exercised without waiting on real CQ data. Links cq_name to
+     the display_name if the student isn't already linked, so a fresh
+     verify-store test account (never in FAKE_ROSTER) can be turned into a
+     linked one on demand. */
+  setCqTotal(total, username) {
+    const stAll = read(LS.students, {});
+    const rec = username ? Object.values(stAll).find(s => s.username === String(username).toLowerCase()) : Object.values(stAll)[0];
+    if (!rec) return { error: "no student — log in once first" };
+    ensureBlipFields(rec);
+    if (!rec.cq_name) rec.cq_name = rec.display_name;
+    rec.cq_total = Number(total) || 0;
+    write(LS.students, stAll);
+    return { username: rec.username, cqName: rec.cq_name, cqTotal: rec.cq_total, cqXpCredited: rec.cq_xp_credited };
   },
 };
 
@@ -762,6 +801,9 @@ export const LocalBackend = {
       blips, shop: shopCatalogue(), foodShop: foodCatalogue(), furnitureShop: furnitureCatalogue(),
       pantry: rec.pantry || {}, tray: rec.tray || {},
       health, canFeedToday, canCareToday, termRunning: running,
+      // CQ-BRIDGE-PLAN.md Part 3: mirrors mhq_get_state's one new field —
+      // the Collect panel renders only when this is true.
+      cqLinked: !!rec.cq_name,
       // Phase 3
       assignment: assignmentView(rec),
       // S2: `pending` is the TOTAL number of unopened boxes so the existing
@@ -963,6 +1005,30 @@ export const LocalBackend = {
     });
     const rows = [mine, ...others].sort((a, b) => a.username.localeCompare(b.username));
     return { ok: true, gallery: rows };
+  },
+
+  // ---- CQ-BRIDGE-PLAN.md Part 3: the XP -> diamonds bridge ----
+  // Mirrors the combined effect of the edge function + mhq_cq_link +
+  // mhq_credit_cq — this file has no separate "CQ project" to model, so it
+  // does the whole round trip against the fake cq_total on the student's
+  // own row (see FAKE_ROSTER / __BLIP_DEV__.setCqTotal). Same contract as
+  // SupabaseBackend.collectCq: {ok, paid, gold} or {ok:false, error}.
+  async collectCq(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const stAll = read(LS.students, {});
+    const rec = stAll[s.id];
+    ensureBlipFields(rec);
+    if (!rec.cq_name) return { ok: false, error: "not_linked" };
+
+    const delta = Math.max(0, (Number(rec.cq_total) || 0) - (Number(rec.cq_xp_credited) || 0));
+    const diamonds = Math.floor(delta / CQ_RATE);
+    if (diamonds > 0) {
+      rec.gold = (rec.gold || 0) + diamonds;
+      rec.cq_xp_credited = (rec.cq_xp_credited || 0) + diamonds * CQ_RATE;
+      write(LS.students, stAll);
+    }
+    return { ok: true, paid: diamonds, gold: rec.gold };
   },
 
   // ---- Blip: Phase 2 feeding / care / second blip ----
