@@ -1,4 +1,36 @@
-# Project status — updated 2026-08-22 (📝 EXAM FOCUS: 21 questions / 5 chapters incl. EUCLIDEAN exam-only chapter ✅ SHIPPED, sw v53)
+# Project status — updated 2026-08-22 (🔄 GENERAL TRIG: all 13 rounds BUILT + reviewed, committed LOCALLY, ⏳ awaiting her "ship" — NOT live, sw still v53)
+
+## 🔄 2026-08-22 (day, unattended) — GENERAL TRIG CHAPTER BUILT, stages 1–4, local commits only
+
+Fable foreman (unattended, her /go in GENERAL-TRIG-FOREMAN-BRIEF.md), Opus ×2 + Sonnet ×2
+build agents (≈1,67M agent tokens), every stage foreman-reviewed with own harness runs,
+own 375 px plays and rendered sketches LOOKED at. Full report: **GENERAL-TRIG-BUILD-REPORT.md**
+(start there — its top paragraph is the between-lessons read). Commits `d6a4b52` →
+`bbea71b` → `c711f81` → `dbb81d5`. Chapter `gtrig` "General Trig" on the Revision tab,
+13 rounds gt1–gt13 in her order; new plumbing (`steps` chains, her tick `tapcross`,
+`tokenpad`, `quadtri` engine with verify(), `reveal` frames, trig-graph `bands`, `mcmulti`);
+discovery rounds 1–3 pay XP once (`xpOnce` + `xpToSubmit` in play.js); the two trig exam
+questions moved under a General Trig tab in Exam Focus with "I'm lost" → gt5 / gt11 (her
+phone ruling mid-build); Mixed Problems stays under 2D Trig. verify-gtrig.html 1 058 724
+checks green; all other harnesses unchanged-green. Her laptop died once mid-stage-3 —
+nothing lost (commits), stage relaunched.
+
+### ⏳ Pending on Megan
+- 💻 5 min **[blocks the chapter going live]**: say **"ship"** — foreman runs
+  `supabase/migration-gtrig-quests.sql` via MCP (13 quest rows, seeded CLOSED, learner
+  hashes before/after), bumps sw v53→v54, pushes, checks live.
+- 📱 3 min after the ship: feel round 1 (circle frames) and round 8 (triangle appears
+  after the quadrant tap) on your phone.
+- 💬 1 line whenever: round 12 treats `sin 3A = cos 60°` as "no reference angle" (your
+  p60 type ⑥) — fine, or only when both sides carry the variable?
+
+### Next up
+- Ship (above). Then: open gt1 in admin when teaching starts; Hayley's way card once she
+  sends the wording; practice-paper mode UI · overnight #2 content run.
+
+---
+
+# (previous head) Project status — updated 2026-08-22 (📝 EXAM FOCUS: 21 questions / 5 chapters incl. EUCLIDEAN exam-only chapter ✅ SHIPPED, sw v53)
 
 ## 🚀 2026-08-22 (morning) — BUILD DAY SHIPPED: register + Euclidean chapter + trig digest (sw v53, commit 537d863)
 

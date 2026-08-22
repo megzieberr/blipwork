@@ -1,6 +1,35 @@
 # GENERAL TRIG — build report (unattended foreman day, 2026-08-22)
 
-_(in progress — the foreman rewrites the top paragraph when the run ends)_
+**All 13 rounds are built, reviewed and committed locally** (four commits, `d6a4b52` →
+`dbb81d5`), nothing pushed, the database untouched. Your mid-lesson ruling is in too:
+the two trig exam questions (Reduction & Ratios, General Solutions) now sit under a
+**General Trig** tab in Exam Focus with working "I'm lost" links to rounds 5 and 11;
+Mixed Problems stays under 2D Trig. Every harness is green on my own runs
+(verify-gtrig 1 058 724 checks; store, dice, exam, trig, tgraph, exp, verify.html and the
+node exam harness all unchanged-green), and I played rounds 3, 4, 5, 6, 7, 8, 12 and 13
+myself at phone width, including a deliberate wrong step and a discovery-round replay
+(+215 XP first time, +0 on replay). Agents used ≈ 1,67M tokens — inside the 2,5–3,2M
+you saw. **To ship, when you say the word:**
+
+- 💻 5 min — say **"ship"**: I run `supabase/migration-gtrig-quests.sql` on live via MCP
+  (13 quest rows, seeded CLOSED, learner-row hashes before/after), bump `sw.js`
+  (v53 → v54), push `main`, check live.
+- 📱 3 min after the ship — open Revision → General Trig on your phone and feel round 1
+  (the circle frames) and round 8 (the triangle that appears after the quadrant tap).
+- 💻 1 min whenever — open round 1 in admin when you're ready to teach it; the Exam
+  Focus tab for General Trig appears the moment any round is open.
+
+Three things that want one line from you (defaults applied, nothing blocks the ship):
+1. **Round 12's "no reference angle" also covers `sin 3A = cos 60°`-shaped items** — by
+   your p60 eg.1 those are type ⑥ (convert, match brackets). A kid could instead read
+   cos 60° = 1/2 and use a ref angle of 30°. Say if you'd rather only *variable* angles
+   on both sides count as "no ref".
+2. **Round 3 leaves special-angle values unrationalised** (`1/√3`); round 8/10 answers
+   from a sketch are rationalised — your F12 habit, unchanged.
+3. **Hayley's way** is still not in round 4/7 (no wording exists) — send the sentence and
+   it's a five-minute card.
+
+---
 
 ## Judgement calls, as they were made
 
@@ -87,3 +116,47 @@ Stage 3 was relaunched from the same brief (cost: the first agent's reading toke
 - Possible later tweak, not done: gt7's seven slots draw independently, so one form can
   repeat (a run showed `−360° − x` three times). Drawing without replacement would
   spread the wheel better.
+
+## Stage 4 — rounds 8–13 + exam move (Opus, ~545k tokens) ✅ committed `dbb81d5`
+- verify-gtrig.html **1 058 724/1 058 724** (foreman's own run): 27 900 generated
+  questions; gt8 sides re-derived; gt9/gt10 equalities re-evaluated at 23°, 37°, 61°;
+  gt11's 4 000 equations re-classified by an independent shape parser (self-tested on
+  18 of her printed examples first); gt12 against `solutionQuadrants`/`boundaryCase`/
+  `refAngle`; gt13's options swept for a zero over 0–360°; 3 900 sketch labels measured.
+- Regression (own runs): exam 176/176 · node exam modules 355/355 · store 4032 · dice
+  134 · trig 36 · tgraph 92 · verify.html 54 · exp 8.
+- Foreman's own 375 px play: gt8 (0 triangles in the DOM during the quadrant step, 1
+  right after, labelled `x | y | r` only; 7/7, +215 XP), gt12 ("no reference angle"
+  ends the chain; one calc miss was my driver typing the raw float — the app was right
+  to refuse), gt13, and Exam Focus → General Trig → General Solutions → "I'm lost" →
+  landed in "11. General solution: the six types". 0 console errors.
+- Looked at: `review-png/stage4-sketches.jpg` (before) and
+  `stage4-quadtri-after-fix2.jpg` (after). Found: in thin 5-12-13 sketches the short
+  x-leg's label and the "O" sat inside the θ arc — the harness measures labels against
+  legs, not against the arc. Fixed in the engine: a short leg's label moves to the foot
+  end; "O" takes the free corner farthest from the θ and x labels.
+- Agent's calls (accepted): gt8 uses primitive triples only (a reduced `20/25` would
+  mark a careful kid wrong); follow-up ratios never re-ask the given one; gt10 angles
+  {35,40,50,55} so the tap targets stay a fingertip apart and sin ≠ cos; gt10's labelled
+  sketch is 470 wide so `√(t² − 1)` fits; gt13 decoys are never-zero expressions; gt13
+  writes `cos x/sin x` rather than `1/tan x` (whose honest answer set includes cos x);
+  gt11's six options are hand-built in her fixed ① – ⑥ order, never shuffled.
+- Her mid-build ruling (from her phone, recorded verbatim in config.js + exam/index.js):
+  the two trig exam questions moved to chapter `gtrig`; `EXAM_CHAPTERS` gains `gtrig`;
+  ids/topics/parts unchanged so exam progress carries. verify-exam's placeholder set is
+  now the two Euclidean ids only.
+- Migration file header updated to "all 13 built". Still NOT run.
+
+## What ships (stage 5 — on her "ship")
+1. `supabase/migration-gtrig-quests.sql` via MCP on the live project, with
+   `students` / `progress` / `blips` row counts + hashes before and after (must be
+   identical — it touches `quests` only), then `/migration-check`.
+2. `sw.js` CACHE `mhq-v53` → `mhq-v54`.
+3. `git push origin main`; confirm live serves v54 and the General Trig chapter shows 13
+   rounds (all closed until she opens them).
+4. PROJECT-STATUS.md head already written for this day (below the ship line).
+
+## Cost
+Agents: stage 1 ≈ 302k · stage 2 ≈ 402k · stage 3 ≈ 426k (+ a partial read before the
+laptop died) · stage 4 ≈ 545k → ≈ 1,67M. Foreman session on top. Inside the 2,5–3,2M
+estimate she saw.
