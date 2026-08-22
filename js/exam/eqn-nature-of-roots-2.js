@@ -138,7 +138,7 @@ const q5 = {
         en: "Solve the equation with the quadratic formula, leaving m in. The √Δ step is the one to watch — you already know Δ is a perfect square, so what happens to the root sign?",
       },
       memo: [
-        { type: "step", text: { en: "x = (−b ± √Δ)/(2a) = (−(2m − 1) ± √((2m + 3)²))/2 = (1 − 2m ± (2m + 3))/2" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "x = (−b ± √Δ)/(2a) = <span class=\"sfrac\"><span class=\"sf-n\">−(2m − 1) ± √((2m + 3)²)</span><span class=\"sf-d\">2</span></span> = (1 − 2m ± (2m + 3))/2" }, ticks: ["s/f"] },
         { type: "step", text: { en: "taking + : &nbsp;x = (1 − 2m + 2m + 3)/2 = 4/2 = 2" }, ticks: ["ca"] },
         { type: "step", text: { en: "taking − : &nbsp;x = (1 − 2m − 2m − 3)/2 = (−4m − 2)/2 = −2m − 1" }, ticks: ["ca"] },
         { type: "answer", text: { en: "both roots are rational whenever m is rational, and they are equal only when −2m − 1 = 2, i.e. m = −3/2 &nbsp;∴ for every other rational m the roots are rational and unequal" }, ticks: ["a"] },

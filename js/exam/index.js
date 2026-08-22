@@ -1,12 +1,22 @@
 /* ============================================================
-   EXAM FOCUS — the registry: per-chapter arrays of seeded questions
+   EXAM FOCUS — the registry: per-chapter arrays of SKILL CARDS
    (EXAM-FOCUS-PLAN.md, session 0 infrastructure build, 2026-08-21;
    overnight run #1's 15 non-Euclidean modules registered day-session
-   2026-08-22 — see OVERNIGHT-1-REPORT.md's "day-session work list").
+   2026-08-22; cut into SKILL CARDS the same evening —
+   EXAM-SKILLS-BRIEF.md stage 1).
    ------------------------------------------------------------
-   Every array starts EMPTY — content is seeded topic by topic in later
-   build sessions. One key per chapter id: the eleven js/config.js
-   CHAPTERS entries, plus every js/config.js EXAM_ONLY_CHAPTERS entry.
+   One key per chapter id: the eleven js/config.js CHAPTERS entries,
+   plus every js/config.js EXAM_ONLY_CHAPTERS entry. A chapter with no
+   content yet is an empty array.
+
+   WHAT CHANGED ON 2026-08-22 (evening): the arrays hold CARDS, not the
+   21 seeded questions. She played the tab and it felt "too sudden" — a
+   whole five-part practice-paper question with no title saying what
+   skill was being practised — so a question is now cut along its skills
+   into short cards, and the tab runs chapter -> skill tiles -> one card
+   at a time. The cutting lives in js/exam/cards-<chapter>.js; this file
+   only joins the six lists up. A CARD IS A QUESTION as far as every
+   other file is concerned.
 
    EUCLIDEAN IS REGISTERED (2026-08-22). Its two composed modules moved
    out of js/exam/_pending-engine-port/ the day the Circle Quest engine
@@ -31,92 +41,53 @@
    js/quests/dice-pools.js).
    ============================================================ */
 import { validateQuestion } from "./_schema.js";
-import { eqnNatureOfRootsQuestions } from "./eqn-nature-of-roots.js";
-import { eqnNatureOfRootsTopUpQuestions } from "./eqn-nature-of-roots-2.js";
-import { eqnKMethodQuestions } from "./eqn-k-method.js";
-import { eqnFractionsAndRestrictionsQuestions } from "./eqn-fractions-and-restrictions.js";
-import { eqnInequalitiesQuestions } from "./eqn-inequalities.js";
-import { eqnInequalitiesTopUpQuestions } from "./eqn-inequalities-2.js";
-import { expFirstStepAndMethodQuestions } from "./exp-first-step-and-method.js";
-import { expConjugatesAndRationalisingQuestions } from "./exp-conjugates-and-rationalising.js";
-import { expNoSolutionAndStrategyQuestions } from "./exp-no-solution-and-strategy.js";
-import { funcHyperbolaAndExponentialQuestions } from "./func-hyperbola-and-exponential.js";
-import { funcGraphsTogetherQuestions } from "./func-graphs-together.js";
-import { funcLineAndParabolaQuestions } from "./func-line-and-parabola.js";
-import { funcHyperbolaAndExponentialT2Questions } from "./func-hyperbola-and-exponential-2.js";
-import { trigReductionAndRatiosQuestions } from "./trig-reduction-and-ratios.js";
-import { trigGeneralSolutionsQuestions } from "./trig-general-solutions.js";
-import { trigMixedProblemsQuestions } from "./trig-mixed-problems.js";
-import { euclidCircleTheoremsQuestions } from "./euclid-circle-theorems.js";
-import { euclidTangentsAndCyclicQuadsQuestions } from "./euclid-tangents-and-cyclic-quads.js";
+import { skillsForChapter, skillLabel } from "./skills.js";
+import { eqnCards } from "./cards-eqn.js";
+import { expCards } from "./cards-exp.js";
+import { funcCards } from "./cards-func.js";
+import { gtrigCards } from "./cards-gtrig.js";
+import { trigCards } from "./cards-trig.js";
+import { euclidCards } from "./cards-euclid.js";
 
-/* PILOT TOPIC (session D, 2026-08-21) + overnight run #1's 15 modules
-   (composed 2026-08-21 night, registered 2026-08-22 day session): eqn
-   goes from 4 questions (nature-of-roots only) to 9 across 4 topics;
-   exp, func and trig go from empty to their first seeded questions. The
-   two Euclidean modules land the NEXT day session (2026-08-22, engine
-   port) as the exam-only "euclid" chapter's first two questions.
+/* SKILL CARDS (EXAM-SKILLS-BRIEF.md, stage 1, 2026-08-22). The registry
+   no longer holds the 21 seeded QUESTIONS directly — it holds the ~54
+   CARDS cut from them by js/exam/cards-<chapter>.js. The 21 source
+   modules are untouched and are now imported ONLY by those files; they
+   remain the content source of truth (and remain what
+   verify-exam-modules.mjs recomputes against, module by module).
+
+   Nothing else changed shape. A card IS a question: same fields, same
+   validator, same server RPC, same player. `topic` carries the SKILL id
+   instead of the old content slug, which is what turns
+   examTopicsForChapter into the tile list and examQuestionsForTopic into
+   "the cards of this skill, in her order".
+
    Every other chapter (stats, finance, prob, meas, tgraph, analytical,
-   pat) stays an empty array until its own seeding session lands.
-
-   2026-08-22, stage 4 of the General Trig build: the two T2 trig
-   questions that were never really 2D trig — reductions & ratios, and
-   general solutions — MOVED from `trig` to `gtrig`, her ruling that
-   morning, now that gtrig's thirteen rounds exist to teach them. `trig`
-   keeps Mixed Problems, which is genuinely sine/cosine/area rule. */
+   pat) stays an empty array until its own seeding session lands. */
 const REGISTRY = {
   stats: [], finance: [], prob: [], meas: [],
   tgraph: [], analytical: [], pat: [],
-  exp: [
-    ...expFirstStepAndMethodQuestions,
-    ...expConjugatesAndRationalisingQuestions,
-    ...expNoSolutionAndStrategyQuestions,
-  ],
-  func: [
-    ...funcHyperbolaAndExponentialQuestions,
-    ...funcGraphsTogetherQuestions,
-    ...funcLineAndParabolaQuestions,
-    ...funcHyperbolaAndExponentialT2Questions,
-  ],
-  /* 2D TRIGONOMETRY — sine rule / cosine rule / area rule, the t1–t7
-     rounds. It owns Mixed Problems and nothing else: the reductions and
-     the general solutions MOVED to the gtrig chapter below on
-     2026-08-22 (her ruling that morning — "list these exam focus
-     questions under the General Trig tab and connect it to the correct
-     rounds"). Ids and topics are untouched by the move, so exam
-     progress, which is keyed by question id, carries across. */
-  trig: [
-    ...trigMixedProblemsQuestions,
-  ],
-  /* GENERAL TRIG (js/config.js CHAPTERS, rounds gt1–gt13). Its two
-     questions arrived from `trig` on 2026-08-22 along with real reteach
-     links — reductions/ratios → gt5, general solutions → gt11 — because
-     this chapter is where those things are actually taught. */
-  gtrig: [
-    ...trigReductionAndRatiosQuestions,
-    ...trigGeneralSolutionsQuestions,
-  ],
-  /* EXAM-FOCUS-ONLY chapter (js/config.js EXAM_ONLY_CHAPTERS) — it owns
+  exp: expCards,
+  func: funcCards,
+  /* 2D TRIGONOMETRY — PAUSED (her ruling, 2026-08-22): one card, and
+     nothing new built for it. */
+  trig: trigCards,
+  /* GENERAL TRIG (js/config.js CHAPTERS, rounds gt1-gt13). Four cards
+     across four skills; two more skills are listed in js/exam/skills.js
+     with no cards yet and render as "coming soon". */
+  gtrig: gtrigCards,
+  /* EXAM-FOCUS-ONLY chapter (js/config.js EXAM_ONLY_CHAPTERS) - it owns
      no drill quests at all, so it appears in the Exam Focus tab and
-     nowhere else in the app. */
-  euclid: [
-    ...euclidCircleTheoremsQuestions,
-    ...euclidTangentsAndCyclicQuadsQuestions,
-  ],
-  eqn: [
-    ...eqnKMethodQuestions,
-    ...eqnFractionsAndRestrictionsQuestions,
-    ...eqnInequalitiesQuestions,
-    ...eqnInequalitiesTopUpQuestions,
-    ...eqnNatureOfRootsQuestions,
-    ...eqnNatureOfRootsTopUpQuestions,
-  ],
+     nowhere else in the app. One skill, one long continuous round. */
+  euclid: euclidCards,
+  eqn: eqnCards,
 };
 
 /* Every question every future seeding session adds MUST pass
    validateQuestion() — checked once here, at import time, so a broken
    seed fails loudly (a thrown error, in dev) rather than shipping a
-   silently-invalid question. Empty today: nothing to check yet. */
+   silently-invalid question. Cards are checked here exactly like
+   the questions they were cut from. */
 Object.entries(REGISTRY).forEach(([chapterId, questions]) => {
   questions.forEach(q => {
     const { ok, issues } = validateQuestion(q);
@@ -137,21 +108,32 @@ export function examQuestionById(id) {
   return null;
 }
 
-function titleCaseSlug(slug) {
-  return String(slug || "").replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+/* The SKILL TILE list for a chapter (EXAM-SKILLS-BRIEF.md, 2026-08-22).
+   It now comes from js/exam/skills.js — her agreed order, her labels —
+   rather than being derived from whatever happens to be registered.
+   That is the whole point: a skill with NO cards yet still has to
+   appear, rendered muted and untappable ("coming soon"), so the learner
+   can see what is coming. A chapter with no skills at all returns [],
+   exactly as the derived version did for an unseeded chapter. */
+export function examTopicsForChapter(chapterId) {
+  return skillsForChapter(chapterId).map(s => ({ id: s.id, label: s.label }));
 }
 
-/* Topic list for a chapter, derived from whatever's actually registered
-   — id + a title-cased fallback label. Real, hand-written topic labels
-   are a seeding-session concern (nothing here blocks a future session
-   from carrying a nicer label alongside the slug if that turns out to
-   be worth the extra field); until then the slug reads fine title-cased
-   ("angle-of-inclination" -> "Angle Of Inclination"). */
-export function examTopicsForChapter(chapterId) {
-  const qs = examQuestionsForChapter(chapterId);
-  const seen = new Map();
-  qs.forEach(q => { if (!seen.has(q.topic)) seen.set(q.topic, { id: q.topic, label: titleCaseSlug(q.topic) }); });
-  return [...seen.values()];
+/* The label for one skill, for the player's heading. Re-exported here
+   so a screen only ever has to import from one place. */
+export { skillLabel };
+
+/* Where "tap a tile" lands: the first card of this skill the learner
+   has NOT finished yet, so a returning learner carries on instead of
+   replaying. Falls back to the first card (everything done — she can
+   still go round again), and to null when the skill has no cards.
+   `progress` is the map js/api.js examState() returns, keyed by card id:
+   { partsOpened, completed, completedAt }. */
+export function examFirstCardForSkill(chapterId, skillId, progress) {
+  const cards = examQuestionsForTopic(chapterId, skillId);
+  if (!cards.length) return null;
+  const p = progress || {};
+  return cards.find(c => !(p[c.id] && p[c.id].completed)) || cards[0];
 }
 
 export function examQuestionsForTopic(chapterId, topicId) {

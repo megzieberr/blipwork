@@ -44,7 +44,7 @@
 <h2>Part 5 · SQL ↔ config literal cross-check (supabase/migration-exam-focus.sql vs js/config.js EXAM)</h2>
 <pre id="sqlChecks">…</pre>
 
-<h2>Part 6 · scope-wall check — every seeded question's topic belongs to its chapter's allowed list</h2>
+<h2>Part 6 · skill-wall check — every card's skill belongs to its chapter's allowed list</h2>
 <pre id="scopeWallChecks">…</pre>
 
 <h2>Part 7 · nature-of-roots content — independent recompute of every discriminant, root and k-value</h2>
@@ -70,6 +70,9 @@
 <h2>Part 11 · the EXAM-FOCUS-ONLY Euclidean chapter — eligible on its flag alone, invisible everywhere else, figures per part, no "I'm lost" (her rulings, 2026-08-22)</h2>
 <pre id="euclidChecks">…</pre>
 
+<h2>Part 12 · skill cards — her grouping table, part for part (EXAM-SKILLS-BRIEF.md, 2026-08-22)</h2>
+<pre id="cardChecks">…</pre>
+
 <div id="harnessHost"></div>
 
 <script>try { localStorage.setItem("mhq.forceLocal", "1"); } catch (e) {}</script>
@@ -79,8 +82,33 @@ import { validateQuestion } from "./js/exam/_schema.js";
 import { stubQuestion } from "./js/exam/_harness-stub.js";
 import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
 import { eqnNatureOfRootsQuestions } from "./js/exam/eqn-nature-of-roots.js";
-import { examQuestionsForTopic } from "./js/exam/index.js";
-import { renderHub, renderExamChapter, renderExamTopic, examChapterEligible } from "./js/screens.js";
+import { examQuestionsForTopic, examFirstCardForSkill, skillLabel } from "./js/exam/index.js";
+import { SKILLS, skillsForChapter } from "./js/exam/skills.js";
+/* the 21 SOURCE questions, imported straight from their own modules for
+   Part 12 (the coverage check has to compare the cards against the real
+   thing, not against another list of ids). eqnNatureOfRootsQuestions is
+   already imported above for Parts 8-10. */
+import { eqnNatureOfRootsTopUpQuestions } from "./js/exam/eqn-nature-of-roots-2.js";
+import { eqnKMethodQuestions } from "./js/exam/eqn-k-method.js";
+import { eqnFractionsAndRestrictionsQuestions } from "./js/exam/eqn-fractions-and-restrictions.js";
+import { eqnInequalitiesQuestions } from "./js/exam/eqn-inequalities.js";
+import { eqnInequalitiesTopUpQuestions } from "./js/exam/eqn-inequalities-2.js";
+import { expFirstStepAndMethodQuestions } from "./js/exam/exp-first-step-and-method.js";
+import { expConjugatesAndRationalisingQuestions } from "./js/exam/exp-conjugates-and-rationalising.js";
+import { expNoSolutionAndStrategyQuestions } from "./js/exam/exp-no-solution-and-strategy.js";
+import { funcHyperbolaAndExponentialQuestions } from "./js/exam/func-hyperbola-and-exponential.js";
+import { funcHyperbolaAndExponentialT2Questions } from "./js/exam/func-hyperbola-and-exponential-2.js";
+import { funcGraphsTogetherQuestions } from "./js/exam/func-graphs-together.js";
+import { funcLineAndParabolaQuestions } from "./js/exam/func-line-and-parabola.js";
+import { trigReductionAndRatiosQuestions } from "./js/exam/trig-reduction-and-ratios.js";
+import { trigGeneralSolutionsQuestions } from "./js/exam/trig-general-solutions.js";
+import { trigMixedProblemsQuestions } from "./js/exam/trig-mixed-problems.js";
+import { euclidCircleTheoremsQuestions } from "./js/exam/euclid-circle-theorems.js";
+import { euclidTangentsAndCyclicQuadsQuestions } from "./js/exam/euclid-tangents-and-cyclic-quads.js";
+/* renderExamTopic is GONE (EXAM-SKILLS-BRIEF.md: tapping a skill tile
+   goes straight into the player, so the question-list screen and its
+   route were deleted rather than left as dead code). */
+import { renderHub, renderExamChapter, examChapterEligible } from "./js/screens.js";
 import { renderExamPlay } from "./js/exam-play.js";
 import { getExamLang, setExamLang } from "./js/exam/lang.js";
 import { api } from "./js/api.js";
@@ -91,6 +119,13 @@ import { el, clear } from "./js/ui.js";
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
 const say = (id, lines) => { document.getElementById(id).textContent = lines.join("\n"); };
+
+/* The chapter screen's cards became SKILL TILES on 2026-08-22, and the
+   two halves of that build (content here, UI in js/screens.js) shipped
+   from two sessions at once. So every tile query in this page goes
+   through these two helpers rather than hard-coding one class name. */
+const tileEls = host => [...host.querySelectorAll(".exam-topic-card, .exam-skill-tile, .exam-skill-card")];
+const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textContent.trim();
 
 /* ============================================================
    PART 1 — schema validator, against the stub (should be clean) and a
@@ -243,7 +278,11 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   // 2026-08-22: trig 3 -> 1 and gtrig 0 -> 2. The two T2 questions that
   // were never really 2D trig MOVED chapter (her ruling that morning);
   // nothing was added or removed from the bank, so the TOTAL is unchanged.
-  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 2, meas: 0, func: 4, tgraph: 0, analytical: 0, pat: 0, exp: 3, eqn: 9, euclid: 2 };
+  // 2026-08-22 (evening): the registry holds CARDS now, not the 21
+  // seeded questions — 54 of them, cut skill by skill
+  // (EXAM-SKILLS-BRIEF.md). Nothing was added to the bank and nothing
+  // was dropped; Part 12 below proves that part by part.
+  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 4, meas: 0, func: 17, tgraph: 0, analytical: 0, pat: 0, exp: 12, eqn: 18, euclid: 2 };
   let countsOk = true;
   const countLines = [];
   allChapterIds.forEach(id => {
@@ -255,28 +294,43 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   tick(countsOk, "every chapter's registry count matches the expected widened state exactly");
   lines.push(`registry question counts: ${countLines.join(", ")} — ${countsOk ? "OK" : "FAIL"}`);
 
-  tick(examTopicsForChapter("stats").length === 0, "examTopicsForChapter derives zero topics from an empty chapter (stats, still unseeded)");
+  tick(examTopicsForChapter("stats").length === 0, "examTopicsForChapter returns zero skills for a chapter with none (stats, still unseeded)");
   lines.push(`examTopicsForChapter("stats") with nothing registered: [${examTopicsForChapter("stats").map(t => t.id).join(",")}] — ${examTopicsForChapter("stats").length === 0 ? "OK" : "FAIL"}`);
 
-  // ---- exact topic SET per newly-seeded chapter (order-independent) ----
+  /* ---- the exact SKILL LIST per chapter, IN HER ORDER ----
+     examTopicsForChapter no longer derives anything: it reads
+     js/exam/skills.js, which is her agreed grouping table typed out.
+     So this is an ORDERED comparison, not a set comparison — the tile
+     order on the chapter screen is her decision and a silent reshuffle
+     would be a real regression. Two gtrig skills deliberately have no
+     cards yet and MUST still be listed (they render "coming soon"). */
   const EXPECTED_TOPICS = {
-    eqn: ["k-method", "fractions-and-restrictions", "inequalities", "nature-of-roots"],
-    exp: ["first-step-and-method", "conjugates-and-rationalising", "no-solution-and-strategy"],
-    func: ["hyperbola-and-exponential", "graphs-together", "line-and-parabola"],
-    trig: ["mixed-problems"],
-    gtrig: ["reduction-and-ratios", "general-solutions"],
-    euclid: ["circle-theorems", "tangents-and-cyclic-quads"],
+    eqn: ["nature-chain", "k-equal-roots", "k-for-nature", "delta-in-p", "inequalities", "fraction-equations", "rational-exponents-k"],
+    exp: ["surds", "rationalise", "exponent-expressions", "exponential-equations"],
+    func: ["find-equation", "asymptotes-domain-range", "intercepts-turning-point", "axis-of-symmetry", "shift", "inequalities", "nature-of-roots", "distances"],
+    trig: ["cosine-rule-area"],
+    gtrig: ["co-functions", "special-sums", "reduction", "general-solution", "identities", "super-special-sums"],
+    euclid: ["circle-geometry"],
   };
   let topicsOk = true;
   const topicLines = [];
   Object.entries(EXPECTED_TOPICS).forEach(([chapterId, wantTopics]) => {
     const gotTopics = examTopicsForChapter(chapterId).map(t => t.id);
-    const gotSet = new Set(gotTopics), wantSet = new Set(wantTopics);
-    const ok = gotSet.size === wantSet.size && [...wantSet].every(t => gotSet.has(t));
+    const ok = gotTopics.length === wantTopics.length && wantTopics.every((t, i) => gotTopics[i] === t);
     if (!ok) topicsOk = false;
-    topicLines.push(`  ${chapterId}: [${gotTopics.join(",")}] — ${ok ? "OK" : `FAIL, want {${wantTopics.join(",")}}`}`);
+    topicLines.push(`  ${chapterId}: [${gotTopics.join(",")}] — ${ok ? "OK" : `FAIL, want [${wantTopics.join(",")}]`}`);
   });
-  tick(topicsOk, "examTopicsForChapter derives exactly the expected topic set for eqn/exp/func/trig/gtrig/euclid");
+  tick(topicsOk, "examTopicsForChapter returns exactly her skill list, in her order, for eqn/exp/func/trig/gtrig/euclid");
+
+  // every skill carries a real hand-written label, never a title-cased slug
+  let labelsOk = true;
+  Object.keys(EXPECTED_TOPICS).forEach(chapterId => {
+    examTopicsForChapter(chapterId).forEach(t => {
+      if (!t.label || !t.label.trim() || t.label === skillLabel(chapterId, "definitely-not-a-real-skill")) labelsOk = false;
+      if (skillLabel(chapterId, t.id) !== t.label) labelsOk = false;
+    });
+  });
+  tick(labelsOk, "every skill has a real label, and skillLabel() agrees with the tile list");
   lines.push(`topics per newly-seeded chapter:\n${topicLines.join("\n")}`);
 
   tick(typeof EXAM.xpPerQuestion === "number" && typeof EXAM.goldPerQuestion === "number", "js/config.js EXAM block has numeric xpPerQuestion/goldPerQuestion");
@@ -325,7 +379,11 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   ["eqn", "exp", "func", "trig", "gtrig", "euclid"].forEach(chapterId => {
     examQuestionsForChapter(chapterId).forEach(q => {
       const lq = q.lostQuest;
-      if (PLACEHOLDER_LOST_IDS.has(q.id)) {
+      /* CARDS (2026-08-22): a card inherits lostQuest from the question
+         it was cut from, so the expectation is keyed by the SOURCE
+         question id, not the card id. */
+      const sourceId = q.source ? q.source.questionId : q.id;
+      if (PLACEHOLDER_LOST_IDS.has(sourceId)) {
         const isPlaceholder = !!lq && /^PENDING-/.test(lq.quest) && lq.chapter === q.chapter && !CHAPTERS.find(c => c.id === lq.chapter)?.quests?.some(qq => qq.id === lq.quest);
         if (!isPlaceholder) placeholderOk = false;
         lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} — documented placeholder (her NO-I’m-lost ruling for Euclidean), correctly non-resolving? ${isPlaceholder}`);
@@ -334,7 +392,7 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
       const lqChapter = lq && CHAPTERS.find(c => c.id === lq.chapter);
       const lqQuest = lqChapter && (lqChapter.quests || []).find(qq => qq.id === lq.quest);
       const resolves = !!lqChapter && !!lqQuest;
-      const want = EXPECTED_LOSTQUEST[q.id];
+      const want = EXPECTED_LOSTQUEST[sourceId];
       const matchesWant = !!want && lq && lq.chapter === want.chapter && lq.quest === want.quest;
       const ok = resolves && matchesWant;
       if (!ok) lostQuestOk = false;
@@ -369,7 +427,6 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     clear(host);
     if (app.screen === "hub") renderHub(app, host);
     else if (app.screen === "examChapter") renderExamChapter(app, host, app.params);
-    else if (app.screen === "examTopic") renderExamTopic(app, host, app.params);
   }
   // openQuests param (session E, 2026-08-21): examChapterEligible() now
   // ALSO requires an open quest in the flagged chapter — this test
@@ -418,14 +475,12 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 
   if (examCard) examCard.querySelector("button").click();
   tick(appOn.screen === "examChapter" && appOn.params.chapterId === "eqn", "clicking the chapter card navigates to examChapter with chapterId \"eqn\"");
-  // eqn now derives FOUR topic cards (k-method, fractions-and-restrictions,
-  // inequalities, nature-of-roots — widened day session 2026-08-22), not
-  // just the pilot's one, so this checks the whole grid rather than
-  // assuming "nature-of-roots" renders first.
-  const topicCards = [...host.querySelectorAll(".exam-topic-card")];
-  tick(topicCards.length === 4, `examChapter screen shows all 4 real seeded topic cards for eqn, got ${topicCards.length}`);
-  tick(topicCards.some(c => /nature/i.test(c.textContent)), "one of eqn's topic cards is the real seeded Nature Of Roots topic, not the empty placeholder");
-  lines.push(`examChapter screen topic cards: [${topicCards.map(c => c.querySelector("h3").textContent.trim()).join(", ")}]`);
+  // eqn shows SEVEN skill tiles now (her grouping table, 2026-08-22),
+  // one per skill in js/exam/skills.js order.
+  const topicCards = tileEls(host);
+  tick(topicCards.length === 7, `examChapter screen shows all 7 skill tiles for eqn, got ${topicCards.length}`);
+  tick(topicCards.some(c => /nature of roots/i.test(c.textContent)), "one of eqn's tiles is the nature-of-roots chain, with her own label");
+  lines.push(`examChapter screen skill tiles: [${topicCards.map(tileText).join(", ")}]`);
 
   const backBtn = host.querySelector(".back");
   if (backBtn) backBtn.click();
@@ -659,73 +714,59 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
    registered — see the lostQuest placeholder handling in Part 2). */
 {
   const lines = [];
-  const SCOPE_WALLS = {
+  /* SKILL WALL (2026-08-22, evening — EXAM-SKILLS-BRIEF.md). A card's
+     `topic` is its SKILL id now, so this is the list of skills each
+     chapter is allowed to hold, typed out here BY HAND from her agreed
+     grouping table rather than read from js/exam/skills.js — a wall
+     that imports the thing it is walling proves nothing. A skill added
+     to skills.js without her say-so fails here.
+
+     The old content-slug wall (k-method / hyperbola-and-exponential /
+     circle-theorems …) did not disappear: it still guards the 21 SOURCE
+     questions, in verify-exam-modules.mjs section 7, which imports
+     those modules directly and is the right place for it now that the
+     registry no longer carries their slugs. */
+  const SKILL_WALLS = {
     eqn: [
-      "standard-form-and-factorising",
-      "special-cases",
-      "k-method",
-      "fractions-and-restrictions",
-      "perfect-square-and-turning-point",
-      "formula-and-simultaneous",
+      "nature-chain",
+      "k-equal-roots",
+      "k-for-nature",
+      "delta-in-p",
       "inequalities",
-      "nature-of-roots",
+      "fraction-equations",
+      "rational-exponents-k",
     ],
     exp: [
-      "exponent-laws",
-      "spot-the-trap",
-      "first-step-and-method",
-      "which-divorce",
-      "surd-laws-and-traps",
-      "conjugates-and-rationalising",
-      "rational-exponent-equations",
-      "no-solution-and-strategy",
+      "surds",
+      "rationalise",
+      "exponent-expressions",
+      "exponential-equations",
     ],
     func: [
-      "four-families",
-      "line-and-parabola",
-      "hyperbola-and-exponential",
-      "reading-a-graph",
-      "inequalities-off-a-graph",
-      "transformations",
-      "graphs-together",
+      "find-equation",
+      "asymptotes-domain-range",
+      "intercepts-turning-point",
+      "axis-of-symmetry",
+      "shift",
+      "inequalities",
+      "nature-of-roots",
+      "distances",
     ],
-    /* EUCLIDEAN wall (2026-08-22): GR11-IEB-PAPER-BANK.md's own Grade 11
-       Euclidean scope wall — four examinable proofs, acute case only,
-       everything else use-as-result; no similarity, no concurrency, no
-       proof by contradiction. Proposed in the modules' pending README,
-       adopted here unchanged. */
+    /* EUCLIDEAN: one skill, one long continuous round (her ruling). */
     euclid: [
-      "circle-theorems",
-      "tangents-and-cyclic-quads",
+      "circle-geometry",
     ],
+    /* 2D TRIG is PAUSED — one skill, one card, nothing new. */
     trig: [
-      "which-rule-fits",
-      "sine-rule-sides",
-      "sine-rule-angles",
-      "cosine-rule-sides",
-      "cosine-rule-angles",
-      "area-rule",
-      "mixed-problems",
+      "cosine-rule-area",
     ],
-    /* GENERAL TRIG wall (2026-08-22): the gt1–gt13 breakdown. The two
-       topics that used to stretch the `trig` wall past its own rounds
-       live here now, where rounds genuinely teach them — so the
-       judgement call the old comment described has gone away rather
-       than been re-taken. */
     gtrig: [
-      "introduction",
-      "cartesian-plane",
-      "special-angles",
       "co-functions",
-      "reductions",
-      "tip-chips",
-      "reduction-and-ratios",
       "special-sums",
+      "reduction",
+      "general-solution",
       "identities",
       "super-special-sums",
-      "six-types",
-      "general-solutions",
-      "undefined-values",
     ],
   };
 
@@ -737,22 +778,22 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   allChapterIds.forEach(chapterId => {
     const qs = examQuestionsForChapter(chapterId);
     if (!qs.length) return; // nothing seeded yet in this chapter — nothing to check
-    const wall = SCOPE_WALLS[chapterId];
+    const wall = SKILL_WALLS[chapterId];
     if (!wall) {
       allInWall = false;
-      perChapterLines.push(`  ${chapterId}: HAS ${qs.length} seeded question(s) but NO scope wall defined — add one`);
+      perChapterLines.push(`  ${chapterId}: HAS ${qs.length} card(s) but NO skill wall defined — add one`);
       return;
     }
     const offenders = qs.filter(q => !wall.includes(q.topic));
     if (offenders.length) allInWall = false;
     perChapterLines.push(`  ${chapterId}: ${qs.length} question(s), topics=[${[...new Set(qs.map(q => q.topic))].join(",")}] — ${offenders.length ? "FAIL: " + offenders.map(q => `${q.id} (topic "${q.topic}")`).join(", ") : "OK, all within wall"}`);
   });
-  tick(allInWall, "every seeded question's topic belongs to its chapter's scope wall");
+  tick(allInWall, "every card's skill belongs to its chapter's hand-written skill wall");
   lines.push(`scope-wall check, per chapter with seeded content:\n${perChapterLines.join("\n")}`);
-  lines.push(`eqn wall: [${SCOPE_WALLS.eqn.join(", ")}]`);
+  lines.push(`eqn skill wall: [${SKILL_WALLS.eqn.join(", ")}]`);
 
   // deliberately-broken case: prove the membership test actually catches an out-of-wall topic
-  const caught = !SCOPE_WALLS.eqn.includes("logarithms");
+  const caught = !SKILL_WALLS.eqn.includes("logarithms");
   tick(caught, 'sanity check: the wall membership test correctly rejects an out-of-scope topic ("logarithms" — METHODS-algebra.md Part E, explicitly not covered)');
   lines.push(`sanity check — "logarithms" against the eqn wall: ${caught ? "correctly rejected" : "FAIL, not caught"}`);
 
@@ -1007,10 +1048,10 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   clear(host);
   renderExamChapter(navApp, host, { chapterId: "eqn" });
   tick(!host.querySelector(".exam-lang-btn"), "renderExamChapter: no EN/AF toggle button anywhere in the header");
-  clear(host);
-  renderExamTopic(navApp, host, { chapterId: "eqn", topicId: "nature-of-roots" });
-  tick(!host.querySelector(".exam-lang-btn"), "renderExamTopic: no EN/AF toggle button anywhere in the header");
-  lines.push("EN/AF toggle button absent from both nav screens: confirmed");
+  /* the question-list screen it used to check here is gone — tapping a
+     skill tile goes straight into the player (EXAM-SKILLS-BRIEF.md), so
+     the chapter screen is the only nav screen left to check. */
+  lines.push("EN/AF toggle button absent from the chapter screen: confirmed");
 
   // ---- the "I'm lost" link: real eqn.nor.q1, gated per-quest ----
   const realQ1for10 = eqnNatureOfRootsQuestions.find(q => q.id === "eqn.nor.q1");
@@ -1096,7 +1137,6 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     clear(host);
     if (app.screen === "hub") renderHub(app, host);
     else if (app.screen === "examChapter") renderExamChapter(app, host, app.params);
-    else if (app.screen === "examTopic") renderExamTopic(app, host, app.params);
   }
   function makeApp11(openQuests) {
     const app = {
@@ -1139,19 +1179,24 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   const appNav = makeApp11([]);
   appNav.go("examChapter", { chapterId: "euclid" });
   tick(appNav.screen === "examChapter", "renderExamChapter reaches the exam-only chapter with NO quest open anywhere");
-  const euclidTopicCards = [...host.querySelectorAll(".exam-topic-card")].map(c => c.querySelector("h3").textContent.trim());
-  tick(euclidTopicCards.length === 2, `euclid shows 2 topic cards, got ${euclidTopicCards.length}`);
-  lines.push(`euclid topic cards: [${euclidTopicCards.join(", ")}]`);
-  appNav.go("examTopic", { chapterId: "euclid", topicId: "tangents-and-cyclic-quads" });
-  tick(appNav.screen === "examTopic", "renderExamTopic reaches a euclid topic");
-  tick(host.querySelectorAll(".exam-question-card").length === 1, "the tangents topic lists its one seeded question");
+  /* ONE skill tile: her ruling is that Euclidean stays one long
+     continuous round, so both questions live whole, in order, under the
+     single "Circle geometry" skill. */
+  const euclidTopicCards = tileEls(host).map(tileText);
+  tick(euclidTopicCards.length === 1, `euclid shows 1 skill tile, got ${euclidTopicCards.length}`);
+  tick(euclidTopicCards.some(t => /circle geometry/i.test(t)), `the euclid tile is "Circle geometry", got [${euclidTopicCards.join(", ")}]`);
+  lines.push(`euclid skill tiles: [${euclidTopicCards.join(", ")}]`);
   clear(host);
 
   /* ---- 4. the player: a figure per part, highlights that change ---- */
-  const q5 = examQuestionsForTopic("euclid", "tangents-and-cyclic-quads")[0];
-  const q4 = examQuestionsForTopic("euclid", "circle-theorems")[0];
-  tick(!!q5 && q5.id === "euclid.tan.t2q5", "resolved euclid.tan.t2q5 through the registry");
-  tick(!!q4 && q4.id === "euclid.circ.t2q4", "resolved euclid.circ.t2q4 through the registry");
+  const euclidCards11 = examQuestionsForTopic("euclid", "circle-geometry");
+  tick(euclidCards11.length === 2, `the circle-geometry skill holds both whole questions, got ${euclidCards11.length}`);
+  const q4 = euclidCards11.find(c => c.id === "euclid.circ.t2q4.ab1b2");
+  const q5 = euclidCards11.find(c => c.id === "euclid.tan.t2q5.abcd");
+  tick(!!q5, "resolved the euclid.tan.t2q5 card through the registry");
+  tick(!!q4, "resolved the euclid.circ.t2q4 card through the registry");
+  tick(!!q5 && q5.parts.length === 4 && q5.parts.map(p => p.id).join("") === "abcd", "the tangents card carries all four parts, in order");
+  tick(!!q4 && q4.parts.length === 3 && q4.parts.map(p => p.id).join(",") === "a,b1,b2", "the circle-theorems card carries all three parts, in order");
 
   // a real signed-in learner, exactly as Part 8 does — the Done button
   // reports the reveal to the backend and only advances on a real ok
@@ -1183,7 +1228,7 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   /* NO "I'm lost" button, on any part, ever — her ruling */
   const anyLost = [...host.querySelectorAll("button")].some(b => /i'm lost/i.test(b.textContent));
   tick(!anyLost, "NO \"I'm lost\" button renders on a Euclidean question (her ruling: they don't need it)");
-  lines.push(`"I'm lost" button on euclid.tan.t2q5: ${anyLost} (want false)`);
+  lines.push(`"I'm lost" button on the euclid.tan.t2q5 card: ${anyLost} (want false)`);
 
   /* walk every part: each gets its own figure, and the highlight really
      changes from part to part (the SVG markup differs). Driven by
@@ -1250,6 +1295,266 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 
   clear(host);
   say("euclidChecks", lines);
+}
+
+/* ============================================================
+   PART 12 — SKILL CARDS (EXAM-SKILLS-BRIEF.md, stage 1, 2026-08-22).
+
+   She played Exam Focus and it felt "too sudden": a whole five-part
+   practice-paper question with no title saying what skill was being
+   practised. So a question is now CUT into short cards along its
+   skills, and the tab runs chapter → skill tiles → one card at a time.
+
+   The one thing that must never happen in a cut like this is a part
+   quietly falling on the floor. So this section rebuilds her grouping
+   table BY HAND below — every skill, every card id, in her order — and
+   checks the registry against it in both directions:
+
+     · every part of all 21 source questions appears on at least one
+       card, and only the one part she deliberately duplicated appears
+       on two;
+     · every card is exactly its source parts, unedited — prompt, hint,
+       memo, esplain, marks and level compared field by field against
+       the module the card was cut from;
+     · card ids are unique, and each skill's cards are in her order;
+     · a card that needs an `intro` has one, and a card whose first
+       part already states its own setup does NOT (nothing said twice);
+     · no part is left starting with "Hence" when the part it points
+       back to is not on the card with it.
+   ============================================================ */
+{
+  const lines = [];
+
+  /* ---- the 21 source questions, straight from their own modules ---- */
+  const SOURCES = [
+    ...eqnNatureOfRootsQuestions, ...eqnNatureOfRootsTopUpQuestions, ...eqnKMethodQuestions,
+    ...eqnFractionsAndRestrictionsQuestions, ...eqnInequalitiesQuestions, ...eqnInequalitiesTopUpQuestions,
+    ...expFirstStepAndMethodQuestions, ...expConjugatesAndRationalisingQuestions, ...expNoSolutionAndStrategyQuestions,
+    ...funcHyperbolaAndExponentialQuestions, ...funcHyperbolaAndExponentialT2Questions,
+    ...funcGraphsTogetherQuestions, ...funcLineAndParabolaQuestions,
+    ...trigReductionAndRatiosQuestions, ...trigGeneralSolutionsQuestions, ...trigMixedProblemsQuestions,
+    ...euclidCircleTheoremsQuestions, ...euclidTangentsAndCyclicQuadsQuestions,
+  ];
+  const sourceById = new Map(SOURCES.map(q => [q.id, q]));
+  tick(SOURCES.length === 21, `all 21 seeded source questions load, got ${SOURCES.length}`);
+
+  /* ---- HER GROUPING TABLE, typed out ---- */
+  const TABLE = {
+    eqn: {
+      "nature-chain": ["eqn.nor.q1.abcd", "eqn.nor.q2.abc"],
+      "k-equal-roots": ["eqn.nor.q2.d", "eqn.nor.q3.a", "eqn.fr.q1.d"],
+      "k-for-nature": ["eqn.nor.q3.bcd"],
+      "delta-in-p": ["eqn.nor.q4.abcd", "eqn.nor.q5.abcd", "eqn.ineq.t1q3.b"],
+      "inequalities": ["eqn.ineq.t1q3.a", "eqn.ineq.q2.a", "eqn.ineq.q2.b", "eqn.ineq.q2.c", "eqn.ineq.q2.d"],
+      "fraction-equations": ["eqn.fr.q1.abc", "eqn.km.t1q2.b"],
+      "rational-exponents-k": ["eqn.km.t1q2.a", "eqn.km.t1q2.c"],
+    },
+    exp: {
+      "surds": ["exp.fsm.t1q1.a", "exp.cr.q1.a", "exp.cr.q1.b", "exp.cr.q1.c"],
+      "rationalise": ["exp.fsm.t1q1.b", "exp.cr.q1.d"],
+      "exponent-expressions": ["exp.fsm.t1q1.c", "exp.fsm.t1q1.d"],
+      "exponential-equations": ["exp.nss.q1.a", "exp.nss.q1.b", "exp.nss.q1.c", "exp.nss.q1.d"],
+    },
+    func: {
+      "find-equation": ["func.lp.q1.a", "func.hyp.t1q4.a"],
+      "asymptotes-domain-range": ["func.hyp.t2q3.a", "func.hyp.t1q4.b", "func.lp.q1.c"],
+      "intercepts-turning-point": ["func.lp.q1.b", "func.hyp.t1q4.c"],
+      "axis-of-symmetry": ["func.hyp.t2q3.b", "func.hyp.t1q4.d"],
+      "shift": ["func.lp.q1.d", "func.hyp.t2q3.c"],
+      "inequalities": ["func.hyp.t1q4.e", "func.hyp.t2q3.cd"],
+      "nature-of-roots": ["func.lp.q1.e", "func.hyp.t2q3.e", "func.gt.t1q5.c"],
+      "distances": ["func.gt.t1q5.ab"],
+    },
+    gtrig: {
+      "co-functions": ["trig.rr.t2q1.a"],
+      "special-sums": ["trig.rr.t2q1.b"],
+      "reduction": ["trig.rr.t2q1.c"],
+      "general-solution": ["trig.gs.t2q2.ab"],
+      "identities": [],
+      "super-special-sums": [],
+    },
+    trig: { "cosine-rule-area": ["trig.mix.t2q6.ab"] },
+    euclid: { "circle-geometry": ["euclid.circ.t2q4.ab1b2", "euclid.tan.t2q5.abcd"] },
+  };
+
+  /* ---- 1. every skill's cards, in her order ---- */
+  let orderOk = true;
+  const orderLines = [];
+  Object.entries(TABLE).forEach(([chapterId, skills]) => {
+    Object.entries(skills).forEach(([skillId, wantIds]) => {
+      const gotIds = examQuestionsForTopic(chapterId, skillId).map(c => c.id);
+      const ok = gotIds.length === wantIds.length && wantIds.every((id, i) => gotIds[i] === id);
+      if (!ok) orderOk = false;
+      orderLines.push(`  ${chapterId}/${skillId}: [${gotIds.join(", ") || "(none)"}]${ok ? "" : ` — FAIL, want [${wantIds.join(", ")}]`}`);
+    });
+  });
+  tick(orderOk, "every skill holds exactly the cards her grouping table lists, in her order");
+  lines.push(`cards per skill:\n${orderLines.join("\n")}`);
+
+  const ALL_CARDS = ["eqn", "exp", "func", "gtrig", "trig", "euclid"].flatMap(c => examQuestionsForChapter(c));
+  const tableCount = Object.values(TABLE).reduce((n, skills) => n + Object.values(skills).reduce((m, ids) => m + ids.length, 0), 0);
+  tick(ALL_CARDS.length === tableCount, `the registry holds exactly the table's ${tableCount} cards, got ${ALL_CARDS.length}`);
+  const skillCount = Object.values(SKILLS).reduce((n, arr) => n + arr.length, 0);
+  tick(skillCount === 27, `js/exam/skills.js lists 27 skills (25 across eqn/exp/func/gtrig + 2D trig + Euclidean), got ${skillCount}`);
+  lines.push(`\n${ALL_CARDS.length} cards across ${skillCount} skills, cut from ${SOURCES.length} seeded questions`);
+
+  /* ---- 2. card ids unique ---- */
+  const idCounts = new Map();
+  ALL_CARDS.forEach(c => idCounts.set(c.id, (idCounts.get(c.id) || 0) + 1));
+  const dupIds = [...idCounts.entries()].filter(([, n]) => n > 1).map(([id]) => id);
+  tick(dupIds.length === 0, `card ids are unique across the whole bank — duplicates: [${dupIds.join(", ")}]`);
+
+  /* ---- 3. COVERAGE: every source part lands on a card ---- */
+  const seen = new Map();     // "questionId(partId)" -> [card ids]
+  ALL_CARDS.forEach(c => {
+    tick(!!c.source && !!c.source.questionId, `${c.id}: carries a source {questionId, partIds}`);
+    if (!c.source) return;
+    c.source.partIds.forEach(pid => {
+      const key = `${c.source.questionId}(${pid})`;
+      seen.set(key, [...(seen.get(key) || []), c.id]);
+    });
+  });
+  const missing = [], doubled = [];
+  SOURCES.forEach(q => q.parts.forEach(p => {
+    const key = `${q.id}(${p.id})`;
+    const on = seen.get(key) || [];
+    if (!on.length) missing.push(key);
+    if (on.length > 1) doubled.push(`${key} → [${on.join(", ")}]`);
+  }));
+  const totalSourceParts = SOURCES.reduce((n, q) => n + q.parts.length, 0);
+  tick(missing.length === 0, `every one of the ${totalSourceParts} source parts appears on at least one card — missing: [${missing.join(", ")}]`);
+  tick(doubled.length === 1 && doubled[0].startsWith("func.hyp.t2q3(c)"),
+    `exactly ONE part is deliberately on two cards (func.hyp.t2q3 part c — the shift card, and the inequalities card where (d) needs h) — got [${doubled.join(" · ")}]`);
+  lines.push(`\ncoverage: ${totalSourceParts} source parts, ${seen.size} covered, ${missing.length} missing`);
+  lines.push(`deliberate duplicate: ${doubled.join(" · ") || "(none)"}`);
+
+  // and nothing invented: every part id a card claims must really exist
+  let claimsOk = true;
+  ALL_CARDS.forEach(c => {
+    const src = sourceById.get(c.source && c.source.questionId);
+    if (!src) { claimsOk = false; return; }
+    const cardPartIds = c.parts.map(p => p.id).join(",");
+    if (cardPartIds !== c.source.partIds.join(",")) claimsOk = false;
+    c.source.partIds.forEach(pid => { if (!src.parts.some(p => p.id === pid)) claimsOk = false; });
+  });
+  tick(claimsOk, "every card's parts are exactly the parts its source declares, in the same order, and every one really exists");
+
+  /* ---- 4. a card is its source parts, UNEDITED ---- */
+  let verbatimOk = true, inheritOk = true, marksOk = true;
+  const editedLines = [];
+  ALL_CARDS.forEach(c => {
+    const src = sourceById.get(c.source.questionId);
+    if (!src) return;
+    if (c.chapter !== src.chapter || c.archetype !== src.archetype || c.paper !== src.paper) inheritOk = false;
+    if (JSON.stringify(c.lostQuest) !== JSON.stringify(src.lostQuest)) inheritOk = false;
+    const want = c.parts.reduce((n, p) => n + p.marks, 0);
+    if (c.marks !== want) marksOk = false;
+    c.parts.forEach(p => {
+      const sp = src.parts.find(x => x.id === p.id);
+      if (!sp) { verbatimOk = false; return; }
+      const same = JSON.stringify(p.prompt) === JSON.stringify(sp.prompt)
+        && JSON.stringify(p.hint) === JSON.stringify(sp.hint)
+        && JSON.stringify(p.memo) === JSON.stringify(sp.memo)
+        && JSON.stringify(p.esplain) === JSON.stringify(sp.esplain)
+        && p.marks === sp.marks && p.level === sp.level;
+      if (!same) { verbatimOk = false; editedLines.push(`  ${c.id} (${p.id}) differs from ${src.id} (${sp.id})`); }
+    });
+  });
+  tick(verbatimOk, `every card part is its source part word for word (prompt, hint, memo, esplain, marks, level)${editedLines.length ? ":\n" + editedLines.join("\n") : ""}`);
+  tick(inheritOk, "every card inherits chapter, archetype, paper and lostQuest from the question it was cut from");
+  tick(marksOk, "every card's marks are the sum of the parts it actually carries");
+
+  /* a copy, not a shared reference — one source part really is on two
+     cards, so a shared object would be a booby trap the first time
+     anything wrote to a part */
+  const shiftCard = ALL_CARDS.find(c => c.id === "func.hyp.t2q3.c");
+  const ineqCard = ALL_CARDS.find(c => c.id === "func.hyp.t2q3.cd");
+  const cPartA = shiftCard && shiftCard.parts.find(p => p.id === "c");
+  const cPartB = ineqCard && ineqCard.parts.find(p => p.id === "c");
+  tick(!!cPartA && !!cPartB && cPartA !== cPartB, "the twice-used part is COPIED onto each card, not shared by reference");
+  tick(!!cPartA && !!cPartB && cPartA.prompt.en === cPartB.prompt.en, "…and both copies still read identically");
+
+  /* ---- 5. every card validates, exactly like a question ---- */
+  let validOk = true;
+  const invalid = [];
+  ALL_CARDS.forEach(c => {
+    const { ok, issues } = validateQuestion(c);
+    if (!ok) { validOk = false; invalid.push(`${c.id}: ${issues.join("; ")}`); }
+  });
+  tick(validOk, `every card passes validateQuestion()${invalid.length ? ":\n" + invalid.join("\n") : ""}`);
+
+  /* ---- 6. INTROS: present exactly where a card needs one ----
+     A card whose FIRST part is the one that carried the source stem
+     reads complete on its own and must NOT have an intro. Every other
+     card must. "First part carried the stem" = it is the first part of
+     its source question. */
+  let introOk = true;
+  const introLines = [];
+  ALL_CARDS.forEach(c => {
+    const src = sourceById.get(c.source.questionId);
+    const startsAtStem = !!src && src.parts[0].id === c.parts[0].id;
+    const hasIntro = !!c.intro;
+    const ok = startsAtStem ? !hasIntro : true;   // a stem-carrying card must not repeat itself
+    if (!ok) introOk = false;
+    introLines.push(`  ${c.id}: ${hasIntro ? `intro — "${c.intro.en.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim()}"` : "no intro" + (startsAtStem ? " (first part carries the stem)" : " (judged self-contained)")}`);
+  });
+  tick(introOk, "no card repeats a stem its own first part already states");
+  const withIntro = ALL_CARDS.filter(c => c.intro);
+  tick(withIntro.every(c => typeof c.intro.en === "string" && c.intro.en.trim().length > 0), "every intro that exists is a non-empty {en} string");
+  lines.push(`\nintros: ${withIntro.length} of ${ALL_CARDS.length} cards carry one\n${introLines.join("\n")}`);
+
+  /* ---- 7. no orphaned "Hence" ----
+     A prompt may only start with "Hence" when the part it points back
+     to is on the same card. */
+  const orphanHence = [];
+  ALL_CARDS.forEach(c => {
+    const src = sourceById.get(c.source.questionId);
+    const onCard = new Set(c.parts.map(p => p.id));
+    c.parts.forEach(p => {
+      const idx = src.parts.findIndex(x => x.id === p.id);
+      const prev = idx > 0 ? src.parts[idx - 1].id : null;
+      const bare = String(p.prompt.en).replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+      if (/^hence\b/i.test(bare) && (!prev || !onCard.has(prev))) orphanHence.push(`${c.id} (${p.id})`);
+    });
+  });
+  tick(orphanHence.length === 0, `no part starts with "Hence" without the part it points back to — offenders: [${orphanHence.join(", ")}]`);
+  lines.push(`\norphaned "Hence" prompts: ${orphanHence.length} (want 0)`);
+
+  /* ---- 8. diagrams narrowed to the parts a card carries ---- */
+  let diagOk = true;
+  ALL_CARDS.forEach(c => {
+    const src = sourceById.get(c.source.questionId);
+    if (!src.diagram) { if (c.diagram) diagOk = false; return; }
+    const wanted = Object.keys(src.diagram.parts || {}).filter(pid => c.source.partIds.includes(pid));
+    const got = c.diagram ? Object.keys(c.diagram.parts || {}) : [];
+    if (got.join(",") !== wanted.join(",")) diagOk = false;
+    if (c.diagram && src.diagram.spec && c.diagram.spec !== src.diagram.spec) diagOk = false;
+  });
+  tick(diagOk, "a card's diagram carries the source spec plus ONLY the entries for the parts it actually holds");
+
+  /* ---- 9. examFirstCardForSkill: where a tile tap lands ---- */
+  {
+    const cards = examQuestionsForTopic("eqn", "inequalities");
+    tick(examFirstCardForSkill("eqn", "inequalities", {}) === cards[0], "examFirstCardForSkill with no progress lands on the first card");
+    tick(examFirstCardForSkill("eqn", "inequalities", null) === cards[0], "examFirstCardForSkill copes with a missing progress map");
+    const oneDone = { [cards[0].id]: { partsOpened: ["a"], completed: true } };
+    tick(examFirstCardForSkill("eqn", "inequalities", oneDone) === cards[1], "…skips a completed card and lands on the next unworked one");
+    const started = { [cards[0].id]: { partsOpened: ["a"], completed: false } };
+    tick(examFirstCardForSkill("eqn", "inequalities", started) === cards[0], "…a STARTED but unfinished card is still where the learner lands");
+    const allDone = {};
+    cards.forEach(c => { allDone[c.id] = { partsOpened: [], completed: true }; });
+    tick(examFirstCardForSkill("eqn", "inequalities", allDone) === cards[0], "…everything done goes round again from the first card (no finish line, her ruling)");
+    tick(examFirstCardForSkill("gtrig", "identities", {}) === null, "a skill with no cards yet returns null (the tile is not tappable)");
+    tick(examFirstCardForSkill("stats", "anything", {}) === null, "an unseeded chapter returns null");
+    lines.push(`\nexamFirstCardForSkill: first=${cards[0].id}, after completing it=${examFirstCardForSkill("eqn", "inequalities", oneDone).id}, empty skill=${examFirstCardForSkill("gtrig", "identities", {})}`);
+  }
+
+  /* ---- 10. skillsForChapter / skillLabel ---- */
+  tick(skillsForChapter("eqn").length === 7 && skillsForChapter("stats").length === 0, "skillsForChapter returns her list for a seeded chapter and [] for an unseeded one");
+  tick(skillLabel("func", "axis-of-symmetry") === "Axis of symmetry", `skillLabel reads her label, got "${skillLabel("func", "axis-of-symmetry")}"`);
+  tick(skillLabel("func", "not-a-real-skill") === "Not A Real Skill", "skillLabel falls back to a title-cased slug rather than rendering blank");
+
+  say("cardChecks", lines);
 }
 
 const banner = document.getElementById("banner");

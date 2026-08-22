@@ -76,20 +76,20 @@ const t1q2 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "Solve for x: &nbsp;2x<sup>3/4</sup> = 54",
+        en: "Solve for x: &nbsp;2x<sup><span class=\"sfrac\"><span class=\"sf-n\">3</span><span class=\"sf-d\">4</span></span></sup> = 54",
       },
       hint: {
         en: "Get the power standing on its own first — the 2 in front has to go before you touch the exponent. Then think: what do you multiply 3/4 by to leave a plain x behind?",
       },
       memo: [
         { type: "step", text: { en: "Get the power on its own first:" } },
-        { type: "step", text: { en: "x<sup>3/4</sup> = 27" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "x<sup><span class=\"sfrac\"><span class=\"sf-n\">3</span><span class=\"sf-d\">4</span></span></sup> = 27" }, ticks: ["s/f"] },
         { type: "step", text: { en: "Now multiply the exponent by its <b>reciprocal</b> — 3/4 × 4/3 = 1, so the x is left standing alone. Whatever you do to the left, you do to the right." } },
-        { type: "step", text: { en: "(x<sup>3/4</sup>)<sup>4/3</sup> = 27<sup>4/3</sup> = (3³)<sup>4/3</sup>" }, ticks: ["ca"] },
+        { type: "step", text: { en: "(x<sup><span class=\"sfrac\"><span class=\"sf-n\">3</span><span class=\"sf-d\">4</span></span></sup>)<sup><span class=\"sfrac\"><span class=\"sf-n\">4</span><span class=\"sf-d\">3</span></span></sup> = 27<sup><span class=\"sfrac\"><span class=\"sf-n\">4</span><span class=\"sf-d\">3</span></span></sup> = (3³)<sup><span class=\"sfrac\"><span class=\"sf-n\">4</span><span class=\"sf-d\">3</span></span></sup>" }, ticks: ["ca"] },
         { type: "answer", text: { en: "x = 3⁴ = 81" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — raise, then root (same marks): x<sup>3/4</sup> = 27 &nbsp;⟹&nbsp; (⁴√(x³))⁴ = 27⁴ &nbsp;⟹&nbsp; x³ = 531 441 &nbsp;⟹&nbsp; x = ³√531 441 = 81" } },
+        { type: "step", text: { en: "<b>OR</b> — raise, then root (same marks): x<sup><span class=\"sfrac\"><span class=\"sf-n\">3</span><span class=\"sf-d\">4</span></span></sup> = 27 &nbsp;⟹&nbsp; (⁴√(x³))⁴ = 27⁴ &nbsp;⟹&nbsp; x³ = 531 441 &nbsp;⟹&nbsp; x = ³√531 441 = 81" } },
         { type: "trap", text: {
-          en: "REMEMBER: where does the ± go? Look at the <i>numerator</i> of the original exponent. Here it is 3, which is odd, so there is <b>no</b> ±. A ± only appears when that numerator is even — e.g. x<sup>2/3</sup> = 9 gives x = ±27.",
+          en: "REMEMBER: where does the ± go? Look at the <i>numerator</i> of the original exponent. Here it is 3, which is odd, so there is <b>no</b> ±. A ± only appears when that numerator is even — e.g. x<sup><span class=\"sfrac\"><span class=\"sf-n\">2</span><span class=\"sf-d\">3</span></span></sup> = 9 gives x = ±27.",
         } },
       ],
       esplain: {

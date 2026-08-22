@@ -1367,22 +1367,31 @@ const m17 = mark();
 {
   const lines = [];
   tick(EXAM_CHAPTERS.includes("gtrig"), `js/config.js EXAM_CHAPTERS includes "gtrig" (got [${EXAM_CHAPTERS.join(",")}])`);
+  /* 2026-08-22 (evening): Exam Focus became SKILL ROUNDS
+     (EXAM-SKILLS-BRIEF.md), so the registry holds CARDS cut from these
+     two questions rather than the questions themselves — four cards
+     across four skills, plus two skills listed with no cards yet
+     ("Identities", "Super Special Sums", rendered "coming soon"). The
+     relink this section exists to guard is unchanged: every card
+     inherits its source question's lostQuest, and that is what is
+     checked below, card by card. */
   const gq = examQuestionsForChapter("gtrig");
-  tick(gq.length === 2, `the gtrig exam chapter owns exactly 2 questions (got ${gq.length})`);
+  tick(gq.length === 4, `the gtrig exam chapter owns exactly 4 skill cards (got ${gq.length})`);
   const tq = examQuestionsForChapter("trig");
-  tick(tq.length === 1 && tq[0].topic === "mixed-problems",
-    `the 2D trig chapter keeps ONLY mixed-problems (got ${tq.map(x => x.topic).join(",")})`);
-  const wantTopics = ["reduction-and-ratios", "general-solutions"];
+  tick(tq.length === 1 && tq[0].topic === "cosine-rule-area",
+    `the 2D trig chapter keeps ONLY its one paused card (got ${tq.map(x => x.topic).join(",")})`);
+  const wantTopics = ["co-functions", "special-sums", "reduction", "general-solution", "identities", "super-special-sums"];
   tick(same(examTopicsForChapter("gtrig").map(t => t.id), wantTopics),
-    `gtrig's exam topics are ${wantTopics.join(" + ")}`);
+    `gtrig's exam skills are ${wantTopics.join(" + ")}`);
   const WANT = { "trig.rr.t2q1": "gt5", "trig.gs.t2q2": "gt11" };
   Object.keys(WANT).forEach(id => {
     const quest = WANT[id];
-    const q = gq.find(x => x.id === id);
-    if (!tick(!!q, `${id} is registered under gtrig`)) return;
-    tick(q.chapter === "gtrig", `${id} declares chapter "gtrig" (got "${q.chapter}")`);
-    tick(q.lostQuest && q.lostQuest.chapter === "gtrig" && q.lostQuest.quest === quest,
-      `${id}'s "I'm lost" points at gtrig/${quest} (got ${JSON.stringify(q.lostQuest)})`);
+    const cards = gq.filter(x => x.source && x.source.questionId === id);
+    if (!tick(cards.length > 0, `${id}'s cards are registered under gtrig`)) return;
+    const q = cards[0];
+    tick(cards.every(c => c.chapter === "gtrig"), `every ${id} card declares chapter "gtrig"`);
+    tick(cards.every(c => c.lostQuest && c.lostQuest.chapter === "gtrig" && c.lostQuest.quest === quest),
+      `every ${id} card's "I'm lost" points at gtrig/${quest} (got ${JSON.stringify(q.lostQuest)})`);
     /* it has to RESOLVE the same three ways js/exam-play.js's
        lostQuestLink() resolves it: chapter, quest entry, quest def */
     const ch = chapterById(q.lostQuest.chapter);
@@ -1391,7 +1400,7 @@ const m17 = mark();
     tick(!!ch && !!entry && !!def, `${id}: chapterById + quests.find + questDef all resolve for gtrig/${quest}`);
     tick(!!def && Array.isArray(def.skills) && def.skills.length > 0, `${id}: gtrig/${quest} is a real round with skills`);
     tick(!/^PENDING-/.test(q.lostQuest.quest), `${id}: no PENDING- placeholder left`);
-    lines.push(`  ${id} → ${q.lostQuest.chapter}/${q.lostQuest.quest} "${entry ? entry.title : "??"}" — resolves, ${def ? def.skills.length : 0} skills`);
+    lines.push(`  ${id} → ${cards.length} card(s) [${cards.map(c => c.id).join(", ")}] → ${q.lostQuest.chapter}/${q.lostQuest.quest} "${entry ? entry.title : "??"}" — resolves, ${def ? def.skills.length : 0} skills`);
   });
   document.getElementById("s4-exam").dataset.detail = lines.join("\n");
   section("s4-exam", `the two T2 trig questions live in gtrig and their reteach links resolve\n${lines.join("\n")}`, m17);

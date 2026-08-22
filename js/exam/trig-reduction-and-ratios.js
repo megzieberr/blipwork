@@ -115,7 +115,7 @@ const t2q1 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Simplify: &nbsp;[ cos(180° − x) · sin(90° + x) ] / cos²(90° + x)",
+        en: "<em>No calculator.</em><br>Simplify: &nbsp;<span class=\"sfrac\"><span class=\"sf-n\">cos(180° − x) · sin(90° + x)</span><span class=\"sf-d\">cos²(90° + x)</span></span>",
       },
       hint: {
         en: "Three reductions, three separate lines — and write the split above each angle before you write anything else. For each one, the three steps in order: which quadrant, which reduction formula, then + or −. And anything you are about to square goes into block brackets first.",

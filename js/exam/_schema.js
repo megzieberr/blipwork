@@ -274,6 +274,44 @@ function validateDiagram(q, issues) {
   });
 }
 
+/* ---------------------------------------------------------------
+   SOURCE + INTRO (optional, added 2026-08-22 with the SKILL CARDS
+   build — EXAM-SKILLS-BRIEF.md). Absent on every one of the 21 SOURCE
+   questions in js/exam/*.js (they stay exactly as composed); present
+   on every CARD built out of them by js/exam/_cards.js.
+
+     source  { questionId, partIds[] } — which seeded question this card
+             was cut from, and which of its parts it carries. SHAPE ONLY
+             here: whether the question id resolves, and whether every
+             part id really appears in this card's parts[], is a
+             cross-file question and belongs in the harness
+             (verify-exam.html Part 12), the same split q.chapter and
+             lostQuest already use.
+     intro   {en, af?} — the GIVEN information the card's parts lean on
+             once they are away from their original question's stem
+             ("h is the hyperbola h(x) = 6/(x + 2) + 1…"). Optional: a
+             card whose first part already states its own setup gets
+             NO intro, so nothing is said twice.
+   --------------------------------------------------------------- */
+function validateSource(q, issues) {
+  const s = q.source;
+  if (s === undefined) return;
+  const label = `question "${q.id}" source`;
+  if (!s || typeof s !== "object" || Array.isArray(s)) { issues.push(`${label}: must be a { questionId, partIds } object`); return; }
+  if (!isNonEmptyString(s.questionId)) issues.push(`${label}.questionId: missing or empty`);
+  if (!Array.isArray(s.partIds) || !s.partIds.length) { issues.push(`${label}.partIds: must be a non-empty array of part ids`); return; }
+  s.partIds.forEach((pid, i) => {
+    if (!isNonEmptyString(pid)) issues.push(`${label}.partIds[${i}]: must be a non-empty string`);
+  });
+}
+
+function validateIntro(q, issues) {
+  if (q.intro === undefined) return;
+  const label = `question "${q.id}" intro`;
+  isTextPair(q.intro, label, issues);
+  glyphIssues(q.intro, label, issues);
+}
+
 /* The one function both a future seeding session and this build's harness
    (verify-exam.html) import — checked in exactly one place, per the
    brief, so the two can never drift apart. Returns {ok, issues}. */
@@ -307,6 +345,8 @@ export function validateQuestion(q) {
   }
 
   validateDiagram(q, issues);
+  validateSource(q, issues);
+  validateIntro(q, issues);
 
   return { ok: issues.length === 0, issues };
 }

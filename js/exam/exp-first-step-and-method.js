@@ -112,7 +112,7 @@ const t1q1 = {
         { type: "step", text: { en: "Work on the left-hand side only and drive it down to what is given." } },
         { type: "step", text: { en: "= 6 / (√5 − √2) &nbsp;×&nbsp; (√5 + √2) / (√5 + √2)" }, ticks: ["s/f"] },
         { type: "step", text: { en: "Multiplying by the <b>conjugate over itself</b> is multiplying by 1, so nothing changes — but the denominator turns into a difference of squares and the surd disappears." } },
-        { type: "step", text: { en: "= 6(√5 + √2) / (5 − 2) = 6(√5 + √2) / 3" } },
+        { type: "step", text: { en: "= (6(√5 + √2))/(5 − 2) = (6(√5 + √2))/3" } },
         { type: "answer", text: { en: "= 2(√5 + √2) = 2√5 + 2√2 &nbsp;as required" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: the conjugate changes <i>only</i> the sign in the middle — the conjugate of √5 − √2 is √5 + √2, not −√5 + √2. And do not start from the right-hand side: a “show that” is worked from one side only.",
@@ -127,7 +127,7 @@ const t1q1 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Simplify: &nbsp;(3<sup>x+1</sup> + 3<sup>x−1</sup>) / (3<sup>x</sup> + 3<sup>x−2</sup>)",
+        en: "<em>No calculator.</em><br>Simplify: &nbsp;<span class=\"sfrac\"><span class=\"sf-n\">3<sup>x+1</sup> + 3<sup>x−1</sup></span><span class=\"sf-d\">3<sup>x</sup> + 3<sup>x−2</sup></span></span>",
       },
       hint: {
         en: "There is a + between the terms, so nothing may cancel yet. Divorce every power into 3ˣ times a small number first, then look for the common factor.",
