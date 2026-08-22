@@ -1,4 +1,36 @@
-# Project status — updated 2026-08-22 early hours (📝 EXAM FOCUS SPEC CORRECTED + OVERNIGHT RUN #1 ✅ DONE, local commit only)
+# Project status — updated 2026-08-22 (📝 EXAM FOCUS: 21 questions / 5 chapters incl. EUCLIDEAN exam-only chapter ✅ SHIPPED, sw v53)
+
+## 🚀 2026-08-22 (morning) — BUILD DAY SHIPPED: register + Euclidean chapter + trig digest (sw v53, commit 537d863)
+
+Fable foreman, Sonnet registration + Opus Euclid/digest/Esplain agents, her "Yes! You can
+ship". Live now: Exam Focus = eqn 9 · exp 3 · func 4 · trig 3 · **euclid 2** (exam-only
+chapter: `EXAM_ONLY_CHAPTERS` in config.js, never in hub/dice/admin; eligible on its flag
+alone; NO "I'm lost" by her ruling). CQ engine ported as `js/exam/circle-engine.js`
+(verbatim + additive `o.mark:"square"`; highlight helpers); `diagram` is a validated
+schema field; per-part figure with that part's highlights. Harness 176/176 browser,
+353/353 node; foreman looked at every figure render. `METHODS-trig.md` (her 68 pages;
+six named general-solution types; 18 flags — F3/F12/F13/F14/F18 want one line from her
+when convenient) + `TRIG-DRILL-ROUNDS-PLAN.md` (her 13 rounds verbatim). Trig exam
+Esplains/hints rewritten in her voice, memos untouched (her ruling: method = textbook).
+Also today: both Sept practice QPs re-laid to her layout rulings (every question on a
+new page; ≤2 algebra parts per page) — ruling recorded in GR11-PAPERS-PROJECT.md.
+No SQL today. ⚠️ `*.pdf` now gitignored — her notes scans sit in the repo folder.
+
+### ⏳ Pending on Megan
+- 🖨 whenever: print the two Sept practice papers (Sept Practice folder).
+- 💻 2 min [whenever]: five one-liners for METHODS-trig flags (rationalising convention,
+  "Hayley's way" wording, R3 triangle-derivation wording, p53 duplicate family, p04 word).
+- 📱 3 min [whenever]: open Exam Focus → Euclidean Geometry on your phone and feel the
+  diagrams + highlighting (foreman-looked, not phone-felt).
+
+### Next up
+- Trig drill rounds chapter (her 13 rounds) — needs a design pass + migration; then the
+  two trig exam modules' lostQuest point at it.
+- Practice-paper mode UI · overnight #2 content run.
+
+---
+
+# (previous head) Project status — updated 2026-08-22 early hours (📝 EXAM FOCUS SPEC CORRECTED + OVERNIGHT RUN #1 ✅ DONE, local commit only)
 
 ## ⚖️ 2026-08-21 LATE NIGHT — THE CORRECTIONS SESSION (read EXAM-FOCUS-PLAN.md's Corrections before ANY exam work; it SUPERSEDES the session-E head below where they clash)
 
