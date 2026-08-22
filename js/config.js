@@ -280,18 +280,22 @@ export const MOOD = {
    EXAM FOCUS — infrastructure build (EXAM-FOCUS-PLAN.md, session 0,
    2026-08-21). THIS FLAG IS THE SWITCH, exactly like DICE_CHAPTERS above:
    a chapter id only ever belongs here once BOTH real seeded questions
-   exist for it (js/exam/index.js's registry) AND Megan's phone-test green
-   light on the pilot topic (EXAM-FOCUS-PLAN.md's build order — session 1
-   seeds the pilot, session 2+ goes topic by topic).
+   exist for it (js/exam/index.js's registry) AND — same relationship as
+   examChapterEligible() in js/screens.js adds on top — at least one of
+   its quests is open, which the flag alone does not control.
 
    PILOT SEEDED (session D, 2026-08-21): eqn / nature-of-roots, four
-   questions (js/exam/eqn-nature-of-roots.js). Flag flipped to ["eqn"] as
-   part of that same session, per the build brief — but the class is NOT
-   yet invited to the app at all (a separate, earlier gate), so nothing
-   here is learner-visible on live regardless. Megan phone-tests this
-   pilot before any other chapter gets seeded — same rhythm as
-   DICE_CHAPTERS above; this is not a green light for topic 2. */
-export const EXAM_CHAPTERS = ["eqn"];
+   questions. WIDENED (day session, 2026-08-22, registering overnight
+   run #1 — OVERNIGHT-1-REPORT.md): exp, func and trig now carry real
+   seeded questions too (js/exam/index.js), so all four flip on here.
+   Euclidean stays OFF this flag — its two modules are unregistered
+   pending the Circle Quest engine port (see js/exam/index.js's header)
+   even though EXAM-FOCUS-PLAN.md's Corrections confirm it belongs in
+   Exam Focus, as its own exam-only chapter, once that lands. The class
+   still is not invited to the app at all (a separate, earlier gate), so
+   nothing here is learner-visible on live regardless — this flag only
+   controls what's REACHABLE once she opens the app up. */
+export const EXAM_CHAPTERS = ["eqn", "exp", "func", "trig"];
 
 /* Pay-per-completed-question, her kickoff ruling (2026-08-21): flat 75 XP +
    10 gold, ONCE per question ever (re-opening an already-completed

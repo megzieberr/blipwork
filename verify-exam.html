@@ -19,18 +19,19 @@
 </head>
 <body>
 <h1 style="font-family:'Space Grotesk',sans-serif">Exam focus infrastructure · verification</h1>
-<p class="muted small">EXAM-FOCUS-PLAN.md, session 0 build (2026-08-21) + session D pilot content (2026-08-21). Tests the
-  machinery (js/exam/_harness-stub.js is a fully-worked stub, never registered/never learner-reachable) AND, from
-  Part 6 onward, the real seeded pilot (eqn / nature-of-roots, js/exam/eqn-nature-of-roots.js). This page forces
-  ?local=1-equivalent behaviour via localStorage before any module import runs, so the REAL js/api.js singleton
-  (used by js/screens.js and js/exam-play.js exactly as the live app uses it) resolves to LocalBackend for the
-  whole page.</p>
+<p class="muted small">EXAM-FOCUS-PLAN.md, session 0 build (2026-08-21) + session D pilot content (2026-08-21) + day session
+  2026-08-22 registering overnight run #1's 15 modules (OVERNIGHT-1-REPORT.md). Tests the machinery
+  (js/exam/_harness-stub.js is a fully-worked stub, never registered/never learner-reachable) AND, from
+  Part 6 onward, the real seeded content across eqn/exp/func/trig. This page forces ?local=1-equivalent
+  behaviour via localStorage before any module import runs, so the REAL js/api.js singleton (used by
+  js/screens.js and js/exam-play.js exactly as the live app uses it) resolves to LocalBackend for the
+  whole page. Run alongside <code>node verify-exam-modules.mjs</code> (repo root) — see Part 7's note.</p>
 <div id="banner">running…</div>
 
 <h2>Part 1 · js/exam/_schema.js — validateQuestion()</h2>
 <div id="schemaChecks"></div>
 
-<h2>Part 2 · registry (js/exam/index.js) — eqn seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn"]</h2>
+<h2>Part 2 · registry (js/exam/index.js) — eqn/exp/func/trig seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn","exp","func","trig"]</h2>
 <pre id="registryChecks">…</pre>
 
 <h2>Part 3 · hub navigation — flag off (simulated), then the real shipped flag state</h2>
@@ -46,6 +47,13 @@
 <pre id="scopeWallChecks">…</pre>
 
 <h2>Part 7 · nature-of-roots content — independent recompute of every discriminant, root and k-value</h2>
+<p class="muted small">The 15 modules registered day-session 2026-08-22 (overnight run #1) get the SAME
+  independent-recompute discipline, but hosted in a separate NODE harness —
+  <code>verify-exam-modules.mjs</code> in the repo root (<code>node verify-exam-modules.mjs</code>) — because
+  a sweep-based recompute of every prompt's numbers across 15 questions doesn't host cleanly inside a
+  browser page. That file also re-runs schema validation, id uniqueness, lostQuest resolution (with the two
+  documented trig placeholders), star placement and the scope-wall check for those 15 modules specifically.
+  Last run: 280/280 checks passed. Run it after touching any of those 15 files.</p>
 <pre id="recomputeChecks">…</pre>
 
 <h2>Part 8 · the part player driven against a REAL seeded question (eqn.nor.q1), end to end</h2>
@@ -206,55 +214,115 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 }
 
 /* ============================================================
-   PART 2 — registry + flag reflect the PILOT SEEDED state (session D,
-   2026-08-21): eqn/nature-of-roots has 4 real questions and
-   EXAM_CHAPTERS is ["eqn"]; every other chapter is still an empty array,
-   exactly as session 0 shipped it. (Originally this section asserted
-   everything was empty/off — updated here because seeding the pilot is
-   this session's actual job, not a regression.)
+   PART 2 — registry + flag reflect the WIDENED state (day session,
+   2026-08-22, registering overnight run #1's 15 non-Euclidean modules —
+   OVERNIGHT-1-REPORT.md): eqn/exp/func/trig all carry real seeded
+   questions now, and EXAM_CHAPTERS covers all four. Euclidean stays
+   unregistered (js/exam/index.js header) so it isn't asserted here at
+   all — same "empty until seeded" relationship the pilot-era version of
+   this section already used for the other chapters.
    ============================================================ */
 {
   const lines = [];
-  tick(Array.isArray(EXAM_CHAPTERS) && EXAM_CHAPTERS.length === 1 && EXAM_CHAPTERS[0] === "eqn", 'js/config.js EXAM_CHAPTERS is ["eqn"] — the pilot flag, and only the pilot flag');
-  lines.push(`EXAM_CHAPTERS: [${EXAM_CHAPTERS.join(",")}] — ${EXAM_CHAPTERS.length === 1 && EXAM_CHAPTERS[0] === "eqn" ? "OK, pilot only" : "FAIL"}`);
 
+  // ---- flag: exactly the four chapters with real content, any order ----
+  const EXPECTED_FLAGGED = ["eqn", "exp", "func", "trig"];
+  const flagSet = new Set(EXAM_CHAPTERS);
+  const flagOk = flagSet.size === EXPECTED_FLAGGED.length && EXPECTED_FLAGGED.every(id => flagSet.has(id));
+  tick(flagOk, `js/config.js EXAM_CHAPTERS is exactly {${EXPECTED_FLAGGED.join(",")}} — got [${EXAM_CHAPTERS.join(",")}]`);
+  lines.push(`EXAM_CHAPTERS: [${EXAM_CHAPTERS.join(",")}] — ${flagOk ? "OK, matches the widened set" : "FAIL"}`);
+
+  // ---- exact question count per chapter, derived from the registry ----
   const allChapterIds = ["stats", "finance", "prob", "trig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn"];
-  let othersEmpty = true;
-  allChapterIds.forEach(id => { if (id !== "eqn" && examQuestionsForChapter(id).length) othersEmpty = false; });
-  tick(othersEmpty, "every chapter OTHER than eqn still has zero questions in the registry");
-  const eqnCount = examQuestionsForChapter("eqn").length;
-  tick(eqnCount === 4, `eqn has exactly 4 seeded questions, got ${eqnCount}`);
-  lines.push(`registry question counts, every chapter: ${allChapterIds.map(id => `${id}=${examQuestionsForChapter(id).length}`).join(", ")} — non-eqn all empty? ${othersEmpty}, eqn=4? ${eqnCount === 4}`);
+  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 3, meas: 0, func: 4, tgraph: 0, analytical: 0, pat: 0, exp: 3, eqn: 9 };
+  let countsOk = true;
+  const countLines = [];
+  allChapterIds.forEach(id => {
+    const got = examQuestionsForChapter(id).length;
+    const ok = got === EXPECTED_COUNTS[id];
+    if (!ok) countsOk = false;
+    countLines.push(`${id}=${got}${ok ? "" : ` (want ${EXPECTED_COUNTS[id]})`}`);
+  });
+  tick(countsOk, "every chapter's registry count matches the expected widened state exactly");
+  lines.push(`registry question counts: ${countLines.join(", ")} — ${countsOk ? "OK" : "FAIL"}`);
 
-  tick(examTopicsForChapter("stats").length === 0, "examTopicsForChapter derives zero topics from an empty chapter (stats, untouched by this session)");
+  tick(examTopicsForChapter("stats").length === 0, "examTopicsForChapter derives zero topics from an empty chapter (stats, still unseeded)");
   lines.push(`examTopicsForChapter("stats") with nothing registered: [${examTopicsForChapter("stats").map(t => t.id).join(",")}] — ${examTopicsForChapter("stats").length === 0 ? "OK" : "FAIL"}`);
 
-  const eqnTopics = examTopicsForChapter("eqn");
-  tick(eqnTopics.length === 1 && eqnTopics[0].id === "nature-of-roots", `examTopicsForChapter("eqn") derives exactly one topic, "nature-of-roots" — got [${eqnTopics.map(t => t.id).join(",")}]`);
-  lines.push(`examTopicsForChapter("eqn"): ${JSON.stringify(eqnTopics)}`);
+  // ---- exact topic SET per newly-seeded chapter (order-independent) ----
+  const EXPECTED_TOPICS = {
+    eqn: ["k-method", "fractions-and-restrictions", "inequalities", "nature-of-roots"],
+    exp: ["first-step-and-method", "conjugates-and-rationalising", "no-solution-and-strategy"],
+    func: ["hyperbola-and-exponential", "graphs-together", "line-and-parabola"],
+    trig: ["reduction-and-ratios", "general-solutions", "mixed-problems"],
+  };
+  let topicsOk = true;
+  const topicLines = [];
+  Object.entries(EXPECTED_TOPICS).forEach(([chapterId, wantTopics]) => {
+    const gotTopics = examTopicsForChapter(chapterId).map(t => t.id);
+    const gotSet = new Set(gotTopics), wantSet = new Set(wantTopics);
+    const ok = gotSet.size === wantSet.size && [...wantSet].every(t => gotSet.has(t));
+    if (!ok) topicsOk = false;
+    topicLines.push(`  ${chapterId}: [${gotTopics.join(",")}] — ${ok ? "OK" : `FAIL, want {${wantTopics.join(",")}}`}`);
+  });
+  tick(topicsOk, "examTopicsForChapter derives exactly the expected topic set for eqn/exp/func/trig");
+  lines.push(`topics per newly-seeded chapter:\n${topicLines.join("\n")}`);
 
   tick(typeof EXAM.xpPerQuestion === "number" && typeof EXAM.goldPerQuestion === "number", "js/config.js EXAM block has numeric xpPerQuestion/goldPerQuestion");
   lines.push(`EXAM block: xpPerQuestion=${EXAM.xpPerQuestion}, goldPerQuestion=${EXAM.goldPerQuestion}`);
 
-  // lostQuest existence check (session E, 2026-08-21) — js/exam/_schema.js
-  // only checks {chapter,quest} are non-empty strings; this harness is
-  // what resolves them against js/config.js CHAPTERS, the same "structure
-  // here, cross-file existence in the harness" split index.js's own
-  // registry check already uses for q.chapter.
-  const eqnQuestions = examQuestionsForChapter("eqn");
-  let lostQuestOk = true;
+  // ---- lostQuest: existence check (session E, 2026-08-21) — js/exam/
+  // _schema.js only checks {chapter,quest} are non-empty strings; this
+  // harness is what resolves them against js/config.js CHAPTERS, the
+  // same "structure here, cross-file existence in the harness" split
+  // index.js's own registry check already uses for q.chapter. WIDENED
+  // (2026-08-22) to cover every seeded chapter, with a documented
+  // exception for the two trig questions Megan ruled ship LINKLESS
+  // until a trig-notes digest exists (EXAM-FOCUS-PLAN.md, morning-of
+  // ruling): their lostQuest is a PENDING- placeholder that must NOT
+  // resolve — that non-resolution is the point (js/exam-play.js's
+  // lostQuestLink() degrades to "no button" through three independent
+  // gates when it can't resolve, never a dead link).
+  const PLACEHOLDER_LOST_IDS = new Set(["trig.rr.t2q1", "trig.gs.t2q2"]);
+  const EXPECTED_LOSTQUEST = {
+    "eqn.nor.q1": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q2": { chapter: "eqn", quest: "eq8" },
+    "eqn.nor.q3": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q4": { chapter: "eqn", quest: "eq8" },
+    "eqn.nor.q5": { chapter: "eqn", quest: "eq8" },
+    "eqn.km.t1q2": { chapter: "eqn", quest: "eq3" },
+    "eqn.fr.q1": { chapter: "eqn", quest: "eq4" },
+    "eqn.ineq.t1q3": { chapter: "eqn", quest: "eq7" }, "eqn.ineq.q2": { chapter: "eqn", quest: "eq7" },
+    "exp.fsm.t1q1": { chapter: "exp", quest: "es3" },
+    "exp.cr.q1": { chapter: "exp", quest: "es6" },
+    "exp.nss.q1": { chapter: "exp", quest: "es8" },
+    "func.hyp.t1q4": { chapter: "func", quest: "fn3" }, "func.hyp.t2q3": { chapter: "func", quest: "fn3" },
+    "func.gt.t1q5": { chapter: "func", quest: "fn7" },
+    "func.lp.q1": { chapter: "func", quest: "fn2" },
+    "trig.mix.t2q6": { chapter: "trig", quest: "t7" },
+  };
+  let lostQuestOk = true, placeholderOk = true;
   const lostQuestLines = [];
-  eqnQuestions.forEach(q => {
-    const lq = q.lostQuest;
-    const lqChapter = lq && CHAPTERS.find(c => c.id === lq.chapter);
-    const lqQuest = lqChapter && (lqChapter.quests || []).find(qq => qq.id === lq.quest);
-    const ok = !!lqChapter && !!lqQuest;
-    if (!ok) lostQuestOk = false;
-    lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} → chapter found? ${!!lqChapter}, quest found? ${!!lqQuest} — ${ok ? "OK" : "FAIL"}`);
+  ["eqn", "exp", "func", "trig"].forEach(chapterId => {
+    examQuestionsForChapter(chapterId).forEach(q => {
+      const lq = q.lostQuest;
+      if (PLACEHOLDER_LOST_IDS.has(q.id)) {
+        const isPlaceholder = !!lq && /^PENDING-/.test(lq.quest) && lq.chapter === "trig" && !CHAPTERS.find(c => c.id === lq.chapter)?.quests?.some(qq => qq.id === lq.quest);
+        if (!isPlaceholder) placeholderOk = false;
+        lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} — documented placeholder (no reteach round exists yet), correctly non-resolving? ${isPlaceholder}`);
+        return;
+      }
+      const lqChapter = lq && CHAPTERS.find(c => c.id === lq.chapter);
+      const lqQuest = lqChapter && (lqChapter.quests || []).find(qq => qq.id === lq.quest);
+      const resolves = !!lqChapter && !!lqQuest;
+      const want = EXPECTED_LOSTQUEST[q.id];
+      const matchesWant = !!want && lq && lq.chapter === want.chapter && lq.quest === want.quest;
+      const ok = resolves && matchesWant;
+      if (!ok) lostQuestOk = false;
+      lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} → resolves? ${resolves}, matches expected ${JSON.stringify(want)}? ${matchesWant} — ${ok ? "OK" : "FAIL"}`);
+    });
   });
-  tick(lostQuestOk, "every eqn pilot question's lostQuest resolves to a real chapter and quest in js/config.js CHAPTERS");
-  tick(eqnQuestions.every(q => q.lostQuest && q.lostQuest.chapter === "eqn" && q.lostQuest.quest === "eq8"), 'every eqn pilot question points lostQuest at {chapter:"eqn", quest:"eq8"} — the confirmed right round');
-  lines.push(`lostQuest existence check:\n${lostQuestLines.join("\n")}`);
+  tick(lostQuestOk, "every non-placeholder seeded question's lostQuest resolves to a real chapter+quest AND matches the expected reteach round");
+  tick(placeholderOk, "trig.rr.t2q1 and trig.gs.t2q2 carry the documented PENDING- placeholder, which correctly does NOT resolve (ships linkless, her ruling)");
+  lines.push(`lostQuest check (all seeded chapters):\n${lostQuestLines.join("\n")}`);
 
   say("registryChecks", lines);
 }
@@ -329,9 +397,14 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 
   if (examCard) examCard.querySelector("button").click();
   tick(appOn.screen === "examChapter" && appOn.params.chapterId === "eqn", "clicking the chapter card navigates to examChapter with chapterId \"eqn\"");
-  const topicCard = host.querySelector(".exam-topic-card");
-  tick(!!topicCard && /nature/i.test(topicCard.textContent), "examChapter screen shows the REAL seeded topic card (Nature Of Roots), not the empty placeholder");
-  lines.push(`examChapter screen topic card: "${topicCard ? topicCard.querySelector("h3").textContent.trim() : "(missing)"}"`);
+  // eqn now derives FOUR topic cards (k-method, fractions-and-restrictions,
+  // inequalities, nature-of-roots — widened day session 2026-08-22), not
+  // just the pilot's one, so this checks the whole grid rather than
+  // assuming "nature-of-roots" renders first.
+  const topicCards = [...host.querySelectorAll(".exam-topic-card")];
+  tick(topicCards.length === 4, `examChapter screen shows all 4 real seeded topic cards for eqn, got ${topicCards.length}`);
+  tick(topicCards.some(c => /nature/i.test(c.textContent)), "one of eqn's topic cards is the real seeded Nature Of Roots topic, not the empty placeholder");
+  lines.push(`examChapter screen topic cards: [${topicCards.map(c => c.querySelector("h3").textContent.trim()).join(", ")}]`);
 
   const backBtn = host.querySelector(".back");
   if (backBtn) backBtn.click();
@@ -548,7 +621,21 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
    Future chapters: add their wall here when their first seeding session
    lands — an unlisted chapter is simply not checked, the same
    "empty until seeded" relationship the registry itself has.
-   ============================================================ */
+
+   WIDENED (day session, 2026-08-22, registering overnight run #1): exp,
+   func and trig walls added, each proposed in its own modules' headers
+   and mirrored in the overnight run's own check-t1-modules.mjs script.
+   exp mirrors the es1–es8 quest breakdown; func mirrors fn1–fn7; trig
+   mirrors t1–t7 PLUS "reduction-and-ratios" and "general-solutions" —
+   the two T2 topics that widen the trig chapter past its own built
+   rounds (co-functions/reductions/general solutions are 2D-trig CAPS
+   content, but nothing in Blipwork's trig/tgraph rounds teaches them
+   yet). The module headers flag including them as "a decision, not a
+   formality" — this session's judgement call is to include them: they
+   are legitimately-scoped, already-composed and verified T2 exam
+   content (Megan's ruling was that the two questions ship with NO
+   "I'm lost" link until a digest exists, never that they wait to be
+   registered — see the lostQuest placeholder handling in Part 2). */
 {
   const lines = [];
   const SCOPE_WALLS = {
@@ -561,6 +648,36 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
       "formula-and-simultaneous",
       "inequalities",
       "nature-of-roots",
+    ],
+    exp: [
+      "exponent-laws",
+      "spot-the-trap",
+      "first-step-and-method",
+      "which-divorce",
+      "surd-laws-and-traps",
+      "conjugates-and-rationalising",
+      "rational-exponent-equations",
+      "no-solution-and-strategy",
+    ],
+    func: [
+      "four-families",
+      "line-and-parabola",
+      "hyperbola-and-exponential",
+      "reading-a-graph",
+      "inequalities-off-a-graph",
+      "transformations",
+      "graphs-together",
+    ],
+    trig: [
+      "which-rule-fits",
+      "sine-rule-sides",
+      "sine-rule-angles",
+      "cosine-rule-sides",
+      "cosine-rule-angles",
+      "area-rule",
+      "mixed-problems",
+      "reduction-and-ratios",   // ⚠ widens past t1–t7 — judgement call, see comment above
+      "general-solutions",      // ⚠ ditto
     ],
   };
 
