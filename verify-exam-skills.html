@@ -228,14 +228,27 @@ const app = {
   lines.push(`Another (card 2 -> wrap): -> ${lastGo.params.question.id}, toast "${toastEl && toastEl.textContent.trim()}"`);
 
   /* ============================================================
-     9 — ENOUGH: from an already-fully-completed card (card 1, both
-     parts done from steps 4/5), the complete screen shows immediately
-     on load, and "Enough" returns to the chapter screen.
+     9 — REPLAY STARTS FRESH + ENOUGH (foreman review ruling, 2026-08-22:
+     a card is a drill — re-opening a finished card must let the learner
+     TRY it again, nothing pre-reveals from the server row). Card 1 was
+     fully completed in steps 4/5: it must open on part (a) with a Done
+     button, each Done reveals only ITS part (the server's full
+     partsOpened list is never adopted), and after both parts the
+     complete screen shows with NO reward (server already paid once).
+     Then "Enough" returns to the chapter screen.
      ============================================================ */
   clear(rig);
   renderExamPlay(app, rig, { chapter: ch, skillId: "harness-skill-a", question: CARD_A1, accent: ch.signature, onBack: () => app.go("examChapter", { chapterId: "eqn" }) });
   await new Promise(r => setTimeout(r, 30));
-  tick(!!rig.querySelector(".exam-complete"), "re-opening an already-completed card shows the complete screen immediately, no re-walking its parts");
+  tick(!rig.querySelector(".exam-complete") && !!btnByText(rig, UI.doneBtn), "re-opening an already-completed card starts FRESH: part (a) active with a Done button, no memo pre-revealed");
+  tick(rig.querySelectorAll(".exam-memo").length === 0, "no memo is shown before the learner taps anything on a replay");
+  btnByText(rig, UI.doneBtn).click();
+  await new Promise(r => setTimeout(r, 30));
+  tick(rig.querySelectorAll(".exam-memo").length === 1 && !rig.querySelector(".exam-complete"), "first Done on a replay reveals ONLY part (a) — part (b) still to do even though the server row has both");
+  btnByText(rig, UI.doneBtn).click();
+  await new Promise(r => setTimeout(r, 30));
+  tick(!!rig.querySelector(".exam-complete"), "second Done completes the replay");
+  tick(!rig.querySelector(".result-reward"), "a replayed card shows no reward (server pays once, ever)");
   lastGo = null;
   btnByText(rig, UI.enoughBtn).click();
   tick(!!lastGo && lastGo.screen === "examChapter" && lastGo.params.chapterId === "eqn", `"${UI.enoughBtn}" returns to the chapter screen — got ${JSON.stringify(lastGo)}`);

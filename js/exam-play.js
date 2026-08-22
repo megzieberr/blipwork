@@ -152,7 +152,6 @@ export function renderExamPlay(app, host, params) {
   let walkPartId = null;             // part id currently in "Walk me through it" mode, or null
   let walkStep = 0;                  // how many of that part's memo blocks the walk has revealed
   let reward = null;                 // the most recent justCompleted response, shown once
-  let loading = true;
 
   // Siblings in this skill, in the exact order the grouping table lists
   // them (js/exam/index.js's examQuestionsForTopic mirrors cards-*.js's
@@ -175,17 +174,16 @@ export function renderExamPlay(app, host, params) {
     return formulaHtml(fracHtml(xbarHtml(pick(pair, lang))));
   }
 
-  async function loadProgress() {
-    if (!sess) { loading = false; redraw(); return; }
-    try {
-      const res = await api.examState(sess.username, sess.password);
-      const row = res && res.ok && res.progress ? res.progress[question.id] : null;
-      if (row && Array.isArray(row.partsOpened)) revealed = new Set(row.partsOpened);
-    } catch { /* offline / not reachable — the card still plays, just from a blank slate */ }
-    loading = false;
-    redraw();
-  }
-
+  /* EVERY PLAY STARTS FRESH (foreman review fix, 2026-08-22 — her
+     "drill it until it sits" intent). A card is a drill: tapping
+     "Another one!" onto a card finished yesterday must let the learner
+     TRY it again, so nothing pre-reveals from the server's progress row
+     and a reveal is tracked locally for this play only. The server
+     still remembers and still pays exactly once (its completed flag is
+     the dedupe) — it just no longer decides what's on screen. That is
+     also why the two submit paths below add `part.id` themselves instead
+     of adopting `res.partsOpened`: a half-done row from an earlier play
+     would otherwise flash every earlier part open after one tap. */
   function memoBlockEl(block) {
     const text = richHtml(block.text);
     if (block.type === "trap") {
@@ -202,7 +200,7 @@ export function renderExamPlay(app, host, params) {
   function partCard(part, idx, isActive) {
     const card = el("div", "card exam-part" + (isActive ? " active" : ""));
     const star = part.level === 4 ? `<span class="exam-star" title="Level 4">★</span>` : "";
-    card.innerHTML = `<div class="exam-part-head"><span class="exam-part-id">(${part.id})</span><span class="exam-part-marks">[${part.marks}]</span>${star}</div>
+    card.innerHTML = `<div class="exam-part-head">${question.parts.length > 1 ? `<span class="exam-part-id">(${part.id})</span>` : ""}<span class="exam-part-marks">[${part.marks}]</span>${star}</div>
       <div class="exam-part-prompt">${richHtml(part.prompt)}</div>`;
 
     const fig = partDiagram(question, part, revealed.has(part.id), accent);
@@ -256,7 +254,7 @@ export function renderExamPlay(app, host, params) {
           res = await api.examOpenPart(sess.username, sess.password, question.id, part.id, question.parts.length);
         } catch { res = { ok: false }; }
         if (res && res.ok) {
-          revealed = new Set(Array.isArray(res.partsOpened) ? res.partsOpened : [...revealed, part.id]);
+          revealed = new Set([...revealed, part.id]);
           walkPartId = null; walkStep = 0;
           if (res.justCompleted) { reward = res; try { await app.refresh(); } catch { /* HUD just won't be fresh until the next real refresh */ } }
           redraw();
@@ -289,7 +287,7 @@ export function renderExamPlay(app, host, params) {
         res = await api.examOpenPart(sess.username, sess.password, question.id, part.id, question.parts.length);
       } catch { res = { ok: false }; }
       if (res && res.ok) {
-        revealed = new Set(Array.isArray(res.partsOpened) ? res.partsOpened : [...revealed, part.id]);
+        revealed = new Set([...revealed, part.id]);
         if (res.justCompleted) { reward = res; try { await app.refresh(); } catch { /* HUD just won't be fresh until the next real refresh */ } }
         redraw();
       } else {
@@ -314,7 +312,7 @@ export function renderExamPlay(app, host, params) {
 
     const head = el("div", "chap-head exam-play-head");
     head.innerHTML = `<div><span class="eyebrow">${(chapter && chapter.icon) || ""} ${(chapter && chapter.name) || ""}</span><h1>${label}</h1>
-        <p class="exam-card-of muted small">${t("cardOf", cardIdx + 1, cardTotal)} · ${question.marks} marks</p></div>
+        <p class="exam-card-of muted small">${t("cardOf", cardIdx + 1, cardTotal)} · ${question.marks} mark${question.marks === 1 ? "" : "s"}</p></div>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="link-btn back" aria-label="Back">←</button>
       </div>`;
@@ -329,12 +327,10 @@ export function renderExamPlay(app, host, params) {
     // (it's static, no need to wait on the progress round trip).
     if (question.intro) root.appendChild(el("div", "exam-intro", richHtml(question.intro)));
 
-    if (loading) { root.appendChild(el("div", "card", `<p class="muted center">…</p>`)); return; }
-
     const total = question.parts.length;
     const activeIdx = question.parts.findIndex(p => !revealed.has(p.id));
     const lastIdx = activeIdx === -1 ? total - 1 : activeIdx;
-    root.appendChild(el("div", "exam-progress muted small", t("partOf", Math.min(lastIdx + 1, total), total)));
+    if (total > 1) root.appendChild(el("div", "exam-progress muted small", t("partOf", Math.min(lastIdx + 1, total), total)));   // a one-part card needs no "Part 1 of 1"
 
     const list = el("div", "exam-parts");
     question.parts.forEach((part, idx) => {
@@ -377,5 +373,4 @@ export function renderExamPlay(app, host, params) {
   }
 
   redraw();
-  loadProgress();
 }
