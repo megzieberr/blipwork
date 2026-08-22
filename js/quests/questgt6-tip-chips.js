@@ -116,5 +116,6 @@ const SKILLS = { threeBoxes, chip1, chip2Pool, chip3, chip4trap, chip5Pool, butW
 
 export const questGt6 = {
   id: "gt6",
+  stackFractions: true,
   skills: Object.entries(SKILLS).map(([id, gen]) => ({ id, concept: CON, gen })),
 };

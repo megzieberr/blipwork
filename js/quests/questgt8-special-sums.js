@@ -106,13 +106,12 @@ function bowTieCard() {
   const ivText = iv.text.replace(/θ/g, L);
   const signWord = sign > 0 ? "POSITIVE" : "NEGATIVE";
   return {
-    type: "mc", concept: CON,
+    type: "steps", concept: CON,
     _dbg: { fn, sign, quadrant, ratioQ, intervalQ: iv.quadrants },
-    prompt: `${fn} ${L} is ${signWord}, and ${ivText}. Which quadrant ends up with TWO ticks?`,
+    prompt: `${fn} ${L} is ${signWord}, and ${ivText}.`,
     // learner-facing copy: no page refs, no third person (foreman ruling)
     reveal: [`<div><b>The bow tie.</b> Two triangles meeting at the origin, one letter per quadrant: <b>A</b>ll · <b>S</b>trippers · <b>T</b>ake · <b>C</b>ash.</div>${bowTieSvg()}<div class="muted small">You were given two things, so you tick twice on one cross — once for the sign, once for the interval. Where the two ticks land on top of each other, that is your quadrant.</div>`],
-    options: quadrantOptions(quadrant),
-    layout: "grid2",
+    steps: [doubleTickStep(fn, L, sign, ratioQ, ivText, iv.quadrants, quadrant)],
     hint: H_TICK,
     answerLabel: `${CIRC[quadrant - 1]} — ${fn} ${L} being ${sign > 0 ? "+" : "−"} ticks ${ratioQ.map(q => CIRC[q - 1]).join(" and ")}; ${ivText} ticks ${iv.quadrants.map(q => CIRC[q - 1]).join(" and ")}. Only ${CIRC[quadrant - 1]} carries both ticks.`,
     solution: [
@@ -120,6 +119,22 @@ function bowTieCard() {
       { s: `${ivText} → ${iv.quadrants.map(q => CIRC[q - 1]).join(", ")}`, r: "the second colour of tick." },
       { s: `∴ ${CIRC[quadrant - 1]}`, r: "the quadrant with two ticks." },
     ],
+  };
+}
+
+/* her double tick as ONE step (ruling 2026-08-22 evening — "the kids must
+   MAKE the 2 ticks"): tick where the sign allows, tick where the interval
+   allows, then tap the overlap. The ticks stay on screen. */
+function doubleTickStep(fn, L, sign, ratioQ, ivText, ivQ, quadrant) {
+  return {
+    kind: "doubletick", correct: quadrant,
+    prompt: "Make the two ticks on the cross.",
+    passes: [
+      { prompt: `Tick every quadrant where ${fn} ${L} is ${sign > 0 ? "positive" : "negative"}.`, correct: ratioQ },
+      { prompt: `Now tick every quadrant that ${ivText} allows.`, correct: ivQ },
+    ],
+    finalPrompt: "Tap the quadrant that has BOTH ticks.",
+    hint: H_TICK,
   };
 }
 
@@ -179,11 +194,20 @@ function chainItem() {
     };
   }
 
+  /* ONE keypad; each typed side is written onto the sketch, then the pad
+     disappears and the finished sketch stays above the ratio questions
+     (her ruling 2026-08-22 evening: "the kids should USE the diagram and
+     READ their answers from the diagram") */
   const steps = [
-    quadStep("Which quadrant gets TWO ticks?", quadrant, H_TICK),
-    { ...calcStep("x = ?", x, derived === "x" ? `${H_SIDE} This is the one Pythagoras has to give you: x² = r² − y²  (pyth).` : H_SIDE, { allowNeg: true, unit: "" }), graph: sketch },
-    calcStep("y = ?", y, derived === "y" ? `${H_SIDE} This is the one Pythagoras has to give you: y² = r² − x²  (pyth).` : H_SIDE, { allowNeg: true, unit: "" }),
-    calcStep("r = ?", r, H_R, { allowNeg: true, unit: "" }),
+    doubleTickStep(fn, L, sign, ratioQ, ivText, iv.quadrants, quadrant),
+    {
+      kind: "sketchfill", prompt: "Now the sketch. Type each side — it appears on the drawing as you go.", graph: sketch, hint: H_SIDE,
+      fields: [
+        { key: "x", prompt: "x = ?", expected: x, hint: derived === "x" ? `${H_SIDE} This is the one Pythagoras has to give you: x² = r² − y²  (pyth).` : H_SIDE },
+        { key: "y", prompt: "y = ?", expected: y, hint: derived === "y" ? `${H_SIDE} This is the one Pythagoras has to give you: y² = r² − x²  (pyth).` : H_SIDE },
+        { key: "r", prompt: "r = ?", expected: r, hint: H_R },
+      ],
+    },
     ratioStep(fA),
     ratioStep(fB),
   ];
@@ -270,11 +294,12 @@ function pointVariant() {
       quadStep("Which quadrant does the arm swing into?", quadrant,
         "The first coordinate is the x, the second is the y — the two signs put the point in exactly one quadrant."),
       {
-        ...calcStep("r = ?", r, H_R, { allowNeg: true, unit: "" }),
+        kind: "sketchfill", prompt: "The point is on the sketch. Type r — it appears on the drawing.", hint: H_R,
         graph: {
           type: "quadtri", x, y, w: 380, h: 300, accent: ACCENT, theta: true,
           labels: { x: negNum(x), y: negNum(y) }, letters: { r: "r" },
         },
+        fields: [{ key: "r", prompt: "r = ?", expected: r, hint: H_R }],
       },
       { kind: "mc", prompt: `tan ${L} = ?`, options: byValue(right.label, right.value, cands), hint: H_RATIO },
     ],
@@ -298,5 +323,6 @@ const SKILLS = {
 
 export const questGt8 = {
   id: "gt8",
+  stackFractions: true,
   skills: Object.entries(SKILLS).map(([id, gen]) => ({ id, concept: CON, gen })),
 };

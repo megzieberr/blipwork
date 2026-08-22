@@ -48,7 +48,9 @@ function pickValueQ() {
     seen.push(r.value); pool.push(r);
   }));
   const wrongs = shuffled(pool).slice(0, 3).map(p => p.text);
-  return mc(CON, `${fn} ${angle}° = ?`, correct.text, wrongs,
+  // the finished O-A-H table sits ABOVE the question (her ruling 2026-08-22: the
+  // table must be on screen when a value is asked — it is a reading exercise)
+  return mc(CON, `<div class="q-oah">${oahTable(5)}</div>${fn} ${angle}° = ?`, correct.text, wrongs,
     { hint: "Pick the two letters SOHCAHTOA gives you, then read them off the table.",
       answerLabel: `${fn} ${angle}° = ${correct.text} (from the O-A-H table).` });
 }
@@ -131,6 +133,8 @@ const SKILLS = {
 
 export const questGt3 = {
   id: "gt3",
-  xpOnce: true,
+  stackFractions: true,
+  // xpOnce REMOVED 2026-08-22 evening — her ruling: the questions rotate every
+  // play, so the discovery rounds pay like any other round (full first time, 25% on replay).
   skills: Object.entries(SKILLS).map(([id, gen]) => ({ id, concept: CON, gen })),
 };

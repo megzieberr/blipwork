@@ -1366,6 +1366,7 @@ export const CONCEPTS = {
 
   /* ---- GENERAL TRIG (chapter gtrig, stage 2, 2026-08-22) ---- */
   gtrigIntro: {
+    fractions: true,
     title: "Trigonometry: where the ratios come from",
     body: `
       <p><b>tri</b>gonometry → <b>three</b> · trigo<b>no</b>metry → <b>angled</b> · trigono<b>metry</b> → <b>measurement</b> — the study of angles and of the angular relationships of triangles.</p>
@@ -1375,6 +1376,7 @@ export const CONCEPTS = {
       <div class="eg">"The sine is 0,6" tells you nothing alone. Fix r, move the point, watch x and y — the ratio IS the angle.</div>`,
   },
   gtrigAstc: {
+    fractions: true,
     title: "The Cartesian plane: All Strippers Take Cash",
     body: `
       <p>Going anticlockwise from quadrant ①: <b>A</b>ll positive · <b>S</b>trippers (sin only) · <b>T</b>ake (tan only) · <b>C</b>ash (cos only).</p>
@@ -1386,6 +1388,7 @@ export const CONCEPTS = {
       <div class="eg">Quadrant ②: x is negative, y is positive, r is always positive → sin θ = y/r is +, cos θ = x/r is −.</div>`,
   },
   gtrigSpecial: {
+    fractions: true,
     title: "Special angles: the two triangles + Oats Are Healthy",
     body: `
       <p>Cut a <b>square</b> corner to corner → the 45-45-90 triangle (sides 1, 1, √2). Cut an <b>equilateral triangle</b> straight down the middle → the 30-60-90 triangle (sides 1, √3, 2).</p>
@@ -1401,6 +1404,7 @@ export const CONCEPTS = {
 
   /* ---- GENERAL TRIG (chapter gtrig, stage 3, 2026-08-22) ---- */
   gtrigCofunction: {
+    fractions: true,
     title: "Co-functions: converting between sin and cos",
     body: `
       <p>Draw a right triangle's two acute angles two ways: θ at one corner, <b>90° − θ</b> at the other. They share the SAME sides — just different names for opposite/adjacent — so:</p>
@@ -1413,6 +1417,7 @@ export const CONCEPTS = {
       <div class="eg">sin 40° = cos 50°. cos 120° = cos(90° + 30°) = −sin 30°.</div>`,
   },
   gtrigReduce: {
+    fractions: true,
     title: "Reductions: rewriting angles as acute angles",
     body: `
       <p><b>Reductions = rewriting any angle as ± an acute angle.</b> Every angle repeats every 360°, and every reduced ratio has the same size as the acute one it came from — the sign is the only thing that can change.</p>
@@ -1428,6 +1433,7 @@ export const CONCEPTS = {
       <div class="eg">sin 210° = sin(180° + 30°) = −sin 30°. sin 510° = [−360°] sin 150° = sin(180° − 30°) = sin 30°.</div>`,
   },
   gtrigTipChips: {
+    fractions: true,
     title: "Reductions TIP Chips",
     body: `
       <p>Five checks to run before you commit to an answer:</p>
@@ -1442,6 +1448,7 @@ export const CONCEPTS = {
       <div class="eg">"but why?" for Chip ⑤: let K = 90° − θ, so θ − 90° = −K, which sits in quadrant IV — where cos survives and sin flips.</div>`,
   },
   gtrigReduceVar: {
+    fractions: true,
     title: "Reductions with a variable",
     body: `
       <p>Same machine as a numerical reduction — quadrant, formula, sign — but the value is left as the letter (x, θ, α…) instead of a number, so there's nothing to calculate.</p>
@@ -1453,6 +1460,7 @@ export const CONCEPTS = {
 
   /* ---- GENERAL TRIG (chapter gtrig, stage 4, 2026-08-22) ---- */
   gtrigSpecialSums: {
+    fractions: true,
     title: "Special sums: the five steps",
     body: `
       <p>You are given ONE ratio and ONE interval, and asked to work out the value of some expression. Five steps, in this order:</p>
@@ -1469,6 +1477,7 @@ export const CONCEPTS = {
       <div class="eg">3 tan θ − 4 = 0 with θ ∈ (180°; 360°). tan is + in ① and ③; the interval gives ③ and ④ → ③. Sketch x = −3, y = −4, r = 5. Then 25 sin²θ − 5 cos θ = 25(−4/5)² − 5(−3/5) = 16 + 3 = 19.</div>`,
   },
   gtrigIdentities: {
+    fractions: true,
     title: "Identities: what to do next",
     body: `
       <p><b>When in doubt, go LEFT.</b> You work the left-hand side, top to bottom, until it turns into the right-hand side — and you close with <b>= RHS</b>. Never squeeze both sides towards the middle.</p>
@@ -1485,6 +1494,7 @@ export const CONCEPTS = {
       <div class="eg">1/cos²θ − 1 = 1/cos²θ − 1/1 = (1 − cos²θ)/cos²θ = sin²θ/cos²θ = tan²θ.</div>`,
   },
   gtrigSuperSpecial: {
+    fractions: true,
     title: "Super special sums: the flamingo & the short-cut",
     body: `
       <p>You are told something like <b>cos 20° = t</b> and asked for everything else in terms of t. A bare value cannot be read off a triangle — so stand it on a 1. That is the <b>flamingo</b>:</p>
@@ -1500,6 +1510,7 @@ export const CONCEPTS = {
       <div class="eg">cos 20° = t. Then sin 20° = √(1 − t²), tan 20° = √(1 − t²)/t, and cos 160° = −cos 20° = −t.</div>`,
   },
   gtrigSixTypes: {
+    fractions: true,
     title: "General solution: the six types",
     body: `
       <p>Before you solve anything, name the type. There are six, and they are always in this order:</p>
@@ -1515,6 +1526,7 @@ export const CONCEPTS = {
       <div class="eg">2 sin²x + 5 sin x − 3 = 0 is ⑤. Let K = sin x → 2K² + 5K − 3 = 0 → (2K − 1)(K + 3) = 0 → sin x = 1/2, or sin x = −3 which has no solution.</div>`,
   },
   gtrigLastSteps: {
+    fractions: true,
     title: "General solution: the last two decisions",
     body: `
       <p>Once the ratio is on its own, everything comes down to two things: <b>which quadrants</b>, and <b>what the reference angle is</b>.</p>
@@ -1522,11 +1534,12 @@ export const CONCEPTS = {
       <p><b>The reference angle comes from the POSITIVE value.</b> Don't type − into the calculator. The minus already did its job when it chose the quadrants; only the size of the number is left.</p>
       <div class="formula">cos θ = −2/5 &nbsp;→&nbsp; ✓ in II and III &nbsp;·&nbsp; ref. ∠ = 66,42°</div>
       <p><b>tan gets ONE line.</b> tan repeats every 180°, so the second quadrant line adds nothing — a waste of time.</p>
-      <p><b>Boundary values run the same machine</b> rather than being read off a graph: sin θ = 0 → ref ∠ = 0 in I and II · cos θ = 0 → ref ∠ = 90° in I · sin θ = −1 → ref ∠ = 90° in III · cos θ = −1 → ref ∠ = 0 in II.</p>
+      <p><b>Boundary values follow the same sign rule</b> — All Strippers Take Cash: cos θ = 1 → cos is positive → tick I and IV, ref ∠ = 0 · sin θ = −1 → sin is negative → tick III and IV, ref ∠ = 90° · cos θ = −1 → tick II and III, ref ∠ = 0 · sin θ = 0 → ref ∠ = 0, tick I and II.</p>
       <p><b>Co-functions have NO reference angle at all.</b> Two different angles means there is nothing to take an inverse of — you make both sides the same function and match the brackets instead.</p>
       <div class="eg">sin x = 1/2 → ✓ in I and II, ref ∠ = 30°. But sin(x + 80°) = sin 2x → no reference angle.</div>`,
   },
   gtrigUndefined: {
+    fractions: true,
     title: "Undefined values",
     body: `
       <p><b>Undefined ↳ denominator = 0.</b> A fraction breaks when its bottom is nothing at all, so the question is only ever "what is on the bottom?"</p>
@@ -1538,7 +1551,7 @@ export const CONCEPTS = {
         <li>read the interval off the list</li>
       </ol>
       <p>Two things people get wrong. <b>Numerators do not count</b> — a top of zero is a perfectly ordinary answer. And <b>tan does not get its own line</b>: tan x is sin x over cos x, so its cos x is already on your list.</p>
-      <div class="eg">tan x + cos x/(1 + sin x) = 1/cos x → the denominators are 1 + sin x and cos x. So 1 + sin x = 0 (sin x = −1, ref ∠ = 90°, III) or cos x = 0 (ref ∠ = 90°, I). On (−180°; 180°) that gives x ∈ {−90°; 90°}.</div>`,
+      <div class="eg">tan x + cos x/(1 + sin x) = 1/cos x → the denominators are 1 + sin x and cos x. So 1 + sin x = 0 (sin x = −1, ref ∠ = 90°, III and IV) or cos x = 0 (ref ∠ = 90°, I and IV). On (−180°; 180°) that gives x ∈ {−90°; 90°}.</div>`,
   },
 };
 

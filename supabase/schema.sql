@@ -1543,8 +1543,8 @@ insert into public.quests (quest_id, chapter, is_open, sort) values
   -- every other chapter here; supabase/migration-gtrig-quests.sql is the
   -- one that ever runs against the live database (written, not run).
   ('gt1','gtrig',false,80), ('gt2','gtrig',false,81), ('gt3','gtrig',false,82),
-  ('gt4','gtrig',false,83), ('gt5','gtrig',false,84), ('gt6','gtrig',false,85),
-  ('gt7','gtrig',false,86), ('gt8','gtrig',false,87), ('gt9','gtrig',false,88),
+  ('gt4','gtrig',false,83), ('gt5','gtrig',false,86), ('gt6','gtrig',false,84),
+  ('gt7','gtrig',false,85), ('gt8','gtrig',false,87), ('gt9','gtrig',false,88),
   ('gt10','gtrig',false,89), ('gt11','gtrig',false,90), ('gt12','gtrig',false,91),
   ('gt13','gtrig',false,92)
 on conflict (quest_id) do nothing;

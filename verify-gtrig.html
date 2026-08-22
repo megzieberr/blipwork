@@ -236,10 +236,11 @@ tick(same(solutionQuadrants("cos", 1), [1, 4]), "p60 cos = cos → right pair I,
 
 /* --- boundaryCase: HER pages, not the graph (digest D8) --- */
 tick(same(boundaryCase("sin", 0), { ref: 0, quadrants: [1, 2] }), "p53 sinθ = 0 → ref 0°, I and II");
-tick(same(boundaryCase("cos", 0), { ref: 90, quadrants: [1] }), "p62 cosx = 0 → ref 90°, I only");
-tick(same(boundaryCase("sin", -1), { ref: 90, quadrants: [3] }), "p59 sinθ = −1 → ref 90°, III");
-tick(same(boundaryCase("cos", -1), { ref: 0, quadrants: [2] }), "p54 cosθ = −1 → ref 0°, II");
-tick(same(boundaryCase("sin", 1), { ref: 90, quadrants: [1] }), "sinθ = 1 → ref 90°, I");
+tick(same(boundaryCase("cos", 0), { ref: 90, quadrants: [1, 4] }), "cosx = 0 → ref 90°, I and IV (her ruling 08-22 evening: plain sign rule)");
+tick(same(boundaryCase("sin", -1), { ref: 90, quadrants: [3, 4] }), "sinθ = −1 → ref 90°, III and IV (sin negative)");
+tick(same(boundaryCase("cos", -1), { ref: 0, quadrants: [2, 3] }), "cosθ = −1 → ref 0°, II and III (cos negative)");
+tick(same(boundaryCase("sin", 1), { ref: 90, quadrants: [1, 2] }), "sinθ = 1 → ref 90°, I and II (sin positive)");
+tick(same(boundaryCase("cos", 1), { ref: 0, quadrants: [1, 4] }), "cosθ = 1 → ref 0°, I and IV — her phone find: \"1 is positive, cos is positive in 1 and 4\"");
 tick(boundaryCase("tan", 0) === null && boundaryCase("sin", 0.5) === null,
   "no boundary case for tan, or for an ordinary value");
 
@@ -571,12 +572,12 @@ tick(stage.querySelectorAll(".q-step").length === 2, "(b) the next step does not
 driveStep(rootB, 1, "right");
 tick(stepB1.dataset.state === "done", "(b) the retry lands and the step locks");
 tick(!stepB1.querySelector(".hint-box.step-hint").hidden, "(b) the step hint stays visible afterwards");
-tick(stepB1.querySelector(".q-step-mark").textContent === "✗ ✓", "(b) a retried step is marked ✗ then ✓");
+tick(stepB1.querySelector(".q-step-mark").textContent === "✓ after a retry", "(b) a retried step is marked softly (✓ after a retry), never with a red cross");
 driveStep(rootB, 2, "right");
 driveStep(rootB, 3, "right");
 tick(same(resB, [false]), "(b) one miss → onResult(false), once");
 tick(stage.querySelectorAll('.q-step[data-state="done"]').length === 4, "(b) all four steps still completed");
-tick((stage.querySelector(".fb-head") || {}).textContent === "✗ Not quite", "(b) the ✗ Not quite panel shows");
+tick(/Got there/.test((stage.querySelector(".fb-head") || {}).textContent) && stage.querySelector(".feedback").classList.contains("soft"), "(b) the SOFT verdict panel shows (not the red Not quite) — her ruling");
 tick(stage.querySelectorAll(".sol-step").length === 2, "(b) her full solution is printed on a miss");
 
 /* (c) the wrong-retry loop: as many wrong answers as you like, never a verdict */
@@ -833,7 +834,7 @@ wantBuilt.forEach(qid => {
         tick(Array.isArray(q.steps) && q.steps.length > 0, `${ctx}: steps is a non-empty array`);
         (q.steps || []).forEach((step, si) => {
           const sctx = `${ctx} step${si}`;
-          tick(["mc", "mcmulti", "tapcross", "tokenpad", "calc", "tapside"].includes(step.kind), `${sctx}: kind is a known step type (got "${step.kind}")`);
+          tick(["mc", "mcmulti", "tapcross", "tokenpad", "calc", "tapside", "doubletick", "sketchfill"].includes(step.kind), `${sctx}: kind is a known step type (got "${step.kind}")`);
           scanText(step.prompt, sctx, "step prompt");
           if (step.kind === "mc") {
             const corrects = (step.options || []).filter(o => o.correct);

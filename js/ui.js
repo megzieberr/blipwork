@@ -84,3 +84,64 @@ export function showToast(message, kind = "info") {
     setTimeout(() => t.remove(), 300);
   }, 2600);
 }
+
+/* ============================================================
+   STACKED FRACTIONS (General Trig, her ruling 2026-08-22 evening:
+   "proper fractions, not slashes"). stackFrac(n, d) builds one; fracHtml(s)
+   rewrites every `a/b` in a learner-facing HTML string into one, innermost
+   first, so authors keep writing `12/13`, `1/(1 + sin θ)`, `√(1 − t²)/t`.
+   Rules: an atom is a bracketed group (one level of nesting) optionally
+   led by √, or a short token (`12`, `√3`, `sin²θ`, `cos θ`, `O`, `r`); a
+   leading minus on the numerator moves in front of the whole fraction
+   (her habit); anything touching a ° sign is left alone (`0°/360°` is an
+   axis label, not a fraction). Switched on per quest (`stackFractions`)
+   so no other chapter's look changes.
+   ============================================================ */
+export function stackFrac(n, d, sign = "") {
+  return `${sign}<span class="sfrac"><span class="sf-n">${n}</span><span class="sf-d">${d}</span></span>`;
+}
+// an atom: √?( … ) with one level of nesting, or a short token that may carry
+// its own √ (2√5, √3) and an optional trailing angle letter (sin θ, cos x).
+// Written as ONE regex literal (no string escaping to get wrong).
+const FRAC_RE = /(^|[^A-Za-z0-9°<>\/√])(√?\((?:[^()<>\/]|\([^()<>\/]*\))*\)|[−-]?[A-Za-z0-9θαβπ²³√]+(?:\s?[θxαAβ](?![A-Za-z]))?)\s*\/\s*(√?\((?:[^()<>\/]|\([^()<>\/]*\))*\)|[−-]?[A-Za-z0-9θαβπ²³√]+(?:\s?[θxαAβ](?![A-Za-z]))?)(?![°\/A-Za-z0-9])/g;
+const strip = a => (a.startsWith("(") && a.endsWith(")") ? a.slice(1, -1) : a);
+export function fracHtml(s) {
+  if (s == null) return s;
+  // built fractions are parked as tokens while the loop runs, so the "/" in
+  // their closing tags can never be mistaken for another fraction bar
+  const parked = [];
+  let out = String(s), prev;
+  for (let i = 0; i < 4 && out !== prev; i++) {
+    prev = out;
+    out = out.replace(FRAC_RE, (m, pre, n, d) => {
+      let sign = "";
+      if (/^[−-]/.test(n)) { sign = "−"; n = n.slice(1); }
+      parked.push(stackFrac(strip(n), strip(d), sign));
+      return pre + "" + (parked.length - 1) + "";
+    });
+  }
+  const unpark = t => t.replace(/(\d+)/g, (m, k) => unpark(parked[Number(k)]));   // nested fractions
+  return unpark(out);
+}
+
+/* ============================================================
+   FORMULA LINE-BREAKING (General Trig, her ruling 2026-08-22 evening):
+   a formula chunk never splits across lines, and a trailing bracket that
+   carries a formula — "…using a co-function (90° ± θ)." — starts on its
+   own line instead of breaking mid-bracket. Also inside a concept card's
+   .formula block, identities separated by " · " each get their own line.
+   Applied together with fracHtml for quests/cards that opt in.
+   ============================================================ */
+const NW = t => `<span class="nowrap">${t}</span>`;
+export function formulaHtml(s) {
+  if (s == null) return s;
+  let out = String(s);
+  // 1) a trailing formula bracket moves to a new line
+  out = out.replace(/\s\((\b(?:using|use)\b[^()]*|[^()]*[°θ±√][^()]*)\)(?=[.?!:]?(?:\s*<br>|\s*$|\s*<\/))/g, (m, inner) => `<br>${NW(`(${inner})`)}`);
+  // 2) function-of-angle chunks and "90° ± θ"-style chunks never wrap
+  out = out.replace(/(?<![\w>])((?:sin|cos|tan)[²]?\s?(?:\((?:[^()<>]|\([^()<>]*\))*\)|[θxαAβ](?![A-Za-z])|\d+°))/g, (m, t) => NW(t));
+  out = out.replace(/(?<![\w>])(\d+°\s[−+±]\s(?:[θxαAβ]|\d+[θxαAβ]?)(?![A-Za-z0-9]))/g, (m, t) => NW(t));
+  // 3) " · "-separated identities in a .formula block each get a line
+  out = out.replace(/(<div class="formula">)([\s\S]*?)(<\/div>)/g, (m, a, body, b) => a + body.replace(/(?:\s|&nbsp;)+·(?:\s|&nbsp;)+/g, "<br>") + b);
+  return out;
+}

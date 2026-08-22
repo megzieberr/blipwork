@@ -84,5 +84,6 @@ const SKILLS = {
 
 export const questGt7 = {
   id: "gt7",
+  stackFractions: true,
   skills: Object.entries(SKILLS).map(([id, gen]) => ({ id, concept: CON, gen })),
 };

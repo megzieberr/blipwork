@@ -269,10 +269,16 @@ const SKILLS = {
   shortcutTan: shortcutItem("tan"),
   shortcutCosInv: shortcutItem("cosinv"),
   readRatio,
-  reduceThenRead,
+  readRatio2: readRatio,
+  /* reduceThenRead CUT 2026-08-22 evening — her ruling: "remove the rounds that
+     ask the question like this without the sketch… the whole exercise is to
+     read from a sketch, not do it in your head". Its slot goes to a second
+     read-off-the-sketch item. The generator stays below, unused, in case she
+     wants it back WITH a sketch. */
 };
 
 export const questGt10 = {
   id: "gt10",
+  stackFractions: true,
   skills: Object.entries(SKILLS).map(([id, gen]) => ({ id, concept: CON, gen })),
 };

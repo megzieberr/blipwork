@@ -363,9 +363,13 @@ export function solutionQuadrants(fn, sign) {
 export function boundaryCase(fn, value) {
   if (fn !== "sin" && fn !== "cos") return null;
   if (value !== -1 && value !== 0 && value !== 1) return null;
+  // HER RULING 2026-08-22 evening (overrides the earlier page-by-page reading):
+  // a boundary value follows the plain sign rule — "1 is positive, and cos is
+  // positive in quadrant 1 and 4, so both need to be ticked". So ±1 ticks the
+  // ASTC pair; 0 keeps her p53 habit (ref 0, the two positive quadrants).
   const table = {
-    sin: { "0": { ref: 0, quadrants: [1, 2] }, "1": { ref: 90, quadrants: [1] }, "-1": { ref: 90, quadrants: [3] } },
-    cos: { "0": { ref: 90, quadrants: [1] }, "1": { ref: 0, quadrants: [1] }, "-1": { ref: 0, quadrants: [2] } },
+    sin: { "0": { ref: 0, quadrants: [1, 2] }, "1": { ref: 90, quadrants: [1, 2] }, "-1": { ref: 90, quadrants: [3, 4] } },
+    cos: { "0": { ref: 90, quadrants: [1, 4] }, "1": { ref: 0, quadrants: [1, 4] }, "-1": { ref: 0, quadrants: [2, 3] } },
   };
   const hit = table[fn][String(value)];
   return hit ? { ref: hit.ref, quadrants: hit.quadrants.slice() } : null;

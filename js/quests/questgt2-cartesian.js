@@ -133,6 +133,8 @@ const SKILLS = {
 
 export const questGt2 = {
   id: "gt2",
-  xpOnce: true,
+  stackFractions: true,
+  // xpOnce REMOVED 2026-08-22 evening — her ruling: the questions rotate every
+  // play, so the discovery rounds pay like any other round (full first time, 25% on replay).
   skills: Object.entries(SKILLS).map(([id, gen]) => ({ id, concept: CON, gen })),
 };

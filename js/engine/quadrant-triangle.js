@@ -181,8 +181,14 @@ export function renderQuadTri(spec) {
   out += text(F.x - sx * 15, (F.y + T.y) / 2, lab("y"), "qt-slab", sx > 0 ? "end" : "start");
   // hypotenuse — pushed outward, away from the foot F
   const hm = { x: (O.x + T.x) / 2, y: (O.y + T.y) / 2 };
-  const nx = hm.x - F.x, ny = hm.y - F.y, nl = Math.hypot(nx, ny) || 1;
-  out += text(hm.x + (nx / nl) * 16, hm.y + (ny / nl) * 16, lab("r"), "qt-slab");
+  // perpendicular to the hypotenuse, away from F, far enough that a long
+  // label like √(p² + 1) clears the line (her review find, 2026-08-22)
+  const hd = { x: T.x - O.x, y: T.y - O.y }, hl = Math.hypot(hd.x, hd.y) || 1;
+  let hn = { x: -hd.y / hl, y: hd.x / hl };
+  if (hn.x * (F.x - hm.x) + hn.y * (F.y - hm.y) > 0) hn = { x: -hn.x, y: -hn.y };
+  const rChars = String(lab("r")).length;
+  const rOff = (3.6 * rChars) * Math.abs(hn.x) + 7 * Math.abs(hn.y) + 8;
+  out += text(hm.x + hn.x * rOff, hm.y + hn.y * rOff, lab("r"), "qt-slab");
 
   if (spec.title) out += text(W / 2, H - 6, spec.title, "qt-title");
   return svgWrap(W, H, spec.accent, out, spec.tap ? "qt-tappable" : "");

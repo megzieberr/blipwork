@@ -37,7 +37,13 @@
                      one answer made of several picks, not several
                      questions.
    ============================================================ */
-import { el, clear, xbarHtml } from "./ui.js";
+import { el, clear, xbarHtml, fracHtml, formulaHtml } from "./ui.js";
+
+/* learner-HTML formatter for the question being mounted: x̄ fix always;
+   stacked fractions when the quest asks for them (General Trig —
+   q.stackFractions, set by play.js from the quest def). Module-level so
+   mountSteps/mountReveal share it. */
+let fmt = xbarHtml;
 import { renderGraph, computeBox } from "./engine/stats-graph.js";
 import { renderTimeline, computeTimeline } from "./engine/timeline-graph.js";
 import { renderVenn, computeVenn } from "./engine/venn-graph.js";
@@ -50,7 +56,7 @@ import { renderAnalytic, computeAnalytic } from "./engine/analytical-graph.js";
 import { renderPattern, computePattern } from "./engine/pattern-graph.js";
 import { renderQuadTri, computeQuadTri } from "./engine/quadrant-triangle.js";
 import { mountKeypad } from "./keypad.js";
-import { mountTapcross } from "./tapcross.js";
+import { mountTapcross, mountDoubleTick } from "./tapcross.js";
 import { mountTokenpad } from "./tokenpad.js";
 import { checkStep } from "./steps-check.js";
 import { mountCalculator } from "./calculator.js";
@@ -79,16 +85,17 @@ function renderSpec(spec) {
 }
 
 export function mountQuestion(host, q, handlers = {}) {
+  fmt = q && q.stackFractions ? (x => formulaHtml(fracHtml(xbarHtml(x)))) : xbarHtml;
   clear(host);
   const root = el("div", "q");
-  if (q.prompt) root.appendChild(el("p", "q-prompt", xbarHtml(q.prompt)));
+  if (q.prompt) root.appendChild(el("p", "q-prompt", fmt(q.prompt)));
 
   // diagram / graph (stats charts or a finance timeline)
   let svgNode = null;
   if (q.graph) {
     const gw = el("div", "q-graph");
     const svg = renderSpec(q.graph);
-    gw.innerHTML = svg + (q.graphCap ? `<div class="cap">${xbarHtml(q.graphCap)}</div>` : "");
+    gw.innerHTML = svg + (q.graphCap ? `<div class="cap">${fmt(q.graphCap)}</div>` : "");
     svgNode = gw.querySelector("svg");
     root.appendChild(gw);
   }
@@ -111,7 +118,7 @@ export function mountQuestion(host, q, handlers = {}) {
 
   // hint + I'm lost
   const hintBox = el("div", "hint-box"); hintBox.hidden = true;
-  hintBox.innerHTML = `<span class="tag">HINT</span>${xbarHtml(q.hint) || "Work through the method step by step."}`;
+  hintBox.innerHTML = `<span class="tag">HINT</span>${fmt(q.hint) || "Work through the method step by step."}`;
   const helpRow = el("div", "help-row");
   const hintBtn = el("button", "btn ghost small", "💡 Hint");
   hintBtn.addEventListener("click", () => { hintBox.hidden = false; hintBtn.disabled = true; });
@@ -122,19 +129,23 @@ export function mountQuestion(host, q, handlers = {}) {
   const feedback = el("div", "feedback"); feedback.hidden = true;
 
   let answered = false;
-  function commit(isCorrect, chosen) {
+  // soft === true: a steps chain that got to the end after a retry — scored as
+  // not-clean (first answer counts) but shown calmly, never the red block
+  // (her ruling 2026-08-22: "I actually skrikked when it turned red").
+  function commit(isCorrect, chosen, soft = false) {
     if (answered) return;
     answered = true;
     handlers.onResult && handlers.onResult(isCorrect, chosen);
 
     hintBtn.style.display = "none";                 // hide hint once answered (kept the I'm-lost button)
     feedback.hidden = false;
-    feedback.classList.add(isCorrect ? "good" : "bad");
-    let html = `<div class="fb-head">${isCorrect ? "✓ Correct!" : "✗ Not quite"}</div>`;
-    if (q.answerLabel != null) html += `<div class="fb-answer"><b>Answer:</b> ${xbarHtml(q.answerLabel)}</div>`;
+    feedback.classList.add(isCorrect ? "good" : soft ? "soft" : "bad");
+    let html = `<div class="fb-head">${isCorrect ? "✓ Correct!" : soft ? "Got there — one step needed a second go" : "✗ Not quite"}</div>`
+      + (soft ? `<div class="fb-sub muted small">Let's do a similar one to lock it in.</div>` : "");
+    if (q.answerLabel != null) html += `<div class="fb-answer"><b>Answer:</b> ${fmt(q.answerLabel)}</div>`;
     if (!isCorrect && Array.isArray(q.solution) && q.solution.length) {
       html += `<div class="sol">` + q.solution.map(s =>
-        `<div class="sol-step"><span class="s">${xbarHtml(s.s)}</span>${s.r ? `<span class="r">${xbarHtml(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
+        `<div class="sol-step"><span class="s">${fmt(s.s)}</span>${s.r ? `<span class="r">${fmt(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
     }
     feedback.innerHTML = html;
     const foot = el("div", "fb-foot");
@@ -149,7 +160,7 @@ export function mountQuestion(host, q, handlers = {}) {
   if (q.type === "mc" || q.type === "reason") {
     const opts = el("div", "q-options" + (q.layout === "grid2" ? " grid2" : ""));
     q.options.forEach((o, idx) => {
-      const b = el("button", "opt", xbarHtml(o.label));
+      const b = el("button", "opt", fmt(o.label));
       b.addEventListener("click", () => {
         if (answered) return;
         [...opts.children].forEach((x, i) => { x.disabled = true; if (q.options[i].correct) x.classList.add("is-correct"); });
@@ -193,7 +204,7 @@ export function mountQuestion(host, q, handlers = {}) {
   // "Check my answer". Correct → ✓ Continue. Wrong → a "Not quite" panel with
   // [Try again] (same task, fresh calculator) and [Show me the steps] → retry.
   else if (q.type === "calcdo") {
-    if (q.task) inputHost.appendChild(el("p", "q-task", xbarHtml(q.task)));
+    if (q.task) inputHost.appendChild(el("p", "q-task", fmt(q.task)));
     const calcBox = el("div", "q-calc");
     inputHost.appendChild(calcBox);
     const checkRow = el("div", "q-check");
@@ -243,9 +254,9 @@ export function mountQuestion(host, q, handlers = {}) {
         show.remove();
         handlers.onSteps && handlers.onSteps();
         let html = "";
-        if (q.answerLabel != null) html += `<div class="fb-answer"><b>Answer:</b> ${xbarHtml(q.answerLabel)}</div>`;
+        if (q.answerLabel != null) html += `<div class="fb-answer"><b>Answer:</b> ${fmt(q.answerLabel)}</div>`;
         if (Array.isArray(q.solution) && q.solution.length)
-          html += `<div class="sol">` + q.solution.map(s => `<div class="sol-step"><span class="s">${xbarHtml(s.s)}</span>${s.r ? `<span class="r">${xbarHtml(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
+          html += `<div class="sol">` + q.solution.map(s => `<div class="sol-step"><span class="s">${fmt(s.s)}</span>${s.r ? `<span class="r">${fmt(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
         feedback.insertBefore(el("div", "", html), foot);
       });
       foot.appendChild(again); foot.appendChild(show);
@@ -261,7 +272,7 @@ export function mountQuestion(host, q, handlers = {}) {
 
   // ---- General Trig: her quadrant cross, on its own ----
   else if (q.type === "tapcross") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     const tc = mountTapcross(inputHost, {
       single: !!q.single, noRef: !!q.noRef, labels: !!q.labels,
       onSubmit(val) {
@@ -276,7 +287,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "quadtri") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addQuadTriHits(svgNode, computeQuadTri(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -284,7 +295,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "timeline") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addTimelineHits(svgNode, computeTimeline(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -292,7 +303,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "venn") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addVennHits(svgNode, computeVenn(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -300,7 +311,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "tree") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addTreeHits(svgNode, computeTree(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -308,7 +319,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "triangle") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addTriangleHits(svgNode, computeTriangle(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -316,7 +327,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "trigg") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addTrigHits(svgNode, computeTrig(q.graph), q.graph, q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -324,7 +335,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "analytic") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addAnalyticHits(svgNode, computeAnalytic(q.graph), q.graph, q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -332,7 +343,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "pattern") {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addPatternHits(svgNode, computePattern(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -340,7 +351,7 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   else if (q.type === "tap" && svgNode) {
-    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
     addBoxHits(svgNode, computeBox(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
@@ -383,7 +394,7 @@ function mountReveal(root, q, inputHost) {
 
   function show(i) {
     if (mode === "replace") clear(box);
-    const f = el("div", "reveal-frame", xbarHtml(frames[i]));
+    const f = el("div", "reveal-frame", fmt(frames[i]));
     f.dataset.frame = String(i);
     box.appendChild(f);
     shown = i;
@@ -447,11 +458,11 @@ function mountSteps(host, root, q, commit, svgNode) {
   function settle(i, w) {
     w.dataset.state = "done";
     const badge = el("span", "q-step-mark" + (w.dataset.retried === "1" ? " retried" : ""),
-      w.dataset.retried === "1" ? "\u2717 \u2713" : "\u2713");
+      w.dataset.retried === "1" ? "✓ after a retry" : "✓");   // soft, never a red cross (her ruling)
     (w.querySelector(".q-step-prompt") || w).appendChild(badge);
     if (i >= list.length - 1) {
       root.dataset.step = String(list.length);
-      commit(clean, "steps");
+      commit(clean, "steps", !clean);            // not clean → the SOFT verdict, not the red one
     } else {
       idx = i + 1;
       root.dataset.step = String(idx);
@@ -465,13 +476,13 @@ function mountSteps(host, root, q, commit, svgNode) {
     w.dataset.kind = step.kind || "";
     w.dataset.state = "active";
     w.dataset.index = String(i);
-    w.appendChild(el("p", "q-step-prompt", xbarHtml(step.prompt || "")));
+    w.appendChild(el("p", "q-step-prompt", fmt(step.prompt || "")));
     /* a step may carry its own diagram — it appears the moment the step
        is reached, never before (gt8: no triangle until the quadrant is
        picked, which is the whole teaching point) */
     if (step.graph) {
       const sg = el("div", "q-graph q-step-graph");
-      sg.innerHTML = renderSpec(step.graph) + (step.graphCap ? `<div class="cap">${xbarHtml(step.graphCap)}</div>` : "");
+      sg.innerHTML = renderSpec(step.graph) + (step.graphCap ? `<div class="cap">${fmt(step.graphCap)}</div>` : "");
       w.appendChild(sg);
       liveSvg = sg.querySelector("svg");
       liveSpec = step.graph;
@@ -480,7 +491,7 @@ function mountSteps(host, root, q, commit, svgNode) {
     w.appendChild(shost);
     const hintBox = el("div", "hint-box step-hint");
     hintBox.hidden = true;
-    hintBox.innerHTML = `<span class="tag">HINT</span>${xbarHtml(step.hint) || "Work this step the way she does."}`;
+    hintBox.innerHTML = `<span class="tag">HINT</span>${fmt(step.hint) || "Work this step the way she does."}`;
     w.appendChild(hintBox);
     all.appendChild(w);
     mountStepInput(step, i, w, shost, hintBox);
@@ -492,7 +503,7 @@ function mountSteps(host, root, q, commit, svgNode) {
     if (step.kind === "mc") {
       const opts = el("div", "q-options" + (step.layout === "grid2" ? " grid2" : ""));
       (step.options || []).forEach((o, oi) => {
-        const b = el("button", "opt", xbarHtml(o.label));
+        const b = el("button", "opt", fmt(o.label));
         b.addEventListener("click", () => {
           if (busy() || b.disabled) return;
           if (checkStep(step, oi)) {
@@ -523,7 +534,7 @@ function mountSteps(host, root, q, commit, svgNode) {
       const on = new Set();
       const buttons = [];
       (step.options || []).forEach((o, oi) => {
-        const b = el("button", "opt", xbarHtml(o.label));
+        const b = el("button", "opt", fmt(o.label));
         b.dataset.idx = String(oi);
         b.addEventListener("click", () => {
           if (busy() || b.disabled) return;
@@ -557,6 +568,57 @@ function mountSteps(host, root, q, commit, svgNode) {
         }
       });
       shost.appendChild(submit);
+      return;
+    }
+
+    // her round-8 move: MAKE the two ticks (sign, interval), then tap the overlap
+    if (step.kind === "doubletick") {
+      const dt = mountDoubleTick(shost, {
+        passes: step.passes, finalPrompt: step.finalPrompt, correct: step.correct,
+        onMiss() { if (!busy()) miss(w, hintBox); },
+        onSubmit(q) { if (busy()) return; if (checkStep(step, q)) { dt.disable(); settle(i, w); } },
+      });
+      return;
+    }
+
+    // her round-8 "USE the diagram": ONE keypad; each typed side is written onto
+    // the sketch and the prompt moves to the next side; the pad goes away at the
+    // end and the finished sketch stays for the ratio questions below it.
+    if (step.kind === "sketchfill") {
+      w.classList.add("q-sketchfill");
+      const spec = JSON.parse(JSON.stringify(step.graph));
+      spec.labels = { ...(spec.labels || {}) };
+      const gbox = w.querySelector(".q-step-graph") || el("div", "q-step-graph");
+      if (!gbox.parentNode) shost.appendChild(gbox);
+      const draw = () => { gbox.innerHTML = renderSpec(spec); };
+      draw();
+      const fp = el("p", "sf-prompt", ""); shost.appendChild(fp);
+      const padHost = el("div", "sf-pad"); shost.appendChild(padHost);
+      const typed = {};
+      let k = 0;
+      let kp = null;
+      const ask = () => {
+        const f = step.fields[k];
+        fp.innerHTML = fmt(f.prompt || `${f.key} = ?`);
+        hintBox.innerHTML = `<span class="tag">HINT</span>${fmt(f.hint || step.hint) || ""}`;
+        if (kp) { padHost.innerHTML = ""; }
+        kp = mountKeypad(padHost, {
+          unit: "", allowNeg: f.allowNeg !== false,
+          onSubmit(v) {
+            if (busy()) return;
+            if (!Number.isFinite(v)) return;
+            const ok = answerCorrect(v, f.expected, { dp: f.dp, tol: f.tol });
+            if (!ok) { miss(w, hintBox); kp.clear(); return; }
+            typed[f.key] = v;
+            spec.labels[f.key] = (v < 0 ? "−" : "") + String(Math.abs(v)).replace(".", ",");   // onto the sketch
+            draw();
+            k += 1;
+            if (k < step.fields.length) { hintBox.hidden = true; ask(); }
+            else { padHost.remove(); fp.remove(); settle(i, w); }
+          },
+        });
+      };
+      ask();
       return;
     }
 
@@ -612,7 +674,7 @@ function mountSteps(host, root, q, commit, svgNode) {
       // falling back to the question-level one
       const tapSvg = liveSvg, tapSpec = liveSpec;
       if (!tapSvg || !tapSpec || tapSpec.type !== "quadtri") return;
-      shost.appendChild(el("p", "q-tap-hint", xbarHtml(step.tapHint || "Tap that side on the sketch.")));
+      shost.appendChild(el("p", "q-tap-hint", fmt(step.tapHint || "Tap that side on the sketch.")));
       const geo = computeQuadTri(tapSpec);
       // a previous tapside step's hot-spots are cleared before this one
       // adds its own, so two chained taps can never leave stale targets

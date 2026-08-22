@@ -75,6 +75,15 @@ export function checkStep(step, given) {
     return (step.alsoAccept || []).some(alt => sameSet(given, alt));
   }
 
+  // doubletick: the final tap — the quadrant carrying BOTH ticks
+  if (kind === "doubletick") return Number(given) === Number(step.correct);
+
+  // sketchfill: every side typed within its tolerance — {x, y, r} → expected
+  if (kind === "sketchfill") {
+    if (!given || typeof given !== "object") return false;
+    return (step.fields || []).every(f => Number.isFinite(given[f.key]) && answerCorrect(given[f.key], f.expected, { dp: f.dp, tol: f.tol }));
+  }
+
   if (kind === "tapcross") {
     if (sameTicks(given, step.correct)) return true;
     return (step.alsoAccept || []).some(alt => sameTicks(given, alt));

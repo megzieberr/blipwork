@@ -149,16 +149,43 @@ export function renderTriangle(spec) {
       out += `<path class="t2-arc" d="M ${N(s0.x)} ${N(s0.y)} A ${r} ${r} 0 ${big} ${sweep} ${N(s1.x)} ${N(s1.y)}" fill="none"/>`;
     }
     if (a.label != null) {
-      const off = a.right ? 24 : 27;
-      out += text(V.x + bis.x * off, V.y + bis.y * off, a.label, "t2-ang");
+      // Her phone review (2026-08-22): "45°" at a sharp vertex sat on the sides.
+      // A label fits INSIDE the angle only where the wedge is wide enough for
+      // it: at distance d along the bisector the wedge is 2·d·tan(α/2) wide.
+      // Long labels at sharp angles go OUTSIDE the vertex instead.
+      const chars = String(a.label).replace(/<[^>]+>/g, "").length;
+      const halfW = 3.6 * chars + 2;
+      const alpha = a.right ? 90 : angleAt(V, P[p], P[q]);
+      const need = halfW / Math.tan((alpha / 2) * Math.PI / 180) + 12;
+      const off = a.right ? 24 : Math.max(27, need);
+      if (off <= 46) out += text(V.x + bis.x * off, V.y + bis.y * off, a.label, "t2-ang");
+      else {
+        // outside the vertex — but the vertex may sit on the frame edge, so fall
+        // back to BESIDE it (away from the triangle's centroid) when there is no
+        // room behind it (her find: the "90° − θ" label vanished off the top)
+        let lx = V.x - bis.x * (halfW + 10), ly = V.y - bis.y * (halfW + 10);
+        if (ly < 12 || ly > g.H - 12 || lx < halfW || lx > g.W - halfW) {
+          const side = V.x >= g.cx ? 1 : -1;
+          lx = V.x + side * (halfW + 12); ly = Math.min(g.H - 12, Math.max(12, V.y + 6));
+        }
+        out += text(lx, ly, a.label, "t2-ang");
+      }
     }
   });
 
   // ---- side labels (midpoint, pushed outward) ----
   (spec.sides || []).forEach(s => {
     const A = P[s.from], B = P[s.to], m = mid(A, B);
-    const n = unit(sub(m, { x: g.cx, y: g.cy }));
-    out += text(m.x + n.x * 15, m.y + n.y * 15, s.label, "t2-slab");
+    // push along the side's TRUE perpendicular (away from the centroid), far
+    // enough that a horizontal label of this width clears the line — her
+    // review find: "√2" and "√(p² + 1)" were drawn across their own sides.
+    const d = unit(sub(B, A));
+    let n = { x: -d.y, y: d.x };
+    const toC = sub({ x: g.cx, y: g.cy }, m);
+    if (n.x * toC.x + n.y * toC.y > 0) n = { x: -n.x, y: -n.y };
+    const chars = String(s.label).replace(/<[^>]+>/g, "").length;
+    const off = (3.6 * chars) * Math.abs(n.x) + 7 * Math.abs(n.y) + 8;
+    out += text(m.x + n.x * off, m.y + n.y * off, s.label, "t2-slab");
   });
 
   // ---- vertex labels (pushed outward) ----

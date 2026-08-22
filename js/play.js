@@ -123,6 +123,7 @@ export function renderPlay(app, host, params) {
     // promise). Static play is untouched (regen/currentQ path, unchanged).
     const q = dice ? genAt(dice.roundSeed, st.i, skill, attempt - 1) : (regen ? skill.gen() : currentQ);
     currentQ = q;
+    if (def.stackFractions) q.stackFractions = true;   // General Trig: slashes render as stacked fractions (js/ui.js fracHtml)
     window.__Q__ = q;                          // expose current question (debug / headless checks)
     // dice is stat-free (no struggle-logged mastery loop), and only ONE
     // answer per index is ever paid or recorded (the firstAnswered gate in

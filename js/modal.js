@@ -1,6 +1,6 @@
 /* The "I'm lost" concept-card overlay. Re-teaches the idea, then the
    caller returns the learner to a fresh sibling question. */
-import { el, xbarHtml } from "./ui.js";
+import { el, xbarHtml, fracHtml, formulaHtml } from "./ui.js";
 import { getConcept } from "./concepts.js";
 
 export function openConcept(conceptId, onClose) {
@@ -11,7 +11,7 @@ export function openConcept(conceptId, onClose) {
   modal.innerHTML = `
     <div class="mhead"><span class="meyebrow">Quick recap</span><button class="link-btn close" aria-label="Close">✕</button></div>
     <h2>${xbarHtml(c.title)}</h2>
-    <div class="concept">${xbarHtml(c.body)}</div>`;
+    <div class="concept">${c.fractions ? formulaHtml(fracHtml(xbarHtml(c.body))) : xbarHtml(c.body)}</div>`;
   const btn = el("button", "btn primary big", "Got it — back to a question");
   modal.appendChild(btn);
   scrim.appendChild(modal);

@@ -53,37 +53,62 @@ export function crossSvg(ticks = []) {
    four axis tips (Part B1). The four WORDS are not baked in here —
    round 2 reveals them as its own frame, right after this one.
    ------------------------------------------------------------ */
-export function astcWheelSvg() {
-  const VB = 240, MID = 120, ARM = 100;
-  const Q = {
-    1: { x: MID, y: MID - ARM, w: ARM, h: ARM },
-    2: { x: MID - ARM, y: MID - ARM, w: ARM, h: ARM },
-    3: { x: MID - ARM, y: MID, w: ARM, h: ARM },
-    4: { x: MID, y: MID, w: ARM, h: ARM },
-  };
-  let out = `<svg class="sg gtrig-wheel" viewBox="0 0 ${VB} ${VB}" role="img" preserveAspectRatio="xMidYMid meet">`;
+export function astcWheelSvg(opts = {}) { return bowTieSvg({ signs: true, words: true, ...opts }); }
+
+/* ------------------------------------------------------------
+   bowTieSvg() — HER BOW TIE, redrawn 2026-08-22 evening to match her
+   sketches exactly ("that's why it's called a bow tie"): two triangles
+   meeting at the ORIGIN — the diagonals run corner to corner through O,
+   the VERTICAL edges sit at the outer left/right with the right-angle
+   marks, the quadrant numbers ①②③④ sit SMALL next to the centre, and
+   the A / S / T / C letters (or the full words with the three signs,
+   round 2) sit out in the four corners. 90° top, 180° left, 270°
+   bottom, 0°/360° right.
+     opts.signs  — list sin/cos/tan with their sign under each word
+     opts.words  — All / Strippers / Take / Cash instead of A S T C
+   ------------------------------------------------------------ */
+const ASTC_LETTER = { 1: "A", 2: "S", 3: "T", 4: "C" };
+const ASTC_WORD = { 1: "All", 2: "Strippers", 3: "Take", 4: "Cash" };
+export function bowTieSvg(opts = {}) {
+  const W = 360, H = opts.signs ? 300 : 240, MX = W / 2, MY = H / 2;
+  const HX = 88, HY = opts.signs ? 108 : 90;        // the bow tie's half-width / half-height
+  const ink = "var(--ink)";
+  let o = `<svg class="sg gtrig-bowtie" viewBox="0 0 ${W} ${H}" role="img" preserveAspectRatio="xMidYMid meet">`;
+  // axes with arrowheads
+  o += `<line x1="14" y1="${MY}" x2="${W - 14}" y2="${MY}" stroke="${ink}" stroke-width="1.6"/>`;
+  o += `<line x1="${MX}" y1="14" x2="${MX}" y2="${H - 14}" stroke="${ink}" stroke-width="1.6"/>`;
+  // the two triangles: verticals at the outer edges, diagonals through O
+  o += `<path d="M ${MX - HX} ${MY - HY} L ${MX - HX} ${MY + HY} M ${MX + HX} ${MY - HY} L ${MX + HX} ${MY + HY}" stroke="${ink}" stroke-width="2.2" fill="none"/>`;
+  o += `<path d="M ${MX - HX} ${MY - HY} L ${MX + HX} ${MY + HY} M ${MX - HX} ${MY + HY} L ${MX + HX} ${MY - HY}" stroke="${ink}" stroke-width="2.2" fill="none"/>`;
+  // right-angle marks where the verticals cross the x-axis
+  const m = 9;
+  o += `<path d="M ${MX - HX} ${MY - m} L ${MX - HX + m} ${MY - m} L ${MX - HX + m} ${MY + m} L ${MX - HX} ${MY + m}" stroke="${ink}" stroke-width="1.4" fill="none"/>`;
+  o += `<path d="M ${MX + HX} ${MY - m} L ${MX + HX - m} ${MY - m} L ${MX + HX - m} ${MY + m} L ${MX + HX} ${MY + m}" stroke="${ink}" stroke-width="1.4" fill="none"/>`;
+  const lab = (x, y, t, anchor = "middle", size = 12, fill = "var(--faint)", extra = "") =>
+    `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" style="font-family:var(--font-num);font-size:${size}px;fill:${fill};${extra}">${t}</text>`;
+  o += lab(MX, 10, "90°") + lab(MX, H - 8, "270°") + lab(6, MY - 11, "180°", "start") + lab(W - 6, MY - 11, "0°/360°", "end");
+  // the small quadrant numbers hugging the centre
+  const Q = { 1: [MX + 22, MY - 18], 2: [MX - 22, MY - 18], 3: [MX - 22, MY + 18], 4: [MX + 22, MY + 18] };
+  [1, 2, 3, 4].forEach(q => { o += lab(Q[q][0], Q[q][1], CIRC[q], "middle", 22, QCOLOR[q], "font-weight:700"); });
+  // corners: A S T C (or the words + signs)
+  // letters sit just outside the tie (her sketch), words+signs use the full corner
+  const CX = opts.signs ? { 1: W - 10, 2: 10, 3: 10, 4: W - 10 } : { 1: MX + HX + 30, 2: MX - HX - 30, 3: MX - HX - 30, 4: MX + HX + 30 };
+  const CA = { 1: "end", 2: "start", 3: "start", 4: "end" };
+  const CY = { 1: MY - HY + 10, 2: MY - HY + 10, 3: MY + HY - 44, 4: MY + HY - 44 };
   [1, 2, 3, 4].forEach(q => {
-    const b = Q[q];
-    out += `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="${QCOLOR[q]}" opacity="0.16"/>`;
+    const word = opts.words ? ASTC_WORD[q] : ASTC_LETTER[q];
+    const first = word[0], rest = word.slice(1);
+    o += `<text x="${CX[q]}" y="${opts.signs ? (q <= 2 ? 24 : H - 64) : CY[q] + (q <= 2 ? 0 : 34)}" text-anchor="${CA[q]}" dominant-baseline="middle"`
+      + ` style="font-family:var(--font-display);font-weight:700;font-size:${opts.words ? 17 : 22}px;fill:${QCOLOR[q]}">${first}<tspan style="fill:var(--ink);font-weight:600">${rest}</tspan></text>`;
+    if (opts.signs) {
+      const sg = f => (ASTC_SIGN[q][f] > 0 ? "+" : "−");
+      const y0 = q <= 2 ? 44 : H - 46;
+      ["sin", "cos", "tan"].forEach((f, i) => { o += lab(CX[q], y0 + i * 16, `• ${f} θ ${sg(f)}`, CA[q], 12.5, "var(--ink)"); });
+    }
   });
-  const top = { x: MID, y: MID - ARM }, bot = { x: MID, y: MID + ARM }, left = { x: MID - ARM, y: MID }, right = { x: MID + ARM, y: MID };
-  out += `<path d="M ${top.x} ${top.y} L ${left.x} ${left.y} L ${right.x} ${right.y} Z" fill="none" stroke="var(--ink)" stroke-width="2" opacity=".55"/>`;
-  out += `<path d="M ${bot.x} ${bot.y} L ${left.x} ${left.y} L ${right.x} ${right.y} Z" fill="none" stroke="var(--ink)" stroke-width="2" opacity=".55"/>`;
-  out += `<line x1="${MID - ARM - 8}" y1="${MID}" x2="${MID + ARM + 8}" y2="${MID}" stroke="var(--ink)" stroke-width="2"/>`;
-  out += `<line x1="${MID}" y1="${MID - ARM - 8}" x2="${MID}" y2="${MID + ARM + 8}" stroke="var(--ink)" stroke-width="2"/>`;
-  const lab = (x, y, s, anchor) => `<text x="${x}" y="${y}" text-anchor="${anchor}" style="font-family:var(--font-num);font-size:12px;fill:var(--faint)">${s}</text>`;
-  out += lab(MID, 14, "90°", "middle");
-  // axis-end labels sit just BELOW the axis line (foreman review fix: they were on it)
-  out += lab(4, MID + 16, "180°", "start");
-  out += lab(MID, VB - 6, "270°", "middle");
-  out += lab(VB - 4, MID + 16, "0°/360°", "end");
-  [1, 2, 3, 4].forEach(q => {
-    const b = Q[q];
-    out += `<text x="${b.x + b.w / 2}" y="${b.y + b.h / 2}" text-anchor="middle" dominant-baseline="middle" style="font-size:30px;font-weight:700;fill:${QCOLOR[q]}">${CIRC[q]}</text>`;
-  });
-  out += `</svg>`;
-  return out;
+  return o + `</svg>`;
 }
+const ASTC_SIGN = { 1: { sin: 1, cos: 1, tan: 1 }, 2: { sin: 1, cos: -1, tan: -1 }, 3: { sin: -1, cos: -1, tan: 1 }, 4: { sin: -1, cos: 1, tan: -1 } };
 
 /* ------------------------------------------------------------
    oahTable(stage) — the O-A-H table, built in HER order (Part C3):
@@ -350,30 +375,7 @@ export const fracValue = (num, den) => num / den;
    already use — round 13's equations are mostly fractions, and a
    flat "cos x/(1 + sin x)" makes the learner parse brackets instead
    of spotting denominators */
-export const tfrac = (n, d) => `<span class="efrac"><sup>${n}</sup>⁄<sub>${d}</sub></span>`;
-
-/* ------------------------------------------------------------
-   bowTieSvg() — her BOW TIE (Part H2, p27): the ASTC diagram drawn
-   as two triangles meeting at the origin, with S A T C at the four
-   corners. Same geometry as the round-2 wheel; the four letters are
-   what make it the bow tie rather than the plain wheel.
-   ------------------------------------------------------------ */
-const ASTC_LETTER = { 1: "A", 2: "S", 3: "T", 4: "C" };
-export function bowTieSvg() {
-  const MID = 120, ARM = 100;
-  const P = {
-    1: { x: MID + ARM * 0.62, y: MID - ARM * 0.70 },
-    2: { x: MID - ARM * 0.62, y: MID - ARM * 0.70 },
-    3: { x: MID - ARM * 0.62, y: MID + ARM * 0.70 },
-    4: { x: MID + ARM * 0.62, y: MID + ARM * 0.70 },
-  };
-  let letters = "";
-  [1, 2, 3, 4].forEach(q => {
-    letters += `<text x="${P[q].x}" y="${P[q].y}" text-anchor="middle" dominant-baseline="middle"`
-      + ` style="font-family:var(--font-display);font-weight:700;font-size:22px;fill:${QCOLOR[q]}">${ASTC_LETTER[q]}</text>`;
-  });
-  return astcWheelSvg().replace("</svg>", letters + "</svg>");
-}
+export const tfrac = (n, d) => `<span class="sfrac"><span class="sf-n">${n}</span><span class="sf-d">${d}</span></span>`;   // stacked (her ruling: no slashes, no slanted fractions)
 
 /* ------------------------------------------------------------
    PYTHAGOREAN TRIPLES for round 8 — 3-4-5, 5-12-13, 8-15-17,

@@ -194,9 +194,12 @@ export const CHAPTERS = [
       { id: "gt2", n: 2, title: "The Cartesian plane", blurb: "All Strippers Take Cash — why each ratio is + or −.", built: true },
       { id: "gt3", n: 3, title: "Special angles & identities", blurb: "The two triangles, Oats Are Healthy, and the masked identities.", built: true },
       { id: "gt4", n: 4, title: "Co-functions", blurb: "Convert between sin and cos — and the cos(90°+x) trap.", built: true },
-      { id: "gt5", n: 5, title: "Reductions: numbers", blurb: "Quadrant, formula, sign, ratio — the reduction routine, step by step.", built: true },
-      { id: "gt6", n: 6, title: "Reductions TIP Chips", blurb: "The five TIP Chips, revised.", built: true },
-      { id: "gt7", n: 7, title: "Reductions: variables", blurb: "Same reductions, with x or θ instead of a number.", built: true },
+      /* her reorder, 2026-08-22 evening: TIP Chips → variables → numbers ("it will
+         flow better"). Ids stay (exam lostQuest → gt5, progress rows); only n and
+         the live `sort` change (migration-gtrig-reorder.sql). */
+      { id: "gt6", n: 5, title: "Reductions TIP Chips", blurb: "The five TIP Chips, revised.", built: true },
+      { id: "gt7", n: 6, title: "Reductions: variables", blurb: "Reductions with x or θ instead of a number.", built: true },
+      { id: "gt5", n: 7, title: "Reductions: numbers", blurb: "Quadrant, formula, sign, ratio — the reduction routine, step by step.", built: true },
       { id: "gt8", n: 8, title: "Special sums", blurb: "Pick the quadrant, the app draws the triangle, evaluate.", built: true },
       { id: "gt9", n: 9, title: "Identities: the next step", blurb: "Spot the move — LCD, masked identity, what simplifies.", built: true },
       { id: "gt10", n: 10, title: "Super special sums", blurb: "Where 1 and k (or t) go on the triangle.", built: true },

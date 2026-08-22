@@ -137,14 +137,14 @@ function boundaryItem() {
     _dbg: { fn: b.fn, value: b.value, quadrants: bc.quadrants, ref: bc.ref, noref: false, boundary: true, plain: eqPlain(eq, L) },
     prompt: eqHtml(eq, L),
     steps: [
-      crossStep("Tick the quadrants on the cross.", bc.quadrants, "A boundary value still gets a cross and a ref ∠ — the same machine, so it stays reliable. Which quadrants does the axis it lands on touch?"),
+      crossStep("Tick the quadrants on the cross.", bc.quadrants, `Same rule as always — All Strippers Take Cash. ${negNum(b.value)} is ${b.value < 0 ? "negative" : b.value > 0 ? "positive" : "zero, which counts as +"}, so tick every quadrant where ${b.fn} is ${b.value < 0 ? "negative" : "positive"}.`),
       calcStep("ref. ∠ = ?", bc.ref, "0° or 90°. The ref ∠ of a boundary value is one of those two, and it comes out of the size of the value the same way as any other.", { dp: 2 }),
     ],
     hint: "Run the routine even here rather than reading the answer off a graph — that is what keeps it reliable.",
     answerLabel: `✓ in ${ticksText(bc.quadrants)} · ref. ∠ = ${bc.ref}°`
       + `<br><span class="muted small">Run the routine here too — never read these off a graph.</span>`,
     solution: [
-      { s: `${b.fn} ${L} = ${negNum(b.value)} → ${ticksText(bc.quadrants)}`, r: "the same routine as any other value, not read off a graph." },
+      { s: `${b.fn} ${L} = ${negNum(b.value)} → ${ticksText(bc.quadrants)}`, r: "All Strippers Take Cash — the sign picks the quadrants, even for a boundary value." },
       { s: `ref. ∠ = ${bc.ref}°`, r: "the boundary reference angle." },
     ],
   };
@@ -191,5 +191,6 @@ const SKILLS = {
 
 export const questGt12 = {
   id: "gt12",
+  stackFractions: true,
   skills: Object.entries(SKILLS).map(([id, gen]) => ({ id, concept: CON, gen })),
 };
