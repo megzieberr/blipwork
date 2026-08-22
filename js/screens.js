@@ -487,7 +487,7 @@ export function renderResults(app, host, params) {
     <div class="result-reward system-notice"><span class="sys-label">Reward</span><div class="sys-value">+${xpAwarded ?? 0} XP · +${goldAwarded ?? 0} <span class="crystal">💎</span></div></div>
     <div class="result-msg ${passed ? "good" : "warn"}">${passed ? "Quest passed — badge earned!" : "So close! Get 80% right first-time to earn the badge."}</div>
     ${badgeEarned ? `<div class="badge-pop"><span class="bi">${chapter.icon}</span>${quest.title} mastered</div>` : ""}
-    ${alreadyPassed ? `<div class="result-msg">Replay — already mastered, so this round paid a smaller XP top-up.</div>` : ""}
+    ${alreadyPassed ? `<div class="result-msg">${(questDef(quest.id) || {}).xpOnce ? "Replay of a discovery round — it paid its XP the first time; this one was free practice." : "Replay — already mastered, so this round paid a smaller XP top-up."}</div>` : ""}
     ${levelUp ? `<div class="result-levelup system-notice"><span class="sys-label">System</span><div class="sys-value"><span class="sparkle tw">✦</span> LEVEL UP — LV. ${level} <span class="sparkle tw">✦</span></div>${unlockedItem ? `<div class="sys-sub">New unlock: ${itemLabel(unlockedItem)}${unlockedCount > 1 ? ` +${unlockedCount - 1} more in the shop` : ""}</div>` : ""}</div>` : ""}
     <div class="result-actions"></div>`;
 

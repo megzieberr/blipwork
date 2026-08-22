@@ -162,9 +162,11 @@ export function renderTriangle(spec) {
   });
 
   // ---- vertex labels (pushed outward) ----
+  // spec.hideNames: skip the vertex letters (General Trig's two special
+  // triangles are drawn exactly as on her page — sides and angles only).
   g.poly.forEach(k => {
     const v = P[k], n = unit(sub(v, { x: g.cx, y: g.cy }));
-    out += text(v.x + n.x * 16, v.y + n.y * 16, k, "t2-vert");
+    if (!spec.hideNames) out += text(v.x + n.x * 16, v.y + n.y * 16, k, "t2-vert");
     out += `<circle class="t2-dot" cx="${N(v.x)}" cy="${N(v.y)}" r="2.2"/>`;
   });
 

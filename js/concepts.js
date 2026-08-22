@@ -1363,6 +1363,41 @@ export const CONCEPTS = {
       </ul>
       <div class="eg">√(x + 3)/(x + 1): undefined at x = −1 (bottom = 0); non-real for x &lt; −3 (inside the root negative). Two different questions!</div>`,
   },
+
+  /* ---- GENERAL TRIG (chapter gtrig, stage 2, 2026-08-22) ---- */
+  gtrigIntro: {
+    title: "Trigonometry: where the ratios come from",
+    body: `
+      <p><b>tri</b>gonometry → <b>three</b> · trigo<b>no</b>metry → <b>angled</b> · trigono<b>metry</b> → <b>measurement</b> — the study of angles and of the angular relationships of triangles.</p>
+      <p>SOHCAHTOA only works in a <b>right</b> triangle. <b>Opposite</b> = across from θ. <b>Adjacent</b> = next to θ. <b>Hypotenuse</b> = across from the right angle.</p>
+      <div class="formula">sin θ = O/H = y/r &nbsp;·&nbsp; cos θ = A/H = x/r &nbsp;·&nbsp; tan θ = O/A = y/x</div>
+      <p>Picture a point moving round a circle: the <b>radius stays the same</b>, but θ, the x-coordinate and the y-coordinate all change. A ratio on its own means nothing — it only means something once you know its θ.</p>
+      <div class="eg">"The sine is 0,6" tells you nothing alone. Fix r, move the point, watch x and y — the ratio IS the angle.</div>`,
+  },
+  gtrigAstc: {
+    title: "The Cartesian plane: All Strippers Take Cash",
+    body: `
+      <p>Going anticlockwise from quadrant ①: <b>A</b>ll positive · <b>S</b>trippers (sin only) · <b>T</b>ake (tan only) · <b>C</b>ash (cos only).</p>
+      <table class="q-table"><tr><th></th><th>①</th><th>②</th><th>③</th><th>④</th></tr>
+        <tr><td>sin θ</td><td>+</td><td>+</td><td>−</td><td>−</td></tr>
+        <tr><td>cos θ</td><td>+</td><td>−</td><td>−</td><td>+</td></tr>
+        <tr><td>tan θ</td><td>+</td><td>−</td><td>+</td><td>−</td></tr></table>
+      <p>Why: cos θ = x/r and sin θ = y/r, and <b>r is always positive</b> (it's the radius) — so the sign is decided by x or y alone, never by r.</p>
+      <div class="eg">Quadrant ②: x is negative, y is positive, r is always positive → sin θ = y/r is +, cos θ = x/r is −.</div>`,
+  },
+  gtrigSpecial: {
+    title: "Special angles: the two triangles + Oats Are Healthy",
+    body: `
+      <p>Cut a <b>square</b> corner to corner → the 45-45-90 triangle (sides 1, 1, √2). Cut an <b>equilateral triangle</b> straight down the middle → the 30-60-90 triangle (sides 1, √3, 2).</p>
+      <p><b>Oats Are Healthy</b> — the table, built in order: O · A · H down the side, 30° · 45° · 60° across the top:</p>
+      <table class="q-table"><tr><th></th><th>30°</th><th>45°</th><th>60°</th></tr>
+        <tr><td>O</td><td>1</td><td>1</td><td>√3</td></tr>
+        <tr><td>A</td><td>√3</td><td>1</td><td>1</td></tr>
+        <tr><td>H</td><td>2</td><td>√2</td><td>2</td></tr></table>
+      <p>Values stay <b>unrationalised</b> (tan 30° = 1/√3, not √3/3). Quadrantal angles (0°, 90°, 180°, 270°) are read straight off the graph or the calculator, never memorised.</p>
+      <p><b>Masked identities:</b> from sin²θ + cos²θ = 1 → sin²θ = 1 − cos²θ and cos²θ = 1 − sin²θ. Reciprocals — "look at the 3rd letter": cosec → sin, sec → cos, cot → tan.</p>
+      <div class="eg">tan 30° = O/A = 1/√3. sin 60° = √3/2. cos 90° = 0 (read off the graph).</div>`,
+  },
 };
 
 export function getConcept(id) { return CONCEPTS[id] || null; }

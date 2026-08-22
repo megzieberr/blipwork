@@ -79,6 +79,9 @@ import { questEq5 } from "./queseq5-square.js";
 import { questEq6 } from "./queseq6-formula.js";
 import { questEq7 } from "./queseq7-inequalities.js";
 import { questEq8 } from "./queseq8-nature.js";
+import { questGt1 } from "./questgt1-intro.js";
+import { questGt2 } from "./questgt2-cartesian.js";
+import { questGt3 } from "./questgt3-special.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -102,5 +105,6 @@ export const QUEST_DEFS = {
   es5: questEs5, es6: questEs6, es7: questEs7, es8: questEs8,
   eq1: questEq1, eq2: questEq2, eq3: questEq3, eq4: questEq4,
   eq5: questEq5, eq6: questEq6, eq7: questEq7, eq8: questEq8,
+  gt1: questGt1, gt2: questGt2, gt3: questGt3,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

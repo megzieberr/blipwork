@@ -176,6 +176,34 @@ export const CHAPTERS = [
       { id: "eq8", n: 8, title: "Nature of roots & know the difference", blurb: "Δ = b² − 4ac, the three pictures, the three question types — and no solution vs undefined vs non-real vs N.A.", built: true },
     ],
   },
+  /* GENERAL TRIG (id gtrig) — her 13 drill rounds, GENERAL-TRIG-BUILD-PLAN.md.
+     Stage 2 (2026-08-22) builds gt1–gt3 (discovery, XP-once) + wiring only;
+     gt4–gt13 are listed here so the chapter map is complete, but stay
+     `built: false` ("Coming soon") until their own stage lands.
+     Colour note: the design plan said "gold is free" — it is NOT (2D
+     Trigonometry and Number Patterns both already use PALETTE.gold). The
+     5-colour CYCLE just keeps rolling: eqn took blue, so gtrig — the next
+     chapter added — takes the next colour in the cycle, violet. */
+  {
+    id: "gtrig", name: "General Trig", paper: "Paper 2", icon: "🔄", term: "revision",
+    signature: PALETTE.violet, open: true,
+    blurb: "Reductions, co-functions, special angles, general solutions — the angle is the whole story.",
+    quests: [
+      { id: "gt1", n: 1, title: "Introduction", blurb: "What trig means, and where the ratios come from.", built: true },
+      { id: "gt2", n: 2, title: "The Cartesian plane", blurb: "All Strippers Take Cash — why each ratio is + or −.", built: true },
+      { id: "gt3", n: 3, title: "Special angles & identities", blurb: "The two triangles, Oats Are Healthy, and the masked identities.", built: true },
+      { id: "gt4", n: 4, title: "Co-functions", blurb: "Convert between sin and cos — and the cos(90°+x) trap.", built: false },
+      { id: "gt5", n: 5, title: "Reductions: numbers", blurb: "Quadrant, formula, sign, ratio — the reduction routine, step by step.", built: false },
+      { id: "gt6", n: 6, title: "Reductions TIP Chips", blurb: "The five TIP Chips, revised.", built: false },
+      { id: "gt7", n: 7, title: "Reductions: variables", blurb: "Same reductions, with x or θ instead of a number.", built: false },
+      { id: "gt8", n: 8, title: "Special sums", blurb: "Pick the quadrant, the app draws the triangle, evaluate.", built: false },
+      { id: "gt9", n: 9, title: "Identities: the next step", blurb: "Spot the move — LCD, masked identity, what simplifies.", built: false },
+      { id: "gt10", n: 10, title: "Super special sums", blurb: "Where 1 and k (or t) go on the triangle.", built: false },
+      { id: "gt11", n: 11, title: "General solution: the six types", blurb: "Name the type, pick the method.", built: false },
+      { id: "gt12", n: 12, title: "General solution: last steps", blurb: "The quadrant cross, then the reference angle.", built: false },
+      { id: "gt13", n: 13, title: "Undefined values", blurb: "Which terms must be equated to zero.", built: false },
+    ],
+  },
 ];
 
 /* ============================================================

@@ -57,8 +57,9 @@
 <h2>8 · play.js — XP once</h2>
 <pre id="xp">…</pre>
 
-<h2>9 · Chapter</h2>
-<pre id="chapter">stage 2+ fills this</pre>
+<h2>9 · Chapter — gt1–gt3 wiring, generation sweep, SQL cross-check</h2>
+<pre id="chapter">…</pre>
+<div class="grid" id="s2-samples"></div>
 
 <script type="module">
 import {
@@ -67,12 +68,17 @@ import {
   sinD, cosD, tanD,
 } from "./js/triglib.js";
 import { renderQuadTri, computeQuadTri, verifyQuadTri } from "./js/engine/quadrant-triangle.js";
-import { renderTrig, computeTrig } from "./js/engine/trig-graph.js";
+import { renderTrig, computeTrig, verifyTrig } from "./js/engine/trig-graph.js";
 import { mountTapcross } from "./js/tapcross.js";
 import { mountTokenpad } from "./js/tokenpad.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import { mountQuestion } from "./js/questions.js";
 import { xpToSubmit } from "./js/play.js";
+import { CHAPTERS, chapterById } from "./js/config.js";
+import { QUEST_DEFS, questDef } from "./js/quests/index.js";
+import { getConcept } from "./js/concepts.js";
+import { renderTriangle, verifyTriangle } from "./js/engine/triangle-graph.js";
+import { oahTable } from "./js/quests/_gtrig.js";
 
 /* count anything that goes wrong in the console — "0 console errors" is
    part of the pass condition, so it has to be measured, not assumed */
@@ -82,7 +88,7 @@ console.error = (...a) => { consoleErrors++; realError(...a); };
 window.addEventListener("error", () => { consoleErrors++; });
 window.addEventListener("unhandledrejection", () => { consoleErrors++; });
 
-const ACC = "#eab308";                       // the free hue the chapter takes (gold)
+const ACC = "#8b5cf6";                       // PALETTE.violet — gtrig's real signature (gold is NOT free: 2D Trig + Number Patterns already use it; see js/config.js's comment)
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return !!cond; };
 const near = (a, b, e = 1e-9) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= e;
@@ -712,6 +718,148 @@ tick(xpToSubmit({ xpOnce: true }, null, 120) === 120, "xpOnce with no progress r
 tick(xpToSubmit(null, { passed: true }, 120) === 120, "no quest def → unchanged");
 tick(xpToSubmit({ xpOnce: true }, { passed: true }, 0) === 0, "xpOnce on a zero round → still 0");
 section("xp", "play.js xpToSubmit — the pure decision behind gt1–gt3", m8);
+
+/* ============================================================
+   9 · CHAPTER — gt1–gt3 wiring, thousands of generations, SQL cross-check
+   ============================================================ */
+const m9 = mark();
+
+/* ---- config.js CHAPTERS ---- */
+const gch = chapterById("gtrig");
+tick(!!gch, "config.js CHAPTERS has a gtrig chapter");
+tick(!!gch && Array.isArray(gch.quests) && gch.quests.length === 13,
+  `gtrig chapter lists 13 quests (got ${gch && gch.quests ? gch.quests.length : 0})`);
+const wantBuilt = ["gt1", "gt2", "gt3"];
+tick(!!gch && gch.quests.every(q => wantBuilt.includes(q.id) === !!q.built),
+  "gt1–gt3 are built:true, gt4–gt13 are built:false (Coming soon)");
+
+/* ---- js/quests/index.js registry ---- */
+wantBuilt.forEach(id => tick(!!QUEST_DEFS[id], `QUEST_DEFS registers ${id}`));
+for (let n = 4; n <= 13; n++) tick(!QUEST_DEFS["gt" + n], `QUEST_DEFS has no gt${n} yet (stage 3/4 will add it)`);
+
+/* ---- the generation sweep: 300× per skill, gt1–gt3 ---- */
+const BAD_WORDS = ["seperately", "compliment", "covert"];
+// a real minus in learner copy is always U+2212; an ASCII hyphen next to a
+// digit is only legitimate inside a triangle NAME like "30-60-90" (digit on
+// BOTH sides) — a hyphen with whitespace/paren/start before it and a digit
+// after is the pattern a stray "-3" (should be "−3") would leave behind.
+const hyphenAsMinus = s => /(^|[\s(=,:])-\d/.test(s);
+function scanText(s, ctx, label) {
+  if (s == null) return;
+  const str = String(s);
+  tick(!hyphenAsMinus(str), `${ctx}: no ASCII hyphen-as-minus in ${label}`);
+  BAD_WORDS.forEach(w => tick(!new RegExp(w, "i").test(str), `${ctx}: ${label} free of "${w}"`));
+}
+// specialExact TEXT → numeric value, so "no decoy equal by value" can be
+// checked against the REAL computed value, not just string difference —
+// covers the table skills (pickValue1/2, quadrantal use specialExact
+// directly; triangles/oahRead use the same four side values).
+const SPECIAL_VALUE = new Map();
+[0, 30, 45, 60, 90, 180, 270, 360].forEach(a => ["sin", "cos", "tan"].forEach(f => {
+  const r = specialExact(f, a);
+  if (r && r.value != null) SPECIAL_VALUE.set(r.text, r.value);
+}));
+[["1", 1], ["√3", Math.sqrt(3)], ["2", 2], ["√2", Math.sqrt(2)]].forEach(([t, v]) => { if (!SPECIAL_VALUE.has(t)) SPECIAL_VALUE.set(t, v); });
+const VALUE_CHECK_SKILLS = new Set(["pickValue1", "pickValue2", "quadrantal", "triangles", "oahRead"]);
+
+const GEN_N = 300;
+const drawn = new Set();     // skill ids already rendered as a sample (one each)
+wantBuilt.forEach(qid => {
+  const def = QUEST_DEFS[qid];
+  (def.skills || []).forEach(skill => {
+    for (let i = 0; i < GEN_N; i++) {
+      const q = skill.gen();
+      const ctx = `${qid}/${skill.id} #${i}`;
+      tick(!!q && typeof q.type === "string" && q.type.length > 0, `${ctx}: has a valid type`);
+      tick(typeof q.prompt === "string" && q.prompt.length > 0, `${ctx}: has a prompt`);
+      tick(!!getConcept(q.concept), `${ctx}: concept "${q.concept}" resolves via getConcept()`);
+      scanText(q.prompt, ctx, "prompt");
+
+      if (Array.isArray(q.options)) {
+        const corrects = q.options.filter(o => o.correct);
+        tick(corrects.length === 1, `${ctx}: exactly one correct mc option (got ${corrects.length})`);
+        q.options.forEach(o => scanText(o.label, ctx, "an option"));
+        if (VALUE_CHECK_SKILLS.has(skill.id)) {
+          const vals = q.options.map(o => SPECIAL_VALUE.get(o.label)).filter(v => v != null);
+          const uniq = new Set(vals.map(v => Math.round(v * 1e6))).size;
+          tick(uniq === vals.length, `${ctx}: no decoy equal by value to the correct label (specialExact)`);
+        }
+      }
+
+      if (q.type === "tapcross") {
+        const okShape = Array.isArray(q.correct) || q.correct === "noref";
+        tick(okShape, `${ctx}: tapcross correct is an array or "noref"`);
+        if (Array.isArray(q.correct)) {
+          const sorted = q.correct.slice().sort((a, b) => a - b);
+          tick(same(q.correct, sorted), `${ctx}: tapcross correct is a SORTED array`);
+        }
+      }
+
+      if (q.type === "tap" && q.graph && q.graph.type === "triangle") {
+        const res = verifyTriangle(q.graph);
+        tick(res.every(r => r.ok), `${ctx}: tap triangle graph passes verifyTriangle (${res.filter(r => !r.ok).map(r => r.label).join("; ")})`);
+      }
+      if (q.graph && q.graph.type === "trigg") {
+        const res = verifyTrig(q.graph);
+        tick(res.every(r => r.ok), `${ctx}: trigg spec passes verifyTrig (${res.filter(r => !r.ok).map(r => r.label).join("; ")})`);
+      }
+    }
+  });
+});
+
+/* ---- render one sample of every skill that DRAWS, so the foreman can LOOK ---- */
+const samplesHost = document.getElementById("s2-samples");
+function sampleCard(id, title, html) {
+  const card = document.createElement("div"); card.className = "card"; card.id = "s2-" + id;
+  card.innerHTML = `<h3>${title}</h3>${html}`;
+  samplesHost.appendChild(card);
+}
+// gt1: the to-scale unlabelled triangle (tapSide) + the four circle frames (whereFrom)
+{
+  const q = QUEST_DEFS.gt1.skills.find(s => s.id === "tapSide").gen();
+  sampleCard("triangle", "gt1 — tap side (θ marked, no numbers)", renderTriangle(q.graph));
+}
+{
+  const q = QUEST_DEFS.gt1.skills.find(s => s.id === "whereFrom").gen();
+  sampleCard("circle", "gt1 — the circle frames (where the ratios come from)", (q.reveal || []).join(""));
+}
+// gt2: the bow-tie wheel (wheelWord) + one banded graph (bandSign)
+{
+  const q = QUEST_DEFS.gt2.skills.find(s => s.id === "wheelWord").gen();
+  sampleCard("wheel", "gt2 — the ASTC wheel", (q.reveal || [])[0] || "");
+}
+{
+  const q = QUEST_DEFS.gt2.skills.find(s => s.id === "bandSign").gen();
+  sampleCard("bands", "gt2 — the colour-blocked graph", renderTrig(q.graph));
+}
+// gt3: the two special triangles (triangles) + the O-A-H table, all 6 stages (oahRead)
+{
+  const q = QUEST_DEFS.gt3.skills.find(s => s.id === "triangles").gen();
+  sampleCard("special", "gt3 — the two special triangles", (q.reveal || []).slice(0, 2).join(""));
+}
+{
+  sampleCard("oah", "gt3 — Oats Are Healthy, all 6 build stages", [0, 1, 2, 3, 4, 5].map(oahTable).join(""));
+}
+
+/* ---- schema.sql AND migration-gtrig-quests.sql both list gt1–gt13 ---- */
+let sqlText = "", migText = "", migRaw = "";
+try { sqlText = (await (await fetch("./supabase/schema.sql")).text()).replace(/--[^\n]*/g, ""); }
+catch (e) { tick(false, "could not read supabase/schema.sql: " + e.message); }
+try { migRaw = await (await fetch("./supabase/migration-gtrig-quests.sql")).text(); migText = migRaw.replace(/--[^\n]*/g, ""); }
+catch (e) { tick(false, "could not read supabase/migration-gtrig-quests.sql: " + e.message); }
+for (let n = 1; n <= 13; n++) {
+  const id = "gt" + n;
+  tick(new RegExp(`'${id}'\\s*,\\s*'gtrig'`).test(sqlText), `schema.sql seeds ${id} in the gtrig chapter`);
+  tick(new RegExp(`'${id}'\\s*,\\s*'gtrig'`).test(migText), `migration-gtrig-quests.sql seeds ${id} in the gtrig chapter`);
+}
+tick(/is_open\s*,\s*sort\)\s*values[\s\S]*?on conflict[\s\S]*?do update/i.test(migText) && /set\s+chapter\s*=\s*excluded\.chapter\s*,\s*sort\s*=\s*excluded\.sort/i.test(migText),
+  "migration-gtrig-quests.sql's on-conflict clause updates chapter/sort only — never re-opens or re-closes is_open");
+// the real (uncommented) SQL statements never force is_open — the commented
+// "how to open gt1 from the SQL editor" example at the bottom is expected to
+// contain that phrase, which is exactly why this checks the STRIPPED text.
+tick(!/set is_open\s*=\s*true/i.test(migText), "migration-gtrig-quests.sql's real SQL never force-opens a round (seeded CLOSED, her ruling) — only its comment shows how");
+
+section("chapter", "gt1–gt3 wiring, generation sweep (900 questions) and the SQL cross-check", m9);
 
 /* ============================================================
    banner

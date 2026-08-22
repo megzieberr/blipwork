@@ -1538,7 +1538,15 @@ insert into public.quests (quest_id, chapter, is_open, sort) values
   ('es7','exp',false,70), ('es8','exp',false,71),
   ('eq1','eqn',false,72), ('eq2','eqn',false,73), ('eq3','eqn',false,74),
   ('eq4','eqn',false,75), ('eq5','eqn',false,76), ('eq6','eqn',false,77),
-  ('eq7','eqn',false,78), ('eq8','eqn',false,79)
+  ('eq7','eqn',false,78), ('eq8','eqn',false,79),
+  -- General Trig (chapter gtrig) — stage 2, 2026-08-22. Seeded CLOSED like
+  -- every other chapter here; supabase/migration-gtrig-quests.sql is the
+  -- one that ever runs against the live database (written, not run).
+  ('gt1','gtrig',false,80), ('gt2','gtrig',false,81), ('gt3','gtrig',false,82),
+  ('gt4','gtrig',false,83), ('gt5','gtrig',false,84), ('gt6','gtrig',false,85),
+  ('gt7','gtrig',false,86), ('gt8','gtrig',false,87), ('gt9','gtrig',false,88),
+  ('gt10','gtrig',false,89), ('gt11','gtrig',false,90), ('gt12','gtrig',false,91),
+  ('gt13','gtrig',false,92)
 on conflict (quest_id) do nothing;
 
 insert into public.app_config (key, value) values ('admin_password', crypt('admin', gen_salt('bf')))
