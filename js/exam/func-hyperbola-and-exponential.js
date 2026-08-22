@@ -11,22 +11,21 @@
        Sept-T1-blueprint.md         §1, §3 whose methods
    Same working, same ticks, same WATCH OUT / REMEMBER cards as print.
 
-   ⚠️ THE SKETCH, AND WHY THIS PROMPT LOOKS DIFFERENT FROM THE PRINTED
+   THE SKETCH, AND WHY THE PROMPT STILL LOOKS DIFFERENT FROM THE PRINTED
    ONE. The printed question hands the learner a to-scale TikZ graph and
-   says "the sketch below shows…". The schema has NO diagram field, and
-   the pilot (js/exam/eqn-nature-of-roots.js) sets no visual precedent,
-   so the stem here states the same facts IN WORDS — which is exactly
-   what the print memo's own \stam line already does: "From the sketch:
-   the asymptotes are x = −2 and y = 1, the graph passes through
-   A(0 ; 4), and B is the x-intercept." No mark scheme changes: every
-   tick in the print memo is earned from those facts, not from the
-   picture. The blueprint's own diagram-leak check confirms the sketch
-   never labelled anything the words do not (B is labelled B only, and
-   its coordinates are what 4(c) asks for).
-   When the diagram engine lands (EXAM-FOCUS-PLAN.md build order step 3
-   — port Circle Quest's engine.js), this question is a clean first
-   non-circle candidate: y = 6/(x + 2) + 1, asymptotes x = −2 and y = 1,
-   A(0 ; 4) marked, x-intercept marked and labelled B only.
+   says "the sketch below shows…"; when this was written the schema had
+   no diagram field yet, so the stem states the same facts IN WORDS
+   instead — which is exactly what the print memo's own \stam line
+   already does: "From the sketch: the asymptotes are x = −2 and y = 1,
+   the graph passes through A(0 ; 4), and B is the x-intercept." No mark
+   scheme changes: every tick in the print memo is earned from those
+   facts, not from the picture. SESSION 1 (2026-08-22) added the
+   `diagram` block below without touching a word of the stem — same
+   discipline the blueprint's diagram-leak check already demanded of
+   the print sketch: B is not drawn at all until (c) — the part that
+   asks for its coordinates — has been revealed; only A(0 ; 4), the
+   asymptotes, and the curve itself (given from the start, per the
+   stem) are on the base figure.
 
    METHOD: GR11-FUNCTIONS-NOTES-DIGEST.md, hers — hyperbola
    y = a/(x − p) + q with asymptotes x = p and y = q (p is the OPPOSITE
@@ -42,21 +41,49 @@
    read-off-then-substitute, so they sit at 2). Nothing in this question
    is starred in the print memo, so nothing here is level 4.
 
-   ⚠️ UNREGISTERED. Registering (a DAY-session job) needs:
-     1. js/exam/index.js — import + set REGISTRY.func = [...].
-     2. js/config.js — EXAM_CHAPTERS must include "func".
-     3. verify-exam.html Part 6 — SCOPE_WALLS has an `eqn` key ONLY; a
-        seeded func question with no wall FAILS by design. Proposed func
-        wall, mirroring the fn1–fn7 quest breakdown:
-        four-families · line-and-parabola · hyperbola-and-exponential ·
-        reading-a-graph · inequalities-off-a-graph · transformations ·
-        graphs-together
-     4. verify-exam.html Part 2 — "every chapter OTHER than eqn still
-        has zero questions" and the EXAM_CHAPTERS === ["eqn"] assertion
-        both break. Widen before registering.
+   REGISTERED via js/exam/cards-func.js (imported there, folded into
+   funcCards), which js/exam/index.js's REGISTRY.func picks up; func is
+   in js/config.js's EXAM_CHAPTERS. (This note used to say ⚠️
+   UNREGISTERED — that was true before cards-func.js wired it in;
+   corrected session 3, 2026-08-23.)
    ============================================================ */
 
 const PAPER = "sept-t1";
+
+/* DIAGRAM (SESSION 1, 2026-08-22). h(x) = 6/(x + 2) + 1, asymptotes
+   x = −2 and y = 1 — both GIVEN in the stem, so they (and the curve
+   itself) sit on the base figure from (a) onward; A(0 ; 4) is likewise
+   given. B(−8 ; 0) is what (c) finds, so it is absent until (c)'s own
+   reveal — then carried forward (already given, via chain or the
+   "inequalities" card's own intro) into (e), whose paint method needs
+   it. (e)'s shaded strip is the answer to "h(x) ≤ 0" and only ever
+   appears on ITS OWN reveal, never the question side. */
+const H1 = { kind: "hyperbola", a: 6, p: -2, q: 1 };
+const H1_A = { x: 0, y: 4, on: 0, label: "A(0 ; 4)" };
+const H1_B = { x: -8, y: 0, on: 0, label: "B(−8 ; 0)" };
+/* (d)'s answer is a LINE, so (d)'s reveal draws it — dashed and named, the same
+   "the reveal draws what it found" rule js/exam/_schema.js now states and every
+   other axis-of-symmetry card on this tile follows (SESSION 2a-FIX). */
+const H1_AXIS = { kind: "line", a: 1, q: 3, dash: true, tone: "b", label: "y = x + 3", labelAt: -5.5 };
+const H1_DIAGRAM = {
+  spec: {
+    type: "function",
+    win: { xmin: -11, xmax: 3, ymin: -3, ymax: 6 },
+    curves: [{ ...H1, tone: "a", label: "h", labelAt: -9 }],
+    asymptotes: [{ x: -2, of: 0, label: "x = −2" }, { y: 1, of: 0, label: "y = 1" }],
+    points: [H1_A],
+  },
+  parts: {
+    a: { question: {} },
+    b: { question: {} },
+    c: { question: {}, reveal: { points: [H1_B] } },            // B is the answer — reveal only
+    d: { question: {}, reveal: { curves: [H1_AXIS] } },
+    e: {
+      question: { points: [H1_B] },                             // B already given (chain / card intro)
+      reveal: { points: [H1_B], shades: [{ x0: -8, x1: -2 }] },  // the ≤0 strip — reveal only
+    },
+  },
+};
 
 const t1q4 = {
   id: "func.hyp.t1q4",
@@ -64,6 +91,7 @@ const t1q4 = {
   topic: "hyperbola-and-exponential",
   archetype: "hyperbola-with-a-battery-of-short-read-offs",
   paper: PAPER,
+  diagram: H1_DIAGRAM,
   // fn3 "Hyperbola & exponential" — asymptotes, branches, domain &
   // range: four of the five parts. 4(e) belongs to fn5, but fn3 is the
   // round that teaches the shape this whole question stands on.
@@ -110,7 +138,7 @@ const t1q4 = {
         { type: "answer", text: { en: "x ∈ ℝ ; x ≠ −2" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "Domain means “which x-values may I feed in”. For a hyperbola the answer is always “all of them except the one that breaks the fraction”, and that one is the vertical asymptote — the same number you already read off in (a). Note how it is written: all the real numbers first, then the restriction riding after a semicolon. That semicolon-then-restriction layout is the one she marks.",
+        en: "Domain means “which x-values may I feed in”. For a hyperbola the answer is always “all of them except the one that breaks the fraction”, and that one is the vertical asymptote — the same x = −2 that's h's own asymptote. Note how it is written: all the real numbers first, then the restriction riding after a semicolon. That semicolon-then-restriction layout is the one she marks.",
       },
     },
     {
@@ -121,7 +149,7 @@ const t1q4 = {
         en: "Determine the coordinates of B.",
       },
       hint: {
-        en: "B is on the x-axis. What is y worth at every single point of the x-axis? Put that into your equation from (a) and solve.",
+        en: "B is on the x-axis. What is y worth at every single point of the x-axis? Put that into the equation for h and solve.",
       },
       memo: [
         { type: "step", text: { en: "B is on the x-axis, so y = 0:" } },

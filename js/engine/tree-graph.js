@@ -74,9 +74,27 @@ export function computeTree(spec) {
 const node = (x, y, label, cls) =>
   `<circle class="tr-node ${cls}" cx="${N(x)}" cy="${N(y)}" r="11"/><text class="tr-nlab" x="${N(x)}" y="${N(y)}" text-anchor="middle" dominant-baseline="central">${label}</text>`;
 const branch = (x1, y1, x2, y2, hot) => `<line class="tr-branch${hot ? " hot" : ""}" x1="${N(x1)}" y1="${N(y1)}" x2="${N(x2)}" y2="${N(y2)}"/>`;
+// A branch probability written as `a/b` is drawn as a PROPER stacked
+// fraction — numerator over a bar over denominator — sitting just off the
+// branch's midpoint on the side away from the line (WHOLE-APP SWEEP,
+// 2026-08-23, her ruling: every fraction in every round is a stacked
+// fraction; SVG text can't use the HTML .sfrac so the engine stacks it
+// itself). Decimals / whole numbers stay on one line as before.
 function plabel(x1, y1, x2, y2, s) {
   const mx = x1 + (x2 - x1) * 0.5, my = y1 + (y2 - y1) * 0.5 - 4;
-  return `<text class="tr-p" x="${N(mx)}" y="${N(my)}" text-anchor="middle">${s}</text>`;
+  const m = /^\s*(−?[0-9]+)\s*\/\s*([0-9]+)\s*$/.exec(String(s));
+  if (!m) return `<text class="tr-p" x="${N(mx)}" y="${N(my)}" text-anchor="middle">${s}</text>`;
+  // the whole stack (≈20 px tall) sits OFF the line: above an upward
+  // branch, below a downward one, so sibling labels never collide and the
+  // bar never lies on the branch itself
+  const up = y2 < y1;
+  const cx = mx + (up ? -4 : 4), cy = y1 + (y2 - y1) * 0.5 + (up ? -11 : 11);
+  const w = Math.max(m[1].length, m[2].length) * 6 + 4;
+  return `<g class="tr-pf">` +
+    `<text class="tr-p" x="${N(cx)}" y="${N(cy - 2)}" text-anchor="middle">${m[1]}</text>` +
+    `<line class="tr-pbar" x1="${N(cx - w / 2)}" y1="${N(cy)}" x2="${N(cx + w / 2)}" y2="${N(cy)}"/>` +
+    `<text class="tr-p" x="${N(cx)}" y="${N(cy + 9)}" text-anchor="middle">${m[2]}</text>` +
+    `</g>`;
 }
 
 export function renderTree(spec) {

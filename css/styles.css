@@ -412,6 +412,8 @@ h2{font-size:20px} h3{font-size:17px}
 .tr-node.leaf.hot{fill:var(--accent)}
 .tr-nlab{font-size:11px;font-weight:700;fill:var(--g-ink)}
 .tr-p{font-size:10px;fill:var(--g-muted);font-weight:600}
+.tr-pf .tr-p{font-size:9px}
+.tr-pbar{stroke:var(--g-muted);stroke-width:1}   /* stacked branch probability (tree-graph plabel) */
 .tr-out{font-size:11.5px;fill:var(--g-ink);font-weight:700}
 .tr-prod{font-size:10px;fill:var(--g-muted);font-weight:500}
 
@@ -437,7 +439,7 @@ h2{font-size:20px} h3{font-size:17px}
 .fg-grid{stroke:var(--g-grid);stroke-width:.5}
 .fg-axis{stroke:var(--g-axis);stroke-width:1.2}
 .fg-arrow{fill:var(--g-axis)}
-.fg-axlab{font-size:11px;font-style:italic;fill:var(--g-muted)}
+.fg-axlab{font-size:11px;font-style:italic;fill:var(--g-muted);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
 .fg-curve{stroke:var(--accent);stroke-width:2.4;fill:none;stroke-linejoin:round;stroke-linecap:round}
 .fg-curve.dash{stroke-dasharray:5 4}
 .fg-asym{stroke:var(--g-muted);stroke-width:1.1;stroke-dasharray:5 4;opacity:.7}
@@ -448,8 +450,14 @@ h2{font-size:20px} h3{font-size:17px}
 .fg-dot.open{fill:var(--bg);stroke:var(--g-ink);stroke-width:1.4}
 .fg-seg{stroke:var(--g-read);stroke-width:2.4}
 .fg-plab{font-size:10.5px;font-weight:700;fill:var(--g-ink);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
-.fg-flab{font-size:13px;font-weight:700;font-style:italic;fill:var(--accent)}
-.fg-tappable .fg-plab,.fg-tappable .fg-flab{pointer-events:none}
+/* curve names and the axis letters carry the same halo as .fg-plab /
+   .fg-alab (added 2026-08-22): O sits where four lines cross and a
+   dashed guide line is the one thing a haloed label may sit on. */
+.fg-flab{font-size:13px;font-weight:700;font-style:italic;fill:var(--accent);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
+/* asymptote caption ("x = −2") — muted, same weight as the dashed line it
+   names, with the .fg-plab halo so it stays readable over the grid. */
+.fg-alab{font-size:10.5px;font-style:italic;fill:var(--g-muted);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
+.fg-tappable .fg-plab,.fg-tappable .fg-flab,.fg-tappable .fg-alab{pointer-events:none}
 
 /* trig-graph engine (.tg-*) — degree-axis plane, sin/cos/tan to scale,
    dashed asymptotes & midline, period/amplitude span arrows. */
@@ -1260,7 +1268,17 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
    trig-chunk .nowrap above). max-width:100% stops the inline-block
    itself from ever forcing the PAGE wider than its own container. */
 .fml{display:inline-block;max-width:100%;vertical-align:baseline}
-.fml .nowrap{white-space:nowrap}
+/* THE SAFETY NET (whole-app sweep, 2026-08-23). overflow-wrap is inert
+   under white-space:nowrap, so the previous belt-and-braces never fired
+   and a too-wide piece still pushed the page sideways (q6's ogive hint,
+   eq8's bracketed asides — 150 overflows in the 25-seed sweep). A piece
+   is now a shrink-to-fit INLINE-BLOCK with NORMAL white-space and
+   max-width:100%: when it fits it is laid out on one line exactly as
+   nowrap did (a shrink-to-fit box never wraps inside itself unless its
+   preferred width exceeds the room), and only a piece wider than the
+   screen wraps INSIDE itself, at a space — never off the edge. That is
+   her rule verbatim: move whole, break only when wider than the screen. */
+.fml .nowrap{display:inline-block;max-width:100%;white-space:normal;vertical-align:baseline}
 .q-oah{margin:0 0 10px}
 .q-oah table{margin:0 auto}
 /* double tick (round 8): two colours of ✓ on one cross, a numbered pass prompt */

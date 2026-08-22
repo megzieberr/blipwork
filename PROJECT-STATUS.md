@@ -1,4 +1,83 @@
-# Project status — updated 2026-08-22 late (📐 FORMULA LINE-BREAK SWEEP built + reviewed, sw v57 LOCAL — ship waits on her word)
+# Project status — updated 2026-08-23 early (📈 STAGE 2 FUNCTIONS SKETCHES + 31 sibling cards + WHOLE-APP fraction/line-break sweep — sw v58)
+
+## 📈 2026-08-22 → 23 — STAGE 2: function sketches in Exam Focus, 48 Functions cards, whole-app sweep (Fable foreman day, her "spend more to make the graphs look good")
+
+sw v57 (the formula line-break sweep) was already live when the day started. Then, in order,
+with every sketch read as a 375-px PNG by the foreman before the next session ran:
+
+1. **Function-graph engine wired into Exam Focus** (`js/exam/function-diagram.js`,
+   `_schema.js` type-dispatch, `exam-play.js`, `css/exam.css` dark-ink-on-white overrides).
+   A `diagram.spec.type === "function"` routes to `js/engine/function-graph.js`; every spec
+   is measured by `verifyFunction` at validation time (a point off its curve fails the
+   harness). The four seeded Functions questions got their sketches.
+2. **Engine polish** (`function-graph.js`): ONE placer for every label — axis letters,
+   curve names (placed on the curve's normal), asymptote captions (`asymptotes[].label`),
+   vline captions (`vlines[].label`), point labels — all dodge axes/curves/dashed lines/
+   each other; weighted least-bad fallback; a labelled point must sit ≥ 0,5 units inside
+   the window. Audit over 2 268 figures: 1 861 label faults → 158 (all in random chapter
+   graphs with no free slot), 0 in exam specs.
+3. **31 sibling cards** from her digest (`js/exam/func-siblings-*.js`, 8 files): every
+   Functions tile now has 6 cards (17 → 48). Every card has a to-scale sketch.
+4. **THE REVEAL RULE** (now in `_schema.js`'s diagram comment): the question side never
+   shows the answer; the reveal side ALWAYS DRAWS it — asymptote/axis/tangent/`y = k`
+   answers as dashed captioned lines, shifted graphs as a second tone-b curve with its own
+   captioned asymptotes, inequality answers as shaded strips bounded by the cut lines,
+   lengths as the segment at its true x. Highlight sets accept `curves`, `asymptotes`,
+   `vlines`, `shades`, `points`, `segment`, `bare`.
+5. **Wording pass**: 11 "from (a)" back-references on split cards reworded to state the
+   fact; `formulaHtml` no longer nowraps a PROSE bracket.
+6. **WHOLE-APP SWEEP (her bedtime ask, done by Fable itself)** — every chapter, every
+   round, 25 generated questions per skill + every concept card, rendered through the real
+   pipeline at 375 px and checked by `scratchpad/sweep.py` (now in `tools/sweep.py`):
+   - **stacked fractions are UNIVERSAL**: `fracHtml` runs at every insertion boundary
+     (questions.js `fmt`, modal cards + titles, play.js method box); `q.stackFractions` /
+     `c.fractions` are no-ops kept for history. Tree-diagram branch probabilities are
+     stacked in SVG by `tree-graph.js` itself. Prose slashes (`add/subtract`, `Left/right`,
+     `yes/no`) stay slashes; `0°/360°` axis labels stay; `rise/run`, `O/H` stack.
+     Fraction regex learned: decimal commas (`0,08/12`), `i_nom/n`, `f(x)/g(x)`,
+     `sin 30°/cos 60°`, `a/sinĈ`, `1/x⁻ᵃ`, groups containing `<sub>` tags, a coefficient
+     before a bracket (`3(n + 1)/4` → 3·[stack]), fractions right after a `>` tag.
+   - **recogniser misses closed**: `cos(90° + x) = −sin x` is ONE unit (a right-hand side
+     may open with a minus — her `90 + x` case); `ax² + bx + c`, `an² + bn + c`, `MN·MP`
+     letter runs are atoms; `½`-style fractions are numbers; `sinM̂`/`cosA` are function
+     atoms; `→ ⟹ ∴` chain a worked line; juxtaposition after a number (`½ ab sin C`,
+     `5 cm`) glues; 2-letter English words never become atoms.
+   - **the real CSS safety net**: `.fml .nowrap` is a shrink-to-fit inline-block with
+     normal white-space + max-width:100% — one line whenever it fits, wraps INSIDE only
+     when wider than the screen (overflow-wrap under nowrap was inert; 150 overflows → 0).
+   - Final sweep: 0 split expressions, 0 real slash fractions, 0 page overflows; the 257
+     remaining "breaks" are prose sentences using `=`/`×` as words.
+7. sw v57 → **v58**.
+
+Spend: ≈ 2,5M agent tokens across 8 sessions + foreman reviews (her ruling: don't stress
+the tokens, make the graphs look good).
+
+### ⏳ Pending on Megan
+- 📱 5 min [whenever]: Exam Focus → Functions → any tile → play two cards through to the
+  reveal, then one General Trig round and one Stats round (fractions) — say what looks off.
+- 🌐 1 min [whenever]: remove Janko from the roster before the kids get access.
+
+### Next up
+- Siblings for eqn → exp → gtrig the same way (6 per tile, reveal rule, PNG review);
+  Identities + Super Special Sums first cards.
+- Small sketch nits to re-look at with her: `ineq.q2`'s three crowded x-axis labels;
+  `sh.q3(b)`'s `(0 ; −3)` at a three-line crossing; `dist.q1(c)` draws the full line AB
+  (no diagonal-segment primitive yet).
+- XP: 75 XP + 10 💎 per card × 48 Functions cards — her call whether to re-tune (migration).
+- `css/exam.css` is missing from `sw.js`'s SHELL precache list (spotted, not touched).
+
+## 📌 Decisions (append-only, 2026-08-23)
+- A reveal DRAWS what it found (lines dashed + captioned, shifted graphs as a second curve,
+  inequalities as painted strips). Question side never leaks the answer.
+- Stacked fractions everywhere, app-wide; prose word-pairs keep their slash.
+- An expression never splits across a line; only a piece wider than the screen may wrap
+  inside itself.
+- Every sketch state gets looked at as a PNG before it ships (the PNG harnesses live in
+  `tools/`).
+
+---
+
+# (previous head) # Project status — updated 2026-08-22 late (📐 FORMULA LINE-BREAK SWEEP built + reviewed, sw v57 LOCAL — ship waits on her word)
 
 ## 📐 2026-08-22 (late) — FORMULA LINE-BREAK SWEEP, app-wide (stage 1 of exam skills approved)
 

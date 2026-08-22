@@ -10,8 +10,8 @@ export function openConcept(conceptId, onClose) {
   const modal = el("div", "modal");
   modal.innerHTML = `
     <div class="mhead"><span class="meyebrow">Quick recap</span><button class="link-btn close" aria-label="Close">✕</button></div>
-    <h2>${formulaHtml(xbarHtml(c.title))}</h2>
-    <div class="concept">${c.fractions ? formulaHtml(fracHtml(xbarHtml(c.body))) : formulaHtml(xbarHtml(c.body))}</div>`;
+    <h2>${formulaHtml(fracHtml(xbarHtml(c.title)))}</h2>
+    <div class="concept">${formulaHtml(fracHtml(xbarHtml(c.body)))}</div>`;   // fracHtml universal (whole-app sweep, 2026-08-23)
   const btn = el("button", "btn primary big", "Got it — back to a question");
   modal.appendChild(btn);
   scrim.appendChild(modal);

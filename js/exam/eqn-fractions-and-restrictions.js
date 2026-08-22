@@ -125,10 +125,10 @@ const q1 = {
         en: "The equation &nbsp;x/(x − 2) + 2/(x + 1) = k/(x² − x − 2) &nbsp;has EQUAL roots for one value of k.<br>Determine that value of k, and write down the equal root.",
       },
       hint: {
-        en: "Run the same LCD step as (b), but leave k where the 6 was. You will get a quadratic with k in it — and equal roots always means one particular thing about Δ.",
+        en: "Run the same LCD step — multiply through by (x − 2)(x + 1) — but leave k where the 6 was. You will get a quadratic with k in it — and equal roots always means one particular thing about Δ.",
       },
       memo: [
-        { type: "step", text: { en: "The same LCD step as (b), with k in place of 6: &nbsp;x(x + 1) + 2(x − 2) = k &nbsp;⟹&nbsp; x² + 3x − 4 − k = 0" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Multiply through by the LCD (x − 2)(x + 1), with k in place of 6: &nbsp;x(x + 1) + 2(x − 2) = k &nbsp;⟹&nbsp; x² + 3x − 4 − k = 0" }, ticks: ["s/f"] },
         { type: "step", text: { en: "for equal roots, Δ = 0: &nbsp;(3)² − 4(1)(−4 − k) = 9 + 16 + 4k = 25 + 4k = 0" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ k = −25/4 = −6,25" }, ticks: ["a"] },
         { type: "answer", text: { en: "the equal root is x = −b/(2a) = −3/(2(1)) = −3/2 = −1,5 &nbsp;— and −1,5 is not a limit, so it stands" }, ticks: ["a"] },
@@ -137,7 +137,7 @@ const q1 = {
         } },
       ],
       esplain: {
-        en: "Two topics meet in this part, which is why it carries the star. The fraction side is unchanged: clear the denominators exactly as in (b) and you are left with an ordinary quadratic — except the constant now carries an unknown k inside it. From there it is pure nature-of-roots: equal roots means Δ is exactly zero, no range and no inequality, so setting Δ = 0 pins k down to a single number. Once k is fixed the ± in the quadratic formula has nothing left to add or subtract, so the one surviving root is simply −b/(2a). The last line is the one that makes it a FRACTION question again: that root still has to clear the limits from (a) before you are allowed to write it down.",
+        en: "Two topics meet in this part, which is why it carries the star. The fraction side is unchanged: clear the denominators exactly as before — multiply through by (x − 2)(x + 1) — and you are left with an ordinary quadratic — except the constant now carries an unknown k inside it. From there it is pure nature-of-roots: equal roots means Δ is exactly zero, no range and no inequality, so setting Δ = 0 pins k down to a single number. Once k is fixed the ± in the quadratic formula has nothing left to add or subtract, so the one surviving root is simply −b/(2a). The last line is the one that makes it a FRACTION question again: that root still has to clear the limits x ≠ 2 and x ≠ −1 before you are allowed to write it down.",
       },
     },
   ],

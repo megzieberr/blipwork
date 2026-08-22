@@ -103,8 +103,26 @@ export function stackFrac(n, d, sign = "") {
 // an atom: √?( … ) with one level of nesting, or a short token that may carry
 // its own √ (2√5, √3) and an optional trailing angle letter (sin θ, cos x).
 // Written as ONE regex literal (no string escaping to get wrong).
-const FRAC_RE = /(^|[^A-Za-z0-9°<>\/√])(√?\((?:[^()<>\/]|\([^()<>\/]*\))*\)|[−-]?[A-Za-z0-9θαβπ²³√]+(?:\s?[θxαAβ](?![A-Za-z]))?)\s*\/\s*(√?\((?:[^()<>\/]|\([^()<>\/]*\))*\)|[−-]?[A-Za-z0-9θαβπ²³√]+(?:\s?[θxαAβ](?![A-Za-z]))?)(?![°\/A-Za-z0-9])/g;
+// Tokens may carry a decimal comma/point (0,08/12 — finance), an underscore
+// (i_nom/n), super/subscript glyphs (1/x⁻ᵃ, xᵃ/yᵃ), ℓ, a combining hat
+// (a/sin Â, x/sinB̂); a bracket group may be led by a short function/name
+// (f(x)/g(x), sin(x)/2) and may contain HTML tags ((x<sub>1</sub> + x<sub>2</sub>)/2)
+// — so the WHOLE numerator/denominator goes over the bar, never just its
+// tail (WHOLE-APP SWEEP, 2026-08-23, her ruling: every fraction in every
+// round is a stacked fraction).
+const FRAC_RE = /(^|[^A-Za-z0-9°<\/√_,.])((?:sin|cos|tan)[²³]?\s?(?:[0-9]+(?:[.,][0-9]+)?°?|[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z])|\((?:[^()<>\/]|<[^>]*>)*\))|(?:[0-9]*[A-Za-z]{0,3})?√?\((?:[^()<>\/]|<[^>]*>|\((?:[^()<>\/]|<[^>]*>)*\))*\)|[−-]?[A-Za-z0-9θαβπℓ°²³√_¹⁰-ₜʰ-˿ᴬ-ᵪ̀-ͯ]+(?:[.,][0-9]+)?(?:\s?[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z]))?)\s*\/\s*((?:sin|cos|tan)[²³]?\s?(?:[0-9]+(?:[.,][0-9]+)?°?|[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z])|\((?:[^()<>\/]|<[^>]*>)*\))|(?:[0-9]*[A-Za-z]{0,3})?√?\((?:[^()<>\/]|<[^>]*>|\((?:[^()<>\/]|<[^>]*>)*\))*\)|[−-]?[A-Za-z0-9θαβπℓ°²³√_¹⁰-ₜʰ-˿ᴬ-ᵪ̀-ͯ]+(?:[.,][0-9]+)?(?:\s?[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z]))?)(?![\/A-Za-z0-9_²³¹⁰-ₜʰ-˿ᴬ-ᵪ])/g;
 const strip = a => (a.startsWith("(") && a.endsWith(")") ? a.slice(1, -1) : a);
+// PROSE slashes stay slashes: "Left/right", "add/subtract", "prism/pyramid",
+// "power/root" are word pairs, not fractions. A slash between two ordinary
+// words (3+ letters each) is prose — except the ratio words she really does
+// write over a bar (rise/run, opposite/adjacent, sin/cos …).
+const FRAC_WORD_OK = new Set(["rise/run", "opposite/adjacent", "opposite/hypotenuse", "adjacent/hypotenuse", "sin/cos", "cos/sin", "sinθ/cosθ", "change/time", "distance/time"]);
+function fracIsProse(n, d) {
+  const a = strip(n).replace(/^[−-]/, ""), b = strip(d);
+  if (!/^[A-Za-z]+$/.test(a) || !/^[A-Za-z]+$/.test(b)) return false;
+  if (a.length < 3 && b.length < 3 && !(a.length === 2 && /^[A-Z]/.test(a))) return false;   // a/b, p/q, O/H — real fractions; "Up/down" is not
+  return !FRAC_WORD_OK.has((a + "/" + b).toLowerCase());
+}
 export function fracHtml(s) {
   if (s == null) return s;
   // built fractions are parked as tokens while the loop runs, so the "/" in
@@ -114,9 +132,13 @@ export function fracHtml(s) {
   for (let i = 0; i < 4 && out !== prev; i++) {
     prev = out;
     out = out.replace(FRAC_RE, (m, pre, n, d) => {
-      let sign = "";
+      if (fracIsProse(n, d)) return m;
+      if (/^[0-9]+°$/.test(n) && /^[0-9]+°$/.test(d)) return m;            // 0°/360° — an axis label, not a fraction (tgraph)
+      let sign = "", coef = "";
       if (/^[−-]/.test(n)) { sign = "−"; n = n.slice(1); }
-      parked.push(stackFrac(strip(n), strip(d), sign));
+      const cm = /^([0-9]+)(\(.*\))$/.exec(n);                              // 3(n + 1)/4 → 3 · [(n + 1) over 4]
+      if (cm) { coef = cm[1]; n = cm[2]; }
+      parked.push(sign + coef + stackFrac(strip(n), strip(d), ""));
       return pre + "" + (parked.length - 1) + "";
     });
   }
@@ -152,8 +174,14 @@ export function fracHtml(s) {
         Unicode-super/subscript tails: ² ³ ⁻ ⁿ ˣ ᵃᵇᵖᵏ ₁₂ₙₖ …), `sin/cos/
         tan/log/ln` (+ optional bracket or angle argument), and bracketed
         groups `( … )`/`[ … ]` (balanced, arbitrary nesting, optional √
-        prefix) — a bracket group is always ONE atom, so nothing inside
-        it is ever considered a break point. Atoms glue into the SAME
+        prefix) — a bracket group is ONE atom UNLESS it reads as prose
+        (3+ ordinary words of 3+ letters inside it — "(There is a quick
+        check available: …)"), in which case it is not an atom at all
+        and is left as ordinary breakable text (session 3 fix, her /go
+        ruling 2026-08-22: swallowing a prose aside whole is what pushed
+        a phone page wider than its screen). A genuine maths bracket
+        group, once recognised, still has nothing inside it treated as
+        a break point. Atoms glue into the SAME
         piece across `·`, `×`, `/` or plain juxtaposition (`2x`, `4√3`,
         `3ˣ · 3`); a relational or +/−/± sign starts a NEW piece, taking
         the sign with it. Each maximal run of atoms becomes one
@@ -276,9 +304,58 @@ function fmlMatchBracketGroup(str, i) {
   }
   return depth === 0 ? j : null;
 }
+// a bracket group reads as PROSE (not maths) when its inner text carries a
+// run of 3+ ordinary words (3+ letters each) — "(There is a quick check
+// available: …)", "(see the sketch below)". Real maths brackets never do:
+// "(a − b)(a + b)", "(x + 1)(x − 4)", "(using the sine rule)" (the last is
+// already caught earlier, by stage 1's own using/use rule, before stage 3
+// ever sees it). A prose bracket must NOT become one opaque nowrap atom —
+// swallowing it whole is exactly what pushed the phone page wider than the
+// screen (bda60e1's sweep, session 3 fix, her /go ruling 2026-08-22).
+// WHOLE-APP SWEEP (2026-08-23) loosened the test: "(upper boundary of the
+// class ; cumulative frequency)" slipped through the old three-in-a-row
+// rule because "of" is two letters. Now: two or more ordinary words of 3+
+// letters ANYWHERE in the bracket, or four or more words of 2+ letters —
+// with sin/cos/tan/log/ln (and their powers) not counting as words, so
+// "(sin θ + cos θ)" and "(cos² x − sin² x)" stay maths.
+const FML_MATHWORDS = new Set(["sin", "cos", "tan", "log", "ln", "sec", "cosec", "cot", "sqrt"]);
+function fmlBracketIsProse(str, i, j) {
+  const inner = str.slice(i + 1, j - 1);
+  const words = (inner.match(/[A-Za-z]{2,}/g) || []).filter(w => !FML_MATHWORDS.has(w.toLowerCase()));
+  const long = words.filter(w => w.length >= 3).length;
+  return long >= 2 || words.length >= 4;
+}
 function fmlMatchNumber(str, i) {
-  const m = /^[0-9]+(?:[.,][0-9]+)?/.exec(str.slice(i));
+  const m = /^(?:[0-9]+(?:[.,][0-9]+)?|[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])/.exec(str.slice(i));   // a vulgar ½ is a number too (Area = ½·MN·MP·sinM̂)
   return m ? i + m[0].length : null;
+}
+// combining diacritics (the hat on M̂, the bar on x̄) ride with their letter
+const FML_COMBINING_RE = /[̀-ͯ]/;
+// a SHORT letter run as a variable/name atom (WHOLE-APP SWEEP, 2026-08-23 —
+// `ax² + bx + c`, `Tn = an² + bn + c`, `MN·MP` were unprotected and broke
+// mid-expression on her phone). Accepted only in clear maths context, so
+// English words stay prose:
+//   · 1–3 letters carrying an exponent/subscript (ax², an², Tn₁)
+//   · 2–3 CAPITALS — a segment/point name (MN, AB, PQR)
+//   · 1–2 letters with an operator on at least one side (+ bx, = ab, MN·MP)
+const FML_WORDS2 = new Set(["to", "of", "in", "on", "at", "by", "is", "it", "as", "or", "an", "if", "so", "do", "no", "be", "we", "he", "me", "my", "up", "us", "go", "am", "ok", "vs", "re"]);
+function fmlMatchLetterRun(str, i) {
+  if (!fmlIsVarLetter(str[i]) || fmlIsLetter(str[i - 1]) || str[i - 1] === "'") return null;
+  let j = i;
+  while (j < str.length && (fmlIsVarLetter(str[j]) || FML_COMBINING_RE.test(str[j]))) j++;
+  if (str[j] === "'") return null;
+  const run = str.slice(i, j).replace(FML_COMBINING_RE, "");
+  if (run.length > 3) return null;
+  if (run.length === 1) return j;                                       // the single-letter rule, as before
+  if (str[j] && (FML_SUP_RE.test(str[j]) || str[j] === "^" || str[j] === FML_PH)) return j;
+  if (/^[A-Z]{2,3}$/.test(run)) return j;
+  if (run.length === 2 && !FML_WORDS2.has(run.toLowerCase())) {
+    let p = i - 1; while (p >= 0 && str[p] === " ") p--;
+    let n = j;     while (n < str.length && str[n] === " ") n++;
+    const OPS = "+−±=≠<>≤≥·×/√(";
+    if ((p >= 0 && OPS.includes(str[p])) || (n < str.length && "+−±=≠<>≤≥·×/)".includes(str[n]))) return j;
+  }
+  return null;
 }
 // trailing superscript/subscript attachments: zero or more, directly
 // touching, no space — an exponent NEVER breaks off its base
@@ -303,7 +380,7 @@ function fmlMatchFuncAtom(str, i) {
   const m = FML_FUNC_RE.exec(str.slice(i));
   if (!m) return null;
   let j = i + m[0].length;
-  if (fmlIsLetter(str[j])) return null;
+  if (fmlIsLetter(str[j]) && !(/[A-Z]/.test(str[j]) && !fmlIsLetter(str[j + 1]))) return null;   // "cost"/"tangent" are words; "sinM̂"/"cosA" are not
   j = fmlMatchSupTail(str, j);
   if (str[j] === "(" || str[j] === "[") {
     const b = fmlMatchBracketGroup(str, j);
@@ -313,6 +390,10 @@ function fmlMatchFuncAtom(str, i) {
     if (str[k] === " ") k++;
     if (str[k] === "x" || (str[k] && FML_GREEK.includes(str[k]))) {
       if (!fmlIsLetter(str[k + 1])) j = k + 1;
+    } else if (/[A-Z]/.test(str[k] || "") && !fmlIsLetter(str[k + 1])) {
+      // a capital angle name, hatted or not: sinM̂, cos A, tanB̂ (never "cost")
+      j = k + 1;
+      while (str[j] && FML_COMBINING_RE.test(str[j])) j++;
     } else {
       const nm = fmlMatchNumber(str, k);
       if (nm != null) { j = nm; if (str[j] === "°") j++; }
@@ -321,17 +402,26 @@ function fmlMatchFuncAtom(str, i) {
   return j;
 }
 function fmlMatchAtomCore(str, i) {
-  if (str[i] === "(" || str[i] === "[") return fmlMatchBracketGroup(str, i);
+  if (str[i] === "(" || str[i] === "[") {
+    const end = fmlMatchBracketGroup(str, i);
+    // a prose bracket is not an atom at all — fall through to null so the
+    // scanner leaves it as ordinary breakable text (a lone "(" matches
+    // none of the branches below either, so this really does mean "not
+    // maths here", not "try something else at the same position")
+    if (end == null || fmlBracketIsProse(str, i, end)) return null;
+    return end;
+  }
   if (str[i] === FML_PH) return i + 1;
   const fn = fmlMatchFuncAtom(str, i);
   if (fn != null) return fn;
   const num = fmlMatchNumber(str, i);
   if (num != null) return num;
-  // a single letter counts as a variable atom only with a real word
-  // boundary on both sides — not a letter, and not an apostrophe (a
-  // contraction: don't/isn't/it's/let's, never a maths token)
-  const before = str[i - 1], after = str[i + 1];
-  if (fmlIsVarLetter(str[i]) && !fmlIsLetter(before) && before !== "'" && !fmlIsLetter(after) && after !== "'") return i + 1;
+  // a short letter run as a variable/name atom — a single letter with a real
+  // word boundary on both sides (not a letter, not an apostrophe: don't /
+  // it's are never maths), or a 2–3 letter run in clear maths context
+  // (see fmlMatchLetterRun)
+  const run = fmlMatchLetterRun(str, i);
+  if (run != null) return run;
   return null;
 }
 // one atom: optional leading unary sign (only when it opens a fresh
@@ -347,7 +437,9 @@ function fmlMatchAtom(str, i, allowLeadingSign) {
   if (str[j] === "°" || str[j] === "%") j++;
   return j;
 }
-const FML_REL_OPS = ["≠", "≤", "≥", "≈", "=", "<", ">"];
+// `→ ⟹ ∴` join a worked chain (2x + 3 = 11 → x = 4) the same way `=` does:
+// one unit, breakable only at the arrow when too wide for the screen
+const FML_REL_OPS = ["≠", "≤", "≥", "≈", "=", "<", ">", "⟹", "→", "∴"];
 // a relational sign, or +/−/± — the only places a piece may break, the
 // sign always leading the NEW piece
 function fmlMatchBreakOp(str, i) {
@@ -362,8 +454,19 @@ function fmlMatchBreakOp(str, i) {
 function fmlMatchGlueThenAtom(str, i) {
   let j = i;
   if (str[j] === " ") j++;
-  if (str[j] === "·" || str[j] === "×" || str[j] === "/") { j++; if (str[j] === " ") j++; }
-  return fmlMatchAtom(str, j, false);
+  if (str[j] === "·" || str[j] === "×" || str[j] === "/") { j++; if (str[j] === " ") j++; return fmlMatchAtom(str, j, false); }
+  if (j === i) return fmlMatchAtom(str, j, false);                       // touching: 2x, 4√3
+  // ONE space = juxtaposition, but only for things that are unmistakably
+  // maths on the right: a sin/cos/tan atom, or — after a number — a short
+  // letter run (½ ab, 2 ab sin C, 5 cm); never "2 of", "4 or" (stoplist)
+  if (fmlMatchFuncAtom(str, j) != null) return fmlMatchAtom(str, j, false);
+  const prevIsNumber = /[0-9½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞²³]/.test(str[i - 1] || "");
+  if (prevIsNumber && fmlIsVarLetter(str[j])) {
+    let k = j; while (k < str.length && fmlIsVarLetter(str[k])) k++;
+    const run = str.slice(j, k);
+    if (run.length <= 2 && !FML_WORDS2.has(run.toLowerCase()) && !fmlIsLetter(str[k]) && str[k] !== "'") return fmlMatchSupTail(str, k);
+  }
+  return null;
 }
 // one maximal expression starting exactly at i, or null
 function fmlTryExpression(str, i) {
@@ -378,7 +481,11 @@ function fmlTryExpression(str, i) {
     if (brk) {
       let k = brk.opEnd;
       if (str[k] === " ") k++;
-      const opEnd = fmlMatchAtom(str, k, false);
+      // after a RELATIONAL sign the right-hand side may open with its own
+      // unary minus — `cos(90° + x) = −sin x` is ONE expression, not two
+      // (her phone: it broke straight after the bracket)
+      const relational = !"+−±-".includes(str[brk.opStart]);
+      const opEnd = fmlMatchAtom(str, k, relational);
       if (opEnd != null) { pieces.push({ start: brk.opStart, end: opEnd }); cur = opEnd; continue; }
     }
     break;
@@ -441,7 +548,13 @@ export function formulaHtml(s) {
   if (s == null) return s;
   let out = String(s);
   // 1) a trailing formula bracket moves to a new line (unchanged)
-  out = out.replace(/\s\((\b(?:using|use)\b[^()]*|[^()]*[°θ±√][^()]*)\)(?=[.?!:]?(?:\s*<br>|\s*$|\s*<\/))/g, (m, inner) => `<br>${NW(`(${inner})`)}`);
+  //    … unless the bracket is a PROSE aside — "(use the marked cycle to
+  //    find the period first)" is a sentence, not a formula; forcing it onto
+  //    one unbreakable line pushed the page wider than the phone (whole-app
+  //    sweep, 2026-08-23). "(using 90° − θ)" / "(using the sine rule)" still
+  //    move whole.
+  out = out.replace(/\s\((\b(?:using|use)\b[^()]*|[^()]*[°θ±√][^()]*)\)(?=[.?!:]?(?:\s*<br>|\s*$|\s*<\/))/g, (m, inner) =>
+    (inner.length > 26 && fmlBracketIsProse(`(${inner})`, 0, inner.length + 2)) ? m : `<br>${NW(`(${inner})`)}`);   // a short "(using the sine rule)" still moves whole
   // 2) " · "-separated identities in a .formula block each get a line (unchanged)
   out = out.replace(/(<div class="formula">)([\s\S]*?)(<\/div>)/g, (m, a, body, b) => a + body.replace(/(?:\s|&nbsp;)+·(?:\s|&nbsp;)+/g, "<br>") + b);
   // 3) the general expression recogniser — every remaining maths expression

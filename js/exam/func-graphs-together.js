@@ -13,18 +13,20 @@
                                     the 6,25 that appears in her notes)
    Same working, same ticks, same WATCH OUT / REMEMBER cards as print.
 
-   ⚠️ THE SKETCH. As in js/exam/func-hyperbola-and-exponential.js, the
-   printed question carries a to-scale TikZ graph and the schema has no
-   diagram field, so the stem states the same facts in words — which is
-   what the print memo's own \stam line does. Both equations were
-   already printed in the QP's text (not only drawn), and A(−1 ; 0) is
-   labelled on the sketch, so nothing is added or withheld here. The
-   blueprint's diagram-leak check notes the printed PQ is deliberately
-   drawn at x = 3,5, NOT at the maximum x = 2 — a words-only stem cannot
-   leak that either, since it never says where PQ sits.
-   Good candidate for the future diagram engine: f(x) = −x² + 6x + 7,
-   g(x) = 2x + 2, A(−1 ; 0) and C(5 ; 12) marked, one vertical PQ drawn
-   somewhere between them but away from x = 2.
+   THE SKETCH. As in js/exam/func-hyperbola-and-exponential.js, the
+   printed question carries a to-scale TikZ graph; when this was written
+   the schema had no diagram field yet, so the stem states the same
+   facts in words instead — which is what the print memo's own \stam
+   line does. Both equations were already printed in the QP's text (not
+   only drawn), and A(−1 ; 0) is labelled on the sketch, so nothing was
+   added or withheld by going words-only. The blueprint's diagram-leak
+   check notes the printed PQ is deliberately drawn at x = 3,5, NOT at
+   the maximum x = 2 — SESSION 1's `diagram` block below (2026-08-22)
+   keeps exactly that discipline: f, g, A(−1 ; 0) and a bare "C" (no
+   coordinates — the stem never gives them either) sit on the base
+   figure, PQ is drawn at x = 3,5 as the SAME illustrative, non-maximal
+   position print used, and the true maximum (at x = 2, length 9) only
+   ever appears on (b)'s own reveal, replacing the illustrative segment.
 
    METHOD: GR11-FUNCTIONS-NOTES-DIGEST.md, hers — happy/sad, the range
    of a sad parabola runs down from its maximum, x = −b/(2a) then
@@ -43,13 +45,64 @@
    the print memo's three ★ parts, and the schema's level === 4 puts the
    amber star on exactly those two. ✓
 
-   ⚠️ UNREGISTERED. Same four registration steps as
-   js/exam/func-hyperbola-and-exponential.js's header (index.js,
-   EXAM_CHAPTERS, the missing func scope wall, and the Part 2
-   pilot-only assertions).
+   REGISTERED via js/exam/cards-func.js (imported there, folded into
+   funcCards), which js/exam/index.js's REGISTRY.func picks up; func is
+   in js/config.js's EXAM_CHAPTERS. (This note used to say ⚠️
+   UNREGISTERED — that was true before cards-func.js wired it in;
+   corrected session 3, 2026-08-23.)
    ============================================================ */
 
 const PAPER = "sept-t1";
+
+/* DIAGRAM (SESSION 1, 2026-08-22). f(x) = −x² + 6x + 7 (a sad
+   parabola, TP(3 ; 16), y-intercept 7), g(x) = 2x + 2, A(−1 ; 0) and
+   C(5 ; 12) — every number read from the memo above. The base figure
+   carries only what the STEM itself gives: both equations (drawn as
+   the real curves — always honest, same rule everywhere), A fully
+   labelled, C as a bare letter (the stem names C but never its
+   coordinates, and no part below asks for them either — so a bare dot
+   matches the print sketch without adding information the words
+   don't have), and PQ at x = 3,5 — the SAME illustrative, non-maximal
+   position the print TikZ sketch used (see the header note). TP and
+   the y-intercept are what (a) and (c) have to FETCH (their own memos
+   say so — (c) is starred exactly because those two facts are nowhere
+   in the question), so neither is on the base figure or on (c)'s
+   question side — only (a)'s own reveal marks TP, and (c)'s reveal
+   marks both, as confirmation after the numbers are already known. */
+const FG_F = { kind: "parabola", a: -1, b: 6, c: 7 };
+const FG_G = { kind: "line", a: 2, q: 2 };
+const FG_A = { x: -1, y: 0, on: [0, 1], label: "A(−1 ; 0)" };
+const FG_C = { x: 5, y: 12, on: [0, 1], label: "C" };
+const FG_TP = { x: 3, y: 16, on: 0, label: "TP(3 ; 16)", place: "above" };
+const FG_YINT = { x: 0, y: 7, on: 0, label: "(0 ; 7)" };
+/* (c)'s answer, 7 < t < 16, is a BAND between two horizontal lines — the
+   sliding line y = t may live between them and nowhere else. SESSION 2a-FIX
+   draws both boundaries on (c)'s reveal, dashed and named, beside the two
+   points that fix them ("the reveal draws what it found", js/exam/_schema.js). */
+const FG_T_LINES = [
+  { kind: "line", a: 0, q: 16, dash: true, tone: "c", label: "y = 16", labelAt: 6.6 },
+  { kind: "line", a: 0, q: 7, dash: true, tone: "c", label: "y = 7", labelAt: -2 },
+];
+const FG_DIAGRAM = {
+  spec: {
+    type: "function",
+    win: { xmin: -3, xmax: 8, ymin: -4, ymax: 18 },   // xmax 8, not 7: f cuts the x-axis at x = 7, which on a 7-wide window landed exactly on the axis arrowhead and its “x” letter (SESSION 1b)
+    curves: [
+      { ...FG_F, tone: "a", label: "f", labelAt: 5.5 },
+      { ...FG_G, tone: "b", label: "g", labelAt: -2.3 },
+    ],
+    points: [FG_A, FG_C],
+    segment: { x: 3.5, fromCurve: 0, toCurve: 1, label: "PQ" },   // illustrative — print's own x, not the answer
+  },
+  parts: {
+    a: { question: {}, reveal: { points: [FG_TP] } },             // TP is (a)'s own answer
+    b: {
+      question: {},                                               // base PQ (x=3,5) is enough
+      reveal: { segment: { x: 2, fromCurve: 0, toCurve: 1, label: "PQ" } },  // the true maximum — reveal only
+    },
+    c: { question: {}, reveal: { points: [FG_TP, FG_YINT], curves: FG_T_LINES } },   // both facts confirmed AND the band they bound — reveal only
+  },
+};
 
 const t1q5 = {
   id: "func.gt.t1q5",
@@ -57,6 +110,7 @@ const t1q5 = {
   topic: "graphs-together",
   archetype: "parabola-and-line-max-segment-plus-sliding-line",
   paper: PAPER,
+  diagram: FG_DIAGRAM,
   // fn7 "Graphs together — Intersections, f vs g, nature of roots,
   // average gradient, max length." Every skill this question needs is
   // named in that round's own blurb.

@@ -10,16 +10,16 @@
    (her pp52–58, f(x) = k slides a horizontal line). Transformations
    (her pp19–24) carry the middle. Fresh intercepts, fresh point.
 
-   ⚠️ DIAGRAM-LIGHT ON PURPOSE, and this is the run's standing ruling
-   for functions top-ups. The schema has NO diagram field and the pilot
-   sets no visual precedent, so rather than describe a sketch a learner
-   cannot see, this question is composed in the "equation from a
-   DESCRIPTION" form: every fact the sketch would have carried is
-   stated in the stem as words and coordinates. Nothing is lost — her
-   notes' route 1 needs only the two x-intercepts and one more point,
-   and all three are given. When the diagram engine lands
-   (EXAM-FOCUS-PLAN.md build order step 3) this question can gain a
-   sketch without a single word of the memo changing.
+   ORIGINALLY DIAGRAM-LIGHT ON PURPOSE (overnight run #1): the schema
+   had no diagram field yet, so this question was composed in the
+   "equation from a DESCRIPTION" form — every fact a sketch would have
+   carried is stated in the stem as words and coordinates instead.
+   SESSION 1 (2026-08-22, function-graph engine wired in) added the
+   `diagram` block below without touching a single word of the stem or
+   memo, exactly as planned: the sketch only ever shows what the words
+   already say (or what an earlier part's own memo already revealed),
+   never the turning point or the k-range ahead of the part that finds
+   them — see the `diagram.parts` comments inline.
 
    SKELETON DISTANCE — checked against Sept T1 Q4 and Q5:
      · T1 Q4 is a HYPERBOLA (equation from asymptotes + a point).
@@ -46,10 +46,55 @@
    LEVELS: 2, 2, 1, 3, 4 — ★ on (e), the only part whose deciding fact
    (the minimum value) is not written anywhere in the question.
 
-   ⚠️ UNREGISTERED — same four registration steps as
-   js/exam/func-hyperbola-and-exponential.js's header, including the
-   missing `func` scope wall in verify-exam.html Part 6.
+   REGISTERED via js/exam/cards-func.js (imported there, folded into
+   funcCards), which js/exam/index.js's REGISTRY.func picks up; func is
+   in js/config.js's EXAM_CHAPTERS. (This note used to say ⚠️
+   UNREGISTERED — that was true before cards-func.js wired it in;
+   corrected session 3, 2026-08-23.)
    ============================================================ */
+
+/* DIAGRAM (SESSION 1, 2026-08-22). f(x) = 2x² − 6x − 8 = 2(x + 1)(x − 4),
+   TP(1,5 ; −12,5) — every number here is read straight off the memo
+   above, never invented. The base spec shows only what the STEM itself
+   states in words: the two x-intercepts and the y-intercept (0 ; −8) —
+   exactly the three given facts (a) works from. The turning point is
+   what (b) is ASKED to find, so it is never on the base spec; it is
+   added by (b)'s OWN reveal, and then carried (as an ALREADY-GIVEN
+   fact) into (c), (d) and (e)'s question side — every card that cuts
+   one of those three parts on its own gives the same fact through its
+   `intro` (js/exam/cards-func.js's PARABOLA string), so showing it
+   there is never ahead of what the learner has already been told. */
+const F1 = { kind: "parabola", a: 2, b: -6, c: -8 };
+const F1_TP = { x: 1.5, y: -12.5, label: "TP(1,5 ; −12,5)", on: 0, place: "above" };
+/* (e)'s answer is k < −12,5 — a FAMILY of horizontal lines with one boundary,
+   the line that just grazes the turning point. SESSION 2a-FIX draws that
+   boundary on (e)'s reveal (dashed, named), so "below the minimum" is
+   something the learner can see rather than only read: any line lower than
+   this one passes underneath the whole parabola. */
+const F1_K_BOUND = { kind: "line", a: 0, q: -12.5, dash: true, tone: "b", label: "y = −12,5", labelAt: -1.5 };
+/* (d)'s answer IS a graph — g = f shifted 2 left and 5 up — so (d)'s reveal
+   draws it (tone b, named) beside f, the same rule the axis-of-symmetry shift
+   cards follow. */
+const G1 = { kind: "parabola", a: 2, p: -0.5, q: -7.5, tone: "b", label: "g", labelAt: -2.2 };
+const F1_DIAGRAM = {
+  spec: {
+    type: "function",
+    win: { xmin: -3, xmax: 6, ymin: -15, ymax: 3 },
+    curves: [{ ...F1, tone: "a", label: "f", labelAt: -1.2 }],
+    points: [
+      { x: -1, y: 0, on: 0, label: "(−1 ; 0)" },
+      { x: 4, y: 0, on: 0, label: "(4 ; 0)" },
+      { x: 0, y: -8, on: 0, label: "(0 ; −8)" },
+    ],
+  },
+  parts: {
+    a: { question: {} },                                       // just the three given facts
+    b: { question: {}, reveal: { points: [F1_TP] } },           // TP is the answer — reveal only
+    c: { question: { points: [F1_TP] } },                       // TP already given (intro / chain)
+    d: { question: { points: [F1_TP] }, reveal: { points: [F1_TP], curves: [G1] } },
+    e: { question: { points: [F1_TP] }, reveal: { points: [F1_TP], curves: [F1_K_BOUND] } },
+  },
+};
 
 const q1 = {
   id: "func.lp.q1",
@@ -58,6 +103,7 @@ const q1 = {
   archetype: "parabola-equation-from-intercepts-then-shift-then-k-value",
   lostQuest: { chapter: "func", quest: "fn2" },
   marks: 13,
+  diagram: F1_DIAGRAM,
   parts: [
     {
       id: "a",
@@ -132,7 +178,7 @@ const q1 = {
         en: "The answer is asked for in turning-point form, so write f in turning-point form first — you already have its turning point. Then move that point, and leave a exactly as it is.",
       },
       memo: [
-        { type: "step", text: { en: "Write f in turning-point form first, using TP(1,5 ; −12,5) from (b): &nbsp;f(x) = 2(x − 1,5)² − 12,5" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Write f in turning-point form first, using TP(1,5 ; −12,5): &nbsp;f(x) = 2(x − 1,5)² − 12,5" }, ticks: ["s/f"] },
         { type: "step", text: { en: "two units left moves the turning point to x = 1,5 − 2 = −0,5 &nbsp;·&nbsp; five units up moves it to y = −12,5 + 5 = −7,5" }, ticks: ["ca"] },
         { type: "answer", text: { en: "g(x) = 2(x + 0,5)² − 7,5" }, ticks: ["a"] },
         { type: "trap", text: {
@@ -162,7 +208,7 @@ const q1 = {
         } },
       ],
       esplain: {
-        en: "Do not solve 2x² − 6x − 8 = k for x — picture the line instead. Every horizontal line y = k either cuts the parabola twice, touches it once, or misses it, and which of the three happens depends only on where k sits relative to the turning point. This parabola is happy, so it has a floor at −12,5: any line above that floor cuts both arms, a line exactly on it touches at one point, and any line below it passes underneath the whole graph and never meets it. That last case is the one asked for. The fact that decides it, the minimum, is nowhere in the question — you had to go and fetch it in (b), which is exactly why this part carries the star. If you would rather do it with algebra, the same answer comes out of Δ &lt; 0 for 2x² − 6x − 8 − k = 0, and both roads earn full marks.",
+        en: "Do not solve 2x² − 6x − 8 = k for x — picture the line instead. Every horizontal line y = k either cuts the parabola twice, touches it once, or misses it, and which of the three happens depends only on where k sits relative to the turning point. This parabola is happy, so it has a floor at −12,5: any line above that floor cuts both arms, a line exactly on it touches at one point, and any line below it passes underneath the whole graph and never meets it. That last case is the one asked for. The fact that decides it, the minimum −12,5, is not something you calculate here — it's a leftover from earlier work, sitting quietly above as given information while this part asks something new of it, which is exactly why this part carries the star. If you would rather do it with algebra, the same answer comes out of Δ &lt; 0 for 2x² − 6x − 8 − k = 0, and both roads earn full marks.",
       },
     },
   ],

@@ -100,6 +100,19 @@ import { funcHyperbolaAndExponentialQuestions } from "./js/exam/func-hyperbola-a
 import { funcHyperbolaAndExponentialT2Questions } from "./js/exam/func-hyperbola-and-exponential-2.js";
 import { funcGraphsTogetherQuestions } from "./js/exam/func-graphs-together.js";
 import { funcLineAndParabolaQuestions } from "./js/exam/func-line-and-parabola.js";
+/* SESSION 2a's four sibling modules — 15 fresh questions that this hand-
+   maintained SOURCES list did not know about, so Part 7 crashed on them
+   (added SESSION 2a-FIX, 2026-08-22). */
+import { funcFindEquationSiblingQuestions } from "./js/exam/func-siblings-find-equation.js";
+import { funcAsymptotesDomainRangeSiblingQuestions } from "./js/exam/func-siblings-asymptotes-domain-range.js";
+import { funcInterceptsTurningPointSiblingQuestions } from "./js/exam/func-siblings-intercepts-turning-point.js";
+import { funcAxisOfSymmetrySiblingQuestions } from "./js/exam/func-siblings-axis-of-symmetry.js";
+/* SESSION 2b's four sibling modules — 16 more fresh questions, the other
+   four Functions skill tiles (2026-08-22). */
+import { funcShiftSiblingQuestions } from "./js/exam/func-siblings-shift.js";
+import { funcInequalitiesSiblingQuestions } from "./js/exam/func-siblings-inequalities.js";
+import { funcNatureOfRootsSiblingQuestions } from "./js/exam/func-siblings-nature-of-roots.js";
+import { funcDistancesSiblingQuestions } from "./js/exam/func-siblings-distances.js";
 import { trigReductionAndRatiosQuestions } from "./js/exam/trig-reduction-and-ratios.js";
 import { trigGeneralSolutionsQuestions } from "./js/exam/trig-general-solutions.js";
 import { trigMixedProblemsQuestions } from "./js/exam/trig-mixed-problems.js";
@@ -282,7 +295,13 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   // seeded questions — 54 of them, cut skill by skill
   // (EXAM-SKILLS-BRIEF.md). Nothing was added to the bank and nothing
   // was dropped; Part 12 below proves that part by part.
-  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 4, meas: 0, func: 17, tgraph: 0, analytical: 0, pat: 0, exp: 12, eqn: 18, euclid: 2 };
+  // 2026-08-22 (SESSION 2a): func 17 -> 32. Fifteen SIBLING questions
+  // (js/exam/func-siblings-*.js) take four of the eight Functions tiles
+  // from one or two cards each to SIX, because "Another one!" ran dry.
+  // 2026-08-22 (SESSION 2b): func 32 -> 48. Sixteen more SIBLING questions
+  // take the remaining four Functions tiles — shift, inequalities,
+  // nature-of-roots and distances — to SIX cards each, so all eight now hold six.
+  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 4, meas: 0, func: 48, tgraph: 0, analytical: 0, pat: 0, exp: 12, eqn: 18, euclid: 2 };
   let countsOk = true;
   const countLines = [];
   allChapterIds.forEach(id => {
@@ -367,6 +386,43 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
     "func.hyp.t1q4": { chapter: "func", quest: "fn3" }, "func.hyp.t2q3": { chapter: "func", quest: "fn3" },
     "func.gt.t1q5": { chapter: "func", quest: "fn7" },
     "func.lp.q1": { chapter: "func", quest: "fn2" },
+    /* SESSION 2a's sibling questions — fn2 "Line & parabola" for the
+       parabola cards, fn3 "Hyperbola & exponential" for the rest. */
+    "func.sib.fe.q1": { chapter: "func", quest: "fn2" },
+    "func.sib.fe.q2": { chapter: "func", quest: "fn3" },
+    "func.sib.fe.q3": { chapter: "func", quest: "fn3" },
+    "func.sib.fe.q4": { chapter: "func", quest: "fn2" },
+    "func.sib.adr.q1": { chapter: "func", quest: "fn3" },
+    "func.sib.adr.q2": { chapter: "func", quest: "fn3" },
+    "func.sib.adr.q3": { chapter: "func", quest: "fn3" },
+    "func.sib.itp.q1": { chapter: "func", quest: "fn2" },
+    "func.sib.itp.q2": { chapter: "func", quest: "fn2" },
+    "func.sib.itp.q3": { chapter: "func", quest: "fn2" },
+    "func.sib.itp.q4": { chapter: "func", quest: "fn3" },
+    "func.sib.aos.q1": { chapter: "func", quest: "fn2" },
+    "func.sib.aos.q2": { chapter: "func", quest: "fn2" },
+    "func.sib.aos.q3": { chapter: "func", quest: "fn3" },
+    "func.sib.aos.q4": { chapter: "func", quest: "fn3" },
+    /* SESSION 2b's sibling questions — fn6 "Transformations" for the
+       shift cards, fn5 "Inequalities off a graph" for the inequality
+       ones, fn7 "Graphs together" for nature-of-roots and for the
+       distance cards, and fn3 for the hyperbola-branches one. */
+    "func.sib.sh.q1": { chapter: "func", quest: "fn6" },
+    "func.sib.sh.q2": { chapter: "func", quest: "fn6" },
+    "func.sib.sh.q3": { chapter: "func", quest: "fn6" },
+    "func.sib.sh.q4": { chapter: "func", quest: "fn6" },
+    "func.sib.ineq.q1": { chapter: "func", quest: "fn5" },
+    "func.sib.ineq.q2": { chapter: "func", quest: "fn5" },
+    "func.sib.ineq.q3": { chapter: "func", quest: "fn5" },
+    "func.sib.ineq.q4": { chapter: "func", quest: "fn5" },
+    "func.sib.nor.q1": { chapter: "func", quest: "fn7" },
+    "func.sib.nor.q2": { chapter: "func", quest: "fn7" },
+    "func.sib.nor.q3": { chapter: "func", quest: "fn7" },
+    "func.sib.dist.q1": { chapter: "func", quest: "fn7" },
+    "func.sib.dist.q2": { chapter: "func", quest: "fn7" },
+    "func.sib.dist.q3": { chapter: "func", quest: "fn7" },
+    "func.sib.dist.q4": { chapter: "func", quest: "fn7" },
+    "func.sib.dist.q5": { chapter: "func", quest: "fn3" },
     "trig.mix.t2q6": { chapter: "trig", quest: "t7" },
     /* RELINKED 2026-08-22 (stage 4 of the General Trig build): the two
        questions that shipped linkless now point at the rounds that
@@ -1310,7 +1366,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
    table BY HAND below — every skill, every card id, in her order — and
    checks the registry against it in both directions:
 
-     · every part of all 21 source questions appears on at least one
+     · every part of all 36 source questions appears on at least one
        card, and only the one part she deliberately duplicated appears
        on two;
      · every card is exactly its source parts, unedited — prompt, hint,
@@ -1325,18 +1381,23 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 {
   const lines = [];
 
-  /* ---- the 21 source questions, straight from their own modules ---- */
+  /* ---- the 52 source questions, straight from their own modules
+     (21 seeded + SESSION 2a's 15 and SESSION 2b's 16 Functions siblings) ---- */
   const SOURCES = [
     ...eqnNatureOfRootsQuestions, ...eqnNatureOfRootsTopUpQuestions, ...eqnKMethodQuestions,
     ...eqnFractionsAndRestrictionsQuestions, ...eqnInequalitiesQuestions, ...eqnInequalitiesTopUpQuestions,
     ...expFirstStepAndMethodQuestions, ...expConjugatesAndRationalisingQuestions, ...expNoSolutionAndStrategyQuestions,
     ...funcHyperbolaAndExponentialQuestions, ...funcHyperbolaAndExponentialT2Questions,
     ...funcGraphsTogetherQuestions, ...funcLineAndParabolaQuestions,
+    ...funcFindEquationSiblingQuestions, ...funcAsymptotesDomainRangeSiblingQuestions,
+    ...funcInterceptsTurningPointSiblingQuestions, ...funcAxisOfSymmetrySiblingQuestions,
+    ...funcShiftSiblingQuestions, ...funcInequalitiesSiblingQuestions,
+    ...funcNatureOfRootsSiblingQuestions, ...funcDistancesSiblingQuestions,
     ...trigReductionAndRatiosQuestions, ...trigGeneralSolutionsQuestions, ...trigMixedProblemsQuestions,
     ...euclidCircleTheoremsQuestions, ...euclidTangentsAndCyclicQuadsQuestions,
   ];
   const sourceById = new Map(SOURCES.map(q => [q.id, q]));
-  tick(SOURCES.length === 21, `all 21 seeded source questions load, got ${SOURCES.length}`);
+  tick(SOURCES.length === 52, `all 52 seeded source questions load — 21 practice-paper + 31 Functions siblings, got ${SOURCES.length}`);
 
   /* ---- HER GROUPING TABLE, typed out ---- */
   const TABLE = {
@@ -1356,14 +1417,14 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
       "exponential-equations": ["exp.nss.q1.a", "exp.nss.q1.b", "exp.nss.q1.c", "exp.nss.q1.d"],
     },
     func: {
-      "find-equation": ["func.lp.q1.a", "func.hyp.t1q4.a"],
-      "asymptotes-domain-range": ["func.hyp.t2q3.a", "func.hyp.t1q4.b", "func.lp.q1.c"],
-      "intercepts-turning-point": ["func.lp.q1.b", "func.hyp.t1q4.c"],
-      "axis-of-symmetry": ["func.hyp.t2q3.b", "func.hyp.t1q4.d"],
-      "shift": ["func.lp.q1.d", "func.hyp.t2q3.c"],
-      "inequalities": ["func.hyp.t1q4.e", "func.hyp.t2q3.cd"],
-      "nature-of-roots": ["func.lp.q1.e", "func.hyp.t2q3.e", "func.gt.t1q5.c"],
-      "distances": ["func.gt.t1q5.ab"],
+      "find-equation": ["func.lp.q1.a", "func.hyp.t1q4.a", "func.sib.fe.q1.ab", "func.sib.fe.q2.a", "func.sib.fe.q3.ab", "func.sib.fe.q4.a"],
+      "asymptotes-domain-range": ["func.hyp.t2q3.a", "func.hyp.t1q4.b", "func.lp.q1.c", "func.sib.adr.q1.abc", "func.sib.adr.q2.abc", "func.sib.adr.q3.ab"],
+      "intercepts-turning-point": ["func.lp.q1.b", "func.hyp.t1q4.c", "func.sib.itp.q1.ab", "func.sib.itp.q2.abc", "func.sib.itp.q3.abc", "func.sib.itp.q4.ab"],
+      "axis-of-symmetry": ["func.hyp.t2q3.b", "func.hyp.t1q4.d", "func.sib.aos.q1.abc", "func.sib.aos.q2.abc", "func.sib.aos.q3.ab", "func.sib.aos.q4.ab"],
+      "shift": ["func.lp.q1.d", "func.hyp.t2q3.c", "func.sib.sh.q1.ab", "func.sib.sh.q2.ab", "func.sib.sh.q3.ab", "func.sib.sh.q4.ab"],
+      "inequalities": ["func.hyp.t1q4.e", "func.hyp.t2q3.cd", "func.sib.ineq.q1.ab", "func.sib.ineq.q2.ab", "func.sib.ineq.q3.ab", "func.sib.ineq.q4.ab"],
+      "nature-of-roots": ["func.lp.q1.e", "func.hyp.t2q3.e", "func.gt.t1q5.c", "func.sib.nor.q1.ab", "func.sib.nor.q2.ab", "func.sib.nor.q3.ab"],
+      "distances": ["func.gt.t1q5.ab", "func.sib.dist.q1.abc", "func.sib.dist.q2.ab", "func.sib.dist.q3.ab", "func.sib.dist.q4.ab", "func.sib.dist.q5.ab"],
     },
     gtrig: {
       "co-functions": ["trig.rr.t2q1.a"],

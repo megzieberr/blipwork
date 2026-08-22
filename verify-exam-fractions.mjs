@@ -89,7 +89,10 @@ CHAPTERS.forEach(chapterId => {
       strings++;
       const rendered = fracHtml(raw);
       const seen = visibleText(rendered);
-      const ok = !seen.includes("/");
+      // a "/" between two ordinary WORDS (yes/no, Functions/Equations) is
+      // prose and stays a slash by design (fracIsProse in js/ui.js, whole-app
+      // sweep 2026-08-23) — only a slash with a non-word on either side counts
+      const ok = !seen.replace(/[A-Za-z]{2,}\/[A-Za-z]{2,}/g, "WORDPAIR").includes("/");
       tick(ok, `${card.id} ${where}: a bare "/" survives fracHtml`);
       if (!ok) offenders.push({ id: card.id, where, raw, seen });
     });

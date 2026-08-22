@@ -11,12 +11,34 @@
      Sept-T2-blueprint.md         §1, §3 "her methods, where they govern"
    Same working, same ticks, same WATCH OUT / REMEMBER cards as print.
 
-   NO DIAGRAM NEEDED, unlike the T1 hyperbola. T2's Q3 gives the
-   EQUATION, f(x) = 4/(x + 1) + 2, and no sketch is printed — every part
-   is answered off the equation. So the words-only stem here is not a
-   substitution for a picture, it is the printed question verbatim. The
-   only drawing in the print memo is 3(d)'s painted cut line, which is
-   carried in words inside the memo (see below).
+   NO DIAGRAM NEEDED FOR THE STEM, unlike the T1 hyperbola — T2's Q3
+   gives the EQUATION, f(x) = 4/(x + 1) + 2, and no sketch was printed;
+   every part is answered off the equation, and the words-only stem
+   stays exactly as printed (nothing added here). The only drawing in
+   the print memo is 3(d)'s painted cut line, carried in words inside
+   the memo (see below).
+
+   SESSION 1 (2026-08-22) still gives this question a `diagram` — a
+   plain sketch of the curve, for the same "here's what this actually
+   looks like" reason a textbook shows one even when the working is
+   algebraic — but DELIBERATELY WITHOUT its asymptotes drawn or a grid:
+   (a) is the one part in this whole chapter that asks the learner to
+   DERIVE the asymptotes FROM the equation, and an accurately-plotted
+   hyperbola on a gridded, dashed-asymptote figure would let a learner
+   read x = −1 / y = 2 straight off the picture instead of doing that
+   — the exact "diagram hands over the answer" failure CLAUDE.md's
+   gotcha #3 warns about, just visual instead of a table total. The
+   curve itself is still real and to-scale (never a fake approximation
+   — same rule everywhere else); it is only the coordinate-reading AIDS
+   (grid, dashed guide lines) that are withheld until (a) is revealed,
+   at which point the centre (−1 ; 2) — the two numbers (a)'s own
+   answer already named — is marked and both asymptotes are drawn in,
+   captioned x = −1 and y = 2. SESSION 1b (2026-08-22) put those two
+   dashed lines on the QUESTION side of (b), (c), (d) and (e) as well:
+   every one of them comes after (a), and every skill card cut from one
+   of them states f(x) = 4/(x + 1) + 2 in its own intro, so the lines
+   can never be ahead of what the learner has been told. (b) also
+   carries the centre forward, which its axis of symmetry needs.
 
    METHOD: GR11-FUNCTIONS-NOTES-DIGEST.md, hers throughout —
      · the stem reads the form off first (a = 4, p = −1, q = 2) exactly
@@ -45,16 +67,105 @@
    a sign question; this one HANDS over the equation and ends on a
    discriminant. Different work, same shelf.
 
-   ⚠️ UNREGISTERED. Registering (a DAY-session job) needs the same four
-   steps as js/exam/func-hyperbola-and-exponential.js's header:
-   index.js, EXAM_CHAPTERS + "func", the missing `func` scope wall in
-   verify-exam.html Part 6 (proposed: four-families · line-and-parabola ·
-   hyperbola-and-exponential · reading-a-graph · inequalities-off-a-graph ·
-   transformations · graphs-together), and the Part 2 pilot-only
-   assertions.
+   REGISTERED via js/exam/cards-func.js (imported there, folded into
+   funcCards), which js/exam/index.js's REGISTRY.func picks up; func is
+   in js/config.js's EXAM_CHAPTERS. (This note used to say ⚠️
+   UNREGISTERED — that was true before cards-func.js wired it in;
+   corrected session 3, 2026-08-23.)
    ============================================================ */
 
 const PAPER = "sept-t2";
+
+/* DIAGRAM (SESSION 1, 2026-08-22; asymptote overlay added SESSION 1b).
+   f(x) = 4/(x + 1) + 2. The BASE spec draws no asymptotes and no grid
+   (see the header note above: (a) has to DERIVE the asymptotes, so the
+   figure must not hand them over), and (a)'s question side inherits that
+   bare picture. From (a)'s own REVEAL onward the two dashed, captioned
+   lines are added — and they are on the question side of (b), (c), (d)
+   and (e), every one of which comes after (a). The centre (−1 ; 2) is
+   NOT on the curve (it is where the asymptotes cross), so its point omits
+   `on` — verifyFunction only checks points that claim to sit ON a
+   curve; the asymptote entries DO carry `of: 0`, so verifyFunction proves
+   each line matches the curve's own p and q. */
+const H2 = { kind: "hyperbola", a: 4, p: -1, q: 2 };
+const H2_CENTRE = { x: -1, y: 2, label: "(−1 ; 2)" };
+/* The two dashed guide lines, withheld from the BASE spec and from (a)'s
+   question side because (a) is the part that has to derive them — but added
+   back (SESSION 1b, 2026-08-22) from (a)'s own reveal onward, and on the
+   question side of (b)–(e), which all come AFTER (a). Every skill card cut
+   from one of those later parts states f(x) = 4/(x + 1) + 2 in its own intro,
+   so the lines never say anything the learner has not already been told. */
+const H2_ASYM = [{ x: -1, of: 0, label: "x = −1" }, { y: 2, of: 0, label: "y = 2" }];
+
+/* THE REVEAL DRAWS WHAT IT FOUND (SESSION 2a-FIX, 2026-08-22 — the rule now
+   written into js/exam/_schema.js's diagram doc comment). Each of (b)–(e)
+   answers with a LINE, a GRAPH or an INTERVAL, and each of those is now on
+   the picture instead of only in the memo:
+     (b) the negative-gradient axis of symmetry, y = −x + 1, dashed and named;
+     (c) h itself — the shifted hyperbola — in tone b, with its own two
+         captioned asymptotes x = −3 and y = −2 (they are plain dashed lines;
+         the engine has no coloured asymptotes and this session did not add
+         any, since the caption already says whose they are);
+     (d) the answer x < −3, painted as a shaded strip from the left edge of
+         the window to the cut at x = −3. (d) is ALSO the one part that is
+         entirely about h and not about f, so it gets its OWN spec — h alone,
+         centred on its own asymptotes — rather than reading h off a picture
+         built around f. The only card that reaches (d) is func.hyp.t2q3.cd,
+         which plays (c) first, so h is never a surprise;
+     (e) the two boundary lines the memo's k = 5 and k = −3 name,
+         y = −x + 5 and y = −x − 3, dashed and named. */
+const H2_H = { kind: "hyperbola", a: 4, p: -3, q: -2 };
+const H2_H_ASYM = [{ x: -3, label: "x = −3" }, { y: -2, label: "y = −2" }];
+const H2_B_LINE = { kind: "line", a: -1, q: 1, dash: true, tone: "b", label: "y = −x + 1", labelAt: -4 };
+const H2_E_LINES = [
+  { kind: "line", a: -1, q: 5, dash: true, tone: "b", label: "y = −x + 5", labelAt: -2.5 },
+  { kind: "line", a: -1, q: -3, dash: true, tone: "c", label: "y = −x − 3", labelAt: 0 },
+];
+/* (c)'s own widened spec (NIT FIX, 2026-08-23): h's lower-left branch runs
+   off to y → −∞ as x → −3 from the left, and at the base spec's ymin = -4 it
+   only reached x = -5 — a stub tucked in the bottom-left corner, not a
+   readable branch. ymin -8 lets it fall to x ≈ −3,67 before it hits the
+   floor, and xmin -7 keeps a comfortable margin on the left; f (curve 0)
+   stays exactly as before, just smaller on the wider canvas. */
+const H2_C_SPEC = {
+  type: "function",
+  win: { xmin: -7, xmax: 4, ymin: -8, ymax: 8 },
+  curves: [{ ...H2, tone: "a", label: "f", labelAt: 3 }],
+};
+/* (d)'s own picture: h on its own axes, both asymptotes given and captioned. */
+const H2_D_SPEC = {
+  type: "function",
+  win: { xmin: -8, xmax: 2, ymin: -8, ymax: 4 },
+  curves: [{ ...H2_H, tone: "b", label: "h", labelAt: -5 }],
+  asymptotes: [{ x: -3, of: 0, label: "x = −3" }, { y: -2, of: 0, label: "y = −2" }],
+};
+const H2_DIAGRAM = {
+  spec: {
+    type: "function",
+    win: { xmin: -6, xmax: 4, ymin: -4, ymax: 8 },
+    curves: [{ ...H2, tone: "a", label: "f", labelAt: 3 }],
+  },
+  parts: {
+    a: { question: {}, reveal: { points: [H2_CENTRE], asymptotes: H2_ASYM } },  // the centre IS (a)'s answer, as a pair
+    b: {                                                                       // (b)'s axis needs the centre — already given
+      question: { points: [H2_CENTRE], asymptotes: H2_ASYM },
+      reveal: { points: [H2_CENTRE], asymptotes: H2_ASYM, curves: [H2_B_LINE] },
+    },
+    c: {
+      spec: H2_C_SPEC,
+      question: { asymptotes: H2_ASYM },
+      reveal: {
+        asymptotes: H2_ASYM.concat(H2_H_ASYM.map((a) => ({ ...a, of: 1 }))),
+        curves: [{ ...H2_H, tone: "b", label: "h", labelAt: 2 }],
+      },
+    },
+    d: { spec: H2_D_SPEC, question: {}, reveal: { shades: [{ x0: -8, x1: -3 }] } },
+    e: {
+      question: { asymptotes: H2_ASYM },
+      reveal: { asymptotes: H2_ASYM, curves: H2_E_LINES },
+    },
+  },
+};
 
 const t2q3 = {
   id: "func.hyp.t2q3",
@@ -62,6 +173,7 @@ const t2q3 = {
   topic: "hyperbola-and-exponential",
   archetype: "hyperbola-from-its-equation-ending-on-a-discriminant",
   paper: PAPER,
+  diagram: H2_DIAGRAM,
   // fn3 "Hyperbola & exponential" — asymptotes, branches, domain &
   // range. The question is one hyperbola from end to end; (c) borrows
   // fn6 and (e) borrows fn7, but fn3 is the round that teaches the
@@ -98,7 +210,7 @@ const t2q3 = {
         en: "Determine the equation of the axis of symmetry of f that has a <b>negative</b> gradient.",
       },
       hint: {
-        en: "Both axes of symmetry go through the point where the asymptotes cross — you found both asymptotes in (a). A negative gradient on a hyperbola means one particular value; put it and the point into y = mx + c.",
+        en: "Both axes of symmetry go through the point where the asymptotes cross — x = −1 and y = 2, so that point is (−1 ; 2). A negative gradient on a hyperbola means one particular value; put it and the point into y = mx + c.",
       },
       memo: [
         { type: "step", text: { en: "Both axes of symmetry go through the point where the asymptotes cross, (−1 ; 2). The one with a negative gradient is y = −x + c:" } },

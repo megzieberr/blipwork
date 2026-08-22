@@ -118,7 +118,7 @@ const q1 = {
         en: "<em>No calculator.</em><br>Solve for x: &nbsp;4<sup>x</sup> − 3 · 2<sup>x</sup> − 4 = 0",
       },
       hint: {
-        en: "The two bases are not the same yet — but one of them is built out of the other. Rewrite 4<sup>x</sup> in terms of 2<sup>x</sup> and the shape from (c) appears. Then think hard about what a power of 2 is allowed to equal.",
+        en: "The two bases are not the same yet — but one of them is built out of the other. Rewrite 4<sup>x</sup> as (2<sup>x</sup>)², let K = 2<sup>x</sup>, and an ordinary quadratic in K appears. Then think hard about what a power of 2 is allowed to equal.",
       },
       memo: [
         { type: "step", text: { en: "The fact you have to fetch: &nbsp;4<sup>x</sup> = (2²)<sup>x</sup> = 2<sup>2x</sup> = (2<sup>x</sup>)². Once both bases are 2, the same K trick as (c) works." } },

@@ -47,15 +47,20 @@
                 js/exam-play.js renders the reteach link ONLY when that
                 quest is currently open (state.openQuests) — never a
                 bypass, never a dead-end.
-     diagram    OPTIONAL. A to-scale circle-geometry figure, drawn by
-                js/exam/circle-engine.js (Circle Quest's engine, ported
-                2026-08-22 — EXAM-FOCUS-PLAN.md build order step 3).
-                Promoted from ignored metadata to a VALIDATED field the
-                same day: every spec here is run through the engine's own
-                verifyDiagram(), so a figure that does not measure what it
-                claims fails validation instead of shipping. Questions
-                without a figure (every one of the 19 already seeded) are
-                unaffected — the field is simply absent.
+     diagram    OPTIONAL. A to-scale figure, drawn by ONE of two engines
+                depending on `spec.type` — js/exam/circle-engine.js
+                (Circle Quest's engine, ported 2026-08-22) for every
+                circle-geometry spec, or js/engine/function-graph.js
+                (the Functions chapter's own engine) when
+                `spec.type === "function"` — added SESSION 1 of the
+                function-diagram build, 2026-08-22, EXAM-FOCUS-PLAN.md
+                build order step 3. Every spec here is run through its
+                engine's own verify — circle specs through
+                verifyDiagram(), function specs through verifyFunction()
+                (js/exam/function-diagram.js is the small glue module) —
+                so a figure that does not measure what it claims fails
+                validation instead of shipping. Questions without a
+                figure are unaffected — the field is simply absent.
 
                   diagram: {
                     spec: <engine spec>,          // default figure
@@ -71,18 +76,88 @@
                 A HIGHLIGHT SET is her per-part marker-pen design
                 (EXAM-FOCUS-PLAN.md, "Circle geo diagrams": "find angle A"
                 lights the wedge on angle A, "prove ABCD is cyclic" lights
-                the four sides) — see js/exam/circle-engine.js's extension
-                block for the full shape. Two rules are enforced here:
+                the four sides) — its shape depends on which engine the
+                spec belongs to:
+
+                  CIRCLE  (js/exam/circle-engine.js's extension block):
+                    { angles?:[{at,legs,v,t?}], chords?:[[a,b,mark?]], bare? }
                   · every name a highlight references must exist in its
                     spec, and every chord ref must be a segment the spec
                     actually draws (diagramRefIssues);
                   · every highlighted angle declares its true value v, and
                     the highlighted spec is re-measured by verifyDiagram —
                     so a wedge on the wrong side of a leg is caught.
+
+                  FUNCTION  (js/exam/function-diagram.js — deliberately
+                  simpler: a function spec's points are bare {x,y} pairs,
+                  not named vertices, so there is nothing to resolve, only
+                  shapes to check):
+                    { curves?:[{kind,…params,tone?,dash?,label?,labelAt?}],
+                      points?:[{x,y,label?,on?,place?}],
+                      asymptotes?:[{x?,y?,of?,label?}], shades?:[{x0,x1}],
+                      vlines?:[{x,label?}],
+                      segment?:{x,fromCurve,toCurve,label?},
+                      bare? }
+                  · curves/points/asymptotes/shades/vlines are APPENDED
+                    to the base spec's own (cloned) arrays; `segment`
+                    REPLACES the base spec's segment when given (only one
+                    is ever drawn). Because appended curves land AFTER
+                    the base spec's own, a highlight's `of`/`on` index
+                    counts (base curve count + position in that array);
+                  · `asymptotes` (SESSION 1b) is for the base spec that
+                    deliberately withholds the dashed guide lines because
+                    ONE part has to DERIVE them (Sept T2 3(a)) while every
+                    later part is entitled to see them. Each entry sets x
+                    OR y (never both), an optional `of: <curve index>` so
+                    verifyFunction can prove the line matches the curve,
+                    and an optional `label` ("x = −1") the engine sets in
+                    the muted caption style beside the line;
+                  · every labelled point that names a curve does so with
+                    `on: <curve index>` (a number, NOT a name — the
+                    function engine's curves are an array, not named
+                    points) so verifyFunction can prove it really sits on
+                    that curve; a reference point (e.g. a hyperbola's
+                    asymptote-crossing centre, which is never ON the
+                    curve) simply omits `on`.
+
+                THE REVEAL DRAWS WHAT IT FOUND (SESSION 2a-FIX,
+                2026-08-22 — her instruction that day: "spend more to
+                make sure the graphs actually look good"). The rule, for
+                every function question from here on:
+
+                  the QUESTION side never shows the answer;
+                  the REVEAL side always DRAWS it.
+
+                Concretely, by kind of answer:
+                  · an asymptote, an axis of symmetry, or a tangent →
+                    a dashed CAPTIONED line (an `asymptotes` entry with
+                    a `label`, a `vlines` entry with a `label`, or a
+                    `curves` entry {kind:"line", dash:true, label});
+                  · a shifted / reflected graph → a second curve in tone
+                    "b", labelled with its name, together with its own
+                    captioned asymptotes if it has any;
+                  · an inequality in x → a shaded strip (`shades`)
+                    bounded by the cut lines — her cut-line-and-paint
+                    method, made visible;
+                  · a point (an intercept, a turning point, the centre of
+                    a hyperbola) → a labelled dot;
+                  · a "for which k" answer → the boundary line(s) y = k,
+                    dashed and labelled.
+                And the other half of the same rule: every GIVEN
+                asymptote or boundary line carries its caption on the
+                QUESTION side, so a learner never has to guess which
+                dashed line is which.
+                Because the reveal highlight set REPLACES the question
+                one (js/exam-play.js), a reveal must repeat whatever the
+                question side showed that should stay on the picture.
+
                 `question.bare: true` draws the figure WITHOUT the spec's
-                own angle labels: the BARE-FIGURE RULE, for a part whose
-                proof IS the labelling (Sept T2 4(a) — a question diagram
-                already carrying x, y, 2x, 2y hands the proof over).
+                own angle labels (circle) or its own marked points
+                (function): the BARE-FIGURE RULE, for a part whose job
+                IS finding that label/point (Sept T2 4(a) — a question
+                diagram already carrying x, y, 2x, 2y hands the proof
+                over; equally, a function part asking "find the turning
+                point" must not already show it marked).
 
      parts      Part[], at least one.
 
@@ -136,6 +211,8 @@
    ============================================================ */
 
 import { verifyDiagram, highlightedSpec, diagramRefIssues } from "./circle-engine.js";
+import { verifyFunction } from "../engine/function-graph.js";
+import { applyFunctionHighlights, functionRefIssues } from "./function-diagram.js";
 
 const ALLOWED_TICKS = new Set(["a", "ca", "s/f"]);
 const ALLOWED_MEMO_TYPES = new Set(["step", "answer", "trap"]);
@@ -231,7 +308,8 @@ function validatePart(part, qid, issues, seenIds) {
    --------------------------------------------------------------- */
 const DIAGRAM_TOL = 1.5;      // the engine's own default tolerance
 
-function checkSpecMeasures(spec, label, issues) {
+/* CIRCLE spec measure check (verifyDiagram — one result per marked angle). */
+function checkCircleMeasures(spec, label, issues) {
   let results;
   try { results = verifyDiagram(spec, DIAGRAM_TOL); }
   catch (e) { issues.push(`${label}: spec failed to render (${e && e.message})`); return; }
@@ -240,9 +318,35 @@ function checkSpecMeasures(spec, label, issues) {
   });
 }
 
+/* FUNCTION spec measure check (verifyFunction — one result per structural
+   fact: window validity, curve visibility, points-on-curve, asymptotes,
+   the segment). Each result already carries its own human-readable label. */
+function checkFunctionMeasures(spec, label, issues) {
+  let results;
+  try { results = verifyFunction(spec); }
+  catch (e) { issues.push(`${label}: spec failed to render (${e && e.message})`); return; }
+  results.forEach(r => { if (!r.ok) issues.push(`${label}: ${r.label}`); });
+}
+
+/* Dispatches on spec.type — every OTHER caller in this file (validateDiagram
+   below) goes through this one function, so a spec is always measured by
+   the engine that actually drew it. */
+function checkSpecMeasures(spec, label, issues) {
+  if (spec && spec.type === "function") checkFunctionMeasures(spec, label, issues);
+  else checkCircleMeasures(spec, label, issues);
+}
+
 function validateHighlightSet(spec, hl, label, issues) {
   if (hl === undefined) return;
   if (!hl || typeof hl !== "object" || Array.isArray(hl)) { issues.push(`${label}: must be a highlight-set object`); return; }
+  if (spec && spec.type === "function") {
+    functionRefIssues(spec, hl, label).forEach(i => issues.push(i));
+    let variant;
+    try { variant = applyFunctionHighlights(spec, hl); }
+    catch (e) { issues.push(`${label}: highlights could not be applied (${e && e.message})`); return; }
+    checkSpecMeasures(variant, `${label} (as rendered)`, issues);
+    return;
+  }
   diagramRefIssues(spec, hl, label).forEach(i => issues.push(i));
   let variant;
   try { variant = highlightedSpec(spec, hl); }

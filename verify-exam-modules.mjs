@@ -51,6 +51,26 @@ const MODULES = [
   /* --- Sept T2, EUCLIDEAN (registered 2026-08-22, engine-port day) --- */
   ["euclid-circle-theorems.js",           "euclidCircleTheoremsQuestions"],
   ["euclid-tangents-and-cyclic-quads.js", "euclidTangentsAndCyclicQuadsQuestions"],
+  /* --- FUNCTIONS SIBLING CARDS (session 2a of the function-diagram
+     build, 2026-08-22). Fifteen fresh questions composed from her own
+     Gr11 notes digest, one file per skill, taking four Functions
+     skill tiles from 2–3 cards each to six. They belong to no paper
+     (paper: "siblings"), so the sept-t1 / sept-t2 star counts in
+     section 4 are untouched by them. --- */
+  ["func-siblings-find-equation.js",             "funcFindEquationSiblingQuestions"],
+  ["func-siblings-asymptotes-domain-range.js",   "funcAsymptotesDomainRangeSiblingQuestions"],
+  ["func-siblings-intercepts-turning-point.js",  "funcInterceptsTurningPointSiblingQuestions"],
+  ["func-siblings-axis-of-symmetry.js",          "funcAxisOfSymmetrySiblingQuestions"],
+  /* --- FUNCTIONS SIBLING CARDS, SESSION 2b (2026-08-22). The other
+     four Functions skill tiles: shift, inequalities, nature-of-roots
+     and distances — sixteen more fresh questions from the same notes
+     digest, taking every one of the eight tiles to six cards. Also
+     paper: "siblings", so section 4's sept-t1 / sept-t2 star counts
+     stay untouched. --- */
+  ["func-siblings-shift.js",                     "funcShiftSiblingQuestions"],
+  ["func-siblings-inequalities.js",              "funcInequalitiesSiblingQuestions"],
+  ["func-siblings-nature-of-roots.js",           "funcNatureOfRootsSiblingQuestions"],
+  ["func-siblings-distances.js",                 "funcDistancesSiblingQuestions"],
 ];
 
 /* the ported diagram engine, for section 9 */
@@ -156,6 +176,24 @@ const EXPECTED_STARS = {
   /* Euclidean: the print memo stars 5(d) and nothing in Q4. */
   "euclid.circ.t2q4": [],
   "euclid.tan.t2q5": ["d"],
+  /* FUNCTIONS SIBLING CARDS (session 2a). These are SHORT drill cards,
+     not practice-paper questions, so the brief's level mix is "mostly
+     1–2, one level 3 per skill, at most one level 4" — and none of the
+     four skills needed a level 4. Every one of the fifteen is therefore
+     expected to carry NO star; a star appearing here would mean a level
+     drifted. */
+  "func.sib.fe.q1": [], "func.sib.fe.q2": [], "func.sib.fe.q3": [], "func.sib.fe.q4": [],
+  "func.sib.adr.q1": [], "func.sib.adr.q2": [], "func.sib.adr.q3": [],
+  "func.sib.itp.q1": [], "func.sib.itp.q2": [], "func.sib.itp.q3": [], "func.sib.itp.q4": [],
+  "func.sib.aos.q1": [], "func.sib.aos.q2": [], "func.sib.aos.q3": [], "func.sib.aos.q4": [],
+  /* SESSION 2b's sixteen, same rule and the same expectation: mostly
+     level 1-2 with exactly one level 3 per skill, and no level 4
+     anywhere, so no star may appear on any of them. */
+  "func.sib.sh.q1": [], "func.sib.sh.q2": [], "func.sib.sh.q3": [], "func.sib.sh.q4": [],
+  "func.sib.ineq.q1": [], "func.sib.ineq.q2": [], "func.sib.ineq.q3": [], "func.sib.ineq.q4": [],
+  "func.sib.nor.q1": [], "func.sib.nor.q2": [], "func.sib.nor.q3": [],
+  "func.sib.dist.q1": [], "func.sib.dist.q2": [], "func.sib.dist.q3": [], "func.sib.dist.q4": [],
+  "func.sib.dist.q5": [],
 };
 mine.forEach(({ q }) => {
   const stars = q.parts.filter(p => p.level === 4).map(p => p.id);
@@ -214,8 +252,18 @@ const WALLS = {
         "perfect-square-and-turning-point", "formula-and-simultaneous", "inequalities", "nature-of-roots"],
   exp: ["exponent-laws", "spot-the-trap", "first-step-and-method", "which-divorce", "surd-laws-and-traps",
         "conjugates-and-rationalising", "rational-exponent-equations", "no-solution-and-strategy"],
+  /* The first seven are the CONTENT slugs the four seeded practice-paper
+     questions carry, straight off the fn1–fn7 quest breakdown. The four
+     after them are SKILL ids (js/exam/skills.js): the session-2a sibling
+     questions are composed skill-first — one file per tile — so their
+     `topic` is the skill from the start, rather than a content slug that
+     js/exam/_cards.js would then overwrite. Both kinds of slug are inside
+     the Functions chapter's own rounds either way, which is what this
+     wall exists to check. */
   func: ["four-families", "line-and-parabola", "hyperbola-and-exponential", "reading-a-graph",
-         "inequalities-off-a-graph", "transformations", "graphs-together"],
+         "inequalities-off-a-graph", "transformations", "graphs-together",
+         "find-equation", "asymptotes-domain-range", "intercepts-turning-point", "axis-of-symmetry",
+         "shift", "inequalities", "nature-of-roots", "distances"],
   /* trig wall from the t1–t7 quest breakdown — sine rule, cosine rule,
      area rule and mixed problems, nothing else. The two topics that
      used to sit here and stretch it past its own rounds moved to the
@@ -493,6 +541,473 @@ chk("T2 1(a) cos 56° = sin 34°, so the answer is t", cosD(56), sinD(34));
   chkS("T2 6(a) the WATCH OUT temptation (12, 8, 68°) really does give a different answer", Math.round(Math.sqrt(12 ** 2 + 8 ** 2 - 2 * 12 * 8 * cosD(68)) * 100) / 100 === 15.30, false);
 }
 
+/* --- FUNCTIONS SIBLING CARDS (session 2a, 2026-08-22) ---------------
+   Same rule as everything above it: every number is worked from the
+   PROMPT's own given facts, never read out of a memo string. Each block
+   rebuilds the function from what the learner is told, then checks that
+   the memo's answer really is what that function does. --- */
+console.log("\n-- session 2a: Functions sibling cards --");
+
+/* fe.q1 — parabola from TP(−1 ; −8) through (1 ; 0) */
+{
+  const a = (0 - (-8)) / ((1 - (-1)) ** 2);
+  chk("fe.q1(a) a from TP(−1 ; −8) and (1 ; 0)", a, 2);
+  const f = x => a * (x + 1) ** 2 - 8;
+  chk("fe.q1(a) the found parabola really passes through (1 ; 0)", f(1), 0);
+  chk("fe.q1(a) and really turns at y = −8", f(-1), -8);
+  const fe = x => 2 * x * x + 4 * x - 6;
+  let bad = 0;
+  for (let i = -600; i <= 400; i++) { const x = i / 100; if (Math.abs(f(x) - fe(x)) > 1e-9) bad++; }
+  chk("fe.q1(b) 2(x + 1)² − 8 ≡ 2x² + 4x − 6 (1 001-point sweep, mismatches)", bad, 0);
+  chk("fe.q1(b) both forms give the same y-intercept", fe(0), -6);
+}
+
+/* fe.q2 — hyperbola from the symmetry lines y = x + 2, y = −x − 4 and x-int (2 ; 0) */
+{
+  const px = (-4 - 2) / 2, py = px + 2;                    // solve x + 2 = −x − 4
+  chk("fe.q2(a) the two symmetry lines cross at x = −3", px, -3);
+  chk("fe.q2(a) …and at y = −1", py, -1);
+  chk("fe.q2(a) the crossing point is on BOTH given lines", -px - 4, py);
+  const a = (0 - py) * (2 - px);                            // 0 = a/(2 − p) + q ⟹ a = −q(2 − p)
+  chk("fe.q2(a) a from the x-intercept (2 ; 0)", a, 5);
+  const h = x => 5 / (x + 3) - 1;
+  chk("fe.q2(a) the found hyperbola really cuts the x-axis at 2", h(2), 0);
+}
+
+/* fe.q3 — exponential from asymptote y = −4, y-int (0 ; −2), point (2 ; 4) */
+{
+  const q = -4, a = -2 - q;                                 // y-int: a·b⁰ + q = −2
+  chk("fe.q3(a) a from the y-intercept", a, 2);
+  const bSq = (4 - q) / a;                                  // (2 ; 4): a·b² + q = 4
+  chk("fe.q3(a) b² from the second point", bSq, 4);
+  chk("fe.q3(a) b (positive root only)", Math.sqrt(bSq), 2);
+  const g = x => 2 * Math.pow(2, x) - 4;
+  chk("fe.q3(a) the found graph passes through (0 ; −2)", g(0), -2);
+  chk("fe.q3(a) …and through (2 ; 4)", g(2), 4);
+  let bad = 0;
+  for (let i = -500; i <= 400; i++) { const x = i / 100; if (Math.abs(g(x) - (Math.pow(2, x + 1) - 4)) > 1e-9) bad++; }
+  chk("fe.q3(b) 2·2ˣ − 4 ≡ 2^(x+1) − 4 (901-point sweep, mismatches)", bad, 0);
+}
+
+/* fe.q4 — parabola through (−2 ; −2), (0 ; −4), (1 ; 1), solved as the
+   learner does: c off the y-intercept, then two simultaneous equations */
+{
+  const c = -4;                                             // (0 ; −4)
+  // (1 ; 1):  a + b + c = 1      ⟹ a + b = 5
+  // (−2 ; −2): 4a − 2b + c = −2  ⟹ 2a − b = 1
+  const a = (5 + 1) / 3, b = 5 - a;
+  chk("fe.q4(a) a from ① + ②", a, 2);
+  chk("fe.q4(a) b back-substituted", b, 3);
+  const f = x => a * x * x + b * x + c;
+  chk("fe.q4(a) the found parabola passes through (−2 ; −2)", f(-2), -2);
+  chk("fe.q4(a) …through (0 ; −4)", f(0), -4);
+  chk("fe.q4(a) …and through (1 ; 1)", f(1), 1);
+  chkS("fe.q4(a) premise: its x-intercepts are NOT whole numbers (so the factorised route is genuinely unavailable)",
+    Number.isInteger((-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)), false);
+}
+
+/* adr.q1 — h(x) = −4/(x − 1) + 3, then k(x) = h(x + 3) − 2 */
+{
+  const h = x => -4 / (x - 1) + 3;
+  chk("adr.q1(a) h is undefined exactly at x = 1", 1, 1 /* p */);
+  chk("adr.q1(a) h(x) → 3 as x grows (tested at x = 10⁶)", Math.round(h(1e6) * 1e3) / 1e3, 3);
+  chkS("adr.q1(b) h never actually equals 3", (() => { for (let i = -5000; i <= 5000; i++) { const x = i / 10; if (x === 1) continue; if (h(x) === 3) return true; } return false; })(), false);
+  const k = x => h(x + 3) - 2;
+  chk("adr.q1(c) k(x) ≡ −4/(x + 2) + 1 (tested at x = 5)", k(5), -4 / 7 + 1);
+  chk("adr.q1(c) k(x) → 1 as x grows", Math.round(k(1e6) * 1e3) / 1e3, 1);
+  chkS("adr.q1(c) k's vertical asymptote is x = −2", Number.isFinite(k(-2)), false);
+}
+
+/* adr.q2 — f(x) = 2·3ˣ − 5 and g(x) = 4(1/2)ˣ + 1, restricted to x ≥ −2 */
+{
+  const f = x => 2 * Math.pow(3, x) - 5, g = x => 4 * Math.pow(0.5, x) + 1;
+  /* SWEEP RANGES ARE DELIBERATELY MODEST HERE. The maths claim is "the
+     graph never reaches its asymptote", which is true for every real x —
+     but a DOUBLE cannot show it past about x = −25 for f (2·3ˣ underflows
+     into the last bit of −5) or x = 45 for g. Sweeping wider tests
+     JavaScript's float precision, not her question, so each sweep stops
+     while the gap is still representable and the limit is checked
+     separately at the edge of that range. */
+  chk("adr.q2(a) f → −5 from above (tested at x = −20)", Math.round(f(-20) * 1e6) / 1e6, -5);
+  chkS("adr.q2(a) f is never ≤ −5 (−20 ≤ x ≤ 3)", (() => { for (let i = -2000; i <= 300; i++) if (f(i / 100) <= -5) return true; return false; })(), false);
+  chk("adr.q2(b) g → 1 from above (tested at x = 40)", Math.round(g(40) * 1e6) / 1e6, 1);
+  chkS("adr.q2(b) g is never ≤ 1 (−3 ≤ x ≤ 40)", (() => { for (let i = -300; i <= 4000; i++) if (g(i / 100) <= 1) return true; return false; })(), false);
+  chk("adr.q2(c) g(−2) = 17, the top of the restricted range", g(-2), 17);
+  let bad = 0;
+  for (let i = -200; i <= 4000; i++) { const y = g(i / 100); if (!(y > 1 && y <= 17)) bad++; }
+  chk("adr.q2(c) on −2 ≤ x ≤ 40 every g-value lies in 1 < y ≤ 17 (4 201-point sweep, misses)", bad, 0);
+}
+
+/* adr.q3 — f(x) = −3·2ˣ + 6 and g(x) = −3(1/2)ˣ + 6 */
+{
+  const f = x => -3 * Math.pow(2, x) + 6, g = x => -3 * Math.pow(0.5, x) + 6;
+  chkS("adr.q3(a) f is never ≥ 6", (() => { for (let i = -4000; i <= 400; i++) if (f(i / 100) >= 6) return true; return false; })(), false);
+  chkS("adr.q3(b) g is never ≥ 6 either — same range", (() => { for (let i = -400; i <= 4000; i++) if (g(i / 100) >= 6) return true; return false; })(), false);
+  let bad = 0;
+  for (let i = -400; i <= 400; i++) { const x = i / 100; if (Math.abs(f(-x) - g(x)) > 1e-9) bad++; }
+  chk("adr.q3(b) g(x) ≡ f(−x) — the mirror-image claim (801-point sweep, mismatches)", bad, 0);
+  chk("adr.q3(a) f cuts the x-axis at 1 (drawn on the figure)", f(1), 0);
+  chk("adr.q3(b) g cuts the x-axis at −1 (drawn on the figure)", g(-1), 0);
+}
+
+/* itp.q1 — f(x) = x² − 2x − 8 */
+{
+  const f = x => x * x - 2 * x - 8;
+  chk("itp.q1(a) y-intercept", f(0), -8);
+  chk("itp.q1(a) x-intercept at −2", f(-2), 0);
+  chk("itp.q1(a) x-intercept at 4", f(4), 0);
+  chk("itp.q1(b) xTP = −b/(2a)", 2 / 2, 1);
+  chk("itp.q1(b) yTP substituted back", f(1), -9);
+  chk("itp.q1(b) the TP really is midway between the intercepts (the memo's own check)", (-2 + 4) / 2, 1);
+}
+
+/* itp.q2 — f(x) = x² − 4x + 9, no x-intercepts */
+{
+  const f = x => x * x - 4 * x + 9;
+  chk("itp.q2(a) xTP", 4 / 2, 2);
+  chk("itp.q2(a) yTP", f(2), 5);
+  chk("itp.q2(b) b² − 4ac", (-4) ** 2 - 4 * 1 * 9, -20);
+  chkS("itp.q2(b) the discriminant really is negative", ((-4) ** 2 - 4 * 1 * 9) < 0, true);
+  chkS("itp.q2(b) f never reaches 0 (2 001-point sweep)", (() => { for (let i = -1000; i <= 1000; i++) if (f(i / 100) <= 0) return true; return false; })(), false);
+  chk("itp.q2(c) y-intercept", f(0), 9);
+}
+
+/* itp.q3 — g(x) = 3x² + 12x + 5, completed square */
+{
+  const g = x => 3 * x * x + 12 * x + 5, gc = x => 3 * (x + 2) ** 2 - 7;
+  let bad = 0;
+  for (let i = -600; i <= 200; i++) { const x = i / 100; if (Math.abs(g(x) - gc(x)) > 1e-9) bad++; }
+  chk("itp.q3(a) 3x² + 12x + 5 ≡ 3(x + 2)² − 7 (801-point sweep, mismatches)", bad, 0);
+  chk("itp.q3(b) TP x from the completed form agrees with −b/(2a)", -12 / 6, -2);
+  chk("itp.q3(b) TP y", g(-2), -7);
+  chk("itp.q3(c) y-intercept", g(0), 5);
+  chk("itp.q3(c) minimum value over a fine sweep", (() => { let m = Infinity; for (let i = -600; i <= 200; i++) m = Math.min(m, g(i / 100)); return m; })(), -7);
+}
+
+/* itp.q4 — f(x) = 2ˣ − 8 (crosses) and g(x) = 2ˣ + 4 (cannot) */
+{
+  const f = x => Math.pow(2, x) - 8, g = x => Math.pow(2, x) + 4;
+  chk("itp.q4(a) f's y-intercept", f(0), -7);
+  chk("itp.q4(a) f's x-intercept at x = 3, since 8 = 2³", f(3), 0);
+  chk("itp.q4(b) g's y-intercept", g(0), 5);
+  chkS("itp.q4(b) g is never ≤ 0 (4 001-point sweep over the drawn window and well beyond)",
+    (() => { for (let i = -3000; i <= 1000; i++) if (g(i / 10) <= 0) return true; return false; })(), false);
+  chkS("itp.q4(b) premise: 2ˣ is always positive", (() => { for (let i = -2000; i <= 200; i++) if (Math.pow(2, i / 10) <= 0) return true; return false; })(), false);
+}
+
+/* aos.q1 — g(x) = 2(x − 3)² − 5, h(x) = −(x + 4)² + 1, k = g shifted */
+{
+  const g = x => 2 * (x - 3) ** 2 - 5, h = x => -((x + 4) ** 2) + 1, k = x => 2 * (x - 1) ** 2 + 1;
+  chk("aos.q1(a) g is symmetric about x = 3 (g(3+t) = g(3−t) at t = 2,5)", g(3 + 2.5), g(3 - 2.5));
+  chk("aos.q1(b) h is symmetric about x = −4", h(-4 + 3.5), h(-4 - 3.5));
+  let bad = 0;
+  for (let i = -300; i <= 900; i++) { const x = i / 100; if (Math.abs(k(x) - (g(x + 2) + 6)) > 1e-9) bad++; }
+  chk("aos.q1(c) k(x) ≡ g(x + 2) + 6, i.e. g moved 2 left and 6 up (1 201-point sweep, mismatches)", bad, 0);
+  chk("aos.q1(c) k is symmetric about x = 1", k(1 + 4), k(1 - 4));
+}
+
+/* aos.q2 — f(x) = −2x² + 8x − 3, m = f − 4, k = f(x + 5) */
+{
+  const f = x => -2 * x * x + 8 * x - 3;
+  chk("aos.q2(a) axis from −b/(2a)", -8 / (2 * -2), 2);
+  chk("aos.q2(a) f is symmetric about x = 2", f(2 + 3), f(2 - 3));
+  const m = x => f(x) - 4;
+  chk("aos.q2(b) m is STILL symmetric about x = 2 (a vertical shift moves nothing sideways)", m(2 + 3), m(2 - 3));
+  const kk = x => f(x + 5);
+  chk("aos.q2(c) k is symmetric about x = −3", kk(-3 + 3), kk(-3 - 3));
+  chkS("aos.q2(c) …and NOT about x = 2", Math.abs(kk(2 + 3) - kk(2 - 3)) < 1e-9, false);
+  chk("aos.q2(c) the memo's own check: k(−3) = f(2)", kk(-3), f(2));
+}
+
+/* aos.q3 — h(x) = 8/(x − 2) − 3, both symmetry lines through (2 ; −3) */
+{
+  chk("aos.q3(a) y = −x − 1 passes through (2 ; −3)", -(2) - 1, -3);
+  chk("aos.q3(b) y = x − 5 passes through (2 ; −3)", 2 - 5, -3);
+  /* a symmetry line really is one: reflecting a point of h in y = x − 5
+     (for a line of gradient 1 through (p ; q): (x ; y) ↦ (y + 5 ; x − 5))
+     must land back on h */
+  const h = x => 8 / (x - 2) - 3;
+  let bad = 0;
+  for (let i = 30; i <= 120; i++) { const x = i / 10; const y = h(x); const rx = y + 5, ry = x - 5; if (Math.abs(h(rx) - ry) > 1e-9) bad++; }
+  chk("aos.q3(b) reflecting h in y = x − 5 maps h onto itself (91-point sweep, misses)", bad, 0);
+}
+
+/* aos.q4 — f(x) = 6/x → g(x) = 6/(x − 4) − 1 */
+{
+  const f = x => 6 / x, g = x => 6 / (x - 4) - 1;
+  let bad = 0;
+  for (let i = -700; i <= 700; i++) { const x = i / 100; if (x === 0) continue; if (Math.abs(g(x + 4) - (f(x) - 1)) > 1e-9) bad++; }
+  chk("aos.q4(b) g(x + 4) ≡ f(x) − 1, i.e. f moved 4 right and 1 down (1 401-point sweep, mismatches)", bad, 0);
+  chk("aos.q4(b) y = x − 5 passes through (4 ; −1)", 4 - 5, -1);
+  chk("aos.q4(b) y = −x + 3 passes through (4 ; −1)", -(4) + 3, -1);
+  let bad2 = 0;
+  for (let i = 50; i <= 140; i++) { const x = i / 10; const y = g(x); const rx = y + 5, ry = x - 5; if (Math.abs(g(rx) - ry) > 1e-9) bad2++; }
+  chk("aos.q4(b) reflecting g in y = x − 5 maps g onto itself (91-point sweep, misses)", bad2, 0);
+}
+
+/* --- FUNCTIONS SIBLING CARDS (session 2b, 2026-08-22) --------------
+   Same discipline again: every number below is rebuilt from the
+   PROMPT's own given facts and then checked against what the memo
+   claims. Nothing here reads a memo string. --- */
+console.log("\n-- session 2b: Functions sibling cards --");
+
+/* sh.q1 — f(x) = (x − 1)² − 4, then g = f(x − 3) and h = −f(x) */
+{
+  const f = x => (x - 1) ** 2 - 4;
+  const g = x => f(x - 3), h = x => -f(x);
+  let bad = 0;
+  for (let i = -400; i <= 800; i++) { const x = i / 100; if (Math.abs(g(x) - ((x - 4) ** 2 - 4)) > 1e-9) bad++; }
+  chk("sh.q1(a) f(x−3) is identically (x−4)² − 4 (1 201-point sweep, mismatches)", bad, 0);
+  chk("sh.q1(a) the new turning point is at (4 ; −4)", g(4), -4);
+  chkS("sh.q1(a) …and it really is the lowest point of g", (() => { for (let i = -400; i <= 800; i++) if (g(i / 100) < -4 - 1e-9) return true; return false; })(), false);
+  bad = 0;
+  for (let i = -400; i <= 800; i++) { const x = i / 100; if (Math.abs(h(x) - (-((x - 1) ** 2) + 4)) > 1e-9) bad++; }
+  chk("sh.q1(b) −f(x) is identically −(x−1)² + 4 (1 201-point sweep, mismatches)", bad, 0);
+  chk("sh.q1(b) the new turning point is at (1 ; 4)", h(1), 4);
+  chk("sh.q1(b) the reflection keeps both x-intercepts", h(-1) + h(3), 0);
+}
+
+/* sh.q2 — f(x) = 3/(x − 2) + 1, then g = f(x + 4) and h = f(x) − 5 */
+{
+  const f = x => 3 / (x - 2) + 1;
+  const g = x => f(x + 4), h = x => f(x) - 5;
+  let bad = 0;
+  for (let i = -700; i <= 800; i++) { const x = i / 100; if (Math.abs(x + 2) < 0.05) continue; if (Math.abs(g(x) - (3 / (x + 2) + 1)) > 1e-9) bad++; }
+  chk("sh.q2(a) f(x+4) is identically 3/(x+2) + 1 (sweep, mismatches)", bad, 0);
+  chkS("sh.q2(a) g's vertical asymptote is x = −2", Number.isFinite(g(-2)), false);
+  chk("sh.q2(a) g still flattens towards y = 1", Math.round(g(1e6) * 1e3) / 1e3, 1);
+  bad = 0;
+  for (let i = -700; i <= 800; i++) { const x = i / 100; if (Math.abs(x - 2) < 0.05) continue; if (Math.abs(h(x) - (3 / (x - 2) - 4)) > 1e-9) bad++; }
+  chk("sh.q2(b) f(x)−5 is identically 3/(x−2) − 4 (sweep, mismatches)", bad, 0);
+  chkS("sh.q2(b) h's vertical asymptote is still x = 2", Number.isFinite(h(2)), false);
+  chk("sh.q2(b) h flattens towards y = −4", Math.round(h(1e6) * 1e3) / 1e3, -4);
+}
+
+/* sh.q3 — f(x) = 2ˣ − 4, then g = f(x) + 3 and h = f(−x) */
+{
+  const f = x => Math.pow(2, x) - 4;
+  const g = x => f(x) + 3, h = x => f(-x);
+  chk("sh.q3 stem: f's y-intercept is (0 ; −3)", f(0), -3);
+  chk("sh.q3 stem: f's x-intercept is (2 ; 0)", f(2), 0);
+  let bad = 0;
+  for (let i = -500; i <= 500; i++) { const x = i / 100; if (Math.abs(g(x) - (Math.pow(2, x) - 1)) > 1e-9) bad++; }
+  chk("sh.q3(a) f(x)+3 is identically 2ˣ − 1 (1 001-point sweep, mismatches)", bad, 0);
+  chk("sh.q3(a) g flattens towards y = −1", Math.round(g(-40) * 1e6) / 1e6, -1);
+  bad = 0;
+  for (let i = -500; i <= 500; i++) { const x = i / 100; if (Math.abs(h(x) - (Math.pow(0.5, x) - 4)) > 1e-9) bad++; }
+  chk("sh.q3(b) f(−x) is identically (1/2)ˣ − 4 (1 001-point sweep, mismatches)", bad, 0);
+  chk("sh.q3(b) h still flattens towards y = −4", Math.round(h(40) * 1e6) / 1e6, -4);
+  chk("sh.q3(b) h cuts the x-axis at −2, the mirror of f's 2", h(-2), 0);
+}
+
+/* sh.q4 — f(x) = (x + 2)² − 1 and g(x) = (x − 3)² + 4 */
+{
+  const f = x => (x + 2) ** 2 - 1, g = x => (x - 3) ** 2 + 4;
+  chk("sh.q4(a) f turns at (−2 ; −1)", f(-2), -1);
+  chk("sh.q4(a) g turns at (3 ; 4)", g(3), 4);
+  let bad = 0;
+  for (let i = -600; i <= 800; i++) { const x = i / 100; if (Math.abs(g(x) - (f(x - 5) + 5)) > 1e-9) bad++; }
+  chk("sh.q4(b) g(x) is identically f(x−5) + 5, i.e. 5 right and 5 up (1 401-point sweep, mismatches)", bad, 0);
+}
+
+/* ineq.q1 — f(x) = −x² + 2x + 8 */
+{
+  const f = x => -x * x + 2 * x + 8;
+  chk("ineq.q1 stem: f cuts the x-axis at −2 and 4", f(-2) + f(4), 0);
+  let bad = 0;
+  for (let i = -500; i <= 700; i++) { const x = i / 100; if ((f(x) > 0) !== (x > -2 && x < 4)) bad++; }
+  chk("ineq.q1(a) f(x) > 0 iff −2 < x < 4 (1 201-point sweep, mismatches)", bad, 0);
+  bad = 0;
+  for (let i = -500; i <= 700; i++) { const x = i / 100; if ((f(x) <= 0) !== (x <= -2 || x >= 4)) bad++; }
+  chk("ineq.q1(b) f(x) ≤ 0 iff x ≤ −2 or x ≥ 4 (1 201-point sweep, mismatches)", bad, 0);
+}
+
+/* ineq.q2 — f(x) = x² − 9 and g(x) = x + 1 */
+{
+  const f = x => x * x - 9, g = x => x + 1;
+  chk("ineq.q2 stem: f cuts at −3 and 3", f(-3) + f(3), 0);
+  chk("ineq.q2 stem: g cuts at −1", g(-1), 0);
+  let bad = 0;
+  for (let i = -600; i <= 600; i++) { const x = i / 100; if ((f(x) * g(x) >= 0) !== ((x >= -3 && x <= -1) || x >= 3)) bad++; }
+  chk("ineq.q2(a) f·g ≥ 0 iff −3 ≤ x ≤ −1 or x ≥ 3 (1 201-point sweep, mismatches)", bad, 0);
+  bad = 0;
+  for (let i = -600; i <= 600; i++) { const x = i / 100; if (near(x, -1)) continue; if ((f(x) / g(x) < 0) !== (x < -3 || (x > -1 && x < 3))) bad++; }
+  chk("ineq.q2(b) f/g < 0 iff x < −3 or −1 < x < 3 (sweep, mismatches)", bad, 0);
+  chkS("ineq.q2(b) x = −1 is excluded because g is zero there", g(-1) === 0, true);
+}
+
+/* ineq.q3 — h(x) = 4/(x − 1) − 2 */
+{
+  const h = x => 4 / (x - 1) - 2;
+  chk("ineq.q3 stem: h cuts the x-axis at 3", h(3), 0);
+  chk("ineq.q3 stem: h cuts the y-axis at −6", h(0), -6);
+  let bad = 0;
+  for (let i = -400; i <= 800; i++) { const x = i / 100; if (near(x, 1)) continue; if ((h(x) >= 0) !== (x > 1 && x <= 3)) bad++; }
+  chk("ineq.q3(a) h(x) ≥ 0 iff 1 < x ≤ 3 (sweep, mismatches)", bad, 0);
+  bad = 0;
+  for (let i = -400; i <= 800; i++) { const x = i / 100; if (near(x, 1)) continue; if ((x * h(x) <= 0) !== ((x >= 0 && x < 1) || x >= 3)) bad++; }
+  chk("ineq.q3(b) x·h(x) ≤ 0 iff 0 ≤ x < 1 or x ≥ 3 (sweep, mismatches)", bad, 0);
+}
+
+/* ineq.q4 — f(x) = x² − 2x − 3 against g(x) = x + 1 */
+{
+  const f = x => x * x - 2 * x - 3, g = x => x + 1;
+  chk("ineq.q4(a) the graphs meet at x = −1", f(-1) - g(-1), 0);
+  chk("ineq.q4(a) …and at x = 4", f(4) - g(4), 0);
+  chk("ineq.q4(a) the second meeting point is (4 ; 5)", g(4), 5);
+  chk("ineq.q4(a) the first meeting point is (−1 ; 0)", g(-1), 0);
+  let bad = 0;
+  for (let i = -500; i <= 800; i++) { const x = i / 100; if ((f(x) >= g(x)) !== (x <= -1 || x >= 4)) bad++; }
+  chk("ineq.q4(b) f ≥ g iff x ≤ −1 or x ≥ 4 (1 301-point sweep, mismatches)", bad, 0);
+}
+
+/* nor.q1 — f(x) = −x² + 4x + 5, sliding line y = k */
+{
+  const f = x => -x * x + 4 * x + 5;
+  chk("nor.q1 stem: f cuts the x-axis at −1 and 5", f(-1) + f(5), 0);
+  chk("nor.q1(a) xTP = −b/(2a)", -4 / (2 * -1), 2);
+  chk("nor.q1(a) the maximum value of f", f(2), 9);
+  let bad = 0;
+  for (let i = -500; i <= 2000; i++) {
+    const k = i / 100;
+    const d = 16 + 4 * (5 - k);            // x² − 4x + (k − 5) = 0
+    const n = d > 1e-12 ? 2 : (Math.abs(d) <= 1e-12 ? 1 : 0);
+    const want = k < 9 ? 2 : (k === 9 ? 1 : 0);
+    if (n !== want) bad++;
+  }
+  chk("nor.q1 Δ says: 2 roots below k = 9, 1 at k = 9, none above (2 501 k-values, mismatches)", bad, 0);
+  chk("nor.q1(a) equal roots exactly at k = 9", 16 + 4 * (5 - 9), 0);
+  chkS("nor.q1(b) a line at k = 11 really misses f", (() => { for (let i = -2000; i <= 3000; i++) if (Math.abs(f(i / 100) - 11) < 1e-6) return true; return false; })(), false);
+}
+
+/* nor.q2 — f(x) = x² + 1 against the rotating line y = kx */
+{
+  const f = x => x * x + 1;
+  let bad = 0;
+  for (let i = -800; i <= 800; i++) { const k = i / 100; const d = k * k - 4; if ((d < 0) !== (k > -2 && k < 2)) bad++; }
+  chk("nor.q2(a) Δ = k² − 4 < 0 iff −2 < k < 2 (1 601 k-values, mismatches)", bad, 0);
+  chk("nor.q2(a) Δ of x² − kx + 1 at k = 3 is positive", 9 - 4, 5);
+  const cuts = k => { let n = 0, prev = null; for (let i = -40000; i <= 40000; i++) { const x = i / 10000; const v = f(x) - k * x; if (prev !== null && (v < 0) !== (prev < 0)) n++; prev = v; } return n; };
+  chk("nor.q2(a) k = 0 inside the range: the line cuts f 0 times", cuts(0), 0);
+  chk("nor.q2(a) k = 3 outside it: the line cuts f 2 times", cuts(3), 2);
+  chk("nor.q2(a) k = −3 outside it: the line cuts f 2 times", cuts(-3), 2);
+  chk("nor.q2(b) at k = 2 the touching point is x = 1", f(1) - 2 * 1, 0);
+  chk("nor.q2(b) …and its height is 2", f(1), 2);
+  chk("nor.q2(b) at k = −2 the touching point is (−1 ; 2)", f(-1) + 2 * -1, 0);
+}
+
+/* nor.q3 — f(x) = x² − 3x + 6 against the sliding line y = x + k */
+{
+  const f = x => x * x - 3 * x + 6;
+  let bad = 0;
+  for (let i = -500; i <= 1500; i++) { const k = i / 100; const d = 16 - 4 * (6 - k); if ((d > 0) !== (k > 2)) bad++; }
+  chk("nor.q3 Δ = 4k − 8 > 0 iff k > 2 (2 001 k-values, mismatches)", bad, 0);
+  chk("nor.q3(a) Δ is zero at k = 2", 16 - 4 * (6 - 2), 0);
+  chk("nor.q3(a) the touching point is x = 2", f(2) - (2 + 2), 0);
+  chk("nor.q3(a) …and its height is 4", f(2), 4);
+  chkS("nor.q3 the illustrative line y = x, k = 0, really misses f", (() => { for (let i = -4000; i <= 7000; i++) { const x = i / 1000; if (Math.abs(f(x) - x) < 1e-6) return true; } return false; })(), false);
+  chk("nor.q3(b) y = x + 6 cuts f at x = 0", f(0) - 6, 0);
+  chk("nor.q3(b) …and at x = 4", f(4) - 10, 0);
+  chk("nor.q3(b) the two cutting points are (0 ; 6) and (4 ; 10)", f(0) + f(4), 16);
+}
+
+/* dist.q1 — f(x) = x² − 4 with A(−3 ; 5) and B(2 ; 0) */
+{
+  const f = x => x * x - 4;
+  chk("dist.q1 stem: A(−3 ; 5) is on f", f(-3), 5);
+  chk("dist.q1 stem: B(2 ; 0) is on f", f(2), 0);
+  chk("dist.q1(a) horizontal distance", Math.abs(2 - -3), 5);
+  chk("dist.q1(b) vertical distance", Math.abs(0 - 5), 5);
+  chk("dist.q1(c) AB² = (Δx)² + (Δy)²", 5 ** 2 + 5 ** 2, 50);
+  chk("dist.q1(c) AB = 5√2", Math.sqrt(50), 5 * Math.sqrt(2));
+  chk("dist.q1(c) …which is 7,07 to two decimals", Math.round(Math.sqrt(50) * 100) / 100, 7.07);
+  chk("dist.q1(c) the drawn line AB, y = −x + 2, passes through A", -(-3) + 2, 5);
+  chk("dist.q1(c) …and through B", -(2) + 2, 0);
+}
+
+/* dist.q2 — f(x) = −x² + 4x + 12 and g(x) = 2x + 4 */
+{
+  const f = x => -x * x + 4 * x + 12, g = x => 2 * x + 4;
+  chk("dist.q2 stem: the graphs meet at (−2 ; 0)", f(-2) - g(-2), 0);
+  chk("dist.q2 stem: …and at (4 ; 12)", f(4) - g(4), 0);
+  chk("dist.q2 stem: the second meeting height is 12", g(4), 12);
+  chk("dist.q2(a) f(1)", f(1), 15);
+  chk("dist.q2(a) g(1)", g(1), 6);
+  chk("dist.q2(a) PQ at x = 1", f(1) - g(1), 9);
+  chk("dist.q2(b) f(5)", f(5), 7);
+  chk("dist.q2(b) g(5)", g(5), 14);
+  chk("dist.q2(b) at x = 5 the LINE is on top, length 7", g(5) - f(5), 7);
+}
+
+/* dist.q3 — f(x) = −x² + 5x + 15 and g(x) = x + 3, MAXIMUM segment */
+{
+  const f = x => -x * x + 5 * x + 15, g = x => x + 3;
+  chk("dist.q3 stem: A(−2 ; 1) is on both", f(-2) - g(-2), 0);
+  chk("dist.q3 stem: A's height is 1", g(-2), 1);
+  chk("dist.q3 stem: B(6 ; 9) is on both", f(6) - g(6), 0);
+  chk("dist.q3 stem: B's height is 9", g(6), 9);
+  const d = x => f(x) - g(x);
+  let bad = 0;
+  for (let i = -400; i <= 800; i++) { const x = i / 100; if (Math.abs(d(x) - (-x * x + 4 * x + 12)) > 1e-9) bad++; }
+  chk("dist.q3(a) f − g is identically −x² + 4x + 12 (1 201-point sweep, mismatches)", bad, 0);
+  chk("dist.q3(a) its xTP = −b/(2a)", -4 / (2 * -1), 2);
+  chk("dist.q3(a) maximum PQ", d(2), 16);
+  let m = -Infinity, at = null;
+  for (let i = -2000; i <= 6000; i++) { const x = i / 1000; if (d(x) > m) { m = d(x); at = x; } }
+  chk("dist.q3(a) 8 001-point scan agrees on the maximum", Math.round(m * 1e6) / 1e6, 16);
+  chk("dist.q3(a) …and on where it happens", at, 2);
+  chk("dist.q3(b) P sits on f, so its height is f(2)", f(2), 21);
+  chk("dist.q3(b) the memo's own check: 21 − 5 = 16", f(2) - g(2), 16);
+  chk("dist.q3 the drawn illustrative segment at x = 4 is NOT the answer", d(4), 12);
+  chkS("dist.q3 trap premise: f's own turning point is at 2,5, not 2", near(-5 / (2 * -1), 2), false);
+}
+
+/* dist.q4 — f(x) = x² − 2x + 6 and g(x) = x − 2, MINIMUM segment */
+{
+  const f = x => x * x - 2 * x + 6, g = x => x - 2;
+  const d = x => f(x) - g(x);
+  chk("dist.q4(a) f(4)", f(4), 14);
+  chk("dist.q4(a) g(4)", g(4), 2);
+  chk("dist.q4(a) PQ at x = 4", d(4), 12);
+  let bad = 0;
+  for (let i = -300; i <= 600; i++) { const x = i / 100; if (Math.abs(d(x) - (x * x - 3 * x + 8)) > 1e-9) bad++; }
+  chk("dist.q4(b) f − g is identically x² − 3x + 8 (901-point sweep, mismatches)", bad, 0);
+  chk("dist.q4(b) its xTP = −b/(2a)", 3 / 2, 1.5);
+  chk("dist.q4(b) minimum PQ", d(1.5), 5.75);
+  let m = Infinity, at = null;
+  for (let i = -5000; i <= 9000; i++) { const x = i / 1000; if (d(x) < m) { m = d(x); at = x; } }
+  chk("dist.q4(b) 14 001-point scan agrees on the minimum", Math.round(m * 1e6) / 1e6, 5.75);
+  chk("dist.q4(b) …and on where it happens", at, 1.5);
+  chk("dist.q4(b) the trap card's claim: the difference has a negative discriminant", 9 - 32, -23);
+  chkS("dist.q4(b) …so the two graphs really never meet", (() => { for (let i = -5000; i <= 9000; i++) if (d(i / 1000) <= 0) return true; return false; })(), false);
+}
+
+/* dist.q5 — h(x) = 4/(x − 1) + 2, the two "TP" points and the gap */
+{
+  const A = 4, P = 1, Q = 2, r = Math.sqrt(A);
+  const h = x => A / (x - P) + Q;
+  chk("dist.q5(a) √a", r, 2);
+  chk("dist.q5(a) p + √a is 3", P + r, 3);
+  chk("dist.q5(a) …and q + √a is 4", Q + r, 4);
+  chk("dist.q5(a) that point really lies on h", h(3), 4);
+  chk("dist.q5(a) the other one, (p − √a ; q − √a), is (−1 ; 0)", h(-1), 0);
+  chk("dist.q5(b) d² = (Δx)² + (Δy)²", (3 - -1) ** 2 + (4 - 0) ** 2, 32);
+  chk("dist.q5(b) d = 4√2", Math.sqrt(32), 4 * Math.sqrt(2));
+  chk("dist.q5(b) …which is 5,66 to two decimals", Math.round(Math.sqrt(32) * 100) / 100, 5.66);
+  chk("dist.q5(b) both points sit on the drawn line y = x + 1", (-1 + 1) + (3 + 1), 0 + 4);
+  /* and the claim itself: no pair of points, one per branch, is closer */
+  let best = Infinity;
+  for (let i = 1; i <= 3000; i++) {
+    const x1 = P + i / 500, y1 = h(x1);
+    for (let j = 1; j <= 3000; j++) {
+      const x2 = P - j / 500, y2 = h(x2);
+      const dd = (x1 - x2) ** 2 + (y1 - y2) ** 2;
+      if (dd < best) best = dd;
+    }
+  }
+  chk("dist.q5(b) 9 000 000-pair brute-force search finds no closer pair than 32", Math.round(best * 1e3) / 1e3, 32);
+}
+
 console.log(R.join("\n"));
 
 /* =====================================================================
@@ -630,6 +1145,103 @@ console.log("\n== 9. Euclidean diagrams: specs, highlights, the bare-figure rule
     tick(!CHAPTERS.some(c => c.id === "euclid"), "euclid is NOT in CHAPTERS — so the hub quest tabs, the dice, the admin grid and assignments can never see it");
     tick(EXAM_CHAPTERS.includes("euclid"), "js/config.js EXAM_CHAPTERS includes euclid");
     console.log(`  euclid: examOnly=${euclidChapter && euclidChapter.examOnly}, quests=${euclidChapter ? (euclidChapter.quests || []).length : "?"}, in CHAPTERS=${CHAPTERS.some(c => c.id === "euclid")}, flagged=${EXAM_CHAPTERS.includes("euclid")}`);
+  }
+}
+
+/* =====================================================================
+   10. FUNCTION DIAGRAMS (SESSION 1, 2026-08-22 — the function-graph
+   engine wired into the same diagram slot section 9's Euclidean specs
+   use, via js/exam/function-diagram.js). Same promise as section 9,
+   different engine underneath: verifyFunction re-measures every point/
+   asymptote/segment a spec (or a highlighted variant of one) claims to
+   draw, and never against a memo string — against the real curve.
+   ===================================================================== */
+console.log("\n== 10. Function diagrams: specs, highlights, the no-leak rule ==");
+{
+  const { verifyFunction } = await import("./js/engine/function-graph.js");
+  const { applyFunctionHighlights, functionRefIssues } = await import("./js/exam/function-diagram.js");
+
+  const funcQs = mine.filter(m => m.q.chapter === "func").map(m => m.q);
+  const withDiagram = funcQs.filter(q => !!q.diagram);
+  /* 4 seeded practice-paper questions + the 15 session-2a sibling
+     questions + the 16 session-2b ones, every one of which carries a
+     to-scale sketch (the briefs' rule for both sessions: "every card
+     gets a sketch"). */
+  tick(withDiagram.length === 35, `expected all 35 func questions to carry a diagram, got ${withDiagram.length}`);
+
+  const measureFn = (spec, label) => {
+    const res = verifyFunction(spec);
+    const bad = res.filter(r => !r.ok);
+    tick(bad.length === 0, `${label}: ${bad.map(r => r.label).join("; ")}`);
+    console.log(`  ${label.padEnd(46)} ${res.length} check(s), ${bad.length ? "FAIL" : "all measure true"}`);
+    return res;
+  };
+
+  withDiagram.forEach(q => {
+    const d = q.diagram;
+    tick(!!d.spec && d.spec.type === "function", `${q.id}: diagram.spec must be a type:"function" spec`);
+    measureFn(d.spec, `${q.id} diagram.spec`);
+    Object.entries(d.parts).forEach(([pid, entry]) => {
+      const spec = entry.spec || d.spec;
+      if (entry.spec) measureFn(entry.spec, `${q.id}(${pid}) spec`);
+      ["question", "reveal"].forEach(side => {
+        if (!entry[side]) return;
+        const refIssues = functionRefIssues(spec, entry[side], `${q.id}(${pid}).${side}`);
+        tick(refIssues.length === 0, refIssues.join(" | "));
+        measureFn(applyFunctionHighlights(spec, entry[side]), `${q.id}(${pid}) ${side} as rendered`);
+      });
+      tick(q.parts.some(pp => pp.id === pid), `${q.id}: diagram.parts["${pid}"] names no real part`);
+    });
+    /* every part of a func question with a diagram gets a figure entry,
+       same "no unanswerable gap" rule section 9 applies to Euclidean */
+    const missing = q.parts.filter(pp => !d.parts[pp.id]).map(pp => pp.id);
+    tick(missing.length === 0, `${q.id}: parts with no diagram entry: ${missing.join(",")}`);
+  });
+
+  /* 10a — THE NO-LEAK RULE, one case per question, mirroring section
+     9b's bare-figure check: a part's QUESTION-side figure must never
+     draw the very fact that part is being asked to find. */
+
+  /* func.hyp.t1q4(c) — B's coordinates are the answer to (c), so the
+     question-side figure must carry no point at B until (c)'s own
+     reveal. */
+  {
+    const q = withDiagram.find(x => x.id === "func.hyp.t1q4");
+    const cQ = applyFunctionHighlights(q.diagram.spec, q.diagram.parts.c.question);
+    const cR = applyFunctionHighlights(q.diagram.spec, q.diagram.parts.c.reveal);
+    const hasB = pts => (pts || []).some(p => Math.abs(p.x - (-8)) < 1e-9 && Math.abs(p.y - 0) < 1e-9);
+    tick(!hasB(cQ.points), "func.hyp.t1q4(c) question-side figure leaks B's coordinates");
+    tick(hasB(cR.points), "func.hyp.t1q4(c) reveal-side figure should mark B");
+    console.log(`  t1q4(c): B on question side? ${hasB(cQ.points)} · on reveal side? ${hasB(cR.points)} — ${!hasB(cQ.points) && hasB(cR.points) ? "OK" : "FAIL"}`);
+  }
+
+  /* func.hyp.t2q3(a) — the one part that DERIVES the asymptotes from
+     the equation. The base spec must carry no `asymptotes` overlay and
+     no grid, and (a)'s question-side figure must carry no points at
+     all (nothing to read the answer off before it is found). */
+  {
+    const q = withDiagram.find(x => x.id === "func.hyp.t2q3");
+    tick(!q.diagram.spec.asymptotes, "func.hyp.t2q3 base spec must not draw asymptote lines (leaks (a)'s answer)");
+    tick(!q.diagram.spec.grid, "func.hyp.t2q3 base spec must not show a grid (leaks (a)'s answer by ruler)");
+    const aQ = applyFunctionHighlights(q.diagram.spec, q.diagram.parts.a.question);
+    tick((aQ.points || []).length === 0, `func.hyp.t2q3(a) question-side figure should carry no points, got ${JSON.stringify(aQ.points)}`);
+    const aR = applyFunctionHighlights(q.diagram.spec, q.diagram.parts.a.reveal);
+    const hasCentre = (aR.points || []).some(p => Math.abs(p.x - (-1)) < 1e-9 && Math.abs(p.y - 2) < 1e-9);
+    tick(hasCentre, "func.hyp.t2q3(a) reveal-side figure should mark the centre (−1 ; 2)");
+    console.log(`  t2q3(a): question-side points ${(aQ.points || []).length}, no asymptotes/grid on base, reveal marks centre — ${(aQ.points || []).length === 0 && !q.diagram.spec.asymptotes && !q.diagram.spec.grid && hasCentre ? "OK" : "FAIL"}`);
+  }
+
+  /* func.gt.t1q5(b) — PQ sits at the print's own illustrative x = 3,5
+     on the base figure (never the answer), and only (b)'s own reveal
+     moves it to the true maximum x = 2. */
+  {
+    const q = withDiagram.find(x => x.id === "func.gt.t1q5");
+    tick(q.diagram.spec.segment && q.diagram.spec.segment.x === 3.5, `func.gt.t1q5 base segment must sit at the illustrative x=3,5, got ${q.diagram.spec.segment && q.diagram.spec.segment.x}`);
+    const bQ = applyFunctionHighlights(q.diagram.spec, q.diagram.parts.b.question);
+    tick(bQ.segment.x === 3.5, `func.gt.t1q5(b) question-side segment should still be the illustrative x=3,5, got ${bQ.segment.x}`);
+    const bR = applyFunctionHighlights(q.diagram.spec, q.diagram.parts.b.reveal);
+    tick(bR.segment.x === 2, `func.gt.t1q5(b) reveal-side segment must move to the true maximum x=2, got ${bR.segment.x}`);
+    console.log(`  gt.t1q5(b): base/question segment x=${bQ.segment.x}, reveal segment x=${bR.segment.x} — ${bQ.segment.x === 3.5 && bR.segment.x === 2 ? "OK" : "FAIL"}`);
   }
 }
 

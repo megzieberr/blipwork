@@ -154,7 +154,26 @@
   background:#fff;border:1px solid var(--brd);border-radius:var(--r-md);
   display:flex;justify-content:center;overflow:hidden;
 }
-.exam-diagram svg.diag{width:100%;max-width:340px;height:auto;display:block}
+.exam-diagram svg.diag,.exam-diagram svg.fg{width:100%;max-width:340px;height:auto;display:block}
+
+/* FUNCTION-GRAPH ENGINE, ink on white (added SESSION 1, 2026-08-22).
+   js/engine/function-graph.js is shared with the live Functions chapter
+   quests, where it draws light ink (--g-ink etc., css/styles.css) for
+   the app's dark background — correct there, illegible here on the
+   white paper panel above. Rather than touch the shared engine or its
+   quest-side colours, every --g-* / --fg-* token it reads is redefined
+   in THIS scope only (a descendant-selector override, same trick as
+   .exam-diagram's own white panel not touching the app's dark theme
+   elsewhere) so axes, grid, read-lines and the three curve tones come
+   out dark-on-white, exactly like the circle engine's hardcoded
+   svg.diag colours just above. --bg is included because
+   .fg-dot.open / .fg-plab's text halo paint themselves against it —
+   on this white panel that must be white, not the app's near-black. */
+.exam-diagram svg.fg{
+  --g-ink:#2b2f4a; --g-muted:#6b7280; --g-axis:#2b2f4a; --g-grid:#dde1ec;
+  --g-read:#b45309; --bg:#fff;
+  --fg-a:#2563eb; --fg-b:#be123c; --fg-c:#7c3aed;
+}
 
 /* diagram core — Circle Quest's values, one font swap (Blipwork has no
    "Instrument Sans"; --font-display is its own display face). */

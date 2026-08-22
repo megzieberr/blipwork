@@ -14,3 +14,4 @@ theory references/
 
 # Her handwritten notes scans live here for digest sessions - NEVER commit (public repo)
 *.pdf
+tools/_out/

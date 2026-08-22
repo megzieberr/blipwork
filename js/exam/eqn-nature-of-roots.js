@@ -281,8 +281,8 @@ const q3 = {
         af: "Vir watter waardes van k sal die wortels van die vergelyking reëel en ongelyk wees?",
       },
       hint: {
-        en: "Real and unequal means Δ > 0, not Δ = 0. Use the same Δ from (a), but this time solve an inequality.",
-        af: "Reëel en ongelyk beteken Δ > 0, nie Δ = 0 nie. Gebruik dieselfde Δ van (a), maar los hierdie keer 'n ongelykheid op.",
+        en: "Real and unequal means Δ > 0, not Δ = 0. Use that same Δ, but this time solve an inequality.",
+        af: "Reëel en ongelyk beteken Δ > 0, nie Δ = 0 nie. Gebruik dieselfde Δ, maar los hierdie keer 'n ongelykheid op.",
       },
       memo: [
         { type: "step", text: { en: "real and unequal roots need Δ > 0:  16 − 8k > 0", af: "reële en ongelyke wortels benodig Δ > 0:  16 − 8k > 0" }, ticks: ["s/f"] },
@@ -294,8 +294,8 @@ const q3 = {
         } },
       ],
       esplain: {
-        en: "'Real and unequal' is Δ > 0, and 'equal' from (a) was Δ = 0 exactly — together those two boundaries are about to carve up every possible value of k into three neat regions. Watch the sign flip closely here; it's the one place this whole ladder likes to trip people up.",
-        af: "'Reëel en ongelyk' is Δ > 0, en 'gelyk' van (a) was Δ = 0 presies — saam gaan hierdie twee grense elke moontlike waarde van k in drie netjiese gebiede verdeel. Let noukeurig op die tekenomkering hier; dit is die een plek waar hierdie hele leer mense laat struikel.",
+        en: "'Real and unequal' is Δ > 0, and 'equal' is Δ = 0 exactly — together those two boundaries are about to carve up every possible value of k into three neat regions. Watch the sign flip closely here; it's the one place this whole ladder likes to trip people up.",
+        af: "'Reëel en ongelyk' is Δ > 0, en 'gelyk' is Δ = 0 presies — saam gaan hierdie twee grense elke moontlike waarde van k in drie netjiese gebiede verdeel. Let noukeurig op die tekenomkering hier; dit is die een plek waar hierdie hele leer mense laat struikel.",
       },
     },
     {
@@ -311,7 +311,7 @@ const q3 = {
         af: "Nie-reëel is bloot alles wat (a) en (b) nog nie gedek het nie. Waar hou 'gelyk' by k = 2 en 'reëel, ongelyk' by k < 2 op?",
       },
       memo: [
-        { type: "step", text: { en: "from (a) and (b), the roots are real (equal or unequal) for every k ≤ 2, so non-real roots need k > 2", af: "van (a) en (b) af, is die wortels reëel (gelyk of ongelyk) vir elke k ≤ 2, dus benodig nie-reële wortels k > 2" }, ticks: ["ca"] },
+        { type: "step", text: { en: "the roots are real — equal at k = 2, unequal for k < 2 — for every k ≤ 2, so non-real roots need k > 2", af: "die wortels is reëel — gelyk by k = 2, ongelyk vir k < 2 — vir elke k ≤ 2, dus benodig nie-reële wortels k > 2" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ k > 2", af: "∴ k > 2" }, ticks: ["a"] },
       ],
       esplain: {

@@ -269,6 +269,52 @@ Object.entries(CONCEPTS).forEach(([id, c]) => {
 });
 console.log(`  ${conceptCount} concept cards checked`);
 
+/* ---------- 5. prose-bracket regression (session 3, her /go ruling
+   2026-08-22) — the app-wide sweep made EVERY bracket group one opaque
+   .nowrap atom, including a prose aside like "(There is a quick check
+   available: …)". On the phone that became an 875px unbreakable span,
+   wider than the 375px screen. The fix: a bracket only counts as a
+   maths atom if it does NOT read as prose (3+ words of 3+ letters). This
+   section checks the fix directly, rather than relying on it merely not
+   crashing anywhere in sections 1-4 above. ---------- */
+console.log("\n== 5. prose-bracket regression (js/ui.js fmlBracketIsProse) ==");
+function nowrapSpansOf(html) {
+  const out = [];
+  const re = /<span class="nowrap">([\s\S]*?)<\/span>/g;
+  let m;
+  while ((m = re.exec(String(html)))) out.push(m[1].replace(/<[^>]*>/g, ""));
+  return out;
+}
+const PROSE_RE_CHECK = /[A-Za-z]{3,}\s+[A-Za-z]{3,}\s+[A-Za-z]{3,}/;
+// the real regression string — func.lp.q1 part (b)'s hint, js/exam/func-line-and-parabola.js
+const LP_Q1_B_HINT = "Find the x of the turning point first with x = −b/(2a), then substitute it back into f to get the y. (There is a quick check available: the turning point always sits exactly midway between the two x-intercepts.)";
+// a second synthetic prose-bracket case (not shipped copy, just a distinct shape)
+const SKETCH_HINT = "Draw the graph first (see the sketch below) before you write anything down.";
+[["lp.q1(b) hint", LP_Q1_B_HINT], ["sketch-below (synthetic)", SKETCH_HINT]].forEach(([label, raw]) => {
+  const rendered = formulaHtml(raw);
+  const spans = nowrapSpansOf(rendered);
+  const stillProse = spans.find(s => PROSE_RE_CHECK.test(s));
+  tick(!stillProse, `prose-bracket regression [${label}]: a .nowrap piece still swallows a prose run (${JSON.stringify(stillProse)})`);
+  // sanity: the text itself must still be intact somewhere on the page
+  tick(stripTags(rendered).includes("quick check available") || stripTags(rendered).includes("see the sketch below"),
+    `prose-bracket regression [${label}]: source text went missing`);
+});
+// maths cases must still stay glued as ONE atom each (the fix must not
+// over-fire on real maths brackets that happen to sit next to a word)
+[
+  ["factorised brackets", "y = a(x − x₁)(x − x₂)", "(x − x₁)(x − x₂)"],
+  ["difference of squares", "(a − b)(a + b) = a² − b²", "(a − b)(a + b)"],
+  ["using-clause (stage 1, unchanged)", "Solve for x (using the quadratic formula).", null],
+].forEach(([label, raw, expectGlued]) => {
+  const rendered = formulaHtml(raw);
+  const spans = nowrapSpansOf(rendered);
+  if (expectGlued) {
+    tick(spans.some(s => s.includes(expectGlued)), `maths-bracket sanity [${label}]: bracket pair no longer one glued piece (spans=${JSON.stringify(spans)})`);
+  } else {
+    tick(stripTags(rendered).includes("using the quadratic formula"), `maths-bracket sanity [${label}]: text preserved`);
+  }
+});
+
 /* ---------- verdict ---------- */
 console.log(`\n  ${stringCount} learner-facing strings run through the pipeline`);
 console.log(`  ${fmlCount} .fml expressions built, ${nowrapCount} .nowrap pieces inside them`);

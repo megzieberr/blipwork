@@ -89,7 +89,10 @@ export function mountQuestion(host, q, handlers = {}) {
   // general no-wrap rule for expressions, applied everywhere") — every
   // question gets it. fracHtml (proper stacked fractions) stays opt-in per
   // quest via q.stackFractions, unchanged.
-  fmt = q && q.stackFractions ? (x => formulaHtml(fracHtml(xbarHtml(x)))) : (x => formulaHtml(xbarHtml(x)));
+  // fracHtml (proper stacked fractions) is now UNIVERSAL too (WHOLE-APP
+  // SWEEP, her ruling 2026-08-23: "all the fractions are proper fractions"
+  // in every round) — q.stackFractions is kept as a no-op flag for history.
+  fmt = (x => formulaHtml(fracHtml(xbarHtml(x))));
   clear(host);
   const root = el("div", "q");
   if (q.prompt) root.appendChild(el("p", "q-prompt", fmt(q.prompt)));

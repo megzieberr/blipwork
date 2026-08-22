@@ -57,6 +57,8 @@ import { examQuestionsForTopic } from "./exam/index.js";
 import { chapterById, questAccent } from "./config.js";
 import { questDef } from "./quests/index.js";
 import { renderDiagram, highlightedSpec } from "./exam/circle-engine.js";
+import { renderFunction } from "./engine/function-graph.js";
+import { applyFunctionHighlights } from "./exam/function-diagram.js";
 import { examChapterEligible } from "./screens.js";
 
 /* "I'm lost" — REteach, not a hint (her ruling, session E, 2026-08-21):
@@ -105,7 +107,16 @@ function lostQuestLink(app, question) {
    observers (house rule: js/browser-pane notes / CLAUDE.md). The engine
    returns an SVG string; the wrapper is a white "paper" panel, because
    the ported engine draws dark ink for a light background and because
-   pen-and-paper is the point of this whole tab. */
+   pen-and-paper is the point of this whole tab.
+
+   TWO ENGINES (added SESSION 1, 2026-08-22): a spec's own `type` says
+   which one drew it — "function" routes to js/engine/function-graph.js
+   (the Functions chapter's own engine) via js/exam/function-diagram.js's
+   applyFunctionHighlights; anything else (every circle-geometry spec,
+   which carries no `type` at all) keeps going through circle-engine.js
+   exactly as before. Same box, same data-part/data-state attributes,
+   same question/reveal switch either way — only which functions build
+   the highlighted spec and render it differs. */
 function partDiagram(question, part, isRevealed, accent) {
   const d = question.diagram;
   if (!d || !d.parts) return null;
@@ -115,7 +126,9 @@ function partDiagram(question, part, isRevealed, accent) {
   if (!spec) return null;
   const hl = (isRevealed && entry.reveal) ? entry.reveal : entry.question;
   const box = el("div", "exam-diagram");
-  box.innerHTML = renderDiagram(highlightedSpec(spec, hl || {}), accent || "#8b5cf6");
+  box.innerHTML = spec.type === "function"
+    ? renderFunction(applyFunctionHighlights(spec, hl || {}))
+    : renderDiagram(highlightedSpec(spec, hl || {}), accent || "#8b5cf6");
   box.setAttribute("data-part", part.id);
   box.setAttribute("data-state", (isRevealed && entry.reveal) ? "reveal" : "question");
   return box;
