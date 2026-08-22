@@ -1,4 +1,55 @@
-# Project status — updated 2026-08-22 night (📝 EXAM FOCUS → SKILL ROUNDS, stage 1 ✅ SHIPPED, sw v56 live)
+# Project status — updated 2026-08-22 late (📐 FORMULA LINE-BREAK SWEEP built + reviewed, sw v57 LOCAL — ship waits on her word)
+
+## 📐 2026-08-22 (late) — FORMULA LINE-BREAK SWEEP, app-wide (stage 1 of exam skills approved)
+
+Her phone: `x² / − 16` split across lines in Equations round 4's MCQ, and `√(2² · 3 · / 5²)`
+split inside a bracket in the surds memo. She paused stage 2 (function sketches): "first do a
+whole app sweep and fix all these lines". Also ruled: Exam Focus skill rounds "flow better
+now"; the tiny stacked ¾ in an exponent STAYS.
+
+Cause: `formulaHtml` (js/ui.js) only protected trig chunks and was opt-in per quest. Built
+(Sonnet, Fable foreman brief + review, 416k agent tokens — over the 150–250k estimate):
+`formulaHtml` is now a tag-aware scanner for ANY maths expression → `<span class="fml">`
+(inline-block: moves to the next line WHOLE; wraps inside only if wider than the screen)
+with `.nowrap` pieces (sign + operand, bracket groups, √ groups, stacked fractions, exponents
+never split). Applied universally: questions.js `fmt` (all quests), modal concept cards,
+play.js method box, doubletick pass prompts (gt8 — was a real gap). fracHtml stays opt-in.
+sw v57. No SQL, no source strings changed. Commit `bda60e1`.
+
+Proof (Fable's own runs): `node verify-wrap.mjs` 257 750/257 750; `verify-wrap.html` at
+375 px in the browser 23 335/23 335 (⚠️ first run showed 0/0 — the OLD sw v56 served the
+cached ui.js; unregister SW + clear caches before trusting any local harness page);
+forced 240 px break of the surds line lands exactly before `+ √(2² · 3 · 5²)`; stacked
+fractions inside `.fml` render one-line, aligned. verify-exam-fractions 821/821, all other
+harnesses green per the builder.
+
+Known harmless wart: lone letters in prose ("a calculator", "e.g.") get an invisible `.fml`
+wrapper. Not touched: `rangeStr()` in funclib/tgraphlib emits a literal `<` as text — works
+by browser tolerance; worth a tidy some day.
+
+### ⏳ Pending on Megan
+- 💬 1 word [blocking]: "ship" → push sw v57 live (no migration).
+- 📱 3 min [whenever, after ship]: reopen PWA, Equations round 4 + Exam Focus → surds card
+  1 → Walk; then one General Trig round with fractions.
+
+### Next up
+- **Stage 2 — Functions**: function-sketch engine (parabola/hyperbola/exponential/line, to
+  scale) + 5–6 sibling cards per skill from the digest; then eqn → exp → gtrig; Identities +
+  Super Special Sums first cards. Wording pass on the four "from (a)" cards.
+- Janko (her brother) added to the live roster 2026-08-22 (username `janko`, visible, sets
+  his own password on first login) — SHE removes him via the dashboard before the kids get
+  access. Teacher dashboard has no add-learner button (only remove/reset); adding = one SQL
+  insert or `mhq_admin_add_student`.
+
+## 📌 Decisions (append-only, 2026-08-22 late)
+- A maths expression is one unit: moves whole; breaks only at = or before a sign; never inside
+  brackets/√/exponents/fractions. App-wide, not per chapter.
+- Stacked fraction in an exponent (x^¾) approved.
+- Function sketches come AFTER this sweep ships.
+
+---
+
+# (previous head) Project status — updated 2026-08-22 night (📝 EXAM FOCUS → SKILL ROUNDS, stage 1 ✅ SHIPPED, sw v56 live)
 
 ## 📝 2026-08-22 (night) — EXAM FOCUS BECOMES SKILL ROUNDS (stage 1), local only
 
