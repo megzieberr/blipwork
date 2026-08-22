@@ -1,4 +1,62 @@
-# Project status — updated 2026-08-22 evening (🔄 GENERAL TRIG LIVE + her phone-review fixes SHIPPED, sw v55; rounds 5–7 reordered)
+# Project status — updated 2026-08-22 night (📝 EXAM FOCUS → SKILL ROUNDS, stage 1 BUILT locally, 3 commits, NOT shipped — waits for her phone)
+
+## 📝 2026-08-22 (night) — EXAM FOCUS BECOMES SKILL ROUNDS (stage 1), local only
+
+Her play-test verdict: practice-paper questions dropped whole into the app felt "too
+sudden" — no title saying what skill is being practised, no sketch, one lonely 5-part
+question. Her drawing (EXAM-SKILLS-BRIEF.md has it): chapter → SKILL TILES → straight into
+one short card → Done / Hint / **Walk me through it** → after marking, **Another one!** /
+**That's enough for now**. Fable foreman, Opus (content) + Sonnet (UI) in parallel, ≈530k
+agent tokens, foreman review on the combined tree with own harness runs + own 375 px walk.
+Commits `cf2b175` (cards) → `a3f0d6e` (UI, sw v56) → `2c6eabe` (review fixes).
+
+Built: `js/exam/skills.js` (27 skills: eqn 7 · exp 4 · func 8 · gtrig 6 · trig 1 · euclid 1)
++ `cards-*.js` turning the 21 seeded questions into **54 cards** by part (dependent parts
+stay together as (a)/(b) — her ruling; 15 cards carry a hand-written `intro` with the
+given information; all 77 source parts covered; hyp.t2q3 (c) deliberately on two cards).
+Skill tiles 2-col grid, "worked k of n"; Identities + Super Special Sums tiles read "coming
+soon" (no cards yet). Walk = memo one block per "Next step →", last step pays like Done.
+Another wraps with a toast. **Every play starts fresh** (foreman ruling: a card is a drill —
+replaying yesterday's card must let you try again; server still pays once). Stacked fractions
+chapter-wide via fracHtml/formulaHtml at render time; 9 source strings hand-stacked, harness
+`verify-exam-fractions.mjs` reports 0 bare slashes. Euclidean = one continuous round. 2D Trig
+paused (one card, nothing new). Old topic list screen deleted.
+
+Harnesses: verify-exam 260/260 · verify-exam-modules 353/353 · verify-exam-skills 41/41 ·
+verify-exam-fractions 821/821 · verify-gtrig 1 036 917 green. No SQL, nothing pushed.
+
+### ⏳ Pending on Megan
+- 📱 5 min [blocking the ship]: run it locally (`?local=1`, port 5191 → Exam Focus →
+  Functions → Find the equation) and feel a card, Walk, Another, Enough. Then say "ship".
+- 💬 1 line [whenever]: rational exponents now render as tiny stacked fractions in the
+  exponent (x to the ¾ as a stack) — keep, or back to x^(3/4)?
+
+### Next up
+- **Ship stage 1** on her word (sw v56; no migration needed).
+- **Stage 2 — Functions first**: 5–6 sibling cards per skill from her digest
+  (graph-questeference\GR11-FUNCTIONS-NOTES-DIGEST.md) + a function-sketch engine so
+  hyperbolas/parabolas get a drawing (the hyperbola with no sketch was the pain point).
+  Then eqn → exp → gtrig (+ Identities, Super Special Sums get their first cards).
+- Wording pass: a few split cards still say "from (a)" / "in (b)" in hints/memos where
+  that part is now on another card (list in the Session A report inside
+  EXAM-SKILLS-BRIEF.md's commit, cards: hyp.t2q3 b, lp.q1 d/e, nor.q3 a/b, fr.q1 d). Intro
+  supplies the fact each time; it's only wording.
+- ⚖️ XP: server pays 75 XP + 10 💎 per completed card id — 54 cards pay 2,6× what 21
+  questions did. Needs a migration to change; her call.
+- Hayley's way card once she sends the wording · practice-paper mode UI.
+
+## 📌 Decisions (append-only, 2026-08-22 night)
+- Exam Focus = skill rounds, not whole paper questions. Chapter → skill → cards.
+- Dependent parts stay on one card; independent parts split.
+- Learner decides when to stop: Another one! / That's enough for now. No finish line.
+- Every play of a card starts fresh; server pays once ever.
+- Euclidean stays one long round; 2D Trig paused until after September scope.
+- Stacked fractions everywhere in Exam Focus — no slashes.
+- "Walk me through it" stays: same memo, one step per tap, last step counts as Done.
+
+---
+
+# (previous head) Project status — updated 2026-08-22 evening (🔄 GENERAL TRIG LIVE + her phone-review fixes SHIPPED, sw v55; rounds 5–7 reordered)
 
 ## 📱 2026-08-22 (evening) — HER PHONE PLAY-TEST → 15 fixes, shipped (sw v55, commit a215e28)
 
