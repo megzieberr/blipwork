@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-22 night (📝 EXAM FOCUS → SKILL ROUNDS, stage 1 BUILT locally, 3 commits, NOT shipped — waits for her phone)
+# Project status — updated 2026-08-22 night (📝 EXAM FOCUS → SKILL ROUNDS, stage 1 ✅ SHIPPED, sw v56 live)
 
 ## 📝 2026-08-22 (night) — EXAM FOCUS BECOMES SKILL ROUNDS (stage 1), local only
 
@@ -25,14 +25,16 @@ paused (one card, nothing new). Old topic list screen deleted.
 Harnesses: verify-exam 260/260 · verify-exam-modules 353/353 · verify-exam-skills 41/41 ·
 verify-exam-fractions 821/821 · verify-gtrig 1 036 917 green. No SQL, nothing pushed.
 
+**SHIPPED the same night on her "you can ship it"**: pushed `cf21691` to main, GitHub Pages
+serving sw **v56** + js/exam/skills.js confirmed by curl. No migration (none needed).
+
 ### ⏳ Pending on Megan
-- 📱 5 min [blocking the ship]: run it locally (`?local=1`, port 5191 → Exam Focus →
-  Functions → Find the equation) and feel a card, Walk, Another, Enough. Then say "ship".
-- 💬 1 line [whenever]: rational exponents now render as tiny stacked fractions in the
-  exponent (x to the ¾ as a stack) — keep, or back to x^(3/4)?
+- 📱 3 min [whenever]: close + reopen the PWA (v56), Exam Focus → Functions → feel a card,
+  Walk, Another, Enough on your phone.
+- 💬 1 line [whenever]: x to the ¾ renders as a tiny stacked fraction in the exponent
+  (Equations → Rational exponents & k-method, card 1) — keep, or back to x^(3/4)?
 
 ### Next up
-- **Ship stage 1** on her word (sw v56; no migration needed).
 - **Stage 2 — Functions first**: 5–6 sibling cards per skill from her digest
   (graph-quest/reference/GR11-FUNCTIONS-NOTES-DIGEST.md) + a function-sketch engine so
   hyperbolas/parabolas get a drawing (the hyperbola with no sketch was the pain point).
