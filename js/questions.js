@@ -85,7 +85,11 @@ function renderSpec(spec) {
 }
 
 export function mountQuestion(host, q, handlers = {}) {
-  fmt = q && q.stackFractions ? (x => formulaHtml(fracHtml(xbarHtml(x)))) : xbarHtml;
+  // formulaHtml is now UNIVERSAL (her /go ruling, 2026-08-22 morning: "one
+  // general no-wrap rule for expressions, applied everywhere") — every
+  // question gets it. fracHtml (proper stacked fractions) stays opt-in per
+  // quest via q.stackFractions, unchanged.
+  fmt = q && q.stackFractions ? (x => formulaHtml(fracHtml(xbarHtml(x)))) : (x => formulaHtml(xbarHtml(x)));
   clear(host);
   const root = el("div", "q");
   if (q.prompt) root.appendChild(el("p", "q-prompt", fmt(q.prompt)));
@@ -573,8 +577,12 @@ function mountSteps(host, root, q, commit, svgNode) {
 
     // her round-8 move: MAKE the two ticks (sign, interval), then tap the overlap
     if (step.kind === "doubletick") {
+      // pass/finalPrompt strings reach the DOM straight from tapcross.js's
+      // own innerHTML (it has no fmt of its own) — run them through fmt
+      // here, at the one call site, same as every other q.*/step.* string
       const dt = mountDoubleTick(shost, {
-        passes: step.passes, finalPrompt: step.finalPrompt, correct: step.correct,
+        passes: (step.passes || []).map(p => ({ ...p, prompt: fmt(p.prompt) })),
+        finalPrompt: fmt(step.finalPrompt), correct: step.correct,
         onMiss() { if (!busy()) miss(w, hintBox); },
         onSubmit(q) { if (busy()) return; if (checkStep(step, q)) { dt.disable(); settle(i, w); } },
       });

@@ -8,7 +8,7 @@ import { getSession } from "./session.js";
 import { mountQuestion } from "./questions.js";
 import { openConcept } from "./modal.js";
 import { openCalculator } from "./calculator.js";
-import { el, clear, mount, xbarHtml } from "./ui.js";
+import { el, clear, mount, xbarHtml, formulaHtml } from "./ui.js";
 import { genAt } from "./dice.js";
 
 /* ------------------------------------------------------------
@@ -187,7 +187,7 @@ export function renderPlay(app, host, params) {
     if (dice && q.method) {
       const mbtn = el("button", "btn ghost small", "📖 Show me the method");
       const mbox = el("div", "hint-box"); mbox.hidden = true;
-      mbox.innerHTML = `<span class="tag">METHOD</span>${xbarHtml(q.method)}`;
+      mbox.innerHTML = `<span class="tag">METHOD</span>${formulaHtml(xbarHtml(q.method))}`;
       mbtn.addEventListener("click", () => { mbox.hidden = false; mbtn.disabled = true; });
       qhost.appendChild(mbtn); qhost.appendChild(mbox);
     }

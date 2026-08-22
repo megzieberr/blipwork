@@ -1248,6 +1248,19 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .opt .sfrac,.q-prompt .sfrac{font-size:.95em}
 /* a formula fragment never breaks across lines (her rule: "(90° ± θ)" on one line) */
 .nowrap,.q-f{white-space:nowrap}
+/* FORMULA LINE-BREAKING, app-wide (js/ui.js formulaHtml, her /go ruling
+   2026-08-22 morning) — a whole maths expression moves to the next line
+   as ONE unit; inline-block is what makes that happen (a plain inline
+   span has no "move me whole" behaviour — its children can still land on
+   separate lines independently). Only when the expression itself is
+   wider than its container does the browser wrap INSIDE it, and even
+   then only at the un-nowrapped space between .nowrap pieces (every
+   piece — a sign plus its operand, a bracket group, a stacked fraction —
+   stays glued, same white-space:nowrap rule as the existing bracket/
+   trig-chunk .nowrap above). max-width:100% stops the inline-block
+   itself from ever forcing the PAGE wider than its own container. */
+.fml{display:inline-block;max-width:100%;vertical-align:baseline}
+.fml .nowrap{white-space:nowrap}
 .q-oah{margin:0 0 10px}
 .q-oah table{margin:0 auto}
 /* double tick (round 8): two colours of ✓ on one cross, a numbered pass prompt */

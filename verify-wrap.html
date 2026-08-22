@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formula line-breaking · 375px verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<link rel="stylesheet" href="./css/exam.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  #banner.running{background:rgba(255,255,255,.05);color:var(--muted)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  /* the actual measured surface: a real 375px phone-width card, using the
+     app's own .card/.q-prompt/.exam-*/.concept classes so computed font,
+     line-height and padding are IDENTICAL to what a learner sees */
+  #stage{width:375px;border:1px dashed #6668;padding:0;margin:10px 0}
+  #stage .card{margin:0}
+  .fail-item{border:1px solid var(--bad);border-radius:10px;padding:10px;margin:8px 0;font-size:12px}
+  .fail-item b{color:var(--bad)}
+  .fail-item .html{color:var(--muted);word-break:break-all}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Formula line-breaking · 375px verification</h1>
+<p class="muted small">Renders every exam card, one fresh roll of every quest skill, and every concept card through the REAL fmt pipeline, into a real 375px-wide `.card` using the app's own CSS, then reads back <code>getClientRects()</code> on every `.fml`/`.nowrap` it produced.</p>
+<div id="banner" class="running">running…</div>
+
+<h2>Summary</h2>
+<pre id="summary">…</pre>
+
+<h2>The two phone screenshots (2026-08-22), rendered for real</h2>
+<div id="shot1" class="card" style="width:375px"></div>
+<div id="shot2" class="card" style="width:375px;margin-top:10px"></div>
+
+<h2>Failures (a .nowrap piece broke across more than one line)</h2>
+<div id="fails"></div>
+
+<div id="stage"></div>
+
+<script type="module">
+import { formulaHtml, fracHtml, xbarHtml } from "./js/ui.js";
+import { QUEST_DEFS } from "./js/quests/index.js";
+import { CONCEPTS } from "./js/concepts.js";
+import { examQuestionsForChapter } from "./js/exam/index.js";
+
+const EXAM_CHAPTER_IDS = ["stats","finance","prob","meas","tgraph","analytical","pat","exp","func","trig","gtrig","euclid","eqn"];
+
+const stage = document.getElementById("stage");
+const failsEl = document.getElementById("fails");
+let total = 0, passed = 0, rendered = 0;
+const failItems = [];
+
+/* getClientRects() returns one rect per inline BOX FRAGMENT, not one per
+   visual LINE — a nested inline element (a stacked-fraction span, a
+   <sup>) creates its own box even when it sits on the very same line as
+   its siblings, so a .nowrap with a nested atom routinely reports 2+
+   rects that are all still on ONE line. The only real signal for "this
+   actually wrapped to a new line" is whether the rects' TOP y-coordinates
+   differ (a few px of rounding slack for sub-pixel layout). */
+function linesUsed(rects) {
+  const tops = [...rects].map(r => Math.round(r.top));
+  const distinct = [...new Set(tops.map(t => Math.round(t / 3) * 3))];   // 3px bucket — same line, not same exact pixel
+  return distinct.length;
+}
+
+/* one string, rendered into a REAL .card at 375px with the given field
+   class (matching the actual DOM shape questions.js/exam-play.js/modal.js
+   build), then measured */
+function checkOne(raw, where, cls, opts = {}) {
+  if (!raw || typeof raw !== "string") return;
+  const html = opts.exam || opts.stackFractions
+    ? formulaHtml(fracHtml(xbarHtml(raw)))
+    : formulaHtml(xbarHtml(raw));
+  if (!html.includes('class="fml"')) return;   // nothing to measure — no expression was found
+  rendered++;
+
+  const card = document.createElement("div");
+  card.className = "card";
+  const field = document.createElement(opts.tag || "p");
+  field.className = cls;
+  field.style.display = "block";   // a bare <span> field (solution steps) sits inside a block wrapper for real — match that width, not its own auto-sized inline box
+  field.innerHTML = html;
+  card.appendChild(field);
+  stage.appendChild(card);
+
+  const fmls = field.querySelectorAll(".fml");
+  fmls.forEach(fml => {
+    const nowraps = fml.querySelectorAll(".nowrap");
+    nowraps.forEach((nw, i) => {
+      total++;
+      const lines = linesUsed(nw.getClientRects());
+      const ok = lines <= 1;
+      if (ok) passed++;
+      else failItems.push({ where: `${where} — .fml .nowrap[${i}] spans ${lines} lines`, html: nw.outerHTML, rects: lines });
+    });
+    // the .fml itself: either one LINE (fits, didn't break) or more than
+    // one because it is genuinely wider than the card — never "broke for
+    // no reason" while narrower than its container
+    total++;
+    const fLines = linesUsed(fml.getClientRects());
+    if (fLines <= 1) { passed++; }
+    else {
+      // wider-than-container check: a clone forced fully nowrap tells us
+      // its true single-line width
+      const clone = fml.cloneNode(true);
+      clone.style.display = "inline-block";
+      clone.style.whiteSpace = "nowrap";
+      clone.style.position = "absolute";
+      clone.style.visibility = "hidden";
+      document.body.appendChild(clone);
+      const trueWidth = clone.getBoundingClientRect().width;
+      document.body.removeChild(clone);
+      const containerWidth = field.getBoundingClientRect().width;
+      const genuinelyTooWide = trueWidth > containerWidth + 1;   // +1px rounding slack
+      if (genuinelyTooWide) passed++;
+      else failItems.push({ where: `${where} — .fml broke but FITS the container (width ${trueWidth.toFixed(1)} ≤ ${containerWidth.toFixed(1)})`, html: fml.outerHTML, rects: fLines });
+    }
+  });
+  card.remove();
+}
+
+/* ---------- the two phone screenshots, rendered visibly above ---------- */
+function renderShot(hostId, html, cls) {
+  const host = document.getElementById(hostId);
+  const p = document.createElement("p");
+  p.className = cls;
+  p.innerHTML = html;
+  host.appendChild(p);
+}
+renderShot("shot1", formulaHtml(xbarHtml(
+  "One denominator is 16 − x² and another is x² − 16. What is the trick?"
+)), "q-prompt");
+renderShot("shot2", formulaHtml(xbarHtml(
+  "√48 + √300 − √27 = √(2⁴ · 3) + √(2² · 3 · 5²) − √(3³)"
+)), "exam-memo-text");
+// measure the shots' OWN already-rendered DOM directly (no reprocessing —
+// checkOne would re-run formulaHtml on already-formatted text)
+function measureRendered(field, where) {
+  field.querySelectorAll(".fml").forEach(fml => {
+    fml.querySelectorAll(".nowrap").forEach((nw, i) => {
+      total++;
+      const lines = linesUsed(nw.getClientRects());
+      const ok = lines <= 1;
+      if (ok) passed++;
+      else failItems.push({ where: `${where} — .fml .nowrap[${i}] spans ${lines} lines`, html: nw.outerHTML, rects: lines });
+    });
+  });
+}
+measureRendered(document.getElementById("shot1").querySelector("p"), "shot1 (screenshot 1)");
+measureRendered(document.getElementById("shot2").querySelector("p"), "shot2 (screenshot 2)");
+
+/* ---------- 1. every exam chapter's cards ---------- */
+let examCards = 0;
+EXAM_CHAPTER_IDS.forEach(chapterId => {
+  let cards = [];
+  try { cards = examQuestionsForChapter(chapterId); } catch { cards = []; }
+  cards.forEach(card => {
+    examCards++;
+    const pair = (where, p, cls, tag) => { if (p && p.en) checkOne(p.en, `exam.${chapterId}.${card.id}.${where}`, cls, { exam: true, tag }); };
+    pair("intro", card.intro, "exam-intro", "div");
+    (card.parts || []).forEach(part => {
+      pair(`(${part.id}).prompt`, part.prompt, "exam-part-prompt", "div");
+      pair(`(${part.id}).hint`, part.hint, "exam-hint", "div");
+      (part.memo || []).forEach((b, i) => pair(`(${part.id}).memo[${i}]`, b.text, "exam-memo-text", "div"));
+    });
+  });
+});
+
+/* ---------- 2. one fresh roll of every quest skill ---------- */
+let skillCount = 0;
+for (const [qid, def] of Object.entries(QUEST_DEFS)) {
+  const stackFractions = !!def.stackFractions;
+  (def.skills || []).forEach(skill => {
+    skillCount++;
+    let q;
+    try { q = skill.gen(); } catch { return; }
+    if (!q) return;
+    checkOne(q.prompt, `${qid}.${skill.id}.prompt`, "q-prompt", { stackFractions, tag: "p" });
+    checkOne(q.hint, `${qid}.${skill.id}.hint`, "", { stackFractions, tag: "p" });
+    checkOne(q.answerLabel, `${qid}.${skill.id}.answerLabel`, "", { stackFractions, tag: "p" });
+    (q.options || []).forEach((o, i) => checkOne(o && o.label, `${qid}.${skill.id}.options[${i}]`, "opt", { stackFractions, tag: "div" }));
+    (q.solution || []).forEach((s, i) => checkOne(s && s.s, `${qid}.${skill.id}.solution[${i}]`, "s", { stackFractions, tag: "span" }));
+  });
+}
+
+/* ---------- 3. every concept card ---------- */
+let conceptCount = 0;
+Object.entries(CONCEPTS).forEach(([id, c]) => {
+  conceptCount++;
+  checkOne(c.body, `concept.${id}.body`, "concept", { stackFractions: !!c.fractions, tag: "div" });
+});
+
+/* ---------- verdict ---------- */
+const banner = document.getElementById("banner");
+const summary = document.getElementById("summary");
+summary.textContent =
+  `${examCards} exam cards, ${skillCount} quest skills (1 roll each), ${conceptCount} concept cards\n` +
+  `${rendered} strings actually rendered into a real 375px .card (had at least one .fml)\n` +
+  `${total} .nowrap/.fml measurements taken\n` +
+  `${passed}/${total} passed`;
+
+if (failItems.length) {
+  banner.textContent = `FAIL — ${failItems.length} broke where they shouldn't`;
+  banner.className = "fail";
+  failItems.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "fail-item";
+    div.innerHTML = `<b>${f.where}</b> — ${f.rects} line(s)<div class="html">${f.html.replace(/</g, "&lt;")}</div>`;
+    failsEl.appendChild(div);
+  });
+} else {
+  banner.textContent = `PASS — ${passed}/${total} measurements, every .nowrap stayed on one line`;
+  banner.className = "pass";
+  failsEl.textContent = "(none)";
+}
+window.__verifyWrapDone = { total, passed, fails: failItems.length, examCards, skillCount, conceptCount, rendered };
+</script>
+</body>
+</html>
