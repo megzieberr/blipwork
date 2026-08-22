@@ -147,7 +147,12 @@ Stage 3 was relaunched from the same brief (cost: the first agent's reading toke
   now the two Euclidean ids only.
 - Migration file header updated to "all 13 built". Still NOT run.
 
-## What ships (stage 5 — on her "ship")
+## Stage 5 — SHIPPED 2026-08-22 evening on her "Yes, you can ship"
+Migration `gtrig_quests` applied via MCP: students 21 / progress 27 / blips 3 — hashes
+byte-identical before and after; the 79 pre-existing quest rows byte-identical; 13 gt
+rows inserted, all `is_open = false`. sw v53 → v54. Pushed to main.
+
+### (the plan as written before the ship)
 1. `supabase/migration-gtrig-quests.sql` via MCP on the live project, with
    `students` / `progress` / `blips` row counts + hashes before and after (must be
    identical — it touches `quests` only), then `/migration-check`.

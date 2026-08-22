@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-22 (🔄 GENERAL TRIG: all 13 rounds BUILT + reviewed, committed LOCALLY, ⏳ awaiting her "ship" — NOT live, sw still v53)
+# Project status — updated 2026-08-22 (🔄 GENERAL TRIG: all 13 rounds ✅ SHIPPED, sw v54, migration applied — rounds seeded CLOSED, open them in admin as you teach)
 
 ## 🔄 2026-08-22 (day, unattended) — GENERAL TRIG CHAPTER BUILT, stages 1–4, local commits only
 
@@ -14,18 +14,17 @@ questions moved under a General Trig tab in Exam Focus with "I'm lost" → gt5 /
 phone ruling mid-build); Mixed Problems stays under 2D Trig. verify-gtrig.html 1 058 724
 checks green; all other harnesses unchanged-green. Her laptop died once mid-stage-3 —
 nothing lost (commits), stage relaunched.
+**SHIPPED the same evening on her "Yes, you can ship"**: migration `gtrig_quests` applied via MCP — students/progress/blips hashes byte-identical before and after (21 / 27 / 3 rows), the 79 existing quest rows byte-identical, 13 new gt rows all closed; sw v53 → **v54**; pushed to main.
 
 ### ⏳ Pending on Megan
-- 💻 5 min **[blocks the chapter going live]**: say **"ship"** — foreman runs
-  `supabase/migration-gtrig-quests.sql` via MCP (13 quest rows, seeded CLOSED, learner
-  hashes before/after), bumps sw v53→v54, pushes, checks live.
+- 💻 1 min when teaching starts: open gt1 in admin (all 13 are seeded CLOSED).
 - 📱 3 min after the ship: feel round 1 (circle frames) and round 8 (triangle appears
   after the quadrant tap) on your phone.
 - 💬 1 line whenever: round 12 treats `sin 3A = cos 60°` as "no reference angle" (your
   p60 type ⑥) — fine, or only when both sides carry the variable?
 
 ### Next up
-- Ship (above). Then: open gt1 in admin when teaching starts; Hayley's way card once she
+- Open gt1 in admin when teaching starts; Hayley's way card once she
   sends the wording; practice-paper mode UI · overnight #2 content run.
 
 ---
