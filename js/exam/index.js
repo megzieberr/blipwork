@@ -5,14 +5,18 @@
    2026-08-22 — see OVERNIGHT-1-REPORT.md's "day-session work list").
    ------------------------------------------------------------
    Every array starts EMPTY — content is seeded topic by topic in later
-   build sessions. One key per js/config.js CHAPTERS[].id. Euclidean
-   geometry has NO key here YET — NOT because it's excluded (that was
-   never Megan's ruling — see EXAM-FOCUS-PLAN.md's "Corrections" section,
-   2026-08-21 late night: Euclidean exam questions belong in Exam Focus,
-   as an exam-focus-only chapter, her 2026-08-22 morning ruling). Its two
-   composed modules wait in js/exam/_pending-engine-port/ on the Circle
-   Quest engine.js port (build order step 3) — a separate day session's
-   job, kept out of this one so it lands clean.
+   build sessions. One key per chapter id: the eleven js/config.js
+   CHAPTERS entries, plus every js/config.js EXAM_ONLY_CHAPTERS entry.
+
+   EUCLIDEAN IS REGISTERED (2026-08-22). Its two composed modules moved
+   out of js/exam/_pending-engine-port/ the day the Circle Quest engine
+   port landed (js/exam/circle-engine.js, EXAM-FOCUS-PLAN.md build order
+   step 3), and its chapter is the first EXAM-FOCUS-ONLY one — her
+   ruling that morning: Euclidean gets its own chapter inside Blipwork,
+   visible in the 📝 Exam Focus tab and nowhere else, because Circle
+   Quest still owns every circle-geo drill round. "euclid" is therefore
+   a perfectly ordinary key here; what makes it exam-only lives in
+   js/config.js (a separate list from CHAPTERS) and js/screens.js.
 
    The HARNESS-ONLY stub (js/exam/_harness-stub.js) is deliberately NOT
    imported or registered here — it must stay unreachable through normal
@@ -43,12 +47,15 @@ import { funcHyperbolaAndExponentialT2Questions } from "./func-hyperbola-and-exp
 import { trigReductionAndRatiosQuestions } from "./trig-reduction-and-ratios.js";
 import { trigGeneralSolutionsQuestions } from "./trig-general-solutions.js";
 import { trigMixedProblemsQuestions } from "./trig-mixed-problems.js";
+import { euclidCircleTheoremsQuestions } from "./euclid-circle-theorems.js";
+import { euclidTangentsAndCyclicQuadsQuestions } from "./euclid-tangents-and-cyclic-quads.js";
 
 /* PILOT TOPIC (session D, 2026-08-21) + overnight run #1's 15 modules
    (composed 2026-08-21 night, registered 2026-08-22 day session): eqn
    goes from 4 questions (nature-of-roots only) to 9 across 4 topics;
    exp, func and trig go from empty to their first seeded questions. The
-   two Euclidean modules stay unregistered — see this file's header.
+   two Euclidean modules land the NEXT day session (2026-08-22, engine
+   port) as the exam-only "euclid" chapter's first two questions.
    Every other chapter (stats, finance, prob, meas, tgraph, analytical,
    pat) stays an empty array until its own seeding session lands. */
 const REGISTRY = {
@@ -69,6 +76,13 @@ const REGISTRY = {
     ...trigReductionAndRatiosQuestions,
     ...trigGeneralSolutionsQuestions,
     ...trigMixedProblemsQuestions,
+  ],
+  /* EXAM-FOCUS-ONLY chapter (js/config.js EXAM_ONLY_CHAPTERS) — it owns
+     no drill quests at all, so it appears in the Exam Focus tab and
+     nowhere else in the app. */
+  euclid: [
+    ...euclidCircleTheoremsQuestions,
+    ...euclidTangentsAndCyclicQuadsQuestions,
   ],
   eqn: [
     ...eqnKMethodQuestions,

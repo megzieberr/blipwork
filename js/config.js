@@ -178,7 +178,48 @@ export const CHAPTERS = [
   },
 ];
 
+/* ============================================================
+   EXAM-FOCUS-ONLY CHAPTERS (her ruling, morning of 2026-08-22 —
+   EXAM-FOCUS-PLAN.md, "Her rulings, morning of 2026-08-22"):
+   "Euclidean gets ITS OWN CHAPTER inside Blipwork — an EXAM-FOCUS-ONLY
+   chapter. No drill quests (Circle Quest still owns those), so it
+   appears in the Exam Focus tab only, never as a hub quest chapter."
+
+   THIS IS A SEPARATE LIST ON PURPOSE, and that separation IS the
+   mechanism. Everything that draws the rest of the app — the hub's
+   Term 3 / Revision quest cards, the 🎲 dice, the admin quest
+   open/close grid, assigned homework, the dashboard chips — iterates
+   CHAPTERS and only CHAPTERS, so a chapter listed here is structurally
+   invisible to all of them; there is no flag to forget to set. Only the
+   Exam Focus screens (js/screens.js) look at both lists, through
+   examChapters() / examChapterById() below.
+
+   An entry mirrors a CHAPTERS entry's shape so the exam tab can render
+   it with the identical card code, with two differences: `quests` is
+   empty (it owns none, by design) and `examOnly: true` marks it for
+   examChapterEligible()'s documented exception in js/screens.js.
+
+   Icon: 🧭 rather than ⭕ — the hub already has an "⭕ Circle Geo" tab
+   pointing at Circle Quest, and two circles side by side in the same
+   hub would read as the same destination. Flag it if she'd rather have
+   a different one; nothing else depends on the choice.
+   ============================================================ */
+export const EXAM_ONLY_CHAPTERS = [
+  {
+    id: "euclid", name: "Euclidean Geometry", paper: "Paper 2", icon: "🧭", term: "exam-only",
+    signature: PALETTE.violet, open: true, examOnly: true,
+    blurb: "Circle theorems, tangents and cyclic quads — real exam questions, one part at a time.",
+    quests: [],
+  },
+];
+
 export function chapterById(id) { return CHAPTERS.find(c => c.id === id) || null; }
+
+/* Every chapter the EXAM FOCUS tab may show — quest chapters first, in
+   their existing order, then the exam-only ones. Exam-focus screens use
+   these two instead of CHAPTERS / chapterById; nothing else does. */
+export function examChapters() { return CHAPTERS.concat(EXAM_ONLY_CHAPTERS); }
+export function examChapterById(id) { return chapterById(id) || EXAM_ONLY_CHAPTERS.find(c => c.id === id) || null; }
 /* every quest in a chapter shares its chapter's one flat accent —
    no per-quest shade ramp in the solid-colour palette. */
 export function questAccent(chapter) {
@@ -288,14 +329,17 @@ export const MOOD = {
    questions. WIDENED (day session, 2026-08-22, registering overnight
    run #1 — OVERNIGHT-1-REPORT.md): exp, func and trig now carry real
    seeded questions too (js/exam/index.js), so all four flip on here.
-   Euclidean stays OFF this flag — its two modules are unregistered
-   pending the Circle Quest engine port (see js/exam/index.js's header)
-   even though EXAM-FOCUS-PLAN.md's Corrections confirm it belongs in
-   Exam Focus, as its own exam-only chapter, once that lands. The class
+   EUCLIDEAN ADDED (day session, 2026-08-22): the Circle Quest engine
+   port landed, its two composed modules are registered, and her
+   morning ruling gave Euclidean its own EXAM-FOCUS-ONLY chapter
+   (EXAM_ONLY_CHAPTERS above). It is the first id here that owns no
+   quests at all, which is why examChapterEligible() in js/screens.js
+   carries a documented exception for exam-only chapters — for them
+   this flag is the whole gate. The class
    still is not invited to the app at all (a separate, earlier gate), so
    nothing here is learner-visible on live regardless — this flag only
    controls what's REACHABLE once she opens the app up. */
-export const EXAM_CHAPTERS = ["eqn", "exp", "func", "trig"];
+export const EXAM_CHAPTERS = ["eqn", "exp", "func", "trig", "euclid"];
 
 /* Pay-per-completed-question, her kickoff ruling (2026-08-21): flat 75 XP +
    10 gold, ONCE per question ever (re-opening an already-completed

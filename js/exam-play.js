@@ -33,6 +33,7 @@ import { el, clear, showToast, xbarHtml } from "./ui.js";
 import { getExamLang, uiStr, pick } from "./exam/lang.js";
 import { chapterById, questAccent } from "./config.js";
 import { questDef } from "./quests/index.js";
+import { renderDiagram, highlightedSpec } from "./exam/circle-engine.js";
 import { examChapterEligible } from "./screens.js";
 
 /* "I'm lost" — REteach, not a hint (her ruling, session E, 2026-08-21):
@@ -59,6 +60,40 @@ function lostQuestLink(app, question) {
   const btn = el("button", "exam-lost-link", "I'm lost — take me to the round that teaches this");
   btn.addEventListener("click", () => app.go("play", { chapter: lostChapter, quest: lostQ, def, accent: questAccent(lostChapter) }));
   return btn;
+}
+
+/* DIAGRAMS (2026-08-22, with the Circle Quest engine port). A question
+   may carry a to-scale figure (js/exam/_schema.js's `diagram` field);
+   when it does, EVERY part that names itself in diagram.parts gets its
+   OWN copy, drawn with THAT part's marker-pen highlights — her design:
+   "find angle A" lights the wedge on angle A, "prove ABCD is cyclic"
+   lights the four sides (EXAM-FOCUS-PLAN.md, "Circle geo diagrams").
+
+   Per PART, not one figure above the whole chain: parts stay on screen
+   as a chain, so a single shared figure could only ever show the ACTIVE
+   part's highlights — and the reveal-side figure (Sept T2 4(a)'s fully
+   labelled version, the one that belongs beside the proof) would be
+   replaced the instant the next part became active, i.e. never seen.
+   Each part carrying its own is what makes both states readable.
+
+   Plain re-render on every redraw — no rAF loop, no animation, no
+   observers (house rule: js/browser-pane notes / CLAUDE.md). The engine
+   returns an SVG string; the wrapper is a white "paper" panel, because
+   the ported engine draws dark ink for a light background and because
+   pen-and-paper is the point of this whole tab. */
+function partDiagram(question, part, isRevealed, accent) {
+  const d = question.diagram;
+  if (!d || !d.parts) return null;
+  const entry = d.parts[part.id];
+  if (!entry) return null;
+  const spec = entry.spec || d.spec;
+  if (!spec) return null;
+  const hl = (isRevealed && entry.reveal) ? entry.reveal : entry.question;
+  const box = el("div", "exam-diagram");
+  box.innerHTML = renderDiagram(highlightedSpec(spec, hl || {}), accent || "#8b5cf6");
+  box.setAttribute("data-part", part.id);
+  box.setAttribute("data-state", (isRevealed && entry.reveal) ? "reveal" : "question");
+  return box;
 }
 
 export function renderExamPlay(app, host, params) {
@@ -118,6 +153,9 @@ export function renderExamPlay(app, host, params) {
     const star = part.level === 4 ? `<span class="exam-star" title="Level 4">★</span>` : "";
     card.innerHTML = `<div class="exam-part-head"><span class="exam-part-id">(${part.id})</span><span class="exam-part-marks">[${part.marks}]</span>${star}</div>
       <div class="exam-part-prompt">${xbarHtml(pick(part.prompt, lang))}</div>`;
+
+    const fig = partDiagram(question, part, revealed.has(part.id), accent);
+    if (fig) card.appendChild(fig);
 
     if (revealed.has(part.id)) {
       const memo = el("div", "exam-memo");

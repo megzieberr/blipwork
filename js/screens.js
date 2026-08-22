@@ -1,5 +1,5 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
-import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, EXAM_CHAPTERS } from "./config.js";
+import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, EXAM_CHAPTERS, examChapters, examChapterById } from "./config.js";
 import { questDef } from "./quests/index.js";
 import { dicePool } from "./quests/dice-pools.js";
 import { openDiceRound } from "./dice-play.js";
@@ -86,6 +86,15 @@ const openSet = app => new Set((app.state && app.state.openQuests) || []);
    reuse the identical rule rather than re-deriving it. */
 export function examChapterEligible(app, ch) {
   if (!ch || !EXAM_CHAPTERS.includes(ch.id)) return false;
+  /* HER RULING, morning of 2026-08-22 (EXAM-FOCUS-PLAN.md): an
+     EXAM-FOCUS-ONLY chapter — Euclidean, whose drill rounds live in
+     Circle Quest and always will — owns NO quests, so the "at least one
+     open quest" half of the session-E gate could never be satisfied and
+     the chapter could never be reached. Documented exception, her call:
+     an exam-only chapter is eligible on its build flag alone. The gate
+     it loses is not the gate it needed — the flag (js/config.js
+     EXAM_CHAPTERS) is still the teacher's switch for it. */
+  if (ch.examOnly) return true;
   const open = openSet(app);
   return (ch.quests || []).some(q => open.has(q.id));
 }
@@ -233,7 +242,7 @@ export function renderHub(app, host) {
   // flagged chapter has one. (The `t.id === "cgeo" || byTerm(t.id).length`
   // prefix is kept byte-for-byte — verify-store.html regex-checks that
   // exact substring.)
-  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && CHAPTERS.some(ch => examChapterEligible(app, ch))));
+  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && examChapters().some(ch => examChapterEligible(app, ch))));
   if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "term3";
 
   const tabbar = el("div", "hub-tabs");
@@ -241,7 +250,11 @@ export function renderHub(app, host) {
   const draw = () => {
     clear(cards);
     if (hubTab === "cgeo") { cards.appendChild(circleGeoCard(app)); return; }
-    if (hubTab === "exam") { CHAPTERS.filter(ch => examChapterEligible(app, ch)).forEach(ch => cards.appendChild(examChapterCard(app, ch))); return; }
+    // EXAM-ONLY CHAPTERS (2026-08-22): examChapters() = CHAPTERS + the
+    // exam-only list, so Euclidean shows HERE and only here. byTerm()
+    // below still reads CHAPTERS, so it can never reach a Term 3 or
+    // Revision tab — an exam-only chapter has no term to be filed under.
+    if (hubTab === "exam") { examChapters().filter(ch => examChapterEligible(app, ch)).forEach(ch => cards.appendChild(examChapterCard(app, ch))); return; }
     byTerm(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
   };
   tabs.forEach(t => {
@@ -339,7 +352,7 @@ export function renderChapter(app, host, params) {
    simpler than hand-patching every localized string in place, and this
    screen has no per-part state worth preserving across a toggle. */
 export function renderExamChapter(app, host, params) {
-  const ch = chapterById(params.chapterId);
+  const ch = examChapterById(params.chapterId);   // CHAPTERS + EXAM_ONLY_CHAPTERS (2026-08-22)
   if (!examChapterEligible(app, ch)) return app.go("hub");   // build flag AND an open quest (session E)
   setTheme(ch.signature, ch.signature);
   const lang = getExamLang();
@@ -398,7 +411,7 @@ async function fillWorkedCounts(chapterId, topics, grid, ui) {
    hands it straight to renderExamPlay via app.go("examPlay", …) — the
    player never has to know how to look a question up. */
 export function renderExamTopic(app, host, params) {
-  const ch = chapterById(params.chapterId);
+  const ch = examChapterById(params.chapterId);   // CHAPTERS + EXAM_ONLY_CHAPTERS (2026-08-22)
   if (!examChapterEligible(app, ch)) return app.go("hub");   // build flag AND an open quest (session E)
   const topic = examTopicsForChapter(ch.id).find(tp => tp.id === params.topicId);
   if (!topic) return app.go("examChapter", { chapterId: ch.id });

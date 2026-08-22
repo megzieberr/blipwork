@@ -22,7 +22,8 @@
 <p class="muted small">EXAM-FOCUS-PLAN.md, session 0 build (2026-08-21) + session D pilot content (2026-08-21) + day session
   2026-08-22 registering overnight run #1's 15 modules (OVERNIGHT-1-REPORT.md). Tests the machinery
   (js/exam/_harness-stub.js is a fully-worked stub, never registered/never learner-reachable) AND, from
-  Part 6 onward, the real seeded content across eqn/exp/func/trig. This page forces ?local=1-equivalent
+  Part 6 onward, the real seeded content across eqn/exp/func/trig — plus, from Part 11, the EXAM-FOCUS-ONLY
+  Euclidean chapter added on engine-port day (2026-08-22). This page forces ?local=1-equivalent
   behaviour via localStorage before any module import runs, so the REAL js/api.js singleton (used by
   js/screens.js and js/exam-play.js exactly as the live app uses it) resolves to LocalBackend for the
   whole page. Run alongside <code>node verify-exam-modules.mjs</code> (repo root) — see Part 7's note.</p>
@@ -31,7 +32,7 @@
 <h2>Part 1 · js/exam/_schema.js — validateQuestion()</h2>
 <div id="schemaChecks"></div>
 
-<h2>Part 2 · registry (js/exam/index.js) — eqn/exp/func/trig seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn","exp","func","trig"]</h2>
+<h2>Part 2 · registry (js/exam/index.js) — eqn/exp/func/trig/euclid seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn","exp","func","trig","euclid"]</h2>
 <pre id="registryChecks">…</pre>
 
 <h2>Part 3 · hub navigation — flag off (simulated), then the real shipped flag state</h2>
@@ -51,9 +52,10 @@
   independent-recompute discipline, but hosted in a separate NODE harness —
   <code>verify-exam-modules.mjs</code> in the repo root (<code>node verify-exam-modules.mjs</code>) — because
   a sweep-based recompute of every prompt's numbers across 15 questions doesn't host cleanly inside a
-  browser page. That file also re-runs schema validation, id uniqueness, lostQuest resolution (with the two
-  documented trig placeholders), star placement and the scope-wall check for those 15 modules specifically.
-  Last run: 280/280 checks passed. Run it after touching any of those 15 files.</p>
+  browser page. That file also re-runs schema validation, id uniqueness, lostQuest resolution (with the four
+  documented placeholders — two trig, two Euclidean), star placement, the scope-wall check and (section 9,
+  added 2026-08-22) every Euclidean diagram spec and highlight.
+  Last run: 353/353 checks passed. Run it after touching any of those files.</p>
 <pre id="recomputeChecks">…</pre>
 
 <h2>Part 8 · the part player driven against a REAL seeded question (eqn.nor.q1), end to end</h2>
@@ -65,15 +67,19 @@
 <h2>Part 10 · English-only removal + the "I'm lost" reteach link (session E, 2026-08-21)</h2>
 <pre id="lostLinkChecks">…</pre>
 
+<h2>Part 11 · the EXAM-FOCUS-ONLY Euclidean chapter — eligible on its flag alone, invisible everywhere else, figures per part, no "I'm lost" (her rulings, 2026-08-22)</h2>
+<pre id="euclidChecks">…</pre>
+
 <div id="harnessHost"></div>
 
 <script>try { localStorage.setItem("mhq.forceLocal", "1"); } catch (e) {}</script>
 <script type="module">
-import { EXAM, EXAM_CHAPTERS, CHAPTERS, chapterById } from "./js/config.js";
+import { EXAM, EXAM_CHAPTERS, EXAM_ONLY_CHAPTERS, CHAPTERS, chapterById, examChapters, examChapterById } from "./js/config.js";
 import { validateQuestion } from "./js/exam/_schema.js";
 import { stubQuestion } from "./js/exam/_harness-stub.js";
 import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
 import { eqnNatureOfRootsQuestions } from "./js/exam/eqn-nature-of-roots.js";
+import { examQuestionsForTopic } from "./js/exam/index.js";
 import { renderHub, renderExamChapter, renderExamTopic, examChapterEligible } from "./js/screens.js";
 import { renderExamPlay } from "./js/exam-play.js";
 import { getExamLang, setExamLang } from "./js/exam/lang.js";
@@ -226,15 +232,15 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   const lines = [];
 
   // ---- flag: exactly the four chapters with real content, any order ----
-  const EXPECTED_FLAGGED = ["eqn", "exp", "func", "trig"];
+  const EXPECTED_FLAGGED = ["eqn", "exp", "func", "trig", "euclid"];
   const flagSet = new Set(EXAM_CHAPTERS);
   const flagOk = flagSet.size === EXPECTED_FLAGGED.length && EXPECTED_FLAGGED.every(id => flagSet.has(id));
   tick(flagOk, `js/config.js EXAM_CHAPTERS is exactly {${EXPECTED_FLAGGED.join(",")}} — got [${EXAM_CHAPTERS.join(",")}]`);
   lines.push(`EXAM_CHAPTERS: [${EXAM_CHAPTERS.join(",")}] — ${flagOk ? "OK, matches the widened set" : "FAIL"}`);
 
   // ---- exact question count per chapter, derived from the registry ----
-  const allChapterIds = ["stats", "finance", "prob", "trig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn"];
-  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 3, meas: 0, func: 4, tgraph: 0, analytical: 0, pat: 0, exp: 3, eqn: 9 };
+  const allChapterIds = ["stats", "finance", "prob", "trig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn", "euclid"];
+  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 3, meas: 0, func: 4, tgraph: 0, analytical: 0, pat: 0, exp: 3, eqn: 9, euclid: 2 };
   let countsOk = true;
   const countLines = [];
   allChapterIds.forEach(id => {
@@ -255,6 +261,7 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     exp: ["first-step-and-method", "conjugates-and-rationalising", "no-solution-and-strategy"],
     func: ["hyperbola-and-exponential", "graphs-together", "line-and-parabola"],
     trig: ["reduction-and-ratios", "general-solutions", "mixed-problems"],
+    euclid: ["circle-theorems", "tangents-and-cyclic-quads"],
   };
   let topicsOk = true;
   const topicLines = [];
@@ -283,7 +290,12 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   // resolve — that non-resolution is the point (js/exam-play.js's
   // lostQuestLink() degrades to "no button" through three independent
   // gates when it can't resolve, never a dead link).
-  const PLACEHOLDER_LOST_IDS = new Set(["trig.rr.t2q1", "trig.gs.t2q2"]);
+  // WIDENED again 2026-08-22 (engine-port day): the two EUCLIDEAN
+  // questions join the placeholder set, for a different reason — not
+  // "waiting on a digest" but her flat ruling that the Euclidean exam
+  // chapter has NO "I'm lost" button at all ("they don't need it
+  // anyway"). Part 11 below proves the button really doesn't render.
+  const PLACEHOLDER_LOST_IDS = new Set(["trig.rr.t2q1", "trig.gs.t2q2", "euclid.circ.t2q4", "euclid.tan.t2q5"]);
   const EXPECTED_LOSTQUEST = {
     "eqn.nor.q1": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q2": { chapter: "eqn", quest: "eq8" },
     "eqn.nor.q3": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q4": { chapter: "eqn", quest: "eq8" },
@@ -301,11 +313,11 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   };
   let lostQuestOk = true, placeholderOk = true;
   const lostQuestLines = [];
-  ["eqn", "exp", "func", "trig"].forEach(chapterId => {
+  ["eqn", "exp", "func", "trig", "euclid"].forEach(chapterId => {
     examQuestionsForChapter(chapterId).forEach(q => {
       const lq = q.lostQuest;
       if (PLACEHOLDER_LOST_IDS.has(q.id)) {
-        const isPlaceholder = !!lq && /^PENDING-/.test(lq.quest) && lq.chapter === "trig" && !CHAPTERS.find(c => c.id === lq.chapter)?.quests?.some(qq => qq.id === lq.quest);
+        const isPlaceholder = !!lq && /^PENDING-/.test(lq.quest) && lq.chapter === q.chapter && !CHAPTERS.find(c => c.id === lq.chapter)?.quests?.some(qq => qq.id === lq.quest);
         if (!isPlaceholder) placeholderOk = false;
         lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} — documented placeholder (no reteach round exists yet), correctly non-resolving? ${isPlaceholder}`);
         return;
@@ -321,7 +333,7 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     });
   });
   tick(lostQuestOk, "every non-placeholder seeded question's lostQuest resolves to a real chapter+quest AND matches the expected reteach round");
-  tick(placeholderOk, "trig.rr.t2q1 and trig.gs.t2q2 carry the documented PENDING- placeholder, which correctly does NOT resolve (ships linkless, her ruling)");
+  tick(placeholderOk, "the four documented PENDING- placeholders (2 trig, 2 Euclidean) correctly do NOT resolve (all four ship linkless, her rulings)");
   lines.push(`lostQuest check (all seeded chapters):\n${lostQuestLines.join("\n")}`);
 
   say("registryChecks", lines);
@@ -668,6 +680,15 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
       "transformations",
       "graphs-together",
     ],
+    /* EUCLIDEAN wall (2026-08-22): GR11-IEB-PAPER-BANK.md's own Grade 11
+       Euclidean scope wall — four examinable proofs, acute case only,
+       everything else use-as-result; no similarity, no concurrency, no
+       proof by contradiction. Proposed in the modules' pending README,
+       adopted here unchanged. */
+    euclid: [
+      "circle-theorems",
+      "tangents-and-cyclic-quads",
+    ],
     trig: [
       "which-rule-fits",
       "sine-rule-sides",
@@ -681,7 +702,9 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     ],
   };
 
-  const allChapterIds = CHAPTERS.map(c => c.id);
+  // examChapters() = CHAPTERS + EXAM_ONLY_CHAPTERS (2026-08-22), so the
+  // exam-only Euclidean chapter gets walled like any other.
+  const allChapterIds = examChapters().map(c => c.id);
   let allInWall = true;
   const perChapterLines = [];
   allChapterIds.forEach(chapterId => {
@@ -873,11 +896,22 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     return app;
   }
 
+  // ⚠ REWRITTEN 2026-08-22. This used to assert "no open quest → no Exam
+  // Focus tab at all", which was true while every flagged chapter owned
+  // quests. The EXAM-FOCUS-ONLY Euclidean chapter (her ruling that
+  // morning) owns none and is eligible on its flag alone, so the tab is
+  // now always present — what the session-E gate still guarantees, and
+  // what is asserted instead, is that a QUEST chapter with nothing open
+  // contributes no card to it.
   const appHidden = makeApp9([]); // flagged (eqn IS in EXAM_CHAPTERS) but nothing open
   renderCurrent9(appHidden);
-  const tabHidden = [...host.querySelectorAll(".hub-tab")].some(b => /exam focus/i.test(b.textContent));
-  tick(!tabHidden, "hub: flagged chapter with NO open quest → 'Exam Focus' tab is hidden entirely");
-  lines.push(`hub, eqn flagged + 0 open quests → Exam Focus tab present? ${tabHidden} (want false)`);
+  const tabHiddenBtn = [...host.querySelectorAll(".hub-tab")].find(b => /exam focus/i.test(b.textContent));
+  tick(!!tabHiddenBtn, "hub: the Exam Focus tab is present even with no quest open, because the exam-only Euclidean chapter is eligible on its flag alone");
+  if (tabHiddenBtn) tabHiddenBtn.click();
+  const hiddenCards = [...host.querySelectorAll(".chapter-cards .ch-card")].map(c => c.querySelector("h2").textContent.trim());
+  tick(!hiddenCards.some(t => /equations/i.test(t)), "hub: with NO quest open, the flagged QUEST chapter (Equations & Inequalities) contributes no Exam Focus card — the session-E gate still holds");
+  tick(hiddenCards.some(t => /euclidean/i.test(t)), "hub: with NO quest open, the exam-only Euclidean chapter is the card that remains");
+  lines.push(`hub, 0 open quests → Exam Focus cards: [${hiddenCards.join(" | ")}] (want Euclidean only)`);
 
   const appShownTab = makeApp9(["eq8"]);
   renderCurrent9(appShownTab);
@@ -988,6 +1022,207 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
 
   clear(host);
   say("lostLinkChecks", lines);
+}
+
+/* ============================================================
+   PART 11 — the EXAM-FOCUS-ONLY chapter (her rulings, 2026-08-22).
+
+   Three things have to be true at once, and each is checked from the
+   thing that actually decides it rather than from a comment:
+     1. Euclidean is REACHABLE in the Exam Focus tab on its build flag
+        alone, with no open quest anywhere — the documented exception in
+        examChapterEligible().
+     2. Euclidean is INVISIBLE everywhere else: no hub quest-chapter
+        card in Term 3 or Revision, no dice, no admin open/close row, no
+        assignment target, no dashboard chip. All five iterate
+        js/config.js CHAPTERS, so the check is that euclid is not in
+        CHAPTERS — plus a DOM sweep of the two hub quest tabs.
+     3. Its questions play: a to-scale figure per part, the highlight
+        changing from part to part, the reveal switching to the fuller
+        figure — and NO "I'm lost" button anywhere, ever.
+   ============================================================ */
+{
+  const lines = [];
+  const host = document.getElementById("harnessHost");
+  const euclidChapter = examChapterById("euclid");
+
+  /* ---- 1. the chapter object + the eligibility exception ---- */
+  tick(!!euclidChapter, "examChapterById(\"euclid\") resolves the exam-only chapter");
+  tick(!!euclidChapter && euclidChapter.examOnly === true, "the euclid chapter carries examOnly:true");
+  tick(!!euclidChapter && (euclidChapter.quests || []).length === 0, "the euclid chapter owns NO quests — Circle Quest keeps every circle-geo drill round");
+  tick(chapterById("euclid") === null, "chapterById(\"euclid\") is null — the ordinary chapter lookup cannot see it");
+  tick(examChapterEligible({ state: { openQuests: [] } }, euclidChapter) === true,
+    "examChapterEligible: an EXAM-ONLY chapter is eligible with NO open quests (her documented exception)");
+  tick(examChapterEligible({ state: { openQuests: ["eq8"] } }, chapterById("stats")) === false,
+    "examChapterEligible: the exception is scoped to examOnly chapters — an unflagged quest chapter is still refused");
+  lines.push(`euclid chapter: examOnly=${euclidChapter && euclidChapter.examOnly}, quests=${euclidChapter ? (euclidChapter.quests || []).length : "?"}, chapterById()=${chapterById("euclid")}`);
+
+  /* ---- 2. invisible everywhere that iterates CHAPTERS ---- */
+  tick(!CHAPTERS.some(c => c.id === "euclid"),
+    "js/config.js CHAPTERS does NOT contain euclid — so the hub quest tabs, the 🎲 dice, the admin open/close grid, assignments and the dashboard chips (all of which iterate CHAPTERS) can never see it");
+  tick(!CHAPTERS.some(c => (c.quests || []).some(q => /euclid/i.test(q.id))), "no quest anywhere in CHAPTERS belongs to Euclidean");
+  tick(EXAM_ONLY_CHAPTERS.every(c => !CHAPTERS.some(cc => cc.id === c.id)), "no exam-only chapter id collides with a real CHAPTERS id");
+  tick(examChapters().length === CHAPTERS.length + EXAM_ONLY_CHAPTERS.length, "examChapters() is exactly CHAPTERS + EXAM_ONLY_CHAPTERS");
+  tick(!euclidChapter || !["term3", "revision"].includes(euclidChapter.term), `an exam-only chapter must not claim a hub term, got "${euclidChapter && euclidChapter.term}"`);
+
+  function renderCurrent11(app) {
+    clear(host);
+    if (app.screen === "hub") renderHub(app, host);
+    else if (app.screen === "examChapter") renderExamChapter(app, host, app.params);
+    else if (app.screen === "examTopic") renderExamTopic(app, host, app.params);
+  }
+  function makeApp11(openQuests) {
+    const app = {
+      state: { xp: 0, gold: 0, levelInfo: { level: 1, intoLevel: 0, nextCost: 300 }, openQuests: openQuests || [] },
+      screen: "hub", params: {},
+      go(screen, params) { app.screen = screen; app.params = params || {}; renderCurrent11(app); },
+      async refresh() { return true; },
+    };
+    return app;
+  }
+
+  // every quest in the app open — the most generous possible state, so a
+  // leak into Term 3 / Revision would definitely show
+  const allQuestIds = CHAPTERS.flatMap(c => (c.quests || []).map(q => q.id));
+  const app11 = makeApp11(allQuestIds);
+  renderCurrent11(app11);
+  const tabButtons = [...host.querySelectorAll(".hub-tab")];
+  const textOfTab = (label) => {
+    const b = tabButtons.find(x => label.test(x.textContent));
+    if (!b) return null;
+    b.click();
+    return [...host.querySelectorAll(".chapter-cards .ch-card")].map(c => c.querySelector("h2").textContent.trim());
+  };
+  const term3Cards = textOfTab(/term 3/i) || [];
+  tick(!term3Cards.some(t => /euclid/i.test(t)), `Term 3 tab must not show a Euclidean card, got [${term3Cards.join(" | ")}]`);
+  const revisionCards = textOfTab(/revision/i) || [];
+  tick(!revisionCards.some(t => /euclid/i.test(t)), `Revision tab must not show a Euclidean card, got [${revisionCards.join(" | ")}]`);
+  const examCards = textOfTab(/exam focus/i) || [];
+  tick(examCards.some(t => /euclidean/i.test(t)), `Exam Focus tab MUST show the Euclidean card, got [${examCards.join(" | ")}]`);
+  lines.push(`hub tabs with EVERY quest open — Term 3: [${term3Cards.join(", ")}]`);
+  lines.push(`  Revision: [${revisionCards.join(", ")}]`);
+  lines.push(`  Exam Focus: [${examCards.join(", ")}]`);
+
+  /* the admin page's own grid, checked the same way admin.js builds it */
+  const adminRows = CHAPTERS.flatMap(ch => (ch.quests || []).filter(q => q.built).map(q => `${ch.id}/${q.id}`));
+  tick(!adminRows.some(r => /euclid/i.test(r)), "admin open/close grid (CHAPTERS × built quests) contains no Euclidean row");
+  lines.push(`admin grid rows: ${adminRows.length}, Euclidean rows: ${adminRows.filter(r => /euclid/i.test(r)).length} (want 0)`);
+
+  /* ---- 3. navigation into the chapter, with nothing open ---- */
+  const appNav = makeApp11([]);
+  appNav.go("examChapter", { chapterId: "euclid" });
+  tick(appNav.screen === "examChapter", "renderExamChapter reaches the exam-only chapter with NO quest open anywhere");
+  const euclidTopicCards = [...host.querySelectorAll(".exam-topic-card")].map(c => c.querySelector("h3").textContent.trim());
+  tick(euclidTopicCards.length === 2, `euclid shows 2 topic cards, got ${euclidTopicCards.length}`);
+  lines.push(`euclid topic cards: [${euclidTopicCards.join(", ")}]`);
+  appNav.go("examTopic", { chapterId: "euclid", topicId: "tangents-and-cyclic-quads" });
+  tick(appNav.screen === "examTopic", "renderExamTopic reaches a euclid topic");
+  tick(host.querySelectorAll(".exam-question-card").length === 1, "the tangents topic lists its one seeded question");
+  clear(host);
+
+  /* ---- 4. the player: a figure per part, highlights that change ---- */
+  const q5 = examQuestionsForTopic("euclid", "tangents-and-cyclic-quads")[0];
+  const q4 = examQuestionsForTopic("euclid", "circle-theorems")[0];
+  tick(!!q5 && q5.id === "euclid.tan.t2q5", "resolved euclid.tan.t2q5 through the registry");
+  tick(!!q4 && q4.id === "euclid.circ.t2q4", "resolved euclid.circ.t2q4 through the registry");
+
+  // a real signed-in learner, exactly as Part 8 does — the Done button
+  // reports the reveal to the backend and only advances on a real ok
+  // reply, so a session is what makes the part-by-part walk below
+  // possible at all.
+  const uname11 = "verify_exam_euclid_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(uname11, "Verify Euclid", "pw12");
+  setSession(uname11, "pw12");
+  const playApp = { state: await api.getState(uname11, "pw12"), screen: "examPlay",
+    go(screen, params) { playApp.screen = screen; playApp.params = params || {}; },
+    async refresh() { playApp.state = await api.getState(uname11, "pw12"); } };
+  playApp.state.openQuests = [];
+  clear(host);
+  renderExamPlay(playApp, host, { chapter: euclidChapter, question: q5, accent: euclidChapter.signature });
+  await new Promise(r => setTimeout(r, 40));
+  tick(playApp.screen === "examPlay", "renderExamPlay does NOT bounce on the exam-only chapter with nothing open");
+
+  const firstFig = host.querySelector(".exam-diagram");
+  tick(!!firstFig, "the active part renders an .exam-diagram panel");
+  const firstSvg = firstFig && firstFig.querySelector("svg.diag");
+  tick(!!firstSvg, "the panel contains the engine's <svg class=\"diag\">");
+  tick(!!firstSvg && firstSvg.getAttribute("viewBox") === `0 0 ${q5.diagram.spec.w} ${q5.diagram.spec.h}`,
+    `the svg keeps the spec's viewBox (want "0 0 ${q5.diagram.spec.w} ${q5.diagram.spec.h}", got "${firstSvg && firstSvg.getAttribute("viewBox")}")`);
+  tick(!!firstSvg && firstSvg.getAttribute("preserveAspectRatio") === "xMidYMid meet", "the svg preserves its aspect ratio, so it scales instead of distorting");
+  tick(!!firstFig && firstFig.getAttribute("data-part") === "a", "the first figure belongs to part (a)");
+  tick(!!firstFig && firstFig.getAttribute("data-state") === "question", "the first figure is in its QUESTION state");
+  lines.push(`part (a) figure: viewBox="${firstSvg && firstSvg.getAttribute("viewBox")}", state=${firstFig && firstFig.getAttribute("data-state")}`);
+
+  /* NO "I'm lost" button, on any part, ever — her ruling */
+  const anyLost = [...host.querySelectorAll("button")].some(b => /i'm lost/i.test(b.textContent));
+  tick(!anyLost, "NO \"I'm lost\" button renders on a Euclidean question (her ruling: they don't need it)");
+  lines.push(`"I'm lost" button on euclid.tan.t2q5: ${anyLost} (want false)`);
+
+  /* walk every part: each gets its own figure, and the highlight really
+     changes from part to part (the SVG markup differs). Driven by
+     clicking Done, exactly as a learner would. */
+  const svgByPart = {};
+  for (let i = 0; i < q5.parts.length; i++) {
+    const fig = [...host.querySelectorAll(".exam-diagram")].find(f => f.getAttribute("data-part") === q5.parts[i].id);
+    tick(!!fig, `part (${q5.parts[i].id}) has its own figure on screen`);
+    if (fig) svgByPart[q5.parts[i].id] = fig.innerHTML;
+    const doneBtn = host.querySelector(".exam-done-btn");
+    if (!doneBtn) break;
+    doneBtn.click();
+    await new Promise(r => setTimeout(r, 60));
+  }
+  const distinct = new Set(Object.values(svgByPart));
+  tick(distinct.size === Object.keys(svgByPart).length,
+    `every part's figure is distinct (${distinct.size} distinct of ${Object.keys(svgByPart).length}) — the highlight really moves`);
+  lines.push(`figures walked: [${Object.keys(svgByPart).join(", ")}], all distinct? ${distinct.size === Object.keys(svgByPart).length}`);
+
+  /* after the walk, every part is revealed — (b) and (d) must have
+     switched to their REVEAL figures, (a) and (c) stay on question */
+  const states = {};
+  [...host.querySelectorAll(".exam-diagram")].forEach(f => { states[f.getAttribute("data-part")] = f.getAttribute("data-state"); });
+  tick(states.b === "reveal" && states.d === "reveal", `(b) and (d) declare a reveal figure and must switch to it, got ${JSON.stringify(states)}`);
+  tick(states.a === "question" && states.c === "question", `(a) and (c) declare no reveal figure and stay on the question one, got ${JSON.stringify(states)}`);
+  lines.push(`figure states after revealing every part: ${JSON.stringify(states)}`);
+  const stillNoLost = [...host.querySelectorAll("button")].some(b => /i'm lost/i.test(b.textContent));
+  tick(!stillNoLost, "still no \"I'm lost\" button after every part is revealed");
+
+  /* ---- 5. Q4(a): the bare-figure rule, in the DOM ---- */
+  clear(host);
+  const playApp4 = { state: await api.getState(uname11, "pw12"), screen: "examPlay",
+    go(screen, params) { playApp4.screen = screen; playApp4.params = params || {}; },
+    async refresh() { playApp4.state = await api.getState(uname11, "pw12"); } };
+  playApp4.state.openQuests = [];
+  renderExamPlay(playApp4, host, { chapter: euclidChapter, question: q4, accent: euclidChapter.signature });
+  await new Promise(r => setTimeout(r, 40));
+  const figA = host.querySelector('.exam-diagram[data-part="a"]');
+  tick(!!figA, "Q4(a) renders a figure");
+  const aLabels = figA ? [...figA.querySelectorAll("text.al")].map(t => t.textContent) : ["(no figure)"];
+  tick(aLabels.length === 0, `Q4(a) QUESTION-side figure must carry NO angle labels (the bare-figure rule — x/y/2x/2y would hand over the proof), got [${aLabels.join(",")}]`);
+  const aPoints = figA ? [...figA.querySelectorAll("text.pl")].map(t => t.textContent).sort() : [];
+  tick(["A", "B", "C", "D", "O"].every(l => aPoints.includes(l)), `Q4(a) question-side figure still labels every point, got [${aPoints.join(",")}]`);
+  lines.push(`Q4(a) question side — angle labels: [${aLabels.join(",") || "none"}] · point labels: [${aPoints.join(",")}]`);
+
+  host.querySelector(".exam-done-btn").click();
+  await new Promise(r => setTimeout(r, 60));
+  const figARev = host.querySelector('.exam-diagram[data-part="a"]');
+  tick(!!figARev && figARev.getAttribute("data-state") === "reveal", "Q4(a) switches to its reveal figure once the memo is open");
+  const aRevLabels = figARev ? [...figARev.querySelectorAll("text.al")].map(t => t.textContent) : [];
+  tick(["x", "y", "2x", "2y"].every(l => aRevLabels.includes(l)), `Q4(a) reveal figure carries the x/y/2x/2y labelling beside the proof, got [${aRevLabels.join(",")}]`);
+  lines.push(`Q4(a) reveal side — angle labels: [${aRevLabels.join(",")}]`);
+
+  /* the right-angle SQUARE at M (port-day gap 1) reaches the DOM: b1's
+     figure must contain a 3-point path (square) and not the chevron's
+     characteristic m·√2 middle point. Checked by rendering the same spec
+     both ways and comparing. */
+  const b1Fig = host.querySelector('.exam-diagram[data-part="b1"]');
+  tick(!!b1Fig, "Q4(b)(1) renders its own figure");
+  const b1Paths = b1Fig ? [...b1Fig.querySelectorAll("path")].map(n => n.getAttribute("d")) : [];
+  tick(b1Paths.some(d => /^M [\d.-]+ [\d.-]+ L [\d.-]+ [\d.-]+ L [\d.-]+ [\d.-]+$/.test(d || "")),
+    "Q4(b)(1)'s figure contains the three-point right-angle mark path");
+  lines.push(`Q4(b)(1) figure paths: ${b1Paths.length}`);
+
+  clear(host);
+  say("euclidChecks", lines);
 }
 
 const banner = document.getElementById("banner");

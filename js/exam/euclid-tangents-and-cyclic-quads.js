@@ -1,16 +1,12 @@
 /* ============================================================
    EXAM FOCUS — Euclidean geometry · Tangents & cyclic quadrilaterals
-   ⚠️ PENDING. Not in js/exam/, not registered, not imported by
-   anything. Read _pending-engine-port/README-PENDING.md first — blocked
-   on BOTH the Circle Quest engine.js port AND a ruling on the Euclidean
-   chapter tag. The sibling file euclid-circle-theorems.js carries the
-   full reasoning for the provisional `chapter: "euclid"` slug and for
-   the lostQuest placeholder; it is not repeated here.
    ------------------------------------------------------------
    SOURCE: September Test 2 (practice), QUESTION 5 — two tangents from
    an external point, a cyclic-quadrilateral proof, and a starred
    all-in-a-variable angle-at-centre proof.
-   (Overnight run #1, stage 3b, 2026-08-21.)
+   (Composed overnight run #1, stage 3b, 2026-08-21; promoted out of
+   js/exam/_pending-engine-port/ and registered 2026-08-22 once the
+   Circle Quest engine port landed — js/exam/circle-engine.js.)
 
    PRINT SOURCE:
      Sept-T2-Practice-QP.tex        Q5 stem + (a)–(d), \FigFive
@@ -20,34 +16,51 @@
    Same statements, same reasons, same ticks, same OR route, same
    WATCH OUT / REMEMBER cards as print. `hint` and `esplain` fresh.
 
-   ⚠️ DIAGRAM. specQ5 below is copied verbatim from the specs document
-   — geometry checked by arc arithmetic and re-measured at six values of
-   x in Sept-T2-verify.py, NEVER rendered. `ext` computes T as the
-   intersection of the two tangents. PORT DAY MUST NOT CHANGE: the
-   degrees, or C's position on the MAJOR arc (that placement is what
-   makes the ∠-at-centre step in (d) legal).
-   KNOWN GAP: 5(a)'s highlight uses a tangent leg, "tg-". A sits at 62°,
-   so "tg-" is the 62 − 90 = −28° direction, the ray from A towards T.
-   If the wedge renders on the far side, swap to "tg+"; verifyDiagram
-   catches it — the measured value must be 90, not 270.
-   ⚠️ 5(b) is the "prove ABCD is cyclic → the four SIDES light up" case
-   from her design note, not an angle highlight. The engine draws A→T
-   and T→B from `ext`; those two need their own hl support or duplicated
-   chord pairs. Recorded in `diagram` below.
+   CHAPTER + lostQuest: the sibling file euclid-circle-theorems.js
+   carries the full reasoning for the exam-focus-only "euclid" chapter
+   and for the lostQuest placeholder (her ruling: NO "I'm lost" button
+   on Euclidean — "they don't need it anyway"). Not repeated here.
 
-   ⚠️ x IS A VARIABLE, NOT 56°. The figure is drawn with ∠ATB at 56°
+   DIAGRAM. specQ5 below is unchanged from the composed original —
+   geometry checked by arc arithmetic and re-measured at six values of
+   x in Sept-T2-verify.py, and now re-measured on every harness run by
+   the engine's own verifyDiagram() (via validateQuestion). `ext`
+   computes T as the intersection of the two tangents.
+   DO NOT CHANGE: the degrees, or C's position on the MAJOR arc — that
+   placement is what makes the angle-at-centre step in (d) legal.
+
+   PORT-DAY GAP 2 IS CLOSED, AND NOT THE WAY THE PENDING NOTE EXPECTED.
+   The note proposed writing 5(a)'s right angle with the pseudo-leg
+   "tg-" and letting verifyDiagram catch a wrong sign ("the measured
+   value must be 90, not 270"). It cannot: computeGeometry always
+   clamps a non-reflex mark to the SHORT sweep, so "tg-" and "tg+" BOTH
+   measure exactly 90 — only the SIDE the wedge sits on differs
+   (bisector −73° towards T, versus 197° away from it). Measured on
+   port day, both read 90,0. So the highlight names the real external
+   point instead: legs ["O","T"] IS the angle OAT the question asks
+   about, it is unambiguous, and it is identical geometry (from −118°
+   to −28°, sweep 90,0 — the same numbers "tg-" produces). The
+   direction is additionally pinned by the harness, which asserts the
+   wedge's bisector, so a future flip fails loudly.
+
+   5(b) is the "prove ABCD is cyclic -> the four SIDES light up" case
+   from her design note, not an angle highlight: chords O–A, A–T, T–B,
+   O–B. A–T and T–B are the tangent segments the `ext` block draws, and
+   the engine's highlight layer takes them as ordinary chord refs.
+
+   x IS A VARIABLE, NOT 56°. The figure is drawn with angle ATB at 56°
    purely so the picture is drawable; the question keeps x as a letter
    throughout and nothing in the memo ever substitutes a number. The
    blueprint's diagram-leak check confirms the drawing value never
    appears in the question or the answers.
 
    LEVELS: 1:1 with T2's blueprint — (a) 1, (b) 2, (c) 3, (d) 4. 5(d) is
-   one of T2's two printed ★ parts, so the star the schema derives from
-   level === 4 lands exactly where the paper puts it. ✓
+   one of T2's two printed ★ parts, so the star the schema derives
+   from level === 4 lands exactly where the paper puts it.
    ============================================================ */
 
 const PAPER = "sept-t2";
-const LOST_PENDING = { chapter: "euclid", quest: "PENDING-no-euclid-chapter" };
+const LOST_PENDING = { chapter: "euclid", quest: "PENDING-euclid-is-exam-only-no-drill-round" };
 
 /* --- diagram spec, verbatim from Sept-T2-euclid-specs.md ------------ */
 
@@ -75,13 +88,46 @@ const t2q5 = {
   paper: PAPER,
   lostQuest: LOST_PENDING,
   marks: 8,
-  /* pending-port metadata only — ignored by validateQuestion() */
+  /* to-scale figure + her per-part marker-pen highlights. One spec for
+     the whole question; each part lights what it is ABOUT. Validated by
+     js/exam/_schema.js — every highlighted variant is re-measured. */
   diagram: {
     spec: specQ5,
-    a: ["hl {at:'A', legs:['O','tg-'], t:'', o:{v:90, mark:1, hl:'#f6c945'}} — check the tg sign on port day"],
-    b: ["hl the FOUR SIDES of OATB, not an angle: ['O','A'], A→T, T→B, ['O','B'] (the two tangent segments come from `ext` and need hl support or duplicated chord pairs)"],
-    c: ["hl {at:'O', legs:['A','B'], t:'', o:{v:124}} — the NON-reflex sweep from 298° to 62°; do NOT set o.reflex"],
-    d: ["hl {at:'C', legs:['A','B'], t:'', o:{v:62}}; on the second reveal step light ∠AOB as well so the centre/circumference pair is visible together"],
+    parts: {
+      /* (a) the right angle between the tangent and the radius, drawn
+         as a SQUARE (the engine's Blipwork-only o.mark:"square"), which
+         is how a Grade 11 learner reads "this is 90°". Legs named by
+         the real external point T — see the header on gap 2. */
+      a: { question: { angles: [{ at: "A", legs: ["O", "T"], v: 90, o: { mark: "square" } }] } },
+      /* (b) her design's own example: "prove ABCD is cyclic -> the four
+         sides light up". The reveal adds the SECOND right angle at B,
+         which is the whole content of the proof. */
+      b: {
+        question: { chords: [["O", "A"], ["A", "T"], ["T", "B"], ["O", "B"]] },
+        reveal: {
+          chords: [["O", "A"], ["A", "T"], ["T", "B"], ["O", "B"]],
+          angles: [
+            { at: "A", legs: ["O", "T"], v: 90, o: { mark: "square" } },
+            { at: "B", legs: ["O", "T"], v: 90, o: { mark: "square" } },
+          ],
+        },
+      },
+      /* (c) the angle being written down — the NON-reflex sweep at the
+         centre, from B round to A. (o.reflex is deliberately NOT set:
+         the reflex angle is the wrong one and would fail the measure.) */
+      c: { question: { angles: [{ at: "O", legs: ["A", "B"], v: 124 }] } },
+      /* (d) the angle at the circumference on the question side; the
+         reveal shows it TOGETHER with the angle at the centre, because
+         "angle at centre = 2 x angle at circumference" is a statement
+         about the pair and is unreadable from either one alone. */
+      d: {
+        question: { angles: [{ at: "C", legs: ["A", "B"], v: 62 }] },
+        reveal: { angles: [
+          { at: "C", legs: ["A", "B"], v: 62 },
+          { at: "O", legs: ["A", "B"], v: 124 },
+        ] },
+      },
+    },
   },
   parts: [
     {

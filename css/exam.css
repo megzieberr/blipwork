@@ -110,3 +110,39 @@
 .exam-complete{text-align:center}
 .exam-complete h2{margin-bottom:6px}
 .exam-complete .btn{margin-top:14px}
+
+/* ============================================================
+   THE FIGURE (2026-08-22 — the Circle Quest engine ported into
+   js/exam/circle-engine.js). One per sub-part that declares one, drawn
+   with that part's marker-pen highlights.
+
+   WHITE PAPER PANEL, on purpose. Blipwork is a dark app; the ported
+   engine draws dark ink (#2b2f4a) for a light background, exactly as
+   Circle Quest does. Rather than re-colour a file whose whole promise
+   is "ported verbatim", the figure sits on its own sheet of paper —
+   which is also the right message for this tab, where pen-and-paper IS
+   the point. The element styles below are Circle Quest's own
+   (css/styles.css there), copied so the two apps' figures match.
+
+   Sized for a 375px phone first: the panel is fluid, the <svg> keeps
+   its viewBox (preserveAspectRatio is set by the engine) and simply
+   scales down, so it can never overflow .exam-part / .card.
+   ============================================================ */
+.exam-diagram{
+  margin:12px 0 2px;padding:10px 8px;
+  background:#fff;border:1px solid var(--brd);border-radius:var(--r-md);
+  display:flex;justify-content:center;overflow:hidden;
+}
+.exam-diagram svg.diag{width:100%;max-width:340px;height:auto;display:block}
+
+/* diagram core — Circle Quest's values, one font swap (Blipwork has no
+   "Instrument Sans"; --font-display is its own display face). */
+svg.diag .ln{stroke:#2b2f4a;stroke-width:2.2;stroke-linecap:round}
+svg.diag .mk{stroke:#2b2f4a;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+svg.diag .sirkel{stroke:#2b2f4a;stroke-width:2.4;fill:none}
+svg.diag .al{font:700 13.5px var(--font-display);text-anchor:middle;dominant-baseline:middle;
+  paint-order:stroke;stroke:#fff;stroke-width:4.5px;stroke-linejoin:round}
+svg.diag .pl{font:700 13px var(--font-display);fill:#2b2f4a;text-anchor:middle;dominant-baseline:middle;
+  paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+svg.diag .ky{font:700 12.5px var(--font-display);dominant-baseline:middle;
+  paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}

@@ -14,15 +14,15 @@
 
      node verify-exam-modules.mjs
 
-   SCOPE: exactly the 15 modules registered this session (eqn ×5 new +
-   the eqn/nature-of-roots pilot for id-uniqueness only, exp ×3, func
-   ×4, trig ×3). The two Euclidean modules in
-   js/exam/_pending-engine-port/ are OUT OF SCOPE here — they are not
-   registered in js/exam/index.js (waiting on the Circle Quest engine
-   port, a separate day session), so this file does not import or
-   check them. When that session lands, it should extend the MODULES
-   list below (or add its own equivalent block) rather than duplicate
-   this file's machinery.
+   SCOPE: the 15 modules registered that session (eqn ×5 new + the
+   eqn/nature-of-roots pilot for id-uniqueness only, exp ×3, func ×4,
+   trig ×3), PLUS — added the next day session, 2026-08-22 — the two
+   EUCLIDEAN modules, promoted out of js/exam/_pending-engine-port/
+   once the Circle Quest engine port landed
+   (js/exam/circle-engine.js). Extending the MODULES list was the
+   route that session was asked to take, rather than duplicating this
+   file's machinery, so that is what it did; the Euclidean-specific
+   work is section 9 at the bottom (diagrams).
    ============================================================ */
 
 const { validateQuestion } = await import("./js/exam/_schema.js");
@@ -46,7 +46,15 @@ const MODULES = [
   ["trig-general-solutions.js",           "trigGeneralSolutionsQuestions"],
   ["func-hyperbola-and-exponential-2.js", "funcHyperbolaAndExponentialT2Questions"],
   ["trig-mixed-problems.js",              "trigMixedProblemsQuestions"],
+  /* --- Sept T2, EUCLIDEAN (registered 2026-08-22, engine-port day) --- */
+  ["euclid-circle-theorems.js",           "euclidCircleTheoremsQuestions"],
+  ["euclid-tangents-and-cyclic-quads.js", "euclidTangentsAndCyclicQuadsQuestions"],
 ];
+
+/* the ported diagram engine, for section 9 */
+const { verifyDiagram, computeGeometry, highlightedSpec, diagramRefIssues } =
+  await import("./js/exam/circle-engine.js");
+const { EXAM_ONLY_CHAPTERS, EXAM_CHAPTERS } = await import("./js/config.js");
 
 /* Questions whose lostQuest CANNOT resolve, by design, each with a
    documented placeholder in its file header — Megan's ruling (morning
@@ -56,6 +64,14 @@ const MODULES = [
 const LOST_PLACEHOLDER_EXPECTED = new Set([
   "trig.rr.t2q1",      // no Blipwork round teaches reductions/co-functions/ratio-from-sketch
   "trig.gs.t2q2",      // no Blipwork round teaches general solutions
+  /* EUCLIDEAN (2026-08-22). Not "waiting on" anything — her ruling that
+     morning was that the Euclidean exam chapter has NO "I'm lost" button
+     at all ("they don't need it anyway"). The schema still requires the
+     field, so it carries an unresolvable PENDING- id; a chapter that is
+     not in js/config.js CHAPTERS cannot resolve either half of it, which
+     is precisely what makes the button not render. */
+  "euclid.circ.t2q4",
+  "euclid.tan.t2q5",
 ]);
 
 let total = 0, passed = 0; const fails = [];
@@ -134,6 +150,9 @@ const EXPECTED_STARS = {
   "trig.gs.t2q2": [],
   "func.hyp.t2q3": ["e"],   // print memo ★ 3(e)
   "trig.mix.t2q6": [],
+  /* Euclidean: the print memo stars 5(d) and nothing in Q4. */
+  "euclid.circ.t2q4": [],
+  "euclid.tan.t2q5": ["d"],
 };
 mine.forEach(({ q }) => {
   const stars = q.parts.filter(p => p.level === 4).map(p => p.id);
@@ -146,8 +165,11 @@ const t1Stars = mine.filter(m => m.q.paper === "sept-t1").flatMap(m => m.q.parts
 tick(t1Stars.length === 3, `the five sept-t1 modules carry exactly 3 stars (print memo stars 3(b), 5(b), 5(c)) — got ${t1Stars.length}`);
 console.log(`  sept-t1 stars overall: ${t1Stars.join(", ")} — ${t1Stars.length === 3 ? "OK, matches the printed memo" : "FAIL"}`);
 const t2Stars = mine.filter(m => m.q.paper === "sept-t2").flatMap(m => m.q.parts.filter(p => p.level === 4).map(p => `${m.q.id}(${p.id})`));
-tick(t2Stars.length === 1, `the four non-Euclidean sept-t2 modules carry exactly 1 star (3(e) — 5(d) is a pending Euclidean module) — got ${t2Stars.length}`);
-console.log(`  sept-t2 (non-Euclidean) stars overall: ${t2Stars.join(", ")} — ${t2Stars.length === 1 ? "OK" : "FAIL"}`);
+/* WAS 1 while 5(d) sat unregistered in _pending-engine-port/; now that the
+   Euclidean modules are in, the count is the printed paper's own: exactly
+   the two starred parts, 3(e) and 5(d). */
+tick(t2Stars.length === 2, `the six sept-t2 modules carry exactly 2 stars (the print memo stars 3(e) and 5(d)) — got ${t2Stars.length}`);
+console.log(`  sept-t2 stars overall: ${t2Stars.join(", ")} — ${t2Stars.length === 2 ? "OK, matches the printed memo" : "FAIL"}`);
 
 /* ---------- 5. glyph hygiene beyond the validator ---------- */
 console.log("\n== 5. glyph hygiene (validator already checks dot-decimals + hyphen-before-digit) ==");
@@ -201,6 +223,11 @@ const WALLS = {
   trig: ["which-rule-fits", "sine-rule-sides", "sine-rule-angles", "cosine-rule-sides",
          "cosine-rule-angles", "area-rule", "mixed-problems",
          "reduction-and-ratios", "general-solutions"],
+  /* EUCLIDEAN wall, from GR11-IEB-PAPER-BANK.md's Grade 11 Euclidean
+     scope wall (four examinable proofs, acute case only; everything
+     else use-as-result; no similarity, no concurrency, no proof by
+     contradiction) — proposed in README-PENDING.md, adopted here. */
+  euclid: ["circle-theorems", "tangents-and-cyclic-quads"],
 };
 const WALL_NEEDS_A_DECISION = new Set(["reduction-and-ratios", "general-solutions"]);
 mine.forEach(({ q }) => {
@@ -461,6 +488,144 @@ chk("T2 1(a) cos 56° = sin 34°, so the answer is t", cosD(56), sinD(34));
 }
 
 console.log(R.join("\n"));
+
+/* =====================================================================
+   9. EUCLIDEAN DIAGRAMS (2026-08-22, engine-port day).
+   The engine's promise is "the picture cannot lie": every marked angle
+   is re-measured from real coordinates. That promise now covers the
+   HIGHLIGHTS too — every per-part marker-pen wedge declares its true
+   value, so a wedge drawn on the wrong side of a leg fails here.
+   ===================================================================== */
+console.log("\n== 9. Euclidean diagrams: specs, highlights, the bare-figure rule ==");
+{
+  const euclid = mine.filter(m => m.q.chapter === "euclid").map(m => m.q);
+  tick(euclid.length === 2, `expected 2 Euclidean questions, got ${euclid.length}`);
+
+  /* 9a — every spec and every rendered variant measures what it claims */
+  const measure = (spec, label) => {
+    const res = verifyDiagram(spec);
+    const bad = res.filter(r => !r.ok);
+    tick(bad.length === 0, `${label}: ${bad.map(r => `${r.at} drawn ${r.drawn}° vs v ${r.v}°`).join("; ")}`);
+    console.log(`  ${label.padEnd(46)} ${res.length} marked angle(s), ${bad.length ? "FAIL" : "all measure true"}`);
+    return res;
+  };
+  euclid.forEach(q => {
+    const d = q.diagram;
+    tick(!!d && !!d.parts, `${q.id}: carries a diagram with a parts map`);
+    if (d.spec) measure(d.spec, `${q.id} diagram.spec`);
+    Object.entries(d.parts).forEach(([pid, entry]) => {
+      const spec = entry.spec || d.spec;
+      if (entry.spec) measure(entry.spec, `${q.id}(${pid}) spec`);
+      ["question", "reveal"].forEach(side => {
+        if (!entry[side]) return;
+        const refIssues = diagramRefIssues(spec, entry[side], `${q.id}(${pid}).${side}`);
+        tick(refIssues.length === 0, refIssues.join(" | "));
+        measure(highlightedSpec(spec, entry[side]), `${q.id}(${pid}) ${side} as rendered`);
+      });
+      /* every part named in the map is a real part, and vice versa where
+         the module says the part has a figure */
+      tick(q.parts.some(pp => pp.id === pid), `${q.id}: diagram.parts["${pid}"] names no real part`);
+    });
+    /* EVERY part of a Euclidean question gets a figure — a sub-part of a
+       geometry question with no picture would be unanswerable on paper. */
+    const missing = q.parts.filter(pp => !d.parts[pp.id]).map(pp => pp.id);
+    tick(missing.length === 0, `${q.id}: parts with no diagram entry: ${missing.join(",")}`);
+    console.log(`  ${q.id.padEnd(20)} figures for parts [${Object.keys(d.parts).join(",")}] — ${missing.length ? "FAIL" : "OK, every part covered"}`);
+  });
+
+  /* 9b — THE BARE-FIGURE RULE. Sept T2 4(a) is the bookwork proof: the
+     learner invents the x / y labelling. The QUESTION-side figure must
+     therefore carry no angle text at all, while the REVEAL side does. */
+  {
+    const q4 = euclid.find(q => q.id === "euclid.circ.t2q4");
+    const entry = q4.diagram.parts.a;
+    const spec = entry.spec || q4.diagram.spec;
+    const qSide = highlightedSpec(spec, entry.question);
+    const rSide = highlightedSpec(spec, entry.reveal);
+    const labelsOf = sp => (sp.angles || []).map(a => a.t).filter(t => t && t.trim().length);
+    const qLabels = labelsOf(qSide), rLabels = labelsOf(rSide);
+    tick(qLabels.length === 0, `4(a) question-side figure leaks angle labels: [${qLabels.join(",")}]`);
+    tick(["x", "y", "2x", "2y"].every(t => rLabels.includes(t)), `4(a) reveal-side figure should carry x/y/2x/2y, got [${rLabels.join(",")}]`);
+    /* and the leak-check the other way round: the raw spec DOES carry them,
+       so the bare flag is doing real work rather than the spec being empty */
+    tick(labelsOf(spec).length >= 4, "4(a) specQ4a itself carries the x/y/2x/2y labelling (so `bare` is what removes it, not an empty spec)");
+    console.log(`  4(a) question side labels [${qLabels.join(",") || "none"}] · reveal side [${rLabels.join(",")}] — ${qLabels.length === 0 ? "OK, bare-figure rule holds" : "FAIL"}`);
+  }
+
+  /* 9c — the RIGHT-ANGLE SQUARE (port-day gap 1). Q4(b)'s angle at M and
+     Q5's tangent-radius angles must render a square, not the chevron. */
+  {
+    const q4 = euclid.find(q => q.id === "euclid.circ.t2q4");
+    const specB = q4.diagram.parts.b1.spec;
+    const mAngle = (specB.angles || []).find(a => a.at === "M");
+    tick(!!mAngle && mAngle.o && mAngle.o.mark === "square", `Q4(b): the 90° at M must ask for o.mark:"square", got ${JSON.stringify(mAngle && mAngle.o)}`);
+    const { renderDiagram } = await import("./js/exam/circle-engine.js");
+    const svgSquare = renderDiagram(specB, "#8b5cf6");
+    /* the chevron branch draws its middle point at m·√2 from the vertex;
+       the square branch draws the vector-sum corner. Prove they differ by
+       rendering the same spec both ways. */
+    const chevronSpec = { ...specB, angles: specB.angles.map(a => ({ ...a, o: { ...a.o, mark: 1 } })) };
+    const svgChevron = renderDiagram(chevronSpec, "#8b5cf6");
+    tick(svgSquare !== svgChevron, "Q4(b): o.mark:\"square\" renders differently from the legacy chevron (the additive branch is actually reached)");
+    console.log(`  Q4(b) right angle at M: mark="square", output differs from chevron — ${svgSquare !== svgChevron ? "OK" : "FAIL"}`);
+  }
+
+  /* 9d — PORT-DAY GAP 2, pinned. verifyDiagram alone CANNOT catch a
+     flipped tangent leg: computeGeometry clamps a non-reflex mark to the
+     short sweep, so ["O","tg-"] and ["O","tg+"] both measure exactly 90.
+     What differs is the SIDE the wedge sits on, so that is what is
+     asserted here — the bisector must point towards T. */
+  {
+    const q5 = euclid.find(q => q.id === "euclid.tan.t2q5");
+    const spec = q5.diagram.spec;
+    const g = computeGeometry(spec);
+    const dirTo = (V, P) => Math.atan2(-(P.y - V.y), P.x - V.x) * 180 / Math.PI;
+    const towardsT = dirTo(g.pts.A, g.pts.T);
+
+    const bothMeasure90 = ["tg-", "tg+"].map(leg => {
+      const v = verifyDiagram(highlightedSpec(spec, { angles: [{ at: "A", legs: ["O", leg], v: 90 }] })).find(r => r.at === "A");
+      return v && v.drawn;
+    });
+    tick(bothMeasure90[0] === 90 && bothMeasure90[1] === 90,
+      `gap-2 premise: both tangent-leg signs measure 90 (got ${bothMeasure90.join(" / ")}) — which is WHY the module names T instead`);
+    console.log(`  gap 2: "tg-" measures ${bothMeasure90[0]}°, "tg+" measures ${bothMeasure90[1]}° — verifyDiagram alone cannot tell them apart`);
+
+    const aEntry = q5.diagram.parts.a.question.angles[0];
+    tick(aEntry.at === "A" && aEntry.legs[0] === "O" && aEntry.legs[1] === "T",
+      `5(a) must name the real external point (legs ["O","T"]), got ${JSON.stringify(aEntry.legs)}`);
+    const drawnA = computeGeometry(highlightedSpec(spec, q5.diagram.parts.a.question)).angles.slice(-1)[0];
+    const delta = Math.abs(((drawnA.bis - towardsT + 540) % 360) - 180);
+    tick(delta < 60, `5(a) wedge bisector ${drawnA.bis.toFixed(1)}° must point towards T (${towardsT.toFixed(1)}°), off by ${delta.toFixed(1)}°`);
+    console.log(`  5(a) right angle at A: sweep ${drawnA.sweep.toFixed(1)}°, bisector ${drawnA.bis.toFixed(1)}° vs direction to T ${towardsT.toFixed(1)}° — ${delta < 60 ? "OK, on T's side" : "FAIL, wrong side"}`);
+    tick(aEntry.o && aEntry.o.mark === "square", "5(a) the tangent-radius right angle is marked with a square");
+  }
+
+  /* 9e — 5(b) is the four-SIDES case from her design note */
+  {
+    const q5 = euclid.find(q => q.id === "euclid.tan.t2q5");
+    const sides = (q5.diagram.parts.b.question.chords || []).map(c => c.join(""));
+    const want = ["OA", "AT", "TB", "OB"];
+    const same = sides.length === 4 && want.every(w => sides.includes(w));
+    tick(same, `5(b) should light the four sides of OATB, got [${sides.join(",")}]`);
+    console.log(`  5(b) highlighted sides [${sides.join(", ")}] — ${same ? "OK, the four sides of OATB" : "FAIL"}`);
+    /* and the two tangent SEGMENTS really do come from `ext`, not chords */
+    const chordPairs = (q5.diagram.spec.chords || []).map(c => c.join(""));
+    tick(!chordPairs.includes("AT") && !chordPairs.includes("TB"),
+      "5(b) premise: AT and TB are tangent segments from the ext point, not authored chords");
+  }
+
+  /* 9f — EXAM-FOCUS-ONLY chapter wiring, checked from data (the DOM side
+     lives in verify-exam.html Part 11). */
+  {
+    const euclidChapter = EXAM_ONLY_CHAPTERS.find(c => c.id === "euclid");
+    tick(!!euclidChapter, "js/config.js EXAM_ONLY_CHAPTERS contains euclid");
+    tick(!!euclidChapter && euclidChapter.examOnly === true, "the euclid chapter is marked examOnly:true");
+    tick(!!euclidChapter && (euclidChapter.quests || []).length === 0, "the euclid chapter owns NO quests (Circle Quest keeps the drill rounds)");
+    tick(!CHAPTERS.some(c => c.id === "euclid"), "euclid is NOT in CHAPTERS — so the hub quest tabs, the dice, the admin grid and assignments can never see it");
+    tick(EXAM_CHAPTERS.includes("euclid"), "js/config.js EXAM_CHAPTERS includes euclid");
+    console.log(`  euclid: examOnly=${euclidChapter && euclidChapter.examOnly}, quests=${euclidChapter ? (euclidChapter.quests || []).length : "?"}, in CHAPTERS=${CHAPTERS.some(c => c.id === "euclid")}, flagged=${EXAM_CHAPTERS.includes("euclid")}`);
+  }
+}
 
 /* ---------- verdict ---------- */
 console.log(`\n===== ${passed}/${total} checks passed =====`);

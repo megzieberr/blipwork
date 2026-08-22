@@ -47,6 +47,43 @@
                 js/exam-play.js renders the reteach link ONLY when that
                 quest is currently open (state.openQuests) — never a
                 bypass, never a dead-end.
+     diagram    OPTIONAL. A to-scale circle-geometry figure, drawn by
+                js/exam/circle-engine.js (Circle Quest's engine, ported
+                2026-08-22 — EXAM-FOCUS-PLAN.md build order step 3).
+                Promoted from ignored metadata to a VALIDATED field the
+                same day: every spec here is run through the engine's own
+                verifyDiagram(), so a figure that does not measure what it
+                claims fails validation instead of shipping. Questions
+                without a figure (every one of the 19 already seeded) are
+                unaffected — the field is simply absent.
+
+                  diagram: {
+                    spec: <engine spec>,          // default figure
+                    parts: {
+                      "a": {
+                        spec:     <engine spec>,  // optional per-part override
+                        question: <highlight set>,// drawn while the part is being worked
+                        reveal:   <highlight set>,// optional; drawn once the memo is open
+                      },
+                    },
+                  }
+
+                A HIGHLIGHT SET is her per-part marker-pen design
+                (EXAM-FOCUS-PLAN.md, "Circle geo diagrams": "find angle A"
+                lights the wedge on angle A, "prove ABCD is cyclic" lights
+                the four sides) — see js/exam/circle-engine.js's extension
+                block for the full shape. Two rules are enforced here:
+                  · every name a highlight references must exist in its
+                    spec, and every chord ref must be a segment the spec
+                    actually draws (diagramRefIssues);
+                  · every highlighted angle declares its true value v, and
+                    the highlighted spec is re-measured by verifyDiagram —
+                    so a wedge on the wrong side of a leg is caught.
+                `question.bare: true` draws the figure WITHOUT the spec's
+                own angle labels: the BARE-FIGURE RULE, for a part whose
+                proof IS the labelling (Sept T2 4(a) — a question diagram
+                already carrying x, y, 2x, 2y hands the proof over).
+
      parts      Part[], at least one.
 
    PART
@@ -97,6 +134,8 @@
    can actually verify a topic against its chapter's wall, and should add
    that check when it lands real content.
    ============================================================ */
+
+import { verifyDiagram, highlightedSpec, diagramRefIssues } from "./circle-engine.js";
 
 const ALLOWED_TICKS = new Set(["a", "ca", "s/f"]);
 const ALLOWED_MEMO_TYPES = new Set(["step", "answer", "trap"]);
@@ -176,6 +215,65 @@ function validatePart(part, qid, issues, seenIds) {
   return typeof part.marks === "number" ? part.marks : 0;
 }
 
+/* ---------------------------------------------------------------
+   DIAGRAM (optional, added 2026-08-22 with the Circle Quest engine
+   port). Absent on every question seeded before this date, so this
+   whole block is a no-op for them — validateQuestion() returns
+   immediately when q.diagram is undefined.
+
+   Two kinds of check, deliberately kept apart:
+     · STRUCTURAL — does every name a highlight uses exist in its
+       spec (js/exam/circle-engine.js's diagramRefIssues);
+     · NUMERIC — does every drawn angle measure what it claims
+       (the engine's own verifyDiagram, the "diagrams cannot lie"
+       guarantee, run on the base spec AND on every highlighted
+       variant a part will actually render).
+   --------------------------------------------------------------- */
+const DIAGRAM_TOL = 1.5;      // the engine's own default tolerance
+
+function checkSpecMeasures(spec, label, issues) {
+  let results;
+  try { results = verifyDiagram(spec, DIAGRAM_TOL); }
+  catch (e) { issues.push(`${label}: spec failed to render (${e && e.message})`); return; }
+  results.forEach(r => {
+    if (!r.ok) issues.push(`${label}: angle at ${r.at}${r.t ? ` ("${r.t}")` : ""} is drawn as ${r.drawn}° but declares v = ${r.v}° (out by ${r.diff}°, tolerance ${DIAGRAM_TOL}°)`);
+  });
+}
+
+function validateHighlightSet(spec, hl, label, issues) {
+  if (hl === undefined) return;
+  if (!hl || typeof hl !== "object" || Array.isArray(hl)) { issues.push(`${label}: must be a highlight-set object`); return; }
+  diagramRefIssues(spec, hl, label).forEach(i => issues.push(i));
+  let variant;
+  try { variant = highlightedSpec(spec, hl); }
+  catch (e) { issues.push(`${label}: highlights could not be applied (${e && e.message})`); return; }
+  checkSpecMeasures(variant, `${label} (as rendered)`, issues);
+}
+
+function validateDiagram(q, issues) {
+  const d = q.diagram;
+  if (d === undefined) return;
+  const label = `question "${q.id}" diagram`;
+  if (!d || typeof d !== "object" || Array.isArray(d)) { issues.push(`${label}: must be an object`); return; }
+  if (d.spec !== undefined) {
+    if (!d.spec || typeof d.spec !== "object") issues.push(`${label}.spec: must be an engine spec object`);
+    else checkSpecMeasures(d.spec, `${label}.spec`, issues);
+  }
+  if (!d.parts || typeof d.parts !== "object" || Array.isArray(d.parts)) { issues.push(`${label}.parts: must be an object keyed by part id`); return; }
+
+  const partIds = new Set((q.parts || []).map(p => p && p.id));
+  Object.entries(d.parts).forEach(([partId, entry]) => {
+    const pl = `${label}.parts["${partId}"]`;
+    if (!partIds.has(partId)) { issues.push(`${pl}: no part with that id exists in this question`); return; }
+    if (!entry || typeof entry !== "object") { issues.push(`${pl}: must be an object`); return; }
+    const spec = entry.spec || d.spec;
+    if (!spec || typeof spec !== "object") { issues.push(`${pl}: no spec — set one here or a default on diagram.spec`); return; }
+    if (entry.spec) checkSpecMeasures(entry.spec, `${pl}.spec`, issues);
+    validateHighlightSet(spec, entry.question, `${pl}.question`, issues);
+    validateHighlightSet(spec, entry.reveal, `${pl}.reveal`, issues);
+  });
+}
+
 /* The one function both a future seeding session and this build's harness
    (verify-exam.html) import — checked in exactly one place, per the
    brief, so the two can never drift apart. Returns {ok, issues}. */
@@ -207,6 +305,8 @@ export function validateQuestion(q) {
   if (typeof q.marks === "number" && markTotal !== q.marks) {
     issues.push(`question "${q.id}": parts sum to ${markTotal} marks, but the question is worth ${q.marks}`);
   }
+
+  validateDiagram(q, issues);
 
   return { ok: issues.length === 0, issues };
 }

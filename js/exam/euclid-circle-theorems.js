@@ -1,14 +1,12 @@
 /* ============================================================
    EXAM FOCUS — Euclidean geometry · Circle theorems
-   ⚠️ PENDING. Not in js/exam/, not registered, not imported by
-   anything. Read _pending-engine-port/README-PENDING.md first — this
-   module is blocked on BOTH the Circle Quest engine.js port AND a
-   ruling on the Euclidean chapter tag.
    ------------------------------------------------------------
    SOURCE: September Test 2 (practice), QUESTION 4 — the bookwork proof
    (∠ at centre = 2 × ∠ at circumference, acute case) plus the
    line-from-centre-⊥-chord calculation.
-   (Overnight run #1, stage 3b, 2026-08-21.)
+   (Composed overnight run #1, stage 3b, 2026-08-21; promoted out of
+   js/exam/_pending-engine-port/ and registered 2026-08-22 once the
+   Circle Quest engine port landed — js/exam/circle-engine.js.)
 
    PRINT SOURCE:
      Desktop\Eksamen Vraestelle\Gr11 IEB Nov\Sept Practice\
@@ -19,44 +17,42 @@
    Same statements, same reasons, same ticks, same WATCH OUT / REMEMBER
    cards as the print memo. `hint` and `esplain` freshly authored.
 
-   ⚠️ CHAPTER TAG IS PROVISIONAL. `chapter: "euclid"` names a chapter
-   that DOES NOT EXIST — js/config.js CHAPTERS has eleven entries and
-   none of them is Euclidean, and js/exam/index.js's REGISTRY has no
-   euclid key (its header's "Euclidean geometry has no key here on
-   purpose" note is now STALE — EXAM-FOCUS-PLAN.md's Corrections section
-   reverses it: Circle Quest owns the DRILL rounds, Euclidean EXAM
-   questions belong here). The slug is a placeholder for whatever she
-   rules the home should be.
+   CHAPTER: "euclid" — her ruling, morning of 2026-08-22: Euclidean gets
+   its own EXAM-FOCUS-ONLY chapter inside Blipwork (js/config.js
+   EXAM_ONLY_CHAPTERS). Circle Quest still owns every circle-geo drill
+   round; this chapter exists in the 📝 Exam Focus tab and nowhere else —
+   no hub quest card, no dice, no admin open/close row.
 
-   ⚠️⚠️ lostQuest IS A DOCUMENTED PLACEHOLDER. With no euclid chapter
-   there is no round to reteach into, and pointing at a Circle Quest
-   round is not possible from here (CQ is a separate app; the plan's
-   CQ→hub link is a different mechanism). The placeholder degrades
-   SAFELY through three independent gates in js/exam-play.js's
-   lostQuestLink(): the id is never in app.state.openQuests, and even if
-   it were, chapterById / quests.find / questDef all fail to resolve and
-   the function returns null. Result: no reteach button — never a
-   dead-end, never a throw. This file is excluded from the harness's
-   lostQuest-resolves check and asserted to carry the placeholder.
+   ⚠️ lostQuest IS A DOCUMENTED PLACEHOLDER, AND STAYS ONE. Her ruling
+   (later the same morning): "Euclidean exam chapter has NO 'I'm lost'
+   button — they don't need it anyway." The schema still REQUIRES the
+   field, so it carries a PENDING- id that cannot resolve, which is
+   exactly what makes the button not render: js/exam-play.js's
+   lostQuestLink() bails through three independent gates — the id is
+   never in app.state.openQuests, and chapterById("euclid") is null
+   because euclid deliberately is NOT in CHAPTERS. Result: no reteach
+   link, never a dead end, never a throw. Asserted by both harnesses.
 
-   ⚠️ DIAGRAMS. The print figures are TikZ (Sept-T2-figs.tex). The specs
-   below are the Circle Quest engine.js drafts, copied verbatim from
-   Sept-T2-euclid-specs.md — geometry checked by arc arithmetic in
-   Sept-T2-verify.py, NEVER rendered. They are exported so port day can
-   import them directly rather than retyping. `diagram` on the question
-   object is plain pending-port metadata; validateQuestion() does not
-   look at it and no schema field was invented.
-   PORT DAY MUST NOT CHANGE: the degrees · D between A and C (the acute
-   case the syllabus examines) · Q4(b)'s 12 : 9 : 15 proportions.
-   KNOWN GAP: o.mark draws a chevron, not a right-angle square; Q4(b)
-   needs a square at M. Do not silently ship a chevron for a 90° angle.
+   ⚠️ DIAGRAMS. The print figures are TikZ (Sept-T2-figs.tex); the specs
+   below are the in-app equivalents, drawn to scale by
+   js/exam/circle-engine.js. Geometry checked by arc arithmetic in
+   Sept-T2-verify.py when they were composed, and now re-measured on
+   every harness run by the engine's own verifyDiagram() (via
+   validateQuestion — js/exam/_schema.js's `diagram` field).
+   DO NOT CHANGE: the degrees · D between A and C (the acute case the
+   syllabus examines) · Q4(b)'s 12 : 9 : 15 proportions.
+   Port-day gap 1 is CLOSED: Q4(b)'s angle at M asks for
+   `o.mark: "square"`, the additive right-angle square added to the
+   ported engine — a chevron would have read as "these two angles are
+   equal", not "this is 90°".
 
    ⚠️ THE BARE-FIGURE RULE FOR 4(a). The printed question shows the
-   figure with NO angle labels at all — the learner constructs the x / y
-   labelling as part of the proof. A diagram already carrying x, y, 2x,
-   2y hands the proof over. So specQ4a's `angles` array is the REVEAL
-   state; `diagram.question` below names the subset to draw on the
-   question side (chords and point labels only).
+   figure with NO angle labels at all — the learner constructs the
+   x / y labelling as part of the proof. A diagram already carrying x,
+   y, 2x, 2y hands the proof over. So `diagram.parts.a.question` sets
+   `bare: true` (chords and point labels only, every angle dropped), and
+   only the REVEAL side draws specQ4a's full labelling beside the
+   worked proof.
 
    LEVELS: 1:1 with T2's blueprint — (a) 1, (b)(1) 3, (b)(2) 2. No ★
    (T2's two level-4 parts are 3(e) and 5(d); 5(d) is in the sibling
@@ -64,7 +60,7 @@
    ============================================================ */
 
 const PAPER = "sept-t2";
-const LOST_PENDING = { chapter: "euclid", quest: "PENDING-no-euclid-chapter" };
+const LOST_PENDING = { chapter: "euclid", quest: "PENDING-euclid-is-exam-only-no-drill-round" };
 
 /* --- diagram specs, verbatim from Sept-T2-euclid-specs.md ----------- */
 
@@ -101,7 +97,7 @@ export const specQ4b = {
     ["O", "T"],        // OM produced to T -- passes through M by construction
   ],
   angles: [
-    { at: "M", legs: ["Q", "T"], t: "", o: { v: 90, mark: 1 } },
+    { at: "M", legs: ["Q", "T"], t: "", o: { v: 90, mark: "square" } },
   ],
 };
 
@@ -113,28 +109,41 @@ const t2q4 = {
   paper: PAPER,
   lostQuest: LOST_PENDING,
   marks: 9,
-  /* pending-port metadata only — ignored by validateQuestion() */
+  /* to-scale figures + her per-part marker-pen highlights.
+     Validated by js/exam/_schema.js: every spec and every highlighted
+     variant is re-measured by the engine's verifyDiagram(). */
   diagram: {
-    a: {
-      spec: specQ4a,
-      question: "chords + point labels ONLY — omit every `angles` entry (see the bare-figure rule above)",
-      reveal: [
-        "step 1: hl #f6c945 on {at:'B',legs:['A','D']} and {at:'A',legs:['B','O']} — the isosceles pair",
-        "step 2: hl on {at:'O',legs:['A','D']} — the 2x exterior angle",
-        "step 3: repeat with the y / 2y pair",
-        "step 4: hl {at:'O',legs:['A','C']} and {at:'B',legs:['A','C']} together — the statement itself",
-      ],
-    },
-    b1: {
-      spec: specQ4b,
-      reveal: [
-        "hl the chord halves: replace ['P','Q'] with {a:'P',b:'M',hl:'#f6c945'} and {a:'M',b:'Q',hl:'#f6c945'} so 'bisects' is the visual message",
-        "then hl {a:'O',b:'P',hl:'#f6c945'} — the radius being found",
-      ],
-    },
-    b2: {
-      spec: specQ4b,
-      reveal: ["hl the segment M→T only: {a:'M',b:'T',hl:'#f6c945'} drawn on top of ['O','T']"],
+    parts: {
+      /* (a) BARE on the question side — see the header's bare-figure
+         rule. The reveal restores specQ4a's own x / y / 2x / 2y
+         labelling and lights the two angles the statement is ABOUT:
+         ∠AOC at the centre and ∠ABC at the circumference. */
+      a: {
+        spec: specQ4a,
+        question: { bare: true },
+        reveal: { angles: [
+          { at: "O", legs: ["A", "C"], v: 130 },
+          { at: "B", legs: ["A", "C"], v: 65 },
+        ] },
+      },
+      /* (b)(1) the chord whose length is given lights up while they
+         work; the reveal switches to its two HALVES, EACH WITH AN
+         EQUAL-LENGTH TICK, so "the perpendicular from the centre
+         bisects the chord" — the mark everyone skips — is the
+         picture's own message. The ticks are not decoration: two
+         adjacent amber halves look identical to one amber whole, so
+         without them the reveal figure is indistinguishable from the
+         question figure (seen on the rendered PNG, 2026-08-22). */
+      b1: {
+        spec: specQ4b,
+        question: { chords: [["P", "Q"]] },
+        reveal: { chords: [["P", "M", "t1"], ["M", "Q", "t1"]] },
+      },
+      /* (b)(2) the piece being found, along the radius OT. */
+      b2: {
+        spec: specQ4b,
+        question: { chords: [["M", "T"]] },
+      },
     },
   },
   parts: [
