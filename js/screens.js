@@ -3,7 +3,8 @@ import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, EXAM_C
 import { questDef } from "./quests/index.js";
 import { dicePool } from "./quests/dice-pools.js";
 import { openDiceRound } from "./dice-play.js";
-import { examTopicsForChapter, examQuestionsForTopic } from "./exam/index.js";
+import { examQuestionsForTopic, examFirstCardForSkill } from "./exam/index.js";
+import { skillsForChapter } from "./exam/skills.js";
 import { getExamLang, uiStr } from "./exam/lang.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
@@ -179,12 +180,12 @@ function examChapterCard(app, ch) {
   const card = el("div", "ch-card");
   card.style.setProperty("--cc", ch.signature);
   card.style.setProperty("--accent", ch.signature);
-  const topics = examTopicsForChapter(ch.id);
+  const skills = skillsForChapter(ch.id);
   card.innerHTML = `
     <div class="ico">${ch.icon}</div>
     <h2>${ch.name}</h2>
     <p>${ch.blurb || ""}</p>
-    <div class="ch-meta"><span>${topics.length} topic${topics.length === 1 ? "" : "s"}</span></div>
+    <div class="ch-meta"><span>${skills.length} skill${skills.length === 1 ? "" : "s"}</span></div>
     <div class="ch-foot"></div>`;
   const btn = el("button", "btn primary", "Enter chapter →");
   btn.addEventListener("click", () => app.go("examChapter", { chapterId: ch.id }));
@@ -341,16 +342,21 @@ export function renderChapter(app, host, params) {
   host.appendChild(grid);
 }
 
-/* ---------------- EXAM FOCUS · topic list (EXAM-FOCUS-PLAN.md, session 0)
-   ---------------- tab -> CHAPTER -> topic -> question -> player. This
-   screen is the chapter step: one card per topic registered in
-   js/exam/index.js for this chapter, "N questions" up front and "worked
-   N of M" filled in after a round trip (mhq_exam_state) resolves — the
-   list never blocks its first paint on the network. EN/AF toggle lives
-   here (and on every screen deeper in the tab) and re-renders the WHOLE
-   screen on flip via app.go(), same route the card clicks already take —
-   simpler than hand-patching every localized string in place, and this
-   screen has no per-part state worth preserving across a toggle. */
+/* ---------------- EXAM FOCUS · skill tiles (EXAM-SKILLS-BRIEF.md, Session
+   B, 2026-08-22 — replaces the old topic-list -> question-list two-step).
+   ---------------- tab -> CHAPTER -> SKILL TILE -> straight into the
+   player, no intermediate question-list screen (her drawing: "tap a tile
+   -> straight into the first card, no list screen"). One tile per skill
+   in js/exam/skills.js's skillsForChapter() order — including a skill
+   with zero cards yet, which renders muted/"coming soon" and un-tappable
+   (gtrig's Identities / Super Special Sums, per the brief's table).
+
+   Progress round-trip: fired ONCE per screen load (progressPromise),
+   shared by both the "worked k of n" fill-in below AND every tile's own
+   click handler (which needs the SAME progress map to resolve
+   examFirstCardForSkill's "first not-completed card" rule) — a learner
+   tapping a tile before the fetch settles still gets exactly one network
+   call, not two. */
 export function renderExamChapter(app, host, params) {
   const ch = examChapterById(params.chapterId);   // CHAPTERS + EXAM_ONLY_CHAPTERS (2026-08-22)
   if (!examChapterEligible(app, ch)) return app.go("hub");   // build flag AND an open quest (session E)
@@ -366,103 +372,57 @@ export function renderExamChapter(app, host, params) {
   head.querySelector(".back").addEventListener("click", () => app.go("hub"));
   host.appendChild(head);
 
-  const topics = examTopicsForChapter(ch.id);
-  if (!topics.length) {
+  const skills = skillsForChapter(ch.id);
+  if (!skills.length) {
     host.appendChild(el("div", "card", `<p class="muted center" style="padding:20px 0">${ui.noTopicsYet}</p>`));
     return;
   }
 
-  const grid = el("div", "exam-topic-grid");
-  topics.forEach(topic => {
-    const qs = examQuestionsForTopic(ch.id, topic.id);
-    const card = el("div", "quest exam-topic-card");
-    card.style.setProperty("--qc", ch.signature);
-    card.innerHTML = `<h3>${topic.label}</h3><p class="muted small exam-topic-count">${qs.length} question${qs.length === 1 ? "" : "s"}</p>`;
-    card.addEventListener("click", () => app.go("examTopic", { chapterId: ch.id, topicId: topic.id }));
-    grid.appendChild(card);
-  });
-  host.appendChild(grid);
-
-  fillWorkedCounts(ch.id, topics, grid, ui);
-}
-
-async function fillWorkedCounts(chapterId, topics, grid, ui) {
+  // one real backend round trip for this whole screen (see header note).
   const sess = getSession();
-  if (!sess) return;
-  let progress;
-  try {
-    const res = await api.examState(sess.username, sess.password);
-    if (!res || !res.ok) return;
-    progress = res.progress || {};
-  } catch { return; }
-  const cards = [...grid.querySelectorAll(".exam-topic-card")];
-  topics.forEach((topic, i) => {
-    const qs = examQuestionsForTopic(chapterId, topic.id);
-    const done = qs.filter(q => progress[q.id] && progress[q.id].completed).length;
-    const line = cards[i] && cards[i].querySelector(".exam-topic-count");
-    if (line) line.textContent = ui.workedOf(done, qs.length);
-  });
-}
+  const progressPromise = sess
+    ? api.examState(sess.username, sess.password).then(res => (res && res.ok) ? (res.progress || {}) : {}).catch(() => ({}))
+    : Promise.resolve({});
 
-/* ---------------- EXAM FOCUS · question list ---------------- one card
-   per seeded question in this topic; a ✓ badge (mirrors .qcheck's look
-   from the quest grid) marks a question already completed. Clicking a
-   question resolves the real question OBJECT here (not just an id) and
-   hands it straight to renderExamPlay via app.go("examPlay", …) — the
-   player never has to know how to look a question up. */
-export function renderExamTopic(app, host, params) {
-  const ch = examChapterById(params.chapterId);   // CHAPTERS + EXAM_ONLY_CHAPTERS (2026-08-22)
-  if (!examChapterEligible(app, ch)) return app.go("hub");   // build flag AND an open quest (session E)
-  const topic = examTopicsForChapter(ch.id).find(tp => tp.id === params.topicId);
-  if (!topic) return app.go("examChapter", { chapterId: ch.id });
-  setTheme(ch.signature, ch.signature);
-  const lang = getExamLang();
-  const ui = uiStr(lang);
-
-  const head = el("div", "chap-head");
-  head.innerHTML = `<div><span class="eyebrow">${ch.icon} ${ch.name}</span><h1>${topic.label}</h1></div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="link-btn back" aria-label="Back">←</button>
-    </div>`;
-  head.querySelector(".back").addEventListener("click", () => app.go("examChapter", { chapterId: ch.id }));
-  host.appendChild(head);
-
-  const questions = examQuestionsForTopic(ch.id, topic.id);
-  if (!questions.length) {
-    host.appendChild(el("div", "card", `<p class="muted center" style="padding:20px 0">${ui.noQuestionsYet}</p>`));
-    return;
-  }
-
-  const grid = el("div", "exam-question-grid");
-  questions.forEach((q, i) => {
-    const card = el("div", "quest exam-question-card");
+  const grid = el("div", "exam-skill-grid");
+  skills.forEach(skill => {
+    const cards = examQuestionsForTopic(ch.id, skill.id);
+    const empty = !cards.length;
+    const card = el("div", "quest exam-skill-card" + (empty ? " locked" : ""));
     card.style.setProperty("--qc", ch.signature);
-    card.innerHTML = `<div class="qn">${i + 1}</div><h3>${q.marks} marks</h3><p class="muted small">${q.parts.length} part${q.parts.length === 1 ? "" : "s"}</p>`;
-    card.addEventListener("click", () => app.go("examPlay", {
-      chapter: ch, topicId: topic.id, question: q, accent: ch.signature,
-      onBack: () => app.go("examTopic", params),
-    }));
-    grid.appendChild(card);
-  });
-  host.appendChild(grid);
-
-  fillCompletedChecks(questions, grid);
-}
-
-async function fillCompletedChecks(questions, grid) {
-  const sess = getSession();
-  if (!sess) return;
-  let progress;
-  try {
-    const res = await api.examState(sess.username, sess.password);
-    if (!res || !res.ok) return;
-    progress = res.progress || {};
-  } catch { return; }
-  const cards = [...grid.querySelectorAll(".exam-question-card")];
-  questions.forEach((q, i) => {
-    if (progress[q.id] && progress[q.id].completed && cards[i]) {
-      cards[i].insertAdjacentHTML("afterbegin", `<div class="qcheck">✓</div>`);
+    card.innerHTML = `<h3>${skill.label}</h3><p class="muted small exam-skill-count">${empty ? ui.comingSoon : `${cards.length} card${cards.length === 1 ? "" : "s"}`}</p>`;
+    if (!empty) {
+      card.addEventListener("click", () => {
+        if (card.classList.contains("busy")) return;   // double-submit rule
+        card.classList.add("busy");
+        progressPromise.then(progress => {
+          card.classList.remove("busy");
+          const first = examFirstCardForSkill(ch.id, skill.id, progress);
+          if (!first) return;   // shouldn't happen (cards.length > 0 checked above) — never a dead end
+          app.go("examPlay", {
+            chapter: ch, skillId: skill.id, question: first, accent: ch.signature,
+            onBack: () => app.go("examChapter", { chapterId: ch.id }),
+          });
+        });
+      });
     }
+    grid.appendChild(card);
+  });
+  host.appendChild(grid);
+
+  fillWorkedCounts(ch.id, skills, grid, ui, progressPromise);
+}
+
+async function fillWorkedCounts(chapterId, skills, grid, ui, progressPromise) {
+  const progress = await progressPromise;
+  if (!progress || !Object.keys(progress).length) return;   // offline / no session — leave "n cards" showing
+  const cards = [...grid.querySelectorAll(".exam-skill-card")];
+  skills.forEach((skill, i) => {
+    const qs = examQuestionsForTopic(chapterId, skill.id);
+    if (!qs.length) return;   // "coming soon" tiles keep their own text
+    const done = qs.filter(q => progress[q.id] && progress[q.id].completed).length;
+    const line = cards[i] && cards[i].querySelector(".exam-skill-count");
+    if (line) line.textContent = ui.workedOf(done, qs.length);
   });
 }
 

@@ -3,7 +3,7 @@ import { api } from "./api.js";
 import { getSession, isLoggedIn, clearSession } from "./session.js";
 import { el, clear } from "./ui.js";
 import { renderLogin } from "./auth.js";
-import { renderHub, renderChapter, renderResults, renderDiceResults, renderExamChapter, renderExamTopic } from "./screens.js";
+import { renderHub, renderChapter, renderResults, renderDiceResults, renderExamChapter } from "./screens.js";
 import { renderPlay } from "./play.js";
 import { renderExamPlay } from "./exam-play.js";
 import { renderBlip } from "./blip.js";
@@ -42,11 +42,14 @@ const app = {
 
   render() {
     clear(this.root);
-    // EXAM-FOCUS-PLAN.md, session 0: examChapter/examTopic are nav screens
-    // (topic list / question list), same posture as "chapter" — they get
-    // the top chrome. examPlay does NOT, matching "play" — the part player
-    // is the focused, distraction-free pen-and-paper screen (no HUD).
-    const chromeScreens = ["hub", "chapter", "blip", "gallery", "examChapter", "examTopic"];
+    // EXAM-FOCUS-PLAN.md, session 0 + EXAM-SKILLS-BRIEF.md, Session B
+    // (2026-08-22): examChapter is a nav screen (skill tiles), same
+    // posture as "chapter" — it gets the top chrome. examTopic is GONE
+    // (dead code removed — tapping a tile goes straight to the player,
+    // no intermediate question-list screen). examPlay does NOT get
+    // chrome, matching "play" — the part player is the focused,
+    // distraction-free pen-and-paper screen (no HUD).
+    const chromeScreens = ["hub", "chapter", "blip", "gallery", "examChapter"];
     if (chromeScreens.includes(this.screen) && this.state) this.root.appendChild(chrome(this));
     const view = el("main", "view");
     this.root.appendChild(view);
@@ -61,7 +64,6 @@ const app = {
       case "blip": renderBlip(this, view); break;
       case "gallery": renderGallery(this, view); break;
       case "examChapter": renderExamChapter(this, view, this.params); break;
-      case "examTopic": renderExamTopic(this, view, this.params); break;
       case "examPlay": renderExamPlay(this, view, this.params); break;
       default: renderHub(this, view);
     }

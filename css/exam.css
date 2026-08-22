@@ -10,21 +10,32 @@
    already a token; this is its first card-level use).
    ============================================================ */
 
-/* ---------- topic / question grids (reuse .quest's card shell) ---------- */
-.exam-topic-grid,.exam-question-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
-.exam-topic-card,.exam-question-card{min-height:88px}
-.exam-topic-card h3{font-size:14px;color:var(--ink)}
-.exam-topic-count{margin-top:6px}
+/* ---------- topic / question / skill grids (reuse .quest's card shell) ---------- */
+.exam-topic-grid,.exam-question-grid,.exam-skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.exam-topic-card,.exam-question-card,.exam-skill-card{min-height:88px}
+.exam-topic-card h3,.exam-skill-card h3{font-size:14px;color:var(--ink)}
+.exam-topic-count,.exam-skill-count{margin-top:6px}
+.exam-skill-card.busy{opacity:.6;pointer-events:none}
 
 /* ---------- the part player ---------- */
 .exam-play{display:flex;flex-direction:column;gap:14px}
 .exam-play-head h1{font-size:19px}
+.exam-card-of{margin-top:2px}
 .exam-opener{
   font-family:var(--font-display);font-weight:600;font-size:13.5px;color:var(--muted);
   padding:9px 13px;border:1px dashed var(--brd-2);border-radius:var(--r-md);
   background:color-mix(in srgb,var(--accent) 6%,transparent);
 }
 .exam-progress{letter-spacing:.3px}
+
+/* the GIVEN-information panel (EXAM-SKILLS-BRIEF.md, Session B,
+   2026-08-22) — same paper-white treatment as .exam-diagram below, so a
+   card's intro reads as "the thing you were handed", not app chrome. */
+.exam-intro{
+  margin:2px 0 4px;padding:12px 14px;
+  background:#fff;color:#2b2f4a;border:1px solid var(--brd);border-radius:var(--r-md);
+  font-size:13.5px;line-height:1.55;
+}
 
 .exam-parts{display:flex;flex-direction:column;gap:14px}
 .exam-part{border-color:var(--brd)}
@@ -110,6 +121,16 @@
 .exam-complete{text-align:center}
 .exam-complete h2{margin-bottom:6px}
 .exam-complete .btn{margin-top:14px}
+/* Another one! / That's enough for now (her ruling, 2026-08-22): the
+   learner decides when to stop — two equally-easy-to-tap choices, no
+   "finish line" language anywhere near them. */
+.exam-complete-actions{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.exam-complete-actions .btn{margin-top:0}
+
+/* Walk me through it (her ruling, 2026-08-22): same memo, one step at a
+   time — visually the same rhythm as .exam-memo, just built up block by
+   block instead of appearing all at once. */
+.exam-walk{margin-top:12px;padding-top:12px;border-top:1px dashed var(--brd)}
 
 /* ============================================================
    THE FIGURE (2026-08-22 — the Circle Quest engine ported into

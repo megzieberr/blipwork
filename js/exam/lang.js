@@ -66,6 +66,16 @@ export const EXAM_UI = {
     noQuestionsYet: "No questions in this topic yet.",
     backToChapters: "← Back",
     enterChapter: "Enter →",
+    // SKILL ROUNDS (EXAM-SKILLS-BRIEF.md, Session B, 2026-08-22): chapter
+    // -> skill tiles -> one card at a time -> Another/Enough. See that
+    // brief's "Session B — UI" section for the exact shapes these fill.
+    walkBtn: "Walk me through it",
+    nextStep: "Next step →",
+    anotherBtn: "Another one!",
+    enoughBtn: "That's enough for now",
+    cardOf: (k, n) => `Card ${k} of ${n}`,
+    comingSoon: "Coming soon",
+    allSeen: "That's all of them — going round again",
   },
   af: {
     tabLabel: "📝 Eksamenfokus", tabSub: "Regte eksamenvrae, een deel op 'n slag",
@@ -85,6 +95,13 @@ export const EXAM_UI = {
     noQuestionsYet: "Nog geen vrae in hierdie onderwerp nie.",
     backToChapters: "← Terug",
     enterChapter: "Gaan in →",
+    walkBtn: "Lei my stap vir stap",
+    nextStep: "Volgende stap →",
+    anotherBtn: "Nog een!",
+    enoughBtn: "Genoeg vir nou",
+    cardOf: (k, n) => `Kaart ${k} van ${n}`,
+    comingSoon: "Kom binnekort",
+    allSeen: "Dis al van hulle — ons begin van voor af",
   },
 };
 

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Focus skill rounds · verification</title>
+<!-- Session A owns verify-exam.html; this is a NEW harness (Session B,
+     EXAM-SKILLS-BRIEF.md, 2026-08-22), copying that file's Part 4/8
+     structure (real production modules, driven directly, real
+     LocalBackend round trip) for the skill-tiles/player rework. -->
+<link rel="stylesheet" href="./css/styles.css">
+<link rel="stylesheet" href="./css/exam.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  /* the 375px rig: a REAL in-flow, visible container (not off-screen) so
+     an overflow bug actually shows up in its own scrollWidth — the
+     off-screen-fixed trick verify-exam.html uses for its stub host is
+     fine for behaviour checks, but useless for "does this push the page
+     sideways at phone width" (house rule: resize_window can no-op /
+     screenshots aren't reliable here — verify layout via computed
+     widths in JS, per CLAUDE.md's browser-pane note). */
+  #rig{width:375px;border:1px solid var(--brd);margin:10px 0;overflow:hidden}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Exam Focus skill rounds · verification</h1>
+<p class="muted small">EXAM-SKILLS-BRIEF.md, Session B (2026-08-22): chapter → skill tiles → one card at a
+  time → "Another one!" / "That's enough for now", "Walk me through it", stacked fractions. Drives the REAL
+  js/screens.js renderExamChapter and js/exam-play.js renderExamPlay directly (same posture as
+  verify-exam.html's Part 4/8) against a harness-only skills/cards stub
+  (verify-exam-skills-harness-stub.js, repo root — never under js/exam/, never imported by the shipped app),
+  wired in ONLY for this page via the import map below. forces ?local=1-equivalent behaviour via
+  localStorage before any module import runs, exactly like verify-exam.html.</p>
+<div id="banner">running…</div>
+<h2>Checks</h2>
+<pre id="checks">…</pre>
+<div id="rig"></div>
+
+<script>try { localStorage.setItem("mhq.forceLocal", "1"); } catch (e) {}</script>
+<!-- Session A's js/exam/skills.js and its examFirstCardForSkill addition
+     to js/exam/index.js don't exist yet while this session builds in
+     parallel (and this session must never create/edit either file —
+     see the harness stub module's own header). This import map remaps
+     ONLY those two specifiers, for THIS PAGE, to the harness stub —
+     js/screens.js and js/exam-play.js are otherwise loaded completely
+     unmodified, real production code, real imports. Both entries point
+     at the SAME stub file (it exports every name either production
+     module actually imports from either real module). -->
+<script type="importmap">
+{
+  "imports": {
+    "./js/exam/skills.js": "./verify-exam-skills-harness-stub.js",
+    "./js/exam/index.js": "./verify-exam-skills-harness-stub.js"
+  }
+}
+</script>
+<script type="module">
+import { chapterById } from "./js/config.js";
+import { renderExamChapter } from "./js/screens.js";
+import { renderExamPlay } from "./js/exam-play.js";
+import { getExamLang, uiStr } from "./js/exam/lang.js";
+import { api } from "./js/api.js";
+import { LocalBackend } from "./js/local-backend.js";
+import { setSession, clearSession } from "./js/session.js";
+import { el, clear } from "./js/ui.js";
+import { CARD_A1, CARD_A2 } from "./verify-exam-skills-harness-stub.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const lines = [];
+const say = () => { document.getElementById("checks").textContent = lines.join("\n"); };
+
+const winErrors = [];
+window.addEventListener("error", e => winErrors.push(String(e.message || e.error || e)));
+window.addEventListener("unhandledrejection", e => winErrors.push(String(e.reason)));
+
+const UI = uiStr(getExamLang());
+const rig = document.getElementById("rig");
+const btnByText = (host, text) => [...host.querySelectorAll("button")].find(b => b.textContent.trim() === text);
+
+let lastGo = null;
+let uname;
+const app = {
+  state: null,
+  go(screen, params) { lastGo = { screen, params }; },
+  async refresh() { app.state = await api.getState(uname, "pw12"); },
+};
+
+(async () => {
+  uname = "verify_examskills_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(uname, "Verify ExamSkills", "pw12");
+  setSession(uname, "pw12");
+  app.state = await api.getState(uname, "pw12");
+
+  const ch = chapterById("eqn");
+
+  /* ============================================================
+     1 — CHAPTER SCREEN: skill tiles, in order, coming-soon un-tappable.
+     ============================================================ */
+  clear(rig);
+  renderExamChapter(app, rig, { chapterId: "eqn" });
+  const tiles = [...rig.querySelectorAll(".exam-skill-card")];
+  tick(tiles.length === 2, `chapter screen renders exactly 2 skill tiles, got ${tiles.length}`);
+  tick(tiles[0] && tiles[0].querySelector("h3").textContent === "Harness Skill A", "tile 1 = Harness Skill A (skillsForChapter order)");
+  tick(tiles[1] && tiles[1].querySelector("h3").textContent === "Harness Skill B", "tile 2 = Harness Skill B (skillsForChapter order)");
+  tick(tiles[0].querySelector(".exam-skill-count").textContent === "2 cards", `tile 1 shows "2 cards" before any round trip — got "${tiles[0].querySelector(".exam-skill-count").textContent}"`);
+  const tileB = tiles[1];
+  tick(tileB.classList.contains("locked") && tileB.querySelector(".exam-skill-count").textContent === UI.comingSoon, "the 0-card skill tile is muted (\"locked\") and reads \"" + UI.comingSoon + "\"");
+  lastGo = null;
+  tileB.click();
+  tick(lastGo === null, "clicking the coming-soon tile does NOT navigate anywhere — it's not tappable");
+  tick(rig.scrollWidth <= 375, `chapter screen does not overflow 375px (scrollWidth=${rig.scrollWidth})`);
+  lines.push(`chapter screen: 2 tiles, order [${tiles.map(t => t.querySelector("h3").textContent).join(", ")}], coming-soon tile locked+un-tappable, 375px width ${rig.scrollWidth}`);
+
+  /* ============================================================
+     2 — TILE TAP -> first card. Progress is empty, so tapping the real
+     tile should land on CARD_A1 (examFirstCardForSkill's "first
+     not-completed" branch degenerating to "first card" when nothing's
+     done yet).
+     ============================================================ */
+  lastGo = null;
+  tiles[0].click();
+  await new Promise(r => setTimeout(r, 20));   // the tile handler awaits the one progress fetch
+  tick(!!lastGo && lastGo.screen === "examPlay" && lastGo.params.question.id === CARD_A1.id, `tapping the real tile lands on the first card (${CARD_A1.id}) — got ${lastGo && lastGo.params && lastGo.params.question && lastGo.params.question.id}`);
+  tick(lastGo && lastGo.params.skillId === "harness-skill-a", "tile tap passes the skillId through to the player");
+  lines.push(`tile tap (fresh progress): -> ${lastGo && lastGo.params.question.id}`);
+
+  /* ============================================================
+     3 — PLAYER HEAD, INTRO, STACKED FRACTIONS (card 1 of 2).
+     ============================================================ */
+  clear(rig);
+  renderExamPlay(app, rig, lastGo.params);
+  await new Promise(r => setTimeout(r, 30));   // loadProgress settles
+  tick(rig.querySelector(".exam-play-head h1").textContent === "Harness Skill A", "player head h1 = the skill label");
+  const cardOfText = rig.querySelector(".exam-card-of").textContent;
+  tick(cardOfText.includes(UI.cardOf(1, 2)) && cardOfText.includes("5 marks"), `player head shows "${UI.cardOf(1, 2)} · 5 marks" — got "${cardOfText}"`);
+  tick(!!rig.querySelector(".exam-intro"), "the .exam-intro panel renders above the parts");
+  tick(rig.querySelector(".exam-intro").querySelector(".sfrac") !== null, "the intro's own 12/13 renders as a stacked fraction (.sfrac)");
+  const activePrompt = rig.querySelector(".exam-part.active .exam-part-prompt");
+  tick(!!activePrompt && activePrompt.querySelector(".sfrac") !== null, "a bare 12/13 in a stub prompt renders as .sfrac");
+  tick(rig.scrollWidth <= 375, `player (question state, part a) does not overflow 375px (scrollWidth=${rig.scrollWidth})`);
+  lines.push(`player head: "${rig.querySelector(".exam-play-head h1").textContent}" / "${cardOfText}"; intro+prompt both carry .sfrac`);
+
+  /* ============================================================
+     4 — WALK ME THROUGH IT on part (a): Next reveals one block at a
+     time; Done/Stuck are hidden while walking; the LAST Next records
+     the part exactly like Done would.
+     ============================================================ */
+  const walkBtn = btnByText(rig, UI.walkBtn);
+  tick(!!walkBtn, `the "${UI.walkBtn}" button is present next to Done/Stuck`);
+  walkBtn.click();
+  tick(!btnByText(rig, UI.doneBtn) && !btnByText(rig, UI.stuckBtn), "Done and Stuck are hidden once Walk mode starts");
+  let nextBtn = btnByText(rig, UI.nextStep);
+  tick(!!nextBtn, `the "${UI.nextStep}" button renders in walk mode`);
+  nextBtn.click();   // reveal block 0 of part (a)'s 2 memo blocks — no network call yet
+  let walkBlocks = rig.querySelectorAll(".exam-walk .exam-memo-line").length;
+  tick(walkBlocks === 1, `first Next reveals exactly 1 memo block, got ${walkBlocks}`);
+  tick(!rig.querySelector(".exam-part.active .exam-memo"), "part (a) is still not server-revealed after only 1 of 2 walk steps");
+  nextBtn = btnByText(rig, UI.nextStep);
+  nextBtn.click();   // the LAST block — this call submits, same as Done
+  await new Promise(r => setTimeout(r, 30));
+  const midProgress = await api.examState(uname, "pw12");
+  const row1 = midProgress.progress[CARD_A1.id];
+  tick(!!row1 && row1.partsOpened.includes("a") && row1.completed === false, "the last Walk step records part (a) server-side, card not yet completed (part b remains)");
+  tick(!!rig.querySelector(".exam-part-id") && rig.querySelector(".exam-part.active .exam-part-id").textContent.includes("b"), "part (b) is now the active part after the walk completed part (a)");
+  lines.push(`walk-through: 1 block per Next, last Next -> server partsOpened=${JSON.stringify(row1 && row1.partsOpened)} completed=${row1 && row1.completed}`);
+
+  /* ============================================================
+     5 — finish card 1 normally (Done on part b) -> Another/Enough render.
+     ============================================================ */
+  btnByText(rig, UI.doneBtn).click();
+  await new Promise(r => setTimeout(r, 30));
+  tick(!!rig.querySelector(".exam-complete"), "card 1 complete after its 2nd part is revealed");
+  tick(!!btnByText(rig, UI.anotherBtn) && !!btnByText(rig, UI.enoughBtn), `"${UI.anotherBtn}" and "${UI.enoughBtn}" both render on the complete screen`);
+  tick(!btnByText(rig, UI.backToChapters), "the old lone Back button is gone from the complete screen (replaced, not just supplemented)");
+
+  /* ============================================================
+     6 — ANOTHER (non-wrap): card 1 -> card 2.
+     ============================================================ */
+  lastGo = null;
+  btnByText(rig, UI.anotherBtn).click();
+  tick(!!lastGo && lastGo.screen === "examPlay" && lastGo.params.question.id === CARD_A2.id, `"Another one!" from card 1 goes to card 2 (${CARD_A2.id}) — got ${lastGo && lastGo.params.question.id}`);
+  tick(!document.querySelector(".toast-host .toast"), "no \"all seen\" toast on a non-wrapping Another");
+  lines.push(`Another (card 1 -> card 2): -> ${lastGo.params.question.id}, no toast`);
+
+  clear(rig);
+  renderExamPlay(app, rig, lastGo.params);
+  await new Promise(r => setTimeout(r, 30));
+  tick(rig.querySelector(".exam-card-of").textContent.includes(UI.cardOf(2, 2)), `player head now shows "${UI.cardOf(2, 2)}"`);
+
+  /* ============================================================
+     7 — TILE TAP again, with card 1 done and card 2 NOT YET done:
+     lands on card 2 (the first NOT-completed one) — the other half of
+     examFirstCardForSkill's contract from step 2 (which tested the
+     "nothing done yet" branch). Checked here, BEFORE card 2 is
+     completed below, or both cards would read "completed" and this
+     would prove nothing.
+     ============================================================ */
+  clear(rig);
+  renderExamChapter(app, rig, { chapterId: "eqn" });
+  await new Promise(r => setTimeout(r, 30));   // let "worked k of n" resolve too
+  tick(rig.querySelectorAll(".exam-skill-card")[0].querySelector(".exam-skill-count").textContent === UI.workedOf(1, 2), `tile 1's count updates to "${UI.workedOf(1, 2)}" after the round trip`);
+  lastGo = null;
+  rig.querySelectorAll(".exam-skill-card")[0].click();
+  await new Promise(r => setTimeout(r, 20));
+  tick(!!lastGo && lastGo.params.question.id === CARD_A2.id, `with card 1 done and card 2 not, the tile now lands on card 2 — got ${lastGo && lastGo.params.question.id}`);
+  lines.push(`tile tap (card 1 done, card 2 not): -> ${lastGo.params.question.id}, tile count "${UI.workedOf(1, 2)}"`);
+
+  /* ============================================================
+     8 — finish card 2 (its one part) via that navigation result, then
+     ANOTHER from card 2 (wrap, with toast, back to card 1).
+     ============================================================ */
+  clear(rig);
+  renderExamPlay(app, rig, lastGo.params);
+  await new Promise(r => setTimeout(r, 30));
+  btnByText(rig, UI.doneBtn).click();
+  await new Promise(r => setTimeout(r, 30));
+  tick(!!rig.querySelector(".exam-complete"), "card 2 completes on its single Done click");
+  lastGo = null;
+  btnByText(rig, UI.anotherBtn).click();
+  const toastEl = document.querySelector(".toast-host .toast:last-child");
+  tick(!!toastEl && toastEl.textContent.trim() === UI.allSeen, `wrapping Another shows the toast "${UI.allSeen}" — got "${toastEl && toastEl.textContent.trim()}"`);
+  tick(!!lastGo && lastGo.params.question.id === CARD_A1.id, `wrapping Another goes back to card 1 (${CARD_A1.id}) — got ${lastGo && lastGo.params.question.id}`);
+  lines.push(`Another (card 2 -> wrap): -> ${lastGo.params.question.id}, toast "${toastEl && toastEl.textContent.trim()}"`);
+
+  /* ============================================================
+     9 — ENOUGH: from an already-fully-completed card (card 1, both
+     parts done from steps 4/5), the complete screen shows immediately
+     on load, and "Enough" returns to the chapter screen.
+     ============================================================ */
+  clear(rig);
+  renderExamPlay(app, rig, { chapter: ch, skillId: "harness-skill-a", question: CARD_A1, accent: ch.signature, onBack: () => app.go("examChapter", { chapterId: "eqn" }) });
+  await new Promise(r => setTimeout(r, 30));
+  tick(!!rig.querySelector(".exam-complete"), "re-opening an already-completed card shows the complete screen immediately, no re-walking its parts");
+  lastGo = null;
+  btnByText(rig, UI.enoughBtn).click();
+  tick(!!lastGo && lastGo.screen === "examChapter" && lastGo.params.chapterId === "eqn", `"${UI.enoughBtn}" returns to the chapter screen — got ${JSON.stringify(lastGo)}`);
+  lines.push(`Enough: -> ${JSON.stringify(lastGo)}`);
+
+  /* ============================================================
+     10 — 375px width, no console errors.
+     ============================================================ */
+  tick(rig.scrollWidth <= 375, `player (complete state) does not overflow 375px (scrollWidth=${rig.scrollWidth})`);
+  tick(winErrors.length === 0, `zero window errors during the whole run — got ${winErrors.length}: ${winErrors.join(" | ")}`);
+
+  clearSession();
+  say();
+  const banner = document.getElementById("banner");
+  banner.textContent = `${passed}/${total} checks passed` + (fails.length ? ` — FAILING: ${fails.join(" · ")}` : "");
+  banner.className = fails.length ? "fail" : "pass";
+})();
+</script>
+</body>
+</html>
