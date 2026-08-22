@@ -1,4 +1,38 @@
-# Project status — updated 2026-08-22 (🔄 GENERAL TRIG: all 13 rounds ✅ SHIPPED, sw v54, migration applied — rounds seeded CLOSED, open them in admin as you teach)
+# Project status — updated 2026-08-22 evening (🔄 GENERAL TRIG LIVE + her phone-review fixes SHIPPED, sw v55; rounds 5–7 reordered)
+
+## 📱 2026-08-22 (evening) — HER PHONE PLAY-TEST → 15 fixes, shipped (sw v55, commit a215e28)
+
+She play-tested every round on her phone and sent 15 findings; Fable fixed them directly
+on her ask ("can you maybe fix this yourself?"). Rulings now law: **discovery rounds 1–3
+pay XP every play** (questions rotate — the xp-once rule is gone); **rounds 5–7 = TIP
+Chips → variables → numbers** (ids unchanged; live `sort` swapped via
+`migration-gtrig-reorder.sql`); **boundary values follow the plain sign rule** (cos = 1
+→ tick I AND IV); **round 10's no-sketch items cut** ("the whole exercise is to read
+from a sketch"). Built: stacked fractions chapter-wide (`js/ui.js fracHtml`, per-quest
+`stackFractions`, no slashes anywhere); formula chunks never wrap, trailing brackets
+like "(90° ± θ)" start on a new line (`formulaHtml`); concept-card identities one per
+line; the solution panel's reason column wraps (it pushed the page sideways); a chain
+that needed a retry gets a calm amber "Got there" verdict, never the red block; **round 8:
+the learner MAKES the two ticks** (two colours, one cross — `doubletick`) then fills the
+sketch with ONE keypad, each side appearing on the drawing (`sketchfill`); the bow tie is
+a real bow tie; angle/side labels placed by wedge width / true perpendicular; round 3
+value questions show the O-A-H table. verify-gtrig 1 037 352 green, every other harness
+unchanged-green. Live migration `gtrig_reorder`: learner tables byte-identical.
+⚖️ She likes round 10 (super special sums) — keep that shape.
+
+### ⏳ Pending on Megan
+- 📱 3 min whenever: re-feel round 8 (make the ticks, fill the sketch) and round 4's
+  triangle on your phone — close and reopen the PWA first (v55).
+
+### Next up
+- **Exam Focus "walk me through it"** (her ask 2026-08-22): a third button next to
+  "Done! Show me the answer" / "I'm stuck" that reveals the existing memo ONE step at a
+  time with a Next button. No new content — same memo, paced. Small build.
+- Hayley's way card once she sends the wording · practice-paper mode UI · overnight #2.
+
+---
+
+# (previous head) Project status — updated 2026-08-22 (🔄 GENERAL TRIG: all 13 rounds ✅ SHIPPED, sw v54, migration applied — rounds seeded CLOSED, open them in admin as you teach)
 
 ## 🔄 2026-08-22 (day, unattended) — GENERAL TRIG CHAPTER BUILT, stages 1–4, local commits only
 

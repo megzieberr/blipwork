@@ -165,3 +165,18 @@ rows inserted, all `is_open = false`. sw v53 → v54. Pushed to main.
 Agents: stage 1 ≈ 302k · stage 2 ≈ 402k · stage 3 ≈ 426k (+ a partial read before the
 laptop died) · stage 4 ≈ 545k → ≈ 1,67M. Foreman session on top. Inside the 2,5–3,2M
 estimate she saw.
+
+## Her phone play-test, same evening → 15 fixes, shipped as sw v55 (commit a215e28)
+Her findings and what changed, in her order: (1) discovery rounds pay XP every play;
+(2) special-triangle labels off the lines — angle labels now placed by wedge width, long
+ones beside the vertex; (3) round-3 value questions show the O-A-H table; (4)/(5)
+formula chunks never wrap, trailing brackets on a new line, identities one per line;
+(6) stacked fractions everywhere + the `90° − θ` label beside the vertex; (7) solution
+reasons wrap (the sideways scroll); (8)=(4) chapter-wide; (9) the retried-chain verdict
+is a calm amber panel, step mark "✓ after a retry"; (10) rounds 5–7 reordered (live sort
+swapped, learner tables byte-identical); (11) a real bow tie; (12) round 8: make the two
+ticks yourself, then tap the overlap; (13) one keypad, sides written onto the sketch, pad
+gone, sketch stays for the ratios; (14) round 10's no-sketch items cut; (15) cos = 1
+ticks I and IV — plain sign rule for boundary values. Harness re-pointed at the new
+rulings; 1 037 352 green. The one open idea is in PROJECT-STATUS Next up (exam "walk me
+through it").
