@@ -21,6 +21,21 @@
                      the last frame is up (q.revealMode "stack"|"replace")
      q.type "steps"— one question made of ordered sub-steps, each of
                      which is one existing input. See mountSteps() below.
+
+   Stage 4 (2026-08-22) adds two things to `steps`, both additive:
+     step.graph    — ANY engine spec, drawn INSIDE that step's wrapper
+                     the moment the step is reached. This is how gt8
+                     "draws the triangle after the quadrant pick": the
+                     sketch cannot appear before the learner has
+                     decided which quadrant it lives in. A `tapside`
+                     step taps the NEAREST PRECEDING graph in the
+                     chain, falling back to q.graph.
+     step.kind
+       "mcmulti"   — options that TOGGLE, plus a "Submit ✓" button;
+                     `correct` is a sorted array of option indices.
+                     gt13 uses it: "pick every denominator", which is
+                     one answer made of several picks, not several
+                     questions.
    ============================================================ */
 import { el, clear, xbarHtml } from "./ui.js";
 import { renderGraph, computeBox } from "./engine/stats-graph.js";
@@ -44,6 +59,25 @@ import { answerCorrect, fmtComma } from "./check.js";
 const SVGNS = "http://www.w3.org/2000/svg";
 function svgEl(tag, attrs) { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
 
+/* ONE place that turns an engine spec into SVG markup. Lifted out of
+   mountQuestion() (2026-08-22, stage 4) unchanged, so a `steps` sub-step
+   carrying its own `graph` draws through exactly the same switch the
+   question-level graph does — one renderer, no second list to keep in
+   step with the engines. */
+function renderSpec(spec) {
+  return spec.type === "timeline" ? renderTimeline(spec) :
+         spec.type === "venn"     ? renderVenn(spec) :
+         spec.type === "tree"     ? renderTree(spec) :
+         spec.type === "triangle" ? renderTriangle(spec) :
+         spec.type === "solid"    ? renderSolid(spec) :
+         spec.type === "function" ? renderFunction(spec) :
+         spec.type === "trigg"    ? renderTrig(spec) :
+         spec.type === "analytic" ? renderAnalytic(spec) :
+         spec.type === "pattern"  ? renderPattern(spec) :
+         spec.type === "quadtri"  ? renderQuadTri(spec) :
+         renderGraph(spec);
+}
+
 export function mountQuestion(host, q, handlers = {}) {
   clear(host);
   const root = el("div", "q");
@@ -53,18 +87,7 @@ export function mountQuestion(host, q, handlers = {}) {
   let svgNode = null;
   if (q.graph) {
     const gw = el("div", "q-graph");
-    const svg =
-      q.graph.type === "timeline" ? renderTimeline(q.graph) :
-      q.graph.type === "venn"     ? renderVenn(q.graph) :
-      q.graph.type === "tree"     ? renderTree(q.graph) :
-      q.graph.type === "triangle" ? renderTriangle(q.graph) :
-      q.graph.type === "solid"    ? renderSolid(q.graph) :
-      q.graph.type === "function" ? renderFunction(q.graph) :
-      q.graph.type === "trigg"    ? renderTrig(q.graph) :
-      q.graph.type === "analytic" ? renderAnalytic(q.graph) :
-      q.graph.type === "pattern"  ? renderPattern(q.graph) :
-      q.graph.type === "quadtri"  ? renderQuadTri(q.graph) :
-      renderGraph(q.graph);
+    const svg = renderSpec(q.graph);
     gw.innerHTML = svg + (q.graphCap ? `<div class="cap">${xbarHtml(q.graphCap)}</div>` : "");
     svgNode = gw.querySelector("svg");
     root.appendChild(gw);
@@ -243,6 +266,7 @@ export function mountQuestion(host, q, handlers = {}) {
       single: !!q.single, noRef: !!q.noRef, labels: !!q.labels,
       onSubmit(val) {
         if (answered) return;
+        if (Array.isArray(val) && !val.length) return;      // nothing ticked yet — not an answer
         const ok = checkStep({ kind: "tapcross", correct: q.correct, alsoAccept: q.alsoAccept }, val);
         tc.disable();
         tc.reveal(Array.isArray(q.correct) ? q.correct : []);
@@ -405,6 +429,11 @@ function mountSteps(host, root, q, commit, svgNode) {
   let clean = true, idx = 0;
   root.dataset.step = "0";
   root.dataset.clean = "1";
+  /* the sketch a `tapside` step taps: the NEAREST PRECEDING step graph,
+     or the question-level one. Both are tracked as the chain unfolds,
+     so gt8 (triangle drawn by step 2) and gt10 (triangle drawn above
+     the whole chain) go through the same code. */
+  let liveSvg = svgNode, liveSpec = q.graph || null;
   if (!list.length) return;
 
   function miss(w, hintBox) {
@@ -437,6 +466,16 @@ function mountSteps(host, root, q, commit, svgNode) {
     w.dataset.state = "active";
     w.dataset.index = String(i);
     w.appendChild(el("p", "q-step-prompt", xbarHtml(step.prompt || "")));
+    /* a step may carry its own diagram — it appears the moment the step
+       is reached, never before (gt8: no triangle until the quadrant is
+       picked, which is the whole teaching point) */
+    if (step.graph) {
+      const sg = el("div", "q-graph q-step-graph");
+      sg.innerHTML = renderSpec(step.graph) + (step.graphCap ? `<div class="cap">${xbarHtml(step.graphCap)}</div>` : "");
+      w.appendChild(sg);
+      liveSvg = sg.querySelector("svg");
+      liveSpec = step.graph;
+    }
     const shost = el("div", "q-step-input");
     w.appendChild(shost);
     const hintBox = el("div", "hint-box step-hint");
@@ -475,11 +514,60 @@ function mountSteps(host, root, q, commit, svgNode) {
       return;
     }
 
+    /* MULTI-PICK (gt13, "which expressions must we look at?"). One
+       answer built from several taps, so nothing is marked until the
+       learner presses Submit — a half-finished list is not a wrong
+       answer, it is an unfinished one. */
+    if (step.kind === "mcmulti") {
+      const opts = el("div", "q-options mcmulti" + (step.layout === "grid2" ? " grid2" : ""));
+      const on = new Set();
+      const buttons = [];
+      (step.options || []).forEach((o, oi) => {
+        const b = el("button", "opt", xbarHtml(o.label));
+        b.dataset.idx = String(oi);
+        b.addEventListener("click", () => {
+          if (busy() || b.disabled) return;
+          if (on.has(oi)) { on.delete(oi); b.classList.remove("is-on"); }
+          else { on.add(oi); b.classList.add("is-on"); }
+          submit.disabled = on.size === 0;
+        });
+        opts.appendChild(b);
+        buttons.push(b);
+      });
+      shost.appendChild(opts);
+      const submit = el("button", "btn primary mcmulti-submit", "Submit ✓");
+      submit.type = "button";
+      submit.disabled = true;
+      submit.addEventListener("click", () => {
+        if (busy() || submit.disabled) return;
+        const chosen = [...on].sort((a, b2) => a - b2);
+        if (checkStep(step, chosen)) {
+          buttons.forEach((b, k) => {
+            b.disabled = true;
+            if ((step.correct || []).includes(k)) b.classList.add("is-correct");
+          });
+          submit.remove();
+          settle(i, w);
+        } else {
+          // a wrong list clears, exactly like a wrong set of ticks on the cross
+          on.clear();
+          buttons.forEach(b => b.classList.remove("is-on"));
+          submit.disabled = true;
+          miss(w, hintBox);
+        }
+      });
+      shost.appendChild(submit);
+      return;
+    }
+
     if (step.kind === "tapcross") {
       const tc = mountTapcross(shost, {
         single: !!step.single, noRef: !!step.noRef, labels: !!step.labels,
         onSubmit(val) {
           if (busy()) return;
+          // Submit with nothing ticked is an UNFINISHED answer, not a wrong
+          // one — same rule the number pad already uses for an empty display
+          if (Array.isArray(val) && !val.length) return;
           if (checkStep(step, val)) {
             tc.disable();
             tc.reveal(Array.isArray(step.correct) ? step.correct : []);
@@ -520,17 +608,25 @@ function mountSteps(host, root, q, commit, svgNode) {
     }
 
     if (step.kind === "tapside") {
-      if (!svgNode || !q.graph || q.graph.type !== "quadtri") return;
+      // the nearest preceding sketch in the chain (a step's own graph),
+      // falling back to the question-level one
+      const tapSvg = liveSvg, tapSpec = liveSpec;
+      if (!tapSvg || !tapSpec || tapSpec.type !== "quadtri") return;
       shost.appendChild(el("p", "q-tap-hint", xbarHtml(step.tapHint || "Tap that side on the sketch.")));
+      const geo = computeQuadTri(tapSpec);
+      // a previous tapside step's hot-spots are cleared before this one
+      // adds its own, so two chained taps can never leave stale targets
+      // (or a stale "here was the answer" glow) stacked on one sketch
+      tapSvg.querySelectorAll(".hit").forEach(h => h.remove());
       let lastWrong = null;
-      addQuadTriHits(svgNode, computeQuadTri(q.graph), { targets: step.targets }, (id, node) => {
+      addQuadTriHits(tapSvg, geo, { targets: step.targets }, (id, node) => {
         if (busy()) return;
         if (lastWrong) { lastWrong.classList.remove("show-wrong"); lastWrong = null; }
         if (checkStep(step, id)) {
-          svgNode.querySelectorAll(".hit").forEach(h => {
-            h.classList.add("locked");
-            if (h.dataset.id === String(step.correct)) h.classList.add("show-correct");
-          });
+          tapSvg.querySelectorAll(".hit").forEach(h => h.remove());
+          // her p36 ③ habit: the value the learner just placed is WRITTEN
+          // onto that side, so the sketch fills in as the chain runs
+          if (step.placeLabel) placeSideLabel(tapSvg, geo, String(step.correct), step.placeLabel);
           settle(i, w);
         } else {
           node.classList.add("show-wrong");
@@ -542,6 +638,25 @@ function mountSteps(host, root, q, commit, svgNode) {
   }
 
   renderStep(0);
+}
+
+/* ------------------------------------------------------------
+   Write a value onto one side of a quadrant triangle, pushed
+   OUTWARD from the triangle's centre so it never lies across the
+   line it labels. Used by `tapside` steps that place the 1 and the
+   t on her short-cut triangle (METHODS-trig J1/J2, p36).
+   ------------------------------------------------------------ */
+function placeSideLabel(svg, geo, sideId, text) {
+  const sp = geo.sideMids[sideId];
+  if (!sp) return;
+  const cx = (geo.O.x + geo.F.x + geo.T.x) / 3, cy = (geo.O.y + geo.F.y + geo.T.y) / 3;
+  const dx = sp.x - cx, dy = sp.y - cy, d = Math.hypot(dx, dy) || 1;
+  const n = svgEl("text", {
+    class: "qt-slab qt-placed", x: (sp.x + (dx / d) * 16).toFixed(1), y: (sp.y + (dy / d) * 16).toFixed(1),
+    "text-anchor": "middle", "dominant-baseline": "middle",
+  });
+  n.textContent = text;
+  svg.appendChild(n);
 }
 
 /* ------------------------------------------------------------

@@ -86,6 +86,12 @@ import { questGt4 } from "./questgt4-cofunctions.js";
 import { questGt5 } from "./questgt5-reductions-numbers.js";
 import { questGt6 } from "./questgt6-tip-chips.js";
 import { questGt7 } from "./questgt7-reductions-variables.js";
+import { questGt8 } from "./questgt8-special-sums.js";
+import { questGt9 } from "./questgt9-identities.js";
+import { questGt10 } from "./questgt10-super-special.js";
+import { questGt11 } from "./questgt11-six-types.js";
+import { questGt12 } from "./questgt12-last-steps.js";
+import { questGt13 } from "./questgt13-undefined.js";
 
 export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
@@ -111,5 +117,7 @@ export const QUEST_DEFS = {
   eq5: questEq5, eq6: questEq6, eq7: questEq7, eq8: questEq8,
   gt1: questGt1, gt2: questGt2, gt3: questGt3,
   gt4: questGt4, gt5: questGt5, gt6: questGt6, gt7: questGt7,
+  gt8: questGt8, gt9: questGt9, gt10: questGt10,
+  gt11: questGt11, gt12: questGt12, gt13: questGt13,
 };
 export function questDef(id) { return QUEST_DEFS[id] || null; }

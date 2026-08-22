@@ -22,7 +22,7 @@
 <p class="muted small">EXAM-FOCUS-PLAN.md, session 0 build (2026-08-21) + session D pilot content (2026-08-21) + day session
   2026-08-22 registering overnight run #1's 15 modules (OVERNIGHT-1-REPORT.md). Tests the machinery
   (js/exam/_harness-stub.js is a fully-worked stub, never registered/never learner-reachable) AND, from
-  Part 6 onward, the real seeded content across eqn/exp/func/trig — plus, from Part 11, the EXAM-FOCUS-ONLY
+  Part 6 onward, the real seeded content across eqn/exp/func/trig/gtrig — plus, from Part 11, the EXAM-FOCUS-ONLY
   Euclidean chapter added on engine-port day (2026-08-22). This page forces ?local=1-equivalent
   behaviour via localStorage before any module import runs, so the REAL js/api.js singleton (used by
   js/screens.js and js/exam-play.js exactly as the live app uses it) resolves to LocalBackend for the
@@ -32,7 +32,7 @@
 <h2>Part 1 · js/exam/_schema.js — validateQuestion()</h2>
 <div id="schemaChecks"></div>
 
-<h2>Part 2 · registry (js/exam/index.js) — eqn/exp/func/trig/euclid seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn","exp","func","trig","euclid"]</h2>
+<h2>Part 2 · registry (js/exam/index.js) — eqn/exp/func/trig/gtrig/euclid seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn","exp","func","trig","gtrig","euclid"]</h2>
 <pre id="registryChecks">…</pre>
 
 <h2>Part 3 · hub navigation — flag off (simulated), then the real shipped flag state</h2>
@@ -232,15 +232,18 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   const lines = [];
 
   // ---- flag: exactly the four chapters with real content, any order ----
-  const EXPECTED_FLAGGED = ["eqn", "exp", "func", "trig", "euclid"];
+  const EXPECTED_FLAGGED = ["eqn", "exp", "func", "trig", "gtrig", "euclid"];
   const flagSet = new Set(EXAM_CHAPTERS);
   const flagOk = flagSet.size === EXPECTED_FLAGGED.length && EXPECTED_FLAGGED.every(id => flagSet.has(id));
   tick(flagOk, `js/config.js EXAM_CHAPTERS is exactly {${EXPECTED_FLAGGED.join(",")}} — got [${EXAM_CHAPTERS.join(",")}]`);
   lines.push(`EXAM_CHAPTERS: [${EXAM_CHAPTERS.join(",")}] — ${flagOk ? "OK, matches the widened set" : "FAIL"}`);
 
   // ---- exact question count per chapter, derived from the registry ----
-  const allChapterIds = ["stats", "finance", "prob", "trig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn", "euclid"];
-  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 3, meas: 0, func: 4, tgraph: 0, analytical: 0, pat: 0, exp: 3, eqn: 9, euclid: 2 };
+  const allChapterIds = ["stats", "finance", "prob", "trig", "gtrig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn", "euclid"];
+  // 2026-08-22: trig 3 -> 1 and gtrig 0 -> 2. The two T2 questions that
+  // were never really 2D trig MOVED chapter (her ruling that morning);
+  // nothing was added or removed from the bank, so the TOTAL is unchanged.
+  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 2, meas: 0, func: 4, tgraph: 0, analytical: 0, pat: 0, exp: 3, eqn: 9, euclid: 2 };
   let countsOk = true;
   const countLines = [];
   allChapterIds.forEach(id => {
@@ -260,7 +263,8 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     eqn: ["k-method", "fractions-and-restrictions", "inequalities", "nature-of-roots"],
     exp: ["first-step-and-method", "conjugates-and-rationalising", "no-solution-and-strategy"],
     func: ["hyperbola-and-exponential", "graphs-together", "line-and-parabola"],
-    trig: ["reduction-and-ratios", "general-solutions", "mixed-problems"],
+    trig: ["mixed-problems"],
+    gtrig: ["reduction-and-ratios", "general-solutions"],
     euclid: ["circle-theorems", "tangents-and-cyclic-quads"],
   };
   let topicsOk = true;
@@ -272,7 +276,7 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     if (!ok) topicsOk = false;
     topicLines.push(`  ${chapterId}: [${gotTopics.join(",")}] — ${ok ? "OK" : `FAIL, want {${wantTopics.join(",")}}`}`);
   });
-  tick(topicsOk, "examTopicsForChapter derives exactly the expected topic set for eqn/exp/func/trig");
+  tick(topicsOk, "examTopicsForChapter derives exactly the expected topic set for eqn/exp/func/trig/gtrig/euclid");
   lines.push(`topics per newly-seeded chapter:\n${topicLines.join("\n")}`);
 
   tick(typeof EXAM.xpPerQuestion === "number" && typeof EXAM.goldPerQuestion === "number", "js/config.js EXAM block has numeric xpPerQuestion/goldPerQuestion");
@@ -284,18 +288,18 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
   // same "structure here, cross-file existence in the harness" split
   // index.js's own registry check already uses for q.chapter. WIDENED
   // (2026-08-22) to cover every seeded chapter, with a documented
-  // exception for the two trig questions Megan ruled ship LINKLESS
-  // until a trig-notes digest exists (EXAM-FOCUS-PLAN.md, morning-of
-  // ruling): their lostQuest is a PENDING- placeholder that must NOT
-  // resolve — that non-resolution is the point (js/exam-play.js's
-  // lostQuestLink() degrades to "no button" through three independent
-  // gates when it can't resolve, never a dead link).
+  // exception for the questions that ship LINKLESS on purpose.
+  // 2026-08-22 (stage 4 of the General Trig build): the two TRIG ones
+  // are no longer among them. They shipped with a PENDING- placeholder
+  // only because no round taught reductions or general solutions;
+  // gtrig's gt5 and gt11 now do, so both were relinked and both moved
+  // into the gtrig chapter. They are checked like any other question.
   // WIDENED again 2026-08-22 (engine-port day): the two EUCLIDEAN
   // questions join the placeholder set, for a different reason — not
   // "waiting on a digest" but her flat ruling that the Euclidean exam
   // chapter has NO "I'm lost" button at all ("they don't need it
   // anyway"). Part 11 below proves the button really doesn't render.
-  const PLACEHOLDER_LOST_IDS = new Set(["trig.rr.t2q1", "trig.gs.t2q2", "euclid.circ.t2q4", "euclid.tan.t2q5"]);
+  const PLACEHOLDER_LOST_IDS = new Set(["euclid.circ.t2q4", "euclid.tan.t2q5"]);
   const EXPECTED_LOSTQUEST = {
     "eqn.nor.q1": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q2": { chapter: "eqn", quest: "eq8" },
     "eqn.nor.q3": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q4": { chapter: "eqn", quest: "eq8" },
@@ -310,16 +314,21 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     "func.gt.t1q5": { chapter: "func", quest: "fn7" },
     "func.lp.q1": { chapter: "func", quest: "fn2" },
     "trig.mix.t2q6": { chapter: "trig", quest: "t7" },
+    /* RELINKED 2026-08-22 (stage 4 of the General Trig build): the two
+       questions that shipped linkless now point at the rounds that
+       teach them, and they live in the gtrig chapter alongside them. */
+    "trig.rr.t2q1": { chapter: "gtrig", quest: "gt5" },
+    "trig.gs.t2q2": { chapter: "gtrig", quest: "gt11" },
   };
   let lostQuestOk = true, placeholderOk = true;
   const lostQuestLines = [];
-  ["eqn", "exp", "func", "trig", "euclid"].forEach(chapterId => {
+  ["eqn", "exp", "func", "trig", "gtrig", "euclid"].forEach(chapterId => {
     examQuestionsForChapter(chapterId).forEach(q => {
       const lq = q.lostQuest;
       if (PLACEHOLDER_LOST_IDS.has(q.id)) {
         const isPlaceholder = !!lq && /^PENDING-/.test(lq.quest) && lq.chapter === q.chapter && !CHAPTERS.find(c => c.id === lq.chapter)?.quests?.some(qq => qq.id === lq.quest);
         if (!isPlaceholder) placeholderOk = false;
-        lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} — documented placeholder (no reteach round exists yet), correctly non-resolving? ${isPlaceholder}`);
+        lostQuestLines.push(`  ${q.id}: lostQuest=${JSON.stringify(lq)} — documented placeholder (her NO-I’m-lost ruling for Euclidean), correctly non-resolving? ${isPlaceholder}`);
         return;
       }
       const lqChapter = lq && CHAPTERS.find(c => c.id === lq.chapter);
@@ -333,7 +342,7 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
     });
   });
   tick(lostQuestOk, "every non-placeholder seeded question's lostQuest resolves to a real chapter+quest AND matches the expected reteach round");
-  tick(placeholderOk, "the four documented PENDING- placeholders (2 trig, 2 Euclidean) correctly do NOT resolve (all four ship linkless, her rulings)");
+  tick(placeholderOk, "the two Euclidean placeholders (her NO-I’m-lost ruling) correctly do NOT resolve — the two trig ones were relinked to gt5/gt11 on 2026-08-22 and are checked above");
   lines.push(`lostQuest check (all seeded chapters):\n${lostQuestLines.join("\n")}`);
 
   say("registryChecks", lines);
@@ -697,8 +706,26 @@ const say = (id, lines) => { document.getElementById(id).textContent = lines.joi
       "cosine-rule-angles",
       "area-rule",
       "mixed-problems",
-      "reduction-and-ratios",   // ⚠ widens past t1–t7 — judgement call, see comment above
-      "general-solutions",      // ⚠ ditto
+    ],
+    /* GENERAL TRIG wall (2026-08-22): the gt1–gt13 breakdown. The two
+       topics that used to stretch the `trig` wall past its own rounds
+       live here now, where rounds genuinely teach them — so the
+       judgement call the old comment described has gone away rather
+       than been re-taken. */
+    gtrig: [
+      "introduction",
+      "cartesian-plane",
+      "special-angles",
+      "co-functions",
+      "reductions",
+      "tip-chips",
+      "reduction-and-ratios",
+      "special-sums",
+      "identities",
+      "super-special-sums",
+      "six-types",
+      "general-solutions",
+      "undefined-values",
     ],
   };
 

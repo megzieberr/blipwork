@@ -197,12 +197,12 @@ export const CHAPTERS = [
       { id: "gt5", n: 5, title: "Reductions: numbers", blurb: "Quadrant, formula, sign, ratio — the reduction routine, step by step.", built: true },
       { id: "gt6", n: 6, title: "Reductions TIP Chips", blurb: "The five TIP Chips, revised.", built: true },
       { id: "gt7", n: 7, title: "Reductions: variables", blurb: "Same reductions, with x or θ instead of a number.", built: true },
-      { id: "gt8", n: 8, title: "Special sums", blurb: "Pick the quadrant, the app draws the triangle, evaluate.", built: false },
-      { id: "gt9", n: 9, title: "Identities: the next step", blurb: "Spot the move — LCD, masked identity, what simplifies.", built: false },
-      { id: "gt10", n: 10, title: "Super special sums", blurb: "Where 1 and k (or t) go on the triangle.", built: false },
-      { id: "gt11", n: 11, title: "General solution: the six types", blurb: "Name the type, pick the method.", built: false },
-      { id: "gt12", n: 12, title: "General solution: last steps", blurb: "The quadrant cross, then the reference angle.", built: false },
-      { id: "gt13", n: 13, title: "Undefined values", blurb: "Which terms must be equated to zero.", built: false },
+      { id: "gt8", n: 8, title: "Special sums", blurb: "Pick the quadrant, the app draws the triangle, evaluate.", built: true },
+      { id: "gt9", n: 9, title: "Identities: the next step", blurb: "Spot the move — LCD, masked identity, what simplifies.", built: true },
+      { id: "gt10", n: 10, title: "Super special sums", blurb: "Where 1 and k (or t) go on the triangle.", built: true },
+      { id: "gt11", n: 11, title: "General solution: the six types", blurb: "Name the type, pick the method.", built: true },
+      { id: "gt12", n: 12, title: "General solution: last steps", blurb: "The quadrant cross, then the reference angle.", built: true },
+      { id: "gt13", n: 13, title: "Undefined values", blurb: "Which terms must be equated to zero.", built: true },
     ],
   },
 ];
@@ -367,8 +367,19 @@ export const MOOD = {
    this flag is the whole gate. The class
    still is not invited to the app at all (a separate, earlier gate), so
    nothing here is learner-visible on live regardless — this flag only
-   controls what's REACHABLE once she opens the app up. */
-export const EXAM_CHAPTERS = ["eqn", "exp", "func", "trig", "euclid"];
+   controls what's REACHABLE once she opens the app up.
+
+   GENERAL TRIG ADDED (stage 4 of the gtrig build, 2026-08-22): her
+   ruling that morning — "I see the exam focus listed the reductions,
+   ratios and general solutions under 2D Trig. Once you're done with the
+   General Trig Rounds, you can just list these exam focus questions
+   under the General Trig tab and connect it to the correct rounds." The
+   two questions moved chapter in js/exam/index.js; this flag is what
+   makes the gtrig exam tab reachable at all. It still shows only once
+   she has opened at least one gtrig round — examChapterEligible() in
+   js/screens.js adds that half of the gate on top, exactly as it does
+   for every non-exam-only chapter. */
+export const EXAM_CHAPTERS = ["eqn", "exp", "func", "trig", "gtrig", "euclid"];
 
 /* Pay-per-completed-question, her kickoff ruling (2026-08-21): flat 75 XP +
    10 gold, ONCE per question ever (re-opening an already-completed

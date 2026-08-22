@@ -57,7 +57,7 @@
 <h2>8 · play.js — XP once</h2>
 <pre id="xp">…</pre>
 
-<h2>9 · Chapter — gt1–gt7 wiring, generation sweep, SQL cross-check</h2>
+<h2>9 · Chapter — gt1–gt13 wiring, generation sweep, SQL cross-check</h2>
 <pre id="chapter">…</pre>
 <div class="grid" id="s2-samples"></div>
 
@@ -66,6 +66,30 @@
 
 <h2>11 · gt4/gt5/gt7 — independent recompute (1 000 items per round)</h2>
 <pre id="recompute">…</pre>
+
+<h2>12 · gt8 — every sketch re-derived: x² + y² = r², signs from the quadrant, every fraction option distinct by value</h2>
+<pre id="s4-gt8">…</pre>
+
+<h2>13 · gt9 + gt10 — every claimed equality re-checked numerically</h2>
+<pre id="s4-gt910">…</pre>
+
+<h2>14 · gt11 — a structural classifier, written from the equation's SHAPE, agrees with every type tag</h2>
+<pre id="s4-gt11">…</pre>
+
+<h2>15 · gt12 — quadrants against solutionQuadrants/boundaryCase, ref ∠ against refAngle</h2>
+<pre id="s4-gt12">…</pre>
+
+<h2>16 · gt13 — the chosen expressions are EXACTLY the ones that can be zero</h2>
+<pre id="s4-gt13">…</pre>
+
+<h2>17 · Exam relink — the two T2 trig questions now live in gtrig and their "I'm lost" resolves</h2>
+<pre id="s4-exam">…</pre>
+
+<h2>19 · Every label fits inside its own picture (rendered and measured with getBBox)</h2>
+<pre id="s4-fit">…</pre>
+
+<h2>18 · The gt8 / gt10 sketches, drawn — one per quadrant, plus the short-cut triangles</h2>
+<div class="grid" id="s4-figs"></div>
 
 <script type="module">
 import {
@@ -85,6 +109,8 @@ import { QUEST_DEFS, questDef } from "./js/quests/index.js";
 import { getConcept } from "./js/concepts.js";
 import { renderTriangle, verifyTriangle } from "./js/engine/triangle-graph.js";
 import { oahTable, symbolicReduce } from "./js/quests/_gtrig.js";
+import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
+import { EXAM_CHAPTERS } from "./js/config.js";
 
 /* count anything that goes wrong in the console — "0 console errors" is
    part of the pass condition, so it has to be measured, not assumed */
@@ -735,13 +761,12 @@ const gch = chapterById("gtrig");
 tick(!!gch, "config.js CHAPTERS has a gtrig chapter");
 tick(!!gch && Array.isArray(gch.quests) && gch.quests.length === 13,
   `gtrig chapter lists 13 quests (got ${gch && gch.quests ? gch.quests.length : 0})`);
-const wantBuilt = ["gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7"];
-tick(!!gch && gch.quests.every(q => wantBuilt.includes(q.id) === !!q.built),
-  "gt1–gt7 are built:true, gt8–gt13 are built:false (Coming soon)");
+const wantBuilt = ["gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", "gt9", "gt10", "gt11", "gt12", "gt13"];
+tick(!!gch && gch.quests.every(q => !!q.built),
+  "all thirteen rounds are built:true (stage 4 finished the chapter)");
 
 /* ---- js/quests/index.js registry ---- */
 wantBuilt.forEach(id => tick(!!QUEST_DEFS[id], `QUEST_DEFS registers ${id}`));
-for (let n = 8; n <= 13; n++) tick(!QUEST_DEFS["gt" + n], `QUEST_DEFS has no gt${n} yet (stage 4 will add it)`);
 
 /* ---- the generation sweep: 300× per skill, gt1–gt3 ---- */
 const BAD_WORDS = ["seperately", "compliment", "covert"];
@@ -808,15 +833,39 @@ wantBuilt.forEach(qid => {
         tick(Array.isArray(q.steps) && q.steps.length > 0, `${ctx}: steps is a non-empty array`);
         (q.steps || []).forEach((step, si) => {
           const sctx = `${ctx} step${si}`;
-          tick(["mc", "tapcross", "tokenpad", "calc"].includes(step.kind), `${sctx}: kind is mc/tapcross/tokenpad/calc (got "${step.kind}")`);
+          tick(["mc", "mcmulti", "tapcross", "tokenpad", "calc", "tapside"].includes(step.kind), `${sctx}: kind is a known step type (got "${step.kind}")`);
           scanText(step.prompt, sctx, "step prompt");
           if (step.kind === "mc") {
             const corrects = (step.options || []).filter(o => o.correct);
             tick(corrects.length === 1, `${sctx}: exactly one correct mc option (got ${corrects.length})`);
             (step.options || []).forEach(o => scanText(o.label, sctx, "an mc option"));
           }
+          if (step.kind === "mcmulti") {
+            const n = (step.options || []).length;
+            tick(n >= 3, `${sctx}: mcmulti offers at least 3 options (got ${n})`);
+            tick(Array.isArray(step.correct) && step.correct.length > 0, `${sctx}: mcmulti correct is a non-empty index array`);
+            tick((step.correct || []).every(i => Number.isInteger(i) && i >= 0 && i < n), `${sctx}: every mcmulti index is inside the option list`);
+            tick(same(step.correct, (step.correct || []).slice().sort((a, b) => a - b)), `${sctx}: mcmulti correct is SORTED`);
+            tick((step.correct || []).length < n, `${sctx}: mcmulti has at least one decoy`);
+            (step.options || []).forEach(o => scanText(o.label, sctx, "an mcmulti option"));
+            /* the marking brain agrees with itself: the right list marks
+               right, and dropping one pick marks wrong */
+            tick(checkStep(step, step.correct.slice()), `${sctx}: checkStep passes the correct list`);
+            tick(!checkStep(step, step.correct.slice(1)), `${sctx}: checkStep rejects an incomplete list`);
+            tick(!checkStep(step, []), `${sctx}: checkStep rejects an empty list`);
+          }
+          if (step.kind === "tapside") {
+            tick(["opp", "adj", "hyp"].includes(step.correct), `${sctx}: tapside correct names a real side (got "${step.correct}")`);
+            tick(checkStep(step, step.correct) && !checkStep(step, ["opp", "adj", "hyp"].find(x => x !== step.correct)),
+              `${sctx}: checkStep marks that side right and another side wrong`);
+          }
+          if (step.graph) {
+            tick(step.graph.type === "quadtri", `${sctx}: a step graph is a quadtri (got "${step.graph.type}")`);
+            const res = verifyQuadTri(step.graph);
+            tick(res.every(r => r.ok), `${sctx}: the step's own sketch passes verifyQuadTri (${res.filter(r => !r.ok).map(r => r.label).join("; ")})`);
+          }
           if (step.kind === "tapcross") {
-            tick(Array.isArray(step.correct), `${sctx}: tapcross step correct is an array`);
+            tick(Array.isArray(step.correct) || step.correct === "noref", `${sctx}: tapcross step correct is an array or "noref"`);
             if (Array.isArray(step.correct)) {
               const sorted = step.correct.slice().sort((a, b) => a - b);
               tick(same(step.correct, sorted), `${sctx}: tapcross step correct is SORTED`);
@@ -832,6 +881,10 @@ wantBuilt.forEach(qid => {
         });
       }
 
+      if (q.graph && q.graph.type === "quadtri") {
+        const res = verifyQuadTri(q.graph);
+        tick(res.every(r => r.ok), `${ctx}: quadtri graph passes verifyQuadTri (${res.filter(r => !r.ok).map(r => r.label).join("; ")})`);
+      }
       if (q.type === "tap" && q.graph && q.graph.type === "triangle") {
         const res = verifyTriangle(q.graph);
         tick(res.every(r => r.ok), `${ctx}: tap triangle graph passes verifyTriangle (${res.filter(r => !r.ok).map(r => r.label).join("; ")})`);
@@ -896,7 +949,7 @@ tick(/is_open\s*,\s*sort\)\s*values[\s\S]*?on conflict[\s\S]*?do update/i.test(m
 // contain that phrase, which is exactly why this checks the STRIPPED text.
 tick(!/set is_open\s*=\s*true/i.test(migText), "migration-gtrig-quests.sql's real SQL never force-opens a round (seeded CLOSED, her ruling) — only its comment shows how");
 
-section("chapter", `gt1–gt7 wiring, generation sweep (${genCount} questions) and the SQL cross-check`, m9);
+section("chapter", `gt1–gt13 wiring, generation sweep (${genCount} questions) and the SQL cross-check`, m9);
 
 /* ============================================================
    10 · symbolicReduce — the 11 wheel forms × 3 fns, hand-known
@@ -1022,6 +1075,417 @@ recomputeRound("gt5", /sign/i, /ratio|stay|change/i, "reduction or co-function")
 recomputeRound("gt7", /sign/i, /ratio/i, "variable reduction");
 
 section("recompute", `gt4 + gt5 + gt7 independent numeric recompute (${3 * RECOMPUTE_N} items)`, m11);
+
+/* ============================================================
+   12 · gt8 — SPECIAL SUMS, re-derived from scratch
+   ------------------------------------------------------------
+   Nothing here trusts the generator. For every item it re-checks
+   that x² + y² = r² with whole numbers, that the two signs match
+   the quadrant the chain says the triangle is in, and that every
+   fraction option is a DIFFERENT VALUE from the right one — the
+   bug CLAUDE.md's gotcha 4 is about, in a round that is nothing
+   but fractions.
+   ============================================================ */
+const m12 = mark();
+const S4_N = 250;
+const QSIGN_H = { 1: [1, 1], 2: [-1, 1], 3: [-1, -1], 4: [1, -1] };
+/* "−4/5" → its value; anything else → null */
+function fracValueOf(label) {
+  const m = String(label).replace(/−/g, "-").match(/^(-?\d+)\/(-?\d+)$/);
+  return m ? Number(m[1]) / Number(m[2]) : null;
+}
+{
+  let items = 0;
+  for (const skill of QUEST_DEFS.gt8.skills) {
+    for (let i = 0; i < S4_N; i++) {
+      const q = skill.gen(); items++;
+      const ctx = `gt8/${skill.id} #${i}`;
+      const d = q._dbg || {};
+      if (d.x != null) {
+        tick(Number.isInteger(d.x) && Number.isInteger(d.y) && Number.isInteger(d.r),
+          `${ctx}: every side is a whole number the pad can type (${d.x}, ${d.y}, ${d.r})`);
+        tick(d.x * d.x + d.y * d.y === d.r * d.r, `${ctx}: x² + y² = r² exactly (${d.x}² + ${d.y}² vs ${d.r}²)`);
+        tick(d.r > 0, `${ctx}: r is positive — always positive bc it is the radius`);
+        const sg = QSIGN_H[d.quadrant];
+        tick(Math.sign(d.x) === sg[0] && Math.sign(d.y) === sg[1],
+          `${ctx}: the signs match quadrant ${d.quadrant} (want ${sg[0]}, ${sg[1]}; got ${Math.sign(d.x)}, ${Math.sign(d.y)})`);
+      }
+      if (d.ratioQ) {
+        tick(d.ratioQ.filter(z => d.intervalQ.includes(z)).length === 1,
+          `${ctx}: the ratio's ticks and the interval's ticks overlap in exactly ONE quadrant`);
+        tick(d.ratioQ.includes(d.quadrant) && d.intervalQ.includes(d.quadrant),
+          `${ctx}: the answer is the double-ticked quadrant`);
+      }
+      const scanOpts = (opts, where) => {
+        if (!opts) return;
+        tick(opts.length === 4, `${ctx} ${where}: four options (got ${opts.length})`);
+        const vals = opts.map(o => fracValueOf(o.label)).filter(v => v != null);
+        const uniq = new Set(vals.map(v => Math.round(v * 1e9))).size;
+        tick(uniq === vals.length, `${ctx} ${where}: no two fraction options share a value`);
+      };
+      scanOpts(q.options, "options");
+      (q.steps || []).forEach((st, si) => { if (st.kind === "mc") scanOpts(st.options, `step ${si}`); });
+      if (d.x != null && d.ratios) {
+        const truth = { sin: d.y / d.r, cos: d.x / d.r, tan: d.y / d.x };
+        d.ratios.forEach(f => {
+          const st = (q.steps || []).find(x => x.kind === "mc" && new RegExp(`^${f}\\b`).test(x.prompt));
+          if (!tick(!!st, `${ctx}: the chain asks for ${f}`)) return;
+          const got = fracValueOf((st.options.find(o => o.correct) || {}).label);
+          tick(got != null && Math.abs(got - truth[f]) < 1e-9,
+            `${ctx}: the option flagged correct for ${f} equals ${truth[f]} (got ${got})`);
+        });
+        tick(!d.ratios.includes(d.fn), `${ctx}: the chain never asks back for the ratio it was given (${d.fn})`);
+      }
+      if (d.expr != null) {
+        const s = d.y / d.r, c = d.x / d.r;
+        const known = Math.abs(d.value - (d.r * s + d.r * c)) < 1e-9
+          || Math.abs(d.value - (d.r * c - d.r * s)) < 1e-9
+          || Math.abs(d.value - (Math.abs(d.y) / s)) < 1e-9
+          || Math.abs(d.value - (d.r * d.r * s * s - d.r * c)) < 1e-9;
+        tick(known, `${ctx}: the substitute answer ${d.value} is one of the four printed expressions evaluated at the sketch`);
+        tick(Number.isInteger(d.value), `${ctx}: the substitute answer is a whole number (${d.value})`);
+      }
+    }
+  }
+  section("s4-gt8", `gt8 — ${items} items re-derived (triples, quadrant signs, every fraction distinct by value)`, m12);
+}
+
+/* ============================================================
+   13 · gt9 + gt10 — every claimed equality, re-evaluated
+   ------------------------------------------------------------
+   Both rounds hand the harness their claims as plain functions
+   (q._dbg.equalities). This evaluates each one at three angles —
+   the two the generator uses and one it does not — so a generator
+   that only ever checked itself at 23° cannot pass here by luck.
+   ============================================================ */
+const m13 = mark();
+{
+  let claims = 0, items = 0;
+  ["gt9", "gt10"].forEach(qid => {
+    for (const skill of QUEST_DEFS[qid].skills) {
+      for (let i = 0; i < S4_N; i++) {
+        const q = skill.gen(); items++;
+        const ctx = `${qid}/${skill.id} #${i}`;
+        const d = q._dbg || {};
+        (d.equalities || []).forEach(e => {
+          claims++;
+          [23, 37, 61].forEach(t => {
+            const a = e.a(t), b = e.b(t);
+            tick(Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) < 1e-9,
+              `${ctx}: "${e.label}" holds at ${t}° (${a} vs ${b})`);
+          });
+        });
+        if (d.ask && d.value != null) {
+          const FNJ = { sin: Math.sin, cos: Math.cos, tan: Math.tan };
+          tick(Math.abs(d.value - FNJ[d.ask](d.ang * Math.PI / 180)) < 1e-9,
+            `${ctx}: the ratio read off the sketch equals ${d.ask} ${d.ang}°`);
+        }
+        if (d.third) {
+          tick(["opp", "adj", "hyp"].includes(d.one) && ["opp", "adj", "hyp"].includes(d.letter) && d.one !== d.letter,
+            `${ctx}: the 1 and the letter land on two DIFFERENT sides`);
+          tick(d.third !== d.one && d.third !== d.letter, `${ctx}: the third side is the one nobody placed`);
+          const letterIsHyp = d.letter === "hyp";
+          tick(letterIsHyp === /√\(\w²\s*−\s*1\)/.test(d.thirdLabel),
+            `${ctx}: √(t² − 1) exactly when the LETTER is the hypotenuse (got "${d.thirdLabel}")`);
+        }
+      }
+    }
+  });
+  section("s4-gt910", `gt9 + gt10 — ${items} items, ${claims} claimed equalities re-evaluated at 23°, 37° and 61°`, m13);
+}
+
+/* ============================================================
+   14 · gt11 — an INDEPENDENT structural classifier
+   ------------------------------------------------------------
+   The round's whole job is naming the type, so the harness has to
+   be able to work the type out for itself. This parses the flat
+   ASCII form of the equation (q._dbg.plain, built by the same code
+   that draws the HTML the learner reads) into terms and factors,
+   and decides the type from SHAPE alone: how many terms, whether a
+   function is squared, whether the two sides carry different
+   angles, whether the two terms share a factor. It never looks at
+   the generator's type tag until the comparison.
+   ============================================================ */
+const m14 = mark();
+function parseSide(str) {
+  const out = []; let depth = 0, cur = "", sign = 1;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (depth === 0 && (ch === "+" || ch === "-")) {
+      if (i === 0) { sign = ch === "-" ? -1 : 1; continue; }
+      out.push({ sign, body: cur }); cur = ""; sign = ch === "-" ? -1 : 1; continue;
+    }
+    cur += ch;
+  }
+  if (cur) out.push({ sign, body: cur });
+  return out.filter(t => t.body !== "0" && t.body !== "");
+}
+function factorsOf(body) {
+  const out = []; const re = /(sin|cos|tan)(\^2)?\(([^)]*)\)/g; let m;
+  while ((m = re.exec(body))) out.push({ n: m[1], p: m[2] ? 2 : 1, a: m[3] });
+  return out;
+}
+function classifyShape(plain) {
+  const halves = String(plain).split("=");
+  const terms = [...parseSide(halves[0]), ...parseSide(halves[1])].map(t => ({ ...t, f: factorsOf(t.body) }));
+  const withFn = terms.filter(t => t.f.length);
+  const angles = new Set(terms.flatMap(t => t.f.map(f => f.a)));
+  if (angles.size >= 2) return 6;                      // different ∠s → co-functions
+  if (terms.length >= 4) return 4;                     // four terms → grouping
+  if (terms.length === 3 && terms.some(t => t.f.some(f => f.p === 2))) return 5;   // 3 terms + a square → trinomial
+  if (terms.length === 2 && withFn.length === 2) {
+    const key = f => `${f.n}|${f.a}`;
+    const A = new Set(terms[0].f.map(key)), B = new Set(terms[1].f.map(key));
+    return [...A].some(k => B.has(k)) ? 3 : 2;         // shared factor → common factor, else same angles
+  }
+  if (terms.length === 2 && withFn.length === 1) return 1;   // one function, one number
+  return 0;
+}
+/* the classifier proves itself on HER OWN printed examples first —
+   otherwise "the classifier agrees with the tag" could just mean the
+   two of them are wrong in the same way */
+[
+  ["2sin(t)-1=0", 1], ["tan(t)-3=0", 1], ["sin(A-24)=-0.7", 1],
+  ["sin(t)-cos(t)=0", 2], ["3cos(20-a)-2sin(20-a)=0", 2], ["sin^2(t)=cos^2(t)", 2],
+  ["sin(t)-sin(t)cos(t)=0", 3], ["sin^2(x)=2sin(x)cos(x)", 3],
+  ["sin(t)+sin(t)cos(t)+2cos(t)+2=0", 4], ["9sin(t)cos(t)+6cos(t)=12sin(t)+8", 4],
+  ["2sin^2(x)+5sin(x)-3=0", 5], ["2cos^2(a)+7sin(a)-5=0", 5], ["1+sin(t)=cos^2(t)", 5], ["4-2cos^2(x)+5sin(x)=0", 5],
+  ["sin(2t)=cos(57)", 6], ["cos(3t+10)=sin(t)", 6], ["sin(t-50)=cos(2t)", 6], ["cos(x+20)=sin(3x)", 6],
+].forEach(pair => {
+  tick(classifyShape(pair[0]) === pair[1], `classifier: "${pair[0]}" reads as type ${pair[1]} (got ${classifyShape(pair[0])})`);
+});
+{
+  let items = 0; const perType = {};
+  const F11_PLAIN = /2cos\^2\([^)]*\)-cos\([^)]*\)\+1=0/;
+  const MARKS = ["①", "②", "③", "④", "⑤", "⑥"];
+  for (const skill of QUEST_DEFS.gt11.skills) {
+    for (let i = 0; i < S4_N * 2; i++) {
+      const q = skill.gen(); items++;
+      const ctx = `gt11/${skill.id} #${i}`;
+      const d = q._dbg;
+      perType[d.type] = (perType[d.type] || 0) + 1;
+      tick(classifyShape(d.plain) === d.type,
+        `${ctx}: the shape classifier and the type tag agree (${d.plain} → tag ${d.type}, classifier ${classifyShape(d.plain)})`);
+      tick(!F11_PLAIN.test(d.plain), `${ctx}: never the F11 snippet 2cos²θ − cosθ + 1 = 0 (Δ < 0, no real solution)`);
+      tick(!/∈/.test(q.prompt), `${ctx}: no interval restriction attached, so flag F6's ambiguity cannot arise`);
+      tick(q.options.length === 6, `${ctx}: six options`);
+      tick(q.options.every((o, k) => o.label.startsWith(MARKS[k])),
+        `${ctx}: the six options are in her fixed ①②③④⑤⑥ order, never shuffled`);
+      tick(q.options.filter(o => o.correct).length === 1, `${ctx}: exactly one option is correct`);
+    }
+  }
+  [1, 2, 3, 4, 5, 6].forEach(t => tick((perType[t] || 0) > 0, `gt11 generates type ${t} (saw ${perType[t] || 0})`));
+  section("s4-gt11", `gt11 — ${items} equations classified from SHAPE alone; per type: ${[1, 2, 3, 4, 5, 6].map(t => `${t}:${perType[t] || 0}`).join(" ")}`, m14);
+}
+
+/* ============================================================
+   15 · gt12 — the quadrants and the ref ∠, against triglib
+   ============================================================ */
+const m15 = mark();
+{
+  let items = 0, norefs = 0;
+  for (const skill of QUEST_DEFS.gt12.skills) {
+    for (let i = 0; i < S4_N; i++) {
+      const q = skill.gen(); items++;
+      const ctx = `gt12/${skill.id} #${i}`;
+      const d = q._dbg;
+      if (d.noref) {
+        norefs++;
+        tick(q.steps.length === 1, `${ctx}: a no-reference-angle item ends at step 1 (got ${q.steps.length} steps)`);
+        tick(q.steps[0].correct === "noref", `${ctx}: its answer IS the "no reference angle" button`);
+        tick(q.steps[0].noRef === true, `${ctx}: that button is actually on screen`);
+        continue;
+      }
+      tick(q.steps.length === 2, `${ctx}: cross then ref ∠ (got ${q.steps.length} steps)`);
+      tick(q.steps[0].noRef === true, `${ctx}: the "no reference angle" button is offered here too — that is what makes it a decision`);
+      const bc = boundaryCase(d.fn, d.value);
+      const wantQ = bc ? bc.quadrants : solutionQuadrants(d.fn, d.value >= 0 ? 1 : -1);
+      const wantRef = bc ? bc.ref : refAngle(d.fn, d.value);
+      tick(same(q.steps[0].correct, wantQ),
+        `${ctx}: ticks ${JSON.stringify(q.steps[0].correct)} = ${bc ? "boundaryCase" : "solutionQuadrants"}(${d.fn}, ${d.value}) ${JSON.stringify(wantQ)}`);
+      tick(Math.abs(q.steps[1].expected - wantRef) <= 0.01,
+        `${ctx}: ref ∠ ${q.steps[1].expected} = refAngle(${d.fn}, ${d.value}) ${wantRef} to 0,01`);
+      tick(q.steps[1].dp === 2, `${ctx}: the ref ∠ is asked to 2 decimals`);
+      if (d.fn === "tan") {
+        tick(same(q.steps[0].alsoAccept, [[wantQ[0]]]),
+          `${ctx}: her one-line tan convention (${wantQ[0]} alone) is accepted — "waste of time!"`);
+        tick(checkStep(q.steps[0], [wantQ[0]]) && checkStep(q.steps[0], wantQ),
+          `${ctx}: checkStep marks BOTH the one-line and the two-line tan answer right`);
+      }
+    }
+  }
+  tick(norefs > 0, `gt12 really produces no-reference-angle items (saw ${norefs})`);
+  section("s4-gt12", `gt12 — ${items} items, quadrants and ref ∠ both re-derived from triglib (${norefs} of them "no reference angle")`, m15);
+}
+
+/* ============================================================
+   16 · gt13 — the picked expressions are EXACTLY the ones that can
+   be zero
+   ------------------------------------------------------------
+   Every option carries its own function (q._dbg.fns). This walks x
+   from 0° to 359° and asks each one "do you ever reach zero?". A
+   denominator must; a decoy must not — a decoy that touched zero
+   would be a second right answer wearing a wrong answer's coat.
+   ============================================================ */
+const m16 = mark();
+{
+  let items = 0, options = 0;
+  const reachesZero = f => {
+    for (let x = 0; x < 360; x++) {
+      const v = f(x);
+      if (!Number.isFinite(v)) continue;
+      if (Math.abs(v) < 1e-9) return true;
+    }
+    return false;
+  };
+  for (const skill of QUEST_DEFS.gt13.skills) {
+    for (let i = 0; i < 120; i++) {
+      const q = skill.gen(); items++;
+      const ctx = `gt13/${skill.id} #${i}`;
+      const d = q._dbg;
+      d.fns.forEach((f, idx) => {
+        options++;
+        const isDen = d.correctIdx.includes(idx);
+        tick(reachesZero(f) === isDen,
+          `${ctx}: "${d.labels[idx]}" ${isDen ? "is a denominator and DOES reach 0" : "is a decoy and never reaches 0"}`);
+      });
+      tick(q.steps[1].expected === 0, `${ctx}: step 2 expects 0 — denominator = 0`);
+      tick(q.steps[0].kind === "mcmulti", `${ctx}: the pick is a multi-select that needs Submit`);
+      tick(!d.labels.some(l => /^tan /.test(l)), `${ctx}: tan is never listed on its own — its cos covers it`);
+    }
+  }
+  section("s4-gt13", `gt13 — ${items} items, ${options} options each swept over x ∈ [0°;360°) for a zero`, m16);
+}
+
+/* ============================================================
+   17 · EXAM RELINK — the two T2 trig questions
+   ============================================================ */
+const m17 = mark();
+{
+  const lines = [];
+  tick(EXAM_CHAPTERS.includes("gtrig"), `js/config.js EXAM_CHAPTERS includes "gtrig" (got [${EXAM_CHAPTERS.join(",")}])`);
+  const gq = examQuestionsForChapter("gtrig");
+  tick(gq.length === 2, `the gtrig exam chapter owns exactly 2 questions (got ${gq.length})`);
+  const tq = examQuestionsForChapter("trig");
+  tick(tq.length === 1 && tq[0].topic === "mixed-problems",
+    `the 2D trig chapter keeps ONLY mixed-problems (got ${tq.map(x => x.topic).join(",")})`);
+  const wantTopics = ["reduction-and-ratios", "general-solutions"];
+  tick(same(examTopicsForChapter("gtrig").map(t => t.id), wantTopics),
+    `gtrig's exam topics are ${wantTopics.join(" + ")}`);
+  const WANT = { "trig.rr.t2q1": "gt5", "trig.gs.t2q2": "gt11" };
+  Object.keys(WANT).forEach(id => {
+    const quest = WANT[id];
+    const q = gq.find(x => x.id === id);
+    if (!tick(!!q, `${id} is registered under gtrig`)) return;
+    tick(q.chapter === "gtrig", `${id} declares chapter "gtrig" (got "${q.chapter}")`);
+    tick(q.lostQuest && q.lostQuest.chapter === "gtrig" && q.lostQuest.quest === quest,
+      `${id}'s "I'm lost" points at gtrig/${quest} (got ${JSON.stringify(q.lostQuest)})`);
+    /* it has to RESOLVE the same three ways js/exam-play.js's
+       lostQuestLink() resolves it: chapter, quest entry, quest def */
+    const ch = chapterById(q.lostQuest.chapter);
+    const entry = ch && (ch.quests || []).find(x => x.id === q.lostQuest.quest);
+    const def = entry && questDef(entry.id);
+    tick(!!ch && !!entry && !!def, `${id}: chapterById + quests.find + questDef all resolve for gtrig/${quest}`);
+    tick(!!def && Array.isArray(def.skills) && def.skills.length > 0, `${id}: gtrig/${quest} is a real round with skills`);
+    tick(!/^PENDING-/.test(q.lostQuest.quest), `${id}: no PENDING- placeholder left`);
+    lines.push(`  ${id} → ${q.lostQuest.chapter}/${q.lostQuest.quest} "${entry ? entry.title : "??"}" — resolves, ${def ? def.skills.length : 0} skills`);
+  });
+  document.getElementById("s4-exam").dataset.detail = lines.join("\n");
+  section("s4-exam", `the two T2 trig questions live in gtrig and their reteach links resolve\n${lines.join("\n")}`, m17);
+}
+
+/* ============================================================
+   19 · EVERY LABEL FITS INSIDE ITS OWN PICTURE
+   ------------------------------------------------------------
+   verifyQuadTri() proves a sketch cannot LIE: the triangle is in
+   the right quadrant, the scale is uniform, the numbers match the
+   drawn lengths. It cannot prove the sketch is READABLE — a side
+   label is just text, and "√(1 − t²)" beside the vertical leg is
+   long enough to walk straight off the edge of the frame at phone
+   width. That happened, and only showed up on the 375 px walk.
+
+   So this section renders each sketch for real and measures every
+   piece of writing on it with getBBox(), asserting it lands inside
+   the viewBox. Rendered, not estimated — a font-size change or a
+   longer letter can never quietly re-break it.
+   ============================================================ */
+const m19 = mark();
+{
+  const stage = document.createElement("div");
+  stage.style.cssText = "position:absolute;left:-4000px;top:0;width:400px";
+  document.body.appendChild(stage);
+
+  let sketches = 0, labels = 0;
+  const fits = (spec, ctx) => {
+    stage.innerHTML = renderQuadTri(spec);
+    const svg = stage.querySelector("svg");
+    sketches++;
+    svg.querySelectorAll("text").forEach(t => {
+      const txt = t.textContent;
+      if (!txt) return;                       // a blank letter has nothing to fit
+      labels++;
+      const b = t.getBBox();
+      tick(b.x >= -1 && b.x + b.width <= spec.w + 1 && b.y >= -1 && b.y + b.height <= spec.h + 1,
+        `${ctx}: "${txt}" sits inside the ${spec.w}×${spec.h} frame (x ${b.x.toFixed(0)}…${(b.x + b.width).toFixed(0)}, y ${b.y.toFixed(0)}…${(b.y + b.height).toFixed(0)})`);
+    });
+  };
+
+  for (const skill of QUEST_DEFS.gt8.skills) {
+    for (let i = 0; i < 60; i++) {
+      const q = skill.gen();
+      if (q.graph && q.graph.type === "quadtri") fits(q.graph, `gt8/${skill.id} #${i}`);
+      (q.steps || []).forEach((st, si) => {
+        if (st.graph && st.graph.type === "quadtri") fits(st.graph, `gt8/${skill.id} #${i} step${si}`);
+      });
+    }
+  }
+  for (const skill of QUEST_DEFS.gt10.skills) {
+    for (let i = 0; i < 60; i++) {
+      const q = skill.gen();
+      if (q.graph && q.graph.type === "quadtri") fits(q.graph, `gt10/${skill.id} #${i}`);
+    }
+  }
+  stage.remove();
+  section("s4-fit", `${sketches} sketches rendered and measured, ${labels} labels — every one inside its frame`, m19);
+}
+
+/* ============================================================
+   18 · THE SKETCHES, DRAWN — one gt8 triangle per quadrant, the
+   finished one, and the short-cut triangles, so the foreman can LOOK
+   ============================================================ */
+{
+  const figHost = document.getElementById("s4-figs");
+  const card = (id, title, html) => {
+    const c = document.createElement("div"); c.className = "card"; c.id = "s4-" + id;
+    c.innerHTML = `<h3>${title}</h3>${html}`;
+    figHost.appendChild(c);
+  };
+  [1, 2, 3, 4].forEach(quad => {
+    for (let i = 0; i < 500; i++) {
+      const q = QUEST_DEFS.gt8.skills.find(sk => sk.id === "chain1").gen();
+      const st = (q.steps || []).find(x => x.graph);
+      if (!st || st.graph.type !== "quadtri") continue;
+      const drawnQ = st.graph.x > 0 ? (st.graph.y > 0 ? 1 : 4) : (st.graph.y > 0 ? 2 : 3);
+      if (drawnQ !== quad) continue;
+      card("qt-q" + quad, `gt8 — quadrant ${quad}, letters only (nothing typed yet)`, renderQuadTri(st.graph));
+      break;
+    }
+  });
+  {
+    const q = QUEST_DEFS.gt8.skills.find(sk => sk.id === "substitute").gen();
+    card("qt-full", "gt8 — the FINISHED sketch (substitute step, every side numeric)", renderQuadTri(q.graph));
+  }
+  ["shortcutCos", "shortcutSin", "shortcutTan", "shortcutCosInv"].forEach(id => {
+    const q = QUEST_DEFS.gt10.skills.find(sk => sk.id === id).gen();
+    card("sc-" + id, `gt10 — ${q.prompt} (blank until the learner places them)`, renderQuadTri(q.graph));
+  });
+  {
+    const q = QUEST_DEFS.gt10.skills.find(sk => sk.id === "readRatio").gen();
+    card("sc-read", `gt10 — ${q.prompt}`, renderQuadTri(q.graph));
+  }
+}
 
 /* ============================================================
    banner

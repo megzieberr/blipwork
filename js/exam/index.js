@@ -57,7 +57,13 @@ import { euclidTangentsAndCyclicQuadsQuestions } from "./euclid-tangents-and-cyc
    two Euclidean modules land the NEXT day session (2026-08-22, engine
    port) as the exam-only "euclid" chapter's first two questions.
    Every other chapter (stats, finance, prob, meas, tgraph, analytical,
-   pat) stays an empty array until its own seeding session lands. */
+   pat) stays an empty array until its own seeding session lands.
+
+   2026-08-22, stage 4 of the General Trig build: the two T2 trig
+   questions that were never really 2D trig — reductions & ratios, and
+   general solutions — MOVED from `trig` to `gtrig`, her ruling that
+   morning, now that gtrig's thirteen rounds exist to teach them. `trig`
+   keeps Mixed Problems, which is genuinely sine/cosine/area rule. */
 const REGISTRY = {
   stats: [], finance: [], prob: [], meas: [],
   tgraph: [], analytical: [], pat: [],
@@ -72,10 +78,23 @@ const REGISTRY = {
     ...funcLineAndParabolaQuestions,
     ...funcHyperbolaAndExponentialT2Questions,
   ],
+  /* 2D TRIGONOMETRY — sine rule / cosine rule / area rule, the t1–t7
+     rounds. It owns Mixed Problems and nothing else: the reductions and
+     the general solutions MOVED to the gtrig chapter below on
+     2026-08-22 (her ruling that morning — "list these exam focus
+     questions under the General Trig tab and connect it to the correct
+     rounds"). Ids and topics are untouched by the move, so exam
+     progress, which is keyed by question id, carries across. */
   trig: [
+    ...trigMixedProblemsQuestions,
+  ],
+  /* GENERAL TRIG (js/config.js CHAPTERS, rounds gt1–gt13). Its two
+     questions arrived from `trig` on 2026-08-22 along with real reteach
+     links — reductions/ratios → gt5, general solutions → gt11 — because
+     this chapter is where those things are actually taught. */
+  gtrig: [
     ...trigReductionAndRatiosQuestions,
     ...trigGeneralSolutionsQuestions,
-    ...trigMixedProblemsQuestions,
   ],
   /* EXAM-FOCUS-ONLY chapter (js/config.js EXAM_ONLY_CHAPTERS) — it owns
      no drill quests at all, so it appears in the Exam Focus tab and

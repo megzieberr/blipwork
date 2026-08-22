@@ -325,3 +325,204 @@ export function nonQuadrantalAngle(lo, hi) {
    review fix 2026-08-22: "sin −15°" read wrongly as a subtraction. */
 import { fmtDeg as _fmtDeg } from "../triglib.js";
 export function argDeg(angle) { return angle < 0 ? `(${_fmtDeg(angle)})` : ` ${_fmtDeg(angle)}`; }   // includes the leading space for positives: use as `${fn}${argDeg(a)}`
+
+/* ============================================================
+   STAGE 4 (2026-08-22) — rounds gt8–gt13 (special sums, identities,
+   super special sums, the six types, last steps, undefined values).
+   Everything below is shared by those six quest files.
+   ============================================================ */
+import { fmtComma } from "../check.js";
+
+/* a real minus in front of a magnitude, never a hyphen (house rule) */
+export const negNum = v => (v < 0 ? "−" : "") + fmtComma(Math.abs(v));
+
+/* a signed fraction as she writes it on the sketch: the minus lives in
+   FRONT of the whole fraction, never on the denominator. */
+export function fracLabel(num, den) {
+  const sign = (num < 0) !== (den < 0) ? "−" : "";
+  return `${sign}${Math.abs(num)}/${Math.abs(den)}`;
+}
+/* …and its VALUE, so a decoy can be filtered by value rather than by
+   string (CLAUDE.md gotcha 4) */
+export const fracValue = (num, den) => num / den;
+
+/* a stacked fraction, the same `efrac` idiom Exponents & Equations
+   already use — round 13's equations are mostly fractions, and a
+   flat "cos x/(1 + sin x)" makes the learner parse brackets instead
+   of spotting denominators */
+export const tfrac = (n, d) => `<span class="efrac"><sup>${n}</sup>⁄<sub>${d}</sub></span>`;
+
+/* ------------------------------------------------------------
+   bowTieSvg() — her BOW TIE (Part H2, p27): the ASTC diagram drawn
+   as two triangles meeting at the origin, with S A T C at the four
+   corners. Same geometry as the round-2 wheel; the four letters are
+   what make it the bow tie rather than the plain wheel.
+   ------------------------------------------------------------ */
+const ASTC_LETTER = { 1: "A", 2: "S", 3: "T", 4: "C" };
+export function bowTieSvg() {
+  const MID = 120, ARM = 100;
+  const P = {
+    1: { x: MID + ARM * 0.62, y: MID - ARM * 0.70 },
+    2: { x: MID - ARM * 0.62, y: MID - ARM * 0.70 },
+    3: { x: MID - ARM * 0.62, y: MID + ARM * 0.70 },
+    4: { x: MID + ARM * 0.62, y: MID + ARM * 0.70 },
+  };
+  let letters = "";
+  [1, 2, 3, 4].forEach(q => {
+    letters += `<text x="${P[q].x}" y="${P[q].y}" text-anchor="middle" dominant-baseline="middle"`
+      + ` style="font-family:var(--font-display);font-weight:700;font-size:22px;fill:${QCOLOR[q]}">${ASTC_LETTER[q]}</text>`;
+  });
+  return astcWheelSvg().replace("</svg>", letters + "</svg>");
+}
+
+/* ------------------------------------------------------------
+   PYTHAGOREAN TRIPLES for round 8 — 3-4-5, 5-12-13, 8-15-17,
+   7-24-25 and every multiple whose biggest side is still ≤ 30, so
+   EVERY side (r included) is a whole number the number pad can type.
+   [x-leg, y-leg, radius]
+   ------------------------------------------------------------ */
+export const TRIPLES = (() => {
+  const prim = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [7, 24, 25]];
+  const out = [];
+  prim.forEach(([a, b, c]) => { for (let k = 1; k * c <= 30; k++) out.push([a * k, b * k, c * k]); });
+  return out;
+})();
+/* The PRIMITIVE four. Round 8 hands the learner a ratio and expects one
+   particular triangle back, so the fraction has to be in lowest terms —
+   `sin θ = 20/25` would be answered just as correctly with y = 4, r = 5,
+   and the learner would be marked wrong for reducing. Her own worked
+   examples are all lowest-terms (tan θ = 4/3 → sides 3 and 4), so the
+   ratio-given items draw from here and the multiples above are kept for
+   anything that does NOT hand over a fraction. */
+export const PRIM_TRIPLES = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [7, 24, 25]];
+/* the small-radius primitives, for the "substitute into an expression"
+   item where a coefficient of r² has to stay a number she would write */
+export const SMALL_TRIPLES = PRIM_TRIPLES.filter(t => t[2] <= 13);
+
+/* the signs (x, y) carry in each quadrant — her bow tie, as numbers */
+export const QSIGN = { 1: [1, 1], 2: [-1, 1], 3: [-1, -1], 4: [1, -1] };
+
+/* the intervals round 8 gives alongside a ratio. Each one ticks TWO
+   quadrants (her second tick colour); the overlap with the ratio's own
+   two quadrants is the single answer — that overlap IS the round. */
+export const INTERVALS = [
+  { text: "0° < θ < 180°", quadrants: [1, 2] },
+  { text: "90° < θ < 270°", quadrants: [2, 3] },
+  { text: "180° < θ < 360°", quadrants: [3, 4] },
+  { text: "−90° < θ < 90°", quadrants: [1, 4] },
+];
+
+/* ------------------------------------------------------------
+   mcMultiStep — the toggle-several-then-Submit step (gt13).
+   `options` is a list of labels in the order they should appear;
+   `correct` is the list of INDICES that must all be on.
+   ------------------------------------------------------------ */
+export function mcMultiStep(prompt, options, correct, hint, opts = {}) {
+  return {
+    kind: "mcmulti", prompt, options: options.map(o => ({ label: String(o) })),
+    correct: correct.slice().sort((a, b) => a - b), hint, layout: opts.layout,
+  };
+}
+
+/* ------------------------------------------------------------
+   tapSideStep — tap one side of the sketch already on screen (gt10).
+   `placeLabel` writes the value onto that side once it is tapped,
+   which is her p36 ③ "re-draw with it filled in".
+   ------------------------------------------------------------ */
+export function tapSideStep(prompt, correct, hint, opts = {}) {
+  return {
+    kind: "tapside", prompt, correct, hint,
+    targets: opts.targets || ["opp", "adj", "hyp"],
+    tapHint: opts.tapHint || "Tap that side on the sketch.",
+    placeLabel: opts.placeLabel,
+  };
+}
+
+/* ============================================================
+   EQUATION MODEL (round 11, reused by 12 and 13)
+   ------------------------------------------------------------
+   Round 11 asks "which of the six types is this?", so the SHAPE of
+   the equation is the whole question — and the harness has to be able
+   to re-derive that shape without trusting the generator's own type
+   tag. Both the learner's HTML and the harness's plain ASCII string
+   are built from ONE structure here, so the picture and the thing the
+   classifier reads can never drift apart.
+
+     TERM   { c, f:[factor…] }   c = coefficient; no factors = a constant
+     FACTOR { n:"sin"|"cos"|"tan", p:1|2, a:{ k, d } }
+                                 angle = k × (the letter) + d degrees;
+                                 k = 0 means a bare number, e.g. cos 57°
+   ============================================================ */
+export const T = (c, ...f) => ({ c, f });
+/* a term written EXACTLY as given (a fraction like 1/2, which fmtComma
+   would otherwise turn into 0,5) while still carrying its real value */
+export const TRaw = (text, value) => ({ c: value, raw: text, f: [] });
+export const F = (n, k = 1, d = 0, p = 1) => ({ n, p, a: { k, d } });
+export const F2 = (n, k = 1, d = 0) => F(n, k, d, 2);
+
+function angHtml(a, L) {
+  const kAbs = Math.abs(a.k);
+  const v = kAbs === 1 ? L : `${kAbs}${L}`;
+  if (a.k === 0) return `${fmtComma(a.d)}°`;
+  if (a.d === 0) return a.k < 0 ? `−${v}` : v;
+  if (a.k < 0) return `${fmtComma(a.d)}° − ${v}`;
+  return `${v} ${a.d < 0 ? "−" : "+"} ${fmtComma(Math.abs(a.d))}°`;
+}
+function angPlain(a, L) {
+  const kAbs = Math.abs(a.k);
+  const v = kAbs === 1 ? L : `${kAbs}${L}`;
+  if (a.k === 0) return String(a.d);
+  if (a.d === 0) return (a.k < 0 ? "-" : "") + v;
+  if (a.k < 0) return `${a.d}-${v}`;
+  return `${v}${a.d < 0 ? "-" : "+"}${Math.abs(a.d)}`;
+}
+/* her notation: a bare or numeric angle needs no brackets (sin θ,
+   cos 57°); anything compound does (sin(2θ), cos(x + 20°)). */
+function facHtml(f, L) {
+  const nm = f.n + (f.p === 2 ? "²" : "");
+  const plainLetter = f.a.k === 1 && f.a.d === 0;
+  const bareNumber = f.a.k === 0;
+  // she writes sin²θ closed up, and sin θ / cos 57° with one space
+  if (plainLetter) return f.p === 2 ? `${nm}${L}` : `${nm} ${L}`;
+  if (bareNumber) return `${nm} ${angHtml(f.a, L)}`;
+  return `${nm}(${angHtml(f.a, L)})`;
+}
+function facPlain(f, L) { return `${f.n}${f.p === 2 ? "^2" : ""}(${angPlain(f.a, L)})`; }
+
+function termHtml(t, L, first) {
+  if (t.raw != null) return (first ? "" : " + ") + t.raw;
+  const mag = Math.abs(t.c);
+  const body = t.f.length
+    ? (mag === 1 ? "" : `${fmtComma(mag)} `) + t.f.map(f => facHtml(f, L)).join(" ")
+    : fmtComma(mag);
+  const lead = first ? (t.c < 0 ? "−" : "") : (t.c < 0 ? " − " : " + ");
+  return lead + body;
+}
+function termPlain(t, L, first) {
+  if (t.raw != null) return (t.c < 0 ? "-" : first ? "" : "+") + String(Math.abs(t.c));
+  const mag = Math.abs(t.c);
+  const body = t.f.length
+    ? (mag === 1 ? "" : String(mag)) + t.f.map(f => facPlain(f, L)).join("")
+    : String(mag);
+  const lead = first ? (t.c < 0 ? "-" : "") : (t.c < 0 ? "-" : "+");
+  return lead + body;
+}
+const sideHtml = (ts, L) => (ts.length ? ts.map((t, i) => termHtml(t, L, i === 0)).join("") : "0");
+const sidePlain = (ts, L) => (ts.length ? ts.map((t, i) => termPlain(t, L, i === 0)).join("") : "0");
+
+/* the equation a learner sees — real minus, decimal comma, her brackets */
+export function eqHtml(eq, L) { return `${sideHtml(eq.lhs, L)} = ${sideHtml(eq.rhs, L)}`; }
+/* the same equation as flat ASCII, for the harness's own parser */
+export function eqPlain(eq, L) { return `${sidePlain(eq.lhs, L)}=${sidePlain(eq.rhs, L)}`; }
+
+/* the numeric value of one side at a given θ (degrees) — lets a
+   generator check "is this equation even satisfiable / did I build the
+   shape I meant" without a second copy of the algebra */
+const FNV = { sin: sinD, cos: cosD, tan: tanD };
+export function sideValue(terms, L, theta) {
+  return terms.reduce((sum, t) => {
+    let v = t.c;
+    t.f.forEach(f => { const ang = f.a.k * theta + f.a.d; v *= Math.pow(FNV[f.n](ang), f.p); });
+    return sum + v;
+  }, 0);
+}

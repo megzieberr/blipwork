@@ -16,7 +16,8 @@
 
    SCOPE: the 15 modules registered that session (eqn ×5 new + the
    eqn/nature-of-roots pilot for id-uniqueness only, exp ×3, func ×4,
-   trig ×3), PLUS — added the next day session, 2026-08-22 — the two
+   trig ×3 — two of which became GTRIG questions on 2026-08-22 without
+   changing file, id or topic), PLUS — added the next day session, 2026-08-22 — the two
    EUCLIDEAN modules, promoted out of js/exam/_pending-engine-port/
    once the Circle Quest engine port landed
    (js/exam/circle-engine.js). Extending the MODULES list was the
@@ -41,7 +42,8 @@ const MODULES = [
   ["eqn-fractions-and-restrictions.js",   "eqnFractionsAndRestrictionsQuestions"],
   ["eqn-inequalities-2.js",               "eqnInequalitiesTopUpQuestions"],
   ["func-line-and-parabola.js",           "funcLineAndParabolaQuestions"],
-  /* --- Sept T2, non-Euclidean --- */
+  /* --- Sept T2, non-Euclidean. The two trig-*.js files below now
+     declare chapter "gtrig" (2026-08-22) — same ids, same topics. --- */
   ["trig-reduction-and-ratios.js",        "trigReductionAndRatiosQuestions"],
   ["trig-general-solutions.js",           "trigGeneralSolutionsQuestions"],
   ["func-hyperbola-and-exponential-2.js", "funcHyperbolaAndExponentialT2Questions"],
@@ -57,13 +59,14 @@ const { verifyDiagram, computeGeometry, highlightedSpec, diagramRefIssues } =
 const { EXAM_ONLY_CHAPTERS, EXAM_CHAPTERS } = await import("./js/config.js");
 
 /* Questions whose lostQuest CANNOT resolve, by design, each with a
-   documented placeholder in its file header — Megan's ruling (morning
-   of 2026-08-22): these two ship with NO "I'm lost" link until a trig
-   notes digest exists. Excluded from the resolve check below;
-   asserted to carry the placeholder instead. */
+   documented placeholder in its file header. Excluded from the resolve
+   check below; asserted to carry the placeholder instead. */
 const LOST_PLACEHOLDER_EXPECTED = new Set([
-  "trig.rr.t2q1",      // no Blipwork round teaches reductions/co-functions/ratio-from-sketch
-  "trig.gs.t2q2",      // no Blipwork round teaches general solutions
+  /* 2026-08-22, stage 4 of the General Trig build: trig.rr.t2q1 and
+     trig.gs.t2q2 LEFT this set. They were placeholders only because no
+     round taught reductions or general solutions; gtrig's gt5 and gt11
+     now do, so both were relinked and both moved into the gtrig
+     chapter. They are checked by the ordinary resolve path below. */
   /* EUCLIDEAN (2026-08-22). Not "waiting on" anything — her ruling that
      morning was that the Euclidean exam chapter has NO "I'm lost" button
      at all ("they don't need it anyway"). The schema still requires the
@@ -213,23 +216,26 @@ const WALLS = {
         "conjugates-and-rationalising", "rational-exponent-equations", "no-solution-and-strategy"],
   func: ["four-families", "line-and-parabola", "hyperbola-and-exponential", "reading-a-graph",
          "inequalities-off-a-graph", "transformations", "graphs-together"],
-  /* trig wall from the t1–t7 quest breakdown. The last two entries are
-     NOT mirrored by any built round — the chapter is "2D Trigonometry"
-     and t1–t7 are entirely sine/cosine/area rule. Registered anyway
-     (judgement call, see verify-exam.html Part 6's comment): they are
-     legitimately-scoped, already-verified T2 exam content, and her
-     ruling was only that the two questions ship with no reteach link,
-     never that they wait to be registered. */
+  /* trig wall from the t1–t7 quest breakdown — sine rule, cosine rule,
+     area rule and mixed problems, nothing else. The two topics that
+     used to sit here and stretch it past its own rounds moved to the
+     gtrig wall below on 2026-08-22. */
+  /* GENERAL TRIG (2026-08-22): its own chapter, its own rounds — the
+     two topics that used to widen the trig wall belong here now. */
+  gtrig: ["introduction", "cartesian-plane", "special-angles", "co-functions", "reductions",
+          "tip-chips", "reduction-and-ratios", "special-sums", "identities",
+          "super-special-sums", "six-types", "general-solutions", "undefined-values"],
   trig: ["which-rule-fits", "sine-rule-sides", "sine-rule-angles", "cosine-rule-sides",
-         "cosine-rule-angles", "area-rule", "mixed-problems",
-         "reduction-and-ratios", "general-solutions"],
+         "cosine-rule-angles", "area-rule", "mixed-problems"],
   /* EUCLIDEAN wall, from GR11-IEB-PAPER-BANK.md's Grade 11 Euclidean
      scope wall (four examinable proofs, acute case only; everything
      else use-as-result; no similarity, no concurrency, no proof by
      contradiction) — proposed in README-PENDING.md, adopted here. */
   euclid: ["circle-theorems", "tangents-and-cyclic-quads"],
 };
-const WALL_NEEDS_A_DECISION = new Set(["reduction-and-ratios", "general-solutions"]);
+/* Nothing widens a chapter past its own rounds any more: the two topics
+   that did were moved into the chapter that teaches them (2026-08-22). */
+const WALL_NEEDS_A_DECISION = new Set();
 mine.forEach(({ q }) => {
   const ok = WALLS[q.chapter] && WALLS[q.chapter].includes(q.topic);
   tick(ok, `${q.id}: topic "${q.topic}" outside the ${q.chapter} wall`);

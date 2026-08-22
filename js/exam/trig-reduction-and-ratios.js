@@ -1,5 +1,5 @@
 /* ============================================================
-   EXAM FOCUS — 2D Trigonometry · Reductions & ratios
+   EXAM FOCUS — General Trig · Reductions & ratios
    SOURCE: September Test 2 (practice), QUESTION 1 — the no-calculator
    trig block: co-function, ratio-from-a-sketch, reduction formulae.
    (Overnight run #1, stage 3b, 2026-08-21.)
@@ -30,57 +30,39 @@
    y = −3, r = 5, not on the drawing itself. Future diagram-engine
    candidate — a plain axes-plus-triangle SVG, no circle engine needed.
 
-   ⚠️⚠️ lostQuest IS A DOCUMENTED PLACEHOLDER — READ THIS.
-   Blipwork's `trig` chapter is "2D Trigonometry": its seven rounds
-   (t1–t7, js/config.js) are ENTIRELY sine rule / cosine rule / area
-   rule. NOTHING in Blipwork — not trig, not tgraph (which is trig
-   GRAPHS, tg1–tg7) — teaches co-functions, ratio-from-a-sketch or
-   reduction formulae. Pointing "I'm lost" at t1 ("Which rule fits?")
-   would drop a learner stuck on a reduction formula into a sine-rule
-   round, which is worse than no link at all and breaks her session-E
-   ruling ("take them to the SPECIFIC round that teaches and drills
-   this"). So lostQuest.quest is the placeholder below.
-   It degrades SAFELY, by three independent gates in js/exam-play.js's
-   lostQuestLink(): the id is never in app.state.openQuests, and even if
-   it were, chapterById/quests.find/questDef would all fail to resolve
-   and the function returns null. The result is simply no reteach
-   button — never a dead-end, never a throw.
-   RESOLVING IT needs one of: (1) new trig rounds for reductions /
-   ratios (a real chapter-extension job, `add-chapter` skill), or (2)
-   her ruling that these questions live somewhere else. Until then this
-   file is excluded from the harness's lostQuest-resolves check and
-   asserted to carry the placeholder instead.
+   ✅ CHAPTER MOVED + RETEACH LINK LIVE — 2026-08-22.
+   This question used to sit under the `trig` chapter (2D Trigonometry:
+   sine rule / cosine rule / area rule, rounds t1–t7) with a PENDING-
+   lostQuest placeholder, because nothing in the app taught reductions,
+   co-functions or ratio-from-a-sketch. Both halves of that are now
+   fixed by the GENERAL TRIG chapter (`gtrig`, rounds gt1–gt13):
+     • `chapter` is now "gtrig". The id, topic, paper tag and every
+       part are UNCHANGED — exam progress is keyed by question id, so
+       nothing a learner has already opened is lost by the move.
+     • `lostQuest` now points at gt5, "Reductions: numbers", which is
+       the round that drills exactly this: quadrant → reduction
+       formula → sign → does the ratio stay or change.
+   The reteach button still only appears once gt5 is OPEN for that
+   learner — js/exam-play.js's lostQuestLink() checks openQuests before
+   it checks anything else — so on live it stays invisible until the
+   teacher opens the round.
 
-   ⚠️ UNREGISTERED. Registering (a DAY-session job) needs:
-     1. js/exam/index.js — import + set REGISTRY.trig = [...].
-     2. js/config.js — EXAM_CHAPTERS must include "trig".
-     3. verify-exam.html Part 6 — SCOPE_WALLS has an `eqn` key ONLY.
-        Proposed trig wall from the t1–t7 breakdown:
-        which-rule-fits · sine-rule-sides · sine-rule-angles ·
-        cosine-rule-sides · cosine-rule-angles · area-rule ·
-        mixed-problems
-        ⚠️ "reduction-and-ratios" (this file) and "general-solutions"
-        (js/exam/trig-general-solutions.js) are NOT in that list —
-        they widen the chapter past its own built rounds. Adding them
-        to the wall is a decision, not a formality: see the lostQuest
-        note above.
-     4. verify-exam.html Part 2 — the pilot-only assertions
-        (EXAM_CHAPTERS === ["eqn"]; every non-eqn chapter empty) break.
-     5. js/exam/_schema.js is unchanged and unchallenged by this file.
+   REGISTERED (2026-08-22): js/exam/index.js lists it under REGISTRY
+   .gtrig, js/config.js EXAM_CHAPTERS includes "gtrig", and
+   verify-exam.html's scope wall for gtrig carries this file's topic
+   ("reduction-and-ratios") — it is the chapter's own content now, not
+   a widening of 2D trig's.
    ============================================================ */
 
 const PAPER = "sept-t2";
-/* See the header. Non-empty strings, so validateQuestion() passes; not
-   resolvable, so the reteach link never renders. Deliberate. */
-const LOST_PENDING = { chapter: "trig", quest: "PENDING-no-round-teaches-this" };
 
 const t2q1 = {
   id: "trig.rr.t2q1",
-  chapter: "trig",
+  chapter: "gtrig",
   topic: "reduction-and-ratios",
   archetype: "no-calculator-trig-block-cofunction-ratio-reduction",
   paper: PAPER,
-  lostQuest: LOST_PENDING,
+  lostQuest: { chapter: "gtrig", quest: "gt5" },
   marks: 9,
   parts: [
     {

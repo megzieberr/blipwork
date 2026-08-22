@@ -110,7 +110,22 @@ export function renderQuadTri(spec) {
   out += text(ox + 12, 16, "y", "qt-axlab");
   // "O" goes in the quadrant OPPOSITE the triangle, so it never sits on the
   // hypotenuse (foreman review fix, 2026-08-22 — it did, in III and IV).
-  out += text(ox + (g.T.x > ox ? -10 : 10), oy + (g.T.y > oy ? -10 : 12), "O", "qt-axlab");
+  // …and outside the θ arc when there is one (second review fix, same day:
+  // in a thin III/IV triangle the arc sweeps right over that corner).
+  // Corner rule: of the three corners the triangle does NOT occupy, take the
+  // one farthest (in angle) from BOTH the θ label (at θ/2) and the x-leg
+  // label (just off the x-leg, on the side away from the triangle).
+  {
+    const R = spec.theta ? g.arcR + 8 : 13;
+    const adist = (a, b) => { const d = Math.abs(((a - b) % 360 + 540) % 360 - 180); return d; };
+    const thetaDir = spec.theta ? g.theta / 2 : null;
+    const xlabDir = spec.x > 0 ? (spec.y > 0 ? 345 : 15) : (spec.y > 0 ? 195 : 165);
+    const corners = [45, 135, 225, 315].filter(c => Math.floor(c / 90) + 1 !== g.quadrant);
+    const best = corners.map(c => ({ c, d: Math.min(adist(c, xlabDir), thetaDir == null ? 999 : adist(c, thetaDir)) }))
+      .sort((p, q) => q.d - p.d)[0].c;
+    const op = arcPoint(g, best, R);
+    out += text(op.x, op.y + 3, "O", "qt-axlab");
+  }
 
   // ---- the θ arc, from the +x axis anticlockwise to the hypotenuse ----
   // (SVG y points down, so an anticlockwise maths turn is sweep-flag 0)
@@ -153,7 +168,12 @@ export function renderQuadTri(spec) {
 
   // ---- side labels: GIVEN numeric or the letter ----
   // adjacent (on the x-axis) — pushed AWAY from the triangle vertically
-  out += text((O.x + F.x) / 2, F.y - sy * 14, lab("x"), "qt-slab");
+  // A SHORT leg (5-12-13 in quadrant III/IV, say) has its midpoint inside
+  // the θ arc, so the label moves out to the FOOT end of the leg instead
+  // (foreman review fix, 2026-08-22 — seen on the rendered sheet).
+  const legPx = Math.abs(F.x - O.x);
+  const xlabX = (spec.theta && legPx < g.arcR * 2 + 14) ? F.x - sx * 6 : (O.x + F.x) / 2;
+  out += text(xlabX, F.y - sy * 14, lab("x"), "qt-slab");
   // opposite (the vertical leg) — pushed away from the origin horizontally.
   // The ANCHOR has to point away from the triangle too: a label sitting to
   // the left of the leg must END there ("end"), otherwise a long one like

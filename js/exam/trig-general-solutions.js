@@ -1,5 +1,5 @@
 /* ============================================================
-   EXAM FOCUS — 2D Trigonometry · General solutions
+   EXAM FOCUS — General Trig · General solutions
    SOURCE: September Test 2 (practice), QUESTION 2 — the general
    solution of a quadratic in cos θ, with one branch rejected, then the
    "hence list them in an interval" follow-on.
@@ -29,30 +29,31 @@
 
    NO DIAGRAM (the print question and memo have none).
 
-   ⚠️⚠️ lostQuest IS THE SAME DOCUMENTED PLACEHOLDER as
-   js/exam/trig-reduction-and-ratios.js — read that file's header for
-   the full reasoning and the safe-degradation proof. Short version:
-   Blipwork's `trig` chapter is 2D trig only (sine/cosine/area rules,
-   t1–t7) and `tgraph` is trig graphs (tg1–tg7); NOTHING in the app
-   teaches general solutions, so there is no honest reteach target.
-   The placeholder renders no link rather than a wrong one.
-
-   ⚠️ UNREGISTERED. Same five registration steps as
-   js/exam/trig-reduction-and-ratios.js's header — including that
-   "general-solutions" is NOT in the proposed trig scope wall, because
-   it widens the chapter past its own built rounds.
+   ✅ CHAPTER MOVED + RETEACH LINK LIVE — 2026-08-22.
+   This question used to sit under the `trig` chapter with a PENDING-
+   lostQuest placeholder, because nothing in the app taught general
+   solutions. The GENERAL TRIG chapter (`gtrig`) now does:
+     • `chapter` is now "gtrig". The id, topic, paper tag and every
+       part are UNCHANGED — exam progress is keyed by question id, so
+       nothing a learner has already opened is lost by the move.
+     • `lostQuest` now points at gt11, "General solution: the six
+       types", which is where the trinomial/K-method shape in part (a)
+       is named and drilled. (gt12 drills the quadrants and the
+       reference angle that finish it off.)
+   The reteach button still only appears once gt11 is OPEN for that
+   learner — js/exam-play.js's lostQuestLink() checks openQuests first
+   — so on live it stays invisible until the teacher opens the round.
    ============================================================ */
 
 const PAPER = "sept-t2";
-const LOST_PENDING = { chapter: "trig", quest: "PENDING-no-round-teaches-this" };
 
 const t2q2 = {
   id: "trig.gs.t2q2",
-  chapter: "trig",
+  chapter: "gtrig",
   topic: "general-solutions",
   archetype: "general-solution-of-a-quadratic-trig-equation-one-branch-dead",
   paper: PAPER,
-  lostQuest: LOST_PENDING,
+  lostQuest: { chapter: "gtrig", quest: "gt11" },
   marks: 7,
   parts: [
     {

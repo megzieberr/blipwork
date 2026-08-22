@@ -5,13 +5,12 @@
 --  struggle, or blip row — nothing about a real kid changes.
 --
 --  ⚠️ SEEDED CLOSED (is_open = false), unlike migration-equations-
---  quests.sql. Only gt1–gt3 (Introduction, The Cartesian plane,
---  Special angles & identities — the discovery rounds) have a real
---  quest built as of this migration; gt4–gt13 exist as rows so the
---  chapter map is complete and sort order is stable, but they show
---  "Coming soon" in the app (js/config.js built:false) regardless of
---  is_open. Megan opens each round from the admin dashboard herself
---  as she teaches it — never auto-opened by this file.
+--  quests.sql. All 13 rounds are built (stages 1–4 of the General Trig
+--  build, 2026-08-22): gt1–gt3 are discovery rounds (XP the first time
+--  only), gt4–gt13 are drills. Megan opens each round from the admin
+--  dashboard herself as she teaches it — never auto-opened by this file.
+--  Opening ≥ 1 round also makes the General Trig tab appear in Exam
+--  Focus (its two questions moved there from 2D Trig, her ruling).
 --
 --  Idempotent AND non-destructive on re-run: the on-conflict clause
 --  updates chapter/sort only and deliberately leaves is_open alone,
@@ -39,13 +38,11 @@ on conflict (quest_id) do update
   set chapter = excluded.chapter, sort = excluded.sort;
 
 -- ------------------------------------------------------------
---  When gt1's build is reviewed and she's ready to teach it, open
---  just that round from the admin dashboard (or):
+--  When she's ready to teach a round, open just that one from the
+--  admin dashboard (or):
 --
 --    update public.quests set is_open = true where quest_id = 'gt1';
 --
---  …and so on for gt2, gt3 as their content lands / gets taught.
---  There is deliberately no "open them all" snippet here, unlike
---  the eqn migration — these are discovery rounds she introduces
---  one at a time, not a revision chapter she opens in one sitting.
+--  There is deliberately no "open them all" snippet here, unlike the
+--  eqn migration — she introduces these one at a time.
 -- ------------------------------------------------------------

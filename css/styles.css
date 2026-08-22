@@ -1221,3 +1221,17 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .q-step-mark{margin-left:8px;font-family:var(--font-display);font-weight:700;font-size:13px;color:var(--good);white-space:nowrap}
 .q-step-mark.retried{color:var(--warn)}
 .q-step .hint-box.step-hint{margin-top:12px;font-size:13.5px}
+/* a diagram that belongs to ONE step (gt8 draws the triangle only after
+   the quadrant is picked) */
+.q-step-graph{margin:2px 0 12px}
+.q-step-graph svg{width:100%;max-width:280px;height:auto;display:block;margin:0 auto}
+/* mcmulti — toggle several options, then Submit (gt13's denominators) */
+.q-options.mcmulti{margin-bottom:10px}
+.opt.is-on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
+.mcmulti-submit{width:100%}
+.mcmulti-submit:disabled{opacity:.5;cursor:default}
+/* an equation shown on its own line inside a prompt (gt13) */
+.q-eq{display:inline-block;margin-top:6px;font-size:16px;line-height:2}
+.efrac{white-space:nowrap}
+/* a side value the learner placed by tapping (gt10's short-cut triangle) */
+.qt-placed{fill:var(--accent);font-weight:700}

@@ -1450,6 +1450,96 @@ export const CONCEPTS = {
       <p>A plain reduction NEVER swaps the ratio — sin stays sin, cos stays cos, tan stays tan. Only the three co-function forms (90° − θ, 90° + θ, θ − 90°) convert between sin and cos.</p>
       <div class="eg">tan(180° + θ) · sin(360° − θ) / tan(360° − θ) = tan θ · (−sin θ) / (−tan θ) = sin θ.</div>`,
   },
+
+  /* ---- GENERAL TRIG (chapter gtrig, stage 4, 2026-08-22) ---- */
+  gtrigSpecialSums: {
+    title: "Special sums: the five steps",
+    body: `
+      <p>You are given ONE ratio and ONE interval, and asked to work out the value of some expression. Five steps, in this order:</p>
+      <div class="formula">① isolate the function &nbsp;·&nbsp; ② determine the quadrant &nbsp;·&nbsp; ③ sketch the diagram &nbsp;·&nbsp; ④ calculate the unknown side &nbsp;·&nbsp; ⑤ substitute</div>
+      <p><b>Step ② is where the marks are.</b> Two things were given, so you tick TWICE on one cross, in two different colours:</p>
+      <ul>
+        <li>one colour for the quadrants the <b>ratio's sign</b> allows (All Strippers Take Cash)</li>
+        <li>a second colour for the quadrants the <b>interval</b> allows</li>
+      </ul>
+      <p>The quadrant with <b>two ticks</b> is the one you sketch in. That overlap is the whole idea.</p>
+      <p>Then Pythagoras for the missing side — and two habits that make it read as yours:</p>
+      <div class="formula">y² = 13² − (−12)² &nbsp;&nbsp;(pyth)<br>y = ±5 &nbsp;→&nbsp; ∴ y = 5</div>
+      <p>The given negative stays <b>inside</b> the square, and the ± line is followed by a ∴ line that picks the sign off the quadrant. <b>r is always positive bc it is the radius</b> — it never takes the minus.</p>
+      <div class="eg">3 tan θ − 4 = 0 with θ ∈ (180°; 360°). tan is + in ① and ③; the interval gives ③ and ④ → ③. Sketch x = −3, y = −4, r = 5. Then 25 sin²θ − 5 cos θ = 25(−4/5)² − 5(−3/5) = 16 + 3 = 19.</div>`,
+  },
+  gtrigIdentities: {
+    title: "Identities: what to do next",
+    body: `
+      <p><b>When in doubt, go LEFT.</b> You work the left-hand side, top to bottom, until it turns into the right-hand side — and you close with <b>= RHS</b>. Never squeeze both sides towards the middle.</p>
+      <p>There are only four moves, and every question is one of them:</p>
+      <ul>
+        <li><b>fractions</b> → find the LCD (every different bottom, multiplied together)</li>
+        <li><b>a bracket squared / two brackets</b> → multiply out (products)</li>
+        <li><b>a common factor</b> → take it out</li>
+        <li><b>a division by a fraction</b> → flip it and multiply</li>
+      </ul>
+      <p>And two things you keep in your pocket:</p>
+      <div class="formula">tan θ = sin θ/cos θ &nbsp;&nbsp;·&nbsp;&nbsp; sin²θ + cos²θ = 1</div>
+      <p>The <b>masked identities</b> are that second one rearranged: sin²θ = 1 − cos²θ and cos²θ = 1 − sin²θ. A 1 with nothing under it gets a denominator of 1 before it can join a fraction.</p>
+      <div class="eg">1/cos²θ − 1 = 1/cos²θ − 1/1 = (1 − cos²θ)/cos²θ = sin²θ/cos²θ = tan²θ.</div>`,
+  },
+  gtrigSuperSpecial: {
+    title: "Super special sums: the flamingo & the short-cut",
+    body: `
+      <p>You are told something like <b>cos 20° = t</b> and asked for everything else in terms of t. A bare value cannot be read off a triangle — so stand it on a 1. That is the <b>flamingo</b>:</p>
+      <div class="formula">cos 20° = t = t/1 = a/h</div>
+      <p>Now t is the adjacent side, 1 is the hypotenuse, and the triangle draws itself in the first quadrant. Pythagoras finds the third side, and then you just read the answers off the picture.</p>
+      <p>The <b>Short-cut</b> — three ready-made triangles:</p>
+      <table class="q-table"><tr><th>given</th><th>adjacent</th><th>opposite</th><th>hypotenuse</th></tr>
+        <tr><td>tan θ = t</td><td>1</td><td>t</td><td>√(t² + 1)</td></tr>
+        <tr><td>sin θ = t</td><td>√(1 − t²)</td><td>t</td><td>1</td></tr>
+        <tr><td>cos θ = 1/t</td><td>1</td><td>√(t² − 1)</td><td>t</td></tr></table>
+      <p><b>√(1 − t²) or √(t² − 1)?</b> Pythagoras decides: the HYPOTENUSE squared is the one that gets the plus, so the missing leg is (hypotenuse)² − (other leg)². If the 1 is the hypotenuse you get √(1 − t²); if the letter is the hypotenuse you get √(t² − 1).</p>
+      <p>If the question asks about a different angle, <b>reduce it to the acute one first</b>, then read it off.</p>
+      <div class="eg">cos 20° = t. Then sin 20° = √(1 − t²), tan 20° = √(1 − t²)/t, and cos 160° = −cos 20° = −t.</div>`,
+  },
+  gtrigSixTypes: {
+    title: "General solution: the six types",
+    body: `
+      <p>Before you solve anything, name the type. There are six, and they are always in this order:</p>
+      <ul>
+        <li><b>① function alone</b> — one ratio, one number. Isolate it, then ref ∠ and quadrants. <span class="muted">(don't type − into the calculator)</span></li>
+        <li><b>② same angles</b> — sin and cos with the SAME angle. Divide every term by cos and it becomes one tan. <span class="muted">also: divide by cos (tan θ)</span></li>
+        <li><b>③ common factor</b> — take the factor out, then each bracket separately = 0. <span class="muted">take 0 as +</span></li>
+        <li><b>④ grouping</b> — four terms. Group them in pairs; the brackets left over must come out the same.</li>
+        <li><b>⑤ trinomial</b> — three terms, one function squared and one not. K-method; if the middle term is a different function, a masked identity first. <span class="muted">also: trinomial with a masked identity</span></li>
+        <li><b>⑥ co-functions</b> — sin and cos with DIFFERENT angles. Make both sides the same function, then match the brackets. <span class="muted">no ref. ∠ · also: make both cos</span></li>
+      </ul>
+      <p>If a factor asks a sine or cosine for something outside [−1 ; 1], write <b>∴ no solution</b> — not "undefined", not "no real solution".</p>
+      <div class="eg">2 sin²x + 5 sin x − 3 = 0 is ⑤. Let K = sin x → 2K² + 5K − 3 = 0 → (2K − 1)(K + 3) = 0 → sin x = 1/2, or sin x = −3 which has no solution.</div>`,
+  },
+  gtrigLastSteps: {
+    title: "General solution: the last two decisions",
+    body: `
+      <p>Once the ratio is on its own, everything comes down to two things: <b>which quadrants</b>, and <b>what the reference angle is</b>.</p>
+      <p><b>The cross.</b> A vertical line and a horizontal line, with a ✓ in each quadrant you are using — top-right is I, top-left is II, bottom-left is III, bottom-right is IV. The sign of the value picks the pair (All Strippers Take Cash).</p>
+      <p><b>The reference angle comes from the POSITIVE value.</b> Don't type − into the calculator. The minus already did its job when it chose the quadrants; only the size of the number is left.</p>
+      <div class="formula">cos θ = −2/5 &nbsp;→&nbsp; ✓ in II and III &nbsp;·&nbsp; ref. ∠ = 66,42°</div>
+      <p><b>tan gets ONE line.</b> tan repeats every 180°, so the second quadrant line adds nothing — a waste of time.</p>
+      <p><b>Boundary values run the same machine</b> rather than being read off a graph: sin θ = 0 → ref ∠ = 0 in I and II · cos θ = 0 → ref ∠ = 90° in I · sin θ = −1 → ref ∠ = 90° in III · cos θ = −1 → ref ∠ = 0 in II.</p>
+      <p><b>Co-functions have NO reference angle at all.</b> Two different angles means there is nothing to take an inverse of — you make both sides the same function and match the brackets instead.</p>
+      <div class="eg">sin x = 1/2 → ✓ in I and II, ref ∠ = 30°. But sin(x + 80°) = sin 2x → no reference angle.</div>`,
+  },
+  gtrigUndefined: {
+    title: "Undefined values",
+    body: `
+      <p><b>Undefined ↳ denominator = 0.</b> A fraction breaks when its bottom is nothing at all, so the question is only ever "what is on the bottom?"</p>
+      <p>The routine:</p>
+      <ol>
+        <li>list <b>every</b> denominator — on both sides of the equation</li>
+        <li>set each one <b>= 0</b></li>
+        <li>solve each one as an ordinary <b>general solution</b></li>
+        <li>read the interval off the list</li>
+      </ol>
+      <p>Two things people get wrong. <b>Numerators do not count</b> — a top of zero is a perfectly ordinary answer. And <b>tan does not get its own line</b>: tan x is sin x over cos x, so its cos x is already on your list.</p>
+      <div class="eg">tan x + cos x/(1 + sin x) = 1/cos x → the denominators are 1 + sin x and cos x. So 1 + sin x = 0 (sin x = −1, ref ∠ = 90°, III) or cos x = 0 (ref ∠ = 90°, I). On (−180°; 180°) that gives x ∈ {−90°; 90°}.</div>`,
+  },
 };
 
 export function getConcept(id) { return CONCEPTS[id] || null; }

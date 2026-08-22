@@ -11,6 +11,9 @@
 
    `given` per kind:
      mc        → the index of the option the learner tapped
+     mcmulti   → a SORTED array of the option indices toggled on
+                 (gt13: "pick every denominator" — one answer made of
+                 several picks, so it is marked once, on Submit)
      tapcross  → a SORTED array of quadrant numbers, or the string
                  "noref" (her "no reference angle" button)
      calc      → a number off the number pad
@@ -35,6 +38,15 @@ export function normalizeTokens(str) {
     .replace(/[xX]/g, "θ");
 }
 
+/* two index LISTS equal, order-blind? (mcmulti) — an empty pick is
+   never right: it is an unfinished answer, not a wrong one, and the
+   widget's Submit button stays disabled until something is chosen. */
+function sameSet(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b) || !a.length) return false;
+  const key = xs => xs.slice().sort((p, q) => p - q).join(",");
+  return key(a) === key(b);
+}
+
 /* two quadrant-tick answers equal? (both sorted arrays, or "noref") */
 function sameTicks(a, b) {
   if (a === "noref" || b === "noref") return a === "noref" && b === "noref";
@@ -56,6 +68,11 @@ export function checkStep(step, given) {
   if (kind === "mc") {
     const opt = (step.options || [])[given];
     return !!(opt && opt.correct);
+  }
+
+  if (kind === "mcmulti") {
+    if (sameSet(given, step.correct)) return true;
+    return (step.alsoAccept || []).some(alt => sameSet(given, alt));
   }
 
   if (kind === "tapcross") {
