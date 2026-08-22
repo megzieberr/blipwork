@@ -11,3 +11,6 @@ supabase/seed-private-real.sql
 
 # authoring/source material — keep out of the public repo
 theory references/
+
+# Her handwritten notes scans live here for digest sessions - NEVER commit (public repo)
+*.pdf

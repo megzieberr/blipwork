@@ -91,7 +91,7 @@ const t2q1 = {
         en: "<em>Answer this ENTIRE question WITHOUT using a calculator. Show all your working.</em><br>If sin 34° = t, write cos 56° in terms of t.",
       },
       hint: {
-        en: "Add the two angles together. If they come to 90°, the question is handing you a co-function and nothing else is needed.",
+        en: "Add the two angles first. If they make 90°, the question is handing you a co-function — and a co-function does one job only: it converts between sin and cos. 90° − θ lives in A on the wheel, where everything is positive, so nothing here is going to need a minus.",
       },
       memo: [
         { type: "step", text: { en: "34° and 56° add up to 90°, so this is a co-function:" } },
@@ -101,7 +101,7 @@ const t2q1 = {
         } },
       ],
       esplain: {
-        en: "Sine and cosine are the same measurement taken from opposite ends of a right-angled triangle — what is “opposite” for one acute angle is “adjacent” for the other. Because those two acute angles always add to 90°, the sine of one is always the cosine of the other. So cos 56° and sin 34° are not merely close in value: they are the same number, written two ways. One mark, no calculation — but only if you spot the 90° first, which is why adding the two angles is always your opening move on a question shaped like this.",
+        en: "Draw one right-angled triangle and label it twice — once from the angle at the bottom, once from the angle at the top. The side that is <i>across from</i> the bottom angle is the side <i>next to</i> the top one, and the hypotenuse never moves. Because those two acute angles always add to 90°, the sine of one is the cosine of the other, every time. That is all a co-function is: it converts between sin and cos. And it is not a separate rule sitting off to one side — co-functions live inside the All Strippers Take Cash wheel. 90° − θ is an A angle, everything positive, so no minus comes along for the ride and cos 56° is simply sin 34°, which is t. The one to watch is its neighbour: 90° + θ has crossed over into S, where only sine survives. Cosine is not sine, so it picks up the minus, and cos(90° + θ) = −sin θ. One plus sign is the whole difference between them — which is why your opening move on a question shaped like this is always the same: add the two angles and see what they make.",
       },
     },
     {
@@ -112,7 +112,7 @@ const t2q1 = {
         en: "<em>No calculator.</em><br>It is given that 5 sin β + 3 = 0 &nbsp;and&nbsp; tan β &gt; 0.<br>With the aid of a sketch, determine the value of 5 cos β + tan β.",
       },
       hint: {
-        en: "Get sin β on its own first, then read the two clues together: which single quadrant has sin negative AND tan positive? Draw your triangle in that quadrant and let Pythagoras find the missing side — signs and all.",
+        en: "Step ① never changes: get the function on its own. Then draw your cross and tick it twice — once for the quadrants where sin is negative, once for the quadrants where tan is positive. The quadrant that collects two ticks is the one you sketch in, and (pyth) finds the side that is missing. Let the quadrant hand you the signs.",
       },
       memo: [
         { type: "step", text: { en: "First get the ratio on its own: &nbsp;5 sin β = −3 &nbsp;⟹&nbsp; sin β = −3/5" } },
@@ -125,7 +125,7 @@ const t2q1 = {
         } },
       ],
       esplain: {
-        en: "Two clues, one quadrant. Run the quadrants in your head — Q1 everything positive, Q2 only sin, Q3 only tan, Q4 only cos — and “sin negative and tan positive” lands on Q3 and nowhere else. That matters because sin β = −3/5 on its own would fit two quadrants, and the two would give opposite answers. Once the quadrant is fixed, the sketch does the rest: y = −3 and r = 5 are handed to you, Pythagoras finds the third side as 4, and the quadrant tells you it must be −4. Note that r is a length, so r is never negative — only x and y carry signs. From there every ratio is just two of those three numbers divided, and no calculator is needed anywhere.",
+        en: "This is a special sum, and it runs on the five steps: isolate the function, determine the quadrant, sketch the diagram, calculate the unknown side, substitute. Step ① is quick — 5 sin β = −3, so sin β = −3/5. Step ② is where the whole teaching sits. Draw the little cross and tick it twice, in two colours if that helps you see it: sin is negative in III and IV, tan is positive in I and III. The quadrant that got two ticks wins, and that is III. All Strippers Take Cash says the same thing round the bow tie — A is everything, S is sine only, T is tan only, C is cos only — so “sin negative and tan positive” can land on T and nowhere else. That double tick is the reason the step exists: sin β = −3/5 on its own fits two quadrants, and the two would hand you opposite answers. After that the sketch does the work. You are given y = −3 and r = 5, (pyth) gives you 4 for the side that is left, and the quadrant tells you to write it as −4, because in the third quadrant both x and y are negative. r never takes a minus — it is the radius, and a radius is a length. From there every ratio is two of those three numbers divided, and the calculator stays in your bag.",
       },
     },
     {
@@ -136,7 +136,7 @@ const t2q1 = {
         en: "<em>No calculator.</em><br>Simplify: &nbsp;[ cos(180° − x) · sin(90° + x) ] / cos²(90° + x)",
       },
       hint: {
-        en: "Take the three reductions one at a time, on their own line each, before you try to put anything together. For each one ask two questions in this order: does the ratio change, and what sign does it get?",
+        en: "Three reductions, three separate lines — and write the split above each angle before you write anything else. For each one, the three steps in order: which quadrant, which reduction formula, then + or −. And anything you are about to square goes into block brackets first.",
       },
       memo: [
         { type: "step", text: { en: "Take the three reductions one at a time." } },
@@ -150,7 +150,7 @@ const t2q1 = {
         } },
       ],
       esplain: {
-        en: "Reduction formulae feel like a wall of rules, but there are really only two questions and they always come in the same order. First: does the ratio change? Only 90° ± x flips sin into cos (and cos into sin) — 180° ± x and 360° ± x leave the ratio exactly as it was and do nothing but decide a sign. Second: what sign? Put the angle in its quadrant and ask whether the original ratio is positive or negative there. Do those two in order, one reduction per line, and the wall becomes three small decisions. The last piece of this question is not trig at all — it is the squaring. The reduction gives −sin x, but the question squares it, and squaring any negative makes it positive, so the denominator comes out clean. Miss that and your whole answer is the right size with the wrong sign.",
+        en: "A reduction is nothing more sinister than rewriting an angle as an acute angle, and the three steps handle every single one: quadrant, reduction formula, sign. Only 90° ± x converts between sin and cos — that is exactly what makes it a co-function. 180° ± x and 360° ± x leave the ratio alone and do nothing but decide a sign, which is why cos(180° − x) is still a cosine and has only turned negative. The middle one, sin(90° + x), converts to cos, and 90° + x sits in S where sine is positive, so it comes out clean as cos x. The third one is the trap: cos(90° + x) is in S as well, but cosine is not sine, so it picks up the minus — cos(90° + x) = −sin x. Then comes the piece that quietly saves the mark. The question squares that one, so put it in block brackets first, [−sin x]², and reduce inside the brackets before you square. The minus dies in there and sin²x comes out positive. Skip the brackets and your answer is exactly the right size with the wrong sign.",
       },
     },
   ],

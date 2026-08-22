@@ -63,7 +63,7 @@ const t2q2 = {
         en: "Determine the general solution of &nbsp;2 cos²θ + 5 cos θ − 3 = 0.",
       },
       hint: {
-        en: "Cover up the “cos” for a moment and look at the shape — it is an ordinary quadratic, so factorise it that way. Then check both branches carefully before you go anywhere near your calculator.",
+        en: "Three terms, one function squared and the other one not — that is a type ⑤: trinomial, K-method. Let K = cos θ and what is left is an ordinary trinomial to factorise. Then read both branches properly before the calculator comes out; one of them may be asking cos for something cos simply does not have.",
       },
       memo: [
         { type: "step", text: { en: "It is an ordinary quadratic — the letter just happens to be cos θ:" } },
@@ -82,7 +82,7 @@ const t2q2 = {
         } },
       ],
       esplain: {
-        en: "Two separate skills are stacked here, and it helps to name them. The first is pure algebra: 2 cos²θ + 5 cos θ − 3 is the same animal as 2y² + 5y − 3, so factorise it exactly as you would any trinomial and only afterwards remember that y stands for cos θ. The second is knowing the range of cosine. Cosine is a ratio of a side to the hypotenuse, and the hypotenuse is always the longest side, so cos θ can only ever live between −1 and 1. That kills the second branch outright — and saying so is a mark, because the examiner is checking that you rejected it on purpose rather than never noticed it. What is left is cos θ = 1/2. The reference angle 60° comes from the calculator, but the calculator only ever gives you one of the answers; cosine is positive in the first and fourth quadrants, so the fourth-quadrant partner 360° − 60° = 300° has to be written down too. The + k · 360° on the end is what turns two angles into every angle: cosine repeats itself every full turn, forever, in both directions.",
+        en: "Name the type first and the question stops feeling new. Three terms, one function squared and the other one not — that is a type ⑤, trinomial, and the K-method is the way through it. Let K = cos θ, and 2 cos²θ + 5 cos θ − 3 turns into 2K² + 5K − 3, an ordinary trinomial you have factorised a hundred times. None of it is trig until you put cos θ back at the end — and putting it back is not optional, because an answer left sitting on K answers a question nobody asked. That gives you two branches, side by side with an <b>or</b> between them, and each one gets its own treatment. cos θ = −3 is asking cosine for a value it does not own: cos is a side over the hypotenuse, the hypotenuse is the longest side, so cos θ lives between −1 and 1 and nowhere else. Write <b>no solution</b> — those two words, not “undefined” and not “no real solution” — because that line is a mark, and the marker wants to see you turned the branch down on purpose rather than quietly losing it. That leaves cos θ = 1/2. Take the reference angle from the size of the number, never from a minus (don't type − into your calculator), so ref. ∠ = 60°. Then the cross: cos is positive down the right-hand side of the bow tie, so tick I and IV, and write one line for each ticked quadrant. The k · 360° on the end is what turns two angles into every angle — cosine repeats itself every full turn, forever, in both directions — and one k ∈ ℤ at the bottom of the last line closes the whole thing off.",
       },
     },
     {
@@ -93,7 +93,7 @@ const t2q2 = {
         en: "Hence write down the values of θ ∈ [−360° ; 0°] that satisfy the equation in (a).",
       },
       hint: {
-        en: "You are not solving anything again — you are feeding whole numbers into k. The interval is entirely negative, so k = 0 is unlikely to help you; try walking k downwards in each branch.",
+        en: "Nothing new gets solved here. The general solution you already wrote is the machine and k is the handle — take one branch at a time and feed it whole numbers. The interval sits entirely below zero, so k = 0 is not going to land; walk k downwards until you overshoot.",
       },
       memo: [
         { type: "step", text: { en: "Walk k down from 0 in each branch and keep whatever lands inside the interval:" } },
@@ -106,7 +106,7 @@ const t2q2 = {
         } },
       ],
       esplain: {
-        en: "This is what the general solution is FOR. Instead of hunting for angles in a given range from scratch, you already own a formula that generates every single one of them, so all that is left is choosing which whole numbers to feed it. Take one branch at a time, start at k = 0, and step in the direction the interval sits — here the interval is entirely negative, so step downwards. Each substitution either lands inside the interval, in which case you keep it, or it does not, in which case you move on. Two branches, one hit each, and the moment a substitution overshoots the far end of the interval you know you are finished with that branch. Notice that −300° and −60° are just 60° and 300° measured the other way round the circle — the same two positions, described by walking clockwise instead of anticlockwise.",
+        en: "This is what the general solution is FOR, and it is why the general solution always comes first and the interval is read off it afterwards, never the other way round. You are not hunting for angles any more — you already own a formula that generates every single one of them, so the only thing left to decide is which whole numbers to feed it. One branch at a time. Start at k = 0 and step in the direction the interval lies; here everything is negative, so step downwards. Each substitution either lands inside [−360° ; 0°], in which case you write it down, or it does not and you move on — and the moment you overshoot the far end you are finished with that branch. Two branches, one hit each. Then look at what came out: −300° and −60° are 60° and 300° reached by turning the other way. Same two arms of the bow tie, same two positions on the circle; you simply walked clockwise to get there instead of anticlockwise. That is also why k ∈ ℤ has to be on the end of the general solution in the first place — without it you had two angles, not every angle, and there would have been nothing here to feed.",
       },
     },
   ],

@@ -218,3 +218,21 @@ One module per question in `js/exam/`, following `_schema.js` and
   (print papers too). · Euclidean → IN exam focus (see Corrections). · Per-question
   vetting → removed (see Corrections). · Digest-first → never existed (see
   Corrections).
+
+## Her rulings, morning of 2026-08-22 (after overnight run #1)
+
+- **Euclidean gets ITS OWN CHAPTER inside Blipwork — an EXAM-FOCUS-ONLY chapter.**
+  No drill quests (CQ still owns those), so it appears in the Exam Focus tab only,
+  never as a hub quest chapter. Design default (foreman, flag if she disagrees): an
+  exam-only chapter is eligible on its build flag alone — `examChapterEligible()`
+  gets a documented exception for chapters that own no quests.
+- **Trig drill rounds (reductions, general solutions) wait for a FULL DIGEST of her
+  trig notes first** — her call. Until then the two T2 trig modules ship with NO
+  "I'm lost" link (safe placeholder, verified). Open question put to her: whether
+  trig joins algebra/finance/functions as a "her methods" chapter for MEMOS too.
+- (later that morning) **Euclidean exam chapter has NO "I'm lost" button** — her call,
+  "they don't need it anyway". lostQuest stays a documented placeholder for euclid.
+- **Trig: her method IS the textbook method** — only the explanation/story differs.
+  So trig memos stay as built; once a trig-notes digest exists, only the `esplain`
+  (and hint) blocks get her story voice. The digest is still the prerequisite for
+  trig DRILL rounds (reductions, general solutions).
