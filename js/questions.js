@@ -13,6 +13,14 @@
    handlers = { onResult(isCorrect, chosen), onContinue(), onSibling(), onLost() }
 
    q.type: "mc" | "reason" | "yesno" | "calc" | "tap" | "calcdo"
+         | "steps" | "tapcross"                (General Trig, 2026-08-22)
+
+   Two additions that any type can use (General Trig, 2026-08-22):
+     q.reveal      — [html, html, …] teaching frames shown between the
+                     prompt and the input; the input stays HIDDEN until
+                     the last frame is up (q.revealMode "stack"|"replace")
+     q.type "steps"— one question made of ordered sub-steps, each of
+                     which is one existing input. See mountSteps() below.
    ============================================================ */
 import { el, clear, xbarHtml } from "./ui.js";
 import { renderGraph, computeBox } from "./engine/stats-graph.js";
@@ -25,7 +33,11 @@ import { renderFunction } from "./engine/function-graph.js";
 import { renderTrig, computeTrig } from "./engine/trig-graph.js";
 import { renderAnalytic, computeAnalytic } from "./engine/analytical-graph.js";
 import { renderPattern, computePattern } from "./engine/pattern-graph.js";
+import { renderQuadTri, computeQuadTri } from "./engine/quadrant-triangle.js";
 import { mountKeypad } from "./keypad.js";
+import { mountTapcross } from "./tapcross.js";
+import { mountTokenpad } from "./tokenpad.js";
+import { checkStep } from "./steps-check.js";
 import { mountCalculator } from "./calculator.js";
 import { answerCorrect, fmtComma } from "./check.js";
 
@@ -51,6 +63,7 @@ export function mountQuestion(host, q, handlers = {}) {
       q.graph.type === "trigg"    ? renderTrig(q.graph) :
       q.graph.type === "analytic" ? renderAnalytic(q.graph) :
       q.graph.type === "pattern"  ? renderPattern(q.graph) :
+      q.graph.type === "quadtri"  ? renderQuadTri(q.graph) :
       renderGraph(q.graph);
     gw.innerHTML = svg + (q.graphCap ? `<div class="cap">${xbarHtml(q.graphCap)}</div>` : "");
     svgNode = gw.querySelector("svg");
@@ -68,6 +81,9 @@ export function mountQuestion(host, q, handlers = {}) {
   }
 
   const inputHost = el("div", "q-input");
+  // teaching frames (q.reveal) sit between the prompt/diagram and the
+  // input, and keep the input hidden until the last one is showing
+  mountReveal(root, q, inputHost);
   root.appendChild(inputHost);
 
   // hint + I'm lost
@@ -215,6 +231,34 @@ export function mountQuestion(host, q, handlers = {}) {
     });
   }
 
+  // ---- General Trig: a question made of ordered sub-steps ----
+  else if (q.type === "steps") {
+    mountSteps(inputHost, root, q, commit, svgNode);
+  }
+
+  // ---- General Trig: her quadrant cross, on its own ----
+  else if (q.type === "tapcross") {
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    const tc = mountTapcross(inputHost, {
+      single: !!q.single, noRef: !!q.noRef, labels: !!q.labels,
+      onSubmit(val) {
+        if (answered) return;
+        const ok = checkStep({ kind: "tapcross", correct: q.correct, alsoAccept: q.alsoAccept }, val);
+        tc.disable();
+        tc.reveal(Array.isArray(q.correct) ? q.correct : []);
+        commit(ok, Array.isArray(val) ? val.join(",") : String(val));
+      },
+    });
+  }
+
+  else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "quadtri") {
+    if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
+    addQuadTriHits(svgNode, computeQuadTri(q.graph), q.tap, (id) => {
+      if (answered) return;
+      commit(id === q.tap.correctId, id);
+    });
+  }
+
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "timeline") {
     if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", xbarHtml(q.tapHint)));
     addTimelineHits(svgNode, computeTimeline(q.graph), q.tap, (id) => {
@@ -283,6 +327,251 @@ export function mountQuestion(host, q, handlers = {}) {
   root.appendChild(helpRow);
   root.appendChild(feedback);
   host.appendChild(root);
+}
+
+
+/* ------------------------------------------------------------
+   REVEAL FRAMES  (q.reveal)
+   ------------------------------------------------------------
+   Her discovery rounds build an idea one beat at a time — the point
+   rotating round the circle (round 1), the O-A-H table written in HER
+   order (round 3). Each beat is a plain HTML frame (so a frame can
+   hold an inline SVG); a "Next ▸" button walks them.
+
+   The input is HIDDEN until the last frame is showing, which is the
+   whole reason this lives here and not in a quest file: a learner
+   can't answer a discovery question before the discovery has
+   happened. "stack" (default) leaves the earlier frames on screen;
+   "replace" swaps them.
+   ------------------------------------------------------------ */
+function mountReveal(root, q, inputHost) {
+  const frames = Array.isArray(q.reveal) ? q.reveal.filter(f => f != null) : null;
+  if (!frames || !frames.length) return null;
+  const mode = q.revealMode === "replace" ? "replace" : "stack";
+
+  const box = el("div", "q-reveal");
+  box.dataset.mode = mode;
+  root.appendChild(box);
+
+  const nextBtn = el("button", "btn ghost small reveal-next", "Next \u25b8");
+  nextBtn.type = "button";
+  let shown = -1;
+
+  function show(i) {
+    if (mode === "replace") clear(box);
+    const f = el("div", "reveal-frame", xbarHtml(frames[i]));
+    f.dataset.frame = String(i);
+    box.appendChild(f);
+    shown = i;
+    box.dataset.frame = String(i);
+    if (i >= frames.length - 1) { nextBtn.remove(); inputHost.hidden = false; }
+  }
+  nextBtn.addEventListener("click", () => { if (shown < frames.length - 1) show(shown + 1); });
+
+  inputHost.hidden = frames.length > 1;
+  show(0);
+  if (frames.length > 1) root.appendChild(nextBtn);
+  return box;
+}
+
+/* ------------------------------------------------------------
+   STEPS  (q.type === "steps")
+   ------------------------------------------------------------
+   One question, several ordered sub-steps, each of which is one
+   input the app already has (mc / tapcross / calc / tokenpad /
+   tapside). This is her round-4/5/7/8/12/13 shape: pick the sign →
+   pick the ratio → type the value.
+
+   The rule that matters — FIRST ANSWER COUNTS. A step's first
+   answer decides that step: right locks it and opens the next one;
+   wrong shows THAT step's hint, flips the question to "not clean",
+   and lets the learner retry the same step as often as they like.
+   Retries are practice — they never change the verdict, and they
+   never call onResult. Only the last step's success commits, with
+   `clean` deciding ✓ Correct or ✗ Not quite (which is what shows
+   her full solution + "Try a similar one").
+
+   The harness reads the state off the DOM:
+     .q[data-step]         index of the step now being answered
+     .q[data-clean]        "1" while no step has been missed
+     .q-step[data-kind]    the input this step uses
+     .q-step[data-state]   "active" | "retry" | "done"
+   ------------------------------------------------------------ */
+function mountSteps(host, root, q, commit, svgNode) {
+  const list = Array.isArray(q.steps) ? q.steps : [];
+  const all = el("div", "q-steps");
+  host.appendChild(all);
+
+  let clean = true, idx = 0;
+  root.dataset.step = "0";
+  root.dataset.clean = "1";
+  if (!list.length) return;
+
+  function miss(w, hintBox) {
+    clean = false;
+    root.dataset.clean = "0";
+    w.dataset.state = "retry";
+    w.dataset.retried = "1";
+    hintBox.hidden = false;
+  }
+
+  function settle(i, w) {
+    w.dataset.state = "done";
+    const badge = el("span", "q-step-mark" + (w.dataset.retried === "1" ? " retried" : ""),
+      w.dataset.retried === "1" ? "\u2717 \u2713" : "\u2713");
+    (w.querySelector(".q-step-prompt") || w).appendChild(badge);
+    if (i >= list.length - 1) {
+      root.dataset.step = String(list.length);
+      commit(clean, "steps");
+    } else {
+      idx = i + 1;
+      root.dataset.step = String(idx);
+      renderStep(idx);
+    }
+  }
+
+  function renderStep(i) {
+    const step = list[i] || {};
+    const w = el("div", "q-step");
+    w.dataset.kind = step.kind || "";
+    w.dataset.state = "active";
+    w.dataset.index = String(i);
+    w.appendChild(el("p", "q-step-prompt", xbarHtml(step.prompt || "")));
+    const shost = el("div", "q-step-input");
+    w.appendChild(shost);
+    const hintBox = el("div", "hint-box step-hint");
+    hintBox.hidden = true;
+    hintBox.innerHTML = `<span class="tag">HINT</span>${xbarHtml(step.hint) || "Work this step the way she does."}`;
+    w.appendChild(hintBox);
+    all.appendChild(w);
+    mountStepInput(step, i, w, shost, hintBox);
+  }
+
+  function mountStepInput(step, i, w, shost, hintBox) {
+    const busy = () => w.dataset.state === "done";
+
+    if (step.kind === "mc") {
+      const opts = el("div", "q-options" + (step.layout === "grid2" ? " grid2" : ""));
+      (step.options || []).forEach((o, oi) => {
+        const b = el("button", "opt", xbarHtml(o.label));
+        b.addEventListener("click", () => {
+          if (busy() || b.disabled) return;
+          if (checkStep(step, oi)) {
+            [...opts.children].forEach((x, k) => {
+              x.disabled = true;
+              if ((step.options[k] || {}).correct) x.classList.add("is-correct");
+            });
+            settle(i, w);
+          } else {
+            // a wrong option greys out and STAYS out; the rest are still live
+            b.disabled = true;
+            b.classList.add("is-wrong");
+            miss(w, hintBox);
+          }
+        });
+        opts.appendChild(b);
+      });
+      shost.appendChild(opts);
+      return;
+    }
+
+    if (step.kind === "tapcross") {
+      const tc = mountTapcross(shost, {
+        single: !!step.single, noRef: !!step.noRef, labels: !!step.labels,
+        onSubmit(val) {
+          if (busy()) return;
+          if (checkStep(step, val)) {
+            tc.disable();
+            tc.reveal(Array.isArray(step.correct) ? step.correct : []);
+            settle(i, w);
+          } else {
+            miss(w, hintBox);
+            tc.reset();                       // the ticks clear, ready for another go
+          }
+        },
+      });
+      return;
+    }
+
+    if (step.kind === "calc") {
+      const kp = mountKeypad(shost, {
+        unit: step.unit || "", allowNeg: !!step.allowNeg,
+        onSubmit(v) {
+          if (busy()) return;
+          if (!Number.isFinite(v)) return;     // ignore an empty submit, same as a plain calc
+          if (checkStep(step, v)) { kp.disable(); settle(i, w); }
+          else { miss(w, hintBox); kp.clear(); }
+        },
+      });
+      return;
+    }
+
+    if (step.kind === "tokenpad") {
+      const tp = mountTokenpad(shost, {
+        sym: step.sym || "\u03b8",
+        onSubmit(raw) {
+          if (busy()) return;
+          if (!raw) return;                    // ignore an empty submit
+          if (checkStep(step, raw)) { tp.disable(); settle(i, w); }
+          else { miss(w, hintBox); tp.clear(); }
+        },
+      });
+      return;
+    }
+
+    if (step.kind === "tapside") {
+      if (!svgNode || !q.graph || q.graph.type !== "quadtri") return;
+      shost.appendChild(el("p", "q-tap-hint", xbarHtml(step.tapHint || "Tap that side on the sketch.")));
+      let lastWrong = null;
+      addQuadTriHits(svgNode, computeQuadTri(q.graph), { targets: step.targets }, (id, node) => {
+        if (busy()) return;
+        if (lastWrong) { lastWrong.classList.remove("show-wrong"); lastWrong = null; }
+        if (checkStep(step, id)) {
+          svgNode.querySelectorAll(".hit").forEach(h => {
+            h.classList.add("locked");
+            if (h.dataset.id === String(step.correct)) h.classList.add("show-correct");
+          });
+          settle(i, w);
+        } else {
+          node.classList.add("show-wrong");
+          lastWrong = node;
+          miss(w, hintBox);
+        }
+      }, { lock: false });
+    }
+  }
+
+  renderStep(0);
+}
+
+/* ------------------------------------------------------------
+   Tappable sides of a quadrant triangle. Hot-spots at the three
+   side midpoints, ids "adj" (the x-leg), "opp" (the y-leg) and
+   "hyp" — the a / o / h she labels on p28. Positions come straight
+   from the engine, so a target is always ON the side it names.
+   opts.lock === false leaves the hits live after a tap (the steps
+   type marks per step and wants a retry to be possible).
+   ------------------------------------------------------------ */
+function addQuadTriHits(svg, geo, tap, onPick, opts = {}) {
+  const lock = opts.lock !== false;
+  const targets = (tap && tap.targets) || ["opp", "adj", "hyp"];
+  targets.forEach(id => {
+    const sp = geo.sideMids[id];
+    if (!sp) return;
+    const node = svgEl("circle", { cx: sp.x, cy: sp.y, r: 18, class: "hit", "data-id": id });
+    node.addEventListener("click", () => {
+      if (node.classList.contains("locked")) return;
+      if (lock) {
+        svg.querySelectorAll(".hit").forEach(h => {
+          h.classList.add("locked");
+          if (h.dataset.id === tap.correctId) h.classList.add("show-correct");
+        });
+        if (id !== tap.correctId) node.classList.add("show-wrong");
+      }
+      onPick(id, node);
+    });
+    svg.appendChild(node);
+  });
 }
 
 /* ------------------------------------------------------------

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Trig · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  .stage{border:1px solid var(--brd);border-radius:14px;padding:12px;margin-top:10px;max-width:420px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">General Trig · verification</h1>
+<div id="banner">running…</div>
+
+<h2>1 · triglib — her pages, function by function</h2>
+<pre id="lib">…</pre>
+
+<h2>2 · quadrant-triangle engine — every sketch re-derives its own scale &amp; quadrant</h2>
+<pre id="qt-sum">…</pre>
+<div class="grid" id="qt"></div>
+
+<h2>3 · trig-graph quadrant bands</h2>
+<pre id="bands">…</pre>
+<div id="bands-fig" style="max-width:420px"></div>
+
+<h2>4 · tapcross — her quadrant cross</h2>
+<pre id="tc">…</pre>
+<div style="display:flex;gap:18px;flex-wrap:wrap">
+  <div class="stage"><b style="font-size:12px">single</b><div id="tc-single"></div></div>
+  <div class="stage"><b style="font-size:12px">multi</b><div id="tc-multi"></div></div>
+  <div class="stage"><b style="font-size:12px">no reference angle</b><div id="tc-noref"></div></div>
+</div>
+
+<h2>5 · tokenpad</h2>
+<pre id="tp">…</pre>
+<div class="stage" id="tp-stage"></div>
+
+<h2>6 · steps question type</h2>
+<pre id="steps">…</pre>
+<div class="stage" id="steps-stage"></div>
+
+<h2>7 · reveal frames</h2>
+<pre id="reveal">…</pre>
+<div class="stage" id="reveal-stage"></div>
+
+<h2>8 · play.js — XP once</h2>
+<pre id="xp">…</pre>
+
+<h2>9 · Chapter</h2>
+<pre id="chapter">stage 2+ fills this</pre>
+
+<script type="module">
+import {
+  quadrantOf, astcSign, rotate, reduce, cofunction, specialExact,
+  refAngle, solutionQuadrants, boundaryCase, pythSide, fmtDeg,
+  sinD, cosD, tanD,
+} from "./js/triglib.js";
+import { renderQuadTri, computeQuadTri, verifyQuadTri } from "./js/engine/quadrant-triangle.js";
+import { renderTrig, computeTrig } from "./js/engine/trig-graph.js";
+import { mountTapcross } from "./js/tapcross.js";
+import { mountTokenpad } from "./js/tokenpad.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
+import { mountQuestion } from "./js/questions.js";
+import { xpToSubmit } from "./js/play.js";
+
+/* count anything that goes wrong in the console — "0 console errors" is
+   part of the pass condition, so it has to be measured, not assumed */
+let consoleErrors = 0;
+const realError = console.error.bind(console);
+console.error = (...a) => { consoleErrors++; realError(...a); };
+window.addEventListener("error", () => { consoleErrors++; });
+window.addEventListener("unhandledrejection", () => { consoleErrors++; });
+
+const ACC = "#eab308";                       // the free hue the chapter takes (gold)
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return !!cond; };
+const near = (a, b, e = 1e-9) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= e;
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const click = n => n && n.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+const section = (id, headline, before) => {
+  const after = total - before.total, ok = (passed - before.passed) === after;
+  document.getElementById(id).textContent = `${ok ? "✓" : "✗"} ${headline}\n${passed - before.passed}/${after} checks passed`
+    + (ok ? "" : "\n\n" + fails.slice(before.fails).map(f => "  ✗ " + f).join("\n"));
+};
+const mark = () => ({ total, passed, fails: fails.length });
+
+/* ============================================================
+   1 · triglib
+   ============================================================ */
+const m1 = mark();
+
+/* --- quadrantOf (Part B / 0.3) --- */
+tick(quadrantOf(45) === 1, "quadrantOf(45) = ① (p05)");
+tick(quadrantOf(95) === 2, "quadrantOf(95) = ② (p05)");
+tick(quadrantOf(200) === 3, "quadrantOf(200) = ③ (p05)");
+tick(quadrantOf(310) === 4, "quadrantOf(310) = ④ (p08 eg.1)");
+tick(quadrantOf(-30) === 4, "quadrantOf(−30) = ④ — a C angle (p13 eg.1)");
+tick(quadrantOf(400) === 1, "quadrantOf(400) = ① (wraps)");
+tick(quadrantOf(90) === null, "quadrantOf(90) = null — quadrantal (p25)");
+tick(quadrantOf(180) === null, "quadrantOf(180) = null — quadrantal (p25)");
+
+/* --- astcSign: All Strippers Take Cash (p05) --- */
+[["sin", 1, 1], ["cos", 1, 1], ["tan", 1, 1],
+ ["sin", 2, 1], ["cos", 2, -1], ["tan", 2, -1],
+ ["sin", 3, -1], ["cos", 3, -1], ["tan", 3, 1],
+ ["sin", 4, -1], ["cos", 4, 1], ["tan", 4, -1]].forEach(([fn, q, s]) => {
+  tick(astcSign(fn, q) === s, `astcSign ${fn} in ${q} = ${s > 0 ? "+" : "−"} (p05 ASTC)`);
+});
+
+/* --- rotate: her thresholds (p09, flag F10) --- */
+tick(rotate(510).angle === 150 && rotate(510).turns.length === 1, "p09 eg.1 sin510 [−360] → 150°");
+tick(rotate(1080).angle === 0 && rotate(1080).turns.length === 3, "p09 eg.2 tan1080 [−360 −360 −360] → 0°");
+tick(rotate(-600).angle === 120 && rotate(-600).turns.length === 2, "p09 sin(−600) [+360 +360] → 120°");
+tick(rotate(-950).angle === 130 && rotate(-950).turns.length === 3, "p09 cos(−950) [+360 ×3] → 130°");
+tick(rotate(-30).angle === -30 && rotate(-30).turns.length === 0, "F10 sin(−30) stays −30° (no +360)");
+tick(rotate(-150).angle === 210 && rotate(-150).turns[0] === "+360", "p13 eg.3 tan(−150) [+360] → 210°");
+
+/* --- reduce: her worked wheel examples (p08, p13) --- */
+const R = (fn, a) => reduce(fn, a);
+tick(R("sin", 310).form === "360−" && R("sin", 310).ref === 50 && R("sin", 310).sign === -1,
+  "p08 eg.1 sin310 → 360−50, −sin50");
+tick(R("tan", 110).form === "180−" && R("tan", 110).ref === 70 && R("tan", 110).sign === -1,
+  "p08 eg.2 tan110 → 180−70, −tan70");
+tick(R("cos", 95).form === "180−" && R("cos", 95).ref === 85 && R("cos", 95).sign === -1,
+  "p08 eg.3 cos95 → 180−85, −cos85");
+tick(R("tan", 235).form === "180+" && R("tan", 235).ref === 55 && R("tan", 235).sign === 1,
+  "p08 eg.4 tan235 → 180+55, tan55");
+tick(R("sin", 250).form === "180+" && R("sin", 250).ref === 70 && R("sin", 250).sign === -1,
+  "p08 eg.5 sin250 → 180+70, −sin70");
+tick(R("sin", -30).form === "−θ" && R("sin", -30).ref === 30 && R("sin", -30).sign === -1,
+  "p13 eg.1 sin(−30) is a C angle → −sin30");
+tick(R("cos", -40).form === "−θ" && R("cos", -40).ref === 40 && R("cos", -40).sign === 1,
+  "p13 eg.2 cos(−40) is a C angle → cos40");
+tick(R("tan", -150).rotated === 210 && R("tan", -150).form === "180+" && R("tan", -150).ref === 30 && R("tan", -150).sign === 1,
+  "p13 eg.3 tan(−150) [+360] → tan210 [180+30] → tan30");
+tick(R("sin", 150).form === "180−" && near(R("sin", 150).value, 0.5, 1e-12),
+  "p07 sin150 = sin(180−30) = 1/2");
+tick(near(R("sin", 210).value, -0.5, 1e-12) && R("sin", 210).form === "180+",
+  "p07 sin210 = sin(180+30) = −1/2");
+tick(near(R("sin", 330).value, -0.5, 1e-12) && R("sin", 330).form === "360−",
+  "p07 sin330 = sin(360−30) = −1/2");
+tick(R("sin", 510).form === "180−" && R("sin", 510).ref === 30, "p09 eg.1 sin510 → sin150 → sin30");
+tick(R("cos", -950).form === "180−" && R("cos", -950).ref === 50 && R("cos", -950).sign === -1,
+  "p09 cos(−950) → cos130 [180−50] → −cos50");
+tick(R("sin", 90).quadrant === null && R("sin", 90).ref === 90, "quadrantal sin90 has no quadrant (p25)");
+tick(R("tan", 90).value === null, "tan90 is undefined, not a huge number (p25)");
+tick(R("sin", 310).fn2 === "sin", "a reduction never swaps the ratio (that's a co-function)");
+
+/* --- cofunction: the wheel and THE TRAP (p17, p24) --- */
+tick(same(cofunction("sin", "90−"), { sign: 1, fn2: "cos" }), "p17 sin(90−θ) = cosθ");
+tick(same(cofunction("cos", "90−"), { sign: 1, fn2: "sin" }), "p17 cos(90−θ) = sinθ");
+tick(same(cofunction("sin", "90+"), { sign: 1, fn2: "cos" }), "p17 sin(90+θ) = +cosθ (S: sine survives)");
+tick(same(cofunction("cos", "90+"), { sign: -1, fn2: "sin" }), "p17 ⚠️ THE TRAP cos(90+θ) = −sinθ");
+tick(same(cofunction("sin", "θ−90"), { sign: -1, fn2: "cos" }), "p24 ⑤ sin(θ−90) = −cosθ");
+tick(same(cofunction("cos", "θ−90"), { sign: 1, fn2: "sin" }), "p24 ⑤ cos(θ−90) = sinθ");
+
+/* --- specialExact: her O-A-H table, UNRATIONALISED (p06, p25, F12) --- */
+tick(specialExact("tan", 30).text === "1/√3", "p06 eg.1 tan30 = 1/√3 (unrationalised, F12)");
+tick(specialExact("sin", 45).text === "1/√2", "p06 eg.2 sin45 = 1/√2 (unrationalised, F12)");
+tick(specialExact("cos", 60).text === "1/2", "p06 eg.3 cos60 = 1/2");
+tick(specialExact("sin", 60).text === "√3/2", "p39 eg.1 sin60 = √3/2");
+tick(specialExact("tan", 45).text === "1", "p39 eg.2 tan45 = 1");
+tick(specialExact("cos", 90).text === "0", "p39 eg.3 cos90 = 0 (read off the graph)");
+tick(specialExact("sin", 270).text === "−1", "p39 eg.4 sin270 = −1 (real minus)");
+tick(specialExact("cos", 180).text === "−1", "p25 cos180 = −1");
+tick(specialExact("tan", 90).text === "undefined" && specialExact("tan", 90).value === null,
+  "p25 tan90 is undefined");
+tick(specialExact("tan", 270).value === null, "p25 tan270 is undefined");
+tick(near(specialExact("tan", 30).value, Math.tan(Math.PI / 6), 1e-12), "tan30's VALUE is computed, not typed");
+tick(near(specialExact("sin", 45).value, Math.SQRT1_2, 1e-12), "sin45's VALUE is computed, not typed");
+tick(specialExact("sin", 30).text.indexOf("-") === -1, "no ASCII hyphen anywhere in the table");
+
+/* --- refAngle: always from the POSITIVE value (p44 ①, 0.6) --- */
+tick(near(refAngle("sin", -0.5), 30, 1e-9), "p44 ① ref ∠ of sinθ = −0,5 is 30° (never negative)");
+tick(near(refAngle("cos", -0.4), 66.4218, 1e-3), "p46 cosθ = −2/5 → ref ∠ ≈ 66,42°");
+tick(near(refAngle("sin", -0.7), 44.427, 1e-3), "p49 sinθ = −0,7 → ref ∠ ≈ 44,43°");
+tick(near(refAngle("tan", 2), 63.4349, 1e-3), "p66 tanx = 2 → ref ∠ ≈ 63,43°");
+tick(refAngle("sin", 2) === null, "p54 sinθ = 2 → no reference angle (∴ no solution)");
+
+/* --- solutionQuadrants: the tick cross (L1) --- */
+tick(same(solutionQuadrants("sin", 1), [1, 2]), "p45 sinθ = 1/2 → top pair I, II");
+tick(same(solutionQuadrants("cos", -1), [2, 3]), "p46 cosθ = −2/5 → left pair II, III");
+tick(same(solutionQuadrants("sin", -1), [3, 4]), "p49 sinθ = −0,7 → bottom pair III, IV");
+tick(same(solutionQuadrants("tan", 1), [1, 3]), "p66 tanx = 2 → I and III (her one line is I)");
+tick(same(solutionQuadrants("tan", -1), [2, 4]), "p68 tan(…) = −0,4 → II and IV");
+tick(same(solutionQuadrants("cos", 1), [1, 4]), "p60 cos = cos → right pair I, IV");
+
+/* --- boundaryCase: HER pages, not the graph (digest D8) --- */
+tick(same(boundaryCase("sin", 0), { ref: 0, quadrants: [1, 2] }), "p53 sinθ = 0 → ref 0°, I and II");
+tick(same(boundaryCase("cos", 0), { ref: 90, quadrants: [1] }), "p62 cosx = 0 → ref 90°, I only");
+tick(same(boundaryCase("sin", -1), { ref: 90, quadrants: [3] }), "p59 sinθ = −1 → ref 90°, III");
+tick(same(boundaryCase("cos", -1), { ref: 0, quadrants: [2] }), "p54 cosθ = −1 → ref 0°, II");
+tick(same(boundaryCase("sin", 1), { ref: 90, quadrants: [1] }), "sinθ = 1 → ref 90°, I");
+tick(boundaryCase("tan", 0) === null && boundaryCase("sin", 0.5) === null,
+  "no boundary case for tan, or for an ordinary value");
+
+/* --- pythSide: p26, r always positive --- */
+tick(same(pythSide({ x: -3, y: -4 }), { r: 5 }), "p26 eg.1 r² = 4² + 3² → r = 5 (always positive)");
+tick(same(pythSide({ x: -12, r: 13, quadrant: 2 }), { y: 5 }), "p26 eg.2 y² = 13² − (−12)² → ∴ y = 5");
+tick(same(pythSide({ y: -3, r: 5, quadrant: 4 }), { x: 4 }), "p26 eg.3 x² = 5² − (−3)² → ∴ x = 4");
+tick(same(pythSide({ x: -3, r: 5, quadrant: 3 }), { y: -4 }), "p28 eg.1 III: horizontal −3, r 5 → y = −4");
+tick(pythSide({ x: 3 }) === null, "one leg alone is not enough");
+
+/* --- fmtDeg --- */
+tick(fmtDeg(-30) === "−30°", "fmtDeg(−30) uses the real minus U+2212");
+tick(fmtDeg(0) === "0°", "fmtDeg(0) = 0°");
+tick(fmtDeg(66.42) === "66,42°", "fmtDeg uses the decimal comma (p46)");
+
+/* --- the 2 000-angle sweep --- */
+let seed = 20260822;
+const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+let sweepBad = 0, sweepQBad = 0, sweepDone = 0;
+for (let i = 0; i < 2000; i++) {
+  const a = Math.round(-1080 + rnd() * 2160);
+  ["sin", "cos", "tan"].forEach(fn => {
+    const r = reduce(fn, a);
+    if (r.value == null) return;
+    const f = fn === "sin" ? sinD : fn === "cos" ? cosD : tanD;
+    const lhs = r.sign * f(r.ref);
+    sweepDone++;
+    if (Math.abs(lhs - r.value) > 1e-9 * Math.max(1, Math.abs(r.value))) sweepBad++;
+  });
+  // quadrantOf must agree with the sign pattern of sin & cos
+  const q = quadrantOf(a);
+  if (q !== null) {
+    const ss = Math.sign(sinD(a)), cs = Math.sign(cosD(a));
+    if (ss !== astcSign("sin", q) || cs !== astcSign("cos", q)) sweepQBad++;
+  }
+}
+tick(sweepBad === 0, `sweep: sign · fn(ref) = fn(angle) on all ${sweepDone} finite cases (${sweepBad} bad)`);
+tick(sweepQBad === 0, `sweep: quadrantOf agrees with the sin/cos sign pattern (${sweepQBad} bad)`);
+section("lib", `triglib — 2 000 random angles in [−1080°; 1080°] swept, ${sweepDone} finite reductions`, m1);
+
+/* ============================================================
+   2 · quadrant-triangle engine
+   ============================================================ */
+const m2 = mark();
+const QT = [
+  { title: "① (3;4) — all three given", spec: { type: "quadtri", x: 3, y: 4, labels: { x: "3", y: "4", r: "5" }, theta: true, accent: ACC } },
+  { title: "① (1;k) — letters only (round 10)", spec: { type: "quadtri", x: 1, y: 1.4, letters: { x: "1", y: "k", r: "r" }, theta: true, accent: ACC } },
+  { title: "② (−12;5) — p26 eg.2", spec: { type: "quadtri", x: -12, y: 5, labels: { x: "−12", r: "13" }, theta: true, accent: ACC } },
+  { title: "② (−3;4) — hypotenuse a letter", spec: { type: "quadtri", x: -3, y: 4, labels: { y: "4" }, theta: true, refAngle: true, refLabel: "ref", accent: ACC } },
+  { title: "③ (−3;−4) — p28 eg.1", spec: { type: "quadtri", x: -3, y: -4, labels: { x: "−3", y: "−4", r: "5" }, theta: true, accent: ACC } },
+  { title: "③ (−4;−3) — legs only", spec: { type: "quadtri", x: -4, y: -3, labels: { x: "−4", y: "−3" }, theta: true, refAngle: true, accent: ACC } },
+  { title: "④ (4;−3) — p26 eg.3", spec: { type: "quadtri", x: 4, y: -3, labels: { y: "−3", r: "5" }, theta: true, accent: ACC } },
+  { title: "④ (2;−1) — p31 eg.4 M(2;−1)", spec: { type: "quadtri", x: 2, y: -1, labels: { x: "2", y: "−1" }, letters: { r: "√5" }, theta: true, accent: ACC } },
+  { title: "④ (1;−1) — the 45° case", spec: { type: "quadtri", x: 1, y: -1, theta: true, refAngle: true, accent: ACC } },
+];
+const qtHost = document.getElementById("qt");
+QT.forEach((t, i) => {
+  const checks = verifyQuadTri(t.spec);
+  checks.forEach(c => tick(c.ok, `${t.title}: ${c.label}`));
+  const card = document.createElement("div");
+  card.className = "card";
+  card.id = "qt-" + (i + 1);
+  card.style.setProperty("--accent", ACC);
+  card.innerHTML = `<h3>${t.title}</h3><div>${renderQuadTri(t.spec)}</div>
+    <ul class="checks">${checks.map(c => `<li class="${c.ok ? "ok" : "bad"}">${c.ok ? "✓" : "✗"} ${c.label}</li>`).join("")}</ul>`;
+  qtHost.appendChild(card);
+});
+/* A "look at it" check, done with geometry because a label that is drawn ON
+   TOP of the side it labels passes every numeric test. Each leg label must sit
+   on the OUTSIDE of its leg: the x-leg label clear of the x-axis on the empty
+   side, the y-leg label clear of the vertical leg on the empty side. This is
+   the check that caught the y-leg text-anchor pointing back into the triangle. */
+QT.forEach((t, i) => {
+  const g = computeQuadTri(t.spec);
+  const svg = document.getElementById("qt-" + (i + 1)).querySelector("svg");
+  const slabs = [...svg.querySelectorAll("text.qt-slab")];
+  const bb = n => n.getBBox();
+  const xlab = slabs[0], ylab = slabs[1], rlab = slabs[2];
+  if (!xlab || !ylab || !rlab) { tick(false, `${t.title}: three side labels drawn`); return; }
+  const bx = bb(xlab), by = bb(ylab), br = bb(rlab);
+  // the triangle stands on the side of the x-axis the point is on, so the
+  // x-leg label belongs on the OTHER side of the axis
+  tick(t.spec.y > 0 ? bx.y >= g.oy - 0.5 : bx.y + bx.height <= g.oy + 0.5,
+    `${t.title}: the x-leg label sits clear of the triangle`);
+  tick(t.spec.x > 0 ? by.x >= g.F.x - 0.5 : by.x + by.width <= g.F.x + 0.5,
+    `${t.title}: the y-leg label sits clear of the vertical leg`);
+  const away = Math.hypot((br.x + br.width / 2) - g.F.x, (br.y + br.height / 2) - g.F.y);
+  const midAway = Math.hypot(g.sideMids.hyp.x - g.F.x, g.sideMids.hyp.y - g.F.y);
+  tick(away > midAway, `${t.title}: the hypotenuse label is pushed outward, off the shape`);
+  // no two labels may collide
+  const nodes = [...svg.querySelectorAll("text")];
+  let clash = 0;
+  for (let a1 = 0; a1 < nodes.length; a1++) for (let b1 = a1 + 1; b1 < nodes.length; b1++) {
+    const p = nodes[a1].getBoundingClientRect(), q = nodes[b1].getBoundingClientRect();
+    if (p.left < q.right - 1 && q.left < p.right - 1 && p.top < q.bottom - 1 && q.top < p.bottom - 1) clash++;
+  }
+  tick(clash === 0, `${t.title}: no two labels overlap (${clash})`);
+});
+
+// a dishonest label MUST be caught (the whole point of verify())
+const liar = { type: "quadtri", x: 3, y: 4, labels: { x: "3", y: "4", r: "6" }, theta: true };
+tick(verifyQuadTri(liar).some(c => !c.ok), "a wrong numeric label (r = 6 on a 5) is REJECTED");
+tick(QT.length >= 8 && [1, 2, 3, 4].every(q => QT.filter(t => computeQuadTri(t.spec).quadrant === q).length >= 2),
+  "at least 2 sketches per quadrant");
+section("qt-sum", `quadrant-triangle — ${QT.length} sketches rendered below, mixed numeric / letter labels`, m2);
+
+/* ============================================================
+   3 · trig-graph quadrant bands (her p05 colours)
+   ============================================================ */
+const m3 = mark();
+const BAND_COLOURS = ["#facc15", "#60a5fa", "#4ade80", "#f9a8d4"];   // ①yellow ②blue ③green ④pink
+const bandSpec = {
+  type: "trigg", accent: ACC, grid: true,
+  win: { xmin: 0, xmax: 360, ymin: -1.6, ymax: 1.6 },
+  curves: [{ fn: "sin", a: 1, b: 1, p: 0, q: 0 }],
+  bands: [0, 1, 2, 3].map(k => ({ x0: k * 90, x1: (k + 1) * 90, fill: BAND_COLOURS[k] })),
+};
+const bfig = document.getElementById("bands-fig");
+bfig.innerHTML = renderTrig(bandSpec);
+const bandRects = [...bfig.querySelectorAll("rect.tg-band")];
+tick(bandRects.length === 4, `four bands drawn (found ${bandRects.length})`);
+const gB = computeTrig(bandSpec);
+bandSpec.bands.forEach((b, i) => {
+  const r = bandRects[i];
+  if (!r) { tick(false, `band ${i} exists`); return; }
+  const x = Number(r.getAttribute("x")), w = Number(r.getAttribute("width"));
+  tick(Math.abs(x - gB.X(b.x0)) < 0.02 && Math.abs(x + w - gB.X(b.x1)) < 0.02,
+    `band ${b.x0}°–${b.x1}° sits at X(${b.x0})…X(${b.x1})`);
+  tick(r.getAttribute("style").indexOf(b.fill) >= 0, `band ${i + 1} keeps her colour ${b.fill}`);
+});
+// the bands must be UNDER everything: first children of the svg
+const svgB = bfig.querySelector("svg");
+tick(svgB && svgB.children[0].classList.contains("tg-band"), "bands are drawn first (under grid and curve)");
+// and a spec with no bands is byte-identical to before
+const noBands = { ...bandSpec }; delete noBands.bands;
+tick(renderTrig(noBands).indexOf("tg-band") === -1, "a spec without bands draws no band rects (additive only)");
+section("bands", "trig-graph bands — positioned by the same X() the curve uses", m3);
+
+/* ============================================================
+   4 · tapcross
+   ============================================================ */
+const m4 = mark();
+const tcLog = [];
+const tcS = mountTapcross(document.getElementById("tc-single"), { single: true, labels: true, onSubmit: v => tcLog.push(["single", v]) });
+const tcM = mountTapcross(document.getElementById("tc-multi"), { single: false, onSubmit: v => tcLog.push(["multi", v]) });
+const tcN = mountTapcross(document.getElementById("tc-noref"), { single: false, noRef: true, onSubmit: v => tcLog.push(["noref", v]) });
+
+function crossGeometry(api, name) {
+  const hits = [...api.svg.querySelectorAll("rect.hit")];
+  tick(hits.length === 4, `${name}: four hit regions`);
+  const mid = Number(api.svg.dataset.mid);
+  hits.forEach(h => {
+    const cx = Number(h.getAttribute("x")) + Number(h.getAttribute("width")) / 2;
+    const cy = Number(h.getAttribute("y")) + Number(h.getAttribute("height")) / 2;
+    const dx = cx - mid, dy = mid - cy;                       // maths-style: up is +
+    const q = dx > 0 ? (dy > 0 ? 1 : 4) : (dy > 0 ? 2 : 3);
+    tick(String(q) === h.dataset.id, `${name}: region data-id ${h.dataset.id} really sits in quadrant ${q}`);
+  });
+  return hits;
+}
+const hitsS = crossGeometry(tcS, "single");
+const hitsM = crossGeometry(tcM, "multi");
+crossGeometry(tcN, "noref");
+
+// single: one tap ticks AND submits
+click(hitsS.find(h => h.dataset.id === "3"));
+tick(same(tcS.value, [3]), "single: tapping ③ gives value [3]");
+tick(tcLog.length === 1 && same(tcLog[0][1], [3]), "single: the tap submits immediately (no button)");
+tick(tcS.svg.querySelector('[data-tick="3"]').style.display === "", "single: a ✓ is drawn in ③");
+
+// multi: taps toggle, the button submits, and the value comes back sorted
+click(hitsM.find(h => h.dataset.id === "4"));
+click(hitsM.find(h => h.dataset.id === "1"));
+tick(same(tcM.value, [1, 4]), "multi: two taps give the SORTED value [1,4]");
+click(hitsM.find(h => h.dataset.id === "4"));
+tick(same(tcM.value, [1]), "multi: tapping ④ again un-ticks it");
+tick(tcLog.filter(e => e[0] === "multi").length === 0, "multi: taps alone never submit");
+click(tcM.svg.parentNode.querySelector(".tc-submit"));
+tick(tcLog.filter(e => e[0] === "multi").length === 1 && same(tcLog.find(e => e[0] === "multi")[1], [1]),
+  "multi: Submit ✓ sends [1]");
+
+// noRef: her "no reference angle" button (L3)
+const noRefBtn = document.querySelector("#tc-noref .tc-noref");
+tick(!!noRefBtn && noRefBtn.textContent === "no reference angle", "noRef: the button is there, in her words");
+click([...tcN.svg.querySelectorAll("rect.hit")].find(h => h.dataset.id === "2"));
+click(noRefBtn);
+tick(tcN.value === "noref", 'noRef: the button clears the ticks and gives "noref"');
+tick(tcLog.some(e => e[0] === "noref" && e[1] === "noref"), 'noRef: it submits "noref" straight away');
+click([...tcN.svg.querySelectorAll("rect.hit")].find(h => h.dataset.id === "1"));
+tick(same(tcN.value, [1]) && !noRefBtn.classList.contains("is-on"),
+  "noRef: ticking a quadrant afterwards un-highlights the button");
+
+// marking (checkStep) — including her tan "waste of time!" ruling (K3)
+tick(checkStep({ kind: "tapcross", correct: [1, 2] }, [1, 2]) === true, "checkStep tapcross: [1,2] = [1,2]");
+tick(checkStep({ kind: "tapcross", correct: [1, 2] }, [2, 1]) === true, "checkStep tapcross: order doesn't matter");
+tick(checkStep({ kind: "tapcross", correct: [1, 2] }, [1]) === false, "checkStep tapcross: a missing tick is wrong");
+tick(checkStep({ kind: "tapcross", correct: [1, 3], alsoAccept: [[1]] }, [1]) === true,
+  'p66 tanx = 2: her ONE quadrant line [1] is accepted ("waste of time!")');
+tick(checkStep({ kind: "tapcross", correct: "noref" }, "noref") === true, "checkStep tapcross: noref = noref");
+tick(checkStep({ kind: "tapcross", correct: "noref" }, [1]) === false, "checkStep tapcross: ticks ≠ noref");
+section("tc", "tapcross — three widgets mounted below and driven by real clicks", m4);
+
+/* ============================================================
+   5 · tokenpad
+   ============================================================ */
+const m5 = mark();
+[["180−", "180−"], ["180°−", "180−"], ["180° −", "180−"], ["180 - ", "180−"],
+ ["180−θ", "180−θ"], ["180−x", "180−θ"], ["180°−X", "180−θ"], ["360°+θ", "360+θ"],
+ ["90°−θ", "90−θ"], ["  90 + x ", "90+θ"], ["", ""]].forEach(([raw, want]) => {
+  tick(normalizeTokens(raw) === want, `normalizeTokens("${raw}") → "${want}"`);
+});
+tick(normalizeTokens("180−") === normalizeTokens("180°−"), "the degree sign is decoration");
+tick(normalizeTokens("180−x") === normalizeTokens("180−θ"), "x and θ are the same unknown");
+tick(checkStep({ kind: "tokenpad", expected: "180−" }, "180°−") === true, "checkStep tokenpad: 180°− = 180−");
+tick(checkStep({ kind: "tokenpad", expected: "180−" }, "180+") === false, "checkStep tokenpad: 180+ ≠ 180−");
+tick(checkStep({ kind: "tokenpad", expected: "360−", alsoAccept: ["−θ"] }, "−θ") === true,
+  "checkStep tokenpad: alsoAccept honours the second wheel form (p13)");
+tick(checkStep({ kind: "tokenpad", expected: "180−" }, "") === false, "checkStep tokenpad: an empty answer is not right");
+
+const tpLog = [];
+const tp = mountTokenpad(document.getElementById("tp-stage"), { sym: "θ", onSubmit: (raw, toks) => tpLog.push([raw, toks]) });
+const tpKey = t => [...document.querySelectorAll("#tp-stage .key")].find(k => k.textContent === t);
+tick(!!tpKey("90°") && !!tpKey("180°") && !!tpKey("360°") && !!tpKey("−") && !!tpKey("+") && !!tpKey("θ"),
+  "tokenpad has her six chips: 90° 180° 360° − + θ");
+click(tpKey("180°")); click(tpKey("−")); click(tpKey("θ"));
+tick(tp.value === "180−θ", `tapping 180° − θ produces "${tp.value}"`);
+tick(document.querySelector("#tp-stage .kval").textContent.replace(/ /g, " ") === "180° − θ",
+  "the display shows the tokens spaced out: 180° − θ");
+click(tpKey("Submit ✓"));
+tick(tpLog.length === 1 && normalizeTokens(tpLog[0][0]) === "180−θ", "Submit ✓ hands the raw token string over");
+click(tpKey("⌫"));
+tick(tp.value === "180−", "⌫ removes the last token");
+for (let i = 0; i < 10; i++) click(tpKey("+"));
+tick(tp.tokens.length === 6, "length guard: never more than 6 tokens");
+tp.clear();
+tick(tp.value === "" && document.querySelector("#tp-stage .kdisp").classList.contains("empty"), "clear() empties the pad");
+section("tp", "tokenpad — a real pad mounted below and driven by clicks", m5);
+
+/* ============================================================
+   6 · steps question type
+   ============================================================ */
+const m6 = mark();
+
+/* checkStep, per kind, with no DOM anywhere near it */
+tick(checkStep({ kind: "mc", options: [{ label: "a" }, { label: "b", correct: true }] }, 1) === true, "checkStep mc: the correct index");
+tick(checkStep({ kind: "mc", options: [{ label: "a" }, { label: "b", correct: true }] }, 0) === false, "checkStep mc: a wrong index");
+tick(checkStep({ kind: "mc", options: [{ label: "a", correct: true }] }, 9) === false, "checkStep mc: an index out of range");
+tick(checkStep({ kind: "calc", expected: 50, dp: 0 }, 50) === true, "checkStep calc: 50 = 50");
+tick(checkStep({ kind: "calc", expected: 50, dp: 0 }, 51) === false, "checkStep calc: 51 ≠ 50");
+tick(checkStep({ kind: "calc", expected: -3, dp: 0 }, -3) === true, "checkStep calc: negatives work (p28 x = −3)");
+tick(checkStep({ kind: "calc", expected: 50 }, NaN) === false, "checkStep calc: an empty pad is not right");
+tick(checkStep({ kind: "tapside", correct: "hyp" }, "hyp") === true, "checkStep tapside: hyp = hyp");
+tick(checkStep({ kind: "tapside", correct: "hyp" }, "opp") === false, "checkStep tapside: opp ≠ hyp");
+tick(checkStep(null, 1) === false, "checkStep: no step at all is not right");
+tick(checkStep({ kind: "nonsense" }, 1) === false, "checkStep: an unknown kind is not right");
+
+/* the synthetic 4-step question: mc → tapcross → tokenpad → calc */
+function makeStepsQ() {
+  return {
+    type: "steps", concept: "gtrig.reduce",
+    prompt: "Reduce <b>sin 310°</b> to an acute angle.",
+    steps: [
+      { kind: "mc", prompt: "① Which quadrant?", hint: "310° is past 270°, so it is a C angle.",
+        options: [{ label: "①" }, { label: "②" }, { label: "③" }, { label: "④", correct: true }] },
+      { kind: "tapcross", prompt: "Tick it on the cross.", correct: [4], single: true, hint: "Bottom-right." },
+      { kind: "tokenpad", prompt: "② Which reduction formula?", expected: "360−", hint: "A ④ angle is 360° − θ." },
+      { kind: "calc", prompt: "③ What is the reference angle?", expected: 50, dp: 0, unit: "°", hint: "360 − 310." },
+    ],
+    hint: "Quadrant, then formula, then sign.",
+    answerLabel: "−sin 50°",
+    solution: [{ s: "sin 310° = sin(360° − 50°)", r: "④" }, { s: "= −sin 50°", r: "C: only cos is +" }],
+  };
+}
+const stage = document.getElementById("steps-stage");
+function driveStep(root, i, how) {
+  const w = root.querySelector(`.q-step[data-index="${i}"]`);
+  if (!w) return null;
+  if (w.dataset.kind === "mc") {
+    const opts = [...w.querySelectorAll(".opt")];
+    click(how === "wrong" ? opts[0] : opts[3]);
+  } else if (w.dataset.kind === "tapcross") {
+    const id = how === "wrong" ? "1" : "4";
+    click([...w.querySelectorAll("rect.hit")].find(h => h.dataset.id === id));
+  } else if (w.dataset.kind === "tokenpad") {
+    const key = t => [...w.querySelectorAll(".key")].find(k => k.textContent === t);
+    if (how === "wrong") { click(key("180°")); click(key("+")); }
+    else { click(key("360°")); click(key("−")); }
+    click(key("Submit ✓"));
+  } else if (w.dataset.kind === "calc") {
+    const key = t => [...w.querySelectorAll(".key")].find(k => k.textContent === t);
+    if (how === "wrong") { click(key("4")); click(key("0")); }
+    else { click(key("5")); click(key("0")); }
+    click(key("Submit ✓"));
+  }
+  return w;
+}
+
+/* (a) all four right → onResult(true), and the steps appear ONE AT A TIME */
+let resA = [];
+mountQuestion(stage, makeStepsQ(), { onResult: (ok) => resA.push(ok), onContinue() {}, onSibling() {}, onLost() {} });
+let rootA = stage.querySelector(".q");
+tick(stage.querySelectorAll(".q-step").length === 1, "(a) only step 1 is on screen to begin with");
+tick(rootA.dataset.step === "0" && rootA.dataset.clean === "1", "(a) data-step 0, data-clean 1 at the start");
+driveStep(rootA, 0, "right");
+tick(stage.querySelectorAll(".q-step").length === 2 && rootA.dataset.step === "1", "(a) step 1 right → step 2 appears");
+tick(stage.querySelector('.q-step[data-index="0"]').dataset.state === "done", "(a) the finished step locks (data-state done)");
+tick(!!stage.querySelector('.q-step[data-index="0"] .q-step-mark'), "(a) the finished step gets its small ✓");
+tick(resA.length === 0, "(a) nothing is committed until the LAST step");
+driveStep(rootA, 1, "right");
+driveStep(rootA, 2, "right");
+driveStep(rootA, 3, "right");
+tick(same(resA, [true]), "(a) all four right → onResult(true) exactly once");
+tick(rootA.dataset.clean === "1" && rootA.dataset.step === "4", "(a) data-clean stays 1, data-step ends at 4");
+tick(stage.querySelectorAll('.q-step[data-state="done"]').length === 4, "(a) all four steps end locked");
+tick((stage.querySelector(".fb-head") || {}).textContent === "✓ Correct!", "(a) the ✓ Correct panel shows");
+
+/* (b) one step missed then got right → onResult(false), all four still finish */
+let resB = [];
+mountQuestion(stage, makeStepsQ(), { onResult: (ok) => resB.push(ok), onContinue() {}, onSibling() {}, onLost() {} });
+let rootB = stage.querySelector(".q");
+driveStep(rootB, 0, "right");
+driveStep(rootB, 1, "wrong");
+tick(resB.length === 0, "(b) a wrong sub-step NEVER calls onResult");
+tick(rootB.dataset.clean === "0", "(b) the miss flips data-clean to 0");
+const stepB1 = stage.querySelector('.q-step[data-index="1"]');
+tick(stepB1.dataset.state === "retry", "(b) the missed step goes to data-state retry");
+tick(!stepB1.querySelector(".hint-box.step-hint").hidden, "(b) THAT step's hint box opens");
+tick(stage.querySelectorAll(".q-step").length === 2, "(b) the next step does not open yet");
+driveStep(rootB, 1, "right");
+tick(stepB1.dataset.state === "done", "(b) the retry lands and the step locks");
+tick(!stepB1.querySelector(".hint-box.step-hint").hidden, "(b) the step hint stays visible afterwards");
+tick(stepB1.querySelector(".q-step-mark").textContent === "✗ ✓", "(b) a retried step is marked ✗ then ✓");
+driveStep(rootB, 2, "right");
+driveStep(rootB, 3, "right");
+tick(same(resB, [false]), "(b) one miss → onResult(false), once");
+tick(stage.querySelectorAll('.q-step[data-state="done"]').length === 4, "(b) all four steps still completed");
+tick((stage.querySelector(".fb-head") || {}).textContent === "✗ Not quite", "(b) the ✗ Not quite panel shows");
+tick(stage.querySelectorAll(".sol-step").length === 2, "(b) her full solution is printed on a miss");
+
+/* (c) the wrong-retry loop: as many wrong answers as you like, never a verdict */
+let resC = [], calls = 0;
+mountQuestion(stage, makeStepsQ(), { onResult: () => { calls++; resC.push(1); }, onContinue() {}, onSibling() {}, onLost() {} });
+let rootC = stage.querySelector(".q");
+driveStep(rootC, 0, "wrong");
+driveStep(rootC, 0, "wrong");                          // the same greyed-out option can't fire twice
+tick(calls === 0, "(c) two wrong answers on step 1 → onResult never called");
+const optsC = [...stage.querySelectorAll('.q-step[data-index="0"] .opt')];
+tick(optsC[0].disabled === true, "(c) a wrong option greys out and STAYS disabled");
+tick(optsC[1].disabled === false, "(c) the other options are still live for the retry");
+driveStep(rootC, 0, "right");
+driveStep(rootC, 1, "wrong");
+driveStep(rootC, 1, "wrong");
+driveStep(rootC, 1, "right");
+driveStep(rootC, 2, "wrong");
+driveStep(rootC, 2, "right");
+tick(calls === 0, "(c) still no verdict — retries are pure practice");
+driveStep(rootC, 3, "right");
+tick(calls === 1, "(c) only the LAST step's success commits");
+
+/* the tokenpad / calc displays really clear after a miss */
+let resD = [];
+mountQuestion(stage, makeStepsQ(), { onResult: (ok) => resD.push(ok), onContinue() {}, onSibling() {}, onLost() {} });
+const rootD = stage.querySelector(".q");
+driveStep(rootD, 0, "right"); driveStep(rootD, 1, "right");
+driveStep(rootD, 2, "wrong");
+tick(stage.querySelector('.q-step[data-index="2"] .kdisp').classList.contains("empty"),
+  "a missed tokenpad step clears its display for the retry");
+driveStep(rootD, 2, "right");
+driveStep(rootD, 3, "wrong");
+tick(stage.querySelector('.q-step[data-index="3"] .kdisp').classList.contains("empty"),
+  "a missed calc step clears its display for the retry");
+driveStep(rootD, 3, "right");
+tick(same(resD, [false]), "the two-miss run still commits exactly once, as a miss");
+
+/* the overall 💡 Hint is separate from the step hints */
+mountQuestion(stage, makeStepsQ(), { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+const rootE = stage.querySelector(".q");
+const hintBtn = [...rootE.querySelectorAll(".help-row .btn")].find(b => b.textContent.indexOf("Hint") >= 0);
+tick(rootE.querySelector(".q > .hint-box, .hint-box:not(.step-hint)").hidden === true, "the overall hint starts closed");
+click(hintBtn);
+tick([...rootE.children].some(c => c.classList.contains("hint-box") && !c.hidden), "💡 Hint opens q.hint, not a step hint");
+
+/* the steps type does not disturb the existing types */
+const mcHost = document.createElement("div");
+let mcRes = null;
+mountQuestion(mcHost, { type: "mc", prompt: "2 + 2?", options: [{ label: "3" }, { label: "4", correct: true }], hint: "add" },
+  { onResult: (ok) => { mcRes = ok; }, onContinue() {}, onSibling() {}, onLost() {} });
+click([...mcHost.querySelectorAll(".opt")][1]);
+tick(mcRes === true, "a plain mc question still behaves exactly as before");
+tick(mcHost.querySelector(".q").dataset.step === undefined, "a non-steps question carries no data-step");
+
+const ynHost = document.createElement("div");
+let ynRes = null;
+mountQuestion(ynHost, { type: "yesno", prompt: "Is sin 310° negative?", yes: true, hint: "④" },
+  { onResult: (ok) => { ynRes = ok; }, onContinue() {}, onSibling() {}, onLost() {} });
+click([...ynHost.querySelectorAll(".opt")][0]);
+tick(ynRes === true, "a plain yesno question still behaves exactly as before");
+
+const calcHost = document.createElement("div");
+let calcRes = null;
+mountQuestion(calcHost, { type: "calc", prompt: "360 − 310?", expected: 50, dp: 0, unit: "°", hint: "take it off" },
+  { onResult: (ok) => { calcRes = ok; }, onContinue() {}, onSibling() {}, onLost() {} });
+const cKey = t => [...calcHost.querySelectorAll(".key")].find(k => k.textContent === t);
+click(cKey("5")); click(cKey("0")); click(cKey("Submit ✓"));
+tick(calcRes === true, "a plain calc question still behaves exactly as before");
+
+const tapHost = document.createElement("div");
+let tapRes = null;
+mountQuestion(tapHost, {
+  type: "tap", prompt: "Tap the hypotenuse.",
+  graph: { type: "triangle", pts: { A: { x: 0, y: 0 }, B: { x: 4, y: 0 }, C: { x: 4, y: 3 } }, poly: ["A", "B", "C"] },
+  tap: { mode: "side", correctId: "CA" }, tapHint: "the long one", hint: "opposite the right angle",
+}, { onResult: (ok) => { tapRes = ok; }, onContinue() {}, onSibling() {}, onLost() {} });
+click([...tapHost.querySelectorAll(".hit")].find(h => h.dataset.id === "CA"));
+tick(tapRes === true, "a plain tap-a-triangle question still behaves exactly as before");
+
+const gtHost = document.createElement("div");
+let gtRes = null;
+mountQuestion(gtHost, {
+  type: "tap", prompt: "Tap the hypotenuse of this sketch.",
+  graph: { type: "quadtri", x: -3, y: -4, labels: { x: "−3", y: "−4" }, theta: true, accent: ACC },
+  tap: { correctId: "hyp" }, tapHint: "r", hint: "the slanted side",
+}, { onResult: (ok) => { gtRes = ok; }, onContinue() {}, onSibling() {}, onLost() {} });
+tick(gtHost.querySelectorAll(".hit").length === 3, "quadtri tap: three side hot-spots (opp / adj / hyp)");
+click([...gtHost.querySelectorAll(".hit")].find(h => h.dataset.id === "hyp"));
+tick(gtRes === true, "quadtri tap: tapping the hypotenuse marks right");
+tick(!!gtHost.querySelector('.hit[data-id="hyp"].show-correct'), "quadtri tap: the right side is painted green");
+
+/* a steps question with a quadtri diagram and a tapside step (round 8 / 10 shape) */
+const sideHost = document.createElement("div");
+let sideRes = [];
+mountQuestion(sideHost, {
+  type: "steps", prompt: "The point (−3;−4).",
+  graph: { type: "quadtri", x: -3, y: -4, labels: { x: "−3", y: "−4" }, theta: true, accent: ACC },
+  steps: [
+    { kind: "tapside", prompt: "Tap the side that is <b>r</b>.", correct: "hyp", hint: "opposite the right angle" },
+    { kind: "calc", prompt: "How long is it?", expected: 5, dp: 0, hint: "pyth" },
+  ],
+  hint: "sketch first", answerLabel: "r = 5", solution: [{ s: "r² = (−3)² + (−4)²", r: "(pyth)" }],
+}, { onResult: (ok) => sideRes.push(ok), onContinue() {}, onSibling() {}, onLost() {} });
+const sideHits = [...sideHost.querySelectorAll(".hit")];
+tick(sideHits.length === 3, "tapside step: the sketch gets its three hot-spots");
+click(sideHits.find(h => h.dataset.id === "opp"));
+tick(sideRes.length === 0 && sideHost.querySelector('.q-step[data-index="0"]').dataset.state === "retry",
+  "tapside step: a wrong side is a retry, not a verdict");
+click(sideHits.find(h => h.dataset.id === "hyp"));
+tick(sideHost.querySelector('.q-step[data-index="0"]').dataset.state === "done", "tapside step: the right side locks it");
+const sKey = t => [...sideHost.querySelectorAll('.q-step[data-index="1"] .key')].find(k => k.textContent === t);
+click(sKey("5")); click(sKey("Submit ✓"));
+tick(same(sideRes, [false]), "tapside step: the missed first step makes the whole question a miss");
+section("steps", "steps — four synthetic runs driven through mountQuestion by real clicks", m6);
+
+/* ============================================================
+   7 · reveal frames
+   ============================================================ */
+const m7 = mark();
+function revealQ(mode) {
+  return {
+    type: "mc", prompt: "Where is the point now?",
+    reveal: ["<b>frame 1</b> — the point starts on the x-axis",
+             "<b>frame 2</b> — it swings up into ①",
+             "<b>frame 3</b> — <svg viewBox='0 0 40 20'><circle cx='20' cy='10' r='6'/></svg>"],
+    revealMode: mode,
+    options: [{ label: "①", correct: true }, { label: "②" }],
+    hint: "Look at the last frame.",
+  };
+}
+const rs = document.getElementById("reveal-stage");
+mountQuestion(rs, revealQ("stack"), { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+tick(rs.querySelectorAll(".reveal-frame").length === 1, "stack: only frame 1 shows at first");
+tick(rs.querySelector(".q-input").hidden === true, "the input is HIDDEN until the last frame");
+tick(!!rs.querySelector(".reveal-next"), "a Next ▸ button is offered");
+click(rs.querySelector(".reveal-next"));
+tick(rs.querySelectorAll(".reveal-frame").length === 2, "stack: frame 2 stacks under frame 1");
+tick(rs.querySelector(".q-input").hidden === true, "the input is still hidden on frame 2");
+click(rs.querySelector(".reveal-next"));
+tick(rs.querySelectorAll(".reveal-frame").length === 3, "stack: all three frames stay on screen");
+tick(rs.querySelector(".q-input").hidden === false, "the input APPEARS once the last frame is up");
+tick(!rs.querySelector(".reveal-next"), "the Next ▸ button disappears on the last frame");
+tick(!!rs.querySelector(".reveal-frame svg"), "a frame can hold an inline SVG");
+
+mountQuestion(rs, revealQ("replace"), { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+click(rs.querySelector(".reveal-next"));
+click(rs.querySelector(".reveal-next"));
+tick(rs.querySelectorAll(".reveal-frame").length === 1, "replace: only the newest frame is kept");
+tick(rs.querySelector(".q-input").hidden === false, "replace: the input still appears at the end");
+
+const oneHost = document.createElement("div");
+mountQuestion(oneHost, { type: "mc", prompt: "?", reveal: ["only one"], options: [{ label: "a", correct: true }] },
+  { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+tick(oneHost.querySelector(".q-input").hidden === false && !oneHost.querySelector(".reveal-next"),
+  "a single frame shows the input straight away, with no Next button");
+const noRevealHost = document.createElement("div");
+mountQuestion(noRevealHost, { type: "mc", prompt: "?", options: [{ label: "a", correct: true }] },
+  { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+tick(!noRevealHost.querySelector(".q-reveal") && noRevealHost.querySelector(".q-input").hidden === false,
+  "a question with no q.reveal is completely untouched");
+section("reveal", "reveal frames — stack and replace, both driven by clicks", m7);
+
+/* ============================================================
+   8 · play.js — XP once (her discovery-round ruling)
+   ============================================================ */
+const m8 = mark();
+tick(xpToSubmit({ skills: [] }, { passed: true }, 120) === 120, "an ordinary quest always pays: 120 → 120");
+tick(xpToSubmit({ xpOnce: true }, { passed: false }, 120) === 120, "xpOnce, not yet passed → full XP");
+tick(xpToSubmit({ xpOnce: true }, { passed: true }, 120) === 0, "xpOnce, already passed → 0 XP on a replay");
+tick(xpToSubmit({ xpOnce: true }, null, 120) === 120, "xpOnce with no progress record yet → full XP");
+tick(xpToSubmit(null, { passed: true }, 120) === 120, "no quest def → unchanged");
+tick(xpToSubmit({ xpOnce: true }, { passed: true }, 0) === 0, "xpOnce on a zero round → still 0");
+section("xp", "play.js xpToSubmit — the pure decision behind gt1–gt3", m8);
+
+/* ============================================================
+   banner
+   ============================================================ */
+tick(consoleErrors === 0, `0 console errors (saw ${consoleErrors})`);
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed, ${consoleErrors} console errors`
+  : `✗ ${total - passed} of ${total} checks failed — see the sections below`;
+window.__VERIFY__ = { total, passed, ok, consoleErrors, fails };
+console.log(`[verify-gtrig] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

@@ -176,3 +176,226 @@ export function footOfPerp(P, Q, R) {
 }
 
 export const dist = (P, Q) => Math.hypot(P.x - Q.x, P.y - Q.y);
+
+/* ============================================================
+   GENERAL TRIG (chapter `gtrig`) — pure helpers
+   ------------------------------------------------------------
+   Added 2026-08-22 for her 13 General-Trig drill rounds. Everything
+   below is PURE: degrees in, degrees/numbers out, no DOM, no
+   randomness. The maths follows METHODS-trig.md (her digest of her
+   own pages) rather than a generic textbook, because the ROUNDS
+   drill her wording:
+     • Part B  — ASTC: A① S② T③ C④ (All Strippers Take Cash)
+     • Part E2 — her three steps: quadrant → formula → sign
+     • Part E5 — her ROTATION thresholds (> 360 take 360 off,
+                 < −90 add 360 on). The −90 is deliberate (flag F10):
+                 sin(−30) and cos(−40) are read straight off the wheel.
+     • Part D2 — the co-function wheel, including THE TRAP
+                 cos(90 + θ) = −sinθ
+     • Part C3 — the O-A-H table, values left UNRATIONALISED (F12)
+     • Part 0.6 / L2 — reference angles come from the POSITIVE value
+     • Part L1 / D8 — the boundary values (sinθ = 0, cosθ = 0 …) follow
+                 HER pages, not the graph a computer would draw
+   ============================================================ */
+
+export const atanD = v => deg(Math.atan(v));
+
+/* the real minus sign (U+2212) — never a hyphen in anything a learner sees */
+const MINUS = "−";
+
+/* "−30°" / "0°" / "12,5°" — real minus, decimal comma (house rules) */
+export function fmtDeg(n) {
+  if (n == null || !Number.isFinite(n)) return "";
+  return fmtComma(n).replace(/-/g, MINUS) + "°";
+}
+
+/* Which quadrant does an angle land in? 1–4 (her ①②③④).
+   A QUADRANTAL angle (0/90/180/270 after wrapping) belongs to no
+   quadrant, so it returns null — the caller must handle it with
+   boundaryCase() / her "read it off the graph" habit (Part C4). */
+export function quadrantOf(angle) {
+  if (!Number.isFinite(angle)) return null;
+  const a = ((angle % 360) + 360) % 360;
+  if (Math.abs(a % 90) < 1e-9) return null;
+  return Math.floor(a / 90) + 1;
+}
+
+/* ASTC: the sign a ratio carries in a quadrant.
+   ① All +   ② only Sin +   ③ only Tan +   ④ only Cos +   */
+export function astcSign(fn, quadrant) {
+  const table = {
+    sin: { 1: 1, 2: 1, 3: -1, 4: -1 },
+    cos: { 1: 1, 2: -1, 3: -1, 4: 1 },
+    tan: { 1: 1, 2: -1, 3: 1, 4: -1 },
+  };
+  const row = table[fn];
+  if (!row || row[quadrant] === undefined) return null;
+  return row[quadrant];
+}
+
+/* ROTATIONS (p09, her thresholds — flag F10).
+   Returns the rotated angle PLUS the list of turns, one entry per
+   360°, because she writes them one per turn above the angle:
+     tan1080  [−360 −360 −360]  = tan0°
+   (that worked example is why the "too big" test is >= 360, not
+   > 360 — 360° itself gets a turn taken off so it lands on 0°.)
+     sin(−600) [+360 +360] = sin120° */
+export function rotate(angle) {
+  let a = angle;
+  const turns = [];
+  let guard = 0;
+  while (a >= 360 && guard++ < 200) { a -= 360; turns.push(MINUS + "360"); }
+  while (a < -90 && guard++ < 200) { a += 360; turns.push("+360"); }
+  return { angle: a, turns };
+}
+
+/* REDUCTION (Part E). Rewrites any angle as ± ratio of an ACUTE angle.
+   { rotated, turns, quadrant, form, ref, sign, fn2, value }
+     rotated — after her rotation rule, so always in [−90; 360)
+     form    — "θ" | "180−" | "180+" | "360−" | "−θ"  (p08 / p13 wheels)
+     ref     — the acute reference angle (always positive)
+     sign    — ±1, from ASTC
+     fn2     — the ratio it stays (reductions never swap the ratio;
+               that is the CO-FUNCTION job, see cofunction())
+     value   — fn(angle) numerically (null where tan is undefined)
+   The contract that makes it safe:  sign · fn(ref) === fn(angle). */
+export function reduce(fn, angle) {
+  const rot = rotate(angle);
+  const r = rot.angle;
+  const undef = fn === "tan" && Math.abs((((r % 180) + 180) % 180) - 90) < 1e-9;
+  const value = undef ? null
+    : (fn === "sin" ? sinD(angle) : fn === "cos" ? cosD(angle) : tanD(angle));
+  const base = { rotated: r, turns: rot.turns, quadrant: quadrantOf(r), fn2: fn, value };
+
+  // quadrantal (0 / 90 / 180 / 270): no quadrant, no reduction — she reads
+  // these off the little graphs (p25 "read from graph or type into calculator")
+  if (Math.abs((((r % 90) + 90) % 90)) < 1e-9) {
+    // the one quadrantal angle that still needs a sign is −90° (sin(−90) = −1):
+    // her wheel reads it as a C-quadrant "−θ" form, so treat it that way.
+    if (r < 0) return { ...base, form: MINUS + "θ", ref: -r, sign: astcSign(fn, 4) };
+    return { ...base, form: "θ", ref: r, sign: 1 };
+  }
+  if (r < 0) return { ...base, form: MINUS + "θ", ref: -r, sign: astcSign(fn, 4) };   // p13: −θ is a C angle
+  if (r < 90) return { ...base, form: "θ", ref: r, sign: 1 };
+  if (r < 180) return { ...base, form: "180" + MINUS, ref: 180 - r, sign: astcSign(fn, 2) };
+  if (r < 270) return { ...base, form: "180+", ref: r - 180, sign: astcSign(fn, 3) };
+  return { ...base, form: "360" + MINUS, ref: 360 - r, sign: astcSign(fn, 4) };
+}
+
+/* CO-FUNCTIONS (Part D2/D3/D4). The ratio SWAPS; the sign comes from
+   the quadrant the form lands in.
+     "90−"  is an A angle  → everything positive, ratio swaps
+     "90+"  is an S angle  → sin(90+θ) = +cosθ  but  cos(90+θ) = −sinθ  ⚠️ THE TRAP
+     "θ−90" (p24 ⑤)        → sin(θ−90) = −cosθ  ·  cos(θ−90) = sinθ
+   tan is included for completeness (it becomes cot); her rounds only
+   ever ask sin and cos. Both the real-minus and the ASCII-hyphen
+   spelling of a form are accepted, so callers can't trip on the glyph. */
+export function cofunction(fn, form) {
+  const swap = { sin: "cos", cos: "sin", tan: "cot" };
+  const fn2 = swap[fn];
+  if (!fn2) return null;
+  const f = String(form).replace(/-/g, MINUS).replace(/[xX]/g, "θ");
+  if (f === "90" + MINUS) return { sign: 1, fn2 };
+  if (f === "90+") return { sign: fn === "sin" ? 1 : -1, fn2 };
+  if (f === "θ" + MINUS + "90") return { sign: fn === "cos" ? 1 : -1, fn2 };
+  return null;
+}
+
+/* SPECIAL ANGLES (Part C3) — read off her O-A-H table, left
+   UNRATIONALISED exactly as she writes them (1/√3, 1/√2 — flag F12),
+   plus the quadrantal values she reads off the little graphs (C4).
+     specialExact("tan", 30) → { text: "1/√3", value: 0.5773… }
+     specialExact("tan", 90) → { text: "undefined", value: null }   */
+export function specialExact(fn, angle) {
+  const T = {
+    0:   { sin: ["0", 0],          cos: ["1", 1],          tan: ["0", 0] },
+    30:  { sin: ["1/2", 0.5],      cos: ["√3/2", null],    tan: ["1/√3", null] },
+    45:  { sin: ["1/√2", null],    cos: ["1/√2", null],    tan: ["1", 1] },
+    60:  { sin: ["√3/2", null],    cos: ["1/2", 0.5],      tan: ["√3", null] },
+    90:  { sin: ["1", 1],          cos: ["0", 0],          tan: ["undefined", null] },
+    180: { sin: ["0", 0],          cos: [MINUS + "1", -1], tan: ["0", 0] },
+    270: { sin: [MINUS + "1", -1], cos: ["0", 0],          tan: ["undefined", null] },
+    360: { sin: ["0", 0],          cos: ["1", 1],          tan: ["0", 0] },
+  };
+  const row = T[angle];
+  if (!row || !row[fn]) return null;
+  const [text, exact] = row[fn];
+  if (text === "undefined") return { text: "undefined", value: null };
+  // the numeric value is COMPUTED (never hand-typed) — the table only
+  // supplies the way she WRITES it
+  const value = exact !== null ? exact
+    : (fn === "sin" ? sinD(angle) : fn === "cos" ? cosD(angle) : tanD(angle));
+  return { text, value };
+}
+
+/* REFERENCE ANGLE from a ratio's value (Part 0.6 / L2 — p44 ①
+   "don't type − into calculator"): always taken from the SIZE of the
+   number, never from the calculator's negative inverse.
+   Out-of-range sin/cos values (|v| > 1) → null, which is her
+   "∴ no solution" (Part 0.5). */
+export function refAngle(fn, value) {
+  if (!Number.isFinite(value)) return null;
+  const v = Math.abs(value);
+  if (fn === "tan") return atanD(v);
+  if (v > 1 + 1e-12) return null;
+  return fn === "sin" ? asinD(v) : fn === "cos" ? acosD(v) : null;
+}
+
+/* Which quadrants does a ratio of that SIGN live in? (the tick cross)
+   sin+ → [1,2] · cos− → [2,3] · tan+ → [1,3] …
+   NON-ZERO general case only. For value ∈ {−1, 0, 1} use boundaryCase(). */
+export function solutionQuadrants(fn, sign) {
+  const s = sign >= 0 ? 1 : -1;
+  return [1, 2, 3, 4].filter(q => astcSign(fn, q) === s);
+}
+
+/* The BOUNDARY values, straight off her pages (digest D8) — NOT off a
+   graph a computer would draw. She still writes a ref ∠ and quadrant
+   lines for these:
+     sinθ = 0  → ref 0°,  quadrants I, II   (p53)
+     sinθ = 1  → ref 90°, quadrant  I
+     sinθ = −1 → ref 90°, quadrant  III     (p59)
+     cosθ = 0  → ref 90°, quadrant  I only  (p62)
+     cosθ = 1  → ref 0°,  quadrant  I
+     cosθ = −1 → ref 0°,  quadrant  II      (p54)
+   Anything else (and every tan value — tan has no boundary case in her
+   notes) → null, so the caller falls through to the general case. */
+export function boundaryCase(fn, value) {
+  if (fn !== "sin" && fn !== "cos") return null;
+  if (value !== -1 && value !== 0 && value !== 1) return null;
+  const table = {
+    sin: { "0": { ref: 0, quadrants: [1, 2] }, "1": { ref: 90, quadrants: [1] }, "-1": { ref: 90, quadrants: [3] } },
+    cos: { "0": { ref: 90, quadrants: [1] }, "1": { ref: 0, quadrants: [1] }, "-1": { ref: 0, quadrants: [2] } },
+  };
+  const hit = table[fn][String(value)];
+  return hit ? { ref: hit.ref, quadrants: hit.quadrants.slice() } : null;
+}
+
+/* PYTHAGORAS on the Cartesian plane (Part H1, p26).
+   Two of { x, y, r } in, the third out — with its SIGN taken from the
+   quadrant, exactly as her `±` line then `∴` line does. r is ALWAYS
+   positive ("always positive bc it is the radius").
+     pythSide({ x: −3, y: −4 })                → { r: 5 }
+     pythSide({ x: −12, r: 13, quadrant: 2 })  → { y: 5 }
+     pythSide({ y: −3, r: 5, quadrant: 4 })    → { x: 4 }
+   `which` ("x" | "y" | "r") is optional — omit it and the missing one
+   is worked out. With no quadrant given the magnitude comes back
+   positive (her `±` line, before the `∴` picks the sign). */
+export function pythSide(known = {}, which = null) {
+  const has = k => known[k] != null && Number.isFinite(known[k]);
+  const want = which || (!has("r") ? "r" : !has("x") ? "x" : !has("y") ? "y" : null);
+  if (want === "r") {
+    if (!has("x") || !has("y")) return null;
+    return { r: Math.hypot(known.x, known.y) };
+  }
+  if (want !== "x" && want !== "y") return null;
+  const other = want === "x" ? "y" : "x";
+  if (!has("r") || !has(other)) return null;
+  const mag = Math.sqrt(Math.max(0, known.r * known.r - known[other] * known[other]));
+  const q = known.quadrant;
+  let sign = 1;
+  if (q === 2) sign = want === "x" ? -1 : 1;
+  else if (q === 3) sign = -1;
+  else if (q === 4) sign = want === "x" ? 1 : -1;
+  return { [want]: mag * sign };
+}

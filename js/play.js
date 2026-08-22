@@ -11,6 +11,24 @@ import { openCalculator } from "./calculator.js";
 import { el, clear, mount, xbarHtml } from "./ui.js";
 import { genAt } from "./dice.js";
 
+/* ------------------------------------------------------------
+   XP-ONCE (General Trig discovery rounds, her ruling 2026-08-22)
+   ------------------------------------------------------------
+   Rounds gt1–gt3 are DISCOVERY: they teach rather than drill, so
+   they pay their XP the first time through and nothing after that.
+   A quest def marks itself with `xpOnce: true`; the "already done"
+   flag is the progress record the server already keeps
+   (progress[questId].passed, which stays true forever once earned).
+
+   Kept as a tiny PURE function so verify-gtrig.html can test the
+   decision without booting the whole app. Gold is untouched — the
+   server pays that, and changing it would need a migration.
+   ------------------------------------------------------------ */
+export function xpToSubmit(def, progressRecord, stXp) {
+  if (!def || !def.xpOnce) return stXp;
+  return (progressRecord && progressRecord.passed) ? 0 : stXp;
+}
+
 /* DICE-PLAN.md (session 0b, 2026-08-21): renderPlay is reused, not forked,
    for dice rounds — params.dice (built by js/dice-play.js) is the only
    thing that changes below. When it's absent every branch here is byte-
@@ -181,6 +199,9 @@ export function renderPlay(app, host, params) {
     // XP from the stored answeredCorrect[]) and routes to the dice results
     // screen itself. Everything below this is the static path, unchanged.
     if (dice) { await dice.finish(st); return; }
+    // discovery rounds pay once (see xpToSubmit above). st.xp is set FIRST
+    // so the results screen shows the same number that gets submitted.
+    st.xp = xpToSubmit(def, (app.state && app.state.progress && app.state.progress[quest.id]) || null, st.xp);
     const score = st.total ? st.firstTry / st.total : 0;
     const priorXp = (app.state && typeof app.state.xp === "number") ? app.state.xp : 0;
     let res = { badgeEarned: false, alreadyPassed: false, xpAwarded: st.xp, goldAwarded: 0, levelUp: false };

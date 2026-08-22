@@ -1171,3 +1171,53 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .tour__skip{background:none;border:0;padding:8px 4px;font-family:var(--font-body);font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
 .tour__skip:hover{color:var(--ink)}
 @media (prefers-reduced-motion: reduce){.tour,.tour__hole,.tour__bubble{transition:none}}
+
+/* tapcross — her quadrant cross (General Trig rounds 2/5/8/12) */
+.tapcross{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:4px}
+.tapcross svg.tc{width:100%;max-width:260px;height:auto;overflow:visible}
+.tc-axis{stroke:var(--ink);stroke-width:2;stroke-linecap:round;fill:none}
+.tc-roman{fill:var(--faint);font-family:var(--font-num);font-size:13px}
+.tc-tick{fill:var(--accent);font-family:var(--font-display);font-size:38px;font-weight:700;pointer-events:none}
+.hit.is-ticked{fill:color-mix(in srgb,var(--accent) 12%,transparent)}
+.tc-buttons{display:flex;gap:9px;width:100%;justify-content:center;flex-wrap:wrap}
+.tc-buttons .tc-submit{flex:1;min-width:150px}
+.tc-noref{flex:1;min-width:150px}
+.tc-noref.is-on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--ink)}
+
+/* token pad — the reduction-formula keys (General Trig round 5) */
+.tokenpad .kdisp{font-family:var(--font-num);font-size:24px;letter-spacing:.5px}
+.tokenpad .key.tok{font-size:19px}
+
+/* quadrant-triangle engine (General Trig rounds 8 / 10) */
+.qt-axis{stroke:var(--ink);stroke-width:1.6;fill:none;opacity:.75}
+.qt-arrow{fill:var(--ink);opacity:.75}
+.qt-axlab{fill:var(--faint);font-family:var(--font-num);font-size:12px}
+.qt-tri{stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round}
+.qt-right{stroke:var(--accent);stroke-width:1.6;opacity:.8}
+.qt-arc{stroke:var(--warn);stroke-width:1.6}
+.qt-refarc{stroke:var(--good);stroke-width:1.6;stroke-dasharray:3 3}
+.qt-ang{fill:var(--warn);font-family:var(--font-num);font-size:13px}
+.qt-dot{fill:var(--accent)}
+.qt-slab{fill:var(--ink);font-family:var(--font-num);font-size:13px}
+.qt-title{fill:var(--faint);font-family:var(--font-num);font-size:11px}
+
+/* trig-graph quadrant bands (General Trig round 2) */
+.tg-band{opacity:.16}
+
+/* reveal frames — one teaching beat per tap (q.reveal) */
+.q-reveal{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.reveal-frame{border:1px solid var(--brd);border-radius:var(--r-md);padding:12px 14px;
+  background:rgba(255,255,255,.03);font-size:14.5px;line-height:1.55}
+.reveal-frame svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.reveal-next{margin-bottom:14px;width:100%}
+
+/* steps — one question, several ordered sub-steps (q.type "steps") */
+.q-steps{display:flex;flex-direction:column;gap:14px}
+.q-step{border:1px solid var(--brd);border-radius:var(--r-md);padding:12px 13px;background:rgba(255,255,255,.02)}
+.q-step[data-state="active"]{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.q-step[data-state="retry"]{border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+.q-step[data-state="done"]{opacity:.78}
+.q-step-prompt{font-size:14.5px;line-height:1.5;margin-bottom:10px;color:var(--ink)}
+.q-step-mark{margin-left:8px;font-family:var(--font-display);font-weight:700;font-size:13px;color:var(--good);white-space:nowrap}
+.q-step-mark.retried{color:var(--warn)}
+.q-step .hint-box.step-hint{margin-top:12px;font-size:13.5px}

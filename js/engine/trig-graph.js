@@ -106,6 +106,18 @@ export function renderTrig(spec) {
   const { xmin, xmax, ymin, ymax } = win;
   let out = "";
 
+  // ---- quadrant bands (General Trig round 2) ----
+  // Light rects UNDER everything else, positioned by the very same X()
+  // transform the curves use — so a band can never drift off the 90°
+  // it claims to shade. Her p05 colours (①yellow ②blue ③green ④pink)
+  // are passed in per band; the engine only places them.
+  (spec.bands || []).forEach((b) => {
+    const xa = X(Math.max(xmin, Math.min(b.x0, b.x1)));
+    const xb = X(Math.min(xmax, Math.max(b.x0, b.x1)));
+    if (!(xb > xa)) return;
+    out += `<rect class="tg-band" x="${N(xa)}" y="${N(Y(ymax))}" width="${N(xb - xa)}" height="${N(Y(ymin) - Y(ymax))}" style="fill:${b.fill || "var(--accent)"}"/>`;
+  });
+
   // ---- light grid ----
   if (spec.grid) {
     let gl = "";
