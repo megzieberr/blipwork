@@ -34,8 +34,7 @@ verify-exam-fractions 821/821 · verify-gtrig 1 036 917 green. No SQL, nothing p
 ### Next up
 - **Ship stage 1** on her word (sw v56; no migration needed).
 - **Stage 2 — Functions first**: 5–6 sibling cards per skill from her digest
-  (graph-quest
-eference\GR11-FUNCTIONS-NOTES-DIGEST.md) + a function-sketch engine so
+  (graph-quest/reference/GR11-FUNCTIONS-NOTES-DIGEST.md) + a function-sketch engine so
   hyperbolas/parabolas get a drawing (the hyperbola with no sketch was the pain point).
   Then eqn → exp → gtrig (+ Identities, Super Special Sums get their first cards).
 - Wording pass: a few split cards still say "from (a)" / "in (b)" in hints/memos where
