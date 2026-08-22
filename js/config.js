@@ -177,8 +177,9 @@ export const CHAPTERS = [
     ],
   },
   /* GENERAL TRIG (id gtrig) — her 13 drill rounds, GENERAL-TRIG-BUILD-PLAN.md.
-     Stage 2 (2026-08-22) builds gt1–gt3 (discovery, XP-once) + wiring only;
-     gt4–gt13 are listed here so the chapter map is complete, but stay
+     Stage 2 (2026-08-22) built gt1–gt3 (discovery, XP-once); stage 3
+     (same day) adds gt4–gt7 (co-functions, reductions ×2, TIP Chips).
+     gt8–gt13 are listed here so the chapter map is complete, but stay
      `built: false` ("Coming soon") until their own stage lands.
      Colour note: the design plan said "gold is free" — it is NOT (2D
      Trigonometry and Number Patterns both already use PALETTE.gold). The
@@ -192,10 +193,10 @@ export const CHAPTERS = [
       { id: "gt1", n: 1, title: "Introduction", blurb: "What trig means, and where the ratios come from.", built: true },
       { id: "gt2", n: 2, title: "The Cartesian plane", blurb: "All Strippers Take Cash — why each ratio is + or −.", built: true },
       { id: "gt3", n: 3, title: "Special angles & identities", blurb: "The two triangles, Oats Are Healthy, and the masked identities.", built: true },
-      { id: "gt4", n: 4, title: "Co-functions", blurb: "Convert between sin and cos — and the cos(90°+x) trap.", built: false },
-      { id: "gt5", n: 5, title: "Reductions: numbers", blurb: "Quadrant, formula, sign, ratio — the reduction routine, step by step.", built: false },
-      { id: "gt6", n: 6, title: "Reductions TIP Chips", blurb: "The five TIP Chips, revised.", built: false },
-      { id: "gt7", n: 7, title: "Reductions: variables", blurb: "Same reductions, with x or θ instead of a number.", built: false },
+      { id: "gt4", n: 4, title: "Co-functions", blurb: "Convert between sin and cos — and the cos(90°+x) trap.", built: true },
+      { id: "gt5", n: 5, title: "Reductions: numbers", blurb: "Quadrant, formula, sign, ratio — the reduction routine, step by step.", built: true },
+      { id: "gt6", n: 6, title: "Reductions TIP Chips", blurb: "The five TIP Chips, revised.", built: true },
+      { id: "gt7", n: 7, title: "Reductions: variables", blurb: "Same reductions, with x or θ instead of a number.", built: true },
       { id: "gt8", n: 8, title: "Special sums", blurb: "Pick the quadrant, the app draws the triangle, evaluate.", built: false },
       { id: "gt9", n: 9, title: "Identities: the next step", blurb: "Spot the move — LCD, masked identity, what simplifies.", built: false },
       { id: "gt10", n: 10, title: "Super special sums", blurb: "Where 1 and k (or t) go on the triangle.", built: false },

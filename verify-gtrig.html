@@ -57,9 +57,15 @@
 <h2>8 · play.js — XP once</h2>
 <pre id="xp">…</pre>
 
-<h2>9 · Chapter — gt1–gt3 wiring, generation sweep, SQL cross-check</h2>
+<h2>9 · Chapter — gt1–gt7 wiring, generation sweep, SQL cross-check</h2>
 <pre id="chapter">…</pre>
 <div class="grid" id="s2-samples"></div>
+
+<h2>10 · symbolicReduce — the 11 wheel forms × 3 fns</h2>
+<pre id="symbolic">…</pre>
+
+<h2>11 · gt4/gt5/gt7 — independent recompute (1 000 items per round)</h2>
+<pre id="recompute">…</pre>
 
 <script type="module">
 import {
@@ -78,7 +84,7 @@ import { CHAPTERS, chapterById } from "./js/config.js";
 import { QUEST_DEFS, questDef } from "./js/quests/index.js";
 import { getConcept } from "./js/concepts.js";
 import { renderTriangle, verifyTriangle } from "./js/engine/triangle-graph.js";
-import { oahTable } from "./js/quests/_gtrig.js";
+import { oahTable, symbolicReduce } from "./js/quests/_gtrig.js";
 
 /* count anything that goes wrong in the console — "0 console errors" is
    part of the pass condition, so it has to be measured, not assumed */
@@ -729,13 +735,13 @@ const gch = chapterById("gtrig");
 tick(!!gch, "config.js CHAPTERS has a gtrig chapter");
 tick(!!gch && Array.isArray(gch.quests) && gch.quests.length === 13,
   `gtrig chapter lists 13 quests (got ${gch && gch.quests ? gch.quests.length : 0})`);
-const wantBuilt = ["gt1", "gt2", "gt3"];
+const wantBuilt = ["gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7"];
 tick(!!gch && gch.quests.every(q => wantBuilt.includes(q.id) === !!q.built),
-  "gt1–gt3 are built:true, gt4–gt13 are built:false (Coming soon)");
+  "gt1–gt7 are built:true, gt8–gt13 are built:false (Coming soon)");
 
 /* ---- js/quests/index.js registry ---- */
 wantBuilt.forEach(id => tick(!!QUEST_DEFS[id], `QUEST_DEFS registers ${id}`));
-for (let n = 4; n <= 13; n++) tick(!QUEST_DEFS["gt" + n], `QUEST_DEFS has no gt${n} yet (stage 3/4 will add it)`);
+for (let n = 8; n <= 13; n++) tick(!QUEST_DEFS["gt" + n], `QUEST_DEFS has no gt${n} yet (stage 4 will add it)`);
 
 /* ---- the generation sweep: 300× per skill, gt1–gt3 ---- */
 const BAD_WORDS = ["seperately", "compliment", "covert"];
@@ -763,10 +769,12 @@ const SPECIAL_VALUE = new Map();
 const VALUE_CHECK_SKILLS = new Set(["pickValue1", "pickValue2", "quadrantal", "triangles", "oahRead"]);
 
 const GEN_N = 300;
+let genCount = 0;
 const drawn = new Set();     // skill ids already rendered as a sample (one each)
 wantBuilt.forEach(qid => {
   const def = QUEST_DEFS[qid];
   (def.skills || []).forEach(skill => {
+    genCount += GEN_N;
     for (let i = 0; i < GEN_N; i++) {
       const q = skill.gen();
       const ctx = `${qid}/${skill.id} #${i}`;
@@ -793,6 +801,35 @@ wantBuilt.forEach(qid => {
           const sorted = q.correct.slice().sort((a, b) => a - b);
           tick(same(q.correct, sorted), `${ctx}: tapcross correct is a SORTED array`);
         }
+      }
+
+      /* ---- stage 3 (gt4–gt7): `steps` chain shape ---- */
+      if (q.type === "steps") {
+        tick(Array.isArray(q.steps) && q.steps.length > 0, `${ctx}: steps is a non-empty array`);
+        (q.steps || []).forEach((step, si) => {
+          const sctx = `${ctx} step${si}`;
+          tick(["mc", "tapcross", "tokenpad", "calc"].includes(step.kind), `${sctx}: kind is mc/tapcross/tokenpad/calc (got "${step.kind}")`);
+          scanText(step.prompt, sctx, "step prompt");
+          if (step.kind === "mc") {
+            const corrects = (step.options || []).filter(o => o.correct);
+            tick(corrects.length === 1, `${sctx}: exactly one correct mc option (got ${corrects.length})`);
+            (step.options || []).forEach(o => scanText(o.label, sctx, "an mc option"));
+          }
+          if (step.kind === "tapcross") {
+            tick(Array.isArray(step.correct), `${sctx}: tapcross step correct is an array`);
+            if (Array.isArray(step.correct)) {
+              const sorted = step.correct.slice().sort((a, b) => a - b);
+              tick(same(step.correct, sorted), `${sctx}: tapcross step correct is SORTED`);
+            }
+          }
+          if (step.kind === "tokenpad") {
+            tick(typeof step.expected === "string" && normalizeTokens(step.expected).length > 0,
+              `${sctx}: tokenpad expected normalises to a non-empty string`);
+          }
+          if (step.kind === "calc") {
+            tick(Number.isFinite(step.expected), `${sctx}: calc expected is finite (got ${step.expected})`);
+          }
+        });
       }
 
       if (q.type === "tap" && q.graph && q.graph.type === "triangle") {
@@ -859,7 +896,132 @@ tick(/is_open\s*,\s*sort\)\s*values[\s\S]*?on conflict[\s\S]*?do update/i.test(m
 // contain that phrase, which is exactly why this checks the STRIPPED text.
 tick(!/set is_open\s*=\s*true/i.test(migText), "migration-gtrig-quests.sql's real SQL never force-opens a round (seeded CLOSED, her ruling) — only its comment shows how");
 
-section("chapter", "gt1–gt3 wiring, generation sweep (900 questions) and the SQL cross-check", m9);
+section("chapter", `gt1–gt7 wiring, generation sweep (${genCount} questions) and the SQL cross-check`, m9);
+
+/* ============================================================
+   10 · symbolicReduce — the 11 wheel forms × 3 fns, hand-known
+   ============================================================ */
+const m10 = mark();
+// hand-known results straight off her wheels (Part D2/E3/E4 of the
+// digest) — the SAME table used to design gt5/gt7, kept independent
+// of triglib's astcSign so a bug shared between the two can't hide.
+// null = "her rounds never ask this" (tan has no co-function in her
+// notes — cofunction() turns it into cot, which symbolicReduce can't
+// match against sin/cos/tan, so it MUST throw for these three cells).
+const HAND_KNOWN = {
+  "180−θ": { sin: 1, cos: -1, tan: -1 },
+  "180+θ": { sin: -1, cos: -1, tan: 1 },
+  "360−θ": { sin: -1, cos: 1, tan: -1 },
+  "−θ": { sin: -1, cos: 1, tan: -1 },
+  "θ−360": { sin: 1, cos: 1, tan: 1 },
+  "θ−180": { sin: -1, cos: -1, tan: 1 },
+  "−180−θ": { sin: 1, cos: -1, tan: -1 },
+  "−360−θ": { sin: -1, cos: 1, tan: -1 },
+  "90−θ": { sin: { sign: 1, fn2: "cos" }, cos: { sign: 1, fn2: "sin" }, tan: null },
+  "90+θ": { sin: { sign: 1, fn2: "cos" }, cos: { sign: -1, fn2: "sin" }, tan: null },
+  "θ−90": { sin: { sign: -1, fn2: "cos" }, cos: { sign: 1, fn2: "sin" }, tan: null },
+};
+Object.keys(HAND_KNOWN).forEach(form => {
+  ["sin", "cos", "tan"].forEach(fn => {
+    const want = HAND_KNOWN[form][fn];
+    const ctx = `symbolicReduce(${fn}, "${form}")`;
+    if (want === null) {
+      let threw = false;
+      try { symbolicReduce(fn, form); } catch (e) { threw = true; }
+      tick(threw, `${ctx}: throws (her rounds never ask a co-function of tan — it's cot, not sin/cos/tan)`);
+      return;
+    }
+    let got;
+    try { got = symbolicReduce(fn, form); }
+    catch (e) { tick(false, `${ctx}: threw unexpectedly (${e.message})`); return; }
+    if (typeof want === "number") {
+      tick(got.fn2 === fn, `${ctx}: fn2 stays ${fn} (a plain reduction never swaps the ratio)`);
+      tick(got.sign === want, `${ctx}: sign ${want > 0 ? "+" : "−"} (got ${got.sign > 0 ? "+" : "−"})`);
+    } else {
+      tick(got.fn2 === want.fn2, `${ctx}: fn2 = ${want.fn2} (got ${got.fn2})`);
+      tick(got.sign === want.sign, `${ctx}: sign ${want.sign > 0 ? "+" : "−"} (got ${got.sign > 0 ? "+" : "−"})`);
+    }
+    tick(typeof got.label === "string" && got.label.length > 0, `${ctx}: label is a non-empty string ("${got.label}")`);
+  });
+});
+section("symbolic", "symbolicReduce — 11 forms × 3 fns against her hand-known wheel (co-function-of-tan throws by design)", m10);
+
+/* ============================================================
+   11 · gt4/gt5/gt7 — independent recompute, 1 000 items per round
+   ------------------------------------------------------------
+   For every generated item, evaluate the ORIGINAL trig expression
+   numerically (Math.sin/cos/tan, called directly — not through
+   triglib) and compare it to the CHAIN's own claimed answer (read
+   off the actual mc options in q.steps, exactly as the learner would
+   see them) — a wiring bug (wrong option flagged correct, a
+   transcription slip between the generator's r.sign and its mc step)
+   can never hide behind the chain marking its own answer "correct".
+
+   Each generator exposes a tiny `_dbg` object (harness-only, unused
+   by the DOM) naming its ORIGINAL fn + numeric angle, so this section
+   never has to re-parse learner-facing prose to find them — prose is
+   free to change without breaking the harness.
+
+   Two identities are in play:
+     • gt4 co-functions and gt5's co-function pool:
+         fn(angle) = sign · fn2(theta)            (theta is dbg.theta)
+     • gt5's plain reductions, gt7's variable reductions:
+         fn(angle) = sign · fn2(ref)               where fn2 is what
+       the chain claims (equal to fn itself for a plain reduction) and
+       ref is the ACUTE reference angle, found by folding angle into
+       [0°,90°] — a plain modular fold, a different computation path
+       from triglib.reduce()'s explicit wheel-form branching, so this
+       is a genuine cross-check and not reduce() graded against itself.
+       For gt7 the "ref" IS theta (23°) directly, because gt7's angle
+       is already exactly form(23°) — no extra folding needed there.
+   ============================================================ */
+const m11 = mark();
+const rad = d => d * Math.PI / 180;
+const FN_JS = { sin: Math.sin, cos: Math.cos, tan: Math.tan };
+const RECOMPUTE_N = 1000;
+
+/* the acute reference angle for ANY angle, via pure fold — independent
+   of triglib's reduce() (which gets there by branching on wheel forms) */
+function refAngleIndependent(angle) {
+  let a = ((angle % 360) + 360) % 360;      // normalise to [0°,360°)
+  if (a > 180) a = 360 - a;                  // fold to [0°,180°]
+  if (a > 90) a = 180 - a;                   // fold to [0°,90°]
+  return a;
+}
+
+function claimedFromSteps(q, signRe, ratioRe) {
+  const signStep = q.steps.find(s => s.kind === "mc" && signRe.test(s.prompt));
+  const ratioStep = q.steps.find(s => s.kind === "mc" && ratioRe.test(s.prompt));
+  const sign = (signStep && signStep.options.find(o => o.correct) || {}).label === "+" ? 1 : -1;
+  const ratioLabel = (ratioStep && ratioStep.options.find(o => o.correct) || {}).label || "";
+  const fn2 = (ratioLabel.match(/(sin|cos|tan)$/) || [, null])[1];
+  return { sign, fn2 };
+}
+
+function recomputeRound(qid, signRe, ratioRe, note) {
+  const skills = QUEST_DEFS[qid].skills;
+  for (let i = 0; i < RECOMPUTE_N; i++) {
+    const skill = skills[i % skills.length];
+    const q = skill.gen();
+    const ctx = `${qid}/${skill.id} #${i}`;
+    if (q.type !== "steps") continue;              // e.g. gt4's twoLabelTriangle is a plain mc, not a chain
+    const dbg = q._dbg;
+    if (!tick(!!dbg, `${ctx}: exposes _dbg for independent recompute`)) continue;
+    const { sign, fn2 } = claimedFromSteps(q, signRe, ratioRe);
+    if (!tick(!!fn2, `${ctx}: could read a claimed ratio off the mc steps`)) continue;
+    const original = FN_JS[dbg.fn](rad(dbg.angle));
+    const evalAt = dbg.theta != null ? dbg.theta : refAngleIndependent(dbg.angle);
+    const claimed = sign * FN_JS[fn2](rad(evalAt));
+    tick(near(claimed, original, 1e-9),
+      `${ctx} (${note}): sign·${fn2}(${evalAt}°) matches ${dbg.fn}(${dbg.angle}°) numerically (${claimed} vs ${original})`);
+  }
+}
+
+recomputeRound("gt4", /sign/i, /becomes/i, "co-function");
+recomputeRound("gt5", /sign/i, /ratio|stay|change/i, "reduction or co-function");
+recomputeRound("gt7", /sign/i, /ratio/i, "variable reduction");
+
+section("recompute", `gt4 + gt5 + gt7 independent numeric recompute (${3 * RECOMPUTE_N} items)`, m11);
 
 /* ============================================================
    banner

@@ -189,6 +189,27 @@ it is NOT a denominator. Render fractions with `<span class="efrac">` like `_exp
 answerLabel: her routine line — "list every denominator, set each = 0, solve each as a
 general solution, then read the interval off the list".
 
+## Exam-module MOVE + relink (her ruling 2026-08-22, mid-build, from her phone)
+Her words: "I see the exam focus listed the reductions, ratios and general solutions
+under 2D Trig. Once you're done with the General Trig Rounds, you can just list these
+exam focus questions under the General Trig tab and connect it to the correct rounds."
+So, in addition to the lostQuest relink below:
+- `js/exam/trig-reduction-and-ratios.js` and `js/exam/trig-general-solutions.js` get
+  `chapter: "gtrig"` (ids, topics, paper tags, parts UNCHANGED — exam progress is keyed
+  by question id, so nothing a learner has done is lost). `trig-mixed-problems.js`
+  STAYS `chapter: "trig"` (2D trig is where it belongs).
+- `js/config.js`: add `"gtrig"` to `EXAM_CHAPTERS` (with a dated comment). Its exam tab
+  shows only once she opens ≥ 1 gtrig round — `examChapterEligible()` already does that.
+- `js/exam/index.js`: follow whatever per-chapter registry structure it has (if
+  questions are grouped by chapter, move the two into a gtrig group). Fix any header
+  wording that still says trig owns them.
+- `verify-exam.html` + `verify-exam-modules.mjs`: update every assertion that counts
+  trig's questions (3 → 1) or lists EXAM_CHAPTERS; add gtrig (2 questions: topics
+  "reduction-and-ratios" → lostQuest gt5, "general-solutions" → lostQuest gt11).
+- 375 px walk: Exam Focus tab shows "General Trig" with the two topics and "2D
+  Trigonometry" with only Mixed Problems; each question's "I'm lost" link lands in
+  gt5 / gt11.
+
 ## Exam-module relink (the two `lostQuest` placeholders)
 - `js/exam/trig-reduction-and-ratios.js`: `lostQuest: { chapter: "gtrig", quest: "gt5" }`;
   `js/exam/trig-general-solutions.js`: `{ chapter: "gtrig", quest: "gt11" }`. Delete the

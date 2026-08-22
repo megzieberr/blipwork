@@ -1398,6 +1398,58 @@ export const CONCEPTS = {
       <p><b>Masked identities:</b> from sin²θ + cos²θ = 1 → sin²θ = 1 − cos²θ and cos²θ = 1 − sin²θ. Reciprocals — "look at the 3rd letter": cosec → sin, sec → cos, cot → tan.</p>
       <div class="eg">tan 30° = O/A = 1/√3. sin 60° = √3/2. cos 90° = 0 (read off the graph).</div>`,
   },
+
+  /* ---- GENERAL TRIG (chapter gtrig, stage 3, 2026-08-22) ---- */
+  gtrigCofunction: {
+    title: "Co-functions: converting between sin and cos",
+    body: `
+      <p>Draw a right triangle's two acute angles two ways: θ at one corner, <b>90° − θ</b> at the other. They share the SAME sides — just different names for opposite/adjacent — so:</p>
+      <div class="formula">sin θ = cos(90° − θ) &nbsp;·&nbsp; cos θ = sin(90° − θ)</div>
+      <p><b>90° − θ</b> is quadrant A — everything positive. <b>90° + θ</b> has crossed into quadrant S — only sine stays positive. That's the trap:</p>
+      <div class="formula">cos(90° + θ) = −sin θ</div>
+      <p>Cosine is not sine, so cos(90° + θ) is negative. (Contrast: sin(90° + θ) = +cos θ — sine is fine there.)</p>
+      <p>Negative co-functions (further from the origin, same idea):</p>
+      <div class="formula">sin(θ − 90°) = −cos θ &nbsp;·&nbsp; cos(θ − 90°) = sin θ</div>
+      <div class="eg">sin 40° = cos 50°. cos 120° = cos(90° + 30°) = −sin 30°.</div>`,
+  },
+  gtrigReduce: {
+    title: "Reductions: rewriting angles as acute angles",
+    body: `
+      <p><b>Reductions = rewriting any angle as ± an acute angle.</b> Every angle repeats every 360°, and every reduced ratio has the same size as the acute one it came from — the sign is the only thing that can change.</p>
+      <p>Three steps, in order:</p>
+      <div class="formula">① quadrant &nbsp;→&nbsp; ② reduction formula &nbsp;→&nbsp; ③ sign (All Strippers Take Cash)</div>
+      <table class="q-table"><tr><th></th><th>positive</th><th>negative</th></tr>
+        <tr><td>S ②</td><td>180° − θ</td><td>−180° − θ</td></tr>
+        <tr><td>T ③</td><td>180° + θ</td><td>θ − 180°</td></tr>
+        <tr><td>C ④</td><td>360° − θ</td><td>−θ &nbsp;/&nbsp; −360° − θ</td></tr>
+        <tr><td>A ①</td><td>θ &nbsp;/&nbsp; 360° + θ</td><td>θ − 360°</td></tr></table>
+      <p>An angle in (−90°, 0°) is a C-angle straight off the wheel — form −θ, <b>no rotation</b>. Anything past a full turn (past 360°, or below −90°) gets ONE extra first step: add or take off 360°.</p>
+      <p>A reduction never swaps the ratio (sin stays sin) — only a co-function does that.</p>
+      <div class="eg">sin 210° = sin(180° + 30°) = −sin 30°. sin 510° = [−360°] sin 150° = sin(180° − 30°) = sin 30°.</div>`,
+  },
+  gtrigTipChips: {
+    title: "Reductions TIP Chips",
+    body: `
+      <p>Five checks to run before you commit to an answer:</p>
+      <ol>
+        <li><b>①</b> positive angle over 360°? → minus 360°. <span class="muted">sin 520° = sin 160°</span></li>
+        <li><b>②</b> negative angle under −90°? → add 360°. <span class="muted">sin(−120°) = sin 240°</span> (but an angle above −90° needs NO rotation at all)</li>
+        <li><b>③</b> squaring a reduced function? → reduce INSIDE block brackets first, then square: the minus dies. <span class="muted">sin²210° = [−sin 30°]² = sin²30°, positive</span></li>
+        <li><b>④</b> the co-functions trap: <span class="muted">cos(90° + θ) = −sin θ</span></li>
+        <li><b>⑤</b> co-functions with negative angles: <span class="muted">sin(θ − 90°) = −cos θ &nbsp;·&nbsp; cos(θ − 90°) = sin θ</span></li>
+      </ol>
+      <p>Positive angles turn anti-clockwise; negative angles turn clockwise; co-functions convert between sin and cos.</p>
+      <div class="eg">"but why?" for Chip ⑤: let K = 90° − θ, so θ − 90° = −K, which sits in quadrant IV — where cos survives and sin flips.</div>`,
+  },
+  gtrigReduceVar: {
+    title: "Reductions with a variable",
+    body: `
+      <p>Same machine as a numerical reduction — quadrant, formula, sign — but the value is left as the letter (x, θ, α…) instead of a number, so there's nothing to calculate.</p>
+      <p>Reduce every factor in place, keep the minus signs visible in brackets, then cancel:</p>
+      <div class="formula">cos(180° + θ) &nbsp;=&nbsp; −cos θ &nbsp;&nbsp;·&nbsp;&nbsp; tan(θ − 180°) &nbsp;=&nbsp; +tan θ</div>
+      <p>A plain reduction NEVER swaps the ratio — sin stays sin, cos stays cos, tan stays tan. Only the three co-function forms (90° − θ, 90° + θ, θ − 90°) convert between sin and cos.</p>
+      <div class="eg">tan(180° + θ) · sin(360° − θ) / tan(360° − θ) = tan θ · (−sin θ) / (−tan θ) = sin θ.</div>`,
+  },
 };
 
 export function getConcept(id) { return CONCEPTS[id] || null; }

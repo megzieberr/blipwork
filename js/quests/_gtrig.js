@@ -19,7 +19,7 @@
 import { mc } from "./_shared.js";
 import { ynQ, poolMC, poolYN } from "./_exp.js";
 import { pick, shuffled, randInt } from "../ui.js";
-import { rotatePts } from "../triglib.js";
+import { rotatePts, sinD, cosD, tanD } from "../triglib.js";
 
 export { mc, ynQ, poolMC, poolYN, pick, shuffled, randInt };
 
@@ -211,3 +211,117 @@ export function qbandsSpec(fn) {
 }
 /* the band a quadrant owns, as an x-window (matches astcSign's ①②③④) */
 export const BAND = { 1: [0, 90], 2: [90, 180], 3: [180, 270], 4: [270, 360] };
+
+/* ============================================================
+   STAGE 3 (2026-08-22) — rounds gt4–gt7 (co-functions, reductions
+   ×2, TIP Chips). Everything below is shared by those four quest
+   files so none of them has to reinvent the `steps` chain building
+   blocks or the co-function/reduction maths.
+   ============================================================ */
+const FNMAP = { sin: sinD, cos: cosD, tan: tanD };
+
+/* ------------------------------------------------------------
+   symbolicReduce(fn, form) — round 7's engine. `form` is one of the
+   11 wheel forms (both wheels — Part D2/E3/E4 — plus the co-function
+   arms), written with a bare θ: "180−θ" "180+θ" "360−θ" "−θ" "θ−360"
+   "θ−180" "−180−θ" "−360−θ" "90−θ" "90+θ" "θ−90".
+
+   Deliberately NOT a hand-typed lookup table. It evaluates
+   fn(form(θ)) at two independent test angles (20° and 37° — chosen
+   because neither is a multiple of any angle that appears in a
+   form, so nothing coincidentally cancels) and asks "which of
+   ±sin(θ), ±cos(θ), ±tan(θ) equals that, AT BOTH ANGLES?". Exactly
+   one candidate should survive both checks — that pair IS the
+   identity. Throwing on 0 or >1 matches means a typo in a form
+   string fails LOUD instead of silently shipping a wrong answer.
+   Returns { sign, fn2, label } — label is the learner-facing answer
+   written with a bare θ (callers substitute their own letter). */
+const REDUCE_FORMS = {
+  "180−θ": t => 180 - t,
+  "180+θ": t => 180 + t,
+  "360−θ": t => 360 - t,
+  "−θ": t => -t,
+  "θ−360": t => t - 360,
+  "θ−180": t => t - 180,
+  "−180−θ": t => -180 - t,
+  "−360−θ": t => -360 - t,
+  "90−θ": t => 90 - t,
+  "90+θ": t => 90 + t,
+  "θ−90": t => t - 90,
+};
+export function symbolicReduce(fn, form) {
+  const formFn = REDUCE_FORMS[form];
+  if (!formFn) throw new Error(`symbolicReduce: unknown form "${form}"`);
+  const applyFn = FNMAP[fn];
+  if (!applyFn) throw new Error(`symbolicReduce: unknown fn "${fn}"`);
+  const thetas = [20, 37];
+  const targets = thetas.map(t => applyFn(formFn(t)));
+  const candidates = [];
+  for (const fn2 of ["sin", "cos", "tan"]) {
+    for (const sign of [1, -1]) {
+      const ok = thetas.every((t, i) => Math.abs(sign * FNMAP[fn2](t) - targets[i]) < 1e-9);
+      if (ok) candidates.push({ sign, fn2 });
+    }
+  }
+  if (candidates.length !== 1)
+    throw new Error(`symbolicReduce(${fn}, ${form}): ${candidates.length} matches (expected exactly 1)`);
+  const { sign, fn2 } = candidates[0];
+  return { sign, fn2, label: `${sign < 0 ? "−" : ""}${fn2} θ` };
+}
+
+/* applyForm(form, theta) — the numeric angle a wheel form produces at
+   a given θ (e.g. applyForm("180−θ", 20) === 160). Exported alongside
+   symbolicReduce so a caller (a quest file's _dbg, or the harness) can
+   compute "what angle did this form actually mean here" without its
+   own copy of the 11-entry table. */
+export function applyForm(form, theta) {
+  const f = REDUCE_FORMS[form];
+  if (!f) throw new Error(`applyForm: unknown form "${form}"`);
+  return f(theta);
+}
+
+/* ------------------------------------------------------------
+   `steps` chain builders — small, dumb factories so gt4/gt5/gt7
+   don't each hand-roll the same { kind, prompt, options/expected }
+   shape. Every one returns a plain step object per stage 1's spec
+   (design/gtrig-briefs/stage1-plumbing.md section A).
+   ------------------------------------------------------------ */
+export function mcStep(prompt, correct, wrongs, hint, opts = {}) {
+  const seen = new Set([String(correct)]);
+  const options = [{ label: String(correct), correct: true }];
+  wrongs.forEach(w => { const l = String(w); if (!seen.has(l)) { seen.add(l); options.push({ label: l, correct: false }); } });
+  return { kind: "mc", prompt, options: shuffled(options), hint, layout: opts.layout };
+}
+export function calcStep(prompt, expected, hint, opts = {}) {
+  return { kind: "calc", prompt, expected, dp: opts.dp ?? 0, tol: opts.tol, unit: opts.unit ?? "°", allowNeg: !!opts.allowNeg, hint };
+}
+export function tokenStep(prompt, expected, alsoAccept, hint, sym = "θ") {
+  return { kind: "tokenpad", prompt, expected, alsoAccept, sym, hint };
+}
+export function quadStep(prompt, correct, hint, opts = {}) {
+  return { kind: "tapcross", single: true, prompt, correct: Array.isArray(correct) ? correct : [correct], alsoAccept: opts.alsoAccept, noRef: !!opts.noRef, hint };
+}
+
+/* a fresh multiple-of-5 angle strictly INSIDE quadrant q (never the
+   quadrantal boundary — gt5's positive pool and gt6's chip③ pool
+   both need "a real angle that actually lives in this quadrant") */
+const QRANGE = { 1: [5, 85], 2: [95, 175], 3: [185, 265], 4: [275, 355] };
+export function quadAngle(quad) {
+  const [lo, hi] = QRANGE[quad];
+  return lo + 5 * randInt(0, (hi - lo) / 5);
+}
+
+/* a multiple-of-5 angle in [lo,hi] that never lands exactly on a
+   quadrantal boundary (0/90/180/270/360…) — used wherever a reduction
+   chain needs a "real" answer, not the degenerate quadrantal case. */
+export function nonQuadrantalAngle(lo, hi) {
+  let a, guard = 0;
+  do { a = lo + 5 * randInt(0, (hi - lo) / 5); guard++; } while (a % 90 === 0 && guard < 100);
+  return a;
+}
+
+/* argDeg(angle) — an angle as it sits after a ratio name: positive "30°",
+   negative "(−30°)" with brackets, her notation (p13: sin(−30)). Foreman
+   review fix 2026-08-22: "sin −15°" read wrongly as a subtraction. */
+import { fmtDeg as _fmtDeg } from "../triglib.js";
+export function argDeg(angle) { return angle < 0 ? `(${_fmtDeg(angle)})` : ` ${_fmtDeg(angle)}`; }   // includes the leading space for positives: use as `${fn}${argDeg(a)}`
