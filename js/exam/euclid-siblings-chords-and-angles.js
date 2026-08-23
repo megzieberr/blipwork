@@ -78,11 +78,33 @@
    out, and at 375 px a label 44 px from A lands closer to C than to A.
    That really happened — the first shoot of this file put C's "2" and
    D's "1" side by side in the middle of the circle, and a learner
-   could not tell which vertex either belonged to. So EVERY wedge here
-   sets its own `o.r` (28–46, and larger only where the wedge is wide
-   and empty) and its own `o.ar`, with the two wedges at a shared
-   vertex given DIFFERENT radii so their labels separate radially as
-   well as angularly. Read the crops after any change to these numbers.
+   could not tell which vertex either belonged to.
+
+   THE NUMBERS NOW SIT INSIDE THEIR ARCS (her phone review, 2026-08-23:
+   "the angle numbering — the 1, 2 and 3 labels — I think we can make
+   that font a bit smaller and also put it INSIDE the angle arc"). That
+   placement is AUTOMATIC in the engine for any label that is a bare
+   digit — js/exam/circle-engine.js's idxLabelR puts it at 0,55 of its
+   own arc radius, between the vertex and the arc — so a numbered wedge
+   here sets NO `o.r` at all and controls the digit purely through
+   `o.ar`. An explicit `o.r` OVERRIDES the rule, so it is used exactly
+   once in this file, on rider 4's Ô₁, where the engine's "O" letter has
+   nowhere to go but that wedge's bisector; the reason is written at the
+   line. Anywhere else, reach for `o.ar`.
+
+   So `o.ar` is now the tuning dial, and it carries two jobs:
+     · TWO WEDGES AT ONE VERTEX GET CLEARLY DIFFERENT ARCS (roughly a
+       1,8× ratio, e.g. 22 and 40), because their digits now live close
+       in and only radial separation keeps them apart. Nested arcs at a
+       shared vertex is the IEB figure convention anyway.
+     · AN ARC MUST NOT CROSS A DRAWN CHORD. A central wedge's chord sits
+       R·cos(½∠) from O — 33 px for a 130° wedge on this canvas — so the
+       arc has to stay inside that, which caps how far out its digit can
+       go. Every `ar` below was measured against that distance, and the
+       narrow wedges (20–30°) get the LARGER arc of their pair so the
+       digit has width to sit in.
+   Value labels ("35°", "x") are untouched by the rule and still set
+   their own `o.r`. Read the crops after any change to these numbers.
 
    ---------------------------------------------------------------
    EVERY NUMBER ON EVERY FIGURE IS REAL. Each rider's point degrees
@@ -160,20 +182,26 @@ const CA1_BASE = {
   angles: [
     { at: "A", legs: ["O", "B"], t: "35°", o: { v: 35, r: 36, ar: 20 } },
     { at: "C", legs: ["B", "O"], t: "40°", o: { v: 40, r: 36, ar: 20 } },
-    { at: "B", legs: ["A", "O"], t: "1", o: { v: 35, r: 30, ar: 16 } },
-    { at: "B", legs: ["O", "C"], t: "2", o: { v: 40, r: 40, ar: 24 } },
-    { at: "O", legs: ["B", "A"], t: "1", o: { v: 110, r: 30, ar: 20 } },
-    { at: "O", legs: ["A", "C"], t: "2", o: { v: 150, r: 46, ar: 30 } },
-    { at: "O", legs: ["C", "B"], t: "3", o: { v: 100, r: 34, ar: 25 } },
+    { at: "B", legs: ["A", "O"], t: "1", o: { v: 35, ar: 40 } },
+    { at: "B", legs: ["O", "C"], t: "2", o: { v: 40, ar: 22 } },
+    { at: "O", legs: ["B", "A"], t: "1", o: { v: 110, ar: 26 } },
+    { at: "O", legs: ["A", "C"], t: "2", o: { v: 150, ar: 50 } },
+    { at: "O", legs: ["C", "B"], t: "3", o: { v: 100, ar: 34 } },
   ],
 };
-const CA1_OAB = { at: "A", legs: ["O", "B"], v: 35 };
-const CA1_OCB = { at: "C", legs: ["B", "O"], v: 40 };
-const CA1_B1 = { at: "B", legs: ["A", "O"], v: 35 };
-const CA1_B2 = { at: "B", legs: ["O", "C"], v: 40 };
-const CA1_O1 = { at: "O", legs: ["B", "A"], v: 110 };
-const CA1_O2 = { at: "O", legs: ["A", "C"], v: 150 };
-const CA1_O3 = { at: "O", legs: ["C", "B"], v: 100 };
+/* Every highlight below repeats its wedge's OWN `ar`. Without it the
+   marker-pen entry falls back to the engine's default arc (22 / 25) and
+   draws a SECOND arc a few px from the authored one — two rings round one
+   wedge, and, now that a numbered label sits at 0,55 of the authored arc,
+   a digit that can land exactly on that second ring. Same radius in, one
+   arc out, the amber pie under it. */
+const CA1_OAB = { at: "A", legs: ["O", "B"], v: 35, o: { ar: 20 } };
+const CA1_OCB = { at: "C", legs: ["B", "O"], v: 40, o: { ar: 20 } };
+const CA1_B1 = { at: "B", legs: ["A", "O"], v: 35, o: { ar: 40, hlR: 40 } };
+const CA1_B2 = { at: "B", legs: ["O", "C"], v: 40, o: { ar: 22 } };
+const CA1_O1 = { at: "O", legs: ["B", "A"], v: 110, o: { ar: 26 } };
+const CA1_O2 = { at: "O", legs: ["A", "C"], v: 150, o: { ar: 50, hlR: 50 } };
+const CA1_O3 = { at: "O", legs: ["C", "B"], v: 100, o: { ar: 34 } };
 const CA1_CHAIN = [
   { n: "B̂₁", v: "35°" }, { n: "Ô₁", v: "110°" }, { n: "B̂₂", v: "40°" },
   { n: "Ô₃", v: "100°" }, { n: "Ô₂", v: "150°" },
@@ -345,28 +373,33 @@ const CA2_BASE = {
   pts: { A: 180, B: 0, C: 130, D: 50 },
   chords: [["A", "B"], ["A", "C"], ["A", "D"], ["B", "C"], ["B", "D"], ["C", "D"]],
   angles: [
-    /* A, B and C each carry two wedges within ~66 px of one another, so
-       every radius below is measured, not defaulted: Â₂ is pulled IN to
-       30 and Ĉ₁ is rotated 25° deeper into its own wedge, because at the
-       engine's own radii those two labels landed 6 px apart in the
-       middle of the circle (first shoot, 2026-08-23) and a learner could
-       not tell which vertex either belonged to. */
-    { at: "A", legs: ["B", "D"], t: "1", o: { v: 25, r: 40, ar: 15 } },
-    { at: "A", legs: ["D", "C"], t: "2", o: { v: 40, r: 30, ar: 22 } },
+    /* A, B and C each carry two wedges within ~66 px of one another, and
+       both numbered pairs now sit INSIDE their arcs, so the arcs are what
+       separates them: the NARROW wedge of each pair takes the big arc
+       (Â₁ 25° → 46, Ĉ₂ 25° → 46) and its 40°/90° neighbour the small one.
+       Two reasons that way round — a digit needs width to sit in, and a
+       25° wedge only has 2·r·sin12,5° of it, so pushing it out to 25 px
+       buys 5,5 px of clearance either side instead of 2,6; and the two
+       digits then separate radially by ~12 px on top of their angular
+       gap. The B pair are VALUE labels ("25°", "40°"), untouched by the
+       index rule, still parked outside on their own measured radii. */
+    { at: "A", legs: ["B", "D"], t: "1", o: { v: 25, ar: 46 } },
+    { at: "A", legs: ["D", "C"], t: "2", o: { v: 40, ar: 28 } },
     { at: "B", legs: ["C", "A"], t: "25°", o: { v: 25, r: 48, ar: 18 } },
     { at: "B", legs: ["D", "C"], t: "40°", o: { v: 40, r: 54, ar: 27 } },
-    { at: "C", legs: ["A", "B"], t: "1", o: { v: 90, r: 34, ar: 18, rot: 25 } },
-    { at: "C", legs: ["B", "D"], t: "2", o: { v: 25, r: 50, ar: 27 } },
+    { at: "C", legs: ["A", "B"], t: "1", o: { v: 90, ar: 26 } },
+    { at: "C", legs: ["B", "D"], t: "2", o: { v: 25, ar: 46 } },
     { at: "D", legs: ["A", "B"], t: "", o: { v: 90, ar: 15 } },
   ],
 };
-const CA2_A1 = { at: "A", legs: ["B", "D"], v: 25 };
-const CA2_A2 = { at: "A", legs: ["D", "C"], v: 40 };
-const CA2_ABC = { at: "B", legs: ["C", "A"], v: 25 };
-const CA2_DBC = { at: "B", legs: ["D", "C"], v: 40 };
-const CA2_C1 = { at: "C", legs: ["A", "B"], v: 90 };
-const CA2_C2 = { at: "C", legs: ["B", "D"], v: 25 };
-const CA2_ADB = { at: "D", legs: ["A", "B"], v: 90 };
+/* each highlight repeats its wedge's own `ar` — see rider 1's note */
+const CA2_A1 = { at: "A", legs: ["B", "D"], v: 25, o: { ar: 46, hlR: 46 } };
+const CA2_A2 = { at: "A", legs: ["D", "C"], v: 40, o: { ar: 28 } };
+const CA2_ABC = { at: "B", legs: ["C", "A"], v: 25, o: { ar: 18 } };
+const CA2_DBC = { at: "B", legs: ["D", "C"], v: 40, o: { ar: 27 } };
+const CA2_C1 = { at: "C", legs: ["A", "B"], v: 90, o: { ar: 26 } };
+const CA2_C2 = { at: "C", legs: ["B", "D"], v: 25, o: { ar: 46, hlR: 46 } };
+const CA2_ADB = { at: "D", legs: ["A", "B"], v: 90, o: { ar: 15 } };
 const CA2_CHAIN = [
   { n: "Ĉ₁", v: "90°" }, { n: "∠ADB", v: "90°" }, { n: "Â₂", v: "40°" },
   { n: "Â₁", v: "25°" }, { n: "Ĉ₂", v: "25°" },
@@ -534,23 +567,29 @@ const CA3_BASE = {
   pts: { A: 210, B: 250, C: 330 },
   chords: [["A", "B"], ["B", "C"], ["A", "C"], ["O", "A"], ["O", "C"]],
   key: { at: "tr", lines: [{ t: "Â₁ = 40°" }] },
+  /* The four numbered wedges (two at A, two at C) sit inside their arcs
+     and are separated by arc radius: at each vertex the NARROWER wedge
+     takes the outer arc, for the width reason in this file's header —
+     Â₂ is 30° and Ĉ₂ 20°, and a 20° wedge gives a digit only 2·r·sin10°
+     of room, so it has to sit 27 px out to have any at all. */
   angles: [
     { at: "O", legs: ["A", "C"], t: "", o: { v: 120, ar: 18 } },
     { at: "O", legs: ["A", "C"], t: "240°", o: { v: 240, reflex: 1, r: 50, ar: 36 } },
-    { at: "A", legs: ["B", "C"], t: "1", o: { v: 40, r: 38, ar: 22 } },
-    { at: "A", legs: ["C", "O"], t: "2", o: { v: 30, r: 28, ar: 15 } },
-    { at: "C", legs: ["O", "A"], t: "1", o: { v: 30, r: 28, ar: 15 } },
-    { at: "C", legs: ["A", "B"], t: "2", o: { v: 20, r: 40, ar: 24 } },
+    { at: "A", legs: ["B", "C"], t: "1", o: { v: 40, ar: 28 } },
+    { at: "A", legs: ["C", "O"], t: "2", o: { v: 30, ar: 46 } },
+    { at: "C", legs: ["O", "A"], t: "1", o: { v: 30, ar: 30 } },
+    { at: "C", legs: ["A", "B"], t: "2", o: { v: 20, ar: 50 } },
     { at: "B", legs: ["A", "C"], t: "", o: { v: 120, ar: 20 } },
   ],
 };
-const CA3_AOC = { at: "O", legs: ["A", "C"], v: 120 };
-const CA3_REFLEX = { at: "O", legs: ["A", "C"], v: 240, o: { reflex: 1 } };
-const CA3_ABC = { at: "B", legs: ["A", "C"], v: 120 };
-const CA3_A1 = { at: "A", legs: ["B", "C"], v: 40 };
-const CA3_A2 = { at: "A", legs: ["C", "O"], v: 30 };
-const CA3_C1 = { at: "C", legs: ["O", "A"], v: 30 };
-const CA3_C2 = { at: "C", legs: ["A", "B"], v: 20 };
+/* each highlight repeats its wedge's own `ar` — see rider 1's note */
+const CA3_AOC = { at: "O", legs: ["A", "C"], v: 120, o: { ar: 18 } };
+const CA3_REFLEX = { at: "O", legs: ["A", "C"], v: 240, o: { reflex: 1, ar: 36, hlR: 36 } };
+const CA3_ABC = { at: "B", legs: ["A", "C"], v: 120, o: { ar: 20 } };
+const CA3_A1 = { at: "A", legs: ["B", "C"], v: 40, o: { ar: 28 } };
+const CA3_A2 = { at: "A", legs: ["C", "O"], v: 30, o: { ar: 46, hlR: 46 } };
+const CA3_C1 = { at: "C", legs: ["O", "A"], v: 30, o: { ar: 30 } };
+const CA3_C2 = { at: "C", legs: ["A", "B"], v: 20, o: { ar: 50, hlR: 50 } };
 const CA3_CHAIN = [
   { n: "∠AOC", v: "120°" }, { n: "∠ABC", v: "120°" }, { n: "Ĉ₁", v: "30°" }, { n: "Â₂", v: "30°" },
 ];
@@ -688,11 +727,12 @@ const ca3 = {
    the angle at B into B̂₁ and B̂₂, and their two labels plus Ô₂'s all
    landed inside the same narrow triangle OAB, three deep. The two 25°
    halves still get their moment: they are the OR route in the last memo.
-   The three labels at O are ROTATED off their bisectors (o.rot) on
-   purpose: the chord a big central wedge stands on sits only
-   R·cos(½∠) = 33 px from the centre, and a label swung sideways along
-   its own arc ends up FURTHER from that chord than one parked on the
-   bisector — which is what buys Ô₂ and Ô₃ the room they need.
+   The three labels at O used to be ROTATED off their bisectors (o.rot),
+   because the chord a big central wedge stands on sits only
+   R·cos(½∠) = 33 px from the centre and a label 35–42 px out had to be
+   swung sideways to clear it. They now sit INSIDE their arcs, 12–24 px
+   from O, where no chord reaches — so the rotations are gone and the
+   arc radii do the work instead. See the note on the angles below.
    ===================================================================== */
 const CA4_BASE = {
   ...CANVAS,
@@ -704,21 +744,43 @@ const CA4_BASE = {
     { a: "B", b: "C", mk: "t1" },
     ["A", "C"], ["O", "A"], ["O", "B"], ["O", "C"],
   ],
+  /* THE THREE WEDGES AT O, now that their digits sit inside their arcs.
+     Three constraints, all measured:
+       · the chord a wedge stands on is R·cos(½∠) from O — 33 px for the
+         two 130° wedges, 50 px for the 100° one — so Ô₂ and Ô₃ cannot
+         have an arc past ~30, and Ô₁ can go to 44;
+       · they must not all share one radius, or the three arcs would join
+         into a single closed circle round O and say nothing;
+       · with the labels in close, no o.rot: the rotations existed to
+         swing labels 35–42 px out away from those same chords, and a
+         digit 12–24 px from O is not near a chord to begin with. rot
+         would also break placeCentreLabel, which reads the UNrotated
+         position when it steers the "O" letter clear. */
   angles: [
-    { at: "O", legs: ["C", "A"], t: "1", o: { v: 100, r: 38, ar: 26 } },
-    { at: "O", legs: ["A", "B"], t: "2", o: { v: 130, r: 42, ar: 16, rot: -50 } },
-    { at: "O", legs: ["B", "C"], t: "3", o: { v: 130, r: 35, ar: 20, rot: -40 } },
+    /* the ONE index label in this file that overrides the automatic
+       radius, and it is measured. The "O" letter is placed by the
+       engine at 14 px from the centre in the most open direction, and
+       with three radii drawn the only open direction here is Ô₁'s
+       100° gap — so the letter lands on Ô₁'s own bisector whatever we
+       do. At the automatic 0,55 × 46 = 25 px the digit and the letter
+       came out 11 px apart and read as "10", a number, on a figure
+       made of numbers. At 30 they are 16 px apart and still well
+       inside the 46 arc, which is what "inside the arc" asks for. */
+    { at: "O", legs: ["C", "A"], t: "1", o: { v: 100, r: 30, ar: 46 } },
+    { at: "O", legs: ["A", "B"], t: "2", o: { v: 130, ar: 30 } },
+    { at: "O", legs: ["B", "C"], t: "3", o: { v: 130, ar: 22 } },
     { at: "A", legs: ["O", "C"], t: "", o: { v: 40, ar: 22 } },
     { at: "C", legs: ["A", "O"], t: "", o: { v: 40, ar: 22 } },
     { at: "B", legs: ["C", "A"], t: "", o: { v: 50, ar: 34 } },
   ],
 };
-const CA4_O1 = { at: "O", legs: ["C", "A"], v: 100 };
-const CA4_O2 = { at: "O", legs: ["A", "B"], v: 130 };
-const CA4_O3 = { at: "O", legs: ["B", "C"], v: 130 };
-const CA4_OAC = { at: "A", legs: ["O", "C"], v: 40 };
-const CA4_ACO = { at: "C", legs: ["A", "O"], v: 40 };
-const CA4_ABC = { at: "B", legs: ["C", "A"], v: 50 };
+/* each highlight repeats its wedge's own `ar` — see rider 1's note */
+const CA4_O1 = { at: "O", legs: ["C", "A"], v: 100, o: { ar: 46, hlR: 46 } };
+const CA4_O2 = { at: "O", legs: ["A", "B"], v: 130, o: { ar: 30 } };
+const CA4_O3 = { at: "O", legs: ["B", "C"], v: 130, o: { ar: 22 } };
+const CA4_OAC = { at: "A", legs: ["O", "C"], v: 40, o: { ar: 22 } };
+const CA4_ACO = { at: "C", legs: ["A", "O"], v: 40, o: { ar: 22 } };
+const CA4_ABC = { at: "B", legs: ["C", "A"], v: 50, o: { ar: 34 } };
 const CA4_CHAIN = [
   { n: "Ô₃", v: "130°" }, { n: "Ô₁", v: "100°" },
   { n: "∠OAC", v: "40°" }, { n: "∠ACO", v: "40°" },
@@ -865,19 +927,26 @@ const CA5_BASE = {
   O: true,
   pts: { A: 160, B: 90, C: 300, D: 340 },
   chords: [["A", "C"], ["C", "B"], ["A", "D"], ["O", "B"], ["A", "B"]],
+  /* Ô₁ and Ô₂ hold their digits inside their arcs. The two arcs are
+     capped by different chords: Ô₁'s wedge faces chord AB, 63,9 px out,
+     so 30 is free; Ô₂'s wedge is crossed by chord CB only 20,2 px from
+     the centre (measured — C and B are 150° apart, R·cos75° = 20,2), so
+     its arc has to stay under that and its digit lands on the engine's
+     11 px floor. */
   angles: [
     { at: "C", legs: ["B", "A"], t: "x", o: { v: 35, r: 40, ar: 24 } },
-    { at: "O", legs: ["B", "A"], t: "1", o: { v: 70, r: 36, ar: 22 } },
-    { at: "O", legs: ["D", "B"], t: "2", o: { v: 110, r: 42, ar: 28 } },
+    { at: "O", legs: ["B", "A"], t: "1", o: { v: 70, ar: 30 } },
+    { at: "O", legs: ["D", "B"], t: "2", o: { v: 110, ar: 19 } },
     { at: "A", legs: ["D", "B"], t: "", o: { v: 55, ar: 24 } },
     { at: "B", legs: ["A", "O"], t: "", o: { v: 55, ar: 24 } },
   ],
 };
-const CA5_X = { at: "C", legs: ["B", "A"], v: 35 };
-const CA5_O1 = { at: "O", legs: ["B", "A"], v: 70 };
-const CA5_O2 = { at: "O", legs: ["D", "B"], v: 110 };
-const CA5_DAB = { at: "A", legs: ["D", "B"], v: 55 };
-const CA5_ABO = { at: "B", legs: ["A", "O"], v: 55 };
+/* each highlight repeats its wedge's own `ar` — see rider 1's note */
+const CA5_X = { at: "C", legs: ["B", "A"], v: 35, o: { ar: 24 } };
+const CA5_O1 = { at: "O", legs: ["B", "A"], v: 70, o: { ar: 30 } };
+const CA5_O2 = { at: "O", legs: ["D", "B"], v: 110, o: { ar: 19 } };
+const CA5_DAB = { at: "A", legs: ["D", "B"], v: 55, o: { ar: 24 } };
+const CA5_ABO = { at: "B", legs: ["A", "O"], v: 55, o: { ar: 24 } };
 const CA5_CHAIN = [
   { n: "Ô₁", v: "2x" }, { n: "∠ABO", v: "90° − x" },
   { n: "∠DAB", v: "90° − x" }, { n: "Ô₂", v: "180° − 2x" },

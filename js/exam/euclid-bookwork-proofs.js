@@ -187,12 +187,23 @@ const SPEC_BW3 = {
   O: true,
   pts: { A: 110, B: 180, C: 310, D: 40 },
   chords: [["A", "B"], ["B", "C"], ["C", "D"], ["D", "A"]],
-  /* both labels hug their own vertex (r 26–28): the reveal adds two
-     more at the centre, and the bisector at A points straight at O,
-     so anything parked further out meets them in the middle. */
+  /* EVERY LABEL ON THIS FIGURE SITS INSIDE ITS OWN ARC (her phone review,
+     2026-08-23: the first build "is a bit deurmekaar [messy], but what you
+     can do here is put that 2x and 2y inside the angle arc and have more
+     space for the x and y then"). Four wedges meet in a small picture —
+     two at the centre sharing both their arms — and a label parked OUTSIDE
+     its arc has to be pushed 26–44 px into the middle of the circle, which
+     is where all four of them collided. Tucked between the vertex and the
+     arc, each one is unmistakably attached to its own vertex and the
+     middle of the figure stays empty.
+     `r` is explicit here because x / y / 2x / 2y are VALUES, not index
+     digits — the engine's automatic inside-the-arc rule only fires for a
+     bare "1" / "2" / "3" (idxLabelR). Each `r` is ≈0,55 of its own `ar`,
+     the same proportion that rule uses, so the whole figure reads as one
+     system. */
   angles: [
-    { at: "A", legs: ["D", "B"], t: "x", o: { v: 110, r: 28, ar: 18 } },
-    { at: "C", legs: ["B", "D"], t: "y", o: { v: 70, r: 26, ar: 16 } },
+    { at: "A", legs: ["D", "B"], t: "x", o: { v: 110, r: 15, ar: 26 } },
+    { at: "C", legs: ["B", "D"], t: "y", o: { v: 70, r: 14, ar: 24 } },
   ],
 };
 
@@ -220,13 +231,42 @@ const bw3 = {
            revolution is the entire proof in one picture. */
         reveal: {
           angles: [
-            { at: "A", legs: ["D", "B"], v: 110 },
-            { at: "C", legs: ["B", "D"], v: 70 },
-            /* both rotated well off their bisectors: the two wedges
-               share their arms, so a label parked on either bisector
-               lands on the vertex that wedge is named after. */
-            { at: "O", legs: ["D", "B"], t: "2y", v: 140, o: { r: 44, ar: 24, rot: -45 } },
-            { at: "O", legs: ["D", "B"], t: "2x", v: 220, o: { reflex: 1, r: 40, ar: 33, rot: 45 } },
+            /* the two marker-pen wedges at A and C carry the SAME arc
+               radius as the spec's own wedge there, so the highlight
+               lands exactly on the arc already drawn instead of adding a
+               second one 7 px outside it — a double arc was half of why
+               x and y looked crowded. hlR matches too, so the amber pie
+               ends where the arc ends rather than spilling past it. */
+            { at: "A", legs: ["D", "B"], v: 110, o: { ar: 26, hlR: 26 } },
+            { at: "C", legs: ["B", "D"], v: 70, o: { ar: 24, hlR: 24 } },
+            /* THE TWO WEDGES AT THE CENTRE. They share both arms and
+               together fill the revolution, so they cannot have the same
+               arc radius — that would draw one closed circle round O and
+               say nothing. The REFLEX one is the inner arc (30) and the
+               140° one the outer (44), and each label sits inside its own
+               arc at ≈0,55 of it.
+               Why the reflex arc has to be the inner of the two: chord BC
+               passes only 33,8 px from O (measured: R·cos½∠BOC), and the
+               reflex wedge is the one that spans it, so anything bigger
+               than ~33 there would cut straight across a drawn chord. The
+               140° wedge faces A, where the nearest chord is 65,5 px out,
+               so 44 is free.
+               NEITHER LABEL ROTATES ANY MORE, and dropping rot is not
+               cosmetic. The old ±45 existed to stop a label parked 40–44
+               px out from being read as the vertex it points at; a label
+               17–25 px from O cannot be mistaken for anything but O's, so
+               the reason is gone. And rot has a cost: computeGeometry
+               works out the label position WITHOUT it (the ported core
+               only applies rot in angleSVG), so placeCentreLabel — which
+               steers the "O" letter away from every angle label — dodges
+               a position the rotated label no longer occupies. With rot
+               45 on 2x the "O" landed 3 px from it. At rot 0 the two
+               agree and O gets pushed properly clear.
+               On the bisector at 290° and only 17 px out, 2x still keeps
+               21,8 px of daylight from chord BC and 16 px from each of
+               its own arms. */
+            { at: "O", legs: ["D", "B"], t: "2y", v: 140, o: { r: 25, ar: 44, hlR: 44 } },
+            { at: "O", legs: ["D", "B"], t: "2x", v: 220, o: { reflex: 1, r: 17, ar: 30, hlR: 30 } },
           ],
           construction: { chords: [["O", "B"], ["O", "D"]] },
         },

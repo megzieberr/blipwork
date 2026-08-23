@@ -9,8 +9,8 @@
    questions can carry a to-scale, spec-driven figure.
 
    Everything down to the "BLIPWORK-ONLY ADDITIVE EXTENSIONS" banner
-   at the bottom of this file is the ported original, with exactly ONE
-   in-place change, clearly marked where it sits:
+   at the bottom of this file is the ported original, with exactly TWO
+   in-place changes, clearly marked where they sit:
 
      · angleSVG()'s o.mark branch now understands o.mark === "square"
        and draws a proper RIGHT-ANGLE SQUARE instead of the chevron.
@@ -23,9 +23,19 @@
        learners read a square as "this is 90°" and a chevron as "these
        two angles are equal", so the chevron would have been a lie.)
 
+     · THREE ONE-LINE HOOKS into the bottom block's idxLabelR / idxClass
+       (2026-08-23): the label radius line in angleSVG, the same line in
+       computeGeometry, and angleSVG's class attribute. All three are
+       written `o.r || idxLabelR(…) || labelR(…)` and `class="al${…}"`,
+       and both helpers return a falsy value for every label that is not
+       a bare index digit ("1", "2", "3"), so the ported behaviour is
+       reached unchanged for every other label and every figure with no
+       numbered wedges. Her phone review asked for the numbering to sit
+       inside its arc; the reasoning is at the helpers, at the bottom.
+
    The additive extensions at the bottom (HL, highlightedSpec,
-   diagramRefIssues) are Blipwork-only — Circle Quest has no use for
-   them and must never be expected to.
+   diagramRefIssues, the index-label helpers) are Blipwork-only —
+   Circle Quest has no use for them and must never be expected to.
 
    Tap-interactivity is BANKED for next year (her call, recorded in
    EXAM-FOCUS-PLAN.md's "Circle geo diagrams") — computeGeometry's
@@ -144,7 +154,12 @@ function angleSVG(cx, cy, from, to, text, o, accent, W, H) {
     out += `<path d="${arcPath(cx, cy, r, from, s)}" fill="none" stroke="${col}" stroke-width="2.2"/>`;
   }
   if (text) {
-    const lr = o.r || labelR(s, text);
+    /* idxLabelR / idxClass are BLIPWORK-ONLY HOOKS (2026-08-23) — see the
+       "INDEX LABELS SIT INSIDE THEIR ARC" block at the bottom of this file.
+       Both return a falsy value ("" / 0) for anything that is not a bare
+       index digit, so every other label takes labelR and the plain "al"
+       class exactly as the ported original does. */
+    const lr = o.r || idxLabelR(text, o, s) || labelR(s, text);
     /* o.rot (additive, opt-in, 2026-08-12): slide the label ALONG its own
        arc by N degrees instead of leaving it on the bisector. Needed where
        the bisector happens to lie along a drawn line — pr4's ∠BOD is
@@ -157,7 +172,7 @@ function angleSVG(cx, cy, from, to, text, o, accent, W, H) {
     const hw = 6 + (text.length * 3.6);
     tx = Math.max(hw, Math.min(W - hw, tx));
     ty = Math.max(13, Math.min(H - 9, ty));
-    out += `<text x="${N(tx)}" y="${N(ty)}" class="al" fill="${col}">${text}</text>`;
+    out += `<text x="${N(tx)}" y="${N(ty)}" class="al${idxClass(text)}" fill="${col}">${text}</text>`;
   }
   return out;
 }
@@ -347,7 +362,11 @@ export function computeGeometry(d) {
     if (o.reflex) { const t = d1; d1 = d2; d2 = t; }
     const s = sweepOf(d1, d2);
     const bis = d1 + s / 2;
-    const lr = o.r || labelR(s, a.t);
+    /* same Blipwork-only hook as angleSVG's, for the same reason and with
+       the same falsy-for-everything-else guarantee: the two must agree, or
+       placeCentreLabel would dodge a label position that is not where the
+       label is actually drawn. */
+    const lr = o.r || idxLabelR(a.t, o, s) || labelR(s, a.t);
     let [lx, ly] = pol(V.x, V.y, lr, bis);
     const hw = 6 + ((a.t || "").length * 3.6);
     lx = Math.max(hw, Math.min(W - hw, lx));
@@ -515,10 +534,16 @@ export function verifyDiagram(d, tol = 1.5) {
 /* ============================================================
    BLIPWORK-ONLY ADDITIVE EXTENSIONS  (2026-08-22)
    ------------------------------------------------------------
-   Nothing below this line exists in circle-geometry-game/js/engine.js,
-   and nothing below is called by anything above it — the ported core
-   behaves exactly as it does in Circle Quest whether this block is
-   here or not.
+   Nothing below this line exists in circle-geometry-game/js/engine.js.
+
+   Nothing below was called from above it until 2026-08-23, when the
+   index-label helpers (idxLabelR / idxClass, first block below) picked
+   up three one-line call sites in the ported core — listed in the file
+   header. Both return falsy for every label that is not a bare index
+   digit, so the ported core still behaves exactly as it does in Circle
+   Quest for every diagram Circle Quest could hand it; a bare "1"/"2"/
+   "3" on a wedge is a Blipwork-only convention that Circle Quest's own
+   figures never use.
 
    WHY IT EXISTS. Her design (EXAM-FOCUS-PLAN.md, "Circle geo
    diagrams"): "each part carries highlight flags — 'find angle A'
@@ -560,6 +585,81 @@ export function verifyDiagram(d, tol = 1.5) {
 
 /* the marker-pen colour, one place */
 export const HL = "#f6c945";
+
+/* --------------------------------------------------------------
+   INDEX LABELS SIT INSIDE THEIR ARC (Blipwork-only, additive and
+   AUTOMATIC, 2026-08-23 — her phone review of the Euclidean sketches:
+   "the angle numbering — the 1, 2 and 3 labels — I think we can make
+   that font a bit smaller and also put it INSIDE the angle arc.")
+
+   WHAT AN INDEX LABEL IS. Exactly a bare single digit: "1", "2", "3".
+   That is the IEB figure convention for a vertex carrying more than one
+   marked wedge — Ô₁, Ô₂, Ô₃ — and it is the only kind of label that is
+   a NAME rather than a VALUE. A name wants to be small and tucked into
+   its own wedge, the way a subscript is; a value ("35°", "2x", "y")
+   wants the ordinary treatment. Anything with a degree sign, a letter,
+   or more than one character is therefore untouched, and so is every
+   figure that has no numbered wedges at all: idxLabelR returns 0 and
+   idxClass returns "", so those call sites fall straight through to
+   labelR and class="al" — byte for byte the ported behaviour.
+
+   WHERE IT PUTS THE DIGIT. labelR pushes a label 44–86 px OUT from the
+   vertex, well beyond the arc. That is right for a value (it needs room
+   and it reads as an annotation), and wrong for an index: at 44 px from
+   A on a 360 px canvas the digit is nearer the far side of the figure
+   than to its own vertex, which is precisely the "C's 2 and D's 1 side
+   by side in the middle of the circle" failure euclid-siblings-chords-
+   and-angles.js's header records. So an index sits at 0,55 of its OWN
+   arc radius: between the vertex and the arc, inside the wedge it names,
+   unmistakably attached to that vertex.
+
+   THE TWO CLAMPS.
+     · MIN — never on the vertex dot. The dot is r 2,6, a 10 px digit is
+       ~3,6 half-height and its white halo adds ~1,8, so anything under
+       ~8 px would be sitting on the dot. 11 px is that with margin. The
+       centre dot is the same dot: an angle whose vertex IS O (every Ô₁
+       / Ô₂ / Ô₃) is the commonest case here, so this clamp is what keeps
+       the digit off it.
+     · MAX — never on the arc itself: ar − IDX_GAP, so the digit clears
+       the 2,2 px arc stroke plus its own halo.
+   When a wedge's arc is too small for both clamps to hold (roughly
+   ar < 20) the MIN wins and the digit lands close to the arc: that is
+   the spec's problem to fix, not the engine's, by giving that wedge a
+   bigger o.ar. Growing the arc is safe — it is a mark, never a
+   measurement, and verifyDiagram re-measures the angle either way.
+
+   AN EXPLICIT o.r STILL WINS, at both call sites (`o.r || idxLabelR(…)`),
+   so a figure that has a reason to park a digit somewhere else says so
+   and is obeyed.
+
+   The CSS half of this lives in css/exam.css:
+   `.exam-diagram svg.diag .al.al-idx` — smaller type, lighter halo.
+   -------------------------------------------------------------- */
+const IDX_MIN_R = 11;    // px from the vertex dot, the floor
+const IDX_GAP = 6.5;     // px of daylight between the digit and its arc
+const IDX_FRAC = 0.55;   // of the arc radius, when both clamps allow it
+
+/* Is this label text a bare index digit? Exported so a module or a
+   harness can ask the same question the renderer asks. */
+export function isIndexLabel(text) { return /^\d$/.test(text || ""); }
+
+/* " al-idx" for an index label, "" for everything else. */
+function idxClass(text) { return isIndexLabel(text) ? " al-idx" : ""; }
+
+/* The inside-the-arc label radius for an index label, or 0 — falsy, so
+   the call site falls through to labelR — for anything else.
+   `s` is the wedge's sweep, used only to reproduce angleSVG's own arc
+   default when the spec sets no o.ar, so the digit is measured against
+   the arc that is really drawn. A MARKED angle (chevron or right-angle
+   square) draws no arc at all, so there is nothing to sit inside and it
+   keeps the ordinary placement. */
+function idxLabelR(text, o, s) {
+  if (!isIndexLabel(text)) return 0;
+  o = o || {};
+  if (o.mark) return 0;
+  const ar = o.ar || (s < 40 ? 22 : 25);          // exactly angleSVG's arc radius
+  return Math.max(IDX_MIN_R, Math.min(IDX_FRAC * ar, ar - IDX_GAP));
+}
 
 const pairKey = (a, b) => [a, b].slice().sort().join("|");
 

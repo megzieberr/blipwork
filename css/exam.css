@@ -270,6 +270,19 @@ svg.diag .mk{stroke:#2b2f4a;stroke-width:2;stroke-linecap:round;stroke-linejoin:
 svg.diag .sirkel{stroke:#2b2f4a;stroke-width:2.4;fill:none}
 svg.diag .al{font:700 13.5px var(--font-display);text-anchor:middle;dominant-baseline:middle;
   paint-order:stroke;stroke:#fff;stroke-width:4.5px;stroke-linejoin:round}
+/* INDEX LABELS — the "1", "2", "3" that number two or more wedges at one
+   vertex, IEB-style (Ô₁, Ô₂, Ô₃). Her phone review of the Euclidean
+   sketches, 2026-08-23: "the angle numbering — the 1, 2 and 3 labels — I
+   think we can make that font a bit smaller and also put it INSIDE the
+   angle arc." The placement half is automatic in js/exam/circle-engine.js
+   (idxLabelR, in its Blipwork-only block, which also stamps this class);
+   this is the type half. Smaller, because an index is a NAME sitting in a
+   small wedge, not a value being read off the figure — and the halo comes
+   down with it, since a 4,5 px white stroke around a 10 px digit eats the
+   arc it is meant to sit inside. Scoped to .exam-diagram, like every other
+   rule in this file. */
+.exam-diagram svg.diag .al.al-idx{font-size:10.5px;stroke-width:3.2px}
+
 svg.diag .pl{font:700 13px var(--font-display);fill:#2b2f4a;text-anchor:middle;dominant-baseline:middle;
   paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
 svg.diag .ky{font:700 12.5px var(--font-display);dominant-baseline:middle;
