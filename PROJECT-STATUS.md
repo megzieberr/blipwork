@@ -1,4 +1,66 @@
-# Project status — updated 2026-08-23 evening (🏁 EXAM FOCUS FULL — 360 cards / 7 chapters LIVE, sw v62, XP 50/5 + eq9 migrations applied)
+# Project status — updated 2026-08-23 night (🧹 FIX DAY shipped — sw v63: exponent fractions, line-break nuggets, Euclid reasons/arcs, bookwork proofs WALK on the sketch)
+
+## 🧹 2026-08-23 (night) — FIX DAY (Fable, her phone finds; one Opus agent under her /go)
+
+Her ruling at the start: this session fixes only; the next build starts in a fresh session.
+Two commits, shipped together on her "ship it": `5a62019` (fixes, sw v63) + `fb1f3dc`
+(bookwork walk). Live-verified: sw v63 served, `js/exam/_walk.js` 200, new wording live.
+
+**Her finds → what was actually wrong → fixed**
+- `x^(2/5)` rendered as `x^(` + stacked fraction + `)` (es7, exam cards, concept cards).
+  `fracHtml` now turns a fraction that IS a caret exponent into `<sup class="sf-exp">`;
+  CSS raises/shrinks it (checked on the real es7 round at 375 px).
+- "Horizontal asymptote" wrapping mid-label — that one bullet held two facts (split). But
+  the hunt behind it found six renderer bugs in `js/ui.js`, each on many cards:
+  × ÷ inside the fraction regex's À-ž letter range (`2/3 × −3/2` → "3 ×" as denominator);
+  trailing `. , ; :` and `{ }` orphaning on the next line; `÷` not a glue op; `^(…)`
+  breaking after the caret; `word = value` splitting (`Lower = | 20 − 18`, `gradient | = 0`,
+  `x̄ > | median`); `∠`/`△` and precomposed `Â Ô Ĉ` unknown to the scanner (`∠ | ABC`).
+  Round/square brackets deliberately NOT glued (verify-wrap rule 3: nowraps balance).
+- Concept cards: spaced ` · ` is the formula-block one-identity-per-line separator, so
+  `Tₙ = a · rⁿ⁻¹`, `xᵃ · xᵇ`, `√a · √b`, `½ · base · height` were chopped into lines —
+  tightened. Replacement e.g. was born without numbers (`still /20` → 7/20, 6/19). Inline
+  `.formula` spans wrapped once (were boxed three times). All 144 cards rendered at 375 px
+  and READ (tools: scratchpad concept_sweep.py — not in repo).
+- Euclid: reason `sum of ∠s in △` → **`int. ∠s of △`** everywhere (30; quads untouched;
+  harness accept-list + EUCLID-ACCEPTABLE-REASONS.md updated). Rider 1 arcs: O₁ O₂ O₃ = 20
+  as asked; B₁ 32 / B₂ 40 (NOT 20 — two narrow wedges can't hold digits below ~30 px, she
+  may still want a say); circle-engine centre label now steps outside a crowded ring at O.
+- **Bookwork proofs walk WITH the sketch** (session G3, `sessions/G3-bookwork-walk-steps.md`):
+  memo blocks may carry `hl` (reveal-shaped); `js/exam/_walk.js` resolves step k's picture
+  = last hl ≤ k, else question; answer without hl = reveal. Opt-in per part — riders are
+  pixel-identical through a walk. All four proofs authored; ticks arrive with "OA = OB",
+  not the construction (no spoilers); tangent–chord's `90° − x` wedge lit but unlabelled
+  (label landed under the O). Harness 9i checks the walk states; `tools/shoot_walk.py`
+  captures every step (crops in tools/diags-walk, git-ignored).
+
+Harnesses at ship: verify-exam 673/673 · modules **7374/7374** (+75) · fractions 5819/5819 ·
+wrap 304 611/304 611 · exam-skills 41/41 · sweep.py A = 0, D = 0. Agent spend ≈ 0.29M Opus.
+
+### ⏳ Pending on Megan
+- 📱 3 min [whenever]: close + reopen the PWA twice, then Exam Focus → Euclidean → bookwork
+  proofs → proof 1 → *Walk me through it* → tap Next step through — the sketch should build.
+- 📱 10 min [whenever]: Exam Focus → Algebraic Expressions → Factorise tile → two cards;
+  Euclidean → Tangents → one full rider; Trig Graphs → Period/amplitude/range → one card.
+- 🌐 1 min [whenever]: admin → open eq9 "Two, one or no solution?" for the learner who asked.
+
+### Next up
+- Today's build (she postponed it to a fresh session) — her brief to come.
+- Rider 1 B₁/B₂ arcs: her verdict on 32/40 vs "same as O".
+- Cyclic-quad proof step 1: index "1" sits near the "O" (cosmetic, same spot as the
+  approved "2x"); `.diag .pl` "O" reads like a zero at 375 px (pre-existing).
+- Dice rounds for other chapters; calculator emulator round 2; two-circle riders (banked).
+
+## 📌 Decisions (append-only, 2026-08-23 fix day)
+- Caret exponents that are fractions render as superscript fractions; other `^(…)` stay as
+  written (her call to revisit if she wants `2^(x+4)` superscripted too).
+- A formula block's spaced ` · ` means "separate identity"; multiplication dots are tight.
+- Bookwork walk pictures are cumulative and never light what the sentence hasn't said yet.
+- Rider arcs: digits need ≥ ~30 px arcs on narrow wedges; uniform-small is for wide wedges.
+
+---
+
+# (previous head) Project status — updated 2026-08-23 evening (🏁 EXAM FOCUS FULL — 360 cards / 7 chapters LIVE, sw v62, XP 50/5 + eq9 migrations applied)
 
 ## 🏁 2026-08-23 — THE EXAM FOCUS BUILD DAY (Fable foreman, 13 Opus sessions, her /go)
 
