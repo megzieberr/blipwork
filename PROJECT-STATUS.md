@@ -38,15 +38,10 @@ Harnesses at ship: verify-exam 673/673 · modules **7374/7374** (+75) · fractio
 wrap 304 611/304 611 · exam-skills 41/41 · sweep.py A = 0, D = 0. Agent spend ≈ 0.29M Opus.
 
 ### ⏳ Pending on Megan
-- 📱 3 min [whenever]: close + reopen the PWA twice, then Exam Focus → Euclidean → bookwork
-  proofs → proof 1 → *Walk me through it* → tap Next step through — the sketch should build.
-- 📱 10 min [whenever]: Exam Focus → Algebraic Expressions → Factorise tile → two cards;
-  Euclidean → Tangents → one full rider; Trig Graphs → Period/amplitude/range → one card.
-- 🌐 1 min [whenever]: admin → open eq9 "Two, one or no solution?" for the learner who asked.
+- (nothing — she checked the bookwork walk + spot-checks on her phone, 2026-08-23 night, all approved)
 
 ### Next up
 - Today's build (she postponed it to a fresh session) — her brief to come.
-- Rider 1 B₁/B₂ arcs: her verdict on 32/40 vs "same as O".
 - Cyclic-quad proof step 1: index "1" sits near the "O" (cosmetic, same spot as the
   approved "2x"); `.diag .pl` "O" reads like a zero at 375 px (pre-existing).
 - Dice rounds for other chapters; calculator emulator round 2; two-circle riders (banked).
