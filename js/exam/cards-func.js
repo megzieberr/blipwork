@@ -42,6 +42,14 @@
    order: what she already had first, then the new ones building up.
    `examQuestionsForTopic` filters this array by topic and keeps its
    order, so position within a skill's block is what decides the run.
+
+   THE BUILD DAY (2026-08-23, EXAM-BUILD-DAY.md) took the chapter from
+   eight tiles to thirteen. Session D1 added sketch · intersection ·
+   average-gradient; session D2 added reflections and the chapter's
+   Level 4 ★ tile, and carried out HER ★ MOVE — every level-4 part that
+   used to sit inside a normal card is now cut onto the Level 4 tile
+   instead, with the tiles that lost a card topped up back to six. The
+   two sections at the foot of this file carry the notes.
    ============================================================ */
 import { makeCard } from "./_cards.js";
 import { funcHyperbolaAndExponentialQuestions } from "./func-hyperbola-and-exponential.js";
@@ -62,6 +70,13 @@ import { funcDistancesSiblingQuestions } from "./func-siblings-distances.js";
 import { funcSketchSiblingQuestions } from "./func-siblings-sketch.js";
 import { funcIntersectionSiblingQuestions } from "./func-siblings-intersection.js";
 import { funcAverageGradientSiblingQuestions } from "./func-siblings-average-gradient.js";
+/* SESSION D2 (2026-08-23, the same build day) — the FOURTH new tile
+   (reflections), the chapter's Level 4 ★ tile, and the four top-up
+   cards the ★ move made necessary. See the "★ MOVE" note further
+   down, at the level-4 section itself. */
+import { funcReflectionsSiblingQuestions } from "./func-siblings-reflections.js";
+import { funcLevel4Questions } from "./func-level4.js";
+import { funcTopUpSiblingQuestions } from "./func-siblings-topup.js";
 
 const SOURCES = [
   ...funcHyperbolaAndExponentialQuestions,
@@ -79,6 +94,9 @@ const SOURCES = [
   ...funcSketchSiblingQuestions,
   ...funcIntersectionSiblingQuestions,
   ...funcAverageGradientSiblingQuestions,
+  ...funcReflectionsSiblingQuestions,
+  ...funcLevel4Questions,
+  ...funcTopUpSiblingQuestions,
 ];
 const src = id => {
   const q = SOURCES.find(qq => qq.id === id);
@@ -133,6 +151,14 @@ export const funcCards = [
   makeCard({ skill: "asymptotes-domain-range", from: src("func.sib.adr.q1"), parts: ["a", "b", "c"] }),
   makeCard({ skill: "asymptotes-domain-range", from: src("func.sib.adr.q2"), parts: ["a", "b", "c"] }),
   makeCard({ skill: "asymptotes-domain-range", from: src("func.sib.adr.q3"), parts: ["a", "b"] }),
+  /* RE-HOMED BY THE ★ MOVE (session D2, 2026-08-23). func.gt.t1q5 used
+     to sit on Distances as an (a)+(b) pair: (a) "determine the range of
+     f", which carries the whole stem, and (b) the starred maximum
+     length of PQ. (b) has gone to the Level 4 tile, and (a) on its own
+     is a RANGE question, not a distance one — so it belongs here rather
+     than left alone on a tile it does not match. It carries its own
+     stem, so it takes no intro. */
+  makeCard({ skill: "asymptotes-domain-range", from: src("func.gt.t1q5"), parts: ["a"] }),
 
   /* ---- 3. Intercepts & turning point --------------------------- */
   makeCard({
@@ -223,38 +249,40 @@ export const funcCards = [
   makeCard({ skill: "inequalities", from: src("func.sib.ineq.q4"), parts: ["a", "b"] }),
 
   /* ---- 7. Nature of roots --------------------------------------
-     All three are "slide a line across the graph" questions, so each
-     one needs the graph it slides across. */
-  makeCard({
-    skill: "nature-of-roots", from: src("func.lp.q1"), parts: ["e"],
-    intro: { en: PARABOLA },
-  }),
-  makeCard({
-    skill: "nature-of-roots", from: src("func.hyp.t2q3"), parts: ["e"],
-    intro: { en: HYP_T2 },
-  }),
-  makeCard({
-    skill: "nature-of-roots", from: src("func.gt.t1q5"), parts: ["c"],
-    // the maximum 16 and the y-intercept 7 are the two facts this part
-    // has to FETCH (its own memo says so, and it is why the part is
-    // starred) — so the intro stops at the equation.
-    intro: { en: "f is the parabola &nbsp;f(x) = −x² + 6x + 7." },
-  }),
-  /* SIBLINGS (session 2b) — the three above are a happy parabola, a
-     hyperbola and a "two positive roots" tail. These three add the
-     SAD parabola read the other way round, the two-sided k answer
-     built from a line that turns rather than slides, and the tangent
-     case with Δ then read backwards into cuts / touches / misses. */
+     THE ★ MOVE EMPTIED THE TOP OF THIS TILE (session D2, 2026-08-23,
+     her ruling 5). The three cards that used to open it — func.lp.q1(e),
+     func.hyp.t2q3(e) and func.gt.t1q5(c) — were each made ENTIRELY of a
+     level-4 part, so all three moved wholesale to the Level 4 ★ tile at
+     the foot of this file, intros and all. That left three cards here,
+     so session D2 composed three fresh level-≤3 ones
+     (js/exam/func-siblings-topup.js) to take the tile back to six.
+
+     SIBLINGS (session 2b) — the SAD parabola read the other way round,
+     the two-sided k answer built from a line that turns rather than
+     slides, and the tangent case with Δ then read backwards into
+     cuts / touches / misses. */
   makeCard({ skill: "nature-of-roots", from: src("func.sib.nor.q1"), parts: ["a", "b"] }),
   makeCard({ skill: "nature-of-roots", from: src("func.sib.nor.q2"), parts: ["a", "b"] }),
   makeCard({ skill: "nature-of-roots", from: src("func.sib.nor.q3"), parts: ["a", "b"] }),
+  /* TOP-UPS (session D2) — the most basic version of the skill, which
+     the tile never had (read the nature straight off a sketch, then the
+     one k that gives equal roots); a horizontal line against an
+     EXPONENTIAL, which never turns, so the count is one-or-none rather
+     than two-or-none; and the version where the GRAPH slides instead of
+     the line, with the sign flip that catches everyone. */
+  makeCard({ skill: "nature-of-roots", from: src("func.sib.nor.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "nature-of-roots", from: src("func.sib.nor.q5"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "nature-of-roots", from: src("func.sib.nor.q6"), parts: ["a", "b"] }),
 
   /* ---- 8. Distances --------------------------------------------
-     (a) carries the whole stem — both graphs, A, C and the segment PQ —
-     and (b) is about that same PQ, so they stay together and no intro
-     is needed. */
-  makeCard({ skill: "distances", from: src("func.gt.t1q5"), parts: ["a", "b"] }),
-  /* SIBLINGS (session 2b) — this was the thinnest tile in the chapter,
+     THE ★ MOVE SPLIT THIS TILE'S FIRST CARD (session D2, 2026-08-23).
+     func.gt.t1q5 used to sit here as an (a)+(b) pair; (b), the starred
+     maximum length of PQ, is now on the Level 4 tile, and (a) — a RANGE
+     question — moved up to Asymptotes, domain & range where it belongs.
+     func.sib.dist.q6 below is the fresh level-≤3 card that takes this
+     tile back to six.
+
+     SIBLINGS (session 2b) — this was the thinnest tile in the chapter,
      with that single card on it. Five more take it to six, walking her
      pp40–45 in order: the three distances between two points, the
      vertical segment at a given x, the MAXIMUM length via the
@@ -266,6 +294,10 @@ export const funcCards = [
   makeCard({ skill: "distances", from: src("func.sib.dist.q3"), parts: ["a", "b"] }),
   makeCard({ skill: "distances", from: src("func.sib.dist.q4"), parts: ["a", "b"] }),
   makeCard({ skill: "distances", from: src("func.sib.dist.q5"), parts: ["a", "b"] }),
+  /* TOP-UP (session D2) — the HORIZONTAL chord: the gap between the two
+     x-intercepts, then the gap between the two points at a given
+     height. The one distance shape the five cards above never ask for. */
+  makeCard({ skill: "distances", from: src("func.sib.dist.q6"), parts: ["a", "b"] }),
 
   /* ---- 9. Sketch the graph (NEW TILE, session D1, 2026-08-23) ----
      Six cards, all fresh: the question side is a blank set of axes with
@@ -313,4 +345,72 @@ export const funcCards = [
   makeCard({ skill: "average-gradient", from: src("func.sib.ag.q4"), parts: ["a", "b"] }),
   makeCard({ skill: "average-gradient", from: src("func.sib.ag.q5"), parts: ["a", "b", "c"] }),
   makeCard({ skill: "average-gradient", from: src("func.sib.ag.q6"), parts: ["a", "b"] }),
+
+  /* ---- 12. Reflections (NEW TILE, session D2, 2026-08-23) --------
+     The fourth of EXAM-BUILD-DAY.md's new Functions tiles, and the one
+     the bank asks for by name ("reflect-about-own-asymptote
+     transformations"). Six fresh cards, easiest first, which here also
+     runs family by family: the parabola in each axis, then the
+     exponential in the y-axis, then the hyperbola about its OWN
+     horizontal asymptote, then the exponential in the x-axis with the
+     range work and the double reflection, and last the question
+     backwards — two graphs given, describe the move. Each carries its
+     own stem, so none takes an intro. */
+  makeCard({ skill: "reflections", from: src("func.sib.ref.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "reflections", from: src("func.sib.ref.q2"), parts: ["a", "b"] }),
+  makeCard({ skill: "reflections", from: src("func.sib.ref.q3"), parts: ["a", "b"] }),
+  makeCard({ skill: "reflections", from: src("func.sib.ref.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "reflections", from: src("func.sib.ref.q5"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "reflections", from: src("func.sib.ref.q6"), parts: ["a", "b"] }),
+
+  /* ---- 13. Level 4 ★ — the brave round (session D2, 2026-08-23) ---
+     Her ruling 5 (EXAM-BUILD-DAY.md): "Levels 1–3 on the normal tiles;
+     every chapter gets a last tile Level 4 ★ holding mixed Level-4
+     questions for that chapter. The low achievers must never meet a ★
+     while drilling basics."
+
+     THE ★ MOVE. Four cards below are NOT new: they are the four level-4
+     parts that used to sit inside normal Functions cards, cut onto this
+     tile instead. Their SOURCE modules are untouched — only the tile
+     they are cut onto changed, and (for the one that lost its
+     stem-carrying partner) the `intro` they carry:
+
+       func.lp.q1(e)     was nature-of-roots  · same intro, PARABOLA
+       func.gt.t1q5(c)   was nature-of-roots  · same intro
+       func.hyp.t2q3(e)  was nature-of-roots  · same intro, HYP_T2
+       func.gt.t1q5(b)   was distances, paired with (a) · NEW intro,
+                         because (a) carried the stem and (a) is now a
+                         card of its own on Asymptotes, domain & range
+
+     The other six are fresh (js/exam/func-level4.js). Every card here
+     is a level-4 card, so the level sort inside the tile leaves this
+     order alone: it ramps from the two shortest sliding-line questions
+     up to the two-graph fetches. */
+  makeCard({
+    skill: "level-4", from: src("func.lp.q1"), parts: ["e"],
+    intro: { en: PARABOLA },
+  }),
+  makeCard({
+    skill: "level-4", from: src("func.gt.t1q5"), parts: ["c"],
+    // the maximum 16 and the y-intercept 7 are the two facts this part
+    // has to FETCH (its own memo says so, and it is why the part is
+    // starred) — so the intro stops at the equation.
+    intro: { en: "f is the parabola &nbsp;f(x) = −x² + 6x + 7." },
+  }),
+  makeCard({ skill: "level-4", from: src("func.l4.q3"), parts: ["a", "b"] }),
+  makeCard({
+    // (b) used to travel with (a), which carried the whole stem. On its
+    // own it needs all of it: both equations, A, C, and what PQ is.
+    skill: "level-4", from: src("func.gt.t1q5"), parts: ["b"],
+    intro: { en: "f is the parabola &nbsp;f(x) = −x² + 6x + 7&nbsp; and g is the line &nbsp;g(x) = 2x + 2. &nbsp;The two graphs cut each other at A(−1 ; 0) and at C, and A is also the x-intercept of both graphs. PQ is a line segment drawn parallel to the y-axis, with P on f and Q on g, and with PQ lying between A and C." },
+  }),
+  makeCard({ skill: "level-4", from: src("func.l4.q2"), parts: ["a"] }),
+  makeCard({ skill: "level-4", from: src("func.l4.q1"), parts: ["a", "b"] }),
+  makeCard({
+    skill: "level-4", from: src("func.hyp.t2q3"), parts: ["e"],
+    intro: { en: HYP_T2 },
+  }),
+  makeCard({ skill: "level-4", from: src("func.l4.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "level-4", from: src("func.l4.q5"), parts: ["a"] }),
+  makeCard({ skill: "level-4", from: src("func.l4.q6"), parts: ["a", "b"] }),
 ];
