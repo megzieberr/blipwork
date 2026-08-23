@@ -39,6 +39,16 @@ created it empty — fill it), your blocks in `verify-exam-modules.mjs`. Nothing
    fresh numbers); a "show that" identity; a "for which values of x is the expression
    undefined / equal to zero" that needs factorising both; a simplify-then-solve.
 
+## One small plumbing item that is yours (nobody else touches these files today)
+The Exam Focus tab lists chapters in `CHAPTERS` order then `EXAM_ONLY_CHAPTERS` order, so
+Algebraic Expressions lands LAST, after Euclidean — wrong for the chapter the weakest learners
+must meet first. Fix: in `js/config.js` add `export const EXAM_TAB_ORDER = ["algx", "exp",
+"eqn", "func", "tgraph", "gtrig", "euclid"]` (documented: the Exam Focus tab's display order,
+basics first; `trig` absent because hidden) and make `examChapters()` return the chapters in
+that order (any flagged chapter missing from the list falls to the end, so nothing can
+vanish). Update `verify-exam.html` Part 3's expectation if it asserts the old order. Phone
+check: the Exam Focus tab at 375 px shows Algebraic Expressions first.
+
 ## Method source
 Her algebra notes (`METHODS-algebra.md`) cover exponents/equations, NOT Grade 10 factorising —
 read Part 0 (universal rules: the `∴` habit, the four "no answer" words, answer presentation)

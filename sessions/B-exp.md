@@ -45,6 +45,14 @@ lines under each tile in the tile-map order; existing lines stay), your blocks i
    2^(n+2) + 2^n` is divisible by 5 for every natural n; a nested rational exponent with a
    negative base trap; a "solve for x: `x^(2/3) = 4`" with both roots and the check.
 
+## THE ★ MOVE (her ruling today: levels 1–3 on normal tiles)
+Session 0's level wall found ONE level-4 part on a normal exp tile: `exp.nss.q1` part d,
+currently the card `exp.nss.q1.d` under `exponential-equations`. Move it: delete that makeCard
+line, and append a makeCard line under your new `/* ---- level-4 ---- */` section in
+`cards-exp.js` with an `intro` carrying whatever (a)–(c) gave it. Then remove `"exp"` from the
+`L4_MOVE_PENDING` constant in `verify-exam.html` Part 13 so the wall is enforced for exp.
+(`exponential-equations` then has 3 cards → bring it to 6, i.e. +3 not +2.)
+
 ## Method source
 `METHODS-algebra.md` Part A (every one of A1–A16) — her names and her order are law in the
 memo and the esplain. Her two open flags (the `√9 = ±3` box; two-roads ordering): the built

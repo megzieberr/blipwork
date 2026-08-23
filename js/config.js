@@ -277,10 +277,39 @@ export const EXAM_ONLY_CHAPTERS = [
 
 export function chapterById(id) { return CHAPTERS.find(c => c.id === id) || null; }
 
-/* Every chapter the EXAM FOCUS tab may show — quest chapters first, in
-   their existing order, then the exam-only ones. Exam-focus screens use
-   these two instead of CHAPTERS / chapterById; nothing else does. */
-export function examChapters() { return CHAPTERS.concat(EXAM_ONLY_CHAPTERS); }
+/* THE EXAM FOCUS TAB'S DISPLAY ORDER (session A of the exam build day,
+   2026-08-23). Plain English: this is the order the chapter cards appear
+   in when a learner opens the 📝 Exam Focus tab — BASICS FIRST.
+
+   It exists because the natural order was wrong for the learners this
+   tab was widened for. examChapters() used to hand back CHAPTERS in
+   their hub order and then the exam-only ones on the end, which put
+   Algebraic Expressions LAST, after Euclidean geometry — the Grade 10
+   revision chapter that her weakest learners have to meet FIRST was the
+   one they had to scroll furthest to reach (EXAM-BUILD-DAY.md ruling 2:
+   "that is where the 30%-learners will earn their marks").
+
+   "trig" is deliberately absent: 2D Trig is hidden from Exam Focus for
+   now (her ruling 9), so it never renders. Nothing can vanish by being
+   left off this list either — a flagged chapter whose id is missing
+   simply falls to the END, in its existing order, which is what the
+   stable sort below guarantees. */
+export const EXAM_TAB_ORDER = ["algx", "exp", "eqn", "func", "tgraph", "gtrig", "euclid"];
+
+/* Every chapter the EXAM FOCUS tab may show — quest chapters and
+   exam-only ones together, in EXAM_TAB_ORDER. Exam-focus screens use
+   this and examChapterById() instead of CHAPTERS / chapterById; nothing
+   else does. The sort is STABLE and total: anything not named in
+   EXAM_TAB_ORDER keeps its relative position at the back rather than
+   disappearing. */
+export function examChapters() {
+  const all = CHAPTERS.concat(EXAM_ONLY_CHAPTERS);
+  const rank = id => { const i = EXAM_TAB_ORDER.indexOf(id); return i === -1 ? EXAM_TAB_ORDER.length : i; };
+  return all
+    .map((c, i) => ({ c, i }))
+    .sort((a, b) => (rank(a.c.id) - rank(b.c.id)) || (a.i - b.i))
+    .map(x => x.c);
+}
 export function examChapterById(id) { return chapterById(id) || EXAM_ONLY_CHAPTERS.find(c => c.id === id) || null; }
 /* every quest in a chapter shares its chapter's one flat accent —
    no per-quest shade ramp in the solid-colour palette. */
