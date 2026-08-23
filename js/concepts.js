@@ -985,11 +985,14 @@ export const CONCEPTS = {
   patArithTerm: {
     title: "The general term of an arithmetic pattern",
     body: `
-      <p>Two formulas — either works:</p>
-      <div class="formula">Tₙ = an + c &nbsp;(a = the common difference, c = T₀)<br>Tₙ = a + (n − 1)d &nbsp;(a = T₁, d = the common difference)</div>
-      <p>Watch the letter clash: in <b>an + c</b> the letter a is the <b>difference</b>; in <b>a + (n − 1)d</b> the letter a is the <b>first term</b>. For an + c, find c by stepping back one: c = T₀ = T₁ − d.</p>
+      <p>One formula, the Grade 11 shortcut (her ruling, 2026-08-23 — the a + (n − 1)d version is Grade 12 work and is NOT used here):</p>
+      <div class="formula">Tₙ = an + c &nbsp;&nbsp;(a = the constant difference, c = T₀)</div>
+      <ol>
+        <li><b>a</b> is the constant difference — so if the pattern goes up by 3 each time, the formula starts with <b>3n</b>.</li>
+        <li><b>c</b> is T₀, the term that would sit <b>before</b> T₁. Take T₁ and step <b>backwards</b> one difference: c = T₁ − d.</li>
+      </ol>
       <p>Once you have Tₙ: substitute n for any term; or set Tₙ equal to a value and solve for n to find <b>which</b> term it is.</p>
-      <div class="eg">e.g. 4 ; 7 ; 10 → a = 3, c = 4 − 3 = 1, so Tₙ = 3n + 1. Then T₁₀ = 31.</div>`,
+      <div class="eg">e.g. −1 ; 2 ; 5 ; 8 → the difference is 3, so start with 3n. Step back from T₁: −1 − 3 = −4, so c = −4 and Tₙ = 3n − 4. Then T₁₀ = 3(10) − 4 = 26.</div>`,
   },
   patQuadratic: {
     title: "Quadratic patterns → Tₙ = an² + bn + c",

@@ -46,7 +46,7 @@ const SKILLS = {
       `Find the general term Tₙ of <b>${list(seq)}</b>.`,
       correct, wrongs,
       { layout: "grid2", graph: pyramid(seq, { showFirst: true, accent: ACC }),
-        hint: "Tₙ = an + c with a = the common difference and c = T₀ (the term before T₁).",
+        hint: "Tₙ = an + c: a is the constant difference (so start with that many n), and c = T₀ — step BACK one difference from T₁.",
         answerLabel: `a = ${C(d)} and c = T₀ = ${C(a1)} − ${P(d)} = ${C(c)}, so Tₙ = ${correct}.` });
   },
 
@@ -58,8 +58,8 @@ const SKILLS = {
       `For the pattern <b>${list(seq)}</b>, find T${C(n)}.`,
       arithTn(a1, d)(n),
       { graph: pyramid(seq, { showFirst: true, accent: ACC }),
-        hint: `Use Tₙ = a + (n − 1)d with a = ${C(a1)}, d = ${C(d)}, n = ${C(n)}.`,
-        answerLabel: `T${C(n)} = ${C(a1)} + (${C(n)} − 1)(${C(d)}) = ${C(arithTn(a1, d)(n))}.` });
+        hint: `First build Tₙ = an + c: a = the difference (${C(d)}), c = T₀ = ${C(a1)} − ${P(d)} = ${C(a1 - d)}. Then put n = ${C(n)} in.`,
+        answerLabel: `Tₙ = ${linStr(d, a1 - d)}, so T${C(n)} = ${linStr(d, a1 - d).replace("n", `(${C(n)})`)} = ${C(arithTn(a1, d)(n))}.` });
   },
 
   /* evaluate a given formula */
@@ -84,8 +84,8 @@ const SKILLS = {
       `In <b>${list(seq)} ; …</b>, which term is equal to ${C(value)}? (Find n.)`,
       whichTermArith(a1, d, value),
       { allowNeg: false,
-        hint: "Set Tₙ = the value and solve for n:  value = a + (n − 1)d.",
-        answerLabel: `${C(value)} = ${C(a1)} + (n − 1)(${C(d)})  →  n = ${C(n)} (the ${ord(n)} term).` });
+        hint: `Build Tₙ = an + c first (a = ${C(d)}, c = T₀ = ${C(a1 - d)}), then set it equal to ${C(value)} and solve for n.`,
+        answerLabel: `${C(value)} = ${linStr(d, a1 - d)}  →  n = ${C(n)} (the ${ord(n)} term).` });
   },
 
   /* what does c mean in Tₙ = an + c? */
