@@ -1,5 +1,5 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
-import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, EXAM_CHAPTERS, examChapters, examChapterById } from "./config.js";
+import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, FUNFUN_ENABLED, EXAM_CHAPTERS, examChapters, examChapterById } from "./config.js";
 import { questDef } from "./quests/index.js";
 import { dicePool } from "./quests/dice-pools.js";
 import { openDiceRound } from "./dice-play.js";
@@ -15,6 +15,24 @@ import { itemLabel } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
 import { renderAssignmentCard } from "./assignment.js";
 import { mountCqCollect } from "./cq-collect.js";
+/* FUNFUN-PART2-BRIEF.md (2026-08-23) — js/funfun/ is a SYNCED COPY of the
+   graph-quest app (generated output, never hand-edited). Only three things
+   are read from it here: the quest list, its grandfathered unlock rule, and
+   its bilingual-string resolver. Everything else about a Fun Functions quest
+   happens inside the shadow root js/funfun-play.js builds. */
+import { QUESTS as FF_QUESTS } from "./funfun/quests/index.js";
+import { questUnlocked as ffUnlocked } from "./funfun/screens.js";
+import { L as ffL, setLang as ffSetLang } from "./funfun/i18n.js";
+
+/* Fun Functions' L() reads a MODULE-LEVEL language that defaults to Afrikaans
+   (its standalone remembers the learner's toggle in localStorage under
+   "gq.lang"). Blipwork and the standalone live on the SAME ORIGIN
+   (megzieberr.github.io), so that key is genuinely shared — a learner who
+   once opened the standalone would otherwise see Afrikaans quest names here.
+   Brief D6: blipwork is English and never shows the toggle. `persist:false`
+   is the mount's own idiom: set it for this read only, never write it back
+   into the shared key. */
+const ffTitle = (q) => { ffSetLang("en", { persist: false }); return ffL(q.title); };
 
 /* ---------------- Phase 2 helpers (mirrors blip.js's normalizers —
    duplicated rather than shared, since this file and blip.js are each
@@ -330,6 +348,15 @@ export function renderChapter(app, host, params) {
     grid.appendChild(dcard);
   }
 
+  // FUNFUN-PART2-BRIEF.md D7 📈 — the Fun Functions strip: 15 tiles, one per
+  // graph-quest quest, mounted one at a time by js/funfun-play.js. Sits AFTER
+  // the 🎲 card and BEFORE the static quest cards, spanning the grid. Like the
+  // dice it is NEVER gated by the teacher's open/close switches (her ruling:
+  // a kid who skips straight to practice is a kid practising maths) — but it
+  // still lives below the "no quests open yet" return above, so a chapter the
+  // class hasn't started shows nothing at all.
+  if (FUNFUN_ENABLED && ch.id === "func") grid.appendChild(funfunStrip(app, ch));
+
   quests.forEach(q => {
     const accent = questAccent(ch, q.n);
     const def = questDef(q.id);
@@ -348,6 +375,58 @@ export function renderChapter(app, host, params) {
     grid.appendChild(card);
   });
   host.appendChild(grid);
+}
+
+/* ---------------- FUN FUNCTIONS strip (brief D7) ----------------
+   Built synchronously (renderChapter is sync) with a placeholder line, then
+   repainted once the learner's Fun Functions profile arrives. The profile is
+   its OWN call — mhq_funfun_state, not a new field bolted onto mhq_get_state
+   (brief D3, the copy-forward danger the dice migration's header spells out).
+   If it can't be fetched (offline, or the migration not applied yet) the strip
+   still draws with an empty profile: quest 1 open, the rest locked, and a
+   plain line saying so — never a blank space the learner can't explain. */
+function funfunStrip(app, ch) {
+  const block = el("div", "ff-strip");
+  block.innerHTML = `<div class="ff-strip-head">
+      <span class="ff-strip-title">📈 Fun Functions</span>
+      <span class="muted small">Always open</span>
+    </div>
+    <p class="muted small ff-strip-blurb">Drag, tap and read the graphs. Tap a quest to play it.</p>
+    <div class="ff-tiles"><p class="muted small ff-strip-msg">Loading your progress…</p></div>`;
+  const tiles = block.querySelector(".ff-tiles");
+
+  const paint = (profileIn, note) => {
+    if (!block.isConnected) return;                 // the learner walked off mid-fetch
+    const profile = { quests: (profileIn && profileIn.quests) || {}, met: (profileIn && profileIn.met) || {} };
+    tiles.textContent = "";
+    if (note) block.insertBefore(el("p", "muted small ff-strip-msg", note), tiles);
+    FF_QUESTS.forEach((q, i) => {
+      const st = profile.quests[q.id] || {};
+      const locked = !ffUnlocked(profile, i);
+      // `best` is a 0..1 fraction (see migration-funfun.sql / local-backend.js)
+      const pct = st.plays > 0 ? Math.round((st.best || 0) * 100) : null;
+      const tile = el("button", "ff-tile" + (locked ? " locked" : ""));
+      tile.type = "button";
+      tile.disabled = locked;
+      tile.style.setProperty("--qc", q.accent || ch.signature);
+      tile.innerHTML = `<span class="qn">${locked ? "🔒" : i + 1}</span>
+        ${st.done ? '<span class="qcheck">✓</span>' : ""}
+        <span class="ff-tt">${ffTitle(q)}</span>
+        <span class="ff-ts">${pct == null ? (locked ? "Locked" : "Open") : pct + "%"}</span>`;
+      if (locked) tile.title = "Finish the quest before this one to open it.";
+      else tile.addEventListener("click", () => app.go("funfunPlay", { chapter: ch, questId: q.id }));
+      tiles.appendChild(tile);
+    });
+  };
+
+  const sess = getSession();
+  const blank = { quests: {}, met: {} };
+  const offline = "Couldn’t load your Fun Functions progress — only the first quest is open until it loads.";
+  if (!sess) { paint(blank, offline); return block; }
+  api.funfunState(sess.username, sess.password)
+    .then(r => (r && r.ok) ? paint(r) : paint(blank, offline))
+    .catch(() => paint(blank, offline));
+  return block;
 }
 
 /* ---------------- EXAM FOCUS · skill tiles (EXAM-SKILLS-BRIEF.md, Session
@@ -515,6 +594,56 @@ export function renderResults(app, host, params) {
 
   if (passed) { mk("Back to quests", true, toChapter); mk("Play again", false, replay); }
   else { mk("Try again", true, replay); mk("Back to quests", false, toChapter); }
+  screen.appendChild(card);
+  host.appendChild(screen);
+}
+
+/* ---------------- FUN FUNCTIONS RESULTS (brief D9) ----------------
+   Modelled on renderDiceResults, and separate from it for the same reason it
+   is separate from renderResults: no pass/fail, no badge, no mastery language
+   on this card. The only "you finished it" signal a learner ever sees is the
+   ✓ the strip tile picks up afterwards.
+
+   `correct` is a SCORE, not a count, and it may be fractional — a question got
+   right on the second chance is worth half a mark — so it renders as e.g.
+   "3.5 / 6". Both numbers come from the server's own recompute (mhq_submit_
+   funfun), never from the client's tally. */
+export function renderFunfunResults(app, host, params) {
+  const { chapter, accent, questId, total, ok, xpAwarded, goldAwarded, levelUp, level } = params;
+  setTheme(chapter.signature, accent);
+  const q = FF_QUESTS.find(x => x.id === questId);
+  const correct = Number(params.correct) || 0;
+  const items = Number(total) || 0;
+  const pct = items ? Math.round((correct / items) * 100) : 0;
+  // SA decimal COMMA (foreman review fix, 2026-08-23): blipwork's own maths
+  // content writes 0,5 — a half-credit score reads "3,5 / 6", never "3.5".
+  // No trailing ",0" on a whole score.
+  const scored = String(Math.round(correct * 100) / 100).replace(".", ",");
+
+  const screen = el("div", "results");
+  screen.style.setProperty("--accent", accent);
+  const card = el("div", "card result-card");
+  card.innerHTML = `
+    <div class="result-emoji">📈</div>
+    <h1>${q ? ffTitle(q) : "Fun Functions"} complete</h1>
+    <div class="big-score">${pct}%</div>
+    <p class="muted">${scored} / ${items}</p>
+    <div class="result-reward system-notice"><span class="sys-label">Reward</span><div class="sys-value">+${xpAwarded ?? 0} XP · +${goldAwarded ?? 0} <span class="crystal">💎</span></div></div>
+    ${ok ? "" : `<div class="result-msg warn">Couldn’t reach the server to pay this round out — check your connection and try again later; what you did in this round wasn’t lost.</div>`}
+    ${levelUp ? `<div class="result-levelup system-notice"><span class="sys-label">System</span><div class="sys-value"><span class="sparkle tw">✦</span> LEVEL UP — LV. ${level} <span class="sparkle tw">✦</span></div></div>` : ""}
+    <div class="result-actions"></div>`;
+
+  const actions = card.querySelector(".result-actions");
+  // her double-submit rule: one tap only, flagged before anything navigates
+  let spent = false;
+  const mk = (label, primary, fn) => {
+    const b = el("button", "btn " + (primary ? "primary" : "ghost"), label);
+    b.addEventListener("click", () => { if (spent) return; spent = true; b.disabled = true; fn(); });
+    actions.appendChild(b);
+  };
+  mk("Play again", true, () => app.go("funfunPlay", { chapter, questId }));
+  mk("Back to quests", false, () => app.go("chapter", { chapterId: chapter.id }));
+
   screen.appendChild(card);
   host.appendChild(screen);
 }

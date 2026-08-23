@@ -124,4 +124,24 @@ export const SupabaseBackend = {
       p_question_id: questionId, p_part_id: partId, p_total_parts: totalParts,
     });
   },
+
+  // ---- FUNFUN-PART2-BRIEF.md: the Fun Functions mount (session 1,
+  // 2026-08-23). Fun Functions is its own app (the graph-quest repo);
+  // blipwork mounts one quest at a time and owns the payout. These four
+  // are its ENTIRE server surface — mhq_get_state and mhq_admin_data are
+  // deliberately untouched (brief D3, the copy-forward danger recorded in
+  // migration-dice.sql's header). funfunSubmit takes NO xp and NO score:
+  // it sends the per-item `answered` record and the server recomputes
+  // both (same "never names an amount" rule as the dice). See
+  // supabase/migration-funfun.sql (WRITTEN, NOT RUN).
+  async funfunState(username, password) {
+    return rpc("mhq_funfun_state", { p_username: username, p_password: password });
+  },
+  async funfunMet(username, password, questId, skillId) {
+    return rpc("mhq_funfun_met", { p_username: username, p_password: password, p_quest_id: questId, p_skill_id: skillId });
+  },
+  async funfunSubmit(username, password, questId, answered) {
+    return rpc("mhq_submit_funfun", { p_username: username, p_password: password, p_quest_id: questId, p_answered: answered ?? [] });
+  },
+  async adminFunfun(pw) { return rpc("mhq_admin_funfun", { p_admin_password: pw }); },
 };

@@ -1,0 +1,255 @@
+{
+  "generatedBy": "graph-quest/tools/sync-to-blipwork.py",
+  "generatedAt": "2026-08-23T19:26:48+00:00",
+  "sourceRepo": "graph-quest",
+  "sourceCommit": "300311d4f82b7525a20d3946ac90f4be3e1a0163",
+  "sourceWorkingTreeDirty": true,
+  "note": "GENERATED OUTPUT \u2014 never hand-edit js/funfun/. See GENERATED.md.",
+  "files": [
+    {
+      "from": "js/mount.js",
+      "to": "mount.js",
+      "bytes": 6478,
+      "sha256": "8e2876790fe89ad2bf465c018f3c013db59248c4e6a1154bd2efa56be1d8253f",
+      "rewritten": false
+    },
+    {
+      "from": "js/play.js",
+      "to": "play.js",
+      "bytes": 23857,
+      "sha256": "0419b36e8eecfe1ea8f588d86163a591fef602a22a3347c2ae1528fa526ff64e",
+      "rewritten": false
+    },
+    {
+      "from": "js/ui.js",
+      "to": "ui.js",
+      "bytes": 3362,
+      "sha256": "443ff0974e25f72271d7294fb3b654841e8bd483976f3854a3a30982bf6bfe53",
+      "rewritten": false
+    },
+    {
+      "from": "js/i18n.js",
+      "to": "i18n.js",
+      "bytes": 5716,
+      "sha256": "ce24e633d1e21b4c8e5dcdd72aeb6308cb36d9a2eb3930a0aca1b59c1c04fae2",
+      "rewritten": false
+    },
+    {
+      "from": "js/backend.js",
+      "to": "backend.js",
+      "bytes": 6505,
+      "sha256": "9af3056c1061e9d29667607b1feffb6ea56a464c38980e918281b297cf5d6bb5",
+      "rewritten": false
+    },
+    {
+      "from": "js/check.js",
+      "to": "check.js",
+      "bytes": 835,
+      "sha256": "432166d91cc7ef26a50c7333fb86a3cf0c4c86e61f6da2687c129024af5d9f82",
+      "rewritten": false
+    },
+    {
+      "from": "js/funclib.js",
+      "to": "funclib.js",
+      "bytes": 19039,
+      "sha256": "62b224ed51afc3d6047ad321e008c458d1ed7cb721beca5208d991a8a28adbac",
+      "rewritten": false
+    },
+    {
+      "from": "js/screens.js",
+      "to": "screens.js",
+      "bytes": 4743,
+      "sha256": "afe68df38e75d1465a12dbb9e20a90a4ef27e1fba35d9bae3715eee228a10073",
+      "rewritten": false
+    },
+    {
+      "from": "js/supabase-config.js",
+      "to": "supabase-config.js",
+      "bytes": 563,
+      "sha256": "c1546e95f3f6bdd889f0234dec0cf6cf6d05a16b5cc6eff56db8166e70364865",
+      "rewritten": false
+    },
+    {
+      "from": "js/engine/function-graph.js",
+      "to": "engine/function-graph.js",
+      "bytes": 24102,
+      "sha256": "2dfe933ff5b211d5640c036fe3a368fdfd53b4f884a5355a15406e0342c4d041",
+      "rewritten": false
+    },
+    {
+      "from": "js/engine/interactive.js",
+      "to": "engine/interactive.js",
+      "bytes": 62482,
+      "sha256": "062d209e57a0ca831d5cb2250eab37ad74606f53ab90f65c1bd1d6db885ca8e5",
+      "rewritten": false
+    },
+    {
+      "from": "js/engine/keypad.js",
+      "to": "engine/keypad.js",
+      "bytes": 3817,
+      "sha256": "1ca241c662360a8c19850812263aaa48dfefb7d8011535f4ffa4e39718f1a241",
+      "rewritten": false
+    },
+    {
+      "from": "js/engine/slider.js",
+      "to": "engine/slider.js",
+      "bytes": 8547,
+      "sha256": "53d96ad08d2c5248c675c0a4b4fd24e6f55566e7cef5bddadf28494828b9d42d",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/_fault.js",
+      "to": "quests/_fault.js",
+      "bytes": 24694,
+      "sha256": "42aca3b93c5cb60fe408a4434664de66de3f618c6fb37dfe41cff70be2473487",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/_graphs.js",
+      "to": "quests/_graphs.js",
+      "bytes": 18758,
+      "sha256": "9cab46a6d44beaa283db3b6cd75b2cff5b68d0607504dbe8f5e9a3e24b7923b1",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/_intervals.js",
+      "to": "quests/_intervals.js",
+      "bytes": 2600,
+      "sha256": "8ec43c523ddc298e5fec692be4f8d046f4b5621dd05257fced0d8f43a46eb51e",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/_shared.js",
+      "to": "quests/_shared.js",
+      "bytes": 6907,
+      "sha256": "0345479fa52f46d30d46417d7cbcce8d4bd7327a5eaec1fbeffa4064fb011023",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/index.js",
+      "to": "quests/index.js",
+      "bytes": 8494,
+      "sha256": "0e46aef8a2b13947fb2c1da0e2a4cfb575c78cd6f0a32e12c12bcf65fc497326",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/q1-discover.js",
+      "to": "quests/q1-discover.js",
+      "bytes": 22735,
+      "sha256": "f37633a23d6e96fc127286ca022cef9632e7dea677c49a44187951904089e751",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/q1b-discover2.js",
+      "to": "quests/q1b-discover2.js",
+      "bytes": 27548,
+      "sha256": "ed28439967c7c788ee83252eb1f37b34c2c0ec3884d9ce22a4b5912eaabe5c25",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/q2-point.js",
+      "to": "quests/q2-point.js",
+      "bytes": 11045,
+      "sha256": "2e4aaebc062df93f85591be7b4e42ec32b20ecf3e7039a664855d895a6552056",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/q3-region.js",
+      "to": "quests/q3-region.js",
+      "bytes": 27578,
+      "sha256": "07600de2d9b0f9aea629108fcdfcc3f2e034b50387151ec31d2f332e05c7f120",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/q5-signs.js",
+      "to": "quests/q5-signs.js",
+      "bytes": 24893,
+      "sha256": "978c91ba8ce5c975ee45db224ba18837ed9884dd205366b756de1faf0700e5f9",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/q6-compare.js",
+      "to": "quests/q6-compare.js",
+      "bytes": 21858,
+      "sha256": "f6f9ff0d0a7e2b4c4dbced09ac06d0e586f53ec6ccc700c442fe02d47f3622d2",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/q7-exam.js",
+      "to": "quests/q7-exam.js",
+      "bytes": 61548,
+      "sha256": "619175e0eb34653f4afdf331f37486228b1ddc711a49bf08e01bea4cad853f7d",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qB-recognize.js",
+      "to": "quests/qB-recognize.js",
+      "bytes": 8294,
+      "sha256": "4ea24530f75ba88a4e315cdb69d382570186b637003a65526c9d98014b3e4bc1",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qE-equation.js",
+      "to": "quests/qE-equation.js",
+      "bytes": 49981,
+      "sha256": "632e4e3252dbb0a8047da6a91d786fa689c29ced91d46a4e3c1bf8fd9e7e2161",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qF-fault.js",
+      "to": "quests/qF-fault.js",
+      "bytes": 15499,
+      "sha256": "3239b4408d54d4aa06f9ae829772f7ce0cdae3414f621c6cc22884729d04ff3d",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qG-gradient.js",
+      "to": "quests/qG-gradient.js",
+      "bytes": 17371,
+      "sha256": "d63b0b293d3d7f50b3b122631d89e1eda80f7ee2d26ad8c1854d9c82b11b7ddb",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qI-inequal2.js",
+      "to": "quests/qI-inequal2.js",
+      "bytes": 41444,
+      "sha256": "1f69ccab143fb6135be5cd7a14110b7cba6322a88a98b27c3d8adc48ed905242",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qK-roots.js",
+      "to": "quests/qK-roots.js",
+      "bytes": 29406,
+      "sha256": "af01df18564f587403f25032b67a0ed33bcd75b1fe8dafa7a5fe43e01fa5f12f",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qL-lengths.js",
+      "to": "quests/qL-lengths.js",
+      "bytes": 20721,
+      "sha256": "16aef564ba3f8a16c4121a6eb82dd94082e66877ae7f5f25cfd97f7027ea7377",
+      "rewritten": false
+    },
+    {
+      "from": "js/quests/qT-transform.js",
+      "to": "quests/qT-transform.js",
+      "bytes": 23462,
+      "sha256": "25d5e56217dd9c4e938e98f3b85cb4a736dc2f9f1bce24b8432aee416da973aa",
+      "rewritten": false
+    },
+    {
+      "from": "mount-driver.js",
+      "to": "mount-driver.js",
+      "bytes": 5885,
+      "sha256": "5d2a4b7e9109272437ee445d2426349d3d0b1ea1cf7c1c16bba4ca3ff4027b2f",
+      "rewritten": true
+    },
+    {
+      "from": "css/styles.css",
+      "to": "styles.css",
+      "bytes": 25071,
+      "sha256": "e4a6f7afaa4123b178f5ec646685fd01c2ec5ece6fb63ec6798b740b2c0e1d38",
+      "rewritten": false
+    }
+  ]
+}

@@ -81,6 +81,18 @@
    navigation yet either way — only verify-exam.html's local round-trip
    test and a harness-driven exam-play.js call these two directly.
 
+   FUN FUNCTIONS ADDITION (2026-08-23, mount Part 2 session 1): mirrors
+   supabase/migration-funfun.sql (WRITTEN NOT RUN there — this file is the
+   ONLY place any of it currently executes). funfunState / funfunMet /
+   funfunSubmit / adminFunfun below are a 1:1 port of mhq_funfun_state /
+   mhq_funfun_met / mhq_submit_funfun / mhq_admin_funfun: same 15-id
+   allow-list, same 1..40-object `answered` validation, the same XP through
+   the SAME accumulator submitDice uses (js/config.js XP — outcome in
+   full/hinted/half counts as a correct answer), the same clamp-then-25%
+   replay rule, the same 0.7 pass bar (graph-quest's, NOT blipwork's 0.8)
+   and the same flat 10 gold. Row shape here: { best (0..1 fraction),
+   total, plays, done, metKinds: {skillId:true} }.
+
    DEV: globalThis.__BLIP_DEV__.skipDays(n) advances the local clock so
    sick states can be tested without waiting a week; .reset() clears it.
    ============================================================ */
@@ -94,7 +106,11 @@ const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq
   // EXAM-FOCUS-PLAN.md (session 0, 2026-08-21): mirrors supabase's
   // exam_progress table — { [studentId]: { [questionId]: { partsOpened,
   // completed, completedAt } } }.
-  examProgress: "mhq.examProgress" };
+  examProgress: "mhq.examProgress",
+  // FUNFUN-PART2-BRIEF.md D11 (2026-08-23): mirrors supabase's
+  // funfun_progress table — { [studentId]: { [questId]: { best, total,
+  // plays, done, metKinds } } }.
+  funfun: "mhq.funfun" };
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
@@ -125,6 +141,40 @@ const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7"
   "es1", "es2", "es3", "es4", "es5", "es6", "es7", "es8",
   "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8", "eq9",
   "gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", "gt9", "gt10", "gt11", "gt12", "gt13"];
+
+/* FUN FUNCTIONS (2026-08-23) — the fifteen mounted quest ids, in the order
+   js/funfun/quests/index.js's QUESTS array lists them. MIRROR of
+   supabase/migration-funfun.sql's _mhq_funfun_quests(); change one, change
+   both. Deliberately NOT imported from js/funfun/quests/index.js: that
+   module pulls in the whole quest graph (and through it the DOM helpers),
+   and this file must stay loadable anywhere. verify-funfun-backend.html
+   checks the two lists agree by walking the REAL registry and submitting
+   to every id it finds. */
+const FUNFUN_QUEST_IDS = ["q1", "q1b", "qB", "q2", "q3", "q5", "q6", "qL",
+  "qG", "qT", "qE", "qK", "qI", "qF", "q7"];
+
+/* get-or-create one funfun_progress row inside an already-read store.
+   The caller writes the store back — mirrors the SQL's
+   "insert … on conflict do nothing, then select … for update". */
+function funfunRow(all, sid, questId) {
+  const forStudent = all[sid] || (all[sid] = {});
+  return forStudent[questId] || (forStudent[questId] = { best: 0, total: 0, plays: 0, done: false, metKinds: {} });
+}
+
+/* the profile payload — EXACTLY the shape js/funfun/mount.js documents for
+   host.profile(). Mirrors _mhq_funfun_profile(): `xp` is the student's
+   lifetime xp (not a Fun Functions subtotal), and `met` carries only the
+   quests that actually have met kinds. */
+function funfunProfile(sid) {
+  const rows = read(LS.funfun, {})[sid] || {};
+  const quests = {}, met = {};
+  Object.entries(rows).forEach(([qid, row]) => {
+    quests[qid] = { best: row.best || 0, total: row.total || 0, plays: row.plays || 0, done: !!row.done };
+    if (row.metKinds && Object.keys(row.metKinds).length) met[qid] = { ...row.metKinds };
+  });
+  const rec = read(LS.students, {})[sid];
+  return { ok: true, xp: (rec && rec.xp) || 0, quests, met };
+}
 
 /* Cosmetic shop — identical ids/slots/prices/minLevel to the live seed.
    SL restyle (2026-07-19): the techy catalogue from Megan's mockup. The old
@@ -1050,6 +1100,93 @@ export const LocalBackend = {
     };
   },
 
+  // ---- FUNFUN-PART2-BRIEF.md D11: the Fun Functions mount (session 1,
+  // 2026-08-23). Mirrors supabase/migration-funfun.sql's mhq_funfun_state /
+  // mhq_funfun_met / mhq_submit_funfun / mhq_admin_funfun (WRITTEN, NOT RUN
+  // there — this file is the ONLY place any of them currently executes).
+  // funfun row shape: { best (0..1 fraction), total, plays, done, metKinds }.
+  async funfunState(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    touch(s.id);
+    return funfunProfile(s.id);
+  },
+  async funfunMet(username, password, questId, skillId) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    if (!FUNFUN_QUEST_IDS.includes(questId)) return { ok: false, error: "bad_round" };
+    const skill = String(skillId == null ? "" : skillId).trim();
+    if (!skill || skill.length > 64) return { ok: false, error: "bad_round" };
+    const all = read(LS.funfun, {});
+    const row = funfunRow(all, s.id, questId);
+    row.metKinds[skill] = true;
+    write(LS.funfun, all);
+    touch(s.id);
+    return funfunProfile(s.id);
+  },
+  /* `answered` is the per-item record js/funfun/play.js builds:
+     [{ i, skillId, outcome: "full"|"hinted"|"half"|"wrong"|"skipped", xp }].
+     Its `xp` field is IGNORED here exactly as the server ignores it — the
+     payout is recomputed from the outcomes (mount Part 2's version of the
+     dice's "the client never names an amount" rule). */
+  async funfunSubmit(username, password, questId, answered) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    if (!FUNFUN_QUEST_IDS.includes(questId)) return { ok: false, error: "bad_round" };
+    if (!Array.isArray(answered) || answered.length < 1 || answered.length > 40) return { ok: false, error: "bad_round" };
+    if (answered.some(r => !r || typeof r !== "object" || Array.isArray(r))) return { ok: false, error: "bad_round" };
+
+    const total = answered.length;
+    let score = 0, streak = 0, xpRaw = 0;
+    for (const rec of answered) {
+      const outcome = rec.outcome;
+      const ok = outcome === "full" || outcome === "hinted" || outcome === "half";
+      // XP: the SAME accumulator submitDice uses (js/config.js XP), fed the
+      // same booleans _mhq_dice_xp() is fed server-side.
+      if (ok) { streak++; xpRaw += XP.perCorrect * Math.min(streak, XP.streakCap) + XP.firstTryBonus; }
+      else streak = 0;
+      // score: half credit is a real outcome (right on the second chance).
+      score += outcome === "full" || outcome === "hinted" ? 1 : outcome === "half" ? 0.5 : 0;
+    }
+    const passed = score / total >= 0.7;             // graph-quest's js/play.js PASS, not blipwork's 0.8
+    // rounded to 4 decimals so this and mhq_submit_funfun store the SAME
+    // number (Postgres numeric division would otherwise give ~20 decimals
+    // where JS gives a double). The pass test above uses the UNROUNDED
+    // fraction, so the rounding can never tip a round over the bar.
+    const frac = Math.round((score / total) * 10000) / 10000;
+
+    const all = read(LS.funfun, {});
+    const row = funfunRow(all, s.id, questId);
+    const alreadyDone = !!row.done;
+    // clamp FIRST, then quarter it — the order mhq_submit_quest uses.
+    let xpGain = Math.max(0, Math.min(Math.round(xpRaw) || 0, 1000));
+    if (alreadyDone) xpGain = Math.round(xpGain * 0.25);
+    const goldGain = 10;                             // flat, every completed quest
+
+    const stAll = read(LS.students, {});
+    const rec = stAll[s.id];
+    ensureBlipFields(rec);
+    const oldLevel = levelInfo(rec.xp).level;
+    rec.xp += xpGain;
+    rec.gold += goldGain;
+    write(LS.students, stAll);
+
+    row.best = Math.max(row.best || 0, frac);
+    row.total = total;                               // the MOST RECENT play's item count
+    row.plays = (row.plays || 0) + 1;
+    row.done = alreadyDone || passed;
+    write(LS.funfun, all);
+    touch(s.id);
+
+    const info = levelInfo(rec.xp);
+    return {
+      ok: true, xpAwarded: xpGain, goldAwarded: goldGain,
+      correct: score, total, passed, alreadyDone,
+      xp: rec.xp, gold: rec.gold, level: info.level, levelUp: info.level > oldLevel, levelInfo: info,
+      best: row.best, plays: row.plays,
+    };
+  },
+
   // ---- EXAM-FOCUS-PLAN.md: the tab's server surface (session 0,
   // 2026-08-21). Mirrors supabase/migration-exam-focus.sql's
   // mhq_exam_state / mhq_exam_open_part (WRITTEN, NOT RUN there — this
@@ -1548,6 +1685,20 @@ export const LocalBackend = {
     });
     return { ok: true, rows, quests: qs, struggles: Object.values(cByConcept).sort((a, b) => b.count - a.count), inactiveDays: 7,
       termRunning: running, termOnSince: onSince, assignment, dicePlays };
+  },
+  /* FUNFUN-PART2-BRIEF.md D10: per-QUEST play totals across the whole
+     class. Its own call, not a field on adminData — mirrors
+     mhq_admin_funfun, which is its own RPC for the same reason
+     (mhq_admin_data is deliberately never re-created, brief D3). */
+  async adminFunfun(pw) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    const plays = {};
+    Object.values(read(LS.funfun, {})).forEach(byQuest => {
+      Object.entries(byQuest).forEach(([qid, row]) => {
+        if (row.plays) plays[qid] = (plays[qid] || 0) + row.plays;
+      });
+    });
+    return { ok: true, plays };
   },
   /* Phase 3 — one active assignment at a time; setting a new one replaces it.
      Refuses a closed quest exactly as the server does: assigning must never

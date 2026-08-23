@@ -8,7 +8,7 @@
      • cross-origin (Supabase, supabase-js CDN, Google Fonts) → straight to
        the network; scores need the internet.
    Bump CACHE on a shippable change to evict the old cache on activate. */
-const CACHE = "mhq-v64";
+const CACHE = "mhq-v65";
 const SHELL = ["./", "./index.html", "./admin.html", "./css/styles.css", "./js/app.js", "./manifest.json",
   "./icon-192.png", "./icon-512.png",
   // Phase 3 stylesheets (the JS is reached through app.js's import graph and
@@ -19,7 +19,13 @@ const SHELL = ["./", "./index.html", "./admin.html", "./css/styles.css", "./js/a
   // other feature stylesheet is here. It is fetched network-first like
   // all app code anyway, so the gap only ever showed OFFLINE, where the
   // exam screens came up unstyled.
-  "./css/exam.css"];
+  "./css/exam.css",
+  // FUNFUN-PART2-BRIEF.md D13: js/funfun/ is the synced Fun Functions app.
+  // Its JS is reached through the import graph and is network-first like all
+  // app code, so only its stylesheet needs listing — and it must be here,
+  // because it is loaded into a SHADOW ROOT where an unstyled fallback would
+  // leave the whole quest screen bare offline.
+  "./js/funfun/styles.css"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {}));

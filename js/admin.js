@@ -9,7 +9,7 @@
    so it works against Supabase (live) or the local backend (?local=1).
    ============================================================ */
 import { api } from "./api.js";
-import { CHAPTERS, DICE_CHAPTERS } from "./config.js";
+import { CHAPTERS, DICE_CHAPTERS, FUNFUN_ENABLED } from "./config.js";
 import { CONCEPTS } from "./concepts.js";
 import { el, clear, pwToggle } from "./ui.js";
 
@@ -76,10 +76,19 @@ async function dashboard() {
   let data;
   try { data = await api.adminData(pw); } catch { status.textContent = "Can’t load. Check your connection."; return; }
   if (!data || !data.ok) { status.textContent = "Couldn’t load the dashboard."; return; }
+  // FUNFUN-PART2-BRIEF.md D10: the 📈 chip's numbers come from their own RPC
+  // (mhq_admin_funfun), NOT a new field on mhq_admin_data — that function is
+  // deliberately never re-created (brief D3, the copy-forward danger). Loaded
+  // alongside, and a failure here only costs the chip, never the dashboard.
+  let funfunPlays = {};
+  if (FUNFUN_ENABLED) {
+    try { const f = await api.adminFunfun(pw); if (f && f.ok) funfunPlays = f.plays || {}; }
+    catch { /* dashboard still loads; the chip just reads 0 */ }
+  }
   status.remove();
   view.appendChild(termSection(!!data.termRunning));
   view.appendChild(assignmentSection(data));
-  view.appendChild(questSection(data.quests || [], data.dicePlays || {}));
+  view.appendChild(questSection(data.quests || [], data.dicePlays || {}, funfunPlays));
   view.appendChild(struggleSection(data.struggles || []));
   view.appendChild(learnerSection(data.rows || [], data.inactiveDays || 7));
 }
@@ -214,7 +223,7 @@ function assignmentSection(data) {
    existing adminSetQuestOpen over that chapter's quests, one reload() at
    the end. A quest id the payload carries but config.js doesn't know about
    (shouldn't happen) is appended in a plain "Other" block, not dropped. */
-function questSection(quests, dicePlays) {
+function questSection(quests, dicePlays, funfunPlays) {
   const sec = el("div", "card adm-section");
   sec.appendChild(el("h2", "", "Quests — open / close"));
   sec.appendChild(el("p", "muted small", "Learners only see open quests. Open each one once you’ve taught it."));
@@ -245,8 +254,13 @@ function questSection(quests, dicePlays) {
     // chapter both has a pool and Megan's phone-test green light.
     const diceCell = DICE_CHAPTERS.includes(ch.id)
       ? `<span class="muted small adm-qcount" title="Dice rounds played this chapter, whole class">🎲 ${dicePlays[ch.id] || 0}</span>` : "";
+    // FUNFUN-PART2-BRIEF.md D10 📈 — class total plays across all 15 Fun
+    // Functions quests, on the Functions row only. Nothing per student.
+    const ffTotal = Object.values(funfunPlays || {}).reduce((a, n) => a + (Number(n) || 0), 0);
+    const funfunCell = (FUNFUN_ENABLED && ch.id === "func")
+      ? `<span class="muted small adm-qcount" title="Fun Functions quests played, whole class, all 15 quests">📈 ${ffTotal}</span>` : "";
     const head = el("div", "adm-qchead",
-      `<span class="adm-qctitle">${ch.icon} ${ch.name}</span><span class="muted small adm-qcount">${openCount} / ${built.length} open</span>${diceCell}`);
+      `<span class="adm-qctitle">${ch.icon} ${ch.name}</span><span class="muted small adm-qcount">${openCount} / ${built.length} open</span>${diceCell}${funfunCell}`);
     const btns = el("div", "adm-qcbtns");
     const openAll = el("button", "btn ghost small", "Open all");
     const closeAll = el("button", "btn ghost small", "Close all");

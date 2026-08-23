@@ -357,6 +357,21 @@ export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
    per chapter follows on live. */
 export const DICE_CHAPTERS = ["stats", "finance", "pat", "trig"];
 
+/* FUNFUN-PART2-BRIEF.md — the 📈 Fun Functions strip on the Functions
+   chapter screen. Fun Functions is its own app (the graph-quest repo,
+   also live standalone at megzieberr.github.io/graph-quest); blipwork
+   mounts one of its 15 quests at a time inside a shadow root and pays out
+   its own XP. This one switch gates the strip, and the strip renders only
+   when it is true AND the chapter is "func".
+
+   The server side (supabase/migration-funfun.sql) is safe to apply before
+   any of this ships — nothing calls those RPCs until the client does, so
+   this flag is the seeded-closed equivalent. Session 1 (2026-08-23) built
+   the plumbing; the strip and the play screen are session 2's, and the
+   flag only earns its `true` once Megan has phone-tested the whole loop
+   at 375px (her one-chapter-at-a-time rhythm, same as the dice). */
+export const FUNFUN_ENABLED = true;
+
 /* Circle Geo tab (CQ-BRIDGE-PLAN.md Part 2, 2026-08-21). Circle Quest stays
    its own app, reached by a plain out-link — never merged, never iframed. */
 export const CQ_URL = "https://megzieberr.github.io/circle-geo-quest/";

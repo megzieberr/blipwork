@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Functions backend · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  ul.fails{list-style:none;font-size:12px;line-height:1.6;color:var(--bad);margin-top:8px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Fun Functions backend · verification</h1>
+<p class="muted small">FUNFUN-PART2-BRIEF.md session 1. Drives the LOCAL backend
+  (<code>js/local-backend.js</code>'s funfunState / funfunMet / funfunSubmit / adminFunfun), which is a 1:1 mirror of
+  <code>supabase/migration-funfun.sql</code> — WRITTEN, NOT RUN, so this page is the only place any of that logic
+  currently executes. The fifteen quest ids are read out of the REAL synced registry
+  (<code>js/funfun/quests/index.js</code>), never typed here, so the backend's own hard-coded allow-list is checked
+  against the thing it is supposed to mirror.</p>
+<div id="banner">running…</div>
+
+<h2>1 · fresh learner — the profile shape the mount asks for</h2>
+<pre id="fresh">…</pre>
+
+<h2>2 · a full quest, then the replay</h2>
+<pre id="payout">…</pre>
+
+<h2>3 · a half / wrong mix</h2>
+<pre id="mix">…</pre>
+
+<h2>4 · the client can never name an amount</h2>
+<pre id="notrust">…</pre>
+
+<h2>5 · XP mirror vs an independent recompute</h2>
+<pre id="xpmirror">…</pre>
+
+<h2>6 · validation — bad_round</h2>
+<pre id="validation">…</pre>
+
+<h2>7 · markMet</h2>
+<pre id="met">…</pre>
+
+<h2>8 · the fifteen ids, and only those fifteen</h2>
+<pre id="ids">…</pre>
+
+<h2>9 · admin — class-total plays per quest</h2>
+<pre id="admin">…</pre>
+
+<h2>failures</h2>
+<ul class="fails" id="failList"></ul>
+
+<script type="module">
+import { LocalBackend } from "./js/local-backend.js";
+import { QUESTS } from "./js/funfun/quests/index.js";
+import { questUnlocked } from "./js/funfun/screens.js";
+import { XP } from "./js/config.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const near = (a, b, eps = 1e-9) => Number.isFinite(a) && Math.abs(a - b) < eps;
+
+const PW = "pw12";
+const freshUser = async (tag) => {
+  const u = `verify_funfun_${tag}_${Math.random().toString(36).slice(2, 8)}`;
+  await LocalBackend.signup(u, "Verify " + tag, PW);
+  return u;
+};
+/* the shape js/funfun/play.js's recordAnswer() actually pushes. `xp` is
+   deliberately filled in with a number here — the whole point of section 4
+   below is that the backend never reads it. */
+const rec = (i, outcome, xp = 10) => ({ i, skillId: "skill" + i, outcome, xp });
+const round = (outcomes, xpEach = 10) => outcomes.map((o, i) => rec(i, o, xpEach));
+
+/* THE HAND-CHECK, written out independently of both the backend and the SQL:
+   outcome full/hinted/half counts as a correct answer; every correct answer
+   in dice/mount mode is a first-try answer (there is no mastery loop), so it
+   earns perCorrect × min(streak, streakCap) + firstTryBonus. A wrong or
+   skipped item resets the streak and earns nothing.
+
+     six "full" items  ->  15 + 25 + 35 + 35 + 35 + 35  =  180
+                            ^s1   ^s2   ^s3   ^cap  ^cap  ^cap
+   That 180 is the number section 2 asserts, and it is the number the SQL's
+   sanity-check block at the bottom of migration-funfun.sql expects too. */
+const EXPECTED_FULL6 = 180;
+function handXp(outcomes) {
+  let streak = 0, xp = 0;
+  for (const o of outcomes) {
+    if (o === "full" || o === "hinted" || o === "half") { streak++; xp += 10 * Math.min(streak, 3) + 5; }
+    else streak = 0;
+  }
+  return xp;
+}
+function handScore(outcomes) {
+  return outcomes.reduce((a, o) => a + (o === "full" || o === "hinted" ? 1 : o === "half" ? 0.5 : 0), 0);
+}
+
+/* the fifteen ids, READ from the synced registry in map order */
+const IDS = QUESTS.map(q => q.id);
+
+/* ============================================================
+   1 · fresh learner
+   ============================================================ */
+const A = await freshUser("a");
+const f = [];
+{
+  const st = await LocalBackend.funfunState(A, PW);
+  tick(st.ok === true, "fresh state: ok true");
+  tick(Object.keys(st).sort().join(",") === "met,ok,quests,xp",
+    `fresh state: payload keys are exactly ok/xp/quests/met (got ${Object.keys(st).sort().join(",")})`);
+  tick(st.xp === 0, "fresh state: xp 0");
+  tick(st.quests && Object.keys(st.quests).length === 0, "fresh state: quests {} (no rows yet)");
+  tick(st.met && Object.keys(st.met).length === 0, "fresh state: met {}");
+
+  // "15 empty quests" — read the way js/funfun/mount.js reads it
+  let empties = 0;
+  IDS.forEach(id => {
+    const q = st.quests[id] || { best: 0, total: 0, plays: 0, done: false };
+    if (q.plays === 0 && q.done === false && q.best === 0) empties++;
+  });
+  tick(IDS.length === 15, `registry has 15 quests (got ${IDS.length})`);
+  tick(empties === 15, `fresh state: all 15 quests read as empty (got ${empties})`);
+
+  // the unlock rule the tile strip will use, driven by this very payload
+  tick(questUnlocked(st, 0) === true, "fresh state: quest 1 is unlocked");
+  tick(questUnlocked(st, 1) === false, "fresh state: quest 2 is locked");
+
+  // auth
+  tick((await LocalBackend.funfunState(A, "wrong")).error === "auth", "funfunState: wrong password -> auth");
+  tick((await LocalBackend.funfunSubmit(A, "wrong", "q1", round(["full"]))).error === "auth", "funfunSubmit: wrong password -> auth");
+  tick((await LocalBackend.funfunMet(A, "wrong", "q1", "s")).error === "auth", "funfunMet: wrong password -> auth");
+
+  f.push(`ids (QUESTS order): ${IDS.join(" ")}`);
+  f.push(`fresh payload: ${JSON.stringify(st)}`);
+}
+document.getElementById("fresh").textContent = f.join("\n");
+
+/* ============================================================
+   2 · a full quest, then the replay
+   ============================================================ */
+const p = [];
+{
+  const six = ["full", "full", "full", "full", "full", "full"];
+  tick(handXp(six) === EXPECTED_FULL6, `hand-check: six "full" items = ${EXPECTED_FULL6} XP`);
+
+  const goldBefore = (await LocalBackend.getState(A, PW)).gold;
+  const r1 = await LocalBackend.funfunSubmit(A, PW, "q1", round(six));
+  tick(r1.ok === true, "q1 first play: ok");
+  tick(r1.xpAwarded === EXPECTED_FULL6, `q1 first play: xpAwarded ${EXPECTED_FULL6} (got ${r1.xpAwarded})`);
+  tick(r1.goldAwarded === 10, "q1 first play: goldAwarded 10 (flat)");
+  tick(r1.correct === 6 && r1.total === 6, `q1 first play: correct 6 / total 6 (got ${r1.correct}/${r1.total})`);
+  tick(r1.passed === true, "q1 first play: passed true (6/6 >= 0.7)");
+  tick(r1.alreadyDone === false, "q1 first play: alreadyDone false");
+  tick(near(r1.best, 1), `q1 first play: best 1.0 (got ${r1.best})`);
+  tick(r1.plays === 1, "q1 first play: plays 1");
+  tick(r1.xp === EXPECTED_FULL6, `q1 first play: lifetime xp now ${EXPECTED_FULL6}`);
+  tick(r1.gold === goldBefore + 10, "q1 first play: gold went up by exactly 10");
+
+  const st1 = await LocalBackend.funfunState(A, PW);
+  tick(st1.quests.q1 && st1.quests.q1.done === true, "state after q1: done true");
+  tick(near(st1.quests.q1.best, 1) && st1.quests.q1.total === 6 && st1.quests.q1.plays === 1,
+    "state after q1: best 1.0 / total 6 / plays 1");
+  tick(st1.xp === EXPECTED_FULL6, "state after q1: xp mirrors the student's lifetime xp");
+  tick(questUnlocked(st1, 1) === true, "state after q1: quest 2 unlocked (previous is done)");
+  tick(questUnlocked(st1, 2) === false, "state after q1: quest 3 still locked");
+
+  // the replay: 25% of the SAME round, because the quest was already done
+  const r2 = await LocalBackend.funfunSubmit(A, PW, "q1", round(six));
+  const quarter = Math.round(EXPECTED_FULL6 * 0.25);
+  tick(r2.alreadyDone === true, "q1 replay: alreadyDone true");
+  tick(r2.xpAwarded === quarter, `q1 replay: xpAwarded ${quarter} (= round(${EXPECTED_FULL6} × 0.25)) (got ${r2.xpAwarded})`);
+  tick(r2.goldAwarded === 10, "q1 replay: gold is still the flat 10 (only XP is quartered)");
+  tick(r2.plays === 2, "q1 replay: plays 2");
+  tick(r2.xp === EXPECTED_FULL6 + quarter, `q1 replay: lifetime xp ${EXPECTED_FULL6 + quarter}`);
+
+  p.push(`first play : ${JSON.stringify({ xpAwarded: r1.xpAwarded, correct: r1.correct, total: r1.total, passed: r1.passed, alreadyDone: r1.alreadyDone, best: r1.best, plays: r1.plays })}`);
+  p.push(`replay     : ${JSON.stringify({ xpAwarded: r2.xpAwarded, alreadyDone: r2.alreadyDone, plays: r2.plays })}`);
+  p.push(`hand-check : 15+25+35+35+35+35 = ${EXPECTED_FULL6}; replay = round(${EXPECTED_FULL6}×0.25) = ${quarter}`);
+}
+document.getElementById("payout").textContent = p.join("\n");
+
+/* ============================================================
+   3 · a half / wrong mix
+   ============================================================ */
+const m = [];
+{
+  const mix = ["full", "half", "wrong", "hinted", "skipped", "full"];
+  const wantXp = handXp(mix);              // 15 + 25 + (reset) + 15 + (reset) + 15 = 70
+  const wantScore = handScore(mix);        // 1 + 0.5 + 0 + 1 + 0 + 1 = 3.5
+  tick(wantXp === 70, `hand-check: the mix pays 70 XP (got ${wantXp})`);
+  tick(near(wantScore, 3.5), `hand-check: the mix scores 3.5 (got ${wantScore})`);
+
+  const r = await LocalBackend.funfunSubmit(A, PW, "q1b", round(mix));
+  tick(r.ok === true, "mix: ok");
+  tick(r.xpAwarded === wantXp, `mix: xpAwarded ${wantXp} (got ${r.xpAwarded})`);
+  tick(near(r.correct, wantScore), `mix: correct ${wantScore} — half credit really is a half (got ${r.correct})`);
+  tick(r.total === 6, "mix: total 6");
+  tick(r.passed === false, `mix: NOT passed (${wantScore}/6 = ${(wantScore / 6).toFixed(3)} < 0.7)`);
+  const wantBest = Math.round((wantScore / 6) * 10000) / 10000;
+  tick(near(r.best, wantBest), `mix: best is the FRACTION ${wantBest} — rounded to 4 dp so SQL numeric and JS double agree (got ${r.best})`);
+
+  const st = await LocalBackend.funfunState(A, PW);
+  tick(st.quests.q1b.done === false, "mix: q1b done stays false");
+  // the grandfathered rule needs the PREVIOUS quest done, not merely played:
+  // q1b has plays > 0 (so q1b itself stays open) but never passed, so quest 3
+  // is still locked.
+  tick(questUnlocked(st, 1) === true, "mix: q1b itself stays open (plays > 0)");
+  tick(questUnlocked(st, 2) === false, "mix: quest 3 stays LOCKED — q1b was played but not passed");
+
+  // exactly on the 0.7 line: 7 full + 3 wrong = 0.7 -> passed
+  const B0 = await freshUser("edge");
+  const online = await LocalBackend.funfunSubmit(B0, PW, "q2",
+    round(["full", "full", "full", "full", "full", "full", "full", "wrong", "wrong", "wrong"]));
+  tick(online.passed === true, "edge: exactly 0.7 passes (>= not >)");
+  const under = await LocalBackend.funfunSubmit(B0, PW, "q3",
+    round(["full", "full", "full", "full", "full", "full", "wrong", "wrong", "wrong", "wrong"]));
+  tick(under.passed === false, "edge: 0.6 does not pass");
+
+  m.push(`mix outcomes: ${mix.join(" ")}`);
+  m.push(`-> ${JSON.stringify({ xpAwarded: r.xpAwarded, correct: r.correct, total: r.total, passed: r.passed, best: r.best })}`);
+}
+document.getElementById("mix").textContent = m.join("\n");
+
+/* ============================================================
+   4 · the client can never name an amount
+   ============================================================ */
+const nt = [];
+{
+  const C = await freshUser("greedy");
+  // every record carries a fat `xp` field, and play.js's res.xp/res.score are
+  // not sent at all — the payout must be identical to section 2's.
+  const greedy = round(["full", "full", "full", "full", "full", "full"], 99999);
+  const r = await LocalBackend.funfunSubmit(C, PW, "q1", greedy);
+  tick(r.xpAwarded === EXPECTED_FULL6, `greedy round: xpAwarded is still ${EXPECTED_FULL6}, not the 99999 per item the client claimed (got ${r.xpAwarded})`);
+  tick(r.correct === 6, "greedy round: correct is recomputed from outcomes");
+
+  // an unknown outcome string is not a free pass
+  const D = await freshUser("unknown");
+  const weird = await LocalBackend.funfunSubmit(D, PW, "q1", round(["banana", "banana", "banana"]));
+  tick(weird.ok === true, "unknown outcome: still a valid round shape");
+  tick(weird.xpAwarded === 0 && weird.correct === 0 && weird.passed === false,
+    `unknown outcome "banana" counts as wrong: 0 XP, 0 score, not passed (got xp ${weird.xpAwarded}, score ${weird.correct})`);
+
+  nt.push(`per-item xp claimed: 99999 × 6   ·   paid: ${r.xpAwarded}`);
+  nt.push(`unknown outcome "banana" ×3 -> ${JSON.stringify({ xpAwarded: weird.xpAwarded, correct: weird.correct, passed: weird.passed })}`);
+}
+document.getElementById("notrust").textContent = nt.join("\n");
+
+/* ============================================================
+   5 · XP mirror vs an independent recompute
+   ============================================================ */
+const xm = [];
+{
+  tick(XP.perCorrect === 10 && XP.firstTryBonus === 5 && XP.streakCap === 3,
+    `js/config.js XP is still 10/5/3 — if this fails, migration-funfun.sql's _mhq_dice_xp reliance and this page's hand-check both need revisiting (got ${XP.perCorrect}/${XP.firstTryBonus}/${XP.streakCap})`);
+
+  const POOL = ["full", "hinted", "half", "wrong", "skipped"];
+  const E = await freshUser("xp");
+  let worst = null;
+  for (let n = 0; n < 40; n++) {
+    const len = 1 + Math.floor(Math.random() * 12);
+    const outcomes = Array.from({ length: len }, () => POOL[Math.floor(Math.random() * POOL.length)]);
+    // a fresh quest each time would run out of ids, so use a fresh LEARNER's
+    // first play on q7 — first play means no 25% rule in the way.
+    const learner = await freshUser("xp" + n);
+    const r = await LocalBackend.funfunSubmit(learner, PW, "q7", round(outcomes));
+    const wantXp = handXp(outcomes), wantScore = handScore(outcomes);
+    const okXp = r.xpAwarded === wantXp, okScore = near(r.correct, wantScore);
+    const okPass = r.passed === (wantScore / len >= 0.7);
+    if (!(okXp && okScore && okPass) && !worst) worst = { outcomes, got: r, wantXp, wantScore };
+    tick(okXp && okScore && okPass, `random round ${n}: [${outcomes.join(",")}] want xp ${wantXp} score ${wantScore}, got xp ${r.xpAwarded} score ${r.correct} passed ${r.passed}`);
+  }
+  tick(!worst, "all 40 random rounds matched the independent recompute");
+  xm.push(worst ? `first mismatch: ${JSON.stringify(worst)}` : "40 random outcome arrays · XP, score and pass all matched the independent recompute exactly");
+}
+document.getElementById("xpmirror").textContent = xm.join("\n");
+
+/* ============================================================
+   6 · validation
+   ============================================================ */
+const v = [];
+{
+  const F = await freshUser("bad");
+  const cases = [
+    ["unknown quest id \"nope\"", () => LocalBackend.funfunSubmit(F, PW, "nope", round(["full"]))],
+    ["a blipwork quest id (\"q4\") is not a Fun Functions id", () => LocalBackend.funfunSubmit(F, PW, "q4", round(["full"]))],
+    ["null quest id", () => LocalBackend.funfunSubmit(F, PW, null, round(["full"]))],
+    ["empty answered array", () => LocalBackend.funfunSubmit(F, PW, "q1", [])],
+    ["answered = null", () => LocalBackend.funfunSubmit(F, PW, "q1", null)],
+    ["answered is not an array", () => LocalBackend.funfunSubmit(F, PW, "q1", { outcome: "full" })],
+    ["answered holds strings, not objects", () => LocalBackend.funfunSubmit(F, PW, "q1", ["full", "full"])],
+    ["answered holds a null", () => LocalBackend.funfunSubmit(F, PW, "q1", [rec(0, "full"), null])],
+    ["41 items (cap is 40)", () => LocalBackend.funfunSubmit(F, PW, "q1", round(Array(41).fill("full")))],
+  ];
+  for (const [label, run] of cases) {
+    const r = await run();
+    tick(r && r.ok === false && r.error === "bad_round", `bad_round: ${label} (got ${JSON.stringify(r && r.error)})`);
+    v.push(`${r && r.error === "bad_round" ? "✓" : "✗"} ${label}`);
+  }
+  const at40 = await LocalBackend.funfunSubmit(F, PW, "q1", round(Array(40).fill("wrong")));
+  tick(at40.ok === true && at40.total === 40, "exactly 40 items is accepted (the cap is inclusive)");
+  v.push(`✓ exactly 40 items accepted (total ${at40.total})`);
+
+  // nothing was written by any refused call
+  const st = await LocalBackend.funfunState(F, PW);
+  tick(Object.keys(st.quests).length === 1 && st.quests.q1 && st.quests.q1.plays === 1,
+    "a refused round writes nothing — only the accepted 40-item play left a row");
+  v.push(`after 9 refusals + 1 accepted play, rows: ${JSON.stringify(st.quests)}`);
+}
+document.getElementById("validation").textContent = v.join("\n");
+
+/* ============================================================
+   7 · markMet
+   ============================================================ */
+const mt = [];
+{
+  const G = await freshUser("met");
+  const r = await LocalBackend.funfunMet(G, PW, "qE", "eqFromSketch");
+  tick(r.ok === true, "markMet: ok");
+  tick(r.met && r.met.qE && r.met.qE.eqFromSketch === true, "markMet: the returned profile already carries it");
+  const st = await LocalBackend.funfunState(G, PW);
+  tick(st.met.qE && st.met.qE.eqFromSketch === true, "markMet: state.met shows it");
+  tick(st.quests.qE && st.quests.qE.plays === 0 && st.quests.qE.done === false,
+    "markMet: it creates the row but pays nothing and counts no play");
+  tick(st.xp === 0, "markMet: no XP (being shown a round is not an achievement)");
+
+  await LocalBackend.funfunMet(G, PW, "qE", "eqFromSketch");
+  await LocalBackend.funfunMet(G, PW, "qE", "eqFromPoints");
+  const st2 = await LocalBackend.funfunState(G, PW);
+  tick(Object.keys(st2.met.qE).length === 2, `markMet: idempotent, two distinct kinds recorded (got ${Object.keys(st2.met.qE).length})`);
+  tick(!st2.met.q1, "markMet: only the quest it was called for appears in met");
+
+  tick((await LocalBackend.funfunMet(G, PW, "nope", "x")).error === "bad_round", "markMet: unknown quest id -> bad_round");
+  tick((await LocalBackend.funfunMet(G, PW, "qE", "")).error === "bad_round", "markMet: empty skill id -> bad_round");
+  tick((await LocalBackend.funfunMet(G, PW, "qE", "x".repeat(65))).error === "bad_round", "markMet: skill id over 64 chars -> bad_round");
+
+  mt.push(`met after three calls: ${JSON.stringify(st2.met)}`);
+  mt.push(`qE row: ${JSON.stringify(st2.quests.qE)}`);
+}
+document.getElementById("met").textContent = mt.join("\n");
+
+/* ============================================================
+   8 · the fifteen ids, and only those fifteen
+   ============================================================ */
+const B = await freshUser("sweep");
+const idl = [];
+{
+  for (const id of IDS) {
+    const r = await LocalBackend.funfunSubmit(B, PW, id, round(["wrong"]));
+    tick(r.ok === true, `allow-list: the registry's "${id}" is accepted by the backend`);
+  }
+  const st = await LocalBackend.funfunState(B, PW);
+  tick(Object.keys(st.quests).length === 15, `allow-list: 15 rows written (got ${Object.keys(st.quests).length})`);
+  tick(st.xp === 0, "allow-list: fifteen all-wrong rounds paid 0 XP");
+
+  for (const bad of ["", "Q1", "q1B", "q4", "q8", "func", "dice", "qZ"]) {
+    const r = await LocalBackend.funfunSubmit(B, PW, bad, round(["full"]));
+    tick(r.ok === false && r.error === "bad_round", `allow-list: "${bad}" refused`);
+  }
+
+  // learner isolation
+  const stA = await LocalBackend.funfunState(A, PW);
+  tick(Object.keys(stA.quests).length === 2, `isolation: learner A still has only its own 2 rows (got ${Object.keys(stA.quests).length})`);
+
+  idl.push(`accepted (registry order): ${IDS.join(" ")}`);
+  idl.push(`refused: "" Q1 q1B q4 q8 func dice qZ`);
+}
+document.getElementById("ids").textContent = idl.join("\n");
+
+/* ============================================================
+   9 · admin
+   ============================================================ */
+const ad = [];
+{
+  tick((await LocalBackend.adminFunfun("not-the-password")).error === "auth", "adminFunfun: wrong password -> auth");
+  const r = await LocalBackend.adminFunfun("admin");
+  tick(r.ok === true, "adminFunfun: ok");
+
+  // learner A played q1 twice and q1b once; learner B played each of the 15
+  // once; the "greedy"/"unknown"/"edge"/"bad"/xp learners added more. So
+  // rather than a fixed total, assert the two facts that matter.
+  tick(r.plays.q1 >= 3, `adminFunfun: q1 totals across the class (A's 2 + B's 1 + others) — got ${r.plays.q1}`);
+  tick(r.plays.q1b >= 2, `adminFunfun: q1b totals across the class — got ${r.plays.q1b}`);
+  IDS.forEach(id => tick(typeof r.plays[id] === "number" && r.plays[id] >= 1,
+    `adminFunfun: "${id}" has at least learner B's one play (got ${r.plays[id]})`));
+  tick(Object.keys(r.plays).every(k => IDS.includes(k)),
+    `adminFunfun: no key outside the fifteen (got ${Object.keys(r.plays).filter(k => !IDS.includes(k)).join(",") || "none"})`);
+  // the met-only learner (section 7) created a qE row with plays 0 — it must
+  // not show up as a play.
+  const before = r.plays.qE;
+  const H = await freshUser("metonly");
+  await LocalBackend.funfunMet(H, PW, "qE", "someKind");
+  const r2 = await LocalBackend.adminFunfun("admin");
+  tick(r2.plays.qE === before, `adminFunfun: a met-only row (plays 0) adds nothing to the chip (before ${before}, after ${r2.plays.qE})`);
+
+  ad.push(`plays: ${JSON.stringify(r.plays)}`);
+}
+document.getElementById("admin").textContent = ad.join("\n");
+
+/* ---------------- banner ---------------- */
+const list = document.getElementById("failList");
+fails.forEach(msg => { const li = document.createElement("li"); li.textContent = "✗ " + msg; list.appendChild(li); });
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — ${passed}/${total} checks passed`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-funfun-backend] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

@@ -59,6 +59,28 @@
                     literal reward (js/config.js EXAM block) exactly once,
                     the moment a question's every part has been opened.
                     Takes NO xp/gold amount from the client, ever.
+     fun functions: funfunState(u,p) — the learner's Fun Functions profile,
+                    in EXACTLY the shape graph-quest's js/mount.js documents
+                    for host.profile(): { ok, xp, quests: { [questId]: {
+                    best (0..1 fraction), total, plays, done } },
+                    met: { [questId]: { [skillId]: true } } }. NOT part of
+                    getState()'s payload — mhq_get_state is deliberately
+                    untouched by the mount build (brief D3; see
+                    migration-funfun.sql's header for the copy-forward
+                    reason).
+                  funfunMet(u,p,questId,skillId) — records that a round KIND
+                    was shown; returns the fresh profile. Pays nothing.
+                    Only the qE quest's deal-each-kind-first rule calls it.
+                  funfunSubmit(u,p,questId,answered) — pays out one finished
+                    quest. Takes NO xp and NO score: `answered` is the
+                    per-item record js/funfun/play.js builds ([{ i, skillId,
+                    outcome: "full"|"hinted"|"half"|"wrong"|"skipped", xp }])
+                    and the server recomputes both from it (the dice's
+                    "never names an amount" rule). Returns { ok, xpAwarded,
+                    goldAwarded, correct, total, passed, alreadyDone, xp,
+                    gold, level, levelUp, levelInfo, best, plays }.
+                  adminFunfun(pw) — { ok, plays: { [questId]:
+                    classTotalPlays } } for the dashboard's 📈 chip.
    ============================================================ */
 import { SupabaseBackend, hasSupabase } from "./supabase.js";
 import { LocalBackend } from "./local-backend.js";

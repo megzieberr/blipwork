@@ -215,6 +215,41 @@ h2{font-size:20px} h3{font-size:17px}
 .dice-card .qstate{margin-top:0;padding-top:0;margin-left:auto;flex:0 0 auto}
 .dice-card.busy{opacity:.6;pointer-events:none}
 
+/* FUNFUN-PART2-BRIEF.md D7 📈 — the Fun Functions strip. Same visual family
+   as the .quest cards (per-tile --qc accent, thin luminous border, small
+   radii), just small enough that all 15 tiles fit on a phone without turning
+   the chapter screen into a scroll marathon: three across at 375px. Only the
+   strip is defined here — everything INSIDE a Fun Functions quest is styled
+   by js/funfun/styles.css, loaded into a shadow root, and cannot reach these
+   rules (or be reached by them). */
+.ff-strip{grid-column:1/-1;margin-top:2px}
+.ff-strip-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.ff-strip-title{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink)}
+.ff-strip-blurb{margin-top:2px}
+.ff-strip-msg{margin:6px 0 2px}
+.ff-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ff-tile{position:relative;text-align:left;font:inherit;cursor:pointer;overflow:hidden;
+  display:flex;flex-direction:column;gap:4px;min-height:88px;padding:9px;border-radius:var(--r-md);
+  border:1px solid color-mix(in srgb,var(--qc) 45%,var(--brd-2));
+  background:color-mix(in srgb,var(--qc) 14%,var(--bg2));
+  transition:transform .16s,box-shadow .16s}
+.ff-tile:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 10px 24px -14px color-mix(in srgb,var(--qc) 60%,transparent)}
+.ff-tile.locked{opacity:.5;filter:saturate(.5);cursor:default}
+.ff-tile .qn{font-family:var(--font-num);font-weight:700;font-size:11px;color:var(--qc);width:22px;height:22px;border-radius:var(--r-sm);display:grid;place-items:center;
+  background:color-mix(in srgb,var(--qc) 20%,transparent);border:1px solid color-mix(in srgb,var(--qc) 48%,transparent)}
+.ff-tile .qcheck{position:absolute;top:8px;right:9px;color:var(--qc);font-size:13px}
+.ff-tile .ff-tt{font-family:var(--font-display);font-weight:600;font-size:11.5px;line-height:1.2;color:var(--ink)}
+.ff-tile .ff-ts{margin-top:auto;font-family:var(--font-num);font-size:10px;color:var(--muted)}
+
+/* The mounted quest's own screen (js/funfun-play.js). The host element is
+   just a box: its shadow root carries all of Fun Functions' CSS. Pulled out
+   to the full view width at phone size, because a graph inside two nested
+   16px paddings loses real drawing room. */
+.ff-play-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ff-play-top .ptitle{flex:1;font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink)}
+.ff-play-top .ff-back{font-size:26px;line-height:1}
+.ff-host{display:block;margin:0 -16px}
+
 /* ---------- PLAY screen ---------- */
 .play-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .play-top .ptitle{flex:1;font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink)}

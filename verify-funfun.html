@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Functions mount · verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .vcard{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .vcard h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  /* The mount runs for real, off-screen — visible layout would only slow the
+     run down, and nothing here is measured in pixels except min-height, which
+     computed style reports regardless of where the box sits. */
+  #stage{position:absolute;left:-10000px;top:0;width:375px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Fun Functions mount · verification</h1>
+<p class="muted small">FUNFUN-PART2-BRIEF.md session 2. Mounts all 15 graph-quest quests the way
+  <code>js/funfun-play.js</code> does — through the SAME <code>funfunShadow()</code> helper the play screen
+  uses, so the shadow setup under test is the shipped one, not a copy — and plays each one to the end with the
+  synced headless driver (<code>js/funfun/mount-driver.js</code>, imported, not re-implemented). Per quest:
+  the finish payload's per-item record matches the item count, the shadow root really is the only place Fun
+  Functions' DOM lives, the <code>min-height:100vh</code> seam override is in force, and destroy() leaves the
+  host element empty.</p>
+<div id="banner">running…</div>
+
+<h2>Per-quest mount, play and teardown</h2>
+<div class="grid" id="quests"></div>
+
+<h2>Page-level checks</h2>
+<pre id="page">…</pre>
+
+<div id="stage"></div>
+
+<script type="module">
+import { QUESTS } from "./js/funfun/quests/index.js";
+import { L } from "./js/funfun/i18n.js";
+import { spyHost, playMounted } from "./js/funfun/mount-driver.js";
+import { funfunShadow } from "./js/funfun-play.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return !!cond; };
+
+/* Class names that belong to Fun Functions ALONE — checked against
+   css/styles.css so none of them can be a blipwork class that legitimately
+   lives in the light DOM (.view, .card, .opt, .qn, .keypad and ~55 others do
+   collide, which is the whole reason for the shadow root). This page's own
+   markup deliberately uses .vcard, not .card, for the same reason. */
+const FF_ONLY = ["ff-root", "ff-app", "qcard", "intro-cap", "hint-btn", "graphbox", "qwrap", "hintbox", "ivmeter", "iv-handle", "boost-banner"];
+const FF_SEL = FF_ONLY.map(c => "." + c).join(",");
+
+const stage = document.getElementById("stage");
+const cards = document.getElementById("quests");
+const page = [];
+
+/* fonts first: the mount inherits Space Grotesk / Sora / JetBrains Mono from
+   the page (both apps load the SAME Google Fonts, so no font work was needed
+   at the seam) — a shadow root does not block that inheritance, but a missing
+   webfont would silently make every mounted screen fall back to system-ui. */
+await document.fonts.ready;
+/* a webfont face is only FETCHED when something on the page first needs that
+   exact family+weight, so document.fonts.ready can resolve with a declared-
+   but-untouched face still "unloaded" — ask for the three faces explicitly,
+   then check. A family the page never declared (or can't fetch) rejects/stays
+   unloaded and the check below fails, which is the thing worth catching. */
+await Promise.all([
+  document.fonts.load('600 16px "Space Grotesk"'),
+  document.fonts.load('400 16px "Sora"'),
+  document.fonts.load('400 16px "JetBrains Mono"'),
+]).catch(() => { /* the check() calls below report it */ });
+const hasGrotesk = document.fonts.check('600 16px "Space Grotesk"');
+tick(hasGrotesk, "document.fonts has Space Grotesk loaded");
+page.push(`document.fonts.check('600 16px "Space Grotesk"') = ${hasGrotesk}`);
+tick(document.fonts.check('400 16px "Sora"'), "document.fonts has Sora loaded");
+tick(document.fonts.check('400 16px "JetBrains Mono"'), "document.fonts has JetBrains Mono loaded");
+page.push(`document.fonts.check('400 16px "Sora"') = ${document.fonts.check('400 16px "Sora"')}`);
+page.push(`document.fonts.check('400 16px "JetBrains Mono"') = ${document.fonts.check('400 16px "JetBrains Mono"')}`);
+
+for (let i = 0; i < QUESTS.length; i++) {
+  const q = QUESTS[i];
+  const card = document.createElement("div");
+  card.className = "vcard";
+  card.innerHTML = `<h3>${i + 1}. ${q.id} — ${L(q.title)}</h3>`;
+  const ul = document.createElement("ul");
+  ul.className = "checks";
+  card.appendChild(ul);
+  cards.appendChild(card);
+  const say = (cond, label) => {
+    const li = document.createElement("li");
+    li.className = cond ? "ok" : "bad";
+    li.textContent = (cond ? "✓ " : "✗ ") + label;
+    ul.appendChild(li);
+  };
+  const check = (cond, label) => { say(tick(cond, `${q.id}: ${label}`), label); };
+
+  const hostEl = document.createElement("div");
+  hostEl.className = "ff-host";
+  stage.appendChild(hostEl);
+
+  const { shadow, rootEl, ready } = funfunShadow(hostEl);
+  await ready;
+
+  const host = spyHost({ questId: q.id, lang: "en", semicircles: false });
+  let out = null, err = null;
+  try { out = await playMounted(rootEl, host, { maxSteps: 6000 }); }
+  catch (e) { err = e; }
+
+  check(!err, `played to the end without throwing${err ? " — " + err.message : ""}`);
+  if (out) {
+    const res = out.res;
+    check(!out.stuck, "driver never got stuck");
+    check(!!res, "onFinished fired with a result payload");
+    if (res) {
+      check(Array.isArray(res.answered) && res.answered.length === res.total,
+        `answered.length === total (${res.answered.length} / ${res.total})`);
+      check(res.total > 0, `a real round was dealt (total = ${res.total})`);
+      check(res.answered.every(r => r && typeof r.skillId === "string" &&
+        ["full", "hinted", "half", "wrong", "skipped"].includes(r.outcome)),
+        "every record carries a skillId and a known outcome");
+      check(out.calls.saveResult.length === 1, `saveResult called exactly once (${out.calls.saveResult.length})`);
+    }
+
+    /* the seam override (brief D1): standalone the sheet says min-height:100vh
+       because Fun Functions owns the page; mounted, the box must be content-tall */
+    const view = rootEl.querySelector(".view");
+    const mh = view ? getComputedStyle(view).minHeight : "(no .view)";
+    check(mh === "0px", `.ff-root .view computed min-height = ${mh} (want 0px)`);
+
+    /* isolation, while it is still LIVE: everything Fun Functions built must
+       be inside the shadow root, and nothing of it in the page */
+    check(rootEl.classList.contains("ff-root"), "the mount's root really is inside the shadow root");
+    check(document.querySelectorAll(FF_SEL).length === 0,
+      "no Fun Functions class in the light DOM while mounted");
+
+    out.handle.destroy();
+    check(hostEl.childElementCount === 0, "host element has no light-DOM children after destroy");
+    check(shadow.contains(rootEl) && rootEl.childElementCount === 0, "shadow root emptied by destroy()");
+    check(document.querySelectorAll(FF_SEL).length === 0, "no Fun Functions class in the light DOM after destroy");
+    check(!rootEl.classList.contains("ff-root"), "destroy() took the .ff-root class back off");
+  }
+  hostEl.remove();
+}
+
+page.push(`quests mounted, played and destroyed: ${QUESTS.length}`);
+page.push(`light-DOM Fun Functions elements at the end of the whole run: ${document.querySelectorAll(FF_SEL).length}`);
+tick(document.querySelectorAll(FF_SEL).length === 0, "light DOM clean after all 15 runs");
+tick(document.getElementById("stage").childElementCount === 0, "stage emptied after all 15 runs");
+document.getElementById("page").textContent = page.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks passed` : `✗ ${total - passed} check(s) failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-funfun] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+/* ============================================================
+   QUEST AUTHORING HELPERS
+   ------------------------------------------------------------
+   Two question shapes:
+
+     mc(...)  a normal multiple-choice round (may carry a picture)
+     iq(...)  an INTERACTIVE round: the learner does the physical
+              thing first, and only then does the question unlock
+
+   Every learner-facing string is bilingual — pass B("en","af")
+   (or a plain string for maths that reads the same either way).
+   ============================================================ */
+import { shuffled } from "../ui.js";
+import { L } from "../i18n.js";
+
+/* Multiple choice.
+   A wrong option may be a plain label OR `{ label, misc }`, where `misc`
+   is a targeted misconception nudge shown when THAT distractor is picked
+   (Circle Quest's pattern — even learners who never tap a hint get the
+   misconception addressed).
+   Wrong options are de-duplicated by their RENDERED text in BOTH
+   languages, so a collision can never show two identical buttons.
+   Generators must still filter decoys by VALUE (blipwork bug #4:
+   `1/2` and `0,5` are different strings but the same number).
+
+   opts.hints    progressive hint ladder (array, one rung per tap;
+                 rung 1 names the MOVE, never the answer)
+   opts.solution worked-method lines shown in the feedback panel */
+/* A maths expression may never wrap mid-way across two lines.
+   Rather than remembering to wrap every generated string by hand, every
+   option label and answer goes through here: anything that looks like an
+   inequality, an interval or set notation gets a no-break .eq wrapper.
+   Already-wrapped text and plain prose are left alone. */
+const MATHY = /(&lt;|&gt;|[<>≤≥≠∈])/;
+function eqWrap(v) {
+  if (v == null) return v;
+  if (typeof v === "object") {
+    const out = {};
+    for (const k in v) out[k] = eqWrap(v[k]);
+    return out;
+  }
+  const s = String(v);
+  if (!MATHY.test(s) || s.includes("class=\"eq\"") || s.includes("class='eq'")) return s;
+  /* prose that merely mentions a symbol (a misconception nudge, a reason)
+     must not be turned into one unbreakable line */
+  if (s.replace(/<[^>]*>/g, "").trim().split(/\s+/).length > 8) return s;
+  return `<span class="eq">${s}</span>`;
+}
+
+export function mc(concept, prompt, correct, wrongs, opts = {}) {
+  correct = eqWrap(correct);
+  wrongs = (wrongs || []).map((w) =>
+    (w && typeof w === "object" && "label" in w) ? { ...w, label: eqWrap(w.label) } : eqWrap(w));
+  if (opts.answerLabel) opts = { ...opts, answerLabel: eqWrap(opts.answerLabel) };
+  const key = (v) => `${L(v)}||${typeof v === "object" ? (v.en || "") + "|" + (v.af || "") : v}`;
+  const seen = new Set([key(correct)]);
+  const uniq = [];
+  for (const w of wrongs) {
+    if (w == null) continue;
+    const label = (w && typeof w === "object" && "label" in w) ? w.label : w;
+    const misc = (w && typeof w === "object" && "label" in w) ? w.misc : null;
+    if (label == null) continue;
+    const k = key(label);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    uniq.push({ label, misc, correct: false });
+    if (uniq.length >= 3) break;              // 4 buttons max — a phone screen
+  }
+  return {
+    type: "mc", concept,
+    prompt, stem: opts.stem,
+    options: shuffled([{ label: correct, correct: true }, ...uniq]),
+    answerLabel: opts.answerLabel || correct,
+    hint: opts.hint,
+    hints: opts.hints,
+    solution: opts.solution,
+    graph: opts.graph,
+    graphCap: opts.graphCap,
+    wide: opts.wide,
+  };
+}
+
+/* An interactive round.
+   cfg = { concept, kind, prompt, coach, build(host, done), then }
+     build()  mounts the mechanic; call done() when the physical
+              part is complete (that reveals `then`)
+     then     an mc() question — or null for "the doing IS the round" */
+export function iq(cfg) {
+  return { type: "interactive", ...cfg };
+}
+
+/* A keypad round: the learner types a number instead of tapping an
+   option (qK's R2 kiss round, batch 3 session 2 keypad amendment — her
+   ruling 2026-08-21). Scores and plays through play.js exactly like an
+   mc() round (same XP, same secondChanceAllowed() gate) — only the entry
+   surface differs.
+   opts.wrongMisc(v)  a bilingual nudge for a submitted WRONG value v,
+                      chosen BY VALUE (mc()'s per-option misc is chosen by
+                      which button was tapped — same idea, different key).
+                      Always called, even when no second chance applies.
+   opts.miscTexts     every bilingual string wrongMisc() can return, so a
+                      language sweep can see them without calling the
+                      function (mc()'s options array gives that for free;
+                      a function does not). */
+export function kp(concept, prompt, correct, opts = {}) {
+  return {
+    type: "kp", concept,
+    prompt, stem: opts.stem,
+    correct, unit: opts.unit || "", allowNeg: !!opts.allowNeg,
+    wrongMisc: opts.wrongMisc || null,
+    miscTexts: opts.miscTexts || [],
+    answerLabel: opts.answerLabel != null ? opts.answerLabel : correct,
+    hint: opts.hint, hints: opts.hints,
+    solution: opts.solution,
+    graph: opts.graph, graphCap: opts.graphCap,
+    wide: opts.wide,
+  };
+}
+
+/* a quest = an id, a title, and a list of skill generators */
+export function quest(id, title, blurb, skills, opts = {}) {
+  return {
+    id, title, blurb, skills,
+    rounds: opts.rounds || 6,
+    techOnly: !!opts.techOnly,
+    accent: opts.accent,
+    /* a quest may build a whole round in one go — exam mode does (one
+       sketch, many sub-questions) and so does a lesson whose beats have
+       to arrive in a fixed order (the discovery quest) */
+    buildAll: opts.buildAll || null,
+    /* …and only the exam kind promises that every item shares ONE sketch */
+    oneSketch: !!opts.oneSketch,
+    /* a quest may hand out the half-marks second chance to EVERY learner,
+       not only to one in Boost mode — Megan's ruling for Round D
+       (2026-08-12): its questions are long enough that one slip should not
+       end the question. The scaffold-on-every-wrong-answer behaviour is
+       unchanged and app-wide; this flag only un-gates the retry. */
+    alwaysSecondChance: !!opts.alwaysSecondChance,
+    /* her qE dealing ruling (2026-08-21): while the learner has not yet
+       MET every usable skill kind (a round of it was actually presented
+       in play, tracked in backend.js's profile.met), every play deals one
+       round of EVERY usable kind first, remaining slots from the normal
+       weighted bag — never skipping a kind on an early play. Once every
+       kind is met, dealing goes back to the plain weighted draw. Opt-in:
+       buildRound() in quests/index.js only looks at this for a quest that
+       sets it — every other quest's dealing is unchanged. */
+    dealEachKindFirst: !!opts.dealEachKindFirst,
+  };
+}

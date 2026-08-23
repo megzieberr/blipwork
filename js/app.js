@@ -3,9 +3,10 @@ import { api } from "./api.js";
 import { getSession, isLoggedIn, clearSession } from "./session.js";
 import { el, clear } from "./ui.js";
 import { renderLogin } from "./auth.js";
-import { renderHub, renderChapter, renderResults, renderDiceResults, renderExamChapter } from "./screens.js";
+import { renderHub, renderChapter, renderResults, renderDiceResults, renderFunfunResults, renderExamChapter } from "./screens.js";
 import { renderPlay } from "./play.js";
 import { renderExamPlay } from "./exam-play.js";
+import { renderFunfunPlay, destroyFunfunMount } from "./funfun-play.js";
 import { renderBlip } from "./blip.js";
 import { closeActiveTour } from "./companion/tour.js";
 import { renderGallery } from "./gallery.js";
@@ -37,7 +38,12 @@ const app = {
   // included, via this.go("login")) — closing any live tour here means a
   // screen swap mid-tour can never leave it stranded on top of whatever
   // renders next.
-  go(screen, params) { closeActiveTour(); this.screen = screen; this.params = params || {}; window.scrollTo(0, 0); this.render(); },
+  // FUNFUN-PART2-BRIEF.md D8 (2026-08-23): the Fun Functions mount lives in
+  // a shadow root on the funfunPlay screen and must be torn down whenever
+  // that screen goes away — back, finish, logout, anything. go() is the one
+  // choke point every navigation runs through, so destroying here means a
+  // second mount can never start while one is still alive.
+  go(screen, params) { closeActiveTour(); destroyFunfunMount(); this.screen = screen; this.params = params || {}; window.scrollTo(0, 0); this.render(); },
   logout() { clearSession(); this.state = null; this.go("login"); },
 
   render() {
@@ -58,9 +64,19 @@ const app = {
       case "hub": renderHub(this, view); break;
       case "chapter": renderChapter(this, view, this.params); break;
       case "play": renderPlay(this, view, this.params); break;
+      // funfunPlay gets NO chrome, matching "play": one Fun Functions quest
+      // fills the screen, with only its own slim back bar above it.
+      case "funfunPlay": renderFunfunPlay(this, view, this.params); break;
       // DICE-PLAN.md: dice rounds route to the SAME "results" screen id, just
       // a different renderer (params.dice flag) — no pass/fail language.
-      case "results": (this.params && this.params.dice) ? renderDiceResults(this, view, this.params) : renderResults(this, view, this.params); break;
+      // FUNFUN-PART2-BRIEF.md D9: a Fun Functions quest lands on the same
+      // "results" screen id with its own renderer (params.funfun), exactly
+      // the way the dice does — the three cards share nothing but the route.
+      case "results":
+        if (this.params && this.params.funfun) renderFunfunResults(this, view, this.params);
+        else if (this.params && this.params.dice) renderDiceResults(this, view, this.params);
+        else renderResults(this, view, this.params);
+        break;
       case "blip": renderBlip(this, view); break;
       case "gallery": renderGallery(this, view); break;
       case "examChapter": renderExamChapter(this, view, this.params); break;
