@@ -23,8 +23,11 @@
      showAsym?:true,                       // auto dashed verticals for tan curves
      midline?:{ y },                       // dashed horizontal y = q
      shades?:[ { x0, x1 } ],               // translucent band over an x-interval
-     vlines?:[ { x, label? } ],            // dashed vertical boundary + caption
-     hlines?:[ { y, label? } ],            // dashed horizontal boundary + caption
+     vlines?:[ { x, label? } ],            // dashed vertical boundary; `label`
+                                           // is captioned in the band UNDER
+                                           // the picture, not beside the line
+     hlines?:[ { y, label? } ],            // dashed horizontal boundary; `label`
+                                           // is captioned beside its own line
      points?:[ { x, y, label?, on?, open?, dashTo?:"x"|"y"|"both", place? } ],
      hmeasure?:{ x0, x1, y, label? },      // horizontal span arrow (a period)
      vmeasure?:{ x, y0, y1, label? },      // vertical span arrow (an amplitude)
@@ -39,6 +42,22 @@
    js/engine/function-graph.js already draws them. STRICTLY ADDITIVE: a
    spec that carries none of the three renders byte-for-byte what it
    rendered before, so every live tg1–tg7 round is untouched.
+
+   VERTICAL-LINE CAPTIONS LIVE UNDER THE PICTURE (2026-08-23, later the
+   same day — her live review of the Exam Focus sketches: "put the x = 2
+   labels BELOW the vertical lines and not on the sketch itself, it
+   looks very cluttered"). A `vlines[].label` (and a vertical
+   `asymptotes[].label`, should a spec ever hand one in) is drawn in a
+   CAPTION BAND in the bottom padding: horizontally centred on its own
+   line, clamped inside the frame, staggered onto a second row when two
+   lines sit too close for their captions to share one. computeTrig
+   GROWS padB by one row per caption row, BELOW the x-tick labels — the
+   two live in different bands, the ticks hugging the axis and the
+   captions hugging the frame's bottom edge — so they can never collide,
+   not even when the x-axis itself is the bottom of the window.
+   HORIZONTAL captions ("y = 3") are untouched. The same rule, the same
+   constants and the same verify check as function-graph.js, because the
+   two engines' figures have to read as one house.
    ============================================================ */
 import { makeTrig, periodOf, amplitudeOf, tanAsymptotesIn } from "../tgraphlib.js";
 
@@ -74,9 +93,83 @@ function autoXStep(spec) {
   return Math.round(span / 6);
 }
 
+/* ----------------------------------------------------------------
+   THE CAPTION BAND — where every "x = 90°" now lives.
+   ----------------------------------------------------------------
+   Deliberately the same numbers as js/engine/function-graph.js's own
+   band (.tg-alab and .fg-alab are the same 10,5px italic), so a trig
+   figure and a function figure sitting on the same Exam Focus card
+   caption their vertical lines at exactly the same height.
+   ---------------------------------------------------------------- */
+const CAP_CW = 6.5, CAP_H = 18;   // .tg-alab metrics, generously over-estimated
+const CAP_ROW = CAP_H + 1;        // one caption row, top to top
+const CAP_EDGE = 2;               // clear air under the bottom row
+const CAP_GAP = 6;                // clear air between two captions on a row
+const BASE_PAD_B = 22;            // the bottom padding when there are no captions
+
+/* every caption that NAMES A VERTICAL LINE, in draw order */
+function verticalCaptions(spec) {
+  const caps = [];
+  (spec.asymptotes || []).forEach((a) => {
+    if (a && a.x !== undefined && a.label != null) caps.push({ x: a.x, label: minus(a.label) });
+  });
+  (spec.vlines || []).forEach((v) => {
+    if (v && v.x !== undefined && v.label != null) caps.push({ x: v.x, label: minus(v.label) });
+  });
+  return caps;
+}
+
+/* Lay them out in the band. HORIZONTAL geometry only (W, padL/padR and
+   the window's degree range) — nothing here depends on padB, which is
+   what lets the result decide how tall padB has to be. Rows fill left to
+   right, first-free-row: row 0 is the row nearest the picture. */
+export function captionLayout(spec) {
+  const caps = verticalCaptions(spec);
+  if (!caps.length) return { rows: 0, items: [] };
+  const W = spec.w || 400, padL = 24, padR = 16;
+  const { xmin, xmax } = spec.win;
+  const sx = (W - padL - padR) / (xmax - xmin);
+  const items = caps.map((c) => {
+    const w = c.label.length * CAP_CW + 6;
+    const lx = padL + (c.x - xmin) * sx;
+    const lo = 2 + w / 2, hi = W - 2 - w / 2;
+    const cx = hi < lo ? W / 2 : Math.min(hi, Math.max(lo, lx));   // never off an edge
+    return { x: c.x, label: c.label, w, lx, cx, row: 0 };
+  });
+  const rows = [];
+  items.slice().sort((a, b) => a.cx - b.cx).forEach((it) => {
+    let r = 0;
+    while (r < 8) {
+      if (!rows[r]) rows[r] = [];
+      if (!rows[r].some((o) => Math.abs(o.cx - it.cx) < (o.w + it.w) / 2 + CAP_GAP)) break;
+      r++;
+    }
+    if (!rows[r]) rows[r] = [];
+    rows[r].push(it);
+    it.row = r;
+  });
+  return { rows: rows.length, items };
+}
+
+/* the band's boxes, in pixels — ONE source of truth, so what render()
+   draws and what verify() measures can never drift apart. */
+function captionBoxes(g) {
+  const { H, capL } = g;
+  if (!capL || !capL.items.length) return [];
+  return capL.items.map((it) => {
+    const cy = H - CAP_EDGE - CAP_ROW / 2 - (capL.rows - 1 - it.row) * CAP_ROW;
+    return { ...it, cy, box: [it.cx - it.w / 2, cy - CAP_H / 2, it.cx + it.w / 2, cy + CAP_H / 2] };
+  });
+}
+
 export function computeTrig(spec) {
   const W = spec.w || 400, H = spec.h || 300;
-  const padL = 24, padR = 16, padT = 16, padB = 22;
+  const capL = captionLayout(spec);
+  /* The ONLY thing that grows the bottom padding: one row per row of
+     vertical-line captions. A spec with none keeps padB === 22, so every
+     live tg1–tg7 / gt8 / gt10 round — none of which captions a vertical
+     line — renders byte-for-byte what it rendered before. */
+  const padL = 24, padR = 16, padT = 16, padB = BASE_PAD_B + capL.rows * CAP_ROW;
   const { xmin, xmax, ymin, ymax } = spec.win;
   const sx = (W - padL - padR) / (xmax - xmin);
   const sy = (H - padT - padB) / (ymax - ymin);
@@ -84,7 +177,7 @@ export function computeTrig(spec) {
   const Y = (y) => H - padB - (y - ymin) * sy;
   const xstep = spec.xstep || autoXStep(spec);
   const ystep = spec.ystep || 1;
-  return { W, H, sx, sy, X, Y, win: spec.win, xstep, ystep, padL, padR, padT, padB };
+  return { W, H, sx, sy, X, Y, win: spec.win, xstep, ystep, padL, padR, padT, padB, capL };
 }
 
 /* sample one curve into clipped polyline segments (breaks at tan
@@ -93,7 +186,19 @@ export function computeTrig(spec) {
 function curvePaths(cv, g) {
   const f = makeTrig(cv);
   const { xmin, xmax, ymin, ymax } = g.win;
-  const span = ymax - ymin, lo = ymin - span * 0.6, hi = ymax + span * 0.6;
+  const span = ymax - ymin;
+  /* How far BELOW the window a curve may be drawn — the same rule, and the
+     same reason, as js/engine/function-graph.js's curvePaths: normally a
+     good slice of the window so a tan branch visibly runs off the picture,
+     but capped to the plain part of the bottom padding the moment a CAPTION
+     BAND exists, so no caption can have a curve ruled through it. With no
+     band the two numbers are this engine's originals, unchanged. */
+  const capRows = (g.capL && g.capL.rows) || 0;
+  const under = capRows
+    ? Math.min(span * 0.55, Math.max(2, BASE_PAD_B - CAP_EDGE - 2) / g.sy)
+    : span * 0.55;
+  const lo = capRows ? ymin - under - span * 0.05 : ymin - span * 0.6;
+  const hi = ymax + span * 0.6;
   const breaks = cv.fn === "tan" ? tanAsymptotesIn(cv, xmin, xmax) : [];
   const STEPS = 720, dx = (xmax - xmin) / STEPS;
   const segs = []; let cur = [];
@@ -102,7 +207,7 @@ function curvePaths(cv, g) {
     if (breaks.some((b) => Math.abs(x - b) < dx * 0.75)) { if (cur.length > 1) segs.push(cur); cur = []; continue; }
     const y = f(x);
     if (!Number.isFinite(y) || y < lo || y > hi) { if (cur.length > 1) segs.push(cur); cur = []; continue; }
-    cur.push([g.X(x), g.Y(Math.max(ymin - span * 0.55, Math.min(ymax + span * 0.55, y)))]);
+    cur.push([g.X(x), g.Y(Math.max(ymin - under, Math.min(ymax + span * 0.55, y)))]);
   }
   if (cur.length > 1) segs.push(cur);
   return segs.map((s) => "M " + s.map(([px, py]) => `${N(px)} ${N(py)}`).join(" L "));
@@ -215,15 +320,15 @@ export function renderTrig(spec) {
   // ---- dashed boundary lines + their captions (2026-08-23) ----
   // Drawn AFTER the curves, like function-graph's own vlines, so a
   // boundary the reveal is pointing at is not hidden under a graph.
-  // The caption is the muted style function-graph uses (.tg-alab ==
-  // .fg-alab): a vertical line captions near the TOP, just right of the
-  // line; a horizontal one captions near the RIGHT end, just above it.
-  // Deliberately fixed slots — this engine has no label placer and does
-  // not need one: a trig question carries one or two of these, not eight.
+  // A VERTICAL line's caption is NOT drawn here: it goes in the caption
+  // band under the picture (see captionLayout above), because a caption
+  // sitting beside its own line in the middle of the sketch is what she
+  // called "very cluttered". A HORIZONTAL one still captions near the
+  // RIGHT end, just above its line — a fixed slot, which is all this
+  // engine needs: a trig question carries one or two of these, not eight.
   (spec.vlines || []).forEach((v) => {
     if (!(v.x >= xmin && v.x <= xmax)) return;
     out += `<line class="tg-vline" x1="${N(X(v.x))}" y1="${N(Y(ymin))}" x2="${N(X(v.x))}" y2="${N(Y(ymax))}"/>`;
-    if (v.label != null) out += text(X(v.x) + 4, Y(ymax) + 10, minus(v.label), "tg-alab", "start");
   });
   (spec.hlines || []).forEach((h) => {
     if (!(h.y >= ymin && h.y <= ymax)) return;
@@ -258,9 +363,18 @@ export function renderTrig(spec) {
     out += `<circle class="tg-dot${p.open ? " open" : ""}" cx="${N(px)}" cy="${N(py)}" r="3.2"/>`;
     if (p.label != null) {
       const above = p.place ? p.place === "above" : py > H / 2;
-      out += text(px, py + (above ? -11 : 13), p.label, "tg-plab");
+      /* A "below" label on a point sitting on the window's own bottom edge
+         would be written into the caption band. This engine has no placer to
+         dodge with, so it flips such a label to the other side of its dot —
+         the band belongs to the captions and to nothing else. */
+      const bandTop = g.capL.rows ? H - CAP_EDGE - g.capL.rows * CAP_ROW : Infinity;
+      const ly = !above && py + 13 + CAP_H / 2 > bandTop ? py - 11 : py + (above ? -11 : 13);
+      out += text(px, ly, p.label, "tg-plab");
     }
   });
+
+  // ---- the caption band: every vertical line's name, under the picture ----
+  captionBoxes(g).forEach((c) => { out += text(c.cx, c.cy, c.label, "tg-alab"); });
 
   return svgWrap(W, H, spec.accent, out, spec.tap ? "tg-tappable" : "");
 }
@@ -348,6 +462,40 @@ export function verifyTrig(spec, tol = { onCurve: 0.03 }) {
   if (spec.vmeasure && (spec.curves || [])[0]) {
     const A = amplitudeOf(spec.curves[0]), h = Math.abs(spec.vmeasure.y1 - spec.vmeasure.y0);
     r.push({ label: "amplitude measure spans peak-to-trough (2a)", ok: A != null && Math.abs(h - 2 * A) < 1e-6 });
+  }
+
+  /* 8) every VERTICAL-LINE caption sits BELOW the plot area and inside the
+        frame (2026-08-23) — the same three measurements verifyFunction
+        makes, so the rule cannot quietly hold in one engine and lapse in
+        the other: top edge at or below the plot's bottom edge, box inside
+        the frame on all four sides, and no caption touching another. */
+  const caps = captionBoxes(g);
+  const plotBottom = g.H - g.padB;
+  caps.forEach((c) => {
+    r.push({
+      label: `vertical caption "${c.label}" sits below the plot area (band starts at the picture's bottom edge)`,
+      ok: c.box[1] >= plotBottom - 1e-9,
+    });
+    r.push({
+      label: `vertical caption "${c.label}" is fully inside the frame`,
+      ok: c.box[0] >= 1 && c.box[2] <= g.W - 1 && c.box[1] >= 1 && c.box[3] <= g.H - 1,
+    });
+  });
+  caps.forEach((c, i) => caps.slice(i + 1).forEach((d) => {
+    const clash = !(c.box[2] <= d.box[0] || d.box[2] <= c.box[0] || c.box[3] <= d.box[1] || d.box[3] <= c.box[1]);
+    r.push({ label: `vertical captions "${c.label}" and "${d.label}" do not overlap`, ok: !clash });
+  }));
+  /* and the band really is EMPTY: a tan branch may run past the window's
+     bottom edge, but not into the caption row. Measured off the drawn
+     path, not assumed from the padding sums. */
+  if (caps.length) {
+    const bandTop = Math.min(...caps.map((c) => c.box[1]));
+    let deepest = -Infinity;
+    (spec.curves || []).forEach((cv) => curvePaths(cv, g).forEach((d) => {
+      const nums = d.match(/-?\d+(?:[.,]\d+)?/g) || [];
+      for (let i = 1; i < nums.length; i += 2) deepest = Math.max(deepest, parseFloat(nums[i]));
+    }));
+    r.push({ label: "no curve is drawn into the caption band", ok: !(deepest > bandTop) });
   }
 
   return r;

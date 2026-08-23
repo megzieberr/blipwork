@@ -22,8 +22,10 @@
        curves?:    [ { fn, a, b, p, q, tone?, dash?, label?, labelAt? } ],
        points?:    [ { x, y, label?, on?, open?, dashTo?, place? } ],
        shades?:    [ { x0, x1 } ],
-       vlines?:    [ { x, label? } ],
-       hlines?:    [ { y, label? } ],
+       vlines?:    [ { x, label? } ],   // `label` is captioned in the band
+                                        // UNDER the picture (2026-08-23),
+                                        // never beside the line
+       hlines?:    [ { y, label? } ],   // `label` still sits beside its line
        midline?:   { y },
        hmeasure?:  { x0, x1, y, label? },
        vmeasure?:  { x, y0, y1, label? },

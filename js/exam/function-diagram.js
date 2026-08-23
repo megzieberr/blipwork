@@ -22,7 +22,9 @@
        points?:     [ { x, y, label?, on?, place?, dashTo? } ],
        asymptotes?: [ { x?, y?, of?, label? } ],
        shades?:     [ { x0, x1 } ],
-       vlines?:     [ { x, label? } ],
+       vlines?:     [ { x, label? } ],   // `label` is captioned in the band
+                                         // UNDER the picture (2026-08-23),
+                                         // never beside the line
        segment?:    { x, fromCurve, toCurve, label? },
        bare?:       true,
      }

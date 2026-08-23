@@ -18,9 +18,12 @@
      win:{ xmin, xmax, ymin, ymax },
      curves:[ { kind, …params, tone?:"a"|"b"|"c", dash?, label?, labelAt? } ],
      points?:[ { x, y, label?, on?, open?, dashTo?:"x"|"y"|"both" } ],
-     asymptotes?:[ { x?, y?, of?, label? } ],  // dashed asymptote lines; `label`
-                                              // (e.g. "x = −2") draws the muted
-                                              // caption beside the line
+     asymptotes?:[ { x?, y?, of?, label? } ],  // dashed asymptote lines. A
+                                              // HORIZONTAL one's `label`
+                                              // ("y = 1") is drawn beside the
+                                              // line; a VERTICAL one's
+                                              // ("x = −2") is drawn in the
+                                              // caption band UNDER the picture
      vlines?:[ { x, label? } ],           // dashed vertical boundary lines (an
                                           // inequality cut, an axis of symmetry);
                                           // `label` ("x = 3") is captioned exactly
@@ -52,6 +55,22 @@
    ignores that axis while still dodging every curve. Before this the
    three letters sat at fixed spots and a curve rising through the top
    of the window near the y-axis was drawn straight over the y.
+
+   VERTICAL-LINE CAPTIONS LIVE UNDER THE PICTURE (2026-08-23, her live
+   review: "put the x = 2 labels BELOW the vertical lines and not on the
+   sketch itself — it looks very cluttered"). Every caption that NAMES a
+   vertical line — a `vlines[].label` and a vertical `asymptotes[].label`
+   — is now drawn in a CAPTION BAND in the bottom padding: horizontally
+   centred on its own line, clamped inside the frame, muted style with
+   the usual white halo. Nothing is placed beside a vertical line inside
+   the plot any more, so a caption can never be drawn across a curve, a
+   marked point or another caption. The band is not free: computeFunction
+   GROWS padB by one row per row of captions (two when two lines sit so
+   close that their captions would touch and have to be staggered), and
+   the band's boxes are handed to the placer as already-claimed, so no
+   axis letter, curve name or coordinate label can be pushed into it.
+   HORIZONTAL captions ("y = 3") are untouched — they still sit beside
+   their own line, where they read perfectly well.
    ============================================================ */
 import { makeFn } from "../funclib.js";
 
@@ -74,16 +93,95 @@ function svgWrap(W, H, accent, inner, cls = "") {
 const text = (x, y, s, cls, anchor = "middle") =>
   `<text class="${cls}" x="${N(x)}" y="${N(y)}" text-anchor="${anchor}" dominant-baseline="middle">${s}</text>`;
 
+/* ----------------------------------------------------------------
+   THE CAPTION BAND — where every "x = …" now lives.
+   ----------------------------------------------------------------
+   One row is ALAB.h plus a hair of breathing room; the bottom row sits
+   CAP_EDGE inside the frame (the placer's own inFrame rule is 2 px, so
+   this matches it); two captions are "touching" once the gap between
+   their boxes drops below CAP_GAP.
+   ---------------------------------------------------------------- */
+const CAP_ROW = ALAB.h + 1;   // one caption row, top to top
+const CAP_EDGE = 2;           // clear air under the bottom row
+const CAP_GAP = 6;            // clear air between two captions on a row
+const BASE_PAD_B = 16;        // the bottom padding when there are no captions
+
+/* Every caption that NAMES A VERTICAL LINE, in draw order: the vertical
+   asymptotes first (they are the picture's own furniture), then the
+   dashed boundary lines a reveal adds. A horizontal asymptote's caption
+   is NOT here — it still sits beside its own line. */
+function verticalCaptions(spec) {
+  const caps = [];
+  (spec.asymptotes || []).forEach((a) => {
+    if (a && a.x !== undefined && a.label != null) caps.push({ x: a.x, label: String(a.label) });
+  });
+  (spec.vlines || []).forEach((v) => {
+    if (v && v.x !== undefined && v.label != null) caps.push({ x: v.x, label: String(v.label) });
+  });
+  return caps;
+}
+
+/* Lay those captions out in the band. Everything here is HORIZONTAL
+   geometry — it depends on W, padL/padR and the window's x-range, and
+   NOT on padB — which is exactly why it can be computed BEFORE the
+   transform exists, and then used to decide how tall padB has to be.
+   Rows are filled left to right, first-free-row: a caption takes row 0
+   (the row nearest the picture) unless its box would touch one already
+   there, in which case it drops a row. */
+export function captionLayout(spec) {
+  const caps = verticalCaptions(spec);
+  if (!caps.length) return { rows: 0, items: [] };
+  const W = spec.w || 360, padL = 16, padR = 16;
+  const { xmin, xmax } = spec.win;
+  const sx = (W - padL - padR) / (xmax - xmin);
+  const items = caps.map((c) => {
+    const w = c.label.length * ALAB.cw + 6;
+    const lx = padL + (c.x - xmin) * sx;
+    const lo = 2 + w / 2, hi = W - 2 - w / 2;
+    const cx = hi < lo ? W / 2 : Math.min(hi, Math.max(lo, lx));   // never off an edge
+    return { x: c.x, label: c.label, w, lx, cx, row: 0 };
+  });
+  const rows = [];
+  items.slice().sort((a, b) => a.cx - b.cx).forEach((it) => {
+    let r = 0;
+    while (r < 8) {
+      if (!rows[r]) rows[r] = [];
+      if (!rows[r].some((o) => Math.abs(o.cx - it.cx) < (o.w + it.w) / 2 + CAP_GAP)) break;
+      r++;
+    }
+    if (!rows[r]) rows[r] = [];
+    rows[r].push(it);
+    it.row = r;
+  });
+  return { rows: rows.length, items };
+}
+
+/* the band's boxes, in pixels — ONE source of truth, so what render()
+   draws and what verify() measures can never drift apart. */
+function captionBoxes(g) {
+  const { H, capL } = g;
+  if (!capL || !capL.items.length) return [];
+  return capL.items.map((it) => {
+    const cy = H - CAP_EDGE - CAP_ROW / 2 - (capL.rows - 1 - it.row) * CAP_ROW;
+    return { ...it, cy, box: [it.cx - it.w / 2, cy - ALAB.h / 2, it.cx + it.w / 2, cy + ALAB.h / 2] };
+  });
+}
+
 /* resolve the window → affine transform + helpers */
 export function computeFunction(spec) {
   const W = spec.w || 360, H = spec.h || 300;
-  const padL = 16, padR = 16, padT = 14, padB = 16;
+  const capL = captionLayout(spec);
+  /* The ONLY thing that grows the bottom padding: one row per row of
+     vertical-line captions. A spec with none is byte-for-byte the
+     picture it was before (padB === 16), so every live Functions drill
+     round — none of which captions a vertical line — is untouched. */
+  const padL = 16, padR = 16, padT = 14, padB = BASE_PAD_B + capL.rows * CAP_ROW;
   const { xmin, xmax, ymin, ymax } = spec.win;
   const sx = (W - padL - padR) / (xmax - xmin);
   const sy = (H - padT - padB) / (ymax - ymin);
   const X = (x) => padL + (x - xmin) * sx;
   const Y = (y) => H - padB - (y - ymin) * sy;
-  return { W, H, sx, sy, X, Y, win: spec.win, padL, padR, padT, padB };
+  return { W, H, sx, sy, X, Y, win: spec.win, padL, padR, padT, padB, capL };
 }
 
 /* sample one curve into clipped polyline segments (breaks at the hyperbola
@@ -92,7 +190,21 @@ export function computeFunction(spec) {
 function curvePaths(cv, g) {
   const f = makeFn(cv);
   const { xmin, xmax, ymin, ymax } = g.win;
-  const span = ymax - ymin, lo = ymin - span * 0.6, hi = ymax + span * 0.6;
+  const span = ymax - ymin;
+  /* How far BELOW the window a curve may be drawn. Normally a good slice of
+     the window, so a branch that leaves the picture visibly runs off it
+     instead of stopping in mid-air. The moment a CAPTION BAND exists that
+     overshoot is capped to the plain part of the bottom padding: the curve
+     may still run past the window's bottom edge, but it must stop short of
+     the band, because a caption with a curve ruled through it is the exact
+     clutter the band was built to remove. With no band the two numbers are
+     the engine's originals, unchanged to the last decimal. */
+  const capRows = (g.capL && g.capL.rows) || 0;
+  const under = capRows
+    ? Math.min(span * 0.55, Math.max(2, BASE_PAD_B - CAP_EDGE - 2) / g.sy)
+    : span * 0.55;
+  const lo = capRows ? ymin - under - span * 0.05 : ymin - span * 0.6;
+  const hi = ymax + span * 0.6;
   const breaks = cv.kind === "hyperbola" ? [cv.p] : [];
   const segs = [];
   let cur = [];
@@ -103,7 +215,7 @@ function curvePaths(cv, g) {
     if (breaks.some((b) => Math.abs(x - b) < dx * 0.5)) { if (cur.length > 1) segs.push(cur); cur = []; prevY = null; continue; }
     const y = f(x);
     if (!Number.isFinite(y) || y < lo || y > hi) { if (cur.length > 1) segs.push(cur); cur = []; prevY = null; continue; }
-    cur.push([g.X(x), g.Y(Math.max(ymin - span * 0.55, Math.min(ymax + span * 0.55, y)))]);
+    cur.push([g.X(x), g.Y(Math.max(ymin - under, Math.min(ymax + span * 0.55, y)))]);
     prevY = y;
   }
   if (cur.length > 1) segs.push(cur);
@@ -187,7 +299,13 @@ export function renderFunction(spec) {
   });
 
   // ---- ALL the text, one placer, most-constrained first ----
-  const P = makePlacer(spec, g, []);
+  /* The caption band goes down FIRST and its boxes are handed to the
+     placer as already-claimed, so nothing else can be pushed into it.
+     Its geometry is fixed (each caption belongs to one line), so it has
+     no candidates to choose between — it is not "placed", it just is. */
+  const caps = captionBoxes(g);
+  const P = makePlacer(spec, g, caps.map((c) => c.box));
+  caps.forEach((c) => { out += text(c.cx, c.cy, c.label, "fg-alab"); });
   out += placeAxisLetters(spec, g, P, { showX, showY });
   out += placeAsymptoteLabels(spec, g, P);
   out += placeCurveNames(spec, g, P);
@@ -347,39 +465,29 @@ function placeAxisLetters(spec, g, P, { showX, showY }) {
   return out;
 }
 
-/* ---- 1. asymptote (and boundary-line) captions ------------------
-   A VERTICAL asymptote's caption sits near the TOP of its line, just
-   to the RIGHT of it (left if that falls out of frame or is blocked),
-   sliding down the line if both sides are busy.
+/* ---- 1. HORIZONTAL asymptote captions ---------------------------
    A HORIZONTAL asymptote's caption sits near the RIGHT end of its
    line, just ABOVE it (below if blocked), sliding left if both are.
-   A `vlines` entry (an inequality boundary / an axis of symmetry) with
-   a `label` is captioned EXACTLY like a vertical asymptote — same
-   slots, same style — added SESSION 2a-FIX so a revealed answer line
-   can say what it is.
+
+   VERTICAL lines are NOT handled here any more (2026-08-23). Their
+   captions — a vertical `asymptotes` entry's and a `vlines` entry's
+   alike — go in the caption band under the picture; see captionLayout /
+   captionBoxes above. What used to happen here was eight rungs down the
+   right of the line, then eight down the left, and on a busy figure
+   that meant "x = 2" ended up ruled through a curve or sitting next to
+   a marked point. Her review of the Exam Focus sketches, verbatim:
+   "It looks very cluttered."
    ---------------------------------------------------------------- */
 function placeAsymptoteLabels(spec, g, P) {
   const { X, Y, win } = g;
   let out = "";
-  const lines = (spec.asymptotes || []).concat((spec.vlines || []).filter((v) => v && v.label != null));
+  const lines = (spec.asymptotes || []).filter((a) => a && a.x === undefined && a.y !== undefined);
   lines.forEach((a) => {
     if (a.label == null) return;
     const s = String(a.label);
     const w = s.length * ALAB.cw + 6, h = ALAB.h;
     const cands = [];
-    if (a.x !== undefined) {
-      /* ALL the right-hand slots first, then all the left-hand ones — never
-         interleaved (SESSION 2a-FIX). Two vertical lines close together used
-         to end up with one caption on each other's side, stacked in the gap
-         between them, so neither said which line it belonged to. Sliding a
-         caption DOWN its own line always reads; swapping its side does not.
-         Eight rungs, because an exponential or a hyperbola branch can hug one
-         side of a line for most of the window's height. */
-      const lx = X(a.x), top = Y(win.ymax);
-      const RUNGS = [11, 28, 45, 62, 79, 96, 113, 130];
-      RUNGS.forEach((d) => cands.push(mid(lx + 6 + w / 2, top + d, w, h)));   // right of the line
-      RUNGS.forEach((d) => cands.push(mid(lx - 6 - w / 2, top + d, w, h)));   // left of it
-    } else if (a.y !== undefined) {
+    if (a.y !== undefined) {
       /* Above-or-below alternating, sliding LEFT along the line. Seven rungs
          reach the far end of the plot, which is what a graph that hugs its own
          horizontal asymptote (every exponential) needs: near the right there is
@@ -611,6 +719,43 @@ export function verifyFunction(spec, tol = { onCurve: 0.02, asym: 1e-6 }) {
   if (spec.segment) {
     const s = spec.segment;
     r.push({ label: "segment spans two real curves", ok: !!spec.curves[s.fromCurve] && !!spec.curves[s.toCurve] && s.fromCurve !== s.toCurve });
+  }
+
+  /* 6) every VERTICAL-LINE caption sits BELOW the plot area and inside the
+        frame (2026-08-23). This is the check that keeps her ruling honest:
+        the moment a caption creeps back up beside its line — because the
+        band was not grown, or a label was drawn by hand — the figure fails
+        here rather than shipping cluttered. Three things per caption:
+          · its top edge is at or below the plot area's bottom edge;
+          · its box is inside the frame on all four sides;
+          · it does not touch any other caption (the stagger did its job). */
+  const caps = captionBoxes(g);
+  const plotBottom = g.H - g.padB;
+  caps.forEach((c) => {
+    r.push({
+      label: `vertical caption "${c.label}" sits below the plot area (band starts at the picture's bottom edge)`,
+      ok: c.box[1] >= plotBottom - 1e-9,
+    });
+    r.push({
+      label: `vertical caption "${c.label}" is fully inside the frame`,
+      ok: c.box[0] >= 1 && c.box[2] <= g.W - 1 && c.box[1] >= 1 && c.box[3] <= g.H - 1,
+    });
+  });
+  caps.forEach((c, i) => caps.slice(i + 1).forEach((d) => {
+    const clash = !(c.box[2] <= d.box[0] || d.box[2] <= c.box[0] || c.box[3] <= d.box[1] || d.box[3] <= c.box[1]);
+    r.push({ label: `vertical captions "${c.label}" and "${d.label}" do not overlap`, ok: !clash });
+  }));
+  /* and the band really is EMPTY: a curve is allowed to run past the
+     window's bottom edge, but not into the caption row. Measured off the
+     drawn path, not assumed from the padding sums. */
+  if (caps.length) {
+    const bandTop = Math.min(...caps.map((c) => c.box[1]));
+    let deepest = -Infinity;
+    (spec.curves || []).forEach((cv) => curvePaths(cv, g).forEach((d) => {
+      const nums = d.match(/-?\d+(?:[.,]\d+)?/g) || [];
+      for (let i = 1; i < nums.length; i += 2) deepest = Math.max(deepest, parseFloat(nums[i]));
+    }));
+    r.push({ label: "no curve is drawn into the caption band", ok: !(deepest > bandTop) });
   }
 
   return r;
