@@ -44,6 +44,19 @@ import { el, clear, xbarHtml, fracHtml, formulaHtml } from "./ui.js";
    q.stackFractions, set by play.js from the quest def). Module-level so
    mountSteps/mountReveal share it. */
 let fmt = xbarHtml;
+/* The worked-solution steps worth printing under "Answer: …". _shared.js's
+   mc() gives every question a DEFAULT solution of [{ s: <the answer> }], so
+   a pure-recall question used to print its answer twice — "Answer: X" and
+   then X again as a lone step (the dice build's Finance session, 2026-08-23,
+   crop finance-r0-01-r.png; app-wide, static play included). A single
+   reason-less step whose text is just the answer is dropped; real working
+   (2+ steps, a reason, or a different sentence) is untouched. */
+const plain = x => String(x == null ? "" : x).replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+function solSteps(q) {
+  const sol = Array.isArray(q.solution) ? q.solution : [];
+  if (sol.length === 1 && !sol[0].r && q.answerLabel != null && plain(sol[0].s) === plain(q.answerLabel)) return [];
+  return sol;
+}
 import { renderGraph, computeBox } from "./engine/stats-graph.js";
 import { renderTimeline, computeTimeline } from "./engine/timeline-graph.js";
 import { renderVenn, computeVenn } from "./engine/venn-graph.js";
@@ -150,8 +163,8 @@ export function mountQuestion(host, q, handlers = {}) {
     let html = `<div class="fb-head">${isCorrect ? "✓ Correct!" : soft ? "Got there — one step needed a second go" : "✗ Not quite"}</div>`
       + (soft ? `<div class="fb-sub muted small">Let's do a similar one to lock it in.</div>` : "");
     if (q.answerLabel != null) html += `<div class="fb-answer"><b>Answer:</b> ${fmt(q.answerLabel)}</div>`;
-    if (!isCorrect && Array.isArray(q.solution) && q.solution.length) {
-      html += `<div class="sol">` + q.solution.map(s =>
+    if (!isCorrect && solSteps(q).length) {
+      html += `<div class="sol">` + solSteps(q).map(s =>
         `<div class="sol-step"><span class="s">${fmt(s.s)}</span>${s.r ? `<span class="r">${fmt(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
     }
     feedback.innerHTML = html;
@@ -262,8 +275,8 @@ export function mountQuestion(host, q, handlers = {}) {
         handlers.onSteps && handlers.onSteps();
         let html = "";
         if (q.answerLabel != null) html += `<div class="fb-answer"><b>Answer:</b> ${fmt(q.answerLabel)}</div>`;
-        if (Array.isArray(q.solution) && q.solution.length)
-          html += `<div class="sol">` + q.solution.map(s => `<div class="sol-step"><span class="s">${fmt(s.s)}</span>${s.r ? `<span class="r">${fmt(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
+        if (solSteps(q).length)
+          html += `<div class="sol">` + solSteps(q).map(s => `<div class="sol-step"><span class="s">${fmt(s.s)}</span>${s.r ? `<span class="r">${fmt(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
         feedback.insertBefore(el("div", "", html), foot);
       });
       foot.appendChild(again); foot.appendChild(show);

@@ -48,11 +48,16 @@ const SKILLS = {
     ["To make the rate bigger", "To turn compound into simple interest", "To avoid using a calculator"],
     { hint: "Two nominal rates with different frequencies can't be compared directly." }),
 
-  whichGrowsMore: () => mc(CL,
-    "10% p.a. compounded <b>monthly</b> vs 10% p.a. compounded <b>annually</b> — which has the higher <b>effective</b> rate?",
-    "Compounded monthly",
-    ["Compounded annually", "They are exactly equal", "It depends on the principal"],
-    { hint: "More frequent compounding earns slightly more over a year.", answerLabel: "More frequent compounding → higher effective rate" }),
+  /* the rate rolls (2026-08-23) — the qualitative answer is
+     rate-independent, so only the number in the sentence changes */
+  whichGrowsMore: () => {
+    const nom = pick([8, 10, 12, 18]);
+    return mc(CL,
+      `${C(nom)}% p.a. compounded <b>monthly</b> vs ${C(nom)}% p.a. compounded <b>annually</b> — which has the higher <b>effective</b> rate?`,
+      "Compounded monthly",
+      ["Compounded annually", "They are exactly equal", "It depends on the principal"],
+      { hint: "More frequent compounding earns slightly more over a year.", answerLabel: "More frequent compounding → higher effective rate" });
+  },
 
   effCalc: () => {
     const o = pick(OPTS), nom = pick([8, 10, 12, 18]);

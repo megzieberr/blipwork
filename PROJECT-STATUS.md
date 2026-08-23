@@ -1,4 +1,109 @@
-# Project status — updated 2026-08-23 night (🧹 FIX DAY shipped — sw v63: exponent fractions, line-break nuggets, Euclid reasons/arcs, bookwork proofs WALK on the sketch)
+# Project status — updated 2026-08-23 (late) (🎲 DICE ×3 — Finance, Number Patterns, 2D Trig pools BUILT + the two Euclid cosmetics; local, sw v64 staged, SHIP WAITS ON HER YES)
+
+## 🎲 2026-08-23 (late) — THREE DICE CHAPTERS + COSMETICS (Fable foreman, 3 parallel Opus sessions under her /go)
+
+Her brief: the two small Euclid cosmetics first, then "the dice rounds". Her question "isn't
+this a nice task for parallel agents?" — yes: one Opus session per chapter, same working
+tree, stub pools pre-registered by the foreman so no session touched a shared file.
+Agent spend ≈ 1.0M Opus (F 0.34M · P 0.32M · T 0.35M) inside the 1.5–2M estimate.
+**Everything is LOCAL and uncommitted** — `DICE_CHAPTERS` now lists all four, `sw.js` is
+bumped to v64, nothing is pushed. The ship is the next act on her yes.
+
+**The two cosmetics (foreman, before the build)**
+- "O" read like a zero: the centre label was painted BEFORE the chords/wedges, so every
+  amber wedge at O dimmed it and ate its halo. `renderDiagram` now emits it after the
+  angles — position unchanged on all 371 Euclid figure states (measured), paint order only.
+- Index "1" under the "O" on the cyclic-quad walk: a keener global step-out was tried and
+  REJECTED (it also moved t2q4 and sib.ca.q4, and on both the moved O read as the arc's).
+  Instead a spec opt-in `oLabel: "outside"` on SPEC_BW3 only — 5 states move (reveal + 4
+  walk steps), 366 identical. Question side untouched. Harnesses 673 · 7374 · 5819 · 41.
+
+**Dice pools (each: reuse every skill.gen() verbatim — CARE guards ride free; `kind` =
+skillId unless a true near-duplicate; roundLength = median skills-per-quest)**
+| chapter | id | entries | kinds | roundLength | method links | harness |
+|---|---|---|---|---|---|---|
+| Finance | `finance` | 51/51 | 49 (f5.rateChangeSegment→f3.exponent, f3.monthlyRate→f3.ratePerPeriod) | 7 | 10 | verify-dice-finance 89/89 + NEW verify-finance 146/146 |
+| Number Patterns | `pat` | 44/44 | 44 | 7 | 3 | verify-dice-pat 96/96 (verify-patterns 41/41 unchanged) |
+| 2D Trig | `trig` | 36/36 | 36 | 5 | 19 | verify-dice-trig 82/82 (verify-trig 36/36 unchanged) |
+- Finance's one hardcoded skill `f5.anyPoint` now rolls (P/rate/T/k; false one roll in
+  three, two misconception wordings; solutions follow FINANCE-METHOD.md). `f7.whichGrowsMore`
+  rolls its rate. `f5.expression` prints "R2 000" like its own timeline.
+- **THE METHOD RULE (new, all pools):** "📖 Show me the method" appears ONLY where the
+  solution holds real working (2+ steps, a reason, or a sentence that isn't just the
+  answer). The builders' default `[{ s: answer }]` would have made the link a spoiler
+  button. Split: Finance 10/51 · Patterns 3/44 · Trig 19/36 have a method; the rest show
+  no link (the answer still shows on a wrong answer).
+- `tools/shoot_dice.py` (foreman): walks a REAL dealt round at 375 px by resuming from
+  the save (production regenerate path), shooting question / method / feedback / steps /
+  results. Works without the hub flag. 404 crops read across the three chapters + my own;
+  scrollW never above 375; zero page errors.
+
+**Shared-file fixes the sessions surfaced (foreman review fixes, each proven)**
+- `js/play.js`: the method panel ran the formula prettifier over the WHOLE markup, so
+  `.sol-step`'s flex row got 3–6 children — "height = 2 ·Area / base = 8,49½" on the phone.
+  Hit 29/58 shipped Stats skills too. Now per-step (fmt(s.s), fmt(s.r), fmt(answerLabel)),
+  exactly like questions.js. Read on screen: stacked fractions, whole steps, reasons on
+  their own line.
+- `js/engine/triangle-graph.js`: a sharp angle's label went "behind" the vertex at 23 px —
+  where the vertex letter already sits at 16 px. 23% of t2.findSide rolls printed "40°"
+  over "A" (pre-existing in static play). Names shown → label now passes the letter; the
+  frame-edge fallback stacks it under the letter. **General Trig untouched by construction:
+  every gtrig spec is `hideNames: true` and both branches key on that flag.** Sweep: 15
+  figure skills × 400 rolls → 0 collisions, 0 off-frame, 0 on a side label.
+- `js/questions.js`: "Answer: X" followed by X again as a lone step (every pure-recall mc,
+  app-wide, static too) — the default single answer-only step is dropped; real working
+  untouched.
+- `js/ui.js`: "the 7th term" broke as "7 / th" (a number becomes an inline-block; browsers
+  may break after an atomic inline). Ordinal suffixes now ride with their number. verify-wrap
+  50 693/50 693.
+- `np5.readWhichTerm`: the graph labelled the turning point T₃ — the answer to "which
+  term?" (her no-spoilers rule). `termParabola` takes a pointLabel; that skill passes "".
+  `readValue` keeps T₍k₎. `np1.tapFirstDiff` got a real Hint (was the generic fallback).
+
+Harnesses at the end (all fresh, after every change): verify-dice 134 · dice-finance 89 ·
+dice-pat 96 · dice-trig 82 · finance 146 · patterns 41 · trig 36 · gtrig 6 · wrap 50 693 ·
+store 4033 · exam 673 · exam-modules 7374 · exam-fractions 5819 · exam-skills 41 — all green.
+Hub: 🎲 card on exactly finance / pat / trig / stats, none elsewhere (checked at 375 px).
+
+### ⏳ Pending on Megan
+- 💻 1 min **[blocking]**: say "ship it" — commit (cosmetics + dice + review fixes), push,
+  live-check sw v64 and the three new 🎲 cards. No migration needed (dice_plays already
+  holds any chapter id).
+- 📱 5 min **[after ship, whenever]**: Finance → 🎲 one round; Number Patterns → 🎲 one
+  round; 2D Trig → 🎲 one round — the phone-test per chapter (her rhythm).
+
+### Next up
+- **Worked-method content batch?** 99 of the 131 new dice skills ship without a method
+  link because their vetted solution is just the answer. Patterns: ~20 already carry the
+  working in their `answerLabel` (cheap promotion, her wording). Finance's must follow
+  FINANCE-METHOD.md. Her call whether/when.
+- Dice: Trig Graphs waits on the shared Soek-die-fout mechanic (graph-quest); Probability
+  and Analytical Geometry need their METHODS digest first; Measurement's engine blocker
+  (curated safe-proportion lists) needs her ruling before its turn; Exponents/Equations
+  have 9 + 8 STATIC skills that simply stay out of the pool.
+- Calculator emulator round 2 (carried). Two-circle riders: the circle engine knows ONE
+  circle (`cx, cy, R` singletons; points = degrees on THE circle; tangents/centre label/
+  harness all assume it) — one engine session (second centre+radius, points on circle 2,
+  contact-point tangent, second O label, verifyDiagram on both) before any rider is written.
+- Trig's open question: the method panel opens with "Answer: …" before the working —
+  inherited from the Stats recipe, all four pools; fine while the link only shows on real
+  working, but she may prefer steps-only.
+- `f5.anyPoint` is false one roll in three (the session's default) — retune to ~half if
+  she'd rather.
+
+## 📌 Decisions (append-only, 2026-08-23 late)
+- Three dice chapters built in PARALLEL (her question, my yes): independent pool files,
+  shared registrations stubbed by the foreman first. Pattern for any future multi-chapter day.
+- A "Show me the method" link appears only on real working — never on an answer-only
+  solution (foreman rule, ratified by the three sessions' coverage reports).
+- Centre-label placement: a per-spec opt-in (`oLabel`) over a global rule change, after
+  measuring the global change moved two approved figures for the worse.
+- Triangle engine fixes key on `hideNames` so General Trig's approved figures never move.
+- The centre "O" is painted after the wedges, everywhere (paint order is not a layout change).
+
+---
+
+# (previous head) Project status — updated 2026-08-23 night (🧹 FIX DAY shipped — sw v63: exponent fractions, line-break nuggets, Euclid reasons/arcs, bookwork proofs WALK on the sketch)
 
 ## 🧹 2026-08-23 (night) — FIX DAY (Fable, her phone finds; one Opus agent under her /go)
 

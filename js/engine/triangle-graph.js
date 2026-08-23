@@ -163,10 +163,23 @@ export function renderTriangle(spec) {
         // outside the vertex — but the vertex may sit on the frame edge, so fall
         // back to BESIDE it (away from the triangle's centroid) when there is no
         // room behind it (her find: the "90° − θ" label vanished off the top)
-        let lx = V.x - bis.x * (halfW + 10), ly = V.y - bis.y * (halfW + 10);
+        // Foreman review fix, 2026-08-23 (the dice build's trig session
+        // measured it: 23% of t2.findSide rolls printed "40°" on top of "A").
+        // The vertex LETTER sits 16 px out from the vertex, away from the
+        // centroid — at a sharp vertex that is the same direction as "behind
+        // it", so a label parked at halfW + 10 landed on the letter. With
+        // names shown, the label now goes PAST the letter (16 + 9 clear, then
+        // its own half-width). With hideNames (every General Trig figure) the
+        // offset is exactly what it was, so those approved pictures do not move.
+        const behind = spec.hideNames ? halfW + 10 : halfW + 25;
+        let lx = V.x - bis.x * behind, ly = V.y - bis.y * behind;
         if (ly < 12 || ly > g.H - 12 || lx < halfW || lx > g.W - halfW) {
           const side = V.x >= g.cx ? 1 : -1;
           lx = V.x + side * (halfW + 12); ly = Math.min(g.H - 12, Math.max(12, V.y + 6));
+          // names shown: "beside it" is where the vertex letter already is
+          // (same review fix as above) — drop the label a line BELOW the
+          // letter, or above it when the vertex sits on the bottom edge.
+          if (!spec.hideNames) ly = V.y + 22 <= g.H - 10 ? V.y + 22 : V.y - 14;
         }
         out += text(lx, ly, a.label, "t2-ang");
       }

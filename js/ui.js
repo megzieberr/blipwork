@@ -335,7 +335,14 @@ function fmlBracketIsProse(str, i, j) {
 }
 function fmlMatchNumber(str, i) {
   const m = /^(?:[0-9]+(?:[.,][0-9]+)?|[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])/.exec(str.slice(i));   // a vulgar ½ is a number too (Area = ½·MN·MP·sinM̂)
-  return m ? i + m[0].length : null;
+  if (!m) return null;
+  // an ORDINAL suffix rides with its number: "7th", "3rd", "21st". A number
+  // becomes an inline-block, and a browser may break a line right after an
+  // atomic inline even with no space — so "the 7th term" printed as "7 / th"
+  // on the phone (the dice build's patterns session, 2026-08-23). Fused only
+  // when the suffix ends the word, so "7the…" is untouched.
+  const ord = /^(?:st|nd|rd|th)(?![A-Za-z])/.exec(str.slice(i + m[0].length));
+  return i + m[0].length + (ord ? ord[0].length : 0);
 }
 // combining diacritics (the hat on M̂, the bar on x̄) ride with their letter
 const FML_COMBINING_RE = /[̀-ͯ]/;

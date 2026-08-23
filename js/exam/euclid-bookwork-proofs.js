@@ -242,6 +242,14 @@ const bw1 = {
 const SPEC_BW3 = {
   w: 320, h: 254, cx: 160, cy: 120, R: 80,
   O: true,
+  /* The "O" sits just outside the two centre wedges once they are drawn
+     (engine opt-in, 2026-08-23 cosmetics — her phone: "O" read like a
+     zero, and the walk's index "1" sat right under it). The wedges fill
+     the whole revolution, so the usual 14 px ring is inside amber and
+     touching either an arm or a label whatever direction it picks; just
+     beyond the 30 px arc, on C's side, there is clear white space
+     before chord CD. The question side has no wedges and is unchanged. */
+  oLabel: "outside",
   pts: { A: 110, B: 180, C: 310, D: 40 },
   chords: [["A", "B"], ["B", "C"], ["C", "D"], ["D", "A"]],
   /* EVERY LABEL ON THIS FIGURE SITS INSIDE ITS OWN ARC (her phone review,

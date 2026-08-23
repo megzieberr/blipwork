@@ -17,7 +17,7 @@ export function pyramid(terms, { showFirst = false, showSecond = false, blankFir
 /* a parabola of the pattern's terms (Tₙ vs n) with the turning point marked,
    built for the to-scale function-graph engine. k = extreme term number,
    value = its value, len = how many terms to span. */
-export function termParabola(a, b, c, k, value, len, accent = PAT[3]) {
+export function termParabola(a, b, c, k, value, len, accent = PAT[3], pointLabel = null) {
   const f = quadTn(a, b, c);
   const ys = [value];
   for (let n = 1; n <= len; n++) ys.push(f(n));
@@ -31,7 +31,10 @@ export function termParabola(a, b, c, k, value, len, accent = PAT[3]) {
     type: "function", accent, grid: true,
     win: { xmin: 0, xmax: len + 1, ymin, ymax },
     curves: [{ kind: "parabola", a, b, c, tone: "a", label: "Tₙ" }],
-    points: [{ x: k, y: value, label: `T${toSub(k)}`, on: 0, dashTo: "both" }],
+    // pointLabel: the turning point is normally named T₍k₎; a skill that asks
+    // WHICH term it is passes "" so the graph doesn't print its own answer
+    // (foreman review fix, 2026-08-23 — the dice build's patterns session).
+    points: [{ x: k, y: value, label: pointLabel == null ? `T${toSub(k)}` : pointLabel, on: 0, dashTo: "both" }],
   };
 }
 const SUBS = "₀₁₂₃₄₅₆₇₈₉";

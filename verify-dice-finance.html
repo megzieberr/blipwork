@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice · Finance pool · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  #measure{position:absolute;left:-9999px;top:0;width:360px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice · Finance pool · verification</h1>
+<p class="muted small">js/quests/dice-finance.js — all 51 f1–f7 skills, 49 kinds, roundLength 7 — driven through
+  js/dice.js's seeded genAt/withSeed exactly as a dealt dice round does. Part 1 is per-entry generation integrity
+  (shape, self-consistency, decoys, the input law, timeline honesty, method markup). Part 2 re-derives the answer
+  independently through js/finlib.js for every skill that rolls a number. Part 3 is the dealing/determinism/resume
+  machinery at full pool size. The chapter's static harness is verify-finance.html — this page deliberately doesn't
+  repeat it. Session F, 2026-08-23.</p>
+<div id="banner">running…</div>
+
+<h2>Part 1 · per-entry generation integrity (200 seeded rolls each)</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Part 2 · independent recompute (js/finlib.js) + timeline honesty</h2>
+<pre id="recompute">…</pre>
+
+<h2>Part 3 · dealing, determinism, resume &amp; the salted retry</h2>
+<pre id="mechanics">…</pre>
+
+<div id="measure"></div>
+
+<h2>Result</h2>
+<pre id="summary">…</pre>
+
+<script type="module">
+import { pool as financePool, PURE_RECALL, hasRealWorking } from "./js/quests/dice-finance.js";
+import { pool as statsPool } from "./js/quests/dice-stats.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect, parseNum } from "./js/check.js";
+import { getConcept } from "./js/concepts.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf } from "./js/quests/_finance-check.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const measure = document.getElementById("measure");
+
+/* Finance's whole input vocabulary — DICE-PLAN's INPUT LAW (list-pick,
+   number pad, sketch-click; never a typed word). */
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap"]);
+const RUNS = 200;
+const FIT_RUNS = 5;                 // measuring a rendered timeline is slow; the amounts repeat quickly
+
+const entriesHost = document.getElementById("entries");
+const recomputeLines = [];
+let methodCount = 0, graphCount = 0;
+
+financePool.entries.forEach((entry, idx) => {
+  const issues = new Set();
+  let sawMethod = false, sawGraph = false, recomputeRuns = 0, recomputeBad = 0;
+  const rc = RECOMPUTE[entry.skillId];
+
+  if (entry.concept && !getConcept(entry.concept)) issues.add(`concept "${entry.concept}" has no card`);
+
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.add(`threw: ${e.message}`); break; }
+
+    if (!INPUT_LAW.has(q.type)) { issues.add(`type "${q.type}" violates the input law`); continue; }
+    if (!q.prompt || !String(q.prompt).trim()) issues.add("empty prompt");
+    if (/\d\.\d/.test(String(q.prompt))) issues.add("prompt contains a dot-decimal number (should be a comma)");
+    if (q.answerLabel != null && /\d\.\d/.test(String(q.answerLabel))) issues.add("answerLabel contains a dot-decimal number");
+
+    /* method markup: only where real working exists, and then real markup */
+    if (q.method != null) {
+      sawMethod = true;
+      if (typeof q.method !== "string" || !q.method.trim()) issues.add("q.method is not a non-empty string");
+      else if (!q.method.includes("sol-step")) issues.add("q.method carries no .sol-step");
+      if (!hasRealWorking(q)) issues.add("q.method attached to a solution that only restates the answer (spoiler link)");
+    } else if (hasRealWorking(q)) issues.add("real working exists but no q.method was attached");
+
+    if (q.type === "mc" || q.type === "reason") {
+      const labels = q.options.map(o => o.label);
+      const corrects = q.options.filter(o => o.correct);
+      if (corrects.length !== 1) issues.add(`${corrects.length} correct options (want exactly 1)`);
+      if (labels.length < 2) issues.add("fewer than 2 options");
+      if (new Set(labels.map(String)).size !== labels.length) issues.add(`duplicate option labels: ${labels.join(" | ")}`);
+      const cn = numOf(corrects[0] && corrects[0].label);
+      q.options.filter(o => !o.correct).forEach(o => {
+        const n = numOf(o.label);
+        // by VALUE (parsed), not just by string — and again through the app's
+        // OWN comparator, so two options can't be indistinguishable to the
+        // checker either.
+        if (Number.isFinite(cn) && Number.isFinite(n) && Math.abs(n - cn) < 1e-9) issues.add(`decoy "${o.label}" equals the answer BY VALUE`);
+        if (Number.isFinite(cn) && Number.isFinite(n) && answerCorrect(n, cn, { dp: 6 })) issues.add(`decoy "${o.label}" would ALSO be marked correct`);
+      });
+      // self-consistency: the question's own correct label survives the app's parser
+      if (Number.isFinite(cn) && !answerCorrect(parseNum(String(corrects[0].label)), cn, { dp: 6 })) issues.add("the correct option's own label fails the checker");
+    } else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.add("non-finite expected");
+      else if (!(Number.isInteger(q.dp ?? 0) && (q.dp ?? 0) >= 0)) issues.add(`dp "${q.dp}" is not a non-negative integer`);
+      else if (q.tol != null && !(Number.isFinite(q.tol) && q.tol >= 0)) issues.add(`tol "${q.tol}" is not finite and ≥ 0`);
+      else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) issues.add("expected fails its own check");
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.add("q.yes not boolean");
+    } else if (q.type === "tap") {
+      if (!q.graph) issues.add("tap question without a graph to tap");
+      const ids = (q.tap && q.tap.targets) || [];
+      if (!ids.includes(q.tap && q.tap.correctId)) issues.add("tap correctId not in targets");
+    }
+
+    if (q.graph) { sawGraph = true; graphIssues(q).forEach(g => issues.add(g)); }
+    if (q.graph && i < FIT_RUNS) labelFitIssues(q.graph, measure).forEach(g => issues.add(g));
+
+    if (rc) {
+      recomputeRuns++;
+      let ok = false;
+      try { ok = !!rc(q); } catch (e) { issues.add(`recompute threw: ${e.message}`); }
+      if (!ok) { recomputeBad++; issues.add("recompute mismatch"); }
+    }
+  }
+
+  /* determinism + the salted retry, per entry */
+  const seed = newRoundSeed();
+  const a = genAt(seed, idx, entry), b = genAt(seed, idx, entry);
+  const deterministic = JSON.stringify(a) === JSON.stringify(b);
+  if (!deterministic) issues.add("genAt is not deterministic (resume would drift)");
+  const pure = PURE_RECALL.has(entry.skillId);
+  let saltDiffers = pure;                      // pure-recall skills have nothing to vary — exempt
+  if (!pure) {
+    for (let s = 0; s < 25 && !saltDiffers; s++) {
+      const sd = newRoundSeed();
+      if (JSON.stringify(genAt(sd, s, entry, 0)) !== JSON.stringify(genAt(sd, s, entry, 1))) saltDiffers = true;
+    }
+    if (!saltDiffers) issues.add("salt 1 never differs from salt 0 — a retry would repeat the same numbers");
+  }
+
+  if (sawMethod) methodCount++;
+  const ok = tick(issues.size === 0, `${entry.skillId} (${RUNS} seeded rolls)`);
+  if (rc) {
+    tick(recomputeBad === 0, `${entry.skillId} recompute (${recomputeRuns} rolls, re-derived from the question's own numbers)`);
+    recomputeLines.push(`${recomputeBad ? "✗" : "✓"} ${entry.skillId}: ${recomputeRuns - recomputeBad}/${recomputeRuns} recompute matches${sawGraph ? " · timeline verified" : ""}`);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...issues].slice(0, 5).join("; ")}</li>
+      <li class="${entry.concept ? "ok" : ""}">${entry.concept ? `concept "${entry.concept}" has a card (I'm lost works)` : "no concept"}</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method (real working — link shown)" : "no q.method (answer-only solution — link correctly omitted)"}</li>
+      <li class="${rc ? "ok" : ""}">${rc ? `independent recompute (${recomputeRuns} rolls)` : "fixed-fact recall — nothing to recompute"}</li>
+      <li class="ok">${pure ? "pure recall — exempt from the salt-differs check" : "salt 1 ≠ salt 0 (a retry re-rolls)"}</li>
+    </ul>`;
+  entriesHost.appendChild(card);
+});
+
+recomputeLines.unshift(`Independent recompute wired for ${RECOMPUTE_IDS.length} of ${financePool.entries.length} skills — every skill that rolls a number; the other ${financePool.entries.length - RECOMPUTE_IDS.length} are fixed-fact recall (listed as PURE_RECALL in the pool). Every timeline a Finance question emits is checked with verifyTimeline, plus a rendered-label fit test (inside the frame, over its own node) on the first ${FIT_RUNS} rolls.\n`);
+recomputeLines.push(`\nMethod coverage: ${methodCount}/${financePool.entries.length} skills attach q.method (the ones whose solution holds real working). The rest carry only the builders' answer-restating default, so the link is deliberately absent — DICE-COMMON's method rule.`);
+document.getElementById("recompute").textContent = recomputeLines.join("\n");
+
+/* ---------- Part 3 · dealing, determinism, resume ---------- */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+  const kinds = [...new Set(financePool.entries.map(e => e.kind))];
+
+  tick(financePool.chapterId === "finance", `pool chapterId is "finance" (${financePool.chapterId})`);
+  tick(financePool.roundLength === 7, `roundLength is 7 — the median skills-per-quest (${financePool.roundLength})`);
+  tick(financePool.entries.length === 51, `51 entries, one per audited skill (${financePool.entries.length})`);
+  tick(new Set(financePool.entries.map(e => e.skillId)).size === 51, "every skillId is unique");
+  lines.push(`pool: ${financePool.entries.length} entries · ${kinds.length} kinds · roundLength ${financePool.roundLength}`);
+  const grouped = kinds.filter(k => financePool.entries.filter(e => e.kind === k).length > 1);
+  lines.push(`grouped kinds (more than one skill in the bucket): ${grouped.length ? grouped.join(", ") : "none"}`);
+
+  let detAll = true, resumeAll = true;
+  financePool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill), c = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    if (JSON.stringify(a) !== JSON.stringify(c)) resumeAll = false;
+  });
+  tick(detAll, "determinism: genAt(seed,i,skill) is byte-identical on repeat, for all 51 skills");
+  tick(resumeAll, "resume: re-deriving any index after the fact reproduces the original question, for all 51 skills");
+  lines.push(`determinism / resume (all 51 skills): ${detAll && resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, financePool.entries[0]);
+  tick(Math.random === before, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${Math.random === before ? "OK" : "FAIL — Math.random was left patched"}`);
+
+  // a fresh learner's first round: 7 distinct SKILLS, every one of an unmet
+  // kind. (Two kinds hold two skills each — see the pool header — so a round
+  // may legitimately contain the same kind twice; distinct skills is the
+  // property that actually matters to a learner.)
+  const deck1 = dealRound(financePool.entries, financePool.roundLength, []);
+  const distinctSkills = new Set(deck1.map(e => e.skillId)).size === deck1.length;
+  tick(deck1.length === financePool.roundLength && distinctSkills, "dealing: a fresh learner's first round is 7 distinct skills");
+  lines.push(`dealing (fresh learner, first round): [${deck1.map(e => e.skillId).join(", ")}] — ${distinctSkills ? "OK" : "FAIL"}`);
+
+  // successive rounds must reach FULL kind coverage inside the budget
+  const maxRounds = Math.ceil(financePool.entries.length / financePool.roundLength) + 2;
+  let met = [], rounds = 0;
+  while (met.length < kinds.length && rounds < maxRounds) {
+    const deck = dealRound(financePool.entries, financePool.roundLength, met);
+    const m = new Set(met); deck.forEach(e => m.add(e.kind)); met = [...m];
+    rounds++;
+  }
+  tick(met.length === kinds.length, `dealing: successive rounds reach all ${kinds.length} kinds (took ${rounds}, budget ${maxRounds})`);
+  lines.push(`dealing (successive rounds): ${met.length}/${kinds.length} kinds met after ${rounds} rounds (budget ${maxRounds}) — ${met.length === kinds.length ? "OK" : "FAIL"}`);
+
+  // partial coverage: every still-unmet kind must be dealt once few enough remain
+  const metMost = kinds.slice(0, kinds.length - 4);
+  const deck2 = dealRound(financePool.entries, financePool.roundLength, metMost);
+  const dealtKinds = new Set(deck2.map(e => e.kind));
+  const gotUnmet = kinds.slice(kinds.length - 4).every(k => dealtKinds.has(k));
+  tick(gotUnmet, "dealing: with 4 kinds left unmet, all 4 are dealt in the next round");
+  lines.push(`dealing (4 kinds unmet): all four present — ${gotUnmet ? "OK" : "FAIL"}`);
+
+  // once every kind is met, a complete round is still dealt (fully random)
+  const deckFull = dealRound(financePool.entries, financePool.roundLength, kinds);
+  tick(deckFull.length === financePool.roundLength, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage): dealt ${deckFull.length}/${financePool.roundLength} — ${deckFull.length === financePool.roundLength ? "OK" : "FAIL"}`);
+
+  // resume backward-compatibility: no salt arg === explicit salt 0, everywhere
+  let baseUnchanged = true;
+  financePool.entries.forEach((skill, i) => {
+    if (JSON.stringify(genAt(seed, i, skill)) !== JSON.stringify(genAt(seed, i, skill, 0))) baseUnchanged = false;
+  });
+  tick(baseUnchanged, "salted retry: genAt() with no salt arg equals explicit salt 0, for all 51 skills (resume unaffected)");
+  lines.push(`no-salt-arg === explicit salt 0 (all 51 skills): ${baseUnchanged ? "OK" : "FAIL"}`);
+
+  // the Statistics pool must be untouched by this session
+  tick(statsPool.entries.length === 58 && statsPool.roundLength === 7, `Statistics pool still 58 entries / roundLength 7 (${statsPool.entries.length}/${statsPool.roundLength}) — nothing shared was changed`);
+  lines.push(`Statistics pool untouched: ${statsPool.entries.length} entries, roundLength ${statsPool.roundLength}`);
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
+}
+
+const ok = passed === total;
+const banner = document.getElementById("banner");
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks green` : `✗ ${total - passed} check(s) failed — see below`;
+document.getElementById("summary").textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed  (51 entries, ${RUNS} seeded rolls each)`
+  : `✗ FAIL — ${total - passed} of ${total} checks failed\n` + fails.slice(0, 40).join("\n");
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice-finance] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

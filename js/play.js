@@ -187,7 +187,22 @@ export function renderPlay(app, host, params) {
     if (dice && q.method) {
       const mbtn = el("button", "btn ghost small", "📖 Show me the method");
       const mbox = el("div", "hint-box"); mbox.hidden = true;
-      mbox.innerHTML = `<span class="tag">METHOD</span>${formulaHtml(fracHtml(xbarHtml(q.method)))}`;
+      // Foreman review fix, 2026-08-23 (dice build day, the trig session's
+      // find): the formula prettifier used to run over the WHOLE method
+      // markup. formulaHtml treats the .sol-step's own <span class="s"> as a
+      // transparent inline tag and re-emits it around every fragment, so
+      // one statement became 3–5 flex children of a space-between row —
+      // "height = 2 ·Area / base = 8,49½" on the phone, the reason's "½"
+      // pulled onto the statement line. 29 of the 58 shipped Stats skills
+      // showed it too. Now each statement is prettified ON ITS OWN, exactly
+      // as js/questions.js does for the wrong-answer panel (fmt(s.s) per
+      // step, fmt(s.r) per reason, fmt(answerLabel)). A free-form
+      // q.method with no .sol-step structure keeps the old whole-string path.
+      const fmtOne = x => formulaHtml(fracHtml(xbarHtml(x)));
+      mbox.innerHTML = `<span class="tag">METHOD</span>${q.method}`;
+      const stepNodes = mbox.querySelectorAll(".fb-answer, .sol-step .s, .sol-step .r");
+      if (stepNodes.length) stepNodes.forEach(n => { n.innerHTML = fmtOne(n.innerHTML); });
+      else mbox.innerHTML = `<span class="tag">METHOD</span>${fmtOne(q.method)}`;
       mbtn.addEventListener("click", () => { mbox.hidden = false; mbtn.disabled = true; });
       qhost.appendChild(mbtn); qhost.appendChild(mbox);
     }

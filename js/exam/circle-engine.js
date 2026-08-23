@@ -63,6 +63,8 @@
      pts            { label: degreeOnCircle }  or  { label: {x,y} } for a
                     free point that is NOT on the circle (added 2026-07-30)
      noCircle       true => do not draw the circle at all (added 2026-07-30)
+     oLabel         "outside" => with wedges at O, the "O" label sits just beyond the
+                    smallest arc instead of on the 14 px ring (added 2026-08-23)
      O              true => draw the centre dot + "O"
      ext            [{name, t:[contactA, contactB]}]  external point = tangent intersection
      tang           [{at, len, lab:[start,end]}]      full tangent line at a contact point
@@ -253,6 +255,18 @@ function placeCentreLabel(g) {
   const arcsAtO = g.angles.filter(a => a.at === "O" && !a.mark).map(a => a.ar);
   const radii = [14];
   if (arcsAtO.length) radii.push(Math.max(...arcsAtO) + 9);
+  // Spec opt-in `oLabel: "outside"` (2026-08-23 cosmetics): when wedges
+  // are drawn at O, skip the inner ring altogether and sit just beyond
+  // the SMALLEST arc at the centre. Written for the cyclic-quad proof,
+  // whose two centre wedges fill the whole revolution — every spot on
+  // the 14 px ring there is inside amber and within a few px of an arm
+  // or a wedge label, yet scores as "clean" (12 px), so the step-out
+  // above never fires. Making the step-out rule itself keener was tried
+  // first and rejected: at a 13 px threshold it also moved the "O" on
+  // the angle-at-centre proof and a chords rider, and on both the moved
+  // label read as the arc's, not the centre's. With no arcs at O the
+  // opt-in is a no-op (the question side of the same spec is untouched).
+  if (g.oLabel === "outside" && arcsAtO.length) radii.splice(0, 1, Math.min(...arcsAtO) + 9);
   let best = pol(cx, cy, 14, 35), bestScore = -1;
   for (const r of radii) {
     if (bestScore >= 9) break;                       // the inner ring had a clean spot
@@ -392,7 +406,7 @@ export function computeGeometry(d) {
     };
   });
 
-  return { W, H, cx, cy, R, O: !!d.O, pts, angles, tangentLines, extTangents, chordSegs };
+  return { W, H, cx, cy, R, O: !!d.O, oLabel: d.oLabel, pts, angles, tangentLines, extTangents, chordSegs };
 }
 
 /* --------------------------------------------------------------
@@ -405,10 +419,9 @@ export function renderDiagram(d, accent, opts = {}) {
   const { W, H, cx, cy, R } = g;
 
   let out = d.noCircle ? "" : `<circle class="sirkel" cx="${cx}" cy="${cy}" r="${R}"/>`;
-  if (g.O) {
-    out += dot(cx, cy);
-    out += placeCentreLabel(g);
-  }
+  /* The centre DOT goes down first (under every line through O, as it
+     always has). Its "O" LABEL no longer does — see below the angles. */
+  if (g.O) out += dot(cx, cy);
 
   /* full tangent lines + their S/U end labels */
   g.tangentLines.forEach(t => {
@@ -434,6 +447,15 @@ export function renderDiagram(d, accent, opts = {}) {
   g.angles.forEach(a => {
     out += angleSVG(a.vertex.x, a.vertex.y, a.from, a.to, a.t, (d.angles[a.index].o || {}), accent, W, H);
   });
+
+  /* the centre label, AFTER the wedges (2026-08-23 cosmetics, her phone:
+     the "O" read like a zero at 375 px). It used to be emitted before the
+     chords and angles, so any translucent amber wedge at O was painted
+     over it — the navy went brown, the white halo vanished, and the one
+     letter on the figure that looked different from A, B, C, D was the
+     centre. Its POSITION is unchanged (placeCentreLabel only reads
+     geometry); only its place in the paint order moved. */
+  if (g.O) out += placeCentreLabel(g);
 
   /* point dots + labels */
   for (const k in g.pts) {

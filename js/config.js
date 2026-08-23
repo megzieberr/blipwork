@@ -349,8 +349,13 @@ export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
    infrastructure only. Session 1 (2026-08-21) wires the real Statistics
    pool and flips it on here — the STATISTICS PILOT going live at the
    next ship; Megan phone-tests on live before any other chapter lights
-   up (DICE-PLAN's rhythm — this is not a green light for chapter 2). */
-export const DICE_CHAPTERS = ["stats"];
+   up (DICE-PLAN's rhythm — this is not a green light for chapter 2).
+   2026-08-23 (her brief for the day: "dice rounds for other chapters"):
+   Finance, Number Patterns ("pat") and 2D Trigonometry pools built by
+   three parallel sessions from the Stats recipe, each harnessed and
+   PNG-reviewed; all three lit here at the same ship, her phone-test
+   per chapter follows on live. */
+export const DICE_CHAPTERS = ["stats", "finance", "pat", "trig"];
 
 /* Circle Geo tab (CQ-BRIDGE-PLAN.md Part 2, 2026-08-21). Circle Quest stays
    its own app, reached by a plain out-link — never merged, never iframed. */

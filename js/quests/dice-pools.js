@@ -10,9 +10,19 @@
    (nothing dealable until a chapter both has a pool AND is
    allow-listed there). */
 import { pool as diceStats } from "./dice-stats.js";
+/* 2026-08-23 build: three more chapter pools, each built by its own
+   session from the dice-stats.js recipe. Registered here up front
+   (as stubs with no entries) so the sessions never share a file;
+   config.js's DICE_CHAPTERS is what actually lights each one up. */
+import { pool as diceFinance } from "./dice-finance.js";
+import { pool as dicePatterns } from "./dice-patterns.js";
+import { pool as diceTrig } from "./dice-trig.js";
 
 const DICE_POOLS = {
   stats: diceStats,
+  finance: diceFinance,
+  pat: dicePatterns,          // config.js chapter id for Number Patterns is "pat"
+  trig: diceTrig,
 };
 
 export function dicePool(chapterId) { return DICE_POOLS[chapterId] || null; }

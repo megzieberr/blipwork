@@ -80,6 +80,7 @@ const SKILLS = {
       pyramid(seq, { showFirst: true, accent: ACC }),
       { targets: ["d1_0", "d1_1", "d1_2"], correctId: "d1_1" },
       { tapHint: "First differences sit between two terms. The one between the 2nd and 3rd terms is the middle cell.",
+        hint: "Look at the top difference row: its middle cell sits between T₂ and T₃.",
         answerLabel: `It is ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}.` });
   },
 

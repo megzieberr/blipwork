@@ -84,7 +84,7 @@ const SKILLS = {
       `The graph shows the terms of a pattern. At which term number n is the turning point?`,
       k,
       { allowNeg: false,
-        graph: termParabola(a, b, c, k, value, len, ACC),
+        graph: termParabola(a, b, c, k, value, len, ACC, ""),   // no T₍k₎ label: that IS the answer
         graphCap: "Tₙ plotted against n · each grid block is 1",
         hint: "Follow the dashed line from the turning point down to the horizontal axis and count the blocks from 0.",
         answerLabel: `The turning point is at n = ${C(k)}.` });

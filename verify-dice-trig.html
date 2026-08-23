@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice · 2D Trigonometry pool · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice · 2D Trigonometry pool · verification</h1>
+<p class="muted small">js/quests/dice-trig.js — all 36 t1–t7 skills, 200 seeded rolls each, built 2026-08-23 (session T of
+  the three-chapter dice build). Part 1 is the generic per-entry integrity spec from DICE-COMMON (input law, shape,
+  self-consistency, no-spoiler decoys, graph honesty via verifyTriangle, method text). Part 2 recomputes each rolled
+  answer INDEPENDENTLY — off the figure's own real coordinates and again through triglib's rules, reading the givens
+  back out of the question's own labels/prompt rather than the generator's variables. Part 3 is dealing, determinism,
+  resume, the attempt salt, and the tolerance-arrival check the 2D-Trig brief calls load-bearing.</p>
+<div id="banner">running…</div>
+
+<h2>Part 1 · per-entry generation integrity (200 seeded rolls each)</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Part 2 · independent recompute (figure coordinates + triglib)</h2>
+<pre id="recompute">…</pre>
+
+<h2>Part 2 · the method rule — which skills get a “📖 Show me the method” link</h2>
+<p class="muted small">DICE-COMMON's rule: attach q.method ONLY where the solution is real working (2+ steps, or a step with a
+  reason, or a single step whose text is not just the answer). Everything else would be a spoiler button, so the link is
+  simply omitted. This block pins that split by name, so a later edit cannot silently change it.</p>
+<pre id="methodRule">…</pre>
+
+<h2>Part 3 · tolerances arrive intact through genAt</h2>
+<p class="muted small">Many 2D-Trig calc skills carry a tuned <code>tol</code> (0,015 sine/cosine rounding drift · 0,1 for
+  angles to 1 dp · 0,5 for the regular-polygon triangle method · 0,06 for the house composite). answerCorrect() reads
+  them off the question object, so a tol lost on the way through the dice wrapper would silently start failing correct
+  learner answers. Every calc skill's (dp, tol) signature set is collected from static play and from dice play and the
+  two sets must be identical.</p>
+<pre id="tolerances">…</pre>
+
+<h2>Part 3 · dealing, determinism, resume &amp; the attempt salt</h2>
+<pre id="mechanics">…</pre>
+
+<script type="module">
+import { pool as trigPool, hasRealWorking } from "./js/quests/dice-trig.js";
+import { questT1 } from "./js/quests/questt1-choose.js";
+import { questT2 } from "./js/quests/questt2-sine-sides.js";
+import { questT3 } from "./js/quests/questt3-sine-angles.js";
+import { questT4 } from "./js/quests/questt4-cosine-sides.js";
+import { questT5 } from "./js/quests/questt5-cosine-angles.js";
+import { questT6 } from "./js/quests/questt6-area.js";
+import { questT7 } from "./js/quests/questt7-mixed.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect } from "./js/check.js";
+import { verifyTriangle } from "./js/engine/triangle-graph.js";
+import { getConcept } from "./js/concepts.js";
+import {
+  sineRuleSide, sineRuleAngle, cosineRuleSide, cosineRuleAngle,
+  areaSAS, ambiguousCase, sinD, footOfPerp, dist,
+} from "./js/triglib.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const RUNS = 200;
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
+
+/* ---------- tiny readers over a question's OWN rendered fields ----------
+   Everything below reads the question the way a learner sees it (the graph
+   spec that is actually drawn, the prompt text that is actually printed),
+   never the generator's internal variables — that is what makes Part 2 an
+   independent recompute rather than a restatement. */
+
+/* Strip tags, then the angle hats, so prompts parse plainly. The chapter
+   writes them BOTH ways — Â is precomposed U+00C2, Ĉ is U+0108, but M̂ / θ̂
+   are a letter plus a combining U+0302 — so decompose first (NFD), then drop
+   every combining mark. Without the NFD half, "Â = 70°" never matches. */
+const plain = s => String(s == null ? "" : s).replace(/<[^>]+>/g, "")
+  .normalize("NFD").replace(/[̀-ͯ]/g, "");
+const flat = s => plain(s).replace(/\s+/g, " ").trim();
+
+/* "13" / "8,2" / "40°" → number ; "x" / "θ" / "Sine rule" → null */
+function numOf(label) {
+  if (label == null) return null;
+  const s = plain(label).replace("°", "").replace(",", ".").replace(/−/g, "-").trim();
+  if (s === "") return null;
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
+}
+function correctLabel(q) {
+  const c = Array.isArray(q.options) ? q.options.find(o => o.correct) : null;
+  return c ? plain(c.label).trim() : null;
+}
+function angBetween(V, P, Q) {
+  const u = { x: P.x - V.x, y: P.y - V.y }, w = { x: Q.x - V.x, y: Q.y - V.y };
+  const lu = Math.hypot(u.x, u.y) || 1e-9, lw = Math.hypot(w.x, w.y) || 1e-9;
+  return Math.acos(Math.max(-1, Math.min(1, (u.x * w.x + u.y * w.y) / (lu * lw)))) * 180 / Math.PI;
+}
+function shoelace(pts, poly) {
+  let s = 0;
+  for (let i = 0; i < poly.length; i++) {
+    const a = pts[poly[i]], b = pts[poly[(i + 1) % poly.length]];
+    s += a.x * b.y - b.x * a.y;
+  }
+  return Math.abs(s) / 2;
+}
+/* where along QR the foot of the perpendicular from P lands (0 = Q, 1 = R) */
+function footParam(P, Q, R) {
+  const dx = R.x - Q.x, dy = R.y - Q.y;
+  return ((P.x - Q.x) * dx + (P.y - Q.y) * dy) / (dx * dx + dy * dy);
+}
+
+/* Read a triangle graph spec back as maths: which angles/sides carry a
+   NUMBER (the givens) and which carry a letter (the unknown). Sides are
+   keyed by the vertex they are OPPOSITE — the chapter's own "friends" rule —
+   so the sine/cosine recomputes below read exactly like the textbook. */
+function triFacts(g) {
+  if (!g || g.type !== "triangle" || !Array.isArray(g.poly) || g.poly.length !== 3) return null;
+  const f = { poly: g.poly, pts: g.pts, angNum: {}, angSym: {}, sideNum: {}, sideSym: {} };
+  (g.angles || []).forEach(a => {
+    if (a.label == null) return;                        // a bare right-angle marker
+    const v = numOf(a.label);
+    if (v == null) f.angSym[a.at] = plain(a.label); else f.angNum[a.at] = v;
+  });
+  (g.sides || []).forEach(s => {
+    const opp = g.poly.find(k => k !== s.from && k !== s.to);
+    if (opp == null) return;
+    const v = numOf(s.label);
+    if (v == null) f.sideSym[opp] = plain(s.label); else f.sideNum[opp] = v;
+  });
+  return f;
+}
+
+/* THE GENERIC RULE RECOMPUTE. One unknown on the figure + the numeric
+   givens → the sine rule (side or angle), the cosine rule (side or angle),
+   or the angle sum first. Covers t2.findSide, t2.findThirdSide, t3.findAngle,
+   t4.findSide, t5.findAngle, t5.obtuseAngle and all three branches of
+   t7.solveUnknown from one piece of code — because they really are the same
+   four rules read off the same kind of figure. */
+function ruleRecompute(f) {
+  if (!f) return null;
+  const symS = Object.keys(f.sideSym), symA = Object.keys(f.angSym);
+  if (symS.length === 1 && symA.length === 0) {
+    const V = symS[0], o = f.poly.filter(k => k !== V);
+    if (f.angNum[V] != null && f.sideNum[o[0]] != null && f.sideNum[o[1]] != null)
+      return { rule: "cosine rule · side", value: cosineRuleSide(f.sideNum[o[0]], f.sideNum[o[1]], f.angNum[V]) };
+    let aV = f.angNum[V];
+    if (aV == null) {
+      const known = f.poly.filter(k => f.angNum[k] != null);
+      if (known.length === 2) aV = 180 - f.angNum[known[0]] - f.angNum[known[1]];
+    }
+    const pair = o.find(k => f.sideNum[k] != null && f.angNum[k] != null);
+    if (aV != null && pair) return { rule: "sine rule · side", value: sineRuleSide(f.sideNum[pair], f.angNum[pair], aV) };
+    return null;
+  }
+  if (symA.length === 1 && symS.length === 0) {
+    const V = symA[0], o = f.poly.filter(k => k !== V);
+    if (f.sideNum[V] != null && f.sideNum[o[0]] != null && f.sideNum[o[1]] != null)
+      return { rule: "cosine rule · angle", value: cosineRuleAngle(f.sideNum[V], f.sideNum[o[0]], f.sideNum[o[1]]) };
+    const pair = o.find(k => f.sideNum[k] != null && f.angNum[k] != null);
+    if (f.sideNum[V] != null && pair) return { rule: "sine rule · angle", value: sineRuleAngle(f.angNum[pair], f.sideNum[pair], f.sideNum[V]) };
+    return null;
+  }
+  return null;
+}
+
+/* The SAME unknown, but measured straight off the to-scale coordinates the
+   engine draws from. Independent of every rule function — if a generator's
+   answer ever drifted from its own picture this is what catches it. */
+function figureTruth(f) {
+  if (!f) return null;
+  const symS = Object.keys(f.sideSym), symA = Object.keys(f.angSym);
+  if (symS.length === 1 && symA.length === 0) {
+    const V = symS[0], o = f.poly.filter(k => k !== V);
+    return dist(f.pts[o[0]], f.pts[o[1]]);
+  }
+  if (symA.length === 1 && symS.length === 0) {
+    const V = symA[0], o = f.poly.filter(k => k !== V);
+    return angBetween(f.pts[V], f.pts[o[0]], f.pts[o[1]]);
+  }
+  return null;
+}
+/* shared by the seven "one unknown on the figure" calc skills */
+function unknownOnFigure(q, extra) {
+  const f = triFacts(q.graph);
+  const r = ruleRecompute(f);
+  const truth = figureTruth(f);
+  if (!r || truth == null) return false;
+  if (!near(r.value, q.expected, 1e-6)) return false;      // triglib's rules agree with the answer
+  if (!near(truth, q.expected, 1e-6)) return false;         // …and so does the drawn figure
+  return extra ? extra(q, f, r) : true;
+}
+
+/* ---------- one recompute per skill that has recoverable data ---------- */
+const RECOMPUTE = {
+  /* --- t1 · which rule fits --- */
+  "t1.ruleForCase": q => {
+    const f = triFacts(q.graph); if (!f) return false;
+    const p = flat(q.prompt);
+    const want = /Two angles and a side/.test(p) ? { rule: "Sine rule", ang: 2, side: 1 }
+      : /find the AREA/.test(p) ? { rule: "Area rule", ang: 1, side: 2 }
+      : /All three sides/.test(p) ? { rule: "Cosine rule", ang: 0, side: 3 }
+      : /find the third side/.test(p) ? { rule: "Cosine rule", ang: 1, side: 2 } : null;
+    if (!want) return false;
+    // the answer matches the case AND the diagram actually shows that case
+    return correctLabel(q) === want.rule
+      && Object.keys(f.angNum).length === want.ang
+      && Object.keys(f.sideNum).length === want.side;
+  },
+  "t1.oppositeSide": q => {
+    const m = flat(q.prompt).match(/opposite ([ABC])/); if (!m) return false;
+    const want = ["A", "B", "C"].filter(k => k !== m[1]).sort().join("");
+    const key = s => String(s).split("").sort().join("");
+    return q.tap && key(q.tap.correctId) === want
+      && q.graph && q.graph.tap && key(q.graph.tap.correctId) === want
+      && (q.tap.targets || []).length === 3;
+  },
+  "t1.biggestAngle": q => {
+    const f = triFacts(q.graph); if (!f) return false;
+    const rows = Object.entries(f.sideNum);
+    if (rows.length !== 3) return false;
+    rows.sort((a, b) => b[1] - a[1]);
+    if (rows[0][1] === rows[1][1]) return false;             // CARE guard: strictly longest side
+    const lab = correctLabel(q);
+    return !!lab && lab.charAt(0) === rows[0][0];            // biggest angle opposite the longest side
+  },
+
+  /* --- t2 · sine rule, sides --- */
+  "t2.findSide": q => unknownOnFigure(q, (qq, f, r) => r.rule === "sine rule · side"),
+  "t2.findThirdSide": q => unknownOnFigure(q, (qq, f, r) => {
+    // this one specifically needs the angle sum first — only two angles are given
+    return r.rule === "sine rule · side" && Object.keys(f.angNum).length === 2;
+  }),
+  "t2.wordSide": q => {
+    const p = flat(q.prompt);
+    const A = Number((p.match(/A = (\d+)°/) || [])[1]);
+    const C = Number((p.match(/C = (\d+)°/) || [])[1]);
+    const b = Number((p.match(/b = (\d+)/) || [])[1]);
+    if (![A, C, b].every(Number.isFinite)) return false;
+    return near(sineRuleSide(b, 180 - A - C, A), q.expected, 1e-6);
+  },
+  "t2.setupRatio": q => {
+    const p = flat(q.prompt);
+    const B = Number((p.match(/opposite B = (\d+)°/) || [])[1]);
+    const a = Number((p.match(/known side (\d+)/) || [])[1]);
+    const A = Number((p.match(/opposite A = (\d+)°/) || [])[1]);
+    if (![A, B, a].every(Number.isFinite)) return false;
+    return correctLabel(q) === `x / sin ${B}° = ${a} / sin ${A}°`;
+  },
+
+  /* --- t3 · sine rule, angles & the ambiguous case --- */
+  "t3.findAngle": q => unknownOnFigure(q, (qq, f, r) => {
+    if (r.rule !== "sine rule · angle") return false;
+    const V = Object.keys(f.angSym)[0];
+    const o = f.poly.filter(k => k !== V);
+    // CARE guards: θ ≥ 24° (label fits its wedge) and the side opposite θ is
+    // the shorter one (so θ is acute and unique — no hidden ambiguous case)
+    return qq.expected >= 24 && qq.expected < 90 && f.sideNum[V] < f.sideNum[o.find(k => f.sideNum[k] != null)];
+  }),
+  "t3.ambiguousCount": q => {
+    const p = flat(q.prompt);
+    const A = Number((p.match(/A = (\d+)°/) || [])[1]);
+    const a = Number((p.match(/is a = (\d+)/) || [])[1]);
+    const b = Number((p.match(/side b = (\d+)/) || [])[1]);
+    if (![A, a, b].every(Number.isFinite)) return false;
+    const word = { 0: "no triangle", 1: "one triangle", 2: "two triangles" }[ambiguousCase(A, a, b).count];
+    return correctLabel(q) === word;
+  },
+  "t3.ambiguousBoth": q => {
+    const p = flat(q.prompt);
+    const A = Number((p.match(/A = (\d+)°/) || [])[1]);
+    const a = Number((p.match(/a = (\d+) \(opposite/) || [])[1]);
+    const b = Number((p.match(/ b = (\d+)/) || [])[1]);
+    if (![A, a, b].every(Number.isFinite)) return false;
+    const res = ambiguousCase(A, a, b);
+    // CARE guard: the prompt promises TWO triangles, so the data must give two
+    return res.count === 2 && near(180 - res.acute, q.expected, 1e-6) && q.expected > 90;
+  },
+  "t3.obtusePartner": q => {
+    const m = flat(q.prompt).match(/is B = (\d+(?:,\d+)?)°/);
+    if (!m) return false;
+    return near(180 - Number(m[1].replace(",", ".")), q.expected, 1e-9);
+  },
+
+  /* --- t4 · cosine rule, sides --- */
+  "t4.findSide": q => unknownOnFigure(q, (qq, f, r) => r.rule === "cosine rule · side"),
+  "t4.wordSide": q => {
+    const p = flat(q.prompt);
+    const b = Number((p.match(/b = (\d+)/) || [])[1]);
+    const c = Number((p.match(/c = (\d+)/) || [])[1]);
+    const A = Number((p.match(/A = (\d+)°/) || [])[1]);
+    if (![A, b, c].every(Number.isFinite)) return false;
+    return near(cosineRuleSide(b, c, A), q.expected, 1e-6);
+  },
+  "t4.whichFormula": q => {
+    const p = flat(q.prompt);
+    const A = Number((p.match(/opposite A = (\d+)°/) || [])[1]);
+    const m = p.match(/two sides (\d+) and (\d+)/);
+    if (!m || !Number.isFinite(A)) return false;
+    const [b, c] = [m[1], m[2]];
+    return correctLabel(q) === `x² = ${b}² + ${c}² − 2(${b})(${c})·cos ${A}°`;
+  },
+
+  /* --- t5 · cosine rule, angles --- */
+  "t5.findAngle": q => unknownOnFigure(q, (qq, f, r) => {
+    if (r.rule !== "cosine rule · angle") return false;
+    const V = Object.keys(f.angSym)[0];
+    return flat(qq.prompt).includes(`the angle at ${V}`);   // prompt names the vertex the θ sits on
+  }),
+  "t5.obtuseAngle": q => unknownOnFigure(q, (qq, f, r) => {
+    if (r.rule !== "cosine rule · angle") return false;
+    const V = Object.keys(f.angSym)[0];
+    const o = f.poly.filter(k => k !== V);
+    // CARE guard: deliberately obtuse — c² > a² + b², and it really renders > 90°
+    return qq.expected > 90 && f.sideNum[V] ** 2 > f.sideNum[o[0]] ** 2 + f.sideNum[o[1]] ** 2;
+  }),
+
+  /* --- t6 · area rule (shoelace on the real coordinates = fully independent) --- */
+  "t6.triArea": q => {
+    const f = triFacts(q.graph); if (!f) return false;
+    const V = Object.keys(f.angNum)[0]; if (!V) return false;
+    const o = f.poly.filter(k => k !== V);
+    const byRule = areaSAS(f.sideNum[o[0]], f.sideNum[o[1]], f.angNum[V]);
+    return near(shoelace(f.pts, f.poly), q.expected, 1e-6) && near(byRule, q.expected, 1e-6);
+  },
+  "t6.triAreaWord": q => {
+    const p = flat(q.prompt);
+    const MN = Number((p.match(/MN = (\d+)/) || [])[1]);
+    const MP = Number((p.match(/MP = (\d+)/) || [])[1]);
+    const M = Number((p.match(/M = (\d+)°/) || [])[1]);
+    if (![MN, MP, M].every(Number.isFinite)) return false;
+    return near(areaSAS(MN, MP, M), q.expected, 1e-6);
+  },
+  "t6.regularPolygon": q => {
+    const g = q.graph; if (!g || !Array.isArray(g.poly)) return false;
+    const n = g.poly.length;
+    const names = { 5: "pentagon", 6: "hexagon", 8: "octagon" };
+    if (!flat(q.prompt).includes(names[n])) return false;
+    const s = numOf((g.sides || [])[0] && (g.sides || [])[0].label);
+    if (s == null) return false;
+    // triangle method (n isosceles triangles from the centre) — a different
+    // path from triglib's n·s²/(4·tan(180/n)) closed form the generator used
+    const R = s / (2 * sinD(180 / n));
+    const byTriangles = n * 0.5 * R * R * sinD(360 / n);
+    return near(shoelace(g.pts, g.poly), q.expected, 1e-6) && near(byTriangles, q.expected, 1e-6);
+  },
+  "t6.houseArea": q => {
+    const g = q.graph; if (!g || !Array.isArray(g.poly) || g.poly.length !== 5) return false;
+    const side = (a, b) => (g.sides || []).find(s => (s.from === a && s.to === b) || (s.from === b && s.to === a));
+    const r = numOf((side("G", "L") || {}).label);
+    const h = numOf((side("H", "G") || {}).label);
+    const th = numOf(((g.angles || []).find(a => a.at === "L") || {}).label);
+    if (r == null || h == null || th == null) return false;
+    const wall = 2 * r * sinD(th / 2) * h, roof = 0.5 * r * r * sinD(th);
+    return near(shoelace(g.pts, g.poly), q.expected, 1e-6) && near(wall + roof, q.expected, 1e-6);
+  },
+
+  /* --- t7 · mixed --- */
+  "t7.solveUnknown": q => unknownOnFigure(q),
+  "t7.shortestDistance": q => {
+    const g = q.graph, f = triFacts(g); if (!f) return false;
+    const m = flat(q.prompt).match(/from ([A-Z]) to ([A-Z])([A-Z])/); if (!m) return false;
+    const [, V, P, Q] = m;
+    const F = footOfPerp(g.pts[V], g.pts[P], g.pts[Q]);
+    const t = footParam(g.pts[V], g.pts[P], g.pts[Q]);
+    if (!(t > 0.02 && t < 0.98)) return false;               // CARE guard: the foot stays INSIDE the base
+    const o = f.poly.filter(k => k !== V);
+    const byRule = 2 * areaSAS(f.sideNum[o[0]], f.sideNum[o[1]], f.angNum[V])
+      / cosineRuleSide(f.sideNum[o[0]], f.sideNum[o[1]], f.angNum[V]);
+    const hasRight = (g.angles || []).some(a => a.right);
+    return near(dist(g.pts[V], F), q.expected, 1e-6) && near(byRule, q.expected, 1e-6) && hasRight;
+  },
+  "t7.areaFromSSS": q => {
+    const f = triFacts(q.graph); if (!f) return false;
+    const [X, Y, Z] = f.poly;
+    if ([X, Y, Z].some(k => f.sideNum[k] == null)) return false;
+    // the taught two-step path (cosine rule for an angle, then the area rule) —
+    // a different route from the generator's Heron call
+    const A = cosineRuleAngle(f.sideNum[X], f.sideNum[Y], f.sideNum[Z]);
+    const byRule = areaSAS(f.sideNum[Y], f.sideNum[Z], A);
+    return near(shoelace(f.pts, f.poly), q.expected, 1e-6) && near(byRule, q.expected, 1e-6);
+  },
+  "t7.contextCosine": q => {
+    const p = flat(q.prompt);
+    const b = Number((p.match(/walks (\d+) m/) || [])[1]);
+    const c = Number((p.match(/the other (\d+) m/) || [])[1]);
+    const A = Number((p.match(/paths is (\d+)°/) || [])[1]);
+    if (![b, c, A].every(Number.isFinite)) return false;
+    return near(cosineRuleSide(b, c, A), q.expected, 1e-6);
+  },
+  "t7.strategy": q => {
+    const p = flat(q.prompt);
+    const want = /all three sides/.test(p) ? "Cosine rule"
+      : /two angles and one side/.test(p) ? "Sine rule"
+        : /want the area/.test(p) ? "Area rule"
+          : /want the third side/.test(p) ? "Cosine rule" : null;
+    return !!want && correctLabel(q) === want;
+  },
+};
+
+/* the skills with no recoverable data to recompute: pure fact-recall MCs
+   with no rolled numbers at all (they still get every generic check). */
+const NO_RECOMPUTE = [
+  "t1.cosineTrigger", "t1.areaTrigger", "t1.ssaTrigger",
+  "t2.whichForm", "t3.whichForm", "t3.ambiguousWhen",
+  "t4.includedAngle", "t5.rearrange", "t5.oppositeSubtracted",
+  "t6.areaFormula", "t6.needIncluded",
+];
+/* the same list, reused as the salt exemption: fixed text, so a salted
+   re-roll can only ever change the shuffled option ORDER. */
+const PURE_RECALL = new Set(NO_RECOMPUTE);
+
+/* ============================================================
+   PART 1 — per-entry generation integrity
+   ============================================================ */
+const host = document.getElementById("entries");
+const recomputeLines = [];
+let methodCount = 0, graphCount = 0;
+
+trigPool.entries.forEach(entry => {
+  const issues = [];
+  let sawMethod = false, sawGraph = false, recomputeRuns = 0, recomputeFails = 0;
+  const types = new Set();
+  const hasRecompute = !!RECOMPUTE[entry.skillId];
+
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.push(`threw: ${e.message}`); break; }
+
+    if (!INPUT_LAW.has(q.type)) { issues.push(`type "${q.type}" violates the input law`); continue; }
+    types.add(q.type);
+    if (q.concept && !getConcept(q.concept)) issues.push(`q.concept "${q.concept}" has no card`);
+    if (/\d\.\d/.test(plain(q.prompt))) issues.push("prompt has a dot-decimal number (house rule: comma)");
+    if (q.answerLabel != null && /\d\.\d/.test(plain(q.answerLabel))) issues.push("answerLabel has a dot-decimal number");
+
+    if (q.type === "mc" || q.type === "reason") {
+      const labels = q.options.map(o => o.label);
+      const corrects = q.options.filter(o => o.correct);
+      if (corrects.length !== 1) issues.push(`${corrects.length} correct options (want exactly 1)`);
+      if (labels.length < 2) issues.push("fewer than 2 options");
+      if (new Set(labels.map(l => String(l))).size !== labels.length) issues.push(`duplicate option labels: ${labels.join(" | ")}`);
+      const cn = numOf(corrects[0] && corrects[0].label);
+      q.options.filter(o => !o.correct).forEach(o => {
+        if (String(o.label) === String(corrects[0] && corrects[0].label)) issues.push(`decoy "${o.label}" equals the answer (string)`);
+        const n = numOf(o.label);
+        if (cn != null && n != null && Math.abs(n - cn) < 1e-9) issues.push(`decoy "${o.label}" equals the answer BY VALUE`);
+      });
+    } else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.push("non-finite expected");
+      if (!Number.isInteger(q.dp) || q.dp < 0) issues.push(`dp "${q.dp}" is not a non-negative integer`);
+      if (q.tol != null && (!Number.isFinite(q.tol) || q.tol < 0)) issues.push(`tol "${q.tol}" not finite/≥0`);
+      if (Number.isFinite(q.expected) && !answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol }))
+        issues.push("expected fails its own answerCorrect check");
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.push("q.yes not boolean");
+      if (!answerCorrect(q.yes ? 1 : 0, q.yes ? 1 : 0, {})) issues.push("yesno self-consistency");
+    } else if (q.type === "tap") {
+      if (!q.graph) issues.push("tap question with no graph to tap on");
+      const ids = (q.tap && q.tap.targets) || [];
+      if (!q.tap || !ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
+    }
+
+    // graph honesty — verifyTriangle re-derives the scale and every numeric
+    // angle straight out of the drawn geometry (verify-trig.html's tolerances)
+    if (q.graph && q.graph.type === "triangle") {
+      sawGraph = true;
+      verifyTriangle(q.graph).forEach(r => { if (!r.ok) issues.push(`graph: ${r.label}`); });
+    }
+
+    // method text
+    if (q.method != null) {
+      sawMethod = true;
+      if (typeof q.method !== "string" || !q.method.trim()) issues.push("q.method present but not a non-empty string");
+      else if (!q.method.includes("sol-step")) issues.push("q.method has no .sol-step");
+    }
+
+    if (hasRecompute) {
+      recomputeRuns++;
+      let ok = false;
+      try { ok = !!RECOMPUTE[entry.skillId](q); }
+      catch (e) { issues.push(`recompute threw: ${e.message}`); }
+      if (!ok) { recomputeFails++; issues.push("recompute mismatch"); }
+    }
+  }
+
+  if (sawMethod) methodCount++;
+  if (sawGraph) graphCount++;
+  const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} rolls)`);
+  if (hasRecompute) {
+    tick(recomputeFails === 0, `${entry.skillId} independent recompute (${recomputeRuns} rolls)`);
+    recomputeLines.push(`${entry.skillId.padEnd(22)} ${recomputeRuns - recomputeFails}/${recomputeRuns} recompute matches`);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...new Set(issues)].slice(0, 5).join("; ")}</li>
+      <li class="ok">types: ${[...types].join(", ") || "—"}${sawGraph ? " · to-scale triangle graph verified" : ""}</li>
+      <li class="${entry.concept ? "ok" : ""}">${entry.concept ? `concept "${entry.concept}" (I'm lost card exists)` : "no concept"}</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method (real working)" : "no q.method (default solution = the answer only)"}</li>
+      <li class="${hasRecompute ? "ok" : ""}">${hasRecompute ? "independent recompute wired" : "pure recall — structural checks only"}</li>
+    </ul>`;
+  host.appendChild(card);
+});
+
+tick(trigPool.entries.length === 36, "pool holds all 36 t1–t7 skills");
+tick(new Set(trigPool.entries.map(e => e.skillId)).size === trigPool.entries.length, "skillIds are unique");
+tick(trigPool.chapterId === "trig", 'pool.chapterId is "trig" (the drill chapter, not gtrig)');
+tick(trigPool.roundLength === 5, "roundLength is 5 (median skills-per-quest)");
+tick(NO_RECOMPUTE.every(id => !RECOMPUTE[id]), "the named no-recompute skills really have no recompute entry");
+tick(Object.keys(RECOMPUTE).length + NO_RECOMPUTE.length === trigPool.entries.length,
+  `every skill is either recomputed (${Object.keys(RECOMPUTE).length}) or named as pure recall (${NO_RECOMPUTE.length})`);
+
+recomputeLines.unshift(
+  `Independent recompute wired for ${Object.keys(RECOMPUTE).length}/${trigPool.entries.length} skills. Every diagram skill is checked TWICE: once`
+  + `\nagainst triglib's rules (givens read back off the figure's own labels) and once against the`
+  + `\nfigure's real coordinates (side length / angle / shoelace area) — so the answer and the picture`
+  + `\ncannot disagree. NOT recomputable (pure fact-recall MC/yes-no, no rolled numbers at all):`
+  + `\n  ${NO_RECOMPUTE.join(", ")}`
+  + `\nCARE guards asserted inside the recomputes: t1.biggestAngle strictly-longest side · t3.findAngle`
+  + `\nθ ≥ 24° and acute-unique · t3.ambiguousBoth really has 2 triangles · t5.obtuseAngle c² > a²+b²`
+  + `\nand θ > 90° · t7.shortestDistance the foot of the perpendicular lands inside the base.\n`);
+recomputeLines.push(`\nMethod coverage: ${methodCount}/${trigPool.entries.length} skills attach q.method (real working). To-scale triangle graphs seen on ${graphCount}/${trigPool.entries.length} skills.`);
+document.getElementById("recompute").textContent = recomputeLines.join("\n");
+
+/* ============================================================
+   PART 2b — the method rule, pinned by name
+   ============================================================ */
+{
+  const RAW = new Map();
+  [questT1, questT2, questT3, questT4, questT5, questT6, questT7].forEach(qu =>
+    qu.skills.forEach(sk => RAW.set(`${qu.id}.${sk.id}`, sk)));
+
+  const withM = [], withoutM = [];
+  let agrees = true, stable = true;
+  trigPool.entries.forEach((entry, i) => {
+    const raw = RAW.get(entry.skillId);
+    let sawMethod = 0, sawWorking = 0;
+    for (let k = 0; k < 60; k++) {
+      const q = genAt(newRoundSeed(), i, entry, k % 4);
+      if (q.method != null) sawMethod++;
+      // the rule re-evaluated INDEPENDENTLY of the wrapper, on the raw
+      // module's own output — so a wrapper that ever stopped applying it
+      // (or started over-applying it) shows up here
+      if (hasRealWorking(withSeed((Math.random() * 1e9) >>> 0, () => raw.gen()))) sawWorking++;
+    }
+    // a skill is either ALWAYS a method skill or NEVER one — no roll-to-roll
+    // flapping, or a learner would meet the link at random
+    if (sawMethod !== 0 && sawMethod !== 60) stable = false;
+    if (sawWorking !== 0 && sawWorking !== 60) stable = false;
+    if ((sawMethod > 0) !== (sawWorking > 0)) agrees = false;
+    (sawMethod > 0 ? withM : withoutM).push(entry.skillId);
+  });
+  tick(stable, "method rule: every skill is consistently a method skill or consistently not (no roll-to-roll flapping)");
+  tick(agrees, "method rule: the attached q.method matches hasRealWorking() re-evaluated on the raw quest module");
+  tick(withM.length === 19 && withoutM.length === 17, `method split is 19 with / 17 without (got ${withM.length} / ${withoutM.length})`);
+  document.getElementById("methodRule").textContent =
+    `WITH a method link — real worked steps (${withM.length}):\n  ${withM.join(", ")}\n\n`
+    + `WITHOUT (${withoutM.length}) — their only "solution" is the answer itself (_shared.js's mc() default),\n`
+    + `so a link would reveal the answer and nothing else. No new method text was written for these;\n`
+    + `that is a separate content batch for Megan to decide on.\n  ${withoutM.join(", ")}`;
+}
+
+/* ============================================================
+   PART 3a — tolerances arrive intact through genAt
+   ============================================================ */
+{
+  const RAW = new Map();
+  [questT1, questT2, questT3, questT4, questT5, questT6, questT7].forEach(qu =>
+    qu.skills.forEach(sk => RAW.set(`${qu.id}.${sk.id}`, sk)));
+  tick(RAW.size === trigPool.entries.length, "every pool entry maps back to a real quest-module skill");
+
+  const N = 300;
+  const lines = [];
+  let allOk = true, calcSkills = 0;
+  const sig = q => `dp ${q.dp} · tol ${q.tol == null ? "(none → TOL.calcEps)" : String(q.tol).replace(".", ",")}`;
+
+  trigPool.entries.forEach((entry, idx) => {
+    const raw = RAW.get(entry.skillId);
+    const staticSigs = new Set(), diceSigs = new Set();
+    for (let i = 0; i < N; i++) {
+      const s = raw.gen();                                  // STATIC play: plain Math.random
+      if (s.type === "calc") staticSigs.add(sig(s));
+      const d = genAt(newRoundSeed(), idx, entry, i % 3);    // DICE play: the production path
+      if (d.type === "calc") diceSigs.add(sig(d));
+    }
+    if (!staticSigs.size && !diceSigs.size) return;          // not a calc skill
+    calcSkills++;
+    const same = staticSigs.size === diceSigs.size && [...staticSigs].every(s => diceSigs.has(s));
+    if (!same) allOk = false;
+    lines.push(`${same ? "✓" : "✗"} ${entry.skillId.padEnd(22)} static {${[...staticSigs].join(" | ")}}  dice {${[...diceSigs].join(" | ")}}`);
+  });
+  tick(allOk, `tolerances/dp survive genAt identically for all ${calcSkills} calc skills`);
+  lines.unshift(`${calcSkills} calc skills · ${N} static rolls vs ${N} dice rolls each · the (dp, tol) signature sets must match exactly\n`);
+  document.getElementById("tolerances").textContent = lines.join("\n");
+}
+
+/* ============================================================
+   PART 3b — dealing, determinism, resume, salt
+   ============================================================ */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+
+  let detAll = true, resumeAll = true;
+  trigPool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill), c = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    if (JSON.stringify(a) !== JSON.stringify(c)) resumeAll = false;
+  });
+  tick(detAll, "determinism: genAt(seed,i,skill) is byte-identical on repeat, for all 36 skills");
+  tick(resumeAll, "resume: re-deriving any index reproduces the original question, for all 36 skills");
+  lines.push(`determinism (all 36 skills, same seed/index twice): ${detAll ? "OK" : "FAIL"}`);
+  lines.push(`resume (all 36 skills, third derive): ${resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, trigPool.entries[0]);
+  const restored = (Math.random === before);
+  tick(restored, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${restored ? "OK" : "FAIL — Math.random was left patched"}`);
+
+  // resume across a WHOLE dealt round, the way js/dice-play.js does it
+  const dealt = dealRound(trigPool.entries, trigPool.roundLength, []);
+  const first = dealt.map((sk, i) => JSON.stringify(genAt(seed, i, sk)));
+  const roundResume = dealt.every((sk, i) => JSON.stringify(genAt(seed, i, sk)) === first[i]);
+  tick(roundResume, "resume: a whole dealt round regenerates identically question by question");
+  lines.push(`resume (whole dealt round of ${dealt.length}): ${roundResume ? "OK" : "FAIL"}`);
+
+  const kinds1 = dealt.map(e => e.kind);
+  const distinct1 = kinds1.length === trigPool.roundLength && new Set(kinds1).size === kinds1.length;
+  tick(distinct1, "dealing: a fresh learner's first round is 5 distinct, all-unmet kinds");
+  lines.push(`dealing (fresh learner): [${kinds1.join(", ")}] — ${distinct1 ? "OK" : "FAIL"}`);
+
+  let met = [], rounds = 0;
+  const maxRounds = Math.ceil(trigPool.entries.length / trigPool.roundLength) + 2;
+  while (met.length < trigPool.entries.length && rounds < maxRounds) {
+    const deck = dealRound(trigPool.entries, trigPool.roundLength, met);
+    const s = new Set(met); deck.forEach(e => s.add(e.kind)); met = [...s]; rounds++;
+  }
+  const full = met.length === trigPool.entries.length;
+  tick(full, `dealing: successive rounds reach full 36-kind coverage (took ${rounds}, expected ≤ ${maxRounds})`);
+  lines.push(`dealing (successive rounds to full coverage): ${met.length}/${trigPool.entries.length} kinds after ${rounds} rounds (cap ${maxRounds}) — ${full ? "OK" : "FAIL"}`);
+
+  const deckFull = dealRound(trigPool.entries, trigPool.roundLength, trigPool.entries.map(e => e.kind));
+  tick(deckFull.length === trigPool.roundLength, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage): dealt ${deckFull.length}/${trigPool.roundLength} — ${deckFull.length === trigPool.roundLength ? "OK" : "FAIL"}`);
+
+  // salt: a re-present of the same index must roll DIFFERENT values
+  const saltBad = [], saltExempt = [];
+  trigPool.entries.forEach((skill, i) => {
+    const base = JSON.stringify(genAt(seed, i, skill, 0));
+    let differs = false;
+    for (let s = 1; s <= 6 && !differs; s++) if (JSON.stringify(genAt(seed, i, skill, s)) !== base) differs = true;
+    if (PURE_RECALL.has(skill.skillId)) { if (!differs) saltExempt.push(skill.skillId); }
+    else if (!differs) saltBad.push(skill.skillId);
+  });
+  tick(saltBad.length === 0, `salt: every numeric skill re-rolls different values on a salted retry (${trigPool.entries.length - PURE_RECALL.size} skills)`);
+  lines.push(`salt (salts 1–6 vs salt 0): ${saltBad.length ? "FAIL — " + saltBad.join(", ") : `OK for all ${trigPool.entries.length - PURE_RECALL.size} numeric skills`}`);
+  lines.push(`salt exemption (pure recall — fixed text, only option order can change): ${PURE_RECALL.size} skills; of those, ${saltExempt.length} produced byte-identical retries: ${saltExempt.join(", ") || "none"}`);
+
+  let baseUnchanged = true;
+  trigPool.entries.forEach((skill, i) => {
+    if (JSON.stringify(genAt(seed, i, skill)) !== JSON.stringify(genAt(seed, i, skill, 0))) baseUnchanged = false;
+  });
+  tick(baseUnchanged, "salt: genAt() with no salt arg still equals explicit salt 0, for all 36 skills (resume unaffected)");
+  lines.push(`no-salt-arg === explicit salt 0 (all 36 skills): ${baseUnchanged ? "OK" : "FAIL"}`);
+
+  let sameSaltOk = true;
+  trigPool.entries.forEach((skill, i) => {
+    for (let s = 0; s <= 2; s++) if (JSON.stringify(genAt(seed, i, skill, s)) !== JSON.stringify(genAt(seed, i, skill, s))) sameSaltOk = false;
+  });
+  tick(sameSaltOk, "salt: the same (seed, index, salt) is byte-identical on repeat");
+  lines.push(`same salt twice → identical: ${sameSaltOk ? "OK" : "FAIL"}`);
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
+}
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice-trig] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

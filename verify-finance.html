@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  #measure{position:absolute;left:-9999px;top:0;width:360px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Finance · verification</h1>
+<p class="muted small">Finance (f1–f7, 51 skills) had no harness of any kind before today — DICE-AUDIT.md §3 flagged
+  that gap. This is the STATIC harness: it drives every quest module's own <code>skill.gen()</code> exactly as static
+  play does, 200 fresh generations each, and checks shape, self-consistency, decoys, the input law, timeline honesty,
+  and an independent recompute through <code>js/finlib.js</code> for every skill that rolls a number (25 of 51 — the
+  other 26 are fixed-fact recall with nothing to recompute). Built 2026-08-23 alongside the dice pool; it deliberately
+  knows nothing about the dice, so it also proves static play is unchanged by today's work.</p>
+<div id="banner">running…</div>
+
+<h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
+<div class="grid" id="engine"></div>
+
+<h2>Quests f1–f7 — every skill, 200 generations</h2>
+<pre id="quests">…</pre>
+
+<h2>Independent recompute (js/finlib.js, from the question's own displayed numbers)</h2>
+<pre id="recompute">…</pre>
+
+<h2>Negative control — does the recompute actually bite?</h2>
+<p class="muted small">A recompute that silently returns true for everything is worse than none. For every recompute-covered
+  skill this deliberately corrupts the answer the question marks correct (a calc's expected, an mc's correct flag, a
+  yes/no's verdict, a tap's target) and requires the recompute to REJECT it.</p>
+<pre id="negative">…</pre>
+
+<h2>f5.anyPoint — the generalised CARE skill, in detail</h2>
+<p class="muted small">Was hardcoded ("R1 000 at T0 is worth R2 100,34 at T5", always true). Now rolls P, the rate, T and
+  the middle point k, and decides yes/no by arithmetic. This block proves both claim families really occur, that the
+  false ones are false for a real reason, and that a learner answering "yes" to every one would NOT pass.</p>
+<pre id="anyPoint">…</pre>
+
+<div id="measure"></div>
+
+<h2>Result</h2>
+<pre id="summary">…</pre>
+
+<script type="module">
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+import { answerCorrect } from "./js/check.js";
+import { renderTimeline, verifyTimeline } from "./js/engine/timeline-graph.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption } from "./js/quests/_finance-check.js";
+
+const ACC = "#8b5cf6";
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const measure = document.getElementById("measure");
+
+/* Finance's whole input vocabulary (DICE-PLAN's INPUT LAW: list-pick,
+   number pad, sketch-click — never typed words). */
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap"]);
+
+/* ---------- 1) the timeline engine, on representative specs ---------- */
+const ENGINE = [
+  { title: "plain move T0 → T5", spec: { type: "timeline", n: 5, nodes: [{ t: 0, role: "P" }, { t: 5, role: "A" }], arc: { from: 0, to: 5 }, accent: ACC } },
+  { title: "backward arc T5 → T1", spec: { type: "timeline", n: 5, nodes: [{ t: 5, role: "A" }, { t: 1, label: "?", role: "P" }], arc: { from: 5, to: 1, dir: "back" }, accent: ACC } },
+  { title: "widest amounts the chapter can roll (2 dp at the end node)", spec: { type: "timeline", n: 6, nodes: [{ t: 0, amount: 12000, dp: 0 }, { t: 3, label: "?", role: "" }, { t: 6, amount: 29243.51, dp: 2 }], accent: ACC } },
+  { title: "rate change, three labelled nodes", spec: { type: "timeline", n: 7, nodes: [{ t: 0, amount: 50000, dp: 0 }, { t: 3, label: "rate changes" }, { t: 7, label: "?", role: "A" }], accent: ACC } },
+];
+const eg = document.getElementById("engine");
+ENGINE.forEach(t => {
+  const checks = verifyTimeline(t.spec);
+  checks.forEach(c => tick(c.ok, `${t.title}: ${c.label}`));
+  const fit = labelFitIssues(t.spec, measure);
+  tick(fit.length === 0, `${t.title}: every amount label sits inside the frame, over its own node`);
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.setProperty("--accent", ACC);
+  card.innerHTML = `<h3>${t.title}</h3><div>${renderTimeline(t.spec)}</div>
+    <ul class="checks">${checks.map(c => `<li class="${c.ok ? "ok" : "bad"}">${c.ok ? "✓" : "✗"} ${c.label}</li>`).join("")}
+      <li class="${fit.length ? "bad" : "ok"}">${fit.length ? "✗ " + fit.join("; ") : "✓ labels inside the frame and over their nodes"}</li></ul>`;
+  eg.appendChild(card);
+});
+
+/* ---------- 2) every skill of every quest, 200 generations ---------- */
+const chapter = CHAPTERS.find(c => c.id === "finance");
+const RUNS = 200;
+const FIT_RUNS = 5;                 // rendering+measuring every roll is slow; the numbers repeat quickly
+const lines = [], recomputeLines = [];
+let genCount = 0, genFails = 0, skillCount = 0;
+
+function checkQuestion(q, issues, opts) {
+  genCount++;
+  if (!INPUT_LAW.has(q.type)) { issues.add(`type "${q.type}" violates the input law`); return; }
+  if (!q.prompt || !String(q.prompt).trim()) issues.add("empty prompt");
+  if (q.concept && !getConcept(q.concept)) issues.add(`q.concept "${q.concept}" not found`);
+  // SA convention: comma decimals everywhere a learner reads a number
+  const texts = [String(q.prompt || ""), String(q.answerLabel == null ? "" : q.answerLabel), String(q.hint || "")]
+    .concat((q.options || []).map(o => String(o.label)))
+    .concat((q.solution || []).map(s => `${s.s || ""} ${s.r || ""}`));
+  if (texts.some(t => /\d\.\d/.test(t))) issues.add("a dot-decimal number is shown (should be a comma)");
+
+  if (q.type === "mc" || q.type === "reason") {
+    const labels = q.options.map(o => o.label);
+    const corrects = q.options.filter(o => o.correct);
+    if (corrects.length !== 1) issues.add(`${corrects.length} correct options (want exactly 1)`);
+    if (labels.length < 2) issues.add("fewer than 2 options");
+    if (new Set(labels).size !== labels.length) issues.add(`duplicate option labels: ${labels.join(" | ")}`);
+    const cn = numOf(corrects[0] && corrects[0].label);
+    if (Number.isFinite(cn)) q.options.filter(o => !o.correct).forEach(o => {
+      const n = numOf(o.label);
+      if (Number.isFinite(n) && Math.abs(n - cn) < 1e-9) issues.add(`decoy "${o.label}" equals the answer BY VALUE`);
+    });
+  } else if (q.type === "calc") {
+    if (!Number.isFinite(q.expected)) issues.add("non-finite expected");
+    else if (!(Number.isInteger(q.dp ?? 0) && (q.dp ?? 0) >= 0)) issues.add(`dp "${q.dp}" is not a non-negative integer`);
+    else if (q.tol != null && !(Number.isFinite(q.tol) && q.tol >= 0)) issues.add(`tol "${q.tol}" is not a finite non-negative number`);
+    else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) issues.add("expected fails its own check");
+  } else if (q.type === "yesno") {
+    if (typeof q.yes !== "boolean") issues.add("q.yes not boolean");
+  } else if (q.type === "tap") {
+    if (!q.tap || q.tap.correctId == null) issues.add("tap without correctId");
+    else if (!(q.tap.targets || []).includes(q.tap.correctId)) issues.add("tap correctId not in targets");
+    if (!q.graph) issues.add("tap question without a graph to tap");
+  }
+  graphIssues(q).forEach(g => issues.add(g));
+  if (opts.fit && q.graph) labelFitIssues(q.graph, measure).forEach(g => issues.add(g));
+}
+
+chapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const bad = [];
+  def.skills.forEach(skill => {
+    skillCount++;
+    const skillId = `${qmeta.id}.${skill.id}`;
+    const issues = new Set();
+    let recomputeRuns = 0, recomputeBad = 0;
+    const rc = RECOMPUTE[skillId];
+    if (!getConcept(skill.concept)) issues.add(`missing concept "${skill.concept}"`);
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); } catch (e) { issues.add("threw: " + e.message); break; }
+      const before = issues.size;
+      checkQuestion(q, issues, { fit: i < FIT_RUNS });
+      if (issues.size > before) genFails++;
+      if (rc) {
+        recomputeRuns++;
+        let ok = false;
+        try { ok = !!rc(q); } catch (e) { issues.add(`recompute threw: ${e.message}`); }
+        if (!ok) { recomputeBad++; issues.add("recompute mismatch"); }
+      }
+    }
+    const ok = tick(issues.size === 0, `${skillId} (${RUNS} generations)`);
+    if (rc) {
+      tick(recomputeBad === 0, `${skillId} recompute (${recomputeRuns} rolls, re-derived from the question's own numbers)`);
+      recomputeLines.push(`${ok && !recomputeBad ? "✓" : "✗"} ${skillId}: ${recomputeRuns - recomputeBad}/${recomputeRuns} recompute matches`);
+    }
+    if (!ok) bad.push(`${skill.id}: ${[...issues].slice(0, 4).join("; ")}`);
+  });
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${skillCount} skills · ${genCount} generations checked · ${genFails} with an integrity problem\n\n` + lines.join("\n");
+recomputeLines.unshift(`Independent recompute wired for ${RECOMPUTE_IDS.length} of ${skillCount} skills — every skill that rolls a number. The other ${skillCount - RECOMPUTE_IDS.length} are fixed-fact recall (no numbers), covered by the shape/decoy/input-law checks above.\n`);
+document.getElementById("recompute").textContent = recomputeLines.join("\n");
+
+/* ---------- 3) negative control: corrupt the answer, expect a reject ---------- */
+{
+  const nlines = [];
+  const skillById = new Map();
+  chapter.quests.forEach(qmeta => questDef(qmeta.id).skills.forEach(s => skillById.set(`${qmeta.id}.${s.id}`, s)));
+  /* break the answer without touching anything the recompute reads as the
+     QUESTION — so a failure to reject means the recompute isn't checking. */
+  function corrupt(q) {
+    if (q.type === "calc") { q.expected = q.expected + 1 + Math.abs(q.expected) * 0.5; return "expected + 1"; }
+    if (q.type === "yesno") { q.yes = !q.yes; return "flipped yes/no"; }
+    if (q.type === "tap") {
+      const other = (q.tap.targets || []).find(t => t !== q.tap.correctId);
+      q.tap = { ...q.tap, correctId: other };
+      return `correct target → ${other}`;
+    }
+    const i = q.options.findIndex(o => o.correct), j = q.options.findIndex(o => !o.correct);
+    q.options = q.options.map((o, k) => ({ ...o, correct: k === j }));
+    return `correct flag moved ${i} → ${j}`;
+  }
+  RECOMPUTE_IDS.forEach(id => {
+    const skill = skillById.get(id);
+    const rc = RECOMPUTE[id];
+    let rejected = 0, how = "";
+    for (let i = 0; i < 25; i++) {
+      const q = skill.gen();
+      how = corrupt(q);
+      let still = true;
+      try { still = !!rc(q); } catch { still = false; }
+      if (!still) rejected++;
+    }
+    tick(rejected === 25, `${id}: recompute rejects a corrupted answer (${how})`);
+    nlines.push(`${rejected === 25 ? "✓" : "✗"} ${id}: ${rejected}/25 corrupted answers rejected  (${how})`);
+  });
+  document.getElementById("negative").textContent = nlines.join("\n");
+}
+
+/* ---------- 4) f5.anyPoint in detail ---------- */
+{
+  const def = questDef("f5");
+  const skill = def.skills.find(s => s.id === "anyPoint");
+  const rc = RECOMPUTE["f5.anyPoint"];
+  const N = 600;
+  let trues = 0, falses = 0, rcBad = 0, sameClaim = 0, diffClaim = 0, plusClaim = 0, withSolution = 0;
+  const samples = { same: null, different: null, plusExp: null };
+  for (let i = 0; i < N; i++) {
+    const q = skill.gen();
+    if (q.yes) trues++; else falses++;
+    if (!rc(q)) rcBad++;
+    if (Array.isArray(q.solution) && q.solution.length >= 2) withSolution++;
+    let key = "plusExp";
+    if (q.prompt.includes("<b>same</b> value")) key = "same";
+    else if (q.prompt.includes("<b>different</b> values")) key = "different";
+    if (key === "same") sameClaim++; else if (key === "different") diffClaim++; else plusClaim++;
+    if (!samples[key]) samples[key] = q;
+  }
+  const share = falses / N;
+  tick(rcBad === 0, `f5.anyPoint: all ${N} rolls re-derive correctly (rate recovered from the question's own amounts)`);
+  tick(sameClaim > 0 && diffClaim > 0 && plusClaim > 0, "f5.anyPoint: all three claim families really occur");
+  tick(share > 0.2 && share < 0.45, `f5.anyPoint: about one roll in three is FALSE (measured ${(share * 100).toFixed(1)}%)`);
+  tick(withSolution === N, "f5.anyPoint: every roll carries a real worked solution (one equation per route)");
+  const show = q => q ? `    prompt : ${q.prompt.replace(/<[^>]+>/g, "")}\n    answer : ${q.yes ? "YES" : "NO"} — ${q.answerLabel}\n    steps  : ${q.solution.map(s => s.s + (s.r ? `   [${s.r}]` : "")).join("\n             ")}` : "    (none)";
+  document.getElementById("anyPoint").textContent =
+    `${N} rolls: ${trues} true / ${falses} false (${(share * 100).toFixed(1)}% false — the design aims at ~33%)\n`
+    + `claims: same ${sameClaim} · different ${diffClaim} · plus-exponent ${plusClaim}\n`
+    + `independent re-derivation: ${N - rcBad}/${N} agree\n\n`
+    + `— a TRUE roll —\n${show(samples.same)}\n\n— a FALSE roll (routes "disagree") —\n${show(samples.different)}\n\n— a FALSE roll (back-move written with a plus exponent) —\n${show(samples.plusExp)}`;
+}
+
+const ok = passed === total && genFails === 0;
+const banner = document.getElementById("banner");
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks green` : `✗ ${total - passed} check(s) failed — see below`;
+document.getElementById("summary").textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed  (${skillCount} skills, ${genCount} generations)`
+  : `✗ FAIL — ${total - passed} of ${total} checks failed\n` + fails.slice(0, 40).join("\n");
+
+window.__VERIFY__ = { total, passed, genCount, genFails, ok, fails };
+console.log(`[verify-finance] ${passed}/${total}, generations ${genCount}, integrity failures ${genFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.slice(0, 40).join("\n"));
+</script>
+</body>
+</html>

@@ -6,12 +6,15 @@
    ============================================================ */
 import { mc, mcNum, C } from "./_shared.js";
 import { randInt, pick } from "../ui.js";
-import { toFrac, COMPOUNDING } from "../finlib.js";
+import { toFrac, COMPOUNDING, compoundAmount, moveMoney, rand } from "../finlib.js";
 
 const MOVE = "timelineMove";
 const RATE = "rateChange";
 const tl = (n, nodes, arc) => ({ type: "timeline", n, nodes, ...(arc ? { arc } : {}) });
 const OPTS = COMPOUNDING.filter(c => [2, 4, 12].includes(c.k));
+const amt0 = v => rand(v, 0).slice(1);            // "1 000" — the way she writes P in an equation (no R on the left)
+/* two money values are "the same value" (float noise only) */
+const agrees = (a, b) => Math.abs(a - b) <= 1e-6 * Math.max(1, Math.abs(a));
 
 const SKILLS = {
   exponentForward: () => {
@@ -38,21 +41,65 @@ const SKILLS = {
     const k = randInt(2, 4), P = pick([1000, 2000, 5000]), iann = pick([8, 10, 12, 16]);
     const i = C(toFrac(iann));
     return mc(MOVE,
-      `Which expression gives the value at <b>T${k}</b> of <b>R${P}</b> invested at T0 (i = ${i})?`,
+      `Which expression gives the value at <b>T${k}</b> of <b>${rand(P, 0)}</b> invested at T0 (i = ${i})?`,   // "R2 000", as its own timeline prints it (review fix 2026-08-23)
       `${P}(1 + ${i})^${k}`,
       [`${P}(1 + ${i})^(−${k})`, `${P}(1 − ${i})^${k}`, `${P}(1 + ${i}·${k})`],
       { graph: tl(k, [{ t: 0, amount: P, dp: 0 }, { t: k, label: "?", role: "A" }], { from: 0, to: k }),
         hint: "Forward → multiply, positive exponent equal to the number of periods.", answerLabel: `${P}(1 + ${i})^${k}` });
   },
 
-  anyPoint: () => ({
-    type: "yesno", concept: MOVE,
-    prompt: "R1 000 at T0 is worth R2 100,34 at T5. Moving <b>forward 4</b> from T0 and moving <b>back 1</b> from T5 give the <b>same</b> value at T4.",
-    yes: true,
-    graph: tl(5, [{ t: 0, amount: 1000, dp: 0 }, { t: 4, label: "?", role: "" }, { t: 5, amount: 2100.34, dp: 0 }]),   // dp 0: the full "R2 100,34" is wider than the engine's edge margin and gets clipped
-    hint: "The same money has ONE value at each date, no matter which way you travel to it.",
-    answerLabel: "True — both routes give the same value at T4",
-  }),
+  /* One value per date, whichever way you travel to it. Generalised from
+     the original hardcoded "R1 000 → R2 100,34 at T5, always true"
+     version (DICE-AUDIT §3's single CARE skill) on 2026-08-23: P, the
+     rate, T and the middle point k all roll, and `yes` is COMPUTED from
+     the two routes every time — about one roll in three states a claim
+     that is genuinely false, built on a real misconception (the two
+     routes "disagree", or moving back written with a plus exponent).
+     Solutions follow FINANCE-METHOD.md: one equation per route, nothing
+     rounded before the final value. */
+  anyPoint: () => {
+    const P = pick([1000, 2000, 5000, 8000]);
+    const annual = pick([8, 10, 12, 16]);            // the same rate bank `expression` above uses
+    const T = randInt(4, 6), k = randInt(1, T - 1);
+    const i = toFrac(annual), iC = C(i), back = T - k;
+    const A = compoundAmount(P, i, T);               // the value at T stated in the prompt
+    const fwd = compoundAmount(P, i, k);             // route 1: forward k from T0
+    const bck = moveMoney(A, i, -back);              // route 2: back (T−k) from T
+    const wrongBack = moveMoney(A, i, back);         // the misconception: back written with a PLUS exponent
+    const claim = pick(["same", "same", "same", "same", "different", "plusExp"]);   // ⅓ of rolls are false
+    const p0 = amt0(P);
+    const steps = [
+      { s: `Forward: ${p0}(1 + ${iC})^${k} = ${rand(fwd, 2)}` },
+      { s: `Back: ${p0}(1 + ${iC})^${T}(1 + ${iC})^−${back} = ${p0}(1 + ${iC})^${k}`,
+        r: `${T} − ${back} = ${k}, so it is the same value: ${rand(fwd, 2)}` },
+    ];
+    if (claim === "plusExp") steps.push({ s: `A plus exponent gives ${rand(wrongBack, 2)} — that is moving forward again.` });
+    return {
+      type: "yesno", concept: MOVE,
+      prompt: claim === "plusExp"
+        ? `${rand(P, 0)} at T0 is worth ${rand(A, 2)} at T${T}. To move the T${T} amount <b>back</b> to T${k}, you multiply by (1 + i)^<b>+${back}</b>.`
+        : `${rand(P, 0)} at T0 is worth ${rand(A, 2)} at T${T}. Moving <b>forward ${k}</b> from T0 and moving <b>back ${back}</b> from T${T} give ${claim === "same" ? "the <b>same</b> value" : "<b>different</b> values"} at T${k}.`,
+      /* honestly computed every roll — never a fixed true */
+      yes: claim === "plusExp" ? agrees(wrongBack, fwd) : (claim === "same" ? agrees(fwd, bck) : !agrees(fwd, bck)),
+      /* The T-node carries the SAME 2 dp the prompt states (the old hardcoded
+         version showed a dp-0 "R2 100" under a prompt that said R2 100,34).
+         The engine clamps a wide end-label inwards rather than clipping it —
+         verify-finance.html measures every rolled label's real box and fails
+         if one leaves the frame or drifts off its own node, and the widest
+         amount this skill can roll (R8 000 at 16% over 6) was read at 375 px
+         in the PNG review. */
+      graph: tl(T, [{ t: 0, amount: P, dp: 0 }, { t: k, label: "?", role: "" }, { t: T, amount: A, dp: 2 }]),
+      hint: claim === "plusExp"
+        ? "Moving to an EARLIER date undoes the growth — the exponent goes negative."
+        : "The same money has ONE value at each date, no matter which way you travel to it.",
+      answerLabel: claim === "plusExp"
+        ? `False — moving back to T${k} is (1 + i)^−${back}`
+        : (claim === "same"
+          ? `True — both routes give the same value at T${k}`
+          : `False — both routes give the same value at T${k}: ${rand(fwd, 2)}`),
+      solution: steps,
+    };
+  },
 
   rateChangeBrackets: () => {
     const y1 = randInt(2, 4), y2 = randInt(2, 4);

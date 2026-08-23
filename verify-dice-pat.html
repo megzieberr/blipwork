@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice · Number Patterns pool · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice · Number Patterns pool · verification</h1>
+<p class="muted small">js/quests/dice-patterns.js — all 44 np1–np7 skills, 200 seeded rolls each.
+  <b>Part 1</b> is the generic per-entry integrity pass every dice pool gets (input law, shape,
+  self-consistency against js/check.js, no decoy equal to the answer by value, comma-decimal /
+  real-minus rendering, the method rule).
+  <b>Part 2</b> is the chapter recompute: every pyramid re-verified by <code>verifyPattern</code>, every
+  min/max term-parabola by <code>verifyFunction</code>, and — for 39 of the 44 skills — the answer
+  independently recomputed straight out of js/patternlib.js from the numbers the question actually
+  PRINTS (first/second differences, quadSolve's a/b/c, the general term string, the missing term, the
+  turning point and its value, the gap-rule, the ratio).
+  <b>Part 3</b> is determinism, salted retry, dealing and resume at full pool size.</p>
+<div id="banner">running…</div>
+
+<h2>Part 1 + 2 · per-entry generation integrity, graph honesty &amp; recompute</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Part 2 · independent recompute (js/patternlib.js) — coverage</h2>
+<pre id="recompute">…</pre>
+
+<h2>Part 2 · graph honesty tally (verifyPattern / verifyFunction)</h2>
+<pre id="graphs">…</pre>
+
+<h2>Part 3 · determinism, salted retry, dealing &amp; resume (44 kinds, roundLength 7)</h2>
+<pre id="mechanics">…</pre>
+
+<script type="module">
+import { pool, hasRealWorking } from "./js/quests/dice-patterns.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect } from "./js/check.js";
+import { getConcept } from "./js/concepts.js";
+import {
+  firstDiffs, secondDiffs, classify, classifyName, quadSolve, quadTn, arithTn, arithAC,
+  linStr, quadStr, geoStr, geoTn, ratioLabel,
+} from "./js/patternlib.js";
+import { verifyPattern, computePattern } from "./js/engine/pattern-graph.js";
+import { verifyFunction } from "./js/engine/function-graph.js";
+import { ord } from "./js/quests/_patterns.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const RUNS = 200;
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+const EPS = 1e-9;
+const near = (a, b, tol = 1e-9) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
+const allEqual = (a) => a.length > 0 && a.every(x => Math.abs(x - a[0]) < 1e-9);
+
+/* ============================================================
+   PARSERS over the question's OWN rendered prompt / structured
+   fields. Reading what the learner is SHOWN (rather than trusting
+   the generator's internal variables) is what makes Part 2 an
+   independent recompute: if a generator's arithmetic ever drifted
+   from what it displays, these catch it.
+   ============================================================ */
+const MINUS = "−";                                   // U+2212, the house minus
+const NUMPAT = "\\d+(?:,\\d+)?";
+const stripTags = (s) => String(s).replace(/<[^>]*>/g, "");
+function num(tok) {
+  const c = String(tok).trim().replace(/−/g, "-").replace(",", ".");
+  return /^-?\d+(\.\d+)?$/.test(c) ? Number(c) : NaN;
+}
+const boldChunks = (html) => [...String(html).matchAll(/<b>([\s\S]*?)<\/b>/g)].map(m => m[1]);
+
+/* the term list the prompt prints, e.g. "<b>3  ;  7  ;  11  ;  15</b>"
+   (some prompts append " ; …" INSIDE the bold — that token is dropped). */
+function promptTerms(q) {
+  for (const b of boldChunks(q.prompt)) {
+    if (!b.includes(";")) continue;
+    const toks = stripTags(b).split(/\s*;\s*/).map(s => s.trim()).filter(s => s !== "" && s !== "…");
+    if (toks.length < 3) continue;
+    const nums = toks.map(num);
+    if (nums.every(Number.isFinite)) return nums;
+  }
+  return null;
+}
+/* the pyramid spec's own terms (may hold a null for a hidden term) */
+const graphTerms = (q) => (q.graph && q.graph.type === "pattern" && Array.isArray(q.graph.terms)) ? q.graph.terms : null;
+
+/* Tₙ = an + c , as rendered by patternlib's linStr()  ("3n + 2", "−n − 5", "4n") */
+function parseLin(s) {
+  const m = stripTags(s).trim().match(new RegExp(`^(${MINUS})?(${NUMPAT})?n(?:\\s*([+${MINUS}])\\s*(${NUMPAT}))?$`));
+  if (!m) return null;
+  const a = (m[1] ? -1 : 1) * (m[2] ? num(m[2]) : 1);
+  const c = m[4] ? (m[3] === MINUS ? -1 : 1) * num(m[4]) : 0;
+  return { a, c };
+}
+/* Tₙ = an² + bn + c , as rendered by quadStr()  ("2n² − 8n + 5", "−n² + n") */
+function parseQuad(s) {
+  const m = stripTags(s).trim().match(
+    new RegExp(`^(${MINUS})?(${NUMPAT})?n²(?:\\s*([+${MINUS}])\\s*(${NUMPAT})?n)?(?:\\s*([+${MINUS}])\\s*(${NUMPAT}))?$`));
+  if (!m) return null;
+  const a = (m[1] ? -1 : 1) * (m[2] ? num(m[2]) : 1);
+  const b = m[3] ? (m[3] === MINUS ? -1 : 1) * (m[4] ? num(m[4]) : 1) : 0;
+  const c = m[5] ? (m[5] === MINUS ? -1 : 1) * num(m[6]) : 0;
+  return { a, b, c };
+}
+function formulaLin(q) { for (const b of boldChunks(q.prompt)) { const p = parseLin(b); if (p) return p; } return null; }
+function formulaQuad(q) { for (const b of boldChunks(q.prompt)) { const p = parseQuad(b); if (p) return p; } return null; }
+
+const corr = (q) => { const c = (q.options || []).find(o => o.correct); return c ? String(c.label) : null; };
+function grab(q, re, i = 1) { const m = stripTags(q.prompt).match(re); return m ? num(m[i]) : NaN; }
+
+/* ============================================================
+   PART 2 — one recompute per skill, using js/patternlib.js only.
+   Skills WITHOUT an entry here are the 5 pure-recall list-picks
+   with no numbers to recompute (named in the coverage note below);
+   they still get every Part 1 + graph check.
+   ============================================================ */
+const classifyMatches = (q) => { const t = promptTerms(q); return !!t && corr(q) === (classifyName[classify(t)] || "none of these"); };
+const dOf = (q) => { const t = promptTerms(q); return t ? firstDiffs(t) : null; };
+
+const RECOMPUTE = {
+  /* ---- np1 · spot the pattern ---- */
+  "np1.classifyArith": q => { const t = promptTerms(q); return !!t && classify(t) === "arithmetic" && classifyMatches(q); },
+  "np1.classifyQuad":  q => { const t = promptTerms(q); return !!t && classify(t) === "quadratic" && classifyMatches(q); },
+  "np1.classifyGeo":   q => { const t = promptTerms(q); return !!t && classify(t) === "geometric" && classifyMatches(q)
+                              && Number.isInteger(t[1] / t[0]); },                    // CARE: integerR guard held
+  "np1.whichConstant": q => { const t = promptTerms(q); return !!t && allEqual(secondDiffs(t)) && !allEqual(firstDiffs(t))
+                              && corr(q) === "the second differences"; },
+  "np1.commonDiff":    q => { const d = dOf(q); return !!d && allEqual(d) && near(q.expected, d[0]); },
+  "np1.tapFirstDiff":  q => {                                                          // positional recompute off the engine's own cells
+                              const t = graphTerms(q); if (!t || t.length !== 4) return false;
+                              const g = computePattern(q.graph);
+                              const cell = g.byId[q.tap.correctId];
+                              const asked = 1;                                        // "between T₂ and T₃" → d1_1
+                              return q.tap.correctId === "d1_" + asked && !!cell
+                                && near(g.fd[asked], t[asked + 1] - t[asked])
+                                && (q.tap.targets || []).every(id => !!g.byId[id]); },
+  "np1.ratioOf":       q => { const t = promptTerms(q); if (!t) return false;
+                              const r = t[1] / t[0];
+                              return t.slice(1).every((v, i) => near(v / t[i], r, 1e-9)) && near(q.expected, r); },
+
+  /* ---- np2 · arithmetic ---- */
+  "np2.commonDiff":  q => { const d = dOf(q); return !!d && allEqual(d) && near(q.expected, d[0]); },
+  "np2.nextTerm":    q => { const t = promptTerms(q), d = dOf(q);
+                            return !!t && allEqual(d) && near(q.expected, t[t.length - 1] + d[0]); },
+  "np2.generalTerm": q => { const t = promptTerms(q); if (!t) return false;
+                            const { a, c } = arithAC(t[0], firstDiffs(t)[0]);
+                            return linStr(a, c) === corr(q); },
+  "np2.nthTerm":     q => { const t = promptTerms(q), n = grab(q, /[Ff]ind T(\d+)/);
+                            return !!t && Number.isFinite(n) && near(q.expected, arithTn(t[0], firstDiffs(t)[0])(n)); },
+  "np2.fromFormula": q => { const f = formulaLin(q), n = grab(q, /[Ff]ind T(\d+)/);
+                            return !!f && Number.isFinite(n) && near(q.expected, f.a * n + f.c); },
+  "np2.whichTerm":   q => { const t = promptTerms(q), v = grab(q, /which term is equal to (−?\d+(?:,\d+)?)\?/);
+                            if (!t || !Number.isFinite(v)) return false;
+                            const d = firstDiffs(t)[0];
+                            return Number.isInteger(q.expected) && q.expected >= 1
+                              && near(t[0] + (q.expected - 1) * d, v); },
+
+  /* ---- np3 · quadratic ---- */
+  "np3.secondDiff":  q => { const t = promptTerms(q); if (!t) return false;
+                            const sd = secondDiffs(t); return allEqual(sd) && near(q.expected, sd[0]); },
+  "np3.findA":       q => { const t = promptTerms(q); return !!t && near(q.expected, quadSolve(t).a); },
+  "np3.findB":       q => { const t = promptTerms(q); if (!t) return false;
+                            const s = quadSolve(t), aShown = grab(q, /with a = (−?\d+(?:,\d+)?)/);
+                            return near(q.expected, s.b) && near(aShown, s.a); },
+  "np3.findC":       q => { const t = promptTerms(q); if (!t) return false;
+                            const s = quadSolve(t);
+                            const aShown = grab(q, /with a = (−?\d+(?:,\d+)?)/), bShown = grab(q, /and b = (−?\d+(?:,\d+)?)/);
+                            return near(q.expected, s.c) && near(aShown, s.a) && near(bShown, s.b); },
+  "np3.generalTerm": q => { const t = promptTerms(q); if (!t) return false;
+                            const { a, b, c } = quadSolve(t); return quadStr(a, b, c) === corr(q); },
+  "np3.fromFormula": q => { const f = formulaQuad(q), n = grab(q, /[Ff]ind T(\d+)/);
+                            return !!f && Number.isFinite(n) && near(q.expected, quadTn(f.a, f.b, f.c)(n)); },
+
+  /* ---- np4 · missing term ---- */
+  "np4.missing4": q => missingOk(q, 4),
+  "np4.missing5": q => missingOk(q, 5),
+  "np4.forwardFromSecond": q => {
+    const p = stripTags(q.prompt);
+    const m = p.match(new RegExp(`T₁ = (${MINUS}?${NUMPAT}), T₂ = (${MINUS}?${NUMPAT}), and its constant second difference is (${MINUS}?${NUMPAT})`));
+    if (!m) return false;
+    const t1 = num(m[1]), t2 = num(m[2]), sd = num(m[3]);
+    return near(q.expected, t2 + (t2 - t1) + sd);
+  },
+
+  /* ---- np5 · min & max ---- */
+  "np5.minOrMax": q => { const f = formulaQuad(q); return !!f && corr(q) === (f.a > 0 ? "a minimum" : "a maximum"); },
+  "np5.whichTerm": q => { const f = formulaQuad(q); if (!f) return false;
+                          const nStar = -f.b / (2 * f.a);
+                          return Number.isInteger(nStar) && near(q.expected, nStar) && q.expected >= 1; },
+  "np5.nearestTerm": q => { const f = formulaQuad(q); if (!f) return false;
+                            const nStar = -f.b / (2 * f.a);
+                            // the CARE construction: |a| = 2 and n* is exactly k ± 0,25 — never a tie,
+                            // so "the nearest whole term" has one unambiguous answer.
+                            return Math.abs(f.a) === 2 && !Number.isInteger(nStar)
+                              && near(Math.abs(nStar - Math.round(nStar)), 0.25, 1e-9)
+                              && near(q.expected, Math.round(nStar)); },
+  "np5.extremeValue": q => { const f = formulaQuad(q), k = grab(q, /turns at n = (\d+)/);
+                             return !!f && Number.isFinite(k) && near(k, -f.b / (2 * f.a))
+                               && near(q.expected, quadTn(f.a, f.b, f.c)(k)); },
+  "np5.readWhichTerm": q => readOff(q, "n"),
+  "np5.readValue":     q => readOff(q, "y"),
+
+  /* ---- np6 · gaps ---- */
+  "np6.gapAtK": q => { const t = promptTerms(q), k = grab(q, /gap between T(\d+) and T(\d+)/);
+                       if (!t || !Number.isFinite(k)) return false;
+                       const g1 = firstDiffs(t)[0], sd = secondDiffs(t)[0];
+                       return allEqual(secondDiffs(t)) && near(q.expected, g1 + (k - 1) * sd); },
+  "np6.whichGap": q => { const t = promptTerms(q), v = grab(q, new RegExp(`consecutive terms is (${MINUS}?${NUMPAT})`));
+                         if (!t || !Number.isFinite(v)) return false;
+                         const g1 = firstDiffs(t)[0], sd = secondDiffs(t)[0];
+                         return Number.isInteger(q.expected) && q.expected >= 1
+                           && near(g1 + (q.expected - 1) * sd, v); },
+  /* this prompt is generic ("the gaps of a quadratic pattern form what kind of
+     pattern?") — the terms live only in the pyramid the learner is shown, so the
+     recompute reads them off the spec and proves the claim actually holds for it. */
+  "np6.gapsAreLinear": q => { const t = graphTerms(q);
+                              return !!t && t.every(Number.isFinite) && t.length >= 4
+                                && allEqual(secondDiffs(t)) && !allEqual(firstDiffs(t))
+                                && corr(q) === "an arithmetic (linear) pattern"; },
+  "np6.gapCommonDiff": q => { const t = promptTerms(q); if (!t) return false;
+                              const sd = secondDiffs(t); return allEqual(sd) && near(q.expected, sd[0]); },
+  "np6.indexRule": q => { const k = grab(q, /gap between T(\d+) and T(\d+)/);
+                          return Number.isFinite(k) && corr(q) === `the ${ord(k)} term`; },
+
+  /* ---- np7 · geometric ---- */
+  "np7.ratio": q => { const t = promptTerms(q); if (!t) return false;
+                      const r = t[1] / t[0];
+                      return t.slice(1).every((v, i) => near(v / t[i], r, 1e-9)) && near(q.expected, r); },
+  "np7.nextTerm": q => { const t = promptTerms(q); if (!t) return false;
+                         const r = t[1] / t[0]; return near(q.expected, t[t.length - 1] * r); },
+  "np7.generalTerm": q => { const t = promptTerms(q); if (!t) return false;
+                            const a1 = t[0], r = t[1] / t[0];
+                            return a1 >= 2 && geoStr(a1, r) === corr(q); },   // CARE: a1 ≥ 2 guard held
+  "np7.nthTerm": q => { const t = promptTerms(q), k = grab(q, /[Ff]ind T(\d+)/);
+                        if (!t || !Number.isFinite(k)) return false;
+                        return near(q.expected, geoTn(t[0], t[1] / t[0])(k), 1e-6); },
+  "np7.ratioAsFraction": q => { const t = promptTerms(q), div = grab(q, /divided by (\d+)/);
+                                if (!t || !Number.isFinite(div)) return false;
+                                const r = t[1] / t[0];
+                                return near(Math.round(1 / r), div) && ratioLabel(r) === corr(q); },
+  "np7.mixedClassify": q => classifyMatches(q),
+};
+
+/* np4's hidden-term recompute: put the claimed answer back into the pyramid
+   and prove the second differences really do come out constant. That is the
+   whole method the chapter teaches, checked independently of withHidden(). */
+function missingOk(q, len) {
+  const t = graphTerms(q);
+  if (!t || t.length !== len) return false;
+  const hide = t.findIndex(v => v == null);
+  if (hide < 1 || hide > len - 2) return false;                       // interior only, both ends visible
+  const labels = q.graph.termLabels || [];
+  if (labels[hide] !== "x" || labels.some((l, i) => i !== hide && l != null)) return false;
+  const filled = t.map((v, i) => (i === hide ? q.expected : v));
+  return filled.every(Number.isFinite) && allEqual(secondDiffs(filled));
+}
+
+/* np5's two graph read-offs: recompute straight out of the function-graph
+   spec the learner is looking at (curve coefficients + the marked point). */
+function readOff(q, want) {
+  const g = q.graph;
+  if (!g || g.type !== "function") return false;
+  const cv = (g.curves || [])[0], pt = (g.points || [])[0];
+  if (!cv || cv.kind !== "parabola" || !pt) return false;
+  const nStar = -cv.b / (2 * cv.a);
+  if (!Number.isInteger(nStar) || !near(nStar, pt.x)) return false;
+  if (!near(quadTn(cv.a, cv.b, cv.c)(pt.x), pt.y)) return false;
+  // readableExtreme()'s guard: |a| = 1 and a small turning value, so the
+  // read-off is countable on the grid.
+  if (Math.abs(cv.a) !== 1 || Math.abs(pt.y) > 5) return false;
+  return near(q.expected, want === "n" ? pt.x : pt.y);
+}
+
+const NO_RECOMPUTE = ["np2.meaningOfC", "np4.methodMC", "np4.constYesno", "np5.signMC", "np7.dontMerge"];
+
+/* pure-recall skills: gen() takes no rolled numbers at all. The three mc ones
+   still vary between salts because mc() shuffles its options through the
+   seeded rng; the two yesno ones are genuinely identical every roll — so all
+   five are exempt from the "salt 1 differs from salt 0" check. */
+const PURE_RECALL = new Set(NO_RECOMPUTE);
+
+/* ---------- graph honesty, generic ---------- */
+function graphIssues(q) {
+  const out = [];
+  const check = (g, tagName) => {
+    if (!g) return;
+    if (g.type === "pattern") verifyPattern(g).forEach(r => { if (!r.ok) out.push(`${tagName} pyramid: ${r.label}`); });
+    else if (g.type === "function") verifyFunction(g).forEach(r => { if (!r.ok) out.push(`${tagName} parabola: ${r.label}`); });
+  };
+  check(q.graph, "graph");
+  if (Array.isArray(q.graphs)) q.graphs.forEach((g, i) => check(g.spec || g, `graphs[${i}]`));
+  return out;
+}
+
+/* ============================================================
+   PART 1 + 2 — per entry
+   ============================================================ */
+const host = document.getElementById("entries");
+const recomputeLines = [];
+let methodCount = 0, noMethodCount = 0;
+let pyramidChecks = 0, parabolaChecks = 0, graphSpecs = 0;
+
+pool.entries.forEach(entry => {
+  const issues = [];
+  let sawMethod = false, recomputeRuns = 0, recomputeFails = 0, sawGraph = false;
+  const hasRecompute = !!RECOMPUTE[entry.skillId];
+
+  if (!getConcept(entry.concept)) issues.push(`concept "${entry.concept}" has no card in js/concepts.js`);
+
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.push(`threw: ${e.message}`); break; }
+
+    /* ---- input law + shape ---- */
+    if (!INPUT_LAW.has(q.type)) { issues.push(`type "${q.type}" violates the input law`); continue; }
+    if (!q.prompt || !String(q.prompt).trim()) issues.push("empty prompt");
+
+    /* ---- SA number rendering (comma decimal, real minus U+2212) ---- */
+    const shown = [q.prompt, q.answerLabel, q.hint].filter(v => v != null).map(v => stripTags(String(v))).join("  ");
+    if (/\d\.\d/.test(shown)) issues.push("a dot-decimal number is shown (house rule: comma)");
+    if (/-\d/.test(shown)) issues.push("an ASCII hyphen is used as a minus (house rule: U+2212)");
+
+    /* ---- the method rule (DICE-COMMON 2026-08-23) ---- */
+    const wantsMethod = hasRealWorking(q);
+    if (!!q.method !== wantsMethod) issues.push(`method rule broken: q.method ${q.method ? "present" : "absent"} but solution ${wantsMethod ? "HAS" : "has no"} real working`);
+    if (q.method != null) {
+      sawMethod = true;
+      if (typeof q.method !== "string" || !q.method.trim()) issues.push("q.method is not a non-empty string");
+      else if (!q.method.includes("sol-step")) issues.push("q.method has no .sol-step");
+    }
+
+    /* ---- per-type shape + self-consistency against js/check.js ---- */
+    if (q.type === "mc" || q.type === "reason") {
+      const labels = q.options.map(o => o.label);
+      const corrects = q.options.filter(o => o.correct);
+      if (corrects.length !== 1) issues.push(`${corrects.length} correct options (want exactly 1)`);
+      if (labels.length < 2) issues.push("fewer than 2 options");
+      if (new Set(labels.map(String)).size !== labels.length) issues.push(`duplicate option labels: ${labels.join(" | ")}`);
+      const cn = num(corrects[0] && corrects[0].label);
+      if (Number.isFinite(cn)) {
+        if (!answerCorrect(cn, cn, { dp: 0 })) issues.push("the correct option's value fails its own check");
+        q.options.filter(o => !o.correct).forEach(o => {
+          const n = num(o.label);
+          if (Number.isFinite(n) && Math.abs(n - cn) < EPS) issues.push(`decoy "${o.label}" equals the answer BY VALUE`);
+        });
+      }
+    } else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.push("non-finite expected");
+      if (!Number.isInteger(q.dp) || q.dp < 0) issues.push(`dp "${q.dp}" is not a non-negative integer`);
+      if (q.tol != null && (!Number.isFinite(q.tol) || q.tol < 0)) issues.push(`tol "${q.tol}" is not finite and ≥ 0`);
+      if (Number.isFinite(q.expected) && !answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) issues.push("expected fails its own check");
+      if (q.allowNeg === false && q.expected < 0) issues.push("allowNeg:false but the expected answer is negative (unanswerable on the pad)");
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.push("q.yes not boolean");
+      else if ((q.yes === true) !== q.yes) issues.push("yes does not answer itself");
+    } else if (q.type === "tap") {
+      if (!q.tap || typeof q.tap.correctId !== "string") issues.push("tap without a string correctId");
+      else {
+        const ids = (q.tap.targets || []);
+        if (!ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
+        if (ids.length < 2) issues.push("fewer than 2 tap targets");
+        const cells = computePattern(q.graph).cells.map(c => c.id);
+        if (!ids.every(id => cells.includes(id))) issues.push("a tap target is not a real pyramid cell");
+      }
+    }
+
+    /* ---- graph honesty ---- */
+    if (q.graph) {
+      sawGraph = true; graphSpecs++;
+      if (q.graph.type === "pattern") pyramidChecks++; else if (q.graph.type === "function") parabolaChecks++;
+      // and: what the pyramid draws must be the terms the prompt prints
+      const pt = promptTerms(q), gt = graphTerms(q);
+      if (pt && gt && gt.every(v => v != null) && (pt.length !== gt.length || pt.some((v, k) => !near(v, gt[k]))))
+        issues.push("the pyramid's terms differ from the terms printed in the prompt");
+    }
+    graphIssues(q).forEach(g => issues.push(g));
+
+    /* ---- independent recompute ---- */
+    if (hasRecompute) {
+      recomputeRuns++;
+      let ok = false;
+      try { ok = !!RECOMPUTE[entry.skillId](q); } catch (e) { ok = false; issues.push(`recompute threw: ${e.message}`); }
+      if (!ok) { recomputeFails++; issues.push("recompute mismatch"); }
+    }
+  }
+
+  if (sawMethod) methodCount++; else noMethodCount++;
+  const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} rolls)`);
+  if (hasRecompute) {
+    tick(recomputeFails === 0, `${entry.skillId} recompute (${recomputeRuns} rolls, patternlib, independent of the generator)`);
+    recomputeLines.push(`${entry.skillId}: ${recomputeRuns - recomputeFails}/${recomputeRuns} recompute matches`);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...new Set(issues)].slice(0, 5).join("; ")}</li>
+      <li class="ok">concept "${entry.concept}" has a card (I'm lost works)</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method (real worked steps)" : "no q.method — solution is answer-only (method rule)"}</li>
+      <li class="${sawGraph ? "ok" : ""}">${sawGraph ? "figure re-verified every roll" : "no figure"}</li>
+      <li class="${hasRecompute ? "ok" : ""}">${hasRecompute ? `independent recompute (${recomputeRuns} rolls)` : "pure recall — nothing to recompute"}</li>
+    </ul>`;
+  host.appendChild(card);
+});
+
+recomputeLines.unshift(
+  `Independent recompute wired for ${Object.keys(RECOMPUTE).length}/${pool.entries.length} skills, all of it through js/patternlib.js on the numbers the question PRINTS.\n` +
+  `Not recomputable (${NO_RECOMPUTE.length}) — pure-recall list-picks with no rolled numbers at all: ${NO_RECOMPUTE.join(", ")}.\n` +
+  `They still get every input-law / shape / decoy / self-consistency check above.\n`);
+recomputeLines.push(`\nMethod coverage: ${methodCount}/${pool.entries.length} skills attach q.method (real worked steps); ${noMethodCount} do not (their solution is the answer only — no spoiler link).`);
+document.getElementById("recompute").textContent = recomputeLines.join("\n");
+document.getElementById("graphs").textContent =
+  `${graphSpecs} figures generated and re-verified across ${RUNS} rolls × ${pool.entries.length} skills:\n` +
+  `  · ${pyramidChecks} difference pyramids → verifyPattern (every visible difference cell equals the true gap of its two parents; term row evenly spaced; tap targets are real cells)\n` +
+  `  · ${parabolaChecks} min/max term-parabolas → verifyFunction (curve visible in the window, the marked turning point really lies on the curve, labelled point clear of the frame edge)\n` +
+  `  · plus, per roll: the pyramid's terms must equal the terms printed in the prompt.`;
+
+/* ============================================================
+   PART 3 — determinism, salted retry, dealing, resume
+   ============================================================ */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+
+  let detAll = true, resumeAll = true;
+  pool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    const c = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(c)) resumeAll = false;
+  });
+  tick(detAll, `determinism: genAt(seed,i,skill) is byte-identical on repeat, for all ${pool.entries.length} skills`);
+  tick(resumeAll, `resume: re-deriving any index reproduces the original question, for all ${pool.entries.length} skills`);
+  lines.push(`determinism (all ${pool.entries.length} skills, same seed/index twice): ${detAll ? "OK" : "FAIL"}`);
+  lines.push(`resume (all ${pool.entries.length} skills): ${resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, pool.entries[0]);
+  tick(Math.random === before, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${Math.random === before ? "OK" : "FAIL — Math.random was left patched"}`);
+
+  // salt 1 must differ from salt 0 for at least one roll, for every skill that
+  // has rolled numbers at all (pure-recall list-picks exempt — listed below).
+  const noVary = [];
+  const recallVaried = [];
+  pool.entries.forEach((skill, i) => {
+    let varied = false;
+    for (let idx = 0; idx < 10 && !varied; idx++) {
+      if (JSON.stringify(genAt(seed, idx, skill, 0)) !== JSON.stringify(genAt(seed, idx, skill, 1))) varied = true;
+    }
+    if (PURE_RECALL.has(skill.skillId)) { if (varied) recallVaried.push(skill.skillId); return; }
+    if (!varied) noVary.push(skill.skillId);
+  });
+  tick(noVary.length === 0, `salted retry: salt 1 differs from salt 0 for every numeric skill (${pool.entries.length - PURE_RECALL.size} of ${pool.entries.length})`);
+  lines.push(`salted retry (numeric skills, salt 0 vs salt 1 over 10 indices): ${noVary.length === 0 ? "OK — all vary" : "FAIL — never varied: " + noVary.join(", ")}`);
+  lines.push(`  exempt (pure recall, no rolled numbers): ${[...PURE_RECALL].join(", ")}`);
+  lines.push(`  of those, still varied via mc()'s seeded option shuffle: ${recallVaried.length ? recallVaried.join(", ") : "none"}`);
+
+  let sameSaltOk = true;
+  pool.entries.forEach((skill, i) => {
+    for (let salt = 0; salt <= 2; salt++) {
+      if (JSON.stringify(genAt(seed, i, skill, salt)) !== JSON.stringify(genAt(seed, i, skill, salt))) sameSaltOk = false;
+    }
+  });
+  tick(sameSaltOk, "salted retry: the same (seed, index, salt) is byte-identical on repeat, salt 0/1/2, all skills");
+  lines.push(`same salt called twice → identical (all skills, salt 0/1/2): ${sameSaltOk ? "OK" : "FAIL"}`);
+
+  let baseUnchanged = true;
+  pool.entries.forEach((skill, i) => {
+    if (JSON.stringify(genAt(seed, i, skill)) !== JSON.stringify(genAt(seed, i, skill, 0))) baseUnchanged = false;
+  });
+  tick(baseUnchanged, "salted retry: genAt() with no salt arg still equals salt 0 (resume path unaffected)");
+  lines.push(`no-salt-arg === explicit salt 0 (all skills): ${baseUnchanged ? "OK" : "FAIL"}`);
+
+  // dealing — a fresh learner's first round is roundLength distinct unmet kinds
+  const deck1 = dealRound(pool.entries, pool.roundLength, []);
+  const distinct1 = deck1.length === pool.roundLength && new Set(deck1.map(e => e.kind)).size === deck1.length;
+  tick(distinct1, `dealing: a fresh learner's first round is ${pool.roundLength} distinct, all-unmet kinds`);
+  lines.push(`dealing (fresh learner, first round of ${pool.roundLength}): [${deck1.map(e => e.kind).join(", ")}] — ${distinct1 ? "OK" : "FAIL"}`);
+
+  // every kind met within ceil(entries/roundLength) + 2 rounds
+  const maxRounds = Math.ceil(pool.entries.length / pool.roundLength) + 2;
+  let met = [], rounds = 0;
+  while (met.length < pool.entries.length && rounds < maxRounds) {
+    const deck = dealRound(pool.entries, pool.roundLength, met);
+    const s = new Set(met); deck.forEach(e => s.add(e.kind)); met = [...s]; rounds++;
+  }
+  const fullCoverage = met.length === pool.entries.length;
+  tick(fullCoverage, `dealing: successive rounds reach full ${pool.entries.length}-kind coverage (took ${rounds}, allowed ≤ ${maxRounds})`);
+  lines.push(`dealing (successive rounds to full coverage): ${met.length}/${pool.entries.length} kinds after ${rounds} rounds (allowed ≤ ${maxRounds}) — ${fullCoverage ? "OK" : "FAIL"}`);
+
+  const deckFull = dealRound(pool.entries, pool.roundLength, pool.entries.map(e => e.kind));
+  tick(deckFull.length === pool.roundLength, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage, fully random): dealt ${deckFull.length}/${pool.roundLength} — ${deckFull.length === pool.roundLength ? "OK" : "FAIL"}`);
+
+  // resume of a REAL dealt round: regenerate every index after the fact
+  const dealt = dealRound(pool.entries, pool.roundLength, []);
+  const firstPass = dealt.map((sk, i) => JSON.stringify(genAt(seed, i, sk)));
+  const resumeOk = dealt.every((sk, i) => JSON.stringify(genAt(seed, i, sk)) === firstPass[i]);
+  tick(resumeOk, "resume: re-deriving every index of a dealt round reproduces the original question");
+  lines.push(`resume (a real dealt round of ${dealt.length}): ${resumeOk ? "OK" : "FAIL"}`);
+
+  // pool shape
+  const ids = pool.entries.map(e => e.skillId);
+  tick(new Set(ids).size === ids.length, "pool: every skillId is unique");
+  tick(pool.chapterId === "pat", 'pool: chapterId is "pat"');
+  tick(pool.entries.length === 44, "pool: 44 entries (all 44 np1–np7 skills, no exclusions)");
+  lines.push(`pool: chapterId "${pool.chapterId}", ${pool.entries.length} entries, ${new Set(pool.entries.map(e => e.kind)).size} distinct kinds, roundLength ${pool.roundLength}`);
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
+}
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks passed` : `✗ FAIL — ${passed}/${total} checks passed, ${total - passed} failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice-pat] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>
