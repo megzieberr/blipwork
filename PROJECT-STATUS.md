@@ -65,6 +65,11 @@ the tokens, make the graphs look good).
 - 🌐 1 min [whenever]: remove Janko from the roster before the kids get access.
 
 ### Next up
+- **Dice rounds for every other drill chapter** (her ask 2026-08-23). Dice is live for Stats
+  only (`DICE_CHAPTERS = ["stats"]` in js/config.js); each further chapter needs its recipe
+  pool in `js/quests/dice-pools.js` + the seeded `genAt` path, then the flag. Per chapter,
+  PNG-reviewed like today. Order her call (suggest: finance → prob → eqn → exp → gtrig →
+  func → meas → trig → tgraph → analytical → patterns).
 - **Calculator emulator, round 2 (her ask 2026-08-23):** re-map her real calculator (the
   Casio she teaches on — photograph/keymap it again first) and add to the in-app calculator
   (`js/calculator.js`): x², √, sin/cos/tan (+ their inverses and the DEG mode), and brackets,
