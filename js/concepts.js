@@ -238,7 +238,7 @@ export const CONCEPTS = {
         <li>T0 → T4 is <b>4</b> periods.</li>
         <li>T5 → T2 is <b>3</b> periods (going back).</li>
       </ul>
-      <p>The <b>direction</b> tells you × or ÷: later = ×, earlier = ÷.</p>`,
+      <p>The <b>direction</b> tells you × or ÷: <span class="nowrap">later = ×</span>, <span class="nowrap">earlier = ÷</span>.</p>`,
   },
   rateChange: {
     title: "When the interest rate changes",
@@ -358,7 +358,7 @@ export const CONCEPTS = {
         <li><b>Multiply</b> the probabilities <b>along</b> a path to get that full outcome.</li>
         <li><b>Add</b> the path probabilities to combine paths into one event.</li>
       </ul>
-      <div class="eg">e.g. two coins: P(H,T) = 0,5 × 0,5 = 0,25; P(exactly one head) = P(HT) + P(TH) = 0,25 + 0,25 = 0,5.</div>`,
+      <div class="eg">e.g. two coins: P(H,T) = 0,5 × 0,5 = 0,25; <span class="nowrap">P(exactly one head)</span> = P(HT) + P(TH) = 0,25 + 0,25 = 0,5.</div>`,
   },
   atLeastOne: {
     title: "The ‘at least one’ shortcut",
@@ -366,7 +366,7 @@ export const CONCEPTS = {
       <p>"At least one" is usually quickest as the complement of "none":</p>
       <div class="formula">P(at least one) = 1 − P(none)</div>
       <p>Find P(none) by multiplying the "not it" branch along every stage, then subtract from 1.</p>
-      <div class="eg">e.g. P(no red) = 15/20 × 15/20 = 225/400 → P(at least one red) = 1 − 225/400 = 175/400.</div>`,
+      <div class="eg">e.g. P(no red) = 15/20 × 15/20 = 225/400 → <span class="nowrap">P(at least one red)</span> = 1 − 225/400 = 175/400.</div>`,
   },
   replacement: {
     title: "With vs without replacement",
@@ -375,7 +375,7 @@ export const CONCEPTS = {
         <li><b>With replacement</b> — the item goes back, so the total <b>stays the same</b> and every second-draw branch uses the same denominator.</li>
         <li><b>Without replacement</b> — the item is kept, so the <b>total drops by one</b> and the colour taken first has <b>one fewer</b>.</li>
       </ul>
-      <div class="eg">e.g. 20 balls, take a green: with replacement the next draw is still /20; without, it's /19 and greens drop from 7 to 6.</div>`,
+      <div class="eg">e.g. 20 balls, take a green: with replacement the next draw is still 7/20; without, it's 6/19 and greens drop from 7 to 6.</div>`,
   },
 
   /* ---------- 2D Trigonometry ---------- */
@@ -470,7 +470,7 @@ export const CONCEPTS = {
     body: `
       <p>The shortest distance from a point to a side is the <b>perpendicular</b> height to that side.</p>
       <p>Find the triangle's area, then turn the area formula around:</p>
-      <div class="formula">Area = ½ · base · height   →   height = 2·Area / base</div>`,
+      <div class="formula">Area = ½·base·height<br>→ height = 2·Area / base</div>`,
   },
   mixedStrategy: {
     title: "Working through a problem",
@@ -522,7 +522,7 @@ export const CONCEPTS = {
     title: "The ‘one third’ family",
     body: `
       <p>A <b>cone</b> or <b>pyramid</b> holds exactly <b>⅓</b> of the cylinder or prism with the same base and height.</p>
-      <div class="formula">V(cone) = ⅓πr²H   ·   V(pyramid) = ⅓ · (base area) · H</div>
+      <div class="formula">V(cone) = ⅓πr²H   ·   V(pyramid) = ⅓·(base area)·H</div>
       <p>So whenever you see a point (apex), expect a ⅓ in the volume.</p>`,
   },
   slantPerp: {
@@ -569,8 +569,8 @@ export const CONCEPTS = {
     body: `
       <p>Inside a cone or pyramid hides a <b>right-angled triangle</b>. Its three sides are the perpendicular height <b>H</b>, the slant height <b>h</b>, and a bottom leg. The slant is the <b>hypotenuse</b> (opposite the right angle), so it is the longest side.</p>
       <ul>
-        <li><b>Cone:</b> the bottom leg is the <b>full radius r</b> → <span class="formula" style="display:inline">h² = H² + r²</span></li>
-        <li><b>Square pyramid:</b> the slant goes to the <b>middle</b> of a base edge, so the bottom leg is <b>HALF the base</b>, ℓ/2 → <span class="formula" style="display:inline">h² = H² + (ℓ/2)²</span></li>
+        <li><b>Cone:</b> the bottom leg is the <b>full radius r</b> → <span class="formula" style="display:inline"><span class="nowrap">h² = H² + r²</span></span></li>
+        <li><b>Square pyramid:</b> the slant goes to the <b>middle</b> of a base edge, so the bottom leg is <b>HALF the base</b>, ℓ/2 → <span class="formula" style="display:inline"><span class="nowrap">h² = H² + (ℓ/2)²</span></span></li>
       </ul>
       <p>To find a missing side, rearrange. For the perpendicular height:</p>
       <div class="formula">H = √(h² − r²)   (cone)      H = √(h² − (ℓ/2)²)   (pyramid)</div>
@@ -640,7 +640,8 @@ export const CONCEPTS = {
     body: `
       <p>Two branches sitting around two asymptotes:</p>
       <ul>
-        <li><b>Vertical asymptote:</b> x = p. <b>Horizontal asymptote:</b> y = q.</li>
+        <li><b>Vertical asymptote:</b> x = p.</li>
+        <li><b>Horizontal asymptote:</b> y = q.</li>
         <li><b>a &gt; 0</b> → branches top-right & bottom-left, each <b>decreasing</b>.</li>
         <li><b>a &lt; 0</b> → branches top-left & bottom-right, each <b>increasing</b>.</li>
       </ul>
@@ -753,7 +754,7 @@ export const CONCEPTS = {
     title: "Maximum / minimum length between graphs",
     body: `
       <p>For a vertical line between two graphs:</p>
-      <div class="formula">length = (graph on top) − (graph below)</div>
+      <div class="formula">length = <span class="nowrap">(graph on top)</span> − <span class="nowrap">(graph below)</span></div>
       <p>If one is a parabola, that difference is itself a parabola. Find where it turns (x = −b/(2a)) and substitute back to get the biggest (or smallest) length.</p>
       <div class="eg">Keep the brackets when subtracting: g − f = −x + 9 − (x² − 2x + 3) = −x² + x + 6.</div>`,
   },
@@ -773,7 +774,7 @@ export const CONCEPTS = {
   trigParams: {
     title: "What a, b and q do",
     body: `
-      <p>Every graph is written as <b>y = a·sin b(x − p) + q</b> (cos and tan use the same form):</p>
+      <p>Every graph is written as <b>y = a·sin b(x − p) + q</b> — cos and tan use the same form:</p>
       <ul>
         <li><b>a</b> — sets the amplitude: its <b>size</b> |a| is the height from the midline to a peak. A <b>negative a</b> flips the graph upside-down.</li>
         <li><b>b</b> — squashes the graph sideways: a bigger b means more cycles (a shorter graph).</li>
@@ -1046,7 +1047,7 @@ export const CONCEPTS = {
     title: "Geometric patterns → Tₙ = a·rⁿ⁻¹",
     body: `
       <p>A geometric pattern has a <b>constant ratio</b> r — multiply by the same number each step.</p>
-      <div class="formula">r = T₂ ÷ T₁ = T₃ ÷ T₂ = …<br>Tₙ = a · rⁿ⁻¹ &nbsp;(a = T₁)</div>
+      <div class="formula">r = T₂ ÷ T₁ = T₃ ÷ T₂ = …<br>Tₙ = a·rⁿ⁻¹ &nbsp;(a = T₁)</div>
       <div class="eg">e.g. 6 ; 12 ; 24 ; 48 → r = 2, a = 6, so Tₙ = 6·2ⁿ⁻¹. Then T₄ = 6·2³ = 48.</div>`,
   },
   patGeoCare: {
@@ -1064,7 +1065,7 @@ export const CONCEPTS = {
     title: "The exponent laws",
     body: `
       <p>Every law is just bookkeeping on the exponents. They only work when the <b>bases are the same</b>.</p>
-      <div class="formula">xᵃ · xᵇ = xᵃ⁺ᵇ &nbsp;(multiply → ADD)<br>
+      <div class="formula">xᵃ·xᵇ = xᵃ⁺ᵇ &nbsp;(multiply → ADD)<br>
         xᵃ ÷ xᵇ = xᵃ⁻ᵇ &nbsp;(divide → SUBTRACT)<br>
         (xᵃ)ᵇ = xᵃᵇ &nbsp;(power of a power → MULTIPLY)<br>
         (xy)ᵃ = xᵃyᵃ &nbsp;·&nbsp; (x/y)ᵃ = xᵃ/yᵃ</div>
@@ -1119,7 +1120,7 @@ export const CONCEPTS = {
     body: `
       <p>A surd is a root written with the radical sign. The index sits on the root; powers inside convert to a fraction.</p>
       <div class="formula">ⁿ√(xᵃ) = x^(a/n) &nbsp;— inside power on TOP, index on the BOTTOM<br>
-        √a · √b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(same root; a, b ≥ 0)</div>
+        √a·√b = √(ab) &nbsp;·&nbsp; √a ÷ √b = √(a/b) &nbsp;(same root; a, b ≥ 0)</div>
       <ul>
         <li><b>Like surds add like terms:</b> 5√x − 2√x = 3√x; √x + √x = 2√x.</li>
         <li><b>BIG NO-NO:</b> √a + √b ≠ √(a+b). You cannot add the insides.</li>
@@ -1172,7 +1173,11 @@ export const CONCEPTS = {
     body: `
       <p><b>One term each side</b> (like 5ˣ = 25): rewrite both as the same base, then “make the bases the same so the guns are equal, shoot each other (the bases fall away), and equate the exponents”.</p>
       <div class="formula">5ˣ = 25 → 5ˣ = 5² → x = 2</div>
-      <p><b>A + or − (two or more terms):</b> factorise. Common-factor type: take out the smallest power. Trinomial type: <b>let k = (base)ˣ</b>, solve the quadratic, then go back.</p>
+      <p><b>A + or − (two or more terms):</b> factorise.</p>
+      <ul>
+        <li><b>Common-factor type:</b> take out the smallest power.</li>
+        <li><b>Trinomial type:</b> <b>let k = (base)ˣ</b>, solve the quadratic, then go back.</li>
+      </ul>
       <p><b>No solution warnings:</b></p>
       <ul>
         <li>A positive base can <b>never</b> give a negative answer: 3ˣ = −9 has no solution.</li>
@@ -1291,7 +1296,7 @@ export const CONCEPTS = {
       <div class="formula">y = a(x − p)² + q &nbsp;→&nbsp; TP(p ; q)</div>
       <ul>
         <li><b>p flips:</b> read it with the OPPOSITE sign of what's in the bracket. (x + 4) → p = −4.</li>
-        <li><b>q keeps its own sign</b> — never flip q. … − 1 → q = −1.</li>
+        <li><b>q keeps its own sign</b> — never flip q. <span class="nowrap">… − 1 → q = −1</span>.</li>
         <li>In words: p is WHERE the turning point is (x-value), q is WHAT it is (y-value).</li>
         <li>a &gt; 0 → happy parabola (opens up) → the TP is a <b>minimum</b>. a &lt; 0 → sad → <b>maximum</b>.</li>
       </ul>

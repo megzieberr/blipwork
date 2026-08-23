@@ -422,7 +422,7 @@ const cq2 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;D̂₂." },
       hint: { en: "D̂₂ is one angle of triangle BCD, and you now know the other two." },
       memo: [
-        { type: "step", text: { en: "In △BCD: &nbsp;D̂₂ + B̂₂ + Ĉ₁ = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △BCD: &nbsp;D̂₂ + B̂₂ + Ĉ₁ = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ D̂₂ = 180° − 45° − 80° = 55°" }, ticks: ["a"] },
       ],
       esplain: {
@@ -436,7 +436,7 @@ const cq2 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;D̂₁." },
       hint: { en: "The other triangle the diagonal made. Which of its angles do you already own?" },
       memo: [
-        { type: "step", text: { en: "In △ABD: &nbsp;D̂₁ + B̂₁ + ∠BAD = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ABD: &nbsp;D̂₁ + B̂₁ + ∠BAD = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ D̂₁ = 180° − 40° − 100° = 40°" }, ticks: ["a"] },
       ],
       esplain: {
@@ -627,7 +627,7 @@ const cq3 = {
       hint: { en: "Triangle OBD has two radii for sides, and you found the angle between them in part (b)." },
       memo: [
         { type: "step", text: { en: "OB = OD &nbsp;<i>(radii)</i>, so ∠OBD = ∠ODB &nbsp;&nbsp;<i>(∠s opp equal sides)</i>" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "In △OBD: &nbsp;2 · ∠OBD + 2x = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i><br>∴ ∠OBD = 90° − x" }, ticks: ["a"] },
+        { type: "answer", text: { en: "In △OBD: &nbsp;2 · ∠OBD + 2x = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i><br>∴ ∠OBD = 90° − x" }, ticks: ["a"] },
       ],
       esplain: {
         en: "The same isosceles-radii move as always, but with algebra doing the sharing out. Both base angles are equal, so call each of them the same thing; the three angles of the triangle are then that thing twice, plus the 2x at the top, and the lot must come to 180°. Solving is ordinary Grade 9 algebra: twice the base angle is 180 − 2x, so the base angle is 90 − x. The step learners skip is the word “twice” — they write one base angle plus 2x equals 180 by accident and lose the whole thing. Say it out loud as you write: “both base angles, plus the top one, is 180”. And check the shape of the answer: 90 − x shrinks as x grows, which is exactly right, because a bigger angle at the centre squashes the base angles down.",
@@ -818,7 +818,7 @@ const cq4 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;Ĉ₁." },
       hint: { en: "Ĉ₁ is one angle of triangle ACD, and you now know that triangle's other two angles." },
       memo: [
-        { type: "step", text: { en: "In △ACD: &nbsp;Ĉ₁ + Â₂ + ∠ADC = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ACD: &nbsp;Ĉ₁ + Â₂ + ∠ADC = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ Ĉ₁ = 180° − 60° − 85° = 35°" }, ticks: ["a"] },
       ],
       esplain: {
@@ -1134,7 +1134,7 @@ const cq6 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;Ĉ₁." },
       hint: { en: "Ĉ₁ is one angle of triangle ABC, and the other two are now both on your page." },
       memo: [
-        { type: "step", text: { en: "In △ABC: &nbsp;Ĉ₁ + ∠BAC + ∠ABC = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ABC: &nbsp;Ĉ₁ + ∠BAC + ∠ABC = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ Ĉ₁ = 180° − 35° − 105° = 40°" }, ticks: ["a"] },
       ],
       esplain: {

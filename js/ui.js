@@ -102,6 +102,9 @@ export function stackFrac(n, d, sign = "") {
 }
 // an atom: √?( … ) with one level of nesting, or a short token that may carry
 // its own √ (2√5, √3) and an optional trailing angle letter (sin θ, cos x).
+// The letter class À-ÖØ-öø-ž skips × (U+00D7) and ÷ (U+00F7), which sit
+// inside À-ž — `70/150 × 80/150` used to swallow the × into the denominator
+// (concept-card sweep, 2026-08-23).
 // Written as ONE regex literal (no string escaping to get wrong).
 // Tokens may carry a decimal comma/point (0,08/12 — finance), an underscore
 // (i_nom/n), super/subscript glyphs (1/x⁻ᵃ, xᵃ/yᵃ), ℓ, a combining hat
@@ -110,7 +113,7 @@ export function stackFrac(n, d, sign = "") {
 // — so the WHOLE numerator/denominator goes over the bar, never just its
 // tail (WHOLE-APP SWEEP, 2026-08-23, her ruling: every fraction in every
 // round is a stacked fraction).
-const FRAC_RE = /(^|[^A-Za-z0-9°<\/√_,.])((?:sin|cos|tan)[²³]?\s?(?:[0-9]+(?:[.,][0-9]+)?°?|[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z])|\((?:[^()<>\/]|<[^>]*>)*\))|(?:[0-9]*[A-Za-z]{0,3})?√?\((?:[^()<>\/]|<[^>]*>|\((?:[^()<>\/]|<[^>]*>)*\))*\)|[−-]?[A-Za-z0-9θαβπℓ°²³√_¹⁰-ₜʰ-˿ᴬ-ᵪ̀-ͯ]+(?:[.,][0-9]+)?(?:\s?[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z]))?)\s*\/\s*((?:sin|cos|tan)[²³]?\s?(?:[0-9]+(?:[.,][0-9]+)?°?|[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z])|\((?:[^()<>\/]|<[^>]*>)*\))|(?:[0-9]*[A-Za-z]{0,3})?√?\((?:[^()<>\/]|<[^>]*>|\((?:[^()<>\/]|<[^>]*>)*\))*\)|[−-]?[A-Za-z0-9θαβπℓ°²³√_¹⁰-ₜʰ-˿ᴬ-ᵪ̀-ͯ]+(?:[.,][0-9]+)?(?:\s?[θxαβA-ZÀ-ž][̀-ͯ]?(?![A-Za-z]))?)(?![\/A-Za-z0-9_²³¹⁰-ₜʰ-˿ᴬ-ᵪ])/g;
+const FRAC_RE = /(^|[^A-Za-z0-9°<\/√_,.])((?:sin|cos|tan)[²³]?\s?(?:[0-9]+(?:[.,][0-9]+)?°?|[θxαβA-ZÀ-ÖØ-öø-ž][̀-ͯ]?(?![A-Za-z])|\((?:[^()<>\/]|<[^>]*>)*\))|(?:[0-9]*[A-Za-z]{0,3})?√?\((?:[^()<>\/]|<[^>]*>|\((?:[^()<>\/]|<[^>]*>)*\))*\)|[−-]?[A-Za-z0-9θαβπℓ°²³√_¹⁰-ₜʰ-˿ᴬ-ᵪ̀-ͯ]+(?:[.,][0-9]+)?(?:\s?[θxαβA-ZÀ-ÖØ-öø-ž][̀-ͯ]?(?![A-Za-z]))?)\s*\/\s*((?:sin|cos|tan)[²³]?\s?(?:[0-9]+(?:[.,][0-9]+)?°?|[θxαβA-ZÀ-ÖØ-öø-ž][̀-ͯ]?(?![A-Za-z])|\((?:[^()<>\/]|<[^>]*>)*\))|(?:[0-9]*[A-Za-z]{0,3})?√?\((?:[^()<>\/]|<[^>]*>|\((?:[^()<>\/]|<[^>]*>)*\))*\)|[−-]?[A-Za-z0-9θαβπℓ°²³√_¹⁰-ₜʰ-˿ᴬ-ᵪ̀-ͯ]+(?:[.,][0-9]+)?(?:\s?[θxαβA-ZÀ-ÖØ-öø-ž][̀-ͯ]?(?![A-Za-z]))?)(?![\/A-Za-z0-9_²³¹⁰-ₜʰ-˿ᴬ-ᵪ])/g;
 const strip = a => (a.startsWith("(") && a.endsWith(")") ? a.slice(1, -1) : a);
 // PROSE slashes stay slashes: "Left/right", "add/subtract", "prism/pyramid",
 // "power/root" are word pairs, not fractions. A slash between two ordinary
@@ -142,6 +145,11 @@ export function fracHtml(s) {
       return pre + "" + (parked.length - 1) + "";
     });
   }
+  // a fraction that is the WHOLE of a caret exponent — x^(2/5), 27^(−2/3),
+  // (−2)^(5/3) — is a superscript fraction, not "^(" + fraction + ")"
+  // (her phone screenshot, 2026-08-23: es7 read as x^(²⁄₅)). The caret and
+  // its brackets go; the stacked fraction is raised and shrunk by .sf-exp.
+  out = out.replace(/\^\((\d+)\)/g, (m, tok) => `<sup class="sf-exp">${tok}</sup>`);
   const unpark = t => t.replace(/(\d+)/g, (m, k) => unpark(parked[Number(k)]));   // nested fractions
   return unpark(out);
 }
@@ -292,7 +300,7 @@ const FML_SUP_RE = /[²³¹⁰-ₜʰ-˿ᴬ-ᵪ]/;
 const FML_FUNC_RE = /^(sin|cos|tan|log|ln)/;
 
 function fmlIsLetter(ch) { return !!ch && /[A-Za-z]/.test(ch); }
-function fmlIsVarLetter(ch) { return !!ch && (/[A-Za-z]/.test(ch) || FML_GREEK.includes(ch)); }
+function fmlIsVarLetter(ch) { return !!ch && (/[A-Za-zÀ-ÖØ-öø-ž]/.test(ch) || FML_GREEK.includes(ch)); }   // precomposed Â/Ô/Ĉ are letters too (Â₂ = 60°)
 
 function fmlMatchBracketGroup(str, i) {
   if (str[i] !== "(" && str[i] !== "[") return null;
@@ -367,6 +375,10 @@ function fmlMatchSupTail(str, i) {
     if (str[j] === "^") {
       const m = /^\^[0-9A-Za-z]+/.exec(str.slice(j));
       if (m) { j += m[0].length; continue; }
+      if (str[j + 1] === "(") {                          // 2^(x+4), (1 + i/k)^(n·k) — the bracket is the exponent
+        const b = fmlMatchBracketGroup(str, j + 1);
+        if (b != null) { j = b; continue; }
+      }
     }
     break;
   }
@@ -431,6 +443,9 @@ function fmlMatchAtom(str, i, allowLeadingSign) {
   let j = i;
   if (allowLeadingSign && str[j] === "−") j++;
   while (str[j] === "√") { j++; if (str[j] === " ") j++; }
+  // ∠ABC, ∠s, △OMA, ∠ Â: the angle/triangle glyph belongs to the name after it
+  // (her phone, 2026-08-23: "∠" sat at a line end with "ABC = 65°" on the next)
+  if (str[j] === "∠" || str[j] === "△") { j++; if (str[j] === " ") j++; }
   const core = fmlMatchAtomCore(str, j);
   if (core == null) return null;
   j = fmlMatchSupTail(str, core);
@@ -455,8 +470,8 @@ function fmlMatchBreakOp(str, i) {
 function fmlMatchGlueThenAtom(str, i) {
   let j = i;
   if (str[j] === " ") j++;
-  if (str[j] === "·" || str[j] === "×" || str[j] === "/") { j++; if (str[j] === " ") j++; return fmlMatchAtom(str, j, false); }
-  for (const ent of ["&times;", "&middot;"]) if (str.startsWith(ent, j)) { j += ent.length; if (str[j] === " ") j++; return fmlMatchAtom(str, j, false); }
+  if (str[j] === "·" || str[j] === "×" || str[j] === "÷" || str[j] === "/") { j++; if (str[j] === " ") j++; return fmlMatchAtom(str, j, false); }
+  for (const ent of ["&times;", "&middot;", "&divide;"]) if (str.startsWith(ent, j)) { j += ent.length; if (str[j] === " ") j++; return fmlMatchAtom(str, j, false); }
   if (j === i) return fmlMatchAtom(str, j, false);                       // touching: 2x, 4√3
   // ONE space = juxtaposition, but only for things that are unmistakably
   // maths on the right: a sin/cos/tan atom, or — after a number — a short
@@ -470,10 +485,32 @@ function fmlMatchGlueThenAtom(str, i) {
   }
   return null;
 }
+// a plain word (2–12 letters, combining marks allowed: x̄) with a real word
+// boundary on both sides — used ONLY next to a relational sign, so "Lower =
+// 20 − 18 = 2", "gradient = 0" and "x̄ > median" stay whole (concept-card
+// sweep, 2026-08-23: the word and its value kept landing on different lines)
+function fmlMatchWord(str, i) {
+  if (!fmlIsVarLetter(str[i]) || fmlIsLetter(str[i - 1]) || str[i - 1] === "'") return null;
+  let j = i;
+  while (j < str.length && (fmlIsVarLetter(str[j]) || FML_COMBINING_RE.test(str[j]))) j++;
+  if (str[j] === "'" || fmlIsLetter(str[j])) return null;
+  const n = str.slice(i, j).replace(FML_COMBINING_RE, "").length;
+  return n >= 2 && n <= 12 ? j : null;
+}
 // one maximal expression starting exactly at i, or null
 function fmlTryExpression(str, i) {
-  const firstEnd = fmlMatchAtom(str, i, true);
-  if (firstEnd == null) return null;
+  let firstEnd = fmlMatchAtom(str, i, true);
+  if (firstEnd == null) {
+    // word-led: "Lower = 20 − 18", "denominator = 0" — only when a relational
+    // sign AND a real atom follow, otherwise the word is ordinary prose
+    const w = fmlMatchWord(str, i);
+    if (w == null) return null;
+    const brk = fmlMatchBreakOp(str, w);
+    if (!brk || "+−±-;".includes(str[brk.opStart])) return null;
+    let k = brk.opEnd; if (str[k] === " ") k++;
+    if (fmlMatchAtom(str, k, true) == null) return null;
+    firstEnd = w;
+  }
   const pieces = [{ start: i, end: firstEnd }];
   let cur = firstEnd;
   for (;;) {
@@ -489,6 +526,11 @@ function fmlTryExpression(str, i) {
       const relational = !"+−±-".includes(str[brk.opStart]);   // (a ";" counts as relational: the next term may carry its own sign)
       const opEnd = fmlMatchAtom(str, k, relational);
       if (opEnd != null) { pieces.push({ start: brk.opStart, end: opEnd }); cur = opEnd; continue; }
+      // "x̄ > median", "= undefined": a plain word closes the expression
+      if (relational && str[brk.opStart] !== ";") {
+        const w = fmlMatchWord(str, k);
+        if (w != null) { pieces.push({ start: brk.opStart, end: w }); cur = w; break; }
+      }
     }
     break;
   }
@@ -501,17 +543,27 @@ function fmlTryExpression(str, i) {
 function fmlWrapExpressionsInText(text, slice = (a, b) => text.slice(a, b)) {
   let out = "", i = 0, plain = i;
   const flush = (to) => { if (to > plain) out += slice(plain, to); plain = to; };
+  const OPEN = "{“\"‘", CLOSE = ".,;:?!}”\"’";   // (round/square brackets stay out: a .nowrap must keep its brackets balanced — verify-wrap rule 3)
   while (i < text.length) {
     const ex = fmlTryExpression(text, i);
     if (ex) {
-      flush(i);
+      // punctuation touching the expression travels with it: "x ∈ {−90°; 90°}",
+      // "frequency n.", "2 ≥ x > −3, written" — an inline-block would
+      // otherwise leave the full stop or comma alone on the next line, or
+      // dangle the "{" at a line end (concept-card sweep, 2026-08-23)
+      let first = i;
+      while (first > plain && OPEN.includes(text[first - 1])) first--;
+      let last = ex.end;
+      while (last < text.length && CLOSE.includes(text[last])) last++;
+      flush(first);
       let inner = "";
       ex.pieces.forEach((p, idx) => {
+        const a = idx === 0 ? first : p.start, b = idx === ex.pieces.length - 1 ? last : p.end;
         if (idx > 0) inner += slice(ex.pieces[idx - 1].end, p.start);   // exact original separator, left unwrapped (a normal breakable space)
-        inner += `<span class="nowrap">${slice(p.start, p.end)}</span>`;
+        inner += `<span class="nowrap">${slice(a, b)}</span>`;
       });
       out += `<span class="fml">${inner}</span>`;
-      i = ex.end; plain = i;
+      i = last; plain = i;
     } else {
       i++;
     }

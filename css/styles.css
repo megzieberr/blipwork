@@ -1263,6 +1263,10 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .sfrac .sf-n{padding:0 .25em .05em;border-bottom:1.5px solid currentColor}
 .sfrac .sf-d{padding:.05em .25em 0}
 .opt .sfrac,.q-prompt .sfrac{font-size:.95em}
+/* a fraction that IS the exponent (x^(2/5)) — raised and small; the stacked
+   fraction inside inherits the sup's size (js/ui.js fracHtml, 2026-08-23) */
+sup.sf-exp{font-size:.62em;line-height:0;vertical-align:1.1em;margin-left:.06em}
+sup.sf-exp .sfrac,.opt sup.sf-exp .sfrac,.q-prompt sup.sf-exp .sfrac{font-size:1em;margin:0 .05em;vertical-align:baseline}
 /* a formula fragment never breaks across lines (her rule: "(90° ± θ)" on one line) */
 .nowrap,.q-f{white-space:nowrap}
 /* FORMULA LINE-BREAKING, app-wide (js/ui.js formulaHtml, her /go ruling

@@ -3255,7 +3255,7 @@ console.log("\n== 9. Euclidean diagrams: specs, highlights, the bare-figure rule
          reason the marker does not have on the memo. */
       const SAG = [
         "radii", "common", "RHS",
-        "∠s opp equal sides", "sides opp equal ∠s", "sum of ∠s in Δ", "ext ∠ of Δ",
+        "∠s opp equal sides", "sides opp equal ∠s", "int. ∠s of △", "sum of ∠s in Δ", "ext ∠ of Δ",
         "∠s on a str line", "∠s round a pt", "co-int ∠s supp",
         "∠ at centre = 2 × ∠ at circumference", "∠s in semi-circle", "∠s in the same seg",
         "equal chords; equal ∠s", "line from centre ⊥ to chord", "Pythagoras",
@@ -3919,7 +3919,7 @@ console.log("\n== 9. Euclidean diagrams: specs, highlights, the bare-figure rule
     {
       const SAG = [
         "radii", "common", "given", "RHS", "SAS",
-        "∠s opp equal sides", "sides opp equal ∠s", "sum of ∠s in Δ", "ext ∠ of Δ",
+        "∠s opp equal sides", "sides opp equal ∠s", "int. ∠s of △", "sum of ∠s in Δ", "ext ∠ of Δ",
         "∠s on a str line", "∠s round a pt", "sum of ∠s in quad",
         "alt ∠s =", "corresp ∠s =", "co-int ∠s supp",
         "∠ at centre = 2 × ∠ at circumference", "∠s in semi-circle", "∠s in the same seg",

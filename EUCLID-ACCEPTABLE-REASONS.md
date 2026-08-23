@@ -22,7 +22,7 @@ use the first unless the question's wording makes the other clearer.
 ## Triangles
 | Statement | Acceptable reason |
 |---|---|
-| Interior angles of a triangle add to 180° | `sum of ∠s in Δ` OR `int ∠s Δ` |
+| Interior angles of a triangle add to 180° | `int. ∠s of △` OR `int ∠s Δ` |
 | Exterior angle of a triangle = sum of interior opposite angles | `ext ∠ of Δ` |
 | Angles opposite equal sides (isosceles) are equal | `∠s opp equal sides` |
 | Sides opposite equal angles are equal | `sides opp equal ∠s` |

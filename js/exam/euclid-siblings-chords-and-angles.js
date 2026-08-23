@@ -182,10 +182,10 @@ const CA1_BASE = {
   angles: [
     { at: "A", legs: ["O", "B"], t: "35°", o: { v: 35, r: 36, ar: 20 } },
     { at: "C", legs: ["B", "O"], t: "40°", o: { v: 40, r: 36, ar: 20 } },
-    { at: "B", legs: ["A", "O"], t: "1", o: { v: 35, ar: 40 } },
-    { at: "B", legs: ["O", "C"], t: "2", o: { v: 40, ar: 22 } },
-    { at: "O", legs: ["B", "A"], t: "1", o: { v: 110, ar: 30 } },
-    { at: "O", legs: ["A", "C"], t: "2", o: { v: 150, ar: 42 } },
+    { at: "B", legs: ["A", "O"], t: "1", o: { v: 35, ar: 32 } },
+    { at: "B", legs: ["O", "C"], t: "2", o: { v: 40, ar: 40 } },
+    { at: "O", legs: ["B", "A"], t: "1", o: { v: 110, ar: 20 } },
+    { at: "O", legs: ["A", "C"], t: "2", o: { v: 150, ar: 20 } },
     { at: "O", legs: ["C", "B"], t: "3", o: { v: 100, ar: 20 } },
   ],
 };
@@ -197,10 +197,10 @@ const CA1_BASE = {
    arc out, the amber pie under it. */
 const CA1_OAB = { at: "A", legs: ["O", "B"], v: 35, o: { ar: 20 } };
 const CA1_OCB = { at: "C", legs: ["B", "O"], v: 40, o: { ar: 20 } };
-const CA1_B1 = { at: "B", legs: ["A", "O"], v: 35, o: { ar: 40, hlR: 40 } };
-const CA1_B2 = { at: "B", legs: ["O", "C"], v: 40, o: { ar: 22 } };
-const CA1_O1 = { at: "O", legs: ["B", "A"], v: 110, o: { ar: 30 } };
-const CA1_O2 = { at: "O", legs: ["A", "C"], v: 150, o: { ar: 42, hlR: 42 } };
+const CA1_B1 = { at: "B", legs: ["A", "O"], v: 35, o: { ar: 32, hlR: 32 } };
+const CA1_B2 = { at: "B", legs: ["O", "C"], v: 40, o: { ar: 40 } };
+const CA1_O1 = { at: "O", legs: ["B", "A"], v: 110, o: { ar: 20 } };
+const CA1_O2 = { at: "O", legs: ["A", "C"], v: 150, o: { ar: 20, hlR: 20 } };
 const CA1_O3 = { at: "O", legs: ["C", "B"], v: 100, o: { ar: 20 } };
 const CA1_CHAIN = [
   { n: "B̂₁", v: "35°" }, { n: "Ô₁", v: "110°" }, { n: "B̂₂", v: "40°" },
@@ -277,7 +277,7 @@ const ca1 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;Ô₁." },
       hint: { en: "You now know both of the bottom angles of triangle OAB. There is only one place left for the rest of the 180° to go." },
       memo: [
-        { type: "step", text: { en: "In △OAB: &nbsp;Ô₁ + 35° + 35° = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △OAB: &nbsp;Ô₁ + 35° + 35° = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ Ô₁ = 110°" }, ticks: ["a"] },
       ],
       esplain: {
@@ -304,7 +304,7 @@ const ca1 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;Ô₃." },
       hint: { en: "Same triangle as (c). You have both of its base angles now." },
       memo: [
-        { type: "step", text: { en: "In △OBC: &nbsp;Ô₃ + 40° + 40° = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △OBC: &nbsp;Ô₃ + 40° + 40° = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ Ô₃ = 100°" }, ticks: ["a"] },
       ],
       esplain: {
@@ -501,7 +501,7 @@ const ca2 = {
       prompt: { en: "Determine, with reasons, the size of &nbsp;Â₁." },
       hint: { en: "Work out the whole angle ∠CAB first — triangle ACB has a right angle and a 25° in it — and then remember that Â₁ is what is left of it once Â₂ is taken away." },
       memo: [
-        { type: "step", text: { en: "In △ACB: &nbsp;∠CAB + 25° + 90° = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ACB: &nbsp;∠CAB + 25° + 90° = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "step", text: { en: "∴ ∠CAB = 65°" }, ticks: ["ca"] },
         { type: "answer", text: { en: "Â₁ = ∠CAB − Â₂ = 65° − 40° = 25°" }, ticks: ["a"] },
       ],
@@ -674,10 +674,10 @@ const ca3 = {
       hint: { en: "Ĉ₁ is a base angle of triangle OAC. Both of that triangle's slanted sides are radii, and you found its top angle in part (a)." },
       memo: [
         { type: "step", text: { en: "OA = OC &nbsp;&nbsp;<i>(radii)</i>, so Ĉ₁ = Â₂ &nbsp;&nbsp;<i>(∠s opp equal sides)</i>" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "In △OAC: &nbsp;Ĉ₁ = (180° − 120°) ÷ 2 = 30° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["a"] },
+        { type: "answer", text: { en: "In △OAC: &nbsp;Ĉ₁ = (180° − 120°) ÷ 2 = 30° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "Every triangle with the centre at one corner and two points of the circle at the others is isosceles, because the two sides running to the circle are radii. That means its two base angles are equal, and once you know the angle at the centre the rest is arithmetic: take it off 180° and share what is left equally between the two. Here 180 − 120 leaves 60, and half of that is 30. Two reasons are needed, not one, and both earn marks — “∠s opp equal sides” to say the two base angles match, and “sum of ∠s in Δ” to say why they come to 30° each.",
+        en: "Every triangle with the centre at one corner and two points of the circle at the others is isosceles, because the two sides running to the circle are radii. That means its two base angles are equal, and once you know the angle at the centre the rest is arithmetic: take it off 180° and share what is left equally between the two. Here 180 − 120 leaves 60, and half of that is 30. Two reasons are needed, not one, and both earn marks — “∠s opp equal sides” to say the two base angles match, and “int. ∠s of △” to say why they come to 30° each.",
       },
     },
     {
@@ -700,7 +700,7 @@ const ca3 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;Ĉ₂." },
       hint: { en: "Look at triangle ABC on its own. You were given one of its angles and you found another one in part (b)." },
       memo: [
-        { type: "step", text: { en: "In △ABC: &nbsp;Â₁ + ∠ABC + Ĉ₂ = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ABC: &nbsp;Â₁ + ∠ABC + Ĉ₂ = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ Ĉ₂ = 180° − 40° − 120° = 20°" }, ticks: ["a"] },
       ],
       esplain: {
@@ -863,10 +863,10 @@ const ca4 = {
       hint: { en: "∠OAC is a base angle of triangle OAC, and you have just found that triangle's angle at O." },
       memo: [
         { type: "step", text: { en: "OA = OC &nbsp;&nbsp;<i>(radii)</i>, so ∠OAC = ∠ACO &nbsp;&nbsp;<i>(∠s opp equal sides)</i>" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "In △OAC: &nbsp;∠OAC = (180° − 100°) ÷ 2 = 40° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["a"] },
+        { type: "answer", text: { en: "In △OAC: &nbsp;∠OAC = (180° − 100°) ÷ 2 = 40° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "Same routine as always with a triangle that has the centre as one corner: two radii means isosceles, isosceles means matching base angles, and the angle sum shares out what is left of 180°. Here 180 − 100 leaves 80, split evenly into two 40s. Write both reasons down — the marker is paying for “∠s opp equal sides” and for “sum of ∠s in Δ” separately, and a learner who writes only the arithmetic will get about half of what the working is worth. If you can see this pattern quickly you can fill in an enormous amount of a circle diagram in a couple of minutes.",
+        en: "Same routine as always with a triangle that has the centre as one corner: two radii means isosceles, isosceles means matching base angles, and the angle sum shares out what is left of 180°. Here 180 − 100 leaves 80, split evenly into two 40s. Write both reasons down — the marker is paying for “∠s opp equal sides” and for “int. ∠s of △” separately, and a learner who writes only the arithmetic will get about half of what the working is worth. If you can see this pattern quickly you can fill in an enormous amount of a circle diagram in a couple of minutes.",
       },
     },
     {
@@ -891,7 +891,7 @@ const ca4 = {
       memo: [
         { type: "step", text: { en: "∠ABC = ½ · Ô₁ &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i> — both stand on arc AC" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ ∠ABC = ½ × 100° = 50°" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — the long way, through the two triangles that meet at B: &nbsp;OA = OB and OB = OC &nbsp;<i>(radii)</i>, so △OAB and △OBC are both isosceles and each gives a base angle of &nbsp;(180° − 130°) ÷ 2 = 25° &nbsp;<i>(∠s opp equal sides; sum of ∠s in Δ)</i>. &nbsp;Then ∠ABC = 25° + 25° = 50°. &nbsp;Same marks." } },
+        { type: "step", text: { en: "<b>OR</b> — the long way, through the two triangles that meet at B: &nbsp;OA = OB and OB = OC &nbsp;<i>(radii)</i>, so △OAB and △OBC are both isosceles and each gives a base angle of &nbsp;(180° − 130°) ÷ 2 = 25° &nbsp;<i>(∠s opp equal sides; int. ∠s of △)</i>. &nbsp;Then ∠ABC = 25° + 25° = 50°. &nbsp;Same marks." } },
         { type: "trap", text: {
           en: "WATCH OUT: the angle at the centre that pairs with ∠ABC is <b>Ô₁</b>, the one standing on arc AC — not one of the 130° wedges. B is looking across the circle at arc AC, so that is the one that gets halved.",
         } },
@@ -1018,7 +1018,7 @@ const ca5 = {
       hint: { en: "∠ABO is a base angle of triangle AOB. Two of that triangle's sides are radii, and you have just found the angle between them." },
       memo: [
         { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>, so ∠ABO = ∠DAB &nbsp;&nbsp;<i>(∠s opp equal sides)</i>" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "In △AOB: &nbsp;2 · ∠ABO + 2x = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["ca"] },
+        { type: "step", text: { en: "In △AOB: &nbsp;2 · ∠ABO + 2x = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ ∠ABO = 90° − x" }, ticks: ["a"] },
       ],
       esplain: {

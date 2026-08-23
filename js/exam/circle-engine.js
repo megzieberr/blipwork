@@ -246,13 +246,23 @@ function placeCentreLabel(g) {
   }
   g.angles.forEach(a => { if (a.t) pts.push([a.label.x, a.label.y]); });
 
+  // Try the usual 14 px ring first. When every spot on it is crowded
+  // (index digits 1/2/3 sitting at the 11 px floor inside small arcs at
+  // O — her phone, 2026-08-23: "O" printed on top of the "2"), step out
+  // to just beyond the widest arc drawn at the centre and try again.
+  const arcsAtO = g.angles.filter(a => a.at === "O" && !a.mark).map(a => a.ar);
+  const radii = [14];
+  if (arcsAtO.length) radii.push(Math.max(...arcsAtO) + 9);
   let best = pol(cx, cy, 14, 35), bestScore = -1;
-  for (let deg = 0; deg < 360; deg += 8) {
-    const [x, y] = pol(cx, cy, 14, deg);
-    let score = 1e9;
-    segs.forEach(s => { score = Math.min(score, segDist(x, y, s[0], s[1], s[2], s[3])); });
-    pts.forEach(p => { score = Math.min(score, Math.hypot(x - p[0], y - p[1])); });
-    if (score > bestScore) { bestScore = score; best = [x, y]; }
+  for (const r of radii) {
+    if (bestScore >= 9) break;                       // the inner ring had a clean spot
+    for (let deg = 0; deg < 360; deg += 8) {
+      const [x, y] = pol(cx, cy, r, deg);
+      let score = 1e9;
+      segs.forEach(s => { score = Math.min(score, segDist(x, y, s[0], s[1], s[2], s[3])); });
+      pts.forEach(p => { score = Math.min(score, Math.hypot(x - p[0], y - p[1])); });
+      if (score > bestScore) { bestScore = score; best = [x, y]; }
+    }
   }
   return `<text class="pl" x="${N(best[0])}" y="${N(best[1])}">O</text>`;
 }
@@ -376,7 +386,7 @@ export function computeGeometry(d) {
     const [hx, hy] = pol(V.x, V.y, hitR, bis);
     return {
       index: i, at: a.at, legs: a.legs, t: a.t, v: o.v, mark: !!o.mark,
-      reflex: !!o.reflex,
+      reflex: !!o.reflex, ar: o.ar || (s < 40 ? 22 : 25),   // the arc radius really drawn (placeCentreLabel reads it)
       sweep: s, from: d1, to: d2, bis,
       vertex: { x: V.x, y: V.y }, label: { x: lx, y: ly }, hit: { x: hx, y: hy }
     };

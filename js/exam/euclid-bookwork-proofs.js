@@ -388,7 +388,7 @@ const bw4 = {
         { type: "step", text: { en: "∠CTR = 90° &nbsp;&nbsp;<i>(tan ⊥ diameter)</i>" }, ticks: ["ca"] },
         { type: "step", text: { en: "∴ ∠CTA = 90° − x" }, ticks: ["ca"] },
         { type: "step", text: { en: "∠TAC = 90° &nbsp;&nbsp;<i>(∠s in semi-circle)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["ca"] },
+        { type: "step", text: { en: "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∠ABT = ∠TCA &nbsp;&nbsp;<i>(∠s in the same seg)</i><br>∴ ∠ABT = x = ∠ATR" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: <b>the construction line is a mark.</b> “Draw the diameter TC and join AC” is the first thing on the page — and it has to be a <b>diameter</b>, through O. Any other line through T gives you no right angle and no proof.",

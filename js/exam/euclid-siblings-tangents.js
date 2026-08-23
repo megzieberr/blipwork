@@ -221,7 +221,7 @@ const tg1 = {
       memo: [
         { type: "step", text: { en: "SU is a straight line, so &nbsp;T̂₁ + T̂₂ + T̂₃ = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ T̂₂ = 180° − 70° − 35° = 75°" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — through the triangle instead: &nbsp;in △ABT, &nbsp;T̂₂ = 180° − ∠ABT − ∠BAT = 180° − 35° − 70° = 75° &nbsp;<i>(sum of ∠s in Δ)</i>. &nbsp;Same marks." } },
+        { type: "step", text: { en: "<b>OR</b> — through the triangle instead: &nbsp;in △ABT, &nbsp;T̂₂ = 180° − ∠ABT − ∠BAT = 180° − 35° − 70° = 75° &nbsp;<i>(int. ∠s of △)</i>. &nbsp;Same marks." } },
       ],
       esplain: {
         en: "Two honest roads, and both earn full marks. The straight-line road uses only the fact that S, T and U are collinear, so the three angles resting on that line at T must total 180°. The triangle road uses the two angles you have just found at A and at B. They agree, and that is not a coincidence — it is the tangent–chord theorem quietly checking your arithmetic. Whenever a chase gives you the same size two different ways, treat it as a free confidence check: if the two roads disagree, a mistake is sitting somewhere behind you and you can go and find it before the marks run out.",
@@ -252,7 +252,7 @@ const tg1 = {
         { type: "step", text: { en: "∴ ∠OAB = ∠OBA &nbsp;&nbsp;<i>(∠s opp equal sides)</i>" }, ticks: ["ca"] },
         { type: "answer", text: { en: "In △OAB: &nbsp;∠OAB = (180° − 150°) ÷ 2 = 15°" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the marker pays for “∠s opp equal sides” AND for “sum of ∠s in Δ” as separate reasons. A learner who writes only the arithmetic — (180 − 150) ÷ 2 — collects about a third of what this part is worth.",
+          en: "WATCH OUT: the marker pays for “∠s opp equal sides” AND for “int. ∠s of △” as separate reasons. A learner who writes only the arithmetic — (180 − 150) ÷ 2 — collects about a third of what this part is worth.",
         } },
       ],
       esplain: {
@@ -405,7 +405,7 @@ const tg2 = {
       memo: [
         { type: "step", text: { en: "ST is a straight line, so &nbsp;P̂₁ + P̂₂ + P̂₃ = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ P̂₂ = 180° − 50° − 60° = 70°" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — in △PQR: &nbsp;P̂₂ = 180° − ∠PQR − ∠PRQ = 180° − 60° − 50° = 70° &nbsp;<i>(sum of ∠s in Δ)</i>. &nbsp;Same marks." } },
+        { type: "step", text: { en: "<b>OR</b> — in △PQR: &nbsp;P̂₂ = 180° − ∠PQR − ∠PRQ = 180° − 60° − 50° = 70° &nbsp;<i>(int. ∠s of △)</i>. &nbsp;Same marks." } },
       ],
       esplain: {
         en: "Both roads are ordinary and both are worth full marks. Notice the pattern the two of them make together, because it is the real content of the tangent–chord theorem: the three angles on the tangent line at P are 50°, 70° and 60°, and the three angles of triangle PQR are 50°, 70° and 60° as well — the same three numbers, just standing in different places. The theorem is what shuffles them across the circle. Seeing that once makes the theorem far harder to forget than any amount of chanting it.",
@@ -590,7 +590,7 @@ const tg3 = {
       memo: [
         { type: "step", text: { en: "∠OAP = ∠OAB + ∠PAB &nbsp;&nbsp;<i>(tan ⊥ radius)</i> gives ∠OAP = 90°" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ ∠OAB = 90° − 66° = 24°" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — through the isosceles triangle at the centre: &nbsp;OA = OB &nbsp;<i>(radii)</i>, so in △OAB, &nbsp;∠OAB = (180° − 132°) ÷ 2 = 24° &nbsp;<i>(∠s opp equal sides; sum of ∠s in Δ)</i>. &nbsp;Same marks." } },
+        { type: "step", text: { en: "<b>OR</b> — through the isosceles triangle at the centre: &nbsp;OA = OB &nbsp;<i>(radii)</i>, so in △OAB, &nbsp;∠OAB = (180° − 132°) ÷ 2 = 24° &nbsp;<i>(∠s opp equal sides; int. ∠s of △)</i>. &nbsp;Same marks." } },
         { type: "trap", text: {
           en: "REMEMBER: the two roads agreeing is not luck — it is the figure being consistent with itself. If your two answers had disagreed, a mistake would be sitting somewhere behind you, and finding it then is far cheaper than finding it at the end.",
         } },
@@ -646,7 +646,7 @@ const tg3 = {
      ∠ATU = 55°   (given)  = ½·arc TA = ½(110°)
      ∠ATD = 180 − 90 − 55 = 35°       (∠s on a str line)
      ∠TAD = 90°                       (∠s in semi-circle)
-     ∠ADT = 180 − 90 − 35 = 55°       (sum of ∠s in Δ) — and equal to
+     ∠ADT = 180 − 90 − 35 = 55°       (int. ∠s of △) — and equal to
                                        ∠ATU, which is the tan chord
                                        theorem showing up on its own
      ∠AOD = 2 × ∠ATD = 70°            (∠ at centre = 2 × ∠ at circumference)
@@ -780,7 +780,7 @@ const tg4 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;∠ADT." },
       hint: { en: "Triangle ATD now has two of its three angles on your page." },
       memo: [
-        { type: "step", text: { en: "In △ATD: &nbsp;∠ADT + ∠TAD + ∠ATD = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ATD: &nbsp;∠ADT + ∠TAD + ∠ATD = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ ∠ADT = 180° − 90° − 35° = 55°" }, ticks: ["a"] },
       ],
       esplain: {

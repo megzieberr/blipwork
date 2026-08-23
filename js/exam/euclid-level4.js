@@ -164,7 +164,7 @@ const l41 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;∠ACB." },
       hint: { en: "Triangle ABC has two of its three angles sitting on the page already." },
       memo: [
-        { type: "step", text: { en: "In △ABC: &nbsp;∠ACB + Â₂ + ∠ABC = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ABC: &nbsp;∠ACB + Â₂ + ∠ABC = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ ∠ACB = 180° − 60° − 65° = 55°" }, ticks: ["a"] },
       ],
       esplain: {
@@ -220,7 +220,7 @@ const l41 = {
    never substituted — every answer is an expression.
      ∠ADE = ∠ACB = x        (the given equality, marked x on both)
      ∠BAC = y               (given)
-     ∠AED = 180 − x − y     (sum of ∠s in Δ, part (a))
+     ∠AED = 180 − x − y     (int. ∠s of △, part (a))
      ∠DEC = x + y           (∠s on a str line, AEC straight)
      ∠DBC = ∠ABC = 180 − x − y
    ===================================================================== */
@@ -290,7 +290,7 @@ const l42 = {
       prompt: { en: "Determine, with a reason, the size of &nbsp;∠AED&nbsp; in terms of x and y." },
       hint: { en: "Triangle ADE has two of its angles marked already — one of them is x and the other is y." },
       memo: [
-        { type: "step", text: { en: "In △ADE: &nbsp;∠AED + ∠ADE + ∠DAE = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "In △ADE: &nbsp;∠AED + ∠ADE + ∠DAE = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["s/f"] },
         { type: "answer", text: { en: "∴ ∠AED = 180° − x − y" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "REMEMBER: ∠DAE and ∠BAC are the <b>same angle</b> — D is on AB and E is on AC, so the ray AD points where AB points and AE points where AC points. That is why the given y can be used inside the small triangle.",
@@ -328,7 +328,7 @@ const l42 = {
         { type: "step", text: { en: "AEC is a straight line, so &nbsp;∠DEC = 180° − ∠AED = 180° − (180° − x − y) = x + y &nbsp;&nbsp;<i>(∠s on a str line)</i>" }, ticks: ["s/f"] },
         { type: "step", text: { en: "In cyclic quad DECB: &nbsp;∠DBC + ∠DEC = 180° &nbsp;&nbsp;<i>(opp ∠s of cyclic quad)</i>" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ ∠DBC = 180° − (x + y) = 180° − x − y" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — without the circle at all: &nbsp;in △ABC, &nbsp;∠ABC = 180° − ∠BAC − ∠ACB = 180° − y − x &nbsp;<i>(sum of ∠s in Δ)</i>, and ∠DBC is that same angle. &nbsp;Same marks." } },
+        { type: "step", text: { en: "<b>OR</b> — without the circle at all: &nbsp;in △ABC, &nbsp;∠ABC = 180° − ∠BAC − ∠ACB = 180° − y − x &nbsp;<i>(int. ∠s of △)</i>, and ∠DBC is that same angle. &nbsp;Same marks." } },
       ],
       esplain: {
         en: "Two roads again, and the fact that they agree is a genuinely useful sanity check on the proof in part (b) — if the circle you proved into existence gave a different answer from ordinary triangle work, something would be wrong. The circle road is the one the word “hence” is asking for: E and B are opposite corners of the cyclic quadrilateral, so their angles add to 180°, and ∠DEC came from the straight line AEC. The triangle road ignores the circle completely. Being able to see both is what makes you quick in an exam, because you can start on whichever one you spot first and use the other to check.",
@@ -440,7 +440,7 @@ const l43 = {
       hint: { en: "Nothing here mentions an angle, so you have to make one. What kind of triangle is OXY, given that all three of its sides are the same length?" },
       memo: [
         { type: "step", text: { en: "OX = OY = r &nbsp;<i>(radii)</i> &nbsp;and&nbsp; XY = r &nbsp;<i>(given)</i>, so △OXY is equilateral." }, ticks: ["s/f"] },
-        { type: "step", text: { en: "∴ ∠XOY = 60° &nbsp;&nbsp;<i>(∠s opp equal sides; sum of ∠s in Δ)</i>" }, ticks: ["ca"] },
+        { type: "step", text: { en: "∴ ∠XOY = 60° &nbsp;&nbsp;<i>(∠s opp equal sides; int. ∠s of △)</i>" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∠XZY = ½ · ∠XOY &nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i> &nbsp;— both stand on chord XY<br>∴ ∠XZY = ½ × 60° = 30°" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "REMEMBER: this is a NUMBER, even though everything else in the question was in terms of r. The angle a chord subtends does not depend on how big the circle is — only on how the chord compares with the radius.",
@@ -576,7 +576,7 @@ const l44 = {
         { type: "step", text: { en: "SU is a straight line, so &nbsp;Â₁ + Â₂ + Â₃ = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>" }, ticks: ["s/f"] },
         { type: "step", text: { en: "∴ x + Â₂ + x = 180°" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ Â₂ = 180° − 2x" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — inside the triangle instead: &nbsp;in △ABC, &nbsp;Â₂ = 180° − ∠ABC − ∠ACB = 180° − x − x = 180° − 2x &nbsp;<i>(sum of ∠s in Δ)</i>. &nbsp;Same marks." } },
+        { type: "step", text: { en: "<b>OR</b> — inside the triangle instead: &nbsp;in △ABC, &nbsp;Â₂ = 180° − ∠ABC − ∠ACB = 180° − x − x = 180° − 2x &nbsp;<i>(int. ∠s of △)</i>. &nbsp;Same marks." } },
         { type: "trap", text: {
           en: "WATCH OUT: 180° − 2x, not 180° − x. There are TWO x's to take off, one on each side of Â₂ — and the same is true inside the triangle, where both base angles came out as x.",
         } },
@@ -705,7 +705,7 @@ const l45 = {
       hint: { en: "Triangle OAB has two radii for sides, and you have just found the angle between them." },
       memo: [
         { type: "step", text: { en: "OA = OB &nbsp;<i>(radii)</i>, so &nbsp;∠OBA = Â₁ &nbsp;&nbsp;<i>(∠s opp equal sides)</i>" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "In △OAB: &nbsp;2 · ∠OBA + ∠AOB = 180° &nbsp;&nbsp;<i>(sum of ∠s in Δ)</i>, &nbsp;so &nbsp;2 · ∠OBA + 2x = 180°" }, ticks: ["ca"] },
+        { type: "step", text: { en: "In △OAB: &nbsp;2 · ∠OBA + ∠AOB = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>, &nbsp;so &nbsp;2 · ∠OBA + 2x = 180°" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ ∠OBA = 90° − x" }, ticks: ["a"] },
       ],
       esplain: {
