@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-23 evening (🏁 EXAM FOCUS FULL — 360 cards / 7 chapters built + reviewed, LOCAL, ship waits on her yes)
+# Project status — updated 2026-08-23 evening (🏁 EXAM FOCUS FULL — 360 cards / 7 chapters LIVE, sw v62, XP 50/5 + eq9 migrations applied)
 
 ## 🏁 2026-08-23 — THE EXAM FOCUS BUILD DAY (Fable foreman, 13 Opus sessions, her /go)
 
@@ -8,7 +8,9 @@ Gap check first (SAGs pp 42–52 + `GR11-IEB-PAPER-BANK.md` + surveys), her eigh
 the build. Plan + tile map: `EXAM-BUILD-DAY.md`; briefs: `sessions/`; SAG reasons:
 `EUCLID-ACCEPTABLE-REASONS.md`.
 
-**What exists now (all local commits, harness 673/673, modules 7299/7299, fractions 5819/5819):**
+**SHIPPED 2026-08-23 evening on her "yes, ship it": sw v62 live, both migrations applied + verified (pays_50/pays_5 true, eq9 closed, anon grant intact), live site serves all 360 cards with no page errors.**
+
+**What exists now (harness 673/673, modules 7299/7299, fractions 5819/5819):**
 
 | chapter | tiles | cards | notes |
 |---|---|---|---|
@@ -43,8 +45,6 @@ Spend: ≈ 7M Opus tokens across 13 sessions + 3 fix sessions + foreman reviews 
 "don't worry about the cost").
 
 ### ⏳ Pending on Megan
-- 🌐 1 min [blocking the ship]: say "yes, ship it" here — then Fable bumps sw → v62, pushes,
-  applies the two migrations (XP 50/5; eq9 closed) via the Supabase connection, confirms live.
 - 📱 10 min [whenever, after ship]: Exam Focus → Algebraic Expressions → Factorise tile → two
   cards; Euclidean → Tangents → one full rider; Trig Graphs → Period/amplitude/range → one card.
 - 🌐 1 min [whenever]: admin → open eq9 "Two, one or no solution?" for the learner who asked.
