@@ -65,7 +65,7 @@ const q1 = {
     {
       id: "a",
       marks: 3,
-      level: 3,
+      level: 4,
       prompt: {
         en: "Show that &nbsp;(2x − 1)(2x + 1) − (2x − 3)² = 12x − 10&nbsp; for all values of x.",
       },
@@ -88,7 +88,7 @@ const q1 = {
     {
       id: "b",
       marks: 2,
-      level: 4,
+      level: 3,
       prompt: {
         en: "Hence determine the value of x for which &nbsp;(2x − 1)(2x + 1) − (2x − 3)² = 0.",
       },

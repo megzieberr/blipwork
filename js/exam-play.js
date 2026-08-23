@@ -247,7 +247,11 @@ export function renderExamPlay(app, host, params) {
 
     if (!isActive) return card;
 
-    if (part.level === 4) card.appendChild(el("div", "exam-star-note", t("starNote")));
+    // The ★ note ("bank the earlier marks first") is for a ★ part met in the
+    // middle of an ordinary question. On the Level 4 tile EVERY card is the
+    // hard one — her ruling 2026-08-23 — so the note is noise there; the ★
+    // badge itself stays.
+    if (part.level === 4 && skillId !== "level-4") card.appendChild(el("div", "exam-star-note", t("starNote")));
 
     /* WALK ME THROUGH IT (her ruling, 2026-08-22: "same memo, revealed
        one step at a time with a Next button. No new content."). Local

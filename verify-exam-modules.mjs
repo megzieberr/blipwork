@@ -425,7 +425,7 @@ const EXPECTED_STARS = {
   /* The Level 4 tile itself: every card is a "hence" pair whose SECOND
      part is the ★, except q7, where both parts are level 4 (two grouped
      differences of squares, neither of them a lead-in to the other). */
-  "algx.l4.q1": ["b"], "algx.l4.q2": ["b"], "algx.l4.q3": ["b"], "algx.l4.q4": ["b"],
+  "algx.l4.q1": ["a"], "algx.l4.q2": ["b"], "algx.l4.q3": ["b"], "algx.l4.q4": ["b"],
   "algx.l4.q5": ["b"], "algx.l4.q6": ["b"], "algx.l4.q7": ["a", "b"],
   /* FUNCTIONS SESSION D1's eighteen (2026-08-23) — the three NEW tiles
      sketch / intersection / average-gradient. Her ruling 5: levels 1-3
