@@ -2970,12 +2970,12 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
 ## Pending on Megan
 (The two BLOCKING items — the collect-cq secrets and the phone eyeball, now
 v34 → v45 — live in the 2026-08-21 entry at the top of this file.)
-- 💻 1 min: say whether `FABLE-AUDIT-2026-08-06.md` may be committed — the repo is
-  PUBLIC, so it stays uncommitted until you decide **[whenever]**
-- 🎨 5 min: re-roll `happy-eyes` if you want it better (the weakest of the six eye
-  pairs; Tripo drew an unwanted mouth that had to be masked out) **[whenever]**
-- 📱 while eyeballing v45, the older decor asks still stand: buy a closet and a
-  wallpaper, check the panel shelf's height and the 🥚 beside Blip's name **[whenever]**
+- 📱 per chapter, when you have a minute: phone-test one dice round in Finance,
+  Number Patterns and 2D Trig **[whenever]**
+
+(2026-08-23 evening: FABLE-AUDIT-2026-08-06.md was already committed on 08-07
+(`7bfa5e6`) — she also ok'd it today; the decor (closet/wallpaper/shelf/🥚) and the
+happy-eyes re-roll are CLOSED — "decor designs look great".)
 
 (Closet prices settled 2026-08-12 — she approved them as proposed.)
 
