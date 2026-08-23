@@ -56,6 +56,12 @@ import { funcShiftSiblingQuestions } from "./func-siblings-shift.js";
 import { funcInequalitiesSiblingQuestions } from "./func-siblings-inequalities.js";
 import { funcNatureOfRootsSiblingQuestions } from "./func-siblings-nature-of-roots.js";
 import { funcDistancesSiblingQuestions } from "./func-siblings-distances.js";
+/* SESSION D1 (2026-08-23, the Exam Focus build day) — three of the four
+   NEW Functions tiles from EXAM-BUILD-DAY.md's map, six fresh cards
+   each: sketch · intersection · average-gradient. */
+import { funcSketchSiblingQuestions } from "./func-siblings-sketch.js";
+import { funcIntersectionSiblingQuestions } from "./func-siblings-intersection.js";
+import { funcAverageGradientSiblingQuestions } from "./func-siblings-average-gradient.js";
 
 const SOURCES = [
   ...funcHyperbolaAndExponentialQuestions,
@@ -70,6 +76,9 @@ const SOURCES = [
   ...funcInequalitiesSiblingQuestions,
   ...funcNatureOfRootsSiblingQuestions,
   ...funcDistancesSiblingQuestions,
+  ...funcSketchSiblingQuestions,
+  ...funcIntersectionSiblingQuestions,
+  ...funcAverageGradientSiblingQuestions,
 ];
 const src = id => {
   const q = SOURCES.find(qq => qq.id === id);
@@ -257,4 +266,51 @@ export const funcCards = [
   makeCard({ skill: "distances", from: src("func.sib.dist.q3"), parts: ["a", "b"] }),
   makeCard({ skill: "distances", from: src("func.sib.dist.q4"), parts: ["a", "b"] }),
   makeCard({ skill: "distances", from: src("func.sib.dist.q5"), parts: ["a", "b"] }),
+
+  /* ---- 9. Sketch the graph (NEW TILE, session D1, 2026-08-23) ----
+     Six cards, all fresh: the question side is a blank set of axes with
+     a light grid — the exam's own answer grid — because here the SKETCH
+     is the answer. Easiest first, which is also her teaching order:
+     turning-point form (read it off), then standard form (work for it),
+     then the exponential, then the hyperbola, then two graphs on one
+     page, and last the bank's rough sketch from sign conditions with no
+     numbers at all. Each carries its own stem, so none takes an intro. */
+  makeCard({ skill: "sketch", from: src("func.sib.sk.q1"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "sketch", from: src("func.sib.sk.q2"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "sketch", from: src("func.sib.sk.q3"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "sketch", from: src("func.sib.sk.q4"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "sketch", from: src("func.sib.sk.q5"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "sketch", from: src("func.sib.sk.q6"), parts: ["a", "b"] }),
+
+  /* ---- 10. Intersections (NEW TILE, session D1, 2026-08-23) ------
+     Her original tile drawing had "[Intersection]" on it and it was
+     never built. Six cards: a line cutting a parabola ("show that",
+     then "hence"), a parabola and an exponential sharing an x-intercept
+     with one constant missing, a horizontal line y = k, reading the
+     crossings off a grid and then proving them, a line cutting a
+     HYPERBOLA, and last the "hence, or otherwise, solve f(x) > g(x)"
+     follow-on that runs her cut-line-and-paint method off the
+     intersections it has just found. */
+  makeCard({ skill: "intersection", from: src("func.sib.int.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "intersection", from: src("func.sib.int.q2"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "intersection", from: src("func.sib.int.q3"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "intersection", from: src("func.sib.int.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "intersection", from: src("func.sib.int.q5"), parts: ["a", "b"] }),
+  makeCard({ skill: "intersection", from: src("func.sib.int.q6"), parts: ["a", "b"] }),
+
+  /* ---- 11. Average gradient (NEW TILE, session D1, 2026-08-23) ---
+     Her p59, and a SAG Term 2 item that had nothing in the app to drill
+     it. Six cards walking outwards from the plain parabola: the
+     hyperbola where the answer is negative, the y-intercept-to-turning-
+     point pair that has to be found first, an exponential measured over
+     two different stretches (what "taking off" means in numbers), the
+     algebraic x = 1 to x = 1 + h version, and last the question
+     backwards — the gradient is given, find the far point. No
+     derivatives anywhere. */
+  makeCard({ skill: "average-gradient", from: src("func.sib.ag.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "average-gradient", from: src("func.sib.ag.q2"), parts: ["a", "b"] }),
+  makeCard({ skill: "average-gradient", from: src("func.sib.ag.q3"), parts: ["a", "b"] }),
+  makeCard({ skill: "average-gradient", from: src("func.sib.ag.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "average-gradient", from: src("func.sib.ag.q5"), parts: ["a", "b", "c"] }),
+  makeCard({ skill: "average-gradient", from: src("func.sib.ag.q6"), parts: ["a", "b"] }),
 ];
