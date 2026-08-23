@@ -99,9 +99,36 @@ import { eqnKMethodQuestions } from "./js/exam/eqn-k-method.js";
 import { eqnFractionsAndRestrictionsQuestions } from "./js/exam/eqn-fractions-and-restrictions.js";
 import { eqnInequalitiesQuestions } from "./js/exam/eqn-inequalities.js";
 import { eqnInequalitiesTopUpQuestions } from "./js/exam/eqn-inequalities-2.js";
+/* SESSION C2's four eqn modules (2026-08-23) — the three NEW tiles
+   quadratic-solving / surd-equations / simultaneous, six cards each,
+   and the six cards that open the chapter's Level 4 ★ tile. */
+import { eqnQuadraticSolvingSiblingQuestions } from "./js/exam/eqn-siblings-quadratic-solving.js";
+import { eqnSurdEquationsSiblingQuestions } from "./js/exam/eqn-siblings-surd-equations.js";
+import { eqnSimultaneousSiblingQuestions } from "./js/exam/eqn-siblings-simultaneous.js";
+import { eqnLevel4Questions } from "./js/exam/eqn-level4.js";
+/* SESSION C1's seven eqn modules (2026-08-23) — the seven ORIGINAL
+   tiles, each filled to six cards. */
+import { eqnNatureChainSiblingQuestions } from "./js/exam/eqn-siblings-nature-chain.js";
+import { eqnKEqualRootsSiblingQuestions } from "./js/exam/eqn-siblings-k-equal-roots.js";
+import { eqnKForNatureSiblingQuestions } from "./js/exam/eqn-siblings-k-for-nature.js";
+import { eqnDeltaInPSiblingQuestions } from "./js/exam/eqn-siblings-delta-in-p.js";
+import { eqnInequalitiesSiblingQuestions } from "./js/exam/eqn-siblings-inequalities.js";
+import { eqnFractionEquationsSiblingQuestions } from "./js/exam/eqn-siblings-fraction-equations.js";
+import { eqnRationalExponentsKSiblingQuestions } from "./js/exam/eqn-siblings-rational-exponents-k.js";
+/* SESSION H's one eqn module (2026-08-23, her afternoon extension) —
+   the NEW solution-count tile, "Two, one or no solution?", six cards. */
+import { eqnSolutionCountSiblingQuestions } from "./js/exam/eqn-siblings-solution-count.js";
 import { expFirstStepAndMethodQuestions } from "./js/exam/exp-first-step-and-method.js";
 import { expConjugatesAndRationalisingQuestions } from "./js/exam/exp-conjugates-and-rationalising.js";
 import { expNoSolutionAndStrategyQuestions } from "./js/exam/exp-no-solution-and-strategy.js";
+/* SESSION B's seven Exponents & Surds modules (2026-08-23) — 31 more questions. */
+import { expRationalExponentsNumericSiblingQuestions } from "./js/exam/exp-siblings-rational-exponents-numeric.js";
+import { expExponentExpressionsSiblingQuestions } from "./js/exam/exp-siblings-exponent-expressions.js";
+import { expExponentialEquationsSiblingQuestions } from "./js/exam/exp-siblings-exponential-equations.js";
+import { expSurdsSiblingQuestions } from "./js/exam/exp-siblings-surds.js";
+import { expRationaliseSiblingQuestions } from "./js/exam/exp-siblings-rationalise.js";
+import { expSurdProofsSiblingQuestions } from "./js/exam/exp-siblings-surd-proofs.js";
+import { expLevel4Questions } from "./js/exam/exp-level4.js";
 import { funcHyperbolaAndExponentialQuestions } from "./js/exam/func-hyperbola-and-exponential.js";
 import { funcHyperbolaAndExponentialT2Questions } from "./js/exam/func-hyperbola-and-exponential-2.js";
 import { funcGraphsTogetherQuestions } from "./js/exam/func-graphs-together.js";
@@ -119,11 +146,70 @@ import { funcShiftSiblingQuestions } from "./js/exam/func-siblings-shift.js";
 import { funcInequalitiesSiblingQuestions } from "./js/exam/func-siblings-inequalities.js";
 import { funcNatureOfRootsSiblingQuestions } from "./js/exam/func-siblings-nature-of-roots.js";
 import { funcDistancesSiblingQuestions } from "./js/exam/func-siblings-distances.js";
+/* SESSION D1's three modules — the NEW sketch / intersection /
+   average-gradient tiles (2026-08-23). */
+import { funcSketchSiblingQuestions } from "./js/exam/func-siblings-sketch.js";
+import { funcIntersectionSiblingQuestions } from "./js/exam/func-siblings-intersection.js";
+import { funcAverageGradientSiblingQuestions } from "./js/exam/func-siblings-average-gradient.js";
+/* SESSION D2's three modules — the NEW reflections tile, the chapter's
+   Level 4 ★ tile, and the top-up cards the ★ move made necessary
+   (2026-08-23). */
+import { funcReflectionsSiblingQuestions } from "./js/exam/func-siblings-reflections.js";
+import { funcLevel4Questions } from "./js/exam/func-level4.js";
+import { funcTopUpSiblingQuestions } from "./js/exam/func-siblings-topup.js";
 import { trigReductionAndRatiosQuestions } from "./js/exam/trig-reduction-and-ratios.js";
 import { trigGeneralSolutionsQuestions } from "./js/exam/trig-general-solutions.js";
 import { trigMixedProblemsQuestions } from "./js/exam/trig-mixed-problems.js";
+/* WAVE 1, SESSION F1 (2026-08-23): GENERAL TRIG part 1 — the first four
+   tiles of the chapter's tile map. Composed skill-first, one module per
+   tile, each question a whole card, so these are its source questions.
+   Session F2 adds reduction / identities / identities-undefined /
+   general-solution / level-4 to the same chapter. */
+import { gtrigCoFunctionsSiblingQuestions } from "./js/exam/gtrig-siblings-co-functions.js";
+import { gtrigSpecialAnglesSiblingQuestions } from "./js/exam/gtrig-siblings-special-angles.js";
+import { gtrigSpecialSumsSiblingQuestions } from "./js/exam/gtrig-siblings-special-sums.js";
+import { gtrigSuperSpecialSumsSiblingQuestions } from "./js/exam/gtrig-siblings-super-special-sums.js";
+/* WAVE 2, SESSION F2 (2026-08-23): GENERAL TRIG part 2 — the other five
+   tiles, two of them topped up and three born from nothing. Same shape:
+   composed skill-first, one module per tile, every question a whole card. */
+import { gtrigReductionSiblingQuestions } from "./js/exam/gtrig-siblings-reduction.js";
+import { gtrigIdentitiesSiblingQuestions } from "./js/exam/gtrig-siblings-identities.js";
+import { gtrigIdentitiesUndefinedSiblingQuestions } from "./js/exam/gtrig-siblings-identities-undefined.js";
+import { gtrigGeneralSolutionSiblingQuestions } from "./js/exam/gtrig-siblings-general-solution.js";
+import { gtrigLevel4Questions } from "./js/exam/gtrig-level4.js";
 import { euclidCircleTheoremsQuestions } from "./js/exam/euclid-circle-theorems.js";
 import { euclidTangentsAndCyclicQuadsQuestions } from "./js/exam/euclid-tangents-and-cyclic-quads.js";
+/* WAVE 1, SESSION G1 (2026-08-23): the two EUCLIDEAN modules for the
+   bookwork-proofs and chords-and-angles tiles. Both are composed
+   tile-first — one module per tile, each question a whole card (a
+   bookwork proof is one part; a chained rider is 5–6 parts that all
+   live on the same sketch) — so these are its source questions. */
+import { euclidBookworkProofQuestions } from "./js/exam/euclid-bookwork-proofs.js";
+import { euclidChordsAndAnglesSiblingQuestions } from "./js/exam/euclid-siblings-chords-and-angles.js";
+/* WAVE 2, SESSION G2 (2026-08-23): the other three EUCLIDEAN tiles —
+   cyclic-quads, tangents and the chapter's Level 4 ★ round. Composed
+   tile-first like G1's, every question a whole chained card. */
+import { euclidCyclicQuadsSiblingQuestions } from "./js/exam/euclid-siblings-cyclic-quads.js";
+import { euclidTangentsSiblingQuestions } from "./js/exam/euclid-siblings-tangents.js";
+import { euclidLevel4Questions } from "./js/exam/euclid-level4.js";
+/* WAVE 1, SESSION A (2026-08-23): the six ALGEBRAIC EXPRESSIONS
+   modules. algx is composed skill-first — one module per tile, each
+   question a whole card — so these are its source questions. */
+import { algxExpandSiblingQuestions } from "./js/exam/algx-siblings-expand.js";
+import { algxFactoriseBasicsSiblingQuestions } from "./js/exam/algx-siblings-factorise-basics.js";
+import { algxFactoriseAdvancedSiblingQuestions } from "./js/exam/algx-siblings-factorise-advanced.js";
+import { algxFractionsMultiplyDivideSiblingQuestions } from "./js/exam/algx-siblings-fractions-multiply-divide.js";
+import { algxFractionsAddSubtractSiblingQuestions } from "./js/exam/algx-siblings-fractions-add-subtract.js";
+import { algxLevel4Questions } from "./js/exam/algx-level4.js";
+/* SESSION E's six tgraph modules (2026-08-23) — Trig Graphs joins the
+   tab: 36 questions, one whole card each, across the chapter's six
+   tiles. */
+import { tgraphPeriodAmplitudeRangeQuestions } from "./js/exam/tgraph-siblings-period-amplitude-range.js";
+import { tgraphReadParametersQuestions } from "./js/exam/tgraph-siblings-read-parameters.js";
+import { tgraphSketchQuestions } from "./js/exam/tgraph-siblings-sketch.js";
+import { tgraphIntersectionsInequalitiesQuestions } from "./js/exam/tgraph-siblings-intersections-inequalities.js";
+import { tgraphShiftReflectQuestions } from "./js/exam/tgraph-siblings-shift-reflect.js";
+import { tgraphLevel4Questions } from "./js/exam/tgraph-level4.js";
 /* renderExamTopic is GONE (EXAM-SKILLS-BRIEF.md: tapping a skill tile
    goes straight into the player, so the question-list screen and its
    route were deleted rather than left as dead code). */
@@ -322,9 +408,86 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   // circle-geometry tile was re-cut into bookwork-proofs / chords-and-
   // angles / tangents / level-4, which splits the two source questions
   // across four cards. NOTHING was added or dropped — Part 12's coverage
-  // check proves that part for part. algx and tgraph register as 0: their
-  // files exist and export [], waiting on their content sessions.
-  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 4, meas: 0, func: 48, tgraph: 0, analytical: 0, pat: 0, exp: 12, eqn: 18, euclid: 4, algx: 0 };
+  // check proves that part for part. tgraph registers as 0: its file
+  // exists and exports [], waiting on its content session.
+  // 2026-08-23 (WAVE 1, SESSION A): algx 0 -> 37. The Algebraic
+  // Expressions chapter is seeded — six tiles, six cards each except
+  // the Level 4 tile which holds seven, 180 marks in all. Every card is
+  // one whole composed question (js/exam/algx-*.js) cut by makeCard, so
+  // Part 12's source/coverage checks below cover them exactly like the
+  // Functions siblings.
+  // 2026-08-23 (BUILD DAY, SESSION B): exp 12 -> 43. Thirty-one fresh
+  // sibling questions across seven modules take every normal Exponents &
+  // Surds tile to SIX cards (two of the tiles are brand new) and open the
+  // chapter's Level 4 tile with seven — six new plus exp.nss.q1(d), the one
+  // level-4 card MOVED off the exponential-equations tile (her ruling 5).
+  // 6+6+6+6+6+6+7 = 43. Nothing was dropped: Part 12's coverage check
+  // proves that part for part.
+  // 2026-08-23 (BUILD DAY, SESSION D1): func 48 -> 66. Three of the four
+  // NEW Functions tiles are seeded — sketch, intersection and
+  // average-gradient, six fresh cards each (js/exam/func-siblings-
+  // sketch.js, -intersection.js, -average-gradient.js). The eight
+  // original tiles are untouched. The remaining two new tiles
+  // (reflections, level-4) belong to session D2 and will move this
+  // number again.
+  // 2026-08-23 (BUILD DAY, SESSION G1): euclid 4 -> 12. The two G1 tiles
+  // are seeded — bookwork-proofs goes to FOUR cards (three fresh proofs
+  // plus the re-homed euclid.circ.t2q4(a), which is the fourth proof
+  // already written), and chords-and-angles goes to SIX (five fresh
+  // chained riders plus the re-homed euclid.circ.t2q4(b1,b2)). The
+  // cyclic-quads / tangents / level-4 tiles belong to session G2 and
+  // will move this number again.
+  // 2026-08-23 (BUILD DAY, SESSION E): tgraph 0 -> 36. Trig Graphs joins
+  // the tab with all six of its tiles seeded at once, six cards each
+  // (js/exam/tgraph-siblings-*.js + tgraph-level4.js). No further
+  // session moves this number.
+  // 2026-08-23 (WAVE 1, SESSION F1): gtrig 4 -> 26. The first four tiles
+  // of General Trig's tile map are filled to six cards each — co-functions
+  // and special-sums topped up from one, special-angles and
+  // super-special-sums born from nothing (js/exam/gtrig-siblings-*.js),
+  // 22 fresh questions worth 85 marks. reduction and general-solution
+  // still hold their one original card each, and identities /
+  // identities-undefined / level-4 are still empty: SESSION F2 fills
+  // those five and will move this number again.
+  // 2026-08-23 (WAVE 2, SESSION F2): gtrig 26 -> 54. The other five
+  // tiles — reduction and general-solution topped up from one card to
+  // six, and identities / identities-undefined / level-4 born from
+  // nothing (js/exam/gtrig-siblings-reduction.js, -identities.js,
+  // -identities-undefined.js, -general-solution.js, gtrig-level4.js),
+  // 28 fresh questions worth 189 marks. All nine tiles now hold six
+  // cards each: 9 x 6 = 54, and no gtrig tile renders "coming soon"
+  // any more. No further session moves this number.
+  // 2026-08-23 (WAVE 2, SESSIONS C1 + C2): eqn 18 -> 72. Two sessions
+  // move this ONE number between them, so whichever lands last owns it:
+  // C2 built the three tiles the chapter never had (quadratic-solving,
+  // surd-equations, simultaneous — six cards each) and opened the
+  // level-4 tile with six more; C1 filled the seven original tiles to
+  // six cards each and MOVED the chapter's existing ★ cards onto
+  // level-4, which is why level-4 holds twelve. Eleven tiles: ten of
+  // six, plus level-4's twelve.
+  // 2026-08-23 (WAVE 2, SESSION D2): func 66 -> 83. The fourth new tile
+  // (reflections, six cards), the chapter's Level 4 ★ tile (ten cards:
+  // six fresh plus the four ★ parts moved off normal tiles), and four
+  // top-up cards for the two tiles that move left short. The net +17 is
+  // 16 fresh questions plus one extra CARD, because func.gt.t1q5's old
+  // (a)+(b) pair split into two cards on two different tiles. Thirteen
+  // tiles: eleven of six, asymptotes-domain-range on seven (it took in
+  // the re-homed range card), and level-4's ten.
+  // 2026-08-23 (BUILD DAY, SESSION G2): euclid 12 -> 29. The chapter's
+  // last three tiles are seeded — cyclic-quads gets SIX fresh chained
+  // riders, tangents gets FIVE fresh ones beside the re-homed
+  // euclid.tan.t2q5(a,b,c), and the Level 4 ★ tile opens with SIX fresh
+  // hard finishers beside the re-homed euclid.tan.t2q5(d)
+  // (js/exam/euclid-siblings-cyclic-quads.js, -tangents.js,
+  // euclid-level4.js). 4 + 6 + 6 + 6 + 7 = 29, all five Euclidean tiles
+  // now hold six or more cards, and no Euclidean tile renders "coming
+  // soon" any more. No further session moves this number.
+  // 2026-08-23 (SESSION H, her afternoon extension): eqn 72 -> 78. ONE
+  // new tile, solution-count "Two, one or no solution?", six fresh
+  // cards on her handwritten rational-exponent box
+  // (js/exam/eqn-siblings-solution-count.js). Twelve tiles: eleven of
+  // six, plus level-4's twelve.
+  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 54, meas: 0, func: 83, tgraph: 36, analytical: 0, pat: 0, exp: 43, eqn: 78, euclid: 29, algx: 37 };
   let countsOk = true;
   const countLines = [];
   allChapterIds.forEach(id => {
@@ -349,7 +512,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   const EXPECTED_TOPICS = {
     algx: ["expand", "factorise-basics", "factorise-advanced", "fractions-multiply-divide", "fractions-add-subtract", "level-4"],
     exp: ["rational-exponents-numeric", "exponent-expressions", "exponential-equations", "surds", "rationalise", "surd-proofs", "level-4"],
-    eqn: ["quadratic-solving", "fraction-equations", "surd-equations", "rational-exponents-k", "simultaneous", "inequalities", "nature-chain", "k-equal-roots", "k-for-nature", "delta-in-p", "level-4"],
+    eqn: ["quadratic-solving", "fraction-equations", "surd-equations", "rational-exponents-k", "solution-count", "simultaneous", "inequalities", "nature-chain", "k-equal-roots", "k-for-nature", "delta-in-p", "level-4"],
     func: ["find-equation", "asymptotes-domain-range", "intercepts-turning-point", "axis-of-symmetry", "shift", "inequalities", "nature-of-roots", "distances", "sketch", "intersection", "average-gradient", "reflections", "level-4"],
     tgraph: ["period-amplitude-range", "read-parameters", "sketch", "intersections-inequalities", "shift-reflect", "level-4"],
     gtrig: ["co-functions", "special-angles", "reduction", "special-sums", "super-special-sums", "identities", "identities-undefined", "general-solution", "level-4"],
@@ -397,7 +560,23 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   // "waiting on a digest" but her flat ruling that the Euclidean exam
   // chapter has NO "I'm lost" button at all ("they don't need it
   // anyway"). Part 11 below proves the button really doesn't render.
-  const PLACEHOLDER_LOST_IDS = new Set(["euclid.circ.t2q4", "euclid.tan.t2q5"]);
+  // WIDENED 2026-08-23 (build day, SESSION G1): the eight new Euclidean
+  // source questions join it for exactly the same reason — the ruling is
+  // about the whole chapter, not about those first two questions, so
+  // every Euclidean question composed from here on carries the same
+  // documented PENDING- placeholder and renders no reteach link.
+  const PLACEHOLDER_LOST_IDS = new Set([
+    "euclid.circ.t2q4", "euclid.tan.t2q5",
+    "euclid.bw.q1", "euclid.bw.q2", "euclid.bw.q3",
+    "euclid.sib.ca.q1", "euclid.sib.ca.q2", "euclid.sib.ca.q3",
+    "euclid.sib.ca.q4", "euclid.sib.ca.q5",
+    /* WAVE 2, SESSION G2 (2026-08-23): the other three tiles, same
+       standing ruling — six cyclic-quad riders, five tangent riders and
+       six Level 4 ★ cards. */
+    ...[1, 2, 3, 4, 5, 6].map(n => `euclid.sib.cq.q${n}`),
+    ...[1, 2, 3, 4, 5].map(n => `euclid.sib.tg.q${n}`),
+    ...[1, 2, 3, 4, 5, 6].map(n => `euclid.l4.q${n}`),
+  ]);
   const EXPECTED_LOSTQUEST = {
     "eqn.nor.q1": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q2": { chapter: "eqn", quest: "eq8" },
     "eqn.nor.q3": { chapter: "eqn", quest: "eq8" }, "eqn.nor.q4": { chapter: "eqn", quest: "eq8" },
@@ -405,9 +584,93 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
     "eqn.km.t1q2": { chapter: "eqn", quest: "eq3" },
     "eqn.fr.q1": { chapter: "eqn", quest: "eq4" },
     "eqn.ineq.t1q3": { chapter: "eqn", quest: "eq7" }, "eqn.ineq.q2": { chapter: "eqn", quest: "eq7" },
+    /* SESSION C2's twenty-four (2026-08-23). Each points at the round
+       that actually reteaches it: eq1 "Standard form & brackets = 0",
+       eq3 "The k-method", eq5 "Perfect squares & the turning point",
+       eq6 "The formula & simultaneous", eq7 "Inequalities: flip & the
+       bowl", eq8 "Nature of roots".
+       THE SURD-EQUATIONS TILE IS THE ONE CROSS-CHAPTER LINK IN THE
+       BANK: it points at exp/es8, "No-solution & strategy", whose own
+       blurb reads "Exponential & surd equations: same base, common
+       factor, let k, isolate-square-TEST, and every no-solution trap".
+       No eq-round teaches surd equations at all, so pointing there
+       would put a wrong reteach behind the "I'm lost" button. The
+       Level 4 surd word problem (eqn.l4.q4) carries the same link.
+       verify-exam-modules.mjs holds the matching documented set
+       (LOST_CROSS_CHAPTER_OK). */
+    "eqn.sib.qs.q1": { chapter: "eqn", quest: "eq1" },
+    "eqn.sib.qs.q2": { chapter: "eqn", quest: "eq1" },
+    "eqn.sib.qs.q3": { chapter: "eqn", quest: "eq6" },
+    "eqn.sib.qs.q4": { chapter: "eqn", quest: "eq5" },
+    "eqn.sib.qs.q5": { chapter: "eqn", quest: "eq1" },
+    "eqn.sib.qs.q6": { chapter: "eqn", quest: "eq1" },
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`eqn.sib.se.q${n}`, { chapter: "exp", quest: "es8" }])),
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`eqn.sib.sim.q${n}`, { chapter: "eqn", quest: "eq6" }])),
+    "eqn.l4.q1": { chapter: "eqn", quest: "eq8" },
+    "eqn.l4.q2": { chapter: "eqn", quest: "eq8" },
+    "eqn.l4.q3": { chapter: "eqn", quest: "eq3" },
+    "eqn.l4.q4": { chapter: "exp", quest: "es8" },
+    "eqn.l4.q5": { chapter: "eqn", quest: "eq8" },
+    "eqn.l4.q6": { chapter: "eqn", quest: "eq7" },
+    /* SESSION C1's twenty-seven eqn questions (2026-08-23). Every one of
+       them points at the eq-round that actually drills it: eq8 "Nature of
+       roots & know the difference" for the four Δ tiles, eq7
+       "Inequalities: flip & the bowl", eq4 "Fractions & restrictions",
+       and eq3 "The k-method" for the rational-exponent tile (es7 teaches
+       the rational-exponent half, but lostQuest.chapter has to match the
+       question's own chapter for the link to render). */
+    ...Object.fromEntries([1, 2, 3, 4].map(n => [`eqn.sib.nc.q${n}`, { chapter: "eqn", quest: "eq8" }])),
+    ...Object.fromEntries([1, 2, 3, 4].map(n => [`eqn.sib.ker.q${n}`, { chapter: "eqn", quest: "eq8" }])),
+    ...Object.fromEntries([1, 2, 3, 4, 5].map(n => [`eqn.sib.kfn.q${n}`, { chapter: "eqn", quest: "eq8" }])),
+    ...Object.fromEntries([1, 2, 3, 4].map(n => [`eqn.sib.dip.q${n}`, { chapter: "eqn", quest: "eq8" }])),
+    ...Object.fromEntries([1, 2].map(n => [`eqn.sib.ineq.q${n}`, { chapter: "eqn", quest: "eq7" }])),
+    ...Object.fromEntries([1, 2, 3, 4].map(n => [`eqn.sib.fe.q${n}`, { chapter: "eqn", quest: "eq4" }])),
+    ...Object.fromEntries([1, 2, 3, 4].map(n => [`eqn.sib.rek.q${n}`, { chapter: "eqn", quest: "eq3" }])),
+    /* SESSION H's six (2026-08-23). They point at eq9 "Two, one or no
+       solution?", the drill round built in the same session, which
+       teaches her handwritten box and then drills exactly this
+       decision. Same chapter, so no cross-chapter entry is needed. */
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`eqn.sib.sc.q${n}`, { chapter: "eqn", quest: "eq9" }])),
     "exp.fsm.t1q1": { chapter: "exp", quest: "es3" },
     "exp.cr.q1": { chapter: "exp", quest: "es6" },
     "exp.nss.q1": { chapter: "exp", quest: "es8" },
+    /* SESSION B's sibling + Level 4 questions (2026-08-23). Each one
+       points at the es-round that actually teaches it: es3 "First step
+       & which method" for the one-term simplifies, es4 "Which divorce?"
+       for the common-factor ones, es5 "Surd laws & traps", es6
+       "Conjugates & rationalising", es7 "Rational-exponent equations"
+       and es8 "No-solution & strategy". */
+    "exp.sib.ren.q1": { chapter: "exp", quest: "es7" },
+    "exp.sib.ren.q2": { chapter: "exp", quest: "es7" },
+    "exp.sib.ren.q3": { chapter: "exp", quest: "es7" },
+    "exp.sib.ren.q4": { chapter: "exp", quest: "es7" },
+    "exp.sib.ren.q5": { chapter: "exp", quest: "es7" },
+    "exp.sib.ren.q6": { chapter: "exp", quest: "es7" },
+    "exp.sib.expr.q1": { chapter: "exp", quest: "es3" },
+    "exp.sib.expr.q2": { chapter: "exp", quest: "es4" },
+    "exp.sib.expr.q3": { chapter: "exp", quest: "es3" },
+    "exp.sib.expr.q4": { chapter: "exp", quest: "es3" },
+    "exp.sib.eqns.q1": { chapter: "exp", quest: "es8" },
+    "exp.sib.eqns.q2": { chapter: "exp", quest: "es8" },
+    "exp.sib.eqns.q3": { chapter: "exp", quest: "es8" },
+    "exp.sib.srd.q1": { chapter: "exp", quest: "es5" },
+    "exp.sib.srd.q2": { chapter: "exp", quest: "es5" },
+    "exp.sib.rat.q1": { chapter: "exp", quest: "es6" },
+    "exp.sib.rat.q2": { chapter: "exp", quest: "es6" },
+    "exp.sib.rat.q3": { chapter: "exp", quest: "es6" },
+    "exp.sib.rat.q4": { chapter: "exp", quest: "es6" },
+    "exp.sib.sp.q1": { chapter: "exp", quest: "es5" },
+    "exp.sib.sp.q2": { chapter: "exp", quest: "es5" },
+    "exp.sib.sp.q3": { chapter: "exp", quest: "es5" },
+    "exp.sib.sp.q4": { chapter: "exp", quest: "es5" },
+    "exp.sib.sp.q5": { chapter: "exp", quest: "es5" },
+    "exp.sib.sp.q6": { chapter: "exp", quest: "es5" },
+    "exp.l4.q1": { chapter: "exp", quest: "es8" },
+    "exp.l4.q2": { chapter: "exp", quest: "es5" },
+    "exp.l4.q3": { chapter: "exp", quest: "es8" },
+    "exp.l4.q4": { chapter: "exp", quest: "es4" },
+    "exp.l4.q5": { chapter: "exp", quest: "es5" },
+    "exp.l4.q6": { chapter: "exp", quest: "es7" },
     "func.hyp.t1q4": { chapter: "func", quest: "fn3" }, "func.hyp.t2q3": { chapter: "func", quest: "fn3" },
     "func.gt.t1q5": { chapter: "func", quest: "fn7" },
     "func.lp.q1": { chapter: "func", quest: "fn2" },
@@ -448,12 +711,90 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
     "func.sib.dist.q3": { chapter: "func", quest: "fn7" },
     "func.sib.dist.q4": { chapter: "func", quest: "fn7" },
     "func.sib.dist.q5": { chapter: "func", quest: "fn3" },
+    /* SESSION D1 (2026-08-23) — the three NEW Functions tiles. Sketching
+       is taught by the family rounds: fn2 for the line and parabola,
+       fn3 for the hyperbola and exponential, fn1 for "which family is
+       this" (the sign-conditions card). Intersections and average
+       gradient are both fn7's job. */
+    "func.sib.sk.q1": { chapter: "func", quest: "fn2" },
+    "func.sib.sk.q2": { chapter: "func", quest: "fn2" },
+    "func.sib.sk.q3": { chapter: "func", quest: "fn3" },
+    "func.sib.sk.q4": { chapter: "func", quest: "fn3" },
+    "func.sib.sk.q5": { chapter: "func", quest: "fn2" },
+    "func.sib.sk.q6": { chapter: "func", quest: "fn1" },
+    "func.sib.int.q1": { chapter: "func", quest: "fn7" },
+    "func.sib.int.q2": { chapter: "func", quest: "fn7" },
+    "func.sib.int.q3": { chapter: "func", quest: "fn7" },
+    "func.sib.int.q4": { chapter: "func", quest: "fn7" },
+    "func.sib.int.q5": { chapter: "func", quest: "fn7" },
+    "func.sib.int.q6": { chapter: "func", quest: "fn7" },
+    "func.sib.ag.q1": { chapter: "func", quest: "fn7" },
+    "func.sib.ag.q2": { chapter: "func", quest: "fn7" },
+    "func.sib.ag.q3": { chapter: "func", quest: "fn7" },
+    "func.sib.ag.q4": { chapter: "func", quest: "fn7" },
+    "func.sib.ag.q5": { chapter: "func", quest: "fn7" },
+    "func.sib.ag.q6": { chapter: "func", quest: "fn7" },
+    /* SESSION D2 (2026-08-23) — the reflections tile, the Level 4 ★
+       tile's six fresh cards, and the four top-ups. Reflections are her
+       pp19–24, which is fn6 "Transformations". The Level 4 tile is
+       mixed, so each of its questions points at the round that actually
+       teaches its move: fn2 "Line & parabola" for the archway (turning
+       point of a parabola), fn7 "Graphs together" for the rest
+       (max distance, sliding lines, tangents, two graphs solved
+       together). The top-ups follow the tile they belong to: fn7 for
+       nature-of-roots, fn2 for the intercepts-and-chord distance card. */
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`func.sib.ref.q${n}`, { chapter: "func", quest: "fn6" }])),
+    "func.l4.q1": { chapter: "func", quest: "fn2" },
+    "func.l4.q2": { chapter: "func", quest: "fn7" },
+    "func.l4.q3": { chapter: "func", quest: "fn7" },
+    "func.l4.q4": { chapter: "func", quest: "fn7" },
+    "func.l4.q5": { chapter: "func", quest: "fn7" },
+    "func.l4.q6": { chapter: "func", quest: "fn7" },
+    "func.sib.nor.q4": { chapter: "func", quest: "fn7" },
+    "func.sib.nor.q5": { chapter: "func", quest: "fn7" },
+    "func.sib.nor.q6": { chapter: "func", quest: "fn7" },
+    "func.sib.dist.q6": { chapter: "func", quest: "fn2" },
     "trig.mix.t2q6": { chapter: "trig", quest: "t7" },
     /* RELINKED 2026-08-22 (stage 4 of the General Trig build): the two
        questions that shipped linkless now point at the rounds that
        teach them, and they live in the gtrig chapter alongside them. */
     "trig.rr.t2q1": { chapter: "gtrig", quest: "gt5" },
     "trig.gs.t2q2": { chapter: "gtrig", quest: "gt11" },
+    /* SESSION F1's twenty-two gtrig questions (2026-08-23). Each tile
+       points at the round that actually drills it: gt4 "Co-functions",
+       gt3 "Special angles & identities", gt8 "Special sums", gt10
+       "Super special sums". */
+    ...Object.fromEntries([1, 2, 3, 4, 5].map(n => [`gtrig.sib.cf.q${n}`, { chapter: "gtrig", quest: "gt4" }])),
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`gtrig.sib.sa.q${n}`, { chapter: "gtrig", quest: "gt3" }])),
+    ...Object.fromEntries([1, 2, 3, 4, 5].map(n => [`gtrig.sib.ss.q${n}`, { chapter: "gtrig", quest: "gt8" }])),
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`gtrig.sib.sss.q${n}`, { chapter: "gtrig", quest: "gt10" }])),
+    /* SESSION F2's twenty-eight gtrig questions (2026-08-23). Reduction
+       splits by kind — gt5 "Reductions: numbers" for the two numeric
+       cards, gt7 "Reductions: variables" for the three with an x or a θ
+       in them. Identities go to gt9 "Identities: the next step" and the
+       undefined-value ones to gt13 "Undefined values". General solution
+       goes to gt11 "the six types", except the compound-angle card,
+       whose whole question IS the quadrant cross and the reference
+       angle — that one points at gt12 "last steps". The Level 4 cards
+       each point at the round their hardest idea comes from. */
+    "gtrig.sib.red.q1": { chapter: "gtrig", quest: "gt5" },
+    "gtrig.sib.red.q2": { chapter: "gtrig", quest: "gt7" },
+    "gtrig.sib.red.q3": { chapter: "gtrig", quest: "gt7" },
+    "gtrig.sib.red.q4": { chapter: "gtrig", quest: "gt5" },
+    "gtrig.sib.red.q5": { chapter: "gtrig", quest: "gt7" },
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`gtrig.sib.id.q${n}`, { chapter: "gtrig", quest: "gt9" }])),
+    ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`gtrig.sib.iu.q${n}`, { chapter: "gtrig", quest: "gt13" }])),
+    "gtrig.sib.gs.q1": { chapter: "gtrig", quest: "gt11" },
+    "gtrig.sib.gs.q2": { chapter: "gtrig", quest: "gt11" },
+    "gtrig.sib.gs.q3": { chapter: "gtrig", quest: "gt11" },
+    "gtrig.sib.gs.q4": { chapter: "gtrig", quest: "gt11" },
+    "gtrig.sib.gs.q5": { chapter: "gtrig", quest: "gt12" },
+    "gtrig.l4.q1": { chapter: "gtrig", quest: "gt10" },
+    "gtrig.l4.q2": { chapter: "gtrig", quest: "gt11" },
+    "gtrig.l4.q3": { chapter: "gtrig", quest: "gt11" },
+    "gtrig.l4.q4": { chapter: "gtrig", quest: "gt9" },
+    "gtrig.l4.q5": { chapter: "gtrig", quest: "gt7" },
+    "gtrig.l4.q6": { chapter: "gtrig", quest: "gt13" },
   };
   let lostQuestOk = true, placeholderOk = true;
   const lostQuestLines = [];
@@ -550,9 +891,24 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   lines.push(`flag ON — hub tabs: [${tabsOn.join(" | ")}] — Exam Focus present? ${!!examTabBtn}`);
 
   if (examTabBtn) examTabBtn.click();
-  const examCard = host.querySelector(".chapter-cards .ch-card");
-  tick(!!examCard && /equations/i.test(examCard.textContent), "flag ON: clicking the Exam Focus tab shows the flagged chapter's card (Equations & Inequalities)");
-  lines.push(`exam chapter card rendered: ${examCard ? examCard.querySelector("h2").textContent.trim() : "(none)"}`);
+  /* THE TAB'S ORDER IS NOW HER ORDER (session A, 2026-08-23):
+     js/config.js EXAM_TAB_ORDER puts BASICS FIRST, so Algebraic
+     Expressions is the first card a learner meets and Euclidean is
+     last — it used to be the other way round, because examChapters()
+     simply concatenated CHAPTERS and EXAM_ONLY_CHAPTERS. Three
+     chapters are eligible in this test (algx and euclid are exam-only,
+     so the build flag is their whole gate; eqn qualifies because eq8
+     is open), and they must appear in EXAM_TAB_ORDER's order. */
+  const examCards = [...host.querySelectorAll(".chapter-cards .ch-card")];
+  const cardNames = examCards.map(c => c.querySelector("h2").textContent.trim());
+  tick(!!examCards.length && /algebraic expressions/i.test(cardNames[0] || ""),
+    `flag ON: the FIRST Exam Focus chapter card is Algebraic Expressions (EXAM_TAB_ORDER, basics first) — got "${cardNames[0]}"`);
+  tick(cardNames.some(n => /euclidean/i.test(n)) ? /euclidean/i.test(cardNames[cardNames.length - 1]) : true,
+    `…and Euclidean is last — got [${cardNames.join(", ")}]`);
+  lines.push(`exam chapter cards, in EXAM_TAB_ORDER: [${cardNames.join(", ")}]`);
+
+  const examCard = examCards.find(c => /equations/i.test(c.textContent));
+  tick(!!examCard, "flag ON: the flagged chapter's card (Equations & Inequalities) is on the grid");
 
   if (examCard) examCard.querySelector("button").click();
   tick(appOn.screen === "examChapter" && appOn.params.chapterId === "eqn", "clicking the chapter card navigates to examChapter with chapterId \"eqn\"");
@@ -871,6 +1227,9 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
       "fraction-equations",
       "surd-equations",
       "rational-exponents-k",
+      /* SESSION H (2026-08-23), her afternoon extension: the tile that
+         goes with the new eq9 drill round. */
+      "solution-count",
       "simultaneous",
       "inequalities",
       "nature-chain",
@@ -1375,18 +1734,66 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   const euclidChords = examQuestionsForTopic("euclid", "chords-and-angles");
   const euclidTangents = examQuestionsForTopic("euclid", "tangents");
   const euclidL4 = examQuestionsForTopic("euclid", "level-4");
-  tick(euclidBookwork.length === 1 && euclidBookwork[0].id === "euclid.circ.t2q4.a", `bookwork-proofs holds the ∠-at-centre proof, got [${euclidBookwork.map(c => c.id).join(", ")}]`);
-  tick(euclidChords.length === 1 && euclidChords[0].id === "euclid.circ.t2q4.b1b2", `chords-and-angles holds the chord/radius pair, got [${euclidChords.map(c => c.id).join(", ")}]`);
-  tick(euclidL4.length === 1 && euclidL4[0].id === "euclid.tan.t2q5.d", `euclid's Level 4 tile holds the starred part on its own, got [${euclidL4.map(c => c.id).join(", ")}]`);
-  tick(examQuestionsForTopic("euclid", "cyclic-quads").length === 0, "cyclic-quads has no cards yet (it renders \"coming soon\" until the Euclidean content sessions land)");
-  const q4 = euclidBookwork[0];
-  const q5 = euclidTangents[0];
+  /* SEEDED 2026-08-23 (build day, SESSION G1): the two G1 tiles now hold
+     four and six cards. What is asserted is the SHAPE the tiles have to
+     keep, not a frozen list (Part 12's grouping table is where the exact
+     membership lives): bookwork-proofs holds one card per examinable
+     proof — four, all level 1, all one part — with the re-homed
+     ∠-at-centre proof still among them; and chords-and-angles holds six
+     chained riders, still including the re-homed chord/radius pair. */
+  tick(euclidBookwork.length === 4, `bookwork-proofs holds one card per examinable proof, got ${euclidBookwork.length}: [${euclidBookwork.map(c => c.id).join(", ")}]`);
+  tick(euclidBookwork.some(c => c.id === "euclid.circ.t2q4.a"), "…and the ∠-at-centre proof re-homed onto it is still one of them");
+  tick(euclidBookwork.every(c => c.parts.length === 1 && c.parts[0].level === 1),
+    `every bookwork card is ONE part at level 1 — bookwork is recall, got [${euclidBookwork.map(c => `${c.id}:${c.parts.length}p/L${c.parts.map(p => p.level).join("")}`).join(", ")}]`);
+  tick(euclidBookwork.every(c => !!c.diagram), "every bookwork card carries its figure");
+  tick(euclidChords.length === 6, `chords-and-angles holds six chained riders, got ${euclidChords.length}: [${euclidChords.map(c => c.id).join(", ")}]`);
+  tick(euclidChords.some(c => c.id === "euclid.circ.t2q4.b1b2"), "…and the re-homed chord/radius pair is still one of them");
+  tick(euclidChords.filter(c => c.id.startsWith("euclid.sib.ca.")).every(c => c.parts.length >= 5 && c.parts.length <= 6),
+    `each fresh rider runs 5–6 parts on ONE sketch (her ruling 4), got [${euclidChords.map(c => `${c.id}:${c.parts.length}`).join(", ")}]`);
+  tick([...euclidBookwork, ...euclidChords].every(c => !c.parts.some(p => p.level === 4)),
+    "no ★ part anywhere on G1's two tiles — level 4 belongs to the brave round");
+  /* SEEDED 2026-08-23 (build day, SESSION G2): the other three tiles.
+     Same rule as above — the SHAPE is asserted here, the exact
+     membership lives in Part 12's grouping table. cyclic-quads and
+     tangents hold six chained riders each and stay level 1–3; the brave
+     round holds seven cards, every one of them carrying a ★ part and no
+     part below level 3. */
+  const euclidCyclic = examQuestionsForTopic("euclid", "cyclic-quads");
+  tick(euclidCyclic.length === 6, `cyclic-quads holds six chained riders, got ${euclidCyclic.length}: [${euclidCyclic.map(c => c.id).join(", ")}]`);
+  tick(euclidTangents.length === 6, `tangents holds six cards, got ${euclidTangents.length}: [${euclidTangents.map(c => c.id).join(", ")}]`);
+  tick(euclidTangents.some(c => c.id === "euclid.tan.t2q5.abc"), "…and the re-homed two-tangents card is still one of them");
+  tick([...euclidCyclic, ...euclidTangents].every(c => c.parts.length >= 3 && c.parts.length <= 6),
+    `every card on those two tiles runs 3–6 parts on ONE sketch, got [${[...euclidCyclic, ...euclidTangents].map(c => `${c.id}:${c.parts.length}`).join(", ")}]`);
+  tick([...euclidCyclic, ...euclidTangents].every(c => !c.parts.some(p => p.level === 4)),
+    "no ★ part on cyclic-quads or tangents either — level 4 belongs to the brave round");
+  tick([...euclidCyclic, ...euclidTangents].every(c => !!c.diagram), "every cyclic-quad and tangent card carries its figure");
+  tick(euclidL4.length === 7, `euclid's Level 4 tile holds seven cards, got ${euclidL4.length}: [${euclidL4.map(c => c.id).join(", ")}]`);
+  tick(euclidL4.some(c => c.id === "euclid.tan.t2q5.d"), "…and the re-homed starred part of the seeded question is still one of them");
+  tick(euclidL4.every(c => c.parts.some(p => p.level === 4)), "every Level 4 card carries at least one ★ part");
+  tick(euclidL4.every(c => c.parts.every(p => p.level >= 3)), "no part below level 3 sits on euclid's Level 4 tile");
+  tick(examQuestionsForTopic("euclid", "level-4").length > 0 && euclidCyclic.length > 0,
+    "no Euclidean tile renders \"coming soon\" any more — all five are seeded");
+  const q4 = euclidBookwork.find(c => c.id === "euclid.circ.t2q4.a");
+  /* The DOM walk below is deliberately pinned to the re-homed
+     euclid.tan.t2q5 card BY ID, not to whatever happens to sort first on
+     the tangents tile. It is the one Euclidean card with a shared
+     `diagram.spec` (its four parts run on one spec with per-part
+     highlights), which is what the viewBox assertion a few lines down
+     reads — every G1 and G2 rider instead carries its OWN spec per part,
+     because `specAfter` grows the value key as the learner works, and
+     those cards have no `diagram.spec` at all. Taking euclidTangents[0]
+     used to be the same card and stopped being so the moment session G2
+     filled the tile. */
+  const q5 = euclidTangents.find(c => c.id === "euclid.tan.t2q5.abc");
   tick(!!q5, "resolved the euclid.tan.t2q5.abc card through the registry");
   tick(!!q4, "resolved the euclid.circ.t2q4.a card through the registry");
   tick(!!q5 && q5.parts.length === 3 && q5.parts.map(p => p.id).join("") === "abc", "the tangents card carries parts (a)(b)(c), in order");
   tick(!!q4 && q4.parts.length === 1 && q4.parts[0].id === "a", "the bookwork card carries just the proof part");
-  tick(!!euclidL4[0] && euclidL4[0].parts.length === 1 && euclidL4[0].parts[0].level === 4, "the Level 4 card is one part, and it really is level 4");
-  tick(!!euclidL4[0] && !!euclidL4[0].intro && /cyclic quadrilateral/i.test(euclidL4[0].intro.en) && /180° − x/.test(euclidL4[0].intro.en),
+  /* the re-homed starred part, resolved BY ID rather than by position —
+     it was euclidL4[0] until session G2 filled the tile around it */
+  const t2q5d = euclidL4.find(c => c.id === "euclid.tan.t2q5.d");
+  tick(!!t2q5d && t2q5d.parts.length === 1 && t2q5d.parts[0].level === 4, "the re-homed Level 4 card is one part, and it really is level 4");
+  tick(!!t2q5d && !!t2q5d.intro && /cyclic quadrilateral/i.test(t2q5d.intro.en) && /180° − x/.test(t2q5d.intro.en),
     "…and it carries an intro with (b)'s and (c)'s results, which its own prompt no longer states");
 
   // a real signed-in learner, exactly as Part 8 does — the Done button
@@ -1486,7 +1893,12 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
     go(screen, params) { playAppC.screen = screen; playAppC.params = params || {}; },
     async refresh() { playAppC.state = await api.getState(uname11, "pw12"); } };
   playAppC.state.openQuests = [];
-  renderExamPlay(playAppC, host, { chapter: euclidChapter, skillId: "chords-and-angles", question: euclidChords[0], accent: euclidChapter.signature });
+  /* NAMED, not euclidChords[0] (2026-08-23, session G1): the tile now
+     holds six cards and the re-homed chord/radius pair is no longer the
+     first of them — the tile runs easiest-first, so it is last. */
+  const b1Card = euclidChords.find(c => c.id === "euclid.circ.t2q4.b1b2");
+  tick(!!b1Card, "the re-homed euclid.circ.t2q4(b1,b2) card is on the chords-and-angles tile");
+  renderExamPlay(playAppC, host, { chapter: euclidChapter, skillId: "chords-and-angles", question: b1Card, accent: euclidChapter.signature });
   await new Promise(r => setTimeout(r, 40));
   const b1Fig = host.querySelector('.exam-diagram[data-part="b1"]');
   tick(!!b1Fig, "Q4(b)(1) renders its own figure on the chords-and-angles card");
@@ -1513,9 +1925,15 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   tick(algxTiles.length === 6, `algx shows its 6 skill tiles, got ${algxTiles.length}`);
   tick(algxTiles.every((t, i) => i === algxTiles.length - 1 || !/level 4/i.test(t)) && /level 4/i.test(algxTiles[algxTiles.length - 1] || ""),
     `algx's Level 4 tile is last and there is only one, got [${algxTiles.join(", ")}]`);
+  /* SEEDED 2026-08-23 (wave 1, session A): all six algx tiles now hold
+     cards, so NONE of them may still be muted. This check used to
+     assert the opposite ("all 6 locked until session A seeds it") — it
+     is the same check, flipped the day the content landed. */
   const algxLocked = [...host.querySelectorAll(".exam-skill-card")].filter(c => c.classList.contains("locked")).length;
-  tick(algxLocked === 6, `every algx tile is muted / "coming soon" until session A seeds it, got ${algxLocked} of 6`);
-  lines.push(`algx skill tiles: [${algxTiles.join(", ")}] — all ${algxLocked} muted, colour ${algxChapter && algxChapter.signature}`);
+  tick(algxLocked === 0, `every algx tile is live now that session A has seeded it — ${algxLocked} still muted, want 0`);
+  const algxCardCounts = SKILLS.algx.map(sk => `${sk.id}=${examQuestionsForTopic("algx", sk.id).length}`);
+  tick(SKILLS.algx.every(sk => examQuestionsForTopic("algx", sk.id).length >= 6), `every algx tile holds at least six cards — [${algxCardCounts.join(", ")}]`);
+  lines.push(`algx skill tiles: [${algxTiles.join(", ")}] — ${algxLocked} muted, cards per tile [${algxCardCounts.join(", ")}], colour ${algxChapter && algxChapter.signature}`);
 
   clear(host);
   say("euclidChecks", lines);
@@ -1549,77 +1967,275 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 {
   const lines = [];
 
-  /* ---- the 52 source questions, straight from their own modules
-     (21 seeded + SESSION 2a's 15 and SESSION 2b's 16 Functions siblings) ---- */
+  /* ---- the 89 source questions, straight from their own modules
+     (21 seeded + SESSION 2a's 15 and SESSION 2b's 16 Functions siblings
+     + WAVE 1 SESSION A's 37 Algebraic Expressions questions) ---- */
   const SOURCES = [
     ...eqnNatureOfRootsQuestions, ...eqnNatureOfRootsTopUpQuestions, ...eqnKMethodQuestions,
     ...eqnFractionsAndRestrictionsQuestions, ...eqnInequalitiesQuestions, ...eqnInequalitiesTopUpQuestions,
+    /* SESSION C2's four eqn modules (2026-08-23) — 24 more questions. */
+    ...eqnQuadraticSolvingSiblingQuestions, ...eqnSurdEquationsSiblingQuestions,
+    ...eqnSimultaneousSiblingQuestions, ...eqnLevel4Questions,
+    /* SESSION C1's seven eqn modules (2026-08-23) — 27 more questions. */
+    ...eqnNatureChainSiblingQuestions, ...eqnKEqualRootsSiblingQuestions,
+    ...eqnKForNatureSiblingQuestions, ...eqnDeltaInPSiblingQuestions,
+    ...eqnInequalitiesSiblingQuestions, ...eqnFractionEquationsSiblingQuestions,
+    ...eqnRationalExponentsKSiblingQuestions,
+    /* SESSION H's one eqn module (2026-08-23) — 6 more questions. */
+    ...eqnSolutionCountSiblingQuestions,
     ...expFirstStepAndMethodQuestions, ...expConjugatesAndRationalisingQuestions, ...expNoSolutionAndStrategyQuestions,
+    /* SESSION B's seven exp modules (2026-08-23) — 31 more questions. */
+    ...expRationalExponentsNumericSiblingQuestions, ...expExponentExpressionsSiblingQuestions,
+    ...expExponentialEquationsSiblingQuestions, ...expSurdsSiblingQuestions,
+    ...expRationaliseSiblingQuestions, ...expSurdProofsSiblingQuestions, ...expLevel4Questions,
     ...funcHyperbolaAndExponentialQuestions, ...funcHyperbolaAndExponentialT2Questions,
     ...funcGraphsTogetherQuestions, ...funcLineAndParabolaQuestions,
     ...funcFindEquationSiblingQuestions, ...funcAsymptotesDomainRangeSiblingQuestions,
     ...funcInterceptsTurningPointSiblingQuestions, ...funcAxisOfSymmetrySiblingQuestions,
     ...funcShiftSiblingQuestions, ...funcInequalitiesSiblingQuestions,
     ...funcNatureOfRootsSiblingQuestions, ...funcDistancesSiblingQuestions,
+    /* SESSION D1's three func modules (2026-08-23) — 18 more questions. */
+    ...funcSketchSiblingQuestions, ...funcIntersectionSiblingQuestions,
+    ...funcAverageGradientSiblingQuestions,
+    /* SESSION D2's three func modules (2026-08-23) — 16 more questions:
+       six reflections, six on the Level 4 ★ tile, and four top-ups. */
+    ...funcReflectionsSiblingQuestions, ...funcLevel4Questions,
+    ...funcTopUpSiblingQuestions,
     ...trigReductionAndRatiosQuestions, ...trigGeneralSolutionsQuestions, ...trigMixedProblemsQuestions,
+    /* SESSION F1's four gtrig modules (2026-08-23) — 22 more questions. */
+    ...gtrigCoFunctionsSiblingQuestions, ...gtrigSpecialAnglesSiblingQuestions,
+    ...gtrigSpecialSumsSiblingQuestions, ...gtrigSuperSpecialSumsSiblingQuestions,
+    /* SESSION F2's five gtrig modules (2026-08-23) — 28 more questions. */
+    ...gtrigReductionSiblingQuestions, ...gtrigIdentitiesSiblingQuestions,
+    ...gtrigIdentitiesUndefinedSiblingQuestions, ...gtrigGeneralSolutionSiblingQuestions,
+    ...gtrigLevel4Questions,
     ...euclidCircleTheoremsQuestions, ...euclidTangentsAndCyclicQuadsQuestions,
+    /* SESSION G1's two euclid modules (2026-08-23) — 8 more questions:
+       three bookwork proofs and five chained riders. */
+    ...euclidBookworkProofQuestions, ...euclidChordsAndAnglesSiblingQuestions,
+    /* SESSION G2's three euclid modules (2026-08-23) — 17 more
+       questions: six cyclic-quad riders, five tangent riders and six
+       Level 4 ★ cards. */
+    ...euclidCyclicQuadsSiblingQuestions, ...euclidTangentsSiblingQuestions,
+    ...euclidLevel4Questions,
+    /* SESSION A's six algx modules (2026-08-23) — 37 more questions. */
+    ...algxExpandSiblingQuestions, ...algxFactoriseBasicsSiblingQuestions,
+    ...algxFactoriseAdvancedSiblingQuestions, ...algxFractionsMultiplyDivideSiblingQuestions,
+    ...algxFractionsAddSubtractSiblingQuestions, ...algxLevel4Questions,
+    /* SESSION E's six tgraph modules (2026-08-23) — 36 more questions. */
+    ...tgraphPeriodAmplitudeRangeQuestions, ...tgraphReadParametersQuestions,
+    ...tgraphSketchQuestions, ...tgraphIntersectionsInequalitiesQuestions,
+    ...tgraphShiftReflectQuestions, ...tgraphLevel4Questions,
   ];
   const sourceById = new Map(SOURCES.map(q => [q.id, q]));
-  tick(SOURCES.length === 52, `all 52 seeded source questions load — 21 practice-paper + 31 Functions siblings, got ${SOURCES.length}`);
+  /* WAS a hard-coded number (52, then 89). On a build day with six
+     content sessions adding modules to this ONE list at the same time, a
+     shared literal is a merge hazard rather than a check — so what the
+     number was actually guarding is asserted instead: every module in
+     the import list above really loads real questions, and no two of
+     them share an id. The count itself is REPORTED a few lines below,
+     beside the card count it feeds. (2026-08-23, session D1.) */
+  tick(SOURCES.length >= 89 && SOURCES.every(q => q && typeof q.id === "string" && Array.isArray(q.parts)),
+    `every seeded source module above loads real questions — got ${SOURCES.length}`);
+  tick(sourceById.size === SOURCES.length,
+    `no two seeded source questions share an id — ${SOURCES.length} questions, ${sourceById.size} distinct ids`);
 
   /* ---- HER GROUPING TABLE, typed out ---- */
   const TABLE = {
     eqn: {
-      "nature-chain": ["eqn.nor.q1.abcd", "eqn.nor.q2.abc"],
-      "k-equal-roots": ["eqn.nor.q2.d", "eqn.nor.q3.a", "eqn.fr.q1.d"],
-      "k-for-nature": ["eqn.nor.q3.bcd"],
-      "delta-in-p": ["eqn.nor.q4.abcd", "eqn.nor.q5.abcd", "eqn.ineq.t1q3.b"],
-      "inequalities": ["eqn.ineq.t1q3.a", "eqn.ineq.q2.a", "eqn.ineq.q2.b", "eqn.ineq.q2.c", "eqn.ineq.q2.d"],
-      "fraction-equations": ["eqn.fr.q1.abc", "eqn.km.t1q2.b"],
-      "rational-exponents-k": ["eqn.km.t1q2.a", "eqn.km.t1q2.c"],
+      /* THE SEVEN ORIGINAL TILES, filled to six cards each by SESSION C1
+         (2026-08-23), and re-cut by the same session's ★ MOVE: every
+         level-4 part that used to sit inside a normal card is now on the
+         level-4 tile below. What changed here:
+           · k-equal-roots  lost eqn.fr.q1.d (level 4);
+           · k-for-nature   eqn.nor.q3.bcd became eqn.nor.q3.bc;
+           · delta-in-p     eqn.nor.q4.abcd became eqn.nor.q4.a (its
+             b–c–d chain moved WHOLE, because (c) and (d) both open
+             "Hence" off the part before them), eqn.nor.q5.abcd became
+             eqn.nor.q5.abc, and eqn.ineq.t1q3.b left the tile;
+           · inequalities   lost eqn.ineq.q2.d (level 4).
+         The source MODULES are untouched — only the cut changed. */
+      "nature-chain": ["eqn.nor.q1.abcd", "eqn.nor.q2.abc", "eqn.sib.nc.q1.abc",
+                       "eqn.sib.nc.q2.ab", "eqn.sib.nc.q3.abc", "eqn.sib.nc.q4.ab"],
+      "k-equal-roots": ["eqn.nor.q2.d", "eqn.nor.q3.a", "eqn.sib.ker.q1.ab",
+                        "eqn.sib.ker.q2.abc", "eqn.sib.ker.q3.ab", "eqn.sib.ker.q4.a"],
+      "k-for-nature": ["eqn.nor.q3.bc", "eqn.sib.kfn.q1.a", "eqn.sib.kfn.q2.a",
+                       "eqn.sib.kfn.q3.ab", "eqn.sib.kfn.q4.ab", "eqn.sib.kfn.q5.ab"],
+      "delta-in-p": ["eqn.nor.q4.a", "eqn.nor.q5.abc", "eqn.sib.dip.q1.a",
+                     "eqn.sib.dip.q2.ab", "eqn.sib.dip.q3.abc", "eqn.sib.dip.q4.ab"],
+      "inequalities": ["eqn.ineq.t1q3.a", "eqn.ineq.q2.a", "eqn.ineq.q2.b", "eqn.ineq.q2.c",
+                       "eqn.sib.ineq.q1.a", "eqn.sib.ineq.q2.ab"],
+      "fraction-equations": ["eqn.fr.q1.abc", "eqn.km.t1q2.b", "eqn.sib.fe.q1.ab",
+                             "eqn.sib.fe.q2.ab", "eqn.sib.fe.q3.ab", "eqn.sib.fe.q4.ab"],
+      "rational-exponents-k": ["eqn.km.t1q2.a", "eqn.km.t1q2.c", "eqn.sib.rek.q1.ab",
+                               "eqn.sib.rek.q2.ab", "eqn.sib.rek.q3.ab", "eqn.sib.rek.q4.a"],
+      /* SESSION H's NEW tile (2026-08-23), six fresh cards, listed in the
+         order js/exam/cards-eqn.js makes them; the level sort then runs
+         over that order, exactly as it does everywhere else here. q2 and
+         q6 are the two that carry an `intro` — q2's instruction and q6's
+         given pair belong to every part on their card. */
+      "solution-count": ["eqn.sib.sc.q1.a", "eqn.sib.sc.q2.abc", "eqn.sib.sc.q3.a",
+                         "eqn.sib.sc.q4.a", "eqn.sib.sc.q5.a", "eqn.sib.sc.q6.ab"],
+      /* SESSION C2's three NEW tiles (2026-08-23), six fresh cards each,
+         listed in the order js/exam/cards-eqn.js makes them; the level
+         sort then runs over that order, exactly as it does everywhere
+         else in this table. */
+      "quadratic-solving": ["eqn.sib.qs.q1.ab", "eqn.sib.qs.q2.a", "eqn.sib.qs.q3.ab",
+                            "eqn.sib.qs.q4.ab", "eqn.sib.qs.q5.a", "eqn.sib.qs.q6.ab"],
+      "surd-equations": ["eqn.sib.se.q1.ab", "eqn.sib.se.q2.a", "eqn.sib.se.q3.a",
+                         "eqn.sib.se.q4.a", "eqn.sib.se.q5.a", "eqn.sib.se.q6.ab"],
+      "simultaneous": ["eqn.sib.sim.q1.ab", "eqn.sib.sim.q2.a", "eqn.sib.sim.q3.a",
+                       "eqn.sib.sim.q4.a", "eqn.sib.sim.q5.a", "eqn.sib.sim.q6.a"],
+      /* THE LEVEL 4 ★ TILE. SESSION C2's six fresh cards come first;
+         SESSION C1 APPENDS the chapter's MOVED ★ cards after them (the
+         level-4 parts that used to sit inside normal cards). Append
+         only — do not reorder what is already listed. */
+      "level-4": ["eqn.l4.q1.a", "eqn.l4.q2.ab", "eqn.l4.q3.a",
+                  "eqn.l4.q4.ab", "eqn.l4.q5.ab", "eqn.l4.q6.ab",
+                  /* SESSION C1's six MOVED ★ cards, appended in the
+                     order js/exam/cards-eqn.js makes them. Four of them
+                     carry an `intro`, because their parts used to lean
+                     on a part that is no longer beside them. */
+                  "eqn.nor.q3.d", "eqn.nor.q4.bcd", "eqn.nor.q5.d",
+                  "eqn.fr.q1.d", "eqn.ineq.t1q3.b", "eqn.ineq.q2.d"],
     },
+    /* EXPONENTS & SURDS — RE-CUT and filled by WAVE 1 SESSION B,
+       2026-08-23. Seven tiles in EXAM-BUILD-DAY.md's map order, six
+       cards each and seven on the Level 4 one. Every one of the twelve
+       original cards is still here; the ONE change to them is that
+       exp.nss.q1.d (level 4) left exponential-equations for level-4,
+       which is what took "exp" off Part 13's L4_MOVE_PENDING list. */
     exp: {
-      "surds": ["exp.fsm.t1q1.a", "exp.cr.q1.a", "exp.cr.q1.b", "exp.cr.q1.c"],
-      "rationalise": ["exp.fsm.t1q1.b", "exp.cr.q1.d"],
-      "exponent-expressions": ["exp.fsm.t1q1.c", "exp.fsm.t1q1.d"],
-      "exponential-equations": ["exp.nss.q1.a", "exp.nss.q1.b", "exp.nss.q1.c", "exp.nss.q1.d"],
+      "rational-exponents-numeric": ["exp.sib.ren.q1.a", "exp.sib.ren.q2.a", "exp.sib.ren.q3.a",
+                                     "exp.sib.ren.q4.a", "exp.sib.ren.q5.a", "exp.sib.ren.q6.a"],
+      "exponent-expressions": ["exp.sib.expr.q1.a", "exp.sib.expr.q2.a", "exp.sib.expr.q3.a",
+                               "exp.fsm.t1q1.c", "exp.fsm.t1q1.d", "exp.sib.expr.q4.a"],
+      "exponential-equations": ["exp.nss.q1.a", "exp.sib.eqns.q1.a", "exp.nss.q1.b",
+                                "exp.sib.eqns.q2.a", "exp.nss.q1.c", "exp.sib.eqns.q3.a"],
+      "surds": ["exp.fsm.t1q1.a", "exp.cr.q1.b", "exp.cr.q1.a", "exp.cr.q1.c",
+                "exp.sib.srd.q2.a", "exp.sib.srd.q1.a"],
+      "rationalise": ["exp.sib.rat.q1.a", "exp.fsm.t1q1.b", "exp.sib.rat.q2.a",
+                      "exp.sib.rat.q3.a", "exp.cr.q1.d", "exp.sib.rat.q4.a"],
+      "surd-proofs": ["exp.sib.sp.q1.a", "exp.sib.sp.q4.a", "exp.sib.sp.q5.a",
+                      "exp.sib.sp.q6.ab", "exp.sib.sp.q2.a", "exp.sib.sp.q3.a"],
+      "level-4": ["exp.nss.q1.d", "exp.l4.q4.a", "exp.l4.q5.ab", "exp.l4.q1.a",
+                  "exp.l4.q6.ab", "exp.l4.q2.abc", "exp.l4.q3.a"],
     },
     func: {
       "find-equation": ["func.lp.q1.a", "func.hyp.t1q4.a", "func.sib.fe.q1.ab", "func.sib.fe.q2.a", "func.sib.fe.q3.ab", "func.sib.fe.q4.a"],
-      "asymptotes-domain-range": ["func.hyp.t2q3.a", "func.hyp.t1q4.b", "func.lp.q1.c", "func.sib.adr.q1.abc", "func.sib.adr.q2.abc", "func.sib.adr.q3.ab"],
+      /* func.gt.t1q5.a joined this tile in SESSION D2's ★ move
+         (2026-08-23): its old card's other half, the starred (b), went
+         to the Level 4 tile, and "determine the range of f" is a range
+         question rather than a distance one. Seven cards here, six
+         everywhere else. */
+      "asymptotes-domain-range": ["func.hyp.t2q3.a", "func.hyp.t1q4.b", "func.lp.q1.c", "func.sib.adr.q1.abc", "func.sib.adr.q2.abc", "func.gt.t1q5.a", "func.sib.adr.q3.ab"],
       "intercepts-turning-point": ["func.lp.q1.b", "func.hyp.t1q4.c", "func.sib.itp.q1.ab", "func.sib.itp.q2.abc", "func.sib.itp.q3.abc", "func.sib.itp.q4.ab"],
       "axis-of-symmetry": ["func.hyp.t2q3.b", "func.hyp.t1q4.d", "func.sib.aos.q1.abc", "func.sib.aos.q2.abc", "func.sib.aos.q3.ab", "func.sib.aos.q4.ab"],
       "shift": ["func.lp.q1.d", "func.hyp.t2q3.c", "func.sib.sh.q1.ab", "func.sib.sh.q2.ab", "func.sib.sh.q3.ab", "func.sib.sh.q4.ab"],
       "inequalities": ["func.hyp.t1q4.e", "func.hyp.t2q3.cd", "func.sib.ineq.q1.ab", "func.sib.ineq.q2.ab", "func.sib.ineq.q3.ab", "func.sib.ineq.q4.ab"],
-      "nature-of-roots": ["func.lp.q1.e", "func.hyp.t2q3.e", "func.gt.t1q5.c", "func.sib.nor.q1.ab", "func.sib.nor.q2.ab", "func.sib.nor.q3.ab"],
-      "distances": ["func.gt.t1q5.ab", "func.sib.dist.q1.abc", "func.sib.dist.q2.ab", "func.sib.dist.q3.ab", "func.sib.dist.q4.ab", "func.sib.dist.q5.ab"],
+      /* SESSION D2's ★ MOVE (2026-08-23) emptied the top of this tile:
+         func.lp.q1.e, func.hyp.t2q3.e and func.gt.t1q5.c were each a
+         whole card made of one level-4 part, so all three are on the
+         level-4 tile below. func.sib.nor.q4–q6 are the fresh level-≤3
+         replacements. */
+      "nature-of-roots": ["func.sib.nor.q1.ab", "func.sib.nor.q2.ab", "func.sib.nor.q3.ab",
+                          "func.sib.nor.q4.ab", "func.sib.nor.q5.abc", "func.sib.nor.q6.ab"],
+      /* func.gt.t1q5.ab split in the same move: (b) went to level-4,
+         (a) to asymptotes-domain-range. func.sib.dist.q6 replaces it. */
+      "distances": ["func.sib.dist.q1.abc", "func.sib.dist.q2.ab", "func.sib.dist.q3.ab", "func.sib.dist.q4.ab", "func.sib.dist.q5.ab", "func.sib.dist.q6.ab"],
+      /* SESSION D1's three NEW tiles (2026-08-23), six fresh cards each. */
+      "sketch": ["func.sib.sk.q1.abc", "func.sib.sk.q2.abc", "func.sib.sk.q3.abc", "func.sib.sk.q4.abc", "func.sib.sk.q5.abc", "func.sib.sk.q6.ab"],
+      "intersection": ["func.sib.int.q1.ab", "func.sib.int.q2.abc", "func.sib.int.q3.abc", "func.sib.int.q4.ab", "func.sib.int.q5.ab", "func.sib.int.q6.ab"],
+      "average-gradient": ["func.sib.ag.q1.ab", "func.sib.ag.q2.ab", "func.sib.ag.q3.ab", "func.sib.ag.q4.ab", "func.sib.ag.q5.abc", "func.sib.ag.q6.ab"],
+      /* SESSION D2's fourth NEW tile (2026-08-23), six fresh cards. */
+      "reflections": ["func.sib.ref.q1.ab", "func.sib.ref.q2.ab", "func.sib.ref.q3.ab",
+                      "func.sib.ref.q4.ab", "func.sib.ref.q5.abc", "func.sib.ref.q6.ab"],
+      /* THE LEVEL 4 ★ TILE (session D2). Ten cards: the four ★ parts
+         moved off normal tiles (func.lp.q1.e · func.gt.t1q5.c ·
+         func.gt.t1q5.b · func.hyp.t2q3.e) plus six fresh ones from
+         js/exam/func-level4.js. Every card here is a level-4 card, so
+         this is also the order the tile runs in. */
+      "level-4": ["func.lp.q1.e", "func.gt.t1q5.c", "func.l4.q3.ab", "func.gt.t1q5.b",
+                  "func.l4.q2.a", "func.l4.q1.ab", "func.hyp.t2q3.e", "func.l4.q4.ab",
+                  "func.l4.q5.a", "func.l4.q6.ab"],
     },
+    /* GENERAL TRIG — SESSION F1 (2026-08-23) filled the first four
+       tiles of the tile map to six cards each; SESSION F2, the same
+       day, topped up reduction and general-solution from one card to
+       six and opened identities / identities-undefined / level-4 from
+       nothing. All nine tiles now hold exactly six cards. */
     gtrig: {
-      "co-functions": ["trig.rr.t2q1.a"],
-      "special-sums": ["trig.rr.t2q1.b"],
-      "reduction": ["trig.rr.t2q1.c"],
-      "general-solution": ["trig.gs.t2q2.ab"],
-      "identities": [],
-      "super-special-sums": [],
+      "co-functions": ["trig.rr.t2q1.a", "gtrig.sib.cf.q1.ab", "gtrig.sib.cf.q2.ab", "gtrig.sib.cf.q3.abc", "gtrig.sib.cf.q4.ab", "gtrig.sib.cf.q5.ab"],
+      "special-angles": ["gtrig.sib.sa.q1.ab", "gtrig.sib.sa.q2.ab", "gtrig.sib.sa.q3.ab", "gtrig.sib.sa.q4.ab", "gtrig.sib.sa.q5.abc", "gtrig.sib.sa.q6.ab"],
+      "special-sums": ["trig.rr.t2q1.b", "gtrig.sib.ss.q1.ab", "gtrig.sib.ss.q2.ab", "gtrig.sib.ss.q3.ab", "gtrig.sib.ss.q4.abc", "gtrig.sib.ss.q5.abc"],
+      "super-special-sums": ["gtrig.sib.sss.q1.abc", "gtrig.sib.sss.q2.abc", "gtrig.sib.sss.q3.abc", "gtrig.sib.sss.q4.abc", "gtrig.sib.sss.q5.abc", "gtrig.sib.sss.q6.abc"],
+      "reduction": ["trig.rr.t2q1.c", "gtrig.sib.red.q1.ab", "gtrig.sib.red.q2.ab",
+                    "gtrig.sib.red.q3.a", "gtrig.sib.red.q4.ab", "gtrig.sib.red.q5.ab"],
+      "identities": ["gtrig.sib.id.q1.ab", "gtrig.sib.id.q2.ab", "gtrig.sib.id.q3.ab",
+                     "gtrig.sib.id.q4.a", "gtrig.sib.id.q5.a", "gtrig.sib.id.q6.ab"],
+      "identities-undefined": ["gtrig.sib.iu.q1.ab", "gtrig.sib.iu.q2.ab", "gtrig.sib.iu.q3.ab",
+                               "gtrig.sib.iu.q4.ab", "gtrig.sib.iu.q5.ab", "gtrig.sib.iu.q6.ab"],
+      "general-solution": ["trig.gs.t2q2.ab", "gtrig.sib.gs.q1.ab", "gtrig.sib.gs.q2.ab",
+                           "gtrig.sib.gs.q3.a", "gtrig.sib.gs.q4.ab", "gtrig.sib.gs.q5.a"],
+      "level-4": ["gtrig.l4.q1.ab", "gtrig.l4.q2.ab", "gtrig.l4.q3.a",
+                  "gtrig.l4.q4.ab", "gtrig.l4.q5.ab", "gtrig.l4.q6.ab"],
     },
     trig: { "cosine-rule-area": ["trig.mix.t2q6.ab"] },
     /* RE-CUT 2026-08-23 (js/exam/cards-euclid.js). Same two source
        questions, same seven parts, four cards across four tiles. */
+    /* EUCLIDEAN — bookwork-proofs and chords-and-angles SEEDED by WAVE 1
+       SESSION G1, 2026-08-23. A bookwork card is one whole proof (one
+       part); a rider card is one whole chained question, every part of
+       it on the same sketch, which is why those ids end in the full run
+       of part letters. cyclic-quads / tangents / level-4 were FILLED by
+       WAVE 2 SESSION G2 the same day — six fresh chained riders on
+       cyclic-quads, five on tangents beside the re-homed
+       euclid.tan.t2q5(a,b,c), and six fresh Level 4 ★ cards beside the
+       re-homed euclid.tan.t2q5(d). Every card on all five tiles is a
+       WHOLE source question, so every id ends in the full run of its
+       part letters. */
     euclid: {
-      "bookwork-proofs": ["euclid.circ.t2q4.a"],
-      "chords-and-angles": ["euclid.circ.t2q4.b1b2"],
-      "cyclic-quads": [],
-      "tangents": ["euclid.tan.t2q5.abc"],
-      "level-4": ["euclid.tan.t2q5.d"],
+      "bookwork-proofs": ["euclid.bw.q1.a", "euclid.circ.t2q4.a", "euclid.bw.q2.a", "euclid.bw.q3.a"],
+      "chords-and-angles": ["euclid.sib.ca.q1.abcdef", "euclid.sib.ca.q3.abcde", "euclid.sib.ca.q4.abcde",
+                            "euclid.sib.ca.q2.abcdef", "euclid.sib.ca.q5.abcde", "euclid.circ.t2q4.b1b2"],
+      "cyclic-quads": ["euclid.sib.cq.q2.abcde", "euclid.sib.cq.q4.abcdef", "euclid.sib.cq.q1.abcdef",
+                       "euclid.sib.cq.q3.abcdef", "euclid.sib.cq.q5.abcde", "euclid.sib.cq.q6.abcdef"],
+      "tangents": ["euclid.sib.tg.q1.abcde", "euclid.sib.tg.q4.abcdef", "euclid.sib.tg.q2.abcde",
+                   "euclid.tan.t2q5.abc", "euclid.sib.tg.q3.abcdef", "euclid.sib.tg.q5.abcde"],
+      "level-4": ["euclid.l4.q1.abc", "euclid.l4.q4.abcd", "euclid.tan.t2q5.d",
+                  "euclid.l4.q3.abc", "euclid.l4.q5.abcd", "euclid.l4.q6.abc", "euclid.l4.q2.abc"],
     },
-    /* NEW on the build day, both registered and both still empty. */
+    /* ALGEBRAIC EXPRESSIONS — seeded by WAVE 1 SESSION A, 2026-08-23.
+       Every algx question is one WHOLE card (its first part carries its
+       own stem, so none of them needs an `intro`), which is why every
+       id below ends in the full list of that question's part letters.
+       Six cards a tile, seven on the Level 4 one. */
     algx: {
-      "expand": [], "factorise-basics": [], "factorise-advanced": [],
-      "fractions-multiply-divide": [], "fractions-add-subtract": [], "level-4": [],
+      "expand": ["algx.sib.ex.q1.a", "algx.sib.ex.q3.ab", "algx.sib.ex.q2.ab",
+                 "algx.sib.ex.q4.a", "algx.sib.ex.q5.ab", "algx.sib.ex.q6.ab"],
+      "factorise-basics": ["algx.sib.fb.q1.ab", "algx.sib.fb.q2.ab", "algx.sib.fb.q3.ab",
+                           "algx.sib.fb.q4.ab", "algx.sib.fb.q5.ab", "algx.sib.fb.q6.ab"],
+      "factorise-advanced": ["algx.sib.fa.q1.ab", "algx.sib.fa.q2.ab", "algx.sib.fa.q3.ab",
+                             "algx.sib.fa.q4.ab", "algx.sib.fa.q6.ab", "algx.sib.fa.q5.ab"],
+      "fractions-multiply-divide": ["algx.sib.fmd.q1.ab", "algx.sib.fmd.q2.ab", "algx.sib.fmd.q3.ab",
+                                    "algx.sib.fmd.q4.ab", "algx.sib.fmd.q5.ab", "algx.sib.fmd.q6.ab"],
+      "fractions-add-subtract": ["algx.sib.fas.q1.ab", "algx.sib.fas.q2.ab", "algx.sib.fas.q3.ab",
+                                 "algx.sib.fas.q4.ab", "algx.sib.fas.q5.ab", "algx.sib.fas.q6.ab"],
+      "level-4": ["algx.l4.q1.ab", "algx.l4.q2.ab", "algx.l4.q3.ab", "algx.l4.q4.ab",
+                  "algx.l4.q5.ab", "algx.l4.q6.ab", "algx.l4.q7.ab"],
     },
+    /* TRIG GRAPHS — SESSION E, 2026-08-23. Six tiles, six cards each.
+       Unlike every other chapter, no card here is a slice of a longer
+       practice-paper question: each of the 36 seeded questions was
+       composed card-sized and goes through makeCard whole, keeping its
+       own id (js/exam/cards-tgraph.js). */
     tgraph: {
-      "period-amplitude-range": [], "read-parameters": [], "sketch": [],
-      "intersections-inequalities": [], "shift-reflect": [], "level-4": [],
+      "period-amplitude-range": ["tgraph.sib.par.q1", "tgraph.sib.par.q2", "tgraph.sib.par.q3", "tgraph.sib.par.q4", "tgraph.sib.par.q5", "tgraph.sib.par.q6"],
+      "read-parameters": ["tgraph.sib.rp.q1", "tgraph.sib.rp.q2", "tgraph.sib.rp.q3", "tgraph.sib.rp.q4", "tgraph.sib.rp.q5", "tgraph.sib.rp.q6"],
+      "sketch": ["tgraph.sib.sk.q1", "tgraph.sib.sk.q2", "tgraph.sib.sk.q3", "tgraph.sib.sk.q4", "tgraph.sib.sk.q5", "tgraph.sib.sk.q6"],
+      "intersections-inequalities": ["tgraph.sib.ii.q1", "tgraph.sib.ii.q2", "tgraph.sib.ii.q3", "tgraph.sib.ii.q4", "tgraph.sib.ii.q5", "tgraph.sib.ii.q6"],
+      "shift-reflect": ["tgraph.sib.sr.q1", "tgraph.sib.sr.q2", "tgraph.sib.sr.q3", "tgraph.sib.sr.q4", "tgraph.sib.sr.q5", "tgraph.sib.sr.q6"],
+      "level-4": ["tgraph.l4.q1", "tgraph.l4.q2", "tgraph.l4.q3", "tgraph.l4.q4", "tgraph.l4.q5", "tgraph.l4.q6"],
     },
   };
 
@@ -1772,22 +2388,48 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   });
   tick(validOk, `every card passes validateQuestion()${invalid.length ? ":\n" + invalid.join("\n") : ""}`);
 
-  /* ---- 6. INTROS: present exactly where a card needs one ----
-     A card whose FIRST part is the one that carried the source stem
-     reads complete on its own and must NOT have an intro. Every other
-     card must. "First part carried the stem" = it is the first part of
-     its source question. */
+  /* ---- 6. INTROS: nothing said twice ----
+     THE ORIGINAL RULE WAS STRUCTURAL (2026-08-22): a card whose FIRST
+     part is its source question's first part carried the stem inside
+     that prompt, so it must NOT also carry an intro.
+
+     WIDENED 2026-08-23 (build day, session G1), because that premise
+     stopped being true the moment content sessions began composing
+     TILE-FIRST rather than cutting practice-paper questions up. Two
+     shapes now legitimately start at part (a) AND need an intro:
+       · a Euclidean bookwork card, whose PROMPT is the theorem as the
+         paper words it ("Prove the theorem which states…") — the given
+         figure has nowhere else to live;
+       · a chained rider, whose six parts all sit on one sketch and all
+         lean on one stem, so that stem belongs in the panel pinned
+         above them, not buried inside part (a) three memos up.
+     So what is checked is the rule that actually matters
+     (CONTENT-COMMON.md: "Never say a thing twice") rather than the
+     proxy for it: a card may carry an intro whatever part it starts
+     at, but no whole sentence of that intro may already appear in its
+     first prompt. The half of the old rule that never rested on the
+     premise — a card starting LATER may always have one — is
+     unchanged. */
   let introOk = true;
   const introLines = [];
+  const flatten = s => String(s).replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  /* whole sentences only, and only ones long enough that an accidental
+     collision is not credible — "Determine the size of Â₁." appearing
+     in both is a repeat; "In the diagram" is not a sentence. */
+  const sentencesOf = s => flatten(s).split(/(?<=[.?!])\s+/).map(x => x.trim()).filter(x => x.length >= 30);
   ALL_CARDS.forEach(c => {
     const src = sourceById.get(c.source.questionId);
     const startsAtStem = !!src && src.parts[0].id === c.parts[0].id;
     const hasIntro = !!c.intro;
-    const ok = startsAtStem ? !hasIntro : true;   // a stem-carrying card must not repeat itself
-    if (!ok) introOk = false;
-    introLines.push(`  ${c.id}: ${hasIntro ? `intro — "${c.intro.en.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim()}"` : "no intro" + (startsAtStem ? " (first part carries the stem)" : " (judged self-contained)")}`);
+    let repeated = [];
+    if (hasIntro) {
+      const firstPrompt = flatten(c.parts[0].prompt.en);
+      repeated = sentencesOf(c.intro.en).filter(sen => firstPrompt.includes(sen));
+    }
+    if (repeated.length) introOk = false;
+    introLines.push(`  ${c.id}: ${hasIntro ? `intro — "${flatten(c.intro.en)}"${repeated.length ? `  ← FAIL, its first prompt already says: "${repeated[0]}"` : ""}` : "no intro" + (startsAtStem ? " (first part carries the stem)" : " (judged self-contained)")}`);
   });
-  tick(introOk, "no card repeats a stem its own first part already states");
+  tick(introOk, "no card's intro repeats a sentence its own first prompt already states");
   const withIntro = ALL_CARDS.filter(c => c.intro);
   tick(withIntro.every(c => typeof c.intro.en === "string" && c.intro.en.trim().length > 0), "every intro that exists is a non-empty {en} string");
   lines.push(`\nintros: ${withIntro.length} of ${ALL_CARDS.length} cards carry one\n${introLines.join("\n")}`);
@@ -1833,13 +2475,19 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
     const allDone = {};
     cards.forEach(c => { allDone[c.id] = { partsOpened: [], completed: true }; });
     tick(examFirstCardForSkill("eqn", "inequalities", allDone) === cards[0], "…everything done goes round again from the first card (no finish line, her ruling)");
-    tick(examFirstCardForSkill("gtrig", "identities", {}) === null, "a skill with no cards yet returns null (the tile is not tappable)");
+    /* WAS gtrig/identities, which had no cards until session F2 filled
+       it on the 2026-08-23 build day. On a day when every tile in the
+       map gets seeded, "pick a tile that happens to be empty" is a
+       check with a shelf life — so it now uses a skill id that is not
+       in js/exam/skills.js at all, which is the same code path
+       (examQuestionsForTopic returns []) and can never go stale. */
+    tick(examFirstCardForSkill("gtrig", "not-a-seeded-skill", {}) === null, "a skill with no cards returns null (the tile is not tappable)");
     tick(examFirstCardForSkill("stats", "anything", {}) === null, "an unseeded chapter returns null");
-    lines.push(`\nexamFirstCardForSkill: first=${cards[0].id}, after completing it=${examFirstCardForSkill("eqn", "inequalities", oneDone).id}, empty skill=${examFirstCardForSkill("gtrig", "identities", {})}`);
+    lines.push(`\nexamFirstCardForSkill: first=${cards[0].id}, after completing it=${examFirstCardForSkill("eqn", "inequalities", oneDone).id}, empty skill=${examFirstCardForSkill("gtrig", "not-a-seeded-skill", {})}`);
   }
 
   /* ---- 10. skillsForChapter / skillLabel ---- */
-  tick(skillsForChapter("eqn").length === 11 && skillsForChapter("stats").length === 0, "skillsForChapter returns her list for a seeded chapter (eqn: 11 tiles after the 2026-08-23 map) and [] for an unseeded one");
+  tick(skillsForChapter("eqn").length === 12 && skillsForChapter("stats").length === 0, "skillsForChapter returns her list for a seeded chapter (eqn: 12 tiles — the 2026-08-23 map plus session H's solution-count) and [] for an unseeded one");
   tick(skillLabel("func", "axis-of-symmetry") === "Axis of symmetry", `skillLabel reads her label, got "${skillLabel("func", "axis-of-symmetry")}"`);
   tick(skillLabel("func", "not-a-real-skill") === "Not A Real Skill", "skillLabel falls back to a title-cased slug rather than rendering blank");
 
@@ -1875,14 +2523,40 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
    the sessions land. Take a chapter off this list the moment its
    session reports.
 
-     func → session D2 (reflections + the Level 4 re-cut)
-     eqn  → session C1 (eqn siblings + Level 4)
-     exp  → session B (exp).  ⚠️ exp was NOT on the brief's list — this
-            check found it: exp.nss.q1.d is a level-4 part sitting on
-            the exponential-equations tile. Session B has to move it.
+     func → DONE, session D2, 2026-08-23. Four ★ parts moved onto func's
+            new Level 4 tile: func.lp.q1(e), func.hyp.t2q3(e) and
+            func.gt.t1q5(c) were each a whole card made of one starred
+            part, so those three cards moved off nature-of-roots intact;
+            func.gt.t1q5(b) was cut away from its lead-in (a) on the
+            distances tile and given an `intro` carrying the stem (a)
+            used to hold, while (a) itself — a RANGE question — moved to
+            asymptotes-domain-range. The SOURCE MODULES were not edited,
+            only the cut in cards-func.js. nature-of-roots and distances
+            were topped back up to six by four fresh level-≤3 cards in
+            js/exam/func-siblings-topup.js. The wall is now ENFORCED for
+            func.
+     eqn  → DONE, session C1, 2026-08-23. Six ★ cards moved onto eqn's
+            Level 4 tile: eqn.nor.q3.d (largest integer k for rational
+            roots), eqn.nor.q4.bcd (complete the square on Δ, real for
+            all p, never equal — (b) and (c) travel with (d) because
+            each opens "Hence" off the one before it), eqn.nor.q5.d
+            (rational for every rational m), eqn.fr.q1.d (equal roots in
+            a fraction equation), eqn.ineq.t1q3.b (real for ALL p) and
+            eqn.ineq.q2.d (the inequality run backwards). The SOURCE
+            MODULES were not edited — only the cut in cards-eqn.js — and
+            four of the six carry an `intro` for what they used to lean
+            on. So the wall is now ENFORCED for eqn.
+     exp  → DONE, session B, 2026-08-23. exp.nss.q1.d (4ˣ − 3·2ˣ − 4 = 0)
+            moved off the exponential-equations tile onto exp's new
+            Level 4 tile, so the wall is now ENFORCED for exp: no ★
+            part may sit on a normal Exponents & Surds tile again.
    ============================================================ */
 {
-  const L4_MOVE_PENDING = ["func", "eqn", "exp"];
+  /* EMPTY as of 2026-08-23 (session D2 took "func" off, the last one).
+     Every chapter's level wall is now enforced with no slack at all —
+     leave it empty; a new chapter with ★ parts inside normal cards is a
+     bug to fix, not an entry to add here. */
+  const L4_MOVE_PENDING = [];
 
   const lines = [];
   let normalOk = true, l4Ok = true;

@@ -37,9 +37,13 @@
 const { fracHtml } = await import("./js/ui.js");
 const { examQuestionsForChapter } = await import("./js/exam/index.js");
 
+/* Every chapter id in js/exam/index.js's registry. "algx" joined on
+   2026-08-23 (the exam build day) — without it this harness silently
+   skipped the whole Algebraic Expressions chapter, which is the one
+   chapter made almost entirely of fractions. */
 const CHAPTERS = [
   "stats", "finance", "prob", "meas", "tgraph", "analytical", "pat",
-  "exp", "func", "trig", "gtrig", "euclid", "eqn",
+  "algx", "exp", "func", "trig", "gtrig", "euclid", "eqn",
 ];
 
 let total = 0, passed = 0;
