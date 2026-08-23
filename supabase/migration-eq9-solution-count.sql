@@ -1,0 +1,53 @@
+-- ============================================================
+--  MIGRATION — add ONE new Equations & Inequalities round:
+--  eq9 "Two, one or no solution?" (2026-08-23).
+--
+--  Safe on the LIVE database: it adds/updates exactly ONE row in
+--  public.quests. It does NOT touch any learner, progress, struggle
+--  or blip row — nothing about a real kid changes.
+--
+--  ⚠️ SEEDED CLOSED (is_open = false). Megan opens it from the admin
+--  dashboard when she teaches it — never auto-opened by this file.
+--
+--  Idempotent AND non-destructive on re-run: the on-conflict clause
+--  updates chapter/sort only and deliberately LEAVES is_open ALONE,
+--  so re-running this after she has opened eq9 for her class can
+--  never re-close it. (Same shape as migration-gtrig-quests.sql, not
+--  the older migration-equations-quests.sql, which force-opens.)
+--
+--  ------------------------------------------------------------
+--  WHY sort = 93, and not 80.
+--  `sort` is a plain int with no unique constraint. eq1..eq8 hold
+--  72..79, so the "obvious" next value would be 80 — but 80 is taken
+--  by gt1, and the whole General Trig block runs 80..92 with no gap
+--  (migration-gtrig-quests.sql + migration-gtrig-reorder.sql). There
+--  is therefore NO free integer immediately after eq8, and renumbering
+--  thirteen live gtrig rows to open one up would be a bigger change to
+--  the live database than this round is worth.
+--
+--  93 is the next free integer in the whole table, and nothing a
+--  learner or teacher sees is harmed by it: the admin dashboard groups
+--  quests by js/config.js's CHAPTERS order (js/admin.js questSection),
+--  so eq9 still renders directly under eq8 in the Equations block, and
+--  the app only ever uses the open-quest list as a SET (membership),
+--  never in sort order. If a later session ever does renumber, the
+--  tidy value for eq9 would be 80 with gtrig shifted to 81..93.
+--  ------------------------------------------------------------
+--
+--  Run once in the Supabase SQL editor.
+-- ============================================================
+insert into public.quests (quest_id, chapter, is_open, sort) values
+  ('eq9','eqn',false,93)
+on conflict (quest_id) do update
+  set chapter = excluded.chapter, sort = excluded.sort;
+
+-- ------------------------------------------------------------
+--  When you're ready to teach it, open just this one from the admin
+--  dashboard (or):
+--
+--    update public.quests set is_open = true where quest_id = 'eq9';
+--
+--  To close it again:
+--
+--    update public.quests set is_open = false where quest_id = 'eq9';
+-- ------------------------------------------------------------

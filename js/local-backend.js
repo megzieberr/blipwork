@@ -108,7 +108,7 @@ const QUEST_IDS = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8",
   "ag1", "ag2", "ag3", "ag4", "ag5", "ag6", "ag7",
   "np1", "np2", "np3", "np4", "np5", "np6", "np7",
   "es1", "es2", "es3", "es4", "es5", "es6", "es7", "es8",
-  "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8",
+  "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8", "eq9",
   "gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", "gt9", "gt10", "gt11", "gt12", "gt13"];
 /* offline sandbox opens stats q1–q3 and every later chapter's quests, so each
    whole chapter is playable locally; on the live backend the teacher opens each.
@@ -123,7 +123,7 @@ const DEFAULT_OPEN = ["q1", "q2", "q3", "f1", "f2", "f3", "f4", "f5", "f6", "f7"
   "ag1", "ag2", "ag3", "ag4", "ag5", "ag6", "ag7",
   "np1", "np2", "np3", "np4", "np5", "np6", "np7",
   "es1", "es2", "es3", "es4", "es5", "es6", "es7", "es8",
-  "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8",
+  "eq1", "eq2", "eq3", "eq4", "eq5", "eq6", "eq7", "eq8", "eq9",
   "gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", "gt9", "gt10", "gt11", "gt12", "gt13"];
 
 /* Cosmetic shop — identical ids/slots/prices/minLevel to the live seed.

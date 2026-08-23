@@ -47,6 +47,10 @@ import { eqnDeltaInPSiblingQuestions } from "./eqn-siblings-delta-in-p.js";
 import { eqnInequalitiesSiblingQuestions } from "./eqn-siblings-inequalities.js";
 import { eqnFractionEquationsSiblingQuestions } from "./eqn-siblings-fraction-equations.js";
 import { eqnRationalExponentsKSiblingQuestions } from "./eqn-siblings-rational-exponents-k.js";
+/* SESSION H (2026-08-23, her afternoon extension to the build day) —
+   ONE new tile, solution-count "Two, one or no solution?", six fresh
+   cards, built alongside the new eq9 drill round that teaches it. */
+import { eqnSolutionCountSiblingQuestions, eqnSolutionCountIntros } from "./eqn-siblings-solution-count.js";
 
 const SOURCES = [
   ...eqnNatureOfRootsQuestions,
@@ -68,6 +72,8 @@ const SOURCES = [
   ...eqnInequalitiesSiblingQuestions,
   ...eqnFractionEquationsSiblingQuestions,
   ...eqnRationalExponentsKSiblingQuestions,
+  /* SESSION H's one module (2026-08-23) — 6 more questions. */
+  ...eqnSolutionCountSiblingQuestions,
 ];
 const src = id => {
   const q = SOURCES.find(qq => qq.id === id);
@@ -189,6 +195,23 @@ export const eqnCards = [
   makeCard({ skill: "rational-exponents-k", from: src("eqn.sib.rek.q2"), parts: ["a", "b"] }),
   makeCard({ skill: "rational-exponents-k", from: src("eqn.sib.rek.q3"), parts: ["a", "b"] }),
   makeCard({ skill: "rational-exponents-k", from: src("eqn.sib.rek.q4"), parts: ["a"] }),
+
+  /* ---- 7b. Two, one or no solution? (NEW tile, SESSION H) --------
+     Her own two handwritten pages on equations with rational exponents,
+     the ones her Grade 11 learner kept confusing herself over: even
+     numerator → ±, only odd numbers → a negative answer is fine, an even
+     number anywhere with a negative → no solution. Six fresh cards, all
+     composed card-sized, so each goes through makeCard whole and keeps
+     its own id. q2 and q6 carry an `intro`, because their instruction
+     (q2) and their given pair (q6) belong to every part on the card;
+     the other four state their own equation in their only prompt. The
+     drill round that reteaches them is eq9, built the same session. */
+  makeCard({ skill: "solution-count", from: src("eqn.sib.sc.q1"), parts: ["a"] }),
+  makeCard({ skill: "solution-count", from: src("eqn.sib.sc.q2"), parts: ["a", "b", "c"], intro: eqnSolutionCountIntros["eqn.sib.sc.q2"] }),
+  makeCard({ skill: "solution-count", from: src("eqn.sib.sc.q3"), parts: ["a"] }),
+  makeCard({ skill: "solution-count", from: src("eqn.sib.sc.q4"), parts: ["a"] }),
+  makeCard({ skill: "solution-count", from: src("eqn.sib.sc.q5"), parts: ["a"] }),
+  makeCard({ skill: "solution-count", from: src("eqn.sib.sc.q6"), parts: ["a", "b"], intro: eqnSolutionCountIntros["eqn.sib.sc.q6"] }),
 
   /* ================================================================
      SESSION C2 (2026-08-23, the Exam Focus build day). Three tiles

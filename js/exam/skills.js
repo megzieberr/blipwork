@@ -72,6 +72,12 @@ export const SKILLS = {
     { id: "fraction-equations",   label: "Fraction equations with restrictions" },
     { id: "surd-equations",       label: "Surd equations (check the false root)" },
     { id: "rational-exponents-k", label: "Rational exponents & k-method" },
+    /* SESSION H (2026-08-23, her afternoon extension): the tile that goes
+       with the new eq9 drill round, "Two, one or no solution?". It sits
+       straight after rational-exponents-k because it is the same method
+       one step deeper — that tile solves them, this one decides FIRST how
+       many answers there are going to be. */
+    { id: "solution-count",       label: "Two, one or no solution?" },
     { id: "simultaneous",         label: "Simultaneous equations" },
     { id: "inequalities",         label: "Inequalities" },
     { id: "nature-chain",         label: "Standard form → Δ → nature of roots" },

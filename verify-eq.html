@@ -21,8 +21,11 @@
 <h1 style="font-family:'Space Grotesk',sans-serif">Equations &amp; Inequalities · verification</h1>
 <div id="banner">running…</div>
 
-<h2>Quests — 8 theory quests (mc / yesno, some with to-scale parabola sketches)</h2>
+<h2>Quests — 9 theory quests (mc / yesno, some with to-scale parabola sketches)</h2>
 <pre id="quests">…</pre>
+
+<h2>eq9 “Two, one or no solution?” — the classification table, swept</h2>
+<pre id="eq9">…</pre>
 
 <h2>One live sample per skill (eyeball the maths &amp; the marked answer)</h2>
 <div id="samples"></div>
@@ -32,6 +35,7 @@ import { questDef } from "./js/quests/index.js";
 import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { renderFunction, verifyFunction } from "./js/engine/function-graph.js";
+import { solutionCount, OPT_TWO, OPT_ONE, OPT_NONE } from "./js/quests/queseq9-solution-count.js";
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
@@ -94,6 +98,145 @@ document.getElementById("quests").textContent =
   `${qTotalChecks} generations checked · ${qFails} integrity failures\n`
   + `${graphsChecked} parabola sketches verified to scale · ${graphFails} graph failures\n\n`
   + lines.join("\n");
+
+/* ============================================================
+   eq9 "Two, one or no solution?" (2026-08-23) — the round is nothing
+   BUT a classification, so the classification gets its own section.
+
+   Three things are proved here, and none of them reads the round's
+   own answer text to do it:
+
+   1. THE TABLE ITSELF, swept exhaustively. `solutionCount()` (the one
+      place the rule is written down in js/quests/queseq9-solution-count.js)
+      is compared against an INDEPENDENT copy typed out below, straight
+      from her handwritten "Important Notes" box, over every (p, q, sign)
+      with p, q ≤ 9 and gcd(p, q) = 1 — both signs, so every branch of
+      her three rules is hit many times over.
+   2. EVERY GENERATED ITEM, 500 per skill. A classification item has
+      EXACTLY THREE options, always in her fixed order, and the one
+      marked correct is the one the table demands for that item's own
+      (p, q, sign). A solve item has exactly FOUR, and the same table
+      decides which of them is right.
+   3. THE ROUND'S SHAPE. Ten questions; a whole simulated round shows
+      each of "two", "one" and "no solution" at least twice (her ask:
+      "sign mixed so all three outcomes appear"); and every skill
+      resolves its concept card.
+   ============================================================ */
+{
+  const eq9lines = [];
+  const def9 = questDef("eq9");
+  const LABELS = { two: OPT_TWO, one: OPT_ONE, none: OPT_NONE };
+
+  /* --- her box, typed out again, deliberately NOT imported --- */
+  function expected(p, q, negative) {
+    if (negative) {
+      // "even number in num. OR denom.  ->  ✗ negative ans (no solution)"
+      if (p % 2 === 0 || q % 2 === 0) return "none";
+      // "only odd numbers in num. AND denom.  ->  ✓ negative answer"
+      return "one";
+    }
+    // "even numerator  ->  ± answer"; an odd numerator gives a single value
+    return p % 2 === 0 ? "two" : "one";
+  }
+  const gcd9 = (a, b) => (b ? gcd9(b, a % b) : a);
+  let sweep = 0, sweepBad = 0;
+  const branchSeen = { two: 0, one: 0, none: 0 };
+  for (let p = 1; p <= 9; p++) for (let q = 1; q <= 9; q++) {
+    if (gcd9(p, q) !== 1) continue;
+    for (const neg of [false, true]) {
+      sweep++;
+      const got = solutionCount(p, q, neg);
+      branchSeen[got] = (branchSeen[got] || 0) + 1;
+      if (got !== expected(p, q, neg)) {
+        sweepBad++;
+        if (sweepBad < 6) eq9lines.push(`    ✗ x^(${p}/${q}) = ${neg ? "−" : "+"}c → ${got}, her box says ${expected(p, q, neg)}`);
+      }
+    }
+  }
+  tick(sweepBad === 0, `eq9 classification table: ${sweepBad} of ${sweep} (p,q,sign) cases disagree with her box`);
+  tick(branchSeen.two > 0 && branchSeen.one > 0 && branchSeen.none > 0, "eq9 sweep exercised all three outcomes");
+  eq9lines.push(`${sweep} (p, q, sign) combinations swept against her handwritten box · ${sweepBad} disagreements`);
+  eq9lines.push(`  outcomes reached: two=${branchSeen.two} · one=${branchSeen.one} · none=${branchSeen.none}`);
+
+  /* --- 500 generations per skill --- */
+  const RUNS9 = 500;
+  const ORDER = [OPT_TWO, OPT_ONE, OPT_NONE].join(" | ");
+  let gen9 = 0, bad9 = 0, three = 0, four = 0;
+  const perSkill = [];
+  if (!def9) {
+    tick(false, "eq9 has no quest def registered");
+    eq9lines.push("✗ eq9 — no quest def registered");
+  } else {
+    tick(def9.skills.length === 10, `eq9 has ten questions in a round (got ${def9.skills.length})`);
+    def9.skills.forEach(skill => {
+      const issues = [];
+      const kinds = {};
+      let revealFrames = 0;
+      for (let i = 0; i < RUNS9; i++) {
+        let q;
+        try { q = skill.gen(); } catch (e) { issues.push("threw: " + e.message); break; }
+        gen9++;
+        if (!getConcept(skill.concept)) issues.push(`missing concept "${skill.concept}"`);
+        if (q.type !== "mc") issues.push(`type "${q.type}" (eq9 is all mc)`);
+        if (!q.meta) { issues.push("no meta — the harness cannot check the answer"); continue; }
+        const p = q.meta.p, pq = q.meta.q, neg = q.meta.neg;
+        const want = solutionCount(p, pq, neg);
+        if (want !== q.meta.kind) issues.push(`meta.kind "${q.meta.kind}" is not the table's "${want}" for x^(${p}/${pq})`);
+        kinds[want] = (kinds[want] || 0) + 1;
+        const corrects = q.options.filter(o => o.correct);
+        if (corrects.length !== 1) issues.push(`${corrects.length} correct options`);
+        const labels = q.options.map(o => o.label);
+        if (labels.length !== new Set(labels).size) issues.push(`duplicate options: ${labels.join(" | ")}`);
+        if (q.meta.three) {
+          three++;
+          if (q.options.length !== 3) issues.push(`classification item with ${q.options.length} options (want exactly 3)`);
+          if (labels.join(" | ") !== ORDER) issues.push(`option order drifted: ${labels.join(" | ")}`);
+          if (corrects.length === 1 && corrects[0].label !== LABELS[want]) issues.push(`marked "${corrects[0].label}", table says "${LABELS[want]}"`);
+        } else if (q.meta.four) {
+          four++;
+          if (q.options.length !== 4) issues.push(`solve item with ${q.options.length} options (want exactly 4)`);
+          /* the four values are always ±A · A · −A · No solution, and the
+             table alone decides which one is marked */
+          const A = q.meta.A;
+          const wantLabel = want === "two" ? `x = ±${A}`
+            : want === "one" && neg ? `x = −${A}`
+              : want === "one" ? `x = ${A}` : OPT_NONE;
+          if (corrects.length === 1 && corrects[0].label !== wantLabel) issues.push(`solve item marked "${corrects[0].label}", table says "${wantLabel}"`);
+        } else issues.push("meta says neither a 3-option nor a 4-option item");
+        if (Array.isArray(q.reveal)) revealFrames = q.reveal.length;
+        if (!q.answerLabel) issues.push("no answerLabel");
+        if (!q.hint) issues.push("no hint");
+        if (!q.prompt || !String(q.prompt).trim()) issues.push("empty prompt");
+      }
+      const uniq = [...new Set(issues)];
+      if (uniq.length) bad9 += uniq.length;
+      tick(uniq.length === 0, `eq9/${skill.id}: ${uniq.join("; ")}`);
+      perSkill.push(`  ${uniq.length ? "✗" : "✓"} ${skill.id.padEnd(18)} ${RUNS9} gens · `
+        + Object.entries(kinds).map(([k, n]) => `${k}=${n}`).join(" ")
+        + (revealFrames ? ` · ${revealFrames} teaching frames` : "")
+        + (uniq.length ? "\n      " + uniq.join("\n      ") : ""));
+    });
+
+    /* teach FIRST: the first two questions must carry teaching frames,
+       and the input stays hidden until the last one is up (mountReveal) */
+    const f1 = def9.skills[0].gen(), f2 = def9.skills[1].gen();
+    tick(Array.isArray(f1.reveal) && f1.reveal.length >= 4, "eq9 question 1 teaches first (her reciprocal move + the three rules)");
+    tick(Array.isArray(f2.reveal) && f2.reveal.length === 4, "eq9 question 2 teaches first (her four worked examples)");
+
+    /* a WHOLE round, 300 times: all three answers at least twice */
+    let rounds = 0, roundBad = 0;
+    for (let r = 0; r < 300; r++) {
+      const c = { two: 0, one: 0, none: 0 };
+      def9.skills.forEach(sk => { const q = sk.gen(); if (q.meta) c[q.meta.kind]++; });
+      rounds++;
+      if (!(c.two >= 2 && c.one >= 2 && c.none >= 2)) roundBad++;
+    }
+    tick(roundBad === 0, `eq9: ${roundBad} of ${rounds} whole rounds failed "every outcome at least twice"`);
+    eq9lines.push(`${rounds} whole simulated rounds · ${roundBad} that did not show all three answers at least twice`);
+  }
+  eq9lines.push(`${gen9} eq9 generations checked · ${three} three-option classification items · ${four} four-option solve items · ${bad9} distinct issues`);
+  document.getElementById("eq9").textContent = eq9lines.join("\n") + "\n\n" + perSkill.join("\n");
+}
 
 // render one sample per skill so the author can sanity-check the maths
 const shost = document.getElementById("samples");

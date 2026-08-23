@@ -184,6 +184,11 @@ export const CHAPTERS = [
       { id: "eq6", n: 6, title: "The formula & simultaneous", blurb: "When to use it, the two lines you must show, signs into the calculator, and the substitution method.", built: true },
       { id: "eq7", n: 7, title: "Inequalities: flip & the bowl", blurb: "Switch the sign on × or ÷ negative; CP; inside the bowl vs left/right — read it off the sketch.", built: true },
       { id: "eq8", n: 8, title: "Nature of roots & know the difference", blurb: "Δ = b² − 4ac, the three pictures, the three question types — and no solution vs undefined vs non-real vs N.A.", built: true },
+      /* eq9 (2026-08-23) — her own two handwritten pages on equations with
+         rational exponents, added because her Grade 11 learner kept confusing
+         herself. Teaches first (reveal frames), then ten pick-the-outcome
+         questions. Seeded CLOSED on live — supabase/migration-eq9-solution-count.sql. */
+      { id: "eq9", n: 9, title: "Two, one or no solution?", blurb: "Rational-exponent equations: even numerator → ±, odd-only → a negative is fine, even anywhere with a negative → no solution.", built: true },
     ],
   },
   /* GENERAL TRIG (id gtrig) — her 13 drill rounds, GENERAL-TRIG-BUILD-PLAN.md.

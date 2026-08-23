@@ -1539,6 +1539,8 @@ insert into public.quests (quest_id, chapter, is_open, sort) values
   ('eq1','eqn',false,72), ('eq2','eqn',false,73), ('eq3','eqn',false,74),
   ('eq4','eqn',false,75), ('eq5','eqn',false,76), ('eq6','eqn',false,77),
   ('eq7','eqn',false,78), ('eq8','eqn',false,79),
+  -- eq9 (2026-08-23, her ask): sort 93 because 80–92 are gtrig — see migration-eq9-solution-count.sql
+  ('eq9','eqn',false,93),
   -- General Trig (chapter gtrig) — stage 2, 2026-08-22. Seeded CLOSED like
   -- every other chapter here; supabase/migration-gtrig-quests.sql is the
   -- one that ever runs against the live database (written, not run).

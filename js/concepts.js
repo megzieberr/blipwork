@@ -1368,6 +1368,24 @@ export const CONCEPTS = {
       </ul>
       <div class="eg">√(x + 3)/(x + 1): undefined at x = −1 (bottom = 0); non-real for x &lt; −3 (inside the root negative). Two different questions!</div>`,
   },
+  /* eq9 "Two, one or no solution?" (2026-08-23) — her two handwritten
+     pages on equations with rational exponents, boxes and all. The three
+     rules below are her "Important Notes" box verbatim, examples
+     included; the worked lines are her page 2. */
+  eqSolutionCount: {
+    title: "Two, one or no solution?",
+    body: `
+      <p><b>Equations with rational exponents.</b> Multiply with the <b>reciprocal</b> of the exponent &mdash; switch numerator and denominator, so <span class="sfrac"><span class="sf-n">3</span><span class="sf-d">4</span></span> × <span class="sfrac"><span class="sf-n">4</span><span class="sf-d">3</span></span> = 1 (cancels out) and x is left on its own.</p>
+      <p>Before you solve anything, look at the fraction on top of the x and at the sign on the right. That alone tells you how many answers there are:</p>
+      <ul>
+        <li><b>Even numerator → ± answer.</b> x<sup><span class="sfrac"><span class="sf-n">2</span><span class="sf-d">3</span></span></sup> = 2 &nbsp;/&nbsp; x<sup><span class="sfrac"><span class="sf-n">4</span><span class="sf-d">7</span></span></sup> = 5 — two solutions.</li>
+        <li><b>Only odd numbers</b> in the numerator and the denominator → ✓ a <b>negative answer is allowed</b> 🙂. x<sup><span class="sfrac"><span class="sf-n">1</span><span class="sf-d">3</span></span></sup> = −2 &nbsp;/&nbsp; x<sup><span class="sfrac"><span class="sf-n">5</span><span class="sf-d">7</span></span></sup> = −9 — one solution.</li>
+        <li><b>An even number</b> in the numerator <b>or</b> the denominator, with a negative on the right → ✗ <b>no solution</b> 🙁. x<sup><span class="sfrac"><span class="sf-n">1</span><span class="sf-d">2</span></span></sup> = −3 &nbsp;/&nbsp; x<sup><span class="sfrac"><span class="sf-n">4</span><span class="sf-d">3</span></span></sup> = −4.</li>
+      </ul>
+      <p>The reason, in one line: x<sup>odd/even</sup> and x<sup>even/odd</sup> <b>≠ a negative number</b>. Ask it of a real number and you can see it: √16 is 4, never −4 — an even root cannot be negative only.</p>
+      <div class="formula">x<sup><span class="sfrac"><span class="sf-n">2</span><span class="sf-d">3</span></span></sup> = 4 &nbsp;→&nbsp; (<sup>3</sup>√(x²))³ = (4)³ &nbsp;→&nbsp; √(x²) = √64 &nbsp;→&nbsp; x = ±8</div>
+      <div class="eg">And the three that go the other way.<br>Only odd numbers, so a negative answer is allowed:<br>x<sup><span class="sfrac"><span class="sf-n">5</span><span class="sf-d">7</span></span></sup> = −9 → (<sup>7</sup>√(x⁵))⁷ = (−9)⁷ → <sup>5</sup>√(x⁵) = <sup>5</sup>√(−4 782 969) → x = −21,67<br>An even numerator with a negative — cannot happen:<br>x<sup><span class="sfrac"><span class="sf-n">4</span><span class="sf-d">3</span></span></sup> = −4 → <sup>4</sup>√(x⁴) = <sup>4</sup>√(−64)<br>An even denominator with a negative — cannot happen:<br>x<sup><span class="sfrac"><span class="sf-n">1</span><span class="sf-d">2</span></span></sup> = −3 → <sup>2</sup>√(x¹) = −3 ✗</div>`,
+  },
 
   /* ---- GENERAL TRIG (chapter gtrig, stage 2, 2026-08-22) ---- */
   gtrigIntro: {
