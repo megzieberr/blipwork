@@ -2984,6 +2984,16 @@ happy-eyes re-roll are CLOSED — "decor designs look great".)
 stands: a live site a ship behind = check `gh api .../pages/builds` first.)
 
 ## Next up
+
+- **📈 Fun Functions MOUNT — Part 2 lives HERE (next session; Opus planning pass
+  first, it touches live Supabase).** Part 1 (the seam in graph-quest) SHIPPED
+  2026-08-23 late, gq-v31. Read `graph-quest\MIGRATION-PLAN.md` + the Part-2 notes
+  in `graph-quest\PROJECT-STATUS.md` Next up (three seam facts the brief must carry).
+  Shape: migration-funfun.sql (funfun_progress + mhq_submit_funfun recomputing XP
+  from the `answered` record at the static-Functions-round rate) → 📈 strip with 15
+  tiles in the Functions chapter → play screen calling `mountFunFunctions()` from the
+  synced `js/funfun/` → payout like finishDice → minimal dashboard chips. Her four
+  calls are decided — don't re-ask.
 **Her plan, stated 2026-08-08 at ship time, two jobs:**
 
 **1. ✅ DONE 2026-08-09 — THE ROOM BECOMES THE HOME SCREEN.** See the
