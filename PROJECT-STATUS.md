@@ -1,4 +1,77 @@
-# Project status — updated 2026-08-23 morning (📈 STAGE 2 + whole-app sweep LIVE — sw v60 after her phone round)
+# Project status — updated 2026-08-23 evening (🏁 EXAM FOCUS FULL — 360 cards / 7 chapters built + reviewed, LOCAL, ship waits on her yes)
+
+## 🏁 2026-08-23 — THE EXAM FOCUS BUILD DAY (Fable foreman, 13 Opus sessions, her /go)
+
+Her brief: "by the end of today I want the exam focus to be full and complete" — every missing
+skill from the SAGs + paper bank, siblings for every tile, Opus only, cost not the constraint.
+Gap check first (SAGs pp 42–52 + `GR11-IEB-PAPER-BANK.md` + surveys), her eight rulings, then
+the build. Plan + tile map: `EXAM-BUILD-DAY.md`; briefs: `sessions/`; SAG reasons:
+`EUCLID-ACCEPTABLE-REASONS.md`.
+
+**What exists now (all local commits, harness 673/673, modules 7299/7299, fractions 5819/5819):**
+
+| chapter | tiles | cards | notes |
+|---|---|---|---|
+| Algebraic Expressions (NEW exam-only `algx`, 🧩 mint) | 6 | 37 | Gr10 revision — her "where the 30%-ers earn marks"; first in the Exam Focus tab |
+| Exponents & Surds | 7 | 43 | +rational-exponents-numeric, +surd-proofs |
+| Equations & Inequalities | 12 | 78 | +quadratic-solving, +surd-equations, +simultaneous, +solution-count (eq9's tile) |
+| Functions | 13 | 83 | +sketch, +intersection, +average-gradient, +reflections; 48 → 83 |
+| Trig Graphs (NEW in Exam Focus) | 6 | 36 | her equations-only period/amplitude/range round is tile 1 |
+| General Trig | 9 | 54 | +special-angles, +identities-undefined; identities + super-special-sums filled |
+| Euclidean | 5 | 29 | 4 bookwork proofs (reveal draws the construction) + 17 chained riders + Level 4 |
+| 2D Trig | — | hidden | `"trig"` out of `EXAM_CHAPTERS`; card + skills entry kept |
+
+Every chapter ends in a full-width amber **Level 4 ★ — the brave round** tile; every ★ part
+moved there (level wall = harness Part 13). Cards inside a tile run easiest first.
+
+**Engines today:** trigg + quadtri wired into Exam Focus (`js/exam/trig-diagram.js`,
+`quadtri-diagram.js`, schema dispatch); vertical-line captions (`x = k`, vertical asymptotes)
+moved to a band UNDER the picture in both graph engines (her phone ruling — drills too);
+circle-engine: additive `construction` field (reveal draws the proof's construction), bare-digit
+angle labels auto-render small + inside their arc (`al-idx`), Euclidean found values go in the
+colour KEY beside the circle (approved by her — wedges too small for "110°").
+
+**Also today (her afternoon ask):** drill round **eq9 "Two, one or no solution?"** in Equations
+from her 2-page notes (teach first → 10 picks: two (±) / one / none; `queseq9-solution-count.js`,
+concept card `eqSolutionCount`), migration `supabase/migration-eq9-solution-count.sql` seeded
+CLOSED (sort 93 — 80–92 are gtrig), + its Exam Focus tile.
+
+**XP:** 50 XP + 5 💎 per card (config mirror done; `supabase/migration-exam-xp-50.sql` WRITTEN,
+NOT RUN — goes in at ship).
+
+Spend: ≈ 7M Opus tokens across 13 sessions + 3 fix sessions + foreman reviews (her ruling:
+"don't worry about the cost").
+
+### ⏳ Pending on Megan
+- 🌐 1 min [blocking the ship]: say "yes, ship it" here — then Fable bumps sw → v62, pushes,
+  applies the two migrations (XP 50/5; eq9 closed) via the Supabase connection, confirms live.
+- 📱 10 min [whenever, after ship]: Exam Focus → Algebraic Expressions → Factorise tile → two
+  cards; Euclidean → Tangents → one full rider; Trig Graphs → Period/amplitude/range → one card.
+- 🌐 1 min [whenever]: admin → open eq9 "Two, one or no solution?" for the learner who asked.
+
+### Next up
+- Her phone round findings (she reviewed sheets in chat today — all approved bar the three
+  fixes, which are in).
+- `.diag .pl` centre label "O" reads like a zero at 375 px (pre-existing font; cosmetic).
+- Dice rounds for other chapters; calculator emulator round 2 (both carried from 08-23 morning).
+- Euclidean two-circle riders impossible until circle-engine draws a second circle (banked).
+
+## 📌 Decisions (append-only, 2026-08-23 build day)
+- Exam scope uncertain (T2 "functions" = trig graphs or ordinary?) → BOTH built; over-prepare.
+- Algebraic expressions = its own exam-only chapter, basics-first in the tab order
+  (`EXAM_TAB_ORDER` in config).
+- Levels 1–3 on normal tiles; every ★ lives on the chapter's Level 4 tile; no ★ note there.
+- Euclidean Exam Focus stays pen-and-paper (NOT the interactive CQ rounds); one sketch per
+  rider, 4–6 chained parts, found values accumulate in the KEY beside the circle; reasons are
+  the SAG short forms verbatim; angle index digits small + inside the arc.
+- Vertical-line captions under the picture, never on the sketch.
+- Trig memos = textbook method, her story in hints/esplains; interval notation never (B8).
+- XP 50 + 5 per card. 2D Trig hidden until it has exam content.
+- eq9 pays XP every play (a drill she sends the learner back to), seeded closed.
+
+---
+
+# (previous head) Project status — updated 2026-08-23 morning (📈 STAGE 2 + whole-app sweep LIVE — sw v60 after her phone round)
 
 ## 📈 2026-08-22 → 23 — STAGE 2: function sketches in Exam Focus, 48 Functions cards, whole-app sweep (Fable foreman day, her "spend more to make the graphs look good")
 
