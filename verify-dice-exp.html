@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice · Exponents &amp; Surds pool · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice · Exponents &amp; Surds pool · verification</h1>
+<p class="muted small">js/quests/dice-exp.js — 43 entries of the chapter's 52 audited skills (9 hand-authored
+  worked-example skills excluded), 39 kinds, roundLength 6 — driven through js/dice.js's seeded genAt/withSeed
+  exactly as a dealt dice round does. Part 1 is per-entry generation integrity (shape, self-consistency through
+  js/check.js, decoys by value, the input law, method markup, determinism, the salted retry). Part 2 is the chapter
+  recompute: this is a THEORY chapter with no maths library and no diagram engine, so "recompute" means re-deriving
+  each rolled question's answer from the question's OWN rendered text — the yes/no traps are re-evaluated as real
+  algebraic statements (superscripts parsed back into powers, both sides evaluated over three probe substitutions)
+  and every other parametrised skill is re-derived from the prompt it actually shows. Part 3 is dealing /
+  determinism / resume at full pool size. The chapter's static harness is verify-exp.html — this page deliberately
+  doesn't repeat it. Session ES, 2026-08-23/24.</p>
+<div id="banner">running…</div>
+
+<h2>Part 1 · per-entry generation integrity (200 seeded rolls each)</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Part 2 · chapter recompute — every rolled question re-derived from its own rendered text</h2>
+<pre id="recompute">…</pre>
+
+<h2>Part 3 · dealing, determinism, resume &amp; the salted retry</h2>
+<pre id="mechanics">…</pre>
+
+<h2>Result</h2>
+<pre id="summary">…</pre>
+
+<script type="module">
+import { pool as expPool, EXCLUDED, PURE_RECALL, FIXED_YESNO, hasRealWorking } from "./js/quests/dice-exp.js";
+import { pool as statsPool } from "./js/quests/dice-stats.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect, parseNum } from "./js/check.js";
+import { getConcept } from "./js/concepts.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+/* This chapter's whole input vocabulary — DICE-PLAN's INPUT LAW
+   (list-pick only here; no number pad, no sketch, never a typed word). */
+const INPUT_LAW = new Set(["mc", "yesno"]);
+const RUNS = 200;
+
+/* ============================================================
+   shared parsing / evaluation helpers for Part 2
+   ============================================================ */
+/* unicode superscript → ordinary characters, so a rendered power can be
+   read back out of the prompt the learner actually sees. */
+const SUPBACK = {
+  "⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9",
+  "⁻": "-", "⁺": "+", "⁽": "(", "⁾": ")",
+  "ᵃ": "a", "ᵇ": "b", "ᵏ": "k", "ᵐ": "m", "ⁿ": "n", "ᵖ": "p", "ˣ": "x",
+};
+const SUPDIG = "⁰¹²³⁴⁵⁶⁷⁸⁹";
+const isSup = c => Object.prototype.hasOwnProperty.call(SUPBACK, c);
+
+/* "2³ · 2² = 4⁵" → "2^(3) · 2^(2) = 4^(5)" */
+function desup(s) {
+  let out = "";
+  const t = String(s);
+  for (let i = 0; i < t.length; i++) {
+    if (isSup(t[i])) {
+      let run = "";
+      while (i < t.length && isSup(t[i])) { run += SUPBACK[t[i]]; i++; }
+      i--;
+      out += `^(${run})`;
+    } else out += t[i];
+  }
+  return out;
+}
+const boldOf = html => { const m = String(html).match(/<b>([\s\S]*?)<\/b>/); return m ? m[1] : null; };
+const plain = html => String(html == null ? "" : html).replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
+const correctLabel = q => { const c = Array.isArray(q.options) ? q.options.find(o => o.correct) : null; return c ? String(c.label) : null; };
+const labels = q => (q.options || []).map(o => String(o.label));
+
+/* a rendered statement → a JavaScript expression source. Handles the SA
+   glyphs (−, ·, ÷), unicode powers, and implicit multiplication (3x⁰,
+   (2x)³, (xy)ᵃ⁺ᵇ). Single-letter identifiers only, which is all this
+   chapter ever writes. */
+function toJs(expr) {
+  const t = desup(plain(expr))
+    .replace(/[−–]/g, "-").replace(/[·×]/g, "*").replace(/÷/g, "/")
+    .replace(/\s+/g, "");
+  let out = "";
+  for (const c of t) {
+    const prev = out[out.length - 1];
+    if (prev && /[0-9A-Za-z)]/.test(prev) && /[A-Za-z(]/.test(c)) out += "*";
+    out += c;
+  }
+  return out.replace(/\^/g, "**");
+}
+function evalSide(js, probe) {
+  let src = js.replace(/[A-Za-z]/g, ch => `(${probe[ch] != null ? probe[ch] : 2})`);
+  // JS forbids a bare unary minus in front of ** — rewrite it as (-1)*
+  src = src.replace(/(^|[(+\-*/])\s*-/g, "$1(-1)*");
+  return Function(`"use strict";return (${src});`)();
+}
+const PROBES = [
+  { x: 2, y: 3, a: 2, b: 3, m: 2, n: 3, p: 2, q: 5 },
+  { x: 3, y: 5, a: 3, b: 2, m: 5, n: 2, p: 3, q: 2 },
+  { x: 5, y: 2, a: 5, b: 4, m: 3, n: 4, p: 4, q: 3 },
+];
+/* Is this statement ACTUALLY true? true / false, or null if it could not
+   be evaluated (which the callers treat as a failure, so a parse that
+   silently stops working shows up as a red check rather than a pass). */
+function truthOf(statement) {
+  const js = toJs(statement);
+  const parts = js.split("=");
+  if (parts.length !== 2) return null;
+  for (const pr of PROBES) {
+    let L, R;
+    try { L = evalSide(parts[0], pr); R = evalSide(parts[1], pr); } catch (e) { return null; }
+    if (!Number.isFinite(L) || !Number.isFinite(R)) return null;
+    if (Math.abs(L - R) > 1e-9 * Math.max(1, Math.abs(L), Math.abs(R))) return false;
+  }
+  return true;
+}
+/* numeric value of a surd expression like "√7 + 2", "2√5 − 1",
+   "(√7 + 2)(√7 − 2)". NaN when the expression is symbolic (a letter
+   under the root). */
+function surdEval(expr) {
+  const t = plain(expr).replace(/[−–]/g, "-").replace(/\)\s*\(/g, ")*(")
+    .replace(/(\d)\s*√/g, "$1*√")                        // 2√5 → 2*√5
+    .replace(/√(\d+)/g, "Math.sqrt($1)").replace(/\s+/g, "");
+  if (/(?!Math|sqrt)[A-Za-z]/.test(t.replace(/Math\.sqrt/g, ""))) return NaN;
+  try { const v = Function(`"use strict";return (${t});`)(); return Number.isFinite(v) ? v : NaN; } catch (e) { return NaN; }
+}
+/* flip the sign between the two terms of a two-term surd expression */
+function flipMid(e) {
+  const s = String(e);
+  if (s.includes(" + ")) return s.replace(" + ", " − ");
+  if (s.includes(" − ")) return s.replace(" − ", " + ");
+  return null;
+}
+/* the house minus (U+2212) back to an ordinary hyphen, for parsing */
+const dash = s => String(s).replace(/[−–]/g, "-");
+const dashNum = s => Number(dash(s));
+
+/* ============================================================
+   Part 2 · one recompute per PARAMETRISED skill (the 19 CARE skills
+   this session rolled). The 24 CLEAN skills are fixed rule-recall —
+   there is no number in them to re-derive; they are covered by every
+   generic check in Part 1.
+   Each function re-derives the answer from the question's OWN rendered
+   prompt/options, never from the generator's internal variables, so a
+   generator whose arithmetic drifted from what it displays would fail
+   here. A regex that stops matching returns false — loud, not silent.
+   ============================================================ */
+const trapTruth = q => truthOf(boldOf(q.prompt)) === q.yes;
+const fixTruth = q => truthOf(boldOf(q.prompt)) === false && correctLabel(q) !== "Nothing — it is correct";
+
+const RECOMPUTE = {
+  /* es2 — the ten yes/no traps, re-evaluated as real algebra */
+  "es2.trap1": trapTruth, "es2.trap2": trapTruth, "es2.trap3": trapTruth, "es2.trap4": trapTruth,
+  /* es2 — "what is wrong with…": the shown step must genuinely be broken */
+  "es2.fixIt1": fixTruth, "es2.fixIt2": fixTruth,
+
+  /* es5.likeSurds — three shapes, each re-derived from the prompt */
+  "es5.likeSurds": q => {
+    const e = boldOf(q.prompt), c = correctLabel(q);
+    let m = e.match(/^(\d+)√(\w) − (\d+)√(\w)$/);
+    if (m) return m[2] === m[4] && c === `${Number(m[1]) - Number(m[3])}√${m[2]}` && Number(m[1]) - Number(m[3]) >= 2;
+    m = e.match(/^√(\w) \+ √(\w)$/);
+    if (m) return m[1] === m[2] && c === `2√${m[1]}`;
+    m = e.match(new RegExp(`^(\\d+)·([${SUPDIG}])√(\\d+) \\+ (\\d+)·([${SUPDIG}])√(\\d+)$`));
+    if (m) return m[2] === m[5] && m[3] === m[6] && c === `${Number(m[1]) + Number(m[4])}·${m[2]}√${m[3]}`;
+    return false;
+  },
+
+  /* es5.insideOutside — ⁿ√(vᵃ) = v^(a/n), recomputed from the shown power.
+     The bank's generic rule item has no rolled numbers — it is matched by
+     its own wording so it can never be confused with the power item. */
+  "es5.insideOutside": q => {
+    if (correctLabel(q) === "On the top (numerator)") return /Where does the <b>inside power<\/b> go/.test(q.prompt);
+    const e = boldOf(q.prompt) || "";
+    const m = e.match(new RegExp(`^(³?)√\\((\\w)([${SUPDIG}]+)\\)$`));
+    if (!m) return false;
+    const n = m[1] === "³" ? 3 : 2;
+    const a = Number(desup(m[3]).replace(/[^\d]/g, ""));
+    if (!Number.isInteger(a / n)) return false;                            // the root must come out exactly
+    return correctLabel(q) === `${m[2]}${String(a / n).split("").map(d => SUPDIG[Number(d)]).join("")}`;
+  },
+
+  /* es5.twoAnswers — r² must be the number shown, and every decoy wrong */
+  "es5.twoAnswers": q => {
+    const m = plain(boldOf(q.prompt)).match(/^x² = (\d+)$/);
+    const c = (correctLabel(q) || "").match(/^x = ±(\d+)$/);
+    if (!m || !c) return false;
+    const r = Number(c[1]), k = Number(m[1]);
+    if (r * r !== k || r < 2) return false;
+    return labels(q).filter(l => l !== correctLabel(q)).every(l => l !== `x = ±${r}`);
+  },
+
+  /* es6.findConjugate — the answer must be the prompt with the middle
+     sign flipped, AND the numeric decoy must be the true conjugate
+     PRODUCT (the misconception the answer text names). */
+  "es6.findConjugate": q => {
+    const m = plain(q.prompt).match(/conjugate of (.+?)\?$/);
+    if (!m) return false;
+    const expr = m[1], c = correctLabel(q);
+    if (c !== flipMid(expr)) return false;
+    const prod = surdEval(expr) * surdEval(c);
+    const numeric = labels(q).filter(l => /^[−-]?\d+$/.test(l));
+    return numeric.length === 1 && Number.isFinite(prod) && Math.abs(dashNum(numeric[0]) - prod) < 1e-9;
+  },
+
+  /* es6.conjugateProduct — evaluated numerically where the surds are
+     numbers, re-derived symbolically for the (√v + c)(√v − c) shape */
+  "es6.conjugateProduct": q => {
+    const e = boldOf(q.prompt), c = correctLabel(q);
+    const v = surdEval(e);
+    if (Number.isFinite(v)) return /^\d+$/.test(c) && Math.abs(Number(c) - v) < 1e-9;
+    const m = plain(e).match(/^\(√(\w) \+ (\d+)\)\(√\1 − \2\)$/);
+    return !!m && c === `${m[1]} − ${Number(m[2]) * Number(m[2])}`;
+  },
+
+  /* es6.rationaliseSingle — multiply by the denominator's surd over
+     itself: same thing top and bottom (× 1), and it must be THIS surd */
+  "es6.rationaliseSingle": q => {
+    const m = plain(boldOf(q.prompt)).match(/^(\d+)\/√(\d+)$/);
+    if (!m) return false;
+    return correctLabel(q) === `√${m[2]} / √${m[2]}`;
+  },
+
+  /* es6.rationaliseTwo — the conjugate of the shown denominator, over
+     itself (both halves identical, or the value would change) */
+  "es6.rationaliseTwo": q => {
+    const m = plain(boldOf(q.prompt)).match(/^\d+\/\((.+)\)$/);
+    if (!m) return false;
+    const conj = flipMid(m[1]);
+    return !!conj && correctLabel(q) === `(${conj})/(${conj})`;
+  },
+
+  /* es6.abForm — a + b√c must add up to the expression shown */
+  "es6.abForm": q => {
+    const e = boldOf(q.prompt), c = (correctLabel(q) || "").match(/^a = ([−-]?\d+), b = ([−-]?\d+)$/);
+    const r = plain(e).match(/√(\d+)/);
+    if (!c || !r) return false;
+    const want = dashNum(c[1]) + dashNum(c[2]) * Math.sqrt(Number(r[1]));
+    const got = surdEval(e);
+    return Number.isFinite(got) && Math.abs(got - want) < 1e-9;
+  },
+
+  /* es7.reciprocalStep — the answer is the exponent turned upside down */
+  "es7.reciprocalStep": q => {
+    const m = plain(boldOf(q.prompt)).match(/^x\^\((\d+)\/(\d+)\) = (\d+)$/);
+    if (!m) return false;
+    return correctLabel(q) === `${m[2]}/${m[1]}` && m[1] !== m[2];
+  },
+
+  /* es8.sameBase — the value shown really is bⁿ for the n the answer gives */
+  "es8.sameBase": q => {
+    const m = desup(plain(boldOf(q.prompt))).replace(/\s+/g, "").match(/^(\d+)\^\(x\)=(\d+)$/);
+    const n = plain(q.answerLabel).match(/x = (\d+)\.$/);
+    if (!m || !n) return false;
+    return Math.pow(Number(m[1]), Number(n[1])) === Number(m[2]);
+  },
+
+  /* es8.positiveBase — a positive base can never reach a negative RHS,
+     and the "ignored the minus" decoy must be the honest exponent */
+  "es8.positiveBase": q => {
+    const m = dash(desup(plain(boldOf(q.prompt)))).replace(/\s+/g, "").match(/^(\d+)\^\(x\)=-(\d+)$/);
+    if (!m) return false;
+    const b = Number(m[1]), v = Number(m[2]);
+    if (!(b > 1 && v > 0)) return false;
+    if (correctLabel(q) !== "No solution") return false;
+    return labels(q).some(l => { const d = l.match(/^x = (\d+)$/); return d && Math.pow(b, Number(d[1])) === v; });
+  },
+
+  /* es8.rejectK — k = baseˣ is always positive, so the negative root
+     is rejected: the statement "both give a value of x" must be false */
+  "es8.rejectK": q => {
+    const t = dash(desup(plain(q.prompt))).replace(/\s+/g, "");
+    const m = t.match(/k=(\d+).*k=-(\d+).*k=(\d+)\^\(x\)/);
+    if (!m) return false;
+    return Number(m[3]) > 1 && Number(m[2]) > 0 && Number(m[1]) > 0 && q.yes === false;
+  },
+
+  /* es8.surdIsolate — isolating gives √(x−c) = −d (impossible), and the
+     naive "square it anyway" decoy must be the honest c + d² */
+  "es8.surdIsolate": q => {
+    const m = plain(boldOf(q.prompt)).match(/^√\(x − (\d+)\) \+ (\d+) = 0$/);
+    if (!m) return false;
+    const c = Number(m[1]), d = Number(m[2]);
+    if (!(correctLabel(q) || "").includes(`√(x − ${c}) = −${d}`)) return false;
+    const naive = labels(q).find(l => l.startsWith("Square both sides"));
+    return !!naive && naive === `Square both sides to get x − ${c} = ${d * d}, so x = ${c + d * d}`;
+  },
+};
+const RECOMPUTE_IDS = Object.keys(RECOMPUTE);
+
+/* ============================================================
+   Part 1 · per-entry generation integrity
+   ============================================================ */
+const entriesHost = document.getElementById("entries");
+const recomputeLines = [];
+let methodCount = 0, recallCount = 0;
+
+expPool.entries.forEach((entry, idx) => {
+  const issues = new Set();
+  let sawMethod = false, recomputeRuns = 0, recomputeBad = 0;
+  const rc = RECOMPUTE[entry.skillId];
+
+  if (entry.concept && !getConcept(entry.concept)) issues.add(`concept "${entry.concept}" has no card`);
+  if (!entry.concept) issues.add("no concept id (the “I'm lost” card would be missing)");
+
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.add(`threw: ${e.message}`); break; }
+
+    if (!INPUT_LAW.has(q.type)) { issues.add(`type "${q.type}" violates the input law (this chapter is list-pick only)`); continue; }
+    if (!q.prompt || !String(q.prompt).trim()) issues.add("empty prompt");
+    if (!q.answerLabel || !String(q.answerLabel).trim()) issues.add("no answerLabel (the steps panel would be blank)");
+    if (/\d\.\d/.test(String(q.prompt))) issues.add("prompt contains a dot-decimal number (should be a comma)");
+    if (/-\d/.test(plain(q.prompt))) issues.add("prompt uses a hyphen-minus before a digit (house rule: U+2212 −)");
+    if (q.answerLabel != null && /-\d/.test(plain(q.answerLabel))) issues.add("answerLabel uses a hyphen-minus before a digit");
+
+    /* method markup: only where real working exists, and then real markup */
+    if (q.method != null) {
+      sawMethod = true;
+      if (typeof q.method !== "string" || !q.method.trim()) issues.add("q.method is not a non-empty string");
+      else if (!q.method.includes("sol-step")) issues.add("q.method carries no .sol-step");
+      if (!hasRealWorking(q)) issues.add("q.method attached to a solution that only restates the answer (spoiler link)");
+    } else if (hasRealWorking(q)) issues.add("real working exists but no q.method was attached");
+
+    if (q.type === "mc") {
+      const ls = labels(q);
+      const corrects = q.options.filter(o => o.correct);
+      if (corrects.length !== 1) issues.add(`${corrects.length} correct options (want exactly 1)`);
+      // every mc in this chapter is authored with 3 wrongs. Fewer than 4
+      // options means mc()'s de-duplication silently dropped a decoy —
+      // i.e. a rolled collision the parametrising guards should prevent.
+      if (ls.length !== 4) issues.add(`${ls.length} options (every Exponents & Surds mc is 4 — a decoy collided)`);
+      if (new Set(ls).size !== ls.length) issues.add(`duplicate option labels: ${ls.join(" | ")}`);
+      const cn = /^[−-]?\d+$/.test(String(corrects[0] && corrects[0].label)) ? dashNum(corrects[0].label) : NaN;
+      q.options.filter(o => !o.correct).forEach(o => {
+        const n = /^[−-]?\d+$/.test(String(o.label)) ? dashNum(o.label) : NaN;
+        if (Number.isFinite(cn) && Number.isFinite(n) && Math.abs(n - cn) < 1e-9) issues.add(`decoy "${o.label}" equals the answer BY VALUE`);
+        if (Number.isFinite(cn) && Number.isFinite(n) && answerCorrect(n, cn, { dp: 6 })) issues.add(`decoy "${o.label}" would ALSO be marked correct`);
+      });
+      // self-consistency: the question's own correct label survives the app's checker
+      if (Number.isFinite(cn) && !answerCorrect(parseNum(String(corrects[0].label)), cn, { dp: 6 })) issues.add("the correct option's own label fails the checker");
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.add("q.yes not boolean");
+      // self-consistency: the question's own answer is what the player checks against
+      if (q.yes !== !!q.yes) issues.add("q.yes is not its own answer");
+    }
+
+    if (rc) {
+      recomputeRuns++;
+      let ok = false;
+      try { ok = !!rc(q); } catch (e) { issues.add(`recompute threw: ${e.message}`); }
+      if (!ok) { recomputeBad++; issues.add(`recompute mismatch — ${plain(q.prompt).slice(0, 70)}`); }
+    }
+  }
+
+  /* determinism + the salted retry, per entry */
+  const seed = newRoundSeed();
+  if (JSON.stringify(genAt(seed, idx, entry)) !== JSON.stringify(genAt(seed, idx, entry))) issues.add("genAt is not deterministic (resume would drift)");
+
+  const pure = PURE_RECALL.has(entry.skillId);
+  if (pure) recallCount++;
+  let saltDiffers = false;
+  for (let s = 0; s < 25 && !saltDiffers; s++) {
+    const sd = newRoundSeed();
+    if (JSON.stringify(genAt(sd, s, entry, 0)) !== JSON.stringify(genAt(sd, s, entry, 1))) saltDiffers = true;
+  }
+  if (!pure && !saltDiffers) issues.add("salt 1 never differs from salt 0 — a retry would repeat the same question");
+  // and the classification has to be honest in the other direction too:
+  // a FIXED_YESNO skill has no options to reshuffle and no numbers, so it
+  // MUST be byte-identical — if one ever isn't, it is not pure recall.
+  if (FIXED_YESNO.has(entry.skillId) && saltDiffers) issues.add("listed as fixed-recall yesno but salt 1 differs — the PURE_RECALL list is wrong");
+
+  if (sawMethod) methodCount++;
+  const ok = tick(issues.size === 0, `${entry.skillId} (${RUNS} seeded rolls)`);
+  if (rc) {
+    tick(recomputeBad === 0, `${entry.skillId} recompute (${recomputeRuns} rolls, re-derived from the question's own rendered text)`);
+    recomputeLines.push(`${recomputeBad ? "✗" : "✓"} ${entry.skillId}: ${recomputeRuns - recomputeBad}/${recomputeRuns} recompute matches`);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...issues].slice(0, 5).join("; ")}</li>
+      <li class="${entry.concept ? "ok" : "bad"}">${entry.concept ? `concept "${entry.concept}" has a card (I'm lost works)` : "no concept"}</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method (real working — link shown)" : "no q.method (answer-only solution — link correctly omitted)"}</li>
+      <li class="${rc ? "ok" : ""}">${rc ? `chapter recompute (${recomputeRuns} rolls)` : "fixed rule-recall — no number to re-derive"}</li>
+      <li class="ok">${pure ? (FIXED_YESNO.has(entry.skillId) ? "fixed-recall yesno — proven byte-identical across salts" : "fixed-recall mc — exempt from salt-differs (its options still reshuffle)") : "salt 1 ≠ salt 0 (a retry re-rolls)"}</li>
+    </ul>`;
+  entriesHost.appendChild(card);
+});
+
+recomputeLines.unshift(`Chapter recompute wired for ${RECOMPUTE_IDS.length} of ${expPool.entries.length} skills — every skill this session PARAMETRISED, i.e. every skill in the pool that rolls a number. The other ${expPool.entries.length - RECOMPUTE_IDS.length} are fixed rule-recall (which law is this, why the conjugate, what does a negative exponent mean): there is no arithmetic in them to re-derive, and they get every generic check in Part 1. ${recallCount} entries are listed PURE_RECALL, ${FIXED_YESNO.size} of those proven byte-identical across salts.\n`);
+recomputeLines.push(`\nMethod coverage: ${methodCount}/${expPool.entries.length} skills attach q.method. Every question in this theory chapter carries only the builders' default solution — mc() sets it to the correct option's own label and ynQ() sets it to the answerLabel — so DICE-COMMON's method rule rejects all of them and js/play.js omits the link. The learner still gets the module's vetted explanation in the wrong-answer "Show me the steps" panel, exactly as in static play.`);
+document.getElementById("recompute").textContent = recomputeLines.join("\n");
+
+/* ============================================================
+   Part 3 · dealing, determinism, resume
+   ============================================================ */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+  const kinds = [...new Set(expPool.entries.map(e => e.kind))];
+
+  tick(expPool.chapterId === "exp", `pool chapterId is "exp" (${expPool.chapterId})`);
+  tick(expPool.roundLength === 6, `roundLength is 6 — the median skills-per-quest of the INCLUDED quests (${expPool.roundLength})`);
+  tick(expPool.entries.length === 43, `43 entries = 52 audited skills − 9 STATIC (${expPool.entries.length})`);
+  tick(EXCLUDED.size === 9, `9 exclusions, all hand-authored worked-example banks (${EXCLUDED.size})`);
+  tick(new Set(expPool.entries.map(e => e.skillId)).size === expPool.entries.length, "every skillId is unique");
+  tick([...EXCLUDED].every(id => !expPool.entries.some(e => e.skillId === id)), "no excluded skill leaked into the pool");
+  tick(kinds.length === 39, `39 kinds — two groupings collapse es2's four traps and two fix-its (${kinds.length})`);
+  lines.push(`pool: ${expPool.entries.length} entries · ${kinds.length} kinds · roundLength ${expPool.roundLength}`);
+  const grouped = kinds.filter(k => expPool.entries.filter(e => e.kind === k).length > 1);
+  lines.push(`grouped kinds (more than one skill in the bucket): ${grouped.length ? grouped.join(", ") : "none"}`);
+  lines.push(`excluded (STATIC, not dealable): ${[...EXCLUDED].join(", ")}`);
+
+  let detAll = true, resumeAll = true;
+  expPool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill), c = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    if (JSON.stringify(a) !== JSON.stringify(c)) resumeAll = false;
+  });
+  tick(detAll, `determinism: genAt(seed,i,skill) is byte-identical on repeat, for all ${expPool.entries.length} skills`);
+  tick(resumeAll, `resume: re-deriving any index after the fact reproduces the original question, for all ${expPool.entries.length} skills`);
+  lines.push(`determinism / resume (all ${expPool.entries.length} skills): ${detAll && resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, expPool.entries[0]);
+  tick(Math.random === before, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${Math.random === before ? "OK" : "FAIL — Math.random was left patched"}`);
+
+  const deck1 = dealRound(expPool.entries, expPool.roundLength, []);
+  const distinctSkills = new Set(deck1.map(e => e.skillId)).size === deck1.length;
+  tick(deck1.length === expPool.roundLength && distinctSkills, "dealing: a fresh learner's first round is 6 distinct skills, all of unmet kinds");
+  lines.push(`dealing (fresh learner, first round): [${deck1.map(e => e.skillId).join(", ")}] — ${distinctSkills ? "OK" : "FAIL"}`);
+
+  const maxRounds = Math.ceil(expPool.entries.length / expPool.roundLength) + 2;
+  let met = [], rounds = 0;
+  while (met.length < kinds.length && rounds < maxRounds) {
+    const deck = dealRound(expPool.entries, expPool.roundLength, met);
+    const m = new Set(met); deck.forEach(e => m.add(e.kind)); met = [...m];
+    rounds++;
+  }
+  tick(met.length === kinds.length, `dealing: successive rounds reach all ${kinds.length} kinds (took ${rounds}, budget ${maxRounds})`);
+  lines.push(`dealing (successive rounds): ${met.length}/${kinds.length} kinds met after ${rounds} rounds (budget ${maxRounds}) — ${met.length === kinds.length ? "OK" : "FAIL"}`);
+
+  const metMost = kinds.slice(0, kinds.length - 4);
+  const dealtKinds = new Set(dealRound(expPool.entries, expPool.roundLength, metMost).map(e => e.kind));
+  const gotUnmet = kinds.slice(kinds.length - 4).every(k => dealtKinds.has(k));
+  tick(gotUnmet, "dealing: with 4 kinds left unmet, all 4 are dealt in the next round");
+  lines.push(`dealing (4 kinds unmet): all four present — ${gotUnmet ? "OK" : "FAIL"}`);
+
+  const deckFull = dealRound(expPool.entries, expPool.roundLength, kinds);
+  tick(deckFull.length === expPool.roundLength, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage): dealt ${deckFull.length}/${expPool.roundLength} — ${deckFull.length === expPool.roundLength ? "OK" : "FAIL"}`);
+
+  let baseUnchanged = true;
+  expPool.entries.forEach((skill, i) => {
+    if (JSON.stringify(genAt(seed, i, skill)) !== JSON.stringify(genAt(seed, i, skill, 0))) baseUnchanged = false;
+  });
+  tick(baseUnchanged, `salted retry: genAt() with no salt arg equals explicit salt 0, for all ${expPool.entries.length} skills (resume unaffected)`);
+  lines.push(`no-salt-arg === explicit salt 0 (all ${expPool.entries.length} skills): ${baseUnchanged ? "OK" : "FAIL"}`);
+
+  tick(statsPool.entries.length === 58 && statsPool.roundLength === 7, `Statistics pool still 58 entries / roundLength 7 (${statsPool.entries.length}/${statsPool.roundLength}) — nothing shared was changed`);
+  lines.push(`Statistics pool untouched: ${statsPool.entries.length} entries, roundLength ${statsPool.roundLength}`);
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
+}
+
+const ok = passed === total;
+const banner = document.getElementById("banner");
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks green` : `✗ ${total - passed} check(s) failed — see below`;
+document.getElementById("summary").textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed  (${expPool.entries.length} entries, ${RUNS} seeded rolls each)`
+  : `✗ FAIL — ${total - passed} of ${total} checks failed\n` + fails.slice(0, 40).join("\n");
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice-exp] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

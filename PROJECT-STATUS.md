@@ -1,4 +1,94 @@
-# Project status — updated 2026-08-23 (night) (📈 FUN FUNCTIONS MOUNT PART 2 SHIPPED — the 15 quests play inside the Functions chapter, sw v65, migration APPLIED to live)
+# Project status — updated 2026-08-24 (early hours) (🎲 DICE WAVE 2 BUILT + FOREMAN-REVIEWED, LOCAL ONLY — Equations, Exponents & Surds, Functions pools ready; General Trig audited; Analytical Geometry DIGESTED. Ship waits on her word)
+
+## 🎲 2026-08-23/24 (overnight) — DICE WAVE 2 + TWO SCOUT JOBS (Fable foreman, 5 parallel Opus agents under her /go "run the three green chapters, audit the general trig and maybe digest Analytical Geometry")
+
+Agent spend ≈ 1.67M Opus (EQ 0.40 · ES 0.36 · FN 0.35 · GT-audit 0.27 · AG-digest 0.29),
+inside the ~2.5M estimate she approved. **Committed LOCALLY only — nothing pushed, no
+migration needed (dice is pure client). The ship is one word away (see Pending).**
+
+**The three pools (each foreman-reviewed: my own harness runs + my own 375px crop reads):**
+| chapter | id | entries | kinds | roundLength | method links | harness (my run) |
+|---|---|---|---|---|---|---|
+| Equations & Inequalities | `eqn` | 68/78 (8 STATIC + eq9's 2 teach-first out) | 67 | 8 | 0 | dice-eqn 151 · eq 25 + 31 200 gens + 1 200 sketches |
+| Exponents & Surds | `exp` | 43/52 (9 STATIC out) | 39 | 6 | 0 | dice-exp 78 · exp 8 + 20 800 gens |
+| Functions | `func` | 40/40 (audit said 38 — §7 missed fn3.expRange + fn5.compareBoundary) | 40 | 6 | 2 | dice-func 89 + 49 796 verifyFunction asserts · func 75 + 6 000 gens |
+Stats verify-dice 134/134 unchanged after every session (my runs). scrollW 375 on every
+crop across all three chapters; zero page errors.
+
+**CARE parametrising (the wave-2 rule):** 30 skills now roll that were fixed numbers —
+eq 11 (the 12th, eq7.flipApply, was already parametric), es 19 (pool 24 → 43, the audit's
+prediction exactly). Wording/mechanic/teaching point kept everywhere; es2's ten traps and
+four fix-its keep the SAME misconceptions with rolled numbers. Functions needed none —
+its 16 CARE were guard-carrying figure gens that ride along verbatim. Static harnesses
+green before AND after with zero assertion changes (they were fully generative).
+
+**Session finds, each fixed in-chapter and re-proven:** fn line sketches printed
+6-decimal intercepts (~1 in 5 rolls; label now 2dp + lineIntercepts forces whole-number
+x-intercept); es likeSurds could print "1√a" (coefficient guard b ≥ 2); eq expSameBase
+decoy printed "by 3 3 times" (count now a word: "by 3 twice").
+
+**🔍 General Trig audited for dice** (`sessions/DICE-AUDIT-gtrig.md`): 93 skills — 49
+CLEAN, 44 CARE, 0 STATIC, **0 blocked**: the dice player is type-agnostic (zero q.type
+hits in dice.js/dice-play.js/play.js — mountQuestion renders everything, verified).
+Pool shape when built: 74 entries, roundLength 7. One real gap: "📖 Show me the method"
+would spoil a steps-chain (renders before step 1) — one-line play.js gate, or no methods
+on chains. Pre-existing find: verify-gtrig.html:1379 hardcodes "exactly 4 skill cards"
+(now 54) — the ONLY red in 1 037 165 checks, Exam Focus grew past it.
+
+**📍 Analytical Geometry DIGESTED** (`METHODS-analytical.md`, 1 266 lines): her 31-page
+PDF (the "228 pages" in the attach header was bad metadata — I verified 31 myself) → 29
+named methods, every one page-cited, + her vocabulary appendix, 14 F-flags, and a
+"Digest vs app" section. I spot-checked p16/p24/p25 against the digest myself — exact.
+**The AG dice/exam blocker is now CLEARED pending her F-flag answers.** Headlines: ag6
+(7 skills, triangle areas via altitudes) teaches a method her notes never use (hers:
+prove the right angle, ½ × the two ⊥ sides — F10); ag5's perpendicular-bisector round
+has no grounding past one definition card (F5); equation-of-line, 4th-vertex, angle-at-
+a-vertex, prove-quads (9 of her 10 cards) and quad areas are in her notes but absent
+from the app.
+
+### ⏳ Pending on Megan
+- 💬 1 word **[blocking]**: "ship" → I flip `DICE_CHAPTERS` to add eqn/exp/func, bump sw
+  to v66, push, live-verify. No SQL.
+- 📱 5 min [whenever, after ship]: one 🎲 round each in Equations, Exponents & Surds,
+  Functions on the phone (sw v66; close-and-reopen the PWA twice first).
+- 💬 a few one-liners [whenever]: gtrig dice — gt1–gt3 discovery rounds in or out (my
+  recommendation: gt2+gt3 in, gt1 out)? + the AG digest's 14 F-flags when she has coffee.
+
+### Next up
+- **The ship** (above), then wave 3 candidates: gtrig (audited, ready, needs her
+  discovery-rounds ruling + the steps-chain method gate), Analytical Geometry (digest
+  done — needs her F-flag answers, then pool + possibly `calc` enabled for the chapter,
+  since AG currently ships mc-only), Probability (still needs its METHODS digest — same
+  overnight recipe as AG once she supplies material).
+- Worked-method content batch, now bigger: eqn 0/68, exp 0/43, func 38/40 dice questions
+  carry no 📖 link because their vetted solution is answer-only (correct under the method
+  rule). Her call whether/when; language = METHODS-algebra.md / her Functions digest.
+- Foreman ruling recorded: `dealRound` MAY deal two same-kind entries in one round
+  (seen: two es2 traps, different numbers). Left as-is — drill, not a bug; an
+  at-most-one-per-kind rule in js/dice.js is a one-line tuning option if she ever minds.
+- Small pre-existing cosmetics logged, none touched: es1.fractional's authored answer
+  writes `x^½` (caret + glyph — the ui.js caret rule doesn't catch it; next fix batch);
+  an orphanable bracket in es8's steps text; 4 function-graph engine nits (secant
+  overshoots frame corner, y-axis letter displaced in crowded windows, point label vs
+  arrowhead, p=q=0 asymptotes over axes); fn7.avgGradient's method prints `2 − −2`
+  where her papers would write `2 − (−2)` (one word, her call).
+
+## 📌 Decisions (append-only, 2026-08-24 early hours)
+- eq9's two teach-first skills stay OUT of dice pools (their drill twins are in; a
+  lesson mustn't land mid-round and "Try a similar one" would replay it). Pattern for
+  any future teach-first skill.
+- Same-kind repeats within one dealt round are ACCEPTED (parametrised numbers make them
+  distinct drills); the coverage-first pass already spreads kinds.
+- The 8 eq + 9 es STATIC skills never roll — hand-authored worked-example banks are
+  content, not parameters (DICE-AUDIT's line, ratified in both pool headers).
+- Functions' real skill count is 40, not the audit's 38 — DICE-AUDIT §7 to be corrected
+  when next touched.
+- The AG methods law is now `METHODS-analytical.md` (page-cited to her PDF); where the
+  app's ag rounds disagree with it, the digest wins once she rules on the F-flags.
+
+---
+
+# (previous head) Project status — updated 2026-08-23 (night) (📈 FUN FUNCTIONS MOUNT PART 2 SHIPPED — the 15 quests play inside the Functions chapter, sw v65, migration APPLIED to live)
 
 ## 📈 2026-08-23 (night) — FUN FUNCTIONS MOUNT PART 2, SHIPPED (Fable foreman, 2 Opus sessions under her /go, commit `f0768f8`)
 

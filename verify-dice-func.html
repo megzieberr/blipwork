@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice · Functions pool · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice · Functions pool · verification</h1>
+<p class="muted small">js/quests/dice-func.js — all 40 fn1–fn7 skills, 200 seeded rolls each.
+  <b>Part 1</b> is the generic per-entry integrity pass every dice pool gets (input law, shape,
+  self-consistency against js/check.js, no decoy equal to the answer by value — compared after
+  HTML-entity decoding and, for coordinate answers, numerically — comma-decimal / real-minus
+  rendering, and the method rule).
+  <b>Part 2</b> is this chapter's recompute: <b>every rolled figure through <code>verifyFunction</code></b>
+  (the graph-honesty law of the Functions chapter — a point off its curve, a mislabelled asymptote
+  or an intercept that doesn't compute fails the roll), plus — for 33 of the 40 skills — the answer
+  recomputed independently out of js/funclib.js from the curve the learner is actually LOOKING AT,
+  with the printed equation checked against that same curve. Where a claim is a sign rule
+  (increasing, growth, above/below, f above g) the recompute SAMPLES the function rather than
+  trusting the generator's sign test.
+  <b>Part 3</b> is determinism, salted retry, dealing and resume at full pool size.</p>
+<div id="banner">running…</div>
+
+<h2>Part 1 + 2 · per-entry generation integrity, graph honesty &amp; recompute</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Part 2 · graph honesty tally (verifyFunction over every rolled figure)</h2>
+<pre id="graphs">…</pre>
+
+<h2>Part 2 · independent recompute (js/funclib.js) — coverage</h2>
+<pre id="recompute">…</pre>
+
+<h2>Part 3 · determinism, salted retry, dealing &amp; resume (40 kinds, roundLength 6)</h2>
+<pre id="mechanics">…</pre>
+
+<script type="module">
+import { pool, hasRealWorking } from "./js/quests/dice-func.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect } from "./js/check.js";
+import { getConcept } from "./js/concepts.js";
+import {
+  makeFn, paraTP, paraStd, paraRoots, paraTPString, lineXInt, lineYInt,
+  domainStr, rangeStr, eqStr, ptStr, avgGradient, fix, C, ineqBetween, ineqOutside,
+} from "./js/funclib.js";
+import { FAMILY } from "./js/quests/_func.js";
+import { verifyFunction } from "./js/engine/function-graph.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const RUNS = 200;
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+const EPS = 1e-9;
+const near = (a, b, tol = 1e-9) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
+
+/* ============================================================
+   HELPERS — everything reads the question's OWN rendered prompt
+   and the spec the learner is SHOWN, never the generator's
+   internal variables. That is what makes Part 2 independent: if
+   a generator's arithmetic ever drifted from what it draws or
+   prints, these catch it.
+   ============================================================ */
+const decode = s => String(s).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&");
+const stripTags = s => String(s).replace(/<[^>]*>/g, "");
+const plain = s => decode(stripTags(s)).replace(/\s+/g, " ").trim();
+const corr = q => { const c = (q.options || []).find(o => o.correct); return c ? String(c.label) : null; };
+const cvN = (q, i) => (q.graph && q.graph.curves && q.graph.curves[i]) || null;
+const cv0 = q => cvN(q, 0);
+const pts = q => (q.graph && q.graph.points) || [];
+const shows = (q, s) => String(q.prompt).includes(s);
+/* the equation printed to the learner IS the equation of the curve drawn */
+const eqShown = (q, cv, name = "f(x)") => shows(q, eqStr(cv, name));
+const numFrom = (s, re) => { const m = plain(s).match(re); return m ? Number(String(m[1]).replace(/−/g, "-").replace(",", ".")) : NaN; };
+/* which family the PRINTED equation is, off its own markup */
+function familyOfPrompt(q) {
+  const p = String(q.prompt);
+  if (p.includes("<sup>")) return "exp";
+  if (p.includes('class="frac"')) return "hyperbola";
+  if (p.includes("x²")) return "parabola";
+  return "line";
+}
+/* a numeric value for an option label: "(2 ; −3)" → [2,−3], "4,5" → [4.5],
+   anything else → null. Used for the by-VALUE decoy-collision check, so a
+   coordinate pair that differs only by formatting can never sneak through. */
+const num = t => { const c = String(t).replace(/−/g, "-").replace(",", "."); return /^-?\d+(\.\d+)?$/.test(c) ? Number(c) : NaN; };
+function valueOf(label) {
+  const s = plain(label);
+  const p = s.match(/^\((−?-?\d+(?:,\d+)?)\s*;\s*(−?-?\d+(?:,\d+)?)\)$/);
+  if (p) { const a = num(p[1]), b = num(p[2]); return Number.isFinite(a) && Number.isFinite(b) ? [a, b] : null; }
+  const v = num(s);
+  return Number.isFinite(v) ? [v] : null;
+}
+
+/* ============================================================
+   PART 2 — one recompute per skill, through js/funclib.js only.
+   The 7 skills WITHOUT an entry are pure-recall list-picks with no
+   rolled numbers at all (named in the coverage note below); they
+   still get every Part 1 check.
+   ============================================================ */
+const RECOMPUTE = {
+  /* ---- fn1 · the four families ---- */
+  "fn1.identifyFromEq": q => corr(q) === FAMILY[familyOfPrompt(q)],
+  "fn1.nameFromGraph":  q => { const cv = cv0(q); return !!cv && corr(q) === FAMILY[cv.kind]; },
+
+  /* ---- fn2 · line & parabola ---- */
+  "fn2.lineDirection": q => { const cv = cv0(q); if (!cv || cv.kind !== "line" || !eqShown(q, cv)) return false;
+                              const f = makeFn(cv), up = f(1) > f(0);                             // sampled, not assumed
+                              return up === (cv.a > 0)
+                                && corr(q) === (up ? "increasing (slopes up)" : "decreasing (slopes down)"); },
+  "fn2.lineIntercepts": q => { const cv = cv0(q); if (!cv || cv.kind !== "line" || !eqShown(q, cv)) return false;
+                              if (cv.a === 0 || cv.q === 0) return false;                         // CARE guard held
+                              const askX = shows(q, "<b>x-intercept</b>");
+                              const xi = lineXInt(cv), yi = lineYInt(cv);
+                              if (!near(makeFn(cv)(xi), 0) || !near(makeFn(cv)(0), yi)) return false;
+                              return corr(q) === (askX ? ptStr(xi, 0) : ptStr(0, yi)); },
+  "fn2.happySad": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola" || !eqShown(q, cv)) return false;
+                         const tp = paraTP(cv), f = makeFn(cv);
+                         const isMin = f(tp.x + 1) > tp.y && f(tp.x - 1) > tp.y;                   // sampled
+                         return isMin === (paraStd(cv).a > 0)
+                           && corr(q) === (isMin ? "“happy” (opens up) — it has a minimum"
+                                                 : "“sad” (opens down) — it has a maximum"); },
+  "fn2.turningPoint": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola" || !eqShown(q, cv)) return false;
+                             const tp = paraTP(cv);
+                             return near(makeFn(cv)(tp.x), tp.y) && corr(q) === ptStr(tp.x, tp.y); },
+  "fn2.tpFormRead": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola") return false;
+                           if (!shows(q, paraTPString(cv))) return false;                          // the printed TP form is the drawn curve's
+                           if (cv.p === 0 || cv.q === 0 || cv.p === cv.q) return false;            // CARE guard held
+                           const tp = paraTP(cv);
+                           return near(tp.x, cv.p) && near(tp.y, cv.q) && corr(q) === ptStr(cv.p, cv.q); },
+  "fn2.axisOfSymmetry": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola" || !eqShown(q, cv)) return false;
+                               const tp = paraTP(cv), f = makeFn(cv);
+                               return near(f(tp.x - 1.3), f(tp.x + 1.3), 1e-9)                     // symmetry, sampled
+                                 && corr(q) === `x = ${C(tp.x)}`; },
+  "fn2.parabolaRange": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola" || !eqShown(q, cv)) return false;
+                              const tp = paraTP(cv), a = paraStd(cv).a;
+                              return corr(q) === rangeStr(cv) && corr(q) === `y ${a > 0 ? "≥" : "≤"} ${C(tp.y)}`; },
+
+  /* ---- fn3 · hyperbola & exponential ---- */
+  "fn3.hypAsymptotes": q => { const cv = cv0(q); if (!cv || cv.kind !== "hyperbola" || !eqShown(q, cv)) return false;
+                              if (cv.p === cv.q) return false;                                     // CARE guard held
+                              const as = q.graph.asymptotes || [];
+                              const vx = as.find(a => a.x !== undefined), hy = as.find(a => a.y !== undefined);
+                              return !!vx && !!hy && near(vx.x, cv.p) && near(hy.y, cv.q)
+                                && corr(q) === `x = ${C(cv.p)} and y = ${C(cv.q)}`; },
+  "fn3.hypDomainRange": q => { const cv = cv0(q); if (!cv || cv.kind !== "hyperbola" || !eqShown(q, cv)) return false;
+                               if (cv.p === cv.q) return false;
+                               const askDom = shows(q, "<b>domain</b>");
+                               return corr(q) === (askDom ? domainStr(cv) : rangeStr(cv))
+                                 && corr(q) === (askDom ? `x ∈ ℝ, x ≠ ${C(cv.p)}` : `y ∈ ℝ, y ≠ ${C(cv.q)}`); },
+  "fn3.hypBranches": q => { const cv = cv0(q); if (!cv || cv.kind !== "hyperbola" || !eqShown(q, cv)) return false;
+                            const f = makeFn(cv), dec = f(cv.p + 3) > f(cv.p + 4);                 // sampled on one branch
+                            return dec === (cv.a > 0) && corr(q) === (dec ? "decreasing" : "increasing"); },
+  "fn3.expGrowthDecay": q => { const cv = cv0(q); if (!cv || cv.kind !== "exp" || !eqShown(q, cv)) return false;
+                               if (!(cv.a > 0)) return false;                                      // CARE guard held
+                               const f = makeFn(cv), grows = f(2) > f(1);
+                               return grows === (cv.b > 1)
+                                 && corr(q) === (grows ? "Growth (increasing — “taking off”)"
+                                                       : "Decay (decreasing — “landing”)"); },
+  "fn3.expAsymptote": q => { const cv = cv0(q); if (!cv || cv.kind !== "exp" || !eqShown(q, cv)) return false;
+                             const hy = (q.graph.asymptotes || []).find(a => a.y !== undefined);
+                             const f = makeFn(cv);                                                 // it really does flatten to q
+                             const flat = Math.abs(f(cv.b > 1 ? -30 : 30) - cv.q) < 1e-6;
+                             return !!hy && near(hy.y, cv.q) && flat && corr(q) === `y = ${C(cv.q)}`; },
+  "fn3.expRange": q => { const cv = cv0(q); if (!cv || cv.kind !== "exp" || !eqShown(q, cv)) return false;
+                         const f = makeFn(cv), above = f(0) > cv.q && f(5) > cv.q && f(-5) > cv.q;
+                         return above === (cv.a > 0) && corr(q) === rangeStr(cv)
+                           && plain(corr(q)) === `y ${above ? ">" : "<"} ${C(cv.q)}`; },
+
+  /* ---- fn4 · reading features off a graph (the equation is NOT shown by design) ---- */
+  "fn4.readYIntercept": q => { const cv = cv0(q), p = pts(q);
+                               if (!cv || p.length !== 1) return false;
+                               const yi = makeFn(cv)(0);
+                               return near(p[0].x, 0) && near(p[0].y, yi) && Math.abs(yi) > 1e-9   // CARE guard: marked, non-zero
+                                 && p[0].dashTo === "both" && p[0].label == null                   // labels stripped → a real read-off
+                                 && !q.graph.curves.some(c => c.label != null)
+                                 && corr(q) === ptStr(0, yi); },
+  "fn4.readXIntercept": q => { const cv = cv0(q), p = pts(q);
+                               if (!cv || cv.kind !== "line" || p.length !== 1) return false;
+                               const xi = lineXInt(cv);
+                               return Number.isInteger(xi) && xi !== 0                             // CARE guard: integer, non-zero
+                                 && near(makeFn(cv)(xi), 0) && near(p[0].x, xi) && near(p[0].y, 0)
+                                 && p[0].label == null && !q.graph.curves.some(c => c.label != null)
+                                 && corr(q) === ptStr(xi, 0); },
+  "fn4.readTP": q => { const cv = cv0(q), p = pts(q);
+                       if (!cv || cv.kind !== "parabola" || p.length !== 1) return false;
+                       const tp = paraTP(cv);
+                       return Number.isInteger(tp.x) && Number.isInteger(tp.y)                     // CARE guard: on a gridline
+                         && near(makeFn(cv)(tp.x), tp.y)
+                         && near(p[0].x, tp.x) && near(p[0].y, tp.y)
+                         && p[0].label == null && corr(q) === ptStr(tp.x, tp.y); },
+  "fn4.readAsymptotes": q => { const cv = cv0(q); if (!cv) return false;
+                               if ((q.graph.points || []).length) return false;                    // every label stripped
+                               const as = q.graph.asymptotes || [];
+                               if (cv.kind === "hyperbola") {
+                                 if (cv.p === cv.q) return false;                                  // CARE guard held
+                                 const vx = as.find(a => a.x !== undefined), hy = as.find(a => a.y !== undefined);
+                                 return !!vx && !!hy && near(vx.x, cv.p) && near(hy.y, cv.q)
+                                   && corr(q) === `x = ${C(cv.p)} and y = ${C(cv.q)}`;
+                               }
+                               const hy = as.find(a => a.y !== undefined);
+                               return cv.kind === "exp" && !!hy && near(hy.y, cv.q)
+                                 && corr(q) === `y = ${C(cv.q)}`; },
+  "fn4.readRange": q => { const cv = cv0(q); if (!cv) return false;
+                          if (q.graph.curves.some(c => c.label != null)) return false;
+                          if (cv.kind === "parabola") {
+                            const tp = paraTP(cv), a = paraStd(cv).a;
+                            return corr(q) === `y ${a > 0 ? "≥" : "≤"} ${C(tp.y)}` && corr(q) === rangeStr(cv);
+                          }
+                          const f = makeFn(cv), above = f(0) > cv.q;
+                          return cv.kind === "exp" && above === (cv.a > 0) && corr(q) === rangeStr(cv); },
+
+  /* ---- fn5 · increasing/decreasing & inequalities ---- */
+  "fn5.incDec": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola") return false;
+                       const tp = paraTP(cv), a = paraStd(cv).a, f = makeFn(cv);
+                       const risesRight = f(tp.x + 2) > f(tp.x + 1);                                // sampled
+                       if (risesRight !== (a > 0)) return false;
+                       const askInc = shows(q, "<b>increasing</b>");
+                       const inc = a > 0 ? `x > ${C(tp.x)}` : `x &lt; ${C(tp.x)}`;
+                       const dec = a > 0 ? `x &lt; ${C(tp.x)}` : `x > ${C(tp.x)}`;
+                       return corr(q) === (askInc ? inc : dec); },
+  "fn5.fPositive": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola") return false;
+                          const r = paraRoots(cv), a = paraStd(cv).a;
+                          if (r.length !== 2 || Math.abs(r[1] - r[0]) < 1) return false;            // CARE guard held
+                          const f = makeFn(cv);
+                          if ((f((r[0] + r[1]) / 2) > 0) !== (a < 0)) return false;                 // sign between the roots, sampled
+                          return corr(q) === (a > 0 ? ineqOutside(r[0], r[1]) : ineqBetween(r[0], r[1])); },
+  "fn5.fNegative": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola") return false;
+                          const r = paraRoots(cv), a = paraStd(cv).a;
+                          if (r.length !== 2 || Math.abs(r[1] - r[0]) < 1) return false;
+                          const f = makeFn(cv);
+                          if ((f((r[0] + r[1]) / 2) < 0) !== (a > 0)) return false;
+                          return corr(q) === (a > 0 ? ineqBetween(r[0], r[1]) : ineqOutside(r[0], r[1])); },
+
+  /* ---- fn6 · transformations ---- */
+  "fn6.shiftRule": q => { const k = numFrom(q.prompt, /by (\d+)\?/);
+                          if (!Number.isFinite(k)) return false;
+                          const p = plain(q.prompt);
+                          const want = p.includes("up") ? `f(x) + ${k}` : p.includes("down") ? `f(x) − ${k}`
+                                     : p.includes("right") ? `f(x − ${k})` : `f(x + ${k})`;
+                          return corr(q) === want; },
+  "fn6.shiftDescribe": q => { const p = plain(q.prompt);
+                              const outside = p.match(/f\(x\)\s*([+−])\s*(\d+)\s*shifts/);
+                              const inside = p.match(/f\(x\s*([+−])\s*(\d+)\)\s*shifts/);
+                              if (outside) return corr(q) === `${outside[1] === "+" ? "up" : "down"} by ${outside[2]}`;
+                              if (inside) return corr(q) === `${inside[1] === "+" ? "left" : "right"} by ${inside[2]}`;
+                              return false; },
+  "fn6.applyReflect": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola") return false;
+                             const tp = paraTP(cv);
+                             if (Math.abs(tp.x) < 0.4 || Math.abs(tp.y) < 0.4) return false;        // CARE guard held
+                             if (!near(makeFn(cv)(tp.x), tp.y)) return false;
+                             if (!shows(q, ptStr(tp.x, tp.y))) return false;                        // the stated TP is the drawn one
+                             const inX = shows(q, "<b>x-axis</b>");
+                             return corr(q) === (inX ? ptStr(tp.x, -tp.y) : ptStr(-tp.x, tp.y)); },
+  "fn6.applyToParabola": q => { const cv = cv0(q); if (!cv || cv.kind !== "parabola") return false;
+                                const tp = paraTP(cv);
+                                if (!near(makeFn(cv)(tp.x), tp.y) || !shows(q, ptStr(tp.x, tp.y))) return false;
+                                const k = numFrom(q.prompt, /by (\d+)/), up = shows(q, "<b>up by");
+                                return Number.isFinite(k) && corr(q) === ptStr(tp.x, up ? tp.y + k : tp.y - k); },
+  "fn6.applyToHyperbola": q => { const cv = cv0(q); if (!cv || cv.kind !== "hyperbola") return false;
+                                 if (!shows(q, `x = ${C(cv.p)} and y = ${C(cv.q)}`)) return false;
+                                 const as = q.graph.asymptotes || [];
+                                 const vx = as.find(a => a.x !== undefined), hy = as.find(a => a.y !== undefined);
+                                 if (!vx || !hy || !near(vx.x, cv.p) || !near(hy.y, cv.q)) return false;
+                                 const k = numFrom(q.prompt, /by (\d+)/), up = shows(q, "<b>up by");
+                                 return Number.isFinite(k)
+                                   && corr(q) === `x = ${C(cv.p)} and y = ${C(up ? cv.q + k : cv.q - k)}`; },
+
+  /* ---- fn7 · putting graphs together ---- */
+  "fn7.intersectionRead": q => { const f = cvN(q, 0), g = cvN(q, 1), p = pts(q);
+                                 if (!f || !g || f.kind !== "line" || g.kind !== "line" || p.length !== 1) return false;
+                                 if (f.a === g.a || f.a === 0 || g.a === 0) return false;            // CARE guards held
+                                 const ix = (g.q - f.q) / (f.a - g.a), iy = makeFn(f)(ix);
+                                 if (near(ix, 0) && near(iy, 0)) return false;                       // never the origin
+                                 return near(makeFn(g)(ix), iy) && near(p[0].x, ix) && near(p[0].y, iy)
+                                   && corr(q) === ptStr(ix, iy); },
+  "fn7.fAboveG": q => { const f = cvN(q, 0), g = cvN(q, 1);
+                        if (!f || !g || f.a === g.a || f.a === 0 || g.a === 0) return false;
+                        const ix = (g.q - f.q) / (f.a - g.a);
+                        const fAboveRight = makeFn(f)(ix + 1) > makeFn(g)(ix + 1);                   // sampled
+                        if (fAboveRight !== (f.a > g.a)) return false;
+                        return corr(q) === (fAboveRight ? `x > ${C(ix)}` : `x &lt; ${C(ix)}`); },
+  "fn7.natureRoots": q => { const p = plain(q.prompt);
+                            const m = p.match(/(minimum|maximum) turning point at \((−?\d+(?:,\d+)?) ; (−?\d+(?:,\d+)?)\)/);
+                            if (!m) {                                                                // the three Δ recall cases
+                              const want = { "touches": "two equal roots (Δ = 0)",
+                                             "cuts": "two real, unequal roots (Δ > 0)",
+                                             "never reaches": "non-real roots (Δ < 0)" };
+                              const key = Object.keys(want).find(k => p.includes(k));
+                              return !!key && plain(corr(q)) === want[key];
+                            }
+                            const y = Number(m[3].replace(/−/g, "-").replace(",", "."));
+                            return plain(corr(q)) === `k ${m[1] === "minimum" ? ">" : "<"} ${C(y)}`; },
+  "fn7.avgGradient": q => { const cv = cvN(q, 0), sec = cvN(q, 1), p = pts(q);
+                            if (!cv || cv.kind !== "parabola" || !sec || sec.kind !== "line" || p.length !== 2) return false;
+                            if (!eqShown(q, cv)) return false;
+                            const x1 = numFrom(q.prompt, /between x = (−?\d+(?:,\d+)?)/);
+                            const x2 = numFrom(q.prompt, /and x = (−?\d+(?:,\d+)?)/);
+                            if (!Number.isFinite(x1) || !Number.isFinite(x2) || x2 <= x1) return false;
+                            const f = makeFn(cv), m = avgGradient(cv, x1, x2);
+                            if (Math.max(Math.abs(f(x1)), Math.abs(f(x2)), Math.abs(paraTP(cv).y)) > 12) return false; // CARE guard held
+                            const onSecant = near(makeFn(sec)(x1), f(x1)) && near(makeFn(sec)(x2), f(x2));
+                            const marked = near(p[0].x, x1) && near(p[0].y, f(x1))
+                                        && near(p[1].x, x2) && near(p[1].y, f(x2));
+                            return onSecant && marked && q.dp === 2 && near(q.expected, m)
+                              && String(q.answerLabel).includes(fix(m, 2)); },
+  "fn7.maxLength": q => { const f = cvN(q, 0), g = cvN(q, 1);
+                          if (!f || f.kind !== "parabola" || !g || g.kind !== "line") return false;
+                          if (!eqShown(q, f) || !eqShown(q, g, "g(x)")) return false;
+                          const std = paraStd(f);
+                          const xStar = (g.a - std.b) / 2;                    // AB = g − f = −x² + (m − b)x + (k − c)
+                          const len = makeFn(g)(xStar) - makeFn(f)(xStar);
+                          const gap = x => makeFn(g)(x) - makeFn(f)(x);
+                          const isMax = gap(xStar + 0.001) <= len + EPS && gap(xStar - 0.001) <= len + EPS;
+                          return std.a === 1 && len > 0 && isMax && q.dp === 2
+                            && near(q.expected, len)
+                            && near(q.graph.segment.x, xStar)
+                            && q.graph.segment.fromCurve === 1 && q.graph.segment.toCurve === 0; },
+};
+
+/* the 7 skills with no rolled numbers at all: a fixed pick of hand-written
+   cases (or one fixed question). Nothing to recompute, and they are exempt
+   from Part 3's "salt 1 differs from salt 0" check — though in practice they
+   still differ, because mc() shuffles its options through the seeded rng. */
+const NO_RECOMPUTE = ["fn1.featureMatch", "fn1.notation", "fn5.productSign", "fn5.xfSign",
+                      "fn5.compareBoundary", "fn6.reflect", "fn6.stretch"];
+const PURE_RECALL = new Set(NO_RECOMPUTE);
+
+/* ---------- graph honesty: EVERY rolled figure, every roll ---------- */
+function graphIssues(q) {
+  const out = [];
+  const check = (g, tag) => {
+    if (!g) return;
+    if (g.type === "function") verifyFunction(g).forEach(r => { if (!r.ok) out.push(`${tag}: ${r.label}`); });
+    else out.push(`${tag}: unexpected graph type "${g.type}" in a Functions question`);
+  };
+  check(q.graph, "figure");
+  if (Array.isArray(q.graphs)) q.graphs.forEach((g, i) => check(g.spec || g, `figures[${i}]`));
+  return out;
+}
+
+/* ============================================================
+   PART 1 + 2 — per entry, 200 seeded rolls
+   ============================================================ */
+const host = document.getElementById("entries");
+const recomputeLines = [];
+let methodCount = 0, noMethodCount = 0;
+let figureSpecs = 0, figureChecks = 0, figureFails = 0, curveCount = 0;
+
+pool.entries.forEach(entry => {
+  const issues = [];
+  let sawMethod = false, recomputeRuns = 0, recomputeFails = 0, sawFigure = false, entryFigures = 0;
+  const hasRecompute = !!RECOMPUTE[entry.skillId];
+
+  if (!getConcept(entry.concept)) issues.push(`concept "${entry.concept}" has no card in js/concepts.js`);
+
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.push(`threw: ${e.message}`); break; }
+
+    /* ---- input law + shape ---- */
+    if (!INPUT_LAW.has(q.type)) { issues.push(`type "${q.type}" violates the input law`); continue; }
+    if (!q.prompt || !String(q.prompt).trim()) issues.push("empty prompt");
+
+    /* ---- SA number rendering (comma decimal, real minus U+2212) — checked on
+       everything the learner READS: prompt, answer, hint, every option, and every
+       piece of text drawn ON the figure (point labels, asymptote captions, the
+       segment name), which the engine renders in its own font. ---- */
+    const figureText = [];
+    if (q.graph) {
+      (q.graph.points || []).forEach(p => p.label != null && figureText.push(String(p.label)));
+      (q.graph.asymptotes || []).forEach(a => a.label != null && figureText.push(String(a.label)));
+      (q.graph.vlines || []).forEach(v => v.label != null && figureText.push(String(v.label)));
+      if (q.graph.segment && q.graph.segment.label) figureText.push(String(q.graph.segment.label));
+    }
+    const readable = [q.prompt, q.answerLabel, q.hint, ...(q.options || []).map(o => o.label), ...figureText]
+      .filter(v => v != null).map(v => plain(v)).join("  ");
+    if (/\d\.\d/.test(readable)) issues.push("a dot-decimal number is shown (house rule: comma)");
+    if (/-\d/.test(readable)) issues.push("an ASCII hyphen is used as a minus (house rule: U+2212)");
+    /* 2 dp is the chapter's ceiling for anything a learner reads or picks — a
+       label like "(0,666667 ; 0)" is not a school sketch (found in the PNG
+       review, 2026-08-23; fixed in _func.js's lineGraph + fn2.lineIntercepts). */
+    const ugly = readable.match(/\d+,\d{3,}/);
+    if (ugly) issues.push(`a number with more than 2 decimals is shown: "${ugly[0]}"`);
+
+    /* ---- the method rule (DICE-COMMON 2026-08-23) ---- */
+    const wantsMethod = hasRealWorking(q);
+    if (!!q.method !== wantsMethod) issues.push(`method rule broken: q.method ${q.method ? "present" : "absent"} but solution ${wantsMethod ? "HAS" : "has no"} real working`);
+    if (q.method != null) {
+      sawMethod = true;
+      if (typeof q.method !== "string" || !q.method.trim()) issues.push("q.method is not a non-empty string");
+      else if (!q.method.includes("sol-step")) issues.push("q.method has no .sol-step");
+    }
+
+    /* ---- per-type shape + self-consistency against js/check.js ---- */
+    if (q.type === "mc" || q.type === "reason") {
+      const raw = q.options.map(o => String(o.label));
+      const labels = raw.map(plain);                       // compare after entity-decoding: "y &lt; 2" and "y < 2" are the SAME button
+      const corrects = q.options.filter(o => o.correct);
+      if (corrects.length !== 1) issues.push(`${corrects.length} correct options (want exactly 1)`);
+      if (labels.length < 2) issues.push("fewer than 2 options");
+      if (labels.some(l => !l)) issues.push("an option label is empty once tags are stripped");
+      if (new Set(labels).size !== labels.length) issues.push(`duplicate option labels: ${labels.join(" | ")}`);
+      const cVal = corrects.length === 1 ? valueOf(corrects[0].label) : null;
+      if (cVal) {
+        if (cVal.length === 1 && !answerCorrect(cVal[0], cVal[0], { dp: 2 })) issues.push("the correct option's value fails its own check");
+        q.options.filter(o => !o.correct).forEach(o => {
+          const d = valueOf(o.label);
+          if (d && d.length === cVal.length && d.every((x, k) => Math.abs(x - cVal[k]) < EPS))
+            issues.push(`decoy "${plain(o.label)}" equals the answer BY VALUE`);
+        });
+      }
+    } else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.push("non-finite expected");
+      if (!Number.isInteger(q.dp) || q.dp < 0) issues.push(`dp "${q.dp}" is not a non-negative integer`);
+      if (q.tol != null && (!Number.isFinite(q.tol) || q.tol < 0)) issues.push(`tol "${q.tol}" is not finite and ≥ 0`);
+      if (Number.isFinite(q.expected) && !answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) issues.push("expected fails its own check");
+      if (q.allowNeg === false && q.expected < 0) issues.push("allowNeg:false but the expected answer is negative (unanswerable on the pad)");
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.push("q.yes not boolean");
+    } else if (q.type === "tap") {
+      if (!q.tap || typeof q.tap.correctId !== "string") issues.push("tap without a string correctId");
+      else if (!(q.tap.targets || []).includes(q.tap.correctId)) issues.push("correctId not in targets");
+    }
+
+    /* ---- graph honesty: every rolled figure through verifyFunction ---- */
+    if (q.graph) {
+      sawFigure = true; figureSpecs++; entryFigures++;
+      curveCount += (q.graph.curves || []).length;
+      const res = verifyFunction(q.graph);
+      figureChecks += res.length;
+      res.forEach(r => { if (!r.ok) figureFails++; });
+    }
+    graphIssues(q).forEach(g => issues.push(g));
+
+    /* ---- independent recompute ---- */
+    if (hasRecompute) {
+      recomputeRuns++;
+      let ok = false;
+      try { ok = !!RECOMPUTE[entry.skillId](q); } catch (e) { ok = false; issues.push(`recompute threw: ${e.message}`); }
+      if (!ok) { recomputeFails++; issues.push("recompute mismatch"); }
+    }
+  }
+
+  if (sawMethod) methodCount++; else noMethodCount++;
+  const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} rolls)`);
+  if (hasRecompute) {
+    tick(recomputeFails === 0, `${entry.skillId} recompute (${recomputeRuns} rolls, funclib, independent of the generator)`);
+    recomputeLines.push(`${entry.skillId}: ${recomputeRuns - recomputeFails}/${recomputeRuns} recompute matches`);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...new Set(issues)].slice(0, 5).join("; ")}</li>
+      <li class="ok">concept "${entry.concept}" has a card (I'm lost works)</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method (real worked steps)" : "no q.method — solution is answer-only (method rule)"}</li>
+      <li class="${sawFigure ? "ok" : ""}">${sawFigure ? `${entryFigures} figures, each through verifyFunction` : "no figure"}</li>
+      <li class="${hasRecompute ? "ok" : ""}">${hasRecompute ? `independent recompute (${recomputeRuns} rolls)` : "pure recall — nothing to recompute"}</li>
+    </ul>`;
+  host.appendChild(card);
+});
+
+tick(figureFails === 0, `verifyFunction: ${figureSpecs} rolled figures, ${figureChecks} individual checks, 0 faults`);
+
+document.getElementById("graphs").textContent =
+  `${figureSpecs} figures generated and re-verified across ${RUNS} rolls × ${pool.entries.length} skills\n` +
+  `  · ${figureChecks} individual verifyFunction assertions, ${figureFails} failures\n` +
+  `  · ${curveCount} curves drawn (line / parabola / hyperbola / exponential)\n` +
+  `  · what verifyFunction proves per figure: the window is valid; every curve is really visible in it;\n` +
+  `    every labelled point that names a curve LIES on that curve and sits inside the frame with at least\n` +
+  `    0,5 units of room for its label; every declared asymptote matches its curve's own p/q; a vertical\n` +
+  `    segment spans two real curves; and every vertical caption sits in the empty band below the plot,\n` +
+  `    inside the frame, not overlapping another caption or a curve.\n` +
+  `  · 29 of the 40 skills carry a figure (${figureSpecs} = 29 × ${RUNS}); the other 11 are equation-only\n` +
+  `    or pure-recall list-picks.\n` +
+  `  · No rolled window ever needed tightening: the pool reuses the chapter's own curated-safe builders\n` +
+  `    (_func.js's randLine/randParabola/randHyperbola/randExp + winFor + labelX), which are exactly the\n` +
+  `    families the static skills already use.`;
+
+recomputeLines.unshift(
+  `Independent recompute wired for ${Object.keys(RECOMPUTE).length}/${pool.entries.length} skills, all of it through js/funclib.js,\n` +
+  `computed from the curve the learner is LOOKING AT (q.graph.curves) and the text the question PRINTS —\n` +
+  `never from the generator's internal variables. Where the answer is a sign claim (increasing/decreasing,\n` +
+  `growth/decay, above/below the axis, f above g, happy/sad, min/max) the recompute SAMPLES the function\n` +
+  `at real x-values instead of re-running the generator's own sign test, and every equation printed in a\n` +
+  `prompt is re-derived with eqStr() from the drawn curve and must match character for character.\n` +
+  `Not recomputable (${NO_RECOMPUTE.length}) — pure-recall list-picks with no rolled numbers at all:\n` +
+  `  ${NO_RECOMPUTE.join(", ")}.\n` +
+  `They still get every input-law / shape / decoy / self-consistency check above.\n`);
+recomputeLines.push(`\nMethod coverage: ${methodCount}/${pool.entries.length} skills attach q.method (real worked steps: fn7.avgGradient, fn7.maxLength); ${noMethodCount} do not — their solution is the answer only, so no spoiler link is shown.`);
+document.getElementById("recompute").textContent = recomputeLines.join("\n");
+
+/* ============================================================
+   PART 3 — determinism, salted retry, dealing, resume
+   ============================================================ */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+
+  let detAll = true, resumeAll = true;
+  pool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    const c = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(c)) resumeAll = false;
+  });
+  tick(detAll, `determinism: genAt(seed,i,skill) is byte-identical on repeat, for all ${pool.entries.length} skills`);
+  tick(resumeAll, `resume: re-deriving any index reproduces the original question, for all ${pool.entries.length} skills`);
+  lines.push(`determinism (all ${pool.entries.length} skills, same seed/index twice): ${detAll ? "OK" : "FAIL"}`);
+  lines.push(`resume (all ${pool.entries.length} skills): ${resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, pool.entries[0]);
+  tick(Math.random === before, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${Math.random === before ? "OK" : "FAIL — Math.random was left patched"}`);
+
+  // salt 1 must differ from salt 0 for at least one roll, for every skill with
+  // rolled numbers (pure-recall list-picks exempt — listed below).
+  const noVary = [], recallVaried = [];
+  pool.entries.forEach(skill => {
+    let varied = false;
+    for (let idx = 0; idx < 10 && !varied; idx++) {
+      if (JSON.stringify(genAt(seed, idx, skill, 0)) !== JSON.stringify(genAt(seed, idx, skill, 1))) varied = true;
+    }
+    if (PURE_RECALL.has(skill.skillId)) { if (varied) recallVaried.push(skill.skillId); return; }
+    if (!varied) noVary.push(skill.skillId);
+  });
+  tick(noVary.length === 0, `salted retry: salt 1 differs from salt 0 for every numeric skill (${pool.entries.length - PURE_RECALL.size} of ${pool.entries.length})`);
+  lines.push(`salted retry (numeric skills, salt 0 vs salt 1 over 10 indices): ${noVary.length === 0 ? "OK — all vary" : "FAIL — never varied: " + noVary.join(", ")}`);
+  lines.push(`  exempt (pure recall, no rolled numbers): ${[...PURE_RECALL].join(", ")}`);
+  lines.push(`  of those, still varied via mc()'s seeded option shuffle: ${recallVaried.length ? recallVaried.join(", ") : "none"}`);
+
+  let sameSaltOk = true;
+  pool.entries.forEach((skill, i) => {
+    for (let salt = 0; salt <= 2; salt++) {
+      if (JSON.stringify(genAt(seed, i, skill, salt)) !== JSON.stringify(genAt(seed, i, skill, salt))) sameSaltOk = false;
+    }
+  });
+  tick(sameSaltOk, "salted retry: the same (seed, index, salt) is byte-identical on repeat, salt 0/1/2, all skills");
+  lines.push(`same salt called twice → identical (all skills, salt 0/1/2): ${sameSaltOk ? "OK" : "FAIL"}`);
+
+  let baseUnchanged = true;
+  pool.entries.forEach((skill, i) => {
+    if (JSON.stringify(genAt(seed, i, skill)) !== JSON.stringify(genAt(seed, i, skill, 0))) baseUnchanged = false;
+  });
+  tick(baseUnchanged, "salted retry: genAt() with no salt arg still equals salt 0 (resume path unaffected)");
+  lines.push(`no-salt-arg === explicit salt 0 (all skills): ${baseUnchanged ? "OK" : "FAIL"}`);
+
+  // dealing — a fresh learner's first round is roundLength distinct unmet kinds
+  const deck1 = dealRound(pool.entries, pool.roundLength, []);
+  const distinct1 = deck1.length === pool.roundLength && new Set(deck1.map(e => e.kind)).size === deck1.length;
+  tick(distinct1, `dealing: a fresh learner's first round is ${pool.roundLength} distinct, all-unmet kinds`);
+  lines.push(`dealing (fresh learner, first round of ${pool.roundLength}): [${deck1.map(e => e.kind).join(", ")}] — ${distinct1 ? "OK" : "FAIL"}`);
+
+  // every kind met within ceil(entries/roundLength) + 2 rounds
+  const maxRounds = Math.ceil(pool.entries.length / pool.roundLength) + 2;
+  let met = [], rounds = 0;
+  while (met.length < pool.entries.length && rounds < maxRounds) {
+    const deck = dealRound(pool.entries, pool.roundLength, met);
+    const s = new Set(met); deck.forEach(e => s.add(e.kind)); met = [...s]; rounds++;
+  }
+  const fullCoverage = met.length === pool.entries.length;
+  tick(fullCoverage, `dealing: successive rounds reach full ${pool.entries.length}-kind coverage (took ${rounds}, allowed ≤ ${maxRounds})`);
+  lines.push(`dealing (successive rounds to full coverage): ${met.length}/${pool.entries.length} kinds after ${rounds} rounds (allowed ≤ ${maxRounds}) — ${fullCoverage ? "OK" : "FAIL"}`);
+
+  const deckFull = dealRound(pool.entries, pool.roundLength, pool.entries.map(e => e.kind));
+  tick(deckFull.length === pool.roundLength, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage, fully random): dealt ${deckFull.length}/${pool.roundLength} — ${deckFull.length === pool.roundLength ? "OK" : "FAIL"}`);
+
+  // resume of a REAL dealt round: regenerate every index after the fact
+  const dealt = dealRound(pool.entries, pool.roundLength, []);
+  const firstPass = dealt.map((sk, i) => JSON.stringify(genAt(seed, i, sk)));
+  const resumeOk = dealt.every((sk, i) => JSON.stringify(genAt(seed, i, sk)) === firstPass[i]);
+  tick(resumeOk, "resume: re-deriving every index of a dealt round reproduces the original question");
+  lines.push(`resume (a real dealt round of ${dealt.length}): ${resumeOk ? "OK" : "FAIL"}`);
+
+  // pool shape
+  const ids = pool.entries.map(e => e.skillId);
+  tick(new Set(ids).size === ids.length, "pool: every skillId is unique");
+  tick(pool.chapterId === "func", 'pool: chapterId is "func"');
+  tick(pool.entries.length === 40, "pool: 40 entries (all 40 fn1–fn7 skills, no exclusions)");
+  tick(pool.roundLength === 6, "pool: roundLength 6 (the chapter's median skills-per-quest: 4,5,5,6,6,7,7)");
+  tick(pool.entries.every(e => typeof e.gen === "function" && e.gen.length === 0), "pool: every gen is a zero-arg function (seeded-rng safe)");
+  lines.push(`pool: chapterId "${pool.chapterId}", ${pool.entries.length} entries, ${new Set(pool.entries.map(e => e.kind)).size} distinct kinds, roundLength ${pool.roundLength}`);
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
+}
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks passed` : `✗ FAIL — ${passed}/${total} checks passed, ${total - passed} failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice-func] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

@@ -30,6 +30,34 @@ export const b = (s) => `<b>${s}</b>`;
 
 export { mc, pick, shuffled, randInt };
 
+/* ---- rolled-number helpers (dice wave 2, 2026-08-23) ----
+   The CARE skills in this chapter were hand-written with UNICODE
+   superscripts (2³, x⁻², (xy)ᵃ⁺ᵇ). usup() builds the same characters
+   from a rolled value, so a parametrised prompt is indistinguishable
+   from the vetted fixed text it replaces — and js/ui.js's expression
+   scanner keeps treating the power as part of its atom, exactly as
+   before (its atom class already lists ² ³ ¹ and U+2070–U+209C).
+   Only digits, + , − and the letters a/b/k/m/n/p/x are ever passed in;
+   anything else falls through unchanged. */
+const SUPMAP = {
+  "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹",
+  "-": "⁻", "−": "⁻", "+": "⁺", "(": "⁽", ")": "⁾",
+  a: "ᵃ", b: "ᵇ", k: "ᵏ", m: "ᵐ", n: "ⁿ", p: "ᵖ", x: "ˣ",
+};
+export const usup = (s) => String(s).split("").map((c) => SUPMAP[c] || c).join("");
+export const upw = (base, e) => `${base}${usup(e)}`;      // upw(2,3) → "2³", upw("x","-2") → "x⁻²"
+
+/* SA minus sign (U+2212) on any rolled negative — the house rule
+   everywhere a number is shown (same as check.js's fmtComma). */
+export const sgn = (n) => (n < 0 ? `−${Math.abs(n)}` : `${n}`);
+
+/* Radicands that are NOT perfect squares. A rolled √4 would quietly be
+   an integer and break every "the surd disappears" / conjugate answer,
+   so every rolled surd draws from here. */
+export const NONSQ = [2, 3, 5, 6, 7, 10, 11, 13, 14, 15];
+
+export const gcd = (a, c) => (c ? gcd(c, a % c) : Math.abs(a));
+
 /* yes/no trap builder — render reads {type:"yesno", yes, prompt, ...}.
    `yes` is whether the STATEMENT is correct, not whether the maths is "yes". */
 export function ynQ(concept, prompt, yes, opts = {}) {

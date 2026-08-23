@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice · Equations &amp; Inequalities pool · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice · Equations &amp; Inequalities pool · verification</h1>
+<p class="muted small">js/quests/dice-eqn.js — 68 entries of the chapter's 78 eq1–eq9 skills, 200 seeded rolls each, built
+  2026-08-23 overnight (session EQ of the wave-2 dice build). Part 1 is DICE-COMMON's generic per-entry spec: input law,
+  shape, self-consistency against js/check.js, no decoy equal to the answer by value, comma decimals, concept cards,
+  graph honesty through the function-graph engine's own verifyFunction, and the method-text shape. Part 2 recomputes
+  each rolled answer INDEPENDENTLY — reading the numbers back out of the question's own printed prompt (or, for the two
+  bowl skills and the Δ pictures, straight off the curve that is actually drawn) rather than out of the generator's
+  variables. Part 3 is the exclusion list, the method split pinned by name, and dealing / determinism / resume / salt.</p>
+<div id="banner">running…</div>
+
+<h2>Part 1 · per-entry generation integrity (200 seeded rolls each)</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Part 2 · independent recompute (prompt numbers · drawn curves · her eq9 box)</h2>
+<pre id="recompute">…</pre>
+
+<h2>Part 2b · eq9 “Two, one or no solution?” — her table, swept again through the pool</h2>
+<p class="muted small">verify-eq.html already sweeps <code>solutionCount()</code> against an independent copy of her handwritten
+  box in static play. This repeats the sweep on the DICE side, so a wrapper that ever mangled an eq9 question on its way
+  through genAt would show up here and not only in static play.</p>
+<pre id="eq9">…</pre>
+
+<h2>Part 3 · exclusions &amp; the method split, pinned by name</h2>
+<p class="muted small">DICE-COMMON: a skill that cannot honestly roll is LEFT OUT, by name and with a reason; and q.method is
+  attached ONLY where the solution is real working. Both lists are pinned here so a later edit cannot quietly change them.</p>
+<pre id="lists">…</pre>
+
+<h2>Part 3 · dealing, determinism, resume &amp; the attempt salt</h2>
+<pre id="mechanics">…</pre>
+
+<script type="module">
+import { pool as eqnPool, EXCLUDED, hasRealWorking } from "./js/quests/dice-eqn.js";
+import { questEq1 } from "./js/quests/queseq1-zeroproduct.js";
+import { questEq2 } from "./js/quests/queseq2-special.js";
+import { questEq3 } from "./js/quests/queseq3-kmethod.js";
+import { questEq4 } from "./js/quests/queseq4-fractions.js";
+import { questEq5 } from "./js/quests/queseq5-square.js";
+import { questEq6 } from "./js/quests/queseq6-formula.js";
+import { questEq7 } from "./js/quests/queseq7-inequalities.js";
+import { questEq8 } from "./js/quests/queseq8-nature.js";
+import { questEq9, solutionCount, OPT_TWO, OPT_ONE, OPT_NONE } from "./js/quests/queseq9-solution-count.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect, fmtComma } from "./js/check.js";
+import { getConcept } from "./js/concepts.js";
+import { verifyFunction } from "./js/engine/function-graph.js";
+import { paraDisc, paraRoots } from "./js/funclib.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const RUNS = 200;
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+const near = (a, b, tol = 1e-9) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
+const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+const isSquare = (n) => n >= 0 && Number.isInteger(Math.sqrt(n));
+
+/* ---------- readers over a question's OWN printed fields ----------
+   Everything below reads the question the way a learner sees it — the
+   prompt text that is actually rendered, the option labels that are
+   actually on the buttons, the curve that is actually drawn — never the
+   generator's internal variables. That is what makes Part 2 an
+   independent recompute rather than a restatement of the generator. */
+const plain = (s) => String(s == null ? "" : s)
+  .replace(/<[^>]+>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
+const flat = (s) => plain(s).replace(/\s+/g, " ").trim();
+/* her real minus (U+2212) back to a plain hyphen so number regexes are simple */
+const ascii = (s) => flat(s).replace(/−/g, "-");
+const same = (a, b) => ascii(a) === ascii(b);
+
+function correctOpt(q) { return Array.isArray(q.options) ? q.options.find((o) => o.correct) : null; }
+function correctLabel(q) { const c = correctOpt(q); return c ? c.label : null; }
+/* pure-numeric label → number, else NaN (the by-value decoy check) */
+function numOf(label) {
+  const s = plain(label).trim().replace(",", ".").replace(/−/g, "-");
+  return /^-?\d+(\.\d+)?$/.test(s) ? Number(s) : NaN;
+}
+const N = (s) => Number(String(s).replace(",", "."));
+const d2 = (v) => fmtComma(v, 2), d1 = (v) => fmtComma(v, 1);
+
+/* ---------- her eq9 box, typed out again and deliberately NOT imported
+   (the same independent copy verify-eq.html carries) ---------- */
+function herBox(p, q, negative) {
+  if (negative) return (p % 2 === 0 || q % 2 === 0) ? "none" : "one";
+  return p % 2 === 0 ? "two" : "one";
+}
+const EQ9_LABEL = { two: OPT_TWO, one: OPT_ONE, none: OPT_NONE };
+const EQ9_ORDER = [OPT_TWO, OPT_ONE, OPT_NONE].join(" | ");
+
+/* a classification item: exactly three options in her fixed order, and the
+   one marked correct is the one HER BOX demands for this item's own p/q/sign */
+function eq9Classify(q) {
+  const m = q.meta;
+  if (!m || !m.three) return false;
+  if (q.options.length !== 3) return false;
+  if (q.options.map((o) => o.label).join(" | ") !== EQ9_ORDER) return false;
+  const want = herBox(m.p, m.q, m.neg);
+  if (want !== solutionCount(m.p, m.q, m.neg)) return false;   // her box vs the module's table
+  if (want !== m.kind) return false;
+  return correctLabel(q) === EQ9_LABEL[want];
+}
+/* a solve item: four options ±A · A · −A · No solution, and the same box
+   alone decides which one is marked */
+function eq9Solve(q) {
+  const m = q.meta;
+  if (!m || !m.four) return false;
+  if (q.options.length !== 4) return false;
+  const want = herBox(m.p, m.q, m.neg);
+  if (want !== solutionCount(m.p, m.q, m.neg) || want !== m.kind) return false;
+  const A = m.A;
+  const wantLabel = want === "two" ? `x = ${fmtComma(A)}`.replace("x = ", "x = ±")
+    : want === "one" && m.neg ? `x = ${fmtComma(-A)}`
+      : want === "one" ? `x = ${fmtComma(A)}` : OPT_NONE;
+  return correctLabel(q) === wantLabel;
+}
+const eq9Forced = (kind, neg) => (q) => eq9Classify(q) && q.meta.kind === kind && q.meta.neg === neg;
+
+/* ---------- one independent recompute per skill that has recoverable
+   numbers. A recompute must handle EVERY shape its skill can produce and
+   return false for anything it does not recognise — never silently pass. */
+const RECOMPUTE = {
+  /* ===== eq1 · standard form & brackets = 0 ===== */
+  "eq1.rootsToFactors": (q) => {
+    const raw = String(q.prompt);
+    const fr = raw.match(/x = (−?)<span class="efrac"><sup>(\d+)<\/sup>⁄<sub>(\d+)<\/sub><\/span>/);
+    if (fr) {
+      const s = fr[1] ? -1 : 1, n = Number(fr[2]), d = Number(fr[3]);
+      if (!(n < d) || gcd(n, d) !== 1) return false;                // guard: lowest terms, a REAL fraction
+      return same(correctLabel(q), `(${d}x ${s > 0 ? "-" : "+"} ${n})`);
+    }
+    const m = ascii(q.prompt).match(/x = (-?\d+)\b/);
+    if (!m) return false;
+    const r = Number(m[1]), k = Math.abs(r);
+    if (k < 2) return false;
+    return same(correctLabel(q), `(x ${r > 0 ? "-" : "+"} ${k})`);
+  },
+  "eq1.bracketsZero": (q) => {
+    const m = ascii(q.prompt).match(/\(x - (\d+)\)\(x \+ (\d+)\) = 0/);
+    if (!m) return false;
+    const p = Number(m[1]), qq = Number(m[2]);
+    if (p === qq) return false;                                     // guard: p ≠ q
+    return same(correctLabel(q), `x = ${p} or x = -${qq}`);
+  },
+  "eq1.threeFactors": (q) => {
+    const m = ascii(q.prompt).match(/x\((\d+)x - (\d+)\)\(-x \+ (\d+)\) = 0/);
+    if (!m) return false;
+    const a = Number(m[1]), bb = Number(m[2]), c = Number(m[3]);
+    if (a === bb) return false;                                     // guard: b/a is a real fraction
+    const lab = ascii(correctLabel(q));
+    return lab === `x = 0, x = ${bb}⁄${a} or x = ${c}`;
+  },
+
+  /* ===== eq2 · special cases & exponent brackets ===== */
+  "eq2.noRealSol": (q) => {
+    const p = ascii(q.prompt);
+    let m = p.match(/x² = -(\d+)/);
+    if (m) return correctLabel(q) === "There is no real solution — a square is never negative" && Number(m[1]) >= 2;
+    m = p.match(/Solve x² \+ (\d+) = 0/);
+    return !!m && correctLabel(q) === "No real solution" && Number(m[1]) >= 2;
+  },
+  "eq2.noB": (q) => {
+    const p = ascii(q.prompt);
+    let m = p.match(/Solve x² = (\d+)/);
+    if (m) {
+      const v = Number(m[1]);
+      return isSquare(v) && same(correctLabel(q), `x = ±${Math.sqrt(v)}`);
+    }
+    m = p.match(/x² - (\d+) = 0 has no middle/);
+    return !!m && isSquare(Number(m[1]))
+      && correctLabel(q) === "Difference of squares, OR square-root both sides keeping ±";
+  },
+  "eq2.plusMinus": (q) => {
+    if (typeof q.yes !== "boolean") return false;
+    const p = ascii(q.prompt);
+    const m = p.match(/x² = (\d+) and writes only x = (\d+)/);
+    if (m) return q.yes === false && Number(m[2]) ** 2 === Number(m[1]);
+    return q.yes === true && /must write ± on the answer/.test(p);
+  },
+  "eq2.noC": (q) => {
+    const p = ascii(q.prompt);
+    let m = p.match(/Solve x² = (\d+)x/);
+    if (m) return same(correctLabel(q), `x = 0 or x = ${m[1]}`);
+    m = p.match(/x² \+ (\d+)x = 0 has no constant/);
+    return !!m && same(correctLabel(q), `Take out the common factor: x(x + ${m[1]}) = 0`);
+  },
+  "eq2.dontDivideByX": (q) => {
+    const p = ascii(q.prompt);
+    const m = p.match(/x² = (\d+)x/);
+    if (!m) return false;
+    if (q.type === "yesno") return q.yes === false;
+    return correctLabel(q) === "The solution x = 0";
+  },
+  "eq2.expSameBase": (q) => {
+    const p = ascii(q.prompt);
+    let m = p.match(/(\d+)x = √(\d+)/);                        // bˣ = √(b³)
+    if (m) return Number(m[1]) ** 3 === Number(m[2]);
+    m = p.match(/(\d+)x = 1\b/);
+    if (m) return correctLabel(q) === `x = 0, because ${m[1]}⁰ = 1`;
+    m = p.match(/(\d+)x = (\d+)\. What is the correct move/);        // bˣ = bᵏ
+    if (!m) return false;
+    const base = Number(m[1]), v = Number(m[2]);
+    const k = Math.round(Math.log(v) / Math.log(base));
+    if (base ** k !== v) return false;                              // the RHS really is a power of the base
+    if (base ** (k - 1) === k) return false;                        // guard: the "÷ once" decoy is not the answer
+    return ascii(correctLabel(q)).endsWith(`equate exponents: x = ${k}`);
+  },
+  "eq2.expNoSol": (q) => {
+    const m = ascii(q.prompt).match(/(\d+)x = -(\d+)/);
+    if (!m) return false;
+    if (![2, 3, 5].includes(Number(m[1]))) return false;
+    if (q.type === "yesno") return q.yes === false;
+    return correctLabel(q) === "No solution — a power with a positive base is never negative";
+  },
+  "eq2.ratExpPM": (q) => {
+    const p = ascii(q.prompt);
+    let m = p.match(/x2\/3 = (\d+) has the answers x = ±(\d+)/);
+    if (m) {
+      const rhs = Number(m[1]), ans = Number(m[2]), a = Math.round(Math.sqrt(rhs));
+      return a * a === rhs && a * a * a === ans;                    // ±a³ really is the answer to x^(2/3) = a²
+    }
+    m = p.match(/To undo the exponent in x2\/3 = (\d+)/);
+    if (m) {
+      const rhs = Number(m[1]), a = Math.round(Math.sqrt(rhs));
+      return a * a === rhs && ascii(q.answerLabel).includes(`±${a * a * a}`);
+    }
+    m = p.match(/x(\d+)\/(\d+) = (\d+)\. The top of the exponent \((\d+)\) is ODD/);
+    if (!m) return false;
+    const num = Number(m[1]), den = Number(m[2]);
+    return num % 2 === 1 && Number(m[4]) === num && gcd(num, den) === 1 && q.yes === false;
+  },
+
+  /* ===== eq3 · the k-method ===== */
+  "eq3.whatIsK": (q) => {
+    const m = ascii(q.prompt).match(/\((x²[^)]*)\)² - (\d+)\((x²[^)]*)\) \+ (\d+) = 0/);
+    if (!m || m[1] !== m[3]) return false;                          // the bracket really does repeat
+    return same(correctLabel(q), `k = ${m[1]}`);
+  },
+  "eq3.afterSub": (q) => {
+    const m = ascii(q.prompt).match(/\((x²[^)]*)\)² - (\d+)\((x²[^)]*)\) \+ (\d+) = 0/);
+    if (!m || m[1] !== m[3]) return false;
+    return same(correctLabel(q), `k² - ${m[2]}k + ${m[4]} = 0`);
+  },
+  "eq3.notDone": (q) => {
+    const m = ascii(q.prompt).match(/k = (\d+) or k = (\d+)/);
+    if (!m || Number(m[2]) <= Number(m[1])) return false;           // guard: two DIFFERENT k-values
+    if (q.type === "yesno") return q.yes === false;
+    return correctLabel(q) === "Replace k with the original bracket and solve each equation for x";
+  },
+  "eq3.carryK": (q) => {
+    const p = ascii(q.prompt);
+    if (q.type === "yesno") return /\(bracket\) ≠ (\d+)/.test(p) && q.yes === true;
+    const m = p.match(/you find k = (\d+), but the restriction was k ≠ (\d+)/);
+    return !!m && m[1] === m[2]
+      && same(correctLabel(q), `Reject k = ${m[1]} (mark it N.A.) and keep only the other k-value`);
+  },
+
+  /* ===== eq4 · fractions & restrictions ===== */
+  "eq4.negTwin": (q) => {
+    const p = ascii(q.prompt);
+    let m = p.match(/One denominator is (\d+) - x² and another is x² - (\d+)\./);
+    if (m) {
+      const v = Number(m[1]);
+      return m[1] === m[2] && isSquare(v)
+        && same(correctLabel(q), `${v} - x² = -(x² - ${v}) — take out the negative so the denominators match`);
+    }
+    m = p.match(/One denominator is (\d+) - x and another is x - (\d+)\./);
+    return !!m && m[1] === m[2]
+      && same(correctLabel(q), `${m[1]} - x = -(x - ${m[1]}) — take out -1 so they match`);
+  },
+  "eq4.whichLCD": (q) => {
+    const p = ascii(q.prompt);
+    if (/Denominators are x and x²\./.test(p)) return correctLabel(q) === "x²";
+    let m = p.match(/Denominators are \(x \+ (\d+)\), \(x - (\d+)\) and x² - (\d+)\./);
+    if (m) {
+      const mm = Number(m[1]);
+      return m[1] === m[2] && Number(m[3]) === mm * mm
+        && same(correctLabel(q), `(x + ${mm})(x - ${mm})`);
+    }
+    m = p.match(/Denominators are x and \(x - (\d+)\)\./);
+    return !!m && same(correctLabel(q), `x(x - ${m[1]})`);
+  },
+  "eq4.clearFractions": (q) => {
+    if (q.type === "yesno") {
+      const m = ascii(q.prompt).match(/In (\d+)\/x \+ (\d+)x\/\(x - (\d+)\) = (\d+), the (\d+) also gets multiplied by the LCD x\(x - (\d+)\)/);
+      if (!m) return false;
+      const [A, B, mm, K] = [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])];
+      if (Number(m[5]) !== K || Number(m[6]) !== mm) return false;   // the LCD named really is x(x − m)
+      return q.yes === true
+        && ascii(q.answerLabel).includes(`${A}(x - ${mm}) + ${B}x·x = ${K}x(x - ${mm})`);
+    }
+    return correctLabel(q) === "Multiply EVERY term on both sides by the LCD";
+  },
+  "eq4.findRestrictions": (q) => {
+    const m = ascii(q.prompt).match(/3xx - (\d+)/);                  // the stacked fraction 3x over (x − m)
+    if (!m) return false;
+    return same(correctLabel(q), `x ≠ 0 and x ≠ ${m[1]}`);
+  },
+  "eq4.rejectNA": (q) => {
+    const m = ascii(q.prompt).match(/x ≠ 0 and x ≠ (\d+). Solving gives x = (\d+) or x = (\d+)\./);
+    if (!m) return false;
+    const [r, a, b] = [Number(m[1]), Number(m[2]), Number(m[3])];
+    if (a !== r || b === r) return false;                            // one answer IS the restriction, the other is not
+    return same(correctLabel(q), `Only x = ${b} — mark x = ${r} as N.A.`);
+  },
+
+  /* ===== eq5 · perfect squares & the turning point ===== */
+  "eq5.completeC": (q) => {
+    const m = ascii(q.prompt).match(/x² ([+-]) (\d+)x \+ □/);
+    if (!m) return false;
+    const bb = Number(m[2]);
+    if (bb % 2 !== 0) return false;                                  // b must be even for (b/2)² to be whole
+    const half = bb / 2;
+    const labels = q.options.map((o) => ascii(o.label));
+    return same(correctLabel(q), String(half * half))
+      && new Set(labels).size === labels.length
+      && labels.includes(String(bb * bb)) && labels.includes(String(half)) && labels.includes(String(bb * bb / 2));
+  },
+  "eq5.whenRule": (q) => {
+    if (q.type === "yesno") return q.yes === false;
+    const m = ascii(q.prompt).match(/complete the square on (\d+)x² - (\d+)x \+ (\d+)\./);
+    if (!m) return false;
+    const [a, bb, cc] = [Number(m[1]), Number(m[2]), Number(m[3])];
+    if (gcd(a, bb) !== 1) return false;                              // guard: b/a is a real fraction
+    if (cc % a !== 0) return false;                                  // guard: c ÷ a stays whole
+    return same(correctLabel(q), `Factor the ${a} out of the terms`)
+      && ascii(q.answerLabel).includes(`${a}(x² - ${bb}/${a}·x + ${cc / a})`);
+  },
+  "eq5.signInside": (q) => {
+    const m = ascii(q.prompt).match(/x² ([+-]) (\d+)x \+ (\d+) = \(x □ (\d+)\)²/);
+    if (!m) return false;
+    const [sg, bb, cc, half] = [m[1], Number(m[2]), Number(m[3]), Number(m[4])];
+    if (half * 2 !== bb || half * half !== cc) return false;         // the printed square really IS (x ± half)²
+    return ascii(correctLabel(q)) === `${sg}, because the middle term is ${sg}${bb}x`;
+  },
+  "eq5.findK": (q) => {
+    const m = ascii(q.prompt).match(/x² - (\d+)x \+ c = \(x \+ k\)²/);
+    if (!m) return false;
+    const odd = Number(m[1]);
+    if (odd % 2 !== 1) return false;                                 // an odd b is what makes k a fraction
+    return ascii(correctLabel(q)) === `k = -${odd}⁄2`
+      && ascii(q.answerLabel).includes(`c = k² = ${odd * odd}⁄4`);
+  },
+  "eq5.readTP": (q) => {
+    const m = ascii(q.prompt).match(/y = (-?\d*)\(x ([+-]) (\d+)\)² ([+-]) (\d+)/);
+    if (!m) return false;
+    const p = m[2] === "-" ? Number(m[3]) : -Number(m[3]);           // p is read with the OPPOSITE sign
+    const qq = m[4] === "+" ? Number(m[5]) : -Number(m[5]);          // q keeps its own
+    return same(correctLabel(q), `TP(${p} ; ${qq})`);
+  },
+  "eq5.pqRule": (q) => {
+    if (q.type === "yesno") {
+      const m = ascii(q.prompt).match(/y = (\d+)\(x \+ (\d+)\)² - (\d+) the turning point is \((-\d+) ; (\d+)\)/);
+      if (!m) return false;
+      const h = Number(m[2]), k = Number(m[3]);
+      if (Number(m[4]) !== -h || Number(m[5]) !== k) return false;   // the claim flips q instead of p — the trap
+      return q.yes === false && ascii(q.answerLabel).includes(`the TP is (${-h} ; ${-k})`);
+    }
+    return correctLabel(q) === "Only p (the x-value of the TP)";
+  },
+  "eq5.happySad": (q) => {
+    const m = ascii(q.prompt).match(/y = (-?\d*)\(x - 1\)² \+ 3/);
+    if (!m) return false;
+    const a = m[1] === "" ? 1 : m[1] === "-" ? -1 : Number(m[1]);
+    if (a === 0) return false;
+    return ascii(correctLabel(q)).startsWith(a > 0 ? "A minimum" : "A maximum");
+  },
+
+  /* ===== eq6 · quadratic formula & simultaneous ===== */
+  "eq6.signsIn": (q) => {
+    const m = ascii(q.prompt).match(/For x² - (\d+)x - (\d+) = 0/);
+    if (!m) return false;
+    return same(correctLabel(q), `a = 1, b = -${m[1]}, c = -${m[2]}`);
+  },
+  "eq6.rounding": (q) => {
+    if (q.type === "yesno") return q.yes === false;
+    const m = ascii(q.prompt).match(/The formula gives x = (\d+) ± √(\d+)\./);
+    if (!m) return false;
+    const mm = Number(m[1]), r = Number(m[2]);
+    if (isSquare(r)) return false;                                   // guard: the roots really are irrational
+    const hi = mm + Math.sqrt(r), lo = mm - Math.sqrt(r);            // exact, rounded ONCE below
+    const wantCorrect = `x ≈ ${d2(hi)} or x ≈ ${d2(lo)} — two decimals, decimal comma`;
+    const labels = q.options.map((o) => String(o.label));
+    return String(correctLabel(q)) === wantCorrect
+      && labels.includes(`x ≈ ${d1(hi)} or x ≈ ${d1(lo)} — one decimal`)
+      && String(q.answerLabel).includes(`${d2(hi)} and ${d2(lo)}`);
+  },
+  "eq6.sumProduct": (q) => {
+    const m = ascii(q.prompt).match(/are -(\d+) and (\d+)\. What is c\?/);
+    if (!m) return false;
+    const a = Number(m[1]), b = Number(m[2]);
+    return same(correctLabel(q), `c = (${a})(-${b}) = ${-a * b}`);
+  },
+  "eq6.simulSubject": (q) => {
+    const m = ascii(q.prompt).match(/From (\d+)x - y = (\d+), the tidy subject/);
+    if (!m) return correctLabel(q) === "The simpler one — usually the LINEAR equation";
+    return same(correctLabel(q), `y = ${m[1]}x - ${m[2]}`);
+  },
+  "eq6.simulFinish": (q) => {
+    if (q.type === "yesno") return q.yes === true;
+    const p = ascii(q.prompt);
+    if (/how many solution PAIRS/.test(p)) {
+      return correctLabel(q) === "Up to two — and each answer must be paired with its partner value";
+    }
+    const m = p.match(/You solved x = (\d+)\./);
+    if (!m) return false;
+    const x0 = Number(m[1]);
+    if (!same(correctLabel(q), `Substitute x = ${x0} back into the SUBJECT expression (the linear equation)`)) return false;
+    const w = ascii(q.answerLabel).match(/y = (\d+)\((\d+)\) - (\d+) = (-?\d+), giving the pair \((\d+) ; (-?\d+)\)/);
+    if (!w) return false;
+    const [a, xa, c, y0, xp, yp] = w.slice(1).map(Number);
+    return xa === x0 && xp === x0 && yp === y0 && a * x0 - c === y0;  // the worked line and the pair agree
+  },
+
+  /* ===== eq7 · inequalities ===== */
+  "eq7.flipApply": (q) => {
+    const m = ascii(q.prompt).match(/Solve for x: -(\d+)x < (\d+)/);
+    if (!m) return false;
+    const a = Number(m[1]), bb = Number(m[2]);
+    if (gcd(a, bb) !== 1) return false;                              // guard: −b/a arrives already simplified
+    return ascii(correctLabel(q)) === `x > -${bb}⁄${a}`;
+  },
+  /* the two bowl skills: read the roots off the CURVE THAT IS DRAWN, then
+     check the shading, the printed factors and the marked interval all say
+     the same thing. */
+  "eq7.readInside": (q) => bowlCheck(q, "inside"),
+  "eq7.readOutside": (q) => bowlCheck(q, "outside"),
+  "eq7.hiddenNeg": (q) => {
+    const p = ascii(q.prompt);
+    let m = p.match(/\(x - (\d+)\)\((\d+) - x\) ≥ 0/);
+    if (m) {
+      const r = Number(m[1]), s = Number(m[2]);
+      if (!(s > r)) return false;
+      return ascii(correctLabel(q)).includes(`(x - ${r})(x - ${s}) ≤ 0`)
+        && ascii(q.answerLabel).includes(`${r} ≤ x ≤ ${s}`);
+    }
+    m = p.match(/A bracket like \((\d+) - x\)/);
+    return !!m && q.yes === false;
+  },
+  "eq7.fracIneq": (q) => {
+    const p = ascii(q.prompt);
+    const m = p.match(/Why may \((\d+) - x²\)\/x² ≥ 0/);
+    if (m) {
+      return isSquare(Number(m[1]))
+        && correctLabel(q) === "x² is positive for every x ≠ 0, so the fraction's sign IS the numerator's sign";
+    }
+    if (q.type === "yesno") return q.yes === true;
+    return correctLabel(q) === "The restriction (e.g. x ≠ 0) — even if the rest of the interval includes it";
+  },
+  "eq7.perfectSquareIneq": (q) => {
+    const m = ascii(q.prompt).match(/Solve \(x ([+-]) (\d+)\)² > 0\./);
+    if (!m) return false;
+    const r = m[1] === "-" ? Number(m[2]) : -Number(m[2]);
+    return same(correctLabel(q), `x ∈ ℝ, x ≠ ${r}`);
+  },
+
+  /* ===== eq8 · nature of roots ===== */
+  "eq8.matchGraph": (q) => {
+    const g = q.graph;
+    if (!g || g.type !== "function" || !Array.isArray(g.curves) || g.curves.length !== 1) return false;
+    const cv = g.curves[0];
+    if (cv.a <= 0) return false;                                     // always a happy bowl, so only the axis differs
+    const d = paraDisc(cv);
+    const want = d > 1e-9 ? "Δ > 0 — two real, unequal roots"
+      : Math.abs(d) <= 1e-9 ? "Δ = 0 — real, equal roots (it touches at the TP)"
+        : "Δ < 0 — non-real roots";
+    return correctLabel(q) === want && q.options.length === 4;
+  },
+  "eq8.classify": (q) => {
+    const m = ascii(q.prompt).match(/You work out Δ = (-?\d+)\./);
+    if (!m) return false;
+    const d = Number(m[1]);
+    const want = d < 0 ? "Non-real"
+      : d === 0 ? "Real, rational, equal"
+        : isSquare(d) ? "Real, rational, unequal" : "Real, irrational, unequal";
+    return correctLabel(q) === want && q.options.length === 4;
+  },
+  "eq8.rejectParam": (q) => {
+    if (q.type === "yesno") return q.yes === false;
+    const m = ascii(q.prompt).match(/k\(k ([+-]) (\d+)\) = 0, so k = 0 or k = (-?\d+)\./);
+    if (!m) return false;
+    const other = m[1] === "+" ? -Number(m[2]) : Number(m[2]);
+    if (Number(m[3]) !== other) return false;                        // the printed root really is the root of k + m
+    return same(correctLabel(q), `k = ${other} only — reject k = 0`);
+  },
+  "eq8.whereUndefined": (q) => {
+    const p = ascii(q.prompt);
+    const m = p.match(/√\(x \+ (\d+)\) \/ \(x \+ (\d+)\)/);
+    if (!m) return false;
+    const n = Number(m[1]), mm = Number(m[2]);
+    if (n === mm) return false;                                      // guard: distinct, so the two answers differ
+    if (/UNDEFINED\?$/.test(p)) return same(correctLabel(q), `x = -${mm} (the denominator becomes 0)`);
+    if (/NON-REAL\?$/.test(p)) return same(correctLabel(q), `x < -${n} (the inside of the root is negative)`);
+    return false;
+  },
+
+  /* ===== eq9 · two, one or no solution? ===== */
+  "eq9.oddTopPositive": eq9Forced("one", false),
+  "eq9.evenTop": eq9Forced("two", false),
+  "eq9.allOddNegative": eq9Forced("one", true),
+  "eq9.evenWithNegative": eq9Forced("none", true),
+  "eq9.mixedA": eq9Classify,
+  "eq9.mixedB": eq9Classify,
+  "eq9.solvePositive": (q) => eq9Solve(q) && q.meta.neg === false,
+  "eq9.solveNegative": (q) => eq9Solve(q) && q.meta.neg === true,
+};
+
+/* the bowl skills' shared check: the DRAWN curve decides everything */
+function bowlCheck(q, mode) {
+  const g = q.graph;
+  if (!g || g.type !== "function" || !Array.isArray(g.curves) || g.curves.length !== 1) return false;
+  const roots = paraRoots(g.curves[0]);
+  if (roots.length !== 2) return false;
+  const [r1, r2] = roots.map((r) => Math.round(r));
+  if (!near(roots[0], r1) || !near(roots[1], r2) || r2 <= r1) return false;
+  // the two labelled critical points on the picture are those same roots
+  const pts = (g.points || []).map((p) => p.x).sort((a, b) => a - b);
+  if (pts.length !== 2 || !near(pts[0], r1) || !near(pts[1], r2)) return false;
+  // the shading matches the region the question is asking about
+  const sh = g.shades || [];
+  if (mode === "inside") {
+    if (sh.length !== 1 || !near(sh[0].x0, r1) || !near(sh[0].x1, r2)) return false;
+  } else {
+    if (sh.length !== 2 || !near(sh[0].x1, r1) || !near(sh[1].x0, r2)) return false;
+  }
+  // the printed factors are the ones those roots come from, and the marked
+  // answer is the interval the sign of the inequality demands
+  const p = ascii(q.prompt);
+  const fac = (r) => (r === 0 ? "x" : r > 0 ? `(x - ${r})` : `(x + ${-r})`);
+  if (!p.startsWith(`${fac(r1)}${fac(r2)} `)) return false;
+  const sg = p.slice(`${fac(r1)}${fac(r2)} `.length).split(" ")[0];
+  const strict = sg === "<" || sg === ">";
+  const insideAsked = sg === "<" || sg === "≤";
+  if (insideAsked !== (mode === "inside")) return false;
+  const want = mode === "inside"
+    ? (strict ? `${r1} < x < ${r2}` : `${r1} ≤ x ≤ ${r2}`)
+    : (strict ? `x < ${r1} or x > ${r2}` : `x ≤ ${r1} or x ≥ ${r2}`);
+  return ascii(correctLabel(q)) === want;
+}
+
+/* Skills with nothing rolled that could decide a key: fixed prose banks
+   (procedural / conceptual recall) whose correct answer is the same words
+   every time. They still get every generic check in Part 1. */
+const NO_RECOMPUTE = [
+  "eq1.eqnMode", "eq1.whyRule", "eq1.onlyAgainstZero",
+  "eq3.whenK", "eq3.howMany",
+  "eq4.firstMove", "eq4.stateWhen", "eq4.whyRestrict",
+  "eq6.whenFormula", "eq6.theFormula", "eq6.showSteps",
+  "eq7.flipWhen", "eq7.circles", "eq7.setup", "eq7.orNotAnd",
+  "eq8.whatDelta", "eq8.conditions", "eq8.knowDiff",
+];
+/* the same list, reused as the salt exemption: fixed text, so a salted
+   re-roll can only ever change which bank item / which option order comes
+   up. (In practice they all do vary — this list only says we don't insist.) */
+const PURE_RECALL = new Set(NO_RECOMPUTE);
+
+/* ============================================================
+   PART 1 — per-entry generation integrity
+   ============================================================ */
+const host = document.getElementById("entries");
+const recomputeLines = [];
+let methodCount = 0, graphCount = 0, graphRolls = 0;
+
+eqnPool.entries.forEach((entry) => {
+  const issues = [];
+  let sawMethod = false, sawGraph = false, recomputeRuns = 0, recomputeFails = 0;
+  const types = new Set();
+  const hasRecompute = !!RECOMPUTE[entry.skillId];
+
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.push(`threw: ${e.message}`); break; }
+
+    if (!q || typeof q !== "object") { issues.push("gen returned no question object"); continue; }
+    if (!INPUT_LAW.has(q.type)) { issues.push(`type "${q.type}" violates the input law`); continue; }
+    types.add(q.type);
+    if (!q.prompt || !String(q.prompt).trim()) issues.push("empty prompt");
+    if (!q.answerLabel) issues.push("no answerLabel");
+    if (!q.hint) issues.push("no hint");
+    if (q.concept && !getConcept(q.concept)) issues.push(`q.concept "${q.concept}" has no card`);
+    if (entry.concept && !getConcept(entry.concept)) issues.push(`entry.concept "${entry.concept}" has no card`);
+    /* house rule: everything a learner reads is comma decimal, never a dot */
+    if (/\d\.\d/.test(plain(q.prompt))) issues.push("prompt has a dot-decimal number (house rule: comma)");
+    if (/\d\.\d/.test(plain(q.answerLabel))) issues.push("answerLabel has a dot-decimal number");
+
+    if (q.type === "mc" || q.type === "reason") {
+      const labels = q.options.map((o) => String(o.label));
+      const corrects = q.options.filter((o) => o.correct);
+      if (corrects.length !== 1) issues.push(`${corrects.length} correct options (want exactly 1)`);
+      if (labels.length < 3) issues.push(`only ${labels.length} options (this chapter always offers 3 or 4)`);
+      if (new Set(labels).size !== labels.length) issues.push(`duplicate option labels: ${labels.join(" | ")}`);
+      /* no decoy equals the answer — by string, and by VALUE for numeric labels */
+      const c = corrects[0];
+      if (c) {
+        const cn = numOf(c.label);
+        q.options.filter((o) => !o.correct).forEach((o) => {
+          if (String(o.label) === String(c.label)) issues.push(`decoy "${o.label}" equals the answer (string)`);
+          const n = numOf(o.label);
+          if (Number.isFinite(cn) && Number.isFinite(n) && Math.abs(n - cn) < 1e-9) issues.push(`decoy "${o.label}" equals the answer BY VALUE`);
+        });
+        /* self-consistency: the question's OWN correct answer is accepted */
+        if (!q.options.find((o) => o.label === c.label && o.correct)) issues.push("correct option not self-consistent");
+      }
+    } else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.push("q.yes not boolean");
+      else if (!answerCorrect(q.yes ? 1 : 0, q.yes ? 1 : 0, {})) issues.push("yesno fails its own check");
+    } else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.push("non-finite expected");
+      if (!Number.isInteger(q.dp) || q.dp < 0) issues.push(`dp "${q.dp}" is not a non-negative integer`);
+      if (q.tol != null && (!Number.isFinite(q.tol) || q.tol < 0)) issues.push(`tol "${q.tol}" not finite/≥0`);
+      if (Number.isFinite(q.expected) && !answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol }))
+        issues.push("expected fails its own answerCorrect check");
+    } else if (q.type === "tap") {
+      if (!q.graph) issues.push("tap question with no graph to tap on");
+      const ids = (q.tap && q.tap.targets) || [];
+      if (!q.tap || !ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
+    }
+
+    /* graph honesty — the function-graph engine's own prover re-derives every
+       drawn feature out of the picture's geometry (same call verify-eq.html
+       makes for static play) */
+    if (q.graph) {
+      sawGraph = true; graphRolls++;
+      if (q.graph.type !== "function") issues.push(`graph type "${q.graph.type}" (this chapter draws function graphs)`);
+      else {
+        try { verifyFunction(q.graph).forEach((r) => { if (!r.ok) issues.push(`graph: ${r.label}`); }); }
+        catch (e) { issues.push(`graph verify threw: ${e.message}`); }
+      }
+    }
+
+    /* method text */
+    if (q.method != null) {
+      sawMethod = true;
+      if (typeof q.method !== "string" || !q.method.trim()) issues.push("q.method present but not a non-empty string");
+      else if (!q.method.includes("sol-step")) issues.push("q.method has no .sol-step");
+    }
+
+    if (hasRecompute) {
+      recomputeRuns++;
+      let ok = false;
+      try { ok = !!RECOMPUTE[entry.skillId](q); }
+      catch (e) { issues.push(`recompute threw: ${e.message}`); }
+      if (!ok) { recomputeFails++; issues.push("recompute mismatch"); }
+    }
+  }
+
+  if (sawMethod) methodCount++;
+  if (sawGraph) graphCount++;
+  const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} rolls)`);
+  if (hasRecompute) {
+    tick(recomputeFails === 0, `${entry.skillId} independent recompute (${recomputeRuns} rolls)`);
+    recomputeLines.push(`${entry.skillId.padEnd(24)} ${recomputeRuns - recomputeFails}/${recomputeRuns} recompute matches`);
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(kind: ${entry.kind})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean" : "✗ " + [...new Set(issues)].slice(0, 5).join("; ")}</li>
+      <li class="ok">types: ${[...types].join(", ") || "—"}${sawGraph ? " · to-scale parabola verified" : ""}</li>
+      <li class="${entry.concept ? "ok" : "bad"}">${entry.concept ? `concept "${entry.concept}" (I'm lost card exists)` : "no concept"}</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method (real working)" : "no q.method — its solution is the answer itself"}</li>
+      <li class="${hasRecompute ? "ok" : ""}">${hasRecompute ? "independent recompute wired" : "fixed prose bank — structural checks only"}</li>
+    </ul>`;
+  host.appendChild(card);
+});
+
+tick(eqnPool.chapterId === "eqn", 'pool.chapterId is "eqn"');
+tick(eqnPool.roundLength === 8, `roundLength is 8, the median skills-per-quest (got ${eqnPool.roundLength})`);
+tick(eqnPool.entries.length === 68, `pool holds 68 entries (got ${eqnPool.entries.length})`);
+tick(new Set(eqnPool.entries.map((e) => e.skillId)).size === eqnPool.entries.length, "skillIds are unique");
+tick(eqnPool.entries.every((e) => typeof e.gen === "function" && e.gen.length === 0), "every gen is a zero-arg function (seeded determinism depends on it)");
+tick(NO_RECOMPUTE.every((id) => !RECOMPUTE[id]), "the named fixed-prose skills really have no recompute entry");
+tick(Object.keys(RECOMPUTE).length + NO_RECOMPUTE.length === eqnPool.entries.length,
+  `every entry is either recomputed (${Object.keys(RECOMPUTE).length}) or named as a fixed prose bank (${NO_RECOMPUTE.length})`);
+
+recomputeLines.unshift(
+  `Independent recompute wired for ${Object.keys(RECOMPUTE).length}/${eqnPool.entries.length} entries — every skill whose rolled numbers`
+  + `\ndecide the key. The numbers are read back out of the question's own PRINTED prompt (or, for`
+  + `\neq7.readInside / eq7.readOutside / eq8.matchGraph, straight off the curve the engine actually`
+  + `\ndraws, via funclib's paraRoots/paraDisc) — never out of the generator's variables. CARE guards`
+  + `\nasserted inside the recomputes: eq1.bracketsZero p ≠ q · eq1.threeFactors b ≠ a ·`
+  + `\neq1.rootsToFactors gcd(n,d)=1 and n<d · eq2.expSameBase b^(k−1) ≠ k · eq4.rejectNA the rejected`
+  + `\nand surviving answers differ · eq5.completeC's three decoys are distinct · eq5.whenRule gcd(a,b)=1`
+  + `\nand a|c · eq6.rounding r is not a perfect square · eq7.flipApply gcd(a,b)=1 ·`
+  + `\neq8.whereUndefined m ≠ n · eq9 every key derived from an independent copy of her box.`
+  + `\nFixed prose banks (no rolled number decides the answer — structural checks only):`
+  + `\n  ${NO_RECOMPUTE.join(", ")}\n`);
+recomputeLines.push(`\nMethod coverage: ${methodCount}/${eqnPool.entries.length} entries attach q.method. To-scale parabola sketches seen on ${graphCount} entries (${graphRolls} sketches verified).`);
+document.getElementById("recompute").textContent = recomputeLines.join("\n");
+
+/* ============================================================
+   PART 2b — eq9's table, swept on the dice side
+   ============================================================ */
+{
+  const lines = [];
+  let sweep = 0, bad = 0;
+  const seen = { two: 0, one: 0, none: 0 };
+  for (let p = 1; p <= 9; p++) for (let qq = 1; qq <= 9; qq++) {
+    if (gcd(p, qq) !== 1) continue;
+    for (const neg of [false, true]) {
+      sweep++;
+      const got = solutionCount(p, qq, neg);
+      seen[got]++;
+      if (got !== herBox(p, qq, neg)) { bad++; if (bad < 6) lines.push(`  ✗ x^(${p}/${qq}) = ${neg ? "−" : "+"}c → ${got}, her box says ${herBox(p, qq, neg)}`); }
+    }
+  }
+  tick(bad === 0, `eq9 table: ${bad} of ${sweep} (p,q,sign) cases disagree with her handwritten box`);
+  tick(seen.two > 0 && seen.one > 0 && seen.none > 0, "eq9 sweep exercised all three outcomes");
+  lines.push(`${sweep} (p, q, sign) combinations swept against an independent copy of her box · ${bad} disagreements`);
+  lines.push(`  outcomes reached: two=${seen.two} · one=${seen.one} · none=${seen.none}`);
+
+  /* the eight eq9 entries, dealt through the dice path, must show all three
+     outcomes — the forced four guarantee it, the free two and the two solve
+     items ride along */
+  const eq9Entries = eqnPool.entries.filter((e) => e.skillId.startsWith("eq9."));
+  tick(eq9Entries.length === 8, `8 of eq9's 10 skills are in the pool (got ${eq9Entries.length})`);
+  const counts = { two: 0, one: 0, none: 0 };
+  const seed = newRoundSeed();
+  eq9Entries.forEach((e, i) => {
+    for (let k = 0; k < 60; k++) {
+      const q = genAt(seed, i, e, k);
+      if (q.meta && q.meta.kind) counts[q.meta.kind]++;
+    }
+  });
+  tick(counts.two >= 20 && counts.one >= 20 && counts.none >= 20,
+    `eq9 through the dice path reaches all three outcomes (two=${counts.two} one=${counts.one} none=${counts.none})`);
+  lines.push(`480 dice-path eq9 rolls: two=${counts.two} · one=${counts.one} · none=${counts.none}`);
+  lines.push(`eq9 entries in the pool: ${eq9Entries.map((e) => e.skillId.slice(4)).join(", ")}`);
+  document.getElementById("eq9").textContent = lines.join("\n");
+}
+
+/* ============================================================
+   PART 3a — exclusions and the method split, pinned by name
+   ============================================================ */
+{
+  const RAW = new Map();
+  [questEq1, questEq2, questEq3, questEq4, questEq5, questEq6, questEq7, questEq8, questEq9].forEach((qu) =>
+    qu.skills.forEach((sk) => RAW.set(`${qu.id}.${sk.id}`, sk)));
+  const allIds = [...RAW.keys()];
+  tick(allIds.length === 78, `the chapter has 78 skills across eq1–eq9 (got ${allIds.length})`);
+  tick(eqnPool.entries.every((e) => RAW.has(e.skillId)), "every pool entry maps back to a real quest-module skill");
+
+  const excluded = Object.keys(EXCLUDED);
+  tick(excluded.length === 10, `10 skills are excluded (got ${excluded.length})`);
+  tick(excluded.every((id) => RAW.has(id)), "every excluded id names a skill that really exists");
+  tick(excluded.every((id) => !eqnPool.entries.some((e) => e.skillId === id)), "no excluded skill leaked into the pool");
+  tick(allIds.every((id) => EXCLUDED[id] || eqnPool.entries.some((e) => e.skillId === id)),
+    "every chapter skill is either in the pool or named in EXCLUDED — nothing silently dropped");
+
+  /* the method rule, re-evaluated INDEPENDENTLY of the pool's wrapper, on the
+     raw quest modules' own output — a wrapper that stopped applying it (or
+     started over-applying it) shows up here */
+  const withM = [], withoutM = [];
+  let stable = true, agrees = true;
+  eqnPool.entries.forEach((entry, i) => {
+    const raw = RAW.get(entry.skillId);
+    let sawMethod = 0, sawWorking = 0;
+    for (let k = 0; k < 60; k++) {
+      if (genAt(newRoundSeed(), i, entry, k % 4).method != null) sawMethod++;
+      if (hasRealWorking(withSeed((Math.random() * 1e9) >>> 0, () => raw.gen()))) sawWorking++;
+    }
+    if (sawMethod !== 0 && sawMethod !== 60) stable = false;
+    if (sawWorking !== 0 && sawWorking !== 60) stable = false;
+    if ((sawMethod > 0) !== (sawWorking > 0)) agrees = false;
+    (sawMethod > 0 ? withM : withoutM).push(entry.skillId);
+  });
+  tick(stable, "method rule: every skill is consistently a method skill or consistently not (no roll-to-roll flapping)");
+  tick(agrees, "method rule: the attached q.method matches hasRealWorking() re-evaluated on the raw quest module");
+  tick(withM.length === 0 && withoutM.length === 68,
+    `method split is 0 with / 68 without (got ${withM.length} / ${withoutM.length})`);
+
+  document.getElementById("lists").textContent =
+    `EXCLUDED (${excluded.length} of the chapter's 78 skills):\n`
+    + excluded.map((id) => `  ${id.padEnd(22)} ${EXCLUDED[id]}`).join("\n")
+    + `\n\nMETHOD LINK — WITH real worked steps (${withM.length}):\n  ${withM.join(", ") || "(none)"}\n`
+    + `\nWITHOUT (${withoutM.length}) — this whole chapter. Every eq question is a list-pick built by\n`
+    + `_shared.js's mc() or _eq.js's ynQ(), whose default solution is the correct label / the\n`
+    + `answerLabel itself, so a "📖 Show me the method" link would reveal the answer and nothing\n`
+    + `else — a spoiler button, not a method. js/play.js simply omits the link. The real teaching\n`
+    + `text lives in q.answerLabel and already shows in the wrong-answer "Show me the steps" panel.\n`
+    + `Writing genuine worked-method text here is a separate content batch for Megan, and it would\n`
+    + `have to follow METHODS-algebra.md — per DICE-COMMON, none is invented here.`;
+}
+
+/* ============================================================
+   PART 3b — dealing, determinism, resume, salt
+   ============================================================ */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+  const KINDS = new Set(eqnPool.entries.map((e) => e.kind));
+  const kindCount = KINDS.size;
+
+  /* the one deliberate grouping (see dice-eqn.js's KINDS block) */
+  const byKind = {};
+  eqnPool.entries.forEach((e) => { (byKind[e.kind] = byKind[e.kind] || []).push(e.skillId); });
+  const grouped = Object.entries(byKind).filter(([, ids]) => ids.length > 1);
+  tick(kindCount === 67, `67 kinds for 68 entries (got ${kindCount})`);
+  tick(grouped.length === 1 && grouped[0][0] === "eq9.mixed" && grouped[0][1].length === 2,
+    "the ONLY grouped kind is eq9.mixed (mixedA + mixedB — byte-identical generators)");
+  lines.push(`kinds: ${kindCount} for ${eqnPool.entries.length} entries · grouped: ${grouped.map(([k, ids]) => `${k} = ${ids.join(" + ")}`).join(", ")}`);
+
+  let detAll = true, resumeAll = true;
+  eqnPool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill), c = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    if (JSON.stringify(a) !== JSON.stringify(c)) resumeAll = false;
+  });
+  tick(detAll, "determinism: genAt(seed,i,skill) is byte-identical on repeat, for all 68 entries");
+  tick(resumeAll, "resume: re-deriving any index reproduces the original question, for all 68 entries");
+  lines.push(`determinism (all 68 entries, same seed/index twice): ${detAll ? "OK" : "FAIL"}`);
+  lines.push(`resume (all 68 entries, third derive): ${resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, eqnPool.entries[0]);
+  tick(Math.random === before, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${Math.random === before ? "OK" : "FAIL — Math.random was left patched"}`);
+
+  const dealt = dealRound(eqnPool.entries, eqnPool.roundLength, []);
+  const first = dealt.map((sk, i) => JSON.stringify(genAt(seed, i, sk)));
+  const roundResume = dealt.every((sk, i) => JSON.stringify(genAt(seed, i, sk)) === first[i]);
+  tick(roundResume, "resume: a whole dealt round regenerates identically question by question");
+  lines.push(`resume (whole dealt round of ${dealt.length}): ${roundResume ? "OK" : "FAIL"}`);
+
+  /* a fresh learner's first round: roundLength entries, every one from a
+     kind not yet met. The only way two can share a kind is the documented
+     eq9.mixed grouping, so that is what is asserted (200 deals, not one). */
+  let lenOk = true, dupOk = true, minDistinct = 99;
+  for (let r = 0; r < 200; r++) {
+    const deck = dealRound(eqnPool.entries, eqnPool.roundLength, []);
+    if (deck.length !== eqnPool.roundLength) lenOk = false;
+    const ks = deck.map((e) => e.kind);
+    const distinct = new Set(ks).size;
+    minDistinct = Math.min(minDistinct, distinct);
+    if (distinct !== ks.length) {
+      const dup = ks.filter((k, i) => ks.indexOf(k) !== i);
+      if (dup.some((k) => k !== "eq9.mixed") || distinct < ks.length - 1) dupOk = false;
+    }
+  }
+  tick(lenOk, "dealing: a fresh learner's first round is always a full 8 questions");
+  tick(dupOk, "dealing: the only kind that can appear twice in one round is the grouped eq9.mixed");
+  lines.push(`dealing (200 fresh-learner first rounds): length always ${eqnPool.roundLength} — ${lenOk ? "OK" : "FAIL"}; fewest distinct kinds seen in a round: ${minDistinct}`);
+  lines.push(`dealing (fresh learner, one sample): [${dealt.map((e) => e.kind).join(", ")}]`);
+
+  let met = [], rounds = 0;
+  const maxRounds = Math.ceil(kindCount / eqnPool.roundLength) + 2;
+  while (met.length < kindCount && rounds < maxRounds) {
+    const deck = dealRound(eqnPool.entries, eqnPool.roundLength, met);
+    const s = new Set(met); deck.forEach((e) => s.add(e.kind)); met = [...s]; rounds++;
+  }
+  const full = met.length === kindCount;
+  tick(full, `dealing: successive rounds reach full ${kindCount}-kind coverage (took ${rounds}, expected ≤ ${maxRounds})`);
+  lines.push(`dealing (successive rounds to full coverage): ${met.length}/${kindCount} kinds after ${rounds} rounds (cap ${maxRounds}) — ${full ? "OK" : "FAIL"}`);
+
+  const deckFull = dealRound(eqnPool.entries, eqnPool.roundLength, [...KINDS]);
+  tick(deckFull.length === eqnPool.roundLength, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage, fully random): dealt ${deckFull.length}/${eqnPool.roundLength} — ${deckFull.length === eqnPool.roundLength ? "OK" : "FAIL"}`);
+
+  /* salt: a re-present of the same index must roll a genuinely different
+     question. Sampled across 3 indices × salts 0–8, so a skill that picks
+     between a rolled item and a fixed one cannot pass or fail by luck. */
+  const saltBad = [], saltFlat = [];
+  eqnPool.entries.forEach((skill, i) => {
+    const seen = new Set();
+    for (let idx = i; idx < i + 3; idx++) for (let s = 0; s <= 8; s++) seen.add(JSON.stringify(genAt(seed, idx, skill, s)));
+    const varied = seen.size > 3;
+    if (PURE_RECALL.has(skill.skillId)) { if (!varied) saltFlat.push(skill.skillId); }
+    else if (!varied) saltBad.push(skill.skillId);
+  });
+  tick(saltBad.length === 0, `salt: every rolled-number skill re-rolls different values on a salted retry (${eqnPool.entries.length - PURE_RECALL.size} entries)`);
+  lines.push(`salt (27 samples per entry, salts 0–8 × 3 indices): ${saltBad.length ? "FAIL — " + saltBad.join(", ") : `OK for all ${eqnPool.entries.length - PURE_RECALL.size} rolled-number entries`}`);
+  lines.push(`salt exemption (fixed prose banks — only the bank item / option order can change): ${PURE_RECALL.size} entries; of those, ${saltFlat.length} produced fewer than 4 distinct questions: ${saltFlat.join(", ") || "none"}`);
+
+  let baseUnchanged = true, sameSaltOk = true;
+  eqnPool.entries.forEach((skill, i) => {
+    if (JSON.stringify(genAt(seed, i, skill)) !== JSON.stringify(genAt(seed, i, skill, 0))) baseUnchanged = false;
+    for (let s = 0; s <= 2; s++) if (JSON.stringify(genAt(seed, i, skill, s)) !== JSON.stringify(genAt(seed, i, skill, s))) sameSaltOk = false;
+  });
+  tick(baseUnchanged, "salt: genAt() with no salt arg still equals explicit salt 0, for all 68 entries (resume unaffected)");
+  tick(sameSaltOk, "salt: the same (seed, index, salt) is byte-identical on repeat");
+  lines.push(`no-salt-arg === explicit salt 0 (all 68 entries): ${baseUnchanged ? "OK" : "FAIL"}`);
+  lines.push(`same salt twice → identical: ${sameSaltOk ? "OK" : "FAIL"}`);
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
+}
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice-eqn] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

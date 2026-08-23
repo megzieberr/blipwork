@@ -7,6 +7,10 @@
    substitution method for simultaneous equations.
    ============================================================ */
 import { mc, ynQ, pick, randInt, C } from "./_eq.js";
+/* forced-decimal-places formatter (comma decimal + a real minus) — the
+   rounding skill needs "2,41" and "2,4" side by side, which C()'s
+   trailing-zero-trimming form cannot give. */
+import { fmtComma } from "../check.js";
 
 const FOR = "eqFormula";
 const SIM = "eqSimultaneous";
@@ -66,10 +70,17 @@ const SKILLS = {
         answerLabel: `b and c BOTH carry their minus signs: b = −${C(bb)}, c = −${C(cc)}. (Typing c = ${C(cc)} into the calculator solves a different equation!)` });
   },
 
-  /* rounding convention */
+  /* rounding convention
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "one fixed
+     concrete example (x = 1 ± √2) — parametrisable"). The surd answer now
+     rolls: m ± √r with r a NON-square, so the roots stay irrational and
+     rounding is genuinely needed. Both values are computed exactly and
+     rounded ONCE at the end (DICE-PLAN's number-pad law / her Finance
+     one-equation rule), and the three decoys are built from those same
+     two values — decimal point, one decimal, and "leave the surd". */
   rounding: () => {
     const items = [
-      { q: "The formula gives x = 1 ± √2. The question wants decimals. How do you write the answers?", correct: "x ≈ 2,41 or x ≈ −0,41 — two decimals, decimal comma", wrongs: ["x ≈ 2.41 or x ≈ −0.41 — decimal point", "x ≈ 2,4 or x ≈ −0,4 — one decimal", "Leave them as 1 ± √2 always"], ans: "Round FINAL answers to two decimals with the decimal comma (SA style): 2,41 and −0,41. Keep the surd form only if the question asks for it." },
+      null,   // the rolled surd item, built below
       ynQ(FOR,
         "You should round every in-between step to two decimals as you go. True?",
         false,
@@ -77,8 +88,20 @@ const SKILLS = {
           answerLabel: "False — round only at the END. Rounding along the way builds up error; carry the exact values (or full calculator display) until the final line." }),
     ];
     const it = pick(items);
-    return it.type ? it : mc(FOR, it.q, it.correct, it.wrongs,
-      { hint: "Two decimals, decimal comma, final answers only.", answerLabel: it.ans });
+    if (it) return it;
+    const m = randInt(1, 5), r = pick([2, 3, 5, 6, 7, 8, 10, 11, 12]);   // never a perfect square
+    const hi = m + Math.sqrt(r), lo = m - Math.sqrt(r);                  // exact, rounded once below
+    const d2 = (v) => fmtComma(v, 2), d1 = (v) => fmtComma(v, 1);
+    const dot = (s) => s.replace(/,/g, ".");
+    const surd = `${C(m)} ± √${C(r)}`;
+    return mc(FOR,
+      `The formula gives x = ${surd}. The question wants decimals. How do you write the answers?`,
+      `x ≈ ${d2(hi)} or x ≈ ${d2(lo)} — two decimals, decimal comma`,
+      [`x ≈ ${dot(d2(hi))} or x ≈ ${dot(d2(lo))} — decimal point`,
+        `x ≈ ${d1(hi)} or x ≈ ${d1(lo)} — one decimal`,
+        `Leave them as ${surd} always`],
+      { hint: "Two decimals, decimal comma, final answers only.",
+        answerLabel: `Round FINAL answers to two decimals with the decimal comma (SA style): ${d2(hi)} and ${d2(lo)}. Keep the surd form only if the question asks for it.` });
   },
 
   /* sum & product of roots — build the factors! (workbook's −42 trap) */
@@ -97,31 +120,57 @@ const SKILLS = {
         answerLabel: `Roots −${C(m)} and ${C(n)} → factors (x + ${C(m)})(x − ${C(n)}). The constant is the product of the FACTOR constants: (${C(m)})(−${C(n)}) = ${C(cVal)}. (And b = ${C(bVal)}, the sum of roots with opposite sign.)` });
   },
 
-  /* simultaneous: who becomes the subject */
+  /* simultaneous: who becomes the subject
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "one fixed
+     concrete example (2x − y = 9) — parametrisable"). The linear equation
+     rolls; the correct rearrangement y = ax − c and all three decoys
+     (take x instead · sign not carried across · "already finished") are
+     built from the same two rolled numbers. */
   simulSubject: () => {
-    const items = [
-      { q: "Simultaneous equations (substitution method). Which equation do you make a variable the subject of?", correct: "The simpler one — usually the LINEAR equation", wrongs: ["The quadratic one — it has more information", "Always the first one written", "Either — it makes no difference to the work"], ans: "Rearrange the LINEAR equation (least work, no squares), then substitute that expression into the other equation." },
-      { q: "From <b>2x − y = 9</b>, the tidy subject to take is…", correct: "y = 2x − 9", wrongs: ["x = (9 + y)/2 — always take x", "y = 9 − 2x", "2x = y + 9 is already finished"], ans: "y = 2x − 9 (watch the signs as it crosses). Substituting this into the other equation leaves one variable." },
-    ];
-    const it = pick(items);
-    return mc(SIM, it.q, it.correct, it.wrongs,
-      { hint: "Pick the easy (linear) equation and make one variable the subject.", answerLabel: it.ans });
+    if (pick([true, false])) {
+      const it = { q: "Simultaneous equations (substitution method). Which equation do you make a variable the subject of?", correct: "The simpler one — usually the LINEAR equation", wrongs: ["The quadratic one — it has more information", "Always the first one written", "Either — it makes no difference to the work"], ans: "Rearrange the LINEAR equation (least work, no squares), then substitute that expression into the other equation." };
+      return mc(SIM, it.q, it.correct, it.wrongs,
+        { hint: "Pick the easy (linear) equation and make one variable the subject.", answerLabel: it.ans });
+    }
+    const a = randInt(2, 6), c = randInt(2, 12);
+    return mc(SIM,
+      `From <b>${C(a)}x − y = ${C(c)}</b>, the tidy subject to take is…`,
+      `y = ${C(a)}x − ${C(c)}`,
+      [`x = (${C(c)} + y)/${C(a)} — always take x`, `y = ${C(c)} − ${C(a)}x`, `${C(a)}x = y + ${C(c)} is already finished`],
+      { hint: "Pick the easy (linear) equation and make one variable the subject.",
+        answerLabel: `y = ${C(a)}x − ${C(c)} (watch the signs as it crosses). Substituting this into the other equation leaves one variable.` });
   },
 
-  /* what you get and how to finish */
+  /* what you get and how to finish
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "one fixed
+     concrete example (x = 3 → y) mixed with generic items"). The
+     back-substitution item rolls its x-value and its linear equation, and
+     the partner y is computed from them (y = a·x₀ − c), so the worked
+     line and the coordinate pair can never disagree. Coordinate pairs
+     keep her SEMICOLON (METHODS-algebra 0.1). The two generic items are
+     untouched. */
   simulFinish: () => {
-    const items = [
-      { q: "Linear + quadratic simultaneous equations: how many solution PAIRS can there be?", correct: "Up to two — and each answer must be paired with its partner value", wrongs: ["Exactly one, always", "Up to four", "None — a line and a parabola can't be solved together"], ans: "Substituting the line into the quadratic gives a quadratic → up to two x-values, each with its own y. Write each as a coordinate pair (x ; y)." },
-      { q: "You solved x = 3. How do you find the matching y?", correct: "Substitute x = 3 back into the SUBJECT expression (the linear equation)", wrongs: ["y is always 0", "Substitute into the discriminant", "Guess and check"], ans: "Back-substitute into the linear equation (the easy one): e.g. y = 2(3) − 9 = −3, giving the pair (3 ; −3)." },
-      ynQ(SIM,
+    const shape = randInt(1, 3);
+    if (shape === 1) {
+      const it = { q: "Linear + quadratic simultaneous equations: how many solution PAIRS can there be?", correct: "Up to two — and each answer must be paired with its partner value", wrongs: ["Exactly one, always", "Up to four", "None — a line and a parabola can't be solved together"], ans: "Substituting the line into the quadratic gives a quadratic → up to two x-values, each with its own y. Write each as a coordinate pair (x ; y)." };
+      return mc(SIM, it.q, it.correct, it.wrongs,
+        { hint: "Substitute, solve the quadratic, back-substitute, pair up.", answerLabel: it.ans });
+    }
+    if (shape === 2) {
+      return ynQ(SIM,
         "Final answers to simultaneous equations should be written as coordinate pairs, e.g. (3 ; −3). True?",
         true,
         { hint: "Each x belongs to a specific y.",
-          answerLabel: "True — each solution is a PAIR that works in both equations, so write them together: (3 ; −3)." }),
-    ];
-    const it = pick(items);
-    return it.type ? it : mc(SIM, it.q, it.correct, it.wrongs,
-      { hint: "Substitute, solve the quadratic, back-substitute, pair up.", answerLabel: it.ans });
+          answerLabel: "True — each solution is a PAIR that works in both equations, so write them together: (3 ; −3)." });
+    }
+    const x0 = randInt(2, 7), a = randInt(2, 5), c = randInt(2, 12);
+    const y0 = a * x0 - c;
+    return mc(SIM,
+      `You solved x = ${C(x0)}. How do you find the matching y?`,
+      `Substitute x = ${C(x0)} back into the SUBJECT expression (the linear equation)`,
+      ["y is always 0", "Substitute into the discriminant", "Guess and check"],
+      { hint: "Substitute, solve the quadratic, back-substitute, pair up.",
+        answerLabel: `Back-substitute into the linear equation (the easy one): e.g. y = ${C(a)}(${C(x0)}) − ${C(c)} = ${C(y0)}, giving the pair (${C(x0)} ; ${C(y0)}).` });
   },
 };
 

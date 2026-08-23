@@ -12,6 +12,14 @@ import { mc, ynQ, pick, randInt, C, pw, frac } from "./_eq.js";
 const SPEC = "eqSpecialCases";
 const EXPB = "eqExpBrackets";
 
+/* unicode superscript digits — the chapter writes small powers inline
+   ("16 = 2⁴", "1 = 3⁰") rather than as <sup>, so a rolled power needs
+   the same glyphs. Only 0-9 ever reach this. */
+const SUPD = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
+const supDigits = (n) => String(n).split("").map((d) => SUPD[Number(d)]).join("");
+/* "…divide by 2 four times…" — the count is spelled out, her wording */
+const TIMES = { 2: "twice", 3: "three times", 4: "four times" };
+
 const SKILLS = {
   /* x² = a negative number */
   noRealSol: () => {
@@ -83,16 +91,46 @@ const SKILLS = {
       { hint: "Dividing by the variable deletes a solution.", answerLabel: it.ans });
   },
 
-  /* exponential factor: make the bases the same */
+  /* exponential factor: make the bases the same
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE). The three
+     hand-written items were 3ˣ = √27 · 3ˣ = 1 · 2ˣ = 16 — three fixed
+     shapes with an obvious pattern. Same wording, same three shapes, the
+     base (and the power) rolled. Guards: √(b³) is honest for every base
+     used, so the ³⁄₂ answer is always right; and the "divide once" decoy
+     value b^(k−1) is forced to differ from the real answer k, which would
+     otherwise collide at 2ˣ = 4 (4 ÷ 2 = 2 = x). */
   expSameBase: () => {
-    const items = [
-      { q: `One bracket gives <b>${pw("3", "x")} = √27</b>. What is the correct first move?`, correct: `Write √27 as a power of 3: ${pw("3", "x")} = ${pw("3", "3/2")}`, wrongs: ["Square both sides", "Take logs", `Divide both sides by 3`], ans: `√27 = √(3³) = ${pw("3", "3/2")}. Same base on both sides → equate the exponents: x = ${frac(3, 2)}.` },
-      { q: `One bracket gives <b>${pw("3", "x")} = 1</b>. What is x?`, correct: "x = 0, because 3⁰ = 1", wrongs: ["x = 1", "No solution", "x = ⅓"], ans: `Write 1 as a power of 3: 1 = 3⁰. Same base → x = 0.` },
-      { q: `One bracket gives <b>${pw("2", "x")} = 16</b>. What is the correct move?`, correct: `Write 16 as ${pw("2", "4")}, then equate exponents: x = 4`, wrongs: ["Divide both sides by 2 four times and count", "Square-root both sides", "x = 8, because 16 ÷ 2 = 8"], ans: `16 = 2⁴, so ${pw("2", "x")} = ${pw("2", "4")} → x = 4. Same base, then the bases fall away.` },
-    ];
-    const it = pick(items);
-    return mc(EXPB, it.q, it.correct, it.wrongs,
-      { hint: "Make the bases the SAME (prime factors / powers), then equate the exponents.", answerLabel: it.ans });
+    const shape = randInt(1, 3);
+    if (shape === 1) {
+      const base = pick([2, 3, 5]), cube = base ** 3;
+      return mc(EXPB,
+        `One bracket gives <b>${pw(String(base), "x")} = √${C(cube)}</b>. What is the correct first move?`,
+        `Write √${C(cube)} as a power of ${C(base)}: ${pw(String(base), "x")} = ${pw(String(base), "3/2")}`,
+        ["Square both sides", "Take logs", `Divide both sides by ${C(base)}`],
+        { hint: "Make the bases the SAME (prime factors / powers), then equate the exponents.",
+          answerLabel: `√${C(cube)} = √(${C(base)}³) = ${pw(String(base), "3/2")}. Same base on both sides → equate the exponents: x = ${frac(3, 2)}.` });
+    }
+    if (shape === 2) {
+      const base = pick([2, 3, 5, 7]);
+      return mc(EXPB,
+        `One bracket gives <b>${pw(String(base), "x")} = 1</b>. What is x?`,
+        `x = 0, because ${C(base)}⁰ = 1`,
+        ["x = 1", "No solution", `x = ${frac(1, base)}`],
+        { hint: "Make the bases the SAME (prime factors / powers), then equate the exponents.",
+          answerLabel: `Write 1 as a power of ${C(base)}: 1 = ${C(base)}⁰. Same base → x = 0.` });
+    }
+    const base = pick([2, 3, 5]);
+    let k = randInt(2, 4);
+    while (base ** (k - 1) === k) k = randInt(2, 4);   // the "÷ once" decoy must not BE the answer
+    const v = base ** k, half = v / base;
+    return mc(EXPB,
+      `One bracket gives <b>${pw(String(base), "x")} = ${C(v)}</b>. What is the correct move?`,
+      `Write ${C(v)} as ${pw(String(base), String(k))}, then equate exponents: x = ${C(k)}`,
+      /* the count is a WORD, as she wrote it ("…by 2 four times…") — two
+         numerals in a row read as one number ("by 3 3 times") on the phone */
+      [`Divide both sides by ${C(base)} ${TIMES[k]} and count`, "Square-root both sides", `x = ${C(half)}, because ${C(v)} ÷ ${C(base)} = ${C(half)}`],
+      { hint: "Make the bases the SAME (prime factors / powers), then equate the exponents.",
+        answerLabel: `${C(v)} = ${C(base)}${supDigits(k)}, so ${pw(String(base), "x")} = ${pw(String(base), String(k))} → x = ${C(k)}. Same base, then the bases fall away.` });
   },
 
   /* a positive base can never give a negative */
@@ -111,20 +149,42 @@ const SKILLS = {
       { hint: "Positive base → the power is always positive.", answerLabel: it.ans });
   },
 
-  /* where the ± in x^(2/3) = 16 comes from */
+  /* where the ± in x^(2/3) = 16 comes from
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "core
+     explanation tied to one fixed worked example — parametrisable with
+     real effort"). The exponent STAYS ²⁄₃ for the first two items — the
+     whole teaching point is reading x^(2/3) as (∛x)², and swapping the
+     denominator would need a root glyph the chapter doesn't have — but
+     the worked number rolls: with a ∈ {2,3,4,5}, the right-hand side is
+     a² and the answer is ±a³, which is exact for every a (the original
+     was a = 4: 16 and ±64). The third item's odd numerator rolls freely,
+     since its whole point is that an odd top never gets a ±. */
   ratExpPM: () => {
-    const items = [
-      { q: `<b>${pw("x", "2/3")} = 16</b> has the answers x = ±64. WHERE does the ± come from?`, correct: "The exponent ⅔ contains an EVEN power: (∛x)² = 16, so ∛x = ±4, so x = ±64", wrongs: ["Every rational-exponent equation gets a ±", "From square-rooting the 16 at the start", "It doesn't — only +64 is correct"], ans: "Read x^(2/3) as (∛x)². Undoing the SQUARE gives ∛x = ±4, and cubing keeps both signs: x = ±64. The even power on top hides the sign." },
-      { q: `To undo the exponent in <b>${pw("x", "2/3")} = 16</b>, you raise both sides to which power?`, correct: `The reciprocal, ${frac(3, 2)}`, wrongs: [`${frac(2, 3)} again`, "3", "2"], ans: `Raise to the reciprocal ${frac(3, 2)}: (x^(2/3))^(3/2) = x. But remember the even power on top means the final answer is ±64, not just +64.` },
-      ynQ(EXPB,
-        `<b>${pw("x", "3/5")} = 8</b>. The top of the exponent (3) is ODD. Does this equation get a ± answer?`,
+    const shape = randInt(1, 3);
+    if (shape === 3) {
+      const [p, q] = pick([[3, 5], [5, 7], [3, 7], [5, 3], [1, 3]]);
+      const k = pick([4, 8, 9, 27, 32]);
+      return ynQ(EXPB,
+        `<b>${pw("x", `${p}/${q}`)} = ${C(k)}</b>. The top of the exponent (${C(p)}) is ODD. Does this equation get a ± answer?`,
         false,
         { hint: "The ± appears only when an EVEN power hides the sign.",
-          answerLabel: "No — an odd power keeps the sign, so there is exactly ONE answer. The ± only appears when the numerator is even (like 2/3)." }),
-    ];
-    const it = pick(items);
-    return it.type ? it : mc(EXPB, it.q, it.correct, it.wrongs,
-      { hint: "x^(2/3) = (∛x)². Undoing an even power → ±.", answerLabel: it.ans });
+          answerLabel: "No — an odd power keeps the sign, so there is exactly ONE answer. The ± only appears when the numerator is even (like 2/3)." });
+    }
+    const a = pick([2, 3, 4, 5]), rhs = a * a, ans = a * a * a;
+    if (shape === 1) {
+      return mc(EXPB,
+        `<b>${pw("x", "2/3")} = ${C(rhs)}</b> has the answers x = ±${C(ans)}. WHERE does the ± come from?`,
+        `The exponent ⅔ contains an EVEN power: (∛x)² = ${C(rhs)}, so ∛x = ±${C(a)}, so x = ±${C(ans)}`,
+        ["Every rational-exponent equation gets a ±", `From square-rooting the ${C(rhs)} at the start`, `It doesn't — only +${C(ans)} is correct`],
+        { hint: "x^(2/3) = (∛x)². Undoing an even power → ±.",
+          answerLabel: `Read x^(2/3) as (∛x)². Undoing the SQUARE gives ∛x = ±${C(a)}, and cubing keeps both signs: x = ±${C(ans)}. The even power on top hides the sign.` });
+    }
+    return mc(EXPB,
+      `To undo the exponent in <b>${pw("x", "2/3")} = ${C(rhs)}</b>, you raise both sides to which power?`,
+      `The reciprocal, ${frac(3, 2)}`,
+      [`${frac(2, 3)} again`, "3", "2"],
+      { hint: "x^(2/3) = (∛x)². Undoing an even power → ±.",
+        answerLabel: `Raise to the reciprocal ${frac(3, 2)}: (x^(2/3))^(3/2) = x. But remember the even power on top means the final answer is ±${C(ans)}, not just +${C(ans)}.` });
   },
 
   /* count the real solutions of a factor-form equation */

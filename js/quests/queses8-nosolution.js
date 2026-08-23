@@ -4,30 +4,44 @@
    Exponential equations (same-base, common-factor, trinomial,
    "positive base ≠ negative") and surd equations (isolate,
    square, ALWAYS test) — and every place a "no solution" hides.
+
+   PARAMETRISED 2026-08-23 (dice wave 2 — DICE-COMMON's CARE rule).
+   DICE-AUDIT §11 marked four skills CARE (sameBase, positiveBase,
+   rejectK, surdIsolate): each was ONE fixed worked example on a very
+   simple pattern. All four now roll their numbers and recompute both
+   the answer text and the decoys. The wording, the mechanic and the
+   misconception behind every wrong option are unchanged — e.g.
+   surdIsolate's decoys are still "squared it anyway", "the root's own
+   zero point" and "subtracted instead". whichMethod stays STATIC (a
+   hand-authored 3-item worked-expression bank), and alwaysTest /
+   surdDomain were CLEAN pure recall — all three are untouched.
    ============================================================ */
-import { mc, ynQ, pick } from "./_exp.js";
+import { mc, ynQ, pick, randInt, upw, sgn } from "./_exp.js";
 
 const EXPQ = "expEqStrategy";
 const SURDQ = "surdEq";
 
 const SKILLS = {
   /* same-base strategy */
-  sameBase: () => mc(EXPQ,
-    "To solve <b>5ˣ = 25</b>, what is the plan?",
-    "Write both sides with the same base, then equate the exponents",
-    ["Take the square root of both sides", "Divide both sides by x", "Subtract 25 from both sides"],
-    { hint: "Make the “guns” (bases) the same; once they match, the bases fall away and the exponents are equal.",
-      answerLabel: "5ˣ = 5² → equate the exponents → x = 2." }),
+  sameBase: () => {
+    const b = randInt(2, 6), n = randInt(2, 4), v = Math.pow(b, n);
+    return mc(EXPQ,
+      `To solve <b>${upw(b, "x")} = ${v}</b>, what is the plan?`,
+      "Write both sides with the same base, then equate the exponents",
+      ["Take the square root of both sides", "Divide both sides by x", `Subtract ${v} from both sides`],
+      { hint: "Make the “guns” (bases) the same; once they match, the bases fall away and the exponents are equal.",
+        answerLabel: `${upw(b, "x")} = ${upw(b, n)} → equate the exponents → x = ${n}.` });
+  },
 
-  /* positive base can't be negative */
+  /* positive base can't be negative.  Decoys are the same three the
+     fixed items used: the exponent you get if you ignore the minus, its
+     negative, and one more. */
   positiveBase: () => {
-    const items = [
-      { q: "Solve <b>3ˣ = −9</b>.", ans: "No solution — a positive base (3ˣ) is always positive, so it can never equal −9." },
-      { q: "Solve <b>2ˣ = −8</b>.", ans: "No solution — 2ˣ is always positive, so it can never equal −8." },
-    ];
-    const it = pick(items);
-    return mc(EXPQ, it.q, "No solution", ["x = 2", "x = −2", "x = 3"],
-      { hint: "What values can a positive base raised to a power take? Can it ever be negative?", answerLabel: it.ans });
+    const b = randInt(2, 6), n = randInt(2, 4), v = Math.pow(b, n);
+    return mc(EXPQ, `Solve <b>${upw(b, "x")} = −${v}</b>.`, "No solution",
+      [`x = ${n}`, `x = −${n}`, `x = ${n + 1}`],
+      { hint: "What values can a positive base raised to a power take? Can it ever be negative?",
+        answerLabel: `No solution — a positive base (${upw(b, "x")}) is always positive, so it can never equal −${v}.` });
   },
 
   /* method for multi-term exponential */
@@ -43,18 +57,27 @@ const SKILLS = {
   },
 
   /* reject a negative k */
-  rejectK: () => ynQ(EXPQ,
-    "Solving a trinomial gives <b>k = 5</b> or <b>k = −4</b>, where k = 2ˣ. Both give a value of x. True or false?",
-    false,
-    { hint: "Can 2ˣ equal a negative number?", answerLabel: "False — 2ˣ is always positive, so k = −4 is rejected. Only 2ˣ = 5 gives a solution." }),
+  rejectK: () => {
+    const b = randInt(2, 5);
+    let r, s;
+    do { r = randInt(2, 9); s = randInt(2, 9); } while (r === s);
+    return ynQ(EXPQ,
+      `Solving a trinomial gives <b>k = ${r}</b> or <b>k = −${s}</b>, where k = ${upw(b, "x")}. Both give a value of x. True or false?`,
+      false,
+      { hint: `Can ${upw(b, "x")} equal a negative number?`,
+        answerLabel: `False — ${upw(b, "x")} is always positive, so k = −${s} is rejected. Only ${upw(b, "x")} = ${r} gives a solution.` });
+  },
 
   /* surd: isolate first → no solution */
-  surdIsolate: () => mc(SURDQ,
-    "Solve <b>√(x − 1) + 3 = 0</b>. What happens?",
-    "Isolate the root → √(x − 1) = −3 → no solution (a root can’t be negative)",
-    ["Square both sides to get x − 1 = 9, so x = 10", "x = 1", "x = −8"],
-    { hint: "Get the root alone first, then look at the sign on the other side.",
-      answerLabel: "√(x − 1) = −3 is impossible (a square root is never negative) → no solution." }),
+  surdIsolate: () => {
+    const c = randInt(1, 9), d = randInt(2, 9);
+    return mc(SURDQ,
+      `Solve <b>√(x − ${c}) + ${d} = 0</b>. What happens?`,
+      `Isolate the root → √(x − ${c}) = −${d} → no solution (a root can’t be negative)`,
+      [`Square both sides to get x − ${c} = ${d * d}, so x = ${c + d * d}`, `x = ${c}`, `x = ${sgn(c - d * d)}`],
+      { hint: "Get the root alone first, then look at the sign on the other side.",
+        answerLabel: `√(x − ${c}) = −${d} is impossible (a square root is never negative) → no solution.` });
+  },
 
   /* always test */
   alwaysTest: () => mc(SURDQ,

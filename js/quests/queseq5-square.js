@@ -24,19 +24,33 @@ const SKILLS = {
         answerLabel: `(${C(bb)} ÷ 2)² = ${C(half)}² = ${C(half * half)}. Then x² ${sign} ${C(bb)}x + ${C(half * half)} = (x ${sign} ${C(half)})².` });
   },
 
-  /* the rule only works when a = 1 */
+  /* the rule only works when a = 1
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "one fixed
+     concrete example (2x² − 7x + 16) — parametrisable"). The second item's
+     trinomial now rolls. Guards: gcd(a, b) = 1 so b/a is a REAL fraction
+     (the reason you cannot just half-and-square as it stands), and c is a
+     multiple of a so the factored line a(x² − b/a·x + c/a) stays whole —
+     both exactly as her original 2x² − 7x + 16 → 2(x² − 7/2·x + 8) did.
+     The first item has no numbers of its own — untouched. */
   whenRule: () => {
-    const items = [
-      ynQ(PSQ,
+    if (pick([true, false])) {
+      return ynQ(PSQ,
         "The rule c = (b/2)² works for ANY quadratic ax² + bx + c, whatever a is. True?",
         false,
         { hint: "Try it on 2x² + 8x + … — does 16 complete that square?",
-          answerLabel: "False — c = (b/2)² only works when the coefficient of x² is 1. With a coefficient, factor it out FIRST (or use b² = 4ac)." }),
-      { q: "You want to complete the square on <b>2x² − 7x + 16</b>. What must happen FIRST?", correct: "Factor the 2 out of the terms", wrongs: ["Add (7/2)² straight away", "Divide only the 16 by 2", "Swap the 7x and the 16"], ans: "With a coefficient on x², factor it out first: 2(x² − 7/2·x + 8) — THEN half-and-square the new middle coefficient inside." },
-    ];
-    const it = pick(items);
-    return it.type ? it : mc(PSQ, it.q, it.correct, it.wrongs,
-      { hint: "c = (b/2)² is an a = 1 rule.", answerLabel: it.ans });
+          answerLabel: "False — c = (b/2)² only works when the coefficient of x² is 1. With a coefficient, factor it out FIRST (or use b² = 4ac)." });
+    }
+    const gcd = (x, y) => (y ? gcd(y, x % y) : x);
+    const a = pick([2, 3, 4, 5]);
+    let bb = pick([5, 7, 9, 11, 13]);
+    while (gcd(a, bb) !== 1) bb = pick([5, 7, 9, 11, 13]);   // b/a must be a real fraction
+    const t = randInt(3, 9), cc = a * t;                     // c ÷ a stays a whole number
+    return mc(PSQ,
+      `You want to complete the square on <b>${C(a)}x² − ${C(bb)}x + ${C(cc)}</b>. What must happen FIRST?`,
+      `Factor the ${C(a)} out of the terms`,
+      [`Add (${C(bb)}/2)² straight away`, `Divide only the ${C(cc)} by ${C(a)}`, `Swap the ${C(bb)}x and the ${C(cc)}`],
+      { hint: "c = (b/2)² is an a = 1 rule.",
+        answerLabel: `With a coefficient on x², factor it out first: ${C(a)}(x² − ${C(bb)}/${C(a)}·x + ${C(t)}) — THEN half-and-square the new middle coefficient inside.` });
   },
 
   /* the sign inside the bracket matches the middle term — fresh */
@@ -84,19 +98,25 @@ const SKILLS = {
         answerLabel: `The bracket (${inner}) gives p = ${C(p)} (opposite sign); the constant outside gives q = ${C(q)} (its OWN sign — never flip q). TP(${C(p)} ; ${C(q)}).` });
   },
 
-  /* which sign flips: p, not q */
+  /* which sign flips: p, not q
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "one fixed
+     concrete example (y = 2(x + 4)² − 1) — parametrisable"). The yes/no
+     item keeps the SHAPE that makes it a trap — a plus inside the bracket
+     and a minus outside, with the claimed TP flipping q instead of p —
+     and rolls a, h and k. The statement is false for every roll, so the
+     teaching point ("the y-value never flips") is untouched. */
   pqRule: () => {
-    const items = [
-      { q: "In turning-point form <b>y = a(x − p)² + q</b>, which value is read with the OPPOSITE sign?", correct: "Only p (the x-value of the TP)", wrongs: ["Only q (the y-value of the TP)", "Both p and q", "Neither — read both as written"], ans: "p flips: (x + 4) means p = −4. q keeps its own sign: … − 1 means q = −1. In words: p is WHERE the TP is, q is WHAT it is." },
-      ynQ(TPF,
-        "For y = 2(x + 4)² − 1 the turning point is (−4 ; 1). True?",
-        false,
-        { hint: "Which of p and q flips its sign?",
-          answerLabel: "False — the y-value never flips. The constant outside is −1, so the TP is (−4 ; −1). Only p gets the opposite sign." }),
-    ];
-    const it = pick(items);
-    return it.type ? it : mc(TPF, it.q, it.correct, it.wrongs,
-      { hint: "Flip p. Never flip q.", answerLabel: it.ans });
+    if (pick([true, false])) {
+      const it = { q: "In turning-point form <b>y = a(x − p)² + q</b>, which value is read with the OPPOSITE sign?", correct: "Only p (the x-value of the TP)", wrongs: ["Only q (the y-value of the TP)", "Both p and q", "Neither — read both as written"], ans: "p flips: (x + 4) means p = −4. q keeps its own sign: … − 1 means q = −1. In words: p is WHERE the TP is, q is WHAT it is." };
+      return mc(TPF, it.q, it.correct, it.wrongs,
+        { hint: "Flip p. Never flip q.", answerLabel: it.ans });
+    }
+    const a = pick([2, 3, 4]), h = randInt(2, 6), k = randInt(1, 6);
+    return ynQ(TPF,
+      `For y = ${C(a)}(x + ${C(h)})² − ${C(k)} the turning point is (${C(-h)} ; ${C(k)}). True?`,
+      false,
+      { hint: "Which of p and q flips its sign?",
+        answerLabel: `False — the y-value never flips. The constant outside is ${C(-k)}, so the TP is (${C(-h)} ; ${C(-k)}). Only p gets the opposite sign.` });
   },
 
   /* happy / sad → min / max */

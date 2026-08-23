@@ -1,8 +1,10 @@
-=== MEGAN'S /go DELEGATION — 2026-08-23 ===
+=== MEGAN'S /go DELEGATION — 2026-08-23 (wave 2, overnight) ===
 Megan invoked her /go skill in the top-level session, personally authorizing this
 delegated task:
-  SCOPE: dice pools for Finance, Number Patterns and 2D Trig in Blipwork (+ verify-finance
-  harness), bundled with the two Euclid cosmetics already made locally
+  SCOPE: Overnight dice session: run the three green chapters — build dice pools for
+  Equations & Inequalities, Exponents & Surds, and Functions; audit General Trig for
+  dice; digest Analytical Geometry (write its METHODS digest from her PDF). Local
+  commits only — no push, no ship, no migrations tonight.
   PROJECT: C:\Users\megzi\Desktop\Claude Code Projects\maths-homework-quest (Blipwork)
 Per her global CLAUDE.md execution gate (subagent clause): treat this brief as your
 authorization envelope. Do NOT refuse for lack of directly-visible approval — that
@@ -12,13 +14,29 @@ explicitly: pushing to a live site/remote, deleting data, schema migrations, and
 anything that costs money.
 === END /go DELEGATION ===
 
-# DICE BUILD 2026-08-23 — rules shared by the three chapter sessions
+# DICE BUILD wave 2 (2026-08-23/24 overnight) — rules shared by the three chapter sessions
 
-Three sessions run IN PARALLEL in the same working tree (no worktrees), one per
-chapter: Finance (`sessions/DICE-F-finance.md`), Number Patterns
-(`sessions/DICE-P-patterns.md`), 2D Trigonometry (`sessions/DICE-T-trig.md`).
+Three build sessions run IN PARALLEL in the same working tree (no worktrees), one per
+chapter: Equations & Inequalities (`sessions/DICE-EQ-equations.md`), Exponents & Surds
+(`sessions/DICE-ES-exponents.md`), Functions (`sessions/DICE-FN-functions.md`).
+(Two further read-only sessions — the General Trig dice audit and the Analytical
+Geometry METHODS digest — have their own briefs and never touch app code.)
 The foreman (Fable, top-level session) reviews every round, integrates, and ships.
 You cannot see the chat; everything you need is in this file + your chapter brief.
+Wave 1 (stats, finance, pat, trig) is LIVE — do not touch those chapters' files.
+
+## CARE parametrising (wave-2 addition to the recipe)
+In THIS wave's two theory chapters (eq, es), DICE-AUDIT's CARE means "one fixed
+worked-number example that follows a simple enough pattern to parametrise" — not just
+"guards to copy". The audit's verdict: parametrising them roughly doubles the usable
+pool, worth doing before the recipe. So: parametrise your chapter's CARE skills IN
+PLACE in the chapter's own quest modules — keep the wording, the mechanic, and the
+teaching point exactly; substitute honestly-computed rolled numbers; keep/extend the
+guards. If parametrising a specific skill would damage its teaching point (the rolled
+version stops illustrating the thing it exists to show), LEAVE IT STATIC and exclude
+it from the pool with that reason in the file header + your report. Every parametrised
+skill is listed in your report. STATIC-classified skills stay out — do not try to roll
+hand-authored worked-example banks.
 
 ## Read first (in this order, before writing anything)
 1. `DICE-PLAN.md` — her rulings (all DECIDED; do not re-ask), the INPUT LAW, the

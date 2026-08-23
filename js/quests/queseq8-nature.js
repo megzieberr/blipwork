@@ -49,19 +49,40 @@ const SKILLS = {
         graph: deltaGraph(kind) });
   },
 
-  /* classify a computed Δ value */
+  /* classify a computed Δ value
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "5 concrete
+     Δ values — clearly parametrisable (roll a Δ, derive category)"). The Δ
+     is rolled, its category DERIVED from it (never stored beside it), and
+     the wrong options are the other three categories — so picture and key
+     cannot disagree. The four category strings are her EQ p43 table
+     wordings (METHODS-algebra B11), unchanged. Guards: the perfect-square
+     branch is built as k² so it really is one, and the non-square branch
+     re-rolls until √Δ is irrational. */
   classify: () => {
-    const items = [
-      { d: "Δ = 16", correct: "Real, rational, unequal", wrongs: ["Real, irrational, unequal", "Real, rational, equal", "Non-real"], why: "16 > 0 AND 16 = 4² is a perfect square → rational, and unequal because Δ ≠ 0." },
-      { d: "Δ = 8", correct: "Real, irrational, unequal", wrongs: ["Real, rational, unequal", "Non-real", "Real, rational, equal"], why: "8 > 0 but 8 is NOT a perfect square → the roots keep a surd: real, irrational, unequal." },
-      { d: "Δ = 0", correct: "Real, rational, equal", wrongs: ["Non-real", "Real, irrational, equal", "Real, rational, unequal"], why: "Δ = 0 → the ± adds nothing: one repeated rational root (the parabola touches the axis)." },
-      { d: "Δ = −47", correct: "Non-real", wrongs: ["Real, irrational, unequal", "Real, rational, equal", "Real, rational, unequal"], why: "Δ < 0 → a negative under the root → non-real roots." },
-      { d: "Δ = 169", correct: "Real, rational, unequal", wrongs: ["Real, irrational, unequal", "Non-real", "Real, rational, equal"], why: "169 = 13² — a positive perfect square → real, rational, unequal." },
-    ];
-    const it = pick(items);
-    return mc(DIS, `You work out <b>${it.d}</b>. What is the nature of the roots?`, it.correct, it.wrongs,
+    const cat = pick(["perfect", "nonPerfect", "zero", "negative"]);
+    let d, why;
+    if (cat === "perfect") {
+      const k = randInt(2, 14); d = k * k;
+      why = `${C(d)} > 0 AND ${C(d)} = ${C(k)}² is a perfect square → rational, and unequal because Δ ≠ 0.`;
+    } else if (cat === "nonPerfect") {
+      d = randInt(2, 99);
+      while (Number.isInteger(Math.sqrt(d))) d = randInt(2, 99);   // must NOT be a perfect square
+      why = `${C(d)} > 0 but ${C(d)} is NOT a perfect square → the roots keep a surd: real, irrational, unequal.`;
+    } else if (cat === "zero") {
+      d = 0;
+      why = "Δ = 0 → the ± adds nothing: one repeated rational root (the parabola touches the axis).";
+    } else {
+      d = -randInt(3, 99);
+      why = "Δ < 0 → a negative under the root → non-real roots.";
+    }
+    const correct = cat === "negative" ? "Non-real"
+      : cat === "zero" ? "Real, rational, equal"
+        : cat === "perfect" ? "Real, rational, unequal" : "Real, irrational, unequal";
+    const ALL = ["Real, rational, unequal", "Real, irrational, unequal", "Real, rational, equal", "Non-real"];
+    return mc(DIS, `You work out <b>Δ = ${C(d)}</b>. What is the nature of the roots?`,
+      correct, ALL.filter((s) => s !== correct),
       { hint: "Sign first (≥ 0 real, < 0 non-real), then perfect square → rational, then 0 → equal.",
-        answerLabel: it.why });
+        answerLabel: why });
   },
 
   /* nature given → which condition to write */
@@ -105,19 +126,31 @@ const SKILLS = {
       { hint: "A square is ≥ 0; a square plus a positive number is > 0. That works for EVERY value.", answerLabel: it.ans });
   },
 
-  /* the rejected parameter value (workbook's k = 0 error) */
+  /* the rejected parameter value (workbook's k = 0 error)
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "one fixed
+     worked example (k(k+8)=0) — parametrisable with real effort"). The
+     factorised Δ = 0 line rolls its constant and its sign; the surviving
+     root is derived from it (k(k + m) = 0 → k = −m; k(k − m) = 0 → k = m),
+     so the rejected value is always 0 and the teaching point — a
+     restriction from the ORIGINAL equation outranks the algebra — is
+     exactly the same on every roll. The yes/no item has no numbers. */
   rejectParam: () => {
-    const items = [
-      { q: "Equal roots demand Δ = 0, which gives <b>k(k + 8) = 0</b>, so k = 0 or k = −8. But the ORIGINAL equation had kx in a denominator. Final answer?", correct: "k = −8 only — reject k = 0", wrongs: ["k = 0 or k = −8, both count", "k = 0 only", "No valid k exists"], ans: "kx in a denominator means k ≠ 0 from the start (and at k = 0 the equation isn't even a quadratic). Reject k = 0: the answer is k = −8 only." },
-      ynQ(DIS,
+    if (pick([true, false])) {
+      return ynQ(DIS,
         "A parameter value that makes the original equation's denominator 0 must still be kept if the algebra produced it. True?",
         false,
         { hint: "Restrictions outrank algebra.",
-          answerLabel: "False — restrictions from the ORIGINAL equation stand. A value that breaks them is rejected (N.A.), exactly like a rejected x." }),
-    ];
-    const it = pick(items);
-    return it.type ? it : mc(DIS, it.q, it.correct, it.wrongs,
-      { hint: "Check every parameter answer against the original equation's restrictions.", answerLabel: it.ans });
+          answerLabel: "False — restrictions from the ORIGINAL equation stand. A value that breaks them is rejected (N.A.), exactly like a rejected x." });
+    }
+    const m = randInt(2, 12), s = pick([1, -1]);
+    const other = -m * s;                                   // k(k + m) = 0 → k = −m ; k(k − m) = 0 → k = m
+    const inner = s > 0 ? `k + ${C(m)}` : `k − ${C(m)}`;
+    return mc(DIS,
+      `Equal roots demand Δ = 0, which gives <b>k(${inner}) = 0</b>, so k = 0 or k = ${C(other)}. But the ORIGINAL equation had kx in a denominator. Final answer?`,
+      `k = ${C(other)} only — reject k = 0`,
+      [`k = 0 or k = ${C(other)}, both count`, "k = 0 only", "No valid k exists"],
+      { hint: "Check every parameter answer against the original equation's restrictions.",
+        answerLabel: `kx in a denominator means k ≠ 0 from the start (and at k = 0 the equation isn't even a quadratic). Reject k = 0: the answer is k = ${C(other)} only.` });
   },
 
   /* KNOW THE DIFFERENCE — the four words */

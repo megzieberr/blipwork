@@ -94,7 +94,10 @@ export function lineGraph(cv, { accent, showInts = true, label } = {}) {
   pts.push({ x: 0, y: yi });
   const win = winFor(pts);
   const points = [];
-  if (showInts && xi != null && xi !== 0) points.push({ x: xi, y: 0, on: 0, label: lab(xi, 0) });
+  /* the LABEL is rounded to 2 dp — the dot still sits at the exact intercept, but
+     a sketch never writes "(0,666667 ; 0)" (dice PNG review, 2026-08-23; same
+     rounding parabolaGraph/hyperbolaGraph already do for their own features). */
+  if (showInts && xi != null && xi !== 0) points.push({ x: xi, y: 0, on: 0, label: lab(Math.round(xi * 100) / 100, 0) });
   points.push({ x: 0, y: yi, on: 0, label: lab(0, yi) });
   return {
     spec: { type: "function", accent, grid: true, win, curves: [{ ...cv, label, labelAt: label ? labelX(cv, win, win.xmax - 1.5) : undefined }], points },

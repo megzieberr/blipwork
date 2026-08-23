@@ -5,7 +5,7 @@
    decide whether the answer is ± (two), a single (possibly
    negative) value, or no real solution.
    ============================================================ */
-import { mc, ynQ, pick } from "./_exp.js";
+import { mc, ynQ, pick, randInt, gcd } from "./_exp.js";
 
 const CON = "ratExpEq";
 
@@ -34,15 +34,22 @@ const SKILLS = {
   classify2: () => { const it = pick(POOL); return mc(CON, `Solve <b>${it.e}</b>. What does the solution look like?`, it.cat, [A, B, C, D].filter((x) => x !== it.cat), { hint: "Look at whether the top and bottom of the exponent are odd or even, and the sign of the right side.", answerLabel: it.why }); },
   classify3: () => { const it = pick(POOL); return mc(CON, `Solve <b>${it.e}</b>. What does the solution look like?`, it.cat, [A, B, C, D].filter((x) => x !== it.cat), { hint: "An even root of a negative is non-real; an even power is never negative.", answerLabel: it.why }); },
 
-  /* the method step */
+  /* the method step.  PARAMETRISED 2026-08-23 (dice wave 2 — the one
+     CARE skill in this quest, DICE-AUDIT §11): the exponent p/q now
+     rolls (in lowest terms, p ≠ q so the reciprocal is a different
+     fraction) and the right-hand side is a rolled positive integer —
+     the question only ever asks WHICH power to raise both sides to, so
+     the value of k plays no part in the answer, exactly as before. The
+     three decoys stay the same three misreadings: the exponent itself,
+     its negative, and the denominator alone. */
   reciprocalStep: () => {
-    const items = [
-      { q: "To solve <b>x^(2/3) = 4</b>, raise both sides to the power:", correct: "3/2", wrongs: ["2/3", "−2/3", "3"], ans: "Use the reciprocal of 2/3, which is 3/2; then (2/3)·(3/2) = 1 and x is on its own." },
-      { q: "To solve <b>x^(3/4) = 8</b>, raise both sides to the power:", correct: "4/3", wrongs: ["3/4", "−3/4", "4"], ans: "Use the reciprocal 4/3 so the exponents cancel to 1." },
-      { q: "To solve <b>x^(2/5) = 9</b>, raise both sides to the power:", correct: "5/2", wrongs: ["2/5", "−5/2", "5"], ans: "Reciprocal of 2/5 is 5/2." },
-    ];
-    const it = pick(items);
-    return mc(CON, it.q, it.correct, it.wrongs, { hint: "Multiply the exponent by its reciprocal so it becomes 1.", answerLabel: it.ans });
+    let p, q;
+    do { p = randInt(2, 5); q = randInt(2, 5); } while (p === q || gcd(p, q) !== 1);
+    const k = randInt(2, 30);
+    return mc(CON, `To solve <b>x^(${p}/${q}) = ${k}</b>, raise both sides to the power:`,
+      `${q}/${p}`, [`${p}/${q}`, `−${p}/${q}`, `${q}`],
+      { hint: "Multiply the exponent by its reciprocal so it becomes 1.",
+        answerLabel: `Use the reciprocal of ${p}/${q}, which is ${q}/${p}; then (${p}/${q})·(${q}/${p}) = 1 and x is on its own.` });
   },
 
   /* why the reciprocal */

@@ -26,7 +26,11 @@ const SKILLS = {
   /* read the intercepts of a line */
   lineIntercepts: () => {
     let cv = randLine();
-    while (cv.a === 0 || cv.q === 0 || lineXInt(cv) == null) cv = randLine();   // q ≠ 0: intercepts away from the origin
+    // q ≠ 0: intercepts away from the origin. The x-intercept must also be a WHOLE
+    // number (the same guard fn4.readXIntercept already uses) — without it −q/a
+    // rolls values like 2/3, and both the sketch label and the four options came
+    // out as "(0,666667 ; 0)" (dice PNG review, 2026-08-23).
+    while (cv.a === 0 || cv.q === 0 || lineXInt(cv) == null || !Number.isInteger(lineXInt(cv))) cv = randLine();
     const xi = lineXInt(cv), yi = lineYInt(cv);
     const askX = pick([true, false]);
     const g = lineGraph(cv, { accent: ACC, label: "f" });

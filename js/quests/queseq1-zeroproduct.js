@@ -39,17 +39,43 @@ const SKILLS = {
       { hint: "MODE → 5: EQN → 3: aX² + bX + c = 0 → type a, b, c with their signs.", answerLabel: it.ans });
   },
 
-  /* roots → factors (opposite sign; denominator multiplies the x) */
+  /* roots → factors (opposite sign; denominator multiplies the x)
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE). The four
+     hand-written items were x = ½ · x = −3 · x = −⅔ · x = 4 — two shapes
+     (whole-number root, fraction root) with a simple enough pattern to
+     roll. Wording, mechanic and teaching point are unchanged; only the
+     root is rolled now. Guards: the fraction is always in lowest terms
+     (gcd = 1) and a real fraction (n < d), so the "denominator multiplies
+     the x" point always has something to bite on; the swapped-numbers
+     decoy drops the "1x" when n = 1, exactly as the ½ item did. */
   rootsToFactors: () => {
-    const items = [
-      { q: "The calculator gives a root <b>x = ½</b>. Which factor does it come from?", correct: "(2x − 1)", wrongs: ["(2x + 1)", "(x − 2)", "(x + ½)"], ans: "The denominator 2 multiplies the x, and the numerator 1 crosses over with the OPPOSITE sign: (2x − 1)." },
-      { q: "The calculator gives a root <b>x = −3</b>. Which factor does it come from?", correct: "(x + 3)", wrongs: ["(x − 3)", "(3x + 1)", "(−x − 3)"], ans: "Opposite sign of the root: x = −3 comes from (x + 3)." },
-      { q: "The calculator gives a root <b>x = −⅔</b>. Which factor does it come from?", correct: "(3x + 2)", wrongs: ["(3x − 2)", "(2x + 3)", "(x + ⅔)"], ans: "Denominator 3 multiplies the x; numerator 2 crosses over with the opposite sign: (3x + 2)." },
-      { q: "The calculator gives a root <b>x = 4</b>. Which factor does it come from?", correct: "(x − 4)", wrongs: ["(x + 4)", "(4x − 1)", "(4x + 1)"], ans: "Opposite sign of the root: x = 4 comes from (x − 4)." },
-    ];
-    const it = pick(items);
-    return mc(FORM, it.q, it.correct, it.wrongs,
-      { hint: "Put the OPPOSITE sign in the bracket. For a fraction root, the denominator multiplies the x.", answerLabel: it.ans });
+    const whole = pick([true, false]);
+    const s = pick([1, -1]);
+    const opp = s > 0 ? "−" : "+";          // the bracket carries the OPPOSITE sign
+    const same = s > 0 ? "+" : "−";
+    if (whole) {
+      const r = randInt(2, 9) * s;
+      const k = Math.abs(r);
+      return mc(FORM,
+        `The calculator gives a root <b>x = ${C(r)}</b>. Which factor does it come from?`,
+        `(x ${opp} ${C(k)})`,
+        [`(x ${same} ${C(k)})`, `(${C(k)}x ${opp} 1)`, `(${C(k)}x ${same} 1)`],
+        { hint: "Put the OPPOSITE sign in the bracket. For a fraction root, the denominator multiplies the x.",
+          answerLabel: `Opposite sign of the root: x = ${C(r)} comes from (x ${opp} ${C(k)}).` });
+    }
+    const gcd = (x, y) => (y ? gcd(y, x % y) : x);
+    const d = pick([2, 3, 4, 5]);
+    let n = randInt(1, d - 1);
+    while (gcd(n, d) !== 1) n = randInt(1, d - 1);   // lowest terms: the root really is a fraction
+    const rootStr = `${s < 0 ? "−" : ""}${frac(n, d)}`;
+    /* n = 1 would print "1x" — the original ½ item wrote "(x − 2)" there */
+    const swapped = n === 1 ? `(x ${opp} ${C(d)})` : `(${C(n)}x ${opp} ${C(d)})`;
+    return mc(FORM,
+      `The calculator gives a root <b>x = ${rootStr}</b>. Which factor does it come from?`,
+      `(${C(d)}x ${opp} ${C(n)})`,
+      [`(${C(d)}x ${same} ${C(n)})`, swapped, `(x ${opp} ${frac(n, d)})`],
+      { hint: "Put the OPPOSITE sign in the bracket. For a fraction root, the denominator multiplies the x.",
+        answerLabel: `Denominator ${C(d)} multiplies the x; numerator ${C(n)} crosses over with the opposite sign: (${C(d)}x ${opp} ${C(n)}).` });
   },
 
   /* the zero-product rule itself */

@@ -4,11 +4,22 @@
    Same-root × and ÷, the BIG NO-NO (√a + √b ≠ √(a+b)), like
    surds, the inside/outside fraction rule, and the sign rules
    (non-real even roots, ± two answers).
+
+   PARAMETRISED 2026-08-23 (dice wave 2 — DICE-COMMON's CARE rule):
+   the three CARE skills of DICE-AUDIT §11 (likeSurds, insideOutside,
+   twoAnswers) now roll their numbers instead of picking between two
+   or three fixed instances. Wording, mechanic and every decoy FAMILY
+   are unchanged — each wrong option is still the same misconception,
+   recomputed from the same roll (added the insides, multiplied the
+   coefficients, added the root indices, forgot the ±, …).
+   multiplyDivide / bigNoNo / signRules were CLEAN (fully symbolic)
+   and are untouched.
    ============================================================ */
-import { mc, ynQ, pick } from "./_exp.js";
+import { mc, ynQ, pick, shuffled, randInt, usup, upw } from "./_exp.js";
 
 const LAW = "surdLaws";
 const SIGN = "surdSigns";
+const VARS = ["x", "y", "a", "m"];
 
 const SKILLS = {
   /* multiply / divide same root */
@@ -31,22 +42,70 @@ const SKILLS = {
   /* like surds add */
   likeSurds: () => {
     const items = [
-      { q: "Simplify <b>5√x − 2√x</b>.", correct: "3√x", wrongs: ["3√(2x)", "7√x", "3x"], ans: "Like surds add like terms: 5√x − 2√x = 3√x." },
-      { q: "Simplify <b>√x + √x</b>.", correct: "2√x", wrongs: ["√(2x)", "2x", "√x²"], ans: "Two of the same surd: √x + √x = 2√x (just like x + x = 2x)." },
-      { q: "Simplify <b>4·³√3 + 2·³√3</b>.", correct: "6·³√3", wrongs: ["6·³√6", "8·³√3", "6·⁶√3"], ans: "Same surd (³√3), so add the coefficients: 4 + 2 = 6 → 6·³√3." },
+      /* a√v − b√v.  Guards: b ≥ 2 so the QUESTION never reads "1√v", and
+         a − b ≥ 2 so the ANSWER never does either (PNG review, 2026-08-23:
+         a roll of 8√a − 1√a is bad maths writing even though it is true). */
+      () => {
+        const v = pick(VARS);
+        let a, b;
+        do { a = randInt(4, 9); b = randInt(2, 6); } while (a - b < 2);
+        return {
+          q: `Simplify <b>${a}√${v} − ${b}√${v}</b>.`, correct: `${a - b}√${v}`,
+          wrongs: [`${a - b}√(2${v})`, `${a + b}√${v}`, `${a - b}${v}`],
+          ans: `Like surds add like terms: ${a}√${v} − ${b}√${v} = ${a - b}√${v}.`,
+        };
+      },
+      /* √v + √v — the "just like x + x = 2x" case, so the coefficients
+         stay 1 (that IS the teaching point); only the letter rolls. */
+      () => {
+        const v = pick(VARS);
+        return {
+          q: `Simplify <b>√${v} + √${v}</b>.`, correct: `2√${v}`,
+          wrongs: [`√(2${v})`, `2${v}`, `√${v}²`],
+          ans: `Two of the same surd: √${v} + √${v} = 2√${v} (just like ${v} + ${v} = 2${v}).`,
+        };
+      },
+      /* a·ⁿ√r + b·ⁿ√r.  Guard a·b ≠ a+b so the "multiplied the
+         coefficients" decoy can never equal the correct answer. */
+      () => {
+        let a, b;
+        do { a = randInt(2, 6); b = randInt(2, 6); } while (a * b === a + b);
+        const n = pick([3, 4]), r = randInt(2, 7);
+        return {
+          q: `Simplify <b>${a}·${usup(n)}√${r} + ${b}·${usup(n)}√${r}</b>.`, correct: `${a + b}·${usup(n)}√${r}`,
+          wrongs: [`${a + b}·${usup(n)}√${2 * r}`, `${a * b}·${usup(n)}√${r}`, `${a + b}·${usup(2 * n)}√${r}`],
+          ans: `Same surd (${usup(n)}√${r}), so add the coefficients: ${a} + ${b} = ${a + b} → ${a + b}·${usup(n)}√${r}.`,
+        };
+      },
     ];
-    const it = pick(items);
+    const it = pick(items)();
     return mc(LAW, it.q, it.correct, it.wrongs, { hint: "Only surds with the SAME root and SAME inside can be added — combine the numbers in front.", answerLabel: it.ans });
   },
 
   /* inside power → top, root → bottom */
   insideOutside: () => {
-    const items = [
-      { q: "Where does the <b>inside power</b> go when you write ⁿ√(xᵃ) = x^(?/?)?", correct: "On the top (numerator)", wrongs: ["On the bottom (denominator)", "It disappears", "It stays inside"], ans: "Inside power → top; root index → bottom: ⁿ√(xᵃ) = x^(a/n)." },
-      { q: "Simplify <b>√(x⁴)</b>.", correct: "x²", wrongs: ["x⁴", "x⁸", "x"], ans: "√(x⁴) = x^(4/2) = x²." },
-      { q: "Simplify <b>³√(y⁶)</b>.", correct: "y²", wrongs: ["y³", "y⁶", "y⁹"], ans: "³√(y⁶) = y^(6/3) = y²." },
-    ];
-    const it = pick(items);
+    /* the generic (rule-recall) item — unchanged, it was already CLEAN */
+    const generic = () => ({
+      q: "Where does the <b>inside power</b> go when you write ⁿ√(xᵃ) = x^(?/?)?", correct: "On the top (numerator)",
+      wrongs: ["On the bottom (denominator)", "It disappears", "It stays inside"],
+      ans: "Inside power → top; root index → bottom: ⁿ√(xᵃ) = x^(a/n).",
+    });
+    /* ONE template now covers both concrete items (√(x⁴) and ³√(y⁶)):
+       index n ∈ {2,3}, inside power a = n·k so the answer is exact.
+       Decoys are the three mistakes the fixed items used — forgot the
+       root (xᵃ), multiplied instead of divided (x^(a·n)), added (x^(a+n)).
+       k ≥ 2 and n ≥ 2 keep all four labels distinct. */
+    const powerItem = () => {
+      const v = pick(VARS), n = pick([2, 3]), k = randInt(2, 4), a = n * k;
+      const idx = n === 2 ? "" : usup(n);
+      return {
+        q: `Simplify <b>${idx}√(${upw(v, a)})</b>.`, correct: upw(v, k),
+        wrongs: [upw(v, a), upw(v, a * n), upw(v, a + n)],
+        ans: `${idx}√(${upw(v, a)}) = ${v}^(${a}/${n}) = ${upw(v, k)}.`,
+      };
+    };
+    /* the generic item stays 1-in-3, exactly as in the fixed 3-item bank */
+    const it = pick([generic, powerItem, powerItem])();
     return mc(LAW, it.q, it.correct, it.wrongs, { hint: "Inside the root → on top of the fraction; the root index → on the bottom.", answerLabel: it.ans });
   },
 
@@ -62,14 +121,19 @@ const SKILLS = {
     return mc(SIGN, it.q, it.correct, it.wrongs, { hint: "Even power/root behaves differently from odd; even root of a negative is non-real.", answerLabel: it.ans });
   },
 
-  /* two answers from an even root of a positive (in an equation) */
+  /* two answers from an even root of a positive (in an equation).
+     r ≥ 2 keeps the "√r" decoy from collapsing to r (√1 = 1). The four
+     misconceptions are exactly the ones the two fixed items used —
+     three are dealt per roll, so both original option sets occur. */
   twoAnswers: () => {
-    const items = [
-      { q: "Solve <b>x² = 9</b>.", correct: "x = ±3", wrongs: ["x = 3 only", "x = −3 only", "x = ±√3"], ans: "Taking the square root of both sides gives x = ±3 (two answers)." },
-      { q: "Solve <b>x² = 25</b>.", correct: "x = ±5", wrongs: ["x = 5 only", "x = ±√5", "no real solution"], ans: "x = ±5 — an even root of a positive gives two answers." },
-    ];
-    const it = pick(items);
-    return mc(SIGN, it.q, it.correct, it.wrongs, { hint: "When you square-root both sides of an equation, remember the ± (both signs work).", answerLabel: it.ans });
+    const r = randInt(2, 12), k = r * r;
+    const wrongs = shuffled([`x = ${r} only`, `x = −${r} only`, `x = ±√${r}`, "no real solution"]).slice(0, 3);
+    const ans = pick([
+      `Taking the square root of both sides gives x = ±${r} (two answers).`,
+      `x = ±${r} — an even root of a positive gives two answers.`,
+    ]);
+    return mc(SIGN, `Solve <b>x² = ${k}</b>.`, `x = ±${r}`, wrongs,
+      { hint: "When you square-root both sides of an equation, remember the ± (both signs work).", answerLabel: ans });
   },
 };
 

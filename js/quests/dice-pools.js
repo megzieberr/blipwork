@@ -17,12 +17,21 @@ import { pool as diceStats } from "./dice-stats.js";
 import { pool as diceFinance } from "./dice-finance.js";
 import { pool as dicePatterns } from "./dice-patterns.js";
 import { pool as diceTrig } from "./dice-trig.js";
+/* Wave 2 (2026-08-23 overnight): three more pools, registered up front as
+   foreman stubs (no entries) so the parallel sessions never share a file.
+   config.js's DICE_CHAPTERS still decides what actually deals. */
+import { pool as diceEqn } from "./dice-eqn.js";
+import { pool as diceExp } from "./dice-exp.js";
+import { pool as diceFunc } from "./dice-func.js";
 
 const DICE_POOLS = {
   stats: diceStats,
   finance: diceFinance,
   pat: dicePatterns,          // config.js chapter id for Number Patterns is "pat"
   trig: diceTrig,
+  eqn: diceEqn,
+  exp: diceExp,
+  func: diceFunc,
 };
 
 export function dicePool(chapterId) { return DICE_POOLS[chapterId] || null; }

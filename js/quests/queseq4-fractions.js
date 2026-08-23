@@ -47,19 +47,25 @@ const SKILLS = {
       { hint: "Each different factor once, at its highest power.", answerLabel: it.ans });
   },
 
-  /* multiply EVERY term by the LCD */
+  /* multiply EVERY term by the LCD
+     PARAMETRISED 2026-08-23 (dice wave 2, DICE-AUDIT §12 CARE: "one fixed
+     worked example — trivially parametrisable"). The yes/no item's
+     equation 10/x + 3x/(x − 2) = 7 now rolls its four numbers; the LCD is
+     always x(x − m) and the cleared line A(x − m) + Bx·x = Kx(x − m) is
+     exact for every roll, so her "the lonely K gets multiplied too" point
+     is unchanged. The first item has no numbers at all — untouched. */
   clearFractions: () => {
-    const items = [
-      { q: "You've found the LCD. How do you clear the fractions?", correct: "Multiply EVERY term on both sides by the LCD", wrongs: ["Multiply only the fraction terms by the LCD", "Add the LCD to both sides", "Divide both sides by the LCD"], ans: "Every single term gets multiplied by the LCD — including the lonely whole-number terms. Then the denominators cancel and it's an ordinary equation." },
-      ynQ(FRA,
-        "In 10/x + 3x/(x − 2) = 7, the 7 also gets multiplied by the LCD x(x − 2). True?",
-        true,
-        { hint: "EVERY term…",
-          answerLabel: "True — 10(x − 2) + 3x·x = 7x(x − 2). Forgetting to multiply the 7 is the classic slip." }),
-    ];
-    const it = pick(items);
-    return it.type ? it : mc(FRA, it.q, it.correct, it.wrongs,
-      { hint: "The LCD hits every term, fractions and non-fractions alike.", answerLabel: it.ans });
+    if (pick([true, false])) {
+      const it = { q: "You've found the LCD. How do you clear the fractions?", correct: "Multiply EVERY term on both sides by the LCD", wrongs: ["Multiply only the fraction terms by the LCD", "Add the LCD to both sides", "Divide both sides by the LCD"], ans: "Every single term gets multiplied by the LCD — including the lonely whole-number terms. Then the denominators cancel and it's an ordinary equation." };
+      return mc(FRA, it.q, it.correct, it.wrongs,
+        { hint: "The LCD hits every term, fractions and non-fractions alike.", answerLabel: it.ans });
+    }
+    const A = pick([6, 8, 9, 10, 12]), B = randInt(2, 5), m = randInt(2, 6), K = randInt(4, 9);
+    return ynQ(FRA,
+      `In ${C(A)}/x + ${C(B)}x/(x − ${C(m)}) = ${C(K)}, the ${C(K)} also gets multiplied by the LCD x(x − ${C(m)}). True?`,
+      true,
+      { hint: "EVERY term…",
+        answerLabel: `True — ${C(A)}(x − ${C(m)}) + ${C(B)}x·x = ${C(K)}x(x − ${C(m)}). Forgetting to multiply the ${C(K)} is the classic slip.` });
   },
 
   /* restrictions come FIRST */
