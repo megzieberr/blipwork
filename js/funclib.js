@@ -178,7 +178,7 @@ export function frac(num, den) {
 export function eqStr(cv, name = "y") {
   if (cv.kind === "line") {
     const t = `${lead(cv.a, "x")}${cv.q ? " " + term(cv.q, "") : ""}`;
-    return `${name} = ${cv.a === 0 ? C(cv.q) : t}`.trim();
+    return `${name} = ${cv.a === 0 ? neg(C(cv.q)) : t}`.trim();   // a horizontal line: real minus (g(x) = −1, never "-1")
   }
   if (cv.kind === "parabola") {
     const { a, b, c } = paraStd(cv);

@@ -12,7 +12,7 @@ import { TOL } from "./config.js";
 /* "8,2" or "8.2" -> 8.2 ; "" / "-" / "," -> NaN */
 export function parseNum(str) {
   if (str == null) return NaN;
-  const cleaned = String(str).trim().replace(",", ".");
+  const cleaned = String(str).trim().replace(",", ".").replace(/−/g, "-");   // a real minus (−) counts as a minus
   if (cleaned === "" || cleaned === "-" || cleaned === ".") return NaN;
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : NaN;
@@ -22,7 +22,9 @@ export function parseNum(str) {
 export function fmtComma(n, dp = null) {
   if (n == null || Number.isNaN(n)) return "";
   const s = (dp == null) ? String(Math.round(n * 1e6) / 1e6) : Number(n).toFixed(dp);
-  return s.replace(".", ",");
+  // comma decimal AND a real minus sign (U+2212) — the house rule everywhere a
+  // number is shown (her phone, 2026-08-23: "g(x) = -1" / "y ≥ -3" hyphens)
+  return s.replace(".", ",").replace(/-/g, "−");
 }
 
 /* round to dp decimal places (half away from zero, the school convention) */

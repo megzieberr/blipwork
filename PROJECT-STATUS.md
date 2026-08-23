@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-23 early (📈 STAGE 2 FUNCTIONS SKETCHES + 31 sibling cards + WHOLE-APP fraction/line-break sweep — sw v58)
+# Project status — updated 2026-08-23 morning (📈 STAGE 2 + whole-app sweep LIVE — sw v59 after her phone round)
 
 ## 📈 2026-08-22 → 23 — STAGE 2: function sketches in Exam Focus, 48 Functions cards, whole-app sweep (Fable foreman day, her "spend more to make the graphs look good")
 
@@ -48,6 +48,13 @@ with every sketch read as a 375-px PNG by the foreman before the next session ra
    - Final sweep: 0 split expressions, 0 real slash fractions, 0 page overflows; the 257
      remaining "breaks" are prose sentences using `=`/`×` as words.
 7. sw v57 → **v58**.
+8. **Her morning phone round → v59** (three finds, all fixed at the root): `f(x) &gt; g(x)`
+   broke at the sign — authored HTML writes `>` as `&gt;` (now an operator) and `f(x)`/`g(x)`
+   sat in their own `<b>` tags (inline tags are now TRANSPARENT to the scanner; pieces are
+   rebuilt with the tags inside, balanced). A number pattern `−5 ; −10 ; −15` is one unit
+   (`;` chains like `=`). fn7's "maximum length of AB" never stated f and g — it does now.
+   Bonus: `fmtComma` emits the real minus everywhere (`g(x) = −1`, `y ≥ −3` were hyphens);
+   `parseNum` accepts both signs.
 
 Spend: ≈ 2,5M agent tokens across 8 sessions + foreman reviews (her ruling: don't stress
 the tokens, make the graphs look good).

@@ -137,7 +137,10 @@ const SKILLS = {
     };
     return {
       type: "calc", concept: "maxLength",
-      prompt: "AB is a vertical line between g (top) and f (bottom). Calculate the <b>maximum length</b> of AB (2 decimals).",
+      // the equations are STATED (her phone, 2026-08-23: "kinda impossible
+      // without the equations of f and g" — a drill round never asks the
+      // learner to find them from the sketch first)
+      prompt: `The sketch shows <b>${eqStr(f, "f(x)")}</b> and <b>${eqStr(g, "g(x)")}</b>. AB is a vertical line between g (top) and f (bottom). Calculate the <b>maximum length</b> of AB (2 decimals).`,
       graph: spec, expected: length, dp: 2,
       hint: "AB = (top graph) − (bottom graph) = g(x) − f(x). That makes a new parabola; its maximum is at x = −b/(2a), then substitute back.",
       answerLabel: `maximum AB = ${fix(length, 2)} units`,

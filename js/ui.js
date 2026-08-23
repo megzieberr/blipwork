@@ -439,7 +439,7 @@ function fmlMatchAtom(str, i, allowLeadingSign) {
 }
 // `→ ⟹ ∴` join a worked chain (2x + 3 = 11 → x = 4) the same way `=` does:
 // one unit, breakable only at the arrow when too wide for the screen
-const FML_REL_OPS = ["≠", "≤", "≥", "≈", "=", "<", ">", "⟹", "→", "∴"];
+const FML_REL_OPS = ["≠", "≤", "≥", "≈", "=", "<", ">", "⟹", "→", "∴", "&gt;", "&lt;", "&ge;", "&le;", "&ne;"];   // authored HTML writes > as &gt; (her phone: "f(x) &gt; g(x)" broke at the sign)
 // a relational sign, or +/−/± — the only places a piece may break, the
 // sign always leading the NEW piece
 function fmlMatchBreakOp(str, i) {
@@ -447,6 +447,7 @@ function fmlMatchBreakOp(str, i) {
   if (str[j] === " ") j++;
   for (const op of FML_REL_OPS) if (str.startsWith(op, j)) return { opStart: j, opEnd: j + op.length };
   if (str[j] === "−" || str[j] === "+" || str[j] === "±") return { opStart: j, opEnd: j + 1 };
+  if (str[j] === ";") return { opStart: j, opEnd: j + 1, seq: true };   // a number pattern "−5 ; −10 ; −15" is one unit; may break only at a ";"
   if (str[j] === "-" && str[i] === " " && str[j + 1] === " ") return { opStart: j, opEnd: j + 1 };   // a spaced ASCII " - "
   return null;
 }
@@ -455,6 +456,7 @@ function fmlMatchGlueThenAtom(str, i) {
   let j = i;
   if (str[j] === " ") j++;
   if (str[j] === "·" || str[j] === "×" || str[j] === "/") { j++; if (str[j] === " ") j++; return fmlMatchAtom(str, j, false); }
+  for (const ent of ["&times;", "&middot;"]) if (str.startsWith(ent, j)) { j += ent.length; if (str[j] === " ") j++; return fmlMatchAtom(str, j, false); }
   if (j === i) return fmlMatchAtom(str, j, false);                       // touching: 2x, 4√3
   // ONE space = juxtaposition, but only for things that are unmistakably
   // maths on the right: a sin/cos/tan atom, or — after a number — a short
@@ -484,7 +486,7 @@ function fmlTryExpression(str, i) {
       // after a RELATIONAL sign the right-hand side may open with its own
       // unary minus — `cos(90° + x) = −sin x` is ONE expression, not two
       // (her phone: it broke straight after the bracket)
-      const relational = !"+−±-".includes(str[brk.opStart]);
+      const relational = !"+−±-".includes(str[brk.opStart]);   // (a ";" counts as relational: the next term may carry its own sign)
       const opEnd = fmlMatchAtom(str, k, relational);
       if (opEnd != null) { pieces.push({ start: brk.opStart, end: opEnd }); cur = opEnd; continue; }
     }
@@ -493,24 +495,80 @@ function fmlTryExpression(str, i) {
   return { end: cur, pieces };
 }
 // wrap every expression found in one parked (atom-placeholdered) text run
-function fmlWrapExpressionsInText(text) {
-  let out = "", i = 0;
+// `slice(a, b)` renders a range of `text` — by default the text itself; the
+// inline-tag path below passes a slicer that puts the <b>/<i> tags back in
+// and keeps every emitted chunk balanced.
+function fmlWrapExpressionsInText(text, slice = (a, b) => text.slice(a, b)) {
+  let out = "", i = 0, plain = i;
+  const flush = (to) => { if (to > plain) out += slice(plain, to); plain = to; };
   while (i < text.length) {
     const ex = fmlTryExpression(text, i);
     if (ex) {
+      flush(i);
       let inner = "";
       ex.pieces.forEach((p, idx) => {
-        if (idx > 0) inner += text.slice(ex.pieces[idx - 1].end, p.start);   // exact original separator, left unwrapped (a normal breakable space)
-        inner += `<span class="nowrap">${text.slice(p.start, p.end)}</span>`;
+        if (idx > 0) inner += slice(ex.pieces[idx - 1].end, p.start);   // exact original separator, left unwrapped (a normal breakable space)
+        inner += `<span class="nowrap">${slice(p.start, p.end)}</span>`;
       });
       out += `<span class="fml">${inner}</span>`;
-      i = ex.end;
+      i = ex.end; plain = i;
     } else {
-      out += text[i];
       i++;
     }
   }
+  flush(text.length);
   return out;
+}
+// INLINE formatting tags (<b>, <i>, <em>, <strong>, <u>, <mark>, plain
+// <span>) are TRANSPARENT to the expression scanner (her phone, 2026-08-23:
+// "f(x) > g(x)" broke after the ">" because f(x) and g(x) were each inside
+// their own <b>…</b> — three text runs, three separate units). The tags are
+// parked as zero-width markers, the scanner reads straight through them, and
+// the slicer rebuilds every emitted chunk with the tags put back — opening
+// again any tag that was already open at the chunk's start and closing any
+// still open at its end, so each .nowrap piece is self-contained, valid HTML.
+const FML_TAGPH = "";
+const FML_INLINE_TAG_RE = /^<\/?(?:b|i|em|strong|u|mark|small|span)(?=[\s>\/])/i;
+function fmlIsInlineTag(tagStr) { return FML_INLINE_TAG_RE.test(tagStr) && !isProtectedOpenTag(tagStr); }
+function fmlWrapWithInlineTags(parked, tags) {
+  // parked: text with FML_PH (atoms) and FML_TAGPH (inline tags) markers
+  const stripped = []; const map = [];          // stripped char index → parked index
+  for (let k = 0; k < parked.length; k++) { if (parked[k] !== FML_TAGPH) { map.push(k); stripped.push(parked[k]); } }
+  map.push(parked.length);
+  const text = stripped.join("");
+  // which tags are open at each parked index (by tag NAME, in order)
+  const tagName = t => (/^<\/?([a-zA-Z]+)/.exec(t) || [])[1].toLowerCase();
+  const openAt = new Map();                     // parked index of a tag marker → stack snapshot BEFORE it
+  const stack = []; let ti = 0;
+  for (let k = 0; k < parked.length; k++) {
+    if (parked[k] !== FML_TAGPH) continue;
+    openAt.set(k, stack.slice());
+    const t = tags[ti++];
+    if (t.startsWith("</")) { const n = tagName(t); const j = stack.map(x => tagName(x)).lastIndexOf(n); if (j >= 0) stack.splice(j, 1); }
+    else stack.push(t);
+  }
+  const stackAtParked = (k) => {                // tags open just before parked index k
+    let st = [];
+    for (const [pos, snap] of openAt) if (pos < k) st = snap; else break;
+    // apply the tag at the last marker before k
+    let last = -1; for (const pos of openAt.keys()) if (pos < k) last = pos;
+    if (last >= 0) { const t = tags[[...openAt.keys()].indexOf(last)]; st = st.slice(); if (t.startsWith("</")) { const n = tagName(t); const j = st.map(x => tagName(x)).lastIndexOf(n); if (j >= 0) st.splice(j, 1); } else st.push(t); }
+    return st;
+  };
+  const slice = (a, b) => {
+    const pa = map[a], pb = map[b];
+    let ti2 = 0; for (let k = 0; k < pa; k++) if (parked[k] === FML_TAGPH) ti2++;
+    let body = "";
+    for (let k = pa; k < pb; k++) body += parked[k] === FML_TAGPH ? tags[ti2++] : parked[k];
+    const openBefore = stackAtParked(pa), openAfter = stackAtParked(pb);
+    return openBefore.join("") + body + openAfter.slice().reverse().map(t => `</${tagName(t)}>`).join("");
+  };
+  // empty stubs left where a tag opened just before a piece ("<b></b>") or
+  // a separator space sat inside a tag ("<b> </b>") — drop the tags, keep
+  // the whitespace
+  return fmlWrapExpressionsInText(text, slice)
+    .replace(/<(b|i|em|strong|u|mark|small)>(\s*)<\/\1>/g, "$2")
+    .replace(/<span(?: [^>]*)?>(\s*)<\/span>/g, "$1");
 }
 // stage 3 alone — every remaining maths expression becomes one .fml unit.
 // Exported separately (besides being run inside formulaHtml below) purely
@@ -524,11 +582,12 @@ export function formulaHtmlExpr(s) {
   const segs = formulaSegments(str);
   let i = 0;
   while (i < segs.length) {
-    if (segs[i].type === "tag") { html += segs[i].text; i++; continue; }
-    const atoms = [];
+    if (segs[i].type === "tag" && !fmlIsInlineTag(segs[i].text)) { html += segs[i].text; i++; continue; }
+    const atoms = [], tags = [];
     let parked = "";
-    while (i < segs.length && segs[i].type !== "tag") {
+    while (i < segs.length && (segs[i].type !== "tag" || fmlIsInlineTag(segs[i].text))) {
       if (segs[i].type === "atom") { parked += FML_PH; atoms.push(segs[i].text); }
+      else if (segs[i].type === "tag") { parked += FML_TAGPH; tags.push(segs[i].text); }   // inline <b>/<i>: transparent
       else parked += segs[i].text;
       i++;
     }
@@ -537,7 +596,7 @@ export function formulaHtmlExpr(s) {
     // no second wrap; only a group that MIXES real text with atom(s) (an
     // operator glued to a stacked fraction, say) goes through the scanner
     const isPureAtoms = atoms.length > 0 && parked === FML_PH.repeat(atoms.length);
-    const wrapped = isPureAtoms ? parked : fmlWrapExpressionsInText(parked);
+    const wrapped = isPureAtoms ? parked : (tags.length ? fmlWrapWithInlineTags(parked, tags) : fmlWrapExpressionsInText(parked));
     let ai = 0;
     html += wrapped.replace(new RegExp(FML_PH, "g"), () => atoms[ai++]);
   }
