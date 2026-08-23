@@ -65,6 +65,12 @@ the tokens, make the graphs look good).
 - 🌐 1 min [whenever]: remove Janko from the roster before the kids get access.
 
 ### Next up
+- **Calculator emulator, round 2 (her ask 2026-08-23):** re-map her real calculator (the
+  Casio she teaches on — photograph/keymap it again first) and add to the in-app calculator
+  (`js/calculator.js`): x², √, sin/cos/tan (+ their inverses and the DEG mode), and brackets,
+  with the same key order and display behaviour as the real thing. Reason: many rounds need
+  calculator work and learners should practise the exact key sequence. Plan first, her nod,
+  then build; the existing LCD/`MEAN_GLYPH` conventions stay.
 - Siblings for eqn → exp → gtrig the same way (6 per tile, reveal rule, PNG review);
   Identities + Super Special Sums first cards.
 - Small sketch nits to re-look at with her: `ineq.q2`'s three crowded x-axis labels;
