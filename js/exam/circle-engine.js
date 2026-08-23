@@ -563,6 +563,50 @@ export const HL = "#f6c945";
 
 const pairKey = (a, b) => [a, b].slice().sort().join("|");
 
+/* --------------------------------------------------------------
+   CONSTRUCTION INK (Blipwork-only, additive, opt-in, 2026-08-23 —
+   the Euclidean bookwork-proofs tile, session G1).
+
+     construction: { pts?: { C: 90 }, chords?: [["T","C"], ["C","A","t2"]] }
+
+   A bookwork proof is marked on its CONSTRUCTION line: "join OA and
+   OB", "draw the diameter TC and join AC". The printed figure never
+   shows it — drawing it is the candidate's own first mark — so the
+   QUESTION side must not have it and the REVEAL side must, which is
+   an asymmetry the highlight layer could not express before.
+
+   WHY NOT JUST USE `chords`. Because those two things are different
+   in kind, and collapsing them would quietly weaken the check that
+   matters. `chords` is a MARKER-PEN STROKE: it must land on ink the
+   figure already draws, which is what segmentIsDrawn enforces, so a
+   highlight can never claim a line the learner cannot see. A
+   CONSTRUCTION is the opposite — new ink that deliberately is not
+   there yet. Keeping it in its own field lets segmentIsDrawn stay
+   exactly as strict as it was for every existing caller.
+
+   Construction geometry is folded into the spec BEFORE anything else
+   looks at it, so everything downstream just works: an angle may sit
+   at a construction point, a `chords` highlight may light a
+   construction segment, and verifyDiagram re-measures the whole thing
+   from real coordinates like any other figure. Construction chords
+   are drawn in the ordinary ink style (that is what a pencil does),
+   with the engine's usual equal-tick / parallel-arrow marks
+   available for the "OA = OB (radii)" line of a congruency proof.
+   -------------------------------------------------------------- */
+function applyConstruction(d, hl) {
+  const con = hl && hl.construction;
+  if (!con || typeof con !== "object" || Array.isArray(con)) return d;
+  const out = { ...d };
+  if (con.pts) out.pts = { ...(d.pts || {}), ...con.pts };
+  if (Array.isArray(con.chords) && con.chords.length) {
+    out.chords = (d.chords || []).concat(con.chords.map(c => {
+      const [a, b, mk] = Array.isArray(c) ? c : [c.a, c.b, c.mk];
+      return mk ? { a, b, mk } : [a, b];
+    }));
+  }
+  return out;
+}
+
 /* Every segment this spec actually DRAWS, as {p1,p2} coordinate pairs:
    the chords, plus the tangent segments an `ext` point creates. Full
    `tang` lines are excluded — they have no named endpoints, so there is
@@ -593,6 +637,9 @@ function segmentIsDrawn(g, a, b) {
    `d` is never mutated. */
 export function highlightedSpec(d, hl) {
   hl = hl || {};
+  /* the construction goes in FIRST, so everything below treats its
+     points and segments as ordinary parts of the figure */
+  d = applyConstruction(d, hl);
   const out = { ...d };
 
   const markFor = new Map();
@@ -633,10 +680,39 @@ export function highlightedSpec(d, hl) {
 export function diagramRefIssues(d, hl, label) {
   const issues = [];
   hl = hl || {};
+  const raw = d;
+  /* checked against the figure AS THE REVEAL DRAWS IT — construction
+     ink included, so an angle at a construction point or a highlight
+     along a construction segment resolves like any other. */
+  d = applyConstruction(d, hl);
   let g;
   try { g = computeGeometry(d); }
   catch (e) { return [`${label}: spec does not resolve (${e && e.message})`]; }
   const names = new Set(Object.keys(g.pts));
+
+  /* the construction's own shape */
+  if (hl.construction !== undefined) {
+    const con = hl.construction;
+    if (!con || typeof con !== "object" || Array.isArray(con)) {
+      issues.push(`${label}.construction: must be a { pts?, chords? } object`);
+    } else {
+      Object.entries(con.pts || {}).forEach(([name, v]) => {
+        const at = `${label}.construction.pts["${name}"]`;
+        const okPt = typeof v === "number" || (v && typeof v === "object" && typeof v.x === "number" && typeof v.y === "number");
+        if (!okPt) issues.push(`${at}: must be a degree on the circle, or an {x,y} free point`);
+        if ((raw.pts || {})[name] !== undefined) issues.push(`${at}: "${name}" is already a point in this spec — a construction ADDS geometry, it never redefines it`);
+        if (name === "O") issues.push(`${at}: the centre is always addressable and can never be constructed`);
+      });
+      (con.chords || []).forEach((c, i) => {
+        const at = `${label}.construction.chords[${i}]`;
+        if (!Array.isArray(c) || c.length < 2 || c.length > 3) { issues.push(`${at}: must be [a,b] or [a,b,mark]`); return; }
+        const [a, b, mk] = c;
+        if (mk !== undefined && !/^[tp][1-3]$/.test(String(mk))) issues.push(`${at}: chord mark "${mk}" must be t1/t2/t3 (equal ticks) or p1/p2 (parallel arrows)`);
+        if (!names.has(a)) issues.push(`${at}: "${a}" is not a point in this spec or its construction`);
+        if (!names.has(b)) issues.push(`${at}: "${b}" is not a point in this spec or its construction`);
+      });
+    }
+  }
 
   (hl.angles || []).forEach((a, i) => {
     const at = `${label}.angles[${i}]`;

@@ -92,10 +92,26 @@
                 spec belongs to:
 
                   CIRCLE  (js/exam/circle-engine.js's extension block):
-                    { angles?:[{at,legs,v,t?}], chords?:[[a,b,mark?]], bare? }
+                    { angles?:[{at,legs,v,t?}], chords?:[[a,b,mark?]],
+                      construction?:{ pts?:{C:90}, chords?:[[a,b,mark?]] },
+                      bare? }
                   · every name a highlight references must exist in its
                     spec, and every chord ref must be a segment the spec
                     actually draws (diagramRefIssues);
+                  · `construction` (2026-08-23, the Euclidean
+                    bookwork-proofs tile) is the one thing that ADDS ink
+                    rather than marking ink that is already there: the
+                    points and lines a bookwork proof's construction
+                    creates ("join OA and OB", "draw the diameter TC").
+                    A printed bookwork figure never shows the
+                    construction — drawing it is the candidate's own
+                    first mark — so it belongs on the REVEAL side only,
+                    which is why it cannot be a `chords` highlight (that
+                    field must land on ink the figure already draws, and
+                    stays exactly that strict). Construction geometry is
+                    folded in before anything else looks at the spec, so
+                    an angle may sit at a construction point and
+                    verifyDiagram re-measures the whole figure as drawn;
                   · every highlighted angle declares its true value v, and
                     the highlighted spec is re-measured by verifyDiagram —
                     so a wedge on the wrong side of a leg is caught.
