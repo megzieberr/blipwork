@@ -22,18 +22,35 @@
      curves:[ { fn, a, b, p, q, tone?:"a"|"b", dash?, label?, labelAt? } ],
      showAsym?:true,                       // auto dashed verticals for tan curves
      midline?:{ y },                       // dashed horizontal y = q
+     shades?:[ { x0, x1 } ],               // translucent band over an x-interval
+     vlines?:[ { x, label? } ],            // dashed vertical boundary + caption
+     hlines?:[ { y, label? } ],            // dashed horizontal boundary + caption
      points?:[ { x, y, label?, on?, open?, dashTo?:"x"|"y"|"both", place? } ],
      hmeasure?:{ x0, x1, y, label? },      // horizontal span arrow (a period)
      vmeasure?:{ x, y0, y1, label? },      // vertical span arrow (an amplitude)
      grid?:true, w?, h?, accent?,
      tap?:{ targets, correctId }
    }
+
+   SHADES / VLINES / HLINES were added 2026-08-23 (EXAM-BUILD-DAY.md,
+   session 0 plumbing) for Exam Focus's Trig Graphs cards — an
+   inequality answer wants a shaded strip, and a revealed boundary or an
+   axis of symmetry wants a captioned dashed line, exactly as
+   js/engine/function-graph.js already draws them. STRICTLY ADDITIVE: a
+   spec that carries none of the three renders byte-for-byte what it
+   rendered before, so every live tg1–tg7 round is untouched.
    ============================================================ */
 import { makeTrig, periodOf, amplitudeOf, tanAsymptotesIn } from "../tgraphlib.js";
 
 const N = (v) => Math.round(v * 100) / 100;
 const TONES = { a: "var(--tg-a)", b: "var(--tg-b)" };
 const deg = (n) => `${String(n).replace(/-/g, "−")}°`;
+/* Every caption this engine prints goes through here first: a hyphen
+   typed in an author's label becomes the REAL minus (−, U+2212), the
+   repo's standing rule for anything a learner reads (CLAUDE.md gotcha
+   #5). Same normalisation the y-tick labels above already do — done in
+   one place so a boundary line captioned "x = -45°" can never ship. */
+const minus = (s) => String(s).replace(/-/g, "−");
 
 function svgWrap(W, H, accent, inner, cls = "") {
   const style = accent ? ` style="--accent:${accent}"` : "";
@@ -118,6 +135,19 @@ export function renderTrig(spec) {
     out += `<rect class="tg-band" x="${N(xa)}" y="${N(Y(ymax))}" width="${N(xb - xa)}" height="${N(Y(ymin) - Y(ymax))}" style="fill:${b.fill || "var(--accent)"}"/>`;
   });
 
+  // ---- shaded x-interval bands (an inequality answer) ----
+  // UNDER the curves, and under the grid, so the picture reads as "this
+  // stretch of the x-axis", never as something drawn on top of the
+  // graph. Clipped to the window, and placed by the very same X()/Y()
+  // transform every curve uses, so a band can never claim a stretch it
+  // does not cover. (Added 2026-08-23 — mirrors function-graph's
+  // .fg-shade exactly, her cut-line-and-paint method made visible.)
+  (spec.shades || []).forEach((sh) => {
+    const x0 = Math.max(Math.min(sh.x0, sh.x1), xmin), x1 = Math.min(Math.max(sh.x0, sh.x1), xmax);
+    if (!(x1 > x0)) return;
+    out += `<rect class="tg-shade" x="${N(X(x0))}" y="${N(Y(ymax))}" width="${N(X(x1) - X(x0))}" height="${N(Y(ymin) - Y(ymax))}"/>`;
+  });
+
   // ---- light grid ----
   if (spec.grid) {
     let gl = "";
@@ -180,6 +210,25 @@ export function renderTrig(spec) {
       if (Number.isFinite(ly) && ly >= ymin && ly <= ymax)
         out += `<text class="tg-flab" x="${N(X(lx) + 10)}" y="${N(Y(ly) - 7)}" text-anchor="middle" dominant-baseline="middle" style="fill:${stroke}">${cv.label}</text>`;
     }
+  });
+
+  // ---- dashed boundary lines + their captions (2026-08-23) ----
+  // Drawn AFTER the curves, like function-graph's own vlines, so a
+  // boundary the reveal is pointing at is not hidden under a graph.
+  // The caption is the muted style function-graph uses (.tg-alab ==
+  // .fg-alab): a vertical line captions near the TOP, just right of the
+  // line; a horizontal one captions near the RIGHT end, just above it.
+  // Deliberately fixed slots — this engine has no label placer and does
+  // not need one: a trig question carries one or two of these, not eight.
+  (spec.vlines || []).forEach((v) => {
+    if (!(v.x >= xmin && v.x <= xmax)) return;
+    out += `<line class="tg-vline" x1="${N(X(v.x))}" y1="${N(Y(ymin))}" x2="${N(X(v.x))}" y2="${N(Y(ymax))}"/>`;
+    if (v.label != null) out += text(X(v.x) + 4, Y(ymax) + 10, minus(v.label), "tg-alab", "start");
+  });
+  (spec.hlines || []).forEach((h) => {
+    if (!(h.y >= ymin && h.y <= ymax)) return;
+    out += `<line class="tg-hline" x1="${N(X(xmin))}" y1="${N(Y(h.y))}" x2="${N(X(xmax))}" y2="${N(Y(h.y))}"/>`;
+    if (h.label != null) out += text(X(xmax) - 4, Y(h.y) - 9, minus(h.label), "tg-alab", "end");
   });
 
   // ---- a horizontal span arrow (one period) ----
@@ -269,6 +318,25 @@ export function verifyTrig(spec, tol = { onCurve: 0.03 }) {
       r.push({ label: `point ${p.label || "(" + p.x + ";" + p.y + ")"} lies on curve ${i}`, ok });
     });
     r.push({ label: `point ${p.label || ""} sits inside the frame`, ok: p.x >= xmin - 1e-9 && p.x <= xmax + 1e-9 && p.y >= ymin - 1e-9 && p.y <= ymax + 1e-9 });
+  });
+
+  // 5b) every shaded band and every boundary line lies INSIDE the window
+  //     (2026-08-23). A band clipped by the frame, or a dashed "x = 150°"
+  //     drawn off the right edge, is a figure quietly telling a lie about
+  //     where the answer is — the same class of fault the point-in-frame
+  //     check above catches for points.
+  (spec.shades || []).forEach((sh, i) => {
+    r.push({ label: `shade ${i} [${sh.x0};${sh.x1}] has a real width (x1 > x0)`, ok: sh.x1 > sh.x0 });
+    r.push({ label: `shade ${i} [${sh.x0};${sh.x1}] lies inside the window [${xmin};${xmax}]`,
+             ok: sh.x0 >= xmin - 1e-9 && sh.x1 <= xmax + 1e-9 });
+  });
+  (spec.vlines || []).forEach((v, i) => {
+    r.push({ label: `vline ${i} (x = ${v.x}${v.label ? `, "${v.label}"` : ""}) lies inside the window [${xmin};${xmax}]`,
+             ok: v.x >= xmin - 1e-9 && v.x <= xmax + 1e-9 });
+  });
+  (spec.hlines || []).forEach((h, i) => {
+    r.push({ label: `hline ${i} (y = ${h.y}${h.label ? `, "${h.label}"` : ""}) lies inside the window [${ymin};${ymax}]`,
+             ok: h.y >= ymin - 1e-9 && h.y <= ymax + 1e-9 });
   });
 
   // 6) a horizontal "period" measure really spans one (or n) whole periods of curve 0

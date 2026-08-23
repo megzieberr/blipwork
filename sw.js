@@ -13,7 +13,13 @@ const SHELL = ["./", "./index.html", "./admin.html", "./css/styles.css", "./js/a
   "./icon-192.png", "./icon-512.png",
   // Phase 3 stylesheets (the JS is reached through app.js's import graph and
   // is network-first anyway, so only the CSS needs listing here).
-  "./css/assignment.css", "./css/treasure.css", "./css/push.css"];
+  "./css/assignment.css", "./css/treasure.css", "./css/push.css",
+  // css/exam.css was missing from this list (spotted 2026-08-23) — the
+  // Exam Focus tab has had its own stylesheet since 2026-08-21 and every
+  // other feature stylesheet is here. It is fetched network-first like
+  // all app code anyway, so the gap only ever showed OFFLINE, where the
+  // exam screens came up unstyled.
+  "./css/exam.css"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {}));

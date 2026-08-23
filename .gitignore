@@ -15,3 +15,8 @@ theory references/
 # Her handwritten notes scans live here for digest sessions - NEVER commit (public repo)
 *.pdf
 tools/_out/
+# shoot.py's PNG output (its own header names these two folders; they were
+# never git-ignored, so a `git add -A` after a crop run would have committed
+# a few hundred screenshots into a public repo). Added 2026-08-23.
+tools/diags/
+tools/shots/

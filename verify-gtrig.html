@@ -1380,7 +1380,15 @@ const m17 = mark();
   const tq = examQuestionsForChapter("trig");
   tick(tq.length === 1 && tq[0].topic === "cosine-rule-area",
     `the 2D trig chapter keeps ONLY its one paused card (got ${tq.map(x => x.topic).join(",")})`);
-  const wantTopics = ["co-functions", "special-sums", "reduction", "general-solution", "identities", "super-special-sums"];
+  /* WIDENED 2026-08-23 (EXAM-BUILD-DAY.md's tile map, session 0
+     plumbing): gtrig went from six tiles to nine — special-angles and
+     identities-undefined are new, and every chapter now ends with the
+     Level 4 tile. Four of the nine hold cards; the rest render
+     "coming soon" until sessions F1/F2 fill them. Typed out here in her
+     order, same posture as verify-exam.html Part 2. */
+  const wantTopics = ["co-functions", "special-angles", "reduction", "special-sums",
+                      "super-special-sums", "identities", "identities-undefined",
+                      "general-solution", "level-4"];
   tick(same(examTopicsForChapter("gtrig").map(t => t.id), wantTopics),
     `gtrig's exam skills are ${wantTopics.join(" + ")}`);
   const WANT = { "trig.rr.t2q1": "gt5", "trig.gs.t2q2": "gt11" };

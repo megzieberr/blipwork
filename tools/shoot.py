@@ -1,9 +1,20 @@
-"""Shoot every card of a Functions skill at 375 px.
+"""Shoot every card of ONE Exam Focus skill tile at 375 px.
 
-usage:  python shoot.py <skillId> [cardIdSubstring]
+usage:  python shoot.py <chapterId> <skillId> [cardIdSubstring]
 
-Writes full-page PNGs to  scratchpad/shots/   (<cardId>-q.png, -rK.png)
-and per-state SKETCH CROPS to scratchpad/diags/
+    python shoot.py func find-equation
+    python shoot.py tgraph sketch
+    python shoot.py euclid level-4 t2q5
+
+The chapter is now an ARGUMENT (2026-08-23, EXAM-BUILD-DAY.md session 0
+— it used to be hard-coded to "func"). It is resolved through
+js/config.js's examChapterById(), NOT chapterById(), so the EXAM-ONLY
+chapters work too: euclid and algx own no drill quests and are therefore
+absent from CHAPTERS entirely. An unknown chapter id exits cleanly with a
+message rather than throwing inside the browser.
+
+Writes full-page PNGs to  tools/shots/   (<cardId>-q.png, -rK.png)
+and per-state SKETCH CROPS to tools/diags/
     <cardId>-q-N.png    question side, Nth .exam-diagram on screen
     <cardId>-rK-N.png   after the Kth "Done" tap
 Clears the service worker + caches and logs itself in against the
@@ -18,19 +29,28 @@ SHOTS = os.path.join(HERE, "shots")
 os.makedirs(DIAGS, exist_ok=True)
 os.makedirs(SHOTS, exist_ok=True)
 
-skill = sys.argv[1]
-only = sys.argv[2] if len(sys.argv) > 2 else None
+if len(sys.argv) < 3:
+    print(__doc__)
+    sys.exit(2)
 
-JS_LIST = """async (skill) => {
+chapter = sys.argv[1]
+skill = sys.argv[2]
+only = sys.argv[3] if len(sys.argv) > 3 else None
+
+# examChapterById = CHAPTERS + EXAM_ONLY_CHAPTERS (euclid, algx), which is
+# the whole reason this is not chapterById().
+JS_LIST = """async ([chapter, skill]) => {
+  const {examChapterById} = await import('/js/config.js');
   const {examQuestionsForTopic} = await import('/js/exam/index.js');
-  return examQuestionsForTopic('func', skill).map(c => c.id);
+  if (!examChapterById(chapter)) return {error: 'no such exam chapter: ' + chapter};
+  return {ids: examQuestionsForTopic(chapter, skill).map(c => c.id)};
 }"""
 
-JS_OPEN = """async ([skill, id]) => {
-  const {CHAPTERS} = await import('/js/config.js');
+JS_OPEN = """async ([chapter, skill, id]) => {
+  const {examChapterById} = await import('/js/config.js');
   const {examQuestionsForTopic} = await import('/js/exam/index.js');
-  const ch = CHAPTERS.find(c => c.id === 'func');
-  const q = examQuestionsForTopic('func', skill).find(c => c.id === id);
+  const ch = examChapterById(chapter);
+  const q = examQuestionsForTopic(chapter, skill).find(c => c.id === id);
   window.__APP__.go('examPlay', {chapter: ch, skillId: skill, question: q, accent: ch.signature});
   await new Promise(r => setTimeout(r, 700));
   return q.parts.length;
@@ -65,13 +85,18 @@ async def main():
         await page.goto("http://localhost:5191/?local=1", wait_until="networkidle")
         await page.wait_for_timeout(1200)
 
-        ids = await page.evaluate(JS_LIST, skill)
+        res = await page.evaluate(JS_LIST, [chapter, skill])
+        if res.get("error"):
+            print(res["error"])
+            await b.close()
+            return
+        ids = res["ids"]
         if only:
             ids = [i for i in ids if only in i]
-        print(f"skill {skill}: {len(ids)} card(s)")
+        print(f"{chapter} / {skill}: {len(ids)} card(s)")
 
         for card in ids:
-            n = await page.evaluate(JS_OPEN, [skill, card])
+            n = await page.evaluate(JS_OPEN, [chapter, skill, card])
             sw = await page.evaluate("()=>document.documentElement.scrollWidth")
             got = await crops(page, card, "q")
             await page.screenshot(path=os.path.join(SHOTS, f"{card}-q.png"), full_page=True)

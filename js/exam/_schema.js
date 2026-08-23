@@ -47,20 +47,32 @@
                 js/exam-play.js renders the reteach link ONLY when that
                 quest is currently open (state.openQuests) — never a
                 bypass, never a dead-end.
-     diagram    OPTIONAL. A to-scale figure, drawn by ONE of two engines
-                depending on `spec.type` — js/exam/circle-engine.js
-                (Circle Quest's engine, ported 2026-08-22) for every
-                circle-geometry spec, or js/engine/function-graph.js
-                (the Functions chapter's own engine) when
-                `spec.type === "function"` — added SESSION 1 of the
-                function-diagram build, 2026-08-22, EXAM-FOCUS-PLAN.md
-                build order step 3. Every spec here is run through its
-                engine's own verify — circle specs through
-                verifyDiagram(), function specs through verifyFunction()
-                (js/exam/function-diagram.js is the small glue module) —
-                so a figure that does not measure what it claims fails
-                validation instead of shipping. Questions without a
-                figure are unaffected — the field is simply absent.
+     diagram    OPTIONAL. A to-scale figure, drawn by ONE of FOUR engines
+                depending on `spec.type`:
+
+                  (no type)   js/exam/circle-engine.js — Circle Quest's
+                              engine, ported 2026-08-22; every
+                              circle-geometry spec.
+                  "function"  js/engine/function-graph.js — the Functions
+                              chapter's own engine (2026-08-22).
+                  "trigg"     js/engine/trig-graph.js — the Trig Graphs
+                              chapter's engine (added 2026-08-23,
+                              EXAM-BUILD-DAY.md, when tgraph joined the
+                              tab).
+                  "quadtri"   js/engine/quadrant-triangle.js — General
+                              Trig's special-sums sketch (same day).
+
+                Every spec here is run through ITS OWN engine's verify —
+                verifyDiagram / verifyFunction / verifyTrig /
+                verifyQuadTri — so a figure that does not measure what it
+                claims fails validation instead of shipping. Each of the
+                three non-circle engines has a small exam-only glue
+                module beside this file (function-diagram.js,
+                trig-diagram.js, quadtri-diagram.js) holding its
+                highlight-set applier and structural checker; the engines
+                themselves are shared with live quest rounds and stay
+                exam-agnostic. Questions without a figure are unaffected
+                — the field is simply absent.
 
                   diagram: {
                     spec: <engine spec>,          // default figure
@@ -119,6 +131,42 @@
                     that curve; a reference point (e.g. a hyperbola's
                     asymptote-crossing centre, which is never ON the
                     curve) simply omits `on`.
+
+                  TRIG GRAPH  (js/exam/trig-diagram.js — added 2026-08-23):
+                    { curves?:[{fn,a,b,p,q,tone?,dash?,label?,labelAt?}],
+                      points?:[{x,y,label?,on?,open?,dashTo?,place?}],
+                      shades?:[{x0,x1}], vlines?:[{x,label?}],
+                      hlines?:[{y,label?}], midline?:{y},
+                      hmeasure?:{x0,x1,y,label?},
+                      vmeasure?:{x,y0,y1,label?}, bare? }
+                  · curves/points/shades/vlines/hlines are APPENDED to
+                    the base spec's own (cloned); midline / hmeasure /
+                    vmeasure REPLACE, because the engine only ever draws
+                    ONE of each. Appended curves land AFTER the base
+                    spec's, so a point's `on: <curve index>` counts
+                    (base curve count + position in the highlight array)
+                    — the same index rule the function engine uses;
+                  · `bare` strips the base spec's own `points`, for a
+                    part whose job IS finding a maximum / an intersection
+                    / an intercept;
+                  · x is in DEGREES throughout. verifyTrig proves every
+                    shade, vline and hline falls inside the window and
+                    that a shade has x1 > x0.
+
+                  QUADRANT TRIANGLE  (js/exam/quadtri-diagram.js — added
+                  2026-08-23; the ONE highlight set that overrides rather
+                  than appends, because the spec has no arrays at all):
+                    { labels?:{x?,y?,r?}, letters?:{x?,y?,r?},
+                      theta?, thetaLabel?, refAngle?, refLabel?, bare? }
+                  · `labels` / `letters` REPLACE wholesale, so an earlier
+                    part's number can never linger on a later part's
+                    picture;
+                  · `bare` strips the numeric `labels` so only the
+                    letters show — the bare-figure rule for a part whose
+                    job is "find r";
+                  · verifyQuadTri proves every numeric label equals the
+                    length actually drawn, so a reveal cannot write 5 on
+                    a hypotenuse the picture draws as 5,1.
 
                 THE REVEAL DRAWS WHAT IT FOUND (SESSION 2a-FIX,
                 2026-08-22 — her instruction that day: "spend more to
@@ -213,6 +261,10 @@
 import { verifyDiagram, highlightedSpec, diagramRefIssues } from "./circle-engine.js";
 import { verifyFunction } from "../engine/function-graph.js";
 import { applyFunctionHighlights, functionRefIssues } from "./function-diagram.js";
+import { verifyTrig } from "../engine/trig-graph.js";
+import { applyTrigHighlights, trigRefIssues } from "./trig-diagram.js";
+import { verifyQuadTri } from "../engine/quadrant-triangle.js";
+import { applyQuadtriHighlights, quadtriRefIssues } from "./quadtri-diagram.js";
 
 const ALLOWED_TICKS = new Set(["a", "ca", "s/f"]);
 const ALLOWED_MEMO_TYPES = new Set(["step", "answer", "trap"]);
@@ -328,21 +380,62 @@ function checkFunctionMeasures(spec, label, issues) {
   results.forEach(r => { if (!r.ok) issues.push(`${label}: ${r.label}`); });
 }
 
+/* TRIG GRAPH spec measure check (verifyTrig — one result per structural
+   fact: window validity, one affine map, curve visibility, amplitude /
+   midline / asymptotes honest, points-on-curve, shades and boundary
+   lines inside the window, the period and amplitude arrows). Added
+   2026-08-23 with the tgraph leg of the exam build. */
+function checkTrigMeasures(spec, label, issues) {
+  let results;
+  try { results = verifyTrig(spec); }
+  catch (e) { issues.push(`${label}: spec failed to render (${e && e.message})`); return; }
+  results.forEach(r => { if (!r.ok) issues.push(`${label}: ${r.label}`); });
+}
+
+/* QUADRANT TRIANGLE spec measure check (verifyQuadTri — legs non-zero,
+   the point drawn in the quadrant it claims, ONE uniform scale, every
+   numeric label equal to the length actually drawn, a real 90° at the
+   foot, the θ arc ending on the hypotenuse, the whole figure in frame).
+   Added 2026-08-23. */
+function checkQuadTriMeasures(spec, label, issues) {
+  let results;
+  try { results = verifyQuadTri(spec); }
+  catch (e) { issues.push(`${label}: spec failed to render (${e && e.message})`); return; }
+  results.forEach(r => { if (!r.ok) issues.push(`${label}: ${r.label}`); });
+}
+
 /* Dispatches on spec.type — every OTHER caller in this file (validateDiagram
    below) goes through this one function, so a spec is always measured by
-   the engine that actually drew it. */
+   the engine that actually drew it. A circle spec carries no `type` at
+   all, which is why it is the fall-through rather than a named branch. */
 function checkSpecMeasures(spec, label, issues) {
-  if (spec && spec.type === "function") checkFunctionMeasures(spec, label, issues);
+  const type = spec && spec.type;
+  if (type === "function") checkFunctionMeasures(spec, label, issues);
+  else if (type === "trigg") checkTrigMeasures(spec, label, issues);
+  else if (type === "quadtri") checkQuadTriMeasures(spec, label, issues);
   else checkCircleMeasures(spec, label, issues);
 }
 
 function validateHighlightSet(spec, hl, label, issues) {
   if (hl === undefined) return;
   if (!hl || typeof hl !== "object" || Array.isArray(hl)) { issues.push(`${label}: must be a highlight-set object`); return; }
-  if (spec && spec.type === "function") {
-    functionRefIssues(spec, hl, label).forEach(i => issues.push(i));
+  /* One branch per engine, all built the same way: the glue module's
+     STRUCTURAL check first (shapes and, for circles, names), then the
+     highlighted variant is built and re-measured by the engine that
+     drew it — so a highlight that moves a line off the window, or puts
+     a wedge on the wrong side of a leg, is caught here rather than on
+     the learner's screen. */
+  const type = spec && spec.type;
+  if (type === "function" || type === "trigg" || type === "quadtri") {
+    const refIssues = type === "function" ? functionRefIssues
+                    : type === "trigg"    ? trigRefIssues
+                    : quadtriRefIssues;
+    const apply = type === "function" ? applyFunctionHighlights
+                : type === "trigg"    ? applyTrigHighlights
+                : applyQuadtriHighlights;
+    refIssues(spec, hl, label).forEach(i => issues.push(i));
     let variant;
-    try { variant = applyFunctionHighlights(spec, hl); }
+    try { variant = apply(spec, hl); }
     catch (e) { issues.push(`${label}: highlights could not be applied (${e && e.message})`); return; }
     checkSpecMeasures(variant, `${label} (as rendered)`, issues);
     return;

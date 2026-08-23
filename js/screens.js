@@ -4,7 +4,7 @@ import { questDef } from "./quests/index.js";
 import { dicePool } from "./quests/dice-pools.js";
 import { openDiceRound } from "./dice-play.js";
 import { examQuestionsForTopic, examFirstCardForSkill } from "./exam/index.js";
-import { skillsForChapter } from "./exam/skills.js";
+import { skillsForChapter, isLevel4Skill } from "./exam/skills.js";
 import { getExamLang, uiStr } from "./exam/lang.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
@@ -75,6 +75,14 @@ function setTheme(chapterSig, accent) {
   if (chapterSig) r.setProperty("--chapter", chapterSig);
   if (accent) r.setProperty("--accent", accent);
 }
+/* EXAM FOCUS · the Level 4 tile's own colour (2026-08-23). Deliberately
+   NOT the chapter's signature: the brave round is amber everywhere in
+   this tab, matching the per-part star badge (.exam-star reads --warn)
+   so a learner meets one consistent "this is the hard one" colour. Same
+   legendary gold the palette already uses, spelled out here because
+   .quest's --qc wants a real colour value, not a token name. */
+const L4_ACCENT = "#fbbf24";
+
 const progressOf = (app, id) => (app.state && app.state.progress && app.state.progress[id]) || { best_score: 0, attempts: 0, passed: false, total_xp: 0 };
 const openSet = app => new Set((app.state && app.state.openQuests) || []);
 
@@ -372,7 +380,18 @@ export function renderExamChapter(app, host, params) {
   head.querySelector(".back").addEventListener("click", () => app.go("hub"));
   host.appendChild(head);
 
-  const skills = skillsForChapter(ch.id);
+  /* THE LEVEL 4 TILE GOES LAST (her ruling 5, 2026-08-23 —
+     EXAM-BUILD-DAY.md): "Levels 1-3 on the normal tiles; every chapter
+     gets a last tile Level 4 ★ … the low achievers must never meet a ★
+     while drilling basics." js/exam/skills.js already lists it last in
+     every chapter, so this sort normally changes nothing — it is here so
+     that a chapter whose list is edited later can never accidentally
+     bury the brave round in the middle of the grid. Stable: everything
+     else keeps her order exactly. */
+  const skills = skillsForChapter(ch.id)
+    .map((sk, i) => ({ sk, i }))
+    .sort((a, b) => (Number(isLevel4Skill(a.sk.id)) - Number(isLevel4Skill(b.sk.id))) || (a.i - b.i))
+    .map(x => x.sk);
   if (!skills.length) {
     host.appendChild(el("div", "card", `<p class="muted center" style="padding:20px 0">${ui.noTopicsYet}</p>`));
     return;
@@ -388,9 +407,17 @@ export function renderExamChapter(app, host, params) {
   skills.forEach(skill => {
     const cards = examQuestionsForTopic(ch.id, skill.id);
     const empty = !cards.length;
-    const card = el("div", "quest exam-skill-card" + (empty ? " locked" : ""));
-    card.style.setProperty("--qc", ch.signature);
-    card.innerHTML = `<h3>${skill.label}</h3><p class="muted small exam-skill-count">${empty ? ui.comingSoon : `${cards.length} card${cards.length === 1 ? "" : "s"}`}</p>`;
+    /* The Level 4 tile is its own thing: full width across the bottom of
+       the grid, amber rather than the chapter's own colour, and a
+       one-line note under the label saying what it is for. It still goes
+       muted / "coming soon" with no cards, exactly like any other tile —
+       nothing about being the brave round makes it tappable early. */
+    const isL4 = isLevel4Skill(skill.id);
+    const card = el("div", "quest exam-skill-card" + (isL4 ? " exam-tile-l4" : "") + (empty ? " locked" : ""));
+    card.style.setProperty("--qc", isL4 ? L4_ACCENT : ch.signature);
+    card.innerHTML = `<h3>${skill.label}</h3>`
+      + (isL4 ? `<p class="muted small exam-tile-l4-note">mixed hard questions — for when the basics sit</p>` : "")
+      + `<p class="muted small exam-skill-count">${empty ? ui.comingSoon : `${cards.length} card${cards.length === 1 ? "" : "s"}`}</p>`;
     if (!empty) {
       card.addEventListener("click", () => {
         if (card.classList.contains("busy")) return;   // double-submit rule

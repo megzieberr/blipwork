@@ -97,6 +97,13 @@ export function skillLabel(chapterId, skillId) {
   return String(skillId || "").replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 }
 
+/* Added 2026-08-23: js/screens.js now imports isLevel4Skill from the
+   real js/exam/skills.js (the Level 4 tile renders last and full-width),
+   and this page remaps that specifier here — so the stub has to export
+   it too or the whole page fails to load. Same one-line rule as the real
+   module; this fixture has no level-4 skill, so it always returns false. */
+export function isLevel4Skill(skillId) { return skillId === "level-4"; }
+
 /* ---- js/exam/index.js additions (Session A) — only the two names
    js/screens.js + js/exam-play.js actually import from that module. ---- */
 export function examQuestionsForTopic(chapterId, topicId) {

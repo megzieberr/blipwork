@@ -481,6 +481,15 @@ h2{font-size:20px} h3{font-size:17px}
 .tg-plab{font-size:10.5px;font-weight:700;fill:var(--g-ink);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
 .tg-flab{font-size:13px;font-weight:700;font-style:italic;fill:var(--accent)}
 .tg-tappable .tg-plab,.tg-tappable .tg-flab{pointer-events:none}
+/* shaded x-interval + captioned dashed boundary lines (2026-08-23, for
+   Exam Focus's Trig Graphs cards). New selectors only — nothing above
+   changes, so every live tg1-tg7 round renders exactly as before. Values
+   copied from the function-graph engine's .fg-shade / .fg-vline /
+   .fg-asym / .fg-alab so the two engines' figures read as one house. */
+.tg-shade{fill:color-mix(in srgb,var(--accent) 15%,transparent)}
+.tg-vline{stroke:var(--g-read);stroke-width:1.2;stroke-dasharray:4 3;opacity:.8}
+.tg-hline{stroke:var(--g-read);stroke-width:1.2;stroke-dasharray:4 3;opacity:.8}
+.tg-alab{font-size:10.5px;font-style:italic;fill:var(--g-muted);paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
 
 /* analytical-geometry engine (.ag-*) — a uniform-scale Cartesian plane so a
    right angle looks square and the angle-of-inclination arc matches the slope */

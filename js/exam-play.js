@@ -59,6 +59,10 @@ import { questDef } from "./quests/index.js";
 import { renderDiagram, highlightedSpec } from "./exam/circle-engine.js";
 import { renderFunction } from "./engine/function-graph.js";
 import { applyFunctionHighlights } from "./exam/function-diagram.js";
+import { renderTrig } from "./engine/trig-graph.js";
+import { applyTrigHighlights } from "./exam/trig-diagram.js";
+import { renderQuadTri } from "./engine/quadrant-triangle.js";
+import { applyQuadtriHighlights } from "./exam/quadtri-diagram.js";
 import { examChapterEligible } from "./screens.js";
 
 /* "I'm lost" — REteach, not a hint (her ruling, session E, 2026-08-21):
@@ -109,14 +113,16 @@ function lostQuestLink(app, question) {
    the ported engine draws dark ink for a light background and because
    pen-and-paper is the point of this whole tab.
 
-   TWO ENGINES (added SESSION 1, 2026-08-22): a spec's own `type` says
-   which one drew it — "function" routes to js/engine/function-graph.js
-   (the Functions chapter's own engine) via js/exam/function-diagram.js's
-   applyFunctionHighlights; anything else (every circle-geometry spec,
-   which carries no `type` at all) keeps going through circle-engine.js
-   exactly as before. Same box, same data-part/data-state attributes,
-   same question/reveal switch either way — only which functions build
-   the highlighted spec and render it differs. */
+   FOUR ENGINES (two added SESSION 1, 2026-08-22; two more on the exam
+   build day, 2026-08-23): a spec's own `type` says which one drew it —
+     "function" → js/engine/function-graph.js  (Functions)
+     "trigg"    → js/engine/trig-graph.js      (Trig Graphs)
+     "quadtri"  → js/engine/quadrant-triangle.js (General Trig)
+     no type    → js/exam/circle-engine.js     (every circle-geometry spec)
+   each through its own exam-only glue module's highlight applier. Same
+   box, same data-part/data-state attributes, same question/reveal switch
+   whichever it is — only which functions build the highlighted spec and
+   render it differ. */
 function partDiagram(question, part, isRevealed, accent) {
   const d = question.diagram;
   if (!d || !d.parts) return null;
@@ -126,8 +132,9 @@ function partDiagram(question, part, isRevealed, accent) {
   if (!spec) return null;
   const hl = (isRevealed && entry.reveal) ? entry.reveal : entry.question;
   const box = el("div", "exam-diagram");
-  box.innerHTML = spec.type === "function"
-    ? renderFunction(applyFunctionHighlights(spec, hl || {}))
+  box.innerHTML = spec.type === "function" ? renderFunction(applyFunctionHighlights(spec, hl || {}))
+    : spec.type === "trigg"   ? renderTrig(applyTrigHighlights(spec, hl || {}))
+    : spec.type === "quadtri" ? renderQuadTri(applyQuadtriHighlights(spec, hl || {}))
     : renderDiagram(highlightedSpec(spec, hl || {}), accent || "#8b5cf6");
   box.setAttribute("data-part", part.id);
   box.setAttribute("data-state", (isRevealed && entry.reveal) ? "reveal" : "question");

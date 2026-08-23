@@ -32,7 +32,7 @@
 <h2>Part 1 · js/exam/_schema.js — validateQuestion()</h2>
 <div id="schemaChecks"></div>
 
-<h2>Part 2 · registry (js/exam/index.js) — eqn/exp/func/trig/gtrig/euclid seeded, every other chapter empty; flag (js/config.js EXAM_CHAPTERS) is ["eqn","exp","func","trig","gtrig","euclid"]</h2>
+<h2>Part 2 · registry (js/exam/index.js) + the build-day flag — EXAM_CHAPTERS is ["algx","eqn","exp","func","tgraph","gtrig","euclid"] (trig OUT, algx and tgraph IN), and every chapter's tile list is EXAM-BUILD-DAY.md's map</h2>
 <pre id="registryChecks">…</pre>
 
 <h2>Part 3 · hub navigation — flag off (simulated), then the real shipped flag state</h2>
@@ -41,7 +41,7 @@
 <h2>Part 4 · the part player (js/exam-play.js) driven directly against the stub, real local-backend round trip</h2>
 <pre id="playerChecks">…</pre>
 
-<h2>Part 5 · SQL ↔ config literal cross-check (supabase/migration-exam-focus.sql vs js/config.js EXAM)</h2>
+<h2>Part 5 · SQL ↔ config literal cross-check (supabase/migration-exam-xp-50.sql vs js/config.js EXAM — 50 XP / 5 gold from 2026-08-23)</h2>
 <pre id="sqlChecks">…</pre>
 
 <h2>Part 6 · skill-wall check — every card's skill belongs to its chapter's allowed list</h2>
@@ -67,11 +67,17 @@
 <h2>Part 10 · English-only removal + the "I'm lost" reteach link (session E, 2026-08-21)</h2>
 <pre id="lostLinkChecks">…</pre>
 
-<h2>Part 11 · the EXAM-FOCUS-ONLY Euclidean chapter — eligible on its flag alone, invisible everywhere else, figures per part, no "I'm lost" (her rulings, 2026-08-22)</h2>
+<h2>Part 11 · the EXAM-FOCUS-ONLY chapters (Euclidean + Algebraic Expressions) — eligible on its flag alone, invisible everywhere else, figures per part, no "I'm lost" (her rulings, 2026-08-22)</h2>
 <pre id="euclidChecks">…</pre>
 
-<h2>Part 12 · skill cards — her grouping table, part for part (EXAM-SKILLS-BRIEF.md, 2026-08-22)</h2>
+<h2>Part 12 · skill cards — her grouping table, part for part (EXAM-SKILLS-BRIEF.md, 2026-08-22), now level-sorted inside each tile</h2>
 <pre id="cardChecks">…</pre>
+
+<h2>Part 13 · the LEVEL WALL — no ★ on a normal tile, and a Level 4 tile holds only hard parts (her ruling 5, 2026-08-23)</h2>
+<pre id="levelWallChecks">…</pre>
+
+<h2>Part 14 · the two NEW diagram engines in Exam Focus — trigg (js/engine/trig-graph.js) and quadtri (js/engine/quadrant-triangle.js), driven through the real player</h2>
+<pre id="engineChecks">…</pre>
 
 <div id="harnessHost"></div>
 
@@ -79,11 +85,11 @@
 <script type="module">
 import { EXAM, EXAM_CHAPTERS, EXAM_ONLY_CHAPTERS, CHAPTERS, chapterById, examChapters, examChapterById } from "./js/config.js";
 import { validateQuestion } from "./js/exam/_schema.js";
-import { stubQuestion } from "./js/exam/_harness-stub.js";
-import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
+import { stubQuestion, stubTrigQuestion, stubQuadTriQuestion } from "./js/exam/_harness-stub.js";
+import { examQuestionsForChapter, examTopicsForChapter, examQuestionById } from "./js/exam/index.js";
 import { eqnNatureOfRootsQuestions } from "./js/exam/eqn-nature-of-roots.js";
-import { examQuestionsForTopic, examFirstCardForSkill, skillLabel } from "./js/exam/index.js";
-import { SKILLS, skillsForChapter } from "./js/exam/skills.js";
+import { examQuestionsForTopic, examFirstCardForSkill, skillLabel, cardLevel } from "./js/exam/index.js";
+import { SKILLS, skillsForChapter, isLevel4Skill } from "./js/exam/skills.js";
 /* the 21 SOURCE questions, imported straight from their own modules for
    Part 12 (the coverage check has to compare the cards against the real
    thing, not against another list of ids). eqnNatureOfRootsQuestions is
@@ -268,26 +274,37 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 }
 
 /* ============================================================
-   PART 2 — registry + flag reflect the WIDENED state (day session,
-   2026-08-22, registering overnight run #1's 15 non-Euclidean modules —
-   OVERNIGHT-1-REPORT.md): eqn/exp/func/trig all carry real seeded
-   questions now, and EXAM_CHAPTERS covers all four. Euclidean stays
-   unregistered (js/exam/index.js header) so it isn't asserted here at
-   all — same "empty until seeded" relationship the pilot-era version of
-   this section already used for the other chapters.
+   PART 2 — registry + flag, rewritten for the EXAM FOCUS BUILD DAY
+   (2026-08-23, EXAM-BUILD-DAY.md). Three things changed at once and each
+   is asserted from the thing that actually decides it:
+
+     · the FLAG is now seven chapters — algx and tgraph joined, trig
+       LEFT (her ruling 9: 2D Trig hidden from Exam Focus for now, its
+       card and skills entry deliberately still in the code);
+     · algx and tgraph are REGISTERED but EMPTY — js/exam/cards-algx.js
+       and js/exam/cards-tgraph.js exist and export [], so every tile
+       renders "coming soon" until wave 1/2 fills them. That is the
+       ordinary empty-until-seeded state, asserted rather than assumed;
+     · every chapter's TILE LIST is EXAM-BUILD-DAY.md's map, typed out
+       below in her order. Ordered comparison, not a set comparison —
+       the tile order is her decision and a silent reshuffle is a real
+       regression. Every list now ENDS with level-4.
    ============================================================ */
 {
   const lines = [];
 
-  // ---- flag: exactly the four chapters with real content, any order ----
-  const EXPECTED_FLAGGED = ["eqn", "exp", "func", "trig", "gtrig", "euclid"];
+  // ---- flag: exactly the seven build-day chapters, any order ----
+  const EXPECTED_FLAGGED = ["algx", "eqn", "exp", "func", "tgraph", "gtrig", "euclid"];
   const flagSet = new Set(EXAM_CHAPTERS);
   const flagOk = flagSet.size === EXPECTED_FLAGGED.length && EXPECTED_FLAGGED.every(id => flagSet.has(id));
   tick(flagOk, `js/config.js EXAM_CHAPTERS is exactly {${EXPECTED_FLAGGED.join(",")}} — got [${EXAM_CHAPTERS.join(",")}]`);
-  lines.push(`EXAM_CHAPTERS: [${EXAM_CHAPTERS.join(",")}] — ${flagOk ? "OK, matches the widened set" : "FAIL"}`);
+  lines.push(`EXAM_CHAPTERS: [${EXAM_CHAPTERS.join(",")}] — ${flagOk ? "OK, matches the build-day set" : "FAIL"}`);
+  tick(!EXAM_CHAPTERS.includes("trig"), "2D Trig is OUT of the flag (her ruling 9, 2026-08-23) — hidden from Exam Focus");
+  tick(!!SKILLS.trig && SKILLS.trig.length === 1, "…but 2D Trig's skills.js entry is still there, so putting it back is a one-word edit");
+  tick(examQuestionsForChapter("trig").length === 1, "…and its one card is still registered, untouched");
 
   // ---- exact question count per chapter, derived from the registry ----
-  const allChapterIds = ["stats", "finance", "prob", "trig", "gtrig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn", "euclid"];
+  const allChapterIds = ["stats", "finance", "prob", "trig", "gtrig", "meas", "func", "tgraph", "analytical", "pat", "exp", "eqn", "euclid", "algx"];
   // 2026-08-22: trig 3 -> 1 and gtrig 0 -> 2. The two T2 questions that
   // were never really 2D trig MOVED chapter (her ruling that morning);
   // nothing was added or removed from the bank, so the TOTAL is unchanged.
@@ -301,7 +318,13 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   // 2026-08-22 (SESSION 2b): func 32 -> 48. Sixteen more SIBLING questions
   // take the remaining four Functions tiles — shift, inequalities,
   // nature-of-roots and distances — to SIX cards each, so all eight now hold six.
-  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 4, meas: 0, func: 48, tgraph: 0, analytical: 0, pat: 0, exp: 12, eqn: 18, euclid: 2 };
+  // 2026-08-23 (BUILD DAY, session 0 plumbing): euclid 2 -> 4. The single
+  // circle-geometry tile was re-cut into bookwork-proofs / chords-and-
+  // angles / tangents / level-4, which splits the two source questions
+  // across four cards. NOTHING was added or dropped — Part 12's coverage
+  // check proves that part for part. algx and tgraph register as 0: their
+  // files exist and export [], waiting on their content sessions.
+  const EXPECTED_COUNTS = { stats: 0, finance: 0, prob: 0, trig: 1, gtrig: 4, meas: 0, func: 48, tgraph: 0, analytical: 0, pat: 0, exp: 12, eqn: 18, euclid: 4, algx: 0 };
   let countsOk = true;
   const countLines = [];
   allChapterIds.forEach(id => {
@@ -324,12 +347,14 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
      would be a real regression. Two gtrig skills deliberately have no
      cards yet and MUST still be listed (they render "coming soon"). */
   const EXPECTED_TOPICS = {
-    eqn: ["nature-chain", "k-equal-roots", "k-for-nature", "delta-in-p", "inequalities", "fraction-equations", "rational-exponents-k"],
-    exp: ["surds", "rationalise", "exponent-expressions", "exponential-equations"],
-    func: ["find-equation", "asymptotes-domain-range", "intercepts-turning-point", "axis-of-symmetry", "shift", "inequalities", "nature-of-roots", "distances"],
+    algx: ["expand", "factorise-basics", "factorise-advanced", "fractions-multiply-divide", "fractions-add-subtract", "level-4"],
+    exp: ["rational-exponents-numeric", "exponent-expressions", "exponential-equations", "surds", "rationalise", "surd-proofs", "level-4"],
+    eqn: ["quadratic-solving", "fraction-equations", "surd-equations", "rational-exponents-k", "simultaneous", "inequalities", "nature-chain", "k-equal-roots", "k-for-nature", "delta-in-p", "level-4"],
+    func: ["find-equation", "asymptotes-domain-range", "intercepts-turning-point", "axis-of-symmetry", "shift", "inequalities", "nature-of-roots", "distances", "sketch", "intersection", "average-gradient", "reflections", "level-4"],
+    tgraph: ["period-amplitude-range", "read-parameters", "sketch", "intersections-inequalities", "shift-reflect", "level-4"],
+    gtrig: ["co-functions", "special-angles", "reduction", "special-sums", "super-special-sums", "identities", "identities-undefined", "general-solution", "level-4"],
     trig: ["cosine-rule-area"],
-    gtrig: ["co-functions", "special-sums", "reduction", "general-solution", "identities", "super-special-sums"],
-    euclid: ["circle-geometry"],
+    euclid: ["bookwork-proofs", "chords-and-angles", "cyclic-quads", "tangents", "level-4"],
   };
   let topicsOk = true;
   const topicLines = [];
@@ -531,10 +556,18 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 
   if (examCard) examCard.querySelector("button").click();
   tick(appOn.screen === "examChapter" && appOn.params.chapterId === "eqn", "clicking the chapter card navigates to examChapter with chapterId \"eqn\"");
-  // eqn shows SEVEN skill tiles now (her grouping table, 2026-08-22),
-  // one per skill in js/exam/skills.js order.
+  // eqn shows ELEVEN skill tiles now (EXAM-BUILD-DAY.md's map,
+  // 2026-08-23 — ten skills plus the Level 4 tile), one per entry in
+  // js/exam/skills.js order. Read from skills.js rather than hard-coded,
+  // because Part 2 above already asserts that list IS her map: if it
+  // drifts, Part 2 is the check that says so, and this one just follows.
+  const wantEqnTiles = skillsForChapter("eqn").length;
   const topicCards = tileEls(host);
-  tick(topicCards.length === 7, `examChapter screen shows all 7 skill tiles for eqn, got ${topicCards.length}`);
+  tick(topicCards.length === wantEqnTiles, `examChapter screen shows all ${wantEqnTiles} skill tiles for eqn, got ${topicCards.length}`);
+  const lastTile = topicCards[topicCards.length - 1];
+  tick(!!lastTile && /level 4/i.test(lastTile.textContent), `the LAST tile on the grid is the Level 4 one, got "${lastTile ? tileText(lastTile) : "(none)"}"`);
+  tick(!!lastTile && lastTile.classList.contains("exam-tile-l4"), "the Level 4 tile carries the exam-tile-l4 class (full-width, amber)");
+  tick(!!lastTile && /mixed hard questions/i.test(lastTile.textContent), "the Level 4 tile carries its one-line muted sub-line");
   tick(topicCards.some(c => /nature of roots/i.test(c.textContent)), "one of eqn's tiles is the nature-of-roots chain, with her own label");
   lines.push(`examChapter screen skill tiles: [${topicCards.map(tileText).join(", ")}]`);
 
@@ -694,7 +727,18 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 /* ============================================================
    PART 5 — SQL ↔ config literal cross-check (mirrors verify-store.html's
    MOOD-block pattern). Also a light structural check on the migration
-   file (function count, search_path pins).
+   files (function count, search_path pins).
+
+   RE-POINTED 2026-08-23 (EXAM-BUILD-DAY.md, her ruling 7): the pay went
+   from 75 XP / 10 gold to 50 XP / 5 gold, and the live literal now lives
+   in a NEW file, supabase/migration-exam-xp-50.sql (written, NOT run —
+   the foreman applies it at ship time). So the literal cross-check reads
+   THAT file. The original migration-exam-focus.sql keeps its 75 / 10 on
+   purpose — it is the applied history of what ran on 2026-08-21, not a
+   live mirror — so it is still checked here for its TABLE and its
+   posture, and explicitly asserted to still say 75 / 10, which is what
+   makes "the new file supersedes the pay amounts only" a fact rather
+   than a claim.
    ============================================================ */
 {
   const lines = [];
@@ -712,14 +756,37 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   tick(/security definer/.test(sql) && (sql.match(/security definer/g) || []).length >= fnCount, "both functions are security definer");
   tick(/_mhq_auth\(p_username, p_password\)/.test(sql), "auth goes through the shared _mhq_auth helper, like every other mhq_* RPC");
 
-  tick(new RegExp(`v_xp_gain := ${EXAM.xpPerQuestion};`).test(sql), `SQL's literal XP payout matches js/config.js EXAM.xpPerQuestion (${EXAM.xpPerQuestion})`);
-  tick(new RegExp(`v_gold_gain := ${EXAM.goldPerQuestion};`).test(sql), `SQL's literal gold payout matches js/config.js EXAM.goldPerQuestion (${EXAM.goldPerQuestion})`);
+  tick(/v_xp_gain := 75;/.test(sql) && /v_gold_gain := 10;/.test(sql),
+    "migration-exam-focus.sql STILL says 75 / 10 — it is applied history, not a live mirror, and the new file is what supersedes it");
 
   tick(/grant execute on function[\s\S]*?mhq_exam_state\(text, text\)[\s\S]*?mhq_exam_open_part/.test(sql), "both learner RPCs are explicitly granted to anon/authenticated");
   tick(!/mhq_get_state/.test(sql), "this migration never touches mhq_get_state (kept fully independent, per the brief)");
 
-  lines.push(`functions: ${fnCount} (want 2) · search_path pins: ${spCount} · XP literal: ${EXAM.xpPerQuestion} · gold literal: ${EXAM.goldPerQuestion}`);
-  lines.push("mhq_get_state untouched: confirmed absent from this file's text.");
+  /* ---- THE LIVE LITERAL: supabase/migration-exam-xp-50.sql ---- */
+  let xp50 = "";
+  try { xp50 = (await (await fetch("./supabase/migration-exam-xp-50.sql")).text()).replace(/--[^\n]*/g, ""); }
+  catch (e) { tick(false, "could not read supabase/migration-exam-xp-50.sql: " + e.message); }
+
+  const xpFnCount = (xp50.match(/create or replace function/g) || []).length;
+  const xpSpCount = (xp50.match(/set search_path = public, extensions/g) || []).length;
+  tick(xpFnCount === 1, `migration-exam-xp-50.sql re-creates exactly ONE function (mhq_exam_open_part), got ${xpFnCount}`);
+  tick(/create or replace function public\.mhq_exam_open_part\(/.test(xp50), "…and that one function is mhq_exam_open_part");
+  tick(!/create or replace function public\.mhq_exam_state/.test(xp50), "it never re-creates mhq_exam_state (the pay amounts only)");
+  tick(!/create table/.test(xp50), "it creates no table — the pay amounts only");
+  tick(!/mhq_get_state/.test(xp50), "it never touches mhq_get_state");
+  tick(xpSpCount === xpFnCount, `its function has its search_path pinned exactly as before: ${xpSpCount} pin(s) for ${xpFnCount} function(s)`);
+  tick((xp50.match(/security definer/g) || []).length === xpFnCount, "it is security definer, same as the original");
+  tick(/_mhq_auth\(p_username, p_password\)/.test(xp50), "it still authenticates through the shared _mhq_auth helper");
+  tick(/grant execute on function[\s\S]*?mhq_exam_open_part\(text, text, text, text, integer\)[\s\S]*?to anon, authenticated/.test(xp50),
+    "the grant is RESTATED (create-or-replace resets a function's privileges — without it, the RPC would sit ungranted)");
+
+  tick(new RegExp(`v_xp_gain := ${EXAM.xpPerQuestion};`).test(xp50), `the NEW SQL's literal XP payout matches js/config.js EXAM.xpPerQuestion (${EXAM.xpPerQuestion})`);
+  tick(new RegExp(`v_gold_gain := ${EXAM.goldPerQuestion};`).test(xp50), `the NEW SQL's literal gold payout matches js/config.js EXAM.goldPerQuestion (${EXAM.goldPerQuestion})`);
+  tick(EXAM.xpPerQuestion === 50 && EXAM.goldPerQuestion === 5, `js/config.js EXAM is her build-day rate, 50 XP + 5 gold — got ${EXAM.xpPerQuestion}/${EXAM.goldPerQuestion}`);
+
+  lines.push(`migration-exam-focus.sql (applied 2026-08-21): functions ${fnCount} (want 2) · search_path pins ${spCount} · still pays 75 / 10 (history, correct)`);
+  lines.push(`migration-exam-xp-50.sql (WRITTEN, NOT RUN): functions ${xpFnCount} (want 1) · XP literal ${EXAM.xpPerQuestion} · gold literal ${EXAM.goldPerQuestion} · grant restated`);
+  lines.push("mhq_get_state untouched by both files: confirmed absent from their text.");
 
   // schema.sql mirror — same checks, lighter touch (the migration already proved the logic).
   let schema = "";
@@ -782,21 +849,44 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
      questions, in verify-exam-modules.mjs section 7, which imports
      those modules directly and is the right place for it now that the
      registry no longer carries their slugs. */
+  /* REPLACED WHOLESALE 2026-08-23 with EXAM-BUILD-DAY.md's tile map —
+     same logic, new data. Still typed out BY HAND from her document
+     rather than read from js/exam/skills.js: a wall that imports the
+     thing it is walling proves nothing, and the whole point is that a
+     skill added to skills.js without her say-so fails here. (Part 2
+     above is the other half of the same pincer: it asserts skills.js
+     matches this same map, in order.) */
   const SKILL_WALLS = {
+    /* ALGEBRAIC EXPRESSIONS — new exam-only chapter, Grade 10 revision. */
+    algx: [
+      "expand",
+      "factorise-basics",
+      "factorise-advanced",
+      "fractions-multiply-divide",
+      "fractions-add-subtract",
+      "level-4",
+    ],
     eqn: [
+      "quadratic-solving",
+      "fraction-equations",
+      "surd-equations",
+      "rational-exponents-k",
+      "simultaneous",
+      "inequalities",
       "nature-chain",
       "k-equal-roots",
       "k-for-nature",
       "delta-in-p",
-      "inequalities",
-      "fraction-equations",
-      "rational-exponents-k",
+      "level-4",
     ],
     exp: [
-      "surds",
-      "rationalise",
+      "rational-exponents-numeric",
       "exponent-expressions",
       "exponential-equations",
+      "surds",
+      "rationalise",
+      "surd-proofs",
+      "level-4",
     ],
     func: [
       "find-equation",
@@ -807,22 +897,46 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
       "inequalities",
       "nature-of-roots",
       "distances",
+      "sketch",
+      "intersection",
+      "average-gradient",
+      "reflections",
+      "level-4",
     ],
-    /* EUCLIDEAN: one skill, one long continuous round (her ruling). */
-    euclid: [
-      "circle-geometry",
-    ],
-    /* 2D TRIG is PAUSED — one skill, one card, nothing new. */
-    trig: [
-      "cosine-rule-area",
+    /* TRIG GRAPHS — new to Exam Focus. period-amplitude-range is her
+       equations-only tile: no sketch on that one (her ruling 8). */
+    tgraph: [
+      "period-amplitude-range",
+      "read-parameters",
+      "sketch",
+      "intersections-inequalities",
+      "shift-reflect",
+      "level-4",
     ],
     gtrig: [
       "co-functions",
-      "special-sums",
+      "special-angles",
       "reduction",
-      "general-solution",
-      "identities",
+      "special-sums",
       "super-special-sums",
+      "identities",
+      "identities-undefined",
+      "general-solution",
+      "level-4",
+    ],
+    /* EUCLIDEAN — RE-CUT 2026-08-23: the old single circle-geometry tile
+       is gone, four real tiles plus the brave round in its place. */
+    euclid: [
+      "bookwork-proofs",
+      "chords-and-angles",
+      "cyclic-quads",
+      "tangents",
+      "level-4",
+    ],
+    /* 2D TRIG is HIDDEN (out of EXAM_CHAPTERS) but still registered —
+       one skill, one card, nothing new. */
+    trig: [
+      "cosine-rule-area",
     ],
   };
 
@@ -1149,7 +1263,12 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 }
 
 /* ============================================================
-   PART 11 — the EXAM-FOCUS-ONLY chapter (her rulings, 2026-08-22).
+   PART 11 — the EXAM-FOCUS-ONLY chapters (her rulings, 2026-08-22 and
+   2026-08-23). There are TWO of them now: euclid, and algx (Algebraic
+   Expressions), added on the build day. Everything below is asserted for
+   euclid, which has content; algx gets the same structural sweep at the
+   end of the section, because "invisible everywhere else" is exactly the
+   property that would break silently.
 
    Three things have to be true at once, and each is checked from the
    thing that actually decides it rather than from a comment:
@@ -1239,20 +1358,36 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
      continuous round, so both questions live whole, in order, under the
      single "Circle geometry" skill. */
   const euclidTopicCards = tileEls(host).map(tileText);
-  tick(euclidTopicCards.length === 1, `euclid shows 1 skill tile, got ${euclidTopicCards.length}`);
-  tick(euclidTopicCards.some(t => /circle geometry/i.test(t)), `the euclid tile is "Circle geometry", got [${euclidTopicCards.join(", ")}]`);
+  tick(euclidTopicCards.length === 5, `euclid shows 5 skill tiles after the 2026-08-23 re-cut, got ${euclidTopicCards.length}`);
+  tick(["The four bookwork proofs", "Chords, centre & angles", "Cyclic quadrilaterals", "Tangents"].every(l => euclidTopicCards.includes(l)),
+    `the four real euclid tiles are hers, got [${euclidTopicCards.join(", ")}]`);
+  tick(!euclidTopicCards.some(t => /^circle geometry$/i.test(t)), "the old single \"Circle geometry\" tile is gone");
+  tick(/level 4/i.test(euclidTopicCards[euclidTopicCards.length - 1] || ""), `euclid's LAST tile is the Level 4 one, got "${euclidTopicCards[euclidTopicCards.length - 1]}"`);
   lines.push(`euclid skill tiles: [${euclidTopicCards.join(", ")}]`);
   clear(host);
 
-  /* ---- 4. the player: a figure per part, highlights that change ---- */
-  const euclidCards11 = examQuestionsForTopic("euclid", "circle-geometry");
-  tick(euclidCards11.length === 2, `the circle-geometry skill holds both whole questions, got ${euclidCards11.length}`);
-  const q4 = euclidCards11.find(c => c.id === "euclid.circ.t2q4.ab1b2");
-  const q5 = euclidCards11.find(c => c.id === "euclid.tan.t2q5.abcd");
-  tick(!!q5, "resolved the euclid.tan.t2q5 card through the registry");
-  tick(!!q4, "resolved the euclid.circ.t2q4 card through the registry");
-  tick(!!q5 && q5.parts.length === 4 && q5.parts.map(p => p.id).join("") === "abcd", "the tangents card carries all four parts, in order");
-  tick(!!q4 && q4.parts.length === 3 && q4.parts.map(p => p.id).join(",") === "a,b1,b2", "the circle-theorems card carries all three parts, in order");
+  /* ---- 4. the player: a figure per part, highlights that change ----
+     RE-CUT 2026-08-23: the two source questions are now four cards
+     across four tiles (js/exam/cards-euclid.js's header explains each
+     move). The DOM walk below runs on the TANGENTS card, which is the
+     three-part one — the starred (d) moved to its own Level 4 card. */
+  const euclidBookwork = examQuestionsForTopic("euclid", "bookwork-proofs");
+  const euclidChords = examQuestionsForTopic("euclid", "chords-and-angles");
+  const euclidTangents = examQuestionsForTopic("euclid", "tangents");
+  const euclidL4 = examQuestionsForTopic("euclid", "level-4");
+  tick(euclidBookwork.length === 1 && euclidBookwork[0].id === "euclid.circ.t2q4.a", `bookwork-proofs holds the ∠-at-centre proof, got [${euclidBookwork.map(c => c.id).join(", ")}]`);
+  tick(euclidChords.length === 1 && euclidChords[0].id === "euclid.circ.t2q4.b1b2", `chords-and-angles holds the chord/radius pair, got [${euclidChords.map(c => c.id).join(", ")}]`);
+  tick(euclidL4.length === 1 && euclidL4[0].id === "euclid.tan.t2q5.d", `euclid's Level 4 tile holds the starred part on its own, got [${euclidL4.map(c => c.id).join(", ")}]`);
+  tick(examQuestionsForTopic("euclid", "cyclic-quads").length === 0, "cyclic-quads has no cards yet (it renders \"coming soon\" until the Euclidean content sessions land)");
+  const q4 = euclidBookwork[0];
+  const q5 = euclidTangents[0];
+  tick(!!q5, "resolved the euclid.tan.t2q5.abc card through the registry");
+  tick(!!q4, "resolved the euclid.circ.t2q4.a card through the registry");
+  tick(!!q5 && q5.parts.length === 3 && q5.parts.map(p => p.id).join("") === "abc", "the tangents card carries parts (a)(b)(c), in order");
+  tick(!!q4 && q4.parts.length === 1 && q4.parts[0].id === "a", "the bookwork card carries just the proof part");
+  tick(!!euclidL4[0] && euclidL4[0].parts.length === 1 && euclidL4[0].parts[0].level === 4, "the Level 4 card is one part, and it really is level 4");
+  tick(!!euclidL4[0] && !!euclidL4[0].intro && /cyclic quadrilateral/i.test(euclidL4[0].intro.en) && /180° − x/.test(euclidL4[0].intro.en),
+    "…and it carries an intro with (b)'s and (c)'s results, which its own prompt no longer states");
 
   // a real signed-in learner, exactly as Part 8 does — the Done button
   // reports the reveal to the backend and only advances on a real ok
@@ -1308,13 +1443,14 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
      switched to their REVEAL figures, (a) and (c) stay on question */
   const states = {};
   [...host.querySelectorAll(".exam-diagram")].forEach(f => { states[f.getAttribute("data-part")] = f.getAttribute("data-state"); });
-  tick(states.b === "reveal" && states.d === "reveal", `(b) and (d) declare a reveal figure and must switch to it, got ${JSON.stringify(states)}`);
+  tick(states.b === "reveal", `(b) declares a reveal figure and must switch to it, got ${JSON.stringify(states)}`);
   tick(states.a === "question" && states.c === "question", `(a) and (c) declare no reveal figure and stay on the question one, got ${JSON.stringify(states)}`);
   lines.push(`figure states after revealing every part: ${JSON.stringify(states)}`);
   const stillNoLost = [...host.querySelectorAll("button")].some(b => /i'm lost/i.test(b.textContent));
   tick(!stillNoLost, "still no \"I'm lost\" button after every part is revealed");
 
-  /* ---- 5. Q4(a): the bare-figure rule, in the DOM ---- */
+  /* ---- 5. Q4(a): the bare-figure rule, in the DOM. Its card is now
+     the bookwork-proofs one, which is that single part. ---- */
   clear(host);
   const playApp4 = { state: await api.getState(uname11, "pw12"), screen: "examPlay",
     go(screen, params) { playApp4.screen = screen; playApp4.params = params || {}; },
@@ -1342,12 +1478,44 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
      figure must contain a 3-point path (square) and not the chevron's
      characteristic m·√2 middle point. Checked by rendering the same spec
      both ways and comparing. */
+  /* the right-angle SQUARE at M (port-day gap 1) reaches the DOM: b1's
+     figure must contain a 3-point path (square). b1 lives on the
+     CHORDS-AND-ANGLES card now, so it gets its own render. */
+  clear(host);
+  const playAppC = { state: await api.getState(uname11, "pw12"), screen: "examPlay",
+    go(screen, params) { playAppC.screen = screen; playAppC.params = params || {}; },
+    async refresh() { playAppC.state = await api.getState(uname11, "pw12"); } };
+  playAppC.state.openQuests = [];
+  renderExamPlay(playAppC, host, { chapter: euclidChapter, skillId: "chords-and-angles", question: euclidChords[0], accent: euclidChapter.signature });
+  await new Promise(r => setTimeout(r, 40));
   const b1Fig = host.querySelector('.exam-diagram[data-part="b1"]');
-  tick(!!b1Fig, "Q4(b)(1) renders its own figure");
+  tick(!!b1Fig, "Q4(b)(1) renders its own figure on the chords-and-angles card");
   const b1Paths = b1Fig ? [...b1Fig.querySelectorAll("path")].map(n => n.getAttribute("d")) : [];
   tick(b1Paths.some(d => /^M [\d.-]+ [\d.-]+ L [\d.-]+ [\d.-]+ L [\d.-]+ [\d.-]+$/.test(d || "")),
     "Q4(b)(1)'s figure contains the three-point right-angle mark path");
   lines.push(`Q4(b)(1) figure paths: ${b1Paths.length}`);
+
+  /* ---- 6. ALGX: the SECOND exam-only chapter (2026-08-23) ---- */
+  clear(host);
+  const algxChapter = examChapterById("algx");
+  tick(!!algxChapter, "examChapterById(\"algx\") resolves the new exam-only chapter");
+  tick(!!algxChapter && algxChapter.examOnly === true, "the algx chapter carries examOnly:true");
+  tick(!!algxChapter && (algxChapter.quests || []).length === 0, "the algx chapter owns NO quests — it is Grade 10 revision, Blipwork has no rounds for it");
+  tick(chapterById("algx") === null, "chapterById(\"algx\") is null — the ordinary chapter lookup cannot see it, so the hub tabs / dice / admin grid / assignments / dashboard never can either");
+  tick(!!algxChapter && !["term3", "revision"].includes(algxChapter.term), `an exam-only chapter must not claim a hub term, got "${algxChapter && algxChapter.term}"`);
+  tick(examChapterEligible({ state: { openQuests: [] } }, algxChapter) === true, "examChapterEligible: algx is eligible with NO open quests (the documented exam-only exception)");
+  const algxSignatures = examChapters().filter(c => c.id !== "algx").map(c => c.signature);
+  tick(!!algxChapter && !algxSignatures.includes(algxChapter.signature), `algx's colour is used by no other chapter — ${algxChapter && algxChapter.signature}`);
+  const appAlgx = makeApp11([]);
+  appAlgx.go("examChapter", { chapterId: "algx" });
+  tick(appAlgx.screen === "examChapter", "renderExamChapter reaches algx with NO quest open anywhere");
+  const algxTiles = tileEls(host).map(tileText);
+  tick(algxTiles.length === 6, `algx shows its 6 skill tiles, got ${algxTiles.length}`);
+  tick(algxTiles.every((t, i) => i === algxTiles.length - 1 || !/level 4/i.test(t)) && /level 4/i.test(algxTiles[algxTiles.length - 1] || ""),
+    `algx's Level 4 tile is last and there is only one, got [${algxTiles.join(", ")}]`);
+  const algxLocked = [...host.querySelectorAll(".exam-skill-card")].filter(c => c.classList.contains("locked")).length;
+  tick(algxLocked === 6, `every algx tile is muted / "coming soon" until session A seeds it, got ${algxLocked} of 6`);
+  lines.push(`algx skill tiles: [${algxTiles.join(", ")}] — all ${algxLocked} muted, colour ${algxChapter && algxChapter.signature}`);
 
   clear(host);
   say("euclidChecks", lines);
@@ -1435,29 +1603,89 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
       "super-special-sums": [],
     },
     trig: { "cosine-rule-area": ["trig.mix.t2q6.ab"] },
-    euclid: { "circle-geometry": ["euclid.circ.t2q4.ab1b2", "euclid.tan.t2q5.abcd"] },
+    /* RE-CUT 2026-08-23 (js/exam/cards-euclid.js). Same two source
+       questions, same seven parts, four cards across four tiles. */
+    euclid: {
+      "bookwork-proofs": ["euclid.circ.t2q4.a"],
+      "chords-and-angles": ["euclid.circ.t2q4.b1b2"],
+      "cyclic-quads": [],
+      "tangents": ["euclid.tan.t2q5.abc"],
+      "level-4": ["euclid.tan.t2q5.d"],
+    },
+    /* NEW on the build day, both registered and both still empty. */
+    algx: {
+      "expand": [], "factorise-basics": [], "factorise-advanced": [],
+      "fractions-multiply-divide": [], "fractions-add-subtract": [], "level-4": [],
+    },
+    tgraph: {
+      "period-amplitude-range": [], "read-parameters": [], "sketch": [],
+      "intersections-inequalities": [], "shift-reflect": [], "level-4": [],
+    },
   };
 
-  /* ---- 1. every skill's cards, in her order ---- */
-  let orderOk = true;
+  /* ---- 1. every skill's cards — her table, then EASIEST FIRST ----
+     Her ruling 10 (2026-08-23): "Cards inside a tile run easiest first,
+     Level 1 → 3." js/exam/index.js's examQuestionsForTopic now applies a
+     STABLE sort by card level (= the level of the card's hardest part)
+     before handing the list over, so the expected order here is her
+     table order run through that same rule — not the raw table order,
+     and not whatever the registry happens to return. Both halves are
+     asserted separately so a failure says WHICH went wrong:
+       · MEMBERSHIP — exactly the cards her table lists, no more, no fewer;
+       · ORDER — non-decreasing in level, with ties in her order. */
+  let memberOk = true, orderOk = true, monotoneOk = true;
   const orderLines = [];
   Object.entries(TABLE).forEach(([chapterId, skills]) => {
+    const byId = new Map(examQuestionsForChapter(chapterId).map(c => [c.id, c]));
     Object.entries(skills).forEach(([skillId, wantIds]) => {
-      const gotIds = examQuestionsForTopic(chapterId, skillId).map(c => c.id);
-      const ok = gotIds.length === wantIds.length && wantIds.every((id, i) => gotIds[i] === id);
+      const got = examQuestionsForTopic(chapterId, skillId);
+      const gotIds = got.map(c => c.id);
+
+      const sameSet = gotIds.length === wantIds.length && [...wantIds].sort().every((id, i) => [...gotIds].sort()[i] === id);
+      if (!sameSet) memberOk = false;
+
+      const wantSorted = wantIds.map((id, i) => ({ id, i }))
+        .sort((a, b) => (cardLevel(byId.get(a.id) || {}) - cardLevel(byId.get(b.id) || {})) || (a.i - b.i))
+        .map(x => x.id);
+      const ok = gotIds.length === wantSorted.length && wantSorted.every((id, i) => gotIds[i] === id);
       if (!ok) orderOk = false;
-      orderLines.push(`  ${chapterId}/${skillId}: [${gotIds.join(", ") || "(none)"}]${ok ? "" : ` — FAIL, want [${wantIds.join(", ")}]`}`);
+
+      const levels = got.map(cardLevel);
+      if (levels.some((L, i) => i > 0 && L < levels[i - 1])) monotoneOk = false;
+
+      orderLines.push(`  ${chapterId}/${skillId}: [${gotIds.map((id, i) => `${id}(L${levels[i]})`).join(", ") || "(none)"}]${ok ? "" : ` — FAIL, want [${wantSorted.join(", ")}]`}`);
     });
   });
-  tick(orderOk, "every skill holds exactly the cards her grouping table lists, in her order");
-  lines.push(`cards per skill:\n${orderLines.join("\n")}`);
+  tick(memberOk, "every skill holds exactly the cards her grouping table lists (membership, ignoring order)");
+  tick(orderOk, "…in her table order run through the level sort — easiest first, ties keep her order");
+  tick(monotoneOk, "no tile ever shows a harder card above an easier one (levels are non-decreasing down every tile)");
+  lines.push(`cards per skill (L = the card's hardest part):\n${orderLines.join("\n")}`);
 
-  const ALL_CARDS = ["eqn", "exp", "func", "gtrig", "trig", "euclid"].flatMap(c => examQuestionsForChapter(c));
+  const ALL_CARDS = ["algx", "eqn", "exp", "func", "tgraph", "gtrig", "trig", "euclid"].flatMap(c => examQuestionsForChapter(c));
   const tableCount = Object.values(TABLE).reduce((n, skills) => n + Object.values(skills).reduce((m, ids) => m + ids.length, 0), 0);
   tick(ALL_CARDS.length === tableCount, `the registry holds exactly the table's ${tableCount} cards, got ${ALL_CARDS.length}`);
+
+  /* SKILL COUNT — data-driven from js/exam/skills.js (2026-08-23). It
+     used to be a hard-coded 27, which every build day had to bump by
+     hand and which said nothing about whether the list was RIGHT. What
+     actually matters is asserted instead:
+       · skills.js holds a list for exactly the seven flagged chapters
+         plus the one deliberately-hidden 2D-trig entry, and nothing else
+         (a stray chapter key here would render nowhere and rot);
+       · every flagged chapter's list is non-empty and ENDS with level-4.
+     Part 2 above separately asserts each list matches her map in order,
+     so between them the count is a reported number, not a guess. */
   const skillCount = Object.values(SKILLS).reduce((n, arr) => n + arr.length, 0);
-  tick(skillCount === 27, `js/exam/skills.js lists 27 skills (25 across eqn/exp/func/gtrig + 2D trig + Euclidean), got ${skillCount}`);
-  lines.push(`\n${ALL_CARDS.length} cards across ${skillCount} skills, cut from ${SOURCES.length} seeded questions`);
+  const SKILL_KEYS_EXPECTED = [...EXAM_CHAPTERS, "trig"].sort();
+  const skillKeys = Object.keys(SKILLS).sort();
+  tick(skillKeys.length === SKILL_KEYS_EXPECTED.length && skillKeys.every((k, i) => k === SKILL_KEYS_EXPECTED[i]),
+    `js/exam/skills.js holds a tile list for exactly the flagged chapters + hidden 2D trig — got [${skillKeys.join(",")}], want [${SKILL_KEYS_EXPECTED.join(",")}]`);
+  const l4Last = EXAM_CHAPTERS.every(id => {
+    const list = skillsForChapter(id);
+    return list.length > 0 && isLevel4Skill(list[list.length - 1].id) && list.filter(sk => isLevel4Skill(sk.id)).length === 1;
+  });
+  tick(l4Last, "every flagged chapter's tile list is non-empty and ends with exactly ONE level-4 tile (her ruling 5)");
+  lines.push(`\n${ALL_CARDS.length} cards across ${skillCount} skills in ${skillKeys.length} chapters, cut from ${SOURCES.length} seeded questions`);
 
   /* ---- 2. card ids unique ---- */
   const idCounts = new Map();
@@ -1611,11 +1839,292 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   }
 
   /* ---- 10. skillsForChapter / skillLabel ---- */
-  tick(skillsForChapter("eqn").length === 7 && skillsForChapter("stats").length === 0, "skillsForChapter returns her list for a seeded chapter and [] for an unseeded one");
+  tick(skillsForChapter("eqn").length === 11 && skillsForChapter("stats").length === 0, "skillsForChapter returns her list for a seeded chapter (eqn: 11 tiles after the 2026-08-23 map) and [] for an unseeded one");
   tick(skillLabel("func", "axis-of-symmetry") === "Axis of symmetry", `skillLabel reads her label, got "${skillLabel("func", "axis-of-symmetry")}"`);
   tick(skillLabel("func", "not-a-real-skill") === "Not A Real Skill", "skillLabel falls back to a title-cased slug rather than rendering blank");
 
   say("cardChecks", lines);
+}
+
+/* ============================================================
+   PART 13 — THE LEVEL WALL (her ruling 5, 2026-08-23,
+   EXAM-BUILD-DAY.md): "Levels 1-3 on the normal tiles; every chapter
+   gets a last tile Level 4 ★ holding mixed Level-4 questions for that
+   chapter. The low achievers must never meet a ★ while drilling
+   basics."
+
+   Two rules, checked from the cards themselves:
+
+     1. A NORMAL tile holds NO level-4 part. Not "mostly none" — none.
+        A learner working through Inequalities to build confidence must
+        not turn a card and find a starred question.
+     2. A LEVEL-4 tile's card holds at least ONE level-4 part, and every
+        part on it is level 3 or 4. The brave round may carry the lead-in
+        parts a starred question genuinely depends on (that is the whole
+        reason a Level 4 card can have more than one part), but a level-1
+        warm-up has no business there — it belongs on the tile that
+        teaches it.
+
+   L4_MOVE_PENDING is the ONE piece of slack, and it is deliberately
+   loud rather than quiet. Three chapters still carry ★ parts inside
+   normal cards, left over from before the Level 4 tiles existed; their
+   own content sessions are the ones that move them, and until they do
+   this check would fail on work that has not been assigned yet. So
+   those chapters are SKIPPED — and their offender count is printed
+   below either way, so the foreman can watch the number go to zero as
+   the sessions land. Take a chapter off this list the moment its
+   session reports.
+
+     func → session D2 (reflections + the Level 4 re-cut)
+     eqn  → session C1 (eqn siblings + Level 4)
+     exp  → session B (exp).  ⚠️ exp was NOT on the brief's list — this
+            check found it: exp.nss.q1.d is a level-4 part sitting on
+            the exponential-equations tile. Session B has to move it.
+   ============================================================ */
+{
+  const L4_MOVE_PENDING = ["func", "eqn", "exp"];
+
+  const lines = [];
+  let normalOk = true, l4Ok = true;
+  const perChapter = [];
+
+  examChapters().forEach(ch => {
+    const cards = examQuestionsForChapter(ch.id);
+    if (!cards.length) return;                       // nothing seeded yet
+    const skipped = L4_MOVE_PENDING.includes(ch.id);
+
+    const starOnNormal = cards.filter(c => !isLevel4Skill(c.topic) && c.parts.some(p => p.level === 4));
+    const l4Cards = cards.filter(c => isLevel4Skill(c.topic));
+    const l4NoStar = l4Cards.filter(c => !c.parts.some(p => p.level === 4));
+    const l4TooEasy = l4Cards.filter(c => c.parts.some(p => p.level < 3));
+
+    if (!skipped && starOnNormal.length) normalOk = false;
+    // rule 2 is NEVER skipped: a Level 4 tile is new today, so nothing
+    // can be grandfathered onto it.
+    if (l4NoStar.length || l4TooEasy.length) l4Ok = false;
+
+    perChapter.push(
+      `  ${ch.id}: ${cards.length} card(s) · ${l4Cards.length} on the Level 4 tile`
+      + ` · ★ parts still on NORMAL tiles: ${starOnNormal.length}${starOnNormal.length ? ` [${starOnNormal.map(c => `${c.id}@${c.topic}`).join(", ")}]` : ""}`
+      + (skipped ? "  ← SKIPPED (L4_MOVE_PENDING — its content session moves these)" : "")
+      + (l4NoStar.length ? `\n      FAIL: Level 4 card with no ★ part: [${l4NoStar.map(c => c.id).join(", ")}]` : "")
+      + (l4TooEasy.length ? `\n      FAIL: Level 4 card carrying a level-1/2 part: [${l4TooEasy.map(c => c.id).join(", ")}]` : "")
+    );
+  });
+
+  tick(normalOk, "no ★ (level-4) part sits on a normal skill tile, outside the chapters still listed in L4_MOVE_PENDING");
+  tick(l4Ok, "every Level 4 tile card holds at least one ★ part, and no part below level 3");
+
+  /* The slack list must shrink, never grow: anything on it has to be a
+     real chapter that really does still have an offender, otherwise it
+     is dead weight hiding a rule nobody is checking any more. */
+  const staleSkips = L4_MOVE_PENDING.filter(id => {
+    const cards = examQuestionsForChapter(id);
+    return cards.length > 0 && !cards.some(c => !isLevel4Skill(c.topic) && c.parts.some(p => p.level === 4));
+  });
+  tick(staleSkips.length === 0,
+    `every chapter in L4_MOVE_PENDING really does still have ★ parts to move — take these off the list, they are clean: [${staleSkips.join(", ")}]`);
+
+  /* and prove the wall itself bites, on a card built to break it */
+  const fakeNormal = { topic: "inequalities", parts: [{ level: 2 }, { level: 4 }] };
+  const fakeL4Easy = { topic: "level-4", parts: [{ level: 1 }, { level: 4 }] };
+  const fakeL4NoStar = { topic: "level-4", parts: [{ level: 3 }] };
+  tick(!isLevel4Skill(fakeNormal.topic) && fakeNormal.parts.some(p => p.level === 4), "sanity: a ★ part on a normal tile is detectable");
+  tick(isLevel4Skill(fakeL4Easy.topic) && fakeL4Easy.parts.some(p => p.level < 3), "sanity: a level-1 part on a Level 4 tile is detectable");
+  tick(isLevel4Skill(fakeL4NoStar.topic) && !fakeL4NoStar.parts.some(p => p.level === 4), "sanity: a Level 4 card with no ★ part is detectable");
+
+  lines.push(`L4_MOVE_PENDING (skipped for rule 1): [${L4_MOVE_PENDING.join(", ")}]`);
+  lines.push(`per chapter:\n${perChapter.join("\n")}`);
+  say("levelWallChecks", lines);
+}
+
+/* ============================================================
+   PART 14 — THE TWO NEW DIAGRAM ENGINES (EXAM-BUILD-DAY.md, session 0
+   plumbing, 2026-08-23). Exam Focus knew two engines yesterday (circle,
+   function); it knows four today. This section drives both new ones
+   through the REAL player, with the real local backend, exactly as
+   Part 4 drives the original stub — the two fixtures are
+   js/exam/_harness-stub.js's stubTrigQuestion and stubQuadTriQuestion,
+   which are NEVER registered (same rule as the original stub: a
+   fixture must stay unreachable through normal navigation).
+
+   Four things per engine:
+     · the player routes on spec.type and the right ENGINE renders (the
+       svg carries that engine's own class);
+     · the figure switches question → reveal on the Done click;
+     · the reveal's new pieces really reach the DOM — the shaded strip,
+       the captioned dashed boundary lines, the numeric side label;
+     · a deliberately WRONG spec fails validateQuestion() rather than
+       shipping a figure that lies.
+   ============================================================ */
+{
+  const lines = [];
+  const host = document.getElementById("harnessHost");
+
+  const uname14 = "verify_exam_engines_" + Math.random().toString(36).slice(2, 8);
+  await LocalBackend.signup(uname14, "Verify Engines", "pw12");
+  setSession(uname14, "pw12");
+
+  function makeApp14(openQuests) {
+    return { state: { xp: 0, gold: 0, levelInfo: { level: 1, intoLevel: 0, nextCost: 300 }, openQuests: openQuests || [] },
+      screen: "examPlay", params: {},
+      go(screen, params) { this.screen = screen; this.params = params || {}; },
+      async refresh() { return true; } };
+  }
+  const clickDone = async () => {
+    const b = host.querySelector(".exam-done-btn");
+    if (!b) return false;
+    b.click();
+    await new Promise(r => setTimeout(r, 60));
+    return true;
+  };
+
+  /* ---------- 1. TRIG GRAPH (spec.type === "trigg") ---------- */
+  {
+    const chapter = chapterById("tgraph");
+    tick(!!chapter, "js/config.js has the tgraph chapter (Trig Graphs)");
+    tick(EXAM_CHAPTERS.includes("tgraph"), "tgraph is flagged into Exam Focus");
+    const q = stubTrigQuestion;
+    tick(validateQuestion(q).ok, `the trigg harness stub passes validateQuestion(): ${validateQuestion(q).issues.join("; ") || "clean"}`);
+
+    clear(host);
+    const app = makeApp14(["tg7"]);           // an open quest, so the player's own gate lets it through
+    renderExamPlay(app, host, { chapter, skillId: "sketch", question: q, accent: chapter.signature });
+    await new Promise(r => setTimeout(r, 40));
+    tick(app.screen === "examPlay", "the player does not bounce on a tgraph card with tg7 open");
+
+    const figA = host.querySelector('.exam-diagram[data-part="a"]');
+    tick(!!figA, "part (a) renders an .exam-diagram panel");
+    const svgA = figA && figA.querySelector("svg.tg");
+    tick(!!svgA, "the panel contains the TRIG-GRAPH engine's <svg class=\"sg tg\"> — the player routed on spec.type");
+    tick(!figA || !figA.querySelector("svg.diag, svg.fg, svg.qt"), "…and NOT any other engine's svg");
+    tick(!!svgA && svgA.getAttribute("viewBox") === `0 0 ${q.diagram.spec.w} ${q.diagram.spec.h}`,
+      `the svg keeps the spec's viewBox (want "0 0 ${q.diagram.spec.w} ${q.diagram.spec.h}", got "${svgA && svgA.getAttribute("viewBox")}")`);
+    tick(!!figA && figA.getAttribute("data-state") === "question", "part (a) starts in its QUESTION state");
+    /* bare:true on the question side — the point the part is FINDING
+       must not already be marked */
+    tick(!!svgA && svgA.querySelectorAll("circle.tg-dot").length === 0, "the bare-figure rule holds: (a)'s question figure marks NO point");
+    lines.push(`trigg (a) question: svg.tg viewBox="${svgA && svgA.getAttribute("viewBox")}", marked points=${svgA ? svgA.querySelectorAll("circle.tg-dot").length : "?"}`);
+
+    await clickDone();
+    const figARev = host.querySelector('.exam-diagram[data-part="a"]');
+    tick(!!figARev && figARev.getAttribute("data-state") === "reveal", "(a) switches to its REVEAL figure once the memo is open");
+    const revDots = figARev ? figARev.querySelectorAll("circle.tg-dot").length : 0;
+    tick(revDots === 1, `the reveal DRAWS what it found — one marked point, got ${revDots}`);
+    const revLabels = figARev ? [...figARev.querySelectorAll("text.tg-plab")].map(t => t.textContent) : [];
+    tick(revLabels.some(t => /A\(30° ; 1\)/.test(t)), `…labelled with its coordinates, got [${revLabels.join(", ")}]`);
+    lines.push(`trigg (a) reveal: dots=${revDots}, point labels=[${revLabels.join(", ")}]`);
+
+    /* part (b): the shaded strip + the two captioned boundary lines */
+    const figB = host.querySelector('.exam-diagram[data-part="b"]');
+    tick(!!figB, "part (b) renders its own figure");
+    tick(!!figB && figB.getAttribute("data-state") === "question", "(b) starts on its question figure");
+    tick(!!figB && figB.querySelectorAll("rect.tg-shade").length === 0, "…which carries NO shaded strip (the answer is not leaked)");
+    await clickDone();
+    const figBRev = host.querySelector('.exam-diagram[data-part="b"]');
+    tick(!!figBRev && figBRev.getAttribute("data-state") === "reveal", "(b) switches to its reveal figure");
+    const shades = figBRev ? figBRev.querySelectorAll("rect.tg-shade").length : 0;
+    const vlines = figBRev ? figBRev.querySelectorAll("line.tg-vline").length : 0;
+    const alabs = figBRev ? [...figBRev.querySelectorAll("text.tg-alab")].map(t => t.textContent) : [];
+    tick(shades === 1, `the reveal paints the inequality strip — one rect.tg-shade, got ${shades}`);
+    tick(vlines === 2, `…bounded by both cut lines — two line.tg-vline, got ${vlines}`);
+    tick(alabs.length === 2 && alabs.some(t => t.includes("−150°")) && alabs.some(t => t.includes("30°")),
+      `…and both lines are CAPTIONED, got [${alabs.join(" | ")}]`);
+    tick(alabs.every(t => !/-\d/.test(t)), `every degree caption uses the real minus sign, got [${alabs.join(" | ")}]`);
+    lines.push(`trigg (b) reveal: shades=${shades}, vlines=${vlines}, captions=[${alabs.join(" | ")}]`);
+  }
+
+  /* ---------- 2. QUADRANT TRIANGLE (spec.type === "quadtri") ---------- */
+  {
+    const chapter = chapterById("gtrig");
+    const q = stubQuadTriQuestion;
+    tick(validateQuestion(q).ok, `the quadtri harness stub passes validateQuestion(): ${validateQuestion(q).issues.join("; ") || "clean"}`);
+
+    clear(host);
+    const app = makeApp14(["gt8"]);
+    renderExamPlay(app, host, { chapter, skillId: "special-sums", question: q, accent: chapter.signature });
+    await new Promise(r => setTimeout(r, 40));
+    tick(app.screen === "examPlay", "the player does not bounce on a gtrig card with gt8 open");
+
+    const figA = host.querySelector('.exam-diagram[data-part="a"]');
+    const svgA = figA && figA.querySelector("svg.qt");
+    tick(!!svgA, "the panel contains the QUADRANT-TRIANGLE engine's <svg class=\"sg qt\"> — the player routed on spec.type");
+    tick(!figA || !figA.querySelector("svg.diag, svg.fg, svg.tg"), "…and NOT any other engine's svg");
+    tick(!!svgA && svgA.getAttribute("preserveAspectRatio") === "xMidYMid meet", "the svg preserves its aspect ratio, so it scales instead of distorting");
+    const qLabels = svgA ? [...svgA.querySelectorAll("text.qt-slab")].map(t => t.textContent).sort() : [];
+    tick(qLabels.includes("−3") && qLabels.includes("−4") && qLabels.includes("r"),
+      `the question figure shows the two GIVENS as numbers and the unknown as a letter, got [${qLabels.join(", ")}]`);
+    tick(!qLabels.includes("5"), "…and does NOT already show r = 5 (the answer is not leaked)");
+    const thetaLabels = svgA ? [...svgA.querySelectorAll("text.qt-ang")].map(t => t.textContent) : [];
+    tick(thetaLabels.includes("θ"), `θ is marked on the question figure, got [${thetaLabels.join(", ")}]`);
+    tick(!!svgA && svgA.querySelectorAll("path.qt-refarc").length === 0, "…with no reference-angle arc yet");
+    lines.push(`quadtri (a) question: side labels=[${qLabels.join(", ")}], angle labels=[${thetaLabels.join(", ")}]`);
+
+    await clickDone();
+    const figARev = host.querySelector('.exam-diagram[data-part="a"]');
+    tick(!!figARev && figARev.getAttribute("data-state") === "reveal", "(a) switches to its reveal figure");
+    tick(!!figARev && figARev.querySelectorAll("path.qt-refarc").length === 1, "the reveal turns the acute reference-angle arc ON (a switch, not an array — the override highlight set)");
+    const revAng = figARev ? [...figARev.querySelectorAll("text.qt-ang")].map(t => t.textContent) : [];
+    tick(revAng.includes("β"), `…and labels it, got [${revAng.join(", ")}]`);
+
+    await clickDone();
+    const figBRev = host.querySelector('.exam-diagram[data-part="b"]');
+    tick(!!figBRev && figBRev.getAttribute("data-state") === "reveal", "(b) switches to its reveal figure");
+    const revLabels = figBRev ? [...figBRev.querySelectorAll("text.qt-slab")].map(t => t.textContent).sort() : [];
+    tick(revLabels.includes("5"), `the reveal DRAWS what it found — r = 5 written on the hypotenuse, got [${revLabels.join(", ")}]`);
+    tick(!revLabels.includes("r"), "…replacing the letter, not sitting next to it (labels REPLACE wholesale)");
+    lines.push(`quadtri reveal: ref-arc on, side labels=[${revLabels.join(", ")}]`);
+  }
+
+  /* ---------- 3. a WRONG spec must FAIL validation ---------- */
+  {
+    const clone = o => JSON.parse(JSON.stringify(o));
+
+    const offCurve = clone(stubTrigQuestion);
+    offCurve.diagram.parts.a.reveal.points[0].y = -1.4;          // nowhere near either graph
+    const r1 = validateQuestion(offCurve);
+    tick(!r1.ok && r1.issues.some(i => /lies on curve/.test(i)),
+      `a point that is NOT on the curve it names fails validation — got [${r1.issues.join(" | ") || "no issues (BAD)"}]`);
+
+    const outsideWindow = clone(stubTrigQuestion);
+    outsideWindow.diagram.parts.b.reveal.shades = [{ x0: -260, x1: 30 }];
+    const r2 = validateQuestion(outsideWindow);
+    tick(!r2.ok && r2.issues.some(i => /lies inside the window/.test(i)),
+      `a shaded strip running off the window fails validation — got [${r2.issues.join(" | ") || "no issues (BAD)"}]`);
+
+    const backwards = clone(stubTrigQuestion);
+    backwards.diagram.parts.b.reveal.shades = [{ x0: 30, x1: -150 }];
+    const r3 = validateQuestion(backwards);
+    tick(!r3.ok && r3.issues.some(i => /x1 must be greater than x0/.test(i)),
+      `a shade with x1 <= x0 fails validation — got [${r3.issues.join(" | ") || "no issues (BAD)"}]`);
+
+    const strayLine = clone(stubTrigQuestion);
+    strayLine.diagram.parts.b.reveal.vlines = [{ x: 400, label: "x = 400°" }];
+    const r4 = validateQuestion(strayLine);
+    tick(!r4.ok, `a boundary line drawn off the window fails validation — got [${r4.issues.join(" | ") || "no issues (BAD)"}]`);
+
+    const lyingLabel = clone(stubQuadTriQuestion);
+    lyingLabel.diagram.parts.b.reveal.labels.r = "6";            // the picture draws 5
+    const r5 = validateQuestion(lyingLabel);
+    tick(!r5.ok && r5.issues.some(i => /matches the drawn length/.test(i)),
+      `a quadtri label that does not match the length actually drawn fails validation — got [${r5.issues.join(" | ") || "no issues (BAD)"}]`);
+
+    const contradiction = clone(stubQuadTriQuestion);
+    contradiction.diagram.parts.a.question = { bare: true, labels: { r: "5" } };
+    const r6 = validateQuestion(contradiction);
+    tick(!r6.ok && r6.issues.some(i => /contradicts itself/.test(i)),
+      `bare:true together with labels is refused as a contradiction — got [${r6.issues.join(" | ") || "no issues (BAD)"}]`);
+
+    lines.push(`deliberately-wrong specs: 6 of 6 refused (point off curve · shade off window · shade reversed · vline off window · lying r label · bare+labels)`);
+  }
+
+  /* neither stub is registered — the standing rule for every fixture */
+  tick(!examQuestionById("harness.stub.trigg") && !examQuestionById("harness.stub.quadtri"),
+    "NEITHER new stub is registered in js/exam/index.js — both stay unreachable through normal navigation");
+
+  clearSession();
+  clear(host);
+  say("engineChecks", lines);
 }
 
 const banner = document.getElementById("banner");

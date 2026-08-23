@@ -12,9 +12,11 @@
    stub must stay unreachable through normal navigation even once a
    chapter's real questions land. Only verify-exam.html imports this
    file, and it drives js/exam-play.js's renderExamPlay() directly with
-   this object (mirrors verify-dice.html's makeHarness(), which drives
+   these objects (mirrors verify-dice.html's makeHarness(), which drives
    the real renderPlay() with a fake `dice` object rather than going
-   through app routing).
+   through app routing). THE SAME RULE APPLIES to the two DIAGRAM stubs
+   added 2026-08-23 (stubTrigQuestion / stubQuadTriQuestion, at the foot
+   of this file) — three exports now, none of them registered, ever.
 
    Freshly composed content (public repo — never verbatim IEB/vendor
    text), Grade 11 Statistics, no Euclidean geometry. Exercises every
@@ -123,6 +125,203 @@ export const stubQuestion = {
       esplain: {
         en: "'Within one standard deviation' just means inside a window centred on the mean, one sd wide on each side. Build the window first (mean ± sd), THEN go back to the original list and count who's inside it.",
         af: "'Binne een standaardafwyking' beteken net binne 'n venster wat op die gemiddeld gesentreer is, een sa breed aan elke kant. Bou eers die venster (gemiddeld ± sa), gaan dán terug na die oorspronklike lys en tel wie daarbinne is.",
+      },
+    },
+  ],
+};
+
+/* ============================================================
+   DIAGRAM STUBS (EXAM-BUILD-DAY.md, session 0 plumbing, 2026-08-23).
+   ------------------------------------------------------------
+   The exam diagram slot learned two more engines on the build day —
+   js/engine/trig-graph.js ("trigg") and js/engine/quadrant-triangle.js
+   ("quadtri") — through the glue modules js/exam/trig-diagram.js and
+   js/exam/quadtri-diagram.js. These two stub cards exercise BOTH ends of
+   each: the validator (js/exam/_schema.js runs every highlighted variant
+   back through the engine that drew it) and the player
+   (js/exam-play.js's partDiagram routes on spec.type).
+
+   Same rule as stubQuestion above: NEVER registered, never reachable.
+   verify-exam.html Part 14 is the only thing that imports them.
+   ============================================================ */
+
+/* ---- 1. TRIG GRAPH ----------------------------------------------
+   f(x) = 2 sin x  and  g(x) = cos(x − 30°) on [−180°; 180°].
+   The two really do cross at (−150°; −1) and (30°; 1) — check for
+   yourself: 2 sin x = cos x cos 30° + sin x sin 30° gives
+   1,5 sin x = (√3/2) cos x, i.e. tan x = 1/√3, i.e. x = 30° or −150°.
+   So f < g strictly between those two, which is the strip part (b)'s
+   reveal paints.
+
+   What each highlight is here to prove:
+     (a) question `bare: true`  — the base spec's own marked point A is
+         stripped, because (a)'s whole job is FINDING it;
+         reveal        — the point comes back, labelled with its
+                         coordinates: the reveal draws what it found.
+     (b) question `{}`          — A is a given now, so it shows;
+         reveal        — the shaded strip plus BOTH captioned dashed
+                         boundary lines, her cut-line-and-paint method.
+   ------------------------------------------------------------------ */
+const TRIG_SPEC = {
+  type: "trigg",
+  win: { xmin: -180, xmax: 180, ymin: -2.5, ymax: 2.5 },
+  xstep: 30, ystep: 1, grid: true,
+  curves: [
+    { fn: "sin", a: 2, b: 1, p: 0, q: 0, tone: "a", label: "f", labelAt: 120 },
+    /* labelAt 0, not −60: at −60 the g label sat right on the x-axis and
+       collided with the "−60°" tick label (seen on the rendered crop).
+       At 0 the curve is 0,87 up, in clear air. Worth knowing when you
+       compose a real trigg card: this engine has NO label placer — you
+       choose labelAt yourself and then LOOK at the crop. */
+    { fn: "cos", a: 1, b: 1, p: 30, q: 0, tone: "b", label: "g", labelAt: 0 },
+  ],
+  points: [{ x: 30, y: 1, label: "A", on: [0, 1], place: "above" }],
+  w: 400, h: 300,
+};
+
+export const stubTrigQuestion = {
+  id: "harness.stub.trigg",
+  chapter: "tgraph",
+  topic: "harness-stub-trigg",
+  archetype: "HARNESS_ONLY_FIXTURE",
+  lostQuest: { chapter: "tgraph", quest: "tg7" },
+  marks: 5,
+  diagram: {
+    spec: TRIG_SPEC,
+    parts: {
+      a: {
+        question: { bare: true },
+        reveal: { bare: true, points: [{ x: 30, y: 1, label: "A(30° ; 1)", on: [0, 1], place: "above" }] },
+      },
+      b: {
+        question: {},
+        reveal: {
+          shades: [{ x0: -150, x1: 30 }],
+          vlines: [{ x: -150, label: "x = −150°" }, { x: 30, label: "x = 30°" }],
+        },
+      },
+    },
+  },
+  parts: [
+    {
+      id: "a",
+      marks: 2,
+      level: 2,
+      prompt: {
+        en: "The sketch shows &nbsp;f(x) = 2 sin x&nbsp; and &nbsp;g(x) = cos(x − 30°)&nbsp; for &nbsp;x ∈ [−180° ; 180°].<br><br>The graphs cut each other at a point A with a positive x-value. Determine the coordinates of A.",
+      },
+      hint: {
+        en: "Where the graphs cut, f(x) = g(x). Expand cos(x − 30°) with the compound-angle form, gather the sin x terms on one side and the cos x terms on the other, and you are left with a tan x you can read off.",
+      },
+      memo: [
+        { type: "step", text: { en: "2 sin x = cos x cos 30° + sin x sin 30° &nbsp;&nbsp;<i>(the graphs cut where f = g)</i>" }, ticks: ["s/f"] },
+        { type: "answer", text: { en: "tan x = 1/√3 &nbsp;∴&nbsp; x = 30° &nbsp;and&nbsp; y = 2 sin 30° = 1 &nbsp;∴&nbsp; A(30° ; 1)" }, ticks: ["a"] },
+      ],
+      esplain: {
+        en: "Two graphs cut where their y-values are the same, so the whole job is solving f(x) = g(x). Everything after that is ordinary trig: open the bracket, collect the sines on one side and the cosines on the other, divide, and you have a tangent. Read the angle off, then put it back into EITHER graph to get the height — both must give you the same answer, which is a free check.",
+      },
+    },
+    {
+      id: "b",
+      marks: 3,
+      level: 3,
+      prompt: {
+        en: "Hence use the sketch to write down the values of x for which &nbsp;f(x) &lt; g(x)&nbsp; in the given interval.",
+      },
+      hint: {
+        en: "Cut the picture at every crossing point first, then look at each strip in turn and ask which graph is on top there.",
+      },
+      memo: [
+        { type: "step", text: { en: "The graphs cut at &nbsp;x = −150°&nbsp; and &nbsp;x = 30°&nbsp; — cut lines there." }, ticks: ["ca"] },
+        { type: "step", text: { en: "Between those cuts the g graph is the higher one." }, ticks: ["ca"] },
+        { type: "answer", text: { en: "−150° &lt; x &lt; 30°" }, ticks: ["a"] },
+        { type: "trap", text: {
+          en: "WATCH OUT: the question asks where f is BELOW g, so read the strip where the f curve sits underneath. Reading the wrong graph gives you the two outside strips instead — the exact opposite answer.",
+        } },
+      ],
+      esplain: {
+        en: "This is her cut-line-and-paint method on a trig picture. Draw a light vertical line through every crossing point, which chops the interval into strips, then walk the strips one at a time and ask a single question in each: which curve is on top here? You never calculate anything — you read. The answer is the strip (or strips) where the one you were asked about is the lower curve, written as an inequality in x.",
+      },
+    },
+  ],
+};
+
+/* ---- 2. QUADRANT TRIANGLE ---------------------------------------
+   The 3-4-5 triangle in the third quadrant: x = −3, y = −4, θ marked
+   from the positive x-axis anticlockwise round to OT.
+
+   (a) reveal turns ON the acute reference-angle arc (a switch, not an
+       array — the one highlight set in the tab that OVERRIDES fields);
+   (b) reveal REPLACES the labels wholesale so r = 5 appears on the
+       hypotenuse. verifyQuadTri then proves that 5 really is the length
+       drawn, so the reveal cannot label a hypotenuse it did not draw.
+   ------------------------------------------------------------------ */
+const QUADTRI_SPEC = {
+  type: "quadtri",
+  x: -3, y: -4,
+  labels: { x: "−3", y: "−4" },
+  letters: { r: "r" },
+  theta: true, thetaLabel: "θ",
+  w: 300, h: 300,
+};
+
+export const stubQuadTriQuestion = {
+  id: "harness.stub.quadtri",
+  chapter: "gtrig",
+  topic: "harness-stub-quadtri",
+  archetype: "HARNESS_ONLY_FIXTURE",
+  lostQuest: { chapter: "gtrig", quest: "gt8" },
+  marks: 3,
+  diagram: {
+    spec: QUADTRI_SPEC,
+    parts: {
+      a: {
+        question: {},
+        reveal: { refAngle: true, refLabel: "β" },
+      },
+      b: {
+        question: {},
+        reveal: { labels: { x: "−3", y: "−4", r: "5" } },
+      },
+    },
+  },
+  parts: [
+    {
+      id: "a",
+      marks: 1,
+      level: 1,
+      prompt: {
+        en: "P(−3 ; −4) is a point on the terminal arm of θ, as shown.<br><br>Write down the quadrant in which θ lies.",
+      },
+      hint: {
+        en: "Look at the two signs. A negative x sends you left of the y-axis, a negative y sends you down below the x-axis — then count the quadrants round anticlockwise from the positive x-axis.",
+      },
+      memo: [
+        { type: "answer", text: { en: "Both x and y are negative, so P lies in the <b>third quadrant</b>." }, ticks: ["a"] },
+      ],
+      esplain: {
+        en: "The quadrants are numbered anticlockwise starting from the top right, so the third one is bottom left — the corner where both coordinates are negative. That is all this part asks, and it is worth doing first every time, because the quadrant is what decides the sign of every ratio you are about to work out.",
+      },
+    },
+    {
+      id: "b",
+      marks: 2,
+      level: 2,
+      prompt: {
+        en: "Calculate the length of OP.",
+      },
+      hint: {
+        en: "OP is the hypotenuse of the right-angled triangle in the sketch, and you know both legs. Lengths are never negative.",
+      },
+      memo: [
+        { type: "step", text: { en: "r² = x² + y² = (−3)² + (−4)² = 9 + 16 = 25 &nbsp;&nbsp;<i>(Pythagoras)</i>" }, ticks: ["s/f"] },
+        { type: "answer", text: { en: "r = 5 &nbsp;&nbsp;∴&nbsp; OP = 5 units" }, ticks: ["a"] },
+        { type: "trap", text: {
+          en: "REMEMBER: r is a LENGTH, so it is always positive — even when both legs are negative. Squaring wipes the signs out before you ever take the root.",
+        } },
+      ],
+      esplain: {
+        en: "The sketch is just Pythagoras wearing a trig hat. The two legs are the x and y you were handed, the hypotenuse is the line from the origin out to the point, and squaring both legs removes their signs before you add. That is why r never comes out negative no matter which quadrant the point sits in — and it is the number every one of sin θ, cos θ and tan θ is about to be built from.",
       },
     },
   ],

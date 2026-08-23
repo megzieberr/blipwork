@@ -17,6 +17,27 @@
 .exam-topic-count,.exam-skill-count{margin-top:6px}
 .exam-skill-card.busy{opacity:.6;pointer-events:none}
 
+/* THE LEVEL 4 TILE (her ruling 5, 2026-08-23 — EXAM-BUILD-DAY.md).
+   Every chapter's LAST tile, and it looks different on purpose: it runs
+   the FULL WIDTH of the two-column grid so it reads as a band across the
+   bottom rather than a ninth ordinary tile, and it wears the amber the
+   ★ badge already uses inside the player (js/screens.js sets --qc to
+   that amber, so .quest's own border/background/glow all follow).
+
+   It is shorter than a normal tile because it has no "two lines of
+   label" to make room for — and the note line under the label is what
+   tells a learner what it is before they tap. Everything else (the
+   locked/"coming soon" state, the busy state, the tap handler) is
+   plain .exam-skill-card behaviour, unchanged.
+
+   Phone-first: `grid-column:1/-1` is the whole layout change; nothing
+   here sets a width, a min-width or a negative margin, so at 375 px the
+   tile is exactly as wide as the grid and nothing can push sideways. */
+.exam-tile-l4{grid-column:1/-1;min-height:0;padding:12px 13px}
+.exam-tile-l4 h3{margin-top:0}
+.exam-tile-l4-note{margin-top:5px;font-size:11px;line-height:1.4}
+.exam-tile-l4 .exam-skill-count{margin-top:7px}
+
 /* ---------- the part player ---------- */
 .exam-play{display:flex;flex-direction:column;gap:14px}
 .exam-play-head h1{font-size:19px}
@@ -154,7 +175,7 @@
   background:#fff;border:1px solid var(--brd);border-radius:var(--r-md);
   display:flex;justify-content:center;overflow:hidden;
 }
-.exam-diagram svg.diag,.exam-diagram svg.fg{width:100%;max-width:340px;height:auto;display:block}
+.exam-diagram svg.diag,.exam-diagram svg.fg,.exam-diagram svg.tg,.exam-diagram svg.qt{width:100%;max-width:340px;height:auto;display:block}
 
 /* FUNCTION-GRAPH ENGINE, ink on white (added SESSION 1, 2026-08-22).
    js/engine/function-graph.js is shared with the live Functions chapter
@@ -173,6 +194,73 @@
   --g-ink:#2b2f4a; --g-muted:#6b7280; --g-axis:#2b2f4a; --g-grid:#dde1ec;
   --g-read:#b45309; --bg:#fff;
   --fg-a:#2563eb; --fg-b:#be123c; --fg-c:#7c3aed;
+}
+
+/* TRIG-GRAPH ENGINE, ink on white (added 2026-08-23, EXAM-BUILD-DAY.md,
+   when Trig Graphs joined Exam Focus). Exactly the same trick and
+   exactly the same reason as the function-graph block above:
+   js/engine/trig-graph.js is SHARED with the live tg1-tg7 rounds, where
+   it draws light ink on the app's near-black background — correct
+   there, illegible here on the white paper panel. So every token its
+   .tg-* element styles read (css/styles.css) is redefined in THIS scope
+   only, and the shared engine is never touched.
+
+   The full list its selectors read, checked against css/styles.css:
+   --g-grid (.tg-grid) · --g-axis (.tg-axis, .tg-arrow, .tg-tick) ·
+   --g-muted (.tg-axlab, .tg-tlab, .tg-asym, .tg-alab) · --g-ink
+   (.tg-dot, .tg-plab) · --g-read (.tg-mid, .tg-drop, .tg-measure,
+   .tg-mlab, .tg-arrow.tg-mar, .tg-vline, .tg-hline) · --bg (the text
+   halo on .tg-tlab / .tg-plab / .tg-mlab / .tg-alab, and .tg-dot.open's
+   fill — white here, not the app's near-black) · --accent (.tg-curve's
+   default stroke, .tg-flab, .tg-shade's fill) · --tg-a / --tg-b (the two
+   named curve tones). Curve tones are her f/g pair in dark-on-white:
+   blue for f, deep rose for g, matching the function engine's --fg-a /
+   --fg-b above so the two kinds of graph read as one house. */
+.exam-diagram svg.tg{
+  --g-ink:#2b2f4a; --g-muted:#6b7280; --g-axis:#2b2f4a; --g-grid:#dde1ec;
+  --g-read:#b45309; --bg:#fff; --accent:#2563eb;
+  --tg-a:#2563eb; --tg-b:#be123c;
+}
+
+/* ⚠️ SPECIFICITY, the thing that makes the two blocks above not enough
+   on their own (found by looking at the rendered crops, 2026-08-23).
+   css/styles.css carries a blanket `.sg text{fill:var(--g-muted)}`, and
+   BOTH engines wrap their output in <svg class="sg tg"> / "sg qt". That
+   selector is (0,1,1) — one class plus a type — so it beats every
+   single-class rule below it: .tg-plab, .tg-mlab, .qt-slab, .qt-axlab
+   and .qt-ang all lose, and EVERY piece of text in those two figures
+   comes out --g-muted. On the app's dark background that reads fine and
+   nobody ever noticed. On this white paper panel it came out pale
+   cyan-grey — a marked point's label, the answer, was the faintest
+   thing on the page.
+
+   These rules restore the hierarchy the engines meant, INSIDE THE EXAM
+   PANEL ONLY (`.exam-diagram` prefixes every one, so the live tg1–tg7
+   and gt8/gt10 rounds are untouched — and svg.fg is left alone too:
+   the Functions figures were reviewed and approved as they are). */
+.exam-diagram svg.tg text.tg-plab{fill:var(--g-ink)}
+.exam-diagram svg.tg text.tg-mlab{fill:var(--g-read)}
+.exam-diagram svg.qt text{fill:var(--ink)}
+.exam-diagram svg.qt text.qt-axlab,.exam-diagram svg.qt text.qt-title{fill:var(--faint)}
+.exam-diagram svg.qt text.qt-ang{fill:var(--warn)}
+
+/* QUADRANT-TRIANGLE ENGINE, ink on white (added 2026-08-23). Same
+   treatment again, but this engine's .qt-* styles read the APP's own
+   text tokens rather than the --g-* graph ones, so those are what get
+   redefined here: --ink (.qt-axis, .qt-arrow, .qt-slab) · --faint
+   (.qt-axlab, .qt-title) · --accent (.qt-tri, .qt-right, .qt-dot,
+   .qt-placed) · --warn (.qt-arc, .qt-ang — the θ arc and its label) ·
+   --good (.qt-refarc, the dashed reference-angle arc). The two arc
+   colours are darkened from the app's neon amber/mint to an amber and a
+   green that hold up on white without losing the "these two arcs are
+   different things" distinction. */
+.exam-diagram svg.qt{
+  --ink:#2b2f4a; --faint:#6b7280; --accent:#2563eb;
+  --warn:#b45309; --good:#047857; --bg:#fff;
+  /* --g-muted is here because of the blanket `.sg text` rule explained
+     below — without it every label in this figure falls back to the
+     app's pale dark-background grey. */
+  --g-muted:#2b2f4a; --g-ink:#2b2f4a;
 }
 
 /* diagram core — Circle Quest's values, one font swap (Blipwork has no

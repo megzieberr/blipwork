@@ -48,6 +48,8 @@ import { funcCards } from "./cards-func.js";
 import { gtrigCards } from "./cards-gtrig.js";
 import { trigCards } from "./cards-trig.js";
 import { euclidCards } from "./cards-euclid.js";
+import { algxCards } from "./cards-algx.js";
+import { tgraphCards } from "./cards-tgraph.js";
 
 /* SKILL CARDS (EXAM-SKILLS-BRIEF.md, stage 1, 2026-08-22). The registry
    no longer holds the 21 seeded QUESTIONS directly — it holds the ~54
@@ -66,7 +68,18 @@ import { euclidCards } from "./cards-euclid.js";
    pat) stays an empty array until its own seeding session lands. */
 const REGISTRY = {
   stats: [], finance: [], prob: [], meas: [],
-  tgraph: [], analytical: [], pat: [],
+  analytical: [], pat: [],
+  /* TRIG GRAPHS (js/config.js CHAPTERS, rounds tg1-tg7) joined Exam
+     Focus on the build day, 2026-08-23 (EXAM-BUILD-DAY.md). Six tiles in
+     js/exam/skills.js, no cards yet — session E fills js/exam/
+     cards-tgraph.js, and until it does every tile renders "coming soon",
+     which is exactly the empty-until-seeded state this registry has
+     always supported. */
+  tgraph: tgraphCards,
+  /* ALGEBRAIC EXPRESSIONS — the SECOND exam-focus-only chapter
+     (js/config.js EXAM_ONLY_CHAPTERS, added 2026-08-23). Owns no drill
+     quests at all, like euclid. Session A fills js/exam/cards-algx.js. */
+  algx: algxCards,
   exp: expCards,
   func: funcCards,
   /* 2D TRIGONOMETRY — PAUSED (her ruling, 2026-08-22): one card, and
@@ -136,6 +149,36 @@ export function examFirstCardForSkill(chapterId, skillId, progress) {
   return cards.find(c => !(p[c.id] && p[c.id].completed)) || cards[0];
 }
 
+/* A CARD'S LEVEL = the level of its hardest part (2026-08-23,
+   EXAM-BUILD-DAY.md). A card is worked whole, so what a learner actually
+   meets is the hardest thing in it — a card with parts at levels 1, 1 and
+   3 is a level-3 card. Exported because verify-exam.html's level-wall
+   check (Part 13) and the sort below must agree on one definition.
+   A card with no parts (impossible past validateQuestion, but this is
+   also called from a harness) reads as level 1. */
+export function cardLevel(card) {
+  const parts = (card && card.parts) || [];
+  return parts.reduce((max, p) => Math.max(max, (p && p.level) || 1), 1);
+}
+
+/* THE CARDS OF ONE SKILL TILE, EASIEST FIRST (her ruling 10,
+   2026-08-23: "Cards inside a tile run easiest first, Level 1 → 3").
+
+   A STABLE sort by cardLevel ascending: cards of equal level keep the
+   order their cards-<chapter>.js file lists them in, so a session's own
+   ordering inside a level band is still respected — the sort only ever
+   moves a harder card BELOW an easier one. (Array.prototype.sort is
+   required to be stable in every engine this app runs on, but the index
+   tiebreak below makes that guarantee explicit rather than assumed.)
+
+   This is also the order "Another one!" walks (js/exam-play.js reads the
+   same function for its sibling list) and the order
+   examFirstCardForSkill resumes into — so a returning learner carries on
+   through a tile from easy to hard, not in file order. */
 export function examQuestionsForTopic(chapterId, topicId) {
-  return examQuestionsForChapter(chapterId).filter(q => q.topic === topicId);
+  return examQuestionsForChapter(chapterId)
+    .filter(q => q.topic === topicId)
+    .map((q, i) => ({ q, i }))
+    .sort((a, b) => (cardLevel(a.q) - cardLevel(b.q)) || (a.i - b.i))
+    .map(x => x.q);
 }

@@ -15,6 +15,16 @@ const PALETTE = {
   cyan:    "#22d3ee",   // ice cyan
   gold:    "#fbbf24",   // legendary gold
   fuchsia: "#e879f9",   // rare-drop fuchsia
+  /* SIXTH ACCENT, added 2026-08-23 for the new exam-only "algx" chapter
+     (EXAM-BUILD-DAY.md). The brief asked for "a PALETTE colour no chapter
+     uses" — there wasn't one left: blue is on stats/func/eqn, violet on
+     finance/tgraph/gtrig/euclid, cyan on prob/analytical, gold on
+     trig/pat, fuchsia on meas/exp. Rather than hand Algebraic
+     Expressions a colour already worn by three other chapters, the
+     curated set grows by one. Mint reads clean on #070b16 and is far
+     enough from cyan to be told apart at a glance; it also stays clear
+     of the amber ★ used by the Level 4 tiles. Nothing else uses it. */
+  mint:    "#34d399",   // fresh-start mint (algx only)
 };
 const CYCLE = [PALETTE.blue, PALETTE.violet, PALETTE.cyan, PALETTE.gold, PALETTE.fuchsia];
 
@@ -243,6 +253,26 @@ export const EXAM_ONLY_CHAPTERS = [
     blurb: "Circle theorems, tangents and cyclic quads — real exam questions, one part at a time.",
     quests: [],
   },
+  /* ALGEBRAIC EXPRESSIONS (her ruling, 2026-08-23 morning —
+     EXAM-BUILD-DAY.md ruling 2): "Algebraic expressions (Gr10 revision)
+     gets its own exam-only chapter — that is where the 30%-learners will
+     earn their marks." The SECOND exam-focus-only chapter, and it works
+     exactly like euclid above: no drill quests of its own (Blipwork has
+     no Grade-10 expanding/factorising rounds, and none are planned), so
+     it is structurally invisible to the hub's Term 3 / Revision tabs,
+     the 🎲 dice, the admin open/close grid, assignments and the
+     dashboard — all of which iterate CHAPTERS and only CHAPTERS. Its
+     examOnly:true flag is what lets examChapterEligible() reach it on
+     the build flag alone, since the "at least one open quest" half of
+     the gate can never be satisfied for a chapter that owns none.
+     Icon 🧩 — the pieces-fitting-together one, and unused elsewhere in
+     the app. Colour: PALETTE.mint, added above for it. */
+  {
+    id: "algx", name: "Algebraic Expressions", paper: "Paper 1", icon: "🧩", term: "exam-only",
+    signature: PALETTE.mint, open: true, examOnly: true,
+    blurb: "Expanding, factorising and algebraic fractions — the Grade 10 skills the exam still expects.",
+    quests: [],
+  },
 ];
 
 export function chapterById(id) { return CHAPTERS.find(c => c.id === id) || null; }
@@ -381,11 +411,30 @@ export const MOOD = {
    makes the gtrig exam tab reachable at all. It still shows only once
    she has opened at least one gtrig round — examChapterEligible() in
    js/screens.js adds that half of the gate on top, exactly as it does
-   for every non-exam-only chapter. */
-export const EXAM_CHAPTERS = ["eqn", "exp", "func", "trig", "gtrig", "euclid"];
+   for every non-exam-only chapter.
 
-/* Pay-per-completed-question, her kickoff ruling (2026-08-21): flat 75 XP +
-   10 gold, ONCE per question ever (re-opening an already-completed
+   THE EXAM BUILD DAY LIST (2026-08-23, EXAM-BUILD-DAY.md). Seven
+   chapters, and two changes from yesterday's six:
+
+     · "algx" JOINS — Algebraic Expressions, the second EXAM-FOCUS-ONLY
+       chapter (EXAM_ONLY_CHAPTERS above). Like euclid it owns no
+       quests, so this flag is its whole gate.
+     · "tgraph" JOINS — Trig Graphs. An ORDINARY quest chapter (rounds
+       tg1–tg7 in CHAPTERS above), so the open-quest half of the gate
+       applies to it exactly as it does to func: its Exam Focus screens
+       only appear once she has opened at least one of tg1–tg7.
+     · "trig" LEAVES — her ruling this morning (EXAM-BUILD-DAY.md ruling
+       9): "2D Trig is HIDDEN from Exam Focus for now." Nothing was
+       deleted — the chapter's one card (js/exam/cards-trig.js) and its
+       skills.js entry both stay exactly where they are, so putting it
+       back later is a one-word edit here. It simply stops being
+       reachable in the tab.
+   */
+export const EXAM_CHAPTERS = ["algx", "eqn", "exp", "func", "tgraph", "gtrig", "euclid"];
+
+/* Pay-per-completed-question, her kickoff ruling (2026-08-21), re-rated
+   2026-08-23 to 50 XP + 5 gold (see the block at the end of this comment):
+   flat pay, ONCE per question ever (re-opening an already-completed
    question pays nothing — the served RPC's `completed` flag is the
    dedupe). THIS IS A DISPLAY MIRROR ONLY, same relationship BLIP/MOOD
    above have with their RPCs — supabase/migration-exam-focus.sql
@@ -395,8 +444,20 @@ export const EXAM_CHAPTERS = ["eqn", "exp", "func", "trig", "gtrig", "euclid"];
    their own. "Completed" = every part's memo has been revealed (the
    client reports each part-reveal as it happens; the server derives
    completion and pays once — there is no correctness signal, by design:
-   the app never marks the learner's own work). */
+   the app never marks the learner's own work).
+
+   PAY CHANGED 2026-08-23 (her ruling, EXAM-BUILD-DAY.md ruling 7):
+   75 XP + 10 💎 → 50 XP + 5 💎 per completed card. The exam bank is
+   about to go from ~50 cards to several hundred, and the old rate would
+   have made Exam Focus by far the fastest way to earn in the whole app.
+   THE SERVER LITERAL LIVES IN THE NEW MIGRATION —
+   supabase/migration-exam-xp-50.sql (WRITTEN, NOT RUN as of this
+   session): it re-creates mhq_exam_open_part with 50 / 5 in place of
+   75 / 10 and changes nothing else. verify-exam.html Part 5 cross-checks
+   THIS block against THAT file. The original
+   supabase/migration-exam-focus.sql keeps its 75 / 10 on purpose — it is
+   the applied history of what ran on 2026-08-21, not a live mirror. */
 export const EXAM = {
-  xpPerQuestion: 75,
-  goldPerQuestion: 10,
+  xpPerQuestion: 50,
+  goldPerQuestion: 5,
 };
