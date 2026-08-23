@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-23 (late) (🎲 DICE ×3 — Finance, Number Patterns, 2D Trig pools BUILT + the two Euclid cosmetics; local, sw v64 staged, SHIP WAITS ON HER YES)
+# Project status — updated 2026-08-23 (late) (🎲 DICE ×3 SHIPPED — Finance, Number Patterns, 2D Trig dice LIVE on sw v64, + the two Euclid cosmetics + four review fixes)
 
 ## 🎲 2026-08-23 (late) — THREE DICE CHAPTERS + COSMETICS (Fable foreman, 3 parallel Opus sessions under her /go)
 
@@ -6,8 +6,9 @@ Her brief: the two small Euclid cosmetics first, then "the dice rounds". Her que
 this a nice task for parallel agents?" — yes: one Opus session per chapter, same working
 tree, stub pools pre-registered by the foreman so no session touched a shared file.
 Agent spend ≈ 1.0M Opus (F 0.34M · P 0.32M · T 0.35M) inside the 1.5–2M estimate.
-**Everything is LOCAL and uncommitted** — `DICE_CHAPTERS` now lists all four, `sw.js` is
-bumped to v64, nothing is pushed. The ship is the next act on her yes.
+**SHIPPED on her "yes, you can ship"**: commit `2262d23`, pushed, Pages built; live-verified
+sw v64 served, the three pool files 200, `DICE_CHAPTERS` live, 🎲 card on all three chapters,
+a real round opened on each on the live site (offline backend) with zero page errors.
 
 **The two cosmetics (foreman, before the build)**
 - "O" read like a zero: the centre label was painted BEFORE the chords/wedges, so every
@@ -66,11 +67,9 @@ store 4033 · exam 673 · exam-modules 7374 · exam-fractions 5819 · exam-skill
 Hub: 🎲 card on exactly finance / pat / trig / stats, none elsewhere (checked at 375 px).
 
 ### ⏳ Pending on Megan
-- 💻 1 min **[blocking]**: say "ship it" — commit (cosmetics + dice + review fixes), push,
-  live-check sw v64 and the three new 🎲 cards. No migration needed (dice_plays already
-  holds any chapter id).
-- 📱 5 min **[after ship, whenever]**: Finance → 🎲 one round; Number Patterns → 🎲 one
-  round; 2D Trig → 🎲 one round — the phone-test per chapter (her rhythm).
+- 📱 5 min **[whenever]**: close-and-reopen the PWA twice (sw v64), then Finance → 🎲 one
+  round; Number Patterns → 🎲 one round; 2D Trig → 🎲 one round — the phone-test per
+  chapter (her rhythm). No SQL to run.
 
 ### Next up
 - **Worked-method content batch?** 99 of the 131 new dice skills ship without a method
