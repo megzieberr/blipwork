@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-23 morning (📈 STAGE 2 + whole-app sweep LIVE — sw v59 after her phone round)
+# Project status — updated 2026-08-23 morning (📈 STAGE 2 + whole-app sweep LIVE — sw v60 after her phone round)
 
 ## 📈 2026-08-22 → 23 — STAGE 2: function sketches in Exam Focus, 48 Functions cards, whole-app sweep (Fable foreman day, her "spend more to make the graphs look good")
 
@@ -74,6 +74,9 @@ the tokens, make the graphs look good).
 - `css/exam.css` is missing from `sw.js`'s SHELL precache list (spotted, not touched).
 
 ## 📌 Decisions (append-only, 2026-08-23)
+- ARITHMETIC PATTERNS teach the Grade 11 shortcut ONLY: Tₙ = an + c, a = the constant
+  difference ("start with 3n"), c = T₀ = T₁ − d (step back one). The a + (n − 1)d formula is
+  Grade 12 and must not appear in Gr11 content (her ruling, phone round 2026-08-23; v60).
 - A reveal DRAWS what it found (lines dashed + captioned, shifted graphs as a second curve,
   inequalities as painted strips). Question side never leaks the answer.
 - Stacked fractions everywhere, app-wide; prose word-pairs keep their slash.
