@@ -982,10 +982,12 @@ export const CONCEPTS = {
       <p>Find d by subtracting any term from the one after it.</p>
       <div class="eg">e.g. 4 ; 7 ; 10 ; 13 → d = 7 − 4 = 3.</div>`,
   },
+  // Gr11 shortcut ONLY (her ruling 2026-08-23): a = constant difference, c = T₀.
+  // The Gr12 a + (n − 1)d form is never shown to learners.
   patArithTerm: {
     title: "The general term of an arithmetic pattern",
     body: `
-      <p>One formula, the Grade 11 shortcut (her ruling, 2026-08-23 — the a + (n − 1)d version is Grade 12 work and is NOT used here):</p>
+      <p>One formula:</p>
       <div class="formula">Tₙ = an + c &nbsp;&nbsp;(a = the constant difference, c = T₀)</div>
       <ol>
         <li><b>a</b> is the constant difference — so if the pattern goes up by 3 each time, the formula starts with <b>3n</b>.</li>

@@ -86,7 +86,7 @@ const SKILLS = {
   /* exponential factor: make the bases the same */
   expSameBase: () => {
     const items = [
-      { q: `One bracket gives <b>${pw("3", "x")} = √27</b>. What is the correct first move?`, correct: `Write √27 as a power of 3: ${pw("3", "x")} = ${pw("3", "3/2")}`, wrongs: ["Square both sides", "Take logs — Grade 12 only, so it can't be solved", `Divide both sides by 3`], ans: `√27 = √(3³) = ${pw("3", "3/2")}. Same base on both sides → equate the exponents: x = ${frac(3, 2)}.` },
+      { q: `One bracket gives <b>${pw("3", "x")} = √27</b>. What is the correct first move?`, correct: `Write √27 as a power of 3: ${pw("3", "x")} = ${pw("3", "3/2")}`, wrongs: ["Square both sides", "Take logs", `Divide both sides by 3`], ans: `√27 = √(3³) = ${pw("3", "3/2")}. Same base on both sides → equate the exponents: x = ${frac(3, 2)}.` },
       { q: `One bracket gives <b>${pw("3", "x")} = 1</b>. What is x?`, correct: "x = 0, because 3⁰ = 1", wrongs: ["x = 1", "No solution", "x = ⅓"], ans: `Write 1 as a power of 3: 1 = 3⁰. Same base → x = 0.` },
       { q: `One bracket gives <b>${pw("2", "x")} = 16</b>. What is the correct move?`, correct: `Write 16 as ${pw("2", "4")}, then equate exponents: x = 4`, wrongs: ["Divide both sides by 2 four times and count", "Square-root both sides", "x = 8, because 16 ÷ 2 = 8"], ans: `16 = 2⁴, so ${pw("2", "x")} = ${pw("2", "4")} → x = 4. Same base, then the bases fall away.` },
     ];
