@@ -184,9 +184,9 @@ const CA1_BASE = {
     { at: "C", legs: ["B", "O"], t: "40°", o: { v: 40, r: 36, ar: 20 } },
     { at: "B", legs: ["A", "O"], t: "1", o: { v: 35, ar: 40 } },
     { at: "B", legs: ["O", "C"], t: "2", o: { v: 40, ar: 22 } },
-    { at: "O", legs: ["B", "A"], t: "1", o: { v: 110, ar: 26 } },
-    { at: "O", legs: ["A", "C"], t: "2", o: { v: 150, ar: 50 } },
-    { at: "O", legs: ["C", "B"], t: "3", o: { v: 100, ar: 34 } },
+    { at: "O", legs: ["B", "A"], t: "1", o: { v: 110, ar: 30 } },
+    { at: "O", legs: ["A", "C"], t: "2", o: { v: 150, ar: 42 } },
+    { at: "O", legs: ["C", "B"], t: "3", o: { v: 100, ar: 20 } },
   ],
 };
 /* Every highlight below repeats its wedge's OWN `ar`. Without it the
@@ -199,9 +199,9 @@ const CA1_OAB = { at: "A", legs: ["O", "B"], v: 35, o: { ar: 20 } };
 const CA1_OCB = { at: "C", legs: ["B", "O"], v: 40, o: { ar: 20 } };
 const CA1_B1 = { at: "B", legs: ["A", "O"], v: 35, o: { ar: 40, hlR: 40 } };
 const CA1_B2 = { at: "B", legs: ["O", "C"], v: 40, o: { ar: 22 } };
-const CA1_O1 = { at: "O", legs: ["B", "A"], v: 110, o: { ar: 26 } };
-const CA1_O2 = { at: "O", legs: ["A", "C"], v: 150, o: { ar: 50, hlR: 50 } };
-const CA1_O3 = { at: "O", legs: ["C", "B"], v: 100, o: { ar: 34 } };
+const CA1_O1 = { at: "O", legs: ["B", "A"], v: 110, o: { ar: 30 } };
+const CA1_O2 = { at: "O", legs: ["A", "C"], v: 150, o: { ar: 42, hlR: 42 } };
+const CA1_O3 = { at: "O", legs: ["C", "B"], v: 100, o: { ar: 20 } };
 const CA1_CHAIN = [
   { n: "B̂₁", v: "35°" }, { n: "Ô₁", v: "110°" }, { n: "B̂₂", v: "40°" },
   { n: "Ô₃", v: "100°" }, { n: "Ô₂", v: "150°" },
