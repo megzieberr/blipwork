@@ -54,6 +54,21 @@
    only the REVEAL side draws specQ4a's full labelling beside the
    worked proof.
 
+   ⚠️ THE SKETCH WALKS WITH THE PROOF (session G3, 2026-08-23). 4(a)
+   is bookwork proof 2 of the four, re-homed onto the bookwork-proofs
+   tile by js/exam/cards-euclid.js, so its memo carries the same
+   per-step `hl` blocks the other three proofs got that day: each `step`
+   that changes the picture holds a highlight set in exactly the shape
+   of `reveal`, and js/exam/_walk.js renders the last one at or before
+   the block the walk has reached. Read js/exam/euclid-bookwork-proofs.js's
+   header for the three authoring rules; the one that matters most here
+   is that every walk state stays `bare`, so the figure only ever shows
+   the wedges the proof has actually reached — and the two the THEOREM is
+   about (the unlabelled ∠AOC and ∠ABC) are drawn for the first time on
+   the answer, by `reveal`, which no `hl` overrides.
+   makeCard copies part objects shallowly, so the memo array (and its
+   `hl` blocks) rides across onto the card untouched.
+
    LEVELS: 1:1 with T2's blueprint — (a) 1, (b)(1) 3, (b)(2) 2. No ★
    (T2's two level-4 parts are 3(e) and 5(d); 5(d) is in the sibling
    file).
@@ -100,6 +115,27 @@ export const specQ4b = {
     { at: "M", legs: ["Q", "T"], t: "", o: { v: 90, mark: "square" } },
   ],
 };
+
+/* --- 4(a)'s walk states (session G3, 2026-08-23) ---------------------
+   Named once and reused, because js/exam/_walk.js's rule is that each
+   `hl` is a COMPLETE picture rather than a diff. Every wedge keeps the
+   label radius specQ4a gives it, so a wedge never moves between the
+   walk and the reveal; `hlR` is pinned to the arc radius angleSVG will
+   actually draw (22 under 40 degrees of sweep, 25 above it) instead of
+   the 34 px default, because two adjacent 34 px pies at O would wash
+   across the whole of angle AOC — the very angle the answer is about.
+   The three radii all carry the SAME double tick: OA, OB and OC are
+   equal to each other, not in two separate pairs. */
+const Q4A_XY_AT_B = [
+  { at: "B", legs: ["A", "D"], t: "x", v: 30, o: { r: 52, hlR: 22 } },
+  { at: "B", legs: ["D", "C"], t: "y", v: 35, o: { r: 52, hlR: 22 } },
+];
+const Q4A_OA_OB = [["O", "A", "t2"], ["O", "B", "t2"]];
+const Q4A_OA_OB_OC = Q4A_OA_OB.concat([["O", "C", "t2"]]);
+const Q4A_X_AT_A = { at: "A", legs: ["B", "O"], t: "x", v: 30, o: { r: 46, hlR: 22 } };
+const Q4A_2X_AT_O = { at: "O", legs: ["A", "D"], t: "2x", v: 60, o: { r: 50, hlR: 25 } };
+const Q4A_Y_AT_C = { at: "C", legs: ["O", "B"], t: "y", v: 35, o: { r: 46, hlR: 22 } };
+const Q4A_2Y_AT_O = { at: "O", legs: ["D", "C"], t: "2y", v: 70, o: { r: 50, rot: -8, hlR: 25 } };
 
 const t2q4 = {
   id: "euclid.circ.t2q4",
@@ -158,12 +194,27 @@ const t2q4 = {
         en: "Start by naming the two halves of the angle at B — call them x and y — and look for the isosceles triangles hiding in the radii. Then remember what an exterior angle of a triangle is worth.",
       },
       memo: [
-        { type: "step", text: { en: "Let ∠ABO = x &nbsp;and&nbsp; ∠CBO = y." } },
-        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" } },
-        { type: "step", text: { en: "∴ ∠OAB = x &nbsp;&nbsp;<i>(∠s opposite equal sides)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "∠AOD = x + x = 2x &nbsp;&nbsp;<i>(exterior ∠ of △AOB)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "OC = OB, so ∠OCB = y &nbsp;&nbsp;<i>(radii; ∠s opposite equal sides)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "∠COD = y + y = 2y &nbsp;&nbsp;<i>(exterior ∠ of △COB)</i>" }, ticks: ["ca"] },
+        /* the two halves of the angle at B get their names — the first
+           thing that appears on a figure that started completely bare */
+        { type: "step", text: { en: "Let ∠ABO = x &nbsp;and&nbsp; ∠CBO = y." },
+          hl: { bare: true, angles: Q4A_XY_AT_B } },
+        /* the two radii light, with the ticks that say they are equal */
+        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" },
+          hl: { bare: true, angles: Q4A_XY_AT_B, chords: Q4A_OA_OB } },
+        /* the base angle the isosceles triangle hands back */
+        { type: "step", text: { en: "∴ ∠OAB = x &nbsp;&nbsp;<i>(∠s opposite equal sides)</i>" }, ticks: ["ca"],
+          hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A]), chords: Q4A_OA_OB } },
+        /* the first half of the angle at the centre */
+        { type: "step", text: { en: "∠AOD = x + x = 2x &nbsp;&nbsp;<i>(exterior ∠ of △AOB)</i>" }, ticks: ["ca"],
+          hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A, Q4A_2X_AT_O]), chords: Q4A_OA_OB } },
+        /* the same move on the other side: third radius, second base angle */
+        { type: "step", text: { en: "OC = OB, so ∠OCB = y &nbsp;&nbsp;<i>(radii; ∠s opposite equal sides)</i>" }, ticks: ["ca"],
+          hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A, Q4A_2X_AT_O, Q4A_Y_AT_C]), chords: Q4A_OA_OB_OC } },
+        /* and the second half of the angle at the centre */
+        { type: "step", text: { en: "∠COD = y + y = 2y &nbsp;&nbsp;<i>(exterior ∠ of △COB)</i>" }, ticks: ["ca"],
+          hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A, Q4A_2X_AT_O, Q4A_Y_AT_C, Q4A_2Y_AT_O]), chords: Q4A_OA_OB_OC } },
+        /* no `hl`: the answer falls through to `reveal`, which is where
+           ∠AOC and ∠ABC themselves are drawn for the first time */
         { type: "answer", text: { en: "∠AOC = 2x + 2y = 2(x + y) = 2 · ∠ABC" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: in bookwork the <b>reasons</b> carry the marks, not the algebra. “∠s opposite equal sides” and “exterior ∠ of a triangle” must appear in words. A proof written as five lines of x's and y's with no reasons scores almost nothing.",

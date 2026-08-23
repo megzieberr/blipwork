@@ -20,3 +20,7 @@ tools/_out/
 # a few hundred screenshots into a public repo). Added 2026-08-23.
 tools/diags/
 tools/shots/
+# shoot_walk.py's output, same reason (session G3, 2026-08-23): one crop per
+# memo step per card is a lot of screenshots, and this repo is public.
+tools/diags-walk/
+tools/shots-walk/

@@ -13,6 +13,16 @@ with the demo learner. They clear the service worker and caches first. Most writ
       python shoot.py func find-equation
       python shoot.py tgraph sketch
       python shoot.py euclid level-4
+- `shoot_walk.py <chapterId> <skillId> [cardIdSubstring]` — the same cards' **walk**: taps
+  "Walk me through it" and photographs the sketch after every "Next step →", including the last
+  click (which flips the part to fully revealed, so that crop is the proof the walk ends on the
+  Done path's picture). Added session G3, 2026-08-23, when a memo step gained an optional `hl`
+  and the figure gained a third state — `shoot.py` never taps the walk button and so cannot see
+  any of them. Writes crops to `tools/diags-walk/`, full pages to `tools/shots-walk/`, and a
+  `_manifest-<chapter>-<skill>.json` naming the memo line each crop belongs to. Read the crops.
+
+      python shoot_walk.py euclid bookwork-proofs
+      python shoot_walk.py euclid bookwork-proofs bw.q1
 - `shoot_round.py <questId>…` — real play rounds, three questions each, hint open, then answered.
 - `sweep.py [N] [questIdPrefix…]` — the whole-app formatting sweep: N generated questions per
   skill for every quest + every concept card, rendered through the real pipeline, checked for

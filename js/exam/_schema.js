@@ -243,11 +243,21 @@
              beyond the memo's method).
 
    MEMO BLOCK — one of three typed shapes:
-     { type:"step",   text:{en,af}, ticks:[...] }
+     { type:"step",   text:{en,af}, ticks:[...], hl? }
        a worked-method line. `ticks` are the mark-earning ticks THIS
        line carries, in order — zero or more.
-     { type:"answer", text:{en,af}, ticks:[...] }
+     { type:"answer", text:{en,af}, ticks:[...], hl? }
        the ANSWER bar — usually the line carrying the part's final ✓a.
+
+     `hl` (OPTIONAL, session G3, 2026-08-23) is a HIGHLIGHT SET in the
+     same shape as the part's `diagram.parts.<id>.reveal`: the picture
+     that goes with THIS line while "Walk me through it" is running.
+     It is cumulative — a block with no `hl` keeps the picture the
+     block before it left on screen — and an `answer` block with no
+     `hl` of its own resolves to the part's `reveal`, so the finished
+     walk and the Done path show the identical figure. The resolver is
+     js/exam/_walk.js; every `hl` is validated exactly like a reveal
+     (validateMemoHighlights below). A trap card never carries one.
      { type:"trap",   text:{en,af} }
        the amber REMEMBER card. Optional — only present where the
        archetype actually has a common trap. Never carries ticks (a
@@ -327,7 +337,14 @@ function validateMemoBlock(block, partId, idx, issues) {
   glyphIssues(block.text, `${label}.text`, issues);
   if (block.type === "trap") {
     if (Array.isArray(block.ticks) && block.ticks.length) issues.push(`${label}: a trap card must not carry ticks (it's a warning, not a mark)`);
+    if (block.hl !== undefined) issues.push(`${label}: a trap card must not carry a diagram highlight \`hl\` — it is a warning, not a step of the proof`);
     return 0;
+  }
+  /* WALK HIGHLIGHT (session G3, 2026-08-23). Shape only here — the
+     against-the-spec checks need the part's figure, so they live in
+     validateMemoHighlights below, beside validateDiagram. */
+  if (block.hl !== undefined && (!block.hl || typeof block.hl !== "object" || Array.isArray(block.hl))) {
+    issues.push(`${label}.hl: must be a highlight-set object (the same shape as the part's diagram reveal)`);
   }
   const ticks = Array.isArray(block.ticks) ? block.ticks : [];
   ticks.forEach(t => { if (!ALLOWED_TICKS.has(t)) issues.push(`${label}: unknown tick "${t}" (allowed: a, ca, s/f)`); });
@@ -488,6 +505,42 @@ function validateDiagram(q, issues) {
 }
 
 /* ---------------------------------------------------------------
+   MEMO WALK HIGHLIGHTS (session G3, 2026-08-23 — her ask: "show the
+   steps on the sketch as well if the kids tapped on 'walk me through
+   it'"). A `step`/`answer` memo block may carry an `hl` in exactly the
+   same shape as its part's `reveal`, and js/exam/_walk.js resolves
+   which one a given walk step renders.
+
+   THE POINT OF CHECKING IT HERE: a walk highlight is a PICTURE A
+   LEARNER SEES, so it earns exactly the same two guarantees a reveal
+   does — every name it uses exists in the figure (structural), and
+   every wedge it lights really measures the value it declares
+   (verifyDiagram, on the highlighted variant). A walk state that lies
+   about the figure now fails validateQuestion instead of shipping.
+   Plus the one rule that only applies here: an `hl` on a part with no
+   figure at all is authoring nonsense, and says so.
+   --------------------------------------------------------------- */
+function validateMemoHighlights(q, issues) {
+  const d = q.diagram;
+  (q.parts || []).forEach(part => {
+    if (!part || !Array.isArray(part.memo)) return;
+    const withHl = part.memo.filter(b => b && b.hl !== undefined);
+    if (!withHl.length) return;
+    const entry = d && d.parts && d.parts[part.id];
+    const spec = entry && (entry.spec || d.spec);
+    if (!spec) {
+      issues.push(`question "${q.id}" part "${part.id}": memo blocks carry \`hl\` but the part has no diagram to draw them on`);
+      return;
+    }
+    part.memo.forEach((block, i) => {
+      if (!block || block.hl === undefined) return;
+      if (!block.hl || typeof block.hl !== "object" || Array.isArray(block.hl)) return;   // shape already reported
+      validateHighlightSet(spec, block.hl, `question "${q.id}" part "${part.id}" memo[${i}].hl`, issues);
+    });
+  });
+}
+
+/* ---------------------------------------------------------------
    SOURCE + INTRO (optional, added 2026-08-22 with the SKILL CARDS
    build — EXAM-SKILLS-BRIEF.md). Absent on every one of the 21 SOURCE
    questions in js/exam/*.js (they stay exactly as composed); present
@@ -558,6 +611,7 @@ export function validateQuestion(q) {
   }
 
   validateDiagram(q, issues);
+  validateMemoHighlights(q, issues);
   validateSource(q, issues);
   validateIntro(q, issues);
 

@@ -117,6 +117,17 @@
    Diagrams ride along untouched: js/exam/_cards.js's cutDiagram narrows
    each card's diagram block to the parts it actually holds, so every
    figure is still the same spec measured by the same engine.
+
+   AND SO DO THE WALK STATES (session G3, 2026-08-23). A memo step may
+   now carry an `hl` — the picture that goes with that line while "Walk
+   me through it" is running (js/exam/_walk.js). makeCard copies a part
+   with `{ ...p }`, a SHALLOW copy, so the card and its source question
+   share the one `memo` array and every `hl` on it: nothing had to be
+   taught to carry them, and nothing can drop them. That is what lets
+   bookwork proof 2 — which lives in euclid-circle-theorems.js as
+   euclid.circ.t2q4 part (a) and is re-homed onto this tile below — get
+   its walk states authored in its own module beside the other three.
+   verify-exam-modules.mjs section 9i checks all four cards' states.
    ============================================================ */
 import { makeCard } from "./_cards.js";
 import { euclidCircleTheoremsQuestions } from "./euclid-circle-theorems.js";

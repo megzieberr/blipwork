@@ -228,6 +228,10 @@ const MODULES = [
 /* the ported diagram engine, for section 9 */
 const { verifyDiagram, computeGeometry, highlightedSpec, diagramRefIssues } =
   await import("./js/exam/circle-engine.js");
+/* the walk-state resolver (session G3, 2026-08-23) — the SAME function
+   js/exam-play.js renders with, so what section 9 measures is literally
+   what a learner sees mid-walk, not a re-implementation of it. */
+const { walkHighlight, walkStates } = await import("./js/exam/_walk.js");
 const { EXAM_ONLY_CHAPTERS, EXAM_CHAPTERS } = await import("./js/config.js");
 
 /* Questions whose lostQuest CANNOT resolve, by design, each with a
@@ -2767,6 +2771,23 @@ console.log("\n== 9. Euclidean diagrams: specs, highlights, the bare-figure rule
         tick(refIssues.length === 0, refIssues.join(" | "));
         measure(highlightedSpec(spec, entry[side]), `${q.id}(${pid}) ${side} as rendered`);
       });
+      /* SESSION G3 (2026-08-23) — THE HARNESS NOW WALKS THE MEMO TOO.
+         A memo `step`/`answer` block may carry an `hl`: the picture that
+         goes with that line while "Walk me through it" is running
+         (js/exam/_walk.js). A walk state is a figure a LEARNER SEES, so
+         it earns exactly the two guarantees a reveal earns and is put
+         through the identical pair of checks here — diagramRefIssues for
+         the names, verifyDiagram on the highlighted variant for the
+         geometry. A wedge lit on the wrong side of a leg two thirds of
+         the way down a proof now fails the harness. */
+      const part = (q.parts || []).find(pp => pp.id === pid);
+      (part && Array.isArray(part.memo) ? part.memo : []).forEach((block, i) => {
+        if (!block || !block.hl) return;
+        const lbl = `${q.id}(${pid}) memo[${i}].hl`;
+        const refIssues = diagramRefIssues(spec, block.hl, lbl);
+        tick(refIssues.length === 0, refIssues.join(" | "));
+        measure(highlightedSpec(spec, block.hl), `${lbl} as rendered`);
+      });
       /* every part named in the map is a real part, and vice versa where
          the module says the part has a figure */
       tick(q.parts.some(pp => pp.id === pid), `${q.id}: diagram.parts["${pid}"] names no real part`);
@@ -3954,6 +3975,177 @@ console.log("\n== 9. Euclidean diagrams: specs, highlights, the bare-figure rule
       })));
       tick(bad.length === 0, `every italic reason in a G2 memo is a verbatim SAG short form — strays: ${bad.join(" | ")}`);
       console.log(`    SAG reasons: ${bad.length ? "FAIL " + bad.join(" | ") : "every italic reason is a listed short form"}`);
+    }
+  }
+
+  /* ===================================================================
+     9i — THE SKETCH WALKS WITH THE PROOF (session G3, 2026-08-23).
+     Her ask, on her phone: "show the steps on the sketch as well if the
+     kids tapped on 'walk me through it'." 9a above already MEASURES
+     every `hl` a memo block carries, exactly as it measures a reveal.
+     What is left is the part measuring cannot see — the STORY the walk
+     tells:
+
+       · every one of the four bookwork proofs is authored (a walk with
+         no `hl` anywhere is the old standing-still sketch, silently);
+       · the CONSTRUCTION line's own step is the step that draws the
+         construction — the candidate's first mark, made visible exactly
+         when the sentence says it;
+       · the walk ENDS on the reveal, object-for-object, so the last
+         "Next step ->" click (which pays exactly like Done) does not
+         change the picture underneath the learner;
+       · NO SPOILERS: no walk state before the answer may light an angle
+         the reveal only lights at the end, and none of the three `bare`
+         proofs may leak the spec's own labelling early;
+       · and the OPT-IN gate holds: a part with no `hl` resolves to its
+         question figure at every step, i.e. behaves as it did before
+         today. That is what keeps "nothing changes for any non-bookwork
+         card" true rather than hoped.
+     =================================================================== */
+  console.log("\n  -- 9i. session G3: the walk states, proof by proof --");
+  {
+    /* the four bookwork cards, as js/exam/cards-euclid.js homes them */
+    const BOOKWORK = [
+      ["euclid.bw.q1", "a", "line from the centre perp. to a chord bisects it"],
+      ["euclid.circ.t2q4", "a", "angle at centre = 2 x angle at circumference"],
+      ["euclid.bw.q2", "a", "opposite angles of a cyclic quad are supplementary"],
+      ["euclid.bw.q3", "a", "the tangent-chord theorem"],
+    ];
+    const partOf = (qid, pid) => {
+      const q = euclid.find(qq => qq.id === qid);
+      return { q, part: q && q.parts.find(p => p.id === pid), entry: q && q.diagram.parts[pid] };
+    };
+
+    BOOKWORK.forEach(([qid, pid, name]) => {
+      const { q, part, entry } = partOf(qid, pid);
+      tick(!!q && !!part && !!entry, `${qid}(${pid}): the bookwork part and its figure both exist`);
+      if (!q || !part || !entry) return;
+      const spec = entry.spec || q.diagram.spec;
+      const states = walkStates(entry, part.memo);
+      const authored = part.memo.filter(b => b && b.hl).length;
+
+      tick(authored > 0, `${qid}(${pid}) "${name}": the memo carries walk highlights — got ${authored}`);
+      /* the construction step is the FIRST block, and it is the block
+         that draws the construction */
+      const first = part.memo[0];
+      const wantsConstruction = /construction/i.test(String(first && first.text && first.text.en));
+      if (wantsConstruction) {
+        tick(!!(first.hl && first.hl.construction), `${qid}(${pid}): the "Construction:" line is the step that draws the construction`);
+        const before = walkHighlight(entry, part.memo, 0);
+        tick(!(before && before.construction), `${qid}(${pid}): nothing is constructed before the construction line is read`);
+      }
+      /* the walk ends on the reveal, the same object */
+      const last = states[states.length - 1];
+      tick(last && last.hl === entry.reveal, `${qid}(${pid}): the walk's last state IS the part's reveal object (so the Done path and the walk end identically)`);
+      /* THE SKETCH REALLY WALKS. Three distinct pictures is the floor:
+         the figure as it starts, at least one state in the middle, and
+         the reveal. Two would mean the old question -> reveal flip with
+         extra steps. */
+      tick(states.length >= 3, `${qid}(${pid}): the walk must pass through at least three distinct pictures — got ${states.length}`);
+      /* every bare question side stays bare all the way down */
+      if (entry.question && entry.question.bare) {
+        const notBare = states.filter(st => st.hl !== entry.reveal && st.hl && st.hl !== entry.question && !st.hl.bare).map(st => st.step);
+        tick(notBare.length === 0, `${qid}(${pid}): a bare question figure must stay bare through the walk — states [${notBare.join(",")}] drop the flag and would leak the spec's own labelling`);
+      }
+      /* and the state count, reported so a reviewer knows how many
+         crops tools/shoot_walk.py should have produced */
+      console.log(`    ${qid}(${pid}).padded`.replace(".padded", "").padEnd(26) +
+        `${part.memo.length} memo block(s), ${authored} authored hl, ${states.length} distinct picture(s) at steps [${states.map(st => st.step).join(",")}]`);
+    });
+
+    /* -----------------------------------------------------------------
+       NO SPOILERS, PROOF BY PROOF. "Never light something the learner
+       has not been told yet" cannot be checked generically — what counts
+       as the punchline is different in each of the four proofs — so the
+       punchline of each is TYPED HERE, the way 9g types the point
+       degrees, and the walk states before the answer are searched for
+       it. Every one of these is a thing the walk must NOT show early.
+       ----------------------------------------------------------------- */
+    const preAnswerStates = (qid, pid) => {
+      const { part, entry } = partOf(qid, pid);
+      return walkStates(entry, part.memo).filter(st => st.hl !== entry.reveal).map(st => ({ step: st.step, hl: st.hl || {} }));
+    };
+    const angleKeys = hl => ((hl.angles || []).map(a => `${a.at}|${(a.legs || []).slice().sort().join(",")}`));
+    const chordKeys = hl => ((hl.chords || []).map(c => [c[0], c[1]].slice().sort().join("")));
+
+    {
+      /* PROOF 1's punchline is "AM = MB" — the two ticked halves of the
+         chord. Nothing before the answer may touch them. */
+      const bad = preAnswerStates("euclid.bw.q1", "a")
+        .filter(st => chordKeys(st.hl).some(k => k === "AM" || k === "BM")).map(st => st.step);
+      tick(bad.length === 0, `bw.q1: the two halves of the chord are the ANSWER — lit early at step(s) [${bad.join(",")}]`);
+      console.log(`    bw.q1 no-spoiler: chord halves AM / MB first appear on the reveal — ${bad.length ? "FAIL" : "OK"}`);
+    }
+    {
+      /* PROOF 2's punchline is the pair of unlabelled wedges the theorem
+         names: angle AOC at the centre and angle ABC at the
+         circumference. The walk builds 2x and 2y and the two halves at
+         B; it must never draw either whole. */
+      const bad = preAnswerStates("euclid.circ.t2q4", "a")
+        .filter(st => angleKeys(st.hl).some(k => k === "O|A,C" || k === "B|A,C")).map(st => st.step);
+      tick(bad.length === 0, `4(a): angle AOC and angle ABC are the ANSWER — lit early at step(s) [${bad.join(",")}]`);
+      console.log(`    4(a) no-spoiler: the theorem's own two wedges first appear on the reveal — ${bad.length ? "FAIL" : "OK"}`);
+    }
+    {
+      /* PROOF 3 has no wedge left for the answer — its punchline is
+         "x + y = 180 degrees", which is arithmetic on two angles already
+         drawn. What it must not do is VALUE the two centre wedges before
+         the proof does: they are named 1 and 2 first (bare index digits,
+         the IEB convention) and only become 2x and 2y on the two steps
+         that derive them. */
+      const st = preAnswerStates("euclid.bw.q2", "a");
+      const labelsAt = step => (st.find(x => x.step === step) || { hl: {} }).hl.angles || [];
+      const nameStep = labelsAt(1).map(a => a.t).sort().join("/");
+      const valueStep = labelsAt(4).map(a => a.t).sort().join("/");
+      tick(nameStep === "1/2", `bw.q2: after the construction line the centre wedges are NAMED, not valued — got [${nameStep}]`);
+      tick(valueStep.includes("2x") && valueStep.includes("2y"), `bw.q2: by the end of the two centre steps both wedges are valued — got [${valueStep}]`);
+      const early2x = st.filter(x => x.step <= 2 && (x.hl.angles || []).some(a => a.t === "2x")).map(x => x.step);
+      tick(early2x.length === 0, `bw.q2: 2x may not appear before the step that derives it — appeared at [${early2x.join(",")}]`);
+      console.log(`    bw.q2 no-spoiler: centre wedges read [${nameStep}] -> [${valueStep}] — ${early2x.length ? "FAIL" : "OK, named before valued"}`);
+    }
+    {
+      /* PROOF 4's punchline is the angle at B — the whole point is that
+         the far angle equals the tangent-chord angle, so B stays
+         completely unmarked until the reveal says so. */
+      const bad = preAnswerStates("euclid.bw.q3", "a")
+        .filter(st => (st.hl.angles || []).some(a => a.at === "B")).map(st => st.step);
+      tick(bad.length === 0, `bw.q3: the angle at B is the ANSWER — marked early at step(s) [${bad.join(",")}]`);
+      /* and the bridge is built in the printed order: the tangent-diameter
+         right angle before the semi-circle right angle before x at C */
+      const firstWith = pred => {
+        const hit = preAnswerStates("euclid.bw.q3", "a").find(st => (st.hl.angles || []).some(pred));
+        return hit ? hit.step : Infinity;
+      };
+      const tanRight = firstWith(a => a.at === "T" && a.v === 90);
+      const semiRight = firstWith(a => a.at === "A" && a.v === 90);
+      const xAtC = firstWith(a => a.at === "C");
+      tick(tanRight < semiRight && semiRight < xAtC,
+        `bw.q3: the bridge must be built in the memo's order — tan-diameter right angle (step ${tanRight}), semi-circle right angle (step ${semiRight}), x at C (step ${xAtC})`);
+      console.log(`    bw.q3 no-spoiler: B unmarked until the reveal; bridge order ${tanRight} -> ${semiRight} -> ${xAtC} — ${bad.length ? "FAIL" : "OK"}`);
+    }
+
+    /* THE OPT-IN GATE, checked on a real part that was NOT authored:
+       4(b)(1) is a chords-and-angles rider sharing this question, it has
+       both a question and a reveal figure, and its walk must still show
+       the question figure at every step. */
+    {
+      const { q, part, entry } = partOf("euclid.circ.t2q4", "b1");
+      const states = walkStates(entry, part.memo);
+      const allQuestion = states.every(st => st.hl === entry.question);
+      tick(part.memo.every(b => !b.hl), "4(b)(1) premise: the rider part carries no walk highlights (only the four proofs were authored)");
+      tick(allQuestion && states.length === 1, `4(b)(1): an un-authored part still walks on its QUESTION figure the whole way down — got ${states.length} state(s)`);
+      console.log(`    opt-in gate: 4(b)(1) walks ${states.length} picture(s) (its question figure) — unchanged by session G3`);
+    }
+
+    /* A TRAP CARD NEVER CARRIES ONE. It is a warning, not a step of the
+       proof, so it must not move the picture (and _schema.js rejects it
+       — this is the data-side half of the same rule). */
+    {
+      const strays = [];
+      euclid.forEach(q => q.parts.forEach(p => (p.memo || []).forEach((b, i) => {
+        if (b && b.type === "trap" && b.hl !== undefined) strays.push(`${q.id}(${p.id}) memo[${i}]`);
+      })));
+      tick(strays.length === 0, `no trap card carries a walk highlight — strays: ${strays.join(", ")}`);
     }
   }
 }

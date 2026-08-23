@@ -64,6 +64,34 @@
    chord, the perpendicular and the right-angle square, exactly like the
    printed paper.
 
+   THE SKETCH WALKS WITH THE PROOF (session G3, 2026-08-23 — her ask on
+   her phone: "show the steps on the sketch as well if the kids tapped on
+   'walk me through it'"). Every memo `step` on this tile that changes
+   the picture carries an `hl` — a highlight set in exactly the shape of
+   its part's `reveal` — and js/exam/_walk.js renders the LAST one at or
+   before the block the walk has reached. Three rules shaped what each
+   step lights:
+
+     · LIGHT WHAT THE SENTENCE IS TALKING ABOUT, and nothing else. The
+       amber marker is the reader's finger following the words.
+     · NEVER LIGHT SOMETHING THE LEARNER HAS NOT BEEN TOLD YET. That is
+       why every walk state on the three `bare` figures stays bare and
+       names its own wedges: the two angles the THEOREM is about are the
+       last thing to appear, on the answer.
+     · THE ANSWER IS THE REVEAL. No `answer` block here carries its own
+       `hl`, so js/exam/_walk.js falls through to `reveal` and the walk
+       ends on the identical picture the "Done! Show me the answer" path
+       draws. `reveal` stays the single source of truth for the finished
+       figure.
+
+   ONE DELIBERATE DEPARTURE from the tick-first instinct, on proof 1:
+   the construction draws OA and OB in PLAIN ink first ("Construction:
+   join OA and OB" says nothing about their lengths), and the ‖ ticks
+   arrive one step later, WITH the amber, on "OA = OB (radii)" — because
+   the ticks ARE that sentence's claim, and a figure that has already
+   made it has told the learner the next line of their own proof. From
+   that step on the construction is tick-for-tick the reveal's own.
+
    lostQuest: the documented euclid placeholder — her ruling
    (2026-08-22): the Euclidean exam chapter has NO "I'm lost" button.
    See js/exam/euclid-circle-theorems.js's header for the full
@@ -96,6 +124,21 @@ const SPEC_BW1 = {
     { at: "M", legs: ["B", "O"], t: "", o: { v: 90, mark: "square" } },
   ],
 };
+
+/* --- bw1's walk states, named once and shared -----------------------
+   Each `hl` below is a COMPLETE picture (js/exam/_walk.js's rule), so
+   the pieces that persist are written once here and reused rather than
+   retyped four times. The construction starts un-ticked and gains its
+   ‖ ticks on the "OA = OB (radii)" line — see this file's header. The
+   right angles keep a SMALL amber pie (hlR 15) so the marker hugs the
+   11 px right-angle square instead of throwing a 34 px wash across the
+   middle of the triangle, which is where OM and both radii live. */
+const BW1_CON = { chords: [["O", "A"], ["O", "B"]] };
+const BW1_CON_TICKED = { chords: [["O", "A", "t2"], ["O", "B", "t2"]] };
+const BW1_RIGHT_ANGLES = [
+  { at: "M", legs: ["B", "O"], v: 90, o: { mark: "square", hlR: 15 } },
+  { at: "M", legs: ["A", "O"], v: 90, o: { mark: "square", hlR: 15 } },
+];
 
 const bw1 = {
   id: "euclid.bw.q1",
@@ -144,10 +187,24 @@ const bw1 = {
         en: "Two triangles are hiding in this picture, but only once you draw two more lines. Which two lines from O would turn OM into a shared side of a pair of triangles — and what do you already know about their lengths?",
       },
       memo: [
-        { type: "step", text: { en: "<b>Construction:</b> join OA and OB." }, ticks: ["ca"] },
-        { type: "step", text: { en: "In △OMA and △OMB:<br>∠OMA = ∠OMB = 90° &nbsp;&nbsp;<i>(given: OM ⊥ AB)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "OM = OM &nbsp;&nbsp;<i>(common)</i>" }, ticks: ["ca"] },
+        /* the two lines appear, plain ink, nothing claimed about them yet */
+        { type: "step", text: { en: "<b>Construction:</b> join OA and OB." }, ticks: ["ca"],
+          hl: { construction: BW1_CON } },
+        /* both right angles at M — the spec only ever drew ∠OMB's square,
+           so this is where ∠OMA's appears and where the pair reads as a pair */
+        { type: "step", text: { en: "In △OMA and △OMB:<br>∠OMA = ∠OMB = 90° &nbsp;&nbsp;<i>(given: OM ⊥ AB)</i>" }, ticks: ["ca"],
+          hl: { construction: BW1_CON, angles: BW1_RIGHT_ANGLES } },
+        /* the radii light, and the ‖ ticks that SAY "equal" arrive with
+           the sentence that says it */
+        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" }, ticks: ["ca"],
+          hl: { construction: BW1_CON_TICKED, chords: [["O", "A"], ["O", "B"]], angles: BW1_RIGHT_ANGLES } },
+        /* the shared side. The radii keep their ticks (ink) but hand the
+           marker over to OM, so the amber is always the line being talked
+           about — by now the picture holds all three facts of the RHS. */
+        { type: "step", text: { en: "OM = OM &nbsp;&nbsp;<i>(common)</i>" }, ticks: ["ca"],
+          hl: { construction: BW1_CON_TICKED, chords: [["O", "M"]], angles: BW1_RIGHT_ANGLES } },
+        /* no `hl`: an answer block falls through to `reveal`, so the walk
+           ends on exactly the figure the Done path draws */
         { type: "answer", text: { en: "∴ △OMA ≡ △OMB &nbsp;&nbsp;<i>(RHS)</i><br>∴ AM = MB" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: <b>the construction line is a mark.</b> The printed figure never shows OA and OB — you draw them and you write “join OA and OB” as your first line. A proof that starts at “OA = OB” has already lost a mark for a line that takes three seconds.",
@@ -206,6 +263,33 @@ const SPEC_BW3 = {
     { at: "C", legs: ["B", "D"], t: "y", o: { v: 70, r: 14, ar: 24 } },
   ],
 };
+
+/* --- bw2's walk states ----------------------------------------------
+   Every state here is `bare`, so the figure carries ONLY the wedges the
+   proof has reached — the spec's own x and y stay hidden until they are
+   introduced, and the O-wedges are named 1 and 2 (bare index digits, so
+   the engine's idxLabelR tucks them inside their own arc) before they
+   are valued 2x and 2y. Each wedge keeps the arc radius and label
+   radius the REVEAL gives it, so nothing shifts position as the walk
+   turns a name into a value.
+   The construction (OB and OD) is the same object at every state: those
+   two lines are drawn on the very first step and never move again. */
+const BW2_CON = { chords: [["O", "B"], ["O", "D"]] };
+/* the two centre wedges, as a function of what they are called yet.
+   The REFLEX one (220 degrees, C's side of BD) is O-hat-1 = 2A-hat; the
+   140 degree one on A's side is O-hat-2 = 2C-hat. They share both arms
+   and fill the revolution between them, so — exactly as on the reveal —
+   the reflex one takes the INNER arc (30) and the other the OUTER (44),
+   or they would draw one closed circle round O and say nothing. */
+const bw2Centre = (t1, t2) => [
+  { at: "O", legs: ["D", "B"], t: t1, v: 220, o: { reflex: 1, r: 17, ar: 30, hlR: 30 } },
+  { at: "O", legs: ["D", "B"], t: t2, v: 140, o: { r: 25, ar: 44, hlR: 44 } },
+];
+/* A-hat and C-hat, on the same arcs the spec draws them on */
+const BW2_XY = [
+  { at: "A", legs: ["D", "B"], t: "x", v: 110, o: { r: 15, ar: 26, hlR: 26 } },
+  { at: "C", legs: ["B", "D"], t: "y", v: 70, o: { r: 14, ar: 24, hlR: 24 } },
+];
 
 const bw3 = {
   id: "euclid.bw.q2",
@@ -285,10 +369,22 @@ const bw3 = {
         en: "Â and Ĉ both stand on the same chord, BD — one from each side of it. So join the centre to B and to D, and use the one theorem that turns an angle at the circumference into an angle at the centre. Twice.",
       },
       memo: [
-        { type: "step", text: { en: "<b>Construction:</b> join OB and OD. &nbsp;Call the angle at O on C's side of BD &nbsp;Ô₁, and the angle on A's side &nbsp;Ô₂." }, ticks: ["ca"] },
-        { type: "step", text: { en: "Let &nbsp;Â = x&nbsp; and &nbsp;Ĉ = y." } },
-        { type: "step", text: { en: "Ô₁ = 2x &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "Ô₂ = 2y &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>" }, ticks: ["ca"] },
+        /* the two lines to the centre appear, and the two wedges they
+           create are NAMED — which is exactly what the sentence does */
+        { type: "step", text: { en: "<b>Construction:</b> join OB and OD. &nbsp;Call the angle at O on C's side of BD &nbsp;Ô₁, and the angle on A's side &nbsp;Ô₂." }, ticks: ["ca"],
+          hl: { bare: true, construction: BW2_CON, angles: bw2Centre("1", "2") } },
+        /* now the two angles the theorem is about get their letters */
+        { type: "step", text: { en: "Let &nbsp;Â = x&nbsp; and &nbsp;Ĉ = y." },
+          hl: { bare: true, construction: BW2_CON, angles: bw2Centre("1", "2").concat(BW2_XY) } },
+        /* O-hat-1 stops being a name and becomes a value */
+        { type: "step", text: { en: "Ô₁ = 2x &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>" }, ticks: ["ca"],
+          hl: { bare: true, construction: BW2_CON, angles: bw2Centre("2x", "2").concat(BW2_XY) } },
+        /* and so does O-hat-2 — from here the picture IS the proof */
+        { type: "step", text: { en: "Ô₂ = 2y &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>" }, ticks: ["ca"],
+          hl: { bare: true, construction: BW2_CON, angles: bw2Centre("2x", "2y").concat(BW2_XY) } },
+        /* no `hl` on the next two: "they fill the revolution" and the
+           algebra that follows add nothing a picture can show that the
+           two wedges meeting round O are not already showing */
         { type: "step", text: { en: "Ô₁ + Ô₂ = 360° &nbsp;&nbsp;<i>(∠s round a pt)</i>" }, ticks: ["ca"] },
         { type: "step", text: { en: "∴ 2x + 2y = 360°" }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ x + y = 180°<br>∴ Â + Ĉ = 180°" }, ticks: ["a"] },
@@ -333,6 +429,35 @@ const SPEC_BW4 = {
     { at: "B", legs: ["T", "A"], t: "x", o: { v: 55 } },
   ],
 };
+
+/* --- bw3's walk states ----------------------------------------------
+   The construction (the diameter TC and the chord CA) lands on the very
+   first step and stays; every later state repeats it. Every state is
+   `bare`, so the angle at B — the far half of the theorem — is the ONE
+   thing the walk never draws: it appears on the answer, with the
+   reveal, which is the moment the proof earns it.
+   The three wedges that share the vertex T are deliberately given three
+   different sizes: x takes the ordinary arc, the tangent-diameter right
+   angle keeps a tight amber pie round its square (hlR 16) so it does
+   not wash over the other two, and 90 degrees minus x sits on the OUTER
+   arc (34) between TC and TA. */
+const BW3_CON = { pts: { C: 90 }, chords: [["T", "C"], ["C", "A"]] };
+const BW3_X_AT_T = { at: "T", legs: ["A", "tg+"], t: "x", v: 55, o: { hlR: 25 } };
+const BW3_TAN_RIGHT = { at: "T", legs: ["C", "tg+"], v: 90, o: { mark: "square", hlR: 16 } };
+/* UNLABELLED, and that took a re-shoot to learn. "90 degrees minus x"
+   is seven characters, and labelR pushes a label that long 58 px out
+   along its bisector — which at this vertex is 19 px under the "O",
+   straddling the diameter TC, reading as an annotation of the middle
+   of the circle rather than of the thin wedge at T it belongs to
+   (crop tools/diags-walk/euclid.bw.q3.a-a-w04.png, first pass). T
+   already carries x and the tangent-diameter square; a third label
+   there has nowhere to stand. So this wedge speaks by LIGHTING
+   instead: it takes the OUTER arc (34, clear of x's 25 and the
+   square's 11) and appears on the exact step whose sentence names
+   it, which is the whole rule this tile's walk is built on. */
+const BW3_CTA = { at: "T", legs: ["C", "A"], v: 35, o: { ar: 34, hlR: 34 } };
+const BW3_SEMI_RIGHT = { at: "A", legs: ["T", "C"], v: 90, o: { mark: "square", hlR: 16 } };
+const BW3_X_AT_C = { at: "C", legs: ["T", "A"], t: "x", v: 55, o: { r: 40, ar: 24, hlR: 24 } };
 
 const bw4 = {
   id: "euclid.bw.q3",
@@ -383,12 +508,28 @@ const bw4 = {
         en: "Start at T and draw the one line through the centre — a diameter. That hands you a right angle where it meets the tangent, and a second right angle at the far end of the chord. Everything else is angles of a triangle.",
       },
       memo: [
-        { type: "step", text: { en: "<b>Construction:</b> draw the diameter TC through O, and join AC." }, ticks: ["ca"] },
-        { type: "step", text: { en: "Let &nbsp;∠ATR = x." } },
-        { type: "step", text: { en: "∠CTR = 90° &nbsp;&nbsp;<i>(tan ⊥ diameter)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "∴ ∠CTA = 90° − x" }, ticks: ["ca"] },
-        { type: "step", text: { en: "∠TAC = 90° &nbsp;&nbsp;<i>(∠s in semi-circle)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["ca"] },
+        /* C appears at the far end of the diameter, and CA is joined —
+           new ink, no claims yet */
+        { type: "step", text: { en: "<b>Construction:</b> draw the diameter TC through O, and join AC." }, ticks: ["ca"],
+          hl: { bare: true, construction: BW3_CON } },
+        /* the given angle gets its name */
+        { type: "step", text: { en: "Let &nbsp;∠ATR = x." },
+          hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T] } },
+        /* the first right angle: tangent meets diameter */
+        { type: "step", text: { en: "∠CTR = 90° &nbsp;&nbsp;<i>(tan ⊥ diameter)</i>" }, ticks: ["ca"],
+          hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT] } },
+        /* what is left of that right angle, written on the figure */
+        { type: "step", text: { en: "∴ ∠CTA = 90° − x" }, ticks: ["ca"],
+          hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT, BW3_CTA] } },
+        /* the second right angle: the angle in the semi-circle */
+        { type: "step", text: { en: "∠TAC = 90° &nbsp;&nbsp;<i>(∠s in semi-circle)</i>" }, ticks: ["ca"],
+          hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT, BW3_CTA, BW3_SEMI_RIGHT] } },
+        /* the triangle's third angle turns out to be x again — the far
+           end of the bridge, one step short of walking it across to B */
+        { type: "step", text: { en: "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["ca"],
+          hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT, BW3_CTA, BW3_SEMI_RIGHT, BW3_X_AT_C] } },
+        /* no `hl`: the answer IS the reveal, which is the first and only
+           time the angle at B is marked */
         { type: "answer", text: { en: "∠ABT = ∠TCA &nbsp;&nbsp;<i>(∠s in the same seg)</i><br>∴ ∠ABT = x = ∠ATR" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: <b>the construction line is a mark.</b> “Draw the diameter TC and join AC” is the first thing on the page — and it has to be a <b>diameter</b>, through O. Any other line through T gives you no right angle and no proof.",

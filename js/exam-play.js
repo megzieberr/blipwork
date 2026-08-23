@@ -64,6 +64,7 @@ import { applyTrigHighlights } from "./exam/trig-diagram.js";
 import { renderQuadTri } from "./engine/quadrant-triangle.js";
 import { applyQuadtriHighlights } from "./exam/quadtri-diagram.js";
 import { examChapterEligible } from "./screens.js";
+import { walkHighlight } from "./exam/_walk.js";
 
 /* "I'm lost" — REteach, not a hint (her ruling, session E, 2026-08-21):
    "don't just give a hint, reteach the concept — take them to the
@@ -122,22 +123,42 @@ function lostQuestLink(app, question) {
    each through its own exam-only glue module's highlight applier. Same
    box, same data-part/data-state attributes, same question/reveal switch
    whichever it is — only which functions build the highlighted spec and
-   render it differ. */
-function partDiagram(question, part, isRevealed, accent) {
+   render it differ.
+
+   THREE STATES, not two (session G3, 2026-08-23). `data-state` is
+   "question" while the part is being worked, "reveal" once its memo is
+   open, and "walk" while "Walk me through it" is running on it — in
+   which case the highlight set comes from js/exam/_walk.js instead of
+   from the entry's own question/reveal pair, and `data-walk-step`
+   carries how many memo blocks are showing. */
+function partDiagram(question, part, isRevealed, accent, walkStep) {
   const d = question.diagram;
   if (!d || !d.parts) return null;
   const entry = d.parts[part.id];
   if (!entry) return null;
   const spec = entry.spec || d.spec;
   if (!spec) return null;
-  const hl = (isRevealed && entry.reveal) ? entry.reveal : entry.question;
+  /* THE WALK STATE (session G3, 2026-08-23 — her ask: "show the steps on
+     the sketch as well if the kids tapped on 'walk me through it'").
+     While this part is the one being walked, the picture is whatever
+     js/exam/_walk.js resolves for the number of memo blocks revealed so
+     far — the last `hl` at or before that block, falling back to the
+     question side. Everything else is untouched: Done still flips
+     straight to `reveal`, and a part whose memo carries no `hl` at all
+     simply keeps showing its question figure the whole way down, exactly
+     as it did before this existed. Plain re-render on every redraw — no
+     animation, no rAF, no observers (house rule). */
+  const walking = typeof walkStep === "number";
+  const hl = walking ? walkHighlight(entry, part.memo, walkStep)
+    : (isRevealed && entry.reveal) ? entry.reveal : entry.question;
   const box = el("div", "exam-diagram");
   box.innerHTML = spec.type === "function" ? renderFunction(applyFunctionHighlights(spec, hl || {}))
     : spec.type === "trigg"   ? renderTrig(applyTrigHighlights(spec, hl || {}))
     : spec.type === "quadtri" ? renderQuadTri(applyQuadtriHighlights(spec, hl || {}))
     : renderDiagram(highlightedSpec(spec, hl || {}), accent || "#8b5cf6");
   box.setAttribute("data-part", part.id);
-  box.setAttribute("data-state", (isRevealed && entry.reveal) ? "reveal" : "question");
+  box.setAttribute("data-state", walking ? "walk" : ((isRevealed && entry.reveal) ? "reveal" : "question"));
+  if (walking) box.setAttribute("data-walk-step", String(walkStep));
   return box;
 }
 
@@ -223,7 +244,8 @@ export function renderExamPlay(app, host, params) {
     card.innerHTML = `<div class="exam-part-head">${question.parts.length > 1 ? `<span class="exam-part-id">(${part.id})</span>` : ""}<span class="exam-part-marks">[${part.marks}]</span>${star}</div>
       <div class="exam-part-prompt">${richHtml(part.prompt)}</div>`;
 
-    const fig = partDiagram(question, part, revealed.has(part.id), accent);
+    const fig = partDiagram(question, part, revealed.has(part.id), accent,
+      (walkPartId === part.id && !revealed.has(part.id)) ? walkStep : null);
     if (fig) card.appendChild(fig);
 
     if (revealed.has(part.id)) {
@@ -261,6 +283,11 @@ export function renderExamPlay(app, host, params) {
        "no policing" rule extends here too: nothing about walking itself
        is ever reported). */
     if (walkPartId === part.id) {
+      /* SESSION G3 (2026-08-23): the SKETCH walks too. partDiagram above
+         is handed walkStep, so the figure shows the state of the last
+         revealed step — see js/exam/_walk.js. Nothing here changes: the
+         memo lines, the Next button and the pay-on-the-last-click rule
+         are exactly as they were. */
       const walk = el("div", "exam-walk");
       if (idx === 0) walk.appendChild(el("div", "exam-memo-framing", t("markingFraming")));
       part.memo.slice(0, walkStep).forEach(block => walk.appendChild(memoBlockEl(block)));
