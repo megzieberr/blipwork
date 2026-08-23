@@ -28,13 +28,17 @@
    order below is written level-first anyway, so the file reads the way
    the tile plays.
 
-   STILL WAITING ON SESSION F2 (sessions/F2-gtrig-part2.md): reduction,
-   identities, identities-undefined, general-solution and the level-4
-   tile. `identities`, `identities-undefined` and `level-4` therefore
-   still render muted and untappable — her ruling: the learner should
-   see what is coming, not a hole, which is why examTopicsForChapter
-   reads js/exam/skills.js rather than deriving tiles from whatever
-   happens to be registered here.
+   AND SESSION F2, the same day (sessions/F2-gtrig-part2.md), fills the
+   other five tiles with twenty-eight more sibling cards:
+
+     reduction             1 → 6   (js/exam/gtrig-siblings-reduction.js)
+     identities            0 → 6   (…-identities.js)             NEW TILE
+     identities-undefined  0 → 6   (…-identities-undefined.js)   NEW TILE
+     general-solution      1 → 6   (…-general-solution.js)
+     level-4               0 → 6   (js/exam/gtrig-level4.js)     NEW TILE
+
+   So the chapter now runs 4 → 54 cards across all nine tiles, and none
+   of them renders "coming soon" any more.
 
    The "<em>Answer this ENTIRE question WITHOUT using a calculator…</em>"
    and "<em>No calculator.</em>" lines stay exactly as printed — real
@@ -49,6 +53,14 @@ import { gtrigCoFunctionsSiblingQuestions } from "./gtrig-siblings-co-functions.
 import { gtrigSpecialAnglesSiblingQuestions } from "./gtrig-siblings-special-angles.js";
 import { gtrigSpecialSumsSiblingQuestions } from "./gtrig-siblings-special-sums.js";
 import { gtrigSuperSpecialSumsSiblingQuestions } from "./gtrig-siblings-super-special-sums.js";
+/* SESSION F2's five modules (2026-08-23) — the other five tiles, also
+   composed skill-first, so each question's `topic` is already the skill
+   id and every question is one whole card. */
+import { gtrigReductionSiblingQuestions } from "./gtrig-siblings-reduction.js";
+import { gtrigIdentitiesSiblingQuestions } from "./gtrig-siblings-identities.js";
+import { gtrigIdentitiesUndefinedSiblingQuestions } from "./gtrig-siblings-identities-undefined.js";
+import { gtrigGeneralSolutionSiblingQuestions } from "./gtrig-siblings-general-solution.js";
+import { gtrigLevel4Questions } from "./gtrig-level4.js";
 
 const SOURCES = [
   ...trigReductionAndRatiosQuestions,
@@ -57,6 +69,11 @@ const SOURCES = [
   ...gtrigSpecialAnglesSiblingQuestions,
   ...gtrigSpecialSumsSiblingQuestions,
   ...gtrigSuperSpecialSumsSiblingQuestions,
+  ...gtrigReductionSiblingQuestions,
+  ...gtrigIdentitiesSiblingQuestions,
+  ...gtrigIdentitiesUndefinedSiblingQuestions,
+  ...gtrigGeneralSolutionSiblingQuestions,
+  ...gtrigLevel4Questions,
 ];
 const src = id => {
   const q = SOURCES.find(qq => qq.id === id);
@@ -117,15 +134,67 @@ export const gtrigCards = [
 
   /* ---- 5. Reduction -------------------------------------------- */
   makeCard({ skill: "reduction", from: src("trig.rr.t2q1"), parts: ["c"] }),
+  /* SIBLINGS (SESSION F2) — the two straight rotations the tile has to
+     OPEN on, the pair that decides most marks (an expression landing on
+     −tan x, and a square that needs block brackets), the six-factor
+     monster the SAG's own paper prints, a double negative rotation with
+     a numeric surd beside it, and the everything-cancels-to-1 shape. */
+  makeCard({ skill: "reduction", from: src("gtrig.sib.red.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "reduction", from: src("gtrig.sib.red.q2"), parts: ["a", "b"] }),
+  makeCard({ skill: "reduction", from: src("gtrig.sib.red.q3"), parts: ["a"] }),
+  makeCard({ skill: "reduction", from: src("gtrig.sib.red.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "reduction", from: src("gtrig.sib.red.q5"), parts: ["a", "b"] }),
 
-  /* ---- 6. General solution -------------------------------------
+  /* ---- 6. Identities: prove — NEW TILE, SESSION F2 ---------------
+     Her four moves (LCD · masked identity · factorise · tan into sin
+     over cos), worked LHS-only every time, with the "never
+     cross-multiply an identity" trap riding on every card. q6 is the
+     prove-it-then-use-it pair: the same expression evaluated at 300°
+     with no calculator, which is only quick off the proved side. */
+  makeCard({ skill: "identities", from: src("gtrig.sib.id.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities", from: src("gtrig.sib.id.q2"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities", from: src("gtrig.sib.id.q3"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities", from: src("gtrig.sib.id.q4"), parts: ["a"] }),
+  makeCard({ skill: "identities", from: src("gtrig.sib.id.q5"), parts: ["a"] }),
+  makeCard({ skill: "identities", from: src("gtrig.sib.id.q6"), parts: ["a", "b"] }),
+
+  /* ---- 7. Identities: undefined values — NEW TILE, SESSION F2 ----
+     Her one routine (list every denominator, set each to zero, solve
+     each, union the lists) six times over, including the two versions
+     that need one extra line: "where is it ZERO" and "where is it
+     REAL". */
+  makeCard({ skill: "identities-undefined", from: src("gtrig.sib.iu.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities-undefined", from: src("gtrig.sib.iu.q2"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities-undefined", from: src("gtrig.sib.iu.q3"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities-undefined", from: src("gtrig.sib.iu.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities-undefined", from: src("gtrig.sib.iu.q5"), parts: ["a", "b"] }),
+  makeCard({ skill: "identities-undefined", from: src("gtrig.sib.iu.q6"), parts: ["a", "b"] }),
+
+  /* ---- 8. General solution -------------------------------------
      (b) is a "hence" straight off (a)'s general solution, so the two
      stay on one card and (a) states the equation. */
   makeCard({ skill: "general-solution", from: src("trig.gs.t2q2"), parts: ["a", "b"] }),
+  /* SIBLINGS (SESSION F2) — ONE CARD PER TYPE, and the type is named in
+     the memo's first line (METHODS-trig.md K1): ① function alone,
+     ② same angles twice over, ⑤ trinomial with a masked identity and a
+     dead branch, ⑥ co-functions, and ① again with a compound angle
+     inside. The existing card above is her plain type ⑤. */
+  makeCard({ skill: "general-solution", from: src("gtrig.sib.gs.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "general-solution", from: src("gtrig.sib.gs.q2"), parts: ["a", "b"] }),
+  makeCard({ skill: "general-solution", from: src("gtrig.sib.gs.q3"), parts: ["a"] }),
+  makeCard({ skill: "general-solution", from: src("gtrig.sib.gs.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "general-solution", from: src("gtrig.sib.gs.q5"), parts: ["a"] }),
 
-  /* ---- Identities · Identities: undefined values · Level 4 ★ -----
-     No cards yet — SESSION F2 fills these, together with the tops-up
-     for reduction and general-solution above. The tiles come from
-     js/exam/skills.js, not from this list, so they render muted and
-     untappable until then. */
+  /* ---- 9. Level 4 ★ — the brave round — NEW TILE, SESSION F2 -----
+     The bank's ⭐ trig items, freshly composed: the range-of-a-ratio
+     inequality, the reverse-engineered general solution, the product
+     trick, the nine-mark identity, the reduce-then-solve-then-check
+     chain, and the two-condition "real" question. Every card carries at
+     least one ★ part and nothing below level 3. */
+  makeCard({ skill: "level-4", from: src("gtrig.l4.q1"), parts: ["a", "b"] }),
+  makeCard({ skill: "level-4", from: src("gtrig.l4.q2"), parts: ["a", "b"] }),
+  makeCard({ skill: "level-4", from: src("gtrig.l4.q3"), parts: ["a"] }),
+  makeCard({ skill: "level-4", from: src("gtrig.l4.q4"), parts: ["a", "b"] }),
+  makeCard({ skill: "level-4", from: src("gtrig.l4.q5"), parts: ["a", "b"] }),
+  makeCard({ skill: "level-4", from: src("gtrig.l4.q6"), parts: ["a", "b"] }),
 ];
