@@ -354,8 +354,10 @@ export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
    Finance, Number Patterns ("pat") and 2D Trigonometry pools built by
    three parallel sessions from the Stats recipe, each harnessed and
    PNG-reviewed; all three lit here at the same ship, her phone-test
-   per chapter follows on live. */
-export const DICE_CHAPTERS = ["stats", "finance", "pat", "trig"];
+   per chapter follows on live.
+   Wave 2 (2026-08-24 ship): eqn, exp, func — built overnight 2026-08-23/24,
+   foreman-reviewed (own harness runs + own 375px crop reads), lit here. */
+export const DICE_CHAPTERS = ["stats", "finance", "pat", "trig", "eqn", "exp", "func"];
 
 /* FUNFUN-PART2-BRIEF.md — the 📈 Fun Functions strip on the Functions
    chapter screen. Fun Functions is its own app (the graph-quest repo,
