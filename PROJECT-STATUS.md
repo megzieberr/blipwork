@@ -1,4 +1,56 @@
-# Project status — updated 2026-08-24 (midday) (🎲 DICE WAVE 3: GENERAL TRIG BUILT + FOREMAN-REVIEWED, LOCAL ONLY — ship waits on her word)
+# Project status — updated 2026-08-24 (afternoon) (🎲 DICE WAVE 3 SHIPPED — General Trig dice LIVE on sw v67; Janko removed from the roster)
+
+## ☀️ 2026-08-24 (afternoon) — SHIP + LIVE-VERIFIED (her "you can ship it") + JANKO REMOVED
+
+Her three same-turn rulings, all in before the flip:
+- **gt3.quadrantal IN** — "fine as a drill"; the permanent 3-option ask is accepted.
+- **gt6.chip3 IN, decoy AS WRITTEN** — "keep it, they lose marks if they don't show
+  the reduction". Do not reword it.
+- **Janko removed from the live roster** (her ask): deleted via the same statement the
+  dashboard's remove runs; he had 0 XP, 0 progress, 1 auto-created blip row
+  (cascade-cleaned). Verified after: 0 janko rows anywhere, roster back to **21**
+  (20 learners + her megzieberr account). The 08-23 pending item "remove Janko" is DONE.
+
+Pool went 65 → **67 entries** (harness ledger re-closes with 0 pending); `DICE_CHAPTERS`
++ gtrig, sw → **v67**; commits `424c385` (ship) after `0c4d11d` (build), pushed.
+**Live-verified in the browser, not just curled:** Pages serves sw v67 / the pool file /
+the flag; on the live site under `?local=1` (offline backend, no learner rows) the 🎲
+card sits on General Trig "Always open", a real 5-question round dealt, question 1
+(tap-the-quadrant, gt2.onlyOne) answered correct, +15 XP FIRST TRY paid, scrollW 375,
+feedback matched the pool. One transient 503 in the console, gone from the network log
+(all 200s) — the same benign CDN-propagation blip as the last two ships.
+Harness runs after the 67-flip, all mine on a clean cache: verify-dice-gtrig 141/141 ·
+verify-store 4034 · (earlier, same session: verify-gtrig ~1.037M fully green ·
+verify-dice 134 · verify-dice-func 89).
+
+### ⏳ Pending on Megan
+- 📱 5 min [whenever]: close-and-reopen the PWA twice (sw v67), then one 🎲 General
+  Trig round on the phone — feel a steps chain and the 5-question length.
+- (carried) 📱 the wave-2 phone rounds (Equations / Exponents & Surds / Functions)
+  if not yet done.
+
+### Next up
+- Wave 4 candidates: Analytical Geometry (digest done, waits on her 14 F-flag
+  answers), Probability (needs her material for its METHODS digest), Measurement
+  (engine ruling), Trig Graphs (Soek-die-fout mechanic in graph-quest).
+- Flagged in the build report, pre-existing, none touched: gt2.wheelWord +
+  gt6.threeBoxes reveal their own answer (free marks dealt cold); gt10.readRatio's
+  reciprocal decoy is an unreadable 3-level fraction stack; method panel opens with
+  "Answer:"; a gt8 step hint can print twice. Candidates for the next fix batch.
+
+## 📌 Decisions (append-only, 2026-08-24 afternoon)
+- gt3.quadrantal's permanent 1-in-3 is accepted as a drill (her ruling).
+- gt6.chip3's arguably-true decoy stays AS WRITTEN — the wrongness is skipping the
+  reduction; learners lose marks for that in an exam (her ruling).
+- ⚠️ Local-harness verification now has a THREE-part cure, all required before
+  trusting any harness page on the bare local server: unregister the service worker
+  + delete CacheStorage + `fetch(file, {cache:"reload"})` over EVERY served file
+  (walk the directory listings). This session saw 3 phantom fails on an already-
+  fixed bug from the heuristic HTTP cache alone, after the sw was already gone.
+
+---
+
+# (previous head) Project status — updated 2026-08-24 (midday) (🎲 DICE WAVE 3: GENERAL TRIG BUILT + FOREMAN-REVIEWED, LOCAL ONLY — ship waits on her word)
 
 ## 🎲 2026-08-24 (midday) — GENERAL TRIG DICE POOL (Fable foreman, 1 Opus agent under her "you can delegate an agent", commit `0c4d11d`)
 
