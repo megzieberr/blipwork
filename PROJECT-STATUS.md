@@ -8,8 +8,11 @@ Her three same-turn rulings, all in before the flip:
   the reduction". Do not reword it.
 - **Janko removed from the live roster** (her ask): deleted via the same statement the
   dashboard's remove runs; he had 0 XP, 0 progress, 1 auto-created blip row
-  (cascade-cleaned). Verified after: 0 janko rows anywhere, roster back to **21**
-  (20 learners + her megzieberr account). The 08-23 pending item "remove Janko" is DONE.
+  (cascade-cleaned). Verified after: 0 janko rows anywhere. The 08-23 pending item
+  "remove Janko" is DONE.
+- **Lize removed too** (her follow-up ask, same session): same statement, same shape
+  (0 XP, 0 progress, 1 blip row cascade-cleaned), verified 0 rows left. Roster now
+  **20** (19 learners + her megzieberr account).
 
 Pool went 65 → **67 entries** (harness ledger re-closes with 0 pending); `DICE_CHAPTERS`
 + gtrig, sw → **v67**; commits `424c385` (ship) after `0c4d11d` (build), pushed.
