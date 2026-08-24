@@ -1,4 +1,71 @@
-# Project status — updated 2026-08-24 (morning) (🎲 DICE WAVE 2 SHIPPED — sw v66 live, Equations/Exponents & Surds/Functions all playing on the live site)
+# Project status — updated 2026-08-24 (midday) (🎲 DICE WAVE 3: GENERAL TRIG BUILT + FOREMAN-REVIEWED, LOCAL ONLY — ship waits on her word)
+
+## 🎲 2026-08-24 (midday) — GENERAL TRIG DICE POOL (Fable foreman, 1 Opus agent under her "you can delegate an agent", commit `0c4d11d`)
+
+Agent spend ≈ 0.32M Opus, inside the ~0.5M estimate. **Committed LOCALLY only —
+nothing pushed, `DICE_CHAPTERS` untouched, sw still v66, no SQL (dice is pure client).**
+
+**The pool** (`js/quests/dice-gtrig.js`): **65 entries** = 93 audited skills − 19
+collapsed duplicate-generator slots − 7 (gt1 out, her go on audit rec C: gt2+gt3 in)
+− 2 pending her (below). `kind = skillId`; every `gen()` reused verbatim so all 44
+CARE guards ride along; `roundLength = 5` (foreman call — a gtrig question is up to
+eight taps; house-median 7 is a one-character change). Method rule POOL-SIDE per the
+audit: no 📖 on any steps chain (the link renders before step 1 and would hand over
+the whole chain); 15 non-steps entries with real working carry it. No shared player
+file touched (only `dice-pools.js` registration + one pre-approved assertion fix).
+
+**Foreman review (all fresh, on a CLEAN cache):** verify-dice-gtrig **141/141** ·
+verify-gtrig **fully green for the first time** (~1.037M checks, 0 console errors —
+the stale 4→54 exam-card count was the build's one pre-approved fix) · verify-dice
+134/134 · verify-dice-func 89/89 · crops read (steps chains, quadtri sketch, "noref"
+tapcross, results card — all clean at 375px, roundLength 5 visible).
+⚠️ Local-harness trap hit AGAIN, worse than before: a stale **sw (mhq-v65)** still
+controlled localhost:5191 AND the browser's heuristic HTTP cache served pre-fix
+modules even after the sw was unregistered — verify-dice-func showed the already-
+fixed 6-decimal intercept bug as 3 phantom fails. Cure: unregister sw + delete
+CacheStorage + `fetch(f, {cache:"reload"})` over EVERY file (walk the bare server's
+directory listings), then reload. Do all three before trusting any local harness.
+
+**Held out of the pool pending her one-liners (each a one-line re-add in KEEP):**
+- `gt3.quadrantal` — can only ever offer 3 options (values are −1/0/1); fine as a
+  drill or leave out?
+- `gt6.chip3` — one decoy (`[sin A°]² = sin²A°`) is arguably true as written; its
+  wrongness is "you didn't reduce first". Reword, keep, or leave out?
+
+**Flagged by the build, pre-existing, none touched** (full list in
+`sessions/DICE-GTRIG-BUILD-REPORT.md`): gt2.wheelWord + gt6.threeBoxes show their
+own answer in their reveal frame (free marks when dealt cold); gt10.readRatio's
+reciprocal decoy renders as an unreadable three-level fraction stack (crop + zoom
+saved in tools/_out/dice); the always-available method panel opens with "Answer:";
+a gt8 step hint can print twice after a failed submit.
+
+### ⏳ Pending on Megan
+- 💬 1 word **[blocking]**: "ship" → I flip `DICE_CHAPTERS` to add gtrig, bump sw to
+  v67, push, live-verify. No SQL.
+- 💬 2 one-liners [whenever]: gt3.quadrantal in/out + gt6.chip3 reword/keep/out (above).
+- 📱 5 min [whenever, after ship]: one 🎲 General Trig round on the phone (sw v67;
+  close-and-reopen the PWA twice first) — feel a steps chain and the 5-question length.
+
+### Next up
+- The ship (above). Then wave 4: Analytical Geometry (digest done, waits on her 14
+  F-flag answers), Probability (needs her material for its METHODS digest),
+  Measurement (engine ruling), Trig Graphs (Soek-die-fout mechanic in graph-quest).
+- Her carried items from wave 2: gtrig discovery ruling is now SETTLED (C); the AG
+  F-flags and the worked-method content batch still open.
+
+## 📌 Decisions (append-only, 2026-08-24 midday)
+- gt1 stays OUT of the dice pool; gt2 + gt3 are IN (audit §6 option C — her go via
+  "you can delegate... just build", after the recommendation was put to her twice).
+- gtrig dice `roundLength = 5`, not the house-median 7 (a gtrig question is up to
+  eight interactions; rounds should feel comparable across chapters). One-character
+  revert if she prefers 7.
+- The method link is pool-side for gtrig: never on a steps chain until js/play.js
+  gates it; the wrong-answer panel still shows the full solution.
+- `reduceThenRead()` stays out of every pool (her 2026-08-22 cut, re-ratified).
+
+---
+
+# (previous head) Project status — updated 2026-08-24 (morning) (🎲 DICE WAVE 2 SHIPPED — sw v66 live, Equations/Exponents & Surds/Functions all playing on the live site)
 
 ## ☀️ 2026-08-24 (morning) — SHIP + LIVE-VERIFIED (her "Yes, you can ship")
 
