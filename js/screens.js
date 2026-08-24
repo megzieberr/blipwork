@@ -159,7 +159,7 @@ function chapterCard(app, ch, open) {
     const pct = total ? Math.round(done / total * 100) : 0;
     card.innerHTML = `
       <div class="ico">${ch.icon}</div>
-      <h2>${ch.name} <span class="pill open">Open</span></h2>
+      <h2>${ch.name} <span class="pill ${total ? "open" : "soon"}">${total ? "Open" : "Soon"}</span></h2>
       <p>${ch.blurb || ""}</p>
       <div class="ch-meta"><span>${total ? `${total} quest${total > 1 ? "s" : ""} open` : "Opening soon"}</span>${total ? `<span class="num">${done} / ${total} done</span>` : ""}</div>
       ${total ? `<div class="ch-prog" style="--p:${pct}%"><i></i></div>` : ""}
