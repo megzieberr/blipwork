@@ -20,7 +20,7 @@
 </head>
 <body>
 <h1 style="font-family:'Space Grotesk',sans-serif">Dice · General Trig pool · verification</h1>
-<p class="muted small">js/quests/dice-gtrig.js — 65 entries, 200 seeded rolls each.
+<p class="muted small">js/quests/dice-gtrig.js — 67 entries, 200 seeded rolls each.
   <b>Part 0</b> proves the pool's shape and that its KEEP list plus its DROPPED list account for every
   one of the chapter's 93 audited skills, so nothing can go missing silently.
   <b>Part 1</b> is the per-entry integrity pass. Half this chapter is <code>steps</code> — an ordered
@@ -46,7 +46,7 @@
 <h2>Part 2 · graph honesty (every rolled figure re-verified)</h2>
 <pre id="graphs">…</pre>
 
-<h2>Part 3 · determinism, salted retry, dealing &amp; resume (65 kinds, roundLength 5)</h2>
+<h2>Part 3 · determinism, salted retry, dealing &amp; resume (67 kinds, roundLength 5)</h2>
 <pre id="mechanics">…</pre>
 
 <script type="module">
@@ -306,7 +306,7 @@ const AUDITED_QUESTS = ["gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", 
   const lines = [];
   const ids = pool.entries.map(e => e.skillId);
   tick(pool.chapterId === "gtrig", 'pool: chapterId is "gtrig"');
-  tick(pool.entries.length === 65, `pool: 65 entries (got ${pool.entries.length})`);
+  tick(pool.entries.length === 67, `pool: 67 entries (got ${pool.entries.length})`);
   tick(pool.roundLength === 5, `pool: roundLength 5 — the foreman's call; the house median is 7 (got ${pool.roundLength})`);
   tick(new Set(ids).size === ids.length, "pool: every skillId is unique");
   tick(pool.entries.every(e => e.kind === e.skillId), "pool: kind === skillId on every entry (the only grouping is the collapse of duplicate generators)");
@@ -342,7 +342,7 @@ const AUDITED_QUESTS = ["gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", 
   const pendings = droppedFlat.filter(d => d[1] === "pending").length;
   tick(dups === 19, `19 duplicate-generator slots collapsed (audit §5's family table) — got ${dups}`);
   tick(rulings === 7, `7 skills out by her ruling (all of gt1, audit §6 option C) — got ${rulings}`);
-  tick(pendings === 2, `2 skills pending Megan (gt3.quadrantal, gt6.chip3) — got ${pendings}`);
+  tick(pendings === 0, `0 skills pending Megan (quadrantal + chip3 ruled IN 2026-08-24) — got ${pendings}`);
   tick(93 - dups - rulings - pendings === pool.entries.length, `the arithmetic closes: 93 − ${dups} dup − ${rulings} ruling − ${pendings} pending = ${pool.entries.length}`);
   tick(!droppedFlat.some(d => d[0] === "gt10.reduceThenRead"), "reduceThenRead is not even a skill any more, so it cannot reach the pool (she cut it 2026-08-22)");
 
@@ -352,8 +352,10 @@ const AUDITED_QUESTS = ["gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", 
   lines.push(`entries per round: ${AUDITED_QUESTS.map(q => `${q} ${perRound[q] || 0}`).join(" · ")}`);
   lines.push(`ledger: ${audited} audited skills = ${pool.entries.length} dealt + ${dups} collapsed duplicates + ${rulings} her-ruling + ${pendings} pending-Megan`);
   lines.push("");
-  lines.push("PENDING MEGAN — both are a one-line re-add in js/quests/dice-gtrig.js's KEEP:");
-  droppedFlat.filter(d => d[1] === "pending").forEach(d => lines.push(`  · ${d[0]} — ${d[2]}`));
+  if (pendings > 0) {
+    lines.push("PENDING MEGAN — each is a one-line re-add in js/quests/dice-gtrig.js's KEEP:");
+    droppedFlat.filter(d => d[1] === "pending").forEach(d => lines.push(`  · ${d[0]} — ${d[2]}`));
+  }
   lines.push("");
   lines.push("HER RULING — gt1 out of the pool (audit §6 option C: gt2 + gt3 in, gt1 out):");
   lines.push(`  · ${droppedFlat.filter(d => d[1] === "ruling").map(d => d[0]).join(", ")}`);

@@ -48,19 +48,20 @@
    verbatim is what carries all of the above for free.
 
    ------------------------------------------------------------
-   ENTRIES — 65. The arithmetic, checked against DICE-AUDIT-gtrig §5:
+   ENTRIES — 67. The arithmetic, checked against DICE-AUDIT-gtrig §5:
 
      93 audited skills
      −19 duplicate-generator slots collapsed (§5's family table)
      =74 collapsed entries
      − 7 gt1, out by her ruling (audit §6 option C)
-     − 1 gt6.chip3     — pending Megan (audit §9 Q4)
-     − 1 gt3.quadrantal — pending Megan (audit §9 Q3)
-     =65
+     =67
+     (gt6.chip3 and gt3.quadrantal were held out pending her at the
+      2026-08-24 build; she ruled the same day — both IN, see notes
+      2 and 3 below.)
 
    Per round, as this file actually builds it:
-     gt2 7 · gt3 5 · gt4 7 · gt5 6 · gt6 6 · gt7 1 · gt8 4
-     gt9 8 · gt10 6 · gt11 7 · gt12 5 · gt13 3        =  65
+     gt2 7 · gt3 6 · gt4 7 · gt5 6 · gt6 7 · gt7 1 · gt8 4
+     gt9 8 · gt10 6 · gt11 7 · gt12 5 · gt13 3        =  67
 
    ------------------------------------------------------------
    OUT OF THE POOL, and exactly why
@@ -76,19 +77,16 @@
       near-isosceles midpoint separation and whatItMeans' mixed
       mc-or-yesno kind — so neither needs handling here.
 
-   2. gt6.chip3 — PENDING MEGAN (audit §9 Q4). One of its decoys,
-      "[fn A°]² = fn²A°", is arguably a TRUE statement as written; the
-      intended wrongness is "you didn't reduce first". A teaching
-      decision, not a maths bug, but it should not be dealt cold in a
-      dice round before she has looked at it. ONE-LINE RE-ADD: put
-      "chip3" back in KEEP.gt6.
+   2. gt6.chip3 — IN, her ruling 2026-08-24 (was pending, audit §9
+      Q4). The decoy "[fn A°]² = fn²A°" stays AS WRITTEN: "keep it,
+      they lose marks if they don't show the reduction" — the
+      wrongness is skipping the reduction step, and that is the
+      teaching point. Do not reword it.
 
-   3. gt3.quadrantal — PENDING MEGAN (audit §9 Q3). sin/cos of a
-      quadrantal angle can only be −1, 0 or 1, so after the by-value
-      decoy filter the question ALWAYS has exactly 3 options — a
-      permanent 1-in-3 guess. Correct, but her call whether that
-      belongs in a pool. ONE-LINE RE-ADD: put "quadrantal" back in
-      KEEP.gt3.
+   3. gt3.quadrantal — IN, her ruling 2026-08-24 (was pending, audit
+      §9 Q3). sin/cos of a quadrantal angle can only be −1, 0 or 1,
+      so the question always has exactly 3 options. "Fine as a
+      drill" — the permanent 1-in-3 is accepted, not an oversight.
 
    4. reduceThenRead() in questgt10-super-special.js — NEVER. She cut
       it on 2026-08-22 ("remove the rounds that ask the question like
@@ -140,7 +138,7 @@
 
    THE HOUSE-MEDIAN ALTERNATIVE IS 7, and it is a one-character
    change on the `roundLength` line below if she prefers it.
-   Coverage: ⌈65/5⌉ = 13 rounds to meet every kind (⌈65/7⌉ = 10 at 7).
+   Coverage: ⌈67/5⌉ = 14 rounds to meet every kind (⌈67/7⌉ = 10 at 7).
 
    ------------------------------------------------------------
    THE METHOD RULE — POOL-SIDE (DICE-AUDIT-gtrig §1.3, the foreman's
@@ -188,10 +186,10 @@ const QUESTS = [questGt2, questGt3, questGt4, questGt5, questGt6, questGt7,
    audited skills. The harness asserts that. */
 const KEEP = {
   gt2:  ["wheelWord", "bandSign", "tapSign", "oneSign", "whySign", "onlyOne", "backwards"],
-  gt3:  ["triangles", "oahRead", "pickValue1", "reciprocals", "masked"],
+  gt3:  ["triangles", "oahRead", "pickValue1", "quadrantal", "reciprocals", "masked"],
   gt4:  ["coNumMinus", "coNumPlus", "coVarMinus", "coVarPlus", "coNeg", "twoLabelTriangle", "coMixedFull"],
   gt5:  ["pos1", "negNear", "negFar", "coFnPlus", "coFnMinus", "rotationPool"],
-  gt6:  ["threeBoxes", "chip1", "chip2Pool", "chip4trap", "chip5Pool", "butWhy"],
+  gt6:  ["threeBoxes", "chip1", "chip2Pool", "chip3", "chip4trap", "chip5Pool", "butWhy"],
   gt7:  ["item1"],
   gt8:  ["bowTieCard", "chain1", "substitute", "pointVariant"],
   gt9:  ["whichSide", "lcdItem", "whichPartFirst", "maskedPick",
@@ -218,10 +216,8 @@ export const DROPPED = {
   ],
   gt3: [
     ["pickValue2",  "dup",     "same pickValueQ() as gt3.pickValue1"],
-    ["quadrantal",  "pending", "always exactly 3 options — pending Megan, audit §9 Q3"],
   ],
   gt5:  [["pos2", "dup", "same positivePool as gt5.pos1"]],
-  gt6:  [["chip3", "pending", "the arguably-true decoy — pending Megan, audit §9 Q4"]],
   gt7:  [["item2", "dup", "randomReduceVarQ ×7 → gt7.item1"],
          ["item3", "dup", "randomReduceVarQ ×7 → gt7.item1"],
          ["item4", "dup", "randomReduceVarQ ×7 → gt7.item1"],

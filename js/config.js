@@ -356,8 +356,11 @@ export const INACTIVE_DAYS = 7;    // admin inactivity flag (used later)
    PNG-reviewed; all three lit here at the same ship, her phone-test
    per chapter follows on live.
    Wave 2 (2026-08-24 ship): eqn, exp, func — built overnight 2026-08-23/24,
-   foreman-reviewed (own harness runs + own 375px crop reads), lit here. */
-export const DICE_CHAPTERS = ["stats", "finance", "pat", "trig", "eqn", "exp", "func"];
+   foreman-reviewed (own harness runs + own 375px crop reads), lit here.
+   Wave 3 (2026-08-24 midday ship): gtrig — 67 entries, roundLength 5
+   (deliberate, not the house median — see dice-gtrig.js's header),
+   gt1 out by her ruling, quadrantal + chip3 in by her rulings. */
+export const DICE_CHAPTERS = ["stats", "finance", "pat", "trig", "eqn", "exp", "func", "gtrig"];
 
 /* FUNFUN-PART2-BRIEF.md — the 📈 Fun Functions strip on the Functions
    chapter screen. Fun Functions is its own app (the graph-quest repo,
