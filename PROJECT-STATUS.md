@@ -1,4 +1,28 @@
-# Project status — updated 2026-08-24 (early hours) (🎲 DICE WAVE 2 BUILT + FOREMAN-REVIEWED, LOCAL ONLY — Equations, Exponents & Surds, Functions pools ready; General Trig audited; Analytical Geometry DIGESTED. Ship waits on her word)
+# Project status — updated 2026-08-24 (morning) (🎲 DICE WAVE 2 SHIPPED — sw v66 live, Equations/Exponents & Surds/Functions all playing on the live site)
+
+## ☀️ 2026-08-24 (morning) — SHIP + LIVE-VERIFIED (her "Yes, you can ship")
+
+`DICE_CHAPTERS` flipped to add `eqn`/`exp`/`func`, sw bumped to v66, verify-store
+4034/4034 clean after the flip, committed (`df17cc5`) and pushed. GitHub Pages built;
+`sw.js` serves `mhq-v66` live, all three new pool files 200. **Live-verified in the
+browser, not just curled:** opened Equations & Inequalities on the live site under
+`?local=1` (offline backend, no learner rows touched), the 🎲 Dice round card is
+"Always open", a real round dealt `x^(1/7) = 4/9` (a fresh eq9 roll), answered it,
+graded correct, +15 XP paid, feedback text matched the pool exactly. One transient
+console 503 seen and re-checked after a hard reload — not reproducible in the network
+log (everything else 200), matches the same benign CDN-propagation pattern logged at
+the last ship, not caused by tonight's change.
+
+### ⏳ Pending on Megan
+- 📱 5 min [whenever]: close-and-reopen the PWA twice (sw v66), then one 🎲 round each
+  in Equations, Exponents & Surds, Functions on your own phone (foreman only walked
+  Equations, in-browser).
+- 💬 a few one-liners [whenever]: gtrig dice — gt1–gt3 discovery rounds in or out (my
+  recommendation: gt2+gt3 in, gt1 out)? + the AG digest's 14 F-flags when she has coffee.
+
+---
+
+# (previous head) Project status — updated 2026-08-24 (early hours) (🎲 DICE WAVE 2 BUILT + FOREMAN-REVIEWED, LOCAL ONLY — Equations, Exponents & Surds, Functions pools ready; General Trig audited; Analytical Geometry DIGESTED. Ship waits on her word)
 
 ## 🎲 2026-08-23/24 (overnight) — DICE WAVE 2 + TWO SCOUT JOBS (Fable foreman, 5 parallel Opus agents under her /go "run the three green chapters, audit the general trig and maybe digest Analytical Geometry")
 
@@ -3129,10 +3153,9 @@ The Circle Quest → Blipwork link was explicitly deferred (see Decisions).
   headless Chromium. If makeAccessoryLayer's maths ever changes, change it too.
 
 ## Pending on Megan
+(2026-08-24 sweep, her word: the Finance / Number Patterns / 2D Trig dice rounds are all phone-tested. Nothing pending.)
 (The two BLOCKING items — the collect-cq secrets and the phone eyeball, now
 v34 → v45 — live in the 2026-08-21 entry at the top of this file.)
-- 📱 per chapter, when you have a minute: phone-test one dice round in Finance,
-  Number Patterns and 2D Trig **[whenever]**
 
 (2026-08-23 evening: FABLE-AUDIT-2026-08-06.md was already committed on 08-07
 (`7bfa5e6`) — she also ok'd it today; the decor (closet/wallpaper/shelf/🥚) and the
