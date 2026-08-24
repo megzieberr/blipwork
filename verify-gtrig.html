@@ -1376,7 +1376,7 @@ const m17 = mark();
      inherits its source question's lostQuest, and that is what is
      checked below, card by card. */
   const gq = examQuestionsForChapter("gtrig");
-  tick(gq.length === 4, `the gtrig exam chapter owns exactly 4 skill cards (got ${gq.length})`);
+  tick(gq.length === 54, `the gtrig exam chapter owns exactly 54 skill cards (got ${gq.length}) — count re-based 2026-08-24 (wave-3 dice session, pre-approved): the registry grew from the four pilot cards the comment above describes; the card-by-card relink checks below are what actually guard the relink`);
   const tq = examQuestionsForChapter("trig");
   tick(tq.length === 1 && tq[0].topic === "cosine-rule-area",
     `the 2D trig chapter keeps ONLY its one paused card (got ${tq.map(x => x.topic).join(",")})`);

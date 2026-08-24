@@ -23,6 +23,12 @@ import { pool as diceTrig } from "./dice-trig.js";
 import { pool as diceEqn } from "./dice-eqn.js";
 import { pool as diceExp } from "./dice-exp.js";
 import { pool as diceFunc } from "./dice-func.js";
+/* Wave 3 (2026-08-24): General Trig. Registered here so the pool is
+   reachable (tools/shoot_dice.py opens a round straight from page JS),
+   but config.js's DICE_CHAPTERS still does NOT list "gtrig" — the flag
+   flip is the ship step and stays with the foreman, so nothing about
+   the learner's hub changes by this import alone. */
+import { pool as diceGtrig } from "./dice-gtrig.js";
 
 const DICE_POOLS = {
   stats: diceStats,
@@ -32,6 +38,7 @@ const DICE_POOLS = {
   eqn: diceEqn,
   exp: diceExp,
   func: diceFunc,
+  gtrig: diceGtrig,
 };
 
 export function dicePool(chapterId) { return DICE_POOLS[chapterId] || null; }

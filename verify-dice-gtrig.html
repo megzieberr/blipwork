@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice · General Trig pool · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:14px;padding:12px}
+  .card h3{font-size:13px;margin-bottom:6px}
+  .checks{list-style:none;font-size:11px;line-height:1.5;margin-top:8px}
+  .checks li.ok{color:var(--good)} .checks li.bad{color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Dice · General Trig pool · verification</h1>
+<p class="muted small">js/quests/dice-gtrig.js — 65 entries, 200 seeded rolls each.
+  <b>Part 0</b> proves the pool's shape and that its KEEP list plus its DROPPED list account for every
+  one of the chapter's 93 audited skills, so nothing can go missing silently.
+  <b>Part 1</b> is the per-entry integrity pass. Half this chapter is <code>steps</code> — an ordered
+  chain of sub-inputs with none of <code>q.options</code> / <code>q.expected</code> / <code>q.yes</code>
+  at question level — so the generic dice checks RECURSE into <code>q.steps</code> and dispatch on all
+  eight sub-kinds (mc, mcmulti, calc, tokenpad, tapcross, doubletick, sketchfill, tapside). The shape
+  validation is lifted from verify-gtrig.html §9 and widened; on top of it every sub-step is put through
+  <code>checkStep()</code> — the app's own marking brain — with its right answer and with a wrong one.
+  <b>Part 2</b> is graph honesty: every rolled figure, question-level and step-level, back through
+  verifyQuadTri / verifyTrig / verifyTriangle.
+  <b>Part 3</b> is the dice layer: determinism, salted retry, dealing, coverage and resume.</p>
+<div id="banner">running…</div>
+
+<h2>Part 0 · pool shape &amp; the 93-skill ledger</h2>
+<pre id="ledger">…</pre>
+
+<h2>Part 1 · per-entry generation integrity (steps-recursive)</h2>
+<div class="grid" id="entries"></div>
+
+<h2>Part 1 · sub-kind coverage &amp; the method rule</h2>
+<pre id="kinds">…</pre>
+
+<h2>Part 2 · graph honesty (every rolled figure re-verified)</h2>
+<pre id="graphs">…</pre>
+
+<h2>Part 3 · determinism, salted retry, dealing &amp; resume (65 kinds, roundLength 5)</h2>
+<pre id="mechanics">…</pre>
+
+<script type="module">
+import { pool, DROPPED, PURE_RECALL, hasRealWorking, methodEligible } from "./js/quests/dice-gtrig.js";
+import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
+import { answerCorrect } from "./js/check.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
+import { getConcept } from "./js/concepts.js";
+import { QUEST_DEFS } from "./js/quests/index.js";
+import { specialExact } from "./js/triglib.js";
+import { verifyQuadTri } from "./js/engine/quadrant-triangle.js";
+import { verifyTrig } from "./js/engine/trig-graph.js";
+import { verifyTriangle } from "./js/engine/triangle-graph.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return !!cond; };
+
+const RUNS = 200;
+/* The INPUT LAW, as this chapter actually uses it: list-pick (mc / reason /
+   yesno), the number pad (calc), the quadrant cross (tapcross), sketch-click
+   (tap) and the chain (steps). No free-text type exists anywhere in gtrig —
+   the token pad is the keypad with whole tokens on its keys, never typing. */
+const QUESTION_TYPES = new Set(["mc", "reason", "yesno", "calc", "tap", "tapcross", "steps"]);
+const STEP_KINDS = ["mc", "mcmulti", "calc", "tokenpad", "tapcross", "doubletick", "sketchfill", "tapside"];
+const EPS = 1e-9;
+
+const decode = s => String(s).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&");
+const stripTags = s => String(s).replace(/<[^>]*>/g, "");
+const plain = s => decode(stripTags(s)).replace(/\s+/g, " ").trim();
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+/* a real minus in learner copy is always U+2212; an ASCII hyphen next to a
+   digit is only legitimate inside a triangle NAME like "30-60-90" (digit on
+   BOTH sides). Same rule verify-gtrig.html §9 applies to static play. */
+const hyphenAsMinus = s => /(^|[\s(=,:])-\d/.test(s);
+
+/* ------------------------------------------------------------
+   BY-VALUE decoy collision (DICE-PLAN's rule; the guards that already
+   enforce it live inside gen() as byValue() / optionsByFn() / the 1e-9
+   specialExact filter — this proves they held on every roll).
+   A label becomes a number when it honestly is one: an integer, a
+   comma-decimal, a signed fraction "a/b" as fracLabel() writes it, or
+   one of the exact special-angle strings ("√3/2", "1/√3", …).
+   Anything else — prose, an expression, "opp" — stays null and is
+   compared by string only, which the distinct-labels check already does.
+   ------------------------------------------------------------ */
+const SPECIAL_VALUE = new Map();
+[0, 30, 45, 60, 90, 180, 270, 360].forEach(a => ["sin", "cos", "tan"].forEach(f => {
+  const r = specialExact(f, a);
+  if (r && r.value != null && !SPECIAL_VALUE.has(r.text)) SPECIAL_VALUE.set(r.text, r.value);
+}));
+[["1", 1], ["√3", Math.sqrt(3)], ["2", 2], ["√2", Math.sqrt(2)], ["0", 0]].forEach(([t, v]) => { if (!SPECIAL_VALUE.has(t)) SPECIAL_VALUE.set(t, v); });
+function valueOf(label) {
+  const s = plain(label);
+  if (SPECIAL_VALUE.has(s)) return SPECIAL_VALUE.get(s);
+  const neg = /^[−-]/.test(s);
+  const body = s.replace(/^[−-]\s*/, "");
+  if (SPECIAL_VALUE.has(body)) return (neg ? -1 : 1) * SPECIAL_VALUE.get(body);
+  const frac = body.match(/^(\d+(?:,\d+)?)\s*\/\s*(\d+(?:,\d+)?)$/);
+  if (frac) {
+    const n = Number(frac[1].replace(",", ".")), d = Number(frac[2].replace(",", "."));
+    if (Number.isFinite(n) && Number.isFinite(d) && d !== 0) return (neg ? -1 : 1) * (n / d);
+  }
+  if (/^\d+(,\d+)?$/.test(body)) return (neg ? -1 : 1) * Number(body.replace(",", "."));
+  return null;
+}
+/* counted, so "0 collisions" can never mean "the check never ran": byValue
+   records how many option sets had a correct answer this parser could read as
+   a number, byString how many were prose/expressions and fell back to the
+   distinct-labels check. */
+const decoyStats = { byValue: 0, byString: 0, compared: 0 };
+function decoyCollisions(options, ctx) {
+  const out = [];
+  const opts = options || [];
+  const correct = opts.find(o => o.correct);
+  if (!correct) return out;
+  const cv = valueOf(correct.label);
+  if (cv == null) { decoyStats.byString++; return out; }
+  decoyStats.byValue++;
+  opts.filter(o => !o.correct).forEach(o => {
+    const dv = valueOf(o.label);
+    if (dv == null) return;
+    decoyStats.compared++;
+    if (Math.abs(dv - cv) < 1e-9) out.push(`${ctx}: decoy "${plain(o.label)}" equals the answer BY VALUE (${cv})`);
+  });
+  return out;
+}
+
+/* ------------------------------------------------------------
+   SHAPE + MARKING-BRAIN validation for one sub-step.
+   Lifted from verify-gtrig.html §9 and widened: §9 covers mc, mcmulti,
+   tapside, tapcross, tokenpad, calc and step graphs; doubletick and
+   sketchfill are added here, and EVERY kind is now also run through
+   checkStep() twice — once with the right answer, once with a wrong
+   one — so a step that cannot be marked can never reach a dice round.
+   ------------------------------------------------------------ */
+function stepIssues(step, sctx, kindTally) {
+  const out = [];
+  const bad = m => out.push(`${sctx}: ${m}`);
+  if (!step || typeof step !== "object") { bad("step is not an object"); return out; }
+  if (!STEP_KINDS.includes(step.kind)) { bad(`kind "${step.kind}" is not a known step type`); return out; }
+  kindTally[step.kind] = (kindTally[step.kind] || 0) + 1;
+  if (step.prompt != null && hyphenAsMinus(String(step.prompt))) bad("ASCII hyphen-as-minus in the step prompt");
+
+  if (step.kind === "mc") {
+    const opts = step.options || [];
+    const corrects = opts.filter(o => o.correct);
+    if (corrects.length !== 1) bad(`${corrects.length} correct mc options (want exactly 1)`);
+    if (opts.length < 2) bad(`only ${opts.length} mc options`);
+    const labels = opts.map(o => plain(o.label));
+    if (labels.some(l => !l)) bad("an mc option label is empty once tags are stripped");
+    if (new Set(labels).size !== labels.length) bad(`duplicate mc option labels: ${labels.join(" | ")}`);
+    opts.forEach(o => { if (hyphenAsMinus(String(o.label))) bad("ASCII hyphen-as-minus in an mc option"); });
+    decoyCollisions(opts, sctx).forEach(m => out.push(m));
+    const ci = opts.findIndex(o => o.correct);
+    if (ci >= 0) {
+      if (!checkStep(step, ci)) bad("checkStep rejects the step's OWN correct option");
+      const wi = opts.findIndex(o => !o.correct);
+      if (wi >= 0 && checkStep(step, wi)) bad("checkStep accepts a decoy");
+    }
+  }
+
+  else if (step.kind === "mcmulti") {
+    const n = (step.options || []).length;
+    if (n < 3) bad(`mcmulti offers only ${n} options`);
+    if (!Array.isArray(step.correct) || !step.correct.length) bad("mcmulti correct is not a non-empty index array");
+    else {
+      if (!step.correct.every(i => Number.isInteger(i) && i >= 0 && i < n)) bad("an mcmulti index is outside the option list");
+      if (!same(step.correct, step.correct.slice().sort((a, b) => a - b))) bad("mcmulti correct is not SORTED");
+      if (step.correct.length >= n) bad("mcmulti has no decoy");
+      if (!checkStep(step, step.correct.slice())) bad("checkStep rejects the correct list");
+      if (checkStep(step, step.correct.slice(1))) bad("checkStep accepts an incomplete list");
+      if (checkStep(step, [])) bad("checkStep accepts an empty list");
+    }
+    (step.options || []).forEach(o => { if (hyphenAsMinus(String(o.label))) bad("ASCII hyphen-as-minus in an mcmulti option"); });
+  }
+
+  else if (step.kind === "calc") {
+    if (!Number.isFinite(step.expected)) bad(`calc expected is not finite (${step.expected})`);
+    if (step.dp != null && (!Number.isInteger(step.dp) || step.dp < 0)) bad(`calc dp "${step.dp}" is not a non-negative integer`);
+    if (step.tol != null && (!Number.isFinite(step.tol) || step.tol < 0)) bad(`calc tol "${step.tol}" is not finite and ≥ 0`);
+    if (Number.isFinite(step.expected)) {
+      if (!checkStep(step, step.expected)) bad("checkStep rejects the step's OWN expected value");
+      /* one whole unit away is wrong under every dp/tol this chapter uses
+         (the widest tol in gt12 is a 2-dp rounding tolerance) */
+      if (checkStep(step, step.expected + 1)) bad("checkStep accepts a value a whole unit away");
+      if (!answerCorrect(step.expected, step.expected, { dp: step.dp, tol: step.tol })) bad("expected fails answerCorrect against itself");
+    }
+  }
+
+  else if (step.kind === "tokenpad") {
+    if (typeof step.expected !== "string" || normalizeTokens(step.expected).length === 0) bad("tokenpad expected does not normalise to a non-empty string");
+    else {
+      if (!checkStep(step, step.expected)) bad("checkStep rejects the step's OWN expected token string");
+      if (checkStep(step, "")) bad("checkStep accepts an empty token string");
+    }
+  }
+
+  else if (step.kind === "tapcross") {
+    /* gt12's co-function items answer with the STRING "noref", not an array —
+       a pool or harness that assumes tapcross answers are arrays breaks here. */
+    const okShape = Array.isArray(step.correct) || step.correct === "noref";
+    if (!okShape) bad(`tapcross correct is neither an array nor "noref" (${JSON.stringify(step.correct)})`);
+    if (Array.isArray(step.correct)) {
+      if (!step.correct.length) bad("tapcross correct is an empty array");
+      if (!same(step.correct, step.correct.slice().sort((a, b) => a - b))) bad("tapcross correct is not SORTED");
+      if (!step.correct.every(q => Number.isInteger(q) && q >= 1 && q <= 4)) bad("a tapcross quadrant is not 1–4");
+      if (!checkStep(step, step.correct.slice())) bad("checkStep rejects the step's OWN quadrant list");
+      const wrong = [1, 2, 3, 4].filter(q => !step.correct.includes(q));
+      if (wrong.length && checkStep(step, [wrong[0]]) && !(step.alsoAccept || []).some(a => same(a, [wrong[0]]))) bad("checkStep accepts a quadrant that is not in the answer");
+    } else {
+      if (!checkStep(step, "noref")) bad('checkStep rejects the step\'s own "noref"');
+      if (checkStep(step, [1])) bad('checkStep accepts a quadrant tick where the answer is "noref"');
+    }
+  }
+
+  else if (step.kind === "doubletick") {
+    if (!Number.isInteger(Number(step.correct)) || Number(step.correct) < 1 || Number(step.correct) > 4) bad(`doubletick correct is not a quadrant 1–4 (${step.correct})`);
+    const passes = step.passes || [];
+    if (passes.length !== 2) bad(`doubletick has ${passes.length} tick passes (want 2)`);
+    passes.forEach((p, pi) => {
+      if (!Array.isArray(p.correct) || !p.correct.length) bad(`doubletick pass${pi} correct is not a non-empty array`);
+      else if (!p.correct.every(q => Number.isInteger(q) && q >= 1 && q <= 4)) bad(`doubletick pass${pi} has a quadrant outside 1–4`);
+      if (!p.prompt) bad(`doubletick pass${pi} has no prompt`);
+    });
+    /* overlapPick()'s whole job: the two tick lists must overlap in EXACTLY
+       one quadrant, and that quadrant must be the answer. */
+    if (passes.length === 2 && Array.isArray(passes[0].correct) && Array.isArray(passes[1].correct)) {
+      const overlap = passes[0].correct.filter(q => passes[1].correct.includes(q));
+      if (overlap.length !== 1) bad(`the two tick passes overlap in ${overlap.length} quadrants (overlapPick guarantees exactly 1)`);
+      else if (Number(overlap[0]) !== Number(step.correct)) bad(`the overlap quadrant ${overlap[0]} is not the stated answer ${step.correct}`);
+    }
+    if (!step.finalPrompt) bad("doubletick has no finalPrompt");
+    if (!checkStep(step, step.correct)) bad("checkStep rejects the step's OWN quadrant");
+    const other = [1, 2, 3, 4].find(q => q !== Number(step.correct));
+    if (checkStep(step, other)) bad("checkStep accepts another quadrant");
+  }
+
+  else if (step.kind === "sketchfill") {
+    const fields = step.fields || [];
+    if (!fields.length) bad("sketchfill has no fields");
+    const right = {};
+    fields.forEach((f, fi) => {
+      if (!f.key) bad(`sketchfill field${fi} has no key`);
+      if (!Number.isFinite(f.expected)) bad(`sketchfill field "${f.key}" expected is not finite (${f.expected})`);
+      if (f.dp != null && (!Number.isInteger(f.dp) || f.dp < 0)) bad(`sketchfill field "${f.key}" dp is not a non-negative integer`);
+      if (!f.prompt) bad(`sketchfill field "${f.key}" has no prompt`);
+      right[f.key] = f.expected;
+    });
+    if (fields.length && fields.every(f => Number.isFinite(f.expected))) {
+      if (!checkStep(step, right)) bad("checkStep rejects the step's OWN field values");
+      const off = { ...right }; off[fields[0].key] = fields[0].expected + 1;
+      if (checkStep(step, off)) bad("checkStep accepts a field a whole unit out");
+      if (checkStep(step, {})) bad("checkStep accepts an empty fill");
+    }
+  }
+
+  else if (step.kind === "tapside") {
+    if (!["opp", "adj", "hyp"].includes(step.correct)) bad(`tapside correct does not name a real side ("${step.correct}")`);
+    else {
+      if (!checkStep(step, step.correct)) bad("checkStep rejects the step's OWN side");
+      const other = ["opp", "adj", "hyp"].find(s => s !== step.correct);
+      if (checkStep(step, other)) bad("checkStep accepts another side");
+    }
+    const targets = step.targets || [];
+    if (!targets.includes(step.correct)) bad("the correct side is not among the step's tap targets");
+  }
+
+  return out;
+}
+
+/* ------------------------------------------------------------
+   graph honesty — EVERY rolled figure, question-level and step-level,
+   through the engine's own verifier. gtrig draws with three engines:
+   quadtri (gt8, gt10), trigg (gt2), triangle (gt4).
+   ------------------------------------------------------------ */
+const GRAPH_VERIFIER = { quadtri: verifyQuadTri, trigg: verifyTrig, triangle: verifyTriangle };
+const graphStats = { specs: 0, checks: 0, faults: 0, byType: {} };
+function graphIssues(g, ctx) {
+  const out = [];
+  if (!g) return out;
+  const v = GRAPH_VERIFIER[g.type];
+  if (!v) { out.push(`${ctx}: unknown graph type "${g.type}" in a gtrig question`); return out; }
+  graphStats.specs++;
+  graphStats.byType[g.type] = (graphStats.byType[g.type] || 0) + 1;
+  const res = v(g);
+  graphStats.checks += res.length;
+  res.forEach(r => { if (!r.ok) { graphStats.faults++; out.push(`${ctx}: ${g.type} figure fails — ${r.label}`); } });
+  return out;
+}
+
+/* ============================================================
+   PART 0 — pool shape, and the 93-skill ledger
+   ============================================================ */
+const AUDITED_QUESTS = ["gt1", "gt2", "gt3", "gt4", "gt5", "gt6", "gt7", "gt8", "gt9", "gt10", "gt11", "gt12", "gt13"];
+{
+  const lines = [];
+  const ids = pool.entries.map(e => e.skillId);
+  tick(pool.chapterId === "gtrig", 'pool: chapterId is "gtrig"');
+  tick(pool.entries.length === 65, `pool: 65 entries (got ${pool.entries.length})`);
+  tick(pool.roundLength === 5, `pool: roundLength 5 — the foreman's call; the house median is 7 (got ${pool.roundLength})`);
+  tick(new Set(ids).size === ids.length, "pool: every skillId is unique");
+  tick(pool.entries.every(e => e.kind === e.skillId), "pool: kind === skillId on every entry (the only grouping is the collapse of duplicate generators)");
+  tick(pool.entries.every(e => typeof e.gen === "function" && e.gen.length === 0), "pool: every gen is a zero-arg function (seeded-rng safe)");
+  tick(pool.entries.every(e => !!getConcept(e.concept)), "pool: every entry's concept has a card in js/concepts.js (I'm lost works)");
+
+  /* the ledger: KEEP (what is in the pool) + DROPPED must account for every
+     skill of every gt round, and nothing may be in both or in neither. */
+  let audited = 0, unaccounted = [], doubleCounted = [];
+  const inPool = new Set(ids);
+  AUDITED_QUESTS.forEach(qid => {
+    const def = QUEST_DEFS[qid];
+    if (!tick(!!def, `QUEST_DEFS registers ${qid}`)) return;
+    const dropped = new Set((DROPPED[qid] || []).map(d => d[0]));
+    (def.skills || []).forEach(s => {
+      audited++;
+      const kept = inPool.has(`${qid}.${s.id}`);
+      if (kept && dropped.has(s.id)) doubleCounted.push(`${qid}.${s.id}`);
+      if (!kept && !dropped.has(s.id)) unaccounted.push(`${qid}.${s.id}`);
+    });
+    /* nothing in DROPPED may name a skill that no longer exists */
+    (DROPPED[qid] || []).forEach(d => {
+      tick((def.skills || []).some(s => s.id === d[0]), `DROPPED.${qid} names a real skill "${d[0]}"`);
+    });
+  });
+  tick(audited === 93, `the chapter still holds the 93 skills the audit classified (got ${audited})`);
+  tick(unaccounted.length === 0, `every skill is either dealt or listed in DROPPED with a reason (unaccounted: ${unaccounted.join(", ") || "none"})`);
+  tick(doubleCounted.length === 0, `no skill is both dealt and dropped (${doubleCounted.join(", ") || "none"})`);
+
+  const droppedFlat = Object.entries(DROPPED).flatMap(([q, list]) => list.map(d => [`${q}.${d[0]}`, d[1], d[2]]));
+  const dups = droppedFlat.filter(d => d[1] === "dup").length;
+  const rulings = droppedFlat.filter(d => d[1] === "ruling").length;
+  const pendings = droppedFlat.filter(d => d[1] === "pending").length;
+  tick(dups === 19, `19 duplicate-generator slots collapsed (audit §5's family table) — got ${dups}`);
+  tick(rulings === 7, `7 skills out by her ruling (all of gt1, audit §6 option C) — got ${rulings}`);
+  tick(pendings === 2, `2 skills pending Megan (gt3.quadrantal, gt6.chip3) — got ${pendings}`);
+  tick(93 - dups - rulings - pendings === pool.entries.length, `the arithmetic closes: 93 − ${dups} dup − ${rulings} ruling − ${pendings} pending = ${pool.entries.length}`);
+  tick(!droppedFlat.some(d => d[0] === "gt10.reduceThenRead"), "reduceThenRead is not even a skill any more, so it cannot reach the pool (she cut it 2026-08-22)");
+
+  const perRound = {};
+  pool.entries.forEach(e => { const q = e.skillId.split(".")[0]; perRound[q] = (perRound[q] || 0) + 1; });
+  lines.push(`pool: chapterId "${pool.chapterId}", ${pool.entries.length} entries, ${new Set(pool.entries.map(e => e.kind)).size} distinct kinds, roundLength ${pool.roundLength}`);
+  lines.push(`entries per round: ${AUDITED_QUESTS.map(q => `${q} ${perRound[q] || 0}`).join(" · ")}`);
+  lines.push(`ledger: ${audited} audited skills = ${pool.entries.length} dealt + ${dups} collapsed duplicates + ${rulings} her-ruling + ${pendings} pending-Megan`);
+  lines.push("");
+  lines.push("PENDING MEGAN — both are a one-line re-add in js/quests/dice-gtrig.js's KEEP:");
+  droppedFlat.filter(d => d[1] === "pending").forEach(d => lines.push(`  · ${d[0]} — ${d[2]}`));
+  lines.push("");
+  lines.push("HER RULING — gt1 out of the pool (audit §6 option C: gt2 + gt3 in, gt1 out):");
+  lines.push(`  · ${droppedFlat.filter(d => d[1] === "ruling").map(d => d[0]).join(", ")}`);
+  lines.push("");
+  lines.push("COLLAPSED DUPLICATE GENERATORS (kept representative ← dropped slots):");
+  Object.entries(DROPPED).forEach(([q, list]) => {
+    list.filter(x => x[1] === "dup").forEach(x => lines.push(`  · ${q}.${x[0]} — ${x[2]}`));
+  });
+  document.getElementById("ledger").textContent = lines.join("\n");
+}
+
+/* ============================================================
+   PART 1 + 2 — per entry, 200 seeded rolls
+   ============================================================ */
+const host = document.getElementById("entries");
+const kindTally = {};
+const typeTally = {};
+const methodOn = [], methodOff = [];
+let stepChains = 0, stepCount = 0;
+
+pool.entries.forEach(entry => {
+  const issues = [];
+  let sawMethod = false, sawSteps = false, sawFigure = false, entryFigures = 0;
+  const seenTypes = new Set();
+
+  for (let i = 0; i < RUNS; i++) {
+    let q;
+    try { q = withSeed((Math.random() * 1e9) >>> 0, () => entry.gen()); }
+    catch (e) { issues.push(`threw: ${e.message}`); break; }
+
+    const ctx = `#${i}`;
+
+    /* ---- input law + the basics every question owes the player ---- */
+    if (!QUESTION_TYPES.has(q.type)) { issues.push(`type "${q.type}" violates the input law`); continue; }
+    seenTypes.add(q.type);
+    typeTally[q.type] = (typeTally[q.type] || 0) + 1;
+    if (!q.prompt || !String(q.prompt).trim()) issues.push("empty prompt");
+    if (!getConcept(q.concept)) issues.push(`concept "${q.concept}" has no card in js/concepts.js`);
+    [q.prompt, q.answerLabel, q.hint].forEach(t => { if (t != null && hyphenAsMinus(String(t))) issues.push("ASCII hyphen-as-minus in learner copy (house rule: U+2212)"); });
+
+    /* ---- the method rule, POOL-SIDE (dice-gtrig.js's header) ---- */
+    const wants = methodEligible(q);
+    if (!!q.method !== wants) issues.push(`method rule broken: q.method ${q.method ? "present" : "absent"} but the rule says ${wants ? "attach" : "omit"}`);
+    if (q.type === "steps" && q.method != null) issues.push("a steps chain carries q.method — that link would hand over every remaining answer");
+    if (q.method != null) {
+      sawMethod = true;
+      if (typeof q.method !== "string" || !q.method.trim()) issues.push("q.method is not a non-empty string");
+      else if (!q.method.includes("sol-step")) issues.push("q.method has no .sol-step");
+    }
+
+    /* ---- shape + self-consistency, per question type ---- */
+    if (q.type === "mc" || q.type === "reason") {
+      const opts = q.options || [];
+      const corrects = opts.filter(o => o.correct);
+      if (corrects.length !== 1) issues.push(`${corrects.length} correct options (want exactly 1)`);
+      if (opts.length < 2) issues.push(`only ${opts.length} options`);
+      const labels = opts.map(o => plain(o.label));
+      if (labels.some(l => !l)) issues.push("an option label is empty once tags are stripped");
+      if (new Set(labels).size !== labels.length) issues.push(`duplicate option labels: ${labels.join(" | ")}`);
+      opts.forEach(o => { if (hyphenAsMinus(String(o.label))) issues.push("ASCII hyphen-as-minus in an option"); });
+      decoyCollisions(opts, ctx).forEach(m => issues.push(m));
+    }
+    else if (q.type === "yesno") {
+      if (typeof q.yes !== "boolean") issues.push("q.yes is not a boolean");
+    }
+    else if (q.type === "calc") {
+      if (!Number.isFinite(q.expected)) issues.push("non-finite expected");
+      if (q.dp != null && (!Number.isInteger(q.dp) || q.dp < 0)) issues.push(`dp "${q.dp}" is not a non-negative integer`);
+      if (q.tol != null && (!Number.isFinite(q.tol) || q.tol < 0)) issues.push(`tol "${q.tol}" is not finite and ≥ 0`);
+      if (Number.isFinite(q.expected) && !answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) issues.push("expected fails its own check");
+    }
+    else if (q.type === "tapcross") {
+      /* js/questions.js marks a question-level tapcross through the SAME
+         checkStep() the chain uses, so it is validated the same way. */
+      stepIssues({ kind: "tapcross", correct: q.correct, alsoAccept: q.alsoAccept, prompt: q.prompt }, ctx, kindTally)
+        .forEach(m => issues.push(m.replace("tapcross", "question-level tapcross")));
+    }
+    else if (q.type === "tap") {
+      if (!q.tap || typeof q.tap.correctId !== "string") issues.push("tap without a string correctId");
+      else if (!(q.tap.targets || []).includes(q.tap.correctId)) issues.push("correctId is not among the tap targets");
+    }
+    else if (q.type === "steps") {
+      sawSteps = true; stepChains++;
+      if (!Array.isArray(q.steps) || !q.steps.length) issues.push("steps is not a non-empty array");
+      else {
+        stepCount += q.steps.length;
+        q.steps.forEach((step, si) => {
+          stepIssues(step, `${ctx} step${si}`, kindTally).forEach(m => issues.push(m));
+          graphIssues(step.graph, `${ctx} step${si}`).forEach(m => issues.push(m));
+        });
+        /* a tapside step needs a quadtri sketch already on screen — its own
+           or an earlier step's (audit §1.2: every gtrig use has one) */
+        q.steps.forEach((step, si) => {
+          if (step.kind !== "tapside") return;
+          const hasSketch = q.steps.slice(0, si + 1).some(s => s.graph && s.graph.type === "quadtri") || (q.graph && q.graph.type === "quadtri");
+          if (!hasSketch) issues.push(`${ctx} step${si}: a tapside step with no quadtri sketch before it`);
+        });
+      }
+    }
+
+    /* ---- reveal frames, where a skill has them ---- */
+    if (q.reveal != null) {
+      if (!Array.isArray(q.reveal) || !q.reveal.length) issues.push("q.reveal is not a non-empty array");
+      else if (!q.reveal.every(f => typeof f === "string" && f.trim())) issues.push("a reveal frame is not a non-empty string");
+      if (q.revealMode != null && q.revealMode !== "replace") issues.push(`unknown revealMode "${q.revealMode}"`);
+    }
+
+    /* ---- graph honesty at question level ---- */
+    if (q.graph) { sawFigure = true; entryFigures++; }
+    graphIssues(q.graph, ctx).forEach(m => issues.push(m));
+  }
+
+  if (sawMethod) methodOn.push(entry.skillId); else methodOff.push(entry.skillId);
+
+  const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} seeded rolls)`);
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${ok ? "✓" : "✗"} ${entry.skillId} <span class="muted">(${[...seenTypes].join(" / ") || "?"})</span></h3>
+    <ul class="checks">
+      <li class="${ok ? "ok" : "bad"}">${ok ? "✓ clean over 200 rolls" : "✗ " + [...new Set(issues)].slice(0, 5).join("; ")}</li>
+      <li class="ok">concept "${entry.concept}" has a card (I'm lost works)</li>
+      <li class="${sawMethod ? "ok" : ""}">${sawMethod ? "carries q.method" : sawSteps ? "no q.method — steps chain (pool-side rule: the link would spoil the chain)" : "no q.method — solution is answer-only"}</li>
+      <li class="${sawFigure ? "ok" : ""}">${sawFigure ? `${entryFigures} question-level figures re-verified` : "no question-level figure"}</li>
+    </ul>`;
+  host.appendChild(card);
+});
+
+/* every one of the eight sub-inputs the chapter uses must actually have been
+   exercised — a shape check that never runs proves nothing */
+STEP_KINDS.forEach(k => tick((kindTally[k] || 0) > 0, `sub-kind "${k}" was generated and shape-checked (${kindTally[k] || 0} times)`));
+tick(decoyStats.compared > 0, `the by-VALUE decoy check actually ran: ${decoyStats.compared} decoys compared numerically against their answer (${decoyStats.byValue} option sets had a readable numeric answer, ${decoyStats.byString} were prose/expressions and fall to the distinct-labels check)`);
+tick(graphStats.faults === 0, `graph honesty: ${graphStats.specs} rolled figures, ${graphStats.checks} engine assertions, 0 faults`);
+
+document.getElementById("kinds").textContent =
+  `question types dealt (${RUNS} rolls × ${pool.entries.length} entries):\n` +
+  Object.entries(typeTally).sort((a, b) => b[1] - a[1]).map(([t, n]) => `  · ${t}: ${n}`).join("\n") +
+  `\n\n${stepChains} steps chains, ${stepCount} sub-steps, all eight sub-kinds exercised:\n` +
+  STEP_KINDS.map(k => `  · ${k}: ${kindTally[k] || 0}`).join("\n") +
+  `\n\nby-VALUE decoy collision check: ${decoyStats.compared} decoys compared numerically\n` +
+  `  · ${decoyStats.byValue} option sets had an answer this parser reads as a number\n` +
+  `    (an integer, a comma-decimal, a fracLabel "a/b", or an exact special-angle string)\n` +
+  `  · ${decoyStats.byString} were prose or expressions — those fall to the distinct-labels check\n` +
+  `  · 0 collisions. The guards that earn this live inside gen(): byValue() in gt8/gt10,\n` +
+  `    optionsByFn() in gt9 (which THROWS on a value-equal decoy) and the 1e-9 specialExact\n` +
+  `    filter in gt3.\n\nMETHOD RULE — pool-side (DICE-AUDIT-gtrig §1.3). q.method is attached only to\n` +
+  `entries that are NOT steps chains AND whose solution carries real working.\n` +
+  `  attached (${methodOn.length}): ${methodOn.join(", ") || "none"}\n` +
+  `  omitted  (${methodOff.length}): ${methodOff.join(", ")}\n` +
+  `A steps chain's solution IS the chain, answer by answer, and js/play.js renders the\n` +
+  `link at mount — before step 1 is answered — so attaching it there would hand the\n` +
+  `learner every remaining answer. The wrong-answer panel still shows the full solution\n` +
+  `at the end, exactly as in static play.`;
+
+document.getElementById("graphs").textContent =
+  `${graphStats.specs} figures generated and re-verified across ${RUNS} rolls × ${pool.entries.length} entries\n` +
+  `  · ${graphStats.checks} individual engine assertions, ${graphStats.faults} failures\n` +
+  Object.entries(graphStats.byType).map(([t, n]) => `  · ${t}: ${n} figures`).join("\n") +
+  `\n  · quadtri → verifyQuadTri re-derives the scale, the quadrant and x² + y² = r² from the spec;\n` +
+  `    trigg → verifyTrig re-plots the curve and its bands; triangle → verifyTriangle re-checks the\n` +
+  `    side lengths and the rotation. Every one of these figures comes out of the chapter's own\n` +
+  `    curated-safe builders (the gt10 {35,40,50,55} angle bank, PRIM_TRIPLES, SMALL_TRIPLES), which\n` +
+  `    the pool reuses verbatim — no rolled figure ever needed tightening.\n` +
+  `  · verify-gtrig.html §19 additionally RENDERS every gt8/gt10 sketch and measures each label with\n` +
+  `    getBBox(); the pool changes no spec, so that proof carries over unchanged.`;
+
+/* ============================================================
+   PART 3 — determinism, salted retry, dealing, resume
+   ============================================================ */
+{
+  const lines = [];
+  const seed = newRoundSeed();
+  const recall = new Set(PURE_RECALL);
+
+  let detAll = true, resumeAll = true;
+  pool.entries.forEach((skill, i) => {
+    const a = genAt(seed, i, skill), b = genAt(seed, i, skill);
+    if (JSON.stringify(a) !== JSON.stringify(b)) detAll = false;
+    if (JSON.stringify(a) !== JSON.stringify(genAt(seed, i, skill))) resumeAll = false;
+  });
+  tick(detAll, `determinism: genAt(seed,i,skill) is byte-identical on repeat, for all ${pool.entries.length} entries`);
+  tick(resumeAll, `resume: re-deriving any index reproduces the original question, for all ${pool.entries.length} entries`);
+  lines.push(`determinism (all ${pool.entries.length} entries, same seed/index twice): ${detAll ? "OK" : "FAIL"}`);
+  lines.push(`resume (all ${pool.entries.length} entries): ${resumeAll ? "OK" : "FAIL"}`);
+
+  const before = Math.random;
+  genAt(newRoundSeed(), 0, pool.entries[0]);
+  tick(Math.random === before, "rng restored to Math.random after genAt (static play unaffected)");
+  lines.push(`rng restore after genAt: ${Math.random === before ? "OK" : "FAIL — Math.random was left patched"}`);
+
+  /* salt 1 must differ from salt 0 for at least one of 20 indices, for every
+     entry with rolled numbers. Exempt: the pure-recall skills the audit
+     measured at 0/200 (DICE-AUDIT-gtrig §1.5) — one fixed true/false each. */
+  const noVary = [], recallVaried = [];
+  pool.entries.forEach(skill => {
+    let varied = false;
+    for (let idx = 0; idx < 20 && !varied; idx++) {
+      if (JSON.stringify(genAt(seed, idx, skill, 0)) !== JSON.stringify(genAt(seed, idx, skill, 1))) varied = true;
+    }
+    if (recall.has(skill.skillId)) { if (varied) recallVaried.push(skill.skillId); return; }
+    if (!varied) noVary.push(skill.skillId);
+  });
+  tick(noVary.length === 0, `salted retry: salt 1 differs from salt 0 for every non-exempt entry (${pool.entries.length - recall.size} of ${pool.entries.length})`);
+  lines.push(`salted retry (salt 0 vs salt 1 over 20 indices): ${noVary.length === 0 ? "OK — all vary" : "FAIL — never varied: " + noVary.join(", ")}`);
+  lines.push(`  exempt (pure recall, measured 0/200 in the audit): ${[...recall].join(", ")}`);
+  lines.push(`  of those, still varied via mc()'s seeded option shuffle: ${recallVaried.length ? recallVaried.join(", ") : "none"}`);
+
+  let sameSaltOk = true;
+  pool.entries.forEach((skill, i) => {
+    for (let salt = 0; salt <= 2; salt++) {
+      if (JSON.stringify(genAt(seed, i, skill, salt)) !== JSON.stringify(genAt(seed, i, skill, salt))) sameSaltOk = false;
+    }
+  });
+  tick(sameSaltOk, "salted retry: the same (seed, index, salt) is byte-identical on repeat, salt 0/1/2, all entries");
+  lines.push(`same salt called twice → identical (all entries, salt 0/1/2): ${sameSaltOk ? "OK" : "FAIL"}`);
+
+  let baseUnchanged = true;
+  pool.entries.forEach((skill, i) => {
+    if (JSON.stringify(genAt(seed, i, skill)) !== JSON.stringify(genAt(seed, i, skill, 0))) baseUnchanged = false;
+  });
+  tick(baseUnchanged, "salted retry: genAt() with no salt arg still equals salt 0 (resume path unaffected)");
+  lines.push(`no-salt-arg === explicit salt 0 (all entries): ${baseUnchanged ? "OK" : "FAIL"}`);
+
+  const deck1 = dealRound(pool.entries, pool.roundLength, []);
+  const distinct1 = deck1.length === pool.roundLength && new Set(deck1.map(e => e.kind)).size === deck1.length;
+  tick(distinct1, `dealing: a fresh learner's first round is ${pool.roundLength} distinct, all-unmet kinds`);
+  lines.push(`dealing (fresh learner, first round of ${pool.roundLength}): [${deck1.map(e => e.kind).join(", ")}] — ${distinct1 ? "OK" : "FAIL"}`);
+
+  const maxRounds = Math.ceil(pool.entries.length / pool.roundLength) + 2;
+  let met = [], rounds = 0;
+  while (met.length < pool.entries.length && rounds < maxRounds) {
+    const deck = dealRound(pool.entries, pool.roundLength, met);
+    const s = new Set(met); deck.forEach(e => s.add(e.kind)); met = [...s]; rounds++;
+  }
+  const fullCoverage = met.length === pool.entries.length;
+  tick(fullCoverage, `dealing: successive rounds reach full ${pool.entries.length}-kind coverage (took ${rounds}, allowed ≤ ${maxRounds})`);
+  lines.push(`dealing (successive rounds to full coverage): ${met.length}/${pool.entries.length} kinds after ${rounds} rounds (allowed ≤ ${maxRounds}) — ${fullCoverage ? "OK" : "FAIL"}`);
+
+  const deckFull = dealRound(pool.entries, pool.roundLength, pool.entries.map(e => e.kind));
+  tick(deckFull.length === pool.roundLength, "dealing: full coverage still deals a complete round (fully random)");
+  lines.push(`dealing (full coverage, fully random): dealt ${deckFull.length}/${pool.roundLength} — ${deckFull.length === pool.roundLength ? "OK" : "FAIL"}`);
+
+  const dealt = dealRound(pool.entries, pool.roundLength, []);
+  const firstPass = dealt.map((sk, i) => JSON.stringify(genAt(seed, i, sk)));
+  const resumeOk = dealt.every((sk, i) => JSON.stringify(genAt(seed, i, sk)) === firstPass[i]);
+  tick(resumeOk, "resume: re-deriving every index of a dealt round reproduces the original question");
+  lines.push(`resume (a real dealt round of ${dealt.length}): ${resumeOk ? "OK" : "FAIL"}`);
+
+  lines.push("");
+  lines.push("NOT CHECKED, deliberately: option ORDER variance. gt11's six options are a list to");
+  lines.push("learn, not a shuffle — the file says so — so a generic \"the options must reshuffle\"");
+  lines.push("assertion would false-flag that whole round (audit §2, gt11's harness note).");
+
+  document.getElementById("mechanics").textContent = lines.join("\n");
+}
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks passed` : `✗ FAIL — ${passed}/${total} checks passed, ${total - passed} failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-dice-gtrig] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>
