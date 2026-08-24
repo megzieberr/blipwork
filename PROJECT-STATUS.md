@@ -56,11 +56,17 @@ FAB + Papers tab on the live hub, 0 console errors.
   test note → 📄 Papers → open a practice paper (the signed-URL download is the
   one path only a real login can prove — everything else is verified).
 - 🌐 1 min [whenever]: admin → Feedback (see your note, mark it read) + Papers
-  (see the two papers listed).
+  (see the FOUR entries listed).
+
+### Update (same evening): her two follow-ups DONE
+- **The two practice MEMOS are uploaded** (her "yes, upload the memos too") —
+  same tokened-seeder pattern, neutralized again after. Papers now holds 4
+  entries (4 rows, 4 objects, byte-exact): each memo sorted directly under its
+  paper (sort 10/11/20/21).
+- **eq9 is OPEN** — she opened it herself in admin; verified is_open = true on
+  live. Every round in the app is now open.
 
 ### Next up
-- Her word on: the two practice-paper MEMOS as Papers entries (one word, I
-  upload); eq9 open/closed for the kids (still closed).
 - Next fix batch: fixed 💬 overlaps the Level 4 tile on the Exam Focus grid at
   scrollY 0 (nav tile, recoverable — builder measured it); sheet's Escape key
   can go dead after close-and-reopen (desktop only); the gtrig cosmetics list
