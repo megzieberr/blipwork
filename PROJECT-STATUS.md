@@ -1,4 +1,89 @@
-# Project status — updated 2026-08-24 (afternoon) (🎲 DICE WAVE 3 SHIPPED — General Trig dice LIVE on sw v67; Janko removed from the roster)
+# Project status — updated 2026-08-24 (evening) (💬 FEEDBACK + 📄 PAPERS LIVE on sw v69 — the kids' two asks, shipped same day; app is GO for the kids)
+
+## 🌙 2026-08-24 (evening) — KIDS-READY AUDIT, PILL FIX (v68), FEEDBACK + PAPERS (v69)
+
+Three things in one session, in order:
+
+**1. Pre-launch audit (her ask: "anything that will break before I send it to my
+kids?")** — all green: advisors 0 errors (the anon-RPC WARNs are the app's design),
+roster exactly 20, exam pay 50/5 confirmed in the live function, sw precache
+complete. Verdict delivered: send it. Only closed round at the time: eq9.
+
+**2. Hub pill fix, sw v68 (commit `9966664`)** — she closed Statistics/Finance/
+Probability for her kids and the chapter cards still wore the hardcoded green
+OPEN chip. The pill now reads the live open-count: ≥1 round open → green "Open",
+none → grey "Soon" (matches the "Opening soon" line). Live-verified. Also
+CONFIRMED (not changed): a chapter with zero open rounds shows NOTHING inside —
+the dice card too; renderChapter's early return guarantees it. The "dice never
+gated" rule only applies inside a chapter with at least one open round.
+
+**3. 💬 Feedback + 📄 Papers (her "go ahead and build it"), build commit `575540c`
+(1 Opus builder, ≈0.32M, brief sessions/FEEDBACK-PAPERS-BRIEF.md), ship commit
+`f8a8f2e`, sw v69.** What the learners get:
+- A 💬 button on every logged-in screen → "Send a note to your teacher", named
+  (default) or anonymous. ⚠️ ANONYMITY IS REAL: an anonymous row stores NULL
+  student_id + NULL display_name — nothing to trace, ever. Everyone still
+  authenticates (spam-proof). Context ("play:gt5") rides along either way.
+  On play/examPlay/funfunPlay the button is an in-flow pill ("💬 Tell your
+  teacher") because a fixed circle always lands on a full-width control at 375px.
+- A 📄 Papers hub tab (beside Circle Geo): grouped list, Open → 60-min signed
+  URL from the paper-url edge function. PDFs live in the PRIVATE `papers` bucket
+  (zero storage policies; edge functions with the service role are the only
+  route to a byte). The repo never holds a PDF.
+- Admin: Feedback section (unread count, "Anonymous" rows, context chip, mark
+  read) + Papers section (list, Remove, title/topic/PDF upload → paper-admin).
+
+**Server work, all applied/deployed by the foreman and sanity-verified:**
+migration `feedback_papers` (bucket private ✓, zero papers policies ✓, wrong-pw
+refusals ✓, wrappers mhq_auth_ok/mhq_admin_ok_rpc sealed to service_role ✓,
+search_path pinned on all six ✓, tables unreachable by anon ✓). paper-url +
+paper-admin deployed (verify_jwt on). **The two September practice papers are
+UPLOADED** (Sept-T1/T2-Practice-QP from Eksamen Vraestelle\Gr11 IEB Nov\Sept
+Practice, byte-exact, titled "September Test 1/2 — Practice Paper" under
+General) — via a tokened ONE-TIME seeder function that is now redeployed as a
+410 (her admin password never passed through chat). Probes: public URL on a
+private object → 400; paper-url wrong creds → auth; dead seeder → gone.
+
+**Foreman review (own eyes, not the builder's say-so):** verify-feedback-papers
+185/185 · verify-store 4033 all green (clean-cache cure applied) · full 375×812
+walk — hub FAB clear at 5 scroll offsets, play-screen pill in-flow and last,
+named send stored WITH name, anon send stored with NOTHING, papers stub +
+offline toast, admin sections render. Live after push: sw v69, both flags true,
+FAB + Papers tab on the live hub, 0 console errors.
+
+### ⏳ Pending on Megan
+- 📱 3 min [whenever]: close-and-reopen the PWA twice (v69) → 💬 send one named
+  test note → 📄 Papers → open a practice paper (the signed-URL download is the
+  one path only a real login can prove — everything else is verified).
+- 🌐 1 min [whenever]: admin → Feedback (see your note, mark it read) + Papers
+  (see the two papers listed).
+
+### Next up
+- Her word on: the two practice-paper MEMOS as Papers entries (one word, I
+  upload); eq9 open/closed for the kids (still closed).
+- Next fix batch: fixed 💬 overlaps the Level 4 tile on the Exam Focus grid at
+  scrollY 0 (nav tile, recoverable — builder measured it); sheet's Escape key
+  can go dead after close-and-reopen (desktop only); the gtrig cosmetics list
+  from the wave-3 report.
+- schema.sql funfun mirror gap → spawned as a task chip (2026-08-24).
+- Carried: wave 4 dice (AG/prob/meas/tgraph), calculator buttons (kids asked).
+
+## 📌 Decisions (append-only, 2026-08-24 evening)
+- Hub pill reads the live open-count; grey "Soon" when a chapter has no open
+  rounds (her find — she was the first to ever close one).
+- Dice stays reachable ONLY via a chapter with ≥1 open round (existing
+  behaviour, now documented as the ruling: fully-closed chapter = nothing).
+- Feedback anonymity is storage-level: an anonymous note keeps no identity, and
+  the admin copy says so in plain words. Everyone authenticates to send.
+- Papers live behind login: private bucket + service-role edge functions; PDFs
+  never enter the public repo. List RPC never exposes storage paths.
+- One-time seeding pattern for uploads-on-her-behalf: tokened throwaway edge
+  function, neutralized to 410 immediately after — her admin password is never
+  typed into chat.
+
+---
+
+# (previous head) Project status — updated 2026-08-24 (afternoon) (🎲 DICE WAVE 3 SHIPPED — General Trig dice LIVE on sw v67; Janko removed from the roster)
 
 ## ☀️ 2026-08-24 (afternoon) — SHIP + LIVE-VERIFIED (her "you can ship it") + JANKO REMOVED
 
