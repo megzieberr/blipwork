@@ -86,6 +86,17 @@
 --   registry stays empty until a real paper-build session seeds content,
 --   so none of this is reachable from the client yet either way.)
 --
+--  (2026-08-23, FUNFUN-PART2-BRIEF.md: the FUN FUNCTIONS MOUNT — see
+--   migration-funfun.sql, which WAS APPLIED TO LIVE on 2026-08-23. ONE new
+--   table (funfun_progress) + FOUR new RPCs (mhq_funfun_state,
+--   mhq_funfun_met, mhq_submit_funfun, mhq_admin_funfun) + two internal
+--   helpers. Fully additive: mhq_get_state and mhq_admin_data are
+--   deliberately UNTOUCHED — Fun Functions carries its own surface rather
+--   than re-creating either of those (that migration's header explains the
+--   copy-forward bug behind the rule). ⚠️ THE MIRROR WAS SKIPPED AT SHIP
+--   TIME and folded in here on 2026-08-24 — the same "AND" this file's
+--   KEEPING IT HONEST note is about, missed a fourth time.)
+--
 --  AUTH MODEL (roster login, like Circle Quest):
 --   • The teacher seeds the roster (mhq_admin_add_student, or bulk insert);
 --     learners never create their own account (mhq_signup is gone).
@@ -1595,6 +1606,257 @@ begin
   return jsonb_build_object('ok', true, 'papers', v_rows);
 end; $$;
 
+-- ============================================================
+--  📈 FUN FUNCTIONS MOUNT  (FUNFUN-PART2-BRIEF.md, 2026-08-23)
+--  MIRROR of supabase/migration-funfun.sql — that migration was APPLIED
+--  TO LIVE on 2026-08-23 but this mirror was skipped at ship time and
+--  folded in on 2026-08-24 (the header's "a schema change goes in TWO
+--  places" rule, caught late again). Read the migration's header for the
+--  full design note: the payout is recomputed server-side from `answered`
+--  alone, the pass bar is graph-quest's 0.7 (not blipwork's 0.8), and
+--  mhq_get_state / mhq_admin_data are DELIBERATELY untouched — Fun
+--  Functions gets its own four RPCs instead.
+--
+--  ⚠️ The migration's §0 dependency guard is NOT copied here: it checks
+--  that _mhq_auth / _mhq_admin_ok / _mhq_level / _mhq_dice_xp already
+--  exist, and in this file all four are defined above.
+-- ============================================================
+
+-- `best` is a FRACTION 0..1, not a raw score count. graph-quest's own
+-- localStorage backend stores the raw count and renders "best/total";
+-- blipwork's tile renders a PERCENT (brief D7), and a fraction is the
+-- only thing that stays meaningful when a later play deals a different
+-- number of items. `total` is the item count of the MOST RECENT play,
+-- mirroring what graph-quest's saveResult() stores.
+create table if not exists public.funfun_progress (
+  student_id  uuid not null references public.students(id) on delete cascade,
+  quest_id    text not null,
+  best        numeric not null default 0,     -- 0..1 fraction of the round scored
+  total       int     not null default 0,     -- items in the most recent play
+  plays       int     not null default 0,
+  done        boolean not null default false, -- has ever scored >= 0.7
+  -- { skillId: true, … } — which round KINDS this learner has actually
+  -- been SHOWN in this quest. Only qE opts into dealEachKindFirst, but
+  -- the column is generic; js/funfun/mount.js threads it back in as
+  -- profile.met[questId]. Never question content, only ids.
+  met_kinds   jsonb not null default '{}'::jsonb,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now(),
+  primary key (student_id, quest_id)
+);
+create index if not exists funfun_progress_student_idx on public.funfun_progress (student_id);
+
+alter table public.funfun_progress enable row level security;
+revoke all on public.funfun_progress from anon, authenticated;
+
+-- The FIFTEEN quest ids — the allow-list, in ONE place. Read out of
+-- js/funfun/quests/*.js in js/funfun/quests/index.js's QUESTS order,
+-- never guessed. A 16th quest upstream needs this array AND the tile
+-- strip — the array is what refuses an unknown id.
+create or replace function public._mhq_funfun_quests()
+returns text[] language sql immutable set search_path = '' as $$
+  select array['q1','q1b','qB','q2','q3','q5','q6','qL','qG','qT','qE','qK','qI','qF','q7']::text[];
+$$;
+
+-- The profile payload, built once and returned by all three learner RPCs
+-- so the client always gets the same shape back (js/mount.js's
+-- host.profile() contract). INTERNAL: revoked below; it takes a student
+-- id, not a password, and must never be callable directly.
+create or replace function public._mhq_funfun_profile(p_sid uuid)
+-- NOT marked STABLE on purpose: mhq_funfun_met and mhq_submit_funfun both
+-- write and then call this to hand the fresh profile back, and a volatile
+-- function is unambiguously reading what the same transaction just wrote.
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_quests jsonb; v_met jsonb; v_xp int;
+begin
+  select coalesce(jsonb_object_agg(quest_id, jsonb_build_object(
+            'best', best, 'total', total, 'plays', plays, 'done', done)), '{}'::jsonb)
+    into v_quests from public.funfun_progress where student_id = p_sid;
+
+  -- only quests that HAVE met kinds, so the payload stays small; the
+  -- mount reads (profile.met || {})[questId] || {} either way.
+  select coalesce(jsonb_object_agg(quest_id, met_kinds), '{}'::jsonb)
+    into v_met from public.funfun_progress
+   where student_id = p_sid and met_kinds <> '{}'::jsonb;
+
+  select xp into v_xp from public.students where id = p_sid;
+
+  return jsonb_build_object('ok', true, 'xp', coalesce(v_xp, 0),
+                            'quests', v_quests, 'met', v_met);
+end; $$;
+
+-- mhq_funfun_state — the learner's whole Fun Functions profile. Called on
+-- entering the Functions chapter (to draw the tiles) and by the play
+-- screen's host.profile().
+create or replace function public.mhq_funfun_state(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  update public.students set last_active_at = now() where id = v_sid;
+  return public._mhq_funfun_profile(v_sid);
+end; $$;
+
+-- mhq_funfun_met — folds one skill id into met_kinds and hands the fresh
+-- profile back (host.markMet's contract). Idempotent. Only qE's
+-- dealEachKindFirst calls it, but nothing here is qE-specific. Pays
+-- NOTHING and can never pay anything — being shown a round is not an
+-- achievement, and this RPC touches no xp/gold column.
+create or replace function public.mhq_funfun_met(p_username text, p_password text,
+                                                p_quest_id text, p_skill_id text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_skill text;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  if p_quest_id is null or not (p_quest_id = any(public._mhq_funfun_quests())) then
+    return jsonb_build_object('ok', false, 'error', 'bad_round');
+  end if;
+  v_skill := nullif(btrim(coalesce(p_skill_id, '')), '');
+  if v_skill is null or length(v_skill) > 64 then
+    return jsonb_build_object('ok', false, 'error', 'bad_round');
+  end if;
+
+  insert into public.funfun_progress (student_id, quest_id, met_kinds)
+  values (v_sid, p_quest_id, jsonb_build_object(v_skill, true))
+  on conflict (student_id, quest_id) do update
+    set met_kinds = public.funfun_progress.met_kinds || jsonb_build_object(v_skill, true),
+        updated_at = now();
+
+  return public._mhq_funfun_profile(v_sid);
+end; $$;
+
+-- mhq_submit_funfun — pays out one finished quest. Takes NO xp and NO
+-- score from the client: it is handed `answered`, the per-item outcome
+-- record, and recomputes everything (the dice's "the client never names
+-- an amount" rule). XP rides the EXISTING _mhq_dice_xp economy, clamped
+-- to 1000 then quartered on a repeat — clamp first, THEN quarter, the
+-- exact order mhq_submit_quest uses. Row-locked (the double-submit rule,
+-- same as every gold/XP write in this schema).
+create or replace function public.mhq_submit_funfun(p_username text, p_password text,
+                                                    p_quest_id text, p_answered jsonb)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_row record; v_n int; v_i int; v_elem jsonb; v_outcome text;
+        v_bools jsonb := '[]'::jsonb; v_score numeric := 0; v_frac numeric;
+        v_passed boolean; v_already boolean; v_xp_gain int; v_gold_gain int := 10;
+        v_old_xp int; v_new_xp int; v_new_gold int; v_old_lvl int; v_new_lvl int;
+        v_best numeric; v_plays int;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  -- ---- validation (brief D3) ----
+  if p_quest_id is null or not (p_quest_id = any(public._mhq_funfun_quests())) then
+    return jsonb_build_object('ok', false, 'error', 'bad_round');
+  end if;
+  if p_answered is null or jsonb_typeof(p_answered) <> 'array' then
+    return jsonb_build_object('ok', false, 'error', 'bad_round');
+  end if;
+  v_n := jsonb_array_length(p_answered);
+  if v_n < 1 or v_n > 40 then
+    return jsonb_build_object('ok', false, 'error', 'bad_round');
+  end if;
+  for v_i in 0 .. v_n - 1 loop
+    if jsonb_typeof(p_answered->v_i) <> 'object' then
+      return jsonb_build_object('ok', false, 'error', 'bad_round');
+    end if;
+  end loop;
+
+  -- ---- the round, scored from `answered` alone ----
+  for v_i in 0 .. v_n - 1 loop
+    v_elem := p_answered->v_i;
+    v_outcome := v_elem->>'outcome';
+    -- coalesce: a record with no `outcome` key at all yields NULL here, and a
+    -- jsonb null in the array would reach _mhq_dice_xp as NULL. It already
+    -- treats that as "not correct", but say it out loud rather than lean on it.
+    v_bools := v_bools || to_jsonb(coalesce(v_outcome in ('full', 'hinted', 'half'), false));
+    v_score := v_score + case v_outcome
+                           when 'full'   then 1
+                           when 'hinted' then 1
+                           when 'half'   then 0.5
+                           else 0
+                         end;
+  end loop;
+  v_passed := (v_score / v_n >= 0.7);   -- graph-quest js/play.js PASS, not blipwork's 0.8
+  -- `best` is rounded to 4 decimals so this and js/local-backend.js's mirror
+  -- store the SAME number. Unrounded, Postgres numeric division would give
+  -- ~20 decimals and JavaScript a 64-bit double — two values that agree on
+  -- screen but never byte-for-byte. The pass test above deliberately uses the
+  -- UNROUNDED fraction, so rounding can never tip a round over the bar.
+  v_frac := round(v_score / v_n, 4);
+
+  -- ---- lock (create the row first so FOR UPDATE always has one) ----
+  insert into public.funfun_progress (student_id, quest_id)
+  values (v_sid, p_quest_id)
+  on conflict (student_id, quest_id) do nothing;
+
+  select * into v_row from public.funfun_progress
+   where student_id = v_sid and quest_id = p_quest_id for update;
+  v_already := coalesce(v_row.done, false);
+
+  -- ---- the payout ----
+  -- clamp first, THEN quarter it — the exact order mhq_submit_quest uses.
+  v_xp_gain := greatest(0, least(coalesce(public._mhq_dice_xp(v_bools), 0), 1000));
+  if v_already then v_xp_gain := round(v_xp_gain * 0.25)::int; end if;
+
+  select xp into v_old_xp from public.students where id = v_sid for update;
+  update public.students
+     set xp = xp + v_xp_gain, gold = gold + v_gold_gain, last_active_at = now()
+   where id = v_sid
+   returning xp, gold into v_new_xp, v_new_gold;
+
+  update public.funfun_progress
+     set best  = greatest(best, v_frac),
+         total = v_n,
+         plays = plays + 1,
+         done  = done or v_passed,
+         updated_at = now()
+   where student_id = v_sid and quest_id = p_quest_id
+   returning best, plays into v_best, v_plays;
+
+  v_old_lvl := (public._mhq_level(v_old_xp)->>'level')::int;
+  v_new_lvl := (public._mhq_level(v_new_xp)->>'level')::int;
+
+  return jsonb_build_object('ok', true,
+    'xpAwarded', v_xp_gain, 'goldAwarded', v_gold_gain,
+    -- `correct` is the SCORE, so a half-credit item contributes 0.5 —
+    -- the results card renders "correct / total" and half credit is a
+    -- real outcome in this game (a right answer on the second chance).
+    'correct', v_score, 'total', v_n,
+    'passed', v_passed, 'alreadyDone', v_already,
+    'xp', v_new_xp, 'gold', v_new_gold, 'level', v_new_lvl,
+    'levelUp', (v_new_lvl > v_old_lvl), 'levelInfo', public._mhq_level(v_new_xp),
+    'best', v_best, 'plays', v_plays);
+end; $$;
+
+-- mhq_admin_funfun — the dashboard chip (brief D10): class-total plays
+-- per quest id, nothing per student. Deliberately its own RPC rather
+-- than a new field on mhq_admin_data (D3).
+create or replace function public.mhq_admin_funfun(p_admin_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_plays jsonb;
+begin
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
+  -- `plays > 0` matters: mhq_funfun_met creates a row the moment a round
+  -- KIND is shown, so a quest someone opened and walked out of would
+  -- otherwise report a 0 and light the chip for nothing.
+  select coalesce(jsonb_object_agg(quest_id, total_plays), '{}'::jsonb) into v_plays
+    from (select quest_id, sum(plays) as total_plays
+            from public.funfun_progress where plays > 0 group by quest_id) t;
+  return jsonb_build_object('ok', true, 'plays', v_plays);
+end; $$;
+
+-- The two internals — revoked from PUBLIC as well as anon and
+-- authenticated. _mhq_funfun_profile takes a student id and no password;
+-- it must never be reachable from the browser. The four callable RPCs
+-- are granted to anon/authenticated in the main GRANTS block below.
+revoke execute on function public._mhq_funfun_profile(uuid) from public, anon, authenticated;
+revoke execute on function public._mhq_funfun_quests() from public, anon, authenticated;
+
 -- The two SERVICE-ROLE-ONLY wrappers the edge functions call. _mhq_auth and
 -- _mhq_admin_ok are revoked from PUBLIC, and service_role inherits PUBLIC's
 -- grants — so it has no execute on either. These two exist so neither of
@@ -1647,7 +1909,14 @@ grant execute on function
   public.mhq_send_feedback(text, text, text, boolean, text),
   public.mhq_admin_feedback(text),
   public.mhq_admin_feedback_read(text, uuid, boolean),
-  public.mhq_list_papers(text, text)
+  public.mhq_list_papers(text, text),
+  -- FUNFUN-PART2-BRIEF.md, 2026-08-23 (mhq_admin_funfun goes to anon too:
+  -- admin.html signs in with the publishable key and a password, exactly
+  -- like mhq_admin_data)
+  public.mhq_funfun_state(text, text),
+  public.mhq_funfun_met(text, text, text, text),
+  public.mhq_submit_funfun(text, text, text, jsonb),
+  public.mhq_admin_funfun(text)
 to anon, authenticated;
 
 -- ⚠️ SERVICE-ROLE ONLY. A publishable-key caller must get a permission
