@@ -389,14 +389,14 @@ export const CQ_URL = "https://megzieberr.github.io/circle-geo-quest/";
    logged-in screen AND the Feedback section in admin.html. The server
    side (supabase/migration-feedback-papers.sql) is safe to apply before
    any of this ships — nothing calls those RPCs until this flag is true. */
-export const FEEDBACK_ENABLED = false;
+export const FEEDBACK_ENABLED = true;
 
 /* PAPERS_ENABLED gates the 📄 Papers hub tab (js/papers.js) and the
    Papers section in admin.html. It stays false until the two edge
    functions (paper-url, paper-admin) are DEPLOYED and at least one
    paper is uploaded — a lit tab over an empty private bucket is a dead
    end, and the learner cannot tell "nothing here yet" from "broken". */
-export const PAPERS_ENABLED = false;
+export const PAPERS_ENABLED = true;
 
 /* ============================================================
    BLIP — Phase 2 feeding/growth/sickness constants (2026-07-19).
