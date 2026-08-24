@@ -144,4 +144,37 @@ export const SupabaseBackend = {
     return rpc("mhq_submit_funfun", { p_username: username, p_password: password, p_quest_id: questId, p_answered: answered ?? [] });
   },
   async adminFunfun(pw) { return rpc("mhq_admin_funfun", { p_admin_password: pw }); },
+
+  // ---- FEEDBACK-PAPERS-BRIEF.md: 💬 feedback (2026-08-24) ----
+  // `anon` true means the ROW keeps nothing about the sender — the
+  // username/password still go up (everyone authenticates; anonymous is
+  // not "a stranger may post"), and mhq_send_feedback simply writes NULL
+  // for student_id and display_name. `context` (screen + question id)
+  // rides along either way. See supabase/migration-feedback-papers.sql
+  // (WRITTEN, NOT RUN).
+  async sendFeedback(username, password, body, anon, context) {
+    return rpc("mhq_send_feedback", {
+      p_username: username, p_password: password,
+      p_body: body, p_anon: !!anon, p_context: context || null,
+    });
+  },
+  async adminFeedback(pw) { return rpc("mhq_admin_feedback", { p_admin_password: pw }); },
+  async adminFeedbackRead(pw, id, read) {
+    return rpc("mhq_admin_feedback_read", { p_admin_password: pw, p_id: id, p_read: !!read });
+  },
+
+  // ---- FEEDBACK-PAPERS-BRIEF.md: 📄 papers (2026-08-24) ----
+  // The LIST is a plain RPC (auth-gated, and it never carries
+  // storage_path). The FILES are not: the `papers` bucket is private
+  // with no storage.objects policies, so every byte goes through an edge
+  // function holding the service role — paperUrl for a learner, paperAdmin
+  // for her. Same invokeFn route collectCq uses.
+  async listPapers(username, password) { return rpc("mhq_list_papers", { p_username: username, p_password: password }); },
+  async paperUrl(username, password, paperId) {
+    return invokeFn("paper-url", { username, password, paper_id: paperId });
+  },
+  // action: "list" | "upload" ({title, chapter, filename, b64}) | "remove" ({paper_id})
+  async paperAdmin(pw, action, args) {
+    return invokeFn("paper-admin", { admin_pw: pw, action, ...(args || {}) });
+  },
 };

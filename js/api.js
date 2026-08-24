@@ -81,6 +81,36 @@
                     gold, level, levelUp, levelInfo, best, plays }.
                   adminFunfun(pw) — { ok, plays: { [questId]:
                     classTotalPlays } } for the dashboard's 📈 chip.
+     feedback:    sendFeedback(u,p,body,anon,context) — one note from the
+                    💬 button. ⚠️ `anon` true means the ROW KEEPS NOTHING
+                    about the sender (NULL student_id, NULL display_name),
+                    not that a name is hidden — see the header of
+                    supabase/migration-feedback-papers.sql. Everyone still
+                    authenticates: anonymous is about what is stored, never
+                    about who may post. `context` (screen + question id,
+                    e.g. "play:gt5") rides along either way — a question id
+                    is not a person. Returns {ok} / {ok:false,error:"auth"
+                    |"empty"}.
+                  adminFeedback(pw) — { ok, unread, rows: [{id, name (already
+                    "Anonymous" when anonymous), anon, context, body,
+                    createdAt, readAt}] }, newest first, capped at 500.
+                  adminFeedbackRead(pw,id,read) — set/clear read_at.
+     papers:      listPapers(u,p) — { ok, papers: [{id,title,chapter,
+                    sizeBytes,sort,createdAt}] }. Auth-gated, and it never
+                    carries the storage path.
+                  paperUrl(u,p,paperId) — { ok, url, title }. NOT an RPC:
+                    the `papers` bucket is PRIVATE with no storage.objects
+                    policies, so the paper-url EDGE FUNCTION (service role)
+                    is the only route to a byte. The url is a 60-minute
+                    signed link. The local backend does NOT mirror this —
+                    it returns {ok:false, error:"local"} and the tab says
+                    "Papers need the internet"; faking a signed URL offline
+                    would misrepresent the one thing this feature is.
+                  paperAdmin(pw,action,args) — the teacher's side, through
+                    the paper-admin edge function. action "list" | "upload"
+                    ({title,chapter,filename,b64}) | "remove" ({paper_id}).
+                    Offline, "list" answers from the stub and the other two
+                    refuse with {ok:false, error:"local"}.
    ============================================================ */
 import { SupabaseBackend, hasSupabase } from "./supabase.js";
 import { LocalBackend } from "./local-backend.js";

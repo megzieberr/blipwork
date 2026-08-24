@@ -1,5 +1,5 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
-import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, FUNFUN_ENABLED, EXAM_CHAPTERS, examChapters, examChapterById } from "./config.js";
+import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, FUNFUN_ENABLED, PAPERS_ENABLED, EXAM_CHAPTERS, examChapters, examChapterById } from "./config.js";
 import { questDef } from "./quests/index.js";
 import { dicePool } from "./quests/dice-pools.js";
 import { openDiceRound } from "./dice-play.js";
@@ -15,6 +15,7 @@ import { itemLabel } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
 import { renderAssignmentCard } from "./assignment.js";
 import { mountCqCollect } from "./cq-collect.js";
+import { mountPapers } from "./papers.js";
 /* FUNFUN-PART2-BRIEF.md (2026-08-23) — js/funfun/ is a SYNCED COPY of the
    graph-quest app (generated output, never hand-edited). Only three things
    are read from it here: the quest list, its grandfathered unlock rule, and
@@ -144,6 +145,12 @@ const TABS = [
   // Circle Geo.
   { id: "exam", label: "📝 Exam Focus", sub: "Real exam questions, one part at a time" },
   { id: "cgeo", label: "⭕ Circle Geo", sub: "Circle Quest" },
+  // FEEDBACK-PAPERS-BRIEF.md (2026-08-24): practice + past papers,
+  // downloadable from a PRIVATE bucket. Not chapter-based either, so it
+  // is excluded from the byTerm() filter exactly like cgeo — and it is
+  // additionally gated on PAPERS_ENABLED, so it does not exist at all
+  // until the edge functions are deployed and she has uploaded one.
+  { id: "papers", label: "📄 Papers", sub: "Practice + past papers" },
 ];
 let hubTab = "term3";                                   // remembered across hub visits
 
@@ -190,6 +197,27 @@ function circleGeoCard(app) {
   card.appendChild(el("div", "cg-collect"));
   card.querySelector(".cg-collect").setAttribute("data-mount", "cq-collect");
   mountCqCollect(app, card.querySelector(".cg-collect"));
+  return card;
+}
+
+/* ---------------- HUB · Papers tab (FEEDBACK-PAPERS-BRIEF.md, 2026-08-24)
+   ---------------- One plain card, same shape as the Circle Geo one above
+   and for the same reason: papers aren't a chapter, so there's no
+   per-chapter accent to key off. The .pp-mount div is the mount point for
+   the list (js/papers.js) — the fetch is async, so this function returns
+   a card with a "Loading papers…" line in it and mountPapers fills it in.
+   The list itself is auth-gated server-side; the files are behind an edge
+   function holding the service role (see js/papers.js's header). */
+function papersCard(app) {
+  const card = el("div", "card pp-card");
+  card.innerHTML = `
+    <div class="ico">📄</div>
+    <h2>Papers</h2>
+    <p>Practice papers and past papers to download and work through.</p>`;
+  const mount = el("div", "pp-mount");
+  mount.setAttribute("data-mount", "papers");
+  card.appendChild(mount);
+  mountPapers(app, mount);
   return card;
 }
 
@@ -269,7 +297,11 @@ export function renderHub(app, host) {
   // flagged chapter has one. (The `t.id === "cgeo" || byTerm(t.id).length`
   // prefix is kept byte-for-byte — verify-store.html regex-checks that
   // exact substring.)
-  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && examChapters().some(ch => examChapterEligible(app, ch))));
+  // 📄 Papers rides on the same "not chapter-based" exemption as cgeo, on
+  // its build flag alone — but its clause goes on the END: the
+  // `t.id === "cgeo" || byTerm(t.id).length` prefix is kept byte-for-byte
+  // because verify-store.html regex-checks that exact substring.
+  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && examChapters().some(ch => examChapterEligible(app, ch))) || (t.id === "papers" && PAPERS_ENABLED));
   if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "term3";
 
   const tabbar = el("div", "hub-tabs");
@@ -277,6 +309,7 @@ export function renderHub(app, host) {
   const draw = () => {
     clear(cards);
     if (hubTab === "cgeo") { cards.appendChild(circleGeoCard(app)); return; }
+    if (hubTab === "papers") { cards.appendChild(papersCard(app)); return; }
     // EXAM-ONLY CHAPTERS (2026-08-22): examChapters() = CHAPTERS + the
     // exam-only list, so Euclidean shows HERE and only here. byTerm()
     // below still reads CHAPTERS, so it can never reach a Term 3 or

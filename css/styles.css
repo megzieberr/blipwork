@@ -1337,3 +1337,90 @@ sup.sf-exp .sfrac,.opt sup.sf-exp .sfrac,.q-prompt sup.sf-exp .sfrac{font-size:1
 /* sketchfill (round 8): one keypad, the typed sides appear on the sketch */
 .q-sketchfill .q-step-graph{margin-bottom:8px}
 .q-sketchfill .sf-prompt{font-size:15px;margin:4px 0 6px}
+
+/* ============================================================
+   💬 FEEDBACK + 📄 PAPERS  (FEEDBACK-PAPERS-BRIEF.md, 2026-08-24)
+   Both features keep their styles HERE rather than in a new stylesheet:
+   a new file would have to be added to sw.js's SHELL to survive offline,
+   and the brief holds sw.js at v68 for the foreman. These rules ride
+   styles.css, which is already in the SHELL.
+   ============================================================ */
+
+/* ---------- 💬 the button ----------
+   Fixed bottom-RIGHT, and deliberately small. .view already reserves a
+   96px bottom gutter, so at full scroll the button sits in that gutter,
+   BELOW the last control on the page — it can never cover the Check /
+   Submit button a learner is reaching for (checked at 375px on hub,
+   chapter, play, blip and exam).
+   z-index 75: above the tour (70) so it is reachable during a
+   walkthrough, below .toast-host (80) so "Sent 💌" is never hidden
+   behind the very button that sent it. */
+.fb-fab{position:fixed;right:14px;bottom:14px;z-index:75;
+  width:46px;height:46px;border-radius:50%;font-size:21px;line-height:1;
+  display:grid;place-items:center;cursor:pointer;
+  background:var(--panel-solid);color:var(--ink);border:1px solid var(--brd-2);
+  box-shadow:0 8px 24px -8px rgba(0,0,0,.6);transition:.15s}
+.fb-fab:hover{border-color:var(--accent);transform:translateY(-1px)}
+.fb-fab[hidden]{display:none}
+/* ⚠️ THE PLAYER SCREENS (play / examPlay / funfunPlay) get the SAME button
+   in the FLOW instead — see js/feedback.js FLOW_SCREENS for the measured
+   reason. It lands inside the 96px bottom gutter .view already reserves, so
+   it cannot cover the Check / submit control at any scroll offset. A pill
+   with a label, not a lone circle: in the flow a bare 💬 reads as a stray,
+   and this is the screen where a learner most needs to know what it does. */
+.fb-fab--inline{position:static;width:auto;height:42px;border-radius:999px;
+  padding:0 16px;gap:8px;grid-auto-flow:column;place-items:center;
+  margin:20px 0 0 auto;box-shadow:none;font-size:16px}
+.fb-fab--inline:hover{transform:none;border-color:var(--accent)}
+.fb-fab-label{font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--muted)}
+.fb-fab--inline:hover .fb-fab-label{color:var(--ink)}
+
+/* ---------- 💬 the sheet ----------
+   Rides the existing .modal-scrim / .modal bottom-sheet chrome (the same
+   one the "I'm lost" concept modal uses) — only the innards are new. */
+.fb-sheet .fb-intro{margin-bottom:12px}
+.fb-body{font-family:var(--font-body);font-size:16px;color:var(--ink);
+  background:var(--panel);border:1px solid var(--brd-2);border-radius:var(--r-md);
+  padding:12px 14px;width:100%;outline:none;resize:vertical;min-height:104px;line-height:1.55}
+.fb-body:focus{border-color:var(--accent)}
+.fb-count{font-family:var(--font-num);font-size:11px;color:var(--faint);text-align:right;margin:4px 0 12px}
+/* the whole row is the hit target — a bare 16px checkbox is a miss on a phone */
+.fb-anon{display:flex;align-items:center;gap:10px;cursor:pointer;
+  padding:11px 12px;border:1px solid var(--brd);border-radius:var(--r-md);background:rgba(58,160,255,.05)}
+.fb-anon input{width:18px;height:18px;flex:0 0 auto;accent-color:var(--accent);cursor:pointer}
+.fb-anon-label{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink)}
+.fb-anon-note{margin:6px 2px 14px}
+
+/* ---------- 📄 papers ---------- */
+.pp-mount{margin-top:12px}
+.pp-loading{margin:0}
+.pp-group + .pp-group{margin-top:16px}
+.pp-group-head{font-family:var(--font-display);font-weight:600;font-size:11px;
+  text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
+.pp-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--brd)}
+.pp-row:last-child{border-bottom:none}
+/* min-width:0 is what lets a long paper title ELLIPSIS instead of pushing
+   the Open button off a 375px screen (the flex-child default is min-content) */
+.pp-info{flex:1 1 auto;min-width:0}
+.pp-title{font-size:14.5px;color:var(--ink);overflow-wrap:anywhere}
+.pp-meta{margin-top:2px}
+.pp-open{flex:0 0 auto}
+
+/* ---------- 💬 admin (admin.html's Feedback + Papers sections) ---------- */
+.adm-fb-row{display:flex;align-items:flex-start;gap:12px;padding:12px 4px;border-bottom:1px solid var(--brd)}
+.adm-fb-row:last-child{border-bottom:none}
+.adm-fb-row.unread{background:rgba(58,160,255,.05)}
+.adm-fb-main{flex:1 1 auto;min-width:0}
+.adm-fb-who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.adm-fb-name{font-family:var(--font-display);font-weight:600;font-size:13.5px;color:var(--ink)}
+.adm-fb-name.anon{color:var(--muted);font-style:italic}
+/* the context is capped at 120 chars server-side, not 20 — a malformed
+   client could still send a long one, and a long chip would stretch the
+   row and push the note text off the page. Ellipsis it; the full string
+   is on the title attribute. */
+.adm-fb-ctx{font-family:var(--font-num);font-size:10.5px;padding:2px 7px;border-radius:999px;
+  color:var(--accent);background:rgba(58,160,255,.12);border:1px solid var(--brd);
+  max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-fb-body{font-size:13.5px;line-height:1.55;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+.adm-fb-tick{flex:0 0 auto}
+.adm-unread{color:var(--warn);font-family:var(--font-num)}

@@ -9,7 +9,7 @@
    so it works against Supabase (live) or the local backend (?local=1).
    ============================================================ */
 import { api } from "./api.js";
-import { CHAPTERS, DICE_CHAPTERS, FUNFUN_ENABLED } from "./config.js";
+import { CHAPTERS, DICE_CHAPTERS, FUNFUN_ENABLED, FEEDBACK_ENABLED, PAPERS_ENABLED } from "./config.js";
 import { CONCEPTS } from "./concepts.js";
 import { el, clear, pwToggle } from "./ui.js";
 
@@ -88,6 +88,14 @@ async function dashboard() {
   status.remove();
   view.appendChild(termSection(!!data.termRunning));
   view.appendChild(assignmentSection(data));
+  // FEEDBACK-PAPERS-BRIEF.md (2026-08-24). Both sections are appended
+  // EMPTY and fill themselves in — each has its own call (mhq_admin_feedback
+  // / the paper-admin edge function) and neither is a field on
+  // mhq_admin_data, which stays untouched for the copy-forward reason
+  // recorded in migration-dice.sql's header. Awaiting them here would hold
+  // the whole dashboard behind two extra round trips.
+  if (FEEDBACK_ENABLED) view.appendChild(feedbackSection());
+  if (PAPERS_ENABLED) view.appendChild(papersSection());
   view.appendChild(questSection(data.quests || [], data.dicePlays || {}, funfunPlays));
   view.appendChild(struggleSection(data.struggles || []));
   view.appendChild(learnerSection(data.rows || [], data.inactiveDays || 7));
@@ -296,6 +304,191 @@ function questSection(quests, dicePlays, funfunPlays) {
     grid.appendChild(block);
   }
 
+  return sec;
+}
+
+/* ---------- 💬 Feedback (FEEDBACK-PAPERS-BRIEF.md, 2026-08-24) ----------
+   The learners' notes, newest first, with a mark-read tick each and an
+   unread count in the header.
+
+   ⚠️ "Anonymous" here is the literal truth, not a label over a hidden
+   name. mhq_send_feedback writes NULL student_id and NULL display_name
+   for an anonymous note — there is nothing in the row to reveal, and no
+   query, export or future migration can bring the sender back. That is
+   the promise the learner was shown when they unticked the box; this
+   section must never grow a feature that appears to break it.
+
+   The CONTEXT chip ("play:gt5", "exam:eqn.nor.q3(a)") is on every note,
+   anonymous ones included — a question id is not a person, and it is the
+   whole difference between "this one renders weird" and a bug she can
+   actually find.
+
+   Fills itself in: the section is appended immediately with a "Loading…"
+   line and the fetch patches it, so the dashboard never waits on it. */
+function feedbackSection() {
+  const sec = el("div", "card adm-section");
+  const head = el("div", "adm-lhead", "<h2>Feedback 💬</h2>");
+  sec.appendChild(head);
+  sec.appendChild(el("p", "muted small", "Notes the learners send from the 💬 button in the app. A note sent anonymously stores nothing about who wrote it — the name is not hidden, it was never saved. The grey chip is the screen or question they were on when they wrote it, which is saved either way."));
+  const list = el("div", "adm-fb-list");
+  list.appendChild(el("p", "muted small", "Loading…"));
+  sec.appendChild(list);
+
+  const draw = (data) => {
+    clear(list);
+    const rows = (data && data.rows) || [];
+    const unread = (data && data.unread) || 0;
+    const h2 = head.querySelector("h2");
+    if (h2) h2.innerHTML = `Feedback 💬 ${unread ? `<span class="adm-unread">${unread} unread</span>` : ""}`;
+    if (!rows.length) {
+      list.appendChild(el("p", "muted small", "Nothing yet."));
+      return;
+    }
+    rows.forEach(r => {
+      const row = el("div", "adm-fb-row" + (r.readAt ? "" : " unread"));
+      const main = el("div", "adm-fb-main");
+      main.innerHTML = `
+        <div class="adm-fb-who">
+          <span class="adm-fb-name${r.anon ? " anon" : ""}">${r.anon ? "Anonymous" : r.name}</span>
+          <span class="muted small">${fmtDate(r.createdAt)}</span>
+          ${r.context ? `<span class="adm-fb-ctx" title="${r.context}">${r.context}</span>` : ""}
+        </div>
+        <div class="adm-fb-body"></div>`;
+      // textContent, not innerHTML: this is text a learner typed, and it
+      // goes on a page that also holds the admin session.
+      main.querySelector(".adm-fb-body").textContent = r.body;
+      row.appendChild(main);
+      const tick = el("button", "btn ghost small adm-fb-tick", r.readAt ? "✓ Read" : "Mark read");
+      tick.addEventListener("click", async () => {
+        tick.disabled = true;                       // disable BEFORE the await
+        try { await api.adminFeedbackRead(pw, r.id, !r.readAt); } catch { /* refresh shows the truth */ }
+        refresh();
+      });
+      row.appendChild(tick);
+      list.appendChild(row);
+    });
+  };
+
+  const refresh = async () => {
+    let data = null;
+    try { data = await api.adminFeedback(pw); } catch { /* handled below */ }
+    if (!data || !data.ok) { clear(list); list.appendChild(el("p", "muted small", "Couldn’t load the feedback.")); return; }
+    draw(data);
+  };
+  refresh();
+  return sec;
+}
+
+/* ---------- 📄 Papers (FEEDBACK-PAPERS-BRIEF.md, 2026-08-24) ----------
+   Upload a PDF, see what's up, remove one.
+
+   Everything here goes through the paper-admin EDGE FUNCTION, not an
+   RPC: the `papers` bucket is private with no storage.objects policies,
+   so only something holding the service role can put a byte in or take
+   one out. The file is sent as base64 in one request — her papers are
+   ≤ ~5 MB and this runs from her laptop every few weeks, so a signed
+   upload URL and a second round trip would be machinery for nothing.
+
+   Offline (?local=1) the mirror answers "list" from a stub and refuses
+   upload/remove honestly — there is no offline private bucket to fake. */
+function papersSection() {
+  const sec = el("div", "card adm-section");
+  sec.appendChild(el("h2", "", "Papers 📄"));
+  sec.appendChild(el("p", "muted small", "Practice papers and past papers the learners can download from the 📄 Papers tab. They live in a private bucket — never in the public repo — and a learner only ever gets a link that expires after an hour."));
+
+  const list = el("div", "adm-quests adm-pp-list");
+  list.appendChild(el("p", "muted small", "Loading…"));
+  sec.appendChild(list);
+
+  // --- upload form ---
+  const title = el("input", "login-input");
+  title.type = "text"; title.maxLength = 160; title.placeholder = "Title (e.g. September Paper 1)";
+  title.style.marginBottom = "0";
+
+  const chapter = el("select", "login-input");
+  chapter.style.marginBottom = "0";
+  const general = el("option", "", "General"); general.value = ""; chapter.appendChild(general);
+  CHAPTERS.forEach(ch => { const o = el("option", "", `${ch.icon} ${ch.name}`); o.value = ch.id; chapter.appendChild(o); });
+
+  const file = el("input", "login-input");
+  file.type = "file"; file.accept = "application/pdf,.pdf"; file.style.marginBottom = "0";
+
+  const up = el("button", "btn primary", "Upload paper");
+  const note = el("p", "muted small", "");
+
+  const form = el("div");
+  form.style.cssText = "display:flex;flex-direction:column;gap:8px;margin-top:14px";
+  form.appendChild(title); form.appendChild(chapter); form.appendChild(file);
+  form.appendChild(up); form.appendChild(note);
+  sec.appendChild(form);
+
+  const fmtSize = b => {
+    const n = Number(b);
+    if (!Number.isFinite(n) || n <= 0) return "";
+    return n < 1024 * 1024 ? `${Math.round(n / 1024)} kB` : `${(n / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const draw = (papers) => {
+    clear(list);
+    if (!papers.length) { list.appendChild(el("p", "muted small", "Nothing uploaded yet.")); return; }
+    papers.forEach(p => {
+      const row = el("div", "adm-qrow",
+        `<span><b>${p.title}</b><div class="muted small">${p.chapter || "General"}${p.sizeBytes ? ` · ${fmtSize(p.sizeBytes)}` : ""}</div></span>`);
+      const rm = el("button", "btn ghost small danger", "Remove");
+      rm.addEventListener("click", async () => {
+        if (!confirm(`Remove “${p.title}”? The file is deleted from the bucket — this cannot be undone.`)) return;
+        rm.disabled = true;                          // disable BEFORE the await
+        try { await api.paperAdmin(pw, "remove", { paper_id: p.id }); } catch { /* refresh shows the truth */ }
+        refresh();
+      });
+      row.appendChild(rm);
+      list.appendChild(row);
+    });
+  };
+
+  const refresh = async () => {
+    let r = null;
+    try { r = await api.paperAdmin(pw, "list"); } catch { /* handled below */ }
+    if (!r || !r.ok) { clear(list); list.appendChild(el("p", "muted small", "Couldn’t load the papers.")); return; }
+    draw(r.papers || []);
+  };
+
+  up.addEventListener("click", async () => {
+    const f = file.files && file.files[0];
+    if (!title.value.trim()) { note.textContent = "Give it a title first."; return; }
+    if (!f) { note.textContent = "Choose a PDF first."; return; }
+    up.disabled = true;                              // disable BEFORE the await
+    note.textContent = "Uploading…";
+    let b64 = "";
+    try {
+      b64 = await new Promise((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = () => res(String(fr.result));    // "data:application/pdf;base64,…"
+        fr.onerror = rej;
+        fr.readAsDataURL(f);                         // the function strips the data: prefix
+      });
+    } catch { note.textContent = "Couldn’t read that file."; up.disabled = false; return; }
+
+    let r = null;
+    try {
+      r = await api.paperAdmin(pw, "upload", { title: title.value.trim(), chapter: chapter.value, filename: f.name, b64 });
+    } catch { note.textContent = "Couldn’t reach the server."; up.disabled = false; return; }
+    up.disabled = false;
+    if (!r || !r.ok) {
+      note.textContent = ({
+        not_pdf: "That isn’t a PDF.",
+        too_big: "That file is too big (12 MB max).",
+        local: "Uploading needs the real backend — this is the offline demo.",
+        auth: "Admin password rejected — reload and log in again.",
+      })[r && r.error] || "Upload failed.";
+      return;
+    }
+    note.textContent = "Uploaded ✓";
+    title.value = ""; file.value = "";
+    refresh();
+  });
+
+  refresh();
   return sec;
 }
 

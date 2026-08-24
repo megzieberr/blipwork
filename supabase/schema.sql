@@ -1465,6 +1465,152 @@ begin
 end; $$;
 
 -- ============================================================
+--  💬 FEEDBACK + 📄 PAPERS  (FEEDBACK-PAPERS-BRIEF.md, 2026-08-24)
+--  MIRROR of supabase/migration-feedback-papers.sql. Read that file's
+--  header for the reasoning — especially the anonymity rule, which is a
+--  promise made to a learner and not a display flag.
+--
+--  ⚠️ THE BUCKET IS NOT CREATED HERE. `insert into storage.buckets` lives
+--  in the migration only: this is the from-scratch PUBLIC schema, and
+--  storage is a Supabase-managed schema. On a fresh project, run the
+--  migration after this file.
+-- ============================================================
+create table if not exists public.feedback (
+  id           uuid primary key default gen_random_uuid(),
+  created_at   timestamptz not null default now(),
+  -- NULL for an anonymous note, and NULL for a note whose author has
+  -- since been removed from the roster. Both are the same row shape.
+  student_id   uuid references public.students(id) on delete set null,
+  display_name text,                       -- snapshot at send time; NULL when anonymous
+  context      text,                       -- "play:gt5" / "exam:…" / "hub" — never a person
+  body         text not null,              -- capped at 1000 chars by the RPC below
+  read_at      timestamptz
+);
+create index if not exists feedback_created_idx on public.feedback (created_at desc);
+
+create table if not exists public.papers (
+  id           uuid primary key default gen_random_uuid(),
+  title        text not null,
+  chapter      text,                       -- topic grouping; NULL/'General' both fine
+  storage_path text not null,              -- key inside the PRIVATE `papers` bucket
+  size_bytes   bigint,
+  sort         int not null default 0,
+  created_at   timestamptz not null default now()
+);
+create index if not exists papers_sort_idx on public.papers (chapter, sort, created_at);
+
+alter table public.feedback enable row level security;
+alter table public.papers   enable row level security;
+revoke all on public.feedback, public.papers from anon, authenticated;
+-- the two edge functions read/write `papers` with the service role
+grant select, insert, delete on public.papers to service_role;
+
+create or replace function public.mhq_send_feedback(p_username text, p_password text,
+                                                    p_body text, p_anon boolean,
+                                                    p_context text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_body text; v_ctx text; v_name text; v_anon boolean;
+begin
+  -- ALWAYS authenticate, anonymous or not: anonymity is about what the row
+  -- keeps, never about who may post.
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  v_body := nullif(btrim(coalesce(p_body, '')), '');
+  if v_body is null then return jsonb_build_object('ok', false, 'error', 'empty'); end if;
+  v_body := left(v_body, 1000);
+  v_ctx := left(nullif(btrim(coalesce(p_context, '')), ''), 120);
+
+  v_anon := coalesce(p_anon, false);
+  if not v_anon then
+    select display_name into v_name from public.students where id = v_sid;
+  end if;
+
+  insert into public.feedback (student_id, display_name, context, body)
+  values (case when v_anon then null else v_sid end,
+          case when v_anon then null else v_name end,
+          v_ctx, v_body);
+
+  update public.students set last_active_at = now() where id = v_sid;
+  return jsonb_build_object('ok', true);
+end; $$;
+
+create or replace function public.mhq_admin_feedback(p_admin_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_rows jsonb; v_unread int;
+begin
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
+
+  select coalesce(jsonb_agg(r order by r_created desc), '[]'::jsonb), count(*) filter (where r_read is null)
+    into v_rows, v_unread
+  from (
+    select jsonb_build_object(
+             'id', f.id,
+             'name', coalesce(f.display_name, 'Anonymous'),
+             'anon', (f.display_name is null),
+             'context', f.context,
+             'body', f.body,
+             'createdAt', f.created_at,
+             'readAt', f.read_at) as r,
+           f.created_at as r_created,
+           f.read_at    as r_read
+      from public.feedback f
+     order by f.created_at desc
+     limit 500) t;
+
+  return jsonb_build_object('ok', true, 'rows', v_rows, 'unread', v_unread);
+end; $$;
+
+create or replace function public.mhq_admin_feedback_read(p_admin_password text,
+                                                          p_id uuid, p_read boolean)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+begin
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
+  update public.feedback
+     set read_at = case when coalesce(p_read, true) then now() else null end
+   where id = p_id;
+  return jsonb_build_object('ok', true);
+end; $$;
+
+create or replace function public.mhq_list_papers(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_rows jsonb;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  update public.students set last_active_at = now() where id = v_sid;
+
+  select coalesce(jsonb_agg(jsonb_build_object(
+           'id', p.id, 'title', p.title,
+           'chapter', coalesce(p.chapter, 'General'),
+           'sizeBytes', p.size_bytes, 'sort', p.sort,
+           'createdAt', p.created_at)
+         order by coalesce(p.chapter, 'General'), p.sort, p.created_at), '[]'::jsonb)
+    into v_rows from public.papers p;
+
+  return jsonb_build_object('ok', true, 'papers', v_rows);
+end; $$;
+
+-- The two SERVICE-ROLE-ONLY wrappers the edge functions call. _mhq_auth and
+-- _mhq_admin_ok are revoked from PUBLIC, and service_role inherits PUBLIC's
+-- grants — so it has no execute on either. These two exist so neither of
+-- those has to be loosened. Granted to service_role and NOTHING else (see
+-- the grants block below).
+create or replace function public.mhq_auth_ok(p_username text, p_password text)
+returns uuid language sql stable security definer set search_path = public, extensions as $$
+  select public._mhq_auth(p_username, p_password);
+$$;
+
+create or replace function public.mhq_admin_ok_rpc(p_admin_password text)
+returns boolean language sql stable security definer set search_path = public, extensions as $$
+  select public._mhq_admin_ok(p_admin_password);
+$$;
+
+-- ============================================================
 --  GRANTS — the publishable/anon key may only EXECUTE the API
 -- ============================================================
 grant execute on function
@@ -1496,8 +1642,20 @@ grant execute on function
   public.mhq_submit_dice(text, text, text),
   -- EXAM-FOCUS-PLAN.md, session C
   public.mhq_exam_state(text, text),
-  public.mhq_exam_open_part(text, text, text, text, integer)
+  public.mhq_exam_open_part(text, text, text, text, integer),
+  -- FEEDBACK-PAPERS-BRIEF.md, 2026-08-24
+  public.mhq_send_feedback(text, text, text, boolean, text),
+  public.mhq_admin_feedback(text),
+  public.mhq_admin_feedback_read(text, uuid, boolean),
+  public.mhq_list_papers(text, text)
 to anon, authenticated;
+
+-- ⚠️ SERVICE-ROLE ONLY. A publishable-key caller must get a permission
+-- error from these two, never a uuid or a boolean.
+revoke execute on function public.mhq_auth_ok(text, text) from public, anon, authenticated;
+grant  execute on function public.mhq_auth_ok(text, text) to service_role;
+revoke execute on function public.mhq_admin_ok_rpc(text) from public, anon, authenticated;
+grant  execute on function public.mhq_admin_ok_rpc(text) to service_role;
 
 -- ============================================================
 --  SEED — quests (q1–q3 open) + admin password (default 'admin').

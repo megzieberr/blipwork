@@ -381,6 +381,23 @@ export const FUNFUN_ENABLED = true;
    its own app, reached by a plain out-link — never merged, never iframed. */
 export const CQ_URL = "https://megzieberr.github.io/circle-geo-quest/";
 
+/* FEEDBACK-PAPERS-BRIEF.md (2026-08-24) — the two things the learners
+   asked for. Both ship CLOSED and the foreman flips them at ship, the
+   same seeded-closed posture FUNFUN_ENABLED had.
+
+   FEEDBACK_ENABLED gates the 💬 button (js/feedback.js) on every
+   logged-in screen AND the Feedback section in admin.html. The server
+   side (supabase/migration-feedback-papers.sql) is safe to apply before
+   any of this ships — nothing calls those RPCs until this flag is true. */
+export const FEEDBACK_ENABLED = false;
+
+/* PAPERS_ENABLED gates the 📄 Papers hub tab (js/papers.js) and the
+   Papers section in admin.html. It stays false until the two edge
+   functions (paper-url, paper-admin) are DEPLOYED and at least one
+   paper is uploaded — a lit tab over an empty private bucket is a dead
+   end, and the learner cannot tell "nothing here yet" from "broken". */
+export const PAPERS_ENABLED = false;
+
 /* ============================================================
    BLIP — Phase 2 feeding/growth/sickness constants (2026-07-19).
    THESE ARE A DISPLAY MIRROR ONLY. The server (supabase/schema.sql +

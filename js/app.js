@@ -11,6 +11,7 @@ import { renderBlip } from "./blip.js";
 import { closeActiveTour } from "./companion/tour.js";
 import { renderGallery } from "./gallery.js";
 import { registerServiceWorker } from "./pwa.js";
+import { mountFeedback } from "./feedback.js";
 
 const app = {
   root: null, state: null, screen: "login", params: {},
@@ -83,6 +84,14 @@ const app = {
       case "examPlay": renderExamPlay(this, view, this.params); break;
       default: renderHub(this, view);
     }
+    // FEEDBACK-PAPERS-BRIEF.md (2026-08-24): the 💬 button belongs to the
+    // CHROME, not to any screen — mounted here, once, so it exists on hub,
+    // chapter, play, blip, gallery, exam and results without a line of code
+    // in any of those files (and cannot be forgotten in the next one).
+    // It owns a single <body>-level element outside #app, which clear()
+    // above never reaches, so this call only shows/hides it. Gated on
+    // js/config.js's FEEDBACK_ENABLED inside mountFeedback().
+    mountFeedback(this);
   },
 };
 

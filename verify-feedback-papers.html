@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback + Papers · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  ul.fails{list-style:none;font-size:12px;line-height:1.6;color:var(--bad);margin-top:8px}
+  /* the 375px stage the DOM walk measures in — an iframe is the only way to
+     get a REAL layout at a width this page isn't being viewed at.
+     375x812 — a real phone viewport, not a convenient box. The play-screen
+     collision this page asserts is viewport-HEIGHT dependent: in a 640-tall
+     frame the Check button is below the fold at the top of the scroll and
+     nothing collides, which would have quietly turned the check green for
+     the wrong reason. */
+  #stage{width:375px;height:812px;border:1px solid var(--brd);border-radius:10px;background:#070b16}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Feedback + Papers · verification</h1>
+<p class="muted small">FEEDBACK-PAPERS-BRIEF.md (2026-08-24). Three kinds of check on one page:
+  (1) the LOCAL backend's feedback/papers mirrors, which stand in for
+  <code>supabase/migration-feedback-papers.sql</code> — WRITTEN, NOT RUN, so this page is the only place any of
+  that logic currently executes; (2) TEXT checks over the migration file and the two edge functions, because the
+  security posture (grants pinned, search_path pinned, bucket private, <code>mhq_auth_ok</code> revoked from anon)
+  cannot be exercised until the foreman applies it; (3) a real 375px LAYOUT walk of the feedback panel and the
+  papers tab in an iframe, with both flags forced on.</p>
+<div id="banner">running…</div>
+
+<h2>1 · feedback — named send</h2>
+<pre id="named">…</pre>
+
+<h2>2 · feedback — anonymous send stores NO identity</h2>
+<pre id="anon">…</pre>
+
+<h2>3 · feedback — validation, auth, caps</h2>
+<pre id="valid">…</pre>
+
+<h2>4 · feedback — the teacher's list + mark read</h2>
+<pre id="admin">…</pre>
+
+<h2>5 · papers — the list mirror, and the honest offline refusal</h2>
+<pre id="papers">…</pre>
+
+<h2>6 · context strings, derived from the app controller alone</h2>
+<pre id="context">…</pre>
+
+<h2>7 · the migration file — grants, search_path, private bucket</h2>
+<pre id="sql">…</pre>
+
+<h2>8 · the two edge functions — service role in, secrets never out</h2>
+<pre id="edge">…</pre>
+
+<h2>9 · flags ship CLOSED</h2>
+<pre id="flags">…</pre>
+
+<h2>10 · 375px — the feedback panel and the papers tab, laid out for real</h2>
+<iframe id="stage" src="about:blank" title="375px stage"></iframe>
+<pre id="layout">…</pre>
+
+<h2>failures</h2>
+<ul class="fails" id="failList"></ul>
+
+<script type="module">
+import { LocalBackend } from "./js/local-backend.js";
+import { feedbackContext } from "./js/feedback.js";
+import { FEEDBACK_ENABLED, PAPERS_ENABLED, CHAPTERS } from "./js/config.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const PW = "pw12";
+const freshUser = async (tag) => {
+  const u = `verify_fb_${tag}_${Math.random().toString(36).slice(2, 8)}`;
+  await LocalBackend.signup(u, "Verify " + tag, PW);
+  return u;
+};
+/* The mirror writes into localStorage under "mhq.feedback" — the harness
+   reads the RAW rows back rather than trusting adminFeedback()'s already-
+   shaped payload. An anonymity claim checked only through the reader that
+   also does the anonymising would prove nothing. */
+const rawRows = () => { try { return JSON.parse(localStorage.getItem("mhq.feedback")) || []; } catch { return []; } };
+
+/* ============================================================
+   1 · named send
+   ============================================================ */
+const A = await freshUser("a");
+const nm = [];
+{
+  const before = rawRows().length;
+  const r = await LocalBackend.sendFeedback(A, PW, "  q4's diagram looks squashed  ", false, "play:gt5");
+  tick(r.ok === true, "named send: ok true");
+  const rows = rawRows();
+  tick(rows.length === before + 1, `named send: exactly one row written (${before} -> ${rows.length})`);
+  const row = rows[rows.length - 1];
+  tick(row.name === "Verify a", `named send: display name snapshotted (got ${JSON.stringify(row.name)})`);
+  tick(typeof row.studentId === "string" && row.studentId.length > 0, "named send: student id stored");
+  tick(row.body === "q4's diagram looks squashed", `named send: body trimmed (got ${JSON.stringify(row.body)})`);
+  tick(row.context === "play:gt5", `named send: context stored (got ${JSON.stringify(row.context)})`);
+  tick(row.readAt === null, "named send: arrives unread");
+  nm.push(JSON.stringify(row, null, 1));
+}
+document.getElementById("named").textContent = nm.join("\n");
+
+/* ============================================================
+   2 · ANONYMOUS — the promise, checked at the raw row
+   ============================================================ */
+const an = [];
+{
+  const r = await LocalBackend.sendFeedback(A, PW, "i don't get question 6", true, "play:gt6");
+  tick(r.ok === true, "anon send: ok true");
+  const row = rawRows()[rawRows().length - 1];
+
+  // the three that ARE the promise
+  tick(row.studentId === null, `anon send: studentId is null (got ${JSON.stringify(row.studentId)})`);
+  tick(row.name === null, `anon send: name is null (got ${JSON.stringify(row.name)})`);
+  const blob = JSON.stringify(row);
+  tick(!blob.includes(A), "anon send: the username appears NOWHERE in the row");
+  tick(!blob.includes("Verify a"), "anon send: the display name appears NOWHERE in the row");
+
+  // and the one that must SURVIVE — context is not identity
+  tick(row.context === "play:gt6", `anon send: context still rides along (got ${JSON.stringify(row.context)})`);
+
+  // the shaped payload must agree with the raw row
+  const list = await LocalBackend.adminFeedback("admin");
+  const shaped = list.rows.find(x => x.id === row.id);
+  tick(shaped && shaped.anon === true, "anon send: adminFeedback flags it anon");
+  tick(shaped && shaped.name === "Anonymous", `anon send: adminFeedback renders "Anonymous" (got ${shaped && shaped.name})`);
+  an.push(JSON.stringify(row, null, 1));
+}
+document.getElementById("anon").textContent = an.join("\n");
+
+/* ============================================================
+   3 · validation / auth / caps
+   ============================================================ */
+const vl = [];
+{
+  tick((await LocalBackend.sendFeedback(A, "wrong-password", "hi", false, "hub")).error === "auth",
+    "wrong password -> auth");
+  tick((await LocalBackend.sendFeedback("nobody_at_all", PW, "hi", false, "hub")).error === "auth",
+    "unknown user -> auth");
+  // ⚠️ anonymous is NOT a way past the door — everyone authenticates.
+  tick((await LocalBackend.sendFeedback(A, "wrong-password", "hi", true, "hub")).error === "auth",
+    "anonymous + wrong password -> STILL auth (anonymity is not an open door)");
+
+  tick((await LocalBackend.sendFeedback(A, PW, "", false, "hub")).error === "empty", "empty body -> empty");
+  tick((await LocalBackend.sendFeedback(A, PW, "   \n  ", false, "hub")).error === "empty", "whitespace-only body -> empty");
+
+  const long = "x".repeat(1500);
+  await LocalBackend.sendFeedback(A, PW, long, false, "y".repeat(400));
+  const row = rawRows()[rawRows().length - 1];
+  tick(row.body.length === 1000, `body capped at 1000 (got ${row.body.length})`);
+  tick(row.context.length === 120, `context capped at 120 (got ${row.context.length})`);
+
+  const noCtx = await LocalBackend.sendFeedback(A, PW, "no context here", false, "");
+  tick(noCtx.ok === true, "missing context is allowed");
+  tick(rawRows()[rawRows().length - 1].context === null, "missing context stores null, not \"\"");
+  vl.push(`caps: body 1000 · context 120`);
+}
+document.getElementById("valid").textContent = vl.join("\n");
+
+/* ============================================================
+   4 · the teacher's list
+   ============================================================ */
+const ad = [];
+{
+  tick((await LocalBackend.adminFeedback("not-the-password")).error === "auth", "adminFeedback: wrong password -> auth");
+  tick((await LocalBackend.adminFeedbackRead("not-the-password", "whatever", true)).error === "auth",
+    "adminFeedbackRead: wrong password -> auth");
+
+  const r = await LocalBackend.adminFeedback("admin");
+  tick(r.ok === true, "adminFeedback: ok");
+  tick(Array.isArray(r.rows), "adminFeedback: rows is an array");
+  tick(typeof r.unread === "number", "adminFeedback: unread is a number");
+
+  // newest first
+  const stamps = r.rows.map(x => x.createdAt);
+  tick(stamps.every((s, i) => i === 0 || stamps[i - 1] >= s), "adminFeedback: newest first");
+
+  // NO shaped row may carry a student id — the reader must not re-expose
+  // what the writer decided not to keep, and must not leak the id of a
+  // NAMED sender to the dashboard payload either (it has no use for it).
+  tick(r.rows.every(x => !("studentId" in x)), "adminFeedback: no studentId in the payload at all");
+
+  const unreadBefore = r.unread;
+  const target = r.rows[0];
+  await LocalBackend.adminFeedbackRead("admin", target.id, true);
+  const r2 = await LocalBackend.adminFeedback("admin");
+  tick(r2.unread === unreadBefore - 1, `mark read: unread ${unreadBefore} -> ${r2.unread}`);
+  tick(!!r2.rows.find(x => x.id === target.id).readAt, "mark read: readAt stamped");
+
+  await LocalBackend.adminFeedbackRead("admin", target.id, false);
+  const r3 = await LocalBackend.adminFeedback("admin");
+  tick(r3.rows.find(x => x.id === target.id).readAt === null, "un-mark read: readAt cleared");
+  tick(r3.unread === unreadBefore, `un-mark read: unread back to ${unreadBefore}`);
+
+  tick((await LocalBackend.adminFeedbackRead("admin", "no-such-id", true)).ok === true,
+    "mark read: an unknown id is a quiet no-op, not an error");
+  ad.push(`rows ${r3.rows.length} · unread ${r3.unread}`);
+}
+document.getElementById("admin").textContent = ad.join("\n");
+
+/* ============================================================
+   5 · papers — the mirror, and what it refuses to fake
+   ============================================================ */
+const pp = [];
+{
+  tick((await LocalBackend.listPapers(A, "wrong-password")).error === "auth", "listPapers: wrong password -> auth");
+  const r = await LocalBackend.listPapers(A, PW);
+  tick(r.ok === true, "listPapers: ok");
+  tick(Array.isArray(r.papers) && r.papers.length === 1, `listPapers: one stub row (got ${r.papers && r.papers.length})`);
+  const p = r.papers[0];
+  ["id", "title", "chapter", "sizeBytes", "sort", "createdAt"].forEach(k =>
+    tick(k in p, `listPapers: stub row has "${k}"`));
+  // storage_path is the ONE field a leaked list would make valuable
+  tick(!("storagePath" in p) && !("storage_path" in p), "listPapers: no storage path in the payload");
+
+  // ⚠️ the offline mirror must NEVER hand back something that looks like a
+  // signed URL — a private bucket is the whole feature.
+  const u = await LocalBackend.paperUrl(A, PW, p.id);
+  tick(u.ok === false && u.error === "local", `paperUrl offline: {ok:false, error:"local"} (got ${JSON.stringify(u)})`);
+  tick(!("url" in u), "paperUrl offline: no url field of any kind");
+  tick((await LocalBackend.paperUrl(A, "wrong-password", p.id)).error === "auth", "paperUrl: wrong password -> auth");
+
+  tick((await LocalBackend.paperAdmin("not-the-password", "list")).error === "auth", "paperAdmin: wrong password -> auth");
+  const al = await LocalBackend.paperAdmin("admin", "list");
+  tick(al.ok === true && al.papers.length === 1, "paperAdmin list: answers from the stub");
+  tick((await LocalBackend.paperAdmin("admin", "upload", {})).error === "local", "paperAdmin upload offline -> local");
+  tick((await LocalBackend.paperAdmin("admin", "remove", {})).error === "local", "paperAdmin remove offline -> local");
+  pp.push(JSON.stringify(p));
+}
+document.getElementById("papers").textContent = pp.join("\n");
+
+/* ============================================================
+   6 · context strings
+   The whole point of deriving these from app.screen/app.params is that no
+   other file has to remember to report anything — so the cases below are
+   built the way the real app.go() calls in js/screens.js, js/dice-play.js
+   and js/exam-play.js build them.
+   ============================================================ */
+const cx = [];
+{
+  const cases = [
+    [{ screen: "hub", params: {} }, "hub"],
+    [{ screen: "blip", params: {} }, "blip"],
+    [{ screen: "gallery", params: {} }, "gallery"],
+    [{ screen: "chapter", params: { chapterId: "trig" } }, "chapter:trig"],
+    [{ screen: "examChapter", params: { chapterId: "eqn" } }, "examChapter:eqn"],
+    // js/screens.js: app.go("play", { chapter: ch, quest: q, def, accent })
+    [{ screen: "play", params: { chapter: { id: "trig" }, quest: { id: "gt5" } } }, "play:gt5"],
+    // js/dice-play.js: a dice round routes through "play" with a placeholder
+    // quest whose id is the literal "dice" — the CHAPTER is the useful id.
+    [{ screen: "play", params: { chapter: { id: "gtrig" }, quest: { id: "dice" }, dice: {} } }, "dice:gtrig"],
+    // js/screens.js: app.go("examPlay", { chapter, skillId, question, … })
+    [{ screen: "examPlay", params: { chapter: { id: "eqn" }, question: { id: "eqn.nor.q3(a)" } } }, "exam:eqn.nor.q3(a)"],
+    [{ screen: "funfunPlay", params: { chapter: { id: "func" }, questId: "qE" } }, "funfun:qE"],
+    [{ screen: "results", params: { chapter: { id: "trig" }, quest: { id: "t4" } } }, "results:t4"],
+    [{ screen: "results", params: { chapter: { id: "gtrig" }, dice: true } }, "results:dice:gtrig"],
+    [{ screen: "results", params: { funfun: true, questId: "q1" } }, "results:funfun:q1"],
+    // defensive: a screen that somehow has no params must still yield
+    // something readable, never "undefined" or a thrown error
+    [{ screen: "play", params: {} }, "play"],
+    [{ screen: "examPlay", params: {} }, "exam"],
+  ];
+  cases.forEach(([app, want]) => {
+    const got = feedbackContext(app);
+    tick(got === want, `context ${app.screen}: expected "${want}", got "${got}"`);
+    cx.push(`${String(app.screen).padEnd(12)} -> ${got}`);
+  });
+  tick(feedbackContext(null) === "", "context: a null app yields \"\", not a throw");
+
+  // ⚠️ no context string may ever contain a learner's name or username
+  const names = cases.map(([a]) => feedbackContext(a)).join(" ");
+  tick(!names.includes(A) && !names.toLowerCase().includes("verify"),
+    "context: never carries a username or display name");
+}
+document.getElementById("context").textContent = cx.join("\n");
+
+/* ============================================================
+   7 · the migration file, read as text
+   The security posture cannot be EXERCISED until the foreman applies it,
+   so it is asserted here against the file the foreman will apply.
+   ============================================================ */
+const sq = [];
+{
+  const src = await (await fetch("./supabase/migration-feedback-papers.sql", { cache: "reload" })).text();
+
+  // ---- every new function pins search_path ----
+  const fnRe = /create or replace function public\.(\w+)\s*\(([^)]*)\)\s*returns\s+([^\s]+)\s+language\s+(\w+)([^$]*?)as \$\$/g;
+  const fns = [];
+  let m;
+  while ((m = fnRe.exec(src)) !== null) fns.push({ name: m[1], head: m[0] });
+  const EXPECTED = ["mhq_send_feedback", "mhq_admin_feedback", "mhq_admin_feedback_read",
+                    "mhq_list_papers", "mhq_auth_ok", "mhq_admin_ok_rpc"];
+  tick(fns.length === EXPECTED.length, `migration defines ${EXPECTED.length} functions (got ${fns.length}: ${fns.map(f => f.name).join(", ")})`);
+  EXPECTED.forEach(n => tick(fns.some(f => f.name === n), `migration defines ${n}`));
+  fns.forEach(f => {
+    tick(/set search_path = /.test(f.head), `${f.name}: search_path pinned`);
+    tick(/security definer/.test(f.head), `${f.name}: security definer`);
+  });
+
+  // ---- grants ----
+  tick(/grant execute on function[\s\S]*?public\.mhq_send_feedback\(text, text, text, boolean, text\)[\s\S]*?to anon, authenticated;/.test(src),
+    "migration: mhq_send_feedback granted to anon/authenticated");
+  ["mhq_admin_feedback(text)", "mhq_admin_feedback_read(text, uuid, boolean)", "mhq_list_papers(text, text)"].forEach(sig =>
+    tick(src.includes(`public.${sig}`), `migration: grants block names ${sig}`));
+
+  // ---- the two wrappers are service-role ONLY ----
+  ["mhq_auth_ok(text, text)", "mhq_admin_ok_rpc(text)"].forEach(sig => {
+    tick(new RegExp(`revoke execute on function public\\.${sig.replace(/[()]/g, "\\$&")} from public, anon, authenticated;`).test(src),
+      `migration: ${sig} revoked from public/anon/authenticated`);
+    tick(new RegExp(`grant\\s+execute on function public\\.${sig.replace(/[()]/g, "\\$&")} to service_role;`).test(src),
+      `migration: ${sig} granted to service_role`);
+  });
+  // and neither may appear in the anon grant list
+  const anonGrant = (src.match(/grant execute on function[\s\S]*?to anon, authenticated;/) || [""])[0];
+  tick(!anonGrant.includes("mhq_auth_ok"), "migration: mhq_auth_ok is NOT in the anon grant list");
+  tick(!anonGrant.includes("mhq_admin_ok_rpc"), "migration: mhq_admin_ok_rpc is NOT in the anon grant list");
+
+  // ---- tables sealed ----
+  ["feedback", "papers"].forEach(t => {
+    tick(new RegExp(`alter table public\\.${t} enable row level security;`).test(src), `migration: ${t} has RLS on`);
+    tick(new RegExp(`revoke all on public\\.${t} from anon, authenticated;`).test(src), `migration: ${t} revoked from anon/authenticated`);
+    tick(!new RegExp(`create policy[\\s\\S]{0,200}public\\.${t}`).test(src), `migration: ${t} has no policies (SECURITY DEFINER RPCs only)`);
+  });
+
+  // ---- the bucket is PRIVATE ----
+  tick(/insert into storage\.buckets \(id, name, public\)\s*values \('papers', 'papers', false\)/.test(src),
+    "migration: the papers bucket is created with public = false");
+  tick(!/create policy[\s\S]{0,300}storage\.objects/.test(src),
+    "migration: NO storage.objects policy is created (anon stays sealed out)");
+
+  // ---- anonymity, in the SQL itself ----
+  tick(/case when v_anon then null else v_sid end/.test(src),
+    "migration: an anonymous insert writes NULL student_id");
+  tick(/case when v_anon then null else v_name end/.test(src),
+    "migration: an anonymous insert writes NULL display_name");
+  tick(/v_sid := public\._mhq_auth\(p_username, p_password\);[\s\S]{0,200}error', 'auth'/.test(src),
+    "migration: mhq_send_feedback authenticates before anything else");
+
+  // ---- the two untouchables ----
+  tick(!/create or replace function public\.mhq_get_state/.test(src), "migration: mhq_get_state NOT re-created");
+  tick(!/create or replace function public\.mhq_admin_data/.test(src), "migration: mhq_admin_data NOT re-created");
+
+  // ---- it says out loud that it has not been run ----
+  tick(/WRITTEN, NOT RUN/.test(src), "migration: header still says WRITTEN, NOT RUN");
+
+  // ---- the schema.sql mirror carries the same four public RPCs ----
+  const schema = await (await fetch("./supabase/schema.sql", { cache: "reload" })).text();
+  ["mhq_send_feedback", "mhq_admin_feedback", "mhq_admin_feedback_read", "mhq_list_papers",
+   "mhq_auth_ok", "mhq_admin_ok_rpc"].forEach(n =>
+    tick(schema.includes(`function public.${n}`), `schema.sql mirror: carries ${n}`));
+  tick(/revoke execute on function public\.mhq_auth_ok\(text, text\) from public, anon, authenticated;/.test(schema),
+    "schema.sql mirror: mhq_auth_ok revoked from anon");
+
+  sq.push(`functions: ${fns.map(f => f.name).join(", ")}`);
+}
+document.getElementById("sql").textContent = sq.join("\n");
+
+/* ============================================================
+   8 · the two edge functions, read as text
+   ============================================================ */
+const eg = [];
+{
+  const url = await (await fetch("./supabase/functions/paper-url/index.ts", { cache: "reload" })).text();
+  const adm = await (await fetch("./supabase/functions/paper-admin/index.ts", { cache: "reload" })).text();
+
+  [["paper-url", url], ["paper-admin", adm]].forEach(([name, src]) => {
+    tick(/Deno\.env\.get\("SUPABASE_URL"\)/.test(src), `${name}: reads SUPABASE_URL from the env`);
+    tick(/Deno\.env\.get\("SUPABASE_SERVICE_ROLE_KEY"\)/.test(src), `${name}: reads SUPABASE_SERVICE_ROLE_KEY from the env`);
+    tick(!/sb_secret|service_role_key\s*=\s*["']ey/.test(src), `${name}: no key literal in the file`);
+    tick(/Access-Control-Allow-Origin/.test(src), `${name}: sends CORS headers`);
+    tick(/if \(req\.method === "OPTIONS"\)/.test(src), `${name}: answers the CORS preflight`);
+    tick(/method_not_allowed/.test(src), `${name}: refuses anything but POST`);
+    // ⚠️ nothing may log a password or an admin password
+    tick(!/console\.(log|error|warn)\([^)]*(password|admin_pw|adminPw)/i.test(src), `${name}: never logs a credential`);
+  });
+
+  // paper-url: auth, then lookup, then a SHORT-LIVED link
+  tick(/rpc\("mhq_auth_ok"/.test(url), "paper-url: checks the learner via mhq_auth_ok");
+  tick(/createSignedUrl\(paper\.storage_path, SIGNED_URL_SECONDS\)/.test(url), "paper-url: signs the row's own path, not a caller-supplied one");
+  tick(/SIGNED_URL_SECONDS = 3600/.test(url), "paper-url: the link lasts 60 minutes");
+  tick(!/\.upload\(|\.remove\(|\.insert\(|\.delete\(/.test(url), "paper-url: cannot write or delete ANYTHING");
+
+  // paper-admin: the gate runs before every action
+  tick(/rpc\("mhq_admin_ok_rpc"/.test(adm), "paper-admin: checks the admin password via mhq_admin_ok_rpc");
+  const gateAt = adm.indexOf('rpc("mhq_admin_ok_rpc"');
+  ["\"list\"", "\"upload\"", "\"remove\""].forEach(a =>
+    tick(adm.indexOf(`action === ${a}`) > gateAt, `paper-admin: the ${a} branch sits AFTER the admin gate`));
+  tick(/function safeName/.test(adm) && /replace\(\/\[\^A-Za-z0-9\._ -\]\+\/g, "-"\)/.test(adm),
+    "paper-admin: the filename is sanitised before it becomes a storage key");
+  tick(/split\(\/\[\\\\\/\]\/\)\.pop\(\)/.test(adm), "paper-admin: any path in the filename is stripped");
+  tick(/magic !== "%PDF-"/.test(adm), "paper-admin: PDF checked on the magic bytes, not just the extension");
+  tick(/MAX_BYTES/.test(adm) && /bytes\.length > MAX_BYTES/.test(adm), "paper-admin: a size cap exists and is enforced");
+  tick(/crypto\.randomUUID\(\)/.test(adm), "paper-admin: the storage key is uuid-prefixed");
+  // remove: object first, then row (an orphan in a private bucket is invisible forever)
+  tick(adm.indexOf('.remove([paper.storage_path])') < adm.indexOf('.delete().eq("id", paperId)'),
+    "paper-admin: remove deletes the object BEFORE the row");
+  eg.push("paper-url: auth -> row -> 60min signed url, read-only");
+  eg.push("paper-admin: admin gate -> list | upload (pdf, capped, sanitised) | remove");
+}
+document.getElementById("edge").textContent = eg.join("\n");
+
+/* ============================================================
+   9 · flags ship CLOSED
+   ============================================================ */
+{
+  tick(FEEDBACK_ENABLED === false, `js/config.js FEEDBACK_ENABLED ships false (got ${FEEDBACK_ENABLED}) — the foreman flips it at ship`);
+  tick(PAPERS_ENABLED === false, `js/config.js PAPERS_ENABLED ships false (got ${PAPERS_ENABLED}) — the foreman flips it at ship`);
+  const sw = await (await fetch("./sw.js", { cache: "reload" })).text();
+  tick(/const CACHE = "mhq-v68"/.test(sw), "sw.js is still v68 (the foreman bumps it at ship)");
+  // no new stylesheet was added, so SHELL needs no new entry
+  tick(!/feedback\.css|papers\.css/.test(sw), "sw.js SHELL untouched — the new CSS rides css/styles.css");
+
+  // the in-flow special case is load-bearing, not decoration — pin it in
+  // source so it cannot be tidied away without this page going red
+  const fbSrc = await (await fetch("./js/feedback.js", { cache: "reload" })).text();
+  tick(/const FLOW_SCREENS = \["play", "examPlay", "funfunPlay"\];/.test(fbSrc),
+    "js/feedback.js: FLOW_SCREENS still covers all three player screens");
+  tick(/classList\.toggle\("fb-fab--inline", inFlow\)/.test(fbSrc),
+    "js/feedback.js: the in-flow class is applied from FLOW_SCREENS");
+  // and the button is mounted ONCE, from the chrome, not per screen
+  const appSrc = await (await fetch("./js/app.js", { cache: "reload" })).text();
+  tick(/mountFeedback\(this\);/.test(appSrc), "js/app.js: mountFeedback is called from render()");
+  tick((appSrc.match(/mountFeedback\(this\)/g) || []).length === 1,
+    "js/app.js: exactly ONE mountFeedback(this) call site — the chrome mount, never per screen");
+  document.getElementById("flags").textContent =
+    `FEEDBACK_ENABLED ${FEEDBACK_ENABLED} · PAPERS_ENABLED ${PAPERS_ENABLED} · sw mhq-v68`;
+}
+
+/* ============================================================
+   10 · 375px layout, for real
+   The iframe loads index.html at exactly 375px with ?local=1, logs a
+   throwaway learner in, and forces BOTH flags on for the duration —
+   they ship false, so without that override there would be nothing to
+   measure. Everything asserted here is read out of the live DOM.
+   ============================================================ */
+const ly = [];
+{
+  const stage = document.getElementById("stage");
+  const seedUser = await freshUser("layout");
+
+  // hand the frame a session before it boots
+  localStorage.setItem("mhq.session", JSON.stringify({ username: seedUser, password: PW }));
+  localStorage.setItem("mhq.forceLocal", "1");
+
+  await new Promise(res => {
+    stage.addEventListener("load", res, { once: true });
+    stage.src = "./index.html?local=1";
+  });
+  const w = stage.contentWindow;
+  const d = stage.contentDocument;
+
+  // wait for app.boot() to finish its first render
+  const waitFor = (fn, ms = 6000) => new Promise((res, rej) => {
+    const t0 = Date.now();
+    (function poll() {
+      let v = null;
+      try { v = fn(); } catch { v = null; }
+      if (v) return res(v);
+      if (Date.now() - t0 > ms) return rej(new Error("timeout"));
+      setTimeout(poll, 40);
+    })();
+  });
+
+  let ok = true;
+  try { await waitFor(() => w.__APP__ && w.__APP__.state); }
+  catch { ok = false; }
+  tick(ok, "375px stage: the app booted and has state");
+
+  if (ok) {
+    const app = w.__APP__;
+
+    /* ---- the 💬 button, forced on ---- */
+    // mountFeedback() early-returns on FEEDBACK_ENABLED, and a module's
+    // import binding cannot be reassigned from outside — so the harness
+    // stands in for the foreman's flip by building the button with exactly
+    // the markup and class mountFeedback() gives it, and measuring THAT.
+    // The CSS under test is therefore the shipped CSS.
+    const fab = d.createElement("button");
+    fab.className = "fb-fab";
+    fab.textContent = "💬";
+    d.body.appendChild(fab);
+    const fr = fab.getBoundingClientRect();
+    tick(fr.width >= 40 && fr.width <= 56, `💬 button is a thumb-sized target (${Math.round(fr.width)}px)`);
+    tick(fr.right <= 375, `💬 button stays inside 375px (right edge ${Math.round(fr.right)})`);
+
+    /* ⚠️ THE ONE THAT MATTERS: it must not cover the answer/submit controls.
+       Measured at five scroll offsets on each screen, not just at rest —
+       a mis-tap on "Check my answer" costs a learner the question, and it
+       is the top of the scroll where a fixed button lands on it (that is
+       exactly what this walk caught on the play screen during the build,
+       and why FLOW_SCREENS exists in js/feedback.js). scrollTo is instant
+       and getBoundingClientRect forces layout, so no waiting is needed
+       between a scroll and a measure. */
+    const overlaps = (a, b) => !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
+    const CONTROLS = ".btn, .opt, .keypad button, .tokenpad button, button.hub-blip-btn";
+    const walkScreen = (label, node) => {
+      const H = d.body.scrollHeight;
+      let worst = 0;
+      for (const y of [0, H * 0.25, H * 0.5, H * 0.75, H]) {
+        w.scrollTo(0, Math.round(y));
+        const nr = node.getBoundingClientRect();
+        const hits = [...d.querySelectorAll(CONTROLS)]
+          .filter(b => b !== node && !node.contains(b) && b.offsetParent !== null && b.getBoundingClientRect().width > 0)
+          .filter(b => overlaps(nr, b.getBoundingClientRect()));
+        worst = Math.max(worst, hits.length);
+      }
+      w.scrollTo(0, 0);
+      tick(worst === 0, `375px ${label}: the 💬 button covers no control at any scroll offset (worst ${worst})`);
+      ly.push(`${label.padEnd(9)} scrollHeight ${H}px · controls clear at 5 offsets`);
+      return worst;
+    };
+    for (const sc of ["hub", "blip", "gallery"]) {
+      app.go(sc);
+      await new Promise(r => setTimeout(r, 80));
+      walkScreen(sc, fab);
+    }
+    fab.remove();
+
+    /* ---- the in-flow variant, on a real player screen ----
+       js/feedback.js moves the SAME button into .view on play / examPlay /
+       funfunPlay, because at 375px every primary control is full width and
+       a fixed bottom-right button will sit on one of them at some scroll
+       offset. In the flow it lands in the 96px gutter .view reserves, where
+       it cannot cover anything by construction. This asserts BOTH: that the
+       fixed variant would have collided on the play screen, and that the
+       in-flow one does not. */
+    {
+      const cfgFrame = await w.eval('import("./js/config.js")');
+      const qdFrame = await w.eval('import("./js/quests/index.js")');
+      const stats = cfgFrame.CHAPTERS.find(c => c.id === "stats");
+      app.go("play", { chapter: stats, quest: stats.quests[0], def: qdFrame.questDef("q1"), accent: stats.signature });
+      await new Promise(r => setTimeout(r, 250));
+
+      // (a) the fixed variant, on this very screen — must collide, or the
+      //     in-flow special case below is solving a problem that went away
+      //     and should be reconsidered rather than left in.
+      const probe = d.createElement("button");
+      probe.className = "fb-fab";
+      probe.textContent = "💬";
+      d.body.appendChild(probe);
+      w.scrollTo(0, 0);
+      const pr = probe.getBoundingClientRect();
+      const collided = [...d.querySelectorAll(".btn.primary")]
+        .filter(b => b.offsetParent !== null)
+        .filter(b => overlaps(pr, b.getBoundingClientRect()));
+      tick(collided.length > 0,
+        "375px play: a FIXED 💬 really does land on the submit control at the top of the scroll (the reason for FLOW_SCREENS)");
+      probe.remove();
+
+      // (b) the in-flow variant — the shipped behaviour
+      const inline = d.createElement("button");
+      inline.className = "fb-fab fb-fab--inline";
+      inline.innerHTML = `💬<span class="fb-fab-label">Tell your teacher</span>`;
+      (d.querySelector("#app .view") || d.body).appendChild(inline);
+      await new Promise(r => setTimeout(r, 60));
+      const ir = inline.getBoundingClientRect();
+      tick(ir.right <= 375, `in-flow 💬 pill stays inside 375px (right edge ${Math.round(ir.right)})`);
+      tick(ir.width > 120 && ir.width < 240, `in-flow 💬 is a labelled pill, not a bare circle (${Math.round(ir.width)}px)`);
+      tick(inline === inline.parentNode.lastElementChild, "in-flow 💬 is the LAST thing in the view, inside the reserved gutter");
+      walkScreen("play", inline);
+      tick(d.documentElement.scrollWidth <= 375, `in-flow 💬: no sideways scroll (scrollWidth ${d.documentElement.scrollWidth})`);
+      inline.remove();
+      app.go("hub");
+      await new Promise(r => setTimeout(r, 80));
+    }
+
+    /* ---- the feedback PANEL, at 375px ---- */
+    // Built from the same markup openSheet() writes, so the CSS under test is
+    // the shipped CSS. (openSheet itself is flag-free, but it is not exported —
+    // the panel's layout is what this section is for.)
+    const scrim = d.createElement("div");
+    scrim.className = "modal-scrim fb-scrim";
+    scrim.innerHTML = `<div class="modal fb-sheet">
+      <div class="mhead"><span class="meyebrow">Feedback</span><button class="link-btn fb-close">✕</button></div>
+      <h2>Send a note to your teacher</h2>
+      <p class="muted small fb-intro">Something wrong with a question…</p>
+      <textarea class="fb-body" rows="5" maxlength="1000"></textarea>
+      <div class="fb-count"><span class="fb-left">1000</span> left</div>
+      <label class="fb-anon"><input type="checkbox" class="fb-anon-cb" checked><span class="fb-anon-label">Show my name</span></label>
+      <p class="muted small fb-anon-note">Your teacher will see who wrote this.</p>
+      <button class="btn primary big fb-send">Send</button></div>`;
+    d.body.appendChild(scrim);
+    await new Promise(r => setTimeout(r, 40));
+    const sheet = scrim.querySelector(".fb-sheet");
+    const sr = sheet.getBoundingClientRect();
+    tick(sr.width <= 375, `feedback panel fits 375px (width ${Math.round(sr.width)})`);
+    tick(d.documentElement.scrollWidth <= 375, `feedback panel open: no sideways scroll (scrollWidth ${d.documentElement.scrollWidth})`);
+    tick(sr.height <= d.documentElement.clientHeight, `feedback panel fits the viewport height (${Math.round(sr.height)} <= ${d.documentElement.clientHeight})`);
+    const ta = sheet.querySelector(".fb-body").getBoundingClientRect();
+    tick(ta.width > 200, `textarea is usably wide (${Math.round(ta.width)}px)`);
+    const anonRow = sheet.querySelector(".fb-anon").getBoundingClientRect();
+    tick(anonRow.height >= 40, `the name/anonymous row is a real tap target (${Math.round(anonRow.height)}px tall)`);
+    const sendBtn = sheet.querySelector(".fb-send").getBoundingClientRect();
+    tick(sendBtn.width > 250, `Send is full-width (${Math.round(sendBtn.width)}px)`);
+    ly.push(`panel ${Math.round(sr.width)}×${Math.round(sr.height)} · textarea ${Math.round(ta.width)} · anon row ${Math.round(anonRow.height)}`);
+    scrim.remove();
+
+    /* ---- the 📄 papers tab, at 375px ---- */
+    // The tab is PAPERS_ENABLED-gated in screens.js, so drive js/papers.js's
+    // mount directly against a stubbed list — that is the function the tab
+    // calls, and its output is what a learner reads.
+    const ppMod = await w.eval('import("./js/papers.js")');
+    const card = d.createElement("div");
+    card.className = "card pp-card";
+    card.innerHTML = `<div class="ico">📄</div><h2>Papers</h2><p>Practice papers and past papers to download and work through.</p>`;
+    const mount = d.createElement("div");
+    mount.className = "pp-mount";
+    card.appendChild(mount);
+    (d.querySelector(".view") || d.body).appendChild(card);
+
+    // a realistic list: several topics, and a title far longer than she will
+    // ever type — a long title is what pushes an Open button off a phone.
+    const stubList = {
+      ok: true,
+      papers: [
+        { id: "p1", title: "September Paper 1", chapter: "General", sizeBytes: 1_400_000, sort: 0 },
+        { id: "p2", title: "September Paper 1 — Memorandum", chapter: "General", sizeBytes: 620_000, sort: 1 },
+        { id: "p3", title: "Trig practice paper", chapter: "trig", sizeBytes: 240_000, sort: 0 },
+        { id: "p4", title: "A really very extraordinarily long paper title that nobody would ever actually type in real life", chapter: "trig", sizeBytes: 5_100_000, sort: 1 },
+        { id: "p5", title: "Analytical geometry past paper", chapter: "analytical", sizeBytes: 900_000, sort: 0 },
+      ],
+    };
+    // swap listPapers for the stub on the frame's own LocalBackend module
+    // (js/api.js exports the very same object as `api` under ?local=1, so
+    // patching the property here is what js/papers.js actually calls)
+    const lbMod = await w.eval('import("./js/local-backend.js")');
+    const originalList = lbMod.LocalBackend.listPapers;
+    lbMod.LocalBackend.listPapers = async () => stubList;
+    await ppMod.mountPapers(app, mount);
+    lbMod.LocalBackend.listPapers = originalList;
+
+    const rows = [...mount.querySelectorAll(".pp-row")];
+    tick(rows.length === 5, `papers tab: 5 rows rendered (got ${rows.length})`);
+    const heads = [...mount.querySelectorAll(".pp-group-head")].map(h => h.textContent.trim());
+    tick(heads.length === 3, `papers tab: 3 topic groups (got ${heads.length}: ${heads.join(" | ")})`);
+    // a known chapter id resolves to the hub's own icon + name
+    const trigCh = CHAPTERS.find(c => c.id === "trig");
+    tick(!!trigCh && heads.includes(`${trigCh.icon} ${trigCh.name}`),
+      `papers tab: "trig" reads as "${trigCh && trigCh.icon} ${trigCh && trigCh.name}", not a raw id`);
+    tick(heads.includes("General"), 'papers tab: an unknown label ("General") is shown verbatim');
+    /* Sizes read in her decimal comma, and a MB is 1024², not 1000² —
+       stated as the arithmetic rather than a magic string, so a change to
+       either rule fails here instead of drifting. 1 400 000 B / 1024² =
+       1.335… -> "1,3 MB". Under a megabyte falls back to whole kB. */
+    const metas = [...mount.querySelectorAll(".pp-meta")].map(m => m.textContent);
+    const mbSizes = metas.filter(t => /MB/.test(t));
+    // of the five stub sizes only 1 400 000 and 5 100 000 clear 1024²
+    tick(mbSizes.length === 2, `papers tab: 2 of the 5 rows show MB (got ${mbSizes.length})`);
+    tick(mbSizes.every(t => /\d+,\d MB/.test(t)),
+      `papers tab: MB sizes use her decimal comma (got ${JSON.stringify(mbSizes)})`);
+    const asMb = b => `${(b / (1024 * 1024)).toFixed(1).replace(".", ",")} MB`;
+    tick(metas.some(t => t.includes(asMb(1_400_000))),
+      `papers tab: 1 400 000 B reads as ${asMb(1_400_000)} (1024², not 1000²)`);
+    tick(metas.some(t => /^PDF · \d+ kB$/.test(t.trim())),
+      `papers tab: a sub-megabyte paper reads in whole kB (got ${JSON.stringify(metas)})`);
+
+    // ⚠️ THE 375px CHECK: nothing may push the page sideways, and every Open
+    // button must be fully on screen — including the row with the absurd title.
+    tick(d.documentElement.scrollWidth <= 375,
+      `papers tab: no sideways scroll (scrollWidth ${d.documentElement.scrollWidth})`);
+    let offscreen = 0, tooSmall = 0;
+    rows.forEach(r => {
+      const b = r.querySelector(".pp-open").getBoundingClientRect();
+      if (b.right > 375 || b.left < 0) offscreen++;
+      if (b.width < 44) tooSmall++;
+    });
+    tick(offscreen === 0, `papers tab: every Open button is fully on a 375px screen (${offscreen} off)`);
+    tick(tooSmall === 0, `papers tab: every Open button is a real tap target (${tooSmall} under 44px)`);
+
+    // the empty state must read as "not yet", never as broken
+    lbMod.LocalBackend.listPapers = async () => ({ ok: true, papers: [] });
+    await ppMod.mountPapers(app, mount);
+    lbMod.LocalBackend.listPapers = originalList;
+    tick(/No papers up yet/.test(mount.textContent), `papers tab: empty state reads as "not yet" (got "${mount.textContent.trim().slice(0, 60)}")`);
+
+    ly.push(`papers  rows ${rows.length} · groups ${heads.join(" | ")} · scrollWidth ${d.documentElement.scrollWidth}`);
+  }
+}
+document.getElementById("layout").textContent = ly.join("\n");
+
+/* ---------------- banner ---------------- */
+const list = document.getElementById("failList");
+fails.forEach(msg => { const li = document.createElement("li"); li.textContent = "✗ " + msg; list.appendChild(li); });
+const banner = document.getElementById("banner");
+const allOk = passed === total;
+banner.className = allOk ? "pass" : "fail";
+banner.textContent = allOk
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — ${passed}/${total} checks passed`;
+
+window.__VERIFY__ = { total, passed, ok: allOk, fails };
+console.log(`[verify-feedback-papers] ${passed}/${total} — ${allOk ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

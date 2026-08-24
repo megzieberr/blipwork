@@ -110,7 +110,22 @@ const LS = { students: "mhq.students", progress: "mhq.progress", struggles: "mhq
   // FUNFUN-PART2-BRIEF.md D11 (2026-08-23): mirrors supabase's
   // funfun_progress table — { [studentId]: { [questId]: { best, total,
   // plays, done, metKinds } } }.
-  funfun: "mhq.funfun" };
+  funfun: "mhq.funfun",
+  // FEEDBACK-PAPERS-BRIEF.md (2026-08-24): mirrors supabase's `feedback`
+  // table — a flat ARRAY (not keyed by student, deliberately: an anonymous
+  // note has no student to key it under, and keying would reintroduce the
+  // identity the row is supposed to have thrown away).
+  feedback: "mhq.feedback" };
+
+/* The one row js/papers.js draws offline. Papers themselves are never
+   mirrored — they live in a private bucket only an edge function can
+   reach — so this stands in for "the tab has rows in it" and nothing
+   more. Its id is deliberately not uuid-shaped: nothing offline should
+   ever be mistakable for a real paper id. */
+const stubPaper = () => ({
+  id: "local-stub", title: "Sample paper", chapter: "General",
+  sizeBytes: 240000, sort: 0, createdAt: new Date().toISOString(),
+});
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
@@ -1394,6 +1409,90 @@ export const LocalBackend = {
       write(LS.students, stAll);
     }
     return { ok: true, paid: diamonds, gold: rec.gold };
+  },
+
+  // ---- FEEDBACK-PAPERS-BRIEF.md: 💬 feedback (2026-08-24). Mirrors
+  // supabase/migration-feedback-papers.sql's mhq_send_feedback /
+  // mhq_admin_feedback / mhq_admin_feedback_read (WRITTEN, NOT RUN there —
+  // this file is the ONLY place any of them currently executes).
+  //
+  // ⚠️ ANONYMITY IS REAL HERE TOO. An anonymous note stores studentId null
+  // and name null — not a hidden flag, nothing to un-hide. The harness
+  // (verify-feedback-papers.html) reads the raw localStorage row back and
+  // asserts exactly that, because a mirror that quietly kept the id would
+  // make the offline demo a lie about what the real one does.
+  async sendFeedback(username, password, body, anon, context) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const text = String(body == null ? "" : body).trim();
+    if (!text) return { ok: false, error: "empty" };
+    const isAnon = !!anon;
+    const ctx = String(context == null ? "" : context).trim().slice(0, 120);
+    const rows = read(LS.feedback, []);
+    rows.push({
+      id: "fb" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      createdAt: new Date().toISOString(),
+      studentId: isAnon ? null : s.id,
+      name: isAnon ? null : s.display_name,
+      context: ctx || null,
+      body: text.slice(0, 1000),
+      readAt: null,
+    });
+    write(LS.feedback, rows);
+    touch(s.id);
+    return { ok: true };
+  },
+  /* Newest first, and `name` already resolved to "Anonymous" — the SQL does
+     that with coalesce() so the client never has to decide what an empty
+     name means; this mirror does the same rather than leave the two
+     backends rendering differently. */
+  async adminFeedback(pw) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    const rows = read(LS.feedback, []).slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+    return {
+      ok: true,
+      unread: rows.filter(r => !r.readAt).length,
+      rows: rows.slice(0, 500).map(r => ({
+        id: r.id, name: r.name || "Anonymous", anon: r.name == null,
+        context: r.context || null, body: r.body,
+        createdAt: r.createdAt, readAt: r.readAt || null,
+      })),
+    };
+  },
+  async adminFeedbackRead(pw, id, readFlag) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    const rows = read(LS.feedback, []);
+    const row = rows.find(r => r.id === id);
+    // an unknown id is a quiet no-op, exactly as the RPC's UPDATE … WHERE
+    // is (she may have two admin tabs open on the same list).
+    if (row) { row.readAt = readFlag === false ? null : new Date().toISOString(); write(LS.feedback, rows); }
+    return { ok: true };
+  },
+
+  // ---- FEEDBACK-PAPERS-BRIEF.md: 📄 papers (2026-08-24) ----
+  // The list is mirrored with ONE stub row so the tab can be laid out and
+  // read at 375px offline. The file side is NOT mirrored and never will
+  // be: a signed URL comes from a private bucket via an edge function
+  // holding the service role, and there is no honest offline version of
+  // that. paperUrl returns {ok:false, error:"local"} and the tab says
+  // "Papers need the internet" — the offline mirror never fakes a link.
+  async listPapers(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    return { ok: true, papers: [stubPaper()] };
+  },
+  async paperUrl(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    return { ok: false, error: "local" };
+  },
+  /* Admin papers is edge-function-only for the same reason. "list" answers
+     from the same stub so admin.html renders offline; upload and remove
+     refuse honestly rather than pretend to have moved a file. */
+  async paperAdmin(pw, action) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    if (action === "list") return { ok: true, papers: [stubPaper()] };
+    return { ok: false, error: "local" };
   },
 
   // ---- Blip: Phase 2 feeding / care / second blip ----
