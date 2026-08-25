@@ -45,7 +45,7 @@
 <div id="stage"></div>
 
 <script type="module">
-import { QUESTS } from "./js/funfun/quests/index.js";
+import { QUESTS, buildRound, setSemicircles } from "./js/funfun/quests/index.js";
 import { L } from "./js/funfun/i18n.js";
 import { spyHost, playMounted } from "./js/funfun/mount-driver.js";
 import { funfunShadow } from "./js/funfun-play.js";
@@ -151,6 +151,37 @@ for (let i = 0; i < QUESTS.length; i++) {
     check(!rootEl.classList.contains("ff-root"), "destroy() took the .ff-root class back off");
   }
   hostEl.remove();
+}
+
+/* ---- the content switch: blipwork is the NO-SEMICIRCLE build ----
+   ⚠ NEVER RELAX into a text scan. The IEB Grade 11s do not do semicircles, and
+   between 2026-08-23 and 08-25 they met them anyway: q5's productSign called
+   randSemicircle() with no gate, so "Plus en minus" drew one in ~12% of its
+   rounds here even though the host passes semicircles:false. Both harnesses
+   were green because both only ever read the question WORDS, and q5's product
+   rounds call their two curves "f" and "g" without naming the shape. Check the
+   picture, not the prose — and check it in THIS copy, so a bad sync from
+   graph-quest can never quietly put it back. */
+{
+  setSemicircles(false);
+  const drawn = (it) => {
+    const out = [];
+    [it.graph, ...(it.graphs || [])].filter(Boolean).forEach((s) => {
+      (s.curves || [s]).forEach((c) => { if (c && c.kind) out.push(c.kind); });
+    });
+    return out;
+  };
+  const leaked = [];
+  let deals = 0;
+  for (const q of QUESTS) {
+    for (let rep = 0; rep < 14; rep++) {
+      deals++;
+      buildRound(q.id).forEach((it) => { if (drawn(it).includes("semicircle")) leaked.push(q.id); });
+    }
+  }
+  page.push(`semicircle scan: ${deals} deals across all ${QUESTS.length} quests — ` +
+            (leaked.length ? "LEAKED in " + [...new Set(leaked)].join(", ") : "none drawn"));
+  tick(leaked.length === 0, `no quest draws a semicircle in the blipwork build (${deals} deals)`);
 }
 
 page.push(`quests mounted, played and destroyed: ${QUESTS.length}`);

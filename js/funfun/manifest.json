@@ -1,9 +1,9 @@
 {
   "generatedBy": "graph-quest/tools/sync-to-blipwork.py",
-  "generatedAt": "2026-08-23T19:26:48+00:00",
+  "generatedAt": "2026-08-25T10:49:50+00:00",
   "sourceRepo": "graph-quest",
-  "sourceCommit": "300311d4f82b7525a20d3946ac90f4be3e1a0163",
-  "sourceWorkingTreeDirty": true,
+  "sourceCommit": "91bf32bedcec9217b95f529ffec6f046e3826431",
+  "sourceWorkingTreeDirty": false,
   "note": "GENERATED OUTPUT \u2014 never hand-edit js/funfun/. See GENERATED.md.",
   "files": [
     {
@@ -163,8 +163,8 @@
     {
       "from": "js/quests/q5-signs.js",
       "to": "quests/q5-signs.js",
-      "bytes": 24893,
-      "sha256": "978c91ba8ce5c975ee45db224ba18837ed9884dd205366b756de1faf0700e5f9",
+      "bytes": 25555,
+      "sha256": "e5ac4ea6ae67e4cbbacb97c0734e47fb0826bc22ec8a28196e95ca40eb6b1127",
       "rewritten": false
     },
     {

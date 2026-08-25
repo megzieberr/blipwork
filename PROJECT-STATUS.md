@@ -1,3 +1,29 @@
+# Project status — updated 2026-08-25 (⚠ semicircle leak in Fun Functions quest 5 FIXED + shipped, sw v70; the kids had been meeting Technical Maths graphs since 08-23)
+
+## ⚠ 2026-08-25 — the Grade 11s were seeing SEMICIRCLES (fixed, sw `mhq-v70`)
+
+Found from the graph-quest side while making the standalone's `?nosemi=1` link stick
+for a second Technical Maths-free learner. **`q5-signs.js`'s `productSign` called
+`randSemicircle()` with no gate at all**, so "Plus en minus" drew a semicircle in
+**12,3% of its rounds — half of every play of quest 5** — even though funfun-play.js
+passes `semicircles:false`. Live here from the mount on 08-23 until today. Semicircles
+are Grade 12 Technical Maths; the IEB Grade 11s do not do them.
+
+Every other direct `randSemicircle()` call site was correctly gated (q3's three are
+`techOnly` skills, q7's sits behind `TECHOK`, qF's behind `familiesFor()`). q5 was the
+only leak.
+
+**Why both harnesses stayed green:** each tested the flag by reading the question TEXT
+for "halfsirkel"/"semicircle"/"x² + y²", and q5's product rounds call their two curves
+"f" and "g" and never name the shape. The words were clean; the picture was not.
+`verify-funfun.html` now scans the DRAWN curves of all 15 quests (210 deals) —
+**never-relax**, and it lives in THIS repo so a bad sync from graph-quest cannot
+quietly put the leak back. Harness 215 → **216**.
+
+Fixed in graph-quest (commit `91bf32b`), carried here by `tools/sync-to-blipwork.py`
+— `js/funfun/` is GENERATED, never hand-edited. Green after the sync:
+verify-funfun 216/216, verify-funfun-backend 160/160, verify 54/54.
+
 # Project status — updated 2026-08-24 (evening) (💬 FEEDBACK + 📄 PAPERS LIVE on sw v69 — the kids' two asks, shipped same day; app is GO for the kids)
 
 ## 🌙 2026-08-24 (evening) — KIDS-READY AUDIT, PILL FIX (v68), FEEDBACK + PAPERS (v69)
