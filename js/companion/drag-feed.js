@@ -107,6 +107,11 @@ export function makeDraggable(handle, opts = {}) {
     if (opts.onEnd) opts.onEnd();
   };
 
+  /* Ignore pointer events that belong to a different finger — the mid-drag
+     listeners live on window (see onDown), which hears EVERY pointer, so a
+     second finger on a second tile must not steer or end this gesture. */
+  const samePointer = (e) => pid == null || e.pointerId == null || e.pointerId === pid;
+
   const onDown = (e) => {
     if (opts.disabled && opts.disabled()) return;
     if (e.button != null && e.button !== 0) return;    // right/middle click is not a drag
@@ -118,9 +123,16 @@ export function makeDraggable(handle, opts = {}) {
     if (pid != null && handle.setPointerCapture) {
       try { handle.setPointerCapture(pid); } catch { /* capture is a nicety */ }
     }
-    handle.addEventListener("pointermove", onMove);
-    handle.addEventListener("pointerup", onUp);
-    handle.addEventListener("pointercancel", onCancel);
+    /* ⚠️ WINDOW, NOT handle. A re-render can delete the handle mid-drag
+       (feedFood's eating-moment refresh rebuilds the whole room while a kid
+       is already dragging the NEXT tray tile). Listeners on the deleted
+       handle never hear the pointerup, but the ghost sits on document.body
+       and outlives the screen — a full-size food frozen over the room until
+       reload (seen live: the giant orange, 2026-08-25). Window keeps
+       hearing the gesture whatever happens to the tile. */
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onCancel);
   };
 
   const beginDrag = (x, y) => {
@@ -139,6 +151,7 @@ export function makeDraggable(handle, opts = {}) {
   };
 
   const onMove = (e) => {
+    if (!samePointer(e)) return;
     const p = pointFrom(e);
     if (!dragging) {
       if (Math.abs(p.x - startX) < DRAG_THRESHOLD_PX && Math.abs(p.y - startY) < DRAG_THRESHOLD_PX) return;
@@ -150,12 +163,13 @@ export function makeDraggable(handle, opts = {}) {
   };
 
   const unbindMove = () => {
-    handle.removeEventListener("pointermove", onMove);
-    handle.removeEventListener("pointerup", onUp);
-    handle.removeEventListener("pointercancel", onCancel);
+    window.removeEventListener("pointermove", onMove);
+    window.removeEventListener("pointerup", onUp);
+    window.removeEventListener("pointercancel", onCancel);
   };
 
   const onUp = (e) => {
+    if (!samePointer(e)) return;
     unbindMove();
     const p = pointFrom(e);
     if (!dragging) { finish(); if (opts.onTap) opts.onTap(); return; }
@@ -175,7 +189,7 @@ export function makeDraggable(handle, opts = {}) {
   /* A cancel is the browser taking the gesture away (a system gesture, the
      element unmounting), NOT the child choosing to drop it somewhere odd —
      so it flies home silently, with no sad face. */
-  const onCancel = () => { unbindMove(); flyHome(); finish(); };
+  const onCancel = (e) => { if (!samePointer(e)) return; unbindMove(); flyHome(); finish(); };
 
   const onKey = (e) => {
     if (e.key !== "Enter" && e.key !== " ") return;

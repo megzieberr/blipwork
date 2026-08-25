@@ -956,7 +956,50 @@ if (repricedFileText.length > 0) {
   src.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }));
   tick(log.join(",") === "tap", `Enter should feed him, got [${log}]`);
 
-  // 7. destroy() really unbinds
+  // 7. THE GIANT ORANGE (2026-08-25, seen live on a learner's phone): the
+  //    handle is deleted MID-DRAG — feedFood's eating-moment refresh rebuilds
+  //    the room while the kid is already dragging the next tray tile. The
+  //    ghost lives on document.body, so if the pointerup listener dies with
+  //    the tile, a full-size food freezes over the room until reload. The
+  //    mid-drag listeners live on window for exactly this; never move them
+  //    back onto the handle.
+  log = [];
+  const src2 = document.createElement("div");
+  Object.assign(src2.style, { position: "fixed", left: "10px", top: "290px", width: "40px", height: "40px" });
+  host.appendChild(src2);
+  const destroy2 = makeDraggable(src2, {
+    target: () => tgt,
+    ghost: () => document.createElement("div"),
+    onStart: () => log.push("start"),
+    onEnd: () => log.push("end"),
+    onDropAway: () => log.push("away"),
+  });
+  src2.dispatchEvent(pe("pointerdown", 30, 300));
+  src2.dispatchEvent(pe("pointermove", 70, 270));
+  tick(ghostsInBody() === 1, "mid-drag-removal check: the drag never began");
+  src2.remove();                                  // the re-render deletes the tile
+  window.dispatchEvent(pe("pointermove", 90, 200));
+  window.dispatchEvent(pe("pointerup", 90, 200)); // finger lifts after the removal
+  tick(log.join(",") === "start,end,away", `a drop after the handle was removed should still land, got [${log}]`);
+  await new Promise((r) => setTimeout(r, 460));
+  tick(ghostsInBody() === 0, "GIANT ORANGE: removing the handle mid-drag stranded the ghost on document.body");
+  destroy2();
+
+  // 8. a second finger on a second tile must not steer or end this gesture
+  //    (window hears every pointer now, so the pointerId guard is load-bearing)
+  log = [];
+  src.dispatchEvent(pe("pointerdown", 30, 300));
+  src.dispatchEvent(pe("pointermove", 70, 270));
+  const otherFinger = (type, x, y) => new PointerEvent(type,
+    { bubbles: true, cancelable: true, clientX: x, clientY: y, pointerId: 2, button: 0, isPrimary: false, pointerType: "touch" });
+  window.dispatchEvent(otherFinger("pointerup", 240, 80));   // finger 2 lifts over Blip
+  tick(!log.includes("end"), `another finger's pointerup ended the drag: [${log}]`);
+  tick(ghostsInBody() === 1, "another finger's pointerup killed the ghost");
+  src.dispatchEvent(pe("pointerup", 240, 80));               // finger 1 really drops on him
+  tick(log.join(",") === "start,end,on", `the real finger's drop did not land, got [${log}]`);
+  tick(ghostsInBody() === 0, "an eaten food left its ghost behind");
+
+  // 9. destroy() really unbinds
   destroy();
   log = [];
   src.dispatchEvent(pe("pointerdown", 30, 300));
@@ -964,7 +1007,7 @@ if (repricedFileText.length > 0) {
   tick(log.length === 0, `destroy() left a live listener: [${log}]`);
 
   host.remove();
-  say("drag-to-feed: tap · drop-on · drop-away (flies home, no penalty) · cancel · disabled · keyboard · destroy");
+  say("drag-to-feed: tap · drop-on · drop-away (flies home, no penalty) · cancel · disabled · keyboard · mid-drag removal (the giant orange) · second finger · destroy");
 }
 
 /* ---------- 6j. FURNITURE (room build S5v2) ----------

@@ -521,6 +521,13 @@ let spontaneousMoodTimer = null;
 export function renderBlip(app, host) {
   clear(host);
   closeRoomSheet(); // a fresh screen render always starts with no sheet open
+  /* A re-render is exactly the event that can orphan a drag ghost (the
+     dragged tile dies with the old DOM; the ghost lives on document.body) —
+     drag-feed.js now survives that via window listeners, but any ghost that
+     slips through is swept here so it can never outlive one render. The
+     body flag comes off with it, or the next sheet would open slid-down. */
+  document.querySelectorAll("body > .feed-ghost").forEach((g) => g.remove());
+  document.body.classList.remove("feeding-drag");
   if (spontaneousMoodTimer) { clearInterval(spontaneousMoodTimer); spontaneousMoodTimer = null; }
   const sess = getSession();
   const state = app.state || {};
