@@ -1,4 +1,33 @@
-# Project status — updated 2026-08-25 (⚠ semicircle leak in Fun Functions quest 5 FIXED + shipped, sw v70; the kids had been meeting Technical Maths graphs since 08-23)
+# Project status — updated 2026-08-25 (evening) (🍊 THE GIANT ORANGE fixed + shipped, sw v71 — a kid's screenshot, same-day turnaround)
+
+## 🍊 2026-08-25 (evening) — the stranded drag-ghost (fixed, sw `mhq-v71`, commit `0f6efd0`)
+
+A learner's screenshot showed a full-size orange frozen over the closet in
+Blip's room ("is that supposed to happen?"). Diagnosis, proven with a
+before/after reproduction: **feedFood's eating-moment refresh rebuilds the
+room ~2s after a feed; if the kid is already dragging the NEXT tray tile,
+the rebuild deletes the tile and its pointerup listeners with it** — but the
+drag ghost lives on `document.body`, so it outlived the screen, frozen at
+the finger's last position (harmless; close-and-reopen clears it). The
+SMALL orange on the floor in the same screenshot was the craving bubble
+working as designed (Terminator craved oranges that day).
+
+Fix: drag-feed.js's mid-drag listeners moved onto `window` (with a
+pointerId guard so a second finger can't steer the drag) — never move them
+back onto the handle; plus renderBlip sweeps stray `.feed-ghost` nodes and
+clears `body.feeding-drag` on every render. Two never-relax checks added to
+verify-store's drag section (mid-drag removal + second-finger isolation);
+harness 4028 → **4035**, all green. Old code failed the new repro, new code
+passes. Live-verified: sw v71 served, both fixed files live, 0 console
+errors on boot.
+
+### ⏳ Pending on Megan
+- 📱 1 min [whenever]: tell the kid the frozen orange is harmless — close
+  and reopen the app and it's gone; the fix reaches everyone on v71.
+
+---
+
+# (previous head) Project status — updated 2026-08-25 (⚠ semicircle leak in Fun Functions quest 5 FIXED + shipped, sw v70; the kids had been meeting Technical Maths graphs since 08-23)
 
 ## ⚠ 2026-08-25 — the Grade 11s were seeing SEMICIRCLES (fixed, sw `mhq-v70`)
 
