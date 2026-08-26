@@ -1,4 +1,70 @@
-# Project status — updated 2026-08-25 (evening) (🍊 THE GIANT ORANGE fixed + shipped, sw v71 — a kid's screenshot, same-day turnaround)
+# Project status — updated 2026-08-26 (📕 HOMEWORK RED BOOK restored — mhq_get_state had lost assignment/boxes/trinkets on 08-21; full copy-forward audit of ALL 72 live functions: everything else clean)
+
+## 📕 2026-08-26 — the invisible homework (fixed, migration `restore_state_keys`, NO sw bump — server-only)
+
+Her report: homework set in admin ("2. Sine rule: sides", due 08-27) but no
+floating red book in Blip's room. **The book was innocent — the learner app was
+never told.** `migration-cq-bridge.sql` (2026-08-21 14:02) redefined
+`mhq_get_state` from a pre-phase-3 base, and dice + mood-cravings (same day)
+copied the gap forward. Since 08-21 the learner payload was missing THREE keys
+the client still reads: `assignment` (hub homework card + desk badge), `boxes`
+{pending, mystery} (treasure box UI), `trinkets` (the shelf). The kids joined
+08-24, so for them these features had simply never shown. EARNING was intact
+the whole time (mhq_submit_quest kept box_grants + milestone_grants) — only the
+showing was lost. Megan's own Lv-10 mystery box sat invisible since 08-21.
+
+**Fix:** current live body + the three restored blocks
+(supabase/migration-restore-state-keys.sql, applied). Proven end-to-end with a
+throwaway learner inside a rolled-back transaction: payload carries
+assignment{t2, done:false, her note}, boxes, trinkets, and all newer keys
+(tray/mood/craving/cqLinked/dice) untouched. SECURITY DEFINER + pinned
+search_path + grants unchanged. No client change — the app already renders all
+three. Learners see the red book + homework card on their next app open.
+
+**Full audit (her ask: "make sure nothing else got lost")** — every one of the
+72 live functions hash-compared against every version in every migration file:
+- **The only live loss was mhq_get_state** (fixed above). All feature markers
+  verified live: submit_quest pays homework + milestone boxes; open_box knows
+  milestone/trinket/mystery; equip has all room slots; exam pay 50 present;
+  funfun recomputes via _mhq_dice_xp @ 0.7 bar; admin_data has
+  assignment/doneCount/dicePlays; feedback anonymity intact.
+- **schema.sql (the mirror) was itself stale**: its mhq_submit_quest was the
+  OLD pre-phase-3 body — almost certainly the stale base the 08-21 rebuild
+  copied from. Mirror re-synced from live (submit_quest materially, 7 more
+  cosmetically); now hash-identical to live for 49 functions. The other 9 live
+  bodies are comment-trimmed foreman-applied variants of the newest repo text
+  (semantics verified equal by marker).
+- Client ↔ live: all 39 RPCs the app calls exist; all 3 edge calls exist;
+  paper-seed confirmed a 410 tombstone; papers bucket private, 0 storage
+  policies, 8 rows = 8 objects (the B papers, added via paper-admin). Quests
+  table ↔ config.js: 93 = 93 both directions. app_config keys all present.
+  Advisors: 0 errors (warns = the known by-design anon-RPC classes).
+  mhq_signup absence is deliberate (roster-login drop). The exam_*/keepalive
+  functions belong to sept2024-check + the keepalive pinger sharing this
+  Supabase project — blipwork never touches them.
+- NOT a loss, already-known parked item: push reminders (pg_cron never
+  installed, cron.sql placeholders unfilled, 0 subscriptions) — that's the
+  PUSH-SETUP walkthrough still waiting, as recorded below.
+
+### ⏳ Pending on Megan
+- 📱 1 min [whenever]: open the app — the homework card + red book on the desk
+  should be there, AND a 🎁 treasure box (your level-10 mystery box, invisible
+  since the 21st). No reinstall, no sw bump — it's all server-side.
+
+### 📌 Decisions (append-only, 2026-08-26)
+- ⚠️ THE COPY-FORWARD RULE IS NOW A LAW: before redefining ANY live function,
+  diff against the LIVE definition (`pg_get_functiondef`), never against
+  another migration file and never against schema.sql on trust. schema.sql is
+  re-synced from live in the same commit as any function change.
+- Audit method that found this (keep for reuse): md5 of live `prosrc`
+  (CR-stripped) vs the body between the $$ of every definition in every
+  supabase/*.sql, newest-per-function; then feature-marker `position()` checks
+  for the no-match set. Script pattern lives in this session's scratchpad;
+  cheap to rebuild.
+
+---
+
+# (previous head) Project status — updated 2026-08-25 (evening) (🍊 THE GIANT ORANGE fixed + shipped, sw v71 — a kid's screenshot, same-day turnaround)
 
 ## 🍊 2026-08-25 (evening) — the stranded drag-ghost (fixed, sw `mhq-v71`, commit `0f6efd0`)
 

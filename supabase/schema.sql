@@ -374,7 +374,7 @@ begin
     v_ok := (p_answered->>v_i)::boolean;
     if v_ok then
       v_streak := v_streak + 1;
-      v_xp := v_xp + 10 * least(v_streak, 3) + 5;
+      v_xp := v_xp + 10 * least(v_streak, 3) + 5;     -- perCorrect * min(streak,cap) + firstTryBonus
     else
       v_streak := 0;
     end if;
@@ -480,6 +480,7 @@ begin
 
   stg := case when du >= 7 then 3 when du >= 5 then 2 when du >= 3 then 1 else 0 end;
   rec := (coalesce(p_care_streak, 0) >= 1 and stg >= 2);
+
   return jsonb_build_object(
     'stage', stg, 'daysUnfed', du, 'recovering', rec,
     'careStreak', coalesce(p_care_streak, 0),
@@ -557,6 +558,7 @@ returns jsonb language plpgsql security definer set search_path = public, extens
 declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb; food jsonb; furn jsonb;
         blips_j jsonb; blip1 jsonb; health jsonb; stg int; is_qual boolean;
         can_feed boolean; can_care boolean; dice_j jsonb; lvl int;
+        asg record; assignment_j jsonb := null; hw_done boolean; mystery int;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
@@ -582,17 +584,11 @@ begin
             'id', item_id, 'slot', slot, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
     into shop from public.shop_items where active and category = 'cosmetic';
   -- pharmacy / grocery, separate array so `shop` keeps its shape.
-  -- S4 (2026-08-08): `minLevel` joined the payload when the 44 groceries
-  -- landed — the tiers are level-gated, and without it a food card cannot
-  -- say "Unlocks at Lv N". No new column: shop_items.min_level was always
-  -- there, so nothing needed a new GRANT.
   select coalesce(jsonb_agg(jsonb_build_object(
             'id', item_id, 'kind', item_id, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
     into food from public.shop_items where active and category = 'food';
   -- Room build S5v2 (2026-08-08): the furniture catalogue, in its own array
-  -- for the same reason foodShop is separate — `shop` keeps its exact shape,
-  -- so the cosmetic panels never learn what a bed is. Same four fields as
-  -- `shop`, so the furniture panel can reuse the cards the shop already draws.
+  -- so `shop` keeps its exact shape.
   select coalesce(jsonb_agg(jsonb_build_object(
             'id', item_id, 'slot', slot, 'price', price, 'minLevel', min_level) order by sort), '[]'::jsonb)
     into furn from public.shop_items where active and category = 'furniture';
@@ -601,10 +597,8 @@ begin
   stg := (health->>'stage')::int;
   lvl := (public._mhq_level(st.xp)->>'level')::int;
 
-  -- MOOD METER + CRAVINGS (2026-08-21): the two new per-blip fields. Mood
-  -- is decayed at READ time (never stored decayed); craving reads the
-  -- shared _mhq_craving helper, the SAME one mhq_eat_food uses to award
-  -- the +2, so it cannot be spoofed client-side.
+  -- MOOD METER + CRAVINGS (2026-08-21): mood decays at READ time; craving
+  -- reads the shared _mhq_craving helper, the SAME one mhq_eat_food uses.
   select coalesce(jsonb_agg(jsonb_build_object(
             'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
             'growthStage', public._mhq_growth(feed_count),
@@ -617,8 +611,7 @@ begin
     into blip1 from public.blips where student_id = sid and slot = 1;
 
   is_qual  := public._mhq_is_qual_day();
-  -- S4: the cookie reads its OWN stamp, so eating a bought grocery (which
-  -- sets last_fed_day) leaves the free cookie sitting there waiting.
+  -- S4: the cookie reads its OWN stamp.
   can_feed := (stg < 2) and (st.last_cookie_day is null or st.last_cookie_day < current_date);
   can_care := (stg >= 2) and is_qual and (st.last_care_day is null or st.last_care_day < current_date);
 
@@ -627,6 +620,22 @@ begin
             'plays', plays, 'metKinds', met_kinds, 'save', save)), '{}'::jsonb)
     into dice_j from public.dice_plays where student_id = sid;
 
+  -- RESTORED (phase 3, 2026-07-19; lost 2026-08-21, back 2026-08-26).
+  -- `done` comes from box_grants, not progress.passed — passed stays true
+  -- forever once earned, so it cannot say whether THIS assignment was done.
+  select * into asg from public.assignments where assignments.active limit 1;
+  if found then                       -- FOUND, not asg.id: an empty SELECT INTO
+    select exists(select 1 from public.box_grants   -- leaves the record null-valued
+                   where box_grants.student_id = sid
+                     and box_grants.assignment_id = asg.id) into hw_done;
+    assignment_j := jsonb_build_object(
+      'questId', asg.quest_id, 'note', asg.note,
+      'assignedOn', asg.assigned_on, 'dueOn', asg.due_on, 'done', hw_done);
+  end if;
+
+  -- RESTORED (room build S2, 2026-08-08; lost 2026-08-21, back 2026-08-26).
+  mystery := jsonb_array_length(coalesce(st.milestone_boxes, '[]'::jsonb));
+
   return jsonb_build_object('ok', true,
     'student', jsonb_build_object('id', sid, 'name', st.display_name, 'username', lower(p_username)),
     'progress', prog, 'totalXp', total, 'openQuests', open_q,
@@ -634,12 +643,15 @@ begin
     'blip', blip1, 'blips', blips_j, 'shop', shop, 'foodShop', food, 'furnitureShop', furn,
     'pantry', st.pantry, 'tray', coalesce(st.tray, '{}'::jsonb), 'health', health,
     'canFeedToday', can_feed, 'canCareToday', can_care,
-    -- CQ-BRIDGE-PLAN.md Part 3: the ONE new field. cq_name lives on `st`
-    -- (select * above), so no extra query — the Collect panel renders only
-    -- when this is true (session 3's client-side rule).
     'cqLinked', (st.cq_name is not null),
     'dice', dice_j,
-    'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'));
+    'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'),
+    'assignment', assignment_j,
+    -- S2: `pending` is the TOTAL (homework + milestone); `mystery` titles the modal.
+    'boxes', jsonb_build_object(
+       'pending', coalesce(st.boxes_pending, 0) + mystery,
+       'mystery', mystery),
+    'trinkets', coalesce(st.trinkets, '[]'::jsonb));
 end; $$;
 
 -- ---------- XP -> diamonds bridge (2026-08-21, CQ-BRIDGE-PLAN.md Part 3) ----------
@@ -839,31 +851,38 @@ end; $$;
 
 create or replace function public.mhq_care(p_username text, p_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; st record; stg int; on_since date; skipped int; new_streak int;
-        healed boolean := false; pan jsonb; n_soup int; n_med int;
-        new_last_fed date; new_care date;
+declare sid uuid; st record; health jsonb; stg int; on_since date;
+        skipped int; new_streak int; healed boolean := false; pan jsonb;
+        n_soup int; n_med int; new_last_fed date; new_care date;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
   select last_fed_day, care_streak, last_care_day, pantry into st
     from public.students where id = sid for update;
-  stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
+
+  health := public._mhq_health(st.last_fed_day, st.care_streak);
+  stg := (health->>'stage')::int;
   if stg < 2 then return jsonb_build_object('ok', false, 'error', 'not_sick'); end if;
   if not public._mhq_is_qual_day() then return jsonb_build_object('ok', false, 'error', 'not_care_day'); end if;
   if st.last_care_day is not null and st.last_care_day >= current_date then
     return jsonb_build_object('ok', false, 'error', 'already_cared');
   end if;
 
-  pan    := coalesce(st.pantry, '{}'::jsonb);
+  -- both supplies must be owned (bought from the pharmacy first)
+  pan   := coalesce(st.pantry, '{}'::jsonb);
   n_soup := coalesce((pan->>'soup')::int, 0);
   n_med  := coalesce((pan->>'medicine')::int, 0);
   if n_soup < 1 or n_med < 1 then
     return jsonb_build_object('ok', false, 'error', 'need_supplies',
       'needSoup', (n_soup < 1), 'needMedicine', (n_med < 1));
   end if;
+
+  -- consume one of each
   pan := jsonb_set(pan, '{soup}',     to_jsonb(n_soup - 1), true);
   pan := jsonb_set(pan, '{medicine}', to_jsonb(n_med  - 1), true);
 
+  -- streak: consecutive qualifying care days. A skipped qualifying day resets it;
+  -- weekends & term-off days never break it (bounded below by term_on_since).
   select value::date into on_since from public.app_config where key = 'term_on_since';
   if st.last_care_day is null then
     new_streak := 1;
@@ -877,7 +896,10 @@ begin
 
   new_care := current_date;
   if new_streak >= 3 then
-    healed := true; new_streak := 0; new_last_fed := current_date;   -- back to healthy; growth kept
+    -- full heal: back to healthy today, streak cleared, growth untouched
+    healed := true;
+    new_streak := 0;
+    new_last_fed := current_date;
   else
     new_last_fed := st.last_fed_day;
   end if;
@@ -895,7 +917,8 @@ begin
      set mood = least(5, public._mhq_mood_effective(mood, mood_day) + 1), mood_day = current_date
    where student_id = sid;
 
-  return jsonb_build_object('ok', true, 'healed', healed, 'pantry', pan,
+  return jsonb_build_object('ok', true, 'healed', healed,
+    'pantry', pan,
     'health', public._mhq_health(new_last_fed, new_streak));
 end; $$;
 
@@ -905,14 +928,9 @@ declare sid uuid; lvl int; nm text; col text; blips_j jsonb;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
-  lvl := (public._mhq_level((select xp from public.students where id = sid))->>'level')::int;
-  -- Her call, 2026-08-12: 10 -> 20. Level 10 arrived too soon once the curve
-  -- capped at 40 and the milestone boxes landed at 10/20/30/40; a second Blip
-  -- at 20 is a milestone reward rather than something that turns up while the
-  -- first one is still new. Mirrored in js/config.js `secondBlipLevel`, which
-  -- js/blip.js must READ rather than hard-code (it used to hard-code 10).
+  lvl := (public._mhq_level((select students.xp from public.students where students.id = sid))->>'level')::int;
   if lvl < 20 then return jsonb_build_object('ok', false, 'error', 'level_locked', 'minLevel', 20); end if;
-  if exists (select 1 from public.blips where student_id = sid and slot = 2) then
+  if exists (select 1 from public.blips where blips.student_id = sid and blips.slot = 2) then
     return jsonb_build_object('ok', false, 'error', 'already_claimed');
   end if;
   col := coalesce(p_colour, 'blue');
@@ -924,10 +942,10 @@ begin
   insert into public.blips (student_id, slot, name, colour, feed_count, owned_items, equipped)
   values (sid, 2, nm, col, 0, '[]'::jsonb, '{}'::jsonb);
   select coalesce(jsonb_agg(jsonb_build_object(
-            'slot', slot, 'name', name, 'colour', colour, 'feedCount', feed_count,
-            'growthStage', public._mhq_growth(feed_count),
-            'owned', owned_items, 'equipped', equipped) order by slot), '[]'::jsonb)
-    into blips_j from public.blips where student_id = sid;
+            'slot', blips.slot, 'name', blips.name, 'colour', blips.colour, 'feedCount', blips.feed_count,
+            'growthStage', public._mhq_growth(blips.feed_count),
+            'owned', blips.owned_items, 'equipped', blips.equipped) order by blips.slot), '[]'::jsonb)
+    into blips_j from public.blips where blips.student_id = sid;
   return jsonb_build_object('ok', true, 'blips', blips_j);
 end; $$;
 
@@ -937,23 +955,26 @@ create or replace function public.mhq_submit_quest(
   p_username text, p_password text, p_quest text,
   p_score numeric, p_xp int, p_total int, p_correct int)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare sid uuid; was_passed boolean := false; now_passed boolean;
-        xp_gain int; gold_gain int := 10; old_xp int; new_xp int; new_gold int;
-        old_lvl int; new_lvl int;
+declare v_sid uuid; v_was_passed boolean := false; v_now_passed boolean;
+        v_xp_gain int; v_gold_gain int := 10; v_old_xp int; v_new_xp int; v_new_gold int;
+        v_old_lvl int; v_new_lvl int;
+        v_asg_id uuid; v_box_awarded boolean := false; v_boxes int;
+        v_ms int; v_rows int; v_mystery jsonb; v_ms_awarded int := 0;
 begin
-  sid := public._mhq_auth(p_username, p_password);
-  if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
-  now_passed := (p_score >= 0.8);
-  select passed into was_passed from public.progress where student_id = sid and quest_id = p_quest;
-  was_passed := coalesce(was_passed, false);
-  if was_passed then
-    xp_gain := round(greatest(0, least(coalesce(p_xp, 0), 1000)) * 0.25)::int;
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  v_now_passed := (p_score >= 0.8);
+  select progress.passed into v_was_passed
+    from public.progress where progress.student_id = v_sid and progress.quest_id = p_quest;
+  v_was_passed := coalesce(v_was_passed, false);
+  if v_was_passed then
+    v_xp_gain := round(greatest(0, least(coalesce(p_xp, 0), 1000)) * 0.25)::int;
   else
-    xp_gain := greatest(0, least(coalesce(p_xp, 0), 1000));
+    v_xp_gain := greatest(0, least(coalesce(p_xp, 0), 1000));
   end if;
 
   insert into public.progress (student_id, quest_id, best_score, attempts, total_xp, passed, last_played_at)
-  values (sid, p_quest, p_score, 1, xp_gain, now_passed, now())
+  values (v_sid, p_quest, p_score, 1, v_xp_gain, v_now_passed, now())
   on conflict (student_id, quest_id) do update set
     best_score = greatest(public.progress.best_score, excluded.best_score),
     attempts   = public.progress.attempts + 1,
@@ -961,20 +982,74 @@ begin
     passed     = public.progress.passed or excluded.passed,
     last_played_at = now();
 
-  select xp into old_xp from public.students where id = sid;
+  select students.xp into v_old_xp from public.students where students.id = v_sid;
   update public.students
-     set last_active_at = now(), xp = xp + xp_gain, gold = gold + gold_gain
-   where id = sid
-   returning xp, gold into new_xp, new_gold;
+     set last_active_at = now(), xp = students.xp + v_xp_gain, gold = students.gold + v_gold_gain
+   where students.id = v_sid
+   returning students.xp, students.gold into v_new_xp, v_new_gold;
 
-  old_lvl := (public._mhq_level(old_xp)->>'level')::int;
-  new_lvl := (public._mhq_level(new_xp)->>'level')::int;
+  -- Homework treasure box (phase 3) — unchanged.
+  if v_now_passed then
+    select assignments.id into v_asg_id
+      from public.assignments
+     where assignments.active and assignments.quest_id = p_quest
+     limit 1;
 
-  return jsonb_build_object('ok', true, 'passed', now_passed,
-    'badgeEarned', (now_passed and not was_passed), 'xpAwarded', xp_gain,
-    'alreadyPassed', was_passed, 'goldAwarded', gold_gain,
-    'xp', new_xp, 'gold', new_gold, 'level', new_lvl,
-    'levelUp', (new_lvl > old_lvl), 'levelInfo', public._mhq_level(new_xp));
+    if v_asg_id is not null then
+      insert into public.box_grants (student_id, assignment_id)
+      values (v_sid, v_asg_id)
+      on conflict (student_id, assignment_id) do nothing;
+
+      if found then
+        update public.students
+           set boxes_pending = students.boxes_pending + 1
+         where students.id = v_sid
+         returning students.boxes_pending into v_boxes;
+        v_box_awarded := true;
+      end if;
+    end if;
+  end if;
+
+  if v_boxes is null then
+    select students.boxes_pending into v_boxes from public.students where students.id = v_sid;
+  end if;
+
+  v_old_lvl := (public._mhq_level(v_old_xp)->>'level')::int;
+  v_new_lvl := (public._mhq_level(v_new_xp)->>'level')::int;
+
+  -- Milestone mystery boxes. SHIP FIX 2: the queue append happens INSIDE
+  -- the update statement (atomic), never via a variable read earlier —
+  -- two concurrent submits can no longer overwrite each other's append.
+  -- The `>=` test and the primary-key dedupe are unchanged from S2.
+  if v_new_lvl >= 10 then
+    for v_ms in select m from unnest(array[10, 20, 30, 40]) m where m <= v_new_lvl order by m loop
+      insert into public.milestone_grants (student_id, milestone)
+      values (v_sid, v_ms)
+      on conflict (student_id, milestone) do nothing;
+      get diagnostics v_rows = row_count;
+      if v_rows > 0 then
+        update public.students
+           set milestone_boxes = coalesce(students.milestone_boxes, '[]'::jsonb) || to_jsonb(v_ms)
+         where students.id = v_sid;
+        v_ms_awarded := v_ms_awarded + 1;
+      end if;
+    end loop;
+  end if;
+
+  -- re-read for the return payload (the appends above are already facts)
+  select coalesce(students.milestone_boxes, '[]'::jsonb) into v_mystery
+    from public.students where students.id = v_sid;
+
+  return jsonb_build_object('ok', true, 'passed', v_now_passed,
+    'badgeEarned', (v_now_passed and not v_was_passed), 'xpAwarded', v_xp_gain,
+    'alreadyPassed', v_was_passed, 'goldAwarded', v_gold_gain,
+    'xp', v_new_xp, 'gold', v_new_gold, 'level', v_new_lvl,
+    'levelUp', (v_new_lvl > v_old_lvl), 'levelInfo', public._mhq_level(v_new_xp),
+    'boxAwarded', v_box_awarded,
+    'mysteryAwarded', v_ms_awarded,
+    'boxes', jsonb_build_object(
+       'pending', coalesce(v_boxes, 0) + jsonb_array_length(v_mystery),
+       'mystery', jsonb_array_length(v_mystery)));
 end; $$;
 
 -- ---------- DICE-PLAN.md (session 0b, 2026-08-21): generative practice
@@ -986,10 +1061,12 @@ declare v_sid uuid;
 begin
   v_sid := public._mhq_auth(p_username, p_password);
   if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
   insert into public.dice_plays (student_id, chapter, save, updated_at)
   values (v_sid, p_chapter, p_save, now())
   on conflict (student_id, chapter) do update
     set save = excluded.save, updated_at = now();
+
   return jsonb_build_object('ok', true);
 end; $$;
 
@@ -1067,65 +1144,61 @@ begin
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
   if v_slot not in (1, 2) then v_slot := 1; end if;
   perform public._mhq_ensure_blip(sid);
-  select * into itm from public.shop_items where item_id = p_item and active;
+  select * into itm from public.shop_items where shop_items.item_id = p_item and shop_items.active;
   if not found then return jsonb_build_object('ok', false, 'error', 'no_item'); end if;
-  select xp, gold, pantry, tray, tray_day, last_fed_day, care_streak
-    into st from public.students where id = sid for update;
+  select students.xp, students.gold, students.pantry, students.tray, students.tray_day,
+         students.last_fed_day, students.care_streak
+    into st from public.students where students.id = sid for update;
   stg := (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int;
-  -- S4 (2026-08-08): moved ABOVE the food branch so the grocery tiers can
-  -- use it. The cosmetic branch below reads the same value.
   lvl := (public._mhq_level(st.xp)->>'level')::int;
 
   if itm.category = 'food' then
     if p_item = 'treat' then
       if stg >= 2 then return jsonb_build_object('ok', false, 'error', 'REFUSES_FOOD'); end if;
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
-      update public.students set gold = gold - itm.price where id = sid returning gold into new_gold;
+      update public.students set gold = students.gold - itm.price where students.id = sid returning students.gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'treat', true);
     elsif p_item in ('soup', 'medicine') then
-      -- pharmacy supplies: the PANTRY, unchanged by S4b — never expire.
+      -- pharmacy supplies: the PANTRY, exactly as before S4b — never expire.
       if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
       pan := coalesce(st.pantry, '{}'::jsonb);
       cnt := coalesce((pan->>p_item)::int, 0) + 1;
       pan := jsonb_set(pan, array[p_item], to_jsonb(cnt), true);
-      update public.students set gold = gold - itm.price, pantry = pan where id = sid returning gold into new_gold;
+      update public.students set gold = students.gold - itm.price, pantry = pan where students.id = sid returning students.gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'pantry', pan);
     else
-      -- S4b: the 44 groceries are level-gated like cosmetics, and land on
-      -- TODAY'S TRAY. A stale tray (yesterday's leftovers) is discarded
-      -- first via _mhq_tray — no refund, her ruling.
+      -- S4b: a grocery lands on TODAY'S TRAY. A stale tray (yesterday's
+      -- leftovers) is discarded first via _mhq_tray — no refund, her ruling.
       if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
       if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
       v_tray := public._mhq_tray(st.tray, st.tray_day);
       v_tray := jsonb_set(v_tray, array[p_item], to_jsonb(coalesce((v_tray->>p_item)::int, 0) + 1), true);
-      update public.students set gold = gold - itm.price, tray = v_tray, tray_day = current_date
-        where id = sid returning gold into new_gold;
+      update public.students set gold = students.gold - itm.price, tray = v_tray, tray_day = current_date
+        where students.id = sid returning students.gold into new_gold;
       return jsonb_build_object('ok', true, 'gold', new_gold, 'tray', v_tray);
     end if;
   end if;
 
-  -- Trinkets (and any future non-buyable category) are not purchasable at all
-  -- (2026-08-08). Without this guard the function falls through to the branch
-  -- below for ANY non-food row, so a crafted request could "buy" a price-0
-  -- trinket. Nothing in the app ever asks for one — but "never in the shop"
-  -- belongs on the server, not in the client not offering it.
-  -- S5v2 lets FURNITURE through: a bed really is bought, owned and equipped
-  -- exactly like a hat, so it wants the whole branch below unchanged.
+  -- Trinkets (and any future non-buyable category) are not purchasable at
+  -- all. Without this guard the function falls through to the branch below
+  -- for ANY non-food row, so a crafted request could "buy" a price-0
+  -- trinket. S5v2 lets FURNITURE through — a bed really is bought, owned
+  -- and equipped exactly like a hat — and nothing else.
   if itm.category not in ('cosmetic', 'furniture') then
     return jsonb_build_object('ok', false, 'error', 'no_item');
   end if;
 
   -- cosmetic accessory or furniture, on the given blip slot
   if stg >= 3 then return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK'); end if;
-  select owned_items into owned from public.blips where student_id = sid and slot = v_slot;
+  select blips.owned_items into owned from public.blips where blips.student_id = sid and blips.slot = v_slot;
   if owned is null then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
   if owned ? p_item then return jsonb_build_object('ok', false, 'error', 'owned'); end if;
   if lvl < itm.min_level then return jsonb_build_object('ok', false, 'error', 'locked', 'minLevel', itm.min_level); end if;
   if st.gold < itm.price then return jsonb_build_object('ok', false, 'error', 'gold', 'price', itm.price, 'gold', st.gold); end if;
-  update public.blips set owned_items = owned_items || to_jsonb(p_item) where student_id = sid and slot = v_slot
-    returning owned_items into owned;
-  update public.students set gold = gold - itm.price where id = sid returning gold into new_gold;
+  update public.blips set owned_items = blips.owned_items || to_jsonb(p_item)
+    where blips.student_id = sid and blips.slot = v_slot returning blips.owned_items into owned;
+  update public.students set gold = students.gold - itm.price where students.id = sid returning students.gold into new_gold;
   return jsonb_build_object('ok', true, 'gold', new_gold, 'owned', owned, 'slot', v_slot);
 end; $$;
 
@@ -1213,7 +1286,8 @@ begin
       'level', (public._mhq_level(s.xp)->>'level')::int,
       'me', (s.id = sid),
       'stage', (public._mhq_health(s.last_fed_day, s.care_streak)->>'stage')::int,
-      'colour', (select colour from public.blips b where b.student_id = s.id and b.slot = 1),
+      -- back-compat: top-level colour/equipped = the student's slot-1 blip
+      'colour', (select colour   from public.blips b where b.student_id = s.id and b.slot = 1),
       'equipped', coalesce((select equipped from public.blips b where b.student_id = s.id and b.slot = 1), '{}'::jsonb),
       'blips', coalesce((select jsonb_agg(jsonb_build_object(
                   'slot', b.slot, 'colour', b.colour, 'equipped', b.equipped,
