@@ -88,6 +88,16 @@ automatically.
   box (invisible since the 21st) are already there from the morning's fix.
 - 🌐 1 min [whenever]: admin → Today's homework → "⬇ Picture for the WhatsApp
   group" → check the PNG lands in your downloads and share it to the group.
+  (She saw the sample card in-session 2026-08-26 — "very cute! i love it!" —
+  the design is APPROVED; only the download-on-her-machine step is unproven.)
+
+### Next up
+- Nothing queued from today — the day was fix + audit + the WhatsApp card,
+  all shipped. Carried from earlier sessions: next fix batch (💬 FAB overlap
+  on Exam Focus at scrollY 0, sheet Escape key, gtrig cosmetics), wave-4
+  dice (AG waits on her 14 F-flags, Probability needs material, Measurement
+  engine ruling, Trig Graphs mechanic), calculator emulator round 2,
+  worked-method content batch, PUSH-SETUP walkthrough (~25 min together).
 
 ### 📌 Decisions (append-only, 2026-08-26)
 - ⚠️ THE COPY-FORWARD RULE IS NOW A LAW: before redefining ANY live function,
