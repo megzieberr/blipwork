@@ -12,6 +12,7 @@ import { api } from "./api.js";
 import { CHAPTERS, DICE_CHAPTERS, FUNFUN_ENABLED, FEEDBACK_ENABLED, PAPERS_ENABLED } from "./config.js";
 import { CONCEPTS } from "./concepts.js";
 import { el, clear, pwToggle } from "./ui.js";
+import { dueLine } from "./assignment.js";
 
 const root = () => document.getElementById("admin");
 let pw = null;
@@ -166,6 +167,32 @@ function assignmentSection(data) {
   const list = el("div", "adm-quests"); list.appendChild(cur);
   sec.appendChild(list);
 
+  // WhatsApp picture (2026-08-26, her ask): a shareable PNG of the CURRENT
+  // homework, drawn as the app's own System-Window popup so the kids
+  // recognise it instantly. Only exists while homework is set — the card
+  // bakes in the live quest/due/note, so there is nothing to share when
+  // nothing is pinned.
+  if (a && a.questId) {
+    const dl = el("button", "btn small", "⬇ Picture for the WhatsApp group");
+    dl.style.marginTop = "8px";
+    dl.addEventListener("click", async () => {
+      dl.disabled = true;                      // double-submit rule
+      try {
+        const blob = await homeworkCardPng(a);
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `blipwork-homework-${a.questId}${a.dueOn ? "-" + a.dueOn : ""}.png`;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      } catch (e) {
+        alert("Couldn’t draw the picture: " + (e && e.message || e));
+      }
+      dl.disabled = false;
+    });
+    sec.appendChild(dl);
+  }
+
   // picker — open quests only, grouped by chapter
   const openIds = new Set((data.quests || []).filter(q => q.is_open).map(q => q.quest_id));
   const select = el("select", "login-input");
@@ -223,6 +250,143 @@ function assignmentSection(data) {
   form.appendChild(save);
   sec.appendChild(form);
   return sec;
+}
+
+/* ---------- the WhatsApp homework picture (2026-08-26) ----------
+   1080×1080 PNG drawn on a canvas in the app's System-Window style: deep
+   navy, thin luminous blue border, low glow — the same popup language the
+   kids see in the app, so the message "go open Blipwork" needs no words.
+   HER art only (assets/companion/homework-badge.png — her red book); the
+   due line comes from assignment.js's own dueLine(), so the picture says
+   exactly what the learner's pinned card will say. No overdue/pressure
+   copy anywhere, per the phase-3 ruling. */
+function loadImg(src) {
+  return new Promise((res, rej) => {
+    const im = new Image();
+    im.onload = () => res(im);
+    im.onerror = () => rej(new Error("could not load " + src));
+    im.src = src;
+  });
+}
+
+/* Word-wrap helper: greedy fill, returns the drawn block's bottom y. */
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  const words = String(text).split(/\s+/);
+  let line = "";
+  for (const w of words) {
+    const probe = line ? line + " " + w : w;
+    if (ctx.measureText(probe).width > maxW && line) {
+      ctx.fillText(line, x, y); y += lineH; line = w;
+    } else line = probe;
+  }
+  if (line) { ctx.fillText(line, x, y); y += lineH; }
+  return y;
+}
+
+async function homeworkCardPng(a) {
+  // resolve quest + chapter for title/icon/accent (same search the learner
+  // card does — the id search is authoritative, chapterId only a hint)
+  let ch = null, q = null;
+  for (const c of CHAPTERS) {
+    const hit = (c.quests || []).find(x => x.id === a.questId);
+    if (hit) { ch = c; q = hit; break; }
+  }
+  const accent = (ch && ch.signature) || "#3aa0ff";
+
+  const [book] = await Promise.all([
+    loadImg("./assets/companion/homework-badge.png"),
+    document.fonts ? document.fonts.load('700 84px "Space Grotesk"')
+      .then(() => document.fonts.load('600 40px "Space Grotesk"'))
+      .then(() => document.fonts.load('400 36px "Sora"')) : Promise.resolve(),
+  ]);
+
+  const S = 1080;
+  const cv = document.createElement("canvas");
+  cv.width = S; cv.height = S;
+  const ctx = cv.getContext("2d");
+
+  // ---- backdrop: near-black navy + two very soft glows ----
+  ctx.fillStyle = "#070b16"; ctx.fillRect(0, 0, S, S);
+  let g = ctx.createRadialGradient(S * 0.2, S * 0.1, 0, S * 0.2, S * 0.1, S * 0.8);
+  g.addColorStop(0, "rgba(58,160,255,.10)"); g.addColorStop(1, "rgba(58,160,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+  g = ctx.createRadialGradient(S * 0.85, S * 0.95, 0, S * 0.85, S * 0.95, S * 0.7);
+  g.addColorStop(0, "rgba(123,92,255,.08)"); g.addColorStop(1, "rgba(123,92,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+
+  // ---- the system window ----
+  const px = 70, py = 90, pw2 = S - 2 * px, ph = S - 2 * py, r = 6;
+  ctx.save();
+  ctx.shadowColor = "rgba(58,160,255,.35)"; ctx.shadowBlur = 60;
+  ctx.beginPath(); ctx.roundRect(px, py, pw2, ph, r);
+  ctx.fillStyle = "rgba(11,18,32,.96)"; ctx.fill();
+  ctx.restore();
+  ctx.beginPath(); ctx.roundRect(px, py, pw2, ph, r);
+  ctx.strokeStyle = "rgba(58,160,255,.55)"; ctx.lineWidth = 2; ctx.stroke();
+
+  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+  const cx = S / 2;
+
+  // FIXED vertical budget (panel runs y 90..990) — flowing the blocks off
+  // the book's height overflowed the canvas on the first render, so every
+  // baseline is placed, not accumulated. Emoji are kept out of the drawn
+  // text: canvas kerning around colour emoji is unreliable (the chapter
+  // icon overlapped its own line), and the words carry the message.
+  // eyebrow + divider (the app's SYSTEM header language)
+  ctx.fillStyle = "#7fa3d4";
+  ctx.font = '600 30px "Space Grotesk", sans-serif';
+  ctx.fillText("S Y S T E M", cx, py + 72);
+  ctx.strokeStyle = "rgba(58,160,255,.25)"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(px + 60, py + 100); ctx.lineTo(S - px - 60, py + 100); ctx.stroke();
+
+  // her red book, centre stage (210 wide → ~357 tall, bottom ≈ y 582)
+  const bw = 210, bh = bw * (book.height / book.width);
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = 30; ctx.shadowOffsetY = 12;
+  ctx.drawImage(book, cx - bw / 2, 225, bw, bh);
+  ctx.restore();
+
+  ctx.fillStyle = "#dbeaff";
+  ctx.font = '700 80px "Space Grotesk", sans-serif';
+  ctx.fillText("You have homework!", cx, 690);
+
+  ctx.fillStyle = accent;
+  const questLine = q ? `${q.n}. ${q.title}  ·  ${ch.name}` : a.questId;
+  // shrink-to-fit: a long title + chapter must stay one line
+  for (const size of [42, 38, 34, 30]) {
+    ctx.font = `600 ${size}px "Space Grotesk", sans-serif`;
+    if (ctx.measureText(questLine).width <= pw2 - 120) break;
+  }
+  ctx.fillText(questLine, cx, 756);
+
+  const due = dueLine(a.dueOn);
+  if (due) {
+    ctx.fillStyle = "#7fa3d4";
+    ctx.font = '400 36px "Sora", sans-serif';
+    ctx.fillText(due, cx, 810);
+  }
+
+  if (a.note) {
+    ctx.fillStyle = "#dbeaff";
+    // 80-char notes are allowed (admin input maxLength) — pick the size
+    // whose wrap stays within two lines so the note never reaches the footer
+    const noteText = `“${a.note}”`;
+    let size = 33;
+    for (const s of [33, 29, 25]) {
+      ctx.font = `400 ${s}px "Sora", sans-serif`;
+      if (ctx.measureText(noteText).width <= 2 * (pw2 - 140)) { size = s; break; }
+    }
+    ctx.font = `400 ${size}px "Sora", sans-serif`;
+    wrapText(ctx, noteText, cx, 868, pw2 - 140, size + 11);
+  }
+
+  // footer: the one instruction
+  ctx.fillStyle = "#7fa3d4";
+  ctx.font = '600 32px "Space Grotesk", sans-serif';
+  ctx.fillText("Open Blipwork — it’s pinned at the top", cx, py + ph - 40);
+
+  return new Promise((res, rej) =>
+    cv.toBlob(b => b ? res(b) : rej(new Error("toBlob failed")), "image/png"));
 }
 
 /* Grouped by chapter (CHAPTERS order), each with an "N / M open" count and

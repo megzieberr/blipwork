@@ -52,8 +52,10 @@ function parseDay(iso) {
 }
 
 /* Soft due line. Never a countdown, never overdue — see the ruling above.
-   Returns null when there is nothing gentle to say (no date, or it's past). */
-function dueLine(dueOn) {
+   Returns null when there is nothing gentle to say (no date, or it's past).
+   Exported (2026-08-26) for the admin dashboard's WhatsApp picture, so the
+   shared card says exactly what the learner's own card says. */
+export function dueLine(dueOn) {
   const due = parseDay(dueOn);
   if (!due) return null;
   const now = new Date();
