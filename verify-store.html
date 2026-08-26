@@ -1980,14 +1980,18 @@ for (const o of outfits) {
     // Foreman build day, session B (2026-08-21): mhq_get_state was
     // re-created a THIRD time, by migration-mood-cravings.sql (adds
     // `mood`/`craving` to every blips[] entry, on top of dice's own `dice`
-    // field and everything before it) — so schema.sql's copy is now
-    // compared against THAT file, the new latest carrier in the chain
-    // (cq-bridge -> dice -> mood-cravings). mhq_credit_cq/mhq_cq_link are
-    // untouched by either later migration and still compare against
-    // migration-cq-bridge.sql.
+    // field and everything before it).
+    // Copy-forward repair (2026-08-26): the 08-21 chain had itself LOST
+    // phase 3's `assignment` + room-build's `boxes`/`trinkets` keys (found
+    // when homework showed no red book) — migration-restore-state-keys.sql
+    // re-created mhq_get_state a FOURTH time with those keys restored, so
+    // schema.sql's copy now compares against THAT file, the new latest
+    // carrier (cq-bridge -> dice -> mood-cravings -> restore-state-keys).
+    // mhq_credit_cq/mhq_cq_link are untouched by every later migration and
+    // still compare against migration-cq-bridge.sql.
     const schemaRaw = await (await fetch("./supabase/schema.sql")).text();
-    const moodRaw = await (await fetch("./supabase/migration-mood-cravings.sql")).text();
-    const bodySrc = { mhq_get_state: { text: moodRaw, name: "migration-mood-cravings.sql" },
+    const restoreRaw = await (await fetch("./supabase/migration-restore-state-keys.sql")).text();
+    const bodySrc = { mhq_get_state: { text: restoreRaw, name: "migration-restore-state-keys.sql" },
                        mhq_credit_cq: { text: raw, name: "migration-cq-bridge.sql" },
                        mhq_cq_link:   { text: raw, name: "migration-cq-bridge.sql" } };
     for (const fn of ["mhq_get_state", "mhq_credit_cq", "mhq_cq_link"]) {

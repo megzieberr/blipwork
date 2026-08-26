@@ -472,7 +472,13 @@ export function furnitureArt(id) {
    offset (top-right corner, slightly overlapping) is the only number that
    belongs to the badge itself. */
 const HOMEWORK_BADGE_SRC = "./assets/companion/homework-badge.png";
-const HOMEWORK_BADGE_OFFSET = { widthPct: 28, right: -6, top: -8 }; // % of the desk's own box
+/* Tuned 2026-08-26 on her phone report ("not on the table"): the original
+   {28, -6, -8} guess put the book at the box's top-right CORNER — empty air
+   in the isometric drawing (the build note said "worth one look on her
+   phone"; tonight was that look). These numbers were composited against ALL
+   FOUR desk arts (basic/techy/princess/nerdy) — the book stands on each
+   desk's surface. Re-check on all four if retuned. */
+const HOMEWORK_BADGE_OFFSET = { widthPct: 21, right: 25, top: 5 }; // % of the desk's own box
 
 export function homeworkBadgeLayer() {
   const badge = el("div", "room-furn-badge");
