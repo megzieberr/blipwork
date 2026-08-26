@@ -66,10 +66,28 @@ partial unique index allows one active row. But a replacement is a NEW
 assignment identity: done-ticks reset, and a learner who already passed can
 earn a second box by passing again. Fine at this scale; just know it.
 
+## 💬 (same evening) — WhatsApp homework picture (sw v73, commit `7231f53`)
+
+Her ask: a shareable "you have homework" PNG for the class WhatsApp group.
+New button under admin → Today's homework: **"⬇ Picture for the WhatsApp
+group"** — only visible while homework is set. Draws the CURRENT assignment
+as a 1080×1080 System-Window card (canvas, client-side): her red book art,
+"You have homework!", quest + chapter in the chapter's colour, the gentle
+due line (dueLine now EXPORTED from js/assignment.js so the picture can
+never say something the learner's card doesn't), her note in quotes, and
+"Open Blipwork — it's pinned at the top". No emoji in the drawn text
+(canvas kerning around colour emoji is unreliable — first render proved
+it); shrink-to-fit guards on the quest line and the 80-char note. Verified
+by capturing the real button's output PNG and LOOKING at it; verify-store
+green (~4039). Replacing homework and re-downloading bakes the new details
+automatically.
+
 ### ⏳ Pending on Megan
-- 📱 1 min [whenever]: close-and-reopen the app twice (sw v72) — the red book
+- 📱 1 min [whenever]: close-and-reopen the app twice (sw v73) — the red book
   should now STAND on the desk. The homework card + your 🎁 level-10 mystery
   box (invisible since the 21st) are already there from the morning's fix.
+- 🌐 1 min [whenever]: admin → Today's homework → "⬇ Picture for the WhatsApp
+  group" → check the PNG lands in your downloads and share it to the group.
 
 ### 📌 Decisions (append-only, 2026-08-26)
 - ⚠️ THE COPY-FORWARD RULE IS NOW A LAW: before redefining ANY live function,
