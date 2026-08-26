@@ -46,10 +46,30 @@ three. Learners see the red book + homework card on their next app open.
   installed, cron.sql placeholders unfilled, 0 subscriptions) — that's the
   PUSH-SETUP walkthrough still waiting, as recorded below.
 
+## 📕 (same evening) — the book stands ON the desk now (sw v72, commit `6e97b36`)
+
+Her phone showed the restored book floating in mid-air off the desk's corner.
+Root cause: the 08-09 offset was a judgement call the build note itself said
+was "worth one look on her phone before it ships" — and that look never
+happened, because homework was never active between the room build (08-09)
+and the state-key loss (08-21). Tonight was the badge's FIRST real render.
+New offsets `{widthPct:21, right:25, top:5}` composited against ALL FOUR desk
+arts (basic/techy/princess/nerdy — the badge rides whatever desk is equipped)
+and DOM-verified with the real furnitureLayer code, not just the compositor.
+verify-store's get_state mirror-check retargeted to
+migration-restore-state-keys.sql (the new carrier in the cq-bridge → dice →
+mood-cravings → restore chain); **4040/4040 green**. Live-verified: Pages
+serves sw v72 + the new offsets.
+
+Also answered (her question): "Replace homework" NEVER makes two — the DB's
+partial unique index allows one active row. But a replacement is a NEW
+assignment identity: done-ticks reset, and a learner who already passed can
+earn a second box by passing again. Fine at this scale; just know it.
+
 ### ⏳ Pending on Megan
-- 📱 1 min [whenever]: open the app — the homework card + red book on the desk
-  should be there, AND a 🎁 treasure box (your level-10 mystery box, invisible
-  since the 21st). No reinstall, no sw bump — it's all server-side.
+- 📱 1 min [whenever]: close-and-reopen the app twice (sw v72) — the red book
+  should now STAND on the desk. The homework card + your 🎁 level-10 mystery
+  box (invisible since the 21st) are already there from the morning's fix.
 
 ### 📌 Decisions (append-only, 2026-08-26)
 - ⚠️ THE COPY-FORWARD RULE IS NOW A LAW: before redefining ANY live function,
