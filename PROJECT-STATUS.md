@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v79 SHIPPED + LIVE-VERIFIED 2026-08-27; 🔔 notifications live and proven)
+# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v80 SHIPPED + LIVE-VERIFIED 2026-08-27 (incl. same-night implicit-× fix); 🔔 notifications live and proven)
 
 ## 🧮 2026-08-27 (late evening) — CALCULATOR ROUND 2: BUILT, FOREMAN-REVIEWED, SHIPPED (83e9331, live-verified)
 
@@ -42,6 +42,18 @@ not a fresh line; (2) ◀/▶ step INTO an existing fraction/root/power template
 (the 1/25 probe), never over it. ⭐ Reusable trick: the emulator is a fully
 scriptable ground-truth oracle — screenshots capture it fine, but zoom/regions
 do NOT (layered window), so read the full screenshot.
+
+**⚠️ SAME-NIGHT LIVE BUG, FOUND BY HER, FIXED + RESHIPPED (ed4bcec, sw v80):**
+19sin(77)/sin(51) typed WITHOUT × rendered correctly but evaluated as 19/sin(51)
+— adjacent factors were silently dropped (the fraction/radical/power sub-parses
+never asserted full token consumption). Fixed as a class: one shared
+parseSubExpr guard (unparseable adjacency now = Syntax ERROR, silent drops
+structurally impossible) + implicit multiplication binding TIGHTER than
+explicit ×÷ (device-verified: the real fx-991ZA auto-brackets 6÷2(1+2) to
+6÷(2(1+2)) and returns 1). Her case now gives 23,82182003; sin(30)sin(60)
+stays exact √3/4. verify-calculator 77/77. ⭐ Test-design lesson: the original
+71 checks all used single factors — always include an implicit product in
+calculator acceptance cases.
 
 **Deliberate scope cuts:** ˣ√ (SHIFT of x^) stays dead; cube roots evaluate to
 decimals (no exact ³√ type). Both fine for Gr11 — revisit only if a quest
