@@ -192,6 +192,11 @@ There are **two** timed jobs, both in the same file:
    **twice**, once per job.
 3. Replace `<CRON_SECRET>` with your CRON_SECRET from Part 4b — also
    **twice**.
+   - ⚠️ **Four replacements in total, and it is easy to do only the first two.**
+     That happened on 2026-08-27: the 07:00 job was perfect and the 17:00 job
+     still had `<PROJECT_REF>` and `<CRON_SECRET>` in it, which would have made
+     the evening reminder post to a nonsense address every day, silently. The
+     check in step 5 is what caught it — do not skip it.
 4. **Pick the times** (optional): the defaults are 7am and 5pm SA. The file
    shows how to change them (they're written in UTC, which is SA time minus
    two hours). Save the file.
@@ -199,9 +204,19 @@ There are **two** timed jobs, both in the same file:
      refuses to announce homework before 7am, so an earlier job would find
      nothing to do and the notification would wait another whole day.
 5. In Supabase: **SQL Editor** → **New query** → paste the whole file → **Run**.
-   - **You should see:** green success. To check, run a new query:
-     `select jobname, schedule from cron.job;` — you should see **both**
-     `blipwork-morning-homework` and `blipwork-blip-reminder`.
+   - **You should see:** green success. To check, run a new query — this one
+     checks the placeholders are really gone, not just that the jobs exist:
+
+     ```sql
+     select jobname, schedule,
+            (command not like '%<CRON_SECRET>%'
+             and command not like '%<PROJECT_REF>%') as filled_in_properly
+       from cron.job order by jobname;
+     ```
+
+     You want **two rows, both `filled_in_properly = true`**:
+     `blipwork-blip-reminder` at `0 15 * * *` and `blipwork-morning-homework`
+     at `0 5 * * *`.
 
 ---
 
@@ -210,12 +225,41 @@ There are **two** timed jobs, both in the same file:
 1. On your phone, open the installed **Blipwork** app → go to the **Blip**
    screen → tap **Turn on** on the 🔔 card → tap **Allow**.
    - **You should see:** the card change to a quiet **Reminders on**.
-2. In Supabase: **Edge Functions** → **send-push** → **Invoke** (or **Test**).
-   - In the request **body**, paste:  `{ "test": true }`
-   - Add a **header** named `x-cron-secret` with your CRON_SECRET value.
-   - Click **Send/Invoke**.
+2. In Supabase: **Edge Functions** → **send-push** → the **Test** button, top
+   right next to Download. (It used to be called **Invoke**.)
+   - **Method:** POST
+   - **Body:** `{ "test": true }`
+   - **Headers:** add one named `x-cron-secret` with your CRON_SECRET value.
+   - Send it.
    - ✅ Within a few seconds you should get a **Blipwork** notification saying
      your Blip's name and *"says hello 👋 — reminders are working."*
+
+### ⭐ The easier way — ask Claude to fire it
+Fiddling with headers in that panel is the most annoying step of this whole
+guide, and it is the one step you do not have to do yourself. Claude can send
+the test from the SQL editor instead, and **your CRON_SECRET never leaves the
+database**: it reads the scheduler's own command, swaps the body for a test
+ping, and runs it.
+
+```sql
+do $$
+declare v_cmd text;
+begin
+  select command into v_cmd from cron.job where jobname = 'blipwork-morning-homework';
+  v_cmd := replace(v_cmd, '''type'', ''morning''', '''test'', true');
+  execute v_cmd;
+end $$;
+```
+
+Then read the reply (pg_net answers asynchronously, so give it a second):
+
+```sql
+select status_code, content from net._http_response order by id desc limit 1;
+```
+
+`"sent": 1` means the push service took it and pushed it to the phone. This is
+how the 2026-08-27 setup was actually tested, and it is the same call the
+scheduler makes — so it proves the real path, not a lookalike.
 
 `{ "test": true }` pings every subscribed device and ignores all the stage rules.
 It also deliberately does **not** count as that day's reminder, so testing can
@@ -254,6 +298,12 @@ exactly who it considered and why anyone was skipped.
 - In Supabase → **Edge Functions → send-push → Logs**, look for errors:
   - **401** — the `x-cron-secret` didn't match. Re-check it is identical in your
     secrets (Part 5) and in `cron.sql` (Part 7). No spaces, no line breaks.
+    If you have just CHANGED the secret, a still-warm copy of the function can
+    hold the old value for a minute — wait and try again before hunting.
+    ⭐ Losing the CRON_SECRET is NOT a disaster, unlike the VAPID private key:
+    it is only a shared password between the scheduler and the function, and
+    both ends are yours. Generate a new one, overwrite the secret, re-run
+    `cron.sql`. That is the whole fix.
   - **`_mhq_is_qual_day` or `_mhq_health` not found** — the database hasn't
     reloaded its list of functions. Run `notify pgrst, 'reload schema';` in the
     SQL editor and invoke again.

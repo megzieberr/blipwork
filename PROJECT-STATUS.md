@@ -1,4 +1,151 @@
-# Project status — updated 2026-08-27 (🔔 NOTIFICATIONS — new-homework push + the Blip nudge made DAILY, sw v74 LIVE but DORMANT; migration written, NOT run; the PUSH-SETUP walkthrough is the only gate left)
+# Project status — updated 2026-08-27 (evening) (🔔 NOTIFICATIONS ARE LIVE AND PROVEN ON HER PHONE — setup finished end to end; 📐 2D Trig round 2 rebuilt as step chains with a stacked-fraction builder, sw v76)
+
+## 🔔 2026-08-27 (evening) — THE PUSH SETUP, FINISHED AND PROVEN
+
+The PUSH-SETUP walkthrough parked since July is **DONE**. Proof, not hope: a
+real notification arrived on her phone and she confirmed seeing it.
+
+    { "ok": true, "mode": "test", "devices": 1, "sent": 1, "removed": 0 }
+
+**What is now live**
+- `migration-push-homework.sql` — APPLIED (the three announce columns,
+  `last_push_kind`, and `mhq_admin_set_announce`).
+- `pg_cron` 1.6.4 and `pg_net` 0.20.3 — installed.
+- Edge function `send-push` — deployed by her via the browser editor,
+  **verify_jwt = false** (confirmed from the API, not assumed).
+- Four secrets set by her: both VAPID keys, VAPID_SUBJECT, CRON_SECRET.
+  ⚠️ The VAPID pair is FRESH, generated 2026-08-27 — NOT Circle Quest's. The
+  private half has never been in a chat, a file, or this repo.
+- `VAPID_PUBLIC_KEY` set in js/push-config.js, so the 🔔 card is no longer
+  dormant. sw v76 live.
+- Two cron jobs, active and verified placeholder-free:
+  `blipwork-morning-homework` at `0 5 * * *` (held homework) and
+  `blipwork-blip-reminder` at `0 15 * * *` (evening nudge, then Blip).
+- ONE device subscribed: hers. **The kids have not opted in yet** — the next
+  real step, and it needs a message from her, not code.
+
+**Three things learned the hard way — all now written into PUSH-SETUP.md**
+1. ⚠️ **cron.sql needs FOUR replacements, not two.** Her 07:00 job was perfect
+   and the 17:00 job still contained `<PROJECT_REF>` and `<CRON_SECRET>`. It
+   would have POSTed to a nonsense URL every evening, silently, forever. Part 7
+   now says "four" in bold, and its check looks for leftover placeholders
+   instead of merely counting jobs.
+2. ⭐ **The CRON_SECRET is the recoverable secret.** She lost hers between
+   setting it and needing it again, and thought she had broken something. She
+   had not: it is only a shared password between two things she owns. New
+   value, overwrite the secret, re-run cron.sql. (The VAPID private key is the
+   one that genuinely cannot be recovered — a different animal.)
+3. ⭐ **Claude can fire the test itself, and should offer to.** The Test panel
+   (renamed from Invoke) needs a hand-typed header and is the fiddliest step in
+   the guide. Instead: read the cron job's OWN command, `replace()` the body
+   with a test flag, `execute` it. The secret is read and rewritten entirely
+   inside Postgres and never enters a chat. It also proves the REAL path rather
+   than a lookalike, because it IS the scheduler's command.
+
+**Repair worth reusing:** the broken 17:00 job was rebuilt by copying the
+working 07:00 job's command and swapping only the mode — again inside Postgres,
+so her secret stayed put. Guarded by a check that the source job had no
+placeholders, so a bad job could not be cloned into a second bad job.
+
+**Her ruling:** the active t2 homework was marked `announced_at = now()` so the
+07:00 job does NOT tell the class "📚 New homework!" about homework set on the
+26th. The first notification a class ever receives decides whether they leave
+notifications on, and it should not open with something untrue. Net effect: t2
+gets no notification at all; the WhatsApp picture button is the tool for
+nudging them about it.
+
+**Dashboard drift, both fixed in the guide:** "Create a function" is now
+**Deploy a new function → Via Editor**; "Invoke" is now **Test**.
+
+---
+
+## 📐 2026-08-27 — 2D TRIG ROUND 2 REBUILT AS STEP CHAINS (sw v75, then v76)
+
+Her ask: *"I feel like it is too intense. It simply gives the triangle, and then
+the kids need to do ALL the steps and just type in the final answer… I think we
+should change it so that they build the equation step by step each time."*
+Round 2 was the live homework, due the 28th, and only 2 of the class had
+finished it. That was her stated reason.
+
+**THE QUESTION AND THE DIAGRAM ARE UNCHANGED** — her explicit instruction. Each
+chain is the question's OWN `solution` list, turned from something shown
+afterwards into something answered.
+
+- `findSide` → 3 steps; `findThirdSide` and `wordSide` → 4 (they earn the third
+  angle first). Shape: [angle] → BUILD → rearrange (mc) → type the number.
+- **whichForm and setupRatio are UNTOUCHED** — "The multi-choice questions are
+  perfect".
+- **The build step is her option B**: assemble, not recognise. tokenpad gained a
+  FRAME MODE — a slotted skeleton plus chips, next box glowing. Free-form tokens
+  were rejected: seven taps on a phone, two of them a divide and an equals, and
+  forgetting the equals would mark a child wrong for punctuation.
+- **Marking did not change**: still kind "tokenpad", still checkStep. The
+  mirrored set-up is accepted because the sine rule is symmetric; only
+  sines-on-top is refused, and the prompt says "sides on top" out loud.
+- **Then she asked for a real stacked fraction**, and was right: the mc options
+  directly below were already stacked, so the pad was a second spelling of the
+  same maths on one screen. Reuses .sfrac/.sf-n/.sf-d — .sf-n's border-bottom IS
+  the app's fraction bar. `align-items:stretch` so the bar spans the wider row.
+
+**Four real bugs, none of which reading the code would have found**
+1. ⚠️ **Isosceles triangles.** With Â = B̂, sinB̂/sinÂ = 1, so the "sines
+   swapped" distractor became character-for-character the correct answer — two
+   identical options, one marked wrong. A child tapping right maths and being
+   told no. Generators now require three distinct angles.
+2. The third angle is the decoy chip, so Ĉ = Â put the same chip on the pad
+   twice. Same guard, plus a dedupe in sineSetupStep.
+3. ⚠️ **The empty boxes had no border.** The CSS used `var(--line)`, which does
+   not exist here — an unknown colour voids the whole `border` shorthand. Found
+   by reading COMPUTED STYLE off the live page, never by reading the file. The
+   house tokens are `--brd` / `--brd-2` / `--accent`, radius `--r-md`.
+4. The filled frame wrapped mid-fraction. Each side of the "=" is now one
+   unbreakable unit, so it can only ever fold at the equals sign.
+
+**verify-t2-steps.mjs (NEW)** — 1200 generated questions, every step marked
+through the app's OWN checkStep(). Proves each chain is BUILDABLE (every piece
+of the answer is actually on the pad — an unbuildable question would be
+unanswerable with no way for a learner to tell), both symmetric fills pass,
+classic wrong fills fail, no duplicate chips, exactly one correct option with
+distinct labels, and the final number matches the sine rule recomputed
+independently. Played end to end in a browser at 375px, clean runs and
+deliberately-wrong runs.
+
+### ⏳ Pending on Megan
+- 📱 2 min [blocking]: send the class the "turn on reminders" message (bottom
+  of PUSH-SETUP.md, under **For the learner**). Until they tap it, only YOUR
+  phone gets anything — the code is done, the opt-in is theirs.
+- 🌐 1 min [whenever]: admin → Today's homework → "⬇ Picture for the WhatsApp
+  group" → check the PNG lands in your downloads.
+- 📱 1 min [whenever]: play round 2 on your phone and eyeball the stacked
+  fraction — it is measured and proven answerable, but no screenshot was
+  possible from this session's browser pane.
+
+### Next up
+- Wave-4 dice (AG waits on her 14 F-flags, Probability needs material,
+  Measurement engine ruling, Trig Graphs mechanic).
+- Next fix batch (💬 FAB overlap on Exam Focus at scrollY 0, sheet Escape key,
+  gtrig cosmetics), calculator emulator round 2, worked-method content batch.
+- Optional tidy-up she was offered and has not taken: move the CRON_SECRET into
+  the database so cron.sql holds no secret and she never has to keep it.
+- The step-chain treatment now exists and works. t4/t5 (cosine rule) are the
+  obvious next candidates IF SHE ASKS — do not assume. t2 was changed because
+  she watched the class stall on it, not because chains are better in general.
+
+### 📌 Decisions (append-only, 2026-08-27 evening)
+- **The kids' opt-in is one switch for all three notification kinds, and the
+  card's copy says so.** It used to promise only "a nudge when Blip's hungry".
+  An opt-in that under-promises is still a lie.
+- **A daily reminder may repeat; it must never nag.** The day-7+ wording is the
+  safety valve that replaced the old permanent silence.
+- **Suppress rather than send a slightly-untrue first notification.**
+- **Secrets are read and rewritten INSIDE Postgres, never through a chat.** Both
+  the test ping and the broken-job repair used this. Reuse it.
+- **Measure the computed style, do not read the CSS.** `var(--line)` looked
+  perfectly fine in the file.
+
+---
+
+# (previous head) Project status — updated 2026-08-27 (🔔 NOTIFICATIONS — new-homework push + the Blip nudge made DAILY, sw v74 LIVE but DORMANT; migration written, NOT run; the PUSH-SETUP walkthrough is the only gate left)
 
 ## 🔔 2026-08-27 — THE NOTIFICATIONS BUILD (her ask, commit `9b84686`, sw v74)
 
