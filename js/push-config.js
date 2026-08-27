@@ -17,4 +17,4 @@
    opt-in card hides itself, nothing subscribes, nothing breaks. That
    is the intended shipping state until Megan works through the setup.
    ============================================================ */
-export const VAPID_PUBLIC_KEY = "";
+export const VAPID_PUBLIC_KEY = "BH4yOCck_I-JcIDX7XNHvXyEGWAiGP4fXb8lMk9u4Psh-CWw-dw2eEyWiAXdBRxMRb3I93FUaoI-SpvMRZI8l4w";

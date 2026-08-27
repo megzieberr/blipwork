@@ -1255,11 +1255,22 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
    difference between "x/sin 110° = 20/sin 105°" sitting on one line and
    folding at the "=". Folding there is a graceful fallback, not a fault —
    it reads like a second line of working — but one line is tidier. */
-.tokenpad.framed .kdisp{justify-content:center;font-size:21px;letter-spacing:0;flex-wrap:wrap;gap:2px;min-height:60px;padding:12px 8px}
+.tokenpad.framed .kdisp{justify-content:center;font-size:21px;letter-spacing:0;flex-wrap:wrap;gap:2px;min-height:96px;padding:12px 8px}
 .tokenpad.framed .kval{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px}
 /* each side of the equation is one unbreakable unit — see paintFrame() */
 .tokenpad.framed .kside{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto}
-.tokenpad.framed .keq{padding:0 5px}
+.tokenpad.framed .keq{padding:0 5px;font-size:22px}
+/* the stacked fraction (her ask). .sfrac already draws the bar as .sf-n's
+   border-bottom; all this does is give the bar room to clear the boxes and
+   stop the inherited .92em shrinking the numbers inside them. */
+/* align-items:stretch, NOT .sfrac's usual centre. The bar lives on .sf-n's
+   bottom edge, so a centred column draws it only as wide as the numerator
+   — fine for text, wrong here, where "x" over "sin 35°" would hang a 52px
+   bar over an 89px box. Stretching makes both rows the width of the wider
+   one, so the bar spans the whole fraction the way it does on paper. */
+.tokenpad.framed .kfrac{font-size:1em;margin:0;align-items:stretch}
+.tokenpad.framed .kfrac .sf-n{padding:0 4px 5px;border-bottom-width:2px;display:flex;justify-content:center}
+.tokenpad.framed .kfrac .sf-d{padding:5px 4px 0;display:flex;justify-content:center}
 .tokenpad.framed .kfx{color:var(--faint);padding:0 2px}
 /* ⚠️ var(--brd), NOT an invented name. The first draft of this used
    var(--line), which does not exist in this stylesheet — an unknown colour

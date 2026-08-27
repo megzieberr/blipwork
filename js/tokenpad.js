@@ -103,22 +103,34 @@ export function mountTokenpad(host, opts = {}) {
       const cls = "kslot" + (filled ? " is-filled" : (i === toks.length ? " is-next" : ""));
       return `<span class="${cls}">${filled ? esc(toks[i]) : ""}</span>`;
     };
-    /* ⚠️ GROUP EACH SIDE OF THE "=" so a long fill can only ever wrap at
-       the equals sign. A chip like "sin 68°" is far wider than an empty
-       box, so a filled frame outgrows 375px — and left to itself the row
-       wrapped mid-fraction, splitting "x" from "/ sin 68°" across two
-       lines. Wrapping at the "=" reads exactly like a learner writing the
-       second line underneath; wrapping inside a fraction reads like a
-       rendering fault. */
+    /* Split at the "=" first, so each side is handled as one unit. */
     const sides = [[]];
     for (const part of frame) {
       if (part === "=") { sides.push("="); sides.push([]); continue; }
       sides[sides.length - 1].push(part);
     }
-    valEl.innerHTML = sides.map(g =>
-      g === "=" ? `<span class="kfx keq">=</span>`
-                : `<span class="kside">${g.map(cell).join("")}</span>`
-    ).join("");
+    /* A side that is exactly  ☐ / ☐  is drawn as a REAL STACKED FRACTION
+       — her note, 2026-08-27: "can't this be a real fraction stacked on top
+       of each other?". It can, and it should: the multiple-choice options
+       directly below the pad are already drawn that way by the app's
+       formula renderer, so an inline "x/sin 41°" here and a stacked one
+       three centimetres lower were two spellings of the same maths on one
+       screen. It is also how they write it on paper.
+
+       Reuses .sfrac/.sf-n/.sf-d rather than inventing a look — .sf-n's
+       border-bottom IS the fraction bar everywhere else in the app, so
+       these boxes get the same bar, in the same weight, for free.
+
+       Any other shape falls back to the inline row, so the pad stays
+       general: a frame that is not a pair of fractions still renders. */
+    const side = g => {
+      const isFrac = g.length === 3 && g[0] === SLOT && g[1] === "/" && g[2] === SLOT;
+      if (!isFrac) return `<span class="kside">${g.map(cell).join("")}</span>`;
+      const num = cell(g[0]), den = cell(g[2]);      // in frame order: numerator first
+      return `<span class="kside"><span class="sfrac kfrac">`
+           + `<span class="sf-n">${num}</span><span class="sf-d">${den}</span></span></span>`;
+    };
+    valEl.innerHTML = sides.map(g => g === "=" ? `<span class="kfx keq">=</span>` : side(g)).join("");
     disp.classList.toggle("empty", toks.length === 0);
   }
 
