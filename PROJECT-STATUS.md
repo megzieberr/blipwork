@@ -1,11 +1,12 @@
-# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v79, UNCOMMITTED, awaiting her ship yes; 🔔 notifications live and proven)
+# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v79 SHIPPED + LIVE-VERIFIED 2026-08-27; 🔔 notifications live and proven)
 
-## 🧮 2026-08-27 (late evening) — CALCULATOR ROUND 2: BUILT, FOREMAN-REVIEWED, NOT YET SHIPPED
+## 🧮 2026-08-27 (late evening) — CALCULATOR ROUND 2: BUILT, FOREMAN-REVIEWED, SHIPPED (83e9331, live-verified)
 
 Foreman day (Fable designed and reviewed, Sonnet typed; her /go scope: keypad
 re-map + maths engine + verify page, no deploy/migrations). The working tree
-holds the finished build UNCOMMITTED — the ship (commit + push) waits for her
-explicit yes in the foreman chat.
+held the build until her “you can ship it” — shipped 83e9331 same evening;
+Pages build “built” on that commit, live sw.js serves mhq-v79, live calculator.js
+carries the new engine (all checked from the live URL, not assumed).
 
 **Her rulings tonight**
 - Full fx-991ZA PLUS II face, drawn key-for-key from her photo + the official
@@ -58,11 +59,10 @@ ship.)
 ### ⏳ Pending on Megan
 - 🌐 1 min [blocking]: say "ship it" (or not) in the foreman chat — the whole
   calculator build sits uncommitted until then.
-- 📱 3 min [after ship]: open Blipwork → any calcdo round → calculator: do
+- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v79 double-load), then open Blipwork → any calcdo round → calculator: do
   ½+⅓ = then S⇔D, and sin 45 — check it feels like your Casio.
 
 ### Next up
-- Ship calculator round 2 (foreman session, her yes pending).
 - ⚠️ (carried) THE VERY BIG BUILD she has in mind — still unnamed, ask what it
   is before picking anything else.
 - (carried) Wave-4 dice; fix batch (💬 FAB overlap on Exam Focus, sheet Escape
