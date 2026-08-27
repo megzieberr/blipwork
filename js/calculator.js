@@ -363,7 +363,32 @@ function parseTerm(st, ctx) {
 function parseUnary(st, ctx) {
   const t = peek(st);
   if (t && t.k === "op" && t.v === "−") { next(st); return vNeg(parseUnary(st, ctx)); }
-  return parsePower(st, ctx);
+  return parseImplicit(st, ctx);
+}
+/* Implicit multiplication — device-verified: adjacency of a completed atom
+   (number / closing-paren group / postfix ²³ / template / Ans — i.e. exactly
+   what parsePower always returns) followed directly by another atom-opener
+   (a function-open, "(", a template, or Ans — with NO explicit × ÷ between
+   them) means MULTIPLY. It binds TIGHTER than explicit × ÷ (nested one level
+   below parseTerm's ×÷ loop, same as the real device auto-bracketing
+   "6÷2(1+2)" into "6÷(2(1+2))" = 1) but looser than postfix/power, which
+   parsePower has already applied by the time we see it here.
+   THIS is also the fix for the silent-wrong-answer bug: before this level
+   existed, an atom directly followed by another atom (e.g. "19sin(77)" typed
+   with no × key) had nothing that would ever consume the second atom — every
+   caller of parseExpr/parseTerm only continues on an explicit + − × ÷, so the
+   second atom was simply never parsed, its tokens quietly left unconsumed.
+   Combined with FIX 2 below (every sub-parse now asserts full consumption),
+   a token that isn't understood as +, ×, or (now) implicit-× can no longer
+   vanish — it forces a Syntax ERROR instead of a silently wrong number. */
+const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "ans");
+function parseImplicit(st, ctx) {
+  let left = parsePower(st, ctx);
+  for (;;) {
+    if (IMPLICIT_TRIGGER(peek(st))) { const right = parsePower(st, ctx); left = vMul(left, right); }
+    else break;
+  }
+  return left;
 }
 function parsePower(st, ctx) {
   let base = parseAtom(st, ctx);
@@ -371,7 +396,7 @@ function parsePower(st, ctx) {
     const t = peek(st);
     if (t && t.k === "sq") { next(st); base = vPowInt(base, 2); }
     else if (t && t.k === "cb") { next(st); base = vPowInt(base, 3); }
-    else if (t && t.k === "pow") { next(st); const e = parseExpr({ arr: compileBox(t.exp), pos: 0 }, ctx); base = vPow(base, e); }
+    else if (t && t.k === "pow") { next(st); const e = parseSubExpr(t.exp, ctx); base = vPow(base, e); }
     else break;
   }
   return base;
@@ -383,18 +408,31 @@ function parseAtom(st, ctx) {
   if (t.k === "(") { next(st); const v = parseExpr(st, ctx); const c = peek(st); if (!c || c.k !== ")") throw new SyntaxErr(); next(st); return v; }
   if (t.k === "func") { next(st); const inner = parseExpr(st, ctx); const c = peek(st); if (!c || c.k !== ")") throw new SyntaxErr(); next(st); return applyFunc(t.name, t.inv, inner, ctx.drg); }
   if (t.k === "ans") { next(st); return ctx.ans; }
-  if (t.k === "frac") { next(st); const num = parseExpr({ arr: compileBox(t.num), pos: 0 }, ctx); const den = parseExpr({ arr: compileBox(t.den), pos: 0 }, ctx); return vDiv(num, den); }
-  if (t.k === "rad") { next(st); const body = parseExpr({ arr: compileBox(t.body), pos: 0 }, ctx); return t.deg === 3 ? vCbrt(body) : vSqrt(body); }
+  if (t.k === "frac") { next(st); const num = parseSubExpr(t.num, ctx); const den = parseSubExpr(t.den, ctx); return vDiv(num, den); }
+  if (t.k === "rad") { next(st); const body = parseSubExpr(t.body, ctx); return t.deg === 3 ? vCbrt(body) : vSqrt(body); }
   throw new SyntaxErr();
 }
+/* FIX 2 (audit result below) — parse a BOUNDED token box (a frac num/den, a
+   rad body, a pow exp, or the whole top-level entry line) and require that
+   parseExpr consumed every token assigned to it. Before this fix, the three
+   template sub-parses (frac num/den, rad body, pow exp) called parseExpr
+   directly and threw away its own leftover-token check — only the top-level
+   evalBox had one. That gap is exactly how "19sin(77)" in a numerator lost
+   its sin(77) factor: parseExpr correctly stopped once no + − × operator
+   followed the "19", the frac/rad/pow callers never checked whether
+   anything was left over in that sub-box, so the unconsumed sin(77) tokens
+   were discarded with no error at all. Every caller below now goes through
+   this one function, so a leftover/un-understood token ALWAYS surfaces as
+   Syntax ERROR instead of silently vanishing. */
+function parseSubExpr(box, ctx) {
+  const st = { arr: compileBox(box), pos: 0 };
+  const v = parseExpr(st, ctx);
+  if (st.pos !== st.arr.length) throw new SyntaxErr();
+  return v;
+}
 function evalBox(box, ctx) {
-  try {
-    const compiled = compileBox(box);
-    const st = { arr: compiled, pos: 0 };
-    const v = parseExpr(st, ctx);
-    if (st.pos !== st.arr.length) throw new SyntaxErr();
-    return v;
-  } catch { return VERR("Syntax ERROR"); }
+  try { return parseSubExpr(box, ctx); }
+  catch { return VERR("Syntax ERROR"); }
 }
 
 export function mountCalculator(host, opts = {}) {
