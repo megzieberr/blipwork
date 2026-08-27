@@ -475,6 +475,37 @@ function mountSteps(host, root, q, commit, svgNode) {
     hintBox.hidden = false;
   }
 
+  /* Bring a newly-revealed step into view (her phone, 2026-08-27: "nothing
+     happened after I clicked submit and it took me a minute to realize I need
+     to scroll down"). A steps question with a diagram is easily taller than a
+     phone screen, so the next step is born below the fold and Submit looks
+     broken — the worst possible reading, because the learner just answered
+     correctly.
+
+     Only scrolls when it actually needs to: a step already sitting in view is
+     left alone, since an unasked-for jump is as disorientating as a missing
+     one. Respects prefers-reduced-motion. */
+  function bringIntoView(node) {
+    if (!node || typeof node.getBoundingClientRect !== "function") return;
+    const TOP_GAP = 84;            // leaves the previous step's ✓ peeking above
+    const r = node.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+    if (r.top >= 0 && r.top <= vh - 160) return;      // enough of it is showing already
+    const y = Math.max(0, window.scrollY + r.top - TOP_GAP);
+    const still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const from = window.scrollY;
+    try { window.scrollTo({ top: y, behavior: still ? "auto" : "smooth" }); }
+    catch { window.scrollTo(0, y); }                  // older engines: no options object
+    /* ⚠️ NEVER TRUST THE SMOOTH SCROLL. It is animation-driven, and there are
+       real environments where it silently does nothing — this project's own
+       preview pane is one (requestAnimationFrame does not run there). A scroll
+       that quietly fails to happen IS the bug this function exists to fix, so
+       check shortly after and jump instead if nothing moved. */
+    if (!still) setTimeout(() => {
+      if (Math.abs(window.scrollY - from) < 2) window.scrollTo(0, y);
+    }, 350);
+  }
+
   function settle(i, w) {
     w.dataset.state = "done";
     const badge = el("span", "q-step-mark" + (w.dataset.retried === "1" ? " retried" : ""),
@@ -483,6 +514,11 @@ function mountSteps(host, root, q, commit, svgNode) {
     if (i >= list.length - 1) {
       root.dataset.step = String(list.length);
       commit(clean, "steps", !clean);            // not clean → the SOFT verdict, not the red one
+      /* the caller paints the verdict into .feedback during commit(); one tick
+         later it has a height, so it can be scrolled to. Same reasoning as the
+         step scroll — finishing the chain must never look like nothing
+         happened either. */
+      setTimeout(() => bringIntoView(root.querySelector(".feedback")), 0);
     } else {
       idx = i + 1;
       root.dataset.step = String(idx);
@@ -515,6 +551,9 @@ function mountSteps(host, root, q, commit, svgNode) {
     w.appendChild(hintBox);
     all.appendChild(w);
     mountStepInput(step, i, w, shost, hintBox);
+    /* NOT on step 0: the question has only just opened and the diagram above
+       is the thing to read first. Scrolling on mount would hide it. */
+    if (i > 0) bringIntoView(w);
   }
 
   function mountStepInput(step, i, w, shost, hintBox) {

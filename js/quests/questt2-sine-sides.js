@@ -39,12 +39,22 @@ const NOTE = "sineRuleSide";
 /* the "now make x the subject" step — same three distractors every
    time, because they are the three things that actually go wrong:
    the two sines swapped, dividing by both, and flipping the fraction */
+/* ⚠️ THE KNOWN SIDE GOES INSIDE THE NUMERATOR, bracketed — her correction
+   on seeing it on her phone, 2026-08-27: "we put the 16 on top of the
+   fraction, in the numerator, next to the sin".
+
+   Unbracketed, `16 · sin 68° / sin 59°` renders as 16 multiplying a fraction,
+   because the formula renderer takes only the token immediately before the
+   slash as the numerator. Same value, but not how she teaches it and not how
+   it is written in an exam. The brackets make the whole of `16 · sin 68°` the
+   numerator; the renderer already absorbs a bracketed group (that is how the
+   `16 / (sin · sin)` distractor has always drawn correctly). */
 function rearrangeStep(known, sinTop, sinBottom, hint) {
-  const right = `x = ${known} · ${sinTop} / ${sinBottom}`;
+  const right = `x = (${known} · ${sinTop}) / ${sinBottom}`;
   return mcStep(
     "Now make <b>x</b> the subject.",
     right,
-    [`x = ${known} · ${sinBottom} / ${sinTop}`,
+    [`x = (${known} · ${sinBottom}) / ${sinTop}`,
      `x = ${known} / (${sinTop} · ${sinBottom})`,
      `x = ${sinTop} / (${known} · ${sinBottom})`],
     hint);
@@ -123,7 +133,7 @@ const SKILLS = {
       solution: [
         { s: "x is opposite B̂; the known side is opposite Â.", r: "pick the friends" },
         { s: `x / sin ${B}° = ${fix(t.sides.a, 0)} / sin ${A}°` },
-        { s: `x = ${fix(t.sides.a, 0)} · sin ${B}° / sin ${A}°` },
+        { s: `x = (${fix(t.sides.a, 0)} · sin ${B}°) / sin ${A}°` },
         { s: `x = ${fix(x, 2)}`, r: "side on top" },
       ],
     };
@@ -160,7 +170,7 @@ const SKILLS = {
       solution: [
         { s: `Ĉ = 180° − ${A}° − ${B}° = ${Cc}°`, r: "angle sum" },
         { s: `x / sin ${Cc}° = ${fix(t.sides.a, 0)} / sin ${A}°` },
-        { s: `x = ${fix(t.sides.a, 0)} · sin ${Cc}° / sin ${A}°` },
+        { s: `x = (${fix(t.sides.a, 0)} · sin ${Cc}°) / sin ${A}°` },
         { s: `x = ${fix(x, 2)}` },
       ],
     };
@@ -189,8 +199,8 @@ const SKILLS = {
           [`sin ${C}°`],
           `a is opposite Â = ${A}°, and b = ${b} is opposite B̂ = ${B}°.`),
         mcStep("Now make <b>a</b> the subject.",
-          `a = ${b} · sin ${A}° / sin ${B}°`,
-          [`a = ${b} · sin ${B}° / sin ${A}°`,
+          `a = (${b} · sin ${A}°) / sin ${B}°`,          // bracketed: her notation
+          [`a = (${b} · sin ${B}°) / sin ${A}°`,
            `a = ${b} / (sin ${A}° · sin ${B}°)`,
            `a = sin ${A}° / (${b} · sin ${B}°)`],
           "sin B̂ is dividing a, so multiply both sides by it."),
@@ -203,7 +213,7 @@ const SKILLS = {
       solution: [
         { s: `B̂ = 180° − ${A}° − ${C}° = ${B}°` },
         { s: `a / sin ${A}° = ${b} / sin ${B}°` },
-        { s: `a = ${b} · sin ${A}° / sin ${B}° = ${fix(a, 2)}` },
+        { s: `a = (${b} · sin ${A}°) / sin ${B}° = ${fix(a, 2)}` },
       ],
     };
   },
