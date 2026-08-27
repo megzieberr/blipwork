@@ -83,10 +83,13 @@ question. The "reopen app twice for sw v78" item is superseded by the v79
 ship.)
 
 ### ⏳ Pending on Megan
-- 🌐 1 min [blocking]: say "ship it" (or not) in the foreman chat — the whole
-  calculator build sits uncommitted until then.
-- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v79 double-load), then open Blipwork → any calcdo round → calculator: do
-  ½+⅓ = then S⇔D, and sin 45 — check it feels like your Casio.
+- 📱 2 min [whenever]: close + reopen Blipwork twice (sw v81), then play any
+  steps question — answered pads should vanish and the 🧮 should float
+  top-right when you scroll.
+
+(Cleared 2026-08-27 night, confirmed by her: the calculator itself works on
+her phone — she play-tested the 2D trig steps round live, found the
+implicit-× bug, and confirmed the v80 fix: “kay, it works”.)
 
 ### Next up
 - ⚠️ (carried) THE VERY BIG BUILD she has in mind — still unnamed, ask what it
