@@ -75,7 +75,7 @@ import {
   roomShellSrc, homeworkBadgeLayer,
 } from "./companion/furniture.js";
 import { makeDraggable } from "./companion/drag-feed.js";
-import { maybeShowReminderCard } from "./push.js";
+import { maybeShowReminderCard, mountReminderBell } from "./push.js";
 import { hasActiveAssignment } from "./assignment.js";
 import { maybeShowInstall } from "./install.js";
 import { startTour, maybeStartTour } from "./companion/tour.js";
@@ -551,6 +551,17 @@ export function renderBlip(app, host) {
   // Room tutorial §4 (2026-08-09, her ruling): always available, never only
   // on first open — a kid who skips it in class can still find it later.
   head.querySelector(".tour-replay-btn").addEventListener("click", () => startTour(host));
+  /* 🔔 the reminder bell sits BETWEEN ❓ and 👥 — "next to the question
+     mark", her words. Inserted rather than appended so ❓ keeps the leftmost
+     position it has held since August; only 👥 shifts by one.
+     Shows only when reminders are ON (or blocked); the opt-in OFFER stays a
+     full card lower down, because an invitation must not be a bare icon.
+     app.render() on change so the card and the bell swap cleanly. */
+  try {
+    const bell = mountReminderBell(head.lastElementChild, () => app.render());
+    const q = head.querySelector(".tour-replay-btn");
+    if (bell && q && q.nextSibling) q.parentNode.insertBefore(bell, q.nextSibling);
+  } catch { /* non-critical, exactly like the card */ }
   const galleryBtn = head.querySelector(".gallery-link");
   if (health.locks.gallery) { galleryBtn.title = "Blip is too sick to go out"; galleryBtn.style.opacity = ".5"; }
   galleryBtn.addEventListener("click", () => app.go("gallery"));
@@ -835,7 +846,7 @@ export function renderBlip(app, host) {
   // Daily-reminder opt-in — was under the old feed button; the room card
   // is the closest equivalent home for it now. Stays hidden until the
   // VAPID key is set, so it is dormant until Megan finishes setup.
-  try { maybeShowReminderCard(roomCard); } catch { /* non-critical */ }
+  try { maybeShowReminderCard(roomCard, () => app.render()); } catch { /* non-critical */ }
 
   /* The second-Blip unlock used to be a `.second-blip-card` block here.
      It is now the 🥚 beside the nickname, built with the room header

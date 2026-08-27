@@ -1245,6 +1245,14 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .tokenpad .kdisp{font-family:var(--font-num);font-size:24px;letter-spacing:.5px}
 .tokenpad .key.tok{font-size:19px}
 
+/* the 🔔 reminder bell in the room header (her 2026-08-27 ruling: the ON
+   state is an off-switch, not a banner). Inherits .link-btn; only the tap
+   target and a faint on-tint are added — 44px is the floor for a thumb, and
+   an emoji glyph on its own is nowhere near it. */
+.link-btn.push-bell{min-width:44px;min-height:44px;line-height:1;font-size:19px}
+.link-btn.push-bell.is-on{filter:drop-shadow(0 0 6px rgba(58,160,255,.45))}
+.link-btn.push-bell:disabled{opacity:.5}
+
 /* ---- the fill-the-equation pad (t2 sine-rule set-up, 2026-08-27) ----
    The display stops being a right-aligned running total and becomes the
    equation skeleton, centred, with tappable-looking boxes. Boxes are sized

@@ -135,7 +135,7 @@ export async function disablePush(username, password) {
    is known. If there is nothing to show, the shell removes itself and
    the learner never sees a flicker.
    ------------------------------------------------------------------ */
-export function maybeShowReminderCard(hostEl) {
+export function maybeShowReminderCard(hostEl, onChange) {
   if (!hostEl) return null;
   /* Cheap synchronous bail-outs first: dormant build, no push in this
      browser (incl. an un-installed iPhone), or nobody logged in. */
@@ -155,23 +155,16 @@ export function maybeShowReminderCard(hostEl) {
 
     if (state === "unsupported" || state === "unconfigured") { card.remove(); return; }
 
-    /* 'blocked' = the learner (or a parent) said Block at the browser
-       prompt. We CANNOT re-ask — only phone settings can undo it — so
-       show a quiet one-liner instead of a button that would do nothing
-       when tapped. Silence would be worse: she'd wonder why reminders
-       never arrive. */
-    if (state === "blocked") {
-      card.innerHTML = `
-        <div class="push-ico">🔕</div>
-        <div class="push-body">
-          <b>Reminders are blocked</b>
-          <p class="muted small">Your phone is blocking notifications for Blipwork. You can switch them back on in your browser or phone settings.</p>
-        </div>`;
-      card.hidden = false;
-      return;
-    }
+    /* ⭐ THE CARD IS NOW ONLY THE OFFER (her ruling 2026-08-27, seeing the
+       ON state on her phone: "can we also maybe move this massive reminders
+       banner to a small icon next to the question mark?").
 
-    if (state === "on") { renderOn(); return; }
+       'on' and 'blocked' are STATUSES, and a status does not need a card —
+       both are now the 🔔 bell in the room header (mountReminderBell below).
+       'off' keeps the card, deliberately: that state is not a status, it is
+       an INVITATION, and an invitation shrunk to an unlabelled icon is one
+       no child will ever accept. */
+    if (state === "on" || state === "blocked") { card.remove(); return; }
 
     /* 'off' — the offer. Dismissable, and the dismissal sticks, because
        a permanent "turn this on" card on the screen she visits every
@@ -207,7 +200,9 @@ export function maybeShowReminderCard(hostEl) {
            it off again she should get the offer back, not silence. */
         try { localStorage.removeItem(DISMISS_KEY); } catch {}
         showToast("Reminders on — Blip will let you know 🔔", "good");
-        renderOn();
+        /* re-render rather than repaint in place: the card's job is done and
+           the header bell is what represents the ON state now. */
+        if (typeof onChange === "function") onChange(); else card.remove();
       } else {
         btn.disabled = false;
         btn.textContent = "Turn on";
@@ -217,33 +212,6 @@ export function maybeShowReminderCard(hostEl) {
     card.querySelector(".push-foot").appendChild(btn);
   }
 
-  function renderOn() {
-    card.classList.add("is-on");
-    card.innerHTML = `
-      <div class="push-ico">🔔</div>
-      <div class="push-body">
-        <b>Reminders on</b>
-        <p class="muted small">You'll hear about new homework, and about Blip on the days he's peckish. One a day at most.</p>
-      </div>
-      <div class="push-foot"></div>`;
-    card.hidden = false;
-
-    const btn = el("button", "btn ghost small", "Turn off");
-    btn.addEventListener("click", async () => {
-      btn.disabled = true;
-      btn.textContent = "…";
-      const r = await disablePush(sess.username, sess.password);
-      if (r.ok) {
-        showToast("Reminders off", "info");
-        renderOff();
-      } else {
-        btn.disabled = false;
-        btn.textContent = "Turn off";
-        showToast("Couldn't turn reminders off — try again in a moment.", "error");
-      }
-    });
-    card.querySelector(".push-foot").appendChild(btn);
-  }
 }
 
 /* Plain-English failure messages — never fail silently on an opt-in
@@ -254,4 +222,78 @@ function reasonText(reason) {
   if (reason === "unsupported") return "This browser can't do reminders. On iPhone, add Blipwork to your home screen first.";
   if (reason === "unconfigured") return "Reminders aren't switched on for this app yet.";
   return "Couldn't turn reminders on just now — check your internet and try again.";
+}
+
+/* ------------------------------------------------------------------
+   THE HEADER BELL  (her ruling, 2026-08-27)
+   ------------------------------------------------------------------
+   "can we also maybe move this massive reminders banner to a small icon
+   next to the question mark?"
+
+   Once reminders are ON, the card was a paragraph of text whose only
+   function was an off-switch — a whole banner, every visit, in the room
+   she opens most. This replaces it with one icon in the room header,
+   beside ❓ and 👥.
+
+   Only ever shows for a state the learner cannot mistake:
+     on      🔔  tap → confirm → off
+     blocked 🔕  tap → explain (we cannot re-ask; only phone settings can)
+     off         nothing — maybeShowReminderCard's offer does that job,
+                 because an invitation must not be an unlabelled icon.
+
+   Same never-throws contract as maybeShowReminderCard: call it, it
+   either appends a button or it doesn't. `onChange` re-renders the
+   screen so the card and the bell swap cleanly — without it, turning
+   reminders off from the bell would leave the learner with no visible
+   way back on until they navigated away and returned.
+   ------------------------------------------------------------------ */
+export function mountReminderBell(hostEl, onChange) {
+  if (!hostEl) return null;
+  if (!pushConfigured() || !pushSupported()) return null;
+  const sess = getSession();
+  if (!sess || !sess.username) return null;
+
+  const btn = el("button", "link-btn push-bell");
+  btn.type = "button";
+  btn.hidden = true;                       // no flicker while we await the state
+  hostEl.appendChild(btn);
+  refresh();
+  return btn;
+
+  async function refresh() {
+    let state;
+    try { state = await pushState(); } catch { state = "off"; }
+    if (state === "on") return paintOn();
+    if (state === "blocked") return paintBlocked();
+    btn.remove();                          // 'off' / unsupported — the card's job
+  }
+
+  function paintOn() {
+    btn.textContent = "🔔";
+    btn.classList.add("is-on");
+    btn.title = "Reminders are on — tap to turn them off";
+    btn.setAttribute("aria-label", "Reminders are on. Tap to turn them off.");
+    btn.hidden = false;
+    btn.onclick = async () => {
+      /* Confirm, because this is the only control and it is one tap from
+         a curious thumb. Losing reminders silently would be a bad way to
+         find out you have stopped hearing about homework. */
+      if (!confirm("Turn reminders off?\n\nYou won't hear about new homework, or when Blip gets hungry.")) return;
+      btn.disabled = true;
+      const r = await disablePush(sess.username, sess.password);
+      btn.disabled = false;
+      if (!r.ok) { showToast("Couldn't turn reminders off — try again in a moment.", "error"); return; }
+      showToast("Reminders off", "info");
+      if (typeof onChange === "function") onChange(); else refresh();
+    };
+  }
+
+  function paintBlocked() {
+    btn.textContent = "🔕";
+    btn.title = "Notifications are blocked for Blipwork";
+    btn.setAttribute("aria-label", "Notifications are blocked. Tap to find out why.");
+    btn.hidden = false;
+    btn.onclick = () => showToast(
+      "Your phone is blocking Blipwork's notifications. Turn them back on in your phone or browser settings.", "info");
+  }
 }
