@@ -1,4 +1,120 @@
-# Project status — updated 2026-08-26 (📕 HOMEWORK RED BOOK restored — mhq_get_state had lost assignment/boxes/trinkets on 08-21; full copy-forward audit of ALL 72 live functions: everything else clean)
+# Project status — updated 2026-08-27 (🔔 NOTIFICATIONS — new-homework push + the Blip nudge made DAILY, sw v74 LIVE but DORMANT; migration written, NOT run; the PUSH-SETUP walkthrough is the only gate left)
+
+## 🔔 2026-08-27 — THE NOTIFICATIONS BUILD (her ask, commit `9b84686`, sw v74)
+
+Her ask, verbatim: *"the kids are asking for daily notification reminders,
+maybe every time blip needs his cookie and when new homework is assigned"*.
+Three kinds of notification now, ONE opt-in switch, still ONE PER LEARNER
+PER DAY.
+
+**Her three rulings this session** (asked before building, answered mid-build):
+1. Blip nudges **daily**, not the old transition-only days 3/5/6.
+2. Homework set late **holds until the next morning**.
+3. The **evening "still to do" nudge** is wanted as well.
+4. And, asked separately: **"homework beats blip"** when both want the same day.
+
+**What shipped**
+- **Blip is daily.** `levelForDaysUnfed` speaks every day from day 3, and the
+  permanent day-7 silence is GONE. ⚠️ The reason that silence existed has not
+  gone away — a daily alarm to a disengaged kid is how you get notifications
+  blocked forever — so it is answered in the WORDING instead: from day 7 the
+  message stops escalating and becomes two soft no-pressure variants that
+  alternate. **If notifications start getting switched off, that is the knob.**
+- **📚 "New homework!"** the moment she saves in admin. admin.js calls
+  send-push with the ADMIN PASSWORD (`mhq_admin_ok_rpc`, the lock paper-admin
+  already uses) — the CRON_SECRET never touches a browser, and no new secret
+  exists anywhere. Outside **07:00–19:00 SA** it HOLDS: `announced_at` stays
+  null and a NEW 07:00 cron job drains the queue in the morning.
+- **Evening nudge** at 17:00 the day before a due date, only to learners with
+  no `box_grant` for that assignment — the same "done" test mhq_get_state uses.
+  Needs no "already nudged" column: due_on = tomorrow is true on exactly one day.
+- **The opt-in card's wording changed.** It promised "a nudge when Blip's
+  hungry"; it now names homework out loud. A child who tapped it for Blip and
+  then got buzzed about maths would be right to feel tricked.
+- **cron.sql now schedules TWO jobs** (07:00 morning, 17:00 daily).
+
+**⚠️ IT IS LIVE BUT DORMANT.** Every new path is gated on `VAPID_PUBLIC_KEY`,
+still `""`. Nothing calls the new RPC or the edge function until PUSH-SETUP.md
+is worked through. That is why it was safe to push AHEAD of the migration —
+the usual ship-skill handshake was consciously skipped for that reason.
+
+**The migration obeys the copy-forward law by not copying anything forward.**
+`migration-push-homework.sql` is ADDITIVE ONLY: three nullable columns on
+`assignments`, one on `push_subscriptions`, one new RPC. It redefines NOTHING —
+`mhq_admin_set_assignment` is left exactly as it is, and admin.js makes a
+second additive call instead. Validated against LIVE inside a **rolled-back
+transaction** (4 columns, search_path pinned, anon execute, wrong password
+rejected → 'auth'), then live re-checked: untouched, 0 columns added.
+
+**Verification — and the bug it caught**
+- **verify-push.mjs (NEW, 105 checks).** It does NOT test a copy: it SLICES the
+  marked pure block straight out of `send-push/index.ts` and runs it under
+  Node's type-stripping. Marker comments in that file are load-bearing; the
+  harness exits loudly if they or any named decision go missing.
+- **It found a real bug.** The notification said *"by 3 September"* while the
+  learner's pinned card says *"by 3 Sep"*. Same day, two different-looking
+  answers. Now compared against `js/assignment.js`'s own `dueLine` over 370
+  dates — the app is the source of truth; copy it, don't improve on it.
+- All five admin outcomes driven in a real browser (sent-plural, sent-singular,
+  held-till-morning, nobody-subscribed, and function-not-deployed → silent,
+  homework still saves). Both card states clean at 375px. verify-wrap
+  (304962) and verify-exam-modules (7374) still green.
+- **NOT proven, and cannot be locally:** that a notification reaches a phone.
+  That needs the keys, the deployed function and a real device — Part 8.
+
+**Known, accepted:** if the sender dies mid-announce, `announced_at` stays null
+and the 07:00 job may announce again — at-least-once. A kid could see it twice.
+Rare, capped by the one-a-day budget, left alone rather than adding machinery.
+
+**Live-verified 2026-08-27:** Pages built green on `9b84686`; the live site
+serves sw `mhq-v74`, the new admin code, the new card wording, and
+`VAPID_PUBLIC_KEY = ""` (i.e. correctly still dormant).
+
+### ⏳ Pending on Megan
+- 💻🌐 **25 min [blocking]: the PUSH-SETUP.md walkthrough** — the ONLY gate
+  left before the kids get notifications. Keys → 4 secrets → 2 Supabase
+  toggles → paste the function → run 2 migrations → run cron.sql → test on
+  your own phone. Do it WITH Claude; it is all dashboard clicking.
+- 🌐 1 min [whenever]: admin → Today's homework → "⬇ Picture for the WhatsApp
+  group" → check the PNG lands in your downloads. (Design already approved.)
+- 📱 1 min [whenever]: close-and-reopen the app twice (sw v74).
+
+### Next up
+- 📐 **Another 2D Trig round** — her ask this session, discussed after the
+  notifications. The chapter has t1–t7 today, ending on "Mixed problems"; t8
+  needs HER call on the topic (do NOT guess her content).
+- Carried: next fix batch (💬 FAB overlap on Exam Focus at scrollY 0, sheet
+  Escape key, gtrig cosmetics), wave-4 dice (AG waits on her 14 F-flags,
+  Probability needs material, Measurement engine ruling, Trig Graphs
+  mechanic), calculator emulator round 2, worked-method content batch.
+
+### 📌 Decisions (append-only, 2026-08-27)
+- **Notifications: one per learner per day, homework > nudge > blip.** Her
+  words: "homework beats blip". Expressed as ONE predicate,
+  `outranksDailyBudget()`, read at all three call sites — the rule has exactly
+  one place to be read, changed or tested.
+- **Nothing is ever sent 19:00–07:00 SA.** Her "hold off until the next
+  morning". The hold has no queue table: `announced_at is null` IS the queue.
+- **A daily reminder may repeat; it must never nag.** The day-7+ wording is
+  the safety valve that replaced the old permanent silence.
+- **One opt-in switch covers all three kinds, and its copy says so.** An
+  opt-in that under-promises is still a lie. If a fourth kind is ever added,
+  that copy changes with it.
+- **Additive-only beats a careful redefinition.** The cleanest way to obey the
+  copy-forward law is not to copy anything forward — new columns + a new RPC,
+  and the existing function untouched. Also avoids the overload trap (extra
+  parameters would create a SECOND function, not replace the first).
+- **Edge-function logic is tested by SLICING the real file**, not by keeping a
+  parallel copy. PUSH-SETUP has her PASTE index.ts into the Supabase editor,
+  so it must stay ONE file — a `./logic.ts` import would never reach the
+  server. Marker comments make the slice safe.
+- **Duplicated learner-facing wording must be diffed against the app**, not
+  eyeballed. The "3 September" vs "3 Sep" bug is why verify-push compares
+  every date against `js/assignment.js` rather than against a fixed list.
+
+---
+
+# (previous head) Project status — updated 2026-08-26 (📕 HOMEWORK RED BOOK restored — mhq_get_state had lost assignment/boxes/trinkets on 08-21; full copy-forward audit of ALL 72 live functions: everything else clean)
 
 ## 📕 2026-08-26 — the invisible homework (fixed, migration `restore_state_keys`, NO sw bump — server-only)
 
