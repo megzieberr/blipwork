@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v80 SHIPPED + LIVE-VERIFIED 2026-08-27 (incl. same-night implicit-× fix); 🔔 notifications live and proven)
+# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v81 SHIPPED + LIVE-VERIFIED 2026-08-27 (+ implicit-× fix + steps-UX round); 🔔 notifications live and proven)
 
 ## 🧮 2026-08-27 (late evening) — CALCULATOR ROUND 2: BUILT, FOREMAN-REVIEWED, SHIPPED (83e9331, live-verified)
 
@@ -54,6 +54,20 @@ explicit ×÷ (device-verified: the real fx-991ZA auto-brackets 6÷2(1+2) to
 stays exact √3/4. verify-calculator 77/77. ⭐ Test-design lesson: the original
 71 checks all used single factors — always include an implicit product in
 calculator acceptance cases.
+
+**ROUND 3, her play-test asks, same night (359f886, sw v81, live-verified):**
+(1) A step's input pad collapses the moment the step is answered — prompt,
+entered value and ✓ stay; instant display:none so the sw v77 scroll-target
+math stays honest; mc/mcmulti options deliberately stay visible (the
+highlighted choice IS the answer display). (2) The 🧮 button gets a floating
+twin pinned top-right whenever the header one scrolls out of view
+(IntersectionObserver, safe-area aware, clear of the 💬 FAB; the observer
+self-disconnects). Foreman review fix folded in: openCalculator() double-open
+guard (the float sits above the calc scrim — two taps used to stack two
+calculators). verify-steps-ux.html NEW at 33/33; 77/77 and 134/134 unchanged.
+⚠️ Pane note for future sessions: IntersectionObserver never fires in the
+preview pane — verify-steps-ux drives the captured callback with synthetic
+entries; the real-scroll probe there is informational only.
 
 **Deliberate scope cuts:** ˣ√ (SHIFT of x^) stays dead; cube roots evaluate to
 decimals (no exact ³√ type). Both fine for Gr11 — revisit only if a quest
