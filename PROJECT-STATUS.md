@@ -111,14 +111,14 @@ independently. Played end to end in a browser at 375px, clean runs and
 deliberately-wrong runs.
 
 ### ⏳ Pending on Megan
-- 📱 2 min [blocking]: send the class the "turn on reminders" message (bottom
-  of PUSH-SETUP.md, under **For the learner**). Until they tap it, only YOUR
-  phone gets anything — the code is done, the opt-in is theirs.
-- 🌐 1 min [whenever]: admin → Today's homework → "⬇ Picture for the WhatsApp
-  group" → check the PNG lands in your downloads.
 - 📱 1 min [whenever]: play round 2 on your phone and eyeball the stacked
   fraction — it is measured and proven answerable, but no screenshot was
   possible from this session's browser pane.
+
+(Cleared 2026-08-27 evening, both confirmed by her: the WhatsApp homework
+picture downloads and looks right — "looks adorable" — and the class opt-in
+message has been sent. Watch `push_subscriptions` for the kids arriving; until
+they tap Allow, only her phone receives anything.)
 
 ### Next up
 - Wave-4 dice (AG waits on her 14 F-flags, Probability needs material,
