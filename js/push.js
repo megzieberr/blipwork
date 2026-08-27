@@ -8,9 +8,14 @@
 
    Ported from Circle Quest's js/push.js (2026-07-19). Two deliberate
    differences:
-     • the card is a Blip-flavoured opt-in ("remind me when he's
-       hungry"), rendered on the BLIP screen next to the feed button
-       rather than on the hub — that is where the emotional context is;
+     • the card is a Blip-flavoured opt-in, rendered on the BLIP screen
+       next to the feed button rather than on the hub — that is where
+       the emotional context is. ⚠️ Since 2026-08-27 this ONE switch also
+       controls homework notifications, so its wording says both things
+       out loud: an opt-in that under-promises is still a lie, and a
+       child who tapped "remind me about Blip" and then got buzzed about
+       maths would be right to feel tricked. If a third kind of
+       notification is ever added, this copy changes with it;
      • it renders itself (maybeShowReminderCard) in the same
        conditional-render idiom as js/install.js, so the caller is a
        one-liner that can never throw into the screen render.
@@ -182,8 +187,8 @@ export function maybeShowReminderCard(hostEl) {
       <button class="push-x" aria-label="Dismiss">✕</button>
       <div class="push-ico">🔔</div>
       <div class="push-body">
-        <b>Get a nudge when Blip's hungry</b>
-        <p class="muted small">One gentle reminder on the days he starts going hungry. Never more than one a day.</p>
+        <b>Get a nudge from Blipwork</b>
+        <p class="muted small">When new homework goes up, and on the days Blip starts going hungry. Never more than one a day.</p>
       </div>
       <div class="push-foot"></div>`;
     card.hidden = false;
@@ -218,7 +223,7 @@ export function maybeShowReminderCard(hostEl) {
       <div class="push-ico">🔔</div>
       <div class="push-body">
         <b>Reminders on</b>
-        <p class="muted small">Blip will send a quiet nudge on the days he's peckish.</p>
+        <p class="muted small">You'll hear about new homework, and about Blip on the days he's peckish. One a day at most.</p>
       </div>
       <div class="push-foot"></div>`;
     card.hidden = false;

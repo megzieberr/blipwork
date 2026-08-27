@@ -40,7 +40,14 @@
                   adminResetProgress, adminResolveStruggle,
                   setTerm(pw,running)  (alias: adminSetTerm),
                   adminSetAssignment(pw,questId,due,note),
-                  adminClearAssignment(pw)
+                  adminClearAssignment(pw),
+                  adminSetAnnounce(pw,title,chapter) — snapshots the quest's
+                    display title + chapter name onto the active assignment
+                    so the send-push edge function can word the "📚 New
+                    homework!" notification without js/config.js,
+                  announceHomework(pw) — asks send-push to tell the kids now.
+                    Returns {held:true} instead of sending when it is outside
+                    07:00–19:00 SA; the 07:00 cron job delivers those.
      dice:        diceSave(u,p,chapter,save) — persist/clear the in-progress
                     round blob (resume checkpoint; save may be null to clear)
                   submitDice(u,p,chapter) — pays out the round. Takes NO xp;

@@ -1831,6 +1831,20 @@ export const LocalBackend = {
   async pushSubscribe() { return { ok: true, local: true }; },
   async pushUnsubscribe() { return { ok: true, local: true }; },
 
+  /* 🔔 The two homework-notification calls (2026-08-27). Offline there is no
+     edge function and nothing to announce to, so both answer honestly and
+     do nothing. `held:true` is the shape admin.js branches on — saying it
+     here means the local harness exercises the SAME message path she sees
+     on a late-night save, instead of a path that only exists on live. */
+  async adminSetAnnounce(pw) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    return { ok: true, updated: true, local: true };
+  },
+  async announceHomework(pw) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    return { ok: true, local: true, held: true, sent: 0 };
+  },
+
   async adminSetQuestOpen(pw, quest, open) {
     if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
     const q = read(LS.quests, {}); if (q[quest]) { q[quest].is_open = !!open; write(LS.quests, q); } return { ok: true };

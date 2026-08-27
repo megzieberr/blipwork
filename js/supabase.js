@@ -98,6 +98,30 @@ export const SupabaseBackend = {
   },
   async adminClearAssignment(pw) { return rpc("mhq_admin_clear_assignment", { p_admin_password: pw }); },
 
+  /* 🔔 HOMEWORK NOTIFICATIONS (2026-08-27). Two calls, both additive, both
+     fired right after adminSetAssignment succeeds:
+
+       adminSetAnnounce  writes the quest's DISPLAY TITLE and CHAPTER NAME
+         onto the active assignment row. Those strings live in js/config.js,
+         which the Deno edge function cannot read — so the browser, which
+         has them, hands them over. See migration-push-homework.sql for why
+         this is a separate RPC rather than two more parameters on
+         mhq_admin_set_assignment (the copy-forward law).
+
+       announceHomework  asks send-push to tell the kids NOW. The edge
+         function decides whether "now" is polite: inside 07:00–19:00 SA it
+         sends, otherwise it replies {held:true} and the 07:00 cron job
+         delivers it in the morning. Authenticated with the admin password
+         through mhq_admin_ok_rpc — the CRON_SECRET never touches a browser.
+
+     Both are best-effort at the call site: the homework itself is already
+     saved by the time they run, so a failure costs a notification, never
+     an assignment. */
+  async adminSetAnnounce(pw, title, chapter) {
+    return rpc("mhq_admin_set_announce", { p_admin_password: pw, p_title: title || null, p_chapter: chapter || null });
+  },
+  async announceHomework(pw) { return invokeFn("send-push", { admin_pw: pw, mode: "homework" }); },
+
   // ---- DICE-PLAN.md: generative practice rounds (session 0b, 2026-08-21) ----
   // diceSave persists/clears the in-progress round blob (resume checkpoint);
   // submitDice takes NO xp/amount — the server recomputes it from the saved

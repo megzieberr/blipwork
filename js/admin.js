@@ -13,11 +13,20 @@ import { CHAPTERS, DICE_CHAPTERS, FUNFUN_ENABLED, FEEDBACK_ENABLED, PAPERS_ENABL
 import { CONCEPTS } from "./concepts.js";
 import { el, clear, pwToggle } from "./ui.js";
 import { dueLine } from "./assignment.js";
+/* The bare public key, not push.js itself: admin.html has no Blip screen and
+   no learner session, so pulling in the whole opt-in module for one truthy
+   check would drag session.js along for nothing. Empty key = the whole
+   reminder feature is dormant (PUSH-SETUP.md). */
+import { VAPID_PUBLIC_KEY } from "./push-config.js";
 
 const root = () => document.getElementById("admin");
 let pw = null;
 
 const questTitle = id => { for (const ch of CHAPTERS) for (const q of (ch.quests || [])) if (q.id === id) return `${q.n}. ${q.title}`; return id; };
+/* The chapter's DISPLAY name ("2D Trigonometry"), not its id ("trig") — this
+   goes straight into a notification a child reads. Null when the quest isn't
+   in config.js at all, which send-push words around. */
+const chapterNameOf = id => { for (const ch of CHAPTERS) for (const q of (ch.quests || [])) if (q.id === id) return ch.name; return null; };
 const conceptTitle = id => (CONCEPTS[id] && CONCEPTS[id].title) || id;
 const fmtDate = v => { if (!v) return "never"; const d = new Date(v); return isNaN(d) ? "—" : d.toLocaleDateString(); };
 const daysSince = v => { if (!v) return Infinity; const d = new Date(v); return isNaN(d) ? Infinity : (Date.now() - d.getTime()) / 864e5; };
@@ -243,8 +252,30 @@ function assignmentSection(data) {
   save.addEventListener("click", async () => {
     if (!select.value) { alert("Pick a quest first."); return; }
     save.disabled = true;
-    try { await api.adminSetAssignment(pw, select.value, due.value || null, note.value.trim() || null); }
-    catch { /* reload shows the true state */ }
+    let saved = false;
+    try {
+      const r = await api.adminSetAssignment(pw, select.value, due.value || null, note.value.trim() || null);
+      saved = !!(r && r.ok);
+    } catch { /* reload shows the true state */ }
+
+    // 🔔 Tell the kids (2026-08-27). Strictly AFTER the homework itself is
+    // saved and strictly best-effort: a notification that fails to go out
+    // must never look like homework that failed to save. Silent while the
+    // feature is dormant — no VAPID key means no setup has happened yet and
+    // an alert on every save would be pure noise (PUSH-SETUP.md).
+    if (saved && VAPID_PUBLIC_KEY) {
+      try {
+        await api.adminSetAnnounce(pw, questTitle(select.value), chapterNameOf(select.value));
+        const r = await api.announceHomework(pw);
+        if (r && r.ok && r.held) {
+          alert("Homework set 👍\n\nIt's late, so the kids won't be buzzed now — the notification goes out at 7am.");
+        } else if (r && r.ok && r.sent > 0) {
+          alert(`Homework set 👍\n\n${r.learners} ${r.learners === 1 ? "learner has" : "learners have"} been notified.`);
+        } else if (r && r.ok) {
+          alert("Homework set 👍\n\nNobody has reminders switched on yet, so no notification went out.");
+        }
+      } catch { /* the homework is saved; the nudge is not worth an error popup */ }
+    }
     reload();
   });
   form.appendChild(save);

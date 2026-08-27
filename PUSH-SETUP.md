@@ -1,12 +1,18 @@
-# PUSH-SETUP.md — turning on Blip reminders
+# PUSH-SETUP.md — turning on Blipwork reminders
 
-This adds a **daily push notification** to Blipwork: a gentle nudge when the
-learner's Blip has gone a few days without a cookie.
+This switches on **notifications** for Blipwork. There are three kinds, and
+one switch in the app turns on all three:
 
-It is deliberately quiet. A reminder only goes out on the day he gets *worse* —
-day 3 (sleepy), day 5 (in bed) and day 6 (last word). Day 4 is silent, day 7 and
-onwards is silent forever, weekends and holidays are silent, and anyone who has
-already fed him that day is skipped. Nobody gets more than one a day.
+| What | When it arrives |
+| --- | --- |
+| 📚 **New homework** | the moment you set homework in admin — or 7am the next morning if you set it late |
+| 💚 **A quick reminder** | 5pm the evening before homework is due, only to a learner who hasn't done it |
+| 😴 **Blip is hungry** | 5pm daily, from the third day his Blip goes unfed |
+
+It is deliberately gentle. **Nobody ever gets more than one notification a
+day** — if two want to fire, homework wins and Blip waits until tomorrow.
+Weekends and school holidays are silent. Anyone who has already fed Blip that
+day is skipped. And nothing is sent between 7pm and 7am, ever.
 
 Your Supabase project, GitHub repo and live site already exist, so this guide is
 only the notification parts. It is the same recipe as Circle Quest, so it should
@@ -81,8 +87,9 @@ can't recover it, and a public key without its matching private key won't send.
    (If you don't have a `commit-msg.txt`, use
    `git commit -m 'Turn on Blip reminders'` — single quotes, not double.)
    - **You should see:** `git push` finish. Wait ~1 minute for GitHub Pages.
-   - Once live, a **🔔 Get a nudge when Blip's hungry** card appears on the Blip
-     screen, just under the Feed button, inside the installed app.
+   - Once live, a **🔔 Get a nudge from Blipwork** card appears on the Blip
+     screen, just under the Feed button, inside the installed app. That one
+     card is the switch for all three kinds of notification.
    - **Before this key is set the card is invisible on purpose** — that's how it
      has been shipping, and it's normal.
 
@@ -99,6 +106,13 @@ can't recover it, and a public key without its matching private key won't send.
 
 *(If you've already run migration-phase3.sql for the homework/treasure-box
 features, it's done — the table came with it. Just confirm it's in the list.)*
+
+4. Now do the same with **`supabase/migration-push-homework.sql`** — New
+   query, paste the whole file, **Run**. This is the homework-notification
+   half, added 2026-08-27.
+   - **You should see:** green **Success**. (Also safe to run twice.)
+   - It changes nothing you can see in the app: it adds four empty columns
+     and one small function the notification sender needs.
 
 ---
 
@@ -157,18 +171,30 @@ features, it's done — the table came with it. Just confirm it's in the list.)*
 
 ---
 
-## Part 7 — Schedule the daily reminder
+## Part 7 — Schedule the two daily runs
+
+There are **two** timed jobs, both in the same file:
+
+- **7am** — sends any homework announcement that was held overnight. Most
+  days it does nothing, because homework set during the day goes out the
+  moment you press Save.
+- **5pm** — the "due tomorrow" reminder, then the Blip nudge.
 
 1. Open **`supabase/cron.sql`** on your computer in a text editor.
-2. Replace `<PROJECT_REF>` with **`pjpwhalcifywjrwtjknd`**.
-3. Replace `<CRON_SECRET>` with your CRON_SECRET from Part 4b.
-4. **Pick the time** (optional): the default is **17:00 SA** — after school,
-   before the evening. The file shows how to change it (it's written in UTC,
-   which is SA time minus 2 hours). Save the file.
+2. Replace `<PROJECT_REF>` with **`pjpwhalcifywjrwtjknd`** — it appears
+   **twice**, once per job.
+3. Replace `<CRON_SECRET>` with your CRON_SECRET from Part 4b — also
+   **twice**.
+4. **Pick the times** (optional): the defaults are 7am and 5pm SA. The file
+   shows how to change them (they're written in UTC, which is SA time minus
+   two hours). Save the file.
+   - ⚠️ If you move the morning one, keep it at or after 7am. The sender
+     refuses to announce homework before 7am, so an earlier job would find
+     nothing to do and the notification would wait another whole day.
 5. In Supabase: **SQL Editor** → **New query** → paste the whole file → **Run**.
    - **You should see:** green success. To check, run a new query:
-     `select jobname, schedule from cron.job;` — you should see
-     `blipwork-blip-reminder`.
+     `select jobname, schedule from cron.job;` — you should see **both**
+     `blipwork-morning-homework` and `blipwork-blip-reminder`.
 
 ---
 
@@ -188,12 +214,22 @@ features, it's done — the table came with it. Just confirm it's in the list.)*
 It also deliberately does **not** count as that day's reminder, so testing can
 never eat a real nudge.
 
+### To test the homework notification
+Easiest test there is: with reminders on, go to **admin → Today's homework**
+and set (or replace) homework during the day. The notification should land on
+your phone within a few seconds, and admin tells you how many learners were
+notified. Set it after 7pm instead and admin says it will go out at 7am — that
+is the hold working, not a failure.
+
+To force the held one through without waiting for morning, invoke the function
+with body `{ "type": "morning" }` and the `x-cron-secret` header.
+
 ### To test a *real* sick-stage message
-The proper daily run only fires on day 3, 5 or 6 unfed, so you can't force it
-from the Invoke box. In the app, use `__BLIP_DEV__.skipDays(3)` in the browser
-console to push the clock forward, then invoke the function with an **empty**
-body `{}` (same `x-cron-secret` header). The response JSON shows exactly who it
-considered and why anyone was skipped.
+The daily run only speaks from day 3 unfed onwards, so you can't force it from
+the Invoke box. In the app, use `__BLIP_DEV__.skipDays(3)` in the browser
+console to push the clock forward, then invoke the function with body
+`{ "type": "daily" }` (same `x-cron-secret` header). The response JSON shows
+exactly who it considered and why anyone was skipped.
 
 ---
 
@@ -216,8 +252,14 @@ considered and why anyone was skipped.
     SQL editor and invoke again.
   - **Nothing sent, `skipped: not_a_qualifying_day`** — it's a weekend, or the
     term toggle is off in admin. Working as intended.
-  - **Nothing sent, `sent: 0` with no detail** — nobody was at day 3, 5 or 6.
-    Also working as intended.
+  - **Nothing sent, `sent: 0` with no detail** — nobody's Blip was hungry
+    enough yet. Also working as intended.
+  - **`skipped: already_pushed_today`** — that learner has already had her
+    one notification for the day. Working as intended: homework beats Blip.
+  - **`held: true`** on a homework call — it's outside 7am–7pm, so the kids
+    get it in the morning. Working as intended.
+  - **`admin_pw may only run mode 'homework'`** — something tried to fire a
+    Blip run from the admin page. That is blocked on purpose.
 - **If you switched to a NEW VAPID pair** after a device had already subscribed
   to the old one: that device has to turn reminders **off and on again** in the
   app. Its old subscription is locked to the old key and will silently fail.
@@ -241,7 +283,8 @@ considered and why anyone was skipped.
 
 ## You're done 🎉
 
-Each weekday at your chosen time the database wakes the function up, it asks the
-health clock how each Blip is doing, and only the learners who have just crossed
-into a hungrier stage hear anything. To change the time, edit `supabase/cron.sql`
-and run it again.
+Homework notifications go out the moment you set homework (or at 7am if it's
+late). Each evening the database wakes the function up, reminds anyone whose
+homework is due tomorrow, and then asks the health clock how each Blip is
+doing. Nobody gets more than one a day. To change the times, edit
+`supabase/cron.sql` and run it again.
