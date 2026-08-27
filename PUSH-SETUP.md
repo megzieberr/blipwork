@@ -159,13 +159,20 @@ features, it's done — the table came with it. Just confirm it's in the list.)*
 
 ## Part 6 — Deploy the notification function
 
-1. Left sidebar → **Edge Functions** → **Create a function** (or **Via editor**).
+1. Left sidebar → **Edge Functions** → the green **Deploy a new function** button
+   (top right) → **Via Editor**.
+   - ⚠️ Supabase renamed this. It used to say **Create a function**; if a future
+     version renames it again, you want whichever option writes the function in
+     the browser — not "Via CLI", and not "Via AI Assistant".
 2. In the **name** box, type exactly: `send-push` (the schedule looks for this).
 3. Open **`supabase/functions/send-push/index.ts`** on your computer, select all
    (Ctrl+A), copy.
 4. In the browser editor, select the sample code (Ctrl+A) and paste yours over it.
 5. Turn the **Verify JWT** option **OFF** for this function, so our scheduler can
    call it with the CRON_SECRET instead of a login token.
+   - In the newer editor this toggle may only appear AFTER the first deploy, under
+     the function's own settings. Deploying first and switching it off after is
+     fine — nothing calls the function in between.
 6. Click **Deploy**.
    - **You should see:** `send-push` listed as **Deployed**.
 
