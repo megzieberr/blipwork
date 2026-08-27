@@ -1245,6 +1245,45 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .tokenpad .kdisp{font-family:var(--font-num);font-size:24px;letter-spacing:.5px}
 .tokenpad .key.tok{font-size:19px}
 
+/* ---- the fill-the-equation pad (t2 sine-rule set-up, 2026-08-27) ----
+   The display stops being a right-aligned running total and becomes the
+   equation skeleton, centred, with tappable-looking boxes. Boxes are sized
+   in ch so "sin 62°" and "14" do not make the frame jump about as they
+   land — a skeleton that reflows on every tap reads as an error. */
+/* tighter side padding than the plain keypad's 18px: the equation needs
+   the width more than the display needs the margin. At 375px this is the
+   difference between "x/sin 110° = 20/sin 105°" sitting on one line and
+   folding at the "=". Folding there is a graceful fallback, not a fault —
+   it reads like a second line of working — but one line is tidier. */
+.tokenpad.framed .kdisp{justify-content:center;font-size:21px;letter-spacing:0;flex-wrap:wrap;gap:2px;min-height:60px;padding:12px 8px}
+.tokenpad.framed .kval{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px}
+/* each side of the equation is one unbreakable unit — see paintFrame() */
+.tokenpad.framed .kside{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto}
+.tokenpad.framed .keq{padding:0 5px}
+.tokenpad.framed .kfx{color:var(--faint);padding:0 2px}
+/* ⚠️ var(--brd), NOT an invented name. The first draft of this used
+   var(--line), which does not exist in this stylesheet — an unknown colour
+   makes the whole `border` shorthand invalid, so the empty boxes shipped
+   with NO BORDER and the frame read as floating punctuation. Caught by
+   measuring the computed style, not by reading the file. The house tokens
+   are --brd / --brd-2 / --accent, and corners are var(--r-md), sharp. */
+.tokenpad.framed .kslot{display:inline-flex;align-items:center;justify-content:center;
+  min-width:5.2ch;height:34px;padding:0 6px;border-radius:var(--r-md);
+  border:1px dashed var(--brd-2);background:rgba(58,160,255,.05);font-size:18px}
+.tokenpad.framed .kslot.is-filled{border-style:solid;border-color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--ink)}
+/* the box the next tap lands in — the one thing this input must never
+   leave ambiguous */
+.tokenpad.framed .kslot.is-next{border-color:var(--accent);border-style:solid;
+  box-shadow:0 0 0 2px rgba(58,160,255,.30)}
+.tokenpad.framed .key.chip{font-size:17px;font-family:var(--font-num);white-space:nowrap}
+.tokenpad.framed .key-gap{pointer-events:none}
+@media (max-width:380px){
+  .tokenpad.framed .kdisp{font-size:18px}
+  .tokenpad.framed .kslot{min-width:4.6ch;height:31px;font-size:16px}
+  .tokenpad.framed .key.chip{font-size:15px}
+}
+
 /* quadrant-triangle engine (General Trig rounds 8 / 10) */
 .qt-axis{stroke:var(--ink);stroke-width:1.6;fill:none;opacity:.75}
 .qt-arrow{fill:var(--ink);opacity:.75}

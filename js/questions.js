@@ -681,8 +681,14 @@ function mountSteps(host, root, q, commit, svgNode) {
     }
 
     if (step.kind === "tokenpad") {
+      /* `keys` + `frame` turn the pad into the fill-the-equation builder
+         (t2's sine-rule set-up, 2026-08-27). Absent, it is the original
+         free-form reduction-formula pad the gtrig rounds use \u2014 same kind,
+         same marking, so nothing in checkStep had to learn a new word. */
       const tp = mountTokenpad(shost, {
         sym: step.sym || "\u03b8",
+        keys: step.keys || null,
+        frame: step.frame || null,
         onSubmit(raw) {
           if (busy()) return;
           if (!raw) return;                    // ignore an empty submit

@@ -5,6 +5,10 @@
    numeric label; unknowns are letters (x / y / θ) — so the engine's
    to-scale checks only ever see exact values. */
 import { solveTriangle, rotatePts, sinD, cosD } from "../triglib.js";
+/* SLOT is the tokenpad's own marker for "a box to be filled" — imported
+   rather than re-typed so a change to the glyph can never leave the frame
+   builder drawing a character the pad no longer recognises. */
+import { SLOT } from "../tokenpad.js";
 import { computeTriangle } from "../engine/triangle-graph.js";
 
 /* Solve + place a triangle, bound to display letters.
@@ -92,4 +96,73 @@ export function regularPolygonFigure(n, s, accent) {
       { from: names[1], to: names[2], label: String(s) },
     ],
   };
+}
+
+/* ============================================================
+   THE SINE-RULE SET-UP STEP  (her 2026-08-27 ask)
+   ------------------------------------------------------------
+   Round 2 used to hand over the triangle and take one number. Her
+   words: "it is too intense… I think we should change it so that
+   they build the equation step by step each time". Two of the class
+   had finished it; she believes that is why.
+
+   This is the BUILD step: a slotted skeleton  ☐/☐ = ☐/☐  and a set
+   of chips. The learner drops a quantity into each box. It is the
+   same `tokenpad` kind the reduction rounds use, so js/steps-check.js
+   marks it with no new code and the harness tests it the same way.
+
+   ⚠️ THE SINE RULE IS SYMMETRIC, so the mirrored fill is EQUALLY
+   CORRECT and is always accepted:
+        x / sin B̂ = a / sin Â      and      a / sin Â = x / sin B̂
+   Marking one of those wrong would be marking a child wrong for the
+   order they happened to read the triangle in.
+
+   NOT accepted, deliberately: the sines-on-top form. It is true
+   maths, so the step PROMPT says "sides on top" out loud — the round
+   has a whole multiple-choice question teaching exactly that, and a
+   step may only mark what it asked for.
+
+   pair:   { side, sin }  the unknown's side chip and its angle chip
+   known:  { side, sin }  the known pair
+   decoys: extra chips (usually the third angle's sine)
+   ============================================================ */
+export function sineSetupStep(pair, known, decoys, hint) {
+  const frame = [SLOT, "/", SLOT, "=", SLOT, "/", SLOT];
+  /* The pad joins its chips with a thin space, so the expected string must
+     too. normalizeTokens() strips all whitespace before comparing, so this
+     separator is never marked — it only stops "14" and "sin 48°" running
+     together into an unreadable expected value. */
+  const join = xs => xs.join(" ");
+  /* ⚠️ DEDUPE. The decoy is normally the third angle's sine, and a
+     triangle can perfectly well have two equal angles — Â = 50°, B̂ = 80°
+     puts Ĉ at 50° too, and the pad would then show "sin 50°" twice. Two
+     identical chips are not a harder question, they are a confusing one:
+     a learner who taps the second copy and gets it right learns that the
+     duplicate mattered. The generators also avoid the collision up front;
+     this is the safety net under them. */
+  const chips = [];
+  for (const c of [pair.side, known.side, pair.sin, known.sin, ...(decoys || [])]) {
+    if (c != null && c !== "" && !chips.includes(c)) chips.push(c);
+  }
+  return {
+    kind: "tokenpad",
+    prompt: "Build the set-up, <b>sides on top</b>. Tap a piece to drop it into the next box.",
+    frame,
+    keys: shuffleChips(chips),
+    expected: join([pair.side, pair.sin, known.side, known.sin]),
+    alsoAccept: [join([known.side, known.sin, pair.side, pair.sin])],
+    hint,
+  };
+}
+
+/* The chip order is shuffled so the answer can never be "tap them left
+   to right". Seeded off nothing in particular — a fresh order per
+   question is the point. */
+function shuffleChips(xs) {
+  const a = xs.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
