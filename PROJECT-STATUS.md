@@ -1,4 +1,84 @@
-# Project status — updated 2026-08-27 (evening) (🔔 NOTIFICATIONS ARE LIVE AND PROVEN ON HER PHONE — setup finished end to end; 📐 2D Trig round 2 rebuilt as step chains with a stacked-fraction builder, sw v76)
+# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v79, UNCOMMITTED, awaiting her ship yes; 🔔 notifications live and proven)
+
+## 🧮 2026-08-27 (late evening) — CALCULATOR ROUND 2: BUILT, FOREMAN-REVIEWED, NOT YET SHIPPED
+
+Foreman day (Fable designed and reviewed, Sonnet typed; her /go scope: keypad
+re-map + maths engine + verify page, no deploy/migrations). The working tree
+holds the finished build UNCOMMITTED — the ship (commit + push) waits for her
+explicit yes in the foreman chat.
+
+**Her rulings tonight**
+- Full fx-991ZA PLUS II face, drawn key-for-key from her photo + the official
+  emulator — but only the needed keys WORK: fractions, √/³√, x²/x³/x^,
+  sin/cos/tan + inverses, brackets, S⇔D, Ans, Deg. Her words: "we don't need
+  all the functions... that will be a waste... but I do want it to LOOK the
+  same." Dead keys (CALC, ∫, log, ln, hyp, GCD/LCM, M+, ×10^x...) depress and
+  do nothing — do not "finish" them.
+- No embedding the Casio emulator in the app: it is Windows-only, licensed
+  software — legally and technically impossible on a public web app. Explained,
+  accepted; the faithful rebuild IS the plan.
+
+**What was built (all uncommitted, sw bumped to v79 in the diff)**
+- js/calculator.js — keypad re-mapped to the real face (6-col function block,
+  round d-pad, number block with DEL/AC beside the 9, gold SHIFT + red ALPHA
+  micro-labels); tokenised 2-D entry model (fraction/√/power templates with
+  device-true cursor moves); exact-first evaluator (BigInt rationals + k√n
+  surds, float fallback); special-angle trig in degrees (sin 45 → √2/2);
+  S⇔D exact↔decimal (comma, 10 sig digits); Ans; Deg/Rad in SETUP with the D
+  indicator. STAT flows byte-identical — their verify checks never went red.
+- css/styles.css — LCD stacked fractions/radicals/superscripts, ZA green
+  DEL/AC, horizontal-scroll-in-LCD (page never grows a scrollbar).
+- verify-calculator.html — NEW, 71 checks: all 50 keys vs an independently
+  typed spec table, dead/wired behaviour, stats regression, and the
+  device-verified engine scenarios.
+
+**Device parity is PROVEN, not assumed.** The official emulator on her laptop
+was driven live (computer-use: keyboard works always; clicks work once the
+window has been moved by a first keypress) before the build to capture
+behaviour, and again after to spot-check. Two mismatches it exposed were fixed
+the same evening: (1) an operator pressed right after `=` chains as `Ans+`,
+not a fresh line; (2) ◀/▶ step INTO an existing fraction/root/power template
+(the 1/25 probe), never over it. ⭐ Reusable trick: the emulator is a fully
+scriptable ground-truth oracle — screenshots capture it fine, but zoom/regions
+do NOT (layered window), so read the full screenshot.
+
+**Deliberate scope cuts:** ˣ√ (SHIFT of x^) stays dead; cube roots evaluate to
+decimals (no exact ³√ type). Both fine for Gr11 — revisit only if a quest
+needs them.
+
+**Verify (run by the foreman first-hand, not subagent say-so):**
+verify-calculator.html 71/71 · verify-dice.html 134/134 · keypad geometry +
+colours checked via DOM at phone width (calc 327px wide, zero key overflow).
+
+(Cleared 2026-08-27 late evening: the "photograph your Casio" pending item —
+she sent the keypad photo, and the emulator answered every remaining label
+question. The "reopen app twice for sw v78" item is superseded by the v79
+ship.)
+
+### ⏳ Pending on Megan
+- 🌐 1 min [blocking]: say "ship it" (or not) in the foreman chat — the whole
+  calculator build sits uncommitted until then.
+- 📱 3 min [after ship]: open Blipwork → any calcdo round → calculator: do
+  ½+⅓ = then S⇔D, and sin 45 — check it feels like your Casio.
+
+### Next up
+- Ship calculator round 2 (foreman session, her yes pending).
+- ⚠️ (carried) THE VERY BIG BUILD she has in mind — still unnamed, ask what it
+  is before picking anything else.
+- (carried) Wave-4 dice; fix batch (💬 FAB overlap on Exam Focus, sheet Escape
+  key, gtrig cosmetics); worked-method content batch; CRON_SECRET tidy-up
+  offer.
+
+## Decisions (2026-08-27 late evening, appended)
+- Full Casio face, needed-keys-only wired (her ruling; see above).
+- No emulator embed — licence + platform; rebuild instead.
+- Exact-first display (stacked fractions/surds) because the real device shows
+  them; decimal fallback mirrors the device. quartilesExclusive and comma
+  decimals remain canon.
+
+
+<!-- previous header: # Project status — updated 2026-08-27 (evening) (🔔 NOTIFICATIONS ARE LIVE AND PROVEN ON HER PHONE — setup finished end to end; 📐 2D Trig round 2 rebuilt as step chains with a stacked-fraction builder, sw v76) -->
+
 
 ## 🔔 2026-08-27 (evening) — THE PUSH SETUP, FINISHED AND PROVEN
 

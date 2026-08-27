@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator keypad &amp; stats regression · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:26px 0 10px}
+  table.spec{border-collapse:collapse;font-size:11px;width:100%}
+  table.spec th,table.spec td{border:1px solid var(--brd);padding:3px 6px;text-align:left}
+  table.spec th{background:rgba(255,255,255,.04)}
+  tr.ok td.stat{color:var(--good)} tr.bad td.stat{color:var(--bad);font-weight:700}
+  .scen{display:inline-block;vertical-align:top;margin:0 14px 20px 0;background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:12px;padding:12px}
+  .scen h3{font-size:12px;margin:0 0 8px}
+  .scen .r{font-size:12px;margin-top:8px}
+  .scen .r.ok{color:var(--good)} .scen .r.bad{color:var(--bad);font-weight:700}
+  #liveHost{margin:8px 0}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Calculator keypad &amp; stats regression · verification</h1>
+<div id="banner">running…</div>
+
+<h2>1. Live mount (eyeball at this width)</h2>
+<div id="liveHost"></div>
+
+<h2>2. Key-grid spec check — every key vs. an independently-typed copy of the brief</h2>
+<pre id="specSummary">…</pre>
+<table class="spec" id="specTable"><thead><tr><th>id</th><th>group</th><th>main</th><th>shift</th><th>red</th><th>dead?</th><th>handler-behaviour</th><th>status</th></tr></thead><tbody></tbody></table>
+
+<h2>3. Stats regression + menu wiring (real DOM clicks on the rendered keys)</h2>
+<div id="scenarios"></div>
+<pre id="scenSummary">…</pre>
+
+<script type="module">
+import { mountCalculator, KEY_SPEC } from "./js/calculator.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+/* ============================================================
+   CANON — hand-typed straight from the round-1 brief's keypad
+   spec table, independently of js/calculator.js's KEY_SPEC. This
+   is the "law" the rendered grid (and KEY_SPEC itself) is checked
+   against, so a transcription slip in calculator.js gets caught
+   rather than the test quietly agreeing with itself.
+   ============================================================ */
+const CANON = {
+  // ---- top row ----
+  shift:  { group: "func", label: "SHIFT" },
+  alpha:  { group: "func", label: "ALPHA" },
+  mode:   { group: "func", label: "MODE", shift: "SETUP" },
+  on:     { group: "func", label: "ON" },
+  // ---- function row 1 (flanks the d-pad) ----
+  calc:   { group: "func", label: "CALC", shift: "SOLVE=", dead: true },
+  intdx:  { group: "func", label: "∫□", shift: "d/dx", dead: true },
+  xinv:   { group: "func", label: "x⁻¹", shift: "x!", dead: true },
+  logbox: { group: "func", label: "log□", shift: "Σ□", dead: true },
+  // ---- function row 2 ----
+  frac:   { group: "func", label: "▫/▫", shift: "▫≡▫/▫", red: "÷R" },
+  sqrt:   { group: "func", label: "√▫", shift: "³√▫" },
+  x2:     { group: "func", label: "x²", shift: "x³", red: "DEC" },
+  pow:    { group: "func", label: "x^▫", shift: "ˣ√▫", red: "HEX" },
+  log:    { group: "func", label: "log", shift: "10^▫", red: "BIN", dead: true },
+  ln:     { group: "func", label: "ln", shift: "e^▫", red: "OCT", dead: true },
+  // ---- function row 3 ----
+  neg:    { group: "func", label: "(−)", shift: "∠", red: "A" },
+  dms:    { group: "func", label: "°'\"", shift: "FACT", red: "B", dead: true },
+  hyp:    { group: "func", label: "hyp", shift: "Abs", red: "C", dead: true },
+  sin:    { group: "func", label: "sin", shift: "sin⁻¹", red: "D" },
+  cos:    { group: "func", label: "cos", shift: "cos⁻¹", red: "E" },
+  tan:    { group: "func", label: "tan", shift: "tan⁻¹", red: "F" },
+  // ---- function row 4 ----
+  rcl:    { group: "func", label: "RCL", shift: "STO", dead: true },
+  eng:    { group: "func", label: "ENG", shift: "←", red: "i", dead: true },
+  lparen: { group: "func", label: "(", shift: "%" },
+  rparen: { group: "func", label: ")", shift: ";", red: "X" },
+  sd:     { group: "func", label: "S⇔D", shift: "a b/c⇔d/c", red: "Y" },
+  mplus:  { group: "func", label: "M+", shift: "M−", red: "M", dead: true },
+  // ---- d-pad ----
+  up:     { group: "dpad", label: "▲" },
+  down:   { group: "dpad", label: "▼" },
+  left:   { group: "dpad", label: "◀" },
+  right:  { group: "dpad", label: "▶" },
+  // ---- number block row 1 ----
+  d7:  { group: "num", label: "7", shift: "CONST" },
+  d8:  { group: "num", label: "8", shift: "CONV" },
+  d9:  { group: "num", label: "9", shift: "CLR" },
+  del: { group: "num", label: "DEL", shift: "INS" },
+  ac:  { group: "num", label: "AC", shift: "OFF" },
+  // ---- row 2 ----
+  d4:   { group: "num", label: "4", shift: "MATRIX" },
+  d5:   { group: "num", label: "5", shift: "VECTOR" },
+  d6:   { group: "num", label: "6" },
+  mult: { group: "num", label: "×", shift: "nPr", red: "GCD" },
+  div:  { group: "num", label: "÷", shift: "nCr", red: "LCM" },
+  // ---- row 3 ----
+  d1:    { group: "num", label: "1", shift: "STAT/DIST" },
+  d2:    { group: "num", label: "2", shift: "CMPLX" },
+  d3:    { group: "num", label: "3", shift: "BASE" },
+  plus:  { group: "num", label: "+", shift: "Pol" },
+  minus: { group: "num", label: "−", shift: "Rec" },
+  // ---- row 4 ----
+  d0:    { group: "num", label: "0", shift: "Rnd" },
+  dot:   { group: "num", label: ",", shift: "Ran#", red: "RanInt" },
+  exp10: { group: "num", label: "×10ˣ", shift: "π", red: "e", dead: true },   // brief: "×10^x" — rendered with a superscript × the same way x⁻¹/sin⁻¹/etc already do, not the literal caret
+  ans:   { group: "num", label: "Ans", shift: "DRG▶", red: "PreAns" },
+  eq:    { group: "num", label: "=" },
+};
+
+const CANON_IDS = Object.keys(CANON);
+const EXPECTED_TOTAL = 50;   // 26 func + 4 dpad + 20 num
+const EXPECTED_DEAD = 12;    // calc intdx xinv logbox log ln dms hyp rcl eng mplus exp10
+const EXPECTED_NEW11 = ["frac","sqrt","x2","pow","sin","cos","tan","lparen","rparen","sd","ans"];
+
+tick(CANON_IDS.length === EXPECTED_TOTAL, `CANON has ${CANON_IDS.length} keys (want ${EXPECTED_TOTAL})`);
+tick(Object.values(CANON).filter(k => k.dead).length === EXPECTED_DEAD, `CANON has ${Object.values(CANON).filter(k => k.dead).length} dead keys (want ${EXPECTED_DEAD})`);
+tick(EXPECTED_NEW11.every(id => CANON[id] && !CANON[id].dead), "all 11 round-2 ids present in CANON and not marked dead");
+tick(KEY_SPEC.length === EXPECTED_TOTAL, `KEY_SPEC exports ${KEY_SPEC.length} keys (want ${EXPECTED_TOTAL})`);
+
+/* ---- 1. live mount, for eyeballing ---- */
+const liveHost = document.getElementById("liveHost");
+liveHost.style.maxWidth = "340px";
+const liveCalc = mountCalculator(liveHost);
+
+/* ---- 2. per-key spec check against the rendered DOM ---- */
+const specRows = [];
+function freshMount() {
+  const h = document.createElement("div");
+  h.style.position = "absolute"; h.style.left = "-9999px"; h.style.maxWidth = "340px";
+  document.body.appendChild(h);
+  const calc = mountCalculator(h);
+  return { h, calc, cleanup: () => h.remove() };
+}
+
+CANON_IDS.forEach(id => {
+  const canon = CANON[id];
+  const btn = liveHost.querySelector(`[data-keyid="${id}"]`);
+  const issues = [];
+  if (!btn) issues.push("not rendered");
+  else {
+    // dpad buttons (up/down/left/right) are plain-text buttons, not the
+    // ksh/kred/kmain-span layout the func/num grids use
+    const kmain = btn.querySelector(".kmain");
+    const ksh = btn.querySelector(".ksh");
+    const kred = btn.querySelector(".kred");
+    const mainText = canon.group === "dpad" ? btn.textContent : (kmain ? kmain.textContent : "");
+    if (mainText !== canon.label) issues.push(`main "${mainText}" ≠ "${canon.label}"`);
+    const shTxt = ksh ? ksh.textContent : null;
+    const wantSh = canon.shift ?? null;
+    if (shTxt !== wantSh) issues.push(`shift "${shTxt}" ≠ "${wantSh}"`);
+    const redTxt = kred ? kred.textContent : null;
+    const wantRed = canon.red ?? null;
+    if (redTxt !== wantRed) issues.push(`red "${redTxt}" ≠ "${wantRed}"`);
+    const domDead = btn.dataset.dead === "1";
+    if (domDead !== !!canon.dead) issues.push(`dead attr ${domDead} ≠ ${!!canon.dead}`);
+
+    // behavioural handler check: fresh calc, SHIFT on, press this key.
+    // A key with a real click handler always clears S.shift (press()
+    // does that unconditionally for every id but "shift" itself); a
+    // DEAD key has no listener at all, so S.shift must stay untouched.
+    if (id !== "shift") {
+      const f = freshMount();
+      f.h.querySelector('[data-keyid="shift"]').click();
+      f.h.querySelector(`[data-keyid="${id}"]`).click();
+      const shiftAfter = f.calc.state().shift;
+      const expectDead = !!canon.dead;
+      const behaviourOk = expectDead ? (shiftAfter === true) : (shiftAfter === false);
+      if (!behaviourOk) issues.push(`handler behaviour wrong (shift stayed ${shiftAfter}, dead=${expectDead})`);
+      f.cleanup();
+    }
+  }
+  const ok = issues.length === 0;
+  tick(ok, `key ${id}: ${issues.join("; ") || "ok"}`);
+  specRows.push({ id, canon, ok, issues });
+});
+
+const specTbody = document.querySelector("#specTable tbody");
+specRows.forEach(r => {
+  const tr = document.createElement("tr");
+  tr.className = r.ok ? "ok" : "bad";
+  tr.innerHTML = `<td>${r.id}</td><td>${r.canon.group}</td><td>${r.canon.label}</td><td>${r.canon.shift || ""}</td><td>${r.canon.red || ""}</td>`
+    + `<td>${r.canon.dead ? "dead" : ""}</td><td class="stat">${r.ok ? "handler ok" : "—"}</td><td class="stat">${r.ok ? "PASS" : "FAIL: " + r.issues.join("; ")}</td>`;
+  specTbody.appendChild(tr);
+});
+document.getElementById("specSummary").textContent =
+  `${specRows.filter(r => r.ok).length}/${specRows.length} keys match the canon spec (label + shift-label + red-label + dead-handler behaviour)`;
+
+/* ============================================================
+   3. Stats regression + menu wiring, driven by real click events
+   on the rendered buttons (never calc.press() directly).
+   ============================================================ */
+const scenHost = document.getElementById("scenarios");
+const scenLines = [];
+function scenario(name, fn) {
+  const card = document.createElement("div"); card.className = "scen";
+  const h3 = document.createElement("h3"); h3.textContent = name; card.appendChild(h3);
+  const f = freshMount();
+  f.h.style.position = "static"; f.h.style.left = "auto"; f.h.style.display = "inline-block";   // make this one visible in the card
+  card.appendChild(f.h);
+  const rEl = document.createElement("div");
+  const press = id => { const b = f.h.querySelector(`[data-keyid="${id}"]`); if (!b) throw new Error(`no rendered key "${id}"`); b.click(); };
+  let ok = true, msg = "";
+  try { ({ ok, msg } = fn(f.calc, press, f.h) || { ok: true, msg: "" }); }
+  catch (e) { ok = false; msg = "threw: " + e.message; }
+  rEl.className = "r " + (ok ? "ok" : "bad");
+  rEl.textContent = (ok ? "✓ " : "✗ ") + msg;
+  card.appendChild(rEl);
+  scenHost.appendChild(card);
+  tick(ok, `scenario "${name}": ${msg}`);
+  scenLines.push(`${ok ? "✓" : "✗"} ${name} — ${msg}`);
+}
+
+const lcdRes = h => (h.querySelector(".lcd-res") || {}).textContent || "";
+const menuText = h => (h.querySelector(".lcd-menu") || {}).textContent || "";
+
+/* ---- (a) the exact class-taught mean read-off, key by key ---- */
+scenario("MODE→3(STAT)→1(1-VAR), enter 2=4=4=, AC, SHIFT1→4(Var)→2(x̄)→=", (calc, press, h) => {
+  press("mode"); press("d3"); press("d1");                 // MODE, STAT, 1-VAR
+  if (calc.state().mode !== "STAT") return { ok: false, msg: `mode after 1-VAR is "${calc.state().mode}", expected STAT` };
+  press("d2"); press("eq"); press("d4"); press("eq"); press("d4"); press("eq");   // 2 = 4 = 4 =
+  const gotData = calc.state().data.map(d => d.x);
+  if (JSON.stringify(gotData) !== JSON.stringify([2, 4, 4])) return { ok: false, msg: `captured data ${JSON.stringify(gotData)}, expected [2,4,4]` };
+  press("ac");
+  press("shift"); press("d1");    // SHIFT 1 -> STAT menu
+  press("d4");                    // 4 -> Var menu
+  press("d2");                    // 2 -> x̄
+  press("eq");
+  const res = lcdRes(h);
+  const ok = /^3,3333333/.test(res);
+  return { ok, msg: `LCD shows "${res}" (want to start "3,3333333" — mean of 2,4,4 = 3.333…, comma decimal)` };
+});
+
+/* ---- (b) the taught full clear: SHIFT 9 -> 3 (All) -> = ---- */
+scenario("data entered, then SHIFT9→3(All)→= clears everything", (calc, press, h) => {
+  press("mode"); press("d3"); press("d1");      // get some data in first
+  press("d7"); press("eq");
+  press("ac");                                  // leave the stat table back to COMP (CLR lives on the COMP screen)
+  press("shift"); press("d9");                  // SHIFT 9 -> CLR menu
+  press("d3");                                  // 3 -> "All" -> confirm prompt
+  press("eq");                                  // = -> Yes
+  const s = calc.state();
+  const ok = s.mode === "COMP" && s.data.length === 0 && s.freqOn === false && s.screen === "comp";
+  return { ok, msg: `after clear: mode=${s.mode}, data.length=${s.data.length}, freqOn=${s.freqOn}, screen=${s.screen}` };
+});
+
+/* ---- (c) SHIFT 9 opens the CLR menu (Setup/Memory/All) ---- */
+scenario("SHIFT 9 opens the CLR menu", (calc, press, h) => {
+  press("shift"); press("d9");
+  const s = calc.state();
+  const txt = menuText(h);
+  const ok = s.screen === "menu" && /All/.test(txt) && /Setup/.test(txt) && /Memory/.test(txt);
+  return { ok, msg: `screen=${s.screen}, menu text="${txt}"` };
+});
+
+/* ---- (d) SHIFT MODE opens the SETUP menu ---- */
+scenario("SHIFT MODE opens the SETUP menu", (calc, press, h) => {
+  press("shift"); press("mode");
+  const s = calc.state();
+  const txt = menuText(h);
+  const ok = s.screen === "menu" && /MthIO/.test(txt) && /LineIO/.test(txt);
+  return { ok, msg: `screen=${s.screen}, menu text="${txt}"` };
+});
+
+/* ---- (e) basic COMP arithmetic still works after the remap: 2+3= ---- */
+scenario("COMP arithmetic: 2 + 3 =", (calc, press, h) => {
+  press("d2"); press("plus"); press("d3"); press("eq");
+  const res = lcdRes(h);
+  return { ok: res === "5", msg: `LCD shows "${res}", want "5"` };
+});
+
+const resEl = h => h.querySelector(".lcd-res");
+const resText = h => (resEl(h) || {}).textContent || "";
+const resFrac = h => { const el = resEl(h); const num = el && el.querySelector(".calc-frac-num"); const den = el && el.querySelector(".calc-frac-den"); return (num && den) ? { num: num.textContent, den: den.textContent } : null; };
+const expr = h => (h.querySelector(".lcd-expr") || {}).textContent || "";
+const ind = h => (h.querySelector(".calc-ind") || {}).textContent || "";
+
+/* ---- round 2: the COMP-mode maths engine, driven by real clicks ---- */
+
+/* 1. frac 1 ▼ 2 ▶ + frac 1 ▼ 3 ▶ = → exact 5⁄6 stacked; sd toggles decimal, then back */
+scenario("frac 1▼2▶ + frac 1▼3▶ = → 5⁄6 exact; sd → 0,8333333333; sd → 5⁄6 again", (calc, press, h) => {
+  press("frac"); press("d1"); press("down"); press("d2"); press("right");
+  press("plus");
+  press("frac"); press("d1"); press("down"); press("d3"); press("right");
+  press("eq");
+  const f1 = resFrac(h);
+  if (!f1 || f1.num !== "5" || f1.den !== "6") return { ok: false, msg: `exact result = ${JSON.stringify(f1)} (or "${resText(h)}"), want stacked 5⁄6` };
+  press("sd");
+  const dec = resText(h);
+  if (dec !== "0,8333333333") return { ok: false, msg: `after sd, result = "${dec}", want "0,8333333333"` };
+  press("sd");
+  const f2 = resFrac(h);
+  const ok = f2 && f2.num === "5" && f2.den === "6";
+  return { ok, msg: `½+⅓ = ${JSON.stringify(f1)} → sd → "${dec}" → sd → ${JSON.stringify(f2)} (want 5⁄6 both ends, decimal "0,8333333333" between)` };
+});
+
+/* 2. sin 4 5 rparen = → √2⁄2 exact; sd → 0,7071067812 */
+scenario("sin 45) = → √2⁄2 exact; sd → 0,7071067812", (calc, press, h) => {
+  press("sin"); press("d4"); press("d5"); press("rparen"); press("eq");
+  const f1 = resFrac(h);
+  if (!f1 || f1.num !== "√2" || f1.den !== "2") return { ok: false, msg: `exact result = ${JSON.stringify(f1)} (or "${resText(h)}"), want stacked √2⁄2` };
+  press("sd");
+  const dec = resText(h);
+  const ok = dec === "0,7071067812";
+  return { ok, msg: `sin(45) = ${JSON.stringify(f1)} → sd → "${dec}" (want "0,7071067812")` };
+});
+
+/* 3. SHIFT sin inserts sin⁻¹( */
+scenario("SHIFT sin → entry line shows sin⁻¹(", (calc, press, h) => {
+  press("shift"); press("sin");
+  const line = expr(h);
+  const ok = /sin⁻¹\($/.test(line);
+  return { ok, msg: `entry line = "${line}" (want it to end "sin⁻¹(")` };
+});
+
+/* 4. sqrt 8 ▶ = → 2√2 */
+scenario("sqrt 8 ▶ = → 2√2", (calc, press, h) => {
+  press("sqrt"); press("d8"); press("right"); press("eq");
+  const res = resText(h);
+  const ok = res === "2√2";
+  return { ok, msg: `LCD shows "${res}", want "2√2"` };
+});
+
+/* 5. x² and SHIFT x² (x³) */
+scenario("5 x² = → 25; then 2 SHIFT-x² = → 8", (calc, press, h) => {
+  press("d5"); press("x2"); press("eq");
+  const r1 = resText(h);
+  if (r1 !== "25") return { ok: false, msg: `5² = "${r1}", want "25"` };
+  press("d2"); press("shift"); press("x2"); press("eq");   // typing after a result starts fresh; SHIFT x² = x³
+  const r2 = resText(h);
+  const ok = r2 === "8";
+  return { ok, msg: `5² = "${r1}" (want 25); 2³ = "${r2}" (want 8)` };
+});
+
+/* 6. 2 pow 5 ▶ = → 32 */
+scenario("2 pow 5 ▶ = → 32", (calc, press, h) => {
+  press("d2"); press("pow"); press("d5"); press("right"); press("eq");
+  const res = resText(h);
+  const ok = res === "32";
+  return { ok, msg: `LCD shows "${res}", want "32"` };
+});
+
+/* 7. lparen 1 + 2 rparen × 3 = → 9 */
+scenario("(1+2)×3 = → 9", (calc, press, h) => {
+  press("lparen"); press("d1"); press("plus"); press("d2"); press("rparen"); press("mult"); press("d3"); press("eq");
+  const res = resText(h);
+  const ok = res === "9";
+  return { ok, msg: `LCD shows "${res}", want "9"` };
+});
+
+/* 8. SHIFT tan 1 rparen = → 45, D indicator visible */
+scenario("SHIFT tan 1) = → 45, D indicator shown", (calc, press, h) => {
+  press("shift"); press("tan"); press("d1"); press("rparen"); press("eq");
+  const res = resText(h);
+  const indTxt = ind(h);
+  const ok = res === "45" && /D/.test(indTxt);
+  return { ok, msg: `tan⁻¹(1) = "${res}" (want "45"); indicator = "${indTxt}" (want it to show "D")` };
+});
+
+/* 9. 8 ÷ 5 = → exact 8⁄5 stacked; sd → 1,6 */
+scenario("8 ÷ 5 = → 8⁄5 exact; sd → 1,6", (calc, press, h) => {
+  press("d8"); press("div"); press("d5"); press("eq");
+  const f1 = resFrac(h);
+  if (!f1 || f1.num !== "8" || f1.den !== "5") return { ok: false, msg: `exact result = ${JSON.stringify(f1)} (or "${resText(h)}"), want stacked 8⁄5` };
+  press("sd");
+  const dec = resText(h);
+  const ok = dec === "1,6";
+  return { ok, msg: `8÷5 = ${JSON.stringify(f1)} → sd → "${dec}" (want "1,6")` };
+});
+
+/* 10. Syntax error path: + = → Syntax ERROR, AC recovers */
+scenario("+ = → Syntax ERROR; AC recovers", (calc, press, h) => {
+  press("plus"); press("eq");
+  const err = resText(h);
+  if (err !== "Syntax ERROR") return { ok: false, msg: `"+ =" shows "${err}", want "Syntax ERROR"` };
+  press("ac");
+  const after = resText(h);
+  const ok = after === "0";
+  return { ok, msg: `after "+ =" → "${err}" (want "Syntax ERROR"); after AC → "${after}" (want "0")` };
+});
+
+/* 11. operator-after-"=" chains from Ans (device-verified): 3+4=, then +,
+   entry line must literally read "Ans+", then 5= → 12 */
+scenario("3+4= then + (chains Ans+) then 5= → 12", (calc, press, h) => {
+  press("d3"); press("plus"); press("d4"); press("eq");
+  const r1 = resText(h);
+  if (r1 !== "7") return { ok: false, msg: `3+4 = "${r1}", want "7"` };
+  press("plus");
+  const lineAfterPlus = expr(h);
+  if (lineAfterPlus !== "Ans+") return { ok: false, msg: `entry line after + is "${lineAfterPlus}", want "Ans+"` };
+  press("d5"); press("eq");
+  const r2 = resText(h);
+  const ok = r2 === "12";
+  return { ok, msg: `3+4= → "7"; + → line "${lineAfterPlus}" (want "Ans+"); 5= → "${r2}" (want "12")` };
+});
+
+/* 12. arrows step INTO existing templates (device-verified): frac 1▼2▶◀5= → 1⁄25 exact; sd → 0,04 */
+scenario("frac 1▼2▶◀5= → 1⁄25 exact (◀ steps back INTO the denominator); sd → 0,04", (calc, press, h) => {
+  press("frac"); press("d1"); press("down"); press("d2"); press("right"); press("left"); press("d5"); press("eq");
+  const f1 = resFrac(h);
+  if (!f1 || f1.num !== "1" || f1.den !== "25") return { ok: false, msg: `exact result = ${JSON.stringify(f1)} (or "${resText(h)}"), want stacked 1⁄25` };
+  press("sd");
+  const dec = resText(h);
+  const ok = dec === "0,04";
+  return { ok, msg: `1/25 = ${JSON.stringify(f1)} → sd → "${dec}" (want "0,04")` };
+});
+
+document.getElementById("scenSummary").textContent = scenLines.join("\n");
+
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed (${specRows.length} keys, ${scenLines.length} regression scenarios)`
+  : `✗ ${total - passed} check(s) failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-calculator] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>
