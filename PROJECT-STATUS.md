@@ -59,6 +59,59 @@ nudging them about it.
 
 ---
 
+## 📱 2026-08-27 (evening) — HER PHONE PLAY-TEST: 3 FIXES (sw v77, v78)
+
+She played round 2 on her phone the moment it went live and found three
+things in about ten minutes. All three shipped the same evening.
+
+1. **⚠️ NOTHING HAPPENED WHEN SHE PRESSED SUBMIT.** Her words: *"nothing
+   happened after I clicked submit and it took me a minute to realize I need
+   to scroll down"*. A steps question with a diagram is taller than a phone
+   screen, so the next step is born below the fold — Submit looks broken, at
+   the exact moment the learner has just answered correctly. mountSteps now
+   brings each newly-revealed step into view, and the verdict at the end.
+   **This fixed every steps round in the app** — the gtrig rounds have had it
+   since 2026-08-22 and nobody had said so.
+   ⭐ **NEVER TRUST A SMOOTH SCROLL.** The first version of the fix tested
+   green on logic and moved the page ZERO PIXELS: `scrollTo({behavior:
+   "smooth"})` is animation-driven and is a silent no-op wherever
+   requestAnimationFrame does not run — this project's own preview pane
+   included (see [[browser-pane-raf-io-dead]]). A scroll that quietly fails
+   to happen IS the bug being fixed, so the code re-checks after 350ms and
+   jumps instead. Proven both ways: at 375×812 every transition scrolls and
+   lands the next step 250–400px down; at 375×2200, where nothing is below
+   the fold, it correctly does not move at all.
+
+2. **The known side belongs IN the numerator.** Her correction: *"we put the
+   16 on top of the fraction, in the numerator, next to the sin"*. Unbracketed,
+   `16 · sin 68° / sin 59°` renders as 16 MULTIPLYING a fraction, because the
+   formula renderer takes only the token immediately before the slash. Same
+   value, wrong notation — not how she teaches it, not how it is written in an
+   exam. Bracketing the numerator fixes it (the renderer already absorbed
+   bracketed groups; that is why the `16/(sin·sin)` distractor always drew
+   right). Applied to both rearrange steps AND the three worked solutions, so
+   nothing on screen disagrees with anything else.
+
+3. **The "Reminders on" banner became a 🔔 in the room header**, between ❓ and
+   👥 — "next to the question mark", her words. Once reminders are on, that
+   card was a paragraph whose only function was an off-switch, on the screen
+   she opens most. That screen no longer scrolls at all; the banner was the
+   only thing pushing it over.
+   ⭐ **THE OFFER STAYS A CARD, deliberately.** 'on' and 'blocked' are
+   STATUSES and fit in an icon. 'off' is not a status, it is an INVITATION,
+   and an invitation shrunk to an unlabelled icon is one no child will ever
+   accept. Turning off asks for confirmation — it is the only control and one
+   tap from a curious thumb.
+
+**⚠️ GITHUB PAGES ERRORED THREE TIMES IN A ROW** (duration 0, message just
+"Page build failed", GitHub status all-green). Same signature as the
+2026-08-06 saga. Nothing was wrong with the commits — the same tree had built
+green minutes earlier. `POST /pages/builds` did not clear it; an EMPTY COMMIT
+did. For ~15 minutes the site was a version behind while "git push" had
+reported success. **Pushed ≠ live. Always curl the live sw.js version.**
+
+---
+
 ## 📐 2026-08-27 — 2D TRIG ROUND 2 REBUILT AS STEP CHAINS (sw v75, then v76)
 
 Her ask: *"I feel like it is too intense. It simply gives the triangle, and then
@@ -111,9 +164,15 @@ independently. Played end to end in a browser at 375px, clean runs and
 deliberately-wrong runs.
 
 ### ⏳ Pending on Megan
-- 📱 1 min [whenever]: play round 2 on your phone and eyeball the stacked
-  fraction — it is measured and proven answerable, but no screenshot was
-  possible from this session's browser pane.
+- 📱 1 min [whenever]: close and reopen the app twice to pick up sw v78
+  (the scroll fix, the numerator notation and the 🔔 header bell).
+- 📱 5 min [whenever, blocks the calculator build]: photograph your Casio —
+  one straight-on shot of the whole keypad, one close-up of the function keys
+  so the little SHIFT labels above them are readable.
+
+(Cleared 2026-08-27 evening, confirmed by her: round 2 played on her phone
+— "looks good"; the stacked fraction and all three play-test fixes verified
+on the live site.)
 
 (Cleared 2026-08-27 evening, both confirmed by her: the WhatsApp homework
 picture downloads and looks right — "looks adorable" — and the class opt-in
@@ -121,6 +180,18 @@ message has been sent. Watch `push_subscriptions` for the kids arriving; until
 they tap Allow, only her phone receives anything.)
 
 ### Next up
+- ⚠️ **SHE HAS "A VERY BIG BUILD" IN MIND** (her words at wrap-up,
+  2026-08-27). Unspecified. ASK WHAT IT IS before picking anything else off
+  this list — it may reorder all of it.
+- **Calculator emulator round 2** — BLOCKED ON HER PHOTOS, and rightly so.
+  The in-app calculator today does stats only: no √, no x², no sin/cos/tan,
+  no inverses, no DEG mode, no brackets. Three blank keys exist, which is far
+  fewer than the brief needs — this is a keypad re-map, not an add. The whole
+  point is that learners practise THE EXACT KEY SEQUENCE on HER calculator, so
+  guessing where SHIFT-sin sits would teach the wrong keystrokes and be worse
+  than having no calculator at all. Her own brief says photograph it first,
+  plan, get her nod, then build. She declined a plan skeleton on 08-27
+  ("no need, got a very big build in mind").
 - Wave-4 dice (AG waits on her 14 F-flags, Probability needs material,
   Measurement engine ruling, Trig Graphs mechanic).
 - Next fix batch (💬 FAB overlap on Exam Focus at scrollY 0, sheet Escape key,
@@ -142,6 +213,15 @@ they tap Allow, only her phone receives anything.)
   the test ping and the broken-job repair used this. Reuse it.
 - **Measure the computed style, do not read the CSS.** `var(--line)` looked
   perfectly fine in the file.
+- **A status can be an icon; an invitation cannot.** Why the 🔔 replaced the
+  ON banner but the opt-in OFFER stays a full card.
+- **Never trust a smooth scroll** — verify it moved, and jump if it did not.
+- **Pushed is not live.** Three Pages builds failed silently tonight. Curl the
+  live `sw.js` before saying anything shipped.
+- **Her play-test found more than the harnesses did.** 1200 generated
+  questions and 25 automated checks all passed on a round whose Submit button
+  appeared to do nothing. Machine checks prove the maths; only a person on a
+  real phone proves the round is usable.
 
 ---
 
