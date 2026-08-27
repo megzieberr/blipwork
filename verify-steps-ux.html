@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steps-question UX (Round 3) · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:900px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  #banner.running{background:rgba(255,255,255,.04);color:var(--muted)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:26px 0 10px}
+  .r{font-size:12px;margin:2px 0}
+  .r.ok{color:var(--good)} .r.bad{color:var(--bad);font-weight:700}
+  #liveHost, #stepsHost{margin:8px 0}
+  #floatSpacer{height:2400px;border-top:1px dashed var(--brd-2);margin-top:12px;padding-top:8px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Steps-question UX (Round 3) · verification</h1>
+<div id="banner" class="running">running…</div>
+
+<h2>1. Live mount (eyeball at this width — resize to 375px too)</h2>
+<div id="liveHost"></div>
+
+<h2>2–3. Step-pad collapse + retry flow (real DOM clicks on the rendered pad)</h2>
+<div id="stepsHost"></div>
+<pre id="stepsSummary">…</pre>
+
+<h2>4. Floating calc button (real IntersectionObserver + a real scroll)</h2>
+<button id="fakeHeaderCalc" class="calc-btn" title="Calculator" aria-label="Open calculator" style="width:36px;height:36px;font-size:16px">🧮</button>
+<div id="floatSpacer">↓ 2400px spacer — scroll the page to push the button above ↑ off-screen</div>
+<pre id="floatSummary">…</pre>
+
+<script type="module">
+// dynamic + cache-busted so a browser tab that had an earlier build of
+// these modules loaded (this project's dev preview reuses one long-lived
+// tab across edits) always re-fetches the CURRENT js/*.js off disk
+const BUST = "?v=" + Date.now();
+const { mountQuestion } = await import("./js/questions.js" + BUST);
+const { mountCalcFloat } = await import("./js/play.js" + BUST);
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const waitFor = (cond, timeout = 3000, step = 40) => new Promise(resolve => {
+  const start = Date.now();
+  const iv = setInterval(() => {
+    if (cond()) { clearInterval(iv); resolve(true); return; }
+    if (Date.now() - start > timeout) { clearInterval(iv); resolve(false); }
+  }, step);
+});
+
+const press = (root, label) => {
+  const b = [...root.querySelectorAll(".key")].find(k => k.textContent.trim() === label);
+  if (!b) throw new Error(`key "${label}" not found in ${root.className || root.id}`);
+  b.click();
+};
+const disp = el => el ? getComputedStyle(el).display : "MISSING";
+
+/* ============================================================
+   1. LIVE MOUNT — a real 3-step chain (calc, calc, tokenpad), same
+   shape as t2's "work out the angle first" rounds this ask is about.
+   ============================================================ */
+const Q = () => ({
+  type: "steps",
+  prompt: "Find θ, step by step.",
+  hint: "Work through it one step at a time.",
+  steps: [
+    { kind: "calc", prompt: "Step 1 — what is x?", unit: "", allowNeg: false, expected: 37, dp: 0, hint: "x = 37" },
+    { kind: "calc", prompt: "Step 2 — what is θ, in degrees?", unit: "°", allowNeg: false, expected: 53, dp: 0, hint: "θ = 53°" },
+    { kind: "tokenpad", prompt: "Step 3 — write the reduction formula for 150°.", sym: "θ", expected: "180-θ", hint: "180° − θ" },
+  ],
+});
+
+const liveHost = document.getElementById("liveHost");
+mountQuestion(liveHost, Q(), {});
+
+/* ============================================================
+   2–3. PROGRAMMATIC — a fresh mount, driven by real clicks on the
+   real rendered keys (not a mocked pad).
+   ============================================================ */
+const stepsHost = document.getElementById("stepsHost");
+mountQuestion(stepsHost, Q(), {});
+const stepsLines = [];
+const st = (cond, label) => { tick(cond, label); stepsLines.push(`${cond ? "✓" : "✗"} ${label}`); };
+
+function stepEl(i) { return stepsHost.querySelectorAll(".q-step")[i]; }
+
+// ---- step 1 (calc): answer correctly first try ----
+{
+  const w = stepEl(0);
+  st(w.dataset.state === "active", "step 1 starts active");
+  const kgrid = w.querySelector(".kgrid");
+  st(disp(kgrid) !== "none", "step 1 pad visible before answering");
+  press(w, "3"); press(w, "7"); press(w, "Submit ✓");
+  st(w.dataset.state === "done", "step 1 → done after a correct first try");
+  st(disp(w.querySelector(".kgrid")) === "none", "step 1 pad (.kgrid) collapses instantly on done");
+  st(disp(w.querySelector(".q-step-prompt")) !== "none", "step 1 prompt stays visible");
+  const kdisp = w.querySelector(".kdisp");
+  st(disp(kdisp) !== "none" && kdisp.textContent.includes("37"), "step 1 entered answer (\"37\") stays visible");
+  st(!!w.querySelector(".q-step-mark"), "step 1 shows the ✓ badge");
+  st(!w.querySelector(".q-step-mark").classList.contains("retried"), "step 1 badge is plain ✓ (no retry)");
+}
+
+// ---- step 2 (calc): wrong once, then right — retry flow ----
+{
+  const w1 = stepEl(0);
+  st(disp(w1.querySelector(".kgrid")) === "none", "step 1 pad STILL collapsed while step 2 is being answered");
+
+  const w2 = stepEl(1);
+  st(w2.dataset.state === "active", "step 2 starts active");
+  press(w2, "1"); press(w2, "Submit ✓");   // wrong (expected 53)
+  st(w2.dataset.state === "retry", "step 2 → retry after a wrong answer");
+  st(disp(w2.querySelector(".kgrid")) !== "none", "step 2 pad stays visible on a wrong try (only \"done\" collapses)");
+  st(!w2.querySelector(".hint-box.step-hint").hidden, "step 2 hint box opens on a miss");
+
+  press(w2, "5"); press(w2, "3"); press(w2, "Submit ✓");   // correct
+  st(w2.dataset.state === "done", "step 2 → done after the retry");
+  st(disp(w2.querySelector(".kgrid")) === "none", "step 2 pad collapses on done, same as step 1");
+  const mark2 = w2.querySelector(".q-step-mark");
+  st(!!mark2 && mark2.classList.contains("retried"), "step 2 badge reads \"✓ after a retry\"");
+  st(disp(w1.querySelector(".kgrid")) === "none", "step 1 pad STILL collapsed after step 2 settles");
+}
+
+// ---- step 3 (tokenpad, the FINAL step): same collapse applies ----
+{
+  const w3 = stepEl(2);
+  st(w3.dataset.state === "active", "step 3 (final, tokenpad) starts active");
+  const kgrid3 = w3.querySelector(".kgrid");
+  st(disp(kgrid3) !== "none", "step 3 pad visible before answering");
+  press(w3, "180°"); press(w3, "−"); press(w3, "θ"); press(w3, "Submit ✓");
+  st(w3.dataset.state === "done", "step 3 → done (chain commits)");
+  st(disp(w3.querySelector(".kgrid")) === "none", "FINAL step's pad (.kgrid) collapses too, same rule");
+  const kdisp3 = w3.querySelector(".kdisp");
+  st(disp(kdisp3) !== "none", "final step's built equation stays visible");
+  st(!stepsHost.querySelector(".feedback").hidden, "chain verdict (.feedback) is shown once the chain commits");
+}
+
+document.getElementById("stepsSummary").textContent = stepsLines.join("\n");
+
+/* ============================================================
+   4. FLOATING CALC BUTTON
+
+   ⚠️ This project's dev preview pane never fires rAF or
+   IntersectionObserver (recorded gotcha, js/companion/treasure.js's
+   header comment — "no IntersectionObserver exist in this app's
+   preview pane"). Confirmed live here too: scrolling the header
+   button thousands of px off-screen and waiting never flips
+   floatBtn.hidden. That is a property of THIS TOOL'S rendering
+   pipeline, not of the shipped code — real Chrome/Safari on her
+   phone fire IntersectionObserver normally.
+
+   So the callback is captured off a spy IntersectionObserver
+   (installed on window BEFORE calling mountCalcFloat) and invoked
+   directly with synthetic entries. This still runs the EXACT
+   function mountCalcFloat() builds — same closure, same
+   `calcFloat.hidden = entry.isIntersecting` line, same
+   isConnected/disconnect guard — only the "did the browser notice
+   the button left the viewport" plumbing is swapped out, because
+   that specific plumbing is what this one tool can't exercise.
+   A best-effort REAL scroll is also run below, informational only
+   (logged, not scored), in case a future pane build fixes this.
+   ============================================================ */
+const floatLines = [];
+const ft = (cond, label) => { tick(cond, label); floatLines.push(`${cond ? "✓" : "✗"} ${label}`); };
+
+let ioTarget = null, ioCallback = null, ioDisconnects = 0;
+class SpyIntersectionObserver {
+  constructor(cb) { ioCallback = cb; }
+  observe(target) { ioTarget = target; }
+  disconnect() { ioDisconnects++; }
+  unobserve() {}
+}
+const RealIO = window.IntersectionObserver;
+window.IntersectionObserver = SpyIntersectionObserver;
+
+const headerCalc = document.getElementById("fakeHeaderCalc");
+const floatBtn = mountCalcFloat(document.body, headerCalc);
+window.IntersectionObserver = RealIO;   // restore immediately — only mountCalcFloat's own `new` needed the spy
+
+ft(!!floatBtn && floatBtn.classList.contains("calc-btn-float"), "mountCalcFloat() returns the .calc-btn-float element");
+ft(floatBtn.hidden === true, "float starts hidden (mount-time default, before any observer callback)");
+ft(ioTarget === headerCalc, "the REAL production code observes the header .calc-btn (not a stand-in)");
+
+ioCallback([{ isIntersecting: true }]);
+ft(floatBtn.hidden === true, "callback(isIntersecting: true) → float stays/goes hidden (header is on-screen)");
+
+ioCallback([{ isIntersecting: false }]);
+ft(floatBtn.hidden === false, "callback(isIntersecting: false) → float becomes visible (header left the viewport)");
+
+ioCallback([{ isIntersecting: true }]);
+ft(floatBtn.hidden === true, "callback flips back to hidden once the header is intersecting again");
+
+// the self-clean guard: once the header button leaves the document,
+// the very next callback must disconnect instead of touching .hidden
+headerCalc.remove();
+const hiddenBeforeDetachCheck = floatBtn.hidden;
+ioCallback([{ isIntersecting: false }]);
+ft(ioDisconnects === 1, "observer self-disconnects the first callback after the header button is detached");
+ft(floatBtn.hidden === hiddenBeforeDetachCheck, "…and does NOT touch .hidden on that same (detached) callback");
+
+// clicking the float opens the SAME overlay the header button does
+// (openCalculator() itself is exercised in depth by verify-calculator.html)
+floatBtn.hidden = false;   // simulate "scrolled away" for the click test below
+floatBtn.click();
+const scrim = document.querySelector(".calc-scrim");
+ft(!!scrim, "clicking the float button opens the calculator overlay");
+if (scrim) scrim.querySelector(".calc-close").click();
+ft(!document.querySelector(".calc-scrim"), "closing it removes the overlay (cleaned up before scoring ends)");
+
+// ---- informational only: a REAL scroll, not scored (see note above) ----
+document.body.appendChild(headerCalc);   // put it back for the eyeball/manual check
+const floatBtn2 = mountCalcFloat(document.body, headerCalc);
+window.scrollTo(0, 0);
+await waitFor(() => true, 200);
+const before = floatBtn2.hidden;
+const docTop = headerCalc.getBoundingClientRect().top + window.scrollY;
+window.scrollTo(0, docTop + 400);
+const changed = await waitFor(() => floatBtn2.hidden !== before, 2000);
+floatLines.push(changed
+  ? "(info) real scroll DID flip the float's visibility in this pane run"
+  : "(info) real scroll did NOT flip it here — expected, see the ⚠️ note above; not scored");
+window.scrollTo(0, 0);
+
+document.getElementById("floatSummary").textContent = floatLines.join("\n");
+
+/* ============================================================ */
+const banner = document.getElementById("banner");
+const ok = passed === total;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed}/${total} check(s) failed — see below`;
+
+window.__VERIFY__ = { total, passed, ok, fails };
+console.log(`[verify-steps-ux] ${passed}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

@@ -29,6 +29,48 @@ export function xpToSubmit(def, progressRecord, stXp) {
   return (progressRecord && progressRecord.passed) ? 0 : stXp;
 }
 
+/* ------------------------------------------------------------
+   FLOATING CALC BUTTON (her 2026-08-27 ask, playtesting on her phone):
+   "make the calculator icon hover at the top, even if you scroll down,
+   otherwise you have to scroll up and down if you wanna use it,
+   especially in questions like this [the new steps chains]." The
+   header `.calc-btn` passed in stays the source of truth — an
+   IntersectionObserver just watches when IT leaves the viewport and
+   shows a compact pinned twin (`.calc-btn-float`) in its place, so
+   there is never a moment with two calc buttons on screen at once. A
+   room with no header calc button never calls this, so it never gets
+   a float either.
+
+   Kept as its own exported function — same reasoning as xpToSubmit
+   above — so verify-steps-ux.html can drive the Observer against a
+   real header button + a real scroll, without booting the whole app
+   (session, api, a live round).
+
+   setInterval self-clean (blip.js's spontaneousMoodTimer) doesn't
+   apply to an Observer; disconnect it the same way instead, on the
+   first callback after the header button has left the document
+   (renderPlay reruns on every room, clear()-ing the old one). Returns
+   the float element (mainly for tests); production code doesn't need
+   the return value.
+   ------------------------------------------------------------ */
+export function mountCalcFloat(host, calcBtn) {
+  const calcFloat = el("button", "calc-btn-float", "🧮");
+  calcFloat.type = "button";
+  calcFloat.title = "Calculator";
+  calcFloat.setAttribute("aria-label", "Open calculator");
+  calcFloat.hidden = true;
+  calcFloat.addEventListener("click", () => openCalculator());
+  host.appendChild(calcFloat);
+  if ("IntersectionObserver" in window) {
+    const calcIO = new IntersectionObserver(([entry]) => {
+      if (!calcBtn.isConnected) { calcIO.disconnect(); return; }
+      calcFloat.hidden = entry.isIntersecting;
+    });
+    calcIO.observe(calcBtn);
+  }
+  return calcFloat;
+}
+
 /* DICE-PLAN.md (session 0b, 2026-08-21): renderPlay is reused, not forked,
    for dice rounds — params.dice (built by js/dice-play.js) is the only
    thing that changes below. When it's absent every branch here is byte-
@@ -49,7 +91,9 @@ export function renderPlay(app, host, params) {
     <button class="calc-btn" title="Calculator" aria-label="Open calculator" style="width:36px;height:36px;font-size:16px">🧮</button>
     <div class="pcount"></div>`;
   top.querySelector(".quit").addEventListener("click", () => app.go("chapter", { chapterId: chapter.id }));
-  top.querySelector(".calc-btn").addEventListener("click", () => openCalculator());
+  const calcBtn = top.querySelector(".calc-btn");
+  calcBtn.addEventListener("click", () => openCalculator());
+  mountCalcFloat(screen, calcBtn);
   const bar = el("div", "pbar"); bar.appendChild(el("i"));
   const xpPop = el("div", "xp-pop");
   const qhost = el("div", "q-host");

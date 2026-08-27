@@ -681,6 +681,21 @@ h2{font-size:20px} h3{font-size:17px}
 .calc-btn{background:var(--panel);border:1px solid var(--brd-2);color:var(--ink);font-size:18px;width:42px;height:42px;border-radius:var(--r-lg);cursor:pointer;display:grid;place-items:center;transition:.15s}
 .calc-btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
 
+/* floating twin of .calc-btn, pinned top-right once the header one
+   scrolls out of view (her 2026-08-27 ask — see js/play.js's
+   IntersectionObserver). Solid panel background so it stays readable
+   sitting over a diagram; safe-area-aware for notched phones. Same
+   z tier as .fb-fab (above the tour at 70, below .toast-host at 80)
+   — top-right keeps it clear of that bottom-right FAB by position,
+   not by stacking order. */
+.calc-btn-float{position:fixed;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:75;
+  width:38px;height:38px;font-size:16px;border-radius:var(--r-lg);cursor:pointer;
+  display:grid;place-items:center;transition:.15s;
+  background:var(--panel-solid);color:var(--ink);border:1px solid var(--brd-2);
+  box-shadow:0 8px 24px -8px rgba(0,0,0,.6)}
+.calc-btn-float:hover{border-color:var(--accent)}
+.calc-btn-float[hidden]{display:none}
+
 /* ============================================================
    NUMBER PATTERNS — the difference pyramid
    ============================================================ */
@@ -1373,6 +1388,19 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .q-step[data-state="active"]{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 .q-step[data-state="retry"]{border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
 .q-step[data-state="done"]{opacity:.78}
+/* Round 3 (2026-08-27), her ask: once a step is answered, its input pad
+   collapses — otherwise the kids have to scroll up and down to build the
+   next equation. Hidden INSTANTLY (display:none, no height transition) so
+   mountSteps()'s bringIntoView() scroll-target math is never computed
+   against an animating box (⚠️ NEVER-TRUST-A-SMOOTH-SCROLL, sw v77). The
+   prompt, the entered value/equation (.kdisp), and the ✓ badge all stay —
+   only the digit grid / token chips / Submit button go. One selector
+   covers keypad.js AND tokenpad.js (both build on .kgrid), plus the
+   tapcross/doubletick Submit row (.tc-buttons). mc/mcmulti options are
+   left alone on purpose: the highlighted choice IS their "entered
+   answer" display, so hiding them would erase it. */
+.q-step[data-state="done"] .kgrid,
+.q-step[data-state="done"] .tc-buttons{display:none}
 .q-step-prompt{font-size:14.5px;line-height:1.5;margin-bottom:10px;color:var(--ink)}
 .q-step-mark{margin-left:8px;font-family:var(--font-display);font-weight:700;font-size:13px;color:var(--good);white-space:nowrap}
 .q-step-mark.retried{color:var(--warn)}

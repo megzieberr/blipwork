@@ -862,6 +862,7 @@ export function mountCalculator(host, opts = {}) {
 
 /* full-screen overlay wrapper */
 export function openCalculator() {
+  if (document.querySelector(".calc-scrim")) return;   // foreman review fix: the floating calc button (z 75) sits above this scrim (z 50), so without this guard a second tap stacks a second calculator
   const scrim = el("div", "modal-scrim calc-scrim");
   const box = el("div", "calc-wrap");
   const head = el("div", "calc-head");
