@@ -636,12 +636,18 @@ export function mountCalculator(host, opts = {}) {
     return true;
   }
 
-  /* = and the down arrow: write, then step on (the long-standing behaviour). */
+  /* = and the down arrow: write, then step DOWN — staying in the column you
+     are in, whether FREQ is on or off.
+
+     Corrected 2026-08-28 from four photos of Megan's fx-991ZA PLUS II with
+     FREQ on: pressing = walks the cursor down the X column (row 1 → 2 → 3),
+     it does NOT hop across to the FREQ column. The machine fills the whole X
+     column first; FREQ is a separate trip with the ▶ key. We had it doing the
+     hop, and round 2's hint taught that wrong sequence along with it. */
   function commitCell() {
     if (!writeCell()) return;
-    if (!S.freqOn) S.row++;
-    else if (S.col === 0) S.col = 1;
-    else { S.col = 0; S.row++; }
+    S.row++;
+    if (S.row > S.data.length) S.row = S.data.length;   // never past the one open row
   }
 
   /* Arrow keys INSIDE the data table. Without these a learner can only ever
@@ -658,6 +664,10 @@ export function mountCalculator(host, opts = {}) {
         if (S.col > 0) S.col = 0;
         else if (S.row > 0) { S.row--; S.col = 1; }
       }
+      /* ▶ vanuit die FREQ-kolom spring terug na die VOLGENDE ry se X-kolom.
+         Dit lyk vreemd, maar Megan het dit op 2026-08-28 teen haar regte
+         fx-991ZA bevestig: "that's how the real calculator works as well."
+         Moenie dit "regmaak" nie. */
       if (dir === "right") {
         if (S.col < 1) S.col = 1;
         else if (S.row < oop) { S.row++; S.col = 0; }

@@ -82,13 +82,35 @@ const fs = c => c.S().data.map(d => d.f);
   tick(ev && ev.p.tok === "Σx²" && ev.p.value === 56, "Σx² of 2;4;6 = 56", ev ? `got ${ev.p.value}` : "no event");
 }
 
-/* ── 3. Σx honours the frequency column ──────────────────── */
+/* ── 3. = walks DOWN the column; it does NOT hop across ────
+   Four photos of Megan's fx-991ZA PLUS II (2026-08-28) with FREQ on: pressing
+   = after an x moves the cursor down the X column, row 1 → 2 → 3. The machine
+   fills the whole X column first, and FREQ is a separate trip with ▶.
+   We used to hop straight across, and this bank's own tests below were typed
+   in that wrong sequence — which is exactly why they passed. */
 {
   const c = fresh();
   c.press("shift", "mode", "down", "d4", "d1");        // FREQ on
   intoStat(c);
-  c.press("d5", "eq", "d3", "eq");                     // x=5 f=3
-  c.press("d2", "eq", "d4", "eq");                     // x=2 f=4
+  c.press("d5", "eq");
+  tick(c.S().col === 0 && c.S().row === 1,
+       "= stays in the X column and steps down one row", `col ${c.S().col}, row ${c.S().row}`);
+  c.press("d2", "eq");
+  tick(xs(c).join(";") === "5;2" && fs(c).join(";") === "1;1",
+       "…so two = give two X rows, each with the default frequency 1",
+       `x ${xs(c).join(";")} · f ${fs(c).join(";")}`);
+}
+
+/* ── 3b. Σx honours the frequency column ─────────────────── */
+{
+  const c = fresh();
+  c.press("shift", "mode", "down", "d4", "d1");        // FREQ on
+  intoStat(c);
+  c.press("d5", "eq", "d2", "eq");                     // the X column: 5 then 2
+  c.press("right", "up", "up");                        // across to FREQ, back to row 1
+  c.press("d3", "eq", "d4", "eq");                     // the FREQ column: 3 then 4
+  tick(fs(c).join(";") === "3;4", "▶ then ▲▲ lands on FREQ row 1, and = fills that column down",
+       `f ${fs(c).join(";")}`);
   c.press("ac", "shift", "d1", "d3", "d2", "eq");
   const ev = c.events.filter(e => e.t === "stat").pop();
   tick(ev && ev.p.value === 23, "Σfx with FREQ on: 5×3 + 2×4 = 23", ev ? `got ${ev.p.value}` : "no event");
@@ -145,8 +167,9 @@ const fs = c => c.S().data.map(d => d.f);
   const c = fresh();
   c.press("shift", "mode", "down", "d4", "d1");
   intoStat(c);
-  c.press("d5", "eq", "d3", "eq");
-  c.press("ac", "shift", "d1", "d2", "up");
+  c.press("d5", "eq");                                 // one row: x = 5, f defaults to 1
+  c.press("right", "up", "d3", "eq");                  // across to FREQ, up to row 1, f = 3
+  c.press("ac", "shift", "d1", "d2", "up", "left");    // reopen Data, row 1, back in the X column
   const beginKol = c.S().col;
   c.press("right");
   tick(c.S().col === 1 || beginKol === 1, "▶ moves onto the FREQ column", `col ${c.S().col}`);
