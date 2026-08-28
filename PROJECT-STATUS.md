@@ -1,4 +1,33 @@
-# Project status — updated 2026-08-28 (🧮 CALCULATOR ROUND 3 — Sum menu + editable data table, sw v82 SHIPPED + LIVE-VERIFIED 2026-08-28; earlier: round 2 full fx-991ZA face + maths engine; 🔔 notifications live and proven)
+# Project status — updated 2026-08-28 (🧮 CALCULATOR ROUND 4 — `=` steps DOWN the column, sw v83 SHIPPED + LIVE-VERIFIED 2026-08-28; earlier: round 3 Sum menu + editable data table; round 2 full fx-991ZA face + maths engine; 🔔 notifications live and proven)
+
+## 🧮 2026-08-28 — CALCULATOR ROUND 4: `=` steps DOWN the column (7051711, sw v83, live-verified)
+
+**We had it backwards, and Stats Quest was teaching the mistake.** With FREQ on, our
+`=` hopped the cursor across to the FREQ column. Megan sent four photos of her real
+fx-991ZA PLUS II: `=` walks **down the X column**, row 1 → 2 → 3. The machine fills the
+whole X column first, each row's frequency defaulting to 1; FREQ is a separate trip with
+▶, then ▲ back up to row 1.
+
+`commitCell()` now steps down and stays in its column whether FREQ is on or off, and
+clamps so it can never run past the one open row.
+
+**The tests were wrong the same way the app was — which is exactly why they passed.**
+Two checks in `verify-calc-sum-edit.html` typed `x = f =`, a sequence that only worked
+because of the hop. Rewritten to the device's real sequence, plus two new checks that
+pin the corrected behaviour. A third failed afterwards for a different reason: its setup
+left the cursor in the FREQ column, so its `▶` wrapped. Fixed the test, not the app.
+
+**Do NOT "fix" the ▶ wrap.** Coming out of the FREQ column, ▶ jumps to the NEXT row's
+X column. That looks wrong and is right — Megan confirmed it against the real machine:
+*"that's how the real calculator works as well."* There is a comment saying so in
+`js/calculator.js`.
+
+Proof: `verify-calculator.html` **77/77** (no regression), `verify-calc-sum-edit.html`
+**29/29**. Live-verified on megzieberr.github.io/blipwork — sw `mhq-v83`, the new
+behaviour present, the old branch gone.
+
+Copied to Stats Quest and its md5 record updated. Grade 11 gets the fix for free.
+
 
 ## 🧮 2026-08-28 — CALCULATOR ROUND 3: Sum menu + an editable data table (e5c9fdb, sw v82, live-verified)
 
