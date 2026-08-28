@@ -1,4 +1,40 @@
-# Project status — updated 2026-08-27 (late evening) (🧮 CALCULATOR ROUND 2 BUILT — full fx-991ZA face + real maths engine, sw v81 SHIPPED + LIVE-VERIFIED 2026-08-27 (+ implicit-× fix + steps-UX round); 🔔 notifications live and proven)
+# Project status — updated 2026-08-28 (🧮 CALCULATOR ROUND 3 — Sum menu + editable data table, sw v82 SHIPPED + LIVE-VERIFIED 2026-08-28; earlier: round 2 full fx-991ZA face + maths engine; 🔔 notifications live and proven)
+
+## 🧮 2026-08-28 — CALCULATOR ROUND 3: Sum menu + an editable data table (e5c9fdb, sw v82, live-verified)
+
+Built while making **Stats Quest** (`Desktop\Claude Code Projects\graad9-statistiek`),
+her Grade 9 calculator drill, which copies `js/calculator.js` verbatim. Her rule for that
+project: the calculator is fixed in Blipwork FIRST, verified here, then copied — so Blipwork
+stays the master and Grade 11 gets the same fixes for free.
+
+**Three additive changes. Nothing that already worked behaves differently.**
+- `SHIFT 1 → 3 (Sum)` was drawn on the LCD but the key did nothing. It now opens
+  **1:Σx² / 2:Σx** and `statValue()` computes both.
+- The data table had **no cursor movement** — up/left/right were inert, so a captured value
+  could only be appended to, never corrected. Arrows now move between rows and (FREQ on)
+  between the x and FREQ columns, clamped to the existing rows plus the one open row.
+  `commitCell()` split into `writeCell()` (writes, no move) + `commitCell()` (writes, steps
+  on), so `=` and `▼` keep their exact old behaviour. The selected cell now shows the value
+  already in it.
+  **New `edit` milestone**, fired only when an existing cell is overwritten — a quest that
+  asks a learner to CHANGE a value can't check the end state alone, since wiping the table
+  and retyping reaches the same end state without using the skill.
+- `setup.data` now takes `{x, f}` pairs as well as plain numbers, so a question can start
+  with a frequency table already captured. Plain numbers behave exactly as before.
+
+**Every menu order was read off the real fx-991ZA PLUS II emulator, key by key** — including
+the one that would have been wrong from memory: in Sum, **Σx is option TWO** (option 1 is Σx²).
+Overtyping a row REPLACES it (2;4;6 → row 1 set to 9 gives Σx = 19, not 21); the row count
+does not grow. STAT/Var/MinMax confirmed unchanged from what the file already had.
+
+**Proof (from the LIVE url, not assumed)** — `verify-calc-sum-edit.html` **26/26** (new file,
+covers all three plus the guard that a plain capture must NOT look like an edit) and the
+existing `verify-calculator.html` **77/77**, both run against
+`https://megzieberr.github.io/blipwork/`. sw v81 → v82. No console errors.
+
+⚠️ Known, deliberately NOT fixed: the ▼ key is 37×18px on a 375px phone. Unchanged from
+round 2. If it should be bigger, that's a Blipwork change both apps inherit.
+
 
 ## 🧮 2026-08-27 (late evening) — CALCULATOR ROUND 2: BUILT, FOREMAN-REVIEWED, SHIPPED (83e9331, live-verified)
 
