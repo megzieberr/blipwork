@@ -9,6 +9,16 @@
      • enter data:   MODE → 3 (STAT) → 1 (1-VAR), type values, AC
      • read a value: SHIFT 1 (STAT) → 4 (Var) → n/x̄/σx/sx, then =
                      SHIFT 1 (STAT) → 6 (MinMax) → minX/maxX/Q1/med/Q3, =
+                     SHIFT 1 (STAT) → 3 (Sum)   → 1:Σx² / 2:Σx, then =
+     • edit a value: SHIFT 1 (STAT) → 2 (Data) reopens the table; ▲▼ move
+                     between rows, typing REPLACES that row, = stores it
+
+   Every menu order above was re-checked key by key on Megan's real
+   fx-991ZA PLUS II emulator on 2026-08-28, not recalled:
+     STAT   1:Type 2:Data 3:Sum 4:Var 5:Distr 6:MinMax
+     Sum    1:Σx²  2:Σx                  ← Σx is TWO
+     Var    1:n    2:x̄   3:σx  4:sx
+     MinMax 1:minX 2:maxX 3:Q1 4:med 5:Q3
    Results are computed from the entered data via statlib, so they
    are real. The COMP screen also has a real 2-D maths engine (round
    2) — fractions, roots, powers, trig — evaluated exact-first with
@@ -454,7 +464,18 @@ export function mountCalculator(host, opts = {}) {
   // in 1-VAR STAT mode (so the learner focuses on the read-off sequence).
   if (opts.setup) {
     const su = opts.setup;
-    if (su.data && su.data.length) { S.mode = "STAT"; S.freqOn = !!su.freq; S.data = su.data.map(x => ({ x, f: 1 })); S.screen = "comp"; }
+    /* setup.data takes either plain numbers (frequency 1 each, the original
+       form — every existing quest still passes this) or {x, f} pairs, so a
+       question can start with a FREQUENCY TABLE already captured instead of a
+       flat list. Added 2026-08-28 for the grouped-data round, where retyping
+       the same table before every read-off would be all tedium and no skill. */
+    if (su.data && su.data.length) {
+      S.mode = "STAT"; S.freqOn = !!su.freq;
+      S.data = su.data.map(d => (d && typeof d === "object")
+        ? { x: Number(d.x), f: Number(d.f ?? 1) }
+        : { x: d, f: 1 });
+      S.screen = "comp";
+    }
     else if (su.statMode) { S.mode = "STAT"; S.screen = "comp"; }
   }
 
@@ -522,6 +543,8 @@ export function mountCalculator(host, opts = {}) {
       case "Q1": return quartilesExclusive(s).q1;
       case "med": return quartilesExclusive(s).med;
       case "Q3": return quartilesExclusive(s).q3;
+      case "Σx": return a.reduce((q, x) => q + x, 0);
+      case "Σx²": return a.reduce((q, x) => q + x * x, 0);
     }
     return null;
   }
@@ -566,9 +589,16 @@ export function mountCalculator(host, opts = {}) {
   }
   function statMenu() {
     openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", "Distr"], ["6", "MinMax"]], ret: "comp",
-      onNum(n) { if (n === 4) varMenu(); else if (n === 6) minMaxMenu(); else if (n === 2) { S.menu = null; S.screen = "statInput"; } } });
+      onNum(n) { if (n === 3) sumMenu(); else if (n === 4) varMenu(); else if (n === 6) minMaxMenu(); else if (n === 2) { S.menu = null; S.screen = "statInput"; } } });
   }
   // STAT menu labels match the device (1:Type 2:Data 3:Sum 4:Var 5:Distr 6:MinMax)
+  /* Sum: 1:Sigma-x-squared  2:Sigma-x  — the ORDER is the device's, verified on
+     Megan's fx-991ZA PLUS II emulator 2026-08-28 (entering 2;4;6 then
+     SHIFT 1 -> 3 -> 2 -> = showed 12). Sigma-x is option TWO, not one. */
+  function sumMenu() {
+    const parent = S.menu;
+    openMenu({ title: "Sum", parent, items: [["1", "Σx²"], ["2", "Σx"]], onNum(n) { pasteStat(["Σx²", "Σx"][n - 1]); } });
+  }
   function varMenu() {
     const parent = S.menu;
     openMenu({ title: "Var", parent, items: [["1", "n"], ["2", MEAN_GLYPH], ["3", "σx"], ["4", "sx"]], onNum(n) { pasteStat(["n", "x̄", "σx", "sx"][n - 1]); } });
@@ -580,15 +610,60 @@ export function mountCalculator(host, opts = {}) {
   function pasteStat(tok) { S.menu = null; S.screen = "comp"; S.line = tok; S.pendingStat = tok; S.result = null; }
 
   // ---- data table ----
-  function commitCell() {
-    if (S.cell === "" || S.cell === "-") return;
+  /* Write whatever has been typed into the CURRENT cell. Does not move.
+     Returns true if something was written.
+
+     Verified on Megan's fx-991ZA PLUS II emulator, 2026-08-28: typing over a
+     row that already holds a value REPLACES it (2;4;6 -> row 1 set to 9 gives
+     Sigma-x = 19, not 21), and the row count does not grow. That is exactly
+     what the assignment below already did; it is now separated from the
+     cursor movement so the arrow keys can reuse it. */
+  function writeCell() {
+    if (S.cell === "" || S.cell === "-") return false;
     const v = Number(S.cell.replace(",", "."));
-    if (!Number.isFinite(v)) { S.cell = ""; return; }
-    if (!S.freqOn) { S.data[S.row] = { x: v, f: 1 }; S.row++; }
-    else if (S.col === 0) { S.data[S.row] = { x: v, f: (S.data[S.row] && S.data[S.row].f) ?? 1 }; S.col = 1; }
-    else { if (S.data[S.row]) S.data[S.row].f = v; S.col = 0; S.row++; }
+    if (!Number.isFinite(v)) { S.cell = ""; return false; }
+    const oorskryf = S.data[S.row] != null;          // was there already a value here?
+    if (!S.freqOn) S.data[S.row] = { x: v, f: 1 };
+    else if (S.col === 0) S.data[S.row] = { x: v, f: (S.data[S.row] && S.data[S.row].f) ?? 1 };
+    else if (S.data[S.row]) S.data[S.row].f = v;
     S.cell = "";
+    /* An EDIT milestone, distinct from "data". A quest that asks the learner to
+       CHANGE a captured value cannot check the end state alone — wiping the
+       table and retyping it reaches the same end state without ever using the
+       skill. This fires only when an existing cell was overwritten. */
+    if (oorskryf) emit("edit", { row: S.row, col: S.col, value: v });
     emit("data", S.data.map(d => d.x));
+    return true;
+  }
+
+  /* = and the down arrow: write, then step on (the long-standing behaviour). */
+  function commitCell() {
+    if (!writeCell()) return;
+    if (!S.freqOn) S.row++;
+    else if (S.col === 0) S.col = 1;
+    else { S.col = 0; S.row++; }
+  }
+
+  /* Arrow keys INSIDE the data table. Without these a learner can only ever
+     append — there is no way back up to row 3 to correct it, which is the
+     whole "change a value" skill. Movement is clamped to the rows that exist
+     plus the one open row at the bottom. */
+  function statNav(dir) {
+    writeCell();                                  // typed digits are stored first
+    const oop = S.data.length;                    // the open row at the very bottom
+    if (dir === "up")   S.row = Math.max(0, S.row - 1);
+    if (dir === "down") S.row = Math.min(oop, S.row + 1);
+    if (S.freqOn) {
+      if (dir === "left") {
+        if (S.col > 0) S.col = 0;
+        else if (S.row > 0) { S.row--; S.col = 1; }
+      }
+      if (dir === "right") {
+        if (S.col < 1) S.col = 1;
+        else if (S.row < oop) { S.row++; S.col = 0; }
+      }
+    }
+    if (S.row > S.data.length) S.row = S.data.length;
   }
 
   // ---- COMP-mode entry model: box tree + cursor ----
@@ -779,7 +854,12 @@ export function mountCalculator(host, opts = {}) {
   function statKey(key) {
     if (key === "stat") return statMenu();
     if (key === "ac") { commitCell(); S.screen = "comp"; S.line = ""; S.result = null; return; }
-    if (key === "eq" || key === "down") return commitCell();
+    if (key === "eq" || key === "down") {
+      // with something typed: store it and step on. With nothing typed: just move.
+      if (S.cell !== "" && S.cell !== "-") commitCell(); else statNav("down");
+      return;
+    }
+    if (key === "up" || key === "left" || key === "right") return statNav(key);
     if (key === "del") { S.cell = S.cell.slice(0, -1); return; }
     if (key === "neg") { S.cell = S.cell.startsWith("-") ? S.cell.slice(1) : "-" + S.cell; return; }
     if (key === "dot") { S.cell += ","; return; }
@@ -846,8 +926,12 @@ export function mountCalculator(host, opts = {}) {
     let html = `<table class="lcd-tab"><tr><th></th><th>X</th>${freq ? "<th>FREQ</th>" : ""}</tr>`;
     for (let r = 0; r < rows; r++) {
       const d = S.data[r];
-      const xc = (r === S.row && S.col === 0) ? `<u>${escapeHtml(S.cell)}</u>` : (d ? fmtNum(d.x) : "");
-      const fc = freq ? ((r === S.row && S.col === 1) ? `<u>${escapeHtml(S.cell)}</u>` : (d ? fmtNum(d.f) : "")) : "";
+      /* The selected cell shows what has been typed; with nothing typed yet it
+         shows the value ALREADY in that cell, so after arrowing back up to a row
+         the learner can see which value they are about to replace. */
+      const sel = (c, waarde) => `<u>${S.cell !== "" ? escapeHtml(S.cell) : (waarde != null ? fmtNum(waarde) : "")}</u>`;
+      const xc = (r === S.row && S.col === 0) ? sel(0, d ? d.x : null) : (d ? fmtNum(d.x) : "");
+      const fc = freq ? ((r === S.row && S.col === 1) ? sel(1, d ? d.f : null) : (d ? fmtNum(d.f) : "")) : "";
       html += `<tr><td>${r + 1}</td><td>${xc}</td>${freq ? `<td>${fc}</td>` : ""}</tr>`;
     }
     html += `</table>`;

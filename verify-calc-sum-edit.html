@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Calculator · Sum menu + data-table editing · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:900px;margin:0 auto}
+  #banner{font-weight:700;font-size:17px;padding:13px 17px;border-radius:14px;margin:14px 0 20px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  .row{font-size:12.5px;line-height:1.8}
+  .ok{color:var(--good)} .bad{color:var(--bad);font-weight:700}
+  #host{position:absolute;left:-9999px}
+  pre{font-size:11.5px;color:var(--muted);background:rgba(255,255,255,.03);padding:11px;border-radius:10px;border:1px solid var(--brd);white-space:pre-wrap}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif;font-size:19px">Sum menu + data-table editing</h1>
+<div id="banner">running…</div>
+<div id="out"></div>
+<div id="host"></div>
+
+<script type="module">
+/* ============================================================
+   Covers the two features added 2026-08-28 for Stats Quest:
+     • SHIFT 1 → 3 (Sum) → 1:Σx² / 2:Σx
+     • ▲▼◀▶ inside the data table, so a captured value can be CHANGED,
+       plus the "edit" milestone that says an existing cell was overwritten
+
+   Every menu order asserted here was read off Megan's real fx-991ZA PLUS II
+   emulator on 2026-08-28 — see the header of js/calculator.js.
+   ============================================================ */
+import { mountCalculator } from "./js/calculator.js";
+
+const out = document.getElementById("out");
+const host = document.getElementById("host");
+let total = 0, passed = 0; const fails = [];
+
+function tick(cond, label, extra = "") {
+  total++; if (cond) passed++; else fails.push(label);
+  out.insertAdjacentHTML("beforeend",
+    `<div class="row ${cond ? "ok" : "bad"}">${cond ? "✓" : "✗"} ${label}${extra ? ` <span style="color:var(--muted)">${extra}</span>` : ""}</div>`);
+}
+
+/* a fresh calculator per scenario, with the milestones it fired */
+function fresh(opts = {}) {
+  host.innerHTML = "";
+  const events = [];
+  const api = mountCalculator(host, { ...opts, onEvent: (t, p) => events.push({ t, p }) });
+  const tap = id => {
+    const b = host.querySelector(`[data-keyid="${id}"]`);
+    if (!b) throw new Error(`no key ${id}`);
+    b.click();
+  };
+  const press = (...ids) => { ids.forEach(tap); };
+  const lcd = () => host.querySelector(".calc-lcd").innerText.replace(/\n+/g, " ⏎ ").trim();
+  return { api, press, events, lcd, S: () => api.state() };
+}
+
+const intoStat = c => c.press("mode", "d3", "d1");
+const typeVals = (c, vals) => vals.forEach(v => { String(v).split("").forEach(d => c.press("d" + d)); c.press("eq"); });
+const xs = c => c.S().data.map(d => d.x);
+const fs = c => c.S().data.map(d => d.f);
+
+/* ── 1. Sum → Σx ─────────────────────────────────────────── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [2, 4, 6]);
+  c.press("ac", "shift", "d1", "d3");
+  tick(/1:Σx²/.test(c.lcd()) && /2:Σx/.test(c.lcd()),
+       "Sum menu reads 1:Σx²  2:Σx (the device's order)", c.lcd());
+  c.press("d2", "eq");
+  const ev = c.events.filter(e => e.t === "stat").pop();
+  tick(ev && ev.p.tok === "Σx" && ev.p.value === 12, "Σx of 2;4;6 = 12", ev ? `got ${ev.p.value}` : "no event");
+  tick(/12/.test(c.lcd()), "…and 12 shows on the LCD", c.lcd());
+}
+
+/* ── 2. Sum → Σx² ────────────────────────────────────────── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [2, 4, 6]);
+  c.press("ac", "shift", "d1", "d3", "d1", "eq");
+  const ev = c.events.filter(e => e.t === "stat").pop();
+  tick(ev && ev.p.tok === "Σx²" && ev.p.value === 56, "Σx² of 2;4;6 = 56", ev ? `got ${ev.p.value}` : "no event");
+}
+
+/* ── 3. Σx honours the frequency column ──────────────────── */
+{
+  const c = fresh();
+  c.press("shift", "mode", "down", "d4", "d1");        // FREQ on
+  intoStat(c);
+  c.press("d5", "eq", "d3", "eq");                     // x=5 f=3
+  c.press("d2", "eq", "d4", "eq");                     // x=2 f=4
+  c.press("ac", "shift", "d1", "d3", "d2", "eq");
+  const ev = c.events.filter(e => e.t === "stat").pop();
+  tick(ev && ev.p.value === 23, "Σfx with FREQ on: 5×3 + 2×4 = 23", ev ? `got ${ev.p.value}` : "no event");
+}
+
+/* ── 4. arrow back up and REPLACE a value ────────────────── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [2, 4, 6]);
+  c.press("ac", "shift", "d1", "d2");                  // Data reopens the table
+  tick(c.S().screen === "statInput", "SHIFT 1 → 2 (Data) reopens the table");
+  tick(c.S().row === 3, "…cursor sits on the open row at the bottom", `row ${c.S().row}`);
+  c.press("up", "up", "up");                           // back to row 1
+  tick(c.S().row === 0, "▲ walks back up to row 1", `row ${c.S().row}`);
+  c.press("d9", "eq");
+  tick(JSON.stringify(xs(c)) === "[9,4,6]", "typing on row 1 REPLACES 2 with 9", xs(c).join(";"));
+  tick(c.S().data.length === 3, "…and the row count does NOT grow", `${c.S().data.length} rows`);
+  tick(c.events.some(e => e.t === "edit"), "an 'edit' milestone fired");
+}
+
+/* ── 5. edit a middle row ────────────────────────────────── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [2, 4, 6]);
+  c.press("ac", "shift", "d1", "d2", "up", "up");      // row 2
+  c.press("d7", "eq");
+  tick(JSON.stringify(xs(c)) === "[2,7,6]", "row 2 edited: 4 → 7", xs(c).join(";"));
+}
+
+/* ── 6. plain capture must NOT look like an edit ──────────── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [3, 5, 8]);
+  tick(!c.events.some(e => e.t === "edit"),
+       "appending fresh values fires NO 'edit' milestone (else every capture looks like an edit)");
+}
+
+/* ── 7. the cursor cannot run off the table ──────────────── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [2, 4]);
+  c.press("ac", "shift", "d1", "d2");
+  c.press("up", "up", "up", "up", "up");
+  tick(c.S().row === 0, "▲ stops at the first row", `row ${c.S().row}`);
+  c.press("down", "down", "down", "down", "down");
+  tick(c.S().row === 2, "▼ stops at the open row, never past it", `row ${c.S().row}`);
+}
+
+/* ── 8. the selected cell shows the value you are about to replace ── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [2, 4, 6]);
+  c.press("ac", "shift", "d1", "d2", "up", "up", "up");
+  tick(/2/.test(c.lcd()), "landing on row 1 shows its existing value, not a blank cell", c.lcd());
+}
+
+/* ── 9. ◀ ▶ move between X and FREQ ──────────────────────── */
+{
+  const c = fresh();
+  c.press("shift", "mode", "down", "d4", "d1");
+  intoStat(c);
+  c.press("d5", "eq", "d3", "eq");
+  c.press("ac", "shift", "d1", "d2", "up");
+  const beginKol = c.S().col;
+  c.press("right");
+  tick(c.S().col === 1 || beginKol === 1, "▶ moves onto the FREQ column", `col ${c.S().col}`);
+  c.press("d6", "eq");
+  tick(fs(c)[0] === 6, "the frequency can be edited too: 3 → 6", `f = ${fs(c)[0]}`);
+}
+
+/* ── 10. setup can pre-load a FREQUENCY TABLE ────────────── */
+{
+  const c = fresh({ setup: { freq: true, data: [{ x: 35, f: 4 }, { x: 45, f: 7 }, { x: 55, f: 9 }] } });
+  tick(JSON.stringify(xs(c)) === "[35,45,55]", "setup pre-loads the x values", xs(c).join(";"));
+  tick(JSON.stringify(fs(c)) === "[4,7,9]", "…and their frequencies, not 1s", fs(c).join(";"));
+  c.press("shift", "d1", "d4", "d1", "eq");            // n
+  let ev = c.events.filter(e => e.t === "stat").pop();
+  tick(ev && ev.p.value === 20, "n reads the TOTAL frequency 4+7+9 = 20, not 3 rows", ev ? `got ${ev.p.value}` : "-");
+  c.press("ac", "shift", "d1", "d3", "d2", "eq");      // Σx
+  ev = c.events.filter(e => e.t === "stat").pop();
+  tick(ev && ev.p.value === 35 * 4 + 45 * 7 + 55 * 9, "Σfx = 35×4 + 45×7 + 55×9 = 950", ev ? `got ${ev.p.value}` : "-");
+  c.press("ac", "shift", "d1", "d4", "d2", "eq");      // x̄
+  ev = c.events.filter(e => e.t === "stat").pop();
+  tick(ev && Math.abs(ev.p.value - 47.5) < 1e-9, "x̄ = 950 / 20 = 47,5", ev ? `got ${ev.p.value}` : "-");
+}
+
+/* ── 11. plain-number setup still behaves exactly as before ── */
+{
+  const c = fresh({ setup: { data: [4, 9, 11] } });
+  tick(JSON.stringify(xs(c)) === "[4,9,11]" && JSON.stringify(fs(c)) === "[1,1,1]",
+       "the old plain-number setup is untouched", `${xs(c)} / ${fs(c)}`);
+}
+
+/* ── 12. nothing else changed: the old capture path still works ── */
+{
+  const c = fresh(); intoStat(c); typeVals(c, [11, 3, 7]);
+  tick(JSON.stringify(xs(c)) === "[11,3,7]", "plain multi-digit capture still works", xs(c).join(";"));
+  c.press("ac", "shift", "d1", "d4", "d1", "eq");
+  const ev = c.events.filter(e => e.t === "stat").pop();
+  tick(ev && ev.p.tok === "n" && ev.p.value === 3, "n still reads 3", ev ? `got ${ev.p.value}` : "no event");
+}
+
+const ok = passed === total;
+const banner = document.getElementById("banner");
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+                        : `✗ ${total - passed} of ${total} failed`;
+if (fails.length) out.insertAdjacentHTML("beforeend", `<pre>${fails.join("\n")}</pre>`);
+window.__VERIFY__ = { total, passed, ok, fails };
+</script>
+</body>
+</html>
