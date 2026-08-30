@@ -131,8 +131,9 @@ gtrig widgets) stop the round with a plain warning.
   and I hide it (one SQL line, reversible).
 
 ## Next up
-- ⚠️ (carried) THE VERY BIG BUILD she has in mind — still unnamed; ask what
-  it is before picking anything else.
+- ~~THE VERY BIG BUILD~~ — CLOSED, her word 2026-08-30: it WAS the
+  calculator upgrade (rounds 1–4, sw v79–v83, done 08-27/28). Stop
+  carrying it; stop asking.
 - Her call: give the six flagged rounds elsewhere the build-steps treatment
   (stats q3, finance f6/f7, functions fn7, measurement m6, probability p6).
 - (carried) Wave-4 dice — each blocked on her: Analytical Geometry (14
