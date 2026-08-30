@@ -192,30 +192,14 @@ function shuffleChips(xs) {
        swapped) is a real wrong and marks wrong;
      · callers must feed DISTINCT side values wherever two sides
        become chips — the generators guard it, dedupe is the net.
-   mcStep/calcStep are round 2's local helpers promoted here, so five
-   quest files don't carry five copies.
+   mcStep/calcStep — round 2's local helpers, promoted here first —
+   moved a level further on this same audit day, to js/quests/_shared.js,
+   so every chapter's step chains share ONE copy, not five. This file
+   just re-exports the two names below so t2–t7's existing imports keep
+   working untouched.
    ============================================================ */
 
-/* same three-distractor shape round 2 established */
-export function mcStep(prompt, correct, wrongs, hint) {
-  const options = [{ label: String(correct), correct: true }]
-    .concat(wrongs.map(w => ({ label: String(w), correct: false })));
-  for (let i = options.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [options[i], options[j]] = [options[j], options[i]];
-  }
-  return { kind: "mc", prompt, options, hint };
-}
-
-/* unit "" by default on purpose: most answers in this chapter are
-   LENGTHS/AREAS. _gtrig.js's calcStep defaults to "°" because that whole
-   chapter is angles; a side labelled 16.63° would be nonsense. Pass
-   unit "°" explicitly on angle steps. allowNeg is for cos θ, which is
-   legitimately negative when θ is obtuse. */
-export function calcStep(prompt, expected, hint, opts = {}) {
-  return { kind: "calc", prompt, expected, dp: opts.dp ?? 2, tol: opts.tol ?? 0.015,
-           unit: opts.unit ?? "", allowNeg: !!opts.allowNeg, hint };
-}
+export { mcStep, calcStep } from "./_shared.js";
 
 /* one dedupe for every builder — two identical chips are not a harder
    question, they are a confusing one (see sineSetupStep's note) */

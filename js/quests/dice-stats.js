@@ -67,7 +67,12 @@ function methodHtml(q) {
 function withMethod(gen) {
   return () => {
     const q = gen();
-    if (q.method == null) {
+    /* STEPS CHAINS NEVER GET q.method — js/play.js renders the 📖 "Show
+       me the method" link BEFORE step 1, so on a chain the link would
+       hand the whole remaining answer over. Same guard dice-trig.js's
+       methodEligible() got on this audit day (2026-08-30) — see that
+       file's header for the full story. */
+    if (q.type !== "steps" && q.method == null) {
       const m = methodHtml(q);
       if (m) q.method = m;
     }

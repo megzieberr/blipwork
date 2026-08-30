@@ -4,7 +4,7 @@
    event, and the "at least one = 1 − none" shortcut. Every tree is
    drawn by the to-scale tree engine (forks verified to sum to 1).
    ============================================================ */
-import { mc } from "./_shared.js";
+import { mc, mcStep, calcStep } from "./_shared.js";
 import { pick } from "../ui.js";
 import { dec } from "../problib.js";
 
@@ -59,20 +59,37 @@ const SKILLS = {
     };
   },
 
+  /* steps, 2026-08-30 audit-day split — graph and prompt unchanged;
+     the existing worked `solution` is what becomes the answered chain. */
   exactlyOneHead: () => {
     const pH = pick([0.5, 0.6, 0.7, 0.4, 0.3, 0.8]);
-    const v = 2 * pH * (1 - pH);
+    const pHT = pH * (1 - pH), pTH = (1 - pH) * pH, v = pHT + pTH;
     return {
-      type: "calc", concept: TREE, dp: 2,
+      type: "steps", concept: TREE,
       prompt: `A coin with P(H) = <b>${dec(pH)}</b> is tossed twice. Using the tree, find <b>P(exactly one head)</b>.`,
       graph: coinTree(pH),
-      expected: v,
+      steps: [
+        /* tol 0.001 (answerCorrect's own epsilon), NOT calcStep's 0.015
+           default — that default is a trig allowance for 4-dp sine
+           working, and here it would accept 0,25 for a true 0,24
+           (foreman review catch, 2026-08-30) */
+        mcStep("Which paths give exactly one head?", "HT and TH",
+          ["HH and TT", "HT only", "HH, HT and TH"],
+          "Exactly one head means one H and one T — either order counts."),
+        calcStep("Find <b>P(HT)</b>.", pHT,
+          "Multiply ALONG the path: P(H) × P(T).", { dp: 2, tol: 0.001 }),
+        calcStep("Find <b>P(TH)</b>.", pTH,
+          "Multiply ALONG the path: P(T) × P(H).", { dp: 2, tol: 0.001 }),
+        calcStep("Now <b>P(exactly one head)</b> — add the two paths.", v,
+          "ADD the paths: P(HT) + P(TH).", { dp: 2, tol: 0.001 }),
+      ],
+      expected: v, dp: 2,
       hint: "Exactly one head = the HT path OR the TH path. Multiply along each path, then ADD the two paths.",
-      answerLabel: `P(HT) + P(TH) = ${dec(pH * (1 - pH), 2)} + ${dec((1 - pH) * pH, 2)} = ${dec(v, 2)}`,
+      answerLabel: `P(HT) + P(TH) = ${dec(pHT, 2)} + ${dec(pTH, 2)} = ${dec(v, 2)}`,
       solution: [
-        { s: `P(HT) = ${dec(pH)} × ${dec(1 - pH)} = ${dec(pH * (1 - pH), 2)}` },
-        { s: `P(TH) = ${dec(1 - pH)} × ${dec(pH)} = ${dec((1 - pH) * pH, 2)}` },
-        { s: `P(exactly one H) = ${dec(pH * (1 - pH), 2)} + ${dec((1 - pH) * pH, 2)} = ${dec(v, 2)}` },
+        { s: `P(HT) = ${dec(pH)} × ${dec(1 - pH)} = ${dec(pHT, 2)}` },
+        { s: `P(TH) = ${dec(1 - pH)} × ${dec(pH)} = ${dec(pTH, 2)}` },
+        { s: `P(exactly one H) = ${dec(pHT, 2)} + ${dec(pTH, 2)} = ${dec(v, 2)}` },
       ],
     };
   },
@@ -108,16 +125,28 @@ const SKILLS = {
     };
   },
 
+  /* steps, 2026-08-30 audit-day split — no graph before, no graph now. */
   biasedFindOther: () => {
     const pH = pick([0.6, 0.7, 0.8]);
-    const pHH = pH * pH, pTT = (1 - pH) * (1 - pH);
+    const pHH = pH * pH, pT = 1 - pH, pTT = pT * pT;
     return {
-      type: "calc", concept: TREE, dp: 2,
+      type: "steps", concept: TREE,
       prompt: `Two identical biased coins are tossed. It is found that <b>P(both heads) = ${dec(pHH)}</b>. Find <b>P(both tails)</b>.`,
-      expected: pTT,
+      steps: [
+        /* tol 0.001 — see exactlyOneHead's note: the 0.015 default would
+           accept a neighbouring tenth/hundredth as correct */
+        calcStep("Find <b>P(H)</b>.", pH,
+          `The coins are identical, so P(H) × P(H) = ${dec(pHH)} — take the square root to find P(H) first.`,
+          { dp: 1, tol: 0.001 }),
+        calcStep("Now find <b>P(T)</b>.", pT,
+          "P(T) = 1 − P(H).", { dp: 1, tol: 0.001 }),
+        calcStep("Now find <b>P(both tails)</b>.", pTT,
+          "P(TT) = P(T) × P(T).", { dp: 2, tol: 0.001 }),
+      ],
+      expected: pTT, dp: 2,
       hint: `The coins are identical, so P(H) × P(H) = ${dec(pHH)} — take the square root to find P(H) first.`,
-      answerLabel: `P(H) = √${dec(pHH)} = ${dec(pH)} → P(TT) = ${dec(1 - pH)}² = ${dec(pTT, 2)}`,
-      solution: [{ s: `P(H) × P(H) = ${dec(pHH)} → P(H) = ${dec(pH)}` }, { s: `P(T) = 1 − ${dec(pH)} = ${dec(1 - pH)}` }, { s: `P(TT) = ${dec(1 - pH)} × ${dec(1 - pH)} = ${dec(pTT, 2)}` }],
+      answerLabel: `P(H) = √${dec(pHH)} = ${dec(pH)} → P(TT) = ${dec(pT)}² = ${dec(pTT, 2)}`,
+      solution: [{ s: `P(H) × P(H) = ${dec(pHH)} → P(H) = ${dec(pH)}` }, { s: `P(T) = 1 − ${dec(pH)} = ${dec(pT)}` }, { s: `P(TT) = ${dec(pT)} × ${dec(pT)} = ${dec(pTT, 2)}` }],
     };
   },
 };

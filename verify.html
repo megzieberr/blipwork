@@ -53,6 +53,8 @@ h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:22px;letter-
 .sg-read-dot{fill:var(--g-read)}
 .sg-read-lab{fill:var(--g-read);font-size:9px;font-weight:700}
 .sg-bar{fill:color-mix(in srgb,var(--accent) 28%,transparent);stroke:var(--accent);stroke-width:1.2}
+h2{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;margin:26px 0 12px;color:var(--ink)}
+pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
 </style>
 </head>
 <body>
@@ -61,10 +63,18 @@ h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:22px;letter-
   <p class="lead">Every graph is drawn from real data; each check re-derives a declared value back out of the geometry. If everything matches, no graph can mislead a learner.</p>
   <div id="banner">running…</div>
   <div class="grid" id="grid"></div>
+
+  <h2>Quests — 8 quests, fresh-number generations</h2>
+  <pre id="quests">…</pre>
 </div>
 
 <script type="module">
 import { renderGraph, verifyGraph } from "./js/engine/stats-graph.js";
+import { questDef } from "./js/quests/index.js";
+import { CHAPTERS } from "./js/config.js";
+import { getConcept } from "./js/concepts.js";
+import { answerCorrect } from "./js/check.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
 /* Test specs — a few of every type, including edge cases (outliers,
    skewed shapes, read-offs). These are ENGINE tests, not game content. */
@@ -132,13 +142,105 @@ SPECS.forEach(t => {
   grid.appendChild(card);
 });
 
+/* ---------- 2) quests: generate each skill many times and validate ----------
+   Added 2026-08-30 audit day (the SPLIT-1 session) — this file previously
+   checked only the graph-rendering engine above, with no per-skill
+   dispatch to hang a "steps" branch on. Built to match verify-trig.html /
+   verify-prob.html's own quest-dispatch, so q3's new outBound step chain
+   (and everything else in the stats chapter) actually gets exercised. */
+const statsChapter = CHAPTERS.find(c => c.id === "stats");
+const RUNS = 120;
+const lines = [];
+const fails = [];
+let qTotalChecks = 0, qFails = 0;
+
+function checkGraph(g) {
+  if (!g) return true;
+  return verifyGraph(g).every(c => c.ok);        // one engine covers box/ogive/hist/numline
+}
+
+statsChapter.quests.forEach(qmeta => {
+  const def = questDef(qmeta.id);
+  const skillIssues = {};
+  def.skills.forEach(skill => {
+    if (!getConcept(skill.concept)) { skillIssues[skill.id] = `missing concept "${skill.concept}"`; }
+    for (let i = 0; i < RUNS; i++) {
+      let q;
+      try { q = skill.gen(); }
+      catch (e) { skillIssues[skill.id] = "threw: " + e.message; break; }
+      qTotalChecks++;
+      if (q.concept && !getConcept(q.concept)) { skillIssues[skill.id] = `q.concept "${q.concept}" not found`; qFails++; }
+      if (q.type === "mc" || q.type === "reason") {
+        const labels = q.options.map(o => o.label);
+        const corrects = q.options.filter(o => o.correct).length;
+        const dupes = labels.length !== new Set(labels).size;
+        if (corrects !== 1) { skillIssues[skill.id] = `has ${corrects} correct options`; qFails++; }
+        if (dupes) { skillIssues[skill.id] = `duplicate option labels: ${labels.join(" | ")}`; qFails++; }
+        if (q.options.length < 2) { skillIssues[skill.id] = "too few options"; qFails++; }
+      } else if (q.type === "calc") {
+        if (!Number.isFinite(q.expected)) { skillIssues[skill.id] = "non-finite expected"; qFails++; }
+        else if (!answerCorrect(q.expected, q.expected, { dp: q.dp, tol: q.tol })) { skillIssues[skill.id] = "expected fails its own check"; qFails++; }
+      } else if (q.type === "yesno") {
+        if (typeof q.yes !== "boolean") { skillIssues[skill.id] = "q.yes not boolean"; qFails++; }
+      } else if (q.type === "tap") {
+        const ids = (q.tap.targets || []);
+        if (!ids.includes(q.tap.correctId)) { skillIssues[skill.id] = "correctId not in targets"; qFails++; }
+      } else if (q.type === "steps") {
+        /* the audit-day chain (q3.outBound, 2026-08-30) — same structural
+           floor verify-trig.html's dispatch checks. */
+        const steps = q.steps || [];
+        if (steps.length < 2) { skillIssues[skill.id] = `chain of ${steps.length} steps`; qFails++; }
+        if (!steps.length || steps[steps.length - 1].kind !== "calc") { skillIssues[skill.id] = "chain does not end on a typed number"; qFails++; }
+        if (q.method) { skillIssues[skill.id] = "chain carries q.method (spoils the steps)"; qFails++; }
+        steps.forEach((st, si) => {
+          if (!st.prompt || !st.hint) { skillIssues[skill.id] = `step ${si} missing prompt/hint`; qFails++; }
+          if (st.kind === "mc") {
+            const rights = st.options.filter(o => o.correct).length;
+            const labels = st.options.map(o => o.label);
+            if (rights !== 1) { skillIssues[skill.id] = `step ${si} has ${rights} correct options`; qFails++; }
+            if (labels.length !== new Set(labels).size) { skillIssues[skill.id] = `step ${si} duplicate options`; qFails++; }
+          } else if (st.kind === "calc") {
+            if (!Number.isFinite(st.expected)) { skillIssues[skill.id] = `step ${si} non-finite expected`; qFails++; }
+            else if (!checkStep(st, st.expected)) { skillIssues[skill.id] = `step ${si} rejects its own answer`; qFails++; }
+            if (st.expected < 0 && !st.allowNeg) { skillIssues[skill.id] = `step ${si} negative expected without allowNeg`; qFails++; }
+          } else if (st.kind === "tokenpad") {
+            const slots = (st.frame || []).filter(f => f === "☐").length;
+            const need = String(st.expected).split(" ").filter(Boolean);   // U+2009 — the pad's own separator
+            const keysNorm = (st.keys || []).map(normalizeTokens);
+            if (need.length !== slots) { skillIssues[skill.id] = `step ${si}: ${need.length} pieces for ${slots} boxes`; qFails++; }
+            if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) { skillIssues[skill.id] = `step ${si} not buildable from its chips`; qFails++; }
+            if (new Set(keysNorm).size !== keysNorm.length) { skillIssues[skill.id] = `step ${si} duplicate chips`; qFails++; }
+            if (!checkStep(st, st.expected)) { skillIssues[skill.id] = `step ${si} rejects its own fill`; qFails++; }
+          } else { skillIssues[skill.id] = `step ${si} unknown kind "${st.kind}"`; qFails++; }
+        });
+        if (steps.length && typeof q.expected === "number"
+            && Math.abs(steps[steps.length - 1].expected - q.expected) > 1e-9) {
+          skillIssues[skill.id] = "chain end ≠ question's headline answer"; qFails++;
+        }
+      }
+      if (!checkGraph(q.graph)) { skillIssues[skill.id] = "graph not to scale"; qFails++; }
+    }
+  });
+  const bad = Object.keys(skillIssues);
+  total++; if (bad.length === 0) passed++; else fails.push(`${qmeta.id} ${qmeta.title}`);
+  lines.push(`${bad.length === 0 ? "✓" : "✗"} ${qmeta.id}  ${qmeta.title}  (${def.skills.length} skills × ${RUNS})`
+    + (bad.length ? "\n    " + bad.map(b => `${b}: ${skillIssues[b]}`).join("\n    ") : ""));
+});
+
+document.getElementById("quests").textContent =
+  `${qTotalChecks} generations checked · ${qFails} integrity failures\n\n` + lines.join("\n");
+
 const banner = document.getElementById("banner");
-if (passed === total) { banner.className = "pass"; banner.textContent = `✓ ALL TO SCALE — ${passed}/${total} checks passed across ${SPECS.length} graphs`; }
-else { banner.className = "fail"; banner.textContent = `✗ ${total - passed} of ${total} checks FAILED — fix before shipping`; }
+const ok = passed === total && qFails === 0;
+banner.className = ok ? "pass" : "fail";
+banner.textContent = ok
+  ? `✓ ALL GOOD — ${passed}/${total} engine/quest checks passed, ${qTotalChecks} generations clean`
+  : `✗ ${total - passed} check group(s) failed; ${qFails} generation failures — see below`;
 
 // surface the result for headless checks too
-window.__VERIFY__ = { total, passed, ok: passed === total };
-console.log(`[verify] ${passed}/${total} checks passed — ${passed === total ? "ALL TO SCALE" : "FAILURES"}`);
+window.__VERIFY__ = { total, passed, qTotalChecks, qFails, ok, fails };
+console.log(`[verify] engine&quest ${passed}/${total}, generations ${qTotalChecks}, failures ${qFails} — ${ok ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
 </script>
 </body>
 </html>

@@ -10,6 +10,8 @@ import { randInt, pick, shuffled } from "../ui.js";
 import { fmtComma } from "../check.js";
 import { TOL } from "../config.js";
 import { rng } from "../rng.js";
+import { SLOT } from "../tokenpad.js";
+import { calcStep } from "./_shared.js";
 import {
   sortAsc, quartilePos, quartileValue, iqr, outlierBounds, percentilePos, roundNote,
 } from "../statlib.js";
@@ -35,6 +37,24 @@ function mcNum(correct, decoys) {
   }
   return shuffled(opts);
 }
+
+/* chip-shuffle + thin-space join for the outlier-boundary build step
+   (Task 1, 2026-08-30 audit-day split) — same shape as _trig.js's
+   shuffleChips/joinThin, kept local here rather than imported from a
+   trig-specific helper file. rng(), NOT Math.random, so a dice round's
+   seeded regeneration reproduces the SAME chip order on resume. */
+function shuffleChips(xs) {
+  const a = xs.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+/* U+2009 THIN SPACE — the tokenpad's own join separator (js/tokenpad.js's
+   THIN const / _trig.js's joinThin note): normalizeTokens strips it
+   before marking, so it is display-and-separation only, never marked. */
+const joinThin = xs => xs.join(" ");
 
 const QLABEL = { q1: "Q1 (the lower quartile)", q2: "the median (Q2)", q3: "Q3 (the upper quartile)" };
 const QFORMULA = { q1: "(n + 1)/4", q2: "(n + 1)/2", q3: "3(n + 1)/4" };
@@ -198,16 +218,44 @@ function genTapBox() {
   };
 }
 
-/* ---------- 7 · outlier boundary ---------- */
+/* ---------- 7 · outlier boundary (steps, 2026-08-30 audit-day split) ----------
+   Was one calc box for a 2-line working; now a build-the-formula
+   tokenpad step sits between the IQR and the final number, so the
+   learner picks WHICH quartile and WHICH sign, not just types a
+   result. No mirror accept here — the choice IS the skill, unlike the
+   trig chapter's symmetric sine-rule fills. */
 function genOutBound() {
-  const q1 = randInt(14, 40), q3 = q1 + randInt(8, 24);
-  const { iqr: range, lower, upper } = outlierBounds(q1, q3);
+  let q1, q3, range, lower, upper;
+  for (let tries = 0; tries < 200; tries++) {
+    q1 = randInt(14, 40); q3 = q1 + randInt(8, 24);
+    ({ iqr: range, lower, upper } = outlierBounds(q1, q3));
+    if (q1 !== range && q3 !== range && q1 !== q3) break;   // three DISTINCT chips (q1≠q3 always true; kept as a floor)
+  }
   const which = pick(["lower", "upper"]);
   const ans = which === "lower" ? lower : upper;
+  const dp = Number.isInteger(ans) ? 0 : 1;
+  const boundaryVal = which === "lower" ? q1 : q3;
   return {
-    type: "calc", concept: "outliers", allowNeg: true, dp: (Number.isInteger(ans) ? 0 : 1),
+    type: "steps", concept: "outliers",
     prompt: `A data set has <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Calculate the <b>${which} boundary</b> for outliers.`,
-    expected: ans, answerLabel: C(ans),
+    steps: [
+      calcStep("First the IQR.", range, "IQR = Q3 − Q1", { dp: 0 }),
+      {
+        kind: "tokenpad",
+        prompt: "Build the boundary. Tap a piece to drop it into the next box.",
+        frame: ["boundary", "=", SLOT, which === "lower" ? "−" : "+", "1,5", "×", SLOT],
+        keys: shuffleChips([String(q1), String(q3), String(range)]),
+        expected: joinThin([String(boundaryVal), String(range)]),
+        hint: "Below Q1 for the lower boundary, above Q3 for the upper — always 1,5 × IQR.",
+      },
+      calcStep(dp === 1 ? "Now calculate the boundary itself (1 decimal)." : "Now calculate the boundary itself.", ans,
+        which === "lower"
+          ? `lower = Q1 − 1,5 × IQR = ${q1} − 1,5 × ${range}.`
+          : `upper = Q3 + 1,5 × IQR = ${q3} + 1,5 × ${range}.`,
+        { dp, allowNeg: true, tol: 0.001 }),
+    ],
+    expected: ans, dp, allowNeg: true,
+    answerLabel: C(ans),
     hint: "Find the IQR first, then go 1,5 × IQR beyond the quartile (below Q1, or above Q3).",
     solution: [
       { s: `IQR = Q3 − Q1 = ${q3} − ${q1} = ${range}`, r: "interquartile range" },

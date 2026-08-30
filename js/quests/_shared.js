@@ -9,6 +9,7 @@ import { sortAsc, midpoint } from "../statlib.js";
    seedable. See js/rng.js for what installs a seeded value during a dice
    round; static play is unaffected (rng() defaults to Math.random). */
 export { rng } from "../rng.js";
+import { rng } from "../rng.js";
 
 export const C = v => fmtComma(v);
 export const list = a => a.join("  ;  ");
@@ -69,4 +70,40 @@ export function freqTable(classes, opts = {}) {
   const n = classes.reduce((s, x) => s + x.freq, 0);
   const totalRow = total ? `<tr><td>Total</td><td>${n}</td>${mid ? "<td></td>" : ""}${cum ? "<td></td>" : ""}</tr>` : "";
   return `<table class="q-table">${head}${rows}${totalRow}</table>`;
+}
+
+/* ============================================================
+   STEP-CHAIN HELPERS  (promoted here from js/quests/_trig.js on the
+   2026-08-30 audit day, when the "split it into steps" treatment
+   widened past the trig chapter). Moved VERBATIM, including the
+   rng-seeded shuffle — it must use rng() from ../rng.js, never
+   Math.random, or a dice round's seeded regeneration stops matching
+   on resume. _trig.js now just re-exports these two names so t2–t7's
+   existing imports keep working untouched.
+   js/quests/_gtrig.js keeps its OWN separate mcStep/calcStep — that
+   chapter's calcStep defaults its unit to "°" (angles everywhere),
+   not "" — so it is a deliberate fork, not a duplicate to merge here.
+   ============================================================ */
+
+/* same three-distractor shape round 2 established */
+export function mcStep(prompt, correct, wrongs, hint) {
+  const options = [{ label: String(correct), correct: true }]
+    .concat(wrongs.map(w => ({ label: String(w), correct: false })));
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [options[i], options[j]] = [options[j], options[i]];
+  }
+  return { kind: "mc", prompt, options, hint };
+}
+
+/* unit "" by default on purpose: most answers reached through this
+   helper are LENGTHS/AREAS/plain numbers. _gtrig.js's own calcStep
+   defaults to "°" because that whole chapter is angles — a side
+   labelled 16.63° would be nonsense there. Pass unit "°" explicitly
+   on angle steps. allowNeg is for values that are legitimately
+   negative (e.g. cos θ when θ is obtuse, or an outlier boundary
+   below zero). */
+export function calcStep(prompt, expected, hint, opts = {}) {
+  return { kind: "calc", prompt, expected, dp: opts.dp ?? 2, tol: opts.tol ?? 0.015,
+           unit: opts.unit ?? "", allowNeg: !!opts.allowNeg, hint };
 }
