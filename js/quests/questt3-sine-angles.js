@@ -5,8 +5,21 @@
    partner 180° − (acute).
    ============================================================ */
 import { mc } from "./_shared.js";
-import { placeTri } from "./_trig.js";
+import { placeTri, sineAngleSetupStep, mcStep, calcStep } from "./_trig.js";
 import { sineRuleAngle, ambiguousCase, sinD, fix, ang, randInt, pick } from "../triglib.js";
+
+/* ------------------------------------------------------------
+   AUDIT DAY 2026-08-30 — the two heavy calculations are STEP CHAINS
+   now, the same treatment round 2 got on 2026-08-27. Her words then:
+   "they build the equation step by step each time"; her words this
+   week: the sine-rule work was "too intense too quick — split those
+   intense questions up in smaller questions so the kids actually
+   build the questions, not try to do everything in their head."
+   Question, diagram and numbers are UNCHANGED — the worked `solution`
+   each question already carried is what became the steps. The
+   multiple-choice skills are untouched (round 2's standing ruling:
+   "The multi-choice questions are perfect").
+   ------------------------------------------------------------ */
 
 const ACC = "#0ea5e9";
 const NOTE = "sineRuleAngle";
@@ -21,18 +34,34 @@ const SKILLS = {
       B = sineRuleAngle(A, a, b);                      // θ, opposite b
     } while (B < 24);                                  // wedge wide enough for its θ label
     const t = placeTri({ angles: { A, B }, sides: { a } }, ["A", "B", "C"], randInt(-22, 22));
+    const sinVal = b * sinD(A) / a;
     return {
-      type: "calc", concept: NOTE,
+      type: "steps", concept: NOTE,
       prompt: `Use the sine rule to find <b>θ</b> (the angle at B), correct to 1 decimal.`,
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`), t.angle("B", "θ")],
         sides: [t.side("B", "C", String(a)), t.side("A", "C", String(b))] },
+      steps: [
+        /* b < a − 3 in the generator keeps the two side chips distinct */
+        sineAngleSetupStep({ sin: "sin θ", side: String(b) }, { sin: `sin ${A}°`, side: String(a) }, [],
+          `θ is opposite ${b}, and ${a} is opposite Â = ${A}°. Each sine sits over the side opposite its angle.`),
+        mcStep("Now get <b>sin θ</b> on its own.",
+          `sin θ = (${b} · sin ${A}°) / ${a}`,
+          [`sin θ = (${a} · sin ${A}°) / ${b}`,
+           `sin θ = ${b} / (${a} · sin ${A}°)`,
+           `sin θ = (${b} · ${a}) / sin ${A}°`],
+          `${b} is dividing sin θ, so it multiplies up to the other side.`),
+        calcStep("Work out the value of <b>sin θ</b> (4 decimals).", sinVal,
+          `sin θ = ${b} × sin ${A}° ÷ ${a}. This is not θ yet — it is sin θ.`, { dp: 4, tol: 0.0015 }),
+        calcStep("Now find <b>θ</b> (1 decimal).", B,
+          "θ = sin⁻¹ of that value — SHIFT sin on the calculator.", { dp: 1, tol: 0.1, unit: "°" }),
+      ],
       expected: B, dp: 1, tol: 0.1,   // accept the neighbouring tenth from 4-dp sine working
       hint: "θ is opposite b. Sines on top: sinθ/b = sinÂ/a, so sinθ = b·sinÂ/a.",
       answerLabel: `θ = ${ang(B)}`,
       solution: [
         { s: `sin θ / ${b} = sin ${A}° / ${a}`, r: "sines on top" },
-        { s: `sin θ = ${b} · sin ${A}° / ${a} = ${fix(b * sinD(A) / a, 4)}` },
+        { s: `sin θ = ${b} · sin ${A}° / ${a} = ${fix(sinVal, 4)}` },
         { s: `θ = ${ang(B)}` },
       ],
     };
@@ -70,8 +99,23 @@ const SKILLS = {
     } while (res.count !== 2);
     const obtuse = 180 - res.acute;
     return {
-      type: "calc", concept: "ambiguousCase",
+      type: "steps", concept: "ambiguousCase",
       prompt: `In △ABC, Â = ${A}°, a = ${a} (opposite Â) and b = ${b}. Two triangles are possible. Calculate the <b>obtuse</b> possibility of B̂ (1 decimal).`,
+      steps: [
+        /* the generator forces h < a < b, so a ≠ b — the side chips stay distinct */
+        sineAngleSetupStep({ sin: "sin B̂", side: String(b) }, { sin: `sin ${A}°`, side: String(a) }, [],
+          `B̂ is opposite b = ${b}, and the known Â = ${A}° is opposite a = ${a}.`),
+        mcStep("Get <b>sin B̂</b> on its own.",
+          `sin B̂ = (${b} · sin ${A}°) / ${a}`,
+          [`sin B̂ = (${a} · sin ${A}°) / ${b}`,
+           `sin B̂ = ${b} / (${a} · sin ${A}°)`,
+           `sin B̂ = (${b} · ${a}) / sin ${A}°`],
+          `${b} is dividing sin B̂, so it multiplies up to the other side.`),
+        calcStep("First the <b>acute</b> possibility of B̂ (1 decimal).", res.acute,
+          "sin⁻¹ always hands you the acute answer first.", { dp: 1, tol: 0.1, unit: "°" }),
+        calcStep("Now the <b>obtuse</b> possibility (1 decimal).", obtuse,
+          "The two possibilities are supplementary: 180° − the acute answer.", { dp: 1, tol: 0.1, unit: "°" }),
+      ],
       expected: obtuse, dp: 1, tol: 0.1,
       hint: "Sine rule first: sinB̂ = b·sinÂ/a gives the ACUTE B̂. The obtuse partner is 180° − (that angle).",
       answerLabel: `obtuse B̂ = ${ang(obtuse)}`,

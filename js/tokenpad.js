@@ -109,26 +109,43 @@ export function mountTokenpad(host, opts = {}) {
       if (part === "=") { sides.push("="); sides.push([]); continue; }
       sides[sides.length - 1].push(part);
     }
-    /* A side that is exactly  ☐ / ☐  is drawn as a REAL STACKED FRACTION
-       — her note, 2026-08-27: "can't this be a real fraction stacked on top
+    /* A side holding exactly ONE "/" is drawn as a REAL STACKED FRACTION —
+       her note, 2026-08-27: "can't this be a real fraction stacked on top
        of each other?". It can, and it should: the multiple-choice options
        directly below the pad are already drawn that way by the app's
        formula renderer, so an inline "x/sin 41°" here and a stacked one
        three centimetres lower were two spellings of the same maths on one
        screen. It is also how they write it on paper.
 
+       Generalised on the 2026-08-30 audit day from the original ☐ / ☐
+       special case: everything before the "/" is the numerator, everything
+       after it the denominator, however many cells each holds — the 2D-trig
+       cosine-angle frame (☐² + ☐² − ☐² over 2 · ☐ · ☐) needed it, because
+       drawn inline it was wider than a phone.
+
        Reuses .sfrac/.sf-n/.sf-d rather than inventing a look — .sf-n's
        border-bottom IS the fraction bar everywhere else in the app, so
        these boxes get the same bar, in the same weight, for free.
 
-       Any other shape falls back to the inline row, so the pad stays
-       general: a frame that is not a pair of fractions still renders. */
+       A side with no "/" renders as the inline row — grouped into
+       .krun chunks that break ONLY before a + or − cell, the app-wide
+       formula-wrap law (js/ui.js formulaHtml): an expression moves to
+       the next line whole, or breaks before a sign, never inside a
+       term. Without the runs, a frame longer than the phone centred
+       itself and clipped off BOTH edges. */
     const side = g => {
-      const isFrac = g.length === 3 && g[0] === SLOT && g[1] === "/" && g[2] === SLOT;
-      if (!isFrac) return `<span class="kside">${g.map(cell).join("")}</span>`;
-      const num = cell(g[0]), den = cell(g[2]);      // in frame order: numerator first
-      return `<span class="kside"><span class="sfrac kfrac">`
-           + `<span class="sf-n">${num}</span><span class="sf-d">${den}</span></span></span>`;
+      const cut = g.indexOf("/");
+      if (cut > 0 && cut < g.length - 1 && g.indexOf("/", cut + 1) === -1) {
+        const num = g.slice(0, cut).map(cell).join(""), den = g.slice(cut + 1).map(cell).join("");
+        return `<span class="kside"><span class="sfrac kfrac">`
+             + `<span class="sf-n">${num}</span><span class="sf-d">${den}</span></span></span>`;
+      }
+      const runs = [[]];
+      for (const part of g) {
+        if ((part === "+" || part === "−") && runs[runs.length - 1].length) runs.push([]);
+        runs[runs.length - 1].push(part);
+      }
+      return `<span class="kside">${runs.map(r => `<span class="krun">${r.map(cell).join("")}</span>`).join("")}</span>`;
     };
     valEl.innerHTML = sides.map(g => g === "=" ? `<span class="kfx keq">=</span>` : side(g)).join("");
     disp.classList.toggle("empty", toks.length === 0);

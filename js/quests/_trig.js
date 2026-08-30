@@ -5,6 +5,14 @@
    numeric label; unknowns are letters (x / y / θ) — so the engine's
    to-scale checks only ever see exact values. */
 import { solveTriangle, rotatePts, sinD, cosD } from "../triglib.js";
+/* rng, NOT Math.random: chip and option shuffles must run under js/rng.js
+   so a dice round's seeded regeneration (genAt → resume) reproduces the
+   SAME order. This file was the only one in js/quests still on raw
+   Math.random — verify-dice-trig's "same salt twice → identical" check
+   caught it on the 2026-08-30 audit day (it had been true of round 2's
+   local helpers since 2026-08-27). Static play is unaffected: rng()
+   defaults to Math.random. */
+import { rng } from "../rng.js";
 /* SLOT is the tokenpad's own marker for "a box to be filled" — imported
    rather than re-typed so a change to the glyph can never leave the frame
    builder drawing a character the pad no longer recognises. */
@@ -156,13 +164,150 @@ export function sineSetupStep(pair, known, decoys, hint) {
 }
 
 /* The chip order is shuffled so the answer can never be "tap them left
-   to right". Seeded off nothing in particular — a fresh order per
-   question is the point. */
+   to right" — a fresh order per question in static play, the SAME order
+   on a seeded dice regeneration (see the rng import note above). */
 function shuffleChips(xs) {
   const a = xs.slice();
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rng() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+/* ============================================================
+   CHAPTER-WIDE STEP BUILDERS  (the audit-day widening, 2026-08-30)
+   ------------------------------------------------------------
+   Round 2's rebuild (sineSetupStep above) proved the shape; her ask
+   this audit day widened it to the rest of the chapter: "split those
+   intense questions up in smaller questions so the kids actually
+   build the questions, not try to do everything in their head."
+   The same laws hold for every builder here:
+     · the question, its diagram and its numbers DO NOT change — the
+       existing worked `solution` becomes the steps, answered;
+     · a symmetric fill is equally correct and is accepted (marking a
+       child wrong for the order they read the triangle in would be
+       marking reading order, not maths);
+     · a STRUCTURAL wrong (the opposite side not subtracted, sines
+       swapped) is a real wrong and marks wrong;
+     · callers must feed DISTINCT side values wherever two sides
+       become chips — the generators guard it, dedupe is the net.
+   mcStep/calcStep are round 2's local helpers promoted here, so five
+   quest files don't carry five copies.
+   ============================================================ */
+
+/* same three-distractor shape round 2 established */
+export function mcStep(prompt, correct, wrongs, hint) {
+  const options = [{ label: String(correct), correct: true }]
+    .concat(wrongs.map(w => ({ label: String(w), correct: false })));
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [options[i], options[j]] = [options[j], options[i]];
+  }
+  return { kind: "mc", prompt, options, hint };
+}
+
+/* unit "" by default on purpose: most answers in this chapter are
+   LENGTHS/AREAS. _gtrig.js's calcStep defaults to "°" because that whole
+   chapter is angles; a side labelled 16.63° would be nonsense. Pass
+   unit "°" explicitly on angle steps. allowNeg is for cos θ, which is
+   legitimately negative when θ is obtuse. */
+export function calcStep(prompt, expected, hint, opts = {}) {
+  return { kind: "calc", prompt, expected, dp: opts.dp ?? 2, tol: opts.tol ?? 0.015,
+           unit: opts.unit ?? "", allowNeg: !!opts.allowNeg, hint };
+}
+
+/* one dedupe for every builder — two identical chips are not a harder
+   question, they are a confusing one (see sineSetupStep's note) */
+function chipsOf(list) {
+  const chips = [];
+  for (const c of list) {
+    if (c != null && c !== "" && !chips.includes(c)) chips.push(c);
+  }
+  return chips;
+}
+/* U+2009 THIN SPACE — the SAME separator the pad itself joins with, so a
+   harness can split expected back into its pieces (a chip like "sin 43°"
+   contains a real space, so splitting on plain whitespace shreds it).
+   normalizeTokens strips it before marking; it is never marked. */
+const joinThin = xs => xs.join(" ");
+
+/* ---------- sine rule, SINES ON TOP (finding an angle) ----------
+   pair:  { sin: "sin θ",  side } — the unknown's sine over its side
+   known: { sin: "sin 43°", side }
+   The mirrored fill is equally correct; the sides-on-top form is true
+   maths but NOT accepted — the prompt says "sines on top" out loud,
+   exactly as sineSetupStep's prompt says "sides on top". */
+export function sineAngleSetupStep(pair, known, decoys, hint) {
+  const frame = [SLOT, "/", SLOT, "=", SLOT, "/", SLOT];
+  return {
+    kind: "tokenpad",
+    prompt: "Build the set-up, <b>sines on top</b>. Tap a piece to drop it into the next box.",
+    frame,
+    keys: shuffleChips(chipsOf([pair.sin, known.sin, pair.side, known.side, ...(decoys || [])])),
+    expected: joinThin([pair.sin, pair.side, known.sin, known.side]),
+    alsoAccept: [joinThin([known.sin, known.side, pair.sin, pair.side])],
+    hint,
+  };
+}
+
+/* ---------- substituted cosine rule for a SIDE ----------
+   lhs² = ☐² + ☐² − 2·☐·☐·cos ☐   with chips s1, s2, angTxt.
+   "cos" sits IN the frame so the last box takes the bare angle — the
+   sin-for-cos mix-up is taught by the round's own formula MC, not
+   trapped here. All four s1/s2 arrangements are the same maths. */
+export function cosineSideSetupStep(lhs, s1, s2, angTxt, hint) {
+  const frame = [`${lhs}²`, "=", SLOT, "²", "+", SLOT, "²", "−", "2", "·", SLOT, "·", SLOT, "·", "cos", SLOT];
+  const fills = [[s1, s2, s1, s2], [s2, s1, s1, s2], [s1, s2, s2, s1], [s2, s1, s2, s1]]
+    .map(f => joinThin([...f, angTxt]));
+  const accepted = [...new Set(fills)];       // s1 === s2 would collapse these; callers keep them distinct
+  return {
+    kind: "tokenpad",
+    prompt: `Build the cosine rule for <b>${lhs}</b>. Tap a piece to drop it into the next box.`,
+    frame,
+    keys: shuffleChips(chipsOf([s1, s2, angTxt])),
+    expected: accepted[0],
+    alsoAccept: accepted.slice(1),
+    hint,
+  };
+}
+
+/* ---------- rearranged cosine rule for an ANGLE ----------
+   cos θ = ( ☐² + ☐² − ☐² ) / ( 2 · ☐ · ☐ )   with chips o1, o2, opp.
+   The one thing this step exists to teach: the side OPPOSITE the angle
+   is the one subtracted. opp in a plus-slot marks wrong, as it should. */
+export function cosineAngleSetupStep(lhsTxt, opp, o1, o2, hint) {
+  /* the "/" cell makes the pad draw this as a REAL STACKED FRACTION
+     (tokenpad.js paintFrame) — no parentheses needed, the bar does that
+     job, and inline this frame was wider than a phone */
+  const frame = [`cos ${lhsTxt}`, "=", SLOT, "²", "+", SLOT, "²", "−", SLOT, "²", "/", "2", "·", SLOT, "·", SLOT];
+  const fills = [[o1, o2, opp, o1, o2], [o2, o1, opp, o1, o2], [o1, o2, opp, o2, o1], [o2, o1, opp, o2, o1]]
+    .map(f => joinThin(f));
+  const accepted = [...new Set(fills)];
+  return {
+    kind: "tokenpad",
+    prompt: `Build the rearranged cosine rule for <b>${lhsTxt}</b>. Which side is subtracted?`,
+    frame,
+    keys: shuffleChips(chipsOf([o1, o2, opp])),
+    expected: accepted[0],
+    alsoAccept: accepted.slice(1),
+    hint,
+  };
+}
+
+/* ---------- area rule ----------
+   Area = ½ · ☐ · ☐ · sin ☐   with chips s1, s2, angTxt. */
+export function areaSetupStep(s1, s2, angTxt, hint) {
+  const frame = ["Area", "=", "½", "·", SLOT, "·", SLOT, "·", "sin", SLOT];
+  const fills = [[s1, s2, angTxt], [s2, s1, angTxt]].map(f => joinThin(f));
+  const accepted = [...new Set(fills)];
+  return {
+    kind: "tokenpad",
+    prompt: "Build the area rule. Tap a piece to drop it into the next box.",
+    frame,
+    keys: shuffleChips(chipsOf([s1, s2, angTxt])),
+    expected: accepted[0],
+    alsoAccept: accepted.slice(1),
+    hint,
+  };
 }

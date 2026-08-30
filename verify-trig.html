@@ -36,6 +36,7 @@ import { questDef } from "./js/quests/index.js";
 import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
 const ACC = "#0ea5e9";
 let total = 0, passed = 0; const fails = [];
@@ -122,6 +123,39 @@ trigChapter.quests.forEach(qmeta => {
       } else if (q.type === "tap") {
         const ids = (q.tap.targets || []);
         if (!ids.includes(q.tap.correctId)) { skillIssues[skill.id] = "correctId not in targets"; qFails++; }
+      } else if (q.type === "steps") {
+        /* the audit-day chains (t2 2026-08-27, t3–t7 2026-08-30). The deep
+           marking sweep lives in verify-t2-steps.mjs / verify-trig-steps.mjs;
+           this is the same structural floor the other types get. */
+        const steps = q.steps || [];
+        if (steps.length < 2) { skillIssues[skill.id] = `chain of ${steps.length} steps`; qFails++; }
+        if (!steps.length || steps[steps.length - 1].kind !== "calc") { skillIssues[skill.id] = "chain does not end on a typed number"; qFails++; }
+        if (q.method) { skillIssues[skill.id] = "chain carries q.method (spoils the steps)"; qFails++; }
+        steps.forEach((st, si) => {
+          if (!st.prompt || !st.hint) { skillIssues[skill.id] = `step ${si} missing prompt/hint`; qFails++; }
+          if (st.kind === "mc") {
+            const rights = st.options.filter(o => o.correct).length;
+            const labels = st.options.map(o => o.label);
+            if (rights !== 1) { skillIssues[skill.id] = `step ${si} has ${rights} correct options`; qFails++; }
+            if (labels.length !== new Set(labels).size) { skillIssues[skill.id] = `step ${si} duplicate options`; qFails++; }
+          } else if (st.kind === "calc") {
+            if (!Number.isFinite(st.expected)) { skillIssues[skill.id] = `step ${si} non-finite expected`; qFails++; }
+            else if (!checkStep(st, st.expected)) { skillIssues[skill.id] = `step ${si} rejects its own answer`; qFails++; }
+            if (st.expected < 0 && !st.allowNeg) { skillIssues[skill.id] = `step ${si} negative expected without allowNeg`; qFails++; }
+          } else if (st.kind === "tokenpad") {
+            const slots = (st.frame || []).filter(f => f === "☐").length;
+            const need = String(st.expected).split(" ").filter(Boolean);   // U+2009 — the pad's join
+            const keysNorm = (st.keys || []).map(normalizeTokens);
+            if (need.length !== slots) { skillIssues[skill.id] = `step ${si}: ${need.length} pieces for ${slots} boxes`; qFails++; }
+            if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) { skillIssues[skill.id] = `step ${si} not buildable from its chips`; qFails++; }
+            if (new Set(keysNorm).size !== keysNorm.length) { skillIssues[skill.id] = `step ${si} duplicate chips`; qFails++; }
+            if (!checkStep(st, st.expected)) { skillIssues[skill.id] = `step ${si} rejects its own fill`; qFails++; }
+          } else { skillIssues[skill.id] = `step ${si} unknown kind "${st.kind}"`; qFails++; }
+        });
+        if (steps.length && typeof q.expected === "number"
+            && Math.abs(steps[steps.length - 1].expected - q.expected) > 1e-9) {
+          skillIssues[skill.id] = "chain end ≠ question's headline answer"; qFails++;
+        }
       }
       if (!checkGraph(q.graph)) { skillIssues[skill.id] = "graph not to scale"; qFails++; }
     }

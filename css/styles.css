@@ -1322,7 +1322,12 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 .tokenpad.framed .kdisp{justify-content:center;font-size:21px;letter-spacing:0;flex-wrap:wrap;gap:2px;min-height:96px;padding:12px 8px}
 .tokenpad.framed .kval{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px}
 /* each side of the equation is one unbreakable unit — see paintFrame() */
-.tokenpad.framed .kside{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto}
+/* a side may WRAP between its .krun chunks (tokenpad.js splits runs before
+   + / − only — the app-wide wrap law), never inside one; flex-wrap here is
+   what lets a phone-wide cosine frame break at a sign instead of clipping
+   off both edges (audit day 2026-08-30) */
+.tokenpad.framed .kside{display:inline-flex;align-items:center;gap:3px;flex:0 1 auto;flex-wrap:wrap;justify-content:center;row-gap:6px}
+.tokenpad.framed .krun{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
 .tokenpad.framed .keq{padding:0 5px;font-size:22px}
 /* the stacked fraction (her ask). .sfrac already draws the bar as .sf-n's
    border-bottom; all this does is give the bar room to clear the boxes and

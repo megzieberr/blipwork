@@ -4,15 +4,27 @@
    a² = b² + c² − 2bc·cosÂ
    ============================================================ */
 import { mc } from "./_shared.js";
-import { placeTri } from "./_trig.js";
+import { placeTri, cosineSideSetupStep, calcStep } from "./_trig.js";
 import { cosineRuleSide, cosD, fix, randInt, pick } from "../triglib.js";
 
 const ACC = "#0d8fce";
 const NOTE = "cosineRuleSide";
 
-/* SAS triangle: two sides b, c and the included angle Â between them */
+/* ------------------------------------------------------------
+   AUDIT DAY 2026-08-30 — the two full calculations are STEP CHAINS
+   now (build the substituted rule → x² → √), the round-2 treatment
+   widened to the chapter: "split those intense questions up in
+   smaller questions so the kids actually build the questions."
+   Question, diagram and numbers unchanged; MCs untouched.
+   ------------------------------------------------------------ */
+
+/* SAS triangle: two sides b, c and the included angle Â between them.
+   b ≠ c since the audit day — the two sides are chips on the build
+   step, and two identical chips are confusing, not harder. */
 function genSAS() {
-  const b = randInt(6, 16), c = randInt(6, 16), A = randInt(35, 130);
+  let b = 0, c = 0;
+  do { b = randInt(6, 16); c = randInt(6, 16); } while (b === c);
+  const A = randInt(35, 130);
   return placeTri({ sides: { b, c }, angles: { A } }, ["A", "B", "C"], randInt(-22, 22));
 }
 
@@ -23,11 +35,20 @@ const SKILLS = {
     const A = Math.round(t.angles.A), b = t.sides.b, c = t.sides.c;
     const x = cosineRuleSide(b, c, A);                  // side a, opposite Â
     return {
-      type: "calc", concept: NOTE,
+      type: "steps", concept: NOTE,
       prompt: `Use the cosine rule to find <b>x</b> (correct to 2 decimals).`,
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`)],
         sides: [t.side("A", "C", String(b)), t.side("A", "B", String(c)), t.side("B", "C", "x")] },
+      steps: [
+        cosineSideSetupStep("x", String(b), String(c), `${A}°`,
+          "The two sides you know fill the squares AND the 2·…·… product; the included angle rides with cos."),
+        calcStep("Work out <b>x²</b> first (2 decimals).", x * x,
+          `x² = ${b}² + ${c}² − ${2 * b * c}·cos ${A}° — type the whole right-hand side in one go.`,
+          { dp: 2, tol: 0.05 }),
+        calcStep("Now <b>x</b> (2 decimals).", x,
+          "x = √(that number). x² is not the answer yet.", { dp: 2, tol: 0.015 }),
+      ],
       expected: x, dp: 2, tol: 0.015,   // absorb the last-cent flip if a learner works with a 4-dp cosine
       hint: "x is opposite the known angle. x² = b² + c² − 2bc·cos(angle).",
       answerLabel: `x = ${fix(x, 2)}`,
@@ -39,13 +60,24 @@ const SKILLS = {
     };
   },
 
-  /* word version, no diagram */
+  /* word version, no diagram — the sides come out of the sentence */
   wordSide: () => {
-    const b = randInt(8, 18), c = randInt(8, 18), A = randInt(40, 125);
+    let b = 0, c = 0;
+    do { b = randInt(8, 18); c = randInt(8, 18); } while (b === c);   // distinct chips
+    const A = randInt(40, 125);
     const a = cosineRuleSide(b, c, A);
     return {
-      type: "calc", concept: NOTE,
+      type: "steps", concept: NOTE,
       prompt: `In △ABC, b = ${b}, c = ${c} and Â = ${A}°. Calculate <b>a</b> (2 decimals).`,
+      steps: [
+        cosineSideSetupStep("a", String(b), String(c), `${A}°`,
+          `Â sits between b and c, so a is opposite it — b and c fill the squares and the product.`),
+        calcStep("Work out <b>a²</b> first (2 decimals).", a * a,
+          `a² = ${b}² + ${c}² − ${2 * b * c}·cos ${A}° — the whole right-hand side in one go.`,
+          { dp: 2, tol: 0.05 }),
+        calcStep("Now <b>a</b> (2 decimals).", a,
+          "a = √(that number).", { dp: 2, tol: 0.015 }),
+      ],
       expected: a, dp: 2, tol: 0.015,
       hint: "Â sits between b and c, so a is opposite it: a² = b² + c² − 2bc·cosÂ.",
       answerLabel: `a = ${fix(a, 2)}`,

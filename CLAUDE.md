@@ -105,7 +105,11 @@ resetting forgotten passwords. All 11 chapters are built and live.
   shipping. Quest modules can also be imported headlessly in node for
   fuzzing.
 - **Session hand-off**: `PROJECT-STATUS.md` — read it at session start,
-  update it before ending a session that changed anything.
+  update it before ending a session that changed anything. Since the
+  2026-08-30 audit it is a SHORT head only; the full session-by-session
+  history lives verbatim in `STATUS-ARCHIVE.md` (append-only — when a
+  head entry stops being current, move it to the archive's top, never
+  delete it). Keep the head under a few hundred lines.
 - **Sibling repo**: `maths-quest-grade7` ("Wiskunde Avontuur", cloned at
   /workspace/maths-quest-grade7) is her separate Grade 7 app, all content in
   Afrikaans. Separate git history and code, but the same architecture

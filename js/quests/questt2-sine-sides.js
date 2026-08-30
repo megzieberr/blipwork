@@ -4,7 +4,7 @@
    a/sinÂ = b/sinB̂ = c/sinĈ. Diagrams are to scale.
    ============================================================ */
 import { mc } from "./_shared.js";
-import { placeTri, sineSetupStep } from "./_trig.js";
+import { placeTri, sineSetupStep, mcStep, calcStep } from "./_trig.js";
 import { sineRuleSide, fix, ang, randInt, pick } from "../triglib.js";
 
 const ACC = "#38bdf8";
@@ -60,26 +60,10 @@ function rearrangeStep(known, sinTop, sinBottom, hint) {
     hint);
 }
 
-/* local copies of the two gtrig step helpers — imported rather than
-   re-implemented would drag the whole General Trig module in for two
-   object literals, and these are the house shapes js/questions.js
-   already knows how to mount. */
-function mcStep(prompt, correct, wrongs, hint) {
-  const options = [{ label: String(correct), correct: true }]
-    .concat(wrongs.map(w => ({ label: String(w), correct: false })));
-  for (let i = options.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [options[i], options[j]] = [options[j], options[i]];
-  }
-  return { kind: "mc", prompt, options, hint };
-}
-/* unit "" on purpose: these answers are LENGTHS. calcStep in _gtrig.js
-   defaults the unit to a degree sign because everything in that chapter
-   is an angle; a side labelled 16.63° would be nonsense. */
-function calcStep(prompt, expected, hint, opts = {}) {
-  return { kind: "calc", prompt, expected, dp: opts.dp ?? 2, tol: opts.tol ?? 0.015,
-           unit: opts.unit ?? "", allowNeg: false, hint };
-}
+/* mcStep/calcStep started life as this file's local helpers (round 2 was
+   the first step-chain round in the chapter). The 2026-08-30 audit day
+   widened chains to t3–t7, so the one definition now lives in _trig.js —
+   identical shapes, imported above. */
 
 /* a valid AAS triangle whose THREE ANGLES ARE ALL DIFFERENT.
    ⚠️ Two equal angles break the chain in two separate ways, and

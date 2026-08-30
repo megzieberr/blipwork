@@ -29,10 +29,22 @@
 
    ENTRIES: all 36 skills. NO EXCLUSIONS — every 2D Trig skill rolls
    honestly (0 STATIC in the audit), every input is mc / tap / calc /
-   yesno (INPUT LAW clean: no free text anywhere in the chapter), and
-   every diagram is drawn to scale by placeTri + triangle-graph.js,
-   which verify-dice-trig.html re-checks with verifyTriangle on every
+   yesno / steps (INPUT LAW clean: no free text anywhere — a steps
+   chain's own steps are mc / calc / tokenpad), and every diagram is
+   drawn to scale by placeTri + triangle-graph.js, which
+   verify-dice-trig.html re-checks with verifyTriangle on every
    rolled figure.
+
+   ⚠️ STEPS ARRIVED AFTER THIS POOL WAS BUILT. Round 2's three
+   calculations became step chains on 2026-08-27, and the audit day
+   2026-08-30 widened chains to t3–t7 — but withMethod() below kept
+   attaching q.method to them, and js/play.js renders the 📖 method
+   link AT MOUNT, before step 1. On a steps chain the method IS the
+   remaining answers, so the link handed the whole chain over. Fixed
+   the same way dice-gtrig.js always had it: methodEligible() refuses
+   steps chains. When the banked play.js gate lands (render the link
+   only once root.dataset.step === steps.length), delete that clause
+   here AND in dice-gtrig.js and the chains get their link back.
 
    KINDS: kind === skillId for all 36 — NO GROUPING. The three pairs
    that look like near-duplicates were each checked and left separate:
@@ -103,6 +115,14 @@ function methodHtml(q) {
   return html;
 }
 
+/* Is this question allowed an always-available method link?
+   `steps` chains are not — their solution IS the remaining answers, and
+   js/play.js renders the link before step 1 (see the header ⚠️).
+   Exported so the harness can assert the rule instead of restating it. */
+export function methodEligible(q) {
+  return !!q && q.type !== "steps" && hasRealWorking(q);
+}
+
 /* Wrap a skill's gen so it stays a PURE zero-arg function — no
    randomness of its own, so genAt()/withSeed() determinism (and hence
    resume) is untouched — and just attaches q.method where the question
@@ -110,7 +130,7 @@ function methodHtml(q) {
 function withMethod(gen) {
   return () => {
     const q = gen();
-    if (q.method == null && hasRealWorking(q)) q.method = methodHtml(q);
+    if (q.method == null && methodEligible(q)) q.method = methodHtml(q);
     return q;
   };
 }

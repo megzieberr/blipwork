@@ -52,7 +52,8 @@
 <pre id="mechanics">…</pre>
 
 <script type="module">
-import { pool as trigPool, hasRealWorking } from "./js/quests/dice-trig.js";
+import { pool as trigPool, hasRealWorking, methodEligible } from "./js/quests/dice-trig.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import { questT1 } from "./js/quests/questt1-choose.js";
 import { questT2 } from "./js/quests/questt2-sine-sides.js";
 import { questT3 } from "./js/quests/questt3-sine-angles.js";
@@ -73,7 +74,10 @@ let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
 
 const RUNS = 200;
-const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+/* "steps" joined 2026-08-27 (t2's rebuild) and covers most of the chapter
+   since the 2026-08-30 audit day — a chain's own steps are mc / calc /
+   tokenpad, so the no-free-text law still holds one level down. */
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo", "steps"]);
 const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
 
 /* ---------- tiny readers over a question's OWN rendered fields ----------
@@ -470,6 +474,39 @@ trigPool.entries.forEach(entry => {
       if (!q.graph) issues.push("tap question with no graph to tap on");
       const ids = (q.tap && q.tap.targets) || [];
       if (!q.tap || !ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
+    } else if (q.type === "steps") {
+      /* the audit-day chains — deep marking sweep in verify-trig-steps.mjs;
+         this is the structural floor, plus the one dice-specific law:
+         NO METHOD LINK ON A CHAIN (play.js renders it before step 1). */
+      const steps = q.steps || [];
+      if (q.method != null) issues.push("steps chain carries q.method — the link renders before step 1 and hands the chain over");
+      if (steps.length < 2) issues.push(`chain of ${steps.length} steps`);
+      if (!steps.length || steps[steps.length - 1].kind !== "calc") issues.push("chain does not end on a typed number");
+      steps.forEach((st, si) => {
+        if (!st.prompt || !st.hint) issues.push(`step ${si} missing prompt/hint`);
+        if (st.kind === "mc") {
+          const rights = st.options.filter(o => o.correct).length;
+          const labels = st.options.map(o => o.label);
+          if (rights !== 1) issues.push(`step ${si} has ${rights} correct options`);
+          if (labels.length !== new Set(labels).size) issues.push(`step ${si} duplicate options`);
+        } else if (st.kind === "calc") {
+          if (!Number.isFinite(st.expected)) issues.push(`step ${si} non-finite expected`);
+          else if (!checkStep(st, st.expected)) issues.push(`step ${si} rejects its own answer`);
+          if (st.expected < 0 && !st.allowNeg) issues.push(`step ${si} negative expected without allowNeg`);
+        } else if (st.kind === "tokenpad") {
+          const slots = (st.frame || []).filter(f => f === "☐").length;
+          const need = String(st.expected).split(" ").filter(Boolean);   // the pad's own thin-space join
+          const keysNorm = (st.keys || []).map(normalizeTokens);
+          if (need.length !== slots) issues.push(`step ${si}: ${need.length} pieces for ${slots} boxes`);
+          if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) issues.push(`step ${si} not buildable from its chips`);
+          if (new Set(keysNorm).size !== keysNorm.length) issues.push(`step ${si} duplicate chips: ${(st.keys || []).join(" | ")}`);
+          if (!checkStep(st, st.expected)) issues.push(`step ${si} rejects its own fill`);
+        } else issues.push(`step ${si} unknown kind "${st.kind}"`);
+      });
+      if (steps.length && Number.isFinite(q.expected)
+          && Math.abs(steps[steps.length - 1].expected - q.expected) > 1e-9) {
+        issues.push("chain end ≠ question's headline answer");
+      }
     }
 
     // graph honesty — verifyTriangle re-derives the scale and every numeric
@@ -545,33 +582,40 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     qu.skills.forEach(sk => RAW.set(`${qu.id}.${sk.id}`, sk)));
 
   const withM = [], withoutM = [];
-  let agrees = true, stable = true;
+  let agrees = true, stable = true, stepsClean = true;
   trigPool.entries.forEach((entry, i) => {
     const raw = RAW.get(entry.skillId);
-    let sawMethod = 0, sawWorking = 0;
+    let sawMethod = 0, sawEligible = 0;
     for (let k = 0; k < 60; k++) {
       const q = genAt(newRoundSeed(), i, entry, k % 4);
       if (q.method != null) sawMethod++;
+      if (q.type === "steps" && q.method != null) stepsClean = false;
       // the rule re-evaluated INDEPENDENTLY of the wrapper, on the raw
       // module's own output — so a wrapper that ever stopped applying it
-      // (or started over-applying it) shows up here
-      if (hasRealWorking(withSeed((Math.random() * 1e9) >>> 0, () => raw.gen()))) sawWorking++;
+      // (or started over-applying it) shows up here. methodEligible is
+      // hasRealWorking MINUS steps chains: js/play.js renders the 📖 link
+      // at mount, before step 1, and a chain's method IS its remaining
+      // answers — the 2026-08-30 audit's live-bug fix.
+      if (methodEligible(withSeed((Math.random() * 1e9) >>> 0, () => raw.gen()))) sawEligible++;
     }
     // a skill is either ALWAYS a method skill or NEVER one — no roll-to-roll
     // flapping, or a learner would meet the link at random
     if (sawMethod !== 0 && sawMethod !== 60) stable = false;
-    if (sawWorking !== 0 && sawWorking !== 60) stable = false;
-    if ((sawMethod > 0) !== (sawWorking > 0)) agrees = false;
+    if (sawEligible !== 0 && sawEligible !== 60) stable = false;
+    if ((sawMethod > 0) !== (sawEligible > 0)) agrees = false;
     (sawMethod > 0 ? withM : withoutM).push(entry.skillId);
   });
   tick(stable, "method rule: every skill is consistently a method skill or consistently not (no roll-to-roll flapping)");
-  tick(agrees, "method rule: the attached q.method matches hasRealWorking() re-evaluated on the raw quest module");
-  tick(withM.length === 19 && withoutM.length === 17, `method split is 19 with / 17 without (got ${withM.length} / ${withoutM.length})`);
+  tick(agrees, "method rule: the attached q.method matches methodEligible() re-evaluated on the raw quest module");
+  tick(stepsClean, "no steps chain ever carries q.method — play.js renders the link before step 1");
+  tick(withM.length + withoutM.length === 36, `every skill classified (got ${withM.length} + ${withoutM.length})`);
   document.getElementById("methodRule").textContent =
-    `WITH a method link — real worked steps (${withM.length}):\n  ${withM.join(", ")}\n\n`
-    + `WITHOUT (${withoutM.length}) — their only "solution" is the answer itself (_shared.js's mc() default),\n`
-    + `so a link would reveal the answer and nothing else. No new method text was written for these;\n`
-    + `that is a separate content batch for Megan to decide on.\n  ${withoutM.join(", ")}`;
+    `WITH a method link — real worked steps, not a chain (${withM.length}):\n  ${withM.join(", ")}\n\n`
+    + `WITHOUT (${withoutM.length}) — either pure recall (their only "solution" is the answer itself,\n`
+    + `_shared.js's mc() default — a link would reveal the answer and nothing else), or a STEPS CHAIN\n`
+    + `(its solution IS the remaining answers, and play.js renders the link before step 1; the banked\n`
+    + `play.js gate gives chains their link back — see dice-trig.js's header). No new method text was\n`
+    + `written for the recall skills; that is a separate content batch for Megan to decide on.\n  ${withoutM.join(", ")}`;
 }
 
 /* ============================================================
