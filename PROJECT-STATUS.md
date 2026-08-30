@@ -114,11 +114,10 @@ locator is stale ("Continue →" now), so it only ever reaches a round's
 first question — sessions verified via skills-filtered defs instead.
 
 ## ⏳ Pending on Megan
-- 💬 1 word **[blocking]**: "ship it" → I bump sw to v85, push the three
-  split-day commits, live-verify. No SQL.
-- 📱 5 min [whenever, after ship]: one question each in stats q3, tree
-  diagrams, hire purchase, eff↔nom, functions round 7 and measurement
-  round 5 — they should all feel like the trig rounds do now.
+- 📱 5 min [whenever]: close + reopen Blipwork twice (sw v85), then one
+  question each in stats q3, tree diagrams, hire purchase, eff↔nom,
+  functions round 7 and measurement round 5 — they should all feel like
+  the trig rounds do now.
 - 🌐 1 line [your call]: megzieberr is still visible in the class name-picker
   (checked live 08-30) and the class invite went out 08-27 — say the word
   and I hide it (one SQL line, reversible).
