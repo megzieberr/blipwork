@@ -48,10 +48,11 @@
 <pre id="mechanics">…</pre>
 
 <script type="module">
-import { pool, hasRealWorking } from "./js/quests/dice-func.js";
+import { pool, hasRealWorking, methodEligible } from "./js/quests/dice-func.js";
 import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
 import { answerCorrect } from "./js/check.js";
 import { getConcept } from "./js/concepts.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import {
   makeFn, paraTP, paraStd, paraRoots, paraTPString, lineXInt, lineYInt,
   domainStr, rangeStr, eqStr, ptStr, avgGradient, fix, C, ineqBetween, ineqOutside,
@@ -63,7 +64,10 @@ let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
 
 const RUNS = 200;
-const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+/* "steps" joined this audit day (fn7.maxLength + all three of m6's calc
+   skills) — a chain's own steps are mc / calc / tokenpad, so the
+   no-free-text law still holds one level down (dice-trig.js's note). */
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo", "steps"]);
 const EPS = 1e-9;
 const near = (a, b, tol = 1e-9) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
 
@@ -397,8 +401,15 @@ pool.entries.forEach(entry => {
     const ugly = readable.match(/\d+,\d{3,}/);
     if (ugly) issues.push(`a number with more than 2 decimals is shown: "${ugly[0]}"`);
 
-    /* ---- the method rule (DICE-COMMON 2026-08-23) ---- */
-    const wantsMethod = hasRealWorking(q);
+    /* ---- the method rule (DICE-COMMON 2026-08-23) ----
+       methodEligible, not hasRealWorking directly: a "steps" chain's
+       kept `solution` still has 2+ lines (hasRealWorking would say yes),
+       but js/play.js renders the 📖 link at MOUNT, before step 1, so a
+       chain must never carry one — methodEligible is hasRealWorking
+       MINUS steps chains (the 2026-08-30 audit-day fix, dice-trig.js's
+       note). Without this fix every steps roll here would report a
+       false "method rule broken". */
+    const wantsMethod = methodEligible(q);
     if (!!q.method !== wantsMethod) issues.push(`method rule broken: q.method ${q.method ? "present" : "absent"} but solution ${wantsMethod ? "HAS" : "has no"} real working`);
     if (q.method != null) {
       sawMethod = true;
@@ -435,6 +446,39 @@ pool.entries.forEach(entry => {
     } else if (q.type === "tap") {
       if (!q.tap || typeof q.tap.correctId !== "string") issues.push("tap without a string correctId");
       else if (!(q.tap.targets || []).includes(q.tap.correctId)) issues.push("correctId not in targets");
+    } else if (q.type === "steps") {
+      /* the audit-day chains — deep marking sweep in verify-trig-steps.mjs;
+         this is the structural floor, plus the one dice-specific law:
+         NO METHOD LINK ON A CHAIN (play.js renders it before step 1). */
+      const steps = q.steps || [];
+      if (q.method != null) issues.push("steps chain carries q.method — the link renders before step 1 and hands the chain over");
+      if (steps.length < 2) issues.push(`chain of ${steps.length} steps`);
+      if (!steps.length || steps[steps.length - 1].kind !== "calc") issues.push("chain does not end on a typed number");
+      steps.forEach((st, si) => {
+        if (!st.prompt || !st.hint) issues.push(`step ${si} missing prompt/hint`);
+        if (st.kind === "mc") {
+          const rights = st.options.filter(o => o.correct).length;
+          const labels = st.options.map(o => o.label);
+          if (rights !== 1) issues.push(`step ${si} has ${rights} correct options`);
+          if (labels.length !== new Set(labels).size) issues.push(`step ${si} duplicate options`);
+        } else if (st.kind === "calc") {
+          if (!Number.isFinite(st.expected)) issues.push(`step ${si} non-finite expected`);
+          else if (!checkStep(st, st.expected)) issues.push(`step ${si} rejects its own answer`);
+          if (st.expected < 0 && !st.allowNeg) issues.push(`step ${si} negative expected without allowNeg`);
+        } else if (st.kind === "tokenpad") {
+          const slots = (st.frame || []).filter(f => f === "☐").length;
+          const need = String(st.expected).split(" ").filter(Boolean);   // the pad's own thin-space join
+          const keysNorm = (st.keys || []).map(normalizeTokens);
+          if (need.length !== slots) issues.push(`step ${si}: ${need.length} pieces for ${slots} boxes`);
+          if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) issues.push(`step ${si} not buildable from its chips`);
+          if (new Set(keysNorm).size !== keysNorm.length) issues.push(`step ${si} duplicate chips: ${(st.keys || []).join(" | ")}`);
+          if (!checkStep(st, st.expected)) issues.push(`step ${si} rejects its own fill`);
+        } else issues.push(`step ${si} unknown kind "${st.kind}"`);
+      });
+      if (steps.length && Number.isFinite(q.expected)
+          && Math.abs(steps[steps.length - 1].expected - q.expected) > 1e-9) {
+        issues.push("chain end ≠ question's headline answer");
+      }
     }
 
     /* ---- graph honesty: every rolled figure through verifyFunction ---- */

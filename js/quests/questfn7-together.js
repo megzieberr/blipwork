@@ -4,7 +4,7 @@
    average gradient, and the maximum/minimum vertical length
    between two graphs.
    ============================================================ */
-import { mc } from "./_shared.js";
+import { mc, mcStep, calcStep } from "./_shared.js";
 import { winFor, labelX, randParabola, ptDecoys } from "./_func.js";
 import {
   makeFn, lineThrough, paraTP, paraStd, parabolaFromRoots,
@@ -117,18 +117,38 @@ const SKILLS = {
     };
   },
 
-  /* maximum vertical length between a line (on top) and a parabola */
+  /* maximum vertical length between a line (on top) and a parabola.
+     AUDIT DAY 2026-08-30 (Session 3, split 3): the heaviest single
+     question in the app (4-line working) — the worked `solution`
+     below is unchanged; it is what became the answered chain. Prompt,
+     graph and numbers are unchanged too. */
   maxLength: () => {
-    let r1 = randInt(-3, 1), r2 = r1 + randInt(2, 4);
-    const f = parabolaFromRoots(1, r1, r2);              // happy parabola, a = 1
-    const tp = paraTP(f);
-    const m = randInt(-2, 2);
-    const k = tp.y + randInt(3, 6) - m * tp.x;           // line passes above the vertex → real gap
-    const g = { kind: "line", a: m, q: k };
-    // AB = g − f = −x² + (m − b)x + (k − c), a sad parabola → a maximum
-    const fb = f.b, fc = f.c;
-    const xStar = (m - fb) / 2;
-    const length = makeFn(g)(xStar) - makeFn(f)(xStar);
+    let r1, r2, f, tp, m, k, g, fb, fc, xStar, length;
+    let correctEq, wrongEqs;
+    // ⚠️ dedupe (foreman brief): a coefficient can land equal by chance
+    // (e.g. f.b = 0 when the roots are symmetric about 0), which would
+    // make one of the "classic slip" wrongs print IDENTICAL to the
+    // correct AB equation. Regenerate the numbers until all four MC
+    // labels are distinct — bounded so it can never spin forever.
+    for (let tries = 0; tries < 60; tries++) {
+      r1 = randInt(-3, 1); r2 = r1 + randInt(2, 4);
+      f = parabolaFromRoots(1, r1, r2);                  // happy parabola, a = 1
+      tp = paraTP(f);
+      m = randInt(-2, 2);
+      k = tp.y + randInt(3, 6) - m * tp.x;               // line passes above the vertex → real gap
+      g = { kind: "line", a: m, q: k };
+      // AB = g − f = −x² + (m − b)x + (k − c), a sad parabola → a maximum
+      fb = f.b; fc = f.c;
+      xStar = (m - fb) / 2;
+      length = makeFn(g)(xStar) - makeFn(f)(xStar);
+      correctEq = eqStr({ kind: "parabola", a: -1, b: m - fb, c: k - fc }, "AB");
+      wrongEqs = [
+        eqStr({ kind: "parabola", a: 1, b: m - fb, c: k - fc }, "AB"),        // forgot the sign flip
+        eqStr({ kind: "parabola", a: -1, b: m + fb, c: k - fc }, "AB"),       // didn't subtract b
+        eqStr({ kind: "parabola", a: -1, b: m - fb, c: k + fc }, "AB"),       // didn't subtract c
+      ];
+      if (new Set([correctEq, ...wrongEqs]).size === 4) break;
+    }
     const win = winFor([tp, { x: xStar, y: makeFn(f)(xStar) }, { x: xStar, y: makeFn(g)(xStar) }, { x: r1, y: 0 }, { x: r2, y: 0 }]);
     const spec = {
       type: "function", accent: ACC, grid: true, win,
@@ -136,17 +156,31 @@ const SKILLS = {
       segment: { x: xStar, fromCurve: 1, toCurve: 0, label: "AB" },
     };
     return {
-      type: "calc", concept: "maxLength",
+      type: "steps", concept: "maxLength",
       // the equations are STATED (her phone, 2026-08-23: "kinda impossible
       // without the equations of f and g" — a drill round never asks the
       // learner to find them from the sketch first)
       prompt: `The sketch shows <b>${eqStr(f, "f(x)")}</b> and <b>${eqStr(g, "g(x)")}</b>. AB is a vertical line between g (top) and f (bottom). Calculate the <b>maximum length</b> of AB (2 decimals).`,
-      graph: spec, expected: length, dp: 2,
+      graph: spec,
+      steps: [
+        mcStep("AB runs from g on top to f below. AB = ?",
+          "g(x) − f(x)",
+          ["f(x) − g(x)", "g(x) + f(x)", "g(x) × f(x)"],
+          "AB is the gap between the graphs: top − bottom. g is on top, f is on the bottom."),
+        mcStep("Subtract and simplify — which parabola is AB?",
+          correctEq, wrongEqs,
+          "Every term of f(x) changes sign when you subtract it: a flips from +1 to −1, and f's other two terms are SUBTRACTED, not added."),
+        calcStep("Where does AB turn?", xStar,
+          "x = −b/(2a) of AB.", { dp: 2, tol: 0.001, allowNeg: true }),
+        calcStep("The maximum length of AB (2 decimals).", length,
+          "Substitute your x back into AB = g(x) − f(x).", { dp: 2, tol: 0.001 }),
+      ],
+      expected: length, dp: 2,
       hint: "AB = (top graph) − (bottom graph) = g(x) − f(x). That makes a new parabola; its maximum is at x = −b/(2a), then substitute back.",
       answerLabel: `maximum AB = ${fix(length, 2)} units`,
       solution: [
         { s: "AB = g(x) − f(x) — keep the brackets when subtracting", r: "top − bottom" },
-        { s: eqStr({ kind: "parabola", a: -1, b: m - fb, c: k - fc }, "AB"), r: "a new (sad) parabola" },
+        { s: correctEq, r: "a new (sad) parabola" },
         { s: `it turns at x = ${fix(xStar, 2)}`, r: "−b/(2a)" },
         { s: `max AB = ${fix(length, 2)} units`, r: "substitute back" },
       ],
