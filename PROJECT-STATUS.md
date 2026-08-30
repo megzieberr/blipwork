@@ -85,10 +85,40 @@ probability p6 (tree combos). Same treatment is a per-chapter call for HER
   as a fraction and wrap sides only before a sign; `_trig.js` shuffles are
   seeded. Both follow existing laws rather than making new ones.
 
+## 🏗️ 2026-08-30 (later) — SPLIT DAY: the six flagged rounds are chains too
+Foreman day on her "run it" (~0,9M agent tokens, inside the 0,8–1,2M
+estimate). Three Sonnet sessions, each foreman-reviewed before the next:
+- **S1** stats q3 outBound (IQR → build-the-boundary pad → number) +
+  prob p6 exactlyOneHead / biasedFindOther; mcStep/calcStep promoted to
+  `_shared.js` (trig re-exports); dice-stats steps guard; verify.html
+  grew its FIRST per-quest dispatch (62/62, 6 960 gens) + verify-prob
+  52/52. Foreman catches: probability steps pin **tol 0,001** (the
+  0,015 calcStep default is a trig allowance — it would have accepted
+  0,25 for a true 0,24); one hint rewritten to state the arithmetic.
+- **S2** finance f6 hpTotal (balance → which-formula → total) + f7
+  effCalc (n → set-up → whole conversion in ONE go; her one-equation
+  law kept, no rounded intermediate anywhere); dice-finance guard;
+  verify-finance 146/146 + verify-dice-finance 89/89; the session
+  itself fixed two latent harness bugs (corrupt() crash on steps, a
+  method check that would false-flag every chain).
+- **S3** functions fn7 maxLength (AB → which-parabola, dedupe-guarded →
+  turning x → max) + measurement m6 ×3 (Pythagoras built on the pad;
+  pyramid offers the FULL base as the tempting chip; mirror accepted
+  only where addition commutes); dice-func guard; verify-func 75/75,
+  verify-meas 69/69, verify-dice-func 89/89. Foreman trim: one hint
+  spoke design-language ("decoy chip") — now learner words.
+All committed locally (16fd938, c320579, + S3); every harness re-run by
+the foreman first-hand; every new chain screenshotted at 375 px and READ.
+⚠️ Flagged for a fix session: `tools/shoot_round.py`'s Next-button
+locator is stale ("Continue →" now), so it only ever reaches a round's
+first question — sessions verified via skills-filtered defs instead.
+
 ## ⏳ Pending on Megan
-- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v84), then play one
-  question in 2D Trig rounds 3, 4 and 6 — the new build-the-formula boxes
-  should feel like round 2 did.
+- 💬 1 word **[blocking]**: "ship it" → I bump sw to v85, push the three
+  split-day commits, live-verify. No SQL.
+- 📱 5 min [whenever, after ship]: one question each in stats q3, tree
+  diagrams, hire purchase, eff↔nom, functions round 7 and measurement
+  round 5 — they should all feel like the trig rounds do now.
 - 🌐 1 line [your call]: megzieberr is still visible in the class name-picker
   (checked live 08-30) and the class invite went out 08-27 — say the word
   and I hide it (one SQL line, reversible).
