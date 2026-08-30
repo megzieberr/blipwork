@@ -44,20 +44,24 @@
 <pre id="summary">…</pre>
 
 <script type="module">
-import { pool as financePool, PURE_RECALL, hasRealWorking } from "./js/quests/dice-finance.js";
+import { pool as financePool, PURE_RECALL, hasRealWorking, methodEligible } from "./js/quests/dice-finance.js";
 import { pool as statsPool } from "./js/quests/dice-stats.js";
 import { newRoundSeed, dealRound, genAt, withSeed } from "./js/dice.js";
 import { answerCorrect, parseNum } from "./js/check.js";
 import { getConcept } from "./js/concepts.js";
 import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf } from "./js/quests/_finance-check.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
 const measure = document.getElementById("measure");
 
 /* Finance's whole input vocabulary — DICE-PLAN's INPUT LAW (list-pick,
-   number pad, sketch-click; never a typed word). */
-const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap"]);
+   number pad, sketch-click; never a typed word). "steps" joined
+   2026-08-30 (Session 2: f6.hpTotal, f7.effCalc) — a chain's own steps
+   are mc / calc / tokenpad, so the no-free-text law still holds one
+   level down. */
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "steps"]);
 const RUNS = 200;
 const FIT_RUNS = 5;                 // measuring a rendered timeline is slow; the amounts repeat quickly
 
@@ -82,13 +86,18 @@ financePool.entries.forEach((entry, idx) => {
     if (/\d\.\d/.test(String(q.prompt))) issues.add("prompt contains a dot-decimal number (should be a comma)");
     if (q.answerLabel != null && /\d\.\d/.test(String(q.answerLabel))) issues.add("answerLabel contains a dot-decimal number");
 
-    /* method markup: only where real working exists, and then real markup */
+    /* method markup: only where real working exists AND the question is
+       method-eligible — steps chains are never eligible (2026-08-30 audit
+       day, Session 2: f6.hpTotal, f7.effCalc). A chain's solution IS the
+       remaining answers, and js/play.js renders the 📖 link at mount,
+       before step 1 — so a steps question must NEVER carry q.method. */
+    if (q.type === "steps" && q.method != null) issues.add("steps chain carries q.method (spoils the steps — play.js renders the link before step 1)");
     if (q.method != null) {
       sawMethod = true;
       if (typeof q.method !== "string" || !q.method.trim()) issues.add("q.method is not a non-empty string");
       else if (!q.method.includes("sol-step")) issues.add("q.method carries no .sol-step");
-      if (!hasRealWorking(q)) issues.add("q.method attached to a solution that only restates the answer (spoiler link)");
-    } else if (hasRealWorking(q)) issues.add("real working exists but no q.method was attached");
+      if (!methodEligible(q)) issues.add("q.method attached to a question that is not method-eligible (spoiler link, or a steps chain)");
+    } else if (methodEligible(q)) issues.add("real working exists but no q.method was attached");
 
     if (q.type === "mc" || q.type === "reason") {
       const labels = q.options.map(o => o.label);
@@ -118,6 +127,37 @@ financePool.entries.forEach((entry, idx) => {
       if (!q.graph) issues.add("tap question without a graph to tap");
       const ids = (q.tap && q.tap.targets) || [];
       if (!ids.includes(q.tap && q.tap.correctId)) issues.add("tap correctId not in targets");
+    } else if (q.type === "steps") {
+      /* the 2026-08-30 audit-day chains (Session 2: f6.hpTotal, f7.effCalc).
+         Structural floor copied from verify-dice-trig.html's steps branch. */
+      const steps = q.steps || [];
+      if (steps.length < 2) issues.add(`chain of ${steps.length} steps`);
+      if (!steps.length || steps[steps.length - 1].kind !== "calc") issues.add("chain does not end on a typed number");
+      steps.forEach((st, si) => {
+        if (!st.prompt || !st.hint) issues.add(`step ${si} missing prompt/hint`);
+        if (st.kind === "mc") {
+          const rights = st.options.filter(o => o.correct).length;
+          const labels = st.options.map(o => o.label);
+          if (rights !== 1) issues.add(`step ${si} has ${rights} correct options`);
+          if (labels.length !== new Set(labels).size) issues.add(`step ${si} duplicate options`);
+        } else if (st.kind === "calc") {
+          if (!Number.isFinite(st.expected)) issues.add(`step ${si} non-finite expected`);
+          else if (!checkStep(st, st.expected)) issues.add(`step ${si} rejects its own answer`);
+          if (st.expected < 0 && !st.allowNeg) issues.add(`step ${si} negative expected without allowNeg`);
+        } else if (st.kind === "tokenpad") {
+          const slots = (st.frame || []).filter(f => f === "☐").length;
+          const need = String(st.expected).split(" ").filter(Boolean);   // the pad's own thin-space join
+          const keysNorm = (st.keys || []).map(normalizeTokens);
+          if (need.length !== slots) issues.add(`step ${si}: ${need.length} pieces for ${slots} boxes`);
+          if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) issues.add(`step ${si} not buildable from its chips`);
+          if (new Set(keysNorm).size !== keysNorm.length) issues.add(`step ${si} duplicate chips: ${(st.keys || []).join(" | ")}`);
+          if (!checkStep(st, st.expected)) issues.add(`step ${si} rejects its own fill`);
+        } else issues.add(`step ${si} unknown kind "${st.kind}"`);
+      });
+      if (steps.length && Number.isFinite(q.expected)
+          && Math.abs(steps[steps.length - 1].expected - q.expected) > 1e-9) {
+        issues.add("chain end ≠ question's headline answer");
+      }
     }
 
     if (q.graph) { sawGraph = true; graphIssues(q).forEach(g => issues.add(g)); }

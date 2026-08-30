@@ -2,7 +2,7 @@
    FINANCE QUEST 6 · Deposits & hire purchase
    The deposit, the amount still owed, and how hire purchase works.
    ============================================================ */
-import { mc, mcNum, C } from "./_shared.js";
+import { mc, mcNum, C, mcStep, calcStep } from "./_shared.js";
 import { pick } from "../ui.js";
 import { depositAmount, balanceAfterDeposit, simpleAmount, toFrac, rand } from "../finlib.js";
 
@@ -70,15 +70,33 @@ const SKILLS = {
     ["Compound interest", "Reducing-balance", "Effective interest"],
     { hint: "Hire purchase is the simple-interest case: A = P(1 + i·n).", answerLabel: "Simple interest" }),
 
+  /* steps, 2026-08-30 audit-day split (Session 2) — prompt, numbers and
+     the worked `solution` are unchanged; the solution's own three lines
+     became the answered chain. ⚠️ HER FINANCE METHOD RULE: `owed` is
+     already exact whole rand by construction (see the comment below), so
+     step 1 hands step 3 an unrounded intermediate — no mid-question
+     rounding is introduced. tol 0.001 explicit on both calc steps (the
+     default 0.015 is a trig allowance and would accept a wrong
+     neighbouring rand here). */
   hpTotal: () => {
     const p = pick(PCTS), price = pick(PRICES), r = pick([10, 15, 20]), n = pick([2, 4]);
     /* these combos always give whole rand; round away float noise at source */
     const owed = Math.round(balanceAfterDeposit(toFrac(p), price));
     const A = Math.round(simpleAmount(owed, toFrac(r), n));
     return {
-      type: "calc", concept: CL, dp: 0,
+      type: "steps", concept: CL,
       prompt: `A fridge costs <b>R${money0(price)}</b>. A <b>${p}%</b> deposit is paid, and the balance is bought on hire purchase at <b>${r}% p.a. simple interest</b> for <b>${n} years</b>. How much is repaid on the balance in total (in rand, deposit not included)?`,
-      expected: A,
+      steps: [
+        calcStep("First: the balance after the deposit (in rand).", owed,
+          "Interest is charged on what is still owed — balance = (100 − p)% × price.", { dp: 0, tol: 0.001 }),
+        mcStep("Hire purchase: which formula applies to that balance?",
+          "A = P(1 + i·n)",
+          ["A = P(1 + i)ⁿ", "A = P(1 − i·n)", "A = P × i × n"],
+          "Hire purchase is the simple-interest case."),
+        calcStep("The total repaid on the balance (in rand).", A,
+          `A = ${owed}(1 + ${C(toFrac(r))} × ${n}) — one line on the calculator.`, { dp: 0, tol: 0.001 }),
+      ],
+      expected: A, dp: 0,
       hint: `First find the balance after the deposit, then use A = P(1 + i·n) on that balance.`,
       answerLabel: `A = R${money0(owed)}(1 + ${C(toFrac(r))}×${n}) = R${money0(A)}`,
       solution: [

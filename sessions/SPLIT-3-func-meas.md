@@ -32,8 +32,16 @@ The heaviest single question in the app (4-line working). Becomes steps:
 3. `calcStep` — "Where does AB turn?" expected `xStar`, dp 2,
    **allowNeg: true** (xStar is often negative). Hint: x = −b/(2a) of AB.
 4. `calcStep` — "The maximum length of AB (2 decimals)." expected
-   `length`, dp 2, tol 0.015. Hint: substitute back — a 2-decimal x is
-   fine here, the parabola is flat at its turning point.
+   `length`, dp 2, **tol: 0.001**. Hint: substitute back — a 2-decimal x
+   is fine here, the parabola is flat at its turning point (the carry
+   error from a 2-dp x is second-order, ≈ 0.000 03, so the tight tol
+   is safe).
+
+⚠️ **Tolerance rule (foreman review catch from Session 1):** `calcStep`
+defaults `tol: 0.015` — a TRIG allowance for 4-dp sine working. Outside
+trig that default can accept a wrong neighbouring value. Pass
+`tol: 0.001` explicitly on EVERY calc step in this session (fn7 and m6 —
+m6's whole-number steps included: harmless there, correct everywhere).
 All other fn7 skills untouched.
 
 ## Task 2 — m6 in `js/quests/questm6-height.js` (three skills)

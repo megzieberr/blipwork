@@ -3,7 +3,7 @@
    What each rate means, that both are compound, and the structure
    of the conversion formula.
    ============================================================ */
-import { mc, C } from "./_shared.js";
+import { mc, C, mcStep, calcStep } from "./_shared.js";
 import { pick } from "../ui.js";
 import { toFrac, effFromNom, COMPOUNDING } from "../finlib.js";
 
@@ -59,14 +59,38 @@ const SKILLS = {
       { hint: "More frequent compounding earns slightly more over a year.", answerLabel: "More frequent compounding → higher effective rate" });
   },
 
+  /* steps, 2026-08-30 audit-day split (Session 2) — prompt, numbers and
+     the worked `solution` are unchanged; the solution's own three lines
+     became the answered chain. ⚠️ HER FINANCE METHOD RULE: no "divide
+     the rate first" step is offered — step 3 types the WHOLE right side
+     of 1 + i_eff = (1 + i_nom/n)ⁿ in one go, so no rounded intermediate
+     ever feeds a later computation. tol 0.001 explicit on the calc step
+     (the default 0.015 is a trig allowance and would accept a wrong
+     neighbouring hundredth-of-a-percent here). */
   effCalc: () => {
     const o = pick(OPTS), nom = pick([8, 10, 12, 18]);
     const eff = effFromNom(toFrac(nom), o.k) * 100;
     const effC = eff.toFixed(2).replace(".", ",");   // always 2 dp, comma decimal
     return {
-      type: "calc", concept: CL, dp: 2,
+      type: "steps", concept: CL,
       prompt: `Convert <b>${C(nom)}% p.a. compounded ${o.label}</b> to an <b>effective annual rate</b>. Give your answer as a %, to 2 decimal places.`,
-      expected: eff,
+      steps: [
+        mcStep(`What is n for “compounded ${o.label}”?`, String(o.k),
+          [1, 2, 4, 12].filter(k => k !== o.k).map(String),
+          "n = how many times a year interest is added."),
+        mcStep("Pick the correct set-up.",
+          `1 + i_eff = (1 + ${C(toFrac(nom))}/${o.k})^${o.k}`,
+          [
+            `1 + i_eff = (1 + ${C(toFrac(nom))} × ${o.k})^${o.k}`,
+            `1 + i_eff = (1 + ${C(toFrac(nom))})^${o.k}`,
+            `i_eff = ${C(toFrac(nom))}/${o.k} × ${o.k}`,
+          ],
+          "Divide the nominal rate by n INSIDE the bracket, power n outside."),
+        calcStep("Now the effective rate, as a %, 2 decimals.", eff,
+          "Type the WHOLE right side in one go, subtract 1, × 100 — never round along the way.",
+          { dp: 2, tol: 0.001 }),
+      ],
+      expected: eff, dp: 2,
       hint: `Use 1 + i_eff = (1 + i_nom/n)ⁿ with n = ${o.k}, then × 100 for a %.`,
       answerLabel: `i_eff ≈ ${effC}%`,
       solution: [

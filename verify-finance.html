@@ -62,6 +62,7 @@ import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline } from "./js/engine/timeline-graph.js";
 import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption } from "./js/quests/_finance-check.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
 const ACC = "#8b5cf6";
 let total = 0, passed = 0; const fails = [];
@@ -69,8 +70,11 @@ const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(lab
 const measure = document.getElementById("measure");
 
 /* Finance's whole input vocabulary (DICE-PLAN's INPUT LAW: list-pick,
-   number pad, sketch-click — never typed words). */
-const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap"]);
+   number pad, sketch-click — never typed words). "steps" joined
+   2026-08-30 (Session 2: f6.hpTotal, f7.effCalc) — a chain's own steps
+   are mc / calc / tokenpad, so the no-free-text law still holds one
+   level down. */
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "steps"]);
 
 /* ---------- 1) the timeline engine, on representative specs ---------- */
 const ENGINE = [
@@ -134,6 +138,38 @@ function checkQuestion(q, issues, opts) {
     if (!q.tap || q.tap.correctId == null) issues.add("tap without correctId");
     else if (!(q.tap.targets || []).includes(q.tap.correctId)) issues.add("tap correctId not in targets");
     if (!q.graph) issues.add("tap question without a graph to tap");
+  } else if (q.type === "steps") {
+    /* the 2026-08-30 audit-day chains (Session 2: f6.hpTotal, f7.effCalc).
+       Structural floor copied from verify-trig.html's steps branch. */
+    const steps = q.steps || [];
+    if (steps.length < 2) issues.add(`chain of ${steps.length} steps`);
+    if (!steps.length || steps[steps.length - 1].kind !== "calc") issues.add("chain does not end on a typed number");
+    if (q.method) issues.add("chain carries q.method (spoils the steps)");
+    steps.forEach((st, si) => {
+      if (!st.prompt || !st.hint) issues.add(`step ${si} missing prompt/hint`);
+      if (st.kind === "mc") {
+        const rights = st.options.filter(o => o.correct).length;
+        const labels = st.options.map(o => o.label);
+        if (rights !== 1) issues.add(`step ${si} has ${rights} correct options`);
+        if (labels.length !== new Set(labels).size) issues.add(`step ${si} duplicate options`);
+      } else if (st.kind === "calc") {
+        if (!Number.isFinite(st.expected)) issues.add(`step ${si} non-finite expected`);
+        else if (!checkStep(st, st.expected)) issues.add(`step ${si} rejects its own answer`);
+        if (st.expected < 0 && !st.allowNeg) issues.add(`step ${si} negative expected without allowNeg`);
+      } else if (st.kind === "tokenpad") {
+        const slots = (st.frame || []).filter(f => f === "☐").length;
+        const need = String(st.expected).split(" ").filter(Boolean);   // U+2009 — the pad's join
+        const keysNorm = (st.keys || []).map(normalizeTokens);
+        if (need.length !== slots) issues.add(`step ${si}: ${need.length} pieces for ${slots} boxes`);
+        if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) issues.add(`step ${si} not buildable from its chips`);
+        if (new Set(keysNorm).size !== keysNorm.length) issues.add(`step ${si} duplicate chips`);
+        if (!checkStep(st, st.expected)) issues.add(`step ${si} rejects its own fill`);
+      } else issues.add(`step ${si} unknown kind "${st.kind}"`);
+    });
+    if (steps.length && typeof q.expected === "number"
+        && Math.abs(steps[steps.length - 1].expected - q.expected) > 1e-9) {
+      issues.add("chain end ≠ question's headline answer");
+    }
   }
   graphIssues(q).forEach(g => issues.add(g));
   if (opts.fit && q.graph) labelFitIssues(q.graph, measure).forEach(g => issues.add(g));
@@ -187,6 +223,11 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
      QUESTION — so a failure to reject means the recompute isn't checking. */
   function corrupt(q) {
     if (q.type === "calc") { q.expected = q.expected + 1 + Math.abs(q.expected) * 0.5; return "expected + 1"; }
+    /* steps chains (f6.hpTotal, f7.effCalc, 2026-08-30 Session 2) still keep
+       the top-level expected/prompt the RECOMPUTE entries read — corrupt the
+       same field the same way, or this falls through to the mc-shaped branch
+       below and throws on q.options (undefined on a steps question). */
+    if (q.type === "steps") { q.expected = q.expected + 1 + Math.abs(q.expected) * 0.5; return "expected + 1 (steps chain)"; }
     if (q.type === "yesno") { q.yes = !q.yes; return "flipped yes/no"; }
     if (q.type === "tap") {
       const other = (q.tap.targets || []).find(t => t !== q.tap.correctId);

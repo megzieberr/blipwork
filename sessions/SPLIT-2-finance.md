@@ -48,8 +48,14 @@ Becomes `type:"steps"`:
    `i_eff = ${C(toFrac(nom))}/${o.k} × ${o.k}`. Hint: divide the nominal
    rate by n INSIDE the bracket, power n outside.
 3. `calcStep` — "Now the effective rate, as a %, 2 decimals." expected
-   `eff`, dp 2. Hint: type the WHOLE right side in one go, subtract 1,
-   × 100 — never round along the way.
+   `eff`, dp 2, **tol: 0.001**. Hint: type the WHOLE right side in one go,
+   subtract 1, × 100 — never round along the way.
+
+⚠️ **Tolerance rule (foreman review catch from Session 1):** `calcStep`
+defaults `tol: 0.015` — a TRIG allowance for 4-dp sine working. On money
+and percent values that default can accept a wrong neighbouring value.
+Pass `tol: 0.001` explicitly on every calc step in this session (the f6
+whole-rand steps included — harmless there, correct everywhere).
 All other f7 skills untouched (they are MCs).
 
 ## Task 3 — the dice guard in `js/quests/dice-finance.js`

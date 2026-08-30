@@ -138,14 +138,25 @@ function methodHtml(q) {
   return html;
 }
 
+/* Is this question allowed an always-available method link? `steps`
+   chains are not — their solution IS the remaining answers, and
+   js/play.js renders the 📖 link at mount, before step 1 (2026-08-30
+   audit-day live-bug fix, first made in dice-trig.js — see that file's
+   header for the full story). Exported so the harness can assert the
+   rule instead of restating it. */
+export function methodEligible(q) {
+  return !!q && q.type !== "steps" && hasRealWorking(q);
+}
+
 /* Wrap a skill's gen so it stays a PURE zero-arg function (js/dice.js's
    genAt/withSeed call it under a seeded rng, and resume depends on that
    determinism — nothing here adds randomness of its own) and only
-   attaches q.method where real working exists. */
+   attaches q.method where real working exists AND the question is
+   method-eligible (not a steps chain). */
 function withMethod(gen) {
   return () => {
     const q = gen();
-    if (q.method == null && hasRealWorking(q)) q.method = methodHtml(q);
+    if (q.method == null && methodEligible(q)) q.method = methodHtml(q);
     return q;
   };
 }
