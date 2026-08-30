@@ -1,4 +1,4 @@
-# Project status — updated 2026-08-30 (🔍 FABLE AUDIT DAY: 2D Trig t3–t7 are step chains, 3 latent bugs fixed, dead code removed, this file split — sw v84 IN THE TREE, not yet shipped)
+# Project status — updated 2026-08-30 (🔍 FABLE AUDIT DAY: 2D Trig t3–t7 are step chains, 3 latent bugs fixed, dead code removed, this file split — ✅ SHIPPED sw v84, commit 8eafe83, LIVE-VERIFIED)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,8 +9,9 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **Live** at https://megzieberr.github.io/blipwork/ on **sw v83**; the tree
-  holds **v84** (this audit day's work) awaiting her "ship it". No SQL needed.
+- **Live** at https://megzieberr.github.io/blipwork/ on **sw v84** (shipped
+  2026-08-30 on her "ship it", commit 8eafe83; Pages built in ~20 s and both
+  trig harnesses ran GREEN against the live URL — 36/36 and 83/83). No SQL.
 - 12 hub chapters (5 Term-3 + 7 Revision) + 2 exam-only; 🎲 dice on 8
   chapters; 📝 Exam Focus 7 chapters / 360 cards; 📈 Fun Functions strip;
   💬 feedback + 📄 papers live; 🔔 notifications LIVE (2 cron jobs, secrets
@@ -85,13 +86,11 @@ probability p6 (tree combos). Same treatment is a per-chapter call for HER
   seeded. Both follow existing laws rather than making new ones.
 
 ## ⏳ Pending on Megan
-- 💬 1 word **[blocking]**: "ship it" → commit + push sw v84 (trig chains +
-  the three bug fixes + the file split), live-verify. No SQL.
-- 📱 3 min [whenever, after ship]: play one question in 2D Trig rounds 3, 4
-  and 6 on your phone — the new build-the-formula boxes should feel like
-  round 2 did.
+- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v84), then play one
+  question in 2D Trig rounds 3, 4 and 6 — the new build-the-formula boxes
+  should feel like round 2 did.
 - 🌐 1 line [your call]: megzieberr is still visible in the class name-picker
-  (checked live today) and the class invite went out 08-27 — say the word
+  (checked live 08-30) and the class invite went out 08-27 — say the word
   and I hide it (one SQL line, reversible).
 
 ## Next up
