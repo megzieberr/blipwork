@@ -107,11 +107,19 @@ estimate). Three Sonnet sessions, each foreman-reviewed before the next:
   only where addition commutes); dice-func guard; verify-func 75/75,
   verify-meas 69/69, verify-dice-func 89/89. Foreman trim: one hint
   spoke design-language ("decoy chip") — now learner words.
-All committed locally (16fd938, c320579, + S3); every harness re-run by
-the foreman first-hand; every new chain screenshotted at 375 px and READ.
-⚠️ Flagged for a fix session: `tools/shoot_round.py`'s Next-button
-locator is stale ("Continue →" now), so it only ever reaches a round's
-first question — sessions verified via skills-filtered defs instead.
+Every harness re-run by the foreman first-hand; every new chain
+screenshotted at 375 px and READ. ✅ **SHIPPED same evening on her word
+(sw v85, push 590b0b4)** — v85 confirmed live in ~30 s and all five
+changed chapter harnesses run GREEN against the live URL (62/62 ·
+52/52 · 146/146 · 75/75 · 69/69).
+✅ Same evening, her ask: `tools/shoot_round.py` REBUILT as an
+answer-aware walker (e98dc94) — it exposes each mounted question on
+`window.__SHOOT_Q__` via the def it already builds, answers
+mc/yesno/calc/tokenpad and whole chains correctly, and advances on
+"Continue →". The old version waited for a "Next" button that never
+existed, so it silently re-shot question 1 forever — distrust any
+older claim that it "walked" a round. Unsupported kinds (tap, calcdo,
+gtrig widgets) stop the round with a plain warning.
 
 ## ⏳ Pending on Megan
 - 📱 5 min [whenever]: close + reopen Blipwork twice (sw v85), then one
