@@ -26,12 +26,32 @@ const TRIANGLE_FRAMES = [
 ];
 const OAH_FRAMES = [0, 1, 2, 3, 4, 5].map(s => oahTable(s));
 
+/* Each item's `sol` is the triangle's OWN story — the cut she describes in
+   TRIANGLE_FRAMES frame 3, then Pythagoras. No value is restated without
+   being built first (2026-09-02 methods batch, session S3). */
+const CUT_EQUI = { s: "Take an equilateral triangle with sides of 2 and cut it straight down the middle", r: "that cut is where the 30-60-90 comes from" };
+const CUT_SQUARE = { s: "Take a square with sides of 1 and cut it corner to corner", r: "that cut is where the 45-45-90 comes from" };
 const TRI_ITEMS = [
-  { prompt: "In the 30-60-90 triangle, the side opposite 30° is…", correct: "1" },
-  { prompt: "In the 30-60-90 triangle, the side opposite 60° is…", correct: "√3" },
-  { prompt: "In the 30-60-90 triangle, the side opposite 90° (the hypotenuse) is…", correct: "2" },
-  { prompt: "In the 45-45-90 triangle, the side opposite a 45° angle is…", correct: "1" },
-  { prompt: "In the 45-45-90 triangle, the side opposite 90° (the hypotenuse) is…", correct: "√2" },
+  { prompt: "In the 30-60-90 triangle, the side opposite 30° is…", correct: "1",
+    sol: [CUT_EQUI,
+      { s: "The cut halves the 60° top angle into 30°, and halves the base of 2 into 1" },
+      { s: "That half-base lies straight across from the 30° corner, so it is 1" }] },
+  { prompt: "In the 30-60-90 triangle, the side opposite 60° is…", correct: "√3",
+    sol: [CUT_EQUI,
+      { s: "Base = 1, slanted side = 2, so height² = 2² − 1² = 3", r: "(pyth)" },
+      { s: "height = √3, and it sits across from the 60° corner, so that side is √3" }] },
+  { prompt: "In the 30-60-90 triangle, the side opposite 90° (the hypotenuse) is…", correct: "2",
+    sol: [CUT_EQUI,
+      { s: "The cut does not touch the slanted side — it is still a whole side of the equilateral triangle" },
+      { s: "That slanted side faces the right angle, so the hypotenuse is 2" }] },
+  { prompt: "In the 45-45-90 triangle, the side opposite a 45° angle is…", correct: "1",
+    sol: [CUT_SQUARE,
+      { s: "The two short sides of the new triangle are just sides of the square, so each is 1" },
+      { s: "Each of them faces one of the 45° corners, so that side is 1" }] },
+  { prompt: "In the 45-45-90 triangle, the side opposite 90° (the hypotenuse) is…", correct: "√2",
+    sol: [CUT_SQUARE,
+      { s: "The two short sides are 1 and 1, so hyp² = 1² + 1² = 2", r: "(pyth)" },
+      { s: "hyp = √2, and it faces the right angle, so the hypotenuse is √2" }] },
 ];
 const ALL_SIDES = ["1", "√3", "2", "√2"];
 
@@ -50,9 +70,20 @@ function pickValueQ() {
   const wrongs = shuffled(pool).slice(0, 3).map(p => p.text);
   // the finished O-A-H table sits ABOVE the question (her ruling 2026-08-22: the
   // table must be on screen when a value is asked — it is a reading exercise)
+  /* the two O-A-H letters SOHCAHTOA hands you, then the cell values —
+     tan 45° comes out as 1/1 and tan 60° as √3/1, written as fractions
+     off the table exactly as she does (METHODS-trig C7) */
+  const LETTERS = { sin: ["O", "H"], cos: ["A", "H"], tan: ["O", "A"] }[fn];
+  const top = OAH_TABLE[LETTERS[0]][angle], bottom = OAH_TABLE[LETTERS[1]][angle];
+  const raw = `${top}/${bottom}`;
   return mc(CON, `<div class="q-oah">${oahTable(5)}</div>${fn} ${angle}° = ?`, correct.text, wrongs,
     { hint: "Pick the two letters SOHCAHTOA gives you, then read them off the table.",
-      answerLabel: `${fn} ${angle}° = ${correct.text} (from the O-A-H table).` });
+      answerLabel: `${fn} ${angle}° = ${correct.text} (from the O-A-H table).`,
+      solution: [
+        { s: `${fn === "sin" ? "SOH" : fn === "cos" ? "CAH" : "TOA"}: ${fn} = ${LETTERS[0]}/${LETTERS[1]}`, r: "SOHCAHTOA picks the two letters" },
+        { s: `In the ${angle}° column: ${LETTERS[0]} = ${top} and ${LETTERS[1]} = ${bottom}`, r: "read the two cells off the O-A-H table" },
+        { s: raw === correct.text ? `${fn} ${angle}° = ${raw}` : `${fn} ${angle}° = ${raw} = ${correct.text}` },
+      ] });
 }
 
 const QANGLES = [0, 90, 180, 270, 360], QFNS = ["sin", "cos"];
@@ -83,15 +114,34 @@ const RECIP_ITEMS = [
 ];
 
 const MASK_ITEMS = [
-  { prompt: "sin²θ + cos²θ = ?", correct: "1", wrongs: ["0", "sin θ · cos θ", "2"], hint: "The one identity that's true for every single θ." },
+  { prompt: "sin²θ + cos²θ = ?", correct: "1", wrongs: ["0", "sin θ · cos θ", "2"], hint: "The one identity that's true for every single θ.",
+    sol: [
+      { s: "Take any point on the circle: sin θ = y/r and cos θ = x/r" },
+      { s: "sin²θ + cos²θ = (y² + x²)/r², and x² + y² = r²", r: "(pyth)" },
+      { s: "So sin²θ + cos²θ = r²/r² = 1", r: "true for every θ, which is why it is THE identity" },
+    ] },
   { prompt: "Which of these is a masked identity?", correct: "cos²θ = 1 − sin²θ",
     wrongs: ["tan²θ = 1 − sin²θ", "sin²θ = 1 + cos²θ", "sin²θ − cos²θ = 1"],
-    hint: "Rearrange sin²θ + cos²θ = 1 — swap one squared term for “1 minus the other”." },
+    hint: "Rearrange sin²θ + cos²θ = 1 — swap one squared term for “1 minus the other”.",
+    sol: [
+      { s: "Start from sin²θ + cos²θ = 1" },
+      { s: "Take sin²θ across to the other side: cos²θ = 1 − sin²θ", r: "the same identity wearing a mask" },
+      { s: "The two wrong-looking ones bring in tan, or turn the − into a +", r: "only one term ever moves, and it changes sign" },
+    ] },
   { prompt: "Which of these is a masked identity?", correct: "sin²θ = 1 − cos²θ",
     wrongs: ["tan²θ = 1 − cos²θ", "cos²θ = 1 + sin²θ", "cos²θ − sin²θ = 1"],
-    hint: "Rearrange sin²θ + cos²θ = 1 the other way round." },
+    hint: "Rearrange sin²θ + cos²θ = 1 the other way round.",
+    sol: [
+      { s: "Start from sin²θ + cos²θ = 1" },
+      { s: "This time take cos²θ across: sin²θ = 1 − cos²θ", r: "the other mask of the same identity" },
+      { s: "Crossing the = always flips the sign, so it is 1 MINUS the other one", r: "never 1 + …" },
+    ] },
   { prompt: "1 − sin²θ = ?", correct: "cos²θ", wrongs: ["sin²θ", "1 + cos²θ", "−cos²θ"],
-    hint: "A masked identity — swap it back to sin²θ + cos²θ = 1." },
+    hint: "A masked identity — swap it back to sin²θ + cos²θ = 1.",
+    sol: [
+      { s: "sin²θ + cos²θ = 1, so cos²θ = 1 − sin²θ" },
+      { s: "Read that backwards: wherever you see 1 − sin²θ you may write cos²θ", r: "spotting the mask is the whole skill" },
+    ] },
 ];
 
 const SKILLS = {
@@ -101,7 +151,8 @@ const SKILLS = {
     const wrongs = ALL_SIDES.filter(s => s !== it.correct);
     return reveal(
       mc(CON, it.prompt, it.correct, wrongs,
-        { hint: "Read the side straight across from the named angle.", answerLabel: `${it.prompt.replace(/…$/, "")} ${it.correct}.` }),
+        { hint: "Read the side straight across from the named angle.", answerLabel: `${it.prompt.replace(/…$/, "")} ${it.correct}.`,
+          solution: it.sol }),
       TRIANGLE_FRAMES);
   },
 
@@ -128,7 +179,7 @@ const SKILLS = {
   reciprocals: () => { const it = pick(RECIP_ITEMS); return mc(CON, it.prompt, it.correct, it.wrongs, { hint: it.hint, answerLabel: `${it.prompt.replace("?", "")}${it.correct}.` }); },
 
   /* C6 — masked identities */
-  masked: () => { const it = pick(MASK_ITEMS); return mc(CON, it.prompt, it.correct, it.wrongs, { hint: it.hint, answerLabel: `${it.prompt.replace("?", "")}${it.correct} — a masked identity.` }); },
+  masked: () => { const it = pick(MASK_ITEMS); return mc(CON, it.prompt, it.correct, it.wrongs, { hint: it.hint, answerLabel: `${it.prompt.replace("?", "")}${it.correct} — a masked identity.`, solution: it.sol }); },
 };
 
 export const questGt3 = {

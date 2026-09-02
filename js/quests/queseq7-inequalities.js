@@ -19,17 +19,28 @@ const SKILLS = {
   /* when does the sign switch? */
   flipWhen: () => {
     const items = [
-      { q: "When solving an inequality, WHEN must you switch the direction of the sign?", correct: "When you multiply or divide both sides by a NEGATIVE number", wrongs: ["Whenever you move a term across", "When you add a negative number to both sides", "Every time there is a fraction"], ans: "Only × or ÷ by a negative flips the sign. Adding/subtracting anything, or ×/÷ by a positive, leaves the sign alone." },
-      { q: "You divide both sides of <b>6x &lt; 18</b> by 6. Does the sign flip?", correct: "No — dividing by a POSITIVE number never flips the sign", wrongs: ["Yes — dividing always flips", "Yes — 18 is bigger than 6", "Only if x is negative"], ans: "6 is positive, so nothing flips: x < 3. The flip is reserved for × or ÷ by a NEGATIVE." },
+      { q: "When solving an inequality, WHEN must you switch the direction of the sign?", correct: "When you multiply or divide both sides by a NEGATIVE number", wrongs: ["Whenever you move a term across", "When you add a negative number to both sides", "Every time there is a fraction"], ans: "Only × or ÷ by a negative flips the sign. Adding/subtracting anything, or ×/÷ by a positive, leaves the sign alone.",
+        sol: [{ s: "Start from something true: 2 &lt; 5" },
+              { s: "Multiply both sides by −1: −2 and −5. On the number line −2 sits to the RIGHT of −5, so now −2 > −5" },
+              { s: "The order really did reverse, so the sign must reverse with it", r: "adding or subtracting slides both sides equally and changes no order" }] },
+      { q: "You divide both sides of <b>6x &lt; 18</b> by 6. Does the sign flip?", correct: "No — dividing by a POSITIVE number never flips the sign", wrongs: ["Yes — dividing always flips", "Yes — 18 is bigger than 6", "Only if x is negative"], ans: "6 is positive, so nothing flips: x < 3. The flip is reserved for × or ÷ by a NEGATIVE.",
+        sol: [{ s: "Ask only one thing: is the number you are dividing by negative?" },
+              { s: "6 is positive, so the order of the two sides is untouched" },
+              { s: "6x &lt; 18  →  x &lt; 3, sign unchanged", r: "the size of the number makes no difference — only its sign does" }] },
       ynQ(LIN,
         "Subtracting 9x from both sides of an inequality flips the sign. True?",
         false,
         { hint: "Adding or subtracting never flips.",
-          answerLabel: "False — moving terms across (adding/subtracting) never flips the sign. Only MULTIPLYING or DIVIDING by a negative does." }),
+          answerLabel: "False — moving terms across (adding/subtracting) never flips the sign. Only MULTIPLYING or DIVIDING by a negative does.",
+          solution: [
+            { s: "Subtracting the same thing from both sides slides both of them the same distance along the number line" },
+            { s: "Sliding both by the same amount cannot change which one is bigger" },
+            { s: "∴ false — only × or ÷ by a NEGATIVE reverses the order, and so the sign" },
+          ] }),
     ];
     const it = pick(items);
     return it.type ? it : mc(LIN, it.q, it.correct, it.wrongs,
-      { hint: "× or ÷ with a negative = switch direction.", answerLabel: it.ans });
+      { hint: "× or ÷ with a negative = switch direction.", answerLabel: it.ans, solution: it.sol });
   },
 
   /* apply the flip — fresh numbers */
@@ -46,7 +57,12 @@ const SKILLS = {
     ];
     return mc(LIN, prompt, correct, wrongs,
       { hint: "Divide both sides by the NEGATIVE coefficient — and switch the sign as you do.",
-        answerLabel: `Divide by −${C(a)} and flip: x > −${frac(bb, a)}.` });
+        answerLabel: `Divide by −${C(a)} and flip: x > −${frac(bb, a)}.`,
+        solution: [
+          { s: `To get x alone you must divide both sides by −${C(a)}` },
+          { s: `That divisor is NEGATIVE, so the sign switches direction as you divide`, r: "&lt; becomes >" },
+          { s: `x > −${frac(bb, a)}`, r: "x on the left, and the fraction is already in lowest terms" },
+        ] });
   },
 
   /* compound inequality */
@@ -68,28 +84,46 @@ const SKILLS = {
   /* number line circles */
   circles: () => {
     const items = [
-      { q: "On a number line, what does an OPEN circle at an endpoint mean?", correct: "The endpoint is NOT included (&lt; or >)", wrongs: ["The endpoint is included (≤ or ≥)", "The answer is undefined there", "The graph continues forever"], ans: "Open circle = not included (strict < or >). Filled circle = included (≤ or ≥)." },
-      { q: "Which endpoints does <b>−3 &lt; x ≤ 2</b> put on the number line?", correct: "Open circle at −3, filled circle at 2", wrongs: ["Filled circle at −3, open circle at 2", "Open circles at both", "Filled circles at both"], ans: "< at −3 → open (not included); ≤ at 2 → filled (included)." },
+      { q: "On a number line, what does an OPEN circle at an endpoint mean?", correct: "The endpoint is NOT included (&lt; or >)", wrongs: ["The endpoint is included (≤ or ≥)", "The answer is undefined there", "The graph continues forever"], ans: "Open circle = not included (strict < or >). Filled circle = included (≤ or ≥).",
+        sol: [{ s: "The circle's job is to say whether the endpoint itself is part of the answer" },
+              { s: "A strict sign (&lt; or >) means x gets as close as it likes but never lands there" },
+              { s: "So the circle is drawn hollow — open", r: "≤ or ≥ would fill it in" }] },
+      { q: "Which endpoints does <b>−3 &lt; x ≤ 2</b> put on the number line?", correct: "Open circle at −3, filled circle at 2", wrongs: ["Filled circle at −3, open circle at 2", "Open circles at both", "Filled circles at both"], ans: "< at −3 → open (not included); ≤ at 2 → filled (included).",
+        sol: [{ s: "Take the two ends one at a time" },
+              { s: "At −3 the sign is &lt;, strict, so −3 itself is not allowed — open circle" },
+              { s: "At 2 the sign is ≤, so 2 IS allowed — filled circle", r: "then shade the stretch between them" }] },
     ];
     const it = pick(items);
     return mc(LIN, it.q, it.correct, it.wrongs,
-      { hint: "Strict sign → open circle. 'Or equal' sign → filled circle.", answerLabel: it.ans });
+      { hint: "Strict sign → open circle. 'Or equal' sign → filled circle.", answerLabel: it.ans, solution: it.sol });
   },
 
   /* quadratic inequality set-up */
   setup: () => {
     const items = [
-      { q: "Setting up a QUADRATIC inequality before sketching the bowl — which list is right?", correct: "Everything to the left (0 on the right); no negative in front of x²; CP from = 0", wrongs: ["Everything to the right; negative x² is fine; CP from < 0", "Divide by x first; then factorise; CP from = 0", "Sketch first, factorise afterwards"], ans: "The routine: 0 on the right → kill any negative in front of x² (divide by −1 and FLIP) → factorise → CP: each factor = 0 → sketch/calculator." },
-      { q: "Where do the critical points (CP) of a quadratic inequality come from?", correct: "Setting each factor equal to 0 — an EQUATION, even though the question is an inequality", wrongs: ["Setting each factor &lt; 0", "The turning point of the parabola", "The y-intercept"], ans: "CP come from factor = 0. The inequality only decides WHICH region between/outside the CPs you keep." },
+      { q: "Setting up a QUADRATIC inequality before sketching the bowl — which list is right?", correct: "Everything to the left (0 on the right); no negative in front of x²; CP from = 0", wrongs: ["Everything to the right; negative x² is fine; CP from < 0", "Divide by x first; then factorise; CP from = 0", "Sketch first, factorise afterwards"], ans: "The routine: 0 on the right → kill any negative in front of x² (divide by −1 and FLIP) → factorise → CP: each factor = 0 → sketch/calculator.",
+        sol: [{ s: "① Take everything to the left so 0 sits on the right", r: "the bowl picture is about where the curve is above or below the axis" },
+              { s: "② No negative in front of x²: divide it away and change the direction of the sign" },
+              { s: "③ Factorise, then ④ CP must be =: set each factor equal to 0" },
+              { s: "Only then sketch the bowl and read the region off it", r: "her TIP Chips checklist, in that order" }] },
+      { q: "Where do the critical points (CP) of a quadratic inequality come from?", correct: "Setting each factor equal to 0 — an EQUATION, even though the question is an inequality", wrongs: ["Setting each factor &lt; 0", "The turning point of the parabola", "The y-intercept"], ans: "CP come from factor = 0. The inequality only decides WHICH region between/outside the CPs you keep.",
+        sol: [{ s: "The critical points are where the curve actually crosses the x-axis" },
+              { s: "Crossing means the value is 0, so each factor is set = 0 — an equation, even though the question is an inequality" },
+              { s: "The inequality sign has a different job: it decides which side of those points you shade", r: "CP must be =" }] },
       ynQ(QUA,
         "There is a negative in front of x². You divide every term by −1 — does the inequality sign flip?",
         true,
         { hint: "÷ by a negative…",
-          answerLabel: "Yes — dividing by −1 flips the sign: −x² + 3x − 2 ≥ 0 becomes x² − 3x + 2 ≤ 0." }),
+          answerLabel: "Yes — dividing by −1 flips the sign: −x² + 3x − 2 ≥ 0 becomes x² − 3x + 2 ≤ 0.",
+          solution: [
+            { s: "−1 is a negative number, and dividing by a negative always reverses the order" },
+            { s: "Every term goes through it, including the 0 on the right", r: "0 ÷ −1 is still 0" },
+            { s: "−x² + 3x − 2 ≥ 0 becomes x² − 3x + 2 ≤ 0", r: "∴ yes, it flips — the whole point of dividing the negative away" },
+          ] }),
     ];
     const it = pick(items);
     return it.type ? it : mc(QUA, it.q, it.correct, it.wrongs,
-      { hint: "Left side, positive x², CP = 0, then sketch.", answerLabel: it.ans });
+      { hint: "Left side, positive x², CP = 0, then sketch.", answerLabel: it.ans, solution: it.sol });
   },
 
   /* ★ read the answer off the sketch — INSIDE the bowl */
@@ -108,6 +142,12 @@ const SKILLS = {
       correct, wrongs,
       { hint: `The expression must be ${strict ? "NEGATIVE" : "negative or 0"} — the bowl dips below the axis BETWEEN its critical points.`,
         answerLabel: `Below the axis = inside the bowl: ${correct}${strict ? "" : " (≤ keeps the critical points in)"}.`,
+        solution: [
+          { s: `CP: set each bracket = 0  →  x = ${C(r1)} or x = ${C(r2)}` },
+          { s: `The sign is ${sign} 0, so you want the parts where the bowl sits BELOW the axis` },
+          { s: `A happy bowl only dips below between its two critical points`, r: "her words: inside of bowl — x lies between" },
+          { s: `∴ ${correct}`, r: strict ? "strict signs, so the critical points themselves are out" : "≤ keeps the critical points in" },
+        ],
         graph: bowlGraph(r1, r2, "inside") });
   },
 
@@ -127,6 +167,12 @@ const SKILLS = {
       correct, wrongs,
       { hint: "Positive = ABOVE the axis — the two arms to the left and right of the bowl. Two pieces need the word OR.",
         answerLabel: `Above the axis = outside the CPs: ${correct}. Two separate pieces MUST be joined with "or" — no x can be in both at once, so "and" is impossible.`,
+        solution: [
+          { s: `CP: set each bracket = 0  →  x = ${C(r1)} or x = ${C(r2)}` },
+          { s: `The sign is ${sign} 0, so you want the parts where the bowl sits ABOVE the axis` },
+          { s: `That is both arms — to the LEFT of ${C(r1)} and to the RIGHT of ${C(r2)}`, r: "her words: outside of bowl; &lt; points left, > points right" },
+          { s: `∴ ${correct}`, r: "two separate stretches, so they are joined with “or”, never “and”" },
+        ],
         graph: bowlGraph(r1, r2, "outside") });
   },
 
@@ -137,28 +183,45 @@ const SKILLS = {
         "A two-piece answer may be written “x ≤ 0 <b>and</b> x ≥ 6”. True?",
         false,
         { hint: "Can one x be in both pieces at the same time?",
-          answerLabel: "False — no number is ≤ 0 AND ≥ 6 at once. Two separate pieces are joined with OR: x ≤ 0 or x ≥ 6." }),
-      { q: "Why must a two-piece solution use <b>or</b> instead of <b>and</b>?", correct: "No single x can satisfy both pieces at once — each x lives in ONE piece", wrongs: ["'And' is just slang for 'or' here", "Because the pieces overlap", "It's tradition with no reason"], ans: "'And' means both at the same time — impossible for x ≤ 0 and x ≥ 6. Each solution sits in one piece OR the other." },
+          answerLabel: "False — no number is ≤ 0 AND ≥ 6 at once. Two separate pieces are joined with OR: x ≤ 0 or x ≥ 6.",
+          solution: [
+            { s: "“And” means one single x would have to satisfy both pieces at the same moment" },
+            { s: "Try to find one: it would have to be 0 or below AND 6 or above — no such number exists" },
+            { s: "∴ false — write x ≤ 0 or x ≥ 6", r: "her ruling: never leave it in the calculator's semicolon form" },
+          ] }),
+      { q: "Why must a two-piece solution use <b>or</b> instead of <b>and</b>?", correct: "No single x can satisfy both pieces at once — each x lives in ONE piece", wrongs: ["'And' is just slang for 'or' here", "Because the pieces overlap", "It's tradition with no reason"], ans: "'And' means both at the same time — impossible for x ≤ 0 and x ≥ 6. Each solution sits in one piece OR the other.",
+        sol: [{ s: "Picture the two shaded arms on the number line — they never touch" },
+              { s: "Any single x you pick lands in one arm or the other, never in both" },
+              { s: "“And” would demand both at once, which is impossible, so the joining word is OR" }] },
     ];
     const it = pick(items);
     return it.type ? it : mc(QUA, it.q, it.correct, it.wrongs,
-      { hint: "Two pieces → OR.", answerLabel: it.ans });
+      { hint: "Two pieces → OR.", answerLabel: it.ans, solution: it.sol });
   },
 
   /* the (4 − x) hidden negative */
   hiddenNeg: () => {
     const r = randInt(2, 5), s = r + randInt(1, 4);
     const items = [
-      { q: `<b>(x − ${C(r)})(${C(s)} − x) ≥ 0</b>. What is hiding in the second bracket?`, correct: `A negative x² — rewrite (${C(s)} − x) as −(x − ${C(s)}), so the inequality FLIPS to (x − ${C(r)})(x − ${C(s)}) ≤ 0`, wrongs: ["Nothing — factorised form is ready for CPs as is", `The bracket just means x = ${C(s)} is a CP, sign unchanged`, "A fraction that must be cleared first"], ans: `(${C(s)} − x) expanded gives −x². Take out the −1 (and flip!): (x − ${C(r)})(x − ${C(s)}) ≤ 0, giving ${C(r)} ≤ x ≤ ${C(s)}.` },
+      { q: `<b>(x − ${C(r)})(${C(s)} − x) ≥ 0</b>. What is hiding in the second bracket?`, correct: `A negative x² — rewrite (${C(s)} − x) as −(x − ${C(s)}), so the inequality FLIPS to (x − ${C(r)})(x − ${C(s)}) ≤ 0`, wrongs: ["Nothing — factorised form is ready for CPs as is", `The bracket just means x = ${C(s)} is a CP, sign unchanged`, "A fraction that must be cleared first"], ans: `(${C(s)} − x) expanded gives −x². Take out the −1 (and flip!): (x − ${C(r)})(x − ${C(s)}) ≤ 0, giving ${C(r)} ≤ x ≤ ${C(s)}.`,
+        sol: [{ s: `Multiply out in pencil: x·(−x) gives −x², so there IS a negative in front of the square` },
+              { s: `Take −1 out of the second bracket: (${C(s)} − x) = −(x − ${C(s)})` },
+              { s: `That −1 divides away and FLIPS the sign: (x − ${C(r)})(x − ${C(s)}) ≤ 0` },
+              { s: `CP x = ${C(r)} and x = ${C(s)}, inside the bowl: ${C(r)} ≤ x ≤ ${C(s)}` }] },
       ynQ(QUA,
         `A bracket like (${C(s)} − x) can be used directly for the bowl sketch without any adjustment. True?`,
         false,
         { hint: "Multiply the brackets out in pencil — what is the coefficient of x²?",
-          answerLabel: `False — (${C(s)} − x) hides a NEGATIVE x², and the bowl method needs a positive one. Take −1 out of that bracket and flip the inequality sign.` }),
+          answerLabel: `False — (${C(s)} − x) hides a NEGATIVE x², and the bowl method needs a positive one. Take −1 out of that bracket and flip the inequality sign.`,
+          solution: [
+            { s: `Check the x² coefficient before sketching anything: an x times the −x in (${C(s)} − x) gives −x²` },
+            { s: `A negative x² is a SAD parabola, and the bowl reading assumes a happy one` },
+            { s: `∴ false — take the −1 out first: (${C(s)} − x) = −(x − ${C(s)}), and flip the sign as it goes` },
+          ] }),
     ];
     const it = pick(items);
     return it.type ? it : mc(QUA, it.q, it.correct, it.wrongs,
-      { hint: "(a − x) hides −x². Take out −1 and flip.", answerLabel: it.ans });
+      { hint: "(a − x) hides −x². Take out −1 and flip.", answerLabel: it.ans, solution: it.sol });
   },
 
   /* brackets that are NOT against 0 — expand first, factorise again */
@@ -181,17 +244,29 @@ const SKILLS = {
   fracIneq: () => {
     const m = randInt(2, 5);
     const items = [
-      { q: `Why may <b>(${C(m * m)} − x²)/x² ≥ 0</b> be read straight off the NUMERATOR (${C(m * m)} − x² ≥ 0)?`, correct: "x² is positive for every x ≠ 0, so the fraction's sign IS the numerator's sign", wrongs: ["The denominator always cancels the numerator", "Fractions in inequalities may always be ignored", "Because the numerator is bigger"], ans: `A square denominator is positive for every non-zero x, so dividing by it never changes the sign. Solve ${C(m * m)} − x² ≥ 0 — but CARRY x ≠ 0 into the final answer.` },
-      { q: "An inequality has x in a DENOMINATOR. What must ride along into the final answer?", correct: "The restriction (e.g. x ≠ 0) — even if the rest of the interval includes it", wrongs: ["Nothing — restrictions are only for equations", "A ± sign", "The LCD"], ans: "A denominator's restriction belongs to the original inequality, so the final answer must exclude it: e.g. −3 ≤ x ≤ 3 with x ≠ 0." },
+      { q: `Why may <b>(${C(m * m)} − x²)/x² ≥ 0</b> be read straight off the NUMERATOR (${C(m * m)} − x² ≥ 0)?`, correct: "x² is positive for every x ≠ 0, so the fraction's sign IS the numerator's sign", wrongs: ["The denominator always cancels the numerator", "Fractions in inequalities may always be ignored", "Because the numerator is bigger"], ans: `A square denominator is positive for every non-zero x, so dividing by it never changes the sign. Solve ${C(m * m)} − x² ≥ 0 — but CARRY x ≠ 0 into the final answer.`,
+        sol: [{ s: "Dividing only flips an inequality when the divisor is NEGATIVE" },
+              { s: "x² is a square, so it is positive for every x except 0 — it can never be negative" },
+              { s: `So the sign of the whole fraction is the sign of the top: solve ${C(m * m)} − x² ≥ 0` },
+              { s: "Then carry x ≠ 0 into the answer after a semicolon", r: "the denominator's restriction never disappears" }] },
+      { q: "An inequality has x in a DENOMINATOR. What must ride along into the final answer?", correct: "The restriction (e.g. x ≠ 0) — even if the rest of the interval includes it", wrongs: ["Nothing — restrictions are only for equations", "A ± sign", "The LCD"], ans: "A denominator's restriction belongs to the original inequality, so the final answer must exclude it: e.g. −3 ≤ x ≤ 3 with x ≠ 0.",
+        sol: [{ s: "The banned value comes from the ORIGINAL inequality, before any working" },
+              { s: "Clearing or simplifying the fraction hides the denominator, but it does not un-ban that x" },
+              { s: "So the restriction is written after a semicolon: −3 ≤ x ≤ 3 ; x ≠ 0", r: "even when the interval would otherwise swallow it" }] },
       ynQ(QUA,
         "A factor that appears in BOTH the numerator and the denominator simplifies away (it equals 1 for any non-zero value). True?",
         true,
         { hint: "Anything non-zero over itself is 1.",
-          answerLabel: "True — e.g. (x³ − 2x² − 3x)/x simplifies to x² − 2x − 3 for x ≠ 0. Simplify first, keep the restriction." }),
+          answerLabel: "True — e.g. (x³ − 2x² − 3x)/x simplifies to x² − 2x − 3 for x ≠ 0. Simplify first, keep the restriction.",
+          solution: [
+            { s: "A factor that multiplies the WHOLE top and the WHOLE bottom is the same thing over itself, which is 1" },
+            { s: "(x³ − 2x² − 3x)/x = x(x² − 2x − 3)/x = x² − 2x − 3", r: "the + and − are caged in the bracket first" },
+            { s: "∴ true — but the x ≠ 0 that made it legal stays in the final answer" },
+          ] }),
     ];
     const it = pick(items);
     return it.type ? it : mc(QUA, it.q, it.correct, it.wrongs,
-      { hint: "A square denominator can't change the sign; a denominator's restriction always survives.", answerLabel: it.ans });
+      { hint: "A square denominator can't change the sign; a denominator's restriction always survives.", answerLabel: it.ans, solution: it.sol });
   },
 
   /* the repeated factor / perfect square special case */
@@ -207,7 +282,13 @@ const SKILLS = {
     ];
     return mc(QUA, prompt, correct, wrongs,
       { hint: "A square is 0 or positive. Where is it exactly 0?",
-        answerLabel: `${br}² is positive EVERYWHERE except at its one critical point x = ${C(r)}, where it is 0 (and 0 > 0 is false). So x ∈ ℝ, x ≠ ${C(r)}. Compare: two DIFFERENT brackets would give two CPs and an outside answer.` });
+        answerLabel: `${br}² is positive EVERYWHERE except at its one critical point x = ${C(r)}, where it is 0 (and 0 > 0 is false). So x ∈ ℝ, x ≠ ${C(r)}. Compare: two DIFFERENT brackets would give two CPs and an outside answer.`,
+        solution: [
+          { s: `Both brackets are the same, so there is only ONE critical point: x = ${C(r)}` },
+          { s: `A square is never negative, so ${br}² is positive for every other x` },
+          { s: `At x = ${C(r)} it is exactly 0, and 0 > 0 is false`, r: "so that single point is thrown out" },
+          { s: `∴ x ∈ ℝ, x ≠ ${C(r)}`, r: "the restriction rides after a semicolon" },
+        ] });
   },
 };
 

@@ -189,18 +189,23 @@
    always-available "📖 Show me the method" link, and it is
    attached ONLY where the question's solution is real working:
    2+ steps, OR a step with a reason, OR a single step whose text
-   is not just the answer. This chapter attaches it NOWHERE, and
-   that is the correct outcome, not an oversight: every eq
-   question is a list-pick built by _shared.js's mc() or _eq.js's
-   ynQ(), whose default solution is [{ s: <the correct label> }]
-   / [{ s: <the answerLabel> }] — so a "method" link would reveal
-   the answer and nothing else. The real teaching text lives in
-   q.answerLabel, which the wrong-answer "Show me the steps" panel
-   already shows. Writing genuine worked-method text for this
-   chapter is a separate content batch for Megan to decide on, and
-   it would have to follow METHODS-algebra.md (her B11 table
-   wordings, B12's three k-shapes, the ∴ habit) — per DICE-COMMON,
-   no new method text is invented here.
+   is not just the answer.
+
+   COVERAGE (2026-09-02 worked-methods batch, session S3): 68 of
+   68 — the whole pool. Until that batch this chapter attached it
+   NOWHERE, because every eq question is a list-pick built by
+   _shared.js's mc() or _eq.js's ynQ(), whose default solution is
+   [{ s: <the correct label> }] / [{ s: <the answerLabel> }] — a
+   link that reveals the answer and nothing else. The batch wrote
+   real working INSIDE each gen(), built from the same rolled
+   values as the question, following METHODS-algebra.md (her TIP
+   Chips checklist, the LCD + limits line, "CP must be =", the
+   B11 Δ table wordings, guns/helmets, N.A. vs no solution vs
+   undefined vs non-real).
+
+   NO METHOD TEXT IS WRITTEN IN THIS FILE — it only surfaces what
+   each quest module's own gen() already built. The 10 EXCLUDED
+   skills above are untouched: they never reach the dice deal.
    ============================================================ */
 import { questEq1 } from "./queseq1-zeroproduct.js";
 import { questEq2 } from "./queseq2-special.js";

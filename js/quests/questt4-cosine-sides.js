@@ -95,7 +95,12 @@ const SKILLS = {
     "between the two known sides (the included angle)",
     ["opposite a known side", "the biggest angle", "any angle you like"],
     { hint: "The − 2bc·cosA term only works when A is the angle between b and c.",
-      answerLabel: "Cosine rule needs the INCLUDED angle — the one between the two known sides." }),
+      answerLabel: "Cosine rule needs the INCLUDED angle — the one between the two known sides.",
+      solution: [
+        { s: "Look at what the − 2bc·cosA term is made of: the two sides b and c, and the angle A" },
+        { s: "In the rule, b and c are the two arms that MEET at A", r: "that is the only way the term is built" },
+        { s: "So the known angle has to sit between the two known sides", r: "an angle somewhere else does not fit the formula" },
+      ] }),
 
   /* pick the correct formula for the labelled unknown */
   whichFormula: () => {
@@ -107,7 +112,12 @@ const SKILLS = {
        `x² = ${b}² − ${c}² − 2(${b})(${c})·cos ${A}°`,
        `x = ${b} + ${c} − 2(${b})(${c})·cos ${A}°`],
       { hint: "It is a MINUS in the middle, and you square first (x², not x).",
-        answerLabel: `x² = ${b}² + ${c}² − 2(${b})(${c})·cos${A}° — sum of squares minus the 2bc·cos term.` });
+        answerLabel: `x² = ${b}² + ${c}² − 2(${b})(${c})·cos${A}° — sum of squares minus the 2bc·cos term.`,
+        solution: [
+          { s: `x is opposite Â, and the two sides ${b} and ${c} meet at Â`, r: "so x plays the part of a, and the sides are b and c" },
+          { s: `a² = b² + c² − 2bc·cosÂ`, r: "write the rule before any numbers go in" },
+          { s: `x² = ${b}² + ${c}² − 2(${b})(${c})·cos${A}°`, r: "plus between the squares, MINUS in front of the 2bc term" },
+        ] });
   },
 };
 

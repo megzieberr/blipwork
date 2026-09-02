@@ -21,7 +21,13 @@ const SKILLS = {
     const wrongs = [`${C(bb * bb)}`, `${C(half)}`, `${C(bb * bb / 2)}`];
     return mc(PSQ, prompt, correct, wrongs,
       { hint: "Half the middle coefficient, then square it: (b/2)².",
-        answerLabel: `(${C(bb)} ÷ 2)² = ${C(half)}² = ${C(half * half)}. Then x² ${sign} ${C(bb)}x + ${C(half * half)} = (x ${sign} ${C(half)})².` });
+        answerLabel: `(${C(bb)} ÷ 2)² = ${C(half)}² = ${C(half * half)}. Then x² ${sign} ${C(bb)}x + ${C(half * half)} = (x ${sign} ${C(half)})².`,
+        solution: [
+          { s: `Check a first: the coefficient of x² is 1, so the half-and-square rule is allowed` },
+          { s: `b/2 = ${C(bb)} ÷ 2 = ${C(half)}`, r: "she writes this in a small boxed working at the top right" },
+          { s: `Square it: ${C(half)}² = ${C(half * half)}` },
+          { s: `x² ${sign} ${C(bb)}x + ${C(half * half)} = (x ${sign} ${C(half)})²`, r: "x and b/2 fall into the new bracket; the sign of b comes with them" },
+        ] });
   },
 
   /* the rule only works when a = 1
@@ -38,7 +44,12 @@ const SKILLS = {
         "The rule c = (b/2)² works for ANY quadratic ax² + bx + c, whatever a is. True?",
         false,
         { hint: "Try it on 2x² + 8x + … — does 16 complete that square?",
-          answerLabel: "False — c = (b/2)² only works when the coefficient of x² is 1. With a coefficient, factor it out FIRST (or use b² = 4ac)." });
+          answerLabel: "False — c = (b/2)² only works when the coefficient of x² is 1. With a coefficient, factor it out FIRST (or use b² = 4ac).",
+          solution: [
+            { s: "Test it on 2x² + 8x + 16: half-and-square says the constant should be (8/2)² = 16" },
+            { s: "But 2(x + 2)² = 2x² + 8x + 8, so the constant that actually works is 8, not 16", r: "the rule has failed" },
+            { s: "∴ false — half-and-square is an a = 1 rule; with a coefficient on x², factor it out first" },
+          ] });
     }
     const gcd = (x, y) => (y ? gcd(y, x % y) : x);
     const a = pick([2, 3, 4, 5]);
@@ -50,7 +61,14 @@ const SKILLS = {
       `Factor the ${C(a)} out of the terms`,
       [`Add (${C(bb)}/2)² straight away`, `Divide only the ${C(cc)} by ${C(a)}`, `Swap the ${C(bb)}x and the ${C(cc)}`],
       { hint: "c = (b/2)² is an a = 1 rule.",
-        answerLabel: `With a coefficient on x², factor it out first: ${C(a)}(x² − ${C(bb)}/${C(a)}·x + ${C(t)}) — THEN half-and-square the new middle coefficient inside.` });
+        answerLabel: `With a coefficient on x², factor it out first: ${C(a)}(x² − ${C(bb)}/${C(a)}·x + ${C(t)}) — THEN half-and-square the new middle coefficient inside.`,
+        solution: [
+          { s: `The coefficient of x² is ${C(a)}, not 1, so half-and-square cannot be used as it stands` },
+          { s: `Factor the ${C(a)} out of the WHOLE expression, constant included: ${C(a)}(x² − ${C(bb)}/${C(a)}·x + ${C(t)})`,
+            r: "accept the fraction it creates — that is normal here" },
+          { s: `Now the inside has a coefficient of 1, so half-and-square the new middle number` },
+          { s: `Switch to square brackets once the inner bracket is formed, and multiply the ${C(a)} back in at the very end` },
+        ] });
   },
 
   /* the sign inside the bracket matches the middle term — fresh */
@@ -65,7 +83,12 @@ const SKILLS = {
     ];
     return mc(PSQ, prompt, correct, wrongs,
       { hint: "The sign inside the bracket MATCHES the sign of the middle term.",
-        answerLabel: `(x ${sign} ${C(half)})² expands to x² ${sign} ${C(bb)}x + ${C(half * half)} — the bracket's sign is the middle term's sign.` });
+        answerLabel: `(x ${sign} ${C(half)})² expands to x² ${sign} ${C(bb)}x + ${C(half * half)} — the bracket's sign is the middle term's sign.`,
+        solution: [
+          { s: `Work backwards: expand (x ${sign} ${C(half)})² = x² ${sign} ${C(bb)}x + ${C(half * half)}` },
+          { s: `The middle term came out as ${sign}${C(bb)}x, matching the question` },
+          { s: `So the bracket takes ${sign}`, r: "the sign of b falls into the bracket — the squared constant is positive either way" },
+        ] });
   },
 
   /* x² − 13x + c = (x + k)² — the k sign trap (workbook got it wrong!) */
@@ -76,7 +99,13 @@ const SKILLS = {
     const wrongs = [`k = ${frac(odd, 2)}`, `k = −${C(odd)}`, `k = ${frac(String(odd * odd), 4)}`];
     return mc(PSQ, prompt, correct, wrongs,
       { hint: "Expand (x + k)² = x² + 2kx + k² and MATCH the middle terms — sign included.",
-        answerLabel: `2k = −${C(odd)}, so k = −${frac(odd, 2)} (negative, because the middle term is −${C(odd)}x). And c = k² = ${frac(String(odd * odd), 4)}.` });
+        answerLabel: `2k = −${C(odd)}, so k = −${frac(odd, 2)} (negative, because the middle term is −${C(odd)}x). And c = k² = ${frac(String(odd * odd), 4)}.`,
+        solution: [
+          { s: `Expand the right side: (x + k)² = x² + 2kx + k²` },
+          { s: `Match the middle terms, sign and all: 2k = −${C(odd)}` },
+          { s: `k = −${frac(odd, 2)}`, r: `the bracket is written (x + k), so a middle term of −${C(odd)}x forces k to be NEGATIVE` },
+          { s: `And then c = k² = ${frac(String(odd * odd), 4)}`, r: "squaring makes c positive" },
+        ] });
   },
 
   /* read the TP off turning-point form — fresh, with the workbook's q-trap */
@@ -95,7 +124,13 @@ const SKILLS = {
     ];
     return mc(TPF, prompt, correct, wrongs,
       { hint: "p is read with the OPPOSITE sign of what's in the bracket; q keeps its own sign.",
-        answerLabel: `The bracket (${inner}) gives p = ${C(p)} (opposite sign); the constant outside gives q = ${C(q)} (its OWN sign — never flip q). TP(${C(p)} ; ${C(q)}).` });
+        answerLabel: `The bracket (${inner}) gives p = ${C(p)} (opposite sign); the constant outside gives q = ${C(q)} (its OWN sign — never flip q). TP(${C(p)} ; ${C(q)}).`,
+        solution: [
+          { s: `Line it up with y = a(x − p)² + q` },
+          { s: `The bracket reads (${inner}), so p = ${C(p)}`, r: "OPPOSITE sign to what you see inside the bracket" },
+          { s: `The constant outside the bracket is q = ${C(q)}`, r: "q keeps its own sign — never flip it" },
+          { s: `∴ TP(${C(p)} ; ${C(q)})`, r: "coordinates take a semicolon, not a comma" },
+        ] });
   },
 
   /* which sign flips: p, not q
@@ -109,14 +144,24 @@ const SKILLS = {
     if (pick([true, false])) {
       const it = { q: "In turning-point form <b>y = a(x − p)² + q</b>, which value is read with the OPPOSITE sign?", correct: "Only p (the x-value of the TP)", wrongs: ["Only q (the y-value of the TP)", "Both p and q", "Neither — read both as written"], ans: "p flips: (x + 4) means p = −4. q keeps its own sign: … − 1 means q = −1. In words: p is WHERE the TP is, q is WHAT it is." };
       return mc(TPF, it.q, it.correct, it.wrongs,
-        { hint: "Flip p. Never flip q.", answerLabel: it.ans });
+        { hint: "Flip p. Never flip q.", answerLabel: it.ans,
+          solution: [
+            { s: "The form is y = a(x − p)² + q, and p is written with a MINUS built into it" },
+            { s: "So (x + 4) is really (x − (−4)), which is why p reads as −4 — the flip comes from that hidden minus" },
+            { s: "q has no hidden minus: it is written + q, so … − 1 simply means q = −1", r: "∴ only p flips" },
+          ] });
     }
     const a = pick([2, 3, 4]), h = randInt(2, 6), k = randInt(1, 6);
     return ynQ(TPF,
       `For y = ${C(a)}(x + ${C(h)})² − ${C(k)} the turning point is (${C(-h)} ; ${C(k)}). True?`,
       false,
       { hint: "Which of p and q flips its sign?",
-        answerLabel: `False — the y-value never flips. The constant outside is ${C(-k)}, so the TP is (${C(-h)} ; ${C(-k)}). Only p gets the opposite sign.` });
+        answerLabel: `False — the y-value never flips. The constant outside is ${C(-k)}, so the TP is (${C(-h)} ; ${C(-k)}). Only p gets the opposite sign.`,
+        solution: [
+          { s: `The bracket is (x + ${C(h)}), so p = ${C(-h)}`, r: "that part of the claim is right" },
+          { s: `The constant outside is − ${C(k)}, so q = ${C(-k)} — it keeps its own sign` },
+          { s: `∴ the TP is (${C(-h)} ; ${C(-k)}), not (${C(-h)} ; ${C(k)})`, r: "the y-value never flips" },
+        ] });
   },
 
   /* happy / sad → min / max */
@@ -133,7 +178,13 @@ const SKILLS = {
     ];
     return mc(TPF, prompt, correct, wrongs,
       { hint: "a > 0 → happy bowl → the TP is the LOWEST point. a < 0 → sad → highest.",
-        answerLabel: `a = ${C(a)} is ${up ? "positive → happy parabola, so the TP is a MINIMUM" : "negative → sad parabola, so the TP is a MAXIMUM"}.` });
+        answerLabel: `a = ${C(a)} is ${up ? "positive → happy parabola, so the TP is a MINIMUM" : "negative → sad parabola, so the TP is a MAXIMUM"}.`,
+        solution: [
+          { s: `Only a decides the shape. Here a = ${C(a)}` },
+          { s: `a is ${up ? "positive, so the arms point up — a happy parabola" : "negative, so the arms point down — a sad parabola"}` },
+          { s: `${up ? "A happy parabola sits in its lowest point at the turning point, so it is a MINIMUM" : "A sad parabola reaches its highest point at the turning point, so it is a MAXIMUM"}`,
+            r: "the bracket and the constant move the TP around, but they cannot change the shape" },
+        ] });
   },
 
   /* the steps for SOLVING by completing the square */

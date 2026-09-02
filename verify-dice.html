@@ -73,11 +73,66 @@ import { mean, median, mode, range, stdDev, quartileValue, quartilePos, percenti
 import { verifyGraph, ogiveAnswerAtCum, ogiveAnswerAtVal } from "./js/engine/stats-graph.js";
 import { renderPlay } from "./js/play.js";
 import { rng } from "./js/rng.js";
+import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
 let total = 0, passed = 0; const fails = [];
 const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
 
-const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo"]);
+/* "steps" joined the law on 2026-09-02 (session S3), the same fix
+   verify-dice-trig.html got on 2026-08-30. A chain is not a new INPUT —
+   its own steps are mc / calc / tokenpad, all already legal — so a
+   chain was never an input-law breach; this harness simply predated
+   the split day and had never been told the type exists. Until now it
+   red-flagged q3.outBound ("type steps violates the input law") on
+   every run, which is a harness gap, not an app bug. Chains now get
+   the sibling's structural floor via stepsIssues() below, INCLUDING
+   its one dice-specific law: no chain may carry a method link. */
+const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "calcdo", "steps"]);
+
+/* The structural floor for a `steps` chain — lifted from
+   verify-dice-trig.html so the two harnesses cannot drift apart.
+   ⚠️ The load-bearing one is the FIRST check: js/play.js renders the
+   📖 "Show me the method" link at mount, before step 1, so a chain
+   carrying q.method would hand the learner every remaining answer.
+   dice-stats.js's withMethod() guards it; this proves the guard. */
+function stepsIssues(q) {
+  const issues = [];
+  const steps = q.steps || [];
+  if (q.method != null) issues.push("steps chain carries q.method — the link renders before step 1 and hands the chain over");
+  if (steps.length < 2) issues.push(`chain of ${steps.length} steps`);
+  if (!steps.length || steps[steps.length - 1].kind !== "calc") issues.push("chain does not end on a typed number");
+  steps.forEach((st, si) => {
+    if (!st.prompt || !st.hint) issues.push(`step ${si} missing prompt/hint`);
+    if (st.kind === "mc") {
+      const rights = st.options.filter(o => o.correct).length;
+      const labels = st.options.map(o => o.label);
+      if (rights !== 1) issues.push(`step ${si} has ${rights} correct options`);
+      if (labels.length !== new Set(labels).size) issues.push(`step ${si} duplicate options`);
+    } else if (st.kind === "calc") {
+      if (!Number.isFinite(st.expected)) issues.push(`step ${si} non-finite expected`);
+      else if (!checkStep(st, st.expected)) issues.push(`step ${si} rejects its own answer`);
+      if (st.expected < 0 && !st.allowNeg) issues.push(`step ${si} negative expected without allowNeg`);
+    } else if (st.kind === "tokenpad") {
+      const slots = (st.frame || []).filter(f => f === "☐").length;
+      /* the pad joins its pieces with U+2009 THIN SPACE (js/tokenpad.js's
+         THIN; quest03's joinThin does the same). Split on ANY whitespace
+         rather than on a literal thin space — the glyph is invisible in an
+         editor and does not survive a copy-paste, which is exactly how the
+         first draft of this check read "1 pieces for 2 boxes". */
+      const need = String(st.expected).split(/\s+/).filter(Boolean);
+      const keysNorm = (st.keys || []).map(normalizeTokens);
+      if (need.length !== slots) issues.push(`step ${si}: ${need.length} pieces for ${slots} boxes`);
+      if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) issues.push(`step ${si} not buildable from its chips`);
+      if (new Set(keysNorm).size !== keysNorm.length) issues.push(`step ${si} duplicate chips: ${(st.keys || []).join(" | ")}`);
+      if (!checkStep(st, st.expected)) issues.push(`step ${si} rejects its own fill`);
+    } else issues.push(`step ${si} unknown kind "${st.kind}"`);
+  });
+  if (steps.length && Number.isFinite(q.expected)
+      && Math.abs(steps[steps.length - 1].expected - q.expected) > 1e-9) {
+    issues.push("chain end ≠ question's headline answer");
+  }
+  return issues;
+}
 
 /* parse a formatted label (comma decimal) back to a number, or NaN if the
    label isn't purely numeric — used for the "no decoy equals the answer
@@ -128,6 +183,10 @@ stubPool.entries.forEach(entry => {
     } else if (q.type === "tap") {
       const ids = q.tap.targets || [];
       if (!ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
+    } else if (q.type === "steps") {
+      /* the stub pool ships no chain today; the branch is here so a future
+         stub chain is checked rather than waved through by the widened law */
+      stepsIssues(q).forEach(s => issues.push(s));
     }
   }
   const ok = tick(issues.length === 0, `${entry.skillId} (${RUNS} rolls)`);
@@ -339,6 +398,9 @@ function graphIssues(q) {
 const statsHost = document.getElementById("statsEntries");
 const recomputeLines = [];
 let sawMethodCount = 0;
+/* the sibling harness's aggregate assertion, asserted once at the end:
+   across every skill and every roll, no chain ever carried a method link */
+let chainsClean = true, sawChain = false;
 
 statsPool.entries.forEach(entry => {
   const issues = [];
@@ -384,6 +446,10 @@ statsPool.entries.forEach(entry => {
       if (!ids.includes(q.tap.correctId)) issues.push("correctId not in targets");
     } else if (q.type === "calcdo") {
       if (!q.goal || typeof q.goal.type !== "string") issues.push("calcdo missing a goal");
+    } else if (q.type === "steps") {
+      sawChain = true;
+      stepsIssues(q).forEach(s => issues.push(s));
+      if (q.method != null) chainsClean = false;
     }
 
     graphIssues(q).forEach(g => issues.push(g));
@@ -414,6 +480,9 @@ statsPool.entries.forEach(entry => {
     </ul>`;
   statsHost.appendChild(card);
 });
+
+tick(sawChain, "the pool still contains at least one `steps` chain (so the chain checks below actually ran)");
+tick(chainsClean, "no steps chain ever carries q.method — play.js renders the link before step 1");
 
 recomputeLines.unshift(`Independent recompute wired for ${recomputeCoverage.length}/${statsPool.entries.length} skills (the mean/median/SD/quartile/IQR family named in the brief, plus every other skill where the rolled data is cheaply recoverable from the question's own structured fields or rendered text). Skills without a recompute entry (q4's qualitative skew classification, and pure-recall mc with no numbers) still get every generic + graph-honesty check above.`);
 recomputeLines.push(`Method-text coverage: ${sawMethodCount}/${statsPool.entries.length} skills carry q.method.`);

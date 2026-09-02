@@ -208,7 +208,12 @@ const SKILLS = {
     "the sides on top (a/sinÂ = b/sinB̂)",
     ["the sines on top (sinÂ/a = sinB̂/b)", "everything multiplied", "the angles added first"],
     { hint: "Put the thing you are solving for on top.",
-      answerLabel: "Finding a side → sides in the numerators: a/sinÂ = b/sinB̂ = c/sinĈ." }),
+      answerLabel: "Finding a side → sides in the numerators: a/sinÂ = b/sinB̂ = c/sinĈ.",
+      solution: [
+        { s: "You are solving for a SIDE, so put the side you want on top" },
+        { s: "a/sinÂ = b/sinB̂ = c/sinĈ", r: "each side over the sine of the angle facing it" },
+        { s: "Then one multiply frees x", r: "with x underneath you would have to flip the fraction first" },
+      ] }),
 
   /* pick the correct ratio set-up */
   setupRatio: () => {
@@ -221,7 +226,12 @@ const SKILLS = {
       correct,
       [`x / sin ${A}° = ${a} / sin ${B}°`, `x · sin ${B}° = ${a} · sin ${A}°`, `sin ${B}° / x = ${a} / sin ${A}°`],
       { hint: "Each side sits over the sine of the angle opposite it.",
-        answerLabel: `x is opposite ${B}°, so x/sin${B}° = ${a}/sin${A}°.` });
+        answerLabel: `x is opposite ${B}°, so x/sin${B}° = ${a}/sin${A}°.`,
+        solution: [
+          { s: `Pair each side with the angle it faces: x with ${B}°, and ${a} with ${A}°`, r: "friends" },
+          { s: `Solving for a side, so sides on top: x/sin${B}° = ${a}/sin${A}°` },
+          { s: `Check the pairing before you press anything`, r: `x under sin${A}° would pair x with the wrong angle` },
+        ] });
   },
 };
 

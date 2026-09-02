@@ -151,7 +151,12 @@ const SKILLS = {
     "½·b·c·sinÂ",
     ["½·b·c·cosÂ", "b·c·sinÂ", "½·b·c·tanÂ"],
     { hint: "Half, two sides, and the SINE of the angle between them.",
-      answerLabel: "Area = ½·b·c·sinÂ — two sides and the sine of their included angle." }),
+      answerLabel: "Area = ½·b·c·sinÂ — two sides and the sine of their included angle.",
+      solution: [
+        { s: "Area of any triangle = ½ × base × height, so take b as the base" },
+        { s: "Drop the height from the top corner: h = c·sinÂ", r: "sinÂ = O/H in the little right triangle" },
+        { s: "Area = ½·b·h = ½·b·c·sinÂ", r: "that is where the sine comes from — never cos, never tan" },
+      ] }),
 
   /* need the included angle */
   needIncluded: () => ({

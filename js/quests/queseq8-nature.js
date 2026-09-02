@@ -15,13 +15,22 @@ const SKILLS = {
   /* what Δ is and where it lives */
   whatDelta: () => {
     const items = [
-      { q: "What is the <b>discriminant</b> Δ?", correct: "Δ = b² − 4ac", wrongs: ["Δ = b² + 4ac", "Δ = √(b² − 4ac)", "Δ = −b / 2a"], ans: "Δ = b² − 4ac — the part UNDER the root in the quadratic formula (without the root itself)." },
-      { q: "Where does Δ live inside the quadratic formula?", correct: "Under the square root", wrongs: ["In the denominator", "In front of the ±", "It isn't in the formula"], ans: "x = (−b ± √Δ)/2a with Δ = b² − 4ac. Its sign decides whether the root (and so the answers) exist." },
-      { q: "What do the ROOTS of a quadratic look like on its graph?", correct: "The x-intercepts — where the parabola cuts the x-axis", wrongs: ["The turning point", "The y-intercept", "The axis of symmetry"], ans: "Roots = x-intercepts. That's why Δ (which counts the real roots) tells you how the parabola meets the x-axis." },
+      { q: "What is the <b>discriminant</b> Δ?", correct: "Δ = b² − 4ac", wrongs: ["Δ = b² + 4ac", "Δ = √(b² − 4ac)", "Δ = −b / 2a"], ans: "Δ = b² − 4ac — the part UNDER the root in the quadratic formula (without the root itself).",
+        sol: [{ s: "Look at the formula: x = (−b ± √(b² − 4ac)) / 2a" },
+              { s: "Δ is the piece sitting UNDER the root, on its own: b² − 4ac", r: "the root sign is not part of Δ" },
+              { s: "It is a MINUS 4ac — a plus there could never come out negative, and the whole point of Δ is that it can" }] },
+      { q: "Where does Δ live inside the quadratic formula?", correct: "Under the square root", wrongs: ["In the denominator", "In front of the ±", "It isn't in the formula"], ans: "x = (−b ± √Δ)/2a with Δ = b² − 4ac. Its sign decides whether the root (and so the answers) exist.",
+        sol: [{ s: "Write the formula with Δ in it: x = (−b ± √Δ) / 2a" },
+              { s: "Δ sits under the square root, which is why its SIGN matters so much" },
+              { s: "Negative under the root → non-real; zero → the ± adds nothing; positive → two different answers" }] },
+      { q: "What do the ROOTS of a quadratic look like on its graph?", correct: "The x-intercepts — where the parabola cuts the x-axis", wrongs: ["The turning point", "The y-intercept", "The axis of symmetry"], ans: "Roots = x-intercepts. That's why Δ (which counts the real roots) tells you how the parabola meets the x-axis.",
+        sol: [{ s: "A root is an x that makes the expression equal 0" },
+              { s: "On the graph, y = 0 IS the x-axis", r: "her heading: nature of roots ↳ where the graph intersects the x-axis" },
+              { s: "So the roots are exactly the x-intercepts, and counting them counts the crossings" }] },
     ];
     const it = pick(items);
     return mc(DIS, it.q, it.correct, it.wrongs,
-      { hint: "Δ is the b² − 4ac sitting under the root.", answerLabel: it.ans });
+      { hint: "Δ is the b² − 4ac sitting under the root.", answerLabel: it.ans, solution: it.sol });
   },
 
   /* ★ match the picture to Δ */
@@ -46,6 +55,20 @@ const SKILLS = {
           : kind === "touch"
             ? "It TOUCHES the x-axis at exactly one point (the turning point) → real, equal roots → Δ = 0."
             : "It never reaches the x-axis → no x-intercepts → non-real roots → Δ < 0.",
+        solution: [
+          { s: "Count the x-intercepts on the sketch — the roots ARE the crossings" },
+          { s: kind === "two"
+              ? "It cuts clean through the axis in two places, so there are two different real roots"
+              : kind === "touch"
+                ? "It just kisses the axis at one point, its turning point — the two roots have landed on top of each other"
+                : "It never reaches the axis at all, so no real x makes it 0" },
+          { s: kind === "two"
+              ? "Two different answers need a real, non-zero ± , so Δ > 0"
+              : kind === "touch"
+                ? "The ± must be adding nothing, so Δ = 0 — real, rational, EQUAL"
+                : "That means a negative under the root: Δ < 0 — non-real / imaginary",
+            r: "her Δ table, read backwards from the picture" },
+        ],
         graph: deltaGraph(kind) });
   },
 
@@ -82,7 +105,17 @@ const SKILLS = {
     return mc(DIS, `You work out <b>Δ = ${C(d)}</b>. What is the nature of the roots?`,
       correct, ALL.filter((s) => s !== correct),
       { hint: "Sign first (≥ 0 real, < 0 non-real), then perfect square → rational, then 0 → equal.",
-        answerLabel: why });
+        answerLabel: why,
+        solution: [
+          { s: `Question 1 — what is the SIGN of Δ? Here Δ = ${C(d)}, which is ${d < 0 ? "negative" : d === 0 ? "zero" : "positive"}`,
+            r: d < 0 ? "a negative under the root → stop here, the roots are non-real" : "so the roots are real" },
+          ...(d < 0 ? [] : [{ s: d === 0
+              ? "Question 2 — is Δ zero? It is, so the ± adds nothing and the two roots collapse into one"
+              : `Question 2 — is Δ a perfect square? ${C(d)} ${cat === "perfect" ? "is" : "is NOT"} one`,
+            r: d === 0 ? "equal roots — the parabola touches the axis at its turning point"
+                       : (cat === "perfect" ? "so the root comes out whole: rational" : "so a surd survives: irrational") }]),
+          { s: `∴ ${correct}`, r: "her exact wording from the Δ table" },
+        ] });
   },
 
   /* nature given → which condition to write */
@@ -98,7 +131,13 @@ const SKILLS = {
     return mc(DIS, `The question says the roots must be <b>${it.want}</b>. Which condition do you write down?`,
       it.correct, it.wrongs,
       { hint: "Translate the words into a Δ statement FIRST, then solve it for the unknown.",
-        answerLabel: `${it.want} → ${it.correct}. Then substitute a, b and c (with the parameter) and solve.` });
+        answerLabel: `${it.want} → ${it.correct}. Then substitute a, b and c (with the parameter) and solve.`,
+        solution: [
+          { s: `Turn the words into a Δ statement before touching any algebra: ${it.want} → ${it.correct}` },
+          { s: "Then write Δ = b² − 4ac, substituting a, b and c with the parameter still in them" },
+          { s: `Set that expression ${it.correct.includes("perfect") ? "greater than 0 (and check for a perfect square)" : it.correct.replace("Δ ", "")} and solve for the unknown`,
+            r: "if you divide by a negative on the way, the inequality sign flips" },
+        ] });
   },
 
   /* the three question types (their notes' framing) */
@@ -140,7 +179,12 @@ const SKILLS = {
         "A parameter value that makes the original equation's denominator 0 must still be kept if the algebra produced it. True?",
         false,
         { hint: "Restrictions outrank algebra.",
-          answerLabel: "False — restrictions from the ORIGINAL equation stand. A value that breaks them is rejected (N.A.), exactly like a rejected x." });
+          answerLabel: "False — restrictions from the ORIGINAL equation stand. A value that breaks them is rejected (N.A.), exactly like a rejected x.",
+          solution: [
+            { s: "The restriction comes from the ORIGINAL equation, before any working started" },
+            { s: "The algebra cannot un-ban a value — it only shows which values would have solved the changed equation" },
+            { s: "∴ false — a parameter that breaks a restriction is rejected as N.A., exactly like a rejected x" },
+          ] });
     }
     const m = randInt(2, 12), s = pick([1, -1]);
     const other = -m * s;                                   // k(k + m) = 0 → k = −m ; k(k − m) = 0 → k = m
@@ -150,7 +194,13 @@ const SKILLS = {
       `k = ${C(other)} only — reject k = 0`,
       [`k = 0 or k = ${C(other)}, both count`, "k = 0 only", "No valid k exists"],
       { hint: "Check every parameter answer against the original equation's restrictions.",
-        answerLabel: `kx in a denominator means k ≠ 0 from the start (and at k = 0 the equation isn't even a quadratic). Reject k = 0: the answer is k = ${C(other)} only.` });
+        answerLabel: `kx in a denominator means k ≠ 0 from the start (and at k = 0 the equation isn't even a quadratic). Reject k = 0: the answer is k = ${C(other)} only.`,
+        solution: [
+          { s: `The algebra gives two candidates: k = 0 or k = ${C(other)}` },
+          { s: "Now check them against the original equation: kx sat in a denominator, so k ≠ 0 from the very start" },
+          { s: "k = 0 breaks that restriction, so it is N.A.", r: "at k = 0 the equation is not even a quadratic any more" },
+          { s: `∴ k = ${C(other)} only` },
+        ] });
   },
 
   /* KNOW THE DIFFERENCE — the four words */
@@ -165,7 +215,12 @@ const SKILLS = {
     const it = pick(items);
     return mc(DIF, `KNOW THE DIFFERENCE: which word describes this?<br>${it.case}`, it.correct, it.wrongs,
       { hint: "No solution = never true. Undefined = denominator 0. Non-real = negative under √. N.A. = a rejected candidate answer.",
-        answerLabel: it.why });
+        answerLabel: it.why,
+        solution: [
+          { s: "Run the four words in order and see which one this case actually fits" },
+          { s: "No solution = the statement can never be true · undefined = a denominator hits 0 · non-real = a negative sits under an even root · N.A. = a candidate answer that fails the original" },
+          { s: it.why, r: "the four are not interchangeable — she gives this its own titled box" },
+        ] });
   },
 
   /* undefined vs non-real on one expression — fresh numbers */
@@ -179,13 +234,23 @@ const SKILLS = {
         `x = −${C(m)} (the denominator becomes 0)`,
         [`x &lt; −${C(n)} (inside of the root negative)`, `x = −${C(n)}`, `x = ${C(m)}`],
         { hint: "Undefined is about the BOTTOM: set the denominator equal to 0.",
-          answerLabel: `Undefined = denominator 0: x + ${C(m)} = 0 → x = −${C(m)}. (x < −${C(n)} is where it's NON-real — a different question!)` });
+          answerLabel: `Undefined = denominator 0: x + ${C(m)} = 0 → x = −${C(m)}. (x < −${C(n)} is where it's NON-real — a different question!)`,
+          solution: [
+            { s: "Undefined has one cause only: dividing by 0 — the ghost under the bed" },
+            { s: `So look at the BOTTOM and set it to 0: x + ${C(m)} = 0` },
+            { s: `x = −${C(m)}`, r: `the root is a different question — that one gives NON-real, at x &lt; −${C(n)}` },
+          ] });
     }
     return mc(DIF, `For which x is <b>${expr}</b> NON-REAL?`,
       `x &lt; −${C(n)} (the inside of the root is negative)`,
       [`x = −${C(m)} (denominator 0)`, `x > −${C(n)}`, `x = −${C(n)}`],
       { hint: "Non-real is about the ROOT: set what's under it less than 0.",
-        answerLabel: `Non-real = negative inside the root: x + ${C(n)} < 0 → x < −${C(n)}. (x = −${C(m)} is where it's UNDEFINED — a different question!)` });
+        answerLabel: `Non-real = negative inside the root: x + ${C(n)} < 0 → x < −${C(n)}. (x = −${C(m)} is where it's UNDEFINED — a different question!)`,
+        solution: [
+          { s: "Non-real has one cause only: a negative sitting under an even root" },
+          { s: `So look INSIDE the root and make it negative: x + ${C(n)} &lt; 0` },
+          { s: `x &lt; −${C(n)}`, r: `the denominator is a different question — that one gives UNDEFINED, at x = −${C(m)}` },
+        ] });
   },
 };
 

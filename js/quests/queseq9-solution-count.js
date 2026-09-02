@@ -113,6 +113,40 @@ function why(p, q, neg, kind) {
   return `The denominator is <b>${q}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even denominator cannot ONLY be ⊖</b> 🙁 — ${root(q, "x")} is never negative. <b>No solution</b>.`;
 }
 
+/* ------------------------------------------------------------
+   THE LADDER, as worked STEPS (2026-09-02 methods batch, session S3).
+   why() above is the one-paragraph answer line; this is the same
+   reasoning walked one rung at a time, so the 📖 method shows HOW the
+   three rules are applied rather than restating the verdict. Pure
+   string building over values the caller has already rolled — no
+   randomness, so the seeded rng stream is untouched. */
+function countLadder(p, q, neg, kind) {
+  const ev = (n) => (n % 2 === 0 ? "EVEN" : "odd");
+  const steps = [
+    { s: `Read the exponent: top = ${p} (${ev(p)}), bottom = ${q} (${ev(q)})`,
+      r: "you never have to solve it — the rules only ask odd or even" },
+    { s: `Read the sign on the right: it is ${neg ? "NEGATIVE" : "positive"}` },
+  ];
+  if (kind === "two") {
+    steps.push({ s: "Even numerator with a positive right-hand side → ± answer",
+      r: "the even power hides the sign, so both a plus and a minus value work" });
+  } else if (kind === "one" && !neg) {
+    steps.push({ s: "Odd numerator, so nothing is hidden and there is no ±",
+      r: `raise both sides to the reciprocal ${p === 1 ? q : `${q}/${p}`} and one value comes out` });
+  } else if (kind === "one") {
+    steps.push({ s: `Only odd numbers, top (${p}) and bottom (${q}), so a negative answer is allowed 🙂`,
+      r: "an odd root of a negative really is negative" });
+  } else if (p % 2 === 0) {
+    steps.push({ s: `The numerator ${p} is even, and an even power can never be ⊖ 🙁`,
+      r: "nothing you square (or raise to any even power) comes out negative" });
+  } else {
+    steps.push({ s: `The denominator ${q} is even, and an even root is never ⊖ 🙁`,
+      r: "so the left side can never reach a negative value" });
+  }
+  steps.push({ s: `∴ ${LABEL[kind]}` });
+  return steps;
+}
+
 const HINTS = [
   "Look at the <b>top</b> and the <b>bottom</b> of the exponent — odd or even? — and then at the sign on the right.",
   "Even numerator → ± answer. Only odd numbers → a negative answer is fine. An even number anywhere, with a negative on the right → it cannot happen.",
@@ -127,7 +161,7 @@ function mc3(prompt, kind, opts) {
     options: TRIO.map((label) => ({ label, correct: label === LABEL[kind] })),
     hint: opts.hint || pick(HINTS),
     answerLabel: opts.answerLabel,
-    solution: [{ s: LABEL[kind] }],
+    solution: opts.solution || [{ s: LABEL[kind] }],
     meta: opts.meta,
   };
 }
@@ -145,7 +179,9 @@ function classify(force, promptFn) {
   return mc3(
     (promptFn || ((s) => `How many solutions does <b>${s}</b> have?`))(e),
     k,
-    { answerLabel: `${e} — ${why(p, q, neg, k)}`, meta: { p, q, neg, kind: k, three: true } },
+    { answerLabel: `${e} — ${why(p, q, neg, k)}`,
+      solution: countLadder(p, q, neg, k),
+      meta: { p, q, neg, kind: k, three: true } },
   );
 }
 
@@ -214,7 +250,11 @@ function solveItem(neg) {
     options,
     hint: "Decide two / one / none FIRST, then multiply the exponent by its reciprocal — whatever you do to the left, do to the right.",
     answerLabel: `${why(it.p, it.q, neg, kind)}<br>${solveWorking(it.p, it.q, it.cAbs, neg, A, kind)}`,
-    solution: [{ s: options.find((o) => o.correct).label }],
+    solution: [
+      ...countLadder(it.p, it.q, neg, kind),
+      { s: solveWorking(it.p, it.q, it.cAbs, neg, A, kind),
+        r: "her layout — whatever you do to the left, do to the right" },
+    ],
     meta: { p: it.p, q: it.q, neg, kind, A, four: true },
   };
 }

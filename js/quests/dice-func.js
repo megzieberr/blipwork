@@ -132,17 +132,28 @@ const QUESTS = [questFn1, questFn2, questFn3, questFn4, questFn5, questFn6, ques
    Otherwise q.method is left undefined and js/play.js simply omits
    the link (it already tolerates absence).
 
-   The two that qualify are both in fn7, and both already follow
-   HER method (GR11-FUNCTIONS-NOTES-DIGEST.md):
+   The two that qualified from the start are both in fn7, and both
+   already follow HER method (GR11-FUNCTIONS-NOTES-DIGEST.md):
      · fn7.avgGradient — m = Δy/Δx, substituting each x into f
        first (her notes p59);
      · fn7.maxLength — AB = top − bottom → a new (sad) parabola →
        x = −b/(2a) → substitute back (her notes p40–45; the Gr11
        route, NOT the Grade-12 derivative the source pages use).
 
-   NO NEW METHOD TEXT IS WRITTEN HERE, and no existing solution
-   text was touched. The 38 skills that ship without one are a
-   separate content batch for Megan to decide on.
+   COVERAGE (2026-09-02 worked-methods batch, session S3): 39 of
+   40 skills now show the link. That batch wrote the missing 38
+   INSIDE each gen(), from her digest: happy/sad, taking off /
+   landing, a>0 decreasing per branch, p flips and q never does,
+   and the CUT-LINES-THEN-PAINT inequality method that replaced
+   the TEKENTABEL — never interval notation, always x first.
+
+   The 40th is fn7.maxLength, a `steps` chain: methodEligible()
+   refuses it because js/play.js renders the 📖 link at mount,
+   BEFORE step 1, so on a chain the link hands over the remaining
+   answers. That refusal is correct, not a gap.
+
+   NO METHOD TEXT IS WRITTEN IN THIS FILE — it only surfaces what
+   each quest module's own gen() already built.
    ------------------------------------------------------------ */
 export function hasRealWorking(q) {
   const sol = q && q.solution;

@@ -32,7 +32,12 @@ const SKILLS = {
     return mc("intersections", "Read the <b>point of intersection</b> of f and g off the graph.",
       ptStr(ix, iy), ptDecoys(ix, iy),
       { graph: spec, hint: "The intersection is the one point on BOTH graphs. Follow the dashed lines to each axis.",
-        answerLabel: `They meet at ${ptStr(ix, iy)}.` });
+        answerLabel: `They meet at ${ptStr(ix, iy)}.`,
+        solution: [
+          { s: "The point of intersection is the one place that lies on BOTH graphs at once" },
+          { s: `Drop the dashed line down to the x-axis: x = ${C(ix)}` },
+          { s: `Run the dashed line across to the y-axis: y = ${C(iy)}`, r: `∴ they meet at ${ptStr(ix, iy)}` },
+        ] });
   },
 
   /* where is f above g? */
@@ -54,7 +59,13 @@ const SKILLS = {
     return mc("intersections", "Use the graph. For which x-values is <b>f(x) &gt; g(x)</b> (f above g)?",
       correct, [wrong, "all real x", `x = ${C(ix)}`],
       { graph: spec, hint: "f &gt; g where the f-line is higher than the g-line. They swap over at the intersection.",
-        answerLabel: `f(x) &gt; g(x) for ${correct}.` });
+        answerLabel: `f(x) &gt; g(x) for ${correct}.`,
+        solution: [
+          { s: `The two lines cross at ${ptStr(ix, iy)}, so cut a line down through x = ${C(ix)}`, r: "that cut is the only place they swap over" },
+          { s: `f has gradient ${C(a1)} and g has gradient ${C(a2)}, so f is the ${fSteeper ? "steeper" : "flatter"} of the two` },
+          { s: `To the right of the cut the steeper line is on top, so f is above g ${fSteeper ? "on the right" : "on the left"}` },
+          { s: `∴ ${correct}`, r: "answer in x, written x first" },
+        ] });
   },
 
   /* nature of roots */
@@ -62,19 +73,35 @@ const SKILLS = {
     const cv = randParabola(), tp = paraTP(cv), happy = paraStd(cv).a > 0;
     const cases = [
       { p: "A parabola that <b>touches</b> the x-axis at exactly one point has…", c: "two equal roots (Δ = 0)",
-        w: ["two unequal roots (Δ &gt; 0)", "non-real roots (Δ &lt; 0)", "no turning point"] },
+        w: ["two unequal roots (Δ &gt; 0)", "non-real roots (Δ &lt; 0)", "no turning point"],
+        sol: [{ s: "The roots ARE the x-intercepts, so count how many times the curve meets the x-axis" },
+              { s: "Touching at exactly one point means the two roots have landed on top of each other" },
+              { s: "That is Δ = 0", r: "her wording: real, rational, equal — only the turning point touches the axis" }] },
       { p: "A parabola that <b>cuts</b> the x-axis at two points has…", c: "two real, unequal roots (Δ &gt; 0)",
-        w: ["two equal roots (Δ = 0)", "non-real roots (Δ &lt; 0)", "no y-intercept"] },
+        w: ["two equal roots (Δ = 0)", "non-real roots (Δ &lt; 0)", "no y-intercept"],
+        sol: [{ s: "The roots ARE the x-intercepts, so count how many times the curve meets the x-axis" },
+              { s: "Two separate crossings means two different answers for x" },
+              { s: "That is Δ &gt; 0", r: "real and unequal — rational if Δ is a perfect □, irrational if not" }] },
       { p: "A parabola that <b>never reaches</b> the x-axis has…", c: "non-real roots (Δ &lt; 0)",
-        w: ["two equal roots (Δ = 0)", "two real roots (Δ &gt; 0)", "a gradient of 0"] },
+        w: ["two equal roots (Δ = 0)", "two real roots (Δ &gt; 0)", "a gradient of 0"],
+        sol: [{ s: "The roots ARE the x-intercepts, so count how many times the curve meets the x-axis" },
+              { s: "It never gets there, so there is no real x that makes y = 0" },
+              { s: "In the formula that means a negative under the √", r: "Δ &lt; 0 → non-real / imaginary" }] },
       happy
-        ? { p: `f has a minimum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &gt; ${C(tp.y)}`, w: [`k &lt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k ≥ ${C(tp.y)}`] }
-        : { p: `f has a maximum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &lt; ${C(tp.y)}`, w: [`k &gt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k ≤ ${C(tp.y)}`] },
+        ? { p: `f has a minimum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &gt; ${C(tp.y)}`, w: [`k &lt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k ≥ ${C(tp.y)}`],
+            sol: [{ s: `y = k is a flat line you slide up and down; f is happy with its lowest point at y = ${C(tp.y)}` },
+                  { s: `Slide the line below ${C(tp.y)} and it misses; land it exactly on ${C(tp.y)} and it touches once, at the turning point` },
+                  { s: `Only above ${C(tp.y)} does it cut both arms`, r: `∴ k &gt; ${C(tp.y)} — strictly greater, since k = ${C(tp.y)} gives one point, not two` }] }
+        : { p: `f has a maximum turning point at ${ptStr(tp.x, tp.y)}. The line y = k cuts f at <b>two</b> points when…`, c: `k &lt; ${C(tp.y)}`, w: [`k &gt; ${C(tp.y)}`, `k = ${C(tp.y)}`, `k ≤ ${C(tp.y)}`],
+            sol: [{ s: `y = k is a flat line you slide up and down; f is sad with its highest point at y = ${C(tp.y)}` },
+                  { s: `Slide the line above ${C(tp.y)} and it misses; land it exactly on ${C(tp.y)} and it touches once, at the turning point` },
+                  { s: `Only below ${C(tp.y)} does it cut both arms`, r: `∴ k &lt; ${C(tp.y)} — strictly less, since k = ${C(tp.y)} gives one point, not two` }] },
     ];
     const k = pick(cases);
     return mc("natureRoots", k.p, k.c, k.w,
       { hint: "Touches once → equal roots (Δ = 0). Cuts twice → Δ &gt; 0. Misses → Δ &lt; 0. The horizontal line y = k meets the parabola twice when it is past the turning-point value.",
-        answerLabel: k.c });
+        answerLabel: k.c,
+        solution: k.sol });
   },
 
   /* average gradient (calc) — the function is shown as an equation AND a graph,

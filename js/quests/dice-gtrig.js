@@ -161,6 +161,23 @@
    change and stays with the foreman. When it lands, delete the
    `q.type !== "steps"` clause in withMethod() below and the 48 chains
    get their link back.
+
+   COVERAGE (2026-09-02 worked-methods batch, session S3): 29 of 67
+   entries show the link, up from 15. The 32 `steps` chains are
+   refused by the rule above, and SIX stay method-less ON PURPOSE:
+   gt2.wheelWord (recite All Strippers Take Cash), gt3.oahRead
+   ("read the table" — the working IS the reading), gt3.quadrantal
+   (read off the graph, her stated route), gt3.reciprocals (the
+   "look at the 3rd letter" mnemonic), and gt6.threeBoxes +
+   gt6.butWhy (both in PURE_RECALL, and both already carry the
+   teaching in their reveal frames). For every one of those six the
+   only "method" possible is the answer itself.
+
+   The 14 that were written follow METHODS-trig.md: the split line
+   above the angle, the ASTC wheel read through x/y/r with r never
+   negative, the two triangles before the O-A-H table (never a
+   9-value grid), and the five TIP Chips including the block-bracket
+   squaring rule and the "but why?" let-K derivation.
    ============================================================ */
 import { questGt2 } from "./questgt2-cartesian.js";
 import { questGt3 } from "./questgt3-special.js";

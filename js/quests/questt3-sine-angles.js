@@ -86,7 +86,17 @@ const SKILLS = {
       `Â = ${A}°, the side opposite Â is a = ${a}, and another side b = ${b}. How many triangles fit this data?`,
       word, ["no triangle", "one triangle", "two triangles"].filter(w => w !== word),
       { hint: "Compare a with h = b·sinÂ. a < h → none; a = h → one (right-angled); h < a < b → two; a ≥ b → one.",
-        answerLabel: `h = b·sinÂ = ${fix(res.h, 2)}. Here ${res.count === 0 ? `a (${a}) < h` : res.count === 2 ? `h < a (${a}) < b (${b})` : `a (${a}) ≥ b (${b})`}, so ${word}.` });
+        answerLabel: `h = b·sinÂ = ${fix(res.h, 2)}. Here ${res.count === 0 ? `a (${a}) < h` : res.count === 2 ? `h < a (${a}) < b (${b})` : `a (${a}) ≥ b (${b})`}, so ${word}.`,
+        solution: [
+          { s: `Drop the height from the top of side b: h = b·sinÂ = ${b}·sin${A}° = ${fix(res.h, 2)}`, r: "the shortest a could possibly be" },
+          { s: `Now place a = ${a} against h = ${fix(res.h, 2)} and b = ${b}` },
+          { s: res.count === 0
+              ? `a = ${a} is shorter than h = ${fix(res.h, 2)}, so it never reaches the base`
+              : res.count === 2
+                ? `h = ${fix(res.h, 2)} &lt; a = ${a} &lt; b = ${b}, so a swings down and cuts the base twice`
+                : `a = ${a} is at least as long as b = ${b}, so it can only reach past the foot on one side`,
+            r: `∴ ${word}` },
+        ] });
   },
 
   /* the full ambiguous calculation: sine rule for the acute angle, then 180° − it */
@@ -148,7 +158,12 @@ const SKILLS = {
     "the sines on top (sinÂ/a = sinB̂/b)",
     ["the sides on top (a/sinÂ = b/sinB̂)", "the angle sum first", "the cosine rule"],
     { hint: "Put the thing you want on top — here, the sine of the angle.",
-      answerLabel: "Finding an angle → sines in the numerators: sinÂ/a = sinB̂/b = sinĈ/c." }),
+      answerLabel: "Finding an angle → sines in the numerators: sinÂ/a = sinB̂/b = sinĈ/c.",
+      solution: [
+        { s: "You are solving for an ANGLE, so the sine you want goes on top" },
+        { s: "sinÂ/a = sinB̂/b = sinĈ/c", r: "still the same rule, just turned upside down" },
+        { s: "One multiply gives sinÂ, then shift-sin gives Â", r: "with the sine underneath you would flip first, which is where marks go" },
+      ] }),
 
   /* when is it ambiguous? */
   ambiguousWhen: () => mc("ambiguousCase",
@@ -156,7 +171,12 @@ const SKILLS = {
     "you use the sine rule with two sides and a non-included angle",
     ["you use the cosine rule", "you know all three angles", "you use the area rule"],
     { hint: "Only the sine rule, and only with SSA (two sides + a non-included angle).",
-      answerLabel: "Ambiguous case = sine rule + SSA. The cosine rule always gives a single answer." }),
+      answerLabel: "Ambiguous case = sine rule + SSA. The cosine rule always gives a single answer.",
+      solution: [
+        { s: "sinθ has the same value at θ and at 180° − θ", r: "that is where the second triangle comes from" },
+        { s: "So a sine-rule answer always has an obtuse partner you have to test" },
+        { s: "cos does NOT do this — a cosine-rule angle comes out negative when it is obtuse", r: "so the cosine rule gives one answer only" },
+      ] }),
 };
 
 export const questT3 = {

@@ -106,7 +106,12 @@ const SKILLS = {
     "(b² + c² − a²) / (2bc)",
     ["(a² + c² − b²) / (2ac)", "(b² + c² + a²) / (2bc)", "(a² − b² − c²) / (2bc)"],
     { hint: "The side opposite the angle you want (a, opposite Â) is the one subtracted on top.",
-      answerLabel: "cosÂ = (b² + c² − a²)/(2bc) — opposite side a² is subtracted; 2bc uses the two sides next to Â." }),
+      answerLabel: "cosÂ = (b² + c² − a²)/(2bc) — opposite side a² is subtracted; 2bc uses the two sides next to Â.",
+      solution: [
+        { s: "Start from the side version: a² = b² + c² − 2bc·cosÂ" },
+        { s: "Move the cos term across and a² back: 2bc·cosÂ = b² + c² − a²", r: "the only negative term left is a²" },
+        { s: "Divide both sides by 2bc: cosÂ = (b² + c² − a²)/(2bc)" },
+      ] }),
 
   /* which side is subtracted */
   oppositeSubtracted: () => mc(NOTE,
@@ -114,7 +119,12 @@ const SKILLS = {
     "the side opposite Â",
     ["the longest side", "either side next to Â", "the shortest side"],
     { hint: "a is opposite Â — its “friend”.",
-      answerLabel: "a is the side opposite the angle you are finding; b and c are the two sides next to it." }),
+      answerLabel: "a is the side opposite the angle you are finding; b and c are the two sides next to it.",
+      solution: [
+        { s: "The bottom is 2bc, and b and c are the two sides that MEET at Â", r: "the arms of the angle" },
+        { s: "That leaves only one side unaccounted for — the one across from Â" },
+        { s: "So a, the side opposite Â, is the one being subtracted on top", r: "same “friends” pairing as the sine rule" },
+      ] }),
 };
 
 export const questT5 = {

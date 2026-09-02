@@ -7,13 +7,31 @@
    Every sign is COMPUTED via astcSign/solutionQuadrants (triglib) —
    nothing here is a hand-typed +/−.
    ============================================================ */
-import { mc, pick, astcWheelSvg, qbandsSpec, BAND } from "./_gtrig.js";
+import { mc, pick, astcWheelSvg, qbandsSpec, BAND, QSIGN } from "./_gtrig.js";
 import { astcSign, solutionQuadrants } from "../triglib.js";
 
 const CON = "gtrigAstc";
 const FN = ["sin", "cos", "tan"];
 const CIRC = { 1: "①", 2: "②", 3: "③", 4: "④" };
 const WORD = { 1: "All", 2: "Strippers", 3: "Take", 4: "Cash" };
+
+/* ---- worked-method helpers (2026-09-02 methods batch, session S3) ----
+   Both are pure string builders over values the skill has ALREADY rolled —
+   they call no randomness, so the seeded rng stream is untouched. Names
+   checked against the whole of js/ before they were added. */
+const astcPositiveIn = quad => FN.filter(f => astcSign(f, quad) > 0);          // which ratios are + in a quadrant
+const xyWordsIn = (quad) => {                                                   // "x is negative and y is positive"
+  const [x, y] = QSIGN[quad];
+  return { x: x > 0 ? "positive" : "negative", y: y > 0 ? "positive" : "negative" };
+};
+const RATIO_OF = { sin: "y/r", cos: "x/r", tan: "y/x" };                        // METHODS-trig A5 (p04)
+const QLIST = qs => qs.map(q => CIRC[q]).join(" and ");
+/* why a ratio carries the sign it does — the r-is-never-negative argument */
+const SIGN_STORY = {
+  sin: "r is a radius, so it is never negative — the sign of sin follows y alone: y is + above the x-axis (① and ②), − below it (③ and ④)",
+  cos: "r is a radius, so it is never negative — the sign of cos follows x alone: x is + on the right (① and ④), − on the left (② and ③)",
+  tan: "tan = y/x has no r in it: it is + when x and y carry the SAME sign (① and ③), − when they differ (② and ④)",
+};
 
 function reveal(q, frames, mode) { q.reveal = frames; if (mode) q.revealMode = mode; return q; }
 
@@ -52,7 +70,13 @@ const SKILLS = {
       sign > 0 ? posLabel : negLabel, [sign > 0 ? negLabel : posLabel, `exactly zero throughout ${x0}°–${x1}°`],
       { hint: "Read the shading and the picture — above the line is +, below is −.",
         graph: qbandsSpec(fn),
-        answerLabel: `${CIRC[quad]} (${x0}°–${x1}°): ${sign > 0 ? posLabel : negLabel}.` });
+        answerLabel: `${CIRC[quad]} (${x0}°–${x1}°): ${sign > 0 ? posLabel : negLabel}.`,
+        solution: [
+          { s: `${x0}° to ${x1}° is quadrant ${CIRC[quad]}`, r: `All ① Strippers ② Take ③ Cash ④ — ${CIRC[quad]} is “${WORD[quad]}”` },
+          { s: `In ${CIRC[quad]} the positive ratios are: ${astcPositiveIn(quad).join(", ")}` },
+          { s: `${fn} is ${sign > 0 ? "on that list, so it is positive" : "not on that list, so it is negative"} in ${CIRC[quad]}`,
+            r: `${sign > 0 ? "positive → the curve sits above the x-axis" : "negative → the curve dips below the x-axis"}` },
+        ] });
   },
 
   /* B3 — tap every quadrant where a ratio is positive/negative */
@@ -67,6 +91,12 @@ const SKILLS = {
       correct,
       hint: "All Strippers Take Cash — the story word order tells you the sign in each quadrant.",
       answerLabel: `${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${correct.map(q => CIRC[q]).join(" and ")}.`,
+      solution: [
+        { s: `${fn} θ = ${RATIO_OF[fn]}`, r: "start from what the ratio is made of" },
+        { s: SIGN_STORY[fn] },
+        { s: `So ${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${QLIST(correct)}`,
+          r: `check it against All Strippers Take Cash — ${correct.map(q => WORD[q]).join(" and ")}` },
+      ],
     };
   },
 
@@ -77,7 +107,17 @@ const SKILLS = {
     const sign = astcSign(fn, quad);
     return mc(CON, `θ is in quadrant ${CIRC[quad]}. ${fn} θ is…`,
       sign > 0 ? "positive" : "negative", [sign > 0 ? "negative" : "positive", "zero"],
-      { hint: "All Strippers Take Cash.", answerLabel: `${CIRC[quad]} → ${fn} θ is ${sign > 0 ? "positive" : "negative"}.` });
+      { hint: "All Strippers Take Cash.", answerLabel: `${CIRC[quad]} → ${fn} θ is ${sign > 0 ? "positive" : "negative"}.`,
+        solution: (() => {
+          const w = xyWordsIn(quad);
+          return [
+            { s: `Put a point in ${CIRC[quad]} and drop x and y to the axes: x is ${w.x}, y is ${w.y}` },
+            { s: fn === "tan"
+                ? `tan θ = y/x, so divide a ${w.y} by a ${w.x}`
+                : `${fn} θ = ${RATIO_OF[fn]}, and r is never negative, so the sign comes from ${fn === "sin" ? `y (${w.y})` : `x (${w.x})`}` },
+            { s: `∴ ${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${CIRC[quad]}`, r: `“${WORD[quad]}” in All Strippers Take Cash` },
+          ];
+        })() });
   },
 
   /* B5 — WHY: x/r or y/r sign, r always positive */
@@ -96,7 +136,13 @@ const SKILLS = {
     return mc(CON, `In quadrant ${CIRC[quad]}, ${fn} θ = ${fn === "cos" ? "x/r" : "y/r"} is ${astcSign(fn, quad) > 0 ? "positive" : "negative"} because…`,
       reason, [decoy1, decoy2],
       { hint: "\"always positive bc it is the radius\" — r never carries the minus. Only x or y can flip the sign.",
-        answerLabel: `${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}: ${reason}.` });
+        answerLabel: `${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}: ${reason}.`,
+        solution: [
+          { s: `Mark a point in ${CIRC[quad]} and drop x and y to the axes: x is ${xSign}, y is ${ySign}` },
+          { s: `r is the radius from the origin out to the point — a length`, r: "a length is never negative, so r stays positive in every quadrant" },
+          { s: `${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}, so only ${fn === "cos" ? "x" : "y"} can put a minus in`,
+            r: `here ${fn === "cos" ? `x is ${xSign}` : `y is ${ySign}`}, so ${fn} θ is ${astcSign(fn, quad) > 0 ? "positive" : "negative"}` },
+        ] });
   },
 
   /* B6 — all positive / only one positive */
@@ -113,6 +159,14 @@ const SKILLS = {
       prompt: it.prompt, correct: it.correct,
       hint: "All Strippers Take Cash: ① all three, ② sin only, ③ tan only, ④ cos only.",
       answerLabel: `${it.prompt.replace("Tap the quadrant where", "That's")} ${CIRC[it.correct[0]]}.`,
+      solution: (() => {
+        const q = it.correct[0], w = xyWordsIn(q), pos = astcPositiveIn(q);
+        return [
+          { s: `Go round the wheel and check what is positive in each quadrant`, r: "All ① Strippers ② Take ③ Cash ④" },
+          { s: `In ${CIRC[q]}, x is ${w.x} and y is ${w.y}, so the positive ratios are: ${pos.join(", ")}` },
+          { s: `That is the only quadrant that matches`, r: `∴ ${CIRC[q]} — “${WORD[q]}”` },
+        ];
+      })(),
     };
   },
 
@@ -127,7 +181,12 @@ const SKILLS = {
     return mc(CON, `sin θ is ${sinWord} and cos θ is ${cosWord}. Which quadrant is θ in?`,
       CIRC[p.q], [1, 2, 3, 4].filter(x => x !== p.q).map(x => CIRC[x]),
       { hint: "Only one quadrant matches both signs at once — check each against All Strippers Take Cash.",
-        answerLabel: `sin ${sinWord}, cos ${cosWord} → only ${CIRC[p.q]} (${WORD[p.q]}) fits both.` });
+        answerLabel: `sin ${sinWord}, cos ${cosWord} → only ${CIRC[p.q]} (${WORD[p.q]}) fits both.`,
+        solution: [
+          { s: `sin θ ${sinWord}: sin = y/r, so y must be ${sinWord} → ${QLIST(solutionQuadrants("sin", p.sin))}` },
+          { s: `cos θ ${cosWord}: cos = x/r, so x must be ${cosWord} → ${QLIST(solutionQuadrants("cos", p.cos))}` },
+          { s: `${CIRC[p.q]} is on both lists`, r: `∴ θ lies in ${CIRC[p.q]} — “${WORD[p.q]}”` },
+        ] });
   },
 };
 

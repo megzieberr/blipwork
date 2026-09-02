@@ -86,18 +86,27 @@
    dealing goes fully random.
 
    ---------- METHOD (DICE-COMMON's method rule) ----------
-   q.method feeds the always-available "📖 Show me the method" link. In
-   THIS chapter every question carries only the builders' DEFAULT
+   q.method feeds the always-available "📖 Show me the method" link.
+
+   COVERAGE (2026-09-02 worked-methods batch, session S3): 42 of 43.
+   Before that batch every question carried only the builders' DEFAULT
    solution — _shared.js's mc() sets solution = [{ s: <the correct
-   option label> }] and _exp.js's ynQ() sets it to [{ s: answerLabel }].
-   A single step that just restates the answer is a spoiler button, not
-   a method, so hasRealWorking() below rejects all 43 and q.method is
-   left undefined everywhere; js/play.js simply omits the link. Writing
-   worked method text for a theory chapter is a separate content batch
-   for Megan to decide on (the language would follow METHODS-algebra.md
-   Part A) — DICE-COMMON forbids inventing it here. The learner still
-   gets the module's own vetted explanation in the wrong-answer
-   "Show me the steps" panel, exactly as in static play.
+   option label> }] and _exp.js's ynQ() sets it to [{ s: answerLabel }]
+   — so hasRealWorking() rejected all 43 and the link was a spoiler
+   button waiting to happen. The batch wrote real working INSIDE each
+   gen(), following METHODS-algebra.md Part A: her law NAMES (product
+   rule, depressed exponents, flipped fractions), divorce and "caged",
+   tickets out, KFC, the BIG NO-NO, guns and helmets, and "ALWAYS test
+   both answers!!".
+
+   ONE stays method-less ON PURPOSE — es1.nameLaw, which asks for the
+   NAME of a law it has already printed in full. The only "working"
+   possible there is her name for it, which is the answer, so a link
+   would be the spoiler button this rule exists to prevent. Its
+   teaching lives in the hint and the "I'm lost" card.
+
+   NO METHOD TEXT IS WRITTEN IN THIS FILE — it only surfaces what each
+   quest module's own gen() already built.
    ============================================================ */
 import { questEs1 } from "./queses1-laws.js";
 import { questEs2 } from "./queses2-traps.js";

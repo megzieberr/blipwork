@@ -30,8 +30,8 @@ const SKILLS = {
       `For the quadratic pattern <b>${list(seq)} ; …</b>, find the gap between T${C(k)} and T${C(k + 1)}, that is T${C(k + 1)} − T${C(k)}.`,
       gapAt(g1, sd, k),
       { graph: pyramid(seq, { showFirst: true, showSecond: true, accent: ACC }),
-        hint: `The gaps form a linear pattern: first gap = ${C(g1)}, changing by ${C(sd)} each time. Gap between Tₖ and Tₖ₊₁ = ${C(g1)} + (k − 1)(${C(sd)}).`,
-        answerLabel: `Gap = ${C(g1)} + (${C(k)} − 1)(${C(sd)}) = ${C(gapAt(g1, sd, k))}.`,
+        hint: `The gaps form a linear pattern: first gap = ${C(g1)}, changing by ${C(sd)} each time. Build gapₙ = an + c: a = ${C(sd)}, c = gap₀ = ${C(g1)} − ${P(sd)} = ${C(gapC0(g1, sd))}. Then put n = ${C(k)} in.`,
+        answerLabel: `gapₙ = ${gapForm(g1, sd)}, so gap ${C(k)} = ${gapForm(g1, sd).replace("n", `(${C(k)})`)} = ${C(gapAt(g1, sd, k))}.`,
         solution: [
           { s: `The gaps are ${list(firstDiffs(seq))} — an arithmetic pattern`, r: `they change by ${C(sd)} each time` },
           { s: `a = ${C(sd)} and c = gap₀ = ${C(g1)} − ${P(sd)} = ${C(gapC0(g1, sd))}  →  gapₙ = ${gapForm(g1, sd)}`, r: "Tₙ = an + c" },
@@ -49,7 +49,7 @@ const SKILLS = {
       `For <b>${list(seq)} ; …</b>, the gap Tₙ₊₁ − Tₙ between two consecutive terms is ${C(value)}. Find n.`,
       n,
       { allowNeg: false,
-        hint: `Set the gap-formula equal: ${C(g1)} + (n − 1)(${C(sd)}) = ${C(value)}, then solve for n.`,
+        hint: `Build gapₙ = an + c first (a = ${C(sd)}, c = gap₀ = ${C(gapC0(g1, sd))}), then set it equal to ${C(value)} and solve for n.`,
         answerLabel: `n = ${C(n)} (the gap between T${C(n)} and T${C(n + 1)}).`,
         solution: [
           { s: `The gaps are arithmetic: a = ${C(sd)}, c = gap₀ = ${C(g1)} − ${P(sd)} = ${C(gapC0(g1, sd))}`, r: "Tₙ = an + c" },

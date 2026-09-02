@@ -49,7 +49,13 @@ const SKILLS = {
     return mc(CON, `To solve <b>x^(${p}/${q}) = ${k}</b>, raise both sides to the power:`,
       `${q}/${p}`, [`${p}/${q}`, `−${p}/${q}`, `${q}`],
       { hint: "Multiply the exponent by its reciprocal so it becomes 1.",
-        answerLabel: `Use the reciprocal of ${p}/${q}, which is ${q}/${p}; then (${p}/${q})·(${q}/${p}) = 1 and x is on its own.` });
+        answerLabel: `Use the reciprocal of ${p}/${q}, which is ${q}/${p}; then (${p}/${q})·(${q}/${p}) = 1 and x is on its own.`,
+        solution: [
+          { s: `x is stuck under the exponent ${p}/${q}, so you need a power that cancels it` },
+          { s: `Switch the numerator and denominator: the reciprocal of ${p}/${q} is ${q}/${p}` },
+          { s: `Raising to that power gives (${p}/${q})·(${q}/${p}) = 1, so x¹ = x stands alone`,
+            r: `then the right side becomes ${k}^(${q}/${p})` },
+        ] });
   },
 
   /* why the reciprocal */
@@ -57,13 +63,24 @@ const SKILLS = {
     "Why do we raise both sides to the <b>reciprocal</b> of the exponent?",
     "So the exponents multiply to 1 and x is left on its own",
     ["To make the right side a whole number", "To change x into a surd", "To remove the negative sign"],
-    { hint: "(p/q) × (q/p) = ?", answerLabel: "(p/q)·(q/p) = 1, so x¹ = x is isolated." }),
+    { hint: "(p/q) × (q/p) = ?", answerLabel: "(p/q)·(q/p) = 1, so x¹ = x is isolated.",
+      solution: [
+        { s: "Raising a power to a power MULTIPLIES the exponents: (x^(p/q))^(q/p) = x^((p/q)·(q/p))" },
+        { s: "A fraction times its own reciprocal is 1, because the tops and bottoms cancel" },
+        { s: "So the exponent becomes 1 and you are left with plain x", r: "that is the only reason the reciprocal is chosen" },
+      ] }),
 
   /* the no-solution rule */
   noSolutionRule: () => ynQ(CON,
     "An <b>even root</b> of a <b>negative</b> number (like x^(1/2) = −4) gives a non-real result, so there is no real solution. True or false?",
     true,
-    { hint: "Can the square root of a negative be a real number?", answerLabel: "True — an even root of a negative is non-real, so the equation has no real solution." }),
+    { hint: "Can the square root of a negative be a real number?", answerLabel: "True — an even root of a negative is non-real, so the equation has no real solution.",
+      solution: [
+        { s: "x^(1/2) means √x, and the 2 underneath is an EVEN root" },
+        { s: "Squaring any real number gives a positive answer, so no real number squares back to a negative" },
+        { s: "∴ true — the even root of a negative is non-real, so there is no real solution",
+          r: "an ODD root would be fine: ³√(−8) = −2" },
+      ] }),
 };
 
 export const questEs7 = {

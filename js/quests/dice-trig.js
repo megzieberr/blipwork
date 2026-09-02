@@ -88,7 +88,16 @@ const QUESTS = [questT1, questT2, questT3, questT4, questT5, questT6, questT7];
      • its single step's text is not just the answer — i.e. it differs
        from q.answerLabel AND from the correct option's label.
    Otherwise q.method is left undefined and js/play.js simply omits the
-   link. No new teaching text is written here; nothing is rewritten. */
+   link. No method text is written in THIS file; it only surfaces what
+   each quest module's own gen() already built.
+
+   COVERAGE (2026-09-02 worked-methods batch, session S3): 19 of 36
+   skills show the link, and the other 17 are all `steps` chains that
+   methodEligible() correctly refuses (the link renders before step 1).
+   Every non-chain skill in the chapter now has one: that batch wrote
+   the missing 17, all textbook 2D-trig method — matched pairs
+   ("friends"), the h = b·sinA ambiguous-case test, and the cosine rule
+   rearranged for an angle. */
 const strip = s => String(s == null ? "" : s).replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 
 export function hasRealWorking(q) {

@@ -54,17 +54,31 @@ const SKILLS = {
   restriction: () => ynQ(CON,
     "After a trinomial gives roots like <b>k = 4</b> or <b>k = −9</b> (with k = 3ˣ), you keep <b>both</b> roots. True or false?",
     false,
-    { hint: "Can 3ˣ ever be a negative number?", answerLabel: "False — 3ˣ is always positive, so k = −9 is rejected; only k = 4 (3ˣ = 4) gives a solution." }),
+    { hint: "Can 3ˣ ever be a negative number?", answerLabel: "False — 3ˣ is always positive, so k = −9 is rejected; only k = 4 (3ˣ = 4) gives a solution.",
+      solution: [
+        { s: "Always substitute back: k = 3ˣ, so the two branches read 3ˣ = 4 and 3ˣ = −9" },
+        { s: "3 is a positive base, and a positive base can never reach a negative value", r: "3ˣ ≠ −9 ∴ no solution on that branch" },
+        { s: "∴ false — only k = 4 survives, and stopping at k would lose the mark anyway" },
+      ] }),
 
   /* number of terms → method */
   byShape: () => {
     const items = [
-      { q: "An expression has <b>three terms</b> (a squared power, a single power and a constant). Which method?", correct: "Trinomial", wrongs: ["Difference of squares", "Common factor", "Grouping"], ans: "Three terms in one power → trinomial (let k = baseˣ)." },
-      { q: "An expression has <b>two terms</b>, a subtraction, and both are perfect squares. Which method?", correct: "Difference of squares", wrongs: ["Trinomial", "Common factor", "Grouping"], ans: "Two squares with a minus → difference of squares." },
-      { q: "An expression has <b>four terms</b> that split into two matching pairs. Which method?", correct: "Grouping", wrongs: ["Trinomial", "Difference of squares", "Common factor"], ans: "Four terms in two pairs → grouping." },
+      { q: "An expression has <b>three terms</b> (a squared power, a single power and a constant). Which method?", correct: "Trinomial", wrongs: ["Difference of squares", "Common factor", "Grouping"], ans: "Three terms in one power → trinomial (let k = baseˣ).",
+        sol: [{ s: "Count the terms first — three of them, and one is the square of another" },
+              { s: "That is the K², K, constant shape, so let K = baseˣ" },
+              { s: "It becomes an ordinary quadratic in K, which factorises into two brackets", r: "and always substitute back at the end" }] },
+      { q: "An expression has <b>two terms</b>, a subtraction, and both are perfect squares. Which method?", correct: "Difference of squares", wrongs: ["Trinomial", "Common factor", "Grouping"], ans: "Two squares with a minus → difference of squares.",
+        sol: [{ s: "Count the terms — two of them, joined by a minus" },
+              { s: "Both are perfect squares, so it fits a² − b² = (a − b)(a + b)", r: "her “diff in □'s”" },
+              { s: "With a plus between them it would not factorise at all", r: "the minus is what makes it work" }] },
+      { q: "An expression has <b>four terms</b> that split into two matching pairs. Which method?", correct: "Grouping", wrongs: ["Trinomial", "Difference of squares", "Common factor"], ans: "Four terms in two pairs → grouping.",
+        sol: [{ s: "Count the terms — four, which is too many for a trinomial" },
+              { s: "Take a common factor out of the first pair and out of the second pair" },
+              { s: "If the same bracket is left over in both, that bracket comes out as one factor", r: "that leftover bracket matching is the point of grouping" }] },
     ];
     const it = pick(items);
-    return mc(CON, it.q, it.correct, it.wrongs, { hint: "The number of terms and their shape pick the method.", answerLabel: it.ans });
+    return mc(CON, it.q, it.correct, it.wrongs, { hint: "The number of terms and their shape pick the method.", answerLabel: it.ans, solution: it.sol });
   },
 };
 

@@ -227,16 +227,37 @@ const SKILLS = {
   /* strategy: name the rule for a described situation */
   strategy: () => {
     const cases = [
-      { p: "You know all three sides and want the biggest angle.", c: "Cosine rule" },
-      { p: "You know two angles and one side and want another side.", c: "Sine rule" },
-      { p: "You know two sides and the angle between them and want the area.", c: "Area rule" },
-      { p: "You know two sides and the angle between them and want the third side.", c: "Cosine rule" },
+      { p: "You know all three sides and want the biggest angle.", c: "Cosine rule",
+        sol: [
+          { s: "Three sides given, no angle at all", r: "the sine rule needs an angle to start" },
+          { s: "cosÂ = (b² + c² − a²)/(2bc) works from sides only" },
+          { s: "Put the LONGEST side in the a slot", r: "the biggest angle faces the longest side" },
+        ] },
+      { p: "You know two angles and one side and want another side.", c: "Sine rule",
+        sol: [
+          { s: "Two angles and a side: the third angle is 180° − the other two, so every angle is known" },
+          { s: "That gives a side paired with the angle opposite it", r: "friends — exactly what the sine rule needs" },
+          { s: "Solving for a side, so sides on top: a/sinÂ = b/sinB̂" },
+        ] },
+      { p: "You know two sides and the angle between them and want the area.", c: "Area rule",
+        sol: [
+          { s: "The question asks for AREA, which rules out the sine and cosine rules straight away" },
+          { s: "Area = ½·b·c·sinÂ needs two sides and the angle between them" },
+          { s: "That is exactly what you were given, so it goes straight in" },
+        ] },
+      { p: "You know two sides and the angle between them and want the third side.", c: "Cosine rule",
+        sol: [
+          { s: "The angle sits BETWEEN the two known sides, so no side is paired with a known opposite angle" },
+          { s: "No pair means the sine rule cannot start" },
+          { s: "a² = b² + c² − 2bc·cosÂ is built for two sides plus the angle between them" },
+        ] },
     ];
     const k = pick(cases);
     return mc("mixedStrategy", k.p + " Which rule?", k.c,
       ["Sine rule", "Cosine rule", "Area rule"].filter(r => r !== k.c),
       { hint: "Side + opposite angle → sine. Included angle (or 3 sides) → cosine. Area from 2 sides + included angle → area rule.",
-        answerLabel: `${k.c}.` });
+        answerLabel: `${k.c}.`,
+        solution: k.sol });
   },
 };
 

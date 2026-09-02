@@ -1040,8 +1040,8 @@ export const CONCEPTS = {
         <li>common difference = the constant <b>second difference</b>.</li>
       </ul>
       <p>So a question about a gap becomes a question about a term of that linear gap-pattern:</p>
-      <div class="formula">gap between Tₖ and Tₖ₊₁ = the kth term of the gap-pattern = (first gap) + (k − 1)(second difference)</div>
-      <div class="eg">−5 ; 0 ; 7 ; 16 ; 27 → gaps 5 ; 7 ; 9 ; 11 (linear, common difference 2).</div>`,
+      <div class="formula">gap between Tₖ and Tₖ₊₁ = the kth term of the gap-pattern<br>gapₙ = an + c &nbsp;&nbsp;(a = the second difference, c = gap₀ = first gap − a)</div>
+      <div class="eg">−5 ; 0 ; 7 ; 16 ; 27 → gaps 5 ; 7 ; 9 ; 11 (linear, common difference 2). So a = 2, c = 5 − 2 = 3, and gapₙ = 2n + 3. The gap between T₁₀ and T₁₁ is 2(10) + 3 = 23.</div>`,
   },
   patGeometric: {
     title: "Geometric patterns → Tₙ = a·rⁿ⁻¹",

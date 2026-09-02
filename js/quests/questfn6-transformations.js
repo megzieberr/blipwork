@@ -14,44 +14,77 @@ const SKILLS = {
   shiftRule: () => {
     const k = randInt(2, 5);
     const cases = [
-      { p: `How do you shift f(x) <b>up</b> by ${k}?`, c: `f(x) + ${k}`, w: [`f(x) − ${k}`, `f(x + ${k})`, `f(x − ${k})`] },
-      { p: `How do you shift f(x) <b>down</b> by ${k}?`, c: `f(x) − ${k}`, w: [`f(x) + ${k}`, `f(x − ${k})`, `f(x + ${k})`] },
-      { p: `How do you shift f(x) <b>right</b> by ${k}?`, c: `f(x − ${k})`, w: [`f(x + ${k})`, `f(x) − ${k}`, `f(x) + ${k}`] },
-      { p: `How do you shift f(x) <b>left</b> by ${k}?`, c: `f(x + ${k})`, w: [`f(x − ${k})`, `f(x) + ${k}`, `f(x) − ${k}`] },
+      { p: `How do you shift f(x) <b>up</b> by ${k}?`, c: `f(x) + ${k}`, w: [`f(x) − ${k}`, `f(x + ${k})`, `f(x − ${k})`],
+        sol: [{ s: "Up and down change the ANSWER, so the number goes OUTSIDE the bracket" },
+              { s: `Every y-value has to come out ${k} bigger: f(x) + ${k}`, r: "nothing happens to x, so nothing moves sideways" }] },
+      { p: `How do you shift f(x) <b>down</b> by ${k}?`, c: `f(x) − ${k}`, w: [`f(x) + ${k}`, `f(x − ${k})`, `f(x + ${k})`],
+        sol: [{ s: "Up and down change the ANSWER, so the number goes OUTSIDE the bracket" },
+              { s: `Every y-value has to come out ${k} smaller: f(x) − ${k}`, r: "nothing happens to x, so nothing moves sideways" }] },
+      { p: `How do you shift f(x) <b>right</b> by ${k}?`, c: `f(x − ${k})`, w: [`f(x + ${k})`, `f(x) − ${k}`, `f(x) + ${k}`],
+        sol: [{ s: "Left and right change what you FEED IN, so the number goes INSIDE the bracket with the x" },
+              { s: `Moving right means the value that used to appear at 0 must now appear at ${k}` },
+              { s: `So the bracket has to take that ${k} back off again: f(x − ${k})`, r: "that is why “right” is written with a minus" }] },
+      { p: `How do you shift f(x) <b>left</b> by ${k}?`, c: `f(x + ${k})`, w: [`f(x − ${k})`, `f(x) + ${k}`, `f(x) − ${k}`],
+        sol: [{ s: "Left and right change what you FEED IN, so the number goes INSIDE the bracket with the x" },
+              { s: `Moving left means the value that used to appear at 0 must now appear at −${k}` },
+              { s: `So the bracket has to add the ${k} back on: f(x + ${k})`, r: "that is why “left” is written with a plus" }] },
     ];
     const c = pick(cases);
     return mc("transformations", c.p, c.c, c.w,
       { hint: "Up/down change the WHOLE function: f(x) ± k. Left/right go INSIDE with x: left is f(x + k), right is f(x − k).",
-        answerLabel: c.c });
+        answerLabel: c.c,
+        solution: c.sol });
   },
 
   /* describe a given shift */
   shiftDescribe: () => {
     const k = randInt(2, 5);
     const cases = [
-      { p: `<b>f(x) + ${k}</b> shifts the graph…`, c: `up by ${k}`, w: [`down by ${k}`, `right by ${k}`, `left by ${k}`] },
-      { p: `<b>f(x) − ${k}</b> shifts the graph…`, c: `down by ${k}`, w: [`up by ${k}`, `left by ${k}`, `right by ${k}`] },
-      { p: `<b>f(x − ${k})</b> shifts the graph…`, c: `right by ${k}`, w: [`left by ${k}`, `up by ${k}`, `down by ${k}`] },
-      { p: `<b>f(x + ${k})</b> shifts the graph…`, c: `left by ${k}`, w: [`right by ${k}`, `down by ${k}`, `up by ${k}`] },
+      { p: `<b>f(x) + ${k}</b> shifts the graph…`, c: `up by ${k}`, w: [`down by ${k}`, `right by ${k}`, `left by ${k}`],
+        sol: [{ s: `The ${k} sits OUTSIDE the bracket, so it changes the answer, not the input` },
+              { s: `Every y-value comes out ${k} bigger, so the whole graph lifts`, r: `∴ up by ${k}` }] },
+      { p: `<b>f(x) − ${k}</b> shifts the graph…`, c: `down by ${k}`, w: [`up by ${k}`, `left by ${k}`, `right by ${k}`],
+        sol: [{ s: `The ${k} sits OUTSIDE the bracket, so it changes the answer, not the input` },
+              { s: `Every y-value comes out ${k} smaller, so the whole graph drops`, r: `∴ down by ${k}` }] },
+      { p: `<b>f(x − ${k})</b> shifts the graph…`, c: `right by ${k}`, w: [`left by ${k}`, `up by ${k}`, `down by ${k}`],
+        sol: [{ s: `The ${k} is INSIDE the bracket with the x, so it changes what gets fed in` },
+              { s: `Put x = ${k} in and the bracket gives f(0) — the value that used to sit at 0 now shows up at ${k}` },
+              { s: `Everything slides ${k} to the RIGHT`, r: "the minus inside the bracket moves the graph the opposite way" }] },
+      { p: `<b>f(x + ${k})</b> shifts the graph…`, c: `left by ${k}`, w: [`right by ${k}`, `down by ${k}`, `up by ${k}`],
+        sol: [{ s: `The ${k} is INSIDE the bracket with the x, so it changes what gets fed in` },
+              { s: `Put x = −${k} in and the bracket gives f(0) — the value that used to sit at 0 now shows up at −${k}` },
+              { s: `Everything slides ${k} to the LEFT`, r: "the plus inside the bracket moves the graph the opposite way" }] },
     ];
     const c = pick(cases);
     return mc("transformations", c.p, c.c, c.w,
       { hint: "± outside the bracket = up/down. The bit with x flips the direction: (x − k) moves right, (x + k) moves left.",
-        answerLabel: c.c });
+        answerLabel: c.c,
+        solution: c.sol });
   },
 
   /* reflections */
   reflect: () => {
     const cases = [
-      { p: "Reflection in the <b>x-axis</b> is written…", c: "−f(x)", w: ["f(−x)", "f(x)⁻¹", "−f(−x)"] },
-      { p: "Reflection in the <b>y-axis</b> is written…", c: "f(−x)", w: ["−f(x)", "f(x) − 1", "−f(−x)"] },
-      { p: "<b>−f(x)</b> reflects the graph in the…", c: "x-axis (the y-values change sign)", w: ["y-axis (the x-values change sign)", "line y = x", "origin only"] },
-      { p: "<b>f(−x)</b> reflects the graph in the…", c: "y-axis (the x-values change sign)", w: ["x-axis (the y-values change sign)", "line y = x", "origin only"] },
+      { p: "Reflection in the <b>x-axis</b> is written…", c: "−f(x)", w: ["f(−x)", "f(x)⁻¹", "−f(−x)"],
+        sol: [{ s: "Folding over the x-axis turns a point (x ; y) into (x ; −y)", r: "only the y-value flips" },
+              { s: "The y-value is the ANSWER, so the minus goes in front of the whole function", r: "∴ −f(x)" }] },
+      { p: "Reflection in the <b>y-axis</b> is written…", c: "f(−x)", w: ["−f(x)", "f(x) − 1", "−f(−x)"],
+        sol: [{ s: "Folding over the y-axis turns a point (x ; y) into (−x ; y)", r: "only the x-value flips" },
+              { s: "The x-value is the INPUT, so the minus goes on the x only", r: "∴ f(−x)" }] },
+      { p: "<b>−f(x)</b> reflects the graph in the…", c: "x-axis (the y-values change sign)", w: ["y-axis (the x-values change sign)", "line y = x", "origin only"],
+        sol: [{ s: "The minus sits on the whole function, so every answer comes out with its sign flipped" },
+              { s: "(x ; y) becomes (x ; −y): the point keeps its place left-to-right and swaps top for bottom" },
+              { s: "That fold is over the x-axis" }] },
+      { p: "<b>f(−x)</b> reflects the graph in the…", c: "y-axis (the x-values change sign)", w: ["x-axis (the y-values change sign)", "line y = x", "origin only"],
+        sol: [{ s: "The minus sits on the x only, so every input goes in with its sign flipped" },
+              { s: "(x ; y) becomes (−x ; y): the point keeps its height and swaps left for right" },
+              { s: "That fold is over the y-axis" }] },
     ];
     const c = pick(cases);
     return mc("transformations", c.p, c.c, c.w,
       { hint: "Negative on the WHOLE function → reflect in the x-axis. Negative on the x only → reflect in the y-axis.",
-        answerLabel: c.c });
+        answerLabel: c.c,
+        solution: c.sol });
   },
 
   /* vertical stretch */
@@ -61,7 +94,12 @@ const SKILLS = {
       "Stretches it vertically (the y-values grow)",
       ["Shifts it up by k", "Reflects it in the x-axis", "Shifts it right by k"],
       { hint: "Multiplying the whole function by k scales every y-value by k — a vertical stretch (k &gt; 1) or shrink (0 &lt; k &lt; 1).",
-        answerLabel: "A vertical stretch by a factor of k." });
+        answerLabel: "A vertical stretch by a factor of k.",
+        solution: [
+          { s: "k·f(x) multiplies the ANSWER by k, so every y-value becomes k times as big" },
+          { s: "The x is untouched, so no point moves left or right", r: "the x-intercepts stay exactly where they were" },
+          { s: "With k &gt; 1 every point is pulled further from the x-axis — a vertical stretch", r: "0 &lt; k &lt; 1 would squash it towards the axis instead" },
+        ] });
   },
 
   /* apply a reflection to a parabola's turning point */
@@ -78,7 +116,13 @@ const SKILLS = {
       { graph: g.spec,
         hint: inX ? "Reflection in the x-axis is −f(x): only the y-coordinate changes sign."
                   : "Reflection in the y-axis is f(−x): only the x-coordinate changes sign.",
-        answerLabel: `New turning point ${ptStr(nx, ny)}.` });
+        answerLabel: `New turning point ${ptStr(nx, ny)}.`,
+        solution: [
+          { s: inX ? "Reflection in the x-axis is −f(x): every y-value changes sign and x stays put"
+                   : "Reflection in the y-axis is f(−x): every x-value changes sign and y stays put" },
+          { s: `Do that to the turning point ${ptStr(tp.x, tp.y)}: ${inX ? `y goes ${C(tp.y)} → ${C(ny)}, x stays ${C(nx)}` : `x goes ${C(tp.x)} → ${C(nx)}, y stays ${C(ny)}`}` },
+          { s: `∴ new turning point ${ptStr(nx, ny)}`, r: "only ONE coordinate ever changes in a reflection like this" },
+        ] });
   },
 
   /* apply a shift to a parabola's turning point */
@@ -92,7 +136,12 @@ const SKILLS = {
       ptStr(tp.x, ny), [ptStr(tp.x, up ? tp.y - k : tp.y + k), ptStr(up ? tp.x + k : tp.x - k, tp.y), ptStr(tp.x, tp.y)],
       { graph: g.spec,
         hint: "Up/down only changes the y-coordinate. x stays the same.",
-        answerLabel: `New turning point ${ptStr(tp.x, ny)}.` });
+        answerLabel: `New turning point ${ptStr(tp.x, ny)}.`,
+        solution: [
+          { s: `Shifting ${up ? "up" : "down"} moves everything vertically, so only the y-coordinate changes` },
+          { s: `y: ${C(tp.y)} ${up ? "+" : "−"} ${C(k)} = ${C(ny)}` },
+          { s: `∴ new turning point ${ptStr(tp.x, ny)}`, r: `the x-coordinate is still ${C(tp.x)}, and so is the axis of symmetry` },
+        ] });
   },
 
   /* apply a shift to a hyperbola's asymptotes */
@@ -107,7 +156,13 @@ const SKILLS = {
       [`x = ${C(up ? cv.p + k : cv.p - k)} and y = ${C(cv.q)}`, `x = ${C(cv.p)} and y = ${C(up ? cv.q - k : cv.q + k)}`, `x = ${C(cv.q)} and y = ${C(cv.p)}`],
       { graph: g.spec,
         hint: "A vertical shift moves the horizontal asymptote y = q only; the vertical asymptote x = p stays put.",
-        answerLabel: `x = ${C(cv.p)} and y = ${C(nq)}.` });
+        answerLabel: `x = ${C(cv.p)} and y = ${C(nq)}.`,
+        solution: [
+          { s: `Shifting ${up ? "up" : "down"} by ${k} lifts every part of the picture, the flat asymptote included` },
+          { s: `y = ${C(cv.q)} ${up ? "+" : "−"} ${C(k)} → y = ${C(nq)}` },
+          { s: `The upright asymptote x = ${C(cv.p)} is a left-right position, so a vertical shift cannot touch it`,
+            r: `∴ x = ${C(cv.p)} and y = ${C(nq)}` },
+        ] });
   },
 };
 

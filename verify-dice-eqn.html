@@ -787,20 +787,28 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   });
   tick(stable, "method rule: every skill is consistently a method skill or consistently not (no roll-to-roll flapping)");
   tick(agrees, "method rule: the attached q.method matches hasRealWorking() re-evaluated on the raw quest module");
-  tick(withM.length === 0 && withoutM.length === 68,
-    `method split is 0 with / 68 without (got ${withM.length} / ${withoutM.length})`);
+  /* PIN UPDATED 2026-09-02 (session S3's worked-methods batch, on the
+     foreman's brief): this pin used to read 0 with / 68 without, which
+     recorded the build-day decision that the chapter's default
+     solutions were answer-only. That batch wrote real working into
+     every gen(), so the correct pin is now the mirror image. It stays
+     a hard pin so a wrapper that silently stopped attaching methods
+     (or an edit that dropped a solution) still turns this harness red. */
+  tick(withM.length === 68 && withoutM.length === 0,
+    `method split is 68 with / 0 without (got ${withM.length} / ${withoutM.length})`);
 
   document.getElementById("lists").textContent =
     `EXCLUDED (${excluded.length} of the chapter's 78 skills):\n`
     + excluded.map((id) => `  ${id.padEnd(22)} ${EXCLUDED[id]}`).join("\n")
     + `\n\nMETHOD LINK — WITH real worked steps (${withM.length}):\n  ${withM.join(", ") || "(none)"}\n`
-    + `\nWITHOUT (${withoutM.length}) — this whole chapter. Every eq question is a list-pick built by\n`
-    + `_shared.js's mc() or _eq.js's ynQ(), whose default solution is the correct label / the\n`
-    + `answerLabel itself, so a "📖 Show me the method" link would reveal the answer and nothing\n`
-    + `else — a spoiler button, not a method. js/play.js simply omits the link. The real teaching\n`
-    + `text lives in q.answerLabel and already shows in the wrong-answer "Show me the steps" panel.\n`
-    + `Writing genuine worked-method text here is a separate content batch for Megan, and it would\n`
-    + `have to follow METHODS-algebra.md — per DICE-COMMON, none is invented here.`;
+    + `\nWITHOUT (${withoutM.length}) — none. Until 2026-09-02 this was the whole chapter: every eq\n`
+    + `question is a list-pick built by _shared.js's mc() or _eq.js's ynQ(), whose default solution\n`
+    + `is the correct label / the answerLabel itself, so the "📖 Show me the method" link would have\n`
+    + `revealed the answer and nothing else — a spoiler button, not a method. Session S3's batch\n`
+    + `wrote real working INSIDE each gen(), from the same rolled values as the question, following\n`
+    + `METHODS-algebra.md (TIP Chips, LCD + limits, "CP must be =", the B11 Δ wordings, guns and\n`
+    + `helmets, and the four no-answer words). The question, options and RNG stream were proven\n`
+    + `byte-identical against the previous HEAD before it landed.`;
 }
 
 /* ============================================================
