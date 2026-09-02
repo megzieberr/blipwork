@@ -74,14 +74,16 @@ function pickValueQ() {
      tan 45° comes out as 1/1 and tan 60° as √3/1, written as fractions
      off the table exactly as she does (METHODS-trig C7) */
   const LETTERS = { sin: ["O", "H"], cos: ["A", "H"], tan: ["O", "A"] }[fn];
-  const top = OAH_TABLE[LETTERS[0]][angle], bottom = OAH_TABLE[LETTERS[1]][angle];
-  const raw = `${top}/${bottom}`;
+  /* cellTop / cellBot, never `top` — her standing rule against a `top`
+     binding anywhere in this app's JS, even a function-scoped one */
+  const cellTop = OAH_TABLE[LETTERS[0]][angle], cellBot = OAH_TABLE[LETTERS[1]][angle];
+  const raw = `${cellTop}/${cellBot}`;
   return mc(CON, `<div class="q-oah">${oahTable(5)}</div>${fn} ${angle}° = ?`, correct.text, wrongs,
     { hint: "Pick the two letters SOHCAHTOA gives you, then read them off the table.",
       answerLabel: `${fn} ${angle}° = ${correct.text} (from the O-A-H table).`,
       solution: [
         { s: `${fn === "sin" ? "SOH" : fn === "cos" ? "CAH" : "TOA"}: ${fn} = ${LETTERS[0]}/${LETTERS[1]}`, r: "SOHCAHTOA picks the two letters" },
-        { s: `In the ${angle}° column: ${LETTERS[0]} = ${top} and ${LETTERS[1]} = ${bottom}`, r: "read the two cells off the O-A-H table" },
+        { s: `In the ${angle}° column: ${LETTERS[0]} = ${cellTop} and ${LETTERS[1]} = ${cellBot}`, r: "read the two cells off the O-A-H table" },
         { s: raw === correct.text ? `${fn} ${angle}° = ${raw}` : `${fn} ${angle}° = ${raw} = ${correct.text}` },
       ] });
 }
