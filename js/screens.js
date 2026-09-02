@@ -11,7 +11,7 @@ import { getSession } from "./session.js";
 import { el, clear, showToast } from "./ui.js";
 import { openCalculator } from "./calculator.js";
 import { renderBlip, playMoment } from "./companion/renderer.js";
-import { itemLabel } from "./companion/blip-ui.js";
+import { itemLabel, cookieReady } from "./companion/blip-ui.js";
 import { openColourUnlock } from "./companion/unlock-modal.js";
 import { renderAssignmentCard } from "./assignment.js";
 import { mountCqCollect } from "./cq-collect.js";
@@ -70,7 +70,6 @@ function normalizeHealth(state) {
     locks: { dress: !!locks.dress, shop: !!locks.shop, gallery: !!locks.gallery },
   };
 }
-const readyFlag = (v) => (v === undefined ? true : !!v);
 
 /* Sick-state login warning: dismissible per stage, not per render — a
    fresh escalation (e.g. stage 1 -> 3) shows again even if the
@@ -267,20 +266,30 @@ export function renderHub(app, host) {
   // Room build S1 (2026-08-08): the rectangular "tap to visit Blip" card is
   // gone — a small pulsing button beside the greeting is the only entry
   // point now. Feeding moved entirely onto the Blip screen (now his room),
-  // which has its own top-right daily cookie button — the hub no longer
-  // shows a cookie badge at all.
+  // which has its own top-right daily cookie button.
+  // 2026-09-02, her ruling: S1 also said "the hub shows no cookie badge at
+  // all" — the BADGE half of that is reversed. FEEDING still lives only in
+  // the room; the hub carries a small 🍪 dot whose whole job is to say
+  // there is one waiting, because kids who never open the room never feed
+  // him and his Blip never grows. Same cookieReady() the room button reads.
   if (app.state && (app.state.blip || app.state.blips)) {
     const blips = normalizeBlips(app.state);
     const primary = blips[0];
     const btn = el("button", "hub-blip-btn", "");
     btn.type = "button";
-    btn.title = "Visit Blip";
-    btn.setAttribute("aria-label", "Visit Blip");
+    const cookieWaiting = cookieReady(app.state);
+    btn.title = cookieWaiting ? "Visit Blip (his cookie is waiting)" : "Visit Blip";
+    btn.setAttribute("aria-label", btn.title); // the dot is aria-hidden, so the label carries it
     btn.innerHTML = `<div class="hbb-stage"><div class="blip-pedestal"><i></i></div></div>`;
     mountBlip(btn.querySelector(".hbb-stage"), {
       colour: primary.colour, equipped: primary.equipped, growthStage: primary.growthStage,
       healthStage: health.stage, recovering: health.recovering,
     });
+    if (cookieWaiting) {
+      const dot = el("span", "hub-cookie-dot", "🍪");
+      dot.setAttribute("aria-hidden", "true");
+      btn.appendChild(dot); // inside the button, so the hub pulse carries it
+    }
     btn.addEventListener("click", () => app.go("blip"));
     const row = head.querySelector(".hub-head-row");
     row.appendChild(btn);

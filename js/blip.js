@@ -59,7 +59,7 @@ import { el, clear, showToast } from "./ui.js";
 import { renderCompanion, renderBlip as mountCompanionBlip, blipMood, playMoment, momentDurationMs, playTapReaction } from "./companion/renderer.js";
 import {
   renderSwatchGrid, itemLabel,
-  SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot,
+  SLOT_LABELS, COSMETIC_SLOTS, itemRarity, accessorySlot, cookieReady,
 } from "./companion/blip-ui.js";
 import { treasureBadge } from "./companion/treasure.js";
 import {
@@ -217,9 +217,8 @@ function normalizeHealth(state) {
     locks: { dress: !!locks.dress, shop: !!locks.shop, gallery: !!locks.gallery },
   };
 }
-/* Undefined (backend hasn't shipped the flag yet) reads as "yes" so
-   the feed/care flow stays testable while the contract lands. */
-const readyFlag = (v) => (v === undefined ? true : !!v);
+/* The daily-cookie test lives in companion/blip-ui.js (cookieReady) —
+   the hub's reminder dot reads the same one, so the two can't drift. */
 
 const MOOD_ICON = { 0: null, 1: "😴", 2: "🛌", 3: "💔" };
 /* Text comes from the renderer's own blipMood() (companion/health-fx.js)
@@ -537,7 +536,7 @@ export function renderBlip(app, host) {
   const xp = state.xp || 0;
   if (!blips.some((b) => b.slot === activeSlot)) activeSlot = blips[0].slot;
   const activeBlip = blips.find((b) => b.slot === activeSlot) || blips[0];
-  const canFeedToday = readyFlag(state.canFeedToday);
+  const canFeedToday = cookieReady(state);
 
   // Room build §1 (2026-08-09, her ruling): home has no back arrow — this
   // IS the landing screen now. The gallery button is the only thing left
@@ -788,6 +787,34 @@ export function renderBlip(app, host) {
   };
   bindFeedDrag(cookieBtn, eatCookie, () => el("div", "fg-emoji", "🍪"));
 
+  /* "Feed him his cookie!" callout (2026-09-02, her ruling) — the free
+     cookie is the ONLY thing that grows a Blip, and kids who never spot
+     the button end up with a Blip that never grows. The one-time tour
+     names it, but a tour is seen once.
+     It hangs off a WRAPPER, not off the button: .cookie-badge is
+     scale-pulsing, and a child of it would pulse and drift with it.
+     Built only while the cookie is unclaimed — feeding re-renders the
+     whole screen, so the ✅ state simply never reaches this line, and
+     nothing needs dismissing. Not tied to sickness: the button is live
+     then too and the refuse path above already answers for it.
+     aria-hidden + pointer-events:none (CSS) — the button carries the
+     real label, and the bubble must never swallow a tap meant for the
+     cookie or for the room behind it. */
+  const cookieWrap = el("div", "cookie-wrap");
+  cookieWrap.appendChild(cookieBtn);
+  if (canFeedToday) {
+    const hint = el("div", "cookie-hint");
+    hint.textContent = `Feed ${(blips[0] && blips[0].name) || "Blip"} his cookie!`; // textContent: a nickname is learner-typed
+    hint.setAttribute("aria-hidden", "true");
+    cookieWrap.appendChild(hint);
+    /* Nicknames run to 24 characters, so the bubble wraps to two lines
+       and reaches down into the subtitle's row. The class widens the
+       title block's right gutter for exactly as long as the bubble is
+       there, which is the same trick padding-right:96px already plays
+       for the tray itself. */
+    roomCard.classList.add("has-cookie-hint");
+  }
+
   /* Room build S4b (2026-08-08 revision): the fridge is gone. A bought
      grocery lands on TODAY'S TRAY instead, shown here beside the cookie —
      every tile draggable onto Blip exactly like the old fridge tiles
@@ -799,11 +826,17 @@ export function renderBlip(app, host) {
   const trayWrap = el("div", "room-tray");
   function renderTray() {
     clear(trayWrap);
-    trayWrap.appendChild(cookieBtn);
+    trayWrap.appendChild(cookieWrap); // the cookie + its hint bubble, one flex item
     const st = app.state || {};
     const trayObj = st.tray || {};
     const hl = normalizeHealth(st);
     const trayIds = FOOD_IDS.filter((id) => (trayObj[id] || 0) > 0);
+    /* Groceries push the cookie from the corner into the MIDDLE of the
+       header, where a bubble hanging to its left would cover the nickname
+       and the mood hearts. With tiles on the tray the bubble opens to the
+       RIGHT instead, into the empty space under the strip. Toggled here
+       because renderTray is the one place that knows what is on the tray. */
+    cookieWrap.classList.toggle("hint-flip", trayIds.length > 0);
     if (trayIds.length) {
       const strip = el("div", "tray-strip" + (hl.stage >= 2 ? " is-locked" : ""));
       // Room tutorial (2026-08-09): a droppable step, only when the tray

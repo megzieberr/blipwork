@@ -138,6 +138,18 @@ export function renderSwatchGrid({ current, locked, onPick }) {
 
 export function accessoryExists(id) { return !!ACCESSORIES[id]; }
 
+/* Is the household's free daily cookie still unclaimed?
+   ONE reader for the room's cookie button (blip.js) and the hub's
+   reminder dot (screens.js) — two copies of this test could drift and
+   the hub would then promise a cookie the room has already spent.
+   The flag itself is computed server-side (mhq_get_state / local
+   getState); undefined = a backend that predates the flag, which reads
+   as "yes" so the feed flow stays usable. */
+export function cookieReady(state) {
+  const v = (state || {}).canFeedToday;
+  return v === undefined ? true : !!v;
+}
+
 /* Which slot an owned id belongs to. Needed for the closet, which lists
    what a blip OWNS — including retired items (party-hat, cat-ears…) that
    are no longer in the shop payload and so have no slot coming from the
