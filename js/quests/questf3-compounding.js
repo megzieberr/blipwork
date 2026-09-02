@@ -56,7 +56,12 @@ const SKILLS = {
       `Choose the correct setup for <b>R${P.toLocaleString("en-ZA").replace(/,/g, " ")}</b> at ${C(annual)}% p.a. compounded <b>${o.label}</b> for ${years} years.`,
       `${P}(1 + ${i}/${o.k})^(${years}×${o.k})`,
       [`${P}(1 + ${i})^${years}`, `${P}(1 + ${i}×${o.k})^${years}`, `${P}(1 + ${i}/${years})^(${o.k})`],
-      { hint: "Divide the rate by k inside the bracket; multiply years by k in the power.", answerLabel: `${P}(1 + ${i}/${o.k})^(${years}×${o.k})` });
+      { hint: "Divide the rate by k inside the bracket; multiply years by k in the power.", answerLabel: `${P}(1 + ${i}/${o.k})^(${years}×${o.k})`,
+        solution: [
+          { s: `Rate per period = ${i}/${o.k}`, r: `compounded ${o.label} → ${o.k} times a year` },
+          { s: `Number of periods = ${years}×${o.k} = ${e}`, r: "years × times-per-year" },
+          { s: `A = ${P}(1 + ${i}/${o.k})^(${years}×${o.k})`, r: "build the WHOLE equation, then type it in one go" },
+        ] });
   },
 
   monthlyRate: () => {
@@ -68,6 +73,11 @@ const SKILLS = {
       options: mcNum(i, [toFrac(annual), toFrac(annual) / 4, toFrac(annual) * 12]),
       answerLabel: `${C(annual)}% ÷ 12 = ${C(i)}`,
       hint: "Monthly means 12 times a year, so divide by 12.",
+      solution: [
+        { s: `${C(annual)}% as a fraction is ${C(toFrac(annual))}`, r: "÷ 100" },
+        { s: `Monthly → interest is added 12 times a year`, r: "so share the annual rate over 12" },
+        { s: `i = ${C(toFrac(annual))} ÷ 12 = ${C(i)}` },
+      ],
     };
   },
 

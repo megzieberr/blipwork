@@ -78,7 +78,7 @@ const QUESTS = [questNp1, questNp2, questNp3, questNp4, questNp5, questNp6, ques
 
    q.method feeds the always-available "📖 Show me the method" link.
    In Statistics every question carried real worked steps. In Number
-   Patterns almost none do: _patterns.js's calcQ/tapQ/yesnoQ and
+   Patterns almost none did: _patterns.js's calcQ/tapQ/yesnoQ and
    _shared.js's mc() all default `solution` to a single step whose
    text IS the answer ([{ s: answerLabel }] / [{ s: correct }]). A
    "method" link that reveals only the answer is a spoiler button,
@@ -92,8 +92,29 @@ const QUESTS = [questNp1, questNp2, questNp3, questNp4, questNp5, questNp6, ques
    Otherwise q.method is left undefined and js/play.js simply omits
    the link (it already tolerates absence).
 
-   NO NEW METHOD TEXT IS WRITTEN HERE. The skills that ship without
-   one are a separate content batch for Megan to decide on.
+   NO METHOD TEXT IS WRITTEN HERE — this file only surfaces what each
+   quest module's own gen() already built from its rolled values.
+
+   COVERAGE (2026-09-02 worked-methods batch, session S2): 39 of 44.
+   That batch wrote real `solution` arrays into questnp1–questnp7 for 36
+   more skills, all using her Grade-11 shortcut Tₙ = an + c (a = the
+   constant difference, c = T₀ = T₁ − d) — never a + (n−1)d, which is
+   Grade 12. They join np4.missing4, np4.missing5 and np5.nearestTerm,
+   which already shipped with working.
+
+   FIVE stay method-less ON PURPOSE — np2.meaningOfC, np4.methodMC,
+   np4.constYesno, np5.signMC and np7.dontMerge. Every one is a pure
+   definition question with no rolled numbers at all; a "method" there
+   could only restate the answer, which is the spoiler button this rule
+   exists to prevent. Their teaching lives in the `hint` and in the
+   "I'm lost" concept card, where it belongs.
+
+   ⚠️ Unlike dice-finance.js / dice-trig.js this pool has NO
+   methodEligible() steps guard, because Number Patterns has no `steps`
+   chains today (every skill is mc / calc / tap / yesno). If a future
+   session ever splits a patterns skill into a step chain, ADD the guard
+   first — js/play.js renders the 📖 link at mount, before step 1, so a
+   chain's method would hand over the remaining answers.
    ------------------------------------------------------------ */
 export function hasRealWorking(q) {
   const sol = q && q.solution;

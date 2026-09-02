@@ -38,6 +38,10 @@ const SKILLS = {
       expected: b - a,
       hint: `Count the jumps from T${a} up to T${b}.`,
       answerLabel: `${b} − ${a} = ${b - a} periods`,
+      solution: [
+        { s: `Count the JUMPS between the dots, not the dots themselves`, r: `T${a} up to T${b}` },
+        { s: `${b} − ${a} = ${b - a} periods` },
+      ],
     };
   },
 
@@ -50,6 +54,10 @@ const SKILLS = {
       expected: b - a,
       hint: "Direction does not change the count — still count the gaps.",
       answerLabel: `${b - a} periods (backward)`,
+      solution: [
+        { s: `Count the jumps between T${a} and T${b}: ${b} − ${a} = ${b - a}` },
+        { s: `Going backward does not change the COUNT — it is still ${b - a} periods`, r: "direction changes the sign of the exponent, not the count" },
+      ],
     };
   },
 
@@ -61,7 +69,11 @@ const SKILLS = {
       ["divide by (1 + i)", "subtract i each time", "leave it unchanged"],
       { graph: tl(b, [{ t: a, role: "P" }, { t: b, label: "?", role: "A" }]),
         hint: "Moving to a LATER date means the money grows — multiply.",
-        answerLabel: "Later date → multiply by (1 + i)" });
+        answerLabel: "Later date → multiply by (1 + i)",
+        solution: [
+          { s: `T${b} is LATER than T${a}`, r: "the money has had more time to grow" },
+          { s: `Forward → multiply by (1 + i)`, r: `${b - a} periods, so × (1 + i)^${b - a}` },
+        ] });
   },
 
   directionBackward: () => {
@@ -72,7 +84,11 @@ const SKILLS = {
       ["multiply by (1 + i)", "add i each time", "leave it unchanged"],
       { graph: tl(b, [{ t: b, role: "A" }, { t: a, label: "?", role: "P" }]),
         hint: "Moving to an EARLIER date means undoing growth — divide.",
-        answerLabel: "Earlier date → divide by (1 + i)" });
+        answerLabel: "Earlier date → divide by (1 + i)",
+        solution: [
+          { s: `T${a} is EARLIER than T${b}`, r: "you are undoing growth, not adding it" },
+          { s: `Backward → divide by (1 + i)`, r: `${b - a} periods, so × (1 + i)^(−${b - a})` },
+        ] });
   },
 
   tapTarget: () => {
@@ -85,6 +101,10 @@ const SKILLS = {
       tapHint: "Count the jumps from T0.",
       hint: `${k} periods after T0 is T${k}.`,
       answerLabel: `T${k}`,
+      solution: [
+        { s: `Start at T0 and count ${k} jumps to the right`, r: "T0 is the start, not the first jump" },
+        { s: `T0 → ${Array.from({ length: k }, (_, j) => `T${j + 1}`).join(" → ")}`, r: `${k} periods after T0 is T${k}` },
+      ],
     };
   },
 

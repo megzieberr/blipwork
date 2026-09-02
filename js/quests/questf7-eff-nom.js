@@ -52,11 +52,22 @@ const SKILLS = {
      rate-independent, so only the number in the sentence changes */
   whichGrowsMore: () => {
     const nom = pick([8, 10, 12, 18]);
+    const effM = (effFromNom(toFrac(nom), 12) * 100).toFixed(2).replace(".", ",");
     return mc(CL,
       `${C(nom)}% p.a. compounded <b>monthly</b> vs ${C(nom)}% p.a. compounded <b>annually</b> — which has the higher <b>effective</b> rate?`,
       "Compounded monthly",
       ["Compounded annually", "They are exactly equal", "It depends on the principal"],
-      { hint: "More frequent compounding earns slightly more over a year.", answerLabel: "More frequent compounding → higher effective rate" });
+      { hint: "More frequent compounding earns slightly more over a year.", answerLabel: "More frequent compounding → higher effective rate",
+        /* Kept to SHORT statements on purpose: at 375 px a long line that
+           contains "i_eff" wraps INSIDE the token and reads as "i_ / eff"
+           (found in this session's phone screenshots). One idea per step
+           keeps every line inside the phone on one row. */
+        solution: [
+          { s: `Monthly: 1 + i_eff = (1 + ${C(toFrac(nom))}/12)^12`, r: "n = 12, one equation" },
+          { s: `That gives ${effM}% a year`, r: "type the whole right side in one go" },
+          { s: `Annually: the ${C(nom)}% is already effective`, r: "interest is added once a year" },
+          { s: `${effM}% > ${C(nom)}% → monthly grows more`, r: "the earlier interest earns interest itself" },
+        ] });
   },
 
   /* steps, 2026-08-30 audit-day split (Session 2) — prompt, numbers and

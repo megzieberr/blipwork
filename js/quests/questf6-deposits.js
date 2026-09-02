@@ -47,6 +47,10 @@ const SKILLS = {
       options: mcNum(100 - p, [p, 100, 100 + p]),
       hint: "The deposit and the balance must add up to 100%.",
       answerLabel: `100% − ${p}% = ${100 - p}%`,
+      solution: [
+        { s: `The deposit and the balance together make up the whole price`, r: "deposit % + balance % = 100%" },
+        { s: `100% − ${p}% = ${100 - p}%`, r: "that is the part still owed" },
+      ],
     };
   },
 

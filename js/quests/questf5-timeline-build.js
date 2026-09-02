@@ -24,7 +24,11 @@ const SKILLS = {
       `+${k}`,
       [`−${k}`, `${k - 1}`, `−${k - 1}`],
       { graph: tl(k, [{ t: 0, role: "P" }, { t: k, label: "?", role: "A" }], { from: 0, to: k }),
-        hint: "Forward = positive exponent = the number of periods.", answerLabel: `exponent = +${k}` });
+        hint: "Forward = positive exponent = the number of periods.", answerLabel: `exponent = +${k}`,
+        solution: [
+          { s: `From T0 to T${k} is ${k} periods`, r: "count the jumps" },
+          { s: `Forward means the money grows, so the exponent is positive: +${k}`, r: `× (1 + i)^${k}` },
+        ] });
   },
 
   exponentBackward: () => {
@@ -34,7 +38,11 @@ const SKILLS = {
       `−${d}`,
       [`+${d}`, `−${d + 1}`, `+${d - 1}`],
       { graph: tl(b, [{ t: b, role: "A" }, { t: a, label: "?", role: "P" }], { from: b, to: a, dir: "back" }),
-        hint: "Backward = negative exponent. Count the periods, then make it negative.", answerLabel: `exponent = −${d}` });
+        hint: "Backward = negative exponent. Count the periods, then make it negative.", answerLabel: `exponent = −${d}`,
+        solution: [
+          { s: `From T${b} to T${a} is ${b} − ${a} = ${d} periods`, r: "count the jumps" },
+          { s: `Backward undoes the growth, so the exponent goes negative: −${d}`, r: `× (1 + i)^(−${d})` },
+        ] });
   },
 
   expression: () => {
@@ -45,7 +53,12 @@ const SKILLS = {
       `${P}(1 + ${i})^${k}`,
       [`${P}(1 + ${i})^(−${k})`, `${P}(1 − ${i})^${k}`, `${P}(1 + ${i}·${k})`],
       { graph: tl(k, [{ t: 0, amount: P, dp: 0 }, { t: k, label: "?", role: "A" }], { from: 0, to: k }),
-        hint: "Forward → multiply, positive exponent equal to the number of periods.", answerLabel: `${P}(1 + ${i})^${k}` });
+        hint: "Forward → multiply, positive exponent equal to the number of periods.", answerLabel: `${P}(1 + ${i})^${k}`,
+        solution: [
+          { s: `T0 → T${k} is forward ${k} periods`, r: "a later date, so the money grows" },
+          { s: `Forward → multiply by (1 + i)^${k}, with i = ${i}` },
+          { s: `Value at T${k} = ${P}(1 + ${i})^${k}`, r: "one equation, built completely before anything is worked out" },
+        ] });
   },
 
   /* One value per date, whichever way you travel to it. Generalised from
@@ -109,6 +122,10 @@ const SKILLS = {
       options: mcNum(2, [1, 3, y1 + y2]),
       hint: "One bracket per segment of the timeline.",
       answerLabel: "2 brackets — one per rate segment",
+      solution: [
+        { s: `The rate changes once, so the timeline splits into 2 segments: ${y1} years, then ${y2} years` },
+        { s: `One bracket per segment → 2 brackets`, r: "multiplied together, never added" },
+      ],
     };
   },
 
@@ -121,6 +138,10 @@ const SKILLS = {
       options: mcNum(e, [yrs, o.k, yrs + o.k, e + 1, e * 2]),   // backstops: when yrs = k, the first two collide AND yrs+k = yrs×k = e
       hint: "Exponent for the segment = years × times-per-year.",
       answerLabel: `${yrs} × ${o.k} = ${e}`,
+      solution: [
+        { s: `Compounded ${o.label} → interest is added ${o.k} times a year` },
+        { s: `Exponent = years × times-per-year = ${yrs} × ${o.k} = ${e}`, r: `the ${C(annual)}% plays no part in the exponent` },
+      ],
     };
   },
 

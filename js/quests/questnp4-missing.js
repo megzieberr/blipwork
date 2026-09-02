@@ -82,7 +82,12 @@ const SKILLS = {
       `A quadratic pattern starts T₁ = ${C(t1)}, T₂ = ${C(t2)}, and its constant second difference is ${C(sd)}. Find T₃.`,
       seq[2],
       { hint: `Next first difference = (T₂ − T₁) + second difference = ${C(t2 - t1)} + ${P(sd)}. Add that to T₂.`,
-        answerLabel: `T₃ = ${C(t2)} + (${C(t2 - t1)} + ${P(sd)}) = ${C(seq[2])}.` });
+        answerLabel: `T₃ = ${C(t2)} + (${C(t2 - t1)} + ${P(sd)}) = ${C(seq[2])}.`,
+        solution: [
+          { s: `First gap: T₂ − T₁ = ${C(t2)} − ${P(t1)} = ${C(t2 - t1)}` },
+          { s: `Next gap = first gap + second difference = ${C(t2 - t1)} + ${P(sd)} = ${C(t2 - t1 + sd)}`, r: "the second difference is constant" },
+          { s: `T₃ = T₂ + next gap = ${C(t2)} + ${P(t2 - t1 + sd)} = ${C(seq[2])}` },
+        ] });
   },
 
   /* which difference do you keep constant? */

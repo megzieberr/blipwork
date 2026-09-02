@@ -33,7 +33,14 @@ const SKILLS = {
       kind === "minimum" ? "a minimum" : "a maximum",
       [kind === "minimum" ? "a maximum" : "a minimum", "neither — it keeps rising", "both"],
       { hint: "a > 0 → ‘happy’ parabola → minimum.  a < 0 → ‘sad’ parabola → maximum.",
-        answerLabel: `a = ${C(a)} ${a > 0 ? "> 0 → minimum" : "< 0 → maximum"}.` });
+        answerLabel: `a = ${C(a)} ${a > 0 ? "> 0 → minimum" : "< 0 → maximum"}.`,
+        solution: [
+          { s: `The coefficient of n² is a = ${C(a)}`, r: "look at the n² term only" },
+          { s: a > 0
+              ? `a = ${C(a)} > 0 → the parabola opens upward`
+              : `a = ${C(a)} < 0 → the parabola opens downward`,
+            r: a > 0 ? "lowest point → a minimum" : "highest point → a maximum" },
+        ] });
   },
 
   /* which term is the extreme (n = −b/2a) */
@@ -44,7 +51,11 @@ const SKILLS = {
       k,
       { allowNeg: false,
         hint: `n = −b ÷ (2a) = −(${C(b)}) ÷ (2 × ${C(a)}).`,
-        answerLabel: `n = ${C(-b)} ÷ ${P(2 * a)} = ${C(k)} — the ${ord(k)} term.` });
+        answerLabel: `n = ${C(-b)} ÷ ${P(2 * a)} = ${C(k)} — the ${ord(k)} term.`,
+        solution: [
+          { s: `a = ${C(a)} and b = ${C(b)}`, r: "read them off Tₙ = an² + bn + c" },
+          { s: `n = −b ÷ (2a) = ${C(-b)} ÷ ${P(2 * a)} = ${C(k)}`, r: `the ${ord(k)} term` },
+        ] });
   },
 
   /* the turning point is NOT a whole number → nearest whole term */
@@ -74,7 +85,11 @@ const SKILLS = {
       `The pattern Tₙ = <b>${quadStr(a, b, c)}</b> turns at n = ${C(k)}. What is its ${kind} value?`,
       value,
       { hint: `Substitute n = ${C(k)} into the formula.`,
-        answerLabel: `T${toSub(k)} = ${C(value)} — the ${kind} value.` });
+        answerLabel: `T${toSub(k)} = ${C(value)} — the ${kind} value.`,
+        solution: [
+          { s: `T${toSub(k)} = ${quadStr(a, b, c, `(${C(k)})`)}`, r: `substitute the turning term n = ${C(k)}` },
+          { s: `T${toSub(k)} = ${C(value)} — the ${kind} value` },
+        ] });
   },
 
   /* read the extreme term-number off the graph */
@@ -87,7 +102,11 @@ const SKILLS = {
         graph: termParabola(a, b, c, k, value, len, ACC, ""),   // no T₍k₎ label: that IS the answer
         graphCap: "Tₙ plotted against n · each grid block is 1",
         hint: "Follow the dashed line from the turning point down to the horizontal axis and count the blocks from 0.",
-        answerLabel: `The turning point is at n = ${C(k)}.` });
+        answerLabel: `The turning point is at n = ${C(k)}.`,
+        solution: [
+          { s: `The turning point is the ${a > 0 ? "lowest" : "highest"} point of the curve`, r: "where the pattern turns around" },
+          { s: `Follow it straight down to the n-axis and count the blocks from 0:  n = ${C(k)}` },
+        ] });
   },
 
   /* read the extreme value off the graph */
@@ -99,7 +118,11 @@ const SKILLS = {
       { graph: termParabola(a, b, c, k, value, len, ACC),
         graphCap: "Tₙ plotted against n · each grid block is 1",
         hint: "Count the grid blocks from the horizontal axis (each block is 1) up or down to the turning point.",
-        answerLabel: `The turning point value is ${C(value)}.` });
+        answerLabel: `The turning point value is ${C(value)}.`,
+        solution: [
+          { s: `The turning point is the ${a > 0 ? "lowest" : "highest"} point of the curve`, r: "where the pattern turns around" },
+          { s: `Count the blocks from the n-axis ${value < 0 ? "down" : "up"} to it (each block is 1):  Tₙ = ${C(value)}` },
+        ] });
   },
 
   /* the sign condition */

@@ -22,17 +22,26 @@ const SKILLS = {
       d,
       { graph: pyramid(seq, { showFirst: true, blankFirst: true, accent: ACC }),
         hint: "d = any term minus the term before it.",
-        answerLabel: `d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}.` });
+        answerLabel: `d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}.`,
+        solution: [
+          { s: `d = T₂ − T₁ = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}`, r: "next − previous" },
+          { s: `Check: T₃ − T₂ = ${C(seq[2])} − ${P(seq[1])} = ${C(d)}`, r: "same, so d is the common difference" },
+        ] });
   },
 
   /* next term */
   nextTerm: () => {
     const { seq, d } = randArith();
+    const last = seq[seq.length - 1];
     return calcQ("patArithmetic",
       `What is the next term of <b>${list(seq)}</b>?`,
-      seq[seq.length - 1] + d,
+      last + d,
       { hint: `Add the common difference (${C(d)}) to the last term.`,
-        answerLabel: `${C(seq[seq.length - 1])} + ${P(d)} = ${C(seq[seq.length - 1] + d)}.` });
+        answerLabel: `${C(last)} + ${P(d)} = ${C(last + d)}.`,
+        solution: [
+          { s: `d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}`, r: "common difference" },
+          { s: `next = last term + d = ${C(last)} + ${P(d)} = ${C(last + d)}` },
+        ] });
   },
 
   /* choose the general term Tₙ = an + c */
@@ -47,19 +56,30 @@ const SKILLS = {
       correct, wrongs,
       { layout: "grid2", graph: pyramid(seq, { showFirst: true, accent: ACC }),
         hint: "Tₙ = an + c: a is the constant difference (so start with that many n), and c = T₀ — step BACK one difference from T₁.",
-        answerLabel: `a = ${C(d)} and c = T₀ = ${C(a1)} − ${P(d)} = ${C(c)}, so Tₙ = ${correct}.` });
+        answerLabel: `a = ${C(d)} and c = T₀ = ${C(a1)} − ${P(d)} = ${C(c)}, so Tₙ = ${correct}.`,
+        solution: [
+          { s: `a = d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}`, r: "a is the constant difference" },
+          { s: `c = T₀ = T₁ − d = ${C(a1)} − ${P(d)} = ${C(c)}`, r: "step BACK one difference from T₁" },
+          { s: `Tₙ = an + c = ${correct}` },
+        ] });
   },
 
   /* a specific term from the formula */
   nthTerm: () => {
     const { a1, d, seq } = randArith();
     const n = pick([10, 12, 15, 20, 25]);
+    const c0 = a1 - d, form = linStr(d, c0);
     return calcQ("patArithTerm",
       `For the pattern <b>${list(seq)}</b>, find T${C(n)}.`,
       arithTn(a1, d)(n),
       { graph: pyramid(seq, { showFirst: true, accent: ACC }),
         hint: `First build Tₙ = an + c: a = the difference (${C(d)}), c = T₀ = ${C(a1)} − ${P(d)} = ${C(a1 - d)}. Then put n = ${C(n)} in.`,
-        answerLabel: `Tₙ = ${linStr(d, a1 - d)}, so T${C(n)} = ${linStr(d, a1 - d).replace("n", `(${C(n)})`)} = ${C(arithTn(a1, d)(n))}.` });
+        answerLabel: `Tₙ = ${form}, so T${C(n)} = ${form.replace("n", `(${C(n)})`)} = ${C(arithTn(a1, d)(n))}.`,
+        solution: [
+          { s: `a = ${C(d)} and c = T₀ = ${C(a1)} − ${P(d)} = ${C(c0)}`, r: "build Tₙ = an + c first" },
+          { s: `Tₙ = ${form}` },
+          { s: `T${C(n)} = ${form.replace("n", `(${C(n)})`)} = ${C(arithTn(a1, d)(n))}`, r: `substitute n = ${C(n)}` },
+        ] });
   },
 
   /* evaluate a given formula */
@@ -67,11 +87,16 @@ const SKILLS = {
     const a = pick([2, 3, 4, 5, -2, -3]);
     const c = randInt(-5, 6);
     const n = pick([6, 7, 8, 9, 11, 12]);
+    const form = linStr(a, c);
     return calcQ("patArithTerm",
-      `A pattern has Tₙ = <b>${linStr(a, c)}</b>. Find T${C(n)}.`,
+      `A pattern has Tₙ = <b>${form}</b>. Find T${C(n)}.`,
       a * n + c,
       { hint: `Substitute n = ${C(n)} into the formula.`,
-        answerLabel: `T${C(n)} = ${linStr(a, c).replace("n", `(${C(n)})`)} = ${C(a * n + c)}.` });
+        answerLabel: `T${C(n)} = ${form.replace("n", `(${C(n)})`)} = ${C(a * n + c)}.`,
+        solution: [
+          { s: `T${C(n)} = ${form.replace("n", `(${C(n)})`)}`, r: `put n = ${C(n)} in` },
+          { s: `T${C(n)} = ${C(a * n)} ${c < 0 ? "−" : "+"} ${C(Math.abs(c))} = ${C(a * n + c)}` },
+        ] });
   },
 
   /* which term has a given value? */
@@ -80,12 +105,18 @@ const SKILLS = {
     const n = pick([8, 9, 10, 11, 12, 14]);
     const value = arithTn(a1, d)(n);
     const seq = arithSeq(a1, d, 4);
+    const c0 = a1 - d, form = linStr(d, c0);
     return calcQ("patArithTerm",
       `In <b>${list(seq)} ; …</b>, which term is equal to ${C(value)}? (Find n.)`,
       whichTermArith(a1, d, value),
       { allowNeg: false,
         hint: `Build Tₙ = an + c first (a = ${C(d)}, c = T₀ = ${C(a1 - d)}), then set it equal to ${C(value)} and solve for n.`,
-        answerLabel: `${C(value)} = ${linStr(d, a1 - d)}  →  n = ${C(n)} (the ${ord(n)} term).` });
+        answerLabel: `${C(value)} = ${linStr(d, a1 - d)}  →  n = ${C(n)} (the ${ord(n)} term).`,
+        solution: [
+          { s: `a = ${C(d)}, c = T₀ = ${C(a1)} − ${P(d)} = ${C(c0)}  →  Tₙ = ${form}`, r: "build the general term first" },
+          { s: `Set it equal to the value: ${form} = ${C(value)}` },
+          { s: `${C(d)}n = ${C(value - c0)}  →  n = ${C(n)}`, r: `the ${ord(n)} term` },
+        ] });
   },
 
   /* what does c mean in Tₙ = an + c? */

@@ -62,14 +62,31 @@
    A "📖 Show me the method" link over that text is a spoiler button,
    not a method — so q.method is attached ONLY where the solution holds
    real working (≥ 2 steps, or a step with a reason, or a single step
-   whose text is not just the answer). No new teaching text is written
-   here; the skills without working simply have no link (js/play.js
-   already omits it). Writing that missing content is a separate batch
-   for Megan, and Finance's would have to follow FINANCE-METHOD.md.
-   Coverage today: 10 of 51 skills carry a method — f1.pctToFrac,
+   whose text is not just the answer). No teaching text is written HERE;
+   this file only surfaces what the quest module's own gen() already
+   built, and the skills without working simply have no link (js/play.js
+   already omits it).
+
+   COVERAGE (2026-09-02 worked-methods batch, session S2): 22 of 51.
+   That batch wrote real `solution` arrays INSIDE the quest gens for 14
+   more skills — f3.fullSetup, f3.monthlyRate, f4.countBetween,
+   f4.countBackward, f4.directionForward, f4.directionBackward,
+   f4.tapTarget, f5.exponentForward, f5.exponentBackward, f5.expression,
+   f5.rateChangeBrackets, f5.rateChangeSegment, f6.percentOwed,
+   f7.whichGrowsMore — each following FINANCE-METHOD.md's ONE-equation
+   rule (build the whole equation, never solve in stages, never round an
+   intermediate). They join the 8 that already had working: f1.pctToFrac,
    f3.ratePerPeriod, f3.exponent, f4.countForward, f5.anyPoint,
-   f5.rateChangeExpr, f6.depositAmount, f6.amountOwed, f6.hpTotal,
-   f7.effCalc.
+   f5.rateChangeExpr, f6.depositAmount, f6.amountOwed.
+
+   The remaining 29 stay method-less ON PURPOSE: 27 are pure-recall
+   definition questions whose bare answer IS the whole working (all of
+   f1 bar pctToFrac, all of f2, f3.timesPerYear, f3.whyDivide,
+   f4.directionWord, f6.depositInterest, f6.interestOnWhat, f6.hpType,
+   and f7's six theory MCs) — a "method" there could only restate the
+   answer, which is the spoiler button this rule exists to prevent. The
+   other two are f6.hpTotal and f7.effCalc, `steps` chains that
+   methodEligible() below correctly refuses.
    ============================================================ */
 import { questF1 } from "./questf1-words.js";
 import { questF2 } from "./questf2-types.js";
