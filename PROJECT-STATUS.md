@@ -1,4 +1,4 @@
-# Project status — updated 2026-09-02 (🏗️ METHODS DAY: worked methods across all 8 dice chapters + fix batch — ✅ SHIPPED sw v86, commit 4f1cef3, LIVE-VERIFIED)
+# Project status — updated 2026-09-02 (🍪 COOKIE HINT shipped sw v87, live-verified; earlier same day: METHODS DAY sw v86)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,11 +9,13 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **Live** at https://megzieberr.github.io/blipwork/ on **sw v86** (shipped
-  2026-09-02 on her "ship it", commit 4f1cef3; Pages built in ~40 s and ALL
-  SIXTEEN harnesses ran GREEN against the live URL — incl. verify-gtrig's
-  1 037 051 checks and verify-dice 136/136, green for the first time since
-  the split day). No SQL.
+- **Live** at https://megzieberr.github.io/blipwork/ on **sw v87** (cookie
+  hint, shipped 2026-09-02 evening on her "yes go ahead": room speech bubble
+  "Feed <name> his cookie!" + hub 🍪 dot, both gone once fed, one shared
+  cookieReady() in js/companion/blip-ui.js. Opus worker built it, foreman
+  read the diff + phone-width screenshots; live sw/assets fetch-verified.
+  No SQL). Earlier same day: methods day sw v86, commit 4f1cef3, all 16
+  harnesses green against the live URL.
 - 12 hub chapters (5 Term-3 + 7 Revision) + 2 exam-only; 🎲 dice on 8
   chapters; 📝 Exam Focus 7 chapters / 360 cards; 📈 Fun Functions strip;
   💬 feedback + 📄 papers live; 🔔 notifications LIVE (2 cron jobs, secrets
@@ -72,8 +74,20 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   tokenpad piece-count splits on ANY whitespace (the pad joins with U+2009
   THIN SPACE — invisible in an editor, lost in copy-paste); np6 +
   concepts.js rewritten under her standing Gr11 Tₙ = an + c ruling.
+- 2026-09-02 evening (hers): cookie hint approved ("yes go ahead, and add
+  the hub dot too") — this reverses the BADGE half of the 08-08 "no cookie
+  badge on the hub" line; feeding still lives only in the room.
+- 2026-09-02 evening (mine, flagged): the bubble stays visible when
+  groceries are on the tray — a kid feeding groceries but never the cookie
+  is exactly the hint's audience. Cost: bubble clips ~7px of the 5th mood
+  heart in that state, and with a 20+ char nickname clips the wrapped name
+  tail (that long-name overflow predates this change). Her call if she
+  wants it polished or the bubble suppressed on a loaded tray instead.
 
 ## ⏳ Pending on Megan
+- 📱 1 min [whenever]: close + reopen Blipwork twice (sw v87) → see the 🍪
+  dot on the hub Blip button and the "Feed … his cookie!" bubble in his
+  room, feed the cookie, both vanish.
 - 📱 5 min [whenever]: close + reopen Blipwork twice (sw v86), then one
   question each in stats q3, tree diagrams, hire purchase, eff↔nom,
   functions round 7 and measurement round 5 — the six split-day chains.
