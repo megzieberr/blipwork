@@ -11,6 +11,94 @@ Read PROJECT-STATUS.md first; come here only when you need the story
 behind a standing rule or an old build.
 
 ---
+# From the 2026-08-30 head, moved here 2026-09-02 at the methods-day wrap (verbatim)
+
+## 🔍 2026-08-30 — THE AUDIT DAY (all local, sw v84 in tree)
+Her brief: sweep for dead/stale code (my judgment), split the too-intense
+2D Trig questions into build-the-answer steps, audit every round against
+"phones only, guided discovery, must not feel like homework", split this
+status file, and list the promised-but-not-done work.
+
+**2D Trig t3–t7 are STEP CHAINS now** — the same treatment she gave round 2
+on 08-27 ("they build the equation step by step each time"), same laws:
+question/diagram/numbers unchanged, the worked solution became the answered
+steps, MCs untouched. New shared builders in `js/quests/_trig.js`
+(sines-on-top ratio, substituted cosine rule, rearranged cosine rule as a
+REAL stacked fraction, area rule); t7's chains open on "which rule fits?".
+Proof: **verify-trig-steps.mjs NEW 50/50** (4 200 chains, every step marked
+through the app's own checkStep), verify-t2-steps 25/25, verify-trig.html
+36/36, verify-dice-trig.html 83/83, all five rounds shot at 375 px and READ
+— zero horizontal overflow, frames render as her stacked fractions.
+
+**Three latent bugs found and fixed** (all pre-dated today):
+1. 🎲 dice 2D-Trig showed "📖 Show me the method" on t2's step chains —
+   play.js renders that link BEFORE step 1, so it handed the chain's answers
+   over. dice-trig.js now has dice-gtrig's `methodEligible()` steps clause.
+2. verify-dice-trig.html had been RED since 08-27 — its INPUT_LAW never
+   learned "steps" (nobody re-ran it after t2's rebuild). It now validates
+   chains and asserts no chain ever carries a method link.
+3. `_trig.js` shuffled chips/options with raw `Math.random` — the only file
+   in js/quests off the seeded `rng()`, so a dice round's seeded resume
+   could re-order options. Both shuffles now ride js/rng.js.
+
+**Tokenpad layout grew up** (js/tokenpad.js + css): a frame side holding one
+"/" renders as a real stacked fraction (generalised from her 08-27 ☐/☐
+ruling); long sides wrap ONLY before a + or − sign (the app-wide wrap law).
+Before this, the cosine frames clipped off both edges of a phone.
+
+**Dead-code sweep verdict: the repo is clean.** Full reference-graph scan +
+unused-export scan. Deleted: `design/design-lab.html` (initial-commit design
+experiment, superseded by the SL restyle) and `design/gtrig-briefs/review-png/
+decode.py` (one-off build-day helper). Everything else flagged turned out
+deliberate and documented (banked art, applied-migration history, her
+art-source masters, harnesses). Library helpers with no callers were left
+alone — deleting working maths helpers is churn, not cleanup.
+
+**Phone-feel audit of the rest of the game:** every other chapter already
+plays phone-only (mc/tap/calc/steps — no free text anywhere). Six rounds
+elsewhere still carry the "whole working in one box" disease, milder:
+stats q3 (outlier boundary), finance f6 (hire-purchase total) + f7
+(eff↔nom), functions fn7 (max length), measurement m6 (find H — 3 skills),
+probability p6 (tree combos). Same treatment is a per-chapter call for HER
+— she has played and approved those chapters as they are.
+
+## 🏗️ 2026-08-30 (later) — SPLIT DAY: the six flagged rounds are chains too
+Foreman day on her "run it" (~0,9M agent tokens, inside the 0,8–1,2M
+estimate). Three Sonnet sessions, each foreman-reviewed before the next:
+- **S1** stats q3 outBound (IQR → build-the-boundary pad → number) +
+  prob p6 exactlyOneHead / biasedFindOther; mcStep/calcStep promoted to
+  `_shared.js` (trig re-exports); dice-stats steps guard; verify.html
+  grew its FIRST per-quest dispatch (62/62, 6 960 gens) + verify-prob
+  52/52. Foreman catches: probability steps pin **tol 0,001** (the
+  0,015 calcStep default is a trig allowance — it would have accepted
+  0,25 for a true 0,24); one hint rewritten to state the arithmetic.
+- **S2** finance f6 hpTotal (balance → which-formula → total) + f7
+  effCalc (n → set-up → whole conversion in ONE go; her one-equation
+  law kept, no rounded intermediate anywhere); dice-finance guard;
+  verify-finance 146/146 + verify-dice-finance 89/89; the session
+  itself fixed two latent harness bugs (corrupt() crash on steps, a
+  method check that would false-flag every chain).
+- **S3** functions fn7 maxLength (AB → which-parabola, dedupe-guarded →
+  turning x → max) + measurement m6 ×3 (Pythagoras built on the pad;
+  pyramid offers the FULL base as the tempting chip; mirror accepted
+  only where addition commutes); dice-func guard; verify-func 75/75,
+  verify-meas 69/69, verify-dice-func 89/89. Foreman trim: one hint
+  spoke design-language ("decoy chip") — now learner words.
+Every harness re-run by the foreman first-hand; every new chain
+screenshotted at 375 px and READ. ✅ **SHIPPED same evening on her word
+(sw v85, push 590b0b4)** — v85 confirmed live in ~30 s and all five
+changed chapter harnesses run GREEN against the live URL (62/62 ·
+52/52 · 146/146 · 75/75 · 69/69).
+✅ Same evening, her ask: `tools/shoot_round.py` REBUILT as an
+answer-aware walker (e98dc94) — it exposes each mounted question on
+`window.__SHOOT_Q__` via the def it already builds, answers
+mc/yesno/calc/tokenpad and whole chains correctly, and advances on
+"Continue →". The old version waited for a "Next" button that never
+existed, so it silently re-shot question 1 forever — distrust any
+older claim that it "walked" a round. Unsupported kinds (tap, calcdo,
+gtrig widgets) stop the round with a plain warning.
+
+---
 # Project status — updated 2026-08-28 (🧮 CALCULATOR ROUND 4 — `=` steps DOWN the column, sw v83 SHIPPED + LIVE-VERIFIED 2026-08-28; earlier: round 3 Sum menu + editable data table; round 2 full fx-991ZA face + maths engine; 🔔 notifications live and proven)
 
 ## 🧮 2026-08-28 — CALCULATOR ROUND 4: `=` steps DOWN the column (7051711, sw v83, live-verified)
