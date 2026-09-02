@@ -1369,10 +1369,13 @@ const m17 = mark();
   tick(EXAM_CHAPTERS.includes("gtrig"), `js/config.js EXAM_CHAPTERS includes "gtrig" (got [${EXAM_CHAPTERS.join(",")}])`);
   /* 2026-08-22 (evening): Exam Focus became SKILL ROUNDS
      (EXAM-SKILLS-BRIEF.md), so the registry holds CARDS cut from these
-     two questions rather than the questions themselves — four cards
-     across four skills, plus two skills listed with no cards yet
-     ("Identities", "Super Special Sums", rendered "coming soon"). The
-     relink this section exists to guard is unchanged: every card
+     two questions rather than the questions themselves — at the time,
+     four cards across four skills, plus two skills listed with no cards
+     yet ("Identities", "Super Special Sums", rendered "coming soon").
+     STALE COUNT, kept for the history: the registry has since grown to
+     54 cards (see the tick() right below, re-based 2026-08-24) — this
+     paragraph only explains WHY cards are checked instead of questions.
+     The relink this section exists to guard is unchanged: every card
      inherits its source question's lostQuest, and that is what is
      checked below, card by card. */
   const gq = examQuestionsForChapter("gtrig");

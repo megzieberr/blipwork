@@ -68,6 +68,36 @@ export function pwToggle(input) {
   return wrap;
 }
 
+/* Escape closes the topmost open sheet/overlay — same behaviour as tapping
+   the scrim or the close button (fix batch, 2026-09-02). Every sheet in the
+   app (calculator, feedback, the room sheets, the "I'm lost" concept modal,
+   treasure/unlock) shares ONE idiom: a .modal-scrim appended to <body>,
+   whose own click handler closes it ONLY when the click's target IS the
+   scrim itself — background tap, not the sheet riding on top of it (see
+   any of those files: `scrim.addEventListener("click", e => { if
+   (e.target === scrim) close(); })`). Dispatching a synthetic click AT the
+   scrim node (not through document, so e.target really is the scrim)
+   reuses that exact guard for free — including the ones that also gate on
+   an in-flight request (treasure.js's busy/settled), so Escape can never
+   cut a save off mid-flight either.
+   Registered ONCE, here, because every sheet-opening module already
+   imports ui.js — nothing else has to remember to wire this up.
+   Only acts when a scrim exists, so a bare Escape with nothing open is
+   never swallowed — an input's own Escape handling (blip.js's nickname
+   editor, which never lives inside a scrim) sees the key exactly as
+   before, and there's nothing here for the calculator's own pads to
+   fight (calculator.js has no keydown handling of its own — taps only).
+   Stacked scrims close ONE per press: every scrim shares the same
+   z-index (50), so paint order follows DOM order and the LAST one
+   appended to <body> is the topmost. */
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  const scrims = document.querySelectorAll(".modal-scrim");
+  if (!scrims.length) return;
+  e.preventDefault();
+  scrims[scrims.length - 1].dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+});
+
 /* Small toast for surfacing shop/equip results (and their errors) —
    never fail silently on a buy/equip/rename. Stacks; auto-dismisses. */
 let toastHost = null;

@@ -127,12 +127,10 @@ function openSheet(app) {
   const close = () => closeSheet(scrim);
   sheet.querySelector(".fb-close").addEventListener("click", close);
   // tapping the dark area closes; tapping inside the sheet must not
+  // (Escape-to-close is now generic — see ui.js's app-wide .modal-scrim
+  // keydown handler, fix batch 2026-09-02; it reuses this exact listener
+  // by dispatching a synthetic click at the scrim.)
   scrim.addEventListener("click", e => { if (e.target === scrim) close(); });
-  document.addEventListener("keydown", function esc(e) {
-    if (e.key !== "Escape") return;
-    document.removeEventListener("keydown", esc);
-    if (sheetOpen) close();
-  });
 
   send.addEventListener("click", async () => {
     const text = body.value.trim();

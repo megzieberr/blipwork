@@ -170,7 +170,13 @@ h2{font-size:20px} h3{font-size:17px}
 .install-x{position:absolute;top:7px;right:10px;background:none;border:0;color:var(--muted);font-size:13px;cursor:pointer;line-height:1}
 .install-x:hover{color:var(--ink)}
 .chapter-cards{display:flex;flex-direction:column;gap:14px}
-.ch-card{position:relative;border-radius:var(--r-lg);padding:18px;cursor:pointer;color:var(--ink);overflow:hidden;
+/* extra right padding clears the fixed 💬 .fb-fab (46px wide, right:14px —
+   occupies the viewport's right ~60px column). These cards stack in one
+   long column on the hub, so every card's blurb/title scrolls THROUGH that
+   column at some point — confirmed 2026-09-02 the FAB was drawing on top of
+   card text (Exam Focus tab, reported overlap). Same fix as
+   .room-titlewrap's padding-right:96px, same reason: reserve the corner. */
+.ch-card{position:relative;border-radius:var(--r-lg);padding:18px 56px 18px 18px;cursor:pointer;color:var(--ink);overflow:hidden;
   border:1px solid color-mix(in srgb,var(--cc) 45%,var(--brd-2));
   background:color-mix(in srgb,var(--cc) 16%,var(--bg2));
   box-shadow:0 0 0 1px rgba(58,160,255,.03),0 4px 20px -12px color-mix(in srgb,var(--cc) 55%,transparent);
