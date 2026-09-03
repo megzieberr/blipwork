@@ -88,7 +88,7 @@
                     gold, level, levelUp, levelInfo, best, plays }.
                   adminFunfun(pw) — { ok, plays: { [questId]:
                     classTotalPlays } } for the dashboard's 📈 chip.
-     feedback:    sendFeedback(u,p,body,anon,context) — one note from the
+     feedback:    sendFeedback(u,p,body,anon,context,snapshot) — one note from the
                     💬 button. ⚠️ `anon` true means the ROW KEEPS NOTHING
                     about the sender (NULL student_id, NULL display_name),
                     not that a name is hidden — see the header of
@@ -98,9 +98,22 @@
                     e.g. "play:gt5") rides along either way — a question id
                     is not a person. Returns {ok} / {ok:false,error:"auth"
                     |"empty"}.
+                    `snapshot` (2026-09-03) is the TEXT OF THE QUESTION that
+                    was on the screen when the sheet opened, captured by
+                    js/feedback.js's snapshotQuestion() and capped at 1800
+                    client-side / 2000 server-side. The questions are
+                    generated fresh per learner per tap, so a note about
+                    "this one" was previously unrecoverable. It rides along
+                    with an anonymous note too, on the same reasoning as
+                    context: a question is content, not identity.
+                    ⚠️ SIX args — supabase/migration-feedback-snapshot.sql
+                    must be applied BEFORE this client ships, or the RPC
+                    call fails against the old 5-argument function.
                   adminFeedback(pw) — { ok, unread, rows: [{id, name (already
-                    "Anonymous" when anonymous), anon, context, body,
-                    createdAt, readAt}] }, newest first, capped at 500.
+                    "Anonymous" when anonymous), anon, context, snapshot
+                    (null on an old note or a note with no question on
+                    screen), body, createdAt, readAt}] }, newest first,
+                    capped at 500.
                   adminFeedbackRead(pw,id,read) — set/clear read_at.
      papers:      listPapers(u,p) — { ok, papers: [{id,title,chapter,
                     sizeBytes,sort,createdAt}] }. Auth-gated, and it never

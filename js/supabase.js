@@ -176,10 +176,19 @@ export const SupabaseBackend = {
   // for student_id and display_name. `context` (screen + question id)
   // rides along either way. See supabase/migration-feedback-papers.sql
   // (WRITTEN, NOT RUN).
-  async sendFeedback(username, password, body, anon, context) {
+  //
+  // `snapshot` (2026-09-03) is the TEXT OF THE QUESTION that was on the
+  // screen when the sheet opened — the questions are generated fresh, so
+  // without it a note about "this one" points at something that no longer
+  // exists. Content, not identity, so it rides along with an anonymous
+  // note exactly as context does.
+  // ⚠️ SIX arguments: supabase/migration-feedback-snapshot.sql must be
+  // applied BEFORE this ships, or the RPC 404s on the old 5-arg signature.
+  async sendFeedback(username, password, body, anon, context, snapshot) {
     return rpc("mhq_send_feedback", {
       p_username: username, p_password: password,
       p_body: body, p_anon: !!anon, p_context: context || null,
+      p_snapshot: snapshot || null,
     });
   },
   async adminFeedback(pw) { return rpc("mhq_admin_feedback", { p_admin_password: pw }); },

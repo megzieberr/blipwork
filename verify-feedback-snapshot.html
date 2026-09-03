@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback snapshot · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  ul.fails{list-style:none;font-size:12px;line-height:1.6;color:var(--bad);margin-top:8px}
+  /* the same 375×812 real-phone stage verify-feedback-papers.html uses —
+     snapshotQuestion() reads innerText, and innerText needs a real layout,
+     so a detached fragment or a 1200px-wide frame would not be the thing
+     the learner is actually looking at. */
+  #stage{width:375px;height:812px;border:1px solid var(--brd);border-radius:10px;background:#070b16}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Feedback snapshot · verification</h1>
+<p class="muted small">The 💬 note now carries the TEXT OF THE QUESTION that was on the learner's screen
+  (<code>supabase/migration-feedback-snapshot.sql</code>, 2026-09-03) — the questions are generated fresh per learner
+  per tap, so a note tagged only <code>play:fn7</code> pointed at something that no longer existed. Four kinds of
+  check: (1) the LOCAL backend's mirror of the new column; (2) <code>snapshotQuestion()</code> driven on real
+  rendered rounds inside a 375px frame — play, dice, Fun Functions (shadow root) and the hub; (3) the whole send
+  path, arguments recorded as the sheet's own Send button fires them; (4) text checks over the migration, which is
+  WRITTEN, NOT RUN.</p>
+<div id="banner">running…</div>
+
+<h2>1 · the local mirror — the new column, and the anonymity rule</h2>
+<pre id="mirror">…</pre>
+
+<h2>2 · snapshotQuestion() on real rounds at 375px</h2>
+<iframe id="stage" src="about:blank" title="375px stage"></iframe>
+<pre id="snap">…</pre>
+
+<h2>3 · the send path — six arguments, recorded at the Send button</h2>
+<pre id="send">…</pre>
+
+<h2>4 · the migration file, and the schema.sql mirror</h2>
+<pre id="sql">…</pre>
+
+<h2>failures</h2>
+<ul class="fails" id="failList"></ul>
+
+<script type="module">
+import { LocalBackend } from "./js/local-backend.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+
+const PW = "pw12";
+const rawRows = () => { try { return JSON.parse(localStorage.getItem("mhq.feedback")) || []; } catch { return []; } };
+const lastRow = () => rawRows()[rawRows().length - 1];
+const waitFor = (fn, ms = 8000) => new Promise((res, rej) => {
+  const t0 = Date.now();
+  (function poll() {
+    let v = null;
+    try { v = fn(); } catch { v = null; }
+    if (v) return res(v);
+    if (Date.now() - t0 > ms) return rej(new Error("timeout"));
+    setTimeout(poll, 40);
+  })();
+});
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+/* Words long enough to be worth looking for in a snapshot. A dice deal is
+   random: some rounds draw a wordy prompt, some draw a bare expression with
+   nothing over three letters in it — so the caller passes a fallback source
+   (the whole card) and this picks the first list that is not empty. */
+const longWords = (...sources) => {
+  for (const src of sources) {
+    const ws = String(src || "").replace(/\s+/g, " ").trim()
+      .split(" ").filter(w => /[A-Za-z]{4,}/.test(w)).slice(0, 3);
+    if (ws.length) return ws;
+  }
+  return [];
+};
+/* The visible option/step text of the question card — always inside the
+   snapshot, and read with innerText so the unopened hint (which is NOT in
+   the snapshot) cannot leak into the expected list. */
+const optionText = () => [...D.querySelectorAll(".q-host .q .opt, .q-host .q .q-prompt")]
+  .map(n => n.innerText || "").join(" ");
+
+/* ============================================================
+   1 · the local mirror
+   ?local=1 is the only place any of this SQL currently executes, so the
+   mirror's behaviour stands in for the RPC's. Read back RAW, not through
+   adminFeedback() — a claim about what the ROW keeps, checked through the
+   reader that also shapes the row, would prove nothing.
+   ============================================================ */
+const mi = [];
+{
+  const U = `verify_snap_${Math.random().toString(36).slice(2, 8)}`;
+  await LocalBackend.signup(U, "Verify Snap", PW);
+
+  const SNAP = "Solve for x:\n3x + 4 = 19\nA  x = 5\nB  x = 7";
+  {
+    const r = await LocalBackend.sendFeedback(U, PW, "this one is wrong", false, "play:eq3", SNAP);
+    tick(r.ok === true, "mirror: a note with a snapshot sends");
+    tick(lastRow().snapshot === SNAP, `mirror: the snapshot is stored verbatim (got ${JSON.stringify(String(lastRow().snapshot).slice(0, 40))})`);
+    mi.push("named  -> " + JSON.stringify(lastRow().snapshot));
+  }
+
+  /* ⚠️ THE RULE. Anonymity is about what the row keeps of the SENDER. A
+     question is content, not identity — exactly as `context` is — so an
+     anonymous note keeps its snapshot, and that is the whole reason the
+     column exists (an anonymous "this one renders weird" is otherwise
+     unactionable). Both halves asserted on the same row. */
+  {
+    await LocalBackend.sendFeedback(U, PW, "i don't get this", true, "play:eq3", SNAP);
+    const row = lastRow();
+    tick(row.studentId === null, "anon + snapshot: student id is still NULL");
+    tick(row.name === null, "anon + snapshot: display name is still NULL");
+    tick(row.snapshot === SNAP, "anon + snapshot: the QUESTION still rides along (content, not identity)");
+    tick(row.context === "play:eq3", "anon + snapshot: the context chip still rides along");
+    tick(!JSON.stringify(row).includes(U), "anon + snapshot: the raw row mentions the username nowhere");
+    mi.push("anon   -> " + JSON.stringify(row.snapshot) + "  studentId " + row.studentId);
+  }
+
+  // caps and empties, the same defensive shape p_context has
+  {
+    await LocalBackend.sendFeedback(U, PW, "long one", false, "play:eq3", "y".repeat(2600));
+    tick(lastRow().snapshot.length === 2000, `mirror: a 2600-char snapshot is cut to 2000 (got ${lastRow().snapshot.length})`);
+
+    await LocalBackend.sendFeedback(U, PW, "hub note", false, "hub", "   ");
+    tick(lastRow().snapshot === null, `mirror: a blank snapshot stores NULL, not "" (got ${JSON.stringify(lastRow().snapshot)})`);
+
+    await LocalBackend.sendFeedback(U, PW, "no snapshot arg at all", false, "hub");
+    tick(lastRow().snapshot === null, "mirror: a caller that sends no snapshot at all stores NULL");
+  }
+
+  // the teacher's reader hands it on
+  {
+    const r = await LocalBackend.adminFeedback("admin");
+    tick(r.ok === true, "mirror: adminFeedback answers");
+    tick(r.rows.some(row => row.snapshot === SNAP), "mirror: adminFeedback returns the snapshot field");
+    tick(r.rows.every(row => "snapshot" in row), "mirror: EVERY row carries the key (null on the ones without one)");
+    const anonRow = r.rows.find(row => row.anon && row.snapshot === SNAP);
+    tick(!!anonRow, "mirror: the anonymous row reaches her WITH its question and WITHOUT a name");
+    mi.push(`adminFeedback rows ${r.rows.length} · with a snapshot ${r.rows.filter(x => x.snapshot).length}`);
+  }
+}
+document.getElementById("mirror").textContent = mi.join("\n");
+
+/* ============================================================
+   2 · snapshotQuestion() on real rounds
+   The frame's OWN module instance is imported (w.eval → import), because
+   snapshotQuestion reads `document` — this page's document is not the app.
+   ============================================================ */
+const sn = [];
+let stageOk = false, W = null, D = null, FB = null, APP = null;
+{
+  const stage = document.getElementById("stage");
+  const seedUser = `verify_stage_${Math.random().toString(36).slice(2, 8)}`;
+  await LocalBackend.signup(seedUser, "Zola Mokoena", PW);
+  localStorage.setItem("mhq.session", JSON.stringify({ username: seedUser, password: PW }));
+  localStorage.setItem("mhq.forceLocal", "1");
+
+  await new Promise(res => {
+    stage.addEventListener("load", res, { once: true });
+    stage.src = "./index.html?local=1";
+  });
+  W = stage.contentWindow; D = stage.contentDocument;
+  try { await waitFor(() => W.__APP__ && W.__APP__.state); stageOk = true; } catch { stageOk = false; }
+  tick(stageOk, "375px stage: the app booted and has state");
+
+  if (stageOk) {
+    APP = W.__APP__;
+    FB = await W.eval('import("./js/feedback.js")');
+    tick(typeof FB.snapshotQuestion === "function", "js/feedback.js exports snapshotQuestion()");
+
+    const cfg = await W.eval('import("./js/config.js")');
+    const qd = await W.eval('import("./js/quests/index.js")');
+
+    /* ---- (a) a real quest round ---- */
+    {
+      const stats = cfg.CHAPTERS.find(c => c.id === "stats");
+      APP.go("play", { chapter: stats, quest: stats.quests[0], def: qd.questDef("q1"), accent: stats.signature });
+      await waitFor(() => D.querySelector(".q-host .q"));
+      await sleep(120);
+
+      const snap = FB.snapshotQuestion(APP);
+      const prompt = (D.querySelector(".q-prompt") || {}).textContent || "";
+      tick(snap.length > 0, `play: the snapshot is not empty (${snap.length} chars)`);
+      // the question that is ON THE SCREEN, not some other question — a few
+      // real words out of the live prompt must be in it
+      const words = longWords(prompt, optionText());
+      tick(words.length > 0 && words.every(w => snap.includes(w)),
+        `play: the snapshot contains the on-screen prompt (looked for ${JSON.stringify(words)})`);
+      // and it is the question CARD, not the whole screen: the play top bar
+      // carries the quest number and a ✕, neither of which is a question
+      tick(!snap.includes("✕"), "play: the quit control is not in the snapshot (it is the card, not the screen)");
+      tick(!snap.includes("Tell your teacher"), "play: the 💬 button's own label is not in the snapshot");
+      sn.push(`play    ${snap.length} chars · ${JSON.stringify(snap.slice(0, 90))}`);
+
+      /* ---- (b) THE SHEET'S OWN TEXT IS NEVER CAPTURED ----
+         Two ways it must not get in: the snapshot is taken before the panel
+         exists (openSheet does it on its first line), and even with the
+         panel standing open a re-read must not pick it up. Assert the
+         second, which is the one a future edit could break. */
+      const fab = D.querySelector(".fb-fab");
+      tick(!!fab, "the 💬 button is mounted on the play screen");
+      fab.click();
+      await waitFor(() => D.querySelector(".fb-scrim"));
+      await sleep(80);
+      const withSheetOpen = FB.snapshotQuestion(APP);
+      tick(!withSheetOpen.includes("Send a note to your teacher"),
+        "the sheet's heading is NOT in a snapshot taken while the sheet is open");
+      tick(!withSheetOpen.includes("Type your note"),
+        "the sheet's placeholder is NOT in a snapshot taken while the sheet is open");
+      tick(!withSheetOpen.includes("Send anonymously") && !withSheetOpen.includes("Show my name"),
+        "the sheet's anonymity control is NOT in the snapshot");
+      D.querySelector(".fb-scrim .fb-close").click();
+      await sleep(60);
+    }
+
+    /* ---- (c) a dice round — same renderer, no backend needed ---- */
+    {
+      const dp = await W.eval('import("./js/dice-play.js")');
+      const gtrig = cfg.CHAPTERS.find(c => c.id === "gtrig") || cfg.CHAPTERS.find(c => c.id === "trig");
+      let diceOk = true;
+      try {
+        await dp.openDiceRound(APP, gtrig);
+        await waitFor(() => D.querySelector(".q-host .q"), 6000);
+      } catch { diceOk = false; }
+      tick(diceOk, `dice: a round on "${gtrig && gtrig.id}" rendered offline`);
+      if (diceOk) {
+        await sleep(120);
+        const snap = FB.snapshotQuestion(APP);
+        const prompt = (D.querySelector(".q-prompt") || {}).textContent || "";
+        tick(snap.length > 0, `dice: the snapshot is not empty (${snap.length} chars)`);
+        /* a dice deal is random: some rounds are a bare expression with no
+           word in them anywhere. Assert on words when there ARE words, and
+           on substance when there are not — never on a coincidence. */
+        const words = longWords(prompt, optionText());
+        if (words.length) {
+          tick(words.every(w => snap.includes(w)),
+            `dice: the snapshot contains the on-screen text (looked for ${JSON.stringify(words)})`);
+        } else {
+          tick(snap.length > 20, `dice: a wordless deal still snapshots its expression (${snap.length} chars)`);
+        }
+        sn.push(`dice    ${snap.length} chars · ${JSON.stringify(snap.slice(0, 90))}`);
+      }
+      APP.go("hub");
+      await sleep(80);
+    }
+
+    /* ---- (d) Fun Functions — THE SHADOW ROOT CASE ----
+       js/funfun-play.js mounts Fun Functions in a shadow root of its own
+       (the two apps share 60 class names). document.querySelector cannot
+       see into it, so a snapshot that only searched the light DOM would
+       come back with nothing at all — the light DOM there holds only a
+       slim back bar and an empty shadow host — and nobody would notice.
+
+       BOTH of its screen shapes are checked, because they are different
+       DOM: a quest opens on a CUTSCENE (a caption-and-graph .view) and
+       only then deals ROUNDS (the .qwrap card). */
+    const ffShadowText = () => {
+      const h = D.querySelector(".ff-host");
+      const r = h && h.shadowRoot;
+      const node = r && (r.querySelector(".qwrap") || r.querySelector(".view"));
+      return node ? (node.innerText || "") : "";
+    };
+    {
+      const ffq = await W.eval('import("./js/funfun/quests/index.js")');
+      const func = cfg.CHAPTERS.find(c => c.id === "func");
+      const questId = ffq.QUESTS[0].id;
+      let ffOk = true;
+      try {
+        APP.go("funfunPlay", { chapter: func, questId });
+        await waitFor(() => ffShadowText().trim().length > 10, 9000);
+      } catch { ffOk = false; }
+      tick(ffOk, `funfun: quest "${questId}" mounted and drew inside its shadow root`);
+      if (ffOk) {
+        await sleep(150);
+        const shRoot = D.querySelector(".ff-host").shadowRoot;
+        const cutscene = !shRoot.querySelector(".qwrap");
+        /* the words to look for come from the CONTENT of the screen, not
+           from its progress bar — .qbar is nav and is stripped on purpose
+           (it is "🔭 Watch first · 1 / 4", not the maths). */
+        const contentNode = shRoot.querySelector(".qwrap")
+          || shRoot.querySelector(".intro-cap")
+          || shRoot.querySelector(".view h2");
+        const shadowText = (contentNode && contentNode.innerText) || ffShadowText();
+        const snap = FB.snapshotQuestion(APP);
+        tick(snap.length > 0, `funfun ${cutscene ? "cutscene" : "round"}: the snapshot is not empty (${snap.length} chars)`);
+        const words = longWords(shadowText, ffShadowText());
+        tick(words.length > 0 && words.every(w => snap.includes(w)),
+          `funfun ${cutscene ? "cutscene" : "round"}: the snapshot reaches INTO the shadow root (looked for ${JSON.stringify(words)})`);
+        sn.push(`funfun${cutscene ? "-cut" : "    "} ${snap.length} chars · ${JSON.stringify(snap.slice(0, 90))}`);
+
+        /* now the ROUND shape: the cutscene's own Skip link walks past it */
+        if (cutscene) {
+          const skip = D.querySelector(".ff-host").shadowRoot.querySelector(".skip-btn");
+          tick(!!skip, "funfun: the cutscene has a Skip link (the way through to a round)");
+          if (skip) {
+            skip.click();
+            let roundOk = true;
+            try { await waitFor(() => D.querySelector(".ff-host").shadowRoot.querySelector(".qwrap"), 9000); }
+            catch { roundOk = false; }
+            tick(roundOk, "funfun: a real round (.qwrap) dealt after the cutscene");
+            if (roundOk) {
+              await sleep(200);
+              const roundText = D.querySelector(".ff-host").shadowRoot.querySelector(".qwrap").innerText || "";
+              const rsnap = FB.snapshotQuestion(APP);
+              tick(rsnap.length > 0, `funfun round: the snapshot is not empty (${rsnap.length} chars)`);
+              const rwords = longWords(roundText);
+              tick(rwords.length > 0 && rwords.every(w => rsnap.includes(w)),
+                `funfun round: the snapshot is the .qwrap card (looked for ${JSON.stringify(rwords)})`);
+              tick(!rsnap.includes("‹ "), "funfun round: the mount's back link is not in the snapshot");
+              sn.push(`funfun  ${rsnap.length} chars · ${JSON.stringify(rsnap.slice(0, 90))}`);
+            }
+          }
+        }
+      }
+      APP.go("hub");
+      await sleep(80);
+    }
+
+    /* ---- (e) the hub — no question on the screen ----
+       DECIDED AND DOCUMENTED: the hub keeps the fallback rather than
+       returning nothing. "The app was slow on the chapter list" is a real
+       note and the tile labels place it. What it must NEVER contain is the
+       learner: the hub head greets them by first name, so .hub-head is
+       stripped and redactSelf() strikes the name out again afterwards. */
+    {
+      APP.go("hub");
+      await waitFor(() => D.querySelector("#app .view .hub-head"));
+      await sleep(120);
+      const snap = FB.snapshotQuestion(APP);
+      const greeting = (D.querySelector(".hub-head h1") || {}).textContent || "";
+      tick(/Zola/.test(greeting), `hub: the greeting really does print the learner's name (got ${JSON.stringify(greeting.trim())})`);
+      tick(!/Zola/i.test(snap), "⚠️ hub: the learner's FIRST NAME is not in the snapshot");
+      tick(!/Mokoena/i.test(snap), "⚠️ hub: the learner's SURNAME is not in the snapshot");
+      tick(!snap.includes(seedUser), "⚠️ hub: the learner's USERNAME is not in the snapshot");
+      tick(snap.length < 900, `hub: the snapshot is short, not a page dump (${snap.length} chars)`);
+      sn.push(`hub     ${snap.length} chars · ${JSON.stringify(snap.slice(0, 90))}`);
+    }
+
+    /* ---- (f) the cap ---- */
+    {
+      const snapCap = await W.eval(`(() => {
+        const v = document.querySelector("#app .view");
+        const junk = document.createElement("div");
+        junk.className = "q-host";
+        junk.innerHTML = '<div class="q"><p class="q-prompt">' + "wordy ".repeat(600) + '</p></div>';
+        v.appendChild(junk);
+        return junk;
+      })()`);
+      await sleep(60);
+      const snap = FB.snapshotQuestion(APP);
+      tick(snap.length <= 1800, `cap: a 3600-char question is cut to at most 1800 (got ${snap.length})`);
+      tick(snap.endsWith("…"), "cap: the cut is marked with an ellipsis she can see");
+      snapCap.remove();
+      sn.push(`cap     ${snap.length} chars (max 1800)`);
+    }
+  }
+}
+document.getElementById("snap").textContent = sn.join("\n");
+
+/* ============================================================
+   3 · the send path — the arguments the Send button really fires
+   The learner's own path, end to end: type in the sheet, press Send, and
+   record what arrives at the backend. The RPC's PARAMETER NAME is asserted
+   in §4 against js/supabase.js (the wire itself needs supabase-js off a
+   CDN and a live project, neither of which belongs in a harness) — so the
+   two together cover the whole hop: six arguments leave the sheet, and the
+   sixth is named p_snapshot on the way out.
+   ============================================================ */
+const se = [];
+if (stageOk) {
+  const lb = await W.eval('import("./js/local-backend.js")');
+  const original = lb.LocalBackend.sendFeedback;
+  let seen = null;
+  lb.LocalBackend.sendFeedback = async function (...args) { seen = args; return { ok: true }; };
+
+  const cfg = await W.eval('import("./js/config.js")');
+  const qd = await W.eval('import("./js/quests/index.js")');
+  const stats = cfg.CHAPTERS.find(c => c.id === "stats");
+  APP.go("play", { chapter: stats, quest: stats.quests[0], def: qd.questDef("q1"), accent: stats.signature });
+  await waitFor(() => D.querySelector(".q-host .q"));
+  await sleep(120);
+  const onScreen = FB.snapshotQuestion(APP);
+
+  D.querySelector(".fb-fab").click();
+  await waitFor(() => D.querySelector(".fb-scrim"));
+  const body = D.querySelector(".fb-scrim .fb-body");
+  body.value = "q1 is wrong";
+  D.querySelector(".fb-scrim .fb-send").click();
+  try { await waitFor(() => seen); } catch { /* the assert below reports it */ }
+  lb.LocalBackend.sendFeedback = original;
+
+  tick(!!seen, "send: the Send button reached the backend");
+  if (seen) {
+    tick(seen.length === 6, `send: SIX arguments arrive (got ${seen.length})`);
+    tick(seen[2] === "q1 is wrong", "send: arg 3 is the note the learner typed");
+    tick(seen[3] === false, "send: arg 4 is the anon flag (false — the box ships ticked)");
+    tick(seen[4] === "play:q1", `send: arg 5 is the context chip (got ${JSON.stringify(seen[4])})`);
+    tick(typeof seen[5] === "string" && seen[5].length > 0, `send: arg 6 is the snapshot (${String(seen[5]).length} chars)`);
+    tick(seen[5] === onScreen, "send: the snapshot sent is the one taken at SHEET-OPEN time, unchanged");
+    tick(!seen[5].includes("q1 is wrong"), "send: the learner's own note is not inside the snapshot");
+    se.push(`args: ${seen.length} · context ${JSON.stringify(seen[4])} · snapshot ${String(seen[5]).length} chars`);
+    se.push(`snapshot: ${JSON.stringify(String(seen[5]).slice(0, 160))}`);
+  }
+  const scrim = D.querySelector(".fb-scrim");
+  if (scrim) scrim.remove();
+}
+document.getElementById("send").textContent = se.join("\n");
+
+/* ============================================================
+   4 · the migration, read as text
+   WRITTEN, NOT RUN — so the posture is asserted against the file Megan
+   will paste in.
+   ============================================================ */
+const sq = [];
+{
+  const src = await (await fetch("./supabase/migration-feedback-snapshot.sql", { cache: "reload" })).text();
+
+  tick(/WRITTEN, NOT RUN/.test(src), "migration: header says WRITTEN, NOT RUN");
+  tick(/alter table public\.feedback add column if not exists snapshot text;/.test(src),
+    "migration: adds feedback.snapshot, re-runnably");
+
+  /* ⚠️ THE OVERLOAD TRAP. Adding an argument to a Postgres function makes
+     an OVERLOAD, not a replacement — the old 5-arg function would sit
+     there, still granted, still swallowing every snapshot. The drop of the
+     exact old signature must come BEFORE the create of the new one. */
+  const dropAt = src.indexOf("drop function if exists public.mhq_send_feedback(text, text, text, boolean, text);");
+  const createAt = src.indexOf("create or replace function public.mhq_send_feedback(");
+  tick(dropAt > -1, "migration: DROPS the exact old 5-argument signature");
+  tick(dropAt > -1 && createAt > dropAt, "migration: the drop comes BEFORE the create (no overload)");
+  tick(/p_context text, p_snapshot text\)/.test(src), "migration: p_snapshot is the LAST argument (the five keep their places)");
+
+  // the same defensive shape p_context has
+  tick(/v_snap := left\(nullif\(btrim\(coalesce\(p_snapshot, ''\)\), ''\), 2000\);/.test(src),
+    "migration: the snapshot is trimmed, nullif-empty'd and capped at 2000");
+  tick(/insert into public\.feedback \(student_id, display_name, context, body, snapshot\)/.test(src),
+    "migration: the insert names the snapshot column");
+
+  // anonymity, unchanged and stated
+  tick(/case when v_anon then null else v_sid end/.test(src), "migration: an anonymous insert still writes NULL student_id");
+  tick(/case when v_anon then null else v_name end/.test(src), "migration: an anonymous insert still writes NULL display_name");
+  tick(/ANONYMITY IS UNCHANGED/.test(src) && /not identity/i.test(src),
+    "migration: the header states the anonymity law (content, not identity)");
+  tick(/stored for anonymous notes/i.test(src), "migration: the header says the snapshot is stored for anonymous notes too");
+  tick(/SHIP ORDER/i.test(src), "migration: the header states the ship order (migration first, then push)");
+
+  // security posture on both functions it touches
+  const fnRe = /create or replace function public\.(\w+)\s*\(([^)]*)\)\s*returns\s+([^\s]+)\s+language\s+(\w+)([^$]*?)as \$\$/g;
+  const fns = []; let m;
+  while ((m = fnRe.exec(src)) !== null) fns.push({ name: m[1], head: m[0] });
+  tick(fns.length === 2, `migration re-creates exactly 2 functions (got ${fns.length}: ${fns.map(f => f.name).join(", ")})`);
+  ["mhq_send_feedback", "mhq_admin_feedback"].forEach(n => tick(fns.some(f => f.name === n), `migration re-creates ${n}`));
+  fns.forEach(f => {
+    tick(/set search_path = public, extensions/.test(f.head), `${f.name}: search_path still pinned`);
+    tick(/security definer/.test(f.head), `${f.name}: still security definer`);
+  });
+
+  // the grant has to be re-issued against the NEW signature — the drop took it
+  tick(/grant execute on function[\s\S]*?public\.mhq_send_feedback\(text, text, text, boolean, text, text\)[\s\S]*?to anon, authenticated;/.test(src),
+    "migration: the 6-argument mhq_send_feedback is granted to anon/authenticated");
+  tick(/public\.mhq_admin_feedback\(text\)/.test(src), "migration: the grants block names mhq_admin_feedback(text)");
+
+  // the teacher's reader hands the field on
+  tick(/'snapshot', f\.snapshot,/.test(src), "migration: mhq_admin_feedback returns the snapshot");
+
+  // the two untouchables, as ever
+  tick(!/create or replace function public\.mhq_get_state/.test(src), "migration: mhq_get_state NOT re-created");
+  tick(!/create or replace function public\.mhq_admin_data/.test(src), "migration: mhq_admin_data NOT re-created");
+  // and nothing else got dragged in
+  tick(!/mhq_admin_feedback_read|mhq_list_papers|mhq_auth_ok|mhq_admin_ok_rpc/.test(
+    src.replace(/^--.*$/gm, "")), "migration: touches nothing but the two functions it names");
+
+  /* ---- the schema.sql mirror (CLAUDE.md: a schema change goes in TWO
+          places, and migration-funfun.sql's header records the time that
+          was forgotten) ---- */
+  const schema = await (await fetch("./supabase/schema.sql", { cache: "reload" })).text();
+  tick(/snapshot     text,/.test(schema), "schema.sql mirror: the feedback table has the snapshot column");
+  tick(/p_context text, p_snapshot text\)/.test(schema), "schema.sql mirror: mhq_send_feedback takes p_snapshot");
+  tick(/insert into public\.feedback \(student_id, display_name, context, body, snapshot\)/.test(schema),
+    "schema.sql mirror: the insert names the snapshot column");
+  tick(/'snapshot', f\.snapshot,/.test(schema), "schema.sql mirror: mhq_admin_feedback returns the snapshot");
+  tick(/public\.mhq_send_feedback\(text, text, text, boolean, text, text\),/.test(schema),
+    "schema.sql mirror: the grants block names the 6-argument signature");
+  tick(!/public\.mhq_send_feedback\(text, text, text, boolean, text\),/.test(schema),
+    "schema.sql mirror: the OLD 5-argument signature is gone from the grants block");
+
+  /* ---- the client end of the wire ---- */
+  const sb = await (await fetch("./js/supabase.js", { cache: "reload" })).text();
+  tick(/async sendFeedback\(username, password, body, anon, context, snapshot\) \{/.test(sb),
+    "js/supabase.js: sendFeedback takes the snapshot as its 6th parameter");
+  tick(/p_snapshot: snapshot \|\| null,/.test(sb),
+    "js/supabase.js: it goes on the wire as p_snapshot (null, never \"\")");
+
+  /* ---- and the capture side's promise, pinned in source ---- */
+  const fb = await (await fetch("./js/feedback.js", { cache: "reload" })).text();
+  tick(/const snapshot = snapshotQuestion\(app\);/.test(fb),
+    "js/feedback.js: the snapshot is taken in openSheet, not at Send");
+  tick(fb.indexOf("const snapshot = snapshotQuestion(app);") < fb.indexOf('el("div", "modal-scrim fb-scrim")'),
+    "js/feedback.js: taken BEFORE the sheet element exists");
+  tick(/\.hub-head/.test(fb) && /\.blip-head/.test(fb),
+    "js/feedback.js: the name-bearing heads are in the strip list (the anonymity promise)");
+  tick(/function redactSelf/.test(fb), "js/feedback.js: redactSelf() is the second lock on the same door");
+  tick(/const SNAPSHOT_MAX = 1800;/.test(fb), "js/feedback.js: the client cap is 1800, under the server's 2000");
+
+  /* ---- her reading view ---- */
+  const adm = await (await fetch("./js/admin.js", { cache: "reload" })).text();
+  tick(/el\("details", "adm-fb-snap"\)/.test(adm), "js/admin.js: the snapshot is a <details> fold");
+  tick(/<summary>On their screen<\/summary>/.test(adm), 'js/admin.js: the label reads "On their screen"');
+  tick(/\.adm-fb-snap-text"\)\.textContent = r\.snapshot;/.test(adm),
+    "js/admin.js: rendered with textContent, never innerHTML");
+  tick(/if \(r\.snapshot\) \{/.test(adm), "js/admin.js: no fold at all on a note without one");
+
+  sq.push(`migration functions: ${fns.map(f => f.name).join(", ")}`);
+  sq.push(`drop at ${dropAt} · create at ${createAt} (drop must come first)`);
+}
+document.getElementById("sql").textContent = sq.join("\n");
+
+/* ---------------- banner ---------------- */
+const list = document.getElementById("failList");
+fails.forEach(msg => { const li = document.createElement("li"); li.textContent = "✗ " + msg; list.appendChild(li); });
+const banner = document.getElementById("banner");
+const allOk = passed === total;
+banner.className = allOk ? "pass" : "fail";
+banner.textContent = allOk
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — ${passed}/${total} checks passed`;
+
+window.__VERIFY__ = { total, passed, ok: allOk, fails };
+console.log(`[verify-feedback-snapshot] ${passed}/${total} — ${allOk ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

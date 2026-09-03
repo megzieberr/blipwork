@@ -1569,6 +1569,13 @@ create table if not exists public.feedback (
   display_name text,                       -- snapshot at send time; NULL when anonymous
   context      text,                       -- "play:gt5" / "exam:…" / "hub" — never a person
   body         text not null,              -- capped at 1000 chars by the RPC below
+  -- the visible text of the question that was on the screen when the 💬
+  -- sheet was opened (migration-feedback-snapshot.sql, 2026-09-03). Every
+  -- question in this app is generated fresh, so without this a note saying
+  -- "this one is wrong" points at something that no longer exists. Stored
+  -- for anonymous notes too: it is CONTENT, not identity, exactly as
+  -- `context` is. NULL is ordinary — the hub has no question to snap.
+  snapshot     text,                       -- capped at 2000 chars by the RPC below
   read_at      timestamptz
 );
 create index if not exists feedback_created_idx on public.feedback (created_at desc);
@@ -1590,11 +1597,16 @@ revoke all on public.feedback, public.papers from anon, authenticated;
 -- the two edge functions read/write `papers` with the service role
 grant select, insert, delete on public.papers to service_role;
 
+-- ⚠️ SIX arguments since migration-feedback-snapshot.sql (2026-09-03).
+-- On a live database that already had the five-argument version, adding an
+-- argument creates an OVERLOAD rather than a replacement — that migration
+-- drops the old signature first. On a FRESH project this file is the only
+-- definition, so there is nothing to drop here.
 create or replace function public.mhq_send_feedback(p_username text, p_password text,
                                                     p_body text, p_anon boolean,
-                                                    p_context text)
+                                                    p_context text, p_snapshot text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare v_sid uuid; v_body text; v_ctx text; v_name text; v_anon boolean;
+declare v_sid uuid; v_body text; v_ctx text; v_snap text; v_name text; v_anon boolean;
 begin
   -- ALWAYS authenticate, anonymous or not: anonymity is about what the row
   -- keeps, never about who may post.
@@ -1605,16 +1617,18 @@ begin
   if v_body is null then return jsonb_build_object('ok', false, 'error', 'empty'); end if;
   v_body := left(v_body, 1000);
   v_ctx := left(nullif(btrim(coalesce(p_context, '')), ''), 120);
+  -- the question that was on the screen, capped the same defensive way
+  v_snap := left(nullif(btrim(coalesce(p_snapshot, '')), ''), 2000);
 
   v_anon := coalesce(p_anon, false);
   if not v_anon then
     select display_name into v_name from public.students where id = v_sid;
   end if;
 
-  insert into public.feedback (student_id, display_name, context, body)
+  insert into public.feedback (student_id, display_name, context, body, snapshot)
   values (case when v_anon then null else v_sid end,
           case when v_anon then null else v_name end,
-          v_ctx, v_body);
+          v_ctx, v_body, v_snap);
 
   update public.students set last_active_at = now() where id = v_sid;
   return jsonb_build_object('ok', true);
@@ -1636,6 +1650,7 @@ begin
              'name', coalesce(f.display_name, 'Anonymous'),
              'anon', (f.display_name is null),
              'context', f.context,
+             'snapshot', f.snapshot,
              'body', f.body,
              'createdAt', f.created_at,
              'readAt', f.read_at) as r,
@@ -1980,7 +1995,8 @@ grant execute on function
   public.mhq_exam_state(text, text),
   public.mhq_exam_open_part(text, text, text, text, integer),
   -- FEEDBACK-PAPERS-BRIEF.md, 2026-08-24
-  public.mhq_send_feedback(text, text, text, boolean, text),
+  -- (six args since migration-feedback-snapshot.sql, 2026-09-03)
+  public.mhq_send_feedback(text, text, text, boolean, text, text),
   public.mhq_admin_feedback(text),
   public.mhq_admin_feedback_read(text, uuid, boolean),
   public.mhq_list_papers(text, text),

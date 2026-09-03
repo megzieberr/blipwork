@@ -1421,13 +1421,21 @@ export const LocalBackend = {
   // (verify-feedback-papers.html) reads the raw localStorage row back and
   // asserts exactly that, because a mirror that quietly kept the id would
   // make the offline demo a lie about what the real one does.
-  async sendFeedback(username, password, body, anon, context) {
+  //
+  // `snapshot` (migration-feedback-snapshot.sql, 2026-09-03) is the text of
+  // the question that was on the screen. Capped at 2000 the same way the
+  // RPC caps it, and stored for an ANONYMOUS note too — it is content, not
+  // identity, exactly as context is. The harness asserts that: a mirror
+  // that dropped it for anonymous notes would make the offline demo lie
+  // about what live does.
+  async sendFeedback(username, password, body, anon, context, snapshot) {
     const s = verify(username, password);
     if (!s) return { ok: false, error: "auth" };
     const text = String(body == null ? "" : body).trim();
     if (!text) return { ok: false, error: "empty" };
     const isAnon = !!anon;
     const ctx = String(context == null ? "" : context).trim().slice(0, 120);
+    const snap = String(snapshot == null ? "" : snapshot).trim().slice(0, 2000);
     const rows = read(LS.feedback, []);
     rows.push({
       id: "fb" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -1435,6 +1443,7 @@ export const LocalBackend = {
       studentId: isAnon ? null : s.id,
       name: isAnon ? null : s.display_name,
       context: ctx || null,
+      snapshot: snap || null,
       body: text.slice(0, 1000),
       readAt: null,
     });
@@ -1454,7 +1463,7 @@ export const LocalBackend = {
       unread: rows.filter(r => !r.readAt).length,
       rows: rows.slice(0, 500).map(r => ({
         id: r.id, name: r.name || "Anonymous", anon: r.name == null,
-        context: r.context || null, body: r.body,
+        context: r.context || null, snapshot: r.snapshot || null, body: r.body,
         createdAt: r.createdAt, readAt: r.readAt || null,
       })),
     };

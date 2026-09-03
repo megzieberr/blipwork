@@ -518,13 +518,23 @@ function questSection(quests, dicePlays, funfunPlays) {
    whole difference between "this one renders weird" and a bug she can
    actually find.
 
+   And under each note, FOLDED AWAY, the SNAPSHOT: the text of the question
+   that was actually on the learner's screen (migration-feedback-snapshot.sql,
+   2026-09-03). The chip names the round; the questions are generated fresh
+   per learner per tap, so the chip alone pointed at a question that no
+   longer existed. Collapsed by default because the note is what she is
+   reading — the question is what she opens when the note does not make
+   sense on its own. Stored and shown for anonymous notes too, same
+   reasoning as the chip. A note written before this shipped, or written
+   on the hub where there is no question, simply has no fold.
+
    Fills itself in: the section is appended immediately with a "Loading…"
    line and the fetch patches it, so the dashboard never waits on it. */
 function feedbackSection() {
   const sec = el("div", "card adm-section");
   const head = el("div", "adm-lhead", "<h2>Feedback 💬</h2>");
   sec.appendChild(head);
-  sec.appendChild(el("p", "muted small", "Notes the learners send from the 💬 button in the app. A note sent anonymously stores nothing about who wrote it — the name is not hidden, it was never saved. The grey chip is the screen or question they were on when they wrote it, which is saved either way."));
+  sec.appendChild(el("p", "muted small", "Notes the learners send from the 💬 button in the app. A note sent anonymously stores nothing about who wrote it — the name is not hidden, it was never saved. The grey chip is the screen or question they were on when they wrote it, which is saved either way. Tap “On their screen” under a note to see the actual question they were looking at."));
   const list = el("div", "adm-fb-list");
   list.appendChild(el("p", "muted small", "Loading…"));
   sec.appendChild(list);
@@ -552,6 +562,16 @@ function feedbackSection() {
       // textContent, not innerHTML: this is text a learner typed, and it
       // goes on a page that also holds the admin session.
       main.querySelector(".adm-fb-body").textContent = r.body;
+      // "On their screen" — collapsed until she taps it. <details> rather
+      // than a button and a hidden div: the browser already owns the
+      // open/close state, the keyboard behaviour and the arrow. textContent
+      // again — this text was assembled from a page, not vetted.
+      if (r.snapshot) {
+        const snap = el("details", "adm-fb-snap");
+        snap.innerHTML = `<summary>On their screen</summary><div class="adm-fb-snap-text"></div>`;
+        snap.querySelector(".adm-fb-snap-text").textContent = r.snapshot;
+        main.appendChild(snap);
+      }
       row.appendChild(main);
       const tick = el("button", "btn ghost small adm-fb-tick", r.readAt ? "✓ Read" : "Mark read");
       tick.addEventListener("click", async () => {

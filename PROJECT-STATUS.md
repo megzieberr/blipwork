@@ -85,6 +85,11 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   wants it polished or the bubble suppressed on a loaded tray instead.
 
 ## ⏳ Pending on Megan
+- 💻 2 min [BLOCKING THE NEXT PUSH]: run
+  `supabase/migration-feedback-snapshot.sql` in the Supabase SQL editor
+  BEFORE the 💬-snapshot code is pushed — the new client sends six
+  arguments and the live 5-argument function would reject every Send.
+  Committed locally (not pushed), sw NOT bumped yet.
 - 📱 1 min [whenever]: close + reopen Blipwork twice (sw v87) → see the 🍪
   dot on the hub Blip button and the "Feed … his cookie!" bubble in his
   room, feed the cookie, both vanish.

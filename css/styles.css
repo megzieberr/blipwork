@@ -1601,5 +1601,19 @@ sup.sf-exp .sfrac,.opt sup.sf-exp .sfrac,.q-prompt sup.sf-exp .sfrac{font-size:1
   color:var(--accent);background:rgba(58,160,255,.12);border:1px solid var(--brd);
   max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .adm-fb-body{font-size:13.5px;line-height:1.55;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+/* "On their screen" — the question the learner was looking at, folded away
+   under the note. Quiet by default: the note is what she reads, the
+   question is what she opens when the note alone does not explain itself.
+   pre-wrap keeps the line breaks snapshotQuestion() preserved (stem, then
+   options, then the worked steps), and overflow-wrap:anywhere stops a long
+   expression pushing the admin page sideways on a phone. */
+.adm-fb-snap{margin-top:6px}
+.adm-fb-snap>summary{cursor:pointer;font-size:11.5px;color:var(--muted);
+  font-family:var(--font-display);letter-spacing:.02em;padding:3px 0}
+.adm-fb-snap>summary:hover{color:var(--accent)}
+.adm-fb-snap-text{margin-top:6px;padding:8px 10px;border-radius:10px;
+  border:1px solid var(--brd);background:rgba(255,255,255,.03);
+  font-family:var(--font-num);font-size:12px;line-height:1.5;color:var(--muted);
+  white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow-y:auto}
 .adm-fb-tick{flex:0 0 auto}
 .adm-unread{color:var(--warn);font-family:var(--font-num)}
