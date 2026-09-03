@@ -1,4 +1,4 @@
-# Project status — updated 2026-09-02 (🍪 COOKIE HINT shipped sw v87, live-verified; earlier same day: METHODS DAY sw v86)
+# Project status — updated 2026-09-03 (📸 FEEDBACK DAY shipped sw v88, live-verified: calc memory + q2 snap fix + feedback snapshots, migration applied)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,7 +9,18 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **Live** at https://megzieberr.github.io/blipwork/ on **sw v87** (cookie
+- **Live on sw v88** (2026-09-03, her "ship it"; feedback day, all three off the
+  kids' first real 💬 notes): the calculator keeps its screen across close/
+  reopen until page reload (singleton detach in js/calculator.js, synced
+  verbatim to Stats Quest sw v10); q2 dropForX snaps where the answer is
+  (graph-quest 2f699d2, sw v33 — was 99/300 rolls broken: wrong crossing /
+  snap-through second spot / never-snaps NaN; now targetX + oneSpotAtY guard,
+  2500/2500 clean, funfun re-synced); 💬 notes carry a SNAPSHOT of the
+  on-screen question, shown folded in admin as "On their screen"
+  (migration feedback_snapshot APPLIED + verified live BEFORE the push:
+  one 6-arg mhq_send_feedback, grants/secdef/search_path checked, anon
+  still can't read the table). 8/8 live-asset fetches verified post-deploy.
+- Previous: **sw v87** (cookie
   hint, shipped 2026-09-02 evening on her "yes go ahead": room speech bubble
   "Feed <name> his cookie!" + hub 🍪 dot, both gone once fed, one shared
   cookieReady() in js/companion/blip-ui.js. Opus worker built it, foreman
@@ -83,13 +94,24 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   heart in that state, and with a 20+ char nickname clips the wrapped name
   tail (that long-name overflow predates this change). Her call if she
   wants it polished or the bubble suppressed on a loaded tray instead.
+- 2026-09-03 (hers): feedback day approved off the kids' first real notes —
+  calc memory build, q2 dig+fix, snapshot plan+build, then "ship it".
+- 2026-09-03 (mine, flagged): a feedback snapshot is CONTENT, not identity —
+  stored for anonymous notes too, same law as `context`; the capture strips
+  name-bearing chrome AND strikes the learner's own name/username out.
+- 2026-09-03 (mine, flagged): calculator state persists until page RELOAD
+  (like a real fx-991ZA put down); no reset between questions, and on a
+  shared device the next kid may see the previous kid's arithmetic — judged
+  harmless, same as sharing a physical calculator.
 
 ## ⏳ Pending on Megan
-- 💻 2 min [BLOCKING THE NEXT PUSH]: run
-  `supabase/migration-feedback-snapshot.sql` in the Supabase SQL editor
-  BEFORE the 💬-snapshot code is pushed — the new client sends six
-  arguments and the live 5-argument function would reject every Send.
-  Committed locally (not pushed), sw NOT bumped yet.
+- 📱 2 min [whenever]: close + reopen Blipwork twice (sw v88) → open the 🧮,
+  type something, close it, reopen — your typing is still there; then send
+  yourself a 💬 note from inside a question and check it lands with "On
+  their screen" in the admin Feedback tab.
+- 💬 [whenever]: 6 unread learner notes in admin (5 Chichy M, 1 anon) — 3
+  are maths questions to answer her in person; her f(x) > g(x) shift
+  reasoning is CORRECT, and her q2 "-4 missing" bug report was REAL (fixed).
 - 📱 1 min [whenever]: close + reopen Blipwork twice (sw v87) → see the 🍪
   dot on the hub Blip button and the "Feed … his cookie!" bubble in his
   room, feed the cookie, both vanish.
@@ -104,6 +126,14 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   line, reversible).
 
 ## Next up
+- **Her call — q2 dropForX parabolas now ALWAYS land on the turning point**
+  (the only height a parabola meets once; measured: all 2502 surviving
+  parabola draws are the TP case, parabola share ~26%→~8%). Correct but
+  repetitive/gameable. Options: leave it, cut parabolas from that skill, or
+  design a variant.
+- **Her call — snapshot of a stacked fraction reads as broken-up text** in
+  the admin fold (y = −1 over x+1 comes out as three stubby lines). Still
+  identifiable; polish only if it bugs her.
 - **Her call — gtrig build report findings (design questions, NOT
   cosmetics):** F1 two recall cards show their own answer in the reveal
   frame; F2 the method-link panel opens with the answer; F4 a
