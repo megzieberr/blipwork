@@ -1,8 +1,8 @@
 {
   "generatedBy": "graph-quest/tools/sync-to-blipwork.py",
-  "generatedAt": "2026-08-25T10:49:50+00:00",
+  "generatedAt": "2026-09-03T15:20:54+00:00",
   "sourceRepo": "graph-quest",
-  "sourceCommit": "91bf32bedcec9217b95f529ffec6f046e3826431",
+  "sourceCommit": "2f699d2add4ab4c6c4aed2b862de7995ad661340",
   "sourceWorkingTreeDirty": false,
   "note": "GENERATED OUTPUT \u2014 never hand-edit js/funfun/. See GENERATED.md.",
   "files": [
@@ -79,8 +79,8 @@
     {
       "from": "js/engine/interactive.js",
       "to": "engine/interactive.js",
-      "bytes": 62482,
-      "sha256": "062d209e57a0ca831d5cb2250eab37ad74606f53ab90f65c1bd1d6db885ca8e5",
+      "bytes": 63464,
+      "sha256": "79ecd9389081f6a538254e276e32039c5aa7f7bcd1d0403eb4feaaccbfa545cd",
       "rewritten": false
     },
     {
@@ -149,8 +149,8 @@
     {
       "from": "js/quests/q2-point.js",
       "to": "quests/q2-point.js",
-      "bytes": 11045,
-      "sha256": "2e4aaebc062df93f85591be7b4e42ec32b20ecf3e7039a664855d895a6552056",
+      "bytes": 12403,
+      "sha256": "36b0f4b0d35b8f8a670abaad7b647453752c7dec1634ba5eee1b14a60c3b32c8",
       "rewritten": false
     },
     {
