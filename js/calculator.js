@@ -954,9 +954,19 @@ export function mountCalculator(host, opts = {}) {
   return api;
 }
 
-/* full-screen overlay wrapper */
+/* full-screen overlay wrapper.
+   The calculator is a module-level singleton: closing it detaches the
+   scrim from the DOM instead of destroying it, so the whole closure state
+   (S, the COMP engine, the stats table, listeners) survives a close —
+   reopening re-attaches the SAME element and the screen is exactly as the
+   learner left it. State only resets on a page reload (that's deliberate:
+   a real fx-991ZA remembers its screen when you put it down). */
+let calcScrim = null;
 export function openCalculator() {
-  if (document.querySelector(".calc-scrim")) return;   // foreman review fix: the floating calc button (z 75) sits above this scrim (z 50), so without this guard a second tap stacks a second calculator
+  if (calcScrim) {
+    if (!calcScrim.isConnected) document.body.appendChild(calcScrim);   // foreman review fix: the floating calc button (z 75) sits above this scrim (z 50), so without this re-attach guard a second tap would stack a second calculator
+    return;
+  }
   const scrim = el("div", "modal-scrim calc-scrim");
   const box = el("div", "calc-wrap");
   const head = el("div", "calc-head");
@@ -968,8 +978,9 @@ export function openCalculator() {
   box.appendChild(host);
   mountCalculator(host);
   scrim.appendChild(box);
-  const dismiss = () => scrim.remove();
+  const dismiss = () => scrim.remove();   // detach only — the singleton keeps its state, remove() here means "hide"
   close.addEventListener("click", dismiss);
   scrim.addEventListener("click", e => { if (e.target === scrim) dismiss(); });
   document.body.appendChild(scrim);
+  calcScrim = scrim;
 }
