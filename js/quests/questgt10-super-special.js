@@ -167,6 +167,25 @@ function shortcutItem(key) {
 /* ------------------------------------------------------------
    6 · READ A RATIO OFF THE FINISHED TRIANGLE (p37 e)
    ------------------------------------------------------------ */
+/* THE UPSIDE-DOWN DECOY — the classic miss in this item: the right two
+   sides, written the wrong way up (o/a where the answer is a/o). It used
+   to be built as `1/(<the ratio>)`, and when the ratio is itself a
+   fraction that stacks THREE levels deep with the brackets gone: at
+   375 px nobody can tell (1/k)/√(k² + 1) from 1/(k/√(k² + 1))
+   (2026-09-04, build-report finding F4). Turning the ratio's own two
+   halves over gives exactly the same VALUE one level deep — and it reads
+   like a wrong answer a learner would actually write:
+     √(1 − t²)/t → t/√(1 − t²)      √(1 − t²) → 1/√(1 − t²)
+     1/√(t² + 1) → √(t² + 1)
+   No ratio in shapes() holds more than one "/", and none holds a "/"
+   inside its √(…), so the first slash is always the dividing line. */
+function flipRatio(ratio) {
+  const cut = ratio.indexOf("/");
+  if (cut < 0) return `1/${ratio}`;
+  const num = ratio.slice(0, cut), den = ratio.slice(cut + 1);
+  return num === "1" ? den : `${den}/${num}`;
+}
+
 function readRatio() {
   const L = pick(VARS), ang = pick(ANGLES);
   const key = pick(["cos", "sin", "tan", "cosinv"]);
@@ -179,7 +198,7 @@ function readRatio() {
   const trueValue = FNV[ask](ang);
   const cands = ["sin", "cos", "tan"].filter(f => f !== ask)
     .map(f => ({ label: shape.ratios[f], value: FNV[f](ang) }));
-  cands.push({ label: `1/(${shape.ratios[ask]})`, value: 1 / trueValue });
+  cands.push({ label: flipRatio(shape.ratios[ask]), value: 1 / trueValue });
   const seen = [trueValue];
   const decoys = [];
   cands.forEach(c => {

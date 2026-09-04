@@ -91,6 +91,10 @@
 <h2>18 · The gt8 / gt10 sketches, drawn — one per quadrant, plus the short-cut triangles</h2>
 <div class="grid" id="s4-figs"></div>
 
+<h2>20 · The recall cards ASK (F1) and gt10's options stay one bar deep (F4)</h2>
+<pre id="s5-cards">…</pre>
+<div class="grid" id="s5-figs"></div>
+
 <script type="module">
 import {
   quadrantOf, astcSign, rotate, reduce, cofunction, specialExact,
@@ -109,6 +113,7 @@ import { QUEST_DEFS, questDef } from "./js/quests/index.js";
 import { getConcept } from "./js/concepts.js";
 import { renderTriangle, verifyTriangle } from "./js/engine/triangle-graph.js";
 import { oahTable, symbolicReduce } from "./js/quests/_gtrig.js";
+import { fracHtml } from "./js/ui.js";
 import { examQuestionsForChapter, examTopicsForChapter } from "./js/exam/index.js";
 import { EXAM_CHAPTERS } from "./js/config.js";
 
@@ -738,7 +743,41 @@ mountQuestion(noRevealHost, { type: "mc", prompt: "?", options: [{ label: "a", c
   { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
 tick(!noRevealHost.querySelector(".q-reveal") && noRevealHost.querySelector(".q-input").hidden === false,
   "a question with no q.reveal is completely untouched");
-section("reveal", "reveal frames — stack and replace, both driven by clicks", m7);
+
+/* q.revealAfter — the CONFIRM side (2026-09-04, build-report F1). The
+   frames must be nowhere on screen while the learner is choosing, and
+   must be in the feedback panel the moment the answer is in. */
+const afterHost = document.createElement("div");
+mountQuestion(afterHost, {
+  type: "mc", prompt: "Which word?", reveal: ["the wheel, corners blank"],
+  revealAfter: ["<b>the wheel, filled in</b>", "<svg viewBox='0 0 40 20'><circle cx='20' cy='10' r='6'/></svg>"],
+  options: [{ label: "Cash", correct: true }, { label: "Take" }],
+}, { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+tick(afterHost.querySelectorAll(".q-reveal-after").length === 0, "revealAfter: not one confirm frame is on screen before the answer");
+tick(afterHost.querySelector(".q-input").hidden === false, "revealAfter: a single ask frame still shows the input straight away");
+tick(afterHost.querySelectorAll(".reveal-frame").length === 1, "revealAfter: only the ask frame is up while choosing");
+click([...afterHost.querySelectorAll(".opt")][0]);
+tick(afterHost.querySelectorAll(".feedback .q-reveal-after .reveal-frame").length === 2,
+  "revealAfter: both confirm frames land INSIDE the feedback panel once the answer is in");
+tick(!!afterHost.querySelector(".feedback .q-reveal-after svg"), "revealAfter: a confirm frame can hold an inline SVG");
+const afterWrongHost = document.createElement("div");
+mountQuestion(afterWrongHost, {
+  type: "mc", prompt: "Which word?", revealAfter: ["<b>the wheel, filled in</b>"],
+  options: [{ label: "Cash", correct: true }, { label: "Take" }],
+  solution: [{ s: "read it anticlockwise from ①", r: "All Strippers Take Cash" }],
+}, { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+click([...afterWrongHost.querySelectorAll(".opt")][1]);
+tick(afterWrongHost.querySelectorAll(".feedback .q-reveal-after .reveal-frame").length === 1,
+  "revealAfter: a WRONG answer gets the confirm frame too");
+tick(!!afterWrongHost.querySelector(".feedback .sol") &&
+  afterWrongHost.querySelector(".feedback .sol").compareDocumentPosition(afterWrongHost.querySelector(".q-reveal-after")) & Node.DOCUMENT_POSITION_FOLLOWING,
+  "revealAfter: the confirm frame sits AFTER the worked solution, not above it");
+const noAfterHost = document.createElement("div");
+mountQuestion(noAfterHost, { type: "mc", prompt: "?", options: [{ label: "a", correct: true }] },
+  { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+click(noAfterHost.querySelector(".opt"));
+tick(!noAfterHost.querySelector(".q-reveal-after"), "a question with no q.revealAfter is completely untouched");
+section("reveal", "reveal frames — stack, replace and the confirm side, all driven by real clicks", m7);
 
 /* ============================================================
    8 · play.js — XP once (her discovery-round ruling)
@@ -1505,6 +1544,90 @@ const m19 = mark();
   {
     const q = QUEST_DEFS.gt10.skills.find(sk => sk.id === "readRatio").gen();
     card("sc-read", `gt10 — ${q.prompt}`, renderQuadTri(q.graph));
+  }
+}
+
+/* ============================================================
+   20 · The two recall cards ask instead of answering (F1), and no
+        gt10 option is a fraction inside a fraction (F4)
+   ------------------------------------------------------------
+   Her 2026-09-04 ruling on the build report. Both guards are written
+   from the OUTSIDE: the ask side is searched for the answer's own
+   words, and the upside-down decoy is re-derived here rather than
+   read out of the quest file.
+   ============================================================ */
+const m20 = mark();
+{
+  const ASTC = ["All", "Strippers", "Take", "Cash"];
+  const wheel = QUEST_DEFS.gt2.skills.find(s => s.id === "wheelWord");
+  const seenQuad = new Set();
+  for (let i = 0; i < 240; i++) {
+    const q = wheel.gen();
+    const ask = (q.reveal || []).join(" ");
+    const conf = (q.revealAfter || []).join(" ");
+    const answer = q.options.find(o => o.correct).label;
+    seenQuad.add(answer);
+    tick(ask.length > 0 && !ASTC.some(w => ask.includes(w)),
+      `gt2.wheelWord #${i}: the ask side shows the wheel but names none of the four words`);
+    tick(conf.includes(answer) && ASTC.every(w => conf.includes(w)),
+      `gt2.wheelWord #${i}: the confirm side gives all four words back, “${answer}” among them`);
+    tick(q.options.length === 4 && q.answerLabel.includes(answer),
+      `gt2.wheelWord #${i}: four words to choose from, and the answer line still names “${answer}”`);
+  }
+  tick(seenQuad.size === 4, `gt2.wheelWord: all four quadrants came up (${[...seenQuad].join(", ")})`);
+
+  const three = QUEST_DEFS.gt6.skills.find(s => s.id === "threeBoxes");
+  for (let i = 0; i < 5; i++) {
+    const q = three.gen();
+    const ask = (q.reveal || []).join(" ");
+    const conf = (q.revealAfter || []).join(" ");
+    tick(!/clockwise/i.test(ask), `gt6.threeBoxes #${i}: the ask side never says which way anything turns`);
+    tick(/positive angles/.test(ask) && /negative angles/.test(ask) && /co-functions/.test(ask),
+      `gt6.threeBoxes #${i}: the three headings still open the card`);
+    tick(/(^|[^-])clockwise/.test(conf) && /anti-clockwise/.test(conf) && /sin and cos/.test(conf),
+      `gt6.threeBoxes #${i}: the confirm side fills all three boxes in`);
+    tick(!/clockwise/i.test(q.hint), `gt6.threeBoxes #${i}: the hint nudges towards the numbering, it does not hand the direction over`);
+  }
+
+  /* gt10 — the same flip the generator does, written again here */
+  const flip = r => {
+    const cut = r.indexOf("/");
+    if (cut < 0) return `1/${r}`;
+    const num = r.slice(0, cut), den = r.slice(cut + 1);
+    return num === "1" ? den : `${den}/${num}`;
+  };
+  let opts = 0;
+  for (let i = 0; i < 600; i++) {
+    const q = QUEST_DEFS.gt10.skills.find(s => s.id === "readRatio").gen();
+    const labels = q.options.map(o => o.label);
+    const answer = q.options.find(o => o.correct).label;
+    labels.forEach(l => {
+      opts++;
+      tick((l.match(/\//g) || []).length <= 1, `gt10.readRatio #${i}: "${l}" is at most one fraction bar deep`);
+      tick(!l.includes("/("), `gt10.readRatio #${i}: "${l}" never divides by a bracket`);
+    });
+    tick(new Set(labels).size === labels.length && labels.length === 4,
+      `gt10.readRatio #${i}: four options, no two the same string`);
+    tick(labels.includes(flip(answer)),
+      `gt10.readRatio #${i}: the upside-down decoy "${flip(answer)}" is on the card next to "${answer}"`);
+  }
+  section("s5-cards", `the ask/confirm split on gt2.wheelWord + gt6.threeBoxes, and ${opts} gt10 option labels measured for depth`, m20);
+
+  /* eyes on it: the two sides of the wheel card, and one set of gt10 options */
+  {
+    const host = document.getElementById("s5-figs");
+    const card = (title, html) => {
+      const c = document.createElement("div"); c.className = "card";
+      c.innerHTML = `<h3>${title}</h3>${html}`; host.appendChild(c);
+    };
+    const q = wheel.gen();
+    card("gt2.wheelWord — the ASK side (corners blank)", (q.reveal || []).join(""));
+    card("gt2.wheelWord — the CONFIRM side", (q.revealAfter || []).join(""));
+    const t = three.gen();
+    card("gt6.threeBoxes — ask, then confirm", (t.reveal || []).join("") + "<hr style='opacity:.2;margin:8px 0'>" + (t.revealAfter || []).join(""));
+    const r = QUEST_DEFS.gt10.skills.find(s => s.id === "readRatio").gen();
+    card(`gt10.readRatio — ${r.prompt}`,
+      `<div class="q-options">` + r.options.map(o => `<div class="opt">${fracHtml(o.label)}</div>`).join("") + `</div>`);
   }
 }
 

@@ -19,6 +19,14 @@
      q.reveal      — [html, html, …] teaching frames shown between the
                      prompt and the input; the input stays HIDDEN until
                      the last frame is up (q.revealMode "stack"|"replace")
+     q.revealAfter — the same frames, held back until the answer is in:
+                     they land inside the feedback panel. Added
+                     2026-09-04 for the two recall cards that used to
+                     print their own answer on the card above the
+                     options (gtrig build-report finding F1). A card
+                     that asks "which word is quadrant ④?" can now show
+                     the wheel with the corners blank, and give the
+                     filled-in wheel back as the confirmation.
      q.type "steps"— one question made of ordered sub-steps, each of
                      which is one existing input. See mountSteps() below.
 
@@ -166,6 +174,17 @@ export function mountQuestion(host, q, handlers = {}) {
     if (!isCorrect && solSteps(q).length) {
       html += `<div class="sol">` + solSteps(q).map(s =>
         `<div class="sol-step"><span class="s">${fmt(s.s)}</span>${s.r ? `<span class="r">${fmt(s.r)}</span>` : ""}</div>`).join("") + `</div>`;
+    }
+    // the CONFIRMING frames (q.revealAfter) — the same card q.reveal would
+    // have shown before the input, kept back until the answer is in. Right
+    // or wrong, the learner leaves the question holding the picture.
+    // (named confirmFrames, not `confirm` — never shadow a window global
+    // next to a template literal; that is how gt3 once printed [object Window])
+    const confirmFrames = (Array.isArray(q.revealAfter) ? q.revealAfter : [])
+      .filter(f => f != null && String(f).trim());
+    if (confirmFrames.length) {
+      html += `<div class="q-reveal q-reveal-after" style="margin:12px 0 0">`
+        + confirmFrames.map(f => `<div class="reveal-frame">${fmt(f)}</div>`).join("") + `</div>`;
     }
     feedback.innerHTML = html;
     const foot = el("div", "fb-foot");

@@ -462,6 +462,12 @@ pool.entries.forEach(entry => {
       else if (!q.reveal.every(f => typeof f === "string" && f.trim())) issues.push("a reveal frame is not a non-empty string");
       if (q.revealMode != null && q.revealMode !== "replace") issues.push(`unknown revealMode "${q.revealMode}"`);
     }
+    /* the CONFIRM side (2026-09-04, build-report F1) — same shape rules,
+       and this is the half that is dealt COLD, so it matters most here */
+    if (q.revealAfter != null) {
+      if (!Array.isArray(q.revealAfter) || !q.revealAfter.length) issues.push("q.revealAfter is not a non-empty array");
+      else if (!q.revealAfter.every(f => typeof f === "string" && f.trim())) issues.push("a confirm frame is not a non-empty string");
+    }
 
     /* ---- graph honesty at question level ---- */
     if (q.graph) { sawFigure = true; entryFigures++; }

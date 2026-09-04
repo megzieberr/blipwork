@@ -12,19 +12,31 @@ import { reduce, fmtDeg } from "../triglib.js";
 const CON = "gtrigTipChips";
 
 function reveal(q, frames, mode) { q.reveal = frames; if (mode) q.revealMode = mode; return q; }
+function revealAfter(q, frames) { q.revealAfter = frames; return q; }
 
-/* ---- beat 1 — the three boxes, then "a negative angle turns…" ---- */
+/* ---- beat 1 — the three boxes, then "a negative angle turns…" ----
+   The three boxes used to be printed FILLED IN above the two options, so
+   "a negative angle turns…" answered itself (2026-09-04, build-report
+   finding F1 — worst when the dice deals this beat on its own). The ask
+   side now shows the three headings with their arrows empty, and the
+   filled-in card comes back as the confirmation. */
 function threeBoxes() {
-  const frame = `<div style="font-size:14px;line-height:2">
-      <div><b style="color:var(--good)">positive angles</b> → anti-clockwise</div>
-      <div><b style="color:var(--bad)">negative angles</b> → clockwise</div>
-      <div><b style="color:var(--accent)">co-functions</b> → convert between sin and cos</div>
-    </div>`;
-  return reveal(
-    mc(CON, "A negative angle turns…", "clockwise", ["anti-clockwise"],
-      { hint: "Positive = anti-clockwise. Negative = clockwise.",
-        answerLabel: "Negative angles turn clockwise; positive angles turn anti-clockwise." }),
-    [frame]);
+  const box = (colour, name, fill) =>
+    `<div><b style="color:var(--${colour})">${name}</b> → ${fill}</div>`;
+  const boxes = fill => `<div style="font-size:14px;line-height:2">`
+    + box("good", "positive angles", fill("anti-clockwise"))
+    + box("bad", "negative angles", fill("clockwise"))
+    + box("accent", "co-functions", fill("convert between sin and cos"))
+    + `</div>`;
+  const ask = `<div class="muted small" style="margin-bottom:6px">Three boxes decide every reduction:</div>`
+    + boxes(() => `<span class="muted">?</span>`);
+  return revealAfter(
+    reveal(
+      mc(CON, "A negative angle turns…", "clockwise", ["anti-clockwise"],
+        { hint: "Positive angles turn the way the quadrants are numbered — ① → ② → ③ → ④. A negative angle turns the other way.",
+          answerLabel: "Negative angles turn clockwise; positive angles turn anti-clockwise." }),
+      [ask]),
+    [boxes(t => t)]);
 }
 
 /* ---- beat 2 — Chip ① : positive angles > 360°, minus 360° ---- */

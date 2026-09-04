@@ -66,6 +66,10 @@ export function astcWheelSvg(opts = {}) { return bowTieSvg({ signs: true, words:
    bottom, 0°/360° right.
      opts.signs  — list sin/cos/tan with their sign under each word
      opts.words  — All / Strippers / Take / Cash instead of A S T C
+     opts.blankNames — the four corners hold a "?" instead of a word or
+       a letter, so the wheel can be shown to a learner who is being
+       ASKED what belongs in a corner (2026-09-04, build-report F1: a
+       recall card must not print its own answer above the options).
    ------------------------------------------------------------ */
 const ASTC_LETTER = { 1: "A", 2: "S", 3: "T", 4: "C" };
 const ASTC_WORD = { 1: "All", 2: "Strippers", 3: "Take", 4: "Cash" };
@@ -96,7 +100,7 @@ export function bowTieSvg(opts = {}) {
   const CA = { 1: "end", 2: "start", 3: "start", 4: "end" };
   const CY = { 1: MY - HY + 10, 2: MY - HY + 10, 3: MY + HY - 44, 4: MY + HY - 44 };
   [1, 2, 3, 4].forEach(q => {
-    const word = opts.words ? ASTC_WORD[q] : ASTC_LETTER[q];
+    const word = opts.blankNames ? "?" : opts.words ? ASTC_WORD[q] : ASTC_LETTER[q];
     const first = word[0], rest = word.slice(1);
     o += `<text x="${CX[q]}" y="${opts.signs ? (q <= 2 ? 24 : H - 64) : CY[q] + (q <= 2 ? 0 : 34)}" text-anchor="${CA[q]}" dominant-baseline="middle"`
       + ` style="font-family:var(--font-display);font-weight:700;font-size:${opts.words ? 17 : 22}px;fill:${QCOLOR[q]}">${first}<tspan style="fill:var(--ink);font-weight:600">${rest}</tspan></text>`;

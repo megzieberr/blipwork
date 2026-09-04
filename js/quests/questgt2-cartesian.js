@@ -7,7 +7,7 @@
    Every sign is COMPUTED via astcSign/solutionQuadrants (triglib) —
    nothing here is a hand-typed +/−.
    ============================================================ */
-import { mc, pick, astcWheelSvg, qbandsSpec, BAND, QSIGN } from "./_gtrig.js";
+import { mc, pick, astcWheelSvg, bowTieSvg, qbandsSpec, BAND, QSIGN } from "./_gtrig.js";
 import { astcSign, solutionQuadrants } from "../triglib.js";
 
 const CON = "gtrigAstc";
@@ -34,6 +34,22 @@ const SIGN_STORY = {
 };
 
 function reveal(q, frames, mode) { q.reveal = frames; if (mode) q.revealMode = mode; return q; }
+function revealAfter(q, frames) { q.revealAfter = frames; return q; }
+
+/* The wheel, twice over (2026-09-04, build-report finding F1). The card
+   used to open with the FILLED-IN bow tie — "which word is quadrant ④?"
+   with ④ labelled Cash right there on the picture, which is a free mark
+   the moment the beat is dealt on its own in a dice round. So the ASK
+   side now shows the same wheel with its four corners blank, and the two
+   filled-in frames moved to the CONFIRM side (q.revealAfter): nothing is
+   taken away from the discovery round, it just arrives one beat later. */
+/* ⚠️ the <div> around the SVG is load-bearing. A reveal frame goes through
+   formulaHtml(), and an SVG with LOOSE TEXT after it (even just a newline
+   and a caption) reads as one expression to keep together: the whole frame
+   comes back inside <span class="fml"><span class="nowrap">…, the svg goes
+   inline, and its box collapses to 0 × 0 — a blank frame, no error, seen
+   only on the rendered sheet. Block-wrap the picture and it is left alone. */
+const WHEEL_BLANK = `<div>${bowTieSvg({ blankNames: true })}</div><div class="muted small" style="margin-top:6px">① is the top-right corner and the numbers run anticlockwise. One word of the story goes in each corner — which one is here?</div>`;
 
 const WHEEL_FRAMES = [
   astcWheelSvg(),
@@ -50,11 +66,13 @@ const SKILLS = {
   /* B1 — the wheel + All Strippers Take Cash */
   wheelWord: () => {
     const q = pick([1, 2, 3, 4]);
-    return reveal(
-      mc(CON, `Which word is quadrant ${CIRC[q]}?`, WORD[q],
-        [1, 2, 3, 4].filter(x => x !== q).map(x => WORD[x]),
-        { hint: "All Strippers Take Cash — read anticlockwise from ①.",
-          answerLabel: `${CIRC[q]} is “${WORD[q]}” — All ① Strippers ② Take ③ Cash ④.` }),
+    return revealAfter(
+      reveal(
+        mc(CON, `Which word is quadrant ${CIRC[q]}?`, WORD[q],
+          [1, 2, 3, 4].filter(x => x !== q).map(x => WORD[x]),
+          { hint: "All Strippers Take Cash — read anticlockwise from ①.",
+            answerLabel: `${CIRC[q]} is “${WORD[q]}” — All ① Strippers ② Take ③ Cash ④.` }),
+        [WHEEL_BLANK]),
       WHEEL_FRAMES);
   },
 
