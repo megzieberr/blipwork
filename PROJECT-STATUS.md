@@ -101,6 +101,19 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   `typeof document !== "undefined"` — every node harness imports ui.js via
   _shared.js and had crashed since d736522.
 
+- 2026-09-04 evening (hers): **Probability follows the SAG + the IEB memo
+  methods** ("I just follow the SAGs and memo methods"); no booklet memo
+  exists, the app computes its own answers; "given that" is laid out the
+  way the memos do it. Prep before build: one page-cited read of the SAG
+  section + the surveyed papers' probability memo pages into
+  METHODS-probability.md.
+- 2026-09-04 evening (hers): the learner's swipe-back request is approved
+  for build (one Opus worker, graph-quest, sync + ship on her word).
+- 2026-09-04 evening (mine, flagged): swipe-back is a visible "◀ Vorige"
+  button, not a swipe gesture (a swipe fights the drag controls and the
+  phone's edge-swipe); the finished screen is KEPT and shown inert, never
+  re-rendered, so she sees the option she tapped and the feedback she got.
+
 ## ⏳ Pending on Megan
 (one close-and-reopen does it all — v89 carries every earlier version's changes)
 - 📱 5 min [whenever]: close + reopen Blipwork twice (sw v89) → roll a
@@ -114,14 +127,10 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   question (Fun Functions fn1 is ideal) → the admin fold shows the
   fraction on ONE line. (The v86–v88 spot-checks — calc memory, cookie,
   six split-day chains — are still unticked if you want them.)
-- 💬 [whenever]: 6 unread learner notes in admin (5 from C.M., 1 anon) —
-  3 are maths questions to answer her in person; her f(x) > g(x) shift
-  reasoning is CORRECT, and her q2 "-4 missing" bug report was REAL (fixed).
-- 📝 1 line each [blocks the Probability chapter]: ① the booklet has NO
-  answers anywhere (26 blank exercise pages, no memo) — does the app work
-  out its own answers to your questions, or does a worked memo copy exist?
-  ② how do you teach the "given that" questions? (No conditional-
-  probability formula appears in the booklet; five exercises ask it.)
+- 💬 [whenever]: all of C.M.'s notes are read and answered in person (she
+  confirmed 2026-09-04 evening). ONE unread note remains: the anonymous
+  2026-09-04 10:12 UTC swipe-back request from funfun:qK, which is being
+  built; mark it read once it ships.
 - 🌐 1 line [your call]: megzieberr is still visible in the class
   name-picker — say the word and I hide it (one SQL line, reversible).
 
@@ -129,8 +138,16 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - **Analytical Geometry dice chapter — UNBLOCKED.** Digest + her seven
   rulings sit in METHODS-analytical.md; ag5 mines the paper-bank mds.
   Needs a build day on her word.
-- **Probability dice chapter** — digest done (METHODS-probability.md,
-  30 flags); waits ONLY on her two 📝 answers above.
+- **Fun Functions swipe-back (BUILT + foreman-reviewed in graph-quest, NOT shipped).** Learner request
+  2026-09-04: look back at the previous question after Next. Design: a
+  "◀ Vorige" button (no swipe gesture), finished screens kept as-is and
+  shown inert in a review sheet; live question untouched. One Opus worker
+  in graph-quest; then tools/sync-to-blipwork.py + blipwork sw v90 +
+  graph-quest gq-v34 on her "ship it".
+- **Probability dice chapter — UNBLOCKED, one prep step first.** Her rulings
+  sit at the TOP of METHODS-probability.md with the file pointers: a worker
+  digests the SAG's Gr11 Probability section + the surveyed papers' memo
+  working (page-cited) into that file, THEN the build day. Both on her word.
 - **verify-store drift** (pre-existing, measured at HEAD too): the bodies
   of mhq_get_state / mhq_credit_cq / mhq_cq_link differ between their
   migration files and schema.sql's mirror-back. Its own small tidy

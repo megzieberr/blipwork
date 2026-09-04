@@ -1,8 +1,8 @@
 {
   "generatedBy": "graph-quest/tools/sync-to-blipwork.py",
-  "generatedAt": "2026-09-03T15:20:54+00:00",
+  "generatedAt": "2026-09-04T18:33:56+00:00",
   "sourceRepo": "graph-quest",
-  "sourceCommit": "2f699d2add4ab4c6c4aed2b862de7995ad661340",
+  "sourceCommit": "3f84d87c9c1d165080e01601e04316a4daa9c9dc",
   "sourceWorkingTreeDirty": false,
   "note": "GENERATED OUTPUT \u2014 never hand-edit js/funfun/. See GENERATED.md.",
   "files": [
@@ -16,8 +16,8 @@
     {
       "from": "js/play.js",
       "to": "play.js",
-      "bytes": 23857,
-      "sha256": "0419b36e8eecfe1ea8f588d86163a591fef602a22a3347c2ae1528fa526ff64e",
+      "bytes": 31526,
+      "sha256": "99070c7c2b535e54d044ab6cc60a0c306969a33dd52528ba1637b34783208fe3",
       "rewritten": false
     },
     {
@@ -30,8 +30,8 @@
     {
       "from": "js/i18n.js",
       "to": "i18n.js",
-      "bytes": 5716,
-      "sha256": "ce24e633d1e21b4c8e5dcdd72aeb6308cb36d9a2eb3930a0aca1b59c1c04fae2",
+      "bytes": 6403,
+      "sha256": "ed8b031d69b1f3a60e7e6fa4ce8d3174ac7e794a78d58c5f40895b7cc4a54c5d",
       "rewritten": false
     },
     {
@@ -247,8 +247,8 @@
     {
       "from": "css/styles.css",
       "to": "styles.css",
-      "bytes": 25071,
-      "sha256": "e4a6f7afaa4123b178f5ec646685fd01c2ec5ece6fb63ec6798b740b2c0e1d38",
+      "bytes": 26738,
+      "sha256": "91256cfef17461b623795de3fd79c1984dbae7ffef326f72ae2fbb2874bd4667",
       "rewritten": false
     }
   ]

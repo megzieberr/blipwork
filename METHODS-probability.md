@@ -16,6 +16,38 @@ Nothing in this file is inferred. Every method, formula variant and worked value
 PDF page number. Where a page is ambiguous, blank, self-contradictory or contains a slip, it
 is an **F-flag** in Part P — never a guess.
 
+## ⚖️ Her rulings, 2026-09-04 evening (a build session reads THIS block first)
+
+Both questions that blocked the Probability chapter are answered. They outrank any flag
+below that assumed the booklet is the only source.
+
+1. **Her methods are the SAG and the IEB memo methods.** Her words: "honestly, I just
+   follow the SAGs and memo methods, so you can just take a peek in the memos for all the
+   papers." So for Probability the VOICE rule at the top of this file is split: the
+   booklet's theory pages keep their wording for hints and Esplains; the WORKING (how a
+   step is laid out, what gets written, what earns the marks) follows the IEB memos.
+2. **No memo for the booklet exists.** The 26 blank exercise pages stay blank. The app
+   computes its own answers to every question shape and proves them by harness
+   (recompute from the seed, never transcribe). No session goes looking for a booklet
+   memo again.
+3. **"Given that" (conditional probability) is laid out the way the IEB memos lay it
+   out.** The booklet has no formula; do not invent one. Find the memo layout and copy it.
+
+**Where to look (so nobody re-opens the wrong thing):**
+- **SAG:** `C:/Users/megzi/Desktop/Eksamen Vraestelle/Gr11 IEB Nov/27. MATHEMATICS SAGs
+  2026 (Updated August 2025).pdf` (Afrikaans twin beside it). Its Grade 11 Probability
+  section is NOT digested yet. Prep step: a worker reads it ONCE, page-cited, into a
+  "Part S: SAG scope" block of this file. Scope facts come from there, never from memory.
+- **Question shapes + final answers:** the surveyed Gr11 IEB bank. Hub
+  `C:/Users/megzi/Desktop/Graad 11 Curro/GR11-IEB-PAPER-BANK.md`, survey files in
+  `survey/` (SURVEY-M4A.md, SURVEY-Nov-P1.md, SURVEY-June.md, SURVEY-Her-2025-Assessments.md,
+  SURVEY-Antwoord-Reeks.md carry the PROB rows). Their working is marked "[see memo]".
+- **Memo working:** not transcribed anywhere yet. Prep step: ONE flagged, page-cited read
+  of the Probability memo pages of the surveyed papers (the memo PDFs the survey files
+  name), digested into a "Part M: memo methods" block here, with the exact layout of each
+  step and every "given that" question found. After that the PDFs stay closed, same law as
+  METHODS-analytical.md Part P: build from the mds.
+
 ---
 
 ## Sources
