@@ -275,6 +275,12 @@ five dealt **every one of the 65 kinds exactly once** — the whole pool, walked
 
 ## 6. Findings — flagged, not fixed (all outside this session's scope)
 
+> **Update 2026-09-04 (her word, fix day):** **F1**, **F2** and **F4** are FIXED —
+> F1 via `q.revealAfter` (gt2.wheelWord + gt6.threeBoxes, and gt6.butWhy got the
+> same treatment on her explicit word), F2 via `slimMethodPanel()` in js/play.js,
+> F4 via `flipRatio()` in questgt10. Commits c090251 · 6415b21 · 5fdfbf5.
+> The text below is the original report, kept as written.
+
 **F1 · Two recall cards show their own answer in their reveal frame.**
 `gt2.wheelWord` asks "Which word is quadrant ④?" and its first reveal frame is
 the full ASTC bow tie with ④ labelled **Cash**. `gt6.threeBoxes` asks "A

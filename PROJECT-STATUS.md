@@ -1,4 +1,4 @@
-# Project status — updated 2026-09-03 (📸 FEEDBACK DAY shipped sw v88, live-verified: calc memory + q2 snap fix + feedback snapshots, migration applied)
+# Project status — updated 2026-09-04 (🔧 FIX DAY shipped sw v89: snapshot fractions · method panel · gtrig asks-first · SHIFT tan sweep; both wave-4 digests landed, Analytical UNBLOCKED)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,61 +9,37 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **Live on sw v88** (2026-09-03, her "ship it"; feedback day, all three off the
-  kids' first real 💬 notes): the calculator keeps its screen across close/
-  reopen until page reload (singleton detach in js/calculator.js, synced
-  verbatim to Stats Quest sw v10); q2 dropForX snaps where the answer is
-  (graph-quest 2f699d2, sw v33 — was 99/300 rolls broken: wrong crossing /
-  snap-through second spot / never-snaps NaN; now targetX + oneSpotAtY guard,
-  2500/2500 clean, funfun re-synced); 💬 notes carry a SNAPSHOT of the
-  on-screen question, shown folded in admin as "On their screen"
-  (migration feedback_snapshot APPLIED + verified live BEFORE the push:
-  one 6-arg mhq_send_feedback, grants/secdef/search_path checked, anon
-  still can't read the table). 8/8 live-asset fetches verified post-deploy.
-- Previous: **sw v87** (cookie
-  hint, shipped 2026-09-02 evening on her "yes go ahead": room speech bubble
-  "Feed <name> his cookie!" + hub 🍪 dot, both gone once fed, one shared
-  cookieReady() in js/companion/blip-ui.js. Opus worker built it, foreman
-  read the diff + phone-width screenshots; live sw/assets fetch-verified.
-  No SQL). Earlier same day: methods day sw v86, commit 4f1cef3, all 16
-  harnesses green against the live URL.
-- 12 hub chapters (5 Term-3 + 7 Revision) + 2 exam-only; 🎲 dice on 8
-  chapters; 📝 Exam Focus 7 chapters / 360 cards; 📈 Fun Functions strip;
-  💬 feedback + 📄 papers live; 🔔 notifications LIVE (2 cron jobs, secrets
-  set) — kids not opted in yet. Roster 20 (19 learners + megzieberr, still
-  visible in the picker — her ruling keeps it until go-live). Class opt-in
-  WhatsApp message went out 2026-08-27.
-- 🧮 Calculator rounds 1–4 done (full fx-991ZA face, exact engine, Sum menu,
-  editable table, `=` steps down the column). Blipwork is the MASTER copy;
-  Stats Quest (graad9-statistiek) copies js/calculator.js verbatim.
-- **"📖 Show me the method" now shows real working nearly everywhere**:
-  pat 39/44, finance 22/51, eqn 68/68, exp 42/43, func 39/40, 2D trig and
-  gtrig every non-chain skill; stats was already covered. The remainder are
-  deliberate (pure-recall/definition skills whose bare answer IS the whole
-  working) or step chains, which never carry a method link (guards intact).
-
-## 🏗️ 2026-09-02 — METHODS DAY (Fable foreman; S1 Sonnet + S2/S3 Opus ≈ 1,26M agent tokens)
-- **S1 fix batch (d736522):** `.ch-card` reserves the 💬 FAB's corner column
-  (padding-right 56 px, fixes all hub tabs at once); ONE generic Escape
-  handler in js/ui.js closes the topmost `.modal-scrim` by dispatching a
-  synthetic click AT the scrim — every sheet's own background-tap guard
-  (incl. treasure.js's busy gate) is reused, never duplicated; feedback.js's
-  ad-hoc Escape listener removed.
-- **S2 (141b015):** worked methods for Patterns 3→39/44 + Finance 8→22/51,
-  built INSIDE each gen() from the same rolled values; 9 180 regenerated
-  questions proven byte-identical to HEAD.
-- **S3 (2d6ba9c + 7e72063):** methods for eqn/exp/func/trig/gtrig off
-  METHODS-algebra.md, METHODS-trig and her functions digest; np6's Grade-12
-  a + (n−1)d leak fixed in hint/answerLabel AND js/concepts.js's
-  patConsecDiff "I'm lost" card (her standing Tₙ = an + c ruling decided
-  it); verify-dice.html finally learned "steps" (136/136, red since the
-  split day); gt3's `const top` renamed cellTop/cellBot before `${top}`
-  could ever print "[object Window]". 32 560 regenerated questions
-  byte-identical vs HEAD; the np6/concepts wording is the day's ONE
-  sanctioned learner-visible text change.
-- Foreman review was first-hand throughout: every diff read, 9 phone
-  screenshots read by eye, every harness re-run locally AND against the
-  live URL after the ship.
+- **Live on sw v89** (2026-09-04, her "ship it"; foreman day, 5 Opus workers
+  ≈ 1,25M agent tokens, all four fix rounds + both digests reviewed
+  first-hand before committing): 💬 feedback snapshots show stacked
+  fractions as ONE readable line in the admin fold; the 📖 method panel
+  says the answer once and never opens with it (gtrig F2 + the eq9
+  duplication); gtrig's three self-answering recall cards (gt2.wheelWord,
+  gt6.threeBoxes, gt6.butWhy) now ASK with blanks and hand the filled-in
+  frame back AFTER the answer (new `q.revealAfter` in js/questions.js);
+  gt10's nested-fraction decoy is one bar deep (`flipRatio`, same value,
+  the classic upside-down error); and ALL learner-visible tan⁻¹/sin⁻¹/cos⁻¹
+  notation is gone — the app speaks **"SHIFT tan"** (her ruling; calculator
+  key faces stay the real fx-991ZA). ui.js's Escape listener wears a
+  typeof-document guard so the node verify-*.mjs harnesses run again.
+  Harnesses re-run by the foreman: verify-gtrig 1 043 655/1 043 655,
+  verify-dice 146/146, verify-feedback-snapshot 131/131, dice suite green;
+  cards read by eye at 375 px. **No SQL today.**
+- **Both wave-4 digests are in.** METHODS-analytical.md's Part P now opens
+  with her seven 2026-09-04 rulings — the Analytical chapter is UNBLOCKED
+  (ag5 mines the surveyed paper-bank mds, ag6 stays, both β routes stay,
+  x₂−x₁ formula card, either quad-proof route full marks).
+  METHODS-probability.md is NEW: her 41-page Term 3 booklet digested
+  (14 ink theory pages, 26 blank exercise pages, NO memo pages, 30 flags;
+  transcription spot-checked against rendered pages). The Probability
+  chapter waits ONLY on her two answers under Pending.
+- Previous ships: sw v88 (2026-09-03 feedback day: calc memory, q2 snap
+  fix, feedback snapshots, migration applied+verified), v87 (cookie hint),
+  v86 (methods day). 12 hub chapters + 2 exam-only; 🎲 dice on 8 chapters;
+  📝 Exam Focus 7 chapters / 360 cards; 🔔 notifications LIVE (kids not
+  opted in); roster 20, megzieberr visible in the picker by her ruling.
+- 🧮 Calculator: Blipwork is the MASTER copy; Stats Quest copies
+  js/calculator.js verbatim (its sw v10 matches v88's calc-memory build).
 
 ## Decisions (append-only; entries before 2026-08-30 are in STATUS-ARCHIVE.md)
 - 2026-08-30 (hers): **the game outside Exam Focus must be playable on the
@@ -103,52 +79,70 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (like a real fx-991ZA put down); no reset between questions, and on a
   shared device the next kid may see the previous kid's arithmetic — judged
   harmless, same as sharing a physical calculator.
+- 2026-09-04 (hers): **q2's parabola always-turning-point repetition STAYS**
+  — "it's a good skill to practice".
+- 2026-09-04 (hers): **the app WRITES no inverse-trig notation.** Questions,
+  hints, cards and memos say "SHIFT tan" — the words they say in class;
+  the inverse step is never written in working ("too many fights with
+  teachers over this"). Calculator key faces keep the real fx-991ZA
+  labels. Any tan⁻¹ returning in learner-visible text is a regression.
+- 2026-09-04 (hers): all seven open analytical flags ruled — recorded at
+  the TOP of METHODS-analytical.md Part P (a build session reads that block
+  first); ag5's perpendicular-bisector content draws question shapes from
+  the surveyed paper-bank mds, never re-opening the paper PDFs.
+- 2026-09-04 (hers): gt6.butWhy gets the same ask-then-confirm treatment
+  as the two F1 recall cards.
+- 2026-09-04 (mine, flagged): new `q.revealAfter` = teaching frames held
+  back to the feedback panel; the method panel keeps its "Answer:" header
+  only when the method is stepless. Side effect surfaced to her and kept:
+  the five stats calcdo panels are now pure key-press recipes — the value
+  is read off the learner's own calculator.
+- 2026-09-04 (mine, flagged): ui.js's Escape listener is guarded with
+  `typeof document !== "undefined"` — every node harness imports ui.js via
+  _shared.js and had crashed since d736522.
 
 ## ⏳ Pending on Megan
-- 📱 2 min [whenever]: close + reopen Blipwork twice (sw v88) → open the 🧮,
-  type something, close it, reopen — your typing is still there; then send
-  yourself a 💬 note from inside a question and check it lands with "On
-  their screen" in the admin Feedback tab.
-- 💬 [whenever]: 6 unread learner notes in admin (5 Chichy M, 1 anon) — 3
-  are maths questions to answer her in person; her f(x) > g(x) shift
+(one close-and-reopen does it all — v89 carries every earlier version's changes)
+- 📱 5 min [whenever]: close + reopen Blipwork twice (sw v89) → roll a
+  gtrig round — the bow-tie / three-boxes / but-why cards should ASK
+  (blank "?" corners) and hand the filled frame back after you answer;
+  then tap 📖 on an eq9 question — the answer reads once, not twice.
+- 📱 3 min [whenever]: open Angle of inclination (ag4) and one 2D-trig
+  chain — hints should say "SHIFT tan/sin/cos" everywhere, no ⁻¹ outside
+  the calculator keys.
+- 📱 2 min [whenever]: send yourself a 💬 note from inside a fraction-heavy
+  question (Fun Functions fn1 is ideal) → the admin fold shows the
+  fraction on ONE line. (The v86–v88 spot-checks — calc memory, cookie,
+  six split-day chains — are still unticked if you want them.)
+- 💬 [whenever]: 6 unread learner notes in admin (5 from C.M., 1 anon) —
+  3 are maths questions to answer her in person; her f(x) > g(x) shift
   reasoning is CORRECT, and her q2 "-4 missing" bug report was REAL (fixed).
-- 📱 1 min [whenever]: close + reopen Blipwork twice (sw v87) → see the 🍪
-  dot on the hub Blip button and the "Feed … his cookie!" bubble in his
-  room, feed the cookie, both vanish.
-- 📱 5 min [whenever]: close + reopen Blipwork twice (sw v86), then one
-  question each in stats q3, tree diagrams, hire purchase, eff↔nom,
-  functions round 7 and measurement round 5 — the six split-day chains.
-- 📱 3 min [whenever]: roll one dice round in Patterns and one in Equations
-  and tap 📖 on a question or two — the method should read like YOUR method
-  (TIP Chips, one equation, an + c), not a textbook's.
+- 📝 1 line each [blocks the Probability chapter]: ① the booklet has NO
+  answers anywhere (26 blank exercise pages, no memo) — does the app work
+  out its own answers to your questions, or does a worked memo copy exist?
+  ② how do you teach the "given that" questions? (No conditional-
+  probability formula appears in the booklet; five exercises ask it.)
 - 🌐 1 line [your call]: megzieberr is still visible in the class
-  name-picker (re-checked live 09-02); say the word and I hide it (one SQL
-  line, reversible).
+  name-picker — say the word and I hide it (one SQL line, reversible).
 
 ## Next up
-- **Her call — q2 dropForX parabolas now ALWAYS land on the turning point**
-  (the only height a parabola meets once; measured: all 2502 surviving
-  parabola draws are the TP case, parabola share ~26%→~8%). Correct but
-  repetitive/gameable. Options: leave it, cut parabolas from that skill, or
-  design a variant.
-- **Her call — snapshot of a stacked fraction reads as broken-up text** in
-  the admin fold (y = −1 over x+1 comes out as three stubby lines). Still
-  identifiable; polish only if it bugs her.
-- **Her call — gtrig build report findings (design questions, NOT
-  cosmetics):** F1 two recall cards show their own answer in the reveal
-  frame; F2 the method-link panel opens with the answer; F4 a
-  nested-fraction decoy renders unreadably in gt10.
-- **Her call — method panel "Answer:" duplication:** methodHtml prefixes
-  every panel with "Answer: …" and the steps then repeat it; on eq9's solve
-  skills the long worked line shows twice on one screen. One shared-file
-  change if she wants it slimmed.
-- (carried) Wave-4 dice — each blocked on her: Analytical Geometry (14
-  F-flags in the digest), Probability (her material for a digest),
-  Measurement (engine ruling), Trig Graphs (Soek-die-fout in graph-quest).
-- (carried) CRON_SECRET tidy-up offer.
-- Banked: the play.js method-link gate (render 📖 only once a chain is
-  finished) — when it lands, delete the `q.type !== "steps"` clauses in
-  dice-gtrig.js AND dice-trig.js.
-- Stale-comment nits, one small pass: dice-gtrig.js's header says "the 48
-  chains" (the pool holds 32); verify-dice-exp prints its ALL GOOD line
-  twice.
+- **Analytical Geometry dice chapter — UNBLOCKED.** Digest + her seven
+  rulings sit in METHODS-analytical.md; ag5 mines the paper-bank mds.
+  Needs a build day on her word.
+- **Probability dice chapter** — digest done (METHODS-probability.md,
+  30 flags); waits ONLY on her two 📝 answers above.
+- **verify-store drift** (pre-existing, measured at HEAD too): the bodies
+  of mhq_get_state / mhq_credit_cq / mhq_cq_link differ between their
+  migration files and schema.sql's mirror-back. Its own small tidy
+  session before the next database day.
+- Remaining wave-4 blockers: Measurement (engine ruling), Trig Graphs
+  (Soek-die-fout mechanic landing in graph-quest first).
+- (carried) CRON_SECRET tidy-up offer; banked play.js method-link gate
+  (render 📖 only once a chain is finished — when it lands, delete the
+  `q.type !== "steps"` clauses in dice-gtrig.js AND dice-trig.js).
+- Stale nits, one small pass: dice-gtrig.js's header says "the 48 chains"
+  (the pool holds 32); verify-dice-exp prints its ALL GOOD line twice;
+  verify-feedback-papers still asserts ship-day states from v68 (4 stale
+  fails: flags asserted false, sw asserted v68, one FAB-geometry probe);
+  gt2's wrong path prints a lone "Cash" solution step (solSteps keeps the
+  answer-only step when answerLabel ≠ correct).

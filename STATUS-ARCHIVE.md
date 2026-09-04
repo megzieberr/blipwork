@@ -10,6 +10,30 @@ the TOP of this file when the head file is trimmed again).
 Read PROJECT-STATUS.md first; come here only when you need the story
 behind a standing rule or an old build.
 
+## 🏗️ 2026-09-02 — METHODS DAY (Fable foreman; S1 Sonnet + S2/S3 Opus ≈ 1,26M agent tokens)
+*(rolled here from the head file on 2026-09-04)*
+- **S1 fix batch (d736522):** `.ch-card` reserves the 💬 FAB's corner column
+  (padding-right 56 px, fixes all hub tabs at once); ONE generic Escape
+  handler in js/ui.js closes the topmost `.modal-scrim` by dispatching a
+  synthetic click AT the scrim — every sheet's own background-tap guard
+  (incl. treasure.js's busy gate) is reused, never duplicated; feedback.js's
+  ad-hoc Escape listener removed.
+- **S2 (141b015):** worked methods for Patterns 3→39/44 + Finance 8→22/51,
+  built INSIDE each gen() from the same rolled values; 9 180 regenerated
+  questions proven byte-identical to HEAD.
+- **S3 (2d6ba9c + 7e72063):** methods for eqn/exp/func/trig/gtrig off
+  METHODS-algebra.md, METHODS-trig and her functions digest; np6's Grade-12
+  a + (n−1)d leak fixed in hint/answerLabel AND js/concepts.js's
+  patConsecDiff "I'm lost" card (her standing Tₙ = an + c ruling decided
+  it); verify-dice.html finally learned "steps" (136/136, red since the
+  split day); gt3's `const top` renamed cellTop/cellBot before `${top}`
+  could ever print "[object Window]". 32 560 regenerated questions
+  byte-identical vs HEAD; the np6/concepts wording is the day's ONE
+  sanctioned learner-visible text change.
+- Foreman review was first-hand throughout: every diff read, 9 phone
+  screenshots read by eye, every harness re-run locally AND against the
+  live URL after the ship.
+
 ---
 # From the 2026-08-30 head, moved here 2026-09-02 at the methods-day wrap (verbatim)
 
