@@ -147,8 +147,20 @@ function chip5Cos() {
 }
 const chip5Pool = () => pick([chip5Sin, chip5Cos])();
 
-/* ---- beat 7 — "but why?" — the K derivation behind Chip ⑤ ---- */
+/* ---- beat 7 — "but why?" — the K derivation behind Chip ⑤ ----
+   Same F1 shape as threeBoxes above (2026-09-04, her word): the full
+   derivation used to sit ABOVE the true/false, and its "in quadrant IV
+   … −sin K" lines ARE the answer. The ask side now stops right at the
+   pivot the question asks about; the finished derivation comes back as
+   the confirmation (q.revealAfter). */
 function butWhy() {
+  const askFrame = `<div style="font-size:13.5px;line-height:1.7">
+      <b>but why?</b><br>
+      sin(θ − 90°) = sin[−(90° − θ)]<br>
+      let K = 90° − θ<br>
+      = sin(−K) — and −K sits in quadrant IV…<br>
+      = ?
+    </div>`;
   const frame = `<div style="font-size:13.5px;line-height:1.7">
       <b>but why?</b><br>
       sin(θ − 90°) = sin[−(90° − θ)]<br>
@@ -156,10 +168,12 @@ function butWhy() {
       = sin(−K) — in quadrant IV<br>
       = −sin K = −sin(90° − θ) = −cos θ
     </div>`;
-  return reveal(
-    ynQ(CON, "In quadrant IV, cos survives and sin flips. True or false?", true,
-      { hint: "That's the pivot of the whole derivation — −K sits in quadrant IV.",
-        answerLabel: "True — that's why sin(θ − 90°) ends up as −cos θ." }),
+  return revealAfter(
+    reveal(
+      ynQ(CON, "In quadrant IV, cos survives and sin flips. True or false?", true,
+        { hint: "That's the pivot of the whole derivation — −K sits in quadrant IV.",
+          answerLabel: "True — that's why sin(θ − 90°) ends up as −cos θ." }),
+      [askFrame]),
     [frame]);
 }
 
