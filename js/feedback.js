@@ -177,6 +177,70 @@ function collapseText(raw) {
    without them. */
 const INPUT_DEVICES = ".keypad, .calc-pad, .calc-btn-float, .fb-fab, .fb-scrim";
 
+/* ============================================================
+   STACKED FRACTIONS, READ BACK AS A LINE
+   ------------------------------------------------------------
+   Every fraction in this app is a REAL stacked fraction, her ruling
+   (js/ui.js stackFrac/fracHtml, 2026-08-22): numerator over denominator,
+   built as DOM —
+     <span class="sfrac"><span class="sf-n">…</span><span class="sf-d">…</span></span>
+   with js/funclib.js drawing the same shape under .frac / .fr-n / .fr-d.
+   Both wrappers are inline-flex, which BLOCKIFIES their two halves: to
+   the walk below the numerator and the denominator are each a block of
+   their own, so "y = −1/(x + 1)" arrived in her admin fold as three
+   stubby lines ("y =", "−1", "x + 1"). Identifiable, but she had to
+   reassemble the question in her head to read the note about it.
+
+   So the walk STOPS at a fraction and writes it the way an author types
+   it here in the first place: numerator "/" denominator, with brackets
+   round either half that is more than one token — "−1/(x + 1)",
+   "(x + 3)/2". Without the brackets a linear fraction is a different
+   sum, which is worse than three stubby lines, not better.
+
+   Fixed at CAPTURE time, not in her reader: the fold shows plain text
+   (js/admin.js writes it with textContent, css white-space:pre-wrap), and
+   old notes keep exactly the text they were sent with. */
+const FRAC_SEL = ".sfrac, .frac";
+
+/* The two halves as DIRECT children — never querySelector(".sf-d"), which
+   on a fraction inside a fraction returns the INNER denominator (document
+   order puts it before the outer one). */
+function fracHalves(node) {
+  let num = null, den = null;
+  for (const kid of node.children) {
+    const cl = kid.classList;
+    if (!num && (cl.contains("sf-n") || cl.contains("fr-n"))) num = kid;
+    else if (!den && (cl.contains("sf-d") || cl.contains("fr-d"))) den = kid;
+  }
+  return num && den ? [num, den] : null;
+}
+
+// a half that is ALREADY one bracketed group — "(x + 1)", "√(1 − t²)" —
+// keeps the brackets it has rather than growing a second pair
+function fracWholeGroup(s) {
+  if (s.length < 2 || s[0] !== "(" || s[s.length - 1] !== ")") return false;
+  let depth = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === "(") depth++;
+    else if (s[i] === ")") { depth--; if (depth === 0) return i === s.length - 1; }
+  }
+  return false;
+}
+/* ONE token and no operator of its own — 12, −1, x², sin²θ, (x + 1),
+   √(1 − t²). Anything else gets brackets. Split on ANY whitespace: the
+   token pad joins its pieces with a U+2009 thin space, invisible in an
+   editor, and a "space" test that only knew about U+0020 would call
+   "x sin 41°" one token. */
+function fracIsAtom(part) {
+  const body = part.replace(/^[−-]/, "");        // a leading minus rides along
+  if (fracWholeGroup(body.replace(/^√/, ""))) return true;
+  if (/\s/.test(body)) return false;
+  return !/[+\-−±×÷·*\/]/.test(body);
+}
+function fracWrap(part) {
+  return part && !fracIsAtom(part) ? "(" + part + ")" : part;
+}
+
 /* Read a LIVE element the way the learner sees it.
 
    Walked rather than handed to innerText in one go, because the walk is
@@ -189,6 +253,18 @@ const INPUT_DEVICES = ".keypad, .calc-pad, .calc-btn-float, .fb-fab, .fb-scrim";
    Whitespace-only text nodes survive as a single space, so words either
    side of an inline tag do not fuse. */
 const XHTML = "http://www.w3.org/1999/xhtml";
+
+/* The same walk over a node's CONTENTS, forced onto one line — what a
+   fraction's halves and a superscript's contents need, since they are
+   being written back into the middle of a line rather than under one.
+   ⚠️ The CHILDREN, never the node itself: handing the node back to the
+   walk that just matched it is an infinite regress (x^(3/4) came out as
+   "x^(^(^(…" until the depth guard bit). */
+function inlineText(node, depth, skipSel) {
+  const out = [];
+  node.childNodes.forEach(kid => liveText(kid, out, depth + 1, skipSel));
+  return out.join("").replace(/\s+/g, " ").trim();
+}
 
 function liveText(node, out, depth, skipSel) {
   if (!node || depth > 24) return;
@@ -210,6 +286,29 @@ function liveText(node, out, depth, skipSel) {
     // ("fxyO−2−1") would make a to-scale graph unreadable in the snapshot.
     inline = !!cs && node.namespaceURI === XHTML && /^inline/.test(cs.display);
   } catch { /* no view — read it and treat it as a block */ }
+
+  if (node.matches) {
+    /* A fraction that IS the exponent — x^(3/4) — has no caret anywhere in
+       the DOM: on screen the RAISING is the caret (js/ui.js fracHtml wraps
+       it in sup.sf-exp; several exam and concept files hand-write the same
+       thing as a plain <sup> round an .sfrac). Written back with its caret,
+       or "x3/4" would read as a completely different number. Ordinary
+       superscripts are left exactly as they were. */
+    if (node.matches("sup") && (node.matches(".sf-exp") || node.querySelector(FRAC_SEL))) {
+      const inner = inlineText(node, depth, skipSel);
+      if (inner) { out.push("^(" + inner + ")"); return; }
+    }
+    if (node.matches(FRAC_SEL)) {
+      const halves = fracHalves(node);
+      if (halves) {
+        const num = fracWrap(inlineText(halves[0], depth, skipSel));
+        const den = fracWrap(inlineText(halves[1], depth, skipSel));
+        // a half-built fraction (one side still empty) is left to the walk
+        // rather than written out as "/3" — better three lines than a lie
+        if (num && den) { out.push(num + "/" + den); return; }
+      }
+    }
+  }
 
   node.childNodes.forEach(kid => liveText(kid, out, depth + 1, skipSel));
   if (!inline) out.push("\n");
