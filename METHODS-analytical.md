@@ -1213,6 +1213,18 @@ the reason" altitude, the way her trig round 9 does.
 
 ## PART P — FLAGS for Megan
 
+### Her rulings — 2026-09-04 (every open flag closed; a build session reads THIS block first)
+
+- **F1:** the 31-page PDF IS the whole chapter; no second file is coming.
+- **F2:** the app writes neither `bgtan` nor `tan⁻¹` — hints use the calculator words they SAY in class: **"SHIFT tan"**. The inverse step is never WRITTEN in working ("too many fights with teachers over this, so we SAY shift tan, but we don't write that step" — her words).
+- **F3:** keep BOTH β routes (p21 and p22) side by side — two different methods, the learner picks.
+- **F5:** she has no extra perpendicular-bisector pages, but learners ask it a lot — **ag5 stays**, and its question shapes get drawn from the surveyed past-paper bank mds at build time (never re-open the paper PDFs).
+- **F6:** the formula card prints the **`(x₂ − x₁)² + (y₂ − y₁)²`** form (p13's version), gradient likewise subscript-2-first.
+- **F10:** ag6 stays exactly as it is.
+- **F13:** p24 quadrilateral proofs: **either route is full marks**.
+
+(F4, F7, F8, F9, F11, F12 and F14 needed no ruling — already recorded/corrected in the digest body.)
+
 One line each. Nothing below was guessed at — where the page is unclear it is left unclear.
 
 | # | Where | What | How the digest handled it |
