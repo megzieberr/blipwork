@@ -414,8 +414,8 @@ export const CONCEPTS = {
     body: `
       <p>Flip the rule so the <b>sines are on top</b>:</p>
       <div class="formula">sinÂ/a = sinB̂/b = sinĈ/c</div>
-      <p>Solve for the sine, then use inverse sine (sin⁻¹).</p>
-      <div class="eg">e.g. sinθ/9 = sin50°/13  →  sinθ = 9·sin50°/13  →  θ = sin⁻¹(…).</div>`,
+      <p>Solve for the sine, then SHIFT sin that value to get the angle.</p>
+      <div class="eg">e.g. sinθ/9 = sin50°/13  →  sinθ = 9·sin50°/13 = 0,5303  →  <span class="nowrap">SHIFT sin (0,5303)</span> → θ = 32,0°.</div>`,
   },
   ambiguousCase: {
     title: "The ambiguous case",
@@ -442,7 +442,7 @@ export const CONCEPTS = {
     body: `
       <p>Use it when you know <b>all three sides</b>. Rearranged so the cosine is the subject:</p>
       <div class="formula">cosÂ = (b² + c² − a²) / (2bc)</div>
-      <p>The side <b>opposite</b> the angle you want is the one subtracted on top. Finish with inverse cosine — a <b>negative</b> answer means the angle is <b>obtuse</b>.</p>
+      <p>The side <b>opposite</b> the angle you want is the one subtracted on top. Work out cos of the angle first, then SHIFT cos that value — and if cos came out <b>negative</b>, the calculator hands you the <b>obtuse</b> angle on its own.</p>
       <div class="eg">This SSS form is <b>not</b> on the formula sheet — memorise it.</div>`,
   },
   areaRule: {
@@ -924,11 +924,11 @@ export const CONCEPTS = {
       <p>θ is the angle the line makes with the <b>positive x-axis</b>, measured anti-clockwise, and</p>
       <div class="formula">tan θ = m</div>
       <ul>
-        <li><b>Positive</b> gradient → θ is <b>acute</b>: θ = tan⁻¹(m).</li>
-        <li><b>Negative</b> gradient → θ is <b>obtuse</b>: θ = 180° − tan⁻¹(|m|).</li>
+        <li><b>Positive</b> gradient → θ is <b>acute</b>: SHIFT tan the gradient and that IS θ.</li>
+        <li><b>Negative</b> gradient → θ is <b>obtuse</b>: SHIFT tan the gradient <b>without</b> its minus, then θ = 180° − that.</li>
       </ul>
-      <p><b>Do not</b> type the negative gradient into tan⁻¹ — drop the sign, find the acute reference angle, then take 180° − that.</p>
-      <div class="eg">e.g. m = −4/5 → ref = tan⁻¹(4/5) = 38,66°, so θ = 180° − 38,66° = 141,34°.</div>`,
+      <p><b>Do not</b> put the negative gradient into the calculator with its minus in — drop the sign, get the acute reference angle, then take 180° − that.</p>
+      <div class="eg">e.g. m = −4/5 → tan θ = −4/5, and <span class="nowrap">SHIFT tan (4/5)</span> = 38,66°, so θ = 180° − 38,66° = 141,34°.</div>`,
   },
   perpBisector: {
     title: "Perpendicular bisector",

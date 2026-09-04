@@ -136,7 +136,7 @@ export const CHAPTERS = [
       { id: "ag1", n: 1, title: "Which formula, and what it tells you", blurb: "Gradient, distance or midpoint — and what each answer looks like.", built: true },
       { id: "ag2", n: 2, title: "Gradient: sign & special lines", blurb: "Positive, negative, zero or undefined — and the horizontal/vertical traps.", built: true },
       { id: "ag3", n: 3, title: "Parallel & perpendicular", blurb: "Equal gradients vs the −1 product, and the negative reciprocal.", built: true },
-      { id: "ag4", n: 4, title: "Angle of inclination", blurb: "Acute or obtuse? When to use 180° − tan⁻¹, and don’t type the negative in.", built: true },
+      { id: "ag4", n: 4, title: "Angle of inclination", blurb: "Acute or obtuse? When to take 180° − the SHIFT tan answer, and don’t type the negative in.", built: true },
       { id: "ag5", n: 5, title: "Perpendicular bisector", blurb: "Through the midpoint AND at right angles — spot it and tap it.", built: true },
       { id: "ag6", n: 6, title: "Area of a triangle", blurb: "Read the base and the ⊥height — altitude vs median.", built: true },
       { id: "ag7", n: 7, title: "Putting it together", blurb: "Median/altitude/bisector, and the ‘to prove…, show…’ table.", built: true },

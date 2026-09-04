@@ -36,11 +36,13 @@ const SKILLS = {
   addRule: () => {
     const c = inclinationCase({ negative: true });
     return mc("angleInclination",
-      `A line has a <b>negative</b> gradient. To find its angle of inclination θ you calculate…`,
-      "θ = 180° − tan⁻¹(|m|)",
-      ["θ = tan⁻¹(m)", "θ = tan⁻¹(|m|)", "θ = 90° + tan⁻¹(m)"],
+      `A line has a <b>negative</b> gradient. To find its angle of inclination θ, what do you do?`,
+      "SHIFT tan the gradient <b>without</b> its minus, then 180° − that answer",
+      ["SHIFT tan the gradient <b>with</b> its minus in, and take that answer",
+       "SHIFT tan the gradient <b>without</b> its minus, and stop there",
+       "SHIFT tan the gradient, then <b>add</b> that answer to 90°"],
       { hint: "A falling line is obtuse. Find the acute reference angle from the SIZE of m, then subtract from 180°.",
-        answerLabel: "θ = 180° − tan⁻¹(|m|) — obtuse." });
+        answerLabel: "Drop the minus, SHIFT tan the size of the gradient, then 180° − that. θ is obtuse." });
   },
 
   /* pick the correct θ value (drills 180− and the negative-sign trap) */
@@ -57,18 +59,18 @@ const SKILLS = {
       correct, decoys,
       { graph: d.spec,
         hint: negative
-          ? "Negative gradient → obtuse. ref = tan⁻¹(|m|), then θ = 180° − ref."
-          : "Positive gradient → acute. θ = tan⁻¹(m) straight off.",
+          ? "Negative gradient → obtuse. Drop the minus, SHIFT tan the size of the gradient for the reference angle, then θ = 180° − that."
+          : "Positive gradient → acute. SHIFT tan the gradient and that IS θ, straight off.",
         answerLabel: `θ = ${correct}.` });
   },
 
   /* don't type the negative into the calculator */
   dontTypeNeg: () => {
     return yesnoQ("angleInclination",
-      "To get the reference angle, should you type the <b>negative</b> gradient straight into tan⁻¹ on your calculator?",
+      "To get the reference angle, should you SHIFT tan the <b>negative</b> gradient exactly as it is, minus sign and all?",
       false,
       { hint: "Typing a negative gives a negative angle. Use the SIZE of the gradient (drop the sign), then do 180° − that.",
-        answerLabel: "No — drop the sign, find tan⁻¹(|m|), then 180° − it." });
+        answerLabel: "No — drop the sign, SHIFT tan the size of the gradient, then 180° − that." });
   },
 
   /* the basic connection */
@@ -92,7 +94,7 @@ const SKILLS = {
       deg0(ex.theta),
       negative ? [deg0(45), negDeg0(45), deg0(90)] : [deg0(135), deg0(90), deg0(60)],
       { graph: d.spec,
-        hint: ex.dy < 0 ? "m = −1 is negative → obtuse → 180° − 45°." : "m = 1 → tan⁻¹(1) = 45°.",
+        hint: ex.dy < 0 ? "m = −1 is negative → obtuse → 180° − 45°." : "m = 1 → SHIFT tan (1) = 45°.",
         answerLabel: `θ = ${deg0(ex.theta)}.` });
   },
 

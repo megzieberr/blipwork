@@ -71,12 +71,12 @@ const t2q2 = {
         { type: "step", text: { en: "2 cos²θ + 5 cos θ − 3 = 0 &nbsp;⟹&nbsp; (2 cos θ − 1)(cos θ + 3) = 0" }, ticks: ["s/f"] },
         { type: "step", text: { en: "cos θ = 1/2 &nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp; cos θ = −3" }, ticks: ["ca"] },
         { type: "step", text: { en: "cos θ can never be smaller than −1, so cos θ = −3 has <b>no solution</b>." }, ticks: ["ca"] },
-        { type: "step", text: { en: "Reference angle: cos⁻¹(1/2) = 60°, and cos is positive in the first and fourth quadrants:" } },
+        { type: "step", text: { en: "Reference angle: <span class=\"nowrap\">SHIFT cos (1/2)</span> gives 60°, and cos is positive in the first and fourth quadrants:" } },
         { type: "answer", text: { en: "θ = 60° + k · 360°" }, ticks: ["a"] },
         { type: "answer", text: { en: "or &nbsp;θ = 300° + k · 360°, &nbsp;&nbsp;k ∈ ℤ" }, ticks: ["a"] },
         { type: "step", text: { en: "<b>OR</b> — written as one line: &nbsp;θ = ± 60° + k · 360°, &nbsp;k ∈ ℤ. &nbsp;Same marks." } },
         { type: "trap", text: {
-          en: "WATCH OUT: cos θ = −3 has <b>no solution</b>. It is not “undefined” and it is not zero — there simply is no angle whose cosine is −3. Write that sentence down; it is a mark on its own, and every year somebody types cos⁻¹(−3) into the calculator, gets an error, and leaves the whole branch out silently.",
+          en: "WATCH OUT: cos θ = −3 has <b>no solution</b>. It is not “undefined” and it is not zero — there simply is no angle whose cosine is −3. Write that sentence down; it is a mark on its own, and every year somebody does <span class=\"nowrap\">SHIFT cos (−3)</span> on the calculator, gets an error, and leaves the whole branch out silently.",
         } },
         { type: "trap", text: {
           en: "REMEMBER: k ∈ ℤ belongs on the end of <i>every</i> general solution. Without it you have written down two angles, not a general solution.",

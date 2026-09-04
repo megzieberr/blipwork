@@ -54,7 +54,7 @@ const SKILLS = {
         calcStep("Work out the value of <b>sin θ</b> (4 decimals).", sinVal,
           `sin θ = ${b} × sin ${A}° ÷ ${a}. This is not θ yet — it is sin θ.`, { dp: 4, tol: 0.0015 }),
         calcStep("Now find <b>θ</b> (1 decimal).", B,
-          "θ = sin⁻¹ of that value — SHIFT sin on the calculator.", { dp: 1, tol: 0.1, unit: "°" }),
+          "SHIFT sin that value on the calculator and you have θ.", { dp: 1, tol: 0.1, unit: "°" }),
       ],
       expected: B, dp: 1, tol: 0.1,   // accept the neighbouring tenth from 4-dp sine working
       hint: "θ is opposite b. Sines on top: sinθ/b = sinÂ/a, so sinθ = b·sinÂ/a.",
@@ -122,7 +122,7 @@ const SKILLS = {
            `sin B̂ = (${b} · ${a}) / sin ${A}°`],
           `${b} is dividing sin B̂, so it multiplies up to the other side.`),
         calcStep("First the <b>acute</b> possibility of B̂ (1 decimal).", res.acute,
-          "sin⁻¹ always hands you the acute answer first.", { dp: 1, tol: 0.1, unit: "°" }),
+          "SHIFT sin always hands you the acute answer first.", { dp: 1, tol: 0.1, unit: "°" }),
         calcStep("Now the <b>obtuse</b> possibility (1 decimal).", obtuse,
           "The two possibilities are supplementary: 180° − the acute answer.", { dp: 1, tol: 0.1, unit: "°" }),
       ],

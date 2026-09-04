@@ -50,7 +50,7 @@ const SKILLS = {
           `cos θ = (${others[0]}² + ${others[1]}² − ${opp}²) ÷ (2 × ${others[0]} × ${others[1]}). A minus answer is allowed here.`,
           { dp: 4, tol: 0.0015, allowNeg: true }),
         calcStep("Now find <b>θ</b> (1 decimal).", val,
-          "θ = cos⁻¹ of that value. If cos θ came out negative, θ is obtuse all by itself.",
+          "SHIFT cos that value and you have θ. If cos θ came out negative, θ is obtuse all by itself.",
           { dp: 1, tol: 0.1, unit: "°" }),
       ],
       expected: val, dp: 1, tol: 0.1,   // accept the neighbouring tenth from 4-dp cosine working
@@ -86,7 +86,7 @@ const SKILLS = {
           `cos θ = (${a}² + ${b}² − ${c}²) ÷ (2 × ${a} × ${b}). It comes out negative — that is the point.`,
           { dp: 4, tol: 0.0015, allowNeg: true }),
         calcStep("Now find <b>θ</b> (1 decimal).", val,
-          "θ = cos⁻¹ of that negative value — the calculator hands you the obtuse angle directly.",
+          "SHIFT cos that negative value — the calculator hands you the obtuse angle directly.",
           { dp: 1, tol: 0.1, unit: "°" }),
       ],
       expected: val, dp: 1, tol: 0.1,
