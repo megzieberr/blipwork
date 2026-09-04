@@ -64,6 +64,15 @@
   used to overwrite the saved false with true and pay full XP).</p>
 <pre id="playWiring">…</pre>
 
+<h2>Part 4 · the 📖 method panel says the answer ONCE (her ruling + audit F2, 2026-09-04)</h2>
+<p class="muted small">Every pool's <code>methodHtml()</code> leads with <code>&lt;div class="fb-answer"&gt;&lt;b&gt;Answer:&lt;/b&gt;…</code>
+  and then prints the working that lands on the same answer, so the panel said it twice (worst on eq9's solve skills,
+  where both copies are a paragraph) and OPENED with the answer on classify/recall cards — the dice-gtrig audit's F2.
+  These drive the real renderPlay() again: a method WITH worked steps must lose the header, a method with nothing but
+  the answer must keep it (so a panel is never empty), and the answer text itself must survive in the steps. The pools,
+  <code>methodHtml()</code> and the eligibility rule are untouched — this is a render-side trim only.</p>
+<pre id="methodPanel">…</pre>
+
 <script type="module">
 import { pool as stubPool } from "./js/quests/dice-stub.js";
 import { pool as statsPool } from "./js/quests/dice-stats.js";
@@ -72,6 +81,7 @@ import { answerCorrect, fmtComma } from "./js/check.js";
 import { mean, median, mode, range, stdDev, quartileValue, quartilePos, percentilePos, outlierBounds } from "./js/statlib.js";
 import { verifyGraph, ogiveAnswerAtCum, ogiveAnswerAtVal } from "./js/engine/stats-graph.js";
 import { renderPlay } from "./js/play.js";
+import { methodHtml as poolMethodHtml } from "./js/quests/dice-gtrig.js";   // Part 4: the REAL method markup, not a restatement of it
 import { rng } from "./js/rng.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
@@ -745,6 +755,99 @@ const pw = [];
 }
 
 document.getElementById("playWiring").textContent = pw.join("\n\n");
+
+/* ============================================================
+   PART 4 — the 📖 method panel says the answer ONCE (her ruling
+   2026-09-04 + the dice-gtrig audit's finding F2). Drives the real
+   renderPlay() again, with q.method built by the real pool builder
+   (dice-gtrig's exported methodHtml), so these fail if play.js's
+   slimMethodPanel() regresses OR if a pool ever stops emitting the
+   .fb-answer / .sol-step markup the trim keys off.
+   ============================================================ */
+function makeMethodSkill(build) {
+  return {
+    id: "sib.method", concept: "sib-test",
+    gen: () => { const q = build(); q.method = poolMethodHtml(q); return q; },
+  };
+}
+function methodBoxOf(host) {
+  return [...host.querySelectorAll(".hint-box")].find(b => {
+    const tag = b.querySelector(".tag");
+    return tag && tag.textContent.trim() === "METHOD";
+  });
+}
+function openMethod(h) {
+  const mbtn = btnByText(h.host, "📖 Show me the method");
+  if (mbtn) mbtn.click();
+  return { mbtn, box: methodBoxOf(h.host) };
+}
+const mp = [];
+
+/* ---- (a) a method WITH worked steps: the "Answer:" header comes off,
+   the working stays, and the answer stands exactly once ---- */
+{
+  const h = makeHarness(makeMethodSkill(() => ({
+    type: "mc", concept: "sib-test", prompt: "How many solutions?",
+    options: [{ label: "One solution", correct: true }, { label: "Two solutions", correct: false }],
+    answerLabel: "One solution",
+    solution: [
+      { s: "Read the exponent: top = 1 (odd), bottom = 3 (odd)", r: "the rules only ask odd or even" },
+      { s: "One solution" },
+    ],
+  })));
+  const { mbtn, box } = openMethod(h);
+  tick(!!mbtn, "method panel: a q.method-carrying dice question still offers “📖 Show me the method”");
+  tick(!!box, "method panel: the link opens a METHOD box");
+  const txt = box ? box.textContent : "";
+  tick(!!box && !box.querySelector(".fb-answer"), "method panel: worked steps present → the “Answer:” header is dropped (F2 — the panel no longer OPENS with the answer)");
+  tick(!/Answer:/.test(txt), "method panel: the word “Answer:” is gone from a worked-steps panel");
+  tick(!!box && box.querySelectorAll(".sol-step").length === 2, "method panel: both worked steps survive the trim");
+  const hits = txt.split("One solution").length - 1;
+  tick(hits === 1, `method panel: the answer text appears EXACTLY once (was twice — header + the step it lands on); saw ${hits}`);
+  tick(txt.replace("METHOD", "").trim().length > 0, "method panel: not empty after the trim");
+  mp.push(`(a) worked steps: .fb-answer removed = ${!box.querySelector(".fb-answer")}; .sol-step count = ${box.querySelectorAll(".sol-step").length} (want 2); "One solution" occurrences = ${hits} (want 1)`);
+  h.cleanup();
+}
+
+/* ---- (b) a method with NOTHING but the answer keeps its header —
+   the guard that stops a panel coming out empty ---- */
+{
+  const h = makeHarness(makeMethodSkill(() => ({
+    type: "mc", concept: "sib-test", prompt: "Pick one.",
+    options: [{ label: "42", correct: true }, { label: "43", correct: false }],
+    answerLabel: "42", solution: [],
+  })));
+  const { box } = openMethod(h);
+  const txt = box ? box.textContent : "";
+  tick(!!box && !!box.querySelector(".fb-answer"), "method panel: no worked steps → the answer line STAYS (a panel is never empty)");
+  tick(/42/.test(txt), "method panel: the answer-only panel still shows its answer");
+  mp.push(`(b) answer only (solution: []): .fb-answer kept = ${!!box.querySelector(".fb-answer")}; box text = ${JSON.stringify(txt)}`);
+  h.cleanup();
+}
+
+/* ---- (c) the trim is dice-only, like the panel itself: a static
+   round never renders the method link at all ---- */
+{
+  const skill = makeMethodSkill(() => ({
+    type: "mc", concept: "sib-test", prompt: "Pick one.",
+    options: [{ label: "7", correct: true }, { label: "8", correct: false }],
+    answerLabel: "7", solution: [{ s: "3 + 4 = 7" }],
+  }));
+  const host = document.createElement("div");
+  host.style.cssText = "position:fixed;left:-9999px;top:0";
+  document.body.appendChild(host);
+  renderPlay({ state: {}, go() {}, refresh: async () => {} }, host, {
+    chapter: { id: "verify", name: "Verify" }, accent: "#3aa0ff",
+    quest: { id: "verify-static", n: "1", title: "Verify · static" },
+    def: { skills: [skill] },
+  });
+  const staticBtn = btnByText(host, "📖 Show me the method");
+  tick(!staticBtn, "method panel: static (non-dice) play still renders no method link — the trim changes nothing there");
+  mp.push(`(c) static play: method link rendered = ${!!staticBtn} (want false)`);
+  host.remove();
+}
+
+document.getElementById("methodPanel").textContent = mp.join("\n\n");
 
 const banner = document.getElementById("banner");
 const ok = passed === total;

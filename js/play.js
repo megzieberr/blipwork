@@ -71,6 +71,46 @@ export function mountCalcFloat(host, calcBtn) {
   return calcFloat;
 }
 
+/* ------------------------------------------------------------
+   SLIM THE METHOD PANEL — say the answer ONCE (her ruling, 2026-09-04)
+   ------------------------------------------------------------
+   Every chapter's pool builds q.method with the same markup:
+
+     <div class="fb-answer"><b>Answer:</b> …</div>
+     <div class="sol"><div class="sol-step">…</div>…</div>
+
+   …and the working underneath lands on that same answer ("∴ One
+   solution", "x = 9", "sin 45° = 1/√2"), so the 📖 panel said it twice.
+   On eq9's solve skills both copies are a long paragraph, one above the
+   other on a single phone screen. It also meant the panel OPENED with the
+   answer, which the dice-gtrig audit flagged as F2: on classify/recall
+   cards ("⑤ trinomial", the flamingo card) the method and the answer are
+   the same sentence, so the always-available link handed the mark over
+   before the learner had picked.
+
+   The rule: when real worked steps follow, the "Answer:" header comes off
+   and the panel leads with the working; a method with no steps to carry
+   the answer keeps its header, so a panel can never come out empty.
+
+   Render side ONLY — no gen(), no methodHtml(), no eligibility rule is
+   touched, so the 32 560 regenerated questions stay byte-identical. The
+   wrong-answer panel in js/questions.js is deliberately left alone: that
+   one is shown AFTER the learner has answered, where "Answer:" belongs.
+
+   Kept as an exported function operating on a live node — same reasoning
+   as xpToSubmit above — so verify-dice.html can assert the rule on the
+   real markup without restating it. Returns true when a header was
+   removed (mainly for tests).
+   ------------------------------------------------------------ */
+export function slimMethodPanel(box) {
+  const ansLine = box && box.querySelector(".fb-answer");
+  if (!ansLine) return false;
+  const worked = [...box.querySelectorAll(".sol-step")].some(s => s.textContent.trim() !== "");
+  if (!worked) return false;
+  ansLine.remove();
+  return true;
+}
+
 /* DICE-PLAN.md (session 0b, 2026-08-21): renderPlay is reused, not forked,
    for dice rounds — params.dice (built by js/dice-play.js) is the only
    thing that changes below. When it's absent every branch here is byte-
@@ -247,6 +287,11 @@ export function renderPlay(app, host, params) {
       const stepNodes = mbox.querySelectorAll(".fb-answer, .sol-step .s, .sol-step .r");
       if (stepNodes.length) stepNodes.forEach(n => { n.innerHTML = fmtOne(n.innerHTML); });
       else mbox.innerHTML = `<span class="tag">METHOD</span>${fmtOne(q.method)}`;
+      // …then say the answer once (see slimMethodPanel above). Deliberately
+      // AFTER the per-step prettify, and after the free-form fallback that
+      // re-writes the whole box — either path can put an "Answer:" header
+      // back, so the header comes off last.
+      slimMethodPanel(mbox);
       mbtn.addEventListener("click", () => { mbox.hidden = false; mbtn.disabled = true; });
       qhost.appendChild(mbtn); qhost.appendChild(mbox);
     }
