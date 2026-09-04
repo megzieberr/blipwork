@@ -1,4 +1,4 @@
-# Project status — updated 2026-09-04 (🔧 FIX DAY shipped sw v89: snapshot fractions · method panel · gtrig asks-first · SHIFT tan sweep; both wave-4 digests landed, Analytical UNBLOCKED)
+# Project status — updated 2026-09-04 evening (🔁 sw v90 LIVE: Fun Functions look-back sheet · earlier 🔧 FIX DAY sw v89: snapshot fractions · method panel · gtrig asks-first · SHIFT tan sweep; both wave-4 digests landed, Analytical UNBLOCKED)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,6 +9,14 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **Live on sw v90** (2026-09-04 evening, her "ship it"; fetch-verified: live sw.js
+  reads mhq-v90 and live js/funfun/play.js carries the sheet). Fun Functions gained a
+  **look-back sheet**: after the first Volgende a "◀ Vorige" link sits in the progress
+  row; it opens a read-only sheet showing the finished question exactly as the learner
+  left it (tapped option, ✓/✗, answer, method); ◀ ▶ page through done items; "Terug na
+  my vraag" closes; the stored subtree is inert and sealed. Built by one Opus worker in
+  graph-quest (3f84d87, gq-v34 live), foreman-reviewed (one fallback fix), synced.
+  A learner asked for it in the 💬 box that morning. **No SQL.**
 - **Live on sw v89** (2026-09-04, her "ship it"; foreman day, 5 Opus workers
   ≈ 1,25M agent tokens, all four fix rounds + both digests reviewed
   first-hand before committing): 💬 feedback snapshots show stacked
@@ -114,8 +122,18 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   phone's edge-swipe); the finished screen is KEPT and shown inert, never
   re-rendered, so she sees the option she tapped and the feedback she got.
 
+- 2026-09-04 evening (hers): "ship it" → sw v90 live (look-back sheet).
+- 2026-09-04 evening (mine, flagged): the redo feature CANNOT replay the exact
+  question (unseeded dealing, interactive items carry closures), so REDO-PLAN.md
+  proposes same skill with fresh numbers, no XP, device-local basket; her five
+  rulings are pending.
+
 ## ⏳ Pending on Megan
-(one close-and-reopen does it all — v89 carries every earlier version's changes)
+(one close-and-reopen does it all — v90 carries every earlier version's changes)
+- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v90) → Functions chapter
+  → any Fun Functions round → answer one, tap Volgende → tap "◀ Vorige" beside
+  "2 van 10": the finished question comes back read-only with its feedback;
+  "Terug na my vraag" returns you with your live question untouched.
 - 📱 5 min [whenever]: close + reopen Blipwork twice (sw v89) → roll a
   gtrig round — the bow-tie / three-boxes / but-why cards should ASK
   (blank "?" corners) and hand the filled frame back after you answer;
@@ -129,8 +147,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   six split-day chains — are still unticked if you want them.)
 - 💬 [whenever]: all of C.M.'s notes are read and answered in person (she
   confirmed 2026-09-04 evening). ONE unread note remains: the anonymous
-  2026-09-04 10:12 UTC swipe-back request from funfun:qK, which is being
-  built; mark it read once it ships.
+  2026-09-04 10:12 UTC swipe-back request from funfun:qK. It SHIPPED in v90:
+  🌐 1 min, mark it read in the admin fold.
 - 🌐 1 line [your call]: megzieberr is still visible in the class
   name-picker — say the word and I hide it (one SQL line, reversible).
 
@@ -138,12 +156,10 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - **Analytical Geometry dice chapter — UNBLOCKED.** Digest + her seven
   rulings sit in METHODS-analytical.md; ag5 mines the paper-bank mds.
   Needs a build day on her word.
-- **Fun Functions swipe-back (BUILT + foreman-reviewed in graph-quest, NOT shipped).** Learner request
-  2026-09-04: look back at the previous question after Next. Design: a
-  "◀ Vorige" button (no swipe gesture), finished screens kept as-is and
-  shown inert in a review sheet; live question untouched. One Opus worker
-  in graph-quest; then tools/sync-to-blipwork.py + blipwork sw v90 +
-  graph-quest gq-v34 on her "ship it".
+- **Redo basket ("remember what I got wrong, let me do it again")** — planned, NOT
+  built: graph-quest/REDO-PLAN.md (two Opus sessions; her five one-line rulings
+  first; same skill with fresh numbers, no XP, device-local basket). Her word:
+  tomorrow, in another session.
 - **Probability dice chapter — UNBLOCKED, one prep step first.** Her rulings
   sit at the TOP of METHODS-probability.md with the file pointers: a worker
   digests the SAG's Gr11 Probability section + the surveyed papers' memo
