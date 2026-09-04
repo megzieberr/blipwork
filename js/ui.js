@@ -89,8 +89,10 @@ export function pwToggle(input) {
    fight (calculator.js has no keydown handling of its own — taps only).
    Stacked scrims close ONE per press: every scrim shares the same
    z-index (50), so paint order follows DOM order and the LAST one
-   appended to <body> is the topmost. */
-document.addEventListener("keydown", (e) => {
+   appended to <body> is the topmost.
+   The typeof guard is for node: every verify-*.mjs harness imports
+   ui.js through _shared.js, where there is no document at all. */
+if (typeof document !== "undefined") document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   const scrims = document.querySelectorAll(".modal-scrim");
   if (!scrims.length) return;
