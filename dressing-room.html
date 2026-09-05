@@ -198,7 +198,7 @@
     <div id="stagewrap" tabindex="0">
       <div id="blipstage"></div>
       <div id="bounds"></div>
-      <!-- Measured off blip-base-blue.png by isolating the dark navy shapes
+      <!-- Measured off blip-base-blue.webp by isolating the dark navy shapes
            (his eye navy is much darker than his outline navy, so the two
            separate cleanly): eyes centred at x 0.302 / 0.691, y 0.571;
            mouth at 0.498 / 0.642. In this 480x600 box that is the numbers
@@ -698,7 +698,7 @@ function loadImage(src) {
 let bodyAlpha = null;
 async function loadBodyAlpha() {
   if (bodyAlpha) return bodyAlpha;
-  const img = await loadImage("assets/companion/blip-base-blue.png");
+  const img = await loadImage("assets/companion/blip-base-blue.webp");
   const c = document.createElement("canvas");
   c.width = AW; c.height = AH;
   const x = c.getContext("2d", { willReadFrequently: true });

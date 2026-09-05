@@ -287,7 +287,7 @@ function assignmentSection(data) {
    1080×1080 PNG drawn on a canvas in the app's System-Window style: deep
    navy, thin luminous blue border, low glow — the same popup language the
    kids see in the app, so the message "go open Blipwork" needs no words.
-   HER art only (assets/companion/homework-badge.png — her red book); the
+   HER art only (assets/companion/homework-badge.webp — her red book); the
    due line comes from assignment.js's own dueLine(), so the picture says
    exactly what the learner's pinned card will say. No overdue/pressure
    copy anywhere, per the phase-3 ruling. */
@@ -325,7 +325,7 @@ async function homeworkCardPng(a) {
   const accent = (ch && ch.signature) || "#3aa0ff";
 
   const [book] = await Promise.all([
-    loadImg("./assets/companion/homework-badge.png"),
+    loadImg("./assets/companion/homework-badge.webp"),
     document.fonts ? document.fonts.load('700 84px "Space Grotesk"')
       .then(() => document.fonts.load('600 40px "Space Grotesk"'))
       .then(() => document.fonts.load('400 36px "Sora"')) : Promise.resolve(),

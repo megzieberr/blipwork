@@ -32,7 +32,7 @@
    rightly so. Same reasoning as trinkets.js and food.js.
 
    ⚠️ THE DOOR COLOURS ALL SHARE ONE PICTURE (her ruling). There is exactly
-   one door drawing, door.png, and every COLOUR is that same file tinted
+   one door drawing, door.webp, and every COLOUR is that same file tinted
    through renderer.js's `tintedImageSrc` — the offscreen-canvas pipeline
    Blip's own recolouring uses. Never add a second door PNG for a colour.
    ⚠️ REWORDED 2026-08-12, because the original said "never add a second
@@ -53,13 +53,13 @@ import { tintedImageSrc } from "./renderer.js";
 
 const DIR = "./assets/companion/furniture";
 /* Wallpapers are the ROOM SHELL itself, so they live one level up beside
-   room-shell.png rather than in furniture/. An entry marked `shell: true`
+   room-shell.webp rather than in furniture/. An entry marked `shell: true`
    reads from here — see furnitureImgSrc. */
 const SHELL_DIR = "./assets/companion";
 
 /* ---------- where the shell's surfaces are ----------
    Fractions of the room box, which is exactly the shape of
-   assets/companion/room-shell.png (768x762 — the CSS pins .room to that
+   assets/companion/room-shell.webp (768x762 — the CSS pins .room to that
    aspect ratio precisely so these numbers mean something). Measured off
    the shell's own alpha channel, not guessed:
 
@@ -201,15 +201,15 @@ const DOOR_TINTS = {
    same way an accessory may override its slot's ATTACH point. */
 export const FURNITURE = {
   // ---- basic (Lv 1, free) — art-source/tripo/furniture-iso-basic.png ----
-  "basic-bed": { slot: "bed", label: "Wooden bed", img: "basic-bed.png", widthPct: 41 },
-  "basic-desk": { slot: "desk", label: "Study desk", img: "basic-desk.png", widthPct: 33 },
-  "city-window": { slot: "window", label: "City window", img: "city-window.png", widthPct: 20 },
+  "basic-bed": { slot: "bed", label: "Wooden bed", img: "basic-bed.webp", widthPct: 41 },
+  "basic-desk": { slot: "desk", label: "Study desk", img: "basic-desk.webp", widthPct: 33 },
+  "city-window": { slot: "window", label: "City window", img: "city-window.webp", widthPct: 20 },
 
   // ---- techy (Lv 8) — furniture-iso-techy.png (the holo screen floats
   //      detached above the desk, so that sheet is sliced with --group) ----
-  "techy-bed": { slot: "bed", label: "Capsule bed", img: "techy-bed.png", widthPct: 37 },
-  "techy-desk": { slot: "desk", label: "Holo desk", img: "techy-desk.png", widthPct: 36 },
-  "space-window": { slot: "window", label: "Space window", img: "space-window.png", widthPct: 20 },
+  "techy-bed": { slot: "bed", label: "Capsule bed", img: "techy-bed.webp", widthPct: 37 },
+  "techy-desk": { slot: "desk", label: "Holo desk", img: "techy-desk.webp", widthPct: 36 },
+  "space-window": { slot: "window", label: "Space window", img: "space-window.webp", widthPct: 20 },
 
   // ---- princess (Lv 14) — furniture-iso-princess.png ----
   // The canopy bed sits at 41, matching the wooden one — HER CALL
@@ -217,20 +217,20 @@ export const FURNITURE = {
   // meant to be an upgrade from looks wrong, and at Megan's placement it has
   // the room for it. The vanity stays narrower: it is the tallest thing in
   // the catalogue (mirror included) and does not need the width.
-  "princess-bed": { slot: "bed", label: "Canopy bed", img: "princess-bed.png", widthPct: 41 },
-  "princess-desk": { slot: "desk", label: "Vanity desk", img: "princess-desk.png", widthPct: 30 },
-  "mountain-window": { slot: "window", label: "Mountain window", img: "mountain-window.png", widthPct: 20 },
+  "princess-bed": { slot: "bed", label: "Canopy bed", img: "princess-bed.webp", widthPct: 41 },
+  "princess-desk": { slot: "desk", label: "Vanity desk", img: "princess-desk.webp", widthPct: 30 },
+  "mountain-window": { slot: "window", label: "Mountain window", img: "mountain-window.webp", widthPct: 20 },
 
   // ---- the door: ONE drawing, tinted in code (her ruling) ----
-  "door-white": { slot: "door", label: "White door", img: "door.png", widthPct: 24, tint: null },
-  "door-mint": { slot: "door", label: "Mint door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.mint },
-  "door-sky": { slot: "door", label: "Sky door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.sky },
-  "door-pink": { slot: "door", label: "Pink door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.pink },
-  "door-lemon": { slot: "door", label: "Lemon door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.lemon },
-  "door-peach": { slot: "door", label: "Peach door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.peach },
-  "door-lilac": { slot: "door", label: "Lilac door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.lilac },
-  "door-coral": { slot: "door", label: "Coral door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.coral },
-  "door-seafoam": { slot: "door", label: "Seafoam door", img: "door.png", widthPct: 24, tint: DOOR_TINTS.seafoam },
+  "door-white": { slot: "door", label: "White door", img: "door.webp", widthPct: 24, tint: null },
+  "door-mint": { slot: "door", label: "Mint door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.mint },
+  "door-sky": { slot: "door", label: "Sky door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.sky },
+  "door-pink": { slot: "door", label: "Pink door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.pink },
+  "door-lemon": { slot: "door", label: "Lemon door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.lemon },
+  "door-peach": { slot: "door", label: "Peach door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.peach },
+  "door-lilac": { slot: "door", label: "Lilac door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.lilac },
+  "door-coral": { slot: "door", label: "Coral door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.coral },
+  "door-seafoam": { slot: "door", label: "Seafoam door", img: "door.webp", widthPct: 24, tint: DOOR_TINTS.seafoam },
 
   /* ---- closet designs (2026-08-12) — her six Tripo closets ----
      ⚠️ THESE DO NOT BREAK THE "ONE DOOR PICTURE" RULE ABOVE — read it again
@@ -257,12 +257,12 @@ export const FURNITURE = {
      widthPct is per piece for the same reason: all seven drawings are 512
      tall, so their widths are pure aspect, and matching rendered HEIGHT to
      the shipped door means scaling widthPct by each one's own width. */
-  "closet-nerdy": { slot: "door", label: "Bookshelf closet", img: "closet-nerdy.png", widthPct: 22, attach: { x: 0.650, y: 0.529 } },
-  "closet-sport": { slot: "door", label: "Locker closet", img: "closet-sport.png", widthPct: 23, attach: { x: 0.650, y: 0.537 } },
-  "closet-lines": { slot: "door", label: "Striped closet", img: "closet-lines.png", widthPct: 22 },
-  "closet-starry": { slot: "door", label: "Starry closet", img: "closet-starry.png", widthPct: 21, attach: { x: 0.650, y: 0.533 } },
-  "closet-flower": { slot: "door", label: "Daisy closet", img: "closet-flower.png", widthPct: 24, attach: { x: 0.650, y: 0.506 } },
-  "closet-emo": { slot: "door", label: "Midnight closet", img: "closet-emo.png", widthPct: 24 },
+  "closet-nerdy": { slot: "door", label: "Bookshelf closet", img: "closet-nerdy.webp", widthPct: 22, attach: { x: 0.650, y: 0.529 } },
+  "closet-sport": { slot: "door", label: "Locker closet", img: "closet-sport.webp", widthPct: 23, attach: { x: 0.650, y: 0.537 } },
+  "closet-lines": { slot: "door", label: "Striped closet", img: "closet-lines.webp", widthPct: 22 },
+  "closet-starry": { slot: "door", label: "Starry closet", img: "closet-starry.webp", widthPct: 21, attach: { x: 0.650, y: 0.533 } },
+  "closet-flower": { slot: "door", label: "Daisy closet", img: "closet-flower.webp", widthPct: 24, attach: { x: 0.650, y: 0.506 } },
+  "closet-emo": { slot: "door", label: "Midnight closet", img: "closet-emo.webp", widthPct: 24 },
 
   /* ---- room decor (2026-08-12) — her 2026-08-09 Tripo drop, wired ----
      ⚠️ EVERY widthPct BELOW IS PROVISIONAL. The three themed sets reuse the
@@ -275,20 +275,20 @@ export const FURNITURE = {
   // ---- nerdy (Lv 4) — space-duvet bed, books-and-cactus desk, telescope
   //      porthole. Sized to the basic set: nerdy-desk is 380x369 against
   //      basic-desk's 338x327, the same shape 12% bigger, so 33 holds.
-  "nerdy-bed": { slot: "bed", label: "Space bed", img: "nerdy-bed.png", widthPct: 41 },
-  "nerdy-desk": { slot: "desk", label: "Study bench", img: "nerdy-desk.png", widthPct: 33 },
-  "nerdy-window": { slot: "window", label: "Telescope window", img: "nerdy-window.png", widthPct: 20 },
+  "nerdy-bed": { slot: "bed", label: "Space bed", img: "nerdy-bed.webp", widthPct: 41 },
+  "nerdy-desk": { slot: "desk", label: "Study bench", img: "nerdy-desk.webp", widthPct: 33 },
+  "nerdy-window": { slot: "window", label: "Telescope window", img: "nerdy-window.webp", widthPct: 20 },
 
   // ---- sport (Lv 11) — ball-print bed, trophy desk, stadium porthole ----
-  "sport-bed": { slot: "bed", label: "Team bed", img: "sport-bed.png", widthPct: 41 },
-  "sport-desk": { slot: "desk", label: "Trophy desk", img: "sport-desk.png", widthPct: 33 },
-  "sport-window": { slot: "window", label: "Stadium window", img: "sport-window.png", widthPct: 20 },
+  "sport-bed": { slot: "bed", label: "Team bed", img: "sport-bed.webp", widthPct: 41 },
+  "sport-desk": { slot: "desk", label: "Trophy desk", img: "sport-desk.webp", widthPct: 33 },
+  "sport-window": { slot: "window", label: "Stadium window", img: "sport-window.webp", widthPct: 20 },
 
   // ---- emo (Lv 18) — black four-poster with bat pillows, candle desk,
   //      curtained moon window ----
-  "emo-bed": { slot: "bed", label: "Midnight bed", img: "emo-bed.png", widthPct: 41 },
-  "emo-desk": { slot: "desk", label: "Candle desk", img: "emo-desk.png", widthPct: 33 },
-  "emo-window": { slot: "window", label: "Moon window", img: "emo-window.png", widthPct: 20 },
+  "emo-bed": { slot: "bed", label: "Midnight bed", img: "emo-bed.webp", widthPct: 41 },
+  "emo-desk": { slot: "desk", label: "Candle desk", img: "emo-desk.webp", widthPct: 33 },
+  "emo-window": { slot: "window", label: "Moon window", img: "emo-window.webp", widthPct: 20 },
 
   /* ---- shelves ----
      ⚠️ THE SUFFIX IS THE WALL, NOT A MIRROR FLAG. Each side is its own
@@ -312,17 +312,17 @@ export const FURNITURE = {
      if any single design wants its own size, that is a one-line override.
      The PANEL shelf is the one to look at first — its art is 348px tall
      against the others' ~305, so at the same width it hangs lower. */
-  "shelf-wood-left": { slot: "shelf-left", label: "Wooden shelf", img: "shelf-wood-left.png", widthPct: 16 },
-  "shelf-wood-right": { slot: "shelf-right", label: "Wooden shelf", img: "shelf-wood-right.png", widthPct: 16 },
-  "shelf-glossy-left": { slot: "shelf-left", label: "Glossy shelf", img: "shelf-glossy-left.png", widthPct: 16 },
-  "shelf-glossy-right": { slot: "shelf-right", label: "Glossy shelf", img: "shelf-glossy-right.png", widthPct: 16 },
-  "shelf-bracket-left": { slot: "shelf-left", label: "Bracket shelf", img: "shelf-bracket-left.png", widthPct: 16 },
-  "shelf-bracket-right": { slot: "shelf-right", label: "Bracket shelf", img: "shelf-bracket-right.png", widthPct: 16 },
-  "shelf-panel-left": { slot: "shelf-left", label: "Panel shelf", img: "shelf-panel-left.png", widthPct: 16 },
-  "shelf-panel-right": { slot: "shelf-right", label: "Panel shelf", img: "shelf-panel-right.png", widthPct: 16 },
+  "shelf-wood-left": { slot: "shelf-left", label: "Wooden shelf", img: "shelf-wood-left.webp", widthPct: 16 },
+  "shelf-wood-right": { slot: "shelf-right", label: "Wooden shelf", img: "shelf-wood-right.webp", widthPct: 16 },
+  "shelf-glossy-left": { slot: "shelf-left", label: "Glossy shelf", img: "shelf-glossy-left.webp", widthPct: 16 },
+  "shelf-glossy-right": { slot: "shelf-right", label: "Glossy shelf", img: "shelf-glossy-right.webp", widthPct: 16 },
+  "shelf-bracket-left": { slot: "shelf-left", label: "Bracket shelf", img: "shelf-bracket-left.webp", widthPct: 16 },
+  "shelf-bracket-right": { slot: "shelf-right", label: "Bracket shelf", img: "shelf-bracket-right.webp", widthPct: 16 },
+  "shelf-panel-left": { slot: "shelf-left", label: "Panel shelf", img: "shelf-panel-left.webp", widthPct: 16 },
+  "shelf-panel-right": { slot: "shelf-right", label: "Panel shelf", img: "shelf-panel-right.webp", widthPct: 16 },
 
   // ---- bean bag (Lv 6) — one floor piece, no free version. Size hers. ----
-  "beanbag": { slot: "beanbag", label: "Bean bag", img: "beanbag.png", widthPct: 17 },
+  "beanbag": { slot: "beanbag", label: "Bean bag", img: "beanbag.webp", widthPct: 17 },
 
   /* ---- wallpaper ----
      ⚠️ THESE DRAW NO LAYER. `shell: true` means the art IS the room shell:
@@ -337,18 +337,18 @@ export const FURNITURE = {
      accepted rather than ideal.
 
      ⚠️ THE FILE NAMES DO NOT DESCRIBE THE DRAWINGS — the ids below do. Tripo
-     named the exports before anyone looked at them: room-shell-sky.png is
-     the TEAL one with moons and clouds, and room-shell-cloudy.png is the
+     named the exports before anyone looked at them: room-shell-sky.webp is
+     the TEAL one with moons and clouds, and room-shell-cloudy.webp is the
      dark navy one with line-drawn mountains. So `wall-moons` reads
-     room-shell-sky.png and `wall-mountains` reads room-shell-cloudy.png, on
+     room-shell-sky.webp and `wall-mountains` reads room-shell-cloudy.webp, on
      purpose. Do not "correct" either mapping to match the file name; open
-     the two PNGs first. (`room-shell-cloud.png` really is the cloud-and-star
-     one and `room-shell-stripes.png` really is the striped one.) */
-  "wall-plain": { slot: "wall", label: "Plain walls", img: "room-shell.png", shell: true },
-  "wall-cloud": { slot: "wall", label: "Clouds & stars", img: "room-shell-cloud.png", shell: true },
-  "wall-moons": { slot: "wall", label: "Moons & clouds", img: "room-shell-sky.png", shell: true },
-  "wall-mountains": { slot: "wall", label: "Misty mountains", img: "room-shell-cloudy.png", shell: true },
-  "wall-stripes": { slot: "wall", label: "Sky stripes", img: "room-shell-stripes.png", shell: true },
+     the two PNGs first. (`room-shell-cloud.webp` really is the cloud-and-star
+     one and `room-shell-stripes.webp` really is the striped one.) */
+  "wall-plain": { slot: "wall", label: "Plain walls", img: "room-shell.webp", shell: true },
+  "wall-cloud": { slot: "wall", label: "Clouds & stars", img: "room-shell-cloud.webp", shell: true },
+  "wall-moons": { slot: "wall", label: "Moons & clouds", img: "room-shell-sky.webp", shell: true },
+  "wall-mountains": { slot: "wall", label: "Misty mountains", img: "room-shell-cloudy.webp", shell: true },
+  "wall-stripes": { slot: "wall", label: "Sky stripes", img: "room-shell-stripes.webp", shell: true },
 };
 
 export const FURNITURE_IDS = Object.keys(FURNITURE);
@@ -471,7 +471,7 @@ export function furnitureArt(id) {
    or swaps its size; there is nothing here to keep in sync by hand. The
    offset (top-right corner, slightly overlapping) is the only number that
    belongs to the badge itself. */
-const HOMEWORK_BADGE_SRC = "./assets/companion/homework-badge.png";
+const HOMEWORK_BADGE_SRC = "./assets/companion/homework-badge.webp";
 /* Tuned 2026-08-26 on her phone report ("not on the table"): the original
    {28, -6, -8} guess put the book at the box's top-right CORNER — empty air
    in the isometric drawing (the build note said "worth one look on her

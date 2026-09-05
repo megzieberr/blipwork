@@ -19,9 +19,9 @@ import argparse, json, os, re, colorsys
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SHELL = os.path.join(ROOT, "assets/companion/room-shell.png")
+SHELL = os.path.join(ROOT, "assets/companion/room-shell.webp")
 FURN = os.path.join(ROOT, "assets/companion/furniture")
-BLIP = os.path.join(ROOT, "assets/companion/blip-base-blue.png")
+BLIP = os.path.join(ROOT, "assets/companion/blip-base-blue.webp")
 
 
 def read_catalogue():
@@ -84,7 +84,7 @@ def tint(im, hex_col, lo=0.45, hi=0.65):
 
 def compose(equipped, width=768, wall=None):
     items, place = read_catalogue()
-    # `wall` names a room-shell PNG beside room-shell.png (the wallpaper
+    # `wall` names a room-shell PNG beside room-shell.webp (the wallpaper
     # slot). All five shells are the same 768x762 drawing with different
     # walls, so nothing else in here changes when it swaps.
     shell_path = os.path.join(os.path.dirname(SHELL), wall) if wall else SHELL
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     ap.add_argument("--shelf-left", default=None)
     ap.add_argument("--shelf-right", default=None)
     ap.add_argument("--beanbag", default=None)
-    ap.add_argument("--wall", default=None, help="a room-shell-*.png filename")
+    ap.add_argument("--wall", default=None, help="a room-shell-*.webp filename")
     a = ap.parse_args()
     eq = dict(SETS[a.set])
     for k, v in (("shelf-left", a.shelf_left), ("shelf-right", a.shelf_right), ("beanbag", a.beanbag)):

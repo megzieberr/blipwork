@@ -103,7 +103,7 @@ function chrome(app) {
   const c = el("div", "chrome");
   const levelInfo = app.state.levelInfo || { level: 1, intoLevel: 0, nextCost: 300 };
   const pct = levelInfo.nextCost ? Math.min(100, Math.round((levelInfo.intoLevel / levelInfo.nextCost) * 100)) : 100;
-  c.innerHTML = `<div class="brand"><img class="brand-logo" src="assets/companion/blip-base-blue.png" alt=""> Blipwork</div>
+  c.innerHTML = `<div class="brand"><img class="brand-logo" src="assets/companion/blip-base-blue.webp" alt=""> Blipwork</div>
     <div class="chrome-right">
       <button class="hud" title="Visit Blip">
         <span class="hud-level">Lv ${levelInfo.level}</span>

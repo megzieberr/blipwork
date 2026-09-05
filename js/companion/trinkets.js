@@ -43,32 +43,32 @@ export const TRINKETS = {
   pen: {
     label: "Ballpoint pen",
     line: "A pen. It works, probably.",
-    img: "pen.png",
+    img: "pen.webp",
   },
   "old-sock": {
     label: "Odd sock",
     line: "One sock. Its partner is gone forever.",
-    img: "old-sock.png",
+    img: "old-sock.webp",
   },
   "smooth-rock": {
     label: "Smooth rock",
     line: "A very good rock. Nice and smooth.",
-    img: "smooth-rock.png",
+    img: "smooth-rock.webp",
   },
   "paper-clip": {
     label: "Paper clip",
     line: "Slightly bent. Still clips.",
-    img: "paper-clip.png",
+    img: "paper-clip.webp",
   },
   "rubber-duck": {
     label: "Rubber duck",
     line: "Squeaks. Excellent at listening.",
-    img: "rubber-duck.png",
+    img: "rubber-duck.webp",
   },
   "broken-ruler": {
     label: "Broken ruler",
     line: "Two rulers now, if you think about it.",
-    img: "broken-ruler.png",
+    img: "broken-ruler.webp",
   },
 };
 

@@ -1077,7 +1077,7 @@ h2{font-size:20px} h3{font-size:17px}
    aligned — so the aspect-ratio above stays correct for every one of them
    and no placement fraction moves when the paper changes. */
 .room{position:relative;width:100%;aspect-ratio:768/762;margin:14px 0 10px;overflow:hidden;
-  background:url("../assets/companion/room-shell.png") center/100% 100% no-repeat}
+  background:url("../assets/companion/room-shell.webp") center/100% 100% no-repeat}
 
 /* One equipped piece, laid on the shell. Sized as a % of the room's WIDTH;
    the height follows the picture's own aspect, and the anchor is applied as

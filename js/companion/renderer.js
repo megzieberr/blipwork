@@ -51,12 +51,12 @@ import { healthOverlaySpec, animatedHealthOverlaySpec, blipMood as _blipMood, HE
 export { blipMood } from "./health-fx.js";
 
 /* SL restyle 2026-07-19: base body swapped from the cream art to Megan's
-   dark-Solo-Leveling blue art (assets/companion/blip-base-blue.png,
+   dark-Solo-Leveling blue art (assets/companion/blip-base-blue.webp,
    extracted from "SL Blip Design.png"). The old cream PNG is kept on disk
-   at assets/companion/blip-base.png as history/fallback but nothing points
+   at assets/companion/blip-base.webp as history/fallback but nothing points
    at it any more. Her blue body is used as-is (house rule — never redraw
    her character); accessories below are still code-drawn SVG. */
-const BASE_SRC = "assets/companion/blip-base-blue.png";
+const BASE_SRC = "assets/companion/blip-base-blue.webp";
 
 /* Natural size of the SL blue base canvas (480x600, aspect-ratio 4:5 —
    unchanged from the cream base so the stage box, all ATTACH fractions,
@@ -71,10 +71,10 @@ const BASE_W = 480, BASE_H = 600;
    contract with her art — see PHASE-2-PLAN.md §6. */
 const IMAGE_SOURCES = {
   base: BASE_SRC,
-  tired: "assets/companion/blip-tired.png",
-  bedridden: "assets/companion/blip-bedridden.png",
-  critical: "assets/companion/blip-critical.png",
-  recovering: "assets/companion/blip-recovering.png",
+  tired: "assets/companion/blip-tired.webp",
+  bedridden: "assets/companion/blip-bedridden.webp",
+  critical: "assets/companion/blip-critical.webp",
+  recovering: "assets/companion/blip-recovering.webp",
 };
 
 /* Sampled directly from Megan's SL blue art (SL Blip Design.png): the
@@ -111,7 +111,7 @@ export const COLOURS = {
 /* ---------- attachment points ----------
    Fractions of the stage box (480x600, mirrors the full base canvas, not
    just the drawn blob's tighter bbox). RE-MEASURED 2026-07-19 off the SL
-   blue base (blip-base-blue.png), where the face sits LOWER than the old
+   blue base (blip-base-blue.webp), where the face sits LOWER than the old
    cream art: eyes centred at y0.569 (x0.302 / x0.691), mouth centred
    (0.499, 0.644). (Old cream numbers were y0.494 eyes / 0.571 mouth — the
    blue body is squatter and bottom-aligned, so everything face-and-below
@@ -339,7 +339,7 @@ export const ACCESSORIES = {
   // rect fully inside the body silhouette (measured: 100% of the cup
   // rect was opaque body pixels — i.e. it sat ON the face, not the
   // side). Re-measured the silhouette programmatically (Python+Pillow
-  // over assets/companion/blip-base-blue.png): the body's left/right
+  // over assets/companion/blip-base-blue.webp): the body's left/right
   // edges at y=0.50 sit at x=0.058 / x=0.935, vs the old cup centre
   // 0.235 which is well inside that (near the eyes, x0.302). New attach
   // (x=0.06/0.94, y=0.50 — just above eye height y0.569 per the
@@ -433,7 +433,7 @@ export const ACCESSORIES = {
      (aurora-wings). Six of these are FREE (price 0 in shop_items) so a
      level-1 learner can dress Blip head to toe on day one.
 
-     GLASSES CONVENTION (measured off blip-base-blue.png, not guessed):
+     GLASSES CONVENTION (measured off blip-base-blue.webp, not guessed):
      the painted eyes sit at stage x 0.308 / 0.688 — 0.38 apart — and
      span y 0.487–0.63. Every glasses item therefore uses viewBox width
      210 with lens centres at x=60 / x=150 (0.4286 apart) at widthPct 90,
@@ -742,10 +742,10 @@ export const ACCESSORIES = {
 
   // --- effects (new slot). Rings run wide so they clear the silhouette.
   "light-ring": {           // free tier, 0g / L1
-    slot: "effects", img: "light-ring.png", widthPct: 110, anchor: { x: 0.5, y: 0.5 },
+    slot: "effects", img: "light-ring.webp", widthPct: 110, anchor: { x: 0.5, y: 0.5 },
   },
   "flame-ring": {
-    slot: "effects", img: "flame-ring.png", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
+    slot: "effects", img: "flame-ring.webp", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
   },
   // `crystal-orbit` was CUT on sight (Megan, 2026-08-08 — "it looks dumb"),
   // the same call that retired shadow-crown and pearls. Gone from here, the
@@ -753,7 +753,7 @@ export const ACCESSORIES = {
   // migration-cut-crystal-orbit.sql. Its id never returns — verify-store's
   // retired scan enforces that.
   "spark-halo": {
-    slot: "effects", img: "spark-halo.png", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
+    slot: "effects", img: "spark-halo.webp", widthPct: 112, anchor: { x: 0.5, y: 0.5 },
   },
 
   // --- hats
@@ -771,20 +771,20 @@ export const ACCESSORIES = {
   // for the dressing room, not a measured placement: anchored on the brim
   // (bottom centre) so it rests on his head.
   "wizard-hat": {
-    slot: "hat", img: "wizard-hat.png", widthPct: 41, outlineFollows: true,
+    slot: "hat", img: "wizard-hat.webp", widthPct: 41, outlineFollows: true,
     anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.516, y: 0.234 },
   },
   // NB `crown` is already taken by the code-drawn 180g hat, so this one is
   // royal-crown. Same for cyber-visor vs the existing `visor`.
   "royal-crown": {
-    slot: "hat", img: "royal-crown.png", widthPct: 34,
+    slot: "hat", img: "royal-crown.webp", widthPct: 34,
     anchor: { x: 0.5, y: 0.9 }, attach: { x: 0.51, y: 0.229 },
   },
 
   // --- eyewear. Sized to the measured eye band (eyes sit at stage x
   // 0.308/0.688, y 0.487-0.63), same convention as the SVG eyewear.
   "cyber-visor": {
-    slot: "glasses", img: "cyber-visor.png", widthPct: 67, anchor: { x: 0.5, y: 0.5 },
+    slot: "glasses", img: "cyber-visor.webp", widthPct: 67, anchor: { x: 0.5, y: 0.5 },
     attach: { x: 0.496, y: 0.547 },
   },
   // The mask has real cut-out eye holes, so his painted eyes show THROUGH
@@ -797,7 +797,7 @@ export const ACCESSORIES = {
   // than his eyes, which clipped them and read as "sits weird".
   // If the art is ever re-rolled, re-measure rather than nudge.
   "eye-mask": {
-    slot: "glasses", img: "eye-mask.png", widthPct: 80, anchor: { x: 0.501, y: 0.493 },
+    slot: "glasses", img: "eye-mask.webp", widthPct: 80, anchor: { x: 0.501, y: 0.493 },
     attach: { x: 0.504, y: 0.556 },
   },
 
@@ -805,7 +805,7 @@ export const ACCESSORIES = {
   // tip clears his hem; the strap across the middle is hidden by the body
   // and that is correct, not a bug (same as the cape and the schoolbag).
   "back-sword": {
-    slot: "back", img: "back-sword.png", widthPct: 59, anchor: { x: 0.5, y: 0.5 },
+    slot: "back", img: "back-sword.webp", widthPct: 59, anchor: { x: 0.5, y: 0.5 },
     attach: { x: 0.65, y: 0.372 },
   },
 
@@ -826,11 +826,11 @@ export const ACCESSORIES = {
   // point is 0.954 of the stage, so the ends have to pass THROUGH that edge
   // to read as wrapping behind him. Checked at 96 / 104 / 112: 96 still stops
   // short, 112 leaves the ends floating off him in mid-air.
-  "heart-chain":    { slot: "neck", img: "heart-chain.png",    widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
-  "star-chain":     { slot: "neck", img: "star-chain.png",     widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
-  "bead-necklace":  { slot: "neck", img: "bead-necklace.png",  widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
-  "flower-garland": { slot: "neck", img: "flower-garland.png", widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
-  "medal-choker":   { slot: "neck", img: "medal-choker.png",   widthPct: 104, anchor: { x: 0.5, y: 0.0 }, outlineFollows: true },
+  "heart-chain":    { slot: "neck", img: "heart-chain.webp",    widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "star-chain":     { slot: "neck", img: "star-chain.webp",     widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "bead-necklace":  { slot: "neck", img: "bead-necklace.webp",  widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "flower-garland": { slot: "neck", img: "flower-garland.webp", widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "medal-choker":   { slot: "neck", img: "medal-choker.webp",   widthPct: 104, anchor: { x: 0.5, y: 0.0 }, outlineFollows: true },
   // `pearls` was cut on sight (2026-08-07) and `gold-chain` deleted with it —
   // the chain was a deep U that crossed his eyes at every size tried. Both
   // are gone from the renderer, the labels, the catalogue and disk; the
@@ -843,7 +843,7 @@ export const ACCESSORIES = {
   // off the stage). New id on purpose: the old id is on verify-store's
   // retired list, and a retired id never comes back.
   "chunky-chain": {
-    slot: "neck", img: "chunky-chain.png", widthPct: 104,
+    slot: "neck", img: "chunky-chain.webp", widthPct: 104,
     anchor: { x: 0.5, y: 0.0 }, attach: { x: 0.5, y: 0.50 },
   },
 
@@ -857,12 +857,12 @@ export const ACCESSORIES = {
   // ⚠️ TUNE ME against the real art: anchor is the one number here that
   // depends on exactly where the feathers meet the shoulder.
   "gold-wings": {
-    slot: "wings", img: "gold-wings.png", widthPct: 34,
+    slot: "wings", img: "gold-wings.webp", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
     attach: [{ x: 0.286, y: 0.395 }, { x: 0.714, y: 0.395 }],
   },
   "dragon-wings": {
-    slot: "wings", img: "dragon-wings.png", widthPct: 34,
+    slot: "wings", img: "dragon-wings.webp", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
     attach: [{ x: 0.276, y: 0.334 }, { x: 0.724, y: 0.334 }],
   },
@@ -893,15 +893,15 @@ export const ACCESSORIES = {
   // shoulder inside the outline (the body spans 0.027-0.969 at this height),
   // as the ATTACHED ruling wants.
   "mech-gauntlet": {
-    slot: "arms", img: "mech-gauntlet.png", widthPct: 28,
+    slot: "arms", img: "mech-gauntlet.webp", widthPct: 28,
     anchor: { x: 0.78, y: 0.1 }, attach: [{ x: 0.22, y: 0.746 }, { x: 0.78, y: 0.746 }],
   },
   "energy-blade": {           // RARE
-    slot: "arms", img: "energy-blade.png", widthPct: 28,
+    slot: "arms", img: "energy-blade.webp", widthPct: 28,
     anchor: { x: 0.78, y: 0.1 }, attach: [{ x: 0.22, y: 0.731 }, { x: 0.78, y: 0.731 }],
   },
   "grapple-claw": {
-    slot: "arms", img: "grapple-claw.png", widthPct: 27,
+    slot: "arms", img: "grapple-claw.webp", widthPct: 27,
     anchor: { x: 0.78, y: 0.1 }, attach: [{ x: 0.224, y: 0.728 }, { x: 0.776, y: 0.728 }],
   },
 
@@ -912,7 +912,7 @@ export const ACCESSORIES = {
   // stage. At 5 it stands ~0.24 of the stage tall, which is a tall aerial
   // without leaving the frame.
   "tech-antenna": {
-    slot: "ears", img: "tech-antenna.png", widthPct: 5,
+    slot: "ears", img: "tech-antenna.webp", widthPct: 5,
     anchor: { x: 0.5, y: 0.95 },
     attach: [{ x: 0.315, y: 0.277 }, { x: 0.685, y: 0.277 }],
   },
@@ -920,11 +920,11 @@ export const ACCESSORIES = {
   // one drops to its own lower attach and anchors by its middle — the same
   // move the code-drawn headphones make.
   "headset-cup": {
-    slot: "ears", img: "headset-cup.png", widthPct: 20,
+    slot: "ears", img: "headset-cup.webp", widthPct: 20,
     anchor: { x: 0.5, y: 0.5 }, attach: [{ x: 0.30, y: 0.34 }, { x: 0.70, y: 0.34 }],
   },
   "data-fin": {
-    slot: "ears", img: "data-fin.png", widthPct: 15,
+    slot: "ears", img: "data-fin.webp", widthPct: 15,
     anchor: { x: 0.5, y: 0.95 }, attach: [{ x: 0.314, y: 0.314 }, { x: 0.686, y: 0.314 }],
   },
 
@@ -948,7 +948,7 @@ export const ACCESSORIES = {
   // re-tune chasing a bug that is not there. If the art is re-rolled,
   // re-measure the anchor and re-judge the size.
   "hud-monocle": {
-    slot: "glasses", img: "hud-monocle.png", widthPct: 28,
+    slot: "glasses", img: "hud-monocle.webp", widthPct: 28,
     anchor: { x: 0.408, y: 0.288 }, attach: { x: 0.688, y: 0.5585 },
   },
 
@@ -956,12 +956,12 @@ export const ACCESSORIES = {
   // --- wings. Single-sided art rooted at the LOWER-LEFT, same as wave 1,
   // so both need flipX or they fold back over the body.
   "plasma-wings": {           // RARE
-    slot: "wings", img: "plasma-wings.png", widthPct: 25,
+    slot: "wings", img: "plasma-wings.webp", widthPct: 25,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
     attach: [{ x: 0.214, y: 0.337 }, { x: 0.786, y: 0.337 }],
   },
   "drone-wings": {            // RARE
-    slot: "wings", img: "drone-wings.png", widthPct: 34,
+    slot: "wings", img: "drone-wings.webp", widthPct: 34,
     anchor: { x: 0.15, y: 0.85 }, flipX: true,
     attach: [{ x: 0.3, y: 0.353 }, { x: 0.7, y: 0.353 }],
   },
@@ -1000,7 +1000,7 @@ export const ACCESSORIES = {
      Checked at 34/40/45 and y0.36-0.50 in tools/preview_accessory.py; these
      are the largest values that keep the whole wing inside the stage box. */
   "fairy-wing": {
-    slot: "wings", img: "fairy-wing.png", widthPct: 35,
+    slot: "wings", img: "fairy-wing.webp", widthPct: 35,
     anchor: { x: 0.03, y: 0.676 }, flipX: true,
     attach: [{ x: 0.344, y: 0.278 }, { x: 0.656, y: 0.278 }],
   },
@@ -1017,7 +1017,7 @@ export const ACCESSORIES = {
   // 512x232, so the old numbers no longer mean anything. STARTING POINT for
   // the dressing room, not a measured placement.
   "flower-crown": {
-    slot: "hat", img: "flower-crown.png", widthPct: 52,
+    slot: "hat", img: "flower-crown.webp", widthPct: 52,
     anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.5, y: 0.385 },
   },
 
@@ -1025,18 +1025,18 @@ export const ACCESSORIES = {
   // Megan's phone review (2026-08-08): lower, so the bow sits on the FRONT
   // of his head rather than hovering above the crown.
   "hair-bow": {
-    slot: "hat", img: "hair-bow.png", widthPct: 26,
+    slot: "hat", img: "hair-bow.webp", widthPct: 26,
     anchor: { x: 0.5, y: 0.88 }, attach: { x: 0.516, y: 0.276 },
   },
   "tiara": {           // RARE (silver + gems, priced to match)
-    slot: "hat", img: "tiara.png", widthPct: 34,
+    slot: "hat", img: "tiara.webp", widthPct: 34,
     anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.506, y: 0.243 },
   },
   // Same treatment as fairy-wing above (read its ⚠️ comment first). Its own
   // root measures x0.006/y0.558, and it is a shallower piece, so it hangs
   // 0.04 lower than the fairy wing to sit level with it on the body.
   "butterfly-wing": {
-    slot: "wings", img: "butterfly-wing.png", widthPct: 35,
+    slot: "wings", img: "butterfly-wing.webp", widthPct: 35,
     anchor: { x: 0.03, y: 0.558 }, flipX: true,
     attach: [{ x: 0.33, y: 0.299 }, { x: 0.67, y: 0.299 }],
   },
@@ -1046,18 +1046,18 @@ export const ACCESSORIES = {
   // 0.31 for the same reason flower-crown uses it (Megan, 2026-08-08) —
   // the cap sits ON his head instead of perching above the point.
   "backwards-cap": {
-    slot: "hat", img: "backwards-cap.png", widthPct: 38, outlineFollows: true,
+    slot: "hat", img: "backwards-cap.webp", widthPct: 38, outlineFollows: true,
     anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.498, y: 0.32 },
   },
   // Drawn straight-on like the code-drawn eyewear, so it uses the shared
   // glasses convention as-is (widthPct 90, lens centres land on his eyes) —
   // no override needed.
   "sport-shades": {
-    slot: "glasses", img: "sport-shades.png", widthPct: 83, anchor: { x: 0.5, y: 0.5 },
+    slot: "glasses", img: "sport-shades.webp", widthPct: 83, anchor: { x: 0.5, y: 0.5 },
     attach: { x: 0.496, y: 0.555 },
   },
   "bucket-hat": {
-    slot: "hat", img: "bucket-hat.png", widthPct: 40,
+    slot: "hat", img: "bucket-hat.webp", widthPct: 40,
     anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.504, y: 0.272 },
   },
 
@@ -1065,10 +1065,10 @@ export const ACCESSORIES = {
   // collection too; see collections.js. Nothing to add here, it already
   // has an ACCESSORIES entry.)
   "gold-shades": {
-    slot: "glasses", img: "gold-shades.png", widthPct: 90, anchor: { x: 0.5, y: 0.5 },
+    slot: "glasses", img: "gold-shades.webp", widthPct: 90, anchor: { x: 0.5, y: 0.5 },
   },
   "snapback": {
-    slot: "hat", img: "snapback.png", widthPct: 38,
+    slot: "hat", img: "snapback.webp", widthPct: 38,
     anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.502, y: 0.272 },
   },
 
@@ -1085,26 +1085,26 @@ export const ACCESSORIES = {
      ~54 (its closed-arc-and-cheek art reads too big at 70) — both numbers
      from the S3 brief in PROJECT-STATUS "Next up", not re-measured here. */
   "star-eyes": {           // sheet M item 1 — shining eyes + white star
-    slot: "glasses", img: "star-eyes.png", widthPct: 59, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
+    slot: "glasses", img: "star-eyes.webp", widthPct: 59, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.508, y: 0.519 },
   },
   "angry-eyes": {          // sheet M item 2 — narrow eyes + angled brows
-    slot: "glasses", img: "angry-eyes.png", widthPct: 66, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
+    slot: "glasses", img: "angry-eyes.webp", widthPct: 66, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.498, y: 0.491 },
   },
   "happy-eyes": {          // sheet M item 3 — closed arcs + rosy cheeks (weakest of the six, Megan may re-roll)
-    slot: "glasses", img: "happy-eyes.png", widthPct: 54, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
+    slot: "glasses", img: "happy-eyes.webp", widthPct: 54, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
   },
   "lash-eyes": {           // sheet L item 1 — big round eyes, curled lashes, pink eyeshadow
-    slot: "glasses", img: "lash-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
+    slot: "glasses", img: "lash-eyes.webp", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.5, y: 0.542 },
   },
   "dreamy-eyes": {         // sheet L item 2 — half-closed sleepy eyes, lilac lid
-    slot: "glasses", img: "dreamy-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
+    slot: "glasses", img: "dreamy-eyes.webp", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.496, y: 0.547 },
   },
   "wink-eyes": {           // sheet L item 3 — one closed, one open
-    slot: "glasses", img: "wink-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
+    slot: "glasses", img: "wink-eyes.webp", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.5, y: 0.542 },
   },
 };
@@ -1346,7 +1346,7 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
    smoothstep on VALUE — but tuned for art that is PALE GREY rather than
    Megan's electric blue. Built for the sliding door: her ruling is that
    the door colours all share ONE drawing
-   (assets/companion/furniture/door.png), tinted in code, never one PNG
+   (assets/companion/furniture/door.webp), tinted in code, never one PNG
    per colour.
 
    WHY IT COULD NOT JUST CALL getBodySrc (rule 9 — recorded, not silently
@@ -1361,7 +1361,7 @@ export function getBodySrc(colourId, baseSrc = BASE_SRC) {
    hue.
 
    The thresholds are the OTHER difference, and they were measured off
-   door.png rather than copied (the lesson from the wings):
+   door.webp rather than copied (the lesson from the wings):
      outline / seams   V < 0.45   (~12.5k px, saturated navy) — kept exactly
      transition band   V 0.45-0.65 (~3.2k px) — smoothstep ramp
      panels            V 0.65-1.00 (~117k px, s 0.02-0.06) — fully tinted
@@ -1488,8 +1488,8 @@ export function outlineTintedImageSrc(src, colourId, { darkLo = 0.45, darkHi = 0
    sprite-sheet animations, sliced by tools/slice_sprites.py (the first
    rows were cut by a scratchpad script that was never kept — the tool is
    now in the repo, so re-cutting a row is reproducible) into
-   assets/companion/anim/<state>-<n>.png, canvased to the same
-   480x600 / ground-line convention as blip-base-blue.png so swapping the
+   assets/companion/anim/<state>-<n>.webp, canvased to the same
+   480x600 / ground-line convention as blip-base-blue.webp so swapping the
    body img's src between a static base and an animation frame never
    shifts scale or position.
    ============================================================ */
@@ -1502,7 +1502,7 @@ const ANIM_FRAME_COUNTS = {};
 function animFramePaths(state) {
   const paths = [];
   const n = ANIM_FRAME_COUNTS[state] || ANIM_FRAME_COUNT;
-  for (let i = 1; i <= n; i++) paths.push(`${ANIM_DIR}/${state}-${i}.png`);
+  for (let i = 1; i <= n; i++) paths.push(`${ANIM_DIR}/${state}-${i}.webp`);
   return paths;
 }
 /* Which loops recolour through the SAME getBodySrc() cache the static
@@ -2016,7 +2016,7 @@ export function renderBlip(el, opts = {}) {
   // (recovering/sleeping/sick/veryill/hungry) — the pre-animation
   // resolveRawBody + health-fx placeholder path is left COMPLETELY INTACT
   // below for every other case (healthy+not-hungry static base, or a
-  // future dedicated bedridden.png/critical.png landing on disk), so
+  // future dedicated bedridden.webp/critical.webp landing on disk), so
   // nothing about pre-animation behaviour changes when it returns null.
   // Factored into a named function (not an inline .then chain) so
   // playMoment's onDone can call the exact same "what should be showing

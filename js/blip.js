@@ -10,7 +10,7 @@
 
    ROOM BUILD S5v2 (2026-08-08 revision) — THE ISOMETRIC ROOM.
    The room is Megan's own shell drawing (assets/companion/
-   room-shell.png) with four EQUIPPED pieces laid on it: a
+   room-shell.webp) with four EQUIPPED pieces laid on it: a
    sliding door back-left (tap → Inventory; its colour is
    shoppable, one drawing tinted in code), a window on the upper
    right wall, a desk on the left and a bed on the right. Blip
@@ -601,7 +601,7 @@ export function renderBlip(app, host) {
   };
 
   /* Room build S5v2: the room is Megan's own isometric shell art
-     (assets/companion/room-shell.png, set as the .room background in CSS,
+     (assets/companion/room-shell.webp, set as the .room background in CSS,
      which pins the box to that picture's exact aspect ratio) with the four
      EQUIPPED pieces laid on top of it. Slot geography is fixed by her
      ruling — door back-left, desk left, bed right, window upper-right —

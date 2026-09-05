@@ -34,7 +34,7 @@ from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
-BASE = os.path.join(ROOT, "assets", "companion", "blip-base-blue.png")
+BASE = os.path.join(ROOT, "assets", "companion", "blip-base-blue.webp")
 ITEMS = os.path.join(ROOT, "assets", "companion", "items")
 
 
@@ -46,7 +46,7 @@ def pair(s):
 def compose(item, attach, width_pct, anchor, behind=False):
     base = Image.open(BASE).convert("RGBA")
     sw, sh = base.size
-    art = Image.open(os.path.join(ITEMS, item + ".png")).convert("RGBA")
+    art = Image.open(os.path.join(ITEMS, item + ".webp")).convert("RGBA")
     w = max(1, round(width_pct / 100.0 * sw))          # % of stage WIDTH
     h = max(1, round(w * art.size[1] / art.size[0]))   # aspect preserved
     art = art.resize((w, h), Image.LANCZOS)

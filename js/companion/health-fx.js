@@ -3,7 +3,7 @@
    ------------------------------------------------------------
    Stand-ins for the four base-PNG art pieces listed in
    PHASE-2-PLAN.md §6 (tired / bedridden / critical / recovering).
-   Once Megan's real art lands at assets/companion/blip-tired.png etc.,
+   Once Megan's real art lands at assets/companion/blip-tired.webp etc.,
    renderer.js's resolveRawBody() swaps straight to that PNG for the
    matching health state and none of this file runs any more — nothing
    here needs to be deleted, it just goes dormant on its own.
@@ -26,7 +26,7 @@
 const OUTLINE_HEX = "#0062ac";
 
 /* Face landmarks, fractions of the stage box — RE-MEASURED 2026-07-19 off
-   the SL blue base (blip-base-blue.png), where the face sits lower than
+   the SL blue base (blip-base-blue.webp), where the face sits lower than
    the old cream art (eyes y0.569 x0.302/x0.691; mouth 0.499/0.644 — the
    ATTACH comment in renderer.js documents the same numbers). If the base
    PNG is redrawn again these must be re-measured. */
@@ -70,7 +70,7 @@ function blanketSvg(lapOnly) {
   // animation frames. Measured the frown's actual on-canvas position in
   // Megan's hand-drawn sheets (Python+Pillow dark-pixel scan across all
   // 8 sick-*/veryill-* frames): the frown band runs y0.65-0.76 (deepest
-  // in sick-3.png), well below where the old code-drawn placeholder's
+  // in sick-3.webp), well below where the old code-drawn placeholder's
   // MOUTH constant (y0.644) assumed. A dome sized/centred for that old
   // constant covered the face outright. This shape only needs to read
   // as "covers the lower body", not reach the ground, so it's now a
@@ -188,8 +188,8 @@ export function animatedHealthOverlaySpec(healthStage, recovering) {
   // widthPct 78, tall dome) covered from mid-chest to well past the
   // chin, burying the sick face the new frames draw as the centrepiece.
   // Re-measured the frown's actual position across all 8 sick-*/
-  // veryill-*.png frames (Python+Pillow dark-pixel row scan): deepest
-  // extent is y0.65-0.76 (sick-3.png), not the base body's plain-face
+  // veryill-*.webp frames (Python+Pillow dark-pixel row scan): deepest
+  // extent is y0.65-0.76 (sick-3.webp), not the base body's plain-face
   // MOUTH constant (y0.644) the old numbers were built around. New
   // blanket is anchored by its TOP edge at y0.79 — clears every frame's
   // measured frown with margin — and re-drawn wide-and-flat (blanketSvg)

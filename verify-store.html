@@ -117,7 +117,7 @@ for (const [id, def] of Object.entries(ACCESSORIES)) {
     tick(!def.svg.includes("{{UID}}") || /id="[^"]*\{\{UID\}\}/.test(def.svg),
       `accessory "${id}" uses {{UID}} but defines no id with it`);
   } else {
-    tick(/^[a-z0-9-]+\.png$/.test(def.img), `accessory "${id}" img must be a bare .png filename`);
+    tick(/^[a-z0-9-]+\.webp$/.test(def.img), `accessory "${id}" img must be a bare .webp filename`);
   }
 }
 
@@ -1050,7 +1050,7 @@ if (repricedFileText.length > 0) {
     tick(FURNITURE_SLOTS.includes(def.slot) || def.slot === "wall",
       `furniture "${id}" has slot "${def.slot}", which is neither a painted slot nor the wall`);
     if (row) tick(row.slot === def.slot, `"${id}" slot differs: payload ${row.slot}, catalogue ${def.slot}`);
-    tick(/^[a-z0-9-]+\.png$/.test(def.img), `furniture "${id}" img must be a bare .png filename`);
+    tick(/^[a-z0-9-]+\.webp$/.test(def.img), `furniture "${id}" img must be a bare .webp filename`);
     tick(!ACCESSORIES[id], `furniture "${id}" is also an ACCESSORY — it would be worn on Blip`);
     // exactly one collection, and its gate must equal the row's own min_level
     const key = furnitureCollectionForItem(id);
@@ -1173,18 +1173,18 @@ if (repricedFileText.length > 0) {
      number, because all five shells are the same drawing with different
      walls. These checks are what would catch a shell that got re-exported
      at a different size and quietly shifted every piece in the room. */
-  tick(roomShellSrc({}).endsWith("room-shell.png"),
+  tick(roomShellSrc({}).endsWith("room-shell.webp"),
     `an empty wall slot should paint the plain shell, got ${roomShellSrc({})}`);
-  tick(roomShellSrc({ wall: "wall-stripes" }).endsWith("room-shell-stripes.png"),
+  tick(roomShellSrc({ wall: "wall-stripes" }).endsWith("room-shell-stripes.webp"),
     `an equipped wallpaper did not reach the room background: ${roomShellSrc({ wall: "wall-stripes" })}`);
-  tick(roomShellSrc({ wall: "not-a-wallpaper" }).endsWith("room-shell.png"),
+  tick(roomShellSrc({ wall: "not-a-wallpaper" }).endsWith("room-shell.webp"),
     "an unknown wallpaper id must fall back to the plain shell");
-  tick(roomShellSrc({ wall: "techy-bed" }).endsWith("room-shell.png"),
+  tick(roomShellSrc({ wall: "techy-bed" }).endsWith("room-shell.webp"),
     "a NON-shell furniture id in the wall slot must fall back — never paint a bed as the room");
   for (const id of FURNITURE_IDS.filter((i) => FURNITURE[i].slot === "wall")) {
     tick(furnitureIsShell(id), `wallpaper "${id}" is not marked shell:true — it would be looked for in furniture/`);
     tick(furnitureImgSrc(id).includes("/companion/") && !furnitureImgSrc(id).includes("/furniture/"),
-      `wallpaper "${id}" resolves to ${furnitureImgSrc(id)} — shells live beside room-shell.png, not in furniture/`);
+      `wallpaper "${id}" resolves to ${furnitureImgSrc(id)} — shells live beside room-shell.webp, not in furniture/`);
   }
   {
     const shells = FURNITURE_IDS.filter((i) => FURNITURE[i].slot === "wall");
@@ -1203,8 +1203,8 @@ if (repricedFileText.length > 0) {
     const right = FURNITURE_IDS.filter((i) => FURNITURE[i].slot === "shelf-right");
     tick(left.length === 4 && right.length === 4,
       `expected 4 shelf designs per wall, found ${left.length} left / ${right.length} right`);
-    for (const id of left) tick(/-left\.png$/.test(FURNITURE[id].img), `"${id}" is a left-wall slot but its art is ${FURNITURE[id].img}`);
-    for (const id of right) tick(/-right\.png$/.test(FURNITURE[id].img), `"${id}" is a right-wall slot but its art is ${FURNITURE[id].img}`);
+    for (const id of left) tick(/-left\.webp$/.test(FURNITURE[id].img), `"${id}" is a left-wall slot but its art is ${FURNITURE[id].img}`);
+    for (const id of right) tick(/-right\.webp$/.test(FURNITURE[id].img), `"${id}" is a right-wall slot but its art is ${FURNITURE[id].img}`);
     const imgs = [...left, ...right].map((i) => FURNITURE[i].img);
     tick(new Set(imgs).size === 8, "two shelves share one drawing — each wall needs its own rake, there is no flipX here");
     for (const id of [...left, ...right]) tick(!FURNITURE[id].flipX, `"${id}" sets flipX — a shelf must never be mirrored, it would mirror the grain too`);
@@ -1222,7 +1222,7 @@ if (repricedFileText.length > 0) {
 
   /* ⚠️ HER RULING: THE DOOR **COLOURS** ALL SHARE ONE PICTURE. Nine colour
      items, ONE png between them, tinted in code. This is the check that
-     catches a future session "fixing" it by generating door-mint.png.
+     catches a future session "fixing" it by generating door-mint.webp.
 
      ⚠️ SPLIT INTO COLOURS vs DESIGNS on 2026-08-12, when her six closets
      landed in the same slot. The old check was `every door item shares one
@@ -1249,7 +1249,7 @@ if (repricedFileText.length > 0) {
     "two closet designs share one drawing — a design is its own picture, unlike a colour");
   for (const id of closets) {
     tick(!FURNITURE[id].tint, `closet "${id}" is tinted — a patterned design must never be recoloured, it would flatten the pattern`);
-    tick(FURNITURE[id].img !== "door.png", `closet "${id}" points at door.png rather than its own art`);
+    tick(FURNITURE[id].img !== "door.webp", `closet "${id}" points at door.webp rather than its own art`);
   }
   for (const id of doorColours.filter((d) => d !== "door-white")) {
     tick(/^#[0-9a-f]{6}$/i.test(FURNITURE[id].tint || ""), `door "${id}" has no usable tint hex`);
@@ -1299,7 +1299,7 @@ if (repricedFileText.length > 0) {
 
     // her art, untouched: "blue" never goes near a canvas
     const plainBody = await (await import("./js/companion/renderer.js")).getBodySrc("blue");
-    tick(plainBody === "assets/companion/blip-base-blue.png",
+    tick(plainBody === "assets/companion/blip-base-blue.webp",
       `getBodySrc("blue") returned ${String(plainBody).slice(0, 40)}…, but the original art must be served as-is, never re-encoded`);
 
     // no accessory may hardcode the navy: it would stay navy on a pink Blip
@@ -1316,7 +1316,7 @@ if (repricedFileText.length > 0) {
     tick(badFlag.length === 0, `outlineFollows set on non-PNG accessory: ${badFlag.join(", ")}`);
 
     // the PNG item pass: free for blue, a real new picture for a colour, cached
-    const itemSrc = "assets/companion/items/wizard-hat.png";
+    const itemSrc = "assets/companion/items/wizard-hat.webp";
     const itemBlue = await outlineTintedImageSrc(itemSrc, "blue");
     tick(itemBlue === itemSrc, "a blue Blip must cost no canvas work on its PNG items");
     const itemPink = await outlineTintedImageSrc(itemSrc, "pink");
@@ -1353,8 +1353,8 @@ if (repricedFileText.length > 0) {
   // the shell itself, which is the whole room's backdrop
   {
     let shellOk = false;
-    try { shellOk = (await fetch(`./assets/companion/room-shell.png?v=${Date.now()}`, { method: "HEAD" })).ok; } catch { shellOk = false; }
-    tick(shellOk, "assets/companion/room-shell.png is missing — the room would render as an empty box");
+    try { shellOk = (await fetch(`./assets/companion/room-shell.webp?v=${Date.now()}`, { method: "HEAD" })).ok; } catch { shellOk = false; }
+    tick(shellOk, "assets/companion/room-shell.webp is missing — the room would render as an empty box");
   }
   say(`furniture: ${FURNITURE_COLLECTION_ORDER.map((k) => `${FURNITURE_COLLECTIONS[k].label}(Lv${FURNITURE_COLLECTIONS[k].unlockLevel}, ${FURNITURE_COLLECTIONS[k].items.length})`).join(" · ")}`);
   say(`furniture art: ${furnFiles.length - missingFurn.length}/${furnFiles.length} PNGs present (9 doors share 1 file)`);
@@ -1409,7 +1409,7 @@ if (repricedFileText.length > 0) {
     tick(off.ok, `taking the ${slot} out failed: ${JSON.stringify(off)}`);
     const bareAgain = await LocalBackend.getState(wu, "pw12");
     if (slot === WALL_SLOT) {
-      tick(roomShellSrc(bareAgain.blip.equipped).endsWith("room-shell.png"),
+      tick(roomShellSrc(bareAgain.blip.equipped).endsWith("room-shell.webp"),
         "an emptied wall slot did not go back to the plain shell");
     } else if (OPTIONAL_FURNITURE_SLOTS.includes(slot)) {
       tick(roomFurniture(bareAgain.blip.equipped)[slot] === null,
@@ -1515,7 +1515,7 @@ if (repricedFileText.length > 0) {
        is what would catch them drifting apart.
      - homeworkBadgeLayer() really disappears on a failed image load — no
        drawn placeholder, no broken-image icon, per her art rule (the
-       badge art, assets/companion/homework-badge.png, may not even be in
+       badge art, assets/companion/homework-badge.webp, may not even be in
        the repo yet — this must stay green either way). */
 {
   const fakeApp = (assignment) => ({ state: { assignment } });
@@ -1542,8 +1542,8 @@ if (repricedFileText.length > 0) {
   tick(host.contains(badge), "homeworkBadgeLayer() did not attach to its host");
   const img = badge.querySelector("img");
   tick(!!img, "homeworkBadgeLayer() has no <img>");
-  tick(!!img && /(^|\/)assets\/companion\/homework-badge\.png$/.test(img.getAttribute("src") || ""),
-    `homework badge points at "${img && img.getAttribute("src")}", expected assets/companion/homework-badge.png`);
+  tick(!!img && /(^|\/)assets\/companion\/homework-badge\.webp$/.test(img.getAttribute("src") || ""),
+    `homework badge points at "${img && img.getAttribute("src")}", expected assets/companion/homework-badge.webp`);
   if (img) img.dispatchEvent(new Event("error"));
   tick(!host.contains(badge), "a failed homework-badge image load should remove the badge, not leave a broken-image icon");
   host.remove();

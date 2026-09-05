@@ -93,7 +93,7 @@
   <div class="matrix-table" id="matrix"></div>
 
   <h2>ANIMATIONS — frame-cycler idle loops + moments (2026-07-19)</h2>
-  <p class="sub">Sliced from Megan's hand-drawn sheets (assets/companion/anim/&lt;state&gt;-&lt;n&gt;.png). Idle loops swap automatically from renderBlip's existing healthStage/recovering options plus the new `hungry` hint. Sick loops (recovering, sick, veryill) render as-authored — no recolour, "sickness overrides colour". Healthy loops (sleeping, hungry) DO recolour through the same cache as the static body — the mint cell below proves it. The recovering row landed 2026-07-19 with the blanket drawn INTO the frames, so its code-drawn blanket overlay is suppressed.</p>
+  <p class="sub">Sliced from Megan's hand-drawn sheets (assets/companion/anim/&lt;state&gt;-&lt;n&gt;.webp). Idle loops swap automatically from renderBlip's existing healthStage/recovering options plus the new `hungry` hint. Sick loops (recovering, sick, veryill) render as-authored — no recolour, "sickness overrides colour". Healthy loops (sleeping, hungry) DO recolour through the same cache as the static body — the mint cell below proves it. The recovering row landed 2026-07-19 with the blanket drawn INTO the frames, so its code-drawn blanket overlay is suppressed.</p>
   <div class="grid" id="anim-states"></div>
   <h3>Moments (one-shot, ~2 loops then back to idle)</h3>
   <div class="grid" id="anim-moments"></div>
@@ -167,7 +167,7 @@
     async function checkAttachment(instance) {
       if (!baseAlphaCtx) {
         const img = new Image();
-        await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = "assets/companion/blip-base-blue.png"; });
+        await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = "assets/companion/blip-base-blue.webp"; });
         const cv = document.createElement("canvas");
         cv.width = img.naturalWidth; cv.height = img.naturalHeight;
         baseAlphaCtx = cv.getContext("2d");

@@ -34,3 +34,24 @@ with the demo learner. They clear the service worker and caches first. Most writ
   absence with `__BLIP_DEV__.lapse()`, reloads so the app's own state call is the one that heals
   Blip, and photographs the room with its welcome line to `_out/build2-hub-375.png`. Prints the
   before/after state either side of the reload, so the picture is not the only evidence.
+
+## After any new companion sprite, run `tools/to_webp.py`
+
+The app ships its companion art as **WebP**, not PNG (fix day, 2026-09-05). The sprite
+generators (`slice_sprites.py`, `tripo_sheet.py`) still write PNG, so a new sprite arrives in
+the wrong format and the app will not find it. One command fixes that:
+
+    python tools/to_webp.py --delete-png
+
+It converts every PNG under `assets/companion/`, prints a bytes-before/bytes-after table, and
+then removes the PNGs it converted. Safe to run again: a sprite whose WebP is already up to
+date is skipped. Art anywhere else (app icons, the apple-touch icon, the favicon, everything in
+`art-source/`) is untouched.
+
+Which sprites are compressed **losslessly** is the one decision in that file, and its header
+explains it: any picture the app re-paints in code (the body, the recoloured animation sheets,
+the door it tints, the nine accessories whose outline follows the body colour) must be lossless,
+because lossy noise would push pixels across the recolour's brightness thresholds and speckle
+every stroke. Everything decorative is quality 90. The script re-reads `renderer.js` and
+`furniture.js` on each run and warns if a newly recoloured or tinted picture is missing from
+that lossless list.

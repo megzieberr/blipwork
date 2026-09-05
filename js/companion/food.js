@@ -90,7 +90,7 @@ export const NON_GROCERY_FOOD = ["soup", "medicine", "treat"];
 
 export function foodExists(id) { return Object.prototype.hasOwnProperty.call(FOODS, id); }
 export function foodLabel(id) { return FOODS[id] || id; }
-export function foodImgSrc(id) { return `${DIR}/${id}.png`; }
+export function foodImgSrc(id) { return `${DIR}/${id}.webp`; }
 
 /* One picture, sized by its container. Used by the shop card, the tray
    tile and the drag ghost, so all three always show the same art. */
