@@ -9,6 +9,22 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **2026-09-05 FIX DAY IN PROGRESS (Fable foreman, dispatching one Opus worker at a
+  time).** Her ticks a to e: ALL DEFAULTS. Term toggle OFF (live-verified). Look-back
+  sheet phone-verified by her. Build 1 DONE + Fable-reviewed (commit 2c575ed, 228k tokens: migration WRITTEN not
+  run, schema.sql byte-mirrored from live, docs corrected, 1.3 GB ignored output
+  deleted, git gc). Build 2 DONE + Fable-reviewed (commit 6ad4b8f, 260k: gentle return, migration
+  WRITTEN not run; the line lives in the ROOM under the mood hearts; PNG checked at
+  375 px). Build 3 DONE + Fable-reviewed (Blipwork 12d52cb + graph-quest 5986454, 226k: exponential
+  card teaches y = a·b^(x − p) + q, find-equation card matched, steepness reminder in
+  hint rung 1 of q1b + gradSteeper, EN + her AF; PNGs checked at 375 px). Build 4
+  DONE + Fable-reviewed (65d8d6f, 259k: outline + eyes follow the body colour, one rule
+  for all eleven presets, blue byte-identical, nine PNG items opt in; contact sheet
+  checked by eye). Build 5 DONE + Fable-reviewed (d4bbdd6, 243k: 176 companion sprites → WebP, 30.1 MB →
+  9.9 MB, zero recolour delta, contact sheet + room shot checked). BOTH MIGRATIONS
+  APPLIED LIVE 2026-09-05 via MCP (audit_seal_clamp_tidy + gentle_return; checks green:
+  helpers sealed, send-push grants intact, shop_items 42501 to anon, tidy rows done).
+  sw v91 ship in progress.
 - **Live on sw v90** (2026-09-04 evening, fetch-verified again 2026-09-05): Fun
   Functions look-back sheet ("◀ Vorige" opens the finished question read-only,
   "Terug na my vraag" returns). Built in graph-quest 3f84d87, synced. **No SQL.**
@@ -125,31 +141,62 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   grant when sealed (send-push calls them). Her three cleanup calls default to
   LEAVE (art-source tracked, "Hayley's way" wording, root planning docs).
 
+- 2026-09-05 (hers): fix-day ticks a to e all DEFAULT: gold on every submit stays;
+  exponential written y = a·b^(x − p) + q; stage-3 shop/gallery lock stays on gentle
+  return; the three cleanup calls LEAVE; Fable dispatches the workers (one Opus at a
+  time). Term toggle switched OFF for exam season (2026-09-05).
+
+- 2026-09-05 (mine, flagged): gentle return counts CALENDAR days (current_date minus
+  last_active_at::date >= 7, UTC like every other date rule); it uses the Blip's
+  nickname like the cookie hint does; the welcome line replaces the cookie hint for that
+  one render; MOOD is not topped up (he comes back well but with empty hearts). The rule
+  is invisible while the Term toggle is OFF, by design.
+
+- 2026-09-05 (mine, flagged): the steepness reminder sits in HINT RUNG 1 (tap 💡, or
+  auto-open in Boost), not on the face of the question: q1b is a discovery beat (no
+  spoilers on the face) and an always-visible slot would need new play.js + CSS. Her
+  call if she wants it always visible. Exam Focus is EN-only (her 2026-08-21 ruling), so
+  the concept card has no AF twin. `func-siblings-sketch.js` still writes the hyperbola
+  and parabola as (x + p) on purpose ("her p10 order").
+
+- 2026-09-05 (mine, flagged): outline colour = body hue + 7°, full saturation, 67 %
+  brightness (measured off her own #62ceff / #0062ac pair), read in HSL not HSV so the
+  pastels ink instead of greying. PNG items follow only when flagged `outlineFollows`
+  (nine of 44: the rest have their own dark colours, hair-bow, shades, snapback).
+  Her eye: LEMON's olive-gold outline and the BACKWARDS-CAP going whole-cap maroon on
+  pink; both shown, both reversible one line each.
+
+- 2026-09-05 (hers): "ship after 5, keep both": Builds 1 to 5 ship today as sw v91;
+  Build 6 (lazy-load + service worker) runs in a FRESH session as v92; lemon's
+  olive-gold outline and the backwards cap recolouring whole STAY.
+
 ## ⏳ Pending on Megan
-- 💬 1 min [blocking the fix day]: five ticks at the bottom of
-  FIX-DAY-2026-09-05-PLAN.md — gold on pass only? (default no) · exponential
-  written (x − p)? (default yes) · drop the stage-3 shop lock? (default keep) ·
-  the three cleanup calls (default leave) · who dispatches the workers.
-- 💻 1 min [your call]: admin page → Term toggle OFF for exam season — every
-  Blip reads as well while it is off (11 of 20 were sick, 8 shop-locked on
-  2026-09-05); ON restarts the clock from that day.
-- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v90) → Functions chapter
-  → any Fun Functions round → answer one, tap Volgende → tap "◀ Vorige" beside
-  "2 van 10": the finished question comes back read-only with its feedback.
-- 📱 5 min [whenever]: roll a gtrig round — the bow-tie / three-boxes / but-why
+- 💻 1 min [at ship]: Supabase dashboard → Edge Functions → delete `paper-seed`
+  (neutralised 2026-08-24, answers 410; the MCP cannot delete and the CLI is not installed).
+- 📱 5 min [whenever]: roll a gtrig round: the bow-tie / three-boxes / but-why
   cards should ASK and hand the filled frame back after you answer; tap 📖 on
-  an eq9 question — the answer reads once, not twice. (The v86–v88 spot-checks
-  — calc memory, cookie, six split-day chains — are still unticked if you want them.)
-- 🌐 1 min [whenever]: mark the anonymous 2026-09-04 10:12 UTC swipe-back note
-  (funfun:qK) read in the admin fold — or leave it for Build 1's data tidy.
+  an eq9 question: the answer reads once, not twice. (The v86–v88 spot-checks,
+  calc memory, cookie, six split-day chains, are still unticked if you want them.)
 - 🌐 1 line [your call]: megzieberr is still visible in the class
-  name-picker — say the word and I hide it (one SQL line, reversible).
+  name-picker; say the word and I hide it (one SQL line, reversible).
 
 ## Next up
-- **The fix day** — FIX-DAY-2026-09-05-PLAN.md, Builds 1 → 6, on her ticks + her
-  dispatch answer (/foreman step 2). Fable writes the /go block and reviews each
-  build; sw v91 once at ship. Fable's own housekeeping in the same go: trim the
-  80 KB project memory file to a short head (history is already in this repo).
+- **SHIP CHECKLIST for this fix day (Fable, on her "ship it"):** (1) apply
+  `supabase/migration-audit-2026-09-05.sql` then `migration-gentle-return-2026-09-05.sql`
+  via the MCP `apply_migration`; (2) `paper-seed` (still ACTIVE, v6) is HERS in the
+  dashboard: no Supabase CLI on the laptop, the MCP cannot delete; (3) `/migration-check`;
+  (4) `sw.js:11` `const CACHE = "mhq-v90"` → `"mhq-v91"`; (5) commit + push;
+  (6) fetch-verify live; (7) then the phone;
+  (8) graph-quest is 1 commit ahead (5986454, the AF reminder): its own sw bump (gq-v35)
+  + push if the two standalone learners should get it, her call.
+- **schema.sql still cannot rebuild the DB from scratch** (found by Build 1, pre-existing):
+  it never creates `assignments`, `box_grants`, `loot_table`, `push_subscriptions`. A
+  small mirror-back build, or the next audit. Also: live has ELEVEN `exam_*` functions +
+  `keepalive` = twelve server-only (the plan said thirteen); schema.sql lists the real ones.
+- **Build 6 (lazy-load + service worker), ≈500–700k, in a FRESH foreman session as
+  sw v92:** the brief is the Build 6 section of FIX-DAY-2026-09-05-PLAN.md, same
+  ground rules, same /go shape as today (Fable mints it on her word). Memory-file trim
+  DONE 2026-09-05 (96 KB → 36 KB, flagged rulings kept).
 - **Analytical Geometry dice chapter — UNBLOCKED.** Digest + her seven
   rulings sit in METHODS-analytical.md; ag5 mines the paper-bank mds.
   Needs a build day on her word.

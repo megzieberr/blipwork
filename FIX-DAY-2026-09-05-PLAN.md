@@ -224,3 +224,15 @@ live at that ship with her word.
 convention `(x − p)`, default yes; (c) remove the stage-3 shop and gallery lock, default
 keep; (d) the three cleanup calls, default leave; (e) who dispatches, per `/foreman`
 step 2.
+
+## Her answers, 2026-09-05 ("defaults for a-e, kay")
+(a) gold: unchanged, every submit pays · (b) exponential written (x − p) · (c) stage-3
+shop + gallery lock STAYS on gentle return · (d) all three cleanup calls LEAVE ·
+(e) Fable dispatches, one Opus worker at a time, reviews each before the next.
+Build 0 done by her (Term toggle OFF, live-verified 2026-09-05). Look-back sheet
+phone-verified by her the same day.
+Steepness reminder AF wording, hers (2026-09-05): "Steilheid is hoe drasties 'n lyn styg
+of daal, maak nie saak in watter rigting nie". EN stays as drafted. Welcome-back line
+stays as drafted (no veto).
+Ship ruling (hers, 2026-09-05): "ship after 5, keep both": Builds 1 to 5 ship as v91;
+Build 6 in a fresh session as v92; lemon outline + backwards cap stay as Build 4 made them.
