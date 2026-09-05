@@ -1,4 +1,4 @@
-# Project status — updated 2026-09-05 (🔎 READ-ONLY AUDIT DAY: nothing built, still live on sw v90; findings in AUDIT-2026-09-05.md, six worker briefs in FIX-DAY-2026-09-05-PLAN.md, her rulings recorded below)
+# Project status — updated 2026-09-05 evening (🚀 FIX DAY SHIPPED: sw v91 LIVE, fetch-verified; Builds 1–5 done, Build 6 waits for a FRESH session as v92)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,41 +9,26 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **2026-09-05 FIX DAY IN PROGRESS (Fable foreman, dispatching one Opus worker at a
-  time).** Her ticks a to e: ALL DEFAULTS. Term toggle OFF (live-verified). Look-back
-  sheet phone-verified by her. Build 1 DONE + Fable-reviewed (commit 2c575ed, 228k tokens: migration WRITTEN not
-  run, schema.sql byte-mirrored from live, docs corrected, 1.3 GB ignored output
-  deleted, git gc). Build 2 DONE + Fable-reviewed (commit 6ad4b8f, 260k: gentle return, migration
-  WRITTEN not run; the line lives in the ROOM under the mood hearts; PNG checked at
-  375 px). Build 3 DONE + Fable-reviewed (Blipwork 12d52cb + graph-quest 5986454, 226k: exponential
-  card teaches y = a·b^(x − p) + q, find-equation card matched, steepness reminder in
-  hint rung 1 of q1b + gradSteeper, EN + her AF; PNGs checked at 375 px). Build 4
-  DONE + Fable-reviewed (65d8d6f, 259k: outline + eyes follow the body colour, one rule
-  for all eleven presets, blue byte-identical, nine PNG items opt in; contact sheet
-  checked by eye). Build 5 DONE + Fable-reviewed (d4bbdd6, 243k: 176 companion sprites → WebP, 30.1 MB →
-  9.9 MB, zero recolour delta, contact sheet + room shot checked). BOTH MIGRATIONS
-  APPLIED LIVE 2026-09-05 via MCP (audit_seal_clamp_tidy + gentle_return; checks green:
-  helpers sealed, send-push grants intact, shop_items 42501 to anon, tidy rows done).
-  sw v91 ship in progress.
-- **Live on sw v90** (2026-09-04 evening, fetch-verified again 2026-09-05): Fun
-  Functions look-back sheet ("◀ Vorige" opens the finished question read-only,
-  "Terug na my vraag" returns). Built in graph-quest 3f84d87, synced. **No SQL.**
-- **2026-09-05 = read-only audit day (Fable).** Verdict: nothing broken. Verified
-  clean: 0 log errors/24 h, cron 9/9, no secrets, RLS + grants right on 18/19
-  tables, six node harnesses green, `tools/sweep.py 2` = 1 414 renders A=0 D=0
-  real C=0, no console errors on live, no learner names in tracked files, no dead
-  JS. Findings + her rulings: `AUDIT-2026-09-05.md`. Fix queue (approved in
-  scope, NOT started): `FIX-DAY-2026-09-05-PLAN.md` — Build 1 seal + mirror +
-  clamp + cleanup + docs · 2 gentle return · 3 exponential p card + steepness
-  reminder (graph-quest, sync) · 4 outline follows body colour · 5 sprites→WebP ·
-  6 lazy-load + service worker. ≈1.5M agent tokens, one Opus worker at a time,
-  Fable reviews each; sw v91 once at ship.
-- Previous ships: v89 (2026-09-04 fix day: snapshot fractions, method panel, gtrig
-  asks-first, SHIFT tan sweep), v88 (feedback day), v87 (cookie hint), v86
-  (methods day). Both wave-4 digests landed 2026-09-04 (Analytical UNBLOCKED,
-  Probability waits on its prep step). 12 hub chapters + 2 exam-only; 🎲 dice on
-  8 chapters; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live, 9 accounts
-  subscribed; roster 20, megzieberr visible in the picker by her ruling.
+- **Live on sw v91** (2026-09-05 evening, fetch-verified: sw v91, a `.webp` sprite 200,
+  the old `.png` 404, the new card text / welcome line / `--blip-outline` / her AF
+  sentence all served). Fix day Builds 1–5 shipped on her "ship after 5", six commits
+  2c575ed…f7fabee: (1) back-end seal + score/XP clamp + data tidy, migration APPLIED;
+  (2) gentle return for a 7+-calendar-day lapse, migration APPLIED (invisible while the
+  Term toggle is OFF); (3) exponential card teaches y = a·b^(x − p) + q, steepness
+  reminder in hint rung 1 of q1b + gradSteeper, EN + her AF wording; (4) Blip outline +
+  eyes follow the body colour (lemon + backwards cap kept); (5) 176 companion sprites →
+  WebP, 30.1 MB → 9.9 MB. Foreman: Fable; five Opus workers, ≈1.2M tokens, each
+  reviewed by eye before the next. **graph-quest 5986454 (the AF reminder) is committed
+  but NOT pushed: her call (gq-v35).** Build 6 (lazy-load + service worker) NOT started.
+- 2026-09-05 read-only audit (Fable): nothing broken; findings + her rulings in
+  `AUDIT-2026-09-05.md`; the six briefs + her ticks + her wording in
+  `FIX-DAY-2026-09-05-PLAN.md`.
+- Previous ships: v90 (2026-09-04 evening: Fun Functions look-back sheet, graph-quest
+  3f84d87), v89 (2026-09-04 fix day: snapshot fractions, method panel, gtrig asks-first,
+  SHIFT tan sweep), v88 (feedback day), v87 (cookie hint), v86 (methods day). 12 hub
+  chapters + 2 exam-only; 🎲 dice on 8 chapters; 📝 Exam Focus 7 chapters / 360 cards;
+  🔔 push live, 9 accounts subscribed; roster 20, megzieberr visible in the picker by
+  her ruling.
 - 🧮 Calculator: Blipwork is the MASTER copy; Stats Quest copies
   js/calculator.js verbatim (its sw v10 matches v88's calc-memory build).
 
@@ -170,17 +155,34 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   Build 6 (lazy-load + service worker) runs in a FRESH session as v92; lemon's
   olive-gold outline and the backwards cap recolouring whole STAY.
 
+- 2026-09-05 evening (hers): "ship after 5" honoured → both migrations applied via MCP,
+  sw v91 pushed and fetch-verified LIVE. Build 6 and the graph-quest push are separate
+  words.
+
 ## ⏳ Pending on Megan
-- 💻 1 min [at ship]: Supabase dashboard → Edge Functions → delete `paper-seed`
-  (neutralised 2026-08-24, answers 410; the MCP cannot delete and the CLI is not installed).
-- 📱 5 min [whenever]: roll a gtrig round: the bow-tie / three-boxes / but-why
-  cards should ASK and hand the filled frame back after you answer; tap 📖 on
-  an eq9 question: the answer reads once, not twice. (The v86–v88 spot-checks,
-  calc memory, cookie, six split-day chains, are still unticked if you want them.)
-- 🌐 1 line [your call]: megzieberr is still visible in the class
-  name-picker; say the word and I hide it (one SQL line, reversible).
+- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v91) → the room: your Blip's
+  outline and eyes in his body colour, art still loads (it is WebP now) → Functions
+  chapter → 📖 the exponential card reads y = a·b^(x − p) + q with the Grade 10 → 11 line.
+- 💻 1 min [whenever]: Supabase dashboard → Edge Functions → delete `paper-seed`
+  (neutralised 2026-08-24, answers 410; the MCP cannot delete, the CLI is not installed).
+- 🌐 1 line [your call]: "ship graph-quest" → I bump gq-v35 + push so the two standalone
+  learners get the AF steepness reminder (Blipwork already has it).
+- 💻 1 min [after exams]: admin page → Term toggle ON again (it is OFF since 2026-09-05;
+  ON restarts the sickness clock from that day, and gentle return starts mattering).
+- 📱 5 min [whenever]: roll a gtrig round: the bow-tie / three-boxes / but-why cards
+  should ASK and hand the filled frame back; tap 📖 on an eq9 question: the answer
+  reads once. (v86–v88 spot-checks still unticked if you want them.)
+- 🌐 1 line [your call]: megzieberr is still visible in the class name-picker; say the
+  word and I hide it (one SQL line, reversible).
+- 💻 1 line [whenever]: a stale git worktree sits at `.claude/worktrees/recursing-payne-2f126b`
+  (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
+- **Optional follow-ups from the fix day, each her one-line call, default leave:** mood
+  hearts topped up on gentle return (he comes back well but glum); the steepness reminder
+  always visible on the question face instead of hint rung 1; `basic-bed` has ~430
+  leftover magenta keying specks (pre-existing, an art pass); the four undrawn health-art
+  names (`blip-tired` etc.) now resolve to `.webp`, so a new PNG needs `tools/to_webp.py`.
 - **SHIP CHECKLIST for this fix day (Fable, on her "ship it"):** (1) apply
   `supabase/migration-audit-2026-09-05.sql` then `migration-gentle-return-2026-09-05.sql`
   via the MCP `apply_migration`; (2) `paper-seed` (still ACTIVE, v6) is HERS in the
