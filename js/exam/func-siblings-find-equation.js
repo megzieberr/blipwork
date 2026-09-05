@@ -27,7 +27,7 @@
      q1  parabola from the TURNING POINT + a point        (her route 2)
      q2  hyperbola from its TWO AXES OF SYMMETRY + x-int  (her pp33–34)
      q3  exponential: y-int → a, second point → b, then the
-         b^(x+p) + q form                                 (her pp35–37)
+         b^(x − p) + q form                               (her pp35–37)
      q4  parabola from three points, simultaneous equations (her route 3)
 
    EVERY CARD IS "READ IT OFF THE SKETCH". The brief's rule for this
@@ -203,7 +203,7 @@ const q2 = {
 
 /* ---------------------------------------------------------------
    q3 — EXPONENTIAL: y-intercept → a, second point → b, then the
-   b^(x + p) + q form (her pp35–37, both halves).
+   b^(x − p) + q form (her pp35–37, both halves).
    g(x) = 2·2ˣ − 4 = 2^(x+1) − 4. Asymptote y = −4, y-int (0 ; −2),
    through (2 ; 4). Chosen so that a really does equal b, which is what
    makes the second form worth asking for.
@@ -261,7 +261,7 @@ const q3 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "Hence write the equation of g in the form &nbsp;y = b<sup>x + p</sup> + q.",
+        en: "Hence write the equation of g in the form &nbsp;y = b<sup>x − p</sup> + q.",
       },
       hint: {
         en: "Look at your a and your b — they are the same number. Write the a as that number to the power 1, and then use the exponent law for multiplying two powers of the same base.",
@@ -270,7 +270,7 @@ const q3 = {
         { type: "step", text: { en: "g(x) = 2·2ˣ − 4, &nbsp;and the front 2 is 2¹, so the two powers have the SAME base: &nbsp;2¹·2ˣ = 2<sup>x + 1</sup>&nbsp; — same base, so add the exponents" }, ticks: ["ca"] },
         { type: "answer", text: { en: "g(x) = 2<sup>x + 1</sup> − 4" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: the − 4 stays exactly where it is. Only the two powers combine — the asymptote number is outside the power and never joins in.",
+          en: "REMEMBER: the − 4 stays exactly where it is. Only the two powers combine — the asymptote number is outside the power and never joins in. And 2<sup>x + 1</sup> − 4 IS the asked-for form: in &nbsp;y = b<sup>x − p</sup> + q&nbsp; the p sits in the exponent with the OPPOSITE sign, so x + 1 means p = −1.",
         } },
       ],
       esplain: {

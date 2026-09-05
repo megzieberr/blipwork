@@ -594,7 +594,7 @@ export const CONCEPTS = {
         <li><b>Straight line</b> — just an x, no powers, no x on the bottom: y = ax + q.</li>
         <li><b>Parabola</b> — has an <b>x²</b> (or a bracket squared): y = ax² + bx + c. Shape ∪ or ∩, one turning point.</li>
         <li><b>Hyperbola</b> — x in the <b>denominator</b>: y = a/(x − p) + q. Two branches, two asymptotes.</li>
-        <li><b>Exponential</b> — x in the <b>exponent</b>: y = a·bˣ + q. One horizontal asymptote, no turning point.</li>
+        <li><b>Exponential</b> — x in the <b>exponent</b>: y = a·b<sup>x − p</sup> + q. One horizontal asymptote, no turning point.</li>
       </ul>
       <p>Names for y: f(x), g(x), h(x). f(3) means “substitute x = 3 and read the y-value”.</p>`,
   },
@@ -648,14 +648,16 @@ export const CONCEPTS = {
       <p>The graph never touches its asymptotes — that is why x ≠ p and y ≠ q.</p>`,
   },
   exponentialGraph: {
-    title: "The exponential y = a·bˣ + q",
+    title: "The exponential y = a·b<sup>x − p</sup> + q",
     body: `
       <p>One horizontal asymptote and no turning point.</p>
       <ul>
         <li><b>Asymptote:</b> y = q (the graph flattens towards it).</li>
         <li><b>b &gt; 1</b> → growth (“taking off”, increasing). <b>0 &lt; b &lt; 1</b> → decay (“landing”, decreasing).</li>
         <li><b>a &gt; 0</b> → graph above the asymptote (range y &gt; q). <b>a &lt; 0</b> → below (y &lt; q).</li>
+        <li><b>p</b> — the exponent is (x − p). Read p as the number after the sign, and the graph moves the <b>opposite</b> way: 2<sup>x − 3</sup> is 3 units to the <b>right</b>, and 2<sup>x + 3</sup> is 3 units to the <b>left</b>.</li>
       </ul>
+      <p>In Grade 10 the exponential was y = a·bˣ + q. Grade 11 adds the p.</p>
       <div class="eg">A fraction base is a negative exponent: (½)ˣ = 2⁻ˣ.</div>`,
   },
   readGraph: {

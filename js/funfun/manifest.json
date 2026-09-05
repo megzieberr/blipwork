@@ -1,8 +1,8 @@
 {
   "generatedBy": "graph-quest/tools/sync-to-blipwork.py",
-  "generatedAt": "2026-09-04T18:33:56+00:00",
+  "generatedAt": "2026-09-05T17:55:07+00:00",
   "sourceRepo": "graph-quest",
-  "sourceCommit": "3f84d87c9c1d165080e01601e04316a4daa9c9dc",
+  "sourceCommit": "5986454103eb0bedb9ecf9126cf42f401f33c347",
   "sourceWorkingTreeDirty": false,
   "note": "GENERATED OUTPUT \u2014 never hand-edit js/funfun/. See GENERATED.md.",
   "files": [
@@ -142,8 +142,8 @@
     {
       "from": "js/quests/q1b-discover2.js",
       "to": "quests/q1b-discover2.js",
-      "bytes": 27548,
-      "sha256": "ed28439967c7c788ee83252eb1f37b34c2c0ec3884d9ce22a4b5912eaabe5c25",
+      "bytes": 27706,
+      "sha256": "c768b4747edb42516f7ba3cb7b5bcc12ecb5ba5d86b432f62efdb577ce231da3",
       "rewritten": false
     },
     {
@@ -205,8 +205,8 @@
     {
       "from": "js/quests/qG-gradient.js",
       "to": "quests/qG-gradient.js",
-      "bytes": 17371,
-      "sha256": "d63b0b293d3d7f50b3b122631d89e1eda80f7ee2d26ad8c1854d9c82b11b7ddb",
+      "bytes": 17529,
+      "sha256": "11eb8b0f4a1e0a4c7c439fa95cdc032d72b3705bf9fa3981f2e2893ce3cdda3c",
       "rewritten": false
     },
     {
