@@ -51,7 +51,7 @@
 </script>
 
 <script type="module">
-import { ACCESSORIES, ATTACH, COLOURS, renderCompanion, tintedImageSrc } from "./js/companion/renderer.js";
+import { ACCESSORIES, ATTACH, COLOURS, OUTLINE, renderCompanion, tintedImageSrc, outlineTintedImageSrc, bodyFlatColour, outlineFlatColour } from "./js/companion/renderer.js";
 import { ITEM_LABELS, itemRarity, accessorySlot, COSMETIC_SLOTS, SLOT_LABELS } from "./js/companion/blip-ui.js";
 import { LocalBackend } from "./js/local-backend.js";
 import { levelInfo, costForLevel, MAX_LEVEL, MILESTONE_LEVELS } from "./js/companion/level.js";
@@ -1266,6 +1266,75 @@ if (repricedFileText.length > 0) {
     tick(tinted !== src, "the tinted door came back as the original file");
     const again = await tintedImageSrc(src, FURNITURE["door-mint"].tint);
     tick(again === tinted, "the tint cache handed back a different result for the same (file, colour)");
+  }
+
+  /* ---------- the outline follows the body colour (2026-09-05) ----------
+     Her ruling: "automatic outline, eyes follow". These checks guard the
+     three things that could silently break it: the derivation drifting off
+     her own reference pair, blue stopping being byte-identical to her art,
+     and a new accessory being drawn with the navy hardcoded so its stroke
+     stays navy on a pink Blip. */
+  {
+    const rgbOf = (css) => css.trim().startsWith("#")
+      ? [1, 3, 5].map((i) => parseInt(css.slice(i, i + 2), 16))
+      : css.replace(/[^0-9,]/g, "").split(",").map(Number);
+
+    // blue is the reference: the derivation must hand back her own navy
+    tick(outlineFlatColour("blue") === OUTLINE, `outlineFlatColour("blue") is ${outlineFlatColour("blue")}, expected the reference ${OUTLINE}`);
+    tick(bodyFlatColour("blue") === "#62ceff", "bodyFlatColour(\"blue\") drifted off her reference body");
+
+    // Every derived outline sits where the reference sits: fully saturated
+    // (min channel 0) at 67.45% brightness (max channel 172). That single
+    // signature is what makes #0062ac the blue member of the same family
+    // rather than a hand-picked colour, so it is checked for all eleven.
+    const outs = new Map();
+    for (const id of Object.keys(COLOURS)) {
+      const [r, g, b] = rgbOf(outlineFlatColour(id));
+      tick(Math.max(r, g, b) === 172, `outline for "${id}" is ${Math.max(r, g, b)} bright, expected 172 (0.6745 of the body)`);
+      tick(Math.min(r, g, b) === 0, `outline for "${id}" is not fully saturated (min channel ${Math.min(r, g, b)})`);
+      outs.set(id, `${r},${g},${b}`);
+    }
+    tick(new Set(outs.values()).size === Object.keys(COLOURS).length,
+      "two colour presets share an outline colour, so their Blips would be indistinguishable in outline");
+
+    // her art, untouched: "blue" never goes near a canvas
+    const plainBody = await (await import("./js/companion/renderer.js")).getBodySrc("blue");
+    tick(plainBody === "assets/companion/blip-base-blue.png",
+      `getBodySrc("blue") returned ${String(plainBody).slice(0, 40)}…, but the original art must be served as-is, never re-encoded`);
+
+    // no accessory may hardcode the navy: it would stay navy on a pink Blip
+    const hardcoded = Object.entries(ACCESSORIES)
+      .filter(([, d]) => d.svg && /stroke="#0062ac"/i.test(d.svg))
+      .map(([id]) => id);
+    tick(hardcoded.length === 0, `${hardcoded.length} accessory SVG(s) hardcode the navy stroke instead of var(--blip-outline): ${hardcoded.join(", ")}`);
+    const usesVar = Object.values(ACCESSORIES).filter((d) => d.svg && d.svg.includes("--blip-outline")).length;
+    const hasStroke = Object.values(ACCESSORIES).filter((d) => d.svg && d.svg.includes("stroke=")).length;
+    tick(usesVar === hasStroke, `${hasStroke - usesVar} stroked accessory SVG(s) do not read --blip-outline`);
+
+    // the flag only means something on PNG art
+    const badFlag = Object.entries(ACCESSORIES).filter(([, d]) => d.outlineFollows && !d.img).map(([id]) => id);
+    tick(badFlag.length === 0, `outlineFollows set on non-PNG accessory: ${badFlag.join(", ")}`);
+
+    // the PNG item pass: free for blue, a real new picture for a colour, cached
+    const itemSrc = "assets/companion/items/wizard-hat.png";
+    const itemBlue = await outlineTintedImageSrc(itemSrc, "blue");
+    tick(itemBlue === itemSrc, "a blue Blip must cost no canvas work on its PNG items");
+    const itemPink = await outlineTintedImageSrc(itemSrc, "pink");
+    tick(typeof itemPink === "string" && itemPink.startsWith("data:image/png"), "the PNG item outline pass did not produce a data URL");
+    tick(await outlineTintedImageSrc(itemSrc, "pink") === itemPink, "the PNG item outline cache handed back a different result for the same (file, colour)");
+
+    // and the stage really publishes the variable the strokes read
+    const probe = document.createElement("div");
+    document.body.appendChild(probe);
+    renderCompanion(probe, { colour: "pink", accessories: [] });
+    const varPink = probe.querySelector(".blip-stage").style.getPropertyValue("--blip-outline");
+    tick(varPink === outlineFlatColour("pink"), `stage --blip-outline is "${varPink}", expected ${outlineFlatColour("pink")}`);
+    renderCompanion(probe, { colour: "blue", accessories: [] });
+    tick(probe.querySelector(".blip-stage").style.getPropertyValue("--blip-outline") === OUTLINE,
+      "a blue Blip's stage no longer publishes her navy");
+    probe.remove();
+
+    say(`outline follows body: ${Object.keys(COLOURS).map((id) => `${id} ${outlineFlatColour(id)}`).join(" · ")}`);
   }
 
   /* The art. Same trap as the accessories and the food: a missing PNG is

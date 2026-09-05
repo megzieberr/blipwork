@@ -34,12 +34,18 @@
    COLOUR SYSTEM: the base PNG is recoloured on an offscreen canvas.
    Every bright body pixel gets the target HUE with saturation scaled
    relative to the body blue's (so the paler gloss highlight stays paler
-   in the new colour) while keeping its own brightness (V); the dark navy
-   outline + navy eyes are untouched, with a smoothstep blend at the
-   boundary instead of a hard cutoff — a hard classify-or-skip would leave
-   the source art's anti-alias fringe as speckles around the strokes.
-   Results are cached per colour id (as data-URLs) so repeated renders/
-   tests never reprocess a colour twice.
+   in the new colour) while keeping its own brightness (V). The dark navy
+   band (outline, eyes, smile) used to be left exactly as drawn, which
+   is what made a pink Blip keep a navy line; since 2026-09-05 (her ruling
+   "automatic outline, eyes follow") it takes an OUTLINE colour derived
+   from the body colour by the relation her own art already holds between
+   #62ceff and #0062ac. A smoothstep blend joins the two instead of a hard
+   cutoff: a hard classify-or-skip would leave the source art's
+   anti-alias fringe as speckles around the strokes. The same derived
+   colour is published as the CSS variable --blip-outline, which every
+   code-drawn accessory stroke reads, so the whole outfit is inked in one
+   line colour. Results are cached per colour id (as data-URLs) so
+   repeated renders/tests never reprocess a colour twice.
    ============================================================ */
 import { healthOverlaySpec, animatedHealthOverlaySpec, blipMood as _blipMood, HEALTH_ROTATE_DEG } from "./health-fx.js";
 export { blipMood } from "./health-fx.js";
@@ -202,6 +208,12 @@ const SLOT_ORDER = ["effects", "back", "wings", "neck", "ears", "glasses", "hat"
    arms) are drawn once here and mirrored (scaleX(-1)) for the second side —
    every paired SVG below is itself left-right symmetric so the mirror is a
    clean flip, no repositioning needed. */
+/* `outlineFollows: true` on a PNG item = its dark pixels are the SL navy
+   stroke, so they follow the body's outline colour (2026-09-05 ruling; see
+   outlineTintedImageSrc for the measurement and the hue gate). Set on the
+   nine items whose dark band measured ≥85% navy-family across all 44 item
+   PNGs: wizard-hat, backwards-cap, medal-choker and the six eye pairs.
+   Every other item keeps its own colours untouched. */
 export const ACCESSORIES = {
   "party-hat": {
     slot: "hat",
@@ -215,8 +227,8 @@ export const ACCESSORIES = {
         <rect x="-15" y="43" width="140" height="19" fill="#8fcbf2" transform="rotate(-10 50 50)"/>
         <rect x="-15" y="73" width="140" height="17" fill="#ff9e92" transform="rotate(-10 50 50)"/>
       </g>
-      <path d="M14 91 Q50 108 86 91 L86 98 Q50 116 14 98 Z" fill="#fce7a6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
-      <path d="M50 5 L79 96 L21 96 Z" fill="none" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M14 91 Q50 108 86 91 L86 98 Q50 116 14 98 Z" fill="#fce7a6" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M50 5 L79 96 L21 96 Z" fill="none" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>`,
     attach: { x: 0.518, y: 0.143 },
   },
@@ -226,7 +238,7 @@ export const ACCESSORIES = {
     anchor: { x: 0.5, y: 0.86 },
     tiltDeg: -25, // lean the ear outward along the sloping outline (mirrored side flips automatically)
     svg: `<svg viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
-      <path d="M30 4 C10 20 4 46 10 64 C16 60 22 56 30 56 C38 56 44 60 50 64 C56 46 50 20 30 4 Z" fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M30 4 C10 20 4 46 10 64 C16 60 22 56 30 56 C38 56 44 60 50 64 C56 46 50 20 30 4 Z" fill="var(--blip-fill, ${BASE_BODY})" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
       <path d="M30 20 C20 30 17 44 20 54 C24 51 27 49 30 49 C33 49 36 51 40 54 C43 44 40 30 30 20 Z" fill="#ffb6c9"/>
     </svg>`,
     attach: [{ x: 0.313, y: 0.3 }, { x: 0.687, y: 0.3 }],
@@ -236,11 +248,11 @@ export const ACCESSORIES = {
     widthPct: 87,
     anchor: { x: 0.5, y: 0.5 },
     svg: `<svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
-      <line x1="86" y1="40" x2="114" y2="40" stroke="${OUTLINE}" stroke-width="6"/>
-      <line x1="10" y1="34" x2="26" y2="30" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
-      <line x1="190" y1="34" x2="174" y2="30" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="55" cy="45" r="38" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
-      <circle cx="145" cy="45" r="38" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
+      <line x1="86" y1="40" x2="114" y2="40" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+      <line x1="10" y1="34" x2="26" y2="30" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linecap="round"/>
+      <line x1="190" y1="34" x2="174" y2="30" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="55" cy="45" r="38" fill="rgba(255,255,255,0.35)" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+      <circle cx="145" cy="45" r="38" fill="rgba(255,255,255,0.35)" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
     </svg>`,
     attach: { x: 0.496, y: 0.569 },
   },
@@ -250,7 +262,7 @@ export const ACCESSORIES = {
     anchor: { x: 0.82, y: 0.28 },
     svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
       <path d="M92 20 C70 10 40 20 22 46 C40 42 52 46 58 56 C38 58 24 70 16 92 C34 84 48 84 56 90 C40 98 30 112 26 132 C46 122 64 108 74 90 C82 68 88 44 92 20 Z"
-        fill="#fff7e8" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+        fill="#fff7e8" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>`,
     attach: [{ x: 0.078, y: 0.526 }, { x: 0.922, y: 0.526 }],
   },
@@ -260,7 +272,7 @@ export const ACCESSORIES = {
     anchor: { x: 0.76, y: 0.1 }, // top (shoulder) end of the capsule — buried in the body's lower side
     svg: `<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
       <rect x="14" y="6" width="32" height="80" rx="16" transform="rotate(24 30 45)"
-        fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="6"/>
+        fill="var(--blip-fill, ${BASE_BODY})" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
     </svg>`,
     // a plain rounded capsule angled ~24° outward-down: the earlier
     // comma/claw path read as a hook once attached to the body (Megan's
@@ -284,10 +296,10 @@ export const ACCESSORIES = {
     widthPct: 90,
     anchor: { x: 0.5, y: 0.5 },
     svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
-      <line x1="86" y1="48" x2="124" y2="48" stroke="${OUTLINE}" stroke-width="7"/>
-      <line x1="20" y1="40" x2="4" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
-      <line x1="190" y1="40" x2="206" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
-      <g stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round">
+      <line x1="86" y1="48" x2="124" y2="48" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7"/>
+      <line x1="20" y1="40" x2="4" y2="34" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7" stroke-linecap="round"/>
+      <line x1="190" y1="40" x2="206" y2="34" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7" stroke-linecap="round"/>
+      <g stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linejoin="round">
         <path d="M60.0,8.0 L70.0,34.2 L98.0,35.6 L76.2,53.3 L83.5,80.4 L60.0,65.0 L36.5,80.4 L43.8,53.3 L22.0,35.6 L50.0,34.2 Z" fill="#ffd23f"/>
         <path d="M150.0,8.0 L160.0,34.2 L188.0,35.6 L166.2,53.3 L173.5,80.4 L150.0,65.0 L126.5,80.4 L133.8,53.3 L112.0,35.6 L140.0,34.2 Z" fill="#ffd23f"/>
       </g>
@@ -303,10 +315,10 @@ export const ACCESSORIES = {
     widthPct: 90,
     anchor: { x: 0.5, y: 0.5 },
     svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
-      <line x1="92" y1="44" x2="118" y2="44" stroke="${OUTLINE}" stroke-width="7"/>
-      <line x1="20" y1="40" x2="4" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
-      <line x1="190" y1="40" x2="206" y2="34" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
-      <g stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round">
+      <line x1="92" y1="44" x2="118" y2="44" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7"/>
+      <line x1="20" y1="40" x2="4" y2="34" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7" stroke-linecap="round"/>
+      <line x1="190" y1="40" x2="206" y2="34" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7" stroke-linecap="round"/>
+      <g stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linejoin="round">
         <path d="M60.0,41.4 C60.0,23.8 20.4,15.0 20.4,37.0 C20.4,56.8 44.6,70.0 60.0,82.3 C75.4,70.0 99.6,56.8 99.6,37.0 C99.6,15.0 60.0,23.8 60.0,41.4 Z" fill="#ff6fa5"/>
         <path d="M150.0,41.4 C150.0,23.8 110.4,15.0 110.4,37.0 C110.4,56.8 134.6,70.0 150.0,82.3 C165.4,70.0 189.6,56.8 189.6,37.0 C189.6,15.0 150.0,23.8 150.0,41.4 Z" fill="#ff6fa5"/>
       </g>
@@ -350,8 +362,8 @@ export const ACCESSORIES = {
     ],
     svg: `<svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg">
       <path d="M28 58 C25 22 77 6 150 10" fill="none" stroke="#2f8fe0" stroke-width="17" stroke-linecap="round"/>
-      <path d="M28 58 C25 22 77 6 150 10" fill="none" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
-      <rect x="6" y="56" width="44" height="74" rx="18" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="7"/>
+      <path d="M28 58 C25 22 77 6 150 10" fill="none" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7" stroke-linecap="round"/>
+      <rect x="6" y="56" width="44" height="74" rx="18" fill="#2f8fe0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7"/>
       <rect x="18" y="72" width="20" height="42" rx="10" fill="#0e2a4a"/>
       <rect x="24" y="76" width="6" height="34" rx="3" fill="#57c9ff" opacity="0.85"/>
     </svg>`,
@@ -366,7 +378,7 @@ export const ACCESSORIES = {
     svg: `<svg viewBox="0 0 120 54" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="#ffe08a" stroke-width="16" opacity="0.35"/>
       <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="#ffd23f" stroke-width="8"/>
-      <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="${OUTLINE}" stroke-width="2.5"/>
+      <ellipse cx="60" cy="27" rx="52" ry="17" fill="none" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="2.5"/>
       <ellipse cx="42" cy="18" rx="10" ry="3.5" fill="#fff6d6" opacity="0.8" transform="rotate(-18 42 18)"/>
     </svg>`,
     attach: { x: 0.514, y: 0.126 },
@@ -391,7 +403,7 @@ export const ACCESSORIES = {
       <path d="M92 20 C70 10 40 20 22 46 C40 42 52 46 58 56 C38 58 24 70 16 92 C34 84 48 84 56 90 C40 98 30 112 26 132 C46 122 64 108 74 90 C82 68 88 44 92 20 Z"
         fill="#7b5cf6" opacity="0.30" transform="translate(-3 3)"/>
       <path d="M92 20 C70 10 40 20 22 46 C40 42 52 46 58 56 C38 58 24 70 16 92 C34 84 48 84 56 90 C40 98 30 112 26 132 C46 122 64 108 74 90 C82 68 88 44 92 20 Z"
-        fill="url(#aurora-{{UID}})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+        fill="url(#aurora-{{UID}})" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
       <path d="M80 34 C64 34 48 44 40 60" fill="none" stroke="#eafcff" stroke-width="3" opacity="0.5" stroke-linecap="round"/>
     </svg>`,
   },
@@ -404,8 +416,8 @@ export const ACCESSORIES = {
     anchor: { x: 0.76, y: 0.1 }, // top (shoulder) end — buried in the body's lower side, matches stubby-arms
     svg: `<svg viewBox="0 0 64 96" xmlns="http://www.w3.org/2000/svg">
       <g transform="rotate(24 32 48)">
-        <rect x="14" y="6" width="34" height="82" rx="17" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6"/>
-        <rect x="12" y="40" width="38" height="16" rx="6" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="5"/>
+        <rect x="14" y="6" width="34" height="82" rx="17" fill="#2f8fe0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+        <rect x="12" y="40" width="38" height="16" rx="6" fill="#1c5fa0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5"/>
         <line x1="31" y1="42" x2="31" y2="54" stroke="#57c9ff" stroke-width="4" stroke-linecap="round"/>
         <circle cx="31" cy="74" r="6" fill="#57c9ff" opacity="0.9"/>
       </g>
@@ -435,11 +447,11 @@ export const ACCESSORIES = {
     widthPct: 90,
     anchor: { x: 0.5, y: 0.5 },
     svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
-      <line x1="98" y1="46" x2="112" y2="46" stroke="${OUTLINE}" stroke-width="6"/>
-      <line x1="22" y1="38" x2="4" y2="32" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
-      <line x1="188" y1="38" x2="206" y2="32" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
-      <rect x="22" y="18" width="76" height="56" rx="16" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
-      <rect x="112" y="18" width="76" height="56" rx="16" fill="rgba(255,255,255,0.35)" stroke="${OUTLINE}" stroke-width="6"/>
+      <line x1="98" y1="46" x2="112" y2="46" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+      <line x1="22" y1="38" x2="4" y2="32" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linecap="round"/>
+      <line x1="188" y1="38" x2="206" y2="32" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linecap="round"/>
+      <rect x="22" y="18" width="76" height="56" rx="16" fill="rgba(255,255,255,0.35)" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+      <rect x="112" y="18" width="76" height="56" rx="16" fill="rgba(255,255,255,0.35)" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
       <line x1="34" y1="32" x2="48" y2="32" stroke="#eafcff" stroke-width="5" opacity="0.55" stroke-linecap="round"/>
       <line x1="124" y1="32" x2="138" y2="32" stroke="#eafcff" stroke-width="5" opacity="0.55" stroke-linecap="round"/>
     </svg>`,
@@ -459,10 +471,10 @@ export const ACCESSORIES = {
     svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="60" cy="46" rx="20" ry="26" fill="var(--blip-fill, ${BASE_BODY})"/>
       <ellipse cx="150" cy="46" rx="20" ry="26" fill="var(--blip-fill, ${BASE_BODY})"/>
-      <path d="M38 40 Q60 68 82 40" fill="none" stroke="${OUTLINE}" stroke-width="9" stroke-linecap="round"/>
-      <path d="M128 40 Q150 68 172 40" fill="none" stroke="${OUTLINE}" stroke-width="9" stroke-linecap="round"/>
-      <line x1="36" y1="54" x2="27" y2="62" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
-      <line x1="174" y1="54" x2="183" y2="62" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
+      <path d="M38 40 Q60 68 82 40" fill="none" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="9" stroke-linecap="round"/>
+      <path d="M128 40 Q150 68 172 40" fill="none" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="9" stroke-linecap="round"/>
+      <line x1="36" y1="54" x2="27" y2="62" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linecap="round"/>
+      <line x1="174" y1="54" x2="183" y2="62" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linecap="round"/>
     </svg>`,
   },
 
@@ -473,7 +485,7 @@ export const ACCESSORIES = {
     widthPct: 90,
     anchor: { x: 0.5, y: 0.5 },
     svg: `<svg viewBox="0 0 210 96" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="18" width="190" height="58" rx="27" fill="#0e2a4a" stroke="${OUTLINE}" stroke-width="6"/>
+      <rect x="10" y="18" width="190" height="58" rx="27" fill="#0e2a4a" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
       <rect x="26" y="34" width="158" height="16" rx="8" fill="#57c9ff" opacity="0.9"/>
       <rect x="34" y="37" width="42" height="8" rx="4" fill="#eafcff" opacity="0.75"/>
       <circle cx="176" cy="62" r="5" fill="#57c9ff" opacity="0.8"/>
@@ -491,9 +503,9 @@ export const ACCESSORIES = {
     anchor: { x: 0.5, y: 0.86 },
     attach: { x: 0.5, y: 0.255 },
     svg: `<svg viewBox="0 0 120 86" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="13" r="12" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="5"/>
-      <path d="M12 66 C12 34 32 22 60 22 C88 22 108 34 108 66 Z" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
-      <rect x="6" y="60" width="108" height="22" rx="11" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="5"/>
+      <circle cx="60" cy="13" r="12" fill="#57c9ff" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5"/>
+      <path d="M12 66 C12 34 32 22 60 22 C88 22 108 34 108 66 Z" fill="#2f8fe0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="6" y="60" width="108" height="22" rx="11" fill="#1c5fa0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5"/>
       <line x1="40" y1="34" x2="34" y2="58" stroke="#1c5fa0" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
       <line x1="60" y1="28" x2="60" y2="58" stroke="#1c5fa0" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
       <line x1="80" y1="34" x2="86" y2="58" stroke="#1c5fa0" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
@@ -508,8 +520,8 @@ export const ACCESSORIES = {
     anchor: { x: 0.5, y: 1 },
     attach: { x: 0.508, y: 0.257 },
     svg: `<svg viewBox="0 0 120 54" xmlns="http://www.w3.org/2000/svg">
-      <path d="M46 52 C30 50 16 38 12 16 C28 18 42 30 48 52 Z" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
-      <path d="M74 52 C90 50 104 38 108 16 C92 18 78 30 72 52 Z" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M46 52 C30 50 16 38 12 16 C28 18 42 30 48 52 Z" fill="#7b5cf6" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M74 52 C90 50 104 38 108 16 C92 18 78 30 72 52 Z" fill="#7b5cf6" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
       <path d="M24 24 C32 30 38 38 42 48" fill="none" stroke="#b79bff" stroke-width="3.5" opacity="0.7" stroke-linecap="round"/>
       <path d="M96 24 C88 30 82 38 78 48" fill="none" stroke="#b79bff" stroke-width="3.5" opacity="0.7" stroke-linecap="round"/>
     </svg>`,
@@ -523,8 +535,8 @@ export const ACCESSORIES = {
     anchor: { x: 0.5, y: 1 },
     attach: { x: 0.508, y: 0.243 },
     svg: `<svg viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
-      <path d="M30 84 C30 66 24 58 24 48" fill="none" stroke="${OUTLINE}" stroke-width="6" stroke-linecap="round"/>
-      <path d="M34 4 L12 44 L26 44 L22 80 L48 36 L32 36 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M30 84 C30 66 24 58 24 48" fill="none" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linecap="round"/>
+      <path d="M34 4 L12 44 L26 44 L22 80 L48 36 L32 36 Z" fill="#ffd23f" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
       <path d="M32 12 L20 38 L29 38" fill="none" stroke="#fff0a8" stroke-width="4" opacity="0.7" stroke-linecap="round"/>
     </svg>`,
   },
@@ -537,11 +549,11 @@ export const ACCESSORIES = {
     anchor: { x: 0.5, y: 0.95 },
     attach: { x: 0.5, y: 0.245 },
     svg: `<svg viewBox="0 0 130 76" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 66 L6 12 L34 34 L65 6 L96 34 L124 12 L120 66 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
-      <rect x="8" y="58" width="114" height="16" rx="8" fill="#f0b429" stroke="${OUTLINE}" stroke-width="5"/>
-      <circle cx="65" cy="46" r="8" fill="#7b5cf6" stroke="${OUTLINE}" stroke-width="4"/>
-      <circle cx="30" cy="50" r="5.5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="3.5"/>
-      <circle cx="100" cy="50" r="5.5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="3.5"/>
+      <path d="M10 66 L6 12 L34 34 L65 6 L96 34 L124 12 L120 66 Z" fill="#ffd23f" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="8" y="58" width="114" height="16" rx="8" fill="#f0b429" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5"/>
+      <circle cx="65" cy="46" r="8" fill="#7b5cf6" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="4"/>
+      <circle cx="30" cy="50" r="5.5" fill="#57c9ff" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="3.5"/>
+      <circle cx="100" cy="50" r="5.5" fill="#57c9ff" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="3.5"/>
       <path d="M18 22 L20 44" fill="none" stroke="#fff0a8" stroke-width="4" opacity="0.6" stroke-linecap="round"/>
     </svg>`,
   },
@@ -555,7 +567,7 @@ export const ACCESSORIES = {
     tiltDeg: -20,
     svg: `<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
       <path d="M28 4 C10 12 4 32 10 50 C16 46 22 43 28 43 C34 43 40 46 46 50 C52 32 46 12 28 4 Z"
-        fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+        fill="var(--blip-fill, ${BASE_BODY})" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
       <path d="M28 18 C20 24 18 34 20 42 C24 40 26 39 28 39 C30 39 32 40 36 42 C38 34 36 24 28 18 Z"
         fill="#eafcff" opacity="0.45"/>
     </svg>`,
@@ -570,7 +582,7 @@ export const ACCESSORIES = {
     tiltDeg: -12,
     svg: `<svg viewBox="0 0 50 112" xmlns="http://www.w3.org/2000/svg">
       <path d="M25 4 C40 4 45 30 45 62 C45 90 37 106 25 106 C13 106 5 90 5 62 C5 30 10 4 25 4 Z"
-        fill="#fff7e8" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+        fill="#fff7e8" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
       <path d="M25 20 C34 20 37 40 37 62 C37 84 32 94 25 94 C18 94 13 84 13 62 C13 40 16 20 25 20 Z"
         fill="#ffb6c9"/>
     </svg>`,
@@ -586,8 +598,8 @@ export const ACCESSORIES = {
     anchor: { x: 0.76, y: 0.1 },
     svg: `<svg viewBox="0 0 64 96" xmlns="http://www.w3.org/2000/svg">
       <g transform="rotate(24 32 48)">
-        <rect x="15" y="6" width="34" height="82" rx="17" fill="var(--blip-fill, ${BASE_BODY})" stroke="${OUTLINE}" stroke-width="6"/>
-        <path d="M17 56 L47 56" stroke="${OUTLINE}" stroke-width="5" opacity="0.5" stroke-linecap="round"/>
+        <rect x="15" y="6" width="34" height="82" rx="17" fill="var(--blip-fill, ${BASE_BODY})" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+        <path d="M17 56 L47 56" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" opacity="0.5" stroke-linecap="round"/>
       </g>
     </svg>`,
     attach: [{ x: 0.141, y: 0.721 }, { x: 0.859, y: 0.721 }],
@@ -600,11 +612,11 @@ export const ACCESSORIES = {
     anchor: { x: 0.78, y: 0.09 },
     svg: `<svg viewBox="0 0 72 104" xmlns="http://www.w3.org/2000/svg">
       <g transform="rotate(24 36 52)">
-        <rect x="20" y="4" width="32" height="46" rx="15" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="6"/>
+        <rect x="20" y="4" width="32" height="46" rx="15" fill="#1c5fa0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
         <path d="M14 62 C14 46 24 40 36 40 C48 40 58 46 58 62 C58 82 48 94 36 94 C24 94 14 82 14 62 Z"
-          fill="#ff6f5e" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
-        <path d="M14 66 C10 66 6 70 6 76 C6 82 10 86 15 85" fill="#ff6f5e" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
-        <line x1="26" y1="50" x2="46" y2="50" stroke="${OUTLINE}" stroke-width="4.5" stroke-linecap="round"/>
+          fill="#ff6f5e" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linejoin="round"/>
+        <path d="M14 66 C10 66 6 70 6 76 C6 82 10 86 15 85" fill="#ff6f5e" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linejoin="round"/>
+        <line x1="26" y1="50" x2="46" y2="50" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="4.5" stroke-linecap="round"/>
         <path d="M24 60 C30 56 42 56 48 60" fill="none" stroke="#ffb3a8" stroke-width="4" opacity="0.7" stroke-linecap="round"/>
       </g>
     </svg>`,
@@ -618,7 +630,7 @@ export const ACCESSORIES = {
     anchor: { x: 0.86, y: 0.32 },
     svg: `<svg viewBox="0 0 70 76" xmlns="http://www.w3.org/2000/svg">
       <path d="M62 10 C40 4 16 14 8 34 C22 32 30 36 34 44 C22 50 14 58 10 70 C28 62 48 46 58 30 C62 24 63 16 62 10 Z"
-        fill="#fff7e8" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+        fill="#fff7e8" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
       <path d="M54 20 C42 22 32 28 26 38" fill="none" stroke="#cfe6f5" stroke-width="3.5" opacity="0.8" stroke-linecap="round"/>
     </svg>`,
   },
@@ -630,7 +642,7 @@ export const ACCESSORIES = {
     anchor: { x: 0.86, y: 0.30 },
     svg: `<svg viewBox="0 0 100 124" xmlns="http://www.w3.org/2000/svg">
       <path d="M94 14 C68 8 34 20 14 44 C24 46 32 48 38 54 C26 62 16 76 12 94 C24 90 34 90 42 94 C34 102 28 112 26 122 C46 112 66 94 80 72 C90 56 94 34 94 14 Z"
-        fill="#6b46d6" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+        fill="#6b46d6" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
       <path d="M90 20 C74 34 58 52 46 74" fill="none" stroke="#b79bff" stroke-width="4" opacity="0.65" stroke-linecap="round"/>
       <path d="M88 30 C72 40 56 54 44 70" fill="none" stroke="#3a1f78" stroke-width="3.5" opacity="0.45" stroke-linecap="round"/>
       <path d="M86 46 C74 58 66 74 60 88" fill="none" stroke="#3a1f78" stroke-width="3.5" opacity="0.45" stroke-linecap="round"/>
@@ -661,10 +673,10 @@ export const ACCESSORIES = {
     // proportions that read as a second pair of ears, not as fabric.
     svg: `<svg viewBox="0 0 200 202" xmlns="http://www.w3.org/2000/svg">
       <path d="M66 0 L134 0 L143 30 L194 190 Q160 176 130 192 Q100 206 70 192 Q40 176 6 190 L57 30 Z"
-        fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
+        fill="#2f8fe0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linejoin="round"/>
       <path d="M84 12 L116 12 L152 176 Q126 168 100 180 Q74 168 48 176 Z"
         fill="#57c9ff" opacity="0.32"/>
-      <path d="M57 30 L143 30" stroke="${OUTLINE}" stroke-width="5" opacity="0.35" stroke-linecap="round"/>
+      <path d="M57 30 L143 30" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" opacity="0.35" stroke-linecap="round"/>
     </svg>`,
   },
 
@@ -680,12 +692,12 @@ export const ACCESSORIES = {
     // body, not match the palette. Also sized up (56% -> 68%) so the pack
     // clears his shoulders instead of hiding behind the crown.
     svg: `<svg viewBox="0 0 140 122" xmlns="http://www.w3.org/2000/svg">
-      <path d="M54 16 C54 2 86 2 86 16" fill="none" stroke="${OUTLINE}" stroke-width="7" stroke-linecap="round"/>
-      <rect x="8" y="14" width="124" height="102" rx="22" fill="#e8a33d" stroke="${OUTLINE}" stroke-width="6"/>
+      <path d="M54 16 C54 2 86 2 86 16" fill="none" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="7" stroke-linecap="round"/>
+      <rect x="8" y="14" width="124" height="102" rx="22" fill="#e8a33d" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
       <path d="M8 42 C8 26 20 14 34 14 L106 14 C120 14 132 26 132 42 L132 60 L8 60 Z"
-        fill="#c9822a" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>
-      <rect x="34" y="50" width="18" height="22" rx="5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="5"/>
-      <rect x="88" y="50" width="18" height="22" rx="5" fill="#57c9ff" stroke="${OUTLINE}" stroke-width="5"/>
+        fill="#c9822a" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6" stroke-linejoin="round"/>
+      <rect x="34" y="50" width="18" height="22" rx="5" fill="#57c9ff" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5"/>
+      <rect x="88" y="50" width="18" height="22" rx="5" fill="#57c9ff" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5"/>
       <rect x="28" y="84" width="84" height="22" rx="11" fill="#c9822a" opacity="0.6"/>
     </svg>`,
     attach: { x: 0.508, y: 0.338 },
@@ -701,17 +713,17 @@ export const ACCESSORIES = {
     anchor: { x: 0.5, y: 0.274 },
     svg: `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
       <g>
-        <rect x="12" y="6" width="48" height="116" rx="24" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6"/>
+        <rect x="12" y="6" width="48" height="116" rx="24" fill="#2f8fe0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
         <rect x="24" y="26" width="10" height="70" rx="5" fill="#57c9ff" opacity="0.85"/>
-        <rect x="20" y="120" width="32" height="30" rx="7" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="6"/>
-        <path d="M22 152 Q12 180 36 208 Q60 180 50 152 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+        <rect x="20" y="120" width="32" height="30" rx="7" fill="#1c5fa0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+        <path d="M22 152 Q12 180 36 208 Q60 180 50 152 Z" fill="#ffd23f" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
         <path d="M29 158 Q24 178 36 196 Q48 178 43 158 Z" fill="#57c9ff" opacity="0.85"/>
       </g>
       <g transform="translate(128 0)">
-        <rect x="12" y="6" width="48" height="116" rx="24" fill="#2f8fe0" stroke="${OUTLINE}" stroke-width="6"/>
+        <rect x="12" y="6" width="48" height="116" rx="24" fill="#2f8fe0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
         <rect x="24" y="26" width="10" height="70" rx="5" fill="#57c9ff" opacity="0.85"/>
-        <rect x="20" y="120" width="32" height="30" rx="7" fill="#1c5fa0" stroke="${OUTLINE}" stroke-width="6"/>
-        <path d="M22 152 Q12 180 36 208 Q60 180 50 152 Z" fill="#ffd23f" stroke="${OUTLINE}" stroke-width="5" stroke-linejoin="round"/>
+        <rect x="20" y="120" width="32" height="30" rx="7" fill="#1c5fa0" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="6"/>
+        <path d="M22 152 Q12 180 36 208 Q60 180 50 152 Z" fill="#ffd23f" stroke="var(--blip-outline, ${OUTLINE})" stroke-width="5" stroke-linejoin="round"/>
         <path d="M29 158 Q24 178 36 196 Q48 178 43 158 Z" fill="#57c9ff" opacity="0.85"/>
       </g>
     </svg>`,
@@ -759,7 +771,7 @@ export const ACCESSORIES = {
   // for the dressing room, not a measured placement: anchored on the brim
   // (bottom centre) so it rests on his head.
   "wizard-hat": {
-    slot: "hat", img: "wizard-hat.png", widthPct: 41,
+    slot: "hat", img: "wizard-hat.png", widthPct: 41, outlineFollows: true,
     anchor: { x: 0.5, y: 0.95 }, attach: { x: 0.516, y: 0.234 },
   },
   // NB `crown` is already taken by the code-drawn 180g hat, so this one is
@@ -818,7 +830,7 @@ export const ACCESSORIES = {
   "star-chain":     { slot: "neck", img: "star-chain.png",     widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
   "bead-necklace":  { slot: "neck", img: "bead-necklace.png",  widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
   "flower-garland": { slot: "neck", img: "flower-garland.png", widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
-  "medal-choker":   { slot: "neck", img: "medal-choker.png",   widthPct: 104, anchor: { x: 0.5, y: 0.0 } },
+  "medal-choker":   { slot: "neck", img: "medal-choker.png",   widthPct: 104, anchor: { x: 0.5, y: 0.0 }, outlineFollows: true },
   // `pearls` was cut on sight (2026-08-07) and `gold-chain` deleted with it —
   // the chain was a deep U that crossed his eyes at every size tried. Both
   // are gone from the renderer, the labels, the catalogue and disk; the
@@ -1034,7 +1046,7 @@ export const ACCESSORIES = {
   // 0.31 for the same reason flower-crown uses it (Megan, 2026-08-08) —
   // the cap sits ON his head instead of perching above the point.
   "backwards-cap": {
-    slot: "hat", img: "backwards-cap.png", widthPct: 38,
+    slot: "hat", img: "backwards-cap.png", widthPct: 38, outlineFollows: true,
     anchor: { x: 0.5, y: 0.85 }, attach: { x: 0.498, y: 0.32 },
   },
   // Drawn straight-on like the code-drawn eyewear, so it uses the shared
@@ -1073,26 +1085,26 @@ export const ACCESSORIES = {
      ~54 (its closed-arc-and-cheek art reads too big at 70) — both numbers
      from the S3 brief in PROJECT-STATUS "Next up", not re-measured here. */
   "star-eyes": {           // sheet M item 1 — shining eyes + white star
-    slot: "glasses", img: "star-eyes.png", widthPct: 59, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "star-eyes.png", widthPct: 59, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.508, y: 0.519 },
   },
   "angry-eyes": {          // sheet M item 2 — narrow eyes + angled brows
-    slot: "glasses", img: "angry-eyes.png", widthPct: 66, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "angry-eyes.png", widthPct: 66, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.498, y: 0.491 },
   },
   "happy-eyes": {          // sheet M item 3 — closed arcs + rosy cheeks (weakest of the six, Megan may re-roll)
-    slot: "glasses", img: "happy-eyes.png", widthPct: 54, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "happy-eyes.png", widthPct: 54, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
   },
   "lash-eyes": {           // sheet L item 1 — big round eyes, curled lashes, pink eyeshadow
-    slot: "glasses", img: "lash-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "lash-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.5, y: 0.542 },
   },
   "dreamy-eyes": {         // sheet L item 2 — half-closed sleepy eyes, lilac lid
-    slot: "glasses", img: "dreamy-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "dreamy-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.496, y: 0.547 },
   },
   "wink-eyes": {           // sheet L item 3 — one closed, one open
-    slot: "glasses", img: "wink-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true,
+    slot: "glasses", img: "wink-eyes.png", widthPct: 70, anchor: { x: 0.5, y: 0.5 }, mask: true, outlineFollows: true,
     attach: { x: 0.5, y: 0.542 },
   },
 };
@@ -1148,11 +1160,56 @@ function hsvToRgb(h, s, v) {
    body → exact target, gloss stays "paler than the body" in the new hue,
    the near-white eye dot (s≈0) stays white. The anti-alias fringe between
    navy and body (V0.68..0.85) rides a smoothstep ramp instead of a hard
-   cutoff, so no speckles form at the stroke edges. */
+   cutoff, so no speckles form at the stroke edges.
+
+   2026-09-05, THE OUTLINE NOW FOLLOWS THE BODY (her ruling: "automatic
+   outline, eyes follow"; the learner request was that after a colour
+   change the outline stopped being navy). The dark band is no longer
+   "kept exactly": it takes an OUTLINE TARGET derived from the body
+   target by the same relation her own art already holds between its two
+   colours. Measured off the reference pair, body #62ceff over outline
+   #0062ac:
+       HSV   body    h 198.73  s 0.616  v 1.000
+             outline h 205.81  s 1.000  v 0.675
+       HSL   body    h 198.73  S 1.000  L 0.692
+             outline h 205.81  S 1.000  L 0.337
+   Both reference colours sit on the FULLY SATURATED surface (HSL S = 1
+   for each; any colour whose brightest channel is 255, which is what
+   bodyFlatColour normalises every preset to, is there too). So the whole
+   relation is three numbers: rotate the hue +7.09°, go to full
+   saturation, and drop to 67.45% of the body's brightness. Feeding the
+   body blue back through it returns #0062ac exactly, which is the check
+   that the derivation is the art's own and not invented.
+
+   A pure MULTIPLICATIVE reading of the same pair (s × 1.624, the HSV
+   ratio) was tried first and rejected by eye: her presets are pastels
+   (s 0.17–0.42 against the reference body's 0.616), so ×1.624 left every
+   outline at s 0.28-0.68: grey-mauve, grey-olive, a pencil smudge
+   rather than an ink line. The HSL reading gives each preset a deep,
+   properly inked line of its own family, which is what her art does. The
+   two were rendered side by side before choosing (dev run, output lands
+   in the gitignored tools/_out/).
+
+   Per pixel the dark band is treated with the SAME formula shape as the
+   body, just against the outline reference instead of the body one:
+   new_s = outline_s * (s / OUTLINE_REF_S) at each pixel's own V. Since
+   both are 1.0 that leaves each dark pixel's own saturation and value
+   alone and only moves its hue, so the eye ring (s 0.88, V 0.31) stays
+   exactly as much darker-and-softer than the stroke as Megan drew it,
+   and the near-black pupil core (s≈0) stays neutral. The eyes follow the
+   outline because they ARE the outline colour in her art. */
 const BODY_S = 0.616; // saturation of the flat body blue (98,206,255)
 const BODY_V = 1.0; // value of the flat body blue
-const DARK_LO = 0.68; // V at/below this: navy outline / eyes — kept exactly
-const DARK_HI = 0.85; // V at/above this: fully recoloured; between = smoothstep blend
+const DARK_LO = 0.68; // V at/below this: the navy band (outline, eyes, smile)
+const DARK_HI = 0.85; // V at/above this: body/gloss; between = smoothstep blend
+
+/* The body → outline relation, measured off her reference pair (see the
+   comment above). OUTLINE_REF_S is the reference outline's own HSV
+   saturation, the divisor that keeps the dark band's internal ladder. */
+const OUTLINE_HUE_SHIFT = 7.09; // degrees, #62ceff h198.73 → #0062ac h205.81
+const OUTLINE_S = 1.0;          // the outline is fully saturated in its family
+const OUTLINE_V_RATIO = 0.6745; // #0062ac V0.6745 over the flat body's V1.0
+const OUTLINE_REF_S = 1.0;      // saturation of the reference navy #0062ac
 function smoothstep(lo, hi, x) {
   const t = Math.min(1, Math.max(0, (x - lo) / (hi - lo)));
   return t * t * (3 - 2 * t);
@@ -1201,16 +1258,29 @@ function buildRecolouredDataUrl(colourId, baseSrc = BASE_SRC) {
     const data = imgData.data;
     const target = hexToRgb(COLOURS[colourId]);
     const [th, ts] = rgbToHsv(target.r, target.g, target.b);
+    const oh = outlineTargetHue(th); // the derived outline hue for this preset
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] === 0) continue; // transparent
       const [, s, v] = rgbToHsv(data[i], data[i + 1], data[i + 2]);
       const w = smoothstep(DARK_LO, DARK_HI, v);
-      if (w === 0) continue; // dark outline / pupils / smile — untouched
-      const ns = Math.min(1, ts * (s / BODY_S)); // saturation scaled relative to body blue, so paler-than-body stays paler-than-body
-      const [nr, ng, nb] = hsvToRgb(th, ns, v);
-      data[i] = Math.round(data[i] + (nr - data[i]) * w);
-      data[i + 1] = Math.round(data[i + 1] + (ng - data[i + 1]) * w);
-      data[i + 2] = Math.round(data[i + 2] + (nb - data[i + 2]) * w);
+      // TWO targets now, blended by the same ramp: the dark band (w=0) goes
+      // to the derived OUTLINE colour, the body/gloss (w=1) to the body
+      // colour, and the anti-alias fringe between them crosses smoothly,
+      // which is why the ramp had to stay rather than become a hard split.
+      let nr, ng, nb;
+      if (w < 1) {
+        const nsOut = Math.min(1, OUTLINE_S * (s / OUTLINE_REF_S)); // keeps the eye ring softer than the stroke, exactly as drawn
+        [nr, ng, nb] = hsvToRgb(oh, nsOut, v);
+      }
+      if (w > 0) {
+        const nsBody = Math.min(1, ts * (s / BODY_S)); // saturation scaled relative to body blue, so paler-than-body stays paler-than-body
+        const [br, bg, bb] = hsvToRgb(th, nsBody, v);
+        if (w === 1) { nr = br; ng = bg; nb = bb; }
+        else { nr += (br - nr) * w; ng += (bg - ng) * w; nb += (bb - nb) * w; }
+      }
+      data[i] = Math.round(nr);
+      data[i + 1] = Math.round(ng);
+      data[i + 2] = Math.round(nb);
     }
     ctx.putImageData(imgData, 0, 0);
     return canvas.toDataURL("image/png");
@@ -1226,6 +1296,27 @@ export function bodyFlatColour(colourId) {
   const t = hexToRgb(COLOURS[colourId]);
   const [th, ts] = rgbToHsv(t.r, t.g, t.b);
   const [r, g, b] = hsvToRgb(th, ts, BODY_V);
+  return `rgb(${r},${g},${b})`;
+}
+
+/* The hue of the outline that belongs to a body target of hue `th`: the
+   +7.09° her own two colours are apart. Kept as a one-liner so the body
+   pixel pass, the PNG-item pass and the CSS variable can never drift. */
+function outlineTargetHue(th) {
+  return (th + OUTLINE_HUE_SHIFT) % 360;
+}
+
+/* The flat colour the recoloured body's OUTLINE ends up as, the partner
+   of bodyFlatColour above, and what --blip-outline is set to so every
+   code-drawn accessory stroke matches the line on the body. "blue" hands
+   back the constant untouched; running the derivation on the blue body
+   returns that same #0062ac, which verify-store.html checks along with the
+   signature every derived outline shares (max channel 172, min 0). */
+export function outlineFlatColour(colourId) {
+  if (!colourId || colourId === "blue" || !COLOURS[colourId]) return OUTLINE;
+  const t = hexToRgb(COLOURS[colourId]);
+  const [th] = rgbToHsv(t.r, t.g, t.b);
+  const [r, g, b] = hsvToRgb(outlineTargetHue(th), OUTLINE_S, BODY_V * OUTLINE_V_RATIO);
   return `rgb(${r},${g},${b})`;
 }
 
@@ -1312,6 +1403,84 @@ export function tintedImageSrc(src, hex, { darkLo = 0.45, darkHi = 0.65 } = {}) 
   const key = `${src}::${hex}::${darkLo}::${darkHi}`;
   if (!tintCache.has(key)) tintCache.set(key, buildTintedDataUrl(src, hex, darkLo, darkHi));
   return tintCache.get(key);
+}
+
+/* ============================================================
+   PNG ACCESSORY OUTLINES (2026-09-05, same ruling as the body)
+
+   The INVERSE mask of tintedImageSrc: it leaves the bright art alone and
+   moves only the dark navy STROKES onto the body's outline hue, so a
+   Tripo-drawn hat sitting on a pink Blip is inked in the same pink-family
+   line the body now is, not left navy next to it.
+
+   Why it is opt-in per item (`outlineFollows: true` in ACCESSORIES) and
+   hue-gated rather than applied to every PNG. Her item art is NOT all
+   drawn in the SL navy palette. Measured over all 44 item PNGs, the dark
+   pixels of hair-bow are its own dark pink, of gold-shades and snapback
+   the black of a lens and a cap, of butterfly-wing its own deep wing
+   colour. Recolouring those would not follow an outline, it would repaint
+   her drawing. Only items whose dark band is ≥85% navy-family carry the
+   flag, and even inside those the hue gate below skips any dark pixel
+   that is not in the navy family, so a gold buckle or a red gem on a
+   flagged item keeps its own colour.
+   ============================================================ */
+/* The gate, MEASURED over the flagged items rather than assumed. Their
+   strokes are NOT at the base art's 205.8°: the Tripo sheets ink at
+   215–230°, clustered hard on 220°. Centring on 220 with a narrow ±20°
+   window is what lets wizard-hat keep its teal band (180–190°) and its
+   purple shading (255°): a wider "blue family" window ate the teal band
+   and turned the hat two-tone, which is how this number was found.
+   Both edges ramp rather than cut, so an anti-aliased pixel crossing a
+   gate does not leave a seam. */
+const ITEM_STROKE_H = 220;      // hue her Tripo item strokes are drawn at
+const GATE_H_CORE = 14;         // within this many degrees: fully a stroke
+const GATE_H_EDGE = 20;         // beyond this: the item's own colour, left alone
+const GATE_S_LO = 0.30;         // below this a dark pixel is a neutral/black, not an ink stroke
+const GATE_S_HI = 0.45;
+const outlineTintCache = new Map(); // "src::hue" -> Promise<string dataURL>
+
+function buildOutlineTintedDataUrl(src, oh, lo, hi) {
+  return loadBaseImage(src).then((img) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] === 0) continue;
+      const [h, s, v] = rgbToHsv(data[i], data[i + 1], data[i + 2]);
+      let w = 1 - smoothstep(lo, hi, v); // 1 = deep in the stroke, 0 = bright art
+      if (w === 0) continue;
+      let dh = Math.abs(h - ITEM_STROKE_H);
+      if (dh > 180) dh = 360 - dh;
+      w *= 1 - smoothstep(GATE_H_CORE, GATE_H_EDGE, dh); // off-hue = the item's own colour, not a stroke
+      w *= smoothstep(GATE_S_LO, GATE_S_HI, s);          // near-neutral = a black/grey, left alone
+      if (w === 0) continue;
+      const [nr, ng, nb] = hsvToRgb(oh, Math.min(1, OUTLINE_S * (s / OUTLINE_REF_S)), v);
+      data[i] = Math.round(data[i] + (nr - data[i]) * w);
+      data[i + 1] = Math.round(data[i + 1] + (ng - data[i + 1]) * w);
+      data[i + 2] = Math.round(data[i + 2] + (nb - data[i + 2]) * w);
+    }
+    ctx.putImageData(imgData, 0, 0);
+    return canvas.toDataURL("image/png");
+  });
+}
+
+/* Promise<string> of `src` with its navy strokes moved onto `colourId`'s
+   outline hue. "blue" (or anything unknown) resolves to `src` itself, so
+   the default Blip costs no canvas work at all and her art is served
+   byte-for-byte as drawn. Cached per (file, hue) forever. */
+export function outlineTintedImageSrc(src, colourId, { darkLo = 0.45, darkHi = 0.65 } = {}) {
+  if (!colourId || colourId === "blue" || !COLOURS[colourId]) return Promise.resolve(src);
+  const t = hexToRgb(COLOURS[colourId]);
+  const oh = outlineTargetHue(rgbToHsv(t.r, t.g, t.b)[0]);
+  const key = `${src}::${oh.toFixed(2)}::${darkLo}::${darkHi}`;
+  if (!outlineTintCache.has(key)) {
+    outlineTintCache.set(key, buildOutlineTintedDataUrl(src, oh, darkLo, darkHi));
+  }
+  return outlineTintCache.get(key);
 }
 
 /* ============================================================
@@ -1562,7 +1731,7 @@ function ensureStyles() {
 let uidCounter = 0;
 function nextUid() { return "u" + (uidCounter++); }
 
-function makeAccessoryLayer(accId, side) {
+function makeAccessoryLayer(accId, side, colour) {
   const def = ACCESSORIES[accId];
   if (!def) return null;
   // an accessory may carry its own `attach` (single point or [L,R] pair)
@@ -1609,6 +1778,15 @@ function makeAccessoryLayer(accId, side) {
     im.addEventListener("error", () => wrap.remove());
     im.src = `${ITEM_DIR}/${def.img}`;
     wrap.appendChild(im);
+    // Items drawn in the SL navy palette get their strokes moved onto the
+    // body's outline hue (see outlineTintedImageSrc). Same "paint the plain
+    // art now, swap once the canvas is done" pattern the body uses, and a
+    // failure just leaves her original art on screen.
+    if (def.outlineFollows) {
+      outlineTintedImageSrc(im.src, colour)
+        .then((u) => { im.src = u; })
+        .catch(() => { /* keep the plain art */ });
+    }
     return wrap;
   }
   // {{UID}} lets an accessory's own SVG carry internal ids (e.g. a <clipPath>)
@@ -1688,6 +1866,7 @@ export function renderCompanion(el, state = {}) {
   const stage = document.createElement("div");
   stage.className = "blip-stage blip-bop";
   stage.style.setProperty("--blip-fill", bodyFlatColour(colour)); // exact on-body flat colour, so attached ears/arms fills merge seamlessly
+  stage.style.setProperty("--blip-outline", outlineFlatColour(colour)); // every code-drawn accessory stroke reads this, so the whole outfit is inked in the body's own line colour
   el.appendChild(stage);
 
   const layers = {}; // slot -> element (or [left,right] for paired slots)
@@ -1696,8 +1875,8 @@ export function renderCompanion(el, state = {}) {
   for (const slot of SLOT_ORDER) {
     for (const accId of bySlot(slot)) {
       if (Array.isArray(ATTACH[slot])) {
-        const left = makeAccessoryLayer(accId, "left");
-        const right = makeAccessoryLayer(accId, "right");
+        const left = makeAccessoryLayer(accId, "left", colour);
+        const right = makeAccessoryLayer(accId, "right", colour);
         stage.appendChild(left);
         stage.appendChild(right);
         layers[slot] = [left, right];
@@ -1707,7 +1886,7 @@ export function renderCompanion(el, state = {}) {
         if (ACCESSORIES[accId] && ACCESSORIES[accId].mask) {
           stage.appendChild(makeEyeMaskLayer());
         }
-        const single = makeAccessoryLayer(accId, null);
+        const single = makeAccessoryLayer(accId, null, colour);
         stage.appendChild(single);
         layers[slot] = single;
       }
