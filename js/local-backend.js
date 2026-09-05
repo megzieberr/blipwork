@@ -671,6 +671,34 @@ function computeHealth(lastFed, careStreak) {
     locks: { dress: stage >= 2, shop: stage >= 3, gallery: stage >= 3 } };
 }
 
+/* GENTLE RETURN (2026-09-05, her ruling) — mirrors the same block at the top
+   of mhq_get_state. A learner who has been away SEVEN OR MORE days comes back
+   to a well Blip: the sickness clock (last_fed_day) moves to today and the
+   care streak clears. last_cookie_day is DELIBERATELY untouched, so today's
+   free cookie is still there to feed him, and the stage-3 shop/gallery locks
+   are not special-cased (healing to stage 0 lifts them the ordinary way).
+   Returns true exactly once — on the call that did the healing.
+   ⚠️ MUST be called BEFORE touch(): touch() stamps last_active_at with THIS
+   visit, so reading after it would always say "0 days away". Same trap the
+   SQL note warns about.
+   last_active_at is a real ms timestamp while the day fields are this file's
+   own day-index (see today()), so the comparison converts one to the other —
+   which also means __BLIP_DEV__.skipDays(n) ages a learner exactly as it ages
+   the sickness clock. */
+function gentleReturn(sid) {
+  const stAll = read(LS.students, {});
+  const rec = stAll[sid];
+  if (!rec) return false;
+  const lastActiveDay = rec.last_active_at == null ? null : Math.floor(rec.last_active_at / DAY_MS);
+  const daysAway = lastActiveDay == null ? Infinity : today() - lastActiveDay;
+  if (daysAway < 7) return false;
+  if (computeHealth(rec.last_fed_day, rec.care_streak).stage < 2) return false;
+  rec.last_fed_day = today();
+  rec.care_streak = 0;
+  write(LS.students, stAll);
+  return true;
+}
+
 /* Adds the Blipwork fields to a student record in place (mutates); returns
    true if anything was missing/changed, so the caller knows to persist. */
 function ensureBlipFields(s) {
@@ -828,6 +856,30 @@ globalThis.__BLIP_DEV__ = {
   skipDays(n) { const m = read(LS.meta, {}); m.dayOffset = (m.dayOffset || 0) + (Number(n) || 0); write(LS.meta, m); return { dayOffset: m.dayOffset, today: today() }; },
   reset() { const m = read(LS.meta, {}); m.dayOffset = 0; write(LS.meta, m); return { dayOffset: 0, today: today() }; },
   today,
+  /* GENTLE RETURN (2026-09-05): stage the whole "away for a fortnight"
+     situation in one call, then RELOAD the page — the next getState is the
+     one that heals him and returns welcomeBack: true.
+       __BLIP_DEV__.lapse()               // 14 days, the first local learner
+       __BLIP_DEV__.lapse(8, 'lerato_test')
+     It turns the term ON (local meta only, never live) and stamps
+     term_on_since + last_fed_day to today BEFORE skipping the clock, so every
+     day that follows counts as unfed; last_active_at is left where it is,
+     which is what makes the learner read as `days` days away. 14 is the
+     default because ten straight days can hold as few as six weekdays
+     (stage 2) while fourteen always holds at least ten (stage 3, the
+     critical Blip this rule exists for). Undo with .reset(). */
+  lapse(days = 14, username) {
+    const stAll = read(LS.students, {});
+    const rec = username ? Object.values(stAll).find(s => s.username === String(username).toLowerCase()) : Object.values(stAll)[0];
+    if (!rec) return { error: "no student — log in once first" };
+    const m = read(LS.meta, {});
+    m.dayOffset = 0; m.term_running = true; m.term_on_since = null; write(LS.meta, m);
+    m.term_on_since = today(); write(LS.meta, m);
+    rec.last_fed_day = today(); rec.care_streak = 0; write(LS.students, stAll);
+    m.dayOffset = Number(days) || 14; write(LS.meta, m);
+    return { username: rec.username, daysAway: m.dayOffset, today: today(),
+             health: computeHealth(rec.last_fed_day, rec.care_streak) };
+  },
   /* Phase 3: hand yourself a box so the treasure modal can be exercised
      offline without setting an assignment and playing it. Takes the first
      student if no username is given (the usual ?local=1 case). */
@@ -938,6 +990,8 @@ export const LocalBackend = {
   async getState(username, password) {
     const s = verify(username, password);
     if (!s) return { ok: false, error: "auth" };
+    // GENTLE RETURN (2026-09-05) — before touch(), which is this very visit.
+    const welcomeBack = gentleReturn(s.id);
     touch(s.id);
     const stAll = read(LS.students, {});
     const rec = stAll[s.id];
@@ -966,6 +1020,8 @@ export const LocalBackend = {
       blips, shop: shopCatalogue(), foodShop: foodCatalogue(), furnitureShop: furnitureCatalogue(),
       pantry: rec.pantry || {}, tray: rec.tray || {},
       health, canFeedToday, canCareToday, termRunning: running,
+      // GENTLE RETURN (2026-09-05): true only on the call that healed him.
+      welcomeBack,
       // CQ-BRIDGE-PLAN.md Part 3: mirrors mhq_get_state's one new field —
       // the Collect panel renders only when this is true.
       cqLinked: !!rec.cq_name,

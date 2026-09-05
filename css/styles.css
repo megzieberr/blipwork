@@ -1017,6 +1017,19 @@ h2{font-size:20px} h3{font-size:17px}
 @keyframes cookie-hint-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
 @media (prefers-reduced-motion:reduce){.cookie-hint{animation:none}}
 
+/* GENTLE RETURN (2026-09-05) — the one warm line a learner meets after a
+   week or more away. Same tokens as .cookie-hint above (accent bubble, dark
+   ink, the same bob), but it sits in the room header's FLOW and spans the
+   card: the sentence is far too long for the 150px corner bubble, where it
+   would tower over the mood hearts and the tray. Nothing to dismiss — it is
+   in the DOM only on the render the server flagged. */
+.welcome-hint{margin:2px auto 12px;max-width:min(100%,320px);padding:8px 12px;border-radius:var(--r-md);
+  font-family:var(--font-body);font-size:12.5px;line-height:1.35;font-weight:600;text-align:center;
+  color:var(--bg);background:var(--accent);
+  box-shadow:0 0 16px -4px color-mix(in srgb,var(--accent) 75%,transparent);
+  animation:cookie-hint-bob 2.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.welcome-hint{animation:none}}
+
 /* today's tray (room build S4b, 2026-08-08 revision) — cookie + whatever
    groceries were bought today, top-right of the room header, replacing
    the old fridge. */

@@ -537,6 +537,10 @@ export function renderBlip(app, host) {
   if (!blips.some((b) => b.slot === activeSlot)) activeSlot = blips[0].slot;
   const activeBlip = blips.find((b) => b.slot === activeSlot) || blips[0];
   const canFeedToday = cookieReady(state);
+  /* GENTLE RETURN (2026-09-05, her ruling) — the server sets this on the ONE
+     call that heals a learner who has been away 7+ days. Never stored, never
+     dismissed: it is gone on the next state load all by itself. */
+  const welcomeBack = state.welcomeBack === true;
 
   // Room build §1 (2026-08-09, her ruling): home has no back arrow — this
   // IS the landing screen now. The gallery button is the only thing left
@@ -750,6 +754,23 @@ export function renderBlip(app, host) {
   if (mood) titleWrap.appendChild(el("div", "blip-mood", `${mood.icon} ${mood.text}`));
   roomCard.appendChild(titleWrap);
 
+  /* GENTLE RETURN (2026-09-05, her ruling: "a good idea") — one warm line for
+     a learner coming back after a week or more. He is already well by the
+     time this draws (the server healed him on the same call), so the line
+     says what happened rather than asking for anything.
+     Same bubble tokens as the cookie hint below, but in the header FLOW and
+     full width instead of hanging off the cookie: at 375 px this sentence
+     needs the whole card, and in the corner it would tower over the mood
+     hearts, the nickname and the tray. The cookie hint stands down for this
+     one render (see the !welcomeBack test below), so a returning learner
+     meets ONE message, not two — this line points at the cookie anyway.
+     textContent, never innerHTML: the nickname is learner-typed. */
+  if (welcomeBack) {
+    const wb = el("div", "welcome-hint");
+    wb.textContent = `${(blips[0] && blips[0].name) || "Blip"} missed you. He's feeling better today, and a cookie would make his day.`;
+    roomCard.appendChild(wb);
+  }
+
   // ---- daily cookie (top-right) — the household's one free daily feed ----
   const cookieBtn = el("button", "cookie-badge" + (canFeedToday ? "" : " done"), canFeedToday ? "🍪" : "✅");
   cookieBtn.type = "button";
@@ -802,7 +823,9 @@ export function renderBlip(app, host) {
      cookie or for the room behind it. */
   const cookieWrap = el("div", "cookie-wrap");
   cookieWrap.appendChild(cookieBtn);
-  if (canFeedToday) {
+  // `&& !welcomeBack`: on a gentle-return render the welcome line above is
+  // the message, and two bubbles at once is one too many (2026-09-05).
+  if (canFeedToday && !welcomeBack) {
     const hint = el("div", "cookie-hint");
     hint.textContent = `Feed ${(blips[0] && blips[0].name) || "Blip"} his cookie!`; // textContent: a nickname is learner-typed
     hint.setAttribute("aria-hidden", "true");

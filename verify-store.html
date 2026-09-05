@@ -1989,11 +1989,25 @@ for (const o of outfits) {
     // carrier (cq-bridge -> dice -> mood-cravings -> restore-state-keys).
     // mhq_credit_cq/mhq_cq_link are untouched by every later migration and
     // still compare against migration-cq-bridge.sql.
-    const schemaRaw = await (await fetch("./supabase/schema.sql")).text();
-    const restoreRaw = await (await fetch("./supabase/migration-restore-state-keys.sql")).text();
-    const bodySrc = { mhq_get_state: { text: restoreRaw, name: "migration-restore-state-keys.sql" },
-                       mhq_credit_cq: { text: raw, name: "migration-cq-bridge.sql" },
-                       mhq_cq_link:   { text: raw, name: "migration-cq-bridge.sql" } };
+    // Gentle return (2026-09-05) re-created mhq_get_state a FIFTH time — it
+    // adds the 7-day heal at the top of the body and the welcomeBack field —
+    // so the carrier chain is now cq-bridge -> dice -> mood-cravings ->
+    // restore-state-keys -> gentle-return-2026-09-05, and schema.sql's copy
+    // compares against THAT file.
+    // ⚠️ Both sides are newline-normalised first. git here runs with
+    // core.autocrlf=true, so a file that has been through a checkout sits on
+    // disk with CRLF endings while an agent-written migration sits with LF —
+    // and with a raw compare all three of these checks failed on the line
+    // endings alone while every body was in fact identical (found 2026-09-05,
+    // fix-day Build 2). This check is about CONTENT drift; it must not fire
+    // on how a file happened to be written.
+    const nl = (s) => s.replace(/\r\n/g, "\n");
+    const schemaRaw = nl(await (await fetch("./supabase/schema.sql")).text());
+    const gentleRaw = nl(await (await fetch("./supabase/migration-gentle-return-2026-09-05.sql")).text());
+    const bridgeRaw = nl(raw);
+    const bodySrc = { mhq_get_state: { text: gentleRaw, name: "migration-gentle-return-2026-09-05.sql" },
+                       mhq_credit_cq: { text: bridgeRaw, name: "migration-cq-bridge.sql" },
+                       mhq_cq_link:   { text: bridgeRaw, name: "migration-cq-bridge.sql" } };
     for (const fn of ["mhq_get_state", "mhq_credit_cq", "mhq_cq_link"]) {
       const src = bodySrc[fn];
       const migBody = isolateFn(src.text, fn);
@@ -2005,7 +2019,7 @@ for (const o of outfits) {
       }
     }
 
-    say("migration-cq-bridge.sql: cq_xp_credited column + cq_rate=30 seed present; mhq_credit_cq/mhq_cq_link both pin search_path AND are revoked from public/anon/authenticated + granted to service_role only; mhq_get_state carries cqLinked without losing its existing fields; all three re-created function bodies are byte-identical to schema.sql");
+    say("migration-cq-bridge.sql: cq_xp_credited column + cq_rate=30 seed present; mhq_credit_cq/mhq_cq_link both pin search_path AND are revoked from public/anon/authenticated + granted to service_role only; mhq_get_state carries cqLinked without losing its existing fields; all three re-created function bodies are byte-identical to schema.sql (mhq_get_state against its newest carrier, migration-gentle-return-2026-09-05.sql)");
   } catch (e) { tick(false, "could not read/parse supabase/migration-cq-bridge.sql: " + e.message); }
 
   // ================= the collect-cq edge function =================

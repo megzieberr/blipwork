@@ -30,3 +30,7 @@ with the demo learner. They clear the service worker and caches first. Most writ
   The standing bar: A = 0, real C = 0, D = 0.
 - `harness_run.py verify-foo verify-bar …` — runs the browser harness pages headless and prints
   their pass lines.
+- `shoot_welcome.py` — the gentle-return proof shot (fix day, 2026-09-05): stages a 14-day
+  absence with `__BLIP_DEV__.lapse()`, reloads so the app's own state call is the one that heals
+  Blip, and photographs the room with its welcome line to `_out/build2-hub-375.png`. Prints the
+  before/after state either side of the reload, so the picture is not the only evidence.

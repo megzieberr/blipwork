@@ -570,9 +570,36 @@ declare sid uuid; prog jsonb; total int; open_q jsonb; st record; shop jsonb; fo
         blips_j jsonb; blip1 jsonb; health jsonb; stg int; is_qual boolean;
         can_feed boolean; can_care boolean; dice_j jsonb; lvl int;
         asg record; assignment_j jsonb := null; hw_done boolean; mystery int;
+        prev_active timestamptz; prev_fed date; prev_streak int;
+        welcome_back boolean := false;
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  /* GENTLE RETURN (2026-09-05, her ruling: "a good idea"). A learner who has
+     been away SEVEN OR MORE CALENDAR DAYS comes back to a WELL Blip, not a
+     critical one. The sickness clock is meant to nudge a kid who is here; it
+     must never be the thing that greets one who has been away.
+     ⚠️ This block reads last_active_at BEFORE the stamp below — that stamp is
+     THIS visit, so reading after it would always say "0 days away".
+     Heals by moving the sickness clock (last_fed_day) to today and clearing
+     the care streak. last_cookie_day is DELIBERATELY untouched, so today's
+     free cookie is still there to be fed to him. The stage-3 shop and
+     gallery locks are not special-cased here: healing to stage 0 lifts them
+     the ordinary way, and they are otherwise left exactly as they were
+     (her tick, 2026-09-05).
+     welcome_back rides out in the payload so the room can say one warm line;
+     it is true only on THIS call, so the line shows once and is gone on the
+     next state load. */
+  select last_active_at, last_fed_day, care_streak
+    into prev_active, prev_fed, prev_streak
+    from public.students where id = sid;
+  if (prev_active is null or current_date - prev_active::date >= 7)
+     and (public._mhq_health(prev_fed, prev_streak)->>'stage')::int >= 2 then
+    update public.students set last_fed_day = current_date, care_streak = 0 where id = sid;
+    welcome_back := true;
+  end if;
+
   update public.students set last_active_at = now() where id = sid;
   perform public._mhq_ensure_blip(sid);
   select * into st from public.students where id = sid;
@@ -654,6 +681,8 @@ begin
     'blip', blip1, 'blips', blips_j, 'shop', shop, 'foodShop', food, 'furnitureShop', furn,
     'pantry', st.pantry, 'tray', coalesce(st.tray, '{}'::jsonb), 'health', health,
     'canFeedToday', can_feed, 'canCareToday', can_care,
+    -- GENTLE RETURN (2026-09-05): true only on the call that healed him.
+    'welcomeBack', welcome_back,
     'cqLinked', (st.cq_name is not null),
     'dice', dice_j,
     'termRunning', (select coalesce((value = 'true'), false) from public.app_config where key = 'term_running'),
