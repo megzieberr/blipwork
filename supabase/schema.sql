@@ -962,11 +962,15 @@ end; $$;
 
 -- First completion of a quest = full XP; replays = 25% XP (revision always pays,
 -- farming one easy round stays slow). Gold: flat 10 per completed round, every round.
+-- AUDIT 2026-09-05 (migration-audit-2026-09-05.sql): p_score is clamped to
+-- [0, 1] and the XP cap dropped 1000 -> 500 (the largest honest round on
+-- record paid 465). Gold deliberately UNCHANGED — her call that day.
 create or replace function public.mhq_submit_quest(
   p_username text, p_password text, p_quest text,
   p_score numeric, p_xp int, p_total int, p_correct int)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare v_sid uuid; v_was_passed boolean := false; v_now_passed boolean;
+        v_score numeric;
         v_xp_gain int; v_gold_gain int := 10; v_old_xp int; v_new_xp int; v_new_gold int;
         v_old_lvl int; v_new_lvl int;
         v_asg_id uuid; v_box_awarded boolean := false; v_boxes int;
@@ -974,18 +978,21 @@ declare v_sid uuid; v_was_passed boolean := false; v_now_passed boolean;
 begin
   v_sid := public._mhq_auth(p_username, p_password);
   if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
-  v_now_passed := (p_score >= 0.8);
+  -- AUDIT 2026-09-05: a score is a fraction of one round. Clamp it.
+  v_score := greatest(0::numeric, least(coalesce(p_score, 0::numeric), 1::numeric));
+  v_now_passed := (v_score >= 0.8);
   select progress.passed into v_was_passed
     from public.progress where progress.student_id = v_sid and progress.quest_id = p_quest;
   v_was_passed := coalesce(v_was_passed, false);
+  -- AUDIT 2026-09-05: XP cap 1000 -> 500 (largest honest round: 465).
   if v_was_passed then
-    v_xp_gain := round(greatest(0, least(coalesce(p_xp, 0), 1000)) * 0.25)::int;
+    v_xp_gain := round(greatest(0, least(coalesce(p_xp, 0), 500)) * 0.25)::int;
   else
-    v_xp_gain := greatest(0, least(coalesce(p_xp, 0), 1000));
+    v_xp_gain := greatest(0, least(coalesce(p_xp, 0), 500));
   end if;
 
   insert into public.progress (student_id, quest_id, best_score, attempts, total_xp, passed, last_played_at)
-  values (v_sid, p_quest, p_score, 1, v_xp_gain, v_now_passed, now())
+  values (v_sid, p_quest, v_score, 1, v_xp_gain, v_now_passed, now())
   on conflict (student_id, quest_id) do update set
     best_score = greatest(public.progress.best_score, excluded.best_score),
     attempts   = public.progress.attempts + 1,
@@ -1220,61 +1227,63 @@ end; $$;
 -- cream is now just a normal selectable colour; the second blip may be any
 -- colour at hatch); nickname is free-form (never shown publicly), trimmed,
 -- max 24 chars.
-create or replace function public.mhq_equip(
-  p_username text, p_password text, p_equipped jsonb default null,
-  p_colour text default null, p_blip_name text default null, p_slot integer default 1)
-returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+--
+-- ⚠️ MIRRORED FROM LIVE 2026-09-05 (audit fix day). Body below is
+-- pg_get_functiondef output, verbatim. Two annotations that used to live
+-- INSIDE this body, kept here so they are not lost:
+--   * the equip-slot list and shop_items_slot_cat_check further up this file
+--     must agree, or an equipped bed comes back 'bad_equipped' (the July bug);
+--   * `wall` is an ordinary equip slot on purpose — only the CLIENT knows it
+--     swaps the room's background instead of painting a layer on it.
+CREATE OR REPLACE FUNCTION public.mhq_equip(p_username text, p_password text, p_equipped jsonb DEFAULT NULL::jsonb, p_colour text DEFAULT NULL::text, p_blip_name text DEFAULT NULL::text, p_slot integer DEFAULT 1)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
 declare sid uuid; b record; st record; bad int; nm text; v_slot int := coalesce(p_slot, 1);
 begin
   sid := public._mhq_auth(p_username, p_password);
   if sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
   if v_slot not in (1, 2) then v_slot := 1; end if;
   perform public._mhq_ensure_blip(sid);
-  select last_fed_day, care_streak, xp into st from public.students where id = sid;
+  select students.last_fed_day, students.care_streak, students.xp
+    into st from public.students where students.id = sid;
   if (public._mhq_health(st.last_fed_day, st.care_streak)->>'stage')::int >= 2 then
     return jsonb_build_object('ok', false, 'error', 'BLIP_TOO_SICK');
   end if;
-  select owned_items into b from public.blips where student_id = sid and slot = v_slot;
+  select blips.owned_items into b from public.blips where blips.student_id = sid and blips.slot = v_slot;
   if not found then return jsonb_build_object('ok', false, 'error', 'no_blip'); end if;
 
   if p_equipped is not null then
     if jsonb_typeof(p_equipped) <> 'object' then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
     select count(*) into bad from jsonb_each_text(p_equipped) e(k, v)
      where k not in ('hat','ears','glasses','wings','arms','back','effects','neck',
-                     -- room build S5v2 (2026-08-08): the four furniture slots.
-                     -- BOTH this list and shop_items_slot_cat_check above, or
-                     -- an equipped bed comes back 'bad_equipped' (the July bug).
                      'bed','desk','window','door',
-                     -- room decor (2026-08-12): two shelf walls, the bean bag
-                     -- and wallpaper. `wall` is an ordinary equip slot here on
-                     -- purpose — only the CLIENT knows it swaps the room's
-                     -- background instead of painting a layer on it.
                      'shelf-left','shelf-right','beanbag','wall')
         or (coalesce(v, '') <> '' and not b.owned_items ? v);
     if bad > 0 then return jsonb_build_object('ok', false, 'error', 'bad_equipped'); end if;
-    update public.blips set equipped = p_equipped where student_id = sid and slot = v_slot;
+    update public.blips set equipped = p_equipped where blips.student_id = sid and blips.slot = v_slot;
   end if;
 
   if p_colour is not null then
     if p_colour not in ('blue','cream','pink','mint','sky','lilac','peach','lemon','seafoam','coral','lavender')
       then return jsonb_build_object('ok', false, 'error', 'bad_colour'); end if;
-    -- blue is the free starting colour (SL restyle); the first CHANGE away from
-    -- it still requires xp > 0 (the original first-completion reward gate).
     if p_colour <> 'blue' and v_slot = 1 and st.xp <= 0
       then return jsonb_build_object('ok', false, 'error', 'colour_locked'); end if;
-    update public.blips set colour = p_colour where student_id = sid and slot = v_slot;
+    update public.blips set colour = p_colour where blips.student_id = sid and blips.slot = v_slot;
   end if;
 
   if p_blip_name is not null then
     nm := left(btrim(p_blip_name), 24);
     if nm = '' then return jsonb_build_object('ok', false, 'error', 'bad_name'); end if;
-    update public.blips set name = nm where student_id = sid and slot = v_slot;
+    update public.blips set name = nm where blips.student_id = sid and blips.slot = v_slot;
   end if;
 
   return (select jsonb_build_object('ok', true, 'slot', v_slot, 'blip', jsonb_build_object(
-    'name', name, 'colour', colour, 'owned', owned_items, 'equipped', equipped))
-    from public.blips where student_id = sid and slot = v_slot);
-end; $$;
+    'name', blips.name, 'colour', blips.colour, 'owned', blips.owned_items, 'equipped', blips.equipped))
+    from public.blips where blips.student_id = sid and blips.slot = v_slot);
+end; $function$;
 
 -- Showcase gallery: usernames only (never blip nicknames), builds + level, no scores,
 -- alphabetical (deliberately NOT ranked — no rank-shaming). Returns ALL of each
@@ -1329,53 +1338,70 @@ returns jsonb language sql security definer set search_path = public, extensions
   select jsonb_build_object('ok', public._mhq_admin_ok(p_admin_password));
 $$;
 
--- ⚠️ This from-scratch copy predates Phase 3 (see this file's own header) and
--- is still missing the `assignment` field admin.js actually reads on live —
--- a real, pre-existing gap, NOT something this session introduced or fixed
--- (out of scope here; supabase/migration-dice.sql's header names the TRUE
--- live body — migration-phase3.sql's — for the foreman to re-check). Only
--- `dicePlays` is added below, additively, on top of whatever this copy's
--- shape already was.
-create or replace function public.mhq_admin_data(p_admin_password text)
-returns jsonb language plpgsql security definer set search_path = public, extensions as $$
-declare rows jsonb; qs jsonb; strug jsonb; term_on boolean; term_since text; dice_totals jsonb;
+-- ⚠️ MIRRORED FROM LIVE 2026-09-05 (audit fix day). The from-scratch copy
+-- that used to sit here predated Phase 3 and was missing the `assignment`
+-- field admin.js actually reads — the gap its own header warned about. The
+-- body below is pg_get_functiondef output from live, verbatim, so this file
+-- now rebuilds the real admin payload: rows, quests, struggles, term flags,
+-- the live assignment, and the per-chapter dice totals.
+CREATE OR REPLACE FUNCTION public.mhq_admin_data(p_admin_password text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+declare v_rows jsonb; v_qs jsonb; v_strug jsonb; v_term_on boolean; v_term_since text;
+        v_asg record; v_assignment jsonb := null; v_dice jsonb;
 begin
-  if not public._mhq_admin_ok(p_admin_password) then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
 
   select coalesce(jsonb_agg(jsonb_build_object(
       'id', s.id, 'name', s.display_name, 'username', s.username,
       'hasPassword', (s.password is not null),       -- never the hash
       'lastActive', s.last_active_at,
-      'totalXp', coalesce((select sum(total_xp) from public.progress p where p.student_id = s.id), 0),
-      -- Phase 2: household health + primary-blip growth for the roster column
+      'totalXp', coalesce((select sum(p.total_xp) from public.progress p where p.student_id = s.id), 0),
       'health', public._mhq_health(s.last_fed_day, s.care_streak),
       'growthStage', (select public._mhq_growth(b.feed_count) from public.blips b where b.student_id = s.id and b.slot = 1),
       'blipCount', (select count(*) from public.blips b where b.student_id = s.id),
-      'quests', coalesce((select jsonb_object_agg(quest_id, jsonb_build_object(
-                  'best_score', best_score, 'attempts', attempts, 'passed', passed,
-                  'last_played_at', last_played_at)) from public.progress p where p.student_id = s.id), '{}'::jsonb)
+      'quests', coalesce((select jsonb_object_agg(p.quest_id, jsonb_build_object(
+                  'best_score', p.best_score, 'attempts', p.attempts, 'passed', p.passed,
+                  'last_played_at', p.last_played_at)) from public.progress p where p.student_id = s.id), '{}'::jsonb)
     ) order by s.display_name), '[]'::jsonb)
-  into rows from public.students s;
+  into v_rows from public.students s;
 
-  select coalesce(jsonb_agg(jsonb_build_object('quest_id', quest_id, 'is_open', is_open) order by sort), '[]'::jsonb)
-  into qs from public.quests;
+  select coalesce(jsonb_agg(jsonb_build_object('quest_id', quests.quest_id, 'is_open', quests.is_open)
+                            order by quests.sort), '[]'::jsonb)
+  into v_qs from public.quests;
 
-  select coalesce(jsonb_agg(j order by (j->>'count')::int desc), '[]'::jsonb) into strug
-  from (select jsonb_build_object('concept', concept, 'count', sum(count), 'students', count(distinct student_id)) j
+  select coalesce(jsonb_agg(j order by (j->>'count')::int desc), '[]'::jsonb) into v_strug
+  from (select jsonb_build_object('concept', concept, 'count', sum(count),
+                                  'students', count(distinct student_id)) j
         from public.struggles group by concept) t;
 
-  select coalesce((value = 'true'), false) into term_on from public.app_config where key = 'term_running';
-  select value into term_since from public.app_config where key = 'term_on_since';
+  select coalesce((app_config.value = 'true'), false) into v_term_on
+    from public.app_config where app_config.key = 'term_running';
+  select app_config.value into v_term_since
+    from public.app_config where app_config.key = 'term_on_since';
 
-  -- DICE-PLAN.md, session 0b: the ONE new field — per-chapter total across
-  -- the whole class (her admin ruling: "🎲 icon + play count, nothing more").
-  select coalesce(jsonb_object_agg(chapter, total_plays), '{}'::jsonb) into dice_totals
+  select * into v_asg from public.assignments where assignments.active limit 1;
+  if found then
+    v_assignment := jsonb_build_object(
+      'questId', v_asg.quest_id, 'note', v_asg.note,
+      'assignedOn', v_asg.assigned_on, 'dueOn', v_asg.due_on,
+      'doneCount', (select count(*) from public.box_grants
+                     where box_grants.assignment_id = v_asg.id));
+  end if;
+
+  -- DICE-PLAN.md, session 0b: per-CHAPTER total across the whole class.
+  select coalesce(jsonb_object_agg(chapter, total_plays), '{}'::jsonb) into v_dice
     from (select chapter, sum(plays) as total_plays from public.dice_plays group by chapter) t;
 
-  return jsonb_build_object('ok', true, 'rows', rows, 'quests', qs, 'struggles', strug,
-    'inactiveDays', 7, 'termRunning', coalesce(term_on, false), 'termOnSince', term_since,
-    'dicePlays', dice_totals);
-end; $$;
+  return jsonb_build_object('ok', true, 'rows', v_rows, 'quests', v_qs, 'struggles', v_strug,
+    'inactiveDays', 7, 'termRunning', coalesce(v_term_on, false), 'termOnSince', v_term_since,
+    'assignment', v_assignment, 'dicePlays', v_dice);
+end; $function$;
 
 -- Term toggle. Turning ON resets term_on_since = today, which forgives all
 -- accrued sickness (the holiday-proof pause + forgiveness mechanism).
@@ -1482,9 +1508,16 @@ begin
   return jsonb_build_object('ok', true, 'progress', v_progress);
 end; $$;
 
-create or replace function public.mhq_exam_open_part(
-  p_username text, p_password text, p_question_id text, p_part_id text, p_total_parts int)
-returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+-- ⚠️ MIRRORED FROM LIVE 2026-09-05 (audit fix day). The copy that used to
+-- sit here still paid the OLD exam reward (75 XP / 10 gold); live and
+-- js/config.js have both said 50 XP / 5 gold since
+-- migration-exam-xp-50.sql. Body below is pg_get_functiondef, verbatim.
+CREATE OR REPLACE FUNCTION public.mhq_exam_open_part(p_username text, p_password text, p_question_id text, p_part_id text, p_total_parts integer)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
 declare v_sid uuid; v_row record; v_parts jsonb; v_total int;
         v_now_completed boolean := false;
         v_xp_gain int := 0; v_gold_gain int := 0;
@@ -1517,8 +1550,8 @@ begin
   v_now_completed := (jsonb_array_length(v_parts) >= v_total);
 
   if v_now_completed then
-    v_xp_gain := 75;    -- EXAM.xpPerQuestion (js/config.js)
-    v_gold_gain := 10;  -- EXAM.goldPerQuestion (js/config.js)
+    v_xp_gain := 50;    -- EXAM.xpPerQuestion
+    v_gold_gain := 5;   -- EXAM.goldPerQuestion
   end if;
 
   update public.exam_progress
@@ -1547,7 +1580,7 @@ begin
     'xpAwarded', v_xp_gain, 'goldAwarded', v_gold_gain,
     'xp', v_new_xp, 'gold', v_new_gold, 'level', v_new_lvl,
     'levelUp', (v_new_lvl > v_old_lvl), 'levelInfo', public._mhq_level(v_new_xp));
-end; $$;
+end; $function$;
 
 -- ============================================================
 --  💬 FEEDBACK + 📄 PAPERS  (FEEDBACK-PAPERS-BRIEF.md, 2026-08-24)
@@ -1946,6 +1979,294 @@ end; $$;
 revoke execute on function public._mhq_funfun_profile(uuid) from public, anon, authenticated;
 revoke execute on function public._mhq_funfun_quests() from public, anon, authenticated;
 
+-- ============================================================
+--  MIRRORED FROM LIVE 2026-09-05 (audit fix day)
+--  Seven functions that were live but had never been written into this
+--  file: they only existed in their own migration-*.sql. Every body
+--  below is pg_get_functiondef output from the live project, verbatim.
+--
+--  ⚠️ THIS FILE STILL DOES NOT CREATE FOUR OF THE TABLES THEY USE:
+--  public.assignments, public.box_grants, public.loot_table and
+--  public.push_subscriptions. They live in migration-phase3.sql and
+--  migration-push-homework.sql. A from-scratch rebuild therefore needs
+--  those two migrations run as well. Pre-existing gap, noted here on
+--  2026-09-05 rather than silently fixed.
+-- ============================================================
+
+-- Weighted random pick from the loot table for one box kind.
+-- Internal: already sealed to postgres + service_role on live.
+CREATE OR REPLACE FUNCTION public._mhq_roll_loot(p_box text)
+ RETURNS text
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+declare v_total int; v_pick int; v_acc int := 0; v_row record;
+begin
+  select coalesce(sum(loot_table.weight), 0) into v_total
+    from public.loot_table where loot_table.active and loot_table.box = p_box;
+  if v_total <= 0 then return null; end if;
+  v_pick := floor(random() * v_total)::int + 1;
+  for v_row in select * from public.loot_table
+                where loot_table.active and loot_table.box = p_box
+                order by loot_table.sort, loot_table.id loop
+    v_acc := v_acc + v_row.weight;
+    if v_pick <= v_acc then return v_row.id; end if;
+  end loop;
+  return null;
+end; $function$;
+
+-- Open one treasure box. Milestone (mystery) boxes are spent first, then
+-- the ordinary homework ones. A cosmetic the learner already owns falls
+-- back to gold, so a box is never a dud.
+CREATE OR REPLACE FUNCTION public.mhq_open_box(p_username text, p_password text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+declare v_sid uuid; v_st record; v_loot record; v_loot_id text;
+        v_kind text; v_item text; v_amount int; v_is_new boolean := false;
+        v_level int; v_owned jsonb; v_pantry jsonb; v_gold int;
+        v_blips jsonb; v_pending int; v_total int;
+        v_box text := 'assignment'; v_ms int := null;
+        v_mystery jsonb; v_trinkets jsonb;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  perform public._mhq_ensure_blip(v_sid);
+
+  select students.boxes_pending, students.gold, students.xp, students.pantry,
+         students.milestone_boxes, students.trinkets
+    into v_st from public.students where students.id = v_sid for update;
+
+  v_mystery  := coalesce(v_st.milestone_boxes, '[]'::jsonb);
+  v_trinkets := coalesce(v_st.trinkets, '[]'::jsonb);
+
+  if jsonb_array_length(v_mystery) > 0 then
+    v_box := 'milestone';
+    v_ms  := (v_mystery->>0)::int;
+  elsif coalesce(v_st.boxes_pending, 0) < 1 then
+    return jsonb_build_object('ok', false, 'error', 'no_box');
+  end if;
+
+  v_level  := (public._mhq_level(v_st.xp)->>'level')::int;
+  v_pantry := coalesce(v_st.pantry, '{}'::jsonb);
+  v_gold   := v_st.gold;
+
+  v_loot_id := public._mhq_roll_loot(v_box);
+  if v_loot_id is null then return jsonb_build_object('ok', false, 'error', 'no_loot_table'); end if;
+  select * into v_loot from public.loot_table where loot_table.id = v_loot_id;
+
+  v_kind := v_loot.kind;
+  v_item := v_loot.item_id;
+  if v_box = 'milestone' and v_kind = 'gold' then
+    v_amount := v_loot.amount_min * v_ms;
+  else
+    v_amount := v_loot.amount_min + floor(random() * (v_loot.amount_max - v_loot.amount_min + 1))::int;
+  end if;
+
+  if v_kind = 'cosmetic' then
+    select coalesce(blips.owned_items, '[]'::jsonb) into v_owned
+      from public.blips where blips.student_id = v_sid and blips.slot = 1;
+
+    select shop_items.item_id into v_item
+      from public.shop_items
+     where shop_items.active
+       and shop_items.category = 'cosmetic'
+       and (case when v_box = 'milestone' then shop_items.price >= 120
+                 else shop_items.min_level <= v_level end)
+       and not (coalesce(v_owned, '[]'::jsonb) ? shop_items.item_id)
+     order by random()
+     limit 1;
+
+    if v_item is null then
+      v_kind := 'gold'; v_item := null;
+      v_amount := case when v_box = 'milestone' then 10 * v_ms else 20 end;
+    else
+      v_is_new := true;
+      update public.blips
+         set owned_items = coalesce(blips.owned_items, '[]'::jsonb) || to_jsonb(v_item)
+       where blips.student_id = v_sid and blips.slot = 1;
+      v_amount := 1;
+    end if;
+
+  elsif v_kind = 'trinket' then
+    select shop_items.item_id into v_item
+      from public.shop_items
+     where shop_items.active
+       and shop_items.category = 'trinket'
+       and not (v_trinkets ? shop_items.item_id)
+     order by random()
+     limit 1;
+
+    if v_item is null then
+      v_kind := 'gold'; v_item := null; v_amount := 10 * coalesce(v_ms, 1);
+    else
+      v_is_new := true;
+      v_trinkets := v_trinkets || to_jsonb(v_item);
+      v_amount := 1;
+    end if;
+  end if;
+
+  if v_kind = 'gold' then
+    v_gold := v_gold + v_amount;
+  elsif v_kind = 'food' then
+    v_pantry := jsonb_set(v_pantry, array[v_item],
+                  to_jsonb(coalesce((v_pantry->>v_item)::int, 0) + v_amount), true);
+  end if;
+
+  if v_box = 'milestone' then v_mystery := v_mystery - 0; end if;
+
+  update public.students
+     set boxes_pending   = case when v_box = 'milestone'
+                                then students.boxes_pending
+                                else students.boxes_pending - 1 end,
+         milestone_boxes = v_mystery,
+         trinkets        = v_trinkets,
+         gold            = v_gold,
+         pantry          = v_pantry,
+         last_active_at  = now()
+   where students.id = v_sid
+   returning students.boxes_pending into v_pending;
+
+  v_total := coalesce(v_pending, 0) + jsonb_array_length(v_mystery);
+
+  select coalesce(jsonb_agg(jsonb_build_object(
+            'slot', blips.slot, 'name', blips.name, 'colour', blips.colour,
+            'feedCount', blips.feed_count,
+            'growthStage', public._mhq_growth(blips.feed_count),
+            'owned', blips.owned_items, 'equipped', blips.equipped) order by blips.slot), '[]'::jsonb)
+    into v_blips from public.blips where blips.student_id = v_sid;
+
+  return jsonb_build_object('ok', true,
+    'loot', jsonb_build_object('kind', v_kind, 'id', v_item, 'amount', v_amount, 'isNew', v_is_new),
+    'boxKind', v_box, 'milestone', v_ms,
+    'boxes', jsonb_build_object('pending', v_total, 'mystery', jsonb_array_length(v_mystery)),
+    'gold', v_gold, 'pantry', v_pantry, 'trinkets', v_trinkets, 'blips', v_blips);
+end; $function$;
+
+-- Set the one live homework assignment. Only an OPEN quest may be set,
+-- and setting a new one retires the previous one.
+CREATE OR REPLACE FUNCTION public.mhq_admin_set_assignment(p_admin_password text, p_quest_id text, p_due date, p_note text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+declare v_is_open boolean; v_row public.assignments;
+begin
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
+
+  select quests.is_open into v_is_open from public.quests where quests.quest_id = p_quest_id;
+  if v_is_open is null then return jsonb_build_object('ok', false, 'error', 'unknown_quest'); end if;
+  if not v_is_open  then return jsonb_build_object('ok', false, 'error', 'quest_closed'); end if;
+
+  update public.assignments set active = false where assignments.active;
+
+  insert into public.assignments (quest_id, note, due_on)
+  values (p_quest_id, nullif(btrim(coalesce(p_note, '')), ''), p_due)
+  returning * into v_row;
+
+  return jsonb_build_object('ok', true, 'assignment', jsonb_build_object(
+    'questId', v_row.quest_id, 'note', v_row.note,
+    'assignedOn', v_row.assigned_on, 'dueOn', v_row.due_on));
+end; $function$;
+
+-- Retire the live assignment without setting a new one.
+CREATE OR REPLACE FUNCTION public.mhq_admin_clear_assignment(p_admin_password text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+begin
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
+  update public.assignments set active = false where assignments.active;
+  return jsonb_build_object('ok', true);
+end; $function$;
+
+-- The push-notification headline that rides along with the assignment.
+CREATE OR REPLACE FUNCTION public.mhq_admin_set_announce(p_admin_password text, p_title text, p_chapter text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+declare v_n int;
+begin
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
+
+  update public.assignments
+     set announce_title   = nullif(btrim(coalesce(p_title, '')), ''),
+         announce_chapter = nullif(btrim(coalesce(p_chapter, '')), '')
+   where assignments.active;
+  get diagnostics v_n = row_count;
+
+  return jsonb_build_object('ok', true, 'updated', v_n > 0);
+end; $function$;
+
+-- Web-push subscribe / unsubscribe. Keyed on the browser's endpoint, so
+-- re-subscribing on the same device updates rather than duplicates.
+CREATE OR REPLACE FUNCTION public.mhq_push_subscribe(p_username text, p_password text, p_sub jsonb)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+declare v_sid uuid; v_endpoint text;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  v_endpoint := p_sub->>'endpoint';
+  if v_endpoint is null or v_endpoint = '' then
+    return jsonb_build_object('ok', false, 'error', 'bad_subscription');
+  end if;
+
+  insert into public.push_subscriptions (student_id, endpoint, sub)
+  values (v_sid, v_endpoint, p_sub)
+  on conflict (endpoint) do update
+    set student_id = excluded.student_id, sub = excluded.sub;
+
+  return jsonb_build_object('ok', true);
+end; $function$;
+
+CREATE OR REPLACE FUNCTION public.mhq_push_unsubscribe(p_username text, p_password text, p_endpoint text)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'extensions'
+AS $function$
+declare v_sid uuid;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+  delete from public.push_subscriptions
+    where student_id = v_sid and push_subscriptions.endpoint = p_endpoint;
+  return jsonb_build_object('ok', true);
+end; $function$;
+
+-- Six of the seven are called from the browser with the publishable key
+-- (admin.html signs in with a password, exactly like mhq_admin_data).
+-- _mhq_roll_loot is internal and stays sealed.
+grant execute on function
+  public.mhq_open_box(text, text),
+  public.mhq_admin_set_assignment(text, text, date, text),
+  public.mhq_admin_clear_assignment(text),
+  public.mhq_admin_set_announce(text, text, text),
+  public.mhq_push_subscribe(text, text, jsonb),
+  public.mhq_push_unsubscribe(text, text, text)
+to anon, authenticated;
+revoke execute on function public._mhq_roll_loot(text) from public, anon, authenticated;
+grant  execute on function public._mhq_roll_loot(text) to service_role;
+
+
 -- The two SERVICE-ROLE-ONLY wrappers the edge functions call. _mhq_auth and
 -- _mhq_admin_ok are revoked from PUBLIC, and service_role inherits PUBLIC's
 -- grants — so it has no execute on either. These two exist so neither of
@@ -2015,6 +2336,84 @@ revoke execute on function public.mhq_auth_ok(text, text) from public, anon, aut
 grant  execute on function public.mhq_auth_ok(text, text) to service_role;
 revoke execute on function public.mhq_admin_ok_rpc(text) from public, anon, authenticated;
 grant  execute on function public.mhq_admin_ok_rpc(text) to service_role;
+
+-- ============================================================
+--  🔒 AUDIT 2026-09-05 SEAL — supabase/migration-audit-2026-09-05.sql
+--
+--  Ten internal helpers, sealed to postgres + service_role, the same ACL
+--  mhq_auth_ok and mhq_admin_ok_rpc have. None is ever called from a
+--  phone; each one is plumbing behind a real API call.
+--
+--  ⚠️ THE service_role GRANTS ARE LOAD-BEARING. service_role inherits
+--  PUBLIC's rights, so revoking from PUBLIC takes them away from the
+--  server too. The `send-push` edge function calls _mhq_is_qual_day()
+--  and _mhq_health(date, integer) as service_role: without the two
+--  grants below the 07:00 and 17:00 pushes die silently.
+-- ============================================================
+revoke execute on function public._mhq_admin_ok(text)            from public, anon, authenticated;
+revoke execute on function public._mhq_auth(text, text)          from public, anon, authenticated;
+revoke execute on function public._mhq_ensure_blip(uuid)         from public, anon, authenticated;
+revoke execute on function public._mhq_health(date, integer)     from public, anon, authenticated;
+revoke execute on function public._mhq_is_qual_day()             from public, anon, authenticated;
+revoke execute on function public._mhq_tray(jsonb, date)         from public, anon, authenticated;
+revoke execute on function public._mhq_dice_xp(jsonb)            from public, anon, authenticated;
+revoke execute on function public._mhq_growth(integer)           from public, anon, authenticated;
+revoke execute on function public._mhq_level(integer)            from public, anon, authenticated;
+revoke execute on function public.exam_name_key(text)            from public, anon, authenticated;
+
+grant execute on function public._mhq_admin_ok(text)             to service_role;
+grant execute on function public._mhq_auth(text, text)           to service_role;
+grant execute on function public._mhq_ensure_blip(uuid)          to service_role;
+grant execute on function public._mhq_health(date, integer)      to service_role;  -- ⚠️ send-push
+grant execute on function public._mhq_is_qual_day()              to service_role;  -- ⚠️ send-push
+grant execute on function public._mhq_tray(jsonb, date)          to service_role;
+grant execute on function public._mhq_dice_xp(jsonb)             to service_role;
+grant execute on function public._mhq_growth(integer)            to service_role;
+grant execute on function public._mhq_level(integer)             to service_role;
+grant execute on function public.exam_name_key(text)             to service_role;
+
+-- shop_items again. Line 319 above already revokes it, but
+-- migration-store-expansion.sql re-created the table and Postgres handed
+-- the default anon/authenticated grants straight back.
+-- ⚠️ RULE: any migration that drops or re-creates a table MUST re-run
+-- that table's revoke, or the table silently reopens to the public key.
+revoke all on table public.shop_items from anon, authenticated;
+
+-- ============================================================
+--  FUNCTIONS THAT LIVE IN THIS DATABASE BUT **NOT** IN THIS FILE,
+--  ON PURPOSE. Catalogued from live pg_proc on 2026-09-05 so the next
+--  audit does not hunt for them. TWELVE in total.
+--
+--  ELEVEN exam_* RPCs belong to the separate sept2024 check-in site, not
+--  to Blipwork. They share this database; nothing in this repo calls
+--  them. Exact live signatures:
+--    exam_flag_set(text, text, text, integer)
+--    exam_flags_mine(text, text)
+--    exam_flags_set_many(text, text, jsonb)
+--    exam_name_key(text)              <-- the one helper the seal above locks
+--    exam_note_mine(text, text)
+--    exam_note_set(text, text, text)
+--    exam_question_list(text)
+--    exam_teacher_flags(text)
+--    exam_teacher_learners(text)
+--    exam_teacher_notes(text)
+--    exam_teacher_summary(text)
+--
+--  Plus ONE pinger:
+--    keepalive()                      -- the daily anti-auto-pause ping
+--
+--  Sealing exam_name_key does not break that site. Its five callers
+--  (exam_flag_set, exam_flags_mine, exam_flags_set_many, exam_note_mine,
+--  exam_note_set) are all SECURITY DEFINER owned by postgres, so they
+--  run as the owner and reach the helper regardless. Proved live in a
+--  rolled-back transaction on 2026-09-05: with the seal applied, anon's
+--  direct execute on exam_name_key = false while exam_note_mine still
+--  returned its row.
+--
+--  Their definitions live with the site that owns them. Do not add them
+--  here, and do not delete them from live.
+-- ============================================================
+
 
 -- ============================================================
 --  SEED — quests (q1–q3 open) + admin password (default 'admin').

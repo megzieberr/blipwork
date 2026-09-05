@@ -734,7 +734,7 @@ function learnerSection(rows, inactiveDays) {
   head.appendChild(csv);
   sec.appendChild(head);
 
-  sec.appendChild(el("p", "muted small", "Learners sign themselves up. Rounds are grouped by chapter — green = passed (80%+) · orange = attempted, not yet passed · grey = not started. Hover a chip for the chapter, best score and when it was last played. You never see their passwords — reset a forgotten one (they set a new one next login, progress kept) or remove a learner."));
+  sec.appendChild(el("p", "muted small", "Learners pick their name off the roster you seed and set their own password the first time. Rounds are grouped by chapter — green = passed (80%+) · orange = attempted, not yet passed · grey = not started. Hover a chip for the chapter, best score and when it was last played. You never see their passwords — reset a forgotten one (they set a new one next login, progress kept) or remove a learner."));
 
   const table = el("table", "adm-table");
   table.innerHTML = `<thead><tr><th>Name</th><th>Username</th><th>Password</th><th>XP</th><th>Blip</th><th>Rounds (by chapter)</th><th>Last active</th><th></th></tr></thead>`;

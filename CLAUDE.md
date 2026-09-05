@@ -44,11 +44,14 @@ caused real stress. Your job is to be a patient guide, not a terse colleague.
 
 Maths Quest is the **homework app for her Grade 11 maths class** — a quick,
 game-like "recap" tool her learners install on their phones like a normal app
-(a PWA). Learners sign themselves up, play short question rounds ("quests")
-on the chapters she has opened, and get hints, worked solutions and concept
-cards only when they're stuck. She runs the class from an admin page: opening
-and closing quests, watching who's struggling with which concept, and
-resetting forgotten passwords. All 11 chapters are built and live.
+(a PWA). Learners pick their own name off the class roster she seeds, set a
+password the first time, then play short question rounds ("quests") on the
+chapters she has opened, and get hints, worked solutions and concept cards
+only when they're stuck. She runs the class from an admin page: opening and
+closing quests, watching who's struggling with which concept, and resetting
+forgotten passwords. Twelve chapters live in the hub (five on the Term 3 tab,
+seven on Revision), plus two more that exist only inside Exam Focus
+(Euclidean Geometry, Algebraic Expressions) and own no hub quests.
 
 ## Technical map (for you, Claude — translate when discussing)
 
@@ -72,8 +75,10 @@ resetting forgotten passwords. All 11 chapters are built and live.
 - **Data storage**: Supabase (a hosted database with login features).
   Everything goes through `SECURITY DEFINER` RPC functions defined in
   `supabase/schema.sql`; row-level security is on with no policies, so the
-  public key can only call those functions. Learners self-sign-up; passwords
-  are **bcrypt-hashed server-side** (the teacher can only reset, never read).
+  public key can only call those functions. Learners log in off a
+  teacher-seeded roster (name picker, no sign-up, since 2026-08-21);
+  passwords are **bcrypt-hashed server-side** (the teacher can only reset,
+  never read).
 - **Local mode**: with no Supabase reachable, or with `?local=1` on the URL
   (which sticks via localStorage key `mhq.forceLocal` — note: a comment in
   `supabase-config.js` says `cgg.forceLocal`, that's wrong), the app uses
@@ -113,9 +118,13 @@ resetting forgotten passwords. All 11 chapters are built and live.
 - **Sibling repo**: `maths-quest-grade7` ("Wiskunde Avontuur", cloned at
   /workspace/maths-quest-grade7) is her separate Grade 7 app, all content in
   Afrikaans. Separate git history and code, but the same architecture
-  (self-signup + bcrypt RPCs, reactive help, GitHub Pages, service worker) —
+  (bcrypt password RPCs, reactive help, GitHub Pages, service worker) —
   lessons learned in one often apply to the other, but a fix here does not
-  automatically fix it there.
+  automatically fix it there. ⚠️ **The two now differ on login**: Blipwork
+  moved to the teacher-seeded roster picker on 2026-08-21, while the Grade 7
+  app still has learners self-register (checked 2026-09-05: its `js/auth.js`
+  header still reads "self-registrasie"). Don't carry a login assumption
+  from one repo to the other.
 
 ## Decision log — what was chosen and WHY (do not silently reverse these)
 
@@ -133,11 +142,15 @@ resetting forgotten passwords. All 11 chapters are built and live.
   `verify()` proves points sit at real coordinates, forks sum to 1, scales
   are uniform, etc. The `verify-*.html` harnesses exist because hand-drawn
   approximations mislead learners; keep them passing.
-- **Self-signup auth with bcrypt-hashed passwords** (commit e3ec374).
-  Learners create their own username + password; the teacher never sees
+- **Roster login with bcrypt-hashed passwords.** Self-signup was the
+  original design (commit e3ec374); it was REPLACED on 2026-08-21 by the
+  teacher-seeded roster picker ported from Circle Quest
+  (`js/auth.js`, `mhq_list_students` + `mhq_first_login`,
+  `supabase/migration-roster-login.sql`). A learner finds their own name in
+  the list and sets a password the first time. The teacher never sees
   passwords, only "resets" (clears) them so the learner sets a new one and
-  keeps their progress. (The README's old "passwords stored readable" claim
-  predates this — the code wins.)
+  keeps their progress. Two test accounts are hidden from the picker via
+  `students.hidden`. Do not reintroduce a sign-up screen.
 - **Casio-EXCLUSIVE quartiles in the calculator sim; (n+1)/4 school method
   everywhere else** (calculator.js comment + PROJECT-STATUS). The simulator
   matches the real fx-991ZA Plus II key-for-key; quests and box plots use
@@ -184,14 +197,29 @@ resetting forgotten passwords. All 11 chapters are built and live.
 5. **Hyphen vs real minus.** South African learners see a proper minus sign
    (−); plain hyphens leaked into options in 6 skills before the `neg()`
    wrapper fixed it. Use the existing helpers for negative numbers.
-6. **Docs lag the code, and this entry lagged too.** The README's "passwords
-   are readable" claim was fixed long ago; what was still stale on 2026-08-07
-   was `js/admin.js`'s own header comment (now corrected) and a mention of
-   seeding a class list — self-signup means there is no class list. Passwords
-   are bcrypt-hashed and unreadable by anyone, including the teacher.
+6. **Docs lag the code, and this entry has lagged twice.** The README's
+   "passwords are readable" claim was fixed long ago. On 2026-08-07 the stale
+   bits were `js/admin.js`'s header comment and a mention of seeding a class
+   list. On 2026-09-05 the audit found the opposite claim stale everywhere:
+   README, this file and `js/admin.js` still said learners sign themselves up,
+   nine days after the roster picker replaced sign-up. Passwords are
+   bcrypt-hashed and unreadable by anyone, including the teacher. When a
+   login or content change ships, grep the docs for the old wording the same
+   day.
 7. **Local mode ≠ live mode.** Local backend opens all quests and stores to
    localStorage; live seeds new quests CLOSED and stores to Supabase. Test
    in both before declaring something done.
+8. **A migration that drops or re-creates a table silently re-opens it.**
+   Creating a table hands out this project's default grants again, so any
+   `revoke` written for that table earlier in `schema.sql` is undone. Found
+   2026-09-05: `schema.sql` line 319 revokes `shop_items` from anon and
+   authenticated, but `migration-store-expansion.sql` re-created the table
+   and live read `anon=arwdDxtm` for weeks. Nothing leaked (row-level
+   security is on with no policies, so the read came back empty rather than
+   denied) but the door was open. **Rule: every migration that drops or
+   re-creates a table must re-run that table's `revoke` in the same file** —
+   and `revoke` is what makes a probe answer `42501 permission denied`
+   instead of `[]`.
 
 Future sessions: when you hit (and fix) a new one, append it here.
 

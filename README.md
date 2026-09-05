@@ -5,10 +5,16 @@ through the **quests their teacher has opened**, and get reactive help only when
 they're stuck. The teacher opens/closes quests and tracks the class from an admin
 dashboard. Installs to the phone like an app.
 
-Eleven chapters ship today (Statistics, Finance, Probability, 2D Trigonometry,
-Measurement, Functions, Trig Graphs, Analytical Geometry, Number Patterns,
-Exponents & Surds, Equations & Inequalities), split across a **Term 3** and a
-**Revision** tab.
+**Logging in (since 2026-08-21):** there is no sign-up. The teacher seeds the class
+roster; a learner finds their own name in the picker and sets a password the first
+time (or after a teacher reset). The teacher can only clear a password, never read
+one.
+
+Twelve chapters ship in the hub, split across a **Term 3** tab (Statistics, Finance,
+Probability, 2D Trigonometry, Measurement) and a **Revision** tab (Functions, Trig
+Graphs, Analytical Geometry, Number Patterns, Exponents & Surds, Equations &
+Inequalities, General Trig). Two more, **Euclidean Geometry** and **Algebraic
+Expressions**, exist only inside Exam Focus: they own no hub quests of their own.
 
 ## Blip, the companion
 Every learner has a blob companion called **Blip** (renameable). Completed rounds pay
