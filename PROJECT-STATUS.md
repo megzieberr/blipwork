@@ -32,82 +32,7 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 🧮 Calculator: Blipwork is the MASTER copy; Stats Quest copies
   js/calculator.js verbatim (its sw v10 matches v88's calc-memory build).
 
-## Decisions (append-only; entries before 2026-08-30 are in STATUS-ARCHIVE.md)
-- 2026-08-30 (hers): **the game outside Exam Focus must be playable on the
-  phone alone — guided discovery, puzzles, "not feel like they are actually
-  doing math". Exam Focus stays the pen-and-paper place.** This is the bar
-  every future round is audited against.
-- 2026-08-30 (hers): intense multi-step questions get SPLIT into build-steps
-  ("so the kids actually build the questions, not try to do everything in
-  their head") — t3–t7 done that day under it.
-- 2026-08-30 (hers): dead-code deletions were delegated to the auditor's
-  judgment; PROJECT-STATUS.md is head + archive from now on.
-- 2026-08-30 (mine, flagged): tokenpad frames may stack any single-"/" side
-  as a fraction and wrap sides only before a sign; `_trig.js` shuffles are
-  seeded. Both follow existing laws rather than making new ones.
-- 2026-09-02 (hers): methods-day queue approved (fix batch + worked
-  methods), foreman dispatches the workers, and "ship it" at the end.
-- 2026-09-02 (mine, flagged): Escape-to-close = a synthetic click at the
-  scrim, so it can never disagree with the background tap; verify-dice's
-  tokenpad piece-count splits on ANY whitespace (the pad joins with U+2009
-  THIN SPACE — invisible in an editor, lost in copy-paste); np6 +
-  concepts.js rewritten under her standing Gr11 Tₙ = an + c ruling.
-- 2026-09-02 evening (hers): cookie hint approved ("yes go ahead, and add
-  the hub dot too") — this reverses the BADGE half of the 08-08 "no cookie
-  badge on the hub" line; feeding still lives only in the room.
-- 2026-09-02 evening (mine, flagged): the bubble stays visible when
-  groceries are on the tray — a kid feeding groceries but never the cookie
-  is exactly the hint's audience. Cost: bubble clips ~7px of the 5th mood
-  heart in that state, and with a 20+ char nickname clips the wrapped name
-  tail (that long-name overflow predates this change). Her call if she
-  wants it polished or the bubble suppressed on a loaded tray instead.
-- 2026-09-03 (hers): feedback day approved off the kids' first real notes —
-  calc memory build, q2 dig+fix, snapshot plan+build, then "ship it".
-- 2026-09-03 (mine, flagged): a feedback snapshot is CONTENT, not identity —
-  stored for anonymous notes too, same law as `context`; the capture strips
-  name-bearing chrome AND strikes the learner's own name/username out.
-- 2026-09-03 (mine, flagged): calculator state persists until page RELOAD
-  (like a real fx-991ZA put down); no reset between questions, and on a
-  shared device the next kid may see the previous kid's arithmetic — judged
-  harmless, same as sharing a physical calculator.
-- 2026-09-04 (hers): **q2's parabola always-turning-point repetition STAYS**
-  — "it's a good skill to practice".
-- 2026-09-04 (hers): **the app WRITES no inverse-trig notation.** Questions,
-  hints, cards and memos say "SHIFT tan" — the words they say in class;
-  the inverse step is never written in working ("too many fights with
-  teachers over this"). Calculator key faces keep the real fx-991ZA
-  labels. Any tan⁻¹ returning in learner-visible text is a regression.
-- 2026-09-04 (hers): all seven open analytical flags ruled — recorded at
-  the TOP of METHODS-analytical.md Part P (a build session reads that block
-  first); ag5's perpendicular-bisector content draws question shapes from
-  the surveyed paper-bank mds, never re-opening the paper PDFs.
-- 2026-09-04 (hers): gt6.butWhy gets the same ask-then-confirm treatment
-  as the two F1 recall cards.
-- 2026-09-04 (mine, flagged): new `q.revealAfter` = teaching frames held
-  back to the feedback panel; the method panel keeps its "Answer:" header
-  only when the method is stepless. Side effect surfaced to her and kept:
-  the five stats calcdo panels are now pure key-press recipes — the value
-  is read off the learner's own calculator.
-- 2026-09-04 (mine, flagged): ui.js's Escape listener is guarded with
-  `typeof document !== "undefined"` — every node harness imports ui.js via
-  _shared.js and had crashed since d736522.
-- 2026-09-04 evening (hers): **Probability follows the SAG + the IEB memo
-  methods** ("I just follow the SAGs and memo methods"); no booklet memo
-  exists, the app computes its own answers; "given that" is laid out the
-  way the memos do it. Prep before build: one page-cited read of the SAG
-  section + the surveyed papers' probability memo pages into
-  METHODS-probability.md.
-- 2026-09-04 evening (hers): the learner's swipe-back request is approved
-  for build (one Opus worker, graph-quest, sync + ship on her word).
-- 2026-09-04 evening (mine, flagged): swipe-back is a visible "◀ Vorige"
-  button, not a swipe gesture (a swipe fights the drag controls and the
-  phone's edge-swipe); the finished screen is KEPT and shown inert, never
-  re-rendered, so she sees the option she tapped and the feedback she got.
-- 2026-09-04 evening (hers): "ship it" → sw v90 live (look-back sheet).
-- 2026-09-04 evening (mine, flagged): the redo feature CANNOT replay the exact
-  question (unseeded dealing, interactive items carry closures), so REDO-PLAN.md
-  proposes same skill with fresh numbers, no XP, device-local basket; her five
-  rulings are pending.
+## Decisions (append-only; entries before 2026-09-05 are in STATUS-ARCHIVE.md)
 - 2026-09-05 (hers): **no class join code at first login, 4-char minimum
   passwords, default bcrypt cost, no login throttle = DELIBERATE** ("I know my
   kids"), not a security risk. CLOSED, never re-raise.
@@ -125,36 +50,30 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   revoke. `_mhq_is_qual_day` + `_mhq_health` keep an explicit service_role
   grant when sealed (send-push calls them). Her three cleanup calls default to
   LEAVE (art-source tracked, "Hayley's way" wording, root planning docs).
-
 - 2026-09-05 (hers): fix-day ticks a to e all DEFAULT: gold on every submit stays;
   exponential written y = a·b^(x − p) + q; stage-3 shop/gallery lock stays on gentle
   return; the three cleanup calls LEAVE; Fable dispatches the workers (one Opus at a
   time). Term toggle switched OFF for exam season (2026-09-05).
-
 - 2026-09-05 (mine, flagged): gentle return counts CALENDAR days (current_date minus
   last_active_at::date >= 7, UTC like every other date rule); it uses the Blip's
   nickname like the cookie hint does; the welcome line replaces the cookie hint for that
   one render; MOOD is not topped up (he comes back well but with empty hearts). The rule
   is invisible while the Term toggle is OFF, by design.
-
 - 2026-09-05 (mine, flagged): the steepness reminder sits in HINT RUNG 1 (tap 💡, or
   auto-open in Boost), not on the face of the question: q1b is a discovery beat (no
   spoilers on the face) and an always-visible slot would need new play.js + CSS. Her
   call if she wants it always visible. Exam Focus is EN-only (her 2026-08-21 ruling), so
   the concept card has no AF twin. `func-siblings-sketch.js` still writes the hyperbola
   and parabola as (x + p) on purpose ("her p10 order").
-
 - 2026-09-05 (mine, flagged): outline colour = body hue + 7°, full saturation, 67 %
   brightness (measured off her own #62ceff / #0062ac pair), read in HSL not HSV so the
   pastels ink instead of greying. PNG items follow only when flagged `outlineFollows`
   (nine of 44: the rest have their own dark colours, hair-bow, shades, snapback).
   Her eye: LEMON's olive-gold outline and the BACKWARDS-CAP going whole-cap maroon on
   pink; both shown, both reversible one line each.
-
 - 2026-09-05 (hers): "ship after 5, keep both": Builds 1 to 5 ship today as sw v91;
   Build 6 (lazy-load + service worker) runs in a FRESH session as v92; lemon's
   olive-gold outline and the backwards cap recolouring whole STAY.
-
 - 2026-09-05 evening (hers): "ship after 5" honoured → both migrations applied via MCP,
   sw v91 pushed and fetch-verified LIVE. Build 6 and the graph-quest push are separate
   words.
