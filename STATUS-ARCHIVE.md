@@ -1,5 +1,56 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-09-05 — READ-ONLY AUDIT DAY (Fable) + fix-day plans written
+
+Her ask: "audit day... thoroughly and properly... did we mess up, front end and back end,
+any clean up duty, pedagogical suggestions... read only for now." Full record:
+`AUDIT-2026-09-05.md`; the plans that came out of it: `FIX-DAY-2026-09-05-PLAN.md`.
+Nothing in the app, the repo or the database was changed today; two memory files and
+these status files are the only writes. Verdict: nothing broken. Verified clean: live on
+v90, 0 log errors/24 h, cron 9/9, no secrets, RLS + grants right on 18/19 tables, six node
+harnesses green, sweep.py 2 = 1 414 renders A=0 D=0 real C=0, no console errors on live,
+no learner names in tracked files, no dead JS files. Findings: shop_items grants came back
+when a migration re-created the table; ten helper functions anon-executable; schema.sql
+not standalone (3 drift, 7 migration-only, 13 server-only); first load = 307 files/5.0 MB
+before login; sprites 19.6 MB; 1.2 GB screenshots + unpacked git + 101 MB art-source in a
+public repo; docs still say self-signup; exponential concept card has no p (a learner's
+note caught it); steepness never defined; 11/20 Blips sick + 8 shop-locked mid-exams.
+Her rulings today (one-liners in PROJECT-STATUS Decisions): login design deliberate
+(CLOSED); usage low because mid-exams (CLOSED); feedback box = one learner on WhatsApp, no
+reply field (CLOSED); fix queue approved in scope: seal + mirror + clamp, cleanup, WebP,
+lazy-load, p card, steepness reminder, gentle return, outline follows colour (automatic,
+eyes follow). Build-go, migrations and ship still wait for her word on the day.
+Session housekeeping: yesterday's "Blipwork catchup" session renamed to
+"Blipwork — v90 look-back sheet ship + probability rulings"; the preview tool started the
+nwu-summaries server by mistake (wrong launch.json from the ~/.claude cwd) and was stopped.
+
+### Rolled here from the status head today (were current until 2026-09-05)
+- **Live on sw v89** (2026-09-04, her "ship it"; foreman day, 5 Opus workers
+  ≈ 1,25M agent tokens, all four fix rounds + both digests reviewed
+  first-hand before committing): 💬 feedback snapshots show stacked
+  fractions as ONE readable line in the admin fold; the 📖 method panel
+  says the answer once and never opens with it (gtrig F2 + the eq9
+  duplication); gtrig's three self-answering recall cards (gt2.wheelWord,
+  gt6.threeBoxes, gt6.butWhy) now ASK with blanks and hand the filled-in
+  frame back AFTER the answer (new `q.revealAfter` in js/questions.js);
+  gt10's nested-fraction decoy is one bar deep (`flipRatio`, same value,
+  the classic upside-down error); and ALL learner-visible tan⁻¹/sin⁻¹/cos⁻¹
+  notation is gone — the app speaks **"SHIFT tan"** (her ruling; calculator
+  key faces stay the real fx-991ZA). ui.js's Escape listener wears a
+  typeof-document guard so the node verify-*.mjs harnesses run again.
+  Harnesses re-run by the foreman: verify-gtrig 1 043 655/1 043 655,
+  verify-dice 146/146, verify-feedback-snapshot 131/131, dice suite green;
+  cards read by eye at 375 px. **No SQL today.**
+- **Both wave-4 digests are in.** METHODS-analytical.md's Part P now opens
+  with her seven 2026-09-04 rulings — the Analytical chapter is UNBLOCKED
+  (ag5 mines the surveyed paper-bank mds, ag6 stays, both β routes stay,
+  x₂−x₁ formula card, either quad-proof route full marks).
+  METHODS-probability.md is NEW: her 41-page Term 3 booklet digested
+  (14 ink theory pages, 26 blank exercise pages, NO memo pages, 30 flags;
+  transcription spot-checked against rendered pages). The Probability
+  chapter waits ONLY on her two answers under Pending.
+
+
 This file is PROJECT-STATUS.md's history, moved here whole on the
 2026-08-30 audit day (her ask: the status file had grown to 280 KB and
 every session was paying to read it). Nothing was deleted — every entry

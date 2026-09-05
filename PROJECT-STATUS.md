@@ -1,4 +1,4 @@
-# Project status — updated 2026-09-04 evening (🔁 sw v90 LIVE: Fun Functions look-back sheet · earlier 🔧 FIX DAY sw v89: snapshot fractions · method panel · gtrig asks-first · SHIFT tan sweep; both wave-4 digests landed, Analytical UNBLOCKED)
+# Project status — updated 2026-09-05 (🔎 READ-ONLY AUDIT DAY: nothing built, still live on sw v90; findings in AUDIT-2026-09-05.md, six worker briefs in FIX-DAY-2026-09-05-PLAN.md, her rulings recorded below)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,43 +9,25 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **Live on sw v90** (2026-09-04 evening, her "ship it"; fetch-verified: live sw.js
-  reads mhq-v90 and live js/funfun/play.js carries the sheet). Fun Functions gained a
-  **look-back sheet**: after the first Volgende a "◀ Vorige" link sits in the progress
-  row; it opens a read-only sheet showing the finished question exactly as the learner
-  left it (tapped option, ✓/✗, answer, method); ◀ ▶ page through done items; "Terug na
-  my vraag" closes; the stored subtree is inert and sealed. Built by one Opus worker in
-  graph-quest (3f84d87, gq-v34 live), foreman-reviewed (one fallback fix), synced.
-  A learner asked for it in the 💬 box that morning. **No SQL.**
-- **Live on sw v89** (2026-09-04, her "ship it"; foreman day, 5 Opus workers
-  ≈ 1,25M agent tokens, all four fix rounds + both digests reviewed
-  first-hand before committing): 💬 feedback snapshots show stacked
-  fractions as ONE readable line in the admin fold; the 📖 method panel
-  says the answer once and never opens with it (gtrig F2 + the eq9
-  duplication); gtrig's three self-answering recall cards (gt2.wheelWord,
-  gt6.threeBoxes, gt6.butWhy) now ASK with blanks and hand the filled-in
-  frame back AFTER the answer (new `q.revealAfter` in js/questions.js);
-  gt10's nested-fraction decoy is one bar deep (`flipRatio`, same value,
-  the classic upside-down error); and ALL learner-visible tan⁻¹/sin⁻¹/cos⁻¹
-  notation is gone — the app speaks **"SHIFT tan"** (her ruling; calculator
-  key faces stay the real fx-991ZA). ui.js's Escape listener wears a
-  typeof-document guard so the node verify-*.mjs harnesses run again.
-  Harnesses re-run by the foreman: verify-gtrig 1 043 655/1 043 655,
-  verify-dice 146/146, verify-feedback-snapshot 131/131, dice suite green;
-  cards read by eye at 375 px. **No SQL today.**
-- **Both wave-4 digests are in.** METHODS-analytical.md's Part P now opens
-  with her seven 2026-09-04 rulings — the Analytical chapter is UNBLOCKED
-  (ag5 mines the surveyed paper-bank mds, ag6 stays, both β routes stay,
-  x₂−x₁ formula card, either quad-proof route full marks).
-  METHODS-probability.md is NEW: her 41-page Term 3 booklet digested
-  (14 ink theory pages, 26 blank exercise pages, NO memo pages, 30 flags;
-  transcription spot-checked against rendered pages). The Probability
-  chapter waits ONLY on her two answers under Pending.
-- Previous ships: sw v88 (2026-09-03 feedback day: calc memory, q2 snap
-  fix, feedback snapshots, migration applied+verified), v87 (cookie hint),
-  v86 (methods day). 12 hub chapters + 2 exam-only; 🎲 dice on 8 chapters;
-  📝 Exam Focus 7 chapters / 360 cards; 🔔 notifications LIVE (kids not
-  opted in); roster 20, megzieberr visible in the picker by her ruling.
+- **Live on sw v90** (2026-09-04 evening, fetch-verified again 2026-09-05): Fun
+  Functions look-back sheet ("◀ Vorige" opens the finished question read-only,
+  "Terug na my vraag" returns). Built in graph-quest 3f84d87, synced. **No SQL.**
+- **2026-09-05 = read-only audit day (Fable).** Verdict: nothing broken. Verified
+  clean: 0 log errors/24 h, cron 9/9, no secrets, RLS + grants right on 18/19
+  tables, six node harnesses green, `tools/sweep.py 2` = 1 414 renders A=0 D=0
+  real C=0, no console errors on live, no learner names in tracked files, no dead
+  JS. Findings + her rulings: `AUDIT-2026-09-05.md`. Fix queue (approved in
+  scope, NOT started): `FIX-DAY-2026-09-05-PLAN.md` — Build 1 seal + mirror +
+  clamp + cleanup + docs · 2 gentle return · 3 exponential p card + steepness
+  reminder (graph-quest, sync) · 4 outline follows body colour · 5 sprites→WebP ·
+  6 lazy-load + service worker. ≈1.5M agent tokens, one Opus worker at a time,
+  Fable reviews each; sw v91 once at ship.
+- Previous ships: v89 (2026-09-04 fix day: snapshot fractions, method panel, gtrig
+  asks-first, SHIFT tan sweep), v88 (feedback day), v87 (cookie hint), v86
+  (methods day). Both wave-4 digests landed 2026-09-04 (Analytical UNBLOCKED,
+  Probability waits on its prep step). 12 hub chapters + 2 exam-only; 🎲 dice on
+  8 chapters; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live, 9 accounts
+  subscribed; roster 20, megzieberr visible in the picker by her ruling.
 - 🧮 Calculator: Blipwork is the MASTER copy; Stats Quest copies
   js/calculator.js verbatim (its sw v10 matches v88's calc-memory build).
 
@@ -108,7 +90,6 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 2026-09-04 (mine, flagged): ui.js's Escape listener is guarded with
   `typeof document !== "undefined"` — every node harness imports ui.js via
   _shared.js and had crashed since d736522.
-
 - 2026-09-04 evening (hers): **Probability follows the SAG + the IEB memo
   methods** ("I just follow the SAGs and memo methods"); no booklet memo
   exists, the app computes its own answers; "given that" is laid out the
@@ -121,53 +102,69 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   button, not a swipe gesture (a swipe fights the drag controls and the
   phone's edge-swipe); the finished screen is KEPT and shown inert, never
   re-rendered, so she sees the option she tapped and the feedback she got.
-
 - 2026-09-04 evening (hers): "ship it" → sw v90 live (look-back sheet).
 - 2026-09-04 evening (mine, flagged): the redo feature CANNOT replay the exact
   question (unseeded dealing, interactive items carry closures), so REDO-PLAN.md
   proposes same skill with fresh numbers, no XP, device-local basket; her five
   rulings are pending.
+- 2026-09-05 (hers): **no class join code at first login, 4-char minimum
+  passwords, default bcrypt cost, no login throttle = DELIBERATE** ("I know my
+  kids"), not a security risk. CLOSED, never re-raise.
+- 2026-09-05 (hers): low usage = mid-exams, she is deliberately not pushing;
+  the 💬 box is one learner's channel answered on WhatsApp — no reply field,
+  never rebuild the app around one learner. CLOSED.
+- 2026-09-05 (hers): fix queue APPROVED IN SCOPE (see FIX-DAY-2026-09-05-PLAN.md);
+  build-go, migrations and ship still need her word on the day.
+- 2026-09-05 (hers): exponential concept card gets its p; one-line steepness
+  reminder beside the steeper/flatter questions (reminder, not a lesson);
+  gentle return for lapsed learners; **Blip outline follows the body colour:
+  automatic outline, eyes follow.**
+- 2026-09-05 (mine, flagged): the shop_items grants came back because a later
+  migration re-created the table — new gotcha: recreating a table re-runs its
+  revoke. `_mhq_is_qual_day` + `_mhq_health` keep an explicit service_role
+  grant when sealed (send-push calls them). Her three cleanup calls default to
+  LEAVE (art-source tracked, "Hayley's way" wording, root planning docs).
 
 ## ⏳ Pending on Megan
-(one close-and-reopen does it all — v90 carries every earlier version's changes)
+- 💬 1 min [blocking the fix day]: five ticks at the bottom of
+  FIX-DAY-2026-09-05-PLAN.md — gold on pass only? (default no) · exponential
+  written (x − p)? (default yes) · drop the stage-3 shop lock? (default keep) ·
+  the three cleanup calls (default leave) · who dispatches the workers.
+- 💻 1 min [your call]: admin page → Term toggle OFF for exam season — every
+  Blip reads as well while it is off (11 of 20 were sick, 8 shop-locked on
+  2026-09-05); ON restarts the clock from that day.
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v90) → Functions chapter
   → any Fun Functions round → answer one, tap Volgende → tap "◀ Vorige" beside
-  "2 van 10": the finished question comes back read-only with its feedback;
-  "Terug na my vraag" returns you with your live question untouched.
-- 📱 5 min [whenever]: close + reopen Blipwork twice (sw v89) → roll a
-  gtrig round — the bow-tie / three-boxes / but-why cards should ASK
-  (blank "?" corners) and hand the filled frame back after you answer;
-  then tap 📖 on an eq9 question — the answer reads once, not twice.
-- 📱 3 min [whenever]: open Angle of inclination (ag4) and one 2D-trig
-  chain — hints should say "SHIFT tan/sin/cos" everywhere, no ⁻¹ outside
-  the calculator keys.
-- 📱 2 min [whenever]: send yourself a 💬 note from inside a fraction-heavy
-  question (Fun Functions fn1 is ideal) → the admin fold shows the
-  fraction on ONE line. (The v86–v88 spot-checks — calc memory, cookie,
-  six split-day chains — are still unticked if you want them.)
-- 💬 [whenever]: all of C.M.'s notes are read and answered in person (she
-  confirmed 2026-09-04 evening). ONE unread note remains: the anonymous
-  2026-09-04 10:12 UTC swipe-back request from funfun:qK. It SHIPPED in v90:
-  🌐 1 min, mark it read in the admin fold.
+  "2 van 10": the finished question comes back read-only with its feedback.
+- 📱 5 min [whenever]: roll a gtrig round — the bow-tie / three-boxes / but-why
+  cards should ASK and hand the filled frame back after you answer; tap 📖 on
+  an eq9 question — the answer reads once, not twice. (The v86–v88 spot-checks
+  — calc memory, cookie, six split-day chains — are still unticked if you want them.)
+- 🌐 1 min [whenever]: mark the anonymous 2026-09-04 10:12 UTC swipe-back note
+  (funfun:qK) read in the admin fold — or leave it for Build 1's data tidy.
 - 🌐 1 line [your call]: megzieberr is still visible in the class
   name-picker — say the word and I hide it (one SQL line, reversible).
 
 ## Next up
+- **The fix day** — FIX-DAY-2026-09-05-PLAN.md, Builds 1 → 6, on her ticks + her
+  dispatch answer (/foreman step 2). Fable writes the /go block and reviews each
+  build; sw v91 once at ship. Fable's own housekeeping in the same go: trim the
+  80 KB project memory file to a short head (history is already in this repo).
 - **Analytical Geometry dice chapter — UNBLOCKED.** Digest + her seven
   rulings sit in METHODS-analytical.md; ag5 mines the paper-bank mds.
   Needs a build day on her word.
 - **Redo basket ("remember what I got wrong, let me do it again")** — planned, NOT
   built: graph-quest/REDO-PLAN.md (two Opus sessions; her five one-line rulings
-  first; same skill with fresh numbers, no XP, device-local basket). Her word:
-  tomorrow, in another session.
+  first; same skill with fresh numbers, no XP, device-local basket).
 - **Probability dice chapter — UNBLOCKED, one prep step first.** Her rulings
   sit at the TOP of METHODS-probability.md with the file pointers: a worker
   digests the SAG's Gr11 Probability section + the surveyed papers' memo
   working (page-cited) into that file, THEN the build day. Both on her word.
-- **verify-store drift** (pre-existing, measured at HEAD too): the bodies
-  of mhq_get_state / mhq_credit_cq / mhq_cq_link differ between their
-  migration files and schema.sql's mirror-back. Its own small tidy
-  session before the next database day.
+- **verify-store drift — re-measured 2026-09-05:** live == schema.sql for
+  mhq_get_state / mhq_credit_cq / mhq_cq_link; the OLDER migration files are the
+  stale side (expected). The real mirror gaps are the 3 drifted + 7 missing
+  functions, covered by Build 1 step A4. verify-store's assertion should be
+  re-pointed at live-vs-schema in that build.
 - Remaining wave-4 blockers: Measurement (engine ruling), Trig Graphs
   (Soek-die-fout mechanic landing in graph-quest first).
 - (carried) CRON_SECRET tidy-up offer; banked play.js method-link gate
