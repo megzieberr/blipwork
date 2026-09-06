@@ -31,9 +31,15 @@
    saveResult NEVER names an XP amount — it hands over the per-item
    outcomes and the server recomputes (the dice's rule, brief D2).
    ============================================================ */
-import { mountFunFunctions } from "./funfun/mount.js";
-import { getQuest } from "./funfun/quests/index.js";
-import { L, setLang } from "./funfun/i18n.js";
+/* LAZY (fix day Build 6, 2026-09-06). js/app.js imports this file at boot,
+   so these three static imports pulled all 0.65 MB of the synced
+   graph-quest copy before the login screen drew, for a strip that lives on
+   ONE chapter. They are fetched when a Fun Functions round actually starts,
+   once, and remembered in FF below. NOTHING under js/funfun/ is edited:
+   only the moment it is asked for moved. funfunShadow() below stays fully
+   synchronous, because verify-funfun.html imports it and mounts exactly the
+   way this screen does. */
+import { lazyImport } from "./lazy.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { el, showToast } from "./ui.js";
@@ -85,6 +91,30 @@ export function funfunShadow(hostEl) {
   return { shadow, rootEl, ready };
 }
 
+/* ---------------- the graph-quest modules, fetched once ----------------
+   The same three-module set js/screens.js's strip needs; each file is
+   fetched once per page load and the browser's own module cache means the
+   two callers share it. A failed fetch clears FF_LOADING, and js/lazy.js
+   is what makes the next try reach the network instead of replaying the
+   failure the browser remembers. */
+let FF = null;                        // { mountFunFunctions, getQuest, L, setLang }
+let FF_LOADING = null;
+
+function loadFunfunModules() {
+  if (FF) return Promise.resolve(FF);
+  if (!FF_LOADING) {
+    FF_LOADING = Promise.all([
+      lazyImport(new URL("./funfun/mount.js", import.meta.url).href),
+      lazyImport(new URL("./funfun/quests/index.js", import.meta.url).href),
+      lazyImport(new URL("./funfun/i18n.js", import.meta.url).href),
+    ]).then(([mount, quests, i18n]) => {
+      FF = { mountFunFunctions: mount.mountFunFunctions, getQuest: quests.getQuest, L: i18n.L, setLang: i18n.setLang };
+      return FF;
+    }).catch(err => { FF_LOADING = null; throw err; });
+  }
+  return FF_LOADING;
+}
+
 /* ---------------- the live mount ----------------
    Module-level on purpose: exactly one Fun Functions quest may be alive
    at a time, and app.js's go() tears it down on EVERY navigation. */
@@ -100,11 +130,24 @@ export function destroyFunfunMount() {
 /* ---------------- the screen ---------------- */
 export function renderFunfunPlay(app, host, params) {
   const { chapter, questId } = params || {};
-  const q = getQuest(questId);
   const sess = getSession();
   const toChapter = () => app.go("chapter", { chapterId: chapter && chapter.id });
 
-  if (!q || !chapter || !sess) { toChapter(); return; }
+  if (!chapter || !sess) { toChapter(); return; }
+  /* The modules are normally already in: the strip that offered this tile
+     loaded them to draw its own titles, so this resolves on the same tick
+     and the screen builds without a flicker. A fetch that fails walks back
+     to the chapter (which is still on screen behind nothing) with the app's
+     own line, never a blank play screen. */
+  if (!FF) {
+    loadFunfunModules()
+      .then(() => { if (host.isConnected) renderFunfunPlay(app, host, params); })   // walked off mid-fetch
+      .catch(() => { showToast("Can't reach the server — try again.", "error"); toChapter(); });
+    return;
+  }
+  const { mountFunFunctions, getQuest, L, setLang } = FF;
+  const q = getQuest(questId);
+  if (!q) { toChapter(); return; }
 
   /* whatever was alive is not this — a stale handle here would mean two
      live mounts, which is the one thing D8 forbids outright */

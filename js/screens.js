@@ -1,9 +1,17 @@
 /* Hub (chapter blocks), chapter (quest map, gated by open/closed) and results. */
 import { CHAPTERS, chapterById, questAccent, PASS, CQ_URL, DICE_CHAPTERS, FUNFUN_ENABLED, PAPERS_ENABLED, EXAM_CHAPTERS, examChapters, examChapterById } from "./config.js";
-import { questDef } from "./quests/index.js";
-import { dicePool } from "./quests/dice-pools.js";
+/* LAZY CONTENT (fix day Build 6, 2026-09-06). This file used to import
+   js/quests/index.js, js/quests/dice-pools.js, js/exam/index.js and three
+   js/funfun/ modules at the top: 93 quest modules, 8 dice pools and every
+   exam card, all fetched before the login screen could draw. It now asks
+   the two loaders for one chapter's worth at a time, and the funfun modules
+   only when the Functions chapter opens. The registries themselves are
+   untouched: the verify pages and the tools still import them directly. */
+import { loadQuest, loadChapterQuests, questRegistered, questMeta, hasDicePool } from "./quests/load.js";
 import { openDiceRound } from "./dice-play.js";
-import { examQuestionsForTopic, examFirstCardForSkill } from "./exam/index.js";
+import { loadExamChapter, peekExamChapter } from "./exam/load.js";
+import { cardsForTopic, firstCardForSkill } from "./exam/_registry.js";
+import { lazyImport } from "./lazy.js";
 import { skillsForChapter, isLevel4Skill } from "./exam/skills.js";
 import { getExamLang, uiStr } from "./exam/lang.js";
 import { api } from "./api.js";
@@ -20,10 +28,31 @@ import { mountPapers } from "./papers.js";
    graph-quest app (generated output, never hand-edited). Only three things
    are read from it here: the quest list, its grandfathered unlock rule, and
    its bilingual-string resolver. Everything else about a Fun Functions quest
-   happens inside the shadow root js/funfun-play.js builds. */
-import { QUESTS as FF_QUESTS } from "./funfun/quests/index.js";
-import { questUnlocked as ffUnlocked } from "./funfun/screens.js";
-import { L as ffL, setLang as ffSetLang } from "./funfun/i18n.js";
+   happens inside the shadow root js/funfun-play.js builds.
+
+   LAZY (2026-09-06): those three modules pull 0.65 MB of graph-quest behind
+   them, and only ONE chapter (Functions) ever shows the strip. They are
+   fetched when that chapter opens, once, and remembered in FF below:
+   NOTHING under js/funfun/ is edited, only when it is asked for. */
+let FF = null;                 // { QUESTS, questUnlocked, L, setLang }, once in
+let ffLoading = null;
+
+function loadFunfun() {
+  if (FF) return Promise.resolve(FF);
+  if (!ffLoading) {
+    ffLoading = Promise.all([
+      lazyImport(new URL("./funfun/quests/index.js", import.meta.url).href),
+      lazyImport(new URL("./funfun/screens.js", import.meta.url).href),
+      lazyImport(new URL("./funfun/i18n.js", import.meta.url).href),
+    ]).then(([quests, ffScreens, i18n]) => {
+      FF = { QUESTS: quests.QUESTS, questUnlocked: ffScreens.questUnlocked, L: i18n.L, setLang: i18n.setLang };
+      return FF;
+    /* cleared so a second visit to the chapter tries again, and js/lazy.js
+       is what makes that second try actually reach the network */
+    }).catch(err => { ffLoading = null; throw err; });
+  }
+  return ffLoading;
+}
 
 /* Fun Functions' L() reads a MODULE-LEVEL language that defaults to Afrikaans
    (its standalone remembers the learner's toggle in localStorage under
@@ -32,8 +61,14 @@ import { L as ffL, setLang as ffSetLang } from "./funfun/i18n.js";
    once opened the standalone would otherwise see Afrikaans quest names here.
    Brief D6: blipwork is English and never shows the toggle. `persist:false`
    is the mount's own idiom: set it for this read only, never write it back
-   into the shared key. */
-const ffTitle = (q) => { ffSetLang("en", { persist: false }); return ffL(q.title); };
+   into the shared key. Only ever called once loadFunfun() has resolved. */
+const ffTitle = (q) => { FF.setLang("en", { persist: false }); return FF.L(q.title); };
+
+/* The one message a failed lazy load shows. Deliberately the app's OWN
+   existing wording (js/blip.js uses it for every failed round trip): a
+   learner meets no new sentence because a module was slow, and the screen
+   they are on stays usable. */
+const LOAD_FAILED = "Can't reach the server — try again.";
 
 /* ---------------- Phase 2 helpers (mirrors blip.js's normalizers —
    duplicated rather than shared, since this file and blip.js are each
@@ -367,13 +402,19 @@ export function renderChapter(app, host, params) {
 
   const grid = el("div", "quest-grid");
 
+  /* Warm this chapter's quest modules while the learner is still reading
+     the map, so tapping a card is instant (fix day Build 6). Failures are
+     ignored on purpose: this is a prefetch, and the card's own click
+     handler below is what actually reports a load that will not come. */
+  loadChapterQuests(ch.id).catch(() => {});
+
   // DICE-PLAN.md 🎲 — visible only when this chapter is BOTH allow-listed
   // (config.js DICE_CHAPTERS) AND has a pool wired (js/quests/dice-pools.js).
   // NEVER locked, regardless of quest gating above — a kid who skips
   // straight to dice practice is a kid practising maths (her ruling).
   // Learner-facing and deliberately stat-free: no best score, no streak —
   // just the card itself and the round's own results screen after.
-  if (DICE_CHAPTERS.includes(ch.id) && dicePool(ch.id)) {
+  if (DICE_CHAPTERS.includes(ch.id) && hasDicePool(ch.id)) {
     const dcard = el("div", "quest dice-card");
     dcard.style.setProperty("--qc", ch.signature);
     dcard.innerHTML = `
@@ -401,8 +442,10 @@ export function renderChapter(app, host, params) {
 
   quests.forEach(q => {
     const accent = questAccent(ch, q.n);
-    const def = questDef(q.id);
-    const playable = q.built && !!def;
+    /* "Is there a def for this id?" is all the card needs to know while it
+       draws: questRegistered answers it without importing the quest
+       (fix day Build 6). The def itself is fetched on the tap below. */
+    const playable = q.built && questRegistered(q.id);
     const prog = progressOf(app, q.id);
     const card = el("div", "quest" + (playable ? "" : " locked"));
     card.style.setProperty("--qc", accent);
@@ -413,7 +456,16 @@ export function renderChapter(app, host, params) {
       <h3>${q.title}</h3>
       <p>${q.blurb || ""}</p>
       <div class="qstate"><span class="led"></span>${state}</div>`;
-    if (playable) card.addEventListener("click", () => app.go("play", { chapter: ch, quest: q, def, accent }));
+    /* The tap fetches the quest (usually already warmed by the prefetch
+       above, so it opens on the same frame). Her double-submit rule: the
+       busy flag goes on BEFORE the await, so a second tap does nothing. */
+    if (playable) card.addEventListener("click", () => {
+      if (card.classList.contains("busy")) return;
+      card.classList.add("busy");
+      loadQuest(q.id)
+        .then(def => app.go("play", { chapter: ch, quest: q, def, accent }))
+        .catch(() => { card.classList.remove("busy"); showToast(LOAD_FAILED, "error"); });
+    });
     grid.appendChild(card);
   });
   host.appendChild(grid);
@@ -438,13 +490,13 @@ function funfunStrip(app, ch) {
   const tiles = block.querySelector(".ff-tiles");
 
   const paint = (profileIn, note) => {
-    if (!block.isConnected) return;                 // the learner walked off mid-fetch
+    if (!block.isConnected || !FF) return;          // the learner walked off mid-fetch
     const profile = { quests: (profileIn && profileIn.quests) || {}, met: (profileIn && profileIn.met) || {} };
     tiles.textContent = "";
     if (note) block.insertBefore(el("p", "muted small ff-strip-msg", note), tiles);
-    FF_QUESTS.forEach((q, i) => {
+    FF.QUESTS.forEach((q, i) => {
       const st = profile.quests[q.id] || {};
-      const locked = !ffUnlocked(profile, i);
+      const locked = !FF.questUnlocked(profile, i);
       // `best` is a 0..1 fraction (see migration-funfun.sql / local-backend.js)
       const pct = st.plays > 0 ? Math.round((st.best || 0) * 100) : null;
       const tile = el("button", "ff-tile" + (locked ? " locked" : ""));
@@ -464,10 +516,19 @@ function funfunStrip(app, ch) {
   const sess = getSession();
   const blank = { quests: {}, met: {} };
   const offline = "Couldn’t load your Fun Functions progress — only the first quest is open until it loads.";
-  if (!sess) { paint(blank, offline); return block; }
-  api.funfunState(sess.username, sess.password)
-    .then(r => (r && r.ok) ? paint(r) : paint(blank, offline))
-    .catch(() => paint(blank, offline));
+
+  /* Two things have to be in before a tile can be drawn: the graph-quest
+     modules (lazy since 2026-09-06) and the learner's profile. The profile
+     failing is the old, gentle case: the strip still draws, with the line
+     above. The MODULES failing means there are no tiles to draw at all, so
+     the strip takes itself off the screen and says so once in a toast; the
+     chapter's own quests and its 🎲 card are untouched and still play. */
+  const modules = loadFunfun();
+  const profile = !sess ? Promise.resolve(null)
+    : api.funfunState(sess.username, sess.password).then(r => (r && r.ok) ? r : null).catch(() => null);
+
+  modules.then(() => profile).then(r => (r ? paint(r) : paint(blank, offline)))
+    .catch(() => { block.remove(); showToast(LOAD_FAILED, "error"); });
   return block;
 }
 
@@ -485,7 +546,17 @@ function funfunStrip(app, ch) {
    click handler (which needs the SAME progress map to resolve
    examFirstCardForSkill's "first not-completed card" rule) — a learner
    tapping a tile before the fetch settles still gets exactly one network
-   call, not two. */
+   call, not two.
+
+   LAZY CARDS (fix day Build 6, 2026-09-06): this chapter's cards are
+   fetched by js/exam/load.js when this screen opens, not at boot. The
+   chapter heading and its back arrow are drawn FIRST and the tiles as
+   soon as the cards are in, so there is never a blank screen and the way
+   out is on the page from the first frame. When the cards are already in
+   memory, which is every verify page (js/exam/index.js seeds the loader's
+   cache as it validates) and every second visit, the tiles are drawn on
+   the same tick, so
+   nothing about this screen became asynchronous for the harnesses. */
 export function renderExamChapter(app, host, params) {
   const ch = examChapterById(params.chapterId);   // CHAPTERS + EXAM_ONLY_CHAPTERS (2026-08-22)
   if (!examChapterEligible(app, ch)) return app.go("hub");   // build flag AND an open quest (session E)
@@ -524,49 +595,58 @@ export function renderExamChapter(app, host, params) {
     ? api.examState(sess.username, sess.password).then(res => (res && res.ok) ? (res.progress || {}) : {}).catch(() => ({}))
     : Promise.resolve({});
 
-  const grid = el("div", "exam-skill-grid");
-  skills.forEach(skill => {
-    const cards = examQuestionsForTopic(ch.id, skill.id);
-    const empty = !cards.length;
-    /* The Level 4 tile is its own thing: full width across the bottom of
-       the grid, amber rather than the chapter's own colour, and a
-       one-line note under the label saying what it is for. It still goes
-       muted / "coming soon" with no cards, exactly like any other tile —
-       nothing about being the brave round makes it tappable early. */
-    const isL4 = isLevel4Skill(skill.id);
-    const card = el("div", "quest exam-skill-card" + (isL4 ? " exam-tile-l4" : "") + (empty ? " locked" : ""));
-    card.style.setProperty("--qc", isL4 ? L4_ACCENT : ch.signature);
-    card.innerHTML = `<h3>${skill.label}</h3>`
-      + (isL4 ? `<p class="muted small exam-tile-l4-note">mixed hard questions — for when the basics sit</p>` : "")
-      + `<p class="muted small exam-skill-count">${empty ? ui.comingSoon : `${cards.length} card${cards.length === 1 ? "" : "s"}`}</p>`;
-    if (!empty) {
-      card.addEventListener("click", () => {
-        if (card.classList.contains("busy")) return;   // double-submit rule
-        card.classList.add("busy");
-        progressPromise.then(progress => {
-          card.classList.remove("busy");
-          const first = examFirstCardForSkill(ch.id, skill.id, progress);
-          if (!first) return;   // shouldn't happen (cards.length > 0 checked above) — never a dead end
-          app.go("examPlay", {
-            chapter: ch, skillId: skill.id, question: first, accent: ch.signature,
-            onBack: () => app.go("examChapter", { chapterId: ch.id }),
+  /* Warm cache → draw now, on this tick. Cold → draw as soon as the cards
+     land. A load that never lands leaves the heading and its back arrow on
+     screen and says so once. */
+  const warm = peekExamChapter(ch.id);
+  if (warm) paintTiles(warm);
+  else loadExamChapter(ch.id).then(paintTiles).catch(() => showToast(LOAD_FAILED, "error"));
+
+  function paintTiles(chapterCards) {
+    const grid = el("div", "exam-skill-grid");
+    skills.forEach(skill => {
+      const cards = cardsForTopic(chapterCards, skill.id);
+      const empty = !cards.length;
+      /* The Level 4 tile is its own thing: full width across the bottom of
+         the grid, amber rather than the chapter's own colour, and a
+         one-line note under the label saying what it is for. It still goes
+         muted / "coming soon" with no cards, exactly like any other tile —
+         nothing about being the brave round makes it tappable early. */
+      const isL4 = isLevel4Skill(skill.id);
+      const card = el("div", "quest exam-skill-card" + (isL4 ? " exam-tile-l4" : "") + (empty ? " locked" : ""));
+      card.style.setProperty("--qc", isL4 ? L4_ACCENT : ch.signature);
+      card.innerHTML = `<h3>${skill.label}</h3>`
+        + (isL4 ? `<p class="muted small exam-tile-l4-note">mixed hard questions — for when the basics sit</p>` : "")
+        + `<p class="muted small exam-skill-count">${empty ? ui.comingSoon : `${cards.length} card${cards.length === 1 ? "" : "s"}`}</p>`;
+      if (!empty) {
+        card.addEventListener("click", () => {
+          if (card.classList.contains("busy")) return;   // double-submit rule
+          card.classList.add("busy");
+          progressPromise.then(progress => {
+            card.classList.remove("busy");
+            const first = firstCardForSkill(chapterCards, skill.id, progress);
+            if (!first) return;   // shouldn't happen (cards.length > 0 checked above) — never a dead end
+            app.go("examPlay", {
+              chapter: ch, skillId: skill.id, question: first, accent: ch.signature,
+              onBack: () => app.go("examChapter", { chapterId: ch.id }),
+            });
           });
         });
-      });
-    }
-    grid.appendChild(card);
-  });
-  host.appendChild(grid);
+      }
+      grid.appendChild(card);
+    });
+    host.appendChild(grid);
 
-  fillWorkedCounts(ch.id, skills, grid, ui, progressPromise);
+    fillWorkedCounts(chapterCards, skills, grid, ui, progressPromise);
+  }
 }
 
-async function fillWorkedCounts(chapterId, skills, grid, ui, progressPromise) {
+async function fillWorkedCounts(chapterCards, skills, grid, ui, progressPromise) {
   const progress = await progressPromise;
   if (!progress || !Object.keys(progress).length) return;   // offline / no session — leave "n cards" showing
   const cards = [...grid.querySelectorAll(".exam-skill-card")];
   skills.forEach((skill, i) => {
-    const qs = examQuestionsForTopic(chapterId, skill.id);
+    const qs = cardsForTopic(chapterCards, skill.id);
     if (!qs.length) return;   // "coming soon" tiles keep their own text
     const done = qs.filter(q => progress[q.id] && progress[q.id].completed).length;
     const line = cards[i] && cards[i].querySelector(".exam-skill-count");
@@ -595,7 +675,7 @@ export function renderResults(app, host, params) {
     <div class="result-reward system-notice"><span class="sys-label">Reward</span><div class="sys-value">+${xpAwarded ?? 0} XP · +${goldAwarded ?? 0} <span class="crystal">💎</span></div></div>
     <div class="result-msg ${passed ? "good" : "warn"}">${passed ? "Quest passed — badge earned!" : "So close! Get 80% right first-time to earn the badge."}</div>
     ${badgeEarned ? `<div class="badge-pop"><span class="bi">${chapter.icon}</span>${quest.title} mastered</div>` : ""}
-    ${alreadyPassed ? `<div class="result-msg">${(questDef(quest.id) || {}).xpOnce ? "Replay of a discovery round — it paid its XP the first time; this one was free practice." : "Replay — already mastered, so this round paid a smaller XP top-up."}</div>` : ""}
+    ${alreadyPassed ? `<div class="result-msg">${(questMeta(quest.id) || {}).xpOnce ? "Replay of a discovery round — it paid its XP the first time; this one was free practice." : "Replay — already mastered, so this round paid a smaller XP top-up."}</div>` : ""}
     ${levelUp ? `<div class="result-levelup system-notice"><span class="sys-label">System</span><div class="sys-value"><span class="sparkle tw">✦</span> LEVEL UP — LV. ${level} <span class="sparkle tw">✦</span></div>${unlockedItem ? `<div class="sys-sub">New unlock: ${itemLabel(unlockedItem)}${unlockedCount > 1 ? ` +${unlockedCount - 1} more in the shop` : ""}</div>` : ""}</div>` : ""}
     <div class="result-actions"></div>`;
 
@@ -624,8 +704,21 @@ export function renderResults(app, host, params) {
   }
 
   const actions = card.querySelector(".result-actions");
-  const mk = (label, primary, fn) => { const b = el("button", "btn " + (primary ? "primary" : "ghost"), label); b.addEventListener("click", fn); actions.appendChild(b); };
-  const replay = () => app.go("play", { chapter, quest, def: questDef(quest.id), accent });
+  // the handler is handed its own button, so replay() can disable it
+  const mk = (label, primary, fn) => { const b = el("button", "btn " + (primary ? "primary" : "ghost"), label); b.addEventListener("click", () => fn(b)); actions.appendChild(b); };
+  /* "Play again" / "Try again" hands the player the WHOLE def, which is
+     more than a flag, so it awaits the loader rather than copying quest
+     content into the sync map (fix day Build 6). The learner has just
+     played this round, so the module is already in the cache and the
+     screen swaps on the same frame; the catch is for the rare cold case
+     (a reload landing straight here) and keeps the results card usable. */
+  const replay = (btn) => {
+    if (btn && btn.disabled) return;                 // her double-submit rule
+    if (btn) btn.disabled = true;
+    loadQuest(quest.id)
+      .then(def => app.go("play", { chapter, quest, def, accent }))
+      .catch(() => { if (btn) btn.disabled = false; showToast(LOAD_FAILED, "error"); });
+  };
   const toChapter = () => app.go("chapter", { chapterId: chapter.id });
 
   if (firstUnlock) {
@@ -653,7 +746,12 @@ export function renderResults(app, host, params) {
 export function renderFunfunResults(app, host, params) {
   const { chapter, accent, questId, total, ok, xpAwarded, goldAwarded, levelUp, level } = params;
   setTheme(chapter.signature, accent);
-  const q = FF_QUESTS.find(x => x.id === questId);
+  /* FF is loaded by the time this card can be reached: the only way here
+     is through a Fun Functions round, which loads those modules to play at
+     all. The null branch is the one this line already had (a quest id the
+     list does not know), so the heading falls back to the same words it
+     always did rather than gaining a new one. */
+  const q = FF ? FF.QUESTS.find(x => x.id === questId) : null;
   const correct = Number(params.correct) || 0;
   const items = Number(total) || 0;
   const pct = items ? Math.round((correct / items) * 100) : 0;

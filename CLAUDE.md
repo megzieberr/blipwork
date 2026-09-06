@@ -126,6 +126,57 @@ seven on Revision), plus two more that exist only inside Exam Focus
   header still reads "self-registrasie"). Don't carry a login assumption
   from one repo to the other.
 
+## How code loads (lazy boundaries, since 2026-09-06)
+
+Plain English: the app used to download **everything** before the login
+screen could draw: all 93 quests, all 8 dice packs, every Exam Focus card
+and the whole copy of Fun Functions: 317 files, 5,4 MB, for a learner who
+had not typed a password yet. Now it downloads the shell first and fetches
+each piece of content the moment it is actually asked for. Measured on
+2026-09-06 (`python tools/count_requests.py`): login 317 → **82 files**,
+5 354 KB → **1 624 KB**; a chapter costs 9 more files, Exam Focus 21.
+
+Five boundaries, each with a **loader** beside the registry it mirrors:
+
+| Content | Registry (unchanged) | Loader (what the app uses) | Fetched when |
+|---|---|---|---|
+| Quests | `js/quests/index.js` | `js/quests/load.js`: `loadQuest`, `loadChapterQuests` | a chapter map opens |
+| Dice pools | `js/quests/dice-pools.js` | `js/quests/load.js`: `loadDicePool` | the 🎲 card is tapped |
+| Exam cards | `js/exam/index.js` | `js/exam/load.js`: `loadExamChapter` | an exam chapter opens |
+| Fun Functions | (the synced `js/funfun/`) | inline in `js/screens.js` + `js/funfun-play.js` | the Functions chapter opens |
+| Offline demo backend | (none) | `js/api.js` | only in `?local=1` mode |
+
+Rules that keep this safe:
+
+- **The registries never change shape.** 19 `verify-*.html` pages,
+  `tools/sweep.py`, the shoot tools and `verify-exam*.mjs` import them
+  synchronously and expect every def and every card to be there. The
+  loaders are a second door onto the same modules, not a copy of them.
+  `js/exam/index.js` even SEEDS the loader's cache as it validates, so
+  any harness that imports the registry keeps the old synchronous
+  behaviour on every screen.
+- **A new quest goes in `js/quests/index.js` AND in `js/quests/load.js`,
+  then run the drift check: `node verify-lazy-load.mjs`.** It fails
+  loudly if the two lists disagree, if a path or export name in the
+  loader is wrong, or if a `QUEST_META` flag no longer matches the real
+  def. Same for a new dice pool and a new exam chapter. Run it in every
+  verify sweep, it takes a second.
+- **The sync map holds flags, never content.** `QUEST_META` carries only
+  what a screen reads while it is drawing (today: `xpOnce`). Anything
+  that needs the whole def, the results screen's "Play again", awaits
+  the loader instead.
+- **Every lazy load is wrapped**, and a failure shows the app's own
+  existing line, "Can't reach the server — try again." Never a blank
+  screen: the chapter heading and its back arrow are always drawn first.
+- **A browser remembers a failed module URL** and will not re-fetch it,
+  so every lazy fetch goes through `js/lazy.js`, which asks again under a
+  fresh query string after a failure. That is what makes a second tap a
+  real second attempt instead of replaying the error.
+- Two Playwright scripts prove it, both at 375 px in `?local=1`:
+  `tools/count_requests.py` (the per-screen request/byte table) and
+  `tools/lazy_playthrough.py` (a quest round, a dice round, a Fun
+  Functions round, an exam card, and the blocked-module failure path).
+
 ## Decision log — what was chosen and WHY (do not silently reverse these)
 
 - **App identity = low-intimidation QUICK RECAP tool** (2026-07-06,

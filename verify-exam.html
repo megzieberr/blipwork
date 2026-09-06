@@ -1609,6 +1609,13 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   tick(!!lostBtn && lostBtn.className.includes("exam-lost-link") && !lostBtn.className.includes("btn"), "\"I'm lost\" link uses its own quiet style, not the primary/ghost .btn classes");
 
   lostBtn.click();
+  /* WAIT FOR THE NAVIGATION (fix day Build 6, 2026-09-06). The reteach
+     round is no longer imported with the app: js/quests/load.js FETCHES it
+     on the tap, so app.go lands a beat after the click instead of on the
+     same tick. Polling for it keeps every check below exactly as strict as
+     it was — a link that never navigates still leaves lastGo undefined and
+     still fails all four. */
+  for (let i = 0; i < 150 && !goCalls.length; i++) await new Promise(r => setTimeout(r, 20));
   const lastGo = goCalls[goCalls.length - 1];
   tick(!!lastGo && lastGo.screen === "play", "\"I'm lost\" click navigates via app.go(\"play\", …) — the same route renderChapter's quest card uses");
   const eq8Quest = eqnChapter.quests.find(q => q.id === "eq8");

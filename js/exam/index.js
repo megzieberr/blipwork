@@ -42,6 +42,13 @@
    ============================================================ */
 import { validateQuestion } from "./_schema.js";
 import { skillsForChapter, skillLabel } from "./skills.js";
+/* The three list rules (card level, the easiest-first sort, the resume
+   pick) moved to js/exam/_registry.js on 2026-09-06 so the lazy loader
+   js/exam/load.js answers identically without importing this file. This
+   registry's exported names, signatures and synchronous behaviour are
+   unchanged, only where the rules are written moved. */
+import { cardLevel, cardsForTopic, firstCardForSkill, validateChapterCards } from "./_registry.js";
+import { seedExamChapter } from "./load.js";
 import { eqnCards } from "./cards-eqn.js";
 import { expCards } from "./cards-exp.js";
 import { funcCards } from "./cards-func.js";
@@ -100,13 +107,17 @@ const REGISTRY = {
    validateQuestion() — checked once here, at import time, so a broken
    seed fails loudly (a thrown error, in dev) rather than shipping a
    silently-invalid question. Cards are checked here exactly like
-   the questions they were cut from. */
+   the questions they were cut from. (The check itself now lives in
+   js/exam/_registry.js so js/exam/load.js runs the identical one.)
+
+   And, in the same pass, the loader's cache is SEEDED: anything that
+   imports this registry has every card in memory already, so a verify
+   page or a node harness never fetches one twice and never validates it
+   twice. The app itself does not import this file at all: it goes
+   through js/exam/load.js, which fetches per chapter. */
 Object.entries(REGISTRY).forEach(([chapterId, questions]) => {
-  questions.forEach(q => {
-    const { ok, issues } = validateQuestion(q);
-    if (!ok) throw new Error(`js/exam/index.js: question "${q && q.id}" in chapter "${chapterId}" failed validation:\n${issues.join("\n")}`);
-    if (q.chapter !== chapterId) throw new Error(`js/exam/index.js: question "${q.id}" is registered under "${chapterId}" but declares chapter "${q.chapter}"`);
-  });
+  validateChapterCards(chapterId, questions, validateQuestion);
+  seedExamChapter(chapterId, questions);
 });
 
 export function examQuestionsForChapter(chapterId) {
@@ -143,10 +154,7 @@ export { skillLabel };
    `progress` is the map js/api.js examState() returns, keyed by card id:
    { partsOpened, completed, completedAt }. */
 export function examFirstCardForSkill(chapterId, skillId, progress) {
-  const cards = examQuestionsForTopic(chapterId, skillId);
-  if (!cards.length) return null;
-  const p = progress || {};
-  return cards.find(c => !(p[c.id] && p[c.id].completed)) || cards[0];
+  return firstCardForSkill(examQuestionsForChapter(chapterId), skillId, progress);
 }
 
 /* A CARD'S LEVEL = the level of its hardest part (2026-08-23,
@@ -155,11 +163,10 @@ export function examFirstCardForSkill(chapterId, skillId, progress) {
    3 is a level-3 card. Exported because verify-exam.html's level-wall
    check (Part 13) and the sort below must agree on one definition.
    A card with no parts (impossible past validateQuestion, but this is
-   also called from a harness) reads as level 1. */
-export function cardLevel(card) {
-  const parts = (card && card.parts) || [];
-  return parts.reduce((max, p) => Math.max(max, (p && p.level) || 1), 1);
-}
+   also called from a harness) reads as level 1.
+   (The body moved to js/exam/_registry.js on 2026-09-06, same function,
+   re-exported here so every existing importer is untouched.) */
+export { cardLevel };
 
 /* THE CARDS OF ONE SKILL TILE, EASIEST FIRST (her ruling 10,
    2026-08-23: "Cards inside a tile run easiest first, Level 1 → 3").
@@ -176,9 +183,5 @@ export function cardLevel(card) {
    examFirstCardForSkill resumes into — so a returning learner carries on
    through a tile from easy to hard, not in file order. */
 export function examQuestionsForTopic(chapterId, topicId) {
-  return examQuestionsForChapter(chapterId)
-    .filter(q => q.topic === topicId)
-    .map((q, i) => ({ q, i }))
-    .sort((a, b) => (cardLevel(a.q) - cardLevel(b.q)) || (a.i - b.i))
-    .map(x => x.q);
+  return cardsForTopic(examQuestionsForChapter(chapterId), topicId);
 }

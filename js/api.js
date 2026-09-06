@@ -133,7 +133,6 @@
                     refuse with {ok:false, error:"local"}.
    ============================================================ */
 import { SupabaseBackend, hasSupabase } from "./supabase.js";
-import { LocalBackend } from "./local-backend.js";
 
 /* ?local=1 pins this device to the offline backend and remembers it. The switch
    has to work in BOTH directions: ?local=0 clears it again. Without that, any
@@ -155,5 +154,13 @@ function forceLocal() {
 }
 
 const useLocal = !hasSupabase || forceLocal();
-export const api = useLocal ? LocalBackend : SupabaseBackend;
+
+/* THE OFFLINE DEMO BACKEND IS ONLY FETCHED WHEN IT IS THE ONE IN USE
+   (fix day Build 6, 2026-09-06). js/local-backend.js is 109 KB of demo
+   data and mirrored RPCs; every learner on the real app was downloading
+   it and never running a line of it. `await` at the top level of a module
+   is fine here: this is a plain ES-module site with no build step, and
+   every importer of `api` still gets the same const binding it always
+   did, fully resolved before its own body runs. */
+export const api = useLocal ? (await import("./local-backend.js")).LocalBackend : SupabaseBackend;
 export const BACKEND = useLocal ? "local" : "supabase";

@@ -72,7 +72,16 @@ const CARD_A2 = {
   lostQuest: { chapter: "eqn", quest: "eq1" },
   parts: [
     {
-      id: "a", marks: 4, level: 1,
+      /* level 3, not 1 (fix day Build 6, 2026-09-06). This page used to
+         replace js/exam/index.js's examQuestionsForTopic wholesale, and
+         the replacement handed the cards back in FILE order. js/screens.js
+         and js/exam-play.js now run the REAL easiest-first rule
+         (js/exam/_registry.js, loaded unmodified here) over whatever cards
+         the fixture supplies, so the fixture has to say out loud what it
+         always meant: card 1 is the easier one, card 2 is the harder one.
+         A1's hardest part is level 2, so this is 3 and the pair sorts
+         A1 then A2, exactly the order every check below expects. */
+      id: "a", marks: 4, level: 3,
       prompt: { en: "This is the second card in the skill — just here to prove Another one! lands on it.", af: "Dit is die tweede kaart in die vaardigheid." },
       hint: { en: "No hint needed — this is a harness fixture.", af: "Geen wenk nodig nie — dit is 'n fixture." },
       memo: [{ type: "answer", text: { en: "Fixture card 2, revealed.", af: "Fixture kaart 2, gewys." }, ticks: ["a", "a", "a", "a"] }],
@@ -115,5 +124,21 @@ export function examFirstCardForSkill(chapterId, skillId, progressMap) {
   const notDone = cards.find(c => !(pm[c.id] && pm[c.id].completed));
   return notDone || cards[0] || null;
 }
+
+/* ---- js/exam/load.js shape (fix day Build 6, 2026-09-06) ----
+   js/screens.js and js/exam-play.js no longer import the exam registry at
+   all: they ask js/exam/load.js for one chapter's cards and then run the
+   pure list rules in js/exam/_registry.js over them. So the page's import
+   map remaps THAT specifier here instead, and this fixture hands back its
+   own two cards as "the eqn chapter". _registry.js itself is loaded for
+   real: it is pure, it takes the cards it is given, and filtering these
+   two by topic reproduces the CARDS map above exactly.
+
+   peekExamChapter answers SYNCHRONOUSLY, which is what keeps this page's
+   checks synchronous: the real loader does the same whenever a chapter is
+   already in memory. */
+const CHAPTER_CARDS = { eqn: [CARD_A1, CARD_A2] };
+export function peekExamChapter(chapterId) { return CHAPTER_CARDS[chapterId] || []; }
+export function loadExamChapter(chapterId) { return Promise.resolve(peekExamChapter(chapterId)); }
 
 export { CARD_A1, CARD_A2 };

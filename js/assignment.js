@@ -22,8 +22,11 @@
      { questId, chapterId, note, assignedOn, dueOn, done }
    ============================================================ */
 import { CHAPTERS, chapterById, questAccent } from "./config.js";
-import { questDef } from "./quests/index.js";
-import { el } from "./ui.js";
+/* LAZY (fix day Build 6, 2026-09-06): the hub's homework card only needs
+   to know THAT the pinned quest has a def while it draws: the def itself
+   is fetched when the learner taps "Start homework". */
+import { loadQuest, questRegistered } from "./quests/load.js";
+import { el, showToast } from "./ui.js";
 
 /* Resolve a quest id back to its chapter + quest metadata. chapterId from
    the server is only a hint — the id search is authoritative, so a chapter
@@ -129,14 +132,22 @@ export function renderAssignmentCard(app, hostEl) {
     }
   } else {
     const isOpen = new Set((app.state && app.state.openQuests) || []).has(q.id);
-    const def = questDef(q.id);
-    const playable = isOpen && q.built && !!def;
+    const playable = isOpen && q.built && questRegistered(q.id);
     if (playable) {
       const accent = questAccent(ch, q.n);
       const btn = el("button", "btn primary big hw-go", "Start homework →");
       // exactly the four params renderChapter builds for a quest tile — same
-      // shape, so play.js can't tell where the learner came from
-      btn.addEventListener("click", () => app.go("play", { chapter: ch, quest: q, def, accent }));
+      // shape, so play.js can't tell where the learner came from. The def is
+      // fetched on the tap (fix day Build 6); her double-submit rule means
+      // the button disables BEFORE the await, and a load that never lands
+      // re-enables it and shows the app's own "can't reach the server" line.
+      btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+        btn.disabled = true;
+        loadQuest(q.id)
+          .then(def => app.go("play", { chapter: ch, quest: q, def, accent }))
+          .catch(() => { btn.disabled = false; showToast("Can't reach the server — try again.", "error"); });
+      });
       card.appendChild(btn);
     } else {
       /* Admin only ever offers OPEN quests, so this is the rare case where a

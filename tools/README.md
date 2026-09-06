@@ -29,11 +29,38 @@ with the demo learner. They clear the service worker and caches first. Most writ
   split expressions (A), unprotected maths runs (B), slash fractions (C), page overflow (D).
   The standing bar: A = 0, real C = 0, D = 0.
 - `harness_run.py verify-foo verify-bar …` — runs the browser harness pages headless and prints
-  their pass lines.
+  their pass lines. ⚠️ On this laptop run it as `PYTHONIOENCODING=utf-8 python tools/harness_run.py
+  …`: the Windows console codepage cannot print the ✓ in a pass line, and without that variable
+  every page reports a bogus `ERR 'charmap' codec can't encode character '✓'` instead of its
+  real result. Nothing is wrong with the page when that happens.
 - `shoot_welcome.py` — the gentle-return proof shot (fix day, 2026-09-05): stages a 14-day
   absence with `__BLIP_DEV__.lapse()`, reloads so the app's own state call is the one that heals
   Blip, and photographs the room with its welcome line to `_out/build2-hub-375.png`. Prints the
   before/after state either side of the reload, so the picture is not the only evidence.
+- `count_requests.py`: how much does each screen cost to open? Counts requests and transferred
+  bytes per screen (login, hub, a chapter, the Exam Focus tab, an exam chapter) in one session at
+  375 px against `?local=1`, with the service worker switched off so every number is a real
+  network fetch. Prints a delta + cumulative table and writes `_out/requests.json`. Added with the
+  lazy-loading build (2026-09-06) as its before/after measure; re-run it after anything that moves
+  an import.
+- `lazy_playthrough.py`: the lazy-loading regression test (2026-09-06): a quest round, a dice
+  round, a Fun Functions round and an exam card all open and are not blank, and a module blocked
+  with `route()` shows the app's own "Can't reach the server" line while the chapter and the hub
+  keep working. Any page error at all fails the run.
+
+## The verify run, in order
+
+    python -m http.server 5191                     # from the repo root, in its own terminal
+    PYTHONIOENCODING=utf-8 python tools/harness_run.py <every verify-*.html name>
+    PYTHONIOENCODING=utf-8 python tools/sweep.py 2  # bar: A = 0, real C = 0, D = 0
+    node verify-exam-modules.mjs
+    node verify-exam-fractions.mjs
+    node verify-lazy-load.mjs                       # the loader/registry drift check
+    PYTHONIOENCODING=utf-8 python tools/lazy_playthrough.py
+
+`verify-lazy-load.mjs` is the one to remember when CONTENT is added: a new quest, dice pool or
+exam chapter has to be registered in its registry AND listed in its loader (`js/quests/load.js`,
+`js/exam/load.js`), and this check is what says so out loud when only one of the two was done.
 
 ## After any new companion sprite, run `tools/to_webp.py`
 

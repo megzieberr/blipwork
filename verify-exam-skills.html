@@ -47,14 +47,20 @@
      see the harness stub module's own header). This import map remaps
      ONLY those two specifiers, for THIS PAGE, to the harness stub —
      js/screens.js and js/exam-play.js are otherwise loaded completely
-     unmodified, real production code, real imports. Both entries point
+     unmodified, real production code, real imports. All entries point
      at the SAME stub file (it exports every name either production
-     module actually imports from either real module). -->
+     module actually imports from any of the real modules).
+     THIRD ENTRY, 2026-09-06 (fix day Build 6): js/screens.js and
+     js/exam-play.js now read the exam cards through js/exam/load.js, the
+     lazy loader, rather than importing the registry, so that specifier
+     is remapped here too. js/exam/_registry.js, which carries the pure
+     list rules both doors share, is loaded for real. -->
 <script type="importmap">
 {
   "imports": {
     "./js/exam/skills.js": "./verify-exam-skills-harness-stub.js",
-    "./js/exam/index.js": "./verify-exam-skills-harness-stub.js"
+    "./js/exam/index.js": "./verify-exam-skills-harness-stub.js",
+    "./js/exam/load.js": "./verify-exam-skills-harness-stub.js"
   }
 }
 </script>

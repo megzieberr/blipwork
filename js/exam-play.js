@@ -53,9 +53,17 @@ import { getSession } from "./session.js";
 import { el, clear, showToast, xbarHtml, fracHtml, formulaHtml } from "./ui.js";
 import { getExamLang, uiStr, pick } from "./exam/lang.js";
 import { skillLabel } from "./exam/skills.js";
-import { examQuestionsForTopic } from "./exam/index.js";
+/* LAZY (fix day Build 6, 2026-09-06): the sibling list and the "I'm lost"
+   round come from the two loaders now, not from the two registries: this
+   file is imported by js/app.js at boot, so importing js/exam/index.js and
+   js/quests/index.js here would have pulled every card and every quest in
+   the app before the login screen drew. The registries are untouched;
+   verify-exam.html and the tools still import them directly (and doing so
+   seeds js/exam/load.js's cache, so the harness path stays synchronous). */
+import { peekExamChapter, loadExamChapter } from "./exam/load.js";
+import { cardsForTopic } from "./exam/_registry.js";
 import { chapterById, questAccent } from "./config.js";
-import { questDef } from "./quests/index.js";
+import { loadQuest, questRegistered } from "./quests/load.js";
 import { renderDiagram, highlightedSpec } from "./exam/circle-engine.js";
 import { renderFunction } from "./engine/function-graph.js";
 import { applyFunctionHighlights } from "./exam/function-diagram.js";
@@ -86,10 +94,17 @@ function lostQuestLink(app, question) {
   if (!openQuests.has(lq.quest)) return null;
   const lostChapter = chapterById(lq.chapter);
   const lostQ = lostChapter && (lostChapter.quests || []).find(q => q.id === lq.quest);
-  const def = lostQ && questDef(lostQ.id);
-  if (!lostChapter || !lostQ || !def) return null;
+  if (!lostChapter || !lostQ || !questRegistered(lostQ.id)) return null;
   const btn = el("button", "exam-lost-link", "I'm lost — take me to the round that teaches this");
-  btn.addEventListener("click", () => app.go("play", { chapter: lostChapter, quest: lostQ, def, accent: questAccent(lostChapter) }));
+  // the round itself is fetched on the tap (fix day Build 6); her
+  // double-submit rule, and the app's own line when it cannot be fetched
+  btn.addEventListener("click", () => {
+    if (btn.disabled) return;
+    btn.disabled = true;
+    loadQuest(lostQ.id)
+      .then(def => app.go("play", { chapter: lostChapter, quest: lostQ, def, accent: questAccent(lostChapter) }))
+      .catch(() => { btn.disabled = false; showToast("Can't reach the server — try again.", "error"); });
+  });
   return btn;
 }
 
@@ -200,8 +215,25 @@ export function renderExamPlay(app, host, params) {
   // pick. A caller that skips skillId (a harness driving a single
   // one-off card, same posture as the old _harness-stub.js) still gets
   // a sane length-1 list rather than a crash.
-  let cardsInSkill = skillId ? examQuestionsForTopic(chapter.id, skillId) : [];
+  //
+  // LAZY (fix day Build 6, 2026-09-06): read out of js/exam/load.js's
+  // cache, which is already full every real way in: the chapter screen
+  // loads it before it can offer a tile, and a harness fills it by
+  // importing the registry. The cold branch below is for a direct nav
+  // with nothing loaded: the card shows as its own length-1 list (the
+  // same fallback this line always had) and repaints with its real
+  // siblings the moment they land, so nothing dead-ends.
+  const peeked = peekExamChapter(chapter.id);
+  let cardsInSkill = (skillId && peeked) ? cardsForTopic(peeked, skillId) : [];
   if (!cardsInSkill.some(c => c.id === question.id)) cardsInSkill = [question];
+  if (skillId && !peeked) {
+    loadExamChapter(chapter.id).then(all => {
+      const sibs = cardsForTopic(all, skillId);
+      if (!root.isConnected || !sibs.some(c => c.id === question.id)) return;
+      cardsInSkill = sibs;
+      redraw();
+    }).catch(() => { /* the card itself plays fine on its own */ });
+  }
 
   function t(key, ...args) {
     const v = uiStr(lang)[key];

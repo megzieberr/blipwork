@@ -11,14 +11,22 @@
 import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { questAccent } from "./config.js";
-import { dicePool } from "./quests/dice-pools.js";
+/* LAZY (fix day Build 6, 2026-09-06): one chapter's pool, fetched when a
+   dice round actually starts, instead of all eight at boot. The sync
+   registry js/quests/dice-pools.js is untouched: tools/shoot_dice.py and
+   the verify-dice pages still import it. */
+import { loadDicePool } from "./quests/load.js";
 import { newRoundSeed, dealRound } from "./dice.js";
 
 /* Entry point: the chapter screen's 🎲 card calls this. Deals or
    resumes, then app.go("play", ...) with a `dice` params object.
    Safe to call even if the chapter has no pool wired yet (no-op). */
 export async function openDiceRound(app, chapter) {
-  const pool = dicePool(chapter.id);
+  /* Rejects when the fetch itself fails; js/screens.js's 🎲 card already
+     catches that and shows "Couldn't start the dice round — check your
+     connection", so a flaky load reads to the learner exactly the way a
+     flaky save already did. */
+  const pool = await loadDicePool(chapter.id);
   if (!pool) return;                               // not wired yet — the chapter card shouldn't show, but stay safe
   const sess = getSession();
   if (!sess) return;
