@@ -1,5 +1,84 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-09-06 — Build 6 shipped (sw v92): lazy-load + cache-first code (Fable foreman, two Opus workers)
+
+**Her words that day:** "on blipwork... we are doing build 6 today" → catch-up; "you run
+them, two workers, /go" (Fable's recommendation to split the plan's single 500–700k worker
+into lazy-load first, service worker second, so the risky half only moved once the loading
+was proven green); mid-morning "yes, ship graph quest" and "done" (paper-seed deleted in the
+dashboard, confirmed by list_edge_functions: four remain); "ship it" for v92.
+
+**Worker 1 (Opus, ≈408k tokens, 211 tool uses, commit bf32dc8):** `js/quests/load.js`
+(93 ids → path + export, `loadQuest`, `loadChapterQuests`, `questRegistered`, sync
+`QUEST_META` with `xpOnce` only, `loadDicePool`), `js/exam/load.js` (`loadExamChapter`,
+`peekExamChapter`, async twins of the two registry helpers, `seedExamChapter`),
+`js/exam/_registry.js` (pure list rules lifted verbatim so both doors share one copy),
+`js/lazy.js` (`lazyImport`: first attempt plain URL, after a failure a fresh `?retry=N`,
+because Chrome re-throws a remembered import failure without touching the network; proved
+headless when the retry test went red), call-site changes in screens.js (chapter open
+prefetches, the tap loads with the busy flag BEFORE the await, toast = the existing
+"Can't reach the server" line), exam-play.js, assignment.js, dice-play.js, funfun-play.js,
+api.js (top-level await, local-backend only under ?local=1). Harness: `verify-lazy-load.mjs`
+52 checks; `tools/count_requests.py`; `tools/lazy_playthrough.py` 18 checks. verify-exam.html
+polls for the "I'm lost" navigation; verify-exam-skills remaps the loader to its stub and the
+fixture's card 2 went level 1 → 3 (the old stub bypassed the easiest-first sort). Numbers:
+login 317 req / 5 354 KB → 83 / 1 627 KB; hub +1; chapter (stats) +9 / 62 KB; exam tab +0;
+exam chapter (eqn) +21 / 399 KB. verify-feedback-papers red at HEAD too (181/185, same four
+stale lines, proved in a throwaway worktree at 56c9fda). Fable's review: re-ran the drift
+check, the counter and the play-through (identical numbers), read lazy.js, the api.js hunk,
+the fixture hunk and screens.js 400–475. The "Couldn't start the dice round" toast was
+pre-existing (in 56c9fda). Accepted without a review fix beyond one doc number (82 → 83).
+
+**Worker 2 (Opus, ≈220k tokens, 75 tool uses, commit 53ecab8):** sw.js 115 → 257 lines:
+`cacheKey()` strips `retry`; `stamped()` adds `x-sw-cached-at`; `fresh()` (unstamped =
+old); `wire()` rebuilds every network request as `cache: "no-cache"` so the browser's own
+HTTP cache under the worker cannot pin a pre-deploy file; `keep()` 200 only; install
+precaches SHELL file by file (one bad path no longer loses the whole precache); activate
+unchanged; `networkFirst` (navigations, every .html, js/app.js, every retry), `codeFirst`
+(.js/.css, 7-day age, stale copy as offline fallback, rethrow on a real failure),
+`assetFirst` unchanged. `tools/sw_check.py` (git log -G on the CACHE line, diff js/ css/
+since it; refuses at HEAD naming worker 1's 11 files, OK on a scratch bump).
+`tools/sw_offline_test.py` 25 checks (offline: played chapter opens, unplayed shows the
+toast, retry heals the plain entry; eviction: bump → old cache gone, 106 entries refetched,
+sw.js restored byte-for-byte). `tools/sw_warm_requests.py`: cold 129 req / 2 603 KB (the
+14-file SHELL precache on top of worker 1's 114), warm 77 req / 7 KB (conditional
+revalidations), steady 5 req / 0 KB. Judgement calls accepted by Fable: the no-cache wire,
+all .html network-first, NO localhost bypass (documented as CLAUDE.md gotcha 10). Fable's
+review: read sw.js 70–215, re-ran sw_check (refusal, 11 files) and the offline test (25/25).
+
+**Ship (Fable, her "ship it"):** sw.js mhq-v91 → mhq-v92; commit 7d95d67 (bump + CLAUDE.md
+83-file fix + the dispatch briefs appended to FIX-DAY-2026-09-05-PLAN.md); sw_check OK on the
+bump commit; push; Pages run 34028439392 success (1m2s). Fetch-verified: sw.js v92, js/lazy.js
+2 129 B, js/quests/load.js 11 807 B, js/exam/load.js 6 048 B, js/exam/_registry.js 4 109 B,
+index.html 200, live screens.js contains the loader calls. A PowerShell poll saw 404s on
+every path for two minutes while curl saw 200s throughout and the Pages API said "built":
+a client/edge artefact, the site was never down. No migration today.
+
+**graph-quest gq-v35:** 5986454 (AF steepness reminder) + dffa423 (bump) pushed; live sw.js
+reads gq-v35 within three polls.
+
+**Rolled out of PROJECT-STATUS.md on 2026-09-06, verbatim (no longer current):**
+- Where we are, v91 entry: "**Live on sw v91** (2026-09-05 evening, fetch-verified: sw v91,
+  a `.webp` sprite 200, the old `.png` 404, the new card text / welcome line /
+  `--blip-outline` / her AF sentence all served). Fix day Builds 1–5 shipped on her "ship
+  after 5", six commits 2c575ed…f7fabee: (1) back-end seal + score/XP clamp + data tidy,
+  migration APPLIED; (2) gentle return for a 7+-calendar-day lapse, migration APPLIED
+  (invisible while the Term toggle is OFF); (3) exponential card teaches
+  y = a·b^(x − p) + q, steepness reminder in hint rung 1 of q1b + gradSteeper, EN + her AF
+  wording; (4) Blip outline + eyes follow the body colour (lemon + backwards cap kept);
+  (5) 176 companion sprites → WebP, 30.1 MB → 9.9 MB. Foreman: Fable; five Opus workers,
+  ≈1.2M tokens, each reviewed by eye before the next. graph-quest 5986454 (the AF reminder)
+  is committed but NOT pushed: her call (gq-v35). Build 6 (lazy-load + service worker) NOT
+  started." Also: "2026-09-05 read-only audit (Fable): nothing broken; findings + her
+  rulings in `AUDIT-2026-09-05.md`; the six briefs + her ticks + her wording in
+  `FIX-DAY-2026-09-05-PLAN.md`."
+- Pending items closed 2026-09-06: "💻 1 min: Supabase dashboard → Edge Functions → delete
+  `paper-seed`" (she did it; list_edge_functions shows four); "🌐 1 line: 'ship graph-quest'
+  → gq-v35" (shipped, live). The v91 phone check (outline, exponential card) was folded
+  into the v92 phone check.
+- Next up items closed: the "SHIP CHECKLIST for this fix day" (v91 shipped 2026-09-05); the
+  "Build 6 ... in a FRESH foreman session as sw v92" item (shipped 2026-09-06).
+
 ## Decisions 2026-08-30 → 2026-09-04 (rolled out of PROJECT-STATUS.md on 2026-09-05, verbatim)
 - 2026-08-30 (hers): **the game outside Exam Focus must be playable on the
   phone alone — guided discovery, puzzles, "not feel like they are actually
