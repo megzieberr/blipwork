@@ -236,3 +236,116 @@ of daal, maak nie saak in watter rigting nie". EN stays as drafted. Welcome-back
 stays as drafted (no veto).
 Ship ruling (hers, 2026-09-05): "ship after 5, keep both": Builds 1 to 5 ship as v91;
 Build 6 in a fresh session as v92; lemon outline + backwards cap stay as Build 4 made them.
+
+## Build 6 dispatch, 2026-09-06: two Opus workers in sequence (her word: "you run them, two workers, /go")
+
+Same ground rules as above. Worker 1 = lazy-loading + the request counter. Worker 2 =
+the service-worker change + the offline test, dispatched only after Fable has reviewed
+worker 1. The sw CACHE bump (v91 to v92) stays with Fable at ship time; neither worker
+touches it. The plan's line "bump to v91 at ship" reads v92 for this build.
+
+### Worker 1 brief: lazy-loading + tools/count_requests.py (about 350k tokens)
+
+Facts re-verified 2026-09-06 (line numbers may drift a few lines, re-check them):
+`js/screens.js:3` imports `questDef` from `./quests/index.js`, `:4` `dicePool` from
+`./quests/dice-pools.js`, `:6` `examQuestionsForTopic` + `examFirstCardForSkill` from
+`./exam/index.js`, `:24-26` `FF_QUESTS` / `ffUnlocked` / `ffL` from `./funfun/...`.
+`js/api.js:136` imports `LocalBackend` unconditionally; `useLocal` is decided at `:157`.
+`js/quests/dice-pools.js` imports all eight pools statically. `js/funfun-play.js:34-36`
+imports `./funfun/mount.js`, `./funfun/quests/index.js`, `./funfun/i18n.js`.
+Sync call sites of `questDef`: `screens.js:404` (chapter map), `:598` (reads `xpOnce` on
+the result screen), `:628` (replay passes the def to play), `assignment.js:132` (homework
+card on the hub), `exam-play.js:89` (lost-question fallback). Exam registry call sites:
+`screens.js:529/548/569`, `exam-play.js:203`. Fun Functions list: `screens.js:445/656`.
+
+Deliverables:
+1. `js/quests/load.js`: `loadQuest(id)` returns a cached promise of that quest's def via
+   a dynamic `import()` of its module (the map is generated from `index.js`'s import
+   list, id to module path to export name); `loadChapterQuests(chapterId)` loads that
+   chapter's set. A small sync `QUEST_META` map (id to the flags the five sync call sites
+   actually read, e.g. `built`, `xpOnce`) so the chapter map and the result screen render
+   without importing any quest module. If a sync site reads more than flags, make that
+   site async rather than copying content into the map.
+2. A drift check: a node script or verify page that imports `js/quests/index.js` and
+   `js/quests/load.js` and asserts every registered id resolves through the loader to
+   the same def object (and vice versa). Wire it into the existing verify run.
+3. `js/exam/load.js`: `loadExamChapter(chapterId)` dynamically imports that chapter's
+   `cards-<chapter>.js` (plus skills if needed) and returns async equivalents of the two
+   registry helpers. `js/exam/index.js` keeps its exported names, signatures and
+   synchronous behaviour exactly (19 verify pages, `tools/sweep.py`, the shoot tools and
+   `verify-exam*.mjs` import it); factoring a pure helper out so both files share it is
+   fine if every verify page still passes. Same rule for `js/quests/index.js` and
+   `js/quests/dice-pools.js`.
+4. Fun Functions boundary: `screens.js` and `funfun-play.js` import the `./funfun/...`
+   modules dynamically when the Functions chapter opens or a Fun Functions round starts.
+   Nothing under `js/funfun/` is edited (generated from graph-quest).
+5. Dice pools lazy per chapter: a `loadDicePool(chapterId)` that imports one pool; the
+   app uses it, the sync export stays for the verify tooling.
+6. `api.js`: import `./local-backend.js` only when `useLocal` is true (top-level await
+   is fine, this is a static ES-module site); `import { api }` consumers stay unchanged;
+   `?local=1` and `mhq.forceLocal` keep working (the whole verify toolchain relies on
+   them).
+7. Every lazy load is wrapped: on failure the existing "can't reach the server" message
+   shows (find it, reuse it, do not write a new one) and the app stays usable (back to
+   the hub). Never a blank screen.
+8. `tools/count_requests.py` (Python Playwright, same shape as `tools/harness_run.py`):
+   against `http://localhost:5191/?local=1` at 375 px, four screens in one session:
+   login, hub after a local login, one chapter (Statistics), the Exam Focus tab. Prints a
+   table of request count and bytes per screen (delta per screen and cumulative) and
+   writes `tools/_out/requests.json` (git-ignored). Run it BEFORE any change for the
+   baseline and AFTER; both tables go in the report. The plan expects roughly login 15,
+   hub 40, a chapter 55, the exam tab +80 only when opened; report the real numbers.
+9. Failure-path test in Playwright: block one lazy module URL with `route()`, open that
+   chapter, assert the message appears and the hub still works.
+10. Verify for real, all green before the commit: every `verify-*.html` through
+    `tools/harness_run.py` (see `tools/README.md` for how they are run), `python
+    tools/sweep.py 2`, `node verify-exam-modules.mjs`, `node verify-exam-fractions.mjs`,
+    the new drift check, and a Playwright play-through at 375 px with `?local=1` of one
+    quest round, one dice round, one Fun Functions round and one exam card, asserting no
+    page errors and no blank screens. Start `python -m http.server 5191` from the project
+    root yourself (check the port is free first). Headless Playwright only; never the
+    desktop app's Browser pane.
+11. Docs: a short "How code loads" block in `CLAUDE.md` (the lazy boundaries, the drift
+    check, "a new quest goes in index.js AND load.js, then run the drift check"). No
+    status-file edits (Fable's).
+12. One LOCAL commit with a message that says WHY, adding the named files (never
+    `git add -A`). No push. No migration. No `sw.js` change. No CACHE bump.
+13. Report back with: files changed with line refs, the before/after request tables, the
+    verify results with their counts, the failure-path result, anything uncertain, and
+    every place where this brief's facts did not match the code.
+
+### Worker 2 brief: service worker cache-first for code + offline test (about 250k tokens)
+
+Dispatched only after Fable has reviewed worker 1's commit. Read `sw.js` (115 lines) in
+full first; its header comment explains why app code is network-first today (the "old
+version still shows" problem). This build changes that deliberately, and the CACHE bump
+on every ship becomes load-bearing for code as it already is for images.
+
+Deliverables:
+1. `sw.js`: app code (`.js`, `.css`) becomes cache-first inside the versioned CACHE with a
+   stored timestamp (an `x-sw-cached-at` header on the stored clone, or a companion
+   metadata cache) and a 7-day maximum age; an entry older than 7 days is fetched
+   network-first with the stale copy as the offline fallback. Navigations, `index.html`,
+   `admin.html` and `js/app.js` stay network-first. Activate still evicts every cache
+   whose name is not CACHE. Cross-origin and images unchanged. The header comment is
+   rewritten to describe the new strategy and the load-bearing bump. CACHE stays
+   `mhq-v91` in the commit; the bump to v92 is Fable's at ship.
+2. `tools/sw_check.py`: prints OK when no tracked file under `js/` or `css/` has changed
+   since the commit that last changed the CACHE line in `sw.js`, otherwise lists the
+   changed files and exits 1. This is the ship-time reminder to bump.
+3. Offline test in Playwright (Chromium, service workers allowed): load the hub and play
+   one chapter online with the worker active and registered; then set the context
+   offline: the played chapter still works, an unplayed chapter shows the existing
+   "can't reach the server" message, never a blank screen.
+4. Eviction test locally: temporarily set CACHE to a test value, reload, assert via
+   `page.evaluate(caches.keys())` that the old cache is gone and code is refetched, then
+   `git checkout sw.js` before committing (no bump in the commit).
+5. Re-run `tools/count_requests.py` on a WARM second load with the worker active and
+   report the numbers next to worker 1's tables.
+6. Same verify run as worker 1 (all `verify-*.html`, `sweep.py 2`, the two node
+   harnesses, the drift check), all green.
+7. Docs: `CLAUDE.md` gotcha, one paragraph: every ship bumps CACHE or learners keep old
+   code for up to 7 days; `tools/sw_check.py` must print OK before the push.
+8. One LOCAL commit, message says WHY. No push. No migration. No CACHE bump.
+9. Report back with files changed, the offline and eviction results, the warm-load
+   numbers, and anything uncertain.

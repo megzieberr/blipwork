@@ -47,7 +47,7 @@
    a real load failure, and the app shows its own "Can't reach the server"
    line. A hollow reply served as a module would be a silent break with
    nothing on screen to explain it. */
-const CACHE = "mhq-v91";
+const CACHE = "mhq-v92";
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;    // 7 days
 const STAMP = "x-sw-cached-at";                // written onto every copy we store
 const SHELL = ["./", "./index.html", "./admin.html", "./css/styles.css", "./js/app.js", "./manifest.json",

@@ -140,8 +140,8 @@ screen could draw: all 93 quests, all 8 dice packs, every Exam Focus card
 and the whole copy of Fun Functions: 317 files, 5,4 MB, for a learner who
 had not typed a password yet. Now it downloads the shell first and fetches
 each piece of content the moment it is actually asked for. Measured on
-2026-09-06 (`python tools/count_requests.py`): login 317 → **82 files**,
-5 354 KB → **1 624 KB**; a chapter costs 9 more files, Exam Focus 21.
+2026-09-06 (`python tools/count_requests.py`): login 317 → **83 files**,
+5 354 KB → **1 627 KB**; a chapter costs 9 more files, Exam Focus 21.
 
 Five boundaries, each with a **loader** beside the registry it mirrors:
 
