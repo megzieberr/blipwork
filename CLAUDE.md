@@ -98,11 +98,18 @@ seven on Revision), plus two more that exist only inside Exam Focus
 - **Deploy target 2 — the database**: pushing code does NOT touch Supabase.
   Schema changes ship as an additive `supabase/migration-*.sql` file that
   must be **pasted into the Supabase SQL editor by hand**.
-- **Service worker**: `sw.js` — read the version out of the file rather than
-  trusting this line (it was stale at v25 while the repo shipped v37).
-  Network-first
-  for app code (so deploys land on the next load), cache-first for images.
-  **Bump the cache version on every shippable change.**
+- **Service worker**: `sw.js`. Read the version out of the file rather than
+  trusting this line (it was stale at v25 while the repo shipped v37). Since
+  2026-09-06 app code (`.js`, `.css`) is **cache-first** inside the versioned
+  cache: each stored copy carries the time it was stored (an `x-sw-cached-at`
+  header) and is served straight from the cache for up to 7 days, after which
+  it is fetched network-first with the stale copy as the offline fallback.
+  Page navigations, any `.html` and `js/app.js` stay network-first, images
+  stay cache-first, and a URL carrying `?retry=` (js/lazy.js's second attempt)
+  goes network-first and is stored under its plain URL. **Bump `CACHE` on
+  every shippable change**, and run `python tools/sw_check.py` before pushing:
+  it prints OK only when nothing under `js/` or `css/` has changed since the
+  last bump.
 - **Local dev**: `python -m http.server 5191` in the repo root, then open
   http://localhost:5191/ — port **5191**. No install step.
 - **Testing**: 10 `verify-*.html` pages (open in a browser, or drive
@@ -206,9 +213,15 @@ Rules that keep this safe:
   everywhere else** (calculator.js comment + PROJECT-STATUS). The simulator
   matches the real fx-991ZA Plus II key-for-key; quests and box plots use
   the method taught in class. This mismatch is deliberate — don't "unify" it.
-- **Service worker is network-first for app code** (commit a790244), fixing
-  the recurring "old version still shows after deploy" problem. Keep it, and
-  still bump the cache version each release.
+- **Service worker was network-first for app code** (commit a790244), fixing
+  the recurring "old version still shows after deploy" problem. **Reversed on
+  purpose on 2026-09-06** (fix day Build 6, in her approved scope): now that
+  the app fetches a quest, a dice pool or an exam chapter at the moment it is
+  tapped, network-first would put a real round trip on school data in front of
+  every tap. Code is cache-first with a 7-day age limit instead, and the
+  freshness the old strategy bought is bought by the `CACHE` bump, which
+  `tools/sw_check.py` guards. The two halves go together: do not quietly
+  revert either one, and do not ship without the check.
 - **Per-chapter colour family** (config.js, "locked decision"): each chapter
   owns one hue; its quests are shades light → deep, so a quest map reads as
   one world.
@@ -271,6 +284,31 @@ Rules that keep this safe:
    re-creates a table must re-run that table's `revoke` in the same file** —
    and `revoke` is what makes a probe answer `42501 permission denied`
    instead of `[]`.
+
+9. **The `CACHE` bump is now load-bearing for CODE, not only for images**
+   (2026-09-06). Until fix-day Build 6 app code was network-first, so a
+   forgotten bump cost at worst a stale picture. Now the worker serves `.js`
+   and `.css` out of its own cache for up to 7 days, and `activate` only
+   clears the old cache when the cache NAME changes. Push new code without
+   bumping `const CACHE` in `sw.js` and learners keep running the old code
+   until the 7-day age limit expires it, file by file. That is the nastiest
+   version of gotcha 2: the deploy looks live, it tests live for whoever
+   clears their cache, and half the class is a week behind with no error
+   anywhere. **`python tools/sw_check.py` must print OK before every push**:
+   it compares `js/` and `css/` against the commit that last touched the
+   `CACHE` line and lists anything that has moved since.
+10. **The same cache can hide a local edit** (2026-09-06, the cost of gotcha
+   9's strategy). If `http://localhost:5191/` has ever been opened in a real
+   browser, that browser has this service worker registered, and it will serve
+   `js/` and `css/` from its own cache for up to 7 days. So an edit to a quest
+   can fail to show on a reload, and a `verify-*.html` page opened in that
+   same browser can grade the OLD file. Nothing on screen says so. The
+   headless tools in `tools/` are safe (every run gets a clean browser, and
+   most switch the worker off outright), so **when a local change "isn't
+   showing", suspect this before the code**. The fix takes one click: press
+   F12, click the **Application** tab, click **Service Workers** on the left,
+   click **Unregister**, then reload the page. Ticking **Bypass for network**
+   on that same panel keeps it out of the way for the rest of the session.
 
 Future sessions: when you hit (and fix) a new one, append it here.
 

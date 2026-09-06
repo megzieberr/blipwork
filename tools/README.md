@@ -47,6 +47,27 @@ with the demo learner. They clear the service worker and caches first. Most writ
   round, a Fun Functions round and an exam card all open and are not blank, and a module blocked
   with `route()` shows the app's own "Can't reach the server" line while the chapter and the hub
   keep working. Any page error at all fails the run.
+- `sw_check.py`: **the ship-time gate.** Since the service worker serves app code cache-first
+  (2026-09-06), the `const CACHE` line in `sw.js` is what makes a deploy land. This prints OK
+  only when nothing under `js/` or `css/` has changed since the commit that last touched that
+  line, and otherwise lists the files and exits 1, meaning bump `CACHE` before pushing.
+  Uncommitted edits count. No browser, no server: it is pure git, so it runs in a second.
+- `sw_offline_test.py`: the service-worker regression test (2026-09-06), the only tool here that
+  runs with the worker really installed and controlling the page. Part 1 plays a chapter online,
+  then `set_offline(True)`: the played chapter still opens a round, an unplayed one shows the
+  app's own "Can't reach the server" line with its map still on screen, the hub still works, and
+  when the signal returns the retried module lands in the cache under its PLAIN url (never a
+  `?retry=` variant). Part 2 temporarily bumps `CACHE` on disk, reloads, and proves the old cache
+  is evicted and the code refetched into the new one, then restores `sw.js` in a `finally` block.
+- `sw_warm_requests.py`: `count_requests.py`'s other half. The same five screens with the worker
+  ON, over three visits (cold, warm, steady state), showing how many requests the worker answers
+  itself and how few actually reach the wire. This is the measure of what cache-first bought.
+
+⚠️ **Everything in this folder runs in a clean browser, but YOUR browser is not clean.** If
+`http://localhost:5191/` has ever been open in Chrome, the service worker is registered there and
+serves `js/` and `css/` from its cache for up to 7 days (CLAUDE.md gotcha 10), so an edit can fail
+to show and a `verify-*.html` page opened by hand can grade the old file. Press F12, Application
+tab, Service Workers, Unregister, then reload. The tools here are unaffected either way.
 
 ## The verify run, in order
 
@@ -57,6 +78,8 @@ with the demo learner. They clear the service worker and caches first. Most writ
     node verify-exam-fractions.mjs
     node verify-lazy-load.mjs                       # the loader/registry drift check
     PYTHONIOENCODING=utf-8 python tools/lazy_playthrough.py
+    PYTHONIOENCODING=utf-8 python tools/sw_offline_test.py
+    python tools/sw_check.py                        # LAST, and only at ship: must print OK
 
 `verify-lazy-load.mjs` is the one to remember when CONTENT is added: a new quest, dice pool or
 exam chapter has to be registered in its registry AND listed in its loader (`js/quests/load.js`,
