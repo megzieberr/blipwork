@@ -57,8 +57,9 @@ const KEY = {
   "sin": "sin", "cos": "cos", "tan": "tan", "(": "lparen", ")": "rparen", "S⇔D": "sd",
   "CALC": "calc", "∫": "intdx", "x²": "x2", "x^": "pow", "√": "sqrt", "frac": "frac",
   "Ans": "ans", "×10x": "exp10", "x⁻¹": "xinv", "log": "log", "ln": "ln", "log□": "logbox", "ENG": "eng",
+  "π": "shift exp10",   // Build 3: π is SHIFT ×10^x (two key presses)
 };
-const keyIds = seq => seq.trim().split(/\s+/).filter(Boolean).flatMap(t => /^\d+$/.test(t) ? t.split("").map(d => "d" + d) : [KEY[t] || t]);
+const keyIds = seq => seq.trim().split(/\s+/).filter(Boolean).flatMap(t => /^\d+$/.test(t) ? t.split("").map(d => "d" + d) : (KEY[t] || t).split(" "));
 
 function freshCalc(h = host, opts = {}) {
   h.innerHTML = "";
@@ -98,6 +99,10 @@ function read(h) {
   const ix = ex && ex.querySelector(".calc-rad-idx");
   const IN = [["calc-frac-num", "num"], ["calc-frac-den", "den"], ["calc-rad-idx", "idx"], ["calc-rad-body", "body"], ["calc-pow-exp", "exp"]];
   const inBox = cur ? (IN.find(([cls]) => cur.parentElement.classList.contains(cls)) || [0, "line"])[1] : null;
+  /* Build 3 field: resFrac — every stacked fraction in the RESULT as
+     [top|bottom], so "one fraction over 4 with √6−√2 on top" can be told
+     apart from "√6 − (√2 over 4)", which reads the same as val */
+  const resFrac = res ? [...res.querySelectorAll(".calc-frac")].map(f => `[${f.querySelector(".calc-frac-num").textContent}|${f.querySelector(".calc-frac-den").textContent}]`).join("") : "";
   const errBox = h.querySelector(".lcd-err");
   const mk = h.querySelector(".lcd-lmark");
   const markOn = !!mk && !mk.hidden && mk.getBoundingClientRect().width > 0;
@@ -110,7 +115,7 @@ function read(h) {
   return {
     expr: ex ? ex.textContent : "", res: res ? res.textContent : "", cur: before,
     sa: slot("sa"), m: slot("m") === "M", sto: slot("sto") === "STO", rcl: slot("rcl") === "RCL", hist: slot("hist"),
-    val, frac: fr ? `${fr.querySelector(".calc-frac-num").textContent}/${fr.querySelector(".calc-frac-den").textContent}` : "",
+    val, resFrac, frac: fr ? `${fr.querySelector(".calc-frac-num").textContent}/${fr.querySelector(".calc-frac-den").textContent}` : "",
     idx: ix ? ix.textContent : null, curIn: inBox,
     err: errBox ? [...errBox.children].map(d => d.textContent).join(" / ") : "",
     mark: markOn, curVis,
@@ -513,6 +518,169 @@ function measureBuild2(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureBuild2(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 3 — exact maths
+   (spec sections 5, 6, 7 and 9)
+   ============================================================ */
+section("Build 3 · two-term surds (spec §7)");
+
+row("√2 + √3 shows √3+√2 (bigger root first)", "§7", [["√ 2 ▶ + √ 3 =", { val: "√3+√2", resFrac: "" }]]);
+row("1 ÷ (√2 + 1) shows −1+√2 (whole number first)", "§7", [["1 ÷ ( √ 2 ▶ + 1 =", { val: "−1+√2", resFrac: "" }]]);
+row("(√2)^3 = 2√2 (whole-number powers keep surds)", "§6", [["√ 2 ▶ x^ 3 ▶ =", { val: "2√2" }]]);
+row("(√2)³ via x³ (SHIFT x²) = 2√2", "§6", [["√ 2 ▶ SHIFT x² =", { val: "2√2" }]]);
+row("S⇔D round trip on a two-term surd: √3+√2 → 3,14626437 → √3+√2", "§7 S⇔D", [
+  ["√ 2 ▶ + √ 3 =", { val: "√3+√2" }], ["S⇔D", { val: "3,14626437" }], ["S⇔D", { val: "√3+√2" }],
+]);
+row("S⇔D round trip on −1+√2: → 0,4142135624 → −1+√2", "§7 S⇔D", [
+  ["1 ÷ ( √ 2 ▶ + 1 =", { val: "−1+√2" }], ["S⇔D", { val: "0,4142135624" }], ["S⇔D", { val: "−1+√2" }],
+]);
+row("exact BigInt arithmetic: (√6−√2)(√6+√2) = 4, a whole number again", "brief: exactness must be real", [["( √ 6 ▶ − √ 2 ▶ ) ( √ 6 ▶ + √ 2 =", { val: "4" }]]);
+row("exact: (1+√2)² = 3+2√2", "§6 whole-number powers keep surds", [["( 1 + √ 2 ▶ ) x² =", { val: "3+2√2" }]]);
+row("Ans keeps the exact two-term value: sin(15 = then ×4 = √6−√2", "§1 Ans-chaining", [["sin 15 = × 4 =", { expr: "Ans×4", val: "√6−√2", resFrac: "" }]]);
+row("▲ brings a two-term answer back exactly", "§1 history", [["sin 15 = 1 + 1 = ▲", { expr: "sin(15", val: "√6−√2/4", resFrac: "[√6−√2|4]" }]]);
+row("three unlike roots fall back to a decimal: √2+√3+√5 = 5,382332347", "brief: outside the shape → decimal", [["√ 2 ▶ + √ 3 ▶ + √ 5 =", { val: "5,382332347" }]]);
+row("√2 − √3 shows −√3+√2 (bigger root first, sign kept)", "Blipwork choice: only √3+√2 and −1+√2 were measured", [["√ 2 ▶ − √ 3 =", { val: "−√3+√2" }]]);
+row("3√2 + √3 shows √3+3√2 (bigger number under the root first)", "Blipwork choice: \"bigger root\" read as the radicand", [["3 √ 2 ▶ + √ 3 =", { val: "√3+3√2" }]]);
+row("both tops negative: sin(−105 shows −(√6+√2)/4, the minus in front", "Blipwork choice: as −√3/2 already shows", [["sin (−) 105 =", { val: "−√6+√2/4", resFrac: "[√6+√2|4]" }]]);
+
+section("Build 3 · surd size limit (spec §7)");
+
+row("√999 = 3√111 (exact)", "§7", [["√ 999 =", { val: "3√111" }]]);
+row("√1001 = 31,63858404 (decimal)", "§7", [["√ 1001 =", { val: "31,63858404" }]]);
+row("S⇔D on √1001 has no surd to go to", "Blipwork choice: as for a too-long fraction (Build 2)", [["√ 1001 = S⇔D", { val: "31,63858404" }]]);
+row("√1200 = 20√3: the limit is on the number left under the root", "§7 \"below 1000 after simplifying\"", [["√ 1200 =", { val: "20√3" }]]);
+row("√0,5 = √2/2 still (Build 2 row kept)", "§7", [["√ 0 , 5 =", { val: "√2/2" }]]);
+
+section("Build 3 · trig, exact for every multiple of 15° (spec §5)");
+
+row("sin(15 = (√6 − √2)/4 as ONE stacked fraction", "§5", [["sin 15 =", { val: "√6−√2/4", resFrac: "[√6−√2|4]" }]]);
+row("tan(15 = 2 − √3", "§5", [["tan 15 =", { val: "2−√3", resFrac: "" }]]);
+row("S⇔D round trip on sin(15: → 0,2588190451 → back", "§5, §7 S⇔D", [
+  ["sin 15 =", { resFrac: "[√6−√2|4]" }], ["S⇔D", { val: "0,2588190451" }], ["S⇔D", { val: "√6−√2/4", resFrac: "[√6−√2|4]" }],
+]);
+row("S⇔D round trip on tan(15: → 0,2679491924 → 2−√3", "§5, §7 S⇔D", [["tan 15 =", { val: "2−√3" }], ["S⇔D", { val: "0,2679491924" }], ["S⇔D", { val: "2−√3" }]]);
+row("sin(18 = 0,3090169944 (not a multiple of 15°: decimal)", "§5", [["sin 18 =", { val: "0,3090169944" }]]);
+row("tan(90 = Math ERROR", "§5", [["tan 90 =", { res: "Math ERROR" }]]);
+row("sin(−30 = −½", "§5", [["sin (−) 30 =", { val: "−1/2" }]]);
+row("cos(150 = −√3/2", "§5", [["cos 150 =", { val: "−√3/2" }]]);
+row("sin(30)² = ¼", "§5", [["sin 30 ) x² =", { val: "1/4" }]]);
+row("tan(20 = 0,3639702343 (was Math ERROR before Build 3)", "§5 \"otherwise decimals\"", [["tan 20 =", { val: "0,3639702343" }]]);
+row("tan(35 = 0,7002075382 (was Math ERROR before Build 3)", "§5 \"otherwise decimals\"", [["tan 35 =", { val: "0,7002075382" }]]);
+row("1 ÷ sin(15 = √6+√2 (the conjugate, exactly)", "§7 two-term arithmetic", [["1 ÷ sin 15 =", { val: "√6+√2" }]]);
+
+section("Build 3 · inverse trig (spec §5)");
+
+row("sin⁻¹(0,5 = 30", "§5", [["SHIFT sin 0 , 5 =", { val: "30" }]]);
+row("sin⁻¹(√3÷2 = 60", "§5", [["SHIFT sin √ 3 ▶ ÷ 2 =", { val: "60" }]]);
+row("cos⁻¹(−0,5 = 120", "§5", [["SHIFT cos (−) 0 , 5 =", { val: "120" }]]);
+row("tan⁻¹(2 = 63,43494882", "§5", [["SHIFT tan 2 =", { val: "63,43494882" }]]);
+row("sin⁻¹ of sin 15° = 15 (a two-term exact value lands on its whole angle)", "brief §B", [["SHIFT sin sin 15 =", { val: "15" }]]);
+row("cos⁻¹ of cos 165° = 165", "brief §B", [["SHIFT cos cos 165 =", { val: "165" }]]);
+row("tan⁻¹(2−√3) = 15", "brief §B", [["SHIFT tan 2 − √ 3 =", { val: "15" }]]);
+row("sin⁻¹ of sin(−75) = −75", "brief §B", [["SHIFT sin sin (−) 75 =", { val: "−75" }]]);
+
+/* every multiple of 15° from −360 to 720, sin cos tan, typed through the
+   rendered keys: the answer must be EXACT (no decimal comma), and its S⇔D
+   decimal must agree with Math.sin/cos/tan to 9 significant digits. tan at
+   90° + 180°k must be Math ERROR. */
+{
+  const c = freshCalc();
+  const miss = []; let n = 0;
+  const num = s => Number(s.replace(/−/g, "-").replace(",", "."));
+  for (let deg = -360; deg <= 720; deg += 15) {
+    for (const fn of ["sin", "cos", "tan"]) {
+      n++;
+      const typed = deg < 0 ? `(−) ${-deg}` : `${deg}`;
+      c.press(`AC ${fn} ${typed} =`);
+      const g = read(c.h);
+      if (fn === "tan" && ((deg % 180) + 180) % 180 === 90) { if (g.res !== "Math ERROR") miss.push(`tan(${deg}) = "${g.val}", want Math ERROR`); continue; }
+      if (g.res === "Math ERROR" || g.res === "Syntax ERROR" || g.val.includes(",")) { miss.push(`${fn}(${deg}) = "${g.val}" is not exact`); continue; }
+      c.press("S⇔D");
+      const shown = num(read(c.h).val);
+      const want = Math[fn](deg * Math.PI / 180);
+      if (!(Math.abs(shown - want) <= 5e-9 * Math.abs(want) + 1e-12)) miss.push(`${fn}(${deg}) = ${g.val} → ${read(c.h).val}, Math.${fn} gives ${want.toPrecision(10)}`);
+    }
+  }
+  tick(miss.length === 0 && n === 219, `sweep: sin, cos, tan of every multiple of 15° from −360 to 720 are exact and right to 9 significant digits <span class="why">[§5 "multiples of 15°"]</span>`,
+       `${n} angles checked${miss.length ? "; " + miss.slice(0, 6).join("; ") : ""}`);
+}
+
+section("Build 3 · exact rational powers (spec §6)");
+
+row("4^(½) = 2", "§6", [["4 x^ frac 1 ▼ 2 ▶ ▶ =", { val: "2" }]]);
+row("4^0,5 = 2", "§6", [["4 x^ 0 , 5 ▶ =", { val: "2" }]]);
+row("8^(⅔) = 4", "§6", [["8 x^ frac 2 ▼ 3 ▶ ▶ =", { val: "4" }]]);
+row("4^(−½) = ½ (stacked fraction)", "§6", [["4 x^ (−) frac 1 ▼ 2 ▶ ▶ =", { val: "1/2", resFrac: "[1|2]" }]]);
+row("27^(−⅔) = 1/9 (stacked fraction)", "§6", [["27 x^ (−) frac 2 ▼ 3 ▶ ▶ =", { val: "1/9", resFrac: "[1|9]" }]]);
+row("2^0,5 = 1,414213562", "§6", [["2 x^ 0 , 5 ▶ =", { val: "1,414213562" }]]);
+row("2^(½) = 1,414213562 (NOT √2)", "§6", [["2 x^ frac 1 ▼ 2 ▶ ▶ =", { val: "1,414213562" }]]);
+row("2^10 = 1024 and 2^(−1) = ½ still", "§6", [["2 x^ 10 ▶ =", { val: "1024" }], ["AC 2 x^ (−) 1 ▶ =", { val: "1/2" }]]);
+row("2^(3²) = 512 still (power key twice nests)", "§6", [["2 x^ 3 x^ 2 ▶ ▶ =", { val: "512" }]]);
+
+section("Build 3 · odd roots of negatives (spec §6)");
+
+row("(−8)^(⅓) = −2", "§6", [["( (−) 8 ) x^ frac 1 ▼ 3 ▶ ▶ =", { val: "−2" }]]);
+row("((−)4)^0,5 = Math ERROR", "§6", [["( (−) 4 ) x^ 0 , 5 ▶ =", { res: "Math ERROR" }]]);
+row("³√27 = 3", "§6", [["SHIFT √ 27 =", { val: "3" }]]);
+row("(−8)^(⅔) = 4", "§6 rule: the odd root, then the power", [["( (−) 8 ) x^ frac 2 ▼ 3 ▶ ▶ =", { val: "4" }]]);
+row("(−2)^(⅓) = −1,25992105 (an odd root that is not whole: a decimal)", "§6 \"odd root of a negative works\"; the decimal is Blipwork's reading", [["( (−) 2 ) x^ frac 1 ▼ 3 ▶ ▶ =", { val: "−1,25992105" }]]);
+row("³√(−8) keeps its old answer, −2", "Blipwork choice: spec silent on ³√ of a negative, current behaviour kept", [["SHIFT √ (−) 8 =", { val: "−2" }]]);
+row("ˣ√ of a negative keeps its old answer, Math ERROR", "Blipwork choice: spec silent on ˣ√ of a negative, current behaviour kept", [["3 SHIFT x^ (−) 8 =", { res: "Math ERROR" }]]);
+
+section("Build 3 · π (spec §7 and §9)");
+
+row("SHIFT ×10^x types π", "§9", [["π", { expr: "π", curIn: "line" }]]);
+row("2π shows 2π (π multiplies implicitly)", "§7", [["2 π =", { expr: "2π", val: "2π", resFrac: "" }]]);
+row("π÷2 shows ½π (stacked fraction first, then π)", "§7", [["π ÷ 2 =", { val: "1/2π", resFrac: "[1|2]" }]]);
+row("π+1 = 4,141592654 (decimal)", "§7", [["π + 1 =", { val: "4,141592654" }]]);
+row("S⇔D round trip on 2π: → 6,283185307 → 2π", "§7", [["2 π =", { val: "2π" }], ["S⇔D", { val: "6,283185307" }], ["S⇔D", { val: "2π" }]]);
+row("S⇔D round trip on ½π: → 1,570796327 → ½π", "§7", [["π ÷ 2 =", { val: "1/2π" }], ["S⇔D", { val: "1,570796327" }], ["S⇔D", { val: "1/2π" }]]);
+row("only rational multiples of π stay exact: π² = 9,869604401", "brief §F", [["π x² =", { val: "9,869604401" }]]);
+row("2π ÷ π = 2", "brief §F (rational)", [["2 π ÷ π =", { val: "2" }]]);
+row("π + π = 2π; −π shows −π", "brief §F", [["π + π =", { val: "2π" }], ["AC (−) π =", { val: "−π" }]]);
+row("SHIFT ×10^x after a result starts a fresh line (like a digit)", "Blipwork choice: spec silent", [["2 + 3 = π", { expr: "π", res: "" }]]);
+row("π then ▫/▫ grabs π as the top: π/□", "Blipwork choice: §8 lists numbers, letters, Ans", [["π frac", { frac: "π/", curIn: "den" }], ["4 ▶ =", { val: "1/4π" }]]);
+row("π directly followed by a number is not a product: Syntax ERROR", "Blipwork choice: as (2+3)4 on the device", [["π 2 =", { res: "Syntax ERROR" }]]);
+row("Rad mode: sin(π÷6 = ½ and sin(π = 0 exactly", "Blipwork choice: spec probed Deg only", [
+  ["SHIFT MODE 4 sin π ÷ 6 =", { val: "1/2" }], ["AC sin π =", { val: "0" }],
+]);
+
+/* ---- a two-term stacked fraction and a π form must fit the LCD at 375 px
+   (DOM bounding boxes, no screenshots) ---- */
+section("Build 3 · exact answers fit the LCD (DOM measurement)");
+function measureBuild3(where, h, press) {
+  /* the RESULT line is compared with ½'s: a √ template on the ENTRY line
+     already makes the LCD a few px taller (as for √2÷2 before Build 3),
+     which is the entry line's doing, not the answer's */
+  const lcd = h.querySelector(".calc-lcd");
+  press("AC AC 1 ÷ 2 =");
+  const hHalf = h.querySelector(".lcd-res").getBoundingClientRect().height;
+  for (const [keys, want] of [["sin 15 =", "√6−√2/4"], ["sin (−) 105 =", "−√6+√2/4"], ["( √ 999 ▶ + √ 998 ▶ ) ÷ 7 =", "√998+3√111/7"], ["1234 π ÷ 56789 =", "1234/56789π"]]) {
+    press("AC " + keys);
+    const g = read(h);
+    const res = h.querySelector(".lcd-res"), L = lcd.getBoundingClientRect();
+    const fr = [...res.querySelectorAll(".calc-frac")].map(f => f.getBoundingClientRect());
+    const inside = fr.every(b => b.left >= L.left && b.right <= L.right && b.top >= L.top && b.bottom <= L.bottom);
+    const hNow = res.getBoundingClientRect().height;
+    tick(g.val === want && res.scrollWidth <= res.clientWidth + 0.5 && inside && Math.abs(hNow - hHalf) < 0.5,
+         `${where}: ${want} fits the result line, inside the LCD, as tall as ½`,
+         `"${g.val}", line ${res.scrollWidth}/${res.clientWidth} px, fraction inside ${inside}, result line ${Math.round(hHalf)} → ${Math.round(hNow)} px`);
+  }
+  press("AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  press("AC ON AC");
+  measureBuild3(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild3(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 

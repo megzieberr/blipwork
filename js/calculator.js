@@ -140,12 +140,26 @@ const lcdShow = s => escapeHtml(s).replace(/x̄/g, MEAN_GLYPH);   // x + combini
    A "Value" is one of:
      { kind:'rat',   n: BigInt, d: BigInt }              — reduced, d>0
      { kind:'surd',  n: BigInt, d: BigInt, rad: BigInt }  — (n/d)·√rad, rad squarefree>1
+     { kind:'surd2', terms: [t1, t2] }                    — t1 + t2, each { n, d, rad } = (n/d)·√rad
+                                                            (Build 3; rad 1 = a plain rational term)
+     { kind:'pi',    n: BigInt, d: BigInt }               — (n/d)·π, n ≠ 0 (Build 3)
      { kind:'float', v: number }                          — decimal fallback
      { kind:'error', msg: "Syntax ERROR" | "Math ERROR" }
-   Only sqrt (degree 2) of a rational is ever exact — cube roots have
-   no exact surd type here, so they always fall back to float (this
-   matches the brief: "anything that leaves the (a/b)√n form falls
-   back to float").
+   Square roots of rationals are exact; a cube or other root is exact
+   only when it is a rational number (³√27 = 3, ⁴√16 = 2), else float.
+   Calculator rebuild Build 3 (2026-10-04, CASIO-CALCULATOR-SPEC.md §5,
+   §6, §7): exact sums of TWO unlike roots, (a√b + c√d)/e, one of which may
+   be a plain number (√3+√2, −1+√2, (√6−√2)/4, 2−√3). The arithmetic is done
+   on BigInt term lists (termsOf / fromTerms below), never by recognising a
+   float afterwards; a result needing three or more unlike roots falls back
+   to a decimal. Trig is exact for every multiple of 15° (the 15° family is
+   COMPUTED from the 30°/45° tables with this arithmetic, sin(b+45°) =
+   sin b cos 45° + cos b sin 45°, not typed in). Rational powers are exact
+   when the answer is rational (8^⅔ = 4, 27^(−⅔) = 1/9), otherwise a
+   decimal, never a surd (2^½ = 1,414213562); odd roots of negatives work
+   ((−8)^⅓ = −2). Surds show exactly only while the simplified number under
+   the root is below 1000 (√999 = 3√111, √1001 = 31,63858404). π (SHIFT
+   ×10^x) is a constant; only rational multiples of π stay exact (2π, ½π).
    Calculator rebuild Build 2 (2026-10-04, CASIO-CALCULATOR-SPEC.md §1,
    §3, §4, §7, §8): a missing ")" at the end of a box is closed for you;
    ▫/▫ and ˣ√ grab the operand before the cursor; x² / x^ / x³ chain from
@@ -181,21 +195,70 @@ function squarefreeSplit(k) {   // k: BigInt ≥ 0 → { sq, rest } with k = sq�
 }
 const isErr = v => v.kind === "error";
 const isZeroV = v => v.kind === "rat" && v.n === 0n;
+const termFloat = t => (Number(t.n) / Number(t.d)) * (t.rad === 1n ? 1 : Math.sqrt(Number(t.rad)));
 function toFloatV(v) {
   if (v.kind === "rat") return Number(v.n) / Number(v.d);
-  if (v.kind === "surd") return (Number(v.n) / Number(v.d)) * Math.sqrt(Number(v.rad));
+  if (v.kind === "surd") return termFloat(v);
+  if (v.kind === "surd2") return termFloat(v.terms[0]) + termFloat(v.terms[1]);
+  if (v.kind === "pi") return (Number(v.n) / Number(v.d)) * Math.PI;
   return v.v;
 }
 const asFloatVal = v => VFLOAT(toFloatV(v));
 
+/* ---- Build 3: exact sums of roots, as BigInt term lists ----
+   Every exact algebraic value (rat, surd, surd2) is a list of terms
+   (n/d)·√rad with rad squarefree (rad 1 = a plain rational term). + − ×
+   work on these lists and fromTerms() collects like roots back into the
+   value kinds: no term → 0, one → rat or surd, two → surd2, three or more
+   (e.g. √2+√3+√5) → a decimal, the spec's fallback ("anything that leaves
+   the shape falls back to a decimal"). So (√6−√2)(√6+√2) really comes back
+   as the whole number 4, by exact BigInt arithmetic. */
+const isAlg = v => v.kind === "rat" || v.kind === "surd" || v.kind === "surd2";
+function termsOf(v) {
+  if (v.kind === "rat") return v.n === 0n ? [] : [{ n: v.n, d: v.d, rad: 1n }];
+  if (v.kind === "surd") return [{ n: v.n, d: v.d, rad: v.rad }];
+  return v.terms;   // surd2
+}
+/* The order the device shows two terms in (spec §7): a plain number FIRST
+   (−1+√2, 2−√3), otherwise the bigger root first (√3+√2, (√6−√2)/4). Only
+   these two cases were measured; "bigger root" is read as the bigger number
+   under the root, whatever the coefficients and signs (Blipwork reading:
+   √2−√3 shows −√3+√2, and 3√2+√3 shows √3+3√2). */
+const termOrder = (a, b) => (a.rad === 1n ? -1 : b.rad === 1n ? 1 : a.rad > b.rad ? -1 : 1);
+function fromTerms(list) {
+  const byRad = new Map();
+  for (const t of list) {
+    if (t.n === 0n) continue;
+    const key = t.rad.toString(), p = byRad.get(key);
+    byRad.set(key, p ? { n: p.n * t.d + t.n * p.d, d: p.d * t.d, rad: t.rad } : { n: t.n, d: t.d, rad: t.rad });
+  }
+  const terms = [];
+  for (const t of byRad.values()) { if (t.n === 0n) continue; const r = mkRat(t.n, t.d); terms.push({ n: r.n, d: r.d, rad: t.rad }); }
+  if (terms.length === 0) return mkRat(0n, 1n);
+  if (terms.length === 1) { const t = terms[0]; return t.rad === 1n ? mkRat(t.n, t.d) : mkSurd(t.n, t.d, t.rad); }
+  if (terms.length === 2) return { kind: "surd2", terms: terms.sort(termOrder) };
+  return VFLOAT(terms.reduce((s, t) => s + termFloat(t), 0));
+}
+const negTerm = t => ({ n: -t.n, d: t.d, rad: t.rad });
+/* (n/d)·π (Build 3, spec §7/§9): only RATIONAL multiples of π stay exact.
+   π + π = 2π and π÷2 = ½π stay exact; π + 1, π², √2·π are decimals. */
+function mkPi(n, d) {
+  const r = mkRat(n, d);
+  if (isErr(r) || r.n === 0n) return r;
+  return { kind: "pi", n: r.n, d: r.d };
+}
+
 function vAddSub(a, b, sign) {
   if (isErr(a)) return a; if (isErr(b)) return b;
   if (a.kind === "float" || b.kind === "float") return asFloatVal({ kind: "float", v: toFloatV(a) + sign * toFloatV(b) });
-  if (a.kind === "rat" && b.kind === "rat") return mkRat(a.n * b.d + BigInt(sign) * b.n * a.d, a.d * b.d);
-  if (isZeroV(a)) return sign === 1 ? b : vNeg(b);
-  if (isZeroV(b)) return a;
-  if (a.kind === "surd" && b.kind === "surd" && a.rad === b.rad) return mkSurd(a.n * b.d + BigInt(sign) * b.n * a.d, a.d * b.d, a.rad);
-  return asFloatVal({ kind: "float", v: toFloatV(a) + sign * toFloatV(b) });
+  if (a.kind === "pi" || b.kind === "pi") {
+    if (isZeroV(b)) return a;
+    if (isZeroV(a)) return sign === 1 ? b : vNeg(b);
+    if (a.kind === "pi" && b.kind === "pi") return mkPi(a.n * b.d + BigInt(sign) * b.n * a.d, a.d * b.d);
+    return asFloatVal({ kind: "float", v: toFloatV(a) + sign * toFloatV(b) });   // π + 1 = 4,141592654 (spec §7)
+  }
+  if (!isAlg(a) || !isAlg(b)) return asFloatVal({ kind: "float", v: toFloatV(a) + sign * toFloatV(b) });   // a kind a later build adds: decimal until it says otherwise
+  return fromTerms([...termsOf(a), ...(sign === 1 ? termsOf(b) : termsOf(b).map(negTerm))]);
 }
 const vAdd = (a, b) => vAddSub(a, b, 1);
 const vSub = (a, b) => vAddSub(a, b, -1);
@@ -203,22 +266,41 @@ function vNeg(a) {
   if (isErr(a)) return a;
   if (a.kind === "float") return VFLOAT(-a.v);
   if (a.kind === "rat") return mkRat(-a.n, a.d);
+  if (a.kind === "pi") return mkPi(-a.n, a.d);
+  if (a.kind === "surd2") return fromTerms(a.terms.map(negTerm));
   return mkSurd(-a.n, a.d, a.rad);
 }
 function vMul(a, b) {
   if (isErr(a)) return a; if (isErr(b)) return b;
   if (a.kind === "float" || b.kind === "float") return asFloatVal({ kind: "float", v: toFloatV(a) * toFloatV(b) });
+  if (a.kind === "pi" || b.kind === "pi") {
+    if (isZeroV(a) || isZeroV(b)) return mkRat(0n, 1n);
+    if (a.kind === "pi" && b.kind === "rat") return mkPi(a.n * b.n, a.d * b.d);
+    if (b.kind === "pi" && a.kind === "rat") return mkPi(a.n * b.n, a.d * b.d);
+    return asFloatVal({ kind: "float", v: toFloatV(a) * toFloatV(b) });   // π², √2·π: not a rational multiple of π
+  }
   if (a.kind === "rat" && b.kind === "rat") return mkRat(a.n * b.n, a.d * b.d);
-  if (a.kind === "rat") return mkSurd(a.n * b.n, a.d * b.d, b.rad);
-  if (b.kind === "rat") return mkSurd(a.n * b.n, a.d * b.d, a.rad);
-  const rn = a.n * b.n, rd = a.d * b.d, radProd = a.rad * b.rad;
-  const { sq, rest } = squarefreeSplit(radProd);
-  return mkSurd(rn * sq, rd, rest);
+  if (!isAlg(a) || !isAlg(b)) return asFloatVal({ kind: "float", v: toFloatV(a) * toFloatV(b) });   // a kind a later build adds
+  const out = [];
+  for (const p of termsOf(a)) for (const q of termsOf(b)) {
+    const { sq, rest } = squarefreeSplit(p.rad * q.rad);   // √r·√s = sq·√rest
+    out.push({ n: p.n * q.n * sq, d: p.d * q.d, rad: rest });
+  }
+  return fromTerms(out);
 }
 function vInv(a) {
   if (isErr(a)) return a;
   if (a.kind === "float") return a.v === 0 ? VERR("Math ERROR") : VFLOAT(1 / a.v);
   if (a.kind === "rat") return a.n === 0n ? VERR("Math ERROR") : mkRat(a.d, a.n);
+  if (a.kind === "pi") return VFLOAT(1 / toFloatV(a));   // 1/π is not a rational multiple of π
+  if (a.kind === "surd2") {
+    /* 1/(p + q) = (p − q)/(p² − q²): p² and q² are rational, and they are
+       never equal for two unlike squarefree roots, so this never divides by
+       0. 1/(√2+1) = (√2−1)/(2−1) = −1+√2 (spec §7). */
+    const [p, q] = a.terms;
+    const sq = t => mkRat(t.n * t.n * t.rad, t.d * t.d);
+    return vDiv(fromTerms([p, negTerm(q)]), vSub(sq(p), sq(q)));
+  }
   if (a.n === 0n) return VERR("Math ERROR");
   return mkSurd(a.d, a.n * a.rad, a.rad);   // 1/((n/d)√rad) = (d/(n·rad))·√rad
 }
@@ -229,26 +311,58 @@ function vPowInt(a, nInt) {
   if (Math.abs(nInt) > 64) return VFLOAT(Math.pow(toFloatV(a), nInt));
   const neg = nInt < 0, n = Math.abs(nInt);
   let result = mkRat(1n, 1n), base = a, e = n;
-  while (e > 0) { if (e & 1) result = vMul(result, base); if (isErr(result)) return result; base = vMul(base, base); if (isErr(base)) return base; e >>= 1; }
+  while (e > 0) { if (e & 1) result = vMul(result, base); if (isErr(result)) return result; e >>= 1; if (e > 0) { base = vMul(base, base); if (isErr(base)) return base; } }
   return neg ? vInv(result) : result;
 }
+/* x^ (Build 3, spec §6). A whole-number exponent keeps surds: (√2)³ = 2√2.
+   A fraction or decimal exponent p/q on a RATIONAL base gives the exact
+   answer only when it is rational, i.e. when top and bottom of the base are
+   perfect q-th powers: 4^½ = 2, 4^0,5 = 2, 8^⅔ = 4, 4^(−½) = ½, 27^(−⅔) =
+   1/9. Otherwise a DECIMAL, never a surd: 2^½ = 1,414213562. An odd root of
+   a negative works ((−8)^⅓ = −2, and as a decimal when not exact); an even
+   root of a negative is Math ERROR ((−4)^0,5). */
+const MAX_EXACT_ROOT = 64n;   // q-th roots tried exactly up to q = 64 (exponent 0,015625); past that, decimal
 function vPow(base, exp) {
   if (isErr(base)) return base; if (isErr(exp)) return exp;
   if (exp.kind === "rat" && exp.d === 1n && exp.n >= -64n && exp.n <= 64n) return vPowInt(base, Number(exp.n));
+  if (exp.kind === "rat" && exp.d > 1n) {
+    const p = exp.n, q = exp.d, oddQ = q % 2n === 1n;
+    if (base.kind === "rat" && q <= MAX_EXACT_ROOT && p >= -64n && p <= 64n) {
+      const neg = base.n < 0n;
+      if (neg && !oddQ) return VERR("Math ERROR");
+      const rn = intRoot(neg ? -base.n : base.n, Number(q)), rd = intRoot(base.d, Number(q));
+      if (rn !== null && rd !== null) return vPowInt(mkRat(neg ? -rn : rn, rd), Number(p));
+    }
+    const f = toFloatV(base);
+    if (f < 0) {
+      if (!oddQ) return VERR("Math ERROR");
+      const m = Math.pow(-f, Number(p) / Number(q));
+      return VFLOAT(p % 2n === 0n ? m : -m);   // a real odd root: (−x)^(p/q) = ±x^(p/q)
+    }
+    return VFLOAT(Math.pow(f, Number(p) / Number(q)));
+  }
   return VFLOAT(Math.pow(toFloatV(base), toFloatV(exp)));
 }
 function vSqrt(a) {
   if (isErr(a)) return a;
   if (a.kind === "float") return a.v < 0 ? VERR("Math ERROR") : VFLOAT(Math.sqrt(a.v));
-  if (a.kind === "surd") return a.n < 0n ? VERR("Math ERROR") : asFloatVal(a);   // sqrt of a surd: no exact type for it here
+  if (a.kind !== "rat") { const f = toFloatV(a); return f < 0 ? VERR("Math ERROR") : VFLOAT(Math.sqrt(f)); }   // √ of a surd, a two-term sum or a π form: decimal (no exact type for it)
   if (a.n < 0n) return VERR("Math ERROR");
   if (a.n === 0n) return mkRat(0n, 1n);
   const num = a.n * a.d;
   const { sq, rest } = squarefreeSplit(num);
   return mkSurd(sq, a.d, rest);
 }
-function vCbrt(a) {   // no exact cube-surd type — always float, matches the brief's scope
+/* ³√ (SHIFT √): exact when the answer is rational (³√27 = 3, spec §6;
+   ³√(8/27) = ⅔, the same rule ˣ√ with index 3 already followed), else a
+   decimal. A NEGATIVE radicand keeps its old behaviour (the real cube root
+   as a decimal): the spec did not measure ³√ of a negative. */
+function vCbrt(a) {
   if (isErr(a)) return a;
+  if (a.kind === "rat" && a.n >= 0n) {
+    const rn = intRoot(a.n, 3), rd = intRoot(a.d, 3);
+    if (rn !== null && rd !== null) return mkRat(rn, rd);
+  }
   return VFLOAT(Math.cbrt(toFloatV(a)));
 }
 /* exact k-th root of a BigInt a ≥ 0, or null when a is not a perfect k-th power */
@@ -264,8 +378,9 @@ function intRoot(a, k) {
    radicand. Index 2 is exactly the √ key (exact surds); a whole-number
    index whose radicand is a perfect power of it gives the exact rational
    root (⁴√16 = 2); everything else is a decimal, the existing value rules.
-   Odd roots of NEGATIVES are Build 3 and give Math ERROR here, as x^
-   already does for (−8)^(⅓). */
+   A NEGATIVE radicand stays Math ERROR here (Build 3 left it alone): the
+   spec measured odd roots of negatives only through x^, (−8)^⅓ = −2, and
+   not through ³√ or ˣ√, so this is kept until a probe says otherwise. */
 function vXroot(idx, x) {
   if (isErr(idx)) return idx; if (isErr(x)) return x;
   if (idx.kind === "rat" && idx.d === 1n && idx.n === 2n) return vSqrt(x);
@@ -277,34 +392,57 @@ function vXroot(idx, x) {
   if (n === 0) return VERR("Math ERROR");
   return VFLOAT(Math.pow(toFloatV(x), 1 / n));
 }
+/* exact equality of two exact algebraic values (Build 3: by exact
+   subtraction, so a two-term sum compares exactly too) */
 function valuesEqual(a, b) {
-  if (isErr(a) || isErr(b)) return false;
-  if (a.kind === "float" || b.kind === "float") return Math.abs(toFloatV(a) - toFloatV(b)) < 1e-9;
-  if (a.kind === "rat" && b.kind === "rat") return a.n * b.d === b.n * a.d;
-  if (a.kind === "surd" && b.kind === "surd") return a.rad === b.rad && a.n * b.d === b.n * a.d;
-  return false;
+  if (isErr(a) || isErr(b) || !isAlg(a) || !isAlg(b)) return false;
+  return isZeroV(vSub(a, b));
 }
 
-/* ---- exact special-angle table (multiples of 30° and 45°), DEGREES ---- */
+/* ---- exact special-angle table, DEGREES ----
+   The 30°/45° family is typed in; Build 3 (spec §5: exact for EVERY
+   multiple of 15°) COMPUTES the other eight angles (15, 75, 105, …, 345)
+   from it with the exact arithmetic above: θ − 45° is then a multiple of
+   30°, and sin θ = sin(θ−45°)cos 45° + cos(θ−45°)sin 45°, cos θ =
+   cos(θ−45°)cos 45° − sin(θ−45°)sin 45°. So sin 15° = (√6−√2)/4 comes out
+   of BigInt arithmetic, not off a list, and tan = sin ÷ cos the same way
+   (tan 15° = 2−√3). verify-calc-casio.html sweeps every entry against
+   Math.sin/cos/tan. */
 const RT = { half: mkRat(1n, 2n), nhalf: mkRat(-1n, 2n), one: mkRat(1n, 1n), none: mkRat(-1n, 1n), zero: mkRat(0n, 1n) };
 const S2 = mkSurd(1n, 2n, 2n), nS2 = mkSurd(-1n, 2n, 2n), S3 = mkSurd(1n, 2n, 3n), nS3 = mkSurd(-1n, 2n, 3n);
 const SIN_TABLE = { 0: RT.zero, 30: RT.half, 45: S2, 60: S3, 90: RT.one, 120: S3, 135: S2, 150: RT.half, 180: RT.zero, 210: RT.nhalf, 225: nS2, 240: nS3, 270: RT.none, 300: nS3, 315: nS2, 330: RT.nhalf };
 const COS_TABLE = { 0: RT.one, 30: S3, 45: S2, 60: RT.half, 90: RT.zero, 120: RT.nhalf, 135: nS2, 150: nS3, 180: RT.none, 210: nS3, 225: nS2, 240: RT.nhalf, 270: RT.zero, 300: RT.half, 315: S2, 330: S3 };
 function normDeg(d) { let x = d % 360; if (x < 0) x += 360; return x; }
-function sinDeg(deg) { return SIN_TABLE[normDeg(deg)]; }
-function cosDeg(deg) { return COS_TABLE[normDeg(deg)]; }
-function tanDeg(deg) { const c = cosDeg(deg); if (c === undefined || isZeroV(c)) return null; const s = sinDeg(deg); return s === undefined ? null : vDiv(s, c); }
-const ASIN_RANGE = [-90, -60, -45, -30, 0, 30, 45, 60, 90];
-const ACOS_RANGE = [0, 30, 45, 60, 90, 120, 135, 150, 180];
-const ATAN_RANGE = [-60, -45, -30, 0, 30, 45, 60];
+for (let deg = 15; deg < 360; deg += 30) {
+  if (SIN_TABLE[deg] !== undefined) continue;   // 45, 135, 225, 315 are in the typed table
+  const b = normDeg(deg - 45);
+  SIN_TABLE[deg] = vAdd(vMul(SIN_TABLE[b], S2), vMul(COS_TABLE[b], S2));
+  COS_TABLE[deg] = vSub(vMul(COS_TABLE[b], S2), vMul(SIN_TABLE[b], S2));
+}
+const TAN_TABLE = {};   // null where cos = 0 (90°, 270°): Math ERROR
+for (const k of Object.keys(SIN_TABLE)) TAN_TABLE[k] = isZeroV(COS_TABLE[k]) ? null : vDiv(SIN_TABLE[k], COS_TABLE[k]);
+const TRIG_TABLE = { sin: SIN_TABLE, cos: COS_TABLE, tan: TAN_TABLE };
+const degRange = (from, to) => { const a = []; for (let d = from; d <= to; d += 15) a.push(d); return a; };
+const INV_RANGE = { asin: degRange(-90, 90), acos: degRange(0, 180), atan: degRange(-75, 75) };
+const INV_OF = { asin: "sin", acos: "cos", atan: "tan" };
+/* The angle in WHOLE degrees when it is exact, else null: a whole number in
+   Deg mode; in Rad mode a rational multiple of π that is a whole number of
+   degrees (π/6 → 30). The Rad case is a Blipwork choice (the spec only
+   probed Deg): without it sin(π) would show 1,224646799×10⁻¹⁶. */
+function exactDeg(argVal, drg) {
+  if (drg === "D" && argVal.kind === "rat" && argVal.d === 1n) return argVal.n;
+  if (drg === "R" && argVal.kind === "pi") { const m = mkRat(argVal.n * 180n, argVal.d); if (m.d === 1n) return m.n; }
+  return null;
+}
 
+/* Build 3 also fixes tan: the old lookup answered Math ERROR for EVERY whole
+   angle outside the 30°/45° table (tan(20 gave Math ERROR, not 0,3639702343). */
 function evalTrigFn(name, argVal, drg) {
   if (isErr(argVal)) return argVal;
-  if (drg === "D" && argVal.kind === "rat" && argVal.d === 1n) {
-    const deg = normDeg(Number(argVal.n));
-    if (name === "sin" && SIN_TABLE[deg] !== undefined) return SIN_TABLE[deg];
-    if (name === "cos" && COS_TABLE[deg] !== undefined) return COS_TABLE[deg];
-    if (name === "tan") { const t = tanDeg(deg); if (t === null) return VERR("Math ERROR"); if (SIN_TABLE[deg] !== undefined) return t; }
+  const deg = exactDeg(argVal, drg);
+  if (deg !== null) {
+    const k = Number(((deg % 360n) + 360n) % 360n), table = TRIG_TABLE[name];
+    if (table[k] !== undefined) return table[k] === null ? VERR("Math ERROR") : table[k];
   }
   const argDeg = toFloatV(argVal);
   const rad = drg === "R" ? argDeg : argDeg * Math.PI / 180;
@@ -312,12 +450,15 @@ function evalTrigFn(name, argVal, drg) {
   const v = fn(rad);
   return Number.isFinite(v) && Math.abs(v) < 1e15 ? VFLOAT(v) : VERR("Math ERROR");
 }
+/* sin⁻¹ / cos⁻¹ / tan⁻¹ of an exact value from the table give the whole
+   angle (sin⁻¹(√3÷2) = 60, sin⁻¹ of sin 15° = 15), in Deg mode. Rad mode
+   keeps its decimal answers (spec silent there). */
 function evalInv(name, argVal, drg) {
   if (isErr(argVal)) return argVal;
-  if (drg === "D" && argVal.kind !== "float") {
-    const range = name === "asin" ? ASIN_RANGE : name === "acos" ? ACOS_RANGE : ATAN_RANGE;
-    for (const deg of range) {
-      const tv = name === "asin" ? sinDeg(deg) : name === "acos" ? cosDeg(deg) : tanDeg(deg);
+  if (drg === "D" && isAlg(argVal)) {
+    const table = TRIG_TABLE[INV_OF[name]];
+    for (const deg of INV_RANGE[name]) {
+      const tv = table[normDeg(deg)];
       if (tv && valuesEqual(tv, argVal)) return mkRat(BigInt(deg), 1n);
     }
   }
@@ -334,6 +475,11 @@ function applyFunc(name, inv, argVal, drg) {
 
 /* ---- display formatting ---- */
 function fmtIntBig(b) { return b < 0n ? "−" + (-b).toString() : b.toString(); }
+const fracHTML = (top, bottom) => `<span class="calc-frac"><span class="calc-frac-num">${top}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${bottom}</span></span>`;
+const absBig = b => (b < 0n ? -b : b);
+/* one term's text without its sign: 2 · √3 · 2√3 */
+const termText = (k, rad) => (rad === 1n ? absBig(k).toString() : (absBig(k) === 1n ? "" : absBig(k).toString()) + "√" + rad);
+const lcmBig = (a, b) => a / gcdBig(a, b) * b;
 function formatExactHTML(v) {
   if (v.kind === "error") return escapeHtml(v.msg);
   if (v.kind === "float") return formatDecimal(v);
@@ -341,14 +487,31 @@ function formatExactHTML(v) {
     if (v.n === 0n) return "0";
     if (v.d === 1n) return fmtIntBig(v.n);
     const neg = v.n < 0n, an = neg ? -v.n : v.n;
-    return (neg ? "−" : "") + `<span class="calc-frac"><span class="calc-frac-num">${an}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${v.d}</span></span>`;
+    return (neg ? "−" : "") + fracHTML(an, v.d);
+  }
+  if (v.kind === "pi") {
+    /* spec §7: 2π shows 2π, π÷2 shows ½π (the stacked fraction FIRST, then π) */
+    const neg = v.n < 0n, an = neg ? -v.n : v.n;
+    return (neg ? "−" : "") + (v.d === 1n ? (an === 1n ? "" : an.toString()) : fracHTML(an, v.d)) + "π";
+  }
+  if (v.kind === "surd2") {
+    /* (a√b + c√d)/e as ONE stacked fraction over the common denominator
+       (spec §5: sin 15° = (√6−√2)/4), inline when e = 1 (√3+√2, −1+√2,
+       2−√3). Terms come in termOrder. When BOTH tops are negative the minus
+       goes in front of the whole fraction, as it does for −√3/2 (Blipwork
+       choice: the device's form for e.g. sin(−105) was not probed). */
+    const [p, q] = v.terms, e = lcmBig(p.d, q.d);
+    const a = p.n * (e / p.d), c = q.n * (e / q.d);
+    if (e === 1n) return (a < 0n ? "−" : "") + termText(a, p.rad) + (c < 0n ? "−" : "+") + termText(c, q.rad);
+    if (a < 0n && c < 0n) return "−" + fracHTML(termText(a, p.rad) + "+" + termText(c, q.rad), e);
+    return fracHTML((a < 0n ? "−" : "") + termText(a, p.rad) + (c < 0n ? "−" : "+") + termText(c, q.rad), e);
   }
   // surd
   const neg = v.n < 0n, an = neg ? -v.n : v.n;
   const radStr = `√${v.rad}`;
   if (v.d === 1n) return (neg ? "−" : "") + (an === 1n ? "" : an.toString()) + radStr;
   const numStr = (an === 1n ? "" : an.toString()) + radStr;
-  return (neg ? "−" : "") + `<span class="calc-frac"><span class="calc-frac-num">${numStr}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${v.d}</span></span>`;
+  return (neg ? "−" : "") + fracHTML(numStr, v.d);
 }
 /* Decimal display, calculator Build 2 (spec §7, Norm 2 = the factory
    setting): 10 significant digits, rounded (2/3 → 0,6666666667). A number
@@ -376,12 +539,17 @@ function formatDecimal(v) {
 /* Spec §7: a fraction shows only while digits(top) + digits(bottom) + 1 is
    10 or less (1234/56789 yes, 12345/67891 → 0,1818355894), and a whole
    number only while it has at most 10 digits. Past that the SAME exact
-   value shows as a decimal, and S⇔D has nothing to toggle to. Surds keep
-   their exact form here: the surd size limit is Build 3. */
+   value shows as a decimal, and S⇔D has nothing to toggle to.
+   Build 3 (spec §7): a surd shows exactly only while the number under the
+   root, after simplifying, is below 1000 (√999 = 3√111 yes, √1001 → 31,63858404),
+   for one root or two; no other surd limit is applied (none was measured).
+   A π form uses the fraction rule on its multiple (Blipwork choice). */
 const digitCount = b => (b < 0n ? -b : b).toString().length;
+const SURD_LIMIT = 1000n;
 function exactFits(v) {
-  if (v.kind === "surd") return true;
-  if (v.kind !== "rat") return false;
+  if (v.kind === "surd") return v.rad < SURD_LIMIT;
+  if (v.kind === "surd2") return v.terms.every(t => t.rad < SURD_LIMIT);
+  if (v.kind !== "rat" && v.kind !== "pi") return false;
   return v.d === 1n ? digitCount(v.n) <= 10 : digitCount(v.n) + digitCount(v.d) + 1 <= 10;
 }
 const formatValue = (v, dec) => (dec || !exactFits(v)) ? formatDecimal(v) : formatExactHTML(v);
@@ -471,7 +639,11 @@ function parseUnary(st, ctx) {
 /* Build 1 (spec §2): a variable letter is an implicit-× trigger too, so
    `2A²` with A = 5 gives 50 (the ² binds to A inside parsePower first,
    then the 2 multiplies) and `AB` is A×B. */
-const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "xrt" || t.k === "ans" || t.k === "var");
+/* Build 3: π multiplies implicitly the same way (2π, Aπ, sin(30)π). Like a
+   letter, π followed directly by a NUMBER (π2) is not a product: Syntax
+   ERROR, as (2+3)4 is on the device (π2 itself was not probed). */
+const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "xrt" || t.k === "ans" || t.k === "var" || t.k === "pi");
+const PI_VAL = mkPi(1n, 1n);
 function parseImplicit(st, ctx) {
   let left = parsePower(st, ctx);
   for (;;) {
@@ -499,6 +671,7 @@ function parseAtom(st, ctx) {
   if (t.k === "func") { next(st); const inner = parseExpr(st, ctx); closeBracket(st); return applyFunc(t.name, t.inv, inner, ctx.drg); }
   if (t.k === "ans") { next(st); return ctx.ans; }
   if (t.k === "var") { next(st); return (ctx.vars && ctx.vars[t.name]) || mkRat(0n, 1n); }   // A–F, X, Y, M (spec §2: all start at 0)
+  if (t.k === "pi") { next(st); return PI_VAL; }   // the constant π (SHIFT ×10^x, Build 3)
   if (t.k === "frac") { next(st); const num = parseSubExpr(t.num, ctx); const den = parseSubExpr(t.den, ctx); return vDiv(num, den); }
   if (t.k === "rad") { next(st); const body = parseSubExpr(t.body, ctx); return t.deg === 3 ? vCbrt(body) : vSqrt(body); }
   if (t.k === "xrt") { next(st); const idx = parseSubExpr(t.idx, ctx); const body = parseSubExpr(t.body, ctx); return vXroot(idx, body); }
@@ -573,7 +746,7 @@ function cloneBox(box) {
 /* ---- Build 2: what ▫/▫ (and ˣ√) "grab" (spec §8) ----
    ▫/▫ typed after an operand takes that operand as its numerator; ˣ√ takes
    it as its index. This finds where the ONE operand just left of `end`
-   starts: a number (only the last number of 2+3), a letter or Ans, a
+   starts: a number (only the last number of 2+3), a letter, Ans or π, a
    finished fraction or root, a whole bracket or function group ((2+3),
    sin(30)), and any of these carrying its ², ³ or x^ exponent (2²).
    Returns `end` when there is no operand (start of the box, or right after
@@ -582,7 +755,7 @@ function operandStart(box, end) {
   if (end <= 0) return end;
   const t = box[end - 1];
   if (t.k === "d" || t.k === "c") { let j = end - 1; while (j > 0 && (box[j - 1].k === "d" || box[j - 1].k === "c")) j--; return j; }
-  if (t.k === "var" || t.k === "ans" || t.k === "frac" || t.k === "rad" || t.k === "xrt") return end - 1;
+  if (t.k === "var" || t.k === "ans" || t.k === "pi" || t.k === "frac" || t.k === "rad" || t.k === "xrt") return end - 1;
   if (t.k === "sq" || t.k === "cb" || t.k === "pow") { const j = operandStart(box, end - 1); return j === end - 1 ? end : j; }
   if (t.k === ")") {
     let depth = 0;
@@ -1060,9 +1233,9 @@ export function mountCalculator(host, opts = {}) {
   // ---- key dispatch ----
   // scope-cut SHIFT sequences: mixed-number entry/toggle, %, ; — and the
   // SHIFT functions of keys whose own build is later (SOLVE, d/dx, x!, Σ, 10^,
-  // e^, FACT, Abs, ←, π). SHIFT is still consumed, as on the device.
-  // (SHIFT x^ = ˣ√ is live since Build 2.)
-  const NOOP_SHIFT = new Set(["frac", "sd", "lparen", "rparen", "calc", "intdx", "xinv", "logbox", "log", "ln", "dms", "hyp", "eng", "exp10"]);
+  // e^, FACT, Abs, ←). SHIFT is still consumed, as on the device.
+  // (SHIFT x^ = ˣ√ is live since Build 2; SHIFT ×10^x = π since Build 3.)
+  const NOOP_SHIFT = new Set(["frac", "sd", "lparen", "rparen", "calc", "intdx", "xinv", "logbox", "log", "ln", "dms", "hyp", "eng"]);
   /* The three-line error screen (Build 2, spec §3) is up: a COMP-engine
      error on the COMP screen. The legacy pasted-STAT "Math ERROR" (no data
      captured) keeps its old one-line look and keys: STAT must behave exactly
@@ -1113,6 +1286,7 @@ export function mountCalculator(host, opts = {}) {
       else if (id === "tan") key = "atan";
       else if (id === "rcl") key = "sto";       // SHIFT RCL = STO
       else if (id === "mplus") key = "mminus";  // SHIFT M+ = M−
+      else if (id === "exp10") key = "pi";      // SHIFT ×10^x = π (Build 3, spec §9)
       else if (NOOP_SHIFT.has(id)) key = "noop";
       S.shift = false;
     }
@@ -1125,7 +1299,7 @@ export function mountCalculator(host, opts = {}) {
 
   const digit = id => (/^d[0-9]$/.test(id) ? +id[1] : null);
   const opChar = { plus: "+", minus: "−", mult: "×", div: "÷" };
-  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "xroot", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon"]);
+  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "xroot", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon", "pi"]);
   const isEntryKey = k => digit(k) != null || ENTRY_KEYS.has(k) || k.startsWith("var_");
   /* POSTFIX keys act on what is before them, so after a result they chain
      from Ans exactly like + − × ÷ do (Build 2, spec §1): x² → Ans², x^ →
@@ -1200,6 +1374,7 @@ export function mountCalculator(host, opts = {}) {
     if (key === "lparen") return insertBoxToken({ k: "(" });
     if (key === "rparen") return insertBoxToken({ k: ")" });
     if (key === "ans") return insertBoxToken({ k: "ans" });
+    if (key === "pi") return insertBoxToken({ k: "pi" });
   }
 
   function menuKey(key) {
@@ -1239,6 +1414,7 @@ export function mountCalculator(host, opts = {}) {
       case "sq": return "²";
       case "cb": return "³";
       case "ans": return "Ans";
+      case "pi": return "π";
       case "var": return escapeHtml(node.name);
       case "eqs": return "=";
       case "colon": return ":";
