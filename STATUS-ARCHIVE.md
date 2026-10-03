@@ -1,5 +1,35 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-03 (Sat night): Casio emulator probe for the calculator rebuild (Opus, nothing built)
+
+**Her words:** "need to make the alpha button work, I also noticed that when you go back on
+the calculator, like with the arrows, and try to fix one mistake, it wipes the whole
+calculator screen ... THOROUGHLY play with the calculator ... functions that school
+learners won't use are fine to skip ... no building tonight, just ... investigate". The
+💬 feedback box also had a learner note (play:t6): "The alpha button dont work in calc".
+Mid-session: "especially test the trig and exponents, as well as shift solve and the mode 7
+table ... and mode 5 eqn"; "take your time ... rather do it thoroughly so I know it's
+correct this time"; Norm 2 "is just the default setting"; "you can change any and all
+settings ... worse case, I just reset it"; then bed, "wrap up and shut my laptop down".
+
+**What happened:** drove her fx-991ZA PLUS II emulator via computer-use for about 40
+minutes, about 160 screens. New driving tricks: Window > Pop-up Display gives a big LCD
+copy (resize it with Alt+Space > Size, arrow keys); the pop-up's grid icon opens a KeyLog
+window listing every key pressed; full screenshots at 0.4 scale are readable through the
+pop-up. A factory reset at the end confirmed her emulator was on factory settings
+(Norm 2, TABLE f and g, FREQ off). Emulator left in COMP mode after the reset.
+
+**Root causes found in code (read only):** ALPHA has no handler at all (`press("alpha")`
+falls through `compKey`); the arrow wipe is `compKey` resetting whenever `S.result` is set,
+while `moveHoriz` never clears `S.result`. Other big gaps: no bracket auto-close
+(`sin(30` = Syntax ERROR in Blipwork, ½ on the device), the fraction key does not grab the
+previous operand as numerator, no SOLVE/CALC/TABLE/EQN/history/variables, several exact
+forms differ (4^(−½), sin 15°, (−8)^(⅓)).
+
+**Deliverable:** `CASIO-CALCULATOR-SPEC.md` (18 sections, device answers to test against,
+gap list, eight-build order). Nothing in `js/` changed. Status file and spec committed
+locally only, not pushed.
+
 ## 2026-09-06 — Build 6 shipped (sw v92): lazy-load + cache-first code (Fable foreman, two Opus workers)
 
 **Her words that day:** "on blipwork... we are doing build 6 today" → catch-up; "you run

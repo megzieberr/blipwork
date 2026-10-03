@@ -1,4 +1,4 @@
-# Project status — updated 2026-09-06 (🚀 BUILD 6 SHIPPED: sw v92 LIVE, fetch-verified; lazy-load + cache-first code; graph-quest gq-v35 LIVE)
+# Project status — updated 2026-10-03 (🧮 Casio probe done: CASIO-CALCULATOR-SPEC.md is the calculator rebuild spec; still LIVE on sw v92)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,6 +9,11 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **🧮 Calculator rebuild is NEXT (2026-10-03).** A learner's 💬 note ("The alpha button
+  dont work in calc") and her own find (arrow back to fix a typo wipes the screen) led to a
+  full probe of her Casio emulator. Everything is in **CASIO-CALCULATOR-SPEC.md**: device
+  answers to test against, the root causes in `js/calculator.js`, and an eight-build order.
+  Nothing in `js/` changed yet.
 - **Live on sw v92** (2026-09-06, fetch-verified: sw.js reads mhq-v92; js/lazy.js,
   js/quests/load.js, js/exam/load.js, js/exam/_registry.js all 200; live screens.js
   uses the loader; Pages build 34028439392 success). **Build 6 shipped on her "ship it":**
@@ -106,6 +111,12 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   `QUEST_META` ships with `xpOnce` false everywhere (no quest has set it since
   2026-08-22); the drift check catches the day one returns.
 
+- 2026-10-03 (hers): the in-app calculator must work EXACTLY like her fx-991ZA PLUS II;
+  functions school learners won't use may be skipped. Priority: ALPHA, the arrow-edit wipe,
+  trig, exponents, SHIFT SOLVE, MODE 7 TABLE, MODE 5 EQN.
+- 2026-10-03 (hers): copy the FACTORY settings (her emulator was never changed; a reset
+  confirmed Norm 2, TABLE asks f(X) and g(X), STAT FREQ off, d/c improper results).
+
 ## ⏳ Pending on Megan
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v92) → play one round in any
   chapter → 📝 Exam Focus → one card. While there: your Blip's outline in his body colour,
@@ -122,6 +133,12 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
+- **Calculator rebuild from CASIO-CALCULATOR-SPEC.md, needs her build-go.** Eight
+  builds, ONE per fresh session or worker (spec section 18): 1 editing + history + ALPHA
+  + variables (her two reports), 2 parser/display (auto-close brackets, fraction grab,
+  Norm 2), 3 exact maths, 4 more keys, 5 CALC + SOLVE, 6 TABLE, 7 EQN (+INEQ), 8 STAT
+  regression + menus. Each: test against the spec's device answers, `tools/sw_check.py`,
+  then copy `js/calculator.js` to Stats Quest (it copies verbatim).
 - **Optional shell trim, her one-line call, default leave:** lazy-load the ten engines,
   `concepts.js`, `calculator.js` and the companion renderer behind their first use;
   login could drop from 83 files toward 40. Same two-worker pattern, one sw bump.
