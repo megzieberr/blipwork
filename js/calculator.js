@@ -41,13 +41,21 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    Each entry: { id, row, col, label, shift, red, cls, dead }.
      label = main (white) legend, shift = gold SHIFT legend,
      red = red ALPHA legend, dead:true = renders + depresses like a
-     real key but has NO click handler (round 2 wires it up).
+     real key but has NO click handler (no key uses it any more).
    Ids already routed by press()/compKey()/statKey()/menuKey() below
    are UNCHANGED (shift alpha up down left right mode on del ac
    d0-d9 dot mult div plus minus neg eq) — only their grid position
    moved. Round 2 wires: frac sqrt x2 pow sin cos tan lparen rparen
-   sd ans. Dead-forever (visual only): calc intdx xinv logbox log ln
-   dms hyp rcl eng mplus exp10.
+   sd ans.
+   Calculator rebuild Build 1 (2026-10-04, CASIO-CALCULATOR-SPEC.md
+   sections 1 and 2): EVERY key now has a handler, because ALPHA and
+   SHIFT are one-shot on the device: "ALPHA then a key with no red
+   letter: nothing is typed, ALPHA switches off". A key with no click
+   handler could never switch them off. Keys whose own function is a
+   later build (calc intdx xinv logbox log ln dms hyp eng exp10) do
+   nothing on a plain press; rcl (RCL / SHIFT = STO) and mplus (M+ /
+   SHIFT = M−) are live. CALC's red "=" and ∫'s red ":" were missing
+   from the key faces and are added (spec §2).
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -56,31 +64,31 @@ const FUNC_KEYS = [
   { row: 1, col: 5, id: "mode", label: "MODE", shift: "SETUP", cls: "k-fn" },
   { row: 1, col: 6, id: "on", label: "ON", cls: "k-fn" },
   // function row 1 (flanks the d-pad)
-  { row: 2, col: 1, id: "calc", label: "CALC", shift: "SOLVE=", cls: "k-fn", dead: true },
-  { row: 2, col: 2, id: "intdx", label: "∫□", shift: "d/dx", cls: "k-fn", dead: true },
-  { row: 2, col: 5, id: "xinv", label: "x⁻¹", shift: "x!", cls: "k-fn", dead: true },
-  { row: 2, col: 6, id: "logbox", label: "log□", shift: "Σ□", cls: "k-fn", dead: true },
+  { row: 2, col: 1, id: "calc", label: "CALC", shift: "SOLVE=", red: "=", cls: "k-fn" },
+  { row: 2, col: 2, id: "intdx", label: "∫□", shift: "d/dx", red: ":", cls: "k-fn" },
+  { row: 2, col: 5, id: "xinv", label: "x⁻¹", shift: "x!", cls: "k-fn" },
+  { row: 2, col: 6, id: "logbox", label: "log□", shift: "Σ□", cls: "k-fn" },
   // function row 2
   { row: 3, col: 1, id: "frac", label: "▫/▫", shift: "▫≡▫/▫", red: "÷R", cls: "k-fn" },
   { row: 3, col: 2, id: "sqrt", label: "√▫", shift: "³√▫", cls: "k-fn" },
   { row: 3, col: 3, id: "x2", label: "x²", shift: "x³", red: "DEC", cls: "k-fn" },
   { row: 3, col: 4, id: "pow", label: "x^▫", shift: "ˣ√▫", red: "HEX", cls: "k-fn" },
-  { row: 3, col: 5, id: "log", label: "log", shift: "10^▫", red: "BIN", cls: "k-fn", dead: true },
-  { row: 3, col: 6, id: "ln", label: "ln", shift: "e^▫", red: "OCT", cls: "k-fn", dead: true },
+  { row: 3, col: 5, id: "log", label: "log", shift: "10^▫", red: "BIN", cls: "k-fn" },
+  { row: 3, col: 6, id: "ln", label: "ln", shift: "e^▫", red: "OCT", cls: "k-fn" },
   // function row 3
   { row: 4, col: 1, id: "neg", label: "(−)", shift: "∠", red: "A", cls: "k-fn" },
-  { row: 4, col: 2, id: "dms", label: "°'\"", shift: "FACT", red: "B", cls: "k-fn", dead: true },
-  { row: 4, col: 3, id: "hyp", label: "hyp", shift: "Abs", red: "C", cls: "k-fn", dead: true },
+  { row: 4, col: 2, id: "dms", label: "°'\"", shift: "FACT", red: "B", cls: "k-fn" },
+  { row: 4, col: 3, id: "hyp", label: "hyp", shift: "Abs", red: "C", cls: "k-fn" },
   { row: 4, col: 4, id: "sin", label: "sin", shift: "sin⁻¹", red: "D", cls: "k-fn" },
   { row: 4, col: 5, id: "cos", label: "cos", shift: "cos⁻¹", red: "E", cls: "k-fn" },
   { row: 4, col: 6, id: "tan", label: "tan", shift: "tan⁻¹", red: "F", cls: "k-fn" },
   // function row 4
-  { row: 5, col: 1, id: "rcl", label: "RCL", shift: "STO", cls: "k-fn", dead: true },
-  { row: 5, col: 2, id: "eng", label: "ENG", shift: "←", red: "i", cls: "k-fn", dead: true },
+  { row: 5, col: 1, id: "rcl", label: "RCL", shift: "STO", cls: "k-fn" },
+  { row: 5, col: 2, id: "eng", label: "ENG", shift: "←", red: "i", cls: "k-fn" },
   { row: 5, col: 3, id: "lparen", label: "(", shift: "%", cls: "k-fn" },
   { row: 5, col: 4, id: "rparen", label: ")", shift: ";", red: "X", cls: "k-fn" },
   { row: 5, col: 5, id: "sd", label: "S⇔D", shift: "a b/c⇔d/c", red: "Y", cls: "k-fn" },
-  { row: 5, col: 6, id: "mplus", label: "M+", shift: "M−", red: "M", cls: "k-fn", dead: true },
+  { row: 5, col: 6, id: "mplus", label: "M+", shift: "M−", red: "M", cls: "k-fn" },
 ];
 /* the round 4-way d-pad, sitting between ALPHA and MODE, spanning the
    top row + function row 1 (cols 3–4, rows 1–2). Rendered separately
@@ -109,7 +117,7 @@ const NUM_KEYS = [
   { row: 3, col: 5, id: "minus", label: "−", shift: "Rec", cls: "k-op" },
   { row: 4, col: 1, id: "d0", label: "0", shift: "Rnd", cls: "k-num" },
   { row: 4, col: 2, id: "dot", label: ",", shift: "Ran#", red: "RanInt", cls: "k-num" },
-  { row: 4, col: 3, id: "exp10", label: "×10ˣ", shift: "π", red: "e", cls: "k-num", dead: true },
+  { row: 4, col: 3, id: "exp10", label: "×10ˣ", shift: "π", red: "e", cls: "k-num" },
   { row: 4, col: 4, id: "ans", label: "Ans", shift: "DRG▶", red: "PreAns", cls: "k-num" },
   { row: 4, col: 5, id: "eq", label: "=", cls: "k-eq" },
 ];
@@ -391,7 +399,10 @@ function parseUnary(st, ctx) {
    Combined with FIX 2 below (every sub-parse now asserts full consumption),
    a token that isn't understood as +, ×, or (now) implicit-× can no longer
    vanish — it forces a Syntax ERROR instead of a silently wrong number. */
-const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "ans");
+/* Build 1 (spec §2): a variable letter is an implicit-× trigger too, so
+   `2A²` with A = 5 gives 50 (the ² binds to A inside parsePower first,
+   then the 2 multiplies) and `AB` is A×B. */
+const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "ans" || t.k === "var");
 function parseImplicit(st, ctx) {
   let left = parsePower(st, ctx);
   for (;;) {
@@ -418,6 +429,7 @@ function parseAtom(st, ctx) {
   if (t.k === "(") { next(st); const v = parseExpr(st, ctx); const c = peek(st); if (!c || c.k !== ")") throw new SyntaxErr(); next(st); return v; }
   if (t.k === "func") { next(st); const inner = parseExpr(st, ctx); const c = peek(st); if (!c || c.k !== ")") throw new SyntaxErr(); next(st); return applyFunc(t.name, t.inv, inner, ctx.drg); }
   if (t.k === "ans") { next(st); return ctx.ans; }
+  if (t.k === "var") { next(st); return (ctx.vars && ctx.vars[t.name]) || mkRat(0n, 1n); }   // A–F, X, Y, M (spec §2: all start at 0)
   if (t.k === "frac") { next(st); const num = parseSubExpr(t.num, ctx); const den = parseSubExpr(t.den, ctx); return vDiv(num, den); }
   if (t.k === "rad") { next(st); const body = parseSubExpr(t.body, ctx); return t.deg === 3 ? vCbrt(body) : vSqrt(body); }
   throw new SyntaxErr();
@@ -445,6 +457,35 @@ function evalBox(box, ctx) {
   catch { return VERR("Syntax ERROR"); }
 }
 
+/* ---- Build 1: variables and history helpers ---- */
+const VAR_NAMES = ["A", "B", "C", "D", "E", "F", "X", "Y", "M"];
+const freshVars = () => Object.fromEntries(VAR_NAMES.map(n => [n, mkRat(0n, 1n)]));
+const isZeroAny = v => !isErr(v) && toFloatV(v) === 0;
+/* The red ALPHA letter on each key face (spec §2, read off the device). The
+   same keys pick the variable after STO and RCL, where no ALPHA is needed. */
+const LETTER_OF = { neg: "A", dms: "B", hyp: "C", sin: "D", cos: "E", tan: "F", rparen: "X", sd: "Y", mplus: "M" };
+/* ALPHA CALC types "=" and ALPHA ∫ types ":" as plain tokens. Evaluating a
+   line that holds them is CALC/SOLVE work (Build 5): today = gives Syntax
+   ERROR on them, which the build brief accepts. */
+const ALPHA_TOKEN = { calc: "eqs", intdx: "colon" };
+/* The device's history limit is by bytes and was not measured; a few dozen
+   entries is plenty for a learner, and keeps the memory bounded. */
+const MAX_HISTORY = 30;
+/* Deep copy of an entry box, re-linking every template sub-box to its new
+   parent (same __parent/__owner/__pkey linkage insertTemplate sets up), so a
+   history entry can be shown and edited without the edit touching history. */
+function cloneBox(box) {
+  const out = [];
+  for (const t of box) {
+    const c = { ...t };
+    for (const key of ["num", "den", "body", "exp"]) {
+      if (Array.isArray(t[key])) { const sub = cloneBox(t[key]); sub.__parent = out; sub.__owner = c; sub.__pkey = key; c[key] = sub; }
+    }
+    out.push(c);
+  }
+  return out;
+}
+
 export function mountCalculator(host, opts = {}) {
   // Optional milestone signal — lets the quest engine see when a learner
   // actually performs a step (cleared, freq on, entered stat mode, captured
@@ -457,6 +498,16 @@ export function mountCalculator(host, opts = {}) {
     data: [], cell: "", row: 0, col: 0, menu: null,
     // ---- COMP-mode maths engine state (round 2) ----
     box: [], cur: null, exactVal: null, showDecimal: false, drg: "D", ansVal: mkRat(0n, 1n),
+    // ---- calculator rebuild Build 1 (spec §1, §2) ----
+    alpha: false,          // ALPHA lit (one-shot, boxed A in the status line)
+    memPending: null,      // "sto" | "rcl": STO/RCL shown in the status line, waiting for a letter key
+    vars: freshVars(),     // A–F, X, Y, M — Value objects, all 0 at the start
+    history: [],           // [{ box, val, showDecimal }], newest last, MAX_HISTORY entries at most
+    histPos: 0,            // index of the history entry on screen; history.length = "below the newest"
+    browsing: false,       // true while ▲/▼ show a history entry (indicator then ▲ / ▼ / ▲▼)
+    afterAC: false,        // the line is empty because of AC: ◀/▶ recall the last expression
+    err: false,            // the result line holds an error message
+    lastWasStat: false,    // the result came from a pasted STAT token (legacy line, no box to edit)
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -585,7 +636,7 @@ export function mountCalculator(host, opts = {}) {
   }
   function clrConfirm() {
     openMenu({ title: "Reset All?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.menu = null; S.screen = "comp"; emit("clear"); } });
+      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 1: "All" also zeroes the variables + M and empties the history (both are memory)
   }
   function statMenu() {
     openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", "Distr"], ["6", "MinMax"]], ret: "comp",
@@ -689,10 +740,13 @@ export function mountCalculator(host, opts = {}) {
     S.box = []; S.cur = { box: S.box, i: 0 };
     S.result = null; S.exactVal = null; S.showDecimal = false;
     S.line = ""; S.pendingStat = null;
+    S.err = false; S.lastWasStat = false; S.browsing = false; S.afterAC = false;
+    S.histPos = S.history.length;
   }
   function linkSub(sub, parentBox, owner, pkey) { sub.__parent = parentBox; sub.__owner = owner; sub.__pkey = pkey; }
-  function insertBoxToken(tok) { S.cur.box.splice(S.cur.i, 0, tok); S.cur.i++; }
+  function insertBoxToken(tok) { S.afterAC = false; S.cur.box.splice(S.cur.i, 0, tok); S.cur.i++; }
   function insertTemplate(tmpl, enterKey) {
+    S.afterAC = false;
     const parentBox = S.cur.box;
     parentBox.splice(S.cur.i, 0, tmpl);
     if (tmpl.k === "frac") { linkSub(tmpl.num, parentBox, tmpl, "num"); linkSub(tmpl.den, parentBox, tmpl, "den"); }
@@ -724,8 +778,57 @@ export function mountCalculator(host, opts = {}) {
     const b = tmpl[key];
     S.cur = { box: b, i: b.length };
   }
+  /* ---- Build 1: editing after a result, history, AC recall (spec §1) ----
+     The device FORGETS the answer the moment ◀ or ▶ is pressed and lets you
+     fix the sum: ◀ puts the cursor at the END of the expression, ▶ at the
+     START, the result disappears and typing inserts at the cursor. Before
+     this, the result stayed "on screen" in our state, so the next digit
+     wiped the line: Megan's "arrowing back to fix a typo wipes the screen". */
+  function editFromResult(dir) {
+    if (S.lastWasStat) return;   // a pasted STAT read-off has no box to edit (legacy line) — unchanged
+    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false;
+    S.browsing = false; S.histPos = S.history.length;
+    S.cur = dir < 0 ? { box: S.box, i: S.box.length } : { box: S.box, i: 0 };
+  }
+  /* After AC, ◀ or ▶ recalls the LAST expression in edit mode (no result). */
+  function recallLast(dir) {
+    const e = S.history[S.history.length - 1];
+    S.box = cloneBox(e.box);
+    S.cur = dir < 0 ? { box: S.box, i: S.box.length } : { box: S.box, i: 0 };
+    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false;
+    S.afterAC = false; S.browsing = false; S.histPos = S.history.length;
+  }
+  /* Show history entry idx WITH its result, as the device's ▲/▼ replay does.
+     The box is a copy, so editing it (◀/▶) never changes the history. */
+  function showEntry(idx) {
+    const e = S.history[idx];
+    S.box = cloneBox(e.box); S.cur = { box: S.box, i: S.box.length };
+    S.exactVal = e.val; S.showDecimal = e.showDecimal;
+    S.result = e.showDecimal ? formatDecimal(e.val) : formatExactHTML(e.val);
+    S.err = false; S.lastWasStat = false; S.line = ""; S.pendingStat = null;
+    S.browsing = true; S.afterAC = false; S.histPos = idx;
+  }
+  /* ▲ (dir −1) = older, ▼ (dir +1) = newer. After = the result on screen IS
+     the newest entry (histPos = newest), so ▲ shows the one before it ("the
+     previous calculation"); after AC histPos sits below the newest, so ▲
+     shows the last calculation itself. Past either end: nothing happens. */
+  function histNav(dir) {
+    const target = S.histPos + dir;
+    if (target < 0 || target > S.history.length - 1) return;
+    showEntry(target);
+  }
+  /* The status-line history arrow (spec §1/§16): ▲ after any =; inside the
+     history ▲ when something older exists, ▼ when something newer does
+     (▲▼ for both). Hidden on an error screen (spec §3) and while typing. */
+  function histIndicator() {
+    if (S.screen !== "comp" || S.err || S.result == null || !S.history.length) return "";
+    if (!S.browsing) return "▲";
+    return (S.histPos > 0 ? "▲" : "") + (S.histPos < S.history.length - 1 ? "▼" : "");
+  }
   function moveHoriz(dir) {
     if (S.pendingStat != null) return;   // legacy pasted-stat display has no cursor model
+    if (S.result != null) return editFromResult(dir);
+    if (S.afterAC && isBoxEmpty(S.box) && S.history.length) return recallLast(dir);
     const box = S.cur.box, i = S.cur.i;
     if (dir > 0) {
       if (i < box.length) { const t = box[i]; if (isTmpl(t)) enterTemplateForward(t); else S.cur.i = i + 1; }
@@ -737,6 +840,8 @@ export function mountCalculator(host, opts = {}) {
   }
   function moveVert(dir) {
     if (S.pendingStat != null) return;
+    // a result (or a history entry) on screen, or the empty AC screen: ▲▼ walk the history
+    if (S.result != null || (S.afterAC && isBoxEmpty(S.box))) { if (!S.err) histNav(dir); return; }
     const box = S.cur.box;
     if (!box.__parent || box.__owner.k !== "frac") return;   // ▲▼ only meaningful inside a fraction
     const owner = box.__owner;
@@ -764,23 +869,89 @@ export function mountCalculator(host, opts = {}) {
       const v = statValue(tok);
       S.result = v == null ? "Math ERROR" : fmtNum(v);
       S.pendingStat = null;
+      S.err = v == null; S.lastWasStat = true; S.browsing = false; S.afterAC = false; S.histPos = S.history.length;
       emit("stat", { tok, value: v });
       return;
     }
     if (isBoxEmpty(S.box)) return;
-    const v = evalBox(S.box, { ans: S.ansVal, drg: S.drg });
-    if (isErr(v)) { S.result = v.msg; S.exactVal = null; S.showDecimal = false; return; }
+    /* A trailing →A (STO), M+ or M− token: evaluate the rest, then store /
+       add to M. These lines are shown with their result but are NOT added to
+       the history: spec §1 lists what the history holds (= results, CALC
+       results, RCL lines) and STO / M± are not among them. */
+    const last = S.box[S.box.length - 1];
+    const effect = last && (last.k === "sto" || last.k === "mplus" || last.k === "mminus") ? last : null;
+    const v = evalBox(effect ? S.box.slice(0, -1) : S.box, { ans: S.ansVal, drg: S.drg, vars: S.vars });
+    S.browsing = false; S.afterAC = false; S.lastWasStat = false;
+    if (isErr(v)) { S.result = v.msg; S.err = true; S.exactVal = null; S.showDecimal = false; S.histPos = S.history.length; return; }
+    if (effect) {
+      if (effect.k === "sto") S.vars[effect.name] = v;
+      else S.vars.M = effect.k === "mplus" ? vAdd(S.vars.M, v) : vSub(S.vars.M, v);
+    }
+    S.err = false;
     S.exactVal = v; S.showDecimal = (v.kind === "float");
     S.result = v.kind === "float" ? formatDecimal(v) : formatExactHTML(v);
     S.ansVal = v;
+    if (effect) { S.histPos = S.history.length; return; }
+    S.history.push({ box: cloneBox(S.box), val: v, showDecimal: S.showDecimal });
+    if (S.history.length > MAX_HISTORY) S.history.shift();
+    S.histPos = S.history.length - 1;
+  }
+  /* STO → letter, M+ and M− act at once, no = needed (spec §2): `5 M+` shows
+     `5M+` with the result 5; `5 SHIFT RCL (−)` shows `5→A` and 5. With a
+     result already on screen the value stored is Ans (the line reads
+     `Ans→A` / `AnsM+`): the spec does not cover this case, it is the same
+     chaining from Ans that + − × ÷ already do. Nothing typed: nothing happens. */
+  function memKey(tok) {
+    if (S.pendingStat != null || S.lastWasStat) return;   // legacy pasted STAT line: no box to evaluate
+    if (S.result != null) { if (S.err) return; S.box = [{ k: "ans" }]; }
+    else if (isBoxEmpty(S.box)) return;
+    S.box.push(tok); S.cur = { box: S.box, i: S.box.length };
+    doEquals();
+  }
+  /* RCL then a letter: the line shows the letter, the result its value, and
+     it goes into the history (spec §2) — exactly "type A, press =". */
+  function rclKey(letter) {
+    resetEntry();
+    S.box.push({ k: "var", name: letter }); S.cur = { box: S.box, i: S.box.length };
+    doEquals();
   }
 
   // ---- key dispatch ----
-  const NOOP_SHIFT = new Set(["pow", "frac", "sd", "lparen", "rparen"]);   // scope-cut SHIFT sequences: ˣ√, mixed-number entry/toggle, %, ; — stay dead
+  // scope-cut SHIFT sequences: ˣ√, mixed-number entry/toggle, %, ; — and the
+  // SHIFT functions of keys whose own build is later (SOLVE, d/dx, x!, Σ, 10^,
+  // e^, FACT, Abs, ←, π). SHIFT is still consumed, as on the device.
+  const NOOP_SHIFT = new Set(["pow", "frac", "sd", "lparen", "rparen", "calc", "intdx", "xinv", "logbox", "log", "ln", "dms", "hyp", "eng", "exp10"]);
   function press(id) {
-    if (id === "shift") { S.shift = !S.shift; return render(); }
+    /* SHIFT and ALPHA share one spot at the far left of the status line
+       (boxed S / boxed A, spec §2). SHIFT then ALPHA = ALPHA on, SHIFT off;
+       ALPHA ALPHA = off. SHIFT after ALPHA switching ALPHA off is the mirror
+       of that (the spec does not cover it). */
+    if (id === "shift") { S.shift = !S.shift; if (S.shift) S.alpha = false; return render(); }
+    if (id === "alpha") { if (S.shift) { S.shift = false; S.alpha = true; } else S.alpha = !S.alpha; return render(); }
+    if (id === "on") { resetEntry(); S.menu = null; S.screen = "comp"; S.shift = false; S.alpha = false; S.memPending = null; return render(); }
+
+    /* STO / RCL waiting for a letter: the letter KEY picks the variable, no
+       ALPHA needed (spec §2). Any other key cancels the STO/RCL and is then
+       handled as an ordinary key (the spec does not cover that case). */
+    if (S.memPending) {
+      const p = S.memPending; S.memPending = null;
+      if (S.screen === "comp" && LETTER_OF[id]) {
+        S.shift = false; S.alpha = false;
+        if (p === "sto") memKey({ k: "sto", name: LETTER_OF[id] }); else rclKey(LETTER_OF[id]);
+        return render();
+      }
+    }
+
     let key = id;
-    if (S.shift) {
+    if (S.alpha) {
+      /* ALPHA is ONE-SHOT: the next key types its red letter, then ALPHA is
+         off. A key with no red letter types nothing (spec §2). ALPHA ×10^x
+         (the constant e) is Build 4, so it only switches ALPHA off for now.
+         Off the COMP screen (menus, the STAT data grid) the key passes
+         through untouched, exactly as before ALPHA was wired. */
+      S.alpha = false; S.shift = false;
+      if (S.screen === "comp") key = LETTER_OF[id] ? "var_" + LETTER_OF[id] : (ALPHA_TOKEN[id] || "noop");
+    } else if (S.shift) {
       if (id === "d9") key = "clr";
       else if (id === "d1") key = "stat";
       else if (id === "mode") key = "setup";
@@ -789,10 +960,11 @@ export function mountCalculator(host, opts = {}) {
       else if (id === "sin") key = "asin";
       else if (id === "cos") key = "acos";
       else if (id === "tan") key = "atan";
+      else if (id === "rcl") key = "sto";       // SHIFT RCL = STO
+      else if (id === "mplus") key = "mminus";  // SHIFT M+ = M−
       else if (NOOP_SHIFT.has(id)) key = "noop";
       S.shift = false;
     }
-    if (id === "on") { resetEntry(); S.menu = null; S.screen = "comp"; S.shift = false; return render(); }
 
     if (S.screen === "comp") compKey(key);
     else if (S.screen === "menu") menuKey(key);
@@ -802,34 +974,48 @@ export function mountCalculator(host, opts = {}) {
 
   const digit = id => (/^d[0-9]$/.test(id) ? +id[1] : null);
   const opChar = { plus: "+", minus: "−", mult: "×", div: "÷" };
-  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans"]);
+  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon"]);
+  const isEntryKey = k => digit(k) != null || ENTRY_KEYS.has(k) || k.startsWith("var_");
 
   function compKey(key) {
     if (key === "mode") return modeMenu();
     if (key === "setup") return setupMenu();
     if (key === "clr") return clrMenu();
     if (key === "stat") { if (S.mode === "STAT") statMenu(); return; }
-    if (key === "ac") { resetEntry(); return; }
+    if (key === "ac") { resetEntry(); S.afterAC = true; return; }   // AC clears the screen but KEEPS the history (spec §1)
     if (key === "sd") return toggleSD();
     if (key === "eq") return doEquals();
     if (key === "up") return moveVert(-1);
     if (key === "down") return moveVert(1);
     if (key === "left") return moveHoriz(-1);
     if (key === "right") return moveHoriz(1);
+    if (key === "sto" || key === "rcl") { S.memPending = key; return; }   // the word STO / RCL shows; the next letter key finishes it
+    if (key === "mplus") return memKey({ k: "mplus" });
+    if (key === "mminus") return memKey({ k: "mminus" });
     if (key === "noop") return;
+
+    /* DEL after a result does NOTHING at all, the screen is unchanged (spec
+       §1; it used to clear the line). DEL on a pasted STAT token (no result
+       yet) still clears that legacy line, as before. */
+    if (key === "del") {
+      if (S.result != null) return;
+      if (S.pendingStat != null) { resetEntry(); return; }
+      doDelBox(); return;
+    }
 
     // device-verified: pressing any entry key after a result (or a pasted
     // stat token) replaces the line with a fresh one — EXCEPT a binary
     // operator (+ − × ÷), which chains from the answer instead: the fresh
     // line starts "Ans" followed by that operator (device-verified: after
-    // 3+4=, pressing + shows "Ans+"). Digits and every other entry key keep
-    // the full-reset behaviour.
-    if ((S.result != null || S.pendingStat != null) && (key === "del" || digit(key) != null || ENTRY_KEYS.has(key))) {
+    // 3+4=, pressing + shows "Ans+"). Digits, ALPHA letters and every other
+    // entry key keep the full-reset behaviour.
+    if ((S.result != null || S.pendingStat != null) && isEntryKey(key)) {
       if (opChar[key]) { resetEntry(); insertBoxToken({ k: "ans" }); insertBoxToken({ k: "op", v: opChar[key] }); return; }
       resetEntry();
-      if (key === "del") return;
     }
-    if (key === "del") { doDelBox(); return; }
+    if (key.startsWith("var_")) return insertBoxToken({ k: "var", name: key.slice(4) });
+    if (key === "eqs") return insertBoxToken({ k: "eqs" });
+    if (key === "colon") return insertBoxToken({ k: "colon" });
 
     const d = digit(key);
     if (d != null) return insertBoxToken({ k: "d", v: String(d) });
@@ -888,6 +1074,12 @@ export function mountCalculator(host, opts = {}) {
       case "sq": return "²";
       case "cb": return "³";
       case "ans": return "Ans";
+      case "var": return escapeHtml(node.name);
+      case "eqs": return "=";
+      case "colon": return ":";
+      case "sto": return "→" + escapeHtml(node.name);
+      case "mplus": return "M+";
+      case "mminus": return "M−";
       case "func": return escapeHtml(node.name) + (node.inv ? "⁻¹" : "") + "(";
       case "frac": return `<span class="calc-frac"><span class="calc-frac-num">${renderBox(node.num)}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${renderBox(node.den)}</span></span>`;
       case "rad": return `<span class="calc-rad">${node.deg === 3 ? '<sup class="calc-rad-deg">3</sup>' : ""}<span class="calc-rad-sign">√</span><span class="calc-rad-body">${renderBox(node.body)}</span></span>`;
@@ -895,29 +1087,48 @@ export function mountCalculator(host, opts = {}) {
       default: return "";
     }
   }
+  let cursorOn = true;   // the cursor hides while a result is on screen; ◀/▶ bring it back (Build 1)
   function renderBox(box) {
     let html = "";
     for (let idx = 0; idx <= box.length; idx++) {
-      if (box === S.cur.box && idx === S.cur.i) html += '<span class="calc-cursor"></span>';
+      if (cursorOn && box === S.cur.box && idx === S.cur.i) html += '<span class="calc-cursor"></span>';
       if (idx < box.length) html += renderNode(box[idx]);
     }
     if (box.length === 0 && box.__parent) html += '<span class="calc-slot"></span>';   // empty template box: dotted placeholder
     return html;
   }
 
+  /* Status line (spec §16, last bullet): boxed S / A at the far left, then
+     M, STO, RCL, STAT (FREQ is Blipwork's own STAT tag), and on the right D
+     next to Math, with the ▲ / ▼ / ▲▼ history arrow at the far right. Every
+     mark has its OWN fixed-width slot, like the segments of the real LCD, so
+     a mark switching on or off never shifts any other mark sideways. */
+  function renderInd() {
+    const comp = S.screen === "comp";
+    const sa = S.shift ? "S" : S.alpha ? "A" : "";
+    const slot = (name, txt) => `<span class="ind-${name}">${txt}</span>`;
+    ind.innerHTML =
+      slot("sa", sa ? `<b>${sa}</b>` : "") +
+      slot("m", isZeroAny(S.vars.M) ? "" : "M") +
+      slot("sto", S.memPending === "sto" ? "STO" : "") +
+      slot("rcl", S.memPending === "rcl" ? "RCL" : "") +
+      slot("stat", S.mode === "STAT" ? "STAT" : "") +
+      slot("freq", S.mode === "STAT" && S.freqOn ? "FREQ" : "") +
+      `<span class="ind-gap"></span>` +
+      slot("drg", comp ? S.drg : "") +
+      slot("math", comp ? "Math" : "") +
+      slot("hist", histIndicator());
+  }
+
   function render() {
-    const tags = [];
-    if (S.screen === "comp") tags.push(S.drg);
-    if (S.shift) tags.push("S");
-    if (S.mode === "STAT") tags.push("STAT");
-    if (S.mode === "STAT" && S.freqOn) tags.push("FREQ");
-    ind.textContent = tags.join("   ");
+    renderInd();
 
     if (S.screen === "comp") {
       const usingLine = S.pendingStat != null;
+      cursorOn = S.result == null;
       const exprHTML = usingLine ? lcdShow(S.line || "") : renderBox(S.box);
-      const lineEmpty = usingLine ? !S.line : isBoxEmpty(S.box);
-      const resHTML = S.result != null ? S.result : (lineEmpty ? "0" : "");
+      // AC / empty screen = an empty line plus the cursor, NO "0" anywhere (spec §1)
+      const resHTML = S.result != null ? S.result : "";
       main.innerHTML = `<div class="lcd-expr">${exprHTML}</div><div class="lcd-res">${resHTML}</div>`;
     } else if (S.screen === "menu") {
       const m = S.menu;

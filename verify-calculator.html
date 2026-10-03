@@ -57,31 +57,36 @@ const CANON = {
   mode:   { group: "func", label: "MODE", shift: "SETUP" },
   on:     { group: "func", label: "ON" },
   // ---- function row 1 (flanks the d-pad) ----
-  calc:   { group: "func", label: "CALC", shift: "SOLVE=", dead: true },
-  intdx:  { group: "func", label: "∫□", shift: "d/dx", dead: true },
-  xinv:   { group: "func", label: "x⁻¹", shift: "x!", dead: true },
-  logbox: { group: "func", label: "log□", shift: "Σ□", dead: true },
+  // Calculator Build 1 (2026-10-04): no key is dead any more. ALPHA and SHIFT
+  // are one-shot (CASIO-CALCULATOR-SPEC.md §2: "ALPHA then a key with no red
+  // letter: nothing is typed, ALPHA switches off"), which a key with no click
+  // handler can never do. CALC's red "=" and ∫'s red ":" were read off the
+  // device (§2: "Blipwork's FUNC_KEYS is missing the red = on CALC and : on ∫").
+  calc:   { group: "func", label: "CALC", shift: "SOLVE=", red: "=" },
+  intdx:  { group: "func", label: "∫□", shift: "d/dx", red: ":" },
+  xinv:   { group: "func", label: "x⁻¹", shift: "x!" },
+  logbox: { group: "func", label: "log□", shift: "Σ□" },
   // ---- function row 2 ----
   frac:   { group: "func", label: "▫/▫", shift: "▫≡▫/▫", red: "÷R" },
   sqrt:   { group: "func", label: "√▫", shift: "³√▫" },
   x2:     { group: "func", label: "x²", shift: "x³", red: "DEC" },
   pow:    { group: "func", label: "x^▫", shift: "ˣ√▫", red: "HEX" },
-  log:    { group: "func", label: "log", shift: "10^▫", red: "BIN", dead: true },
-  ln:     { group: "func", label: "ln", shift: "e^▫", red: "OCT", dead: true },
+  log:    { group: "func", label: "log", shift: "10^▫", red: "BIN" },
+  ln:     { group: "func", label: "ln", shift: "e^▫", red: "OCT" },
   // ---- function row 3 ----
   neg:    { group: "func", label: "(−)", shift: "∠", red: "A" },
-  dms:    { group: "func", label: "°'\"", shift: "FACT", red: "B", dead: true },
-  hyp:    { group: "func", label: "hyp", shift: "Abs", red: "C", dead: true },
+  dms:    { group: "func", label: "°'\"", shift: "FACT", red: "B" },
+  hyp:    { group: "func", label: "hyp", shift: "Abs", red: "C" },
   sin:    { group: "func", label: "sin", shift: "sin⁻¹", red: "D" },
   cos:    { group: "func", label: "cos", shift: "cos⁻¹", red: "E" },
   tan:    { group: "func", label: "tan", shift: "tan⁻¹", red: "F" },
   // ---- function row 4 ----
-  rcl:    { group: "func", label: "RCL", shift: "STO", dead: true },
-  eng:    { group: "func", label: "ENG", shift: "←", red: "i", dead: true },
+  rcl:    { group: "func", label: "RCL", shift: "STO" },
+  eng:    { group: "func", label: "ENG", shift: "←", red: "i" },
   lparen: { group: "func", label: "(", shift: "%" },
   rparen: { group: "func", label: ")", shift: ";", red: "X" },
   sd:     { group: "func", label: "S⇔D", shift: "a b/c⇔d/c", red: "Y" },
-  mplus:  { group: "func", label: "M+", shift: "M−", red: "M", dead: true },
+  mplus:  { group: "func", label: "M+", shift: "M−", red: "M" },
   // ---- d-pad ----
   up:     { group: "dpad", label: "▲" },
   down:   { group: "dpad", label: "▼" },
@@ -108,14 +113,14 @@ const CANON = {
   // ---- row 4 ----
   d0:    { group: "num", label: "0", shift: "Rnd" },
   dot:   { group: "num", label: ",", shift: "Ran#", red: "RanInt" },
-  exp10: { group: "num", label: "×10ˣ", shift: "π", red: "e", dead: true },   // brief: "×10^x" — rendered with a superscript × the same way x⁻¹/sin⁻¹/etc already do, not the literal caret
+  exp10: { group: "num", label: "×10ˣ", shift: "π", red: "e" },   // brief: "×10^x" — rendered with a superscript × the same way x⁻¹/sin⁻¹/etc already do, not the literal caret
   ans:   { group: "num", label: "Ans", shift: "DRG▶", red: "PreAns" },
   eq:    { group: "num", label: "=" },
 };
 
 const CANON_IDS = Object.keys(CANON);
 const EXPECTED_TOTAL = 50;   // 26 func + 4 dpad + 20 num
-const EXPECTED_DEAD = 12;    // calc intdx xinv logbox log ln dms hyp rcl eng mplus exp10
+const EXPECTED_DEAD = 0;     // was 12 (calc intdx xinv logbox log ln dms hyp rcl eng mplus exp10); Build 1 gave every key a handler, see the CANON note above
 const EXPECTED_NEW11 = ["frac","sqrt","x2","pow","sin","cos","tan","lparen","rparen","sd","ans"];
 
 tick(CANON_IDS.length === EXPECTED_TOTAL, `CANON has ${CANON_IDS.length} keys (want ${EXPECTED_TOTAL})`);
@@ -380,8 +385,9 @@ scenario("+ = → Syntax ERROR; AC recovers", (calc, press, h) => {
   if (err !== "Syntax ERROR") return { ok: false, msg: `"+ =" shows "${err}", want "Syntax ERROR"` };
   press("ac");
   const after = resText(h);
-  const ok = after === "0";
-  return { ok, msg: `after "+ =" → "${err}" (want "Syntax ERROR"); after AC → "${after}" (want "0")` };
+  // Build 1: was "0". CASIO-CALCULATOR-SPEC.md §1: "AC screen = empty line plus cursor, no 0 anywhere."
+  const ok = after === "";
+  return { ok, msg: `after "+ =" → "${err}" (want "Syntax ERROR"); after AC → "${after}" (want "", no 0 on an empty screen)` };
 });
 
 /* 11. operator-after-"=" chains from Ans (device-verified): 3+4=, then +,

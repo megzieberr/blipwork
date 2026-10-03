@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator vs. the real fx-991ZA PLUS II · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:900px;margin:0 auto}
+  #status{font-weight:700;font-size:15px;padding:11px 15px;border-radius:12px;margin:12px 0 18px;border:1px solid var(--brd)}
+  #status.pass{background:var(--good-bg);color:var(--good)} #status.fail{background:var(--bad-bg);color:var(--bad)}
+  h2{font-size:15px;margin:24px 0 8px}
+  .row{font-size:12px;line-height:1.7}
+  .ok{color:var(--good)} .bad{color:var(--bad);font-weight:700}
+  .why{color:var(--muted)}
+  #host{position:absolute;left:-9999px;width:340px}
+  #fitHost{max-width:340px}
+  #summary{font-weight:700;font-size:15px;margin-top:22px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif;font-size:19px">Calculator vs. the real fx-991ZA PLUS II</h1>
+<div id="status">running…</div>
+<div id="out"></div>
+<div id="host"></div>
+<div id="fitHost" class="q-calc"></div>
+<div id="summary"></div>
+
+<script type="module">
+/* ============================================================
+   Every row below is one key sequence pressed through the RENDERED
+   buttons (a real click on [data-keyid], never calc.press()), and the
+   LCD state the real device shows afterwards. The expected values are
+   the device's own answers from CASIO-CALCULATOR-SPEC.md (probed on
+   Megan's fx-991ZA PLUS II emulator, 3 October 2026); each row names
+   the spec line it comes from. Rows marked "Blipwork choice" test a
+   decision taken where the spec is silent, so a later probe can
+   overturn them.
+
+   Later builds: append your own section with section("Build N …")
+   and rows in the same shape. Keep the ONE summary line at the very
+   end of the page: tools/harness_run.py reads the last line that
+   contains "passed" or "FAIL", so no row text may contain either word.
+   ============================================================ */
+import { mountCalculator, openCalculator } from "./js/calculator.js";
+
+const out = document.getElementById("out");
+const host = document.getElementById("host");
+let total = 0, good = 0; const bad = [];
+
+/* key names as printed on the key face → the rendered button's data-keyid */
+const KEY = {
+  "+": "plus", "−": "minus", "×": "mult", "÷": "div", "=": "eq", ",": "dot",
+  "◀": "left", "▶": "right", "▲": "up", "▼": "down",
+  "AC": "ac", "DEL": "del", "SHIFT": "shift", "ALPHA": "alpha", "MODE": "mode", "ON": "on",
+  "RCL": "rcl", "M+": "mplus", "(−)": "neg", "°'\"": "dms", "hyp": "hyp",
+  "sin": "sin", "cos": "cos", "tan": "tan", "(": "lparen", ")": "rparen", "S⇔D": "sd",
+  "CALC": "calc", "∫": "intdx", "x²": "x2", "x^": "pow", "√": "sqrt", "frac": "frac",
+  "Ans": "ans", "×10x": "exp10", "x⁻¹": "xinv", "log": "log", "ln": "ln", "log□": "logbox", "ENG": "eng",
+};
+const keyIds = seq => seq.trim().split(/\s+/).filter(Boolean).flatMap(t => /^\d+$/.test(t) ? t.split("").map(d => "d" + d) : [KEY[t] || t]);
+
+function freshCalc(h = host, opts = {}) {
+  h.innerHTML = "";
+  const api = mountCalculator(h, opts);
+  const press = seq => keyIds(seq).forEach(id => {
+    const b = h.querySelector(`[data-keyid="${id}"]`);
+    if (!b) throw new Error(`no rendered key "${id}"`);
+    b.click();
+  });
+  return { api, press, h };
+}
+
+/* what the LCD shows right now */
+function read(h) {
+  const ex = h.querySelector(".lcd-expr"), res = h.querySelector(".lcd-res");
+  const cur = ex && ex.querySelector(".calc-cursor");
+  let before = null;
+  if (cur) { const r = document.createRange(); r.setStart(ex, 0); r.setEndBefore(cur); before = r.toString(); }
+  const slot = n => { const s = h.querySelector(`.calc-ind .ind-${n}`); return s ? s.textContent : ""; };
+  return {
+    expr: ex ? ex.textContent : "", res: res ? res.textContent : "", cur: before,
+    sa: slot("sa"), m: slot("m") === "M", sto: slot("sto") === "STO", rcl: slot("rcl") === "RCL", hist: slot("hist"),
+  };
+}
+
+function section(title) { out.insertAdjacentHTML("beforeend", `<h2>${title}</h2>`); }
+function tick(cond, label, detail = "") {
+  total++; if (cond) good++; else bad.push(label + (detail ? " — " + detail : ""));
+  out.insertAdjacentHTML("beforeend", `<div class="row ${cond ? "ok" : "bad"}">${cond ? "✓" : "✗"} ${label}${detail ? ` <span class="why">${detail}</span>` : ""}</div>`);
+}
+
+/* A row: name, spec reference, then one or more [keys, want] steps on ONE
+   fresh calculator. Only the fields named in `want` are compared. */
+function row(name, spec, steps) {
+  const c = freshCalc();
+  const diffs = [];
+  try {
+    steps.forEach(([keys, want], i) => {
+      c.press(keys);
+      const got = read(c.h);
+      for (const k of Object.keys(want)) {
+        if (got[k] !== want[k]) diffs.push(`after "${keys}": ${k} = ${JSON.stringify(got[k])}, want ${JSON.stringify(want[k])}`);
+      }
+    });
+  } catch (e) { diffs.push("threw: " + e.message); }
+  tick(diffs.length === 0, `${name} <span class="why">[${spec}]</span>`, diffs.join("; "));
+}
+
+/* ============================================================
+   BUILD 1 — editing, history, ALPHA, variables, STO, RCL, M
+   (spec sections 1 and 2)
+   ============================================================ */
+section("Build 1 · editing after a result (spec §1)");
+
+row("the reported bug: type a sum, =, ◀, DEL, retype, =", "§1 ◀ after a result edits", [
+  ["12 + 35 =", { expr: "12+35", res: "47" }],
+  ["◀", { expr: "12+35", res: "", cur: "12+35" }],
+  ["DEL", { expr: "12+3", res: "", cur: "12+3" }],
+  ["4", { expr: "12+34", res: "", cur: "12+34" }],
+  ["=", { expr: "12+34", res: "46" }],
+]);
+row("◀ after a result: cursor at the END, result gone, typing inserts there", "§1", [
+  ["2 + 3 =", { res: "5" }],
+  ["◀", { expr: "2+3", res: "", cur: "2+3" }],
+  ["4 =", { expr: "2+34", res: "36" }],
+]);
+row("▶ after a result: cursor at the START, typing inserts there", "§1", [
+  ["2 + 3 =", { res: "5" }],
+  ["▶", { expr: "2+3", res: "", cur: "" }],
+  ["1 =", { expr: "12+3", res: "15" }],
+]);
+row("◀ then ◀ moves on through the expression (inside edit mode)", "§1 cursor", [
+  ["2 + 3 = ◀ ◀", { expr: "2+3", cur: "2+" }],
+  ["1 =", { expr: "2+13", res: "15" }],
+]);
+row("DEL after a result does nothing at all", "§1", [
+  ["2 + 3 = DEL", { expr: "2+3", res: "5" }],
+  ["DEL DEL", { expr: "2+3", res: "5" }],
+]);
+row("a digit after a result still starts a fresh line", "§1", [
+  ["2 + 3 = 7", { expr: "7", res: "" }],
+]);
+row("+ after a result still chains from Ans", "§1 / device-verified earlier", [
+  ["3 + 4 = +", { expr: "Ans+" }],
+  ["5 =", { res: "12" }],
+]);
+row("a fresh calculator shows an empty line plus the cursor, no 0", "§1 no \"0\" anywhere", [
+  ["", { expr: "", res: "", cur: "" }],
+]);
+row("AC clears the screen to an empty line plus the cursor, no 0", "§1", [
+  ["2 + 3 = AC", { expr: "", res: "", cur: "" }],
+]);
+row("AC then ◀ recalls the last expression, cursor at the end, no result", "§1 AC keeps the history", [
+  ["2 + 3 = AC ◀", { expr: "2+3", res: "", cur: "2+3" }],
+  ["=", { res: "5" }],
+]);
+row("AC then ▶ recalls the last expression, cursor at the start", "§1", [
+  ["2 + 3 = AC ▶", { expr: "2+3", res: "", cur: "" }],
+  ["9 =", { expr: "92+3", res: "95" }],
+]);
+
+section("Build 1 · history ▲▼ (spec §1)");
+
+row("after = a small ▲ shows at the top right", "§1", [
+  ["1 + 1 =", { res: "2", hist: "▲" }],
+]);
+row("▲ / ▼ walk three entries; ▲▼ inside the history", "§1, §16 ▲ / ▼ / ▲▼; ▼ alone at the oldest is Blipwork's reading of §16", [
+  ["1 + 1 = 2 + 2 = 3 + 3 =", { expr: "3+3", res: "6", hist: "▲" }],
+  ["▲", { expr: "2+2", res: "4", hist: "▲▼" }],
+  ["▲", { expr: "1+1", res: "2", hist: "▼" }],
+  ["▲", { expr: "1+1", res: "2", hist: "▼" }],
+  ["▼", { expr: "2+2", res: "4", hist: "▲▼" }],
+  ["▼", { expr: "3+3", res: "6", hist: "▲" }],
+  ["▼", { expr: "3+3", res: "6", hist: "▲" }],
+]);
+row("AC then ▲ shows the last calculation WITH its result", "§1", [
+  ["1 + 1 = 2 + 2 = AC", { expr: "", res: "" }],
+  ["▲", { expr: "2+2", res: "4" }],
+  ["▲", { expr: "1+1", res: "2" }],
+]);
+row("◀ on a history entry edits it; = makes a NEW entry, the old one stays", "§1", [
+  ["1 + 1 = 2 + 2 = 3 + 3 = ▲ ▲", { expr: "1+1", res: "2" }],
+  ["◀", { expr: "1+1", res: "", cur: "1+1" }],
+  ["0 =", { expr: "1+10", res: "11", hist: "▲" }],
+  ["▲", { expr: "3+3", res: "6", hist: "▲▼" }],
+  ["▲ ▲", { expr: "1+1", res: "2", hist: "▼" }],
+]);
+row("▶ on a history entry edits it with the cursor at the start", "§1", [
+  ["1 + 1 = 2 + 2 = ▲ ▶", { expr: "1+1", res: "", cur: "" }],
+  ["5 =", { expr: "51+1", res: "52" }],
+]);
+row("DEL on a history entry does nothing (a result is on screen)", "§1 DEL after a result", [
+  ["1 + 1 = 2 + 2 = ▲ DEL", { expr: "1+1", res: "2", hist: "▼" }],
+]);
+row("the ▲ hides on an error screen", "§3 \"the ▲ history indicator hides on an error screen\"", [
+  ["1 + 1 = + =", { res: "Syntax ERROR", hist: "" }],
+]);
+{
+  // Blipwork choice: the device's limit is by bytes and was not measured; we keep 30 entries
+  const c = freshCalc();
+  for (let k = 1; k <= 35; k++) c.press(`${k} =`);
+  for (let k = 0; k < 40; k++) c.press("▲");
+  const g = read(c.h);
+  tick(g.expr === "6" && g.res === "6" && g.hist === "▼",
+       `history stays bounded: 35 calculations, ▲ ×40 stops at the 6th <span class="why">[Blipwork choice: 30 entries]</span>`,
+       `oldest shown "${g.expr}" = "${g.res}", indicator "${g.hist}"`);
+}
+
+section("Build 1 · ALPHA (spec §2)");
+
+row("ALPHA lights a boxed A at the far left", "§2", [["ALPHA", { sa: "A" }]]);
+row("SHIFT lights a boxed S in the same spot", "§2", [["SHIFT", { sa: "S" }]]);
+row("ALPHA ALPHA = off", "§2", [["ALPHA ALPHA", { sa: "" }]]);
+row("SHIFT then ALPHA = ALPHA on, SHIFT off", "§2", [["SHIFT ALPHA", { sa: "A" }]]);
+row("ALPHA then a key with no red letter (7): nothing typed, ALPHA off", "§2", [["ALPHA 7", { expr: "", sa: "" }]]);
+row("ALPHA ×10^x: nothing typed yet (the constant e is Build 4), ALPHA off", "build brief", [["ALPHA ×10x", { expr: "", sa: "" }]]);
+row("ALPHA is ONE-SHOT: ALPHA (−) (−) types A then a minus", "§2", [["ALPHA (−)", { expr: "A", sa: "" }], ["(−)", { expr: "A−" }]]);
+[["(−)", "A"], ["°'\"", "B"], ["hyp", "C"], ["sin", "D"], ["cos", "E"], ["tan", "F"],
+ [")", "X"], ["S⇔D", "Y"], ["M+", "M"], ["CALC", "="], ["∫", ":"]].forEach(([k, letter]) =>
+  row(`ALPHA ${k} types the red ${letter}`, "§2 red letters", [[`ALPHA ${k}`, { expr: letter, sa: "" }]]));
+{
+  const c = freshCalc();
+  const red = id => { const s = c.h.querySelector(`[data-keyid="${id}"] .kred`); return s ? s.textContent : null; };
+  tick(red("calc") === "=" && red("intdx") === ":", `the red "=" on CALC and ":" on ∫ are printed on the key faces <span class="why">[§2]</span>`,
+       `CALC "${red("calc")}", ∫ "${red("intdx")}"`);
+}
+row("every variable starts at 0", "§2 \"A = gives 0\"", [["ALPHA (−) =", { expr: "A", res: "0" }]]);
+row("ALPHA CALC's \"=\" in a COMP line: Syntax ERROR for now (CALC/SOLVE are Build 5)", "build brief", [
+  ["2 ALPHA CALC 3 =", { expr: "2=3", res: "Syntax ERROR" }],
+]);
+
+section("Build 1 · STO, RCL, variables, M (spec §2)");
+
+row("STO: value, SHIFT RCL shows STO, (−) stores into A with no =", "§2", [
+  ["5 SHIFT RCL", { expr: "5", sto: true, sa: "" }],
+  ["(−)", { expr: "5→A", res: "5", sto: false }],
+  ["ALPHA (−) =", { expr: "A", res: "5" }],
+]);
+row("RCL shows the word RCL, then the letter: line shows A, result its value", "§2", [
+  ["5 SHIFT RCL (−) AC RCL", { rcl: true }],
+  ["(−)", { expr: "A", res: "5", rcl: false }],
+]);
+row("STO and RCL into X (the red letter on the ) key)", "§2", [
+  ["7 SHIFT RCL )", { expr: "7→X", res: "7" }],
+  ["RCL )", { expr: "X", res: "7" }],
+]);
+row("STO into M (the M+ key), then RCL M+", "§2", [
+  ["3 SHIFT RCL M+", { expr: "3→M", res: "3", m: true }],
+  ["RCL M+", { expr: "M", res: "3" }],
+]);
+row("2A² with A = 5 gives 50 (the square binds to A first)", "§2", [
+  ["5 SHIFT RCL (−) 2 ALPHA (−) x² =", { expr: "2A²", res: "50" }],
+]);
+row("letters multiply implicitly: A = 2, B = 3, AB = 6", "§2 implicit ×", [
+  ["2 SHIFT RCL (−) 3 SHIFT RCL °'\" ALPHA (−) ALPHA °'\" =", { expr: "AB", res: "6" }],
+]);
+row("letters multiply implicitly next to brackets: X = 4, 3(X+1) = 15", "§2 implicit ×", [
+  ["4 SHIFT RCL ) 3 ( ALPHA ) + 1 ) =", { expr: "3(X+1)", res: "15" }],
+]);
+row("M+ shows 5M+ with result 5 and lights the M indicator", "§2", [
+  ["", { m: false }],
+  ["5 M+", { expr: "5M+", res: "5", m: true }],
+  ["RCL M+", { expr: "M", res: "5" }],
+]);
+row("SHIFT M+ = M−: 5 M+, 2 M− leaves M = 3", "§2", [
+  ["5 M+ 2 SHIFT M+", { expr: "2M−", res: "2", m: true }],
+  ["RCL M+", { expr: "M", res: "3" }],
+]);
+row("the M indicator goes out when M is back to 0", "§2 \"while M is not 0\"", [
+  ["5 M+ 5 SHIFT M+", { m: false }],
+]);
+row("an RCL line goes into the history", "§2 / §1 history contents", [
+  ["5 SHIFT RCL (−) RCL (−) 1 + 1 =", { res: "2" }],
+  ["▲", { expr: "A", res: "5" }],
+]);
+
+/* ---- status line fits at 375 px (DOM bounding boxes, no screenshots) ----
+   The worst case lights almost every mark at once: boxed A, M, STO, STAT,
+   FREQ, D, Math and ▲▼. Nothing may wrap, overflow its slot, or move the
+   D / Math / STAT marks from where they sit with nothing else lit. */
+section("Build 1 · status line at 375 px (DOM measurement)");
+function measureStatus(where, h, press) {
+  const ind = h.querySelector(".calc-ind");
+  const box = n => h.querySelector(`.calc-ind .ind-${n}`).getBoundingClientRect();
+  press("SHIFT MODE ▼ 4 1 MODE 3 1 AC");          // FREQ on, STAT mode, back to the COMP screen
+  const base = { stat: box("stat").left, drg: box("drg").left, math: box("math").left };
+  press("5 M+ 1 = 2 = 3 = ▲ SHIFT RCL ALPHA");     // M, a history entry in the middle (▲▼), STO, then ALPHA
+  const g = read(h);
+  const lit = ["sa", "m", "sto", "stat", "freq", "drg", "math", "hist"];
+  const texts = lit.map(n => h.querySelector(`.calc-ind .ind-${n}`).textContent);
+  tick(g.sa === "A" && g.m && g.sto && g.hist === "▲▼" && texts.every(Boolean),
+       `${where}: the worst case really lights A, M, STO, STAT, FREQ, D, Math, ▲▼`, `"${texts.join(" | ")}"`);
+  const tops = lit.map(n => Math.round(box(n).top));
+  const clipped = lit.filter(n => { const s = h.querySelector(`.calc-ind .ind-${n}`); return s.scrollWidth > s.clientWidth + 0.5; });
+  tick(new Set(tops).size === 1 && ind.scrollWidth <= ind.clientWidth + 0.5 && clipped.length === 0 && ind.getBoundingClientRect().height <= 14,
+       `${where}: one line, nothing clipped or overflowing`,
+       `status line ${Math.round(ind.getBoundingClientRect().width)}×${Math.round(ind.getBoundingClientRect().height)} px, content ${ind.scrollWidth} px, clipped: ${clipped.join(",") || "none"}`);
+  const moved = ["stat", "drg", "math"].filter(n => Math.abs(box(n).left - base[n]) > 0.5);
+  tick(moved.length === 0, `${where}: STAT, D and Math do not move when the other marks light up`,
+       `moved: ${moved.join(",") || "none"}`);
+}
+{
+  // (a) the real overlay the learner opens from the floating button
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureStatus(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();       // detach it again so the page text ends with the summary
+  // (b) the in-question calculator (.q-calc) inside this page's padded column
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureStatus(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   ONE summary line, at the very end (tools/harness_run.py)
+   ============================================================ */
+const ok = good === total;
+const status = document.getElementById("status");
+status.className = ok ? "pass" : "fail";
+status.textContent = ok ? `✓ all ${total} rows match the device` : `✗ ${total - good} of ${total} rows do not match`;
+document.getElementById("summary").textContent = ok
+  ? `Casio calculator spec: ${good}/${total} passed`
+  : `FAIL: ${total - good} of ${total} rows (${good}/${total} matching)`;
+window.__VERIFY__ = { total, passed: good, ok, fails: bad };
+console.log(`[verify-calc-casio] ${good}/${total} — ${ok ? "OK" : "FAIL"}`);
+if (bad.length) console.log("MISMATCHES:\n" + bad.join("\n"));
+</script>
+</body>
+</html>
