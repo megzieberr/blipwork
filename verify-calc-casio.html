@@ -1228,6 +1228,309 @@ function measureBuild5(where, h, press) {
 }
 
 /* ============================================================
+   BUILD 6 — TABLE = MODE 7 (spec section 12)
+   ============================================================ */
+/* Build 6 fields, read by readT (read() plus the table): tbl — the 3
+   visible rows, each "rownumber|X|F(X)[|G(X)]" (a raised ×10 power as
+   ^power), joined by " / "; head — the column headings "X|F(X)|G(X)";
+   lit — the lit heading; sel — the selected cell as "rownumber:heading"
+   ("1:X"). On the table screen val / res are the bottom line. */
+function readT(h) {
+  const g = read(h), t = h.querySelector(".lcd-tbl");
+  if (!t) return { ...g, tbl: "", head: "", lit: "", sel: "" };
+  const txt = c => { const k = c.cloneNode(true); k.querySelectorAll(".calc-x10-exp").forEach(s => { s.textContent = "^" + s.textContent; }); return k.textContent; };
+  const heads = [...t.rows[0].cells].slice(1).map(txt);
+  const sc = t.querySelector("td.lcd-tbl-sel"), lit = t.querySelector("th.lcd-tbl-lit");
+  const sel = sc ? `${sc.parentElement.cells[0].textContent}:${heads[[...sc.parentElement.cells].indexOf(sc) - 1]}` : "";
+  return { ...g, tbl: [...t.rows].slice(1).map(r => [...r.cells].map(txt).join("|")).join(" / "), head: heads.join("|"), lit: lit ? lit.textContent : "", sel };
+}
+function trow(name, spec, steps) {
+  const c = freshCalc();
+  const diffs = [];
+  try {
+    steps.forEach(([keys, want]) => {
+      c.press(keys);
+      const got = readT(c.h);
+      for (const k of Object.keys(want)) {
+        if (got[k] !== want[k]) diffs.push(`after "${keys}": ${k} = ${JSON.stringify(got[k])}, want ${JSON.stringify(want[k])}`);
+      }
+    });
+  } catch (e) { diffs.push("threw: " + e.message); }
+  tick(diffs.length === 0, `${name} <span class="why">[${spec}]</span>`, diffs.join("; "));
+}
+const F1 = "MODE 7 X x² − 2 X − 3";                 // the device example f(X)=X²−2X−3
+const EX = `${F1} = = (−) 2 = 4 = 1 =`;            // … g skipped, Start −2, End 4, Step 1
+const EX_TOP = "1|−2|5 / 2|−1|0 / 3|0|−3";
+const DOWN = n => Array(n).fill("▼").join(" ");
+
+section("Build 6 · MODE 7: f(X)= and g(X)= (spec §12)");
+
+trow("MODE 7 opens f(X)= with the cursor, nothing else on screen", "§12", [["MODE 7", { expr: "f(X)=", cur: "f(X)=", res: "", tbl: "" }]]);
+trow("the function is typed with the normal keys; X is ALPHA )", "§12", [[F1, { expr: "f(X)=X²−2X−3", cur: "f(X)=X²−2X−3" }]]);
+trow("editing works on f(X)= as on the line: ◀, DEL, insert", "§1 editing; Blipwork: the same line editor", [["MODE 7 X + 1 ◀ DEL −", { expr: "f(X)=X−1", cur: "f(X)=X−" }]]);
+trow("= → g(X)= (the factory setting asks both)", "§12", [[`${F1} =`, { expr: "g(X)=", cur: "g(X)=" }]]);
+trow("g(X) left empty, = skips it: Start? comes next", "§12", [[`${F1} = =`, { expr: "Start?", tbl: "" }]]);
+trow("= on an empty f(X)= does nothing", "Blipwork choice: spec silent", [["MODE 7 =", { expr: "f(X)=", cur: "f(X)=" }]]);
+trow("AC on g(X)= clears g", "Blipwork choice: spec silent, as AC on f(X)=", [["MODE 7 X = X + 1 AC", { expr: "g(X)=", cur: "g(X)=" }]]);
+trow("another letter can be used: A = 3, f(X)=AX gives 3, 6, 9", "§2 letters; Blipwork: stored values", [["3 SHIFT RCL (−) MODE 7 ALPHA (−) X = = = = =", { tbl: "1|1|3 / 2|2|6 / 3|3|9" }]]);
+trow("the skipped SHIFT keys type nothing on f(X)= (SHIFT + is Pol)", "brief SKIP list (Build 4)", [["MODE 7 SHIFT + X", { expr: "f(X)=X" }]]);
+trow("no ▲ history mark on f(X)= or on the table", "§1 (▲ after a result only)", [["1 + 1 = MODE 7", { hist: "" }], ["X = = = = =", { hist: "", sa: "" }]]);
+
+section("Build 6 · Start? End? Step? (spec §12)");
+
+trow("the defaults: Start? 1, End? 5, Step? 1, each shown bottom right; the table runs 1 to 5", "§12", [
+  [`${F1} = =`, { expr: "Start?", val: "1", big: false }],
+  ["=", { expr: "End?", val: "5" }],
+  ["=", { expr: "Step?", val: "1" }],
+  ["=", { head: "X|F(X)", tbl: "1|1|−4 / 2|2|−3 / 3|3|0" }],
+  [DOWN(4), { sel: "5:X", val: "5" }],
+  ["▼", { sel: "6:X", val: "" }],
+]);
+trow("typing shows the value big at the top left; the old value stays bottom right until =", "§12, §10", [
+  [`${F1} = = (−) 2`, { expr: "−2", big: true, val: "1" }],
+  ["=", { expr: "End?", val: "5", big: false }],
+]);
+trow("Start, End and Step remember the last values used", "§12", [
+  [`${F1} = = (−) 2 = 4 = 2 =`, { tbl: "1|−2|5 / 2|0|−3 / 3|2|−3" }],
+  ["AC = =", { expr: "Start?", val: "−2" }],
+  ["=", { expr: "End?", val: "4" }],
+  ["=", { expr: "Step?", val: "2" }],
+  ["=", { tbl: "1|−2|5 / 2|0|−3 / 3|2|−3" }],
+]);
+trow("still remembered after MODE 1 and MODE 7 again (which opens an empty f(X)=)", "§12; Blipwork: MODE 7 opens empty", [
+  [`${EX.replace("= 1 =", "= 2 =")} MODE 1 MODE 7`, { expr: "f(X)=", cur: "f(X)=" }],
+  ["X = =", { expr: "Start?", val: "−2" }],
+  ["= =", { expr: "Step?", val: "2" }],
+]);
+trow("CLR All (SHIFT 9 3 =) puts Start, End and Step back to 1, 5, 1", "Blipwork choice: Reset All read as everything", [
+  [`${EX.replace("= 1 =", "= 2 =")} SHIFT 9 3 = MODE 7 X = =`, { expr: "Start?", val: "1" }],
+  ["=", { expr: "End?", val: "5" }], ["=", { expr: "Step?", val: "1" }],
+]);
+trow("a decimal step: 0 to 1 step 0,25 gives exactly 0 / 0,25 / 0,5 / 0,75 / 1", "§12; Blipwork: exact steps", [
+  ["MODE 7 X = = 0 = 1 = 0 , 25 =", { tbl: "1|0|0 / 2|0,25|0,25 / 3|0,5|0,5" }],
+  [DOWN(4), { sel: "5:X", val: "1", tbl: "3|0,5|0,5 / 4|0,75|0,75 / 5|1|1" }],
+  ["▼", { sel: "6:X", val: "" }],
+]);
+trow("AC on Start? goes back to f(X)= with the function kept, cursor at the start", "Blipwork choice: spec silent, as AC in the table", [
+  [`${F1} = = AC`, { expr: "f(X)=X²−2X−3", cur: "f(X)=", big: false }],
+]);
+
+section("Build 6 · the table (spec §12)");
+
+trow("device example X²−2X−3 from −2 to 4: the X column, row by row, scrolling one row at a time", "§12 device answer", [
+  [EX, { head: "X|F(X)", tbl: EX_TOP, sel: "1:X", lit: "X", val: "−2", err: "" }],
+  ["▼", { tbl: EX_TOP, sel: "2:X", val: "−1" }],
+  ["▼", { tbl: EX_TOP, sel: "3:X", val: "0" }],
+  ["▼", { tbl: "2|−1|0 / 3|0|−3 / 4|1|−4", sel: "4:X", val: "1" }],
+  ["▼", { tbl: "3|0|−3 / 4|1|−4 / 5|2|−3", sel: "5:X", val: "2" }],
+  ["▼", { tbl: "4|1|−4 / 5|2|−3 / 6|3|0", sel: "6:X", val: "3" }],
+  ["▼", { tbl: "5|2|−3 / 6|3|0 / 7|4|5", sel: "7:X", val: "4" }],
+]);
+trow("device example: ▶ goes to F(X), its heading lights; the F(X) column 5, 0, −3, −4, −3, 0, 5", "§12 device answer", [
+  [`${EX} ▶`, { sel: "1:F(X)", lit: "F(X)", val: "5" }],
+  ["▼", { sel: "2:F(X)", val: "0" }],
+  ["▼", { sel: "3:F(X)", val: "−3" }],
+  ["▼", { sel: "4:F(X)", val: "−4", tbl: "2|−1|0 / 3|0|−3 / 4|1|−4" }],
+  ["▼", { sel: "5:F(X)", val: "−3" }],
+  ["▼", { sel: "6:F(X)", val: "0" }],
+  ["▼", { sel: "7:F(X)", val: "5", tbl: "5|2|−3 / 6|3|0 / 7|4|5" }],
+]);
+trow("▲ walks back up, the view scrolling back one row at a time", "§12 (▼ scrolls one row; ▲ the mirror)", [
+  [`${EX} ▶ ${DOWN(6)} ▲ ▲`, { sel: "5:F(X)", val: "−3", tbl: "5|2|−3 / 6|3|0 / 7|4|5" }],
+  ["▲", { sel: "4:F(X)", tbl: "4|1|−4 / 5|2|−3 / 6|3|0" }],
+  ["▲", { sel: "3:F(X)", tbl: "3|0|−3 / 4|1|−4 / 5|2|−3" }],
+  ["▲ ▲", { sel: "1:F(X)", val: "5", tbl: EX_TOP }],
+  ["▲", { sel: "1:F(X)", tbl: EX_TOP }],
+]);
+trow("f and g together: X | F(X) | G(X); ▶ ▶ reaches G(X)", "§12", [
+  ["MODE 7 X x² = 2 X + 1 = = = =", { head: "X|F(X)|G(X)", tbl: "1|1|1|3 / 2|2|4|5 / 3|3|9|7", sel: "1:X", lit: "X" }],
+  ["▶ ▶", { sel: "1:G(X)", lit: "G(X)", val: "3" }],
+  [DOWN(4), { sel: "5:G(X)", val: "11", tbl: "3|3|9|7 / 4|4|16|9 / 5|5|25|11" }],
+  ["◀", { sel: "5:F(X)", lit: "F(X)", val: "25" }],
+]);
+trow("▶ on the last column and ◀ on X stay put (no wrap)", "Blipwork choice: spec silent", [
+  ["MODE 7 X x² = 2 X + 1 = = = = ▶ ▶ ▶", { sel: "1:G(X)" }],
+  ["◀ ◀ ◀ ◀", { sel: "1:X" }],
+]);
+trow("g skipped: the table has X and F(X) only", "§12", [["MODE 7 X x² = = = = = ▶ ▶", { head: "X|F(X)", tbl: "1|1|1 / 2|2|4 / 3|3|9", sel: "1:F(X)" }]]);
+trow("AC on the table: f(X)=<function> with the cursor at the START; g is kept", "§12; Blipwork: g kept", [
+  ["MODE 7 X x² = 2 X + 1 = = = = AC", { expr: "f(X)=X²", cur: "f(X)=", tbl: "" }],
+  ["=", { expr: "g(X)=2X+1", cur: "g(X)=2X+1" }],
+]);
+trow("▼ past the last row shows an empty lit row; typing there does nothing", "§12", [
+  ["MODE 7 X = = = = =", { tbl: "1|1|1 / 2|2|2 / 3|3|3" }],
+  [DOWN(4), { sel: "5:X", val: "5", tbl: "3|3|3 / 4|4|4 / 5|5|5" }],
+  ["▼", { sel: "6:X", val: "", tbl: "4|4|4 / 5|5|5 / 6||" }],
+  ["7 = DEL (−) X 1", { sel: "6:X", val: "", tbl: "4|4|4 / 5|5|5 / 6||" }],
+  ["▶", { sel: "6:F(X)", lit: "F(X)", val: "" }],
+  ["▼", { sel: "6:F(X)", tbl: "4|4|4 / 5|5|5 / 6||" }],
+  ["▲", { sel: "5:F(X)", val: "5", tbl: "4|4|4 / 5|5|5 / ||" }],
+]);
+trow("view only: typing, =, DEL and S⇔D on a row change nothing", "§12", [
+  [`${EX} 7 + sin ( = DEL S⇔D X SHIFT 7 ▼ 9 DEL`, { tbl: EX_TOP, sel: "2:X", val: "−1", sa: "" }],
+]);
+trow("cells are CUT OFF to 6 characters (⅔ shows 0,6666); the bottom line is rounded", "§12 device answer", [
+  ["MODE 7 X ÷ 3 = = 1 = 3 = 1 = ▶", { tbl: "1|1|0,3333 / 2|2|0,6666 / 3|3|1", val: "0,3333333333" }],
+  ["▼", { sel: "2:F(X)", val: "0,6666666667" }],
+]);
+trow("2^X from −2 shows 0,25 / 0,5 / 1; the bottom line is 0,25, not ¼", "§12 device answer", [
+  ["MODE 7 2 x^ X ▶ = = (−) 2 = 0 = 1 = ▶", { tbl: "1|−2|0,25 / 2|−1|0,5 / 3|0|1", val: "0,25", resFrac: "" }],
+]);
+trow("a negative is cut the same way, the minus counting as a character: −⅔ shows −0,666", "Blipwork choice: spec silent", [
+  ["MODE 7 (−) X ÷ 3 = = 2 = 2 = 1 = ▶", { tbl: "1|2|−0,666 / || / ||", val: "−0,6666666667" }],
+]);
+trow("a number too long for a cell shows the ×10 form, cut: 2^20 shows 1,04×10⁶", "Blipwork choice: spec silent", [
+  ["MODE 7 2 x^ X ▶ = = 20 = 20 = 1 = ▶", { tbl: "1|20|1,04×10^6 / || / ||", val: "1048576" }],
+]);
+trow("a cell that cannot be worked out (1÷X at 0) shows ERROR; the table stays usable", "foreman ruling: spec silent", [
+  ["MODE 7 1 ÷ X = = (−) 1 = 1 = 1 = ▶", { tbl: "1|−1|−1 / 2|0|ERROR / 3|1|1", val: "−1", err: "" }],
+  ["▼", { sel: "2:F(X)", val: "ERROR" }],
+  ["▼", { sel: "3:F(X)", val: "1" }],
+]);
+trow("Fix rounds the bottom line, not the cut-off cells; Norm puts it back", "Blipwork choice: spec silent", [
+  ["MODE 7 X ÷ 3 = = 1 = 3 = 1 = ▶ SHIFT MODE 6 2", { tbl: "1|1|0,3333 / 2|2|0,6666 / 3|3|1", sel: "1:F(X)", val: "0,33", fix: "FIX" }],
+  ["SHIFT MODE 8 2", { val: "0,3333333333", fix: "" }],
+]);
+
+section("Build 6 · row limit, AC, MODE (spec §12)");
+
+trow("20 rows are fine: ▼ reaches row 20, then the empty row 21", "§12 row limit 20", [
+  ["MODE 7 X = = 1 = 20 = 1 =", { err: "", tbl: "1|1|1 / 2|2|2 / 3|3|3" }],
+  [DOWN(19), { sel: "20:X", val: "20", tbl: "18|18|18 / 19|19|19 / 20|20|20" }],
+  ["▼", { sel: "21:X", val: "", tbl: "19|19|19 / 20|20|20 / 21||" }],
+]);
+trow("20 rows with f and g are fine too", "§12 row limit 20 with f and g", [
+  ["MODE 7 X = X x² = 1 = 20 = 1 =", { err: "", head: "X|F(X)|G(X)" }],
+  [`${DOWN(19)} ▶ ▶`, { sel: "20:G(X)", val: "400" }],
+]);
+trow("21 rows → Insufficient MEM / [AC] :Cancel / [◀][▶]:Goto; other keys do nothing", "§12, §3", [
+  ["MODE 7 X x² = = 1 = 21 = 1 =", { err: ERR("Insufficient MEM"), tbl: "" }],
+  ["7 DEL = ▲ ▼ MODE SHIFT ON", { err: ERR("Insufficient MEM") }],
+]);
+trow("◀ (Goto) goes back to f(X)= with the function kept; fix End and the table is made", "§12; Blipwork: cursor at the end", [
+  ["MODE 7 X x² = = 1 = 21 = 1 = ◀", { err: "", expr: "f(X)=X²", cur: "f(X)=X²" }],
+  ["= = = 20 = =", { err: "", tbl: "1|1|1 / 2|2|4 / 3|3|9" }],
+]);
+trow("21 rows with f and g → Insufficient MEM; ▶ (Goto) also goes back to f(X)=", "§12, §3", [
+  ["MODE 7 X = X = 0 = 20 = 1 =", { err: ERR("Insufficient MEM") }],
+  ["▶", { err: "", expr: "f(X)=X", cur: "f(X)=X" }],
+]);
+trow("0 to 5 step 0,25 is 21 rows: Insufficient MEM", "§12 row limit", [["MODE 7 X = = 0 = 5 = 0 , 25 =", { err: ERR("Insufficient MEM") }]]);
+trow("AC on Insufficient MEM goes back to f(X)= with the function kept", "Blipwork choice: spec silent, as AC in the table", [
+  ["MODE 7 X x² = = 1 = 21 = 1 = AC", { err: "", expr: "f(X)=X²", cur: "f(X)=" }],
+]);
+trow("AC in the table → f(X)=<function>, cursor at the START; AC again → an empty f(X)=", "§12", [
+  [`${EX} ▼ ▶ AC`, { expr: "f(X)=X²−2X−3", cur: "f(X)=", tbl: "" }],
+  ["AC", { expr: "f(X)=", cur: "f(X)=" }],
+  ["AC", { expr: "f(X)=", cur: "f(X)=" }],
+]);
+trow("after AC the function can be changed and a new table made (Start/End/Step kept)", "§12", [
+  [`${EX} AC 2 = = = = =`, { tbl: "1|−2|9 / 2|−1|1 / 3|0|−3", sel: "1:X" }],
+]);
+trow("ON goes back to f(X)= with the function kept", "Blipwork choice: spec silent", [[`${EX} ON`, { expr: "f(X)=X²−2X−3", cur: "f(X)=", tbl: "" }]]);
+trow("MODE on the table, then AC: back to the table as it was", "Blipwork choice: spec silent", [
+  [`${EX} ▼ MODE`, { menu: "1:COMP2:CMPLX3:STAT4:BASE-N5:EQN6:MATRIX7:TABLE" }],
+  ["AC", { tbl: EX_TOP, sel: "2:X", val: "−1" }],
+]);
+trow("MODE 1 goes back to COMP, and COMP works (a sum, CALC)", "§12", [
+  [`${EX} MODE 1`, { expr: "", res: "", tbl: "" }],
+  ["2 + 3 =", { expr: "2+3", val: "5" }],
+  ["X x² CALC 3 =", { expr: "X²", val: "9" }],
+]);
+trow("MODE 1 from the f(X)= line works too", "§12", [["MODE 7 X x² MODE 1 1 + 1 =", { expr: "1+1", val: "2" }]]);
+trow("the table changes neither X nor Ans", "Blipwork choice: spec silent", [
+  ["7 SHIFT RCL ) 1 + 1 = MODE 7 X x² = = = = = MODE 1 Ans =", { val: "2" }],
+  ["RCL )", { expr: "X", val: "7" }],
+]);
+trow("STAT still works after TABLE (MODE 3 1 from the table)", "foreman ruling: STAT unchanged", [
+  ["MODE 7 X = = = = = MODE 3 1 2 = 4 = AC SHIFT 1 4 2 =", { res: "3" }],
+]);
+
+section("Build 6 · errors when the table is made (Blipwork choices: spec silent)");
+
+trow("a Syntax ERROR in f shows after Step?; Goto puts the cursor before the bad token", "Blipwork choice; §3 Goto", [
+  ["MODE 7 X + × 2 = = = = =", { err: ERR("Syntax ERROR") }],
+  ["◀", { err: "", expr: "f(X)=X+×2", cur: "f(X)=X+" }],
+]);
+trow("a Syntax ERROR in g: Goto goes to g(X)=", "Blipwork choice; §3 Goto", [
+  ["MODE 7 X = X + × = = = =", { err: ERR("Syntax ERROR") }],
+  ["▶", { err: "", expr: "g(X)=X+×", cur: "g(X)=X+" }],
+]);
+trow("Step 0 → Math ERROR; Goto goes back to f(X)=", "Blipwork choice", [
+  ["MODE 7 X = = = = 0 =", { err: ERR("Math ERROR") }],
+  ["◀", { err: "", expr: "f(X)=X", cur: "f(X)=X" }],
+]);
+trow("Start after End with a positive Step → Math ERROR (no rows)", "Blipwork choice", [["MODE 7 X = = 5 = 1 = =", { err: ERR("Math ERROR") }]]);
+trow("Start 5, End 1, Step −1 counts down: 5, 4, 3, 2, 1", "Blipwork choice: Start, Start+Step, … to End", [
+  ["MODE 7 X = = 5 = 1 = (−) 1 =", { tbl: "1|5|5 / 2|4|4 / 3|3|3" }],
+  [DOWN(5), { sel: "6:X", tbl: "4|2|2 / 5|1|1 / 6||" }],
+]);
+
+/* ---- DOM measurements at 375 px: the table with f AND g and the widest
+   cells, the empty lit row, Insufficient MEM, a long f(X)= line ---- */
+section("Build 6 · the table fits the LCD (DOM measurement)");
+function measureBuild6(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  const textRight = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().right; };
+  const unclipped = el => el.scrollWidth <= el.clientWidth + 0.5;
+  press("AC ON AC SHIFT 9 3 = AC");
+  const h0 = L().height;
+  // (1) f = −X⁷ and g = −1÷X from 18 to 20: row numbers + X + F(X) + G(X), the widest cells (×10 forms, −0,055)
+  press("MODE 7 (−) X x^ 7 ▶ = (−) 1 ÷ X = 18 = 20 = 1 =");
+  const t = h.querySelector(".lcd-tbl");
+  const cells = t ? [...t.querySelectorAll("th,td")] : [];
+  const g = readT(h);
+  tick(!!t && g.head === "X|F(X)|G(X)" && cells.length === 16 && cells.every(inside) && cells.every(unclipped) && unclipped(t.parentElement) && Math.abs(L().height - h0) < 0.5,
+       `${where}: the table (row numbers, X, F(X), G(X)) sits inside the LCD, no cell cut, LCD height unchanged`,
+       `"${g.tbl}", LCD ${Math.round(h0)} → ${Math.round(L().height)} px, ${cells.filter(c => !inside(c)).length} cells outside, ${cells.filter(c => !unclipped(c)).length} clipped`);
+  const nCell = t && t.rows[1].cells[0], xCell = t && t.rows[1].cells[1];
+  tick(!!t && nCell.getBoundingClientRect().width < xCell.getBoundingClientRect().width / 2 && parseFloat(getComputedStyle(nCell).fontSize) < parseFloat(getComputedStyle(xCell).fontSize),
+       `${where}: the row-number column is narrow and its numbers small`,
+       t ? `${Math.round(nCell.getBoundingClientRect().width)} px / ${getComputedStyle(nCell).fontSize} against ${Math.round(xCell.getBoundingClientRect().width)} px / ${getComputedStyle(xCell).fontSize}` : "no table");
+  const lcdBg = getComputedStyle(lcd).backgroundColor, lcdInk = getComputedStyle(lcd).color;
+  const rev = el => !!el && getComputedStyle(el).backgroundColor === lcdInk && getComputedStyle(el).color === lcdBg;
+  const plain = t && t.rows[2].cells[2];
+  tick(rev(t && t.querySelector("td.lcd-tbl-sel")) && rev(t && t.querySelector("th.lcd-tbl-lit")) && getComputedStyle(plain).backgroundColor === "rgba(0, 0, 0, 0)",
+       `${where}: the selected cell and its column heading are in reverse colours, the others not`, `ink ${lcdInk}, LCD ${lcdBg}`);
+  // (2) the bottom line: big, right-aligned, the longest values fit
+  const fCell = xCell ? parseFloat(getComputedStyle(xCell).fontSize) : NaN;   // read before the next key redraws the table
+  press("▶ ▼ ▼");
+  const res = h.querySelector(".lcd-res");
+  const fRes = parseFloat(getComputedStyle(res).fontSize);
+  tick(readT(h).val === "−1280000000" && inside(res) && unclipped(res) && L().right - textRight(res) < 14 && fRes > 2 * fCell && Math.abs(L().height - h0) < 0.5,
+       `${where}: the bottom line −1280000000 is big (${fRes}px against ${fCell}px cells), right-aligned and whole`,
+       `"${readT(h).val}", ${Math.round(L().right - textRight(res))} px from the right, LCD ${Math.round(L().height)} px`);
+  // (3) the empty lit row past the end keeps the height
+  press("▼");
+  tick(readT(h).sel === "4:F(X)" &&[...h.querySelectorAll(".lcd-tbl th,.lcd-tbl td")].every(inside) && Math.abs(L().height - h0) < 0.5,
+       `${where}: the empty lit row fits, LCD height unchanged`, `${readT(h).tbl}`);
+  // (4) Insufficient MEM: the three lines fit
+  press("AC AC MODE 7 X = = 1 = 21 = 1 =");
+  const lines = [...h.querySelectorAll(".lcd-err > div")];
+  tick(lines.length === 3 && lines[0].textContent === "Insufficient MEM" && lines.every(inside) && lines.every(unclipped) && Math.abs(L().height - h0) < 0.5,
+       `${where}: Insufficient MEM shows its three lines inside the LCD`, lines.map(d => d.textContent).join(" / "));
+  // (5) a long f(X)= line scrolls with the cursor, ◀ marker showing
+  press("AC AC X x² + 123456789 X + 987654321 X + 5555 X + 1234567 X + 7654321");
+  const r5 = read(h);
+  tick(r5.mark && r5.curVis && Math.abs(L().height - h0) < 0.5, `${where}: a long f(X)= line scrolls, the cursor in view and the ◀ marker showing`,
+       `mark ${r5.mark}, cursor visible ${r5.curVis}, LCD ${Math.round(L().height)} px`);
+  press("AC ON AC SHIFT 9 3 = AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild6(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild6(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
    ONE summary line, at the very end (tools/harness_run.py)
    ============================================================ */
 const ok = good === total;

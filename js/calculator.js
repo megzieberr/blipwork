@@ -67,6 +67,10 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    CALC: `Solve for X`, the three-line X= / L−R= answer, Can't Solve) are
    live, on ONE reusable prompt screen (openPrompt) that TABLE and EQN will
    use too. CALC and SOLVE work in COMP mode only.
+   Calculator rebuild Build 6 (2026-10-04, spec §12): TABLE (MODE 7) is
+   live: f(X)= and g(X)= typed with the normal keys, Start? End? Step? on
+   the Build 5 prompt screen (remembered between tables), and a view-only
+   grid of 3 rows drawn by the same gridHTML as the STAT data grid.
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -741,6 +745,51 @@ function exactFits(v) {
 }
 const formatValue = (v, dec, fix = null) => (dec || !exactFits(v)) ? formatDecimal(v, fix) : formatExactHTML(v);
 
+/* ---- Build 6: TABLE (MODE 7, spec §12) ----
+   Cells show DECIMALS, CUT OFF (not rounded) to about 6 characters: ⅔ shows
+   0,6666 while the bottom line shows the rounded 0,6666666667; 2^X from −2
+   shows 0,25 / 0,5 / 1. The cut is done exactly on the value (a decimal is
+   first read at 15 significant digits, as Fix does), so nothing is ever
+   rounded up. Blipwork choices where the spec is silent: the minus sign
+   counts as one of the 6 characters (−⅔ shows −0,666); a whole-number part
+   too long for 6 characters, or a value so small that the cut leaves only
+   zeros, shows the ×10 form with its mantissa cut to two decimals
+   (2^20 = 1048576 shows 1,04×10⁶); a value that cannot be worked out shows
+   ERROR (foreman ruling). */
+const TBL_CELL_CHARS = 6;
+const TBL_VISIBLE = 3;         // spec §12: 3 rows visible
+/* Row limit 20 "with the f and g setting" (spec §12, 21 rows → Insufficient
+   MEM). The setting is always f and g until Build 8 adds SETUP 5:TABLE, so
+   the limit is 20 whether or not g was given (the f-only limit was not
+   measured). */
+const TABLE_MAX_ROWS = 20;
+const freshRange = () => ({ start: mkRat(1n, 1n), end: mkRat(5n, 1n), step: mkRat(1n, 1n) });   // factory Start 1, End 5, Step 1
+function tableCellText(v) {
+  if (isErr(v)) return "ERROR";
+  const f = toFloatV(v);
+  if (!Number.isFinite(f)) return "ERROR";
+  if (f === 0) return "0";
+  const r = v.kind === "rat" ? v : floatToRat(f);
+  const neg = r.n < 0n, n = neg ? -r.n : r.n, sign = neg ? "−" : "";
+  const ip = (n / r.d).toString(), head = sign + ip;
+  if (head.length <= TBL_CELL_CHARS) {
+    const room = TBL_CELL_CHARS - head.length - 1;   // digits left after the comma
+    const fd = room > 0 ? ((n % r.d) * 10n ** BigInt(room) / r.d).toString().padStart(room, "0").replace(/0+$/, "") : "";
+    if (ip !== "0" || fd) return head + (fd ? "," + fd : "");
+  }
+  const [m, ex] = Math.abs(f).toExponential(14).split("e");
+  const md = m.replace(".", ""), tail = md.slice(1, 3).replace(/0+$/, ""), e = Number(ex);
+  return `${sign}${md[0]}${tail ? "," + tail : ""}<span class="calc-x10">×10</span><sup class="calc-x10-exp">${e < 0 ? "−" : ""}${Math.abs(e)}</sup>`;
+}
+/* One LCD grid as an HTML table (Build 6): the STAT data grid and the TABLE
+   screen are both drawn by this. heads and every row are lists of cells
+   { html, cls }; the first cell of each is the row-number column. */
+function gridHTML(cls, heads, rows) {
+  const cell = (tag, c) => `<${tag}${c.cls ? ` class="${c.cls}"` : ""}>${c.html}</${tag}>`;
+  return `<table class="${cls}"><tr>${heads.map(c => cell("th", c)).join("")}</tr>`
+    + rows.map(r => `<tr>${r.map(c => cell("td", c)).join("")}</tr>`).join("") + `</table>`;
+}
+
 /* ---- token box compile + recursive-descent parse (no implicit ×) ----
    Build 2: every compiled token remembers `src`, its index in the box the
    learner typed, so a Syntax ERROR can say WHERE it happened and ◀/▶
@@ -1050,6 +1099,9 @@ export function mountCalculator(host, opts = {}) {
     prompt: null,          // the open prompt screen (screen "prompt"): { label, value, box, onAccept, onCancel, err, errAt }
     calcRun: null,         // { letters }: the result on screen came from CALC, so = (or CALC) asks again from the first letter
     solve: null,           // the SOLVE answer screen (screen "solved"): { x, lr }
+    // ---- calculator rebuild Build 6 (spec §12) ----
+    tbl: null,             // TABLE mode (screens "tblF", "table", "tblErr"): { f, g, which, rows, hasG, r, c, top, back, err }
+    tblRange: freshRange(),   // Start / End / Step: remembered from one table to the next (spec §12)
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -1143,12 +1195,17 @@ export function mountCalculator(host, opts = {}) {
   }
 
   // ---- menus ----
-  const openMenu = m => { S.menu = m; S.screen = "menu"; };
-  const closeMenu = () => { if (S.menu && S.menu.parent) S.menu = S.menu.parent; else { S.screen = S.menu && S.menu.ret || "comp"; S.menu = null; } };
+  /* Build 6: a menu opened from a TABLE screen goes back to that screen
+     (the f(X)= line or the table itself), not to a COMP line TABLE mode does
+     not have. In COMP and STAT mode home() is "comp", exactly as before. */
+  const home = () => (S.mode === "TABLE" && S.tbl ? S.tbl.back || "tblF" : "comp");
+  const openMenu = m => { if (S.mode === "TABLE" && S.tbl && S.screen !== "menu") S.tbl.back = S.screen; S.menu = m; S.screen = "menu"; };
+  const closeMenu = () => { if (S.menu && S.menu.parent) S.menu = S.menu.parent; else { const ret = S.menu && S.menu.ret; S.screen = !ret || ret === "comp" ? home() : ret; S.menu = null; } };
+  const leaveMenu = () => { S.menu = null; S.screen = home(); };
 
   function modeMenu() {
     openMenu({ items: [["1", "COMP"], ["2", "CMPLX"], ["3", "STAT"], ["4", "BASE-N"], ["5", "EQN"], ["6", "MATRIX"], ["7", "TABLE"]], ret: "comp",
-      onNum(n) { if (n === 1) { S.mode = "COMP"; resetEntry(); S.menu = null; S.screen = "comp"; } else if (n === 3) statTypeMenu(); } });
+      onNum(n) { if (n === 1) { S.mode = "COMP"; resetEntry(); S.menu = null; S.screen = "comp"; } else if (n === 3) statTypeMenu(); else if (n === 7) startTable(); } });
   }
   function statTypeMenu() {
     openMenu({ items: [["1", "1-VAR"], ["2", "A+BX"], ["3", "_+CX²"], ["4", "ln X"], ["5", "e^X"], ["6", "A·B^X"], ["7", "A·X^B"], ["8", "1/X"]], ret: "comp",
@@ -1163,8 +1220,8 @@ export function mountCalculator(host, opts = {}) {
       onDown() { if (this.page === 0) { this.page = 1; this.items = p2; } },
       onUp() { if (this.page === 1) { this.page = 0; this.items = p1; } },
       onNum(n) {
-        if (this.page === 0 && n === 3) { S.drg = "D"; S.menu = null; S.screen = "comp"; }
-        else if (this.page === 0 && n === 4) { S.drg = "R"; S.menu = null; S.screen = "comp"; }
+        if (this.page === 0 && n === 3) { S.drg = "D"; leaveMenu(); }
+        else if (this.page === 0 && n === 4) { S.drg = "R"; leaveMenu(); }
         else if (this.page === 0 && n === 6) fixPrompt();
         else if (this.page === 0 && n === 8) normPrompt();
         else if (this.page === 1 && n === 4) freqMenu();
@@ -1177,15 +1234,15 @@ export function mountCalculator(host, opts = {}) {
      Frequency? prompt already did). A result on screen is redrawn at once. */
   function fixPrompt() {
     openMenu({ title: "Fix 0~9?", items: [], ret: "comp",
-      onNum(n) { S.fix = n; S.menu = null; S.screen = "comp"; refreshResult(); } });
+      onNum(n) { S.fix = n; leaveMenu(); refreshResult(); } });
   }
   function normPrompt() {
     openMenu({ title: "Norm 1~2?", items: [], ret: "comp",
-      onNum(n) { if (n !== 1 && n !== 2) return; S.fix = null; S.norm = n; S.menu = null; S.screen = "comp"; refreshResult(); } });
+      onNum(n) { if (n !== 1 && n !== 2) return; S.fix = null; S.norm = n; leaveMenu(); refreshResult(); } });
   }
   function freqMenu() {
     openMenu({ title: "Frequency?", items: [["1", "ON"], ["2", "OFF"]], ret: "comp",
-      onNum(n) { if (n !== 1 && n !== 2) return; S.freqOn = (n === 1); S.menu = null; S.screen = "comp"; emit("freq", n === 1); } });
+      onNum(n) { if (n !== 1 && n !== 2) return; S.freqOn = (n === 1); leaveMenu(); emit("freq", n === 1); } });
   }
   function clrMenu() {
     openMenu({ items: [["1", "Setup"], ["2", "Memory"], ["3", "All"]], ret: "comp",
@@ -1193,7 +1250,7 @@ export function mountCalculator(host, opts = {}) {
   }
   function clrConfirm() {
     openMenu({ title: "Reset All?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.fix = null; S.norm = 2; S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 1: "All" also zeroes the variables + M and empties the history (both are memory); Build 4: and puts Fix back to Norm 2
+      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.fix = null; S.norm = 2; S.tbl = null; S.tblRange = freshRange(); S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 1: "All" also zeroes the variables + M and empties the history (both are memory); Build 4: and puts Fix back to Norm 2; Build 6: and TABLE's Start/End/Step back to 1/5/1 (not measured: Reset All read as "everything")
   }
   /* CLR 1:Setup (Build 4): the setup items Blipwork has go back to the
      factory settings (spec intro: Norm 2, Deg, STAT FREQ off). Its confirm
@@ -1201,7 +1258,7 @@ export function mountCalculator(host, opts = {}) {
      NOT fire the "clear" milestone, which belongs to CLR All. */
   function clrSetupConfirm() {
     openMenu({ title: "Reset Setup?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { S.fix = null; S.norm = 2; S.drg = "D"; S.freqOn = false; S.menu = null; S.screen = "comp"; refreshResult(); } });
+      onEq() { S.fix = null; S.norm = 2; S.drg = "D"; S.freqOn = false; leaveMenu(); refreshResult(); } });
   }
   function statMenu() {
     openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", "Distr"], ["6", "MinMax"]], ret: "comp",
@@ -1763,6 +1820,151 @@ export function mountCalculator(host, opts = {}) {
       + `<div class="lcd-sv-row"><span class="lcd-sv-lab">L−R=</span><span class="lcd-sv-val">${num(S.solve.lr)}</span></div></div>`;
   }
 
+  /* ---- Build 6: TABLE = MODE 7 (spec §12) ----
+     Measured on the device and built as measured:
+     - MODE 7 opens `f(X)=` with the cursor; the function is typed with the
+       normal keys (X is ALPHA )). = → `g(X)=` (factory setting: both); g
+       left empty and = skips it. Then Start? (1), End? (5), Step? (1) on
+       the Build 5 prompt screen; the three REMEMBER the last values used.
+     - The table: row numbers, X | F(X) (| G(X) when g was given), 3 rows
+       visible, the selected cell and its column heading reversed, the
+       selected value big and right-aligned underneath (always a decimal:
+       2^X at −2 shows 0,25, not ¼). Starts on row 1, column X; ▶ / ◀ move
+       across, ▼ / ▲ move down / up, the view scrolling one row at a time;
+       ▼ past the last row shows an empty lit row. View only: typing does
+       nothing anywhere in the table.
+     - 21 rows or more → Insufficient MEM (three-line screen); ◀ goes back to
+       f(X)= with the function kept.
+     - AC in the table → f(X)=<function> with the cursor at the START; AC
+       again clears it to an empty f(X)=.
+     Blipwork choices where the spec is silent (each listed in the Build 6
+     report): MODE 7 always opens an EMPTY f(X)= (g is emptied too); = on an
+     empty f(X)= does nothing; on g(X)= the cursor starts at the END of g;
+     AC on g(X)= clears g; AC on Start? / End? / Step?, AC on the Insufficient
+     MEM screen and ON all go back to f(X)= like AC in the table (cursor at
+     the start); Goto (◀ or ▶) from Insufficient MEM puts the cursor at the
+     END of f; a Syntax ERROR in f or g shows after Step?, like Insufficient
+     MEM, and Goto puts the cursor just before the bad token in that line;
+     Step 0, or a Start/End/Step that gives no row at all, is Math ERROR;
+     ▶ on the last column and ◀ on X stay put (no wrap); ▼ on the empty row
+     and ▲ on row 1 stay put; MODE, SETUP and CLR work on the f(X)= line and
+     the table, and a menu left with AC (or a SETUP choice) returns there;
+     the table does not change X, Ans or the history; a SETUP change made
+     while the table is showing does not recompute it; Fix rounds the bottom
+     line but not the cut-off cells. */
+  function startTable() {
+    resetEntry();
+    S.mode = "TABLE"; S.menu = null;
+    S.tbl = { f: [], g: [], which: "f", rows: null, hasG: false, r: 0, c: 0, top: 0, back: null, err: null };
+    openTblFn("f", "end");
+  }
+  /* the f(X)= or g(X)= line, its box the one S.cur types into (as the
+     Build 5 prompt does), cursor at the start or the end */
+  function openTblFn(which, at) {
+    const T = S.tbl, box = T[which];
+    T.which = which; T.err = null;
+    S.cur = { box, i: at === "start" ? 0 : box.length };
+    S.result = null; S.err = false; S.errAt = null; S.afterAC = false; S.pendingStat = null; S.browsing = false;
+    S.screen = "tblF";
+  }
+  function tblFnKey(key) {
+    const T = S.tbl;
+    if (key === "mode") return modeMenu();
+    if (key === "setup") return setupMenu();
+    if (key === "clr") return clrMenu();
+    if (key === "ac") { T[T.which] = []; return openTblFn(T.which, "start"); }   // spec §12: AC clears the line to an empty f(X)=
+    if (key === "eq") {
+      if (T.which === "g") return askRange(0);   // g given or left empty (spec §12: an empty g is skipped)
+      if (!isBoxEmpty(T.f)) openTblFn("g", "end");
+      return;
+    }
+    if (key === "left" || key === "right") return moveHoriz(key === "left" ? -1 : 1);
+    if (key === "up" || key === "down") return moveVert(key === "up" ? -1 : 1);
+    if (key === "del") return doDelBox();
+    if (key === "eqs" || key === "colon") return;   // an "=" or ":" has no place in a function (as at a prompt)
+    if (isEntryKey(key)) typeKey(key);
+  }
+  function tblFnHTML() {
+    const T = S.tbl;
+    cursorOn = true;
+    return `<div class="lcd-line"><span class="lcd-lmark" hidden>◀</span><div class="lcd-expr"><span class="lcd-tbl-fn">${T.which}(X)=</span>${renderBox(T[T.which])}</div></div><div class="lcd-res"></div>`;
+  }
+  const RANGE_KEYS = ["start", "end", "step"], RANGE_LABELS = ["Start?", "End?", "Step?"];
+  function askRange(k) {
+    if (k >= RANGE_KEYS.length) return buildTable();
+    const key = RANGE_KEYS[k];
+    openPrompt({ label: RANGE_LABELS[k], value: S.tblRange[key],
+      onAccept: v => { S.tblRange[key] = v; askRange(k + 1); },
+      onCancel: () => openTblFn("f", "start") });
+  }
+  /* how many rows Start, End and Step give: Start, Start+Step, … up to End */
+  function tblRowCount() {
+    const { start, end, step } = S.tblRange;
+    const span = vDiv(vSub(end, start), step);
+    if (isErr(span)) return 0;   // Step 0
+    if (span.kind === "rat") return span.n < 0n ? 0 : Number(span.n / span.d) + 1;
+    const q = toFloatV(span);
+    return Number.isFinite(q) && q > -1e-9 ? Math.floor(q + 1e-9) + 1 : 0;
+  }
+  function tblEval(box, x) {
+    let v = evalBox(box, { ans: S.ansVal, drg: S.drg, vars: { ...S.vars, X: x } });
+    if (!isErr(v) && !Number.isFinite(toFloatV(v))) v = VERR("Math ERROR");
+    return v;
+  }
+  function tblError(msg, which, at) { S.tbl.err = { msg, which, at }; S.screen = "tblErr"; }
+  function buildTable() {
+    const T = S.tbl, n = tblRowCount();
+    if (n < 1) return tblError("Math ERROR", "f", null);
+    if (n > TABLE_MAX_ROWS) return tblError("Insufficient MEM", "f", null);
+    const hasG = !isBoxEmpty(T.g), { start, step } = S.tblRange, rows = [];
+    for (let k = 0; k < n; k++) {
+      const x = vAdd(start, vMul(mkRat(BigInt(k), 1n), step));   // exact: 0,25 steps stay 0,25 steps
+      rows.push({ x, f: tblEval(T.f, x), g: hasG ? tblEval(T.g, x) : null });
+    }
+    /* a Syntax ERROR does not depend on X, so the first row shows it */
+    for (const which of hasG ? ["f", "g"] : ["f"]) {
+      const v = rows[0][which];
+      if (isErr(v) && v.msg === "Syntax ERROR") return tblError("Syntax ERROR", which, v.at || null);
+    }
+    Object.assign(T, { rows, hasG, r: 0, c: 0, top: 0 });
+    S.screen = "table";
+  }
+  /* only AC, ◀ and ▶ reach here (spec §3: everything else is ignored) */
+  function tblErrKey(key) {
+    const e = S.tbl.err;
+    if (key === "ac") return openTblFn("f", "start");
+    if (key === "left" || key === "right") {
+      openTblFn(e.which, "end");
+      if (e.at) S.cur = { box: e.at.box, i: Math.min(e.at.i, e.at.box.length) };
+    }
+  }
+  function tblViewKey(key) {
+    const T = S.tbl, ncol = T.hasG ? 3 : 2;
+    if (key === "mode") return modeMenu();
+    if (key === "setup") return setupMenu();
+    if (key === "clr") return clrMenu();
+    if (key === "ac") return openTblFn("f", "start");   // spec §12: back to f(X)=<function>, cursor at the START
+    if (key === "down" && T.r < T.rows.length) { T.r++; if (T.r > T.top + TBL_VISIBLE - 1) T.top = T.r - TBL_VISIBLE + 1; }
+    else if (key === "up" && T.r > 0) { T.r--; if (T.r < T.top) T.top = T.r; }
+    else if (key === "right" && T.c < ncol - 1) T.c++;
+    else if (key === "left" && T.c > 0) T.c--;
+    // every other key: nothing (spec §12: the table is view only)
+  }
+  function tblHTML() {
+    const T = S.tbl, heads = T.hasG ? ["X", "F(X)", "G(X)"] : ["X", "F(X)"];
+    const head = [{ html: "", cls: "lcd-tbl-n" }, ...heads.map((h, c) => ({ html: h, cls: c === T.c ? "lcd-tbl-lit" : "" }))];
+    const body = [];
+    for (let r = T.top; r < T.top + TBL_VISIBLE; r++) {
+      const row = T.rows[r], open = !row && r === T.r;   // the empty lit row past the end
+      const vals = row ? [row.x, row.f, row.g] : [];
+      body.push([{ html: row || open ? String(r + 1) : "", cls: "lcd-tbl-n" },
+        ...heads.map((_, c) => ({ html: row ? tableCellText(vals[c]) : "", cls: r === T.r && c === T.c ? "lcd-tbl-sel" : "" }))]);
+    }
+    const sel = T.rows[T.r], v = sel ? [sel.x, sel.f, sel.g][T.c] : null;
+    const bottom = v == null ? "" : isErr(v) ? "ERROR" : formatDecimal(v, S.fix);
+    return gridHTML("lcd-tab lcd-tbl", head, body) + `<div class="lcd-res lcd-tbl-val">${bottom}</div>`;
+  }
+
   // ---- key dispatch ----
   // SHIFT functions that do nothing: ; (SHIFT )) and the ones skipped as
   // not school use (d/dx, Σ, FACT, ←). SHIFT is still consumed, as on the
@@ -1781,7 +1983,11 @@ export function mountCalculator(host, opts = {}) {
      captured) keeps its old one-line look and keys: STAT must behave exactly
      as before until Build 8 moves STAT read-offs onto an editable line. */
   const onErrScreen = () => (S.screen === "comp" && S.err && S.result != null && !S.lastWasStat)
-    || (S.screen === "prompt" && !!S.prompt && !!S.prompt.err);   // Build 5: an error in a value typed at a prompt
+    || (S.screen === "prompt" && !!S.prompt && !!S.prompt.err)   // Build 5: an error in a value typed at a prompt
+    || (S.screen === "tblErr" && !!S.tbl && !!S.tbl.err);        // Build 6: Insufficient MEM (and Syntax / Math ERROR) when the table is made
+  /* the screens a function or value is typed on: ALPHA types its letter
+     and the skipped SHIFT keys type nothing there (Build 6 adds f(X)=) */
+  const typingScreen = () => S.screen === "comp" || S.screen === "prompt" || S.screen === "tblF";
   function press(id) {
     /* On an error screen ONLY AC, ◀ and ▶ do anything; every other key is
        ignored (spec §3), including SHIFT, ALPHA, ON, DEL and the digits. */
@@ -1792,7 +1998,11 @@ export function mountCalculator(host, opts = {}) {
        of that (the spec does not cover it). */
     if (id === "shift") { S.shift = !S.shift; if (S.shift) S.alpha = false; return render(); }
     if (id === "alpha") { if (S.shift) { S.shift = false; S.alpha = true; } else S.alpha = !S.alpha; return render(); }
-    if (id === "on") { resetEntry(); S.menu = null; S.screen = "comp"; S.shift = false; S.alpha = false; S.memPending = null; return render(); }
+    if (id === "on") {
+      resetEntry(); S.menu = null; S.screen = "comp"; S.shift = false; S.alpha = false; S.memPending = null;
+      if (S.mode === "TABLE" && S.tbl) openTblFn("f", "start");   // Build 6: TABLE has no COMP line; ON goes back to f(X)= (Blipwork choice)
+      return render();
+    }
 
     /* STO / RCL waiting for a letter: the letter KEY picks the variable, no
        ALPHA needed (spec §2). Any other key cancels the STO/RCL and is then
@@ -1814,7 +2024,7 @@ export function mountCalculator(host, opts = {}) {
          the STAT data grid) the key passes through untouched, exactly as
          before ALPHA was wired. */
       S.alpha = false; S.shift = false;
-      if (S.screen === "comp" || S.screen === "prompt") key = LETTER_OF[id] ? "var_" + LETTER_OF[id] : (ALPHA_TOKEN[id] || "noop");   // Build 5: a letter can be typed as a prompt value too
+      if (typingScreen()) key = LETTER_OF[id] ? "var_" + LETTER_OF[id] : (ALPHA_TOKEN[id] || "noop");   // Build 5: a letter can be typed as a prompt value too; Build 6: and into f(X)= (X is ALPHA ))
     } else if (S.shift) {
       if (id === "d9") key = "clr";
       else if (id === "d1") key = "stat";
@@ -1839,7 +2049,7 @@ export function mountCalculator(host, opts = {}) {
       else if (id === "sd") key = "mixtog";     //   SHIFT S⇔D = improper ↔ mixed
       else if (id === "calc") key = "solve";    // Build 5 (spec §11): SHIFT CALC = SOLVE
       else if (NOOP_SHIFT.has(id)) key = "noop";
-      else if ((S.screen === "comp" || S.screen === "prompt") && SKIP_SHIFT_COMP.has(id)) key = "noop";   // Build 5: on a prompt too
+      else if (typingScreen() && SKIP_SHIFT_COMP.has(id)) key = "noop";   // Build 5: on a prompt too; Build 6: and on f(X)=
       S.shift = false;
     }
 
@@ -1848,6 +2058,9 @@ export function mountCalculator(host, opts = {}) {
     else if (S.screen === "statInput") statKey(key);
     else if (S.screen === "prompt") promptKey(key);   // Build 5
     else if (S.screen === "solved") solvedKey(key);
+    else if (S.screen === "tblF") tblFnKey(key);      // Build 6: f(X)= / g(X)=
+    else if (S.screen === "table") tblViewKey(key);
+    else if (S.screen === "tblErr") tblErrKey(key);
     render();
   }
 
@@ -2059,7 +2272,8 @@ export function mountCalculator(host, opts = {}) {
      mark has its OWN fixed-width slot, like the segments of the real LCD, so
      a mark switching on or off never shifts any other mark sideways. */
   function renderInd() {
-    const comp = S.screen === "comp" || S.screen === "prompt" || S.screen === "solved";   // Build 5: D and Math stay lit on the CALC / SOLVE screens
+    const comp = S.screen === "comp" || S.screen === "prompt" || S.screen === "solved"   // Build 5: D and Math stay lit on the CALC / SOLVE screens
+      || S.screen === "tblF" || S.screen === "tblErr";   // Build 6: and on f(X)= and its error screen; the table grid, like the STAT grid, shows neither (spec silent)
     const sa = S.shift ? "S" : S.alpha ? "A" : "";
     const slot = (name, txt) => `<span class="ind-${name}">${txt}</span>`;
     ind.innerHTML =
@@ -2084,7 +2298,7 @@ export function mountCalculator(host, opts = {}) {
          The message keeps the .lcd-res class it always had, so anything
          that reads the result line still reads "Syntax ERROR". Build 5: the
          same screen for Can't Solve and for an error in a prompt value. */
-      const msg = S.screen === "prompt" ? S.prompt.err : S.result;
+      const msg = S.screen === "prompt" ? S.prompt.err : S.screen === "tblErr" ? S.tbl.err.msg : S.result;   // Build 6: Insufficient MEM
       main.innerHTML = `<div class="lcd-err"><div class="lcd-res lcd-err-msg">${escapeHtml(msg)}</div>`
         + `<div class="lcd-err-line">[AC] :Cancel</div><div class="lcd-err-line">[◀][▶]:Goto</div></div>`;
       exprScroll = 0;
@@ -2111,6 +2325,11 @@ export function mountCalculator(host, opts = {}) {
       main.innerHTML = html;
     } else if (S.screen === "statInput") {
       main.innerHTML = renderTable();
+    } else if (S.screen === "tblF") {   // Build 6: f(X)= / g(X)=
+      main.innerHTML = tblFnHTML();
+      keepCursorInView();
+    } else if (S.screen === "table") {
+      main.innerHTML = tblHTML();
     }
   }
   /* Long input (Build 2, spec §1): the entry line scrolls left so the
@@ -2135,10 +2354,12 @@ export function mountCalculator(host, opts = {}) {
     ex.scrollLeft = exprScroll;
     mark.hidden = !(exprScroll > 0.5);
   }
+  /* the STAT data grid. Build 6: drawn by gridHTML (shared with TABLE); the
+     HTML it gives is exactly what this function built by hand before. */
   function renderTable() {
     const freq = S.freqOn;
     const rows = Math.max(S.data.length + 1, S.row + 1);
-    let html = `<table class="lcd-tab"><tr><th></th><th>X</th>${freq ? "<th>FREQ</th>" : ""}</tr>`;
+    const body = [];
     for (let r = 0; r < rows; r++) {
       const d = S.data[r];
       /* The selected cell shows what has been typed; with nothing typed yet it
@@ -2147,10 +2368,9 @@ export function mountCalculator(host, opts = {}) {
       const sel = (c, waarde) => `<u>${S.cell !== "" ? escapeHtml(S.cell) : (waarde != null ? fmtNum(waarde) : "")}</u>`;
       const xc = (r === S.row && S.col === 0) ? sel(0, d ? d.x : null) : (d ? fmtNum(d.x) : "");
       const fc = freq ? ((r === S.row && S.col === 1) ? sel(1, d ? d.f : null) : (d ? fmtNum(d.f) : "")) : "";
-      html += `<tr><td>${r + 1}</td><td>${xc}</td>${freq ? `<td>${fc}</td>` : ""}</tr>`;
+      body.push([{ html: String(r + 1) }, { html: xc }, ...(freq ? [{ html: fc }] : [])]);
     }
-    html += `</table>`;
-    return html;
+    return gridHTML("lcd-tab", [{ html: "" }, { html: "X" }, ...(freq ? [{ html: "FREQ" }] : [])], body);
   }
 
   render();
