@@ -61,7 +61,12 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    the mixed-fraction template, SHIFT S⇔D and Fix / Norm are live. Still
    doing nothing on purpose (her ruling, not school use): hyp, ENG, ∫,
    d/dx, Σ, FACT, and on the COMP screen SHIFT + − 7 8 0 , Ans DEL (Pol,
-   Rec, CONST, CONV, Rnd, Ran#, DRG▶, INS). CALC / SOLVE are Build 5.
+   Rec, CONST, CONV, Rnd, Ran#, DRG▶, INS).
+   Calculator rebuild Build 5 (2026-10-04, spec §10, §11): CALC (X?
+   prompts in the order the letters appear, = asks again) and SOLVE (SHIFT
+   CALC: `Solve for X`, the three-line X= / L−R= answer, Can't Solve) are
+   live, on ONE reusable prompt screen (openPrompt) that TABLE and EQN will
+   use too. CALC and SOLVE work in COMP mode only.
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -151,6 +156,10 @@ const lcdShow = s => escapeHtml(s).replace(/x̄/g, MEAN_GLYPH);   // x + combini
      { kind:'pi',    n: BigInt, d: BigInt }               — (n/d)·π, n ≠ 0 (Build 3)
      { kind:'float', v: number }                          — decimal fallback
      { kind:'error', msg: "Syntax ERROR" | "Math ERROR" }
+   Calculator rebuild Build 5 (2026-10-04, spec §11): SOLVE's root finder,
+   solveNewton, works on decimals (Newton from the starting guess); its
+   answer is kept to 15 significant digits and stored in X as that exact
+   decimal.
    Square roots of rationals are exact; a cube or other root is exact
    only when it is a rational number (³√27 = 3, ⁴√16 = 2), else float.
    Calculator rebuild Build 4 (2026-10-04, spec §6–§9): log, ln and log□
@@ -577,6 +586,46 @@ function applyFunc(name, inv, argVal, drg) {
   return inv ? evalInv(name === "sin" ? "asin" : name === "cos" ? "acos" : "atan", argVal, drg) : evalTrigFn(name, argVal, drg);
 }
 
+/* ---- Build 5: SOLVE's root finder (spec §11) ----
+   The device "finds the root reached from the starting guess (Newton-
+   style)". This is Newton's method from the guess, the slope measured by a
+   FORWARD difference (f(x+h) − f(x)) ÷ h with h = 10⁻⁶·max(1, |x|).
+   Deterministic, no randomness. The forward difference is what reproduces
+   the device's answer on X²−4 from 0: the true slope there is 0, but the
+   forward difference is a tiny POSITIVE number, so the first step jumps far
+   to the right and Newton walks back down onto +2 (spec: "From 0 on X²−4 it
+   found +2"); from −5 it goes to −2. Measured device answers it must give:
+   X²−4 from 0 → 2, from −5 → −2; 1000(1,08)^X = 2000 → 9,006468342;
+   2X+1 = 7 → 3; X²+1 → Can't Solve.
+   F(x) gives the two sides { l, r } as decimals, or null where the
+   equation cannot be evaluated (a step that lands there is halved until it
+   can be). It stops when a step is below 10⁻¹⁴ of X, and then only accepts
+   X when L − R is tiny next to the size of the numbers involved; otherwise,
+   or after 200 steps, it gives up (null = Can't Solve). */
+const SOLVE_MAX_STEPS = 200;
+function solveNewton(F, x0) {
+  let x = x0, o = F(x);
+  if (!o) return null;
+  for (let it = 0; it < SOLVE_MAX_STEPS; it++) {
+    const f = o.l - o.r;
+    if (f === 0) return { x, l: o.l, r: o.r, scale: Math.max(1, Math.abs(o.l), Math.abs(o.r)) };
+    let h = 1e-6 * Math.max(1, Math.abs(x)), oh = F(x + h);
+    if (!oh) { h = -h; oh = F(x + h); }   // at the edge of where the equation is defined: measure the slope on the other side
+    if (!oh) return null;
+    const d = ((oh.l - oh.r) - f) / h;
+    if (!Number.isFinite(d) || d === 0) return null;   // flat: no step to take
+    let step = f / d, xn = x - step, on = Number.isFinite(xn) ? F(xn) : null;
+    for (let k = 0; !on && k < 60; k++) { step /= 2; xn = x - step; on = Number.isFinite(xn) ? F(xn) : null; }
+    if (!on) return null;
+    x = xn; o = on;
+    if (Math.abs(step) <= 1e-14 * Math.abs(x) || Math.abs(step) < 1e-300) {
+      const scale = Math.max(1, Math.abs(o.l), Math.abs(o.r), Math.abs(x * d));
+      return Math.abs(o.l - o.r) <= 1e-9 * scale ? { x, l: o.l, r: o.r, scale } : null;
+    }
+  }
+  return null;
+}
+
 /* ---- display formatting ---- */
 function fmtIntBig(b) { return b < 0n ? "−" + (-b).toString() : b.toString(); }
 const fracHTML = (top, bottom) => `<span class="calc-frac"><span class="calc-frac-num">${top}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${bottom}</span></span>`;
@@ -920,9 +969,10 @@ const isZeroAny = v => !isErr(v) && toFloatV(v) === 0;
 /* The red ALPHA letter on each key face (spec §2, read off the device). The
    same keys pick the variable after STO and RCL, where no ALPHA is needed. */
 const LETTER_OF = { neg: "A", dms: "B", hyp: "C", sin: "D", cos: "E", tan: "F", rparen: "X", sd: "Y", mplus: "M" };
-/* ALPHA CALC types "=" and ALPHA ∫ types ":" as plain tokens. Evaluating a
-   line that holds them is CALC/SOLVE work (Build 5): today = gives Syntax
-   ERROR on them, which the build brief accepts. */
+/* ALPHA CALC types "=" and ALPHA ∫ types ":" as plain tokens. SOLVE (Build
+   5) reads the "=" as the two sides of an equation. Pressing the = KEY on a
+   line that holds "=" or ":" is still a Syntax ERROR: the spec does not
+   measure that case, so Build 1's behaviour is kept. */
 const ALPHA_TOKEN = { calc: "eqs", intdx: "colon", exp10: "econst" };   // Build 4: ALPHA ×10^x = the constant e (spec §2, §9)
 /* The device's history limit is by bytes and was not measured; a few dozen
    entries is plenty for a learner, and keeps the memory bounded. */
@@ -996,6 +1046,10 @@ export function mountCalculator(host, opts = {}) {
     fix: null,             // SETUP Fix: 0–9 decimals, or null = Norm (the FIX tag shows while it is set)
     norm: 2,               // SETUP Norm 1 or 2; factory Norm 2. Norm 1 is accepted and shows like Norm 2 (not measured)
     form: null,            // how the result is shown: null (exact / decimal, see showDecimal), "mixed" (1¾) or "dms" (30°15'0")
+    // ---- calculator rebuild Build 5 (spec §10, §11) ----
+    prompt: null,          // the open prompt screen (screen "prompt"): { label, value, box, onAccept, onCancel, err, errAt }
+    calcRun: null,         // { letters }: the result on screen came from CALC, so = (or CALC) asks again from the first letter
+    solve: null,           // the SOLVE answer screen (screen "solved"): { x, lr }
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -1253,6 +1307,8 @@ export function mountCalculator(host, opts = {}) {
     S.line = ""; S.pendingStat = null;
     S.err = false; S.lastWasStat = false; S.browsing = false; S.afterAC = false;
     S.histPos = S.history.length; S.errAt = null; S.form = null;
+    S.prompt = null; S.calcRun = null; S.solve = null;   // Build 5: leaves CALC / SOLVE
+    if (S.screen === "prompt" || S.screen === "solved") S.screen = "comp";
   }
   function linkSub(sub, parentBox, owner, pkey) { sub.__parent = parentBox; sub.__owner = owner; sub.__pkey = pkey; }
   function insertBoxToken(tok) { S.afterAC = false; S.cur.box.splice(S.cur.i, 0, tok); S.cur.i++; }
@@ -1509,13 +1565,211 @@ export function mountCalculator(host, opts = {}) {
     doEquals();
   }
 
+  /* ---- Build 5: the PROMPT screen (spec §10, §11; reused by TABLE §12
+     and EQN §13 in later builds) ----
+     One piece for every "type a value" screen: the label at the top left
+     (`X?`, `Solve for X`, later `Start?`), the current value at the bottom
+     right. Typing shows the entry BIG at the top left, in place of the
+     label (spec §10: "Typing a number shows it big at top left (the old
+     value stays bottom right until =)"). = with nothing typed keeps the
+     shown value; = with something typed evaluates it (a whole expression
+     may be typed: −5, ½, √2 ...) and hands the Value to onAccept. AC calls
+     onCancel (default: the blank screen, as AC always gives).
+     A Syntax / Math ERROR in the typed entry shows the usual three-line
+     error screen; ◀ / ▶ (Goto) go back to the typed entry, AC cancels (the
+     spec does not cover an error at a prompt: Blipwork choice).
+     The typed entry is an ordinary box: S.cur points into it while the
+     prompt is open, so every entry key, ◀ ▶ ▲ ▼ and DEL work in it exactly
+     as on the calculation line. The calculation line (S.box) is untouched.
+     p = { label, value, onAccept(value, typed), onCancel? } */
+  function openPrompt(p) {
+    S.prompt = { label: p.label, value: p.value, onAccept: p.onAccept, onCancel: p.onCancel || null, box: [], err: null, errAt: null };
+    S.cur = { box: S.prompt.box, i: 0 };
+    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false; S.errAt = null; S.form = null;
+    S.browsing = false; S.afterAC = false; S.histPos = S.history.length;
+    S.screen = "prompt";
+  }
+  function closePrompt() {
+    S.prompt = null; S.screen = "comp";
+    S.cur = { box: S.box, i: S.box.length };
+  }
+  function promptCancel() {
+    const p = S.prompt;
+    closePrompt();
+    if (p && p.onCancel) p.onCancel();
+    else { resetEntry(); S.afterAC = true; }   // AC: the blank screen, history kept (spec §1)
+  }
+  function promptKey(key) {
+    const p = S.prompt;
+    if (key === "ac") return promptCancel();
+    if (p.err) {   // only AC, ◀ and ▶ do anything on an error screen (spec §3)
+      if (key === "left" || key === "right") {
+        const at = p.errAt || { box: p.box, i: p.box.length };
+        p.err = null; p.errAt = null;
+        S.cur = { box: at.box, i: Math.min(at.i, at.box.length) };
+      }
+      return;
+    }
+    if (key === "eq") {
+      const typed = !isBoxEmpty(p.box);
+      let v = p.value;
+      if (typed) {
+        v = evalBox(p.box, { ans: S.ansVal, drg: S.drg, vars: S.vars });
+        if (!isErr(v) && !Number.isFinite(toFloatV(v))) v = VERR("Math ERROR");
+        if (isErr(v)) { p.err = v.msg; p.errAt = v.at || null; return; }
+      }
+      closePrompt();
+      return p.onAccept(v, typed);
+    }
+    if (key === "left" || key === "right") return moveHoriz(key === "left" ? -1 : 1);
+    if (key === "up" || key === "down") return moveVert(key === "up" ? -1 : 1);
+    if (key === "del") return doDelBox();
+    if (key === "eqs" || key === "colon") return;   // an "=" or ":" is not a value
+    if (isEntryKey(key)) typeKey(key);
+  }
+  function promptHTML(p) {
+    const typing = !isBoxEmpty(p.box);
+    cursorOn = typing;
+    const top = typing ? renderBox(p.box) : `<span class="lcd-pr-label">${escapeHtml(p.label)}</span>`;
+    return `<div class="lcd-line lcd-pr${typing ? " lcd-pr-typing" : ""}"><span class="lcd-lmark" hidden>◀</span><div class="lcd-expr">${top}</div></div>`
+      + `<div class="lcd-res">${formatValue(p.value, !exactFits(p.value), S.fix)}</div>`;
+  }
+
+  /* ---- Build 5: CALC (spec §10) ----
+     CALC on a line with letters asks for each letter in the ORDER THEY
+     APPEAR (AX+B: A?, then X?, then B?), each prompt showing the letter's
+     current value; the values are stored in the letters, then the line is
+     worked out exactly as = does, so the answer goes into the history and
+     into Ans (spec §10: "CALC answers ARE added to the history"). After the
+     answer, = or CALC asks again from the first letter; AC leaves.
+     Not measured, Blipwork choices: a line with no letters is worked out at
+     once, like =; a line holding "=" is asked for its letters and then gives
+     the = key's Syntax ERROR; AC on a prompt gives the blank screen, as AC
+     after the answer does; CALC and SOLVE work in COMP mode only (STAT mode
+     behaves exactly as before). */
+  function lettersIn(box, out = []) {
+    for (const t of box) {
+      if (t.k === "var" && !out.includes(t.name)) out.push(t.name);
+      const order = TMPL_BOXES[t.k];
+      if (order) for (const key of order) lettersIn(t[key], out);   // a template's boxes in the order ▶ walks them
+    }
+    return out;
+  }
+  const canCalc = () => S.mode === "COMP" && S.pendingStat == null && !S.lastWasStat && !isBoxEmpty(S.box);
+  function startCalc() {
+    if (!canCalc()) return;
+    const letters = lettersIn(S.box);
+    if (!letters.length) { S.calcRun = null; return doEquals(); }
+    S.calcRun = { letters };
+    calcAsk(0);
+  }
+  function calcAsk(k) {
+    const run = S.calcRun, letters = run.letters;
+    if (k >= letters.length) {
+      doEquals();
+      S.calcRun = S.err ? null : run;
+      return;
+    }
+    const L = letters[k];
+    openPrompt({ label: L + "?", value: S.vars[L], onAccept: v => { S.vars[L] = v; S.calcRun = run; calcAsk(k + 1); } });
+    S.calcRun = run;
+  }
+
+  /* ---- Build 5: SOLVE = SHIFT CALC (spec §11) ----
+     The line may hold one "=" (ALPHA CALC); without it SOLVE solves
+     line = 0. `Solve for X` asks for the starting guess, X's current value;
+     a typed guess replaces it (and is stored in X, as CALC stores a typed
+     value: Blipwork reading). = solves with solveNewton (above). The answer
+     screen shows three small lines: the equation, X= and L−R=. X keeps the
+     answer, so the next SOLVE starts from it. SOLVE runs are NOT added to
+     the history and do not change Ans (spec §1 / §11; Ans not measured).
+     Other letters in the equation (AX+B=0) use their stored values and are
+     not asked for (foreman ruling: the spec measured only X). */
+  function startSolve() {
+    if (!canCalc()) return;
+    S.calcRun = null; S.solve = null;
+    openPrompt({ label: "Solve for X", value: S.vars.X, onAccept: v => { S.vars.X = v; runSolve(toFloatV(v)); } });
+  }
+  /* the two sides of the line: split at the first "=" in the line itself
+     (an "=" inside a fraction or root, or a second "=", is a Syntax ERROR
+     where it stands, like any other stray token) */
+  function splitEquation(box) {
+    const k = box.findIndex(t => t.k === "eqs");
+    return k < 0 ? { L: box, R: null, k } : { L: box.slice(0, k), R: box.slice(k + 1), k };
+  }
+  function solveError(msg, at) {
+    S.screen = "comp"; S.solve = null;
+    S.result = msg; S.err = true; S.exactVal = null; S.showDecimal = false; S.form = null;
+    S.errAt = at; S.histPos = S.history.length;
+  }
+  function runSolve(x0) {
+    const { L, R, k } = splitEquation(S.box);
+    const ctxAt = x => ({ ans: S.ansVal, drg: S.drg, vars: { ...S.vars, X: VFLOAT(x) } });
+    const sides = x => {
+      const c = ctxAt(x), l = evalBox(L, c), r = R ? evalBox(R, c) : mkRat(0n, 1n);
+      return { l, r };
+    };
+    /* a Syntax ERROR is a Syntax ERROR whatever X is: show it, with Goto
+       just before the token that caused it (spec §3) */
+    const first = sides(Number.isFinite(x0) ? x0 : 0);
+    for (const [v, part, off] of [[first.l, L, 0], [first.r, R, k + 1]]) {
+      if (v && isErr(v) && v.msg === "Syntax ERROR") {
+        const at = v.at ? (v.at.box === part ? { box: S.box, i: v.at.i + off } : v.at) : null;
+        return solveError("Syntax ERROR", at);
+      }
+    }
+    /* the equation cannot be worked out at the starting guess (log(X) from
+       X = 0): Math ERROR. Not measured (Blipwork choice). */
+    if (!Number.isFinite(x0) || isErr(first.l) || isErr(first.r) || !Number.isFinite(toFloatV(first.l)) || !Number.isFinite(toFloatV(first.r))) return solveError("Math ERROR", null);
+    const F = x => {
+      const s = sides(x);
+      if (isErr(s.l) || isErr(s.r)) return null;
+      const l = toFloatV(s.l), r = toFloatV(s.r);
+      return Number.isFinite(l) && Number.isFinite(r) ? { l, r } : null;
+    };
+    const root = solveNewton(F, x0);
+    if (!root) return solveError("Can't Solve", null);   // spec §11: X²+1 → Can't Solve; ◀ returns to the equation (end of the line, as for Math ERROR)
+    /* X is kept to 15 significant digits, the device's working precision,
+       and stored as that exact decimal (RCL X shows it, spec §11). L−R is
+       shown as 0 when it is below 10⁻¹³ of the size of the numbers in the
+       equation (rounding noise; the device shows 0 for 1000(1,08)^X=2000). */
+    let x = Number(root.x.toPrecision(15));
+    if (Object.is(x, -0)) x = 0;
+    const o = F(x) || root;
+    const lr = o.l - o.r;
+    S.vars.X = floatToRat(x);
+    S.solve = { x, lr: Math.abs(lr) <= 1e-13 * root.scale ? 0 : lr };
+    S.screen = "solved";
+  }
+  /* keys on the SOLVE answer screen (spec §11): = (or SOLVE) asks
+     `Solve for X` again with the new X as the guess; ◀ goes back to the
+     equation, editable, cursor at the end; AC gives the blank screen. ▶ puts
+     the cursor at the START (spec silent: the §1 rule for results). Every
+     other key does nothing (spec silent). */
+  function solvedKey(key) {
+    if (key === "eq" || key === "solve") return startSolve();
+    if (key === "left" || key === "right") {
+      S.screen = "comp"; S.solve = null; S.result = null; S.err = false;
+      S.cur = key === "left" ? { box: S.box, i: S.box.length } : { box: S.box, i: 0 };
+      return;
+    }
+    if (key === "ac") { resetEntry(); S.afterAC = true; }
+  }
+  function solvedHTML() {
+    cursorOn = false;
+    const num = v => formatDecimal(VFLOAT(v), S.fix);
+    return `<div class="lcd-solve"><div class="lcd-expr lcd-sv-eq">${renderBox(S.box)}</div>`
+      + `<div class="lcd-sv-row"><span class="lcd-sv-lab">X=</span><span class="lcd-sv-val">${num(S.solve.x)}</span></div>`
+      + `<div class="lcd-sv-row"><span class="lcd-sv-lab">L−R=</span><span class="lcd-sv-val">${num(S.solve.lr)}</span></div></div>`;
+  }
+
   // ---- key dispatch ----
-  // SHIFT functions that do nothing: ; (SHIFT )), SOLVE (Build 5), and the
-  // ones skipped as not school use (d/dx, Σ, FACT, ←). SHIFT is still
-  // consumed, as on the device. (SHIFT x^ = ˣ√ is live since Build 2; SHIFT
-  // ×10^x = π since Build 3; Build 4 made SHIFT log, ln, x⁻¹, ÷, ×, (, hyp,
-  // ▫/▫ and S⇔D live.)
-  const NOOP_SHIFT = new Set(["rparen", "calc", "intdx", "logbox", "dms", "eng"]);
+  // SHIFT functions that do nothing: ; (SHIFT )) and the ones skipped as
+  // not school use (d/dx, Σ, FACT, ←). SHIFT is still consumed, as on the
+  // device. (SHIFT x^ = ˣ√ is live since Build 2; SHIFT ×10^x = π since
+  // Build 3; Build 4 made SHIFT log, ln, x⁻¹, ÷, ×, (, hyp, ▫/▫ and S⇔D
+  // live; Build 5 made SHIFT CALC = SOLVE live.)
+  const NOOP_SHIFT = new Set(["rparen", "intdx", "logbox", "dms", "eng"]);
   /* Build 4, her ruling "not school use, leave those keys doing nothing":
      Pol (SHIFT +), Rec (SHIFT −), CONST (SHIFT 7), CONV (SHIFT 8), Rnd
      (SHIFT 0), Ran# (SHIFT ,), DRG▶ (SHIFT Ans) and INS (SHIFT DEL). Before
@@ -1526,7 +1780,8 @@ export function mountCalculator(host, opts = {}) {
      error on the COMP screen. The legacy pasted-STAT "Math ERROR" (no data
      captured) keeps its old one-line look and keys: STAT must behave exactly
      as before until Build 8 moves STAT read-offs onto an editable line. */
-  const onErrScreen = () => S.screen === "comp" && S.err && S.result != null && !S.lastWasStat;
+  const onErrScreen = () => (S.screen === "comp" && S.err && S.result != null && !S.lastWasStat)
+    || (S.screen === "prompt" && !!S.prompt && !!S.prompt.err);   // Build 5: an error in a value typed at a prompt
   function press(id) {
     /* On an error screen ONLY AC, ◀ and ▶ do anything; every other key is
        ignored (spec §3), including SHIFT, ALPHA, ON, DEL and the digits. */
@@ -1559,7 +1814,7 @@ export function mountCalculator(host, opts = {}) {
          the STAT data grid) the key passes through untouched, exactly as
          before ALPHA was wired. */
       S.alpha = false; S.shift = false;
-      if (S.screen === "comp") key = LETTER_OF[id] ? "var_" + LETTER_OF[id] : (ALPHA_TOKEN[id] || "noop");
+      if (S.screen === "comp" || S.screen === "prompt") key = LETTER_OF[id] ? "var_" + LETTER_OF[id] : (ALPHA_TOKEN[id] || "noop");   // Build 5: a letter can be typed as a prompt value too
     } else if (S.shift) {
       if (id === "d9") key = "clr";
       else if (id === "d1") key = "stat";
@@ -1582,14 +1837,17 @@ export function mountCalculator(host, opts = {}) {
       else if (id === "hyp") key = "abs";       //   SHIFT hyp = Abs
       else if (id === "frac") key = "mixed";    //   SHIFT ▫/▫ = the mixed-number template
       else if (id === "sd") key = "mixtog";     //   SHIFT S⇔D = improper ↔ mixed
+      else if (id === "calc") key = "solve";    // Build 5 (spec §11): SHIFT CALC = SOLVE
       else if (NOOP_SHIFT.has(id)) key = "noop";
-      else if (S.screen === "comp" && SKIP_SHIFT_COMP.has(id)) key = "noop";
+      else if ((S.screen === "comp" || S.screen === "prompt") && SKIP_SHIFT_COMP.has(id)) key = "noop";   // Build 5: on a prompt too
       S.shift = false;
     }
 
     if (S.screen === "comp") compKey(key);
     else if (S.screen === "menu") menuKey(key);
     else if (S.screen === "statInput") statKey(key);
+    else if (S.screen === "prompt") promptKey(key);   // Build 5
+    else if (S.screen === "solved") solvedKey(key);
     render();
   }
 
@@ -1608,7 +1866,17 @@ export function mountCalculator(host, opts = {}) {
      chain from Ans the same way (AnsC): not measured, the + − × ÷ rule. */
   const BINARY_KEYS = new Set(["ncr", "npr"]);
 
+  /* Build 5: after a CALC answer, = or CALC asks again from the first
+     letter (spec §10). Keys that only change how the answer is shown keep
+     that; any other key leaves CALC and then does its usual job. */
+  const CALC_KEEP = new Set(["sd", "mixtog", "dms", "noop"]);
   function compKey(key) {
+    if (S.calcRun) {
+      if ((key === "eq" || key === "calc") && S.result != null && !S.err) return calcAsk(0);
+      if (!CALC_KEEP.has(key)) S.calcRun = null;
+    }
+    if (key === "calc") return startCalc();
+    if (key === "solve") return startSolve();
     if (key === "mode") return modeMenu();
     if (key === "setup") return setupMenu();
     if (key === "clr") return clrMenu();
@@ -1651,6 +1919,11 @@ export function mountCalculator(host, opts = {}) {
       resetEntry();
       if (chain) insertBoxToken({ k: "ans" });   // the key itself goes in below, right after "Ans"
     }
+    return typeKey(key);
+  }
+  /* Type one entry key at the cursor (S.cur). Shared by the calculation
+     line and the Build 5 prompt screen, whose typed value is a box too. */
+  function typeKey(key) {
     if (key.startsWith("var_")) return insertBoxToken({ k: "var", name: key.slice(4) });
     if (key === "eqs") return insertBoxToken({ k: "eqs" });
     if (key === "colon") return insertBoxToken({ k: "colon" });
@@ -1786,7 +2059,7 @@ export function mountCalculator(host, opts = {}) {
      mark has its OWN fixed-width slot, like the segments of the real LCD, so
      a mark switching on or off never shifts any other mark sideways. */
   function renderInd() {
-    const comp = S.screen === "comp";
+    const comp = S.screen === "comp" || S.screen === "prompt" || S.screen === "solved";   // Build 5: D and Math stay lit on the CALC / SOLVE screens
     const sa = S.shift ? "S" : S.alpha ? "A" : "";
     const slot = (name, txt) => `<span class="ind-${name}">${txt}</span>`;
     ind.innerHTML =
@@ -1806,12 +2079,20 @@ export function mountCalculator(host, opts = {}) {
   function render() {
     renderInd();
 
-    if (S.screen === "comp" && onErrScreen()) {
+    if (onErrScreen()) {
       /* Build 2 (spec §3): exactly three lines, and nothing else on screen.
          The message keeps the .lcd-res class it always had, so anything
-         that reads the result line still reads "Syntax ERROR". */
-      main.innerHTML = `<div class="lcd-err"><div class="lcd-res lcd-err-msg">${escapeHtml(S.result)}</div>`
+         that reads the result line still reads "Syntax ERROR". Build 5: the
+         same screen for Can't Solve and for an error in a prompt value. */
+      const msg = S.screen === "prompt" ? S.prompt.err : S.result;
+      main.innerHTML = `<div class="lcd-err"><div class="lcd-res lcd-err-msg">${escapeHtml(msg)}</div>`
         + `<div class="lcd-err-line">[AC] :Cancel</div><div class="lcd-err-line">[◀][▶]:Goto</div></div>`;
+      exprScroll = 0;
+    } else if (S.screen === "prompt") {   // Build 5: X?, Solve for X (and later Start?, End?, Step?)
+      main.innerHTML = promptHTML(S.prompt);
+      keepCursorInView();
+    } else if (S.screen === "solved") {   // Build 5: the three-line SOLVE answer
+      main.innerHTML = solvedHTML();
       exprScroll = 0;
     } else if (S.screen === "comp") {
       const usingLine = S.pendingStat != null;

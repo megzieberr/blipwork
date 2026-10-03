@@ -119,7 +119,18 @@ function read(h) {
   const mx = res && res.querySelector(".calc-mixed");
   const mixed = mx ? `${mx.textContent.startsWith("−") ? "−" : ""}${mx.querySelector(".calc-mixed-whole").textContent} ${mx.querySelector(".calc-frac-num").textContent}/${mx.querySelector(".calc-frac-den").textContent}` : "";
   const ttl = h.querySelector(".lcd-title"), mnu = h.querySelector(".lcd-menu");
+  /* Build 5 fields: sv — the SOLVE answer's two value lines, "X=2 / L−R=0"
+     (a raised ×10 power as ^power); big — a prompt shows a TYPED value (the
+     big top-left entry) rather than its label. On a prompt, expr is the top
+     left (the label or the typed value) and val the value bottom right; on
+     the SOLVE answer, expr is the equation line. */
+  const sv = [...h.querySelectorAll(".lcd-sv-row")].map(r => {
+    const c = r.cloneNode(true);
+    c.querySelectorAll(".calc-x10-exp").forEach(s => { s.textContent = "^" + s.textContent; });
+    return c.textContent.replace(/\s+/g, "");
+  }).join(" / ");
   return {
+    sv, big: !!h.querySelector(".lcd-pr-typing"),
     mixed, title: ttl ? ttl.textContent : "", menu: mnu ? mnu.textContent : "", fix: slot("fix"),
     expr: ex ? ex.textContent : "", res: res ? res.textContent : "", cur: before,
     sa: slot("sa"), m: slot("m") === "M", sto: slot("sto") === "STO", rcl: slot("rcl") === "RCL", hist: slot("hist"),
@@ -913,6 +924,306 @@ function measureBuild4(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureBuild4(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 5 — CALC and SOLVE
+   (spec sections 10 and 11)
+   ============================================================ */
+KEY.X = "alpha rparen";        // the letter X (ALPHA ), spec §2)
+KEY.EQS = "alpha calc";        // the "=" TYPED into a line (ALPHA CALC), not the = key
+KEY.SOLVE = "shift calc";      // SOLVE = SHIFT CALC (spec §11)
+const AXB = "ALPHA (−) X + ALPHA °'\"";   // the line AX+B
+
+section("Build 5 · CALC (spec §10)");
+
+row("CALC on X²+1 shows X? top left and X's current value (0) bottom right", "§10", [["X x² + 1 CALC", { expr: "X?", val: "0", big: false, res: "0" }]]);
+row("typing shows the number big at top left; the old value stays bottom right until =", "§10", [
+  ["X x² + 1 CALC 3", { expr: "3", big: true, val: "0" }],
+  ["=", { expr: "X²+1", val: "10", big: false }],
+]);
+row("= with nothing typed keeps the shown value", "§10", [
+  ["X x² + 1 CALC 3 =", { val: "10" }],
+  ["=", { expr: "X?", val: "3" }],
+  ["=", { expr: "X²+1", val: "10" }],
+]);
+row("typed values are stored in the letters: RCL X then shows 3", "§10", [["X x² + 1 CALC 3 = AC RCL )", { expr: "X", val: "3" }]]);
+row("AX+B asks A?, then X?, then B? (the order the letters appear)", "§10", [
+  [`${AXB} CALC`, { expr: "A?", val: "0" }],
+  ["2 =", { expr: "X?", val: "0" }],
+  ["3 =", { expr: "B?", val: "0" }],
+  ["4 =", { expr: "AX+B", val: "10" }],
+]);
+row("the order follows the line: XA+B asks X? first", "§10", [
+  ["X ALPHA (−) + ALPHA °'\" CALC", { expr: "X?" }], ["=", { expr: "A?" }], ["=", { expr: "B?" }], ["=", { expr: "XA+B", val: "0" }],
+]);
+row("a letter used twice is asked once: X²+X with X = 2 gives 6", "§10 (Blipwork reading: one prompt per letter)", [
+  ["X x² + X CALC", { expr: "X?" }], ["2 =", { expr: "X²+X", val: "6" }],
+]);
+row("letters inside a fraction are asked top first: (A over X)+B → A?, X?, B?", "§10 order of appearance", [
+  ["frac ALPHA (−) ▼ X ▶ + ALPHA °'\" CALC", { expr: "A?" }], ["6 =", { expr: "X?" }], ["4 =", { expr: "B?" }], ["1 =", { val: "5/2" }],
+]);
+row("the typed values are stored: RCL A = 2 and RCL B = 4 after AX+B", "§10", [
+  [`${AXB} CALC 2 = 3 = 4 = AC RCL (−)`, { expr: "A", val: "2" }],
+  ["RCL °'\"", { expr: "B", val: "4" }],
+]);
+row("after the answer, = asks again from the FIRST letter, showing the stored values", "§10", [
+  [`${AXB} CALC 2 = 3 = 4 =`, { val: "10" }],
+  ["=", { expr: "A?", val: "2" }],
+  ["=", { expr: "X?", val: "3" }],
+  ["5 =", { expr: "B?", val: "4" }],
+  ["=", { expr: "AX+B", val: "14" }],
+]);
+row("after the answer, CALC also asks again from the first letter", "§10", [
+  [`${AXB} CALC 2 = 3 = 4 = CALC`, { expr: "A?", val: "2" }],
+  ["= = 7 =", { expr: "AX+B", val: "13" }],
+]);
+row("AC after the answer leaves: a blank screen", "§10", [
+  ["X x² CALC 3 = AC", { expr: "", res: "" }],
+  ["=", { expr: "", res: "" }],
+]);
+row("AC on a prompt leaves too: a blank screen", "Blipwork choice: spec silent, as AC after the answer", [["X x² CALC AC", { expr: "", res: "", big: false }]]);
+row("CALC answers ARE added to the history", "§10, §1", [
+  ["1 + 1 = X x² CALC 3 =", { val: "9", hist: "▲" }],
+  ["CALC 4 =", { val: "16", hist: "▲" }],
+  ["AC ▲", { expr: "X²", res: "16" }],
+  ["▲", { expr: "X²", res: "9" }],
+  ["▲", { expr: "1+1", res: "2" }],
+]);
+row("the CALC answer is Ans: + 1 = after X² with X = 3 gives 10", "Blipwork reading: CALC works the line out as = does", [["X x² CALC 3 = + 1 =", { expr: "Ans+1", val: "10" }]]);
+row("a typed value may be negative or a fraction: X² with X = −½ gives ¼", "§10 typed value; Blipwork: any value the line can type", [
+  ["X x² CALC (−) frac 1 ▼ 2 ▶", { big: true, val: "0" }], ["=", { val: "1/4" }],
+]);
+row("◀ on a CALC answer edits the line, as after any result", "§1", [
+  ["X x² CALC 3 = ◀", { expr: "X²", cur: "X²", res: "" }],
+  ["+ 1 =", { expr: "X²+1", val: "10" }],
+  ["=", { expr: "X²+1", val: "10" }],
+]);
+row("a Syntax ERROR in a typed value: three lines; ◀ returns to the typed value", "Blipwork choice: spec silent; §3 screen", [
+  ["X x² CALC 2 + =", { err: ERR("Syntax ERROR") }],
+  ["◀", { err: "", expr: "2+", cur: "2+", big: true }],
+  ["3 =", { expr: "X²", val: "25" }],
+]);
+row("on a prompt the skipped SHIFT keys (Pol: SHIFT +) type nothing, as on the line", "brief SKIP list (Build 4)", [["X x² CALC SHIFT + 3", { expr: "3" }], ["=", { expr: "X²", val: "9" }]]);
+row("CALC on a line with no letters works it out at once", "Blipwork choice: spec silent", [["2 + 3 CALC", { expr: "2+3", val: "5" }]]);
+row("CALC and SHIFT CALC on an empty line do nothing", "Blipwork choice: spec silent", [["CALC SHIFT CALC", { expr: "", res: "", sa: "" }]]);
+row("in STAT mode CALC and SOLVE do nothing (STAT unchanged)", "foreman ruling: STAT unchanged", [
+  ["MODE 3 1 AC 2 X CALC", { expr: "2X", res: "" }], ["SHIFT CALC", { expr: "2X", res: "", sa: "" }],
+]);
+row("the ▲ history mark does not show on a prompt", "§1 (▲ after a result)", [["1 + 1 = X x² CALC", { expr: "X?", hist: "" }]]);
+
+section("Build 5 · SOLVE = SHIFT CALC (spec §11)");
+
+row("SHIFT CALC shows Solve for X with X's current value (0) bottom right", "§11", [["X x² − 4 SOLVE", { expr: "Solve for X", val: "0", big: false }]]);
+row("X²−4 from 0 → X= 2, L−R= 0 (the slope at 0 is zero, the device still lands on +2)", "§11 device answer", [
+  ["X x² − 4 SOLVE =", { expr: "X²−4", sv: "X=2 / L−R=0", res: "" }],
+]);
+row("X²−4 from −5 → X= −2 (the typed guess shows big, the old guess stays bottom right)", "§11 device answer", [
+  ["X x² − 4 SOLVE (−) 5", { expr: "−5", big: true, val: "0" }],
+  ["=", { sv: "X=−2 / L−R=0" }],
+]);
+row("1000(1,08)^X=2000 → X= 9,006468342, L−R= 0", "§11 device answer", [
+  ["1000 ( 1 , 08 ) x^ X ▶ EQS 2000 SOLVE =", { expr: "1000(1,08)X=2000", sv: "X=9,006468342 / L−R=0" }],
+]);
+row("2X+1=7 → X= 3", "§11 device answer", [["2 X + 1 EQS 7 SOLVE =", { expr: "2X+1=7", sv: "X=3 / L−R=0" }]]);
+row("with or without \"=\": X²=4 gives the same as X²−4", "§11 \"Works with or without =\"", [["X x² EQS 4 SOLVE =", { expr: "X²=4", sv: "X=2 / L−R=0" }]]);
+row("X keeps the answer: RCL X shows it", "§11", [["X x² − 4 SOLVE (−) 5 = AC RCL )", { expr: "X", val: "−2" }]]);
+row("X keeps the answer, so the next SOLVE starts from it", "§11", [
+  ["X x² − 4 SOLVE (−) 5 = ◀ SOLVE", { expr: "Solve for X", val: "−2" }],
+  ["=", { sv: "X=−2 / L−R=0" }],
+]);
+row("= on the answer screen: back to Solve for X with the new X as the guess", "§11", [
+  ["2 X + 1 EQS 7 SOLVE =", { sv: "X=3 / L−R=0" }],
+  ["=", { expr: "Solve for X", val: "3", sv: "" }],
+  ["=", { sv: "X=3 / L−R=0" }],
+]);
+row("◀ on the answer screen: back to the equation, editable, cursor at the end", "§11", [
+  ["X x² − 4 SOLVE =", { sv: "X=2 / L−R=0" }],
+  ["◀", { expr: "X²−4", cur: "X²−4", sv: "", res: "" }],
+  ["DEL 9 SOLVE", { expr: "Solve for X", val: "2" }],
+  ["=", { expr: "X²−9", sv: "X=3 / L−R=0" }],
+]);
+row("▶ on the answer screen: the equation, cursor at the start", "Blipwork choice: spec silent, the §1 rule for results", [["X x² − 4 SOLVE = ▶", { expr: "X²−4", cur: "", sv: "" }]]);
+row("AC on the answer screen: a blank screen", "§11", [["X x² − 4 SOLVE = AC", { expr: "", res: "", sv: "" }]]);
+row("other keys on the answer screen do nothing", "Blipwork choice: spec silent", [["X x² − 4 SOLVE = 7 + ▲ S⇔D", { expr: "X²−4", sv: "X=2 / L−R=0" }]]);
+row("SOLVE runs are NOT added to the history", "§1, §11", [
+  ["1 + 1 = X x² − 4 SOLVE = AC ▲", { expr: "1+1", res: "2" }],
+  ["▲", { expr: "1+1", res: "2" }],
+]);
+row("the ▲ history mark does not show on the SOLVE screens", "§1 (▲ after a result)", [
+  ["1 + 1 = X x² − 4 SOLVE", { hist: "" }], ["=", { hist: "" }],
+]);
+row("SOLVE leaves Ans alone: Ans after solving X²−4 is still the last = answer", "Blipwork choice: spec silent", [["5 + 2 = X x² − 4 SOLVE = AC Ans =", { val: "7" }]]);
+row("X²+1 has no answer: Can't Solve / [AC] :Cancel / [◀][▶]:Goto", "§11, §3", [["X x² + 1 SOLVE =", { err: ERR("Can't Solve"), expr: "", sv: "", hist: "" }]]);
+row("Can't Solve, ◀ returns to the equation (cursor at the end)", "§11; cursor place: Blipwork, as for Math ERROR", [["X x² + 1 SOLVE = ◀", { err: "", expr: "X²+1", cur: "X²+1" }]]);
+row("Can't Solve, ▶ also returns to the equation (Goto)", "§3", [["X x² + 1 SOLVE = ▶", { err: "", expr: "X²+1", cur: "X²+1" }]]);
+row("Can't Solve, AC: a blank screen", "§3", [["X x² + 1 SOLVE = AC", { err: "", expr: "", res: "" }]]);
+row("on Can't Solve only AC, ◀, ▶ do anything", "§3", [["X x² + 1 SOLVE = 7 = SHIFT CALC", { err: ERR("Can't Solve"), sa: "" }]]);
+row("other letters use their stored values, not asked: A = 2, B = −6, AX+B=0 → X= 3", "foreman ruling (open question: only X was measured)", [
+  [`2 SHIFT RCL (−) (−) 6 SHIFT RCL °'\" ${AXB} EQS 0 SOLVE`, { expr: "Solve for X", val: "0" }],
+  ["=", { expr: "AX+B=0", sv: "X=3 / L−R=0" }],
+]);
+row("a Syntax ERROR in the equation: Goto lands just before the token", "§3; Blipwork: checked when = is pressed", [
+  ["2 X + EQS 7 SOLVE =", { err: ERR("Syntax ERROR") }],
+  ["◀", { err: "", expr: "2X+=7", cur: "2X+" }],
+]);
+row("two \"=\" in one line: Syntax ERROR at the second", "§3; Blipwork reading", [["X EQS 1 EQS 2 SOLVE =", { err: ERR("Syntax ERROR") }], ["◀", { cur: "X=1" }]]);
+row("log(X)=1 from X = 0 cannot be worked out there: Math ERROR; from 5 → X= 10", "Blipwork choice: spec silent", [
+  ["log X EQS 1 SOLVE =", { err: ERR("Math ERROR") }],
+  ["AC log X EQS 1 SOLVE 5 =", { sv: "X=10 / L−R=0" }],
+]);
+row("the = KEY on a line holding \"=\" is still Syntax ERROR (spec does not measure it)", "brief scope C: Build 1 behaviour kept", [["2 X + 1 EQS 7 =", { err: ERR("Syntax ERROR") }]]);
+row("SOLVE with an answer on screen solves the line above it", "Blipwork reading: spec silent", [["X x² − 9 =", { val: "−9" }], ["SOLVE 1 =", { expr: "X²−9", sv: "X=3 / L−R=0" }]]);
+
+/* ---- the solver sweep: equations with known roots, typed on the keys,
+   solved from a typed guess. The answer stored in X must be within 1e-9
+   (relative for big roots) of the true root, the shown X must agree to its
+   10 digits, and L−R must show 0 or something below 1e-9. ---- */
+section("Build 5 · solver sweep: known roots (spec §11)");
+const SWEEP = [
+  // linear
+  ["2X+1=7", "2 X + 1 EQS 7", "0", 3],
+  ["3X−5=10", "3 X − 5 EQS 10", "0", 5],
+  ["5X=2", "5 X EQS 2", "0", 0.4],
+  ["7X+2=−12", "7 X + 2 EQS (−) 12", "0", -2],
+  ["X÷4−3=1", "X ÷ 4 − 3 EQS 1", "0", 16],
+  ["0,5X+1,25=3", "0 , 5 X + 1 , 25 EQS 3", "0", 3.5],
+  ["12X−7 (no =)", "12 X − 7", "0", 7 / 12],
+  ["−3X+9 (no =)", "(−) 3 X + 9", "0", 3],
+  ["4(X−2)=10", "4 ( X − 2 ) EQS 10", "0", 4.5],
+  ["1000X=1", "1000 X EQS 1", "0", 0.001],
+  // quadratics, from both sides
+  ["X²−4 from 0", "X x² − 4", "0", 2],
+  ["X²−4 from −5", "X x² − 4", "(−) 5", -2],
+  ["X²−5X+6 from 0", "X x² − 5 X + 6", "0", 2],
+  ["X²−5X+6 from 10", "X x² − 5 X + 6", "10", 3],
+  ["X²−2X−1 from −5", "X x² − 2 X − 1", "(−) 5", 1 - Math.SQRT2],
+  ["X²−2X−1 from 5", "X x² − 2 X − 1", "5", 1 + Math.SQRT2],
+  ["2X²+3X−2 from −10", "2 X x² + 3 X − 2", "(−) 10", -2],
+  ["2X²+3X−2 from 10", "2 X x² + 3 X − 2", "10", 0.5],
+  ["X²=2 from 1", "X x² EQS 2", "1", Math.SQRT2],
+  ["X²=2 from −1", "X x² EQS 2", "(−) 1", -Math.SQRT2],
+  ["3X²−12X+5 from 0", "3 X x² − 12 X + 5", "0", (12 - Math.sqrt(84)) / 6],
+  ["3X²−12X+5 from 10", "3 X x² − 12 X + 5", "10", (12 + Math.sqrt(84)) / 6],
+  ["−X²+4X−3 from −2", "(−) X x² + 4 X − 3", "(−) 2", 1],
+  ["−X²+4X−3 from 9", "(−) X x² + 4 X − 3", "9", 3],
+  ["(X+3)²=1 from 0", "( X + 3 ) x² EQS 1", "0", -2],
+  ["(X+3)²=1 from −10", "( X + 3 ) x² EQS 1", "(−) 10", -4],
+  ["X²−0,25 from 3", "X x² − 0 , 25", "3", 0.5],
+  ["X²−0,25 from −3", "X x² − 0 , 25", "(−) 3", -0.5],
+  // exponential (finance)
+  ["1000(1,08)^X=2000", "1000 ( 1 , 08 ) x^ X ▶ EQS 2000", "0", Math.log(2) / Math.log(1.08)],
+  ["5000(1,1)^X=8000", "5000 ( 1 , 1 ) x^ X ▶ EQS 8000", "0", Math.log(1.6) / Math.log(1.1)],
+  ["2^X=10", "2 x^ X ▶ EQS 10", "0", Math.log(10) / Math.log(2)],
+  ["3^X=81", "3 x^ X ▶ EQS 81", "0", 4],
+  ["500(1−0,15)^X=200", "500 ( 1 − 0 , 15 ) x^ X ▶ EQS 200", "0", Math.log(0.4) / Math.log(0.85)],
+  ["1200(1+0,09÷12)^X=1500", "1200 ( 1 + 0 , 09 ÷ 12 ) x^ X ▶ EQS 1500", "0", Math.log(1.25) / Math.log(1.0075)],
+  ["10^X=50", "SHIFT log X ▶ EQS 50", "0", Math.log10(50)],
+  // fraction equations
+  ["X/3+1=5", "frac X ▼ 3 ▶ + 1 EQS 5", "0", 12],
+  ["1/X=4 from 0,1", "frac 1 ▼ X ▶ EQS 4", "0 , 1", 0.25],
+  ["(X+1)/(X−1)=3 from 2,5", "frac X + 1 ▼ X − 1 ▶ EQS 3", "2 , 5", 2],
+  ["2/X+1=3 from 0,5", "frac 2 ▼ X ▶ + 1 EQS 3", "0 , 5", 1],
+  ["X/2=X/3+1", "frac X ▼ 2 ▶ EQS frac X ▼ 3 ▶ + 1", "0", 6],
+  // roots and trig
+  ["√X=3 from 1", "√ X ▶ EQS 3", "1", 9],
+  ["sin(X)=0,5 (Deg) from 0", "sin X ) EQS 0 , 5", "0", 30],
+];
+const shownNum = t => Number(t.replace(/−/g, "-").replace(",", ".").replace("×10^", "e"));
+{
+  let good5 = 0; const misses = [];
+  for (const [name, eq, guess, root] of SWEEP) {
+    const c = freshCalc();
+    let why = "";
+    try {
+      c.press(`${eq} SOLVE ${guess} =`);
+      const g = read(c.h);
+      const [xs = "", lrs = ""] = g.sv.split(" / ").map(s => s.slice(s.indexOf("=") + 1));
+      const X = c.api.state().vars.X, stored = Number(X.n) / Number(X.d);
+      const tol = 1e-9 * Math.max(1, Math.abs(root));
+      const lr = shownNum(lrs);
+      if (!g.sv) why = `no answer screen (${g.err || g.res || g.expr})`;
+      else if (!(Math.abs(stored - root) <= tol)) why = `X stored ${stored}, want ${root}`;
+      else if (!(Math.abs(shownNum(xs) - root) <= tol)) why = `X shown ${xs}, want ${root}`;
+      else if (!(lrs === "0" || Math.abs(lr) <= 1e-9)) why = `L−R shown ${lrs}`;
+    } catch (e) { why = "threw: " + e.message; }
+    if (why) misses.push(`${name}: ${why}`); else good5++;
+  }
+  tick(misses.length === 0, `solver sweep: ${good5} of ${SWEEP.length} equations (linear, quadratics from both sides, finance exponentials, fraction equations, √, sin) land within 1e-9, L−R 0 or tiny <span class="why">[§11]</span>`,
+       misses.join("; "));
+  tick(SWEEP.length >= 30, `the sweep holds at least 30 equations <span class="why">[build brief]</span>`, `${SWEEP.length}`);
+}
+{
+  // the same equation and guess always give the same answer (no randomness)
+  const runs = [1, 2, 3].map(() => { const c = freshCalc(); c.press("X x² − 4 SOLVE ="); return read(c.h).sv; });
+  tick(runs.every(s => s === "X=2 / L−R=0"), `the solver is deterministic: X²−4 from 0 gives X=2 three times out of three <span class="why">[build brief]</span>`, runs.join(" | "));
+}
+
+/* ---- DOM measurements at 375 px: the prompt screen and the three-line
+   SOLVE answer (with an equation too long for one line) ---- */
+section("Build 5 · prompt and SOLVE screens fit (DOM measurement)");
+function measureBuild5(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  const textRight = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().right; };
+  press("ON AC SHIFT 9 3 = AC 1 + 1 =");
+  const h0 = L().height;
+  // (1) the CALC prompt: label top left, value bottom right
+  press("AC X x² + 1 CALC");
+  let lab = h.querySelector(".lcd-pr-label"), res = h.querySelector(".lcd-res");
+  const l = L(), lb = lab.getBoundingClientRect(), rb = res.getBoundingClientRect();
+  tick(lb.left - l.left < 14 && lb.bottom <= rb.top + 0.5 && l.right - textRight(res) < 14 && inside(lab) && inside(res) && Math.abs(L().height - h0) < 0.5,
+       `${where}: X? sits top left, the value 0 bottom right, both inside the LCD, height unchanged`,
+       `label ${Math.round(lb.left - l.left)} px from the left, value ${Math.round(l.right - textRight(res))} px from the right, label bottom ${Math.round(lb.bottom)} vs value top ${Math.round(rb.top)}, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  const fLab = parseFloat(getComputedStyle(lab).fontSize);
+  // (2) typing: big at the top left; a typed fraction keeps the LCD height
+  press("3");
+  let ex = h.querySelector(".lcd-expr"), fBig = parseFloat(getComputedStyle(ex).fontSize);
+  tick(fBig > fLab && ex.getBoundingClientRect().left - L().left < 14 && h.querySelector(".lcd-res").textContent === "0",
+       `${where}: a typed value shows BIG at the top left (${fBig}px against the label's ${fLab}px), the old value stays`, `font ${fBig}/${fLab} px`);
+  press("AC X x² + 1 CALC frac 1 ▼ 2");
+  const parts = [...h.querySelectorAll(".calc-main > *")];
+  tick(parts.every(inside) && Math.abs(L().height - h0) < 0.5, `${where}: a typed fraction at the prompt fits and keeps the LCD height`,
+       `LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  press("AC X x² − 4 SOLVE");
+  lab = h.querySelector(".lcd-pr-label");
+  tick(lab && lab.textContent === "Solve for X" && inside(lab) && lab.getBoundingClientRect().height < 20, `${where}: "Solve for X" sits on one line inside the LCD`,
+       lab ? `${Math.round(lab.getBoundingClientRect().width)}×${Math.round(lab.getBoundingClientRect().height)} px` : "missing");
+  // (3) the SOLVE answer: three small lines, values right-aligned
+  press("=");
+  const rows = [...h.querySelectorAll(".lcd-sv-row")], eq = h.querySelector(".lcd-sv-eq");
+  const fs = [eq, ...rows].map(e => parseFloat(getComputedStyle(e).fontSize));
+  const flush = rows.every(r => { const v = r.querySelector(".lcd-sv-val"); return Math.abs(textRight(v) - r.getBoundingClientRect().right) < 1; });
+  tick(rows.length === 2 && fs.every(f => f === fs[0] && f <= 13) && flush && [eq, ...rows].every(inside) && Math.abs(L().height - h0) < 0.5,
+       `${where}: the answer is three small lines (${fs.join("/")} px), X= and L−R= values right-aligned, inside the LCD`,
+       `${rows.length + 1} lines, right-aligned ${flush}, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  // (4) an equation too long for one line (with a fraction in it): cut off at the right, never wrapped
+  press("AC frac X ▼ 3 ▶ + 1000 ( 1 , 08 ) x^ X ▶ + 123456789 X EQS 987654321 + 2 X + 1 + 5555 SOLVE =");
+  const g = read(h);
+  const eq2 = h.querySelector(".lcd-sv-eq"), rows2 = [...h.querySelectorAll(".lcd-sv-row")];
+  const fr = eq2 && eq2.querySelector(".calc-frac");
+  tick(g.sv.startsWith("X=8,0000") && eq2.scrollWidth > eq2.clientWidth && eq2.getBoundingClientRect().height < 40 && inside(eq2) && rows2.every(inside)
+       && rows2.every(r => r.scrollWidth <= r.clientWidth + 0.5) && Math.abs(L().height - h0) < 0.5 && fr && inside(fr),
+       `${where}: a long equation is cut off at the right on its one line, X= and L−R= still fit, LCD height unchanged`,
+       `"${g.sv}", line ${eq2.scrollWidth}/${eq2.clientWidth} px, ${Math.round(eq2.getBoundingClientRect().height)} px high, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  // (5) Can't Solve: the three error lines fit
+  press("AC X x² + 1 SOLVE =");
+  const lines = [...h.querySelectorAll(".lcd-err > div")];
+  tick(lines.length === 3 && lines.every(inside) && lines.every(d => d.scrollWidth <= d.clientWidth + 0.5) && Math.abs(L().height - h0) < 0.5,
+       `${where}: Can't Solve shows its three lines inside the LCD`, `${lines.map(d => d.textContent).join(" / ")}`);
+  press("AC SHIFT 9 3 = AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild5(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild5(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 
