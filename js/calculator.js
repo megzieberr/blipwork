@@ -56,6 +56,12 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    nothing on a plain press; rcl (RCL / SHIFT = STO) and mplus (M+ /
    SHIFT = M−) are live. CALC's red "=" and ∫'s red ":" were missing
    from the key faces and are added (spec §2).
+   Calculator rebuild Build 4 (2026-10-04, spec §6–§9, §16): log, log□,
+   ln, 10^□, e^□, ×10^x, ALPHA ×10^x (e), x⁻¹, x!, nCr, nPr, %, Abs, °'",
+   the mixed-fraction template, SHIFT S⇔D and Fix / Norm are live. Still
+   doing nothing on purpose (her ruling, not school use): hyp, ENG, ∫,
+   d/dx, Σ, FACT, and on the COMP screen SHIFT + − 7 8 0 , Ans DEL (Pol,
+   Rec, CONST, CONV, Rnd, Ran#, DRG▶, INS). CALC / SOLVE are Build 5.
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -147,6 +153,12 @@ const lcdShow = s => escapeHtml(s).replace(/x̄/g, MEAN_GLYPH);   // x + combini
      { kind:'error', msg: "Syntax ERROR" | "Math ERROR" }
    Square roots of rationals are exact; a cube or other root is exact
    only when it is a rational number (³√27 = 3, ⁴√16 = 2), else float.
+   Calculator rebuild Build 4 (2026-10-04, spec §6–§9): log, ln and log□
+   give a WHOLE number exactly (log(100 = 2, log₂(8) = 3, ln(e = 1) and a
+   decimal otherwise; x! nCr nPr are exact whole numbers (BigInt); % is
+   ÷100 (20% = 1/5); ×10^x is part of the number it follows (2,5×10⁻³ =
+   1/400); the constant e (ALPHA ×10^x) is a decimal; °'" entries (30°15')
+   are exact degrees; a mixed number 1¾ is 1 + ¾.
    Calculator rebuild Build 3 (2026-10-04, CASIO-CALCULATOR-SPEC.md §5,
    §6, §7): exact sums of TWO unlike roots, (a√b + c√d)/e, one of which may
    be a plain number (√3+√2, −1+√2, (√6−√2)/4, 2−√3). The arithmetic is done
@@ -399,6 +411,96 @@ function valuesEqual(a, b) {
   return isZeroV(vSub(a, b));
 }
 
+/* ---- Build 4: more keys (spec §6–§9) ---- */
+const TEN = mkRat(10n, 1n), HUNDRED = mkRat(100n, 1n), RT_ONE = mkRat(1n, 1n);
+const E_VAL = VFLOAT(Math.E);   // the constant e (ALPHA ×10^x): a decimal, like e¹ = 2,718281828 (spec §6)
+const pow10 = e => (e >= 0n ? mkRat(10n ** e, 1n) : mkRat(1n, 10n ** -e));
+/* a value that is a whole number, as a BigInt (a decimal only when it is
+   exactly whole), else null: what x!, nCr and nPr accept */
+function wholeOf(v) {
+  if (v.kind === "rat" && v.d === 1n) return v.n;
+  if (v.kind === "float" && Number.isInteger(v.v) && Math.abs(v.v) <= Number.MAX_SAFE_INTEGER) return BigInt(v.v);
+  return null;
+}
+/* the exact decimal a float shows at 15 significant digits, as a fraction:
+   rounding for Fix and the °'" form is then done exactly, never on binary
+   floats (1,005 with Fix 2 is 1,01, as a decimal machine would round it) */
+function floatToRat(f) {
+  const [m, ex] = Math.abs(f).toPrecision(15).split("e");
+  const [ip, fp = ""] = m.split(".");
+  let n = BigInt(ip + fp), d = 10n ** BigInt(fp.length);
+  const e = ex ? Number(ex) : 0;
+  if (e > 0) n *= 10n ** BigInt(e); else if (e < 0) d *= 10n ** BigInt(-e);
+  return mkRat(f < 0 ? -n : n, d);
+}
+/* Foreman ruling: log and ln results are decimals unless they are whole
+   numbers. For exact inputs that is decided exactly (base^k = x); a decimal
+   input (the constant e, e^□ ...) has no exact form, so a result within
+   10⁻¹² of a whole number is taken as that whole number (ln(e) = 1). */
+function snapWhole(r) {
+  if (!Number.isFinite(r)) return VERR("Math ERROR");
+  const k = Math.round(r);
+  return Math.abs(r - k) <= 1e-12 * Math.max(1, Math.abs(r)) ? mkRat(BigInt(k), 1n) : VFLOAT(r);
+}
+/* log□(base, x), and log( with base 10 (spec §9: log(100 = 2, log₂(8) = 3).
+   A base or argument that is 0 or negative, or base 1, is Math ERROR. */
+function vLogBase(base, x) {
+  if (isErr(base)) return base; if (isErr(x)) return x;
+  const fb = toFloatV(base), fx = toFloatV(x);
+  if (!(fx > 0) || !(fb > 0) || fb === 1) return VERR("Math ERROR");
+  const r = base === TEN ? Math.log10(fx) : Math.log(fx) / Math.log(fb);
+  if (isAlg(base) && isAlg(x)) {
+    const k = Math.round(r);
+    if (Number.isFinite(r) && Math.abs(k) <= 64 && valuesEqual(vPowInt(base, k), x)) return mkRat(BigInt(k), 1n);
+    return VFLOAT(r);
+  }
+  return snapWhole(r);
+}
+/* ln( (spec §9: ln(e = 1). ln of an exact number other than 1 is never
+   whole, so only ln 1 = 0 is exact there. */
+function vLn(x) {
+  if (isErr(x)) return x;
+  const fx = toFloatV(x);
+  if (!(fx > 0)) return VERR("Math ERROR");
+  if (isAlg(x)) return valuesEqual(x, RT_ONE) ? mkRat(0n, 1n) : VFLOAT(Math.log(fx));
+  return snapWhole(Math.log(fx));
+}
+/* e^□ (SHIFT ln): a decimal (e¹ = 2,718281828, spec §6); e⁰ = 1 */
+function vExp(e) {
+  if (isErr(e)) return e;
+  if (isZeroV(e)) return mkRat(1n, 1n);
+  return VFLOAT(Math.exp(toFloatV(e)));
+}
+/* Abs (SHIFT hyp): |−5| = 5 (spec §9) */
+function vAbs(a) { if (isErr(a)) return a; return toFloatV(a) < 0 ? vNeg(a) : a; }
+/* x! (SHIFT x⁻¹): 5! = 120 (spec §9), exact BigInt. Only whole numbers
+   0, 1, 2 ... ; anything else is Math ERROR. Past 170! no display could
+   hold it (the same overflow every other result has), so it stops there. */
+function vFact(a) {
+  if (isErr(a)) return a;
+  const n = wholeOf(a);
+  if (n === null || n < 0n || n > 170n) return VERR("Math ERROR");
+  let r = 1n; for (let k = 2n; k <= n; k++) r *= k;
+  return mkRat(r, 1n);
+}
+/* nCr (SHIFT ÷) and nPr (SHIFT ×): 5C2 = 10, 5P2 = 20 (spec §9), exact
+   BigInt. n and r whole, 0 ≤ r ≤ n, else Math ERROR. A result too big for
+   any display (more than ~2000 factors) is Math ERROR, as an overflow. */
+function vComb(nv, rv, kind) {
+  if (isErr(nv)) return nv; if (isErr(rv)) return rv;
+  const n = wholeOf(nv), r = wholeOf(rv);
+  if (n === null || r === null || n < 0n || r < 0n || r > n) return VERR("Math ERROR");
+  if (kind === "P") {
+    if (r > 400n) return VERR("Math ERROR");
+    let p = 1n; for (let k = n - r + 1n; k <= n; k++) p *= k;
+    return mkRat(p, 1n);
+  }
+  const k = r < n - r ? r : n - r;
+  if (k > 2000n) return VERR("Math ERROR");
+  let c = 1n; for (let i = 1n; i <= k; i++) c = c * (n - k + i) / i;   // exact at every step
+  return mkRat(c, 1n);
+}
+
 /* ---- exact special-angle table, DEGREES ----
    The 30°/45° family is typed in; Build 3 (spec §5: exact for EVERY
    multiple of 15°) COMPUTES the other eight angles (15, 75, 105, …, 345)
@@ -470,6 +572,8 @@ function evalInv(name, argVal, drg) {
   return VFLOAT(drg === "R" ? rad : rad * 180 / Math.PI);
 }
 function applyFunc(name, inv, argVal, drg) {
+  if (name === "log") return vLogBase(TEN, argVal);   // Build 4
+  if (name === "ln") return vLn(argVal);
   return inv ? evalInv(name === "sin" ? "asin" : name === "cos" ? "acos" : "atan", argVal, drg) : evalTrigFn(name, argVal, drg);
 }
 
@@ -519,11 +623,16 @@ function formatExactHTML(v) {
    power (2^40 → 1,099511628×10¹²); small numbers stay plain decimals down
    to 10⁻⁹ (1/2000 → 0,0005, not 5×10⁻⁴) and only switch below that.
    Trailing zeros are dropped. Returns HTML (the ×10 form has markup).
-   STAT read-offs do NOT come through here: they keep fmtNum, unchanged. */
-function formatDecimal(v) {
+   STAT read-offs do NOT come through here: they keep fmtNum, unchanged.
+   Build 4: `fix` (0–9, or null for Norm) is the SETUP Fix setting. Fix only
+   changes DECIMAL display (spec §7: 2÷3 stays ⅔, S⇔D → 0,67; sin(40 =
+   0,64): exactly `fix` decimals, rounded half up. Past 10 digits before the
+   comma the Norm ×10 form is kept (Fix there was not measured). */
+function formatDecimal(v, fix = null) {
   if (v.kind === "error") return escapeHtml(v.msg);
   const f = toFloatV(v);
   if (!Number.isFinite(f)) return "Math ERROR";
+  if (fix != null && Math.abs(f) < 1e10) return formatFix(v, fix);
   if (f === 0) return "0";
   const sign = f < 0 ? "−" : "";
   const [m, ex] = Math.abs(f).toExponential(9).split("e");   // ONE rounding, to 10 significant digits
@@ -535,6 +644,35 @@ function formatDecimal(v) {
   const ip = e >= 0 ? digits.slice(0, e + 1) : "0";
   const fp = (e >= 0 ? digits.slice(e + 1) : "0".repeat(-e - 1) + digits).replace(/0+$/, "");
   return sign + ip + (fp ? "," + fp : "");
+}
+/* Fix n: exactly n decimals, rounded half up on the exact value (a decimal
+   is first read at 15 significant digits). A value that rounds to 0 shows
+   no minus sign (Blipwork choice, not measured). */
+function formatFix(v, fix) {
+  const r = v.kind === "rat" ? v : floatToRat(toFloatV(v));
+  const neg = r.n < 0n, n = neg ? -r.n : r.n, scale = 10n ** BigInt(fix);
+  const q = (2n * n * scale + r.d) / (2n * r.d);
+  const s = q.toString().padStart(fix + 1, "0");
+  return (neg && q !== 0n ? "−" : "") + s.slice(0, s.length - fix) + (fix ? "," + s.slice(s.length - fix) : "");
+}
+/* The °'" form of a result (spec §9: 30°15' = shows 30°15'0"). Seconds are
+   rounded to hundredths, carrying into the minutes and degrees; how many
+   decimals the device gives the seconds was not measured (Blipwork choice:
+   at most 2, trailing zeros dropped). */
+function formatDMS(v) {
+  const r = v.kind === "rat" ? v : floatToRat(toFloatV(v));
+  const neg = r.n < 0n, n = neg ? -r.n : r.n;
+  const hs = (2n * n * 360000n + r.d) / (2n * r.d);   // hundredths of a second, rounded half up
+  const deg = hs / 360000n, rest = hs % 360000n, min = rest / 6000n, sh = rest % 6000n;
+  const frac = (sh % 100n).toString().padStart(2, "0").replace(/0+$/, "");
+  return (neg && hs !== 0n ? "−" : "") + `${deg}°${min}'${sh / 100n}${frac ? "," + frac : ""}"`;
+}
+/* The mixed form (SHIFT S⇔D, spec §7/§8: 7/4 → 1¾, 100/3 → 33⅓): only an
+   improper fraction that fits the display has one. */
+const hasMixedForm = v => !!v && v.kind === "rat" && v.d > 1n && (v.n < 0n ? -v.n : v.n) > v.d && exactFits(v);
+function formatMixed(v) {
+  const neg = v.n < 0n, n = neg ? -v.n : v.n;
+  return `<span class="calc-mixed">${neg ? "−" : ""}<span class="calc-mixed-whole">${n / v.d}</span>${fracHTML(n % v.d, v.d)}</span>`;
 }
 /* Spec §7: a fraction shows only while digits(top) + digits(bottom) + 1 is
    10 or less (1234/56789 yes, 12345/67891 → 0,1818355894), and a whole
@@ -552,7 +690,7 @@ function exactFits(v) {
   if (v.kind !== "rat" && v.kind !== "pi") return false;
   return v.d === 1n ? digitCount(v.n) <= 10 : digitCount(v.n) + digitCount(v.d) + 1 <= 10;
 }
-const formatValue = (v, dec) => (dec || !exactFits(v)) ? formatDecimal(v) : formatExactHTML(v);
+const formatValue = (v, dec, fix = null) => (dec || !exactFits(v)) ? formatDecimal(v, fix) : formatExactHTML(v);
 
 /* ---- token box compile + recursive-descent parse (no implicit ×) ----
    Build 2: every compiled token remembers `src`, its index in the box the
@@ -560,14 +698,38 @@ const formatValue = (v, dec) => (dec || !exactFits(v)) ? formatDecimal(v) : form
    (Goto) can put the cursor just before that token (spec §3). The copies
    share the template sub-box arrays, so a position inside a fraction or a
    root points at the live box on screen. */
+/* Build 4: two kinds of number literal are folded here, because on the
+   device they are part of the NUMBER, not operators:
+   - ×10^x (spec §9): a number, the small ×10, an optional minus, digits:
+     `3×10 5` = 300000, 2,5×10⁻³ = 1/400. A ×10 with no number before it
+     or no digits after it is left alone, so it is a Syntax ERROR (and Goto
+     lands just before it): neither case was measured.
+   - °'" (spec §9): up to three "number °'"" pairs, degrees, minutes,
+     seconds: 30°15' = 30 + 15/60, exact. */
+const isNumTok = t => t && (t.k === "d" || t.k === "c");
 function compileBox(box) {
   const out = [];
   let i = 0;
+  const readNum = () => { let s = ""; while (i < box.length && isNumTok(box[i])) { s += box[i].k === "c" ? "." : box[i].v; i++; } return s; };
   while (i < box.length) {
     const t = box[i];
-    if (t.k === "d" || t.k === "c") {
-      const src = i; let s = "";
-      while (i < box.length && (box[i].k === "d" || box[i].k === "c")) { s += box[i].k === "c" ? "." : box[i].v; i++; }
+    if (isNumTok(t)) {
+      const src = i, s = readNum();
+      if (box[i] && box[i].k === "x10") {
+        let j = i + 1, neg = false, e = "";
+        if (box[j] && box[j].k === "op" && box[j].v === "−") { neg = true; j++; }
+        while (j < box.length && box[j].k === "d") { e += box[j].v; j++; }
+        if (e && e.length <= 3) { out.push({ k: "num", v: s, e10: BigInt(e) * (neg ? -1n : 1n), src }); i = j; continue; }
+      }
+      if (box[i] && box[i].k === "dms") {
+        const parts = [s]; i++;
+        while (parts.length < 3 && isNumTok(box[i])) {
+          const back = i, p = readNum();
+          if (box[i] && box[i].k === "dms") { parts.push(p); i++; } else { i = back; break; }
+        }
+        out.push({ k: "dmsv", parts, src });
+        continue;
+      }
       out.push({ k: "num", v: s, src });
       continue;
     }
@@ -575,6 +737,8 @@ function compileBox(box) {
   }
   return out;
 }
+/* does a box (or any template box inside it) hold a °'" mark? */
+const boxHasDMS = box => box.some(t => t.k === "dms" || SUB_KEYS.some(key => Array.isArray(t[key]) && boxHasDMS(t[key])));
 /* a Syntax ERROR at the parser's current token (or at `at`, a box index);
    at the end of the box the position is the box's end */
 function synErr(st, at) {
@@ -607,10 +771,23 @@ function parseExpr(st, ctx) {
   return left;
 }
 function parseTerm(st, ctx) {
+  let left = parseComb(st, ctx);
+  for (;;) {
+    const t = peek(st);
+    if (t && t.k === "op" && (t.v === "×" || t.v === "÷")) { next(st); const right = parseComb(st, ctx); left = t.v === "×" ? vMul(left, right) : vDiv(left, right); }
+    else break;
+  }
+  return left;
+}
+/* nCr / nPr (Build 4). Only 5C2 and 5P2 on their own were measured. They
+   bind tighter than × and ÷ (2×5C2 = 2×10 = 20) and looser than implicit ×
+   and the minus sign: a Blipwork choice, so `0,5^3×10C3` reads the way a
+   learner means it. */
+function parseComb(st, ctx) {
   let left = parseUnary(st, ctx);
   for (;;) {
     const t = peek(st);
-    if (t && t.k === "op" && (t.v === "×" || t.v === "÷")) { next(st); const right = parseUnary(st, ctx); left = t.v === "×" ? vMul(left, right) : vDiv(left, right); }
+    if (t && t.k === "comb") { next(st); const right = parseUnary(st, ctx); left = vComb(left, right, t.v); }
     else break;
   }
   return left;
@@ -642,7 +819,10 @@ function parseUnary(st, ctx) {
 /* Build 3: π multiplies implicitly the same way (2π, Aπ, sin(30)π). Like a
    letter, π followed directly by a NUMBER (π2) is not a product: Syntax
    ERROR, as (2+3)4 is on the device (π2 itself was not probed). */
-const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "xrt" || t.k === "ans" || t.k === "var" || t.k === "pi");
+/* Build 4: the constant e multiplies implicitly like π (spec §9), and so do
+   the new templates (log□(), |□|, 10^□, e^□, a mixed number): 2e, 3|−2|. */
+const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "xrt" || t.k === "ans" || t.k === "var" || t.k === "pi"
+  || t.k === "econst" || t.k === "logb" || t.k === "abs" || t.k === "tenpow" || t.k === "epow" || t.k === "mixed");
 const PI_VAL = mkPi(1n, 1n);
 function parseImplicit(st, ctx) {
   let left = parsePower(st, ctx);
@@ -659,6 +839,9 @@ function parsePower(st, ctx) {
     if (t && t.k === "sq") { next(st); base = vPowInt(base, 2); }
     else if (t && t.k === "cb") { next(st); base = vPowInt(base, 3); }
     else if (t && t.k === "pow") { next(st); const e = parseSubExpr(t.exp, ctx); base = vPow(base, e); }
+    else if (t && t.k === "inv") { next(st); base = vInv(base); }          // x⁻¹ (Build 4)
+    else if (t && t.k === "fact") { next(st); base = vFact(base); }        // x!
+    else if (t && t.k === "pct") { next(st); base = vDiv(base, HUNDRED); } // %: ÷100 (20% = 1/5)
     else break;
   }
   return base;
@@ -666,7 +849,23 @@ function parsePower(st, ctx) {
 function parseAtom(st, ctx) {
   const t = peek(st);
   if (!t) throw synErr(st);
-  if (t.k === "num") { let v; try { v = numToValue(t.v); } catch { throw synErr(st, t.src + badCommaAt(t.v)); } next(st); return v; }
+  if (t.k === "num") { let v; try { v = numToValue(t.v); } catch { throw synErr(st, t.src + badCommaAt(t.v)); } next(st); return t.e10 != null ? vMul(v, pow10(t.e10)) : v; }
+  if (t.k === "dmsv") {   // 30°15'20" = 30 + 15/60 + 20/3600 (Build 4)
+    let v = mkRat(0n, 1n);
+    for (const [k, p] of t.parts.entries()) {
+      let pv; try { pv = numToValue(p); } catch { throw synErr(st, t.src); }
+      v = vAdd(v, vDiv(pv, mkRat([1n, 60n, 3600n][k], 1n)));
+    }
+    next(st); return v;
+  }
+  if (t.k === "econst") { next(st); return E_VAL; }
+  if (t.k === "logb") { next(st); const b = parseSubExpr(t.base, ctx); const x = parseSubExpr(t.body, ctx); return vLogBase(b, x); }
+  if (t.k === "abs") { next(st); return vAbs(parseSubExpr(t.body, ctx)); }
+  if (t.k === "tenpow") { next(st); return vPow(TEN, parseSubExpr(t.exp, ctx)); }
+  if (t.k === "epow") { next(st); return vExp(parseSubExpr(t.exp, ctx)); }
+  /* 1¾ = 1 + ¾ (spec §8). A negative whole box was not measured: Blipwork
+     adds the parts as typed, (−1)¾ = −¼; −1¾ is typed as − then 1¾. */
+  if (t.k === "mixed") { next(st); const w = parseSubExpr(t.whole, ctx); const n = parseSubExpr(t.num, ctx); const d = parseSubExpr(t.den, ctx); return vAdd(w, vDiv(n, d)); }
   if (t.k === "(") { next(st); const v = parseExpr(st, ctx); closeBracket(st); return v; }
   if (t.k === "func") { next(st); const inner = parseExpr(st, ctx); closeBracket(st); return applyFunc(t.name, t.inv, inner, ctx.drg); }
   if (t.k === "ans") { next(st); return ctx.ans; }
@@ -724,14 +923,14 @@ const LETTER_OF = { neg: "A", dms: "B", hyp: "C", sin: "D", cos: "E", tan: "F", 
 /* ALPHA CALC types "=" and ALPHA ∫ types ":" as plain tokens. Evaluating a
    line that holds them is CALC/SOLVE work (Build 5): today = gives Syntax
    ERROR on them, which the build brief accepts. */
-const ALPHA_TOKEN = { calc: "eqs", intdx: "colon" };
+const ALPHA_TOKEN = { calc: "eqs", intdx: "colon", exp10: "econst" };   // Build 4: ALPHA ×10^x = the constant e (spec §2, §9)
 /* The device's history limit is by bytes and was not measured; a few dozen
    entries is plenty for a learner, and keeps the memory bounded. */
 const MAX_HISTORY = 30;
 /* Deep copy of an entry box, re-linking every template sub-box to its new
    parent (same __parent/__owner/__pkey linkage insertTemplate sets up), so a
    history entry can be shown and edited without the edit touching history. */
-const SUB_KEYS = ["num", "den", "body", "exp", "idx"];   // every template sub-box key (idx = the ˣ√ index, Build 2)
+const SUB_KEYS = ["num", "den", "body", "exp", "idx", "base", "whole"];   // every template sub-box key (idx = the ˣ√ index, Build 2; base = log□'s base, whole = a mixed number's whole part, Build 4)
 function cloneBox(box) {
   const out = [];
   for (const t of box) {
@@ -755,8 +954,9 @@ function operandStart(box, end) {
   if (end <= 0) return end;
   const t = box[end - 1];
   if (t.k === "d" || t.k === "c") { let j = end - 1; while (j > 0 && (box[j - 1].k === "d" || box[j - 1].k === "c")) j--; return j; }
-  if (t.k === "var" || t.k === "ans" || t.k === "pi" || t.k === "frac" || t.k === "rad" || t.k === "xrt") return end - 1;
-  if (t.k === "sq" || t.k === "cb" || t.k === "pow") { const j = operandStart(box, end - 1); return j === end - 1 ? end : j; }
+  if (t.k === "var" || t.k === "ans" || t.k === "pi" || t.k === "frac" || t.k === "rad" || t.k === "xrt"
+    || t.k === "econst" || t.k === "logb" || t.k === "abs" || t.k === "tenpow" || t.k === "epow" || t.k === "mixed") return end - 1;   // Build 4 operands
+  if (t.k === "sq" || t.k === "cb" || t.k === "pow" || t.k === "inv" || t.k === "fact" || t.k === "pct") { const j = operandStart(box, end - 1); return j === end - 1 ? end : j; }
   if (t.k === ")") {
     let depth = 0;
     for (let j = end - 1; j >= 0; j--) {
@@ -792,6 +992,10 @@ export function mountCalculator(host, opts = {}) {
     lastWasStat: false,    // the result came from a pasted STAT token (legacy line, no box to edit)
     // ---- calculator rebuild Build 2 (spec §3) ----
     errAt: null,           // { box, i }: where ◀/▶ (Goto) put the cursor after a Syntax ERROR
+    // ---- calculator rebuild Build 4 (spec §7, §8, §9, §16) ----
+    fix: null,             // SETUP Fix: 0–9 decimals, or null = Norm (the FIX tag shows while it is set)
+    norm: 2,               // SETUP Norm 1 or 2; factory Norm 2. Norm 1 is accepted and shows like Norm 2 (not measured)
+    form: null,            // how the result is shown: null (exact / decimal, see showDecimal), "mixed" (1¾) or "dms" (30°15'0")
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -899,7 +1103,7 @@ export function mountCalculator(host, opts = {}) {
   function startStat() { S.mode = "STAT"; S.data = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput"; emit("statMode"); }
 
   function setupMenu() {
-    const p1 = [["1", "MthIO"], ["2", "LineIO"], ["3", "Deg"], ["4", "Rad"], ["5", "Gra"], ["6", "Fix"], ["7", "Sci"]];
+    const p1 = [["1", "MthIO"], ["2", "LineIO"], ["3", "Deg"], ["4", "Rad"], ["5", "Gra"], ["6", "Fix"], ["7", "Sci"], ["8", "Norm"]];   // 8:Norm added in Build 4 (spec §16)
     const p2 = [["1", "ab/c"], ["2", "d/c"], ["3", "CMPLX"], ["4", "STAT"], ["5", "TABLE"], ["6", "APO"], ["7", "CONT"]];
     openMenu({ items: p1, page: 0, pages: 2, ret: "comp",
       onDown() { if (this.page === 0) { this.page = 1; this.items = p2; } },
@@ -907,8 +1111,23 @@ export function mountCalculator(host, opts = {}) {
       onNum(n) {
         if (this.page === 0 && n === 3) { S.drg = "D"; S.menu = null; S.screen = "comp"; }
         else if (this.page === 0 && n === 4) { S.drg = "R"; S.menu = null; S.screen = "comp"; }
+        else if (this.page === 0 && n === 6) fixPrompt();
+        else if (this.page === 0 && n === 8) normPrompt();
         else if (this.page === 1 && n === 4) freqMenu();
       } });
+  }
+  /* Build 4 (spec §7, §16): SETUP 6 asks `Fix 0~9?` and a digit sets it (the
+     FIX tag lights); SETUP 8 asks `Norm 1~2?` and 1 or 2 leaves Fix. Neither
+     prompt shows the current choice; AC cancels without changing anything
+     (no parent menu, so AC goes straight back to the calculation, as the
+     Frequency? prompt already did). A result on screen is redrawn at once. */
+  function fixPrompt() {
+    openMenu({ title: "Fix 0~9?", items: [], ret: "comp",
+      onNum(n) { S.fix = n; S.menu = null; S.screen = "comp"; refreshResult(); } });
+  }
+  function normPrompt() {
+    openMenu({ title: "Norm 1~2?", items: [], ret: "comp",
+      onNum(n) { if (n !== 1 && n !== 2) return; S.fix = null; S.norm = n; S.menu = null; S.screen = "comp"; refreshResult(); } });
   }
   function freqMenu() {
     openMenu({ title: "Frequency?", items: [["1", "ON"], ["2", "OFF"]], ret: "comp",
@@ -916,11 +1135,19 @@ export function mountCalculator(host, opts = {}) {
   }
   function clrMenu() {
     openMenu({ items: [["1", "Setup"], ["2", "Memory"], ["3", "All"]], ret: "comp",
-      onNum(n) { if (n === 3) clrConfirm(); } });
+      onNum(n) { if (n === 3) clrConfirm(); else if (n === 1) clrSetupConfirm(); } });
   }
   function clrConfirm() {
     openMenu({ title: "Reset All?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 1: "All" also zeroes the variables + M and empties the history (both are memory)
+      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.fix = null; S.norm = 2; S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 1: "All" also zeroes the variables + M and empties the history (both are memory); Build 4: and puts Fix back to Norm 2
+  }
+  /* CLR 1:Setup (Build 4): the setup items Blipwork has go back to the
+     factory settings (spec intro: Norm 2, Deg, STAT FREQ off). Its confirm
+     screen was not probed: it copies the measured Reset All? flow. It does
+     NOT fire the "clear" milestone, which belongs to CLR All. */
+  function clrSetupConfirm() {
+    openMenu({ title: "Reset Setup?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
+      onEq() { S.fix = null; S.norm = 2; S.drg = "D"; S.freqOn = false; S.menu = null; S.screen = "comp"; refreshResult(); } });
   }
   function statMenu() {
     openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", "Distr"], ["6", "MinMax"]], ret: "comp",
@@ -1025,7 +1252,7 @@ export function mountCalculator(host, opts = {}) {
     S.result = null; S.exactVal = null; S.showDecimal = false;
     S.line = ""; S.pendingStat = null;
     S.err = false; S.lastWasStat = false; S.browsing = false; S.afterAC = false;
-    S.histPos = S.history.length; S.errAt = null;
+    S.histPos = S.history.length; S.errAt = null; S.form = null;
   }
   function linkSub(sub, parentBox, owner, pkey) { sub.__parent = parentBox; sub.__owner = owner; sub.__pkey = pkey; }
   function insertBoxToken(tok) { S.afterAC = false; S.cur.box.splice(S.cur.i, 0, tok); S.cur.i++; }
@@ -1053,7 +1280,11 @@ export function mountCalculator(host, opts = {}) {
   }
   /* a template's boxes in the order ▶ walks them (the ˣ√ index comes FIRST,
      spec §6: "the INDEX box first (small, upper left), then the radicand") */
-  const TMPL_BOXES = { frac: ["num", "den"], rad: ["body"], pow: ["exp"], xrt: ["idx", "body"] };
+  /* Build 4: log□ walks base → inside the bracket (spec §9: "BASE box first
+     (low, small), then into the bracket"); a mixed number walks whole → top
+     → bottom (spec §8); |□|, 10^□ and e^□ have one box each. */
+  const TMPL_BOXES = { frac: ["num", "den"], rad: ["body"], pow: ["exp"], xrt: ["idx", "body"],
+    logb: ["base", "body"], abs: ["body"], tenpow: ["exp"], epow: ["exp"], mixed: ["whole", "num", "den"] };
   function exitOrAdvanceRight(box) {
     if (!box.__parent) return;   // root, at end: no-op
     const owner = box.__owner, parent = box.__parent;
@@ -1091,7 +1322,7 @@ export function mountCalculator(host, opts = {}) {
        ERROR (2+×3+4 → between + and ×). For a Math ERROR the spec does not
        say where the cursor lands: Blipwork puts it at the end of the line. */
     const goto = S.err ? (S.errAt || { box: S.box, i: S.box.length }) : null;
-    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false; S.errAt = null;
+    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false; S.errAt = null; S.form = null;
     S.browsing = false; S.histPos = S.history.length;
     if (goto) S.cur = { box: goto.box, i: Math.min(goto.i, goto.box.length) };
     else S.cur = dir < 0 ? { box: S.box, i: S.box.length } : { box: S.box, i: 0 };
@@ -1101,7 +1332,7 @@ export function mountCalculator(host, opts = {}) {
     const e = S.history[S.history.length - 1];
     S.box = cloneBox(e.box);
     S.cur = dir < 0 ? { box: S.box, i: S.box.length } : { box: S.box, i: 0 };
-    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false;
+    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false; S.form = null;
     S.afterAC = false; S.browsing = false; S.histPos = S.history.length;
   }
   /* Show history entry idx WITH its result, as the device's ▲/▼ replay does.
@@ -1109,8 +1340,8 @@ export function mountCalculator(host, opts = {}) {
   function showEntry(idx) {
     const e = S.history[idx];
     S.box = cloneBox(e.box); S.cur = { box: S.box, i: S.box.length };
-    S.exactVal = e.val; S.showDecimal = e.showDecimal;
-    S.result = formatValue(e.val, e.showDecimal);
+    S.exactVal = e.val; S.showDecimal = e.showDecimal; S.form = e.form || null;
+    S.result = shownHTML();
     S.err = false; S.lastWasStat = false; S.line = ""; S.pendingStat = null;
     S.browsing = true; S.afterAC = false; S.histPos = idx;
   }
@@ -1149,7 +1380,7 @@ export function mountCalculator(host, opts = {}) {
     // a result (or a history entry) on screen, or the empty AC screen: ▲▼ walk the history
     if (S.result != null || (S.afterAC && isBoxEmpty(S.box))) { if (!S.err) histNav(dir); return; }
     const box = S.cur.box;
-    if (!box.__parent || box.__owner.k !== "frac") return;   // ▲▼ only meaningful inside a fraction
+    if (!box.__parent || (box.__owner.k !== "frac" && box.__owner.k !== "mixed")) return;   // ▲▼ only meaningful inside a fraction (or a mixed number's top/bottom, Build 4)
     const owner = box.__owner;
     if (dir > 0 && box.__pkey === "num") S.cur = { box: owner.den, i: Math.min(S.cur.i, owner.den.length) };
     else if (dir < 0 && box.__pkey === "den") S.cur = { box: owner.num, i: Math.min(S.cur.i, owner.num.length) };
@@ -1164,17 +1395,56 @@ export function mountCalculator(host, opts = {}) {
     parent.splice(pidx, 1);
     S.cur = { box: parent, i: pidx };
   }
+  /* The result as it should look now: its form (Build 4: mixed 1¾ or °'"),
+     else exact or decimal, decimals following Fix. */
+  function shownHTML() {
+    if (S.form === "dms") return formatDMS(S.exactVal);
+    if (S.form === "mixed") return formatMixed(S.exactVal);
+    return formatValue(S.exactVal, S.showDecimal, S.fix);
+  }
+  /* redraw the result on screen after a SETUP change (Fix / Norm / CLR Setup) */
+  function refreshResult() {
+    if (S.result == null || S.err || S.lastWasStat || !S.exactVal || isErr(S.exactVal)) return;
+    S.result = shownHTML();
+  }
   function toggleSD() {
     // nothing to toggle to: a decimal answer, or a fraction / whole number too long to show exactly (spec §7)
     if (!S.exactVal || isErr(S.exactVal) || !exactFits(S.exactVal)) return;
-    S.showDecimal = !S.showDecimal;
-    S.result = formatValue(S.exactVal, S.showDecimal);
+    /* Build 4: S⇔D on the °'" form does nothing (not measured); from the
+       mixed form it goes to the decimal (1¾ → 1,75), and the next S⇔D
+       back to the improper fraction, the factory d/c form. */
+    if (S.form === "dms") return;
+    if (S.form === "mixed") { S.form = null; S.showDecimal = true; }
+    else S.showDecimal = !S.showDecimal;
+    S.result = shownHTML();
+  }
+  /* SHIFT S⇔D (Build 4, spec §7/§8): improper ↔ mixed (100/3 ↔ 33⅓). The
+     spec's "1¾ = 7/4, S⇔D → 1,75, SHIFT S⇔D → 1¾" may be read as a
+     sequence, so from the decimal it goes to the mixed form too. A value
+     with no mixed form (⅔, 5, √2, a decimal answer): nothing happens. */
+  function toggleMixed() {
+    if (S.result == null || S.err || S.lastWasStat || S.form === "dms" || !hasMixedForm(S.exactVal)) return;
+    S.form = S.form === "mixed" ? null : "mixed";
+    S.showDecimal = false;
+    S.result = shownHTML();
+  }
+  /* °'" on a result (Build 4, spec §1, §9): it acts ON the result, it does
+     not start a new line. The °'" form goes to the decimal (30°15'0" →
+     30,25) and any other form goes to °'" (and back). Past 10 digits before
+     the comma there is no °'" form (Blipwork choice, not measured). */
+  function dmsToggle() {
+    if (S.err || S.lastWasStat || !S.exactVal || isErr(S.exactVal)) return;
+    if (S.form === "dms") { S.form = null; S.showDecimal = true; }
+    else if (Math.abs(toFloatV(S.exactVal)) < 1e10) S.form = "dms";
+    else return;
+    S.result = shownHTML();
   }
   function doEquals() {
     if (S.pendingStat) {
       const tok = S.pendingStat;
       const v = statValue(tok);
-      S.result = v == null ? "Math ERROR" : fmtNum(v);
+      // Build 4: with Fix switched on a read-off is a decimal display, so Fix rounds it too; with Norm (Fix off) the old text, unchanged
+      S.result = v == null ? "Math ERROR" : (S.fix != null && Math.abs(v) < 1e10 ? formatFix(VFLOAT(v), S.fix) : fmtNum(v));
       S.pendingStat = null;
       S.err = v == null; S.lastWasStat = true; S.browsing = false; S.afterAC = false; S.histPos = S.history.length;
       emit("stat", { tok, value: v });
@@ -1192,7 +1462,7 @@ export function mountCalculator(host, opts = {}) {
     if (!isErr(v) && !Number.isFinite(toFloatV(v))) v = VERR("Math ERROR");   // an exact value too big for any display, same as a float overflow
     S.browsing = false; S.afterAC = false; S.lastWasStat = false;
     if (isErr(v)) {
-      S.result = v.msg; S.err = true; S.exactVal = null; S.showDecimal = false; S.histPos = S.history.length;
+      S.result = v.msg; S.err = true; S.exactVal = null; S.showDecimal = false; S.form = null; S.histPos = S.history.length;
       // where Goto (◀/▶) will put the cursor; `target` may be a copy of the line without its →A / M+ token
       S.errAt = v.at ? { box: v.at.box === target ? S.box : v.at.box, i: v.at.i } : null;
       return;
@@ -1203,10 +1473,19 @@ export function mountCalculator(host, opts = {}) {
     }
     S.err = false; S.errAt = null;
     S.exactVal = v; S.showDecimal = !exactFits(v);   // floats, and fractions past the size limit, show as decimals (spec §7)
-    S.result = formatValue(v, S.showDecimal);
+    /* Build 4 (spec §9): a line that is ONE °'" entry (30°15') shows its
+       result in the °'" form, 30°15'0". °'" mixed with any other operation
+       was not measured: Blipwork shows that result as a plain decimal. */
+    S.form = null;
+    if (boxHasDMS(target)) {
+      const arr = compileBox(target);
+      const lone = arr.length === 1 ? arr[0] : arr.length === 2 && arr[0].k === "op" && arr[0].v === "−" ? arr[1] : null;
+      if (lone && lone.k === "dmsv" && Math.abs(toFloatV(v)) < 1e10) S.form = "dms"; else S.showDecimal = true;
+    }
+    S.result = shownHTML();
     S.ansVal = v;
     if (effect) { S.histPos = S.history.length; return; }
-    S.history.push({ box: cloneBox(S.box), val: v, showDecimal: S.showDecimal });
+    S.history.push({ box: cloneBox(S.box), val: v, showDecimal: S.showDecimal, form: S.form });
     if (S.history.length > MAX_HISTORY) S.history.shift();
     S.histPos = S.history.length - 1;
   }
@@ -1231,11 +1510,18 @@ export function mountCalculator(host, opts = {}) {
   }
 
   // ---- key dispatch ----
-  // scope-cut SHIFT sequences: mixed-number entry/toggle, %, ; — and the
-  // SHIFT functions of keys whose own build is later (SOLVE, d/dx, x!, Σ, 10^,
-  // e^, FACT, Abs, ←). SHIFT is still consumed, as on the device.
-  // (SHIFT x^ = ˣ√ is live since Build 2; SHIFT ×10^x = π since Build 3.)
-  const NOOP_SHIFT = new Set(["frac", "sd", "lparen", "rparen", "calc", "intdx", "xinv", "logbox", "log", "ln", "dms", "hyp", "eng"]);
+  // SHIFT functions that do nothing: ; (SHIFT )), SOLVE (Build 5), and the
+  // ones skipped as not school use (d/dx, Σ, FACT, ←). SHIFT is still
+  // consumed, as on the device. (SHIFT x^ = ˣ√ is live since Build 2; SHIFT
+  // ×10^x = π since Build 3; Build 4 made SHIFT log, ln, x⁻¹, ÷, ×, (, hyp,
+  // ▫/▫ and S⇔D live.)
+  const NOOP_SHIFT = new Set(["rparen", "calc", "intdx", "logbox", "dms", "eng"]);
+  /* Build 4, her ruling "not school use, leave those keys doing nothing":
+     Pol (SHIFT +), Rec (SHIFT −), CONST (SHIFT 7), CONV (SHIFT 8), Rnd
+     (SHIFT 0), Ran# (SHIFT ,), DRG▶ (SHIFT Ans) and INS (SHIFT DEL). Before
+     this they typed the plain key. Only on the COMP screen: in the STAT data
+     grid and the menus they pass through exactly as before. */
+  const SKIP_SHIFT_COMP = new Set(["plus", "minus", "d7", "d8", "d0", "dot", "ans", "del"]);
   /* The three-line error screen (Build 2, spec §3) is up: a COMP-engine
      error on the COMP screen. The legacy pasted-STAT "Math ERROR" (no data
      captured) keeps its old one-line look and keys: STAT must behave exactly
@@ -1269,9 +1555,9 @@ export function mountCalculator(host, opts = {}) {
     if (S.alpha) {
       /* ALPHA is ONE-SHOT: the next key types its red letter, then ALPHA is
          off. A key with no red letter types nothing (spec §2). ALPHA ×10^x
-         (the constant e) is Build 4, so it only switches ALPHA off for now.
-         Off the COMP screen (menus, the STAT data grid) the key passes
-         through untouched, exactly as before ALPHA was wired. */
+         types the constant e (Build 4, spec §9). Off the COMP screen (menus,
+         the STAT data grid) the key passes through untouched, exactly as
+         before ALPHA was wired. */
       S.alpha = false; S.shift = false;
       if (S.screen === "comp") key = LETTER_OF[id] ? "var_" + LETTER_OF[id] : (ALPHA_TOKEN[id] || "noop");
     } else if (S.shift) {
@@ -1287,7 +1573,17 @@ export function mountCalculator(host, opts = {}) {
       else if (id === "rcl") key = "sto";       // SHIFT RCL = STO
       else if (id === "mplus") key = "mminus";  // SHIFT M+ = M−
       else if (id === "exp10") key = "pi";      // SHIFT ×10^x = π (Build 3, spec §9)
+      else if (id === "log") key = "tenpow";    // Build 4 (spec §6, §9): SHIFT log = 10^□
+      else if (id === "ln") key = "epow";       //   SHIFT ln = e^□
+      else if (id === "xinv") key = "fact";     //   SHIFT x⁻¹ = x!
+      else if (id === "div") key = "ncr";       //   SHIFT ÷ = nCr
+      else if (id === "mult") key = "npr";      //   SHIFT × = nPr
+      else if (id === "lparen") key = "pct";    //   SHIFT ( = %
+      else if (id === "hyp") key = "abs";       //   SHIFT hyp = Abs
+      else if (id === "frac") key = "mixed";    //   SHIFT ▫/▫ = the mixed-number template
+      else if (id === "sd") key = "mixtog";     //   SHIFT S⇔D = improper ↔ mixed
       else if (NOOP_SHIFT.has(id)) key = "noop";
+      else if (S.screen === "comp" && SKIP_SHIFT_COMP.has(id)) key = "noop";
       S.shift = false;
     }
 
@@ -1299,14 +1595,18 @@ export function mountCalculator(host, opts = {}) {
 
   const digit = id => (/^d[0-9]$/.test(id) ? +id[1] : null);
   const opChar = { plus: "+", minus: "−", mult: "×", div: "÷" };
-  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "xroot", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon", "pi"]);
+  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "xroot", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon", "pi",
+    "log", "ln", "logbox", "tenpow", "epow", "exp10", "econst", "xinv", "fact", "pct", "ncr", "npr", "abs", "mixed", "dms"]);   // second row: Build 4
   const isEntryKey = k => digit(k) != null || ENTRY_KEYS.has(k) || k.startsWith("var_");
   /* POSTFIX keys act on what is before them, so after a result they chain
      from Ans exactly like + − × ÷ do (Build 2, spec §1): x² → Ans², x^ →
-     Ans^□ (cursor in the exponent), x³ → Ans³. A postfix key added later
-     (Build 4: x⁻¹, x!, %) gets this by being listed here (and in
-     ENTRY_KEYS); nothing else needs to change. */
-  const POSTFIX_KEYS = new Set(["x2", "cube", "pow"]);
+     Ans^□ (cursor in the exponent), x³ → Ans³. Build 4 adds x⁻¹ (spec §9:
+     2 = x⁻¹ shows Ans⁻¹ = ½), x! and % (spec §1: "postfix too and should
+     chain the same way"). */
+  const POSTFIX_KEYS = new Set(["x2", "cube", "pow", "xinv", "fact", "pct"]);
+  /* nCr and nPr sit between two numbers like × and ÷, so after a result they
+     chain from Ans the same way (AnsC): not measured, the + − × ÷ rule. */
+  const BINARY_KEYS = new Set(["ncr", "npr"]);
 
   function compKey(key) {
     if (key === "mode") return modeMenu();
@@ -1315,6 +1615,8 @@ export function mountCalculator(host, opts = {}) {
     if (key === "stat") { if (S.mode === "STAT") statMenu(); return; }
     if (key === "ac") { resetEntry(); S.afterAC = true; return; }   // AC clears the screen but KEEPS the history (spec §1)
     if (key === "sd") return toggleSD();
+    if (key === "mixtog") return toggleMixed();
+    if (key === "dms" && S.result != null) return dmsToggle();   // °'" acts ON a result (spec §1, §9); with no result it types the mark (below)
     if (key === "eq") return doEquals();
     if (key === "up") return moveVert(-1);
     if (key === "down") return moveVert(1);
@@ -1345,7 +1647,7 @@ export function mountCalculator(host, opts = {}) {
     // Blipwork does not put STAT read-offs into Ans yet (Build 8), so Ans²
     // there would square an OLD answer, a silently wrong number.
     if ((S.result != null || S.pendingStat != null) && isEntryKey(key)) {
-      const chain = !!opChar[key] || (POSTFIX_KEYS.has(key) && S.result != null && !S.lastWasStat);
+      const chain = !!opChar[key] || BINARY_KEYS.has(key) || (POSTFIX_KEYS.has(key) && S.result != null && !S.lastWasStat);
       resetEntry();
       if (chain) insertBoxToken({ k: "ans" });   // the key itself goes in below, right after "Ans"
     }
@@ -1375,6 +1677,24 @@ export function mountCalculator(host, opts = {}) {
     if (key === "rparen") return insertBoxToken({ k: ")" });
     if (key === "ans") return insertBoxToken({ k: "ans" });
     if (key === "pi") return insertBoxToken({ k: "pi" });
+    /* ---- Build 4 (spec §6–§9). Prefix keys and templates do not grab what
+       is before them (only ▫/▫ and ˣ√ were measured grabbing): 2 log(100 is
+       2 × log(100. The mixed-number template does not grab either (spec §8
+       does not say it does): its whole box comes first, empty. */
+    if (key === "log" || key === "ln") return insertBoxToken({ k: "func", name: key, inv: false });
+    if (key === "logbox") return insertTemplate({ k: "logb", base: [], body: [] }, "base");
+    if (key === "tenpow") return insertTemplate({ k: "tenpow", exp: [] }, "exp");
+    if (key === "epow") return insertTemplate({ k: "epow", exp: [] }, "exp");
+    if (key === "exp10") return insertBoxToken({ k: "x10" });   // ONE small "×10" glyph; the power digits are typed inline after it
+    if (key === "econst") return insertBoxToken({ k: "econst" });
+    if (key === "xinv") return insertBoxToken({ k: "inv" });
+    if (key === "fact") return insertBoxToken({ k: "fact" });
+    if (key === "pct") return insertBoxToken({ k: "pct" });
+    if (key === "ncr") return insertBoxToken({ k: "comb", v: "C" });
+    if (key === "npr") return insertBoxToken({ k: "comb", v: "P" });
+    if (key === "abs") return insertTemplate({ k: "abs", body: [] }, "body");
+    if (key === "mixed") return insertTemplate({ k: "mixed", whole: [], num: [], den: [] }, "whole");
+    if (key === "dms") return insertBoxToken({ k: "dms" });
   }
 
   function menuKey(key) {
@@ -1426,22 +1746,42 @@ export function mountCalculator(host, opts = {}) {
       case "rad": return `<span class="calc-rad">${node.deg === 3 ? '<sup class="calc-rad-deg">3</sup>' : ""}<span class="calc-rad-sign">√</span><span class="calc-rad-body">${renderBox(node.body)}</span></span>`;
       case "xrt": return `<span class="calc-rad calc-xrt"><sup class="calc-rad-deg calc-rad-idx">${renderBox(node.idx)}</sup><span class="calc-rad-sign">√</span><span class="calc-rad-body">${renderBox(node.body)}</span></span>`;
       case "pow": return `<sup class="calc-pow-exp">${renderBox(node.exp)}</sup>`;
+      // ---- Build 4 ----
+      case "econst": return "e";
+      case "x10": return '<span class="calc-x10">×10</span>';
+      case "inv": return "⁻¹";
+      case "fact": return "!";
+      case "pct": return "%";
+      case "comb": return `<span class="calc-comb">${node.v}</span>`;   // the special C / P sign of nCr / nPr
+      case "logb": return `<span class="calc-logb">log<span class="calc-logb-base">${renderBox(node.base)}</span>(<span class="calc-logb-body">${renderBox(node.body)}</span>)</span>`;
+      case "abs": return `<span class="calc-abs"><span class="calc-abs-body">${renderBox(node.body)}</span></span>`;   // straight bars = the body's left and right borders, so they grow with what is inside
+      case "tenpow": return `<span class="calc-tenpow">10<sup class="calc-pow-exp">${renderBox(node.exp)}</sup></span>`;
+      case "epow": return `<span class="calc-tenpow">e<sup class="calc-pow-exp">${renderBox(node.exp)}</sup></span>`;
+      case "mixed": return `<span class="calc-mixed"><span class="calc-mixed-whole">${renderBox(node.whole)}</span><span class="calc-frac"><span class="calc-frac-num">${renderBox(node.num)}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${renderBox(node.den)}</span></span></span>`;
       default: return "";
     }
   }
   let cursorOn = true;   // the cursor hides while a result is on screen; ◀/▶ bring it back (Build 1)
+  /* Build 4: one °'" key types every mark; what it SHOWS depends on its
+     place in the number: 30 °'" 15 °'" shows 30°15' (spec §9), a third mark
+     shows ". */
+  const DMS_MARKS = ["°", "'", "\""];
   function renderBox(box) {
-    let html = "";
+    let html = "", dmsN = 0;
     for (let idx = 0; idx <= box.length; idx++) {
       if (cursorOn && box === S.cur.box && idx === S.cur.i) html += '<span class="calc-cursor"></span>';
-      if (idx < box.length) html += renderNode(box[idx]);
+      if (idx >= box.length) continue;
+      const node = box[idx];
+      if (node.k === "dms") { html += DMS_MARKS[Math.min(dmsN, 2)]; dmsN++; continue; }
+      if (node.k !== "d" && node.k !== "c") dmsN = 0;
+      html += renderNode(node);
     }
     if (box.length === 0 && box.__parent) html += '<span class="calc-slot"></span>';   // empty template box: dotted placeholder
     return html;
   }
 
   /* Status line (spec §16, last bullet): boxed S / A at the far left, then
-     M, STO, RCL, STAT (FREQ is Blipwork's own STAT tag), and on the right D
+     M, STO, RCL, STAT (FREQ is Blipwork's own STAT tag), FIX, and on the right D
      next to Math, with the ▲ / ▼ / ▲▼ history arrow at the far right. Every
      mark has its OWN fixed-width slot, like the segments of the real LCD, so
      a mark switching on or off never shifts any other mark sideways. */
@@ -1456,6 +1796,7 @@ export function mountCalculator(host, opts = {}) {
       slot("rcl", S.memPending === "rcl" ? "RCL" : "") +
       slot("stat", S.mode === "STAT" ? "STAT" : "") +
       slot("freq", S.mode === "STAT" && S.freqOn ? "FREQ" : "") +
+      slot("fix", S.fix != null ? "FIX" : "") +   // Build 4 (spec §7, §16)
       `<span class="ind-gap"></span>` +
       slot("drg", comp ? S.drg : "") +
       slot("math", comp ? "Math" : "") +

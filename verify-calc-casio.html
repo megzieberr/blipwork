@@ -97,7 +97,8 @@ function read(h) {
   }
   const fr = ex && ex.querySelector(".calc-frac");
   const ix = ex && ex.querySelector(".calc-rad-idx");
-  const IN = [["calc-frac-num", "num"], ["calc-frac-den", "den"], ["calc-rad-idx", "idx"], ["calc-rad-body", "body"], ["calc-pow-exp", "exp"]];
+  const IN = [["calc-frac-num", "num"], ["calc-frac-den", "den"], ["calc-rad-idx", "idx"], ["calc-rad-body", "body"], ["calc-pow-exp", "exp"],
+              ["calc-logb-base", "base"], ["calc-logb-body", "logbody"], ["calc-abs-body", "abs"], ["calc-mixed-whole", "whole"]];   // second row: Build 4 boxes
   const inBox = cur ? (IN.find(([cls]) => cur.parentElement.classList.contains(cls)) || [0, "line"])[1] : null;
   /* Build 3 field: resFrac — every stacked fraction in the RESULT as
      [top|bottom], so "one fraction over 4 with √6−√2 on top" can be told
@@ -112,7 +113,14 @@ function read(h) {
     const left = markOn ? mk.getBoundingClientRect().right : er.left;
     curVis = cr.left >= left - 0.5 && cr.right <= er.right + 0.5;
   }
+  /* Build 4 fields: mixed — a mixed-number RESULT as "whole top/bottom"
+     ("1 3/4"); title — a menu or prompt title ("Fix 0~9?"); menu — the menu
+     items' text; fix — the FIX tag in the status line */
+  const mx = res && res.querySelector(".calc-mixed");
+  const mixed = mx ? `${mx.textContent.startsWith("−") ? "−" : ""}${mx.querySelector(".calc-mixed-whole").textContent} ${mx.querySelector(".calc-frac-num").textContent}/${mx.querySelector(".calc-frac-den").textContent}` : "";
+  const ttl = h.querySelector(".lcd-title"), mnu = h.querySelector(".lcd-menu");
   return {
+    mixed, title: ttl ? ttl.textContent : "", menu: mnu ? mnu.textContent : "", fix: slot("fix"),
     expr: ex ? ex.textContent : "", res: res ? res.textContent : "", cur: before,
     sa: slot("sa"), m: slot("m") === "M", sto: slot("sto") === "STO", rcl: slot("rcl") === "RCL", hist: slot("hist"),
     val, resFrac, frac: fr ? `${fr.querySelector(".calc-frac-num").textContent}/${fr.querySelector(".calc-frac-den").textContent}` : "",
@@ -252,7 +260,8 @@ row("SHIFT lights a boxed S in the same spot", "§2", [["SHIFT", { sa: "S" }]]);
 row("ALPHA ALPHA = off", "§2", [["ALPHA ALPHA", { sa: "" }]]);
 row("SHIFT then ALPHA = ALPHA on, SHIFT off", "§2", [["SHIFT ALPHA", { sa: "A" }]]);
 row("ALPHA then a key with no red letter (7): nothing typed, ALPHA off", "§2", [["ALPHA 7", { expr: "", sa: "" }]]);
-row("ALPHA ×10^x: nothing typed yet (the constant e is Build 4), ALPHA off", "build brief", [["ALPHA ×10x", { expr: "", sa: "" }]]);
+// Build 4 changed this row: it read expr "" ("the constant e is Build 4"); spec §2 "×10^x → e" and §9 "ALPHA ×10^x = the constant e"
+row("ALPHA ×10^x types the constant e, ALPHA off", "§2 red letters, §9", [["ALPHA ×10x", { expr: "e", sa: "" }]]);
 row("ALPHA is ONE-SHOT: ALPHA (−) (−) types A then a minus", "§2", [["ALPHA (−)", { expr: "A", sa: "" }], ["(−)", { expr: "A−" }]]);
 [["(−)", "A"], ["°'\"", "B"], ["hyp", "C"], ["sin", "D"], ["cos", "E"], ["tan", "F"],
  [")", "X"], ["S⇔D", "Y"], ["M+", "M"], ["CALC", "="], ["∫", ":"]].forEach(([k, letter]) =>
@@ -681,6 +690,229 @@ function measureBuild3(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureBuild3(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 4 — more keys
+   (spec sections 6, 7, 8, 9 and 16)
+   ============================================================ */
+section("Build 4 · log, log□, ln and e (spec §9)");
+
+row("log(100 = 2", "§9 \"log(100 = 2\"", [["log 100", { expr: "log(100" }], ["=", { val: "2", resFrac: "" }]]);
+row("log(2 = 0,3010299957 (not whole: a decimal)", "foreman ruling: log is a decimal unless whole", [["log 2 =", { val: "0,3010299957" }]]);
+row("log□: the BASE box comes first", "§9 \"BASE box first\"", [["log□", { curIn: "base" }], ["2", { curIn: "base" }], ["▶", { curIn: "logbody" }], ["8", { expr: "log2(8)", curIn: "logbody" }]]);
+row("log₂(8) = 3 (the closing bracket is part of the template)", "§9", [["log□ 2 ▶ 8 =", { expr: "log2(8)", val: "3" }]]);
+row("log₂(½) = −1 and log₄(2) = 0,5 (whole only when it is whole)", "foreman ruling", [["log□ 2 ▶ 1 ÷ 2 =", { val: "−1" }], ["AC log□ 4 ▶ 2 =", { val: "0,5" }]]);
+row("ln(e = 1", "§9 \"ln(e = 1\"", [["ln ALPHA ×10x", { expr: "ln(e" }], ["=", { val: "1", resFrac: "" }]]);
+row("e alone = 2,718281828", "§6 \"e¹ = 2,718281828\": e is a decimal", [["ALPHA ×10x =", { expr: "e", val: "2,718281828" }]]);
+row("e multiplies implicitly like π: 2e = 5,436563657", "§9 \"multiplies implicitly like π\"", [["2 ALPHA ×10x =", { expr: "2e", val: "5,436563657" }]]);
+row("ln(1 = 0, ln(2 = 0,6931471806", "foreman ruling", [["ln 1 =", { val: "0" }], ["AC ln 2 =", { val: "0,6931471806" }]]);
+row("log(0 and log(−1 are Math ERROR", "Blipwork: no real logarithm, the existing Math ERROR rule", [["log 0 =", { res: "Math ERROR" }], ["AC log (−) 1 =", { res: "Math ERROR" }]]);
+{
+  const c = freshCalc(); c.press("log□");
+  const base = c.h.querySelector(".lcd-expr .calc-logb-base"), lg = c.h.querySelector(".lcd-expr .calc-logb");
+  const fb = parseFloat(getComputedStyle(base).fontSize), fl = parseFloat(getComputedStyle(lg).fontSize);
+  const b = base.getBoundingClientRect(), l = lg.getBoundingClientRect();
+  const sl = base.querySelector(".calc-slot").getBoundingClientRect();
+  tick(fb < fl && sl.bottom > l.top + l.height * 0.6, `the log□ base box is small and low <span class="why">[§9 "low, small"]</span>`,
+       `base ${fb}px vs ${fl}px; base slot bottom ${Math.round(sl.bottom - l.top)} of ${Math.round(l.height)} px down`);
+}
+
+section("Build 4 · 10^□ and e^□ (spec §6)");
+
+row("SHIFT log: 10^□, cursor in the power", "§6", [["SHIFT log", { expr: "10", curIn: "exp" }]]);
+row("10³ = 1000", "§6 \"10³ = 1000\"", [["SHIFT log 3 =", { val: "1000" }]]);
+row("10^(−2) = 1/100 (exact)", "§6, existing exact power rules", [["SHIFT log (−) 2 =", { val: "1/100" }]]);
+row("e¹ = 2,718281828", "§6 \"e¹ = 2,718281828\"", [["SHIFT ln", { expr: "e", curIn: "exp" }], ["1 =", { val: "2,718281828" }]]);
+row("ln(e^□(2)) = 2: a decimal that is whole shows as a whole number", "foreman ruling", [["ln SHIFT ln 2 =", { val: "2" }]]);
+row("2·10³ = 2000 (10^□ multiplies implicitly, it does not grab)", "Blipwork choice: only ▫/▫ and ˣ√ were measured grabbing", [["2 SHIFT log 3 =", { val: "2000" }]]);
+
+section("Build 4 · ×10^x (spec §9)");
+
+row("3 ×10 5 = 300000: one small ×10 glyph, digits typed inline", "§9", [["3 ×10x 5", { expr: "3×105", curIn: "line" }], ["=", { val: "300000" }]]);
+row("2,5×10⁻³ = 1/400", "§7 \"2,5×10⁻³ = 1/400\"", [["2 , 5 ×10x (−) 3 =", { val: "1/400", resFrac: "[1|400]" }]]);
+row("×10 binds to its own number: 1 ÷ 2×10 3 = 1/2000", "Blipwork reading: ×10 is part of the number", [["1 ÷ 2 ×10x 3 =", { val: "1/2000" }]]);
+row("×10 with no power digits: Syntax ERROR, Goto lands just before ×10", "Blipwork choice: not measured", [["3 ×10x =", { res: "Syntax ERROR" }], ["◀", { cur: "3" }]]);
+{
+  const c = freshCalc(); c.press("3 ×10x 5");
+  const ex = c.h.querySelector(".lcd-expr"), g = ex.querySelector(".calc-x10");
+  const fe = parseFloat(getComputedStyle(ex).fontSize), fg = parseFloat(getComputedStyle(g).fontSize);
+  tick(!!g && fg < fe && ex.querySelectorAll(".calc-pow-exp, .calc-slot").length === 0,
+       `×10^x inserts ONE small "×10" glyph, not a template <span class="why">[§9]</span>`, `×10 ${fg}px vs line ${fe}px`);
+}
+
+section("Build 4 · x⁻¹, x!, x³ (spec §1, §6, §9)");
+
+row("2 = then x⁻¹ shows Ans⁻¹ = ½", "§9 \"2, =, x⁻¹ → Ans⁻¹ = ½\"", [["2 = x⁻¹", { expr: "Ans⁻¹", res: "" }], ["=", { val: "1/2" }]]);
+row("4 x⁻¹ = ¼; 0 x⁻¹ = Math ERROR", "§9", [["4 x⁻¹ =", { expr: "4⁻¹", val: "1/4" }], ["AC 0 x⁻¹ =", { res: "Math ERROR" }]]);
+row("5! = 120", "§9 \"5! = 120\"", [["5 SHIFT x⁻¹", { expr: "5!" }], ["=", { val: "120" }]]);
+row("x! chains from Ans: 2+3 = then x! → Ans! = 120", "§1 \"x! … postfix too\"", [["2 + 3 = SHIFT x⁻¹", { expr: "Ans!" }], ["=", { val: "120" }]]);
+row("0! = 1; (−3)! and 2,5! are Math ERROR", "Blipwork: x! of whole numbers only", [["0 SHIFT x⁻¹ =", { val: "1" }], ["AC ( (−) 3 ) SHIFT x⁻¹ =", { res: "Math ERROR" }], ["AC 2 , 5 SHIFT x⁻¹ =", { res: "Math ERROR" }]]);
+row("20! = 2,432902008×10¹⁸ (exact, too long to show in full)", "§7 more than 10 digits", [["20 SHIFT x⁻¹ =", { val: "2,432902008×10^18" }]]);
+row("(√2)³ via x³ = 2√2", "§6", [["( √ 2 ▶ ) SHIFT x² =", { val: "2√2" }]]);
+
+section("Build 4 · nCr and nPr (spec §9)");
+
+row("5C2 = 10, with the special C sign", "§9 \"5C2 = 10\"", [["5 SHIFT ÷ 2", { expr: "5C2" }], ["=", { val: "10" }]]);
+row("5P2 = 20", "§9 \"5P2 = 20\"", [["5 SHIFT × 2", { expr: "5P2" }], ["=", { val: "20" }]]);
+row("2×5C2 = 20 (C binds tighter than ×)", "Blipwork choice: precedence not measured", [["2 × 5 SHIFT ÷ 2 =", { val: "20" }]]);
+row("5C6 and 5C(−1) are Math ERROR", "Blipwork: 0 ≤ r ≤ n", [["5 SHIFT ÷ 6 =", { res: "Math ERROR" }], ["AC 5 SHIFT ÷ (−) 1 =", { res: "Math ERROR" }]]);
+row("52C5 = 2598960 and 10P10 = 3628800", "exact BigInt", [["52 SHIFT ÷ 5 =", { val: "2598960" }], ["AC 10 SHIFT × 10 =", { val: "3628800" }]]);
+row("C after a result chains from Ans: 6 = then nCr 2 → AnsC2 = 15", "Blipwork choice: the + − × ÷ rule", [["6 = SHIFT ÷", { expr: "AnsC" }], ["2 =", { val: "15" }]]);
+{
+  const c = freshCalc(); c.press("5 SHIFT ÷ 2");
+  const s = c.h.querySelector(".lcd-expr .calc-comb");
+  c.press("AC ALPHA hyp");
+  tick(!!s && s.textContent === "C" && !c.h.querySelector(".lcd-expr .calc-comb"),
+       `the nCr sign is its own glyph, not the letter C <span class="why">[§9 "special C sign"]</span>`, `sign ${s ? "found" : "missing"}`);
+}
+
+section("Build 4 · % and Abs (spec §9)");
+
+row("20%×50 = 10", "§9 \"20%×50 = 10\"", [["20 SHIFT (", { expr: "20%" }], ["× 50 =", { val: "10" }]]);
+row("20% = 1/5 (exact)", "foreman ruling", [["20 SHIFT ( =", { val: "1/5" }]]);
+row("% chains from Ans: 50 = then % → Ans% = ½", "§1 \"% … postfix too\"", [["50 = SHIFT (", { expr: "Ans%" }], ["=", { val: "1/2" }]]);
+row("|−5| = 5", "§9 \"|−5| = 5\"", [["SHIFT hyp", { curIn: "abs" }], ["(−) 5 =", { val: "5" }]]);
+row("|2−√5| = −2+√5 (exact)", "Blipwork: Abs keeps the exact value", [["SHIFT hyp 2 − √ 5 =", { val: "−2+√5" }]]);
+{
+  const c = freshCalc(); c.press("SHIFT hyp (−) 5");
+  const body = c.h.querySelector(".lcd-expr .calc-abs-body"), cs = body && getComputedStyle(body);
+  const r = body && body.getBoundingClientRect();
+  tick(!!body && cs.borderLeftStyle === "solid" && cs.borderRightStyle === "solid" && parseFloat(cs.borderLeftWidth) > 0 && r.height > 10 && body.textContent === "−5",
+       `Abs is a template |□| with straight bars on both sides <span class="why">[§9]</span>`, body ? `bars ${cs.borderLeftWidth} / ${cs.borderRightWidth}, ${Math.round(r.height)} px tall, inside "${body.textContent}"` : "no template");
+}
+
+section("Build 4 · °'\" (spec §9)");
+
+row("30 °'\" 15 °'\" shows 30°15'; = gives 30°15'0\"", "§9", [["30 °'\" 15 °'\"", { expr: "30°15'" }], ["=", { val: "30°15'0\"" }]]);
+row("°'\" on that result gives 30,25, and again goes back", "§9 \"(and back)\"", [["30 °'\" 15 °'\" =", { val: "30°15'0\"" }], ["°'\"", { val: "30,25" }], ["°'\"", { val: "30°15'0\"" }]]);
+row("°'\" acts ON a result, it does not start a new line", "§1", [["30 °'\" 15 °'\" = °'\"", { expr: "30°15'", val: "30,25" }]]);
+row("a third mark shows \": 30°15'36\" = 30°15'36\", then 30,26", "§9 entry form", [["30 °'\" 15 °'\" 36 °'\"", { expr: "30°15'36\"" }], ["=", { val: "30°15'36\"" }], ["°'\"", { val: "30,26" }]]);
+row("°'\" mixed with other operations: a plain decimal, 30°15' + 1 = 31,25", "Blipwork choice: not measured (brief §H)", [["30 °'\" 15 °'\" + 1 =", { val: "31,25" }]]);
+row("°'\" on any other result shows it in °'\" form: 2,5 → 2°30'0\"", "§1 \"°'\" acts ON the result (toggle its form)\"", [["5 ÷ 2 =", { val: "5/2" }], ["°'\"", { val: "2°30'0\"" }], ["°'\"", { val: "2,5" }]]);
+row("▲ brings a °'\" answer back in its °'\" form", "§1 history", [["30 °'\" 15 °'\" = 1 + 1 = ▲", { expr: "30°15'", val: "30°15'0\"" }]]);
+row("Ans keeps the exact value: 30°15' = then ×4 = 121", "§1 Ans", [["30 °'\" 15 °'\" = × 4 =", { val: "121" }]]);
+
+section("Build 4 · mixed fractions and SHIFT S⇔D (spec §7, §8)");
+
+row("SHIFT ▫/▫: the whole box first, then top, then bottom", "§8", [["SHIFT frac", { curIn: "whole" }], ["1 ▶", { curIn: "num" }], ["3 ▼", { curIn: "den" }]]);
+row("1¾ = gives 7/4 (improper by default)", "§8", [["SHIFT frac 1 ▶ 3 ▼ 4 ▶ =", { val: "7/4", mixed: "" }]]);
+row("1¾: S⇔D → 1,75; SHIFT S⇔D → 1¾", "§8", [["SHIFT frac 1 ▶ 3 ▼ 4 ▶ =", { val: "7/4" }], ["S⇔D", { val: "1,75" }], ["SHIFT S⇔D", { mixed: "1 3/4" }]]);
+row("100÷3 = 100/3; SHIFT S⇔D → 33⅓, and back", "§8", [["100 ÷ 3 =", { val: "100/3" }], ["SHIFT S⇔D", { mixed: "33 1/3" }], ["SHIFT S⇔D", { val: "100/3", mixed: "" }]]);
+row("round trip: 7/4 → 1¾ → 7/4 → 1,75 → 7/4", "§7 \"SHIFT S⇔D toggles improper ↔ mixed\"", [
+  ["7 ÷ 4 =", { val: "7/4" }], ["SHIFT S⇔D", { mixed: "1 3/4" }], ["SHIFT S⇔D", { val: "7/4", mixed: "" }], ["S⇔D", { val: "1,75" }], ["S⇔D", { val: "7/4" }],
+]);
+row("S⇔D from the mixed form goes to the decimal, then the improper fraction", "Blipwork choice: not measured", [["7 ÷ 4 = SHIFT S⇔D", { mixed: "1 3/4" }], ["S⇔D", { val: "1,75", mixed: "" }], ["S⇔D", { val: "7/4" }]]);
+row("SHIFT S⇔D on ⅔, on 5 and on √2 does nothing (no mixed form)", "§7", [["2 ÷ 3 = SHIFT S⇔D", { val: "2/3", mixed: "" }], ["AC 5 = SHIFT S⇔D", { val: "5" }], ["AC √ 2 = SHIFT S⇔D", { val: "√2" }]]);
+row("−7/4 → SHIFT S⇔D → −1¾", "Blipwork: the minus in front", [["(−) 7 ÷ 4 = SHIFT S⇔D", { mixed: "−1 3/4" }]]);
+
+section("Build 4 · Fix and Norm (spec §7, §16)");
+
+row("SETUP page 1 now ends 7:Sci 8:Norm", "§16", [["SHIFT MODE", { menu: "1:MthIO2:LineIO3:Deg4:Rad5:Gra6:Fix7:Sci8:Norm" }]]);
+row("SETUP 6 asks Fix 0~9?; a digit sets it and FIX lights", "§16, §7", [["SHIFT MODE 6", { title: "Fix 0~9?", fix: "" }], ["2", { title: "", fix: "FIX", expr: "" }]]);
+row("Fix 2: 2÷3 is still ⅔, S⇔D → 0,67", "§7", [["SHIFT MODE 6 2 2 ÷ 3 =", { val: "2/3", fix: "FIX" }], ["S⇔D", { val: "0,67" }]]);
+row("Fix 2: sin(40 = 0,64", "§7", [["SHIFT MODE 6 2 sin 40 =", { val: "0,64" }]]);
+row("Fix rounds half up on the exact value: Fix 2, 1,005 S⇔D → 1,01", "Blipwork: decimal rounding", [["SHIFT MODE 6 2 1 , 005 = S⇔D", { val: "1,01" }]]);
+row("Fix 0: 2÷3 S⇔D → 1", "§7 Fix 0~9", [["SHIFT MODE 6 0 2 ÷ 3 = S⇔D", { val: "1" }]]);
+row("SETUP 8 asks Norm 1~2?; 2 leaves Fix and the old display returns", "§16, foreman ruling", [
+  ["SHIFT MODE 6 2 2 ÷ 3 = S⇔D", { val: "0,67", fix: "FIX" }],
+  ["SHIFT MODE 8", { title: "Norm 1~2?" }],
+  ["2", { fix: "", val: "0,6666666667" }],
+  ["AC sin 40 =", { val: "0,6427876097" }],
+]);
+row("Norm 1 is accepted and shows like Norm 2 for now: 1÷2000 S⇔D = 0,0005", "foreman ruling (no Norm 1 measurements)", [["SHIFT MODE 6 3 SHIFT MODE 8 1", { fix: "" }], ["1 ÷ 2000 = S⇔D", { val: "0,0005" }]]);
+row("Norm prompt: 3 does nothing, the prompt stays", "§16 \"Norm 1~2?\"", [["SHIFT MODE 8 3", { title: "Norm 1~2?" }]]);
+row("AC cancels the Fix prompt without changing anything", "§16 \"AC cancels without changing\"", [["SHIFT MODE 6 AC", { title: "", fix: "" }], ["2 ÷ 3 = S⇔D", { val: "0,6666666667" }]]);
+row("AC cancels the Norm prompt: Fix stays on", "§16", [["SHIFT MODE 6 2 SHIFT MODE 8 AC", { title: "", fix: "FIX" }]]);
+row("CLR 1 (Setup) puts Fix back to Norm 2", "brief §J", [["SHIFT MODE 6 2 SHIFT 9 1", { title: "Reset Setup?" }], ["=", { fix: "" }], ["2 ÷ 3 = S⇔D", { val: "0,6666666667" }]]);
+row("CLR 3 (All) puts Fix back to Norm 2", "brief §J", [["SHIFT MODE 6 2 SHIFT 9 3 =", { fix: "" }]]);
+row("Fix does not touch exact answers: Fix 2, 1÷4 = ¼ and √8 = 2√2", "§7 \"only rounds DECIMAL display\"", [["SHIFT MODE 6 2 1 ÷ 4 =", { val: "1/4" }], ["AC √ 8 =", { val: "2√2" }]]);
+row("Fix 2 on a STAT read-off: x̄ of 1, 1, 2 = 1,33", "foreman ruling: Fix may change read-offs only when it is on", [["SHIFT MODE 6 2 MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33" }]]);
+row("Fix on, then Norm: the STAT read-off text is the old 1,33333333 again", "foreman ruling: STAT unchanged", [["SHIFT MODE 6 2 SHIFT MODE 8 2 MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33333333", fix: "" }]]);
+
+section("Build 4 · the keys still work as STO / RCL / ALPHA letters (Build 1)");
+
+row("hyp is still C: STO, ALPHA and RCL", "§2 red letters", [["7 SHIFT RCL hyp", { expr: "7→C", val: "7" }], ["ALPHA hyp =", { expr: "C", val: "7" }], ["RCL hyp", { expr: "C", val: "7" }]]);
+row("°'\" is still B: STO, ALPHA and RCL", "§2", [["9 SHIFT RCL °'\"", { expr: "9→B", val: "9" }], ["ALPHA °'\" =", { expr: "B", val: "9" }], ["RCL °'\"", { expr: "B", val: "9" }]]);
+row("(−) A, sin D, cos E, tan F, ) X, S⇔D Y, M+ M still type their letters", "§2", [["ALPHA (−) ALPHA sin ALPHA cos ALPHA tan ALPHA ) ALPHA S⇔D ALPHA M+", { expr: "ADEFXYM", sa: "" }]]);
+row("SHIFT hyp is Abs while ALPHA hyp is C", "§2, §9", [["SHIFT hyp", { curIn: "abs" }], ["AC ALPHA hyp", { expr: "C" }]]);
+row("ALPHA on a key with no red letter (log, x⁻¹, log□) types nothing", "§2", [["ALPHA log ALPHA x⁻¹ ALPHA log□", { expr: "", sa: "" }]]);
+row("STO into C, then 2C with the Abs template beside it: |−3|C = 21", "§2 implicit ×", [["7 SHIFT RCL hyp SHIFT hyp (−) 3 ▶ ALPHA hyp =", { val: "21" }]]);
+
+section("Build 4 · skipped keys do nothing (her ruling: not school use)");
+
+row("hyp, ENG, ∫ and SHIFT log□ / °'\" / ) type nothing", "brief SKIP list", [["hyp ENG ∫ SHIFT log□ SHIFT °'\" SHIFT )", { expr: "", sa: "" }]]);
+row("Pol, Rec, CONST, CONV, Rnd, Ran#, DRG▶ (SHIFT + − 7 8 0 , Ans) type nothing", "brief SKIP list", [["SHIFT + SHIFT − SHIFT 7 SHIFT 8 SHIFT 0 SHIFT , SHIFT Ans", { expr: "", sa: "" }]]);
+row("INS (SHIFT DEL) does nothing", "brief SKIP list", [["2 + 3 SHIFT DEL", { expr: "2+3", cur: "2+3" }]]);
+row("the STAT data grid still takes SHIFT 7 as 7, as before", "foreman ruling: STAT unchanged", [["MODE 3 1 SHIFT 7 = AC SHIFT 1 4 2 =", { res: "7" }]]);
+
+/* ---- DOM measurements at 375 px: the FIX tag in the busiest status line,
+   the new templates on the entry line, the new result forms, the prompts ---- */
+section("Build 4 · new marks, templates and forms fit (DOM measurement)");
+function measureBuild4(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  // (1) the busiest status line, now with FIX: A, M, STO, STAT, FREQ, FIX, D, Math, ▲▼
+  press("ON AC SHIFT 9 3 = SHIFT MODE ▼ 4 1 MODE 3 1 AC");
+  const box = n => h.querySelector(`.calc-ind .ind-${n}`).getBoundingClientRect();
+  const base = { stat: box("stat").left, drg: box("drg").left, math: box("math").left };
+  press("SHIFT MODE 6 2 5 M+ 1 = 2 = 3 = ▲ SHIFT RCL ALPHA");
+  const ind = h.querySelector(".calc-ind");
+  const lit = ["sa", "m", "sto", "stat", "freq", "fix", "drg", "math", "hist"];
+  const texts = lit.map(n => h.querySelector(`.calc-ind .ind-${n}`).textContent);
+  const clipped = lit.filter(n => { const s = h.querySelector(`.calc-ind .ind-${n}`); return s.scrollWidth > s.clientWidth + 0.5; });
+  const tops = new Set(lit.map(n => Math.round(box(n).top)));
+  const moved = ["stat", "drg", "math"].filter(n => Math.abs(box(n).left - base[n]) > 0.5);
+  tick(texts.every(Boolean) && texts[5] === "FIX" && tops.size === 1 && clipped.length === 0 && ind.scrollWidth <= ind.clientWidth + 0.5 && moved.length === 0,
+       `${where}: A, M, STO, STAT, FREQ, FIX, D, Math, ▲▼ all lit on one line, nothing clipped, STAT/D/Math unmoved`,
+       `"${texts.join(" | ")}", ${Math.round(ind.getBoundingClientRect().width)} px line, content ${ind.scrollWidth} px, clipped: ${clipped.join(",") || "none"}, moved: ${moved.join(",") || "none"}`);
+  press("ON AC SHIFT 9 3 =");
+  // (2) each new template, alone on the entry line, sits inside the LCD and the line does not overflow
+  for (const [keys, sel, what] of [["log□", ".calc-logb", "log□(□)"], ["SHIFT hyp", ".calc-abs", "|□|"], ["SHIFT frac", ".calc-mixed", "□ □/□"],
+                                   ["SHIFT log", ".calc-tenpow", "10^□"], ["SHIFT ln", ".calc-tenpow", "e^□"], ["5 SHIFT ÷ 2", ".calc-comb", "5C2"], ["3 ×10x 5", ".calc-x10", "3×10 5"]]) {
+    press("AC " + keys);
+    const t = h.querySelector(".lcd-expr " + sel), ex = h.querySelector(".lcd-expr");
+    tick(!!t && inside(t) && ex.scrollWidth <= ex.clientWidth + 0.5, `${where}: ${what} on the entry line sits inside the LCD`,
+         t ? `line ${ex.scrollWidth}/${ex.clientWidth} px` : "not rendered");
+  }
+  // (3) the new result forms fit the result line, inside the LCD
+  for (const [keys, want, field] of [["30 °'\" 15 °'\" 36 °'\" =", "30°15'36\"", "val"], ["100 ÷ 3 = SHIFT S⇔D", "33 1/3", "mixed"], ["SHIFT MODE 6 9 2 ÷ 3 = S⇔D", "0,666666667", "val"]]) {
+    press("AC " + keys);
+    const g = read(h), res = h.querySelector(".lcd-res");
+    tick(g[field] === want && res.scrollWidth <= res.clientWidth + 0.5 && inside(res), `${where}: ${want} fits the result line, inside the LCD`,
+         `"${g[field]}", line ${res.scrollWidth}/${res.clientWidth} px`);
+  }
+  // (4) SETUP page 1 with 8:Norm keeps its four rows (two columns, spec §16) inside the LCD;
+  //     the two prompts sit inside the LCD and do not change its height
+  press("AC");
+  const h0 = L().height;
+  press("SHIFT MODE");
+  const items = [...h.querySelectorAll(".lcd-mi")];
+  const rows = new Set(items.map(i => Math.round(i.getBoundingClientRect().top))).size;
+  const lastTwo = items.slice(-2).map(i => i.textContent).join(" ");
+  tick(items.length === 8 && rows === 4 && lastTwo === "7:Sci 8:Norm" && items.every(inside) && [...h.querySelectorAll(".calc-main > *")].every(inside),
+       `${where}: SETUP page 1 shows 8 items in 4 rows, 7:Sci 8:Norm last, all inside the LCD`, `${items.length} items, ${rows} rows, last row "${lastTwo}"`);
+  press("AC");
+  for (const [keys, label] of [["SHIFT MODE 6", "the Fix 0~9? prompt"], ["SHIFT MODE 8", "the Norm 1~2? prompt"]]) {
+    press(keys);
+    const parts = [...h.querySelectorAll(".calc-main > *")];
+    tick(parts.length > 0 && parts.every(inside) && Math.abs(L().height - h0) < 0.5, `${where}: ${label} sits inside the LCD and does not change its height`,
+         `${parts.length} parts, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+    press("AC");
+  }
+  press("SHIFT 9 3 = AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild4(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild4(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 

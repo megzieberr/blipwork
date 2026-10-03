@@ -624,6 +624,7 @@ h2{font-size:20px} h3{font-size:17px}
 .calc-ind .ind-m{width:11px}
 .calc-ind .ind-sto,.calc-ind .ind-rcl{width:25px}
 .calc-ind .ind-stat,.calc-ind .ind-freq{width:32px}
+.calc-ind .ind-fix{width:25px}   /* Build 4: the FIX tag (SETUP Fix 0~9) */
 .calc-ind .ind-gap{flex:1 1 auto;min-width:0}
 .calc-ind .ind-drg{width:11px}
 .calc-ind .ind-math{width:32px}
@@ -668,6 +669,13 @@ h2{font-size:20px} h3{font-size:17px}
 .calc-pow-exp{font-size:.68em;line-height:1;vertical-align:super;padding:0 1px}
 .calc-slot{display:inline-block;width:.65em;height:.85em;border:1.3px dashed currentColor;border-radius:1px;opacity:.6;vertical-align:middle;margin:0 1px}
 .calc-cursor{display:inline-block;width:0;border-left:1.4px solid currentColor;height:1em;vertical-align:middle;margin:0 -.5px;animation:calc-blink 1s step-end infinite}
+/* calculator Build 4: log□ (base low and small), |□| (straight bars that grow
+   with what is inside), the nCr / nPr sign, the mixed number's whole part.
+   10^□ and e^□ reuse .calc-pow-exp; the ×10 glyph reuses .calc-x10. */
+.calc-logb-base{font-size:.68em;line-height:1;vertical-align:sub;padding:0 1px}
+.calc-abs-body{display:inline-block;border-left:1.4px solid currentColor;border-right:1.4px solid currentColor;padding:0 2px;margin:0 1px;line-height:1.15}
+.calc-comb{font-weight:700;font-size:1.05em;padding:0 1px}
+.calc-mixed-whole{padding-right:1px}
 @keyframes calc-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
 .calc-pad{display:flex;flex-direction:column;gap:8px}
