@@ -629,8 +629,20 @@ h2{font-size:20px} h3{font-size:17px}
 .calc-ind .ind-math{width:32px}
 .calc-ind .ind-hist{width:22px;text-align:right;letter-spacing:0}
 .calc-main{flex:1;display:flex;flex-direction:column;justify-content:center}
-.lcd-expr{font-size:13px;min-height:16px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;max-width:100%}
+.lcd-expr{font-size:13px;min-height:16px;overflow-x:hidden;overflow-y:hidden;white-space:nowrap;max-width:100%}
 .lcd-res{font-size:24px;text-align:right;font-weight:700;min-height:28px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;max-width:100%}
+/* calculator Build 2: a long entry line scrolls with the cursor (the code
+   sets scrollLeft) and a ◀ at the left edge marks hidden content (spec §1) */
+.lcd-line{position:relative;min-width:0;max-width:100%}
+.lcd-lmark{position:absolute;left:0;top:0;bottom:0;z-index:1;display:flex;align-items:center;padding-right:2px;font-size:9px;line-height:1;background:#b8c6ae}
+.lcd-lmark[hidden]{display:none}
+/* the three-line error screen (spec §3): Syntax ERROR / [AC] :Cancel / [◀][▶]:Goto */
+.lcd-err{display:flex;flex-direction:column;gap:3px}
+.lcd-res.lcd-err-msg{font-size:15px;text-align:left;min-height:0}
+.lcd-err-line{font-size:12px;white-space:nowrap}
+/* big/small decimals: a small "×10" and a raised power (spec §7) */
+.calc-x10{font-size:.62em;margin-left:1px}
+.calc-x10-exp{font-size:.55em;line-height:0;vertical-align:super}
 .lcd-title{font-size:12px;font-weight:700;margin-bottom:3px}
 .lcd-menu{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;font-size:12px}
 .lcd-ov{border-top:1px solid currentColor;display:inline-block;line-height:1.05}   /* mean: bar above the x */
@@ -650,6 +662,7 @@ h2{font-size:20px} h3{font-size:17px}
 .calc-frac-bar{display:block;width:100%;height:0;border-top:1.4px solid currentColor;margin:1px 0}
 .calc-rad{display:inline-flex;align-items:flex-start;vertical-align:middle;margin:0 1px}
 .calc-rad-deg{font-size:.55em;line-height:1;margin-right:-.3em;position:relative;top:-.3em}
+.calc-rad-idx{margin-right:0}   /* ˣ√ index box (Build 2): small, upper left, holds a typed slot so it may not overlap the √ */
 .calc-rad-sign{font-size:1em;line-height:1}
 .calc-rad-body{display:inline-block;border-top:1.4px solid currentColor;padding:0 2px 0 1px;margin-top:2px}
 .calc-pow-exp{font-size:.68em;line-height:1;vertical-align:super;padding:0 1px}

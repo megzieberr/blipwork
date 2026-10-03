@@ -146,6 +146,11 @@ const lcdShow = s => escapeHtml(s).replace(/x̄/g, MEAN_GLYPH);   // x + combini
    no exact surd type here, so they always fall back to float (this
    matches the brief: "anything that leaves the (a/b)√n form falls
    back to float").
+   Calculator rebuild Build 2 (2026-10-04, CASIO-CALCULATOR-SPEC.md §1,
+   §3, §4, §7, §8): a missing ")" at the end of a box is closed for you;
+   ▫/▫ and ˣ√ grab the operand before the cursor; x² / x^ / x³ chain from
+   Ans; three-line error screens with Goto; the fraction size limit; Norm 2
+   decimals with 10 significant digits and the ×10 form; the long-line ◀.
    ============================================================ */
 class SyntaxErr extends Error {}
 
@@ -246,6 +251,32 @@ function vCbrt(a) {   // no exact cube-surd type — always float, matches the b
   if (isErr(a)) return a;
   return VFLOAT(Math.cbrt(toFloatV(a)));
 }
+/* exact k-th root of a BigInt a ≥ 0, or null when a is not a perfect k-th power */
+function intRoot(a, k) {
+  if (a < 2n) return a;
+  const approx = Math.round(Math.pow(Number(a), 1 / k));
+  if (!Number.isFinite(approx)) return null;
+  const r = BigInt(approx), K = BigInt(k);
+  for (const c of [r - 1n, r, r + 1n]) if (c >= 0n && c ** K === a) return c;
+  return null;
+}
+/* ˣ√ (SHIFT x^, calculator Build 2, spec §6/§8): the index-th root of the
+   radicand. Index 2 is exactly the √ key (exact surds); a whole-number
+   index whose radicand is a perfect power of it gives the exact rational
+   root (⁴√16 = 2); everything else is a decimal, the existing value rules.
+   Odd roots of NEGATIVES are Build 3 and give Math ERROR here, as x^
+   already does for (−8)^(⅓). */
+function vXroot(idx, x) {
+  if (isErr(idx)) return idx; if (isErr(x)) return x;
+  if (idx.kind === "rat" && idx.d === 1n && idx.n === 2n) return vSqrt(x);
+  if (idx.kind === "rat" && idx.d === 1n && idx.n > 0n && idx.n <= 64n && x.kind === "rat" && x.n >= 0n) {
+    const k = Number(idx.n), rn = intRoot(x.n, k), rd = intRoot(x.d, k);
+    if (rn !== null && rd !== null) return mkRat(rn, rd);
+  }
+  const n = toFloatV(idx);
+  if (n === 0) return VERR("Math ERROR");
+  return VFLOAT(Math.pow(toFloatV(x), 1 / n));
+}
 function valuesEqual(a, b) {
   if (isErr(a) || isErr(b)) return false;
   if (a.kind === "float" || b.kind === "float") return Math.abs(toFloatV(a) - toFloatV(b)) < 1e-9;
@@ -319,34 +350,72 @@ function formatExactHTML(v) {
   const numStr = (an === 1n ? "" : an.toString()) + radStr;
   return (neg ? "−" : "") + `<span class="calc-frac"><span class="calc-frac-num">${numStr}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${v.d}</span></span>`;
 }
+/* Decimal display, calculator Build 2 (spec §7, Norm 2 = the factory
+   setting): 10 significant digits, rounded (2/3 → 0,6666666667). A number
+   with more than 10 digits switches to ×10 form, a small "×10" and a raised
+   power (2^40 → 1,099511628×10¹²); small numbers stay plain decimals down
+   to 10⁻⁹ (1/2000 → 0,0005, not 5×10⁻⁴) and only switch below that.
+   Trailing zeros are dropped. Returns HTML (the ×10 form has markup).
+   STAT read-offs do NOT come through here: they keep fmtNum, unchanged. */
 function formatDecimal(v) {
   if (v.kind === "error") return escapeHtml(v.msg);
   const f = toFloatV(v);
   if (!Number.isFinite(f)) return "Math ERROR";
   if (f === 0) return "0";
-  let s = Math.abs(f) > 0 && (Math.abs(f) < 1e-9 || Math.abs(f) >= 1e15) ? f.toString() : f.toPrecision(10);
-  if (/e/i.test(s)) s = f.toString();
-  if (s.includes(".")) { s = s.replace(/0+$/, ""); s = s.replace(/\.$/, ""); }
-  s = s.replace(".", ",").replace("-", "−");
-  return s;
+  const sign = f < 0 ? "−" : "";
+  const [m, ex] = Math.abs(f).toExponential(9).split("e");   // ONE rounding, to 10 significant digits
+  const e = Number(ex), digits = m.replace(".", "");
+  if (e >= 10 || e < -9) {
+    const tail = digits.slice(1).replace(/0+$/, "");
+    return `${sign}${digits[0]}${tail ? "," + tail : ""}<span class="calc-x10">×10</span><sup class="calc-x10-exp">${e < 0 ? "−" : ""}${Math.abs(e)}</sup>`;
+  }
+  const ip = e >= 0 ? digits.slice(0, e + 1) : "0";
+  const fp = (e >= 0 ? digits.slice(e + 1) : "0".repeat(-e - 1) + digits).replace(/0+$/, "");
+  return sign + ip + (fp ? "," + fp : "");
 }
+/* Spec §7: a fraction shows only while digits(top) + digits(bottom) + 1 is
+   10 or less (1234/56789 yes, 12345/67891 → 0,1818355894), and a whole
+   number only while it has at most 10 digits. Past that the SAME exact
+   value shows as a decimal, and S⇔D has nothing to toggle to. Surds keep
+   their exact form here: the surd size limit is Build 3. */
+const digitCount = b => (b < 0n ? -b : b).toString().length;
+function exactFits(v) {
+  if (v.kind === "surd") return true;
+  if (v.kind !== "rat") return false;
+  return v.d === 1n ? digitCount(v.n) <= 10 : digitCount(v.n) + digitCount(v.d) + 1 <= 10;
+}
+const formatValue = (v, dec) => (dec || !exactFits(v)) ? formatDecimal(v) : formatExactHTML(v);
 
-/* ---- token box compile + recursive-descent parse (no implicit ×) ---- */
+/* ---- token box compile + recursive-descent parse (no implicit ×) ----
+   Build 2: every compiled token remembers `src`, its index in the box the
+   learner typed, so a Syntax ERROR can say WHERE it happened and ◀/▶
+   (Goto) can put the cursor just before that token (spec §3). The copies
+   share the template sub-box arrays, so a position inside a fraction or a
+   root points at the live box on screen. */
 function compileBox(box) {
   const out = [];
   let i = 0;
   while (i < box.length) {
     const t = box[i];
     if (t.k === "d" || t.k === "c") {
-      let s = "";
+      const src = i; let s = "";
       while (i < box.length && (box[i].k === "d" || box[i].k === "c")) { s += box[i].k === "c" ? "." : box[i].v; i++; }
-      out.push({ k: "num", v: s });
+      out.push({ k: "num", v: s, src });
       continue;
     }
-    out.push(t); i++;
+    out.push({ ...t, src: i }); i++;
   }
   return out;
 }
+/* a Syntax ERROR at the parser's current token (or at `at`, a box index);
+   at the end of the box the position is the box's end */
+function synErr(st, at) {
+  const e = new SyntaxErr(), t = st.arr[st.pos];
+  e.at = { box: st.box, i: at != null ? at : t ? t.src : st.box.length };
+  return e;
+}
+/* in a malformed number like 1,2,3 the error sits at the second comma */
+const badCommaAt = s => { const a = s.indexOf("."), b = a < 0 ? -1 : s.indexOf(".", a + 1); return b > a ? b : 0; };
 function numToValue(str) {
   if (!str || str === ".") throw new SyntaxErr();
   const parts = str.split(".");
@@ -402,7 +471,7 @@ function parseUnary(st, ctx) {
 /* Build 1 (spec §2): a variable letter is an implicit-× trigger too, so
    `2A²` with A = 5 gives 50 (the ² binds to A inside parsePower first,
    then the 2 multiplies) and `AB` is A×B. */
-const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "ans" || t.k === "var");
+const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "xrt" || t.k === "ans" || t.k === "var");
 function parseImplicit(st, ctx) {
   let left = parsePower(st, ctx);
   for (;;) {
@@ -424,15 +493,28 @@ function parsePower(st, ctx) {
 }
 function parseAtom(st, ctx) {
   const t = peek(st);
-  if (!t) throw new SyntaxErr();
-  if (t.k === "num") { next(st); return numToValue(t.v); }
-  if (t.k === "(") { next(st); const v = parseExpr(st, ctx); const c = peek(st); if (!c || c.k !== ")") throw new SyntaxErr(); next(st); return v; }
-  if (t.k === "func") { next(st); const inner = parseExpr(st, ctx); const c = peek(st); if (!c || c.k !== ")") throw new SyntaxErr(); next(st); return applyFunc(t.name, t.inv, inner, ctx.drg); }
+  if (!t) throw synErr(st);
+  if (t.k === "num") { let v; try { v = numToValue(t.v); } catch { throw synErr(st, t.src + badCommaAt(t.v)); } next(st); return v; }
+  if (t.k === "(") { next(st); const v = parseExpr(st, ctx); closeBracket(st); return v; }
+  if (t.k === "func") { next(st); const inner = parseExpr(st, ctx); closeBracket(st); return applyFunc(t.name, t.inv, inner, ctx.drg); }
   if (t.k === "ans") { next(st); return ctx.ans; }
   if (t.k === "var") { next(st); return (ctx.vars && ctx.vars[t.name]) || mkRat(0n, 1n); }   // A–F, X, Y, M (spec §2: all start at 0)
   if (t.k === "frac") { next(st); const num = parseSubExpr(t.num, ctx); const den = parseSubExpr(t.den, ctx); return vDiv(num, den); }
   if (t.k === "rad") { next(st); const body = parseSubExpr(t.body, ctx); return t.deg === 3 ? vCbrt(body) : vSqrt(body); }
-  throw new SyntaxErr();
+  if (t.k === "xrt") { next(st); const idx = parseSubExpr(t.idx, ctx); const body = parseSubExpr(t.body, ctx); return vXroot(idx, body); }
+  throw synErr(st);
+}
+/* Build 2 (spec §4, "very important"): a missing ")" at the END of a box
+   counts as closed, because the device closes every open bracket: sin(30 = ½,
+   (2+3 = 5, and sin(30+1 = sin(31), the open bracket swallowing the rest.
+   "The end of a box" is the end of the line or of a template box (a
+   fraction's top, a root's body, an exponent). Anything else where the ")"
+   should be is still a Syntax ERROR, and so are 2+3) and (2+3)4. */
+function closeBracket(st) {
+  const c = peek(st);
+  if (!c) return;
+  if (c.k !== ")") throw synErr(st);
+  next(st);
 }
 /* FIX 2 (audit result below) — parse a BOUNDED token box (a frac num/den, a
    rad body, a pow exp, or the whole top-level entry line) and require that
@@ -447,14 +529,16 @@ function parseAtom(st, ctx) {
    this one function, so a leftover/un-understood token ALWAYS surfaces as
    Syntax ERROR instead of silently vanishing. */
 function parseSubExpr(box, ctx) {
-  const st = { arr: compileBox(box), pos: 0 };
+  const st = { arr: compileBox(box), pos: 0, box };
   const v = parseExpr(st, ctx);
-  if (st.pos !== st.arr.length) throw new SyntaxErr();
+  if (st.pos !== st.arr.length) throw synErr(st);
   return v;
 }
+/* A Syntax ERROR value carries `at` = { box, i }: the cursor position just
+   BEFORE the token that caused it (Build 2, spec §3 Goto). */
 function evalBox(box, ctx) {
   try { return parseSubExpr(box, ctx); }
-  catch { return VERR("Syntax ERROR"); }
+  catch (e) { const r = VERR("Syntax ERROR"); r.at = (e && e.at) || null; return r; }
 }
 
 /* ---- Build 1: variables and history helpers ---- */
@@ -474,16 +558,41 @@ const MAX_HISTORY = 30;
 /* Deep copy of an entry box, re-linking every template sub-box to its new
    parent (same __parent/__owner/__pkey linkage insertTemplate sets up), so a
    history entry can be shown and edited without the edit touching history. */
+const SUB_KEYS = ["num", "den", "body", "exp", "idx"];   // every template sub-box key (idx = the ˣ√ index, Build 2)
 function cloneBox(box) {
   const out = [];
   for (const t of box) {
     const c = { ...t };
-    for (const key of ["num", "den", "body", "exp"]) {
+    for (const key of SUB_KEYS) {
       if (Array.isArray(t[key])) { const sub = cloneBox(t[key]); sub.__parent = out; sub.__owner = c; sub.__pkey = key; c[key] = sub; }
     }
     out.push(c);
   }
   return out;
+}
+/* ---- Build 2: what ▫/▫ (and ˣ√) "grab" (spec §8) ----
+   ▫/▫ typed after an operand takes that operand as its numerator; ˣ√ takes
+   it as its index. This finds where the ONE operand just left of `end`
+   starts: a number (only the last number of 2+3), a letter or Ans, a
+   finished fraction or root, a whole bracket or function group ((2+3),
+   sin(30)), and any of these carrying its ², ³ or x^ exponent (2²).
+   Returns `end` when there is no operand (start of the box, or right after
+   an operator or an open bracket): the template then goes in empty. */
+function operandStart(box, end) {
+  if (end <= 0) return end;
+  const t = box[end - 1];
+  if (t.k === "d" || t.k === "c") { let j = end - 1; while (j > 0 && (box[j - 1].k === "d" || box[j - 1].k === "c")) j--; return j; }
+  if (t.k === "var" || t.k === "ans" || t.k === "frac" || t.k === "rad" || t.k === "xrt") return end - 1;
+  if (t.k === "sq" || t.k === "cb" || t.k === "pow") { const j = operandStart(box, end - 1); return j === end - 1 ? end : j; }
+  if (t.k === ")") {
+    let depth = 0;
+    for (let j = end - 1; j >= 0; j--) {
+      const k = box[j].k;
+      if (k === ")") depth++;
+      else if ((k === "(" || k === "func") && --depth === 0) return j;
+    }
+  }
+  return end;
 }
 
 export function mountCalculator(host, opts = {}) {
@@ -508,6 +617,8 @@ export function mountCalculator(host, opts = {}) {
     afterAC: false,        // the line is empty because of AC: ◀/▶ recall the last expression
     err: false,            // the result line holds an error message
     lastWasStat: false,    // the result came from a pasted STAT token (legacy line, no box to edit)
+    // ---- calculator rebuild Build 2 (spec §3) ----
+    errAt: null,           // { box, i }: where ◀/▶ (Goto) put the cursor after a Syntax ERROR
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -741,41 +852,57 @@ export function mountCalculator(host, opts = {}) {
     S.result = null; S.exactVal = null; S.showDecimal = false;
     S.line = ""; S.pendingStat = null;
     S.err = false; S.lastWasStat = false; S.browsing = false; S.afterAC = false;
-    S.histPos = S.history.length;
+    S.histPos = S.history.length; S.errAt = null;
   }
   function linkSub(sub, parentBox, owner, pkey) { sub.__parent = parentBox; sub.__owner = owner; sub.__pkey = pkey; }
   function insertBoxToken(tok) { S.afterAC = false; S.cur.box.splice(S.cur.i, 0, tok); S.cur.i++; }
-  function insertTemplate(tmpl, enterKey) {
+  /* `grab` (Build 2, spec §8): { into, enter }. When an operand sits just
+     left of the cursor it MOVES into the `into` box (▫/▫: the numerator;
+     ˣ√: the index) and the cursor lands in the `enter` box (the denominator
+     / the radicand). With no operand the template goes in empty and the
+     cursor lands in `enterKey`, as before. */
+  function insertTemplate(tmpl, enterKey, grab = null) {
     S.afterAC = false;
     const parentBox = S.cur.box;
-    parentBox.splice(S.cur.i, 0, tmpl);
-    if (tmpl.k === "frac") { linkSub(tmpl.num, parentBox, tmpl, "num"); linkSub(tmpl.den, parentBox, tmpl, "den"); }
-    else if (tmpl.k === "rad") { linkSub(tmpl.body, parentBox, tmpl, "body"); }
-    else if (tmpl.k === "pow") { linkSub(tmpl.exp, parentBox, tmpl, "exp"); }
+    let at = S.cur.i;
+    if (grab) {
+      const j = operandStart(parentBox, at);
+      if (j < at) {
+        const taken = parentBox.splice(j, at - j);
+        for (const t of taken) for (const key of SUB_KEYS) if (Array.isArray(t[key])) t[key].__parent = tmpl[grab.into];   // a grabbed template's boxes now live one level down
+        tmpl[grab.into].push(...taken);
+        at = j; enterKey = grab.enter;
+      }
+    }
+    parentBox.splice(at, 0, tmpl);
+    for (const key of SUB_KEYS) if (Array.isArray(tmpl[key])) linkSub(tmpl[key], parentBox, tmpl, key);
     S.cur = { box: tmpl[enterKey], i: 0 };
   }
+  /* a template's boxes in the order ▶ walks them (the ˣ√ index comes FIRST,
+     spec §6: "the INDEX box first (small, upper left), then the radicand") */
+  const TMPL_BOXES = { frac: ["num", "den"], rad: ["body"], pow: ["exp"], xrt: ["idx", "body"] };
   function exitOrAdvanceRight(box) {
     if (!box.__parent) return;   // root, at end: no-op
     const owner = box.__owner, parent = box.__parent;
-    if (owner.k === "frac" && box.__pkey === "num") { S.cur = { box: owner.den, i: 0 }; return; }
+    const order = TMPL_BOXES[owner.k], k = order.indexOf(box.__pkey);
+    if (k < order.length - 1) { S.cur = { box: owner[order[k + 1]], i: 0 }; return; }   // frac top → bottom, ˣ√ index → radicand
     const pidx = parent.indexOf(owner);
     S.cur = { box: parent, i: pidx + 1 };   // exits: den / body / exp → right after the template token
   }
   function exitOrAdvanceLeft(box) {
     if (!box.__parent) return;
     const owner = box.__owner, parent = box.__parent;
-    if (owner.k === "frac" && box.__pkey === "den") { S.cur = { box: owner.num, i: owner.num.length }; return; }
+    const order = TMPL_BOXES[owner.k], k = order.indexOf(box.__pkey);
+    if (k > 0) { const b = owner[order[k - 1]]; S.cur = { box: b, i: b.length }; return; }   // frac bottom → top, ˣ√ radicand → index
     const pidx = parent.indexOf(owner);
     S.cur = { box: parent, i: pidx };   // exits backward: before the template token
   }
-  const isTmpl = t => t.k === "frac" || t.k === "rad" || t.k === "pow";
+  const isTmpl = t => !!TMPL_BOXES[t.k];
   function enterTemplateForward(tmpl) {   // ▶ landing on a template from outside: step INTO its first box
-    const key = tmpl.k === "frac" ? "num" : tmpl.k === "rad" ? "body" : "exp";
-    S.cur = { box: tmpl[key], i: 0 };
+    S.cur = { box: tmpl[TMPL_BOXES[tmpl.k][0]], i: 0 };
   }
   function enterTemplateBackward(tmpl) {   // ◀ landing on a template from outside: step INTO its last box, at its end
-    const key = tmpl.k === "frac" ? "den" : tmpl.k === "rad" ? "body" : "exp";
-    const b = tmpl[key];
+    const order = TMPL_BOXES[tmpl.k], b = tmpl[order[order.length - 1]];
     S.cur = { box: b, i: b.length };
   }
   /* ---- Build 1: editing after a result, history, AC recall (spec §1) ----
@@ -786,9 +913,15 @@ export function mountCalculator(host, opts = {}) {
      wiped the line: Megan's "arrowing back to fix a typo wipes the screen". */
   function editFromResult(dir) {
     if (S.lastWasStat) return;   // a pasted STAT read-off has no box to edit (legacy line) — unchanged
-    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false;
+    /* Build 2 (spec §3, Goto): on an error screen ◀ and ▶ BOTH return to the
+       expression with the cursor just before the token that caused a Syntax
+       ERROR (2+×3+4 → between + and ×). For a Math ERROR the spec does not
+       say where the cursor lands: Blipwork puts it at the end of the line. */
+    const goto = S.err ? (S.errAt || { box: S.box, i: S.box.length }) : null;
+    S.result = null; S.exactVal = null; S.showDecimal = false; S.err = false; S.errAt = null;
     S.browsing = false; S.histPos = S.history.length;
-    S.cur = dir < 0 ? { box: S.box, i: S.box.length } : { box: S.box, i: 0 };
+    if (goto) S.cur = { box: goto.box, i: Math.min(goto.i, goto.box.length) };
+    else S.cur = dir < 0 ? { box: S.box, i: S.box.length } : { box: S.box, i: 0 };
   }
   /* After AC, ◀ or ▶ recalls the LAST expression in edit mode (no result). */
   function recallLast(dir) {
@@ -804,7 +937,7 @@ export function mountCalculator(host, opts = {}) {
     const e = S.history[idx];
     S.box = cloneBox(e.box); S.cur = { box: S.box, i: S.box.length };
     S.exactVal = e.val; S.showDecimal = e.showDecimal;
-    S.result = e.showDecimal ? formatDecimal(e.val) : formatExactHTML(e.val);
+    S.result = formatValue(e.val, e.showDecimal);
     S.err = false; S.lastWasStat = false; S.line = ""; S.pendingStat = null;
     S.browsing = true; S.afterAC = false; S.histPos = idx;
   }
@@ -859,9 +992,10 @@ export function mountCalculator(host, opts = {}) {
     S.cur = { box: parent, i: pidx };
   }
   function toggleSD() {
-    if (!S.exactVal || isErr(S.exactVal)) return;
+    // nothing to toggle to: a decimal answer, or a fraction / whole number too long to show exactly (spec §7)
+    if (!S.exactVal || isErr(S.exactVal) || !exactFits(S.exactVal)) return;
     S.showDecimal = !S.showDecimal;
-    S.result = S.showDecimal ? formatDecimal(S.exactVal) : formatExactHTML(S.exactVal);
+    S.result = formatValue(S.exactVal, S.showDecimal);
   }
   function doEquals() {
     if (S.pendingStat) {
@@ -880,16 +1014,23 @@ export function mountCalculator(host, opts = {}) {
        results, RCL lines) and STO / M± are not among them. */
     const last = S.box[S.box.length - 1];
     const effect = last && (last.k === "sto" || last.k === "mplus" || last.k === "mminus") ? last : null;
-    const v = evalBox(effect ? S.box.slice(0, -1) : S.box, { ans: S.ansVal, drg: S.drg, vars: S.vars });
+    const target = effect ? S.box.slice(0, -1) : S.box;
+    let v = evalBox(target, { ans: S.ansVal, drg: S.drg, vars: S.vars });
+    if (!isErr(v) && !Number.isFinite(toFloatV(v))) v = VERR("Math ERROR");   // an exact value too big for any display, same as a float overflow
     S.browsing = false; S.afterAC = false; S.lastWasStat = false;
-    if (isErr(v)) { S.result = v.msg; S.err = true; S.exactVal = null; S.showDecimal = false; S.histPos = S.history.length; return; }
+    if (isErr(v)) {
+      S.result = v.msg; S.err = true; S.exactVal = null; S.showDecimal = false; S.histPos = S.history.length;
+      // where Goto (◀/▶) will put the cursor; `target` may be a copy of the line without its →A / M+ token
+      S.errAt = v.at ? { box: v.at.box === target ? S.box : v.at.box, i: v.at.i } : null;
+      return;
+    }
     if (effect) {
       if (effect.k === "sto") S.vars[effect.name] = v;
       else S.vars.M = effect.k === "mplus" ? vAdd(S.vars.M, v) : vSub(S.vars.M, v);
     }
-    S.err = false;
-    S.exactVal = v; S.showDecimal = (v.kind === "float");
-    S.result = v.kind === "float" ? formatDecimal(v) : formatExactHTML(v);
+    S.err = false; S.errAt = null;
+    S.exactVal = v; S.showDecimal = !exactFits(v);   // floats, and fractions past the size limit, show as decimals (spec §7)
+    S.result = formatValue(v, S.showDecimal);
     S.ansVal = v;
     if (effect) { S.histPos = S.history.length; return; }
     S.history.push({ box: cloneBox(S.box), val: v, showDecimal: S.showDecimal });
@@ -917,11 +1058,20 @@ export function mountCalculator(host, opts = {}) {
   }
 
   // ---- key dispatch ----
-  // scope-cut SHIFT sequences: ˣ√, mixed-number entry/toggle, %, ; — and the
+  // scope-cut SHIFT sequences: mixed-number entry/toggle, %, ; — and the
   // SHIFT functions of keys whose own build is later (SOLVE, d/dx, x!, Σ, 10^,
   // e^, FACT, Abs, ←, π). SHIFT is still consumed, as on the device.
-  const NOOP_SHIFT = new Set(["pow", "frac", "sd", "lparen", "rparen", "calc", "intdx", "xinv", "logbox", "log", "ln", "dms", "hyp", "eng", "exp10"]);
+  // (SHIFT x^ = ˣ√ is live since Build 2.)
+  const NOOP_SHIFT = new Set(["frac", "sd", "lparen", "rparen", "calc", "intdx", "xinv", "logbox", "log", "ln", "dms", "hyp", "eng", "exp10"]);
+  /* The three-line error screen (Build 2, spec §3) is up: a COMP-engine
+     error on the COMP screen. The legacy pasted-STAT "Math ERROR" (no data
+     captured) keeps its old one-line look and keys: STAT must behave exactly
+     as before until Build 8 moves STAT read-offs onto an editable line. */
+  const onErrScreen = () => S.screen === "comp" && S.err && S.result != null && !S.lastWasStat;
   function press(id) {
+    /* On an error screen ONLY AC, ◀ and ▶ do anything; every other key is
+       ignored (spec §3), including SHIFT, ALPHA, ON, DEL and the digits. */
+    if (onErrScreen() && id !== "ac" && id !== "left" && id !== "right") return;
     /* SHIFT and ALPHA share one spot at the far left of the status line
        (boxed S / boxed A, spec §2). SHIFT then ALPHA = ALPHA on, SHIFT off;
        ALPHA ALPHA = off. SHIFT after ALPHA switching ALPHA off is the mirror
@@ -957,6 +1107,7 @@ export function mountCalculator(host, opts = {}) {
       else if (id === "mode") key = "setup";
       else if (id === "sqrt") key = "cbrt";
       else if (id === "x2") key = "cube";
+      else if (id === "pow") key = "xroot";     // SHIFT x^ = ˣ√ (Build 2)
       else if (id === "sin") key = "asin";
       else if (id === "cos") key = "acos";
       else if (id === "tan") key = "atan";
@@ -974,8 +1125,14 @@ export function mountCalculator(host, opts = {}) {
 
   const digit = id => (/^d[0-9]$/.test(id) ? +id[1] : null);
   const opChar = { plus: "+", minus: "−", mult: "×", div: "÷" };
-  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon"]);
+  const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "xroot", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon"]);
   const isEntryKey = k => digit(k) != null || ENTRY_KEYS.has(k) || k.startsWith("var_");
+  /* POSTFIX keys act on what is before them, so after a result they chain
+     from Ans exactly like + − × ÷ do (Build 2, spec §1): x² → Ans², x^ →
+     Ans^□ (cursor in the exponent), x³ → Ans³. A postfix key added later
+     (Build 4: x⁻¹, x!, %) gets this by being listed here (and in
+     ENTRY_KEYS); nothing else needs to change. */
+  const POSTFIX_KEYS = new Set(["x2", "cube", "pow"]);
 
   function compKey(key) {
     if (key === "mode") return modeMenu();
@@ -1007,11 +1164,16 @@ export function mountCalculator(host, opts = {}) {
     // stat token) replaces the line with a fresh one — EXCEPT a binary
     // operator (+ − × ÷), which chains from the answer instead: the fresh
     // line starts "Ans" followed by that operator (device-verified: after
-    // 3+4=, pressing + shows "Ans+"). Digits, ALPHA letters and every other
-    // entry key keep the full-reset behaviour.
+    // 3+4=, pressing + shows "Ans+"). Build 2: a POSTFIX key chains the same
+    // way after a COMP result (spec §1). Digits, ALPHA letters, prefix keys
+    // (√, sin, (, (−) ...) and the ▫/▫ and ˣ√ templates keep the full reset.
+    // After a STAT read-off a postfix key still resets, exactly as before:
+    // Blipwork does not put STAT read-offs into Ans yet (Build 8), so Ans²
+    // there would square an OLD answer, a silently wrong number.
     if ((S.result != null || S.pendingStat != null) && isEntryKey(key)) {
-      if (opChar[key]) { resetEntry(); insertBoxToken({ k: "ans" }); insertBoxToken({ k: "op", v: opChar[key] }); return; }
+      const chain = !!opChar[key] || (POSTFIX_KEYS.has(key) && S.result != null && !S.lastWasStat);
       resetEntry();
+      if (chain) insertBoxToken({ k: "ans" });   // the key itself goes in below, right after "Ans"
     }
     if (key.startsWith("var_")) return insertBoxToken({ k: "var", name: key.slice(4) });
     if (key === "eqs") return insertBoxToken({ k: "eqs" });
@@ -1022,9 +1184,12 @@ export function mountCalculator(host, opts = {}) {
     if (key === "dot") return insertBoxToken({ k: "c" });
     if (key === "neg") return insertBoxToken({ k: "op", v: "−" });
     if (opChar[key]) return insertBoxToken({ k: "op", v: opChar[key] });
-    if (key === "frac") return insertTemplate({ k: "frac", num: [], den: [] }, "num");
+    // ▫/▫ grabs the operand before the cursor as its numerator (spec §8); √ and ³√ do NOT grab (9 √ → 9√□)
+    if (key === "frac") return insertTemplate({ k: "frac", num: [], den: [] }, "num", { into: "num", enter: "den" });
     if (key === "sqrt") return insertTemplate({ k: "rad", deg: 2, body: [] }, "body");
     if (key === "cbrt") return insertTemplate({ k: "rad", deg: 3, body: [] }, "body");
+    // ˣ√ (SHIFT x^): index box first; an operand before the cursor becomes the INDEX (5 SHIFT x^ → ⁵√□)
+    if (key === "xroot") return insertTemplate({ k: "xrt", idx: [], body: [] }, "idx", { into: "idx", enter: "body" });
     if (key === "x2") return insertBoxToken({ k: "sq" });
     if (key === "cube") return insertBoxToken({ k: "cb" });
     if (key === "pow") return insertTemplate({ k: "pow", exp: [] }, "exp");
@@ -1083,6 +1248,7 @@ export function mountCalculator(host, opts = {}) {
       case "func": return escapeHtml(node.name) + (node.inv ? "⁻¹" : "") + "(";
       case "frac": return `<span class="calc-frac"><span class="calc-frac-num">${renderBox(node.num)}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${renderBox(node.den)}</span></span>`;
       case "rad": return `<span class="calc-rad">${node.deg === 3 ? '<sup class="calc-rad-deg">3</sup>' : ""}<span class="calc-rad-sign">√</span><span class="calc-rad-body">${renderBox(node.body)}</span></span>`;
+      case "xrt": return `<span class="calc-rad calc-xrt"><sup class="calc-rad-deg calc-rad-idx">${renderBox(node.idx)}</sup><span class="calc-rad-sign">√</span><span class="calc-rad-body">${renderBox(node.body)}</span></span>`;
       case "pow": return `<sup class="calc-pow-exp">${renderBox(node.exp)}</sup>`;
       default: return "";
     }
@@ -1123,13 +1289,21 @@ export function mountCalculator(host, opts = {}) {
   function render() {
     renderInd();
 
-    if (S.screen === "comp") {
+    if (S.screen === "comp" && onErrScreen()) {
+      /* Build 2 (spec §3): exactly three lines, and nothing else on screen.
+         The message keeps the .lcd-res class it always had, so anything
+         that reads the result line still reads "Syntax ERROR". */
+      main.innerHTML = `<div class="lcd-err"><div class="lcd-res lcd-err-msg">${escapeHtml(S.result)}</div>`
+        + `<div class="lcd-err-line">[AC] :Cancel</div><div class="lcd-err-line">[◀][▶]:Goto</div></div>`;
+      exprScroll = 0;
+    } else if (S.screen === "comp") {
       const usingLine = S.pendingStat != null;
       cursorOn = S.result == null;
       const exprHTML = usingLine ? lcdShow(S.line || "") : renderBox(S.box);
       // AC / empty screen = an empty line plus the cursor, NO "0" anywhere (spec §1)
       const resHTML = S.result != null ? S.result : "";
-      main.innerHTML = `<div class="lcd-expr">${exprHTML}</div><div class="lcd-res">${resHTML}</div>`;
+      main.innerHTML = `<div class="lcd-line"><span class="lcd-lmark" hidden>◀</span><div class="lcd-expr">${exprHTML}</div></div><div class="lcd-res">${resHTML}</div>`;
+      keepCursorInView();
     } else if (S.screen === "menu") {
       const m = S.menu;
       let html = m.title ? `<div class="lcd-title">${m.title}</div>` : "";
@@ -1140,6 +1314,28 @@ export function mountCalculator(host, opts = {}) {
     } else if (S.screen === "statInput") {
       main.innerHTML = renderTable();
     }
+  }
+  /* Long input (Build 2, spec §1): the entry line scrolls left so the
+     cursor stays in view, and a ◀ marker at the left edge shows that
+     content is hidden. The line is redrawn on every key, so the scroll
+     offset is kept here between draws. With a result on screen (no
+     cursor) the line shows from its start, as it always did. */
+  let exprScroll = 0;
+  function keepCursorInView() {
+    const ex = main.querySelector(".lcd-expr"), mark = main.querySelector(".lcd-lmark");
+    const cur = ex.querySelector(".calc-cursor");
+    if (!cur || ex.scrollWidth <= ex.clientWidth) exprScroll = 0;
+    else {
+      ex.scrollLeft = exprScroll;
+      mark.hidden = false;
+      const room = mark.offsetWidth + 1;   // keep the cursor clear of the ◀ marker
+      const er = ex.getBoundingClientRect(), cr = cur.getBoundingClientRect();
+      if (cr.right > er.right - 1) ex.scrollLeft += cr.right - er.right + 1;
+      else if (ex.scrollLeft > 0 && cr.left < er.left + room) ex.scrollLeft -= er.left + room - cr.left;
+      exprScroll = ex.scrollLeft;
+    }
+    ex.scrollLeft = exprScroll;
+    mark.hidden = !(exprScroll > 0.5);
   }
   function renderTable() {
     const freq = S.freqOn;

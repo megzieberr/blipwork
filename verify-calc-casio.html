@@ -78,9 +78,42 @@ function read(h) {
   let before = null;
   if (cur) { const r = document.createRange(); r.setStart(ex, 0); r.setEndBefore(cur); before = r.toString(); }
   const slot = n => { const s = h.querySelector(`.calc-ind .ind-${n}`); return s ? s.textContent : ""; };
+  /* Build 2 fields (only compared when a row names them):
+     val   — the result as text, a stacked fraction as top/bottom, a raised
+             ×10 power as ^power: "1/2", "√2/2", "1,099511628×10^12"
+     frac  — the FIRST fraction on the entry line as top/bottom ("3/" = 3/□)
+     idx   — the ˣ√ index box's text on the entry line
+     curIn — which box holds the cursor: num, den, idx, body, exp, or line
+     err   — the error screen's lines joined by " / " ("" when none)
+     mark  — the long-line ◀ marker is showing
+     curVis — the cursor sits inside the visible part of the line (clear of ◀) */
+  let val = "";
+  if (res) {
+    const c = res.cloneNode(true);
+    c.querySelectorAll(".calc-x10-exp").forEach(s => { s.textContent = "^" + s.textContent; });
+    c.querySelectorAll(".calc-frac").forEach(f => f.replaceWith(`${f.querySelector(".calc-frac-num").textContent}/${f.querySelector(".calc-frac-den").textContent}`));
+    val = c.textContent;
+  }
+  const fr = ex && ex.querySelector(".calc-frac");
+  const ix = ex && ex.querySelector(".calc-rad-idx");
+  const IN = [["calc-frac-num", "num"], ["calc-frac-den", "den"], ["calc-rad-idx", "idx"], ["calc-rad-body", "body"], ["calc-pow-exp", "exp"]];
+  const inBox = cur ? (IN.find(([cls]) => cur.parentElement.classList.contains(cls)) || [0, "line"])[1] : null;
+  const errBox = h.querySelector(".lcd-err");
+  const mk = h.querySelector(".lcd-lmark");
+  const markOn = !!mk && !mk.hidden && mk.getBoundingClientRect().width > 0;
+  let curVis = false;
+  if (cur) {
+    const er = ex.getBoundingClientRect(), cr = cur.getBoundingClientRect();
+    const left = markOn ? mk.getBoundingClientRect().right : er.left;
+    curVis = cr.left >= left - 0.5 && cr.right <= er.right + 0.5;
+  }
   return {
     expr: ex ? ex.textContent : "", res: res ? res.textContent : "", cur: before,
     sa: slot("sa"), m: slot("m") === "M", sto: slot("sto") === "STO", rcl: slot("rcl") === "RCL", hist: slot("hist"),
+    val, frac: fr ? `${fr.querySelector(".calc-frac-num").textContent}/${fr.querySelector(".calc-frac-den").textContent}` : "",
+    idx: ix ? ix.textContent : null, curIn: inBox,
+    err: errBox ? [...errBox.children].map(d => d.textContent).join(" / ") : "",
+    mark: markOn, curVis,
   };
 }
 
@@ -226,8 +259,11 @@ row("ALPHA is ONE-SHOT: ALPHA (−) (−) types A then a minus", "§2", [["ALPHA
        `CALC "${red("calc")}", ∫ "${red("intdx")}"`);
 }
 row("every variable starts at 0", "§2 \"A = gives 0\"", [["ALPHA (−) =", { expr: "A", res: "0" }]]);
-row("ALPHA CALC's \"=\" in a COMP line: Syntax ERROR for now (CALC/SOLVE are Build 5)", "build brief", [
-  ["2 ALPHA CALC 3 =", { expr: "2=3", res: "Syntax ERROR" }],
+// Build 2: the error screen shows ONLY its three lines (spec §3), so the
+// typed "2=3" is checked after Goto (◀) instead of on the error screen.
+row("ALPHA CALC's \"=\" in a COMP line: Syntax ERROR for now (CALC/SOLVE are Build 5)", "build brief; §3 error screen", [
+  ["2 ALPHA CALC 3 =", { res: "Syntax ERROR" }],
+  ["◀", { expr: "2=3", res: "" }],
 ]);
 
 section("Build 1 · STO, RCL, variables, M (spec §2)");
@@ -311,6 +347,172 @@ function measureStatus(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureStatus(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 2 — parser and display
+   (spec sections 1, 3, 4, 6, 7 and 8)
+   ============================================================ */
+section("Build 2 · a missing \")\" closes itself (spec §4)");
+
+row("sin(30 = ½", "§4 \"sin(30 = gives ½\"", [["sin 30 =", { expr: "sin(30", val: "1/2" }]]);
+row("(2+3 = 5", "§4", [["( 2 + 3 =", { expr: "(2+3", val: "5" }]]);
+row("sin(30+1 means sin(31) = 0,5150380749", "§4 the open bracket swallows the rest", [["sin 30 + 1 =", { val: "0,5150380749" }]]);
+row("sin(30)+1 = 3/2", "§4", [["sin 30 ) + 1 =", { val: "3/2" }]]);
+row("2sin(30 = 1", "§5", [["2 sin 30 =", { val: "1" }]]);
+row("10÷sin(30 = 20", "§5", [["10 ÷ sin 30 =", { val: "20" }]]);
+row("sin(30)cos(60 = ¼", "§5", [["sin 30 ) cos 60 =", { val: "1/4" }]]);
+row("sin((30 = ½: every open bracket closes", "§4 \"the device closes every open bracket\"", [["sin ( 30 =", { val: "1/2" }]]);
+row("the end of a template box closes too: (sin(30) over 2 = ¼", "§4 \"at the end of each template box\"", [["frac sin 30 ▼ 2 ▶ =", { val: "1/4" }]]);
+row("tan(90 = Math ERROR", "§3 seen", [["tan 90 =", { res: "Math ERROR" }]]);
+row("2+3) stays Syntax ERROR", "§3 seen", [["2 + 3 ) =", { res: "Syntax ERROR" }]]);
+row("(2+3)4 stays Syntax ERROR (a number after \")\" is not ×)", "§3 seen", [["( 2 + 3 ) 4 =", { res: "Syntax ERROR" }]]);
+
+section("Build 2 · ▫/▫ grabs what is before it (spec §8)");
+
+row("3 then ▫/▫ → 3/□, cursor in the bottom", "§8", [["3 frac", { frac: "3/", curIn: "den" }], ["4 ▶ =", { val: "3/4" }]]);
+row("2+3 then ▫/▫ → 2 + 3/□ (only the last number)", "§8", [["2 + 3 frac", { expr: "2+3", frac: "3/", curIn: "den" }], ["4 ▶ =", { val: "11/4" }]]);
+row("(2+3) then ▫/▫ → (2+3)/□ (the whole bracket group)", "§8", [["( 2 + 3 ) frac", { frac: "(2+3)/", curIn: "den" }], ["4 ▶ =", { val: "5/4" }]]);
+row("2² then ▫/▫ → 2²/□", "§8", [["2 x² frac", { frac: "2²/", curIn: "den" }], ["3 ▶ =", { val: "4/3" }]]);
+row("sin(30) then ▫/▫ → sin(30)/□", "§8", [["sin 30 ) frac", { frac: "sin(30)/", curIn: "den" }], ["2 ▶ =", { val: "1/4" }]]);
+row("▫/▫ on an empty line: an empty □/□, cursor in the top", "§8", [["frac", { frac: "/", curIn: "num" }]]);
+row("▫/▫ right after an operator: an empty □/□, cursor in the top", "§8", [["2 + frac", { expr: "2+", frac: "/", curIn: "num" }], ["1 ▼ 2 ▶ =", { val: "5/2" }]]);
+row("√ does NOT grab: 9 then √ → 9√□ (implicit ×)", "§8", [["9 √", { expr: "9√", curIn: "body" }], ["4 ▶ =", { val: "18" }]]);
+
+section("Build 2 · ˣ√ (SHIFT x^, spec §6 and §8)");
+
+row("SHIFT x^ on an empty line: the index box first", "§6 \"the INDEX box first\"", [["SHIFT x^", { idx: "", curIn: "idx" }]]);
+row("⁴√16 = 2 (▶ walks index → radicand → out)", "§6", [["SHIFT x^ 4", { idx: "4", curIn: "idx" }], ["▶ 16", { curIn: "body" }], ["▶ =", { val: "2" }]]);
+row("5 then SHIFT x^ → ⁵√□: the 5 becomes the INDEX, cursor in the radicand", "§8", [["5 SHIFT x^", { expr: "5√", idx: "5", curIn: "body" }]]);
+row("4 SHIFT x^ 16 = 2 (grabbed index)", "§6, §8", [["4 SHIFT x^ 16 =", { val: "2" }]]);
+row("³√2 by ˣ√ is a decimal (no exact type for it): 1,25992105", "brief: existing value rules", [["3 SHIFT x^ 2 =", { val: "1,25992105" }]]);
+{
+  const c = freshCalc(); c.press("SHIFT x^");
+  const ix = c.h.querySelector(".lcd-expr .calc-rad-idx"), sign = c.h.querySelector(".lcd-expr .calc-xrt .calc-rad-sign");
+  const a = ix.getBoundingClientRect(), s = sign.getBoundingClientRect();
+  const fi = parseFloat(getComputedStyle(ix).fontSize), fs = parseFloat(getComputedStyle(sign).fontSize);
+  tick(fi < fs && a.left < s.left && a.top < s.top + s.height / 2,
+       `the ˣ√ index box is small and upper left of the √ <span class="why">[§6 "small, upper left"]</span>`,
+       `index ${fi}px at (${Math.round(a.left - s.left)}, ${Math.round(a.top - s.top)}) from the √ (${fs}px)`);
+}
+
+section("Build 2 · postfix keys chain from Ans (spec §1)");
+
+row("2+3 = then x² → Ans², = 25", "§1", [["2 + 3 = x²", { expr: "Ans²", res: "" }], ["=", { val: "25" }]]);
+row("2+3 = then x^ → Ans^□ with the cursor in the exponent, 2 = 25", "§1", [["2 + 3 = x^", { expr: "Ans", curIn: "exp" }], ["2 =", { val: "25" }]]);
+row("2+3 = then x³ (SHIFT x²) → Ans³, = 125", "§1 \"x³ … postfix too\"", [["2 + 3 = SHIFT x²", { expr: "Ans³" }], ["=", { val: "125" }]]);
+row("a prefix key after a result still starts a fresh line (√)", "§1", [["2 + 3 = √", { expr: "√", curIn: "body" }]]);
+row("▫/▫ after a result starts a fresh empty □/□", "Blipwork choice: spec silent, Build 1 behaviour kept", [["2 + 3 = frac", { frac: "/", curIn: "num" }]]);
+row("after a STAT read-off x² does NOT chain (Blipwork's Ans is not the read-off yet): unchanged", "foreman ruling: STAT unchanged until Build 8", [
+  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33333333" }],
+  ["x²", { expr: "²", res: "" }],
+]);
+
+section("Build 2 · error screens and Goto (spec §3)");
+
+const ERR = m => `${m} / [AC] :Cancel / [◀][▶]:Goto`;
+row("Syntax ERROR: exactly three lines, the ▲ hidden, nothing else on screen", "§3", [
+  ["2 + 3 = 2 + × 3 + 4 =", { err: ERR("Syntax ERROR"), expr: "", hist: "" }],
+]);
+row("on the error screen digits, SHIFT, ALPHA, ON, DEL, =, ▲▼, x², MODE, S⇔D do nothing", "§3 \"only AC, ◀ and ▶ do anything\"", [
+  ["2 + × 3 + 4 =", { err: ERR("Syntax ERROR") }],
+  ["7", { err: ERR("Syntax ERROR"), expr: "" }],
+  ["SHIFT", { err: ERR("Syntax ERROR"), sa: "" }],
+  ["ALPHA", { err: ERR("Syntax ERROR"), sa: "" }],
+  ["ON DEL = ▲ ▼ x² MODE S⇔D sin frac", { err: ERR("Syntax ERROR"), sa: "" }],
+]);
+row("Goto: ◀ puts the cursor between + and ×; one DEL removes the +", "§3 example", [
+  ["2 + × 3 + 4 = ◀", { err: "", expr: "2+×3+4", res: "", cur: "2+" }],
+  ["DEL", { expr: "2×3+4", cur: "2" }],
+  ["=", { val: "10" }],
+]);
+row("Goto: ▶ puts the cursor in the same place", "§3 \"◀ or ▶ (Goto)\"", [["2 + × 3 + 4 = ▶", { expr: "2+×3+4", cur: "2+" }]]);
+row("AC on the error screen: an empty line", "§3", [["2 + × 3 + 4 = AC", { err: "", expr: "", res: "", cur: "" }]]);
+row("Math ERROR: the same three lines", "§3", [["1 ÷ 0 =", { err: ERR("Math ERROR"), expr: "" }]]);
+row("Math ERROR, ◀: the cursor goes to the END of the line", "Blipwork choice: spec silent", [["1 ÷ 0 = ◀", { expr: "1÷0", cur: "1÷0" }]]);
+row("2+3) Goto: the cursor lands just before the stray \")\"", "§3 \"just BEFORE the token that caused the error\"", [["2 + 3 ) = ◀", { cur: "2+3" }]]);
+row("an empty fraction top: Goto lands in that empty box", "§3, Blipwork reading for a missing number", [["frac ▼ 2 ▶ =", { res: "Syntax ERROR" }], ["◀", { curIn: "num" }]]);
+
+section("Build 2 · how numbers are shown (spec §7)");
+
+row("1234÷56789 stays a fraction (4+5+1 = 10)", "§7", [["1234 ÷ 56789 =", { val: "1234/56789" }]]);
+row("12345÷67891 = 0,1818355894 (5+5+1 = 11, too long for a fraction)", "§7", [["12345 ÷ 67891 =", { val: "0,1818355894" }]]);
+row("S⇔D on that decimal has no fraction to go to", "Blipwork choice: spec silent", [["12345 ÷ 67891 = S⇔D", { val: "0,1818355894" }]]);
+row("2÷3, S⇔D → 0,6666666667 (10 significant digits, rounded)", "§7", [["2 ÷ 3 =", { val: "2/3" }], ["S⇔D", { val: "0,6666666667" }]]);
+row("12345÷678901 = 0,01818379999", "§7", [["12345 ÷ 678901 =", { val: "0,01818379999" }]]);
+row("2^40 = 1,099511628×10¹²", "§7 big numbers", [["2 x^ 40 ▶ =", { val: "1,099511628×10^12" }]]);
+row("a 10-digit whole number still shows in full; 11 digits switch to ×10", "§7 \"more than 10 digits\"", [
+  ["9999999999 =", { val: "9999999999" }],
+  ["+ 1 =", { val: "1×10^10" }],
+]);
+row("1÷2000 = 1/2000, S⇔D → 0,0005 (Norm 2, not 5×10⁻⁴)", "§7 small numbers", [["1 ÷ 2000 =", { val: "1/2000" }], ["S⇔D", { val: "0,0005" }]]);
+row("10⁻⁹ itself is still a plain decimal", "§7 \"only switches below 10⁻⁹\"", [["1 ÷ 1000000000 =", { val: "0,000000001" }]]);
+row("below 10⁻⁹ the ×10 form: 1÷2000000000 = 5×10⁻¹⁰", "§7", [["1 ÷ 2000000000 =", { val: "5×10^−10" }]]);
+row("decimal input, exact output: 0,5 + 0,25 = ¾", "§7", [["0 , 5 + 0 , 25 =", { val: "3/4" }]]);
+row("decimal input, exact output: √0,5 = √2/2", "§7", [["√ 0 , 5 =", { val: "√2/2" }]]);
+{
+  const c = freshCalc(); c.press("2 x^ 40 ▶ =");
+  const res = c.h.querySelector(".lcd-res"), x10 = res.querySelector(".calc-x10"), exp = res.querySelector(".calc-x10-exp");
+  const fr = parseFloat(getComputedStyle(res).fontSize), fx = parseFloat(getComputedStyle(x10).fontSize), fe = parseFloat(getComputedStyle(exp).fontSize);
+  const bx = x10.getBoundingClientRect(), be = exp.getBoundingClientRect();
+  tick(fx < fr && fe < fr && be.bottom < bx.bottom && res.scrollWidth <= res.clientWidth + 0.5,
+       `the "×10" is small and the power is raised, and it fits the line <span class="why">[§7]</span>`,
+       `digits ${fr}px, ×10 ${fx}px, power ${fe}px, power bottom ${Math.round(bx.bottom - be.bottom)} px above the ×10's; line ${res.scrollWidth}/${res.clientWidth} px`);
+}
+row("STAT read-offs keep their old 8-decimal text: x̄ of 1, 1, 2 = 1,33333333", "foreman ruling: STAT unchanged", [
+  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33333333" }],
+]);
+row("STAT read-offs keep their old text: σx of 1, 1, 2 = 0,47140452", "foreman ruling: STAT unchanged", [
+  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 3 =", { res: "0,47140452" }],
+]);
+
+/* ---- DOM measurements: the long line and the error screen must fit the
+   LCD at 375 px (the overlay) and in the in-question calculator ---- */
+section("Build 2 · long lines and the error screen fit (DOM measurement)");
+function measureBuild2(where, h, press) {
+  const LONG = Array(6).fill("1234567890").join(" + ");   // 65 characters, about twice the line
+  press("AC AC " + LONG);
+  let g = read(h);
+  let ex = h.querySelector(".lcd-expr");                 // the line is redrawn on every key: re-read it after each press
+  const lcd = h.querySelector(".calc-lcd");
+  tick(g.mark && g.curVis && ex.scrollLeft > ex.clientWidth / 2,
+       `${where}: typing past the edge scrolls the line, the cursor stays in view and ◀ shows`,
+       `◀ ${g.mark}, cursor visible ${g.curVis}, scrolled ${Math.round(ex.scrollLeft)} px of ${ex.scrollWidth} (line ${ex.clientWidth} px)`);
+  press("=");
+  g = read(h);
+  tick(g.val === "7407407340" && !g.mark, `${where}: = answers 7407407340 and the line shows from its start (no ◀)`, `"${g.val}", ◀ ${g.mark}`);
+  press("◀");
+  g = read(h);
+  tick(g.mark && g.curVis && g.cur === LONG.replace(/ /g, ""), `${where}: ◀ edits with the cursor at the end, still in view, ◀ shows`, `◀ ${g.mark}, cursor visible ${g.curVis}`);
+  press(Array(40).fill("◀").join(" "));
+  g = read(h); ex = h.querySelector(".lcd-expr");
+  tick(g.mark && g.curVis && g.cur === LONG.replace(/ /g, "").slice(0, 25), `${where}: arrowing back past the left edge keeps the cursor in view, clear of ◀`,
+       `◀ ${g.mark}, cursor visible ${g.curVis}, scrolled ${Math.round(ex.scrollLeft)} px`);
+  press(Array(30).fill("◀").join(" "));
+  g = read(h);
+  tick(!g.mark && g.curVis && g.cur === "", `${where}: arrowing back to the start scrolls back, ◀ goes out`, `◀ ${g.mark}, cursor visible ${g.curVis}, before cursor "${g.cur}"`);
+  press("AC 1 + 1 =");
+  const hRes = lcd.getBoundingClientRect().height;
+  press("2 + × 3 + 4 =");
+  const hErr = lcd.getBoundingClientRect().height;
+  const lines = [...h.querySelectorAll(".lcd-err > div")];
+  const over = lines.filter(d => d.scrollWidth > d.clientWidth + 0.5 || d.getBoundingClientRect().right > lcd.getBoundingClientRect().right);
+  tick(lines.length === 3 && over.length === 0 && Math.abs(hErr - hRes) < 0.5,
+       `${where}: the three error lines fit inside the LCD and do not change its height`,
+       `${lines.length} lines, overflowing: ${over.length}, LCD ${Math.round(hRes)} → ${Math.round(hErr)} px`);
+  press("AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  press("ON AC");                                        // the overlay is a singleton: clear what the Build 1 block left lit
+  measureBuild2(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild2(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 
