@@ -163,7 +163,10 @@ const MEAN_GLYPH = '<span class="lcd-ov">x</span>';
 /* Build 8: x̂ and ŷ (the Reg menu), the hat drawn by CSS above the letter
    for the same reason (.lcd-hat) */
 const HAT_GLYPH = c => `<span class="lcd-hat">${c}</span>`;
-const STAT_GLYPH = { "x̄": MEAN_GLYPH, "x̂": HAT_GLYPH("x"), "ŷ": HAT_GLYPH("y") };
+/* Build 9: ȳ (the two-variable Var menu, spec §19.3), its bar drawn the same
+   way as x̄'s. Its token is the one character U+0233. */
+const YBAR = "ȳ";
+const STAT_GLYPH = { "x̄": MEAN_GLYPH, "x̂": HAT_GLYPH("x"), "ŷ": HAT_GLYPH("y"), [YBAR]: '<span class="lcd-ov">y</span>' };
 const statGlyph = name => STAT_GLYPH[name] || escapeHtml(name);
 
 /* ============================================================
@@ -996,17 +999,22 @@ const EQN_VIS_COLS = 3;
      r = (nΣxy − ΣxΣy) / √((nΣx² − (Σx)²)(nΣy² − (Σy)²)).
    null when there are no pairs or every X is the same (B has no value);
    r is null when every Y is the same. Those read-offs are Math ERROR (not
-   measured: it is a division by 0). */
+   measured: it is a division by 0).
+   Build 9: a pair may carry a weight `w` (a whole number, its FREQ; 1 when
+   absent), and it counts that many times, so n and every sum are weighted
+   (not device-measured). With every w = 1 the sums are exactly as before. */
 function regFit(pairs) {
   if (!pairs.length) return null;
   const Z = mkRat(0n, 1n);
-  let sx = Z, sy = Z, sxx = Z, sxy = Z, syy = Z;
+  let n = Z, sx = Z, sy = Z, sxx = Z, sxy = Z, syy = Z;
   for (const p of pairs) {
-    const x = floatToRat(p.x), y = floatToRat(p.y);
-    sx = vAdd(sx, x); sy = vAdd(sy, y);
-    sxx = vAdd(sxx, vMul(x, x)); sxy = vAdd(sxy, vMul(x, y)); syy = vAdd(syy, vMul(y, y));
+    const w = mkRat(BigInt(p.w ?? 1), 1n);
+    if (isZeroV(w)) continue;
+    const x = floatToRat(p.x), y = floatToRat(p.y), wx = vMul(w, x), wy = vMul(w, y);
+    n = vAdd(n, w); sx = vAdd(sx, wx); sy = vAdd(sy, wy);
+    sxx = vAdd(sxx, vMul(wx, x)); sxy = vAdd(sxy, vMul(wx, y)); syy = vAdd(syy, vMul(wy, y));
   }
-  const n = mkRat(BigInt(pairs.length), 1n);
+  if (isZeroV(n)) return null;
   const dxx = vSub(vMul(n, sxx), vMul(sx, sx)), dxy = vSub(vMul(n, sxy), vMul(sx, sy)), dyy = vSub(vMul(n, syy), vMul(sy, sy));
   if (isErr(dxx) || isZeroV(dxx)) return null;
   const B = vDiv(dxy, dxx), A = vDiv(vSub(sy, vMul(B, sx)), n);
@@ -1361,6 +1369,9 @@ export function mountCalculator(host, opts = {}) {
     pairs: [],             // A+BX data: [{ x, y }]
     held: null,            // a STAT value was pasted after a result: that previous answer (HTML) stays bottom right until = (spec §15)
     tblType: "fg",         // SETUP 5:TABLE: "fg" = f(x),g(x) (factory) or "f" = f(x) only
+    // ---- calculator rebuild Build 9 (spec §19.2, §19.3) ----
+    gridTop: 0,            // the STAT data editor shows three rows: the first one on show (index)
+    statBack: false,       // the open menu was opened FROM the data editor, so AC / a choice goes back there
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -1452,26 +1463,70 @@ export function mountCalculator(host, opts = {}) {
     }
     return null;
   }
+  /* Build 9 (spec §19.2 "A+BX with FREQ on"): the A+BX pairs, each with the
+     number of times it counts. With FREQ on that is its FREQ, read exactly
+     the way expanded() reads a 1-VAR FREQ (a row counts as often as
+     `for (i = 0; i < f; i++)` runs, so 0 or less drops it); with FREQ off,
+     once. The weighting itself is not device-measured. */
+  const reps = f => (f > 0 ? Math.ceil(f) : 0);
+  const regRows = () => S.pairs.map(p => ({ x: p.x, y: p.y, w: S.freqOn ? reps(p.f ?? 1) : 1 }));
+  /* Build 9 (spec §19.3): the two-variable Sum / Var / MinMax read-offs on
+     A+BX, as decimals like 1-VAR's (the same formulas as statValue, with each
+     pair counted w times; sx and sy are 0 for one value, as 1-VAR's sx is).
+     null (Math ERROR) when no pair counts. Device check values, X 1,2,3,4 /
+     Y 2,4,5,8: maxY = 8, σy = 2,165063509. */
+  function regValue(tok) {
+    const rows = regRows().filter(p => p.w > 0);
+    if (!rows.length) return null;
+    const sum = f => rows.reduce((q, p) => q + p.w * f(p), 0);
+    const n = sum(() => 1), mx = sum(p => p.x) / n, my = sum(p => p.y) / n;
+    const ssx = sum(p => (p.x - mx) ** 2), ssy = sum(p => (p.y - my) ** 2);
+    const xs = rows.map(p => p.x), ys = rows.map(p => p.y);
+    switch (tok) {
+      case "n": return n;
+      case "x̄": return mx;
+      case "σx": return Math.sqrt(ssx / n);
+      case "sx": return n > 1 ? Math.sqrt(ssx / (n - 1)) : 0;
+      case YBAR: return my;
+      case "σy": return Math.sqrt(ssy / n);
+      case "sy": return n > 1 ? Math.sqrt(ssy / (n - 1)) : 0;
+      case "Σx²": return sum(p => p.x * p.x);
+      case "Σx": return sum(p => p.x);
+      case "Σy²": return sum(p => p.y * p.y);
+      case "Σy": return sum(p => p.y);
+      case "Σxy": return sum(p => p.x * p.y);
+      case "Σx³": return sum(p => p.x ** 3);
+      case "Σx²y": return sum(p => p.x * p.x * p.y);
+      case "Σx⁴": return sum(p => p.x ** 4);
+      case "minX": return Math.min(...xs);
+      case "maxX": return Math.max(...xs);
+      case "minY": return Math.min(...ys);
+      case "maxY": return Math.max(...ys);
+    }
+    return null;
+  }
   /* Build 8: what a pasted STAT token is worth when = is pressed. The 1-VAR
      values are exactly statValue's numbers (unchanged); A, B and r come from
      regFit. All are DECIMALS (spec §15: "A = 0, B = 1,9, r = 0,981155781
      (decimals)"), so they show by the normal decimal rules and S⇔D has no
-     fraction to switch to. No data: Math ERROR, as before. */
+     fraction to switch to. No data: Math ERROR, as before.
+     Build 9: in A+BX every other token is a two-variable read-off (regValue),
+     and A, B, r, x̂, ŷ count each pair by its FREQ (regRows). */
   const REG_TOKS = new Set(["A", "B", "r"]);
   function statTok(name) {
     if (REG_TOKS.has(name)) {
-      const fit = regFit(S.pairs), v = fit && (name === "A" ? fit.A : name === "B" ? fit.B : fit.r);
+      const fit = regFit(regRows()), v = fit && (name === "A" ? fit.A : name === "B" ? fit.B : fit.r);
       if (v == null || (typeof v === "object" && isErr(v))) return VERR("Math ERROR");
       return VFLOAT(typeof v === "number" ? v : toFloatV(v));
     }
-    const v = statValue(name);
+    const v = S.mode === "REG" ? regValue(name) : statValue(name);
     return v == null ? VERR("Math ERROR") : VFLOAT(v);
   }
   /* ŷ = A + B·x and x̂ = (y − A) ÷ B, exact on an exact operand, then shown
      as a decimal like the other read-offs (spec §15: 5ŷ = 9,5) */
   function statPost(name, x) {
     if (isErr(x)) return x;
-    const fit = regFit(S.pairs);
+    const fit = regFit(regRows());
     if (!fit) return VERR("Math ERROR");
     const out = name === "ŷ" ? vAdd(fit.A, vMul(fit.B, x)) : vDiv(vSub(x, fit.A), fit.B);
     return isErr(out) ? out : VFLOAT(toFloatV(out));
@@ -1484,10 +1539,12 @@ export function mountCalculator(host, opts = {}) {
      not have. In COMP and STAT mode home() is "comp", exactly as before. */
   /* Build 7: the same for EQN and INEQ: back to the grid or the answer on
      screen. */
+  /* Build 9 (spec §19.2): and a menu opened from the STAT data editor (MODE,
+     SETUP, CLR, the short SHIFT 1 menu) goes back to the editor. */
   const eqnMode = () => (S.mode === "EQN" || S.mode === "INEQ") && !!S.eqn;
-  const home = () => (S.mode === "TABLE" && S.tbl ? S.tbl.back || "tblF" : eqnMode() ? S.eqn.back || "eqnGrid" : "comp");
+  const home = () => (S.mode === "TABLE" && S.tbl ? S.tbl.back || "tblF" : eqnMode() ? S.eqn.back || "eqnGrid" : statMode() && S.statBack ? "statInput" : "comp");
   const openMenu = m => {
-    if (S.screen !== "menu") { if (S.mode === "TABLE" && S.tbl) S.tbl.back = S.screen; if (eqnMode()) S.eqn.back = S.screen; }
+    if (S.screen !== "menu") { if (S.mode === "TABLE" && S.tbl) S.tbl.back = S.screen; if (eqnMode()) S.eqn.back = S.screen; S.statBack = S.screen === "statInput"; }
     S.menu = m; S.screen = "menu";
   };
   const closeMenu = () => { if (S.menu && S.menu.parent) S.menu = S.menu.parent; else { const ret = S.menu && S.menu.ret; S.screen = !ret || ret === "comp" ? home() : ret; S.menu = null; } };
@@ -1606,16 +1663,33 @@ export function mountCalculator(host, opts = {}) {
      back to COMP. 1 and 2 have the same two steps with their own words
      (Reset Setup? → Reset Setup, Reset Memory? → Reset Memory): only All was
      probed, so their screens copy it. AC on a Reset …? screen cancels without
-     changing anything. On the last screen only AC (or ON) does anything. */
+     changing anything. On the last screen only AC (or ON) does anything.
+     Build 9 (spec §19.2, measured from the STAT data editor): 2 is `Clear
+     Memory?` / `[=] :Yes` / `[AC] :Cancel`, then `Complete!` / `Press [AC]
+     key` (the spec writes this "key" in lower case; All's is "Key"). These
+     replace Build 8's copied guess (Reset Memory? / Reset Memory) wherever
+     CLR is opened: it is one CLR. Setup keeps the copied words (not probed).
+     Opened from the data editor, AC on the last screen goes back to the
+     editor, cursor on row 1 (spec §19.2, measured for Memory; Setup does the
+     same, not device-measured); All leaves STAT, so it goes to COMP. */
   const CLR_WORDS = { 1: "Setup", 2: "Memory", 3: "All" };
+  const CLR_SCREENS = {
+    1: { ask: "Reset Setup?", done: ["Reset Setup", "Press [AC] Key"] },
+    2: { ask: "Clear Memory?", done: ["Complete!", "Press [AC] key"] },
+    3: { ask: "Reset All?", done: ["Reset All", "Press [AC] Key"] },
+  };
   function clrMenu() {
     openMenu({ title: "Clear?", items: [["1", "Setup"], ["2", "Memory"], ["3", "All"]], ret: "comp",
       onNum(n) { if (CLR_WORDS[n]) clrConfirm(n); } });
   }
   function clrConfirm(n) {
-    const w = CLR_WORDS[n];
-    openMenu({ title: `Reset ${w}?`, items: [], notes: ["[=] :Yes", "[AC] :Cancel"], ret: "comp",
-      onEq() { clrReset(n); S.menu = { done: [`Reset ${w}`, "Press [AC] Key"], items: [], ret: "comp" }; S.screen = "menu"; } });
+    const w = CLR_SCREENS[n];
+    openMenu({ title: w.ask, items: [], notes: ["[=] :Yes", "[AC] :Cancel"], ret: "comp",
+      onEq() {
+        clrReset(n);
+        if (S.statBack && statMode()) { S.row = 0; S.col = 0; S.cell = ""; S.gridTop = 0; }   // Build 9: back to the editor's row 1
+        S.menu = { done: w.done, items: [], ret: "comp" }; S.screen = "menu";
+      } });
   }
   /* What each reset puts back (factory settings, spec intro: Norm 2, Deg,
      TABLE asks f(X) and g(X), STAT FREQ off):
@@ -1624,7 +1698,8 @@ export function mountCalculator(host, opts = {}) {
      2 Memory (Blipwork reading, not measured; Build 1 already read the
        history as memory): the variables A–F, X, Y and M to 0, Ans to 0, the
        history emptied. The screen is cleared too, as All does, except in
-       TABLE / EQN / INEQ, which keep their screen.
+       TABLE / EQN / INEQ, which keep their screen. Build 9: the device keeps
+       the STAT data through it (spec §19.2, measured), as this always did.
      3 All: everything above, plus the mode back to COMP, the STAT data
        (both kinds) emptied, TABLE's function and Start/End/Step (1/5/1)
        and the EQN grid gone (Build 6/7 reading of "everything"). */
@@ -1643,17 +1718,56 @@ export function mountCalculator(host, opts = {}) {
   }
   /* SHIFT 1. 1-VAR (unchanged): 1:Type 2:Data 3:Sum 4:Var 5:Distr 6:MinMax.
      A+BX (Build 8, spec §15): 1:Type 2:Data / 3:Sum 4:Var / 5:Reg 6:MinMax.
-     What 3:Sum, 4:Var and 6:MinMax hold for two-variable data was not
-     measured, so in A+BX they do nothing (no invented lists); 1:Type does
-     nothing in either, as before. `fromGrid`: opened on the data grid, so a
-     pasted value starts a fresh line (the grid has no calculation line). */
+     Build 9 (spec §19.3): in A+BX 3:Sum, 4:Var and 6:MinMax open the
+     measured two-variable lists. 1:Type does nothing in either, as before.
+     `fromGrid`: opened on the data grid, so a pasted value starts a fresh line
+     (the grid has no calculation line). Build 9: on the grid SHIFT 1 opens the
+     short menu (statEditMenu) instead, so this menu is only opened from the
+     calculation screen now. */
   function statMenu() {
     const reg = S.mode === "REG", fromGrid = S.screen === "statInput";
     openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", reg ? "Reg" : "Distr"], ["6", "MinMax"]], ret: "comp", fromGrid,
       onNum(n) {
         if (n === 2) { S.menu = null; S.screen = "statInput"; return; }
-        if (reg) { if (n === 5) regMenu(); return; }
+        if (reg) { if (n === 3) sum2Menu(); else if (n === 4) var2Menu(); else if (n === 5) regMenu(); else if (n === 6) minMax2Menu(); return; }
         if (n === 3) sumMenu(); else if (n === 4) varMenu(); else if (n === 6) minMaxMenu();
+      } });
+  }
+  /* Build 9 (spec §19.3): the two-variable lists, measured on A+BX:
+     Sum `1:Σx² 2:Σx / 3:Σy² 4:Σy / 5:Σxy 6:Σx³ / 7:Σx²y 8:Σx⁴` (one screen,
+     four lines), Var `1:n 2:x̄ / 3:σx 4:sx / 5:ȳ 6:σy / 7:sy`, MinMax
+     `1:minX 2:maxX / 3:minY 4:maxY`. Picking pastes the token, as Reg does.
+     No title line: Sum and Var fill the device's four lines, so there is no
+     room for one (MinMax follows them, not device-measured); the rows are
+     packed like MODE 3's so the LCD keeps its plain height. A digit with no
+     item does nothing. */
+  const SUM2_TOKS = ["Σx²", "Σx", "Σy²", "Σy", "Σxy", "Σx³", "Σx²y", "Σx⁴"];
+  const VAR2_TOKS = ["n", "x̄", "σx", "sx", YBAR, "σy", "sy"];
+  const MINMAX2_TOKS = ["minX", "maxX", "minY", "maxY"];
+  function tokMenu(toks) {
+    const parent = S.menu;
+    openMenu({ parent, packed: true, items: toks.map((t, k) => [String(k + 1), statGlyph(t)]), onNum(n) { pasteStat(toks[n - 1]); } });
+  }
+  const sum2Menu = () => tokMenu(SUM2_TOKS), var2Menu = () => tokMenu(VAR2_TOKS), minMax2Menu = () => tokMenu(MINMAX2_TOKS);
+  /* Build 9 (spec §19.2): SHIFT 1 INSIDE the data editor is a short menu,
+     `1:Type 2:Data / 3:Edit`; 3 → `1:Ins 2:Del-A`. Ins puts a new row at the
+     cursor holding 0 (FREQ 1; in A+BX X 0, Y 0) and pushes the rest down;
+     Del-A empties the table at once, no question, cursor on row 1. Both go
+     back to the editor. 2:Data goes back to the editor as it was; 1:Type does
+     nothing (as on the calculation screen). AC goes back to the editor (the
+     Edit list: back to the short menu). Blipwork choices, not
+     device-measured: no titles; the cursor stays on the new row after Ins, in
+     the same column; Del-A puts it in the X column; Ins on the open row adds
+     a 0 row there; a half-typed number is dropped by Ins and Del-A. */
+  function statEditMenu() {
+    openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Edit"]], ret: "comp",
+      onNum(n) {
+        if (n === 2) { S.menu = null; S.screen = "statInput"; }
+        else if (n === 3) {
+          const parent = S.menu;
+          openMenu({ parent, items: [["1", "Ins"], ["2", "Del-A"]],
+            onNum(k) { if (k === 1) gridInsert(); else if (k === 2) gridClear(); else return; S.menu = null; S.screen = "statInput"; } });
+        }
       } });
   }
   /* 5:Reg → `1:A 2:B / 3:r 4:x̂ / 5:ŷ` (spec §15); no title (none measured) */
@@ -1714,15 +1828,20 @@ export function mountCalculator(host, opts = {}) {
      cursor movement so the arrow keys can reuse it. */
   /* Build 8 (spec §15): in A+BX the grid is X | Y. An X fills its Y with 0
      on a new row; a Y on the open row (no X yet) is dropped, as a FREQ there
-     is. No milestones: they belong to the 1-VAR questions. */
+     is. No milestones: they belong to the 1-VAR questions.
+     Build 9 (spec §19.2): with FREQ on the grid is X | Y | FREQ; a new row's
+     FREQ is 1, like 1-VAR's, and column 2 is that FREQ. */
   const gridRows = () => (S.mode === "REG" ? S.pairs : S.data);
+  const gridCols = () => (S.mode === "REG" ? 2 : 1) + (S.freqOn ? 1 : 0);   // Build 9: how many value columns the grid has
   function writeCell() {
     if (S.cell === "" || S.cell === "-") return false;
     const v = Number(S.cell.replace(",", "."));
     if (!Number.isFinite(v)) { S.cell = ""; return false; }
     if (S.mode === "REG") {
-      if (S.col === 0) S.pairs[S.row] = { x: v, y: S.pairs[S.row] ? S.pairs[S.row].y : 0 };
-      else if (S.pairs[S.row]) S.pairs[S.row].y = v;
+      const p = S.pairs[S.row];
+      if (S.col === 0) S.pairs[S.row] = { x: v, y: p ? p.y : 0, f: p ? (p.f ?? 1) : 1 };
+      else if (p && S.col === 1) p.y = v;
+      else if (p) p.f = v;
       S.cell = "";
       return true;
     }
@@ -1762,26 +1881,55 @@ export function mountCalculator(host, opts = {}) {
      (spec §15: ▶ goes to Y on the same row, ▲ back up the Y column; ◀ and ▶
      at the column edges were not measured for A+BX, so FREQ's rules are
      kept). */
+  /* Build 9 (spec §19.2): ▼ and ▲ WRAP. The rows are 1…n plus ONE open row;
+     ▼ on the open row goes to row 1 and ▲ on row 1 to the open row, in every
+     column (X, FREQ, Y). The A+BX grid with FREQ on (X | Y | FREQ) moves
+     with the same ◀ ▶ rules over three columns: ◀ steps left, and from X to
+     the last column of the row above; ▶ steps right, and from the last
+     column to the next row's X (not device-measured for three columns). */
   function statNav(dir) {
     writeCell();                                  // typed digits are stored first
     const oop = gridRows().length;                // the open row at the very bottom
-    if (dir === "up")   S.row = Math.max(0, S.row - 1);
-    if (dir === "down") S.row = Math.min(oop, S.row + 1);
-    if (S.freqOn || S.mode === "REG") {
+    if (dir === "up")   S.row = S.row > 0 ? S.row - 1 : oop;
+    if (dir === "down") S.row = S.row < oop ? S.row + 1 : 0;
+    const last = gridCols() - 1;
+    if (last > 0) {
       if (dir === "left") {
-        if (S.col > 0) S.col = 0;
-        else if (S.row > 0) { S.row--; S.col = 1; }
+        if (S.col > 0) S.col--;
+        else if (S.row > 0) { S.row--; S.col = last; }
       }
       /* ▶ vanuit die FREQ-kolom spring terug na die VOLGENDE ry se X-kolom.
          Dit lyk vreemd, maar Megan het dit op 2026-08-28 teen haar regte
          fx-991ZA bevestig: "that's how the real calculator works as well."
          Moenie dit "regmaak" nie. */
       if (dir === "right") {
-        if (S.col < 1) S.col = 1;
+        if (S.col < last) S.col++;
         else if (S.row < oop) { S.row++; S.col = 0; }
       }
     }
     if (S.row > gridRows().length) S.row = gridRows().length;
+  }
+  /* Build 9 (spec §19.2): DEL with nothing typed deletes the whole row the
+     cursor is on; the rows below move up and the cursor keeps its row number
+     (on the open row there is nothing to delete). Ins and Del-A (SHIFT 1 3).
+     In 1-VAR each reports the new data, as typing a value does. */
+  function gridChanged() { if (S.mode !== "REG") emit("data", S.data.map(d => d.x)); }
+  function gridDeleteRow() {
+    const rows = gridRows();
+    if (S.row >= rows.length) return;
+    rows.splice(S.row, 1);
+    gridChanged();
+  }
+  function gridInsert() {
+    S.cell = "";
+    gridRows().splice(S.row, 0, S.mode === "REG" ? { x: 0, y: 0, f: 1 } : { x: 0, f: 1 });
+    gridChanged();
+  }
+  function gridClear() {
+    S.cell = "";
+    if (S.mode === "REG") S.pairs = []; else S.data = [];
+    S.row = 0; S.col = 0; S.gridTop = 0;
+    gridChanged();
   }
 
   // ---- COMP-mode entry model: box tree + cursor ----
@@ -1999,7 +2147,9 @@ export function mountCalculator(host, opts = {}) {
     (function walk(box) { for (const t of box) { if (t.k === "stat") toks.push(t.v); const order = TMPL_BOXES[t.k]; if (order) for (const key of order) walk(t[key]); } })(target);
     if (!toks.length) return;
     const lone = target.length === 1 && isStatAtom(target[0]) ? target[0].v : null;
-    const value = isErr(v) ? null : lone && !REG_TOKS.has(lone) ? statValue(lone) : toFloatV(v);
+    /* Build 9: in A+BX a lone x̄ (n, Σx …) is a two-variable read-off, so it
+       reports the number shown, never statValue's 1-VAR one */
+    const value = isErr(v) ? null : lone && S.mode !== "REG" && !REG_TOKS.has(lone) ? statValue(lone) : toFloatV(v);
     emit("stat", { tok: lone, value });
   }
   function doEquals() {
@@ -2796,18 +2946,39 @@ export function mountCalculator(host, opts = {}) {
   }
 
   function statKey(key) {
-    if (key === "stat") return statMenu();
-    /* AC: store what is typed and go to the calculation screen. Build 8: that
-       screen is EMPTY (resetEntry), as it was meant to be; before, a line
-       typed before MODE 3 could still be sitting under it. */
-    if (key === "ac") { commitCell(); resetEntry(); S.screen = "comp"; return; }
+    /* Build 9 (spec §19.2): SHIFT 1 here is the short menu (1:Type 2:Data /
+       3:Edit). MODE, SETUP and CLR open from the editor too and come back to
+       it; they drop a half-typed number first, as AC does (Blipwork choice,
+       not device-measured). SHIFT 1 leaves it alone, as before. */
+    if (key === "stat") return statEditMenu();
+    if (key === "mode" || key === "setup" || key === "clr") {
+      S.cell = "";
+      return key === "mode" ? modeMenu() : key === "setup" ? setupMenu() : clrMenu();
+    }
+    /* AC: go to the calculation screen. Build 8: that screen is EMPTY
+       (resetEntry), as it was meant to be; before, a line typed before MODE 3
+       could still be sitting under it. Build 9 (spec §19.2): AC while typing
+       CANCELS the typing (the cell keeps its old value, the editor stays);
+       before, AC stored the typed digits and left. */
+    if (key === "ac") {
+      if (S.cell !== "") { S.cell = ""; return; }
+      resetEntry(); S.screen = "comp"; return;
+    }
     if (key === "eq" || key === "down") {
       // with something typed: store it and step on. With nothing typed: just move.
-      if (S.cell !== "" && S.cell !== "-") commitCell(); else statNav("down");
+      /* Build 9: ▼ wraps from the open row to row 1 (statNav); = with nothing
+         typed on the open row stays put, as it always did (the wrap was
+         measured for ▼ only). */
+      if (S.cell !== "" && S.cell !== "-") commitCell();
+      else if (key === "eq" && S.row >= gridRows().length) return;
+      else statNav("down");
       return;
     }
     if (key === "up" || key === "left" || key === "right") return statNav(key);
-    if (key === "del") { S.cell = S.cell.slice(0, -1); return; }
+    /* DEL while typing removes the last typed character (as before; DEL while
+       typing was not measured). Build 9 (spec §19.2): DEL with nothing typed
+       deletes the whole row. */
+    if (key === "del") { if (S.cell !== "") S.cell = S.cell.slice(0, -1); else gridDeleteRow(); return; }
     if (key === "neg") { S.cell = S.cell.startsWith("-") ? S.cell.slice(1) : "-" + S.cell; return; }
     if (key === "dot") { S.cell += ","; return; }
     const d = digit(key);
@@ -2938,6 +3109,7 @@ export function mountCalculator(host, opts = {}) {
       main.innerHTML = html;
     } else if (S.screen === "statInput") {
       main.innerHTML = renderTable();
+      if (S.cell !== "") keepCursorInView(); else exprScroll = 0;   // Build 9: the typed number, bottom left
     } else if (S.screen === "tblF") {   // Build 6: f(X)= / g(X)=
       main.innerHTML = tblFnHTML();
       keepCursorInView();
@@ -2974,35 +3146,59 @@ export function mountCalculator(host, opts = {}) {
     mark.hidden = !(exprScroll > 0.5);
   }
   /* the STAT data grid. Build 6: drawn by gridHTML (shared with TABLE); the
-     HTML it gives is exactly what this function built by hand before. */
+     HTML it gives is exactly what this function built by hand before.
+     Build 9 (spec §19.2): drawn like the TABLE screen (Build 6's small
+     .lcd-tbl cells, so the LCD keeps its plain height): THREE rows on show,
+     scrolled to keep the cursor row in view; the selected cell INVERTED
+     (.lcd-tbl-sel: a solid dark cell with light digits, steady); its full
+     value bottom RIGHT (the TABLE's bottom line; Fix applies there as it does
+     on the TABLE, not device-measured for STAT). While a number is being
+     typed the bottom right is empty and the number shows bottom LEFT with a
+     blinking cursor after it (the EQN grid's .lcd-eqn-in line). The selected
+     cell still shows what is typed, as before (not device-measured). Row
+     numbers in the TABLE's narrow column; rows past the open row are blank.
+     Negative numbers show the real minus sign. */
   function renderTable() {
     if (S.mode === "REG") return renderRegTable();
     const freq = S.freqOn;
-    const rows = Math.max(S.data.length + 1, S.row + 1);
-    const body = [];
-    for (let r = 0; r < rows; r++) {
-      const d = S.data[r];
-      /* The selected cell shows what has been typed; with nothing typed yet it
-         shows the value ALREADY in that cell, so after arrowing back up to a row
-         the learner can see which value they are about to replace. */
-      const sel = (c, waarde) => `<u>${S.cell !== "" ? escapeHtml(S.cell) : (waarde != null ? fmtNum(waarde) : "")}</u>`;
-      const xc = (r === S.row && S.col === 0) ? sel(0, d ? d.x : null) : (d ? fmtNum(d.x) : "");
-      const fc = freq ? ((r === S.row && S.col === 1) ? sel(1, d ? d.f : null) : (d ? fmtNum(d.f) : "")) : "";
-      body.push([{ html: String(r + 1) }, { html: xc }, ...(freq ? [{ html: fc }] : [])]);
-    }
-    return gridHTML("lcd-tab", [{ html: "" }, { html: "X" }, ...(freq ? [{ html: "FREQ" }] : [])], body);
+    return statGridHTML(freq ? ["X", "FREQ"] : ["X"], d => (freq ? [d.x, d.f] : [d.x]));
   }
-  /* Build 8 (spec §15): the A+BX grid, X | Y, in the 1-VAR grid's look. FREQ
-     on in A+BX was not measured: the grid stays X | Y and every pair counts
-     once (Blipwork choice). */
+  /* Build 8 (spec §15): the A+BX grid, X | Y, in the 1-VAR grid's look.
+     Build 9 (spec §19.2): with FREQ on it is X | Y | FREQ (measured); each
+     pair then counts FREQ times (regRows, not device-measured). */
   function renderRegTable() {
-    const rows = Math.max(S.pairs.length + 1, S.row + 1), body = [];
-    for (let r = 0; r < rows; r++) {
-      const d = S.pairs[r];
-      const cellOf = (c, v) => ((r === S.row && S.col === c) ? `<u>${S.cell !== "" ? escapeHtml(S.cell) : (v != null ? fmtNum(v) : "")}</u>` : (v != null ? fmtNum(v) : ""));
-      body.push([{ html: String(r + 1) }, { html: cellOf(0, d ? d.x : null) }, { html: cellOf(1, d ? d.y : null) }]);
+    const freq = S.freqOn;
+    return statGridHTML(freq ? ["X", "Y", "FREQ"] : ["X", "Y"], d => (freq ? [d.x, d.y, d.f ?? 1] : [d.x, d.y]));
+  }
+  const STAT_VISIBLE = 3;   // spec §19.2: "the screen shows three data rows"
+  const statCellText = v => (v == null ? "" : fmtNum(v).replace("-", "−"));
+  function statGridHTML(heads, valsOf) {
+    const rows = gridRows(), open = rows.length;
+    /* keep the cursor on the grid (a SETUP FREQ change made from the editor
+       can take a column away), and its row among the three on show */
+    if (S.col > heads.length - 1) S.col = heads.length - 1;
+    if (S.row > open) S.row = open;
+    let top = Math.min(S.gridTop, Math.max(0, open - STAT_VISIBLE + 1));
+    if (S.row < top) top = S.row;
+    if (S.row > top + STAT_VISIBLE - 1) top = S.row - STAT_VISIBLE + 1;
+    S.gridTop = top;
+    const typing = S.cell !== "", typed = escapeHtml(S.cell.replace("-", "−"));
+    const body = [];
+    for (let r = top; r < top + STAT_VISIBLE; r++) {
+      const d = rows[r], vals = d ? valsOf(d) : [];
+      body.push([{ html: r <= open ? String(r + 1) : "", cls: "lcd-tbl-n" },
+        ...heads.map((_, c) => {
+          const sel = r === S.row && c === S.col;
+          /* The selected cell shows what has been typed; with nothing typed yet it
+             shows the value ALREADY in that cell, so after arrowing back up to a row
+             the learner can see which value they are about to replace. */
+          return { html: sel && typing ? typed : statCellText(vals[c]), cls: sel ? "lcd-tbl-sel" : "" };
+        })]);
     }
-    return gridHTML("lcd-tab", [{ html: "" }, { html: "X" }, { html: "Y" }], body);
+    const html = gridHTML("lcd-tab lcd-tbl lcd-stat", [{ html: "", cls: "lcd-tbl-n" }, ...heads.map(h => ({ html: h }))], body);
+    if (typing) return html + `<div class="lcd-line lcd-eqn-in"><span class="lcd-lmark" hidden>◀</span><div class="lcd-expr">${typed}<span class="calc-cursor"></span></div></div>`;
+    const d = rows[S.row], v = d ? valsOf(d)[S.col] : null;
+    return html + `<div class="lcd-res lcd-tbl-val">${v == null ? "" : formatDecimal(VFLOAT(v), S.fix)}</div>`;
   }
 
   render();

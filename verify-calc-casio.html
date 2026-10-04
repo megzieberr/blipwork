@@ -2101,11 +2101,16 @@ function read8(h) {
   const cur = ex && ex.querySelector(".calc-cursor");
   let cur8 = null;
   if (cur) { const r = document.createRange(); r.setStart(ex, 0); r.setEndBefore(cur); const d = document.createElement("div"); d.appendChild(r.cloneContents()); cur8 = glyphText(d); }
-  const t = h.querySelector("table.lcd-tab:not(.lcd-tbl)");
+  /* Build 9 changed this reader: the STAT grid is now drawn like the TABLE
+     (table.lcd-stat, three rows on show, blank rows past the open row) and
+     its selected cell is the inverted .lcd-tbl-sel, no longer a <u>. The
+     blank rows (no row number) are left out, so g8 still reads the rows on
+     show, the selected cell in [brackets]. */
+  const t = h.querySelector("table.lcd-stat");
   let g8 = "";
   if (t) {
-    const cellT = c => (c.querySelector("u") ? `[${c.textContent}]` : c.textContent);
-    g8 = [...t.rows[0].cells].slice(1).map(c => c.textContent).join("|") + " || " + [...t.rows].slice(1).map(r => [...r.cells].map(cellT).join("|")).join(" / ");
+    const cellT = c => (c.classList.contains("lcd-tbl-sel") ? `[${c.textContent}]` : c.textContent);
+    g8 = [...t.rows[0].cells].slice(1).map(c => c.textContent).join("|") + " || " + [...t.rows].slice(1).filter(r => r.cells[0].textContent !== "").map(r => [...r.cells].map(cellT).join("|")).join(" / ");
   }
   const slot = n => { const s = h.querySelector(`.calc-ind .ind-${n}`); return s ? s.textContent : ""; };
   return { ...g, line: ex ? glyphText(ex) : "", cur8, menu8: mn ? glyphText(mn) : "",
@@ -2177,7 +2182,10 @@ row8("DEL after a read-off's answer does nothing", "§1", [[`${V1} SHIFT 1 4 2 =
 row8("no data: Math ERROR on the three-line screen; ◀ (Goto) goes back to the line", "§3; Build 2 note \"until Build 8\"", [
   ["MODE 3 1 AC SHIFT 1 4 2 =", { err: ERR("Math ERROR") }], ["◀", { err: "", line: XBAR, cur8: XBAR }],
 ]);
-row8("pasted from the data grid (SHIFT 1 on the grid): a fresh line", "Blipwork: the grid has no line", [[`MODE 3 1 2 = 4 = SHIFT 1 4 2`, { line: XBAR, res: "" }], ["=", { val: "3" }]]);
+// Build 9 changed this row: it pasted x̄ straight from the grid (SHIFT 1 4 2 on the grid). On the device SHIFT 1 on
+// the grid is the short menu 1:Type 2:Data / 3:Edit (spec §19.2), so a read-off needs AC first, then a fresh line as before
+row8("SHIFT 1 on the grid is the short menu (no read-offs there); AC, then x̄ pastes on a fresh line", "§19.2", [
+  [`MODE 3 1 2 = 4 = SHIFT 1 4`, { menu8: "1:Type2:Data3:Edit", line: "" }], ["AC AC SHIFT 1 4 2", { line: XBAR, res: "" }], ["=", { val: "3" }]]);
 row8("ŷ after a result chains from Ans: 5 = then ŷ → Ansŷ, the 5 stays until =", "§1 postfix rule; not measured for ŷ", [
   [`${XB} AC 5 = SHIFT 1 5 5`, { line: `Ans${YHAT}`, res: "5" }], ["=", { val: "9,5" }],
 ]);
@@ -2261,25 +2269,30 @@ const ST = "1:1-VAR2:A+BX3:_+CX²4:ln X5:e^X6:A·B^X7:A·X^B8:1/X";
 row8("MODE 3: eight types in two columns", "§15", [["MODE 3", { menu8: ST }]]);
 row8("types 3 to 8 (and 9) do nothing", "brief: not measured, not school use", [["MODE 3 3 4 5 6 7 8 9", { menu8: ST }]]);
 row8("2 opens the X | Y grid, STAT lit, no FREQ", "§15 \"columns X | Y (FREQ off)\"", [["MODE 3 2", { g8: "X|Y || 1|[]|", stat: "STAT", freq: "", menu8: "" }]]);
+// Build 9 changed the next four g8 rows (and "2:Data" and "typing over an X" below): the grid shows three rows,
+// scrolled to the cursor (spec §19.2), so a five-row table reads as its three rows on show; the pairs are checked in state
+const PAIRS = want => s => (s.pairs.map(p => `${p.x};${p.y}`).join(" ") === want ? "" : `pairs ${s.pairs.map(p => `${p.x};${p.y}`).join(" ")}`);
 row8("= walks DOWN the X column; each X fills its Y with 0", "§15", [
   ["MODE 3 2 1 =", { g8: "X|Y || 1|1|0 / 2|[]|" }],
-  ["2 = 3 = 4 =", { g8: "X|Y || 1|1|0 / 2|2|0 / 3|3|0 / 4|4|0 / 5|[]|" }],
+  ["2 = 3 = 4 =", { g8: "X|Y || 3|3|0 / 4|4|0 / 5|[]|" }, PAIRS("1;0 2;0 3;0 4;0")],
 ]);
 row8("▶ goes to Y on the same row; ▲ back to row 1; = walks down the Y column", "§15", [
-  ["MODE 3 2 1 = 2 = 3 = 4 = ▶", { g8: "X|Y || 1|1|0 / 2|2|0 / 3|3|0 / 4|4|0 / 5||[]" }],
-  ["▲ ▲ ▲ ▲", { g8: "X|Y || 1|1|[0] / 2|2|0 / 3|3|0 / 4|4|0 / 5||" }],
-  ["2 = 4 = 5 = 8 =", { g8: "X|Y || 1|1|2 / 2|2|4 / 3|3|5 / 4|4|8 / 5||[]" }],
+  ["MODE 3 2 1 = 2 = 3 = 4 = ▶", { g8: "X|Y || 3|3|0 / 4|4|0 / 5||[]" }],
+  ["▲ ▲ ▲ ▲", { g8: "X|Y || 1|1|[0] / 2|2|0 / 3|3|0" }],
+  ["2 = 4 = 5 = 8 =", { g8: "X|Y || 3|3|5 / 4|4|8 / 5||[]" }, PAIRS("1;2 2;4 3;5 4;8")],
 ]);
 row8("typed digits show in the cell until =", "as 1-VAR", [["MODE 3 2 1 2", { g8: "X|Y || 1|[12]|" }], [", 5 =", { g8: "X|Y || 1|12,5|0 / 2|[]|" }]]);
 row8("A+BX is mode REG; 1-VAR's data and its statMode milestone stay untouched (calcdo goals)", "consumer guard", [
   [XB, {}, (s, ev) => (s.mode === "REG" && s.data.length === 0 && s.pairs.length === 4 && s.pairs[3].x === 4 && s.pairs[3].y === 8 && !ev.some(e => e.t === "statMode" || e.t === "data") ? "" : `mode ${s.mode}, data ${s.data.length}, pairs ${JSON.stringify(s.pairs)}, events ${ev.map(e => e.t).join(",")}`)],
 ]);
 row8("SHIFT 1: 1:Type 2:Data / 3:Sum 4:Var / 5:Reg 6:MinMax", "§15", [[`${XB} AC SHIFT 1`, { menu8: "1:Type2:Data3:Sum4:Var5:Reg6:MinMax" }]]);
-row8("3:Sum, 4:Var, 6:MinMax and 1:Type do nothing in A+BX (not measured: no invented lists)", "brief", [[`${XB} AC SHIFT 1 1 3 4 6 7`, { menu8: "1:Type2:Data3:Sum4:Var5:Reg6:MinMax" }]]);
+// Build 9 changed this row: it read "3:Sum, 4:Var, 6:MinMax and 1:Type do nothing in A+BX"; spec §19.3 measured
+// the two-variable lists, so 3, 4 and 6 open them now (Build 9 rows below). 1:Type, 7, 8 and 9 still do nothing
+row8("1:Type, 7, 8 and 9 do nothing in A+BX", "brief; §19.3 gives 3, 4 and 6 their lists", [[`${XB} AC SHIFT 1 1 7 8 9`, { menu8: "1:Type2:Data3:Sum4:Var5:Reg6:MinMax" }]]);
 row8("5:Reg → 1:A 2:B / 3:r 4:x̂ / 5:ŷ; AC back to the STAT menu", "§15", [
   [`${XB} AC SHIFT 1 5`, { menu8: `1:A2:B3:r4:${XHAT}5:${YHAT}`, title: "" }], ["AC", { menu8: "1:Type2:Data3:Sum4:Var5:Reg6:MinMax" }],
 ]);
-row8("2:Data reopens the X | Y grid", "§15", [[`${XB} AC SHIFT 1 2`, { g8: "X|Y || 1|1|2 / 2|2|4 / 3|3|5 / 4|4|8 / 5||[]" }]]);
+row8("2:Data reopens the X | Y grid", "§15", [[`${XB} AC SHIFT 1 2`, { g8: "X|Y || 3|3|5 / 4|4|8 / 5||[]" }, PAIRS("1;2 2;4 3;5 4;8")]]);   // Build 9: three rows on show
 row8("A = 0", "§15 device answer", [[`${XB} AC SHIFT 1 5 1`, { line: "A" }], ["=", { val: "0" }]]);
 row8("B = 1,9", "§15 device answer", [[`${XB} AC SHIFT 1 5 2 =`, { line: "B", val: "1,9" }]]);
 row8("r = 0,981155781", "§15 device answer", [[`${XB} AC SHIFT 1 5 3 =`, { line: "r", val: "0,981155781" }]]);
@@ -2291,7 +2304,7 @@ row8("every Y the same: B = 0, A = that Y, r Math ERROR", "Blipwork: not measure
 ]);
 row8("no pairs: A is Math ERROR", "as 1-VAR with no data", [["MODE 3 2 AC SHIFT 1 5 1 =", { err: ERR("Math ERROR") }]]);
 row8("a Y on the open row (no X yet) is dropped, as a FREQ there is", "Blipwork: the FREQ rule", [["MODE 3 2 1 = ▶ ▲ 5 = 6 =", { g8: "X|Y || 1|1|5 / 2||[]" }]]);
-row8("typing over an X keeps its Y", "1-VAR's replace rule", [[`${XB} AC SHIFT 1 2 ◀ ▲ ▲ ▲ ▲ 9 =`, { g8: "X|Y || 1|9|2 / 2|[2]|4 / 3|3|5 / 4|4|8 / 5||" }]]);
+row8("typing over an X keeps its Y", "1-VAR's replace rule", [[`${XB} AC SHIFT 1 2 ◀ ▲ ▲ ▲ ▲ 9 =`, { g8: "X|Y || 1|9|2 / 2|[2]|4 / 3|3|5" }, PAIRS("9;2 2;4 3;5 4;8")]]);   // Build 9: three rows on show
 row8("AC on the grid: an empty calculation line", "Build 8: the line under the grid is cleared", [["5 + 5 MODE 3 2 1 = AC", { line: "", res: "" }]]);
 row8("MODE 3 1 after A+BX starts empty; MODE 3 2 after 1-VAR too", "one data area", [
   [`${XB} AC MODE 3 1`, { g8: "X || 1|[]" }, s => (s.pairs.length === 0 ? "" : "pairs kept")],
@@ -2383,8 +2396,10 @@ row8("= → Reset All / Press [AC] Key, centred; other keys do nothing; AC → C
 row8("1 → Reset Setup? → Reset Setup / Press [AC] Key", "brief: same two steps, own words", [
   ["SHIFT 9 1", { title: "Reset Setup?", notes: "[=] :Yes / [AC] :Cancel" }], ["=", { done: "Reset Setup / Press [AC] Key", centred: true }], ["AC", { done: "" }],
 ]);
-row8("2 → Reset Memory? → Reset Memory / Press [AC] Key", "brief: same two steps, own words", [
-  ["SHIFT 9 2", { title: "Reset Memory?", notes: "[=] :Yes / [AC] :Cancel" }], ["=", { done: "Reset Memory / Press [AC] Key", centred: true }], ["AC", { done: "" }],
+// Build 9 changed this row: it expected Build 8's copied guess "Reset Memory?" → "Reset Memory / Press [AC] Key";
+// spec §19.2 measured CLR Memory's own words (from the STAT data editor), and it is one CLR
+row8("2 → Clear Memory? → Complete! / Press [AC] key", "§19.2 device words", [
+  ["SHIFT 9 2", { title: "Clear Memory?", notes: "[=] :Yes / [AC] :Cancel" }], ["=", { done: "Complete! / Press [AC] key", centred: true }], ["AC", { done: "" }],
 ]);
 row8("AC on Reset …? cancels: nothing changes (A keeps 5)", "§16 [AC] :Cancel", [
   ["5 SHIFT RCL (−) SHIFT 9 3 AC", { title: "", done: "" }], ["ALPHA (−) =", { val: "5" }],
@@ -2490,6 +2505,436 @@ function measureBuild8(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureBuild8(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 9: the STAT data editor, the A+BX Sum / Var / MinMax
+   lists (spec sections 19.2 and 19.3)
+   ============================================================ */
+/* Build 9 reads the editor with read8: g8 (the three rows on show, the
+   inverted cell in [brackets]), val (the value bottom right), typed (the
+   number being typed, bottom left) and cur (the text before its cursor).
+   Step checks look at the calculator's state: at9(row, column) is the
+   cursor (rows counted from 1 as on the LCD, column 0 = X); XS / FDATA the
+   1-VAR data; PAIRS (above) and PAIRSF the A+BX pairs. */
+const FQ = "SHIFT MODE ▼ 4 1";                       // FREQ on (SETUP ▼ 4 1)
+const V9 = `${FQ} MODE 3 1 5 = 7 = 9 =`;            // spec §19.2's measured example: 1-VAR, FREQ on, X 5, 7, 9
+const FQR = `${FQ} MODE 3 2`;                        // A+BX with FREQ on
+const YBAR9 = "ȳ";                              // ȳ
+const at9 = (row, col) => s => (s.row === row - 1 && s.col === col ? "" : `cursor row ${s.row + 1} column ${s.col}, want row ${row} column ${col}`);
+const XS = want => s => { const g = s.data.map(d => d.x).join(";"); return g === want ? "" : `data ${g}, want ${want}`; };
+const FDATA = want => s => { const g = s.data.map(d => `${d.x}:${d.f}`).join(" "); return g === want ? "" : `data ${g}, want ${want}`; };
+const PAIRSF = want => s => { const g = s.pairs.map(p => `${p.x};${p.y};${p.f}`).join(" "); return g === want ? "" : `pairs ${g}, want ${want}`; };
+const ON9 = scr => s => (s.screen === scr ? "" : `screen ${s.screen}, want ${scr}`);
+const all9 = (...fs) => (s, ev) => fs.map(f => f(s, ev)).filter(Boolean).join("; ");
+const parse9 = t => Number(t.replace(/−/g, "-").replace(/,/g, ".").replace("×10^", "e"));
+
+section("Build 9 · the data editor: ▼ and ▲ wrap (spec §19.2)");
+
+row8("1-VAR with FREQ on, X 5, 7, 9: = walks down to the open row 4", "§19.2 measured example", [[V9, { g8: "X|FREQ || 2|7|1 / 3|9|1 / 4|[]|", freq: "FREQ" }, at9(4, 0)]]);
+row8("X column: ▼ on the open row wraps to row 1; ▲ on row 1 wraps back to the open row", "§19.2 device", [
+  [`${V9} ▼`, { g8: "X|FREQ || 1|[5]|1 / 2|7|1 / 3|9|1" }, at9(1, 0)],
+  ["▲", { g8: "X|FREQ || 2|7|1 / 3|9|1 / 4|[]|" }, at9(4, 0)],
+]);
+row8("FREQ column: the same wrap, both ways", "§19.2 device", [
+  [`${V9} ▶`, { g8: "X|FREQ || 2|7|1 / 3|9|1 / 4||[]" }, at9(4, 1)],
+  ["▼", { g8: "X|FREQ || 1|5|[1] / 2|7|1 / 3|9|1" }, at9(1, 1)],
+  ["▲", { g8: "X|FREQ || 2|7|1 / 3|9|1 / 4||[]" }, at9(4, 1)],
+]);
+row8("Y column (A+BX, X 1,2,3,4 / Y 2,4,5,8): the same wrap both ways, the view scrolls with it", "§19.2 device", [
+  [XB, { g8: "X|Y || 3|3|5 / 4|4|8 / 5||[]" }, at9(5, 1)],
+  ["▼", { g8: "X|Y || 1|1|[2] / 2|2|4 / 3|3|5" }, at9(1, 1)],
+  ["▲", { g8: "X|Y || 3|3|5 / 4|4|8 / 5||[]" }, at9(5, 1)],
+]);
+row8("A+BX X column: ▼ wraps to row 1, ▲ back to the open row", "§19.2 device", [
+  [`${XB} ◀`, {}, at9(5, 0)],
+  ["▼", { g8: "X|Y || 1|[1]|2 / 2|2|4 / 3|3|5" }, at9(1, 0)],
+  ["▲", { g8: "X|Y || 3|3|5 / 4|4|8 / 5|[]|" }, at9(5, 0)],
+]);
+row8("FREQ off (X only): the same wrap", "§19.2 device", [
+  ["MODE 3 1 2 = 4 = ▼", { g8: "X || 1|[2] / 2|4 / 3|" }, at9(1, 0)],
+  ["▲", { g8: "X || 1|2 / 2|4 / 3|[]" }, at9(3, 0)],
+]);
+row8("an empty table: ▼ and ▲ stay on its one open row", "§19.2: rows 1…n plus one open row, n = 0", [["MODE 3 1 ▼ ▲ ▲", { g8: "X || 1|[]" }, at9(1, 0)]]);
+row8("a typed number is stored first, then ▼ moves on; on the open row the next ▼ wraps", "§19.2; as before", [
+  ["MODE 3 1 5 = 7 = 9", { g8: "X || 1|5 / 2|7 / 3|[9]" }],
+  ["▼", { g8: "X || 2|7 / 3|9 / 4|[]" }, all9(at9(4, 0), XS("5;7;9"))],
+  ["▼", { g8: "X || 1|[5] / 2|7 / 3|9" }, at9(1, 0)],
+]);
+row8("= still walks DOWN the column it is in: 3 = 4 = fills FREQ rows 1 and 2", "kept: Megan's fx-991ZA photos, 2026-08-28", [
+  [`${V9} ▶ ▼ 3 = 4 =`, { g8: "X|FREQ || 1|5|3 / 2|7|4 / 3|9|[1]" }, all9(at9(3, 1), FDATA("5:3 7:4 9:1"))],
+]);
+row8("▶ from the FREQ column still jumps to the next row's X", "kept: her real fx-991ZA, 2026-08-28", [[`${V9} ▼ ▶ ▶`, { g8: "X|FREQ || 1|5|1 / 2|[7]|1 / 3|9|1" }, at9(2, 0)]]);
+row8("= with nothing typed: on the open row it stays put; on a data row it steps down", "Blipwork choice: the wrap was measured for ▼ only (not device-measured)", [
+  ["MODE 3 1 2 = 4 = =", { g8: "X || 1|2 / 2|4 / 3|[]" }, at9(3, 0)],
+  ["▼ =", { g8: "X || 1|2 / 2|[4] / 3|" }, at9(2, 0)],
+]);
+
+section("Build 9 · the cursor cell is inverted, its value bottom right; three rows (spec §19.2)");
+
+row8("the cursor cell holds its value and the same value shows bottom right: 7", "§19.2 device example", [[`${V9} ▲ ▲`, { g8: "X|FREQ || 2|[7]|1 / 3|9|1 / 4||", val: "7", typed: "" }, at9(2, 0)]]);
+row8("on the FREQ column its FREQ shows bottom right", "§19.2", [[`${V9} ▼ ▶`, { val: "1" }], ["3 = ▲", { val: "3", g8: "X|FREQ || 1|5|[3] / 2|7|1 / 3|9|1" }]]);
+row8("the open row's empty cell: nothing bottom right", "§19.2 (the cell has no value)", [[V9, { val: "", typed: "" }]]);
+row8("a decimal and a negative: 12,5 and −3 (the real minus) in the cell and bottom right", "decimal comma; house rule: the real minus", [
+  ["MODE 3 1 1 2 , 5 = (−) 3 = ▲", { g8: "X || 1|12,5 / 2|[−3] / 3|", val: "−3" }],
+  ["▲", { g8: "X || 1|[12,5] / 2|−3 / 3|", val: "12,5" }, XS("12.5;-3")],
+]);
+row8("three rows on show; the view scrolls to keep the cursor row in view", "§19.2 device", [
+  ["MODE 3 1 1 = 2 = 3 = 4 = 5 =", { g8: "X || 4|4 / 5|5 / 6|[]" }],
+  ["▲ ▲ ▲", { g8: "X || 3|[3] / 4|4 / 5|5" }],
+  ["▲ ▲", { g8: "X || 1|[1] / 2|2 / 3|3" }],
+  ["▼ ▼ ▼", { g8: "X || 2|2 / 3|3 / 4|[4]" }],
+]);
+
+section("Build 9 · typing: the number bottom left, a blinking cursor after it (spec §19.2)");
+
+row8("typing 12: the bottom-right value goes, 12 shows bottom left with the cursor after it", "§19.2 device", [
+  [`${V9} ▲ ▲ 1 2`, { typed: "12", cur: "12", res: "", val: "" }],
+  [", 5", { typed: "12,5", cur: "12,5" }],
+]);
+row8("while typing, the cursor cell shows the typed number too", "Blipwork choice: as before (not device-measured)", [[`${V9} ▲ ▲ 1 2`, { g8: "X|FREQ || 2|[12]|1 / 3|9|1 / 4||" }]]);
+row8("= stores it and steps down: the next value shows bottom right again", "§19.2 \"already right\"", [
+  [`${V9} ▲ ▲ 1 2 , 5 =`, { typed: "", val: "9", g8: "X|FREQ || 2|12,5|1 / 3|[9]|1 / 4||" }, all9(at9(3, 0), FDATA("5:1 12.5:1 9:1"))],
+]);
+row8("(−) types the real minus sign bottom left", "house rule", [["MODE 3 1 (−) 4", { typed: "−4" }], ["=", { g8: "X || 1|−4 / 2|[]" }, XS("-4")]]);
+
+section("Build 9 · AC and DEL in the editor (spec §19.2)");
+
+row8("AC while typing CANCELS the typing: the cell keeps 7 and the editor stays", "§19.2 device", [
+  [`${V9} ▲ ▲ 3 AC`, { typed: "", val: "7", g8: "X|FREQ || 2|[7]|1 / 3|9|1 / 4||" }, all9(ON9("statInput"), FDATA("5:1 7:1 9:1"))],
+]);
+row8("AC while typing on the open row stores nothing", "§19.2 device", [["MODE 3 1 5 = 7 AC", { typed: "", g8: "X || 1|5 / 2|[]" }, all9(ON9("statInput"), XS("5"))]]);
+row8("AC with nothing typed leaves to the STAT calculation screen; the data stays (n = 3)", "§19.2", [
+  [`${V9} AC`, { line: "", stat: "STAT" }, all9(ON9("comp"), FDATA("5:1 7:1 9:1"))],
+  ["SHIFT 1 4 1 =", { val: "3" }],
+]);
+row8("AC, AC: the first cancels the typing, the second leaves", "§19.2", [["MODE 3 1 5 = 7 AC", {}, ON9("statInput")], ["AC", {}, all9(ON9("comp"), XS("5"))]]);
+row8("DEL with nothing typed deletes the whole row; the rows below move up; the cursor stays on row 2", "§19.2 device", [
+  [`${V9} ▲ ▲ DEL`, { g8: "X|FREQ || 1|5|1 / 2|[9]|1 / 3||", val: "9" }, all9(at9(2, 0), FDATA("5:1 9:1"))],
+]);
+row8("DEL on the last row: that row number is now the open row", "§19.2", [[`${V9} ▲ DEL`, { g8: "X|FREQ || 1|5|1 / 2|7|1 / 3|[]|", val: "" }, all9(at9(3, 0), FDATA("5:1 7:1"))]]);
+row8("DEL on the FREQ column deletes the row too (its X and its FREQ)", "§19.2 \"the whole row\"", [
+  [`${V9} ▼ ▶ 4 = ▲ DEL`, { g8: "X|FREQ || 1|7|[1] / 2|9|1 / 3||" }, all9(at9(1, 1), FDATA("7:1 9:1"))],
+]);
+row8("DEL on the open row has nothing to delete", "Blipwork choice (not device-measured)", [["MODE 3 1 5 = 7 = DEL DEL", { g8: "X || 1|5 / 2|7 / 3|[]" }, XS("5;7")]]);
+row8("DEL while typing removes the last typed character; with nothing typed it deletes the row", "§19.2: DEL while typing kept (not measured)", [
+  ["MODE 3 1 5 = 7 = 9 = ▲ ▲ 1 2", { typed: "12" }],
+  ["DEL", { typed: "1" }],
+  ["DEL", { typed: "", val: "7" }, XS("5;7;9")],
+  ["DEL", { g8: "X || 1|5 / 2|[9] / 3|" }, XS("5;9")],
+]);
+row8("A+BX: DEL deletes the pair, its X and its Y", "§19.2", [[`${XB} ▼ DEL`, { g8: "X|Y || 1|2|[4] / 2|3|5 / 3|4|8" }, all9(at9(1, 1), PAIRS("2;4 3;5 4;8"))]]);
+row8("DEL reports the new data (the 1-VAR data milestone, as typing a value does)", "Blipwork choice", [
+  ["MODE 3 1 5 = 7 = 9 = ▲ ▲ DEL", {}, (s, ev) => { const e = ev.filter(x => x.t === "data").pop(); return e && e.p.join(";") === "5;9" ? "" : `last data event ${JSON.stringify(e && e.p)}`; }],
+]);
+
+section("Build 9 · SHIFT 9 (CLR) inside the editor (spec §19.2)");
+
+row8("SHIFT 9 in the editor: Clear? / 1:Setup 2:Memory / 3:All", "§19.2 device", [[`${V9} SHIFT 9`, { title: "Clear?", menu8: "1:Setup2:Memory3:All" }]]);
+row8("2 → Clear Memory? / [=] :Yes / [AC] :Cancel", "§19.2 device", [[`${V9} SHIFT 9 2`, { title: "Clear Memory?", notes: "[=] :Yes / [AC] :Cancel", menu8: "" }]]);
+row8("= → Complete! / Press [AC] key", "§19.2 device", [[`${V9} SHIFT 9 2 =`, { done: "Complete! / Press [AC] key", title: "", notes: "" }]]);
+row8("AC goes back to WHERE YOU WERE: the editor, cursor on row 1; the STAT data is not cleared", "§19.2 device", [
+  [`${V9} ▲ ▲ SHIFT 9 2 = AC`, { done: "", g8: "X|FREQ || 1|[5]|1 / 2|7|1 / 3|9|1", val: "5", stat: "STAT", freq: "FREQ" }, all9(ON9("statInput"), at9(1, 0), FDATA("5:1 7:1 9:1"))],
+]);
+row8("Memory clear from the editor still clears the memory: A, M and Ans to 0", "§16 (what Memory clears: Build 8 reading)", [
+  ["8 SHIFT RCL (−) 3 M+ MODE 3 1 5 = SHIFT 9 2 = AC", { m: false }, all9(XS("5"), s => (isZeroVal(s.vars.A) && isZeroVal(s.vars.M) && isZeroVal(s.ansVal) ? "" : "memory kept"))],
+]);
+row8("A+BX: Memory clear keeps the pairs, back to row 1", "§19.2", [[`${XB} SHIFT 9 2 = AC`, { g8: "X|Y || 1|[1]|2 / 2|2|4 / 3|3|5" }, all9(at9(1, 0), PAIRS("1;2 2;4 3;5 4;8"))]]);
+row8("AC on Clear? goes back to the editor, the cursor where it was", "Blipwork: as every menu (not device-measured)", [
+  [`${V9} ▲ ▲ SHIFT 9 AC`, { title: "", g8: "X|FREQ || 2|[7]|1 / 3|9|1 / 4||" }, ON9("statInput")],
+]);
+row8("AC on Clear Memory? cancels: back to the editor, nothing cleared (A keeps 5)", "§19.2 [AC] :Cancel", [
+  ["5 SHIFT RCL (−) MODE 3 1 5 = 7 = SHIFT 9 2 AC", { title: "", g8: "X || 1|5 / 2|7 / 3|[]" }, all9(ON9("statInput"), s => (s.vars.A.n === 5n ? "" : "A cleared"))],
+]);
+row8("SHIFT 9 while typing drops the typed number first", "Blipwork choice (not device-measured)", [["MODE 3 1 5 = 7 SHIFT 9 AC", { typed: "", g8: "X || 1|5 / 2|[]" }, XS("5")]]);
+row8("1:Setup in the editor: factory setup (FREQ off, so the X grid), back to the editor at row 1, data kept", "not device-measured: does what Setup does from the calculation screen", [
+  [`${V9} ▶ SHIFT 9 1`, { title: "Reset Setup?" }],
+  ["=", { done: "Reset Setup / Press [AC] Key" }],
+  ["AC", { g8: "X || 1|[5] / 2|7 / 3|9", freq: "" }, all9(ON9("statInput"), at9(1, 0), s => (s.freqOn ? "FREQ still on" : ""), XS("5;7;9"))],
+]);
+row8("3:All in the editor: everything reset, AC goes to COMP, the data is gone", "not device-measured: does what All does from the calculation screen", [
+  [`${V9} SHIFT 9 3`, { title: "Reset All?" }],
+  ["=", { done: "Reset All / Press [AC] Key" }, (s, ev) => (ev.some(e => e.t === "clear") ? "" : "no clear milestone")],
+  ["AC", { stat: "", freq: "", line: "" }, all9(ON9("comp"), s => (s.mode === "COMP" && s.data.length === 0 && !s.freqOn ? "" : `mode ${s.mode}, data ${s.data.length}`))],
+  ["2 + 2 =", { val: "4" }],
+]);
+
+section("Build 9 · MODE and SETUP from the editor (spec §19.2)");
+
+row8("MODE in the editor opens the MODE menu; AC goes back to the editor", "§19.2: MODE was missing there", [
+  [`${V9} ▲ MODE`, { menu8: P1, more: "▼" }],
+  ["AC", { menu8: "", g8: "X|FREQ || 2|7|1 / 3|[9]|1 / 4||" }, all9(ON9("statInput"), at9(3, 0))],
+]);
+row8("MODE 1 from the editor: COMP", "§16 MODE", [["MODE 3 1 5 = MODE 1", { stat: "" }, all9(ON9("comp"), s => (s.mode === "COMP" ? "" : s.mode))], ["2 + 3 =", { val: "5" }]]);
+row8("MODE 3 2 from the 1-VAR editor: an empty X | Y grid (picking a type clears the data)", "Build 8 rule", [
+  ["MODE 3 1 5 = MODE 3 2", { g8: "X|Y || 1|[]|" }, s => (s.mode === "REG" && s.data.length === 0 ? "" : `mode ${s.mode}, data ${s.data.length}`)],
+]);
+row8("SETUP in the editor opens SETUP; AC goes back to the editor", "§19.2: SETUP was missing there", [
+  ["MODE 3 1 5 = SHIFT MODE", { menu8: SP1 }], ["AC", { menu8: "", g8: "X || 1|5 / 2|[]" }, ON9("statInput")],
+]);
+row8("SETUP ▼ 4 1 from the editor: FREQ on, back to the editor with the X | FREQ grid", "§16 + §19.2", [
+  ["MODE 3 1 5 = 7 = SHIFT MODE ▼ 4 1", { g8: "X|FREQ || 1|5|1 / 2|7|1 / 3|[]|", freq: "FREQ" }, ON9("statInput")],
+]);
+row8("SETUP ▼ 4 2 on the FREQ column: FREQ off, the cursor moves to the X column", "Blipwork choice: the cursor stays on the grid (not device-measured)", [
+  [`${V9} ▼ ▶ SHIFT MODE ▼ 4 2`, { g8: "X || 1|[5] / 2|7 / 3|9", freq: "" }, at9(1, 0)],
+]);
+row8("SETUP Fix from the editor: the FIX tag; the bottom-right value follows Fix like the TABLE's bottom line", "Blipwork choice: TABLE's measured rule (not device-measured for STAT)", [
+  ["MODE 3 1 1 2 , 3 4 5 = ▲ SHIFT MODE 6 2", { fix: "FIX", val: "12,35", g8: "X || 1|[12,345] / 2|" }],
+  ["SHIFT MODE 8 2", { fix: "", val: "12,345" }],
+]);
+row8("MODE while typing drops the typed number", "Blipwork choice (not device-measured)", [["MODE 3 1 5 = 7 MODE AC", { typed: "", g8: "X || 1|5 / 2|[]" }, XS("5")]]);
+row8("MODE 3 1 from the A+BX editor fires the statMode milestone", "consumer: questions.js goal statMode", [
+  ["MODE 3 2 1 = MODE 3 1", { g8: "X || 1|[]" }, (s, ev) => (ev.some(e => e.t === "statMode") && s.mode === "STAT" ? "" : "no statMode")],
+]);
+
+section("Build 9 · SHIFT 1 inside the editor: the short menu, Edit, Ins, Del-A (spec §19.2)");
+
+row8("SHIFT 1 in the editor: 1:Type 2:Data / 3:Edit, no title", "§19.2 device", [[`${V9} SHIFT 1`, { menu8: "1:Type2:Data3:Edit", title: "" }]]);
+row8("3 → 1:Ins 2:Del-A; AC back to the short menu; AC back to the editor, cursor kept", "§19.2; AC: Blipwork (not device-measured)", [
+  [`${V9} ▲ SHIFT 1 3`, { menu8: "1:Ins2:Del-A", title: "" }],
+  ["AC", { menu8: "1:Type2:Data3:Edit" }],
+  ["AC", { menu8: "", g8: "X|FREQ || 2|7|1 / 3|[9]|1 / 4||" }, all9(ON9("statInput"), at9(3, 0))],
+]);
+row8("2:Data goes back to the editor; 1:Type and 4 to 9 do nothing", "§19.2; 1:Type as on the calculation screen", [
+  [`${V9} ▲ SHIFT 1 1 4 5 6 7 8 9`, { menu8: "1:Type2:Data3:Edit" }],
+  ["2", { menu8: "", g8: "X|FREQ || 2|7|1 / 3|[9]|1 / 4||" }, ON9("statInput")],
+]);
+row8("Ins puts a new row holding 0 (FREQ 1) at the cursor and pushes the rest down", "§19.2 device", [
+  [`${V9} ▲ ▲ SHIFT 1 3 1`, { menu8: "", g8: "X|FREQ || 2|[0]|1 / 3|7|1 / 4|9|1", val: "0" }, all9(ON9("statInput"), at9(2, 0), FDATA("5:1 0:1 7:1 9:1"))],
+]);
+row8("Ins, then type 6 =: the new row takes the value", "§19.2", [[`${V9} ▲ ▲ SHIFT 1 3 1 6 =`, {}, XS("5;6;7;9")]]);
+row8("A+BX: Ins puts X 0, Y 0 at the cursor", "§19.2", [[`${XB} ▼ SHIFT 1 3 1`, { g8: "X|Y || 1|0|[0] / 2|1|2 / 3|2|4" }, all9(at9(1, 1), PAIRS("0;0 1;2 2;4 3;5 4;8"))]]);
+row8("Ins on the open row adds a 0 row there", "Blipwork choice (not device-measured)", [["MODE 3 1 5 = SHIFT 1 3 1", { g8: "X || 1|5 / 2|[0] / 3|" }, XS("5;0")]]);
+row8("Ins drops a half-typed number", "Blipwork choice (not device-measured)", [["MODE 3 1 5 = 7 = ▲ 8 SHIFT 1 3 1", { typed: "", g8: "X || 1|5 / 2|[0] / 3|7" }, XS("5;0;7")]]);
+row8("Del-A empties the table at once (no question), cursor on row 1", "§19.2 device", [
+  [`${V9} ▲ ▶ SHIFT 1 3 2`, { menu8: "", title: "", notes: "", g8: "X|FREQ || 1|[]|", val: "" }, all9(ON9("statInput"), at9(1, 0), XS(""))],
+]);
+row8("A+BX: Del-A empties the pairs", "§19.2", [[`${XB} SHIFT 1 3 2`, { g8: "X|Y || 1|[]|" }, all9(at9(1, 0), PAIRS(""))]]);
+row8("Ins and Del-A report the new data (the 1-VAR data milestone)", "Blipwork choice", [
+  ["MODE 3 1 5 = SHIFT 1 3 1", {}, (s, ev) => { const e = ev.filter(x => x.t === "data").pop(); return e && e.p.join(";") === "5;0" ? "" : JSON.stringify(e && e.p); }],
+  ["SHIFT 1 3 2", {}, (s, ev) => { const e = ev.filter(x => x.t === "data").pop(); return e && e.p.length === 0 ? "" : JSON.stringify(e && e.p); }],
+]);
+row8("SHIFT 1 on the CALCULATION screen keeps its full 1-VAR menus", "§19.2 \"already match\"", [
+  [`${V9} AC SHIFT 1`, { menu8: "1:Type2:Data3:Sum4:Var5:Distr6:MinMax" }],
+  ["3", { menu8: "1:Σx²2:Σx", title: "Sum" }],
+  ["AC 4", { menu8: `1:n2:${XBAR}3:σx4:sx`, title: "Var" }],
+  ["AC 6", { menu8: "1:minX2:maxX3:Q14:med5:Q3", title: "MinMax" }],
+]);
+
+section("Build 9 · A+BX with FREQ on: X | Y | FREQ (spec §19.2)");
+
+row8("FREQ on, MODE 3 2: the grid is X | Y | FREQ", "§19.2 device", [[FQR, { g8: "X|Y|FREQ || 1|[]||", stat: "STAT" }]]);
+row8("each X fills its Y with 0 and its FREQ with 1", "§15; FREQ 1 as in 1-VAR", [[`${FQR} 1 = 2 =`, { g8: "X|Y|FREQ || 1|1|0|1 / 2|2|0|1 / 3|[]||" }, PAIRSF("1;0;1 2;0;1")]]);
+row8("▶ walks X → Y → FREQ, then the next row's X; ◀ walks back, from X to the row above's FREQ", "FREQ's ◀ ▶ rules kept (not device-measured for three columns)", [
+  [`${FQR} 1 = 2 = ▲ ▲ ▶`, { g8: "X|Y|FREQ || 1|1|[0]|1 / 2|2|0|1 / 3|||" }],
+  ["▶", { g8: "X|Y|FREQ || 1|1|0|[1] / 2|2|0|1 / 3|||" }],
+  ["▶", { g8: "X|Y|FREQ || 1|1|0|1 / 2|[2]|0|1 / 3|||" }],
+  ["◀", { g8: "X|Y|FREQ || 1|1|0|[1] / 2|2|0|1 / 3|||" }],
+]);
+row8("= walks down the FREQ column; ▼ and ▲ wrap there too", "§19.2", [
+  [`${FQR} 1 = 2 = ▲ ▲ ▶ ▶ 3 = 2 =`, { g8: "X|Y|FREQ || 1|1|0|3 / 2|2|0|2 / 3|||[]" }, PAIRSF("1;0;3 2;0;2")],
+  ["▼", { g8: "X|Y|FREQ || 1|1|0|[3] / 2|2|0|2 / 3|||" }],
+  ["▲", { g8: "X|Y|FREQ || 1|1|0|3 / 2|2|0|2 / 3|||[]" }],
+]);
+row8("factory A+BX (FREQ off) stays X | Y", "§19.2 \"factory is FREQ off\"", [["MODE 3 2", { g8: "X|Y || 1|[]|" }]]);
+{
+  /* the weighting is NOT device-measured: X 1, 2, 3 / Y 2, 4, 5 / FREQ 1, 2, 3
+     must give exactly what the six pairs 1;2 2;4 2;4 3;5 3;5 3;5 give, computed
+     here from those six pairs (and, as a second opinion, typed into a FREQ-off
+     A+BX grid as six rows) */
+  const X6 = [1, 2, 2, 3, 3, 3], Y6 = [2, 4, 4, 5, 5, 5], n6 = 6;
+  const S6 = f => X6.reduce((q, x, i) => q + f(x, Y6[i]), 0);
+  const sx = S6(x => x), sy = S6((x, y) => y), sxx = S6(x => x * x), sxy = S6((x, y) => x * y), syy = S6((x, y) => y * y);
+  const B6 = (n6 * sxy - sx * sy) / (n6 * sxx - sx * sx), A6 = (sy - B6 * sx) / n6, r6 = (n6 * sxy - sx * sy) / Math.sqrt((n6 * sxx - sx * sx) * (n6 * syy - sy * sy));
+  const my = sy / n6, sigY = Math.sqrt(S6((x, y) => (y - my) ** 2) / n6);
+  const want = { "A": A6, "B": B6, "r": r6, "n": n6, "Σxy": sxy, "σy": sigY, "minX": 1, "maxY": 5, "5ŷ": A6 + 5 * B6 };
+  const reads = [["A", "AC SHIFT 1 5 1 ="], ["B", "AC SHIFT 1 5 2 ="], ["r", "AC SHIFT 1 5 3 ="], ["n", "AC SHIFT 1 4 1 ="], ["Σxy", "AC SHIFT 1 3 5 ="], ["σy", "AC SHIFT 1 4 6 ="], ["minX", "AC SHIFT 1 6 1 ="], ["maxY", "AC SHIFT 1 6 4 ="], ["5ŷ", "AC 5 SHIFT 1 5 5 ="]];
+  const close = (g, w) => Math.abs(g - w) <= 1e-9 * Math.max(1, Math.abs(w));
+  const weighted = freshCalc(), six = freshCalc(document.getElementById("fitHost"));
+  const diffs = [], got = {};
+  try {
+    weighted.press(`${FQR} 1 = 2 = 3 = ▶ ▲ ▲ ▲ 2 = 4 = 5 = ▶ ▲ ▲ ▲ 1 = 2 = 3 =`);
+    const pf = weighted.api.state().pairs.map(p => `${p.x};${p.y};${p.f}`).join(" ");
+    if (pf !== "1;2;1 2;4;2 3;5;3") diffs.push(`pairs ${pf}`);
+    six.press(`MODE 3 2 ${X6.map(x => `${x} =`).join(" ")} ▶ ${X6.map(() => "▲").join(" ")} ${Y6.map(y => `${y} =`).join(" ")}`);
+    for (const [name, keys] of reads) {
+      weighted.press(keys); six.press(keys);
+      const a = read(weighted.h).val, b = read(six.h).val;
+      got[name] = a;
+      if (!close(parse9(a), want[name])) diffs.push(`${name} = ${a}, computed ${want[name]}`);
+      if (a !== b) diffs.push(`${name}: FREQ grid ${a}, six rows ${b}`);
+    }
+  } catch (e) { diffs.push("threw: " + e.message); }
+  document.getElementById("fitHost").innerHTML = "";
+  tick(diffs.length === 0, `FREQ weights every A+BX read-off: X 1,2,3 / Y 2,4,5 / FREQ 1,2,3 = the six pairs one by one (A ${got.A}, B ${got.B}, r ${got.r}, n ${got.n}, σy ${got["σy"]}) <span class="why">[computed, not device-measured]</span>`, diffs.join("; "));
+}
+row8("FREQ 0 drops a pair: X 1,2,3,9 / Y 2,4,5,100 / FREQ 1,1,1,0 gives the first three pairs' n, B and maxY", "computed, not device-measured (1-VAR's FREQ 0 rule)", [
+  [`${FQR} 1 = 2 = 3 = 9 = ▶ ▲ ▲ ▲ ▲ 2 = 4 = 5 = 100 = ▶ ▲ 0 = AC SHIFT 1 4 1 =`, { val: "3" }],
+  ["AC SHIFT 1 5 2 =", { val: "1,5" }], ["AC SHIFT 1 6 4 =", { val: "5" }],
+]);
+row8("FREQ off again: every pair counts once (the FREQ values are kept)", "computed, not device-measured", [
+  [`${FQR} 1 = 2 = 3 = ▶ ▲ ▲ ▲ 2 = 4 = 5 = ▶ ▲ ▲ ▲ 1 = 2 = 3 = AC SHIFT MODE ▼ 4 2 SHIFT 1 4 1 =`, { val: "3" }, PAIRSF("1;2;1 2;4;2 3;5;3")],
+  ["AC SHIFT 1 2", { g8: "X|Y || 2|2|4 / 3|3|5 / 4||[]" }],   // the cursor was on the FREQ column: it lands on Y, the last column now
+]);
+
+section("Build 9 · A+BX Sum / Var / MinMax (spec §19.3)");
+
+const SUM9 = "1:Σx²2:Σx3:Σy²4:Σy5:Σxy6:Σx³7:Σx²y8:Σx⁴", VAR9 = `1:n2:${XBAR}3:σx4:sx5:${YBAR9}6:σy7:sy`, MM9 = "1:minX2:maxX3:minY4:maxY", REGM = "1:Type2:Data3:Sum4:Var5:Reg6:MinMax";
+row8("Sum: 1:Σx² 2:Σx / 3:Σy² 4:Σy / 5:Σxy 6:Σx³ / 7:Σx²y 8:Σx⁴, no title", "§19.3 device", [[`${XB} AC SHIFT 1 3`, { menu8: SUM9, title: "" }]]);
+row8("Var: 1:n 2:x̄ / 3:σx 4:sx / 5:ȳ 6:σy / 7:sy, no title", "§19.3 device", [[`${XB} AC SHIFT 1 4`, { menu8: VAR9, title: "" }]]);
+row8("MinMax: 1:minX 2:maxX / 3:minY 4:maxY, no title", "§19.3 device", [[`${XB} AC SHIFT 1 6`, { menu8: MM9, title: "" }]]);
+row8("AC in each list goes back to the STAT menu", "as Reg (Build 8)", [[`${XB} AC SHIFT 1 3 AC`, { menu8: REGM }], ["4 AC", { menu8: REGM }], ["6 AC", { menu8: REGM }]]);
+row8("a digit with no item does nothing: Sum 9 0, Var 8 9 0, MinMax 5 9 0", "Blipwork choice, as the 1-VAR lists", [
+  [`${XB} AC SHIFT 1 3 9 0`, { menu8: SUM9, line: "" }], ["AC 4 8 9 0", { menu8: VAR9, line: "" }], ["AC 6 5 9 0", { menu8: MM9, line: "" }],
+]);
+row8("maxY = 8", "§19.3 device answer", [[`${XB} AC SHIFT 1 6 4`, { line: "maxY", cur8: "maxY", res: "" }], ["=", { line: "maxY", val: "8" }]]);
+row8("σy = 2,165063509", "§19.3 device answer", [[`${XB} AC SHIFT 1 4 6`, { line: "σy", cur8: "σy" }], ["=", { val: "2,165063509" }]]);
+{
+  /* every other token, against the value this page computes from X 1,2,3,4 /
+     Y 2,4,5,8 (computed, not device-measured: only maxY and σy were probed) */
+  const X4 = [1, 2, 3, 4], Y4 = [2, 4, 5, 8], n = 4;
+  const S4 = f => X4.reduce((q, x, i) => q + f(x, Y4[i]), 0);
+  const mx = S4(x => x) / n, my = S4((x, y) => y) / n, ssx = S4(x => (x - mx) ** 2), ssy = S4((x, y) => (y - my) ** 2);
+  const TOKS = [
+    ["3 1", "Σx²", S4(x => x * x)], ["3 2", "Σx", S4(x => x)], ["3 3", "Σy²", S4((x, y) => y * y)], ["3 4", "Σy", S4((x, y) => y)],
+    ["3 5", "Σxy", S4((x, y) => x * y)], ["3 6", "Σx³", S4(x => x ** 3)], ["3 7", "Σx²y", S4((x, y) => x * x * y)], ["3 8", "Σx⁴", S4(x => x ** 4)],
+    ["4 1", "n", n], ["4 2", XBAR, mx], ["4 3", "σx", Math.sqrt(ssx / n)], ["4 4", "sx", Math.sqrt(ssx / (n - 1))],
+    ["4 5", YBAR9, my], ["4 7", "sy", Math.sqrt(ssy / (n - 1))],
+    ["6 1", "minX", Math.min(...X4)], ["6 2", "maxX", Math.max(...X4)], ["6 3", "minY", Math.min(...Y4)],
+  ];
+  for (const [keys, tok, want] of TOKS) {
+    row8(`${tok}: pasted as "${tok}", = gives ${String(+want.toPrecision(10)).replace(".", ",")}`, "computed, not device-measured", [
+      [`${XB} AC SHIFT 1 ${keys}`, { line: tok, cur8: tok }],
+      ["=", {}, (s, ev) => { const v = parse9(read(host).val); const p = lastStat(ev); return Math.abs(v - want) <= 1e-9 * Math.max(1, Math.abs(want)) && p && p.tok === NFC(tok) && Math.abs(p.value - want) < 1e-9 ? "" : `shows ${read(host).val}, milestone ${JSON.stringify(p)}, computed ${want}`; }],
+    ]);
+  }
+}
+row8("ȳ is drawn with the app's bar over the y, never a combining macron", "house rule (x̄'s way)", [
+  [`${XB} AC SHIFT 1 4 5`, { line: YBAR9 }, () => { const ex = host.querySelector(".lcd-expr"), ov = ex && ex.querySelector(".lcd-ov"); return ov && ov.textContent === "y" && ex.textContent === "y" && !/[̄ȳ]/.test(ex.innerHTML) ? "" : `expr html ${ex && ex.innerHTML}`; }],
+]);
+row8("keep typing: 2ȳ = 9,5, and the read-off goes into Ans", "§19.3 \"same as Reg\"", [[`${XB} AC 2 SHIFT 1 4 5 =`, { line: `2${YBAR9}`, val: "9,5" }], ["Ans × 2 =", { val: "19" }]]);
+row8("the previous answer stays bottom right until =, as for Reg", "§15 rule", [[`${XB} AC 5 + 5 = SHIFT 1 6 4`, { line: "maxY", res: "10" }], ["=", { val: "8" }]]);
+row8("the stat milestone in A+BX: tok σy with the two-variable number", "consumer: questions.js compares tok and the NUMBER", [
+  [`${XB} AC SHIFT 1 4 6 =`, {}, (s, ev) => { const p = lastStat(ev); return p && p.tok === "σy" && Math.abs(p.value - Math.sqrt(4.6875)) < 1e-12 ? "" : JSON.stringify(p); }],
+]);
+row8("x̄ in A+BX reports the X column's mean, 2,5 (it used to read 1-VAR's empty data)", "consumer guard", [
+  [`${XB} AC SHIFT 1 4 2 =`, { val: "2,5" }, (s, ev) => { const p = lastStat(ev); return p && p.tok === XBAR && p.value === 2.5 ? "" : JSON.stringify(p); }],
+]);
+row8("no pairs: maxY is Math ERROR", "as 1-VAR with no data", [["MODE 3 2 AC SHIFT 1 6 4 =", { err: ERR("Math ERROR") }]]);
+row8("1-VAR's x̄ is unchanged next to it (13/3 = 4,333333333)", "Build 8 rows", [[`${V1} SHIFT 1 4 2 =`, { val: "4,333333333" }]]);
+
+section("Build 9 · the calcdo questions still mark correctly (quest01 + questions.js's goal rules)");
+{
+  const { quest01 } = await import("./js/quests/quest01-calculator.js");
+  const ms = a => a.slice().sort((x, y) => x - y).join(",");
+  const goalMet = (g, s, f) => (g.type === "statMode" ? f.enteredStat || s.mode === "STAT" : g.type === "data" ? ms(s.data.map(d => d.x)) === ms(g.expect)
+    : g.type === "stat" ? !!(f.lastStat && f.lastStat.tok === g.tok && f.lastStat.value != null && Math.abs(f.lastStat.value - g.value) <= (g.tol == null ? 1e-6 : g.tol)) : null);
+  const runQ = (q, keys) => {
+    const f = { enteredStat: false, lastStat: null };
+    const c = freshCalc(host, { setup: q.setup, onEvent(t, p) { if (t === "statMode") f.enteredStat = true; else if (t === "stat") f.lastStat = p; } });
+    c.press(keys);
+    return goalMet(q.goal, c.api.state(), f);
+  };
+  const SK = id => quest01.skills.find(s => s.id === id).gen();
+  const cap = SK("capture"), vals = cap.goal.expect;
+  const typed = vals.map(v => `${v} =`).join(" ");
+  tick(runQ(cap, `MODE 3 1 ${typed}`) === true, `capture: the taught keys (each value then =) still count <span class="why">[consumer]</span>`, "");
+  tick(runQ(cap, `MODE 3 1 ${typed} DEL ▼ ▲`) === true, `capture: DEL on the open row and a wrap there change nothing <span class="why">[§19.2]</span>`, "");
+  tick(runQ(cap, `MODE 3 1 ${vals.slice(0, -1).map(v => `${v} =`).join(" ")} ${vals[vals.length - 1]} AC`) === false,
+       `capture: the last value typed then AC (no =) is NOT captured, as on the device <span class="why">[§19.2: AC cancels the typing]</span>`, "");
+  tick(runQ(cap, `MODE 3 1 ${typed} ▲ DEL`) === false, `capture: deleting a row with DEL makes the data wrong <span class="why">[§19.2]</span>`, "");
+  tick(runQ(cap, `MODE 3 1 ${typed} SHIFT 1 3 2 ${typed}`) === true, `capture: Del-A, then the values again, counts <span class="why">[§19.2]</span>`, "");
+  tick(runQ(SK("statMode"), "MODE 3 2 MODE 3 1") === true, `statMode: MODE 3 1 from the A+BX editor counts <span class="why">[consumer]</span>`, "");
+  const rm = SK("readMean");
+  tick(runQ(rm, "SHIFT 1 4 2 =") === true && runQ(rm, "SHIFT 1 2 SHIFT 1 4 2 =") === false && runQ(rm, "SHIFT 1 2 AC SHIFT 1 4 2 =") === true,
+       `readMean: from the editor SHIFT 1 is the short menu, so AC comes first, as on the device <span class="why">[§19.2]</span>`, "");
+}
+
+/* ---- DOM measurements at 375 px: the editor keeps the LCD's plain height
+   with three rows, the cursor cell is reversed (not underlined, not
+   blinking), the value bottom right is big, the typed number bottom left has
+   a blinking cursor, and the new menus fit ---- */
+section("Build 9 · the editor, its cursor cell and the new menus fit (DOM measurement)");
+function measureBuild9(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  const same = h0 => Math.abs(L().height - h0) < 0.5;
+  const unclipped = el => el.scrollWidth <= el.clientWidth + 0.5;
+  const lcdBg = getComputedStyle(lcd).backgroundColor, lcdInk = getComputedStyle(lcd).color;
+  const rev = el => !!el && getComputedStyle(el).backgroundColor === lcdInk && getComputedStyle(el).color === lcdBg;
+  const textBox = el => { const rg = document.createRange(); rg.selectNodeContents(el); return rg.getBoundingClientRect(); };
+  const lines = () => {
+    const byTop = new Map();
+    for (const i of h.querySelectorAll(".lcd-mi")) { const t = Math.round(i.getBoundingClientRect().top); byTop.set(t, [...(byTop.get(t) || []), glyphText(i)]); }
+    return [...byTop.keys()].sort((a, b) => a - b).map(t => byTop.get(t).join(" ")).join(" / ");
+  };
+  press("AC ON AC SHIFT 9 3 = AC");
+  const h0 = L().height;
+  for (const [keys, label] of [
+    ["MODE 3 1", "the empty 1-VAR editor"],
+    ["MODE 3 1 1 2 , 5 = (−) 3 = 7 = ▲", "1-VAR with 12,5, −3 and 7, cursor on 7"],
+    [`${FQ} MODE 3 1 ${Array.from({ length: 10 }, (_, k) => `${k + 1} =`).join(" ")} ▶ ▲ ▲`, "1-VAR FREQ with ten rows, cursor on a FREQ"],
+    [`${FQR} 1 2 , 5 = (−) 3 = ▶ ▲ ▲ 1 0 0 = 2 = ▶ ▲ ▲ 3 =`, "A+BX X | Y | FREQ with 12,5, −3, 100"],
+  ]) {
+    press(`AC AC AC ON AC SHIFT 9 3 = AC ${keys}`);
+    const t = h.querySelector("table.lcd-stat"), cells = t ? [...t.querySelectorAll("th,td")] : [];
+    const sel = t ? [...t.querySelectorAll("td.lcd-tbl-sel")] : [], others = t ? [...t.querySelectorAll("td:not(.lcd-tbl-sel)")] : [];
+    tick(!!t && t.rows.length === 4 && cells.every(inside) && cells.every(unclipped) && same(h0),
+         `${where}: ${label}: heading + three rows inside the LCD, no cell cut, LCD height unchanged`,
+         `${t ? t.rows.length : 0} rows, LCD ${Math.round(h0)} → ${Math.round(L().height)} px, ${cells.filter(c => !inside(c)).length} outside, ${cells.filter(c => !unclipped(c)).length} cut`);
+    tick(sel.length === 1 && rev(sel[0]) && others.every(c => getComputedStyle(c).backgroundColor === "rgba(0, 0, 0, 0)") && !t.querySelector("u")
+         && getComputedStyle(sel[0]).animationName === "none" && sel[0].getBoundingClientRect().height >= 9,
+         `${where}: ${label}: ONE cursor cell, inverted (dark cell, light digits), steady, no underline`, `ink ${lcdInk}, LCD ${lcdBg}`);
+    const res = h.querySelector(".lcd-res.lcd-tbl-val"), fCell = parseFloat(getComputedStyle(sel[0] || t).fontSize);
+    const v = res && res.textContent !== "" ? textBox(res) : null;
+    tick(!!res && inside(res) && (v == null || (L().right - v.right < 14 && v.left > L().left + L().width / 2)) && parseFloat(getComputedStyle(res).fontSize) > 2 * fCell && !h.querySelector(".lcd-eqn-in"),
+         `${where}: ${label}: the cursor cell's value "${res ? res.textContent : ""}" bottom right, big, inside the LCD`, `${res ? getComputedStyle(res).fontSize : "none"} against ${fCell}px cells`);
+  }
+  // typing: bottom left, a blinking cursor after it, no value bottom right
+  press("AC AC AC ON AC SHIFT 9 3 = AC MODE 3 1 5 = 7 = 9 = ▲ ▲ 1 2 3 4 5 6 , 7 8");
+  const tin = h.querySelector(".lcd-eqn-in"), cur = tin && tin.querySelector(".calc-cursor"), ex = tin && tin.querySelector(".lcd-expr"), tb = h.querySelector("table.lcd-stat");
+  let tr = null;
+  if (ex && cur) { const rg = document.createRange(); rg.setStart(ex, 0); rg.setEndBefore(cur); tr = rg.getBoundingClientRect(); }   // the typed digits only
+  tick(!!tin && !!cur && inside(tin) && same(h0) && !h.querySelector(".lcd-res") && tr.left - L().left < 16 && tr.right < L().left + L().width / 2 + 40
+       && cur.getBoundingClientRect().left >= tr.right - 1 && getComputedStyle(cur).animationName === "calc-blink" && tin.getBoundingClientRect().top >= tb.getBoundingClientRect().bottom - 0.5,
+       `${where}: typing 123456,78: bottom LEFT under the grid, a blinking cursor after it, nothing bottom right, LCD height unchanged`,
+       `text ${tr ? Math.round(tr.left - L().left) : "?"}…${tr ? Math.round(tr.right - L().left) : "?"} px from the LCD's left, LCD ${Math.round(L().height)} px`);
+  // the menus
+  for (const [keys, label, want] of [
+    ["AC SHIFT 1", "the editor's short menu", "1:Type 2:Data / 3:Edit"],   // AC cancels the typing, the editor stays
+    ["3", "Edit", "1:Ins 2:Del-A"],
+    ["AC AC AC AC ON AC SHIFT 9 3 = AC MODE 3 2 1 = 2 = 3 = 4 = ▶ ▲ ▲ ▲ ▲ 2 = 4 = 5 = 8 = AC SHIFT 1 3", "A+BX Sum (four lines)", "1:Σx² 2:Σx / 3:Σy² 4:Σy / 5:Σxy 6:Σx³ / 7:Σx²y 8:Σx⁴"],
+    ["AC 4", "A+BX Var (four lines)", `1:n 2:${XBAR} / 3:σx 4:sx / 5:${YBAR9} 6:σy / 7:sy`],
+    ["AC 6", "A+BX MinMax", "1:minX 2:maxX / 3:minY 4:maxY"],
+  ]) {
+    press(keys);
+    const items = [...h.querySelectorAll(".lcd-mi")];
+    tick(lines() === NFC(want) && items.every(inside) && [...h.querySelectorAll(".calc-main > *")].every(inside) && same(h0),
+         `${where}: ${label} line by line "${want}", inside the LCD, height unchanged`, `"${lines()}", LCD ${Math.round(L().height)} px`);
+  }
+  for (const [keys, label] of [["AC AC SHIFT 1 2 SHIFT 9 2", "Clear Memory? with its two lines"], ["=", "Complete! / Press [AC] key"]]) {
+    press(keys);
+    tick([...h.querySelectorAll(".calc-main > *")].every(inside) && same(h0), `${where}: ${label} sits inside the LCD, height unchanged`, `LCD ${Math.round(L().height)} px`);
+  }
+  press("AC");
+  tick(!!h.querySelector("table.lcd-stat") && same(h0), `${where}: AC after Complete! is back in the editor`, "");
+  // ȳ on the line, with its bar, fits
+  press("AC AC SHIFT 1 4 5");
+  const ov = h.querySelector(".lcd-expr .lcd-ov");
+  tick(!!ov && inside(ov) && same(h0) && getComputedStyle(ov).borderTopStyle === "solid", `${where}: ȳ with its bar fits the line, height unchanged`, "");
+  press("AC AC ON AC SHIFT 9 3 = AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild9(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild9(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 

@@ -703,6 +703,12 @@ h2{font-size:20px} h3{font-size:17px}
 .lcd-tbl .calc-x10{line-height:0}
 .lcd-tbl .calc-x10-exp{vertical-align:baseline;position:relative;top:-3px;line-height:0}   /* the ×10 form raised without making its row taller */
 .lcd-res.lcd-tbl-val{min-height:0;height:26px;line-height:26px}
+/* calculator Build 9 (spec §19.2): the STAT data editor is drawn with these
+   same TABLE cells (table.lcd-tab.lcd-tbl.lcd-stat, three rows, its cursor
+   cell the reversed .lcd-tbl-sel, its value in .lcd-tbl-val) and shows a
+   number being typed bottom left on the EQN grid's .lcd-eqn-in line (Build 7,
+   below). .lcd-stat has no rules of its own: it names the STAT grid for the
+   verify page. The calculator no longer draws the .lcd-tab u underline. */
 /* calculator Build 7: the EQN / INEQ coefficient grid (MODE 5, spec §13). The
    TABLE grid's small cells, no lines between the columns, matrix brackets
    drawn by the borders of two thin bracket columns (.lcd-eqn-bl = "[", .lcd-eqn-br
