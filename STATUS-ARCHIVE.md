@@ -1,6 +1,20 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
-## 2026-10-04 (Sun, 09:30 to 11:00): calculator Builds 9 + 10, foreman run, third probe (LOCAL only)
+## 2026-10-04 (Sun, 10:29 to 10:40): sw v94 shipped (Builds 9 + 10)
+
+**Her words:** "yes, ship it, and then wrap up please".
+
+**Ship.** Pre-flight: tree clean, 5 local commits in the range, no migration or supabase
+file in it, public-repo scan of the added lines clean (no names, emails or keys). sw.js
+CACHE mhq-v93 → mhq-v94, commit `1dc72c9` (written with `git commit -F`). With the bumped
+tree: lazy_playthrough 18/18 (boot check), verify-calc-casio 1030/1030, verify-calculator
+77/77; `python tools/sw_check.py` OK; push 48a2a91..1dc72c9. After the push (curl + gh
+api): Pages build `built` for 1dc72c9 on the fourth poll (about 30 s), live index / sw.js
+/ js/calculator.js / css/styles.css all 200, live sw reads mhq-v94, live calculator.js
+md5 equal to `git show HEAD:js/calculator.js`. Blipwork only: Stats Quest NOT copied.
+Test server started with Start-Process and stopped by the PID that held port 5191.
+
+## 2026-10-04 (Sun, 09:30 to 10:29): calculator Builds 9 + 10, foreman run, third probe (LOCAL only)
 
 **Her words:** "you will be running as foreman for builds 9 and 10, and then I just want you
 to fix my casio emulator, it no longer allows me to enter numbers from my keyboard ... you

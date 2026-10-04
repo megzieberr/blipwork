@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-04 11:00 (🧮 calculator Builds 9 + 10 BUILT and reviewed, LOCAL only; live is still sw v93; ship waits on her word)
+# Project status — updated 2026-10-04 10:40 (🧮 calculator Builds 9 + 10 LIVE as sw v94; next = her phone test, then the Stats Quest copy)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,20 +9,19 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **🧮 Calculator rebuild LIVE as sw v93 (Sun 2026-10-04 08:40, her "please push the new
-  calculator").** Ship commit `48a2a91`; fresh 827/827 + 77/77 before the push, sw_check OK,
-  Pages build success, live `js/calculator.js` byte-identical to HEAD. Blipwork only:
-  **Stats Quest still has the old calculator** (and the old tan(20) Math ERROR).
-- **Builds 9 + 10 BUILT and reviewed Sun 2026-10-04 (her "you will be running as foreman
-  for builds 9 and 10 ... you may start"), LOCAL only, main is 4 ahead of origin:**
-  `d40c276` Build 9 (STAT editor: wrap, inverted cursor cell with its value bottom right,
-  typing bottom left, AC cancels, DEL deletes a row, SHIFT 9 / MODE / SETUP inside the
-  editor, short SHIFT 1 menu with Edit → Ins / Del-A, X | Y | FREQ, the two-variable
-  Sum / Var / MinMax lists), `52bd8e1` Build 10 (GCD / LCM + Argument ERROR, the 12-digit
-  cut, DEL inside fractions and roots), `6b9739c` review fixes from a third emulator
-  probe (spec §19.8). Fresh after the last edit: verify-calc-casio 1030/1030,
-  verify-calculator 77/77, verify-calc-sum-edit 30/30, verify-steps-ux 33/33, verify-dice
-  146/146, the four other dice pages green, verify-lazy-load 52/52. sw.js NOT bumped yet.
+- **🧮 Calculator Builds 9 + 10 LIVE as sw v94 (Sun 2026-10-04 10:35, her "yes, ship it").**
+  Ship commit `1dc72c9`; sw_check OK before the push; Pages build `built` for 1dc72c9;
+  live sw reads mhq-v94; live `js/calculator.js` byte-identical to HEAD. In it: `d40c276`
+  Build 9 (STAT editor: wrap, inverted cursor cell with its value bottom right, typing
+  bottom left, AC cancels, DEL deletes a row, SHIFT 9 / MODE / SETUP inside the editor,
+  short SHIFT 1 menu with Edit → Ins / Del-A, X | Y | FREQ, the two-variable Sum / Var /
+  MinMax lists), `52bd8e1` Build 10 (GCD / LCM + Argument ERROR, the 12-digit cut, DEL
+  inside fractions and roots), `6b9739c` review fixes from a third emulator probe (spec
+  §19.8). Fresh before the push: verify-calc-casio 1030/1030, verify-calculator 77/77,
+  verify-calc-sum-edit 30/30, verify-steps-ux 33/33, verify-dice 146/146, four more dice
+  pages green, verify-lazy-load 52/52, lazy_playthrough 18/18. Blipwork only: **Stats
+  Quest still has the OLD calculator** (and the old tan(20) Math ERROR).
+- v93 (same morning, 08:40, `48a2a91`) was the eight-build rebuild; details in the archive.
 - Her goal in her words: the kids "really suck at calculator work" and felt overwhelmed
   by the stats steps, so the app must not throw them off.
 - ⚠️ **EVERY SHIP FROM NOW ON: `python tools/sw_check.py` must print OK before the push.**
@@ -129,11 +128,13 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   menu, so a read-off needs AC first. Blipwork's read-off quests start on the calculation
   screen and the concept card already says "type the values, AC"; any Stats Quest hint
   that goes straight from typing to SHIFT 1 must gain the AC at the copy.
+- 2026-10-04 (hers): "yes, ship it, and then wrap up please" → sw v94 live, Blipwork only.
 
 ## ⏳ Pending on Megan
-- 💻 1 line [blocking the fixes going live]: say "ship it" → sw v94 (Builds 9 + 10, GitHub
-  only, no Supabase), then test GCD and the stats table on your phone.
-- 💻 1 line [whenever]: say "copy it to Stats Quest" (best after v94 ships).
+- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v94) → calculator → try
+  GCD(12;18 (ALPHA ×, then SHIFT ) for the ;) and the stats table (▼ past the last row,
+  the dark bar on your line).
+- 💻 1 line [whenever]: say "copy it to Stats Quest" (v94 is live, so it is ready).
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v92) → play one round in any
   chapter → 📝 Exam Focus → one card. While there: your Blip's outline in his body colour,
   the exponential card reads y = a·b^(x − p) + q. Optional: airplane mode, reopen a
@@ -149,12 +150,9 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
-- **Ship v94 on her "ship it" (Builds 9 + 10 + review fixes, 4 local commits).** Plan: run
-  every verify page + `node verify-lazy-load.mjs` fresh, public-repo scan of the 4-commit
-  range, bump `sw.js` CACHE mhq-v93 → mhq-v94, ship commit, push (GitHub Pages only, no
-  migration), `python tools/sw_check.py` OK, Pages build `built`, live sw reads v94, live
-  calculator.js matches HEAD. Then her phone test: GCD / LCM, the stats table.
-- **Stats Quest copy after that, her word:** `js/calculator.js` WITH the new calculator
+- **Her phone test of v94** (GCD / LCM, the stats table); anything she finds gets measured
+  on the emulator first, then built (one unit per worker).
+- **Stats Quest copy, her word, fresh session:** `js/calculator.js` WITH the new calculator
   CSS from `css/styles.css` (`.calc-ind` slots, error screen, `.calc-logb-base`,
   `.calc-abs-body`, `.calc-comb`, `.calc-mixed-whole`, `.ind-fix`, `.lcd-pr*`,
   `.lcd-solve`, `.lcd-sv-*`, `.lcd-tbl*`, `.lcd-eqn*`, `.lcd-ineq`, `.lcd-menu-*`,
