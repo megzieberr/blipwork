@@ -1,5 +1,43 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-04 (Sun, 08:35 to 09:30): sw v93 shipped; her phone test; second emulator probe
+
+**Her words:** "please push the new calculator to blipwork, I want to test the functions in
+the app itself on my phone please". Later: "you can take control of my laptop again and play
+with the calculator ... here is your /go".
+
+**Ship.** sw.js CACHE mhq-v92 → mhq-v93, commit `48a2a91` (written with `git commit -F`).
+Before the push: verify-calc-casio 827/827 and verify-calculator 77/77 rerun fresh against a
+local `python -m http.server 5191`, `node verify-lazy-load.mjs` 52/52, public-repo scan of the
+11-commit range clean (no names, emails or keys), no migration in the range. After the push:
+`python tools/sw_check.py` OK, Pages build `built` for 48a2a91, live index / sw.js /
+js/calculator.js / css/styles.css all 200, live sw reads mhq-v93, live calculator.js md5 equal
+to `git show HEAD:js/calculator.js` (the working copy differs only by CRLF). Blipwork only:
+Stats Quest NOT copied. Slip, harmless: a PowerShell Stop-Process filter on
+"http.server 5191" matched its own bash command line and killed that shell before the commit;
+the server died too, the commit was simply redone.
+
+**Her phone test, 09:07.** ALPHA GCD / ALPHA LCM do nothing; in the STAT editor ▼ on the
+bottom row does not wrap to the top and there is no visible cursor row; SHIFT 9 gives no
+Clear. Probe list answers: (1) 2-var Sum/Var/MinMax still do nothing, "why?"; (2) SOLVE asks
+just "Solve for X"; (3) the device shows a fraction, then ×10⁻ⁿ when smaller; (4) DEL leaves
+a blank fraction on the device. Her why: the kids struggle with calculator work and told her
+they feel overwhelmed by the stats steps; the app is meant to make practice feel like a game.
+
+**Second probe (computer-use on the fx-991ZA PLUS II emulator, about 60 screenshots).** All
+results written to CASIO-CALCULATOR-SPEC.md §19 (19.1 GCD/LCM, 19.2 STAT editor, 19.3 2-var
+menus, 19.4 SOLVE, 19.5 the 12-digit cut, 19.6 DEL template rules, 19.7 build plan). Code
+read only to locate the gaps: `statNav` clamps (no wrap), `statKey` has no clr / mode / setup
+and AC commits the typed digits, `renderTable` marks the cell with `<u>` only, the grid's
+SHIFT 1 menu is the full six items with no Edit, no Argument ERROR anywhere. Nothing in the
+app changed. Answer to her "why?": the 2-var menus were unmeasured, and the overnight rule
+was not measured = not built.
+
+**Decisions.** Hers: push v93 before a laptop try-out; GCD and LCM ARE wanted (reverses §9's
+skip); the builds start in a fresh session. Mine, flagged: the plan splits into Build 9 (STAT
+editor + 2-var menus) and Build 10 (COMP: GCD/LCM + Argument ERROR, 12-digit cut, DEL
+rules), one Opus worker each; estimate under 1% of the weekly limit for both.
+
 ## 2026-10-04 (Sun, 00:00 to 02:40): calculator rebuild, all eight builds, overnight foreman run (LOCAL only)
 
 **Her words:** "Is this a safe build to task you to run as foreman over night? ... Yes, here

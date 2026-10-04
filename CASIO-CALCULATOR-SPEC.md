@@ -379,3 +379,99 @@ builds (listed at the end), each its own fresh session. Start with the two you r
 
 Each build: test against the examples in this file (they are the device's own answers),
 then `tools/sw_check.py`, then copy `calculator.js` to Stats Quest.
+
+## 19. Second probe, Sun 2026-10-04 morning (after her phone test of sw v93)
+
+Her reports from the live app, each measured on the emulator (factory settings except
+STAT FREQ was ON). Nothing built yet; build plan at the end.
+
+### 19.1 GCD and LCM (her ask: they must work; §9 had skipped them)
+- ALPHA × → `GCD(`. ALPHA ÷ → `LCM(`. The separator is SHIFT ) and it shows as `;`
+  (the decimal comma is taken). Blipwork's key table already labels these (red GCD/LCM,
+  shift `;`); only the behaviour is missing.
+- `GCD(12;18` = 6 (closing bracket optional, the screen keeps the line as typed).
+  `LCM(4;6` = 12. `GCD(−12;18)+1` = 7 (negatives fine, answer positive).
+- Exactly two arguments: `GCD(12;18;24` → **Syntax ERROR**.
+- A non-whole argument: `GCD(12,5;3` → **Argument ERROR**, a new error screen with the
+  usual layout: `Argument ERROR` / `[AC] :Cancel` / `[◀][▶]:Goto`. (Blipwork has no
+  Argument ERROR yet.)
+
+### 19.2 STAT data editor (her report: no wrap, no "which line am I on")
+Measured on 1-VAR with FREQ on (X 5, 7, 9) and on A+BX.
+- Rows are 1…n plus ONE open row (n+1). **▼ on the open row wraps to row 1. ▲ on row 1
+  wraps to the open row.** Same in the FREQ and Y columns. (Blipwork `statNav` clamps.)
+- The selected cell is drawn **inverted: a solid dark cell with light digits, steady, not
+  blinking.** Its full value also shows **bottom right** of the screen (e.g. `7`). The
+  screen shows three data rows and scrolls to keep the cursor row in view. (Blipwork
+  `renderTable` only wraps the cell in `<u>`, which reads as no cursor at all on a phone.)
+- Typing: the bottom-right value disappears and the typed number shows **bottom LEFT with
+  a blinking cursor** after it. = stores it and steps down (already right).
+- **AC while typing cancels the typing** (the cell keeps its old value, you stay in the
+  editor). AC with nothing typed leaves to the STAT calculation screen (empty line, 0
+  bottom right). (Blipwork `statKey`: AC STORES the typed digits and leaves.)
+- **DEL with nothing typed deletes the whole row**; the rows below move up and the cursor
+  stays on that row number. (Not measured: DEL while typing; keep "remove the last typed
+  character".)
+- **SHIFT 9 works inside the editor too:** `Clear?` / `1:Setup 2:Memory` / `3:All`.
+  2 → `Clear Memory?` / `[=] :Yes` / `[AC] :Cancel` → = → `Complete!` / `Press [AC] key`
+  → AC goes back to WHERE YOU WERE (the editor, cursor on row 1).
+  **Memory clear does NOT clear the STAT data.** (Blipwork `statKey` has no `clr`, so
+  SHIFT 9 does nothing there: her report. MODE and SETUP are missing there as well.)
+- **SHIFT 1 inside the editor is a short menu:** `1:Type 2:Data` / `3:Edit`.
+  3 → `1:Ins 2:Del-A`. Ins puts a new row at the cursor holding 0 (FREQ 1) and pushes the
+  rest down. Del-A empties the table at once, no question, cursor on row 1. (Blipwork
+  shows the full six-item menu inside the editor and has no Edit.)
+- SHIFT 1 on the calculation screen, 1-VAR: `1:Type 2:Data / 3:Sum 4:Var / 5:Distr
+  6:MinMax`; Sum `1:Σx² 2:Σx`; Var `1:n 2:x̄ / 3:σx 4:sx`; MinMax `1:minX 2:maxX / 3:Q1
+  4:med / 5:Q3`; Distr `1:P( 2:Q( / 3:R( 4:▶t`. **All already match Blipwork.**
+- A+BX with FREQ on: the grid is **X | Y | FREQ** (Blipwork keeps X | Y; factory is FREQ
+  off, so this matters only after a learner switches FREQ on).
+
+### 19.3 Two-variable Sum / Var / MinMax (probe-list item 1; "why does it do nothing?")
+They did nothing because they had not been measured yet. Now measured, A+BX:
+- Sum: `1:Σx² 2:Σx / 3:Σy² 4:Σy / 5:Σxy 6:Σx³ / 7:Σx²y 8:Σx⁴` (one screen, four lines).
+- Var: `1:n 2:x̄ / 3:σx 4:sx / 5:ȳ 6:σy / 7:sy`.
+- MinMax: `1:minX 2:maxX / 3:minY 4:maxY`.
+- Picking pastes the token on the editable line; = evaluates (same as Reg).
+  Check values with X 1,2,3,4 / Y 2,4,5,8: `maxY` = 8, `σy` = 2,165063509.
+
+### 19.4 SOLVE with other letters (probe-list item 2)
+- `A×X+B` then SHIFT SOLVE asks only `Solve for X`. A and B are NOT asked; their stored
+  values are used. Blipwork already does this: no change.
+
+### 19.5 Tiny decimals (probe-list item 3)
+- `1÷3000000 =` gives the fraction 1/3000000; S⇔D gives `0,00000033333`.
+- `1÷7000000` S⇔D → `0,00000014285`. `2÷3000` S⇔D → `0,00066666666`.
+  `1÷70000000` S⇔D → `0,00000001428`. `1÷7000000000` S⇔D → `1,428571429×10⁻¹⁰`.
+- Rule (Norm 2): a decimal shows **at most 12 digits counting the leading 0** (so at most
+  11 decimal places), and the extra digits are **cut off, NOT rounded** (14285, not
+  14286). The ×10 form below 10⁻⁹ is already right. Blipwork shows 0,0000003333333333.
+  Note: 10 significant digits still applies first (1÷3 = 0,3333333333 is 11 digits).
+
+### 19.6 DEL inside fractions and roots (probe-list item 4)
+DEL deletes what is LEFT of the cursor. Measured:
+- `3` ▫/▫ gives 3/□, cursor in the empty bottom. DEL → nothing is deleted; **the cursor
+  jumps to the end of the top** (3▮ over □). DEL again → deletes the 3, leaving an empty
+  □/□. DEL again (cursor in the empty top) → removes the whole fraction. Her "it only
+  deletes the 3 and leaves the fraction blank" is what the second press shows.
+- `3/4` with the cursor before the 4 (start of a NON-empty bottom): DEL → the cursor jumps
+  to the end of the top, nothing deleted (typing 7 then gives 37/4).
+- `2+3/4` with the cursor at the start of the TOP: DEL → **the fraction frame goes, its
+  contents stay inline**: 2+34 (typing 7 there gives 2+734).
+- `2√□` (empty root): DEL removes the empty √. `2√9` with the cursor before the 9: DEL
+  removes the √ and keeps the 9 inline (typing 7 gives 279).
+- General rule: at the start of a template's FIRST box, DEL removes the frame and spills
+  its contents inline; at the start of a LATER box, DEL only moves the cursor to the end
+  of the box before it. (Blipwork deletes the whole fraction.)
+
+### 19.7 Build plan (one unit per worker, fresh sessions, read this section only)
+- **Build 9, STAT editor:** 19.2 + 19.3. Code: `statNav` (wrap), `statKey` (AC cancel,
+  DEL row, clr / mode / setup), `renderTable` + `renderRegTable` (inverted cell, value
+  bottom right, typing bottom left with a blinking cursor, three visible rows if the
+  phone layout allows, otherwise keep all rows but the inverted cell is a must), the
+  SHIFT 1 menu from the grid (short menu + Edit), the A+BX Sum / Var / MinMax menus.
+  Re-check the stats quests' `calcdo` steps still pass.
+- **Build 10, COMP:** 19.1 + 19.5 + 19.6 (GCD/LCM + Argument ERROR, the 12-digit cut,
+  the DEL template rules).
+- Each: new rows in `verify-calc-casio.html` from the device answers above, all verify
+  pages green, sw CACHE bump + `tools/sw_check.py` OK, then the Stats Quest copy.
