@@ -24,6 +24,9 @@ import { openColourUnlock } from "./companion/unlock-modal.js";
 import { renderAssignmentCard } from "./assignment.js";
 import { mountCqCollect } from "./cq-collect.js";
 import { mountPapers } from "./papers.js";
+/* INBOX-PLAN.md unit 3 (2026-10-04): the 📥 chip in the hub head. A plain
+   static import on purpose: one small file, only the hub uses it. */
+import { mountInbox } from "./inbox.js";
 /* FUNFUN-PART2-BRIEF.md (2026-08-23) — js/funfun/ is a SYNCED COPY of the
    graph-quest app (generated output, never hand-edited). Only three things
    are read from it here: the quest list, its grandfathered unlock rule, and
@@ -286,7 +289,7 @@ export function renderHub(app, host) {
   const name = ((app.state && app.state.student && app.state.student.name) || "").split(" ")[0];
   const head = el("div", "hub-head");
   head.innerHTML = `<span class="eyebrow">Grade 11 Maths</span>
-    <div class="hub-head-row"><h1>Hi, ${name || "there"} 👋</h1></div>
+    <div class="hub-head-row"><h1>Hi, ${name || "there"}&nbsp;👋</h1></div>
     <p class="muted small">Pick a chapter to practise.</p>`;
   host.appendChild(head);
 
@@ -329,6 +332,15 @@ export function renderHub(app, host) {
     const row = head.querySelector(".hub-head-row");
     row.appendChild(btn);
   }
+
+  // 📥 INBOX-PLAN.md unit 3 (2026-10-04): her answers to this learner's 💬
+  // notes. Fills itself in AFTER the hub has drawn, with its own call; the
+  // hub never waits on it. Hidden unless something has been answered, and
+  // gated on FEEDBACK_ENABLED inside mountInbox(). It sits in .hub-head,
+  // which the 💬 snapshot strips, and its sheet goes on <body>.
+  // (The &nbsp; before the 👋 above keeps the wave glued to the name when
+  // a long first name has to wrap.)
+  mountInbox(app, head.querySelector(".hub-head-row"));
 
   const open = openSet(app);
   const byTerm = (t) => CHAPTERS.filter(ch => (ch.term || "term3") === t);

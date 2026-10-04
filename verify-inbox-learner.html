@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inbox learner · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  ul.fails{list-style:none;font-size:12px;line-height:1.6;color:var(--bad);margin-top:8px}
+  /* the real learner app, at phone width: her class reads this on phones */
+  #frame{width:375px;height:812px;border:1px solid var(--brd);border-radius:10px;background:#070b16}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Inbox learner · verification</h1>
+<p class="muted small">INBOX-PLAN.md (2026-10-04), unit 3: the learner's 📥 inbox. This page drives the REAL
+  <code>index.html?local=1</code> in a 375 px iframe. It seeds notes and answers through the local backend (same
+  origin, same localStorage), opens the hub, taps the real chip, and reads the RAW <code>mhq.feedback</code> rows back.
+  To test the quiet failure paths it wraps the frame's own <code>api.inbox</code> / <code>api.inboxSeen</code> (the
+  local backend object). It adds its own learners and notes (tagged with a random token) and never clears anything
+  else.</p>
+<div id="banner">running…</div>
+
+<h2>1 · when the chip stays away</h2>
+<pre id="hidden">…</pre>
+<h2>2 · the chip and its dot</h2>
+<pre id="chip">…</pre>
+<h2>3 · the sheet: wording, order, literal text</h2>
+<pre id="sheet">…</pre>
+<h2>4 · seen, the dot coming back, Undo</h2>
+<pre id="seen">…</pre>
+<h2>5 · learner B never sees learner A's notes</h2>
+<pre id="other">…</pre>
+<h2>6 · the 💬 snapshot stays clean</h2>
+<pre id="snap">…</pre>
+<h2>7 · phone width, long names, house rules</h2>
+<pre id="phone">…</pre>
+
+<h2>failures</h2>
+<ul class="fails" id="failList"></ul>
+
+<iframe id="frame" title="learner app under test"></iframe>
+
+<script type="module">
+import { LocalBackend as B } from "./js/local-backend.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const out = (id, lines) => { document.getElementById(id).textContent = lines.join("\n"); };
+const J = JSON.stringify;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const waitFor = async (fn, ms = 4000) => { const t0 = Date.now(); for (;;) { let v; try { v = fn(); } catch { v = null; } if (v) return v; if (Date.now() - t0 > ms) return null; await sleep(20); } };
+
+const ADMIN = "admin", PW = "pw12";
+const TOK = Math.random().toString(36).slice(2, 8);
+const rawRows = () => { try { return JSON.parse(localStorage.getItem("mhq.feedback")) || []; } catch { return []; } };
+const raw = id => rawRows().find(r => r.id === id);
+
+const FIXED = "Fixed! Thanks for spotting it.";
+const ADDRESSED = "Your teacher answered this one outside the app ✓";
+const REPLY_LABEL = "Your teacher's reply";
+
+/* ---------------- seed: our own learners ---------------- */
+await B.adminLogin(ADMIN); // runs the local seed (admin password "admin")
+const A = `verify_ibl_a_${TOK}`, Bu = `verify_ibl_b_${TOK}`, L = `verify_ibl_l_${TOK}`;
+tick((await B.signup(A, "Test Learner", PW)).ok === true, "setup: signup learner A");
+tick((await B.signup(Bu, "Other Learner", PW)).ok === true, "setup: signup learner B");
+tick((await B.signup(L, "Bartholomew Learner", PW)).ok === true, "setup: signup the long-name learner");
+const send = async (u, body, anon = false) => {
+  const r = await B.sendFeedback(u, PW, body, anon, "play:gt5", null);
+  tick(r.ok === true, `setup: send "${body}"`);
+  const rows = rawRows(); return rows[rows.length - 1].id;
+};
+const answer = async (id, status, reply) => {
+  await sleep(3); // distinct repliedAt stamps, so "newest outcome first" is testable
+  tick((await B.adminFeedbackReply(ADMIN, id, status, reply)).ok === true, `setup: ${status} on a note`);
+};
+
+/* ---------------- the real app in the frame ---------------- */
+const frame = document.getElementById("frame");
+let W = null, D = null, APP = null, API = null, INBOX = null, FB = null;
+const spy = { mode: "real", seenMode: "real", calls: 0, done: 0, seenCalls: 0, quiet: [] };
+
+async function boot(username) {
+  localStorage.setItem("mhq.session", JSON.stringify({ username, password: PW }));
+  localStorage.setItem("mhq.forceLocal", "1");
+  await new Promise(res => { frame.addEventListener("load", res, { once: true }); frame.src = "./index.html?local=1&t=" + Date.now(); });
+  W = frame.contentWindow; D = frame.contentDocument;
+  APP = await waitFor(() => W.__APP__ && W.__APP__.state && W.__APP__, 10000);
+  tick(!!APP, `boot as ${username.split("_")[2]}: the app booted with state`);
+  API = (await W.eval('import("./js/api.js")')).api;
+  INBOX = await W.eval('import("./js/inbox.js")');
+  FB = await W.eval('import("./js/feedback.js")');
+  // wrap the frame's OWN backend object: the hub reads api.inbox off it at call time
+  const origInbox = API.inbox, origSeen = API.inboxSeen;
+  API.inbox = async function (u, p) {
+    spy.calls++;
+    try {
+      if (spy.mode === "reject") throw new TypeError("Failed to fetch");
+      if (spy.mode === "notok") return { ok: false, error: "auth" };
+      if (spy.mode === "delay") await sleep(350);
+      return await origInbox.call(API, u, p);
+    } finally { spy.done++; }
+  };
+  API.inboxSeen = async function (u, p) {
+    spy.seenCalls++;
+    if (spy.seenMode === "reject") throw new TypeError("Failed to fetch");
+    return origSeen.call(API, u, p);
+  };
+  // anything loud during the failure paths is a fail
+  ["error", "warn"].forEach(k => { const o = W.console[k].bind(W.console); W.console[k] = (...a) => { spy.quiet.push(k + ": " + a.join(" ")); o(...a); }; });
+  W.addEventListener("unhandledrejection", e => spy.quiet.push("unhandledrejection: " + (e.reason && e.reason.message)));
+}
+
+/* go to the hub and wait for ITS inbox call to come back */
+async function hub() {
+  const before = spy.done;
+  APP.go("hub");
+  await waitFor(() => spy.done > before);
+  await sleep(40);
+  return D.querySelector("#app .view .hub-head .hub-inbox-btn");
+}
+const dotText = btn => { const d = btn && btn.querySelector(".hub-inbox-dot"); return d ? d.textContent : null; };
+const scrimEl = () => D.querySelector(".inbox-scrim");
+const items = () => [...D.querySelectorAll(".inbox-scrim .inbox-item")];
+const itemOf = body => items().find(li => (li.querySelector(".inbox-note") || {}).textContent === body);
+const closeSheet = async () => { const c = D.querySelector(".inbox-scrim .inbox-close"); if (c) c.click(); await waitFor(() => !scrimEl(), 1000); };
+
+/* ============================================================
+   1 · when the chip stays away
+   ============================================================ */
+const B_OPEN = `still waiting ${TOK}`;
+const B_REPLIED = `<b>x</b> replied note ${TOK}`;
+const B_FIXED = `fixed note ${TOK}`, B_FIXED_BARE = `fixed bare ${TOK}`;
+const B_ADDR = `addressed note ${TOK}`, B_ADDR_BARE = `addressed bare ${TOK}`;
+const B_ANON = `anon note ${TOK}`, B_LATER = `later note ${TOK}`;
+const REPLY_HTML = `<b>x</b> her reply ${TOK}`;
+const FIX_EXTRA = `The diagram is redrawn ${TOK}`, ADDR_EXTRA = `Sent a voice note ${TOK}`;
+let idOpen, idReplied, idFixed, idFixedBare, idAddr, idAddrBare, idAnon, idLater;
+{
+  const Lg = [];
+  await boot(A);
+  let chip = await hub();
+  tick(spy.calls >= 1, "the hub asks for the inbox on its own");
+  tick(!chip, "no notes at all: no chip");
+  idOpen = await send(A, B_OPEN);
+  chip = await hub();
+  tick(!chip, "only an OPEN note (nothing answered yet): still no chip");
+
+  // seed the answered notes, oldest outcome first
+  idReplied = await send(A, B_REPLIED);
+  idFixed = await send(A, B_FIXED);
+  idFixedBare = await send(A, B_FIXED_BARE);
+  idAddr = await send(A, B_ADDR);
+  idAddrBare = await send(A, B_ADDR_BARE);
+  idAnon = await send(A, B_ANON, true);
+  idLater = await send(A, B_LATER);
+  await answer(idAddrBare, "addressed", null);
+  await answer(idAddr, "addressed", ADDR_EXTRA);
+  await answer(idFixedBare, "fixed", "   ");
+  await answer(idFixed, "fixed", FIX_EXTRA);
+  await answer(idReplied, "replied", REPLY_HTML);
+  await answer(idAnon, "fixed", null); // anonymous: her tick only, nobody's inbox
+
+  // failure paths: hidden, quiet
+  spy.quiet.length = 0;
+  spy.mode = "reject"; chip = await hub();
+  tick(!chip, "a failed fetch (offline): no chip");
+  spy.mode = "notok"; chip = await hub();
+  tick(!chip, "{ok:false}: no chip");
+  await sleep(80);
+  tick(spy.quiet.length === 0, `the failures were quiet: nothing on console.error/warn, no unhandled rejection (got ${J(spy.quiet)})`);
+  spy.mode = "real";
+
+  // FEEDBACK_ENABLED off (a const, so the seam is mountInbox's opts.enabled)
+  {
+    const row = D.createElement("div"); row.className = "hub-head-row"; D.body.appendChild(row);
+    const before = spy.calls;
+    const res = await INBOX.mountInbox(APP, row, { enabled: false });
+    tick(res === null && !row.firstChild, "FEEDBACK_ENABLED off: nothing is drawn");
+    tick(spy.calls === before, "FEEDBACK_ENABLED off: no inbox call is even made");
+    const res2 = await INBOX.mountInbox(APP, row);
+    tick(!!res2 && row.querySelector(".hub-inbox-btn") === res2, "control: the same call with the flag on does draw the chip");
+    row.remove();
+  }
+  const scr = await (await fetch("./js/screens.js", { cache: "reload" })).text();
+  const ibx = await (await fetch("./js/inbox.js", { cache: "reload" })).text();
+  tick(/\n {2}mountInbox\(app, head\.querySelector\("\.hub-head-row"\)\);\n/.test(scr), "screens.js: the hub calls mountInbox(app, row) with no override and no await");
+  tick(/import \{ mountInbox \} from "\.\/inbox\.js";/.test(scr), "screens.js: a plain static import of ./inbox.js");
+  tick(/opts\.enabled === undefined \? FEEDBACK_ENABLED : opts\.enabled/.test(ibx) && /import \{ FEEDBACK_ENABLED \} from "\.\/config\.js";/.test(ibx), "inbox.js: gated on config.js's FEEDBACK_ENABLED by default");
+  Lg.push(`inbox calls so far ${spy.calls}`);
+  out("hidden", Lg);
+}
+
+/* ============================================================
+   2 · the chip and its dot
+   ============================================================ */
+let chip;
+{
+  const Lg = [];
+  chip = await hub();
+  tick(!!chip, "answered notes: the chip is there");
+  tick(chip && chip.getAttribute("aria-label") === "Inbox", `aria-label is "Inbox" (got ${J(chip && chip.getAttribute("aria-label"))})`);
+  tick(chip && chip.closest(".hub-head-row") && chip.nextElementSibling && chip.nextElementSibling.classList.contains("hub-blip-btn") || (chip && !D.querySelector(".hub-blip-btn")), "the chip sits in the greeting row, just before the Blip button");
+  tick(dotText(chip) === "5", `dot shows the unseen count, 5 (got ${J(dotText(chip))})`);
+  const api5 = await B.inbox(A, PW);
+  tick(api5.ok && api5.unseen === 5 && api5.rows.length === 5, `back end agrees: 5 answered, 5 unseen, the anonymous one is not counted (got ${api5.unseen}/${api5.rows.length})`);
+
+  // left before the fetch came back: never written into a detached head
+  spy.mode = "delay";
+  let before = spy.done;
+  APP.go("hub");
+  const oldRow = D.querySelector(".hub-head-row");
+  APP.go("blip");
+  await waitFor(() => spy.done > before, 3000); await sleep(40);
+  tick(!oldRow.isConnected && !oldRow.querySelector(".hub-inbox-btn"), "hub left mid-fetch: the detached head got nothing");
+  tick(!D.querySelector(".hub-inbox-btn"), "hub left mid-fetch: no chip anywhere on the blip screen");
+  // re-rendered mid-fetch: only the newest head gets the chip, once
+  before = spy.done;
+  APP.go("hub"); const row1 = D.querySelector(".hub-head-row");
+  APP.go("hub"); const row2 = D.querySelector(".hub-head-row");
+  await waitFor(() => spy.done >= before + 2, 3000); await sleep(40);
+  tick(!row1.querySelector(".hub-inbox-btn") && !!row2.querySelector(".hub-inbox-btn"), "hub re-rendered mid-fetch: only the live head has the chip");
+  tick(D.querySelectorAll(".hub-inbox-btn").length === 1, `exactly one chip on the page (got ${D.querySelectorAll(".hub-inbox-btn").length})`);
+  spy.mode = "real";
+  Lg.push(`dot ${dotText(chip)}`);
+  out("chip", Lg);
+}
+
+/* ============================================================
+   3 · the sheet
+   ============================================================ */
+{
+  const Lg = [];
+  chip = await hub();
+  const seenBefore = spy.seenCalls;
+  chip.click();
+  // optimistic: checked straight after the click, before anything awaits
+  tick(dotText(chip) === null, "opening clears the dot at once");
+  tick(spy.seenCalls === seenBefore + 1, "opening calls inboxSeen once");
+  const scrim = await waitFor(scrimEl);
+  tick(!!scrim, "the sheet opened");
+  tick(scrim && scrim.parentElement === D.body, "the sheet's scrim is a child of <body>");
+  tick(scrim && !scrim.closest("#app") && !D.querySelector("#app .view .inbox-scrim, #app .view .inbox-item"), "the sheet is NOT inside #app .view");
+  tick(scrim && scrim.classList.contains("modal-scrim") && !!scrim.querySelector(".modal.inbox-sheet"), "the app's usual .modal-scrim / .modal idiom");
+  const sheet = D.querySelector(".inbox-sheet");
+  tick(sheet && sheet.querySelector("h2").textContent === "Inbox", `title is "Inbox" (got ${J(sheet && sheet.querySelector("h2").textContent)})`);
+  tick(sheet && sheet.contains(D.activeElement), "focus moved into the sheet");
+  tick(sheet && sheet.getAttribute("role") === "dialog", "the sheet is a dialog");
+
+  const order = items().map(li => li.querySelector(".inbox-note").textContent);
+  tick(J(order) === J([B_REPLIED, B_FIXED, B_FIXED_BARE, B_ADDR, B_ADDR_BARE]), `newest outcome first (got ${J(order)})`);
+  tick(!itemOf(B_OPEN), "an open note is not in the inbox");
+  tick(!itemOf(B_ANON), "the anonymous note is not in the inbox");
+
+  const rp = itemOf(B_REPLIED);
+  tick(rp && rp.querySelector(".inbox-out-label") && rp.querySelector(".inbox-out-label").textContent === REPLY_LABEL, `replied: label "${REPLY_LABEL}"`);
+  tick(rp && rp.querySelector(".inbox-out-text").textContent === REPLY_HTML, "replied: her text, exactly");
+  tick(rp && !rp.querySelector(".inbox-out-line"), "replied: no ready-made line");
+  tick(rp && !rp.querySelector("b"), "<b>x</b> in her reply AND in the note renders literally (no <b> element made)");
+  tick(rp && rp.querySelector(".inbox-note").textContent.startsWith("<b>x</b>") && rp.querySelector(".inbox-out-text").textContent.startsWith("<b>x</b>"), "the angle brackets are visible as typed");
+
+  const fx = itemOf(B_FIXED);
+  tick(fx && fx.querySelector(".inbox-out-line").textContent === FIXED, `fixed: exactly "${FIXED}"`);
+  tick(fx && fx.querySelector(".inbox-out-text") && fx.querySelector(".inbox-out-text").textContent === FIX_EXTRA, "fixed: her extra text under it");
+  tick(fx && fx.querySelector(".inbox-out-line").compareDocumentPosition(fx.querySelector(".inbox-out-text")) & 4, "fixed: the extra text comes AFTER the line");
+  const fb = itemOf(B_FIXED_BARE);
+  tick(fb && fb.querySelector(".inbox-out-line").textContent === FIXED && !fb.querySelector(".inbox-out-text"), "fixed with no text (blank in, blank out): just the line");
+
+  const ad = itemOf(B_ADDR);
+  tick(ad && ad.querySelector(".inbox-out-line").textContent === ADDRESSED, `addressed: exactly "${ADDRESSED}"`);
+  tick(ad && ad.querySelector(".inbox-out-text") && ad.querySelector(".inbox-out-text").textContent === ADDR_EXTRA, "addressed: her text under it");
+  const ab = itemOf(B_ADDR_BARE);
+  tick(ab && ab.querySelector(".inbox-out-line").textContent === ADDRESSED && !ab.querySelector(".inbox-out-text"), "addressed with no text: just the line");
+
+  tick(items().length === 5 && items().every(li => li.classList.contains("is-new") && li.querySelector(".inbox-new")), "every unseen item carries the 'new' mark while the sheet is open");
+  const dates = items().map(li => (li.querySelector(".inbox-date") || {}).textContent || "");
+  tick(dates.every(d => /^\d{1,2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)( \d{4})?$/.test(d)), `each item has a small outcome date (got ${J(dates)})`);
+  // long notes are clamped (about three lines) by CSS
+  const noteCss = W.getComputedStyle(rp.querySelector(".inbox-note"));
+  tick(noteCss.webkitLineClamp === "3" || noteCss.getPropertyValue("-webkit-line-clamp") === "3", `the note is clamped to 3 lines (got ${J(noteCss.webkitLineClamp)})`);
+
+  const seenAll = await waitFor(() => [idReplied, idFixed, idFixedBare, idAddr, idAddrBare].every(id => raw(id).seenAt));
+  tick(!!seenAll, "opening writes seenAt on every answered note in localStorage");
+  tick(raw(idOpen).seenAt == null && raw(idAnon).seenAt == null, "seenAt is NOT written on the open or the anonymous note");
+
+  // Escape closes, focus goes back to the chip
+  D.dispatchEvent(new W.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  await waitFor(() => !scrimEl(), 1000);
+  tick(!scrimEl(), "Escape closes the sheet");
+  tick(D.activeElement === chip, "focus goes back to the chip on close");
+  // reopened in the same render: the "new" marks are gone, no second seen call
+  const s2 = spy.seenCalls;
+  chip.click(); await waitFor(scrimEl);
+  tick(items().length === 5 && items().every(li => !li.classList.contains("is-new") && !li.querySelector(".inbox-new")), "reopened: the 'new' marks went when the sheet closed");
+  tick(spy.seenCalls === s2, "reopened with nothing new: no extra inboxSeen call");
+  // a background tap closes; a tap inside does not
+  D.querySelector(".inbox-sheet").click();
+  tick(!!scrimEl(), "a tap inside the sheet does not close it");
+  scrimEl().click();
+  await waitFor(() => !scrimEl(), 1000);
+  tick(!scrimEl(), "a tap on the dark background closes it");
+  chip.click(); await waitFor(scrimEl);
+  await closeSheet();
+  tick(!scrimEl(), "the ✕ button closes it");
+  const visible = [D.querySelector(".hub-inbox-btn").title];
+  chip.click(); await waitFor(scrimEl);
+  visible.push(scrimEl().textContent);
+  tick(!visible.join(" ").includes("—"), "no em-dash in any inbox text");
+  tick(!/(^|[^\w])-\d/.test(visible.join(" ")), "no hyphen-minus before a number in the inbox chrome");
+  await closeSheet();
+  Lg.push(`items ${order.length}`, `dates ${J(dates)}`);
+  out("sheet", Lg);
+}
+
+/* ============================================================
+   4 · seen, the dot coming back, Undo
+   ============================================================ */
+{
+  const Lg = [];
+  chip = await hub();
+  tick(chip && dotText(chip) === null, "next hub render after opening: no dot");
+  await answer(idLater, "fixed", null);
+  chip = await hub();
+  tick(dotText(chip) === "1", `a new outcome brings the dot back with 1 (got ${J(dotText(chip))})`);
+  await answer(idFixedBare, "replied", "Changed my mind, here is more");
+  chip = await hub();
+  tick(dotText(chip) === "2", `a NEW outcome on a note already seen brings it back too (got ${J(dotText(chip))})`);
+
+  // inboxSeen fails: still quiet, dot clears now and returns on the next render
+  spy.quiet.length = 0; spy.seenMode = "reject";
+  chip.click();
+  tick(dotText(chip) === null, "inboxSeen failing: the dot still clears at once");
+  await waitFor(scrimEl); await sleep(60);
+  await closeSheet();
+  tick(spy.quiet.length === 0, `inboxSeen failing: nothing loud (got ${J(spy.quiet)})`);
+  spy.seenMode = "real";
+  chip = await hub();
+  tick(dotText(chip) === "2", `inboxSeen failed: the dot simply returns on the next hub render (got ${J(dotText(chip))})`);
+  chip.click(); await waitFor(scrimEl);
+  await waitFor(() => raw(idLater).seenAt && raw(idFixedBare).seenAt);
+  await closeSheet();
+
+  // Undo on her side
+  await answer(idFixed, "open", null);
+  chip = await hub();
+  chip.click(); await waitFor(scrimEl);
+  tick(!itemOf(B_FIXED), "Undo: the item disappears from the inbox");
+  tick(items().length === 5, `Undo: the other items stay (got ${items().length})`);
+  await closeSheet();
+  for (const id of [idReplied, idFixedBare, idAddr, idAddrBare, idLater]) await answer(id, "open", null);
+  chip = await hub();
+  tick(!chip, "everything undone: the chip goes away (nothing answered to show)");
+  // put a few back for the next sections
+  await answer(idReplied, "replied", REPLY_HTML);
+  await answer(idFixed, "fixed", FIX_EXTRA);
+  await answer(idAddr, "addressed", ADDR_EXTRA);
+  Lg.push("dot cycle 0 -> 1 -> 2 -> (failed seen) 2 -> undo");
+  out("seen", Lg);
+}
+
+/* ============================================================
+   5 · learner B
+   ============================================================ */
+{
+  const Lg = [];
+  const B_B = `learner B note ${TOK}`;
+  const idB = await send(Bu, B_B);
+  await answer(idB, "replied", `for B only ${TOK}`);
+  await boot(Bu);
+  chip = await hub();
+  tick(!!chip && dotText(chip) === "1", `learner B: their own chip, dot 1 (got ${J(dotText(chip))})`);
+  chip.click(); await waitFor(scrimEl);
+  const bodies = items().map(li => li.querySelector(".inbox-note").textContent);
+  tick(J(bodies) === J([B_B]), `learner B sees ONLY their own note (got ${J(bodies)})`);
+  tick(!scrimEl().textContent.includes(FIX_EXTRA) && !scrimEl().textContent.includes(REPLY_HTML), "learner B sees none of A's replies");
+  await closeSheet();
+  tick(raw(idB).seenAt && !raw(idReplied).seenAt, "B opening their inbox stamps B's note only, never A's");
+  await boot(A);
+  chip = await hub();
+  tick(dotText(chip) === "3", `back as A: A's own dot is untouched by B (got ${J(dotText(chip))})`);
+  out("other", Lg.concat([`B items ${bodies.length}`]));
+}
+
+/* ============================================================
+   6 · the 💬 snapshot
+   ============================================================ */
+{
+  const Lg = [];
+  chip = await hub();
+  const banned = ["📥", "Inbox", REPLY_LABEL, FIXED, ADDRESSED, REPLY_HTML, FIX_EXTRA, ADDR_EXTRA, B_REPLIED, B_FIXED, "From your teacher", "You wrote"];
+  const s1 = FB.snapshotQuestion(APP);
+  const hit1 = banned.filter(b => s1.includes(b));
+  tick(!!chip && hit1.length === 0, `snapshot on the hub with the chip showing: no icon, no inbox text (hits ${J(hit1)})`);
+  tick(s1.length > 0, `control: the hub snapshot is not empty (${s1.length} chars)`);
+  chip.click(); await waitFor(scrimEl);
+  const s2 = FB.snapshotQuestion(APP);
+  const hit2 = banned.filter(b => s2.includes(b));
+  tick(!!scrimEl() && hit2.length === 0, `snapshot with the sheet OPEN: no inbox text (hits ${J(hit2)})`);
+  await closeSheet();
+  Lg.push(`hub snapshot ${s1.length} chars: ${J(s1.slice(0, 80))}`);
+  out("snap", Lg);
+}
+
+/* ============================================================
+   7 · phone width, long names, house rules
+   ============================================================ */
+{
+  const Lg = [];
+  chip = await hub();
+  const de = D.documentElement;
+  tick(frame.clientWidth <= 377, `running at phone width (${frame.clientWidth}px)`);
+  tick(de.scrollWidth <= de.clientWidth + 1, `hub with the chip: no sideways scroll (scrollWidth ${de.scrollWidth}, clientWidth ${de.clientWidth})`);
+  const cr = chip.getBoundingClientRect();
+  tick(cr.width >= 44 && cr.height >= 44, `the chip is a 44px+ tap target (${Math.round(cr.width)}x${Math.round(cr.height)})`);
+  const h1 = D.querySelector(".hub-head h1"), hr = h1.getBoundingClientRect();
+  tick(cr.left >= hr.right - 0.5, "the chip does not overlap the greeting");
+  tick(h1.textContent.endsWith(" 👋"), "the 👋 is glued to the name (no-break space), so it can never sit alone on a line");
+  chip.click(); await waitFor(scrimEl);
+  tick(de.scrollWidth <= de.clientWidth + 1, `sheet open: no sideways scroll (scrollWidth ${de.scrollWidth})`);
+  const sh = D.querySelector(".inbox-sheet").getBoundingClientRect();
+  tick(sh.right <= de.clientWidth + 0.5 && sh.left >= -0.5, "the sheet fits the 375 px screen");
+  const cb = D.querySelector(".inbox-close").getBoundingClientRect();
+  tick(cb.width >= 44 && cb.height >= 44, `the close button is a 44px+ tap target (${Math.round(cb.width)}x${Math.round(cb.height)})`);
+  await closeSheet();
+
+  const ibx = await (await fetch("./js/inbox.js", { cache: "reload" })).text();
+  tick(!/\.innerHTML\s*=/.test(ibx), "inbox.js never assigns innerHTML");
+  tick(/note\.textContent = String\(r\.body \?\? ""\);/.test(ibx), "inbox.js: the learner's note goes in by textContent");
+  tick(/t\.textContent = r\.reply;/.test(ibx), "inbox.js: her reply goes in by textContent");
+  tick(!ibx.includes("—"), "inbox.js: no em-dash anywhere in the file");
+  tick(!/[^.]\bimport\(/.test(ibx.replace(/lazyImport\(/g, "")), "inbox.js: no bare dynamic import()");
+  tick(/document\.body\.appendChild\(scrim\)/.test(ibx), "inbox.js: the sheet goes on <body>");
+
+  // a long first name: the chip must not push the greeting onto an ugly wrap
+  const idL = await send(L, `long name note ${TOK}`);
+  await answer(idL, "replied", `hello ${TOK}`);
+  await boot(L);
+  chip = await hub();
+  await sleep(200); // the fit is re-checked when the fonts are in
+  const g = D.querySelector(".hub-head h1"), gr = g.getBoundingClientRect();
+  const lh = parseFloat(W.getComputedStyle(g).lineHeight);
+  tick(!!chip, "long-name learner: chip shown");
+  tick(gr.height <= lh * 1.5, `"Hi, Bartholomew 👋" stays on ONE line with the chip there (h1 ${Math.round(gr.height)}px, line ${Math.round(lh)}px)`);
+  tick(chip.getBoundingClientRect().left >= gr.right - 0.5, "long name: the chip does not overlap the greeting");
+  tick(g.scrollWidth <= g.clientWidth + 1, "long name: the greeting does not overflow its box");
+  tick(D.documentElement.scrollWidth <= D.documentElement.clientWidth + 1, "long name: no sideways scroll");
+  Lg.push(`chip ${Math.round(cr.width)}x${Math.round(cr.height)}`, `long-name h1 ${Math.round(gr.height)}px, font ${W.getComputedStyle(g).fontSize}`);
+  out("phone", Lg);
+}
+
+/* ---------------- banner ---------------- */
+const list = document.getElementById("failList");
+fails.forEach(msg => { const li = document.createElement("li"); li.textContent = "✗ " + msg; list.appendChild(li); });
+const banner = document.getElementById("banner");
+const allOk = passed === total;
+banner.className = allOk ? "pass" : "fail";
+banner.textContent = allOk
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — ${passed}/${total} checks passed`;
+window.__VERIFY__ = { total, passed, ok: allOk, fails };
+console.log(`[verify-inbox-learner] ${passed}/${total} — ${allOk ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>
