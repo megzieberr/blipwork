@@ -1638,7 +1638,16 @@ create table if not exists public.feedback (
   -- for anonymous notes too: it is CONTENT, not identity, exactly as
   -- `context` is. NULL is ordinary — the hub has no question to snap.
   snapshot     text,                       -- capped at 2000 chars by the RPC below
-  read_at      timestamptz
+  read_at      timestamptz,
+  -- 📥 INBOX (migration-feedback-inbox.sql, 2026-10-04): her answer to the
+  -- note. One outcome per note; a later action replaces the earlier one.
+  -- `reply` is ALWAYS NULL on an anonymous row (nobody could read it).
+  -- `seen_at` goes back to NULL on every new outcome, so the dot returns.
+  status       text not null default 'open',
+  reply        text,                       -- capped at 1000 chars by the RPC below
+  replied_at   timestamptz,                -- when the current outcome was set
+  seen_at      timestamptz,                -- when the learner opened the inbox after it
+  constraint feedback_status_check check (status in ('open', 'replied', 'fixed', 'addressed'))
 );
 create index if not exists feedback_created_idx on public.feedback (created_at desc);
 
@@ -1715,7 +1724,11 @@ begin
              'snapshot', f.snapshot,
              'body', f.body,
              'createdAt', f.created_at,
-             'readAt', f.read_at) as r,
+             'readAt', f.read_at,
+             'status', f.status,
+             'reply', f.reply,
+             'repliedAt', f.replied_at,
+             'seenAt', f.seen_at) as r,
            f.created_at as r_created,
            f.read_at    as r_read
       from public.feedback f
@@ -1736,6 +1749,110 @@ begin
      set read_at = case when coalesce(p_read, true) then now() else null end
    where id = p_id;
   return jsonb_build_object('ok', true);
+end; $$;
+
+-- ============================================================
+--  📥 INBOX (INBOX-PLAN.md, 2026-10-04)
+--  MIRROR of supabase/migration-feedback-inbox.sql §3, §5, §6. Read that
+--  file's header for the reasoning. ⚠️ An anonymous row never gets reply
+--  text, and `replied` on it is refused ('anon'): the anonymity promise.
+--  mhq_inbox never returns snapshot and never another learner's row.
+-- ============================================================
+create or replace function public.mhq_admin_feedback_reply(p_admin_password text, p_id uuid,
+                                                           p_status text, p_reply text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_found boolean := false; v_sid uuid; v_reply text;
+begin
+  if not public._mhq_admin_ok(p_admin_password) then
+    return jsonb_build_object('ok', false, 'error', 'auth');
+  end if;
+
+  if p_status is null or p_status not in ('open', 'replied', 'fixed', 'addressed') then
+    return jsonb_build_object('ok', false, 'error', 'status');
+  end if;
+
+  select true, f.student_id into v_found, v_sid
+    from public.feedback f where f.id = p_id;
+  if not coalesce(v_found, false) then
+    return jsonb_build_object('ok', false, 'error', 'missing');
+  end if;
+
+  if p_status = 'open' then
+    update public.feedback
+       set status = 'open', reply = null, replied_at = null, seen_at = null
+     where id = p_id;
+    return jsonb_build_object('ok', true);
+  end if;
+
+  v_reply := left(nullif(btrim(coalesce(p_reply, ''), E' \t\r\n'), ''), 1000);
+
+  if p_status = 'replied' then
+    if v_sid is null then return jsonb_build_object('ok', false, 'error', 'anon'); end if;
+    if v_reply is null then return jsonb_build_object('ok', false, 'error', 'empty'); end if;
+  end if;
+
+  -- the anonymity promise: nobody can read text on an anonymous row, so
+  -- none is kept there.
+  if v_sid is null then v_reply := null; end if;
+
+  update public.feedback
+     set status     = p_status,
+         reply      = v_reply,
+         replied_at = now(),
+         seen_at    = null,
+         read_at    = coalesce(read_at, now())
+   where id = p_id;
+
+  return jsonb_build_object('ok', true);
+end; $$;
+
+create or replace function public.mhq_inbox(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_rows jsonb; v_unseen int;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  select coalesce(jsonb_agg(r order by r_at desc nulls last, r_created desc), '[]'::jsonb),
+         count(*) filter (where r_seen is null)
+    into v_rows, v_unseen
+  from (
+    select jsonb_build_object(
+             'id', f.id,
+             'body', f.body,
+             'context', f.context,
+             'createdAt', f.created_at,
+             'status', f.status,
+             'reply', f.reply,
+             'repliedAt', f.replied_at,
+             'seenAt', f.seen_at) as r,
+           f.replied_at as r_at,
+           f.created_at as r_created,
+           f.seen_at    as r_seen
+      from public.feedback f
+     where f.student_id = v_sid
+       and f.status <> 'open'
+     order by f.replied_at desc nulls last, f.created_at desc
+     limit 50) t;
+
+  return jsonb_build_object('ok', true, 'unseen', v_unseen, 'rows', v_rows);
+end; $$;
+
+create or replace function public.mhq_inbox_seen(p_username text, p_password text)
+returns jsonb language plpgsql security definer set search_path = public, extensions as $$
+declare v_sid uuid; v_n int;
+begin
+  v_sid := public._mhq_auth(p_username, p_password);
+  if v_sid is null then return jsonb_build_object('ok', false, 'error', 'auth'); end if;
+
+  update public.feedback
+     set seen_at = now()
+   where student_id = v_sid
+     and status <> 'open'
+     and seen_at is null;
+  get diagnostics v_n = row_count;
+
+  return jsonb_build_object('ok', true, 'seen', v_n);
 end; $$;
 
 create or replace function public.mhq_list_papers(p_username text, p_password text)
@@ -2349,6 +2466,10 @@ grant execute on function
   public.mhq_send_feedback(text, text, text, boolean, text, text),
   public.mhq_admin_feedback(text),
   public.mhq_admin_feedback_read(text, uuid, boolean),
+  -- INBOX-PLAN.md, 2026-10-04 (migration-feedback-inbox.sql)
+  public.mhq_admin_feedback_reply(text, uuid, text, text),
+  public.mhq_inbox(text, text),
+  public.mhq_inbox_seen(text, text),
   public.mhq_list_papers(text, text),
   -- FUNFUN-PART2-BRIEF.md, 2026-08-23 (mhq_admin_funfun goes to anon too:
   -- admin.html signs in with the publishable key and a password, exactly

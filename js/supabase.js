@@ -196,6 +196,24 @@ export const SupabaseBackend = {
     return rpc("mhq_admin_feedback_read", { p_admin_password: pw, p_id: id, p_read: !!read });
   },
 
+  // ---- INBOX-PLAN.md: 📥 answering the 💬 notes (2026-10-04) ----
+  // status: "open" (Undo) | "replied" | "fixed" | "addressed". The server
+  // owns every rule: `replied` needs text ('empty') and is refused on an
+  // anonymous note ('anon'); an anonymous note never stores text. See
+  // supabase/migration-feedback-inbox.sql (WRITTEN, NOT RUN until the
+  // foreman applies it; it must be applied BEFORE this client ships).
+  async adminFeedbackReply(pw, id, status, reply) {
+    return rpc("mhq_admin_feedback_reply", {
+      p_admin_password: pw, p_id: id, p_status: status,
+      p_reply: reply == null ? null : String(reply),
+    });
+  },
+  // The learner's own answered notes, newest outcome first. Never another
+  // learner's, never an open note, never the snapshot.
+  async inbox(username, password) { return rpc("mhq_inbox", { p_username: username, p_password: password }); },
+  // Opening the sheet: stamps seen_at, which clears the dot.
+  async inboxSeen(username, password) { return rpc("mhq_inbox_seen", { p_username: username, p_password: password }); },
+
   // ---- FEEDBACK-PAPERS-BRIEF.md: 📄 papers (2026-08-24) ----
   // The LIST is a plain RPC (auth-gated, and it never carries
   // storage_path). The FILES are not: the `papers` bucket is private

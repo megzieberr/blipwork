@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inbox · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  ul.fails{list-style:none;font-size:12px;line-height:1.6;color:var(--bad);margin-top:8px}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Inbox · verification</h1>
+<p class="muted small">INBOX-PLAN.md (2026-10-04), unit 1: the back end. Two kinds of check:
+  (1) DATA checks on the LOCAL backend's <code>adminFeedbackReply</code> / <code>inbox</code> /
+  <code>inboxSeen</code>, which mirror <code>supabase/migration-feedback-inbox.sql</code> rule for rule. That
+  file is WRITTEN, NOT RUN, so this page is the only place the rules currently execute. The anonymity checks read
+  the RAW localStorage rows, never only the shaped payload. (2) TEXT checks over the migration file, the
+  <code>schema.sql</code> mirror and <code>js/supabase.js</code>, because the security posture (definer rights,
+  pinned search_path, grants, no table re-created) cannot be exercised until the foreman applies it.</p>
+<div id="banner">running…</div>
+
+<h2>1 · auth: a wrong password is refused</h2>
+<pre id="auth">…</pre>
+
+<h2>2 · status rules: the four values, and nothing else</h2>
+<pre id="status">…</pre>
+
+<h2>3 · replied: needs text, stores it trimmed and capped</h2>
+<pre id="replied">…</pre>
+
+<h2>4 · fixed / addressed on a named note</h2>
+<pre id="fixed">…</pre>
+
+<h2>5 · anonymous notes: her tick only, no text, no inbox</h2>
+<pre id="anon">…</pre>
+
+<h2>6 · the learner's inbox: own answered notes only</h2>
+<pre id="inbox">…</pre>
+
+<h2>7 · the dot: unseen, seen, and back again</h2>
+<pre id="seen">…</pre>
+
+<h2>8 · Undo puts the note back to open</h2>
+<pre id="undo">…</pre>
+
+<h2>9 · learner B never sees learner A</h2>
+<pre id="other">…</pre>
+
+<h2>10 · the teacher's list carries the outcome; old rows read as open</h2>
+<pre id="admin">…</pre>
+
+<h2>11 · newest outcome first, limit 50</h2>
+<pre id="limit">…</pre>
+
+<h2>12 · the migration file, read as text</h2>
+<pre id="sql">…</pre>
+
+<h2>13 · the schema.sql mirror and js/supabase.js</h2>
+<pre id="mirror">…</pre>
+
+<h2>failures</h2>
+<ul class="fails" id="failList"></ul>
+
+<script type="module">
+import { LocalBackend as B } from "./js/local-backend.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const out = (id, lines) => { document.getElementById(id).textContent = lines.join("\n"); };
+const J = JSON.stringify;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+const PW = "pw12", ADMIN = "admin";
+const freshUser = async (tag) => {
+  const u = `verify_ib_${tag}_${Math.random().toString(36).slice(2, 8)}`;
+  const r = await B.signup(u, "Inbox " + tag, PW);
+  tick(r.ok === true, `setup: signup ${tag}`);
+  return u;
+};
+/* RAW localStorage rows: an anonymity claim checked only through the
+   reader that does the shaping would prove nothing. */
+const rawRows = () => { try { return JSON.parse(localStorage.getItem("mhq.feedback")) || []; } catch { return []; } };
+const raw = id => rawRows().find(r => r.id === id);
+/* send one note and hand back its raw id (the mirror appends) */
+const send = async (u, body, anon = false, ctx = "play:gt5", snap = "Solve for x:  3x + 4 = 19") => {
+  const r = await B.sendFeedback(u, PW, body, anon, ctx, snap);
+  tick(r.ok === true, `setup: send "${body}"`);
+  const rows = rawRows();
+  return rows[rows.length - 1].id;
+};
+const reply = async (id, status, text) => { const r = await B.adminFeedbackReply(ADMIN, id, status, text); await sleep(4); return r; };
+const INBOX_KEYS = ["id", "body", "context", "createdAt", "status", "reply", "repliedAt", "seenAt"].sort().join(",");
+
+const A = await freshUser("a");
+const Bu = await freshUser("b");
+const a1 = await send(A, "q4's diagram looks squashed");
+const a2 = await send(A, "how do I do question 6?");
+const a3 = await send(A, "the sine rule one marked me wrong");
+const a4 = await send(A, "still waiting on this one");     // stays open throughout
+const aAnon = await send(A, "anonymous: this round is too long", true);
+const b1 = await send(Bu, "B's note about the graph");
+
+/* ============================================================
+   1 · auth
+   ============================================================ */
+{
+  const L = [];
+  const before = J(raw(a1));
+  const r = await B.adminFeedbackReply("wrongpassword", a1, "replied", "should not land");
+  tick(r.ok === false && r.error === "auth", `wrong admin password refused (got ${J(r)})`);
+  tick(J(raw(a1)) === before, "wrong admin password: the row is untouched");
+  const r2 = await B.adminFeedbackReply("", a1, "fixed", null);
+  tick(r2.ok === false && r2.error === "auth", `empty admin password refused (got ${J(r2)})`);
+  const i = await B.inbox(A, "wrong");
+  tick(i.ok === false && i.error === "auth", `inbox: wrong learner password refused (got ${J(i)})`);
+  tick(!("rows" in i), "inbox: a refused call carries no rows");
+  const s = await B.inboxSeen(A, "wrong");
+  tick(s.ok === false && s.error === "auth", `inboxSeen: wrong learner password refused (got ${J(s)})`);
+  const s2 = await B.inbox("nobody_at_all", PW);
+  tick(s2.ok === false && s2.error === "auth", "inbox: unknown username refused");
+  L.push(`wrong admin -> ${J(r)}`, `wrong learner -> ${J(i)}`);
+  out("auth", L);
+}
+
+/* ============================================================
+   2 · status rules
+   ============================================================ */
+{
+  const L = [];
+  for (const bad of ["closed", "", null, undefined, "FIXED", " fixed", "resolved"]) {
+    const r = await B.adminFeedbackReply(ADMIN, a1, bad, "x");
+    tick(r.ok === false && r.error === "status", `status ${J(bad)} refused with 'status' (got ${J(r)})`);
+    L.push(`${J(bad)} -> ${J(r)}`);
+  }
+  tick((raw(a1).status || "open") === "open" && raw(a1).reply == null, "bad statuses: the row is still open with no reply");
+  const m = await B.adminFeedbackReply(ADMIN, "no-such-id", "fixed", null);
+  tick(m.ok === false && m.error === "missing", `unknown id refused with 'missing' (got ${J(m)})`);
+  L.push(`unknown id -> ${J(m)}`);
+  out("status", L);
+}
+
+/* ============================================================
+   3 · replied
+   ============================================================ */
+{
+  const L = [];
+  for (const blank of ["", "   ", null, undefined, "\n  \t"]) {
+    const r = await B.adminFeedbackReply(ADMIN, a1, "replied", blank);
+    tick(r.ok === false && r.error === "empty", `replied with ${J(blank)} refused with 'empty' (got ${J(r)})`);
+  }
+  tick((raw(a1).status || "open") === "open", "empty reply: the row stays open");
+  tick(!raw(a1).repliedAt, "empty reply: no repliedAt written");
+
+  tick(!raw(a1).readAt, "setup: a1 is unread before her reply");
+  const r = await reply(a1, "replied", "  Use the sine rule, then check the angle.  ");
+  tick(r.ok === true, `replied with text: ok (got ${J(r)})`);
+  const row = raw(a1);
+  tick(row.status === "replied", `replied: status 'replied' (got ${J(row.status)})`);
+  tick(row.reply === "Use the sine rule, then check the angle.", `replied: text stored trimmed (got ${J(row.reply)})`);
+  tick(typeof row.repliedAt === "string" && !isNaN(Date.parse(row.repliedAt)), "replied: repliedAt set");
+  tick(row.seenAt === null, "replied: seenAt null");
+  tick(typeof row.readAt === "string", "replied: acting on a note marks it read");
+
+  const long = "x".repeat(1500);
+  const r2 = await reply(a2, "replied", long);
+  tick(r2.ok === true && raw(a2).reply.length === 1000, `replied: text capped at 1000 (got ${raw(a2).reply && raw(a2).reply.length})`);
+  L.push(J(row, null, 1));
+  out("replied", L);
+}
+
+/* ============================================================
+   4 · fixed / addressed on a named note
+   ============================================================ */
+{
+  const L = [];
+  // read_at keeps its FIRST value: coalesce(read_at, now())
+  await B.adminFeedbackRead(ADMIN, a3, true);
+  const firstRead = raw(a3).readAt;
+  await sleep(4);
+  const r = await reply(a3, "fixed", "   ");
+  tick(r.ok === true, "fixed with blank text: ok");
+  tick(raw(a3).status === "fixed", "fixed: status 'fixed'");
+  tick(raw(a3).reply === null, `fixed with blank text: reply stored as null (got ${J(raw(a3).reply)})`);
+  tick(raw(a3).readAt === firstRead, "fixed: an already-read note keeps its first readAt");
+  tick(!!raw(a3).repliedAt && raw(a3).seenAt === null, "fixed: repliedAt set, seenAt null");
+
+  const r2 = await reply(a3, "fixed", "  The marker now accepts 0,5 too.  ");
+  tick(r2.ok === true && raw(a3).reply === "The marker now accepts 0,5 too.", `fixed with text: stored trimmed (got ${J(raw(a3).reply)})`);
+
+  const r3 = await reply(a2, "addressed", null);
+  tick(r3.ok === true && raw(a2).status === "addressed", "addressed: status 'addressed'");
+  tick(raw(a2).reply === null, `addressed with no text: reply null, the earlier reply is replaced (got ${raw(a2).reply && raw(a2).reply.length} chars)`);
+  const r4 = await reply(a2, "addressed", "Sent you a video on WhatsApp");
+  tick(r4.ok === true && raw(a2).reply === "Sent you a video on WhatsApp", "addressed with text: stored");
+
+  // one outcome per note: replied -> fixed reads as fixed
+  const before = raw(a1).repliedAt;
+  const r5 = await reply(a1, "fixed", raw(a1).reply);
+  tick(r5.ok === true && raw(a1).status === "fixed", "replied then fixed: the note reads as fixed");
+  tick(raw(a1).reply === "Use the sine rule, then check the angle.", "replied then fixed (text passed again): her text kept as the extra line");
+  tick(raw(a1).repliedAt > before, "replied then fixed: repliedAt moves forward");
+  L.push(`a3 ${J(raw(a3))}`, `a2 ${J({ status: raw(a2).status, reply: raw(a2).reply })}`, `a1 ${J({ status: raw(a1).status, reply: raw(a1).reply })}`);
+  out("fixed", L);
+}
+
+/* ============================================================
+   5 · ANONYMOUS
+   ============================================================ */
+{
+  const L = [];
+  const before = J(raw(aAnon));
+  tick(raw(aAnon).studentId === null && raw(aAnon).name === null, "setup: the anonymous row keeps no id and no name");
+
+  const r = await B.adminFeedbackReply(ADMIN, aAnon, "replied", "Here is the answer");
+  tick(r.ok === false && r.error === "anon", `anon + replied refused with 'anon' (got ${J(r)})`);
+  const rE = await B.adminFeedbackReply(ADMIN, aAnon, "replied", "  ");
+  tick(rE.ok === false && rE.error === "anon", `anon + replied + blank is still 'anon', not 'empty' (got ${J(rE)})`);
+  tick(J(raw(aAnon)) === before, "anon + replied: the row is untouched");
+
+  const SECRET = "secret words only she typed";
+  const r2 = await reply(aAnon, "fixed", SECRET);
+  tick(r2.ok === true, "anon + fixed: allowed");
+  tick(raw(aAnon).status === "fixed", "anon + fixed: status 'fixed'");
+  tick(raw(aAnon).reply === null, `anon + fixed: NO text stored (got ${J(raw(aAnon).reply)})`);
+  tick(!J(raw(aAnon)).includes(SECRET), "anon + fixed: her text appears NOWHERE in the raw row");
+  tick(!!raw(aAnon).readAt, "anon + fixed: marked read on her side");
+
+  const r3 = await reply(aAnon, "addressed", SECRET);
+  tick(r3.ok === true && raw(aAnon).status === "addressed", "anon + addressed: allowed");
+  tick(raw(aAnon).reply === null && !J(raw(aAnon)).includes(SECRET), "anon + addressed: NO text stored");
+
+  // identity still absent after every action
+  const blob = J(raw(aAnon));
+  tick(raw(aAnon).studentId === null && raw(aAnon).name === null, "anon: still no id and no name after her actions");
+  tick(!blob.includes(A) && !blob.includes("Inbox a"), "anon: the username and display name appear NOWHERE in the row");
+
+  // and nobody's inbox shows it
+  const ia = await B.inbox(A, PW);
+  tick(!ia.rows.some(x => x.id === aAnon), "anon: the SENDER's inbox does not show it (the row cannot point back)");
+  const ib = await B.inbox(Bu, PW);
+  tick(!ib.rows.some(x => x.id === aAnon), "anon: learner B's inbox does not show it");
+  L.push(blob);
+  out("anon", L);
+}
+
+/* ============================================================
+   6 · the learner's inbox
+   ============================================================ */
+{
+  const L = [];
+  const i = await B.inbox(A, PW);
+  tick(i.ok === true, "inbox: ok");
+  const ids = i.rows.map(x => x.id);
+  tick(ids.includes(a1) && ids.includes(a2) && ids.includes(a3), "inbox: the three answered notes are there");
+  tick(!ids.includes(a4), "inbox: an OPEN note never shows");
+  tick(ids.length === 3, `inbox: exactly 3 rows (got ${ids.length})`);
+  tick(i.rows.every(x => Object.keys(x).sort().join(",") === INBOX_KEYS), `inbox: every row has exactly the eight keys (${INBOX_KEYS})`);
+  tick(i.rows.every(x => !("snapshot" in x)), "inbox: no row carries a snapshot");
+  tick(!J(i).includes("Solve for x"), "inbox: the snapshot text appears nowhere in the payload");
+  tick(i.rows.every(x => !("name" in x) && !("studentId" in x)), "inbox: no name / studentId keys");
+  tick(i.rows.every(x => x.status !== "open"), "inbox: no row is open");
+  const r1 = i.rows.find(x => x.id === a1);
+  tick(r1.body === "q4's diagram looks squashed" && r1.context === "play:gt5", "inbox: the learner's own words and context ride along");
+  // newest outcome first: a1 was acted on last
+  tick(ids[0] === a1, `inbox: newest outcome first (first is ${ids[0] === a1 ? "a1" : ids[0]})`);
+  const ts = i.rows.map(x => x.repliedAt);
+  tick(ts.every((t, k) => k === 0 || ts[k - 1] >= t), "inbox: repliedAt is non-increasing down the list");
+  L.push(`unseen ${i.unseen}`, ...i.rows.map(x => `${x.status.padEnd(9)} ${x.repliedAt}  ${x.body.slice(0, 40)}`));
+  out("inbox", L);
+}
+
+/* ============================================================
+   7 · the dot
+   ============================================================ */
+{
+  const L = [];
+  const i0 = await B.inbox(A, PW);
+  tick(i0.unseen === 3, `unseen: 3 answered, none seen (got ${i0.unseen})`);
+  const s = await B.inboxSeen(A, PW);
+  tick(s.ok === true && s.seen === 3, `inboxSeen: stamped 3 (got ${J(s)})`);
+  const i1 = await B.inbox(A, PW);
+  tick(i1.unseen === 0, `inboxSeen clears the count (got ${i1.unseen})`);
+  tick(i1.rows.every(x => typeof x.seenAt === "string"), "inboxSeen: every answered row has seenAt");
+  tick((raw(a4).status || "open") === "open" && !raw(a4).seenAt, "inboxSeen: an OPEN note is not stamped");
+  tick(!raw(aAnon).seenAt, "inboxSeen: the anonymous row is not stamped");
+  const s2 = await B.inboxSeen(A, PW);
+  tick(s2.ok === true && s2.seen === 0, `inboxSeen twice: stamps nothing the second time (got ${J(s2)})`);
+
+  // a new outcome brings the dot back, even on a note already seen
+  await reply(a3, "addressed", null);
+  const i2 = await B.inbox(A, PW);
+  tick(i2.unseen === 1, `a new outcome brings unseen back to 1 (got ${i2.unseen})`);
+  tick(raw(a3).seenAt === null, "a new outcome clears seenAt on that note");
+  tick(i2.rows[0].id === a3, "the new outcome is now first in the list");
+  tick(typeof raw(a1).seenAt === "string", "the other notes keep their seenAt");
+  L.push(`before ${i0.unseen} · seen ${s.seen} · after ${i1.unseen} · new outcome ${i2.unseen}`);
+  out("seen", L);
+}
+
+/* ============================================================
+   8 · Undo
+   ============================================================ */
+{
+  const L = [];
+  const readBefore = raw(a1).readAt;
+  const r = await reply(a1, "open", "this text is ignored");
+  tick(r.ok === true, "undo: ok");
+  const row = raw(a1);
+  tick(row.status === "open", "undo: status back to open");
+  tick(row.reply === null && row.repliedAt === null && row.seenAt === null, `undo: reply, repliedAt and seenAt cleared (got ${J({ reply: row.reply, repliedAt: row.repliedAt, seenAt: row.seenAt })})`);
+  tick(row.readAt === readBefore, "undo: read on her side stays read (Undo is not 'mark unread')");
+  const i = await B.inbox(A, PW);
+  tick(!i.rows.some(x => x.id === a1), "undo: the note leaves the learner's inbox");
+  tick(i.rows.length === 2, `undo: two answered notes left (got ${i.rows.length})`);
+  // Undo on the anonymous row too
+  const ra = await reply(aAnon, "open", null);
+  tick(ra.ok === true && raw(aAnon).status === "open" && raw(aAnon).repliedAt === null, "undo: works on an anonymous row");
+  L.push(J(row));
+  out("undo", L);
+}
+
+/* ============================================================
+   9 · learner B never sees learner A
+   ============================================================ */
+{
+  const L = [];
+  const ib0 = await B.inbox(Bu, PW);
+  tick(ib0.ok === true && ib0.rows.length === 0 && ib0.unseen === 0, `B: empty inbox while B's note is open (got ${ib0.rows.length} rows, unseen ${ib0.unseen})`);
+  await reply(b1, "replied", "Thanks B, fixed the scale.");
+  const ib = await B.inbox(Bu, PW);
+  tick(ib.rows.length === 1 && ib.rows[0].id === b1, "B: sees exactly B's one answered note");
+  tick(!ib.rows.some(x => [a1, a2, a3, a4, aAnon].includes(x.id)), "B: none of A's rows");
+  tick(!J(ib).includes("squashed") && !J(ib).includes("sine rule"), "B: none of A's words or her replies to A");
+  const ia = await B.inbox(A, PW);
+  tick(!ia.rows.some(x => x.id === b1), "A: does not see B's note");
+  tick(ia.unseen === 1, `A: unseen unchanged by B's reply (got ${ia.unseen})`);
+  const sb = await B.inboxSeen(Bu, PW);
+  tick(sb.seen === 1, "B: inboxSeen stamps only B's one row");
+  const ia2 = await B.inbox(A, PW);
+  tick(ia2.unseen === 1, `A: B opening B's inbox does not clear A's dot (got ${ia2.unseen})`);
+  L.push(`B rows ${ib.rows.length} · A rows ${ia.rows.length} · A unseen after B saw ${ia2.unseen}`);
+  out("other", L);
+}
+
+/* ============================================================
+   10 · the teacher's list
+   ============================================================ */
+{
+  const L = [];
+  // a row written before the inbox existed: no status keys at all
+  const legacyId = "fblegacy" + Math.random().toString(36).slice(2, 8);
+  const st = Object.values(JSON.parse(localStorage.getItem("mhq.students")) || {}).find(s => s.username === A);
+  const rows = rawRows();
+  rows.push({ id: legacyId, createdAt: new Date(Date.now() - 86400000).toISOString(), studentId: st.id, name: st.display_name,
+              context: "hub", snapshot: null, body: "legacy note", readAt: null });
+  localStorage.setItem("mhq.feedback", J(rows));
+
+  const list = await B.adminFeedback(ADMIN);
+  tick(list.ok === true, "adminFeedback: ok");
+  tick(list.rows.every(x => ["status", "reply", "repliedAt", "seenAt"].every(k => k in x)), "adminFeedback: every row carries status, reply, repliedAt, seenAt");
+  tick(list.rows.every(x => ["id", "name", "anon", "context", "snapshot", "body", "createdAt", "readAt"].every(k => k in x)), "adminFeedback: the old keys are all still there");
+  const lg = list.rows.find(x => x.id === legacyId);
+  tick(lg && lg.status === "open" && lg.reply === null && lg.repliedAt === null && lg.seenAt === null, `adminFeedback: a pre-inbox row reads as open (got ${J(lg && lg.status)})`);
+  const la2 = list.rows.find(x => x.id === a2);
+  tick(la2 && la2.status === "addressed" && la2.reply === "Sent you a video on WhatsApp", "adminFeedback: an outcome and her text come back");
+  const lb = list.rows.find(x => x.id === b1);
+  tick(lb && typeof lb.seenAt === "string", "adminFeedback: seenAt shows once the learner opened it");
+  const ia = await B.inbox(A, PW);
+  tick(!ia.rows.some(x => x.id === legacyId), "inbox: a pre-inbox row (no status) never shows");
+  const bad = await B.adminFeedback("wrongpassword");
+  tick(bad.ok === false && bad.error === "auth", "adminFeedback: wrong admin password still refused");
+  // tidy the injected row away
+  localStorage.setItem("mhq.feedback", J(rawRows().filter(r => r.id !== legacyId)));
+  L.push(J(lg));
+  out("admin", L);
+}
+
+/* ============================================================
+   11 · newest outcome first, limit 50
+   ============================================================ */
+{
+  const L = [];
+  const C = await freshUser("c");
+  const ids = [];
+  for (let k = 0; k < 55; k++) {
+    const r = await B.sendFeedback(C, PW, `note ${k}`, false, "hub", null);
+    if (!r.ok) tick(false, `setup: C send ${k}`);
+    const rows = rawRows(); ids.push(rows[rows.length - 1].id);
+  }
+  for (const id of ids) {
+    const r = await B.adminFeedbackReply(ADMIN, id, "fixed", null);
+    if (!r.ok) tick(false, `setup: fix ${id}`);
+    await sleep(2);
+  }
+  const i = await B.inbox(C, PW);
+  tick(i.rows.length === 50, `limit: 55 answered notes, inbox returns 50 (got ${i.rows.length})`);
+  tick(i.unseen === 50, `limit: unseen counts the rows the sheet can show (got ${i.unseen})`);
+  tick(i.rows[0].id === ids[54], "limit: the last one acted on is first");
+  tick(!i.rows.some(x => [ids[0], ids[1], ids[2], ids[3], ids[4]].includes(x.id)), "limit: the five oldest outcomes are the ones left out");
+  // tidy C's 55 rows away so repeat runs stay small
+  localStorage.setItem("mhq.feedback", J(rawRows().filter(r => !ids.includes(r.id))));
+  L.push(`rows ${i.rows.length} · unseen ${i.unseen} · first "${i.rows[0].body}" · last "${i.rows[49].body}"`);
+  out("limit", L);
+}
+
+/* ============================================================
+   12 · the migration file, read as text
+   ============================================================ */
+const fnRe = /create or replace function public\.(\w+)\s*\(([^)]*)\)\s*returns\s+([^\s]+)\s+language\s+(\w+)([^$]*?)as \$\$/g;
+const fnsOf = src => { const f = []; let m; fnRe.lastIndex = 0; while ((m = fnRe.exec(src)) !== null) f.push({ name: m[1], head: m[0], at: m.index }); return f; };
+/* the body of one function: from its head to the closing `end; $$;` */
+const bodyOf = (src, name) => {
+  const i = src.indexOf(`create or replace function public.${name}(`);
+  if (i < 0) return "";
+  const j = src.indexOf("end; $$;", i);
+  return j < 0 ? "" : src.slice(i, j + 8);
+};
+const FOUR = ["mhq_admin_feedback_reply", "mhq_admin_feedback", "mhq_inbox", "mhq_inbox_seen"];
+{
+  const L = [];
+  const src = await (await fetch("./supabase/migration-feedback-inbox.sql", { cache: "reload" })).text();
+  const code = src.split("\n").filter(l => !/^\s*--/.test(l)).join("\n"); // comments stripped
+
+  const fns = fnsOf(src);
+  tick(fns.length === 4, `migration defines exactly 4 functions (got ${fns.length}: ${fns.map(f => f.name).join(", ")})`);
+  FOUR.forEach(n => tick(fns.some(f => f.name === n), `migration defines ${n}`));
+  fns.forEach(f => {
+    tick(/security definer/.test(f.head), `${f.name}: security definer`);
+    tick(/set search_path = public, extensions/.test(f.head), `${f.name}: search_path pinned to public, extensions`);
+  });
+  tick((src.match(/security definer/g) || []).length === 4, `migration: "security definer" appears exactly 4 times (got ${(src.match(/security definer/g) || []).length})`);
+  tick((src.match(/set search_path = public, extensions/g) || []).length === 4, "migration: exactly 4 pinned search_paths");
+
+  // the grants: all four, to anon AND authenticated
+  const grant = (src.match(/grant execute on function[\s\S]*?to anon, authenticated;/) || [""])[0];
+  ["mhq_admin_feedback_reply(text, uuid, text, text)", "mhq_admin_feedback(text)", "mhq_inbox(text, text)", "mhq_inbox_seen(text, text)"]
+    .forEach(sig => tick(grant.includes(`public.${sig}`), `migration: grant execute names ${sig} to anon, authenticated`));
+
+  // the arity of the replaced function is unchanged (a true replace)
+  tick(/create or replace function public\.mhq_admin_feedback\(p_admin_password text\)/.test(src), "migration: mhq_admin_feedback keeps its ONE argument (no overload)");
+
+  // nothing dropped or re-created
+  tick(!/drop\s+table/i.test(src), "migration: no drop table");
+  tick(!/create\s+table/i.test(src), "migration: no create table");
+  tick(!/drop\s+function/i.test(code), "migration: no drop function");
+  tick(!/create\s+policy/i.test(code), "migration: no policy created");
+  tick(!/grant\s+(select|insert|update|delete|all)\b[^;]*on\s+(table\s+)?public\.feedback/i.test(code), "migration: no table privilege granted on public.feedback");
+
+  // the untouchables are not even named
+  ["mhq_send_feedback", "mhq_get_state", "mhq_admin_data"].forEach(n =>
+    tick(!src.includes(n), `migration: ${n} does not appear in the file`));
+
+  // the columns, re-runnable
+  ["status     text not null default 'open'", "reply      text", "replied_at timestamptz", "seen_at    timestamptz"].forEach(c =>
+    tick(src.includes(`alter table public.feedback add column if not exists ${c}`), `migration: add column if not exists ${c.split(/\s+/)[0]}`));
+  tick(/if not exists \(select 1 from pg_constraint[\s\S]{0,200}feedback_status_check[\s\S]{0,300}check \(status in \('open', 'replied', 'fixed', 'addressed'\)\)/.test(src),
+    "migration: the status check is added by name, guarded so a re-run is safe");
+
+  // the rules, in the SQL itself
+  const rep = bodyOf(src, "mhq_admin_feedback_reply");
+  tick(/if not public\._mhq_admin_ok\(p_admin_password\) then\s*return jsonb_build_object\('ok', false, 'error', 'auth'\)/.test(rep), "reply: the admin check comes first, same pattern as the other admin RPCs");
+  const repBody = rep.slice(rep.indexOf("\nbegin"));
+  tick(repBody.indexOf("_mhq_admin_ok") >= 0 && repBody.indexOf("_mhq_admin_ok") < repBody.indexOf("p_status"), "reply: admin check before anything reads the status");
+  tick(/error', 'anon'/.test(rep) && /error', 'empty'/.test(rep), "reply: refuses 'anon' and 'empty'");
+  tick(rep.indexOf("'anon'") < rep.indexOf("'empty'"), "reply: the anon check runs before the empty check");
+  tick(/if v_sid is null then v_reply := null; end if;/.test(rep), "reply: an anonymous row's text is forced to NULL");
+  // btrim with E' \t\r\n', not bare btrim (spaces only): a reply of only
+  // newlines must read as blank on live exactly as String.trim() does locally
+  tick(rep.includes("left(nullif(btrim(coalesce(p_reply, ''), E' \\t\\r\\n'), ''), 1000)"), "reply: text trimmed of spaces/tabs/newlines, NULL when blank, capped at 1000");
+  tick(/read_at\s*=\s*coalesce\(read_at, now\(\)\)/.test(rep), "reply: read_at = coalesce(read_at, now())");
+  tick(/seen_at\s*=\s*null/.test(rep) && /replied_at = now\(\)/.test(rep), "reply: an outcome sets replied_at and clears seen_at");
+  tick(/set status = 'open', reply = null, replied_at = null, seen_at = null/.test(rep), "reply: 'open' clears reply, replied_at, seen_at");
+
+  for (const n of ["mhq_inbox", "mhq_inbox_seen"]) {
+    const b = bodyOf(src, n);
+    tick(/v_sid := public\._mhq_auth\(p_username, p_password\);\s*if v_sid is null then return jsonb_build_object\('ok', false, 'error', 'auth'\)/.test(b),
+      `${n}: _mhq_auth first, same pattern as the other learner RPCs`);
+    tick(/student_id = v_sid/.test(b) && /status <> 'open'/.test(b), `${n}: only the caller's own answered rows`);
+  }
+  const ib = bodyOf(src, "mhq_inbox");
+  tick(!/snapshot/.test(ib), "mhq_inbox: never selects the snapshot");
+  tick(!/display_name/.test(ib), "mhq_inbox: never selects a name");
+  tick(/limit 50/.test(ib), "mhq_inbox: limit 50");
+  tick(/order by f\.replied_at desc/.test(ib), "mhq_inbox: newest outcome first");
+  const af = bodyOf(src, "mhq_admin_feedback");
+  ["'status', f.status", "'reply', f.reply", "'repliedAt', f.replied_at", "'seenAt', f.seen_at", "'snapshot', f.snapshot", "limit 500"].forEach(k =>
+    tick(af.includes(k), `mhq_admin_feedback: carries ${k}`));
+
+  tick(/WRITTEN, NOT RUN/.test(src), "migration: header says WRITTEN, NOT RUN");
+  tick(/to_regprocedure\('public\._mhq_auth\(text, text\)'\)/.test(src) && /to_regprocedure\('public\._mhq_admin_ok\(text\)'\)/.test(src), "migration: dependency guard at the top");
+  tick(/has_table_privilege\('anon', 'public\.feedback'/.test(src), "migration: sanity checks include anon has NO table privilege");
+  L.push(`functions: ${fns.map(f => f.name).join(", ")}`);
+  out("sql", L);
+}
+
+/* ============================================================
+   13 · the schema.sql mirror and js/supabase.js
+   ============================================================ */
+{
+  const L = [];
+  const src = await (await fetch("./supabase/migration-feedback-inbox.sql", { cache: "reload" })).text();
+  const schema = await (await fetch("./supabase/schema.sql", { cache: "reload" })).text();
+  // the four functions are byte-for-byte the same in both files
+  FOUR.forEach(n => {
+    const a = bodyOf(src, n), b = bodyOf(schema, n);
+    tick(a.length > 0 && a === b, `schema.sql mirror: ${n} is identical to the migration's`);
+  });
+  ["status       text not null default 'open'", "reply        text", "replied_at   timestamptz", "seen_at      timestamptz",
+   "constraint feedback_status_check check (status in ('open', 'replied', 'fixed', 'addressed'))"].forEach(c =>
+    tick(schema.includes(c), `schema.sql mirror: feedback table has ${c.split(/\s+/)[0] === "constraint" ? "feedback_status_check" : c.split(/\s+/)[0]}`));
+  /* the ONE big grants block: the statement that holds the existing
+     mhq_admin_feedback_read grant, from its `grant execute` to its `to anon` */
+  const anchor = schema.indexOf("  public.mhq_admin_feedback_read(text, uuid, boolean),");
+  const gStart = schema.lastIndexOf("grant execute on function", anchor);
+  const gEnd = schema.indexOf("to anon, authenticated;", anchor);
+  const grant = (anchor > 0 && gStart > 0 && gEnd > anchor) ? schema.slice(gStart, gEnd + 23) : "";
+  tick(grant.length > 0 && !grant.slice(25).includes("grant execute"), "schema.sql mirror: found the single grants block");
+  ["mhq_admin_feedback_reply(text, uuid, text, text)", "mhq_inbox(text, text)", "mhq_inbox_seen(text, text)", "mhq_admin_feedback(text)"].forEach(sig =>
+    tick(grant.includes(`public.${sig}`), `schema.sql mirror: grants block names ${sig}`));
+  tick(/revoke all on public\.feedback, public\.papers from anon, authenticated;/.test(schema), "schema.sql mirror: feedback still revoked from anon/authenticated");
+  tick((schema.match(/create or replace function public\.mhq_admin_feedback\(/g) || []).length === 1, "schema.sql mirror: ONE mhq_admin_feedback definition");
+
+  const sb = await (await fetch("./js/supabase.js", { cache: "reload" })).text();
+  tick(/rpc\("mhq_admin_feedback_reply", \{\s*p_admin_password: pw, p_id: id, p_status: status,\s*p_reply:/.test(sb), "supabase.js: adminFeedbackReply calls mhq_admin_feedback_reply with the four named args");
+  tick(/rpc\("mhq_inbox", \{ p_username: username, p_password: password \}\)/.test(sb), "supabase.js: inbox calls mhq_inbox");
+  tick(/rpc\("mhq_inbox_seen", \{ p_username: username, p_password: password \}\)/.test(sb), "supabase.js: inboxSeen calls mhq_inbox_seen");
+  ["adminFeedbackReply", "inbox", "inboxSeen"].forEach(n => tick(typeof B[n] === "function", `local-backend.js: ${n} exists`));
+  const api = await (await fetch("./js/api.js", { cache: "reload" })).text();
+  ["adminFeedbackReply(pw,id,status,reply)", "inbox(u,p)", "inboxSeen(u,p)"].forEach(n => tick(api.includes(n), `api.js doc block: ${n}`));
+  out("mirror", L.concat([`checked ${FOUR.length} function bodies across both files`]));
+}
+
+/* ---------------- banner ---------------- */
+const list = document.getElementById("failList");
+fails.forEach(msg => { const li = document.createElement("li"); li.textContent = "✗ " + msg; list.appendChild(li); });
+const banner = document.getElementById("banner");
+const allOk = passed === total;
+banner.className = allOk ? "pass" : "fail";
+banner.textContent = allOk
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — ${passed}/${total} checks passed`;
+
+window.__VERIFY__ = { total, passed, ok: allOk, fails };
+console.log(`[verify-inbox] ${passed}/${total} — ${allOk ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

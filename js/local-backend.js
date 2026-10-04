@@ -126,6 +126,9 @@ const stubPaper = () => ({
   id: "local-stub", title: "Sample paper", chapter: "General",
   sizeBytes: 240000, sort: 0, createdAt: new Date().toISOString(),
 });
+/* INBOX-PLAN.md (2026-10-04): the four values feedback.status may hold —
+   the same list as the SQL check constraint feedback_status_check. */
+const FEEDBACK_STATUSES = ["open", "replied", "fixed", "addressed"];
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
@@ -1502,6 +1505,8 @@ export const LocalBackend = {
       snapshot: snap || null,
       body: text.slice(0, 1000),
       readAt: null,
+      // INBOX-PLAN.md (2026-10-04): the SQL column defaults, mirrored
+      status: "open", reply: null, repliedAt: null, seenAt: null,
     });
     write(LS.feedback, rows);
     touch(s.id);
@@ -1521,8 +1526,73 @@ export const LocalBackend = {
         id: r.id, name: r.name || "Anonymous", anon: r.name == null,
         context: r.context || null, snapshot: r.snapshot || null, body: r.body,
         createdAt: r.createdAt, readAt: r.readAt || null,
+        // INBOX-PLAN.md (2026-10-04). A row written before the inbox has no
+        // status at all; the SQL column default makes those 'open', so the
+        // mirror does the same.
+        status: r.status || "open", reply: r.reply ?? null,
+        repliedAt: r.repliedAt ?? null, seenAt: r.seenAt ?? null,
       })),
     };
+  },
+  // ---- INBOX-PLAN.md: 📥 answering the 💬 notes (2026-10-04). Mirrors
+  // supabase/migration-feedback-inbox.sql's mhq_admin_feedback_reply /
+  // mhq_inbox / mhq_inbox_seen rule for rule, in the same order:
+  // auth -> status -> missing -> open (Undo) -> anon -> empty -> write.
+  // verify-inbox.html reads the raw localStorage rows back to prove an
+  // anonymous row never keeps her text.
+  async adminFeedbackReply(pw, id, status, reply) {
+    if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
+    if (!FEEDBACK_STATUSES.includes(status)) return { ok: false, error: "status" };
+    const rows = read(LS.feedback, []);
+    const row = rows.find(r => r.id === id);
+    if (!row) return { ok: false, error: "missing" };
+    if (status === "open") {
+      row.status = "open"; row.reply = null; row.repliedAt = null; row.seenAt = null;
+      write(LS.feedback, rows);
+      return { ok: true };
+    }
+    const anon = row.studentId == null;
+    let text = String(reply == null ? "" : reply).trim().slice(0, 1000) || null;
+    if (status === "replied") {
+      if (anon) return { ok: false, error: "anon" };
+      if (!text) return { ok: false, error: "empty" };
+    }
+    if (anon) text = null; // the anonymity promise: nobody could ever read it
+    const now = new Date().toISOString();
+    row.status = status; row.reply = text; row.repliedAt = now; row.seenAt = null;
+    row.readAt = row.readAt || now;
+    write(LS.feedback, rows);
+    return { ok: true };
+  },
+  async inbox(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const mine = read(LS.feedback, [])
+      .filter(r => r.studentId === s.id && (r.status || "open") !== "open")
+      .sort((a, b) => String(b.repliedAt || "").localeCompare(String(a.repliedAt || ""))
+                   || String(b.createdAt).localeCompare(String(a.createdAt)))
+      .slice(0, 50);
+    return {
+      ok: true,
+      unseen: mine.filter(r => !r.seenAt).length,
+      // the same eight keys as the SQL: never the snapshot, never a name
+      rows: mine.map(r => ({
+        id: r.id, body: r.body, context: r.context || null, createdAt: r.createdAt,
+        status: r.status, reply: r.reply ?? null, repliedAt: r.repliedAt ?? null, seenAt: r.seenAt ?? null,
+      })),
+    };
+  },
+  async inboxSeen(username, password) {
+    const s = verify(username, password);
+    if (!s) return { ok: false, error: "auth" };
+    const rows = read(LS.feedback, []);
+    const now = new Date().toISOString();
+    let n = 0;
+    rows.forEach(r => {
+      if (r.studentId === s.id && (r.status || "open") !== "open" && !r.seenAt) { r.seenAt = now; n++; }
+    });
+    if (n) write(LS.feedback, rows);
+    return { ok: true, seen: n };
   },
   async adminFeedbackRead(pw, id, readFlag) {
     if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };

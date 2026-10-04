@@ -115,6 +115,27 @@
                     screen), body, createdAt, readAt}] }, newest first,
                     capped at 500.
                   adminFeedbackRead(pw,id,read) — set/clear read_at.
+                  Since INBOX-PLAN.md (2026-10-04) every adminFeedback row
+                    also carries status ("open"|"replied"|"fixed"|
+                    "addressed"), reply, repliedAt, seenAt.
+     inbox:       adminFeedbackReply(pw,id,status,reply) — her one outcome
+                    per note; a later one replaces the earlier. "open" is
+                    Undo (clears reply/repliedAt/seenAt). "replied" needs
+                    text ({ok:false,error:"empty"}) and is refused on an
+                    anonymous note ({ok:false,error:"anon"}). "fixed" /
+                    "addressed" take optional text, but an anonymous note
+                    NEVER stores any. Any outcome sets repliedAt, clears
+                    seenAt (the dot comes back) and marks the note read.
+                    Other errors: "auth" | "status" | "missing".
+                  inbox(u,p) — { ok, unseen, rows: [{id, body, context,
+                    createdAt, status, reply, repliedAt, seenAt}] }: the
+                    caller's OWN notes that have an outcome, newest outcome
+                    first, max 50. Never an open note, never another
+                    learner's, never the snapshot.
+                  inboxSeen(u,p) — { ok, seen } stamps seenAt on the
+                    caller's unseen answered notes, which clears the dot.
+                  supabase/migration-feedback-inbox.sql must be applied
+                    BEFORE a client that calls these ships.
      papers:      listPapers(u,p) — { ok, papers: [{id,title,chapter,
                     sizeBytes,sort,createdAt}] }. Auth-gated, and it never
                     carries the storage path.
