@@ -1,5 +1,32 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-04 11:21 to 12:10: 📥 inbox built and shipped as sw v95 (session diary)
+- Her words: "/catchup on blipwork, build the inbox", then "you run them, one at a time"
+  (Opus 5.5 as foreman instead of the planned Fable), then "yes to both" (migration + push).
+- Worker 1 (Opus, 186k): `db43d99` back end. Copy-forward base = migration-feedback-snapshot.sql
+  §4; nothing later re-created it (the audit file only re-granted `_mhq_auth`/`_mhq_admin_ok`).
+  Its calls: unknown id → 'missing'; exact status match; check order auth, status, missing, open,
+  anon, empty; btrim of space/tab/CR/LF; anonymous = student_id null (covers removed learners);
+  Undo leaves read_at alone; unseen counts only the 50 returned rows; inbox calls never touch
+  last_active_at. Foreman rerun 201/201.
+- Foreman review: the admin list's `anon` (display_name null) differs from the server's refusal
+  test (student_id null) for a removed learner's named note → `canReply` key added in worker 2.
+  The plan's "reply then fixed keeps the text" is done client-side: the textbox comes back
+  pre-filled with her reply.
+- Worker 2 (Opus, 172k): `d1c9a8c` admin page + canReply in migration, schema.sql, local backend
+  (local adminRemoveStudent now mirrors on-delete-set-null). Auth line written without the old
+  em dash. verify-inbox 220/220, new verify-inbox-admin 86/86. 375 px screenshot looked at: tall
+  on a phone (Mark read keeps its own column), wraps cleanly, no sideways scroll.
+- Worker 3 (Opus, 200k): `8c1c084` learner inbox (`js/inbox.js`, static import in screens.js).
+  Uses the current "System Window" colours (the CSS header says Holo moved on); amber dot;
+  greeting steps 26 → 22 px when the icon would wrap it; a no-break space before 👋; extra bottom
+  padding so the floating 💬 never covers the last item. sw.js needed nothing but the bump.
+  verify-inbox-learner 131/131; both screenshots looked at.
+- Ship: live mhq_admin_feedback matched the snapshot copy before applying; migration
+  `feedback_inbox_2026_10_04` via MCP; sanity checks + throwaway-learner smoke test green;
+  CACHE v95 committed, then sw_check OK (it reads committed state), push `7d3fc3c`, Pages built,
+  live files byte-identical. Old 2026-09-05/06 decision one-liners rolled into this archive.
+
 ## 2026-10-04 12:15 roll: Decisions 2026-09-05 and 2026-09-06, moved verbatim from PROJECT-STATUS.md
 - 2026-09-05 (hers): **no class join code at first login, 4-char minimum
   passwords, default bcrypt cost, no login throttle = DELIBERATE** ("I know my
