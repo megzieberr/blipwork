@@ -703,6 +703,25 @@ h2{font-size:20px} h3{font-size:17px}
 .lcd-tbl .calc-x10{line-height:0}
 .lcd-tbl .calc-x10-exp{vertical-align:baseline;position:relative;top:-3px;line-height:0}   /* the ×10 form raised without making its row taller */
 .lcd-res.lcd-tbl-val{min-height:0;height:26px;line-height:26px}
+/* calculator Build 7: the EQN / INEQ coefficient grid (MODE 5, spec §13). The
+   TABLE grid's small cells, no lines between the columns, matrix brackets
+   drawn by the borders of two thin bracket columns (.lcd-eqn-bl = "[", .lcd-eqn-br
+   = "]", with their serifs on the first and last rows); the typed entry at the
+   bottom LEFT (.lcd-eqn-in), at the height of the bottom line so the LCD never
+   grows; an answer's value (.lcd-eqn-val); the INEQ inequality under the grid
+   (.lcd-ineq); and one-item-per-line menus (.lcd-menu-list). */
+.lcd-tbl.lcd-eqn th,.lcd-tbl.lcd-eqn td{border:0}
+.lcd-tbl.lcd-eqn .lcd-eqn-bk{width:4px;padding:0}
+.lcd-tbl.lcd-eqn td.lcd-eqn-bl{border-left:1.4px solid currentColor}
+.lcd-tbl.lcd-eqn td.lcd-eqn-br{border-right:1.4px solid currentColor}
+.lcd-tbl.lcd-eqn td.lcd-eqn-t{border-top:1.4px solid currentColor}
+.lcd-tbl.lcd-eqn td.lcd-eqn-b{border-bottom:1.4px solid currentColor}
+.lcd-line.lcd-eqn-in{height:26px;display:flex;align-items:center}
+.lcd-eqn-in .lcd-expr{flex:1 1 auto;min-width:0;font-size:16px;line-height:1}
+.lcd-eqn-in .calc-frac{line-height:1;font-size:.72em}
+.lcd-eqn-val .calc-frac{line-height:1}   /* a fraction answer (5/2, −½+(√3/2)i) may not make the LCD taller */
+.lcd-ineq{font-size:11px;line-height:13px;white-space:nowrap}
+.lcd-menu.lcd-menu-list{grid-template-columns:1fr;gap:0;font-size:11px;line-height:14px}
 @keyframes calc-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
 .calc-pad{display:flex;flex-direction:column;gap:8px}

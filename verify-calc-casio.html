@@ -1531,6 +1531,419 @@ function measureBuild6(where, h, press) {
 }
 
 /* ============================================================
+   BUILD 7 — EQN = MODE 5 (spec section 13)
+   ============================================================ */
+/* Build 7 fields, read by readE (read() plus the coefficient grid): head —
+   the column headings on show, "a|b|c"; grid — each row's cells "v|v|v",
+   with "n:" in front for the systems' row numbers, rows joined by " / ";
+   sel — the selected cell "row:heading" ("1:a"; row 1 for one-row grids
+   too); brk — the matrix brackets on show, "[]", "[", "]" or ""; typed —
+   the entry at the bottom left ("" when nothing is typed); ineq — the
+   inequality under an INEQ grid. On the grid, val is the bottom-right
+   value; on an answer, expr is the label (top left) and val the value. */
+function readE(h) {
+  const g = read(h), t = h.querySelector(".lcd-eqn");
+  const ti = h.querySelector(".lcd-eqn-in .lcd-expr"), iq = h.querySelector(".lcd-ineq");
+  const base = { ...g, typed: ti ? ti.textContent : "", ineq: iq ? iq.textContent : "" };
+  if (!t) return { ...base, head: "", grid: "", sel: "", brk: "" };
+  const data = row => [...row.cells].filter(c => !c.classList.contains("lcd-tbl-n") && !c.classList.contains("lcd-eqn-bk"));
+  const txt = c => { const k = c.cloneNode(true); k.querySelectorAll(".calc-x10-exp").forEach(s => { s.textContent = "^" + s.textContent; }); return k.textContent; };
+  const heads = data(t.rows[0]).map(c => c.textContent), rows = [...t.rows].slice(1);
+  const grid = rows.map(r => { const n = r.querySelector(".lcd-tbl-n"); return (n ? n.textContent + ":" : "") + data(r).map(txt).join("|"); }).join(" / ");
+  const sc = t.querySelector("td.lcd-tbl-sel");
+  const sel = sc ? `${rows.indexOf(sc.parentElement) + 1}:${heads[data(sc.parentElement).indexOf(sc)]}` : "";
+  const brk = (t.querySelector(".lcd-eqn-bl") ? "[" : "") + (t.querySelector(".lcd-eqn-br") ? "]" : "");
+  return { ...base, head: heads.join("|"), grid, sel, brk };
+}
+function erow(name, spec, steps) {
+  const c = freshCalc();
+  const diffs = [];
+  try {
+    steps.forEach(([keys, want]) => {
+      c.press(keys);
+      const got = readE(c.h);
+      for (const k of Object.keys(want)) {
+        if (got[k] !== want[k]) diffs.push(`after "${keys}": ${k} = ${JSON.stringify(got[k])}, want ${JSON.stringify(want[k])}`);
+      }
+    });
+  } catch (e) { diffs.push("threw: " + e.message); }
+  tick(diffs.length === 0, `${name} <span class="why">[${spec}]</span>`, diffs.join("; "));
+}
+/* a number as keys: (−) for a negative */
+const nk = n => (n < 0 ? `(−) ${-n}` : String(n));
+/* the exact answer the LCD shows for p/q, as read() reads it ("−1/4", "3") */
+const gcd7 = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+const fr7 = (p, q = 1) => { if (q < 0) { p = -p; q = -q; } const g = gcd7(p, q); p /= g; q /= g; return (p < 0 ? "−" : "") + Math.abs(p) + (q === 1 ? "" : "/" + q); };
+/* a deterministic random source for the sweeps */
+let seed7 = 20261004;
+const rnd7 = (lo, hi) => { seed7 = (Math.imul(seed7, 1103515245) + 12345) >>> 0; return lo + ((seed7 >>> 8) % (hi - lo + 1)); };
+/* type every coefficient of a grid, each followed by =, then = to solve */
+const fillKeys = cs => cs.map(n => `${nk(n)} =`).join(" ") + " =";
+const QD = "MODE 5 3 1 = (−) 5 = 6 = =";   // the device example x²−5x+6
+
+section("Build 7 · MODE 5: the type menu and the grids (spec §13)");
+
+erow("MODE 5 lists the four types, plain lines", "§13", [["MODE 5", { menu: "1:anX+bnY=cn2:anX+bnY+cnZ=dn3:aX²+bX+c=04:aX³+bX²+cX+d=0" }]]);
+erow("1: two unknowns: a b c, rows 1 and 2, brackets, every coefficient 0, cell a selected, its value bottom right", "§13", [
+  ["MODE 5 1", { head: "a|b|c", grid: "1:0|0|0 / 2:0|0|0", brk: "[]", sel: "1:a", val: "0", typed: "", menu: "" }]]);
+erow("2: three unknowns: a b c d, rows 1 to 3; four columns do not fit, the view shows a b c", "§13", [
+  ["MODE 5 2", { head: "a|b|c", grid: "1:0|0|0 / 2:0|0|0 / 3:0|0|0", brk: "[", sel: "1:a", val: "0" }]]);
+erow("3: the quadratic: a b c, one row, no row number", "§13", [["MODE 5 3", { head: "a|b|c", grid: "0|0|0", brk: "[]", sel: "1:a", val: "0" }]]);
+erow("4: the cubic: a b c d, one row; the view shows a b c", "§13", [["MODE 5 4", { head: "a|b|c", grid: "0|0|0", brk: "[", sel: "1:a", val: "0" }]]);
+erow("AC on the type menu goes back to the calculation", "Blipwork choice: as the STAT type menu", [["2 + 3 = MODE 5 AC", { menu: "", expr: "2+3", val: "5" }]]);
+erow("no D, Math or ▲ on the grid (like the other grids)", "Blipwork choice: spec silent", [["1 + 1 = MODE 5 3", { hist: "", sa: "" }]]);
+
+section("Build 7 · typing, = and the arrows on the grid (spec §13)");
+
+erow("typing shows the entry at the BOTTOM LEFT; the cell keeps its old value until =", "§13", [
+  ["MODE 5 3 2", { typed: "2", grid: "0|0|0", sel: "1:a", val: "" }],
+  ["5", { typed: "25", grid: "0|0|0" }],
+  ["=", { typed: "", grid: "25|0|0", sel: "1:b", val: "0" }],
+]);
+erow("= stores and moves RIGHT a → b → c, wraps to the next row's a, and stays on the very last cell", "§13", [
+  ["MODE 5 1 2 =", { sel: "1:b", grid: "1:2|0|0 / 2:0|0|0" }],
+  ["3 =", { sel: "1:c" }],
+  ["13 =", { sel: "2:a", grid: "1:2|3|13 / 2:0|0|0" }],
+  ["1 =", { sel: "2:b" }],
+  ["(−) 1 =", { sel: "2:c" }],
+  ["(−) 1 =", { sel: "2:c", grid: "1:2|3|13 / 2:1|−1|−1", val: "−1" }],
+  ["4 =", { sel: "2:c", grid: "1:2|3|13 / 2:1|−1|4", val: "4" }],
+]);
+erow("the arrows move without changing a cell; no wrap at the edges", "§13; Blipwork: no wrap", [
+  ["MODE 5 1 5 = 6 = 7 =", { sel: "2:a", grid: "1:5|6|7 / 2:0|0|0" }],
+  ["◀", { sel: "2:a" }],
+  ["▲ ◀ ◀", { sel: "1:a", grid: "1:5|6|7 / 2:0|0|0", val: "5" }],
+  ["▼ ▶ ▶ ▶", { sel: "2:c", val: "0" }],
+  ["▼", { sel: "2:c" }], ["▲ ▲", { sel: "1:c", grid: "1:5|6|7 / 2:0|0|0", val: "7" }],
+]);
+erow("the cubic's view slides sideways: d comes into view (b c d) and back", "§13 \"the view slides sideways\"", [
+  ["MODE 5 4 1 = 2 = 3 =", { sel: "1:d", head: "b|c|d", grid: "2|3|0", brk: "]" }],
+  ["4 =", { sel: "1:d", head: "b|c|d", grid: "2|3|4", val: "4" }],
+  ["◀ ◀", { sel: "1:b", head: "b|c|d" }],
+  ["◀", { sel: "1:a", head: "a|b|c", brk: "[", grid: "1|2|3" }],
+]);
+erow("three unknowns: the walk slides to d and back to a on the next row", "§13", [
+  ["MODE 5 2 1 = 1 = 1 =", { sel: "1:d", head: "b|c|d", grid: "1:1|1|0 / 2:0|0|0 / 3:0|0|0" }],
+  ["6 =", { sel: "2:a", head: "a|b|c", grid: "1:1|1|1 / 2:0|0|0 / 3:0|0|0" }],
+]);
+erow("= with NOTHING typed solves, from any cell", "§13", [
+  [`MODE 5 3 1 = (−) 5 = 6 = ◀ ◀`, { sel: "1:a" }],
+  ["=", { expr: "X₁=", val: "3" }],
+]);
+erow("= with nothing typed on a middle cell solves too (b, after typing a)", "§13 \"on any cell\"", [
+  ["MODE 5 3 1 = =", { expr: "X=", val: "0" }],
+]);
+erow("picking the mode again resets every coefficient to 0", "§13", [
+  ["MODE 5 3 1 = (−) 5 = 6 =", { grid: "1|−5|6" }],
+  ["MODE 5 3", { grid: "0|0|0", sel: "1:a" }],
+  ["1 = MODE 5 1", { grid: "1:0|0|0 / 2:0|0|0" }],
+]);
+erow("while typing, ◀ and DEL edit the entry (not the cell)", "Blipwork choice: the typed entry is a line", [
+  ["MODE 5 3 1 2 ◀ DEL", { typed: "2", cur: "", sel: "1:a", grid: "0|0|0" }],
+  ["3 =", { grid: "32|0|0", sel: "1:b" }],
+]);
+erow("AC while typing drops the entry; AC with nothing typed does nothing", "Blipwork choice: spec silent", [
+  ["MODE 5 3 7 AC", { typed: "", grid: "0|0|0", sel: "1:a", val: "0" }],
+  ["AC", { grid: "0|0|0", sel: "1:a" }],
+]);
+erow("a typed expression is worked out: 1÷2 shows 0,5 in the cell and the bottom line", "Blipwork choice: TABLE's decimal cells", [
+  ["MODE 5 3 1 ÷ 2 =", { grid: "0,5|0|0", sel: "1:b" }],
+  ["◀", { val: "0,5" }],
+]);
+erow("a fraction coefficient: ½X²−X−4 → X₁= 4, X₂= −2", "Blipwork: exact arithmetic", [
+  ["MODE 5 3 frac 1 ▼ 2 ▶ = (−) 1 = (−) 4 = =", { expr: "X₁=", val: "4" }], ["=", { expr: "X₂=", val: "−2" }],
+]);
+erow("ALPHA letters type into a coefficient (A = 3 stored)", "§2 letters", [["3 SHIFT RCL (−) MODE 5 3 ALPHA (−) =", { grid: "3|0|0" }]]);
+erow("a Syntax ERROR in a typed entry: three lines; Goto back to the entry just before the bad token", "§3; Blipwork choice", [
+  ["MODE 5 3 2 + × 3 =", { err: ERR("Syntax ERROR") }],
+  ["7 = DEL", { err: ERR("Syntax ERROR") }],
+  ["◀", { err: "", typed: "2+×3", cur: "2+", grid: "0|0|0" }],
+  ["DEL =", { grid: "6|0|0", sel: "1:b" }],
+]);
+erow("AC on an entry's error drops the entry", "Blipwork choice", [["MODE 5 3 2 + × 3 = AC", { err: "", typed: "", grid: "0|0|0", sel: "1:a" }]]);
+
+section("Build 7 · the answers, device examples (spec §13)");
+
+erow("2x+3y=13, x−y=−1 → X= 2 ▼, then Y= 3 ▲; = after the last goes back to the grid, cell a, numbers kept", "§13 device answer", [
+  ["MODE 5 1 2 = 3 = 13 = 1 = (−) 1 = (−) 1 = =", { expr: "X=", val: "2", hist: "▼" }],
+  ["=", { expr: "Y=", val: "3", hist: "▲" }],
+  ["=", { sel: "1:a", grid: "1:2|3|13 / 2:1|−1|−1", hist: "", val: "2" }],
+]);
+erow("x²−5x+6 → X₁= 3, X₂= 2, X-Value Minimum= 5/2, Y-Value Minimum= −1/4, with ▼ ▲▼ ▲▼ ▲", "§13 device answer", [
+  [QD, { expr: "X₁=", val: "3", hist: "▼" }],
+  ["=", { expr: "X₂=", val: "2", hist: "▲▼" }],
+  ["=", { expr: "X-Value Minimum=", val: "5/2", resFrac: "[5|2]", hist: "▲▼" }],
+  ["=", { expr: "Y-Value Minimum=", val: "−1/4", resFrac: "[1|4]", hist: "▲" }],
+  ["=", { sel: "1:a", grid: "1|−5|6", hist: "" }],
+]);
+erow("▲ steps back; ▲ on the first answer stays; ▼ steps forward but not past the last", "§13 \"▲ steps back\"; Blipwork: ▼", [
+  [`${QD} = = =`, { expr: "Y-Value Minimum=" }],
+  ["▲", { expr: "X-Value Minimum=", val: "5/2" }],
+  ["▲ ▲ ▲", { expr: "X₁=", val: "3", hist: "▼" }],
+  ["▼ ▼ ▼ ▼", { expr: "Y-Value Minimum=", hist: "▲" }],
+  ["=", { sel: "1:a" }],
+]);
+erow("−x²+4x−3 → X₁= 3, X₂= 1, X-Value Maximum= 2, Y-Value Maximum= 1", "§13 device answer", [
+  ["MODE 5 3 (−) 1 = 4 = (−) 3 = =", { expr: "X₁=", val: "3" }],
+  ["=", { expr: "X₂=", val: "1" }],
+  ["=", { expr: "X-Value Maximum=", val: "2" }],
+  ["=", { expr: "Y-Value Maximum=", val: "1" }],
+]);
+erow("x²−2x−1 → X₁= 1+√2, X₂= 1−√2 (exact); S⇔D on X₂ → −0,4142135624", "§13 device answer", [
+  ["MODE 5 3 1 = (−) 2 = (−) 1 = =", { expr: "X₁=", val: "1+√2", resFrac: "" }],
+  ["=", { expr: "X₂=", val: "1−√2" }],
+  ["S⇔D", { expr: "X₂=", val: "−0,4142135624" }],
+  ["S⇔D", { val: "1−√2" }],
+  ["=", { expr: "X-Value Minimum=", val: "1" }], ["=", { expr: "Y-Value Minimum=", val: "−2" }],
+]);
+erow("x²+x+1 → X₁= −½+(√3/2)i, X₂= −½−(√3/2)i, then the min/max lines; no \"no real roots\" message", "§13 device answer", [
+  ["MODE 5 3 1 = 1 = 1 = =", { expr: "X₁=", val: "−1/2+(√3/2)i", resFrac: "[1|2][√3|2]", err: "" }],
+  ["=", { expr: "X₂=", val: "−1/2−(√3/2)i", resFrac: "[1|2][√3|2]" }],
+  ["=", { expr: "X-Value Minimum=", val: "−1/2" }],
+  ["=", { expr: "Y-Value Minimum=", val: "3/4", hist: "▲" }],
+]);
+erow("x²−4x+4 → a single X= 2 (no subscript), then the min/max lines", "§13 device answer", [
+  ["MODE 5 3 1 = (−) 4 = 4 = =", { expr: "X=", val: "2", hist: "▼" }],
+  ["=", { expr: "X-Value Minimum=", val: "2", hist: "▲▼" }],
+  ["=", { expr: "Y-Value Minimum=", val: "0", hist: "▲" }],
+  ["=", { sel: "1:a" }],
+]);
+erow("x³−6x²+11x−6 → X₁= 1, X₂= 3, X₃= 2; no turning points for cubics", "§13 device answer", [
+  ["MODE 5 4 1 = (−) 6 = 11 = (−) 6 = =", { expr: "X₁=", val: "1", hist: "▼" }],
+  ["=", { expr: "X₂=", val: "3", hist: "▲▼" }],
+  ["=", { expr: "X₃=", val: "2", hist: "▲" }],
+  ["=", { sel: "1:a", head: "a|b|c", grid: "1|−6|11" }],
+]);
+erow("on an answer, digits and other keys do nothing; AC goes back to the grid (cell a)", "§13", [
+  [`${QD} = 7 8 + sin DEL ◀ ▶ (−)`, { expr: "X₂=", val: "2" }],
+  ["AC", { sel: "1:a", grid: "1|−5|6", typed: "" }],
+]);
+erow("S⇔D on an answer: 5/2 → 2,5 and back; stepping on shows the next answer exact", "§13 \"S⇔D works on answers\"", [
+  [`${QD} = = S⇔D`, { val: "2,5" }], ["S⇔D", { val: "5/2" }], ["S⇔D =", { val: "−1/4" }],
+]);
+erow("MODE on an answer, then AC: back to the same answer", "Blipwork choice: spec silent", [
+  [`${QD} =`, { expr: "X₂=" }],
+  ["MODE", { menu: "1:COMP2:CMPLX3:STAT4:BASE-N5:EQN6:MATRIX7:TABLE" }],
+  ["AC", { expr: "X₂=", val: "2", hist: "▲▼" }],
+]);
+erow("Fix 2 rounds a decimal answer: x²−2x−1, S⇔D on X₁ → 2,41", "§7 Fix", [["SHIFT MODE 6 2 MODE 5 3 1 = (−) 2 = (−) 1 = = S⇔D", { val: "2,41" }]]);
+
+section("Build 7 · more systems, roots and errors (Blipwork choices where the spec is silent)");
+
+erow("three unknowns: x+y+z=6, 2x−y+z=3, x+2y−z=2 → X= 1 ▼, Y= 2 ▲▼, Z= 3 ▲", "§13 type 2", [
+  [`MODE 5 2 ${fillKeys([1, 1, 1, 6, 2, -1, 1, 3, 1, 2, -1, 2])}`, { expr: "X=", val: "1", hist: "▼" }],
+  ["=", { expr: "Y=", val: "2", hist: "▲▼" }], ["=", { expr: "Z=", val: "3", hist: "▲" }],
+  ["=", { sel: "1:a", head: "a|b|c", grid: "1:1|1|1 / 2:2|−1|1 / 3:1|2|−1" }],
+]);
+erow("a system with fraction answers: x+y=1, x−y=2 → X= 3/2, Y= −1/2", "Blipwork: exact arithmetic", [
+  [`MODE 5 1 ${fillKeys([1, 1, 1, 1, -1, 2])}`, { val: "3/2" }], ["=", { val: "−1/2" }],
+]);
+erow("a singular system (no unique solution) → Math ERROR; Goto back to the grid, numbers kept", "foreman ruling: Math ERROR", [
+  [`MODE 5 1 ${fillKeys([1, 1, 2, 2, 2, 4])}`, { err: ERR("Math ERROR") }],
+  ["◀", { err: "", sel: "2:c", grid: "1:1|1|2 / 2:2|2|4" }],
+  ["=", { err: ERR("Math ERROR") }], ["AC", { err: "", sel: "2:c" }],
+]);
+erow("all zeros: = solves at once → Math ERROR (a = 0)", "Blipwork choice: a = 0 not measured", [["MODE 5 3 =", { err: ERR("Math ERROR") }], ["AC", { err: "", grid: "0|0|0" }]]);
+erow("x²+4 → X₁= 2i, X₂= −2i (real part 0 left out)", "Blipwork choice: format not measured", [
+  ["MODE 5 3 1 = 0 = 4 = =", { val: "2i" }], ["=", { val: "−2i" }],
+]);
+erow("x²+2x+5 → X₁= −1+2i, X₂= −1−2i; S⇔D → −1+2i", "Blipwork choice", [["MODE 5 3 1 = 2 = 5 = =", { val: "−1+2i" }], ["S⇔D", { val: "−1+2i" }], ["=", { val: "−1−2i" }]]);
+erow("3x²+2x+1: S⇔D on a complex root shows decimals: −0,3333333333+0,4714045208i", "Blipwork choice", [
+  ["MODE 5 3 3 = 2 = 1 = =", { val: "−1/3+(√2/3)i" }], ["S⇔D", { val: "−0,3333333333+0,4714045208i" }],
+]);
+erow("x²+x−1 → X₁= (−1+√5)/2 as one fraction; X₂= −(1+√5)/2, the minus in front (Build 3's form)", "§7 two-term surds", [
+  ["MODE 5 3 1 = 1 = (−) 1 = =", { val: "−1+√5/2", resFrac: "[−1+√5|2]" }], ["=", { val: "−1+√5/2", resFrac: "[1+√5|2]" }]]);
+erow("cubic x³−1 → X₁= 1, then the complex pair: X₂= −½+(√3/2)i, X₃= −½−(√3/2)i", "foreman ruling: the quadratic's a+bi format", [
+  ["MODE 5 4 1 = 0 = 0 = (−) 1 = =", { expr: "X₁=", val: "1" }], ["=", { expr: "X₂=", val: "−1/2+(√3/2)i" }], ["=", { expr: "X₃=", val: "−1/2−(√3/2)i" }],
+]);
+erow("cubic (x−1)(x²−2) = x³−x²−2x+2 → exact: X₁= −√2, X₂= √2, X₃= 1", "Blipwork: exact roots; order rule", [
+  ["MODE 5 4 1 = (−) 1 = (−) 2 = 2 = =", { val: "−√2" }], ["=", { val: "√2" }], ["=", { val: "1" }],
+]);
+erow("cubic 2x³+x²−13x+6 → X₁= −3, X₂= 2, X₃= 1/2", "Blipwork: exact roots; order rule", [
+  ["MODE 5 4 2 = 1 = (−) 13 = 6 = =", { val: "−3" }], ["=", { val: "2" }], ["=", { val: "1/2" }],
+]);
+erow("cubic with a double root (x−1)²(x−3) → X₁= 1, X₂= 3 (each root once)", "Blipwork choice: not measured", [
+  ["MODE 5 4 1 = (−) 5 = 7 = (−) 3 = =", { expr: "X₁=", val: "1", hist: "▼" }], ["=", { expr: "X₂=", val: "3", hist: "▲" }],
+]);
+erow("cubic with a triple root (x−2)³ → a single X= 2", "Blipwork choice: as the quadratic's double root", [["MODE 5 4 1 = (−) 6 = 12 = (−) 8 = =", { expr: "X=", val: "2", hist: "" }]]);
+erow("cubic with no rational root, x³−2 → a decimal X₁= 1,25992105", "Blipwork: decimal when not exact", [["MODE 5 4 1 = 0 = 0 = (−) 2 = =", { expr: "X₁=", val: "1,25992105" }]]);
+erow("cubic with a = 0 → Math ERROR", "Blipwork choice: not measured", [["MODE 5 4 0 = 1 = 2 = 3 = =", { err: ERR("Math ERROR") }]]);
+erow("ON goes back to the grid, cell a, numbers kept", "Blipwork choice: spec silent", [[`${QD} = ON`, { sel: "1:a", grid: "1|−5|6", hist: "" }]]);
+erow("SETUP from the grid: Fix 2 then back on the grid", "Blipwork choice", [["MODE 5 3 1 ÷ 3 = ◀ SHIFT MODE 6 2", { sel: "1:a", val: "0,33", fix: "FIX" }]]);
+erow("EQN changes neither X, Ans nor the history", "Blipwork choice: spec silent", [
+  [`7 SHIFT RCL ) 1 + 1 = ${QD} MODE 1 Ans =`, { val: "2" }], ["RCL )", { expr: "X", val: "7" }],
+]);
+erow("MODE 1 from an answer goes back to COMP, and COMP works", "§13", [[`${QD} MODE 1 2 + 3 =`, { expr: "2+3", val: "5" }]]);
+erow("STAT still works after EQN, and so does its COMP line", "foreman ruling: STAT unchanged", [
+  ["MODE 5 3 7 MODE 3 1 2 = 4 = AC SHIFT 1 4 2 =", { res: "3" }],
+  ["AC 2 + 3 =", { expr: "2+3", val: "5" }],
+]);
+erow("TABLE → STAT → AC: the COMP line types again (the cursor no longer stays in f(X)=)", "Build 7 fix of a Build 6 leftover", [
+  ["MODE 7 X x² MODE 3 1 AC 2 + 3 =", { expr: "2+3", val: "5" }],
+]);
+erow("CLR All from EQN goes back to COMP", "§16 CLR", [[`${QD} SHIFT 9 3 = 2 + 2 =`, { expr: "2+2", val: "4" }]]);
+
+/* ---- sweeps: answers computed here, independently of calculator.js ---- */
+section("Build 7 · sweep: 44 quadratics with whole-number roots");
+for (let k = 0; k < 44; k++) {
+  const a = [1, -1, 2, -2, 3, -3, 1, 1][rnd7(0, 7)];
+  const r1 = rnd7(-9, 9), r2 = k % 9 === 0 ? r1 : rnd7(-9, 9);
+  const b = -a * (r1 + r2), c = a * r1 * r2, mm = a > 0 ? "Minimum" : "Maximum";
+  const want = r1 === r2 ? [["X=", fr7(r1)]] : [["X₁=", fr7(Math.max(r1, r2))], ["X₂=", fr7(Math.min(r1, r2))]];
+  want.push([`X-Value ${mm}=`, fr7(r1 + r2, 2)], [`Y-Value ${mm}=`, fr7(-a * (r1 - r2) ** 2, 4)]);
+  const steps = want.map(([expr, val], i) => [i === 0 ? `MODE 5 3 ${fillKeys([a, b, c])}` : "=", { expr, val }]);
+  steps.push(["=", { sel: "1:a", grid: [a, b, c].map(n => fr7(n)).join("|") }]);
+  erow(`${a}X² ${b < 0 ? "−" : "+"} ${Math.abs(b)}X ${c < 0 ? "−" : "+"} ${Math.abs(c)}: roots ${r1}, ${r2}`, "§13 sweep", steps);
+}
+
+section("Build 7 · sweep: 24 systems of two equations");
+for (let k = 0; k < 24; k++) {
+  let a1, b1, a2, b2, det;
+  do { a1 = rnd7(-9, 9); b1 = rnd7(-9, 9); a2 = rnd7(-9, 9); b2 = rnd7(-9, 9); det = a1 * b2 - b1 * a2; } while (det === 0);
+  let c1, c2;
+  if (k % 2 === 0) { const x = rnd7(-9, 9), y = rnd7(-9, 9); c1 = a1 * x + b1 * y; c2 = a2 * x + b2 * y; }   // whole-number answers
+  else { c1 = rnd7(-20, 20); c2 = rnd7(-20, 20); }                                                        // fraction answers
+  const X = fr7(c1 * b2 - b1 * c2, det), Y = fr7(a1 * c2 - c1 * a2, det);
+  erow(`${a1}x+${b1}y=${c1}, ${a2}x+${b2}y=${c2} → X= ${X}, Y= ${Y}`, "§13 sweep", [
+    [`MODE 5 1 ${fillKeys([a1, b1, c1, a2, b2, c2])}`, { expr: "X=", val: X }], ["=", { expr: "Y=", val: Y }], ["=", { sel: "1:a" }],
+  ]);
+}
+
+section("Build 7 · sweep: 8 systems of three equations, 12 cubics, 16 quadratics checked as decimals");
+for (let k = 0; k < 8; k++) {
+  let A, det;
+  do {
+    A = [0, 1, 2].map(() => [0, 1, 2].map(() => rnd7(-5, 5)));
+    det = A[0][0] * (A[1][1] * A[2][2] - A[1][2] * A[2][1]) - A[0][1] * (A[1][0] * A[2][2] - A[1][2] * A[2][0]) + A[0][2] * (A[1][0] * A[2][1] - A[1][1] * A[2][0]);
+  } while (det === 0);
+  const s = [rnd7(-5, 5), rnd7(-5, 5), rnd7(-5, 5)];
+  const cs = A.flatMap(r => [...r, r[0] * s[0] + r[1] * s[1] + r[2] * s[2]]);
+  erow(`three unknowns → X= ${s[0]}, Y= ${s[1]}, Z= ${s[2]}`, "§13 sweep", [
+    [`MODE 5 2 ${fillKeys(cs)}`, { expr: "X=", val: fr7(s[0]) }], ["=", { expr: "Y=", val: fr7(s[1]) }], ["=", { expr: "Z=", val: fr7(s[2]) }],
+  ]);
+}
+for (let k = 0; k < 12; k++) {
+  const a = rnd7(0, 1) ? 1 : -1, rs = [rnd7(-6, 6), rnd7(-6, 6), k % 4 === 0 ? null : rnd7(-6, 6)];
+  if (rs[2] === null) rs[2] = rs[0];   // some with a repeated root
+  const [p, q, r] = rs;
+  const cs = [a, -a * (p + q + r), a * (p * q + p * r + q * r), -a * p * q * r];
+  const distinct = [...new Set(rs)].sort((x, y) => x - y);
+  const order = [distinct[0], ...distinct.slice(1).reverse()];   // the Blipwork rule: smallest, then the rest bigger first
+  const labels = order.length === 1 ? ["X="] : order.map((_, i) => `X${"₁₂₃"[i]}=`);
+  erow(`cubic with roots ${rs.join(", ")} → ${order.join(", ")}`, "§13 sweep; order rule", [
+    ...order.map((v, i) => [i === 0 ? `MODE 5 4 ${fillKeys(cs)}` : "=", { expr: labels[i], val: fr7(v) }]), ["=", { sel: "1:a" }],
+  ]);
+}
+{
+  const fails = [];
+  for (let k = 0; k < 16; k++) {
+    const a = (rnd7(1, 5)) * (rnd7(0, 1) ? 1 : -1), b = rnd7(-12, 12), c = rnd7(-12, 12), D = b * b - 4 * a * c;
+    const cc = freshCalc();
+    cc.press(`MODE 5 3 ${fillKeys([a, b, c])}`);
+    const num = s => Number(s.replace(/−/g, "-").replace(",", "."));
+    const g1 = readE(cc.h);
+    const close = (s, w) => Math.abs(num(s) - w) <= 1e-9 * Math.max(1, Math.abs(w));
+    if (D > 0) {
+      const want = [(-b + Math.sqrt(D)) / (2 * a), (-b - Math.sqrt(D)) / (2 * a)].sort((x, y) => y - x);
+      cc.press("S⇔D"); const x1 = readE(cc.h);
+      cc.press("= S⇔D"); const x2 = readE(cc.h);
+      if (g1.expr !== "X₁=" || x2.expr !== "X₂=" || !close(x1.val, want[0]) || !close(x2.val, want[1])) fails.push(`${a},${b},${c}: ${x1.val} / ${x2.val}, want ${want.join(" / ")}`);
+      cc.press("=");   // → X-Value
+    } else if (D === 0) {
+      cc.press("S⇔D"); const x = readE(cc.h);
+      if (g1.expr !== "X=" || !close(x.val, -b / (2 * a))) fails.push(`${a},${b},${c}: double root ${x.val}`);
+      cc.press("=");
+    } else {
+      if (g1.expr !== "X₁=" || !g1.val.endsWith("i")) fails.push(`${a},${b},${c}: ${g1.expr} ${g1.val}`);
+      cc.press("= =");
+    }
+    cc.press("S⇔D");
+    const mm = readE(cc.h), xv = -b / (2 * a);
+    if (mm.expr !== `X-Value ${a > 0 ? "Minimum" : "Maximum"}=` || Math.abs(num(mm.val) - xv) > 1e-9) fails.push(`${a},${b},${c}: ${mm.expr} ${mm.val}, want ${xv}`);
+  }
+  tick(fails.length === 0, `16 random quadratics: the exact roots, as decimals, match (−b ± √D)/2a, bigger root first; the turning point's X matches <span class="why">[§13 sweep]</span>`, fails.join("; "));
+}
+
+/* ---- DOM measurements at 375 px: the type menu, the widest grid, a typed
+   fraction, the slid cubic view, the long X-Value Minimum= label, a long
+   decimal complex root, the error screen ---- */
+section("Build 7 · the EQN screens fit the LCD (DOM measurement)");
+function measureBuild7(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  const textRight = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().right; };
+  const unclipped = el => el.scrollWidth <= el.clientWidth + 0.5;
+  const same = h0 => Math.abs(L().height - h0) < 0.5;
+  press("AC ON AC SHIFT 9 3 = AC");
+  const h0 = L().height;
+  // (1) the type menu: four items, one per line
+  press("MODE 5");
+  const items = [...h.querySelectorAll(".lcd-mi")];
+  const tops = new Set(items.map(i => Math.round(i.getBoundingClientRect().top))).size;
+  tick(items.length === 4 && tops === 4 && items.every(inside) && items.every(i => i.getBoundingClientRect().height < 20) && same(h0),
+       `${where}: MODE 5 shows the four types one per line, inside the LCD, height unchanged`, `${items.length} items on ${tops} lines, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  // (2) the three-unknown grid with the widest cells: row numbers, brackets, 3 rows
+  press(`2 ${["(−) 12345", "123456", "(−) 1 ÷ 3", "(−) 99999", "(−) 1 ÷ 7", "2 x^ 30", "1 ÷ 3"].map(s => s + " =").join(" ")} ◀ ◀ ◀ ▶`);
+  const t = h.querySelector(".lcd-eqn"), cells = t ? [...t.querySelectorAll("th,td")] : [];
+  const g = readE(h);
+  tick(!!t && g.grid === "1:−12345|123456|−0,333 / 2:−0,142|1,07×10^9|0,3333 / 3:0|0|0" && cells.every(inside) && cells.every(unclipped) && unclipped(t.parentElement) && same(h0),
+       `${where}: the three-row grid (row numbers, brackets, the widest cells) sits inside the LCD, no cell cut, height unchanged`,
+       `"${g.grid}", LCD ${Math.round(L().height)} px, ${cells.filter(c => !inside(c)).length} outside, ${cells.filter(c => !unclipped(c)).length} cut`);
+  const lbr = t && t.querySelector("td.lcd-eqn-bl"), first = t && t.rows[1].cells[2];
+  tick(!!lbr && !!first && getComputedStyle(lbr).borderLeftStyle === "solid" && lbr.getBoundingClientRect().right <= first.getBoundingClientRect().left + 0.5
+       && t.rows[1].cells[0].getBoundingClientRect().right <= lbr.getBoundingClientRect().left + 0.5,
+       `${where}: the "[" sits between the row numbers and column a`, "");
+  const lcdBg = getComputedStyle(lcd).backgroundColor, lcdInk = getComputedStyle(lcd).color;
+  const rev = el => !!el && getComputedStyle(el).backgroundColor === lcdInk && getComputedStyle(el).color === lcdBg;
+  const selCell = t && t.querySelector("td.lcd-tbl-sel"), others = t ? [...t.querySelectorAll("td:not(.lcd-tbl-sel), th")] : [];
+  tick(rev(selCell) && selCell.textContent === "1,07×109" && others.every(c => !rev(c)),
+       `${where}: the selected cell (2^30, row 2 column b) is in reverse colours, no other cell or heading is`, `ink ${lcdInk}, LCD ${lcdBg}`);
+  const res = h.querySelector(".lcd-res");
+  tick(g.val === "1073741824" && inside(res) && L().right - textRight(res) < 14 && same(h0),
+       `${where}: the selected value shows big at the bottom right`, `"${g.val}", ${Math.round(L().right - textRight(res))} px from the right`);
+  // (3) a typed fraction at the bottom left keeps the height
+  press("frac 1 ▼ 3");
+  const tin = h.querySelector(".lcd-eqn-in");
+  tick(!!tin && inside(tin) && tin.getBoundingClientRect().left - L().left < 14 && [...h.querySelectorAll(".calc-main > *")].every(inside) && same(h0),
+       `${where}: a typed fraction shows at the bottom LEFT, inside the LCD, height unchanged`, `LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  // (4) the slid view of the cubic
+  press("AC MODE 5 4 ▶ ▶ ▶");
+  const g4 = readE(h), c4 = [...h.querySelectorAll(".lcd-eqn th,.lcd-eqn td")];
+  tick(g4.head === "b|c|d" && g4.brk === "]" && c4.every(inside) && same(h0), `${where}: the cubic's view slides to b c d with "]", inside the LCD`, `${g4.head} ${g4.brk}`);
+  // (5) the long label and an answer
+  press(`AC MODE 5 3 1 = (−) 5 = 6 = = = =`);
+  const lab = h.querySelector(".lcd-pr-label"), val = h.querySelector(".lcd-res");
+  tick(!!lab && lab.textContent === "X-Value Minimum=" && inside(lab) && lab.getBoundingClientRect().height < 20 && inside(val) && L().right - textRight(val) < 14 && same(h0),
+       `${where}: "X-Value Minimum=" sits on one line top left, the value bottom right, height unchanged`,
+       lab ? `${Math.round(lab.getBoundingClientRect().width)}×${Math.round(lab.getBoundingClientRect().height)} px, LCD ${Math.round(L().height)} px` : "missing");
+  // (6) complex roots, exact and as long decimals, fit on their line
+  press("AC MODE 5 3 3 = 2 = 1 = =");
+  const v6 = () => h.querySelector(".lcd-res");
+  const ok6a = inside(v6()) && unclipped(v6()) && same(h0) && readE(h).val === "−1/3+(√2/3)i";
+  press("S⇔D");
+  tick(ok6a && readE(h).val === "−0,3333333333+0,4714045208i" && inside(v6()) && unclipped(v6()) && same(h0),
+       `${where}: a complex root fits, exact and as a long decimal (the font steps down)`, `font ${getComputedStyle(v6()).fontSize}, ${v6().scrollWidth}/${v6().clientWidth} px`);
+  // (7) Math ERROR from solving: the three lines fit
+  press("AC MODE 5 3 =");
+  const lines = [...h.querySelectorAll(".lcd-err > div")];
+  tick(lines.length === 3 && lines[0].textContent === "Math ERROR" && lines.every(inside) && lines.every(unclipped) && same(h0),
+       `${where}: Math ERROR shows its three lines inside the LCD`, lines.map(d => d.textContent).join(" / "));
+  press("AC ON AC SHIFT 9 3 = AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild7(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild7(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
    ONE summary line, at the very end (tools/harness_run.py)
    ============================================================ */
 const ok = good === total;

@@ -71,6 +71,9 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    live: f(X)= and g(X)= typed with the normal keys, Start? End? Step? on
    the Build 5 prompt screen (remembered between tables), and a view-only
    grid of 3 rows drawn by the same gridHTML as the STAT data grid.
+   Calculator rebuild Build 7 (2026-10-04, spec §13): EQN (MODE 5: two or
+   three unknowns, the quadratic, the cubic) on a coefficient grid drawn by
+   gridHTML, answered exactly, one answer per screen.
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -781,6 +784,191 @@ function tableCellText(v) {
   const md = m.replace(".", ""), tail = md.slice(1, 3).replace(/0+$/, ""), e = Number(ex);
   return `${sign}${md[0]}${tail ? "," + tail : ""}<span class="calc-x10">×10</span><sup class="calc-x10-exp">${e < 0 ? "−" : ""}${Math.abs(e)}</sup>`;
 }
+/* ---- Build 7: EQN (MODE 5, spec §13) and INEQ (MODE ▼ 2, spec §14) ----
+   The solvers work on the exact value types (rat, surd, surd2) wherever the
+   coefficients are exact, so the answers come out of BigInt arithmetic and
+   are never recognised from a float afterwards: x²−2x−1 gives 1+√2 because
+   the discriminant 8 goes through vSqrt (2√2) and the exact + and ÷. A
+   decimal coefficient (sin 40 ...) makes the arithmetic decimal, as in COMP.
+   An answer is a Value, or a complex root { kind: "cplx", re, im } (spec:
+   x²+x+1 → X₁= −½+(√3/2)i), or an INEQ answer { kind: "ineq", ... }. These
+   two are display shapes for the answer screens only, never engine values. */
+const TWO = mkRat(2n, 1n), FOUR = mkRat(4n, 1n);
+const signOfV = v => (isZeroV(v) ? 0 : Math.sign(toFloatV(v)));
+const mkCplx = (re, im) => ({ kind: "cplx", re, im });
+/* The roots of aX²+bX+c (a ≠ 0) through the exact discriminant.
+   { n: 2, x1, x2 } with X₁ the BIGGER root (spec §13: "The bigger root is
+   X₁", also when a < 0: −x²+4x−3 → 3 then 1); { n: 1, x } for a double
+   root; { n: 0, re, im } for a complex pair, im > 0. null on an error. */
+function quadRoots(a, b, c) {
+  const bb = vMul(b, b), ac4 = vMul(FOUR, vMul(a, c)), D = vSub(bb, ac4), a2 = vMul(TWO, a);
+  if (isErr(D) || isErr(a2)) return null;
+  let ds = signOfV(D);
+  /* a decimal discriminant that is only rounding noise counts as 0 */
+  if (D.kind === "float" && Math.abs(D.v) <= 1e-12 * Math.max(Math.abs(toFloatV(bb)), Math.abs(toFloatV(ac4)))) ds = 0;
+  if (ds === 0) return { n: 1, x: vDiv(vNeg(b), a2) };
+  if (ds > 0) {
+    const r = vSqrt(D), s = signOfV(a) > 0 ? r : vNeg(r);   // (−b + s)/(2a) is the bigger root for either sign of a
+    return { n: 2, x1: vDiv(vAdd(vNeg(b), s), a2), x2: vDiv(vSub(vNeg(b), s), a2) };
+  }
+  return { n: 0, re: vDiv(vNeg(b), a2), im: vDiv(vSqrt(vNeg(D)), vAbs(a2)) };
+}
+/* a value that is really there: not an error, finite (an overflow is Math ERROR) */
+const okVal = v => (v.kind === "cplx" ? okVal(v.re) && okVal(v.im) : v.kind === "ineq" ? okVal(v.lo) && okVal(v.hi) : !isErr(v) && Number.isFinite(toFloatV(v)));
+/* Systems of 2 or 3 equations by Cramer's rule, exact. A singular system
+   (determinant 0) was not measured: Math ERROR (foreman ruling). */
+function det2(m) { return vSub(vMul(m[0][0], m[1][1]), vMul(m[0][1], m[1][0])); }
+function det3(m) {
+  const minor = (c1, c2) => vSub(vMul(m[1][c1], m[2][c2]), vMul(m[1][c2], m[2][c1]));
+  return vAdd(vSub(vMul(m[0][0], minor(1, 2)), vMul(m[0][1], minor(0, 2))), vMul(m[0][2], minor(0, 1)));
+}
+function solveSystem(coef) {
+  const n = coef.length, A = coef.map(r => r.slice(0, n)), rhs = coef.map(r => r[n]), det = n === 2 ? det2 : det3;
+  const D = det(A);
+  if (isErr(D) || isZeroV(D)) return null;
+  if (D.kind === "float") {
+    const big = Math.max(...A.flat().map(v => Math.abs(toFloatV(v))));
+    if (Math.abs(D.v) <= 1e-12 * big ** n) return null;   // singular up to rounding
+  }
+  return ["X=", "Y=", "Z="].slice(0, n).map((label, k) => ({ label, v: vDiv(det(A.map((row, i) => row.map((v, j) => (j === k ? rhs[i] : v)))), D) }));
+}
+/* The quadratic's screens (spec §13): X₁= X₂= (bigger first), or one X= for
+   a double root, or the complex pair (+i first; no "no real roots" message),
+   then X-Value and Y-Value of the turning point, Minimum when a > 0,
+   Maximum when a < 0. a = 0 was not measured: Math ERROR (Blipwork choice). */
+function solveQuadratic([a, b, c]) {
+  if (isZeroAny(a)) return null;
+  const q = quadRoots(a, b, c);
+  if (!q) return null;
+  const out = q.n === 2 ? [{ label: "X₁=", v: q.x1 }, { label: "X₂=", v: q.x2 }]
+    : q.n === 1 ? [{ label: "X=", v: q.x }]
+    : [{ label: "X₁=", v: mkCplx(q.re, q.im) }, { label: "X₂=", v: mkCplx(q.re, vNeg(q.im)) }];
+  const mm = signOfV(a) > 0 ? "Minimum" : "Maximum";
+  out.push({ label: `X-Value ${mm}=`, v: vDiv(vNeg(b), vMul(TWO, a)) },
+    { label: `Y-Value ${mm}=`, v: vSub(c, vDiv(vMul(b, b), vMul(FOUR, a))) });
+  return out;
+}
+/* CUBIC ROOT ORDER (open question: spec §13 measured ONE cubic,
+   x³−6x²+11x−6 → X₁= 1, X₂= 3, X₃= 2, "it seems to find one root first,
+   then the other two bigger first"). Blipwork's rule, reproducing that:
+   X₁ is the SMALLEST real root; the others follow BIGGER first; a complex
+   pair (not measured) comes after the real root, +i first, in the
+   quadratic's a+bi format. A repeated root (not measured) is shown once,
+   and when only one root is left it is a single "X=", as the quadratic's
+   double root is. Change THIS function if a probe shows another order. */
+function cubicOrder(reals, cplx) {
+  const rs = reals.slice().sort((x, y) => toFloatV(x) - toFloatV(y));
+  const list = [rs[0], ...rs.slice(1).reverse()];
+  if (cplx) list.push(mkCplx(cplx.re, cplx.im), mkCplx(cplx.re, vNeg(cplx.im)));
+  return list.length === 1 ? [{ label: "X=", v: list[0] }] : list.map((v, k) => ({ label: `X${"₁₂₃"[k]}=`, v }));
+}
+const polyAt = (cs, x) => cs.reduce((acc, k) => vAdd(vMul(acc, x), k), mkRat(0n, 1n));
+/* one real root of a cubic with decimal coefficients (a ≠ 0), by halving
+   [−B, B], B the Cauchy bound: the cubic changes sign there, so a root of
+   odd multiplicity is always found */
+function cubicRealRootF(a, b, c, d) {
+  const p = x => ((a * x + b) * x + c) * x + d;
+  const B = 1 + Math.max(Math.abs(b / a), Math.abs(c / a), Math.abs(d / a));
+  let lo = -B, hi = B, plo = p(lo);
+  if (plo === 0) return lo;
+  for (let k = 0; k < 400; k++) {
+    const mid = (lo + hi) / 2;
+    if (mid === lo || mid === hi) break;
+    const pm = p(mid);
+    if (pm === 0) return mid;
+    if ((pm < 0) === (plo < 0)) { lo = mid; plo = pm; } else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+/* The cubic. With rational coefficients the roots are EXACT whenever one of
+   them is rational: a rational root p/q of the integer-scaled cubic has q
+   dividing the leading coefficient A, so A·root is a whole number. Each
+   decimal approximation is rounded that way and tested by exact arithmetic;
+   the first that is truly a root is divided out exactly, and the quadratic
+   left over goes through quadRoots (exact surds and complex pairs). With no
+   rational root, or decimal coefficients, the roots are decimals. */
+function solveCubic(cs) {
+  const [a, b, c, d] = cs;
+  if (isZeroAny(a)) return null;   // not measured: Math ERROR (Blipwork choice)
+  const [fa, fb, fc, fd] = cs.map(toFloatV);
+  if (![fa, fb, fc, fd].every(Number.isFinite)) return null;
+  const r = cubicRealRootF(fa, fb, fc, fd);
+  const fb1 = fb + fa * r, fc1 = fc + fb1 * r;
+  const qf = quadRoots(VFLOAT(fa), VFLOAT(fb1), VFLOAT(fc1));
+  if (!qf) return null;
+  const gather = (x0, q) => {
+    const reals = [x0];
+    if (q.n === 2) reals.push(q.x1, q.x2); else if (q.n === 1) reals.push(q.x);
+    const distinct = [];
+    for (const x of reals) if (!distinct.some(y => sameRoot(x, y))) distinct.push(x);
+    return cubicOrder(distinct, q.n === 0 ? q : null);
+  };
+  if (cs.every(v => v.kind === "rat")) {
+    const L = cs.reduce((l, v) => lcmBig(l, v.d), 1n), A = a.n * (L / a.d);
+    const approx = [r, ...(qf.n === 2 ? [qf.x1, qf.x2] : qf.n === 1 ? [qf.x] : []).map(toFloatV)];
+    for (const f of approx) {
+      const m = Math.round(Number(A) * f);
+      if (!Number.isSafeInteger(m)) continue;
+      const x0 = mkRat(BigInt(m), A);
+      if (!isZeroV(polyAt(cs, x0))) continue;
+      const b1 = vAdd(b, vMul(a, x0)), c1 = vAdd(c, vMul(b1, x0));   // cs ÷ (X − x0), exactly
+      const q = quadRoots(a, b1, c1);
+      if (q) return gather(x0, q);
+    }
+  }
+  return gather(VFLOAT(r), qf);
+}
+function sameRoot(x, y) {
+  if (isAlg(x) && isAlg(y)) return valuesEqual(x, y);
+  const fx = toFloatV(x), fy = toFloatV(y);
+  return Math.abs(fx - fy) <= 1e-9 * Math.max(1, Math.abs(fx));
+}
+/* INEQ (spec §14): aX²+bX+c with > < ≥ ≤ 0. Measured for a quadratic with
+   two real roots only: x²−5x+6<0 → A<X<B / 2<X<3, >0 → X<A;B<X / X<2;3<X
+   (a SEMICOLON: the comma is the decimal sign). ≥ and ≤ follow the same
+   shape with ≤ (built as the brief asks, not measured). One or no real
+   root, and a = 0, were not measured: Math ERROR (foreman ruling), so no
+   answer format is invented. */
+function solveIneq([a, b, c], sign) {
+  if (isZeroAny(a)) return null;
+  const q = quadRoots(a, b, c);
+  if (!q || q.n !== 2) return null;
+  const gt = sign === ">" || sign === "≥", op = sign === ">" || sign === "<" ? "<" : "≤";
+  const outside = gt === (signOfV(a) > 0);   // a > 0: > 0 outside the roots, < 0 between them; a < 0 the other way round
+  return [{ label: outside ? `X${op}A;B${op}X` : `A${op}X${op}B`, v: { kind: "ineq", outside, op, lo: q.x2, hi: q.x1 } }];
+}
+/* An answer as the LCD shows it. dec = S⇔D switched it to decimals. A
+   complex root: the real part (left out when 0), then the imaginary part,
+   in brackets when it is a fraction or a root (−½+(√3/2)i), plain when it
+   is a whole number or a decimal (Blipwork choice: only the bracketed form
+   was measured), "i" alone for 1. */
+function answerHTML(v, dec, fix) {
+  const num = x => formatValue(x, dec || !exactFits(x), fix);
+  if (v.kind === "ineq") return v.outside ? `X${v.op}${num(v.lo)};${num(v.hi)}${v.op}X` : `${num(v.lo)}${v.op}X${v.op}${num(v.hi)}`;
+  if (v.kind !== "cplx") return num(v);
+  const exact = !dec && exactFits(v.re) && exactFits(v.im);
+  const re = isZeroAny(v.re) ? "" : num(v.re);
+  const neg = toFloatV(v.im) < 0, im = neg ? vNeg(v.im) : v.im;
+  let imHTML;
+  if (!exact) imHTML = formatDecimal(im, fix);
+  else if (im.kind === "rat" && im.d === 1n) imHTML = im.n === 1n ? "" : im.n.toString();
+  else imHTML = "(" + formatExactHTML(im) + ")";
+  return re + (neg ? "−" : re ? "+" : "") + imHTML + "i";
+}
+/* S⇔D has something to switch to only while the exact form can show */
+const answerHasExact = v => (v.kind === "cplx" ? exactFits(v.re) && exactFits(v.im) : v.kind === "ineq" ? exactFits(v.lo) && exactFits(v.hi) : exactFits(v));
+/* The EQN types (spec §13) and INEQ's one quadratic grid (spec §14) */
+const EQN_TYPES = {
+  1: { kind: "sys", rows: 2, cols: 3 }, 2: { kind: "sys", rows: 3, cols: 4 },
+  3: { kind: "quad", rows: 1, cols: 3 }, 4: { kind: "cubic", rows: 1, cols: 4 },
+  ineq: { kind: "ineq", rows: 1, cols: 3 },
+};
+const EQN_HEADS = ["a", "b", "c", "d"];
+/* "Four columns do not fit: the view slides sideways" (spec §13): three
+   columns show at a time (Blipwork reading: three is what fits for the
+   three-column types). */
+const EQN_VIS_COLS = 3;
+
 /* One LCD grid as an HTML table (Build 6): the STAT data grid and the TABLE
    screen are both drawn by this. heads and every row are lists of cells
    { html, cls }; the first cell of each is the row-number column. */
@@ -1102,6 +1290,8 @@ export function mountCalculator(host, opts = {}) {
     // ---- calculator rebuild Build 6 (spec §12) ----
     tbl: null,             // TABLE mode (screens "tblF", "table", "tblErr"): { f, g, which, rows, hasG, r, c, top, back, err }
     tblRange: freshRange(),   // Start / End / Step: remembered from one table to the next (spec §12)
+    // ---- calculator rebuild Build 7 (spec §13, §14) ----
+    eqn: null,             // EQN / INEQ (screens "eqnGrid", "eqnAns", "eqnErr"): { kind, type, rows, cols, coef, r, c, left, box, answers, ai, dec, back, err, sign }
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -1198,20 +1388,38 @@ export function mountCalculator(host, opts = {}) {
   /* Build 6: a menu opened from a TABLE screen goes back to that screen
      (the f(X)= line or the table itself), not to a COMP line TABLE mode does
      not have. In COMP and STAT mode home() is "comp", exactly as before. */
-  const home = () => (S.mode === "TABLE" && S.tbl ? S.tbl.back || "tblF" : "comp");
-  const openMenu = m => { if (S.mode === "TABLE" && S.tbl && S.screen !== "menu") S.tbl.back = S.screen; S.menu = m; S.screen = "menu"; };
+  /* Build 7: the same for EQN and INEQ: back to the grid or the answer on
+     screen. */
+  const eqnMode = () => (S.mode === "EQN" || S.mode === "INEQ") && !!S.eqn;
+  const home = () => (S.mode === "TABLE" && S.tbl ? S.tbl.back || "tblF" : eqnMode() ? S.eqn.back || "eqnGrid" : "comp");
+  const openMenu = m => {
+    if (S.screen !== "menu") { if (S.mode === "TABLE" && S.tbl) S.tbl.back = S.screen; if (eqnMode()) S.eqn.back = S.screen; }
+    S.menu = m; S.screen = "menu";
+  };
   const closeMenu = () => { if (S.menu && S.menu.parent) S.menu = S.menu.parent; else { const ret = S.menu && S.menu.ret; S.screen = !ret || ret === "comp" ? home() : ret; S.menu = null; } };
   const leaveMenu = () => { S.menu = null; S.screen = home(); };
 
   function modeMenu() {
     openMenu({ items: [["1", "COMP"], ["2", "CMPLX"], ["3", "STAT"], ["4", "BASE-N"], ["5", "EQN"], ["6", "MATRIX"], ["7", "TABLE"]], ret: "comp",
-      onNum(n) { if (n === 1) { S.mode = "COMP"; resetEntry(); S.menu = null; S.screen = "comp"; } else if (n === 3) statTypeMenu(); else if (n === 7) startTable(); } });
+      onNum(n) { if (n === 1) { S.mode = "COMP"; resetEntry(); S.menu = null; S.screen = "comp"; } else if (n === 3) statTypeMenu(); else if (n === 5) eqnTypeMenu(); else if (n === 7) startTable(); } });
+  }
+  /* Build 7 (spec §13): MODE 5 lists the four types as four plain lines */
+  function eqnTypeMenu() {
+    openMenu({ items: [["1", "anX+bnY=cn"], ["2", "anX+bnY+cnZ=dn"], ["3", "aX²+bX+c=0"], ["4", "aX³+bX²+cX+d=0"]], list: true, ret: "comp",
+      onNum(n) { if (n >= 1 && n <= 4) startEqn(n); } });
   }
   function statTypeMenu() {
     openMenu({ items: [["1", "1-VAR"], ["2", "A+BX"], ["3", "_+CX²"], ["4", "ln X"], ["5", "e^X"], ["6", "A·B^X"], ["7", "A·X^B"], ["8", "1/X"]], ret: "comp",
       onNum(n) { if (n === 1) startStat(); } });
   }
-  function startStat() { S.mode = "STAT"; S.data = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput"; emit("statMode"); }
+  /* Build 7: coming from TABLE or EQN, the cursor still points into the
+     f(X)= line or the coefficient being typed; it is put back on the
+     (empty) calculation line, or the COMP line under STAT would type into a
+     box that is not on screen. From COMP nothing changes. */
+  function startStat() {
+    if (S.mode === "TABLE" || S.mode === "EQN" || S.mode === "INEQ") resetEntry();
+    S.mode = "STAT"; S.data = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput"; emit("statMode");
+  }
 
   function setupMenu() {
     const p1 = [["1", "MthIO"], ["2", "LineIO"], ["3", "Deg"], ["4", "Rad"], ["5", "Gra"], ["6", "Fix"], ["7", "Sci"], ["8", "Norm"]];   // 8:Norm added in Build 4 (spec §16)
@@ -1250,7 +1458,7 @@ export function mountCalculator(host, opts = {}) {
   }
   function clrConfirm() {
     openMenu({ title: "Reset All?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.fix = null; S.norm = 2; S.tbl = null; S.tblRange = freshRange(); S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 1: "All" also zeroes the variables + M and empties the history (both are memory); Build 4: and puts Fix back to Norm 2; Build 6: and TABLE's Start/End/Step back to 1/5/1 (not measured: Reset All read as "everything")
+      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.fix = null; S.norm = 2; S.tbl = null; S.tblRange = freshRange(); S.eqn = null; S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 7: and leaves EQN / INEQ; Build 1: "All" also zeroes the variables + M and empties the history (both are memory); Build 4: and puts Fix back to Norm 2; Build 6: and TABLE's Start/End/Step back to 1/5/1 (not measured: Reset All read as "everything")
   }
   /* CLR 1:Setup (Build 4): the setup items Blipwork has go back to the
      factory settings (spec intro: Norm 2, Deg, STAT FREQ off). Its confirm
@@ -1471,6 +1679,9 @@ export function mountCalculator(host, opts = {}) {
      history ▲ when something older exists, ▼ when something newer does
      (▲▼ for both). Hidden on an error screen (spec §3) and while typing. */
   function histIndicator() {
+    /* Build 7 (spec §13): on an EQN / INEQ answer the same arrows show what
+       is above and below: ▼ on the first, ▲▼ in between, ▲ on the last */
+    if (S.screen === "eqnAns" && S.eqn && S.eqn.answers) { const k = S.eqn.ai; return (k > 0 ? "▲" : "") + (k < S.eqn.answers.length - 1 ? "▼" : ""); }
     if (S.screen !== "comp" || S.err || S.result == null || !S.history.length) return "";
     if (!S.browsing) return "▲";
     return (S.histPos > 0 ? "▲" : "") + (S.histPos < S.history.length - 1 ? "▼" : "");
@@ -1965,6 +2176,163 @@ export function mountCalculator(host, opts = {}) {
     return gridHTML("lcd-tab lcd-tbl", head, body) + `<div class="lcd-res lcd-tbl-val">${bottom}</div>`;
   }
 
+  /* ---- Build 7: EQN = MODE 5 (spec §13), INEQ = MODE ▼ 2 (spec §14) ----
+     Measured on the device and built as measured:
+     - Picking a type opens the coefficient grid with EVERY coefficient 0;
+       picking the mode again always resets them. Headings a b c (a b c d),
+       matrix brackets, row numbers at the far left for the systems only.
+       The selected cell is reversed, its value big at the bottom right. Four
+       columns do not fit: the view slides sideways (three show at a time).
+     - Typing shows the entry at the BOTTOM LEFT; the cell keeps its old
+       value until =. = with something typed stores it and moves RIGHT
+       (a → b → c), wrapping to the next row's a; on the very last cell it
+       stores and stays. = with NOTHING typed, on any cell, SOLVES. The
+       arrows move without changing a cell.
+     - Answers one per screen: the label top left, the value big bottom
+       right, ▼ / ▲▼ / ▲ in the status line for what is above and below.
+       = steps forward, ▲ steps back; after the last answer = goes back to
+       the grid (cell a, numbers kept); AC too. Digits do nothing there;
+       S⇔D switches the answer between exact and decimal.
+     Blipwork choices where the spec is silent (each in the Build 7 report):
+     a typed entry is an ordinary box (any expression, as at a prompt), so
+     while something is typed ◀ ▶ ▲ ▼ DEL edit THAT entry, and the arrows
+     move between cells only when nothing is typed (no wrap at the edges);
+     AC while typing drops the entry, AC on the grid with nothing typed does
+     nothing; DEL with nothing typed does nothing; the cells show the TABLE's
+     cut-off decimals and the bottom line a decimal (TABLE's measured rule);
+     ▼ on an answer steps forward like = but not past the last answer; ◀ ▶
+     and every other key on an answer do nothing; a Syntax / Math ERROR in
+     a typed entry shows the three-line screen, Goto returns to the entry,
+     AC drops it; an error from solving (a = 0, a singular system, an INEQ
+     with one or no real root) shows Math ERROR, and AC or Goto go back to
+     the grid with the numbers and the selected cell kept; ON goes back to
+     the grid at cell a, numbers kept; EQN changes neither X, Ans nor the
+     history; MODE, SETUP and CLR work on the grid and the answers and come
+     back to them. */
+  function startEqn(type, sign = null) {
+    resetEntry();
+    const T = EQN_TYPES[type];
+    S.mode = type === "ineq" ? "INEQ" : "EQN"; S.menu = null;
+    S.eqn = { kind: T.kind, type, rows: T.rows, cols: T.cols, sign,
+      coef: Array.from({ length: T.rows }, () => Array.from({ length: T.cols }, () => mkRat(0n, 1n))),
+      r: 0, c: 0, left: 0, box: [], answers: null, ai: 0, dec: false, back: null, err: null };
+    eqnToGrid(false);
+  }
+  /* back to the grid, nothing typed (atA: on cell a) */
+  function eqnToGrid(atA) {
+    const E = S.eqn;
+    E.answers = null; E.err = null; E.dec = false; E.box = [];
+    if (atA) { E.r = 0; E.c = 0; }
+    eqnSlide();
+    S.cur = { box: E.box, i: 0 };
+    S.result = null; S.err = false; S.errAt = null; S.afterAC = false; S.pendingStat = null; S.browsing = false;
+    S.screen = "eqnGrid";
+  }
+  /* keep the selected column among the three on show */
+  function eqnSlide() {
+    const E = S.eqn, vis = Math.min(E.cols, EQN_VIS_COLS);
+    if (E.c < E.left) E.left = E.c;
+    else if (E.c > E.left + vis - 1) E.left = E.c - vis + 1;
+  }
+  function eqnGridKey(key) {
+    const E = S.eqn, typing = !isBoxEmpty(E.box);
+    if (key === "mode") return modeMenu();
+    if (key === "setup") return setupMenu();
+    if (key === "clr") return clrMenu();
+    if (key === "ac") { if (typing) { E.box = []; S.cur = { box: E.box, i: 0 }; } return; }
+    if (key === "eq") return typing ? eqnStore() : eqnSolve();
+    if (key === "left" || key === "right" || key === "up" || key === "down") {
+      if (typing) return key === "left" || key === "right" ? moveHoriz(key === "left" ? -1 : 1) : moveVert(key === "up" ? -1 : 1);
+      if (key === "left" && E.c > 0) E.c--;
+      else if (key === "right" && E.c < E.cols - 1) E.c++;
+      else if (key === "up" && E.r > 0) E.r--;
+      else if (key === "down" && E.r < E.rows - 1) E.r++;
+      return eqnSlide();
+    }
+    if (key === "del") { if (typing) doDelBox(); return; }
+    if (key === "eqs" || key === "colon") return;   // an "=" or ":" is not a value (as at a prompt)
+    if (isEntryKey(key)) typeKey(key);
+  }
+  /* = with something typed: work it out, store it, move right (spec §13) */
+  function eqnStore() {
+    const E = S.eqn;
+    let v = evalBox(E.box, { ans: S.ansVal, drg: S.drg, vars: S.vars });
+    if (!isErr(v) && !Number.isFinite(toFloatV(v))) v = VERR("Math ERROR");
+    if (isErr(v)) { E.err = { msg: v.msg, at: v.at || null, entry: true }; S.screen = "eqnErr"; return; }
+    E.coef[E.r][E.c] = v;
+    if (E.c < E.cols - 1) E.c++;
+    else if (E.r < E.rows - 1) { E.r++; E.c = 0; }   // wrap to the next row's a; on the very last cell: stay
+    E.box = []; S.cur = { box: E.box, i: 0 };
+    eqnSlide();
+  }
+  /* = with nothing typed: SOLVE (spec §13, §14) */
+  function eqnSolve() {
+    const E = S.eqn, row0 = E.coef[0];
+    const answers = E.kind === "sys" ? solveSystem(E.coef) : E.kind === "quad" ? solveQuadratic(row0)
+      : E.kind === "cubic" ? solveCubic(row0) : solveIneq(row0, E.sign);
+    if (!answers || !answers.every(a => okVal(a.v))) { E.err = { msg: "Math ERROR", at: null, entry: false }; S.screen = "eqnErr"; return; }
+    E.answers = answers; E.ai = 0; E.dec = false;
+    S.screen = "eqnAns";
+  }
+  function eqnAnsKey(key) {
+    const E = S.eqn, last = E.answers.length - 1;
+    if (key === "mode") return modeMenu();
+    if (key === "setup") return setupMenu();
+    if (key === "clr") return clrMenu();
+    if (key === "ac") return eqnToGrid(true);
+    if (key === "eq") { if (E.ai < last) { E.ai++; E.dec = false; } else eqnToGrid(true); return; }
+    if (key === "down" && E.ai < last) { E.ai++; E.dec = false; }
+    else if (key === "up" && E.ai > 0) { E.ai--; E.dec = false; }
+    else if (key === "sd" && answerHasExact(E.answers[E.ai].v)) E.dec = !E.dec;
+    // every other key, digits included: nothing (spec §13)
+  }
+  /* only AC, ◀ and ▶ reach here (spec §3) */
+  function eqnErrKey(key) {
+    const E = S.eqn, e = E.err;
+    if (key !== "ac" && key !== "left" && key !== "right") return;
+    if (e.entry && key !== "ac") {   // Goto: back to the typed entry, cursor just before the bad token
+      E.err = null; S.screen = "eqnGrid";
+      const at = e.at || { box: E.box, i: E.box.length };
+      S.cur = { box: at.box, i: Math.min(at.i, at.box.length) };
+      return;
+    }
+    eqnToGrid(false);   // AC drops a bad entry; after an error from solving, the grid as it was
+  }
+  function eqnGridHTML() {
+    const E = S.eqn, vis = Math.min(E.cols, EQN_VIS_COLS), cols = [];
+    for (let k = E.left; k < E.left + vis; k++) cols.push(k);
+    const lb = E.left === 0, rb = E.left + vis === E.cols, nums = E.rows > 1;
+    const numCell = html => (nums ? [{ html, cls: "lcd-tbl-n" }] : []);
+    const heads = [...numCell(""), { html: "", cls: "lcd-eqn-bk" }, ...cols.map(k => ({ html: EQN_HEADS[k], cls: "" })), { html: "", cls: "lcd-eqn-bk" }];
+    const body = [];
+    for (let r = 0; r < E.rows; r++) {
+      const edge = (r === 0 ? " lcd-eqn-t" : "") + (r === E.rows - 1 ? " lcd-eqn-b" : "");
+      body.push([...numCell(String(r + 1)), { html: "", cls: "lcd-eqn-bk" + (lb ? " lcd-eqn-bl" + edge : "") },
+        ...cols.map(k => ({ html: tableCellText(E.coef[r][k]), cls: r === E.r && k === E.c ? "lcd-tbl-sel" : "" })),
+        { html: "", cls: "lcd-eqn-bk" + (rb ? " lcd-eqn-br" + edge : "") }]);
+    }
+    let html = gridHTML("lcd-tab lcd-tbl lcd-eqn", heads, body);
+    if (E.kind === "ineq") html += `<div class="lcd-ineq">aX²+bX+c${E.sign}0</div>`;   // spec §14: the chosen inequality under the grid
+    const typing = !isBoxEmpty(E.box);
+    cursorOn = typing;
+    html += typing
+      ? `<div class="lcd-line lcd-eqn-in"><span class="lcd-lmark" hidden>◀</span><div class="lcd-expr">${renderBox(E.box)}</div></div>`
+      : `<div class="lcd-res lcd-tbl-val">${formatDecimal(E.coef[E.r][E.c], S.fix)}</div>`;
+    return html;
+  }
+  function eqnAnsHTML() {
+    const E = S.eqn, a = E.answers[E.ai];
+    cursorOn = false;
+    return `<div class="lcd-line lcd-pr"><div class="lcd-expr"><span class="lcd-pr-label">${escapeHtml(a.label)}</span></div></div>`
+      + `<div class="lcd-res lcd-eqn-val">${answerHTML(a.v, E.dec, S.fix)}</div>`;
+  }
+  /* a long answer (a decimal complex root) steps its font down until it fits */
+  function fitAnswer() {
+    const r = main.querySelector(".lcd-eqn-val");
+    if (!r) return;
+    for (let f = 22; r.scrollWidth > r.clientWidth + 0.5 && f >= 12; f -= 2) r.style.fontSize = f + "px";
+  }
+
   // ---- key dispatch ----
   // SHIFT functions that do nothing: ; (SHIFT )) and the ones skipped as
   // not school use (d/dx, Σ, FACT, ←). SHIFT is still consumed, as on the
@@ -1984,10 +2352,12 @@ export function mountCalculator(host, opts = {}) {
      as before until Build 8 moves STAT read-offs onto an editable line. */
   const onErrScreen = () => (S.screen === "comp" && S.err && S.result != null && !S.lastWasStat)
     || (S.screen === "prompt" && !!S.prompt && !!S.prompt.err)   // Build 5: an error in a value typed at a prompt
-    || (S.screen === "tblErr" && !!S.tbl && !!S.tbl.err);        // Build 6: Insufficient MEM (and Syntax / Math ERROR) when the table is made
+    || (S.screen === "tblErr" && !!S.tbl && !!S.tbl.err)         // Build 6: Insufficient MEM (and Syntax / Math ERROR) when the table is made
+    || (S.screen === "eqnErr" && !!S.eqn && !!S.eqn.err);        // Build 7: an error in a typed coefficient, or Math ERROR from solving
   /* the screens a function or value is typed on: ALPHA types its letter
-     and the skipped SHIFT keys type nothing there (Build 6 adds f(X)=) */
-  const typingScreen = () => S.screen === "comp" || S.screen === "prompt" || S.screen === "tblF";
+     and the skipped SHIFT keys type nothing there (Build 6 adds f(X)=,
+     Build 7 the EQN / INEQ coefficient grid) */
+  const typingScreen = () => S.screen === "comp" || S.screen === "prompt" || S.screen === "tblF" || S.screen === "eqnGrid";
   function press(id) {
     /* On an error screen ONLY AC, ◀ and ▶ do anything; every other key is
        ignored (spec §3), including SHIFT, ALPHA, ON, DEL and the digits. */
@@ -2001,6 +2371,7 @@ export function mountCalculator(host, opts = {}) {
     if (id === "on") {
       resetEntry(); S.menu = null; S.screen = "comp"; S.shift = false; S.alpha = false; S.memPending = null;
       if (S.mode === "TABLE" && S.tbl) openTblFn("f", "start");   // Build 6: TABLE has no COMP line; ON goes back to f(X)= (Blipwork choice)
+      else if (eqnMode()) eqnToGrid(true);                         // Build 7: and EQN / INEQ to the grid, cell a, numbers kept (Blipwork choice)
       return render();
     }
 
@@ -2061,6 +2432,9 @@ export function mountCalculator(host, opts = {}) {
     else if (S.screen === "tblF") tblFnKey(key);      // Build 6: f(X)= / g(X)=
     else if (S.screen === "table") tblViewKey(key);
     else if (S.screen === "tblErr") tblErrKey(key);
+    else if (S.screen === "eqnGrid") eqnGridKey(key);  // Build 7: EQN / INEQ
+    else if (S.screen === "eqnAns") eqnAnsKey(key);
+    else if (S.screen === "eqnErr") eqnErrKey(key);
     render();
   }
 
@@ -2273,7 +2647,8 @@ export function mountCalculator(host, opts = {}) {
      a mark switching on or off never shifts any other mark sideways. */
   function renderInd() {
     const comp = S.screen === "comp" || S.screen === "prompt" || S.screen === "solved"   // Build 5: D and Math stay lit on the CALC / SOLVE screens
-      || S.screen === "tblF" || S.screen === "tblErr";   // Build 6: and on f(X)= and its error screen; the table grid, like the STAT grid, shows neither (spec silent)
+      || S.screen === "tblF" || S.screen === "tblErr"    // Build 6: and on f(X)= and its error screen; the table grid, like the STAT grid, shows neither (spec silent)
+      || S.screen === "eqnAns" || S.screen === "eqnErr"; // Build 7: and on an EQN / INEQ answer and its error screen; the coefficient grid shows neither, like the other grids (spec silent)
     const sa = S.shift ? "S" : S.alpha ? "A" : "";
     const slot = (name, txt) => `<span class="ind-${name}">${txt}</span>`;
     ind.innerHTML =
@@ -2298,7 +2673,7 @@ export function mountCalculator(host, opts = {}) {
          The message keeps the .lcd-res class it always had, so anything
          that reads the result line still reads "Syntax ERROR". Build 5: the
          same screen for Can't Solve and for an error in a prompt value. */
-      const msg = S.screen === "prompt" ? S.prompt.err : S.screen === "tblErr" ? S.tbl.err.msg : S.result;   // Build 6: Insufficient MEM
+      const msg = S.screen === "prompt" ? S.prompt.err : S.screen === "tblErr" ? S.tbl.err.msg : S.screen === "eqnErr" ? S.eqn.err.msg : S.result;   // Build 6: Insufficient MEM; Build 7: EQN
       main.innerHTML = `<div class="lcd-err"><div class="lcd-res lcd-err-msg">${escapeHtml(msg)}</div>`
         + `<div class="lcd-err-line">[AC] :Cancel</div><div class="lcd-err-line">[◀][▶]:Goto</div></div>`;
       exprScroll = 0;
@@ -2319,7 +2694,8 @@ export function mountCalculator(host, opts = {}) {
     } else if (S.screen === "menu") {
       const m = S.menu;
       let html = m.title ? `<div class="lcd-title">${m.title}</div>` : "";
-      if (m.items && m.items.length) html += `<div class="lcd-menu">` + m.items.map(([n, l]) => `<span class="lcd-mi">${n}:${l}</span>`).join("") + `</div>`;
+      // Build 7: list = one item per line (the EQN types, spec §13 "four plain lines")
+      if (m.items && m.items.length) html += `<div class="lcd-menu${m.list ? " lcd-menu-list" : ""}">` + m.items.map(([n, l]) => `<span class="lcd-mi">${n}:${l}</span>`).join("") + `</div>`;
       if (m.note) html += `<div class="lcd-note">${m.note}</div>`;
       if (m.pages && m.page < m.pages - 1) html += `<div class="lcd-more">▼</div>`;
       main.innerHTML = html;
@@ -2330,6 +2706,12 @@ export function mountCalculator(host, opts = {}) {
       keepCursorInView();
     } else if (S.screen === "table") {
       main.innerHTML = tblHTML();
+    } else if (S.screen === "eqnGrid") {   // Build 7: EQN / INEQ coefficients
+      main.innerHTML = eqnGridHTML();
+      if (!isBoxEmpty(S.eqn.box)) keepCursorInView(); else exprScroll = 0;
+    } else if (S.screen === "eqnAns") {
+      main.innerHTML = eqnAnsHTML();
+      fitAnswer();
     }
   }
   /* Long input (Build 2, spec §1): the entry line scrolls left so the
