@@ -728,6 +728,16 @@ h2{font-size:20px} h3{font-size:17px}
 .lcd-mi-n{background:#1c241a;color:#b8c6ae;padding:0 2px;border-radius:1px}
 .lcd-menu.lcd-menu-boxed{gap:0 10px;line-height:14px}
 .lcd-menu-boxed+.lcd-more{line-height:12px;margin-top:0}
+/* calculator Build 8 (spec §15, §16): MODE 3's eight STAT types in two plain
+   columns, rows packed like the MODE menu so the LCD keeps its plain height
+   (.lcd-menu-packed; SETUP reuses .lcd-menu-boxed); the hat of x̂ and ŷ drawn
+   above the letter (.lcd-hat, the LCD font will not stack a combining
+   circumflex, as .lcd-ov does for x̄); CLR's last screen, two centred lines
+   (.lcd-done); the Reset …? lines [=] :Yes / [AC] :Cancel use .lcd-note */
+.lcd-menu.lcd-menu-packed{gap:0 10px;line-height:14px}
+.lcd-hat{position:relative;display:inline-block;line-height:1.05}
+.lcd-hat::before{content:"";position:absolute;left:50%;top:.1em;width:.24em;height:.24em;border-left:1px solid currentColor;border-top:1px solid currentColor;transform:translateX(-50%) rotate(45deg)}
+.lcd-done{text-align:center;font-size:13px;line-height:18px}
 @keyframes calc-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
 .calc-pad{display:flex;flex-direction:column;gap:8px}

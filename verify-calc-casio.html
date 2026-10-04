@@ -429,9 +429,12 @@ row("2+3 = then x^ → Ans^□ with the cursor in the exponent, 2 = 25", "§1", 
 row("2+3 = then x³ (SHIFT x²) → Ans³, = 125", "§1 \"x³ … postfix too\"", [["2 + 3 = SHIFT x²", { expr: "Ans³" }], ["=", { val: "125" }]]);
 row("a prefix key after a result still starts a fresh line (√)", "§1", [["2 + 3 = √", { expr: "√", curIn: "body" }]]);
 row("▫/▫ after a result starts a fresh empty □/□", "Blipwork choice: spec silent, Build 1 behaviour kept", [["2 + 3 = frac", { frac: "/", curIn: "num" }]]);
-row("after a STAT read-off x² does NOT chain (Blipwork's Ans is not the read-off yet): unchanged", "foreman ruling: STAT unchanged until Build 8", [
-  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33333333" }],
-  ["x²", { expr: "²", res: "" }],
+// Build 8 changed this row: it read "x² does NOT chain (Blipwork's Ans is not the read-off yet)", expr "²";
+// since Build 8 a read-off is an ordinary answer in Ans (spec §15), so x² chains like every postfix key (§1)
+row("after a STAT read-off x² chains from Ans (the read-off is in Ans since Build 8)", "§1, §15", [
+  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,333333333" }],
+  ["x²", { expr: "Ans²", res: "" }],
+  ["=", { val: "1,777777778" }],
 ]);
 
 section("Build 2 · error screens and Goto (spec §3)");
@@ -485,11 +488,13 @@ row("decimal input, exact output: √0,5 = √2/2", "§7", [["√ 0 , 5 =", { va
        `the "×10" is small and the power is raised, and it fits the line <span class="why">[§7]</span>`,
        `digits ${fr}px, ×10 ${fx}px, power ${fe}px, power bottom ${Math.round(bx.bottom - be.bottom)} px above the ×10's; line ${res.scrollWidth}/${res.clientWidth} px`);
 }
-row("STAT read-offs keep their old 8-decimal text: x̄ of 1, 1, 2 = 1,33333333", "foreman ruling: STAT unchanged", [
-  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33333333" }],
+// Build 8 changed these two rows: they expected the old 8-decimal read-off text (1,33333333 and 0,47140452);
+// the foreman's Build 8 ruling moves read-offs to the normal display rules, 10 significant digits (spec §15: r = 0,981155781)
+row("STAT read-offs follow the normal display rules: x̄ of 1, 1, 2 = 1,333333333", "§7, §15; Build 8 foreman ruling", [
+  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,333333333" }],
 ]);
-row("STAT read-offs keep their old text: σx of 1, 1, 2 = 0,47140452", "foreman ruling: STAT unchanged", [
-  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 3 =", { res: "0,47140452" }],
+row("STAT read-offs follow the normal display rules: σx of 1, 1, 2 = 0,4714045208", "§7, §15; Build 8 foreman ruling", [
+  ["MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 3 =", { res: "0,4714045208" }],
 ]);
 
 /* ---- DOM measurements: the long line and the error screen must fit the
@@ -836,11 +841,13 @@ row("Norm 1 is accepted and shows like Norm 2 for now: 1÷2000 S⇔D = 0,0005", 
 row("Norm prompt: 3 does nothing, the prompt stays", "§16 \"Norm 1~2?\"", [["SHIFT MODE 8 3", { title: "Norm 1~2?" }]]);
 row("AC cancels the Fix prompt without changing anything", "§16 \"AC cancels without changing\"", [["SHIFT MODE 6 AC", { title: "", fix: "" }], ["2 ÷ 3 = S⇔D", { val: "0,6666666667" }]]);
 row("AC cancels the Norm prompt: Fix stays on", "§16", [["SHIFT MODE 6 2 SHIFT MODE 8 AC", { title: "", fix: "FIX" }]]);
-row("CLR 1 (Setup) puts Fix back to Norm 2", "brief §J", [["SHIFT MODE 6 2 SHIFT 9 1", { title: "Reset Setup?" }], ["=", { fix: "" }], ["2 ÷ 3 = S⇔D", { val: "0,6666666667" }]]);
+// Build 8 changed this row: AC added before "2 ÷ 3" (spec §16: after = the device shows Reset … / Press [AC] Key, and only AC leaves it)
+row("CLR 1 (Setup) puts Fix back to Norm 2", "brief §J", [["SHIFT MODE 6 2 SHIFT 9 1", { title: "Reset Setup?" }], ["=", { fix: "" }], ["AC 2 ÷ 3 = S⇔D", { val: "0,6666666667" }]]);
 row("CLR 3 (All) puts Fix back to Norm 2", "brief §J", [["SHIFT MODE 6 2 SHIFT 9 3 =", { fix: "" }]]);
 row("Fix does not touch exact answers: Fix 2, 1÷4 = ¼ and √8 = 2√2", "§7 \"only rounds DECIMAL display\"", [["SHIFT MODE 6 2 1 ÷ 4 =", { val: "1/4" }], ["AC √ 8 =", { val: "2√2" }]]);
 row("Fix 2 on a STAT read-off: x̄ of 1, 1, 2 = 1,33", "foreman ruling: Fix may change read-offs only when it is on", [["SHIFT MODE 6 2 MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33" }]]);
-row("Fix on, then Norm: the STAT read-off text is the old 1,33333333 again", "foreman ruling: STAT unchanged", [["SHIFT MODE 6 2 SHIFT MODE 8 2 MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,33333333", fix: "" }]]);
+// Build 8 changed this row: it expected the old 8-decimal text 1,33333333 (Build 8 foreman ruling: normal display rules)
+row("Fix on, then Norm: the STAT read-off shows by Norm 2 again, 1,333333333", "§7, §15; Build 8 foreman ruling", [["SHIFT MODE 6 2 SHIFT MODE 8 2 MODE 3 1 1 = 1 = 2 = AC SHIFT 1 4 2 =", { res: "1,333333333", fix: "" }]]);
 
 section("Build 4 · the keys still work as STO / RCL / ALPHA letters (Build 1)");
 
@@ -866,7 +873,7 @@ function measureBuild4(where, h, press) {
   const L = () => lcd.getBoundingClientRect();
   const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
   // (1) the busiest status line, now with FIX: A, M, STO, STAT, FREQ, FIX, D, Math, ▲▼
-  press("ON AC SHIFT 9 3 = SHIFT MODE ▼ 4 1 MODE 3 1 AC");
+  press("ON AC SHIFT 9 3 = AC SHIFT MODE ▼ 4 1 MODE 3 1 AC");   // Build 8: AC added after CLR's = (spec §16: Press [AC] Key)
   const box = n => h.querySelector(`.calc-ind .ind-${n}`).getBoundingClientRect();
   const base = { stat: box("stat").left, drg: box("drg").left, math: box("math").left };
   press("SHIFT MODE 6 2 5 M+ 1 = 2 = 3 = ▲ SHIFT RCL ALPHA");
@@ -1303,7 +1310,7 @@ trow("still remembered after MODE 1 and MODE 7 again (which opens an empty f(X)=
   ["= =", { expr: "Step?", val: "2" }],
 ]);
 trow("CLR All (SHIFT 9 3 =) puts Start, End and Step back to 1, 5, 1", "Blipwork choice: Reset All read as everything", [
-  [`${EX.replace("= 1 =", "= 2 =")} SHIFT 9 3 = MODE 7 X = =`, { expr: "Start?", val: "1" }],
+  [`${EX.replace("= 1 =", "= 2 =")} SHIFT 9 3 = AC MODE 7 X = =`, { expr: "Start?", val: "1" }],   // Build 8: AC added after CLR's = (spec §16)
   ["=", { expr: "End?", val: "5" }], ["=", { expr: "Step?", val: "1" }],
 ]);
 trow("a decimal step: 0 to 1 step 0,25 gives exactly 0 / 0,25 / 0,5 / 0,75 / 1", "§12; Blipwork: exact steps", [
@@ -1782,7 +1789,7 @@ erow("STAT still works after EQN, and so does its COMP line", "foreman ruling: S
 erow("TABLE → STAT → AC: the COMP line types again (the cursor no longer stays in f(X)=)", "Build 7 fix of a Build 6 leftover", [
   ["MODE 7 X x² MODE 3 1 AC 2 + 3 =", { expr: "2+3", val: "5" }],
 ]);
-erow("CLR All from EQN goes back to COMP", "§16 CLR", [[`${QD} SHIFT 9 3 = 2 + 2 =`, { expr: "2+2", val: "4" }]]);
+erow("CLR All from EQN goes back to COMP", "§16 CLR", [[`${QD} SHIFT 9 3 = AC 2 + 2 =`, { expr: "2+2", val: "4" }]]);   // Build 8: AC added after CLR's = (spec §16)
 
 /* ---- sweeps: answers computed here, independently of calculator.js ---- */
 section("Build 7 · sweep: 44 quadratics with whole-number roots");
@@ -2066,6 +2073,423 @@ function measureBuild7b(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureBuild7b(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 8 — STAT read-offs on the line, A+BX, SETUP, CLR, status
+   line (spec sections 15 and 16)
+   ============================================================ */
+/* Build 8 fields, read by read8 (readE plus): line — the entry line's text
+   with x̄, x̂ and ŷ written out (the LCD draws their bar and hat with CSS,
+   so plain textContent would read "x"); cur8 — the same, up to the cursor;
+   menu8 — the menu items written the same way; notes — the Reset …? lines
+   joined by " / "; done — CLR's last screen, "Reset All / Press [AC] Key";
+   centred — those lines are centred; g8 — the STAT data grid as "X|Y || row
+   / row", each row "n|x|y" with the selected cell in [brackets]; thead — the
+   TABLE screen's headings (readT's head); stat, freq, drg — status slots. */
+const NFC = s => s.normalize("NFC");
+function glyphText(node) {
+  const c = node.cloneNode(true);
+  c.querySelectorAll(".lcd-ov").forEach(e => e.replaceWith(e.textContent + "̄"));
+  c.querySelectorAll(".lcd-hat").forEach(e => e.replaceWith(e.textContent + "̂"));
+  return NFC(c.textContent);
+}
+function read8(h) {
+  const g = readE(h);
+  const ex = h.querySelector(".lcd-expr"), mn = h.querySelector(".lcd-menu"), dn = h.querySelector(".lcd-done");
+  const cur = ex && ex.querySelector(".calc-cursor");
+  let cur8 = null;
+  if (cur) { const r = document.createRange(); r.setStart(ex, 0); r.setEndBefore(cur); const d = document.createElement("div"); d.appendChild(r.cloneContents()); cur8 = glyphText(d); }
+  const t = h.querySelector("table.lcd-tab:not(.lcd-tbl)");
+  let g8 = "";
+  if (t) {
+    const cellT = c => (c.querySelector("u") ? `[${c.textContent}]` : c.textContent);
+    g8 = [...t.rows[0].cells].slice(1).map(c => c.textContent).join("|") + " || " + [...t.rows].slice(1).map(r => [...r.cells].map(cellT).join("|")).join(" / ");
+  }
+  const slot = n => { const s = h.querySelector(`.calc-ind .ind-${n}`); return s ? s.textContent : ""; };
+  return { ...g, line: ex ? glyphText(ex) : "", cur8, menu8: mn ? glyphText(mn) : "",
+    notes: [...h.querySelectorAll(".lcd-note > div")].map(d => d.textContent).join(" / "),
+    done: dn ? [...dn.children].map(d => d.textContent).join(" / ") : "", centred: !!dn && getComputedStyle(dn).textAlign === "center",
+    g8, thead: readT(h).head, stat: slot("stat"), freq: slot("freq"), drg: slot("drg") };
+}
+/* A row: [keys, want, check?] steps on ONE fresh calculator; check(state,
+   events) returns "" when happy, else what is wrong */
+function row8(name, spec, steps, opts = {}) {
+  const events = [];
+  const c = freshCalc(host, { ...opts, onEvent: (t, p) => events.push({ t, p }) });
+  const diffs = [];
+  try {
+    steps.forEach(([keys, want, check]) => {
+      c.press(keys);
+      const got = read8(c.h);
+      for (const k of Object.keys(want || {})) {
+        const a = typeof got[k] === "string" ? NFC(got[k]) : got[k], b = typeof want[k] === "string" ? NFC(want[k]) : want[k];
+        if (a !== b) diffs.push(`after "${keys}": ${k} = ${JSON.stringify(got[k])}, want ${JSON.stringify(want[k])}`);
+      }
+      if (check) { const m = check(c.api.state(), events); if (m) diffs.push(`after "${keys}": ${m}`); }
+    });
+  } catch (e) { diffs.push("threw: " + e.message); }
+  tick(diffs.length === 0, `${name} <span class="why">[${spec}]</span>`, diffs.join("; "));
+}
+const XBAR = "x̄", XHAT = "x̂", YHAT = NFC("ŷ");
+const V1 = "MODE 3 1 2 = 4 = 7 = AC";                                  // 1-VAR data 2, 4, 7: x̄ = 13/3
+const XB = "MODE 3 2 1 = 2 = 3 = 4 = ▶ ▲ ▲ ▲ ▲ 2 = 4 = 5 = 8 =";     // spec §15 device example: X 1,2,3,4 / Y 2,4,5,8
+const lastStat = ev => { const e = ev.filter(x => x.t === "stat").pop(); return e ? e.p : null; };
+const isZeroVal = v => v && v.kind === "rat" && v.n === 0n;
+
+section("Build 8 · a STAT read-off is pasted onto an editable line (spec §15, §1)");
+
+row8("picking x̄ pastes it, cursor after it; = works it out: 13/3 = 4,333333333", "§15", [
+  [`${V1} SHIFT 1 4 2`, { line: XBAR, cur8: XBAR, res: "", menu8: "" }],
+  ["=", { line: XBAR, val: "4,333333333", hist: "▲" }],
+]);
+row8("paste, keep typing, =: x̄ + 1 = 5,333333333", "§15 \"the learner can keep typing\"", [
+  [`${V1} SHIFT 1 4 2 + 1`, { line: `${XBAR}+1`, cur8: `${XBAR}+1` }], ["=", { val: "5,333333333" }],
+]);
+row8("the previous answer stays bottom right until =", "§15", [
+  [`${V1} 5 + 5 = SHIFT 1 4 2`, { line: XBAR, cur8: XBAR, res: "10" }],
+  ["+ 1", { line: `${XBAR}+1`, res: "10" }],
+  ["=", { val: "5,333333333" }],
+]);
+row8("5ŷ: type 5, then SHIFT 1 5 5, = gives 9,5", "§15 device answer", [
+  [`${XB} AC 5 SHIFT 1 5 5`, { line: `5${YHAT}`, cur8: `5${YHAT}`, res: "" }], ["=", { val: "9,5" }],
+]);
+row8("x̂ the same way, the other direction: 9,5x̂ = 5", "§15 \"x̂ works the same way\"", [[`${XB} AC 9 , 5 SHIFT 1 5 4 =`, { line: `9,5${XHAT}`, val: "5" }]]);
+row8("2,5ŷ = 4,75 and 0x̂ = 0 (A = 0)", "§15 maths", [[`${XB} AC 2 , 5 SHIFT 1 5 5 =`, { val: "4,75" }], ["AC 0 SHIFT 1 5 4 =", { val: "0" }]]);
+row8("a read-off goes into Ans: x̄ = then Ans × 3 = 13", "brief: \"a read-off did not update Ans\"", [[`${V1} SHIFT 1 4 2 = Ans × 3 =`, { line: "Ans×3", val: "13" }]]);
+row8("+ after a read-off chains Ans+ like any answer", "§1", [[`${V1} SHIFT 1 4 2 = + 1`, { line: "Ans+1" }], ["=", { val: "5,333333333" }]]);
+row8("a read-off goes into the history: ▲ shows the sum before it, ▼ the read-off again", "§1 history", [
+  [`${V1} 1 + 1 = SHIFT 1 4 2 =`, { val: "4,333333333", hist: "▲" }],
+  ["▲", { line: "1+1", val: "2", hist: "▼" }],
+  ["▼", { line: XBAR, val: "4,333333333", hist: "▲" }],
+]);
+row8("S⇔D after a read-off acts on IT (a decimal: nothing to switch), not on the ⅓ before it", "brief gap; Blipwork: read-offs are decimals (§15)", [
+  [`${V1} 1 ÷ 3 = SHIFT 1 4 2 =`, { val: "4,333333333" }], ["S⇔D", { val: "4,333333333" }], ["S⇔D", { val: "4,333333333" }],
+]);
+row8("◀ after a read-off edits it: cursor at the end, the result goes; × 3 = 13", "§1; brief gap \"◀ did nothing on it\"", [
+  [`${V1} SHIFT 1 4 2 = ◀`, { line: XBAR, cur8: XBAR, res: "" }], ["× 3 =", { line: `${XBAR}×3`, val: "13" }],
+]);
+row8("▶ after a read-off puts the cursor at the start: 2 in front, 2x̄ = 8,666666667", "§1", [[`${V1} SHIFT 1 4 2 = ▶ 2`, { line: `2${XBAR}`, cur8: "2" }], ["=", { val: "8,666666667" }]]);
+row8("a number typed first: 2 then x̄ → 2x̄ (pasted at the cursor, implicit ×)", "§15 paste at the cursor", [[`${V1} 2 SHIFT 1 4 2`, { line: `2${XBAR}` }], ["=", { val: "8,666666667" }]]);
+row8("DEL deletes a pasted value like any token", "§1 DEL", [[`${V1} SHIFT 1 4 2 DEL`, { line: "", cur8: "" }], ["SHIFT 1 4 3 =", { val: "2,054804668" }]]);
+row8("DEL after a read-off's answer does nothing", "§1", [[`${V1} SHIFT 1 4 2 = DEL`, { line: XBAR, val: "4,333333333" }]]);
+row8("no data: Math ERROR on the three-line screen; ◀ (Goto) goes back to the line", "§3; Build 2 note \"until Build 8\"", [
+  ["MODE 3 1 AC SHIFT 1 4 2 =", { err: ERR("Math ERROR") }], ["◀", { err: "", line: XBAR, cur8: XBAR }],
+]);
+row8("pasted from the data grid (SHIFT 1 on the grid): a fresh line", "Blipwork: the grid has no line", [[`MODE 3 1 2 = 4 = SHIFT 1 4 2`, { line: XBAR, res: "" }], ["=", { val: "3" }]]);
+row8("ŷ after a result chains from Ans: 5 = then ŷ → Ansŷ, the 5 stays until =", "§1 postfix rule; not measured for ŷ", [
+  [`${XB} AC 5 = SHIFT 1 5 5`, { line: `Ans${YHAT}`, res: "5" }], ["=", { val: "9,5" }],
+]);
+row8("ŷ with nothing before it: Syntax ERROR, Goto just before ŷ", "Blipwork reading: nothing for it to act on", [[`${XB} AC SHIFT 1 5 5 =`, { err: ERR("Syntax ERROR") }], ["◀", { cur8: "" }]]);
+row8("σx of 2, 4, 7 = 2,054804668 (10 significant digits)", "§7; Build 8 foreman ruling", [[`${V1} SHIFT 1 4 3 =`, { val: "2,054804668" }]]);
+row8("the other 1-VAR read-offs, same numbers as before: n, Σx, Σx², sx, minX, maxX, Q1, med, Q3", "foreman ruling: numbers unchanged", [
+  [`${V1} SHIFT 1 4 1 =`, { val: "3" }], ["AC SHIFT 1 3 2 =", { val: "13" }], ["AC SHIFT 1 3 1 =", { val: "69" }], ["AC SHIFT 1 4 4 =", { val: "2,516611478" }],
+  ["AC SHIFT 1 6 1 =", { val: "2" }], ["AC SHIFT 1 6 2 =", { val: "7" }], ["AC SHIFT 1 6 3 =", { val: "2" }], ["AC SHIFT 1 6 4 =", { val: "4" }], ["AC SHIFT 1 6 5 =", { val: "7" }],
+]);
+row8("Fix 2 rounds a read-off; r with Fix 3 = 0,981", "§7 Fix", [[`SHIFT MODE 6 3 ${XB} AC SHIFT 1 5 3 =`, { val: "0,981", fix: "FIX" }]]);
+row8("a digit with no item in the Var menu does nothing (it used to leave the menu)", "Blipwork choice", [[`${V1} SHIFT 1 4 7`, { menu8: `1:n2:${XBAR}3:σx4:sx`, line: "" }]]);
+row8("STO after a read-off stores the read-off: Ans→A, then A = 4,333333333", "§2 STO from Ans", [[`${V1} SHIFT 1 4 2 = SHIFT RCL (−)`, { line: "Ans→A" }], ["ALPHA (−) =", { val: "4,333333333" }]]);
+
+section("Build 8 · the stat milestone the calcdo questions read (questions.js compares tok and the NUMBER)");
+
+row8("x̄ = reports tok x̄ with statValue's exact number (13/3)", "consumer: questions.js goal \"stat\"", [
+  [`${V1} SHIFT 1 4 2 =`, {}, (s, ev) => { const p = lastStat(ev); return p && p.tok === XBAR && p.value === 13 / 3 ? "" : `got ${JSON.stringify(p)}`; }],
+]);
+row8("x̄ + 1 = reports tok null, so it never counts as the plain read-off", "Blipwork rule for the consumer", [
+  [`${V1} SHIFT 1 4 2 + 1 =`, {}, (s, ev) => { const p = lastStat(ev); return p && p.tok === null && Math.abs(p.value - 16 / 3) < 1e-12 ? "" : `got ${JSON.stringify(p)}`; }],
+]);
+row8("a sum with no STAT value reports nothing; the read-off before it stays the last one", "as before Build 8", [
+  [`${V1} SHIFT 1 4 2 = 3 + 4 =`, { val: "7" }, (s, ev) => { const all = ev.filter(e => e.t === "stat"); return all.length === 1 && all[0].p.tok === XBAR ? "" : `${all.length} stat events`; }],
+]);
+row8("no data: tok x̄ with value null (as before)", "as before Build 8", [
+  ["MODE 3 1 AC SHIFT 1 4 2 =", {}, (s, ev) => { const p = lastStat(ev); return p && p.tok === XBAR && p.value === null ? "" : `got ${JSON.stringify(p)}`; }],
+]);
+row8("setup data (the read-off questions): n, x̄, σx, med report the same numbers as statlib", "consumer: quest01 setup", [
+  ["SHIFT 1 4 1 =", { val: "5" }, (s, ev) => (lastStat(ev).tok === "n" && lastStat(ev).value === 5 ? "" : JSON.stringify(lastStat(ev)))],
+  ["AC SHIFT 1 4 2 =", { val: "8,4" }, (s, ev) => (Math.abs(lastStat(ev).value - 8.4) < 1e-12 ? "" : JSON.stringify(lastStat(ev)))],
+  ["AC SHIFT 1 4 3 =", { val: "3,979949748" }],
+  ["AC SHIFT 1 6 4 =", { val: "9" }, (s, ev) => (lastStat(ev).tok === "med" && lastStat(ev).value === 9 ? "" : JSON.stringify(lastStat(ev)))],
+], { setup: { data: [3, 5, 9, 11, 14] } });
+
+section("Build 8 · the calcdo questions still mark correctly (quest01 + questions.js's goal rules)");
+{
+  const { quest01 } = await import("./js/quests/quest01-calculator.js");
+  /* questions.js's goalMet, rule for rule (that file is not touched) */
+  const ms = a => a.slice().sort((x, y) => x - y).join(",");
+  function goalMet(g, s, flags) {
+    if (g.type === "clear") return flags.cleared;
+    if (g.type === "freq") return s.freqOn === !!g.on;
+    if (g.type === "statMode") return flags.enteredStat || s.mode === "STAT";
+    if (g.type === "data") return ms(s.data.map(d => d.x)) === ms(g.expect);
+    if (g.type === "stat") { const tol = g.tol == null ? 1e-6 : g.tol; return !!(flags.lastStat && flags.lastStat.tok === g.tok && flags.lastStat.value != null && Math.abs(flags.lastStat.value - g.value) <= tol); }
+    return false;
+  }
+  function runQ(q, keys) {
+    const flags = { cleared: false, enteredStat: false, lastStat: null };
+    const c = freshCalc(host, { setup: q.setup, onEvent(type, p) { if (type === "clear") flags.cleared = true; else if (type === "statMode") flags.enteredStat = true; else if (type === "stat") flags.lastStat = p; } });
+    c.press(keys);
+    return goalMet(q.goal, c.api.state(), flags);
+  }
+  const RIGHT = { clear: () => "SHIFT 9 3 =", freqOn: () => "SHIFT MODE ▼ 4 1", statMode: () => "MODE 3 1",
+    capture: q => "MODE 3 1 " + q.goal.expect.map(v => `${v} =`).join(" "),
+    readN: () => "SHIFT 1 4 1 =", readMean: () => "SHIFT 1 4 2 =", readSd: () => "SHIFT 1 4 3 =", readMedian: () => "SHIFT 1 6 4 =" };
+  for (const sk of quest01.skills) {
+    let good8 = 0, n8 = 6, first = "";
+    for (let k = 0; k < n8; k++) { const q = sk.gen(); if (runQ(q, RIGHT[sk.id](q))) good8++; else if (!first) first = JSON.stringify(q.goal); }
+    tick(good8 === n8, `${sk.id}: the taught keys are marked right in ${n8} fresh questions <span class="why">[consumer: questions.js calcdo]</span>`, `${good8}/${n8} ${first}`);
+  }
+  const SK = id => quest01.skills.find(s => s.id === id).gen();
+  const WRONG = [
+    ["readSd answered with sx (option 4)", SK("readSd"), "SHIFT 1 4 4 ="],
+    ["readMean answered with x̄ + 1", SK("readMean"), "SHIFT 1 4 2 + 1 ="],
+    ["readMedian answered with Q3", SK("readMedian"), "SHIFT 1 6 5 ="],
+    ["statMode answered with MODE 3 2 (A+BX, not 1-VAR)", SK("statMode"), "MODE 3 2"],
+    ["clear answered with CLR Setup", SK("clear"), "SHIFT 9 1 ="],
+    ["clear answered with CLR Memory", SK("clear"), "SHIFT 9 2 ="],
+  ];
+  const cap = SK("capture");
+  WRONG.push(["capture typed into A+BX's X column", cap, "MODE 3 2 " + cap.goal.expect.map(v => `${v} =`).join(" ")]);
+  for (const [what, q, keys] of WRONG) tick(runQ(q, keys) === false, `${what}: still marked wrong <span class="why">[consumer: questions.js calcdo]</span>`, "");
+  const rm = SK("readMean");
+  tick(runQ(rm, "SHIFT 1 4 2 = 3 + 4 =") === true, `readMean: a sum after the read-off keeps the read-off as the answer, as before <span class="why">[consumer]</span>`, "");
+}
+
+section("Build 8 · two-variable STAT: A+BX (spec §15)");
+
+const ST = "1:1-VAR2:A+BX3:_+CX²4:ln X5:e^X6:A·B^X7:A·X^B8:1/X";
+row8("MODE 3: eight types in two columns", "§15", [["MODE 3", { menu8: ST }]]);
+row8("types 3 to 8 (and 9) do nothing", "brief: not measured, not school use", [["MODE 3 3 4 5 6 7 8 9", { menu8: ST }]]);
+row8("2 opens the X | Y grid, STAT lit, no FREQ", "§15 \"columns X | Y (FREQ off)\"", [["MODE 3 2", { g8: "X|Y || 1|[]|", stat: "STAT", freq: "", menu8: "" }]]);
+row8("= walks DOWN the X column; each X fills its Y with 0", "§15", [
+  ["MODE 3 2 1 =", { g8: "X|Y || 1|1|0 / 2|[]|" }],
+  ["2 = 3 = 4 =", { g8: "X|Y || 1|1|0 / 2|2|0 / 3|3|0 / 4|4|0 / 5|[]|" }],
+]);
+row8("▶ goes to Y on the same row; ▲ back to row 1; = walks down the Y column", "§15", [
+  ["MODE 3 2 1 = 2 = 3 = 4 = ▶", { g8: "X|Y || 1|1|0 / 2|2|0 / 3|3|0 / 4|4|0 / 5||[]" }],
+  ["▲ ▲ ▲ ▲", { g8: "X|Y || 1|1|[0] / 2|2|0 / 3|3|0 / 4|4|0 / 5||" }],
+  ["2 = 4 = 5 = 8 =", { g8: "X|Y || 1|1|2 / 2|2|4 / 3|3|5 / 4|4|8 / 5||[]" }],
+]);
+row8("typed digits show in the cell until =", "as 1-VAR", [["MODE 3 2 1 2", { g8: "X|Y || 1|[12]|" }], [", 5 =", { g8: "X|Y || 1|12,5|0 / 2|[]|" }]]);
+row8("A+BX is mode REG; 1-VAR's data and its statMode milestone stay untouched (calcdo goals)", "consumer guard", [
+  [XB, {}, (s, ev) => (s.mode === "REG" && s.data.length === 0 && s.pairs.length === 4 && s.pairs[3].x === 4 && s.pairs[3].y === 8 && !ev.some(e => e.t === "statMode" || e.t === "data") ? "" : `mode ${s.mode}, data ${s.data.length}, pairs ${JSON.stringify(s.pairs)}, events ${ev.map(e => e.t).join(",")}`)],
+]);
+row8("SHIFT 1: 1:Type 2:Data / 3:Sum 4:Var / 5:Reg 6:MinMax", "§15", [[`${XB} AC SHIFT 1`, { menu8: "1:Type2:Data3:Sum4:Var5:Reg6:MinMax" }]]);
+row8("3:Sum, 4:Var, 6:MinMax and 1:Type do nothing in A+BX (not measured: no invented lists)", "brief", [[`${XB} AC SHIFT 1 1 3 4 6 7`, { menu8: "1:Type2:Data3:Sum4:Var5:Reg6:MinMax" }]]);
+row8("5:Reg → 1:A 2:B / 3:r 4:x̂ / 5:ŷ; AC back to the STAT menu", "§15", [
+  [`${XB} AC SHIFT 1 5`, { menu8: `1:A2:B3:r4:${XHAT}5:${YHAT}`, title: "" }], ["AC", { menu8: "1:Type2:Data3:Sum4:Var5:Reg6:MinMax" }],
+]);
+row8("2:Data reopens the X | Y grid", "§15", [[`${XB} AC SHIFT 1 2`, { g8: "X|Y || 1|1|2 / 2|2|4 / 3|3|5 / 4|4|8 / 5||[]" }]]);
+row8("A = 0", "§15 device answer", [[`${XB} AC SHIFT 1 5 1`, { line: "A" }], ["=", { val: "0" }]]);
+row8("B = 1,9", "§15 device answer", [[`${XB} AC SHIFT 1 5 2 =`, { line: "B", val: "1,9" }]]);
+row8("r = 0,981155781", "§15 device answer", [[`${XB} AC SHIFT 1 5 3 =`, { line: "r", val: "0,981155781" }]]);
+row8("A, B and r in a calculation: 2B + 1 = 4,8", "§15 keep typing", [[`${XB} AC 2 SHIFT 1 5 2 + 1 =`, { val: "4,8" }]]);
+row8("1-VAR's STAT menu is unchanged (5:Distr)", "brief: 1-VAR keeps its menus", [["MODE 3 1 2 = AC SHIFT 1", { menu8: "1:Type2:Data3:Sum4:Var5:Distr6:MinMax" }]]);
+row8("every X the same: A is Math ERROR (B has no value)", "Blipwork: not measured, a division by 0", [["MODE 3 2 3 = 3 = ▶ ▲ ▲ 1 = 2 = AC SHIFT 1 5 1 =", { err: ERR("Math ERROR") }]]);
+row8("every Y the same: B = 0, A = that Y, r Math ERROR", "Blipwork: not measured", [
+  ["MODE 3 2 1 = 2 = 3 = ▶ ▲ ▲ ▲ 4 = 4 = 4 = AC SHIFT 1 5 2 =", { val: "0" }], ["AC SHIFT 1 5 1 =", { val: "4" }], ["AC SHIFT 1 5 3 =", { err: ERR("Math ERROR") }],
+]);
+row8("no pairs: A is Math ERROR", "as 1-VAR with no data", [["MODE 3 2 AC SHIFT 1 5 1 =", { err: ERR("Math ERROR") }]]);
+row8("a Y on the open row (no X yet) is dropped, as a FREQ there is", "Blipwork: the FREQ rule", [["MODE 3 2 1 = ▶ ▲ 5 = 6 =", { g8: "X|Y || 1|1|5 / 2||[]" }]]);
+row8("typing over an X keeps its Y", "1-VAR's replace rule", [[`${XB} AC SHIFT 1 2 ◀ ▲ ▲ ▲ ▲ 9 =`, { g8: "X|Y || 1|9|2 / 2|[2]|4 / 3|3|5 / 4|4|8 / 5||" }]]);
+row8("AC on the grid: an empty calculation line", "Build 8: the line under the grid is cleared", [["5 + 5 MODE 3 2 1 = AC", { line: "", res: "" }]]);
+row8("MODE 3 1 after A+BX starts empty; MODE 3 2 after 1-VAR too", "one data area", [
+  [`${XB} AC MODE 3 1`, { g8: "X || 1|[]" }, s => (s.pairs.length === 0 ? "" : "pairs kept")],
+  ["2 = AC MODE 3 2", { g8: "X|Y || 1|[]|" }, s => (s.data.length === 0 ? "" : "data kept")],
+]);
+row8("CALC and SOLVE do nothing in A+BX (COMP only, as in 1-VAR)", "Build 5 rule", [["MODE 3 2 AC 2 X CALC", { line: "2X", res: "" }]]);
+
+section("Build 8 · sweep: 24 data sets, A, B, r and ŷ against values computed here");
+{
+  let seed8 = 8082026;
+  const rnd8 = (lo, hi) => { seed8 = (Math.imul(seed8, 1103515245) + 12345) >>> 0; return lo + ((seed8 >>> 8) % (hi - lo + 1)); };
+  const numKeys = v => (v < 0 ? "(−) " : "") + String(Math.abs(v)).replace(".", " , ");
+  const parse = s => Number(s.replace(/−/g, "-").replace(/,/g, ".").replace("×10^", "e"));
+  const close = (g, w) => (w === 0 ? g === 0 : Math.abs(g - w) <= 1e-9 * Math.abs(w) + 1e-15);
+  for (let k = 0; k < 24; k++) {
+    const n = rnd8(3, 7), half = k % 4 === 3;
+    let xs, ys;
+    do {
+      xs = Array.from({ length: n }, () => rnd8(-9, 15) + (half && rnd8(0, 1) ? 0.5 : 0));
+      ys = Array.from({ length: n }, () => rnd8(-20, 30) + (half && rnd8(0, 1) ? 0.5 : 0));
+    } while (new Set(xs).size < 2 || new Set(ys).size < 2);
+    const sx = xs.reduce((a, b) => a + b, 0), sy = ys.reduce((a, b) => a + b, 0);
+    const sxx = xs.reduce((a, x) => a + x * x, 0), syy = ys.reduce((a, y) => a + y * y, 0), sxy = xs.reduce((a, x, i) => a + x * ys[i], 0);
+    const dxx = n * sxx - sx * sx, dxy = n * sxy - sx * sy, dyy = n * syy - sy * sy;
+    const B = dxy / dxx, A = (sy * sxx - sx * sxy) / dxx, r = dxy / Math.sqrt(dxx * dyy), Y2 = (sy * sxx - sx * sxy + 2 * dxy) / dxx;
+    const c = freshCalc();
+    const got = {};
+    const diffs = [];
+    try {
+      c.press(`MODE 3 2 ${xs.map(x => numKeys(x) + " =").join(" ")} ▶ ${Array(n).fill("▲").join(" ")} ${ys.map(y => numKeys(y) + " =").join(" ")}`);
+      const st = c.api.state();
+      if (st.pairs.map(p => `${p.x};${p.y}`).join(" ") !== xs.map((x, i) => `${x};${ys[i]}`).join(" ")) diffs.push(`pairs ${JSON.stringify(st.pairs)}`);
+      for (const [name, keys, want] of [["A", "AC SHIFT 1 5 1 =", A], ["B", "AC SHIFT 1 5 2 =", B], ["r", "AC SHIFT 1 5 3 =", r], ["2ŷ", "AC 2 SHIFT 1 5 5 =", Y2]]) {
+        c.press(keys);
+        got[name] = read(c.h).val;
+        if (!close(parse(got[name]), want)) diffs.push(`${name} = ${got[name]}, want ${want}`);
+      }
+    } catch (e) { diffs.push("threw: " + e.message); }
+    tick(diffs.length === 0, `X ${xs.join("; ")} / Y ${ys.join("; ")} → A ${got.A}, B ${got.B}, r ${got.r} <span class="why">[§15 sweep]</span>`, diffs.join("; "));
+  }
+}
+
+section("Build 8 · SETUP: two boxed pages (spec §16)");
+
+const SP1 = "1:MthIO2:LineIO3:Deg4:Rad5:Gra6:Fix7:Sci8:Norm", SP2 = "1:ab/c2:d/c3:CMPLX4:STAT5:TABLE6:APO7:◀CONT▶";
+row8("page 1: 1:MthIO 2:LineIO / 3:Deg 4:Rad / 5:Gra 6:Fix / 7:Sci 8:Norm with ▼", "§16", [["SHIFT MODE", { menu8: SP1, more: "▼" }]]);
+row8("▼ → page 2: 1:ab/c 2:d/c / 3:CMPLX 4:STAT / 5:TABLE 6:APO / 7:◀CONT▶ (no ▲: not described); ▲ back", "§16", [
+  ["SHIFT MODE ▼", { menu8: SP2, more: "" }], ["▼", { menu8: SP2 }], ["▲", { menu8: SP1, more: "▼" }], ["▲", { menu8: SP1 }],
+]);
+row8("the items not built do nothing: page 1 1 2 5 7 9; page 2 1 2 3 6 7 8", "brief", [["SHIFT MODE 1 2 5 7 9", { menu8: SP1 }], ["▼ 1 2 3 6 7 8", { menu8: SP2 }]]);
+row8("3:Deg and 4:Rad: the D / R mark and the angle unit", "§16", [
+  ["SHIFT MODE 4", { menu8: "", drg: "R" }], ["sin π ÷ 6 =", { val: "1/2" }],
+  ["SHIFT MODE 3", { drg: "D" }], ["sin 30 =", { val: "1/2" }],
+]);
+row8("6:Fix and 8:Norm", "§16, §7", [["SHIFT MODE 6", { title: "Fix 0~9?" }], ["3 1 ÷ 3 = S⇔D", { val: "0,333", fix: "FIX" }], ["SHIFT MODE 8 2", { val: "0,3333333333", fix: "" }]]);
+row8("▼ 4:STAT asks Frequency?; 1 ON gives the X | FREQ grid, 2 OFF the X grid", "§16; class key sequence", [
+  ["SHIFT MODE ▼ 4", { title: "Frequency?", menu8: "1:ON2:OFF" }],
+  ["1 MODE 3 1", { g8: "X|FREQ || 1|[]|", freq: "FREQ" }, s => (s.freqOn ? "" : "freqOn false")],
+  ["AC SHIFT MODE ▼ 4 2 MODE 3 1", { g8: "X || 1|[]", freq: "" }, s => (!s.freqOn ? "" : "freqOn true")],
+]);
+row8("▼ 5:TABLE asks Select Type? / 1:f(x) / 2:f(x),g(x)", "§16", [["SHIFT MODE ▼ 5", { title: "Select Type?", menu8: "1:f(x)2:f(x),g(x)" }]]);
+row8("TABLE 1:f(x): MODE 7 asks for f only, = goes straight to Start?; the table is X | F(X)", "§16", [
+  ["SHIFT MODE ▼ 5 1", { menu8: "", title: "" }, s => (s.tblType === "f" ? "" : `tblType ${s.tblType}`)],
+  ["MODE 7 X x² =", { expr: "Start?" }], ["= = =", { thead: "X|F(X)" }],
+]);
+row8("TABLE 2:f(x),g(x) asks for g again", "§16", [["SHIFT MODE ▼ 5 1 SHIFT MODE ▼ 5 2 MODE 7 X =", { expr: "g(X)=" }]]);
+row8("Select Type? does not show the choice; AC cancels without changing (f only stays)", "§16 \"AC cancels without changing\"", [
+  ["SHIFT MODE ▼ 5 1 SHIFT MODE ▼ 5", { menu8: "1:f(x)2:f(x),g(x)" }], ["AC MODE 7 X =", { expr: "Start?" }],
+]);
+row8("Select Type?: other digits do nothing", "Blipwork choice", [["SHIFT MODE ▼ 5 3 0", { title: "Select Type?" }]]);
+row8("f only from the table: a g typed before is not used", "Blipwork: g ignored with f(x) only", [
+  ["MODE 7 X = X x² = = = =", { thead: "X|F(X)|G(X)" }], ["SHIFT MODE ▼ 5 1 AC = = = =", { thead: "X|F(X)" }],
+]);
+row8("f only: 20 rows fine, 21 → Insufficient MEM (the limit is kept at 20)", "brief: f-only limit not measured", [
+  ["SHIFT MODE ▼ 5 1 MODE 7 X = 1 = 20 = 1 =", { thead: "X|F(X)", err: "" }],
+  ["AC = 1 = 21 = 1 =", { err: ERR("Insufficient MEM") }],
+]);
+
+section("Build 8 · CLR (SHIFT 9, spec §16)");
+
+row8("Clear? over 1:Setup 2:Memory / 3:All", "§16", [["SHIFT 9", { title: "Clear?", menu8: "1:Setup2:Memory3:All" }]]);
+row8("3 → Reset All? / [=] :Yes / [AC] :Cancel", "§16", [["SHIFT 9 3", { title: "Reset All?", notes: "[=] :Yes / [AC] :Cancel", menu8: "" }]]);
+row8("= → Reset All / Press [AC] Key, centred; other keys do nothing; AC → COMP", "§16", [
+  ["SHIFT 9 3 =", { done: "Reset All / Press [AC] Key", centred: true, title: "", notes: "" }],
+  ["1 + MODE ▲ ◀ = SHIFT 9", { done: "Reset All / Press [AC] Key" }],
+  ["AC", { done: "", line: "", res: "" }, s => (s.mode === "COMP" && s.screen === "comp" ? "" : `${s.mode} ${s.screen}`)],
+  ["2 + 2 =", { val: "4" }],
+]);
+row8("1 → Reset Setup? → Reset Setup / Press [AC] Key", "brief: same two steps, own words", [
+  ["SHIFT 9 1", { title: "Reset Setup?", notes: "[=] :Yes / [AC] :Cancel" }], ["=", { done: "Reset Setup / Press [AC] Key", centred: true }], ["AC", { done: "" }],
+]);
+row8("2 → Reset Memory? → Reset Memory / Press [AC] Key", "brief: same two steps, own words", [
+  ["SHIFT 9 2", { title: "Reset Memory?", notes: "[=] :Yes / [AC] :Cancel" }], ["=", { done: "Reset Memory / Press [AC] Key", centred: true }], ["AC", { done: "" }],
+]);
+row8("AC on Reset …? cancels: nothing changes (A keeps 5)", "§16 [AC] :Cancel", [
+  ["5 SHIFT RCL (−) SHIFT 9 3 AC", { title: "", done: "" }], ["ALPHA (−) =", { val: "5" }],
+  ["SHIFT 9 2 AC ALPHA (−) =", { val: "5" }],
+]);
+row8("AC on Clear? goes back to the calculation", "Blipwork: as every menu", [["2 + 3 = SHIFT 9 AC", { line: "2+3", val: "5", title: "" }]]);
+row8("Reset Setup: Rad → Deg, Fix → Norm 2, FREQ off, TABLE f and g; variables, Ans, history kept", "spec intro factory settings", [
+  ["SHIFT MODE 4 SHIFT MODE 6 2 SHIFT MODE ▼ 4 1 SHIFT MODE ▼ 5 1 5 SHIFT RCL (−) 1 + 1 = SHIFT 9 1 = AC", { drg: "D", fix: "" },
+    s => (!s.freqOn && s.tblType === "fg" && s.norm === 2 && s.vars.A.n === 5n && s.history.length === 1 && s.ansVal.n === 2n ? "" : `freq ${s.freqOn}, tbl ${s.tblType}, A ${s.vars.A.n}, history ${s.history.length}`)],
+]);
+row8("Reset Memory: variables, M and Ans to 0, history empty; Rad and Fix kept", "Blipwork reading (not measured)", [
+  ["SHIFT MODE 4 SHIFT MODE 6 2 5 SHIFT RCL (−) 7 M+ 1 + 1 = SHIFT 9 2 = AC", { drg: "R", fix: "FIX", m: false, line: "", res: "" },
+    s => (Object.values(s.vars).every(isZeroVal) && isZeroVal(s.ansVal) && s.history.length === 0 ? "" : `vars ${Object.entries(s.vars).filter(([, v]) => !isZeroVal(v)).map(([k]) => k)}, history ${s.history.length}`)],
+  ["▲", { line: "", res: "" }], ["ALPHA (−) =", { val: "0" }], ["Ans + 1 =", { val: "1" }],
+]);
+row8("Reset All: factory everything (Deg, Norm 2, FREQ off, TABLE f and g, variables 0, history empty, COMP, data gone)", "§16; brief: \"it leaves Rad today\"", [
+  ["SHIFT MODE 4 SHIFT MODE 6 2 SHIFT MODE ▼ 4 1 SHIFT MODE ▼ 5 1 5 SHIFT RCL (−) 7 M+ 1 + 1 = MODE 3 1 3 = AC SHIFT 9 3 = AC", { drg: "D", fix: "", stat: "", freq: "", m: false },
+    s => (s.mode === "COMP" && !s.freqOn && s.fix == null && s.norm === 2 && s.drg === "D" && s.tblType === "fg" && s.data.length === 0 && s.pairs.length === 0
+      && Object.values(s.vars).every(isZeroVal) && isZeroVal(s.ansVal) && s.history.length === 0 ? "" : `mode ${s.mode}, drg ${s.drg}, tbl ${s.tblType}, data ${s.data.length}, history ${s.history.length}`)],
+  ["▲", { line: "", res: "" }], ["MODE 7 X =", { expr: "g(X)=" }], ["= =", { expr: "End?", val: "5" }],
+]);
+row8("Reset All empties the A+BX pairs and fires the clear milestone at =", "consumer: questions.js goal \"clear\"", [
+  [`${XB} AC SHIFT 9 3`, {}, (s, ev) => (ev.some(e => e.t === "clear") ? "fired too early" : "")],
+  ["=", {}, (s, ev) => (ev.some(e => e.t === "clear") && s.pairs.length === 0 && s.mode === "COMP" ? "" : "no clear / pairs kept")],
+]);
+row8("Reset Setup and Reset Memory do not fire the clear milestone", "Build 4 rule", [["SHIFT 9 1 = AC SHIFT 9 2 = AC", {}, (s, ev) => (ev.some(e => e.t === "clear") ? "fired" : "")]]);
+row8("Reset Memory from the table: back to the table", "Blipwork: TABLE keeps its screen", [["MODE 7 X x² = = = = = SHIFT 9 2 = AC", { thead: "X|F(X)", done: "" }]]);
+row8("Reset All from A+BX: back to COMP, STAT off", "§16 \"AC returns to COMP\"", [[`${XB} SHIFT 1 2 AC SHIFT 9 3 = AC 2 + 2 =`, { val: "4", stat: "" }]]);
+
+/* ---- DOM measurements at 375 px: the menus keep the LCD's plain height,
+   the CLR screens, the pasted line with x̂ / ŷ and the held answer, the X | Y
+   grid, and the status-line order (spec §16, last bullet) ---- */
+section("Build 8 · menus, CLR screens, the pasted line and the status line fit (DOM measurement)");
+function measureBuild8(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  const same = h0 => Math.abs(L().height - h0) < 0.5;
+  const lcdBg = getComputedStyle(lcd).backgroundColor, lcdInk = getComputedStyle(lcd).color;
+  const rev = el => getComputedStyle(el).backgroundColor === lcdInk && getComputedStyle(el).color === lcdBg;
+  const grid = () => { const items = [...h.querySelectorAll(".lcd-mi")]; return { items, rows: new Set(items.map(i => Math.round(i.getBoundingClientRect().top))).size, cols: new Set(items.map(i => Math.round(i.getBoundingClientRect().left))).size }; };
+  const allIn = () => [...h.querySelectorAll(".calc-main > *")].every(inside);
+  /* the menu as the LCD shows it, LINE BY LINE: items that share a row joined
+     by a space, rows by " / " */
+  const lines = () => {
+    const byTop = new Map();
+    for (const i of h.querySelectorAll(".lcd-mi")) { const t = Math.round(i.getBoundingClientRect().top); byTop.set(t, [...(byTop.get(t) || []), glyphText(i)]); }
+    return [...byTop.keys()].sort((a, b) => a - b).map(t => byTop.get(t).join(" ")).join(" / ");
+  };
+  press("AC ON AC SHIFT 9 3 = AC");
+  const h0 = L().height;
+  for (const [keys, label, nItems, nRows, boxed, want] of [
+    ["MODE 3", "MODE 3 (eight STAT types)", 8, 4, false, "1:1-VAR 2:A+BX / 3:_+CX² 4:ln X / 5:e^X 6:A·B^X / 7:A·X^B 8:1/X"],
+    ["SHIFT MODE", "SETUP page 1", 8, 4, true, "1:MthIO 2:LineIO / 3:Deg 4:Rad / 5:Gra 6:Fix / 7:Sci 8:Norm"],
+    ["SHIFT MODE ▼", "SETUP page 2", 7, 4, true, "1:ab/c 2:d/c / 3:CMPLX 4:STAT / 5:TABLE 6:APO / 7:◀CONT▶"],
+    ["SHIFT 9", "Clear?", 3, 2, false, "1:Setup 2:Memory / 3:All"]]) {
+    press("AC " + keys);
+    const g = grid(), digits = [...h.querySelectorAll(".lcd-mi-n")];
+    tick(lines() === want && g.items.length === nItems && g.rows === nRows && g.cols === 2 && g.items.every(inside) && allIn() && same(h0) && (boxed ? digits.length === nItems && digits.every(rev) : digits.length === 0),
+         `${where}: ${label} line by line "${want}"${boxed ? ", digits reversed" : ""}, inside the LCD, height unchanged`, `"${lines()}", ${g.cols} columns, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  }
+  for (const [keys, label] of [["SHIFT MODE ▼ 5", "Select Type?"], ["SHIFT 9", "Clear?"], ["SHIFT 9 3", "Reset All? with its two lines"], ["SHIFT 9 3 =", "Reset All / Press [AC] Key"]]) {
+    press("AC " + keys);
+    tick(allIn() && same(h0) && h.querySelector(".calc-main").scrollWidth <= h.querySelector(".calc-main").clientWidth + 0.5, `${where}: ${label} sits inside the LCD, height unchanged`, `LCD ${Math.round(L().height)} px`);
+  }
+  const textBox = d => { const rg = document.createRange(); rg.selectNodeContents(d); return rg.getBoundingClientRect(); };
+  const dn = h.querySelector(".lcd-done"), dl = [...dn.children].map(textBox), mb = h.querySelector(".calc-main").getBoundingClientRect();
+  tick(dl.every(r => r.width > 0 && Math.abs((r.left + r.right) / 2 - (mb.left + mb.right) / 2) < 1) && dn.children[0].textContent === "Reset All",
+       `${where}: the Reset All lines are centred (the text itself)`, dl.map(r => `${Math.round(r.left - mb.left)}…${Math.round(mb.right - r.right)}`).join(", "));
+  // the A+BX menus and grid
+  press(`AC ${XB}`);
+  const t = h.querySelector(".lcd-tab");
+  tick(!!t && t.getBoundingClientRect().width <= h.querySelector(".calc-main").getBoundingClientRect().width + 0.5 && [...t.querySelectorAll("td,th")].every(c => c.scrollWidth <= c.clientWidth + 0.5),
+       `${where}: the X | Y grid fits the LCD's width`, "");
+  for (const [keys, label, n, want] of [["AC SHIFT 1", "the A+BX STAT menu", 6, "1:Type 2:Data / 3:Sum 4:Var / 5:Reg 6:MinMax"], ["AC SHIFT 1 5", "the Reg menu", 5, `1:A 2:B / 3:r 4:${XHAT} / 5:${YHAT}`]]) {
+    press(keys);
+    const g = grid();
+    tick(lines() === NFC(want) && g.items.length === n && g.rows === 3 && g.items.every(inside) && same(h0), `${where}: ${label} line by line "${want}", inside the LCD, height unchanged`, `"${lines()}", LCD ${Math.round(L().height)} px`);
+  }
+  // the pasted line: ŷ with its hat, the held answer bottom right
+  press("AC AC 5 + 5 = SHIFT 1 5 5");
+  const hat = h.querySelector(".lcd-expr .lcd-hat"), hs = hat && getComputedStyle(hat, "::before");
+  tick(!!hat && inside(hat) && inside(h.querySelector(".lcd-res")) && h.querySelector(".lcd-res").textContent === "10" && same(h0) && hs.borderTopWidth === "1px" && hs.position === "absolute",
+       `${where}: Ansŷ with its hat and the held 10 bottom right fit, height unchanged`, `LCD ${Math.round(L().height)} px`);
+  press("AC AC MODE 3 1 2 = 4 = AC 12 + 34 = SHIFT 1 4 2 + 1");
+  tick(inside(h.querySelector(".lcd-expr .lcd-ov")) && same(h0), `${where}: x̄+1 with the held answer fits, height unchanged`, "");
+  // the status line: the spec's order, D next to Math, the arrows at the far right
+  press("= SHIFT MODE 6 2 7 M+ RCL");
+  const order = ["sa", "m", "sto", "rcl", "stat", "freq", "fix", "drg", "math", "hist"];
+  const r = n => h.querySelector(`.calc-ind .ind-${n}`).getBoundingClientRect(), ind = h.querySelector(".calc-ind").getBoundingClientRect();
+  const inOrder = order.every((n, k) => k === 0 || r(order[k - 1]).right <= r(n).left + 0.5);
+  const lit = ["m", "rcl", "stat", "fix", "drg", "math"].map(n => h.querySelector(`.calc-ind .ind-${n}`).textContent);
+  tick(inOrder && Math.abs(r("drg").right - r("math").left) < 0.5 && Math.abs(r("math").right - r("hist").left) < 0.5 && Math.abs(r("hist").right - ind.right) < 1 && r("fix").right < r("drg").left - 20 && lit.join(" ") === "M RCL STAT FIX D Math",
+       `${where}: status line S/A, M, STO, RCL, STAT, FIX on the left; D next to Math; the arrows at the far right`, `"${lit.join(" ")}"`);
+  press("AC AC ON AC SHIFT 9 3 = AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild8(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild8(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 

@@ -4,7 +4,7 @@
    ------------------------------------------------------------
    A faithful, interactive replica of the calculator's stats flow,
    built to the exact key sequences the class is taught:
-     • clear:        SHIFT 9 → 3 (All) → =
+     • clear:        SHIFT 9 → 3 (All) → = (then AC leaves "Press [AC] Key", Build 8)
      • frequency:    SHIFT MODE (SETUP) → ▼ → 4 (STAT) → 1 ON / 2 OFF
      • enter data:   MODE → 3 (STAT) → 1 (1-VAR), type values, AC
      • read a value: SHIFT 1 (STAT) → 4 (Var) → n/x̄/σx/sx, then =
@@ -76,6 +76,14 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    grid drawn by gridHTML, answered exactly, one answer per screen; the
    MODE menu's two pages; INEQ (MODE ▼ 2) for a quadratic with two real
    roots (the cubic item and the unmeasured cases are left out on purpose).
+   Calculator rebuild Build 8 (2026-10-04, spec §15, §16): a STAT read-off
+   (x̄, σx, n, A, B, r ...) is PASTED as a token onto the ordinary editable
+   line, = works it out like any calculation (Ans, history, S⇔D, ◀ all act
+   on it) and it shows by the normal display rules (10 significant digits);
+   the two-variable type A+BX (MODE 3 2) with its X | Y grid and the Reg
+   menu (A, B, r, x̂, ŷ); the SETUP menu's two boxed pages with 5:TABLE
+   (f(x) only, or f(x) and g(x)); the CLR screens Clear? / Reset …? /
+   Reset … Press [AC] Key, for Setup, Memory and All.
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -148,11 +156,15 @@ const NUM_KEYS = [
 export const KEY_SPEC = [...FUNC_KEYS, ...NUM_KEYS, ...DPAD_KEYS.map(k => ({ ...k, group: "dpad" }))];
 
 const escapeHtml = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const fmtNum = v => (v == null ? "" : String(Math.round(v * 1e8) / 1e8).replace(".", ","));   // comma decimal (ZA locale, verified on the device) — STAT read-offs ONLY
+const fmtNum = v => (v == null ? "" : String(Math.round(v * 1e8) / 1e8).replace(".", ","));   // comma decimal (ZA locale, verified on the device) — the STAT data grid's cells ONLY (Build 8: read-offs follow the normal display rules)
 /* the mean symbol x̄ — drawn with the bar ABOVE the x (the LCD font won't
    stack the combining macron, so it lands beside it). Render as an overline. */
 const MEAN_GLYPH = '<span class="lcd-ov">x</span>';
-const lcdShow = s => escapeHtml(s).replace(/x̄/g, MEAN_GLYPH);   // x + combining macron → overlined x
+/* Build 8: x̂ and ŷ (the Reg menu), the hat drawn by CSS above the letter
+   for the same reason (.lcd-hat) */
+const HAT_GLYPH = c => `<span class="lcd-hat">${c}</span>`;
+const STAT_GLYPH = { "x̄": MEAN_GLYPH, "x̂": HAT_GLYPH("x"), "ŷ": HAT_GLYPH("y") };
+const statGlyph = name => STAT_GLYPH[name] || escapeHtml(name);
 
 /* ============================================================
    COMP-MODE MATHS ENGINE (round 2) — exact-first, decimal fallback.
@@ -681,7 +693,8 @@ function formatExactHTML(v) {
    power (2^40 → 1,099511628×10¹²); small numbers stay plain decimals down
    to 10⁻⁹ (1/2000 → 0,0005, not 5×10⁻⁴) and only switch below that.
    Trailing zeros are dropped. Returns HTML (the ×10 form has markup).
-   STAT read-offs do NOT come through here: they keep fmtNum, unchanged.
+   Build 8: STAT read-offs come through here too (foreman ruling: r =
+   0,981155781 as on the device); before, they kept an 8-decimal text.
    Build 4: `fix` (0–9, or null for Norm) is the SETUP Fix setting. Fix only
    changes DECIMAL display (spec §7: 2÷3 stays ⅔, S⇔D → 0,67; sin(40 =
    0,64): exactly `fix` decimals, rounded half up. Past 10 digits before the
@@ -764,9 +777,8 @@ const formatValue = (v, dec, fix = null) => (dec || !exactFits(v)) ? formatDecim
 const TBL_CELL_CHARS = 6;
 const TBL_VISIBLE = 3;         // spec §12: 3 rows visible
 /* Row limit 20 "with the f and g setting" (spec §12, 21 rows → Insufficient
-   MEM). The setting is always f and g until Build 8 adds SETUP 5:TABLE, so
-   the limit is 20 whether or not g was given (the f-only limit was not
-   measured). */
+   MEM). Build 8 added SETUP 5:TABLE (f only); the f-only limit was not
+   measured, so the limit stays 20 for both settings (foreman ruling). */
 const TABLE_MAX_ROWS = 20;
 const freshRange = () => ({ start: mkRat(1n, 1n), end: mkRat(5n, 1n), step: mkRat(1n, 1n) });   // factory Start 1, End 5, Step 1
 function tableCellText(v) {
@@ -974,6 +986,44 @@ const EQN_HEADS = ["a", "b", "c", "d"];
    three-column types). */
 const EQN_VIS_COLS = 3;
 
+/* ---- Build 8: two-variable STAT, A+BX (spec §15) ----
+   The line of best fit y = A + Bx and r, from the X | Y pairs. Worked out
+   EXACTLY on the numbers as typed (each cell read at 15 significant digits
+   as a fraction, the way Fix reads a decimal), so A for X 1,2,3,4 / Y
+   2,4,5,8 is exactly 0, never a rounding crumb like 8,9×10⁻¹⁶ (device: A =
+   0, B = 1,9, r = 0,981155781). With n the number of pairs:
+     B = (nΣxy − ΣxΣy) / (nΣx² − (Σx)²),   A = (Σy − BΣx) / n,
+     r = (nΣxy − ΣxΣy) / √((nΣx² − (Σx)²)(nΣy² − (Σy)²)).
+   null when there are no pairs or every X is the same (B has no value);
+   r is null when every Y is the same. Those read-offs are Math ERROR (not
+   measured: it is a division by 0). */
+function regFit(pairs) {
+  if (!pairs.length) return null;
+  const Z = mkRat(0n, 1n);
+  let sx = Z, sy = Z, sxx = Z, sxy = Z, syy = Z;
+  for (const p of pairs) {
+    const x = floatToRat(p.x), y = floatToRat(p.y);
+    sx = vAdd(sx, x); sy = vAdd(sy, y);
+    sxx = vAdd(sxx, vMul(x, x)); sxy = vAdd(sxy, vMul(x, y)); syy = vAdd(syy, vMul(y, y));
+  }
+  const n = mkRat(BigInt(pairs.length), 1n);
+  const dxx = vSub(vMul(n, sxx), vMul(sx, sx)), dxy = vSub(vMul(n, sxy), vMul(sx, sy)), dyy = vSub(vMul(n, syy), vMul(sy, sy));
+  if (isErr(dxx) || isZeroV(dxx)) return null;
+  const B = vDiv(dxy, dxx), A = vDiv(vSub(sy, vMul(B, sx)), n);
+  let r = null;
+  if (!isZeroV(dyy)) {
+    const r2 = vDiv(vMul(dxy, dxy), vMul(dxx, dyy));
+    const m = r2.n === r2.d ? 1 : Math.sqrt(toFloatV(r2));   // r = ±1 exactly on a perfect line
+    r = signOfV(dxy) < 0 ? -m : m;
+  }
+  return { A, B, r };
+}
+/* x̂ and ŷ come AFTER the number they act on (spec §15: `5ŷ` = 9,5, the
+   predicted y when x = 5), like x² does; on their own they are Syntax ERROR
+   (Blipwork reading: nothing for them to act on) */
+const REG_POSTFIX = new Set(["x̂", "ŷ"]);
+const isStatAtom = t => t && t.k === "stat" && !REG_POSTFIX.has(t.v);
+
 /* One LCD grid as an HTML table (Build 6): the STAT data grid and the TABLE
    screen are both drawn by this. heads and every row are lists of cells
    { html, cls }; the first cell of each is the row-number column. */
@@ -1112,8 +1162,10 @@ function parseUnary(st, ctx) {
    ERROR, as (2+3)4 is on the device (π2 itself was not probed). */
 /* Build 4: the constant e multiplies implicitly like π (spec §9), and so do
    the new templates (log□(), |□|, 10^□, e^□, a mixed number): 2e, 3|−2|. */
+/* Build 8: a pasted STAT value (x̄, σx, A ...) multiplies the same way (2x̄);
+   x̂ and ŷ do not, they act on what is before them (parsePower). */
 const IMPLICIT_TRIGGER = t => t && (t.k === "func" || t.k === "(" || t.k === "frac" || t.k === "rad" || t.k === "xrt" || t.k === "ans" || t.k === "var" || t.k === "pi"
-  || t.k === "econst" || t.k === "logb" || t.k === "abs" || t.k === "tenpow" || t.k === "epow" || t.k === "mixed");
+  || t.k === "econst" || t.k === "logb" || t.k === "abs" || t.k === "tenpow" || t.k === "epow" || t.k === "mixed" || isStatAtom(t));
 const PI_VAL = mkPi(1n, 1n);
 function parseImplicit(st, ctx) {
   let left = parsePower(st, ctx);
@@ -1133,6 +1185,7 @@ function parsePower(st, ctx) {
     else if (t && t.k === "inv") { next(st); base = vInv(base); }          // x⁻¹ (Build 4)
     else if (t && t.k === "fact") { next(st); base = vFact(base); }        // x!
     else if (t && t.k === "pct") { next(st); base = vDiv(base, HUNDRED); } // %: ÷100 (20% = 1/5)
+    else if (t && t.k === "stat" && REG_POSTFIX.has(t.v)) { next(st); base = ctx.statPost ? ctx.statPost(t.v, base) : VERR("Math ERROR"); }   // 5ŷ (Build 8)
     else break;
   }
   return base;
@@ -1162,6 +1215,9 @@ function parseAtom(st, ctx) {
   if (t.k === "ans") { next(st); return ctx.ans; }
   if (t.k === "var") { next(st); return (ctx.vars && ctx.vars[t.name]) || mkRat(0n, 1n); }   // A–F, X, Y, M (spec §2: all start at 0)
   if (t.k === "pi") { next(st); return PI_VAL; }   // the constant π (SHIFT ×10^x, Build 3)
+  /* a pasted STAT value (Build 8): worked out from the data at the moment
+     = is pressed; a line evaluated with no STAT data hook gives Math ERROR */
+  if (isStatAtom(t)) { next(st); return ctx.stat ? ctx.stat(t.v) : VERR("Math ERROR"); }
   if (t.k === "frac") { next(st); const num = parseSubExpr(t.num, ctx); const den = parseSubExpr(t.den, ctx); return vDiv(num, den); }
   if (t.k === "rad") { next(st); const body = parseSubExpr(t.body, ctx); return t.deg === 3 ? vCbrt(body) : vSqrt(body); }
   if (t.k === "xrt") { next(st); const idx = parseSubExpr(t.idx, ctx); const body = parseSubExpr(t.body, ctx); return vXroot(idx, body); }
@@ -1247,8 +1303,8 @@ function operandStart(box, end) {
   const t = box[end - 1];
   if (t.k === "d" || t.k === "c") { let j = end - 1; while (j > 0 && (box[j - 1].k === "d" || box[j - 1].k === "c")) j--; return j; }
   if (t.k === "var" || t.k === "ans" || t.k === "pi" || t.k === "frac" || t.k === "rad" || t.k === "xrt"
-    || t.k === "econst" || t.k === "logb" || t.k === "abs" || t.k === "tenpow" || t.k === "epow" || t.k === "mixed") return end - 1;   // Build 4 operands
-  if (t.k === "sq" || t.k === "cb" || t.k === "pow" || t.k === "inv" || t.k === "fact" || t.k === "pct") { const j = operandStart(box, end - 1); return j === end - 1 ? end : j; }
+    || t.k === "econst" || t.k === "logb" || t.k === "abs" || t.k === "tenpow" || t.k === "epow" || t.k === "mixed" || isStatAtom(t)) return end - 1;   // Build 4 operands; Build 8 a STAT value
+  if (t.k === "sq" || t.k === "cb" || t.k === "pow" || t.k === "inv" || t.k === "fact" || t.k === "pct" || (t.k === "stat" && REG_POSTFIX.has(t.v))) { const j = operandStart(box, end - 1); return j === end - 1 ? end : j; }
   if (t.k === ")") {
     let depth = 0;
     for (let j = end - 1; j >= 0; j--) {
@@ -1268,7 +1324,7 @@ export function mountCalculator(host, opts = {}) {
 
   const S = {
     shift: false, mode: "COMP", screen: "comp", freqOn: false,
-    line: "", result: null, pendingStat: null,
+    result: null,
     data: [], cell: "", row: 0, col: 0, menu: null,
     // ---- COMP-mode maths engine state (round 2) ----
     box: [], cur: null, exactVal: null, showDecimal: false, drg: "D", ansVal: mkRat(0n, 1n),
@@ -1281,7 +1337,6 @@ export function mountCalculator(host, opts = {}) {
     browsing: false,       // true while ▲/▼ show a history entry (indicator then ▲ / ▼ / ▲▼)
     afterAC: false,        // the line is empty because of AC: ◀/▶ recall the last expression
     err: false,            // the result line holds an error message
-    lastWasStat: false,    // the result came from a pasted STAT token (legacy line, no box to edit)
     // ---- calculator rebuild Build 2 (spec §3) ----
     errAt: null,           // { box, i }: where ◀/▶ (Goto) put the cursor after a Syntax ERROR
     // ---- calculator rebuild Build 4 (spec §7, §8, §9, §16) ----
@@ -1297,6 +1352,15 @@ export function mountCalculator(host, opts = {}) {
     tblRange: freshRange(),   // Start / End / Step: remembered from one table to the next (spec §12)
     // ---- calculator rebuild Build 7 (spec §13, §14) ----
     eqn: null,             // EQN / INEQ (screens "eqnGrid", "eqnAns", "eqnErr"): { kind, type, rows, cols, coef, r, c, left, box, answers, ai, dec, back, err, sign }
+    // ---- calculator rebuild Build 8 (spec §15, §16) ----
+    /* mode "REG" = STAT type A+BX (MODE 3 2). It is kept apart from "STAT"
+       (1-VAR), and its X | Y pairs apart from S.data, on purpose: the calcdo
+       questions read state().mode === "STAT" and state().data for their
+       1-VAR goals, so a two-variable entry must never count as the 1-VAR one
+       they ask for. The status line shows STAT for both. */
+    pairs: [],             // A+BX data: [{ x, y }]
+    held: null,            // a STAT value was pasted after a result: that previous answer (HTML) stays bottom right until = (spec §15)
+    tblType: "fg",         // SETUP 5:TABLE: "fg" = f(x),g(x) (factory) or "f" = f(x) only
   };
   S.cur = { box: S.box, i: 0 };
 
@@ -1388,6 +1452,31 @@ export function mountCalculator(host, opts = {}) {
     }
     return null;
   }
+  /* Build 8: what a pasted STAT token is worth when = is pressed. The 1-VAR
+     values are exactly statValue's numbers (unchanged); A, B and r come from
+     regFit. All are DECIMALS (spec §15: "A = 0, B = 1,9, r = 0,981155781
+     (decimals)"), so they show by the normal decimal rules and S⇔D has no
+     fraction to switch to. No data: Math ERROR, as before. */
+  const REG_TOKS = new Set(["A", "B", "r"]);
+  function statTok(name) {
+    if (REG_TOKS.has(name)) {
+      const fit = regFit(S.pairs), v = fit && (name === "A" ? fit.A : name === "B" ? fit.B : fit.r);
+      if (v == null || (typeof v === "object" && isErr(v))) return VERR("Math ERROR");
+      return VFLOAT(typeof v === "number" ? v : toFloatV(v));
+    }
+    const v = statValue(name);
+    return v == null ? VERR("Math ERROR") : VFLOAT(v);
+  }
+  /* ŷ = A + B·x and x̂ = (y − A) ÷ B, exact on an exact operand, then shown
+     as a decimal like the other read-offs (spec §15: 5ŷ = 9,5) */
+  function statPost(name, x) {
+    if (isErr(x)) return x;
+    const fit = regFit(S.pairs);
+    if (!fit) return VERR("Math ERROR");
+    const out = name === "ŷ" ? vAdd(fit.A, vMul(fit.B, x)) : vDiv(vSub(x, fit.A), fit.B);
+    return isErr(out) ? out : VFLOAT(toFloatV(out));
+  }
+  const evalCtx = () => ({ ans: S.ansVal, drg: S.drg, vars: S.vars, stat: statTok, statPost });
 
   // ---- menus ----
   /* Build 6: a menu opened from a TABLE screen goes back to that screen
@@ -1438,23 +1527,44 @@ export function mountCalculator(host, opts = {}) {
     openMenu({ items: [["1", "anX+bnY=cn"], ["2", "anX+bnY+cnZ=dn"], ["3", "aX²+bX+c=0"], ["4", "aX³+bX²+cX+d=0"]], list: true, ret: "comp",
       onNum(n) { if (n >= 1 && n <= 4) startEqn(n); } });
   }
+  /* Build 8 (spec §15): two columns `1:1-VAR 2:A+BX / 3:_+CX² 4:ln X /
+     5:e^X 6:A·B^X / 7:A·X^B 8:1/X`, rows packed so the LCD keeps its plain
+     height. 2 opens A+BX; 3 to 8 were not measured and are not school use:
+     they do nothing. */
   function statTypeMenu() {
-    openMenu({ items: [["1", "1-VAR"], ["2", "A+BX"], ["3", "_+CX²"], ["4", "ln X"], ["5", "e^X"], ["6", "A·B^X"], ["7", "A·X^B"], ["8", "1/X"]], ret: "comp",
-      onNum(n) { if (n === 1) startStat(); } });
+    openMenu({ items: [["1", "1-VAR"], ["2", "A+BX"], ["3", "_+CX²"], ["4", "ln X"], ["5", "e^X"], ["6", "A·B^X"], ["7", "A·X^B"], ["8", "1/X"]], packed: true, ret: "comp",
+      onNum(n) { if (n === 1) startStat(); else if (n === 2) startReg(); } });
   }
   /* Build 7: coming from TABLE or EQN, the cursor still points into the
      f(X)= line or the coefficient being typed; it is put back on the
      (empty) calculation line, or the COMP line under STAT would type into a
      box that is not on screen. From COMP nothing changes. */
+  /* Build 8: picking a STAT type clears ALL the STAT data, both kinds (one
+     data area, as on the device). */
   function startStat() {
     if (S.mode === "TABLE" || S.mode === "EQN" || S.mode === "INEQ") resetEntry();
-    S.mode = "STAT"; S.data = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput"; emit("statMode");
+    S.mode = "STAT"; S.data = []; S.pairs = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput"; emit("statMode");
   }
+  /* A+BX (spec §15): the X | Y grid. No "statMode" milestone: the calcdo
+     questions that listen for it ask for 1-VAR. */
+  function startReg() {
+    if (S.mode === "TABLE" || S.mode === "EQN" || S.mode === "INEQ") resetEntry();
+    S.mode = "REG"; S.data = []; S.pairs = []; S.cell = ""; S.row = 0; S.col = 0; S.menu = null; S.screen = "statInput";
+  }
+  const statMode = () => S.mode === "STAT" || S.mode === "REG";
 
+  /* Build 8 (spec §16): two pages in the MODE menu's look (two columns,
+     digits in reversed boxes, rows packed so the LCD keeps its plain height):
+     page 1 `1:MthIO 2:LineIO / 3:Deg 4:Rad / 5:Gra 6:Fix / 7:Sci 8:Norm`
+     with ▼, page 2 `1:ab/c 2:d/c / 3:CMPLX 4:STAT / 5:TABLE 6:APO /
+     7:◀CONT▶`. Working: Deg, Rad, Fix, Norm, 4:STAT (the FREQ switch) and
+     5:TABLE; everything else does nothing when picked. Page 2 shows no ▲:
+     the spec gives MODE's page 2 a ▲ but says nothing for SETUP's, so it is
+     left as it was. */
   function setupMenu() {
     const p1 = [["1", "MthIO"], ["2", "LineIO"], ["3", "Deg"], ["4", "Rad"], ["5", "Gra"], ["6", "Fix"], ["7", "Sci"], ["8", "Norm"]];   // 8:Norm added in Build 4 (spec §16)
-    const p2 = [["1", "ab/c"], ["2", "d/c"], ["3", "CMPLX"], ["4", "STAT"], ["5", "TABLE"], ["6", "APO"], ["7", "CONT"]];
-    openMenu({ items: p1, page: 0, pages: 2, ret: "comp",
+    const p2 = [["1", "ab/c"], ["2", "d/c"], ["3", "CMPLX"], ["4", "STAT"], ["5", "TABLE"], ["6", "APO"], ["7", "◀CONT▶"]];
+    openMenu({ items: p1, page: 0, pages: 2, boxed: true, ret: "comp",
       onDown() { if (this.page === 0) { this.page = 1; this.items = p2; } },
       onUp() { if (this.page === 1) { this.page = 0; this.items = p1; } },
       onNum(n) {
@@ -1463,7 +1573,15 @@ export function mountCalculator(host, opts = {}) {
         else if (this.page === 0 && n === 6) fixPrompt();
         else if (this.page === 0 && n === 8) normPrompt();
         else if (this.page === 1 && n === 4) freqMenu();
+        else if (this.page === 1 && n === 5) tableTypeMenu();
       } });
+  }
+  /* SETUP ▼ 5:TABLE (spec §16): `Select Type?` / `1:f(x)` / `2:f(x),g(x)`.
+     1 makes TABLE ask for f only. The current choice is not shown; AC
+     cancels without changing (back to the calculation, like Fix 0~9?). */
+  function tableTypeMenu() {
+    openMenu({ title: "Select Type?", items: [["1", "f(x)"], ["2", "f(x),g(x)"]], list: true, ret: "comp",
+      onNum(n) { if (n !== 1 && n !== 2) return; S.tblType = n === 1 ? "f" : "fg"; leaveMenu(); } });
   }
   /* Build 4 (spec §7, §16): SETUP 6 asks `Fix 0~9?` and a digit sets it (the
      FIX tag lights); SETUP 8 asks `Norm 1~2?` and 1 or 2 leaves Fix. Neither
@@ -1482,25 +1600,66 @@ export function mountCalculator(host, opts = {}) {
     openMenu({ title: "Frequency?", items: [["1", "ON"], ["2", "OFF"]], ret: "comp",
       onNum(n) { if (n !== 1 && n !== 2) return; S.freqOn = (n === 1); leaveMenu(); emit("freq", n === 1); } });
   }
+  /* Build 8 (spec §16): SHIFT 9 shows the title `Clear?` over `1:Setup
+     2:Memory / 3:All`. 3 → `Reset All?` / `[=] :Yes` / `[AC] :Cancel`; = does
+     the reset and shows `Reset All` / `Press [AC] Key`, centred; AC then goes
+     back to COMP. 1 and 2 have the same two steps with their own words
+     (Reset Setup? → Reset Setup, Reset Memory? → Reset Memory): only All was
+     probed, so their screens copy it. AC on a Reset …? screen cancels without
+     changing anything. On the last screen only AC (or ON) does anything. */
+  const CLR_WORDS = { 1: "Setup", 2: "Memory", 3: "All" };
   function clrMenu() {
-    openMenu({ items: [["1", "Setup"], ["2", "Memory"], ["3", "All"]], ret: "comp",
-      onNum(n) { if (n === 3) clrConfirm(); else if (n === 1) clrSetupConfirm(); } });
+    openMenu({ title: "Clear?", items: [["1", "Setup"], ["2", "Memory"], ["3", "All"]], ret: "comp",
+      onNum(n) { if (CLR_WORDS[n]) clrConfirm(n); } });
   }
-  function clrConfirm() {
-    openMenu({ title: "Reset All?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { S.vars = freshVars(); S.history = []; resetEntry(); S.data = []; S.mode = "COMP"; S.freqOn = false; S.fix = null; S.norm = 2; S.tbl = null; S.tblRange = freshRange(); S.eqn = null; S.menu = null; S.screen = "comp"; emit("clear"); } });   // Build 7: and leaves EQN / INEQ; Build 1: "All" also zeroes the variables + M and empties the history (both are memory); Build 4: and puts Fix back to Norm 2; Build 6: and TABLE's Start/End/Step back to 1/5/1 (not measured: Reset All read as "everything")
+  function clrConfirm(n) {
+    const w = CLR_WORDS[n];
+    openMenu({ title: `Reset ${w}?`, items: [], notes: ["[=] :Yes", "[AC] :Cancel"], ret: "comp",
+      onEq() { clrReset(n); S.menu = { done: [`Reset ${w}`, "Press [AC] Key"], items: [], ret: "comp" }; S.screen = "menu"; } });
   }
-  /* CLR 1:Setup (Build 4): the setup items Blipwork has go back to the
-     factory settings (spec intro: Norm 2, Deg, STAT FREQ off). Its confirm
-     screen was not probed: it copies the measured Reset All? flow. It does
-     NOT fire the "clear" milestone, which belongs to CLR All. */
-  function clrSetupConfirm() {
-    openMenu({ title: "Reset Setup?", items: [], note: "[=]:Yes   [AC]:Cancel", ret: "comp",
-      onEq() { S.fix = null; S.norm = 2; S.drg = "D"; S.freqOn = false; leaveMenu(); refreshResult(); } });
+  /* What each reset puts back (factory settings, spec intro: Norm 2, Deg,
+     TABLE asks f(X) and g(X), STAT FREQ off):
+     1 Setup (Build 4): Fix → Norm 2, Deg, FREQ off, TABLE f and g. It does
+       NOT fire the "clear" milestone, which belongs to CLR All.
+     2 Memory (Blipwork reading, not measured; Build 1 already read the
+       history as memory): the variables A–F, X, Y and M to 0, Ans to 0, the
+       history emptied. The screen is cleared too, as All does, except in
+       TABLE / EQN / INEQ, which keep their screen.
+     3 All: everything above, plus the mode back to COMP, the STAT data
+       (both kinds) emptied, TABLE's function and Start/End/Step (1/5/1)
+       and the EQN grid gone (Build 6/7 reading of "everything"). */
+  function clrReset(n) {
+    if (n === 1 || n === 3) { S.fix = null; S.norm = 2; S.drg = "D"; S.freqOn = false; S.tblType = "fg"; }
+    if (n === 2 || n === 3) {
+      S.vars = freshVars(); S.ansVal = mkRat(0n, 1n); S.history = []; S.histPos = 0; S.browsing = false;
+      if (S.mode !== "TABLE" && !eqnMode()) resetEntry();
+    }
+    if (n === 3) {
+      resetEntry(); S.data = []; S.pairs = []; S.cell = ""; S.row = 0; S.col = 0; S.mode = "COMP";
+      S.tbl = null; S.tblRange = freshRange(); S.eqn = null; S.memPending = null;
+      emit("clear");
+    }
+    refreshResult();
   }
+  /* SHIFT 1. 1-VAR (unchanged): 1:Type 2:Data 3:Sum 4:Var 5:Distr 6:MinMax.
+     A+BX (Build 8, spec §15): 1:Type 2:Data / 3:Sum 4:Var / 5:Reg 6:MinMax.
+     What 3:Sum, 4:Var and 6:MinMax hold for two-variable data was not
+     measured, so in A+BX they do nothing (no invented lists); 1:Type does
+     nothing in either, as before. `fromGrid`: opened on the data grid, so a
+     pasted value starts a fresh line (the grid has no calculation line). */
   function statMenu() {
-    openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", "Distr"], ["6", "MinMax"]], ret: "comp",
-      onNum(n) { if (n === 3) sumMenu(); else if (n === 4) varMenu(); else if (n === 6) minMaxMenu(); else if (n === 2) { S.menu = null; S.screen = "statInput"; } } });
+    const reg = S.mode === "REG", fromGrid = S.screen === "statInput";
+    openMenu({ items: [["1", "Type"], ["2", "Data"], ["3", "Sum"], ["4", "Var"], ["5", reg ? "Reg" : "Distr"], ["6", "MinMax"]], ret: "comp", fromGrid,
+      onNum(n) {
+        if (n === 2) { S.menu = null; S.screen = "statInput"; return; }
+        if (reg) { if (n === 5) regMenu(); return; }
+        if (n === 3) sumMenu(); else if (n === 4) varMenu(); else if (n === 6) minMaxMenu();
+      } });
+  }
+  /* 5:Reg → `1:A 2:B / 3:r 4:x̂ / 5:ŷ` (spec §15); no title (none measured) */
+  function regMenu() {
+    const parent = S.menu;
+    openMenu({ parent, items: [["1", "A"], ["2", "B"], ["3", "r"], ["4", STAT_GLYPH["x̂"]], ["5", STAT_GLYPH["ŷ"]]], onNum(n) { const t = ["A", "B", "r", "x̂", "ŷ"][n - 1]; if (t) pasteStat(t); } });
   }
   // STAT menu labels match the device (1:Type 2:Data 3:Sum 4:Var 5:Distr 6:MinMax)
   /* Sum: 1:Sigma-x-squared  2:Sigma-x  — the ORDER is the device's, verified on
@@ -1518,7 +1677,31 @@ export function mountCalculator(host, opts = {}) {
     const parent = S.menu;
     openMenu({ title: "MinMax", parent, items: [["1", "minX"], ["2", "maxX"], ["3", "Q1"], ["4", "med"], ["5", "Q3"]], onNum(n) { pasteStat(["minX", "maxX", "Q1", "med", "Q3"][n - 1]); } });
   }
-  function pasteStat(tok) { S.menu = null; S.screen = "comp"; S.line = tok; S.pendingStat = tok; S.result = null; }
+  /* Build 8 (spec §15): picking a STAT value PASTES its token onto the
+     editable calculation line, cursor after it; the learner can keep typing
+     and = works the line out (Ans, history, S⇔D and ◀ then act on it as on
+     any answer). Before, it showed a fixed line that only = could use.
+     - Typing a line: the token goes in at the cursor (`5` then ŷ → `5ŷ`).
+     - A result on screen: a fresh line, and that previous answer STAYS bottom
+       right until = (spec §15). x̂ / ŷ chain from Ans there (`Ansŷ`), as every
+       postfix key does after a result (spec §1); not measured for x̂ / ŷ.
+     - Opened on the data grid: a fresh line (the grid has no line to add to).
+     A digit with no item in the menu does nothing (it used to leave the
+     menu with an empty line). */
+  function pasteStat(tok) {
+    if (!tok) return;
+    let root = S.menu; while (root && root.parent) root = root.parent;
+    const fromGrid = !!(root && root.fromGrid);
+    S.menu = null; S.screen = "comp";
+    if (fromGrid) resetEntry();
+    else if (S.result != null) {
+      const prev = S.err ? null : S.result;
+      resetEntry();
+      S.held = prev;
+      if (REG_POSTFIX.has(tok)) insertBoxToken({ k: "ans" });
+    }
+    insertBoxToken({ k: "stat", v: tok });
+  }
 
   // ---- data table ----
   /* Write whatever has been typed into the CURRENT cell. Does not move.
@@ -1529,10 +1712,20 @@ export function mountCalculator(host, opts = {}) {
      Sigma-x = 19, not 21), and the row count does not grow. That is exactly
      what the assignment below already did; it is now separated from the
      cursor movement so the arrow keys can reuse it. */
+  /* Build 8 (spec §15): in A+BX the grid is X | Y. An X fills its Y with 0
+     on a new row; a Y on the open row (no X yet) is dropped, as a FREQ there
+     is. No milestones: they belong to the 1-VAR questions. */
+  const gridRows = () => (S.mode === "REG" ? S.pairs : S.data);
   function writeCell() {
     if (S.cell === "" || S.cell === "-") return false;
     const v = Number(S.cell.replace(",", "."));
     if (!Number.isFinite(v)) { S.cell = ""; return false; }
+    if (S.mode === "REG") {
+      if (S.col === 0) S.pairs[S.row] = { x: v, y: S.pairs[S.row] ? S.pairs[S.row].y : 0 };
+      else if (S.pairs[S.row]) S.pairs[S.row].y = v;
+      S.cell = "";
+      return true;
+    }
     const oorskryf = S.data[S.row] != null;          // was there already a value here?
     if (!S.freqOn) S.data[S.row] = { x: v, f: 1 };
     else if (S.col === 0) S.data[S.row] = { x: v, f: (S.data[S.row] && S.data[S.row].f) ?? 1 };
@@ -1558,19 +1751,23 @@ export function mountCalculator(host, opts = {}) {
   function commitCell() {
     if (!writeCell()) return;
     S.row++;
-    if (S.row > S.data.length) S.row = S.data.length;   // never past the one open row
+    if (S.row > gridRows().length) S.row = gridRows().length;   // never past the one open row
   }
 
   /* Arrow keys INSIDE the data table. Without these a learner can only ever
      append — there is no way back up to row 3 to correct it, which is the
      whole "change a value" skill. Movement is clamped to the rows that exist
      plus the one open row at the bottom. */
+  /* Build 8: A+BX's X | Y grid moves exactly like the 1-VAR X | FREQ grid
+     (spec §15: ▶ goes to Y on the same row, ▲ back up the Y column; ◀ and ▶
+     at the column edges were not measured for A+BX, so FREQ's rules are
+     kept). */
   function statNav(dir) {
     writeCell();                                  // typed digits are stored first
-    const oop = S.data.length;                    // the open row at the very bottom
+    const oop = gridRows().length;                // the open row at the very bottom
     if (dir === "up")   S.row = Math.max(0, S.row - 1);
     if (dir === "down") S.row = Math.min(oop, S.row + 1);
-    if (S.freqOn) {
+    if (S.freqOn || S.mode === "REG") {
       if (dir === "left") {
         if (S.col > 0) S.col = 0;
         else if (S.row > 0) { S.row--; S.col = 1; }
@@ -1584,7 +1781,7 @@ export function mountCalculator(host, opts = {}) {
         else if (S.row < oop) { S.row++; S.col = 0; }
       }
     }
-    if (S.row > S.data.length) S.row = S.data.length;
+    if (S.row > gridRows().length) S.row = gridRows().length;
   }
 
   // ---- COMP-mode entry model: box tree + cursor ----
@@ -1598,9 +1795,8 @@ export function mountCalculator(host, opts = {}) {
   function isBoxEmpty(box) { return box.length === 0; }
   function resetEntry() {
     S.box = []; S.cur = { box: S.box, i: 0 };
-    S.result = null; S.exactVal = null; S.showDecimal = false;
-    S.line = ""; S.pendingStat = null;
-    S.err = false; S.lastWasStat = false; S.browsing = false; S.afterAC = false;
+    S.result = null; S.exactVal = null; S.showDecimal = false; S.held = null;
+    S.err = false; S.browsing = false; S.afterAC = false;
     S.histPos = S.history.length; S.errAt = null; S.form = null;
     S.prompt = null; S.calcRun = null; S.solve = null;   // Build 5: leaves CALC / SOLVE
     if (S.screen === "prompt" || S.screen === "solved") S.screen = "comp";
@@ -1667,7 +1863,8 @@ export function mountCalculator(host, opts = {}) {
      this, the result stayed "on screen" in our state, so the next digit
      wiped the line: Megan's "arrowing back to fix a typo wipes the screen". */
   function editFromResult(dir) {
-    if (S.lastWasStat) return;   // a pasted STAT read-off has no box to edit (legacy line) — unchanged
+    /* Build 8: a STAT read-off is an ordinary line now, so ◀ / ▶ edit it too
+       (before, they did nothing on it). */
     /* Build 2 (spec §3, Goto): on an error screen ◀ and ▶ BOTH return to the
        expression with the cursor just before the token that caused a Syntax
        ERROR (2+×3+4 → between + and ×). For a Math ERROR the spec does not
@@ -1693,7 +1890,7 @@ export function mountCalculator(host, opts = {}) {
     S.box = cloneBox(e.box); S.cur = { box: S.box, i: S.box.length };
     S.exactVal = e.val; S.showDecimal = e.showDecimal; S.form = e.form || null;
     S.result = shownHTML();
-    S.err = false; S.lastWasStat = false; S.line = ""; S.pendingStat = null;
+    S.err = false; S.held = null;
     S.browsing = true; S.afterAC = false; S.histPos = idx;
   }
   /* ▲ (dir −1) = older, ▼ (dir +1) = newer. After = the result on screen IS
@@ -1717,7 +1914,6 @@ export function mountCalculator(host, opts = {}) {
     return (S.histPos > 0 ? "▲" : "") + (S.histPos < S.history.length - 1 ? "▼" : "");
   }
   function moveHoriz(dir) {
-    if (S.pendingStat != null) return;   // legacy pasted-stat display has no cursor model
     if (S.result != null) return editFromResult(dir);
     if (S.afterAC && isBoxEmpty(S.box) && S.history.length) return recallLast(dir);
     const box = S.cur.box, i = S.cur.i;
@@ -1730,7 +1926,6 @@ export function mountCalculator(host, opts = {}) {
     }
   }
   function moveVert(dir) {
-    if (S.pendingStat != null) return;
     // a result (or a history entry) on screen, or the empty AC screen: ▲▼ walk the history
     if (S.result != null || (S.afterAC && isBoxEmpty(S.box))) { if (!S.err) histNav(dir); return; }
     const box = S.cur.box;
@@ -1758,7 +1953,7 @@ export function mountCalculator(host, opts = {}) {
   }
   /* redraw the result on screen after a SETUP change (Fix / Norm / CLR Setup) */
   function refreshResult() {
-    if (S.result == null || S.err || S.lastWasStat || !S.exactVal || isErr(S.exactVal)) return;
+    if (S.result == null || S.err || !S.exactVal || isErr(S.exactVal)) return;
     S.result = shownHTML();
   }
   function toggleSD() {
@@ -1777,7 +1972,7 @@ export function mountCalculator(host, opts = {}) {
      sequence, so from the decimal it goes to the mixed form too. A value
      with no mixed form (⅔, 5, √2, a decimal answer): nothing happens. */
   function toggleMixed() {
-    if (S.result == null || S.err || S.lastWasStat || S.form === "dms" || !hasMixedForm(S.exactVal)) return;
+    if (S.result == null || S.err || S.form === "dms" || !hasMixedForm(S.exactVal)) return;
     S.form = S.form === "mixed" ? null : "mixed";
     S.showDecimal = false;
     S.result = shownHTML();
@@ -1787,23 +1982,28 @@ export function mountCalculator(host, opts = {}) {
      30,25) and any other form goes to °'" (and back). Past 10 digits before
      the comma there is no °'" form (Blipwork choice, not measured). */
   function dmsToggle() {
-    if (S.err || S.lastWasStat || !S.exactVal || isErr(S.exactVal)) return;
+    if (S.err || !S.exactVal || isErr(S.exactVal)) return;
     if (S.form === "dms") { S.form = null; S.showDecimal = true; }
     else if (Math.abs(toFloatV(S.exactVal)) < 1e10) S.form = "dms";
     else return;
     S.result = shownHTML();
   }
+  /* Build 8: the "stat" milestone the calcdo questions mark (questions.js
+     compares its tok and its NUMBER, never the text). A line that is ONE
+     STAT value (x̄ =) reports that token with statValue's exact number, as
+     before; a line that does more with it (x̄+1, 5ŷ) reports tok null and
+     its answer, so it never counts as the plain read-off a question asks
+     for. A line with no STAT value reports nothing. */
+  function statMilestone(target, v) {
+    const toks = [];
+    (function walk(box) { for (const t of box) { if (t.k === "stat") toks.push(t.v); const order = TMPL_BOXES[t.k]; if (order) for (const key of order) walk(t[key]); } })(target);
+    if (!toks.length) return;
+    const lone = target.length === 1 && isStatAtom(target[0]) ? target[0].v : null;
+    const value = isErr(v) ? null : lone && !REG_TOKS.has(lone) ? statValue(lone) : toFloatV(v);
+    emit("stat", { tok: lone, value });
+  }
   function doEquals() {
-    if (S.pendingStat) {
-      const tok = S.pendingStat;
-      const v = statValue(tok);
-      // Build 4: with Fix switched on a read-off is a decimal display, so Fix rounds it too; with Norm (Fix off) the old text, unchanged
-      S.result = v == null ? "Math ERROR" : (S.fix != null && Math.abs(v) < 1e10 ? formatFix(VFLOAT(v), S.fix) : fmtNum(v));
-      S.pendingStat = null;
-      S.err = v == null; S.lastWasStat = true; S.browsing = false; S.afterAC = false; S.histPos = S.history.length;
-      emit("stat", { tok, value: v });
-      return;
-    }
+    S.held = null;   // a pasted read-off's previous answer goes at = (spec §15)
     if (isBoxEmpty(S.box)) return;
     /* A trailing →A (STO), M+ or M− token: evaluate the rest, then store /
        add to M. These lines are shown with their result but are NOT added to
@@ -1812,9 +2012,10 @@ export function mountCalculator(host, opts = {}) {
     const last = S.box[S.box.length - 1];
     const effect = last && (last.k === "sto" || last.k === "mplus" || last.k === "mminus") ? last : null;
     const target = effect ? S.box.slice(0, -1) : S.box;
-    let v = evalBox(target, { ans: S.ansVal, drg: S.drg, vars: S.vars });
+    let v = evalBox(target, evalCtx());
     if (!isErr(v) && !Number.isFinite(toFloatV(v))) v = VERR("Math ERROR");   // an exact value too big for any display, same as a float overflow
-    S.browsing = false; S.afterAC = false; S.lastWasStat = false;
+    S.browsing = false; S.afterAC = false;
+    statMilestone(target, v);
     if (isErr(v)) {
       S.result = v.msg; S.err = true; S.exactVal = null; S.showDecimal = false; S.form = null; S.histPos = S.history.length;
       // where Goto (◀/▶) will put the cursor; `target` may be a copy of the line without its →A / M+ token
@@ -1849,7 +2050,6 @@ export function mountCalculator(host, opts = {}) {
      `Ans→A` / `AnsM+`): the spec does not cover this case, it is the same
      chaining from Ans that + − × ÷ already do. Nothing typed: nothing happens. */
   function memKey(tok) {
-    if (S.pendingStat != null || S.lastWasStat) return;   // legacy pasted STAT line: no box to evaluate
     if (S.result != null) { if (S.err) return; S.box = [{ k: "ans" }]; }
     else if (isBoxEmpty(S.box)) return;
     S.box.push(tok); S.cur = { box: S.box, i: S.box.length };
@@ -1953,7 +2153,7 @@ export function mountCalculator(host, opts = {}) {
     }
     return out;
   }
-  const canCalc = () => S.mode === "COMP" && S.pendingStat == null && !S.lastWasStat && !isBoxEmpty(S.box);
+  const canCalc = () => S.mode === "COMP" && !isBoxEmpty(S.box);
   function startCalc() {
     if (!canCalc()) return;
     const letters = lettersIn(S.box);
@@ -2105,7 +2305,7 @@ export function mountCalculator(host, opts = {}) {
     const T = S.tbl, box = T[which];
     T.which = which; T.err = null;
     S.cur = { box, i: at === "start" ? 0 : box.length };
-    S.result = null; S.err = false; S.errAt = null; S.afterAC = false; S.pendingStat = null; S.browsing = false;
+    S.result = null; S.err = false; S.errAt = null; S.afterAC = false; S.browsing = false;
     S.screen = "tblF";
   }
   function tblFnKey(key) {
@@ -2116,7 +2316,7 @@ export function mountCalculator(host, opts = {}) {
     if (key === "ac") { T[T.which] = []; return openTblFn(T.which, "start"); }   // spec §12: AC clears the line to an empty f(X)=
     if (key === "eq") {
       if (T.which === "g") return askRange(0);   // g given or left empty (spec §12: an empty g is skipped)
-      if (!isBoxEmpty(T.f)) openTblFn("g", "end");
+      if (!isBoxEmpty(T.f)) { if (S.tblType === "f") askRange(0); else openTblFn("g", "end"); }   // Build 8: SETUP TABLE 1:f(x) asks for f only (spec §16)
       return;
     }
     if (key === "left" || key === "right") return moveHoriz(key === "left" ? -1 : 1);
@@ -2157,7 +2357,7 @@ export function mountCalculator(host, opts = {}) {
     const T = S.tbl, n = tblRowCount();
     if (n < 1) return tblError("Math ERROR", "f", null);
     if (n > TABLE_MAX_ROWS) return tblError("Insufficient MEM", "f", null);
-    const hasG = !isBoxEmpty(T.g), { start, step } = S.tblRange, rows = [];
+    const hasG = S.tblType !== "f" && !isBoxEmpty(T.g), { start, step } = S.tblRange, rows = [];   // Build 8: with f(x) only, a g typed earlier is not used
     for (let k = 0; k < n; k++) {
       const x = vAdd(start, vMul(mkRat(BigInt(k), 1n), step));   // exact: 0,25 steps stay 0,25 steps
       rows.push({ x, f: tblEval(T.f, x), g: hasG ? tblEval(T.g, x) : null });
@@ -2255,7 +2455,7 @@ export function mountCalculator(host, opts = {}) {
     if (atA) { E.r = 0; E.c = 0; }
     eqnSlide();
     S.cur = { box: E.box, i: 0 };
-    S.result = null; S.err = false; S.errAt = null; S.afterAC = false; S.pendingStat = null; S.browsing = false;
+    S.result = null; S.err = false; S.errAt = null; S.afterAC = false; S.browsing = false;
     S.screen = "eqnGrid";
   }
   /* keep the selected column among the three on show */
@@ -2377,10 +2577,9 @@ export function mountCalculator(host, opts = {}) {
      grid and the menus they pass through exactly as before. */
   const SKIP_SHIFT_COMP = new Set(["plus", "minus", "d7", "d8", "d0", "dot", "ans", "del"]);
   /* The three-line error screen (Build 2, spec §3) is up: a COMP-engine
-     error on the COMP screen. The legacy pasted-STAT "Math ERROR" (no data
-     captured) keeps its old one-line look and keys: STAT must behave exactly
-     as before until Build 8 moves STAT read-offs onto an editable line. */
-  const onErrScreen = () => (S.screen === "comp" && S.err && S.result != null && !S.lastWasStat)
+     error on the COMP screen. Build 8: a STAT read-off with no data is an
+     ordinary Math ERROR on this screen now (it had a one-line look before). */
+  const onErrScreen = () => (S.screen === "comp" && S.err && S.result != null)
     || (S.screen === "prompt" && !!S.prompt && !!S.prompt.err)   // Build 5: an error in a value typed at a prompt
     || (S.screen === "tblErr" && !!S.tbl && !!S.tbl.err)         // Build 6: Insufficient MEM (and Syntax / Math ERROR) when the table is made
     || (S.screen === "eqnErr" && !!S.eqn && !!S.eqn.err);        // Build 7: an error in a typed coefficient, or Math ERROR from solving
@@ -2497,7 +2696,7 @@ export function mountCalculator(host, opts = {}) {
     if (key === "mode") return modeMenu();
     if (key === "setup") return setupMenu();
     if (key === "clr") return clrMenu();
-    if (key === "stat") { if (S.mode === "STAT") statMenu(); return; }
+    if (key === "stat") { if (statMode()) statMenu(); return; }   // Build 8: and in A+BX
     if (key === "ac") { resetEntry(); S.afterAC = true; return; }   // AC clears the screen but KEEPS the history (spec §1)
     if (key === "sd") return toggleSD();
     if (key === "mixtog") return toggleMixed();
@@ -2513,11 +2712,11 @@ export function mountCalculator(host, opts = {}) {
     if (key === "noop") return;
 
     /* DEL after a result does NOTHING at all, the screen is unchanged (spec
-       §1; it used to clear the line). DEL on a pasted STAT token (no result
-       yet) still clears that legacy line, as before. */
+       §1; it used to clear the line). Build 8: a pasted STAT token is an
+       ordinary token, so DEL deletes it like any other (before, DEL cleared
+       the fixed read-off line). */
     if (key === "del") {
       if (S.result != null) return;
-      if (S.pendingStat != null) { resetEntry(); return; }
       doDelBox(); return;
     }
 
@@ -2528,11 +2727,10 @@ export function mountCalculator(host, opts = {}) {
     // 3+4=, pressing + shows "Ans+"). Build 2: a POSTFIX key chains the same
     // way after a COMP result (spec §1). Digits, ALPHA letters, prefix keys
     // (√, sin, (, (−) ...) and the ▫/▫ and ˣ√ templates keep the full reset.
-    // After a STAT read-off a postfix key still resets, exactly as before:
-    // Blipwork does not put STAT read-offs into Ans yet (Build 8), so Ans²
-    // there would square an OLD answer, a silently wrong number.
-    if ((S.result != null || S.pendingStat != null) && isEntryKey(key)) {
-      const chain = !!opChar[key] || BINARY_KEYS.has(key) || (POSTFIX_KEYS.has(key) && S.result != null && !S.lastWasStat);
+    // Build 8: a STAT read-off is an ordinary answer in Ans now, so postfix
+    // keys chain from it too (x̄ = then x² gives Ans², the read-off squared).
+    if (S.result != null && isEntryKey(key)) {
+      const chain = !!opChar[key] || BINARY_KEYS.has(key) || POSTFIX_KEYS.has(key);
       resetEntry();
       if (chain) insertBoxToken({ k: "ans" });   // the key itself goes in below, right after "Ans"
     }
@@ -2599,7 +2797,10 @@ export function mountCalculator(host, opts = {}) {
 
   function statKey(key) {
     if (key === "stat") return statMenu();
-    if (key === "ac") { commitCell(); S.screen = "comp"; S.line = ""; S.result = null; return; }
+    /* AC: store what is typed and go to the calculation screen. Build 8: that
+       screen is EMPTY (resetEntry), as it was meant to be; before, a line
+       typed before MODE 3 could still be sitting under it. */
+    if (key === "ac") { commitCell(); resetEntry(); S.screen = "comp"; return; }
     if (key === "eq" || key === "down") {
       // with something typed: store it and step on. With nothing typed: just move.
       if (S.cell !== "" && S.cell !== "-") commitCell(); else statNav("down");
@@ -2631,6 +2832,7 @@ export function mountCalculator(host, opts = {}) {
       case "sto": return "→" + escapeHtml(node.name);
       case "mplus": return "M+";
       case "mminus": return "M−";
+      case "stat": return statGlyph(node.v);   // a pasted STAT value (Build 8): x̄ overlined, x̂ ŷ with a hat
       case "func": return escapeHtml(node.name) + (node.inv ? "⁻¹" : "") + "(";
       case "frac": return `<span class="calc-frac"><span class="calc-frac-num">${renderBox(node.num)}</span><span class="calc-frac-bar"></span><span class="calc-frac-den">${renderBox(node.den)}</span></span>`;
       case "rad": return `<span class="calc-rad">${node.deg === 3 ? '<sup class="calc-rad-deg">3</sup>' : ""}<span class="calc-rad-sign">√</span><span class="calc-rad-body">${renderBox(node.body)}</span></span>`;
@@ -2686,7 +2888,7 @@ export function mountCalculator(host, opts = {}) {
       slot("m", isZeroAny(S.vars.M) ? "" : "M") +
       slot("sto", S.memPending === "sto" ? "STO" : "") +
       slot("rcl", S.memPending === "rcl" ? "RCL" : "") +
-      slot("stat", S.mode === "STAT" ? "STAT" : "") +
+      slot("stat", statMode() ? "STAT" : "") +   // Build 8: A+BX is STAT too
       slot("freq", S.mode === "STAT" && S.freqOn ? "FREQ" : "") +
       slot("fix", S.fix != null ? "FIX" : "") +   // Build 4 (spec §7, §16)
       `<span class="ind-gap"></span>` +
@@ -2714,20 +2916,23 @@ export function mountCalculator(host, opts = {}) {
       main.innerHTML = solvedHTML();
       exprScroll = 0;
     } else if (S.screen === "comp") {
-      const usingLine = S.pendingStat != null;
       cursorOn = S.result == null;
-      const exprHTML = usingLine ? lcdShow(S.line || "") : renderBox(S.box);
+      const exprHTML = renderBox(S.box);
       // AC / empty screen = an empty line plus the cursor, NO "0" anywhere (spec §1)
-      const resHTML = S.result != null ? S.result : "";
+      // Build 8: after a STAT value is pasted, the previous answer stays until = (S.held)
+      const resHTML = S.result != null ? S.result : (S.held || "");
       main.innerHTML = `<div class="lcd-line"><span class="lcd-lmark" hidden>◀</span><div class="lcd-expr">${exprHTML}</div></div><div class="lcd-res">${resHTML}</div>`;
       keepCursorInView();
     } else if (S.screen === "menu") {
       const m = S.menu;
       let html = m.title ? `<div class="lcd-title">${m.title}</div>` : "";
       // Build 7: list = one item per line (the EQN types, spec §13 "four plain lines")
-      // boxed = the digits in reversed boxes (the MODE menu, spec §16)
-      if (m.items && m.items.length) html += `<div class="lcd-menu${m.list ? " lcd-menu-list" : ""}${m.boxed ? " lcd-menu-boxed" : ""}">` + m.items.map(([n, l]) => `<span class="lcd-mi">${m.boxed ? `<span class="lcd-mi-n">${n}</span>` : n}:${l}</span>`).join("") + `</div>`;
+      // boxed = the digits in reversed boxes (the MODE menu, spec §16; Build 8: SETUP too)
+      // Build 8: packed = two plain columns with the rows packed (MODE 3's eight STAT types)
+      if (m.items && m.items.length) html += `<div class="lcd-menu${m.list ? " lcd-menu-list" : ""}${m.boxed ? " lcd-menu-boxed" : ""}${m.packed ? " lcd-menu-packed" : ""}">` + m.items.map(([n, l]) => `<span class="lcd-mi">${m.boxed ? `<span class="lcd-mi-n">${n}</span>` : n}:${l}</span>`).join("") + `</div>`;
       if (m.note) html += `<div class="lcd-note">${m.note}</div>`;
+      if (m.notes) html += `<div class="lcd-note">${m.notes.map(t => `<div>${escapeHtml(t)}</div>`).join("")}</div>`;   // Build 8: Reset …? / [=] :Yes / [AC] :Cancel (spec §16), one per line
+      if (m.done) html += `<div class="lcd-done">${m.done.map(t => `<div>${escapeHtml(t)}</div>`).join("")}</div>`;      // Build 8: Reset All / Press [AC] Key, centred (spec §16)
       if (m.pages && m.page < m.pages - 1) html += `<div class="lcd-more">▼</div>`;
       if (m.upMark && m.page > 0) html += `<div class="lcd-more">▲</div>`;   // Build 7: MODE page 2 shows ▲ (spec §16; SETUP's page 2 was not described, so unchanged)
       main.innerHTML = html;
@@ -2771,6 +2976,7 @@ export function mountCalculator(host, opts = {}) {
   /* the STAT data grid. Build 6: drawn by gridHTML (shared with TABLE); the
      HTML it gives is exactly what this function built by hand before. */
   function renderTable() {
+    if (S.mode === "REG") return renderRegTable();
     const freq = S.freqOn;
     const rows = Math.max(S.data.length + 1, S.row + 1);
     const body = [];
@@ -2785,6 +2991,18 @@ export function mountCalculator(host, opts = {}) {
       body.push([{ html: String(r + 1) }, { html: xc }, ...(freq ? [{ html: fc }] : [])]);
     }
     return gridHTML("lcd-tab", [{ html: "" }, { html: "X" }, ...(freq ? [{ html: "FREQ" }] : [])], body);
+  }
+  /* Build 8 (spec §15): the A+BX grid, X | Y, in the 1-VAR grid's look. FREQ
+     on in A+BX was not measured: the grid stays X | Y and every pair counts
+     once (Blipwork choice). */
+  function renderRegTable() {
+    const rows = Math.max(S.pairs.length + 1, S.row + 1), body = [];
+    for (let r = 0; r < rows; r++) {
+      const d = S.pairs[r];
+      const cellOf = (c, v) => ((r === S.row && S.col === c) ? `<u>${S.cell !== "" ? escapeHtml(S.cell) : (v != null ? fmtNum(v) : "")}</u>` : (v != null ? fmtNum(v) : ""));
+      body.push([{ html: String(r + 1) }, { html: cellOf(0, d ? d.x : null) }, { html: cellOf(1, d ? d.y : null) }]);
+    }
+    return gridHTML("lcd-tab", [{ html: "" }, { html: "X" }, { html: "Y" }], body);
   }
 
   render();

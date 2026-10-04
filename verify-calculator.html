@@ -249,6 +249,7 @@ scenario("data entered, then SHIFT9→3(All)→= clears everything", (calc, pres
   press("shift"); press("d9");                  // SHIFT 9 -> CLR menu
   press("d3");                                  // 3 -> "All" -> confirm prompt
   press("eq");                                  // = -> Yes
+  press("ac");                                  // calculator Build 8: = shows "Reset All / Press [AC] Key" (spec §16), AC goes back to COMP
   const s = calc.state();
   const ok = s.mode === "COMP" && s.data.length === 0 && s.freqOn === false && s.screen === "comp";
   return { ok, msg: `after clear: mode=${s.mode}, data.length=${s.data.length}, freqOn=${s.freqOn}, screen=${s.screen}` };
