@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-04 11:20 (🧮 sw v94 LIVE; 📥 inbox PLANNED in INBOX-PLAN.md, nothing built; next = inbox build in a fresh session, her word)
+# Project status — updated 2026-10-04 12:15 (📥 inbox LIVE as sw v95; next = her phone test of the inbox + v94 calculator, then the Stats Quest copy)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,9 +9,17 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **📥 Inbox for the 💬 notes: PLANNED 2026-10-04 11:20, nothing built.** INBOX-PLAN.md
-  holds her four rulings, my flagged defaults, the database design and the three-worker
-  queue. Live box that day: 15 notes, 3 anonymous, 1 unread (from 3 Oct).
+- **📥 Inbox for the 💬 notes LIVE as sw v95 (Sun 2026-10-04 12:10, her "yes to both").**
+  Opus 5.5 foreman, three Opus workers one at a time (186k + 172k + 200k tokens):
+  `db43d99` back end, `d1c9a8c` admin page, `8c1c084` learner inbox, ship `7d3fc3c`.
+  Migration `feedback_inbox_2026_10_04` applied BEFORE the push: live base checked first
+  (mhq_admin_feedback matched the snapshot copy), sanity checks green (one of each
+  function, definer + pinned path + anon EXECUTE, table still revoked, 15 notes all open),
+  throwaway-learner smoke test green (inbox, unseen, seen clears, B sees nothing, wrong
+  password refused, check blocks a bad status; both learners + the note deleted after).
+  Foreman reruns: verify-inbox 220/220, verify-inbox-admin 86/86, verify-inbox-learner
+  131/131. Live: Pages `built` 7d3fc3c, sw mhq-v95, inbox.js/admin.js/screens.js/styles.css
+  byte-identical to HEAD.
 - **🧮 Calculator Builds 9 + 10 LIVE as sw v94 (Sun 2026-10-04 10:35, her "yes, ship it").**
   Ship commit `1dc72c9`; sw_check OK before the push; Pages build `built` for 1dc72c9;
   live sw reads mhq-v94; live `js/calculator.js` byte-identical to HEAD. In it: `d40c276`
@@ -39,62 +47,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 🧮 Calculator: Blipwork is the MASTER copy; Stats Quest copies
   js/calculator.js verbatim (its sw v10 matches v88's calc-memory build).
 
-## Decisions (append-only; entries before 2026-09-05 are in STATUS-ARCHIVE.md)
-- 2026-09-05 (hers): **no class join code at first login, 4-char minimum
-  passwords, default bcrypt cost, no login throttle = DELIBERATE** ("I know my
-  kids"), not a security risk. CLOSED, never re-raise.
-- 2026-09-05 (hers): low usage = mid-exams, she is deliberately not pushing;
-  the 💬 box is one learner's channel answered on WhatsApp — no reply field,
-  never rebuild the app around one learner. CLOSED.
-- 2026-09-05 (hers): fix queue APPROVED IN SCOPE (see FIX-DAY-2026-09-05-PLAN.md);
-  build-go, migrations and ship still need her word on the day.
-- 2026-09-05 (hers): exponential concept card gets its p; one-line steepness
-  reminder beside the steeper/flatter questions (reminder, not a lesson);
-  gentle return for lapsed learners; **Blip outline follows the body colour:
-  automatic outline, eyes follow.**
-- 2026-09-05 (mine, flagged): the shop_items grants came back because a later
-  migration re-created the table — new gotcha: recreating a table re-runs its
-  revoke. `_mhq_is_qual_day` + `_mhq_health` keep an explicit service_role
-  grant when sealed (send-push calls them). Her three cleanup calls default to
-  LEAVE (art-source tracked, "Hayley's way" wording, root planning docs).
-- 2026-09-05 (hers): fix-day ticks a to e all DEFAULT: gold on every submit stays;
-  exponential written y = a·b^(x − p) + q; stage-3 shop/gallery lock stays on gentle
-  return; the three cleanup calls LEAVE; Fable dispatches the workers (one Opus at a
-  time). Term toggle switched OFF for exam season (2026-09-05).
-- 2026-09-05 (mine, flagged): gentle return counts CALENDAR days (current_date minus
-  last_active_at::date >= 7, UTC like every other date rule); it uses the Blip's
-  nickname like the cookie hint does; the welcome line replaces the cookie hint for that
-  one render; MOOD is not topped up. Invisible while the Term toggle is OFF, by design.
-- 2026-09-05 (mine, flagged): the steepness reminder sits in HINT RUNG 1 (tap 💡, or
-  auto-open in Boost), not on the face of the question. Exam Focus is EN-only (her
-  2026-08-21 ruling), so the concept card has no AF twin. `func-siblings-sketch.js`
-  still writes the hyperbola and parabola as (x + p) on purpose ("her p10 order").
-- 2026-09-05 (mine, flagged): outline colour = body hue + 7°, full saturation, 67 %
-  brightness, read in HSL. PNG items follow only when flagged `outlineFollows` (nine of
-  44). Lemon's olive-gold outline and the backwards cap going whole-cap maroon on pink:
-  both shown, both reversible one line each.
-- 2026-09-05 (hers): "ship after 5, keep both": Builds 1 to 5 shipped as sw v91; Build 6
-  in a fresh session as v92; lemon outline + backwards cap STAY.
-- 2026-09-06 (hers): **"you run them, two workers, /go"**: Build 6 split into two Opus
-  workers in sequence (Fable's recommendation, the service-worker half being the risky
-  one); "ship it" → sw v92 live. "ship graph-quest" → gq-v35 live. paper-seed deleted.
-- 2026-09-06 (mine, flagged): app code is CACHE-FIRST with a 7-day `x-sw-cached-at`
-  stamp; navigations, every .html and js/app.js stay network-first; every network trip
-  is a conditional request so the browser's own HTTP cache can never pin a pre-deploy
-  file for a week; `?retry=` loads go network-first and are stored under the PLAIN url;
-  no localhost bypass (worker 2's call, accepted: the preview pane refuses service
-  workers and the headless tools start clean, so only her own Chrome could see a stale
-  file, and CLAUDE.md gotcha 10 carries the fix); images unchanged.
-- 2026-09-06 (mine, flagged): the plan's "login ≈ 15 files" was a guess. The five lazy
-  boundaries give 83; the rest is the app shell that `js/app.js` still imports
-  statically (blip.js, concepts.js, calculator.js, questions.js, the ten engines, the
-  companion renderer, styles.css, the Blip sprite, two Google fonts). Trimming the shell
-  is a separate build, her call, default leave.
-- 2026-09-06 (mine, flagged): `verify-exam-skills`' stub fixture card 2 went level 1 → 3
-  because the app now runs the REAL easiest-first rule over the fixture (the old stub
-  replaced the sorted helper wholesale); the harness exercises more real code, not less.
-  `QUEST_META` ships with `xpOnce` false everywhere (no quest has set it since
-  2026-08-22); the drift check catches the day one returns.
+## Decisions (append-only; entries before 2026-10-03 are in STATUS-ARCHIVE.md)
+- 2026-09-05 / 09-06 one-liners: rolled to STATUS-ARCHIVE.md (2026-10-04 12:15 roll).
 
 - 2026-10-03 (hers): the in-app calculator must work EXACTLY like her fx-991ZA PLUS II;
   functions school learners won't use may be skipped. Priority: ALPHA, the arrow-edit wipe,
@@ -138,7 +92,17 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   message. "Answered elsewhere" shows a short inbox line. Bug fixed = ready-made line +
   optional extra. Dot on the icon only, no push. Plan = INBOX-PLAN.md (nothing built).
 
+- 2026-10-04 (hers): "you run them, one at a time" → Opus 5.5 foreman for the inbox (plan
+  said Fable); "yes to both" → migration + sw v95 push.
+- 2026-10-04 (mine, flagged): admin list gains `canReply` (student_id not null): a named note
+  whose learner was removed is treated like an anonymous one (no textbox, own line). After an
+  outcome her textbox comes back PRE-FILLED with her reply, so reply then Bug fixed keeps the
+  text (what is in the box is what is sent). Inbox sheet labels: "From your teacher",
+  "You wrote", "Your teacher's reply". Long names step the greeting 26 → 22 px.
+
 ## ⏳ Pending on Megan
+- 📱 5 min [whenever]: close + reopen Blipwork twice (sw v95) → admin page → answer the one
+  unread note from 3 Oct → open Blipwork as a learner who sent a note and check the 📥 dot.
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v94) → calculator → try
   GCD(12;18 (ALPHA ×, then SHIFT ) for the ;) and the stats table (▼ past the last row,
   the dark bar on your line).
@@ -158,10 +122,6 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
-- **📥 Inbox build, her word, FRESH session:** read INBOX-PLAN.md (her four rulings + my
-  flagged defaults are in it, do not re-ask). Fable foreman, three Opus workers one at a
-  time (backend, admin page, learner inbox), about 0.75M tokens. Migration before push,
-  ship as sw v95.
 - **Her phone test of v94** (GCD / LCM, the stats table); anything she finds gets measured
   on the emulator first, then built (one unit per worker).
 - **Stats Quest copy, her word, fresh session:** `js/calculator.js` WITH the new calculator

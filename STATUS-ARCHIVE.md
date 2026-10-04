@@ -1,5 +1,63 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-04 12:15 roll: Decisions 2026-09-05 and 2026-09-06, moved verbatim from PROJECT-STATUS.md
+- 2026-09-05 (hers): **no class join code at first login, 4-char minimum
+  passwords, default bcrypt cost, no login throttle = DELIBERATE** ("I know my
+  kids"), not a security risk. CLOSED, never re-raise.
+- 2026-09-05 (hers): low usage = mid-exams, she is deliberately not pushing;
+  the 💬 box is one learner's channel answered on WhatsApp — no reply field,
+  never rebuild the app around one learner. CLOSED.
+- 2026-09-05 (hers): fix queue APPROVED IN SCOPE (see FIX-DAY-2026-09-05-PLAN.md);
+  build-go, migrations and ship still need her word on the day.
+- 2026-09-05 (hers): exponential concept card gets its p; one-line steepness
+  reminder beside the steeper/flatter questions (reminder, not a lesson);
+  gentle return for lapsed learners; **Blip outline follows the body colour:
+  automatic outline, eyes follow.**
+- 2026-09-05 (mine, flagged): the shop_items grants came back because a later
+  migration re-created the table — new gotcha: recreating a table re-runs its
+  revoke. `_mhq_is_qual_day` + `_mhq_health` keep an explicit service_role
+  grant when sealed (send-push calls them). Her three cleanup calls default to
+  LEAVE (art-source tracked, "Hayley's way" wording, root planning docs).
+- 2026-09-05 (hers): fix-day ticks a to e all DEFAULT: gold on every submit stays;
+  exponential written y = a·b^(x − p) + q; stage-3 shop/gallery lock stays on gentle
+  return; the three cleanup calls LEAVE; Fable dispatches the workers (one Opus at a
+  time). Term toggle switched OFF for exam season (2026-09-05).
+- 2026-09-05 (mine, flagged): gentle return counts CALENDAR days (current_date minus
+  last_active_at::date >= 7, UTC like every other date rule); it uses the Blip's
+  nickname like the cookie hint does; the welcome line replaces the cookie hint for that
+  one render; MOOD is not topped up. Invisible while the Term toggle is OFF, by design.
+- 2026-09-05 (mine, flagged): the steepness reminder sits in HINT RUNG 1 (tap 💡, or
+  auto-open in Boost), not on the face of the question. Exam Focus is EN-only (her
+  2026-08-21 ruling), so the concept card has no AF twin. `func-siblings-sketch.js`
+  still writes the hyperbola and parabola as (x + p) on purpose ("her p10 order").
+- 2026-09-05 (mine, flagged): outline colour = body hue + 7°, full saturation, 67 %
+  brightness, read in HSL. PNG items follow only when flagged `outlineFollows` (nine of
+  44). Lemon's olive-gold outline and the backwards cap going whole-cap maroon on pink:
+  both shown, both reversible one line each.
+- 2026-09-05 (hers): "ship after 5, keep both": Builds 1 to 5 shipped as sw v91; Build 6
+  in a fresh session as v92; lemon outline + backwards cap STAY.
+- 2026-09-06 (hers): **"you run them, two workers, /go"**: Build 6 split into two Opus
+  workers in sequence (Fable's recommendation, the service-worker half being the risky
+  one); "ship it" → sw v92 live. "ship graph-quest" → gq-v35 live. paper-seed deleted.
+- 2026-09-06 (mine, flagged): app code is CACHE-FIRST with a 7-day `x-sw-cached-at`
+  stamp; navigations, every .html and js/app.js stay network-first; every network trip
+  is a conditional request so the browser's own HTTP cache can never pin a pre-deploy
+  file for a week; `?retry=` loads go network-first and are stored under the PLAIN url;
+  no localhost bypass (worker 2's call, accepted: the preview pane refuses service
+  workers and the headless tools start clean, so only her own Chrome could see a stale
+  file, and CLAUDE.md gotcha 10 carries the fix); images unchanged.
+- 2026-09-06 (mine, flagged): the plan's "login ≈ 15 files" was a guess. The five lazy
+  boundaries give 83; the rest is the app shell that `js/app.js` still imports
+  statically (blip.js, concepts.js, calculator.js, questions.js, the ten engines, the
+  companion renderer, styles.css, the Blip sprite, two Google fonts). Trimming the shell
+  is a separate build, her call, default leave.
+- 2026-09-06 (mine, flagged): `verify-exam-skills`' stub fixture card 2 went level 1 → 3
+  because the app now runs the REAL easiest-first rule over the fixture (the old stub
+  replaced the sorted helper wholesale); the harness exercises more real code, not less.
+  `QUEST_META` ships with `xpOnce` false everywhere (no quest has set it since
+  2026-08-22); the drift check catches the day one returns.
+
+
 ## 2026-10-04 (Sun, 10:29 to 10:40): sw v94 shipped (Builds 9 + 10)
 
 **Her words:** "yes, ship it, and then wrap up please".
