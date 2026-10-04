@@ -1,5 +1,104 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-04 (Sun, 09:30 to 11:00): calculator Builds 9 + 10, foreman run, third probe (LOCAL only)
+
+**Her words:** "you will be running as foreman for builds 9 and 10, and then I just want you
+to fix my casio emulator, it no longer allows me to enter numbers from my keyboard ... you
+may start".
+
+**How it ran.** Fable foreman, one Opus worker per build, one at a time, no /go block (she
+did not run /go; each brief quoted her words as its authorization). Workers did not bump
+sw.js. Before Build 10 was dispatched Fable reran verify-calc-casio, verify-calculator,
+verify-calc-sum-edit, verify-steps-ux, verify-dice and verify-lazy-load fresh, pressed
+about 35 device examples at 375 px with Playwright and looked at three screenshots; the
+same again after Build 10 (28 examples, two screenshots).
+- Build 9 `d40c276` (STAT editor + two-variable lists): verify-calc-casio 827 → 980.
+  Worker 402k tokens.
+- Build 10 `52bd8e1` (GCD / LCM + Argument ERROR, 12-digit cut, DEL in templates, the
+  honest wrap test in verify-calc-sum-edit section 7): 980 → 1029, sum-edit 29 → 30. The
+  worker ran its 49 new rows against the old calculator.js first: 45 failed, as they
+  should. Worker 272k tokens.
+- Review fixes `6b9739c` (Fable, small): the three third-probe corrections below; 1029 →
+  1030. Final fresh run: 1030/1030, 77/77, 30/30, 33/33, 146/146, dice-eqn 151/151,
+  dice-func 89/89, dice-trig 83/83, dice-pat 96/96, lazy-load 52/52.
+
+**Third probe (computer-use, about 12 screenshots, written to spec §19.8).** While typing
+in the STAT editor the cell keeps its old value (typed number bottom left only). CLR 1 is
+`Clear Setup?` → `Complete!`; all three last screens say `Press [AC] key` with a small k
+(§16's "Key" was a misread). The STAT calculation screen shows 0 bottom right after AC and
+while typing; COMP does not. The first two were fixed in the review; the 0 is NOT built.
+
+**Her emulator "takes no numbers from my keyboard".** Cause: Num Lock off. The laptop was
+shut down after the overnight run and boots with Num Lock off
+(`InitialKeyboardIndicators` = 0), so the number pad sent arrows. Num Lock switched on,
+number-pad 1 2 3 proved with scan-code presses. The Pop-up Display was NOT the cause (first
+guess, wrong); it was closed as a probe leftover. Reset All was pressed on the emulator
+during the probe (factory settings, empty STAT table). Slip, harmless: a `kill` on the
+bash job left the python test server on 5191 running; Build 10's worker found and reused
+it, and it was stopped by its PID afterwards.
+
+**Probe list 2 (spec silent, the workers' choices; each has a test row a probe can overturn).**
+- STAT editor: = with nothing typed on the open row stays put (only ▼ ▲ wrap); the
+  bottom-right value follows Fix; rows past the open row are blank, heading not lit, cells
+  in the TABLE's small size; MODE, SETUP and SHIFT 9 drop a half-typed number, SHIFT 1
+  leaves it, Ins and Del-A drop it; AC on any menu opened from the editor returns to the
+  editor; CLR 1:Setup from the editor resets and returns to row 1 X, 3:All goes to COMP
+  with the data gone, after Memory the cursor is in the X column; a SETUP change that
+  removes FREQ moves the cursor to the last column; DEL on the open row does nothing; DEL,
+  Ins and Del-A send the 1-VAR "data" event; Ins keeps the cursor on the new row, Ins on
+  the open row adds a 0 row; Del-A lands on row 1 X; the short menu and Edit list have no
+  title, 1:Type does nothing.
+- A+BX: X | Y | FREQ uses FREQ's arrow rules over three columns, a new row gets FREQ 1;
+  each pair counts FREQ times (FREQ 0 drops it); the two-variable lists have no title and
+  use packed rows; sx and sy give 0 for one value; the `stat` event reports the
+  two-variable number. Device rows: maxY = 8, σy = 2,165063509; the rest computed.
+- GCD / LCM: Argument ERROR Goto puts the cursor at the end; LCM of a negative is
+  positive; GCD(0;5 = 5, LCM(0;5 = 0, GCD(0;0) = 0; one argument is Syntax ERROR; `;`
+  outside GCD( / LCM( is Syntax ERROR with Goto before the `;`; a root argument is
+  Argument ERROR; an error inside an argument stays that error; arguments can be
+  expressions; 2GCD(4;6 = 4 (implied ×); GCD( or `;` after a result starts a fresh line;
+  they work on every typing screen (CALC prompt, f(X)=, EQN); SHIFT ) does nothing in the
+  STAT editor, menus and the table view.
+- 12-digit cut: the minus does not count; it lives in the one decimal formatter, so every
+  Norm decimal gets it (EQN answers, prompts, SOLVE, read-offs); Fix is unaffected.
+- DEL: the general rule applied to x^□, ³√, log□, Abs, ˣ√, 10^□, e^□ and the mixed
+  number; a template spilled out of a fraction stays linked; same rule on f(X)=, prompts
+  and EQN entry.
+- Found and left: the STAT calculation screen's 0 bottom right; 1-VAR 5:Distr does
+  nothing; SHIFT DEL acts as DEL in the editor; the FREQ tag lights only in 1-VAR; inside
+  SOLVE every non-syntax error shows as Math ERROR; TABLE cells show ERROR for any error;
+  dead leftovers (`.lcd-tab u`, `fromGrid`); ON can leave a half-typed number waiting.
+
+**Moved out of the status head on 2026-10-04 11:00 (size gate), verbatim:**
+- **Her phone test (09:07) found more, all measured on the emulator the same morning →
+  CASIO-CALCULATOR-SPEC.md §19:** GCD/LCM missing; the STAT editor does not wrap, shows no
+  clear cursor, and SHIFT 9 does nothing inside it; the four probe-list answers (2-var
+  Sum/Var/MinMax lists, SOLVE asks only X = already right, 12-digit cut for tiny decimals,
+  DEL template rules).
+- **Before that, sw v92** (2026-09-06, fetch-verified: sw.js reads mhq-v92; js/lazy.js,
+  js/quests/load.js, js/exam/load.js, js/exam/_registry.js all 200; live screens.js
+  uses the loader; Pages build 34028439392 success). **Build 6 shipped on her "ship it":**
+  two Opus workers in sequence (bf32dc8 lazy-load, 53ecab8 service worker), ship commit
+  7d95d67, about 630k worker tokens, each reviewed by Fable with fresh runs before the
+  next. Numbers (375 px, ?local=1): login 317 files / 5 354 KB → **83 / 1 627 KB**; a
+  chapter +9 files, an exam chapter +21; with the worker warm, the third visit onwards
+  costs **5 requests / 0 KB for all five screens**.
+- New tools: `tools/count_requests.py` (cold request table), `tools/lazy_playthrough.py`
+  (18 checks incl. the blocked-module retry), `tools/sw_offline_test.py` (25 checks:
+  offline + eviction), `tools/sw_warm_requests.py`, `tools/sw_check.py`,
+  `verify-lazy-load.mjs` (52-check loader/registry drift test). `PYTHONIOENCODING=utf-8`
+  is required for `tools/harness_run.py` (documented in tools/README.md).
+- **graph-quest gq-v35 LIVE** (2026-09-06, her "ship graph-quest"): the AF steepness
+  reminder reaches the two standalone learners. **paper-seed deleted** by her 2026-09-06
+  (the hub lists exactly four edge functions: collect-cq, paper-url, paper-admin,
+  send-push).
+- Previous ships: v91 (2026-09-05 fix day Builds 1–5: back-end seal + clamp, gentle
+  return, exponential p + steepness reminder, Blip outline colour, WebP sprites; the
+  audit + briefs in `AUDIT-2026-09-05.md` and `FIX-DAY-2026-09-05-PLAN.md`), v90 (look-back
+  sheet), v89, v88, v87, v86. 12 hub chapters + 2 exam-only; 🎲 dice on 8 chapters;
+  📝 Exam Focus 7 chapters / 360 cards; 🔔 push live, 9 accounts subscribed; roster 20,
+  megzieberr visible in the picker by her ruling.
+
 ## 2026-10-04 (Sun, 08:35 to 09:30): sw v93 shipped; her phone test; second emulator probe
 
 **Her words:** "please push the new calculator to blipwork, I want to test the functions in

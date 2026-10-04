@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-04 (🧮 calculator rebuild LIVE as sw v93; her phone test + second probe → spec §19, Builds 9 + 10 next)
+# Project status — updated 2026-10-04 11:00 (🧮 calculator Builds 9 + 10 BUILT and reviewed, LOCAL only; live is still sw v93; ship waits on her word)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -13,40 +13,27 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   calculator").** Ship commit `48a2a91`; fresh 827/827 + 77/77 before the push, sw_check OK,
   Pages build success, live `js/calculator.js` byte-identical to HEAD. Blipwork only:
   **Stats Quest still has the old calculator** (and the old tan(20) Math ERROR).
-- **Her phone test (09:07) found more, all measured on the emulator the same morning →
-  CASIO-CALCULATOR-SPEC.md §19:** GCD/LCM missing; the STAT editor does not wrap, shows no
-  clear cursor, and SHIFT 9 does nothing inside it; the four probe-list answers (2-var
-  Sum/Var/MinMax lists, SOLVE asks only X = already right, 12-digit cut for tiny decimals,
-  DEL template rules). Her goal in her words: the kids "really suck at calculator work"
-  and felt overwhelmed by the stats steps, so the app must not throw them off.
-- **Before that, sw v92** (2026-09-06, fetch-verified: sw.js reads mhq-v92; js/lazy.js,
-  js/quests/load.js, js/exam/load.js, js/exam/_registry.js all 200; live screens.js
-  uses the loader; Pages build 34028439392 success). **Build 6 shipped on her "ship it":**
-  two Opus workers in sequence (bf32dc8 lazy-load, 53ecab8 service worker), ship commit
-  7d95d67, about 630k worker tokens, each reviewed by Fable with fresh runs before the
-  next. Numbers (375 px, ?local=1): login 317 files / 5 354 KB → **83 / 1 627 KB**; a
-  chapter +9 files, an exam chapter +21; with the worker warm, the third visit onwards
-  costs **5 requests / 0 KB for all five screens**.
+- **Builds 9 + 10 BUILT and reviewed Sun 2026-10-04 (her "you will be running as foreman
+  for builds 9 and 10 ... you may start"), LOCAL only, main is 4 ahead of origin:**
+  `d40c276` Build 9 (STAT editor: wrap, inverted cursor cell with its value bottom right,
+  typing bottom left, AC cancels, DEL deletes a row, SHIFT 9 / MODE / SETUP inside the
+  editor, short SHIFT 1 menu with Edit → Ins / Del-A, X | Y | FREQ, the two-variable
+  Sum / Var / MinMax lists), `52bd8e1` Build 10 (GCD / LCM + Argument ERROR, the 12-digit
+  cut, DEL inside fractions and roots), `6b9739c` review fixes from a third emulator
+  probe (spec §19.8). Fresh after the last edit: verify-calc-casio 1030/1030,
+  verify-calculator 77/77, verify-calc-sum-edit 30/30, verify-steps-ux 33/33, verify-dice
+  146/146, the four other dice pages green, verify-lazy-load 52/52. sw.js NOT bumped yet.
+- Her goal in her words: the kids "really suck at calculator work" and felt overwhelmed
+  by the stats steps, so the app must not throw them off.
 - ⚠️ **EVERY SHIP FROM NOW ON: `python tools/sw_check.py` must print OK before the push.**
   It refuses when js/ or css/ changed since the last CACHE bump. Without the bump,
   learners keep old code for up to 7 days. ⚠️ Her own Chrome on localhost:5191 holds code
   7 days too (CLAUDE.md gotcha 10: F12 → Application → Service Workers → Unregister).
   The app's preview pane refuses service workers, and the headless tools start clean.
-- New tools: `tools/count_requests.py` (cold request table), `tools/lazy_playthrough.py`
-  (18 checks incl. the blocked-module retry), `tools/sw_offline_test.py` (25 checks:
-  offline + eviction), `tools/sw_warm_requests.py`, `tools/sw_check.py`,
-  `verify-lazy-load.mjs` (52-check loader/registry drift test). `PYTHONIOENCODING=utf-8`
-  is required for `tools/harness_run.py` (documented in tools/README.md).
-- **graph-quest gq-v35 LIVE** (2026-09-06, her "ship graph-quest"): the AF steepness
-  reminder reaches the two standalone learners. **paper-seed deleted** by her 2026-09-06
-  (the hub lists exactly four edge functions: collect-cq, paper-url, paper-admin,
-  send-push).
-- Previous ships: v91 (2026-09-05 fix day Builds 1–5: back-end seal + clamp, gentle
-  return, exponential p + steepness reminder, Blip outline colour, WebP sprites; the
-  audit + briefs in `AUDIT-2026-09-05.md` and `FIX-DAY-2026-09-05-PLAN.md`), v90 (look-back
-  sheet), v89, v88, v87, v86. 12 hub chapters + 2 exam-only; 🎲 dice on 8 chapters;
-  📝 Exam Focus 7 chapters / 360 cards; 🔔 push live, 9 accounts subscribed; roster 20,
-  megzieberr visible in the picker by her ruling.
+- Previous ships: v92 (2026-09-06, Build 6 lazy-load + cache-first code), v91, v90 and
+  earlier: details in STATUS-ARCHIVE.md. 12 hub chapters + 2 exam-only; 🎲 dice on 8
+  chapters; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live; roster 20, megzieberr
+  visible in the picker by her ruling.
 - 🧮 Calculator: Blipwork is the MASTER copy; Stats Quest copies
   js/calculator.js verbatim (its sw v10 matches v88's calc-memory build).
 
@@ -130,11 +117,23 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   do nothing or give Math ERROR rather than a guessed screen. Skipped by her ruling: hyp,
   ENG, INS, ∫, CONST, CONV and friends. The short raised minus of the (−) key is NOT copied
   (house rule: the real minus sign).
+- 2026-10-04 (hers): "you will be running as foreman for builds 9 and 10 ... you may start":
+  Fable foreman, one Opus worker per build (402k + 272k tokens), local commits, no push.
+- 2026-10-04 (mine, flagged): workers do NOT bump sw.js; one bump at ship time (v94 covers
+  both builds). Third probe (spec §19.8) overruled three Build 9 guesses, fixed in the
+  review: the cursor cell keeps its old value while typing; CLR Setup says Clear Setup? →
+  Complete!; every CLR last screen says "Press [AC] key" (small k). Measured but NOT built:
+  the STAT calculation screen's 0 bottom right. The workers' other unmeasured choices are
+  listed in STATUS-ARCHIVE.md (2026-10-04, "probe list 2").
+- 2026-10-04 (mine, flagged): on the device SHIFT 1 INSIDE the data editor is the short
+  menu, so a read-off needs AC first. Blipwork's read-off quests start on the calculation
+  screen and the concept card already says "type the values, AC"; any Stats Quest hint
+  that goes straight from typing to SHIFT 1 must gain the AC at the copy.
 
 ## ⏳ Pending on Megan
-- 💻 1 line [blocking the fixes]: say "go" for Builds 9 + 10 (spec §19.7), one Opus worker
-  each, in a FRESH session.
-- 💻 1 line [whenever]: say "copy it to Stats Quest" (best after Builds 9 + 10 ship).
+- 💻 1 line [blocking the fixes going live]: say "ship it" → sw v94 (Builds 9 + 10, GitHub
+  only, no Supabase), then test GCD and the stats table on your phone.
+- 💻 1 line [whenever]: say "copy it to Stats Quest" (best after v94 ships).
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v92) → play one round in any
   chapter → 📝 Exam Focus → one card. While there: your Blip's outline in his body colour,
   the exponential card reads y = a·b^(x − p) + q. Optional: airplane mode, reopen a
@@ -150,18 +149,24 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
-- **Calculator Builds 9 + 10 (spec §19.7), her word, fresh session.** Build 9 = STAT
-  editor (wrap, inverted cell + value bottom right, typing bottom left with a blinking
-  cursor, AC cancels typing, DEL deletes a row, SHIFT 9 / MODE / SETUP inside the editor,
-  short SHIFT 1 menu with Edit → Ins / Del-A, the A+BX Sum / Var / MinMax menus).
-  Build 10 = COMP (GCD/LCM + Argument ERROR, the 12-digit cut, the DEL template rules).
-  Each: verify rows from §19, all verify pages green, sw bump to v94 / v95, sw_check OK.
-- **Stats Quest copy after that:** `js/calculator.js` WITH the new calculator CSS from
-  `css/styles.css` (`.calc-ind` slots, error screen, `.calc-logb-base`, `.calc-abs-body`,
-  `.calc-comb`, `.calc-mixed-whole`, `.ind-fix`, `.lcd-pr*`, `.lcd-solve`, `.lcd-sv-*`,
-  `.lcd-tbl*`, `.lcd-eqn*`, `.lcd-ineq`, `.lcd-menu-*`, `.lcd-mi-n`, `.lcd-hat`,
-  `.lcd-done`, plus whatever Builds 9 + 10 add), re-check Stats Quest's own calculator
-  consumers, bump its sw, push.
+- **Ship v94 on her "ship it" (Builds 9 + 10 + review fixes, 4 local commits).** Plan: run
+  every verify page + `node verify-lazy-load.mjs` fresh, public-repo scan of the 4-commit
+  range, bump `sw.js` CACHE mhq-v93 → mhq-v94, ship commit, push (GitHub Pages only, no
+  migration), `python tools/sw_check.py` OK, Pages build `built`, live sw reads v94, live
+  calculator.js matches HEAD. Then her phone test: GCD / LCM, the stats table.
+- **Stats Quest copy after that, her word:** `js/calculator.js` WITH the new calculator
+  CSS from `css/styles.css` (`.calc-ind` slots, error screen, `.calc-logb-base`,
+  `.calc-abs-body`, `.calc-comb`, `.calc-mixed-whole`, `.ind-fix`, `.lcd-pr*`,
+  `.lcd-solve`, `.lcd-sv-*`, `.lcd-tbl*`, `.lcd-eqn*`, `.lcd-ineq`, `.lcd-menu-*`,
+  `.lcd-mi-n`, `.lcd-hat`, `.lcd-done`, `.lcd-ov`; Builds 9 + 10 added no new rules, only
+  the bare class `lcd-stat` and a CSS comment), re-check Stats Quest's own calculator
+  consumers AND its hints (SHIFT 1 inside the data editor now needs AC first), bump its
+  sw, push.
+- **Optional calculator leftovers, her one-line call, default leave:** the 0 bottom right
+  on the STAT calculation screen (spec §19.8, measured, many test rows assert the blank);
+  1-VAR 5:Distr does nothing; the FREQ tag lights only in 1-VAR; SHIFT DEL acts as DEL in
+  the editor; inside SOLVE a bad GCD argument shows Math ERROR; dead leftovers
+  (`.lcd-tab u` rule, `fromGrid` path).
 - **Optional shell trim, her one-line call, default leave:** lazy-load the ten engines,
   `concepts.js`, `calculator.js` and the companion renderer behind their first use;
   login could drop from 83 files toward 40. Same two-worker pattern, one sw bump.
