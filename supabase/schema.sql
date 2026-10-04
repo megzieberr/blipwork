@@ -1728,7 +1728,8 @@ begin
              'status', f.status,
              'reply', f.reply,
              'repliedAt', f.replied_at,
-             'seenAt', f.seen_at) as r,
+             'seenAt', f.seen_at,
+             'canReply', (f.student_id is not null)) as r,
            f.created_at as r_created,
            f.read_at    as r_read
       from public.feedback f

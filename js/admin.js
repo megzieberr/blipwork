@@ -539,6 +539,91 @@ function feedbackSection() {
   list.appendChild(el("p", "muted small", "Loading…"));
   sec.appendChild(list);
 
+  /* 📥 INBOX-PLAN.md (2026-10-04), "Her admin page": answering a note.
+     One outcome per note; a later action replaces the earlier one, and Undo
+     puts it back to open. canReply (not !anon) decides the textbox: it is
+     false for an anonymous note AND for a named note whose learner was
+     removed, the two kinds the server refuses a reply on. The textbox comes
+     back pre-filled with her current text, so "reply, then Bug fixed" keeps
+     what she typed as the extra line; whatever is in the box is what is
+     sent. textContent for her text and the learner's alike. */
+  const OUTCOME_CHIP = { replied: "Replied", fixed: "Fixed", addressed: "Answered elsewhere" };
+  const outcomeBlock = (r) => {
+    const box = el("div", "adm-fb-out");
+    const status = OUTCOME_CHIP[r.status] ? r.status : "open";
+    const canReply = !!r.canReply;
+
+    if (status !== "open" || r.seenAt) {
+      const chips = el("div", "adm-fb-chips");
+      if (status !== "open") chips.appendChild(el("span", `adm-fb-chip ${status}`, OUTCOME_CHIP[status]));
+      if (r.seenAt) chips.appendChild(el("span", "adm-fb-seen", "seen ✓"));
+      box.appendChild(chips);
+    }
+    if (status !== "open" && r.reply) {
+      const said = el("div", "adm-fb-said");
+      said.appendChild(el("span", "adm-fb-said-label", "Your reply"));
+      const t = el("div", "adm-fb-said-text");
+      t.textContent = r.reply;
+      said.appendChild(t);
+      box.appendChild(said);
+    }
+
+    let text = null;
+    if (canReply) {
+      text = el("textarea", "login-input adm-fb-text");
+      text.rows = 2; text.maxLength = 1000;
+      text.placeholder = "Type a reply";
+      text.value = status !== "open" && r.reply ? r.reply : "";
+      box.appendChild(text);
+    }
+
+    const btns = el("div", "adm-fb-btns");
+    const err = el("p", "adm-fb-err");
+    err.hidden = true;
+    const all = [];
+    const add = (label, cls, next) => {
+      const b = el("button", `btn small adm-fb-act ${cls}`);
+      b.textContent = label;
+      b.dataset.status = next;
+      b.addEventListener("click", () => act(next));
+      btns.appendChild(b); all.push(b);
+      return b;
+    };
+    if (canReply) add("Send reply", "primary", "replied");
+    add("Bug fixed", "ghost", "fixed");
+    add("Answered elsewhere", "ghost", "addressed");
+    if (status !== "open") add("Undo", "ghost adm-fb-undo", "open");
+    box.appendChild(btns);
+
+    if (!canReply) {
+      box.appendChild(el("p", "adm-fb-quiet", r.anon
+        ? "Anonymous, so no message can be sent. This tick is for your own list."
+        : "This learner is no longer in the class, so no message can be sent. This tick is for your own list."));
+    }
+    box.appendChild(err);
+
+    const say = (msg) => { err.textContent = msg; err.hidden = false; };
+    const setBusy = (on) => { all.forEach(b => { b.disabled = on; }); if (text) text.disabled = on; };
+
+    async function act(next) {
+      err.hidden = true;
+      // Undo clears; everything else sends whatever is in the box (nothing
+      // at all when there is no box).
+      const reply = next === "open" || !text ? null : (text.value.trim() || null);
+      if (next === "replied" && !reply) { say("Type a reply first."); return; }
+      setBusy(true);                              // disable BEFORE the await
+      let res = null;
+      try { res = await api.adminFeedbackReply(pw, r.id, next, reply); } catch { /* handled below */ }
+      if (res && res.ok) { refresh(); return; }
+      setBusy(false);
+      const code = res && res.error;
+      say(code === "empty" ? "Type a reply first."
+        : code === "auth" ? "Admin password rejected. Reload and log in again."
+        : "Couldn't save that. Try again.");
+    }
+    return box;
+  };
+
   const draw = (data) => {
     clear(list);
     const rows = (data && data.rows) || [];
@@ -572,6 +657,7 @@ function feedbackSection() {
         snap.querySelector(".adm-fb-snap-text").textContent = r.snapshot;
         main.appendChild(snap);
       }
+      main.appendChild(outcomeBlock(r));
       row.appendChild(main);
       const tick = el("button", "btn ghost small adm-fb-tick", r.readAt ? "✓ Read" : "Mark read");
       tick.addEventListener("click", async () => {

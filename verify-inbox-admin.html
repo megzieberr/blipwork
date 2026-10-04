@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inbox admin · verification</title>
+<link rel="stylesheet" href="./css/styles.css">
+<style>
+  body{font-family:"JetBrains Mono",monospace;padding:24px;max-width:1100px;margin:0 auto}
+  #banner{font-weight:700;font-size:18px;padding:14px 18px;border-radius:14px;margin:14px 0 22px;border:1px solid var(--brd)}
+  #banner.pass{background:var(--good-bg);color:var(--good)} #banner.fail{background:var(--bad-bg);color:var(--bad)}
+  pre{white-space:pre-wrap;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);padding:12px;border-radius:10px;border:1px solid var(--brd)}
+  h2{font-size:15px;margin:22px 0 10px}
+  ul.fails{list-style:none;font-size:12px;line-height:1.6;color:var(--bad);margin-top:8px}
+  /* the real admin page, at phone width: she answers notes on her phone too */
+  #frame{width:375px;height:900px;border:1px solid var(--brd);border-radius:10px;background:#070b16}
+</style>
+</head>
+<body>
+<h1 style="font-family:'Space Grotesk',sans-serif">Inbox admin · verification</h1>
+<p class="muted small">INBOX-PLAN.md (2026-10-04), unit 2: her admin page. <code>feedbackSection</code> is private to
+  <code>js/admin.js</code>, so this page drives the REAL <code>admin.html?local=1</code> in a 375 px iframe: it seeds
+  notes through the local backend (same origin, same localStorage), logs in with the local demo password, clicks the
+  real buttons, and reads the RAW <code>mhq.feedback</code> rows back after every action. It adds its own notes and
+  learners (tagged with a random token) and never clears anything else.</p>
+<div id="banner">running…</div>
+
+<h2>1 · what each row shows</h2>
+<pre id="shape">…</pre>
+<h2>2 · a named note, start to finish</h2>
+<pre id="flow">…</pre>
+<h2>3 · notes nobody can be messaged about</h2>
+<pre id="nomsg">…</pre>
+<h2>4 · errors: one calm line, buttons come back</h2>
+<pre id="errs">…</pre>
+<h2>5 · phone width and house rules</h2>
+<pre id="phone">…</pre>
+
+<h2>failures</h2>
+<ul class="fails" id="failList"></ul>
+
+<iframe id="frame" title="admin page under test"></iframe>
+
+<script type="module">
+import { LocalBackend as B } from "./js/local-backend.js";
+
+let total = 0, passed = 0; const fails = [];
+const tick = (cond, label) => { total++; if (cond) passed++; else fails.push(label); return cond; };
+const out = (id, lines) => { document.getElementById(id).textContent = lines.join("\n"); };
+const J = JSON.stringify;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const waitFor = async (fn, ms = 4000) => { const t0 = Date.now(); for (;;) { let v; try { v = fn(); } catch { v = null; } if (v) return v; if (Date.now() - t0 > ms) return null; await sleep(25); } };
+
+const ADMIN = "admin", PW = "pw12";
+const TOK = Math.random().toString(36).slice(2, 8);
+const rawRows = () => { try { return JSON.parse(localStorage.getItem("mhq.feedback")) || []; } catch { return []; } };
+const raw = id => rawRows().find(r => r.id === id);
+const students = () => { try { return JSON.parse(localStorage.getItem("mhq.students")) || {}; } catch { return {}; } };
+
+const ANON_LINE = "Anonymous, so no message can be sent. This tick is for your own list.";
+const GONE_LINE = "This learner is no longer in the class, so no message can be sent. This tick is for your own list.";
+
+/* ---------------- seed: our own learners and notes ---------------- */
+await B.adminLogin(ADMIN); // runs the local seed (admin password "admin")
+const N = `verify_iba_n_${TOK}`, R = `verify_iba_r_${TOK}`;
+tick((await B.signup(N, "Named " + TOK, PW)).ok === true, "setup: signup the named learner");
+tick((await B.signup(R, "Removed " + TOK, PW)).ok === true, "setup: signup the learner who will be removed");
+const send = async (u, body, anon = false) => {
+  const r = await B.sendFeedback(u, PW, body, anon, "play:gt5", null);
+  tick(r.ok === true, `setup: send "${body}"`);
+  const rows = rawRows(); return rows[rows.length - 1].id;
+};
+const B_OPEN = `open note ${TOK}`, B_REPLIED = `replied note ${TOK}`, B_FIXED = `fixed note ${TOK}`,
+      B_ADDR = `addressed note ${TOK}`, B_ANON = `anon note ${TOK}`, B_GONE = `removed learner note ${TOK}`,
+      B_HTML = `<b>x</b> ${TOK}`, B_MISSING = `vanishing note ${TOK}`;
+const idOpen = await send(N, B_OPEN);
+const idReplied = await send(N, B_REPLIED);
+const idHtml = await send(N, B_HTML);
+const idMissing = await send(N, B_MISSING);
+const idAnon = await send(N, B_ANON, true);
+const idGone = await send(R, B_GONE);
+tick((await B.adminFeedbackReply(ADMIN, idReplied, "replied", "Pre-typed answer")).ok, "setup: reply to one note");
+tick((await B.inboxSeen(N, PW)).ok, "setup: the learner opens their inbox (seen)");
+const idFixed = await send(N, B_FIXED);
+const idAddr = await send(N, B_ADDR);
+await sleep(4);
+tick((await B.adminFeedbackReply(ADMIN, idFixed, "fixed", null)).ok, "setup: mark one fixed");
+tick((await B.adminFeedbackReply(ADMIN, idAddr, "addressed", null)).ok, "setup: mark one answered elsewhere");
+const rId = Object.values(students()).find(s => s.username === R).id;
+tick((await B.adminRemoveStudent(ADMIN, rId)).ok, "setup: remove the second learner from the roster");
+
+/* ---------------- the real admin page, logged in ---------------- */
+const frame = document.getElementById("frame");
+frame.src = "./admin.html?local=1";
+await new Promise(r => frame.addEventListener("load", r, { once: true }));
+const doc = () => frame.contentDocument;
+frame.contentWindow.alert = () => { frame.contentWindow.__alerted = true; };
+const pwIn = await waitFor(() => doc().querySelector("input.login-input[type=password]"));
+tick(!!pwIn, "admin page: login box is there");
+pwIn.value = ADMIN;
+doc().querySelector("button.btn.primary").click();
+const rowOf = body => [...doc().querySelectorAll(".adm-fb-row")].find(r => {
+  const b = r.querySelector(".adm-fb-body"); return b && b.textContent === body;
+});
+tick(!!(await waitFor(() => rowOf(B_OPEN), 8000)), "admin page: the feedback list loaded with our notes");
+
+const view = body => {
+  const r = rowOf(body); if (!r) return null;
+  const chip = r.querySelector(".adm-fb-chip");
+  const ta = r.querySelector("textarea.adm-fb-text");
+  const quiet = r.querySelector(".adm-fb-quiet");
+  const said = r.querySelector(".adm-fb-said-text");
+  const err = r.querySelector(".adm-fb-err");
+  return {
+    row: r, chip: chip ? chip.textContent : null, seen: !!r.querySelector(".adm-fb-seen"),
+    seenText: (r.querySelector(".adm-fb-seen") || {}).textContent || null,
+    buttons: [...r.querySelectorAll(".adm-fb-act")].map(b => b.textContent),
+    ta, taValue: ta ? ta.value : null, quiet: quiet ? quiet.textContent : null,
+    said: said ? said.textContent : null, err: err && !err.hidden ? err.textContent : null,
+    btn: label => [...r.querySelectorAll(".adm-fb-act")].find(b => b.textContent === label),
+    tick: r.querySelector(".adm-fb-tick"),
+  };
+};
+const THREE = J(["Send reply", "Bug fixed", "Answered elsewhere"]);
+
+/* ============================================================
+   1 · what each row shows
+   ============================================================ */
+{
+  const L = [];
+  const o = view(B_OPEN);
+  tick(o && o.chip === null && !o.seen, "open note: no status chip, no seen");
+  tick(o && J(o.buttons) === THREE, `named open note: Send reply, Bug fixed, Answered elsewhere (got ${J(o && o.buttons)})`);
+  tick(o && o.ta && o.taValue === "", "named open note: an empty textbox");
+  tick(o && o.quiet === null, "named note: no 'no message' line");
+  tick(o && o.said === null, "open note: no text shown back");
+
+  const rp = view(B_REPLIED);
+  tick(rp && rp.chip === "Replied", `replied note: chip "Replied" (got ${J(rp && rp.chip)})`);
+  tick(rp && rp.seen && rp.seenText === "seen ✓", `replied + opened by the learner: "seen ✓" (got ${J(rp && rp.seenText)})`);
+  tick(rp && rp.said === "Pre-typed answer", "replied note: her text shown back");
+  tick(rp && rp.taValue === "Pre-typed answer", "replied note: textbox pre-filled with her current reply");
+  tick(rp && J(rp.buttons) === J(["Send reply", "Bug fixed", "Answered elsewhere", "Undo"]), `replied note: the three buttons plus Undo (got ${J(rp && rp.buttons)})`);
+
+  const fx = view(B_FIXED);
+  tick(fx && fx.chip === "Fixed", `fixed note: chip "Fixed" (got ${J(fx && fx.chip)})`);
+  tick(fx && !fx.seen, "fixed note not yet opened: no seen ✓");
+  tick(fx && fx.said === null && fx.taValue === "", "fixed with no text: nothing shown back, box empty");
+  const ad = view(B_ADDR);
+  tick(ad && ad.chip === "Answered elsewhere", `addressed note: chip "Answered elsewhere" (got ${J(ad && ad.chip)})`);
+
+  const an = view(B_ANON);
+  tick(an && J(an.buttons) === J(["Bug fixed", "Answered elsewhere"]), `anonymous note: only Bug fixed + Answered elsewhere (got ${J(an && an.buttons)})`);
+  tick(an && an.ta === null, "anonymous note: no textbox");
+  tick(an && an.quiet === ANON_LINE, `anonymous note: the exact line (got ${J(an && an.quiet)})`);
+
+  const gn = view(B_GONE);
+  tick(gn && J(gn.buttons) === J(["Bug fixed", "Answered elsewhere"]), `removed learner's note: two buttons only (got ${J(gn && gn.buttons)})`);
+  tick(gn && gn.ta === null, "removed learner's note: no textbox");
+  tick(gn && gn.quiet === GONE_LINE, `removed learner's note: the exact line (got ${J(gn && gn.quiet)})`);
+  tick(gn && gn.row.querySelector(".adm-fb-name").textContent === "Removed " + TOK, "removed learner's note still shows the name");
+
+  const h = rowOf(B_HTML);
+  const hb = h && h.querySelector(".adm-fb-body");
+  tick(hb && hb.textContent === B_HTML && !hb.querySelector("b"), "a learner's <b>x</b> renders as literal text, not bold");
+
+  const mr = o && o.tick;
+  tick(mr && mr.className === "btn ghost small adm-fb-tick" && (mr.textContent === "Mark read" || mr.textContent === "✓ Read"), "Mark read is still there, unchanged");
+  L.push(`open ${J(o && o.buttons)}`, `replied ${J(rp && [rp.chip, rp.seenText, rp.taValue])}`, `anon ${J(an && an.quiet)}`, `removed ${J(gn && gn.quiet)}`);
+  out("shape", L);
+}
+
+/* ============================================================
+   2 · a named note, start to finish
+   ============================================================ */
+{
+  const L = [];
+  // Send reply with an empty box: one line, nothing written
+  const before = J(raw(idOpen));
+  view(B_OPEN).btn("Send reply").click();
+  await sleep(60);
+  let v = view(B_OPEN);
+  tick(v.err === "Type a reply first.", `empty Send reply: "Type a reply first." (got ${J(v.err)})`);
+  tick(J(raw(idOpen)) === before, "empty Send reply: nothing written");
+  v.ta.value = "   ";
+  v.btn("Send reply").click(); await sleep(60);
+  tick(view(B_OPEN).err === "Type a reply first." && J(raw(idOpen)) === before, "spaces only: same line, nothing written");
+
+  // Send reply with text; the buttons are disabled while the call is in flight
+  v = view(B_OPEN);
+  v.ta.value = "Here is how: <i>tip</i>";
+  const row0 = v.row;
+  v.btn("Send reply").click();
+  const acts = [...row0.querySelectorAll(".adm-fb-act")];
+  tick(acts.length === 3 && acts.every(b => b.disabled), "in flight: every action button is disabled BEFORE the await");
+  tick(row0.querySelector("textarea").disabled, "in flight: the textbox is disabled too");
+  tick(!!(await waitFor(() => { const x = view(B_OPEN); return x && x.chip === "Replied"; })), "Send reply: the list refreshes to Replied");
+  let r = raw(idOpen);
+  tick(r.status === "replied" && r.reply === "Here is how: <i>tip</i>", `Send reply: writes replied + the text (got ${J([r.status, r.reply])})`);
+  tick(!!r.readAt, "acting on a note also marks it read");
+  v = view(B_OPEN);
+  tick(v.taValue === "Here is how: <i>tip</i>", "after Send reply: textbox pre-filled with her reply");
+  tick(v.said === "Here is how: <i>tip</i>" && !v.row.querySelector(".adm-fb-said-text i"), "her text shown back as literal text");
+  tick(v.buttons.includes("Undo"), "after an outcome: Undo is there");
+
+  // reply, then Bug fixed: her typed text stays as the extra line
+  v.btn("Bug fixed").click();
+  tick(!!(await waitFor(() => view(B_OPEN).chip === "Fixed")), "Bug fixed: chip Fixed");
+  r = raw(idOpen);
+  tick(r.status === "fixed" && r.reply === "Here is how: <i>tip</i>", `reply then Bug fixed keeps the text (got ${J([r.status, r.reply])})`);
+  tick(view(B_OPEN).taValue === "Here is how: <i>tip</i>", "after Bug fixed: box still pre-filled");
+
+  // she clears the box: Answered elsewhere goes with no text
+  v = view(B_OPEN); v.ta.value = "";
+  v.btn("Answered elsewhere").click();
+  tick(!!(await waitFor(() => view(B_OPEN).chip === "Answered elsewhere")), "Answered elsewhere: chip");
+  r = raw(idOpen);
+  tick(r.status === "addressed" && r.reply === null, `cleared box + Answered elsewhere: addressed, no text (got ${J([r.status, r.reply])})`);
+  tick(view(B_OPEN).said === null && view(B_OPEN).taValue === "", "no text: nothing shown back, box empty");
+
+  // Bug fixed with an extra line typed fresh
+  v = view(B_OPEN); v.ta.value = "  Thanks!  ";
+  v.btn("Bug fixed").click();
+  tick(!!(await waitFor(() => view(B_OPEN).chip === "Fixed")), "Bug fixed again: chip Fixed");
+  r = raw(idOpen);
+  tick(r.status === "fixed" && r.reply === "Thanks!", `Bug fixed sends the box text, trimmed (got ${J([r.status, r.reply])})`);
+
+  // Undo: back to open, reply cleared
+  view(B_OPEN).btn("Undo").click();
+  tick(!!(await waitFor(() => { const x = view(B_OPEN); return x && x.chip === null && !x.buttons.includes("Undo"); })), "Undo: chip and Undo gone");
+  r = raw(idOpen);
+  tick(r.status === "open" && r.reply === null && r.repliedAt === null && r.seenAt === null, `Undo: open, reply cleared (got ${J([r.status, r.reply, r.repliedAt])})`);
+  v = view(B_OPEN);
+  tick(v.taValue === "" && v.said === null && J(v.buttons) === THREE, "after Undo: empty box, three buttons");
+  L.push(`final raw ${J({ status: r.status, reply: r.reply })}`);
+  out("flow", L);
+}
+
+/* ============================================================
+   3 · notes nobody can be messaged about
+   ============================================================ */
+{
+  const L = [];
+  view(B_ANON).btn("Bug fixed").click();
+  tick(!!(await waitFor(() => view(B_ANON).chip === "Fixed")), "anonymous Bug fixed: chip Fixed");
+  let r = raw(idAnon);
+  tick(r.status === "fixed" && r.reply === null && r.studentId === null && r.name === null, `anonymous Bug fixed: fixed, no text, still nameless (got ${J([r.status, r.reply])})`);
+  let v = view(B_ANON);
+  tick(v.ta === null && v.quiet === ANON_LINE && J(v.buttons) === J(["Bug fixed", "Answered elsewhere", "Undo"]), `anonymous with an outcome: no box, the line, two buttons + Undo (got ${J(v.buttons)})`);
+  v.btn("Undo").click();
+  tick(!!(await waitFor(() => view(B_ANON).chip === null)), "anonymous Undo: back to open");
+  tick(raw(idAnon).status === "open", "anonymous Undo: raw row open");
+
+  view(B_GONE).btn("Answered elsewhere").click();
+  tick(!!(await waitFor(() => view(B_GONE).chip === "Answered elsewhere")), "removed learner: Answered elsewhere lands");
+  r = raw(idGone);
+  tick(r.status === "addressed" && r.reply === null, `removed learner: addressed, no text (got ${J([r.status, r.reply])})`);
+  tick(view(B_GONE).quiet === GONE_LINE, "removed learner: the line stays");
+  L.push(`anon ${J(raw(idAnon).status)} · removed ${J(raw(idGone).status)}`);
+  out("nomsg", L);
+}
+
+/* ============================================================
+   4 · errors
+   ============================================================ */
+{
+  const L = [];
+  // auth: the admin password changed underneath her
+  const meta = JSON.parse(localStorage.getItem("mhq.meta"));
+  const realPw = meta.adminPassword;
+  localStorage.setItem("mhq.meta", J({ ...meta, adminPassword: "changed-" + TOK }));
+  const before = J(raw(idFixed));
+  let v = view(B_FIXED);
+  v.btn("Answered elsewhere").click();
+  const authMsg = await waitFor(() => view(B_FIXED).err);
+  tick(authMsg === "Admin password rejected. Reload and log in again.", `auth: the log-in-again line (got ${J(authMsg)})`);
+  tick(J(raw(idFixed)) === before, "auth: nothing written");
+  v = view(B_FIXED);
+  tick([...v.row.querySelectorAll(".adm-fb-act")].every(b => !b.disabled) && !v.ta.disabled, "auth: buttons and box enabled again");
+  localStorage.setItem("mhq.meta", J({ ...JSON.parse(localStorage.getItem("mhq.meta")), adminPassword: realPw }));
+
+  // anything else: the note vanished from under her ('missing')
+  localStorage.setItem("mhq.feedback", J(rawRows().filter(x => x.id !== idMissing)));
+  v = view(B_MISSING);
+  v.btn("Bug fixed").click();
+  const miss = await waitFor(() => view(B_MISSING).err);
+  tick(miss === "Couldn't save that. Try again.", `other error: "Couldn't save that. Try again." (got ${J(miss)})`);
+  tick([...view(B_MISSING).row.querySelectorAll(".adm-fb-act")].every(b => !b.disabled), "other error: buttons enabled again");
+  tick(!frame.contentWindow.__alerted, "no alert() used");
+  L.push(`auth -> ${J(authMsg)}`, `missing -> ${J(miss)}`);
+  out("errs", L);
+}
+
+/* ============================================================
+   5 · phone width and house rules
+   ============================================================ */
+{
+  const L = [];
+  const d = doc();
+  tick(frame.clientWidth <= 377, `the admin page is running at phone width (${frame.clientWidth}px)`);
+  tick(d.documentElement.scrollWidth <= d.documentElement.clientWidth + 1, `no sideways scroll at 375 px (scrollWidth ${d.documentElement.scrollWidth}, clientWidth ${d.documentElement.clientWidth})`);
+  const ours = [B_OPEN, B_REPLIED, B_FIXED, B_ADDR, B_ANON, B_GONE].map(rowOf).filter(Boolean);
+  const btns = ours.flatMap(r => [...r.querySelectorAll(".adm-fb-act")]);
+  tick(btns.length > 0 && btns.every(b => b.getBoundingClientRect().height >= 44), `every action button is at least 44px tall (min ${Math.min(...btns.map(b => Math.round(b.getBoundingClientRect().height)))}px)`);
+  const fits = ours.every(r => { const box = r.getBoundingClientRect(); return [...r.querySelectorAll(".adm-fb-act")].every(b => b.getBoundingClientRect().right <= box.right + 0.5); });
+  tick(fits, "every action button wraps inside its row (none pokes out on the right)");
+  const visible = ours.map(r => r.querySelector(".adm-fb-out").textContent).join(" ");
+  tick(!visible.includes("—"), "no em-dash in any text the outcome blocks show");
+  const src = await (await fetch("./js/admin.js", { cache: "reload" })).text();
+  const blk = src.slice(src.indexOf("const OUTCOME_CHIP"), src.indexOf("const draw = (data)"));
+  tick(blk.length > 0 && !/alert\(/.test(blk), "admin.js outcome block: no alert()");
+  tick(blk.length > 0 && !/\.innerHTML\s*=/.test(blk), "admin.js outcome block: never assigns innerHTML");
+  tick(/t\.textContent = r\.reply;/.test(blk), "admin.js outcome block: her text goes in by textContent");
+  tick(/setBusy\(true\);\s*\/\/ disable BEFORE the await\s*\n\s*let res = null;\s*\n\s*try \{ res = await api\.adminFeedbackReply\(pw, r\.id, next, reply\)/.test(src), "admin.js: buttons disabled before the await, with the page's own pw");
+  tick(/api\.adminFeedbackRead\(pw, r\.id, !r\.readAt\)/.test(src), "admin.js: Mark read's call is unchanged");
+  L.push(`buttons checked ${btns.length}`, `scrollWidth ${d.documentElement.scrollWidth}`);
+  out("phone", L);
+}
+
+/* ---------------- banner ---------------- */
+const list = document.getElementById("failList");
+fails.forEach(msg => { const li = document.createElement("li"); li.textContent = "✗ " + msg; list.appendChild(li); });
+const banner = document.getElementById("banner");
+const allOk = passed === total;
+banner.className = allOk ? "pass" : "fail";
+banner.textContent = allOk
+  ? `✓ ALL GOOD — ${passed}/${total} checks passed`
+  : `✗ ${total - passed} check(s) failed — ${passed}/${total} checks passed`;
+window.__VERIFY__ = { total, passed, ok: allOk, fails };
+console.log(`[verify-inbox-admin] ${passed}/${total} — ${allOk ? "OK" : "FAIL"}`);
+if (fails.length) console.log("FAILS:\n" + fails.join("\n"));
+</script>
+</body>
+</html>

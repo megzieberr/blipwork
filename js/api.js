@@ -117,7 +117,10 @@
                   adminFeedbackRead(pw,id,read) — set/clear read_at.
                   Since INBOX-PLAN.md (2026-10-04) every adminFeedback row
                     also carries status ("open"|"replied"|"fixed"|
-                    "addressed"), reply, repliedAt, seenAt.
+                    "addressed"), reply, repliedAt, seenAt, and canReply
+                    (true when the note still points at a learner on the
+                    roster; false for anonymous AND for a named note whose
+                    learner was removed, the rows a reply is refused on).
      inbox:       adminFeedbackReply(pw,id,status,reply) — her one outcome
                     per note; a later one replaces the earlier. "open" is
                     Undo (clears reply/repliedAt/seenAt). "replied" needs

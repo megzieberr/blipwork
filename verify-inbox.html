@@ -64,6 +64,9 @@
 <h2>13 · the schema.sql mirror and js/supabase.js</h2>
 <pre id="mirror">…</pre>
 
+<h2>14 · canReply: who a reply can still reach (foreman review, unit 2)</h2>
+<pre id="canreply">…</pre>
+
 <h2>failures</h2>
 <ul class="fails" id="failList"></ul>
 
@@ -534,6 +537,49 @@ const FOUR = ["mhq_admin_feedback_reply", "mhq_admin_feedback", "mhq_inbox", "mh
   const api = await (await fetch("./js/api.js", { cache: "reload" })).text();
   ["adminFeedbackReply(pw,id,status,reply)", "inbox(u,p)", "inboxSeen(u,p)"].forEach(n => tick(api.includes(n), `api.js doc block: ${n}`));
   out("mirror", L.concat([`checked ${FOUR.length} function bodies across both files`]));
+}
+
+/* ============================================================
+   14 · canReply. `anon` means "sent anonymously" (display_name null);
+   canReply means "student_id is not null", the test the reply function
+   refuses on. They differ for a named note whose learner was removed
+   from the roster (on delete set null): a name, but nobody to reach.
+   ============================================================ */
+{
+  const L = [];
+  const C = await freshUser("c");
+  const c1 = await send(C, "a note from a learner who will be removed");
+  const cRec = Object.values(JSON.parse(localStorage.getItem("mhq.students")) || {}).find(s => s.username === C);
+  let list = await B.adminFeedback(ADMIN);
+  const byId = id => list.rows.find(x => x.id === id);
+  tick(list.rows.every(x => typeof x.canReply === "boolean"), "adminFeedback: every row carries a boolean canReply");
+  tick(byId(aAnon) && byId(aAnon).canReply === false, `canReply: anonymous row -> false (got ${J(byId(aAnon) && byId(aAnon).canReply)})`);
+  tick(byId(a1) && byId(a1).canReply === true, `canReply: named row -> true (got ${J(byId(a1) && byId(a1).canReply)})`);
+  tick(byId(c1) && byId(c1).canReply === true, "canReply: C's note -> true before C is removed");
+  const rm = await B.adminRemoveStudent(ADMIN, cRec.id);
+  tick(rm.ok === true, "setup: remove learner C from the roster");
+  tick(raw(c1) && raw(c1).studentId === null, "remove learner: the note's studentId is set null (mirrors on delete set null)");
+  list = await B.adminFeedback(ADMIN);
+  const lc = byId(c1);
+  tick(lc && lc.canReply === false, `canReply: named row whose learner was removed -> false (got ${J(lc && lc.canReply)})`);
+  tick(lc && lc.anon === false && lc.name === "Inbox c", `removed learner's note keeps its name and is NOT anonymous (got ${J(lc && [lc.anon, lc.name])})`);
+  const rr = await B.adminFeedbackReply(ADMIN, c1, "replied", "hello?");
+  tick(rr.ok === false && rr.error === "anon", `removed learner's note: a reply is refused (got ${J(rr)})`);
+  const rf = await B.adminFeedbackReply(ADMIN, c1, "fixed", "kept text?");
+  tick(rf.ok === true && raw(c1).status === "fixed" && raw(c1).reply === null, "removed learner's note: Bug fixed lands, with no text stored");
+  L.push(`anon ${J(byId(aAnon).canReply)} · named ${J(byId(a1).canReply)} · removed ${J(lc && lc.canReply)}`);
+
+  const KEY = "'canReply', (f.student_id is not null)";
+  for (const [f, label] of [["./supabase/migration-feedback-inbox.sql", "migration"], ["./supabase/schema.sql", "schema.sql"]]) {
+    const txt = await (await fetch(f, { cache: "reload" })).text();
+    const admin = bodyOf(txt, "mhq_admin_feedback");
+    tick(admin.includes(KEY), `${label}: mhq_admin_feedback carries ${KEY}`);
+    tick(!bodyOf(txt, "mhq_inbox").includes("canReply"), `${label}: mhq_inbox does NOT carry canReply (learner payload unchanged)`);
+    tick((txt.match(/'canReply'/g) || []).length === 1, `${label}: 'canReply' appears exactly once`);
+  }
+  const mig = await (await fetch("./supabase/migration-feedback-inbox.sql", { cache: "reload" })).text();
+  tick(mig.includes("plus five keys: status, reply, repliedAt, seenAt, canReply.") && !/four keys/.test(mig), "migration header: says five keys, not four");
+  out("canreply", L);
 }
 
 /* ---------------- banner ---------------- */

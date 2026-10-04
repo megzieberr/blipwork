@@ -1531,6 +1531,10 @@ export const LocalBackend = {
         // mirror does the same.
         status: r.status || "open", reply: r.reply ?? null,
         repliedAt: r.repliedAt ?? null, seenAt: r.seenAt ?? null,
+        // canReply mirrors the SQL's (student_id is not null): the very test
+        // adminFeedbackReply refuses on. Not the same as !anon: a named note
+        // whose learner was removed keeps its name but has nobody to reach.
+        canReply: r.studentId != null,
       })),
     };
   },
@@ -2000,6 +2004,10 @@ export const LocalBackend = {
   async adminRemoveStudent(pw, id) {
     if (read(LS.meta, {}).adminPassword !== pw) return { ok: false, error: "auth" };
     const st = read(LS.students, {}); delete st[id]; write(LS.students, st);
+    // feedback.student_id is `on delete set null` in SQL: the note stays,
+    // with its name, but no longer points at anyone (so canReply is false).
+    const fb = read(LS.feedback, []);
+    if (fb.some(r => r.studentId === id)) { fb.forEach(r => { if (r.studentId === id) r.studentId = null; }); write(LS.feedback, fb); }
     const bl = read(LS.blips, {}); delete bl[id]; write(LS.blips, bl); return { ok: true };
   },
   async adminResetProgress(pw, id) {

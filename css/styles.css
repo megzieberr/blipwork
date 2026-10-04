@@ -1731,3 +1731,22 @@ sup.sf-exp .sfrac,.opt sup.sf-exp .sfrac,.q-prompt sup.sf-exp .sfrac{font-size:1
   white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow-y:auto}
 .adm-fb-tick{flex:0 0 auto}
 .adm-unread{color:var(--warn);font-family:var(--font-num)}
+/* 📥 answering a note (INBOX-PLAN.md, 2026-10-04). Same pill as the context
+   chip; the colour says the outcome. Buttons wrap, and min-height keeps each
+   one a thumb-sized target on her phone (the plain .btn.small is ~36px). */
+.adm-fb-out{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.adm-fb-chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.adm-fb-chip{font-family:var(--font-num);font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--brd)}
+.adm-fb-chip.replied{color:var(--accent);background:rgba(58,160,255,.12)}
+.adm-fb-chip.fixed{color:var(--good);background:var(--good-bg);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.adm-fb-chip.addressed{color:var(--muted);background:rgba(127,163,212,.08)}
+.adm-fb-seen{font-family:var(--font-num);font-size:10.5px;color:var(--good)}
+.adm-fb-said{padding:8px 10px;border-left:2px solid var(--brd-2);background:rgba(255,255,255,.03);border-radius:var(--r-sm)}
+.adm-fb-said-label{display:block;font-size:11px;color:var(--muted);font-family:var(--font-display);margin-bottom:2px}
+.adm-fb-said-text{font-size:13px;line-height:1.5;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+.adm-fb-text{margin-bottom:0;padding:10px 12px;min-height:64px;resize:vertical;line-height:1.45}
+.adm-fb-btns{display:flex;flex-wrap:wrap;gap:8px}
+.adm-fb-act{min-height:44px}
+.adm-fb-quiet{font-size:12px;color:var(--muted);line-height:1.45}
+.adm-fb-err{font-size:12.5px;color:var(--warn)}
+.adm-fb-err[hidden]{display:none}

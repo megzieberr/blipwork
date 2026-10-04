@@ -45,7 +45,7 @@
 --  (sealed to service_role), not their bodies. No later file alters
 --  public.feedback's columns (the audit file only deletes one test row
 --  and marks one row read). The §4 body below is the snapshot copy plus
---  four keys and nothing else.
+--  five keys and nothing else.
 --
 --  ⚠️ OVERLOAD TRAP, STEPPED AROUND: no existing function gains an
 --  argument here. mhq_admin_feedback keeps its single argument, so
@@ -197,7 +197,16 @@ end; $$;
 --
 --  Same arity (one argument), so this really is a replace and no drop is
 --  needed. Byte-for-byte the copy in migration-feedback-snapshot.sql §4
---  plus four keys: status, reply, repliedAt, seenAt.
+--  plus five keys: status, reply, repliedAt, seenAt, canReply.
+--
+--  canReply is NOT the same as `not anon`. `anon` means display_name is
+--  null (sent anonymously). canReply means student_id is not null, the
+--  very test mhq_admin_feedback_reply refuses on. The two differ for a
+--  named note whose learner was later removed from the roster
+--  (student_id set null on delete, display_name kept): it shows a name,
+--  but there is nobody to deliver a reply to. The admin page reads
+--  canReply to decide whether to offer the textbox and Send reply
+--  (foreman review of unit 1, 2026-10-04).
 -- ============================================================
 create or replace function public.mhq_admin_feedback(p_admin_password text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
@@ -222,7 +231,8 @@ begin
              'status', f.status,
              'reply', f.reply,
              'repliedAt', f.replied_at,
-             'seenAt', f.seen_at) as r,
+             'seenAt', f.seen_at,
+             'canReply', (f.student_id is not null)) as r,
            f.created_at as r_created,
            f.read_at    as r_read
       from public.feedback f
