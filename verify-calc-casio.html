@@ -860,7 +860,9 @@ row("STO into C, then 2C with the Abs template beside it: |−3|C = 21", "§2 im
 
 section("Build 4 · skipped keys do nothing (her ruling: not school use)");
 
-row("hyp, ENG, ∫ and SHIFT log□ / °'\" / ) type nothing", "brief SKIP list", [["hyp ENG ∫ SHIFT log□ SHIFT °'\" SHIFT )", { expr: "", sa: "" }]]);
+// Build 10 changed this row: it read "hyp, ENG, ∫ and SHIFT log□ / °'\" / ) type nothing" and pressed SHIFT ) too;
+// since Build 10 SHIFT ) types the ";" of GCD( / LCM( (spec §19.1), tested in the Build 10 section
+row("hyp, ENG, ∫ and SHIFT log□ / °'\" type nothing", "brief SKIP list", [["hyp ENG ∫ SHIFT log□ SHIFT °'\"", { expr: "", sa: "" }]]);
 row("Pol, Rec, CONST, CONV, Rnd, Ran#, DRG▶ (SHIFT + − 7 8 0 , Ans) type nothing", "brief SKIP list", [["SHIFT + SHIFT − SHIFT 7 SHIFT 8 SHIFT 0 SHIFT , SHIFT Ans", { expr: "", sa: "" }]]);
 row("INS (SHIFT DEL) does nothing", "brief SKIP list", [["2 + 3 SHIFT DEL", { expr: "2+3", cur: "2+3" }]]);
 row("the STAT data grid still takes SHIFT 7 as 7, as before", "foreman ruling: STAT unchanged", [["MODE 3 1 SHIFT 7 = AC SHIFT 1 4 2 =", { res: "7" }]]);
@@ -2935,6 +2937,168 @@ function measureBuild9(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureBuild9(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 10, COMP: GCD( and LCM(, the 12-digit cut, DEL inside
+   templates (spec sections 19.1, 19.5 and 19.6)
+   ============================================================ */
+KEY.GCD = "alpha mult";      // GCD( is ALPHA × (spec §19.1)
+KEY.LCM = "alpha div";       // LCM( is ALPHA ÷
+KEY[";"] = "shift rparen";   // the separator is SHIFT ), shown as ;
+
+section("Build 10 · GCD( and LCM( (spec §19.1)");
+
+row("ALPHA × types GCD(, ALPHA ÷ types LCM(, SHIFT ) types ;", "§19.1", [
+  ["ALPHA ×", { expr: "GCD(", sa: "" }],
+  ["AC ALPHA ÷", { expr: "LCM(", sa: "" }],
+  ["AC SHIFT )", { expr: ";", sa: "" }],
+]);
+row("GCD(12;18 = 6, the line kept as typed (no \")\" added)", "§19.1 device", [["GCD 12 ; 18 =", { expr: "GCD(12;18", val: "6" }]]);
+row("LCM(4;6 = 12", "§19.1 device", [["LCM 4 ; 6 =", { expr: "LCM(4;6", val: "12" }]]);
+row("GCD(−12;18)+1 = 7: a negative is fine, the answer is positive", "§19.1 device", [["GCD (−) 12 ; 18 ) + 1 =", { expr: "GCD(−12;18)+1", val: "7" }]]);
+row("exactly two arguments: GCD(12;18;24 = Syntax ERROR", "§19.1 device", [["GCD 12 ; 18 ; 24 =", { err: ERR("Syntax ERROR"), expr: "" }]]);
+row("a non-whole argument: GCD(12,5;3 = Argument ERROR, the usual three lines", "§19.1 device, §3 layout", [["GCD 12 , 5 ; 3 =", { err: ERR("Argument ERROR"), expr: "", hist: "" }]]);
+row("on Argument ERROR only AC, ◀ and ▶ do anything; AC gives an empty line", "§3, §19.1", [
+  ["GCD 12 , 5 ; 3 =", { err: ERR("Argument ERROR") }],
+  ["7 DEL = ▲ x² SHIFT ALPHA", { err: ERR("Argument ERROR"), sa: "" }],
+  ["AC", { err: "", expr: "", res: "", cur: "" }],
+]);
+row("Argument ERROR, ◀ (Goto): the cursor goes to the END of the line, as for Math ERROR", "Blipwork choice (not device-measured)", [
+  ["GCD 12 , 5 ; 3 = ◀", { err: "", expr: "GCD(12,5;3", cur: "GCD(12,5;3" }],
+]);
+row("LCM(−4;6 = 12: LCM's answer is positive too", "Blipwork reading of §19.1 \"answer positive\" (not device-measured)", [["LCM (−) 4 ; 6 =", { val: "12" }]]);
+row("a zero argument: GCD(0;5 = 5, LCM(0;5 = 0", "Blipwork choice (not device-measured)", [["GCD 0 ; 5 =", { val: "5" }], ["AC LCM 0 ; 5 =", { val: "0" }]]);
+row("one argument only: GCD(12 = Syntax ERROR", "Blipwork reading (not device-measured)", [["GCD 12 =", { err: ERR("Syntax ERROR") }]]);
+row("a ; outside GCD( / LCM(: 2;3 = Syntax ERROR, Goto just before the ;", "Blipwork reading (not device-measured)", [["2 ; 3 =", { err: ERR("Syntax ERROR") }], ["◀", { cur: "2" }]]);
+row("a root is not a whole number: GCD(√2;4 = Argument ERROR", "Blipwork reading (not device-measured)", [["GCD √ 2 ▶ ; 4", { expr: "GCD(√2;4" }], ["=", { err: ERR("Argument ERROR") }]]);
+row("an error inside an argument stays that error: GCD(1÷0;3 = Math ERROR", "Blipwork choice (not device-measured)", [["GCD 1 ÷ 0 ; 3 =", { err: ERR("Math ERROR") }]]);
+row("each argument is a whole expression: GCD(6+6;3×6 = 6", "Blipwork reading (not device-measured)", [["GCD 6 + 6 ; 3 × 6 =", { val: "6" }]]);
+row("GCD( multiplies implicitly like sin(: 2GCD(4;6 = 4", "Blipwork choice (not device-measured)", [["2 GCD 4 ; 6 =", { expr: "2GCD(4;6", val: "4" }]]);
+row("after a result GCD( starts a fresh line, like sin(", "Blipwork choice (not device-measured)", [["2 + 3 = GCD", { expr: "GCD(", res: "" }]]);
+row("after a result ; starts a fresh line (no Ans chain)", "Blipwork choice (not device-measured)", [["2 + 3 = ;", { expr: ";", res: "" }]]);
+trow("GCD( and ; type on f(X)= like any key: f(X)=GCD(X;6 gives 1, 2, 3", "Blipwork choice (not device-measured): the same line editor", [
+  ["MODE 7 GCD X ; 6", { expr: "f(X)=GCD(X;6" }],
+  ["= = = = =", { tbl: "1|1|1 / 2|2|2 / 3|3|3" }],
+]);
+row("in the STAT editor SHIFT ) still does nothing (5 is stored, x̄ = 5)", "Blipwork choice (not device-measured): off the typing screens unchanged", [["MODE 3 1 5 ; = AC SHIFT 1 4 2 =", { res: "5" }]]);
+
+section("Build 10 · decimals: at most 12 digits, cut off (spec §19.5)");
+
+row("1÷3000000 = 1/3000000; S⇔D → 0,00000033333", "§19.5 device", [["1 ÷ 3000000 =", { val: "1/3000000" }], ["S⇔D", { val: "0,00000033333" }]]);
+row("1÷7000000 S⇔D → 0,00000014285 (cut, not rounded to …86)", "§19.5 device", [["1 ÷ 7000000 =", { val: "1/7000000" }], ["S⇔D", { val: "0,00000014285" }]]);
+row("2÷3000 S⇔D → 0,00066666666", "§19.5 device", [["2 ÷ 3000 =", { val: "1/1500" }], ["S⇔D", { val: "0,00066666666" }]]);
+row("1÷70000000 S⇔D → 0,00000001428", "§19.5 device", [["1 ÷ 70000000 =", { val: "1/70000000" }], ["S⇔D", { val: "0,00000001428" }]]);
+row("1÷7000000000 → 1,428571429×10⁻¹⁰, also after S⇔D (the ×10 form is unchanged)", "§19.5 device", [["1 ÷ 7000000000 =", { val: "1,428571429×10^−10" }], ["S⇔D", { val: "1,428571429×10^−10" }]]);
+row("1÷3 S⇔D → 0,3333333333: 10 significant digits come first, nothing cut", "§19.5 device note", [["1 ÷ 3 = S⇔D", { val: "0,3333333333" }]]);
+row("the minus sign is not one of the 12 digits: −1÷3000000 S⇔D → −0,00000033333", "Blipwork reading (not device-measured)", [["(−) 1 ÷ 3000000 = S⇔D", { val: "−0,00000033333" }]]);
+erow("the cut on another screen: EQN X= 1/3000000, S⇔D → 0,00000033333", "Blipwork reading (not device-measured): every Norm decimal", [
+  ["MODE 5 1 3000000 = 0 = 1 = 0 = 1 = 0 = =", { expr: "X=", val: "1/3000000" }],
+  ["S⇔D", { expr: "X=", val: "0,00000033333" }],
+]);
+
+section("Build 10 · DEL inside fractions and roots (spec §19.6)");
+
+row("3 ▫/▫ then DEL: the cursor jumps to the end of the top; DEL deletes the 3; DEL in the empty top removes the fraction", "§19.6 device", [
+  ["3 frac", { frac: "3/", curIn: "den" }],
+  ["DEL", { frac: "3/", curIn: "num", cur: "3" }],
+  ["DEL", { frac: "/", curIn: "num", cur: "" }],
+  ["DEL", { frac: "", expr: "", curIn: "line", cur: "" }],
+]);
+row("3/4 with the cursor before the 4: DEL only moves the cursor to the end of the top; 7 gives 37/4", "§19.6 device", [
+  ["3 frac 4 ◀", { frac: "3/4", curIn: "den", cur: "3" }],
+  ["DEL", { frac: "3/4", curIn: "num", cur: "3" }],
+  ["7", { frac: "37/4" }],
+  ["=", { val: "37/4" }],
+]);
+row("2+3/4 with the cursor at the start of the top: DEL drops the frame, 2+34; 7 there gives 2+734", "§19.6 device", [
+  ["2 + 3 frac 4 ◀ ◀ ◀", { frac: "3/4", curIn: "num", cur: "2+" }],
+  ["DEL", { frac: "", expr: "2+34", curIn: "line", cur: "2+" }],
+  ["7", { expr: "2+734" }],
+  ["=", { val: "736" }],
+]);
+row("2√□ (empty root): DEL removes the empty √", "§19.6 device", [["2 √", { expr: "2√", curIn: "body" }], ["DEL", { expr: "2", curIn: "line", cur: "2" }]]);
+row("2√9 with the cursor before the 9: DEL removes the √, the 9 stays; 7 gives 279", "§19.6 device", [
+  ["2 √ 9 ◀", { expr: "2√9", curIn: "body", cur: "2√" }],
+  ["DEL", { expr: "29", curIn: "line", cur: "2" }],
+  ["7", { expr: "279" }],
+  ["=", { val: "279" }],
+]);
+row("x^□: DEL at the start of the exponent drops the frame, 2³ → 23", "general rule §19.6 (x^□ not device-measured)", [
+  ["2 x^ 3 ◀", { curIn: "exp", cur: "2" }],
+  ["DEL", { expr: "23", curIn: "line", cur: "2" }],
+  ["=", { val: "23" }],
+]);
+row("³√□: DEL at the start of the radicand drops the frame, ³√8 → 8", "general rule §19.6 (³√ not device-measured)", [["SHIFT √ 8 ◀", { curIn: "body", cur: "3√" }], ["DEL", { expr: "8", curIn: "line", cur: "" }]]);
+row("log□: DEL in the bracket moves to the end of the base; DEL at the start of the base drops the frame, log₂(8) → 28", "general rule §19.6 (log□ not device-measured)", [
+  ["log□ 2 ▶ 8 ◀", { curIn: "logbody", cur: "log2(" }],
+  ["DEL", { curIn: "base", cur: "log2", expr: "log2(8)" }],
+  ["◀ DEL", { expr: "28", curIn: "line", cur: "" }],
+]);
+row("Abs: DEL at the start of |□| drops the bars, |−5| → −5", "general rule §19.6 (Abs not device-measured)", [
+  ["SHIFT hyp (−) 5 ◀ ◀", { curIn: "abs", cur: "" }],
+  ["DEL", { expr: "−5", curIn: "line", cur: "" }],
+  ["=", { val: "−5" }],
+]);
+row("ˣ√: DEL in the radicand moves to the end of the index; DEL at the start of the index drops the frame, ³√8 → 38", "general rule §19.6 (ˣ√ not device-measured)", [
+  ["3 SHIFT x^ 8 ◀", { curIn: "body", idx: "3" }],
+  ["DEL", { curIn: "idx", cur: "3", expr: "3√8" }],
+  ["◀ DEL", { expr: "38", curIn: "line", cur: "" }],
+]);
+row("10^□: DEL at the start of the exponent drops the frame (the 10 with it), 10² → 2", "general rule §19.6 (10^□ not device-measured)", [["SHIFT log 2 ◀", { curIn: "exp" }], ["DEL", { expr: "2", curIn: "line", cur: "" }]]);
+row("e^□: DEL at the start of the exponent drops the frame, e² → 2", "general rule §19.6 (e^□ not device-measured)", [["SHIFT ln 2 ◀", { curIn: "exp" }], ["DEL", { expr: "2", curIn: "line", cur: "" }]]);
+row("mixed number: DEL walks bottom → top → whole, then drops the frame, 1¾ → 134", "general rule §19.6 (mixed number not device-measured)", [
+  ["SHIFT frac 1 ▶ 3 ▶ 4 ◀", { curIn: "den", cur: "13" }],
+  ["DEL", { curIn: "num", cur: "13" }],
+  ["◀ DEL", { curIn: "whole", cur: "1" }],
+  ["◀ DEL", { expr: "134", curIn: "line", cur: "" }],
+]);
+row("a template spilled out of a fraction still works: (√4)/2 from the top → √4 2, ▶ walks out of the √, + gives √4+2 = 4", "general rule §19.6 (nesting not device-measured)", [
+  ["frac √ 4 ▶ ▼ 2 ▲ ◀ ◀ ◀", { curIn: "num", cur: "" }],
+  ["DEL", { frac: "", expr: "√42", curIn: "line", cur: "" }],
+  ["▶ ▶ ▶ +", { expr: "√4+2", curIn: "line", cur: "√4+" }],
+  ["=", { val: "4" }],
+]);
+row("the rule is the shared line editor's: on f(X)= too, X+1/□ DEL DEL → X+□/□ with the cursor in the top", "Blipwork choice (not device-measured): the same line editor", [
+  ["MODE 7 X + 1 frac DEL DEL", { frac: "/", curIn: "num", expr: "f(X)=X+" }],
+]);
+
+/* ---- DOM measurements: GCD( on the line, its answer and the Argument
+   ERROR screen fit the LCD at 375 px (the overlay) and in the in-question
+   calculator ---- */
+section("Build 10 · GCD( and Argument ERROR fit (DOM measurement)");
+function measureBuild10(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  press("AC AC ON AC 1 + 1 =");
+  const h0 = L().height;
+  press("AC GCD 12 ; 18 =");
+  const ex = h.querySelector(".lcd-expr"), res = h.querySelector(".lcd-res");
+  tick(read(h).val === "6" && inside(ex) && inside(res) && ex.scrollWidth <= ex.clientWidth + 0.5 && Math.abs(L().height - h0) < 0.5,
+       `${where}: GCD(12;18 and its answer 6 sit inside the LCD, the line uncut, height unchanged`, `LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  press("AC GCD 12 , 5 ; 3 =");
+  const lines = [...h.querySelectorAll(".lcd-err > div")];
+  const over = lines.filter(d => d.scrollWidth > d.clientWidth + 0.5 || !inside(d));
+  tick(lines.length === 3 && over.length === 0 && Math.abs(L().height - h0) < 0.5,
+       `${where}: the three Argument ERROR lines fit inside the LCD and do not change its height`,
+       `${lines.length} lines, overflowing: ${over.length}, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  press("AC 1 ÷ 7000000 = S⇔D");
+  const r2 = h.querySelector(".lcd-res");
+  tick(read(h).val === "0,00000014285" && inside(r2) && r2.scrollWidth <= r2.clientWidth + 0.5,
+       `${where}: the cut decimal 0,00000014285 fits the answer line`, `${r2.scrollWidth}/${r2.clientWidth} px`);
+  press("AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild10(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild10(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 

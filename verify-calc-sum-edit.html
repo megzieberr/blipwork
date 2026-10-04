@@ -145,14 +145,16 @@ const fs = c => c.S().data.map(d => d.f);
        "appending fresh values fires NO 'edit' milestone (else every capture looks like an edit)");
 }
 
-/* ── 7. the cursor cannot run off the table ──────────────── */
+/* ── 7. the cursor wraps round the table (spec §19.2, measured on the device) ── */
 {
   const c = fresh(); intoStat(c); typeVals(c, [2, 4]);
-  c.press("ac", "shift", "d1", "d2");
-  c.press("up", "up", "up", "up", "up");
-  tick(c.S().row === 0, "▲ stops at the first row", `row ${c.S().row}`);
-  c.press("down", "down", "down", "down", "down");
-  tick(c.S().row === 2, "▼ stops at the open row, never past it", `row ${c.S().row}`);
+  c.press("ac", "shift", "d1", "d2");                 // back in the editor, on the open row
+  c.press("up", "up");
+  tick(c.S().row === 0, "▲ twice from the open row reaches the first row", `row ${c.S().row}`);
+  c.press("up");
+  tick(c.S().row === 2, "▲ on the first row wraps to the open row", `row ${c.S().row}`);
+  c.press("down");
+  tick(c.S().row === 0, "▼ on the open row wraps to the first row, never past the table", `row ${c.S().row}`);
 }
 
 /* ── 8. the selected cell shows the value you are about to replace ── */

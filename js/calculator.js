@@ -84,6 +84,12 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    menu (A, B, r, x̂, ŷ); the SETUP menu's two boxed pages with 5:TABLE
    (f(x) only, or f(x) and g(x)); the CLR screens Clear? / Reset …? /
    Reset … Press [AC] Key, for Setup, Memory and All.
+   Calculator rebuild Build 10 (2026-10-04, spec §19.1, §19.5, §19.6):
+   GCD( (ALPHA ×) and LCM( (ALPHA ÷) with the ";" separator (SHIFT )) and
+   the new Argument ERROR; a plain decimal shows at most 12 digits counting
+   the leading 0, cut off (0,00000014285); DEL at the start of a template
+   box moves to the box before it, or at the first box removes the frame
+   and keeps what was inside.
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -179,7 +185,7 @@ const statGlyph = name => STAT_GLYPH[name] || escapeHtml(name);
                                                             (Build 3; rad 1 = a plain rational term)
      { kind:'pi',    n: BigInt, d: BigInt }               — (n/d)·π, n ≠ 0 (Build 3)
      { kind:'float', v: number }                          — decimal fallback
-     { kind:'error', msg: "Syntax ERROR" | "Math ERROR" }
+     { kind:'error', msg: "Syntax ERROR" | "Math ERROR" | "Argument ERROR" (Build 10) }
    Calculator rebuild Build 5 (2026-10-04, spec §11): SOLVE's root finder,
    solveNewton, works on decimals (Newton from the starting guess); its
    answer is kept to 15 significant digits and stored in X as that exact
@@ -533,6 +539,21 @@ function vComb(nv, rv, kind) {
   let c = 1n; for (let i = 1n; i <= k; i++) c = c * (n - k + i) / i;   // exact at every step
   return mkRat(c, 1n);
 }
+/* GCD( and LCM( (Build 10, spec §19.1): GCD(12;18 = 6, LCM(4;6 = 12,
+   GCD(−12;18)+1 = 7 (a negative argument is fine, the answer is positive).
+   An argument that is not a whole number is Argument ERROR (GCD(12,5;3).
+   An error inside an argument (GCD(1÷0;3) stays that error. Not measured,
+   Blipwork choice: a zero argument gives the plain maths answer, GCD(0;5)
+   = 5, LCM(0;5) = 0, GCD(0;0) = 0. */
+function vGcdLcm(name, av, bv) {
+  if (isErr(av)) return av; if (isErr(bv)) return bv;
+  let a = wholeOf(av), b = wholeOf(bv);
+  if (a === null || b === null) return VERR("Argument ERROR");
+  if (a < 0n) a = -a; if (b < 0n) b = -b;
+  let g = a, r = b; while (r) [g, r] = [r, g % r];
+  if (name === "GCD") return mkRat(g, 1n);
+  return mkRat(g === 0n ? 0n : a / g * b, 1n);
+}
 
 /* ---- exact special-angle table, DEGREES ----
    The 30°/45° family is typed in; Build 3 (spec §5: exact for EVERY
@@ -701,7 +722,17 @@ function formatExactHTML(v) {
    Build 4: `fix` (0–9, or null for Norm) is the SETUP Fix setting. Fix only
    changes DECIMAL display (spec §7: 2÷3 stays ⅔, S⇔D → 0,67; sin(40 =
    0,64): exactly `fix` decimals, rounded half up. Past 10 digits before the
-   comma the Norm ×10 form is kept (Fix there was not measured). */
+   comma the Norm ×10 form is kept (Fix there was not measured).
+   Build 10 (spec §19.5): a plain decimal shows at most 12 digits counting
+   the leading 0, so at most 11 decimal places, and the extra digits are CUT
+   OFF, not rounded: the 10-significant-digit rounding happens first, then
+   the cut (1÷7000000 = 0,00000014285, not ...86; 1÷3 = 0,3333333333 is
+   untouched). Only numbers below 0,01 are long enough to be cut. The minus
+   sign is not one of the 12 digits (not measured, Blipwork reading: the
+   rule counts digits). Every Norm decimal on every screen comes through
+   here, so the cut applies wherever such a decimal shows (Blipwork reading:
+   the device was measured on the calculation line only). */
+const DEC_MAX_DIGITS = 12;
 function formatDecimal(v, fix = null) {
   if (v.kind === "error") return escapeHtml(v.msg);
   const f = toFloatV(v);
@@ -716,7 +747,7 @@ function formatDecimal(v, fix = null) {
     return `${sign}${digits[0]}${tail ? "," + tail : ""}<span class="calc-x10">×10</span><sup class="calc-x10-exp">${e < 0 ? "−" : ""}${Math.abs(e)}</sup>`;
   }
   const ip = e >= 0 ? digits.slice(0, e + 1) : "0";
-  const fp = (e >= 0 ? digits.slice(e + 1) : "0".repeat(-e - 1) + digits).replace(/0+$/, "");
+  const fp = (e >= 0 ? digits.slice(e + 1) : "0".repeat(-e - 1) + digits).slice(0, DEC_MAX_DIGITS - ip.length).replace(/0+$/, "");   // Build 10: the 12-digit cut
   return sign + ip + (fp ? "," + fp : "");
 }
 /* Fix n: exactly n decimals, rounded half up on the exact value (a decimal
@@ -1219,6 +1250,22 @@ function parseAtom(st, ctx) {
      adds the parts as typed, (−1)¾ = −¼; −1¾ is typed as − then 1¾. */
   if (t.k === "mixed") { next(st); const w = parseSubExpr(t.whole, ctx); const n = parseSubExpr(t.num, ctx); const d = parseSubExpr(t.den, ctx); return vAdd(w, vDiv(n, d)); }
   if (t.k === "(") { next(st); const v = parseExpr(st, ctx); closeBracket(st); return v; }
+  /* GCD( and LCM( (Build 10, spec §19.1): EXACTLY two arguments split by
+     ";" (SHIFT )), so GCD(12;18;24 is Syntax ERROR at the second ";". The
+     ")" closes itself at the end of a box like every bracket (GCD(12;18 =
+     6). Not measured, Blipwork reading: one argument only (GCD(12) is
+     Syntax ERROR too, and a ";" anywhere else is a token nothing reads, so
+     Syntax ERROR (2;3). */
+  if (t.k === "func" && (t.name === "GCD" || t.name === "LCM")) {
+    next(st);
+    const a = parseExpr(st, ctx);
+    const s = peek(st);
+    if (!s || s.k !== "sep") throw synErr(st);
+    next(st);
+    const b = parseExpr(st, ctx);
+    closeBracket(st);
+    return vGcdLcm(t.name, a, b);
+  }
   if (t.k === "func") { next(st); const inner = parseExpr(st, ctx); closeBracket(st); return applyFunc(t.name, t.inv, inner, ctx.drg); }
   if (t.k === "ans") { next(st); return ctx.ans; }
   if (t.k === "var") { next(st); return (ctx.vars && ctx.vars[t.name]) || mkRat(0n, 1n); }   // A–F, X, Y, M (spec §2: all start at 0)
@@ -1279,7 +1326,8 @@ const LETTER_OF = { neg: "A", dms: "B", hyp: "C", sin: "D", cos: "E", tan: "F", 
    5) reads the "=" as the two sides of an equation. Pressing the = KEY on a
    line that holds "=" or ":" is still a Syntax ERROR: the spec does not
    measure that case, so Build 1's behaviour is kept. */
-const ALPHA_TOKEN = { calc: "eqs", intdx: "colon", exp10: "econst" };   // Build 4: ALPHA ×10^x = the constant e (spec §2, §9)
+const ALPHA_TOKEN = { calc: "eqs", intdx: "colon", exp10: "econst",   // Build 4: ALPHA ×10^x = the constant e (spec §2, §9)
+  mult: "gcd", div: "lcm" };   // Build 10 (spec §19.1): ALPHA × = GCD(, ALPHA ÷ = LCM(
 /* The device's history limit is by bytes and was not measured; a few dozen
    entries is plenty for a learner, and keeps the memory bounded. */
 const MAX_HISTORY = 30;
@@ -2082,14 +2130,30 @@ export function mountCalculator(host, opts = {}) {
     if (dir > 0 && box.__pkey === "num") S.cur = { box: owner.den, i: Math.min(S.cur.i, owner.den.length) };
     else if (dir < 0 && box.__pkey === "den") S.cur = { box: owner.num, i: Math.min(S.cur.i, owner.num.length) };
   }
+  /* Build 10 (spec §19.6): DEL deletes what is LEFT of the cursor. At the
+     start of a template box nothing is left of the cursor inside that box:
+     - at the start of a LATER box (a fraction's bottom, the ˣ√ radicand, a
+       mixed number's top or bottom, log□'s bracket) DEL deletes nothing and
+       only moves the cursor to the END of the box before it (3/4 with the
+       cursor before the 4: the cursor goes after the 3, typing 7 gives 37/4);
+     - at the start of the FIRST box DEL removes the frame and its contents
+       stay inline, every box in walking order, the cursor where the frame
+       began (2+3/4 from the start of the top: 2+34; 2√9: 29; an empty □/□
+       or √□ simply goes).
+     Measured on the device for ▫/▫ and √ only; x^□, log□, Abs, ˣ√, 10^□,
+     e^□ and the mixed number follow the same rule (not measured). Before
+     Build 10, DEL there deleted the whole template. */
   function doDelBox() {
     const box = S.cur.box;
     if (S.cur.i > 0) { box.splice(S.cur.i - 1, 1); S.cur.i--; return; }
     if (!box.__parent) return;   // at the very start of the root: no-op
-    // at the start of a template's sub-box: delete the whole (possibly empty) template — keep it simple
     const parent = box.__parent, owner = box.__owner, pidx = parent.indexOf(owner);
     if (pidx < 0) return;
-    parent.splice(pidx, 1);
+    const order = TMPL_BOXES[owner.k], k = order.indexOf(box.__pkey);
+    if (k > 0) { const b = owner[order[k - 1]]; S.cur = { box: b, i: b.length }; return; }
+    const spill = order.flatMap(key => owner[key]);
+    for (const t of spill) for (const key of SUB_KEYS) if (Array.isArray(t[key])) t[key].__parent = parent;   // a spilled template's boxes now live one level up
+    parent.splice(pidx, 1, ...spill);
     S.cur = { box: parent, i: pidx };
   }
   /* The result as it should look now: its form (Build 4: mixed 1¾ or °'"),
@@ -2714,12 +2778,12 @@ export function mountCalculator(host, opts = {}) {
   }
 
   // ---- key dispatch ----
-  // SHIFT functions that do nothing: ; (SHIFT )) and the ones skipped as
-  // not school use (d/dx, Σ, FACT, ←). SHIFT is still consumed, as on the
-  // device. (SHIFT x^ = ˣ√ is live since Build 2; SHIFT ×10^x = π since
-  // Build 3; Build 4 made SHIFT log, ln, x⁻¹, ÷, ×, (, hyp, ▫/▫ and S⇔D
-  // live; Build 5 made SHIFT CALC = SOLVE live.)
-  const NOOP_SHIFT = new Set(["rparen", "intdx", "logbox", "dms", "eng"]);
+  // SHIFT functions that do nothing: the ones skipped as not school use
+  // (d/dx, Σ, FACT, ←). SHIFT is still consumed, as on the device. (SHIFT
+  // x^ = ˣ√ is live since Build 2; SHIFT ×10^x = π since Build 3; Build 4
+  // made SHIFT log, ln, x⁻¹, ÷, ×, (, hyp, ▫/▫ and S⇔D live; Build 5 made
+  // SHIFT CALC = SOLVE live; Build 10 made SHIFT ) = ";" live.)
+  const NOOP_SHIFT = new Set(["intdx", "logbox", "dms", "eng"]);
   /* Build 4, her ruling "not school use, leave those keys doing nothing":
      Pol (SHIFT +), Rec (SHIFT −), CONST (SHIFT 7), CONV (SHIFT 8), Rnd
      (SHIFT 0), Ran# (SHIFT ,), DRG▶ (SHIFT Ans) and INS (SHIFT DEL). Before
@@ -2798,6 +2862,7 @@ export function mountCalculator(host, opts = {}) {
       else if (id === "frac") key = "mixed";    //   SHIFT ▫/▫ = the mixed-number template
       else if (id === "sd") key = "mixtog";     //   SHIFT S⇔D = improper ↔ mixed
       else if (id === "calc") key = "solve";    // Build 5 (spec §11): SHIFT CALC = SOLVE
+      else if (id === "rparen") key = typingScreen() ? "sep" : "noop";   // Build 10 (spec §19.1): SHIFT ) = the ";" of GCD( / LCM(; off the typing screens it does nothing, as before
       else if (NOOP_SHIFT.has(id)) key = "noop";
       else if (typingScreen() && SKIP_SHIFT_COMP.has(id)) key = "noop";   // Build 5: on a prompt too; Build 6: and on f(X)=
       S.shift = false;
@@ -2820,7 +2885,8 @@ export function mountCalculator(host, opts = {}) {
   const digit = id => (/^d[0-9]$/.test(id) ? +id[1] : null);
   const opChar = { plus: "+", minus: "−", mult: "×", div: "÷" };
   const ENTRY_KEYS = new Set(["dot", "neg", "plus", "minus", "mult", "div", "frac", "sqrt", "cbrt", "xroot", "x2", "cube", "pow", "sin", "cos", "tan", "asin", "acos", "atan", "lparen", "rparen", "ans", "eqs", "colon", "pi",
-    "log", "ln", "logbox", "tenpow", "epow", "exp10", "econst", "xinv", "fact", "pct", "ncr", "npr", "abs", "mixed", "dms"]);   // second row: Build 4
+    "log", "ln", "logbox", "tenpow", "epow", "exp10", "econst", "xinv", "fact", "pct", "ncr", "npr", "abs", "mixed", "dms",   // second row: Build 4
+    "gcd", "lcm", "sep"]);   // Build 10: GCD( and LCM( start a fresh line after a result like sin( does, and so does ";" (not measured, Blipwork choice)
   const isEntryKey = k => digit(k) != null || ENTRY_KEYS.has(k) || k.startsWith("var_");
   /* POSTFIX keys act on what is before them, so after a result they chain
      from Ans exactly like + − × ÷ do (Build 2, spec §1): x² → Ans², x^ →
@@ -2933,6 +2999,11 @@ export function mountCalculator(host, opts = {}) {
     if (key === "abs") return insertTemplate({ k: "abs", body: [] }, "body");
     if (key === "mixed") return insertTemplate({ k: "mixed", whole: [], num: [], den: [] }, "whole");
     if (key === "dms") return insertBoxToken({ k: "dms" });
+    /* ---- Build 10 (spec §19.1): GCD( and LCM( are function openers like
+       sin( (they multiply implicitly the same way, 2GCD(4;6 = 4: not
+       measured); ";" is its own token, read only inside them ---- */
+    if (key === "gcd" || key === "lcm") return insertBoxToken({ k: "func", name: key.toUpperCase(), inv: false });
+    if (key === "sep") return insertBoxToken({ k: "sep" });
   }
 
   function menuKey(key) {
@@ -3000,6 +3071,7 @@ export function mountCalculator(host, opts = {}) {
       case "var": return escapeHtml(node.name);
       case "eqs": return "=";
       case "colon": return ":";
+      case "sep": return ";";   // Build 10: the GCD( / LCM( separator (SHIFT ))
       case "sto": return "→" + escapeHtml(node.name);
       case "mplus": return "M+";
       case "mminus": return "M−";
