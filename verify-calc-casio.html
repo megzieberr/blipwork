@@ -1429,7 +1429,7 @@ trow("after AC the function can be changed and a new table made (Start/End/Step 
 ]);
 trow("ON goes back to f(X)= with the function kept", "Blipwork choice: spec silent", [[`${EX} ON`, { expr: "f(X)=X²−2X−3", cur: "f(X)=", tbl: "" }]]);
 trow("MODE on the table, then AC: back to the table as it was", "Blipwork choice: spec silent", [
-  [`${EX} ▼ MODE`, { menu: "1:COMP2:CMPLX3:STAT4:BASE-N5:EQN6:MATRIX7:TABLE" }],
+  [`${EX} ▼ MODE`, { menu: "1:COMP2:CMPLX3:STAT4:BASE-N5:EQN6:MATRIX7:TABLE8:VECTOR" }],   // Build 7: 8:VECTOR added (spec §16 page 1)
   ["AC", { tbl: EX_TOP, sel: "2:X", val: "−1" }],
 ]);
 trow("MODE 1 goes back to COMP, and COMP works (a sum, CALC)", "§12", [
@@ -1544,7 +1544,8 @@ function measureBuild6(where, h, press) {
 function readE(h) {
   const g = read(h), t = h.querySelector(".lcd-eqn");
   const ti = h.querySelector(".lcd-eqn-in .lcd-expr"), iq = h.querySelector(".lcd-ineq");
-  const base = { ...g, typed: ti ? ti.textContent : "", ineq: iq ? iq.textContent : "" };
+  const more = [...h.querySelectorAll(".lcd-more")].map(m => m.textContent).join("");   // a menu's ▼ / ▲ page mark
+  const base = { ...g, typed: ti ? ti.textContent : "", ineq: iq ? iq.textContent : "", more };
   if (!t) return { ...base, head: "", grid: "", sel: "", brk: "" };
   const data = row => [...row.cells].filter(c => !c.classList.contains("lcd-tbl-n") && !c.classList.contains("lcd-eqn-bk"));
   const txt = c => { const k = c.cloneNode(true); k.querySelectorAll(".calc-x10-exp").forEach(s => { s.textContent = "^" + s.textContent; }); return k.textContent; };
@@ -1684,22 +1685,22 @@ erow("▲ steps back; ▲ on the first answer stays; ▼ steps forward but not p
   ["=", { sel: "1:a" }],
 ]);
 erow("−x²+4x−3 → X₁= 3, X₂= 1, X-Value Maximum= 2, Y-Value Maximum= 1", "§13 device answer", [
-  ["MODE 5 3 (−) 1 = 4 = (−) 3 = =", { expr: "X₁=", val: "3" }],
-  ["=", { expr: "X₂=", val: "1" }],
-  ["=", { expr: "X-Value Maximum=", val: "2" }],
-  ["=", { expr: "Y-Value Maximum=", val: "1" }],
+  ["MODE 5 3 (−) 1 = 4 = (−) 3 = =", { expr: "X₁=", val: "3", hist: "▼" }],
+  ["=", { expr: "X₂=", val: "1", hist: "▲▼" }],
+  ["=", { expr: "X-Value Maximum=", val: "2", hist: "▲▼" }],
+  ["=", { expr: "Y-Value Maximum=", val: "1", hist: "▲" }],
 ]);
 erow("x²−2x−1 → X₁= 1+√2, X₂= 1−√2 (exact); S⇔D on X₂ → −0,4142135624", "§13 device answer", [
-  ["MODE 5 3 1 = (−) 2 = (−) 1 = =", { expr: "X₁=", val: "1+√2", resFrac: "" }],
-  ["=", { expr: "X₂=", val: "1−√2" }],
+  ["MODE 5 3 1 = (−) 2 = (−) 1 = =", { expr: "X₁=", val: "1+√2", resFrac: "", hist: "▼" }],
+  ["=", { expr: "X₂=", val: "1−√2", hist: "▲▼" }],
   ["S⇔D", { expr: "X₂=", val: "−0,4142135624" }],
   ["S⇔D", { val: "1−√2" }],
-  ["=", { expr: "X-Value Minimum=", val: "1" }], ["=", { expr: "Y-Value Minimum=", val: "−2" }],
+  ["=", { expr: "X-Value Minimum=", val: "1", hist: "▲▼" }], ["=", { expr: "Y-Value Minimum=", val: "−2", hist: "▲" }],
 ]);
 erow("x²+x+1 → X₁= −½+(√3/2)i, X₂= −½−(√3/2)i, then the min/max lines; no \"no real roots\" message", "§13 device answer", [
-  ["MODE 5 3 1 = 1 = 1 = =", { expr: "X₁=", val: "−1/2+(√3/2)i", resFrac: "[1|2][√3|2]", err: "" }],
-  ["=", { expr: "X₂=", val: "−1/2−(√3/2)i", resFrac: "[1|2][√3|2]" }],
-  ["=", { expr: "X-Value Minimum=", val: "−1/2" }],
+  ["MODE 5 3 1 = 1 = 1 = =", { expr: "X₁=", val: "−1/2+(√3/2)i", resFrac: "[1|2][√3|2]", err: "", hist: "▼" }],
+  ["=", { expr: "X₂=", val: "−1/2−(√3/2)i", resFrac: "[1|2][√3|2]", hist: "▲▼" }],
+  ["=", { expr: "X-Value Minimum=", val: "−1/2", hist: "▲▼" }],
   ["=", { expr: "Y-Value Minimum=", val: "3/4", hist: "▲" }],
 ]);
 erow("x²−4x+4 → a single X= 2 (no subscript), then the min/max lines", "§13 device answer", [
@@ -1723,7 +1724,7 @@ erow("S⇔D on an answer: 5/2 → 2,5 and back; stepping on shows the next answe
 ]);
 erow("MODE on an answer, then AC: back to the same answer", "Blipwork choice: spec silent", [
   [`${QD} =`, { expr: "X₂=" }],
-  ["MODE", { menu: "1:COMP2:CMPLX3:STAT4:BASE-N5:EQN6:MATRIX7:TABLE" }],
+  ["MODE", { menu: "1:COMP2:CMPLX3:STAT4:BASE-N5:EQN6:MATRIX7:TABLE8:VECTOR" }],
   ["AC", { expr: "X₂=", val: "2", hist: "▲▼" }],
 ]);
 erow("Fix 2 rounds a decimal answer: x²−2x−1, S⇔D on X₁ → 2,41", "§7 Fix", [["SHIFT MODE 6 2 MODE 5 3 1 = (−) 2 = (−) 1 = = S⇔D", { val: "2,41" }]]);
@@ -1940,6 +1941,131 @@ function measureBuild7(where, h, press) {
   const fit = document.getElementById("fitHost");
   const c = freshCalc(fit);
   measureBuild7(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
+  fit.innerHTML = "";
+}
+
+/* ============================================================
+   BUILD 7, PART 2 — the MODE menu's two pages (spec §16) and
+   INEQ = MODE ▼ 2 (spec §14)
+   ============================================================ */
+section("Build 7 · the MODE menu: two pages (spec §16)");
+
+const P1 = "1:COMP2:CMPLX3:STAT4:BASE-N5:EQN6:MATRIX7:TABLE8:VECTOR", P2 = "1:DIST2:INEQ3:RATIO";
+erow("page 1: eight items, with ▼", "§16", [["MODE", { menu: P1, more: "▼" }]]);
+erow("▼ → page 2 `1:DIST 2:INEQ / 3:RATIO` with ▲; ▲ back to page 1; ▼ ▼ and ▲ ▲ stay", "§16", [
+  ["MODE ▼", { menu: P2, more: "▲" }], ["▼", { menu: P2, more: "▲" }],
+  ["▲", { menu: P1, more: "▼" }], ["▲", { menu: P1, more: "▼" }],
+]);
+erow("the items not built do nothing: 2 CMPLX, 4 BASE-N, 6 MATRIX, 8 VECTOR, 9", "brief: not school use", [["MODE 2 4 6 8 9", { menu: P1 }]]);
+erow("page 2: 1 DIST and 3 RATIO do nothing; 2 INEQ opens its type menu", "brief; §14", [
+  ["MODE ▼ 1 3", { menu: P2 }], ["2", { menu: "1:aX²+bX+c2:aX³+bX²+cX+d", more: "" }],
+]);
+erow("AC on page 2 goes back to the calculation", "Blipwork choice: as page 1", [["2 + 3 = MODE ▼ AC", { menu: "", expr: "2+3", val: "5" }]]);
+erow("page 1 still works: MODE 1, 3, 5, 7", "§16", [
+  ["MODE 5", { menu: "1:anX+bnY=cn2:anX+bnY+cnZ=dn3:aX²+bX+c=04:aX³+bX²+cX+d=0" }],
+  ["AC MODE 7", { expr: "f(X)=", menu: "" }],
+  ["MODE 3 1 2 = 4 = AC SHIFT 1 4 2 =", { res: "3" }],
+  ["MODE 1 2 + 3 =", { expr: "2+3", val: "5" }],
+]);
+
+section("Build 7 · INEQ = MODE ▼ 2 (spec §14)");
+
+const INQ = (sign, cs) => `MODE ▼ 2 1 ${sign} ${fillKeys(cs)}`;   // sign: 1 > · 2 < · 3 ≥ · 4 ≤
+erow("the type menu: 1:aX²+bX+c / 2:aX³+bX²+cX+d; the cubic item does nothing", "§14; brief: cubic not built", [
+  ["MODE ▼ 2", { menu: "1:aX²+bX+c2:aX³+bX²+cX+d" }], ["2", { menu: "1:aX²+bX+c2:aX³+bX²+cX+d" }],
+]);
+erow("then the four signs", "§14", [["MODE ▼ 2 1", { menu: "1:aX²+bX+c>02:aX²+bX+c<03:aX²+bX+c≥04:aX²+bX+c≤0" }]]);
+erow("the grid [a b c], every coefficient 0, the chosen inequality written under it", "§14", [
+  ["MODE ▼ 2 1 2", { head: "a|b|c", grid: "0|0|0", brk: "[]", sel: "1:a", ineq: "aX²+bX+c<0", val: "0", menu: "" }],
+]);
+erow("the same = rules as EQN: stores, moves right, stays on c", "§14 \"same = rules as EQN\"", [
+  ["MODE ▼ 2 1 1 1 =", { sel: "1:b", grid: "1|0|0" }], ["(−) 5 =", { sel: "1:c" }], ["6 =", { sel: "1:c", grid: "1|−5|6", ineq: "aX²+bX+c>0" }],
+]);
+erow("x²−5x+6<0 → top A<X<B, bottom 2<X<3", "§14 device answer", [[INQ(2, [1, -5, 6]), { expr: "A<X<B", val: "2<X<3", hist: "", err: "" }]]);
+erow("x²−5x+6>0 → top X<A;B<X, bottom X<2;3<X (a semicolon)", "§14 device answer", [[INQ(1, [1, -5, 6]), { expr: "X<A;B<X", val: "X<2;3<X" }]]);
+erow("x²−5x+6≥0 → X≤A;B≤X / X≤2;3≤X", "brief: the four signs (≥ not measured)", [[INQ(3, [1, -5, 6]), { expr: "X≤A;B≤X", val: "X≤2;3≤X" }]]);
+erow("x²−5x+6≤0 → A≤X≤B / 2≤X≤3", "brief: the four signs (≤ not measured)", [[INQ(4, [1, -5, 6]), { expr: "A≤X≤B", val: "2≤X≤3" }]]);
+erow("a < 0 turns it round: −x²+5x−6>0 → A<X<B / 2<X<3", "§14 maths; Blipwork: a < 0 not measured", [[INQ(1, [-1, 5, -6]), { expr: "A<X<B", val: "2<X<3" }]]);
+erow("−x²+5x−6<0 → X<A;B<X / X<2;3<X", "§14 maths", [[INQ(2, [-1, 5, -6]), { expr: "X<A;B<X", val: "X<2;3<X" }]]);
+erow("surd roots are exact: x²−2<0 → −√2<X<√2; S⇔D → decimals", "§13 \"S⇔D works on answers\"; Blipwork for INEQ", [
+  [INQ(2, [1, 0, -2]), { val: "−√2<X<√2" }], ["S⇔D", { val: "−1,414213562<X<1,414213562" }], ["S⇔D", { val: "−√2<X<√2" }],
+]);
+erow("fraction roots: 2x²−x−1>0 → X<−1/2;1<X", "Blipwork: exact roots", [[INQ(1, [2, -1, -1]), { val: "X<−1/2;1<X", resFrac: "[1|2]" }]]);
+erow("= after the answer goes back to the grid (cell a, numbers kept); so does AC", "§13 rules", [
+  [`${INQ(2, [1, -5, 6])} =`, { sel: "1:a", grid: "1|−5|6", ineq: "aX²+bX+c<0" }],
+  ["= AC", { sel: "1:a", grid: "1|−5|6" }],
+  ["= 7 ▲ ▼", { expr: "A<X<B", val: "2<X<3" }],
+]);
+erow("one real root (x²−4x+4>0) → Math ERROR, no invented format", "brief: not measured", [[INQ(1, [1, -4, 4]), { err: ERR("Math ERROR") }], ["AC", { err: "", grid: "1|−4|4" }]]);
+erow("no real roots (x²+1<0) → Math ERROR", "brief: not measured", [[INQ(2, [1, 0, 1]), { err: ERR("Math ERROR") }]]);
+erow("a = 0 → Math ERROR", "Blipwork choice", [[INQ(2, [0, 1, 1]), { err: ERR("Math ERROR") }]]);
+erow("picking INEQ again resets the coefficients", "§13 rule", [[`${INQ(2, [1, -5, 6])} MODE ▼ 2 1 4`, { grid: "0|0|0", ineq: "aX²+bX+c≤0" }]]);
+erow("INEQ → MODE 5 → EQN works; and back to COMP", "§16", [[`${INQ(2, [1, -5, 6])} MODE 5 3 ${fillKeys([1, -5, 6])}`, { expr: "X₁=", val: "3" }], ["MODE 1 1 + 1 =", { val: "2" }]]);
+erow("ON on an INEQ answer goes back to the grid", "Blipwork choice", [[`${INQ(2, [1, -5, 6])} ON`, { sel: "1:a", grid: "1|−5|6" }]]);
+
+section("Build 7 · sweep: 24 quadratic inequalities with whole-number roots");
+for (let k = 0; k < 24; k++) {
+  const a = [1, -1, 2, -2, 3, -3][rnd7(0, 5)], r1 = rnd7(-9, 9);
+  let r2 = rnd7(-9, 9); if (r2 === r1) r2 = r1 + 1 + rnd7(0, 4);
+  const sk = rnd7(1, 4), sign = [">", "<", "≥", "≤"][sk - 1];
+  const lo = Math.min(r1, r2), hi = Math.max(r1, r2), op = sk <= 2 ? "<" : "≤";
+  const outside = (sk === 1 || sk === 3) === (a > 0);
+  const want = outside ? { expr: `X${op}A;B${op}X`, val: `X${op}${fr7(lo)};${fr7(hi)}${op}X` } : { expr: `A${op}X${op}B`, val: `${fr7(lo)}${op}X${op}${fr7(hi)}` };
+  const cs = [a, -a * (r1 + r2), a * r1 * r2];
+  erow(`${cs.join(", ")} ${sign} 0 → ${want.val}`, "§14 sweep", [[INQ(sk, cs), want], ["=", { sel: "1:a", ineq: `aX²+bX+c${sign}0` }]]);
+}
+
+/* ---- DOM measurements at 375 px: both MODE pages, the INEQ grid with
+   its inequality line, the widest INEQ answers ---- */
+section("Build 7 · the MODE pages and INEQ screens fit the LCD (DOM measurement)");
+function measureBuild7b(where, h, press) {
+  const lcd = h.querySelector(".calc-lcd");
+  const L = () => lcd.getBoundingClientRect();
+  const inside = el => { const b = el.getBoundingClientRect(), l = L(); return b.left >= l.left - 0.5 && b.right <= l.right + 0.5 && b.top >= l.top - 0.5 && b.bottom <= l.bottom + 0.5; };
+  const unclipped = el => el.scrollWidth <= el.clientWidth + 0.5;
+  const same = h0 => Math.abs(L().height - h0) < 0.5;
+  const lcdBg = getComputedStyle(lcd).backgroundColor, lcdInk = getComputedStyle(lcd).color;
+  const rev = el => getComputedStyle(el).backgroundColor === lcdInk && getComputedStyle(el).color === lcdBg;
+  press("AC ON AC SHIFT 9 3 = AC");
+  const h0 = L().height;
+  press("MODE");
+  let items = [...h.querySelectorAll(".lcd-mi")], digits = [...h.querySelectorAll(".lcd-mi-n")];
+  const rows = new Set(items.map(i => Math.round(i.getBoundingClientRect().top))).size, cols = new Set(items.map(i => Math.round(i.getBoundingClientRect().left))).size;
+  tick(items.length === 8 && rows === 4 && cols === 2 && items.every(inside) && inside(h.querySelector(".lcd-more")) && same(h0),
+       `${where}: MODE page 1 shows 8 items in 4 rows of 2, and ▼, inside the LCD, height unchanged`, `${items.length} items, ${rows} rows, ${cols} columns, LCD ${Math.round(h0)} → ${Math.round(L().height)} px`);
+  tick(digits.length === 8 && digits.every(rev) && digits.map(d => d.textContent).join("") === "12345678" && !rev(items[0]),
+       `${where}: the MODE digits are in reversed boxes, the item names not`, "");
+  press("▼");
+  items = [...h.querySelectorAll(".lcd-mi")];
+  tick(items.length === 3 && items.every(inside) && h.querySelector(".lcd-more").textContent === "▲" && inside(h.querySelector(".lcd-more")) && same(h0),
+       `${where}: MODE page 2 shows 3 items and ▲, inside the LCD, height unchanged`, `${items.map(i => i.textContent).join(" ")}`);
+  // the INEQ grid with its inequality line
+  press("2 1 1 1 = (−) 111 = (−) 1476 =");
+  const parts = [...h.querySelectorAll(".calc-main > *")], line = h.querySelector(".lcd-ineq");
+  tick(!!line && line.textContent === "aX²+bX+c>0" && parts.every(inside) && unclipped(line) && same(h0) && readE(h).grid === "1|−111|−1476",
+       `${where}: the INEQ grid with "aX²+bX+c>0" under it fits, height unchanged`, `LCD ${Math.round(L().height)} px`);
+  press("frac 1 ▼ 3");
+  tick([...h.querySelectorAll(".calc-main > *")].every(inside) && same(h0), `${where}: a typed fraction on the INEQ grid keeps the height`, `LCD ${Math.round(L().height)} px`);
+  // the widest answers
+  press("AC =");
+  const res = h.querySelector(".lcd-res"), lab = h.querySelector(".lcd-pr-label");
+  tick(readE(h).val === "X<−12;123<X" && inside(res) && unclipped(res) && inside(lab) && same(h0), `${where}: X<A;B<X / X<−12;123<X fits`, `"${readE(h).val}"`);
+  press("S⇔D AC MODE ▼ 2 1 1 2 = (−) 1 = (−) 1 = =");
+  tick(readE(h).val === "X<−1/2;1<X" && inside(h.querySelector(".lcd-res")) && same(h0), `${where}: an answer with a stacked fraction fits, height unchanged`, `LCD ${Math.round(L().height)} px`);
+  press("AC MODE ▼ 2 1 2 1 = 0 = (−) 7 = = S⇔D");
+  tick(readE(h).val === "−2,645751311<X<2,645751311" && inside(h.querySelector(".lcd-res")) && unclipped(h.querySelector(".lcd-res")) && same(h0),
+       `${where}: a long decimal answer fits (the font steps down)`, `"${readE(h).val}", font ${getComputedStyle(h.querySelector(".lcd-res")).fontSize}`);
+  press("AC ON AC SHIFT 9 3 = AC");
+}
+{
+  openCalculator();
+  const scrim = document.querySelector(".calc-scrim");
+  const press = seq => keyIds(seq).forEach(id => scrim.querySelector(`[data-keyid="${id}"]`).click());
+  measureBuild7b(`overlay at ${window.innerWidth} px`, scrim, press);
+  scrim.querySelector(".calc-close").click();
+  const fit = document.getElementById("fitHost");
+  const c = freshCalc(fit);
+  measureBuild7b(`in-question calculator, ${Math.round(fit.getBoundingClientRect().width)} px wide`, fit, c.press);
   fit.innerHTML = "";
 }
 

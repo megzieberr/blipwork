@@ -71,9 +71,11 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    live: f(X)= and g(X)= typed with the normal keys, Start? End? Step? on
    the Build 5 prompt screen (remembered between tables), and a view-only
    grid of 3 rows drawn by the same gridHTML as the STAT data grid.
-   Calculator rebuild Build 7 (2026-10-04, spec §13): EQN (MODE 5: two or
-   three unknowns, the quadratic, the cubic) on a coefficient grid drawn by
-   gridHTML, answered exactly, one answer per screen.
+   Calculator rebuild Build 7 (2026-10-04, spec §13, §14, §16): EQN (MODE
+   5: two or three unknowns, the quadratic, the cubic) on a coefficient
+   grid drawn by gridHTML, answered exactly, one answer per screen; the
+   MODE menu's two pages; INEQ (MODE ▼ 2) for a quadratic with two real
+   roots (the cubic item and the unmeasured cases are left out on purpose).
    ============================================================ */
 const FUNC_KEYS = [
   // top row
@@ -944,7 +946,10 @@ function solveIneq([a, b, c], sign) {
    was measured), "i" alone for 1. */
 function answerHTML(v, dec, fix) {
   const num = x => formatValue(x, dec || !exactFits(x), fix);
-  if (v.kind === "ineq") return v.outside ? `X${v.op}${num(v.lo)};${num(v.hi)}${v.op}X` : `${num(v.lo)}${v.op}X${v.op}${num(v.hi)}`;
+  if (v.kind === "ineq") {
+    const op = escapeHtml(v.op);   // "<" must not open a tag
+    return v.outside ? `X${op}${num(v.lo)};${num(v.hi)}${op}X` : `${num(v.lo)}${op}X${op}${num(v.hi)}`;
+  }
   if (v.kind !== "cplx") return num(v);
   const exact = !dec && exactFits(v.re) && exactFits(v.im);
   const re = isZeroAny(v.re) ? "" : num(v.re);
@@ -1399,9 +1404,34 @@ export function mountCalculator(host, opts = {}) {
   const closeMenu = () => { if (S.menu && S.menu.parent) S.menu = S.menu.parent; else { const ret = S.menu && S.menu.ret; S.screen = !ret || ret === "comp" ? home() : ret; S.menu = null; } };
   const leaveMenu = () => { S.menu = null; S.screen = home(); };
 
+  /* Build 7 (spec §16): MODE is two pages, two columns, digits in reversed
+     boxes: page 1 `1:COMP 2:CMPLX / 3:STAT 4:BASE-N / 5:EQN 6:MATRIX /
+     7:TABLE 8:VECTOR` with ▼, page 2 `1:DIST 2:INEQ / 3:RATIO` with ▲.
+     The items Blipwork does not build (CMPLX, BASE-N, MATRIX, VECTOR, DIST,
+     RATIO: her ruling, not school use) do nothing when picked. */
   function modeMenu() {
-    openMenu({ items: [["1", "COMP"], ["2", "CMPLX"], ["3", "STAT"], ["4", "BASE-N"], ["5", "EQN"], ["6", "MATRIX"], ["7", "TABLE"]], ret: "comp",
-      onNum(n) { if (n === 1) { S.mode = "COMP"; resetEntry(); S.menu = null; S.screen = "comp"; } else if (n === 3) statTypeMenu(); else if (n === 5) eqnTypeMenu(); else if (n === 7) startTable(); } });
+    const p1 = [["1", "COMP"], ["2", "CMPLX"], ["3", "STAT"], ["4", "BASE-N"], ["5", "EQN"], ["6", "MATRIX"], ["7", "TABLE"], ["8", "VECTOR"]];
+    const p2 = [["1", "DIST"], ["2", "INEQ"], ["3", "RATIO"]];
+    openMenu({ items: p1, page: 0, pages: 2, boxed: true, upMark: true, ret: "comp",
+      onDown() { if (this.page === 0) { this.page = 1; this.items = p2; } },
+      onUp() { if (this.page === 1) { this.page = 0; this.items = p1; } },
+      onNum(n) {
+        if (this.page === 1) { if (n === 2) ineqTypeMenu(); return; }
+        if (n === 1) { S.mode = "COMP"; resetEntry(); S.menu = null; S.screen = "comp"; } else if (n === 3) statTypeMenu(); else if (n === 5) eqnTypeMenu(); else if (n === 7) startTable();
+      } });
+  }
+  /* Build 7 (spec §14): INEQ asks the type, then the sign. Only the
+     quadratic is built: the cubic item does nothing (its answers were not
+     measured). The sign lines are written out in full (spec shorthand
+     `1:aX²+bX+c>0 / 2:<0 / 3:≥0 / 4:≤0`, read as four full lines). */
+  function ineqTypeMenu() {
+    openMenu({ items: [["1", "aX²+bX+c"], ["2", "aX³+bX²+cX+d"]], list: true, ret: "comp",
+      onNum(n) { if (n === 1) ineqSignMenu(); } });
+  }
+  function ineqSignMenu() {
+    const signs = [">", "<", "≥", "≤"];
+    openMenu({ items: signs.map((s, k) => [String(k + 1), `aX²+bX+c${escapeHtml(s)}0`]), list: true, ret: "comp",
+      onNum(n) { if (n >= 1 && n <= 4) startEqn("ineq", signs[n - 1]); } });
   }
   /* Build 7 (spec §13): MODE 5 lists the four types as four plain lines */
   function eqnTypeMenu() {
@@ -2312,7 +2342,7 @@ export function mountCalculator(host, opts = {}) {
         { html: "", cls: "lcd-eqn-bk" + (rb ? " lcd-eqn-br" + edge : "") }]);
     }
     let html = gridHTML("lcd-tab lcd-tbl lcd-eqn", heads, body);
-    if (E.kind === "ineq") html += `<div class="lcd-ineq">aX²+bX+c${E.sign}0</div>`;   // spec §14: the chosen inequality under the grid
+    if (E.kind === "ineq") html += `<div class="lcd-ineq">aX²+bX+c${escapeHtml(E.sign)}0</div>`;   // spec §14: the chosen inequality under the grid
     const typing = !isBoxEmpty(E.box);
     cursorOn = typing;
     html += typing
@@ -2695,9 +2725,11 @@ export function mountCalculator(host, opts = {}) {
       const m = S.menu;
       let html = m.title ? `<div class="lcd-title">${m.title}</div>` : "";
       // Build 7: list = one item per line (the EQN types, spec §13 "four plain lines")
-      if (m.items && m.items.length) html += `<div class="lcd-menu${m.list ? " lcd-menu-list" : ""}">` + m.items.map(([n, l]) => `<span class="lcd-mi">${n}:${l}</span>`).join("") + `</div>`;
+      // boxed = the digits in reversed boxes (the MODE menu, spec §16)
+      if (m.items && m.items.length) html += `<div class="lcd-menu${m.list ? " lcd-menu-list" : ""}${m.boxed ? " lcd-menu-boxed" : ""}">` + m.items.map(([n, l]) => `<span class="lcd-mi">${m.boxed ? `<span class="lcd-mi-n">${n}</span>` : n}:${l}</span>`).join("") + `</div>`;
       if (m.note) html += `<div class="lcd-note">${m.note}</div>`;
       if (m.pages && m.page < m.pages - 1) html += `<div class="lcd-more">▼</div>`;
+      if (m.upMark && m.page > 0) html += `<div class="lcd-more">▲</div>`;   // Build 7: MODE page 2 shows ▲ (spec §16; SETUP's page 2 was not described, so unchanged)
       main.innerHTML = html;
     } else if (S.screen === "statInput") {
       main.innerHTML = renderTable();
