@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-04 10:40 (🧮 calculator Builds 9 + 10 LIVE as sw v94; next = her phone test, then the Stats Quest copy)
+# Project status — updated 2026-10-04 11:20 (🧮 sw v94 LIVE; 📥 inbox PLANNED in INBOX-PLAN.md, nothing built; next = inbox build in a fresh session, her word)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,6 +9,9 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **📥 Inbox for the 💬 notes: PLANNED 2026-10-04 11:20, nothing built.** INBOX-PLAN.md
+  holds her four rulings, my flagged defaults, the database design and the three-worker
+  queue. Live box that day: 15 notes, 3 anonymous, 1 unread (from 3 Oct).
 - **🧮 Calculator Builds 9 + 10 LIVE as sw v94 (Sun 2026-10-04 10:35, her "yes, ship it").**
   Ship commit `1dc72c9`; sw_check OK before the push; Pages build `built` for 1dc72c9;
   live sw reads mhq-v94; live `js/calculator.js` byte-identical to HEAD. In it: `d40c276`
@@ -129,6 +132,11 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   screen and the concept card already says "type the values, AC"; any Stats Quest hint
   that goes straight from typing to SHIFT 1 must gain the AC at the copy.
 - 2026-10-04 (hers): "yes, ship it, and then wrap up please" → sw v94 live, Blipwork only.
+- 2026-10-04 (hers): **📥 inbox for the 💬 notes is WANTED; this replaces the 2026-09-05
+  "no reply field" ruling** ("never rebuild the app around one learner" still stands).
+  Typed reply / Bug fixed / Answered elsewhere. Anonymous notes: her tick only, no
+  message. "Answered elsewhere" shows a short inbox line. Bug fixed = ready-made line +
+  optional extra. Dot on the icon only, no push. Plan = INBOX-PLAN.md (nothing built).
 
 ## ⏳ Pending on Megan
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v94) → calculator → try
@@ -150,6 +158,10 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
+- **📥 Inbox build, her word, FRESH session:** read INBOX-PLAN.md (her four rulings + my
+  flagged defaults are in it, do not re-ask). Fable foreman, three Opus workers one at a
+  time (backend, admin page, learner inbox), about 0.75M tokens. Migration before push,
+  ship as sw v95.
 - **Her phone test of v94** (GCD / LCM, the stats table); anything she finds gets measured
   on the emulator first, then built (one unit per worker).
 - **Stats Quest copy, her word, fresh session:** `js/calculator.js` WITH the new calculator
