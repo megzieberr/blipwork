@@ -336,8 +336,8 @@ builds (listed at the end), each its own fresh session. Start with the two you r
   None show the current choice. AC cancels without changing.
 - **CLR** (SHIFT 9): title `Clear?`, then `1:Setup 2:Memory` / `3:All`. 3 →
   `Reset All?` / `[=] :Yes` / `[AC] :Cancel`. = → centred `Reset All` /
-  `Press [AC] Key`, and AC returns to COMP. (Blipwork has no title and skips the last
-  screen.)
+  `Press [AC] key` (lower-case k, corrected by §19.8), and AC returns to COMP. (Blipwork
+  has no title and skips the last screen.)
 - Status-line words: boxed S / A at the far left, then M, STO, RCL, STAT, FIX; D on the
   right next to `Math`; ▲ / ▼ / ▲▼ at the far right.
 
@@ -475,3 +475,19 @@ DEL deletes what is LEFT of the cursor. Measured:
   the DEL template rules).
 - Each: new rows in `verify-calc-casio.html` from the device answers above, all verify
   pages green, sw CACHE bump + `tools/sw_check.py` OK, then the Stats Quest copy.
+
+### 19.8 Third probe, Sun 2026-10-04 10:05 (foreman review of Builds 9 + 10)
+Measured on the emulator at full scale, to settle choices the Build 9 worker had to guess.
+- **Typing in the STAT editor:** the inverted cell KEEPS its old value while a number is
+  typed; the typed number shows bottom left only (X 5, 7, 9; cursor on 5; typing 12 leaves
+  the cell reading 5). = stores it. BUILT in the review.
+- **CLR words:** 1 → `Clear Setup?` / `[=] :Yes` / `[AC] :Cancel` → `Complete!` /
+  `Press [AC] key`. 2 → `Clear Memory?` → `Complete!` / `Press [AC] key`. 3 →
+  `Reset All?` → `Reset All` / `Press [AC] key`. Every last screen has a lower-case "key"
+  (§16 had "Key" for All: a misread). BUILT in the review.
+- **STAT calculation screen:** after AC it shows the cursor top left and a **0 bottom
+  right**, and the 0 stays while a line is typed (5, then 58, with 0 under it) until =
+  gives a result. COMP (MthIO) after AC shows NO 0. NOT built: Blipwork's STAT screen is
+  blank there, and many test rows assert that; optional, her call, default leave.
+- Driving note: her "the emulator takes no numbers from my keyboard" was Num Lock (off
+  after a restart), not the emulator; the number pad types digits again with it on.

@@ -4,7 +4,7 @@
    ------------------------------------------------------------
    A faithful, interactive replica of the calculator's stats flow,
    built to the exact key sequences the class is taught:
-     • clear:        SHIFT 9 → 3 (All) → = (then AC leaves "Press [AC] Key", Build 8)
+     • clear:        SHIFT 9 → 3 (All) → = (then AC leaves "Press [AC] key", Build 8)
      • frequency:    SHIFT MODE (SETUP) → ▼ → 4 (STAT) → 1 ON / 2 OFF
      • enter data:   MODE → 3 (STAT) → 1 (1-VAR), type values, AC
      • read a value: SHIFT 1 (STAT) → 4 (Var) → n/x̄/σx/sx, then =
@@ -83,7 +83,7 @@ import { mean, stdDev, sortAsc, quartilesExclusive } from "./statlib.js";
    the two-variable type A+BX (MODE 3 2) with its X | Y grid and the Reg
    menu (A, B, r, x̂, ŷ); the SETUP menu's two boxed pages with 5:TABLE
    (f(x) only, or f(x) and g(x)); the CLR screens Clear? / Reset …? /
-   Reset … Press [AC] Key, for Setup, Memory and All.
+   Reset … Press [AC] key, for Setup, Memory and All.
    Calculator rebuild Build 10 (2026-10-04, spec §19.1, §19.5, §19.6):
    GCD( (ALPHA ×) and LCM( (ALPHA ÷) with the ";" separator (SHIFT )) and
    the new Argument ERROR; a plain decimal shows at most 12 digits counting
@@ -1707,24 +1707,26 @@ export function mountCalculator(host, opts = {}) {
   }
   /* Build 8 (spec §16): SHIFT 9 shows the title `Clear?` over `1:Setup
      2:Memory / 3:All`. 3 → `Reset All?` / `[=] :Yes` / `[AC] :Cancel`; = does
-     the reset and shows `Reset All` / `Press [AC] Key`, centred; AC then goes
+     the reset and shows `Reset All` / `Press [AC] key`, centred; AC then goes
      back to COMP. 1 and 2 have the same two steps with their own words
-     (Reset Setup? → Reset Setup, Reset Memory? → Reset Memory): only All was
-     probed, so their screens copy it. AC on a Reset …? screen cancels without
+     (Build 8 copied All's shape for them; Build 9 and the third probe below
+     replaced those guesses with the measured words). AC on a Reset …? screen cancels without
      changing anything. On the last screen only AC (or ON) does anything.
      Build 9 (spec §19.2, measured from the STAT data editor): 2 is `Clear
      Memory?` / `[=] :Yes` / `[AC] :Cancel`, then `Complete!` / `Press [AC]
-     key` (the spec writes this "key" in lower case; All's is "Key"). These
-     replace Build 8's copied guess (Reset Memory? / Reset Memory) wherever
-     CLR is opened: it is one CLR. Setup keeps the copied words (not probed).
+     key`. These replace Build 8's copied guess (Reset Memory? / Reset
+     Memory) wherever CLR is opened: it is one CLR.
+     Third probe (spec §19.8, measured): 1 is `Clear Setup?`, then
+     `Complete!` / `Press [AC] key`, and every last screen writes "key" in
+     lower case, All's too (`Reset All` / `Press [AC] key`).
      Opened from the data editor, AC on the last screen goes back to the
      editor, cursor on row 1 (spec §19.2, measured for Memory; Setup does the
      same, not device-measured); All leaves STAT, so it goes to COMP. */
   const CLR_WORDS = { 1: "Setup", 2: "Memory", 3: "All" };
   const CLR_SCREENS = {
-    1: { ask: "Reset Setup?", done: ["Reset Setup", "Press [AC] Key"] },
+    1: { ask: "Clear Setup?", done: ["Complete!", "Press [AC] key"] },
     2: { ask: "Clear Memory?", done: ["Complete!", "Press [AC] key"] },
-    3: { ask: "Reset All?", done: ["Reset All", "Press [AC] Key"] },
+    3: { ask: "Reset All?", done: ["Reset All", "Press [AC] key"] },
   };
   function clrMenu() {
     openMenu({ title: "Clear?", items: [["1", "Setup"], ["2", "Memory"], ["3", "All"]], ret: "comp",
@@ -3175,7 +3177,7 @@ export function mountCalculator(host, opts = {}) {
       if (m.items && m.items.length) html += `<div class="lcd-menu${m.list ? " lcd-menu-list" : ""}${m.boxed ? " lcd-menu-boxed" : ""}${m.packed ? " lcd-menu-packed" : ""}">` + m.items.map(([n, l]) => `<span class="lcd-mi">${m.boxed ? `<span class="lcd-mi-n">${n}</span>` : n}:${l}</span>`).join("") + `</div>`;
       if (m.note) html += `<div class="lcd-note">${m.note}</div>`;
       if (m.notes) html += `<div class="lcd-note">${m.notes.map(t => `<div>${escapeHtml(t)}</div>`).join("")}</div>`;   // Build 8: Reset …? / [=] :Yes / [AC] :Cancel (spec §16), one per line
-      if (m.done) html += `<div class="lcd-done">${m.done.map(t => `<div>${escapeHtml(t)}</div>`).join("")}</div>`;      // Build 8: Reset All / Press [AC] Key, centred (spec §16)
+      if (m.done) html += `<div class="lcd-done">${m.done.map(t => `<div>${escapeHtml(t)}</div>`).join("")}</div>`;      // Build 8: Reset All / Press [AC] key, centred (spec §16)
       if (m.pages && m.page < m.pages - 1) html += `<div class="lcd-more">▼</div>`;
       if (m.upMark && m.page > 0) html += `<div class="lcd-more">▲</div>`;   // Build 7: MODE page 2 shows ▲ (spec §16; SETUP's page 2 was not described, so unchanged)
       main.innerHTML = html;
@@ -3227,7 +3229,8 @@ export function mountCalculator(host, opts = {}) {
      on the TABLE, not device-measured for STAT). While a number is being
      typed the bottom right is empty and the number shows bottom LEFT with a
      blinking cursor after it (the EQN grid's .lcd-eqn-in line). The selected
-     cell still shows what is typed, as before (not device-measured). Row
+     cell KEEPS its old value until = stores the new one (spec §19.8,
+     measured: the typed number shows bottom left only). Row
      numbers in the TABLE's narrow column; rows past the open row are blank.
      Negative numbers show the real minus sign. */
   function renderTable() {
@@ -3261,10 +3264,10 @@ export function mountCalculator(host, opts = {}) {
       body.push([{ html: r <= open ? String(r + 1) : "", cls: "lcd-tbl-n" },
         ...heads.map((_, c) => {
           const sel = r === S.row && c === S.col;
-          /* The selected cell shows what has been typed; with nothing typed yet it
-             shows the value ALREADY in that cell, so after arrowing back up to a row
-             the learner can see which value they are about to replace. */
-          return { html: sel && typing ? typed : statCellText(vals[c]), cls: sel ? "lcd-tbl-sel" : "" };
+          /* The selected cell shows the value ALREADY in that cell, also while a
+             new number is being typed (spec §19.8, measured), so the learner can
+             see which value they are about to replace. */
+          return { html: statCellText(vals[c]), cls: sel ? "lcd-tbl-sel" : "" };
         })]);
     }
     const html = gridHTML("lcd-tab lcd-tbl lcd-stat", [{ html: "", cls: "lcd-tbl-n" }, ...heads.map(h => ({ html: h }))], body);
