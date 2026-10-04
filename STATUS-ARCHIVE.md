@@ -1,5 +1,109 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-04 (Sun, 00:00 to 02:40): calculator rebuild, all eight builds, overnight foreman run (LOCAL only)
+
+**Her words:** "Is this a safe build to task you to run as foreman over night? ... Yes, here
+is your /go ... see how far you get tonight with the usage limit ... Shut the laptop down
+when you're done please." Weekly limit was at 93% with 7 hours to the reset.
+
+**How it ran.** Fable foreman, eight Opus workers one at a time, one build each, briefs
+carrying her /go block. Each worker appended a section to `verify-calc-casio.html` (keys
+pressed through the rendered buttons, expected screens taken from the spec's device answers)
+and committed locally. Before each next dispatch Fable reran verify-calculator,
+verify-calc-sum-edit, verify-calc-casio, verify-steps-ux and verify-dice fresh, pressed 10 to
+17 device examples itself at 375 px with Playwright, looked at the picture, and checked the
+weekly limit. After Build 8: every verify page in the repo rerun (31 pages) plus
+`node verify-lazy-load.mjs`, all green except verify-feedback-papers' 4 old stale fails.
+Cost: weekly limit 93% → 96% for everything; workers 274k + 289k + 261k + 332k + 314k +
+306k + 364k + 416k tokens.
+
+**Build log.**
+  - Build 1 DONE `d499268` (editing after =, ▲▼ history, ALPHA letters, STO/RCL/M+).
+    Foreman rerun: verify-calculator 77/77, verify-calc-sum-edit 29/29, verify-calc-casio
+    57/57; looked at 375 px. Worker 274k tokens, about 1% of the week.
+  - Build 2 DONE `d5306e2` (brackets close themselves, fraction grab, ˣ√, Ans², error
+    screens with Goto, fraction size limit, 10 digits, ×10 form, Norm 2). Foreman rerun:
+    77/77, 29/29, verify-calc-casio 125/125, steps-ux 33/33, dice 146/146; 13 device
+    examples pressed and looked at 375 px. Worker 289k tokens.
+  - Build 3 DONE `5da210c` (two-term surds, all 15° trig exact, exact rational powers, odd
+    roots of negatives, surd limit, π key and π forms). Foreman rerun: 77/77, 29/29,
+    verify-calc-casio 202/202, steps-ux 33/33, dice 146/146; 14 device examples pressed and
+    looked at 375 px. Worker 261k tokens. ⚠️ It also fixed a bug that is LIVE today:
+    tan(20), tan(35) and every whole angle outside the 30/45 family give Math ERROR on v92.
+  - Build 4 DONE `a91b1c7` (log, log□, ln, e, 10^□, e^□, ×10^x, x⁻¹, x!, x³, nCr, nPr, %,
+    Abs, °'", mixed fractions, SHIFT S⇔D, Fix + 8:Norm). Foreman rerun: 77/77, 29/29,
+    verify-calc-casio 314/314, steps-ux 33/33, dice 146/146; 17 examples pressed and looked
+    at 375 px. Worker 332k tokens. Stats Quest copy must also take the new CSS rules
+    (`.calc-logb-base`, `.calc-abs-body`, `.calc-comb`, `.calc-mixed-whole`, `.ind-fix`, plus
+    the status-line and error-screen rules from Builds 1 and 2).
+  - Build 5 DONE `2ee9255` (CALC with letter prompts, SOLVE with the three-line answer
+    screen and Can't Solve). Foreman rerun: 77/77, 29/29, verify-calc-casio 381/381,
+    steps-ux 33/33, dice 146/146; 12 examples pressed and looked at 375 px (all four device
+    SOLVE answers match). Worker 314k tokens. New CSS: `.lcd-pr*`, `.lcd-solve`, `.lcd-sv-*`.
+    Weekly limit 95% after five builds.
+  - Build 6 DONE `c2ce649` (TABLE, MODE 7: f and g, Start/End/Step remembered, 3-row view,
+    cut-off cells with the full value on the bottom line, 20-row limit). Foreman rerun:
+    77/77, 29/29, verify-calc-casio 447/447, steps-ux 33/33, dice 146/146; 10 examples
+    pressed and looked at 375 px (device example table matches; STAT grid unchanged).
+    Worker 306k tokens. New CSS: `.lcd-tbl*`.
+  - Build 7 DONE `a10c423` (EQN, MODE 5) + `c763daf` (two-page MODE menu, INEQ for
+    quadratics with two real roots). Foreman rerun: 77/77, 29/29, verify-calc-casio 677/677,
+    steps-ux 33/33, dice 146/146; 16 examples pressed and looked at 375 px (every device
+    answer in spec 13 and 14 matches, incl. the "i" roots and X₁ 1, X₂ 3, X₃ 2 for the cubic).
+    Worker 364k tokens. New CSS: `.lcd-eqn*`, `.lcd-ineq`, `.lcd-menu-list`,
+    `.lcd-menu-boxed`, `.lcd-mi-n`. Weekly limit still 95%.
+  - Build 8 DONE `a508b29` (STAT read-offs pasted onto an editable line, A+BX regression with
+    A, B, r, x̂, ŷ, two-page SETUP, TABLE f-only setting, CLR flows, Reset All back to
+    factory). verify-calc-casio 827/827; 17 examples pressed and looked at 375 px
+    (A = 0, B = 1,9, r = 0,981155781, 5ŷ = 9,5 all match). New CSS: `.lcd-menu-packed`,
+    `.lcd-hat`, `.lcd-done`. `calcdo` reads `{tok, value}` events and compares numbers with a
+    tolerance; A+BX has its own mode name `REG` so it can never satisfy a 1-VAR goal.
+
+**Probe list (spec silent, the workers' choices; each has a test row a probe can overturn).**
+- Editing / ALPHA: ALPHA then AC, DEL, = or an arrow does nothing; SHIFT after ALPHA switches
+  ALPHA off; ▲ shows after every = even the first; ▼ alone at the oldest entry; STO / M± right
+  after a result store Ans and stay out of the history; errors are not added to the history.
+- Fractions / display: `3` ▫/▫ then DEL deletes the whole fraction; S⇔D does nothing on a
+  fraction too long to show; values between 10⁻⁹ and 10⁻⁶ show as long plain decimals
+  (1÷3000000 = 0,0000003333333333); error-screen lines are left-aligned; Math ERROR Goto puts
+  the cursor at the end; ON is ignored on an error screen.
+- Exact maths: two unlike roots are ordered bigger-radicand first whatever the signs
+  (√2−√3 shows −√3+√2); two negatives pull the minus in front of the fraction; surd limit is
+  "radicand after simplifying below 1000" (√1200 = 20√3); (−2)^(⅓) is a decimal; ³√(−8) = −2
+  but ˣ√ of a negative is Math ERROR; π2 is Syntax ERROR; Rad-mode sin(π÷6) is exact.
+  Result roots are drawn without the bar over the number (the input line has it).
+- Keys: nCr / nPr bind tighter than × ÷; ×10 with nothing before or after is Syntax ERROR;
+  °'" mixed into other sums gives a plain decimal, seconds rounded to 2 decimals; the mixed
+  template does not grab the number before it; Norm 1 behaves like Norm 2; with Fix on, STAT
+  read-offs are rounded too.
+- CALC / SOLVE: only in COMP; CALC on a line with no letters works like =; a typed SOLVE
+  guess is stored in X; SOLVE leaves Ans alone; other letters use stored values without
+  asking; log(X)=1 from 0 gives Math ERROR not Can't Solve; a too-long equation is cut off on
+  the answer screen; double roots untested.
+- TABLE: MODE 7 always opens empty; a cell that cannot be worked out shows ERROR; Step 0 is
+  Math ERROR; the minus counts as one of the 6 cell characters; ▶ / ◀ do not wrap; Fix rounds
+  the bottom line only; the 20-row limit also applies to f-only.
+- EQN / INEQ: cubic order = smallest real root first, then the rest bigger first
+  (`cubicOrder()`); a complex pair follows the real root, +i first; a singular system or a = 0
+  is Math ERROR; menu text has no subscript n; ≥ and ≤ follow the measured < and > shapes.
+- STAT: read-offs are decimals so S⇔D does nothing on them; ŷ / x̂ alone are Syntax ERROR;
+  no pairs or all-equal X is Math ERROR; FREQ on is ignored in A+BX; SETUP page 2 shows no ▲;
+  Reset Memory clears variables, M, Ans and history; a digit with no menu item does nothing.
+- Found and left: nothing known. Found and fixed on the way: tan of any whole angle outside
+  the 30/45 family gave Math ERROR (LIVE on v92); MODE 3 1 from TABLE left the cursor in a
+  hidden box.
+
+**Moved out of the status head on 2026-10-04 (size gate), verbatim:**
+- **What changed under the hood:** `js/quests/load.js`, `js/exam/load.js` and
+  `loadDicePool` fetch content on the tap (chapter open prefetches its seven);
+  `js/funfun/` is imported only when the Functions chapter opens; `local-backend.js` only
+  under `?local=1`; `js/lazy.js` retries a failed module under a fresh `?retry=` URL
+  (browsers REMEMBER a failed import for the whole session, proved headless);
+  `js/exam/_registry.js` holds the pure card rules both doors share; the three registries
+  keep their sync exports for the 30 verify pages. `sw.js`: app code cache-first with a
+  7-day stamp, navigations + every .html + js/app.js network-first, every network trip
+  conditional (`cache: "no-cache"`), retries heal the plain entry, activate still evicts.
+
 ## 2026-10-03 (Sat night): Casio emulator probe for the calculator rebuild (Opus, nothing built)
 
 **Her words:** "need to make the alpha button work, I also noticed that when you go back on

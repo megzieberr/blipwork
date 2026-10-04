@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-03 (🧮 Casio probe done: CASIO-CALCULATOR-SPEC.md is the calculator rebuild spec; still LIVE on sw v92)
+# Project status — updated 2026-10-04 (🧮 calculator rebuild BUILT overnight, all 8 builds, LOCAL only; live is still sw v92 until she says ship)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,11 +9,15 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **🧮 Calculator rebuild is NEXT (2026-10-03).** A learner's 💬 note ("The alpha button
-  dont work in calc") and her own find (arrow back to fix a typo wipes the screen) led to a
-  full probe of her Casio emulator. Everything is in **CASIO-CALCULATOR-SPEC.md**: device
-  answers to test against, the root causes in `js/calculator.js`, and an eight-build order.
-  Nothing in `js/` changed yet.
+- **🧮 Calculator rebuild BUILT, not shipped (Sun 2026-10-04, overnight foreman run on her
+  /go).** All eight builds of CASIO-CALCULATOR-SPEC.md section 18 are in `js/calculator.js`
+  as nine LOCAL commits (`d499268` … `a508b29`), each reviewed by Fable with a fresh test
+  run and a look at 375 px before the next started. `verify-calc-casio.html` holds 827
+  checks taken from her emulator's own answers; every verify page in the repo is green
+  (feedback-papers keeps its 4 old stale fails). Nothing pushed, no sw bump, Stats Quest
+  not yet copied. Learners are still on v92.
+- ⚠️ **Live bug the rebuild fixes:** on v92 `tan(20)`, `tan(35)` and every whole angle
+  outside the 30°/45° family give Math ERROR. Fixed locally (Build 3), waits for the ship.
 - **Live on sw v92** (2026-09-06, fetch-verified: sw.js reads mhq-v92; js/lazy.js,
   js/quests/load.js, js/exam/load.js, js/exam/_registry.js all 200; live screens.js
   uses the loader; Pages build 34028439392 success). **Build 6 shipped on her "ship it":**
@@ -22,15 +26,6 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   next. Numbers (375 px, ?local=1): login 317 files / 5 354 KB → **83 / 1 627 KB**; a
   chapter +9 files, an exam chapter +21; with the worker warm, the third visit onwards
   costs **5 requests / 0 KB for all five screens**.
-- **What changed under the hood:** `js/quests/load.js`, `js/exam/load.js` and
-  `loadDicePool` fetch content on the tap (chapter open prefetches its seven);
-  `js/funfun/` is imported only when the Functions chapter opens; `local-backend.js` only
-  under `?local=1`; `js/lazy.js` retries a failed module under a fresh `?retry=` URL
-  (browsers REMEMBER a failed import for the whole session, proved headless);
-  `js/exam/_registry.js` holds the pure card rules both doors share; the three registries
-  keep their sync exports for the 30 verify pages. `sw.js`: app code cache-first with a
-  7-day stamp, navigations + every .html + js/app.js network-first, every network trip
-  conditional (`cache: "no-cache"`), retries heal the plain entry, activate still evicts.
 - ⚠️ **EVERY SHIP FROM NOW ON: `python tools/sw_check.py` must print OK before the push.**
   It refuses when js/ or css/ changed since the last CACHE bump. Without the bump,
   learners keep old code for up to 7 days. ⚠️ Her own Chrome on localhost:5191 holds code
@@ -116,8 +111,28 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   trig, exponents, SHIFT SOLVE, MODE 7 TABLE, MODE 5 EQN.
 - 2026-10-03 (hers): copy the FACTORY settings (her emulator was never changed; a reset
   confirmed Norm 2, TABLE asks f(X) and g(X), STAT FREQ off, d/c improper results).
+- 2026-10-04 (hers): "/go ... see how far you get tonight with the usage limit ... shut the
+  laptop down when you're done". Fable foreman, one Opus worker per build, local commits.
+- 2026-10-04 (mine, flagged): the calculator stays ONE file (`js/calculator.js`, 945 → 3043
+  lines) because Stats Quest copies it verbatim; a split into lazy modules is a
+  separate optional build. Where the spec was silent the workers kept the old behaviour or
+  the simplest reading and gave each choice its own test row; the list is in
+  STATUS-ARCHIVE.md (2026-10-04) as "probe list".
+- 2026-10-04 (mine, flagged): STAT read-offs are now real editable lines and show 10
+  significant digits like the device (x̄ 3,33333333 → 3,333333333). Safe because the stats
+  quests (`calcdo`) compare the NUMBER with a tolerance, never the text (checked, tested).
+- 2026-10-04 (mine, flagged): not measured = not built. STAT types 3 to 8, the two-variable
+  Sum / Var / MinMax menus, INEQ for cubics and for one or no real root, ab/c, LineIO, Sci
+  do nothing or give Math ERROR rather than a guessed screen. Skipped by her ruling: hyp,
+  ENG, INS, ∫, CONST, CONV and friends. The short raised minus of the (−) key is NOT copied
+  (house rule: the real minus sign).
 
 ## ⏳ Pending on Megan
+- 💻 10 min [blocking the ship]: say "open the new calculator" → I open it beside your
+  emulator → try your everyday sums on both.
+- 💻 1 line [blocking]: say "ship it" → I bump the cache to v93, push, and copy the
+  calculator to Stats Quest (GitHub only, two repos, no Supabase).
+- 💻 5 min [whenever]: four emulator checks from the probe list (see Next up).
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v92) → play one round in any
   chapter → 📝 Exam Focus → one card. While there: your Blip's outline in his body colour,
   the exponential card reads y = a·b^(x − p) + q. Optional: airplane mode, reopen a
@@ -133,12 +148,18 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
-- **Calculator rebuild from CASIO-CALCULATOR-SPEC.md, needs her build-go.** Eight
-  builds, ONE per fresh session or worker (spec section 18): 1 editing + history + ALPHA
-  + variables (her two reports), 2 parser/display (auto-close brackets, fraction grab,
-  Norm 2), 3 exact maths, 4 more keys, 5 CALC + SOLVE, 6 TABLE, 7 EQN (+INEQ), 8 STAT
-  regression + menus. Each: test against the spec's device answers, `tools/sw_check.py`,
-  then copy `js/calculator.js` to Stats Quest (it copies verbatim).
+- **Calculator ship, needs her "ship it".** Steps: her own try-out first; bump `sw.js`
+  CACHE to mhq-v93; `python tools/sw_check.py` must print OK; push; fetch-verify live; then
+  copy `js/calculator.js` to Stats Quest WITH the new calculator CSS from `css/styles.css`
+  (`.calc-ind` slots, error screen, `.calc-logb-base`, `.calc-abs-body`, `.calc-comb`,
+  `.calc-mixed-whole`, `.ind-fix`, `.lcd-pr*`, `.lcd-solve`, `.lcd-sv-*`, `.lcd-tbl*`,
+  `.lcd-eqn*`, `.lcd-ineq`, `.lcd-menu-*`, `.lcd-mi-n`, `.lcd-hat`, `.lcd-done`), re-check
+  Stats Quest's own calculator consumers there, bump its sw, push.
+- **Probe list for her emulator (full list in STATUS-ARCHIVE.md, 2026-10-04).** The four
+  that matter most: (1) in A+BX mode, what do SHIFT 1 → 3:Sum, 4:Var and 6:MinMax list?
+  (they do nothing now); (2) SOLVE on `AX+B` with letters other than X: does it ask A? and
+  B? first? (we use the stored values); (3) `1÷3000000 =` then S⇔D: what shows? (we show
+  0,0000003333333333); (4) `3` ▫/▫ then DEL: what is deleted? (we delete the whole fraction).
 - **Optional shell trim, her one-line call, default leave:** lazy-load the ten engines,
   `concepts.js`, `calculator.js` and the companion renderer behind their first use;
   login could drop from 83 files toward 40. Same two-worker pattern, one sw bump.
