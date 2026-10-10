@@ -135,6 +135,7 @@ import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/tim
 import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f12Diagnose, f12EquationsOf } from "./js/quests/_finance-check.js";
 import { F12_FAMILIES } from "./js/quests/questf12-one-equation.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
+import { formulaHtml, fracHtml, xbarHtml } from "./js/ui.js";
 
 const ACC = "#8b5cf6";
 let total = 0, passed = 0; const fails = [];
@@ -575,7 +576,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   const noTags = s => String(s).replace(/<[^>]+>/g, "");
   tick(def.skills.map(s => s.id).join(",") === ORDER.join(","), `f12 deals 8 cards in order: ${def.skills.map(s => s.id).join(", ")}`);
   def.skills.forEach((skill, pos) => {
-    const st = { bad: 0, firstBad: "", pics: 0, names: new Set(), deps3: 0, deps2: 0, carOnPay: 0, carOnTotal: 0, steps3: 0, eqs: 0 };
+    const st = { bad: 0, firstBad: "", pics: 0, names: new Set(), deps3: 0, deps2: 0, carOnPay: 0, carOnTotal: 0, steps3: 0, eqs: 0, cutOpts: 0, cutCards: 0 };
     const showPic = pos < 3;
     for (let i = 0; i < N; i++) {
       const q = skill.gen();
@@ -592,6 +593,12 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       if (/\^\(?−?1\)?(?!\d)/.test(noTags(t))) problems.push("a car with an exponent of 1");
       if (/half-yearly/.test(t)) problems.push("half-yearly with a breakable hyphen");
       if (/<span class="nowrap">\s*=/.test(t)) problems.push("a unit that starts with =");
+      /* f12 review 1: a number and its unit are one unit ("2 years", "8% p.a.", "2 decimal places"); a single-letter
+         left side rides with its first term ("A = 5 500(…)"), never "A =" alone; every equation wears .f12-eq */
+      if (/\d%?[\s ](?:(?:years?|times?|decimal|months?)\b|p\.a\.)/.test(noTags(t.replace(/<span class="nowrap">[^<]*<\/span>/g, "")))) problems.push("a number apart from its unit");
+      if (/<span class="nowrap">[AP] =<\/span>/.test(t)) problems.push("\"A =\" or \"P =\" in a unit of its own");
+      const eqLines = [...((steps[0] && steps[0].options) || []).map(o => String(o.label)), ...(q.solution || []).filter(s => String(s.s).startsWith("The one equation: ")).map(s => String(s.s).slice(18))];
+      if (eqLines.some(h => !/^<span class="f12-eq">[\s\S]*<\/span>$/.test(h))) problems.push("an equation without the round's .f12-eq size");
       if (/buys an? car\b/i.test(t)) problems.push("a car that is bought (car is the bracket)");
       if (!NAMES.includes((String(q.prompt).match(/^([A-Z][a-z]+) /) || [])[1])) problems.push("not one of the ten textbook names");
       if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 4) problems.push("no hint, answer or worked solution");
@@ -618,12 +625,15 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       st.names.add((String(q.prompt).match(/^([A-Z][a-z]+) /) || [])[1]);
       if (skill.id === "twoDeposits") { if (/straight after the last deposit/.test(q.prompt)) st.deps3++; else st.deps2++; }   // Mvelo: a third deposit on the day of A
       const opts = (steps[0] && steps[0].options) || [];
-      if (opts.some(o => !o.correct && /^<span class="nowrap">(A|P|\d[\d ]*)\(1/.test(o.label))) st.carOnTotal++; else st.carOnPay++;
+      if (opts.some(o => !o.correct && /^<span class="f12-eq"><span class="nowrap">(A|P|\d[\d ]*)\(1/.test(o.label))) st.carOnTotal++; else st.carOnPay++;
+      /* f12 review 1: how often a term is too wide for a 360-px option and is cut, "× (1 + …)^n" */
+      const cuts = opts.filter(o => o.label.includes("×")).length;
+      st.cutOpts += cuts; if (cuts) st.cutCards++;
       if (problems.length) { st.bad++; if (!st.firstBad) st.firstBad = problems.join(", ") + ": " + noTags(q.prompt).slice(0, 140); }
     }
     stat[skill.id] = st;
     tick(st.bad === 0, `f12 card ${pos + 1} (${skill.id}): words, units, equations, chain, fade, the story and its decoys (${N} rolls)`);
-    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(18)} timeline ${String(st.pics).padStart(3)}/${N} · names ${[...st.names].join("/")} · car decoy on a payment ${st.carOnPay}, on the total ${st.carOnTotal} · equations parsed ${st.eqs}`
+    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(18)} timeline ${String(st.pics).padStart(3)}/${N} · names ${[...st.names].join("/")} · car decoy on a payment ${st.carOnPay}, on the total ${st.carOnTotal} · equations parsed ${st.eqs} · a term cut "× (…)" on ${st.cutCards} cards (${st.cutOpts} options)`
       + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
   });
   const S = id => stat[id] || {};
@@ -649,6 +659,44 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     tick(bad === 0, `f12.${fam} with its timeline forced on: honest, to scale, every label clear at 360 px (40 rolls)`);
     flines2.push(`${bad === 0 ? "✓" : "✗"} ${fam.padEnd(18)} 40 drawn timelines, ${bad} with a problem${first ? `: ${first}` : ""}`);
   });
+  /* f12 review 1: the DOM check behind "a number never leaves its unit". Every text a learner reads on a card (the
+     story, each step's prompt, the four options, the worked lines and side notes) is formatted as the app does it
+     (formulaHtml), laid out at every width from 200 to 360 px, and the client rects of each number's last glyph and its
+     unit's first glyph ("2 years", "8% p.a.", "12 times", "2 decimal places") must sit on ONE line. The width sweep
+     puts a line end at every place a line could end, so it does not lean on this page's font */
+  {
+    const fmt = x => formulaHtml(fracHtml(xbarHtml(x)));
+    const UNIT = /(\d%?)[\s ]+(years?|times?|p\.a\.|decimal|months?)/g;
+    const glyph = (t, i) => { const r = document.createRange(); r.setStart(t, i); r.setEnd(t, i + 1); return r.getClientRects()[0]; };
+    let pairs = 0, renders = 0; const split = [];
+    def.skills.forEach(skill => {
+      for (let i = 0; i < 8; i++) {
+        const q = skill.gen();
+        const texts = [q.prompt, ...q.steps.flatMap(x => [x.prompt, ...(x.options || []).map(o => o.label)]), ...q.solution.flatMap(s => [s.s, s.r])].filter(Boolean).map(String);
+        texts.forEach(txt => {
+          if (!UNIT.test(txt.replace(/<[^>]+>/g, ""))) return;
+          UNIT.lastIndex = 0;
+          for (let w = 200; w <= 360; w += 10) {
+            measure.innerHTML = `<div class="q-prompt" style="width:${w}px">${fmt(txt)}</div>`;
+            renders++;
+            const nodes = []; let full = "";
+            const tw = document.createTreeWalker(measure, NodeFilter.SHOW_TEXT);
+            for (let t = tw.nextNode(); t; t = tw.nextNode()) { nodes.push({ t, at: full.length }); full += t.data; }
+            const at = k => { for (let j = nodes.length - 1; j >= 0; j--) if (nodes[j].at <= k) return [nodes[j].t, k - nodes[j].at]; return null; };
+            for (const m of full.matchAll(UNIT)) {
+              pairs++;
+              const A = at(m.index + m[1].length - 1), B = at(m.index + m[0].length - m[2].length);
+              const ra = A && glyph(...A), rb = B && glyph(...B);
+              if (ra && rb && Math.abs(ra.bottom - rb.bottom) > 4) split.push(`${skill.id} at ${w} px: "${full.slice(Math.max(0, m.index - 10), m.index + m[0].length)}"`);
+            }
+          }
+        });
+      }
+    });
+    measure.innerHTML = "";
+    tick(pairs > 0 && split.length === 0, `f12: a number never leaves its unit at a line end (${pairs} number–unit pairs in ${renders} renders, widths 200–360 px)${split.length ? ": " + split.slice(0, 3).join("; ") : ""}`);
+    flines2.push(`${split.length === 0 ? "✓" : "✗"} number and unit on one line: ${pairs} pairs in ${renders} renders (200–360 px), ${split.length} split${split.length ? ": " + split[0] : ""}`);
+  }
   const sample = def.skills.map((s, pos) => {
     const q = s.gen(), ok = q.steps[0].options.find(o => o.correct);
     return `  card ${pos + 1}: ${noTags(q.prompt)}\n          ${noTags(ok.label)}  →  ${noTags(q.answerLabel)}`;

@@ -43,10 +43,16 @@
    F12_FAMILIES exports the seven family makers ({ timeline }) for the
    Exam Focus "timeline-equation" tile to deal later.
 
-   WRAPPING (f9/f10 review 1): every TERM of an equation, its amount
-   and all its cars, is ONE <span class="nowrap"> unit, so a line may
-   break only between terms. The "=" glues to the term BEFORE it ("A ="),
-   so a broken line never starts with "=". Exponents are written worked
+   WRAPPING (f9/f10 review 1, f12 review 1): every TERM of an equation,
+   its amount and all its cars, is ONE <span class="nowrap"> unit, so a
+   line may break only between terms; the equations are a size smaller
+   (.f12-eq) so a two-car term fits a 360-px option, and the rare one that
+   cannot is cut before its second car, which then reads "× (1 + …)^n".
+   A single-letter left side rides with the first right-hand term
+   ("A = 5 500(…)"); any other left side keeps the "=" glued to the term
+   BEFORE it, so a broken line never starts with "=". In running text a
+   number and its unit are one unit ("2 years", "8% p.a.", "2 decimal
+   places"). Exponents are written worked
    out, the exam way (^36, ^(−8)), as f10 does; no car is ever ^1. Every
    money amount goes through money(); "half‑yearly" keeps a
    non-breaking hyphen. Each road is at least 2 years long and every
@@ -105,7 +111,14 @@ const pa = r => `${r}%${NB}p.a.`;
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const yrs = y => `${y}${NB}year${y === 1 ? "" : "s"}`;                 // f10's no-break glue
 const perYear = k => `${k}${NB}time${k === 1 ? "" : "s"}${NB}a${NB}year`;
-const when = t => (t === 0 ? "now" : `after ${yrs(t)}`);
+/* f12 review 1: in running text a number and its unit are ONE unit ("2 years",
+   "8% p.a.", "2 decimal places"). The no-break space alone did not hold:
+   formulaHtml wraps the bare number in its own inline-block, the space is
+   left outside it, and the line broke between them ("after 2 | years") */
+const years = y => nw(yrs(y));
+const paU = r => nw(pa(r));
+const DP2 = nw("2 decimal places");
+const when = t => (t === 0 ? "now" : `after ${years(t)}`);
 const andList = xs => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
 const CAPTION = "T in years";
 /* f10 review 1: the first time a solution says "car", it says what one is */
@@ -138,12 +151,36 @@ function carText(c) {
   return c.e < 0 ? `${base}^(−${-c.e})` : `${base}^${c.e}`;
 }
 const coefText = c => (typeof c === "number" ? amt0(c) : c);
-/* a term's unbreakable units (f9 review 1): the amount rides with its first
-   car, a second car is a unit of its own, and the plain space between them
-   is the only place the term may break. A two-car reverse term is wider
-   than a 360-px option (266 px of room), and one unit that wide would wrap
-   INSIDE itself (the app's .fml safety net) */
-const termUnits = (t, lead = "") => [lead + coefText(t.c) + (t.cars.length ? carText(t.cars[0]) : ""), ...t.cars.slice(1).map(carText)];
+
+/* f12 review 1: every equation of the round (the options, the worked lines,
+   the concept sheet) wears ONE class, .f12-eq (css/styles.css): 12 px, 0.8
+   of an option's 15 px. Measured over 2 800 rolls, that is the largest size
+   at which a two-car term (with the sign in front of it) fits a 360-px
+   option in one piece on all but 2 cards in 100; at 0.85 it was 1 in 5.
+   GLYPH_EM is Sora 500's advance per glyph in em (measured 2026-10-10 in an
+   .opt; no kerning between these glyphs, the sum is the rendered width to
+   the pixel), so a unit's width is known when the card is built */
+const EQ_PX = 12, OPT_ROOM = 266;                    // .f12-eq; the room inside an .opt at a 360-px phone
+const GLYPH_EM = {
+  0: 0.75, 1: 0.423, 2: 0.623, 3: 0.62, 4: 0.652, 5: 0.63, 6: 0.668, 7: 0.585, 8: 0.647, 9: 0.668,
+  " ": 0.222, [NB]: 0.222, "(": 0.382, ")": 0.382, "+": 0.592, "−": 0.592, ",": 0.266, "/": 0.365, "^": 0.587,
+  "=": 0.59, "×": 0.592, A: 0.775, P: 0.649, x: 0.574,
+};
+const unitPx = s => [...s].reduce((a, ch) => a + (GLYPH_EM[ch] ?? 0.8), 0) * EQ_PX;
+const fitsOption = s => unitPx(s) <= OPT_ROOM - 1;
+const EQ = html => `<span class="f12-eq">${html}</span>`;
+/* a term is ONE unbreakable unit, its amount and every car (f12 review 1),
+   "5 500(1 + 0,14/2)^6 (1 + 0,12/12)^48", so a line never starts on a
+   second car that reads like a new term. Only when that unit cannot fit a
+   360-px option even at the .f12-eq size (cut) does the second car stand
+   on its own, and then it says so: "× (1 + 0,12/12)^48". cut: true / false,
+   or null to decide by the unit's own width */
+function termUnits(t, lead = "", cut = null) {
+  const cars = t.cars.map(carText), head = lead + coefText(t.c) + (cars[0] || "");
+  const whole = [head, ...cars.slice(1)].join(" ");
+  if (cars.length < 2 || !(cut == null ? !fitsOption(whole) : cut)) return [whole];
+  return [head, ...cars.slice(1).map(c => `×${NB}${c}`)];
+}
 const unitsHtml = us => us.map(nw).join(" ");
 /* finlib does the moving: amount × (1 + i/k)^e, car by car, nothing rounded */
 const grow = (v, cars) => cars.reduce((a, c) => moveMoney(a, ratePerPeriod(toFrac(c.r), c.k), c.e), v);
@@ -156,17 +193,37 @@ const totalTerm = sc => ({ s: 1, c: sc.total.value != null ? sc.total.value : sc
    right (deposits and repayments plus, a withdrawal minus) */
 const oneEq = sc => ({ L: [totalTerm(sc)], R: sc.pays.map(x => payTerm(sc, x)) });
 
-/* each term its own units; a leading minus rides inside its term, the
-   signs between terms stand alone (formulaHtml glues each to the unit after it) */
-const piecesOf = terms => terms.map((t, j) => ({ lead: j === 0 ? "" : (t.s < 0 ? "−" : "+"), units: termUnits(t, j === 0 && t.s < 0 ? "−" : "") }));
+/* each term its own unit; a leading minus rides inside its term, the signs
+   between terms stand alone (formulaHtml glues each to the unit after it).
+   glue: what rides in front of the FIRST term ("A = "), cut: per term */
+const firstLead = (t, j, glue) => (j === 0 ? glue + (t.s < 0 ? "−" : "") : "");
+const piecesOf = (terms, glue = "", cut = []) => terms.map((t, j) => ({
+  lead: j === 0 ? "" : (t.s < 0 ? "−" : "+"),
+  units: termUnits(t, firstLead(t, j, glue), cut[j] ?? null),
+}));
 const piecesHtml = ps => ps.map(p => (p.lead ? `${p.lead} ` : "") + unitsHtml(p.units)).join(" ");
-/* f10 review 1: the "=" glues to the term BEFORE it ("A =") */
-export function eqHtml(q) {
-  const L = piecesOf(q.L), R = piecesOf(q.R);
-  const head = L.slice(0, -1), last = L[L.length - 1];
-  const us = last.units.slice();
+/* f12 review 1: a left side that is a single letter (A, or the loan P) rides
+   with the FIRST right-hand term, "A = 5 500(1 + 0,14/2)^6 …", so "A =" never
+   dangles at a line end. Anything else keeps the f10 rule: the "=" glues to
+   the term BEFORE it ("1 000 000 =", "A(1 + 0,08/12)^72 =") */
+const bareLeft = q => q.L.length === 1 && !q.L[0].cars.length && typeof q.L[0].c === "string" && q.L[0].s > 0;
+const glueOf = q => (bareLeft(q) ? `${q.L[0].c} = ` : "");
+/* which right-hand terms must cut, decided ONCE per card over all four
+   options, so a term is cut the same way wherever it stands. The sign in
+   front of a term rides in the same line piece as its unit (formulaHtml),
+   so it is measured with it: "+ 4 000(…)" */
+export function cutsOf(eqs) {
+  return eqs[0].R.map((_, j) => eqs.some(q => {
+    const t = q.R[j], sign = j === 0 ? "" : `${t.s < 0 ? "−" : "+"} `;
+    return t.cars.length > 1 && !fitsOption(sign + termUnits(t, firstLead(t, j, glueOf(q)), false)[0]);
+  }));
+}
+export function eqHtml(q, cut = cutsOf([q])) {
+  const R = piecesHtml(piecesOf(q.R, glueOf(q), cut));
+  if (bareLeft(q)) return EQ(R);
+  const L = piecesOf(q.L), last = L[L.length - 1], us = last.units.slice();
   us[us.length - 1] += " =";
-  return `${piecesHtml([...head, { ...last, units: us }])} ${piecesHtml(R)}`;
+  return EQ(`${piecesHtml([...L.slice(0, -1), { ...last, units: us }])} ${R}`);
 }
 
 /* the value of the unknown, from the very numbers on the card */
@@ -277,9 +334,9 @@ function roll(make, fix) {
 /* ---------- the words ---------- */
 
 function rateSentence(roads) {
-  const one = r => `${pa(r.r)} compounded ${HOW(r.k)}`;
+  const one = r => `${paU(r.r)} compounded ${HOW(r.k)}`;
   const [a, b] = roads;
-  return b ? `The interest rate is ${one(a)} for the first ${yrs(a.to)}, then ${one(b)}.` : `The interest rate is ${one(a)}.`;
+  return b ? `The interest rate is ${one(a)} for the first ${years(a.to)}, then ${one(b)}.` : `The interest rate is ${one(a)}.`;
 }
 const at = x => (typeof x.v === "number" ? `${money(x.v)} ${when(x.t)}` : `an amount ${x.v} ${when(x.t)}`);
 
@@ -290,7 +347,7 @@ function story(sc) {
   const sameDay = sc.pays.some(x => x.t === sc.n && sc.kind === "save");
   switch (sc.fam) {
     case "targetAmount":
-      return `${N} wants ${money(sc.total.value)} in a savings account after ${yrs(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?`;
+      return `${N} wants ${money(sc.total.value)} in a savings account after ${years(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?`;
     case "hirePurchase": {
       const a = /^[aeiou]/i.test(sc.item) ? "an" : "a";
       return `${N} buys ${a} ${sc.item}. ${He} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} Find the loan, P, and then the price of the ${sc.item}.`;
@@ -298,10 +355,10 @@ function story(sc) {
     case "loanTwoRepayments":
       return `${N} borrows money now. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} How much did ${p.he} borrow?`;
     case "unknownPayment":
-      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${yrs(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.`;
+      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${years(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.`;
     default: {                                                        // twoDeposits, withdrawal, mixed: find A
       const out = wds.length ? ` ${He} withdraws ${andList(wds.map(at))}.` : "";
-      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${yrs(sc.n)}${sameDay ? ", straight after the last deposit" : ""}? That is the total, A.`;
+      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${years(sc.n)}${sameDay ? ", straight after the last deposit" : ""}? That is the total, A.`;
     }
   }
 }
@@ -327,12 +384,12 @@ function termLine(t) {
   const sign = t.s < 0 ? "−" : "+";
   const who = typeof t.c === "number" ? `${cap(WHAT[t.kind])} of ${money(t.c)} at T${t.t}` : `${cap(WHAT[t.kind])} ${t.c} at T${t.t}`;
   const io = t.kind === "wd" ? "comes OUT, so minus" : t.kind === "repay" ? "stands positive on the right" : "goes IN, so plus";
-  return { s: `${who} ${io}: ${unitsHtml(termUnits(t, sign))}`, r: carNote(t) };
+  return { s: `${who} ${io}: ${EQ(unitsHtml(termUnits(t, sign)))}`, r: carNote(t) };
 }
 function meetLine(sc) {
   return {
     s: `The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car (${CAR_IS}).`,
-    r: sc.kind === "loan" ? "back to T0: reverse gear, negative exponents" : "on to the end: forward gear, positive exponents",
+    r: sc.kind === "loan" ? "back to T0: reverse gear, negative exponents" : "everything moves forward to the end, so every exponent is positive",
   };
 }
 function leftNote(sc) {
@@ -345,8 +402,8 @@ const solves = sc => sc.total.value != null;                          // the unk
 
 /* ---------- one card ---------- */
 function build(sc, { timeline = false } = {}) {
-  const D = decoysOf(sc), eq = D.eq;
-  const right = eqHtml(eq), wrongs = [D.sign, D.car, D.gear].map(eqHtml);
+  const D = decoysOf(sc), eq = D.eq, cut = cutsOf([eq, D.sign, D.car, D.gear]);
+  const right = eqHtml(eq, cut), wrongs = [D.sign, D.car, D.gear].map(d => eqHtml(d, cut));
   if (new Set([right, ...wrongs]).size !== 4) throw new Error("f12: two options coincide");   // never reached: each decoy is one different slip
   const val = solve(sc), U = unknownOf(sc), p = WHO[sc.name];
   const price = sc.down != null ? val + sc.down : null;
@@ -359,18 +416,18 @@ function build(sc, { timeline = false } = {}) {
     : `${U} sits inside the one equation: SHIFT SOLVE finds it. How much must ${p.he} deposit now?`;
   const steps = [
     mcStep(`The meeting day is T${sc.meet}, ${dayOf(sc)}. Which line is the one equation?`, right, wrongs, hint1),
-    typed(`${ask} Give it in rand, to 2 decimal places.`, val,
+    typed(`${ask} Give it in rand, to ${DP2}.`, val,
       solves(sc) ? "Type the whole equation, then SHIFT SOLVE. Never round along the way: round once, at the end."
         : "Type the whole right side in one go. Never round along the way: round once, at the end."),
   ];
-  if (price != null) steps.push(typed(`Price = loan + down${NB}payment. What is the price of the ${sc.item}, in rand, to 2 decimal places?`, price,
+  if (price != null) steps.push(typed(`Price = loan + down${NB}payment. What is the price of the ${sc.item}, in rand, to ${DP2}?`, price,
     "The down payment never enters the account: it just adds on to the loan."));
   const answer = nw(`${U} = ${rands(val, 2)}`);
   const solution = [
     meetLine(sc),
     ...eq.R.map(termLine),
     { s: `The one equation: ${right}`, r: leftNote(sc) },
-    { s: answer, r: solves(sc) ? "SHIFT SOLVE on the one line, rounded once, at the end (2 decimal places)" : "typed in once, rounded once, at the end (2 decimal places)" },
+    { s: answer, r: `${solves(sc) ? "SHIFT SOLVE on the one line" : "typed in once"}, rounded once, at the end (${DP2})` },
   ];
   if (price != null) solution.push({
     s: `Price${NB}= loan +${NB}down${NB}payment${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}`,

@@ -101,6 +101,18 @@
    that no stretch of it crosses an amount, the ring, a role letter, a
    T label, a road rate, the flag, its words or its pole. A spec without
    the key computes and renders byte-for-byte what it did before.
+
+   F12 REVIEW 1 (2026-10-10). On a T10 loan the "?" ring on T0 sat 5 px
+   from "R8 000" on T1. The ring's full box (stroke included) now keeps
+   RING_AIR from every amount on another day: a neighbour in the ring's
+   row is nudged sideways, away from the ring, just far enough (its centre
+   stays near its own tick, and a lone amount's leader still runs to it).
+   verifyTimeline (and _finance-check's labelFitIssues, on the real boxes)
+   asserts RING_MIN_PX of air at a 360-px phone between the ring and every
+   other label: amounts, role letters on other days, T labels, road rates
+   and the words "meeting day". A neighbour that cannot move far enough
+   fails verify, so a quest that rolls its scenes rolls again. A spec with
+   no ring that close computes byte-for-byte what it did before.
    ============================================================ */
 import { rand } from "../finlib.js";
 
@@ -139,6 +151,14 @@ const LEAD_GAP = 2;          // air between a leader line and its label, and its
 /* f10 review 1 (spec.stackLeaders), in viewBox units */
 const SLEAD_AIR = 5;         // a stack leader's air beside the labels and role letter below its amount
 const POLE_AIR = 7;          // the flag pole's air above a stacked amount on the meeting day
+/* f12 review 1: the total's ring and its neighbours. RING_MIN_PX is the air
+   a learner must see at a 360-px phone (6 px = 6.6 units). An amount label is
+   estimated GLYPH wide per glyph, but Sora's bold digits run wider: measured
+   2026-10-10 over 2 600 drawn amounts, up to 6 units more ("R400 000"), so up
+   to 3 units on each side. The engine keeps RING_AIR in its estimate, and
+   verify asserts that estimate, so the real ink keeps its 6 px */
+export const RING_MIN_PX = 6;
+const RING_AIR = 10;         // viewBox units: 6.6 for the 6 px, plus 3 for Sora's wider digits
 
 function svgWrap(W, H, accent, inner, cls = "") {
   const style = accent ? ` style="--accent:${accent}"` : "";
@@ -203,6 +223,21 @@ export function computeTimeline(spec) {
       };
       labels.push(lb);
       return lb;
+    });
+  });
+  // f12 review 1: the total's ring keeps RING_AIR from every amount on another
+  // day. A neighbour in the ring's row moves sideways, away from the ring,
+  // just far enough (clamped into the frame like every label)
+  labels.filter(rg => rg.ring).forEach(rg => {
+    const ri = labelInk(rg);
+    labels.forEach(lb => {
+      if (lb.t === rg.t) return;
+      const b = labelInk(lb);
+      if (b.y0 >= ri.y1 + RING_AIR || ri.y0 >= b.y1 + RING_AIR) return;   // another row: the air is above or below
+      const side = lb.x >= rg.x ? 1 : -1, air = side > 0 ? b.x0 - ri.x1 : ri.x0 - b.x1;
+      if (air >= RING_AIR) return;
+      const half = lb.w / 2;
+      lb.x = Math.max(half + 2, Math.min(W - half - 2, lb.x + side * (RING_AIR - air)));
     });
   });
   // hit boxes for tappable amount labels: as wide as the label plus a margin
@@ -466,6 +501,26 @@ export function verifyTimeline(spec, tol = 0.5) {
     const ok = lb.text === "−" + rand(lb.amount, (spec.nodes.find(d => d.out && d.t === lb.t && d.amount === lb.amount) || {}).dp ?? 2)
       && lb.amount > 0 && !lb.role;
     r.push({ label: `the withdrawal on T${lb.t} is drawn "${lb.text}", minus in front, and is not the total`, ok });
+  });
+  // 6e) f12 review 1: the total's ring (stroke included) keeps RING_MIN_PX of
+  //     air at a 360-px phone from every other label: each amount (another
+  //     day's, or one stacked above it), a role letter on another day, the T
+  //     labels, the road rates and the words "meeting day". Asserted on the
+  //     estimate at RING_AIR, which allows for Sora's wider digits
+  g.labels.filter(lb => lb.ring).forEach(rg => {
+    const ri = labelInk(rg), near = [];
+    const others = [
+      ...g.labels.filter(lb => lb !== rg).map(lb => ({ what: `"${lb.text}"`, box: labelInk(lb) })),
+      ...g.nodes.filter(nd => nd.role && nd.t !== rg.t).map(nd => ({ what: `role ${nd.role} on T${nd.t}`, box: roleInk(g, nd) })),
+      ...g.nodes.map(nd => ({ what: `T label ${nd.label}`, box: tLabInk(g, nd) })),
+      ...g.roads.map(rd => ({ what: `road label "${rd.label.text}"`, box: roadInk(rd) })),
+      ...(g.meet ? [{ what: `"${MEET_TEXT}"`, box: meetInks(g.meet).text }] : []),
+    ];
+    others.forEach(o => {
+      const air = Math.max(ri.x0 - o.box.x1, o.box.x0 - ri.x1, ri.y0 - o.box.y1, o.box.y0 - ri.y1);
+      if (air < RING_AIR - 0.01) near.push(`${o.what} ${N(air)} units`);
+    });
+    r.push({ label: `the ring around the total "?" on T${rg.t} keeps ${RING_MIN_PX} px of air at 360 from every other label (${RING_AIR} units in the estimate, Sora's wider digits allowed for)${near.length ? ": " + near.join("; ") : ""}`, ok: near.length === 0 });
   });
   // the things a flag or a road label must never touch (f9)
   const inFrame = b => b.x0 >= -tol && b.x1 <= g.W + tol && b.y0 >= -tol && b.y1 <= g.H + tol;

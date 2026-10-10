@@ -26,7 +26,7 @@ import {
   simpleAmount, depositAmount, balanceAfterDeposit, effFromNom,
 } from "../finlib.js";
 import { fmtComma } from "../check.js";
-import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN } from "../engine/timeline-graph.js";
+import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN, RING_MIN_PX } from "../engine/timeline-graph.js";
 
 const C = v => fmtComma(v);
 export const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
@@ -134,6 +134,24 @@ export function labelFitIssues(spec, host) {
   for (let i = 0; i < boxes.length; i++)
     for (let j = i + 1; j < boxes.length; j++)
       if (hits(boxes[i].bb, boxes[j].bb, 0.5)) out.push(`amounts "${boxes[i].text}" and "${boxes[j].text}" overlap`);
+  /* f12 review 1 (2026-10-10): the total's ring, its REAL box with the stroke
+     (measured above), keeps RING_MIN_PX of air at a 360-px phone from every
+     other drawn label: each amount, a role letter on another day (its own
+     letter sits right under it by design), the T labels, the road rates and
+     the words "meeting day" */
+  boxes.filter(b => b.lb.ring).forEach(rb => {
+    const bbOf = el => { try { return el.getBBox(); } catch { return null; } };
+    const others = [
+      ...boxes.filter(o => o !== rb).map(o => ({ what: `amount "${o.text}"`, bb: o.bb })),
+      ...[...svg.querySelectorAll("text.tl-role")].filter(el => Math.abs(Number(el.getAttribute("x")) - rb.lb.nodeX) > 0.5).map(el => ({ what: `role letter ${el.textContent}`, bb: bbOf(el) })),
+      ...[...svg.querySelectorAll("text.tl-tlab, text.tl-roadlab, text.tl-meet")].map(el => ({ what: `"${el.textContent}"`, bb: bbOf(el) })),
+    ].filter(o => o.bb);
+    others.forEach(o => {
+      const a = rb.bb, b = o.bb;
+      const air = Math.max(a.x - (b.x + b.width), b.x - (a.x + a.width), a.y - (b.y + b.height), b.y - (a.y + a.height));
+      if (air * PHONE_360 < RING_MIN_PX - 0.01) out.push(`the ring around "${rb.text}" is ${Math.round(air * PHONE_360 * 10) / 10} px from ${o.what} at 360 (under ${RING_MIN_PX})`);
+    });
+  });
   /* f10 (2026-10-10): a withdrawal (spec node out: true) is its own label,
      "−R2 000", in .tl-out; its real box, minus included, was measured
      above like every amount (inside the frame, over its node, no overlap) */
@@ -940,15 +958,25 @@ const F12_MONEY = "<span class=\"nowrap\">R(\\d{1,3}(?:\\u00A0\\d{3})*)<\\/span>
 const f12CarsOf = text => [...String(text).matchAll(F12_CAR)].map(c => ({ i: c[1], e: c[2].startsWith("(") ? -Number(c[2].slice(2, -1)) : Number(c[2]) }));
 const f12Num = s => Number(String(s).replace(/[\s  ]/g, ""));
 const f12Rate = (r, k) => (k === 1 ? C(toFrac(r)) : `${C(toFrac(r))}/${k}`);
+/* f12 review 1 (2026-10-10): an equation wears ONE wrapper, <span
+   class="f12-eq"> (a size smaller); a two-car term is ONE unit, its two cars
+   a space apart; a single-letter left side rides with the first right-hand
+   term ("A = 5 500(…)"); and a term too wide for a 360-px option is cut
+   before its second car, which then reads "× (1 + …)^n". A second car in a
+   unit of its own WITHOUT the "×" no longer parses: it read like a new term */
+const F12_CUT = /^×[\s ]/;
+const f12Joined = b => String(b).replace(/(\^(?:\d+|\(−\d+\))) (?=\(1 \+)/g, "$1");   // the space between two cars of one unit
 export function f12ParseEq(html, iTexts = null) {
   if (html == null) return null;
   const units = [];
   const unit = inner => { units.push(inner); return ` #${units.length - 1} `; };
-  const s = String(html).replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
+  const s = String(html).replace(/^<span class="f12-eq">([\s\S]*)<\/span>$/, "$1").replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
     const k = inner.indexOf(" =");
     if (k < 0) return inner.includes("=") ? " ! " : unit(inner);
-    if (inner.slice(k + 2).trim()) return " ! ";                          // nothing rides after the "=" here
-    return unit(inner.slice(0, k)) + " =g ";
+    const rest = inner.slice(k + 2).trim();
+    if (!rest) return unit(inner.slice(0, k)) + " =g ";
+    /* only a single-letter left side (A, P) rides with the first right-hand term */
+    return /^[AP]$/.test(inner.slice(0, k)) && !rest.includes("=") ? `${unit(inner.slice(0, k))} =g ${unit(rest)}` : " ! ";
   });
   if (/[<>]/.test(s)) return null;                                         // a term that is not its own unit
   const toks = s.trim().split(/ +/).filter(Boolean);
@@ -958,7 +986,7 @@ export function f12ParseEq(html, iTexts = null) {
     if (want === "operand") {
       const m = /^#(\d+)$/.exec(tk);
       if (!m) return null;
-      const body = units[Number(m[1])];
+      const body = f12Joined(units[Number(m[1])]);
       let depth = 0;
       for (const ch of body) { depth += ch === "(" ? 1 : ch === ")" ? -1 : 0; if (depth < 0) return null; }
       if (depth !== 0) return null;
@@ -970,8 +998,8 @@ export function f12ParseEq(html, iTexts = null) {
       if (iTexts && cars.some(c => !iTexts.includes(c.i))) return null;  // every car at one of the story's rates
       sides[side].push({ s: sign * (tm[1] ? -1 : 1), c: /^\d/.test(tm[2]) ? f12Num(tm[2]) : tm[2], cars });
       sign = 1; want = "op";
-    } else if (/^#\d+$/.test(tk) && F12_CARS_ONLY.test(units[Number(tk.slice(1))])) {
-      /* a second car, its own unit, rides on the term right before it */
+    } else if (/^#\d+$/.test(tk) && F12_CUT.test(units[Number(tk.slice(1))]) && F12_CARS_ONLY.test(units[Number(tk.slice(1))].replace(F12_CUT, ""))) {
+      /* a cut term's second car, "× (1 + …)^n", rides on the term right before it */
       const cars = f12CarsOf(units[Number(tk.slice(1))]), last = sides[side][sides[side].length - 1];
       if (!last || cars.some(c => !(Number.isInteger(c.e) && c.e !== 0)) || (iTexts && cars.some(c => !iTexts.includes(c.i)))) return null;
       last.cars.push(...cars);
@@ -989,7 +1017,8 @@ const f12Same = (a, b) => a.L.length === b.L.length && a.L.every((t, j) => f12Ke
 
 /* the scene, from the word question and step 1's prompt only */
 export function f12Scene(q) {
-  const p = String(q && q.prompt || "");
+  /* f12 review 1: "2 years", "8% p.a." are units of their own now; only a money unit stays wrapped here */
+  const p = String(q && q.prompt || "").replace(/<span class="nowrap">(?!R\d)([^<]*)<\/span>/g, "$1");
   const name = (p.match(/^([A-Z][a-z]+) /) || [])[1];
   if (!F12_NAMES.includes(name)) return null;
   const loan = /\bborrows\b/.test(p), save = /savings account/.test(p);

@@ -323,6 +323,12 @@ h2{font-size:20px} h3{font-size:17px}
 /* f8 (2026-10-10): tappable amount labels on a timeline wear a faint dashed
    outline until answered, so the money reads as something to tap */
 .hit.tl-lab-hit:not(.locked):not(:hover){stroke:color-mix(in srgb,var(--accent) 45%,transparent);stroke-dasharray:3 3}
+/* f12 review 1 (2026-10-10): the one-equation round's equations (its options,
+   worked lines and concept sheet) a size smaller, 12 px (0.8 of an option's
+   15 px), so a two-car term fits a 360-px option as ONE unit. The equations
+   read the same size everywhere in the round. js/quests/questf12-one-equation.js
+   measures its units at this size (EQ_PX): change both together */
+.f12-eq{font-size:12px}
 
 /* keypad */
 .keypad{margin-top:4px}
