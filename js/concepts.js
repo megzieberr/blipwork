@@ -243,7 +243,7 @@ export const CONCEPTS = {
   rateChange: {
     title: "When the interest rate changes",
     body: `
-      <p>If the rate or compounding frequency changes part-way, split the timeline into segments. For one lump sum, use <b>one bracket per segment</b>:</p>
+      <p>If the rate or compounding frequency changes part-way, split the timeline into segments. For a single amount, use <b>one bracket per segment</b>:</p>
       <div class="formula">A = P(1 + i₁/k₁)^(n₁·k₁) (1 + i₂/k₂)^(n₂·k₂)</div>
       <p>Work out each segment's rate-per-period and number-of-periods separately, then multiply the brackets together.</p>`,
   },
