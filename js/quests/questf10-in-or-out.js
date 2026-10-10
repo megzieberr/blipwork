@@ -40,6 +40,18 @@
    ONE equation, built completely; nothing is solved in stages and
    nothing is rounded mid-way.
 
+   REVIEW 1 (2026-10-10, phone-width check). The "=" glues to the term
+   BEFORE it, inside that term's unit ("P(…)^36 =", and a lone 0 or A
+   rides along: "9 000 = 0", "…^8 = A"), so a broken line never starts
+   with "="; in prose an operator glues to the word after it. A deposit
+   stacked on the day of A gets its own leader (timeline stackLeaders).
+   The refrain's closing line depends on the kind (a loan: payments
+   positive on the right; saving: deposits plus, the withdrawal minus, A
+   on the left). The first "car" in a solution says what a car is. The
+   exponent is written "3 years × 12 times a year = 36". "half‑yearly"
+   has a non-breaking hyphen, and no car is ever ^1 (every car moves at
+   least 2 periods).
+
    A static round deals def.skills IN ORDER, one card per skill, so the
    ROUND list at the bottom IS the round (8 cards).
    ============================================================ */
@@ -48,11 +60,15 @@ import { randInt, pick, shuffled } from "../ui.js";
 import { rand, toFrac, COMPOUNDING } from "../finlib.js";
 
 const CON = "inOrOut";
-export const REFRAIN = "Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: payments positive on the right.";
+/* the refrain: its closing line depends on the kind (f10 review 1) */
+const REFRAIN_HEAD = "Deposits and the loan go IN. Withdrawals and repayments come OUT.";
+export const REFRAIN = `${REFRAIN_HEAD} Tidy: payments positive on the right.`;                       // a loan
+export const REFRAIN_SAVING = `${REFRAIN_HEAD} Tidy: deposits plus, the withdrawal minus, A on the left.`;
+const refrain = loan => ({ s: loan ? REFRAIN : REFRAIN_SAVING });
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = COMPOUNDING.filter(c => [1, 2, 4, 12].includes(c.k)).map(c => c.k);
-const HOW = k => (k === 2 ? "half-yearly" : COMPOUNDING.find(c => c.k === k).label);
+const HOW = k => (k === 2 ? "half‑yearly" : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
 const DEP_AMTS = [3000, 4000, 5000, 6000, 8000, 10000, 12000, 14000, 15000, 20000];
 const WD_AMTS = [500, 1000, 1500, 2000, 2500, 3000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500, 8000, 9000];
@@ -62,6 +78,13 @@ const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500, 
 
 const NB = " ";
 const nw = s => `<span class="nowrap">${s}</span>`;                    // ONE unbreakable unit (f9 review 1)
+/* f10 review 1: the first time a solution says "car", it says what one is */
+const CAR_IS = `a car is the ${nw("(1 + i)^n")} bracket that moves an amount to the meeting day`;
+/* "3 years × 12 times a year = 36" (never a bare k). A line may break only
+   before the "×" (an operator leads its piece) or after the "=" */
+const yrs = y => `${y} year${y === 1 ? "" : "s"}`;
+const perYear = k => `${k} time${k === 1 ? "" : "s"} a year`;
+const carSum = (y, k) => `${yrs(y)} × ${k} = ${y * k}`;              // "2 years × 12 = 24"
 const rands = (v, dp = 0) => rand(v, dp).replace(/ /g, NB);            // "R8 000", "R3 587,42"
 const money = (v, dp = 0) => nw(rands(v, dp));                         // EVERY money amount in this round
 const amt0 = v => rands(v, 0).slice(1);                                // "8 000", as it stands in an equation
@@ -85,14 +108,18 @@ function car(sc, e) {
 const coefText = c => (typeof c === "number" ? amt0(c) : c);
 const termText = (sc, t) => coefText(t.c) + car(sc, t.e);
 /* one side: each term ONE nowrap unit; a leading minus rides inside its
-   term, the signs between terms stand alone (the only break points) */
-function sideHtml(sc, terms) {
-  if (!terms.length) return "0";
-  return terms.map((t, j) => (j === 0
-    ? nw((t.s < 0 ? "−" : "") + termText(sc, t))
-    : `${t.s < 0 ? "−" : "+"} ${nw(termText(sc, t))}`)).join(" ");
+   term, the signs between terms stand alone (a line may break before one) */
+const piecesOf = (sc, terms) => terms.map((t, j) => ({ lead: j === 0 ? "" : (t.s < 0 ? "−" : "+"), body: (j === 0 && t.s < 0 ? "−" : "") + termText(sc, t) }));
+const piecesHtml = ps => ps.map(p => (p.lead ? `${p.lead} ${nw(p.body)}` : nw(p.body))).join(" ");
+/* f10 review 1: the "=" glues to the term BEFORE it ("P(…)^36 =", so a
+   broken line never starts with "="); a right side that is a lone 0 or A
+   rides along whole ("9 000 = 0", "…^8 = A") */
+function eqHtml(sc, q) {
+  const L = piecesOf(sc, q.L), R = q.R.length ? piecesOf(sc, q.R) : [{ lead: "", body: "0" }];
+  const head = L.slice(0, -1), last = L[L.length - 1];
+  if (R.length === 1 && /^(0|A)$/.test(R[0].body)) return piecesHtml([...head, { ...last, body: `${last.body} = ${R[0].body}` }]);
+  return `${piecesHtml([...head, { ...last, body: `${last.body} =` }])} ${piecesHtml(R)}`;
 }
-const eqHtml = (sc, q) => `${sideHtml(sc, q.L)} = ${sideHtml(sc, q.R)}`;
 
 /* two equations are the SAME equation when left − right holds the same
    signed terms, or all of them negated (both sides swapped or × −1) */
@@ -117,13 +144,22 @@ function decoysOf(correct, cands, want = 3) {
 /* a loan: the total P at T0 (unknown), cnt repayments on T1..Tn; the loan is
    paid off at Tn, the meeting day. Half the time the last repayment is ON
    the meeting day (no car). */
+/* f10 review 1: every car moves at least 2 periods, so no exponent is ever 1
+   (annually, a payment one year before the meeting day is rolled again) */
+const carsOk = sc => sc.pays.every(x => x.t === sc.n || (sc.n - x.t) * sc.k >= 2);
+function reroll(make) {
+  for (let tries = 0; tries < 100; tries++) { const sc = make(); if (carsOk(sc)) return sc; }
+  const sc = make(); sc.k = 12; return sc;                               // never reached in practice
+}
 function loanScene(cnt) {
-  const n = randInt(Math.max(2, cnt), 5), r = pick(RATES), k = pick(KS), p = person();
-  const end = rng() < 0.5;
-  const pool = shuffled(range(1, end ? n - 1 : n));
-  const times = (end ? [n, ...pool.slice(0, cnt - 1)] : pool.slice(0, cnt)).sort((a, b) => a - b);
-  const vals = shuffled(REPAY_AMTS).slice(0, cnt);
-  return { loan: true, n, r, k, p, pays: times.map((t, j) => ({ t, v: vals[j], kind: "repay" })) };
+  return reroll(() => {
+    const n = randInt(Math.max(2, cnt), 5), r = pick(RATES), k = pick(KS), p = person();
+    const end = rng() < 0.5;
+    const pool = shuffled(range(1, end ? n - 1 : n));
+    const times = (end ? [n, ...pool.slice(0, cnt - 1)] : pool.slice(0, cnt)).sort((a, b) => a - b);
+    const vals = shuffled(REPAY_AMTS).slice(0, cnt);
+    return { loan: true, n, r, k, p, pays: times.map((t, j) => ({ t, v: vals[j], kind: "repay" })) };
+  });
 }
 
 /* saving: dep deposits (1 or 2) and ONE withdrawal. The first deposit is at
@@ -132,16 +168,18 @@ function loanScene(cnt) {
    deposit (there is money to take out). A later deposit may share the day
    of A (no car). The total A is at Tn, the meeting day. */
 function saveScene(dep) {
-  const n = randInt(3, 5), r = pick(RATES), k = pick(KS), p = person();
-  const t0 = pick([0, 0, 1]);
-  const tw = randInt(t0 + 1, n - 1);
-  const rest = range(t0 + 1, n).filter(t => t !== tw);
-  const times = [t0, ...shuffled(rest).slice(0, dep - 1)];
-  const deps = shuffled(DEP_AMTS).slice(0, dep);
-  const w = pick(WD_AMTS.filter(v => v < deps[0] && !deps.includes(v)));
-  const pays = [...times.map((t, j) => ({ t, v: deps[j], kind: "dep" })), { t: tw, v: w, kind: "wd" }];
-  pays.sort((a, b) => a.t - b.t);
-  return { loan: false, n, r, k, p, pays };
+  return reroll(() => {
+    const n = randInt(3, 5), r = pick(RATES), k = pick(KS), p = person();
+    const t0 = pick([0, 0, 1]);
+    const tw = randInt(t0 + 1, n - 1);
+    const rest = range(t0 + 1, n).filter(t => t !== tw);
+    const times = [t0, ...shuffled(rest).slice(0, dep - 1)];
+    const deps = shuffled(DEP_AMTS).slice(0, dep);
+    const w = pick(WD_AMTS.filter(v => v < deps[0] && !deps.includes(v)));
+    const pays = [...times.map((t, j) => ({ t, v: deps[j], kind: "dep" })), { t: tw, v: w, kind: "wd" }];
+    pays.sort((a, b) => a.t - b.t);
+    return { loan: false, n, r, k, p, pays };
+  });
 }
 
 const IN_KINDS = new Set(["dep", "loan"]);
@@ -168,6 +206,7 @@ function graphOf(sc, { meet = true, total = null } = {}) {
     nodes: [tot, ...sc.pays.map(x => ({ t: x.t, amount: x.v, dp: 0, ...(x.kind === "wd" ? { out: true } : {}) }))],
     roads: [{ from: 0, to: sc.n, rate: `${sc.r}% p.a.`, k: sc.k }],
     leaders: true,
+    stackLeaders: true,                 // f10 review 1: a deposit on the day of A reads as an amount, not a flag caption
   };
 }
 
@@ -189,16 +228,26 @@ function termLine(sc, t) {
   const who = t.kind === "loan" ? "The loan, P," : `${cap(WHAT[t.kind])} at T${t.t}, ${money(t.c)},`;
   return {
     s: `${who} ${io}: ${nw((t.s < 0 ? "−" : "+") + termText(sc, t))}`,
-    r: t.e ? `a car from T${t.t} to T${sc.n}: ${sc.n - t.t} × ${sc.k} = ${t.e}` : "no car: it already stands on the meeting day",
+    r: t.e ? `a car from T${t.t} to T${sc.n}: ${carSum(sc.n - t.t, sc.k)}` : "no car: it already stands on the meeting day",
   };
 }
-const meetLine = sc => ({ s: `The meeting day is T${sc.n}. Every amount drives there in forward gear.`, r: "exponent = years × k" });
+/* the first line of a worked solution: the meeting day, what a car is, and
+   the exponent the way the learner sees it, on the longest trip (the loan
+   from T0, or the first deposit) */
+function meetLine(sc) {
+  const y = sc.loan ? sc.n : sc.n - Math.min(...sc.pays.filter(x => x.kind === "dep").map(x => x.t));
+  return {
+    s: `The meeting day is T${sc.n}. Every amount drives there in its car, in forward gear (${CAR_IS}).`,
+    r: `${yrs(y)} × ${perYear(sc.k)} = ${y * sc.k}`,
+  };
+}
 const tidyLine = sc => (sc.loan
   ? { s: `Tidy: move the minuses across: ${eqHtml(sc, tidyOf(sc))}`, r: "the payments stand positive on the right" }
   : { s: `Tidy: the total on its own: ${eqHtml(sc, tidyOf(sc))}`, r: "the withdrawal keeps its minus" });
+/* the jug form's right side in words (an "=" never stands alone) */
 const endLine = sc => (sc.loan
-  ? { s: "The loan is paid off, so the jug ends empty: = 0" }
-  : { s: "The jug ends holding the total: = A" });
+  ? { s: "The loan is paid off, so the jug ends empty: it equals 0." }
+  : { s: "The jug ends holding the total: it equals A." });
 
 /* ---------- the skills ---------- */
 
@@ -213,7 +262,7 @@ function jugCorrect() {
     graph: graphOf(sc), graphCap: CAPTION,
     hint: "Check every sign. Does the amount go IN (plus) or come OUT (minus)?",
     answerLabel: "Yes: in is plus, out is minus, and every sign is right",
-    solution: [meetLine(sc), ...jug.L.map(t => termLine(sc, t)), endLine(sc), tidyLine(sc), { s: REFRAIN }],
+    solution: [meetLine(sc), ...jug.L.map(t => termLine(sc, t)), endLine(sc), tidyLine(sc), refrain(sc.loan)],
   };
 }
 
@@ -242,9 +291,9 @@ function jugWrong() {
     answerLabel: `No: ${slip.kind === "loan" ? "the loan, P," : `${WHAT[slip.kind]} at T${slip.t}`} needs ${need}`,
     solution: [
       { s: `The slip: ${who}, so it needs ${need}.`, r: slip.s > 0 ? "in is plus" : "out is minus" },
-      { s: `The right jug form: ${eqHtml(sc, jug)}`, r: sc.loan ? "the loan is paid off: = 0" : "the jug ends holding the total: = A" },
+      { s: `The right jug form: ${eqHtml(sc, jug)}`, r: sc.loan ? "the loan is paid off: it equals 0" : "the jug ends holding the total: it equals A" },
       tidyLine(sc),
-      { s: REFRAIN },
+      refrain(sc.loan),
     ],
   };
 }
@@ -273,9 +322,10 @@ function tidy() {
       hint: "A minus that crosses the equals sign turns into a plus. Every car stays where it is.",
       solution: [
         { s: `The jug form: ${eqHtml(sc, jug)}`, r: "the loan in (plus), the repayments out (minus)" },
-        ...R.map(t => ({ s: `${cap(WHAT[t.kind])} at T${t.t} crosses the equals sign: ${nw("−" + termText(sc, t))} becomes ${nw("+" + termText(sc, t))}`, r: t.e ? "its car stays" : "no car: it stands on the meeting day" })),
+        ...R.map((t, j) => ({ s: `${cap(WHAT[t.kind])} at T${t.t} crosses the equals sign: ${nw("−" + termText(sc, t))} becomes ${nw("+" + termText(sc, t))}`,
+          r: (t.e ? "its car stays" : "no car: it stands on the meeting day") + (j === 0 ? ` (${CAR_IS})` : "") })),
         { s: `Tidy: ${eqHtml(sc, right)}`, r: "the payments stand positive on the right" },
-        { s: REFRAIN },
+        refrain(true),
       ],
     });
 }
@@ -306,7 +356,7 @@ function withdrawal() {
         ...right.R.map(t => termLine(sc, t)),
         { s: `The withdrawal needs a car too: the ${money(W.c)} left the account at T${W.t}, so the interest it would have earned is gone as well.`, r: `forward gear, exponent ${W.e}` },
         { s: `The one equation: ${eqHtml(sc, right)}`, r: "the withdrawal keeps its minus" },
-        { s: REFRAIN },
+        refrain(false),
       ],
     });
 }
@@ -314,21 +364,21 @@ function withdrawal() {
 /* mc: plain recall, one item per card */
 const IN = "In: plus", OUT = "Out: minus", NEVER = "Neither: it never enters the account";
 const WORDS = [
-  { what: "A repayment on a loan", ans: OUT, why: "A repayment pays the loan back. It comes OUT of the account: minus." },
-  { what: "A deposit into savings", ans: IN, why: "A deposit is money put into the account. It goes IN: plus." },
-  { what: "A withdrawal from savings", ans: OUT, why: "A withdrawal is money taken out of the account. It comes OUT: minus." },
-  { what: "The loan itself (the amount borrowed)", ans: IN, why: "The bank pays the loan into the account. It goes IN: plus." },
-  { what: "A down payment on a fridge bought on hire purchase", ans: NEVER,
-    why: "A down payment is paid straight to the seller. It never enters the account: no car, no sign. It comes off the price: loan = price − down payment." },
+  { what: "A repayment on a loan", ans: OUT, loan: true, why: "A repayment pays the loan back. It comes OUT of the account: minus." },
+  { what: "A deposit into savings", ans: IN, loan: false, why: "A deposit is money put into the account. It goes IN: plus." },
+  { what: "A withdrawal from savings", ans: OUT, loan: false, why: "A withdrawal is money taken out of the account. It comes OUT: minus." },
+  { what: "The loan itself (the amount borrowed)", ans: IN, loan: true, why: "The bank pays the loan into the account. It goes IN: plus." },
+  { what: "A down payment on a fridge bought on hire purchase", ans: NEVER, loan: true,
+    why: `A down payment is paid straight to the seller. It never enters the account: no car, no sign (${CAR_IS}). It comes off the price: loan = price − down payment.` },
 ];
 function inOrOutWord() {
   const w = pick(WORDS);
   return mc(CON,
-    `In the jug form, which way does it go? <b>${w.what}</b>`,
+    `<b>${w.what}</b>: in or out?`,                                   // the item first (f10 review 1)
     w.ans, [IN, OUT, NEVER].filter(o => o !== w.ans), {
       hint: "Does the money go into the account, come out of it, or never touch it?",
       answerLabel: w.ans,
-      solution: [{ s: w.why }, { s: REFRAIN }],
+      solution: [{ s: w.why }, refrain(w.loan)],
     });
 }
 
@@ -362,13 +412,13 @@ function interestPaid() {
     `${cap(p.he)} borrowed ${money(loan, 2)} at ${pa(sc.r)} compounded ${HOW(sc.k)}. ${cap(p.he)} paid back ${andList(pays.map(at))}, and that paid off the loan. How much interest did ${p.he} pay?`,
     lab(intC), wrongs, {
       graph: g, graphCap: CAPTION,
-      hint: "Interest = what was paid back − what was borrowed.",
+      hint: "Interest = what was paid back − what was borrowed.",
       answerLabel: `${lab(intC)} of interest`,
       solution: [
-        { s: `Paid back (OUT): ${nw(amt0(sc.vals[0]))} + ${nw(amt0(sc.vals[1]))} = ${nw(amt0(paidC / 100))}`, r: "the repayments cover the loan AND its interest" },
-        { s: `Borrowed (IN): ${nw(amt2(loan))}`, r: "the loan has no interest in it" },
-        { s: `Interest = paid back − borrowed = ${nw(amt0(paidC / 100))} − ${nw(amt2(loan))} = ${lab(intC)}` },
-        { s: REFRAIN },
+        { s: `Paid back (OUT): ${nw(amt0(sc.vals[0]))} + ${nw(`${amt0(sc.vals[1])} = ${amt0(paidC / 100)}`)}`, r: "the repayments cover the loan AND its interest" },
+        { s: `Borrowed (IN): ${nw(amt2(loan))}`, r: "no interest in the loan" },
+        { s: `Interest = paid back − borrowed = ${nw(amt0(paidC / 100))} − ${nw(`${amt2(loan)} = ${rands(intC / 100, 2)}`)}` },
+        refrain(true),
       ],
     });
 }
@@ -391,7 +441,8 @@ function tidyLoan() {
     const vals = shuffled(REPAY_AMTS.filter(v => v < loan / 2 && v !== down && v !== loan)).slice(0, cnt);
     const g = 1 + toFrac(r) / k;
     const x = loan * Math.pow(g, n * k) - vals.reduce((s, v, j) => s + v * Math.pow(g, (n - times[j]) * k), 0);
-    if (vals.length === cnt && x > 500) sc = { loan: true, n, r, k, p, price, down, ln: loan, item: pick(ITEMS), pays: times.map((t, j) => ({ t, v: vals[j], kind: "repay" })) };
+    const cars2 = times.every(t => (n - t) * k >= 2);                    // f10 review 1: no car is ever ^1
+    if (vals.length === cnt && x > 500 && cars2) sc = { loan: true, n, r, k, p, price, down, ln: loan, item: pick(ITEMS), pays: times.map((t, j) => ({ t, v: vals[j], kind: "repay" })) };
   }
   sc = sc || { loan: true, n: 3, r: 12, k: 12, p: { he: "he", his: "his" }, price: 15000, down: 3000, ln: 12000, item: "laptop", pays: [{ t: 1, v: 5000, kind: "repay" }] };
   const { p, n } = sc, E = n * sc.k;
@@ -409,14 +460,14 @@ function tidyLoan() {
   return mc(CON,
     `${cap(p.he)} buys ${a} ${sc.item} for ${money(sc.price)}. ${cap(p.he)} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and a last repayment, x, at T${n} pays off the loan. The meeting day is T${n}. Which line is the tidy form?`,
     eqHtml(sc, right), wrongs, {
-      hint: "Price = loan + down payment. Only the loan goes into the account.",
+      hint: "Price = loan + down payment. Only the loan goes into the account.",
       solution: [
-        { s: `Price = loan + down payment, so the loan = ${nw(amt0(sc.price))} − ${nw(amt0(sc.down))} = ${nw(amt0(sc.ln))}`, r: "the down payment never enters the account: no car, no sign" },
-        { s: `The loan goes IN: ${nw(termText(sc, right.L[0]))}`, r: `a car from T0 to T${n}: ${n} × ${sc.k} = ${E}` },
-        ...pays.map(t => ({ s: `The repayment at T${t.t} comes OUT: ${nw(termText(sc, t))}`, r: `a car from T${t.t} to T${n}: ${n - t.t} × ${sc.k} = ${t.e}` })),
+        { s: `Price = loan + down payment, so the loan = ${nw(amt0(sc.price))} − ${nw(`${amt0(sc.down)} = ${amt0(sc.ln)}`)}`, r: `the down payment never enters the account: no car, no sign (${CAR_IS})` },
+        { s: `The loan goes IN: ${nw(termText(sc, right.L[0]))}`, r: `a car from T0 to T${n}: ${carSum(n, sc.k)}` },
+        ...pays.map(t => ({ s: `The repayment at T${t.t} comes OUT: ${nw(termText(sc, t))}`, r: `a car from T${t.t} to T${n}: ${carSum(n - t.t, sc.k)}` })),
         { s: "The last repayment, x, comes OUT too, on the meeting day", r: "no car" },
         { s: `Tidy: ${eqHtml(sc, right)}`, r: "the payments stand positive on the right" },
-        { s: REFRAIN },
+        refrain(true),
       ],
     });
 }
@@ -449,7 +500,7 @@ function signOnTimeline() {
         meetLine(sc),
         ...R.map(t => termLine(sc, t)),
         { s: `The one equation: ${eqHtml(sc, right)}`, r: "the total on its own on the left" },
-        { s: REFRAIN },
+        refrain(false),
       ],
     });
 }

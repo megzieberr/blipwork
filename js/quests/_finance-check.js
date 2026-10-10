@@ -221,6 +221,22 @@ export function labelFitIssues(spec, host) {
       if (Math.abs(Number(l.getAttribute("x2")) - g.xAt(Math.round((Number(l.getAttribute("x2")) - g.xAt(0)) / gap))) > 0.5) out.push("a leader line does not end on a tick");
       [...fixed, ...extra].filter(o => o.bb).forEach(o => { if (hits(b, o.bb, 0)) out.push(`a leader line crosses ${o.what}`); });
     });
+    /* f10 review 1 (spec.stackLeaders): a stacked amount's leader runs down
+       beside the stack and in to its tick; it ends on a tick, and no stretch
+       of it crosses an amount (the "?" ring is part of its amount's box), a
+       role letter, a T label, a road rate, the flag, its words or its pole */
+    const sleads = [...svg.querySelectorAll("polyline.tl-slead")];
+    if (sleads.length !== (g.stackLeaders || []).length) out.push(`${sleads.length} stack leaders drawn for ${(g.stackLeaders || []).length} stacked amounts`);
+    sleads.forEach(pl => {
+      const pts = String(pl.getAttribute("points")).trim().split(/\s+/).map(p => p.split(",").map(Number));
+      const end = pts[pts.length - 1];
+      if (pts.length < 2 || Math.abs(end[0] - g.xAt(Math.round((end[0] - g.xAt(0)) / gap))) > 0.5 || !(end[1] < g.cy - 6)) out.push("a stacked amount's leader does not end on a tick");
+      for (let i = 1; i < pts.length; i++) {
+        const [a, c] = [pts[i - 1], pts[i]];
+        const b = { x: Math.min(a[0], c[0]) - 0.5, y: Math.min(a[1], c[1]), width: Math.abs(a[0] - c[0]) + 1, height: Math.abs(a[1] - c[1]) };
+        [...fixed, ...extra].filter(o => o.bb).forEach(o => { if (hits(b, o.bb, 0)) out.push(`a stacked amount's leader crosses ${o.what}`); });
+      }
+    });
     extra.filter(e => e.bb).forEach((e, i, arr) => {
       if (e.bb.x < -0.5 || e.bb.x + e.bb.width > g.W + 0.5 || e.bb.y < -0.5 || e.bb.y + e.bb.height > g.H + 0.5) out.push(`${e.what} runs outside the frame`);
       fixed.forEach(f => { if (hits(e.bb, f.bb, 0.5)) out.push(`${e.what} touches ${f.what}`); });
@@ -493,10 +509,10 @@ export const RECOMPUTE = {
   },
   "f10.interestPaid": q => {
     const p = String(q.prompt);
-    const m = p.match(/borrowed <span class="nowrap">R([\d ]+,\d\d)<\/span> at (\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)\./);
+    const m = p.match(/borrowed <span class="nowrap">R([\d ]+,\d\d)<\/span> at (\d+)%\s?p\.a\. compounded (annually|half[-‑]yearly|quarterly|monthly)\./);
     const pays = [...p.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
     if (!m || pays.length !== 2 || q.type !== "mc") return false;
-    const loan = f10Num(m[1]), r = Number(m[2]), k = F9_K[m[3]];
+    const loan = f10Num(m[1]), r = Number(m[2]), k = F9_K[f10Word(m[3])];
     /* the story is true: those repayments, moved back to T0 at the stated rate, are that loan to the cent */
     const pv = pays.reduce((s, x) => s + x.v * Math.pow(1 + toFrac(r) / k, -x.t * k), 0);
     if (!(Math.abs(pv - loan) <= 0.005 + 1e-9)) return false;
@@ -517,11 +533,11 @@ export const RECOMPUTE = {
   "f10.tidyLoan": q => {
     const p = String(q.prompt);
     const price = p.match(/ for <span class="nowrap">R([\d ]+)<\/span>/), down = p.match(/down payment of <span class="nowrap">R([\d ]+)<\/span>/);
-    const said = [...p.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)/g)];
+    const said = [...p.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half[-‑]yearly|quarterly|monthly)/g)];
     const xm = p.match(/a last repayment, x, at T(\d+)/), mm = p.match(/The meeting day is T(\d+)\./);
     const pays = [...p.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
     if (!price || !down || said.length !== 1 || !xm || !mm || !pays.length || q.graph) return false;
-    const n = Number(mm[1]), r = Number(said[0][1]), k = F9_K[said[0][2]];
+    const n = Number(mm[1]), r = Number(said[0][1]), k = F9_K[f10Word(said[0][2])];
     const P = f10Num(price[1]), D = f10Num(down[1]), loan = P - D;               // price = loan + down payment
     if (Number(xm[1]) !== n || !(D > 0 && loan > 0) || pays.some(x => !(x.t > 0 && x.t < n))) return false;
     const s = { saving: false, n, r, k, pays: pays.map(x => ({ ...x, out: false })) };
@@ -536,9 +552,13 @@ export const RECOMPUTE = {
        tidy line) must PARSE: each term one <span class="nowrap"> unit
        (amount with no-break thousands, or P / A / x, then at most one
        car "(1 + 0,12/12)^36" or "^(−36)" at the story's own rate),
-       terms joined only by " + " / " − ", exactly one " = ", a side may
-       be a lone 0, a leading minus only on a side's first term, and the
-       brackets balance. A slip here returns null and the check fails.
+       terms joined only by " + " / " − ", exactly one "=", a right side
+       may be a lone 0, a leading minus only on a side's first term, and
+       the brackets balance. A slip here returns null and the check fails.
+     · f10 review 1: the "=" glues to the term BEFORE it, inside that
+       term's unit ("P(…)^36 =", and a lone 0 or A rides along too:
+       "9 000 = 0", "…^8 = A"), so a broken line never starts with "=".
+       An "=" standing on its own between units does not parse.
      · the scene comes from the picture: the total ("?" with its letter,
        A at the end for saving, P at T0 for a loan; or the known loan with
        its P), the payments, the ONE withdrawal drawn out (saving only,
@@ -559,11 +579,22 @@ function f10Cents(label) {
   return m ? (m[1] ? -1 : 1) * Math.round(f10Num(m[2]) * 100) : NaN;
 }
 const f10Rate = s => (s.k === 1 ? C(toFrac(s.r)) : `${C(toFrac(s.r))}/${s.k}`);
+/* f10 review 1: "half‑yearly" is written with a non-breaking hyphen (U+2011) */
+const f10Word = w => String(w).replace("‑", "-");
 const F10_TERM = /^(−)?(\d{1,3}(?: \d{3})*|P|A|x)(?:\(1 \+ (0,\d+(?:\/\d+)?)\)\^(\d+|\(−\d+\)))?$/;
 export function f10ParseEq(html, iText = null) {
   if (html == null) return null;
   const units = [];
-  const s = String(html).replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => { units.push(inner); return ` #${units.length - 1} `; });
+  const unit = inner => { units.push(inner); return ` #${units.length - 1} `; };
+  /* f10 review 1: a unit "TERM =" or "TERM = RIGHT" (RIGHT a lone 0 or a
+     term) holds the equals sign; it becomes the tokens TERM, "=g", RIGHT */
+  const s = String(html).replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
+    const k = inner.indexOf(" =");
+    if (k < 0) return inner.includes("=") ? " ! " : unit(inner);           // "=" leading a unit: free to start a line
+    const rest = inner.slice(k + 2);
+    if (rest.includes("=") || (rest && !rest.startsWith(" "))) return " ! ";
+    return unit(inner.slice(0, k)) + " =g " + (rest.trim() ? unit(rest.trim()) : "");
+  });
   if (/[<>]/.test(s)) return null;                                         // a term that is not its own unbreakable unit
   const toks = s.trim().split(/ +/).filter(Boolean);
   const sides = [[], []];
@@ -571,10 +602,13 @@ export function f10ParseEq(html, iText = null) {
   for (let j = 0; j < toks.length; j++) {
     const tk = toks[j];
     if (want === "operand") {
-      if (tk === "0" && !sides[side].length && sign === 1 && (toks[j + 1] === "=" || j === toks.length - 1)) { want = "zero"; continue; }
       const m = /^#(\d+)$/.exec(tk);
       if (!m) return null;
       const body = units[Number(m[1])];
+      if (body === "0") {                                                  // a right side that is a lone 0, last
+        if (side !== 1 || sides[1].length || sign !== 1 || j !== toks.length - 1) return null;
+        want = "zero"; continue;
+      }
       let depth = 0;
       for (const ch of body) { depth += ch === "(" ? 1 : ch === ")" ? -1 : 0; if (depth < 0) return null; }
       if (depth !== 0) return null;                                        // brackets balance
@@ -588,8 +622,8 @@ export function f10ParseEq(html, iText = null) {
       sides[side].push({ s: sign * (tm[1] ? -1 : 1), c, e });
       sign = 1; want = "op";
     } else if ((tk === "+" || tk === "−") && want === "op") { sign = tk === "+" ? 1 : -1; want = "operand"; }
-    else if (tk === "=" && side === 0) { side = 1; want = "operand"; sign = 1; }
-    else return null;
+    else if (tk === "=g" && side === 0 && want === "op") { side = 1; want = "operand"; sign = 1; }
+    else return null;                                                      // a bare "=" between units never parses
   }
   if (side !== 1 || want === "operand") return null;
   return { L: sides[0], R: sides[1] };
@@ -612,9 +646,9 @@ export function f10Scene(q) {
   if (!g || g.type !== "timeline" || !Array.isArray(g.nodes) || !Array.isArray(g.roads) || g.roads.length !== 1) return null;
   if (g.meet !== g.n) return null;                                          // the meeting day is the last T
   const prompt = String(q.prompt);
-  const said = [...prompt.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)/g)];
+  const said = [...prompt.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half[-‑]yearly|quarterly|monthly)/g)];
   if (said.length !== 1) return null;
-  const r = Number(said[0][1]), k = F9_K[said[0][2]];
+  const r = Number(said[0][1]), k = F9_K[f10Word(said[0][2])];
   const road = g.roads[0], rm = String(road.rate).match(/^(\d+)% p\.a\.$/);
   if (!rm || Number(rm[1]) !== r || road.from !== 0 || road.to !== g.n) return null;
   const roles = g.nodes.filter(nd => nd.role);
@@ -706,7 +740,9 @@ function f10JugCheck(q, wrong) {
    lines) parsed, for the harness's f10 block: [{ where, ok }] */
 export function f10EquationsOf(q) {
   const out = [];
-  const looks = h => /<span class="nowrap">[^<]*<\/span> (?:=|\+|−) /.test(String(h)) && / = /.test(String(h).replace(/<[^>]+>/g, ""));
+  /* f10 review 1: the "=" now sits INSIDE a unit, so an equation is any
+     line that holds a nowrap unit and an "=" (a bare one fails the parse) */
+  const looks = h => /<span class="nowrap">[^<]*<\/span>/.test(String(h)) && /=/.test(String(h).replace(/<[^>]+>/g, ""));
   const pe = f10PromptEq(q);
   if (pe != null && looks(pe)) out.push({ where: "prompt", ok: !!f10ParseEq(pe) });
   (q.options || []).forEach((o, j) => { if (looks(o.label)) out.push({ where: `option ${j + 1}`, ok: !!f10ParseEq(o.label) }); });

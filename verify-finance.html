@@ -89,7 +89,10 @@
 
 <h2>f10 — the round's shape, words and rulings, card by card</h2>
 <p class="muted small">Every f10 card: a hint, an answer and a worked solution ending on the refrain "Deposits and the loan go IN.
-  Withdrawals and repayments come OUT. Tidy: payments positive on the right."; nothing says lumpsum, lump sum, accumulated
+  Withdrawals and repayments come OUT." with its closing line by kind: a loan "Tidy: payments positive on the right.", saving
+  "Tidy: deposits plus, the withdrawal minus, A on the left." (review 1). Every "=" glues to the term before it inside that
+  term's unit (a bare "=" between units does not parse), no car is ever ^1, "half‑yearly" keeps its non-breaking hyphen, and a
+  deposit on the day of A draws its own leader down beside the "?" ring. Nothing says lumpsum, lump sum, accumulated
   amount, LHS or RHS; no HTML entity, no plain space inside an amount, no money amount outside its unbreakable unit; every
   equation parses term by term. On a picture the total is "?" with its role letter (or, on the interest card, the known loan
   with its P), the meeting day is the last T, and a saving picture draws exactly one withdrawal "−R…". The shape: the jug
@@ -108,7 +111,7 @@ import { questDef } from "./js/quests/index.js";
 import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
-import { renderTimeline, verifyTimeline } from "./js/engine/timeline-graph.js";
+import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/timeline-graph.js";
 import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf } from "./js/quests/_finance-check.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
@@ -148,7 +151,7 @@ const ENGINE = [
   /* f10 (2026-10-10): a WITHDRAWAL drawn "−R3 000" (out: true) squeezed between the widest deposits the round rolls
      (R20 000, R15 000) on neighbouring T's at n = 5, a deposit stacked on the day of A under the meeting-day flag; then
      the interest card's known loan, the widest 2-dp label it allows (under R10 000), carrying its P at T0 at n = 4 */
-  { title: "f10: a withdrawal −R3 000 between the widest deposits, a deposit on the day of A", spec: { type: "timeline", n: 5, meet: 5, leaders: true, nodes: [{ t: 5, label: "?", role: "A" }, { t: 0, amount: 20000, dp: 0 }, { t: 1, amount: 3000, dp: 0, out: true }, { t: 2, amount: 15000, dp: 0 }, { t: 5, amount: 14000, dp: 0 }], roads: [{ from: 0, to: 5, rate: "15% p.a.", k: 12 }], accent: ACC } },
+  { title: "f10: a withdrawal −R3 000 between the widest deposits, a deposit on the day of A with its stack leader", spec: { type: "timeline", n: 5, meet: 5, leaders: true, stackLeaders: true, nodes: [{ t: 5, label: "?", role: "A" }, { t: 0, amount: 20000, dp: 0 }, { t: 1, amount: 3000, dp: 0, out: true }, { t: 2, amount: 15000, dp: 0 }, { t: 5, amount: 14000, dp: 0 }], roads: [{ from: 0, to: 5, rate: "15% p.a.", k: 12 }], accent: ACC } },
   { title: "f10: the known loan R9 999,99 with its P at T0 (the interest card)", spec: { type: "timeline", n: 4, leaders: true, nodes: [{ t: 0, amount: 9999.99, dp: 2, role: "P" }, { t: 1, amount: 9000, dp: 0 }, { t: 4, amount: 7500, dp: 0 }], roads: [{ from: 0, to: 4, rate: "15% p.a.", k: 2 }], accent: ACC } },
 ];
 const eg = document.getElementById("engine");
@@ -456,6 +459,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
 {
   /* written out here on purpose, not imported, so a slip in the module cannot pass itself */
   const REFRAIN = "Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: payments positive on the right.";
+  const REFRAIN_SAVING = "Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: deposits plus, the withdrawal minus, A on the left.";
   const BANNED = [/lumpsum/i, /lump sum/i, /accumulated amount/i, /\bLHS\b/, /\bRHS\b/];
   const ORDER = ["jugCorrect", "jugWrong", "tidy", "withdrawal", "inOrOutWord", "interestPaid", "tidyLoan", "signOnTimeline"];
   const def = questDef("f10");
@@ -476,7 +480,14 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       if (/\d \d{3}(?!\d)/.test(noTags(t))) problems.push("a plain space inside an amount");
       if (/R\d/.test(noTags(t.replace(/<span class="nowrap">[^<]*<\/span>/g, "")))) problems.push("a money amount outside its unbreakable unit");
       if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 2) problems.push("no hint, answer or worked solution");
-      else if (q.solution[q.solution.length - 1].s !== REFRAIN) problems.push("the solution does not end on the refrain");
+      else {
+        /* review 1: the refrain's closing line by kind (a saving picture, or a recall item about a deposit or withdrawal) */
+        const savingCard = (g && g.nodes.some(nd => nd.role === "A")) || (skill.id === "inOrOutWord" && /deposit|withdrawal/i.test(noTags((String(q.prompt).match(/<b>([^<]+)<\/b>/) || [])[1])));
+        if (q.solution[q.solution.length - 1].s !== (savingCard ? REFRAIN_SAVING : REFRAIN)) problems.push(`the solution does not end on the ${savingCard ? "saving" : "loan"} refrain`);
+      }
+      if (/\^\(?−?1\)?(?!\d)/.test(noTags(t))) problems.push("a car with an exponent of 1");
+      if (/half-yearly/.test(t)) problems.push("half-yearly with a breakable hyphen");
+      if (/<span class="nowrap">\s*=/.test(t)) problems.push("a unit that starts with =");
       const eqs = f10EquationsOf(q);
       st.eqs += eqs.length;
       if (eqs.some(e => !e.ok)) problems.push(`an equation that does not parse (${eqs.filter(e => !e.ok).map(e => e.where).join(", ")})`);
@@ -492,7 +503,12 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
         st.outs += outs;
         if (saving ? outs !== 1 : outs !== 0) problems.push(`${outs} withdrawals drawn on a ${saving ? "saving" : "loan"} picture`);
         if (!saving && pays.some(nd => nd.t === g.n)) st.repayOnMeet++;
-        if (saving && pays.some(nd => nd.t === g.n)) st.depOnA++;
+        if (saving && pays.some(nd => nd.t === g.n)) {
+          st.depOnA++;
+          /* review 1: the deposit stacked above the "?" ring draws its own leader (verifyTimeline measures it) */
+          if (!g.stackLeaders || computeTimeline(g).stackLeaders.length !== 1) problems.push("a deposit on the day of A without its stack leader");
+          else st.sleads = (st.sleads || 0) + 1;
+        }
         st.amounts.add(pays.length);
       }
       if (skill.id === "jugWrong") st.slips.add((String(q.answerLabel).match(/the (loan|repayment|withdrawal|deposit)/) || [])[1]);
@@ -515,6 +531,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   tick(["loan", "repayment", "withdrawal", "deposit"].every(k => S("jugWrong").slips.has(k)), `f10.jugWrong: all four slips occur (${[...S("jugWrong").slips].join(", ")})`);
   tick(S("jugCorrect").repayOnMeet > 0 && S("tidy").repayOnMeet > 0, "f10: a repayment sometimes stands on the meeting day (no car)");
   tick(S("jugCorrect").depOnA > 0 && S("withdrawal").depOnA > 0 && S("signOnTimeline").depOnA > 0, "f10: a deposit sometimes shares the day of A (no car)");
+  tick(["jugCorrect", "jugWrong", "withdrawal", "signOnTimeline"].every(id => (S(id).sleads || 0) === S(id).depOnA), `f10 review 1: every deposit on the day of A draws its stack leader (signOnTimeline ${S("signOnTimeline").sleads || 0} of ${S("signOnTimeline").depOnA})`);
   tick(S("inOrOutWord").items.size === 5 && S("inOrOutWord").answers.size === 3, `f10.inOrOutWord: all five items (${S("inOrOutWord").items.size}) and all three answers (${S("inOrOutWord").answers.size}) occur`);
   tick(S("interestPaid").negDecoy === N, "f10.interestPaid: every roll offers the loan minus the payments as a negative decoy");
   tick(S("signOnTimeline").namesAmount === 0 && S("signOnTimeline").outs === N, "f10.signOnTimeline: the prompt names no amount, and every picture draws its one withdrawal");

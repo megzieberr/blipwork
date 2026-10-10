@@ -43,6 +43,11 @@
      leaders?: true,                            // f9 review 1: a thin dashed line from each LONE
                                                 // amount label (no role letter under it) down
                                                 // to its own tick.
+     stackLeaders?: true,                       // f10 review 1: a leader from each amount STACKED
+                                                // above another on one node (the last deposit on
+                                                // the day of A, above the "?" ring), down BESIDE
+                                                // the stack and in to its own tick; the flag pole
+                                                // then stops POLE_AIR above that amount.
    }
    Colours come from CSS (.tl-*); the per-quest accent is the --accent
    CSS var inherited from the screen.
@@ -85,6 +90,17 @@
    under the flagged T label: it slides along its own road (at an end of
    the line, into the empty margin past it) to the nearest place clear of
    that label, and verify measures it there.
+
+   F10 REVIEW 1 (2026-10-10, spec.stackLeaders). A deposit stacked above
+   the "?" ring on the meeting day read like a caption of the flag. Its
+   leader now runs from just under it, straight down BESIDE the ring and
+   the role letter (SLEAD_AIR clear of both), then in to the top of its
+   own tick, so it reads as an amount on that day. The flag pole stops
+   POLE_AIR above it instead of 3 units. verifyTimeline asserts that each
+   stack leader starts under its own amount, ends on its own tick, and
+   that no stretch of it crosses an amount, the ring, a role letter, a
+   T label, a road rate, the flag, its words or its pole. A spec without
+   the key computes and renders byte-for-byte what it did before.
    ============================================================ */
 import { rand } from "../finlib.js";
 
@@ -120,6 +136,9 @@ const Q_DY = 3.8;            // its centre above the label baseline (half the "?
 const Q_STROKE = 0.6;        // half the ring's stroke (CSS .tl-qring, 1.2)
 const MEET_AIR = 4;          // sideways air between a road's rate and the flagged T label
 const LEAD_GAP = 2;          // air between a leader line and its label, and its tick
+/* f10 review 1 (spec.stackLeaders), in viewBox units */
+const SLEAD_AIR = 5;         // a stack leader's air beside the labels and role letter below its amount
+const POLE_AIR = 7;          // the flag pole's air above a stacked amount on the meeting day
 
 function svgWrap(W, H, accent, inner, cls = "") {
   const style = accent ? ` style="--accent:${accent}"` : "";
@@ -239,9 +258,10 @@ export function computeTimeline(spec) {
     const side = mx + FLAG_W + 4 + w <= W - 2 ? 1 : -1;
     const top = node.labels.length ? labelInk(node.labels[node.labels.length - 1]).y0
       : node.role ? cy - 24 - ROLE_UP : cy - 6;
+    const air = spec.stackLeaders && node.labels.length > 1 ? POLE_AIR : 3;   // f10 review 1: clear of a stacked amount
     meet = {
       t: node.t, x: mx, side,
-      pole: { x: mx, y0: FLAG_TOP - 1, y1: top - 3 },
+      pole: { x: mx, y0: FLAG_TOP - 1, y1: top - air },
       flag: { x0: side > 0 ? mx : mx - FLAG_W, x1: side > 0 ? mx + FLAG_W : mx, y0: FLAG_TOP, y1: FLAG_TOP + FLAG_H },
       text: { x: mx + side * (FLAG_W + 4), y: MEET_Y, w, anchor: side > 0 ? "start" : "end", text: MEET_TEXT },
     };
@@ -252,7 +272,20 @@ export function computeTimeline(spec) {
     const lb = nd.labels[0];
     return { t: nd.t, x1: lb.x, y1: labelInk(lb).y1 + LEAD_GAP, x2: nd.x, y2: cy - 6 - LEAD_GAP };
   }) : [];
-  return { type: "timeline", n, W, H, L, R, cy, xAt, gap, nodes, labels, roads, meet, leaders };
+  // f10 review 1 (spec.stackLeaders): each amount stacked ABOVE another on one
+  // node gets a leader: straight down beside everything under it (on the side
+  // facing the middle of the line), then in to the top of its own tick
+  const stackLeaders = spec.stackLeaders ? nodes.filter(nd => nd.labels.length > 1).flatMap(nd => {
+    const side = nd.x > W / 2 ? -1 : 1;
+    return nd.labels.slice(1).map(lb => {
+      const under = nd.labels.slice(0, lb.j).map(labelInk);
+      const reach = Math.max(nd.role ? ROLE_W / 2 : 0, ...under.map(b => (side < 0 ? nd.x - b.x0 : b.x1 - nd.x)));
+      const xv = nd.x + side * (reach + SLEAD_AIR);
+      const bend = nd.role ? cy - 24 + ROLE_DOWN + SLEAD_AIR : Math.max(...under.map(b => b.y1)) + SLEAD_AIR;
+      return { t: nd.t, j: lb.j, pts: [[xv, labelInk(lb).y1 + LEAD_GAP], [xv, bend], [nd.x, cy - 6 - LEAD_GAP]] };
+    });
+  }) : [];
+  return { type: "timeline", n, W, H, L, R, cy, xAt, gap, nodes, labels, roads, meet, leaders, stackLeaders };
 }
 
 /* f9: verify's ink models of the things the flag and the roads must not
@@ -301,6 +334,8 @@ export function renderTimeline(spec) {
   });
   // f9 review 1: the leader lines (spec.leaders)
   g.leaders.forEach(l => { out += line(l.x1, l.y1, l.x2, l.y2, "tl-lead"); });
+  // f10 review 1: a stacked amount's leader, down beside the stack and in to its tick
+  g.stackLeaders.forEach(l => { out += `<polyline class="tl-lead tl-slead" fill="none" points="${l.pts.map(([x, y]) => `${N(x)},${N(y)}`).join(" ")}"/>`; });
 
   // f9: the meeting day: a ring on the axis, a pole, a pennant, the words
   if (g.meet) {
@@ -512,6 +547,35 @@ export function verifyTimeline(spec, tol = 0.5) {
       things.forEach(o => { if (overlaps(b, o.box, 0)) bad.push(`the leader on T${l.t} crosses ${o.what}`); });
     });
     r.push({ label: `${g.leaders.length} leader line${g.leaders.length > 1 ? "s" : ""}, each from its amount down to its own T, crossing no label${bad.length ? ": " + bad.join("; ") : ""}`, ok: bad.length === 0 });
+  }
+  // 10) the stack leaders (f10 review 1): each starts right under its own
+  //     stacked amount, ends on the top of its own tick, and no stretch of it
+  //     crosses an amount (the "?" ring included), a role letter, a T label, a
+  //     road rate, the flag, its words or its pole; the pole keeps POLE_AIR
+  //     above the top amount of a stacked meeting day
+  if (g.stackLeaders.length) {
+    const bad = [];
+    const things = [
+      ...g.labels.map(lb => ({ what: lb.ring ? `the ring around "${lb.text}"` : `amount "${lb.text}"`, box: labelInk(lb) })),
+      ...g.nodes.map(nd => ({ what: `T label ${nd.label}`, box: tLabInk(g, nd) })),
+      ...g.nodes.filter(nd => nd.role).map(nd => ({ what: `role ${nd.role} on T${nd.t}`, box: roleInk(g, nd) })),
+      ...g.roads.map(rd => ({ what: `road label "${rd.label.text}"`, box: roadInk(rd) })),
+    ];
+    if (g.meet) { const mi = meetInks(g.meet); things.push({ what: "the flag", box: mi.flag }, { what: `"${MEET_TEXT}"`, box: mi.text }, { what: "the flag pole", box: mi.pole }); }
+    g.stackLeaders.forEach(l => {
+      const nd = g.nodes[l.t], lb = nd.labels[l.j], ink = labelInk(lb), p = l.pts, end = p[p.length - 1];
+      if (!(p[0][0] > ink.x0 && p[0][0] < ink.x1 && p[0][1] > ink.y1 && p[0][1] - ink.y1 <= LEAD_GAP + tol)) bad.push(`the leader of "${lb.text}" does not start right under it`);
+      if (Math.abs(end[0] - nd.x) > tol || !(end[1] < g.cy - 6) || g.cy - 6 - end[1] > LEAD_GAP + tol) bad.push(`the leader of "${lb.text}" does not end on its own tick T${l.t}`);
+      for (let i = 1; i < p.length; i++) {
+        const b = { x0: Math.min(p[i - 1][0], p[i][0]) - 0.5, x1: Math.max(p[i - 1][0], p[i][0]) + 0.5, y0: Math.min(p[i - 1][1], p[i][1]), y1: Math.max(p[i - 1][1], p[i][1]) };
+        things.forEach(o => { if (overlaps(b, o.box, 0)) bad.push(`the leader of "${lb.text}" crosses ${o.what}`); });
+      }
+    });
+    if (g.meet) {
+      const nd = g.nodes[g.meet.t];
+      if (nd.labels.length > 1 && !(labelInk(nd.labels[nd.labels.length - 1]).y0 - g.meet.pole.y1 >= POLE_AIR - tol)) bad.push(`the flag pole comes within ${POLE_AIR} of "${nd.labels[nd.labels.length - 1].text}"`);
+    }
+    r.push({ label: `${g.stackLeaders.length} stacked amount${g.stackLeaders.length > 1 ? "s" : ""} with a leader down beside the stack to its own T, crossing no label, ring or flag; the pole stays clear${bad.length ? ": " + bad.join("; ") : ""}`, ok: bad.length === 0 });
   }
   return r;
 }
