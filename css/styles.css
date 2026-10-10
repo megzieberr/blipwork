@@ -320,6 +320,9 @@ h2{font-size:20px} h3{font-size:17px}
 .hit.show-correct{fill:color-mix(in srgb,var(--good) 26%,transparent);stroke:var(--good)}
 .hit.show-correct[data-shape="stroke"]{stroke:var(--good);fill:none}
 .hit.show-wrong{fill:color-mix(in srgb,var(--bad) 26%,transparent);stroke:var(--bad)}
+/* f8 (2026-10-10): tappable amount labels on a timeline wear a faint dashed
+   outline until answered, so the money reads as something to tap */
+.hit.tl-lab-hit:not(.locked):not(:hover){stroke:color-mix(in srgb,var(--accent) 45%,transparent);stroke-dasharray:3 3}
 
 /* keypad */
 .keypad{margin-top:4px}

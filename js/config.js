@@ -56,6 +56,7 @@ export const CHAPTERS = [
       { id: "f5", n: 5, title: "Timelines: building the move", blurb: "× or ÷, the exponent's sign, and rate changes.", built: true },
       { id: "f6", n: 6, title: "Deposits & hire purchase", blurb: "The deposit and what's still owed.", built: true },
       { id: "f7", n: 7, title: "Effective vs nominal", blurb: "Annual vs a frequency, and the conversion formula.", built: true },
+      { id: "f8", n: 8, title: "Which one is the total?", blurb: "Savings or a loan: tap the amount all the others add up to.", built: true },
     ],
   },
   {

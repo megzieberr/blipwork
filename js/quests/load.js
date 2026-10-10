@@ -37,7 +37,7 @@
 import { chapterById } from "../config.js";
 import { lazyImport } from "../lazy.js";
 
-/* id : [module path, export name], the same 93 lines js/quests/index.js
+/* id : [module path, export name], the same lines js/quests/index.js
    imports, in the same order. Keep the two in step (the drift check
    proves it). */
 export const QUEST_MODULES = {
@@ -56,6 +56,7 @@ export const QUEST_MODULES = {
   f5: ["./questf5-timeline-build.js", "questF5"],
   f6: ["./questf6-deposits.js", "questF6"],
   f7: ["./questf7-eff-nom.js", "questF7"],
+  f8: ["./questf8-which-total.js", "questF8"],
   p1: ["./questp1-basics.js", "questP1"],
   p2: ["./questp2-venn-regions.js", "questP2"],
   p3: ["./questp3-venn-prob.js", "questP3"],

@@ -206,7 +206,10 @@ financePool.entries.forEach((entry, idx) => {
   entriesHost.appendChild(card);
 });
 
-recomputeLines.unshift(`Independent recompute wired for ${RECOMPUTE_IDS.length} of ${financePool.entries.length} skills — every skill that rolls a number; the other ${financePool.entries.length - RECOMPUTE_IDS.length} are fixed-fact recall (listed as PURE_RECALL in the pool). Every timeline a Finance question emits is checked with verifyTimeline, plus a rendered-label fit test (inside the frame, over its own node) on the first ${FIT_RUNS} rolls.\n`);
+/* only the pool's own skills count here: RECOMPUTE also carries f8's tap
+   skills (2026-10-10), which are not in this f1–f7 pool */
+const poolRecompute = RECOMPUTE_IDS.filter(id => financePool.entries.some(e => e.skillId === id)).length;
+recomputeLines.unshift(`Independent recompute wired for ${poolRecompute} of ${financePool.entries.length} skills — every skill that rolls a number; the other ${financePool.entries.length - poolRecompute} are fixed-fact recall (listed as PURE_RECALL in the pool). Every timeline a Finance question emits is checked with verifyTimeline, plus a rendered-label fit test (inside the frame, over its own node) on the first ${FIT_RUNS} rolls.\n`);
 recomputeLines.push(`\nMethod coverage: ${methodCount}/${financePool.entries.length} skills attach q.method (the ones whose solution holds real working). The rest carry only the builders' answer-restating default, so the link is deliberately absent — DICE-COMMON's method rule.`);
 document.getElementById("recompute").textContent = recomputeLines.join("\n");
 

@@ -267,6 +267,21 @@ export const CONCEPTS = {
       <div class="formula">1 + i_eff = (1 + i_nom / n)ⁿ</div>
       <p>Here n is the number of compounding periods <b>per year</b> (12 for monthly).</p>`,
   },
+  /* f8 "Which one is the total?" (2026-10-10). Uses the MIDDLE wording of
+     the round's vocabulary phasing, "the total (lumpsum)" (FINANCE-ROUNDS-2-PLAN.md). */
+  theTotal: {
+    title: "The total (lumpsum)",
+    body: `
+      <p><b>The total (lumpsum)</b> is the amount all the payments add up to, once each payment is moved (with its interest) to the total's date. It is <b>never one of the payments</b>.</p>
+      <ul>
+        <li><b>Saving:</b> the deposits grow into the total, so it sits at the <b>end</b>.</li>
+        <li><b>A loan:</b> the total is the amount borrowed, so it sits at the <b>start</b> (T0). A loan starts big and gets paid down.</li>
+      </ul>
+      <p>The loan amount <b>P has no interest in it</b>. The repayments pay back the loan <b>and</b> its interest, so together they come to more than P, and one repayment can even be bigger than P.</p>
+      <p>Two amounts on the same day? Only one of them is the total. The other is a payment made on that day.</p>
+      <div class="eg">Saving at 10% p.a.: R2 000 at T0 and R3 000 at T1 grow into R6 292 at T3. The total is R6 292, at the end.</div>
+      <div class="eg">A loan at 10% p.a.: he borrows R5 000 at T0 and pays back R2 200 at T1 and R3 993 at T3. The total is R5 000, at the start.</div>`,
+  },
 
   /* ---------- Probability ---------- */
   probBasics: {

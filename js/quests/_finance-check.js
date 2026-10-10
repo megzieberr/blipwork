@@ -9,9 +9,10 @@
    independent: if a quest module's arithmetic ever drifted from what it
    actually SHOWS the learner, these checks fail.
 
-   Coverage: all 25 Finance skills that roll a number. The other 26 are
-   pure fixed-fact recall (no numbers to recompute) and are covered by
-   the generic shape / self-consistency / decoy checks in the harnesses.
+   Coverage: all 25 f1–f7 skills that roll a number, plus f8's five
+   tap-the-total skills (2026-10-10). The rest are pure fixed-fact recall
+   (no numbers to recompute) and are covered by the generic shape /
+   self-consistency / decoy checks in the harnesses.
    ============================================================ */
 import {
   toFrac, COMPOUNDING, ratePerPeriod, periodCount, compoundAmount, moveMoney,
@@ -87,17 +88,42 @@ export function labelFitIssues(spec, host) {
   if (!svg) return ["timeline did not render"];
   const g = computeTimeline(spec);
   const gap = g.n > 0 ? (g.xAt(1) - g.xAt(0)) : g.W;
-  const labelled = g.nodes.filter(n => n.amountLabel != null);
+  /* one entry per drawn amount label, in draw order (2026-10-10, f8: a node
+     can now carry TWO stacked labels, so labels are counted, not nodes) */
+  const labelled = g.labels;
   const texts = [...svg.querySelectorAll("text.tl-amt")];
-  if (texts.length !== labelled.length) return [`${texts.length} amount labels drawn for ${labelled.length} labelled nodes`];
+  if (texts.length !== labelled.length) return [`${texts.length} amount labels drawn for ${labelled.length} labels in the spec`];
+  const boxes = [];
   texts.forEach((el, i) => {
     let bb;
     try { bb = el.getBBox(); } catch { return; }
-    const node = labelled[i];
+    const lb = labelled[i];
+    boxes.push({ lb, bb, text: el.textContent });
     if (bb.x < -0.5 || bb.x + bb.width > g.W + 0.5) out.push(`amount "${el.textContent}" runs outside the ${g.W}-wide viewBox`);
+    if (bb.y < -0.5 || bb.y + bb.height > g.H + 0.5) out.push(`amount "${el.textContent}" runs outside the ${g.H}-high viewBox`);
     const centre = bb.x + bb.width / 2;
-    if (Math.abs(centre - node.x) > gap * 0.6) out.push(`amount "${el.textContent}" sits ${Math.round(Math.abs(centre - node.x))}px off its own node (T${node.t})`);
+    if (Math.abs(centre - lb.nodeX) > gap * 0.6) out.push(`amount "${el.textContent}" sits ${Math.round(Math.abs(centre - lb.nodeX))}px off its own node (T${lb.t})`);
   });
+  /* no two REAL label boxes overlap: neighbours on the line, or the two
+     amounts stacked on one node (f8's same-day deposit and its total) */
+  const hits = (a, b, m) => a.x < b.x + b.width - m && b.x < a.x + a.width - m && a.y < b.y + b.height - m && b.y < a.y + a.height - m;
+  for (let i = 0; i < boxes.length; i++)
+    for (let j = i + 1; j < boxes.length; j++)
+      if (hits(boxes[i].bb, boxes[j].bb, 0.5)) out.push(`amounts "${boxes[i].text}" and "${boxes[j].text}" overlap`);
+  /* tappable labels (spec.tapLabels): each label's real box sits inside its
+     OWN hit box, and its centre inside no other label's box, so the place a
+     learner aims at is always the amount they meant */
+  if (spec.tapLabels) {
+    const inBox = (x, y, h) => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h;
+    boxes.forEach(({ lb, bb, text }) => {
+      const h = lb.hit;
+      if (!h) { out.push(`amount "${text}" has no hit box`); return; }
+      if (bb.x < h.x - 1 || bb.x + bb.width > h.x + h.w + 1 || bb.y < h.y - 1 || bb.y + bb.height > h.y + h.h + 1)
+        out.push(`amount "${text}" spills out of its own hit box`);
+      const cx = bb.x + bb.width / 2, cyy = bb.y + bb.height / 2;
+      boxes.forEach(o => { if (o.lb !== lb && o.lb.hit && inBox(cx, cyy, o.lb.hit)) out.push(`amount "${text}" sits inside the hit box of "${o.text}"`); });
+    });
+  }
   return out;
 }
 
@@ -270,7 +296,73 @@ export const RECOMPUTE = {
     const i = toFrac(p[0]);
     return effFromNom(i, 12) > effFromNom(i, 1) && correctLabel(q) === "Compounded monthly";
   },
+
+  /* ---- f8 (2026-10-10): tap the total ---- */
+  "f8.tapSavings": q => f8TapCheck(q, "savings"),
+  "f8.tapLoan": q => f8TapCheck(q, "loan"),
+  "f8.tapSameDay": q => f8TapCheck(q, "sameDay"),
+  "f8.tapLoanBigRepay": q => f8TapCheck(q, "bigRepay"),
+  "f8.tapUnknownX": q => f8TapCheck(q, "x"),
 };
+
+/* ============================================================
+   f8 · "Which one is the total?" — the tap target, re-derived.
+   Reads ONLY what the learner sees: the story in the prompt (saving or a
+   loan), the rate in the prompt, and the amount labels the engine draws.
+     · the marked target is a real amount (never x), and it sits where the
+       total belongs: at the END for saving, at T0 for a loan;
+     · no two amounts on the line are equal;
+     · with no x on the line, the marked amount is the ONLY amount that
+       equals every other amount moved to its date at the stated rate
+       (rounded to the rand), so it is the one they all add up to and
+       every payment node is ruled out by arithmetic, not by position;
+     · with x on the line, the x that the total implies is a positive
+       whole number of hundreds (to within the total's rounding), so the
+       total was built from real payments;
+     · the per-skill shape: one amount at the end (savings), two at the
+       end (same day), the loan bigger than every repayment (loan), some
+       repayment bigger than the loan (bigRepay), x strictly in the middle.
+   ============================================================ */
+function f8TapCheck(q, kind) {
+  if (q.type !== "tap" || !q.graph || !q.graph.tapLabels || !q.tap) return false;
+  const g = computeTimeline(q.graph);
+  const [r] = pcts(q.prompt);
+  const saving = /\bsaves?\b|savings/.test(q.prompt), loan = /borrows|\bloan\b|pays off/.test(q.prompt);
+  if (!Number.isFinite(r) || saving === loan) return false;                 // exactly one story
+  const i = toFrac(r);
+  const items = g.labels.map(lb => ({ id: lb.id, t: lb.t, text: lb.text, v: lb.text === "x" ? NaN : numOf(lb.text.replace(/^R/, "")) }));
+  const ids = items.map(it => it.id);
+  const targets = q.tap.targets || [];
+  if (targets.length !== ids.length || !ids.every(id => targets.includes(id))) return false;   // every amount is tappable
+  const pick = items.find(it => it.id === q.tap.correctId);
+  if (!pick || !Number.isFinite(pick.v)) return false;                      // the total is a known amount, never x
+  const home = saving ? g.n : 0;
+  if (pick.t !== home) return false;                                        // saving: the end; a loan: the start
+  const xs = items.filter(it => it.text === "x");
+  const known = items.filter(it => Number.isFinite(it.v));
+  if (known.length + xs.length !== items.length || xs.length > 1) return false;
+  if (new Set(known.map(it => it.v)).size !== known.length) return false;   // no two amounts equal
+  const movedTo = (it, o) => o.v * Math.pow(1 + i, it.t - o.t);
+  if (!xs.length) {
+    const sumOthers = it => items.filter(o => o !== it).reduce((s, o) => s + movedTo(it, o), 0);
+    const fits = known.filter(it => Math.abs(sumOthers(it) - it.v) <= 0.5 + 1e-6);
+    if (fits.length !== 1 || fits[0] !== pick) return false;
+  } else {
+    const x = xs[0];
+    const rest = known.filter(o => o !== pick).reduce((s, o) => s + movedTo(pick, o), 0);
+    const xAtTotal = pick.v - rest;                                          // x moved to the total's date
+    const xVal = xAtTotal * Math.pow(1 + i, x.t - pick.t);                   // …and back to x's own date
+    const slack = 0.5 * Math.pow(1 + i, Math.abs(x.t - pick.t)) + 1e-6;     // the total's rounding, carried over
+    if (!(xVal > 0) || Math.abs(xVal - Math.round(xVal / 100) * 100) > slack) return false;
+  }
+  const atHome = items.filter(it => it.t === home).length;
+  if (kind === "savings") return saving && !xs.length && atHome === 1;
+  if (kind === "sameDay") return saving && !xs.length && atHome === 2;
+  if (kind === "loan") return loan && !xs.length && known.every(it => it === pick || it.v < pick.v);
+  if (kind === "bigRepay") return loan && !xs.length && known.some(it => it !== pick && it.v > pick.v);
+  if (kind === "x") return xs.length === 1 && xs[0].t > 0 && xs[0].t < g.n && atHome === 1;
+  return false;
+}
 
 /* the skills with no rolled numbers — nothing to recompute (they are
    the same 26 listed as PURE_RECALL in js/quests/dice-finance.js) */

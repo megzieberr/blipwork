@@ -335,7 +335,10 @@ export function mountQuestion(host, q, handlers = {}) {
 
   else if (q.type === "tap" && svgNode && q.graph && q.graph.type === "timeline") {
     if (q.tapHint) inputHost.appendChild(el("p", "q-tap-hint", fmt(q.tapHint)));
-    addTimelineHits(svgNode, computeTimeline(q.graph), q.tap, (id) => {
+    // f8 (2026-10-10): a spec with tapLabels is tapped on its AMOUNT labels
+    // (two amounts can share one T); every other timeline keeps f4's tick bands
+    const addHits = q.graph.tapLabels ? addTimelineLabelHits : addTimelineHits;
+    addHits(svgNode, computeTimeline(q.graph), q.tap, (id) => {
       if (answered) return;
       commit(id === q.tap.correctId, id);
     });
@@ -889,6 +892,31 @@ function addTimelineHits(svg, geo, tap, onPick) {
       });
       if (n.t !== tap.correctId) node.classList.add("show-wrong");
       onPick(n.t);
+    });
+    svg.appendChild(node);
+  });
+}
+
+/* ------------------------------------------------------------
+   Tappable AMOUNT labels over a finance timeline (f8, 2026-10-10:
+   "tap the total"). Two amounts can sit on one T, so the target is
+   the money label, not the tick. Each label's hit box comes straight
+   from the engine (geo.labels[k].hit), the same boxes verifyTimeline
+   and verify-finance.html measure; id is the spec entry's `id`.
+   ------------------------------------------------------------ */
+function addTimelineLabelHits(svg, geo, tap, onPick) {
+  const targets = tap.targets || geo.labels.map(lb => lb.id);
+  geo.labels.filter(lb => lb.hit && targets.includes(lb.id)).forEach(lb => {
+    const b = lb.hit;
+    const node = svgEl("rect", { x: b.x, y: b.y, width: b.w, height: b.h, rx: 6, class: "hit tl-hit tl-lab-hit", "data-id": lb.id, role: "button", "aria-label": `${lb.text} at T${lb.t}` });
+    node.addEventListener("click", () => {
+      if (node.classList.contains("locked")) return;
+      svg.querySelectorAll(".hit").forEach(h => {
+        h.classList.add("locked");
+        if (h.dataset.id === tap.correctId) h.classList.add("show-correct");
+      });
+      if (lb.id !== tap.correctId) node.classList.add("show-wrong");
+      onPick(lb.id);
     });
     svg.appendChild(node);
   });
