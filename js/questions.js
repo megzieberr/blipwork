@@ -731,6 +731,7 @@ function mountSteps(host, root, q, commit, svgNode) {
     if (step.kind === "calc") {
       const kp = mountKeypad(shost, {
         unit: step.unit || "", allowNeg: !!step.allowNeg,
+        maxDigits: step.maxDigits,          // undefined keeps the keypad's 6 (finance f12 asks for 9)
         onSubmit(v) {
           if (busy()) return;
           if (!Number.isFinite(v)) return;     // ignore an empty submit, same as a plain calc

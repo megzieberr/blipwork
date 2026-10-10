@@ -48,12 +48,22 @@
   form and the tidy form must be the same terms with the moved signs flipped, and every decoy a different equation. The
   interest card is recomputed from its displayed numbers. The engine learnt one thing, measured below: a WITHDRAWAL node
   (out: true) drawn "−R2 000" in its own colour. The f10 block at the bottom checks the round's shape and words.</p>
+<p class="muted small"><b>2026-10-10: f12 "Build the one equation" joined</b> (8 more skills, so f1–f12 is 83 skills with f11
+  still to come; the recompute covers 54 of them, the other 29 are fixed-fact recall). The exam shape: a word question from the
+  class bank with rolled numbers, then a steps chain: pick the one equation (mc), type the answer to 2 dp (calc), and for
+  hire purchase the price. Every f12 card is read back from its own words alone (the name, saving or a loan, every amount and
+  when, the rates and the rate change, the meeting day): the right equation is rebuilt (the total alone on the left, one car
+  per road to the meeting day, no car on the meeting day), each option is parsed term by term, the three decoys must be one
+  sign slip, one car slip and one gear slip, and the answer and the price are recomputed through finlib. The FADE is checked
+  card by card (a timeline on cards 1–3, none on 4–8), and every family is also drawn with its timeline forced on and measured
+  at phone width, for the Exam Focus tile that will deal these gens. The f12 block at the bottom checks the round's shape and
+  words.</p>
 <div id="banner">running…</div>
 
 <h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
 <div class="grid" id="engine"></div>
 
-<h2>Quests f1–f10 — every skill, 200 generations</h2>
+<h2>Quests f1–f12 (f11 still to come) — every skill, 200 generations</h2>
 <pre id="quests">…</pre>
 
 <h2>Independent recompute (js/finlib.js, from the question's own displayed numbers)</h2>
@@ -101,6 +111,16 @@
   the recall card deals all five items, the interest card offers a negative decoy, signOnTimeline names no amount in words.</p>
 <pre id="f10">…</pre>
 
+<h2>f12 — the round's shape, words, fade and rulings, card by card</h2>
+<p class="muted small">Every f12 card: one of the ten textbook names, a steps chain of mc (the one equation) then calc (to the cent,
+  2 dp), plus the price for hire purchase; a hint on the card and on every step; a worked solution with the one-equation line,
+  whose first "car" says what a car is, ending on the refrain "Build the whole equation first. Type it once. Round once, at the
+  end."; every option and the worked one-equation line parse term by term; no money amount outside its unbreakable unit, no
+  plain or thin space inside one, no HTML entity, no car ^1, "half‑yearly" with its non-breaking hyphen, no unit that starts with
+  "=". Nothing says lumpsum, lump sum, accumulated amount, LHS, RHS or hire purchase. The fade: a timeline on every roll of cards
+  1–3, on none of cards 4–8. Then every family drawn with its timeline forced on.</p>
+<pre id="f12">…</pre>
+
 <div id="measure"></div>
 
 <h2>Result</h2>
@@ -112,7 +132,8 @@ import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/timeline-graph.js";
-import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf } from "./js/quests/_finance-check.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f12Diagnose, f12EquationsOf } from "./js/quests/_finance-check.js";
+import { F12_FAMILIES } from "./js/quests/questf12-one-equation.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
 const ACC = "#8b5cf6";
@@ -538,6 +559,102 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   tick(S("signOnTimeline").amounts.has(2) && S("signOnTimeline").amounts.has(3), "f10.signOnTimeline: two and three amounts both occur");
   const sample = def.skills.map((s, pos) => `  card ${pos + 1}: ${noTags(String(s.gen().prompt).replace(/<br>/g, " ⏎ "))}`).join("\n");
   document.getElementById("f10").textContent = flines.join("\n") + "\n\none roll of each card, in dealing order:\n" + sample;
+}
+
+/* ---------- 8) f12: the round's shape, words, fade and rulings ---------- */
+{
+  /* written out here on purpose, not imported, so a slip in the module cannot pass itself */
+  const REFRAIN = "Build the whole equation first. Type it once. Round once, at the end.";
+  const CAR_IS = "a car is the (1 + i)^n bracket that moves an amount to the meeting day";
+  const BANNED = [/lumpsum/i, /lump sum/i, /accumulated amount/i, /\bLHS\b/, /\bRHS\b/, /hire purchase/i];
+  const ORDER = ["twoDeposits", "withdrawal", "loanTwoRepayments", "mixed", "targetAmount", "loanAgain", "hirePurchase", "unknownPayment"];
+  const NAMES = ["Brenda", "Bradley", "Jason", "Brian", "Mandy", "Bob", "Stephanie", "Arnold", "David", "Mvelo"];
+  const def = questDef("f12");
+  const N = 300;
+  const flines = [], stat = {};
+  const noTags = s => String(s).replace(/<[^>]+>/g, "");
+  tick(def.skills.map(s => s.id).join(",") === ORDER.join(","), `f12 deals 8 cards in order: ${def.skills.map(s => s.id).join(", ")}`);
+  def.skills.forEach((skill, pos) => {
+    const st = { bad: 0, firstBad: "", pics: 0, names: new Set(), deps3: 0, deps2: 0, carOnPay: 0, carOnTotal: 0, steps3: 0, eqs: 0 };
+    const showPic = pos < 3;
+    for (let i = 0; i < N; i++) {
+      const q = skill.gen();
+      const steps = q.steps || [];
+      const all = [q.prompt, q.hint, q.answerLabel, ...steps.flatMap(x => [x.prompt, x.hint, ...(x.options || []).map(o => o.label)]),
+        ...(q.solution || []).flatMap(s => [s.s, s.r])].filter(x => x != null).map(String);
+      const t = all.join(" | ");
+      const problems = [];
+      if (BANNED.some(re => re.test(t))) problems.push("a banned word");
+      if (/&#|&nbsp;/.test(t)) problems.push("an HTML entity");
+      if (/ /.test(t)) problems.push("a thin no-break space (U+202F)");
+      if (/\d \d{3}(?!\d)/.test(noTags(t))) problems.push("a plain space inside an amount");
+      if (/R\d/.test(noTags(t.replace(/<span class="nowrap">[^<]*<\/span>/g, "")))) problems.push("a money amount outside its unbreakable unit");
+      if (/\^\(?−?1\)?(?!\d)/.test(noTags(t))) problems.push("a car with an exponent of 1");
+      if (/half-yearly/.test(t)) problems.push("half-yearly with a breakable hyphen");
+      if (/<span class="nowrap">\s*=/.test(t)) problems.push("a unit that starts with =");
+      if (/buys an? car\b/i.test(t)) problems.push("a car that is bought (car is the bracket)");
+      if (!NAMES.includes((String(q.prompt).match(/^([A-Z][a-z]+) /) || [])[1])) problems.push("not one of the ten textbook names");
+      if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 4) problems.push("no hint, answer or worked solution");
+      else {
+        if (q.solution[q.solution.length - 1].s !== REFRAIN) problems.push("the solution does not end on the refrain");
+        const firstCar = q.solution.findIndex(s => /\bcar\b/.test(noTags(`${s.s} ${s.r || ""}`)));
+        if (firstCar >= 0 && !noTags(`${q.solution[firstCar].s} ${q.solution[firstCar].r || ""}`).replace(/ /g, " ").includes(CAR_IS)) problems.push("the first \"car\" in the solution does not say what a car is");
+        if (!q.solution.some(s => String(s.s).startsWith("The one equation: "))) problems.push("no one-equation line in the solution");
+      }
+      /* the chain: mc (the one equation), calc (2 dp), and the price for hire purchase */
+      const kinds = steps.map(x => x.kind).join(",");
+      if (kinds !== (skill.id === "hirePurchase" ? "mc,calc,calc" : "mc,calc")) problems.push(`steps ${kinds}`);
+      if (steps.some(x => !x.prompt || !x.hint)) problems.push("a step without its prompt or hint");
+      if (steps.slice(1).some(x => x.dp !== 2 || !(x.tol <= 0.001))) problems.push("a typed step not marked to the cent");
+      if (steps.length === 3) st.steps3++;
+      /* the fade: a timeline on cards 1 to 3, none on 4 to 8 */
+      if (!!q.graph !== showPic) problems.push(showPic ? "no timeline on a card that shows one" : "a timeline after card 3");
+      if (q.graph) st.pics++;
+      const eqs = f12EquationsOf(q);
+      st.eqs += eqs.length;
+      if (eqs.length !== 5 || eqs.some(e => !e.ok)) problems.push(`an equation that does not parse (${eqs.filter(e => !e.ok).map(e => e.where).join(", ") || eqs.length + " found"})`);
+      const d = f12Diagnose(q, skill.id === "loanAgain" ? "loanTwoRepayments" : skill.id);
+      if (d) problems.push(d);
+      st.names.add((String(q.prompt).match(/^([A-Z][a-z]+) /) || [])[1]);
+      if (skill.id === "twoDeposits") { if (/straight after the last deposit/.test(q.prompt)) st.deps3++; else st.deps2++; }   // Mvelo: a third deposit on the day of A
+      const opts = (steps[0] && steps[0].options) || [];
+      if (opts.some(o => !o.correct && /^<span class="nowrap">(A|P|\d[\d ]*)\(1/.test(o.label))) st.carOnTotal++; else st.carOnPay++;
+      if (problems.length) { st.bad++; if (!st.firstBad) st.firstBad = problems.join(", ") + ": " + noTags(q.prompt).slice(0, 140); }
+    }
+    stat[skill.id] = st;
+    tick(st.bad === 0, `f12 card ${pos + 1} (${skill.id}): words, units, equations, chain, fade, the story and its decoys (${N} rolls)`);
+    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(18)} timeline ${String(st.pics).padStart(3)}/${N} · names ${[...st.names].join("/")} · car decoy on a payment ${st.carOnPay}, on the total ${st.carOnTotal} · equations parsed ${st.eqs}`
+      + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
+  });
+  const S = id => stat[id] || {};
+  tick(ORDER.slice(0, 3).every(id => S(id).pics === N) && ORDER.slice(3).every(id => S(id).pics === 0), "f12: the fade, a timeline on every roll of cards 1 to 3 and on none of cards 4 to 8");
+  tick(S("twoDeposits").deps3 > N * 0.3 && S("twoDeposits").deps2 > N * 0.3, `f12.twoDeposits: Brenda's two deposits and Mvelo's three (the last on the day of A) both occur (${S("twoDeposits").deps2} / ${S("twoDeposits").deps3})`);
+  tick(S("twoDeposits").carOnPay > 0 && S("twoDeposits").carOnTotal > 0, "f12.twoDeposits: the car decoy lands on the day-of-A deposit when there is one, on the total when there is not");
+  tick(S("unknownPayment").carOnPay === N && ["withdrawal", "mixed", "loanTwoRepayments", "targetAmount", "loanAgain", "hirePurchase"].every(id => S(id).carOnTotal === N),
+    "f12: the car decoy is always on the payment standing on the meeting day (David), else on the total");
+  tick(S("hirePurchase").steps3 === N, "f12.hirePurchase: every roll ends on the price step");
+  tick(S("withdrawal").names.has("Bradley") && S("withdrawal").names.has("Jason") && S("loanTwoRepayments").names.has("Brian") && S("loanTwoRepayments").names.has("Stephanie"),
+    "f12: the bank's names rotate (Bradley / Jason, Brian / Stephanie)");
+  /* the Exam Focus tile will deal every family WITH its picture: measure each one drawn, at phone width */
+  const flines2 = [];
+  Object.entries(F12_FAMILIES).forEach(([fam, make]) => {
+    let bad = 0, first = "";
+    for (let i = 0; i < 40; i++) {
+      const q = make({ timeline: true });
+      const issues = [...graphIssues(q), ...labelFitIssues(q.graph, measure)];
+      const d = f12Diagnose(q, fam);
+      if (d) issues.push(d);
+      if (issues.length) { bad++; if (!first) first = issues.slice(0, 2).join("; "); }
+    }
+    tick(bad === 0, `f12.${fam} with its timeline forced on: honest, to scale, every label clear at 360 px (40 rolls)`);
+    flines2.push(`${bad === 0 ? "✓" : "✗"} ${fam.padEnd(18)} 40 drawn timelines, ${bad} with a problem${first ? `: ${first}` : ""}`);
+  });
+  const sample = def.skills.map((s, pos) => {
+    const q = s.gen(), ok = q.steps[0].options.find(o => o.correct);
+    return `  card ${pos + 1}: ${noTags(q.prompt)}\n          ${noTags(ok.label)}  →  ${noTags(q.answerLabel)}`;
+  }).join("\n");
+  document.getElementById("f12").textContent = flines.join("\n") + "\n\nevery family with its timeline drawn (the Exam Focus tile):\n" + flines2.join("\n")
+    + "\n\none roll of each card, in dealing order (the right equation and the answer):\n" + sample;
 }
 
 const ok = passed === total && genFails === 0;

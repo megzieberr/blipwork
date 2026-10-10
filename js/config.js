@@ -59,6 +59,7 @@ export const CHAPTERS = [
       { id: "f8", n: 8, title: "Which one is the total?", blurb: "Savings or a loan: tap the amount all the others add up to.", built: true },
       { id: "f9", n: 9, title: "Car or no car?", blurb: "The meeting day, forward or reverse gear, and one car per road.", built: true },
       { id: "f10", n: 10, title: "In or out?", blurb: "Deposits and the loan go in, withdrawals and repayments come out: the jug form, then the tidy step.", built: true },
+      { id: "f12", n: 12, title: "Build the one equation", blurb: "The exam shape: the whole equation in one line, typed once, rounded once.", built: true },
     ],
   },
   {

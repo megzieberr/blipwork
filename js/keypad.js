@@ -4,13 +4,17 @@
    On-screen keys only — no device keyboard. Digits, a decimal
    COMMA, a minus (when negatives are allowed), delete, submit.
    Shows the value with a comma; a pasted point becomes a comma.
-   mountKeypad(host, { unit, allowNeg, onSubmit }) -> { value, clear }
+   mountKeypad(host, { unit, allowNeg, onSubmit, maxDigits }) -> { value, clear }
+   maxDigits (2026-10-10, finance f12): how many digits the guard lets
+   in, 6 unless a question asks for more. f12's answers are rand to the
+   cent (R104 072,38 is 8 digits), so its typed steps ask for 9; every
+   other question keeps the old 6.
    ============================================================ */
 import { el } from "./ui.js";
 import { parseNum } from "./check.js";
 
 export function mountKeypad(host, opts = {}) {
-  const { unit = "", allowNeg = false, onSubmit } = opts;
+  const { unit = "", allowNeg = false, onSubmit, maxDigits = 6 } = opts;
   let buf = "";   // e.g. "-8,2"
 
   const wrap = el("div", "keypad");
@@ -27,7 +31,7 @@ export function mountKeypad(host, opts = {}) {
     if (k === "del") buf = buf.slice(0, -1);
     else if (k === "neg") buf = buf.startsWith("-") ? buf.slice(1) : "-" + buf;
     else if (k === ",") { if (!buf.includes(",") && buf !== "" && buf !== "-") buf += ","; }
-    else { if (buf.replace("-", "").replace(",", "").length < 6) buf += k; }   // length guard
+    else { if (buf.replace("-", "").replace(",", "").length < maxDigits) buf += k; }   // length guard
     paint();
   }
 

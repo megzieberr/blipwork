@@ -1,0 +1,494 @@
+/* ============================================================
+   FINANCE QUEST 12 · Build the one equation   ★
+   ------------------------------------------------------------
+   FINANCE-ROUNDS-2-PLAN.md, round f12 (built 2026-10-10). The EXAM
+   shape. A full word question, recycled from her class bank with
+   ROLLED numbers (the ten textbook names: Brenda, Mvelo, Bradley,
+   Jason, Mandy, Brian, Stephanie, Bob, Arnold, David), answered as a
+   steps chain:
+     · step 1 (mc): four equations. The right one, and exactly the
+       plan's three decoys: a SIGN slip (the withdrawal added, or a
+       repayment subtracted; with no withdrawal in the story, a deposit
+       subtracted), a CAR given to the amount that already stands on the
+       meeting day (the payment on that day; when no payment stands
+       there, the total itself), and a GEAR slip (one amount's exponent
+       sign flipped: a reverse exponent written positive on a loan, a
+       forward one written negative on saving);
+     · step 2 (calc): the answer to 2 dp, computed by finlib from the
+       same numbers the prompt shows, never rounded along the way;
+     · step 3 (calc, hire purchase only): price = loan + down payment.
+
+   HER METHOD (CLASS-DIGEST "The method, in her words"): ONE meeting
+   day; the total written FIRST, alone on the left; every other amount
+   in its car to the meeting day (forward gear +, reverse gear −, one
+   car per road), no car if it already stands there. ONE equation,
+   built completely, typed once, rounded once at the end. The meeting
+   day is the exam's natural one: the day of A for saving, T0 for a
+   loan. When the total is a KNOWN number and the unknown is a payment
+   (Bob's deposit P, David's x), the same line holds and SHIFT SOLVE
+   finds the unknown.
+
+   THE FADE: cards 1 to 3 of a round show the timeline (f9 style: the
+   meeting-day flag, coloured rate roads, the total "?" in its ring with
+   its role letter, a withdrawal drawn "−R2 000"); cards 4 to 8 show
+   none, so the learner builds it in their head. A static round deals
+   def.skills IN ORDER (js/play.js renderPlay: skills[st.i]), so the
+   timeline is bound to the skill's index when the list is built (f8's
+   per-position hook): gen() stays pure and seedable.
+
+   THE ROUND (8 cards, 7 families): twoDeposits, withdrawal and
+   loanTwoRepayments with the picture; then mixed, targetAmount, a
+   second loanTwoRepayments roll (skill id loanAgain: a loan with no
+   picture, the class's struggle point), hirePurchase and unknownPayment.
+   F12_FAMILIES exports the seven family makers ({ timeline }) for the
+   Exam Focus "timeline-equation" tile to deal later.
+
+   WRAPPING (f9/f10 review 1): every TERM of an equation, its amount
+   and all its cars, is ONE <span class="nowrap"> unit, so a line may
+   break only between terms. The "=" glues to the term BEFORE it ("A ="),
+   so a broken line never starts with "=". Exponents are written worked
+   out, the exam way (^36, ^(−8)), as f10 does; no car is ever ^1. Every
+   money amount goes through money(); "half‑yearly" keeps a
+   non-breaking hyphen. Each road is at least 2 years long and every
+   scene is checked against the engine's own label geometry, so the
+   timeline is to scale and nothing on it touches.
+
+   VOCABULARY: "the total" only, "meeting day", "car", "deposit" /
+   "withdrawal" / "repayment", "down payment". Never "lump sum",
+   "accumulated amount", LHS/RHS. No "hire purchase" in a prompt (f6
+   teaches hire purchase as simple interest). Never "car" for a thing
+   that is bought.
+   ============================================================ */
+import { C, rng, mcStep, calcStep } from "./_shared.js";
+import { randInt, pick, shuffled } from "../ui.js";
+import { rand, toFrac, moveMoney, ratePerPeriod, COMPOUNDING } from "../finlib.js";
+import { computeTimeline, verifyTimeline } from "../engine/timeline-graph.js";
+
+const CON = "oneEquation";
+export const REFRAIN = "Build the whole equation first. Type it once. Round once, at the end.";
+
+const RATES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20];        // whole % only
+const KS = [1, 2, 4, 12];                                               // annually, half-yearly, quarterly, monthly
+const HOW = k => (k === 2 ? "half‑yearly" : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
+const CALC_TOL = 0.001;                                                 // the app's calc tolerance (TOL.calcEps): the cent must match
+/* the keypad lets in 6 digits unless told more; an answer to the cent here
+   runs to 8 (R104 072,38), so every typed step asks for 9 (js/keypad.js) */
+const KEYPAD_DIGITS = 9;
+const typed = (prompt, v, hint) => ({ ...calcStep(prompt, v, hint, { dp: 2, tol: CALC_TOL }), maxDigits: KEYPAD_DIGITS });
+
+const DEP_AMTS = [2000, 3000, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 12000, 15000];
+const BIG_DEP = [8000, 10000, 12000, 14000, 15000, 18000, 20000];
+const WD_AMTS = [1000, 1500, 2000, 2500, 3000, 4000, 5000];
+const REPAY_AMTS = [2000, 2300, 2500, 3000, 3500, 4000, 4200, 4500, 5000, 6000, 7000, 8000, 9000];
+const TARGETS = [100000, 150000, 200000, 250000, 300000, 400000, 500000, 750000, 1000000];
+const DOWNS = [1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000];
+const ITEMS = ["lounge suite", "motorbike", "laptop", "fridge", "TV", "bed"];   // never a car: "car" is the bracket
+const D0_AMTS = [10000, 15000, 20000, 25000, 30000, 40000];
+const DEND_AMTS = [10000, 20000, 25000, 30000, 40000, 50000];
+const XGUESS = [20000, 25000, 30000, 40000, 50000, 60000, 80000, 100000];
+
+/* the ten textbook names (CLASS-DIGEST examples bank) and their pronouns;
+   Mvelo is named again rather than given a pronoun */
+const SHE = { he: "she", his: "her" }, HE = { he: "he", his: "his" };
+const WHO = {
+  Brenda: SHE, Mvelo: { he: "Mvelo", his: "Mvelo’s" }, Bradley: HE, Jason: HE, Mandy: SHE,
+  Brian: HE, Stephanie: SHE, Bob: HE, Arnold: HE, David: HE,
+};
+
+const NB = " ";
+const nw = s => `<span class="nowrap">${s}</span>`;                    // ONE unbreakable unit (f9 review 1)
+const rands = (v, dp = 0) => rand(v, dp).replace(/ /g, NB);            // "R8 000", "R3 587,42"
+const money = (v, dp = 0) => nw(rands(v, dp));                         // EVERY money amount in this round
+const amt0 = v => rands(v, 0).slice(1);                                // "8 000", as it stands in an equation
+const amt2 = v => rands(v, 2).slice(1);                                // "9 914,71"
+const pa = r => `${r}%${NB}p.a.`;
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const yrs = y => `${y}${NB}year${y === 1 ? "" : "s"}`;                 // f10's no-break glue
+const perYear = k => `${k}${NB}time${k === 1 ? "" : "s"}${NB}a${NB}year`;
+const when = t => (t === 0 ? "now" : `after ${yrs(t)}`);
+const andList = xs => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
+const CAPTION = "T in years";
+/* f10 review 1: the first time a solution says "car", it says what one is */
+const CAR_IS = `a car is the ${nw("(1 + i)^n")} bracket that moves an amount to the meeting day`;
+
+/* ---------- roads, cars, terms ---------- */
+
+/* one road, or a rate change at T c (each road at least 2 years, so its
+   rate text fits under it). The RATE always changes (the compounding may
+   change too): a road is drawn as its rate, and the engine's verify will
+   not let the road change colour while "18% p.a." stays "18% p.a." */
+function rollRoads(n, two) {
+  if (!two) return [{ from: 0, to: n, r: pick(RATES), k: pick(KS) }];
+  const c = randInt(2, n - 2), r1 = pick(RATES);
+  return [{ from: 0, to: c, r: r1, k: pick(KS) }, { from: c, to: n, r: pick(RATES.filter(r => r !== r1)), k: pick(KS) }];
+}
+
+/* the cars that move an amount from T t to the meeting day m, in TRAVEL
+   order (reverse gear meets the later road first): one car per road */
+function carsOf(roads, t, m) {
+  const dir = Math.sign(m - t), lo = Math.min(t, m), hi = Math.max(t, m);
+  let legs = roads.map(r => ({ r: r.r, k: r.k, from: Math.max(lo, r.from), to: Math.min(hi, r.to) }))
+    .filter(l => l.to > l.from);
+  if (dir < 0) legs = legs.reverse();
+  return legs.map(l => ({ ...l, years: l.to - l.from, e: dir * (l.to - l.from) * l.k }));
+}
+/* one car: (1 + 0,12/12)^36, reverse (1 + 0,12/12)^(−36); annual (1 + 0,08)^3 */
+function carText(c) {
+  const i = C(toFrac(c.r)), base = c.k === 1 ? `(1 + ${i})` : `(1 + ${i}/${c.k})`;
+  return c.e < 0 ? `${base}^(−${-c.e})` : `${base}^${c.e}`;
+}
+const coefText = c => (typeof c === "number" ? amt0(c) : c);
+/* a term's unbreakable units (f9 review 1): the amount rides with its first
+   car, a second car is a unit of its own, and the plain space between them
+   is the only place the term may break. A two-car reverse term is wider
+   than a 360-px option (266 px of room), and one unit that wide would wrap
+   INSIDE itself (the app's .fml safety net) */
+const termUnits = (t, lead = "") => [lead + coefText(t.c) + (t.cars.length ? carText(t.cars[0]) : ""), ...t.cars.slice(1).map(carText)];
+const unitsHtml = us => us.map(nw).join(" ");
+/* finlib does the moving: amount × (1 + i/k)^e, car by car, nothing rounded */
+const grow = (v, cars) => cars.reduce((a, c) => moveMoney(a, ratePerPeriod(toFrac(c.r), c.k), c.e), v);
+
+/* a term: s = +1 / −1, c = the amount (a number) or "A" / "P" / "x", its
+   cars, plus what it is (kind) and when (t) */
+const payTerm = (sc, x) => ({ s: x.kind === "wd" ? -1 : 1, c: x.v, cars: carsOf(sc.roads, x.t, sc.meet), kind: x.kind, t: x.t });
+const totalTerm = sc => ({ s: 1, c: sc.total.value != null ? sc.total.value : sc.total.role, cars: [], kind: "total", t: sc.total.t });
+/* the tidy one equation: the total alone on the left, the payments on the
+   right (deposits and repayments plus, a withdrawal minus) */
+const oneEq = sc => ({ L: [totalTerm(sc)], R: sc.pays.map(x => payTerm(sc, x)) });
+
+/* each term its own units; a leading minus rides inside its term, the
+   signs between terms stand alone (formulaHtml glues each to the unit after it) */
+const piecesOf = terms => terms.map((t, j) => ({ lead: j === 0 ? "" : (t.s < 0 ? "−" : "+"), units: termUnits(t, j === 0 && t.s < 0 ? "−" : "") }));
+const piecesHtml = ps => ps.map(p => (p.lead ? `${p.lead} ` : "") + unitsHtml(p.units)).join(" ");
+/* f10 review 1: the "=" glues to the term BEFORE it ("A =") */
+export function eqHtml(q) {
+  const L = piecesOf(q.L), R = piecesOf(q.R);
+  const head = L.slice(0, -1), last = L[L.length - 1];
+  const us = last.units.slice();
+  us[us.length - 1] += " =";
+  return `${piecesHtml([...head, { ...last, units: us }])} ${piecesHtml(R)}`;
+}
+
+/* the value of the unknown, from the very numbers on the card */
+function solve(sc) {
+  const eq = oneEq(sc);
+  const known = eq.R.filter(t => typeof t.c === "number").reduce((s, t) => s + t.s * grow(t.c, t.cars), 0);
+  if (sc.unknown === "A" || sc.kind === "loan") return known;          // the total on the left is the unknown
+  const u = eq.R.find(t => typeof t.c !== "number");                   // the unknown payment (P or x)
+  return (sc.total.value - known) / (u.s * grow(1, u.cars));
+}
+
+/* the plan's three decoys, each ONE slip away from the right equation */
+function decoysOf(sc) {
+  const eq = oneEq(sc), R = eq.R, idx = R.map((t, j) => j);
+  /* 1 · the sign: the withdrawal added; a loan: a repayment subtracted; no
+     withdrawal: a deposit subtracted (a known amount where there is one) */
+  let si = R.findIndex(t => t.kind === "wd");
+  if (si < 0) {
+    const nums = idx.filter(j => typeof R[j].c === "number");
+    si = pick(nums.length ? nums : idx);
+  }
+  const sign = { L: eq.L, R: R.map((t, j) => (j === si ? { ...t, s: -t.s } : t)) };
+  /* 2 · a car on the amount already standing on the meeting day: the
+     payment on that day, else the total itself. The car drives over the
+     whole road that touches the meeting day, forward */
+  const road = sc.meet === 0 ? sc.roads[0] : sc.roads[sc.roads.length - 1];
+  const bogus = [{ r: road.r, k: road.k, from: road.from, to: road.to, years: road.to - road.from, e: (road.to - road.from) * road.k }];
+  const onDay = R.findIndex(t => t.t === sc.meet && !t.cars.length);
+  const car = onDay >= 0
+    ? { L: eq.L, R: R.map((t, j) => (j === onDay ? { ...t, cars: bogus } : t)) }
+    : { L: [{ ...eq.L[0], cars: bogus }], R };
+  /* 3 · the gear: one amount's exponents written with the wrong sign */
+  const gi = pick(idx.filter(j => R[j].cars.length));
+  const gear = { L: eq.L, R: R.map((t, j) => (j === gi ? { ...t, cars: t.cars.map(c => ({ ...c, e: -c.e })) } : t)) };
+  return { eq, sign, car, gear };
+}
+
+/* ---------- the timeline (cards 1 to 3) ---------- */
+
+/* the total FIRST (the bottom of a shared day's stack, right above its
+   letter); an unknown total is "?" in its ring, a known one its amount
+   WITH its letter (never a bare money label); x or P where a payment is
+   the unknown; a withdrawal drawn "−R2 000" */
+function graphOf(sc) {
+  const T = sc.total;
+  const tot = T.value == null ? { t: T.t, label: "?", role: T.role } : { t: T.t, amount: T.value, dp: 0, role: T.role };
+  const pays = sc.pays.map(x => (typeof x.v === "number"
+    ? { t: x.t, amount: x.v, dp: 0, ...(x.kind === "wd" ? { out: true } : {}) }
+    : { t: x.t, label: x.v }));
+  return {
+    type: "timeline", n: sc.n, meet: sc.meet,
+    nodes: [tot, ...pays],
+    roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: `${r.r}% p.a.`, k: r.k })),
+    leaders: true,
+    /* f10 review 1: a deposit stacked above the "?" ring draws its own leader.
+       Above a KNOWN total (David's wide "R300 000") the leader could not start
+       under the narrower amount, so that stack stands as f8's did, unled */
+    ...(T.value == null ? { stackLeaders: true } : {}),
+  };
+}
+/* the engine's own label geometry: no two labels on different days within
+   4 units of each other, and no stack leader running through a label */
+function fits(spec) {
+  const g = computeTimeline(spec);
+  const box = lb => ({ x0: lb.x - lb.w / 2, x1: lb.x + lb.w / 2, y0: lb.y - 11, y1: lb.y + 4 });
+  const L = g.labels;
+  for (let i = 0; i < L.length; i++)
+    for (let j = i + 1; j < L.length; j++) {
+      if (L[i].t === L[j].t) continue;
+      const a = box(L[i]), b = box(L[j]);
+      if (a.x0 < b.x1 + 4 && b.x0 < a.x1 + 4 && a.y0 < b.y1 && b.y0 < a.y1) return false;
+    }
+  for (const sl of g.stackLeaders) {
+    const xv = sl.pts[0][0];
+    for (const lb of L) {
+      if (lb.t === sl.t) continue;
+      const b = box(lb);
+      if (xv > b.x0 - 3 && xv < b.x1 + 3) return false;
+    }
+  }
+  return true;
+}
+
+/* ---------- a scene is honest ---------- */
+function valid(sc) {
+  const eq = oneEq(sc);
+  if (eq.R.some(t => t.cars.some(c => Math.abs(c.e) < 2))) return false;           // never ^1 (f10 review 1)
+  const nums = sc.pays.filter(x => typeof x.v === "number").map(x => x.v);
+  if (new Set(nums).size !== nums.length) return false;                              // no two payments alike
+  if (new Set(sc.pays.map(x => x.t)).size !== sc.pays.length) return false;          // one payment a day
+  const v = solve(sc);
+  if (!(Number.isFinite(v) && v > 1)) return false;                                  // positive and sensible
+  if (v + (sc.down || 0) >= 1e7) return false;                                       // 9 digits to the cent: the keypad's room
+  /* never on a rounding knife-edge: the calculator shows 10 digits, so the
+     half-cent must sit further away than its display can blur */
+  const cents = v * 100, blur = Math.pow(10, Math.floor(Math.log10(v)) - 9) * 100;
+  if (Math.abs(cents - Math.floor(cents) - 0.5) < blur) return false;
+  if (sc.kind === "loan" && !(v < nums.reduce((s, x) => s + x, 0))) return false;  // a loan smaller than its repayments
+  if (sc.down != null && !(sc.down * 1.25 <= v)) return false;                       // the down payment a part of the price
+  const g = graphOf(sc);
+  return fits(g) && verifyTimeline(g).every(c => c.ok);                             // to scale, the engine's own word
+}
+function roll(make, fix) {
+  for (let tries = 0; tries < 300; tries++) { const sc = make(); if (valid(sc)) return sc; }
+  return fix();                                                                      // a bank example, hand-checked
+}
+
+/* ---------- the words ---------- */
+
+function rateSentence(roads) {
+  const one = r => `${pa(r.r)} compounded ${HOW(r.k)}`;
+  const [a, b] = roads;
+  return b ? `The interest rate is ${one(a)} for the first ${yrs(a.to)}, then ${one(b)}.` : `The interest rate is ${one(a)}.`;
+}
+const at = x => (typeof x.v === "number" ? `${money(x.v)} ${when(x.t)}` : `an amount ${x.v} ${when(x.t)}`);
+
+function story(sc) {
+  const p = WHO[sc.name], He = cap(p.he), N = sc.name;
+  const deps = sc.pays.filter(x => x.kind === "dep"), wds = sc.pays.filter(x => x.kind === "wd"), reps = sc.pays.filter(x => x.kind === "repay");
+  const rate = rateSentence(sc.roads);
+  const sameDay = sc.pays.some(x => x.t === sc.n && sc.kind === "save");
+  switch (sc.fam) {
+    case "targetAmount":
+      return `${N} wants ${money(sc.total.value)} in a savings account after ${yrs(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?`;
+    case "hirePurchase": {
+      const a = /^[aeiou]/i.test(sc.item) ? "an" : "a";
+      return `${N} buys ${a} ${sc.item}. ${He} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} Find the loan, P, and then the price of the ${sc.item}.`;
+    }
+    case "loanTwoRepayments":
+      return `${N} borrows money now. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} How much did ${p.he} borrow?`;
+    case "unknownPayment":
+      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${yrs(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.`;
+    default: {                                                        // twoDeposits, withdrawal, mixed: find A
+      const out = wds.length ? ` ${He} withdraws ${andList(wds.map(at))}.` : "";
+      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${yrs(sc.n)}${sameDay ? ", straight after the last deposit" : ""}? That is the total, A.`;
+    }
+  }
+}
+
+const dayOf = sc => (sc.kind === "loan" ? "the day of the loan" : "the day of A");
+const WHAT = { dep: "the deposit", wd: "the withdrawal", repay: "the repayment" };
+
+/* "3 years × 12 times a year = 36", one per car, with the stretch of the
+   line it drives over (two roads may share a rate) */
+function carNote(t) {
+  if (!t.cars.length) return "no car: it already stands on the meeting day";
+  const legs = t.cars.map(c => {
+    const span = c.e < 0 ? `T${c.to} to T${c.from}` : `T${c.from} to T${c.to}`;
+    /* the whole sum is ONE unit: formulaHtml makes each number an inline-block,
+       and a line may break before one even after a no-break space, so f10's
+       glue alone left "3 years ×" at a line end at 360 px */
+    const sum = nw(`${yrs(c.years)} × ${perYear(c.k)} = ${c.years * c.k}`);
+    return `${span}: ${sum}${c.e < 0 ? `, written ${nw(`−${c.years * c.k}`)}` : ""}`;
+  });
+  return `${t.cars[0].e < 0 ? "reverse gear" : "forward gear"}, ${t.cars.length > 1 ? "one car per road; " : ""}${legs.join("; ")}`;
+}
+function termLine(t) {
+  const sign = t.s < 0 ? "−" : "+";
+  const who = typeof t.c === "number" ? `${cap(WHAT[t.kind])} of ${money(t.c)} at T${t.t}` : `${cap(WHAT[t.kind])} ${t.c} at T${t.t}`;
+  const io = t.kind === "wd" ? "comes OUT, so minus" : t.kind === "repay" ? "stands positive on the right" : "goes IN, so plus";
+  return { s: `${who} ${io}: ${unitsHtml(termUnits(t, sign))}`, r: carNote(t) };
+}
+function meetLine(sc) {
+  return {
+    s: `The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car (${CAR_IS}).`,
+    r: sc.kind === "loan" ? "back to T0: reverse gear, negative exponents" : "on to the end: forward gear, positive exponents",
+  };
+}
+function leftNote(sc) {
+  if (sc.kind === "loan") return "the loan, P, alone on the left; the repayments positive on the right";
+  if (sc.total.value != null) return "the total, A, alone on the left, even though it is known";
+  return "the total, A, alone on the left; a deposit plus, a withdrawal minus";
+}
+const unknownOf = sc => (sc.kind === "loan" ? "P" : sc.unknown);
+const solves = sc => sc.total.value != null;                          // the unknown is a payment inside the line
+
+/* ---------- one card ---------- */
+function build(sc, { timeline = false } = {}) {
+  const D = decoysOf(sc), eq = D.eq;
+  const right = eqHtml(eq), wrongs = [D.sign, D.car, D.gear].map(eqHtml);
+  if (new Set([right, ...wrongs]).size !== 4) throw new Error("f12: two options coincide");   // never reached: each decoy is one different slip
+  const val = solve(sc), U = unknownOf(sc), p = WHO[sc.name];
+  const price = sc.down != null ? val + sc.down : null;
+  const hint1 = sc.kind === "loan"
+    ? "The loan, P, alone on the left. Every repayment drives back to T0 in reverse gear (a negative exponent) and stands positive on the right."
+    : "The total alone on the left. Every other amount drives to the meeting day in forward gear: a deposit plus, a withdrawal minus. Already on the meeting day? No car.";
+  const ask = sc.kind === "loan" ? "How much is the loan, P?"
+    : sc.unknown === "A" ? "How much is A?"
+    : sc.unknown === "x" ? `${U} sits inside the one equation: SHIFT SOLVE finds it. How much is x?`
+    : `${U} sits inside the one equation: SHIFT SOLVE finds it. How much must ${p.he} deposit now?`;
+  const steps = [
+    mcStep(`The meeting day is T${sc.meet}, ${dayOf(sc)}. Which line is the one equation?`, right, wrongs, hint1),
+    typed(`${ask} Give it in rand, to 2 decimal places.`, val,
+      solves(sc) ? "Type the whole equation, then SHIFT SOLVE. Never round along the way: round once, at the end."
+        : "Type the whole right side in one go. Never round along the way: round once, at the end."),
+  ];
+  if (price != null) steps.push(typed(`Price = loan + down${NB}payment. What is the price of the ${sc.item}, in rand, to 2 decimal places?`, price,
+    "The down payment never enters the account: it just adds on to the loan."));
+  const answer = nw(`${U} = ${rands(val, 2)}`);
+  const solution = [
+    meetLine(sc),
+    ...eq.R.map(termLine),
+    { s: `The one equation: ${right}`, r: leftNote(sc) },
+    { s: answer, r: solves(sc) ? "SHIFT SOLVE on the one line, rounded once, at the end (2 decimal places)" : "typed in once, rounded once, at the end (2 decimal places)" },
+  ];
+  if (price != null) solution.push({
+    s: `Price${NB}= loan +${NB}down${NB}payment${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}`,
+    r: "the down payment never enters the account: no car, no sign",
+  });
+  solution.push({ s: REFRAIN });
+  return {
+    type: "steps", concept: CON,
+    prompt: story(sc),
+    ...(timeline ? { graph: graphOf(sc), graphCap: CAPTION } : {}),
+    steps,
+    expected: price != null ? price : val, dp: 2,
+    hint: "Meeting day, cars, then ONE line: the total alone on the left, the payments on the right. Type it once, round once.",
+    answerLabel: price != null ? `${answer}, so the price is ${money(price, 2)}` : answer,
+    solution,
+  };
+}
+
+/* ---------- the seven families (bank shapes, rolled numbers) ---------- */
+const saveScene = (fam, name, n, roads, pays, extra = {}) => ({
+  fam, name, kind: "save", n, meet: n, roads, total: { t: n, role: "A", value: null }, unknown: "A", pays, ...extra,
+});
+const loanScene = (fam, name, n, roads, pays, extra = {}) => ({
+  fam, name, kind: "loan", n, meet: 0, roads, total: { t: 0, role: "P", value: null }, unknown: "P", pays, ...extra,
+});
+const dep = (t, v) => ({ t, v, kind: "dep" }), wd = (t, v) => ({ t, v, kind: "wd" }), repay = (t, v) => ({ t, v, kind: "repay" });
+
+/* the bank examples, hand-checked: the fallback if a roll loop ever misses */
+const FIX = {
+  twoDeposits: () => saveScene("twoDeposits", "Brenda", 7, [{ from: 0, to: 3, r: 14, k: 2 }, { from: 3, to: 7, r: 12, k: 12 }], [dep(0, 5500), dep(5, 4000)]),
+  withdrawal: () => saveScene("withdrawal", "Bradley", 6, [{ from: 0, to: 6, r: 8, k: 12 }], [dep(0, 14000), wd(2, 2000)]),
+  mixed: () => saveScene("mixed", "Mandy", 7, [{ from: 0, to: 3, r: 8, k: 12 }, { from: 3, to: 7, r: 9, k: 4 }], [dep(0, 5000), dep(2, 6000), wd(5, 3000)]),
+  loanTwoRepayments: () => loanScene("loanTwoRepayments", "Brian", 6, [{ from: 0, to: 4, r: 16, k: 4 }, { from: 4, to: 6, r: 14, k: 2 }], [repay(4, 5000), repay(6, 6000)]),
+  targetAmount: () => ({ ...saveScene("targetAmount", "Bob", 10, [{ from: 0, to: 4, r: 18, k: 12 }, { from: 4, to: 10, r: 20, k: 4 }], [dep(0, "P")]), total: { t: 10, role: "A", value: 1000000 }, unknown: "P" }),
+  hirePurchase: () => loanScene("hirePurchase", "Arnold", 4, [{ from: 0, to: 2, r: 18, k: 12 }, { from: 2, to: 4, r: 19, k: 12 }], [repay(2, 8000), repay(4, 9000)], { down: 6000, item: "lounge suite" }),
+  /* David's bank shape keeps 18% and changes only the compounding; a road is
+     drawn as its rate, so the fallback changes the rate as every roll does */
+  unknownPayment: () => ({ ...saveScene("unknownPayment", "David", 7, [{ from: 0, to: 3, r: 18, k: 12 }, { from: 3, to: 7, r: 16, k: 2 }], [dep(0, 30000), dep(5, "x"), dep(7, 50000)]), total: { t: 7, role: "A", value: 300000 }, unknown: "x" }),
+};
+
+/* Brenda (two deposits) or Mvelo (three, the last on the day of A); one rate change; find A */
+function twoDeposits(opts) {
+  return build(roll(() => {
+    const mvelo = rng() < 0.5, n = randInt(mvelo ? 5 : 4, 10), m = randInt(1, n - 1);
+    const vals = shuffled(DEP_AMTS).slice(0, mvelo ? 3 : 2), times = mvelo ? [0, m, n] : [0, m];
+    return saveScene("twoDeposits", mvelo ? "Mvelo" : "Brenda", n, rollRoads(n, true), times.map((t, j) => dep(t, vals[j])));
+  }, FIX.twoDeposits), opts);
+}
+/* Bradley / Jason: a deposit, then a withdrawal; one rate; find A */
+function withdrawal(opts) {
+  return build(roll(() => {
+    const n = randInt(4, 8), d = pick(BIG_DEP), w = pick(WD_AMTS.filter(v => v <= d / 2));
+    return saveScene("withdrawal", pick(["Bradley", "Jason"]), n, rollRoads(n, false), [dep(0, d), wd(randInt(1, n - 1), w)]);
+  }, FIX.withdrawal), opts);
+}
+/* Mandy: two deposits and a withdrawal, a rate change; find A */
+function mixed(opts) {
+  return build(roll(() => {
+    const n = randInt(5, 10), a = randInt(1, n - 3), b = randInt(a + 1, n - 1);
+    const [d0, d1] = shuffled(DEP_AMTS).slice(0, 2), w = pick(WD_AMTS.filter(v => v < Math.min(d0, d1)));
+    return saveScene("mixed", "Mandy", n, rollRoads(n, true), [dep(0, d0), dep(a, d1), wd(b, w)]);
+  }, FIX.mixed), opts);
+}
+/* Brian / Stephanie: a loan at T0 paid off with two repayments (the last
+   one ends it), a rate change; find P */
+function loanTwoRepayments(opts) {
+  return build(roll(() => {
+    const n = randInt(4, 10), a = randInt(1, n - 1), [v0, v1] = shuffled(REPAY_AMTS).slice(0, 2);
+    return loanScene("loanTwoRepayments", pick(["Brian", "Stephanie"]), n, rollRoads(n, true), [repay(a, v0), repay(n, v1)]);
+  }, FIX.loanTwoRepayments), opts);
+}
+/* Bob: a known total A at the end, two rates; find the deposit P now */
+function targetAmount(opts) {
+  return build(roll(() => {
+    const n = randInt(5, 10);
+    return { ...saveScene("targetAmount", "Bob", n, rollRoads(n, true), [dep(0, "P")]), total: { t: n, role: "A", value: pick(TARGETS) }, unknown: "P" };
+  }, FIX.targetAmount), opts);
+}
+/* Arnold: a down payment straight to the shop, the loan paid off with two
+   repayments, two rates; find the loan, then the price */
+function hirePurchase(opts) {
+  return build(roll(() => {
+    const n = randInt(4, 8), a = randInt(1, n - 1), [v0, v1] = shuffled(REPAY_AMTS).slice(0, 2);
+    return loanScene("hirePurchase", "Arnold", n, rollRoads(n, true), [repay(a, v0), repay(n, v1)], { down: pick(DOWNS), item: pick(ITEMS) });
+  }, FIX.hirePurchase), opts);
+}
+/* David: a deposit now, x in the middle, a deposit on the day of A, and a
+   known total A; a rate change; find x. A is rolled UP to a round R10 000
+   from a guessed x, so x comes out a little over the guess, positive */
+function unknownPayment(opts) {
+  return build(roll(() => {
+    const n = randInt(5, 10), m = randInt(1, n - 1), roads = rollRoads(n, true);
+    const d0 = pick(D0_AMTS), dEnd = pick(DEND_AMTS.filter(v => v !== d0)), xg = pick(XGUESS);
+    const raw = grow(d0, carsOf(roads, 0, n)) + grow(xg, carsOf(roads, m, n)) + dEnd;
+    const A = Math.ceil(raw / 10000) * 10000;
+    return { ...saveScene("unknownPayment", "David", n, roads, [dep(0, d0), dep(m, "x"), dep(n, dEnd)]), total: { t: n, role: "A", value: A }, unknown: "x" };
+  }, FIX.unknownPayment), opts);
+}
+
+/* for the Exam Focus "timeline-equation" tile (not built yet): each maker
+   takes { timeline: true | false } and is a pure function of the rng */
+export const F12_FAMILIES = { twoDeposits, withdrawal, mixed, loanTwoRepayments, targetAmount, hirePurchase, unknownPayment };
+
+/* ---------- the round, in dealing order (the fade follows the index) ---------- */
+/* the timeline shows on cards 1 to 3 only (0-based position < 3) */
+export const timelineAt = pos => pos < 3;
+const ROUND = [
+  ["twoDeposits", twoDeposits],               // card 1 · timeline
+  ["withdrawal", withdrawal],                 // card 2 · timeline
+  ["loanTwoRepayments", loanTwoRepayments],   // card 3 · timeline
+  ["mixed", mixed],                           // card 4 · no timeline from here on
+  ["targetAmount", targetAmount],             // card 5
+  ["loanAgain", loanTwoRepayments],           // card 6 · a loan again, now without its picture
+  ["hirePurchase", hirePurchase],             // card 7 · three steps: the equation, the loan, the price
+  ["unknownPayment", unknownPayment],         // card 8
+];
+
+export const questF12 = {
+  id: "f12",
+  skills: ROUND.map(([id, make], pos) => ({ id, concept: CON, gen: () => make({ timeline: timelineAt(pos) }) })),
+};

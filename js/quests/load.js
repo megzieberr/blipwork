@@ -59,6 +59,7 @@ export const QUEST_MODULES = {
   f8: ["./questf8-which-total.js", "questF8"],
   f9: ["./questf9-car-or-no-car.js", "questF9"],
   f10: ["./questf10-in-or-out.js", "questF10"],
+  f12: ["./questf12-one-equation.js", "questF12"],
   p1: ["./questp1-basics.js", "questP1"],
   p2: ["./questp2-venn-regions.js", "questP2"],
   p3: ["./questp3-venn-prob.js", "questP3"],
