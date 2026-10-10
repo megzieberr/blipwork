@@ -57,6 +57,7 @@ export const CHAPTERS = [
       { id: "f6", n: 6, title: "Deposits & hire purchase", blurb: "The deposit and what's still owed.", built: true },
       { id: "f7", n: 7, title: "Effective vs nominal", blurb: "Annual vs a frequency, and the conversion formula.", built: true },
       { id: "f8", n: 8, title: "Which one is the total?", blurb: "Savings or a loan: tap the amount all the others add up to.", built: true },
+      { id: "f9", n: 9, title: "Car or no car?", blurb: "The meeting day, forward or reverse gear, and one car per road.", built: true },
     ],
   },
   {

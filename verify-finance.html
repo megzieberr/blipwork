@@ -33,12 +33,19 @@
   for saving, at T0 for a loan). The timeline engine learnt two things for it, both measured below: two amounts STACKED on
   one node, and tappable amount LABELS with their own hit boxes. The f8 block at the bottom checks the vocabulary phasing
   ("lumpsum (the total)" → "the total (lumpsum)" → "the total") card by card.</p>
+<p class="muted small"><b>2026-10-10: f9 "Car or no car?" joined</b> (8 more skills, so f1–f9 is 67 skills; the recompute
+  covers 38 of them, the other 29 are fixed-fact recall). All eight are re-derived from what the learner sees: the named
+  amount's T against the flagged meeting day (car or no car, which gear), the roads it drives over, and each exponent
+  (± years × k, k read from the prompt's "compounded …" words). The engine learnt a flagged MEETING DAY and coloured RATE
+  ROADS; the flag, its words and every road label are measured below against the amounts, role letters, T labels and each
+  other. Her rulings are checked on every roll: the total is "?" with its role letter (never a bare money label), and a
+  payment on the total's own day stacks ABOVE it. The f9 block at the bottom checks the round's shape and words.</p>
 <div id="banner">running…</div>
 
 <h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
 <div class="grid" id="engine"></div>
 
-<h2>Quests f1–f8 — every skill, 200 generations</h2>
+<h2>Quests f1–f9 — every skill, 200 generations</h2>
 <pre id="quests">…</pre>
 
 <h2>Independent recompute (js/finlib.js, from the question's own displayed numbers)</h2>
@@ -63,6 +70,14 @@
   in that card's phase form, cards 1, 4 and 7 must actually show it, and nothing may say "lump sum", "accumulated amount",
   LHS or RHS.</p>
 <pre id="phasing">…</pre>
+
+<h2>f9 — the round's shape, words and rulings, card by card</h2>
+<p class="muted small">Every f9 card: a flagged meeting day, one or two roads, 2 or 3 payments, the total drawn as "?" with its
+  role letter; a hint, an answer and a worked solution ending on the refrain "A car only if it has to move. Already there?
+  No car."; nothing says lumpsum, lump sum, accumulated amount, LHS or RHS. The shape: about one card in three of needsCar,
+  gear and carCount stands ON the meeting day, and the meeting day is sometimes the total's own day (the last deposit on the
+  day of A) and sometimes a middle T; both gears occur; twoCars and roadExponent always cross the rate change, exponent never.</p>
+<pre id="f9">…</pre>
 
 <div id="measure"></div>
 
@@ -100,6 +115,12 @@ const ENGINE = [
      with neighbours on adjacent nodes, two amounts STACKED on the last node, and every label tappable */
   { title: "f8: same-day deposit + total stacked on T6, tappable labels", spec: { type: "timeline", n: 6, tapLabels: true, nodes: [{ t: 0, amount: 10000, dp: 0, id: "a" }, { t: 4, amount: 8000, dp: 0, id: "b" }, { t: 5, amount: 99999, dp: 0, id: "c" }, { t: 6, amount: 10000, dp: 0, id: "d" }, { t: 6, amount: 88888, dp: 0, id: "e" }], accent: ACC } },
   { title: "f8: a loan with x in the middle, tappable labels", spec: { type: "timeline", n: 6, tapLabels: true, nodes: [{ t: 0, amount: 99999, dp: 0, id: "a" }, { t: 1, amount: 88888, dp: 0, id: "b" }, { t: 2, label: "x", id: "c" }, { t: 3, amount: 77777, dp: 0, id: "d" }], accent: ACC } },
+  /* f9 (2026-10-10): the widest amounts the round rolls (R10 000) on neighbouring T's at n = 6, the meeting day on a
+     middle payment, two roads with the widest rate text; then the tightest roads (2 + 2 years at n = 4) with the last
+     deposit stacked on the day of A and the flag at the right edge (its words flip left); then a flag on an empty T0 */
+  { title: "f9: meeting day on a middle payment, two roads, widest labels", spec: { type: "timeline", n: 6, meet: 3, nodes: [{ t: 0, label: "?", role: "P" }, { t: 2, amount: 10000, dp: 0 }, { t: 3, amount: 10000, dp: 0 }, { t: 4, amount: 7500, dp: 0 }], roads: [{ from: 0, to: 2, rate: "15% p.a.", k: 12 }, { from: 2, to: 6, rate: "14% p.a.", k: 2 }], accent: ACC } },
+  { title: "f9: last deposit on the day of A, meeting day at the end, 2 + 2 roads", spec: { type: "timeline", n: 4, meet: 4, nodes: [{ t: 4, label: "?", role: "A" }, { t: 3, amount: 10000, dp: 0 }, { t: 4, amount: 10000, dp: 0 }], roads: [{ from: 0, to: 2, rate: "12% p.a.", k: 4 }, { from: 2, to: 4, rate: "15% p.a.", k: 1 }], accent: ACC } },
+  { title: "f9: meeting day on an empty T0, one road", spec: { type: "timeline", n: 6, meet: 0, nodes: [{ t: 6, label: "?", role: "A" }, { t: 1, amount: 10000, dp: 0 }, { t: 5, amount: 8000, dp: 0 }], roads: [{ from: 0, to: 6, rate: "11% p.a.", k: 12 }], accent: ACC } },
 ];
 const eg = document.getElementById("engine");
 ENGINE.forEach(t => {
@@ -121,6 +142,8 @@ const chapter = CHAPTERS.find(c => c.id === "finance");
 const RUNS = 200;
 const FIT_RUNS = 5;                 // rendering+measuring every roll is slow; the numbers repeat quickly
 const LABEL_TAP_FIT_RUNS = 40;      // f8's tappable-label timelines vary a lot more (stacks, x, 3–4 amounts): measure 40 rolls each
+                                    // f9's flagged, road-coloured timelines too (meeting day anywhere, 1–2 roads, a stack on the day of A)
+const fitsMore = g => !!(g && (g.tapLabels || g.meet != null || (Array.isArray(g.roads) && g.roads.length)));
 const lines = [], recomputeLines = [];
 let genCount = 0, genFails = 0, skillCount = 0;
 
@@ -208,7 +231,7 @@ chapter.quests.forEach(qmeta => {
       let q;
       try { q = skill.gen(); } catch (e) { issues.add("threw: " + e.message); break; }
       const before = issues.size;
-      checkQuestion(q, issues, { fit: i < FIT_RUNS || (i < LABEL_TAP_FIT_RUNS && !!(q.graph && q.graph.tapLabels)) });
+      checkQuestion(q, issues, { fit: i < FIT_RUNS || (i < LABEL_TAP_FIT_RUNS && fitsMore(q.graph)) });
       if (issues.size > before) genFails++;
       if (rc) {
         recomputeRuns++;
@@ -340,6 +363,64 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   });
   const sample = def.skills.map((s, pos) => `  card ${pos + 1}: ${String(s.gen().prompt).replace(/<[^>]+>/g, "")}`).join("\n");
   document.getElementById("phasing").textContent = plines.join("\n") + "\n\none roll of each card, in dealing order:\n" + sample;
+}
+
+/* ---------- 6) f9: the round's shape, words and rulings ---------- */
+{
+  /* written out here on purpose, not imported, so a slip in the module cannot pass itself */
+  const REFRAIN = "A car only if it has to move. Already there? No car.";
+  const BANNED = [/lumpsum/i, /lump sum/i, /accumulated amount/i, /\bLHS\b/, /\bRHS\b/, /hire purchase/i];
+  const def = questDef("f9");
+  const N = 300;
+  const flines = [], stat = {};
+  tick(def.skills.length >= 8 && def.skills.length <= 10, `f9 deals ${def.skills.length} cards (the plan: 8 to 10)`);
+  def.skills.forEach((skill, pos) => {
+    const st = { bad: 0, firstBad: "", onDay: 0, onTotalDay: 0, onMiddle: 0, fwd: 0, rev: 0, cross: 0, sameDay: 0 };
+    for (let i = 0; i < N; i++) {
+      const q = skill.gen(), g = q.graph || { nodes: [] };
+      const t = [q.prompt, q.hint, q.answerLabel, ...(q.options || []).map(o => o.label),
+        ...(q.solution || []).map(s => `${s.s || ""} ${s.r || ""}`)].filter(x => x != null).join(" | ");
+      const m = String(q.prompt).match(/<b>R(\d[\d\s]*)<\/b>/);
+      const named = m ? Number(m[1].replace(/\s/g, "")) : NaN;
+      const node = g.nodes.find(nd => nd.amount === named);
+      const tot = g.nodes.find(nd => nd.role);
+      const problems = [];
+      if (BANNED.some(re => re.test(t))) problems.push("a banned word");
+      if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 2) problems.push("no hint, answer or worked solution");
+      else if (q.solution[q.solution.length - 1].s !== REFRAIN) problems.push("the solution does not end on the refrain");
+      if (g.meet == null || !Array.isArray(g.roads) || !g.roads.length) problems.push("no meeting day or no roads");
+      if (!tot || tot.label !== "?" || tot.amount != null) problems.push("the total is not \"?\" with its role letter");
+      if (!node) problems.push("no bold named amount on the line");
+      const pays = g.nodes.filter(nd => nd !== tot).length;
+      if (pays < 2 || pays > 3) problems.push(`${pays} payments`);
+      if (problems.length) { st.bad++; if (!st.firstBad) st.firstBad = problems.join(", ") + ": " + t.replace(/<[^>]+>/g, "").slice(0, 140); }
+      if (node && tot) {
+        if (node.t === g.meet) { st.onDay++; if (g.meet === tot.t) st.onTotalDay++; else st.onMiddle++; }
+        else if (g.meet > node.t) st.fwd++; else st.rev++;
+        const lo = Math.min(node.t, g.meet), hi = Math.max(node.t, g.meet);
+        if (g.roads.length === 2 && lo < g.roads[1].from && hi > g.roads[1].from) st.cross++;
+        if (g.nodes.some(nd => nd !== tot && nd.t === tot.t)) st.sameDay++;
+      }
+    }
+    stat[skill.id] = st;
+    tick(st.bad === 0, `f9 card ${pos + 1} (${skill.id}): words, refrain, hint/answer/solution, the total drawn as "?" with its letter (${N} rolls)`);
+    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(13)} on the day ${String(st.onDay).padStart(3)} (total's day ${st.onTotalDay}, other T ${st.onMiddle}) · forward ${st.fwd} · reverse ${st.rev} · crosses the change ${st.cross} · a payment on the total's day ${st.sameDay}`
+      + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
+  });
+  const S = id => stat[id] || {};
+  ["needsCar", "gear", "carCount"].forEach(id => {
+    const share = S(id).onDay / N;
+    tick(share > 0.22 && share < 0.45, `f9.${id}: about one card in three stands ON the meeting day (measured ${(share * 100).toFixed(1)}%)`);
+  });
+  ["needsCar", "onTheDay"].forEach(id =>
+    tick(S(id).onTotalDay > 0 && S(id).onMiddle > 0, `f9.${id}: the meeting day is sometimes the total's own day (a deposit on the day of A) and sometimes another T`));
+  tick(S("onTheDay").onDay === N, "f9.onTheDay: the named amount always stands on the meeting day");
+  ["gear", "exponent", "twoCars"].forEach(id => tick(S(id).fwd > 0 && S(id).rev > 0, `f9.${id}: both gears occur`));
+  tick(S("roads").cross > N * 0.3 && S("roads").cross < N * 0.7, `f9.roads: about half the trips cross the rate change (${S("roads").cross}/${N})`);
+  ["twoCars", "roadExponent"].forEach(id => tick(S(id).cross === N, `f9.${id}: every trip crosses the rate change`));
+  tick(S("exponent").cross === 0, "f9.exponent: no trip crosses the rate change (one car, one exponent)");
+  const sample = def.skills.map((s, pos) => `  card ${pos + 1}: ${String(s.gen().prompt).replace(/<[^>]+>/g, "")}`).join("\n");
+  document.getElementById("f9").textContent = flines.join("\n") + "\n\none roll of each card, in dealing order:\n" + sample;
 }
 
 const ok = passed === total && genFails === 0;

@@ -436,6 +436,17 @@ h2{font-size:20px} h3{font-size:17px}
 .tl-arrow{fill:var(--accent)}
 .tl-arclab{font-size:10px;font-weight:700;fill:var(--accent)}
 .tl-title{font-size:10px;fill:var(--g-muted)}
+/* f9 (2026-10-10): rate ROADS, one colour per road (a rate change = the road
+   changes colour), and the MEETING-DAY flag in the graph "read" yellow */
+.tl-road{stroke-width:3.4}
+.tl-road-0{stroke:#38bdf8} .tl-road-1{stroke:#fb923c} .tl-road-2{stroke:#a3e635}
+.tl-roadlab{font-size:9.5px;font-weight:700}
+.tl-roadlab-0{fill:#38bdf8} .tl-roadlab-1{fill:#fb923c} .tl-roadlab-2{fill:#a3e635}
+.tl-pole{stroke:var(--g-read);stroke-width:1.4}
+.tl-flag{fill:var(--g-read)}
+.tl-meet{font-size:9.5px;font-weight:700;fill:var(--g-read)}
+.tl-meetdot{fill:var(--bg);stroke:var(--g-read);stroke-width:2}
+.tl-tlab.tl-tmeet{fill:var(--g-read);font-weight:700}
 
 /* venn engine (.vn-*) — accent fills sit UNDER the outlines at low opacity */
 .vn{width:100%;height:auto;display:block;font-family:var(--font-num)}

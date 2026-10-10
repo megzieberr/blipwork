@@ -16,6 +16,7 @@ import { questF5 } from "./questf5-timeline-build.js";
 import { questF6 } from "./questf6-deposits.js";
 import { questF7 } from "./questf7-eff-nom.js";
 import { questF8 } from "./questf8-which-total.js";
+import { questF9 } from "./questf9-car-or-no-car.js";
 import { questP1 } from "./questp1-basics.js";
 import { questP2 } from "./questp2-venn-regions.js";
 import { questP3 } from "./questp3-venn-prob.js";
@@ -99,7 +100,7 @@ export const QUEST_DEFS = {
   q1: quest01, q2: quest02, q3: quest03, q4: quest04,
   q5: quest05, q6: quest06, q7: quest07, q8: quest08,
   f1: questF1, f2: questF2, f3: questF3, f4: questF4,
-  f5: questF5, f6: questF6, f7: questF7, f8: questF8,
+  f5: questF5, f6: questF6, f7: questF7, f8: questF8, f9: questF9,
   p1: questP1, p2: questP2, p3: questP3, p4: questP4,
   p5: questP5, p6: questP6, p7: questP7,
   t1: questT1, t2: questT2, t3: questT3, t4: questT4,

@@ -282,6 +282,24 @@ export const CONCEPTS = {
       <div class="eg">Saving at 10% p.a.: R2&#8239;000 at T0 and R3&#8239;000 at T1 grow into R6&#8239;292 at T3. The total is R6&#8239;292, at the end.</div>
       <div class="eg">A loan at 10% p.a.: he borrows R5&#8239;000 at T0 and pays back R2&#8239;200 at T1 and R3&#8239;993 at T3. The total is R5&#8239;000, at the start.</div>`,
   },
+  /* f9 "Car or no car?" (2026-10-10). This round says only "the total". */
+  carOrNoCar: {
+    title: "Car or no car?",
+    body: `
+      <p>Every amount on a timeline is moved to <b>one</b> T, the <b>meeting day</b> (the flag on the line).</p>
+      <p>A <b>car</b> is the bracket <b>(1 + i)^n</b> that moves an amount to the meeting day.</p>
+      <ul>
+        <li><b>Forward gear</b>: the meeting day is later, so <b>multiply (×)</b>: a positive exponent.</li>
+        <li><b>Reverse gear</b>: the meeting day is earlier, so <b>divide (÷)</b>: a negative exponent.</li>
+        <li>An amount <b>already standing on the meeting day</b> needs <b>no car</b>.</li>
+        <li>Each <b>road</b> is one rate, in one colour. Where the road changes colour, the rate changes: an amount that crosses it needs <b>one car per road</b>.</li>
+      </ul>
+      <div class="formula">exponent = ± years × k</div>
+      <p>k is how many times a year the interest is added: annually 1 · half-yearly 2 · quarterly 4 · monthly 12.</p>
+      <div class="eg">8% p.a. compounded quarterly until T4, then 10% p.a. compounded monthly. R5&#8239;000 at T2, meeting day T6: two cars, both forward: 5&#8239;000(1 + 0,08/4)^(2×4)(1 + 0,1/12)^(2×12).</div>
+      <div class="eg">Her last deposit, R2&#8239;000, is made on the day of A, and the meeting day is that day: no car, it is just 2&#8239;000.</div>
+      <p>A car only if it has to move. Already there? No car.</p>`,
+  },
 
   /* ---------- Probability ---------- */
   probBasics: {

@@ -10,7 +10,9 @@
    actually SHOWS the learner, these checks fail.
 
    Coverage: all 25 f1–f7 skills that roll a number, plus f8's five
-   tap-the-total skills (2026-10-10). The rest are pure fixed-fact recall
+   tap-the-total skills and all eight f9 car skills (2026-10-10, each
+   re-derived from the drawn meeting day, roads and amounts and the rates
+   in the prompt). The rest are pure fixed-fact recall
    (no numbers to recompute) and are covered by the generic shape /
    self-consistency / decoy checks in the harnesses.
    ============================================================ */
@@ -146,6 +148,45 @@ export function labelFitIssues(spec, host) {
         if (a.lb.t === b.lb.t && (Math.abs(a.x0 - b.x0) > 0.05 || Math.abs(a.x1 - b.x1) > 0.05 || Math.abs((a.y1 - a.y0) - (b.y1 - b.y0)) > 0.05))
           out.push(`stacked hit boxes of "${a.text}" and "${b.text}" do not line up`);
       }
+  }
+  /* f9 (2026-10-10): the meeting-day flag and the rate roads, measured the
+     same way as the amounts: real boxes inside the frame, the pole on its
+     own T, each road's rate under its OWN road, and none of the flag, its
+     words, its pole or a road label touching an amount, a role letter, a
+     T label or each other (the pennant hangs on its pole by design) */
+  const roadSpec = Array.isArray(spec.roads) && spec.roads.length;
+  if (spec.meet != null || roadSpec) {
+    const bbOf = el => { try { const b = el.getBBox(); return { x: b.x, y: b.y, width: b.width, height: b.height }; } catch { return null; } };
+    const all = (sel, what) => [...svg.querySelectorAll(sel)].map(el => ({ what: `${what} "${el.textContent}"`, bb: bbOf(el) })).filter(o => o.bb);
+    const fixed = [...boxes.map(b => ({ what: `amount "${b.text}"`, bb: b.bb })), ...all("text.tl-tlab", "T label"), ...all("text.tl-role", "role letter")];
+    const extra = [];
+    if (spec.meet != null) {
+      const words = svg.querySelector("text.tl-meet"), flag = svg.querySelector("path.tl-flag"), pole = svg.querySelector("line.tl-pole");
+      if (!words || !flag || !pole) out.push("the meeting-day flag did not render");
+      else {
+        if (Math.abs(Number(pole.getAttribute("x1")) - g.xAt(spec.meet)) > 0.5) out.push(`the flag pole does not stand on T${spec.meet}`);
+        const pb = bbOf(pole);
+        extra.push({ what: `"${words.textContent}"`, bb: bbOf(words), kind: "words" }, { what: "the flag", bb: bbOf(flag), kind: "flag" });
+        if (pb) extra.push({ what: "the flag pole", bb: { x: pb.x - 0.7, y: pb.y, width: 1.4, height: pb.height }, kind: "pole" });
+      }
+    }
+    const roadEls = [...svg.querySelectorAll("text.tl-roadlab")];
+    if (roadEls.length !== g.roads.length) out.push(`${roadEls.length} road labels drawn for ${g.roads.length} roads`);
+    roadEls.forEach((el, j) => {
+      const bb = bbOf(el), rd = g.roads[j];
+      if (!bb || !rd) return;
+      if (bb.x < rd.x0 - 0.5 || bb.x + bb.width > rd.x1 + 0.5) out.push(`road label "${el.textContent}" is wider than its road (T${rd.from}–T${rd.to})`);
+      extra.push({ what: `road label "${el.textContent}"`, bb, kind: "road" });
+    });
+    extra.filter(e => e.bb).forEach((e, i, arr) => {
+      if (e.bb.x < -0.5 || e.bb.x + e.bb.width > g.W + 0.5 || e.bb.y < -0.5 || e.bb.y + e.bb.height > g.H + 0.5) out.push(`${e.what} runs outside the frame`);
+      fixed.forEach(f => { if (hits(e.bb, f.bb, 0.5)) out.push(`${e.what} touches ${f.what}`); });
+      arr.slice(i + 1).forEach(o => {
+        const pair = [e.kind, o.kind].sort().join("+");
+        if (pair === "flag+pole") return;                                    // the pennant hangs on its pole
+        if (hits(e.bb, o.bb, 0.5)) out.push(`${e.what} touches ${o.what}`);
+      });
+    });
   }
   return out;
 }
@@ -326,7 +367,122 @@ export const RECOMPUTE = {
   "f8.tapSameDay": q => f8TapCheck(q, "sameDay"),
   "f8.tapLoanBigRepay": q => f8TapCheck(q, "bigRepay"),
   "f8.tapUnknownX": q => f8TapCheck(q, "x"),
+
+  /* ---- f9 (2026-10-10): car or no car ---- */
+  "f9.needsCar": q => {
+    const s = f9Scene(q);
+    return !!s && q.type === "yesno" && q.yes === (s.at !== s.meet);
+  },
+  "f9.gear": q => {
+    const s = f9Scene(q), l = correctLabel(q);
+    if (!s || q.type !== "mc" || !l || q.options.length !== 3) return false;
+    const dir = Math.sign(s.meet - s.at);
+    return dir > 0 ? /^Forward gear \(×\)/.test(l) : dir < 0 ? /^Reverse gear \(÷\)/.test(l) : /^No car/.test(l);
+  },
+  "f9.onTheDay": q => {
+    const s = f9Scene(q);
+    if (!s || s.at !== s.meet) return false;
+    return q.type === "yesno" ? q.yes === false : /^No car/.test(correctLabel(q) || "");
+  },
+  "f9.exponent": q => {
+    const s = f9Scene(q), t = s && f9Trip(s);
+    if (!t || !s.ratesShown || t.legs.length !== 1) return false;
+    const L = t.legs[0];
+    return correctNum(q) === t.dir * L.years * L.k;
+  },
+  "f9.roads": q => {
+    const s = f9Scene(q), t = s && f9Trip(s);
+    if (!t || s.roads.length !== 2 || !t.legs.length) return false;
+    const want = t.legs.length === 1 ? `The ${t.legs[0].rate}% road only` : `The ${t.legs[0].rate}% road, then the ${t.legs[1].rate}% road`;
+    return correctLabel(q) === want;
+  },
+  "f9.twoCars": q => {
+    const s = f9Scene(q), t = s && f9Trip(s);
+    if (!t || !s.ratesShown || t.legs.length !== 2) return false;
+    const amt = String(s.v).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const car = L => {
+      const i = C(toFrac(L.rate)), m = t.dir < 0 ? "−" : "";
+      return L.k === 1 ? `(1 + ${i})^${m ? `(−${L.years})` : L.years}` : `(1 + ${i}/${L.k})^(${m}${L.years}×${L.k})`;
+    };
+    return String(correctLabel(q) || "").replace(/ /g, " ") === amt + t.legs.map(car).join("");
+  },
+  "f9.roadExponent": q => {
+    const s = f9Scene(q), t = s && f9Trip(s);
+    const m = String(q.prompt).match(/On the <b>(\d+)% road<\/b>/);
+    if (!t || !m || !s.ratesShown || t.legs.length !== 2) return false;
+    const L = t.legs.find(l => l.rate === Number(m[1]));
+    return !!L && correctNum(q) === t.dir * L.years * L.k;
+  },
+  "f9.carCount": q => {
+    const s = f9Scene(q), t = s && f9Trip(s);
+    return !!t && correctNum(q) === t.legs.length;
+  },
 };
+
+/* ============================================================
+   f9 · "Car or no car?" — the scene, read back from what is drawn.
+     · the named amount is the ONE bold rand in the prompt, and it is
+       drawn on exactly one node;
+     · the meeting day is the flag (spec.meet), a node on the line;
+     · the roads cover the whole line in order, each "N% p.a."; when the
+       prompt states the rates, it states one "N% p.a. compounded …" per
+       road in road order, and a second road starts where the prompt says
+       ("from T3 the rate is …"); k comes from those words;
+     · HER RULING: the total is never a bare money label. Exactly one
+       entry carries a role, it is drawn "?", A sits at the end and P at
+       T0, and on a shared day (the last deposit on the day of A) it is
+       the BOTTOM label, right above its letter. A loan never has a
+       repayment on T0. Payments are distinct whole rand.
+   Any failure returns null, and every f9 recompute then fails loudly.
+   ============================================================ */
+const F9_K = { annually: 1, "half-yearly": 2, quarterly: 4, monthly: 12 };
+function f9Scene(q) {
+  const g = q && q.graph;
+  if (!g || g.type !== "timeline" || !Number.isInteger(g.meet) || g.meet < 0 || g.meet > g.n) return null;
+  if (!Array.isArray(g.roads) || g.roads.length < 1 || g.roads.length > 2 || !Array.isArray(g.nodes)) return null;
+  const prompt = String(q.prompt);
+  const named = [...prompt.matchAll(/<b>R(\d[\d\s]*)<\/b>/g)].map(m => Number(m[1].replace(/\s/g, "")));
+  if (named.length !== 1) return null;
+  const v = named[0], on = g.nodes.filter(nd => nd.amount === v);
+  if (on.length !== 1) return null;
+  const roleNodes = g.nodes.filter(nd => nd.role);
+  if (roleNodes.length !== 1) return null;
+  const tot = roleNodes[0];
+  if (tot.label !== "?" || tot.amount != null) return null;
+  if (!((tot.role === "A" && tot.t === g.n) || (tot.role === "P" && tot.t === 0))) return null;
+  if (g.nodes.find(nd => nd.t === tot.t) !== tot) return null;                // bottom of its day's stack
+  const pays = g.nodes.filter(nd => nd !== tot);
+  if (!pays.every(nd => Number.isInteger(nd.amount) && nd.amount > 0 && Number.isInteger(nd.t) && nd.t >= 0 && nd.t <= g.n)) return null;
+  if (new Set(pays.map(p => p.amount)).size !== pays.length || new Set(pays.map(p => p.t)).size !== pays.length) return null;
+  if (tot.role === "P" && pays.some(p => p.t === 0)) return null;
+  const roads = g.roads.map(r => {
+    const m = String(r.rate).match(/^(\d+)% p\.a\.$/);
+    return m ? { from: r.from, to: r.to, rate: Number(m[1]), k: null } : null;
+  });
+  if (roads.some(r => !r) || roads[0].from !== 0 || roads[roads.length - 1].to !== g.n) return null;
+  if (roads.some((r, j) => j > 0 && (r.from !== roads[j - 1].to || r.rate === roads[j - 1].rate))) return null;
+  const said = [...prompt.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)/g)];
+  let ratesShown = false;
+  if (said.length) {
+    if (said.length !== roads.length || said.some((m, j) => Number(m[1]) !== roads[j].rate)) return null;
+    said.forEach((m, j) => { roads[j].k = F9_K[m[2]]; });
+    if (roads.length === 2) {
+      const ch = prompt.match(/from T(\d+) the rate is/);
+      if (!ch || Number(ch[1]) !== roads[1].from) return null;
+    }
+    ratesShown = true;
+  }
+  return { v, at: on[0].t, meet: g.meet, n: g.n, roads, ratesShown };
+}
+/* the trip to the meeting day: its direction and the years on each road it
+   drives over, in travel order (reverse gear meets the later road first) */
+function f9Trip(s) {
+  const dir = Math.sign(s.meet - s.at), lo = Math.min(s.at, s.meet), hi = Math.max(s.at, s.meet);
+  const legs = [];
+  s.roads.forEach(r => { const years = Math.min(hi, r.to) - Math.max(lo, r.from); if (years > 0) legs.push({ rate: r.rate, k: r.k, years }); });
+  if (dir < 0) legs.reverse();
+  return { dir, legs };
+}
 
 /* ============================================================
    f8 · "Which one is the total?" — the tap target, re-derived.
