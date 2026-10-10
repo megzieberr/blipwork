@@ -348,6 +348,29 @@ export const CONCEPTS = {
       <p>Build the whole equation first. Type it once. Round once, at the end.</p>`,
   },
 
+  /* f11 "Pick the meeting day" (2026-10-10). The shortcut round: count the
+     cars for a day (the total too), the two rules of thumb, and the answer
+     is the same anywhere. "the total" only. Money amounts, "p.a." and "N cars"
+     carry a LITERAL U+00A0 inside their .nowrap unit (f10 review 1: not the
+     thin U+202F, never an entity); a sum is one unit with its "=" inside. */
+  meetingDay: {
+    title: "Pick the meeting day",
+    body: `
+      <p>Any T can be the <b>meeting day</b>. Every amount drives there in its <b>car</b> (a car is the <span class="nowrap">(1 + i)^n</span> bracket that moves an amount to the meeting day), <b>the total too</b> when it is not already there. Count the cars for a day:</p>
+      <ul>
+        <li>An amount <b>already standing</b> on the meeting day: <b>no car</b>.</li>
+        <li>An amount that stays on <b>one colour</b> of road: <b><span class="nowrap">1 car</span></b>.</li>
+        <li>An amount that <b>crosses the colour change</b>: <b><span class="nowrap">2 cars</span></b>, one per road.</li>
+      </ul>
+      <p><b>Two rules of thumb</b> for the day with the fewest cars:</p>
+      <ul>
+        <li><b>Meet where someone already stands.</b> That amount needs no car.</li>
+        <li><b>Meet where the road changes colour.</b> Then nobody crosses the change, so nobody needs two cars.</li>
+      </ul>
+      <div class="eg">Saving: <span class="nowrap">R5 000 at T1</span>, <span class="nowrap">R3 000 at T3</span>, <span class="nowrap">A at T6</span>; <span class="nowrap">8% p.a.</span> until T3, then <span class="nowrap">10% p.a.</span>, so the road changes colour at T3. Meet at T6: the <span class="nowrap">R5 000</span> crosses the change (<span class="nowrap">2 cars</span>), the <span class="nowrap">R3 000</span> needs <span class="nowrap">1 car</span>, A is already there: <span class="nowrap">2 + 1 + 0 = 3 cars</span>. Meet at T3: <span class="nowrap">1 + 0 + 1 = 2 cars</span>. T3 does both: an amount stands there, and the road changes colour there.</div>
+      <p>The answer is the same wherever you meet; picking the day is only about typing less.</p>`,
+  },
+
   /* ---------- Probability ---------- */
   probBasics: {
     title: "Theoretical probability",

@@ -202,7 +202,12 @@ export function mountQuestion(host, q, handlers = {}) {
       const b = el("button", "opt", fmt(o.label));
       b.addEventListener("click", () => {
         if (answered) return;
-        [...opts.children].forEach((x, i) => { x.disabled = true; if (q.options[i].correct) x.classList.add("is-correct"); });
+        [...opts.children].forEach((x, i) => {
+          x.disabled = true; if (q.options[i].correct) x.classList.add("is-correct");
+          // f11 (2026-10-10): an option may carry a note (its car count, "2 cars"),
+          // shown on EVERY button once the answer is in, right or wrong
+          if (q.options[i].note != null) x.insertAdjacentHTML("beforeend", ` <span class="opt-note">${fmt(q.options[i].note)}</span>`);
+        });
         b.classList.add(o.correct ? "is-correct" : "is-wrong");
         commit(!!o.correct, o.label);
       });

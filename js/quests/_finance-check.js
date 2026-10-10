@@ -17,7 +17,10 @@
    the story give; the interest recomputed from the displayed numbers;
    the recall card against a table written out here), and all eight f12 one-equation
    cards (2026-10-10: the story read back, every option parsed, the decoys
-   classified, the answer recomputed). The rest are pure fixed-fact recall
+   classified, the answer recomputed), and all eight f11 meeting-day cards
+   (2026-10-10: the car count of every candidate day recomputed from the
+   drawn amounts, their T's and the rate-change T; the marked day the one
+   and only day with the fewest). The rest are pure fixed-fact recall
    (no numbers to recompute) and are covered by the generic shape /
    self-consistency / decoy checks in the harnesses.
    ============================================================ */
@@ -577,7 +580,162 @@ export const RECOMPUTE = {
   "f12.loanAgain": q => f12Diagnose(q, "loanTwoRepayments") === null,
   "f12.hirePurchase": q => f12Diagnose(q, "hirePurchase") === null,
   "f12.unknownPayment": q => f12Diagnose(q, "unknownPayment") === null,
+
+  /* ---- f11 (2026-10-10): pick the meeting day ---- */
+  /* the car count of each candidate day recomputed from the drawn amounts,
+     their T's and the rate-change T (on the day 0, across the change 2,
+     else 1; the total counts too), the story read back against the roads */
+  "f11.whereStands": q => f11Diagnose(q, "whereStands") === null,
+  "f11.colourChange": q => f11Diagnose(q, "colourChange") === null,
+  "f11.carCountAt": q => f11Diagnose(q, "carCountAt") === null,
+  "f11.fewestCars": q => f11Diagnose(q, "fewestCars") === null,
+  "f11.bestReason": q => f11Diagnose(q, "bestReason") === null,
+  "f11.carCountAgain": q => f11Diagnose(q, "carCountAgain") === null,
+  "f11.sameAnswer": q => f11Diagnose(q, "sameAnswer") === null,
+  "f11.fewestAgain": q => f11Diagnose(q, "fewestCars") === null,
 };
+
+/* ============================================================
+   f11 · "Pick the meeting day" — every count re-derived from the picture.
+     · the scene: NO meeting-day flag (the learner picks the day), 4 to 8
+       years, one or two roads each at least 2 years and each "N% p.a.",
+       the rate really changing; the prompt names one "N% p.a. compounded
+       …" per road in road order, and a second road starts where it says
+       ("from T3 the rate is …"); saving or a loan in words, matching the
+       total's letter;
+     · HER RULING: the total is "?" with its role letter (A at the end, P
+       at T0), the bottom label of a shared day; 2 or 3 payments, distinct
+       whole rand on distinct days; a loan's last repayment at the end and
+       none on T0;
+     · THE COUNT, written out here, not imported: for a meeting day D an
+       amount on D needs 0 cars, one whose T and D lie on either side of
+       the rate change (strictly) needs 2, any other 1; every amount on the
+       line counts, the total too;
+     · fewestCars: 3 or 4 T options, the end day among them; every option's
+       note is ITS count ("2 cars"); the marked day needs the fewest of ANY
+       day on the line, and it is the only day that does (the tie rule);
+     · carCountAt: the marked number is the count for the asked day, and
+       carCountAgain's day makes some amount cross the change;
+     · whereStands: the asked day holds 0 or 1 amounts, and the marked
+       option names it (a payment's rand, "The total, A", or "Nothing");
+     · colourChange: the marked T is the rate change, T0 and the end are
+       decoys; sameAnswer: "no", two different days on the line;
+     · bestReason: the asked day is a middle day with the fewest cars, the
+       biggest payment does not stand there, and the marked reason is the
+       true one (an amount stands there, the road changes colour there, or
+       both).
+   f11Diagnose returns null when all of that holds, else the first reason.
+   ============================================================ */
+const f11Text = x => String(x == null ? "" : x).replace(/<[^>]+>/g, "").replace(/[  ]/g, " ").replace(/‑/g, "-").trim();
+const f11Cars = (t, D, c) => (t === D ? 0 : c != null && Math.min(t, D) < c && c < Math.max(t, D) ? 2 : 1);
+const f11Count = (s, D) => s.items.reduce((a, it) => a + f11Cars(it.t, D, s.c), 0);
+const f11T = label => { const m = f11Text(label).match(/^T(\d+)$/); return m ? Number(m[1]) : NaN; };
+const f11Rand = label => { const m = f11Text(label).match(/^R(\d{1,3}(?: \d{3})*)$/); return m ? Number(m[1].replace(/ /g, "")) : NaN; };
+/* "2 cars" → 2, "1 car" → 1 (the plural has to agree) */
+function f11Note(note) {
+  const m = f11Text(note).match(/^(\d+) (cars?)$/);
+  return m && (m[1] === "1") === (m[2] === "car") ? Number(m[1]) : NaN;
+}
+export function f11Scene(q) {
+  const g = q && q.graph;
+  if (!g || g.type !== "timeline" || g.meet != null) return null;
+  if (!Number.isInteger(g.n) || g.n < 4 || g.n > 8 || !Array.isArray(g.nodes) || !Array.isArray(g.roads)) return null;
+  const roles = g.nodes.filter(nd => nd.role);
+  if (roles.length !== 1) return null;
+  const tot = roles[0];
+  if (tot.label !== "?" || tot.amount != null) return null;
+  if (!((tot.role === "A" && tot.t === g.n) || (tot.role === "P" && tot.t === 0))) return null;
+  if (g.nodes.find(nd => nd.t === tot.t) !== tot) return null;                         // the bottom of its day's stack
+  const pays = g.nodes.filter(nd => nd !== tot);
+  if (pays.length < 2 || pays.length > 3) return null;
+  if (!pays.every(nd => Number.isInteger(nd.amount) && nd.amount > 0 && nd.label == null && !nd.out && Number.isInteger(nd.t) && nd.t >= 0 && nd.t <= g.n)) return null;
+  if (new Set(pays.map(p => p.amount)).size !== pays.length || new Set(pays.map(p => p.t)).size !== pays.length) return null;
+  if (tot.role === "P" && (pays.some(p => p.t === 0) || !pays.some(p => p.t === g.n))) return null;
+  if (g.roads.length < 1 || g.roads.length > 2) return null;
+  const roads = g.roads.map(r => { const m = String(r.rate).match(/^(\d+)% p\.a\.$/); return m ? { from: r.from, to: r.to, rate: Number(m[1]) } : null; });
+  if (roads.some(r => !r) || roads[0].from !== 0 || roads[roads.length - 1].to !== g.n) return null;
+  if (roads.some((r, j) => r.to - r.from < 2 || (j > 0 && (r.from !== roads[j - 1].to || r.rate === roads[j - 1].rate)))) return null;
+  const words = f11Text(q.prompt);
+  const said = [...words.matchAll(/(\d+)% p\.a\. compounded (annually|half-yearly|quarterly|monthly)/g)];
+  if (said.length !== roads.length || said.some((m, j) => Number(m[1]) !== roads[j].rate)) return null;
+  if (roads.length === 2) {
+    const ch = words.match(/from T(\d+) the rate is/);
+    if (!ch || Number(ch[1]) !== roads[1].from) return null;
+  }
+  /* the story's own first sentence: "She saves at …" or "He borrows the total, P, at …" */
+  const saving = /^(?:She|He) saves at /.test(words), loan = /^(?:She|He) borrows the total, P, at /.test(words);
+  if (saving === loan || saving !== (tot.role === "A")) return null;
+  const items = [{ t: tot.t, total: true }, ...pays.map(p => ({ t: p.t, v: p.amount }))];
+  return { n: g.n, c: roads.length === 2 ? roads[1].from : null, roads, items, role: tot.role, words };
+}
+export function f11Diagnose(q, skill) {
+  const s = f11Scene(q);
+  if (!s) return "the scene does not read back (timeline, roads, rates, the total, the story)";
+  const counts = Array.from({ length: s.n + 1 }, (_, D) => f11Count(s, D));
+  const min = Math.min(...counts);
+  const asked = re => { const m = s.words.match(re); const D = m ? Number(m[1]) : NaN; return D >= 0 && D <= s.n ? D : NaN; };
+  if (skill === "sameAnswer") {
+    if (q.type !== "yesno" || q.yes !== false) return "the answer is not \"no\"";
+    const m = s.words.match(/meet at T(\d+) instead of T(\d+), does the final answer for ([AP]) change\?/);
+    if (!m || m[1] === m[2] || Number(m[1]) > s.n || Number(m[2]) > s.n || m[3] !== s.role) return "not two different days on the line, or the wrong letter";
+    return null;
+  }
+  const opts = q.options || [], right = opts.filter(o => o.correct);
+  if (q.type !== "mc" || right.length !== 1) return "not an mc with exactly one right option";
+  if (skill === "fewestCars") {
+    const ts = opts.map(o => f11T(o.label));
+    if (opts.length < 3 || opts.length > 4) return `${opts.length} options (want 3 or 4)`;
+    if (ts.some(t => !(t >= 0 && t <= s.n)) || new Set(ts).size !== ts.length) return "an option is not a T on the line";
+    if (!ts.includes(s.n)) return "the end day is not an option";
+    const off = opts.find(o => f11Note(o.note) !== counts[f11T(o.label)]);
+    if (off) return `the note on ${f11Text(off.label)} ("${f11Text(off.note)}") is not its count (${counts[f11T(off.label)]})`;
+    const best = f11T(right[0].label);
+    if (counts[best] !== min) return `the marked day needs ${counts[best]} cars, the fewest is ${min}`;
+    if (counts.filter(k => k === min).length !== 1) return "two days tie for the fewest (the tie rule: one day only)";
+    return null;
+  }
+  if (skill === "carCountAt" || skill === "carCountAgain") {
+    const D = asked(/If we meet at T(\d+), how many cars are needed altogether\?/);
+    if (!Number.isInteger(D)) return "no meeting day in the question";
+    if (numOf(right[0].label) !== counts[D]) return `the marked count is ${f11Text(right[0].label)}, the count is ${counts[D]}`;
+    if (skill === "carCountAgain" && !s.items.some(it => f11Cars(it.t, D, s.c) === 2)) return "no amount crosses the colour change";
+    return null;
+  }
+  if (skill === "whereStands") {
+    const D = asked(/Which amount is already standing on T(\d+)\?/);
+    if (!Number.isInteger(D)) return "no day in the question";
+    const at = s.items.filter(it => it.t === D);
+    if (at.length > 1) return "it asks about a shared day";
+    const lab = f11Text(right[0].label), labs = opts.map(o => f11Text(o.label));
+    const NONE = `Nothing: no amount stands on T${D}`, TOTAL = `The total, ${s.role}`;
+    const ok = !at.length ? lab === NONE : at[0].total ? lab === TOTAL : f11Rand(lab) === at[0].v;
+    if (!ok) return `the marked option "${lab}" is not what stands on T${D}`;
+    if (!s.items.every(it => it.total || labs.some(l => f11Rand(l) === it.v)) || !labs.includes(TOTAL) || !labs.includes(NONE)) return "not every amount (and the total, and nothing) is offered";
+    return null;
+  }
+  if (skill === "colourChange") {
+    if (s.c == null) return "one road: the colour never changes";
+    if (f11T(right[0].label) !== s.c) return `the marked T is not the rate change T${s.c}`;
+    const ts = opts.map(o => f11T(o.label));
+    if (!ts.includes(0) || !ts.includes(s.n)) return "T0 and the end are not both decoys";
+    return null;
+  }
+  if (skill === "bestReason") {
+    const D = asked(/Why is T(\d+) a good meeting day here\?/);
+    if (!(D > 0 && D < s.n)) return "the day is T0, the end, or off the line";
+    if (counts[D] !== min) return `T${D} needs ${counts[D]} cars, the fewest is ${min}`;
+    const at = s.items.filter(it => it.t === D), big = Math.max(...s.items.filter(it => !it.total).map(it => it.v));
+    if (at.some(it => it.v === big)) return "the biggest payment stands there, so a decoy is true";
+    const stands = at.length > 0, colour = s.c === D;
+    if (!stands && !colour) return "neither reason holds";
+    const want = stands && colour ? /^Both: / : stands ? /^An amount already stands there/ : /^The road changes colour there/;
+    if (!want.test(f11Text(right[0].label))) return `the marked reason "${f11Text(right[0].label)}" is not the true one`;
+    const labs = opts.map(o => f11Text(o.label));
+    if (!labs.some(l => /^It is the end/.test(l)) || !labs.some(l => /^The biggest amount/.test(l))) return "the two plan decoys are not offered";
+    return null;
+  }
+  return `unknown f11 skill "${skill}"`;
+}
 
 /* ============================================================
    f10 · "In or out?" — the one equation, read back from what is shown.

@@ -58,12 +58,20 @@
   card by card (a timeline on cards 1–3, none on 4–8), and every family is also drawn with its timeline forced on and measured
   at phone width, for the Exam Focus tile that will deal these gens. The f12 block at the bottom checks the round's shape and
   words.</p>
+<p class="muted small"><b>2026-10-10: f11 "Pick the meeting day" joined, so f1–f12 is complete</b> (8 more skills, 91 in all;
+  the recompute covers 62 of them, the other 29 are fixed-fact recall). The shortcut round: any T can be the meeting day, the
+  answer is the same wherever you meet, and picking the day is only about typing less. The timeline is f9's without the flag
+  (the learner picks the day). Every card is read back from its picture and story, and the car count of every candidate day is
+  recomputed here from the drawn amounts, their T's and the rate-change T (an amount on the day 0 cars, one that crosses the
+  change 2, any other 1; the total counts too): the day marked fewest must be the ONLY day on the line with the fewest (the tie
+  rule), every option's car-count note must be its own count, and the "why" card's reason must be the true one. The f11 block
+  at the bottom checks the round's shape and words, and that a number never leaves its unit ("2 cars", "R8 000 at T3").</p>
 <div id="banner">running…</div>
 
 <h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
 <div class="grid" id="engine"></div>
 
-<h2>Quests f1–f12 (f11 still to come) — every skill, 200 generations</h2>
+<h2>Quests f1–f12 (complete) — every skill, 200 generations</h2>
 <pre id="quests">…</pre>
 
 <h2>Independent recompute (js/finlib.js, from the question's own displayed numbers)</h2>
@@ -111,6 +119,18 @@
   the recall card deals all five items, the interest card offers a negative decoy, signOnTimeline names no amount in words.</p>
 <pre id="f10">…</pre>
 
+<h2>f11 — the round's shape, words and rulings, card by card</h2>
+<p class="muted small">Every f11 card: a timeline with NO meeting-day flag, one or two roads, 2 or 3 payments, the total drawn as
+  "?" with its role letter; a story told with pronouns only; a hint, an answer and a worked solution whose first "car" says what a
+  car is, with a car count for a day, ending on the refrain "The answer is the same wherever you meet; picking the day is only
+  about typing less."; no money amount outside its unbreakable unit, no number apart from its unit, no amount apart from its T, no
+  plain or thin space inside an amount, no HTML entity, "half‑yearly" with its non-breaking hyphen. Nothing says lumpsum, lump
+  sum, accumulated amount, LHS, RHS or hire purchase. The fewest cards carry a car-count note on every option. The shape: all
+  three kinds of best day occur (the road changes colour there and an amount stands there; the road changes colour there and
+  nobody does; two amounts on the end day); whereStands asks about a payment, the total and an empty day; all three reasons
+  occur; carCountAgain always has a two-car trip; loans and saving, one road and two, and a deposit on the day of A all occur.</p>
+<pre id="f11">…</pre>
+
 <h2>f12 — the round's shape, words, fade and rulings, card by card</h2>
 <p class="muted small">Every f12 card: one of the ten textbook names, a steps chain of mc (the one equation) then calc (to the cent,
   2 dp), plus the price for hire purchase; a hint on the card and on every step; a worked solution with the one-equation line,
@@ -132,7 +152,7 @@ import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/timeline-graph.js";
-import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f12Diagnose, f12EquationsOf } from "./js/quests/_finance-check.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f12Diagnose, f12EquationsOf, f11Scene, f11Diagnose } from "./js/quests/_finance-check.js";
 import { F12_FAMILIES } from "./js/quests/questf12-one-equation.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import { formulaHtml, fracHtml, xbarHtml } from "./js/ui.js";
@@ -174,6 +194,11 @@ const ENGINE = [
      (R20 000, R15 000) on neighbouring T's at n = 5, a deposit stacked on the day of A under the meeting-day flag; then
      the interest card's known loan, the widest 2-dp label it allows (under R10 000), carrying its P at T0 at n = 4 */
   { title: "f10: a withdrawal −R3 000 between the widest deposits, a deposit on the day of A with its stack leader", spec: { type: "timeline", n: 5, meet: 5, leaders: true, stackLeaders: true, nodes: [{ t: 5, label: "?", role: "A" }, { t: 0, amount: 20000, dp: 0 }, { t: 1, amount: 3000, dp: 0, out: true }, { t: 2, amount: 15000, dp: 0 }, { t: 5, amount: 14000, dp: 0 }], roads: [{ from: 0, to: 5, rate: "15% p.a.", k: 12 }], accent: ACC } },
+  /* f11 (2026-10-10): no flag. The longest line the round rolls (n = 8, gap 38.5 units) with the widest amounts two T's
+     apart, a 3-year first road, and the last deposit stacked on the day of A with its stack leader; then the shortest
+     line (n = 4, 2 + 2 roads) as a loan, the "?" ring on T0 beside a repayment on T1 */
+  { title: "f11: n = 8, no flag, two roads, a deposit on the day of A with its stack leader", spec: { type: "timeline", n: 8, leaders: true, stackLeaders: true, nodes: [{ t: 8, label: "?", role: "A" }, { t: 1, amount: 10000, dp: 0 }, { t: 3, amount: 10000, dp: 0 }, { t: 8, amount: 8000, dp: 0 }], roads: [{ from: 0, to: 3, rate: "15% p.a.", k: 12 }, { from: 3, to: 8, rate: "14% p.a.", k: 2 }], accent: ACC } },
+  { title: "f11: n = 4 loan, no flag, 2 + 2 roads, a repayment on T1 beside the ring", spec: { type: "timeline", n: 4, leaders: true, stackLeaders: true, nodes: [{ t: 0, label: "?", role: "P" }, { t: 1, amount: 7500, dp: 0 }, { t: 2, amount: 6000, dp: 0 }, { t: 4, amount: 5000, dp: 0 }], roads: [{ from: 0, to: 2, rate: "15% p.a.", k: 4 }, { from: 2, to: 4, rate: "14% p.a.", k: 1 }], accent: ACC } },
   { title: "f10: the known loan R9 999,99 with its P at T0 (the interest card)", spec: { type: "timeline", n: 4, leaders: true, nodes: [{ t: 0, amount: 9999.99, dp: 2, role: "P" }, { t: 1, amount: 9000, dp: 0 }, { t: 4, amount: 7500, dp: 0 }], roads: [{ from: 0, to: 4, rate: "15% p.a.", k: 2 }], accent: ACC } },
 ];
 const eg = document.getElementById("engine");
@@ -560,6 +585,149 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   tick(S("signOnTimeline").amounts.has(2) && S("signOnTimeline").amounts.has(3), "f10.signOnTimeline: two and three amounts both occur");
   const sample = def.skills.map((s, pos) => `  card ${pos + 1}: ${noTags(String(s.gen().prompt).replace(/<br>/g, " ⏎ "))}`).join("\n");
   document.getElementById("f10").textContent = flines.join("\n") + "\n\none roll of each card, in dealing order:\n" + sample;
+}
+
+/* ---------- 9) f11: the round's shape, words and rulings ---------- */
+{
+  /* written out here on purpose, not imported, so a slip in the module cannot pass itself */
+  const REFRAIN = "The answer is the same wherever you meet; picking the day is only about typing less.";
+  const CAR_IS = "car is the (1 + i)^n bracket that moves an amount";
+  const BANNED = [/lumpsum/i, /lump sum/i, /accumulated amount/i, /\bLHS\b/, /\bRHS\b/, /hire purchase/i];
+  const ORDER = ["whereStands", "colourChange", "carCountAt", "fewestCars", "bestReason", "carCountAgain", "sameAnswer", "fewestAgain"];
+  const FEWEST = new Set(["fewestCars", "fewestAgain"]);
+  const def = questDef("f11");
+  const N = 300;
+  const flines = [], stat = {};
+  const noTags = x => String(x).replace(/<[^>]+>/g, "");
+  const flat = x => noTags(x).replace(/[  ]/g, " ");
+  const cars = (t, D, c) => (t === D ? 0 : c != null && Math.min(t, D) < c && c < Math.max(t, D) ? 2 : 1);
+  tick(def.skills.map(x => x.id).join(",") === ORDER.join(","), `f11 deals 8 cards in order: ${def.skills.map(x => x.id).join(", ")}`);
+  tick(chapter.quests.map(x => x.id).join(",").includes("f10,f11,f12"), "f11 stands between f10 and f12 on the Finance map");
+  def.skills.forEach((skill, pos) => {
+    const st = { bad: 0, firstBad: "", one: 0, two: 0, loan: 0, saving: 0, shared: 0, sleads: 0, kinds: new Set(), nOpts: new Set(), twoCar: 0, endOpt: 0 };
+    for (let i = 0; i < N; i++) {
+      const q = skill.gen(), g = q.graph;
+      const all = [q.prompt, q.hint, q.answerLabel, ...(q.options || []).flatMap(o => [o.label, o.note]),
+        ...(q.solution || []).flatMap(x => [x.s, x.r])].filter(x => x != null).map(String);
+      const t = all.join(" | ");
+      const problems = [];
+      if (BANNED.some(re => re.test(t))) problems.push("a banned word");
+      if (/&#|&nbsp;/.test(t)) problems.push("an HTML entity");
+      if (/ /.test(t)) problems.push("a thin no-break space (U+202F)");
+      if (/\d \d{3}(?!\d)/.test(noTags(t))) problems.push("a plain space inside an amount");
+      const outside = noTags(t.replace(/<span class="nowrap">[^<]*<\/span>/g, ""));
+      if (/R\d/.test(outside)) problems.push("a money amount outside its unbreakable unit");
+      if (/\d%?[\s ](?:(?:years?|times?|cars?|decimal|months?)\b|p\.a\.)/.test(outside)) problems.push("a number apart from its unit");
+      if (/<\/span>\s+at T\d/.test(t)) problems.push("an amount apart from its T (\"R8 000 at T3\" is one unit)");
+      if (/half-yearly/.test(t)) problems.push("half-yearly with a breakable hyphen");
+      if (/\^\(?−?1\)?(?!\d)/.test(noTags(t))) problems.push("a car with an exponent of 1");
+      if (!/^(?:She|He) /.test(noTags(q.prompt))) problems.push("the story does not start with a pronoun (no first names)");
+      if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 3) problems.push("no hint, answer or worked solution");
+      else {
+        if (q.solution[q.solution.length - 1].s !== REFRAIN) problems.push("the solution does not end on the refrain");
+        const firstCar = q.solution.findIndex(x => /\bcars?\b/.test(noTags(`${x.s} ${x.r || ""}`)));
+        if (firstCar < 0 || !flat(`${q.solution[firstCar].s} ${q.solution[firstCar].r || ""}`).includes(CAR_IS)) problems.push("the first \"car\" in the solution does not say what a car is");
+        if (!q.solution.some(x => /^Meet at T\d+/.test(noTags(x.s)))) problems.push("no car count for a day in the working");
+      }
+      if (FEWEST.has(skill.id)) { if (!q.options.every(o => o.note != null)) problems.push("an option without its car count"); }
+      else if ((q.options || []).some(o => o.note != null)) problems.push("a car-count note on a card that does not count per option");
+      const d = f11Diagnose(q, FEWEST.has(skill.id) ? "fewestCars" : skill.id);
+      if (d) problems.push(d);
+      const sc = f11Scene(q);
+      if (!g || g.meet != null) problems.push("no timeline, or a meeting-day flag on it (the learner picks the day)");
+      if (sc) {
+        if (sc.c == null) st.one++; else st.two++;
+        if (sc.role === "P") st.loan++; else st.saving++;
+        const onEnd = sc.items.filter(it => it.t === sc.n).length;
+        if (sc.role === "A" && onEnd === 2) {
+          st.shared++;
+          if (!g.stackLeaders || computeTimeline(g).stackLeaders.length !== 1) problems.push("a deposit on the day of A without its stack leader");
+          else st.sleads++;
+        }
+        const right = (q.options || []).find(o => o.correct);
+        if (FEWEST.has(skill.id) && right) {
+          const best = Number(noTags(right.label).slice(1)), at = sc.items.filter(it => it.t === best).length;
+          st.kinds.add(sc.c === best ? (at ? "colour+stands" : "colour only") : at >= 2 ? "two on the end day" : "other");
+          st.nOpts.add(q.options.length);
+          if (q.options.some(o => noTags(o.label) === `T${sc.n}`)) st.endOpt++;
+        }
+        if (skill.id === "whereStands" && right) {
+          const l = flat(right.label);
+          st.kinds.add(/^Nothing/.test(l) ? "nothing" : /^The total/.test(l) ? "the total" : "a payment");
+        }
+        if (skill.id === "bestReason" && right) st.kinds.add(flat(right.label).split(/[,:]/)[0]);
+        if (skill.id === "carCountAt" || skill.id === "carCountAgain") {
+          const m = flat(q.prompt).match(/meet at T(\d+), how many/);
+          if (m && sc.items.some(it => cars(it.t, Number(m[1]), sc.c) === 2)) st.twoCar++;
+        }
+      }
+      if (problems.length) { st.bad++; if (!st.firstBad) st.firstBad = problems.join(", ") + ": " + noTags(q.prompt).slice(0, 140); }
+    }
+    stat[skill.id] = st;
+    tick(st.bad === 0, `f11 card ${pos + 1} (${skill.id}): words, units, refrain, the picture, the counts (${N} rolls)`);
+    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(14)} one road ${String(st.one).padStart(3)} · two roads ${String(st.two).padStart(3)} · loan ${String(st.loan).padStart(3)} · saving ${String(st.saving).padStart(3)} · a deposit on the day of A ${st.shared}`
+      + (st.kinds.size ? ` · ${[...st.kinds].join(" / ")}` : "") + (skill.id.startsWith("carCount") ? ` · a two-car trip on ${st.twoCar}` : "")
+      + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
+  });
+  const S = id => stat[id] || {};
+  ["fewestCars", "fewestAgain"].forEach(id => {
+    tick(["colour+stands", "colour only", "two on the end day"].every(k => S(id).kinds.has(k)) && !S(id).kinds.has("other"),
+      `f11.${id}: the best day is each of the three kinds, the two rules of thumb (${[...S(id).kinds].join(" / ")})`);
+    tick(S(id).endOpt === N && [...S(id).nOpts].every(k => k === 3 || k === 4), `f11.${id}: 3 or 4 options, the end day always among them`);
+  });
+  tick(["a payment", "the total", "nothing"].every(k => S("whereStands").kinds.has(k)), `f11.whereStands: it asks about a payment, the total and an empty day (${[...S("whereStands").kinds].join(" / ")})`);
+  tick(["An amount already stands there", "The road changes colour there", "Both"].every(k => S("bestReason").kinds.has(k)), `f11.bestReason: all three reasons occur (${[...S("bestReason").kinds].join(" / ")})`);
+  tick(S("carCountAt").twoCar > 0 && S("carCountAt").twoCar < N, `f11.carCountAt: a two-car trip on some rolls, not all (${S("carCountAt").twoCar}/${N})`);
+  tick(S("carCountAgain").twoCar === N, "f11.carCountAgain: a two-car trip on every roll");
+  tick(S("colourChange").one === 0, "f11.colourChange: always two roads");
+  tick(["whereStands", "carCountAt", "sameAnswer"].every(id => S(id).loan > 0 && S(id).saving > 0 && S(id).one > 0 && S(id).two > 0), "f11: loans and saving, one road and two, all occur");
+  const sharedAll = ORDER.reduce((a, id) => a + S(id).shared, 0), sleadAll = ORDER.reduce((a, id) => a + S(id).sleads, 0);
+  tick(sharedAll > 0 && sharedAll === sleadAll, `f11: a deposit on the day of A occurs, and every one draws its stack leader (${sleadAll} of ${sharedAll})`);
+  /* the DOM check behind "a number never leaves its unit", f12's method: every text a learner reads on a card (the story,
+     the options and their notes, the hint, the answer, the worked lines) is formatted as the app does it, laid out at every
+     width from 200 to 360 px, and each number's last glyph must sit on ONE line with its unit's first glyph ("2 cars",
+     "8% p.a.", "R8 000 at T3") and with an operator beside it ("1 + 0 + 1 = 2") */
+  const flines2 = [];
+  {
+    const fmt = x => formulaHtml(fracHtml(xbarHtml(x)));
+    const PAIRS = [/(\d%?)[\s ]+(years?|times?|p\.a\.|decimal|months?|cars?|at T)/g, /(\d)[\s ]+([+=])/g, /([+=])[\s ]+(\d)/g];
+    const glyph = (tn, i) => { const r = document.createRange(); r.setStart(tn, i); r.setEnd(tn, i + 1); return r.getClientRects()[0]; };
+    let pairs = 0, renders = 0; const split = [];
+    def.skills.forEach(skill => {
+      for (let i = 0; i < 6; i++) {
+        const q = skill.gen();
+        const texts = [q.prompt, q.hint, q.answerLabel, ...(q.options || []).flatMap(o => [o.label, o.note]), ...q.solution.flatMap(x => [x.s, x.r])].filter(Boolean).map(String);
+        texts.forEach(txt => {
+          if (!PAIRS.some(re => { re.lastIndex = 0; return re.test(noTags(txt)); })) return;
+          for (let w = 200; w <= 360; w += 10) {
+            measure.innerHTML = `<div class="q-prompt" style="width:${w}px">${fmt(txt)}</div>`;
+            renders++;
+            const nodes = []; let full = "";
+            const tw = document.createTreeWalker(measure, NodeFilter.SHOW_TEXT);
+            for (let tn = tw.nextNode(); tn; tn = tw.nextNode()) { nodes.push({ tn, at: full.length }); full += tn.data; }
+            const at = k => { for (let j = nodes.length - 1; j >= 0; j--) if (nodes[j].at <= k) return [nodes[j].tn, k - nodes[j].at]; return null; };
+            PAIRS.forEach(re => {
+              re.lastIndex = 0;
+              for (const m of full.matchAll(re)) {
+                pairs++;
+                const A = at(m.index + m[1].length - 1), B = at(m.index + m[0].length - m[2].length);
+                const ra = A && glyph(...A), rb = B && glyph(...B);
+                if (ra && rb && Math.abs(ra.bottom - rb.bottom) > 4) split.push(`${skill.id} at ${w} px: "${full.slice(Math.max(0, m.index - 10), m.index + m[0].length)}"`);
+              }
+            });
+          }
+        });
+      }
+    });
+    measure.innerHTML = "";
+    tick(pairs > 0 && split.length === 0, `f11: a number never leaves its unit or its operator at a line end (${pairs} pairs in ${renders} renders, widths 200–360 px)${split.length ? ": " + split.slice(0, 3).join("; ") : ""}`);
+    flines2.push(`${split.length === 0 ? "✓" : "✗"} number and unit (or operator) on one line: ${pairs} pairs in ${renders} renders (200–360 px), ${split.length} split${split.length ? ": " + split[0] : ""}`);
+  }
+  const sample = def.skills.map((x, pos) => {
+    const q = x.gen(), ok = q.type === "yesno" ? (q.yes ? "Yes" : "No") : noTags(q.options.find(o => o.correct).label);
+    return `  card ${pos + 1}: ${flat(q.prompt)}\n          → ${ok}${q.options && q.options[0].note != null ? `   (${q.options.map(o => `${noTags(o.label)}: ${flat(o.note)}`).join(", ")})` : ""}`;
+  }).join("\n");
+  document.getElementById("f11").textContent = flines.join("\n") + "\n" + flines2.join("\n") + "\n\none roll of each card, in dealing order (the right answer):\n" + sample;
 }
 
 /* ---------- 8) f12: the round's shape, words, fade and rulings ---------- */
