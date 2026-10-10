@@ -46,6 +46,17 @@
    the working is counting cars. The first "car" of every solution says
    what a car is, and every solution ends on the refrain.
 
+   REVIEW 1 (2026-10-10, phone width). The per-amount breakdown ("R6 000:
+   1 car · A: 2 cars") and the car rule used to sit in the narrow italic
+   aside and wrapped with a "·" dangling at line ends. Each is now a line
+   of its own in the main step text, a UNIT LIST (css .ulist): every
+   "R6 000: 1 car" is one unbreakable unit that draws its own "·" in
+   front, and the "·" of a unit that starts a line is clipped away, so no
+   line starts or ends with one. A day's own line keeps a short aside
+   ("count per amount"); a sum ("0 + 1 + 1 = 2") is one unit on a line of
+   its own. The "how many cars" hint names the colour change only when the
+   road has one.
+
    VOCABULARY: "the total", "meeting day", "car", "road", "deposit" /
    "repayment". Never "lump sum", "accumulated amount", LHS/RHS.
    Pronouns only, no first names (public repo).
@@ -85,6 +96,12 @@ const cars = k => nw(carsWord(k));
 /* f10 review 1: the first time a solution says "car", it says what one is */
 const CAR_IS = `A car is the ${nw("(1 + i)^n")} bracket that moves an amount to the meeting day.`;
 const CAPTION = "T in years";
+/* review 1: a UNIT LIST, a line of its own in a worked step (css .ulist).
+   Each part is one unbreakable unit with its own "·" in front (drawn by the
+   css, inside the unit; the one that starts a line is clipped away). A unit
+   ends on a space, so the text still reads "R6 000: 1 car A: 2 cars" when
+   copied, and nothing between the units can be broken off on its own. */
+const unitList = parts => `<div class="ulist"><div>${parts.map(p => nw(`${p} `)).join("")}</div></div>`;
 
 /* ---------- the scene: a story, its roads, its payments, the total ---------- */
 
@@ -223,16 +240,23 @@ function story(sc) {
     ? `${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.`
     : `${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.`;
 }
-const RULE_TWO = "already there: no car · one colour: 1 car · across the colour change: 2 cars";
-const RULE_ONE = "already there: no car · it has to move: 1 car (one road, one colour)";
-const ruleOf = sc => (sc.c == null ? RULE_ONE : RULE_TWO).replace(/(\d) (cars?)/g, (m, k, u) => nw(`${k}${NB}${u}`));
-const carLine = sc => ({ s: CAR_IS, r: ruleOf(sc) });
+const RULE_TWO = ["already there: no car", `one colour: ${carsWord(1)}`, `across the colour change: ${carsWord(2)}`];
+const RULE_ONE = ["already there: no car", `it has to move: ${carsWord(1)}`, "one road, one colour"];
+/* review 1: what a car is, then the rule as a unit list on a line of its own (two steps) */
+const carLine = sc => [{ s: CAR_IS }, { s: unitList(sc.c == null ? RULE_ONE : RULE_TWO) }];
 
 /* "R5 000 at T1", "A at T6": who stands where, ONE unit */
 const whoAt = it => (it.total ? `the total ${nw(`${it.role} at T${it.t}`)}` : nw(`${rands(it.v)} at T${it.t}`));
-/* the per-day breakdown, one unit per amount: "R5 000: 2 · R3 000: 0 · A: 1" */
-const breakdown = (sc, D) => itemsOf(sc).map(it => nw(`${it.total ? it.role : rands(it.v)}: ${carsFor(it.t, D, sc.c)}`)).join(" · ");
-const dayLine = (sc, D, tag = "") => ({ s: `Meet at T${D}${tag}: ${cars(countAt(sc, D))}`, r: breakdown(sc, D) });
+/* the per-day breakdown, one unit per amount: "R5 000: 2 cars", "R3 000: no car", "A: 1 car" */
+const breakdown = (sc, D) => itemsOf(sc).map(it => {
+  const k = carsFor(it.t, D, sc.c);
+  return `${it.total ? it.role : rands(it.v)}: ${k ? carsWord(k) : "no car"}`;
+});
+/* review 1: a day's count with a short aside, then its breakdown as a unit list (two steps) */
+const dayLine = (sc, D, tag = "") => [
+  { s: `Meet at T${D}${tag}: ${cars(countAt(sc, D))}`, r: "count per amount" },
+  { s: unitList(breakdown(sc, D)) },
+];
 /* the road an amount drives on when it stays on one colour */
 function roadOf(sc, t, D) {
   if (sc.c == null) return sc.roads[0];
@@ -283,8 +307,8 @@ function fewestCars() {
       : `Count the cars for each day. Already there: none. One colour: ${cars(1)}. Across the colour change: ${cars(2)}. The total counts too.`,
     answerLabel: `T${b.D}: ${cars(b.min)}, the fewest`,
     solution: [
-      carLine(sc),
-      ...opts.map(D => dayLine(sc, D)),
+      ...carLine(sc),
+      ...opts.flatMap(D => dayLine(sc, D)),
       { s: `T${b.D} needs the fewest: ${cars(b.min)}`, r: WHY[b.kind]() },
       { s: REFRAIN },
     ],
@@ -319,12 +343,16 @@ function carCountAt({ cross = false } = {}) {
     prompt: `${story(sc)} If we meet at T${D}, how many cars are needed altogether?`,
     options: mcNum(k, [moved, items.length, k + 1, k - 1, k + 2]),
     graph: graphOf(sc), graphCap: CAPTION,
-    hint: `Go amount by amount, the total too. Already on T${D}: no car. One colour: ${cars(1)}. Across the colour change: ${cars(2)}.`,
+    /* review 1: a one-colour road has no colour change to cross */
+    hint: sc.c == null
+      ? `Go amount by amount, the total too. Already on T${D}: no car. One colour, so one car for each amount that has to move.`
+      : `Go amount by amount, the total too. Already on T${D}: no car. One colour: ${cars(1)}. Across the colour change: ${cars(2)}.`,
     answerLabel: `${cars(k)} if we meet at T${D}`,
     solution: [
-      carLine(sc),
+      ...carLine(sc),
       ...lines,
-      { s: `Meet at T${D}: ${cars(k)} altogether`, r: nw(`${parts.join(" + ")} = ${k}`) },
+      { s: `Meet at T${D}: ${cars(k)} altogether`, r: "add them up" },
+      { s: nw(`${parts.join(" + ")} = ${k}`) },
       { s: REFRAIN },
     ],
   };
@@ -358,7 +386,7 @@ function whereStands() {
       solution: [
         { s: CAR_IS, r: "an amount already on the meeting day needs no car" },
         { s: `On T${D}: ${stands}`, r: "read straight up from the T label" },
-        dayLine(sc, D),
+        ...dayLine(sc, D),
         { s: REFRAIN },
       ],
     });
@@ -383,7 +411,8 @@ function colourChange() {
     solution: [
       { s: CAR_IS, r: "an amount that crosses the colour change needs two cars, one per road" },
       { s: `The road changes colour at T${c}`, r: `the ${roadU(r0.r)} ends there and the ${roadU(r1.r)} starts` },
-      { s: `Meet at T${c}: ${cars(k)}`, r: `${breakdown(sc, c)}; no amount crosses the change, so none needs two cars` },
+      { s: `Meet at T${c}: ${cars(k)}`, r: "no amount crosses the change, so none needs two cars" },
+      { s: unitList(breakdown(sc, c)) },
       { s: REFRAIN },
     ],
   };
@@ -407,9 +436,9 @@ function sameAnswer() {
     hint: "Another meeting day changes the brackets you type, not the value of the total.",
     answerLabel: `No: ${R} comes out the same; only the typing changes`,
     solution: [
-      carLine(sc),
-      dayLine(sc, b),
-      dayLine(sc, a),
+      ...carLine(sc),
+      ...dayLine(sc, b),
+      ...dayLine(sc, a),
       { s: `The same ${R} either way: every amount moves at the same rates`, r: ka === kb ? `${cars(ka)} either way` : `T${ka < kb ? a : b} has fewer cars: less to type` },
       { s: REFRAIN },
     ],
@@ -453,10 +482,10 @@ function bestReason() {
       hint: `Look at T${D}. Does an amount stand there? Does the road change colour there?`,
       answerLabel: REASONS[kind],
       solution: [
-        carLine(sc),
+        ...carLine(sc),
         { s: `On T${D}: ${here}`, r: sc.c === D ? `and the road changes colour at T${D}` : sc.c == null ? "one road: the colour never changes" : `the road changes colour at T${sc.c}, not here` },
-        dayLine(sc, D),
-        dayLine(sc, n, " (the end)"),
+        ...dayLine(sc, D),
+        ...dayLine(sc, n, " (the end)"),
         { s: `T${D} needs ${cars(min)}, ${ties === 1 ? "the fewest of any day" : "as few as any day"}`,
           r: kind === "stands" ? "an amount already stands there: it needs no car"
             : kind === "colour" ? "nobody crosses the colour change on the way there"

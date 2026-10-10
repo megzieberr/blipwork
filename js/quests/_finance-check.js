@@ -29,7 +29,7 @@ import {
   simpleAmount, depositAmount, balanceAfterDeposit, effFromNom,
 } from "../finlib.js";
 import { fmtComma } from "../check.js";
-import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN, RING_MIN_PX } from "../engine/timeline-graph.js";
+import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN, RING_MIN_PX, LABEL_MIN_PX } from "../engine/timeline-graph.js";
 
 const C = v => fmtComma(v);
 export const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
@@ -137,6 +137,16 @@ export function labelFitIssues(spec, host) {
   for (let i = 0; i < boxes.length; i++)
     for (let j = i + 1; j < boxes.length; j++)
       if (hits(boxes[i].bb, boxes[j].bb, 0.5)) out.push(`amounts "${boxes[i].text}" and "${boxes[j].text}" overlap`);
+  /* f11 review 1 (2026-10-10): EVERY timeline, not just f8's tap boxes: any two
+     drawn amounts keep LABEL_MIN_PX of air at a 360-px phone (the ring's own
+     air is measured below, against RING_MIN_PX) */
+  for (let i = 0; i < boxes.length; i++)
+    for (let j = i + 1; j < boxes.length; j++) {
+      if (boxes[i].lb.ring || boxes[j].lb.ring) continue;
+      const a = boxes[i].bb, b = boxes[j].bb;
+      const air = Math.max(a.x - (b.x + b.width), b.x - (a.x + a.width), a.y - (b.y + b.height), b.y - (a.y + a.height));
+      if (air * PHONE_360 < LABEL_MIN_PX - 0.01) out.push(`amounts "${boxes[i].text}" and "${boxes[j].text}" are ${Math.round(air * PHONE_360 * 10) / 10} px apart at 360 (under ${LABEL_MIN_PX})`);
+    }
   /* f12 review 1 (2026-10-10): the total's ring, its REAL box with the stroke
      (measured above), keeps RING_MIN_PX of air at a 360-px phone from every
      other drawn label: each amount, a role letter on another day (its own
@@ -205,7 +215,9 @@ export function labelFitIssues(spec, host) {
      words, its pole or a road label touching an amount, a role letter, a
      T label or each other (the pennant hangs on its pole by design) */
   const roadSpec = Array.isArray(spec.roads) && spec.roads.length;
-  if (spec.meet != null || roadSpec) {
+  /* f11 review 1: a staggered amount draws a leader on ANY timeline, so the
+     leader checks below run whenever a leader is drawn */
+  if (spec.meet != null || roadSpec || g.leaders.length || (g.stackLeaders || []).length) {
     const bbOf = el => { try { const b = el.getBBox(); return { x: b.x, y: b.y, width: b.width, height: b.height }; } catch { return null; } };
     const all = (sel, what) => [...svg.querySelectorAll(sel)].map(el => ({ what: `${what} "${el.textContent}"`, bb: bbOf(el) })).filter(o => o.bb);
     const fixed = [...boxes.map(b => ({ what: `amount "${b.text}"`, bb: b.bb })), ...all("text.tl-tlab", "T label"), ...all("text.tl-role", "role letter")];
@@ -250,10 +262,16 @@ export function labelFitIssues(spec, host) {
        role letter, a T label, a road rate, the flag, its words or its pole */
     const sleads = [...svg.querySelectorAll("polyline.tl-slead")];
     if (sleads.length !== (g.stackLeaders || []).length) out.push(`${sleads.length} stack leaders drawn for ${(g.stackLeaders || []).length} stacked amounts`);
-    sleads.forEach(pl => {
+    sleads.forEach((pl, k) => {
       const pts = String(pl.getAttribute("points")).trim().split(/\s+/).map(p => p.split(",").map(Number));
       const end = pts[pts.length - 1];
       if (pts.length < 2 || Math.abs(end[0] - g.xAt(Math.round((end[0] - g.xAt(0)) / gap))) > 0.5 || !(end[1] < g.cy - 6)) out.push("a stacked amount's leader does not end on a tick");
+      /* f11 review 1: it drops straight from the middle of its own amount's
+         drawn box (one bend at most), and that amount keeps RING_MIN_PX of air
+         at 360 from a ring under it (measured with the ring above) */
+      const sl = (g.stackLeaders || [])[k], own = sl && boxes.find(b => b.lb === g.nodes[sl.t].labels[sl.j]);
+      if (own && (Math.abs(pts[0][0] - (own.bb.x + own.bb.width / 2)) > 1 || pts.length > 3 || (pts.length > 2 && Math.abs(pts[1][0] - pts[0][0]) > 0.5)))
+        out.push(`the leader of "${own.text}" does not drop straight from its middle`);
       for (let i = 1; i < pts.length; i++) {
         const [a, c] = [pts[i - 1], pts[i]];
         const b = { x: Math.min(a[0], c[0]) - 0.5, y: Math.min(a[1], c[1]), width: Math.abs(a[0] - c[0]) + 1, height: Math.abs(a[1] - c[1]) };

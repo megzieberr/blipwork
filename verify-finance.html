@@ -199,6 +199,10 @@ const ENGINE = [
      line (n = 4, 2 + 2 roads) as a loan, the "?" ring on T0 beside a repayment on T1 */
   { title: "f11: n = 8, no flag, two roads, a deposit on the day of A with its stack leader", spec: { type: "timeline", n: 8, leaders: true, stackLeaders: true, nodes: [{ t: 8, label: "?", role: "A" }, { t: 1, amount: 10000, dp: 0 }, { t: 3, amount: 10000, dp: 0 }, { t: 8, amount: 8000, dp: 0 }], roads: [{ from: 0, to: 3, rate: "15% p.a.", k: 12 }, { from: 3, to: 8, rate: "14% p.a.", k: 2 }], accent: ACC } },
   { title: "f11: n = 4 loan, no flag, 2 + 2 roads, a repayment on T1 beside the ring", spec: { type: "timeline", n: 4, leaders: true, stackLeaders: true, nodes: [{ t: 0, label: "?", role: "P" }, { t: 1, amount: 7500, dp: 0 }, { t: 2, amount: 6000, dp: 0 }, { t: 4, amount: 5000, dp: 0 }], roads: [{ from: 0, to: 2, rate: "15% p.a.", k: 4 }, { from: 2, to: 4, rate: "14% p.a.", k: 1 }], accent: ACC } },
+  /* f11 review 1 (2026-10-10): the phone check's 7-year line, "R3 000" on T5 next to "R4 000" on T6 (3 px apart at 360
+     before): the pair staggers, one amount a row up with its own leader; the deposit on the day of A sits beside the
+     ring, its leader straight down from its middle with one bend */
+  { title: "f11 review 1: R3 000 next to R4 000 at n = 7, staggered; a deposit on the day of A beside the ring", spec: { type: "timeline", n: 7, leaders: true, stackLeaders: true, nodes: [{ t: 7, label: "?", role: "A" }, { t: 5, amount: 3000, dp: 0 }, { t: 6, amount: 4000, dp: 0 }, { t: 7, amount: 2000, dp: 0 }], roads: [{ from: 0, to: 3, rate: "8% p.a.", k: 4 }, { from: 3, to: 7, rate: "10% p.a.", k: 12 }], accent: ACC } },
   { title: "f10: the known loan R9 999,99 with its P at T0 (the interest card)", spec: { type: "timeline", n: 4, leaders: true, nodes: [{ t: 0, amount: 9999.99, dp: 2, role: "P" }, { t: 1, amount: 9000, dp: 0 }, { t: 4, amount: 7500, dp: 0 }], roads: [{ from: 0, to: 4, rate: "15% p.a.", k: 2 }], accent: ACC } },
 ];
 const eg = document.getElementById("engine");
@@ -635,6 +639,13 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       if (d) problems.push(d);
       const sc = f11Scene(q);
       if (!g || g.meet != null) problems.push("no timeline, or a meeting-day flag on it (the learner picks the day)");
+      /* review 1: a breakdown or a rule is a unit list (one unbreakable unit per part, each drawing its own "·"),
+         never "·" typed into the text; no aside is one word; a one-colour road's hint names no colour change */
+      if (/·/.test(t)) problems.push("a \"·\" typed into the text (a unit list draws its own)");
+      if ((q.solution || []).some(x => /class="ulist"/.test(String(x.s)) && !/^<div class="ulist"><div>(?:<span class="nowrap">[^<]+ <\/span>)+<\/div><\/div>$/.test(String(x.s))))
+        problems.push("a unit list that is not one unit per part");
+      if ((q.solution || []).some(x => x.r != null && flat(x.r).trim().split(/\s+/).length < 2)) problems.push("a one-word aside");
+      if (sc && sc.c == null && /colour change/.test(flat(q.hint))) problems.push("the hint names a colour change on a one-colour road");
       if (sc) {
         if (sc.c == null) st.one++; else st.two++;
         if (sc.role === "P") st.loan++; else st.saving++;
@@ -722,6 +733,45 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     measure.innerHTML = "";
     tick(pairs > 0 && split.length === 0, `f11: a number never leaves its unit or its operator at a line end (${pairs} pairs in ${renders} renders, widths 200–360 px)${split.length ? ": " + split.slice(0, 3).join("; ") : ""}`);
     flines2.push(`${split.length === 0 ? "✓" : "✗"} number and unit (or operator) on one line: ${pairs} pairs in ${renders} renders (200–360 px), ${split.length} split${split.length ? ": " + split[0] : ""}`);
+  }
+  /* review 1: the 7-year line staggers its close pair, and the deposit on the day of A sits beside the ring */
+  {
+    const g = computeTimeline(ENGINE.find(e => e.title.startsWith("f11 review 1")).spec);
+    const up = g.labels.filter(lb => lb.row > lb.j), sl = g.stackLeaders[0], top = g.nodes[7].labels[1];
+    tick(up.length === 1 && [5, 6].includes(up[0].t) && g.leaders.some(l => l.t === up[0].t),
+      `f11 review 1: "R3 000" and "R4 000" on neighbouring days stagger, one a row up with its leader (${up.map(lb => `"${lb.text}" on T${lb.t}`).join(", ")})`);
+    tick(!!sl && Math.abs(sl.pts[0][0] - top.x) < 0.01 && sl.pts.length === 3 && Math.abs(sl.pts[1][0] - sl.pts[0][0]) < 0.01 && top.x < g.nodes[7].x,
+      "f11 review 1: the deposit on the day of A sits beside the ring, its leader straight down from its middle, one bend");
+  }
+  /* review 1, the DOM check behind "no line starts or ends with a ·": every unit list a card shows is laid out as a
+     worked step at every width from 200 to 360 px; on each line the first unit's "·" is clipped (its box starts left of
+     the list) and every other unit's "·" shows (its box starts inside), and no unit runs past the list's right edge */
+  {
+    const fmt = x => formulaHtml(fracHtml(xbarHtml(x)));
+    let lists = 0, renders = 0, units = 0; const bad = [];
+    def.skills.forEach(skill => {
+      for (let i = 0; i < 4; i++) {
+        const q = skill.gen();
+        (q.solution || []).filter(x => /class="ulist"/.test(String(x.s))).forEach(x => {
+          lists++;
+          for (let w = 200; w <= 360; w += 20) {
+            measure.innerHTML = `<div class="sol" style="width:${w}px"><div class="sol-step"><span class="s">${fmt(x.s)}</span></div></div>`;
+            renders++;
+            const ul = measure.querySelector(".ulist"), box = ul.getBoundingClientRect();
+            const us = [...ul.querySelectorAll(".nowrap")].map(el => el.getBoundingClientRect());
+            units += us.length;
+            us.forEach((r, k) => {
+              const first = k === 0 || Math.abs(r.top - us[k - 1].top) > 2;
+              if (first ? r.left > box.left - 1 : r.left < box.left - 0.5) bad.push(`${skill.id} at ${w} px: a line ${first ? "starts" : "ends"} with a "·"`);
+              if (r.right > box.right + 0.5) bad.push(`${skill.id} at ${w} px: a unit runs past the edge`);
+            });
+          }
+        });
+      }
+    });
+    measure.innerHTML = "";
+    tick(lists > 0 && bad.length === 0, `f11 review 1: no line of a unit list starts or ends with a "·" (${lists} lists, ${units} units in ${renders} renders, 200–360 px)${bad.length ? ": " + bad.slice(0, 3).join("; ") : ""}`);
+    flines2.push(`${bad.length === 0 ? "✓" : "✗"} unit lists: ${lists} lists in ${renders} renders (200–360 px), ${bad.length} lines starting or ending with a "·"${bad.length ? ": " + bad[0] : ""}`);
   }
   const sample = def.skills.map((x, pos) => {
     const q = x.gen(), ok = q.type === "yesno" ? (q.yes ? "Yes" : "No") : noTags(q.options.find(o => o.correct).label);

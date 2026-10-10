@@ -1710,6 +1710,14 @@ sup.sf-exp .sfrac,.opt sup.sf-exp .sfrac,.q-prompt sup.sf-exp .sfrac{font-size:1
    screen wraps INSIDE itself, at a space — never off the edge. That is
    her rule verbatim: move whole, break only when wider than the screen. */
 .fml .nowrap{display:inline-block;max-width:100%;white-space:normal;vertical-align:baseline}
+/* A UNIT LIST (f11 review 1, 2026-10-10): a worked step's line of unbreakable units, "R6 000: 1 car", "A: 2 cars".
+   Each unit is an inline-block (a line may break only BETWEEN units) that draws its own "·" in front, inside the unit.
+   The list is pulled one separator-width left and clipped, so the "·" of the unit that starts a line is hidden: no
+   line ever starts or ends with a "·". It sits a little in, right under the line it breaks down. */
+.ulist{overflow:hidden;margin:-3px 0 0 .7em}
+.ulist>div{margin-left:-1em}
+.ulist .nowrap{display:inline-block;white-space:nowrap}
+.ulist .nowrap::before{content:"·";display:inline-block;width:1em;text-align:center;color:var(--muted)}
 .q-oah{margin:0 0 10px}
 .q-oah table{margin:0 auto}
 /* double tick (round 8): two colours of ✓ on one cross, a numbered pass prompt */

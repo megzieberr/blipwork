@@ -113,6 +113,24 @@
    and the words "meeting day". A neighbour that cannot move far enough
    fails verify, so a quest that rolls its scenes rolls again. A spec with
    no ring that close computes byte-for-byte what it did before.
+
+   F11 REVIEW 1 (2026-10-10). Two things from a phone-width check.
+   (a) A payment stacked above the "?" ring (spec.stackLeaders) read as a
+   caption of the ring: its leader started left of its middle and ran
+   close by the ring. The stacked amount now sits BESIDE the stack, its
+   centre right above its own leader, which drops straight down from the
+   middle of its bottom edge, past the ring and the role letter, and bends
+   once, under them, into the top of its own tick.
+   (b) Amounts on neighbouring days stood 3 px apart on 7-year lines. Every
+   two amount labels now keep LABEL_MIN_PX of air at a 360-px phone (the
+   rule the tap boxes already had). The estimate allows for Sora's wider
+   bold digits (SORA_SIDE per glyph on each side); a pair still too close on
+   one row is STAGGERED: one amount (a lone one without a role letter, the
+   one whose move parts the most close pairs) goes up a row, the frame grows
+   by STACK at the top the way a stack does, and a raised amount always
+   draws a leader to its own tick. verifyTimeline asserts the estimate, and
+   _finance-check's labelFitIssues measures the drawn boxes. Apart from (a),
+   a spec with no pair that close computes byte-for-byte what it did before.
    ============================================================ */
 import { rand } from "../finlib.js";
 
@@ -159,6 +177,20 @@ const POLE_AIR = 7;          // the flag pole's air above a stacked amount on th
    verify asserts that estimate, so the real ink keeps its 6 px */
 export const RING_MIN_PX = 6;
 const RING_AIR = 10;         // viewBox units: 6.6 for the 6 px, plus 3 for Sora's wider digits
+/* f11 review 1: the air between ANY two amount labels, in phone pixels at 360
+   and in viewBox units. Sora's bold amounts measured in the app 2026-10-10
+   ran up to 0.76 units per glyph wider than the GLYPH estimate ("R400 000":
+   +6.0; "R6 000": +3.0), so each side of a label is padded SORA_SIDE per glyph */
+export const LABEL_MIN_PX = 6;
+const LABEL_AIR = 6.6;
+const SORA_SIDE = 0.38;
+const soraPad = lb => (lb.ring ? 0 : String(lb.text).length * SORA_SIDE);
+/* the estimated air between two amount labels, Sora's wider digits allowed for */
+export function labelAir(a, b) {
+  const A = labelInk(a), B = labelInk(b), pa = soraPad(a), pb = soraPad(b);
+  return Math.max(B.x0 - pb - A.x1 - pa, A.x0 - pa - B.x1 - pb, A.y0 - B.y1, B.y0 - A.y1);
+}
+const boxAir = (A, B) => Math.max(A.x0 - B.x1, B.x0 - A.x1, A.y0 - B.y1, B.y0 - A.y1);
 
 function svgWrap(W, H, accent, inner, cls = "") {
   const style = accent ? ` style="--accent:${accent}"` : "";
@@ -167,24 +199,11 @@ function svgWrap(W, H, accent, inner, cls = "") {
 const line = (x1, y1, x2, y2, cls) => `<line class="${cls}" x1="${N(x1)}" y1="${N(y1)}" x2="${N(x2)}" y2="${N(y2)}"/>`;
 const text = (x, y, s, cls, anchor = "middle") => `<text class="${cls}" x="${N(x)}" y="${N(y)}" text-anchor="${anchor}">${s}</text>`;
 
-/* how many amount labels the busiest node carries */
-function maxStack(spec) {
-  const per = new Map();
-  (spec.nodes || []).forEach(d => {
-    if (d.label == null && d.amount == null) return;
-    if (!(d.t >= 0 && d.t <= spec.n)) return;
-    per.set(d.t, (per.get(d.t) || 0) + 1);
-  });
-  return Math.max(1, ...per.values());
-}
-
 export function computeTimeline(spec) {
   const n = spec.n;
-  const extra = (maxStack(spec) - 1) * STACK;
   const roadLane = Array.isArray(spec.roads) && spec.roads.length ? ROAD_LANE : 0;   // f9: 0 without roads
-  const W = spec.w || 360, H = (spec.h || 132) + extra + roadLane;
+  const W = spec.w || 360;
   const L = 26, R = 26;
-  const cy = H - 46 - roadLane;              // axis baseline, leaving room for T-labels below
   const span = (W - L - R);
   const xAt = t => L + (n === 0 ? 0 : (t / n) * span);
   const gap = n > 0 ? span / n : span;
@@ -206,7 +225,10 @@ export function computeTimeline(spec) {
     node.role = node.role || d.role || "";
     if (amountLabel != null) node.labels.push({ d, text: String(amountLabel) });
   });
-  // one entry per drawn amount label, in draw order (node by node, bottom up)
+  // one entry per drawn amount label, in draw order (node by node, bottom up).
+  // f11 review 1: each label has a ROW (0 = the old height, a stack's j-th
+  // label row j; a staggered amount goes up a row). Its y is first measured
+  // from the axis (as if cy = 0) and moved down once the frame is known.
   const labels = [];
   nodes.forEach(node => {
     node.labels = node.labels.map(({ d, text: s }, j, arr) => {
@@ -218,17 +240,30 @@ export function computeTimeline(spec) {
       const lb = {
         id: d.id != null ? String(d.id) : `${node.t}.${j}`,
         t: node.t, j, levels: arr.length, nodeX: node.x,
-        x, y: cy - 38 - j * STACK, w, text: s, amount: d.amount, role: d.role || "", ring,
+        x, y: -38 - j * STACK, w, text: s, amount: d.amount, role: d.role || "", ring,
         out: !!d.out && d.label == null && d.amount != null,
+        row: j, bx: x,                                  // its row, and its x before any nudge
       };
       labels.push(lb);
       return lb;
     });
   });
+  // f11 review 1 (spec.stackLeaders): an amount stacked above another sits
+  // BESIDE everything under it (on the side facing the middle of the line),
+  // its centre right above the leader that drops past them to its tick
+  if (spec.stackLeaders) nodes.filter(nd => nd.labels.length > 1).forEach(nd => {
+    const side = nd.x > W / 2 ? -1 : 1;
+    nd.labels.slice(1).forEach(lb => {
+      const under = nd.labels.slice(0, lb.j).map(labelInk);
+      const reach = Math.max(nd.role ? ROLE_W / 2 : 0, ...under.map(b => (side < 0 ? nd.x - b.x0 : b.x1 - nd.x)));
+      const half = lb.w / 2;
+      lb.x = lb.bx = Math.max(half + 2, Math.min(W - half - 2, nd.x + side * (reach + SLEAD_AIR)));
+    });
+  });
   // f12 review 1: the total's ring keeps RING_AIR from every amount on another
   // day. A neighbour in the ring's row moves sideways, away from the ring,
   // just far enough (clamped into the frame like every label)
-  labels.filter(rg => rg.ring).forEach(rg => {
+  const nudgeRings = () => labels.filter(rg => rg.ring).forEach(rg => {
     const ri = labelInk(rg);
     labels.forEach(lb => {
       if (lb.t === rg.t) return;
@@ -240,6 +275,71 @@ export function computeTimeline(spec) {
       lb.x = Math.max(half + 2, Math.min(W - half - 2, lb.x + side * (RING_AIR - air)));
     });
   });
+  // f11 review 1: two amounts on one row closer than LABEL_AIR (Sora allowed
+  // for) are STAGGERED. One of them (lone on its day, no role letter under it;
+  // the one whose move leaves the fewest close pairs, then the lower row, then
+  // the right-hand one) goes up to the lowest row where its box keeps the air
+  // from every other amount, its leader (straight down to its own tick)
+  // crosses no amount, and it meets no other leader. A pair nothing can part
+  // is left as it is, and verify says so.
+  const place = lb => { lb.y = -38 - lb.row * STACK; };
+  const movable = lb => lb.levels === 1 && !lb.ring && !nodes[lb.t].role;
+  const tickTop = -6 - LEAD_GAP;
+  const leadBox = lb => ({ x0: Math.min(lb.x, lb.nodeX) - 1.5, x1: Math.max(lb.x, lb.nodeX) + 1.5, y0: labelInk(lb).y1, y1: tickTop });
+  const tooClose = (a, b) => (a.ring || b.ring ? boxAir(labelInk(a), labelInk(b)) < RING_AIR - 0.01 : labelAir(a, b) < LABEL_AIR - 0.01);
+  function clearAt(lb) {
+    const me = labelInk(lb), mine = leadBox(lb);
+    for (const o of labels) {
+      if (o === lb || o.t === lb.t) continue;
+      if (tooClose(lb, o) || overlaps(mine, labelInk(o))) return false;
+      if (o.row > o.j && overlaps(leadBox(o), me)) return false;                         // another raised amount's leader
+      if (spec.stackLeaders && o.j > 0 && overlaps({ x0: o.x - 1.5, x1: o.x + 1.5, y0: labelInk(o).y1, y1: tickTop }, me)) return false;   // a stacked amount's leader
+    }
+    return true;
+  }
+  function lowestRow(lb) {
+    const keep = { row: lb.row, x: lb.x };
+    let found = null;
+    lb.x = lb.bx;
+    for (let r = keep.row + 1; r <= keep.row + 3 && found == null; r++) { lb.row = r; place(lb); if (clearAt(lb)) found = r; }
+    lb.row = keep.row; lb.x = keep.x; place(lb);
+    return found;
+  }
+  const stuck = new Set();
+  const closePairs = () => {
+    const out = [];
+    for (let i = 0; i < labels.length; i++)
+      for (let k = i + 1; k < labels.length; k++) {
+        const a = labels[i], b = labels[k];
+        if (a.t !== b.t && !a.ring && !b.ring && a.row === b.row && !stuck.has(`${i}|${k}`) && labelAir(a, b) < LABEL_AIR - 0.01) out.push([i, k]);
+      }
+    return out;
+  };
+  for (let pass = 0; pass < 16; pass++) {
+    labels.forEach(lb => { lb.x = lb.bx; place(lb); });
+    nudgeRings();
+    const pair = closePairs()[0];
+    if (!pair) break;
+    let best = null;
+    for (const lb of [labels[pair[1]], labels[pair[0]]]) {
+      if (!movable(lb)) continue;
+      const r = lowestRow(lb);
+      if (r == null) continue;
+      const keep = { row: lb.row, x: lb.x };
+      lb.row = r; lb.x = lb.bx; place(lb);
+      const left = closePairs().length;
+      lb.row = keep.row; lb.x = keep.x; place(lb);
+      if (!best || left < best.left || (left === best.left && r < best.r)) best = { lb, r, left };
+    }
+    if (best) best.lb.row = best.r; else stuck.add(pair.join("|"));
+  }
+  labels.forEach(lb => { lb.x = lb.bx; place(lb); });
+  nudgeRings();
+  // the frame: the top row lands where a single label always sat
+  const extra = Math.max(0, ...labels.map(lb => lb.row)) * STACK;
+  const H = (spec.h || 132) + extra + roadLane;
+  const cy = H - 46 - roadLane;              // axis baseline, leaving room for T-labels below
+  labels.forEach(lb => { lb.y += cy; });
   // hit boxes for tappable amount labels: as wide as the label plus a margin
   // but never closer than TAP_AIR to the next node's box; every box on one
   // node shares the widest one's edges, so a stack lines up. A lone label's
@@ -302,24 +402,22 @@ export function computeTimeline(spec) {
     };
   }
   // f9 review 1 (spec.leaders): a leader from each LONE amount label (no role
-  // letter under it, no stack) down to its own tick
-  const leaders = spec.leaders ? nodes.filter(nd => nd.labels.length === 1 && !nd.role).map(nd => {
+  // letter under it, no stack) down to its own tick. f11 review 1: a raised
+  // (staggered) amount always draws one, leaders or not
+  const leaders = nodes.filter(nd => nd.labels.length === 1 && !nd.role && (spec.leaders || nd.labels[0].row > 0)).map(nd => {
     const lb = nd.labels[0];
     return { t: nd.t, x1: lb.x, y1: labelInk(lb).y1 + LEAD_GAP, x2: nd.x, y2: cy - 6 - LEAD_GAP };
-  }) : [];
+  });
   // f10 review 1 (spec.stackLeaders): each amount stacked ABOVE another on one
-  // node gets a leader: straight down beside everything under it (on the side
-  // facing the middle of the line), then in to the top of its own tick
-  const stackLeaders = spec.stackLeaders ? nodes.filter(nd => nd.labels.length > 1).flatMap(nd => {
-    const side = nd.x > W / 2 ? -1 : 1;
-    return nd.labels.slice(1).map(lb => {
+  // node gets a leader. f11 review 1: from the middle of its bottom edge (the
+  // amount sits beside the stack, see above) straight down past everything
+  // under it, then ONE bend, under the role letter, in to the top of its tick
+  const stackLeaders = spec.stackLeaders ? nodes.filter(nd => nd.labels.length > 1).flatMap(nd =>
+    nd.labels.slice(1).map(lb => {
       const under = nd.labels.slice(0, lb.j).map(labelInk);
-      const reach = Math.max(nd.role ? ROLE_W / 2 : 0, ...under.map(b => (side < 0 ? nd.x - b.x0 : b.x1 - nd.x)));
-      const xv = nd.x + side * (reach + SLEAD_AIR);
       const bend = nd.role ? cy - 24 + ROLE_DOWN + SLEAD_AIR : Math.max(...under.map(b => b.y1)) + SLEAD_AIR;
-      return { t: nd.t, j: lb.j, pts: [[xv, labelInk(lb).y1 + LEAD_GAP], [xv, bend], [nd.x, cy - 6 - LEAD_GAP]] };
-    });
-  }) : [];
+      return { t: nd.t, j: lb.j, pts: [[lb.x, labelInk(lb).y1 + LEAD_GAP], [lb.x, bend], [nd.x, cy - 6 - LEAD_GAP]] };
+    })) : [];
   return { type: "timeline", n, W, H, L, R, cy, xAt, gap, nodes, labels, roads, meet, leaders, stackLeaders };
 }
 
@@ -446,6 +544,22 @@ export function verifyTimeline(spec, tol = 0.5) {
         if (overlaps(labelInk(g.labels[i]), labelInk(g.labels[j]), 0.5)) clash.push(`"${g.labels[i].text}" × "${g.labels[j].text}"`);
     const stacked = g.nodes.filter(nd => nd.labels.length > 1).map(nd => `T${nd.t}`);
     r.push({ label: `${g.labels.length} amount labels, none overlapping${stacked.length ? ` (stacked on ${stacked.join(", ")})` : ""}${clash.length ? ": " + clash.join("; ") : ""}`, ok: clash.length === 0 });
+    // 5b) f11 review 1: every two amounts (the ring's air is check 6e's) keep
+    //     LABEL_MIN_PX of air at a 360-px phone: LABEL_AIR units in the
+    //     estimate, Sora's wider digits allowed for on both sides. A pair that
+    //     was too close on one row is staggered, and a raised amount has its
+    //     own leader down to its own T
+    const near = [];
+    for (let i = 0; i < g.labels.length; i++)
+      for (let j = i + 1; j < g.labels.length; j++) {
+        const a = g.labels[i], b = g.labels[j];
+        if (a.ring || b.ring) continue;
+        const air = labelAir(a, b);
+        if (air < LABEL_AIR - 0.01) near.push(`"${a.text}" × "${b.text}" ${N(air)} units`);
+      }
+    const up = g.labels.filter(lb => lb.row > lb.j);
+    const lost = up.filter(lb => !g.leaders.some(l => l.t === lb.t)).map(lb => `"${lb.text}" raised without a leader`);
+    r.push({ label: `every two amounts keep ${LABEL_MIN_PX} px of air at 360 (${LABEL_AIR} units, Sora's wider digits allowed for)${up.length ? `; staggered a row up, with a leader: ${up.map(lb => `"${lb.text}" on T${lb.t}`).join(", ")}` : ""}${near.concat(lost).length ? ": " + near.concat(lost).join("; ") : ""}`, ok: near.length === 0 && lost.length === 0 });
   }
   // 6) tappable labels: every label has a unique id and a hit box that sits
   //    in the frame, holds its own label, is big enough for a finger
@@ -620,6 +734,10 @@ export function verifyTimeline(spec, tol = 0.5) {
     g.stackLeaders.forEach(l => {
       const nd = g.nodes[l.t], lb = nd.labels[l.j], ink = labelInk(lb), p = l.pts, end = p[p.length - 1];
       if (!(p[0][0] > ink.x0 && p[0][0] < ink.x1 && p[0][1] > ink.y1 && p[0][1] - ink.y1 <= LEAD_GAP + tol)) bad.push(`the leader of "${lb.text}" does not start right under it`);
+      // f11 review 1: from the middle of its bottom edge, straight down, one bend at most,
+      // and the amount itself keeps RING_MIN_PX of air at 360 from a ring under it
+      if (Math.abs(p[0][0] - lb.x) > tol || p.length > 3 || (p.length > 2 && Math.abs(p[1][0] - p[0][0]) > tol)) bad.push(`the leader of "${lb.text}" does not drop straight from its middle with one bend`);
+      nd.labels.slice(0, l.j).filter(u => u.ring).forEach(u => { if (boxAir(ink, labelInk(u)) * PHONE_360 < RING_MIN_PX - 0.01) bad.push(`"${lb.text}" is within ${RING_MIN_PX} px of the ring under it`); });
       if (Math.abs(end[0] - nd.x) > tol || !(end[1] < g.cy - 6) || g.cy - 6 - end[1] > LEAD_GAP + tol) bad.push(`the leader of "${lb.text}" does not end on its own tick T${l.t}`);
       for (let i = 1; i < p.length; i++) {
         const b = { x0: Math.min(p[i - 1][0], p[i][0]) - 0.5, x1: Math.max(p[i - 1][0], p[i][0]) + 0.5, y0: Math.min(p[i - 1][1], p[i][1]), y1: Math.max(p[i - 1][1], p[i][1]) };
@@ -630,7 +748,7 @@ export function verifyTimeline(spec, tol = 0.5) {
       const nd = g.nodes[g.meet.t];
       if (nd.labels.length > 1 && !(labelInk(nd.labels[nd.labels.length - 1]).y0 - g.meet.pole.y1 >= POLE_AIR - tol)) bad.push(`the flag pole comes within ${POLE_AIR} of "${nd.labels[nd.labels.length - 1].text}"`);
     }
-    r.push({ label: `${g.stackLeaders.length} stacked amount${g.stackLeaders.length > 1 ? "s" : ""} with a leader down beside the stack to its own T, crossing no label, ring or flag; the pole stays clear${bad.length ? ": " + bad.join("; ") : ""}`, ok: bad.length === 0 });
+    r.push({ label: `${g.stackLeaders.length} stacked amount${g.stackLeaders.length > 1 ? "s" : ""} beside the stack, ${RING_MIN_PX} px above the ring, its leader straight down from its middle to its own T (one bend), crossing no label, ring or flag; the pole stays clear${bad.length ? ": " + bad.join("; ") : ""}`, ok: bad.length === 0 });
   }
   return r;
 }
