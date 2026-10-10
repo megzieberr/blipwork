@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-04 12:15 (📥 inbox LIVE as sw v95; next = her phone test of the inbox + v94 calculator, then the Stats Quest copy)
+# Project status — updated 2026-10-10 22:55 (💰 Finance rounds part 2 BUILT locally f8–f12, NOT pushed, sw NOT bumped; 🚫 f8 not approved, parked; her play-test of f9/f10/f11/f12 + the ship on her yes = next; inbox LIVE as sw v95)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,6 +9,34 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **💰 Finance rounds part 2 BUILT locally, Sat 2026-10-10 17:57–23:00 (Fable foreman, her
+  "run it" 17:57 + /go; one Opus worker per unit; nothing pushed, sw NOT bumped).** Local
+  commits: f8 `66498aa`+`12018be`, concept fix `6505cf1`, f9 `c6f5cec`+`7ecefa2`, f10
+  `55e5c6a`+`cf85183`, f12 `fc8efef`+`2d8ffe2`, f11 `b39a7fa`+`8ddb325`.
+  Loop per round: Opus build → Sonnet phone-width checker (390 + 360 px, screenshots in ITS
+  context only) → fresh Opus fix worker → Fable rerun. verify-finance green at every step,
+  now f1–f12: **586/586 (91 skills, 18 200 gens)**; verify-dice-finance 89/89; steps-ux, wrap,
+  exam (673/673), lazy-load green after the shared-code changes.
+  Plan correction: `verify-finance.html` existed since 23 Aug (146/146 at 17:52), so prep job
+  F0 was already done and the queue started at f8.
+- 🚫 **f8 "Which one is the total?" NOT APPROVED (her play 19:10).** It drew the total as a
+  bare money amount among the payments (the worker dropped the P/A role letters) = THE
+  class confusion; a payment on the total's day "breaks everyone" before the kids can tell
+  the two apart. Her clarification 19:19: same-day payments are a real exam shape and stay;
+  f8's job is to make total vs payment look like two different KINDS of thing FIRST. f8 stays
+  built but parked for a redesign talk; before the ship decide: ship it CLOSED (the seed
+  hides it) or `built:false`.
+- Rule applied from f9 on: the total is `?` with its role letter (engine: accent colour, bold,
+  ring since f9's fix); never a bare money label; payments may share its day.
+- Shared code riding with the rounds (one sw bump covers all): timeline engine (stacked
+  labels + label hit boxes, `meet` flag, coloured `roads`, `out` withdrawals, leader lines,
+  ring air, 6 px label air), keypad `maxDigits` (opt-in, default 6; f12 asks 9), mc option
+  `note` chips (f11 car counts), unbreakable-term wrapping, concept cards use U+00A0.
+- Live DB read 20:58: 93 quest rows, max sort 93, f1–f6 open, f7 closed, none of f8–f12
+  present. Seeding migration drafted (f8–f12 closed, sort 94–98) in the session scratchpad;
+  ship plan there too (SHIP-PLAN-finance-2.md). NOTHING run.
+  Background for the wording (do not re-read the transcripts): `Tutoring Resources/Graad 11
+  Curro/Gr11 Finance Explainers/CLASS-DIGEST-2026.md` and `GR11-FINANCE-REDESIGN.md`.
 - **📥 Inbox for the 💬 notes LIVE as sw v95 (Sun 2026-10-04 12:10, her "yes to both").**
   Opus 5.5 foreman, three Opus workers one at a time (186k + 172k + 200k tokens):
   `db43d99` back end, `d1c9a8c` admin page, `8c1c084` learner inbox, ship `7d3fc3c`.
@@ -20,18 +48,9 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   Foreman reruns: verify-inbox 220/220, verify-inbox-admin 86/86, verify-inbox-learner
   131/131. Live: Pages `built` 7d3fc3c, sw mhq-v95, inbox.js/admin.js/screens.js/styles.css
   byte-identical to HEAD.
-- **🧮 Calculator Builds 9 + 10 LIVE as sw v94 (Sun 2026-10-04 10:35, her "yes, ship it").**
-  Ship commit `1dc72c9`; sw_check OK before the push; Pages build `built` for 1dc72c9;
-  live sw reads mhq-v94; live `js/calculator.js` byte-identical to HEAD. In it: `d40c276`
-  Build 9 (STAT editor: wrap, inverted cursor cell with its value bottom right, typing
-  bottom left, AC cancels, DEL deletes a row, SHIFT 9 / MODE / SETUP inside the editor,
-  short SHIFT 1 menu with Edit → Ins / Del-A, X | Y | FREQ, the two-variable Sum / Var /
-  MinMax lists), `52bd8e1` Build 10 (GCD / LCM + Argument ERROR, the 12-digit cut, DEL
-  inside fractions and roots), `6b9739c` review fixes from a third emulator probe (spec
-  §19.8). Fresh before the push: verify-calc-casio 1030/1030, verify-calculator 77/77,
-  verify-calc-sum-edit 30/30, verify-steps-ux 33/33, verify-dice 146/146, four more dice
-  pages green, verify-lazy-load 52/52, lazy_playthrough 18/18. Blipwork only: **Stats
-  Quest still has the OLD calculator** (and the old tan(20) Math ERROR).
+- **🧮 Calculator Builds 9 + 10 LIVE as sw v94 (Sun 2026-10-04 10:35).** Ship `1dc72c9`; STAT editor,
+  GCD/LCM, review fixes from the third emulator probe; all harnesses green before the push. Full
+  write-up in STATUS-ARCHIVE.md (2026-10-04). Stats Quest still has the OLD calculator.
 - v93 (same morning, 08:40, `48a2a91`) was the eight-build rebuild; details in the archive.
 - Her goal in her words: the kids "really suck at calculator work" and felt overwhelmed
   by the stats steps, so the app must not throw them off.
@@ -47,66 +66,39 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 🧮 Calculator: Blipwork is the MASTER copy; Stats Quest copies
   js/calculator.js verbatim (its sw v10 matches v88's calc-memory build).
 
-## Decisions (append-only; entries before 2026-10-03 are in STATUS-ARCHIVE.md)
+## Decisions (append-only; entries before 2026-10-10 are in STATUS-ARCHIVE.md)
 - 2026-09-05 / 09-06 one-liners: rolled to STATUS-ARCHIVE.md (2026-10-04 12:15 roll).
 
-- 2026-10-03 (hers): the in-app calculator must work EXACTLY like her fx-991ZA PLUS II;
-  functions school learners won't use may be skipped. Priority: ALPHA, the arrow-edit wipe,
-  trig, exponents, SHIFT SOLVE, MODE 7 TABLE, MODE 5 EQN.
-- 2026-10-03 (hers): copy the FACTORY settings (her emulator was never changed; a reset
-  confirmed Norm 2, TABLE asks f(X) and g(X), STAT FREQ off, d/c improper results).
-- 2026-10-04 (hers): "/go ... see how far you get tonight with the usage limit ... shut the
-  laptop down when you're done". Fable foreman, one Opus worker per build, local commits.
-- 2026-10-04 (mine, flagged): the calculator stays ONE file (`js/calculator.js`, 945 → 3043
-  lines) because Stats Quest copies it verbatim; a split into lazy modules is a
-  separate optional build. Where the spec was silent the workers kept the old behaviour or
-  the simplest reading and gave each choice its own test row; the list is in
-  STATUS-ARCHIVE.md (2026-10-04) as "probe list".
-- 2026-10-04 (mine, flagged): STAT read-offs are now real editable lines and show 10
-  significant digits like the device (x̄ 3,33333333 → 3,333333333). Safe because the stats
-  quests (`calcdo`) compare the NUMBER with a tolerance, never the text (checked, tested).
-- 2026-10-04 (hers): "please push the new calculator" → sw v93 live, Blipwork only (she tests
-  on her phone instead of a laptop try-out). GCD and LCM ARE wanted (reverses the §9 skip).
-  Second emulator probe on her /go → spec §19.
-- 2026-10-04 (mine, flagged): not measured = not built. STAT types 3 to 8, the two-variable
-  Sum / Var / MinMax menus, INEQ for cubics and for one or no real root, ab/c, LineIO, Sci
-  do nothing or give Math ERROR rather than a guessed screen. Skipped by her ruling: hyp,
-  ENG, INS, ∫, CONST, CONV and friends. The short raised minus of the (−) key is NOT copied
-  (house rule: the real minus sign).
-- 2026-10-04 (hers): "you will be running as foreman for builds 9 and 10 ... you may start":
-  Fable foreman, one Opus worker per build (402k + 272k tokens), local commits, no push.
-- 2026-10-04 (mine, flagged): workers do NOT bump sw.js; one bump at ship time (v94 covers
-  both builds). Third probe (spec §19.8) overruled three Build 9 guesses, fixed in the
-  review: the cursor cell keeps its old value while typing; CLR Setup says Clear Setup? →
-  Complete!; every CLR last screen says "Press [AC] key" (small k). Measured but NOT built:
-  the STAT calculation screen's 0 bottom right. The workers' other unmeasured choices are
-  listed in STATUS-ARCHIVE.md (2026-10-04, "probe list 2").
-- 2026-10-04 (mine, flagged): on the device SHIFT 1 INSIDE the data editor is the short
-  menu, so a read-off needs AC first. Blipwork's read-off quests start on the calculation
-  screen and the concept card already says "type the values, AC"; any Stats Quest hint
-  that goes straight from typing to SHIFT 1 must gain the AC at the copy.
-- 2026-10-04 (hers): "yes, ship it, and then wrap up please" → sw v94 live, Blipwork only.
-- 2026-10-04 (hers): **📥 inbox for the 💬 notes is WANTED; this replaces the 2026-09-05
-  "no reply field" ruling** ("never rebuild the app around one learner" still stands).
-  Typed reply / Bug fixed / Answered elsewhere. Anonymous notes: her tick only, no
-  message. "Answered elsewhere" shows a short inbox line. Bug fixed = ready-made line +
-  optional extra. Dot on the icon only, no push. Plan = INBOX-PLAN.md (nothing built).
+- 2026-10-07 (hers): 2D Trig comes back into Exam Focus; the round-two tile map (7 chapters,
+  EXAM-BUILD-DAY.md "ROUND TWO") is agreed as proposed; build order = exam order (Paper 1
+  26 Oct first); the next fresh session does the three prep jobs BEFORE any cards.
+- 2026-10-03 / 10-04 one-liners (calculator rebuild, inbox): rolled to STATUS-ARCHIVE.md (2026-10-10 23:00 roll).
 
-- 2026-10-04 (hers): "you run them, one at a time" → Opus 5.5 foreman for the inbox (plan
-  said Fable); "yes to both" → migration + sw v95 push.
-- 2026-10-04 (mine, flagged): admin list gains `canReply` (student_id not null): a named note
-  whose learner was removed is treated like an anonymous one (no textbox, own line). After an
-  outcome her textbox comes back PRE-FILLED with her reply, so reply then Bug fixed keeps the
-  text (what is in the box is what is sent). Inbox sheet labels: "From your teacher",
-  "You wrote", "Your teacher's reply". Long names step the greeting 26 → 22 px.
+- 2026-10-10 (hers, 17:55): Fable manages the finance-round workers; she play-tests each round
+  before the next; ship at the end of the night. 19:10: carry on without her play-tests while
+  she is out; she plays them all when back, then "we talk about what we can do to fix f8".
+- 2026-10-10 (hers, 19:10 + 19:19): f8 NOT approved (total drawn like a payment). A payment CAN
+  land on the total's day; f8 must first make total vs payment distinguishable.
+- 2026-10-10 (hers, 18:02): one real learner's first name removed from the plan file; the
+  other names in it are textbook example names and stay (public repo).
+- 2026-10-10 (hers, 17:55): the Stats Quest calculator copy waits for her next Stats Quest
+  update (on hold).
+- 2026-10-10 (mine, flagged): saving jug form is `deposits − withdrawal = A` (f10 worker's
+  catch, my brief had a minus on a deposit); f10's closing line is kind-specific (loan:
+  payments positive on the right; saving: deposits plus, withdrawal minus, A on the left);
+  f12 writes exponents worked out (`^36`), f9 keeps the teaching form `^(3×12)`.
+- 2026-10-10 (mine, flagged): f9 road-rate label may reach into the margin past a short end
+  road; f12 two-car terms fall back to a split with a visible "×" on ~8% of rolls at 12 px;
+  f11 only deals timelines with a unique fewest-cars day. Workers' commits carry an Opus 5.5
+  co-author line (accurate), not the brief's Fable line.
 
 ## ⏳ Pending on Megan
-- 📱 5 min [whenever]: close + reopen Blipwork twice (sw v95) → admin page → answer the one
-  unread note from 3 Oct → open Blipwork as a learner who sent a note and check the 📥 dot.
-- 📱 3 min [whenever]: close + reopen Blipwork twice (sw v94) → calculator → try
-  GCD(12;18 (ALPHA ×, then SHIFT ) for the ;) and the stats table (▼ past the last row,
-  the dark bar on your line).
-- 💻 1 line [whenever]: say "copy it to Stats Quest" (v94 is live, so it is ready).
+- 💻 15 min **[blocking the ship]**: incognito → `http://localhost:5191/?local=1` (a local
+  server must be running: `python -m http.server 5191` in the repo root) → log in as Lerato
+  Test / demo1234 → Finance map → play f9, f10, f11, f12 once each → "ship it" or fix notes.
+- 💻 1 line **[blocking the ship]**: f8: ship it CLOSED (hidden by the seed) or pull it from
+  the map (`built:false`) until the redesign talk.
+- 💻 (on hold, her word 10 Oct): "copy it to Stats Quest" waits for the next Stats Quest update.
 - 📱 3 min [whenever]: close + reopen Blipwork twice (sw v92) → play one round in any
   chapter → 📝 Exam Focus → one card. While there: your Blip's outline in his body colour,
   the exponential card reads y = a·b^(x − p) + q. Optional: airplane mode, reopen a
@@ -122,6 +114,19 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
+- **The ship (her "yes, ship it"):** per the session's SHIP-PLAN-finance-2.md: f8 decision →
+  migration f8–f12 closed at sort 94–98 (re-check max(sort) first; mirror into schema.sql +
+  supabase/migration-finance-quests-2.sql) → /migration-check → sw CACHE mhq-v95 → v96 →
+  `python tools/sw_check.py` OK → full harness sweep → commit + push → live checks (sw v96,
+  the new quest files byte-identical, map shows 8–12 closed) → she opens rounds as she teaches.
+- **The f8 redesign talk** (her idea first): how to make the total look like a different KIND
+  of thing from a payment so the round teaches the distinction before same-day cases.
+- **📝 Exam Focus round two PLANNED 2026-10-07 (her "write it down"):** the tile map for
+  the seven remaining chapters (finance, prob, pat, trig UNHIDDEN by her word, stats, meas,
+  analytical) is in EXAM-BUILD-DAY.md "ROUND TWO". **Next fresh session = the three prep
+  jobs first, her word:** Probability SAG + memo reads into METHODS-probability.md (Parts S
+  and M), ~~build `verify-finance.html`~~ (it exists, DONE), decide the straight-line helper for Analytical. Then
+  Paper 1 chapters (26 Oct) before Paper 2 (16 Nov), one chapter per session.
 - **Her phone test of v94** (GCD / LCM, the stats table); anything she finds gets measured
   on the emulator first, then built (one unit per worker).
 - **Stats Quest copy, her word, fresh session:** `js/calculator.js` WITH the new calculator

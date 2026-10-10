@@ -1,5 +1,114 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## Decisions rolled from PROJECT-STATUS.md on 2026-10-10 23:00 (2026-10-03 and 2026-10-04 one-liners, verbatim)
+- 2026-10-03 (hers): the in-app calculator must work EXACTLY like her fx-991ZA PLUS II;
+  functions school learners won't use may be skipped. Priority: ALPHA, the arrow-edit wipe,
+  trig, exponents, SHIFT SOLVE, MODE 7 TABLE, MODE 5 EQN.
+- 2026-10-03 (hers): copy the FACTORY settings (her emulator was never changed; a reset
+  confirmed Norm 2, TABLE asks f(X) and g(X), STAT FREQ off, d/c improper results).
+- 2026-10-04 (hers): "/go ... see how far you get tonight with the usage limit ... shut the
+  laptop down when you're done". Fable foreman, one Opus worker per build, local commits.
+- 2026-10-04 (mine, flagged): the calculator stays ONE file (`js/calculator.js`, 945 → 3043
+  lines) because Stats Quest copies it verbatim; a split into lazy modules is a
+  separate optional build. Where the spec was silent the workers kept the old behaviour or
+  the simplest reading and gave each choice its own test row; the list is in
+  STATUS-ARCHIVE.md (2026-10-04) as "probe list".
+- 2026-10-04 (mine, flagged): STAT read-offs are now real editable lines and show 10
+  significant digits like the device (x̄ 3,33333333 → 3,333333333). Safe because the stats
+  quests (`calcdo`) compare the NUMBER with a tolerance, never the text (checked, tested).
+- 2026-10-04 (hers): "please push the new calculator" → sw v93 live, Blipwork only (she tests
+  on her phone instead of a laptop try-out). GCD and LCM ARE wanted (reverses the §9 skip).
+  Second emulator probe on her /go → spec §19.
+- 2026-10-04 (mine, flagged): not measured = not built. STAT types 3 to 8, the two-variable
+  Sum / Var / MinMax menus, INEQ for cubics and for one or no real root, ab/c, LineIO, Sci
+  do nothing or give Math ERROR rather than a guessed screen. Skipped by her ruling: hyp,
+  ENG, INS, ∫, CONST, CONV and friends. The short raised minus of the (−) key is NOT copied
+  (house rule: the real minus sign).
+- 2026-10-04 (hers): "you will be running as foreman for builds 9 and 10 ... you may start":
+  Fable foreman, one Opus worker per build (402k + 272k tokens), local commits, no push.
+- 2026-10-04 (mine, flagged): workers do NOT bump sw.js; one bump at ship time (v94 covers
+  both builds). Third probe (spec §19.8) overruled three Build 9 guesses, fixed in the
+  review: the cursor cell keeps its old value while typing; CLR Setup says Clear Setup? →
+  Complete!; every CLR last screen says "Press [AC] key" (small k). Measured but NOT built:
+  the STAT calculation screen's 0 bottom right. The workers' other unmeasured choices are
+  listed in STATUS-ARCHIVE.md (2026-10-04, "probe list 2").
+- 2026-10-04 (mine, flagged): on the device SHIFT 1 INSIDE the data editor is the short
+  menu, so a read-off needs AC first. Blipwork's read-off quests start on the calculation
+  screen and the concept card already says "type the values, AC"; any Stats Quest hint
+  that goes straight from typing to SHIFT 1 must gain the AC at the copy.
+- 2026-10-04 (hers): "yes, ship it, and then wrap up please" → sw v94 live, Blipwork only.
+- 2026-10-04 (hers): **📥 inbox for the 💬 notes is WANTED; this replaces the 2026-09-05
+  "no reply field" ruling** ("never rebuild the app around one learner" still stands).
+  Typed reply / Bug fixed / Answered elsewhere. Anonymous notes: her tick only, no
+  message. "Answered elsewhere" shows a short inbox line. Bug fixed = ready-made line +
+  optional extra. Dot on the icon only, no push. Plan = INBOX-PLAN.md (nothing built).
+
+- 2026-10-04 (hers): "you run them, one at a time" → Opus 5.5 foreman for the inbox (plan
+  said Fable); "yes to both" → migration + sw v95 push.
+- 2026-10-04 (mine, flagged): admin list gains `canReply` (student_id not null): a named note
+  whose learner was removed is treated like an anonymous one (no textbox, own line). After an
+  outcome her textbox comes back PRE-FILLED with her reply, so reply then Bug fixed keeps the
+  text (what is in the box is what is sent). Inbox sheet labels: "From your teacher",
+  "You wrote", "Your teacher's reply". Long names step the greeting 26 → 22 px.
+
+
+## 2026-10-10 17:51 to 23:00: 💰 Finance rounds part 2 BUILT locally (Fable foreman, Opus workers, Sonnet checkers)
+- Her words: "this is the build session for the finance rounds", "run it, thanks", "Can I leave
+  you to manage the workers ... ping me to play test before you start building the next
+  round, and then we ship at the end of the night?", 19:10 "this round [f8] is not approved, it
+  literally does what I have been complaining the whole day about ... continue with the other
+  rounds so long and then I play test them when I get back", 19:19 "A payment can land on the
+  total's day, but they first need to be able to distinguish between the total and a payment,
+  and that's what f8 was supposed to help with".
+- Catch-up found `verify-finance.html` already existed (23 Aug, 146/146), so the plan's prep job
+  F0 was stale; corrected in the plan and EXAM-BUILD-DAY at 22:45. Order ran f8, f9, f10, f12, f11.
+- Per round: Opus builder (brief in the session scratchpad, /go block on top) → Sonnet checker
+  at 390 + 360 px (screenshots stay in its context; writes a defect list) → fresh Opus fix
+  worker → Fable reran verify-finance + verify-dice-finance each time.
+- f8 `66498aa`: 5 tap skills (tap the money label; stacked same-day labels; label hit boxes) +
+  3 recall; checker: 6 cosmetic → fix `12018be` (box air, no-break p.a./money, asides). Her
+  verdict 19:10: NOT approved, see status. Also `6505cf1`: rateChange card "lump sum" → "a
+  single amount".
+- f9 `c6f5cec`: meeting-day flag + coloured rate roads in the engine, 8 skills; checker: 2
+  blockers (HTML entity shown raw on the concept sheets because the concept renderer escapes
+  `&`; car expressions breaking inside numbers at 360) → fix `7ecefa2` (literal U+202F, per-term
+  nowrap wrapping, `?` + letter in accent with a ring, tinted rate labels, leader lines).
+- f10 `55e5c6a`: jug form first then tidy, 8 skills, `out` withdrawals; worker corrected my
+  brief's saving jug form; checker: cosmetic → fix `cf85183` ("=" glued to the term before it,
+  stack leaders, kind-specific refrain, U+00A0 in concept cards, no `^1`).
+- f12 `fc8efef`: 7 bank families as steps chains (mc equation with the plan's four decoys →
+  calc 2 dp; hire purchase adds the price), timeline fades after card 3, `F12_FAMILIES`
+  exported for the Exam Focus tile, keypad `maxDigits`; checker: cosmetic → fix `2d8ffe2`
+  (number stays with its unit, 12 px equation font, two-car terms one unit with a "×"
+  fallback ~8%, ring air 6 px).
+- f11 `b39a7fa`: 6 skills, option `note` chips show each day's car count on reveal; unique
+  fewest-cars day only; checker: cosmetic → fix `8ddb325` (stacked payment reads as its own amount,
+  6 px label air everywhere, breakdown in the main step text, one-colour hint).
+- Live DB read 20:58 (read-only): 93 rows, max sort 93, f1–f6 open, f7 closed, f8–f12 absent.
+- Measured worker cost (task notifications): builders 309k / 294k / 343k / 445k / 354k; fixes
+  163k / 289k / 308k / 364k / 333k; checkers 200k / 189k / 219k / 259k / 271k.
+  ≈ 4.3M worker tokens against the 1.2M–2.2M quoted at 17:55 (fix rounds cost as much as
+  builds); flagged to her at 20:58.
+- Files in the session scratchpad (not the repo): brief-f8..f12 (+ -fix1), SHIP-PLAN-finance-2.md,
+  migration-finance-quests-2.sql, wrapup-draft.md, the workers' Playwright drivers per round.
+
+## 2026-10-07 09:53 to 11:50: 📝 Exam Focus round two PLANNED (Fable planning session, nothing built)
+- Her words: "planning session for exam revision tab", "we can unhide 2D trig", "use this
+  session just to plan the skills for all the remaining chapters", "you nailed it, write it
+  down", "we can start with these 3 things in the next fresh session", "wrap it up here".
+- Found fresh from the repo: round one = 7 chapters / 360 cards, every tile full (algx 37,
+  exp 43, eqn 78, func 83, tgraph 36, gtrig 54, euclid 29); stats, finance, prob, meas,
+  analytical, pat = 0 cards and NO skill list drafted anywhere; trig hidden with 1 card.
+- Written: EXAM-BUILD-DAY.md "ROUND TWO" section (rulings, prep owed, tile map for finance 8
+  / prob 8 / pat 9 / trig 6 / stats 8 / meas 6 / analytical 8 tiles, session queue);
+  PROJECT-STATUS.md Next up + Decisions; memory maths-homework-quest.md AT A GLANCE.
+- The three prep jobs (next fresh session, her word): (1) Probability SAG scope + IEB memo
+  layouts into METHODS-probability.md Parts S and M (her 2026-09-04 rulings); (2) build
+  verify-finance.html, the only chapter with no harness; (3) Analytical equation-of-line has
+  no drill round (ag1 to ag7 skip it), decide a small analyticslib line helper.
+- No code, config, SQL or sw touched. Both md files left uncommitted (planning docs, her
+  standing preference). Cost: a short Fable thread, no workers.
+
 ## 2026-10-04 11:21 to 12:10: 📥 inbox built and shipped as sw v95 (session diary)
 - Her words: "/catchup on blipwork, build the inbox", then "you run them, one at a time"
   (Opus 5.5 as foreman instead of the planned Fable), then "yes to both" (migration + push).
