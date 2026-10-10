@@ -447,6 +447,17 @@ h2{font-size:20px} h3{font-size:17px}
 .tl-meet{font-size:9.5px;font-weight:700;fill:var(--g-read)}
 .tl-meetdot{fill:var(--bg);stroke:var(--g-read);stroke-width:2}
 .tl-tlab.tl-tmeet{fill:var(--g-read);font-weight:700}
+/* f9 review 1 (2026-10-10). `.sg text{fill:var(--g-muted)}` (a class AND a
+   type) outranked the one-class fills above, so the role letter and the
+   road rates drew grey on the phone. Two classes win: */
+.tl text.tl-role{fill:var(--accent)}
+.tl text.tl-roadlab-0{fill:#38bdf8} .tl text.tl-roadlab-1{fill:#fb923c} .tl text.tl-roadlab-2{fill:#a3e635}
+/* the total, "?" with its role letter: a different KIND of thing from a
+   payment (her ruling): accent, bold, a thin ring (the engine's Q_R) */
+.tl text.tl-q{fill:var(--accent);font-weight:700}
+.tl .tl-qring{fill:none;stroke:var(--accent);stroke-width:1.2}
+/* a thin leader from a lone amount down to its own tick (spec.leaders) */
+.tl .tl-lead{stroke:var(--g-muted);stroke-width:.8;stroke-dasharray:2 2;opacity:.75}
 
 /* venn engine (.vn-*) — accent fills sit UNDER the outlines at low opacity */
 .vn{width:100%;height:auto;display:block;font-family:var(--font-num)}

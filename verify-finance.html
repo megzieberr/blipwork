@@ -121,6 +121,11 @@ const ENGINE = [
   { title: "f9: meeting day on a middle payment, two roads, widest labels", spec: { type: "timeline", n: 6, meet: 3, nodes: [{ t: 0, label: "?", role: "P" }, { t: 2, amount: 10000, dp: 0 }, { t: 3, amount: 10000, dp: 0 }, { t: 4, amount: 7500, dp: 0 }], roads: [{ from: 0, to: 2, rate: "15% p.a.", k: 12 }, { from: 2, to: 6, rate: "14% p.a.", k: 2 }], accent: ACC } },
   { title: "f9: last deposit on the day of A, meeting day at the end, 2 + 2 roads", spec: { type: "timeline", n: 4, meet: 4, nodes: [{ t: 4, label: "?", role: "A" }, { t: 3, amount: 10000, dp: 0 }, { t: 4, amount: 10000, dp: 0 }], roads: [{ from: 0, to: 2, rate: "12% p.a.", k: 4 }, { from: 2, to: 4, rate: "15% p.a.", k: 1 }], accent: ACC } },
   { title: "f9: meeting day on an empty T0, one road", spec: { type: "timeline", n: 6, meet: 0, nodes: [{ t: 6, label: "?", role: "A" }, { t: 1, amount: 10000, dp: 0 }, { t: 5, amount: 8000, dp: 0 }], roads: [{ from: 0, to: 6, rate: "11% p.a.", k: 12 }], accent: ACC } },
+  /* f9 review 1 (2026-10-10): a 2-year END road at n = 6 with the flag in its middle, the one place a rate has no room
+     beside the flagged T on its own road, so it slides into the empty margin past the end of the line (left, then right);
+     the "?" total in its ring, and leader lines from the lone amounts */
+  { title: "f9 review 1: flag in the middle of a short first road, ring, leaders", spec: { type: "timeline", n: 6, meet: 1, leaders: true, nodes: [{ t: 6, label: "?", role: "A" }, { t: 1, amount: 10000, dp: 0 }, { t: 4, amount: 10000, dp: 0 }], roads: [{ from: 0, to: 2, rate: "15% p.a.", k: 12 }, { from: 2, to: 6, rate: "14% p.a.", k: 2 }], accent: ACC } },
+  { title: "f9 review 1: flag in the middle of a short last road, loan ring on T0", spec: { type: "timeline", n: 6, meet: 5, leaders: true, nodes: [{ t: 0, label: "?", role: "P" }, { t: 3, amount: 7500, dp: 0 }, { t: 5, amount: 10000, dp: 0 }], roads: [{ from: 0, to: 4, rate: "12% p.a.", k: 4 }, { from: 4, to: 6, rate: "15% p.a.", k: 1 }], accent: ACC } },
 ];
 const eg = document.getElementById("engine");
 ENGINE.forEach(t => {

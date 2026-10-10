@@ -279,8 +279,8 @@ export const CONCEPTS = {
       </ul>
       <p>The loan amount <b>P has no interest in it</b>. The repayments pay back the loan <b>and</b> its interest, so together they come to more than P, and one repayment can even be bigger than P.</p>
       <p>Two amounts on the same day? Only one of them is the total. The other is a payment made on that day.</p>
-      <div class="eg">Saving at 10% p.a.: R2&#8239;000 at T0 and R3&#8239;000 at T1 grow into R6&#8239;292 at T3. The total is R6&#8239;292, at the end.</div>
-      <div class="eg">A loan at 10% p.a.: he borrows R5&#8239;000 at T0 and pays back R2&#8239;200 at T1 and R3&#8239;993 at T3. The total is R5&#8239;000, at the start.</div>`,
+      <div class="eg">Saving at 10% p.a.: <span class="nowrap">R2 000</span> at T0 and <span class="nowrap">R3 000</span> at T1 grow into <span class="nowrap">R6 292</span> at T3. The total is <span class="nowrap">R6 292</span>, at the end.</div>
+      <div class="eg">A loan at 10% p.a.: he borrows <span class="nowrap">R5 000</span> at T0 and pays back <span class="nowrap">R2 200</span> at T1 and <span class="nowrap">R3 993</span> at T3. The total is <span class="nowrap">R5 000</span>, at the start.</div>`,
   },
   /* f9 "Car or no car?" (2026-10-10). This round says only "the total". */
   carOrNoCar: {
@@ -296,8 +296,8 @@ export const CONCEPTS = {
       </ul>
       <div class="formula">exponent = ± years × k</div>
       <p>k is how many times a year the interest is added: annually 1 · half-yearly 2 · quarterly 4 · monthly 12.</p>
-      <div class="eg">8% p.a. compounded quarterly until T4, then 10% p.a. compounded monthly. R5&#8239;000 at T2, meeting day T6: two cars, both forward: 5&#8239;000(1 + 0,08/4)^(2×4)(1 + 0,1/12)^(2×12).</div>
-      <div class="eg">Her last deposit, R2&#8239;000, is made on the day of A, and the meeting day is that day: no car, it is just 2&#8239;000.</div>
+      <div class="eg">8% p.a. compounded quarterly until T4, then 10% p.a. compounded monthly. <span class="nowrap">R5 000</span> at T2, meeting day T6: two cars, both forward: <span class="nowrap">5 000(1 + 0,08/4)^(2×4)</span> <span class="nowrap">(1 + 0,1/12)^(2×12)</span>.</div>
+      <div class="eg">Her last deposit, <span class="nowrap">R2 000</span>, is paid in on the same day as A, and the meeting day is that day: no car, it is just <span class="nowrap">2 000</span>.</div>
       <p>A car only if it has to move. Already there? No car.</p>`,
   },
 

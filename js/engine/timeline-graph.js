@@ -34,6 +34,9 @@
                                                 // written under it. One road = one colour; a
                                                 // rate change = the road changes colour. k is
                                                 // carried for the quest, never drawn.
+     leaders?: true,                            // f9 review 1: a thin dashed line from each LONE
+                                                // amount label (no role letter under it) down
+                                                // to its own tick.
    }
    Colours come from CSS (.tl-*); the per-quest accent is the --accent
    CSS var inherited from the screen.
@@ -66,6 +69,16 @@
    total's day (the last deposit on the day of A): the total is then the
    BOTTOM label of the stack, right above its role letter, and verify
    says so if a role letter ever sits under somebody else's label.
+
+   F9 REVIEW 1 (2026-10-10, her ruling: the total is a different KIND of
+   thing from a payment). A "?" label that carries a role letter is the
+   total: it draws in the accent colour inside a thin ring, its role
+   letter (accent too) right under it, and its measured ink box IS the
+   ring (labelInk), so every fit and overlap check measures the ring.
+   f4 and f5 draw their "?" totals the same way. A road's rate never sits
+   under the flagged T label: it slides along its own road (at an end of
+   the line, into the empty margin past it) to the nearest place clear of
+   that label, and verify measures it there.
    ============================================================ */
 import { rand } from "../finlib.js";
 
@@ -94,6 +107,13 @@ const ROAD_Y = 36;           // road label baseline, below the axis (the T label
 const FLAG_TOP = 5, FLAG_H = 9, FLAG_W = 11;     // the pennant
 const MEET_Y = 15;           // baseline of the words "meeting day"
 const MEET_TEXT = "meeting day";
+/* f9 review 1: the total's ring, the road rates' distance from the flagged
+   T label, and the leader lines, in viewBox units */
+const Q_R = 6.5;             // the ring around a "?" total (10.5px bold "?": ~6.3 wide, ~7.7 tall)
+const Q_DY = 3.8;            // its centre above the label baseline (half the "?"'s cap height)
+const Q_STROKE = 0.6;        // half the ring's stroke (CSS .tl-qring, 1.2)
+const MEET_AIR = 4;          // sideways air between a road's rate and the flagged T label
+const LEAD_GAP = 2;          // air between a leader line and its label, and its tick
 
 function svgWrap(W, H, accent, inner, cls = "") {
   const style = accent ? ` style="--accent:${accent}"` : "";
@@ -144,13 +164,15 @@ export function computeTimeline(spec) {
   const labels = [];
   nodes.forEach(node => {
     node.labels = node.labels.map(({ d, text: s }, j, arr) => {
-      const w = s.length * GLYPH, half = w / 2;
+      // f9 review 1: the total ("?" with a role letter) wears a ring, and its width is the ring's
+      const ring = s === "?" && !!d.role;
+      const w = ring ? 2 * (Q_R + Q_STROKE) : s.length * GLYPH, half = w / 2;
       // clamp the centred label into the viewBox (end nodes can carry labels wider than the margin)
       const x = Math.max(half + 2, Math.min(W - half - 2, node.x));
       const lb = {
         id: d.id != null ? String(d.id) : `${node.t}.${j}`,
         t: node.t, j, levels: arr.length, nodeX: node.x,
-        x, y: cy - 38 - j * STACK, w, text: s, amount: d.amount, role: d.role || "",
+        x, y: cy - 38 - j * STACK, w, text: s, amount: d.amount, role: d.role || "", ring,
       };
       labels.push(lb);
       return lb;
@@ -178,11 +200,25 @@ export function computeTimeline(spec) {
     });
   }
   // f9: the rate roads, one colour each, the rate written under the middle
-  // of its road (clamped into the frame like an amount label)
+  // of its road (clamped into the frame like an amount label). f9 review 1:
+  // never directly under the flagged T label. The rate slides to the nearer
+  // spot just clear of it, its centre still over its own road, its ink on
+  // its own road or in the empty margin past an end of the line.
+  const meetNode = spec.meet != null ? nodes[spec.meet] : null;
   const roads = (Array.isArray(spec.roads) ? spec.roads : []).map((r, j) => {
-    const x0 = xAt(r.from), x1 = xAt(r.to);
+    const x0 = xAt(r.from), x1 = xAt(r.to), mid = (x0 + x1) / 2;
     const s = String(r.rate == null ? "" : r.rate), w = s.length * SMALL_GLYPH, half = w / 2;
-    const x = Math.max(half + 2, Math.min(W - half - 2, (x0 + x1) / 2));
+    let x = Math.max(half + 2, Math.min(W - half - 2, mid));
+    if (meetNode) {
+      const keep = meetNode.label.length * T_GLYPH / 2 + MEET_AIR + half;
+      if (Math.abs(x - meetNode.x) < keep) {
+        const lo = (r.from === 0 ? 2 : x0) + half, hi = (r.to === n ? W - 2 : x1) - half;
+        const spots = [meetNode.x - keep, meetNode.x + keep]
+          .filter(c => c >= lo && c <= hi && c >= x0 && c <= x1)
+          .sort((a, b) => Math.abs(a - mid) - Math.abs(b - mid));
+        if (spots.length) x = spots[0];
+      }
+    }
     return { j, from: r.from, to: r.to, rate: s, k: r.k, x0, x1, cls: j % 3, label: { x, y: cy + ROAD_Y, w, text: s } };
   });
   // f9: the meeting day. The words sit right of the pole, or left of it
@@ -193,7 +229,7 @@ export function computeTimeline(spec) {
     const node = nodes[spec.meet], mx = node.x;
     const w = MEET_TEXT.length * SMALL_GLYPH;
     const side = mx + FLAG_W + 4 + w <= W - 2 ? 1 : -1;
-    const top = node.labels.length ? node.labels[node.labels.length - 1].y - INK_UP
+    const top = node.labels.length ? labelInk(node.labels[node.labels.length - 1]).y0
       : node.role ? cy - 24 - ROLE_UP : cy - 6;
     meet = {
       t: node.t, x: mx, side,
@@ -202,7 +238,13 @@ export function computeTimeline(spec) {
       text: { x: mx + side * (FLAG_W + 4), y: MEET_Y, w, anchor: side > 0 ? "start" : "end", text: MEET_TEXT },
     };
   }
-  return { type: "timeline", n, W, H, L, R, cy, xAt, gap, nodes, labels, roads, meet };
+  // f9 review 1 (spec.leaders): a leader from each LONE amount label (no role
+  // letter under it, no stack) down to its own tick
+  const leaders = spec.leaders ? nodes.filter(nd => nd.labels.length === 1 && !nd.role).map(nd => {
+    const lb = nd.labels[0];
+    return { t: nd.t, x1: lb.x, y1: labelInk(lb).y1 + LEAD_GAP, x2: nd.x, y2: cy - 6 - LEAD_GAP };
+  }) : [];
+  return { type: "timeline", n, W, H, L, R, cy, xAt, gap, nodes, labels, roads, meet, leaders };
 }
 
 /* f9: verify's ink models of the things the flag and the roads must not
@@ -243,8 +285,14 @@ export function renderTimeline(spec) {
     out += line(node.x, g.cy - 6, node.x, g.cy + 6, "tl-tick");
     out += text(node.x, g.cy + 20, node.label, node.t === meetT ? "tl-tlab tl-tmeet" : "tl-tlab");
     if (node.role) out += text(node.x, g.cy - 24, node.role, "tl-role");
-    node.labels.forEach(lb => { out += text(lb.x, lb.y, lb.text, "tl-amt"); });
+    node.labels.forEach(lb => {
+      if (!lb.ring) { out += text(lb.x, lb.y, lb.text, "tl-amt"); return; }
+      // the total: "?" in the accent colour inside its ring (f9 review 1)
+      out += `<g class="tl-qmark"><circle class="tl-qring" cx="${N(lb.x)}" cy="${N(lb.y - Q_DY)}" r="${Q_R}"/>${text(lb.x, lb.y, lb.text, "tl-amt tl-q")}</g>`;
+    });
   });
+  // f9 review 1: the leader lines (spec.leaders)
+  g.leaders.forEach(l => { out += line(l.x1, l.y1, l.x2, l.y2, "tl-lead"); });
 
   // f9: the meeting day: a ring on the axis, a pole, a pennant, the words
   if (g.meet) {
@@ -280,6 +328,10 @@ export function renderTimeline(spec) {
 
 /* the estimated ink box of one amount label (verify's model of it) */
 export function labelInk(lb) {
+  if (lb.ring) {                                  // the total's ring, stroke included (f9 review 1)
+    const cyR = lb.y - Q_DY, e = Q_R + Q_STROKE;
+    return { x0: lb.x - e, x1: lb.x + e, y0: cyR - e, y1: cyR + e };
+  }
   return { x0: lb.x - lb.w / 2, x1: lb.x + lb.w / 2, y0: lb.y - INK_UP, y1: lb.y + INK_DOWN };
 }
 const overlaps = (a, b, m = 0) => a.x0 < b.x1 - m && b.x0 < a.x1 - m && a.y0 < b.y1 - m && b.y0 < a.y1 - m;
@@ -356,6 +408,14 @@ export function verifyTimeline(spec, tol = 0.5) {
     const own = nd.labels[0].role === nd.role && nd.labels.slice(1).every(lb => !lb.role);
     r.push({ label: `on T${nd.t} the role ${nd.role} belongs to the bottom label of the stack ("${nd.labels[0].text}"), the one right above it`, ok: own });
   });
+  // 6c) the total's ring (f9 review 1) holds the "?", and stays clear of the
+  //     role letter right under it
+  g.labels.filter(lb => lb.ring).forEach(lb => {
+    const nd = g.nodes[lb.t], ink = labelInk(lb);
+    const clear = !nd.role || !overlaps(ink, roleInk(g, nd), 0);
+    const holds = ink.x0 <= lb.x - GLYPH / 2 && ink.x1 >= lb.x + GLYPH / 2 && ink.y0 <= lb.y - INK_UP + 1 && ink.y1 >= lb.y;
+    r.push({ label: `the total "?" on T${lb.t} sits in its ring, clear of its role letter ${nd.role || ""}`, ok: clear && holds });
+  });
   // the things a flag or a road label must never touch (f9)
   const inFrame = b => b.x0 >= -tol && b.x1 <= g.W + tol && b.y0 >= -tol && b.y1 <= g.H + tol;
   const others = () => {
@@ -405,11 +465,37 @@ export function verifyTimeline(spec, tol = 0.5) {
     g.roads.forEach((rd, j) => {
       const b = roadInk(rd);
       if (!inFrame(b)) fit.push(`"${rd.label.text}" leaves the frame`);
-      if (b.x0 < rd.x0 - tol || b.x1 > rd.x1 + tol) fit.push(`"${rd.label.text}" is wider than its road (T${rd.from}–T${rd.to})`);
+      // its centre over its own road; its ink on its own road, or in the empty margin past an end of the line
+      const lo = rd.from === 0 ? 0 : rd.x0, hi = rd.to === g.n ? g.W : rd.x1;
+      if (b.x0 < lo - tol || b.x1 > hi + tol || rd.label.x < rd.x0 - tol || rd.label.x > rd.x1 + tol) fit.push(`"${rd.label.text}" is not under its own road (T${rd.from}–T${rd.to})`);
+      // f9 review 1: never directly under the flagged meeting-day T label
+      if (g.meet) {
+        const tm = tLabInk(g, g.nodes[g.meet.t]);
+        if (b.x0 < tm.x1 + MEET_AIR - 1 && tm.x0 - MEET_AIR + 1 < b.x1) fit.push(`"${rd.label.text}" sits under the flagged T${g.meet.t}`);
+      }
       all.forEach(o => { if (overlaps(b, o.box, 0.5)) fit.push(`"${rd.label.text}" touches ${o.what}`); });
       g.roads.slice(j + 1).forEach(o => { if (overlaps(b, roadInk(o), 0.5)) fit.push(`"${rd.label.text}" × "${o.label.text}"`); });
     });
-    r.push({ label: `every road's rate sits under its own road, clear of every label${fit.length ? ": " + fit.join("; ") : ""}`, ok: fit.length === 0 });
+    r.push({ label: `every road's rate sits under its own road, clear of every label and of the flagged T${fit.length ? ": " + fit.join("; ") : ""}`, ok: fit.length === 0 });
+  }
+  // 9) the leader lines (f9 review 1): each runs from its lone amount down to
+  //    its own tick, and crosses no label, role letter, T label, road rate or flag
+  if (g.leaders.length) {
+    const bad = [];
+    const things = [
+      ...g.labels.map(lb => ({ what: `amount "${lb.text}"`, box: labelInk(lb) })),
+      ...g.nodes.map(nd => ({ what: `T label ${nd.label}`, box: tLabInk(g, nd) })),
+      ...g.nodes.filter(nd => nd.role).map(nd => ({ what: `role ${nd.role} on T${nd.t}`, box: roleInk(g, nd) })),
+      ...g.roads.map(rd => ({ what: `road label "${rd.label.text}"`, box: roadInk(rd) })),
+    ];
+    if (g.meet) { const mi = meetInks(g.meet); things.push({ what: "the flag", box: mi.flag }, { what: `"${MEET_TEXT}"`, box: mi.text }, { what: "the flag pole", box: mi.pole }); }
+    g.leaders.forEach(l => {
+      const nd = g.nodes[l.t];
+      const b = { x0: Math.min(l.x1, l.x2) - 0.5, x1: Math.max(l.x1, l.x2) + 0.5, y0: Math.min(l.y1, l.y2), y1: Math.max(l.y1, l.y2) };
+      if (Math.abs(l.x2 - nd.x) > tol || !(l.y2 < g.cy - 6) || l.y2 - l.y1 < 4) bad.push(`the leader on T${l.t} does not run down to its own tick`);
+      things.forEach(o => { if (overlaps(b, o.box, 0)) bad.push(`the leader on T${l.t} crosses ${o.what}`); });
+    });
+    r.push({ label: `${g.leaders.length} leader line${g.leaders.length > 1 ? "s" : ""}, each from its amount down to its own T, crossing no label${bad.length ? ": " + bad.join("; ") : ""}`, ok: bad.length === 0 });
   }
   return r;
 }

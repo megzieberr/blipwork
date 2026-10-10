@@ -96,9 +96,26 @@ export function labelFitIssues(spec, host) {
   const texts = [...svg.querySelectorAll("text.tl-amt")];
   if (texts.length !== labelled.length) return [`${texts.length} amount labels drawn for ${labelled.length} labels in the spec`];
   const boxes = [];
+  /* f9 review 1 (2026-10-10): the total ("?" with a role letter) is drawn
+     inside a ring, <g class="tl-qmark"><circle class="tl-qring"/><text/></g>.
+     Its measured box is the text AND the ring (stroke included), and the
+     ring must sit centred on its "?" */
+  const ringOf = el => (el.parentNode && el.parentNode.matches && el.parentNode.matches("g.tl-qmark")) ? el.parentNode.querySelector("circle.tl-qring") : null;
   texts.forEach((el, i) => {
     let bb;
     try { bb = el.getBBox(); } catch { return; }
+    const ring = ringOf(el);
+    if (ring) {
+      let rb; try { rb = ring.getBBox(); } catch { rb = null; }
+      if (!rb) out.push(`the ring around "${el.textContent}" did not render`);
+      else {
+        const sw = parseFloat(getComputedStyle(ring).strokeWidth) / 2 || 0;
+        const tc = { x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 }, rc = { x: rb.x + rb.width / 2, y: rb.y + rb.height / 2 };
+        if (Math.abs(tc.x - rc.x) > 1 || Math.abs(tc.y - rc.y) > 1.5) out.push(`the ring is not centred on its "${el.textContent}"`);
+        const x0 = Math.min(bb.x, rb.x - sw), y0 = Math.min(bb.y, rb.y - sw);
+        bb = { x: x0, y: y0, width: Math.max(bb.x + bb.width, rb.x + rb.width + sw) - x0, height: Math.max(bb.y + bb.height, rb.y + rb.height + sw) - y0 };
+      }
+    }
     const lb = labelled[i];
     boxes.push({ lb, bb, text: el.textContent });
     if (bb.x < -0.5 || bb.x + bb.width > g.W + 0.5) out.push(`amount "${el.textContent}" runs outside the ${g.W}-wide viewBox`);
@@ -175,8 +192,24 @@ export function labelFitIssues(spec, host) {
     roadEls.forEach((el, j) => {
       const bb = bbOf(el), rd = g.roads[j];
       if (!bb || !rd) return;
-      if (bb.x < rd.x0 - 0.5 || bb.x + bb.width > rd.x1 + 0.5) out.push(`road label "${el.textContent}" is wider than its road (T${rd.from}–T${rd.to})`);
+      /* its centre over its own road, its ink on its own road or in the empty
+         margin past an end of the line (f9 review 1: a rate slides off the
+         flagged T label, into that margin when its road is short) */
+      const lo = rd.from === 0 ? 0 : rd.x0, hi = rd.to === g.n ? g.W : rd.x1, cx = bb.x + bb.width / 2;
+      if (bb.x < lo - 0.5 || bb.x + bb.width > hi + 0.5 || cx < rd.x0 - 0.5 || cx > rd.x1 + 0.5) out.push(`road label "${el.textContent}" is not under its own road (T${rd.from}–T${rd.to})`);
+      /* f9 review 1: never directly under the flagged meeting-day T label (real boxes, 2 units of air) */
+      const tm = svg.querySelector("text.tl-tmeet"), tb = tm && bbOf(tm);
+      if (tb && bb.x < tb.x + tb.width + 2 && tb.x - 2 < bb.x + bb.width) out.push(`road label "${el.textContent}" sits under the flagged ${tm.textContent}`);
       extra.push({ what: `road label "${el.textContent}"`, bb, kind: "road" });
+    });
+    /* f9 review 1: each leader line (a thin line from a lone amount down to
+       its tick) crosses no amount, T label, role letter, road rate or flag */
+    [...svg.querySelectorAll("line.tl-lead")].forEach(l => {
+      const lb = bbOf(l);
+      if (!lb) return;
+      const b = { x: lb.x - 0.5, y: lb.y, width: lb.width + 1, height: lb.height };
+      if (Math.abs(Number(l.getAttribute("x2")) - g.xAt(Math.round((Number(l.getAttribute("x2")) - g.xAt(0)) / gap))) > 0.5) out.push("a leader line does not end on a tick");
+      [...fixed, ...extra].filter(o => o.bb).forEach(o => { if (hits(b, o.bb, 0)) out.push(`a leader line crosses ${o.what}`); });
     });
     extra.filter(e => e.bb).forEach((e, i, arr) => {
       if (e.bb.x < -0.5 || e.bb.x + e.bb.width > g.W + 0.5 || e.bb.y < -0.5 || e.bb.y + e.bb.height > g.H + 0.5) out.push(`${e.what} runs outside the frame`);
@@ -404,7 +437,8 @@ export const RECOMPUTE = {
       const i = C(toFrac(L.rate)), m = t.dir < 0 ? "−" : "";
       return L.k === 1 ? `(1 + ${i})^${m ? `(−${L.years})` : L.years}` : `(1 + ${i}/${L.k})^(${m}${L.years}×${L.k})`;
     };
-    return String(correctLabel(q) || "").replace(/ /g, " ") === amt + t.legs.map(car).join("");
+    const flat = x => String(x).replace(/<[^>]+>/g, "").replace(/\s+/g, "");   // f9 review 1: terms are <span class="nowrap"> units now
+    return flat(correctLabel(q) || "") === flat(amt + t.legs.map(car).join(""));
   },
   "f9.roadExponent": q => {
     const s = f9Scene(q), t = s && f9Trip(s);
