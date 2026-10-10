@@ -19,7 +19,7 @@ import {
   simpleAmount, depositAmount, balanceAfterDeposit, effFromNom,
 } from "../finlib.js";
 import { fmtComma } from "../check.js";
-import { computeTimeline, renderTimeline, verifyTimeline } from "../engine/timeline-graph.js";
+import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN } from "../engine/timeline-graph.js";
 
 const C = v => fmtComma(v);
 export const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
@@ -123,6 +123,29 @@ export function labelFitIssues(spec, host) {
       const cx = bb.x + bb.width / 2, cyy = bb.y + bb.height / 2;
       boxes.forEach(o => { if (o.lb !== lb && o.lb.hit && inBox(cx, cyy, o.lb.hit)) out.push(`amount "${text}" sits inside the hit box of "${o.text}"`); });
     });
+    /* f8 review 1 (2026-10-10): draw the hit boxes the way the app does
+       (js/questions.js addTimelineLabelHits) and measure the drawn rects,
+       scaled to a 360-px phone: every box at least TAP_MIN.h px tall, any
+       two boxes at least TAP_MIN.air px apart, and the boxes of a stack
+       lined up (same left and right edges, same height) */
+    const NS = "http://www.w3.org/2000/svg";
+    const rects = boxes.filter(b => b.lb.hit).map(({ lb, text }) => {
+      const r = document.createElementNS(NS, "rect");
+      [["x", lb.hit.x], ["y", lb.hit.y], ["width", lb.hit.w], ["height", lb.hit.h]].forEach(([k, v]) => r.setAttribute(k, v));
+      svg.appendChild(r);
+      let bb; try { bb = r.getBBox(); } catch { return null; }
+      return { lb, text, x0: bb.x * PHONE_360, x1: (bb.x + bb.width) * PHONE_360, y0: bb.y * PHONE_360, y1: (bb.y + bb.height) * PHONE_360 };
+    }).filter(Boolean);
+    const px = v => Math.round(v * 10) / 10;
+    rects.forEach(a => { if (a.y1 - a.y0 < TAP_MIN.h - 0.01) out.push(`hit box of "${a.text}" only ${px(a.y1 - a.y0)} px tall at 360`); });
+    for (let i = 0; i < rects.length; i++)
+      for (let j = i + 1; j < rects.length; j++) {
+        const a = rects[i], b = rects[j];
+        const air = Math.max(a.x0 - b.x1, b.x0 - a.x1, a.y0 - b.y1, b.y0 - a.y1);
+        if (air < TAP_MIN.air - 0.01) out.push(`hit boxes of "${a.text}" and "${b.text}" only ${px(air)} px apart at 360`);
+        if (a.lb.t === b.lb.t && (Math.abs(a.x0 - b.x0) > 0.05 || Math.abs(a.x1 - b.x1) > 0.05 || Math.abs((a.y1 - a.y0) - (b.y1 - b.y0)) > 0.05))
+          out.push(`stacked hit boxes of "${a.text}" and "${b.text}" do not line up`);
+      }
   }
   return out;
 }

@@ -64,14 +64,14 @@ const person = () => pick([{ he: "she", his: "her" }, { he: "he", his: "his" }])
 const valueAt = (pays, i, at) => pays.reduce((s, p) => s + moveMoney(p.v, i, at - p.t), 0);
 
 const saveStory = (p, r) => pick([
-  `${cap(p.he)} saves in an account that pays ${r}% p.a., compounded annually.`,
-  `${cap(p.he)} saves money at ${r}% p.a., compounded annually.`,
-  `${cap(p.he)} puts money into a savings account at ${r}% p.a., compounded annually.`,
+  `${cap(p.he)} saves in an account that pays ${r}%\u00A0p.a., compounded annually.`,
+  `${cap(p.he)} saves money at ${r}%\u00A0p.a., compounded annually.`,
+  `${cap(p.he)} puts money into a savings account at ${r}%\u00A0p.a., compounded annually.`,
 ]);
 const loanStory = (p, r) => pick([
-  `${cap(p.he)} borrows money at ${r}% p.a., compounded annually, and pays it back.`,
-  `${cap(p.he)} pays off a car: the loan is at ${r}% p.a., compounded annually.`,
-  `${cap(p.he)} takes out a loan at ${r}% p.a., compounded annually, and pays it back in parts.`,
+  `${cap(p.he)} borrows money at ${r}%\u00A0p.a., compounded annually, and pays it back.`,
+  `${cap(p.he)} pays off a car: the loan is at ${r}%\u00A0p.a., compounded annually.`,
+  `${cap(p.he)} takes out a loan at ${r}%\u00A0p.a., compounded annually, and pays it back in parts.`,
 ]);
 
 /* ---------- the tap card ---------- */
@@ -88,7 +88,7 @@ function timeline(n, amounts) {
   return { graph: { type: "timeline", n, nodes, tapLabels: true }, ids };
 }
 
-function tapCard(w, { story, n, amounts, total, hint, here }) {
+function tapCard(w, { story, saving, n, amounts, total, hint, here }) {
   const { graph, ids } = timeline(n, amounts);
   return {
     type: "tap", concept: TOTAL,
@@ -100,7 +100,7 @@ function tapCard(w, { story, n, amounts, total, hint, here }) {
     answerLabel: `${R0(total.v)} at T${total.t} is ${w}`,
     solution: [
       { s: `${cap(w)} is the one that is not a payment.` },
-      { s: "For saving it sits at the end; for a loan it sits at the start.", r: "a loan starts big and gets paid down" },
+      { s: "For saving it sits at the end; for a loan it sits at the start.", r: saving ? "the deposits grow into it" : "a loan starts big and gets paid down" },
       ...here,
     ],
   };
@@ -126,7 +126,7 @@ function tapSavings(w) {
     const A = { t: n, v: Math.round(valueAt(deps, i, n)) };
     if (A.v >= MAX_LABEL || !distinct([...vals, A.v])) return null;
     return tapCard(w, {
-      story: saveStory(p, r), n, amounts: [...deps, A], total: A,
+      story: saveStory(p, r), saving: true, n, amounts: [...deps, A], total: A,
       hint: `Saving: the deposits grow into ${w}. Where on the line does that leave it?`,
       here: [{ s: `${cap(p.he)} saves, so it is ${R0(A.v)} at T${n}, the end.`, r: `the deposits ${andList(deps.map(d => R0(d.v)))} grow into it` }],
     });
@@ -146,7 +146,7 @@ function tapLoan(w) {
     const P = { t: 0, v: Math.round(valueAt(pays, i, 0)) };
     if (P.v >= MAX_LABEL || !(P.v > Math.max(...vals)) || !distinct([...vals, P.v])) return null;
     return tapCard(w, {
-      story: loanStory(p, r), n, amounts: [P, ...pays], total: P,
+      story: loanStory(p, r), saving: false, n, amounts: [P, ...pays], total: P,
       hint: `A loan: ${w} is the amount borrowed. When was the money borrowed?`,
       here: [{ s: `${cap(p.he)} borrows, so it is ${R0(P.v)} at T0, the start.`, r: `the repayments ${andList(pays.map(d => R0(d.v)))} pay it down` }],
     });
@@ -168,12 +168,12 @@ function tapSameDay(w) {
     const A = { t: n, v: Math.round(valueAt([...early, same], i, n)) };
     if (A.v >= MAX_LABEL || !distinct([...vals, A.v])) return null;
     return tapCard(w, {
-      story: `${saveStory(p, r)} ${cap(p.his)} last deposit is on the day ${p.he} checks the account.`,
+      story: `${saveStory(p, r)} ${cap(p.his)} last deposit is on the day ${p.he} checks the account.`, saving: true,
       n, amounts: [...early, ...(totalOnTop ? [same, A] : [A, same])], total: A,
       hint: "Two amounts sit on the last day. One of them is a deposit, and a deposit is a payment.",
       here: [
         { s: `T${n} holds two amounts: ${R0(same.v)} is ${p.his} last deposit, a payment.` },
-        { s: `${R0(A.v)} is ${w}.`, r: `${andList([...early, same].map(d => R0(d.v)))} all add up to it` },
+        { s: `${R0(A.v)} is ${w}.`, r: `the deposits ${andList([...early, same].map(d => R0(d.v)))} grow into it` },
       ],
     });
   };
@@ -193,7 +193,7 @@ function tapLoanBigRepay(w) {
     const P = { t: 0, v: Math.round(valueAt(pays, i, 0)) };
     if (P.v >= MAX_LABEL || !(big > P.v) || !distinct([...vals, big, P.v])) return null;
     return tapCard(w, {
-      story: loanStory(p, r), n, amounts: [P, ...pays], total: P,
+      story: loanStory(p, r), saving: false, n, amounts: [P, ...pays], total: P,
       hint: `The biggest number is not always ${w}. Where does it sit for a loan?`,
       here: [
         { s: `${R0(big)} is bigger than the loan, but it is a repayment.`, r: "the repayments carry the interest" },
@@ -225,7 +225,7 @@ function tapUnknownX(w) {
     if (total.v >= MAX_LABEL || !distinct([...known.map(d => d.v), total.v])) return null;
     const what = saving ? "deposit" : "repayment";
     return tapCard(w, {
-      story: `${saving ? saveStory(p, r) : loanStory(p, r)} One ${what}, x, is not known yet.`,
+      story: `${saving ? saveStory(p, r) : loanStory(p, r)} One ${what}, x, is not known yet.`, saving,
       n, amounts: saving ? [...pays, total] : [total, ...pays], total,
       hint: `x is a ${what} you would solve for later. ${cap(w)} is a different amount.`,
       here: [

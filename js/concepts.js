@@ -279,8 +279,8 @@ export const CONCEPTS = {
       </ul>
       <p>The loan amount <b>P has no interest in it</b>. The repayments pay back the loan <b>and</b> its interest, so together they come to more than P, and one repayment can even be bigger than P.</p>
       <p>Two amounts on the same day? Only one of them is the total. The other is a payment made on that day.</p>
-      <div class="eg">Saving at 10% p.a.: R2 000 at T0 and R3 000 at T1 grow into R6 292 at T3. The total is R6 292, at the end.</div>
-      <div class="eg">A loan at 10% p.a.: he borrows R5 000 at T0 and pays back R2 200 at T1 and R3 993 at T3. The total is R5 000, at the start.</div>`,
+      <div class="eg">Saving at 10% p.a.: R2&#8239;000 at T0 and R3&#8239;000 at T1 grow into R6&#8239;292 at T3. The total is R6&#8239;292, at the end.</div>
+      <div class="eg">A loan at 10% p.a.: he borrows R5&#8239;000 at T0 and pays back R2&#8239;200 at T1 and R3&#8239;993 at T3. The total is R5&#8239;000, at the start.</div>`,
   },
 
   /* ---------- Probability ---------- */

@@ -32,11 +32,29 @@
    frame grows by (k − 1)·STACK at the top so the highest label lands
    exactly where a single label always sat. A spec with no shared t
    (every round before f8) computes byte-for-byte the old geometry.
+
+   TAP BOXES GET AIR (f8 review 1, 2026-10-10). At a 360-px phone the
+   two boxes of a stack touched and the top one was 29 px tall, and
+   boxes on neighbouring days sat 2.7 px apart. Now: the boxes of a
+   stack share one width (edges line up) and are each TAP_H tall with
+   TAP_GAP between them; any two boxes keep TAP_AIR apart sideways.
+   verifyTimeline asserts the minimums in PHONE pixels (TAP_MIN). A
+   tap stack holds TWO labels (f8's same-day deposit and total); a
+   third would not fit its box, and verify would say so.
    ============================================================ */
 import { rand } from "../finlib.js";
 
 const N = v => Math.round(v * 10) / 10;
-const STACK = 22;            // vertical gap between two amount labels stacked on one node
+const STACK = 34;            // vertical step between two amount labels stacked on one node
+/* tap boxes (spec.tapLabels), in viewBox units */
+const TAP_H = 46;            // each box of a stack: 46 → 42 px tall at a 360-px phone
+const TAP_GAP = 8;           // air between the two boxes of a stack: 8 → 7.3 px
+const TAP_AIR = 7;           // air between boxes on neighbouring nodes: 7 → 6.4 px
+/* a 360-wide timeline draws 328 px wide in the question card at a 360-px
+   viewport (measured 2026-10-10: 0.911×). verify checks tap boxes at that
+   size against TAP_MIN, the minimums in real phone pixels. */
+export const PHONE_360 = 0.911;
+export const TAP_MIN = { h: 40, air: 6 };
 const GLYPH = 6.3;           // ≈0.6 × 10.5px per glyph: the width estimate the clamp has always used
 /* the estimated ink box of an amount label around its baseline (10.5px bold) */
 const INK_UP = 9, INK_DOWN = 3;
@@ -102,16 +120,24 @@ export function computeTimeline(spec) {
     });
   });
   // hit boxes for tappable amount labels: as wide as the label plus a margin
-  // (never past half-way to the next node), the bottom label of a stack
-  // reaching down to just above its tick, the top one reaching up a little.
+  // but never closer than TAP_AIR to the next node's box; every box on one
+  // node shares the widest one's edges, so a stack lines up. A lone label's
+  // box reaches from just above its tick up past the label; a stack is
+  // TAP_H-tall boxes, bottom one down to the tick, TAP_GAP between them.
   if (spec.tapLabels) {
-    const halfCap = gap / 2 - 1.5;
-    labels.forEach(lb => {
-      const half = Math.min(halfCap, Math.max(lb.w / 2 + 6, 18));
-      const x0 = Math.max(1, lb.x - half), x1 = Math.min(W - 1, lb.x + half);
-      const bottom = lb.j === 0 ? cy - 8 : lb.y + (STACK - 16);
-      const top = lb.j === lb.levels - 1 ? Math.max(2, lb.y - 26) : lb.y - 16;
-      lb.hit = { x: x0, y: top, w: x1 - x0, h: bottom - top };
+    const halfCap = (gap - TAP_AIR) / 2;
+    nodes.forEach(node => {
+      if (!node.labels.length) return;
+      const spans = node.labels.map(lb => {
+        const half = Math.min(halfCap, Math.max(lb.w / 2 + 6, 18));
+        return [Math.max(1, lb.x - half), Math.min(W - 1, lb.x + half)];
+      });
+      const x0 = Math.min(...spans.map(s => s[0])), x1 = Math.max(...spans.map(s => s[1]));
+      node.labels.forEach(lb => {
+        const bottom = cy - 8 - (lb.levels > 1 ? lb.j * (TAP_H + TAP_GAP) : 0);
+        const top = lb.levels > 1 ? bottom - TAP_H : Math.max(2, lb.y - 26);
+        lb.hit = { x: x0, y: top, w: x1 - x0, h: bottom - top };
+      });
     });
   }
   return { type: "timeline", n, W, H, L, R, cy, xAt, gap, nodes, labels };
@@ -192,8 +218,10 @@ export function verifyTimeline(spec, tol = 0.5) {
     r.push({ label: `${g.labels.length} amount labels, none overlapping${stacked.length ? ` (stacked on ${stacked.join(", ")})` : ""}${clash.length ? ": " + clash.join("; ") : ""}`, ok: clash.length === 0 });
   }
   // 6) tappable labels: every label has a unique id and a hit box that sits
-  //    in the frame, holds its own label, is big enough for a finger, and
-  //    never overlaps another label's box (so a tap is never ambiguous)
+  //    in the frame, holds its own label, is big enough for a finger
+  //    (TAP_MIN.h phone px tall), keeps TAP_MIN.air phone px from every
+  //    other box (so a tap is never ambiguous), and the boxes of a stack
+  //    share their left and right edges and their height
   if (spec.tapLabels) {
     const ids = g.labels.map(lb => lb.id);
     r.push({ label: `${ids.length} tappable amount labels, ids unique`, ok: ids.length > 0 && new Set(ids).size === ids.length });
@@ -204,13 +232,21 @@ export function verifyTimeline(spec, tol = 0.5) {
       const hb = boxOf(h), ink = labelInk(lb);
       if (hb.x0 < -tol || hb.x1 > g.W + tol || hb.y0 < -tol || hb.y1 > g.H + tol) bad.push(`"${lb.text}" hit box leaves the frame`);
       if (!(hb.x0 <= ink.x0 + tol && hb.x1 >= ink.x1 - tol && hb.y0 <= ink.y0 + tol && hb.y1 >= ink.y1 - tol)) bad.push(`"${lb.text}" hit box does not hold its label`);
-      if (h.w < 28 || h.h < 18) bad.push(`"${lb.text}" hit box only ${N(h.w)}×${N(h.h)}`);
+      if (h.w < 28 || h.h * PHONE_360 < TAP_MIN.h - 0.01) bad.push(`"${lb.text}" hit box only ${N(h.w)}×${N(h.h)} (${N(h.h * PHONE_360)} px tall at 360)`);
     });
     for (let i = 0; i < g.labels.length; i++)
       for (let j = i + 1; j < g.labels.length; j++) {
         const a = g.labels[i].hit, b = g.labels[j].hit;
-        if (a && b && overlaps(boxOf(a), boxOf(b), 0.01)) bad.push(`hit boxes of "${g.labels[i].text}" and "${g.labels[j].text}" overlap`);
+        if (!a || !b) continue;
+        const A = boxOf(a), B = boxOf(b);
+        const air = Math.max(A.x0 - B.x1, B.x0 - A.x1, A.y0 - B.y1, B.y0 - A.y1);
+        if (air * PHONE_360 < TAP_MIN.air - 0.01) bad.push(`hit boxes of "${g.labels[i].text}" and "${g.labels[j].text}" only ${N(air * PHONE_360)} px apart at 360`);
       }
+    g.nodes.filter(nd => nd.labels.length > 1).forEach(nd => {
+      const [a, ...rest] = nd.labels.map(lb => lb.hit).filter(Boolean);
+      if (a && rest.some(b => Math.abs(b.x - a.x) > 0.01 || Math.abs(b.w - a.w) > 0.01 || Math.abs(b.h - a.h) > 0.01))
+        bad.push(`stacked boxes on T${nd.t} differ in edges or height`);
+    });
     r.push({ label: `every amount label has its own finger-sized hit box${bad.length ? ": " + bad.join("; ") : ""}`, ok: bad.length === 0 });
   }
   return r;
