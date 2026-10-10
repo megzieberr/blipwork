@@ -10,11 +10,17 @@
 
    spec: {
      type:"timeline", n,                       // nodes T0..Tn
-     nodes:[ {t, amount?|label?, dp?, role?, id?} ],
+     nodes:[ {t, amount?|label?, dp?, role?, id?, out?} ],
                                                 // labels above a node; role "P"|"A"|"".
                                                 // TWO entries may share one t (f8's
                                                 // same-day deposit and total): their
                                                 // labels STACK upwards, never overlapping.
+                                                // out: true (f10, 2026-10-10): a WITHDRAWAL,
+                                                // money OUT of savings. Its amount is drawn
+                                                // with a leading minus, "−R2 000", in its own
+                                                // colour (.tl-out); the minus is part of the
+                                                // label, so every width, fit and overlap
+                                                // check measures it.
      arc?:{ from, to, label?, dir? },           // a single curved arrow from→to
      title?, w?, h?,
      tap?:{ targets:[t...], correctId:t },      // optional tap-a-node question
@@ -151,7 +157,8 @@ export function computeTimeline(spec) {
   (spec.nodes || []).forEach(d => {
     const node = nodes[d.t];
     if (!node) return;
-    const amountLabel = d.label != null ? d.label : (d.amount != null ? rand(d.amount, d.dp ?? 2) : null);
+    // f10: a withdrawal (d.out) carries its minus in the label itself, "−R2 000"
+    const amountLabel = d.label != null ? d.label : (d.amount != null ? (d.out ? "−" : "") + rand(d.amount, d.dp ?? 2) : null);
     if (!node.decorated) {
       node.decorated = true;
       node.amount = d.amount;
@@ -173,6 +180,7 @@ export function computeTimeline(spec) {
         id: d.id != null ? String(d.id) : `${node.t}.${j}`,
         t: node.t, j, levels: arr.length, nodeX: node.x,
         x, y: cy - 38 - j * STACK, w, text: s, amount: d.amount, role: d.role || "", ring,
+        out: !!d.out && d.label == null && d.amount != null,
       };
       labels.push(lb);
       return lb;
@@ -286,7 +294,7 @@ export function renderTimeline(spec) {
     out += text(node.x, g.cy + 20, node.label, node.t === meetT ? "tl-tlab tl-tmeet" : "tl-tlab");
     if (node.role) out += text(node.x, g.cy - 24, node.role, "tl-role");
     node.labels.forEach(lb => {
-      if (!lb.ring) { out += text(lb.x, lb.y, lb.text, "tl-amt"); return; }
+      if (!lb.ring) { out += text(lb.x, lb.y, lb.text, lb.out ? "tl-amt tl-out" : "tl-amt"); return; }   // f10: a withdrawal in its own colour
       // the total: "?" in the accent colour inside its ring (f9 review 1)
       out += `<g class="tl-qmark"><circle class="tl-qring" cx="${N(lb.x)}" cy="${N(lb.y - Q_DY)}" r="${Q_R}"/>${text(lb.x, lb.y, lb.text, "tl-amt tl-q")}</g>`;
     });
@@ -415,6 +423,14 @@ export function verifyTimeline(spec, tol = 0.5) {
     const clear = !nd.role || !overlaps(ink, roleInk(g, nd), 0);
     const holds = ink.x0 <= lb.x - GLYPH / 2 && ink.x1 >= lb.x + GLYPH / 2 && ink.y0 <= lb.y - INK_UP + 1 && ink.y1 >= lb.y;
     r.push({ label: `the total "?" on T${lb.t} sits in its ring, clear of its role letter ${nd.role || ""}`, ok: clear && holds });
+  });
+  // 6d) a withdrawal (f10, spec node out: true) is a real amount drawn with
+  //     its minus in front, "−R2 000", and is never the total (no role letter
+  //     of its own). Its box (minus included) is measured by checks 5 and 9.
+  g.labels.filter(lb => lb.out).forEach(lb => {
+    const ok = lb.text === "−" + rand(lb.amount, (spec.nodes.find(d => d.out && d.t === lb.t && d.amount === lb.amount) || {}).dp ?? 2)
+      && lb.amount > 0 && !lb.role;
+    r.push({ label: `the withdrawal on T${lb.t} is drawn "${lb.text}", minus in front, and is not the total`, ok });
   });
   // the things a flag or a road label must never touch (f9)
   const inFrame = b => b.x0 >= -tol && b.x1 <= g.W + tol && b.y0 >= -tol && b.y1 <= g.H + tol;

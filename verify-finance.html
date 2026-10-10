@@ -40,12 +40,20 @@
   ROADS; the flag, its words and every road label are measured below against the amounts, role letters, T labels and each
   other. Her rulings are checked on every roll: the total is "?" with its role letter (never a bare money label), and a
   payment on the total's own day stacks ABOVE it. The f9 block at the bottom checks the round's shape and words.</p>
+<p class="muted small"><b>2026-10-10: f10 "In or out?" joined</b> (8 more skills, so f1–f10 is 75 skills; the recompute
+  covers 46 of them, the other 29 are fixed-fact recall). Every equation a learner reads on an f10 card (the jug form in a
+  prompt, each option, the worked tidy line) is parsed term by term: each term its own unbreakable unit, at the story's rate,
+  one "=", balanced brackets, only the story's terms. The right equation is rebuilt from the picture and the story (the loan
+  and deposits IN, plus; repayments and withdrawals OUT, minus; each with its car to the meeting day) and compared: the jug
+  form and the tidy form must be the same terms with the moved signs flipped, and every decoy a different equation. The
+  interest card is recomputed from its displayed numbers. The engine learnt one thing, measured below: a WITHDRAWAL node
+  (out: true) drawn "−R2 000" in its own colour. The f10 block at the bottom checks the round's shape and words.</p>
 <div id="banner">running…</div>
 
 <h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
 <div class="grid" id="engine"></div>
 
-<h2>Quests f1–f9 — every skill, 200 generations</h2>
+<h2>Quests f1–f10 — every skill, 200 generations</h2>
 <pre id="quests">…</pre>
 
 <h2>Independent recompute (js/finlib.js, from the question's own displayed numbers)</h2>
@@ -79,6 +87,17 @@
   day of A) and sometimes a middle T; both gears occur; twoCars and roadExponent always cross the rate change, exponent never.</p>
 <pre id="f9">…</pre>
 
+<h2>f10 — the round's shape, words and rulings, card by card</h2>
+<p class="muted small">Every f10 card: a hint, an answer and a worked solution ending on the refrain "Deposits and the loan go IN.
+  Withdrawals and repayments come OUT. Tidy: payments positive on the right."; nothing says lumpsum, lump sum, accumulated
+  amount, LHS or RHS; no HTML entity, no plain space inside an amount, no money amount outside its unbreakable unit; every
+  equation parses term by term. On a picture the total is "?" with its role letter (or, on the interest card, the known loan
+  with its P), the meeting day is the last T, and a saving picture draws exactly one withdrawal "−R…". The shape: the jug
+  cards roll loans and saving, jugWrong slips each of the four kinds (a repayment added, the loan subtracted, the withdrawal
+  added, a deposit subtracted), a repayment sometimes stands on the meeting day and a deposit sometimes on the day of A,
+  the recall card deals all five items, the interest card offers a negative decoy, signOnTimeline names no amount in words.</p>
+<pre id="f10">…</pre>
+
 <div id="measure"></div>
 
 <h2>Result</h2>
@@ -90,7 +109,7 @@ import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline } from "./js/engine/timeline-graph.js";
-import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption } from "./js/quests/_finance-check.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf } from "./js/quests/_finance-check.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 
 const ACC = "#8b5cf6";
@@ -126,6 +145,11 @@ const ENGINE = [
      the "?" total in its ring, and leader lines from the lone amounts */
   { title: "f9 review 1: flag in the middle of a short first road, ring, leaders", spec: { type: "timeline", n: 6, meet: 1, leaders: true, nodes: [{ t: 6, label: "?", role: "A" }, { t: 1, amount: 10000, dp: 0 }, { t: 4, amount: 10000, dp: 0 }], roads: [{ from: 0, to: 2, rate: "15% p.a.", k: 12 }, { from: 2, to: 6, rate: "14% p.a.", k: 2 }], accent: ACC } },
   { title: "f9 review 1: flag in the middle of a short last road, loan ring on T0", spec: { type: "timeline", n: 6, meet: 5, leaders: true, nodes: [{ t: 0, label: "?", role: "P" }, { t: 3, amount: 7500, dp: 0 }, { t: 5, amount: 10000, dp: 0 }], roads: [{ from: 0, to: 4, rate: "12% p.a.", k: 4 }, { from: 4, to: 6, rate: "15% p.a.", k: 1 }], accent: ACC } },
+  /* f10 (2026-10-10): a WITHDRAWAL drawn "−R3 000" (out: true) squeezed between the widest deposits the round rolls
+     (R20 000, R15 000) on neighbouring T's at n = 5, a deposit stacked on the day of A under the meeting-day flag; then
+     the interest card's known loan, the widest 2-dp label it allows (under R10 000), carrying its P at T0 at n = 4 */
+  { title: "f10: a withdrawal −R3 000 between the widest deposits, a deposit on the day of A", spec: { type: "timeline", n: 5, meet: 5, leaders: true, nodes: [{ t: 5, label: "?", role: "A" }, { t: 0, amount: 20000, dp: 0 }, { t: 1, amount: 3000, dp: 0, out: true }, { t: 2, amount: 15000, dp: 0 }, { t: 5, amount: 14000, dp: 0 }], roads: [{ from: 0, to: 5, rate: "15% p.a.", k: 12 }], accent: ACC } },
+  { title: "f10: the known loan R9 999,99 with its P at T0 (the interest card)", spec: { type: "timeline", n: 4, leaders: true, nodes: [{ t: 0, amount: 9999.99, dp: 2, role: "P" }, { t: 1, amount: 9000, dp: 0 }, { t: 4, amount: 7500, dp: 0 }], roads: [{ from: 0, to: 4, rate: "15% p.a.", k: 2 }], accent: ACC } },
 ];
 const eg = document.getElementById("engine");
 ENGINE.forEach(t => {
@@ -426,6 +450,77 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   tick(S("exponent").cross === 0, "f9.exponent: no trip crosses the rate change (one car, one exponent)");
   const sample = def.skills.map((s, pos) => `  card ${pos + 1}: ${String(s.gen().prompt).replace(/<[^>]+>/g, "")}`).join("\n");
   document.getElementById("f9").textContent = flines.join("\n") + "\n\none roll of each card, in dealing order:\n" + sample;
+}
+
+/* ---------- 7) f10: the round's shape, words and rulings ---------- */
+{
+  /* written out here on purpose, not imported, so a slip in the module cannot pass itself */
+  const REFRAIN = "Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: payments positive on the right.";
+  const BANNED = [/lumpsum/i, /lump sum/i, /accumulated amount/i, /\bLHS\b/, /\bRHS\b/];
+  const ORDER = ["jugCorrect", "jugWrong", "tidy", "withdrawal", "inOrOutWord", "interestPaid", "tidyLoan", "signOnTimeline"];
+  const def = questDef("f10");
+  const N = 300;
+  const flines = [], stat = {};
+  tick(def.skills.map(s => s.id).join(",") === ORDER.join(","), `f10 deals 8 cards in order, the jug form first: ${def.skills.map(s => s.id).join(", ")}`);
+  const noTags = s => String(s).replace(/<[^>]+>/g, "");
+  def.skills.forEach((skill, pos) => {
+    const st = { bad: 0, firstBad: "", loan: 0, saving: 0, repayOnMeet: 0, depOnA: 0, eqs: 0, outs: 0, amounts: new Set(), items: new Set(), answers: new Set(), slips: new Set(), negDecoy: 0, namesAmount: 0 };
+    for (let i = 0; i < N; i++) {
+      const q = skill.gen(), g = q.graph;
+      const all = [q.prompt, q.hint, q.answerLabel, ...(q.options || []).map(o => o.label),
+        ...(q.solution || []).flatMap(s => [s.s, s.r])].filter(x => x != null).map(String);
+      const t = all.join(" | ");
+      const problems = [];
+      if (BANNED.some(re => re.test(t))) problems.push("a banned word");
+      if (/&#|&nbsp;/.test(t)) problems.push("an HTML entity");
+      if (/\d \d{3}(?!\d)/.test(noTags(t))) problems.push("a plain space inside an amount");
+      if (/R\d/.test(noTags(t.replace(/<span class="nowrap">[^<]*<\/span>/g, "")))) problems.push("a money amount outside its unbreakable unit");
+      if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 2) problems.push("no hint, answer or worked solution");
+      else if (q.solution[q.solution.length - 1].s !== REFRAIN) problems.push("the solution does not end on the refrain");
+      const eqs = f10EquationsOf(q);
+      st.eqs += eqs.length;
+      if (eqs.some(e => !e.ok)) problems.push(`an equation that does not parse (${eqs.filter(e => !e.ok).map(e => e.where).join(", ")})`);
+      if (g) {
+        const tot = g.nodes.filter(nd => nd.role), pays = g.nodes.filter(nd => !nd.role);
+        const isQ = tot.length === 1 && tot[0].label === "?" && tot[0].amount == null;
+        const knownLoan = tot.length === 1 && skill.id === "interestPaid" && tot[0].role === "P" && tot[0].t === 0 && Number.isFinite(tot[0].amount);
+        if (!isQ && !knownLoan) problems.push("the total is not \"?\" (or the known loan) with its role letter");
+        if (skill.id === "interestPaid" ? g.meet != null : g.meet !== g.n) problems.push("the meeting day is not the last T");
+        const saving = tot.length === 1 && tot[0].role === "A";
+        if (saving) st.saving++; else st.loan++;
+        const outs = pays.filter(nd => nd.out).length;
+        st.outs += outs;
+        if (saving ? outs !== 1 : outs !== 0) problems.push(`${outs} withdrawals drawn on a ${saving ? "saving" : "loan"} picture`);
+        if (!saving && pays.some(nd => nd.t === g.n)) st.repayOnMeet++;
+        if (saving && pays.some(nd => nd.t === g.n)) st.depOnA++;
+        st.amounts.add(pays.length);
+      }
+      if (skill.id === "jugWrong") st.slips.add((String(q.answerLabel).match(/the (loan|repayment|withdrawal|deposit)/) || [])[1]);
+      if (skill.id === "inOrOutWord") { st.items.add(noTags((String(q.prompt).match(/<b>([^<]+)<\/b>/) || [])[1])); st.answers.add(q.answerLabel); }
+      if (skill.id === "interestPaid" && q.options.some(o => /^−R/.test(noTags(o.label)) && !o.correct)) st.negDecoy++;
+      if (skill.id === "tidyLoan") {
+        if (q.graph) problems.push("a timeline on the tidyLoan card (it would show the loan and give the price away)");
+        if (!/down payment/.test(q.prompt) || /deposit/i.test(t.split(REFRAIN).join(""))) problems.push("the down payment is not called a down payment");
+      }
+      if (/R\d/.test(noTags(q.prompt))) st.namesAmount++;
+      if (problems.length) { st.bad++; if (!st.firstBad) st.firstBad = problems.join(", ") + ": " + noTags(q.prompt).slice(0, 140); }
+    }
+    stat[skill.id] = st;
+    tick(st.bad === 0, `f10 card ${pos + 1} (${skill.id}): words, refrain, units, equations, the total on the picture (${N} rolls)`);
+    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(15)} equations parsed ${String(st.eqs).padStart(4)} · loan ${st.loan} · saving ${st.saving} · repayment on the meeting day ${st.repayOnMeet} · deposit on the day of A ${st.depOnA}`
+      + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
+  });
+  const S = id => stat[id] || {};
+  ["jugCorrect", "jugWrong"].forEach(id => tick(S(id).loan > N * 0.4 && S(id).saving > N * 0.2, `f10.${id}: loans and saving both rolled (loan ${S(id).loan}, saving ${S(id).saving})`));
+  tick(["loan", "repayment", "withdrawal", "deposit"].every(k => S("jugWrong").slips.has(k)), `f10.jugWrong: all four slips occur (${[...S("jugWrong").slips].join(", ")})`);
+  tick(S("jugCorrect").repayOnMeet > 0 && S("tidy").repayOnMeet > 0, "f10: a repayment sometimes stands on the meeting day (no car)");
+  tick(S("jugCorrect").depOnA > 0 && S("withdrawal").depOnA > 0 && S("signOnTimeline").depOnA > 0, "f10: a deposit sometimes shares the day of A (no car)");
+  tick(S("inOrOutWord").items.size === 5 && S("inOrOutWord").answers.size === 3, `f10.inOrOutWord: all five items (${S("inOrOutWord").items.size}) and all three answers (${S("inOrOutWord").answers.size}) occur`);
+  tick(S("interestPaid").negDecoy === N, "f10.interestPaid: every roll offers the loan minus the payments as a negative decoy");
+  tick(S("signOnTimeline").namesAmount === 0 && S("signOnTimeline").outs === N, "f10.signOnTimeline: the prompt names no amount, and every picture draws its one withdrawal");
+  tick(S("signOnTimeline").amounts.has(2) && S("signOnTimeline").amounts.has(3), "f10.signOnTimeline: two and three amounts both occur");
+  const sample = def.skills.map((s, pos) => `  card ${pos + 1}: ${noTags(String(s.gen().prompt).replace(/<br>/g, " ⏎ "))}`).join("\n");
+  document.getElementById("f10").textContent = flines.join("\n") + "\n\none roll of each card, in dealing order:\n" + sample;
 }
 
 const ok = passed === total && genFails === 0;

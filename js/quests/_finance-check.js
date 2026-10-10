@@ -12,7 +12,10 @@
    Coverage: all 25 f1–f7 skills that roll a number, plus f8's five
    tap-the-total skills and all eight f9 car skills (2026-10-10, each
    re-derived from the drawn meeting day, roads and amounts and the rates
-   in the prompt). The rest are pure fixed-fact recall
+   in the prompt), and all eight f10 sign skills (2026-10-10: every
+   equation parsed term by term and compared with the one the picture and
+   the story give; the interest recomputed from the displayed numbers;
+   the recall card against a table written out here). The rest are pure fixed-fact recall
    (no numbers to recompute) and are covered by the generic shape /
    self-consistency / decoy checks in the harnesses.
    ============================================================ */
@@ -129,6 +132,13 @@ export function labelFitIssues(spec, host) {
   for (let i = 0; i < boxes.length; i++)
     for (let j = i + 1; j < boxes.length; j++)
       if (hits(boxes[i].bb, boxes[j].bb, 0.5)) out.push(`amounts "${boxes[i].text}" and "${boxes[j].text}" overlap`);
+  /* f10 (2026-10-10): a withdrawal (spec node out: true) is its own label,
+     "−R2 000", in .tl-out; its real box, minus included, was measured
+     above like every amount (inside the frame, over its node, no overlap) */
+  const outSpec = (spec.nodes || []).filter(d => d.out && d.amount != null && d.label == null).length;
+  const outEls = [...svg.querySelectorAll("text.tl-amt.tl-out")];
+  if (outEls.length !== outSpec) out.push(`${outEls.length} withdrawal labels drawn for ${outSpec} in the spec`);
+  outEls.forEach(el => { if (!/^−R\d/.test(el.textContent)) out.push(`withdrawal "${el.textContent}" is not drawn with its minus in front`); });
   /* tappable labels (spec.tapLabels): each label's real box sits inside its
      OWN hit box, and its centre inside no other label's box, so the place a
      learner aims at is always the amount they meant */
@@ -451,7 +461,261 @@ export const RECOMPUTE = {
     const s = f9Scene(q), t = s && f9Trip(s);
     return !!t && correctNum(q) === t.legs.length;
   },
+
+  /* ---- f10 (2026-10-10): in or out? (the one equation's signs) ---- */
+  "f10.jugCorrect": q => f10JugCheck(q, false),
+  "f10.jugWrong": q => f10JugCheck(q, true),
+  "f10.tidy": q => {
+    const s = f10Scene(q);
+    if (!s || s.saving || s.known) return false;
+    const jug = f10ParseEq(f10PromptEq(q), f10Rate(s));
+    if (!jug || !f10JugShape(jug, s) || !f10Equiv(jug, f10Expect(s))) return false;   // the jug form shown is right…
+    return f10McCheck(q, s, f10Expect(s), { c: "P", e: s.n * s.k }, f10Allowed(s));  // …and the tidy option is the same equation
+  },
+  "f10.withdrawal": q => {
+    const s = f10Scene(q);
+    return !!s && s.saving && !s.known && f10McCheck(q, s, f10Expect(s), { c: "A", e: 0 }, f10Allowed(s));
+  },
+  "f10.signOnTimeline": q => {
+    const s = f10Scene(q);
+    return !!s && s.saving && !s.known && !/R\d/.test(String(q.prompt).replace(/<[^>]+>/g, ""))   // the picture alone carries the amounts
+      && f10McCheck(q, s, f10Expect(s), { c: "A", e: 0 }, f10Allowed(s));
+  },
+  "f10.inOrOutWord": q => {
+    /* written out here on purpose, not imported from the module */
+    const m = String(q.prompt).match(/<b>([^<]+)<\/b>/);
+    if (!m || q.type !== "mc" || q.options.length !== 3) return false;
+    const item = m[1];
+    const want = /down payment/i.test(item) ? "Neither: it never enters the account"
+      : /repayment|withdrawal/i.test(item) ? "Out: minus"
+      : /deposit|loan itself/i.test(item) ? "In: plus" : null;
+    return !!want && correctLabel(q) === want;
+  },
+  "f10.interestPaid": q => {
+    const p = String(q.prompt);
+    const m = p.match(/borrowed <span class="nowrap">R([\d ]+,\d\d)<\/span> at (\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)\./);
+    const pays = [...p.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
+    if (!m || pays.length !== 2 || q.type !== "mc") return false;
+    const loan = f10Num(m[1]), r = Number(m[2]), k = F9_K[m[3]];
+    /* the story is true: those repayments, moved back to T0 at the stated rate, are that loan to the cent */
+    const pv = pays.reduce((s, x) => s + x.v * Math.pow(1 + toFrac(r) / k, -x.t * k), 0);
+    if (!(Math.abs(pv - loan) <= 0.005 + 1e-9)) return false;
+    /* the picture agrees: the loan at T0 carrying its letter P, the repayments where the story puts them */
+    const g = q.graph;
+    if (!g || !Array.isArray(g.nodes)) return false;
+    const tot = g.nodes.filter(nd => nd.role);
+    if (tot.length !== 1 || tot[0].role !== "P" || tot[0].t !== 0 || !near(tot[0].amount, loan, 1e-9)) return false;
+    const others = g.nodes.filter(nd => !nd.role);
+    if (others.length !== 2 || !pays.every(x => others.some(nd => nd.amount === x.v && nd.t === x.t))) return false;
+    /* interest = paid back − borrowed, to the cent; no decoy equals it by value */
+    const want = Math.round((pays[0].v + pays[1].v) * 100) - Math.round(loan * 100);
+    const cents = q.options.map(o => f10Cents(o.label));
+    if (!cents.every(Number.isFinite) || new Set(cents).size !== cents.length) return false;
+    const c = correctOption(q);
+    return !!c && f10Cents(c.label) === want;
+  },
+  "f10.tidyLoan": q => {
+    const p = String(q.prompt);
+    const price = p.match(/ for <span class="nowrap">R([\d ]+)<\/span>/), down = p.match(/down payment of <span class="nowrap">R([\d ]+)<\/span>/);
+    const said = [...p.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)/g)];
+    const xm = p.match(/a last repayment, x, at T(\d+)/), mm = p.match(/The meeting day is T(\d+)\./);
+    const pays = [...p.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
+    if (!price || !down || said.length !== 1 || !xm || !mm || !pays.length || q.graph) return false;
+    const n = Number(mm[1]), r = Number(said[0][1]), k = F9_K[said[0][2]];
+    const P = f10Num(price[1]), D = f10Num(down[1]), loan = P - D;               // price = loan + down payment
+    if (Number(xm[1]) !== n || !(D > 0 && loan > 0) || pays.some(x => !(x.t > 0 && x.t < n))) return false;
+    const s = { saving: false, n, r, k, pays: pays.map(x => ({ ...x, out: false })) };
+    const expect = [{ s: 1, c: loan, e: n * k }, ...pays.map(x => ({ s: -1, c: x.v, e: (n - x.t) * k })), { s: -1, c: "x", e: 0 }];
+    return f10McCheck(q, s, expect, { c: loan, e: n * k }, new Set([P, D, loan, "x", ...pays.map(x => x.v)]));
+  },
 };
+
+/* ============================================================
+   f10 · "In or out?" — the one equation, read back from what is shown.
+     · EVERY equation (the prompt's jug form, each option, the worked
+       tidy line) must PARSE: each term one <span class="nowrap"> unit
+       (amount with no-break thousands, or P / A / x, then at most one
+       car "(1 + 0,12/12)^36" or "^(−36)" at the story's own rate),
+       terms joined only by " + " / " − ", exactly one " = ", a side may
+       be a lone 0, a leading minus only on a side's first term, and the
+       brackets balance. A slip here returns null and the check fails.
+     · the scene comes from the picture: the total ("?" with its letter,
+       A at the end for saving, P at T0 for a loan; or the known loan with
+       its P), the payments, the ONE withdrawal drawn out (saving only,
+       after a deposit, before the meeting day), one road whose rate is the
+       prompt's, and the story's "R… at T…" mentions match the nodes.
+     · the expected equation: the loan and every deposit IN (+), every
+       repayment and withdrawal OUT (−), each with its car to the meeting
+       day (the last T): exponent (n − t) × k; the total A on the other side.
+     · two equations are the same when left − right holds the same signed
+       terms, or all of them negated (the jug form and its tidy form are
+       the same terms with the moved signs flipped).
+   ============================================================ */
+const f10Num = s => Number(String(s).replace(/[\s  ]/g, "").replace(",", "."));
+/* "R2 912,58" / "−R2 912,58" (tags stripped) → cents; NaN if not money */
+function f10Cents(label) {
+  const t = String(label).replace(/<[^>]+>/g, "");
+  const m = t.match(/^(−?)R(\d{1,3}(?: \d{3})*,\d\d)$/);
+  return m ? (m[1] ? -1 : 1) * Math.round(f10Num(m[2]) * 100) : NaN;
+}
+const f10Rate = s => (s.k === 1 ? C(toFrac(s.r)) : `${C(toFrac(s.r))}/${s.k}`);
+const F10_TERM = /^(−)?(\d{1,3}(?: \d{3})*|P|A|x)(?:\(1 \+ (0,\d+(?:\/\d+)?)\)\^(\d+|\(−\d+\)))?$/;
+export function f10ParseEq(html, iText = null) {
+  if (html == null) return null;
+  const units = [];
+  const s = String(html).replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => { units.push(inner); return ` #${units.length - 1} `; });
+  if (/[<>]/.test(s)) return null;                                         // a term that is not its own unbreakable unit
+  const toks = s.trim().split(/ +/).filter(Boolean);
+  const sides = [[], []];
+  let side = 0, want = "operand", sign = 1;
+  for (let j = 0; j < toks.length; j++) {
+    const tk = toks[j];
+    if (want === "operand") {
+      if (tk === "0" && !sides[side].length && sign === 1 && (toks[j + 1] === "=" || j === toks.length - 1)) { want = "zero"; continue; }
+      const m = /^#(\d+)$/.exec(tk);
+      if (!m) return null;
+      const body = units[Number(m[1])];
+      let depth = 0;
+      for (const ch of body) { depth += ch === "(" ? 1 : ch === ")" ? -1 : 0; if (depth < 0) return null; }
+      if (depth !== 0) return null;                                        // brackets balance
+      const tm = F10_TERM.exec(body);
+      if (!tm) return null;
+      if (tm[1] && (sides[side].length || sign !== 1)) return null;       // a leading minus only on a side's first term
+      if (tm[3] != null && iText != null && tm[3] !== iText) return null; // every car at the story's own rate
+      const c = /^\d/.test(tm[2]) ? Number(tm[2].replace(/ /g, "")) : tm[2];
+      const e = tm[4] == null ? 0 : tm[4].startsWith("(") ? -Number(tm[4].slice(2, -1)) : Number(tm[4]);
+      if (tm[4] != null && !(Number.isInteger(e) && e !== 0)) return null;
+      sides[side].push({ s: sign * (tm[1] ? -1 : 1), c, e });
+      sign = 1; want = "op";
+    } else if ((tk === "+" || tk === "−") && want === "op") { sign = tk === "+" ? 1 : -1; want = "operand"; }
+    else if (tk === "=" && side === 0) { side = 1; want = "operand"; sign = 1; }
+    else return null;
+  }
+  if (side !== 1 || want === "operand") return null;
+  return { L: sides[0], R: sides[1] };
+}
+const f10Key = ts => ts.map(t => `${t.s}|${t.c}|${t.e}`).sort().join(";");
+const f10Zero = eq => [...eq.L, ...eq.R.map(t => ({ ...t, s: -t.s }))];
+export function f10Equiv(eq, zero) {
+  const a = f10Key(f10Zero(eq));
+  return a === f10Key(zero) || a === f10Key(zero.map(t => ({ ...t, s: -t.s })));
+}
+/* the equation shown in a jug-card prompt: the line between the two <br>s */
+function f10PromptEq(q) { const parts = String(q.prompt).split("<br>"); return parts.length === 3 ? parts[1] : null; }
+/* the equation at the end of a worked line ("Tidy: …: EQ") */
+function f10SolEq(q, start) {
+  const st = (q.solution || []).find(x => String(x.s).startsWith(start));
+  return st ? String(st.s).slice(String(st.s).lastIndexOf(": ") + 2) : null;
+}
+export function f10Scene(q) {
+  const g = q && q.graph;
+  if (!g || g.type !== "timeline" || !Array.isArray(g.nodes) || !Array.isArray(g.roads) || g.roads.length !== 1) return null;
+  if (g.meet !== g.n) return null;                                          // the meeting day is the last T
+  const prompt = String(q.prompt);
+  const said = [...prompt.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)/g)];
+  if (said.length !== 1) return null;
+  const r = Number(said[0][1]), k = F9_K[said[0][2]];
+  const road = g.roads[0], rm = String(road.rate).match(/^(\d+)% p\.a\.$/);
+  if (!rm || Number(rm[1]) !== r || road.from !== 0 || road.to !== g.n) return null;
+  const roles = g.nodes.filter(nd => nd.role);
+  if (roles.length !== 1) return null;
+  const tot = roles[0], saving = tot.role === "A";
+  if (!((saving && tot.t === g.n) || (tot.role === "P" && tot.t === 0))) return null;
+  if (g.nodes.find(nd => nd.t === tot.t) !== tot) return null;            // the bottom of its day's stack, right above its letter
+  /* HER RULING: the total is never a bare money label: "?" with its letter, or a known loan WITH its letter */
+  const known = tot.label == null && Number.isFinite(tot.amount);
+  if (!known && !(tot.label === "?" && tot.amount == null)) return null;
+  if (known && saving) return null;
+  const pays = g.nodes.filter(nd => nd !== tot);
+  if (!pays.every(nd => Number.isInteger(nd.amount) && nd.amount > 0 && Number.isInteger(nd.t) && nd.t >= 0 && nd.t <= g.n && nd.label == null && !nd.role)) return null;
+  if (new Set(pays.map(x => x.amount)).size !== pays.length || new Set(pays.map(x => x.t)).size !== pays.length) return null;
+  const outs = pays.filter(x => x.out);
+  if (saving) {
+    if (outs.length !== 1) return null;
+    const w = outs[0];
+    if (!(w.t > 0 && w.t < g.n && pays.some(x => !x.out && x.t < w.t))) return null;   // after a deposit, before the meeting day
+  } else if (outs.length || pays.some(x => x.t === 0)) return null;
+  /* the story, where it names amounts, names exactly the drawn ones */
+  const said2 = [...prompt.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
+  if (said2.length && (said2.length !== pays.length || !said2.every(x => pays.some(nd => nd.amount === x.v && nd.t === x.t)))) return null;
+  const wd = [...prompt.matchAll(/withdraws <span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)];
+  if (wd.length && (wd.length !== 1 || f10Num(wd[0][1]) !== outs[0].amount || Number(wd[0][2]) !== outs[0].t)) return null;
+  return { saving, known, n: g.n, meet: g.meet, r, k, pays: pays.map(x => ({ t: x.t, v: x.amount, out: !!x.out })) };
+}
+/* left − right of the right equation, with the meeting day on the last T */
+function f10Expect(s) {
+  const e = t => (s.n - t) * s.k;
+  return s.saving
+    ? [...s.pays.map(x => ({ s: x.out ? -1 : 1, c: x.v, e: e(x.t) })), { s: -1, c: "A", e: 0 }]
+    : [{ s: 1, c: "P", e: e(0) }, ...s.pays.map(x => ({ s: -1, c: x.v, e: e(x.t) }))];
+}
+const f10Allowed = s => new Set([s.saving ? "A" : "P", ...s.pays.map(x => x.v)]);
+/* the jug form's shape: a loan's side starts with +P and equals 0; saving equals A alone */
+function f10JugShape(eq, s) {
+  return s.saving
+    ? eq.R.length === 1 && eq.R[0].c === "A" && eq.R[0].s === 1 && eq.R[0].e === 0 && eq.L.length === s.pays.length
+    : eq.R.length === 0 && eq.L.length === s.pays.length + 1;
+}
+/* the tidy form's shape: the total's term alone on the left, every payment
+   positive on the right except a withdrawal, which keeps its minus */
+function f10TidyShape(eq, lead, outs) {
+  return eq.L.length === 1 && eq.L[0].s === 1 && eq.L[0].c === lead.c && eq.L[0].e === lead.e
+    && eq.R.every(t => t.s === (outs.has(t.c) ? -1 : 1));
+}
+/* an mc of equations: every option parses (at the story's rate, with only
+   the story's terms), exactly one option is the right equation, it is
+   marked correct and is in the tidy form, and no two options are the same
+   equation */
+function f10McCheck(q, s, expect, lead, allowed) {
+  if (q.type !== "mc" || !Array.isArray(q.options) || q.options.length !== 4) return false;
+  const parsed = q.options.map(o => ({ o, eq: f10ParseEq(o.label, f10Rate(s)) }));
+  if (parsed.some(p => !p.eq || [...p.eq.L, ...p.eq.R].some(t => !allowed.has(t.c)))) return false;
+  const right = parsed.filter(p => f10Equiv(p.eq, expect));
+  if (right.length !== 1 || !right[0].o.correct) return false;
+  if (!f10TidyShape(right[0].eq, lead, new Set(s.pays.filter(x => x.out).map(x => x.v)))) return false;
+  for (let i = 0; i < parsed.length; i++)
+    for (let j = i + 1; j < parsed.length; j++) if (f10Equiv(parsed[i].eq, f10Zero(parsed[j].eq))) return false;
+  return true;
+}
+/* the yes/no jug cards: the shown jug form is right (jugCorrect) or has
+   EXACTLY ONE sign slipped (jugWrong); q.yes must say which; the worked
+   right jug form and tidy line are the right equation, in shape */
+function f10JugCheck(q, wrong) {
+  const s = f10Scene(q);
+  if (!s || s.known || q.type !== "yesno" || s.meet !== s.n) return false;
+  const iT = f10Rate(s), expect = f10Expect(s);
+  const shown = f10ParseEq(f10PromptEq(q), iT);
+  if (!shown || !f10JugShape(shown, s)) return false;
+  const ok = f10Equiv(shown, expect);
+  if (q.yes !== ok) return false;
+  if (wrong) {
+    /* same terms, exactly one sign different (orientation: the side with the payments, minus the other) */
+    const z = f10Zero(shown), want = expect;
+    const strip = ts => ts.map(t => `${t.c}|${t.e}`).sort().join(";");
+    if (strip(z) !== strip(want)) return false;
+    const diff = z.filter(t => !want.some(w => w.c === t.c && w.e === t.e && w.s === t.s)).length;
+    if (diff !== 1) return false;
+    const fixed = f10ParseEq(f10SolEq(q, "The right jug form"), iT);
+    if (!fixed || !f10JugShape(fixed, s) || !f10Equiv(fixed, expect)) return false;
+  }
+  const tidy = f10ParseEq(f10SolEq(q, "Tidy"), iT);
+  const lead = s.saving ? { c: "A", e: 0 } : { c: "P", e: s.n * s.k };
+  return !!tidy && f10Equiv(tidy, expect) && f10TidyShape(tidy, lead, new Set(s.pays.filter(x => x.out).map(x => x.v)));
+}
+/* every equation a learner reads on an f10 card (prompt, options, worked
+   lines) parsed, for the harness's f10 block: [{ where, ok }] */
+export function f10EquationsOf(q) {
+  const out = [];
+  const looks = h => /<span class="nowrap">[^<]*<\/span> (?:=|\+|−) /.test(String(h)) && / = /.test(String(h).replace(/<[^>]+>/g, ""));
+  const pe = f10PromptEq(q);
+  if (pe != null && looks(pe)) out.push({ where: "prompt", ok: !!f10ParseEq(pe) });
+  (q.options || []).forEach((o, j) => { if (looks(o.label)) out.push({ where: `option ${j + 1}`, ok: !!f10ParseEq(o.label) }); });
+  (q.solution || []).forEach((st, j) => {
+    const s = String(st.s), i = s.lastIndexOf(": ");
+    if (i >= 0 && looks(s.slice(i + 2)) && !/Interest|loan =/.test(s)) out.push({ where: `worked line ${j + 1}`, ok: !!f10ParseEq(s.slice(i + 2)) });
+  });
+  return out;
+}
 
 /* ============================================================
    f9 · "Car or no car?" — the scene, read back from what is drawn.

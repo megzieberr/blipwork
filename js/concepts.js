@@ -300,6 +300,26 @@ export const CONCEPTS = {
       <div class="eg">Her last deposit, <span class="nowrap">R2 000</span>, is paid in on the same day as A, and the meeting day is that day: no car, it is just <span class="nowrap">2 000</span>.</div>
       <p>A car only if it has to move. Already there? No car.</p>`,
   },
+  /* f10 "In or out?" (2026-10-10). The sign round: the jug form first, then
+     the tidy step. "the total" only. Money amounts carry a LITERAL U+202F
+     (the entity would be escaped and shown as raw text). */
+  inOrOut: {
+    title: "In or out?",
+    body: `
+      <p>Think of the account as a <b>jug</b>. Money that goes <b>IN</b> is <b>plus</b>. Money that comes <b>OUT</b> is <b>minus</b>.</p>
+      <ul>
+        <li><b>IN (plus):</b> a deposit into savings, and the loan itself (the bank pays it in).</li>
+        <li><b>OUT (minus):</b> a withdrawal from savings, and every repayment on a loan.</li>
+        <li>A <b>down payment</b> never enters the account: it is paid straight to the seller. No car, no sign. It comes off the price: <span class="nowrap">loan = price − down payment</span>.</li>
+      </ul>
+      <p><b>The jug form.</b> Move every amount to the meeting day and write them all on one side. A loan ends empty, so it equals 0. Saving ends holding the total, so it equals A.</p>
+      <div class="eg">A loan paid back with <span class="nowrap">R8 000</span> at T1 and <span class="nowrap">R9 000</span> at T3, 12% p.a. compounded monthly, meeting day T3: <span class="nowrap">P(1 + 0,12/12)^36</span> − <span class="nowrap">8 000(1 + 0,12/12)^24</span> − <span class="nowrap">9 000</span> = 0</div>
+      <p><b>The tidy form.</b> Move the minuses across the equals sign. They turn into plusses, so the payments stand positive on the right. The cars stay.</p>
+      <div class="eg"><span class="nowrap">P(1 + 0,12/12)^36</span> = <span class="nowrap">8 000(1 + 0,12/12)^24</span> + <span class="nowrap">9 000</span></div>
+      <div class="eg">Saving with a withdrawal: <span class="nowrap">R14 000</span> in at T0, <span class="nowrap">R2 000</span> out at T3, meeting day T5, 8% p.a. compounded quarterly: <span class="nowrap">A</span> = <span class="nowrap">14 000(1 + 0,08/4)^20</span> − <span class="nowrap">2 000(1 + 0,08/4)^8</span>. The withdrawal keeps its minus. On a timeline it is drawn <span class="nowrap">−R2 000</span>.</div>
+      <div class="eg">Interest on a loan = paid back − borrowed. Borrowed <span class="nowrap">R3 587,42</span>, paid back <span class="nowrap">R2 300</span> and <span class="nowrap">R4 200</span>: <span class="nowrap">6 500</span> − <span class="nowrap">3 587,42</span> = <span class="nowrap">R2 912,58</span> of interest.</div>
+      <p>Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: payments positive on the right.</p>`,
+  },
 
   /* ---------- Probability ---------- */
   probBasics: {

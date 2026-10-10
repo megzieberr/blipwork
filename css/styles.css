@@ -458,6 +458,9 @@ h2{font-size:20px} h3{font-size:17px}
 .tl .tl-qring{fill:none;stroke:var(--accent);stroke-width:1.2}
 /* a thin leader from a lone amount down to its own tick (spec.leaders) */
 .tl .tl-lead{stroke:var(--g-muted);stroke-width:.8;stroke-dasharray:2 2;opacity:.75}
+/* f10 "In or out?" (2026-10-10): a WITHDRAWAL, money out of savings, drawn
+   "−R2 000" (spec node out: true) in the money-out red */
+.tl text.tl-out{fill:var(--bad)}
 
 /* venn engine (.vn-*) — accent fills sit UNDER the outlines at low opacity */
 .vn{width:100%;height:auto;display:block;font-family:var(--font-num)}
