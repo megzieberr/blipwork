@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-10 22:55 (💰 Finance rounds part 2 BUILT locally f8–f12, NOT pushed, sw NOT bumped; 🚫 f8 not approved, parked; her play-test of f9/f10/f11/f12 + the ship on her yes = next; inbox LIVE as sw v95)
+# Project status — updated 2026-10-11 10:50 (💰 Finance rounds part 2 BUILT locally f8–f12, NOT pushed, sw NOT bumped; 🚫 f8 not approved, parked; her play-test of f9/f10/f11/f12 + the ship on her yes = next; inbox LIVE as sw v95)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -33,8 +33,9 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   ring air, 6 px label air), keypad `maxDigits` (opt-in, default 6; f12 asks 9), mc option
   `note` chips (f11 car counts), unbreakable-term wrapping, concept cards use U+00A0.
 - Live DB read 20:58: 93 quest rows, max sort 93, f1–f6 open, f7 closed, none of f8–f12
-  present. Seeding migration drafted (f8–f12 closed, sort 94–98) in the session scratchpad;
-  ship plan there too (SHIP-PLAN-finance-2.md). NOTHING run.
+  present. Seeding migration drafted: `supabase/migration-finance-quests-2.sql` (f8–f12 closed, sort
+  94–98); ship plan: `SHIP-PLAN-finance-2.md` (repo root); the five worker briefs in
+  `briefs/finance-2/`. NOTHING run.
   Background for the wording (do not re-read the transcripts): `Tutoring Resources/Graad 11
   Curro/Gr11 Finance Explainers/CLASS-DIGEST-2026.md` and `GR11-FINANCE-REDESIGN.md`.
 - **📥 Inbox for the 💬 notes LIVE as sw v95 (Sun 2026-10-04 12:10, her "yes to both").**
@@ -94,7 +95,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## ⏳ Pending on Megan
 - 💻 15 min **[blocking the ship]**: incognito → `http://localhost:5191/?local=1` (a local
-  server must be running: `python -m http.server 5191` in the repo root) → log in as Lerato
+  server must be running: `python -m http.server 5191` in the repo root; one from 10 Oct may
+  still be up, an "address in use" error then just means it already is) → log in as Lerato
   Test / demo1234 → Finance map → play f9, f10, f11, f12 once each → "ship it" or fix notes.
 - 💻 1 line **[blocking the ship]**: f8: ship it CLOSED (hidden by the seed) or pull it from
   the map (`built:false`) until the redesign talk.
@@ -114,12 +116,12 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships); say the word and I remove it.
 
 ## Next up
-- **The ship (her "yes, ship it"):** per the session's SHIP-PLAN-finance-2.md: f8 decision →
+- **The ship (her "yes, ship it"):** per `SHIP-PLAN-finance-2.md` (repo root): f8 decision →
   migration f8–f12 closed at sort 94–98 (re-check max(sort) first; mirror into schema.sql +
   supabase/migration-finance-quests-2.sql) → /migration-check → sw CACHE mhq-v95 → v96 →
   `python tools/sw_check.py` OK → full harness sweep → commit + push → live checks (sw v96,
   the new quest files byte-identical, map shows 8–12 closed) → she opens rounds as she teaches.
-- **The f8 redesign talk** (her idea first): how to make the total look like a different KIND
+- **The f8 redesign talk, in a FRESH session (her word, Sun 11 Oct 10:43; she play-tests first)** (her idea first): how to make the total look like a different KIND
   of thing from a payment so the round teaches the distinction before same-day cases.
 - **📝 Exam Focus round two PLANNED 2026-10-07 (her "write it down"):** the tile map for
   the seven remaining chapters (finance, prob, pat, trig UNHIDDEN by her word, stats, meas,
