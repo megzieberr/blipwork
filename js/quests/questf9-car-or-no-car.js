@@ -45,7 +45,7 @@ export const REFRAIN = "A car only if it has to move. Already there? No car.";
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = COMPOUNDING.filter(c => [1, 2, 4, 12].includes(c.k)).map(c => c.k);
-const HOW = k => (k === 2 ? "half-yearly" : COMPOUNDING.find(c => c.k === k).label);
+const HOW = k => (k === 2 ? "half‑yearly" : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (Fix A review, as f10)
 const SAVE_AMTS = [1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 8000, 10000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500];
 /* every amount stays under R100 000 (7 glyphs at most), n ≤ 6: two labels

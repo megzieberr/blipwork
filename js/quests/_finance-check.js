@@ -54,6 +54,13 @@ export const unsup = html => String(html == null ? "" : html)
   .replace(/<span class="eq-road-\d">([\s\S]*?)<\/span>/g, "$1")
   .replace(/<sup>([\s\S]*?)<\/sup>/g, (m, x) => (/^−|×/.test(x) ? `^(${x})` : `^${x}`));
 
+/* Fix A review (2026-10-11): f5's option labels print the amount the way its
+   prompt does, "2 000(1 + …)", with a NO-BREAK thousands space, the whole
+   amount-and-brackets one nowrap unit (the f9/f13 house shape). Written out
+   here, not imported from the round, so a slip there cannot pass itself */
+const grp = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");   // 20000 → "20 000" (U+00A0)
+const nwUnit = s => `<span class="nowrap">${s}</span>`;
+
 /* "0,075" / "−3" / "2 100,34" → number (NaN if not purely numeric) */
 export function numOf(label) {
   const cleaned = String(label).trim().replace(/[−]/g, "-").replace(/[\s  ]/g, "").replace(",", ".");
@@ -79,8 +86,10 @@ export function tIndices(prompt) {
 /* the compounding option named in the prompt (longest label first, so
    "semi-annually (half-yearly)" is never mistaken for "annually") */
 const BY_LEN = [...COMPOUNDING].sort((a, b) => b.label.length - a.label.length);
-export function freqIn(prompt) { return BY_LEN.find(o => String(prompt).includes(o.label)) || null; }
-export function freqByLabel(label) { return COMPOUNDING.find(o => o.label === label) || null; }
+/* a no-break hyphen (U+2011, the Fix A review's "semi‑annually (half‑yearly)") reads as the label's hyphen */
+const hyph = s => String(s).replace(/\u2011/g, "-");
+export function freqIn(prompt) { const p = hyph(prompt); return BY_LEN.find(o => p.includes(o.label)) || null; }
+export function freqByLabel(label) { return COMPOUNDING.find(o => o.label === hyph(label)) || null; }
 /* "<b>3 years</b>" → 3 */
 export function yearsIn(prompt) {
   const m = String(prompt).match(/(\d+)\s*years?/);
@@ -389,11 +398,14 @@ export const RECOMPUTE = {
   },
   "f5.expression": q => {
     // the amount prints as "R2 000" (finlib rand(P, 0), foreman review fix
-    // 2026-08-23) — the thousands space is dropped before parsing
-    const m = String(q.prompt).match(/value at <b>T(\d+)<\/b> of <b>R([\d ]+)<\/b> invested at T0 \(i = ([\d,]+)\)/);
+    // 2026-08-23) — the thousands space is dropped before parsing. Since the
+    // Fix A review (11 Oct) that space is a no-break one and the amount is
+    // ONE nowrap unit, in the prompt AND in the option label (C2: the label
+    // carries the same thousands space the prompt does)
+    const m = String(q.prompt).match(/value at <b>T(\d+)<\/b> of <span class="nowrap"><b>R([\d\s]+)<\/b><\/span> invested at T0 \(i = ([\d,]+)\)/);
     if (!m) return false;
-    const k = Number(m[1]), P = Number(m[2].replace(/ /g, "")), i = m[3];
-    return correctLabel(q) === `${P}${pow(`(1 + ${i})`, k)}` && q.graph.n === k;
+    const k = Number(m[1]), P = Number(m[2].replace(/\s/g, "")), i = m[3];
+    return correctLabel(q) === nwUnit(`${grp(P)}${pow(`(1 + ${i})`, k)}`) && q.graph.n === k;
   },
   /* the only CARE skill: both routes are re-derived from the question's
      OWN two amounts (the rate is recovered from P, A and T), and the
@@ -436,14 +448,14 @@ export const RECOMPUTE = {
     return !!o && Number.isFinite(years) && periodCount(years, o.k) === correctNum(q);
   },
   "f5.rateChangeExpr": q => {
-    const m = String(q.prompt).match(/<b>R([\d\s  ]+)<\/b> grows at ([\d,]+)% p\.a\. compounded <b>([^<]+)<\/b> for (\d+) years, then at ([\d,]+)% p\.a\. compounded <b>([^<]+)<\/b> for (\d+) years/);
+    const m = String(q.prompt).match(/<span class="nowrap"><b>R([\d\s  ]+)<\/b><\/span> grows at <span class="nowrap">([\d,]+)%\sp\.a\.<\/span> compounded <b>([^<]+)<\/b> for (\d+) years, then at <span class="nowrap">([\d,]+)%\sp\.a\.<\/span> compounded <b>([^<]+)<\/b> for (\d+) years/);
     if (!m) return false;
     const P = Number(m[1].replace(/[\s  ]/g, ""));
     const r1 = Number(m[2].replace(",", ".")), o1 = freqByLabel(m[3]), y1 = Number(m[4]);
     const r2 = Number(m[5].replace(",", ".")), o2 = freqByLabel(m[6]), y2 = Number(m[7]);
     if (!o1 || !o2) return false;
     if (!String(q.prompt).includes(`end of the ${y1 + y2} years`)) return false;
-    const want = `${P}${pow(`(1 + ${C(toFrac(r1))}/${o1.k})`, `${y1}×${o1.k}`)}${pow(`(1 + ${C(toFrac(r2))}/${o2.k})`, `${y2}×${o2.k}`)}`;
+    const want = nwUnit(`${grp(P)}${pow(`(1 + ${C(toFrac(r1))}/${o1.k})`, `${y1}×${o1.k}`)}${pow(`(1 + ${C(toFrac(r2))}/${o2.k})`, `${y2}×${o2.k}`)}`);
     return correctLabel(q) === want && q.graph.n === y1 + y2;
   },
 
@@ -1146,11 +1158,11 @@ function f9Scene(q) {
   });
   if (roads.some(r => !r) || roads[0].from !== 0 || roads[roads.length - 1].to !== g.n) return null;
   if (roads.some((r, j) => j > 0 && (r.from !== roads[j - 1].to || r.rate === roads[j - 1].rate))) return null;
-  const said = [...prompt.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half-yearly|quarterly|monthly)/g)];
+  const said = [...prompt.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half[-‑]yearly|quarterly|monthly)/g)];   // f9's HOW writes a no-break hyphen since the Fix A review
   let ratesShown = false;
   if (said.length) {
     if (said.length !== roads.length || said.some((m, j) => Number(m[1]) !== roads[j].rate)) return null;
-    said.forEach((m, j) => { roads[j].k = F9_K[m[2]]; });
+    said.forEach((m, j) => { roads[j].k = F9_K[f10Word(m[2])]; });
     if (roads.length === 2) {
       const ch = prompt.match(/from T(\d+) the rate is/);
       if (!ch || Number(ch[1]) !== roads[1].from) return null;

@@ -498,8 +498,61 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   tick(share > 0.2 && share < 0.45, `f5.anyPoint: about one roll in three is FALSE (measured ${(share * 100).toFixed(1)}%)`);
   tick(withSolution === N, "f5.anyPoint: every roll carries a real worked solution (one equation per route)");
   const show = q => q ? `    prompt : ${q.prompt.replace(/<[^>]+>/g, "")}\n    answer : ${q.yes ? "YES" : "NO"} — ${q.answerLabel}\n    steps  : ${q.solution.map(s => s.s + (s.r ? `   [${s.r}]` : "")).join("\n             ")}` : "    (none)";
+  /* Fix A review (11 Oct): the DOM check behind "a number never leaves its unit", on f5 (f11/f13's method). Every text
+     a learner reads on an f5 card (prompt, options, hint, answer, worked lines and side notes) is formatted as the app
+     does it, laid out at every width from 200 to 360 px, and a money amount's thousands groups ("R2 000", "1 000(1 + …")
+     and a rate and its "p.a." ("12% p.a.") must each sit on ONE line. Phone checker 13:48: "R2" / "000" at 390 px in
+     the expression prompt, and "… = 1" / "000(1 + 0,16)¹" in anyPoint's worked line */
+  let f5Pairs = 0, f5Renders = 0; const f5Split = [];
+  {
+    const fmt = x => formulaHtml(fracHtml(xbarHtml(x)));
+    const PAIRS = [/(\d)[\s ](\d{3})(?!\d)/g, /(\d%)[\s ]+(p\.a\.)/g];
+    const glyph = (tn, i) => { const r = document.createRange(); r.setStart(tn, i); r.setEnd(tn, i + 1); return r.getClientRects()[0]; };
+    def.skills.forEach(sk => {
+      for (let r = 0; r < 6; r++) {
+        const q = sk.gen();
+        const texts = [q.prompt, q.hint, q.answerLabel, ...(q.options || []).map(o => o.label), ...(q.solution || []).flatMap(x => [x.s, x.r])].filter(Boolean).map(String);
+        texts.forEach(txt => {
+          if (!PAIRS.some(re => { re.lastIndex = 0; return re.test(txt.replace(/<[^>]+>/g, "")); })) return;
+          for (let w = 200; w <= 360; w += 10) {
+            measure.innerHTML = `<div class="q-prompt" style="width:${w}px">${fmt(txt)}</div>`;
+            f5Renders++;
+            const nodes = []; let full = "";
+            const tw = document.createTreeWalker(measure, NodeFilter.SHOW_TEXT);
+            for (let tn = tw.nextNode(); tn; tn = tw.nextNode()) { nodes.push({ tn, at: full.length }); full += tn.data; }
+            const at = k => { for (let j = nodes.length - 1; j >= 0; j--) if (nodes[j].at <= k) return [nodes[j].tn, k - nodes[j].at]; return null; };
+            PAIRS.forEach(re => {
+              re.lastIndex = 0;
+              for (const m of full.matchAll(re)) {
+                f5Pairs++;
+                const A = at(m.index + m[1].length - 1), B = at(m.index + m[0].length - m[2].length);
+                const ra = A && glyph(...A), rb = B && glyph(...B);
+                if (ra && rb && Math.abs(ra.bottom - rb.bottom) > 4) f5Split.push(`${sk.id} at ${w} px: "${full.slice(Math.max(0, m.index - 10), m.index + m[0].length)}"`);
+              }
+            });
+          }
+        });
+      }
+    });
+    measure.innerHTML = "";
+    tick(f5Pairs > 0 && f5Split.length === 0, `f5: a money amount never splits and a rate never leaves its p.a. at a line end (${f5Pairs} pairs in ${f5Renders} renders, widths 200–360 px)${f5Split.length ? ": " + f5Split.slice(0, 3).join("; ") : ""}`);
+    /* C2: the options print the amount the way the prompt does ("5 000(1 + …", never "5000(1 + …") */
+    const flat = [];
+    ["expression", "rateChangeExpr"].forEach(id => {
+      const sk = def.skills.find(s => s.id === id);
+      for (let r = 0; r < 40; r++) {
+        const q = sk.gen();
+        [...q.options.map(o => o.label), q.answerLabel, ...q.solution.map(x => x.s)].forEach(l => {
+          const t = String(l).replace(/<[^>]+>/g, "");
+          if (/\d{4,}/.test(t)) flat.push(`${id}: "${t}"`);
+        });
+      }
+    });
+    tick(flat.length === 0, `f5: every amount in an option, answer or worked line carries its thousands space (80 rolls)${flat.length ? ": " + flat.slice(0, 2).join("; ") : ""}`);
+  }
   document.getElementById("anyPoint").textContent =
-    `${N} rolls: ${trues} true / ${falses} false (${(share * 100).toFixed(1)}% false — the design aims at ~33%)\n`
+    `f5, a number never leaves its unit: ${f5Pairs} pairs in ${f5Renders} renders (200–360 px), ${f5Split.length} split${f5Split.length ? ": " + f5Split[0] : ""}\n\n`
+    + `${N} rolls: ${trues} true / ${falses} false (${(share * 100).toFixed(1)}% false — the design aims at ~33%)\n`
     + `claims: same ${sameClaim} · different ${diffClaim} · plus-exponent ${plusClaim}\n`
     + `independent re-derivation: ${N - rcBad}/${N} agree\n\n`
     + `— a TRUE roll —\n${show(samples.same)}\n\n— a FALSE roll (routes "disagree") —\n${show(samples.different)}\n\n— a FALSE roll (back-move written with a plus exponent) —\n${show(samples.plusExp)}`;

@@ -335,7 +335,7 @@ export const CONCEPTS = {
         <li><b>exponent</b> = years × (times per year)</li>
       </ul>
       <div class="formula">A = P(1 + i/k)<sup>n·k</sup></div>
-      <p>Times per year k: annually 1 · half-yearly 2 · quarterly 4 · monthly 12 · weekly 52 · daily 365.</p>
+      <p>Times per year k: annually 1 · half‑yearly 2 · quarterly 4 · monthly 12 · weekly 52 · daily 365.</p>
       <div class="eg">12% p.a. compounded quarterly for 5 years → i = 0,12/4 = 0,03 and exponent = 5×4 = 20.</div>`,
   },
   timelineMove: {
@@ -347,12 +347,12 @@ export const CONCEPTS = {
         <li><b>Backward</b> (to an earlier date) → <b>divide</b> by (1 + i) once per period → a <b>negative</b> exponent.</li>
       </ul>
       <div class="formula">value = amount × (1 + i)<sup>±periods</sup></div>
-      <p>Count the periods between the two T-points. Forward T2 → T5 is 3 periods (+3); backward T5 → T2 is 3 periods (−3).</p>`,
+      <p>Count the periods between the two <span class="nowrap">T‑points</span>. Forward T2 → T5 is 3 periods (+3); backward T5 → T2 is 3 periods (−3).</p>`,
   },
   timelineCount: {
     title: "Counting periods on a timeline",
     body: `
-      <p>The number of periods is just how many <b>gaps</b> you jump between the two T-points — count the spaces, not the dots.</p>
+      <p>The number of periods is just how many <b>gaps</b> you jump between the two <span class="nowrap">T‑points</span> — count the spaces, not the dots.</p>
       <ul>
         <li>T0 → T4 is <b>4</b> periods.</li>
         <li>T5 → T2 is <b>3</b> periods (going back).</li>
@@ -383,7 +383,7 @@ export const CONCEPTS = {
         <li><b>Effective</b> rate is always an <b>annual</b> rate (the true yearly growth).</li>
         <li><b>Nominal</b> rate is quoted with a <b>compounding frequency</b> (monthly, quarterly, …).</li>
       </ul>
-      <div class="formula">1 + i_eff = (1 + i_nom / n)ⁿ</div>
+      <div class="formula">1 + i<sub>eff</sub> = (1 + <span class="sfrac"><span class="sf-n">i<sub>nom</sub></span><span class="sf-d">n</span></span>)ⁿ</div>
       <p>Here n is the number of compounding periods <b>per year</b> (12 for monthly).</p>`,
   },
   /* f8 "Which one is the total?" (the jug round, 2026-10-11; the 10 Oct
@@ -416,8 +416,8 @@ export const CONCEPTS = {
         <li>Each <b>road</b> is one rate, in one colour. Where the road changes colour, the rate changes: an amount that crosses it needs <b>one car per road</b>.</li>
       </ul>
       <div class="formula">exponent = ± years × k</div>
-      <p>k is how many times a year the interest is added: annually 1 · half-yearly 2 · quarterly 4 · monthly 12.</p>
-      <div class="eg">8% p.a. compounded quarterly until T4, then 10% p.a. compounded monthly. <span class="nowrap">R5 000</span> at T2, meeting day T6: two cars, both forward: <span class="nowrap">5 000(1 + 0,08/4)<sup>2×4</sup></span> <span class="nowrap">(1 + 0,1/12)<sup>2×12</sup></span>.</div>
+      <p>k is how many times a year the interest is added: <span class="nowrap">annually 1 ·</span> <span class="nowrap">half‑yearly 2 ·</span> <span class="nowrap">quarterly 4 ·</span> <span class="nowrap">monthly 12</span>.</p>
+      <div class="eg"><span class="nowrap">8% p.a.</span> compounded quarterly until T4, then <span class="nowrap">10% p.a.</span> compounded monthly. <span class="nowrap">R5 000</span> at T2, meeting day T6: two cars, both forward: <span class="nowrap">5 000(1 + 0,08/4)<sup>2×4</sup></span> <span class="nowrap">(1 + 0,1/12)<sup>2×12</sup></span>.</div>
       <div class="eg">Her last deposit, <span class="nowrap">R2 000</span>, is paid in on the same day as A, and the meeting day is that day: no car, it is just <span class="nowrap">2 000</span>.</div>
       <p>A car only if it has to move. Already there? No car.</p>`,
   },

@@ -292,11 +292,24 @@ function liveText(node, out, depth, skipSel) {
        the DOM: on screen the RAISING is the caret (js/ui.js fracHtml wraps
        it in sup.sf-exp; several exam and concept files hand-write the same
        thing as a plain <sup> round an .sfrac). Written back with its caret,
-       or "x3/4" would read as a completely different number. Ordinary
-       superscripts are left exactly as they were. */
-    if (node.matches("sup") && (node.matches(".sf-exp") || node.querySelector(FRAC_SEL))) {
+       or "x3/4" would read as a completely different number.
+       Since the Fix A review (11 Oct) EVERY superscript gets its caret: the
+       Finance chapter's exponents are real <sup>s now, and her inbox read
+       "(1 + 0,12/12)36" where the learner saw (1 + 0,12/12)³⁶. A single
+       character or a plain number goes bare (x^2, )^36); anything else is
+       bracketed so the exponent cannot swallow what follows it ()^(−6),
+       )^(3×4), x^(2x)). The one exception is the flat `efrac` idiom
+       (js/quests/_eq.js, _exp.js: <sup>3</sup>⁄<sub>4</sub>), whose sup is
+       a numerator, not an exponent, and already reads "3⁄4". */
+    if (node.matches("sup") && !node.closest(".efrac")) {
       const inner = inlineText(node, depth, skipSel);
-      if (inner) { out.push("^(" + inner + ")"); return; }
+      if (inner) {
+        const frac = node.matches(".sf-exp") || node.querySelector(FRAC_SEL);
+        const bare = !frac && !/^[−-]/.test(inner) &&
+          ([...inner].length === 1 || /^\d+(?:[.,]\d+)?$/.test(inner));
+        out.push(bare ? "^" + inner : "^(" + inner + ")");
+        return;
+      }
     }
     if (node.matches(FRAC_SEL)) {
       const halves = fracHalves(node);

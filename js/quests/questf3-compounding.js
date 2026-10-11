@@ -19,7 +19,7 @@ const SKILLS = {
       prompt: `How many times a year is interest added when it is compounded <b>${o.label}</b>?`,
       options: mcNum(o.k, [o.k === 12 ? 6 : 12, o.k === 1 ? 2 : 1, o.k * 2, o.k + 3]),
       answerLabel: `${o.label} → ${o.k} time${o.k > 1 ? "s" : ""} a year`,
-      hint: "Annually 1, half-yearly 2, quarterly 4, monthly 12.",
+      hint: "Annually 1, half‑yearly 2, quarterly 4, monthly 12.",
     };
   },
 
@@ -44,7 +44,7 @@ const SKILLS = {
       prompt: `Compounded <b>${o.label}</b> for <b>${years} years</b>. What is the exponent (power)?`,
       options: mcNum(e, [years, o.k, years + o.k, e + 1, e * 2]),   // backstops: when years = k, the first two collide AND years+k = years×k = e
       answerLabel: `${years} × ${o.k} = ${e}`,
-      hint: "Exponent = years × times-per-year.",
+      hint: 'Exponent = years × <span class="nowrap">times‑per‑year</span>.',
       solution: [{ s: `${years} years × ${o.k} per year = ${e}` }],
     };
   },
@@ -59,7 +59,7 @@ const SKILLS = {
       { hint: "Divide the rate by k inside the bracket; multiply years by k in the power.", answerLabel: `${P}${pow(`(1 + ${i}/${o.k})`, `${years}×${o.k}`)}`,
         solution: [
           { s: `Rate per period = ${i}/${o.k}`, r: `compounded ${o.label} → ${o.k} times a year` },
-          { s: `Number of periods = ${years}×${o.k} = ${e}`, r: "years × times-per-year" },
+          { s: `Number of periods = ${years}×${o.k} = ${e}`, r: 'years × <span class="nowrap">times‑per‑year</span>' },
           { s: `A = ${P}${pow(`(1 + ${i}/${o.k})`, `${years}×${o.k}`)}`, r: "build the WHOLE equation, then type it in one go" },
         ] });
   },

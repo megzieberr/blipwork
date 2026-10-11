@@ -426,7 +426,9 @@ function termLine(t) {
 }
 function meetLine(sc) {
   return {
-    s: `The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car (${CAR_IS}).`,
+    /* Fix A review: a plain sentence, never in brackets (as f10): formulaHtml read "(a car is …)" as a formula
+       bracket and left its "(" alone at a line end at 360 px */
+    s: `The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car: ${CAR_IS}.`,
     r: sc.kind === "loan" ? "back to T0: reverse gear, negative exponents" : "everything moves forward to the end, so every exponent is positive",
   };
 }

@@ -648,15 +648,77 @@ if (stageOk) {
     fr.push(`plain sup + sfrac   -> ${JSON.stringify(got)}`);
   }
 
-  /* ⚠️ AND WHAT MUST NOT CHANGE. An ordinary superscript is not a fraction
-     and does not grow a caret; the flat `efrac` idiom (js/quests/_eq.js,
-     _exp.js) was already readable and is left exactly as it was. */
+  /* EVERY superscript keeps its caret (Fix A review, 11 Oct): the Finance
+     chapter's exponents became real <sup>s, and her inbox read
+     "(1 + 0,12/12)36" where the learner saw the 36 raised. A single
+     character or a plain number goes bare; a minus or more than one token
+     is bracketed. What must NOT change: the flat `efrac` idiom
+     (js/quests/_eq.js, _exp.js), whose sup is a numerator, not an exponent. */
   {
     const sup = await snapOf("x<sup>2</sup> + 1");
-    tick(sup === "x2 + 1", `frac: an ordinary <sup> is untouched (got ${JSON.stringify(sup)})`);
+    tick(sup === "x^2 + 1", `sup: an ordinary <sup> gets its caret, bare (got ${JSON.stringify(sup)})`);
     const ef = await snapOf(`<span class="efrac"><sup>3</sup>⁄<sub>4</sub></span> of a circle`);
     tick(ef === "3⁄4 of a circle", `frac: the flat efrac idiom is untouched (got ${JSON.stringify(ef)})`);
-    fr.push(`untouched           -> ${JSON.stringify(sup)} · ${JSON.stringify(ef)}`);
+    fr.push(`sup / efrac         -> ${JSON.stringify(sup)} · ${JSON.stringify(ef)}`);
+  }
+
+  /* one case per shape, on a FINANCE card: the labels built by finlib's own
+     pow() (the one door every Finance exponent goes through) and mounted by
+     the app's real mountQuestion (formulaHtml + fracHtml, as a learner
+     sees it). [exponent, what she must read] */
+  {
+    const FIN = await W.eval('import("./js/finlib.js")');
+    const QS = await W.eval('import("./js/questions.js")');
+    const snapQ = async (q) => {
+      const view = D.querySelector("#app .view");
+      const host = D.createElement("div");
+      host.className = "q-host";
+      view.appendChild(host);
+      QS.mountQuestion(host, q, {});
+      await sleep(30);
+      const s = FB.snapshotQuestion(APP);
+      const nSup = host.querySelectorAll(".q sup").length;
+      host.remove();
+      return { s, nSup };
+    };
+    const SHAPES = [
+      ["36",  "1 000(1 + 0,12/12)^36",       "a plain number goes bare"],
+      ["−6",  "1 000(1 + 0,12/12)^(−6)",     "a minus is bracketed"],
+      ["3×4", "1 000(1 + 0,12/12)^(3×4)",    "a product (f9's teaching form) is bracketed"],
+    ];
+    const q = {
+      type: "mc", concept: "carOrNoCar",
+      prompt: `What is R1 000 worth after 3 years at 12% p.a. compounded monthly?`,
+      options: SHAPES.map(([e], j) => ({ label: `1 000${FIN.pow("(1 + 0,12/12)", e)}`, correct: j === 0 })),
+    };
+    const { s, nSup } = await snapQ(q);
+    const lines = s.split("\n");
+    for (const [e, want, why] of SHAPES) {
+      tick(lines.includes(want), `sup: finance option, ${why} — exponent ${JSON.stringify(e)} reads ${JSON.stringify(want)} (got ${JSON.stringify(lines)})`);
+    }
+    tick(nSup === 3 && (s.match(/\^/g) || []).length === 3, `sup: one caret per superscript on the card (${nSup} sups)`);
+    fr.push(`finance shapes      -> ${JSON.stringify(lines.filter(l => l.includes("^")))}`);
+
+    /* and REAL rolled f5 cards, the round with all three shapes (card 3's
+       `expression`: ^k and ^(−k); card 7's `rateChangeExpr`: ^(y×k)): every
+       sup is read back with a caret and no exponent is ever left flat
+       against its bracket ("…)36") */
+    const qdF = await W.eval('import("./js/quests/index.js")');
+    const f5 = qdF.questDef("f5");
+    let rolls = 0, bad = [];
+    for (const id of ["expression", "rateChangeExpr", "anyPoint", "exponentBackward"]) {
+      const sk = f5.skills.find(k => k.id === id);
+      for (let r = 0; r < 6; r++) {
+        const card = sk.gen();
+        const { s: snap, nSup: ns } = await snapQ(card);
+        rolls++;
+        const carets = (snap.match(/\^/g) || []).length;
+        if (carets !== ns) bad.push(`${id}: ${ns} sups, ${carets} carets: ${JSON.stringify(snap)}`);
+        if (/\)\d/.test(snap)) bad.push(`${id}: a flat exponent: ${JSON.stringify(snap)}`);
+        if (/\^[−-]/.test(snap)) bad.push(`${id}: a bare minus exponent: ${JSON.stringify(snap)}`);
+      }
+    }
+    tick(rolls === 24 && bad.length === 0, `sup: 24 rolled f5 cards, every sup read back with its caret (${bad.length ? bad.slice(0, 2).join(" | ") : "clean"})`);
   }
 
   /* a whole round the way she reads it: a stem and three options, each one
