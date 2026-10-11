@@ -44,6 +44,15 @@
                      gt13 uses it: "pick every denominator", which is
                      one answer made of several picks, not several
                      questions.
+
+   f8 (2026-10-11, the jug round) adds two more, both additive:
+     step.graphAfter — a diagram for a step's FEEDBACK side, drawn under
+                     the step only once it is answered (the "?" in its
+                     ring after "T0 or the end?", never before it).
+     an mc step's option.note / option.why — the kind of thing the
+                     option is: a pill on the tapped option (and on all
+                     of them once the step is done), and the sentence a
+                     miss on it shows in the step's hint box.
    ============================================================ */
 import { el, clear, xbarHtml, fracHtml, formulaHtml } from "./ui.js";
 
@@ -538,6 +547,18 @@ function mountSteps(host, root, q, commit, svgNode) {
     const badge = el("span", "q-step-mark" + (w.dataset.retried === "1" ? " retried" : ""),
       w.dataset.retried === "1" ? "✓ after a retry" : "✓");   // soft, never a red cross (her ruling)
     (w.querySelector(".q-step-prompt") || w).appendChild(badge);
+    /* f8 (2026-10-11, the jug round): a step may carry a diagram for its
+       FEEDBACK side, step.graphAfter, drawn under the step only once it is
+       answered. f8's "Does the jug sit at T0 or at the end?" draws the
+       timeline with the "?" in its ring AFTER the learner has said where the
+       jug sits: step.graph would have drawn it with the question, and handed
+       the answer over. Drawn through the same renderSpec as every graph. */
+    const st = list[i] || {};
+    if (st.graphAfter) {
+      const ga = el("div", "q-graph q-step-graph q-step-after");
+      ga.innerHTML = renderSpec(st.graphAfter) + (st.graphAfterCap ? `<div class="cap">${fmt(st.graphAfterCap)}</div>` : "");
+      w.appendChild(ga);
+    }
     if (i >= list.length - 1) {
       root.dataset.step = String(list.length);
       commit(clean, "steps", !clean);            // not clean → the SOFT verdict, not the red one
@@ -588,6 +609,17 @@ function mountSteps(host, root, q, commit, svgNode) {
 
     if (step.kind === "mc") {
       const opts = el("div", "q-options" + (step.layout === "grid2" ? " grid2" : ""));
+      /* f8 (2026-10-11, the jug round): an option may carry
+           note — a short pill naming what KIND of thing it is ("a coin: in"),
+                  the f11 .opt-note, added to the tapped option at once when
+                  it is a miss, and to every option once the step is done;
+           why  — the sentence a miss on THIS option shows in the step's hint
+                  box ("That is a coin: money going in on its day."), ahead
+                  of the step's own hint. Her rule: a wrong tap always says
+                  which kind of thing was tapped, never just "no". */
+      const noteOn = (x, o2) => {
+        if (o2 && o2.note != null && !x.querySelector(".opt-note")) x.insertAdjacentHTML("beforeend", ` <span class="opt-note">${fmt(o2.note)}</span>`);
+      };
       (step.options || []).forEach((o, oi) => {
         const b = el("button", "opt", fmt(o.label));
         b.addEventListener("click", () => {
@@ -596,12 +628,15 @@ function mountSteps(host, root, q, commit, svgNode) {
             [...opts.children].forEach((x, k) => {
               x.disabled = true;
               if ((step.options[k] || {}).correct) x.classList.add("is-correct");
+              noteOn(x, step.options[k]);
             });
             settle(i, w);
           } else {
             // a wrong option greys out and STAYS out; the rest are still live
             b.disabled = true;
             b.classList.add("is-wrong");
+            noteOn(b, o);
+            hintBox.innerHTML = `<span class="tag">HINT</span>${o.why ? `${fmt(o.why)} ` : ""}${fmt(step.hint) || "Work this step the way she does."}`;
             miss(w, hintBox);
           }
         });

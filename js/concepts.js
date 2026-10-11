@@ -6,6 +6,60 @@
    question on the same skill. Wording follows CAPS conventions;
    example numbers are original (never from the planning PDFs).
    ============================================================ */
+
+/* ---------------------------------------------------------
+   THE JUG PICTURE (f8 "Which one is the total?", 2026-10-11).
+   Her ruling: payments are coins, the total is the jug. The jug is
+   HER drawing (art-source/finance/jug-outline.png, used as is),
+   painted through two masks that tools/jug_masks.py makes from it:
+   the outline in a light tint of the chapter colour (her black line
+   never shows black on the dark UI), the fill behind it in the
+   chapter colour, inside the body only (css/styles.css, the .jug
+   rules). One drawing, two jugs: savings fills partway (one rise per
+   coin that goes in, a dip for the coin that comes out, then a little
+   growth: the interest), the loan jug is full, to just under the rim
+   and never into the spout. Coins and arrows are code-drawn: a gold
+   rim going in, a red rim going out, short labels.
+   Everything is in units of a 320 × 232 stage; the jug's box is 180
+   units square and is placed by percent, so it stays lined up with
+   the SVG at every width. Whole numbers only in the SVG. The captions
+   keep "full jug" and "the total" together with a literal U+00A0.
+   --------------------------------------------------------- */
+const JUG_W = 320, JUG_H = 232, JUG_BOX = 180;
+const jugPct = v => `${Math.round(v * 10000) / 100}%`;
+/* an arrow along one quadratic curve, its head at the end */
+function jugArrow(x1, y1, cx, cy, x2, y2, cls) {
+  const a = Math.atan2(y2 - cy, x2 - cx), L = 13, W = 7, r = Math.round;
+  const bx = x2 - L * Math.cos(a), by = y2 - L * Math.sin(a), px = -Math.sin(a) * W, py = Math.cos(a) * W;
+  return `<g class="jug-arr ${cls}"><path d="M${x1} ${y1} Q${cx} ${cy} ${r(bx)} ${r(by)}"/>`
+    + `<polygon points="${x2},${y2} ${r(bx + px)},${r(by + py)} ${r(bx - px)},${r(by - py)}"/></g>`;
+}
+const jugCoin = (x, y, label, cls) =>
+  `<g class="jug-coin ${cls}"><circle cx="${x}" cy="${y}" r="33"/><text x="${x}" y="${y + 7}">${label.replace(/ /g, " ")}</text></g>`;
+const jugBox = (x, y, cls) =>
+  `<div class="jug ${cls}" style="left:${jugPct(x / JUG_W)};top:${jugPct(y / JUG_H)};width:${jugPct(JUG_BOX / JUG_W)}">`
+  + `<div class="jug-fill"><div class="jug-lvl"></div></div><div class="jug-line"></div></div>`;
+const jugLetters = (x, yRole, role, yQ) =>
+  `<text class="jug-role" x="${x}" y="${yRole}">${role}</text><text class="jug-q" x="${x}" y="${yQ}">?</text>`;
+const JUG_SVG = inner => `<svg class="jug-svg" viewBox="0 0 ${JUG_W} ${JUG_H}" aria-hidden="true">${inner}</svg>`;
+/* savings: the jug at x 128, coins on the left; two in (gold), one out (red) */
+const JUG_SAVE = `<div class="jug-stage">${jugBox(128, 40, "jug-save")}${JUG_SVG(
+  jugCoin(36, 50, "5 000", "in") + jugCoin(36, 122, "3 000", "in") + jugCoin(36, 196, "4 000", "out")
+  + jugArrow(70, 54, 112, 60, 146, 112, "in a1") + jugArrow(70, 124, 110, 124, 143, 142, "in a2")
+  + jugArrow(146, 186, 110, 206, 71, 200, "out a3")
+  + jugLetters(204, 124, "A", 199))}</div>`;
+/* a loan: the bank hands over the full jug (x 8); the repayments go out (red) */
+const JUG_LOAN = `<div class="jug-stage">${jugBox(8, 40, "jug-loan")}${JUG_SVG(
+  `<g class="jug-bank"><rect x="226" y="4" width="86" height="36" rx="7"/><text x="269" y="29">BANK</text></g>`
+  + jugArrow(226, 24, 170, 8, 132, 40, "bank")
+  + jugCoin(284, 100, "6 000", "out") + jugCoin(284, 180, "3 000", "out")
+  + jugArrow(182, 98, 218, 90, 249, 100, "out") + jugArrow(142, 178, 198, 196, 249, 184, "out")
+  + jugLetters(84, 94, "P", 141))}</div>`;
+const JUG_PICTURE = `<div class="jugs">`
+  + `<div class="jug-pane">${JUG_SAVE}<div class="jug-cap"><b>SAVINGS</b><br>you fill the jug<br>the jug at the <b>end</b> is the total</div></div>`
+  + `<div class="jug-pane">${JUG_LOAN}<div class="jug-cap"><b>LOAN</b><br>the bank hands you a full jug<br>the jug at the <b>start</b> is the total</div></div>`
+  + `</div>`;
+
 export const CONCEPTS = {
   quartiles: {
     title: "Quartiles & their positions",
@@ -267,20 +321,19 @@ export const CONCEPTS = {
       <div class="formula">1 + i_eff = (1 + i_nom / n)ⁿ</div>
       <p>Here n is the number of compounding periods <b>per year</b> (12 for monthly).</p>`,
   },
-  /* f8 "Which one is the total?" (2026-10-10). Uses the MIDDLE wording of
-     the round's vocabulary phasing, "the total (lumpsum)" (FINANCE-ROUNDS-2-PLAN.md). */
+  /* f8 "Which one is the total?" (the jug round, 2026-10-11; the 10 Oct
+     tap-the-label card is in briefs/finance-2/ARCHIVE-f8-tap-label-2026-10-10.md).
+     The approved mock-up's text (her "absolutely perfect", 11 Oct 12:02),
+     the two jugs side by side (JUG_PICTURE above) with their captions as
+     drawn. The round shows this card on top of its first card (q.reveal),
+     and "I'm lost" opens it as usual. "the total" only: never the word
+     the textbooks use for a single payment. */
   theTotal: {
-    title: "The total (lumpsum)",
+    title: "Payments are coins. The total is the jug.",
     body: `
-      <p><b>The total (lumpsum)</b> is the amount all the payments add up to, once each payment is moved (with its interest) to the total's date. It is <b>never one of the payments</b>.</p>
-      <ul>
-        <li><b>Saving:</b> the deposits grow into the total, so it sits at the <b>end</b>.</li>
-        <li><b>A loan:</b> the total is the amount borrowed, so it sits at the <b>start</b> (T0). A loan starts big and gets paid down.</li>
-      </ul>
-      <p>The loan amount <b>P has no interest in it</b>. The repayments pay back the loan <b>and</b> its interest, so together they come to more than P, and one repayment can even be bigger than P.</p>
-      <p>Two amounts on the same day? Only one of them is the total. The other is a payment made on that day.</p>
-      <div class="eg">Saving at 10% p.a.: <span class="nowrap">R2 000</span> at T0 and <span class="nowrap">R3 000</span> at T1 grow into <span class="nowrap">R6 292</span> at T3. The total is <span class="nowrap">R6 292</span>, at the end.</div>
-      <div class="eg">A loan at 10% p.a.: he borrows <span class="nowrap">R5 000</span> at T0 and pays back <span class="nowrap">R2 200</span> at T1 and <span class="nowrap">R3 993</span> at T3. The total is <span class="nowrap">R5 000</span>, at the start.</div>`,
+      <p>Every payment is <b class="jug-hl">one coin</b> going in or out on its day. The total is the <b class="jug-hl">one jug</b> all the coins are worth together. A coin is never the jug.</p>
+      ${JUG_PICTURE}
+      <p class="jug-after">Interest makes the jug grow (or the debt grow). A withdrawal takes a coin out. The jug can end up smaller than a coin: it is still the jug.</p>`,
   },
   /* f9 "Car or no car?" (2026-10-10). This round says only "the total". */
   carOrNoCar: {
