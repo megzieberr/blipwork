@@ -152,7 +152,7 @@ import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/timeline-graph.js";
-import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f12EquationsOf, f11Scene, f11Diagnose } from "./js/quests/_finance-check.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f13EquationsOf, f11Scene, f11Diagnose } from "./js/quests/_finance-check.js";
 import { F13_FAMILIES } from "./js/quests/questf13-one-equation.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import { formulaHtml, fracHtml, xbarHtml } from "./js/ui.js";
@@ -835,7 +835,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       /* the fade: a timeline on cards 1 to 3, none on 4 to 8 */
       if (!!q.graph !== showPic) problems.push(showPic ? "no timeline on a card that shows one" : "a timeline after card 3");
       if (q.graph) st.pics++;
-      const eqs = f12EquationsOf(q);
+      const eqs = f13EquationsOf(q);
       st.eqs += eqs.length;
       if (eqs.length !== 5 || eqs.some(e => !e.ok)) problems.push(`an equation that does not parse (${eqs.filter(e => !e.ok).map(e => e.where).join(", ") || eqs.length + " found"})`);
       const d = f13Diagnose(q, skill.id === "loanAgain" ? "loanTwoRepayments" : skill.id);

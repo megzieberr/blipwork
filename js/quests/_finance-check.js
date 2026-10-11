@@ -1099,7 +1099,7 @@ function f8TapCheck(q, kind) {
        "N% p.a. compounded …" (a second one starts "for the first N
        years"). n is the last T named; the meeting day (step 1's prompt)
        must be the day of A for saving and T0 for a loan.
-     · EVERY equation parses (f12ParseEq, f10's conventions): each term
+     · EVERY equation parses (f13ParseEq, f10's conventions): each term
        its own <span class="nowrap"> units, the amount with its first car
        "(1 + 0,12/12)^36" / "^(−36)" and a second car as its own unit
        right after it (f9's wrapping: a two-car term is wider than a
@@ -1126,23 +1126,23 @@ function f8TapCheck(q, kind) {
        payment where the story puts it, the withdrawal drawn out.
    f13Diagnose returns null when all of that holds, else the first reason.
    ============================================================ */
-const F12_NAMES = ["Brenda", "Bradley", "Jason", "Brian", "Mandy", "Bob", "Stephanie", "Arnold", "David", "Mvelo"];
-const F12_CAR = /\(1 \+ (0,\d+(?:\/\d+)?)\)\^(\d+|\(−\d+\))/g;
-const F12_TERM = /^(−)?(\d{1,3}(?: \d{3})*|P|A|x)((?:\(1 \+ 0,\d+(?:\/\d+)?\)\^(?:\d+|\(−\d+\)))*)$/;
-const F12_CARS_ONLY = /^(?:\(1 \+ 0,\d+(?:\/\d+)?\)\^(?:\d+|\(−\d+\)))+$/;
-const F12_MONEY = "<span class=\"nowrap\">R(\\d{1,3}(?:\\u00A0\\d{3})*)<\\/span>";
-const f12CarsOf = text => [...String(text).matchAll(F12_CAR)].map(c => ({ i: c[1], e: c[2].startsWith("(") ? -Number(c[2].slice(2, -1)) : Number(c[2]) }));
-const f12Num = s => Number(String(s).replace(/[\s  ]/g, ""));
-const f12Rate = (r, k) => (k === 1 ? C(toFrac(r)) : `${C(toFrac(r))}/${k}`);
+const F13_NAMES = ["Brenda", "Bradley", "Jason", "Brian", "Mandy", "Bob", "Stephanie", "Arnold", "David", "Mvelo"];
+const F13_CAR = /\(1 \+ (0,\d+(?:\/\d+)?)\)\^(\d+|\(−\d+\))/g;
+const F13_TERM = /^(−)?(\d{1,3}(?: \d{3})*|P|A|x)((?:\(1 \+ 0,\d+(?:\/\d+)?\)\^(?:\d+|\(−\d+\)))*)$/;
+const F13_CARS_ONLY = /^(?:\(1 \+ 0,\d+(?:\/\d+)?\)\^(?:\d+|\(−\d+\)))+$/;
+const F13_MONEY = "<span class=\"nowrap\">R(\\d{1,3}(?:\\u00A0\\d{3})*)<\\/span>";
+const f13CarsOf = text => [...String(text).matchAll(F13_CAR)].map(c => ({ i: c[1], e: c[2].startsWith("(") ? -Number(c[2].slice(2, -1)) : Number(c[2]) }));
+const f13Num = s => Number(String(s).replace(/[\s  ]/g, ""));
+const f13Rate = (r, k) => (k === 1 ? C(toFrac(r)) : `${C(toFrac(r))}/${k}`);
 /* f12 review 1 (2026-10-10): an equation wears ONE wrapper, <span
    class="f13-eq"> (a size smaller); a two-car term is ONE unit, its two cars
    a space apart; a single-letter left side rides with the first right-hand
    term ("A = 5 500(…)"); and a term too wide for a 360-px option is cut
    before its second car, which then reads "× (1 + …)^n". A second car in a
    unit of its own WITHOUT the "×" no longer parses: it read like a new term */
-const F12_CUT = /^×[\s ]/;
-const f12Joined = b => String(b).replace(/(\^(?:\d+|\(−\d+\))) (?=\(1 \+)/g, "$1");   // the space between two cars of one unit
-export function f12ParseEq(html, iTexts = null) {
+const F13_CUT = /^×[\s ]/;
+const f13Joined = b => String(b).replace(/(\^(?:\d+|\(−\d+\))) (?=\(1 \+)/g, "$1");   // the space between two cars of one unit
+export function f13ParseEq(html, iTexts = null) {
   if (html == null) return null;
   const units = [];
   const unit = inner => { units.push(inner); return ` #${units.length - 1} `; };
@@ -1162,21 +1162,21 @@ export function f12ParseEq(html, iTexts = null) {
     if (want === "operand") {
       const m = /^#(\d+)$/.exec(tk);
       if (!m) return null;
-      const body = f12Joined(units[Number(m[1])]);
+      const body = f13Joined(units[Number(m[1])]);
       let depth = 0;
       for (const ch of body) { depth += ch === "(" ? 1 : ch === ")" ? -1 : 0; if (depth < 0) return null; }
       if (depth !== 0) return null;
-      const tm = F12_TERM.exec(body);
+      const tm = F13_TERM.exec(body);
       if (!tm) return null;
       if (tm[1] && (sides[side].length || sign !== 1)) return null;
-      const cars = f12CarsOf(tm[3]);
+      const cars = f13CarsOf(tm[3]);
       if (cars.some(c => !(Number.isInteger(c.e) && c.e !== 0))) return null;
       if (iTexts && cars.some(c => !iTexts.includes(c.i))) return null;  // every car at one of the story's rates
-      sides[side].push({ s: sign * (tm[1] ? -1 : 1), c: /^\d/.test(tm[2]) ? f12Num(tm[2]) : tm[2], cars });
+      sides[side].push({ s: sign * (tm[1] ? -1 : 1), c: /^\d/.test(tm[2]) ? f13Num(tm[2]) : tm[2], cars });
       sign = 1; want = "op";
-    } else if (/^#\d+$/.test(tk) && F12_CUT.test(units[Number(tk.slice(1))]) && F12_CARS_ONLY.test(units[Number(tk.slice(1))].replace(F12_CUT, ""))) {
+    } else if (/^#\d+$/.test(tk) && F13_CUT.test(units[Number(tk.slice(1))]) && F13_CARS_ONLY.test(units[Number(tk.slice(1))].replace(F13_CUT, ""))) {
       /* a cut term's second car, "× (1 + …)^n", rides on the term right before it */
-      const cars = f12CarsOf(units[Number(tk.slice(1))]), last = sides[side][sides[side].length - 1];
+      const cars = f13CarsOf(units[Number(tk.slice(1))]), last = sides[side][sides[side].length - 1];
       if (!last || cars.some(c => !(Number.isInteger(c.e) && c.e !== 0)) || (iTexts && cars.some(c => !iTexts.includes(c.i)))) return null;
       last.cars.push(...cars);
     } else if ((tk === "+" || tk === "−") && want === "op") { sign = tk === "+" ? 1 : -1; want = "operand"; }
@@ -1186,17 +1186,17 @@ export function f12ParseEq(html, iTexts = null) {
   if (side !== 1 || want === "operand" || sides[0].length !== 1) return null;
   return { L: sides[0], R: sides[1] };
 }
-const f12CarKey = t => t.cars.map(c => `${c.i}^${c.e}`).join("*");
-const f12Key = t => `${t.s}|${t.c}|${f12CarKey(t)}`;
-const f12Same = (a, b) => a.L.length === b.L.length && a.L.every((t, j) => f12Key(t) === f12Key(b.L[j]))
-  && a.R.length === b.R.length && a.R.map(f12Key).sort().join(";") === b.R.map(f12Key).sort().join(";");
+const f13CarKey = t => t.cars.map(c => `${c.i}^${c.e}`).join("*");
+const f13Key = t => `${t.s}|${t.c}|${f13CarKey(t)}`;
+const f13Same = (a, b) => a.L.length === b.L.length && a.L.every((t, j) => f13Key(t) === f13Key(b.L[j]))
+  && a.R.length === b.R.length && a.R.map(f13Key).sort().join(";") === b.R.map(f13Key).sort().join(";");
 
 /* the scene, from the word question and step 1's prompt only */
-export function f12Scene(q) {
+export function f13Scene(q) {
   /* f12 review 1: "2 years", "8% p.a." are units of their own now; only a money unit stays wrapped here */
   const p = String(q && q.prompt || "").replace(/<span class="nowrap">(?!R\d)([^<]*)<\/span>/g, "$1");
   const name = (p.match(/^([A-Z][a-z]+) /) || [])[1];
-  if (!F12_NAMES.includes(name)) return null;
+  if (!F13_NAMES.includes(name)) return null;
   const loan = /\bborrows\b/.test(p), save = /savings account/.test(p);
   if (loan === save) return null;
   const said = [...p.matchAll(/(\d+)% p\.a\. compounded (annually|half‑yearly|quarterly|monthly)/g)].map(m => ({ r: Number(m[1]), k: F9_K[f10Word(m[2])] }));
@@ -1210,55 +1210,55 @@ export function f12Scene(q) {
     if (!c || !(Number(c[1]) > 0 && Number(c[1]) < n)) return null;
     roads = [{ from: 0, to: Number(c[1]), ...said[0] }, { from: Number(c[1]), to: n, ...said[1] }];
   }
-  const pays = [...p.matchAll(new RegExp(`(withdraws )?${F12_MONEY} (now|after (\\d+)\\syears?)`, "g"))]
-    .map(m => ({ v: f12Num(m[2]), t: m[3] === "now" ? 0 : Number(m[4]), kind: m[1] ? "wd" : loan ? "repay" : "dep" }));
+  const pays = [...p.matchAll(new RegExp(`(withdraws )?${F13_MONEY} (now|after (\\d+)\\syears?)`, "g"))]
+    .map(m => ({ v: f13Num(m[2]), t: m[3] === "now" ? 0 : Number(m[4]), kind: m[1] ? "wd" : loan ? "repay" : "dep" }));
   const xm = p.match(/an amount x (now|after (\d+)\syears?)/);
   if (xm) pays.push({ v: "x", t: xm[1] === "now" ? 0 : Number(xm[2]), kind: "dep" });
   if (/How much, P, must (?:he|she) deposit now\?/.test(p)) pays.push({ v: "P", t: 0, kind: "dep" });
   pays.sort((a, b) => a.t - b.t);
-  const kn = p.match(new RegExp(`wants ${F12_MONEY} in (?:a savings account|the account) after (\\d+)\\syears?`));
+  const kn = p.match(new RegExp(`wants ${F13_MONEY} in (?:a savings account|the account) after (\\d+)\\syears?`));
   if (kn && (loan || Number(kn[2]) !== n)) return null;
-  const dm = p.match(new RegExp(`down payment of ${F12_MONEY} straight to the shop`));
+  const dm = p.match(new RegExp(`down payment of ${F13_MONEY} straight to the shop`));
   const im = p.match(/the price of the ([a-zA-Z ]+)\.$/);
-  const total = loan ? { t: 0, c: "P", known: false, role: "P" } : kn ? { t: n, c: f12Num(kn[1]), known: true, role: "A" } : { t: n, c: "A", known: false, role: "A" };
+  const total = loan ? { t: 0, c: "P", known: false, role: "P" } : kn ? { t: n, c: f13Num(kn[1]), known: true, role: "A" } : { t: n, c: "A", known: false, role: "A" };
   const unknowns = pays.filter(x => typeof x.v !== "number");
   if (total.known ? unknowns.length !== 1 : unknowns.length !== 0) return null;   // exactly one unknown on the card
   const mm = String((q.steps && q.steps[0] && q.steps[0].prompt) || "").match(/^The meeting day is T(\d+), (the day of A|the day of the loan)\./);
   if (!mm) return null;
   const meet = Number(mm[1]);
   if (meet !== (loan ? 0 : n) || mm[2] !== (loan ? "the day of the loan" : "the day of A")) return null;
-  return { name, loan, n, meet, roads, pays, total, down: dm ? f12Num(dm[1]) : null, item: im ? im[1] : null, unknown: loan ? "P" : total.known ? unknowns[0].v : "A" };
+  return { name, loan, n, meet, roads, pays, total, down: dm ? f13Num(dm[1]) : null, item: im ? im[1] : null, unknown: loan ? "P" : total.known ? unknowns[0].v : "A" };
 }
 /* one car per road an amount drives over to the meeting day, travel order */
-function f12Cars(s, t) {
+function f13Cars(s, t) {
   const m = s.meet, dir = Math.sign(m - t), lo = Math.min(t, m), hi = Math.max(t, m);
   let legs = s.roads.map(r => ({ r, years: Math.min(hi, r.to) - Math.max(lo, r.from) })).filter(l => l.years > 0);
   if (dir < 0) legs = legs.reverse();
-  return legs.map(l => ({ i: f12Rate(l.r.r, l.r.k), e: dir * l.years * l.r.k, r: l.r.r, k: l.r.k }));
+  return legs.map(l => ({ i: f13Rate(l.r.r, l.r.k), e: dir * l.years * l.r.k, r: l.r.r, k: l.r.k }));
 }
-const f12Expect = s => ({
+const f13Expect = s => ({
   L: [{ s: 1, c: s.total.c, cars: [] }],
-  R: s.pays.map(x => ({ s: x.kind === "wd" ? -1 : 1, c: x.v, cars: f12Cars(s, x.t) })),
+  R: s.pays.map(x => ({ s: x.kind === "wd" ? -1 : 1, c: x.v, cars: f13Cars(s, x.t) })),
 });
-const f12Grow = (v, cars) => cars.reduce((a, c) => moveMoney(a, toFrac(c.r) / c.k, c.e), v);
+const f13Grow = (v, cars) => cars.reduce((a, c) => moveMoney(a, toFrac(c.r) / c.k, c.e), v);
 /* the unknown's value, from the story's numbers */
-function f12Value(s) {
-  const R = f12Expect(s).R;
-  const known = R.filter(t => typeof t.c === "number").reduce((a, t) => a + t.s * f12Grow(t.c, t.cars), 0);
+function f13Value(s) {
+  const R = f13Expect(s).R;
+  const known = R.filter(t => typeof t.c === "number").reduce((a, t) => a + t.s * f13Grow(t.c, t.cars), 0);
   if (!s.total.known) return known;
   const u = R.find(t => typeof t.c !== "number");
-  return (s.total.c - known) / f12Grow(1, u.cars);
+  return (s.total.c - known) / f13Grow(1, u.cars);
 }
 /* which ONE slip turns the right equation into this decoy (null: not one of the plan's) */
-function f12Slip(right, d, s) {
+function f13Slip(right, d, s) {
   if (d.L.length !== 1 || d.R.length !== right.R.length) return null;
   const pairs = [[right.L[0], d.L[0], "L"], ...right.R.map((t, j) => [t, d.R[j], "R"])];
-  const diff = pairs.filter(([a, b]) => f12Key(a) !== f12Key(b));
+  const diff = pairs.filter(([a, b]) => f13Key(a) !== f13Key(b));
   if (diff.length !== 1) return null;
   const [a, b, side] = diff[0];
   if (a.c !== b.c) return null;
   const pay = s.pays.find(x => x.v === a.c);
-  if (a.s === -b.s && f12CarKey(a) === f12CarKey(b) && side === "R" && pay) {
+  if (a.s === -b.s && f13CarKey(a) === f13CarKey(b) && side === "R" && pay) {
     const wd = s.pays.some(x => x.kind === "wd");
     if (wd ? pay.kind === "wd" : pay.kind === (s.loan ? "repay" : "dep")) return "sign";
     return null;
@@ -1272,7 +1272,7 @@ function f12Slip(right, d, s) {
   return null;
 }
 /* the timeline says what the story says */
-function f12GraphIssue(g, s) {
+function f13GraphIssue(g, s) {
   if (g.type !== "timeline" || g.n !== s.n || g.meet !== s.meet) return "timeline: wrong n or meeting day";
   if (!Array.isArray(g.roads) || g.roads.length !== s.roads.length
     || !g.roads.every((r, j) => r.from === s.roads[j].from && r.to === s.roads[j].to && r.rate === `${s.roads[j].r}% p.a.`)) return "timeline: the roads are not the story's";
@@ -1292,23 +1292,23 @@ function f12GraphIssue(g, s) {
 // was f12Diagnose until 2026-10-11 (the round is f13 now; f12 = Build the timeline)
 export function f13Diagnose(q, fam = null) {
   if (!q || q.type !== "steps" || !Array.isArray(q.steps)) return "not a steps chain";
-  const s = f12Scene(q);
+  const s = f13Scene(q);
   if (!s) return "the story does not read back";
-  const iTexts = s.roads.map(r => f12Rate(r.r, r.k));
+  const iTexts = s.roads.map(r => f13Rate(r.r, r.k));
   const [s1, s2, s3] = q.steps;
   if (q.steps.length !== (s.down != null ? 3 : 2)) return `${q.steps.length} steps`;
   if (!s1 || s1.kind !== "mc" || s1.options.length !== 4) return "step 1 is not a four-option mc";
   if (new Set(s1.options.map(o => o.label)).size !== 4) return "two options coincide";
-  const parsed = s1.options.map(o => ({ o, eq: f12ParseEq(o.label, iTexts) }));
+  const parsed = s1.options.map(o => ({ o, eq: f13ParseEq(o.label, iTexts) }));
   if (parsed.some(x => !x.eq)) return "an option does not parse";
-  const want = f12Expect(s);
+  const want = f13Expect(s);
   const allowed = new Set([s.total.c, ...s.pays.map(x => x.v)]);
   if (parsed.some(x => [...x.eq.L, ...x.eq.R].some(t => !allowed.has(t.c)))) return "an option holds a term the story does not";
-  const rights = parsed.filter(x => f12Same(x.eq, want));
+  const rights = parsed.filter(x => f13Same(x.eq, want));
   if (rights.length !== 1 || !rights[0].o.correct || parsed.filter(x => x.o.correct).length !== 1) return "the right equation is not the one marked correct";
-  const slips = parsed.filter(x => x !== rights[0]).map(x => f12Slip(rights[0].eq, x.eq, s)).sort().join(",");
+  const slips = parsed.filter(x => x !== rights[0]).map(x => f13Slip(rights[0].eq, x.eq, s)).sort().join(",");
   if (slips !== "car,gear,sign") return `the decoys are not one sign, one car and one gear slip (${slips})`;
-  const v = f12Value(s);
+  const v = f13Value(s);
   if (!(Number.isFinite(v) && v > 0)) return "the answer is not positive";
   if (s.loan && !(v < s.pays.reduce((a, x) => a + x.v, 0))) return "the loan is not smaller than its repayments";
   const near2 = (a, b) => Number.isFinite(a) && Math.abs(a - b) <= 1e-6 * Math.max(1, Math.abs(b));
@@ -1319,7 +1319,7 @@ export function f13Diagnose(q, fam = null) {
   /* the keypad lets in 6 digits unless a step asks for more (js/keypad.js maxDigits) */
   const digits = x => x.toFixed(2).replace(".", "").replace(/^0+(?=\d)/, "").length;
   if (q.steps.slice(1).some(st => digits(st.expected) > (st.maxDigits ?? 6))) return "an answer longer than its keypad lets in";
-  if (q.graph && f12GraphIssue(q.graph, s)) return f12GraphIssue(q.graph, s);
+  if (q.graph && f13GraphIssue(q.graph, s)) return f13GraphIssue(q.graph, s);
   /* the family's bank shape */
   const deps = s.pays.filter(x => x.kind === "dep"), wds = s.pays.filter(x => x.kind === "wd"), reps = s.pays.filter(x => x.kind === "repay");
   const two = s.roads.length === 2;
@@ -1338,12 +1338,12 @@ export function f13Diagnose(q, fam = null) {
 }
 /* every equation a learner reads on an f13 card (the four options, the
    worked "The one equation:" line), parsed: [{ where, ok }] */
-export function f12EquationsOf(q) {
+export function f13EquationsOf(q) {
   const out = [];
-  ((q.steps && q.steps[0] && q.steps[0].options) || []).forEach((o, j) => out.push({ where: `option ${j + 1}`, ok: !!f12ParseEq(o.label) }));
+  ((q.steps && q.steps[0] && q.steps[0].options) || []).forEach((o, j) => out.push({ where: `option ${j + 1}`, ok: !!f13ParseEq(o.label) }));
   (q.solution || []).forEach((st, j) => {
     const t = String(st.s);
-    if (t.startsWith("The one equation: ")) out.push({ where: `worked line ${j + 1}`, ok: !!f12ParseEq(t.slice("The one equation: ".length)) });
+    if (t.startsWith("The one equation: ")) out.push({ where: `worked line ${j + 1}`, ok: !!f13ParseEq(t.slice("The one equation: ".length)) });
   });
   return out;
 }
