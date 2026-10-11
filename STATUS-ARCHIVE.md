@@ -1,5 +1,155 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-11 16:49–19:20 — Finance part 2: her play-test, three fixes, 2b, SHIP sw v96 (Fable; four workers, three checkers)
+- Catch-up (portfolio sweep: nothing new; every flagged item on the known-deliberate list).
+  Local server started on 5191 for her play-test (`localhost:5191/?local=1`). Session titles
+  tidied (the 12:12–16:35 foreman session renamed).
+- Her play-test notes (16:54 / 16:56 / 17:02): (1) "lumpsum" in brackets in f8's first
+  paragraph plus one line that it IS the total and from now on we call it the total: phasing
+  the word out, not cold turkey; (2) f8's first slide = just the jug, a discovery slide: tap →
+  savings fill, the total sits at the END; tap → the loan drains, the total at the START;
+  then the questions; (3) f12: an answered step collapses, only the paragraph and the
+  timeline stay. "The rest looks perfect, you can make those fixes now please."
+- Worker A (Opus, 248k, brief-7): `40e6d97`. The engine's `q.reveal` frames already hide the
+  input until the last frame, so the slide is three frames in replace mode, no engine edit.
+  `jugDiscover(mode)` in js/concepts.js (one jug, 63% of the card; coins and arrows in one
+  column on the left because her handle is on the right); `.jug-discover` CSS; a delegated
+  listener in questf8 makes a tap on the jug click Next; `tools/shoot_round.py` clicks
+  `.reveal-next` until none is left (it stopped on "option count mismatch" before);
+  `f8Diagnose(q, first)`; the "lump" ban in _finance-check.js carved out for frame 1 only;
+  verify-finance 675 → 679. Library card "theTotal" gets the same bracket + line.
+  Checker (Sonnet, 152k): nothing blocking; loan jug ends with a sliver (9%); frame 3's loan
+  caption stays above a savings paragraph; hint on frames 1–2 names chips not yet shown;
+  coin labels hug the ring (mock-up); floating calculator button (pinned).
+- Worker B (Opus, 271k, brief-8): `52956bf`. Two opt-in flags in js/questions.js:
+  `q.stepGraphPinned` (one host `div.q-graph.q-step-graph.pinned` under the prompt, replaced
+  per step; `liveSvg`/`liveSpec` follow it) and `q.collapseSteps` (a done step folds to
+  prompt + ✓ + the answer taken; options/pad/hint/graph hidden by CSS, never removed, so
+  shoot_round's "last option group" still works); `bringIntoView(node, keep)` keeps the
+  picture at the top in pinned mode; f12 sets both. Card 5 at 360 px: 2 675 → 1 041 px; all
+  eight cards 902–1 137 px. verify-finance 679 → 687 (incl. f10 card 1 and f8 card 3 walks
+  proving the flag-less path unchanged); verify-gtrig passes. Checker (Sonnet, 141k): nothing
+  blocking; the paragraph scrolls off at the rates step (her 18:13: leave it); the calculator
+  button covers the timeline's top-right corner at 360 (pinned, app-wide).
+- Her 18:12: "do the two f8 fixes and 2b first, then ship it and wrap up please."
+- Worker C (Opus, 179k, brief-9): `5840846`. Loan drain ends at 1.8% (frame 1's empty level;
+  steps 87 → 61 → 35 unchanged); `remindAfterDrain` in questf8 on `animationend` of the loan
+  level + a 6 s timer fallback, fades in `.jd-remind` ("Payments are coins. The total is the
+  jug."), min-height held so the chips do not jump ~24 px at the 5 s mark (the worker's own
+  catch: a learner could tap the wrong chip and the first answer counts); verify-finance 690.
+- Worker D (Opus, 279k, brief-2b as parked): `926c86e`. Item A `liveText()` writes every
+  `<sup>` back with its caret (`)^36`, `)^(−6)`, `)^(3×4)`; `.efrac` sups excluded; the
+  exponent chapter's `x2` → `x^2` in snapshots, wanted); B/C1/C2 f5 gets `NB`/`nw`/`money`/
+  `term`/`pa`, money + "N% p.a." unbreakable in prompts, worked lines, option labels with the
+  thousands space, a "number never leaves its unit" DOM check at 200–360 px (proven to catch
+  the old file); C3 carOrNoCar items each nowrap; C4 "T‑points" U+2011 in a nowrap span;
+  C5 half‑yearly U+2011 in f9/f3/concept cards + finlib's "semi‑annually (half‑yearly)" at
+  f5's call sites, checks read U+2011 as a hyphen; C6 `i<sub>eff</sub>` with a hand-written
+  `sfrac`; D f13's car sentence unbracketed (f11 already was). verify-finance 692/692,
+  verify-feedback-snapshot 131 → 136. Leftovers it saw: f3 card 4 "8%"/"p.a." and
+  "(half-"/"yearly)" split (f3/f7 print finlib's plain-hyphen label); f7 "i_eff" underscores.
+- Pre-ship checker (Sonnet, 182k; f5 both widths, f8 card 1, f13 snapshot): nothing blocking.
+  f5 money whole everywhere; loan jug EMPTY at 5.6 s; the caption swaps between 4.6 and
+  5.6 s with no chip jump (page height 2386 vs 2388); snapshot shows `(1 + 0,09/2)^(−4)`
+  forms. Cosmetic: the reminder line wraps "the jug." alone at 360; f5 card 4 end label
+  18 px past the T6 tick; f5 wrong panel's "same value" line before the claim it answers.
+- Ship (her yes 18:12): live DB 19:04 `insert … on conflict do nothing` → f8–f13 false at
+  94–99 (93 → 99 rows; quests grants: postgres + service_role only, unchanged). Files for the
+  commit grepped against the 19 real first names in `students`: clean. Harness sweep on the
+  final tree all green (finance 692, dice-finance 89, steps-ux 33, wrap, store 4074, snapshot
+  136, inbox-learner 131, exam 673 read off `#banner`, lazy-load 52). `sw.js` v95 → v96;
+  commit `a4621b5` (sw.js + briefs/finance-2 incl. brief-7/8/9 + the play-test plan + the
+  mock-up PNG); `tools/sw_check.py` OK (it counts only a committed bump); push
+  7d3fc3c..a4621b5. Live 19:15: sw mhq-v96 after 1 s; 8 files byte-identical; WebPs
+  image/webp (16 560 + 2 108 bytes); live page at 375 px, no page errors.
+- Slip, no damage: a `cat > file` without a heredoc in the ship command hung the shell waiting
+  on stdin for 2 min; killed the stray `cat`, the rest of the chain then ran once, correctly
+  (verified: one ship commit, one push).
+- Cost ≈ 1.45M worker tokens (A 248k, B 271k, C 179k, D 279k; checkers 152k / 141k / 182k).
+  Lesson kept: a capped checker lands at 140–180k; an engine-touching fix round ≈ 270k.
+## 2026-10-11 12:07–16:35 — Finance part 2 BUILD DAY (Fable foreman; six workers; nothing pushed)
+- Catch-up (portfolio sweep: nothing new), her jug PNG measured (2000×2000 RGBA, transparent
+  background, one pure-black 35-px outline, body interior one sealed region x 243–1453 /
+  y 122–1963, handle holes separate): verdict "it works", the app paints it via masks. Audience
+  pinned: Curro Gr11 group, English, public repo. Her 12:12 "Yebo, all looks good... run it" =
+  Fable dispatches the queue as agents, one at a time, estimate 2.2M–3.7M.
+- Worker 1 (Sonnet, 151k): renumber one-equation f12 → f13 (git mv, exports, ids, `.f13-eq`,
+  migration six rows 94–99 + schema mirror, verify-finance 586/586 unchanged). Fable review fix
+  `a4872ea`: ~25 leftover `f12*` helper names in _finance-check.js / verify-finance → f13*.
+- Worker 2 (Opus, 408k): Fix A `9f1a788`. `pow(base, exp)` in js/finlib.js; sups in f3–f7,
+  f9–f11, f13 and the finance concept cards; `unsup()` so the checks parse the old caret form;
+  `line-height:0` on sups in .opt/.q-prompt/.q-step-prompt/.sol-step/.fb-answer/.hint-box/
+  .concept (measured: a sup grew a chip 49 → 52 px); f13's `unitPx` width model fixed (sup
+  counted at 0.834, the "× (1 + …)" cut gone); 13 new "no visible caret" ticks → 599/599.
+  Noticed outside scope: the teacher snapshot flattens a plain sup; es1 `x^½`; f5 "R2 000" split.
+- Checker 1 (Sonnet, 408k, UNCAPPED: ran roll loops + DOM probes on its own): nothing blocking;
+  cosmetic C1–C6 (f5 money splits, f5 unformatted option amounts, concept-card wraps, i_eff
+  underscores, half-yearly hyphen) → brief-2b. Budget section added to CHECKER-BRIEF.md.
+- Worker 3 (Opus, 389k): f10 `73c89c2` taught form only; archive md + pointer line in
+  GR11-FINANCE-REDESIGN.md; cards inOrOutSaving / inOrOutLoan (steps chains, ☐ slot) /
+  equationYesNo + the five older cards reworked (inOrOutWord → "where does it go in the
+  equation?", tidyLoan → hirePurchasePrice); loans meet on T0; verify-finance 602/602.
+  Fable looked at cards 1 and 3 on real shots: passes. Checker 2 (218k, capped mid-run):
+  nothing blocking; F1–F5 → brief-3b.
+- Worker 4 (Opus, 427k): f8 `ff3e5e1` the jug round. Her PNG copied to art-source/finance,
+  `tools/jug_masks.py` (scipy.ndimage.label, Pillow floodfill trap avoided) → 512-px
+  jug-outline.webp (16.5 KB) + jug-inside.webp (2.1 KB); CSS mask-image paints the outline
+  lavender and the fill inside the body (loan full = 87%, under the rim); concept card = the
+  mock-up; paragraph cards = steps chains of three mc (jug sentence → savings/loan → T0/end,
+  timeline via `step.graphAfter`); recall cards four phrases; questions.js gained `note`/`why`
+  per mc-step option; verify-finance 638/638 incl. 12 DOM checks of the concept card at
+  360 px. Fable looked at card 1 both sides: matches the mock-up. Checker 3 (152k): nothing
+  blocking; coin digits cramped, step-3 timeline small, hire-purchase price sentence → brief-4b.
+- Worker 5 (Opus, 411k): f12 `2d55459` Build the timeline. questf13 refactored to export
+  `F13_SCENES`/`f13Story`/`f13GraphOf` (6 000 seeded cards byte-identical); her five steps
+  as mc + tokenpad frame ("☐ then ☐", chips "8% p.a."); each step's own graph = the correct
+  state so far; `step.graphWide` (step pictures were capped at 280 px for gt8); down payment
+  → "nowhere: it never enters the account" (f13's drawing has none; stacked cases are Mvelo's
+  and David's day-of-A deposits); final spec deep-equals f13's; verify-finance 666/666.
+  Fable looked at card 1 answered side (≈2 700 CSS px): passes, length = her call. Checker 4
+  (167k): nothing blocking; David's stacked label without a leader, flagless headroom, pad
+  decoy hint, 3 100-px cards → brief-5b.
+- Worker 6 (Opus, 278k): Fix B `4736ce5`. `:root{--road-0..2}` (the three hexes moved from
+  three hard-coded spots), `.eq-road-j{color:var(--road-j)}` on every car (inside `nw()`,
+  outside `<sup>`), wrong options coloured by the same rule, 7 "colour is never a hint"
+  checks + a one-source check + a broken-paint control → 675/675. Fable looked at card 1:
+  sky cars on the sky road, orange on orange. Checker 5 (195k): nothing blocking; dimmed
+  colours after answering (by design), f9 half-yearly hyphen (already in 2b).
+- Live DB 15:30: 93 rows / max sort 93 / f1–f6 open / f7 closed. SHIP-PLAN-finance-2.md
+  rewritten for six rounds. sw_check refuses (expected). tools/_out is git-ignored.
+- Her 16:32: finishing videos, play-test in a bit, FRESH session before the ship. Wrap.
+- Decisions, hers: 12:12 run it; 16:32 wrap, fresh session ships. Flagged, default keep: f12
+  down payment "nowhere"; f12 keeps all step pictures; f8 concept card on card 1 via q.reveal;
+  fix rounds parked (2b recommended before the ship: the snapshot regression).
+- Cost ≈ 3.2M worker tokens vs 2.2M–3.7M quoted. Lessons: a Blipwork round build = ~400k;
+  checkers without a budget line run 400k; the shared files (concepts.js, verify-finance.html,
+  _finance-check.js) force builds and fix rounds to run one at a time.
+
+## 2026-10-11 11:05–12:10 — Finance part 2 PLAY-TEST + f8 jug talk (Opus 5.5 → Fable mid-session; nothing built, nothing pushed)
+- Catch-up: portfolio sweep clean apart from the known 15 unpushed finance commits; local server
+  started on :5191 for her incognito play. Her first "I only see up until round 7" was just the
+  map's scroll (headless check: all 12 cards render, 8–12 below the fold).
+- Her play notes: f9 and f10 and f12 draw exponents as a literal caret (`^(3×2)`, `^4`); f11 clean.
+  Cause measured: `formulaHtml` (js/ui.js:184) superscripts only a parked FRACTION exponent;
+  f5–f7 write `^k` as text too. Fix = a finance `pow()` helper (recommended) or an app-wide rule.
+- f10: she saw the jug form ("P(…)^24 − 6 000(…)^12 − 3 000 = 0, tidy it") and stopped: that is
+  her 2027 teaching (after a proper discovery lesson); this year the class never did discovery,
+  so the rounds keep the taught form only (total left, payments right). Not nuked: archived with
+  a pointer so the 2027 build reuses it.
+- Her new round: Build the timeline from a paragraph in five taps (last T → rate change or
+  "no change" → rates on roads → the jug at T0 / the end → each coin on its T). First proposed
+  after the equation round, then moved BEFORE it (words → timeline → equation), so timeline = f12,
+  one equation = f13. f12/f13's equation options take their road colours.
+- The f8 talk: "lump sum" means ONE PAYMENT in the textbooks, which is why her definitions kept
+  breaking ("balance" breaks on loans, "biggest" breaks on withdrawals). Definition kept: the ONE
+  amount worth the same as ALL the payments together on the same day; test: it stands alone on
+  its side of the taught equation; in the paragraph it is the "has / borrows / wants" sentence.
+  Picture: coins = payments, jug = the total (savings fill the jug, the bank hands a loan over as a
+  full jug). Mock-up rendered at 390 px (`briefs/finance-2/f8-jug-mockup.png`): "absolutely
+  perfect"; she draws her own jug (mine "very wonky").
+- Hand-off: `FINANCE-PLAYTEST-2026-10-11-PLAN.md` (six-worker queue, ~2.2M–3.7M tokens, then the
+  ship). A fresh session runs it as foreman; this one carried four screenshots + the mock-up.
+
 ## Decisions rolled from PROJECT-STATUS.md on 2026-10-10 23:00 (2026-10-03 and 2026-10-04 one-liners, verbatim)
 - 2026-10-03 (hers): the in-app calculator must work EXACTLY like her fx-991ZA PLUS II;
   functions school learners won't use may be skipped. Priority: ALPHA, the arrow-edit wipe,

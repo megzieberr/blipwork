@@ -1,6 +1,6 @@
 # Finance rounds part 2: play-test notes and the build queue (Sun 2026-10-11)
 
-> STATE 2026-10-11 16:35: the §6 queue RAN (Fable foreman, six workers, commits 75e73ce…4736ce5), NOT shipped; see PROJECT-STATUS.md and SHIP-PLAN-finance-2.md. The f12 down payment is answered "nowhere" (worker 5's call, flagged); fix lists parked in briefs/finance-2/brief-2b…5b.
+> STATE 2026-10-11 19:20: SHIPPED as sw v96 `a4621b5` after her play-test fixes (f8 discovery slide + polish, f12 collapsing steps, the 2b list); see PROJECT-STATUS.md. Earlier: STATE 2026-10-11 16:35: the §6 queue RAN (Fable foreman, six workers, commits 75e73ce…4736ce5), NOT shipped; see PROJECT-STATUS.md and SHIP-PLAN-finance-2.md. The f12 down payment is answered "nowhere" (worker 5's call, flagged); fix lists parked in briefs/finance-2/brief-2b…5b.
 
 Megan play-tested f9, f10, f11, f12 on `localhost:5191/?local=1` (11:05 to 11:50) and we talked
 f8 through. This file is the hand-off for the FRESH foreman session that runs the builds
