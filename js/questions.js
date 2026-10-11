@@ -62,6 +62,25 @@
                      label air its engine guarantees at a 360-px phone
                      (PHONE_360), and f12's pictures must read at the size
                      of the f13 timeline they build up to.
+
+   f12 play-test (2026-10-11, her note: "only keep the paragraph and
+   timeline the whole time") adds two QUESTION-level flags, both opt-in,
+   both off by default (every other steps round renders as before):
+     q.stepGraphPinned — every step.graph (and a step's graphAfter) is
+                     drawn into ONE host, div.q-graph.q-step-graph.pinned,
+                     right above the steps list, instead of inside its own
+                     step. Each new picture REPLACES the one there (its
+                     caption too); a step with no picture leaves it alone;
+                     the host is born with the first picture. liveSvg /
+                     liveSpec follow the pinned picture.
+     q.collapseSteps — a step that is done folds to ONE line: its
+                     question line (the prompt with its muted span dropped,
+                     the last line of what is left), the ✓ mark, and the
+                     answer that was taken. Everything else in the step
+                     (options, pads, hint box, its own graph) is hidden by
+                     CSS (.q-steps.collapse > .q-step.collapsed), never
+                     removed: shoot_round.py and the harnesses read the DOM.
+                     The line is a record, never a verdict.
    ============================================================ */
 import { el, clear, xbarHtml, fracHtml, formulaHtml } from "./ui.js";
 
@@ -96,7 +115,7 @@ import { renderPattern, computePattern } from "./engine/pattern-graph.js";
 import { renderQuadTri, computeQuadTri } from "./engine/quadrant-triangle.js";
 import { mountKeypad } from "./keypad.js";
 import { mountTapcross, mountDoubleTick } from "./tapcross.js";
-import { mountTokenpad } from "./tokenpad.js";
+import { mountTokenpad, SLOT } from "./tokenpad.js";
 import { checkStep } from "./steps-check.js";
 import { mountCalculator } from "./calculator.js";
 import { answerCorrect, fmtComma } from "./check.js";
@@ -499,7 +518,11 @@ function mountReveal(root, q, inputHost) {
    ------------------------------------------------------------ */
 function mountSteps(host, root, q, commit, svgNode) {
   const list = Array.isArray(q.steps) ? q.steps : [];
-  const all = el("div", "q-steps");
+  /* f12 play-test (2026-10-11): the two opt-in flags (header). Both false
+     for every other steps round, so every branch below that reads them
+     falls through to the old code unchanged. */
+  const pinned = q.stepGraphPinned === true, collapse = q.collapseSteps === true;
+  const all = el("div", "q-steps" + (collapse ? " collapse" : ""));
   host.appendChild(all);
 
   let clean = true, idx = 0;
@@ -511,6 +534,67 @@ function mountSteps(host, root, q, commit, svgNode) {
      the whole chain) go through the same code. */
   let liveSvg = svgNode, liveSpec = q.graph || null;
   if (!list.length) return;
+
+  /* q.stepGraphPinned: ONE picture host under the paragraph, above the
+     steps list, born with the first picture (f12's step 1 has none). A new
+     picture REPLACES what is there, caption and width included. */
+  let pin = null;
+  function pinPicture(spec, cap, wide) {
+    if (!pin) { pin = el("div", ""); host.insertBefore(pin, all); }
+    pin.className = "q-graph q-step-graph pinned" + (wide ? " wide" : "");
+    pin.innerHTML = renderSpec(spec) + (cap ? `<div class="cap">${fmt(cap)}</div>` : "");
+    liveSvg = pin.querySelector("svg");
+    liveSpec = spec;
+  }
+
+  /* q.collapseSteps: the answer a done step took, as a learner reads it.
+     mc → the tapped option's label (the right one); tokenpad → the chips
+     placed, joined by the pad's thin space, inside their frame words when
+     the pad is a frame ("8% p.a. then 12% p.a."); calc → the expected value
+     with its unit. Any other kind has no one-line answer: the line is the
+     question and its ✓. */
+  function takenAnswer(step, given) {
+    const k = step.kind;
+    if (k === "mc") {
+      const o = (step.options || [])[given] || (step.options || []).find(x => x.correct);
+      return o ? String(o.label) : "";
+    }
+    if (k === "mcmulti") return (step.correct || []).map(j => ((step.options || [])[j] || {}).label).filter(x => x != null).join(", ");
+    if (k === "tokenpad") {
+      const raw = String(given != null ? given : step.expected != null ? step.expected : "");
+      if (!Array.isArray(step.frame) || !Array.isArray(step.keys)) return raw;
+      const toks = raw.split(" ").filter(x => x !== "");   // U+2009, the pad's thin space (literal, as js/tokenpad.js writes it)
+      let t = 0;
+      return step.frame.map(f => (f === SLOT ? (toks[t++] || "") : f)).join(" ");
+    }
+    if (k === "calc") return step.expected == null ? "" : fmtComma(step.expected, step.dp != null ? step.dp : null) + (step.unit ? ` ${step.unit}` : "");
+    return "";
+  }
+  /* the question line: the prompt as drawn, its muted span(s) dropped, cut at
+     its <br>s, the LAST line with words in it ("R3 000 deposit: which T?",
+     not the "Where does each coin go?" header above it) */
+  function questionLine(step) {
+    const t = document.createElement("div");
+    t.innerHTML = fmt(step.prompt || "");
+    t.querySelectorAll(".muted").forEach(n => n.remove());
+    const lines = [[]];
+    [...t.childNodes].forEach(n => (n.nodeName === "BR" ? lines.push([]) : lines[lines.length - 1].push(n)));
+    const keep = lines.filter(g => g.some(n => n.textContent.trim())).pop() || [];
+    const out = el("span", "q-step-q");
+    keep.forEach(n => out.appendChild(n));
+    return out;
+  }
+  function collapseStep(step, w, badge, given) {
+    const line = el("div", "q-step-line");
+    line.appendChild(questionLine(step));
+    const took = el("span", "q-step-took");      // the ✓ and the answer wrap as ONE piece
+    took.appendChild(badge);
+    const ans = takenAnswer(step, given);
+    if (ans) took.appendChild(el("span", "q-step-ans", fmt(ans)));
+    line.appendChild(took);
+    w.insertBefore(line, w.firstChild);
+    w.classList.add("collapsed");
+  }
 
   function miss(w, hintBox) {
     clean = false;
@@ -529,14 +613,29 @@ function mountSteps(host, root, q, commit, svgNode) {
 
      Only scrolls when it actually needs to: a step already sitting in view is
      left alone, since an unasked-for jump is as disorientating as a missing
-     one. Respects prefers-reduced-motion. */
-  function bringIntoView(node) {
+     one. Respects prefers-reduced-motion.
+
+     `keep` (q.stepGraphPinned only, f12 2026-10-11): the pinned picture. A new
+     step that is wholly on screen is left alone. Otherwise, when the picture's
+     top AND the whole new step fit on the screen together, the scroll stops
+     with the picture at the top, so the learner answers with the timeline in
+     view (her note: "keep the paragraph and timeline the whole time"). When
+     they do not fit, the usual rule below. */
+  function bringIntoView(node, keep) {
     if (!node || typeof node.getBoundingClientRect !== "function") return;
     const TOP_GAP = 84;            // leaves the previous step's ✓ peeking above
     const r = node.getBoundingClientRect();
     const vh = window.innerHeight || document.documentElement.clientHeight || 0;
-    if (r.top >= 0 && r.top <= vh - 160) return;      // enough of it is showing already
-    const y = Math.max(0, window.scrollY + r.top - TOP_GAP);
+    let y = null;
+    if (keep && typeof keep.getBoundingClientRect === "function") {
+      const k = keep.getBoundingClientRect();
+      if (r.top >= 0 && r.bottom <= vh) return;        // the whole step is showing
+      if (r.bottom - (k.top - 8) <= vh) y = Math.max(0, window.scrollY + k.top - 8);
+    }
+    if (y == null) {
+      if (r.top >= 0 && r.top <= vh - 160) return;      // enough of it is showing already
+      y = Math.max(0, window.scrollY + r.top - TOP_GAP);
+    }
     const still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const from = window.scrollY;
     try { window.scrollTo({ top: y, behavior: still ? "auto" : "smooth" }); }
@@ -551,11 +650,14 @@ function mountSteps(host, root, q, commit, svgNode) {
     }, 350);
   }
 
-  function settle(i, w) {
+  /* `given` is the answer the step's input just took (an mc option index, the
+     token pad's raw string); only q.collapseSteps reads it */
+  function settle(i, w, given) {
     w.dataset.state = "done";
     const badge = el("span", "q-step-mark" + (w.dataset.retried === "1" ? " retried" : ""),
       w.dataset.retried === "1" ? "✓ after a retry" : "✓");   // soft, never a red cross (her ruling)
-    (w.querySelector(".q-step-prompt") || w).appendChild(badge);
+    if (collapse) collapseStep(list[i] || {}, w, badge, given);   // the ✓ rides in the one line
+    else (w.querySelector(".q-step-prompt") || w).appendChild(badge);
     /* f8 (2026-10-11, the jug round): a step may carry a diagram for its
        FEEDBACK side, step.graphAfter, drawn under the step only once it is
        answered. f8's "Does the jug sit at T0 or at the end?" draws the
@@ -563,7 +665,8 @@ function mountSteps(host, root, q, commit, svgNode) {
        jug sits: step.graph would have drawn it with the question, and handed
        the answer over. Drawn through the same renderSpec as every graph. */
     const st = list[i] || {};
-    if (st.graphAfter) {
+    if (st.graphAfter && pinned) pinPicture(st.graphAfter, st.graphAfterCap, st.graphWide);   // f12: the finished timeline, in the one host
+    else if (st.graphAfter) {
       const ga = el("div", "q-graph q-step-graph q-step-after" + (st.graphWide ? " wide" : ""));
       ga.innerHTML = renderSpec(st.graphAfter) + (st.graphAfterCap ? `<div class="cap">${fmt(st.graphAfterCap)}</div>` : "");
       w.appendChild(ga);
@@ -593,7 +696,8 @@ function mountSteps(host, root, q, commit, svgNode) {
     /* a step may carry its own diagram — it appears the moment the step
        is reached, never before (gt8: no triangle until the quadrant is
        picked, which is the whole teaching point) */
-    if (step.graph) {
+    if (step.graph && pinned) pinPicture(step.graph, step.graphCap, step.graphWide);   // f12: replaces the picture above the steps
+    else if (step.graph) {
       const sg = el("div", "q-graph q-step-graph" + (step.graphWide ? " wide" : ""));
       sg.innerHTML = renderSpec(step.graph) + (step.graphCap ? `<div class="cap">${fmt(step.graphCap)}</div>` : "");
       w.appendChild(sg);
@@ -610,7 +714,7 @@ function mountSteps(host, root, q, commit, svgNode) {
     mountStepInput(step, i, w, shost, hintBox);
     /* NOT on step 0: the question has only just opened and the diagram above
        is the thing to read first. Scrolling on mount would hide it. */
-    if (i > 0) bringIntoView(w);
+    if (i > 0) bringIntoView(w, pinned ? pin : null);
   }
 
   function mountStepInput(step, i, w, shost, hintBox) {
@@ -639,7 +743,7 @@ function mountSteps(host, root, q, commit, svgNode) {
               if ((step.options[k] || {}).correct) x.classList.add("is-correct");
               noteOn(x, step.options[k]);
             });
-            settle(i, w);
+            settle(i, w, oi);
           } else {
             // a wrong option greys out and STAYS out; the rest are still live
             b.disabled = true;
@@ -803,7 +907,7 @@ function mountSteps(host, root, q, commit, svgNode) {
         onSubmit(raw) {
           if (busy()) return;
           if (!raw) return;                    // ignore an empty submit
-          if (checkStep(step, raw)) { tp.disable(); settle(i, w); }
+          if (checkStep(step, raw)) { tp.disable(); settle(i, w, raw); }
           else { miss(w, hintBox); tp.clear(); }
         },
       });

@@ -199,7 +199,12 @@
   the flag, then coin by coin), no picture repeats the one above it, the pictures grow only by the engine's own growth, and the
   finished drawing deep-equals f13's timeline of the same seed's scene. Labels measured at a 360-px phone (the stacked case, the
   last deposit on the day of A, on every roll that has it). Nothing says lump, wrong, final answer, car or hire purchase; no
-  exponent is shown. Then the concept card's example: f13's own drawing of Brenda's scene.</p>
+  exponent is shown. Then the concept card's example: f13's own drawing of Brenda's scene.<br>
+  <b>Her play-test note, 11 Oct 17:02</b> ("only keep the paragraph and timeline the whole time"): every card sets the two steps
+  flags (one pinned picture, answered steps folded), and a three-coin card is walked at a 360-px phone, every step answered (one
+  after a miss): each answered step folds to one line (its question, the ✓, the answer taken, never a verdict word), ONE picture
+  sits under the paragraph and is the one the next step opens on, the finished drawing at the end, and the whole card stays under
+  1 400 px. f10 card 1 and f8 card 3, which do not set the flags, are walked too: their steps keep their options and pictures.</p>
 <pre id="f12">…</pre>
 
 <h2>Fix A — no caret anywhere a learner reads (every exponent a real superscript)</h2>
@@ -1313,7 +1318,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   const whyOnMisses = st => (st.options || []).every(o => o.correct || (o.why && String(o.why).trim()));
   tick(def.skills.map(x => x.id).join(",") === ORDER.join(","), `f12 deals 8 cards in order: ${def.skills.map(x => x.id).join(", ")}`);
   const flines = [], stat = {};
-  let fitRuns = 0, fitBad = 0, fitFirst = "", sameAsF13 = 0, rollsAll = 0, worstJump = 0;
+  let fitRuns = 0, fitBad = 0, fitFirst = "", sameAsF13 = 0, rollsAll = 0, worstJump = 0, flagsOn = 0;
   const jumps = new Set();
   def.skills.forEach((skill, pos) => {
     const st = { bad: 0, firstBad: "", stacked: 0, one: 0, two: 0, loan: 0, down: 0, xcoin: 0, wd: 0, pastPeriods: 0, pastOne: 0, pics: new Set() };
@@ -1327,6 +1332,9 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       rollsAll++;
       const problems = [];
       const steps = q.steps || [];
+      /* her play-test note (11 Oct 17:02): one pinned timeline under the paragraph, answered steps fold to a line */
+      if (q.stepGraphPinned === true && q.collapseSteps === true) flagsOn++;
+      else problems.push("the two steps flags are not both on (stepGraphPinned, collapseSteps)");
       /* the words: f13's own paragraph (the same seed deals the same scene), read back by f13's own reader */
       const story = String(q.prompt).split("<br>")[0];
       if (story !== q13.prompt) problems.push("the paragraph is not f13's for the same seed");
@@ -1455,6 +1463,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   });
   const S = id => stat[id] || {};
   tick(sameAsF13 === rollsAll, `f12: the finished drawing deep-equals f13's timeline of the same seed's scene on every roll (${sameAsF13}/${rollsAll})`);
+  tick(flagsOn === rollsAll, `f12: every card sets both steps flags, one pinned picture and answered steps folded (${flagsOn}/${rollsAll})`);
   tick(fitRuns > 0 && fitBad === 0, `f12: every label clear at a 360-px phone (${fitRuns} drawings measured, stacked ones included)${fitFirst ? ": " + fitFirst : ""}`);
   tick(S("unknownPayment").stacked === N && S("twoDeposits").stacked > N * 0.3 && S("twoDeposits").stacked < N * 0.7,
     `f12: the stacked case, the last deposit on the day of A (David every roll, Mvelo about half: ${S("twoDeposits").stacked}/${N})`);
@@ -1477,6 +1486,133 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       && !BANNED.some(([re]) => re.test(words)),
       `f12 concept card: its example is f13's drawing of Brenda's scene, honest and clear at 360 px, drawn on the card${fit.length ? ": " + fit[0] : ""}`);
   }
+  /* her play-test note (11 Oct 17:02): "after the option is selected, make it collapse ... only keep the paragraph and
+     timeline the whole time". A three-coin card (card 5: two deposits and a withdrawal) mounted the way the play screen
+     mounts it, at a 360-px phone in the app's own font, and every step answered right first time; then the same card
+     again with one miss on step 2, so a retried step folds too.
+     After each step: the step shows ONE line (its question, the ✓, the answer taken; no option, pad, hint or picture on
+     screen, never a verdict word); ONE pinned picture sits under the paragraph and above the steps, and it is the picture
+     the next step opens on (rebuilt here from the words), the finished drawing after the last step. Then two rounds
+     WITHOUT the flags, to prove the old layout still stands: f10 card 1 (an mc chain under a question-level picture) and
+     f8 card 3 (the jug step's feedback picture). */
+  let walkLines = [], walkH = 0, retryLine = "";
+  {
+    const shown = e => !!e && e.offsetParent !== null;
+    const picOf = spec => { const t = document.createElement("div"); t.innerHTML = renderTimeline(spec); return t.querySelector("svg").outerHTML; };
+    const mount = q => {
+      const host = document.createElement("div");
+      host.className = "play";
+      host.style.cssText = `width:360px;padding:0 16px;font-family:var(--font-body);line-height:1.5;--accent:${ACC}`;   // the play screen's gutter and font
+      measure.appendChild(host);
+      mountQuestion(host, q, { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+      return host;
+    };
+    const right = st => st.options.findIndex(o => o.correct);
+    let q;
+    try { setRng(mulberry(7919 * 5 + 3)); q = def.skills[4].gen(); } finally { resetRng(); }
+    const steps = q.steps, s = f13Words(String(q.prompt).split("<br>")[0]);
+    const full = drawing(s);
+    const opensOn = [null, upTo(full), upTo(full), upTo(full, { roads: true }), ...s.pays.map((x, j) => upTo(full, { roads: true, jug: true, coins: j })), ...(s.down != null ? [full] : [])];
+    const host = mount(q), card = host.querySelector(".q");
+    tick(def.skills[4].id === "mixed" && s.pays.length === 3 && steps.length === 7 && !card.querySelector(".q-step-graph") && card.querySelectorAll(".q-step").length === 1 && shown(card.querySelector(".q-prompt")),
+      `f12 walk (360 px): a three-coin card (${s.pays.length} coins, ${steps.length} steps) opens on the paragraph and step 1 alone, no picture yet`);
+    const fold = [], pinBad = [], verdict = [];
+    steps.forEach((st, k) => {
+      const w = card.querySelector(`.q-step[data-index="${k}"]`);
+      if (!w || w.dataset.state !== "active") { fold.push(`step ${k + 1} never became the active step`); return; }
+      let want;
+      if (st.kind === "mc") {
+        [...w.querySelectorAll("button.opt")][right(st)].click();
+        want = flat(st.options[right(st)].label);
+      } else {
+        const chips = [...w.querySelectorAll(".key.tok")], toks = st.expected.split(THIN);
+        toks.forEach(tok => { const c = chips.find(x => x.textContent.trim() === tok); if (c) c.click(); });
+        const sub = w.querySelector(".key.submit"); if (sub) sub.click();
+        let t = 0;
+        want = flat(st.frame.map(f => (f === SLOT ? toks[t++] : f)).join(THIN));
+      }
+      /* the fold */
+      const line = w.querySelector(":scope > .q-step-line"), mark = line && line.querySelector(".q-step-mark"), ans = line && line.querySelector(".q-step-ans");
+      const said = line ? [line.querySelector(".q-step-q"), mark, ans].filter(Boolean).map(x => flat(x.textContent)).join(" ") : "";
+      walkLines.push(said);
+      if (w.dataset.state !== "done" || !w.classList.contains("collapsed") || !shown(line)) fold.push(`step ${k + 1} did not fold to its line`);
+      else {
+        if ([...w.children].some(x => x !== line && shown(x))) fold.push(`step ${k + 1}: more than its line still shows`);
+        if ([...w.querySelectorAll("button.opt, .tokenpad, .hint-box, svg")].some(shown)) fold.push(`step ${k + 1}: an option, the pad, the hint or a picture still shows`);
+        if (!w.querySelector(".q-step-prompt") || !w.querySelector(".q-step-input")) fold.push(`step ${k + 1}: its prompt or input left the DOM (hide, never remove)`);
+        if (!mark || !ans || flat(ans.textContent) !== want) fold.push(`step ${k + 1}: the line is not ✓ + "${want}" ("${said}")`);
+        if (line.scrollWidth > line.clientWidth + 1) fold.push(`step ${k + 1}: the line is clipped at 360 px`);
+        if (/wrong|correct|incorrect/i.test(line.textContent)) verdict.push(`step ${k + 1}: "${said}"`);
+      }
+      /* the one picture */
+      const pins = card.querySelectorAll(".q-step-graph.pinned"), pin = pins[0];
+      const wantSpec = k + 1 < steps.length ? opensOn[k + 1] : full;
+      const list = card.querySelector(".q-steps"), prompt = card.querySelector(".q-prompt");
+      if (pins.length !== 1 || !shown(pin)) pinBad.push(`after step ${k + 1}: ${pins.length} pinned hosts`);
+      else {
+        if (pin.querySelectorAll("svg").length !== 1) pinBad.push(`after step ${k + 1}: ${pin.querySelectorAll("svg").length} pictures in the host`);
+        else if (pin.querySelector("svg").outerHTML !== picOf(wantSpec)) pinBad.push(`after step ${k + 1}: the picture is not ${k + 1 < steps.length ? `the one step ${k + 2} opens on` : "the finished drawing"}`);
+        if (!pin.classList.contains("wide") || !/T in years/.test(pin.textContent)) pinBad.push(`after step ${k + 1}: not the card width or no caption`);
+        if (pin.closest(".q-step") || !shown(prompt) || !(prompt.compareDocumentPosition(pin) & Node.DOCUMENT_POSITION_FOLLOWING) || !(pin.compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING))
+          pinBad.push(`after step ${k + 1}: the picture is not between the paragraph and the steps`);
+      }
+      if (card.querySelectorAll(".q-step svg").length) pinBad.push(`after step ${k + 1}: a picture inside a step`);
+    });
+    tick(fold.length === 0, `f12 walk: every answered step folds to ONE line, its question, the ✓ and the answer taken, nothing else on screen, nothing removed (${walkLines.length} steps)${fold.length ? ": " + fold.slice(0, 2).join("; ") : ""}`);
+    tick(pinBad.length === 0, `f12 walk: ONE picture under the paragraph after every step, the correct state so far (the next step's picture), the finished drawing after the last${pinBad.length ? ": " + pinBad.slice(0, 2).join("; ") : ""}`);
+    walkH = Math.round(card.getBoundingClientRect().height);
+    tick(card.dataset.step === String(steps.length) && walkH < 1400 && host.scrollWidth <= host.clientWidth + 1,
+      `f12 walk: the whole card, verdict included, is ${walkH} px tall at 360 px (under 1 400), nothing wider than the phone (${host.scrollWidth} / ${host.clientWidth} px)`);
+    measure.innerHTML = "";
+    /* the same card again, one miss on step 2: it stays open until it is right, then folds like any other, its ✓ the
+       soft "after a retry" */
+    {
+      const h2 = mount(q), c2 = h2.querySelector(".q");
+      const w1 = c2.querySelector('.q-step[data-index="0"]');
+      [...w1.querySelectorAll("button.opt")][right(steps[0])].click();
+      const w2 = c2.querySelector('.q-step[data-index="1"]'), b2 = [...w2.querySelectorAll("button.opt")];
+      b2[steps[1].options.findIndex(o => !o.correct)].click();
+      const midway = w2.dataset.state === "retry" && !w2.classList.contains("collapsed") && b2.filter(shown).length === b2.length;
+      b2[right(steps[1])].click();
+      const line = w2.querySelector(":scope > .q-step-line"), mark = line && line.querySelector(".q-step-mark");
+      retryLine = line ? [line.querySelector(".q-step-q"), mark, line.querySelector(".q-step-ans")].filter(Boolean).map(x => flat(x.textContent)).join(" ") : "";
+      tick(midway && w2.classList.contains("collapsed") && !!mark && mark.classList.contains("retried") && /after a retry/.test(retryLine)
+        && ![...w2.children].some(x => x !== line && shown(x)) && verdict.length === 0 && !/wrong|correct/i.test(line.textContent),
+        `f12 walk: a missed step stays open until it is right, then folds the same way ("${retryLine}"); no line says wrong or correct${verdict.length ? ": " + verdict[0] : ""}`);
+      measure.innerHTML = "";
+    }
+
+    /* f10 card 1, no flags: every done step keeps its options and its ✓ in its prompt, the picture stays above the chain */
+    {
+      const q10 = questDef("f10").skills[0].gen(), h = mount(q10), c10 = h.querySelector(".q"), bad = [];
+      q10.steps.forEach((st, k) => {
+        const w = c10.querySelector(`.q-step[data-index="${k}"]`);
+        if (!w) { bad.push(`step ${k + 1} missing`); return; }
+        [...w.querySelectorAll("button.opt")][right(st)].click();
+        if ([...w.querySelectorAll("button.opt")].filter(shown).length !== st.options.length) bad.push(`step ${k + 1}: its options left the screen`);
+        if (!w.querySelector(".q-step-prompt .q-step-mark") || w.querySelector(".q-step-line") || w.classList.contains("collapsed")) bad.push(`step ${k + 1}: folded, or its ✓ is not in its prompt`);
+      });
+      const g = c10.querySelector(":scope > .q-graph svg");
+      tick(q10.type === "steps" && !q10.stepGraphPinned && !q10.collapseSteps && bad.length === 0 && shown(g) && !c10.querySelector(".pinned, .q-steps.collapse"),
+        `f10 card 1 (no flags): ${q10.steps.length} steps answered, every one keeps its options and its ✓, no fold, no pinned host, the question's picture above the chain${bad.length ? ": " + bad[0] : ""}`);
+      measure.innerHTML = "";
+    }
+    /* f8 card 3, no flags: the jug step's feedback picture is drawn INSIDE its own step, the options stay */
+    {
+      const q8 = questDef("f8").skills[2].gen(), h = mount(q8), c8 = h.querySelector(".q"), bad = [];
+      let after = 0;
+      q8.steps.forEach((st, k) => {
+        const w = c8.querySelector(`.q-step[data-index="${k}"]`);
+        if (!w) { bad.push(`step ${k + 1} missing`); return; }
+        [...w.querySelectorAll("button.opt")][right(st)].click();
+        if ([...w.querySelectorAll("button.opt")].filter(shown).length !== st.options.length) bad.push(`step ${k + 1}: its options left the screen`);
+        if (st.graphAfter) { after++; if (!shown(w.querySelector(":scope > .q-step-after svg"))) bad.push(`step ${k + 1}: its feedback picture is not inside it`); }
+      });
+      tick(!q8.stepGraphPinned && !q8.collapseSteps && after > 0 && bad.length === 0 && !c8.querySelector(".pinned, .q-steps.collapse, .q-step.collapsed"),
+        `f8 card 3 (no flags): the feedback picture lands inside its own step (${after}), every step keeps its options, no fold, no pinned host${bad.length ? ": " + bad[0] : ""}`);
+      measure.innerHTML = "";
+    }
+  }
   /* one roll of each card, in dealing order: the paragraph, each step's options with the right one marked */
   const sample = def.skills.map((sk, pos) => {
     const q = sk.gen();
@@ -1487,6 +1623,8 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   }).join("\n");
   measure.innerHTML = "";
   document.getElementById("f12").textContent = flines.join("\n") + `\n\nlabels measured at 360 px: ${fitRuns} drawings, ${fitBad} with a problem · largest picture growth ${worstJump} units`
+    + `\n\nthe 360-px walk, card 5 (three coins, every step right first time): the whole card ${walkH} px tall at the end; the folded lines:\n`
+    + walkLines.map((l, k) => `    ${k + 1}. ${l}`).join("\n") + `\n  and step 2 again, after one miss:\n    2. ${retryLine}`
     + "\n\none roll of each card, in dealing order (the right pick in brackets):\n" + sample;
 }
 

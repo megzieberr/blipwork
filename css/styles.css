@@ -1743,6 +1743,23 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
 /* f12 (2026-10-11): step.graphWide, a timeline built step by step at the full card width,
    the size of the question-level timeline it builds up to (js/questions.js) */
 .q-step-graph.wide svg{max-width:none}
+/* f12 play-test (2026-10-11), her note: "after the option is selected, make it collapse ... only keep
+   the paragraph and timeline the whole time". Two opt-in steps flags (js/questions.js header):
+   q.stepGraphPinned draws every step picture into ONE host above the steps list (not sticky: a
+   sticky picture could cover the options on a short phone); q.collapseSteps folds a done step to
+   one line. Hidden INSTANTLY with display:none, never removed (harnesses and shoot_round.py read
+   the DOM; bringIntoView never measures an animating box). A feedback picture (.q-step-after)
+   stays out of the fold: on a collapse-only card it is the one thing the step still shows. */
+.q-step-graph.pinned{margin:0 0 14px}
+.q-steps.collapse{gap:8px}
+.q-steps.collapse>.q-step.collapsed{padding:7px 12px}
+.q-steps.collapse>.q-step.collapsed>:not(.q-step-line):not(.q-step-after){display:none}
+.q-step-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;font-size:14px;line-height:1.45;color:var(--ink);min-width:0}
+.q-step-line .q-step-q{min-width:0;overflow-wrap:anywhere}
+.q-step-took{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;max-width:100%}
+.q-step-line .q-step-mark{margin-left:0}
+.q-step-ans{font-size:13px;font-weight:600;line-height:1.4;padding:1px 8px;border:1px solid var(--brd);
+  border-radius:999px;background:rgba(255,255,255,.04);color:var(--ink);max-width:100%}
 /* mcmulti — toggle several options, then Submit (gt13's denominators) */
 .q-options.mcmulti{margin-bottom:10px}
 .opt.is-on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}

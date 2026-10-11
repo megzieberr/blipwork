@@ -26,14 +26,25 @@
    whose answer is "nowhere: it never enters the account" (f10's taught
    form and its words): see DOWN PAYMENT below.
 
+   ONE PICTURE, ANSWERED STEPS FOLD (her play-test note, 11 Oct 17:02:
+   "only keep the paragraph and timeline the whole time"). The card sets
+   the two opt-in steps flags of js/questions.js: stepGraphPinned draws
+   every picture below into ONE host right under the paragraph, above the
+   steps (each new picture replaces the one there; the host is born with
+   step 2's bare axis), and collapseSteps folds every answered step to one
+   line: its question, the ✓, the answer taken. Not sticky on purpose: the
+   fold is what stops the scrolling, and a sticky picture could cover the
+   options on a short phone.
+
    EVERY PICTURE IS THE CORRECT STATE SO FAR. A step carries its own graph
-   (js/questions.js draws it the moment the step is reached), and that
-   graph is the timeline as it stands after the step before it was
-   answered RIGHT, whatever was tapped: a slip in step 2 never poisons step
-   5. A step whose state would draw the very same picture as the one just
-   above it carries none (the rates step: until its rates land, the roads
-   have no colour, so its picture is step 2's bare axis). The last coin's
-   feedback side (step.graphAfter) draws the finished timeline. Every one
+   (js/questions.js draws it into the pinned host the moment the step is
+   reached), and that graph is the timeline as it stands after the step
+   before it was answered RIGHT, whatever was tapped: a slip in step 2
+   never poisons step 5. A step whose state would draw the very same
+   picture as the one already in the host carries none, and the host keeps
+   it (the rates step: until its rates land, the roads have no colour, so
+   its picture is step 2's bare axis). The last coin's feedback side
+   (step.graphAfter) puts the finished timeline in the host. Every one
    is drawn at the full card width (step.graphWide, js/questions.js), the
    size of f13's own timeline, not the 280-px cap of a step's triangle. In
    order:
@@ -282,6 +293,7 @@ export function f12Card(sc) {
   return {
     type: "steps", concept: CON,
     prompt: `${f13Story(sc)}<br><span class="muted small">Build its timeline first, tap by tap. No equation yet.</span>`,
+    stepGraphPinned: true, collapseSteps: true,    // one timeline under the paragraph; answered steps fold to a line
     steps,
     hint: "How far, where the rate changes, which rate on which road, where the jug goes, where each coin goes.",
     answerLabel: `T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : "no rate change"}; ${jugWord}, at ${T(sc.total.t)}; ${coins.map(x => `${coinName(x)} at ${T(x.t)}`).join(", ")}${sc.down != null ? `; the ${money(sc.down)} down payment: nowhere` : ""}.`,
