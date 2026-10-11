@@ -6,6 +6,7 @@
    question on the same skill. Wording follows CAPS conventions;
    example numbers are original (never from the planning PDFs).
    ============================================================ */
+import { renderTimeline } from "./engine/timeline-graph.js";
 
 /* ---------------------------------------------------------
    THE JUG PICTURE (f8 "Which one is the total?", 2026-10-11).
@@ -59,6 +60,21 @@ const JUG_PICTURE = `<div class="jugs">`
   + `<div class="jug-pane">${JUG_SAVE}<div class="jug-cap"><b>SAVINGS</b><br>you fill the jug<br>the jug at the <b>end</b> is the total</div></div>`
   + `<div class="jug-pane">${JUG_LOAN}<div class="jug-cap"><b>LOAN</b><br>the bank hands you a full jug<br>the jug at the <b>start</b> is the total</div></div>`
   + `</div>`;
+
+/* ---------------------------------------------------------
+   THE BUILT TIMELINE (f12 "Build the timeline", 2026-10-11).
+   Brenda's bank example (f13's own FIX.twoDeposits scene), drawn by
+   the timeline engine exactly as f13 draws that scene (f13GraphOf):
+   verify-finance asserts the two specs are the same, and draws this
+   one at a 360-px phone. The engine already loads with the shell
+   (js/questions.js imports it), so this import costs no request.
+   --------------------------------------------------------- */
+export const BUILD_TIMELINE_EXAMPLE = {
+  type: "timeline", n: 7, meet: 7,
+  nodes: [{ t: 7, label: "?", role: "A" }, { t: 0, amount: 5500, dp: 0 }, { t: 5, amount: 4000, dp: 0 }],
+  roads: [{ from: 0, to: 3, rate: "14% p.a.", k: 2 }, { from: 3, to: 7, rate: "12% p.a.", k: 12 }],
+  leaders: true, stackLeaders: true,
+};
 
 export const CONCEPTS = {
   quartiles: {
@@ -375,6 +391,30 @@ export const CONCEPTS = {
       <div class="eg">A loan paid back with <span class="nowrap">R8 000</span> at T1 and <span class="nowrap">R9 000</span> at T3, <span class="nowrap">12% p.a.</span> compounded monthly, meeting day T0: <span class="nowrap">P = 8 000(1 + 0,12/12)<sup>−12</sup></span> + <span class="nowrap">9 000(1 + 0,12/12)<sup>−36</sup></span></div>
       <p>Interest on a loan = paid back − borrowed.</p>
       <p>Saving: deposits plus, withdrawals minus, A alone on the left. A loan: repayments plus on the right, P alone on the left.</p>`,
+  },
+
+  /* f12 "Build the timeline" (2026-10-11, her design 11:39, her order 11:47).
+     Words, then the timeline, then the equation: her five taps as a short
+     checklist in her order, one line each, then one worked example in words
+     and the timeline it builds (BUILD_TIMELINE_EXAMPLE above, f13's own
+     drawing of that scene). The jug and coin words are f8's card's. Money,
+     "p.a." and "N years" carry a LITERAL U+00A0 inside their .nowrap unit. */
+  buildTimeline: {
+    title: "Build the timeline",
+    body: `
+      <p>The exam hands you words. Build the whole timeline from them, tap by tap, before any equation. Every payment is <b class="jug-hl">one coin</b> on its day; the total is the <b class="jug-hl">one jug</b>.</p>
+      <ul>
+        <li><b>Tap 1: how far does it go?</b> The last day the words name is the last T: “after <span class="nowrap">7 years</span>” is T7.</li>
+        <li><b>Tap 2: where does the rate change?</b> “for the first <span class="nowrap">3 years</span>” is T3. One rate all the way: no change.</li>
+        <li><b>Tap 3: which rate on which road?</b> The first rate from T0 to the change, the new rate after it, each road in its own colour.</li>
+        <li><b>Tap 4: where does the jug go?</b> Savings: at the end, A. A loan: at T0, P.</li>
+        <li><b>Tap 5: where does each coin go?</b> “now” is T0, “after <span class="nowrap">5 years</span>” is T5; a coin going out is drawn <span class="nowrap">−R2 000</span>.</li>
+      </ul>
+      <p>A down payment never enters the account: it goes straight to the shop, so it has no place on the timeline.</p>
+      <div class="eg">Brenda opens a savings account. She deposits <span class="nowrap">R5 500</span> now and <span class="nowrap">R4 000</span> after <span class="nowrap">5 years</span>. The interest rate is <span class="nowrap">14% p.a.</span> compounded half‑yearly for the first <span class="nowrap">3 years</span>, then <span class="nowrap">12% p.a.</span> compounded monthly. How much is in the account after <span class="nowrap">7 years</span>?</div>
+      <p>The five taps: T7; T3; <span class="nowrap">14% p.a.</span>, then <span class="nowrap">12% p.a.</span>; the jug, A, at T7; <span class="nowrap">R5 500</span> at T0 and <span class="nowrap">R4 000</span> at T5.</p>
+      <div class="q-graph">${renderTimeline(BUILD_TIMELINE_EXAMPLE)}<div class="cap">T in years</div></div>
+      <p>Words first. Then the timeline. Then the one equation.</p>`,
   },
 
   /* f13 "Build the one equation" (2026-10-10; was f12 until 2026-10-11). The exam shape, her method:

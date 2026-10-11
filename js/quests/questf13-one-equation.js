@@ -45,6 +45,9 @@
    picture, the class's struggle point), hirePurchase and unknownPayment.
    F13_FAMILIES exports the seven family makers ({ timeline }) for the
    Exam Focus "timeline-equation" tile to deal later.
+   F13_SCENES, f13Story and f13GraphOf (2026-10-11) export the scene
+   makers, the paragraph and the timeline spec for f12 "Build the timeline",
+   which deals these scenes and ends on this round's own drawing.
 
    WRAPPING (f9/f10 review 1, f12 review 1): every TERM of an equation,
    its amount and all its cars, is ONE <span class="nowrap"> unit, so a
@@ -488,63 +491,84 @@ const FIX = {
 };
 
 /* Brenda (two deposits) or Mvelo (three, the last on the day of A); one rate change; find A */
-function twoDeposits(opts) {
-  return build(roll(() => {
+function twoDepositsScene() {
+  return roll(() => {
     const mvelo = rng() < 0.5, n = randInt(mvelo ? 5 : 4, 10), m = randInt(1, n - 1);
     const vals = shuffled(DEP_AMTS).slice(0, mvelo ? 3 : 2), times = mvelo ? [0, m, n] : [0, m];
     return saveScene("twoDeposits", mvelo ? "Mvelo" : "Brenda", n, rollRoads(n, true), times.map((t, j) => dep(t, vals[j])));
-  }, FIX.twoDeposits), opts);
+  }, FIX.twoDeposits);
 }
 /* Bradley / Jason: a deposit, then a withdrawal; one rate; find A */
-function withdrawal(opts) {
-  return build(roll(() => {
+function withdrawalScene() {
+  return roll(() => {
     const n = randInt(4, 8), d = pick(BIG_DEP), w = pick(WD_AMTS.filter(v => v <= d / 2));
     return saveScene("withdrawal", pick(["Bradley", "Jason"]), n, rollRoads(n, false), [dep(0, d), wd(randInt(1, n - 1), w)]);
-  }, FIX.withdrawal), opts);
+  }, FIX.withdrawal);
 }
 /* Mandy: two deposits and a withdrawal, a rate change; find A */
-function mixed(opts) {
-  return build(roll(() => {
+function mixedScene() {
+  return roll(() => {
     const n = randInt(5, 10), a = randInt(1, n - 3), b = randInt(a + 1, n - 1);
     const [d0, d1] = shuffled(DEP_AMTS).slice(0, 2), w = pick(WD_AMTS.filter(v => v < Math.min(d0, d1)));
     return saveScene("mixed", "Mandy", n, rollRoads(n, true), [dep(0, d0), dep(a, d1), wd(b, w)]);
-  }, FIX.mixed), opts);
+  }, FIX.mixed);
 }
 /* Brian / Stephanie: a loan at T0 paid off with two repayments (the last
    one ends it), a rate change; find P */
-function loanTwoRepayments(opts) {
-  return build(roll(() => {
+function loanTwoRepaymentsScene() {
+  return roll(() => {
     const n = randInt(4, 10), a = randInt(1, n - 1), [v0, v1] = shuffled(REPAY_AMTS).slice(0, 2);
     return loanScene("loanTwoRepayments", pick(["Brian", "Stephanie"]), n, rollRoads(n, true), [repay(a, v0), repay(n, v1)]);
-  }, FIX.loanTwoRepayments), opts);
+  }, FIX.loanTwoRepayments);
 }
 /* Bob: a known total A at the end, two rates; find the deposit P now */
-function targetAmount(opts) {
-  return build(roll(() => {
+function targetAmountScene() {
+  return roll(() => {
     const n = randInt(5, 10);
     return { ...saveScene("targetAmount", "Bob", n, rollRoads(n, true), [dep(0, "P")]), total: { t: n, role: "A", value: pick(TARGETS) }, unknown: "P" };
-  }, FIX.targetAmount), opts);
+  }, FIX.targetAmount);
 }
 /* Arnold: a down payment straight to the shop, the loan paid off with two
    repayments, two rates; find the loan, then the price */
-function hirePurchase(opts) {
-  return build(roll(() => {
+function hirePurchaseScene() {
+  return roll(() => {
     const n = randInt(4, 8), a = randInt(1, n - 1), [v0, v1] = shuffled(REPAY_AMTS).slice(0, 2);
     return loanScene("hirePurchase", "Arnold", n, rollRoads(n, true), [repay(a, v0), repay(n, v1)], { down: pick(DOWNS), item: pick(ITEMS) });
-  }, FIX.hirePurchase), opts);
+  }, FIX.hirePurchase);
 }
 /* David: a deposit now, x in the middle, a deposit on the day of A, and a
    known total A; a rate change; find x. A is rolled UP to a round R10 000
    from a guessed x, so x comes out a little over the guess, positive */
-function unknownPayment(opts) {
-  return build(roll(() => {
+function unknownPaymentScene() {
+  return roll(() => {
     const n = randInt(5, 10), m = randInt(1, n - 1), roads = rollRoads(n, true);
     const d0 = pick(D0_AMTS), dEnd = pick(DEND_AMTS.filter(v => v !== d0)), xg = pick(XGUESS);
     const raw = grow(d0, carsOf(roads, 0, n)) + grow(xg, carsOf(roads, m, n)) + dEnd;
     const A = Math.ceil(raw / 10000) * 10000;
     return { ...saveScene("unknownPayment", "David", n, roads, [dep(0, d0), dep(m, "x"), dep(n, dEnd)]), total: { t: n, role: "A", value: A }, unknown: "x" };
-  }, FIX.unknownPayment), opts);
+  }, FIX.unknownPayment);
 }
+
+/* the SCENE makers, exported 2026-10-11 for f12 "Build the timeline" (its
+   brief: f12 must not invent a second timeline model). Each one is the roll
+   the family always did, a pure function of the rng; a family below is
+   build(its scene, opts), the same rng calls in the same order as before, so
+   every f13 card rolls byte-for-byte what it did. With story() (the
+   paragraph's words) and graphOf() (the timeline spec of a scene), f12 deals
+   these very scenes and finishes on the very drawing f13 starts from. */
+export const F13_SCENES = {
+  twoDeposits: twoDepositsScene, withdrawal: withdrawalScene, mixed: mixedScene,
+  loanTwoRepayments: loanTwoRepaymentsScene, targetAmount: targetAmountScene,
+  hirePurchase: hirePurchaseScene, unknownPayment: unknownPaymentScene,
+};
+export { story as f13Story, graphOf as f13GraphOf };
+function twoDeposits(opts) { return build(twoDepositsScene(), opts); }
+function withdrawal(opts) { return build(withdrawalScene(), opts); }
+function mixed(opts) { return build(mixedScene(), opts); }
+function loanTwoRepayments(opts) { return build(loanTwoRepaymentsScene(), opts); }
+function targetAmount(opts) { return build(targetAmountScene(), opts); }
+function hirePurchase(opts) { return build(hirePurchaseScene(), opts); }
+function unknownPayment(opts) { return build(unknownPaymentScene(), opts); }
 
 /* for the Exam Focus "timeline-equation" tile (not built yet): each maker
    takes { timeline: true | false } and is a pure function of the rng */

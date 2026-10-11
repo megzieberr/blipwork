@@ -1713,6 +1713,9 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
    the quadrant is picked) */
 .q-step-graph{margin:2px 0 12px}
 .q-step-graph svg{width:100%;max-width:280px;height:auto;display:block;margin:0 auto}
+/* f12 (2026-10-11): step.graphWide, a timeline built step by step at the full card width,
+   the size of the question-level timeline it builds up to (js/questions.js) */
+.q-step-graph.wide svg{max-width:none}
 /* mcmulti — toggle several options, then Submit (gt13's denominators) */
 .q-options.mcmulti{margin-bottom:10px}
 .opt.is-on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}

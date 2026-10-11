@@ -1411,10 +1411,13 @@ const f13Key = t => `${t.s}|${t.c}|${f13CarKey(t)}`;
 const f13Same = (a, b) => a.L.length === b.L.length && a.L.every((t, j) => f13Key(t) === f13Key(b.L[j]))
   && a.R.length === b.R.length && a.R.map(f13Key).sort().join(";") === b.R.map(f13Key).sort().join(";");
 
-/* the scene, from the word question and step 1's prompt only */
-export function f13Scene(q) {
+/* the scene, from the word question alone (no meeting day: f13Scene below
+   reads that off step 1's prompt). Split out 2026-10-11 so f12 "Build the
+   timeline", which deals f13's own paragraphs, is read back by the very
+   same reader; f13Scene returns exactly what it always did */
+export function f13Words(prompt) {
   /* f12 review 1: "2 years", "8% p.a." are units of their own now; only a money unit stays wrapped here */
-  const p = String(q && q.prompt || "").replace(/<span class="nowrap">(?!R\d)([^<]*)<\/span>/g, "$1");
+  const p = String(prompt || "").replace(/<span class="nowrap">(?!R\d)([^<]*)<\/span>/g, "$1");
   const name = (p.match(/^([A-Z][a-z]+) /) || [])[1];
   if (!F13_NAMES.includes(name)) return null;
   const loan = /\bborrows\b/.test(p), save = /savings account/.test(p);
@@ -1443,11 +1446,18 @@ export function f13Scene(q) {
   const total = loan ? { t: 0, c: "P", known: false, role: "P" } : kn ? { t: n, c: f13Num(kn[1]), known: true, role: "A" } : { t: n, c: "A", known: false, role: "A" };
   const unknowns = pays.filter(x => typeof x.v !== "number");
   if (total.known ? unknowns.length !== 1 : unknowns.length !== 0) return null;   // exactly one unknown on the card
+  return { name, loan, n, roads, pays, total, down: dm ? f13Num(dm[1]) : null, item: im ? im[1] : null, unknown: loan ? "P" : total.known ? unknowns[0].v : "A" };
+}
+/* the scene, from the word question and step 1's prompt only */
+export function f13Scene(q) {
+  const w = f13Words(q && q.prompt);
+  if (!w) return null;
+  const { name, loan, n, roads, pays, total, down, item, unknown } = w;
   const mm = String((q.steps && q.steps[0] && q.steps[0].prompt) || "").match(/^The meeting day is T(\d+), (the day of A|the day of the loan)\./);
   if (!mm) return null;
   const meet = Number(mm[1]);
   if (meet !== (loan ? 0 : n) || mm[2] !== (loan ? "the day of the loan" : "the day of A")) return null;
-  return { name, loan, n, meet, roads, pays, total, down: dm ? f13Num(dm[1]) : null, item: im ? im[1] : null, unknown: loan ? "P" : total.known ? unknowns[0].v : "A" };
+  return { name, loan, n, meet, roads, pays, total, down, item, unknown };
 }
 /* one car per road an amount drives over to the meeting day, travel order */
 function f13Cars(s, t) {

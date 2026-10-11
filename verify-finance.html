@@ -89,6 +89,10 @@
   four short phrases). All eight are now read back from their own words (the recompute below: 8 f8 entries where the tap
   round had 5), the f8 block at the bottom checks the round's shape and words, and the concept card is drawn at a 360-px
   phone with both jugs painted through her drawing's masks.</p>
+<p class="muted small"><b>2026-10-11: f12 "Build the timeline" joined</b> (8 more skills, so f1–f13 is 99 skills; the
+  recompute is unchanged, f12 rolls f13's scenes and computes no answer). Its block below reads every card back from f13's own
+  paragraph and checks each of her five taps, every per-step picture against the words, and the finished drawing against f13's
+  own timeline for the same seed. The Finance map tick now asks for f10, f11, f12, f13 in that order.</p>
 <div id="banner">running…</div>
 
 <h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
@@ -171,6 +175,20 @@
   1–3, on none of cards 4–8. Then every family drawn with its timeline forced on.</p>
 <pre id="f13">…</pre>
 
+<h2>f12 — Build the timeline, card by card</h2>
+<p class="muted small">Every f12 card, 200 seeded rolls each: the card opens on f13's own paragraph for the same seed (no
+  timeline yet), read back by f13's own reader (f13Words); then her five taps as a chain: how far (four T's, the last T right,
+  one option always past the end), where the rate changes (three inner T's and "no change"), the rates on the roads (the token
+  pad's frame, one box per road; the chips are the road rates once each plus one decoy rate, and exactly one fill passes), where
+  the jug goes (T0 / the last T), and one tap per coin, the x and P coins and the withdrawals included, with the down payment last
+  on its card ("nowhere: it never enters the account"). Every mc step has exactly one right option and a miss sentence on every
+  other one. Every picture is the CORRECT state so far, rebuilt here from the words (bare axis, then the roads, then the jug with
+  the flag, then coin by coin), no picture repeats the one above it, the pictures grow only by the engine's own growth, and the
+  finished drawing deep-equals f13's timeline of the same seed's scene. Labels measured at a 360-px phone (the stacked case, the
+  last deposit on the day of A, on every roll that has it). Nothing says lump, wrong, final answer, car or hire purchase; no
+  exponent is shown. Then the concept card's example: f13's own drawing of Brenda's scene.</p>
+<pre id="f12">…</pre>
+
 <h2>Fix A — no caret anywhere a learner reads (every exponent a real superscript)</h2>
 <p class="muted small">Every round f1–f13, 30 rolls of every skill: the story, every step's prompt and hint, every option and its
   note, the hint, the answer line and the worked lines with their side notes, each formatted as the app does it and put in the
@@ -190,8 +208,10 @@ import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/timeline-graph.js";
-import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f13EquationsOf, f11Scene, f11Diagnose, unsup, f8Diagnose } from "./js/quests/_finance-check.js";
-import { F13_FAMILIES } from "./js/quests/questf13-one-equation.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f13EquationsOf, f11Scene, f11Diagnose, unsup, f8Diagnose, f13Words } from "./js/quests/_finance-check.js";
+import { F13_FAMILIES, f13GraphOf, f13Story } from "./js/quests/questf13-one-equation.js";
+import { BUILD_TIMELINE_EXAMPLE } from "./js/concepts.js";
+import { setRng, resetRng } from "./js/rng.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import { formulaHtml, fracHtml, xbarHtml } from "./js/ui.js";
 
@@ -211,6 +231,9 @@ const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "steps"]);
 /* f8's five paragraph cards (2026-10-11, the jug round) are chains of three mc steps too: the words first, no number */
 const MC_CHAINS = new Set(["f10.inOrOutSaving", "f10.inOrOutLoan",
   "f8.jugTwoDeposits", "f8.jugLoan", "f8.jugWithdrawal", "f8.jugHirePurchase", "f8.jugTargetOrSameDay"]);
+/* f12 "Build the timeline" (2026-10-11): every card is a chain of taps, mc steps and ONE token-pad step (the rates on the
+   roads, FRAME mode), and no typed number: the round builds the timeline, the equation is f13's */
+const PAD_CHAINS = new Set(["twoDeposits", "loanTwoRepayments", "withdrawal", "hirePurchase", "mixed", "targetAmount", "loanAgain", "unknownPayment"].map(id => `f12.${id}`));
 
 /* ---------- 1) the timeline engine, on representative specs ---------- */
 const ENGINE = [
@@ -312,7 +335,7 @@ function checkQuestion(q, issues, opts) {
     const steps = q.steps || [];
     if (steps.length < 2) issues.add(`chain of ${steps.length} steps`);
     if (!steps.length || (steps[steps.length - 1].kind !== "calc" && !opts.mcChain)) issues.add("chain does not end on a typed number");
-    if (opts.mcChain && steps.some(st => st.kind !== "mc")) issues.add("a sign chain with a step that is not mc");
+    if (opts.mcChain && steps.some(st => st.kind !== "mc" && !(opts.padOk && st.kind === "tokenpad"))) issues.add("a sign chain with a step that is not mc");
     if (q.method) issues.add("chain carries q.method (spoils the steps)");
     steps.forEach((st, si) => {
       if (!st.prompt || !st.hint) issues.add(`step ${si} missing prompt/hint`);
@@ -327,7 +350,7 @@ function checkQuestion(q, issues, opts) {
         if (st.expected < 0 && !st.allowNeg) issues.add(`step ${si} negative expected without allowNeg`);
       } else if (st.kind === "tokenpad") {
         const slots = (st.frame || []).filter(f => f === "☐").length;
-        const need = String(st.expected).split(" ").filter(Boolean);   // U+2009 — the pad's join
+        const need = String(st.expected).split(" ").filter(Boolean);   // U+2009, the pad's join (2026-10-11: was a plain space; f12's chips "8% p.a." are the first finance tokens with a space inside)
         const keysNorm = (st.keys || []).map(normalizeTokens);
         if (need.length !== slots) issues.add(`step ${si}: ${need.length} pieces for ${slots} boxes`);
         if (need.some(t => !keysNorm.includes(normalizeTokens(t)))) issues.add(`step ${si} not buildable from its chips`);
@@ -358,7 +381,7 @@ chapter.quests.forEach(qmeta => {
       let q;
       try { q = skill.gen(); } catch (e) { issues.add("threw: " + e.message); break; }
       const before = issues.size;
-      checkQuestion(q, issues, { fit: i < FIT_RUNS || (i < LABEL_TAP_FIT_RUNS && fitsMore(q.graph)), mcChain: MC_CHAINS.has(skillId) });
+      checkQuestion(q, issues, { fit: i < FIT_RUNS || (i < LABEL_TAP_FIT_RUNS && fitsMore(q.graph)), mcChain: MC_CHAINS.has(skillId) || PAD_CHAINS.has(skillId), padOk: PAD_CHAINS.has(skillId) });
       if (issues.size > before) genFails++;
       if (rc) {
         recomputeRuns++;
@@ -753,7 +776,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   const flat = x => noTags(x).replace(/[  ]/g, " ");
   const cars = (t, D, c) => (t === D ? 0 : c != null && Math.min(t, D) < c && c < Math.max(t, D) ? 2 : 1);
   tick(def.skills.map(x => x.id).join(",") === ORDER.join(","), `f11 deals 8 cards in order: ${def.skills.map(x => x.id).join(", ")}`);
-  tick(chapter.quests.map(x => x.id).join(",").includes("f10,f11,f13"), "f11 stands between f10 and f13 on the Finance map (f12 slot open until Build the timeline lands)");
+  tick(chapter.quests.map(x => x.id).join(",").includes("f10,f11,f12,f13"), "f11 stands between f10 and f12 on the Finance map; f12 before f13");
   def.skills.forEach((skill, pos) => {
     const st = { bad: 0, firstBad: "", one: 0, two: 0, loan: 0, saving: 0, shared: 0, sleads: 0, kinds: new Set(), nOpts: new Set(), twoCar: 0, endOpt: 0 };
     for (let i = 0; i < N; i++) {
@@ -1070,6 +1093,232 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   }).join("\n");
   document.getElementById("f13").textContent = flines.join("\n") + "\n\nevery family with its timeline drawn (the Exam Focus tile):\n" + flines2.join("\n")
     + "\n\none roll of each card, in dealing order (the right equation and the answer):\n" + sample;
+}
+
+/* ---------- 11) f12: Build the timeline (2026-10-11) ---------- */
+{
+  /* written out here on purpose, not imported, so a slip in the module cannot pass itself: the dealing order, the
+     words, the drawing a scene's words give (f13's conventions), and every picture before it */
+  const ORDER = ["twoDeposits", "loanTwoRepayments", "withdrawal", "hirePurchase", "mixed", "targetAmount", "loanAgain", "unknownPayment"];
+  const FAM = id => (id === "loanAgain" ? "loanTwoRepayments" : id);
+  const BANNED = [[/lump/i, "lump"], [/wrong/i, "wrong"], [/final answer/i, "final answer"], [/hire purchase/i, "hire purchase"],
+    [/\bcars?\b/i, "car"], [/accumulated amount/i, "accumulated amount"], [/\bLHS\b|\bRHS\b/, "LHS/RHS"]];
+  const NOWHERE = "nowhere: it never enters the account", NO_CHANGE = "no change";
+  const THIN = " ", NB = " ", SLOT = "☐";
+  const ROAD_LANE = 14, STACK = 34;                        // the engine's own growth: a road lane at the bottom, a stack row at the top
+  const def = questDef("f12");
+  const N = 200, FIT = 40;
+  const noTags = s => unsup(s).replace(/<[^>]+>/g, "");
+  const flat = s => noTags(s).replace(/[  ]/g, " ").replace(/‑/g, "-");
+  const thou = v => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const mulberry = a => () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  /* deep equality, key order ignored */
+  const same = (a, b) => {
+    if (a === b) return true;
+    if (a == null || b == null || typeof a !== "object" || typeof b !== "object" || Array.isArray(a) !== Array.isArray(b)) return false;
+    const ka = Object.keys(a), kb = Object.keys(b);
+    return ka.length === kb.length && ka.every(k => Object.prototype.hasOwnProperty.call(b, k) && same(a[k], b[k]));
+  };
+  /* the drawing the words give: the total first (the bottom of a shared day's stack), "?" in its ring with its letter
+     (a known total its amount WITH its letter), each coin on its T (a withdrawal drawn out; x or P as its letter), the
+     roads with their rates, the flag on the total's own day (the day of A, T0 for a loan) */
+  const drawing = s => ({
+    type: "timeline", n: s.n, meet: s.loan ? 0 : s.n,
+    nodes: [s.total.known ? { t: s.total.t, amount: s.total.c, dp: 0, role: s.total.role } : { t: s.total.t, label: "?", role: s.total.role },
+      ...s.pays.map(x => (typeof x.v === "number" ? { t: x.t, amount: x.v, dp: 0, ...(x.kind === "wd" ? { out: true } : {}) } : { t: x.t, label: x.v }))],
+    roads: s.roads.map(r => ({ from: r.from, to: r.to, rate: `${r.r}% p.a.`, k: r.k })),
+    leaders: true, ...(s.total.known ? {} : { stackLeaders: true }),
+  });
+  /* the drawing with the later parts left out: no roads until the rates are placed, no total and no flag until the jug
+     is, the first `coins` coins */
+  const upTo = (full, { roads = false, jug = false, coins = 0 } = {}) => {
+    const o = {};
+    Object.keys(full).forEach(k => {
+      if ((k === "meet" && !jug) || (k === "roads" && !roads)) return;
+      o[k] = k === "nodes" ? full.nodes.filter((nd, j) => (j === 0 ? jug : j <= coins)) : full[k];
+    });
+    return o;
+  };
+  const isT = l => /^T\d+$/.test(String(l)), tOf = l => Number(String(l).slice(1));
+  const oneRight = st => (st.options || []).filter(o => o.correct).length === 1;
+  const whyOnMisses = st => (st.options || []).every(o => o.correct || (o.why && String(o.why).trim()));
+  tick(def.skills.map(x => x.id).join(",") === ORDER.join(","), `f12 deals 8 cards in order: ${def.skills.map(x => x.id).join(", ")}`);
+  const flines = [], stat = {};
+  let fitRuns = 0, fitBad = 0, fitFirst = "", sameAsF13 = 0, rollsAll = 0, worstJump = 0;
+  const jumps = new Set();
+  def.skills.forEach((skill, pos) => {
+    const st = { bad: 0, firstBad: "", stacked: 0, one: 0, two: 0, loan: 0, down: 0, xcoin: 0, wd: 0, pastPeriods: 0, pastOne: 0, pics: new Set() };
+    for (let i = 0; i < N; i++) {
+      const seed = 7919 * (pos + 1) + i;
+      let q, q13;
+      try {
+        setRng(mulberry(seed)); q = skill.gen();
+        setRng(mulberry(seed)); q13 = F13_FAMILIES[FAM(skill.id)]({ timeline: true });
+      } finally { resetRng(); }
+      rollsAll++;
+      const problems = [];
+      const steps = q.steps || [];
+      /* the words: f13's own paragraph (the same seed deals the same scene), read back by f13's own reader */
+      const story = String(q.prompt).split("<br>")[0];
+      if (story !== q13.prompt) problems.push("the paragraph is not f13's for the same seed");
+      const s = f13Words(story);
+      if (!s) { problems.push("the paragraph does not read back"); st.bad++; if (!st.firstBad) st.firstBad = problems.join(", "); continue; }
+      const n = s.n, two = s.roads.length === 2, c = two ? s.roads[0].to : null;
+      /* every text a learner reads */
+      const chipTexts = steps.flatMap(x => [...(x.keys || []), ...(x.frame || [])]);
+      const texts = [q.prompt, q.hint, q.answerLabel, ...steps.flatMap(x => [x.prompt, x.hint, ...(x.options || []).flatMap(o => [o.label, o.why, o.note])]),
+        ...(q.solution || []).flatMap(x => [x.s, x.r])].filter(x => x != null).map(String);
+      const t = texts.join(" | ");
+      BANNED.forEach(([re, w]) => { if (re.test(flat(t)) || chipTexts.some(k => re.test(k))) problems.push(`"${w}"`); });
+      if (/&#|&nbsp;/.test(t)) problems.push("an HTML entity");
+      if (/ /.test(t + chipTexts.join(""))) problems.push("a thin no-break space (U+202F)");
+      if (/\d \d{3}(?!\d)/.test(noTags(t))) problems.push("a plain space inside an amount");
+      const outside = noTags(t.replace(/<span class="nowrap">[^<]*<\/span>/g, ""));
+      if (/R\d/.test(outside)) problems.push("a money amount outside its unbreakable unit");
+      if (/\d%?[\s ](?:(?:years?|times?|decimal|months?)\b|p\.a\.)/.test(outside)) problems.push("a number apart from its unit");
+      if (/half-yearly/.test(t)) problems.push("half-yearly with a breakable hyphen");
+      if (/\^|<sup/.test(t)) problems.push("an exponent (this round shows none)");
+      if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 5) problems.push("no hint, answer or worked solution");
+      else if (q.solution[q.solution.length - 1].s !== "Words first. Then the timeline. Then the one equation.") problems.push("the solution does not end on the refrain");
+      if (q.graph || q.graphs) problems.push("a timeline before the first tap (the card opens on the words alone)");
+      /* the chain: how far, where the rate changes, the roads, the jug, then one coin per coin; a down payment last */
+      const want = ["mc", "mc", "tokenpad", "mc", ...s.pays.map(() => "mc"), ...(s.down != null ? ["mc"] : [])].join(",");
+      if (steps.map(x => x.kind).join(",") !== want) problems.push(`steps ${steps.map(x => x.kind).join(",")} (want ${want})`);
+      else {
+        if (steps.some(x => !x.prompt || !x.hint)) problems.push("a step without its prompt or hint");
+        const mcs = steps.filter(x => x.kind === "mc");
+        if (!mcs.every(oneRight)) problems.push("an mc step without exactly one right option");
+        if (!mcs.every(whyOnMisses)) problems.push("an option a learner can miss on without its why");
+        if (mcs.some(x => new Set(x.options.map(o => o.label)).size !== x.options.length)) problems.push("two options alike");
+        /* 1 · how far */
+        const s1 = steps[0], l1 = s1.options.map(o => o.label);
+        if (l1.length !== 4 || !l1.every(isT) || s1.options.find(o => o.correct).label !== `T${n}`) problems.push("step 1 is not four T's with the last T right");
+        if (!l1.some(l => tOf(l) > n)) problems.push("step 1 offers nothing past the end (the biggest T would always be right)");
+        const k1 = (s.roads.find(r => r.k > 1) || {}).k;
+        if (k1 && l1.includes(`T${n * k1}`) && n * k1 !== n + 1) st.pastPeriods++;
+        if (l1.includes(`T${n + 1}`)) st.pastOne++;
+        /* 2 · where the rate changes: three T's inside the line and "no change" */
+        const s2 = steps[1], l2 = s2.options.map(o => o.label);
+        if (l2.length !== 4 || l2.filter(l => l === NO_CHANGE).length !== 1 || !l2.filter(l => l !== NO_CHANGE).every(l => isT(l) && tOf(l) >= 1 && tOf(l) <= n - 1)) problems.push("step 2 is not three inner T's and \"no change\"");
+        if (s2.options.find(o => o.correct).label !== (two ? `T${c}` : NO_CHANGE)) problems.push("step 2's right option is not the words' rate change");
+        /* 3 · the roads: one box per road, the road rates as chips once each and one decoy rate, one fill and one only */
+        const s3 = steps[2], chips = s.roads.map(r => `${r.r}%${NB}p.a.`);
+        if (JSON.stringify(s3.frame) !== JSON.stringify(two ? [SLOT, "then", SLOT] : [SLOT])) problems.push("step 3's frame is not one box per road");
+        const keys = s3.keys || [], decoys = keys.filter(k => !chips.includes(k));
+        if (keys.length !== chips.length + 1 || !chips.every(ch => keys.filter(k => k === ch).length === 1) || decoys.length !== 1
+          || !/^\d+% p\.a\.$/.test(decoys[0]) || s.roads.some(r => decoys[0] === `${r.r}%${NB}p.a.`)) problems.push("step 3's chips are not the road rates once each plus one decoy");
+        if (s3.expected !== chips.join(THIN)) problems.push("step 3 does not expect the road rates in order");
+        const slots = (s3.frame || []).filter(f => f === SLOT).length;
+        let fills = [[]];
+        for (let k = 0; k < slots; k++) fills = fills.flatMap(f => keys.map(key => [...f, key]));
+        const pass = fills.filter(f => checkStep(s3, f.join(THIN)));
+        if (pass.length !== 1 || pass[0].join(THIN) !== chips.join(THIN)) problems.push(`step 3: ${pass.length} fills pass (want the one)`);
+        /* 4 · the jug: T0 or the last T */
+        const s4 = steps[3];
+        if (s4.options.map(o => o.label).sort().join(",") !== ["T0", `T${n}`].sort().join(",") || s4.options.find(o => o.correct).label !== `T${s.total.t}`) problems.push("step 4 is not T0 / the last T with the jug's day right");
+        if (s.total.t !== (s.loan ? 0 : n)) problems.push("the jug's day is not T0 for a loan, the end for saving");
+        /* 5 · each coin on its T, in the paragraph's order */
+        s.pays.forEach((x, j) => {
+          const sx = steps[4 + j], word = { dep: "deposit", wd: "withdrawal", repay: "repayment" }[x.kind];
+          const name = typeof x.v === "number" ? `R${thou(x.v)} ${word}` : `${word} ${x.v}`;
+          if (!flat(sx.prompt).toLowerCase().includes(`${name.toLowerCase()}: which t?`)) problems.push(`coin step ${j + 1} does not name its coin ("${name}")`);
+          const lx = sx.options.map(o => o.label);
+          if (lx.length !== 4 || !lx.every(l => isT(l) && tOf(l) <= n) || sx.options.find(o => o.correct).label !== `T${x.t}`) problems.push(`coin step ${j + 1}: not four T's with the coin's own T right`);
+        });
+        if (s.down != null) {
+          const sd = steps[steps.length - 1], ld = sd.options.map(o => o.label);
+          if (!flat(sd.prompt).includes(`R${thou(s.down)} down payment`)) problems.push("the down-payment step does not name it");
+          if (ld.filter(l => l === NOWHERE).length !== 1 || sd.options.find(o => o.correct).label !== NOWHERE || !ld.includes("T0") || !ld.filter(l => l !== NOWHERE).every(isT)) problems.push("the down payment is not \"nowhere\", with T0 offered");
+          st.down++;
+        }
+        /* the pictures: each step opens on the CORRECT state after the step before (a step whose state is the picture
+           just above it carries none), and the last one is the finished drawing */
+        const full = drawing(s);
+        const opensOn = [null, upTo(full), upTo(full), upTo(full, { roads: true }), ...s.pays.map((x, j) => upTo(full, { roads: true, jug: true, coins: j })), ...(s.down != null ? [full] : [])];
+        let shown = null;
+        const pics = [];
+        steps.forEach((x, k) => {
+          if (x.graph) {
+            if (!same(x.graph, opensOn[k])) problems.push(`step ${k + 1}'s picture is not the correct state so far`);
+            if (same(x.graph, shown)) problems.push(`step ${k + 1} repeats the picture above it`);
+            shown = x.graph; pics.push(x.graph);
+          } else if (opensOn[k] && !same(opensOn[k], shown)) problems.push(`step ${k + 1} has no picture of its state`);
+          if (x.graphAfter) {
+            if (k !== steps.length - 1) problems.push(`a feedback picture on step ${k + 1}, not the last`);
+            if (same(x.graphAfter, shown)) problems.push("the finished drawing repeats the picture above it");
+            shown = x.graphAfter; pics.push(x.graphAfter);
+          }
+        });
+        if (steps.some(x => (x.graph || x.graphAfter) && x.graphWide !== true)) problems.push("a picture at the 280-px step size, not the card width (step.graphWide)");
+        if (!same(shown, full)) problems.push("the last picture is not the drawing the words give");
+        if (!same(shown, q13.graph)) problems.push("the last picture is not f13's drawing of the same scene");
+        else sameAsF13++;
+        st.pics.add(pics.length);
+        pics.forEach((g, k) => graphIssues({ graph: g }).forEach(e => problems.push(`picture ${k + 1}: ${e}`)));
+        /* heights: a picture grows only by the engine's own growth (the road lane, a stack row) */
+        for (let k = 1; k < pics.length; k++) {
+          const dh = computeTimeline(pics[k]).H - computeTimeline(pics[k - 1]).H;
+          const roadsNow = !pics[k - 1].roads && pics[k].roads;
+          jumps.add(dh); worstJump = Math.max(worstJump, dh);
+          if (roadsNow ? dh !== ROAD_LANE : !(dh >= 0 && dh % STACK === 0)) problems.push(`picture ${k + 1} grows ${dh} units (want ${roadsNow ? "the road lane" : "nothing or a stack row"})`);
+        }
+        /* every label clear at a 360-px phone: the finished drawing on the first 40 rolls and on every stacked one, and
+           every picture of the first 5 rolls */
+        const stacked = full.nodes.some((nd, j) => full.nodes.findIndex(m => m.t === nd.t) !== j);
+        if (stacked) st.stacked++;
+        const fitThese = [...(i < 5 ? pics.slice(0, -1) : []), ...(i < FIT || stacked ? [shown] : [])];
+        fitThese.forEach(g => {
+          fitRuns++;
+          const e = labelFitIssues(g, measure);
+          if (e.length) { fitBad++; if (!fitFirst) fitFirst = `${skill.id}: ${e[0]}`; problems.push(`labels at 360: ${e[0]}`); }
+        });
+      }
+      if (two) st.two++; else st.one++;
+      if (s.loan) st.loan++;
+      if (s.pays.some(x => typeof x.v !== "number")) st.xcoin++;
+      if (s.pays.some(x => x.kind === "wd")) st.wd++;
+      if (problems.length) { st.bad++; if (!st.firstBad) st.firstBad = problems.slice(0, 3).join(", ") + ": " + flat(story).slice(0, 120); }
+    }
+    stat[skill.id] = st;
+    tick(st.bad === 0, `f12 card ${pos + 1} (${skill.id}): words, the five taps (one right pick each, the frame resolves), every picture the correct state so far, the last one f13's (${N} rolls)`);
+    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(18)} one road ${String(st.one).padStart(3)} · two ${String(st.two).padStart(3)} · loan ${String(st.loan).padStart(3)} · stacked ${String(st.stacked).padStart(3)} · down payment ${st.down} · x/P coin ${st.xcoin} · withdrawal ${st.wd} · pictures per card ${[...st.pics].sort().join("/")} · past-the-end decoy: +1 year ${st.pastOne}, periods ${st.pastPeriods}`
+      + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
+  });
+  const S = id => stat[id] || {};
+  tick(sameAsF13 === rollsAll, `f12: the finished drawing deep-equals f13's timeline of the same seed's scene on every roll (${sameAsF13}/${rollsAll})`);
+  tick(fitRuns > 0 && fitBad === 0, `f12: every label clear at a 360-px phone (${fitRuns} drawings measured, stacked ones included)${fitFirst ? ": " + fitFirst : ""}`);
+  tick(S("unknownPayment").stacked === N && S("twoDeposits").stacked > N * 0.3 && S("twoDeposits").stacked < N * 0.7,
+    `f12: the stacked case, the last deposit on the day of A (David every roll, Mvelo about half: ${S("twoDeposits").stacked}/${N})`);
+  tick(S("withdrawal").one === N && ORDER.filter(id => id !== "withdrawal").every(id => S(id).two === N), "f12: \"no change\" is right on the one-rate card only; every other card changes rate");
+  tick(["loanTwoRepayments", "hirePurchase", "loanAgain"].every(id => S(id).loan === N) && ["twoDeposits", "withdrawal", "mixed", "targetAmount", "unknownPayment"].every(id => S(id).loan === 0),
+    "f12: the jug at T0 on the three loan cards, at the end on the five saving cards");
+  tick(S("hirePurchase").down === N && ORDER.filter(id => id !== "hirePurchase").every(id => S(id).down === 0), "f12: the down payment is asked on its card every roll (nowhere on the timeline), and nowhere else");
+  tick(S("targetAmount").xcoin === N && S("unknownPayment").xcoin === N && S("withdrawal").wd === N && S("mixed").wd === N, "f12: the P and x coins and the withdrawals are placed like every coin");
+  tick(ORDER.some(id => S(id).pastPeriods > 0) && ORDER.some(id => S(id).pastOne > 0), "f12: step 1's past-the-end option is sometimes a year too far, sometimes the periods counted");
+  tick([...jumps].every(d => d === ROAD_LANE || (d >= 0 && d % STACK === 0)), `f12: the pictures grow only by the engine's own growth (jumps seen: ${[...jumps].sort((a, b) => a - b).join(", ")} units)`);
+  /* the concept card's example is f13's own drawing of Brenda's bank scene, clear at 360 px, and the card draws it */
+  {
+    const brenda = { fam: "twoDeposits", name: "Brenda", kind: "save", n: 7, meet: 7, roads: [{ from: 0, to: 3, r: 14, k: 2 }, { from: 3, to: 7, r: 12, k: 12 }],
+      total: { t: 7, role: "A", value: null }, unknown: "A", pays: [{ t: 0, v: 5500, kind: "dep" }, { t: 5, v: 4000, kind: "dep" }] };
+    const c = getConcept("buildTimeline");
+    const fit = labelFitIssues(BUILD_TIMELINE_EXAMPLE, measure);
+    const words = c ? flat(c.body) : "";
+    tick(!!c && same(BUILD_TIMELINE_EXAMPLE, f13GraphOf(brenda)) && same(BUILD_TIMELINE_EXAMPLE, drawing(f13Words(f13Story(brenda))))
+      && verifyTimeline(BUILD_TIMELINE_EXAMPLE).every(r => r.ok) && fit.length === 0 && /class="sg tl/.test(c.body)
+      && !BANNED.some(([re]) => re.test(words)),
+      `f12 concept card: its example is f13's drawing of Brenda's scene, honest and clear at 360 px, drawn on the card${fit.length ? ": " + fit[0] : ""}`);
+  }
+  /* one roll of each card, in dealing order: the paragraph, each step's options with the right one marked */
+  const sample = def.skills.map((sk, pos) => {
+    const q = sk.gen();
+    const lines = q.steps.map((x, k) => x.kind === "tokenpad"
+      ? `    ${k + 1}. ${flat(x.prompt)}  chips [${x.keys.map(flat).join(" | ")}]  frame ${x.frame.join(" ")}  → ${flat(x.expected.split(THIN).join(" then "))}`
+      : `    ${k + 1}. ${flat(x.prompt)}  ${x.options.map(o => (o.correct ? `[${flat(o.label)}]` : flat(o.label))).join("  ")}`);
+    return `  card ${pos + 1}: ${flat(String(q.prompt).split("<br>")[0])}\n${lines.join("\n")}`;
+  }).join("\n");
+  measure.innerHTML = "";
+  document.getElementById("f12").textContent = flines.join("\n") + `\n\nlabels measured at 360 px: ${fitRuns} drawings, ${fitBad} with a problem · largest picture growth ${worstJump} units`
+    + "\n\none roll of each card, in dealing order (the right pick in brackets):\n" + sample;
 }
 
 /* ---------- 10) Fix A (2026-10-11): no caret anywhere a learner reads ---------- */

@@ -53,6 +53,15 @@
                      option is: a pill on the tapped option (and on all
                      of them once the step is done), and the sentence a
                      miss on it shows in the step's hint box.
+
+   f12 (2026-10-11, Build the timeline) adds one, additive:
+     step.graphWide — draw this step's graph (and its graphAfter) at the
+                     full card width, the size a question-level graph is
+                     drawn. A step graph is capped at 280 px for gt8's
+                     triangles; a timeline drawn that small loses the
+                     label air its engine guarantees at a 360-px phone
+                     (PHONE_360), and f12's pictures must read at the size
+                     of the f13 timeline they build up to.
    ============================================================ */
 import { el, clear, xbarHtml, fracHtml, formulaHtml } from "./ui.js";
 
@@ -555,7 +564,7 @@ function mountSteps(host, root, q, commit, svgNode) {
        the answer over. Drawn through the same renderSpec as every graph. */
     const st = list[i] || {};
     if (st.graphAfter) {
-      const ga = el("div", "q-graph q-step-graph q-step-after");
+      const ga = el("div", "q-graph q-step-graph q-step-after" + (st.graphWide ? " wide" : ""));
       ga.innerHTML = renderSpec(st.graphAfter) + (st.graphAfterCap ? `<div class="cap">${fmt(st.graphAfterCap)}</div>` : "");
       w.appendChild(ga);
     }
@@ -585,7 +594,7 @@ function mountSteps(host, root, q, commit, svgNode) {
        is reached, never before (gt8: no triangle until the quadrant is
        picked, which is the whole teaching point) */
     if (step.graph) {
-      const sg = el("div", "q-graph q-step-graph");
+      const sg = el("div", "q-graph q-step-graph" + (step.graphWide ? " wide" : ""));
       sg.innerHTML = renderSpec(step.graph) + (step.graphCap ? `<div class="cap">${fmt(step.graphCap)}</div>` : "");
       w.appendChild(sg);
       liveSvg = sg.querySelector("svg");

@@ -60,7 +60,7 @@ export const CHAPTERS = [
       { id: "f9", n: 9, title: "Car or no car?", blurb: "The meeting day, forward or reverse gear, and one car per road.", built: true },
       { id: "f10", n: 10, title: "In or out?", blurb: "Deposits go in, withdrawals and repayments come out; the total stands alone on the left.", built: true },
       { id: "f11", n: 11, title: "Pick the meeting day", blurb: "Any T can be the meeting day: count the cars and pick the day with the fewest. The answer is the same anywhere.", built: true },
-      // f12 "Build the timeline" lands here (2026-10-11 queue, worker 5)
+      { id: "f12", n: 12, title: "Build the timeline", blurb: "The exam hands you words: build the whole timeline, tap by tap, before any equation.", built: true },
       { id: "f13", n: 13, title: "Build the one equation", blurb: "The exam shape: the whole equation in one line, typed once, rounded once.", built: true },
     ],
   },
