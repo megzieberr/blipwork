@@ -75,7 +75,7 @@ const JUG_PICTURE = `<div class="jugs">`
               the jug at the END is the total;
      "loan"   the BANK hands over the full jug (87%, never into the
               spout) and three coins go OUT one by one (red rim), each
-              lowering the level, near empty at the end.
+              lowering the level, EMPTY at the end (frame 1's level).
    The coins sit in ONE column on the left in both, so a coin keeps its
    slot and only its direction changes (her handle is on the right). The
    timing is css/styles.css .jug-discover: keyframes on the level's

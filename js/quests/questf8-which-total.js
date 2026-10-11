@@ -120,9 +120,27 @@ const DISCOVER = [
   jugDiscover("loan") + `<div class="jd-cap">`
     + `<p><b>A loan:</b> the bank hands you the full${NB}jug at <b>the${NB}START</b>. The${NB}total sits at the beginning, and your coins pay it back.</p></div>`,
 ];
+/* Frame 3 stays up for the whole card (replace mode), but card 1's own story
+   is always savings: so once the loan has drained, its caption fades to the
+   neutral reminder (11 Oct, from the phone checker's report). The jug stays
+   as it ended, empty. */
+const REMIND = `<p>Payments are <b>coins</b>. The${NB}total is <b>the${NB}jug</b>.</p>`;
+function remindAfterDrain(jd) {
+  const frame = jd.isConnected && jd.dataset.remind !== "done" ? jd.closest(".reveal-frame") : null;
+  const cap = frame ? frame.querySelector(".jd-cap") : null;
+  if (!cap) return;
+  jd.dataset.remind = "done";
+  cap.style.minHeight = cap.offsetHeight + "px";   // the chips below never jump under a finger
+  cap.innerHTML = REMIND;
+  cap.classList.add("jd-remind");        // the ~300 ms fade, css/styles.css
+}
 /* her "they tap": a tap on the slide's jug does what "Next ▸" does. One
    delegated listener, added once when this module first loads; no engine
    change (the button is the reveal box's sibling, gone on the last frame).
+   The same block swaps frame 3's caption: on the loan level's animationend
+   (frames 1 and 2 never match), or 6 s after frame 3 came up (reduced
+   motion, or a missed event); frame 3 only ever comes up by a click, on
+   Next or on the jug, so the click listener arms the timer.
    Node imports of the round (the harnesses) have no document. */
 if (typeof document !== "undefined" && !globalThis.__f8JugTap) {
   globalThis.__f8JugTap = true;
@@ -130,6 +148,14 @@ if (typeof document !== "undefined" && !globalThis.__f8JugTap) {
     const jug = e.target instanceof Element ? e.target.closest(".q-reveal .jug-discover") : null;
     const next = jug ? jug.closest(".q-reveal").parentElement.querySelector(":scope > .reveal-next") : null;
     if (next) next.click();
+    document.querySelectorAll(".q-reveal .jd-loan:not([data-remind])").forEach(jd => {
+      jd.dataset.remind = "armed";
+      setTimeout(() => remindAfterDrain(jd), 6000);
+    });
+  });
+  document.addEventListener("animationend", e => {
+    const jd = e.target instanceof Element && e.target.matches(".q-reveal .jd-loan .jug-lvl") ? e.target.closest(".jd-loan") : null;
+    if (jd) remindAfterDrain(jd);
   });
 }
 

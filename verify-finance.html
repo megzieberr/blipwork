@@ -139,7 +139,8 @@
   or frames 2 and 3. The shape: card 1 alone opens on the discovery slide (three frames, one jug each, replace mode: empty,
   savings, loan), the jug moves between slots, card 7 deals a target amount and a same-day repayment about half each. Then
   the library card at a 360-px phone as the "I'm lost" sheet draws it, and card 1 mounted the way the play screen mounts it:
-  the chips hidden, one jug through her masks on frame 1, two taps on Next to frame 3, then the chips.</p>
+  the chips hidden, one jug through her masks on frame 1, two taps on Next to frame 3, then the chips. The loan jug drains to
+  EMPTY (frame 1's level), and once its drain is done frame 3's caption becomes the reminder line, never before.</p>
 <pre id="f8">…</pre>
 
 <h2>f9 — the round's shape, words and rulings, card by card</h2>
@@ -595,7 +596,10 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
        frame through her masks, the sentence chips hidden until two taps on
        Next have brought frame 3 up. The levels are read at the moment a frame
        mounts: the savings jug starts empty, the loan jug full (under reduced
-       motion both stand at their end level instead). */
+       motion both stand at their end level instead). Then the end of the
+       drain (11 Oct, from the phone checker's report): the loan jug ends at
+       frame 1's empty level, and frame 3's loan caption turns into the
+       reminder line on the loan level's animationend, never on frame 2's. */
     const host = document.createElement("div");
     host.className = "play";
     host.style.cssText = `width:360px;padding:0 12px;--accent:${ACC}`;
@@ -617,22 +621,45 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     const m1 = fr.length ? maskOf(fr[0].querySelector(".jug-line")) : "none", f1 = fr.length ? maskOf(fr[0].querySelector(".jug-fill")) : "none";
     tick(!!m1 && m1 !== "none" && /jug-outline\.webp/.test(m1), `f8 card 1 frame 1: the outline is painted through her drawing (mask-image ${String(m1).slice(0, 40)}…)`);
     tick(!!f1 && f1 !== "none" && /jug-inside\.webp/.test(f1), "f8 card 1 frame 1: the fill is masked to the jug's inside");
-    tick(fr.length === 1 && Math.abs(level(fr[0]) - 0.018) < 0.01, `f8 card 1 frame 1: the jug is empty (${fr.length ? (level(fr[0]) * 100).toFixed(1) : "?"}%)`);
+    const emptyLvl = fr.length === 1 ? level(fr[0]) : -1;
+    tick(fr.length === 1 && Math.abs(emptyLvl - 0.018) < 0.01, `f8 card 1 frame 1: the jug is empty (${fr.length ? (emptyLvl * 100).toFixed(1) : "?"}%)`);
+    const capOf = f => { const c = f && f.querySelector(".jd-cap"); return c ? c.textContent.replace(/\s+/g, " ").trim() : ""; };
     const levels = [];
-    let taps = 0;
+    let taps = 0, saveCap = "", saveKept = false;
     for (let k = 0; k < 2; k++) {
       const nb = host.querySelector(".reveal-next");
       if (!nb) break;
       nb.click(); taps++;
       fr = onScreen();
       levels.push(fr.length === 1 && drawnJugs(fr[0]).length === 1 ? level(fr[0]) : -1);
+      if (k === 0 && fr.length === 1) {
+        /* frame 2's own level ends too: its caption must stay the savings line */
+        const l2 = fr[0].querySelector(".jug-lvl");
+        if (l2) l2.dispatchEvent(new Event("animationend", { bubbles: true }));
+        saveCap = capOf(fr[0]);
+        saveKept = /^Savings:/.test(saveCap) && !fr[0].querySelector(".jd-remind");
+      }
     }
     fr = onScreen();
     tick(taps === 2 && fr.length === 1 && fr[0].dataset.frame === "2" && !host.querySelector(".reveal-next"),
       `f8 card 1: two taps on Next reach frame 3 (${taps} taps, frame ${fr.length ? Number(fr[0].dataset.frame) + 1 : "?"}), and Next is gone`);
-    const want = still ? [0.70, 0.09] : [0.018, 0.87];
+    const want = still ? [0.70, 0.018] : [0.018, 0.87];
     tick(levels.length === 2 && levels.every((v, k) => Math.abs(v - want[k]) < 0.01),
-      `f8 card 1: one jug a frame; the savings jug ${still ? "stands at its end" : "starts empty"} (${levels[0] != null ? (levels[0] * 100).toFixed(1) : "?"}%), the loan jug ${still ? "near empty" : "starts full"} (${levels[1] != null ? (levels[1] * 100).toFixed(1) : "?"}%)`);
+      `f8 card 1: one jug a frame; the savings jug ${still ? "stands at its end" : "starts empty"} (${levels[0] != null ? (levels[0] * 100).toFixed(1) : "?"}%), the loan jug ${still ? "empty" : "starts full"} (${levels[1] != null ? (levels[1] * 100).toFixed(1) : "?"}%)`);
+    const f3 = fr.length === 1 ? fr[0] : null;
+    const capBefore = capOf(f3);
+    tick(saveKept && /bank/i.test(capBefore) && /START/.test(capBefore),
+      `f8 card 1: the caption waits for the loan's drain (frame 2's animationend leaves "${saveCap.slice(0, 24)}…", frame 3 opens on "${capBefore.slice(0, 28)}…")`);
+    const lvl3 = f3 ? f3.querySelector(".jd-loan .jug-lvl") : null;
+    const capEl = f3 ? f3.querySelector(".jd-cap") : null, capH = capEl ? capEl.getBoundingClientRect().height : 0;
+    if (lvl3) lvl3.dispatchEvent(new Event("animationend", { bubbles: true }));
+    const capAfter = capOf(f3), capH2 = capEl ? capEl.getBoundingClientRect().height : -1;
+    tick(capAfter === "Payments are coins. The total is the jug." && !/bank|START/i.test(capAfter) && !!capEl && capEl.classList.contains("jd-remind") && Math.abs(capH2 - capH) < 1,
+      `f8 card 1 frame 3: once the drain is done the caption fades to the reminder line ("${capAfter}"), in the same height (${Math.round(capH)} -> ${Math.round(capH2)} px, the chips never jump)`);
+    if (lvl3) lvl3.getAnimations().forEach(a => a.finish());
+    const endLvl = f3 ? level(f3) : -1;
+    tick(!!lvl3 && emptyLvl > 0 && Math.abs(endLvl - emptyLvl) < 0.002,
+      `f8 card 1 frame 3: the loan jug drains to EMPTY, frame 1's level (${(endLvl * 100).toFixed(1)}% vs ${(emptyLvl * 100).toFixed(1)}%)`);
     const chips = [...host.querySelectorAll(".q-input .q-step button.opt")].filter(b => b.offsetParent !== null);
     tick(!!input && !input.hidden && input.offsetParent !== null && chips.length === q1.steps[0].options.length,
       `f8 card 1 frame 3: the input shows, with its ${chips.length} sentence chips`);
