@@ -26,7 +26,7 @@
    ============================================================ */
 import {
   toFrac, COMPOUNDING, ratePerPeriod, periodCount, compoundAmount, moveMoney,
-  simpleAmount, depositAmount, balanceAfterDeposit, effFromNom,
+  simpleAmount, depositAmount, balanceAfterDeposit, effFromNom, pow,
 } from "../finlib.js";
 import { fmtComma } from "../check.js";
 import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN, RING_MIN_PX, LABEL_MIN_PX } from "../engine/timeline-graph.js";
@@ -35,6 +35,16 @@ const C = v => fmtComma(v);
 export const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
 
 /* ---------- tiny parsers over a question's own text ---------- */
+
+/* Fix A (2026-10-11): every exponent a learner reads is a real superscript
+   now, built by finlib's pow(): "(1 + 0,12/12)<sup>36</sup>". The parsers
+   below were written for the caret form, so a label is first written back
+   to it, and then read exactly as before: <sup>36</sup> → ^36, and an
+   exponent that starts with a minus or holds a × goes in brackets, the way
+   the rounds used to print it: <sup>−36</sup> → ^(−36), <sup>3×4</sup> →
+   ^(3×4). Only a bare <sup> (never a class="sf-exp" fraction exponent). */
+export const unsup = html => String(html == null ? "" : html)
+  .replace(/<sup>([\s\S]*?)<\/sup>/g, (m, x) => (/^−|×/.test(x) ? `^(${x})` : `^${x}`));
 
 /* "0,075" / "−3" / "2 100,34" → number (NaN if not purely numeric) */
 export function numOf(label) {
@@ -321,7 +331,7 @@ export const RECOMPUTE = {
   "f3.fullSetup": q => {
     const [P] = rands(q.prompt), [annual] = pcts(q.prompt), o = freqIn(q.prompt), years = yearsIn(q.prompt);
     if (!o || !Number.isFinite(P) || !Number.isFinite(annual) || !Number.isFinite(years)) return false;
-    return correctLabel(q) === `${P}(1 + ${C(toFrac(annual))}/${o.k})^(${years}×${o.k})`;
+    return correctLabel(q) === `${P}${pow(`(1 + ${C(toFrac(annual))}/${o.k})`, `${years}×${o.k}`)}`;
   },
   "f3.monthlyRate": q => {
     const [annual] = pcts(q.prompt);
@@ -375,7 +385,7 @@ export const RECOMPUTE = {
     const m = String(q.prompt).match(/value at <b>T(\d+)<\/b> of <b>R([\d ]+)<\/b> invested at T0 \(i = ([\d,]+)\)/);
     if (!m) return false;
     const k = Number(m[1]), P = Number(m[2].replace(/ /g, "")), i = m[3];
-    return correctLabel(q) === `${P}(1 + ${i})^${k}` && q.graph.n === k;
+    return correctLabel(q) === `${P}${pow(`(1 + ${i})`, k)}` && q.graph.n === k;
   },
   /* the only CARE skill: both routes are re-derived from the question's
      OWN two amounts (the rate is recovered from P, A and T), and the
@@ -384,7 +394,7 @@ export const RECOMPUTE = {
     const [P, A] = rands(q.prompt);
     if (!Number.isFinite(P) || !Number.isFinite(A) || P <= 0) return false;
     const mSame = String(q.prompt).match(/Moving <b>forward (\d+)<\/b> from T0 and moving <b>back (\d+)<\/b> from T(\d+) give (the <b>same<\/b> value|<b>different<\/b> values) at T(\d+)\./);
-    const mPlus = String(q.prompt).match(/at T(\d+)\. To move the T(\d+) amount <b>back<\/b> to T(\d+), you multiply by \(1 \+ i\)\^<b>\+(\d+)<\/b>\./);
+    const mPlus = unsup(q.prompt).match(/at T(\d+)\. To move the T(\d+) amount <b>back<\/b> to T(\d+), you multiply by \(1 \+ i\)\^<b>\+(\d+)<\/b>\./);
     let T, k, back, claim;
     if (mSame) {
       k = Number(mSame[1]); back = Number(mSame[2]); T = Number(mSame[3]);
@@ -425,7 +435,7 @@ export const RECOMPUTE = {
     const r2 = Number(m[5].replace(",", ".")), o2 = freqByLabel(m[6]), y2 = Number(m[7]);
     if (!o1 || !o2) return false;
     if (!String(q.prompt).includes(`end of the ${y1 + y2} years`)) return false;
-    const want = `${P}(1 + ${C(toFrac(r1))}/${o1.k})^(${y1}×${o1.k})(1 + ${C(toFrac(r2))}/${o2.k})^(${y2}×${o2.k})`;
+    const want = `${P}${pow(`(1 + ${C(toFrac(r1))}/${o1.k})`, `${y1}×${o1.k}`)}${pow(`(1 + ${C(toFrac(r2))}/${o2.k})`, `${y2}×${o2.k}`)}`;
     return correctLabel(q) === want && q.graph.n === y1 + y2;
   },
 
@@ -502,9 +512,11 @@ export const RECOMPUTE = {
     const amt = String(s.v).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     const car = L => {
       const i = C(toFrac(L.rate)), m = t.dir < 0 ? "−" : "";
-      return L.k === 1 ? `(1 + ${i})^${m ? `(−${L.years})` : L.years}` : `(1 + ${i}/${L.k})^(${m}${L.years}×${L.k})`;
+      return L.k === 1 ? pow(`(1 + ${i})`, `${m}${L.years}`) : pow(`(1 + ${i}/${L.k})`, `${m}${L.years}×${L.k}`);
     };
-    const flat = x => String(x).replace(/<[^>]+>/g, "").replace(/\s+/g, "");   // f9 review 1: terms are <span class="nowrap"> units now
+    /* f9 review 1: terms are <span class="nowrap"> units now; Fix A: the sup
+       is written back to its caret first, so where the exponent sits still counts */
+    const flat = x => unsup(x).replace(/<[^>]+>/g, "").replace(/\s+/g, "");
     return flat(correctLabel(q) || "") === flat(amt + t.legs.map(car).join(""));
   },
   "f9.roadExponent": q => {
@@ -783,7 +795,7 @@ export function f11Diagnose(q, skill) {
 const f10Num = s => Number(String(s).replace(/[\s  ]/g, "").replace(",", "."));
 /* "R2 912,58" / "−R2 912,58" (tags stripped) → cents; NaN if not money */
 function f10Cents(label) {
-  const t = String(label).replace(/<[^>]+>/g, "");
+  const t = unsup(label).replace(/<[^>]+>/g, "");                         // Fix A: a sup is never silently dropped
   const m = t.match(/^(−?)R(\d{1,3}(?: \d{3})*,\d\d)$/);
   return m ? (m[1] ? -1 : 1) * Math.round(f10Num(m[2]) * 100) : NaN;
 }
@@ -797,7 +809,8 @@ export function f10ParseEq(html, iText = null) {
   const unit = inner => { units.push(inner); return ` #${units.length - 1} `; };
   /* f10 review 1: a unit "TERM =" or "TERM = RIGHT" (RIGHT a lone 0 or a
      term) holds the equals sign; it becomes the tokens TERM, "=g", RIGHT */
-  const s = String(html).replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
+  /* Fix A: each car's <sup> back to its caret first, then parsed as before */
+  const s = unsup(html).replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
     const k = inner.indexOf(" =");
     if (k < 0) return inner.includes("=") ? " ! " : unit(inner);           // "=" leading a unit: free to start a line
     const rest = inner.slice(k + 2);
@@ -951,7 +964,7 @@ export function f10EquationsOf(q) {
   const out = [];
   /* f10 review 1: the "=" now sits INSIDE a unit, so an equation is any
      line that holds a nowrap unit and an "=" (a bare one fails the parse) */
-  const looks = h => /<span class="nowrap">[^<]*<\/span>/.test(String(h)) && /=/.test(String(h).replace(/<[^>]+>/g, ""));
+  const looks = h => /<span class="nowrap">[^<]*<\/span>/.test(unsup(h)) && /=/.test(unsup(h).replace(/<[^>]+>/g, ""));   // Fix A: sups back to carets first
   const pe = f10PromptEq(q);
   if (pe != null && looks(pe)) out.push({ where: "prompt", ok: !!f10ParseEq(pe) });
   (q.options || []).forEach((o, j) => { if (looks(o.label)) out.push({ where: `option ${j + 1}`, ok: !!f10ParseEq(o.label) }); });
@@ -1146,7 +1159,8 @@ export function f13ParseEq(html, iTexts = null) {
   if (html == null) return null;
   const units = [];
   const unit = inner => { units.push(inner); return ` #${units.length - 1} `; };
-  const s = String(html).replace(/^<span class="f13-eq">([\s\S]*)<\/span>$/, "$1").replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
+  /* Fix A: each car's <sup> back to its caret first, then parsed as before */
+  const s = unsup(html).replace(/^<span class="f13-eq">([\s\S]*)<\/span>$/, "$1").replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
     const k = inner.indexOf(" =");
     if (k < 0) return inner.includes("=") ? " ! " : unit(inner);
     const rest = inner.slice(k + 2).trim();

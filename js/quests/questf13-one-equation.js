@@ -70,7 +70,7 @@
    ============================================================ */
 import { C, rng, mcStep, calcStep } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
-import { rand, toFrac, moveMoney, ratePerPeriod, COMPOUNDING } from "../finlib.js";
+import { rand, toFrac, moveMoney, ratePerPeriod, COMPOUNDING, pow } from "../finlib.js";
 import { computeTimeline, verifyTimeline } from "../engine/timeline-graph.js";
 
 const CON = "oneEquation";
@@ -125,7 +125,7 @@ const when = t => (t === 0 ? "now" : `after ${years(t)}`);
 const andList = xs => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
 const CAPTION = "T in years";
 /* f10 review 1: the first time a solution says "car", it says what one is */
-const CAR_IS = `a car is the ${nw("(1 + i)^n")} bracket that moves an amount to the meeting day`;
+const CAR_IS = `a car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day`;
 
 /* ---------- roads, cars, terms ---------- */
 
@@ -148,10 +148,12 @@ function carsOf(roads, t, m) {
   if (dir < 0) legs = legs.reverse();
   return legs.map(l => ({ ...l, years: l.to - l.from, e: dir * (l.to - l.from) * l.k }));
 }
-/* one car: (1 + 0,12/12)^36, reverse (1 + 0,12/12)^(−36); annual (1 + 0,08)^3 */
+/* one car: (1 + 0,12/12)^36, reverse (1 + 0,12/12)^(−36); annual (1 + 0,08)^3.
+   Fix A (11 Oct): the exponent is a real superscript (finlib's pow), inside
+   the term's nowrap unit like the rest of the car */
 function carText(c) {
   const i = C(toFrac(c.r)), base = c.k === 1 ? `(1 + ${i})` : `(1 + ${i}/${c.k})`;
-  return c.e < 0 ? `${base}^(−${-c.e})` : `${base}^${c.e}`;
+  return c.e < 0 ? pow(base, `−${-c.e}`) : pow(base, c.e);
 }
 const coefText = c => (typeof c === "number" ? amt0(c) : c);
 
@@ -166,10 +168,24 @@ const coefText = c => (typeof c === "number" ? amt0(c) : c);
 const EQ_PX = 12, OPT_ROOM = 266;                    // .f13-eq; the room inside an .opt at a 360-px phone
 const GLYPH_EM = {
   0: 0.75, 1: 0.423, 2: 0.623, 3: 0.62, 4: 0.652, 5: 0.63, 6: 0.668, 7: 0.585, 8: 0.647, 9: 0.668,
-  " ": 0.222, [NB]: 0.222, "(": 0.382, ")": 0.382, "+": 0.592, "−": 0.592, ",": 0.266, "/": 0.365, "^": 0.587,
+  " ": 0.222, [NB]: 0.222, "(": 0.382, ")": 0.382, "+": 0.592, "−": 0.592, ",": 0.266, "/": 0.365,
   "=": 0.59, "×": 0.592, A: 0.775, P: 0.649, x: 0.574,
 };
-const unitPx = s => [...s].reduce((a, ch) => a + (GLYPH_EM[ch] ?? 0.8), 0) * EQ_PX;
+/* Fix A (11 Oct): an exponent is a <sup> now, not "^36". The tags take no
+   room; the exponent's glyphs are drawn at the sup's own size, the browser's
+   "smaller" (10 px on the .f13-eq's 12 px; the Fix A rule in css/styles.css
+   changes only its line-height). Measured in an .opt: a sup's width is 0.833
+   of the same digits at full size, so the unit is measured as it is drawn */
+const SUP_EM = 0.834;
+const glyphsEm = s => [...s].reduce((a, ch) => a + (GLYPH_EM[ch] ?? 0.8), 0);
+const unitPx = s => {
+  let em = 0;
+  String(s).split(/(<sup>[\s\S]*?<\/sup>)/).forEach(part => {
+    const m = /^<sup>([\s\S]*)<\/sup>$/.exec(part);
+    em += m ? glyphsEm(m[1].replace(/<[^>]+>/g, "")) * SUP_EM : glyphsEm(part.replace(/<[^>]+>/g, ""));
+  });
+  return em * EQ_PX;
+};
 const fitsOption = s => unitPx(s) <= OPT_ROOM - 1;
 const EQ = html => `<span class="f13-eq">${html}</span>`;
 /* a term is ONE unbreakable unit, its amount and every car (f12 review 1),

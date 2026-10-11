@@ -5,7 +5,7 @@
    ============================================================ */
 import { mc, C, mcStep, calcStep } from "./_shared.js";
 import { pick } from "../ui.js";
-import { toFrac, effFromNom, COMPOUNDING } from "../finlib.js";
+import { toFrac, effFromNom, COMPOUNDING, pow } from "../finlib.js";
 
 const CL = "effNom";
 /* the frequencies worth converting (k > 1) */
@@ -63,7 +63,7 @@ const SKILLS = {
            (found in this session's phone screenshots). One idea per step
            keeps every line inside the phone on one row. */
         solution: [
-          { s: `Monthly: 1 + i_eff = (1 + ${C(toFrac(nom))}/12)^12`, r: "n = 12, one equation" },
+          { s: `Monthly: 1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/12)`, 12)}`, r: "n = 12, one equation" },
           { s: `That gives ${effM}% a year`, r: "type the whole right side in one go" },
           { s: `Annually: the ${C(nom)}% is already effective`, r: "interest is added once a year" },
           { s: `${effM}% > ${C(nom)}% → monthly grows more`, r: "the earlier interest earns interest itself" },
@@ -90,10 +90,10 @@ const SKILLS = {
           [1, 2, 4, 12].filter(k => k !== o.k).map(String),
           "n = how many times a year interest is added."),
         mcStep("Pick the correct set-up.",
-          `1 + i_eff = (1 + ${C(toFrac(nom))}/${o.k})^${o.k}`,
+          `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`,
           [
-            `1 + i_eff = (1 + ${C(toFrac(nom))} × ${o.k})^${o.k}`,
-            `1 + i_eff = (1 + ${C(toFrac(nom))})^${o.k}`,
+            `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))} × ${o.k})`, o.k)}`,
+            `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))})`, o.k)}`,
             `i_eff = ${C(toFrac(nom))}/${o.k} × ${o.k}`,
           ],
           "Divide the nominal rate by n INSIDE the bracket, power n outside."),
@@ -105,8 +105,8 @@ const SKILLS = {
       hint: `Use 1 + i_eff = (1 + i_nom/n)ⁿ with n = ${o.k}, then × 100 for a %.`,
       answerLabel: `i_eff ≈ ${effC}%`,
       solution: [
-        { s: `1 + i_eff = (1 + ${C(toFrac(nom))}/${o.k})^${o.k}`, r: `n = ${o.k} because interest is added ${o.k} times a year` },
-        { s: `i_eff = (1 + ${C(toFrac(nom) / o.k)})^${o.k} − 1` },
+        { s: `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`, r: `n = ${o.k} because interest is added ${o.k} times a year` },
+        { s: `i_eff = ${pow(`(1 + ${C(toFrac(nom) / o.k)})`, o.k)} − 1` },
         { s: `i_eff ≈ ${effC}%`, r: "× 100 to write it as a percentage" },
       ],
     };

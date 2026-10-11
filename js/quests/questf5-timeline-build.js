@@ -6,7 +6,7 @@
    ============================================================ */
 import { mc, mcNum, C } from "./_shared.js";
 import { randInt, pick } from "../ui.js";
-import { toFrac, COMPOUNDING, compoundAmount, moveMoney, rand } from "../finlib.js";
+import { toFrac, COMPOUNDING, compoundAmount, moveMoney, rand, pow } from "../finlib.js";
 
 const MOVE = "timelineMove";
 const RATE = "rateChange";
@@ -27,7 +27,7 @@ const SKILLS = {
         hint: "Forward = positive exponent = the number of periods.", answerLabel: `exponent = +${k}`,
         solution: [
           { s: `From T0 to T${k} is ${k} periods`, r: "count the jumps" },
-          { s: `Forward means the money grows, so the exponent is positive: +${k}`, r: `× (1 + i)^${k}` },
+          { s: `Forward means the money grows, so the exponent is positive: +${k}`, r: `× ${pow("(1 + i)", k)}` },
         ] });
   },
 
@@ -41,7 +41,7 @@ const SKILLS = {
         hint: "Backward = negative exponent. Count the periods, then make it negative.", answerLabel: `exponent = −${d}`,
         solution: [
           { s: `From T${b} to T${a} is ${b} − ${a} = ${d} periods`, r: "count the jumps" },
-          { s: `Backward undoes the growth, so the exponent goes negative: −${d}`, r: `× (1 + i)^(−${d})` },
+          { s: `Backward undoes the growth, so the exponent goes negative: −${d}`, r: `× ${pow("(1 + i)", `−${d}`)}` },
         ] });
   },
 
@@ -50,14 +50,14 @@ const SKILLS = {
     const i = C(toFrac(iann));
     return mc(MOVE,
       `Which expression gives the value at <b>T${k}</b> of <b>${rand(P, 0)}</b> invested at T0 (i = ${i})?`,   // "R2 000", as its own timeline prints it (review fix 2026-08-23)
-      `${P}(1 + ${i})^${k}`,
-      [`${P}(1 + ${i})^(−${k})`, `${P}(1 − ${i})^${k}`, `${P}(1 + ${i}·${k})`],
+      `${P}${pow(`(1 + ${i})`, k)}`,
+      [`${P}${pow(`(1 + ${i})`, `−${k}`)}`, `${P}${pow(`(1 − ${i})`, k)}`, `${P}(1 + ${i}·${k})`],
       { graph: tl(k, [{ t: 0, amount: P, dp: 0 }, { t: k, label: "?", role: "A" }], { from: 0, to: k }),
-        hint: "Forward → multiply, positive exponent equal to the number of periods.", answerLabel: `${P}(1 + ${i})^${k}`,
+        hint: "Forward → multiply, positive exponent equal to the number of periods.", answerLabel: `${P}${pow(`(1 + ${i})`, k)}`,
         solution: [
           { s: `T0 → T${k} is forward ${k} periods`, r: "a later date, so the money grows" },
-          { s: `Forward → multiply by (1 + i)^${k}, with i = ${i}` },
-          { s: `Value at T${k} = ${P}(1 + ${i})^${k}`, r: "one equation, built completely before anything is worked out" },
+          { s: `Forward → multiply by ${pow("(1 + i)", k)}, with i = ${i}` },
+          { s: `Value at T${k} = ${P}${pow(`(1 + ${i})`, k)}`, r: "one equation, built completely before anything is worked out" },
         ] });
   },
 
@@ -82,15 +82,15 @@ const SKILLS = {
     const claim = pick(["same", "same", "same", "same", "different", "plusExp"]);   // ⅓ of rolls are false
     const p0 = amt0(P);
     const steps = [
-      { s: `Forward: ${p0}(1 + ${iC})^${k} = ${rand(fwd, 2)}` },
-      { s: `Back: ${p0}(1 + ${iC})^${T}(1 + ${iC})^−${back} = ${p0}(1 + ${iC})^${k}`,
+      { s: `Forward: ${p0}${pow(`(1 + ${iC})`, k)} = ${rand(fwd, 2)}` },
+      { s: `Back: ${p0}${pow(`(1 + ${iC})`, T)}${pow(`(1 + ${iC})`, `−${back}`)} = ${p0}${pow(`(1 + ${iC})`, k)}`,
         r: `${T} − ${back} = ${k}, so it is the same value: ${rand(fwd, 2)}` },
     ];
     if (claim === "plusExp") steps.push({ s: `A plus exponent gives ${rand(wrongBack, 2)} — that is moving forward again.` });
     return {
       type: "yesno", concept: MOVE,
       prompt: claim === "plusExp"
-        ? `${rand(P, 0)} at T0 is worth ${rand(A, 2)} at T${T}. To move the T${T} amount <b>back</b> to T${k}, you multiply by (1 + i)^<b>+${back}</b>.`
+        ? `${rand(P, 0)} at T0 is worth ${rand(A, 2)} at T${T}. To move the T${T} amount <b>back</b> to T${k}, you multiply by ${pow("(1 + i)", `<b>+${back}</b>`)}.`
         : `${rand(P, 0)} at T0 is worth ${rand(A, 2)} at T${T}. Moving <b>forward ${k}</b> from T0 and moving <b>back ${back}</b> from T${T} give ${claim === "same" ? "the <b>same</b> value" : "<b>different</b> values"} at T${k}.`,
       /* honestly computed every roll — never a fixed true */
       yes: claim === "plusExp" ? agrees(wrongBack, fwd) : (claim === "same" ? agrees(fwd, bck) : !agrees(fwd, bck)),
@@ -106,7 +106,7 @@ const SKILLS = {
         ? "Moving to an EARLIER date undoes the growth — the exponent goes negative."
         : "The same money has ONE value at each date, no matter which way you travel to it.",
       answerLabel: claim === "plusExp"
-        ? `False — moving back to T${k} is (1 + i)^−${back}`
+        ? `False — moving back to T${k} is ${pow("(1 + i)", `−${back}`)}`
         : (claim === "same"
           ? `True — both routes give the same value at T${k}`
           : `False — both routes give the same value at T${k}: ${rand(fwd, 2)}`),
@@ -152,14 +152,14 @@ const SKILLS = {
     const i1 = C(toFrac(r1)), i2 = C(toFrac(r2));
     const P = pick([10000, 20000, 50000]);
     const Pd = P.toLocaleString("en-ZA").replace(/,/g, " ");
-    const b1 = `(1 + ${i1}/${o1.k})^(${y1}×${o1.k})`;
-    const b2 = `(1 + ${i2}/${o2.k})^(${y2}×${o2.k})`;
+    const b1 = pow(`(1 + ${i1}/${o1.k})`, `${y1}×${o1.k}`);
+    const b2 = pow(`(1 + ${i2}/${o2.k})`, `${y2}×${o2.k}`);
     return mc(RATE,
       `<b>R${Pd}</b> grows at ${C(r1)}% p.a. compounded <b>${o1.label}</b> for ${y1} years, then at ${C(r2)}% p.a. compounded <b>${o2.label}</b> for ${y2} years. Which expression gives its value at the end of the ${y1 + y2} years?`,
       `${P}${b1}${b2}`,
-      [`${P}(1 + ${i1}/${o1.k})^(${y1 + y2}×${o1.k})`,
+      [`${P}${pow(`(1 + ${i1}/${o1.k})`, `${y1 + y2}×${o1.k}`)}`,
        `${P}${b1} + ${P}${b2}`,
-       `${P}${b1}(1 + ${i2}/${o2.k})^(−${y2}×${o2.k})`],
+       `${P}${b1}${pow(`(1 + ${i2}/${o2.k})`, `−${y2}×${o2.k}`)}`],
       { graph: tl(y1 + y2, [{ t: 0, amount: P, dp: 0 }, { t: y1, label: "rate changes" }, { t: y1 + y2, label: "?", role: "A" }]),
         hint: "Split the timeline where the rate changes: ONE bracket per segment, multiplied together.",
         answerLabel: `${P}${b1}${b2}`,

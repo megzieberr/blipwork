@@ -215,7 +215,7 @@ export const CONCEPTS = {
         <li><b>rate per period</b> = annual rate ÷ (times per year)</li>
         <li><b>exponent</b> = years × (times per year)</li>
       </ul>
-      <div class="formula">A = P(1 + i/k)^(n·k)</div>
+      <div class="formula">A = P(1 + i/k)<sup>n·k</sup></div>
       <p>Times per year k: annually 1 · half-yearly 2 · quarterly 4 · monthly 12 · weekly 52 · daily 365.</p>
       <div class="eg">12% p.a. compounded quarterly for 5 years → i = 0,12/4 = 0,03 and exponent = 5×4 = 20.</div>`,
   },
@@ -227,7 +227,7 @@ export const CONCEPTS = {
         <li><b>Forward</b> (to a later date) → <b>multiply</b> by (1 + i) once per period → a <b>positive</b> exponent.</li>
         <li><b>Backward</b> (to an earlier date) → <b>divide</b> by (1 + i) once per period → a <b>negative</b> exponent.</li>
       </ul>
-      <div class="formula">value = amount × (1 + i)^(±periods)</div>
+      <div class="formula">value = amount × (1 + i)<sup>±periods</sup></div>
       <p>Count the periods between the two T-points. Forward T2 → T5 is 3 periods (+3); backward T5 → T2 is 3 periods (−3).</p>`,
   },
   timelineCount: {
@@ -244,7 +244,7 @@ export const CONCEPTS = {
     title: "When the interest rate changes",
     body: `
       <p>If the rate or compounding frequency changes part-way, split the timeline into segments. For a single amount, use <b>one bracket per segment</b>:</p>
-      <div class="formula">A = P(1 + i₁/k₁)^(n₁·k₁) (1 + i₂/k₂)^(n₂·k₂)</div>
+      <div class="formula">A = P(1 + i₁/k₁)<sup>n₁·k₁</sup> (1 + i₂/k₂)<sup>n₂·k₂</sup></div>
       <p>Work out each segment's rate-per-period and number-of-periods separately, then multiply the brackets together.</p>`,
   },
   deposits: {
@@ -287,7 +287,7 @@ export const CONCEPTS = {
     title: "Car or no car?",
     body: `
       <p>Every amount on a timeline is moved to <b>one</b> T, the <b>meeting day</b> (the flag on the line).</p>
-      <p>A <b>car</b> is the bracket <b>(1 + i)^n</b> that moves an amount to the meeting day.</p>
+      <p>A <b>car</b> is the bracket <b>(1 + i)<sup>n</sup></b> that moves an amount to the meeting day.</p>
       <ul>
         <li><b>Forward gear</b>: the meeting day is later, so <b>multiply (×)</b>: a positive exponent.</li>
         <li><b>Reverse gear</b>: the meeting day is earlier, so <b>divide (÷)</b>: a negative exponent.</li>
@@ -296,7 +296,7 @@ export const CONCEPTS = {
       </ul>
       <div class="formula">exponent = ± years × k</div>
       <p>k is how many times a year the interest is added: annually 1 · half-yearly 2 · quarterly 4 · monthly 12.</p>
-      <div class="eg">8% p.a. compounded quarterly until T4, then 10% p.a. compounded monthly. <span class="nowrap">R5 000</span> at T2, meeting day T6: two cars, both forward: <span class="nowrap">5 000(1 + 0,08/4)^(2×4)</span> <span class="nowrap">(1 + 0,1/12)^(2×12)</span>.</div>
+      <div class="eg">8% p.a. compounded quarterly until T4, then 10% p.a. compounded monthly. <span class="nowrap">R5 000</span> at T2, meeting day T6: two cars, both forward: <span class="nowrap">5 000(1 + 0,08/4)<sup>2×4</sup></span> <span class="nowrap">(1 + 0,1/12)<sup>2×12</sup></span>.</div>
       <div class="eg">Her last deposit, <span class="nowrap">R2 000</span>, is paid in on the same day as A, and the meeting day is that day: no car, it is just <span class="nowrap">2 000</span>.</div>
       <p>A car only if it has to move. Already there? No car.</p>`,
   },
@@ -314,11 +314,11 @@ export const CONCEPTS = {
         <li><b>OUT (minus):</b> a withdrawal from savings, and every repayment on a loan.</li>
         <li>A <b>down payment</b> never enters the account: it is paid straight to the seller. No car, no sign. It comes off the price: <span class="nowrap">loan = price − down payment</span>.</li>
       </ul>
-      <p><b>The jug form.</b> Move every amount to the meeting day in its car (a car is the <span class="nowrap">(1 + i)^n</span> bracket that moves an amount to the meeting day) and write them all on one side. A loan ends empty, so it equals 0. Saving ends holding the total, so it equals A.</p>
-      <div class="eg">A loan paid back with <span class="nowrap">R8 000</span> at T1 and <span class="nowrap">R9 000</span> at T3, 12% p.a. compounded monthly, meeting day T3: <span class="nowrap">P(1 + 0,12/12)^36</span> − <span class="nowrap">8 000(1 + 0,12/12)^24</span> − <span class="nowrap">9 000 = 0</span></div>
+      <p><b>The jug form.</b> Move every amount to the meeting day in its car (a car is the <span class="nowrap">(1 + i)<sup>n</sup></span> bracket that moves an amount to the meeting day) and write them all on one side. A loan ends empty, so it equals 0. Saving ends holding the total, so it equals A.</p>
+      <div class="eg">A loan paid back with <span class="nowrap">R8 000</span> at T1 and <span class="nowrap">R9 000</span> at T3, 12% p.a. compounded monthly, meeting day T3: <span class="nowrap">P(1 + 0,12/12)<sup>36</sup></span> − <span class="nowrap">8 000(1 + 0,12/12)<sup>24</sup></span> − <span class="nowrap">9 000 = 0</span></div>
       <p><b>The tidy form.</b> Move the minuses across the equals sign. They turn into plusses, so the payments stand positive on the right. The cars stay.</p>
-      <div class="eg"><span class="nowrap">P(1 + 0,12/12)^36 =</span> <span class="nowrap">8 000(1 + 0,12/12)^24</span> + <span class="nowrap">9 000</span></div>
-      <div class="eg">Saving with a withdrawal: <span class="nowrap">R14 000</span> in at T0, <span class="nowrap">R2 000</span> out at T3, meeting day T5, 8% p.a. compounded quarterly: <span class="nowrap">A =</span> <span class="nowrap">14 000(1 + 0,08/4)^20</span> − <span class="nowrap">2 000(1 + 0,08/4)^8</span>. The withdrawal keeps its minus. On a timeline it is drawn <span class="nowrap">−R2 000</span>.</div>
+      <div class="eg"><span class="nowrap">P(1 + 0,12/12)<sup>36</sup> =</span> <span class="nowrap">8 000(1 + 0,12/12)<sup>24</sup></span> + <span class="nowrap">9 000</span></div>
+      <div class="eg">Saving with a withdrawal: <span class="nowrap">R14 000</span> in at T0, <span class="nowrap">R2 000</span> out at T3, meeting day T5, 8% p.a. compounded quarterly: <span class="nowrap">A =</span> <span class="nowrap">14 000(1 + 0,08/4)<sup>20</sup></span> − <span class="nowrap">2 000(1 + 0,08/4)<sup>8</sup></span>. The withdrawal keeps its minus. On a timeline it is drawn <span class="nowrap">−R2 000</span>.</div>
       <div class="eg">Interest on a loan = paid back − borrowed. Borrowed <span class="nowrap">R3 587,42</span>, paid back <span class="nowrap">R2 300</span> and <span class="nowrap">R4 200</span>: <span class="nowrap">6 500</span> − <span class="nowrap">3 587,42 = R2 912,58</span> of interest.</div>
       <p>Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: payments positive on the right.</p>`,
   },
@@ -337,12 +337,12 @@ export const CONCEPTS = {
     body: `
       <ul>
         <li><b>Step 1: pick the meeting day.</b> Saving: the day of A, at the end. A loan: T0, the day of the loan.</li>
-        <li><b>Step 2: give every amount its car</b> (a car is the <span class="nowrap">(1 + i)^n</span> bracket that moves an amount to the meeting day). Forward gear to a later day: a positive exponent. Reverse gear to an earlier day: a negative exponent. One car per road. An amount already standing on the meeting day gets <b>no car</b>.</li>
+        <li><b>Step 2: give every amount its car</b> (a car is the <span class="nowrap">(1 + i)<sup>n</sup></span> bracket that moves an amount to the meeting day). Forward gear to a later day: a positive exponent. Reverse gear to an earlier day: a negative exponent. One car per road. An amount already standing on the meeting day gets <b>no car</b>.</li>
         <li><b>Step 3: write it all in ONE line.</b> The total alone on the left (A for saving, the loan P for a loan). The payments on the right: a deposit or a repayment plus, a withdrawal minus.</li>
         <li><b>Step 4: type it once, round once.</b> Never solve it in stages and never round along the way: the answer to <span class="nowrap">2 decimal places</span>, at the end.</li>
       </ul>
-      <div class="eg">Saving: <span class="nowrap">R5 500</span> now and <span class="nowrap">R4 000</span> at T5; <span class="nowrap">14% p.a.</span> compounded half‑yearly for <span class="nowrap">3 years</span>, then <span class="nowrap">12% p.a.</span> compounded monthly; meeting day T7: <span class="f13-eq"><span class="nowrap">A = 5 500(1 + 0,14/2)^6 (1 + 0,12/12)^48</span> + <span class="nowrap">4 000(1 + 0,12/12)^24</span></span>, so <span class="nowrap">A = R18 386,28</span>.</div>
-      <div class="eg">A loan paid off with <span class="nowrap">R5 000</span> at T4 and <span class="nowrap">R6 000</span> at T6; <span class="nowrap">16% p.a.</span> compounded quarterly for <span class="nowrap">4 years</span>, then <span class="nowrap">14% p.a.</span> compounded half‑yearly; meeting day T0: <span class="f13-eq"><span class="nowrap">P = 5 000(1 + 0,16/4)^(−16)</span> + <span class="nowrap">6 000(1 + 0,14/2)^(−4) (1 + 0,16/4)^(−16)</span></span>, so <span class="nowrap">P = R5 113,44</span>.</div>
+      <div class="eg">Saving: <span class="nowrap">R5 500</span> now and <span class="nowrap">R4 000</span> at T5; <span class="nowrap">14% p.a.</span> compounded half‑yearly for <span class="nowrap">3 years</span>, then <span class="nowrap">12% p.a.</span> compounded monthly; meeting day T7: <span class="f13-eq"><span class="nowrap">A = 5 500(1 + 0,14/2)<sup>6</sup> (1 + 0,12/12)<sup>48</sup></span> + <span class="nowrap">4 000(1 + 0,12/12)<sup>24</sup></span></span>, so <span class="nowrap">A = R18 386,28</span>.</div>
+      <div class="eg">A loan paid off with <span class="nowrap">R5 000</span> at T4 and <span class="nowrap">R6 000</span> at T6; <span class="nowrap">16% p.a.</span> compounded quarterly for <span class="nowrap">4 years</span>, then <span class="nowrap">14% p.a.</span> compounded half‑yearly; meeting day T0: <span class="f13-eq"><span class="nowrap">P = 5 000(1 + 0,16/4)<sup>−16</sup></span> + <span class="nowrap">6 000(1 + 0,14/2)<sup>−4</sup> (1 + 0,16/4)<sup>−16</sup></span></span>, so <span class="nowrap">P = R5 113,44</span>.</div>
       <p>The total is known and a payment is the unknown (a deposit P now, or x in the middle)? Write the same one line, the known total alone on the left, and let <b>SHIFT SOLVE</b> find the unknown.</p>
       <p>A down payment never enters the loan: it comes off the price. <span class="nowrap">Price = loan + down payment</span>.</p>
       <p>Build the whole equation first. Type it once. Round once, at the end.</p>`,
@@ -356,7 +356,7 @@ export const CONCEPTS = {
   meetingDay: {
     title: "Pick the meeting day",
     body: `
-      <p>Any T can be the <b>meeting day</b>. Every amount drives there in its <b>car</b> (a car is the <span class="nowrap">(1 + i)^n</span> bracket that moves an amount to the meeting day), <b>the total too</b> when it is not already there. Count the cars for a day:</p>
+      <p>Any T can be the <b>meeting day</b>. Every amount drives there in its <b>car</b> (a car is the <span class="nowrap">(1 + i)<sup>n</sup></span> bracket that moves an amount to the meeting day), <b>the total too</b> when it is not already there. Count the cars for a day:</p>
       <ul>
         <li>An amount <b>already standing</b> on the meeting day: <b>no car</b>.</li>
         <li>An amount that stays on <b>one colour</b> of road: <b><span class="nowrap">1 car</span></b>.</li>

@@ -1685,6 +1685,15 @@ body.feeding-drag .room-sheet{transform:translateY(calc(100% - 52px));opacity:.2
    fraction inside inherits the sup's size (js/ui.js fracHtml, 2026-08-23) */
 sup.sf-exp{font-size:.62em;line-height:0;vertical-align:1.1em;margin-left:.06em}
 sup.sf-exp .sfrac,.opt sup.sf-exp .sfrac,.q-prompt sup.sf-exp .sfrac{font-size:1em;margin:0 .05em;vertical-align:baseline}
+/* Finance Fix A (2026-10-11): a plain exponent <sup> (finlib's pow(), the
+   exponent and equation chapters' pw()) no longer grows its line. Measured
+   at 390 px: an option chip holding a sup was 52 px against 49 px without
+   one, and a wrapped prompt / worked line / concept paragraph got 3 px taller
+   on the line with the sup, so the running text's baseline jumped there.
+   line-height:0 alone takes that away and moves no glyph: the sup keeps its
+   own size and raise (measured: the same 3 px above the bracket, before and
+   after). Its size and raise are deliberately left alone, app-wide. */
+.opt sup,.q-prompt sup,.q-step-prompt sup,.sol-step sup,.fb-answer sup,.hint-box sup,.concept sup{line-height:0}
 /* a formula fragment never breaks across lines (her rule: "(90° ± θ)" on one line) */
 .nowrap,.q-f{white-space:nowrap}
 /* FORMULA LINE-BREAKING, app-wide (js/ui.js formulaHtml, her /go ruling

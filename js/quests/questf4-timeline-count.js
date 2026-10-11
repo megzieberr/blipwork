@@ -6,7 +6,7 @@
    ============================================================ */
 import { mc } from "./_shared.js";
 import { randInt, pick } from "../ui.js";
-import { rand } from "../finlib.js";
+import { rand, pow } from "../finlib.js";
 
 const COUNT = "timelineCount";
 const MOVE = "timelineMove";
@@ -72,7 +72,7 @@ const SKILLS = {
         answerLabel: "Later date → multiply by (1 + i)",
         solution: [
           { s: `T${b} is LATER than T${a}`, r: "the money has had more time to grow" },
-          { s: `Forward → multiply by (1 + i)`, r: `${b - a} periods, so × (1 + i)^${b - a}` },
+          { s: `Forward → multiply by (1 + i)`, r: `${b - a} periods, so × ${pow("(1 + i)", b - a)}` },
         ] });
   },
 
@@ -87,7 +87,7 @@ const SKILLS = {
         answerLabel: "Earlier date → divide by (1 + i)",
         solution: [
           { s: `T${a} is EARLIER than T${b}`, r: "you are undoing growth, not adding it" },
-          { s: `Backward → divide by (1 + i)`, r: `${b - a} periods, so × (1 + i)^(−${b - a})` },
+          { s: `Backward → divide by (1 + i)`, r: `${b - a} periods, so × ${pow("(1 + i)", `−${b - a}`)}` },
         ] });
   },
 

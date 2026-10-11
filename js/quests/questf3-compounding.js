@@ -5,7 +5,7 @@
    ============================================================ */
 import { mc, mcNum, C } from "./_shared.js";
 import { randInt, pick } from "../ui.js";
-import { toFrac, COMPOUNDING } from "../finlib.js";
+import { toFrac, COMPOUNDING, pow } from "../finlib.js";
 
 const CL = "compounding";
 /* the meaningful (k>1) options for rate/exponent setup */
@@ -54,13 +54,13 @@ const SKILLS = {
     const i = C(toFrac(annual)), e = years * o.k;
     return mc(CL,
       `Choose the correct setup for <b>R${P.toLocaleString("en-ZA").replace(/,/g, " ")}</b> at ${C(annual)}% p.a. compounded <b>${o.label}</b> for ${years} years.`,
-      `${P}(1 + ${i}/${o.k})^(${years}×${o.k})`,
-      [`${P}(1 + ${i})^${years}`, `${P}(1 + ${i}×${o.k})^${years}`, `${P}(1 + ${i}/${years})^(${o.k})`],
-      { hint: "Divide the rate by k inside the bracket; multiply years by k in the power.", answerLabel: `${P}(1 + ${i}/${o.k})^(${years}×${o.k})`,
+      `${P}${pow(`(1 + ${i}/${o.k})`, `${years}×${o.k}`)}`,
+      [`${P}${pow(`(1 + ${i})`, years)}`, `${P}${pow(`(1 + ${i}×${o.k})`, years)}`, `${P}${pow(`(1 + ${i}/${years})`, o.k)}`],
+      { hint: "Divide the rate by k inside the bracket; multiply years by k in the power.", answerLabel: `${P}${pow(`(1 + ${i}/${o.k})`, `${years}×${o.k}`)}`,
         solution: [
           { s: `Rate per period = ${i}/${o.k}`, r: `compounded ${o.label} → ${o.k} times a year` },
           { s: `Number of periods = ${years}×${o.k} = ${e}`, r: "years × times-per-year" },
-          { s: `A = ${P}(1 + ${i}/${o.k})^(${years}×${o.k})`, r: "build the WHOLE equation, then type it in one go" },
+          { s: `A = ${P}${pow(`(1 + ${i}/${o.k})`, `${years}×${o.k}`)}`, r: "build the WHOLE equation, then type it in one go" },
         ] });
   },
 

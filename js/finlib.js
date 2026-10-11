@@ -27,6 +27,16 @@ export const moveMoney = (amount, i, steps) => amount * Math.pow(1 + i, steps);
 /* effective rate from a nominal rate compounded k times a year */
 export const effFromNom = (inomFrac, k) => Math.pow(1 + inomFrac / k, k) - 1;
 
+/* An exponent a learner reads, as a REAL superscript (Fix A, her play-test
+   11 Oct: "the exponents need to be real exponents, not like this ^").
+   exp is a ready string, never bracketed: "36", "−10" (U+2212), "3×4",
+   "−3×4", "n". Every learner-facing exponent in the Finance chapter goes
+   through here, so a correct label and its decoys are built the same way
+   (mc() de-dupes by string) and js/quests/_finance-check.js can rebuild
+   the very same string. The plain <sup> is the house shape (_exp.js and
+   _eq.js export the same pw()). */
+export const pow = (base, exp) => `${base}<sup>${exp}</sup>`;
+
 /* the compounding options the chapter uses */
 export const COMPOUNDING = [
   { key: "annually",  label: "annually",                    adj: "annual",       k: 1 },

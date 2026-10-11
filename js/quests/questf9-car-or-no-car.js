@@ -38,7 +38,7 @@
    ============================================================ */
 import { mc, mcNum, C, rng } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
-import { rand, toFrac, COMPOUNDING } from "../finlib.js";
+import { rand, toFrac, COMPOUNDING, pow } from "../finlib.js";
 
 const CAR = "carOrNoCar";
 export const REFRAIN = "A car only if it has to move. Already there? No car.";
@@ -135,10 +135,12 @@ function trip(sc, at, meet) {
   legs.forEach(l => { l.exp = dir * l.years * l.k; });
   return { dir, legs };
 }
-/* one car: (1 + 0,08/4)^(3×4), reverse (1 + 0,08/4)^(−3×4); annual (1 + 0,08)^3 / ^(−3) */
+/* one car: (1 + 0,08/4)^(3×4), reverse (1 + 0,08/4)^(−3×4); annual (1 + 0,08)^3 / ^(−3).
+   Fix A (11 Oct): drawn as a real superscript through finlib's pow(); the
+   teaching form 3×4 stays inside the sup (her ruling) */
 function bracket(l) {
   const i = C(toFrac(l.r)), m = l.exp < 0 ? "−" : "";
-  return l.k === 1 ? `(1 + ${i})^${m ? `(−${l.years})` : l.years}` : `(1 + ${i}/${l.k})^(${m}${l.years}×${l.k})`;
+  return l.k === 1 ? pow(`(1 + ${i})`, `${m}${l.years}`) : pow(`(1 + ${i}/${l.k})`, `${m}${l.years}×${l.k}`);
 }
 /* an amount and its car(s). Each TERM is one unbreakable unit: the amount
    rides with its first car, a second car is a unit of its own, and the

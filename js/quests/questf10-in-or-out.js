@@ -57,7 +57,7 @@
    ============================================================ */
 import { mc, C, rng } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
-import { rand, toFrac, COMPOUNDING } from "../finlib.js";
+import { rand, toFrac, COMPOUNDING, pow } from "../finlib.js";
 
 const CON = "inOrOut";
 /* the refrain: its closing line depends on the kind (f10 review 1) */
@@ -79,7 +79,7 @@ const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500, 
 const NB = " ";
 const nw = s => `<span class="nowrap">${s}</span>`;                    // ONE unbreakable unit (f9 review 1)
 /* f10 review 1: the first time a solution says "car", it says what one is */
-const CAR_IS = `a car is the ${nw("(1 + i)^n")} bracket that moves an amount to the meeting day`;
+const CAR_IS = `a car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day`;
 /* "3 years × 12 times a year = 36" (never a bare k). A line may break only
    before the "×" (an operator leads its piece) or after the "=" */
 const yrs = y => `${y} year${y === 1 ? "" : "s"}`;
@@ -103,7 +103,7 @@ const CAPTION = "T in years";
 function car(sc, e) {
   if (!e) return "";
   const i = C(toFrac(sc.r)), base = sc.k === 1 ? `(1 + ${i})` : `(1 + ${i}/${sc.k})`;
-  return e < 0 ? `${base}^(−${-e})` : `${base}^${e}`;
+  return e < 0 ? pow(base, `−${-e}`) : pow(base, e);                     // Fix A: a real superscript
 }
 const coefText = c => (typeof c === "number" ? amt0(c) : c);
 const termText = (sc, t) => coefText(t.c) + car(sc, t.e);

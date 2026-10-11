@@ -67,7 +67,7 @@
    ============================================================ */
 import { mc, mcNum, rng } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
-import { rand, COMPOUNDING } from "../finlib.js";
+import { rand, COMPOUNDING, pow } from "../finlib.js";
 import { computeTimeline, verifyTimeline } from "../engine/timeline-graph.js";
 
 const CON = "meetingDay";
@@ -94,7 +94,7 @@ const person = () => pick([{ he: "she", his: "her" }, { he: "he", his: "his" }])
 const carsWord = k => `${k}${NB}car${k === 1 ? "" : "s"}`;            // "2 cars"
 const cars = k => nw(carsWord(k));
 /* f10 review 1: the first time a solution says "car", it says what one is */
-const CAR_IS = `A car is the ${nw("(1 + i)^n")} bracket that moves an amount to the meeting day.`;
+const CAR_IS = `A car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day.`;
 const CAPTION = "T in years";
 /* review 1: a UNIT LIST, a line of its own in a worked step (css .ulist).
    Each part is one unbreakable unit with its own "·" in front (drawn by the
