@@ -12,10 +12,11 @@
    Coverage: all 25 f1–f7 skills that roll a number, plus f8's five
    tap-the-total skills and all eight f9 car skills (2026-10-10, each
    re-derived from the drawn meeting day, roads and amounts and the rates
-   in the prompt), and all eight f10 sign skills (2026-10-10: every
-   equation parsed term by term and compared with the one the picture and
-   the story give; the interest recomputed from the displayed numbers;
-   the recall card against a table written out here), and all eight f13 (was f12) one-equation
+   in the prompt), and all eight f10 sign skills (2026-10-10; the TAUGHT form only since
+   2026-10-11: every equation parsed term by term and compared with the one
+   the picture and the story give, each steps card's sign per step and form
+   so far, the yes/no card's one slip; the interest recomputed from the
+   displayed numbers; the recall card against a table written out here), and all eight f13 (was f12) one-equation
    cards (2026-10-10: the story read back, every option parsed, the decoys
    classified, the answer recomputed), and all eight f11 meeting-day cards
    (2026-10-10: the car count of every candidate day recomputed from the
@@ -531,40 +532,40 @@ export const RECOMPUTE = {
     return !!t && correctNum(q) === t.legs.length;
   },
 
-  /* ---- f10 (2026-10-10): in or out? (the one equation's signs) ---- */
-  "f10.jugCorrect": q => f10JugCheck(q, false),
-  "f10.jugWrong": q => f10JugCheck(q, true),
-  "f10.tidy": q => {
-    const s = f10Scene(q);
-    if (!s || s.saving || s.known) return false;
-    const jug = f10ParseEq(f10PromptEq(q), f10Rate(s));
-    if (!jug || !f10JugShape(jug, s) || !f10Equiv(jug, f10Expect(s))) return false;   // the jug form shown is right…
-    return f10McCheck(q, s, f10Expect(s), { c: "P", e: s.n * s.k }, f10Allowed(s));  // …and the tidy option is the same equation
-  },
+  /* ---- f10 (2026-10-10; the TAUGHT form only since 2026-10-11): in or out? ---- */
+  /* the steps cards: every step's amount, options, right sign and form so
+     far, rebuilt from the picture; the yes/no card: the shown line is the
+     taught form, or wrong by exactly ONE slip that the answer names */
+  "f10.inOrOutSaving": q => f10Clean(q) && f10StepsCheck(q, false),
+  "f10.inOrOutLoan": q => f10Clean(q) && f10StepsCheck(q, true),
+  "f10.equationYesNo": q => f10Clean(q) && f10YesNoCheck(q),
   "f10.withdrawal": q => {
     const s = f10Scene(q);
-    return !!s && s.saving && !s.known && f10McCheck(q, s, f10Expect(s), { c: "A", e: 0 }, f10Allowed(s));
+    return f10Clean(q) && !!s && s.saving && !s.known && s.outs === 1 && f10McCheck(q, s, f10Expect(s), f10Lead(s), f10Allowed(s));
   },
   "f10.signOnTimeline": q => {
     const s = f10Scene(q);
-    return !!s && s.saving && !s.known && !/R\d/.test(String(q.prompt).replace(/<[^>]+>/g, ""))   // the picture alone carries the amounts
-      && f10McCheck(q, s, f10Expect(s), { c: "A", e: 0 }, f10Allowed(s));
+    return f10Clean(q) && !!s && s.saving && !s.known && s.outs === 1 && !/R\d/.test(String(q.prompt).replace(/<[^>]+>/g, ""))   // the picture alone carries the amounts
+      && f10McCheck(q, s, f10Expect(s), f10Lead(s), f10Allowed(s));
   },
   "f10.inOrOutWord": q => {
-    /* written out here on purpose, not imported from the module */
-    const m = String(q.prompt).match(/<b>([^<]+)<\/b>/);
-    if (!m || q.type !== "mc" || q.options.length !== 3) return false;
+    /* written out here on purpose, not imported from the module: where each
+       item stands in the taught equation */
+    const m = String(q.prompt).match(/^<b>([^<]+)<\/b>: where does it go in the equation\?$/);
+    if (!f10Clean(q) || !m || q.type !== "mc" || q.options.length !== 4) return false;
+    if (q.options.map(o => String(o.label)).sort().join("|") !== [...F10_WHERE, F10_NOWHERE].sort().join("|")) return false;
     const item = m[1];
-    const want = /down payment/i.test(item) ? "Neither: it never enters the account"
-      : /repayment|withdrawal/i.test(item) ? "Out: minus"
-      : /deposit|loan itself/i.test(item) ? "In: plus" : null;
+    const want = /down payment/i.test(item) ? F10_NOWHERE
+      : /withdrawal/i.test(item) ? "− on the right"
+      : /deposit|repayment/i.test(item) ? "+ on the right"
+      : /loan itself|the total/i.test(item) ? "alone on the left" : null;
     return !!want && correctLabel(q) === want;
   },
   "f10.interestPaid": q => {
     const p = String(q.prompt);
     const m = p.match(/borrowed <span class="nowrap">R([\d ]+,\d\d)<\/span> at (\d+)%\s?p\.a\. compounded (annually|half[-‑]yearly|quarterly|monthly)\./);
     const pays = [...p.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
-    if (!m || pays.length !== 2 || q.type !== "mc") return false;
+    if (!f10Clean(q) || !m || pays.length !== 2 || q.type !== "mc") return false;
     const loan = f10Num(m[1]), r = Number(m[2]), k = F9_K[f10Word(m[3])];
     /* the story is true: those repayments, moved back to T0 at the stated rate, are that loan to the cent */
     const pv = pays.reduce((s, x) => s + x.v * Math.pow(1 + toFrac(r) / k, -x.t * k), 0);
@@ -583,19 +584,21 @@ export const RECOMPUTE = {
     const c = correctOption(q);
     return !!c && f10Cents(c.label) === want;
   },
-  "f10.tidyLoan": q => {
+  "f10.hirePurchasePrice": q => {
+    /* price = loan + down payment; the meeting day is T0, so the KNOWN loan
+       stands alone on the left and x (the last repayment, at Tn) drives back too */
     const p = String(q.prompt);
     const price = p.match(/ for <span class="nowrap">R([\d ]+)<\/span>/), down = p.match(/down payment of <span class="nowrap">R([\d ]+)<\/span>/);
     const said = [...p.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half[-‑]yearly|quarterly|monthly)/g)];
-    const xm = p.match(/a last repayment, x, at T(\d+)/), mm = p.match(/The meeting day is T(\d+)\./);
+    const xm = p.match(/a last repayment, x, at T(\d+)/);
     const pays = [...p.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
-    if (!price || !down || said.length !== 1 || !xm || !mm || !pays.length || q.graph) return false;
-    const n = Number(mm[1]), r = Number(said[0][1]), k = F9_K[f10Word(said[0][2])];
+    if (!f10Clean(q) || !price || !down || said.length !== 1 || !xm || !/The meeting day is T0, the day of the loan\./.test(p) || !pays.length || q.graph) return false;
+    const n = Number(xm[1]), r = Number(said[0][1]), k = F9_K[f10Word(said[0][2])];
     const P = f10Num(price[1]), D = f10Num(down[1]), loan = P - D;               // price = loan + down payment
-    if (Number(xm[1]) !== n || !(D > 0 && loan > 0) || pays.some(x => !(x.t > 0 && x.t < n))) return false;
-    const s = { saving: false, n, r, k, pays: pays.map(x => ({ ...x, out: false })) };
-    const expect = [{ s: 1, c: loan, e: n * k }, ...pays.map(x => ({ s: -1, c: x.v, e: (n - x.t) * k })), { s: -1, c: "x", e: 0 }];
-    return f10McCheck(q, s, expect, { c: loan, e: n * k }, new Set([P, D, loan, "x", ...pays.map(x => x.v)]));
+    if (!(D > 0 && loan > 0) || pays.some(x => !(x.t > 0 && x.t < n) || x.t * k < 2)) return false;   // no car is ever ^−1
+    const s = { saving: false, n, meet: 0, r, k, pays: pays.map(x => ({ ...x, out: false })) };
+    const expect = [{ s: 1, c: loan, e: 0 }, ...pays.map(x => ({ s: -1, c: x.v, e: -x.t * k })), { s: -1, c: "x", e: -n * k }];
+    return f10McCheck(q, s, expect, { c: loan, e: 0 }, new Set([P, D, loan, "x", ...pays.map(x => x.v)]));
   },
 
   /* ---- f13 (2026-10-10; was f12 until 2026-10-11): build the one equation (the exam shape) ---- */
@@ -769,28 +772,39 @@ export function f11Diagnose(q, skill) {
 
 /* ============================================================
    f10 · "In or out?" — the one equation, read back from what is shown.
-     · EVERY equation (the prompt's jug form, each option, the worked
-       tidy line) must PARSE: each term one <span class="nowrap"> unit
-       (amount with no-break thousands, or P / A / x, then at most one
-       car "(1 + 0,12/12)^36" or "^(−36)" at the story's own rate),
-       terms joined only by " + " / " − ", exactly one "=", a right side
-       may be a lone 0, a leading minus only on a side's first term, and
-       the brackets balance. A slip here returns null and the check fails.
-     · f10 review 1: the "=" glues to the term BEFORE it, inside that
-       term's unit ("P(…)^36 =", and a lone 0 or A rides along too:
-       "9 000 = 0", "…^8 = A"), so a broken line never starts with "=".
-       An "=" standing on its own between units does not parse.
+   Since 2026-10-11 the round keeps the TAUGHT form only: the total alone
+   on the left, the payments on the right (her ruling; the one-sided form
+   of the 10 Oct build is parked in briefs/finance-2/ARCHIVE-f10-jug-form-2027.md).
+     · EVERY equation (a yes/no card's shown line, each option, a steps
+       card's form so far with its ☐ filled by the right sign, its answer,
+       the worked "one equation" line) must PARSE: each term one
+       <span class="nowrap"> unit (amount with no-break thousands, or
+       P / A / x, then at most one car "(1 + 0,12/12)^36" or "^(−36)" at the
+       story's own rate), terms joined only by " + " / " − ", exactly one
+       "=", a leading minus only on a side's first term, and the brackets
+       balance. A slip here returns null and the check fails.
+     · the "=" never stands alone: a single-letter left side rides with the
+       first right-hand term inside ONE unit ("A = 5 000(…)^20"), any other
+       left side carries it inside its last unit ("9 000 ="). An "=" on its
+       own between units does not parse.
      · the scene comes from the picture: the total ("?" with its letter,
-       A at the end for saving, P at T0 for a loan; or the known loan with
-       its P), the payments, the ONE withdrawal drawn out (saving only,
-       after a deposit, before the meeting day), one road whose rate is the
-       prompt's, and the story's "R… at T…" mentions match the nodes.
-     · the expected equation: the loan and every deposit IN (+), every
-       repayment and withdrawal OUT (−), each with its car to the meeting
-       day (the last T): exponent (n − t) × k; the total A on the other side.
+       A at the end for saving, P at T0 for a loan), the payments, at most
+       ONE withdrawal drawn out (saving only, after a deposit, before the day
+       of A), one road whose rate is the prompt's, the meeting day on the
+       total's OWN day (the day of A; T0 for a loan, so every repayment
+       drives back in reverse gear), and the story's "R… at T…" mentions
+       match the nodes.
+     · the expected equation: the total alone on the left with no car;
+       every deposit and repayment plus, every withdrawal minus, each with
+       its car to the meeting day: exponent (meeting day − t) × k.
      · two equations are the same when left − right holds the same signed
-       terms, or all of them negated (the jug form and its tidy form are
-       the same terms with the moved signs flipped).
+       terms, or all of them negated; they are the same BY VALUE when, on
+       top of that, every exponent is shifted by one constant (both sides
+       × one car). No two options may be the same by value: a decoy that is
+       the right equation in disguise would mark a right learner wrong
+       (gotcha 4).
+     · no learner text says "tidy", "= 0", "lump sum" / "lumpsum" or "jug
+       form" (her 11 Oct ruling).
    ============================================================ */
 const f10Num = s => Number(String(s).replace(/[\s  ]/g, "").replace(",", "."));
 /* "R2 912,58" / "−R2 912,58" (tags stripped) → cents; NaN if not money */
@@ -852,13 +866,33 @@ export function f10ParseEq(html, iText = null) {
 }
 const f10Key = ts => ts.map(t => `${t.s}|${t.c}|${t.e}`).sort().join(";");
 const f10Zero = eq => [...eq.L, ...eq.R.map(t => ({ ...t, s: -t.s }))];
+const f10Flip = ts => ts.map(t => ({ ...t, s: -t.s }));
 export function f10Equiv(eq, zero) {
   const a = f10Key(f10Zero(eq));
-  return a === f10Key(zero) || a === f10Key(zero.map(t => ({ ...t, s: -t.s })));
+  return a === f10Key(zero) || a === f10Key(f10Flip(zero));
 }
-/* the equation shown in a jug-card prompt: the line between the two <br>s */
+/* the same equation BY VALUE: the same signed terms (or all negated), each
+   exponent shifted by ONE constant d (both sides × the car ^d). With d = 0
+   this is f10Equiv. Terms are matched by their amount or letter (each one
+   appears once in an f10 equation) */
+export function f10ByValue(a, b) {
+  const za = f10Zero(a), zb = f10Zero(b);
+  if (za.length !== zb.length) return false;
+  const byC = new Map(zb.map(t => [String(t.c), t]));
+  if (byC.size !== zb.length || new Set(za.map(t => String(t.c))).size !== za.length)
+    return f10Key(za) === f10Key(zb) || f10Key(za) === f10Key(f10Flip(zb));
+  let d = null, f = null;
+  for (const t of za) {
+    const u = byC.get(String(t.c));
+    if (!u) return false;
+    const dd = u.e - t.e, ff = u.s === t.s ? 1 : -1;
+    if (d === null) { d = dd; f = ff; } else if (dd !== d || ff !== f) return false;
+  }
+  return true;
+}
+/* the equation shown in a yes/no prompt: the line between the two <br>s */
 function f10PromptEq(q) { const parts = String(q.prompt).split("<br>"); return parts.length === 3 ? parts[1] : null; }
-/* the equation at the end of a worked line ("Tidy: …: EQ") */
+/* the equation at the end of a worked line ("The one equation: …") */
 function f10SolEq(q, start) {
   const st = (q.solution || []).find(x => String(x.s).startsWith(start));
   return st ? String(st.s).slice(String(st.s).lastIndexOf(": ") + 2) : null;
@@ -866,7 +900,6 @@ function f10SolEq(q, start) {
 export function f10Scene(q) {
   const g = q && q.graph;
   if (!g || g.type !== "timeline" || !Array.isArray(g.nodes) || !Array.isArray(g.roads) || g.roads.length !== 1) return null;
-  if (g.meet !== g.n) return null;                                          // the meeting day is the last T
   const prompt = String(q.prompt);
   const said = [...prompt.matchAll(/(\d+)%\s?p\.a\. compounded (annually|half[-‑]yearly|quarterly|monthly)/g)];
   if (said.length !== 1) return null;
@@ -877,6 +910,7 @@ export function f10Scene(q) {
   if (roles.length !== 1) return null;
   const tot = roles[0], saving = tot.role === "A";
   if (!((saving && tot.t === g.n) || (tot.role === "P" && tot.t === 0))) return null;
+  if (g.meet !== tot.t) return null;                                        // the meeting day is the total's own day
   if (g.nodes.find(nd => nd.t === tot.t) !== tot) return null;            // the bottom of its day's stack, right above its letter
   /* HER RULING: the total is never a bare money label: "?" with its letter, or a known loan WITH its letter */
   const known = tot.label == null && Number.isFinite(tot.amount);
@@ -887,87 +921,169 @@ export function f10Scene(q) {
   if (new Set(pays.map(x => x.amount)).size !== pays.length || new Set(pays.map(x => x.t)).size !== pays.length) return null;
   const outs = pays.filter(x => x.out);
   if (saving) {
-    if (outs.length !== 1) return null;
+    if (outs.length > 1 || !pays.some(x => !x.out)) return null;            // at most one withdrawal, at least one deposit
     const w = outs[0];
-    if (!(w.t > 0 && w.t < g.n && pays.some(x => !x.out && x.t < w.t))) return null;   // after a deposit, before the meeting day
+    if (w && !(w.t > 0 && w.t < g.n && pays.some(x => !x.out && x.t < w.t))) return null;   // after a deposit, before the day of A
   } else if (outs.length || pays.some(x => x.t === 0)) return null;
   /* the story, where it names amounts, names exactly the drawn ones */
   const said2 = [...prompt.matchAll(/<span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)].map(x => ({ v: f10Num(x[1]), t: Number(x[2]) }));
   if (said2.length && (said2.length !== pays.length || !said2.every(x => pays.some(nd => nd.amount === x.v && nd.t === x.t)))) return null;
   const wd = [...prompt.matchAll(/withdraws <span class="nowrap">R([\d ]+)<\/span> at T(\d+)/g)];
-  if (wd.length && (wd.length !== 1 || f10Num(wd[0][1]) !== outs[0].amount || Number(wd[0][2]) !== outs[0].t)) return null;
-  return { saving, known, n: g.n, meet: g.meet, r, k, pays: pays.map(x => ({ t: x.t, v: x.amount, out: !!x.out })) };
+  if (wd.length && (wd.length !== 1 || !outs.length || f10Num(wd[0][1]) !== outs[0].amount || Number(wd[0][2]) !== outs[0].t)) return null;
+  return { saving, known, n: g.n, meet: g.meet, r, k, outs: outs.length, pays: pays.map(x => ({ t: x.t, v: x.amount, out: !!x.out })) };
 }
-/* left − right of the right equation, with the meeting day on the last T */
+/* left − right of the right equation: the total alone, every payment in
+   its car to the meeting day, exponent (meeting day − t) × k */
 function f10Expect(s) {
-  const e = t => (s.n - t) * s.k;
+  const e = t => (s.meet - t) * s.k;
   return s.saving
     ? [...s.pays.map(x => ({ s: x.out ? -1 : 1, c: x.v, e: e(x.t) })), { s: -1, c: "A", e: 0 }]
-    : [{ s: 1, c: "P", e: e(0) }, ...s.pays.map(x => ({ s: -1, c: x.v, e: e(x.t) }))];
+    : [{ s: 1, c: "P", e: 0 }, ...s.pays.map(x => ({ s: -1, c: x.v, e: e(x.t) }))];
 }
+const f10Lead = s => ({ c: s.saving ? "A" : "P", e: 0 });
+const f10Outs = s => new Set(s.pays.filter(x => x.out).map(x => x.v));
 const f10Allowed = s => new Set([s.saving ? "A" : "P", ...s.pays.map(x => x.v)]);
-/* the jug form's shape: a loan's side starts with +P and equals 0; saving equals A alone */
-function f10JugShape(eq, s) {
-  return s.saving
-    ? eq.R.length === 1 && eq.R[0].c === "A" && eq.R[0].s === 1 && eq.R[0].e === 0 && eq.L.length === s.pays.length
-    : eq.R.length === 0 && eq.L.length === s.pays.length + 1;
-}
-/* the tidy form's shape: the total's term alone on the left, every payment
-   positive on the right except a withdrawal, which keeps its minus */
-function f10TidyShape(eq, lead, outs) {
+/* the right equation itself, in time order */
+const f10Right = s => ({ L: [{ s: 1, ...f10Lead(s) }], R: s.pays.slice().sort((a, b) => a.t - b.t).map(x => ({ s: x.out ? -1 : 1, c: x.v, e: (s.meet - x.t) * s.k })) });
+/* the taught form's shape: the total's term alone on the left, every
+   payment positive on the right except a withdrawal, which is minus */
+function f10TaughtShape(eq, lead, outs) {
   return eq.L.length === 1 && eq.L[0].s === 1 && eq.L[0].c === lead.c && eq.L[0].e === lead.e
     && eq.R.every(t => t.s === (outs.has(t.c) ? -1 : 1));
 }
 /* an mc of equations: every option parses (at the story's rate, with only
    the story's terms), exactly one option is the right equation, it is
-   marked correct and is in the tidy form, and no two options are the same
-   equation */
+   marked correct and is in the taught form, and no two options are the
+   same equation, not even by value */
 function f10McCheck(q, s, expect, lead, allowed) {
   if (q.type !== "mc" || !Array.isArray(q.options) || q.options.length !== 4) return false;
   const parsed = q.options.map(o => ({ o, eq: f10ParseEq(o.label, f10Rate(s)) }));
   if (parsed.some(p => !p.eq || [...p.eq.L, ...p.eq.R].some(t => !allowed.has(t.c)))) return false;
   const right = parsed.filter(p => f10Equiv(p.eq, expect));
   if (right.length !== 1 || !right[0].o.correct) return false;
-  if (!f10TidyShape(right[0].eq, lead, new Set(s.pays.filter(x => x.out).map(x => x.v)))) return false;
+  if (!f10TaughtShape(right[0].eq, lead, f10Outs(s))) return false;
   for (let i = 0; i < parsed.length; i++)
-    for (let j = i + 1; j < parsed.length; j++) if (f10Equiv(parsed[i].eq, f10Zero(parsed[j].eq))) return false;
+    for (let j = i + 1; j < parsed.length; j++) if (f10ByValue(parsed[i].eq, parsed[j].eq)) return false;
   return true;
 }
-/* the yes/no jug cards: the shown jug form is right (jugCorrect) or has
-   EXACTLY ONE sign slipped (jugWrong); q.yes must say which; the worked
-   right jug form and tidy line are the right equation, in shape */
-function f10JugCheck(q, wrong) {
-  const s = f10Scene(q);
-  if (!s || s.known || q.type !== "yesno" || s.meet !== s.n) return false;
-  const iT = f10Rate(s), expect = f10Expect(s);
-  const shown = f10ParseEq(f10PromptEq(q), iT);
-  if (!shown || !f10JugShape(shown, s)) return false;
-  const ok = f10Equiv(shown, expect);
-  if (q.yes !== ok) return false;
-  if (wrong) {
-    /* same terms, exactly one sign different (orientation: the side with the payments, minus the other) */
-    const z = f10Zero(shown), want = expect;
-    const strip = ts => ts.map(t => `${t.c}|${t.e}`).sort().join(";");
-    if (strip(z) !== strip(want)) return false;
-    const diff = z.filter(t => !want.some(w => w.c === t.c && w.e === t.e && w.s === t.s)).length;
-    if (diff !== 1) return false;
-    const fixed = f10ParseEq(f10SolEq(q, "The right jug form"), iT);
-    if (!fixed || !f10JugShape(fixed, s) || !f10Equiv(fixed, expect)) return false;
-  }
-  const tidy = f10ParseEq(f10SolEq(q, "Tidy"), iT);
-  const lead = s.saving ? { c: "A", e: 0 } : { c: "P", e: s.n * s.k };
-  return !!tidy && f10Equiv(tidy, expect) && f10TidyShape(tidy, lead, new Set(s.pays.filter(x => x.out).map(x => x.v)));
+
+/* the steps cards (inOrOutSaving, inOrOutLoan): the ☐ of a step's form so
+   far, filled with a sign, so the form parses like any other equation. The
+   slot rides in its amount's unit ("☐ 3 000(…)^8", or "A = ☐ 5 000(…)^20"
+   when it is the first term) */
+export function f10FillSlot(html, sign) {
+  const neg = sign < 0;
+  return unsup(html)
+    .replace(/<span class="nowrap">([AP] = )☐ ([^<]*)<\/span>/, (m, g, b) => `<span class="nowrap">${g}${neg ? "−" : ""}${b}</span>`)
+    .replace(/<span class="nowrap">☐ ([^<]*)<\/span>/, (m, b) => `${neg ? "−" : "+"} <span class="nowrap">${b}</span>`);
 }
-/* every equation a learner reads on an f10 card (prompt, options, worked
+/* written out here on purpose, not imported from the module */
+const F10_IN = "+ (in)", F10_OUT = "− (out)";
+const F10_WHERE = ["+ on the right", "− on the right", "alone on the left"];
+const F10_NOWHERE = "nowhere: it never enters the account";
+/* a steps card: one mc step per drawn amount, in time order. Step j names
+   that amount first ("R3 000 at T2: in or out?"), offers exactly the two
+   (saving) or three (loan) options, marks the right one (a deposit in, a
+   withdrawal out; a repayment + on the right), and shows the taught form
+   so far: the total alone on the left, the j amounts before it with their
+   right signs and cars, then ONE ☐ and this amount in its car. The answer
+   and the worked "one equation" line are the finished taught form */
+function f10StepsCheck(q, loan) {
+  const s = f10Scene(q);
+  if (!s || s.known || s.saving === loan || q.type !== "steps" || !Array.isArray(q.steps)) return false;
+  const pays = s.pays.slice().sort((a, b) => a.t - b.t);
+  if (q.steps.length !== pays.length || pays.length < 2 || pays.length > (loan ? 2 : 3)) return false;
+  if (!new RegExp(`The meeting day is T${s.meet}, ${loan ? "the day of the loan" : "the day of A"}\\.`).test(String(q.prompt))) return false;
+  const iT = f10Rate(s), lead = f10Lead(s), right = f10Right(s);
+  for (let j = 0; j < pays.length; j++) {
+    const st = q.steps[j], x = pays[j], t = right.R[j];
+    if (!st || st.kind !== "mc" || !st.hint || !Array.isArray(st.options)) return false;
+    const want = loan ? F10_WHERE : [F10_IN, F10_OUT];
+    if (st.options.map(o => String(o.label)).sort().join("|") !== want.slice().sort().join("|")) return false;
+    const ok = st.options.filter(o => o.correct);
+    if (ok.length !== 1 || ok[0].label !== (loan ? "+ on the right" : x.out ? F10_OUT : F10_IN)) return false;
+    const m = String(st.prompt).match(/^<b><span class="nowrap">R([\d ]+)<\/span> at T(\d+)<\/b>: (in or out|where does it go)\?<br>([\s\S]+)$/);
+    if (!m || f10Num(m[1]) !== x.v || Number(m[2]) !== x.t || m[3] !== (loan ? "where does it go" : "in or out")) return false;
+    if ((m[4].match(/☐/g) || []).length !== 1) return false;
+    const eq = f10ParseEq(f10FillSlot(m[4], t.s), iT);
+    if (!eq || eq.L.length !== 1 || eq.L[0].c !== lead.c || eq.L[0].e !== 0 || eq.L[0].s !== 1) return false;
+    if (eq.R.length !== j + 1 || !eq.R.every((u, i) => u.s === right.R[i].s && u.c === right.R[i].c && u.e === right.R[i].e)) return false;
+  }
+  const expect = f10Expect(s), outs = f10Outs(s);
+  const fin = f10ParseEq(q.answerLabel, iT), sol = f10ParseEq(f10SolEq(q, "The one equation"), iT);
+  return !!fin && !!sol && [fin, sol].every(eq => f10Equiv(eq, expect) && f10TaughtShape(eq, lead, outs));
+}
+/* the yes/no card: the shown line is the taught form (q.yes), or wrong by
+   EXACTLY ONE slip, and really wrong (not the right equation by value):
+     · the withdrawal written plus, everything else as taught; or
+     · one payment written on the total's side with the sign it has on the
+       right, the rest as taught, the right side still starting plus.
+   The answer names the slip; the worked line is the right equation */
+function f10YesNoCheck(q) {
+  const s = f10Scene(q);
+  if (!s || s.known || q.type !== "yesno" || typeof q.yes !== "boolean") return false;
+  const iT = f10Rate(s), expect = f10Expect(s), lead = f10Lead(s), outs = f10Outs(s), right = f10Right(s);
+  const shown = f10ParseEq(f10PromptEq(q), iT);
+  if (!shown || [...shown.L, ...shown.R].some(t => !f10Allowed(s).has(t.c))) return false;
+  const ok = f10Equiv(shown, expect) && f10TaughtShape(shown, lead, outs);
+  if (q.yes !== ok) return false;
+  const fixed = f10ParseEq(f10SolEq(q, ok ? "The one equation" : "The right equation"), iT);
+  if (!fixed || !f10Equiv(fixed, expect) || !f10TaughtShape(fixed, lead, outs)) return false;
+  const lab = String(q.answerLabel);
+  if (ok) return /^Yes: /.test(lab);
+  if (f10ByValue(shown, right)) return false;                              // really wrong, not just rearranged
+  const key = t => `${t.c}|${t.e}`;
+  const wantR = new Map(right.R.map(t => [key(t), t]));
+  const leadOk = t => t.c === lead.c && t.e === 0 && t.s === 1;
+  if (shown.L.length === 1) {
+    /* slip 1: the withdrawal's sign flipped */
+    if (!leadOk(shown.L[0]) || shown.R.length !== right.R.length || !shown.R.every(t => wantR.has(key(t)))) return false;
+    const diff = shown.R.filter(t => wantR.get(key(t)).s !== t.s);
+    if (diff.length !== 1 || !outs.has(diff[0].c) || diff[0].s !== 1) return false;
+    const x = s.pays.find(p => p.v === diff[0].c);
+    return lab.startsWith(`No: the withdrawal at T${x.t} needs a minus`);
+  }
+  /* slip 2: one payment on the total's side, keeping the sign it has on the right */
+  if (shown.L.length !== 2 || !leadOk(shown.L[0]) || shown.R.length !== right.R.length - 1) return false;
+  const M = shown.L[1], m = wantR.get(key(M));
+  if (!m || m.s !== M.s || !shown.R.length || shown.R[0].s !== 1) return false;
+  if (!shown.R.every(t => key(t) !== key(M) && wantR.has(key(t)) && wantR.get(key(t)).s === t.s)) return false;
+  const x = s.pays.find(p => p.v === M.c);
+  const word = x.out ? "withdrawal" : s.saving ? "deposit" : "repayment";
+  return lab.startsWith(`No: the ${word} at T${x.t} is written on ${lead.c}'s side: only the total stands alone on the left`);
+}
+/* every text a learner can read on an f10 card */
+export function f10LearnerTexts(q) {
+  const steps = q.steps || [];
+  return [q.prompt, q.hint, q.answerLabel, ...(q.options || []).map(o => o.label),
+    ...steps.flatMap(x => [x.prompt, x.hint, ...(x.options || []).map(o => o.label)]),
+    ...(q.solution || []).flatMap(x => [x.s, x.r])].filter(x => x != null).map(String);
+}
+/* her 11 Oct ruling: this year's f10 never says these (the one-sided form
+   and its moving step are parked for 2027) */
+const F10_BANNED = [[/tidy/i, "tidy"], [/=\s*0(?![\d,])/, "= 0"], [/lump\s?sum/i, "lump sum"], [/jug form/i, "jug form"]];
+export function f10Banned(q) {
+  const t = unsup(f10LearnerTexts(q).join(" | ")).replace(/<[^>]+>/g, "");
+  return F10_BANNED.filter(([re]) => re.test(t)).map(([, w]) => w);
+}
+const f10Clean = q => f10Banned(q).length === 0;
+/* every equation a learner reads on an f10 card (prompt, options, a steps
+   card's forms with the ☐ filled by the marked sign, its answer, worked
    lines) parsed, for the harness's f10 block: [{ where, ok }] */
 export function f10EquationsOf(q) {
   const out = [];
-  /* f10 review 1: the "=" now sits INSIDE a unit, so an equation is any
-     line that holds a nowrap unit and an "=" (a bare one fails the parse) */
+  /* f10 review 1: the "=" sits INSIDE a unit, so an equation is any line
+     that holds a nowrap unit and an "=" (a bare one fails the parse) */
   const looks = h => /<span class="nowrap">[^<]*<\/span>/.test(unsup(h)) && /=/.test(unsup(h).replace(/<[^>]+>/g, ""));   // Fix A: sups back to carets first
   const pe = f10PromptEq(q);
   if (pe != null && looks(pe)) out.push({ where: "prompt", ok: !!f10ParseEq(pe) });
   (q.options || []).forEach((o, j) => { if (looks(o.label)) out.push({ where: `option ${j + 1}`, ok: !!f10ParseEq(o.label) }); });
+  (q.steps || []).forEach((st, j) => {
+    const parts = String(st.prompt).split("<br>"), form = parts[parts.length - 1];
+    const c = (st.options || []).find(o => o.correct);
+    if (parts.length === 2 && looks(form)) out.push({ where: `step ${j + 1}`, ok: !!c && (form.match(/☐/g) || []).length === 1 && !!f10ParseEq(f10FillSlot(form, /^−/.test(String(c.label)) ? -1 : 1)) });
+  });
+  if (q.type === "steps" && looks(q.answerLabel)) out.push({ where: "answer", ok: !!f10ParseEq(q.answerLabel) });
   (q.solution || []).forEach((st, j) => {
     const s = String(st.s), i = s.lastIndexOf(": ");
     if (i >= 0 && looks(s.slice(i + 2)) && !/Interest|loan =/.test(s)) out.push({ where: `worked line ${j + 1}`, ok: !!f10ParseEq(s.slice(i + 2)) });

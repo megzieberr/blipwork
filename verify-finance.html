@@ -72,6 +72,15 @@
   read (<code>unsup()</code> in _finance-check.js) before parsing, so every rule below still reads exactly what it read before.
   The Fix A block at the bottom renders every text a learner reads on every round, and every Finance concept card, the way the
   app does, and requires no "^" anywhere.</p>
+<p class="muted small"><b>2026-10-11: f10 keeps the TAUGHT form only</b> (her play-test ruling; the one-sided form and its
+  moving step are parked for her 2027 class in briefs/finance-2/ARCHIVE-f10-jug-form-2027.md). Still 8 skills: three new cards
+  replace three old ones (inOrOutSaving and inOrOutLoan, steps chains of mc with one step per amount; equationYesNo, the taught
+  form or ONE slip), and tidyLoan is now hirePurchasePrice. The total stands alone on the left and the meeting day is its own
+  day (the day of A; T0 for a loan, so the repayments drive back in reverse gear). Each steps card is checked step by step
+  from its picture (the amount the step names, its options, the right sign, the form so far with one ☐ and the right signs
+  before it), the yes/no card's wrong line must differ from the taught form by exactly one slip that its answer names and be
+  really wrong (not the right equation rearranged), and no two options of an f10 card may be the same equation, not even by
+  value (both sides times one car). No f10 text may say "tidy", "= 0", "lump sum" or "jug form".</p>
 <div id="banner">running…</div>
 
 <h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
@@ -112,17 +121,19 @@
 <pre id="f9">…</pre>
 
 <h2>f10 — the round's shape, words and rulings, card by card</h2>
-<p class="muted small">Every f10 card: a hint, an answer and a worked solution ending on the refrain "Deposits and the loan go IN.
-  Withdrawals and repayments come OUT." with its closing line by kind: a loan "Tidy: payments positive on the right.", saving
-  "Tidy: deposits plus, the withdrawal minus, A on the left." (review 1). Every "=" glues to the term before it inside that
-  term's unit (a bare "=" between units does not parse), no car is ever ^1, "half‑yearly" keeps its non-breaking hyphen, and a
-  deposit on the day of A draws its own leader down beside the "?" ring. Nothing says lumpsum, lump sum, accumulated
-  amount, LHS or RHS; no HTML entity, no plain space inside an amount, no money amount outside its unbreakable unit; every
-  equation parses term by term. On a picture the total is "?" with its role letter (or, on the interest card, the known loan
-  with its P), the meeting day is the last T, and a saving picture draws exactly one withdrawal "−R…". The shape: the jug
-  cards roll loans and saving, jugWrong slips each of the four kinds (a repayment added, the loan subtracted, the withdrawal
-  added, a deposit subtracted), a repayment sometimes stands on the meeting day and a deposit sometimes on the day of A,
-  the recall card deals all five items, the interest card offers a negative decoy, signOnTimeline names no amount in words.</p>
+<p class="muted small">Every f10 card (the TAUGHT form only since 2026-10-11): a hint, an answer and a worked solution
+  ending on the refrain by kind, saving "Deposits go IN: plus. Withdrawals come OUT: minus. The total, A, stands alone on the
+  left.", a loan "Repayments stand plus on the right. The loan is the total, P: it stands alone on the left." A bare left
+  letter rides with the first term ("A = 5 000(…)"), any other left side keeps its "=" inside its last unit (a bare "=" between
+  units does not parse); no car is ever ^1; "half‑yearly" keeps its non-breaking hyphen; a deposit on the day of A draws its own
+  leader down beside the "?" ring. Nothing says lumpsum, lump sum, accumulated amount, LHS, RHS, tidy, "= 0", jug form or
+  "move the minuses"; no HTML entity, no plain space inside an amount, no money amount outside its unbreakable unit; every
+  equation parses term by term (a steps card's form so far with its ☐ filled by the marked sign). On a picture the total is "?"
+  with its role letter (or, on the interest card, the known loan with its P), the meeting day is the total's own day, and a
+  saving picture draws at most one withdrawal "−R…". The shape: the steps cards are mc only with one ☐ per step, the saving one
+  rolls 2 and 3 amounts with a withdrawal in about half, the loan one always 2 repayments with a down payment in some rolls; the
+  yes/no card deals saving and a loan in turn, yes and no about half each, and both slips; the recall card deals all six items
+  and all four answers, the interest card offers a negative decoy, signOnTimeline names no amount in words.</p>
 <pre id="f10">…</pre>
 
 <h2>f11 — the round's shape, words and rulings, card by card</h2>
@@ -182,6 +193,9 @@ const measure = document.getElementById("measure");
    are mc / calc / tokenpad, so the no-free-text law still holds one
    level down. */
 const INPUT_LAW = new Set(["mc", "reason", "yesno", "calc", "tap", "steps"]);
+/* f10's two sign chains (2026-10-11, the taught form): one mc step per amount and NO typed number, the
+   round is about signs. Only these may end a chain on an mc step. */
+const MC_CHAINS = new Set(["f10.inOrOutSaving", "f10.inOrOutLoan"]);
 
 /* ---------- 1) the timeline engine, on representative specs ---------- */
 const ENGINE = [
@@ -282,7 +296,8 @@ function checkQuestion(q, issues, opts) {
        Structural floor copied from verify-trig.html's steps branch. */
     const steps = q.steps || [];
     if (steps.length < 2) issues.add(`chain of ${steps.length} steps`);
-    if (!steps.length || steps[steps.length - 1].kind !== "calc") issues.add("chain does not end on a typed number");
+    if (!steps.length || (steps[steps.length - 1].kind !== "calc" && !opts.mcChain)) issues.add("chain does not end on a typed number");
+    if (opts.mcChain && steps.some(st => st.kind !== "mc")) issues.add("a sign chain with a step that is not mc");
     if (q.method) issues.add("chain carries q.method (spoils the steps)");
     steps.forEach((st, si) => {
       if (!st.prompt || !st.hint) issues.add(`step ${si} missing prompt/hint`);
@@ -328,7 +343,7 @@ chapter.quests.forEach(qmeta => {
       let q;
       try { q = skill.gen(); } catch (e) { issues.add("threw: " + e.message); break; }
       const before = issues.size;
-      checkQuestion(q, issues, { fit: i < FIT_RUNS || (i < LABEL_TAP_FIT_RUNS && fitsMore(q.graph)) });
+      checkQuestion(q, issues, { fit: i < FIT_RUNS || (i < LABEL_TAP_FIT_RUNS && fitsMore(q.graph)), mcChain: MC_CHAINS.has(skillId) });
       if (issues.size > before) genFails++;
       if (rc) {
         recomputeRuns++;
@@ -366,6 +381,12 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
        the top-level expected/prompt the RECOMPUTE entries read — corrupt the
        same field the same way, or this falls through to the mc-shaped branch
        below and throws on q.options (undefined on a steps question). */
+    if (q.type === "steps" && typeof q.expected !== "number" && (q.steps || []).every(st => st.kind === "mc")) {
+      /* f10's sign chains (2026-10-11) carry no number: move the correct flag on their LAST step instead */
+      const st = q.steps[q.steps.length - 1], j = st.options.findIndex(o => !o.correct);
+      st.options = st.options.map((o, k) => ({ ...o, correct: k === j }));
+      return "correct flag moved on the last step (sign chain)";
+    }
     if (q.type === "steps") { q.expected = q.expected + 1 + Math.abs(q.expected) * 0.5; return "expected + 1 (steps chain)"; }
     if (q.type === "yesno") { q.yes = !q.yes; return "flipped yes/no"; }
     if (q.type === "tap") {
@@ -523,33 +544,36 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
 /* ---------- 7) f10: the round's shape, words and rulings ---------- */
 {
   /* written out here on purpose, not imported, so a slip in the module cannot pass itself */
-  const REFRAIN = "Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: payments positive on the right.";
-  const REFRAIN_SAVING = "Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: deposits plus, the withdrawal minus, A on the left.";
-  const BANNED = [/lumpsum/i, /lump sum/i, /accumulated amount/i, /\bLHS\b/, /\bRHS\b/];
-  const ORDER = ["jugCorrect", "jugWrong", "tidy", "withdrawal", "inOrOutWord", "interestPaid", "tidyLoan", "signOnTimeline"];
+  const REFRAIN = "Repayments stand plus on the right. The loan is the total, P: it stands alone on the left.";
+  const REFRAIN_SAVING = "Deposits go IN: plus. Withdrawals come OUT: minus. The total, A, stands alone on the left.";
+  /* her 11 Oct ruling: the taught form only this year, so never the words of the parked one-sided form */
+  const BANNED = [/lumpsum/i, /lump sum/i, /accumulated amount/i, /\bLHS\b/, /\bRHS\b/, /tidy/i, /=\s*0(?![\d,])/, /jug form/i, /move the minuses/i];
+  const ORDER = ["inOrOutSaving", "inOrOutLoan", "equationYesNo", "withdrawal", "inOrOutWord", "interestPaid", "hirePurchasePrice", "signOnTimeline"];
+  const STEPS = new Set(["inOrOutSaving", "inOrOutLoan"]);
   const def = questDef("f10");
   const N = 300;
   const flines = [], stat = {};
-  tick(def.skills.map(s => s.id).join(",") === ORDER.join(","), `f10 deals 8 cards in order, the jug form first: ${def.skills.map(s => s.id).join(", ")}`);
+  tick(def.skills.map(s => s.id).join(",") === ORDER.join(","), `f10 deals 8 cards in order, the taught form only: ${def.skills.map(s => s.id).join(", ")}`);
   /* Fix A (2026-10-11): a car's exponent is a <sup> now; it is written back to its caret (unsup) before these rules
      read it, so "no car ^1", "every amount in its unit" and "no number apart from its unit" read what they always read */
   const noTags = s => unsup(s).replace(/<[^>]+>/g, "");
   def.skills.forEach((skill, pos) => {
-    const st = { bad: 0, firstBad: "", loan: 0, saving: 0, repayOnMeet: 0, depOnA: 0, eqs: 0, outs: 0, amounts: new Set(), items: new Set(), answers: new Set(), slips: new Set(), negDecoy: 0, namesAmount: 0 };
+    const st = { bad: 0, firstBad: "", loan: 0, saving: 0, depOnA: 0, sleads: 0, eqs: 0, outs: 0, wdRolls: 0, hp: 0, amounts: new Set(), chain: new Set(), items: new Set(), answers: new Set(), slips: new Set(), kinds: "", yes: 0, no: 0, negDecoy: 0, namesAmount: 0 };
     for (let i = 0; i < N; i++) {
-      const q = skill.gen(), g = q.graph;
+      const q = skill.gen(), g = q.graph, steps = q.steps || [];
       const all = [q.prompt, q.hint, q.answerLabel, ...(q.options || []).map(o => o.label),
+        ...steps.flatMap(x => [x.prompt, x.hint, ...(x.options || []).map(o => o.label)]),
         ...(q.solution || []).flatMap(s => [s.s, s.r])].filter(x => x != null).map(String);
       const t = unsup(all.join(" | "));
       const problems = [];
-      if (BANNED.some(re => re.test(t))) problems.push("a banned word");
+      if (BANNED.some(re => re.test(noTags(t)))) problems.push(`a banned word (${BANNED.filter(re => re.test(noTags(t))).map(String).join(" ")})`);
       if (/&#|&nbsp;/.test(t)) problems.push("an HTML entity");
       if (/\d \d{3}(?!\d)/.test(noTags(t))) problems.push("a plain space inside an amount");
       if (/R\d/.test(noTags(t.replace(/<span class="nowrap">[^<]*<\/span>/g, "")))) problems.push("a money amount outside its unbreakable unit");
       if (!q.hint || !q.answerLabel || !Array.isArray(q.solution) || q.solution.length < 2) problems.push("no hint, answer or worked solution");
       else {
-        /* review 1: the refrain's closing line by kind (a saving picture, or a recall item about a deposit or withdrawal) */
-        const savingCard = (g && g.nodes.some(nd => nd.role === "A")) || (skill.id === "inOrOutWord" && /deposit|withdrawal/i.test(noTags((String(q.prompt).match(/<b>([^<]+)<\/b>/) || [])[1])));
+        /* review 1: the refrain's closing line by kind (a saving picture, or a recall item about saving) */
+        const savingCard = (g && g.nodes.some(nd => nd.role === "A")) || (skill.id === "inOrOutWord" && /deposit|withdrawal|savings/i.test(noTags((String(q.prompt).match(/<b>([^<]+)<\/b>/) || [])[1])));
         if (q.solution[q.solution.length - 1].s !== (savingCard ? REFRAIN_SAVING : REFRAIN)) problems.push(`the solution does not end on the ${savingCard ? "saving" : "loan"} refrain`);
       }
       if (/\^\(?−?1\)?(?!\d)/.test(noTags(t))) problems.push("a car with an exponent of 1");
@@ -558,52 +582,74 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       const eqs = f10EquationsOf(q);
       st.eqs += eqs.length;
       if (eqs.some(e => !e.ok)) problems.push(`an equation that does not parse (${eqs.filter(e => !e.ok).map(e => e.where).join(", ")})`);
+      if (STEPS.has(skill.id)) {
+        /* one mc step per amount, each showing the form so far with exactly one ☐; the answer is the finished equation */
+        if (q.type !== "steps" || !steps.length || steps.some(x => x.kind !== "mc")) problems.push("not a steps chain of mc only");
+        steps.forEach((x, j) => { const n = (String(x.prompt).match(/☐/g) || []).length; if (n !== 1) problems.push(`step ${j + 1} shows ${n} slots`); });
+        if (/☐/.test(String(q.answerLabel)) || !/ = /.test(noTags(q.answerLabel))) problems.push("the answer is not the finished equation");
+        st.chain.add(steps.length);
+      }
       if (g) {
         const tot = g.nodes.filter(nd => nd.role), pays = g.nodes.filter(nd => !nd.role);
         const isQ = tot.length === 1 && tot[0].label === "?" && tot[0].amount == null;
         const knownLoan = tot.length === 1 && skill.id === "interestPaid" && tot[0].role === "P" && tot[0].t === 0 && Number.isFinite(tot[0].amount);
         if (!isQ && !knownLoan) problems.push("the total is not \"?\" (or the known loan) with its role letter");
-        if (skill.id === "interestPaid" ? g.meet != null : g.meet !== g.n) problems.push("the meeting day is not the last T");
         const saving = tot.length === 1 && tot[0].role === "A";
+        /* the taught form: the meeting day is the total's own day, the day of A or T0 for a loan (no flag on the interest card) */
+        if (skill.id === "interestPaid" ? g.meet != null : g.meet !== (saving ? g.n : 0)) problems.push("the meeting day is not the total's own day");
         if (saving) st.saving++; else st.loan++;
         const outs = pays.filter(nd => nd.out).length;
         st.outs += outs;
-        if (saving ? outs !== 1 : outs !== 0) problems.push(`${outs} withdrawals drawn on a ${saving ? "saving" : "loan"} picture`);
-        if (!saving && pays.some(nd => nd.t === g.n)) st.repayOnMeet++;
+        if (outs) st.wdRolls++;
+        if (saving ? outs > 1 : outs !== 0) problems.push(`${outs} withdrawals drawn on a ${saving ? "saving" : "loan"} picture`);
+        if ((skill.id === "withdrawal" || skill.id === "signOnTimeline") && outs !== 1) problems.push("a withdrawal card without its one withdrawal");
         if (saving && pays.some(nd => nd.t === g.n)) {
           st.depOnA++;
           /* review 1: the deposit stacked above the "?" ring draws its own leader (verifyTimeline measures it) */
           if (!g.stackLeaders || computeTimeline(g).stackLeaders.length !== 1) problems.push("a deposit on the day of A without its stack leader");
-          else st.sleads = (st.sleads || 0) + 1;
+          else st.sleads++;
         }
         st.amounts.add(pays.length);
+        if (!saving && /down payment/.test(q.prompt)) st.hp++;
       }
-      if (skill.id === "jugWrong") st.slips.add((String(q.answerLabel).match(/the (loan|repayment|withdrawal|deposit)/) || [])[1]);
+      if (skill.id === "equationYesNo") {
+        st.kinds += g && g.nodes.some(nd => nd.role === "A") ? "S" : "L";
+        if (q.yes) st.yes++; else { st.no++; st.slips.add(/^No: the withdrawal at T\d+ needs a minus/.test(q.answerLabel) ? "the withdrawal written plus" : /^No: the (deposit|withdrawal|repayment) at T\d+ is written on [AP]'s side/.test(q.answerLabel) ? "a payment on the total's side" : `unnamed: ${q.answerLabel}`); }
+      }
       if (skill.id === "inOrOutWord") { st.items.add(noTags((String(q.prompt).match(/<b>([^<]+)<\/b>/) || [])[1])); st.answers.add(q.answerLabel); }
       if (skill.id === "interestPaid" && q.options.some(o => /^−R/.test(noTags(o.label)) && !o.correct)) st.negDecoy++;
-      if (skill.id === "tidyLoan") {
-        if (q.graph) problems.push("a timeline on the tidyLoan card (it would show the loan and give the price away)");
+      if (skill.id === "hirePurchasePrice") {
+        if (q.graph) problems.push("a timeline on the hirePurchasePrice card (it would show the loan and give the price away)");
         if (!/down payment/.test(q.prompt) || /deposit/i.test(t.split(REFRAIN).join(""))) problems.push("the down payment is not called a down payment");
       }
+      if (skill.id === "inOrOutLoan" && /deposit/i.test(t.split(REFRAIN).join(""))) problems.push("a loan card says deposit (it is a down payment)");
       if (/R\d/.test(noTags(q.prompt))) st.namesAmount++;
       if (problems.length) { st.bad++; if (!st.firstBad) st.firstBad = problems.join(", ") + ": " + noTags(q.prompt).slice(0, 140); }
     }
     stat[skill.id] = st;
     tick(st.bad === 0, `f10 card ${pos + 1} (${skill.id}): words, refrain, units, equations, the total on the picture (${N} rolls)`);
-    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(15)} equations parsed ${String(st.eqs).padStart(4)} · loan ${st.loan} · saving ${st.saving} · repayment on the meeting day ${st.repayOnMeet} · deposit on the day of A ${st.depOnA}`
+    flines.push(`${st.bad === 0 ? "✓" : "✗"} card ${pos + 1}  ${skill.id.padEnd(17)} equations parsed ${String(st.eqs).padStart(4)} · loan ${st.loan} · saving ${st.saving} · with a withdrawal ${st.wdRolls} · deposit on the day of A ${st.depOnA}`
       + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
   });
   const S = id => stat[id] || {};
-  ["jugCorrect", "jugWrong"].forEach(id => tick(S(id).loan > N * 0.4 && S(id).saving > N * 0.2, `f10.${id}: loans and saving both rolled (loan ${S(id).loan}, saving ${S(id).saving})`));
-  tick(["loan", "repayment", "withdrawal", "deposit"].every(k => S("jugWrong").slips.has(k)), `f10.jugWrong: all four slips occur (${[...S("jugWrong").slips].join(", ")})`);
-  tick(S("jugCorrect").repayOnMeet > 0 && S("tidy").repayOnMeet > 0, "f10: a repayment sometimes stands on the meeting day (no car)");
-  tick(S("jugCorrect").depOnA > 0 && S("withdrawal").depOnA > 0 && S("signOnTimeline").depOnA > 0, "f10: a deposit sometimes shares the day of A (no car)");
-  tick(["jugCorrect", "jugWrong", "withdrawal", "signOnTimeline"].every(id => (S(id).sleads || 0) === S(id).depOnA), `f10 review 1: every deposit on the day of A draws its stack leader (signOnTimeline ${S("signOnTimeline").sleads || 0} of ${S("signOnTimeline").depOnA})`);
-  tick(S("inOrOutWord").items.size === 5 && S("inOrOutWord").answers.size === 3, `f10.inOrOutWord: all five items (${S("inOrOutWord").items.size}) and all three answers (${S("inOrOutWord").answers.size}) occur`);
+  tick(S("inOrOutSaving").amounts.has(2) && S("inOrOutSaving").amounts.has(3) && [...S("inOrOutSaving").chain].every(n => n === 2 || n === 3), `f10.inOrOutSaving: 2 and 3 amounts both occur, one step each (steps ${[...S("inOrOutSaving").chain].join(", ")})`);
+  tick(S("inOrOutSaving").wdRolls > N * 0.3 && S("inOrOutSaving").wdRolls < N * 0.7, `f10.inOrOutSaving: a withdrawal in about half the rolls (${S("inOrOutSaving").wdRolls} of ${N})`);
+  tick([...S("inOrOutLoan").chain].join(",") === "2" && S("inOrOutLoan").loan === N, "f10.inOrOutLoan: every roll a loan with 2 repayments, one step each");
+  tick(S("inOrOutLoan").hp > 0 && S("inOrOutLoan").hp < N, `f10.inOrOutLoan: a down payment in some rolls, not all (${S("inOrOutLoan").hp} of ${N})`);
+  tick(/^(SL)+S?$|^(LS)+L?$/.test(S("equationYesNo").kinds), `f10.equationYesNo: saving and a loan in turn (saving ${S("equationYesNo").saving}, loan ${S("equationYesNo").loan})`);
+  tick(S("equationYesNo").yes > N * 0.3 && S("equationYesNo").no > N * 0.3, `f10.equationYesNo: yes and no both about half (yes ${S("equationYesNo").yes}, no ${S("equationYesNo").no})`);
+  tick(S("equationYesNo").slips.size === 2 && S("equationYesNo").slips.has("the withdrawal written plus") && S("equationYesNo").slips.has("a payment on the total's side"), `f10.equationYesNo: both slips occur, each named (${[...S("equationYesNo").slips].join("; ")})`);
+  tick(["inOrOutSaving", "withdrawal", "signOnTimeline"].every(id => S(id).depOnA > 0), "f10: a deposit sometimes shares the day of A (no car)");
+  tick(["inOrOutSaving", "equationYesNo", "withdrawal", "signOnTimeline"].every(id => S(id).sleads === S(id).depOnA), `f10 review 1: every deposit on the day of A draws its stack leader (inOrOutSaving ${S("inOrOutSaving").sleads} of ${S("inOrOutSaving").depOnA})`);
+  tick(S("inOrOutWord").items.size === 6 && S("inOrOutWord").answers.size === 4, `f10.inOrOutWord: all six items (${S("inOrOutWord").items.size}) and all four answers (${S("inOrOutWord").answers.size}) occur`);
   tick(S("interestPaid").negDecoy === N, "f10.interestPaid: every roll offers the loan minus the payments as a negative decoy");
   tick(S("signOnTimeline").namesAmount === 0 && S("signOnTimeline").outs === N, "f10.signOnTimeline: the prompt names no amount, and every picture draws its one withdrawal");
   tick(S("signOnTimeline").amounts.has(2) && S("signOnTimeline").amounts.has(3), "f10.signOnTimeline: two and three amounts both occur");
-  const sample = def.skills.map((s, pos) => `  card ${pos + 1}: ${noTags(String(s.gen().prompt).replace(/<br>/g, " ⏎ "))}`).join("\n");
+  const sample = def.skills.map((s, pos) => {
+    const q = s.gen(), line = x => noTags(String(x).replace(/<br>/g, " ⏎ "));
+    return `  card ${pos + 1}: ${line(q.prompt)}` + (q.steps || []).map((x, j) => `\n      step ${j + 1}: ${line(x.prompt)}  [${x.options.map(o => noTags(o.label)).join(" | ")}]`).join("")
+      + (q.type === "steps" ? `\n      answer: ${line(q.answerLabel)}` : "");
+  }).join("\n");
   document.getElementById("f10").textContent = flines.join("\n") + "\n\none roll of each card, in dealing order:\n" + sample;
 }
 
