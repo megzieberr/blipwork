@@ -132,10 +132,14 @@
   miss sentence naming its kind; "Savings or loan?" agrees with the paragraph (hire purchase is a loan, its money on day one
   a "down payment", never a deposit); "T0 or the end?" offers T0 and the paragraph's last T, and its feedback timeline is the
   "?" in its ring with its role letter (P at T0, A at the end), no coins, no tap targets. One textbook name per paragraph.
-  On a recall card, four distinct phrases with four distinct amounts, one jug and three coins. Nothing says "lump", "A value",
-  "final answer" or "wrong"; every amount, "p.a." and "N years" one unbreakable unit. The shape: card 1 carries the concept
-  card on top, the jug moves between slots, card 7 deals a target amount and a same-day repayment about half each. Then the
-  concept card at a 360-px phone, as the "I'm lost" sheet and as card 1 draw it.</p>
+  On a recall card, four distinct phrases with four distinct amounts, one jug and three coins. Nothing says "A value",
+  "final answer" or "wrong"; every amount, "p.a." and "N years" one unbreakable unit. "Lump" appears in exactly two places,
+  where her note of 11 Oct 16:54 phases the word out: frame 1 of card 1's discovery slide ("the total (the lumpsum)", then
+  "we just call it the total") and the 📖 library card; never in a prompt, chip, pill, hint, answer, worked line, recall card
+  or frames 2 and 3. The shape: card 1 alone opens on the discovery slide (three frames, one jug each, replace mode: empty,
+  savings, loan), the jug moves between slots, card 7 deals a target amount and a same-day repayment about half each. Then
+  the library card at a 360-px phone as the "I'm lost" sheet draws it, and card 1 mounted the way the play screen mounts it:
+  the chips hidden, one jug through her masks on frame 1, two taps on Next to frame 3, then the chips.</p>
 <pre id="f8">…</pre>
 
 <h2>f9 — the round's shape, words and rulings, card by card</h2>
@@ -223,6 +227,7 @@ import { BUILD_TIMELINE_EXAMPLE } from "./js/concepts.js";
 import { setRng, resetRng } from "./js/rng.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import { formulaHtml, fracHtml, xbarHtml } from "./js/ui.js";
+import { mountQuestion } from "./js/questions.js";
 
 const ACC = "#8b5cf6";
 let total = 0, passed = 0; const fails = [];
@@ -505,13 +510,14 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   const flines = [], stat = {};
   tick(def.skills.map(s => s.id).join(",") === ORDER.join(","), `f8 deals 8 cards in order: ${def.skills.map(s => s.id).join(", ")}`);
   def.skills.forEach((skill, pos) => {
-    const st = { bad: 0, firstBad: "", slots: new Set(), chips: new Set(), loans: 0, savings: 0, target: 0, sameDay: 0, reveal: 0, withdraw: 0, hpDown: 0, unknownP: 0 };
+    const st = { bad: 0, firstBad: "", slots: new Set(), chips: new Set(), loans: 0, savings: 0, target: 0, sameDay: 0, reveal: 0, slide: 0, withdraw: 0, hpDown: 0, unknownP: 0 };
     for (let i = 0; i < N; i++) {
       const q = skill.gen();
-      const why = f8Diagnose(q);
+      const why = f8Diagnose(q, pos === 0);
       if (why) { st.bad++; if (!st.firstBad) st.firstBad = why; }
-      const rv = Array.isArray(q.reveal) ? q.reveal.join("") : "";
-      if (rv.includes(getConcept("theTotal").title) && rv.includes("jug-save") && rv.includes("jug-loan")) st.reveal++;
+      const rv = Array.isArray(q.reveal) ? q.reveal : [];
+      if (rv.length) st.reveal++;
+      if (rv.length === 3 && q.revealMode === "replace" && /jd-empty/.test(rv[0]) && /jd-save/.test(rv[1]) && /jd-loan/.test(rv[2])) st.slide++;
       if (q.type === "steps") {
         const chips = q.steps[0].options;
         st.slots.add(chips.findIndex(o => o.correct));
@@ -534,8 +540,8 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       + (st.firstBad ? `\n      e.g. ${st.firstBad}` : ""));
   });
   const S = id => stat[id] || {};
-  tick(S("jugTwoDeposits").reveal === N, "f8 card 1 carries the concept card on top (both jugs) on every roll");
-  tick(ORDER.slice(1).every(id => S(id).reveal === 0), "no other f8 card carries it");
+  tick(S("jugTwoDeposits").slide === N, "f8 card 1 opens on the discovery slide on every roll (three frames, replace mode: empty, savings, loan)");
+  tick(ORDER.slice(1).every(id => S(id).reveal === 0), "no other f8 card carries reveal frames");
   ["jugTwoDeposits", "jugWithdrawal"].forEach(id => tick(S(id).loans === 0, `f8.${id}: always savings`));
   ["jugLoan", "jugHirePurchase"].forEach(id => tick(S(id).savings === 0, `f8.${id}: always a loan`));
   tick(S("jugWithdrawal").withdraw === N, "f8.jugWithdrawal: a coin out on every roll");
@@ -547,15 +553,16 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
   Object.keys(PARAGRAPH).forEach(id => tick(S(id).slots.size >= 2, `f8.${id}: the jug sentence moves (slots ${[...S(id).slots].sort().join("/")})`));
   ["recallSaving", "recallLoan", "recallMixed"].forEach(id => tick(S(id).slots.size === 4, `f8.${id}: the jug phrase lands in all four slots`));
 
-  /* the concept card at a 360-px phone, as the "I'm lost" sheet draws it AND as
-     card 1 draws it on top of the question: both jugs drawn, the outline and the
-     inside painted through her masks (computed mask-image), the loan jug full to
-     87%, no raw tag on screen, nothing wider than the phone */
+  /* the library card (theTotal) at a 360-px phone, as the "I'm lost" sheet draws
+     it: both jugs drawn, the outline and the inside painted through her masks
+     (computed mask-image), the loan jug full to 87%, no raw tag on screen,
+     nothing wider than the phone. (Until 11 Oct 17:00 card 1 drew this card on
+     top of the question too; it now opens on the discovery slide, checked
+     below by mounting the card itself.) */
   const fmt = x => formulaHtml(fracHtml(xbarHtml(x)));
   const c = getConcept("theTotal");
   const hosts = [
     ["the I'm-lost sheet", `<div class="modal" style="position:static;width:360px;max-height:none"><h2>${fmt(c.title)}</h2><div class="concept">${fmt(c.body)}</div></div>`],
-    ["card 1's reveal", `<div class="play" style="width:360px;padding:0 12px;--accent:${ACC}"><div class="q-reveal"><div class="reveal-frame">${fmt(questDef("f8").skills[0].gen().reveal[0])}</div></div></div>`],
   ];
   const urls = new Set();
   for (const [where, html] of hosts) {
@@ -577,6 +584,57 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     tick(box.scrollWidth <= box.clientWidth + 1, `f8 concept (${where}): nothing wider than the phone (${box.scrollWidth} / ${box.clientWidth} px)`);
   }
   measure.innerHTML = "";
+  {
+    /* card 1 mounted the way the play screen mounts it, at a 360-px phone (her
+       notes, 11 Oct 16:54 and 16:56): the discovery slide first, ONE jug a
+       frame through her masks, the sentence chips hidden until two taps on
+       Next have brought frame 3 up. The levels are read at the moment a frame
+       mounts: the savings jug starts empty, the loan jug full (under reduced
+       motion both stand at their end level instead). */
+    const host = document.createElement("div");
+    host.className = "play";
+    host.style.cssText = `width:360px;padding:0 12px;--accent:${ACC}`;
+    measure.appendChild(host);
+    const q1 = questDef("f8").skills[0].gen();
+    mountQuestion(host, q1, { onResult() {}, onContinue() {}, onSibling() {}, onLost() {} });
+    const input = host.querySelector(".q-input");
+    const onScreen = () => [...host.querySelectorAll(".reveal-frame")];
+    const drawnJugs = f => [...f.querySelectorAll(".jug")].filter(j => j.getBoundingClientRect().width > 40 && j.getBoundingClientRect().height > 40);
+    const level = f => { const j = f.querySelector(".jug"), l = f.querySelector(".jug-lvl"); return l.getBoundingClientRect().height / j.getBoundingClientRect().height; };
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    tick(!!input && input.hidden && input.offsetParent === null, "f8 card 1 (360 px): mounts with the sentence chips hidden");
+    let fr = onScreen();
+    const j1 = fr.length === 1 ? drawnJugs(fr[0]) : [];
+    const share = j1.length ? j1[0].getBoundingClientRect().width / host.querySelector(".q").getBoundingClientRect().width : 0;
+    tick(fr.length === 1 && fr[0].dataset.frame === "0" && j1.length === 1 && share >= 0.55 && share <= 0.75,
+      `f8 card 1 frame 1: one frame on screen, ONE jug drawn, ${j1.length ? Math.round(j1[0].getBoundingClientRect().width) : 0} px wide (${Math.round(share * 100)}% of the card)`);
+    const maskOf = el => { if (!el) return "none"; const cs = getComputedStyle(el); return cs.maskImage && cs.maskImage !== "none" ? cs.maskImage : cs.webkitMaskImage; };
+    const m1 = fr.length ? maskOf(fr[0].querySelector(".jug-line")) : "none", f1 = fr.length ? maskOf(fr[0].querySelector(".jug-fill")) : "none";
+    tick(!!m1 && m1 !== "none" && /jug-outline\.webp/.test(m1), `f8 card 1 frame 1: the outline is painted through her drawing (mask-image ${String(m1).slice(0, 40)}…)`);
+    tick(!!f1 && f1 !== "none" && /jug-inside\.webp/.test(f1), "f8 card 1 frame 1: the fill is masked to the jug's inside");
+    tick(fr.length === 1 && Math.abs(level(fr[0]) - 0.018) < 0.01, `f8 card 1 frame 1: the jug is empty (${fr.length ? (level(fr[0]) * 100).toFixed(1) : "?"}%)`);
+    const levels = [];
+    let taps = 0;
+    for (let k = 0; k < 2; k++) {
+      const nb = host.querySelector(".reveal-next");
+      if (!nb) break;
+      nb.click(); taps++;
+      fr = onScreen();
+      levels.push(fr.length === 1 && drawnJugs(fr[0]).length === 1 ? level(fr[0]) : -1);
+    }
+    fr = onScreen();
+    tick(taps === 2 && fr.length === 1 && fr[0].dataset.frame === "2" && !host.querySelector(".reveal-next"),
+      `f8 card 1: two taps on Next reach frame 3 (${taps} taps, frame ${fr.length ? Number(fr[0].dataset.frame) + 1 : "?"}), and Next is gone`);
+    const want = still ? [0.70, 0.09] : [0.018, 0.87];
+    tick(levels.length === 2 && levels.every((v, k) => Math.abs(v - want[k]) < 0.01),
+      `f8 card 1: one jug a frame; the savings jug ${still ? "stands at its end" : "starts empty"} (${levels[0] != null ? (levels[0] * 100).toFixed(1) : "?"}%), the loan jug ${still ? "near empty" : "starts full"} (${levels[1] != null ? (levels[1] * 100).toFixed(1) : "?"}%)`);
+    const chips = [...host.querySelectorAll(".q-input .q-step button.opt")].filter(b => b.offsetParent !== null);
+    tick(!!input && !input.hidden && input.offsetParent !== null && chips.length === q1.steps[0].options.length,
+      `f8 card 1 frame 3: the input shows, with its ${chips.length} sentence chips`);
+    tick(!/[<>]|&[a-z#0-9]+;/i.test(host.textContent), "f8 card 1: no raw tag or entity on screen");
+    tick(host.scrollWidth <= host.clientWidth + 1, `f8 card 1: nothing wider than the phone (${host.scrollWidth} / ${host.clientWidth} px)`);
+    measure.innerHTML = "";
+  }
   /* each mask really loads and decodes as a 512 × 512 picture (the local
      python server sends .webp as octet-stream; the browser sniffs it, as it
      will on GitHub Pages, which sends image/webp) */

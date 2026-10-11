@@ -379,8 +379,28 @@ h2{font-size:20px} h3{font-size:17px}
 .concept .jug-hl{color:#a78bfa}
 .concept .jug-after{color:#b9b4e0}
 @media (prefers-reduced-motion:reduce){.jug-save .jug-lvl,.jug-arr{animation:none}}
-/* f8: the concept card on top of the round's first card (q.reveal) */
-.reveal-frame .jug-card h3{font-size:17px;margin:2px 0 10px}
+/* f8 card 1's DISCOVERY slide (her note, 11 Oct 16:56; js/concepts.js
+   jugDiscover): ONE jug per reveal frame, its box 62.5% of the stage, the same
+   masks and colours as .jugs. The level's HEIGHT runs once from the moment the
+   frame mounts (the reveal engine builds a fresh frame on every Next): savings
+   rise once per coin in, then the interest; a loan starts FULL (87%, never into
+   the spout) and drops once per coin out to near empty. Each coin and its arrow
+   fade in just before its step. Reduced motion: the end state, standing still. */
+.jug-discover{--jug-c:#8b5cf6;--jug-line:#c4b5fd;--coin:#fde68a;--coin-in:#f59e0b;--coin-out:#f43f5e;margin:0 -12px 2px}
+.jug-discover .jug-stage{aspect-ratio:320/250}
+.jug-discover .jug-svg{position:absolute;inset:0;width:100%;height:100%;margin:0;overflow:visible}
+.jug-discover .jug-coin text{font-size:13px}
+.jd-save .jug-lvl{--lvl:70%;animation:jugFill 5s ease-in-out .4s 1 both}
+@keyframes jugFill{0%,10%{height:1.8%}22%,38%{height:22%}50%,66%{height:42%}78%,84%{height:62%}100%{height:70%}}
+.jd-loan .jug-lvl{--lvl:9%;animation:jugDrain 4s ease-in-out 1s 1 both}
+@keyframes jugDrain{0%,12%{height:87%}27%,47%{height:61%}62%,82%{height:35%}97%,100%{height:9%}}
+.jd-c1,.jd-c2,.jd-c3{animation:jugArrIn .5s ease both}
+.jd-save .jd-c1{animation-delay:.4s} .jd-save .jd-c2{animation-delay:1.8s} .jd-save .jd-c3{animation-delay:3.2s}
+.jd-loan .jd-c1{animation-delay:1s} .jd-loan .jd-c2{animation-delay:2.4s} .jd-loan .jd-c3{animation-delay:3.8s}
+.jd-cap{text-align:center;font-size:15px;line-height:1.5;margin-top:8px}
+.jd-cap p{margin:0 0 6px} .jd-cap p:last-child{margin-bottom:0}
+.jd-cap b{color:#c4b5fd}
+@media (prefers-reduced-motion:reduce){.jug-discover .jug-lvl,.jd-c1,.jd-c2,.jd-c3{animation:none}}
 
 /* keypad */
 .keypad{margin-top:4px}

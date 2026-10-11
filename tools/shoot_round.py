@@ -99,6 +99,14 @@ JS_ANSWER = """async () => {
     return 'unsupported:' + kind;
   };
 
+  // teaching frames (q.reveal) keep the input hidden until the last one is
+  // up: walk "Next ▸" while it is on screen (f8's discovery slide, 2026-10-11)
+  for (let k = 0; k < 12; k++) {
+    const nx = [...document.querySelectorAll('.reveal-next')].filter(visible).pop();
+    if (!nx) break;
+    nx.click(); await sleep(150);
+  }
+
   if (q.type === 'steps') {
     for (const step of q.steps) {
       const r = await answerOne(step.kind, step);

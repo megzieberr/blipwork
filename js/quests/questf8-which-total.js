@@ -10,7 +10,9 @@
    HER RULINGS (11 Oct 11:54 to 12:02)
      · The textbooks' word for the total literally means ONE PAYMENT, so the
        class heard "a payment" every time. The word is retired: the app says
-       "the total".
+       "the total". (16:54: phased out, not dropped cold. Frame 1 of card 1's
+       discovery slide and the 📖 library card say it once in brackets and
+       say it IS the total; nowhere else in the round.)
      · The total is the ONE amount that is worth the same as ALL the
        payments together, once they are all on the same day.
      · Payments are coins, the total is the jug. Savings: you fill the jug;
@@ -28,8 +30,8 @@
 
    THE ROUND (8 cards, every tap an mc, so the harness and
    tools/shoot_round.py can drive it):
-     1 jugTwoDeposits     paragraph: a saving with two deposits (the concept
-                          card sits on top of this card: q.reveal)
+     1 jugTwoDeposits     paragraph: a saving with two deposits, opened by
+                          the DISCOVERY slide (q.reveal, three frames, below)
      2 recallSaving       "Which of these is the jug?" (four short phrases)
      3 jugLoan            paragraph: a loan with two repayments
      4 jugWithdrawal      paragraph: a saving with a withdrawal
@@ -64,14 +66,14 @@
 import { mc } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
 import { rand, toFrac } from "../finlib.js";
-import { getConcept } from "../concepts.js";
+import { jugDiscover } from "../concepts.js";
 
 const TOTAL = "theTotal";
 
 /* The 10 Oct round phased its word by card position; the jug round says
    "the total" on every card. The per-position hook stays (a static round
    deals def.skills IN ORDER, so a card's position is its skill's index,
-   js/play.js renderPlay): it is how card 1 knows to carry the concept card. */
+   js/play.js renderPlay): it is how card 1 knows to open on the discovery slide. */
 export const totalWordAt = () => "the total";
 
 /* ---------- words and numbers ---------- */
@@ -96,6 +98,40 @@ const WHO = {
 };
 export const F8_NAMES = Object.keys(WHO);
 const ITEMS = ["lounge suite", "motorbike", "laptop", "fridge", "TV", "bed"];   // never "car": f9 to f13's car is the bracket
+
+/* ---------- card 1 opens on a DISCOVERY slide (her notes, 11 Oct 16:54, 16:56) ----------
+   "Make the first slide just the jug": three frames, one jug at a time
+   (q.revealMode "replace"; js/questions.js keeps the sentence chips hidden
+   until the third frame is up, and its "Next ▸" is the tap). Frame 1 is the
+   empty jug, and the ONLY place in the round (with the 📖 library card) that
+   says the textbook's word: in brackets once, then "that is the total, from
+   now on we just call it the total". Frame 2: savings fill the jug coin by
+   coin, the total at the END. Frame 3: a loan, the bank hands over the full
+   jug at the START and the coins drain it. The picture is jugDiscover in
+   js/concepts.js. NB keeps "the total", "the jug", "full jug", "the END" and
+   "the START" on one line. */
+const DISCOVER = [
+  jugDiscover("empty") + `<div class="jd-cap">`
+    + `<p>Payments are <b>coins</b>. The${NB}total (the${NB}lumpsum) is <b>the${NB}jug</b>.</p>`
+    + `<p>Your textbook says “lump sum”. That is the${NB}total we are talking about. From now on we just call it the${NB}total.</p>`
+    + `<p class="muted small">Tap Next to see where the jug sits.</p></div>`,
+  jugDiscover("save") + `<div class="jd-cap">`
+    + `<p><b>Savings:</b> you fill the jug coin by coin. The${NB}total sits at <b>the${NB}END</b>.</p></div>`,
+  jugDiscover("loan") + `<div class="jd-cap">`
+    + `<p><b>A loan:</b> the bank hands you the full${NB}jug at <b>the${NB}START</b>. The${NB}total sits at the beginning, and your coins pay it back.</p></div>`,
+];
+/* her "they tap": a tap on the slide's jug does what "Next ▸" does. One
+   delegated listener, added once when this module first loads; no engine
+   change (the button is the reveal box's sibling, gone on the last frame).
+   Node imports of the round (the harnesses) have no document. */
+if (typeof document !== "undefined" && !globalThis.__f8JugTap) {
+  globalThis.__f8JugTap = true;
+  document.addEventListener("click", e => {
+    const jug = e.target instanceof Element ? e.target.closest(".q-reveal .jug-discover") : null;
+    const next = jug ? jug.closest(".q-reveal").parentElement.querySelector(":scope > .reveal-next") : null;
+    if (next) next.click();
+  });
+}
 
 /* ---------- the kinds of sentence ----------
    note: the pill a chip wears once it is answered; why: what a miss on it
@@ -175,11 +211,10 @@ function paragraphCard(pos, { name, loan, hp = false, n, order }) {
 
   const kindWord = loan ? (hp ? "Hire purchase is a loan" : "A loan") : "Savings";
   const where = loan ? "T0, the start" : `T${n}, the end`;
-  const c = getConcept(TOTAL);
   return {
     type: "steps", concept: TOTAL,
     prompt: pos === 0 ? "First the idea. Then a finance question, cut into its sentences." : "A finance question, cut into its sentences.",
-    ...(pos === 0 && c ? { reveal: [`<div class="concept jug-card"><h3>${c.title}</h3>${c.body}</div>`] } : {}),
+    ...(pos === 0 ? { reveal: DISCOVER.slice(), revealMode: "replace" } : {}),
     steps: [step1, step2, step3],
     hint: "Find the jug in the words first: what someone has, borrows or wants to have.",
     answerLabel: `The jug: “${jugChip.text}” ${kindWord}, so the jug is ${role}, at ${where}.`,
@@ -395,7 +430,7 @@ function recallCard(which) {
 
 /* ---------- the round, in dealing order ---------- */
 const ROUND = [
-  ["jugTwoDeposits", jugTwoDeposits],          // card 1 · the concept card on top
+  ["jugTwoDeposits", jugTwoDeposits],          // card 1 · the discovery slide on top
   ["recallSaving", () => recallCard("recallSaving")],
   ["jugLoan", jugLoan],
   ["jugWithdrawal", jugWithdrawal],

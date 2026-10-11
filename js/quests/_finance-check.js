@@ -481,8 +481,9 @@ export const RECOMPUTE = {
 
   /* ---- f8 (the jug round, 2026-10-11): every card read back from its own
      words (f8Diagnose, below): the one jug chip, savings or loan, the jug's
-     day, the feedback timeline; the recall cards' one jug among three coins */
-  "f8.jugTwoDeposits": q => f8Diagnose(q) === null,
+     day, the feedback timeline; the recall cards' one jug among three coins.
+     Card 1 alone opens on the discovery slide (f8RevealIssue): its flag */
+  "f8.jugTwoDeposits": q => f8Diagnose(q, true) === null,
   "f8.recallSaving": q => f8Diagnose(q) === null,
   "f8.jugLoan": q => f8Diagnose(q) === null,
   "f8.jugWithdrawal": q => f8Diagnose(q) === null,
@@ -1193,12 +1194,20 @@ function f9Trip(s) {
      · a recall card: four distinct phrases with four distinct amounts,
        exactly one jug (the correct one), three coins, each with a note.
      · every text a learner can read (prompt, hints, chips, notes, whys,
-       answer, worked lines, the concept frame) never says "lump",
-       "A value", "final answer" or "wrong", has no em-dash, no HTML
-       entity, no caret; every money amount, "p.a." and "N years" is one
+       answer, worked lines, the discovery frames) never says "A value",
+       "final answer" or "wrong", has no em-dash, no HTML entity, no
+       caret; every money amount, "p.a." and "N years" is one
        unbreakable unit with a literal U+00A0 inside; "half‑yearly"
-       keeps its non-breaking hyphen.
-   f8Diagnose returns null when all of that holds, else the first reason.
+       keeps its non-breaking hyphen. None says "lump" EXCEPT frame 1
+       of card 1's discovery slide.
+     · the discovery slide (her notes, 11 Oct 16:54 and 16:56): card 1
+       and only card 1 carries reveal frames, exactly three, revealMode
+       "replace", one jug each, in the order empty, savings, loan. The
+       textbook's word is phased out, not dropped cold: frame 1 MUST say
+       "the total (the lumpsum)" and "we just call it the total";
+       frames 2 and 3 never say "lump".
+   f8Diagnose(q, first) returns null when all of that holds, else the
+   first reason; first is true for card 1 (jugTwoDeposits) only.
    ============================================================ */
 const F8_NAMES = ["Brenda", "Mvelo", "Bradley", "Jason", "Mandy", "Brian", "Stephanie", "Bob", "Arnold", "David"];
 const F8_NOT_NAMES = new Set(["He", "She", "How", "The", "What", "On"]);     // words that open a sentence
@@ -1216,14 +1225,15 @@ export function f8KindOf(html) {
 const f8Count = (s, re) => (String(s).match(re) || []).length;
 export function f8LearnerTexts(q) {
   const steps = q.steps || [];
-  return [q.prompt, q.hint, q.answerLabel, ...(q.reveal || []),
+  return [q.prompt, q.hint, q.answerLabel,
     ...(q.options || []).flatMap(o => [o.label, o.note, o.why]),
     ...steps.flatMap(st => [st.prompt, st.hint, st.graphAfterCap, ...(st.options || []).flatMap(o => [o.label, o.note, o.why])]),
     ...(q.solution || []).flatMap(x => [x.s, x.r])].filter(x => x != null && x !== "").map(String);
 }
-function f8TextIssue(t) {
+/* lumpOk: card 1's discovery frames, checked for the word by f8RevealIssue */
+function f8TextIssue(t, lumpOk = false) {
   const p = f8Plain(t);
-  if (/lump/i.test(p)) return `says "lump": ${p.slice(0, 60)}`;
+  if (!lumpOk && /lump/i.test(p)) return `says "lump": ${p.slice(0, 60)}`;
   if (/\bA value\b/i.test(p)) return `says "A value": ${p.slice(0, 60)}`;
   if (/final answer/i.test(p)) return `says "final answer": ${p.slice(0, 60)}`;
   if (/wrong/i.test(p)) return `says "wrong": ${p.slice(0, 60)}`;
@@ -1303,8 +1313,27 @@ function f8RecallIssue(q) {
   if (opts.some((o, j) => !o.note || !(kinds[j] === "jug" ? /jug/ : /coin/).test(o.note))) return "a phrase without a pill naming its kind";
   return f8NameIssue(labels, false);
 }
-export function f8Diagnose(q) {
+/* card 1's discovery slide; every other card carries no frames at all */
+function f8RevealIssue(q, first) {
+  const frames = Array.isArray(q.reveal) ? q.reveal : [];
+  if (!first) return frames.length || q.revealMode != null ? "reveal frames on a card other than card 1" : null;
+  if (frames.length !== 3) return `${frames.length} discovery frames on card 1 (want 3)`;
+  if (q.revealMode !== "replace") return `card 1's frames stack (revealMode ${q.revealMode}), want "replace": one jug at a time`;
+  for (const f of frames) { const why = f8TextIssue(String(f), true); if (why) return `discovery frame: ${why}`; }
+  const jugs = frames.map(f => f8Count(f, /class="jug /g));
+  if (jugs.some(k => k !== 1)) return `the discovery frames draw ${jugs.join("/")} jugs (want one each)`;
+  const modes = frames.map(f => (/class="jug-discover jd-(\w+)"/.exec(f) || [])[1]).join(",");
+  if (modes !== "empty,save,loan") return `the discovery frames run ${modes} (want empty,save,loan)`;
+  const [p1, p2, p3] = frames.map(f8Plain);
+  if (!/the total \(the lumpsum\)/i.test(p1)) return 'frame 1 does not say "the total (the lumpsum)"';
+  if (!/we just call it the total/i.test(p1)) return 'frame 1 does not say "we just call it the total"';
+  if (/lump/i.test(p2) || /lump/i.test(p3)) return 'frame 2 or 3 says "lump"';
+  return null;
+}
+export function f8Diagnose(q, first = false) {
   for (const t of f8LearnerTexts(q)) { const why = f8TextIssue(t); if (why) return why; }
+  const rv = f8RevealIssue(q, first);
+  if (rv) return rv;
   if (q.type === "mc") return f8RecallIssue(q);
   if (q.type === "steps") return f8ParagraphIssue(q);
   return `type "${q.type}" (want steps or mc)`;

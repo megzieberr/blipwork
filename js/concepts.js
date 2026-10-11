@@ -35,11 +35,15 @@ function jugArrow(x1, y1, cx, cy, x2, y2, cls) {
   return `<g class="jug-arr ${cls}"><path d="M${x1} ${y1} Q${cx} ${cy} ${r(bx)} ${r(by)}"/>`
     + `<polygon points="${x2},${y2} ${r(bx + px)},${r(by + py)} ${r(bx - px)},${r(by - py)}"/></g>`;
 }
-const jugCoin = (x, y, label, cls) =>
-  `<g class="jug-coin ${cls}"><circle cx="${x}" cy="${y}" r="33"/><text x="${x}" y="${y + 7}">${label.replace(/ /g, " ")}</text></g>`;
-const jugBox = (x, y, cls) =>
-  `<div class="jug ${cls}" style="left:${jugPct(x / JUG_W)};top:${jugPct(y / JUG_H)};width:${jugPct(JUG_BOX / JUG_W)}">`
+/* a coin of radius rad, its label dy below the centre; a jug box of B units on
+   a W × H stage. The library card's own sizes are jugCoin and jugBox. */
+const jugCoinR = (rad, dy) => (x, y, label, cls) =>
+  `<g class="jug-coin ${cls}"><circle cx="${x}" cy="${y}" r="${rad}"/><text x="${x}" y="${y + dy}">${label.replace(/ /g, " ")}</text></g>`;
+const jugBoxIn = (W, H, B) => (x, y, cls) =>
+  `<div class="jug ${cls}" style="left:${jugPct(x / W)};top:${jugPct(y / H)};width:${jugPct(B / W)}">`
   + `<div class="jug-fill"><div class="jug-lvl"></div></div><div class="jug-line"></div></div>`;
+const jugCoin = jugCoinR(33, 7);
+const jugBox = jugBoxIn(JUG_W, JUG_H, JUG_BOX);
 const jugLetters = (x, yRole, role, yQ) =>
   `<text class="jug-role" x="${x}" y="${yRole}">${role}</text><text class="jug-q" x="${x}" y="${yQ}">?</text>`;
 const JUG_SVG = inner => `<svg class="jug-svg" viewBox="0 0 ${JUG_W} ${JUG_H}" aria-hidden="true">${inner}</svg>`;
@@ -60,6 +64,51 @@ const JUG_PICTURE = `<div class="jugs">`
   + `<div class="jug-pane">${JUG_SAVE}<div class="jug-cap"><b>SAVINGS</b><br>you fill the jug<br>the jug at the <b>end</b> is the total</div></div>`
   + `<div class="jug-pane">${JUG_LOAN}<div class="jug-cap"><b>LOAN</b><br>the bank hands you a full jug<br>the jug at the <b>start</b> is the total</div></div>`
   + `</div>`;
+
+/* ---------------------------------------------------------
+   THE DISCOVERY JUG (f8 card 1, her note 11 Oct 16:56: "make the first
+   slide just the jug"). ONE jug per frame, large and centred, the same
+   drawing, masks and colours as the picture above. jugDiscover(mode):
+     "empty"  the empty jug, nothing moves;
+     "save"   three coins come IN one by one (gold rim) and the level
+              rises as each lands, then a little more (the interest):
+              the jug at the END is the total;
+     "loan"   the BANK hands over the full jug (87%, never into the
+              spout) and three coins go OUT one by one (red rim), each
+              lowering the level, near empty at the end.
+   The coins sit in ONE column on the left in both, so a coin keeps its
+   slot and only its direction changes (her handle is on the right). The
+   timing is css/styles.css .jug-discover: keyframes on the level's
+   HEIGHT, started when the frame mounts (the reveal engine builds a fresh
+   frame on every Next), played once, still under reduced motion.
+   A 320 × 250 stage; the jug's box is 206 units (64% of the stage),
+   centred, and the stage runs into the frame's side padding (styles.css),
+   so the jug is about 63% of the card at 360 and 390 px. Whole numbers only in the SVG; an arrow's tip stops just
+   outside her line.
+   --------------------------------------------------------- */
+const JD_W = 320, JD_H = 250, JD_BOX = 206, JD_X = 57, JD_Y = 40;
+const jdBox = jugBoxIn(JD_W, JD_H, JD_BOX);
+const jdCoin = jugCoinR(24, 5);
+/* per coin: its centre, then its arrow as [coin end, curve control, jug end] */
+const JD_COINS = [
+  { x: 29, y: 86, arrow: [[55, 84], [76, 82], [92, 97]] },
+  { x: 29, y: 152, arrow: [[54, 147], [66, 138], [80, 133]] },
+  { x: 29, y: 218, arrow: [[54, 215], [68, 216], [82, 210]] },
+];
+const JD_LABELS = { save: ["2 000", "3 000", "1 000"], loan: ["5 000", "5 000", "5 000"] };
+export function jugDiscover(mode) {
+  const coins = !JD_LABELS[mode] ? "" : JD_COINS.map(({ x, y, arrow: [a, c, b] }, j) => {
+    const arrow = mode === "loan"
+      ? jugArrow(b[0], b[1], c[0], c[1], a[0], a[1], "out")
+      : jugArrow(a[0], a[1], c[0], c[1], b[0], b[1], "in");
+    return `<g class="jd-c${j + 1}">${jdCoin(x, y, JD_LABELS[mode][j], mode === "loan" ? "out" : "in")}${arrow}</g>`;
+  }).join("");
+  const bank = mode !== "loan" ? "" :
+    `<g class="jug-bank"><rect x="226" y="4" width="86" height="34" rx="7"/><text x="269" y="28">BANK</text></g>`
+    + jugArrow(226, 21, 198, 10, 178, 38, "bank");
+  return `<div class="jug-discover jd-${mode}"><div class="jug-stage">${jdBox(JD_X, JD_Y, "jug-d")}`
+    + `<svg class="jug-svg" viewBox="0 0 ${JD_W} ${JD_H}" aria-hidden="true">${bank}${coins}</svg></div></div>`;
+}
 
 /* ---------------------------------------------------------
    THE BUILT TIMELINE (f12 "Build the timeline", 2026-10-11).
@@ -341,13 +390,16 @@ export const CONCEPTS = {
      tap-the-label card is in briefs/finance-2/ARCHIVE-f8-tap-label-2026-10-10.md).
      The approved mock-up's text (her "absolutely perfect", 11 Oct 12:02),
      the two jugs side by side (JUG_PICTURE above) with their captions as
-     drawn. The round shows this card on top of its first card (q.reveal),
-     and "I'm lost" opens it as usual. "the total" only: never the word
-     the textbooks use for a single payment. */
+     drawn. "I'm lost" (and the 📖 library) opens it; the round itself opens
+     on the one-jug discovery slide instead (jugDiscover above, 11 Oct
+     16:56). The textbook's word is PHASED OUT, not dropped cold (her note,
+     11 Oct 16:54): this card and the slide's first frame are the only two
+     places that say it, once in brackets and once to say it is the total
+     and from now on just "the total". Never anywhere else in f8. */
   theTotal: {
     title: "Payments are coins. The total is the jug.",
     body: `
-      <p>Every payment is <b class="jug-hl">one coin</b> going in or out on its day. The total is the <b class="jug-hl">one jug</b> all the coins are worth together. A coin is never the jug.</p>
+      <p>Every payment is <b class="jug-hl">one coin</b> going in or out on its day. The total (the lumpsum) is the <b class="jug-hl">one jug</b> all the coins are worth together. A coin is never the jug. Your textbook says “lump sum”. That is the total we are talking about. From now on we just call it the total.</p>
       ${JUG_PICTURE}
       <p class="jug-after">Interest makes the jug grow (or the debt grow). A withdrawal takes a coin out. The jug can end up smaller than a coin: it is still the jug.</p>`,
   },
