@@ -93,6 +93,15 @@
   recompute is unchanged, f12 rolls f13's scenes and computes no answer). Its block below reads every card back from f13's own
   paragraph and checks each of her five taps, every per-step picture against the words, and the finished drawing against f13's
   own timeline for the same seed. The Finance map tick now asks for f10, f11, f12, f13 in that order.</p>
+<p class="muted small"><b>2026-10-11: Fix B, f13's cars wear their roads' colours</b> (her ruling 11:47: the kids read the
+  equation off the picture, and the colours stay after the timeline fades). Every car of every f13 equation line, the four
+  options and the worked lines, sits in <code>&lt;span class="eq-road-j"&gt;</code>, j the index of its road, the index the timeline
+  engine colours that road by; the three colours are CSS variables declared once (<code>--road-0/1/2</code>) that the roads,
+  their rates and the cars all read. <code>unsup()</code> takes the paint off before any parser reads a car, so every rule
+  below reads what it read before; <code>f13Diagnose</code> now also checks each car's paint against the story's own roads.
+  The Fix B lines in the f13 block: colour is never a hint (200 rolls of every family: no option alone with its number of
+  colours, the right option's colour pattern always shared by a wrong one), one CSS source and her three colours, every
+  painted car laid out at 360 px (one car, its sup inside it, inside its term's unit, 12 px), and the check bites.</p>
 <div id="banner">running…</div>
 
 <h2>Timeline engine — to-scale nodes and labels the engine can actually place</h2>
@@ -208,7 +217,7 @@ import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/timeline-graph.js";
-import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f13EquationsOf, f11Scene, f11Diagnose, unsup, f8Diagnose, f13Words } from "./js/quests/_finance-check.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f13EquationsOf, f13OptionColours, f11Scene, f11Diagnose, unsup, f8Diagnose, f13Words } from "./js/quests/_finance-check.js";
 import { F13_FAMILIES, f13GraphOf, f13Story } from "./js/quests/questf13-one-equation.js";
 import { BUILD_TIMELINE_EXAMPLE } from "./js/concepts.js";
 import { setRng, resetRng } from "./js/rng.js";
@@ -1015,7 +1024,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
       st.names.add((String(q.prompt).match(/^([A-Z][a-z]+) /) || [])[1]);
       if (skill.id === "twoDeposits") { if (/straight after the last deposit/.test(q.prompt)) st.deps3++; else st.deps2++; }   // Mvelo: a third deposit on the day of A
       const opts = (steps[0] && steps[0].options) || [];
-      if (opts.some(o => !o.correct && /^<span class="f13-eq"><span class="nowrap">(A|P|\d[\d ]*)\(1/.test(o.label))) st.carOnTotal++; else st.carOnPay++;
+      if (opts.some(o => !o.correct && /^<span class="f13-eq"><span class="nowrap">(A|P|\d[\d ]*)<span class="eq-road-\d">\(1/.test(o.label))) st.carOnTotal++; else st.carOnPay++;
       /* f12 review 1: how often a term is too wide for a 360-px option and is cut, "× (1 + …)^n" */
       const cuts = opts.filter(o => o.label.includes("×")).length;
       st.cutOpts += cuts; if (cuts) st.cutCards++;
@@ -1049,6 +1058,107 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     tick(bad === 0, `f13.${fam} with its timeline forced on: honest, to scale, every label clear at 360 px (40 rolls)`);
     flines2.push(`${bad === 0 ? "✓" : "✗"} ${fam.padEnd(18)} 40 drawn timelines, ${bad} with a problem${first ? `: ${first}` : ""}`);
   });
+  /* Fix B (2026-10-11, her ruling 11:47): every car of every f13 equation line wears the colour of its ROAD, the colour the
+     timeline draws that road in, so the kids read the equation off the picture; after the fade the colours stay. f13Diagnose
+     checks each car's paint against the story's own roads on every roll above (the options and every worked line). Here:
+     colour is never a hint. The four options of a card are painted by one rule, so no option is the only one with its
+     number of colours, and the right option's colour pattern (each car's road, in reading order) is always shared by a
+     wrong one. 200 rolls of every family */
+  const flines3 = [];
+  Object.entries(F13_FAMILIES).forEach(([fam, make]) => {
+    let bad = 0, first = "", minShare = 4, extraCar = 0;
+    const nCols = new Set();
+    for (let i = 0; i < 200; i++) {
+      const q = make({ timeline: i % 2 === 0 });
+      const oc = f13OptionColours(q), problems = [];
+      if (!oc || oc.length !== 4) problems.push("an option not painted by its roads");
+      else {
+        const n = oc.map(o => new Set(o.cols).size);
+        n.forEach(k => nCols.add(k));
+        if (n.some(k => n.filter(m => m === k).length === 1)) problems.push(`an option alone with its number of colours (${n.join(", ")})`);
+        const key = o => o.cols.join("-"), right = oc.find(o => o.correct);
+        const share = oc.filter(o => o !== right && key(o) === key(right)).length;
+        minShare = Math.min(minShare, share);
+        if (share < 1) problems.push("the right option's colour pattern is its own");
+        /* not a colour hint, the car slip itself: one more bracket, in the colour of the road touching the meeting day */
+        const lens = oc.map(o => o.cols.length), most = Math.max(...lens);
+        if (lens.filter(l => l === most).length === 1 && !oc[lens.indexOf(most)].correct) extraCar++;
+      }
+      if (problems.length) { bad++; if (!first) first = problems.join(", ") + ": " + noTags(q.prompt).slice(0, 120); }
+    }
+    tick(bad === 0, `Fix B f13.${fam}: colour is never a hint, every option painted by its roads, none alone with its number of colours, the right one's pattern shared by a wrong one (200 rolls)`);
+    flines3.push(`${bad === 0 ? "✓" : "✗"} ${fam.padEnd(18)} colours per option ${[...nCols].sort().join("/")} · the right option's pattern shared by ≥ ${minShare} wrong option${minShare === 1 ? "" : "s"} · the car slip the one option with an extra car on ${extraCar}/200`
+      + (first ? `\n      e.g. ${first}` : ""));
+  });
+  /* one source of colour: the road, its rate and an equation's car all read the same three CSS variables, and they are
+     still her f9 colours (written out here on purpose: sky, orange, lime). Then every card of the round, laid out as an
+     option and as a worked line at 360 px: each painted car is ONE car (its sup the last thing inside it, coloured with
+     it), inside its term's nowrap unit, in its road's colour, at the .f13-eq size */
+  {
+    const HEX = ["#38bdf8", "#fb923c", "#a3e635"], RGB = ["rgb(56, 189, 248)", "rgb(251, 146, 60)", "rgb(163, 230, 53)"];
+    const fmt = x => formulaHtml(fracHtml(xbarHtml(x)));
+    const bad = [];
+    measure.innerHTML = `<svg class="sg tl" viewBox="0 0 100 20">${[0, 1, 2].map(j => `<line class="tl-road tl-road-${j}" x1="0" y1="5" x2="10" y2="5"/><text class="tl-roadlab tl-roadlab-${j}" x="5" y="15">8%</text>`).join("")}</svg>`
+      + [0, 1, 2].map(j => `<span class="eq-road-${j}">(1 + 0,08)<sup>3</sup></span>`).join(" ");
+    const lines = [...measure.querySelectorAll("line")], texts = [...measure.querySelectorAll("text")], spans = [...measure.querySelectorAll("span")];
+    [0, 1, 2].forEach(j => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue(`--road-${j}`).trim().toLowerCase();
+      if (v !== HEX[j]) bad.push(`--road-${j} is ${v || "missing"}, not ${HEX[j]}`);
+      if (getComputedStyle(lines[j]).stroke !== RGB[j]) bad.push(`road ${j} draws ${getComputedStyle(lines[j]).stroke}`);
+      if (getComputedStyle(texts[j]).fill !== RGB[j]) bad.push(`road ${j}'s rate draws ${getComputedStyle(texts[j]).fill}`);
+      if (getComputedStyle(spans[j]).color !== RGB[j]) bad.push(`an equation's road-${j} car reads ${getComputedStyle(spans[j]).color}`);
+    });
+    let cars = 0;
+    questDef("f13").skills.forEach(skill => {
+      for (let i = 0; i < 4; i++) {
+        const q = skill.gen();
+        const eqs = [...q.steps[0].options.map(o => ({ h: o.label, wrap: "opt" })), ...q.solution.map(x => ({ h: x.s, wrap: "sol" }))];
+        eqs.forEach(({ h, wrap }) => {
+          measure.innerHTML = wrap === "opt" ? `<button class="opt" style="width:360px">${fmt(h)}</button>` : `<div class="sol" style="width:360px"><div class="sol-step"><span class="s">${fmt(h)}</span></div></div>`;
+          measure.querySelectorAll("[class*='eq-road-']").forEach(el => {
+            cars++;
+            const j = Number((/eq-road-(\d)/.exec(el.className) || [])[1]);
+            /* one car: "(1 + " its rate (0,06/4 drawn as the app's stacked fraction) ")" and ONE sup, the last thing in it */
+            const sup = el.lastElementChild, sups = el.querySelectorAll("sup");
+            if (sups.length !== 1 || !sup || sup.tagName !== "SUP" || el.lastChild !== sup || !/^\(1 \+ /.test(el.textContent)) bad.push(`${skill.id}: a painted car that is not one car ending on its sup`);
+            else if (getComputedStyle(sup).color !== RGB[j]) bad.push(`${skill.id}: a car's sup not in its car's colour`);
+            if (!el.parentElement || !el.parentElement.closest(".nowrap")) bad.push(`${skill.id}: a painted car outside its term's unit`);
+            if (getComputedStyle(el).color !== RGB[j]) bad.push(`${skill.id}: a road-${j} car reads ${getComputedStyle(el).color}`);
+            const eq = el.closest(".f13-eq");
+            if (!eq || getComputedStyle(eq).fontSize !== "12px") bad.push(`${skill.id}: a painted car outside the 12-px .f13-eq`);
+          });
+        });
+      }
+    });
+    measure.innerHTML = "";
+    tick(cars > 0 && bad.length === 0, `Fix B: one source of colour (--road-0/1/2 = ${HEX.join(", ")} feed the roads, their rates and the equations' cars); ${cars} painted cars on every card of the round, each one car with its sup inside it, inside its term's unit, in its road's colour, at 12 px${bad.length ? ": " + bad.slice(0, 3).join("; ") : ""}`);
+    flines3.push(`${cars > 0 && bad.length === 0 ? "✓" : "✗"} one CSS source for roads, rates and cars; ${cars} painted cars laid out as options and worked lines at 360 px, ${bad.length} problems${bad.length ? ": " + bad[0] : ""}`);
+  }
+  /* the colour check bites: a card with its paint broken in each way must fail f13Diagnose, and a broken option must also
+     fail the paint rule itself (f13OptionColours), not only some other check */
+  {
+    const q = F13_FAMILIES.twoDeposits({ timeline: false }), right = q.steps[0].options.findIndex(o => o.correct);
+    const broken = (label, sol = null) => {
+      const b = JSON.parse(JSON.stringify(q));
+      b.steps[0].options[right].label = label(b.steps[0].options[right].label);
+      if (sol) { const w = b.solution.findIndex(x => String(x.s).startsWith("The one equation: ")); b.solution[w].s = sol(b.solution[w].s); }
+      const d = f13Diagnose(b, "twoDeposits");
+      return { d, caught: d != null && (sol != null || f13OptionColours(b) === null) };
+    };
+    const swap = h => h.replace(/eq-road-([01])/g, (m, j) => `eq-road-${1 - Number(j)}`);
+    const cases = {
+      "the roads' colours swapped": broken(swap),
+      "a car with no paint": broken(h => h.replace(/<span class="eq-road-\d">([^<]*<sup>[^<]*<\/sup>)<\/span>/, "$1")),
+      "an amount painted": broken(h => h.replace(/(\d)(<span class="eq-road-)/, `<span class="eq-road-0">$1</span>$2`)),
+      "a sign painted": broken(h => h.replace(/<\/span> ([+−]) <span class="nowrap">/, `</span> <span class="eq-road-0">$1</span> <span class="nowrap">`)),
+      "a car outside its term's unit": broken(h => h.replace(/(<span class="eq-road-\d">[^<]*<sup>[^<]*<\/sup><\/span>)<\/span>/, "</span>$1")),
+      "a worked line's colours swapped": broken(h => h, swap),
+    };
+    const missed = Object.entries(cases).filter(([, r]) => !r.caught).map(([k]) => k);
+    tick(f13Diagnose(q, "twoDeposits") === null && f13OptionColours(q) !== null && missed.length === 0,
+      `Fix B: the colour check bites (${Object.keys(cases).join("; ")}: each one fails the card)${missed.length ? ": missed " + missed.join(", ") : ""}`);
+    flines3.push(`${missed.length === 0 ? "✓" : "✗"} the check bites: ${Object.entries(cases).map(([k, r]) => `${k} → ${r.caught ? r.d : "MISSED"}`).join(" · ")}`);
+  }
   /* f12 review 1: the DOM check behind "a number never leaves its unit". Every text a learner reads on a card (the
      story, each step's prompt, the four options, the worked lines and side notes) is formatted as the app does it
      (formulaHtml), laid out at every width from 200 to 360 px, and the client rects of each number's last glyph and its
@@ -1092,6 +1202,7 @@ document.getElementById("recompute").textContent = recomputeLines.join("\n");
     return `  card ${pos + 1}: ${noTags(q.prompt)}\n          ${noTags(ok.label)}  →  ${noTags(q.answerLabel)}`;
   }).join("\n");
   document.getElementById("f13").textContent = flines.join("\n") + "\n\nevery family with its timeline drawn (the Exam Focus tile):\n" + flines2.join("\n")
+    + "\n\nFix B, the road colours (200 rolls of every family, then the CSS source and the layout):\n" + flines3.join("\n")
     + "\n\none roll of each card, in dealing order (the right equation and the answer):\n" + sample;
 }
 

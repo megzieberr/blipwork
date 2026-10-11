@@ -39,6 +39,12 @@
    timeline is bound to the skill's index when the list is built (f8's
    per-position hook): gen() stays pure and seedable.
 
+   THE COLOURS (Fix B, her ruling 11 Oct 11:47): every car in every
+   equation line (the four options, the worked lines, the 📖 steps) wears
+   its ROAD's colour, the same colour the timeline draws that road in, so
+   the kids read the equation off the picture; after the fade (card 4 on)
+   the colours stay. Wrong options are painted by the same rule (carText).
+
    THE ROUND (8 cards, 7 families): twoDeposits, withdrawal and
    loanTwoRepayments with the picture; then mixed, targetAmount, a
    second loanTwoRepayments roll (skill id loanAgain: a loan with no
@@ -143,20 +149,30 @@ function rollRoads(n, two) {
 }
 
 /* the cars that move an amount from T t to the meeting day m, in TRAVEL
-   order (reverse gear meets the later road first): one car per road */
+   order (reverse gear meets the later road first): one car per road. Each
+   car keeps j, the index of its road in sc.roads: the same index the
+   timeline engine colours that road by (rd.cls = j % 3), so Fix B can paint
+   the car in its road's colour */
 function carsOf(roads, t, m) {
   const dir = Math.sign(m - t), lo = Math.min(t, m), hi = Math.max(t, m);
-  let legs = roads.map(r => ({ r: r.r, k: r.k, from: Math.max(lo, r.from), to: Math.min(hi, r.to) }))
+  let legs = roads.map((r, j) => ({ j, r: r.r, k: r.k, from: Math.max(lo, r.from), to: Math.min(hi, r.to) }))
     .filter(l => l.to > l.from);
   if (dir < 0) legs = legs.reverse();
   return legs.map(l => ({ ...l, years: l.to - l.from, e: dir * (l.to - l.from) * l.k }));
 }
 /* one car: (1 + 0,12/12)^36, reverse (1 + 0,12/12)^(−36); annual (1 + 0,08)^3.
    Fix A (11 Oct): the exponent is a real superscript (finlib's pow), inside
-   the term's nowrap unit like the rest of the car */
+   the term's nowrap unit like the rest of the car.
+   Fix B (11 Oct, her ruling 11:47): every car wears the colour of the ROAD it
+   drives over, <span class="eq-road-j">, j its road's index (the engine's
+   .tl-road-j; one set of CSS variables feeds both, css/styles.css), so the
+   kids read the equation off the picture, and the colours stay on the cards
+   with no picture. The span holds the whole car, its sup included, and sits
+   inside the term's nowrap unit. Every option is painted by this one rule, so
+   a colour is never a hint to the right one. Amounts keep the text colour */
 function carText(c) {
   const i = C(toFrac(c.r)), base = c.k === 1 ? `(1 + ${i})` : `(1 + ${i}/${c.k})`;
-  return c.e < 0 ? pow(base, `−${-c.e}`) : pow(base, c.e);
+  return `<span class="eq-road-${c.j % 3}">${c.e < 0 ? pow(base, `−${-c.e}`) : pow(base, c.e)}</span>`;
 }
 const coefText = c => (typeof c === "number" ? amt0(c) : c);
 
@@ -271,8 +287,8 @@ function decoysOf(sc) {
   /* 2 · a car on the amount already standing on the meeting day: the
      payment on that day, else the total itself. The car drives over the
      whole road that touches the meeting day, forward */
-  const road = sc.meet === 0 ? sc.roads[0] : sc.roads[sc.roads.length - 1];
-  const bogus = [{ r: road.r, k: road.k, from: road.from, to: road.to, years: road.to - road.from, e: (road.to - road.from) * road.k }];
+  const rj = sc.meet === 0 ? 0 : sc.roads.length - 1, road = sc.roads[rj];
+  const bogus = [{ j: rj, r: road.r, k: road.k, from: road.from, to: road.to, years: road.to - road.from, e: (road.to - road.from) * road.k }];
   const onDay = R.findIndex(t => t.t === sc.meet && !t.cars.length);
   const car = onDay >= 0
     ? { L: eq.L, R: R.map((t, j) => (j === onDay ? { ...t, cars: bogus } : t)) }

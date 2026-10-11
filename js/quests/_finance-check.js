@@ -45,8 +45,13 @@ export const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(
    to it, and then read exactly as before: <sup>36</sup> → ^36, and an
    exponent that starts with a minus or holds a × goes in brackets, the way
    the rounds used to print it: <sup>−36</sup> → ^(−36), <sup>3×4</sup> →
-   ^(3×4). Only a bare <sup> (never a class="sf-exp" fraction exponent). */
+   ^(3×4). Only a bare <sup> (never a class="sf-exp" fraction exponent).
+   Fix B (2026-10-11): an f13 car wears its road's colour, <span
+   class="eq-road-j">…</span> around the whole car; that paint is taken off
+   first (only that span, never another), so every parser reads the car
+   exactly as before. f13Colours below checks the paint itself. */
 export const unsup = html => String(html == null ? "" : html)
+  .replace(/<span class="eq-road-\d">([\s\S]*?)<\/span>/g, "$1")
   .replace(/<sup>([\s\S]*?)<\/sup>/g, (m, x) => (/^−|×/.test(x) ? `^(${x})` : `^${x}`));
 
 /* "0,075" / "−3" / "2 100,34" → number (NaN if not purely numeric) */
@@ -1406,6 +1411,36 @@ export function f13ParseEq(html, iTexts = null) {
   if (side !== 1 || want === "operand" || sides[0].length !== 1) return null;
   return { L: sides[0], R: sides[1] };
 }
+/* Fix B (2026-10-11, her ruling 11:47): every car of an f13 equation wears
+   the colour of its ROAD, <span class="eq-road-j">(1 + i)<sup>e</sup></span>,
+   j the index of the road whose rate the car carries (iTexts, in the story's
+   road order: the timeline engine's .tl-road-j, j % 3). The paint holds the
+   whole car with its sup and nothing else, sits inside the term's nowrap unit,
+   and no car goes unpainted. Returns each car's colour in reading order, or
+   null when any of that fails */
+const F13_PAINT = /<span class="eq-road-(\d)">([\s\S]*?)<\/span>/g;
+const F13_PAINTED_CAR = /^\(1 \+ (0,\d+(?:\/\d+)?)\)<sup>(?:\d+|−\d+)<\/sup>$/;
+const F13_NOWRAP_UNIT = /<span class="nowrap">(?:[^<]|<(?!\/?span\b)|<span class="eq-road-\d">(?:[^<]|<(?!\/?span\b))*<\/span>)*<\/span>/g;
+export function f13Colours(html, iTexts) {
+  const h = String(html == null ? "" : html), js = [];
+  for (const m of h.matchAll(F13_PAINT)) {
+    const c = F13_PAINTED_CAR.exec(m[2]);
+    if (!c || iTexts.indexOf(c[1]) < 0 || iTexts.indexOf(c[1]) % 3 !== Number(m[1])) return null;
+    js.push(Number(m[1]));
+  }
+  if (h.replace(F13_NOWRAP_UNIT, "").includes("eq-road")) return null;   // paint outside a term's unit
+  return [...unsup(h).matchAll(F13_CAR)].length === js.length ? js : null;
+}
+/* the four options of an f13 card with each one's colours, read against the
+   story's own roads: [{ correct, cols: [j, …] }], or null if one is not
+   painted by the rule (verify-finance's "colour is never a hint" check) */
+export function f13OptionColours(q) {
+  const s = f13Scene(q);
+  if (!s) return null;
+  const iTexts = s.roads.map(r => f13Rate(r.r, r.k));
+  const out = ((q.steps && q.steps[0] && q.steps[0].options) || []).map(o => ({ correct: !!o.correct, cols: f13Colours(o.label, iTexts) }));
+  return out.some(o => !o.cols) ? null : out;
+}
 const f13CarKey = t => t.cars.map(c => `${c.i}^${c.e}`).join("*");
 const f13Key = t => `${t.s}|${t.c}|${f13CarKey(t)}`;
 const f13Same = (a, b) => a.L.length === b.L.length && a.L.every((t, j) => f13Key(t) === f13Key(b.L[j]))
@@ -1531,6 +1566,9 @@ export function f13Diagnose(q, fam = null) {
   if (new Set(s1.options.map(o => o.label)).size !== 4) return "two options coincide";
   const parsed = s1.options.map(o => ({ o, eq: f13ParseEq(o.label, iTexts) }));
   if (parsed.some(x => !x.eq)) return "an option does not parse";
+  /* Fix B: every car on the card (the options, every worked line) in its road's colour */
+  if (s1.options.some(o => !f13Colours(o.label, iTexts))) return "an option's car not in its road's colour";
+  if ((q.solution || []).some(x => !f13Colours(x.s, iTexts) || !f13Colours(x.r, iTexts))) return "a worked line's car not in its road's colour";
   const want = f13Expect(s);
   const allowed = new Set([s.total.c, ...s.pays.map(x => x.v)]);
   if (parsed.some(x => [...x.eq.L, ...x.eq.R].some(t => !allowed.has(t.c)))) return "an option holds a term the story does not";

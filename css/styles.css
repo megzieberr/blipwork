@@ -496,10 +496,17 @@ h2{font-size:20px} h3{font-size:17px}
 .tl-title{font-size:10px;fill:var(--g-muted)}
 /* f9 (2026-10-10): rate ROADS, one colour per road (a rate change = the road
    changes colour), and the MEETING-DAY flag in the graph "read" yellow */
+/* Fix B (2026-10-11): the three road colours are declared ONCE, here, and
+   everything that wears a road's colour reads them: the road itself, its
+   rate under it, and in f13 "Build the one equation" each car of an
+   equation line (.eq-road-j, j = the road's index, the engine's rd.cls), so
+   the drawing and the equation can never drift apart. Sky, orange, lime */
+:root{--road-0:#38bdf8;--road-1:#fb923c;--road-2:#a3e635}
 .tl-road{stroke-width:3.4}
-.tl-road-0{stroke:#38bdf8} .tl-road-1{stroke:#fb923c} .tl-road-2{stroke:#a3e635}
+.tl-road-0{stroke:var(--road-0)} .tl-road-1{stroke:var(--road-1)} .tl-road-2{stroke:var(--road-2)}
 .tl-roadlab{font-size:9.5px;font-weight:700}
-.tl-roadlab-0{fill:#38bdf8} .tl-roadlab-1{fill:#fb923c} .tl-roadlab-2{fill:#a3e635}
+.tl-roadlab-0{fill:var(--road-0)} .tl-roadlab-1{fill:var(--road-1)} .tl-roadlab-2{fill:var(--road-2)}
+.eq-road-0{color:var(--road-0)} .eq-road-1{color:var(--road-1)} .eq-road-2{color:var(--road-2)}
 .tl-pole{stroke:var(--g-read);stroke-width:1.4}
 .tl-flag{fill:var(--g-read)}
 .tl-meet{font-size:9.5px;font-weight:700;fill:var(--g-read)}
@@ -509,7 +516,7 @@ h2{font-size:20px} h3{font-size:17px}
    type) outranked the one-class fills above, so the role letter and the
    road rates drew grey on the phone. Two classes win: */
 .tl text.tl-role{fill:var(--accent)}
-.tl text.tl-roadlab-0{fill:#38bdf8} .tl text.tl-roadlab-1{fill:#fb923c} .tl text.tl-roadlab-2{fill:#a3e635}
+.tl text.tl-roadlab-0{fill:var(--road-0)} .tl text.tl-roadlab-1{fill:var(--road-1)} .tl text.tl-roadlab-2{fill:var(--road-2)}
 /* the total, "?" with its role letter: a different KIND of thing from a
    payment (her ruling): accent, bold, a thin ring (the engine's Q_R) */
 .tl text.tl-q{fill:var(--accent);font-weight:700}
