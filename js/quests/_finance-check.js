@@ -15,7 +15,7 @@
    in the prompt), and all eight f10 sign skills (2026-10-10: every
    equation parsed term by term and compared with the one the picture and
    the story give; the interest recomputed from the displayed numbers;
-   the recall card against a table written out here), and all eight f12 one-equation
+   the recall card against a table written out here), and all eight f13 (was f12) one-equation
    cards (2026-10-10: the story read back, every option parsed, the decoys
    classified, the answer recomputed), and all eight f11 meeting-day cards
    (2026-10-10: the car count of every candidate day recomputed from the
@@ -586,18 +586,18 @@ export const RECOMPUTE = {
     return f10McCheck(q, s, expect, { c: loan, e: n * k }, new Set([P, D, loan, "x", ...pays.map(x => x.v)]));
   },
 
-  /* ---- f12 (2026-10-10): build the one equation (the exam shape) ---- */
+  /* ---- f13 (2026-10-10; was f12 until 2026-10-11): build the one equation (the exam shape) ---- */
   /* the story read back, every option parsed, the right one rebuilt, the
      three decoys one plan slip each, the answer and the price recomputed
      through finlib, the timeline (cards 1 to 3) against the story */
-  "f12.twoDeposits": q => f12Diagnose(q, "twoDeposits") === null,
-  "f12.withdrawal": q => f12Diagnose(q, "withdrawal") === null,
-  "f12.loanTwoRepayments": q => f12Diagnose(q, "loanTwoRepayments") === null,
-  "f12.mixed": q => f12Diagnose(q, "mixed") === null,
-  "f12.targetAmount": q => f12Diagnose(q, "targetAmount") === null,
-  "f12.loanAgain": q => f12Diagnose(q, "loanTwoRepayments") === null,
-  "f12.hirePurchase": q => f12Diagnose(q, "hirePurchase") === null,
-  "f12.unknownPayment": q => f12Diagnose(q, "unknownPayment") === null,
+  "f13.twoDeposits": q => f13Diagnose(q, "twoDeposits") === null,
+  "f13.withdrawal": q => f13Diagnose(q, "withdrawal") === null,
+  "f13.loanTwoRepayments": q => f13Diagnose(q, "loanTwoRepayments") === null,
+  "f13.mixed": q => f13Diagnose(q, "mixed") === null,
+  "f13.targetAmount": q => f13Diagnose(q, "targetAmount") === null,
+  "f13.loanAgain": q => f13Diagnose(q, "loanTwoRepayments") === null,
+  "f13.hirePurchase": q => f13Diagnose(q, "hirePurchase") === null,
+  "f13.unknownPayment": q => f13Diagnose(q, "unknownPayment") === null,
 
   /* ---- f11 (2026-10-10): pick the meeting day ---- */
   /* the car count of each candidate day recomputed from the drawn amounts,
@@ -1087,7 +1087,7 @@ function f8TapCheck(q, kind) {
 }
 
 /* ============================================================
-   f12 · "Build the one equation" — the exam shape, read back from what
+   f13 · "Build the one equation" — the exam shape, read back from what
    is shown. Written 2026-10-10 alongside the round; it knows nothing of
    the module's variables.
      · the SCENE comes from the word question alone: the textbook name,
@@ -1124,7 +1124,7 @@ function f8TapCheck(q, kind) {
        on the meeting day, the roads and rates, the total "?" in its ring
        with its letter (a known total its amount WITH its letter), each
        payment where the story puts it, the withdrawal drawn out.
-   f12Diagnose returns null when all of that holds, else the first reason.
+   f13Diagnose returns null when all of that holds, else the first reason.
    ============================================================ */
 const F12_NAMES = ["Brenda", "Bradley", "Jason", "Brian", "Mandy", "Bob", "Stephanie", "Arnold", "David", "Mvelo"];
 const F12_CAR = /\(1 \+ (0,\d+(?:\/\d+)?)\)\^(\d+|\(−\d+\))/g;
@@ -1135,7 +1135,7 @@ const f12CarsOf = text => [...String(text).matchAll(F12_CAR)].map(c => ({ i: c[1
 const f12Num = s => Number(String(s).replace(/[\s  ]/g, ""));
 const f12Rate = (r, k) => (k === 1 ? C(toFrac(r)) : `${C(toFrac(r))}/${k}`);
 /* f12 review 1 (2026-10-10): an equation wears ONE wrapper, <span
-   class="f12-eq"> (a size smaller); a two-car term is ONE unit, its two cars
+   class="f13-eq"> (a size smaller); a two-car term is ONE unit, its two cars
    a space apart; a single-letter left side rides with the first right-hand
    term ("A = 5 500(…)"); and a term too wide for a 360-px option is cut
    before its second car, which then reads "× (1 + …)^n". A second car in a
@@ -1146,7 +1146,7 @@ export function f12ParseEq(html, iTexts = null) {
   if (html == null) return null;
   const units = [];
   const unit = inner => { units.push(inner); return ` #${units.length - 1} `; };
-  const s = String(html).replace(/^<span class="f12-eq">([\s\S]*)<\/span>$/, "$1").replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
+  const s = String(html).replace(/^<span class="f13-eq">([\s\S]*)<\/span>$/, "$1").replace(/<span class="nowrap">([^<]*)<\/span>/g, (m, inner) => {
     const k = inner.indexOf(" =");
     if (k < 0) return inner.includes("=") ? " ! " : unit(inner);
     const rest = inner.slice(k + 2).trim();
@@ -1289,7 +1289,8 @@ function f12GraphIssue(g, s) {
     : nd.label === x.v && nd.amount == null)));
   return okPay ? null : "timeline: a payment is not where the story puts it";
 }
-export function f12Diagnose(q, fam = null) {
+// was f12Diagnose until 2026-10-11 (the round is f13 now; f12 = Build the timeline)
+export function f13Diagnose(q, fam = null) {
   if (!q || q.type !== "steps" || !Array.isArray(q.steps)) return "not a steps chain";
   const s = f12Scene(q);
   if (!s) return "the story does not read back";
@@ -1335,7 +1336,7 @@ export function f12Diagnose(q, fam = null) {
   if (fam && !(SHAPE[fam] && SHAPE[fam]())) return `not the ${fam} shape`;
   return null;
 }
-/* every equation a learner reads on an f12 card (the four options, the
+/* every equation a learner reads on an f13 card (the four options, the
    worked "The one equation:" line), parsed: [{ where, ok }] */
 export function f12EquationsOf(q) {
   const out = [];

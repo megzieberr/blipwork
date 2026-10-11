@@ -60,7 +60,7 @@ export const QUEST_MODULES = {
   f9: ["./questf9-car-or-no-car.js", "questF9"],
   f10: ["./questf10-in-or-out.js", "questF10"],
   f11: ["./questf11-meeting-day.js", "questF11"],
-  f12: ["./questf12-one-equation.js", "questF12"],
+  f13: ["./questf13-one-equation.js", "questF13"],
   p1: ["./questp1-basics.js", "questP1"],
   p2: ["./questp2-venn-regions.js", "questP2"],
   p3: ["./questp3-venn-prob.js", "questP3"],

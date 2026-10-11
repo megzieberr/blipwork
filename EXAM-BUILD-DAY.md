@@ -206,7 +206,7 @@ Level 4, easiest first, every chapter ends on `level-4`).
    (`Tutoring Resources/Graad 11 Curro/GR11-IEB-PAPER-BANK.md` + `survey/`), including
    every "given that" question found. One worker per read; after that the PDFs stay closed.
 2. **Finance: `verify-finance.html` — DONE, it already existed** (built 2026-08-23, 146/146 on
-   2026-10-10; the "no harness" note was stale; by the end of 10 Oct it covers f1–f12). Finlib recompute of every f1 to f7 generation, same shape as verify-func.
+   2026-10-10; the "no harness" note was stale; by the end of 10 Oct it covers f1–f13 (the one-equation round was renumbered f12 → f13 on 2026-10-11; f12 = Build the timeline)). Finlib recompute of every f1 to f7 generation, same shape as verify-func.
    Method source = `Tutoring Resources/Graad 12 Curro/Notas & Beplanning/FINANCE-METHOD.md`
    (ONE equation, no "start and stop", no rounding mid-question).
 3. **Analytical: equation of a straight line has no drill round** (ag1 to ag7 skip it). Its

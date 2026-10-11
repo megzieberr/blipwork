@@ -323,13 +323,13 @@ export const CONCEPTS = {
       <p>Deposits and the loan go IN. Withdrawals and repayments come OUT. Tidy: payments positive on the right.</p>`,
   },
 
-  /* f12 "Build the one equation" (2026-10-10). The exam shape, her method:
+  /* f13 "Build the one equation" (2026-10-10; was f12 until 2026-10-11). The exam shape, her method:
      one meeting day, the total alone on the left, every other amount in its
      car, ONE line typed once and rounded once. "the total" only. Money
      amounts and "p.a." carry a LITERAL U+00A0 (f10 review 1: not the thin
      U+202F, never an entity); the "=" glues to the term before it, and in
      prose an operator glues to the word after it. f12 review 1: the
-     equations wear .f12-eq (a size smaller), a two-car term is ONE unit,
+     equations wear .f13-eq (a size smaller), a two-car term is ONE unit,
      a single-letter left side rides with the first term ("A = 5 500(…)"),
      and a number and its unit are one unit ("14% p.a.", "3 years"). */
   oneEquation: {
@@ -341,8 +341,8 @@ export const CONCEPTS = {
         <li><b>Step 3: write it all in ONE line.</b> The total alone on the left (A for saving, the loan P for a loan). The payments on the right: a deposit or a repayment plus, a withdrawal minus.</li>
         <li><b>Step 4: type it once, round once.</b> Never solve it in stages and never round along the way: the answer to <span class="nowrap">2 decimal places</span>, at the end.</li>
       </ul>
-      <div class="eg">Saving: <span class="nowrap">R5 500</span> now and <span class="nowrap">R4 000</span> at T5; <span class="nowrap">14% p.a.</span> compounded half‑yearly for <span class="nowrap">3 years</span>, then <span class="nowrap">12% p.a.</span> compounded monthly; meeting day T7: <span class="f12-eq"><span class="nowrap">A = 5 500(1 + 0,14/2)^6 (1 + 0,12/12)^48</span> + <span class="nowrap">4 000(1 + 0,12/12)^24</span></span>, so <span class="nowrap">A = R18 386,28</span>.</div>
-      <div class="eg">A loan paid off with <span class="nowrap">R5 000</span> at T4 and <span class="nowrap">R6 000</span> at T6; <span class="nowrap">16% p.a.</span> compounded quarterly for <span class="nowrap">4 years</span>, then <span class="nowrap">14% p.a.</span> compounded half‑yearly; meeting day T0: <span class="f12-eq"><span class="nowrap">P = 5 000(1 + 0,16/4)^(−16)</span> + <span class="nowrap">6 000(1 + 0,14/2)^(−4) (1 + 0,16/4)^(−16)</span></span>, so <span class="nowrap">P = R5 113,44</span>.</div>
+      <div class="eg">Saving: <span class="nowrap">R5 500</span> now and <span class="nowrap">R4 000</span> at T5; <span class="nowrap">14% p.a.</span> compounded half‑yearly for <span class="nowrap">3 years</span>, then <span class="nowrap">12% p.a.</span> compounded monthly; meeting day T7: <span class="f13-eq"><span class="nowrap">A = 5 500(1 + 0,14/2)^6 (1 + 0,12/12)^48</span> + <span class="nowrap">4 000(1 + 0,12/12)^24</span></span>, so <span class="nowrap">A = R18 386,28</span>.</div>
+      <div class="eg">A loan paid off with <span class="nowrap">R5 000</span> at T4 and <span class="nowrap">R6 000</span> at T6; <span class="nowrap">16% p.a.</span> compounded quarterly for <span class="nowrap">4 years</span>, then <span class="nowrap">14% p.a.</span> compounded half‑yearly; meeting day T0: <span class="f13-eq"><span class="nowrap">P = 5 000(1 + 0,16/4)^(−16)</span> + <span class="nowrap">6 000(1 + 0,14/2)^(−4) (1 + 0,16/4)^(−16)</span></span>, so <span class="nowrap">P = R5 113,44</span>.</div>
       <p>The total is known and a payment is the unknown (a deposit P now, or x in the middle)? Write the same one line, the known total alone on the left, and let <b>SHIFT SOLVE</b> find the unknown.</p>
       <p>A down payment never enters the loan: it comes off the price. <span class="nowrap">Price = loan + down payment</span>.</p>
       <p>Build the whole equation first. Type it once. Round once, at the end.</p>`,

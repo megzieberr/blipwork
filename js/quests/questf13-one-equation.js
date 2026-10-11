@@ -1,5 +1,8 @@
 /* ============================================================
-   FINANCE QUEST 12 · Build the one equation   ★
+   FINANCE QUEST 13 · Build the one equation   ★
+   ------------------------------------------------------------
+   NOTE: this round was f12 until 2026-10-11 (now f13; f12 = Build the
+   timeline). Comments saying 'f12 review 1' refer to its 10 Oct review.
    ------------------------------------------------------------
    FINANCE-ROUNDS-2-PLAN.md, round f12 (built 2026-10-10). The EXAM
    shape. A full word question, recycled from her class bank with
@@ -40,13 +43,13 @@
    loanTwoRepayments with the picture; then mixed, targetAmount, a
    second loanTwoRepayments roll (skill id loanAgain: a loan with no
    picture, the class's struggle point), hirePurchase and unknownPayment.
-   F12_FAMILIES exports the seven family makers ({ timeline }) for the
+   F13_FAMILIES exports the seven family makers ({ timeline }) for the
    Exam Focus "timeline-equation" tile to deal later.
 
    WRAPPING (f9/f10 review 1, f12 review 1): every TERM of an equation,
    its amount and all its cars, is ONE <span class="nowrap"> unit, so a
    line may break only between terms; the equations are a size smaller
-   (.f12-eq) so a two-car term fits a 360-px option, and the rare one that
+   (.f13-eq) so a two-car term fits a 360-px option, and the rare one that
    cannot is cut before its second car, which then reads "× (1 + …)^n".
    A single-letter left side rides with the first right-hand term
    ("A = 5 500(…)"); any other left side keeps the "=" glued to the term
@@ -153,14 +156,14 @@ function carText(c) {
 const coefText = c => (typeof c === "number" ? amt0(c) : c);
 
 /* f12 review 1: every equation of the round (the options, the worked lines,
-   the concept sheet) wears ONE class, .f12-eq (css/styles.css): 12 px, 0.8
+   the concept sheet) wears ONE class, .f13-eq (css/styles.css): 12 px, 0.8
    of an option's 15 px. Measured over 2 800 rolls, that is the largest size
    at which a two-car term (with the sign in front of it) fits a 360-px
    option in one piece on all but 2 cards in 100; at 0.85 it was 1 in 5.
    GLYPH_EM is Sora 500's advance per glyph in em (measured 2026-10-10 in an
    .opt; no kerning between these glyphs, the sum is the rendered width to
    the pixel), so a unit's width is known when the card is built */
-const EQ_PX = 12, OPT_ROOM = 266;                    // .f12-eq; the room inside an .opt at a 360-px phone
+const EQ_PX = 12, OPT_ROOM = 266;                    // .f13-eq; the room inside an .opt at a 360-px phone
 const GLYPH_EM = {
   0: 0.75, 1: 0.423, 2: 0.623, 3: 0.62, 4: 0.652, 5: 0.63, 6: 0.668, 7: 0.585, 8: 0.647, 9: 0.668,
   " ": 0.222, [NB]: 0.222, "(": 0.382, ")": 0.382, "+": 0.592, "−": 0.592, ",": 0.266, "/": 0.365, "^": 0.587,
@@ -168,11 +171,11 @@ const GLYPH_EM = {
 };
 const unitPx = s => [...s].reduce((a, ch) => a + (GLYPH_EM[ch] ?? 0.8), 0) * EQ_PX;
 const fitsOption = s => unitPx(s) <= OPT_ROOM - 1;
-const EQ = html => `<span class="f12-eq">${html}</span>`;
+const EQ = html => `<span class="f13-eq">${html}</span>`;
 /* a term is ONE unbreakable unit, its amount and every car (f12 review 1),
    "5 500(1 + 0,14/2)^6 (1 + 0,12/12)^48", so a line never starts on a
    second car that reads like a new term. Only when that unit cannot fit a
-   360-px option even at the .f12-eq size (cut) does the second car stand
+   360-px option even at the .f13-eq size (cut) does the second car stand
    on its own, and then it says so: "× (1 + 0,12/12)^48". cut: true / false,
    or null to decide by the unit's own width */
 function termUnits(t, lead = "", cut = null) {
@@ -404,7 +407,7 @@ const solves = sc => sc.total.value != null;                          // the unk
 function build(sc, { timeline = false } = {}) {
   const D = decoysOf(sc), eq = D.eq, cut = cutsOf([eq, D.sign, D.car, D.gear]);
   const right = eqHtml(eq, cut), wrongs = [D.sign, D.car, D.gear].map(d => eqHtml(d, cut));
-  if (new Set([right, ...wrongs]).size !== 4) throw new Error("f12: two options coincide");   // never reached: each decoy is one different slip
+  if (new Set([right, ...wrongs]).size !== 4) throw new Error("f13: two options coincide");   // never reached: each decoy is one different slip
   const val = solve(sc), U = unknownOf(sc), p = WHO[sc.name];
   const price = sc.down != null ? val + sc.down : null;
   const hint1 = sc.kind === "loan"
@@ -529,7 +532,7 @@ function unknownPayment(opts) {
 
 /* for the Exam Focus "timeline-equation" tile (not built yet): each maker
    takes { timeline: true | false } and is a pure function of the rng */
-export const F12_FAMILIES = { twoDeposits, withdrawal, mixed, loanTwoRepayments, targetAmount, hirePurchase, unknownPayment };
+export const F13_FAMILIES = { twoDeposits, withdrawal, mixed, loanTwoRepayments, targetAmount, hirePurchase, unknownPayment };
 
 /* ---------- the round, in dealing order (the fade follows the index) ---------- */
 /* the timeline shows on cards 1 to 3 only (0-based position < 3) */
@@ -545,7 +548,7 @@ const ROUND = [
   ["unknownPayment", unknownPayment],         // card 8
 ];
 
-export const questF12 = {
-  id: "f12",
+export const questF13 = {
+  id: "f13",
   skills: ROUND.map(([id, make], pos) => ({ id, concept: CON, gen: () => make({ timeline: timelineAt(pos) }) })),
 };

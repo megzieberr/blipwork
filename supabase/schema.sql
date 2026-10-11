@@ -2580,6 +2580,9 @@ insert into public.quests (quest_id, chapter, is_open, sort) values
   ('f1','finance',false, 9), ('f2','finance',false,10), ('f3','finance',false,11),
   ('f4','finance',false,12), ('f5','finance',false,13), ('f6','finance',false,14),
   ('f7','finance',false,15),
+  -- f8..f13 (2026-10-10/11): live sorts 94..99
+  ('f8','finance',false,94), ('f9','finance',false,95), ('f10','finance',false,96),
+  ('f11','finance',false,97), ('f12','finance',false,98), ('f13','finance',false,99),
   ('p1','prob',false,16), ('p2','prob',false,17), ('p3','prob',false,18),
   ('p4','prob',false,19), ('p5','prob',false,20), ('p6','prob',false,21),
   ('p7','prob',false,22),

@@ -330,9 +330,9 @@ h2{font-size:20px} h3{font-size:17px}
 /* f12 review 1 (2026-10-10): the one-equation round's equations (its options,
    worked lines and concept sheet) a size smaller, 12 px (0.8 of an option's
    15 px), so a two-car term fits a 360-px option as ONE unit. The equations
-   read the same size everywhere in the round. js/quests/questf12-one-equation.js
+   read the same size everywhere in the round. js/quests/questf13-one-equation.js
    measures its units at this size (EQ_PX): change both together */
-.f12-eq{font-size:12px}
+.f13-eq{font-size:12px}
 
 /* keypad */
 .keypad{margin-top:4px}
