@@ -26,3 +26,4 @@ tools/diags-walk/
 tools/shots-walk/
 # funfun phone-walk screenshots (session 2, 2026-08-23) — public repo, keep out
 sessions/funfun-walk/
+node_modules/

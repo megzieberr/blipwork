@@ -1,0 +1,9 @@
+{
+  "name": "blipwork-tools",
+  "private": true,
+  "description": "Node helpers for the Afrikaans pipeline (af_extract / af_inject). The Python tools in this folder need none of this.",
+  "dependencies": {
+    "acorn": "^8.19.0",
+    "acorn-walk": "^8.3.5"
+  }
+}
