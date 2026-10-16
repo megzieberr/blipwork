@@ -70,7 +70,7 @@ seven on Revision), plus two more that exist only inside Exam Focus
     `analyticslib.js`, `patternlib.js`) — every answer key is computed here,
     never hand-typed.
   - `js/config.js` — chapter list, tabs (Term 3 / Revision), per-chapter
-    colour families. `js/concepts.js` — the "I'm lost" concept cards.
+    colour families. `js/concepts/<id>.js` per chapter, assembled by `js/concepts.js` (split 2026-10-17, row S4 of the Afrikaans queue) — the "I'm lost" concept cards.
   - `js/calculator.js` — the in-app Casio fx-991ZA Plus II simulator.
 - **Data storage**: Supabase (a hosted database with login features).
   Everything goes through `SECURITY DEFINER` RPC functions defined in
@@ -322,7 +322,7 @@ Future sessions: when you hit (and fix) a new one, append it here.
    maths library (answers computed, decoys filtered by value, tolerances
    measured); diagrams → `js/engine/` (its `verify()` must stay honest);
    answer flow / marking UI → `js/questions.js` + `js/play.js`; chapter
-   wiring → `js/config.js`, `js/quests/index.js`, `js/concepts.js`;
+   wiring → `js/config.js`, `js/quests/index.js`, a new `js/concepts/<id>.js` plus one import and one spread line in `js/concepts.js`;
    database → `supabase/schema.sql` PLUS a new additive `migration-*.sql`.
 4. Respect the decision log above — especially recap-sized quests, computed
    answers, and the Casio-vs-school quartile split.
