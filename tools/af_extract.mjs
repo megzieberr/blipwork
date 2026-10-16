@@ -41,6 +41,10 @@ import * as walk from "acorn-walk";
 export const TOOLS = path.dirname(fileURLToPath(import.meta.url));
 export const REPO = path.resolve(TOOLS, "..");
 export const LANG_JS = path.join(REPO, "js", "lang.js");
+/* read-only: Fun Functions' B(en, af) twins (js/funfun/ is GENERATED,
+   never written); af_check reads them like L when asked (opts.funfun) */
+export const FUNFUN_I18N = path.join(REPO, "js", "funfun", "i18n.js");
+export const isFunfunFile = (abs) => repoRel(abs).startsWith("js/funfun/");
 
 /* ---------------- THE TABLES (surveyed 2026-10-16) ----------------
    HELPERS: question builders by NAME (the same name means the same
@@ -164,11 +168,15 @@ export function isPairObj(obj) {
 /* the file's import of L from js/lang.js (resolved, so js/exam/lang.js
    never counts): { decl, local } or null */
 export function langImport(ast, abs) {
+  return importOf(ast, abs, LANG_JS, "L");
+}
+/* the file's import of <name> from the module <target> (absolute path) */
+export function importOf(ast, abs, target, name) {
   for (const d of ast.body) {
     if (d.type !== "ImportDeclaration" || !String(d.source.value).startsWith(".")) continue;
-    if (path.resolve(path.dirname(abs), d.source.value) !== LANG_JS) continue;
+    if (path.resolve(path.dirname(abs), d.source.value) !== target) continue;
     for (const s of d.specifiers) {
-      if (s.type === "ImportSpecifier" && (s.imported.name ?? s.imported.value) === "L") return { decl: d, local: s.local.name };
+      if (s.type === "ImportSpecifier" && (s.imported.name ?? s.imported.value) === name) return { decl: d, local: s.local.name };
     }
   }
   return null;
@@ -195,11 +203,17 @@ const FN_TYPES = new Set(["FunctionDeclaration", "FunctionExpression", "ArrowFun
    A SITE is every string or template literal, classified by where it
    sits: free | key | import | member | tagged | directive | L0 | L1 | Lx
    | pairEn | pairAf. Only free, L0 (and pairEn in exam files) can carry
-   an item. */
-export function analyse(text, abs) {
+   an item.
+   opts (all optional; af_check / af_glossary_apply, S3): `as` = read the
+   file as if it sat at this absolute path (exam mode, config mode and
+   import resolution follow it: for checking copies in tools/_out/);
+   `funfun` = treat Fun Functions' B(en, af) from js/funfun/i18n.js as the
+   twin wrapper when there is no L import (read-only checks). */
+export function analyse(text, abs, opts = {}) {
   const ast = parse(text);
-  const exam = isExamFile(abs);
-  const lang = langImport(ast, abs);
+  const where = opts.as || abs;
+  const exam = isExamFile(where);
+  const lang = langImport(ast, where) || (opts.funfun ? importOf(ast, where, FUNFUN_I18N, "B") : null);
   const Lname = lang ? lang.local : null;
   const declared = new Set(), bindings = new Map(), calls = new Map(), fns = [], sites = [], siteByNode = new Map();
   walk.fullAncestor(ast, (node, _st, anc) => {
@@ -239,7 +253,7 @@ export function analyse(text, abs) {
       }
     }
   });
-  return { ast, text, abs, exam, lang, Lname, declared, bindings, calls, fns, sites, siteByNode };
+  return { ast, text, abs, where, exam, lang, Lname, declared, bindings, calls, fns, sites, siteByNode };
 }
 
 function makeSite(text, node, parent, grand, anc, Lname) {
@@ -260,20 +274,26 @@ function makeSite(text, node, parent, grand, anc, Lname) {
   const dev = anc.some((a) =>
     (a.type === "CallExpression" && a.callee.type === "MemberExpression" && a.callee.object.type === "Identifier" && a.callee.object.name === "console") ||
     (a.type === "NewExpression" && a.callee.type === "Identifier" && /Error$/.test(a.callee.name)) || a.type === "ThrowStatement");
-  let data = false;
-  if (parent) {
-    if (parent.type === "BinaryExpression" && ["===", "!==", "==", "!="].includes(parent.operator)) data = true;
-    else if (parent.type === "SwitchCase" && parent.test === node) data = true;
-    else if (parent.type === "Property" && parent.value === node && DATA_KEYS.has(keyName(parent))) data = true;
-    else if (parent.type === "CallExpression" && parent.arguments.includes(node) && parent.callee.type === "MemberExpression" &&
-      !parent.callee.computed && DATA_METHODS.has(parent.callee.property.name)) data = true;
-  }
+  const data = dataUse(node, parent);
   return {
     node, cls, parent, grand, dev, data,
     kind: isTpl(node) ? "template" : "string",
     raw: rawOf(text, node), start: node.start, end: node.end,
     line: node.loc.start.line, col: node.loc.start.column + 1,
   };
+}
+
+/* a value sitting at `node` under `parent` is (also) used as data: a
+   comparison, a switch case, an id-like key, a lookup method argument.
+   af_check also asks it about an L(...) call, so the flag survives inject. */
+export function dataUse(node, parent) {
+  if (!parent) return false;
+  if (parent.type === "BinaryExpression" && ["===", "!==", "==", "!="].includes(parent.operator)) return true;
+  if (parent.type === "SwitchCase" && parent.test === node) return true;
+  if (parent.type === "Property" && parent.value === node && DATA_KEYS.has(keyName(parent))) return true;
+  if (parent.type === "CallExpression" && parent.arguments.includes(node) && parent.callee.type === "MemberExpression" &&
+    !parent.callee.computed && DATA_METHODS.has(parent.callee.property.name)) return true;
+  return false;
 }
 
 /* ---------------- impure placeholders ----------------
@@ -340,7 +360,7 @@ function returnsOf(fn) {
    Returns Map(literal node -> Set(slot labels)) plus option lists. */
 function discover(A) {
   const hits = new Map(), seen = new Set(), work = [], inferred = new Map(), optionLists = [], skippedLists = [];
-  const isConfig = repoRel(A.abs) === "js/config.js";
+  const isConfig = repoRel(A.where || A.abs) === "js/config.js";
   const hit = (n, label) => { if (!hits.has(n)) hits.set(n, new Set()); hits.get(n).add(label); };
   const add = (n, label) => work.push([n, label, false]);
   const last = (label) => label.split(".").pop();
@@ -560,9 +580,9 @@ export function existingAf(A, s) {
   return undefined;
 }
 
-export function extractFile(abs) {
+export function extractFile(abs, opts = {}) {
   const { text } = readSource(abs);
-  const A = analyse(text, abs);
+  const A = analyse(text, abs, opts);
   const base = path.basename(abs);
   const { hits, optionLists, skippedLists } = discover(A);
   const slotsByText = new Map();

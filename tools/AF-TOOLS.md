@@ -6,7 +6,7 @@ Setup once per machine: `cd tools && npm ci` (acorn + acorn-walk; the night rout
 `tools/node_modules` is missing). Node 24.
 
 **A translation row, start to end:** `node tools/af_extract.mjs --unit T09 <files>` → the translator
-writes `briefs/af/T09.af.json` → `node tools/af_inject.mjs T09` → `node tools/af_check.mjs` (row S3) →
+writes `briefs/af/T09.af.json` → `node tools/af_inject.mjs T09` → `node tools/af_check.mjs --unit T09` (exit 0) →
 the chapter's verify page in EN and with `?lang=af` (`python tools/harness_run.py verify-eq "verify-eq?lang=af"`).
 
 ## Commands
@@ -84,3 +84,43 @@ as a leftover with `in`); the brief decides whether the translator may translate
   translated with those files' own row, and a text comparison across files must be checked by hand.
 - `js/quests/_finance-check.js` reads English prompts (pcts, yearsIn, freqIn): verify-finance in
   `?lang=af` needs those checks to read the af side before finance is translated.
+
+## af_check (row S3): is every item twinned, is every twin safe
+`node tools/af_check.mjs [--unit <row> [--dir <d>]] [--all] [--strict] [--json] [--verbose] [--as <repo path>] <file> ...`
+reads the FILES (never the tables): af_extract's items, and each one's twin (`L`/`afL` second argument,
+exam `af:`, read-only `B(en, af)` for js/funfun/). Prints `ERROR|WARN <rule> <key> <file:line> [detail]
+<snippet>` per file, a counts line (`items / twins / missing / errors / warns`) and a totals line.
+Exit 1 on any ERROR; `--strict` turns WARNs into errors; `--json` also writes `tools/_out/af_check.json`.
+**The night routine, after inject: `node tools/af_check.mjs --unit <row>` must exit 0.**
+`--all` (every content file: `contentFiles()` in af_check.mjs; not js/funfun/, js/lang.js, js/exam/lang.js,
+the harness stub, the loaders) is the ship-time DEBT REPORT: missing twins are counted per file (lines with
+`--verbose`), other findings listed, exit 0 unless `--strict`. `--as` checks a copy (tools/_out/) as if it sat
+at that path. One finding per rule per twin; several hits show as `[×n]`.
+- `missing` ERROR (debt in `--all`): an item with no twin. `af-conflict` WARN: one English, two af texts.
+- `placeholders` ERROR: the `${...}` sequence differs after blanking quoted strings inside each placeholder
+  (quoted prose there may be translated, the code may not); the af template does not parse; `${` in a string.
+- `tags` ERROR: HTML tags, entities, and ✓ / ✓ca / ✗ ticks differ in order or count.
+- `english-leak` WARN: an af word from `STOP_WORDS` (top of af_check.mjs; English words that are NOT also
+  Afrikaans; ALL-CAPS, tags and `${...}` skipped). ERROR when af == en, en has 3+ words and it is not data.
+- `wording:<id>` (the `RULES` table, top of af_check.mjs; G2 extends it there): ERROR frase(s), em-dash,
+  en-dash used as a dash, decimal point between digits (question numbers like Vraag 3.1 skipped), kot / kosek
+  / sek (not "30 sek"), weerkaats*, sin/cos/tan⁻¹ (also ^-1, <sup>−1</sup>), a translator's `??term??`;
+  WARN hyphen-minus where the en has a real minus, formal `u` (skipped when u is a variable), en "interval"
+  without af "interval", en "drag" with af "sleep".
+- `length` WARN: visible af/en > 1.6 with en ≥ 12 characters (360 px). `numbers` WARN: digit runs differ
+  (decimal comma/point and thousands spaces normalised; "(1,2)" vs "(1;2)" shows here).
+- `must-equal` ERROR: an item also used as data (a comparison, an id-like key) whose af differs.
+
+## af_glossary_apply (row S3): her later word wins everywhere
+`node tools/af_glossary_apply.mjs [--glossary <path>] [--write] [--as <repo path>] [--all | <file> ...]`
+reads `AF-GLOSSARY.md` (row S5): a `## Terms` table `| English | Afrikaans | Note | Retired |` (columns
+found by name), then `## Rules`. A row with a Retired cell (old forms split by `;`) replaces each whole-word,
+case-insensitive old form with the FIRST Afrikaans form (before the first `,`), a leading capital kept, in
+AF SIDES ONLY: `L`/`afL` second arguments, exam `af:`, `briefs/af/*.af.json` values (so a re-inject keeps it).
+Inside a template only its text and the quoted prose in `${...}` change: never code, comparison strings,
+tags or entities. Never an English side, js/funfun/ or js/lang.js. DRY by default (`file:line old → new`,
+per-file and per-term counts); `--write` edits from the end backwards, CRLF/LF + BOM kept, re-parses every
+literal and the file. No glossary: "no AF-GLOSSARY.md yet", exit 0. Rows that would never settle (the new
+form contains the old one) are skipped and printed. `--all` = contentFiles() + every `.af.json`. After
+`--write` it prints the af_check (and re-inject) commands for the touched files. Retire only words with ONE
+meaning: a dry run's per-term count is the brake (e.g. retiring "deel" would hit every "deel deur").
