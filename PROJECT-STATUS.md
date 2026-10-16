@@ -10,16 +10,10 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
 - **🚀 Sat 2026-10-17 00:18: sw v97 LIVE (`5cf9433`): HUB TABS = PAPER 1 / PAPER 2 (`9ef7f91`), plus the AF
-  queue's S1 (hidden language switch) and S2 (extract / inject tools, no app code).** The
-  Term 3 / Revision pair is gone; each tab lists its chapters in the paper's own order (js/screens.js
-  PAPER_TABS: P1 exp, eqn, pat, func, finance, prob; P2 stats, analytical, gtrig, tgraph, trig, meas; an
-  unlisted id follows in CHAPTERS order). The chapter `term` field in js/config.js is untouched, nothing
-  reads it. Checks: verify-exam 678/678 (new order ticks), verify-wrap 56658/56658, verify-store only its
-  6 old dress-lock / care-day failures; hub DOM + render at 375 px: two tabs per row, six cards each, no
-  page errors. Shipped on her "ship it now" (00:13): bump commit `5cf9433`, sw_check OK, push `9f073ba..5cf9433`;
-  live checks 00:20: live sw.js mhq-v97 on the second poll; sw.js / js/screens.js / js/app.js / js/lang.js /
-  css/styles.css / index.html byte-identical to HEAD; the LIVE hub at 375 px shows Paper 1 / Paper 2 with the
-  paper order under each, no page errors.
+  queue's S1 (hidden language switch) and S2 (extract / inject tools).** Each tab lists its chapters in the
+  paper's own order (js/screens.js PAPER_TABS); the chapter `term` field stays, nothing reads it. Shipped on
+  her "ship it now" (00:13), sw_check OK, live checks 00:20 green at 375 px; the full write-up and the harness
+  numbers are in STATUS-ARCHIVE.md 2026-10-16 23:45.
 - **🇿🇦 Sat 2026-10-17 01:30: AFRIKAANS HEAD START DONE, S1–S6 + the pilot all green** (Fable foreman, one
   Opus worker per row, each reviewed with fresh proof before the next): S1 `f3cc903` `js/lang.js` (key
   `mhq.lang`, `L(en, af)`, `?lang=af` sets the device, button hidden behind `SHOW_TOGGLE`; exam + Fun Functions
