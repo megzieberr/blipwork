@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-11 19:20 (🚀 sw v96 LIVE 19:12, `a4621b5`: finance rounds part 2 SHIPPED, f8–f13 live CLOSED at sort 94–99; she opens each from the admin page as she teaches it)
+# Project status — updated 2026-10-16 23:20 (🇿🇦 Afrikaans plan + nightly routine SET UP, nothing built; 🚀 sw v96 still LIVE `a4621b5`, f8–f13 live CLOSED; she opens each from the admin page as she teaches it)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,6 +9,16 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **🇿🇦 Fri 2026-10-16 23:20: AFRIKAANS TRANSLATION planned, nothing built.** For her 2027 Gr11s, done by
+  the START of January: the UI stays English, only the maths content gets Afrikaans twins in the same
+  files (`L(en, af)` in hub rounds, `af:` beside `en:` in exam cards, hub tiles too), behind a HIDDEN
+  Circle Quest style device toggle (`mhq.lang`; `?lang=af` on the URL is how she tests). Runs as the LOCAL
+  scheduled task `blipwork-afrikaans-night`: nightly 22:10 from Sun 18 Oct (start-date guard), up to two
+  QUEUE.md rows a night, one Opus worker each, commits LOCAL on main, never pushes, never bumps sw.js.
+  Files in the root: AFRIKAANS-PLAN.md (the brief, its rulings are law, stays untracked), QUEUE.md (6 setup
+  rows S1–S6, pilot gate G1, 91 translation rows of ≤ 4 000 words, gate G2) and AF-LOG.md (one line per
+  row), both committed by the routine's first green row. Head start Fri 16 + Sat 17 Oct in a fresh Fable
+  session (S1–S3, then S4–S6 + the pilot). Measured ~225k English words; a night ≈ 150–280k tokens.
 - **🚀 Sun 2026-10-11 19:12: sw v96 LIVE (`a4621b5`), 26 commits since the inbox ship
   (v95, 4 Oct).** The finance chapter now holds f1–f13: the 10 Oct rounds (f9 Car or no car,
   f10 In or out, f11 Pick the meeting day), the 11 Oct foreman day (renumber, Fix A real
@@ -89,8 +99,24 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   made "times‑per‑year" unbreakable in f5/f3.
 - 2026-10-11 19:12: SHIPPED sw v96 `a4621b5` (migration 19:04, sw_check OK, live checks
   19:15). `FINANCE-ROUNDS-2-PLAN.md` stays untracked/local (her 10 Oct call stands).
+- 2026-10-15 (hers): Blipwork for Afrikaans learners = app UI English, maths content Afrikaans; never a
+  copy of the app.
+- 2026-10-16 (hers): translate bit by bit, done by the START of January 2027, for her 2027 Gr11s (chapter
+  order = teaching order); EN/AF toggle like Circle Quest's, HIDDEN until the whole queue is done; hub
+  tiles are content (Finance → Finansies); the work runs as a nightly 22:00 scheduled task from Sunday
+  18 Oct (Saturday night = her own manual push); ship as we go: night commits on main, her ships carry
+  them live, hidden; a Gr11/Gr12 grade toggle (Circle Quest's eweredigheid pattern) = a DECEMBER planning
+  session, nothing before; `mindbourne-gr4-textbook` stays local, nothing online.
+- 2026-10-16 (mine, flagged, default keep): the night run never pushes (a push without an sw bump in exam
+  weeks could mix old and new files on a phone); a row = one table ≤ 4 000 words, several small files may
+  share one ("translation chapter" is a unit in her one-unit rule); two rows a night, a third only when
+  both were small, hard stop ~300k; translators never read code (extract → table → Opus → inject →
+  af_check → the chapter's verify page in EN and AF).
 
 ## ⏳ Pending on Megan
+- 📱 3 min [after the head start; blocks the routine]: open Blipwork with `?lang=af` on your phone → play
+  Number Patterns round 1 in Afrikaans → tick row G1 in QUEUE.md (or write the fixes under it).
+- 💻 1 min [Sunday morning, whenever]: read AF-LOG.md, one line per row the night did.
 - 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13, one at a time, the
   day you teach it (they are live but CLOSED, learners cannot see them yet).
 - 📱 3 min [whenever]: on your phone close Blipwork, open it, close it, open it again (v96
@@ -104,6 +130,11 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships).
 
 ## Next up
+- **🇿🇦 Afrikaans queue (nightly from 18 Oct, AFRIKAANS-PLAN.md + QUEUE.md):** the routine works the queue
+  top to bottom; her part = the pilot gate, then one AF round per chapter on her phone; wording she hates →
+  a row in AF-GLOSSARY.md (`tools/af_glossary_apply.mjs` back-fills earlier chapters). G2 after the
+  queue: wording sweep, `SHOW_TOGGLE` on, ship. DECEMBER: the Gr12 layer planning session
+  (GR12-LAYER-PLAN.md, not started).
 - **Parked cosmetic lists, her one-line call, nothing blocking:** `briefs/finance-2/
   brief-3b-f10-review.md`, `brief-4b-f8-review.md`, `brief-5b-f12-review.md` (H4 is done by
   the collapse; H1–H3 remain), plus this evening's leftovers: f8's reminder line wraps

@@ -1,5 +1,28 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-16 22:32–23:20 — Blipwork in Afrikaans: the plan, the queue, the nightly routine (Fable; no workers, nothing built)
+- Catch-up: portfolio sweep nothing new except the non-git `mindbourne-gr4-textbook` folder (her ruling:
+  local on purpose, nothing online → NON_GIT_BY_DESIGN + memory). Read the 15 Oct session's transcript
+  ("Blipwork Afrikaans Grade 11 functions"): an Afrikaans Gr12 group asked for Blipwork in Afrikaans;
+  that session measured ~250k words, sent them the Fun Functions link instead; her ruling there: UI
+  English, maths Afrikaans.
+- Measured the repo (prose words inside string literals, scripts in the session scratchpad): exam cards
+  ~140k / 66 files, exam engine+other ~22k, hub rounds ~47k / 111, concepts ~12.5k, tiles ~1.4k,
+  helpers+dice ~3.4k; ~225k in all. Found the dormant `{en, af}` schema in js/exam (her 21 Aug parking),
+  Fun Functions fully bilingual (mount pinned EN), Circle Quest's js/i18n.js toggle pattern.
+- Plan v1 (per-learner DB flag) → v2 after her answers (hidden device toggle, no migration; nightly
+  routine; tiles Afrikaans) → v3 (two rows a night, rows packed to ≤ 4 000-word tables, start Sunday)
+  after "done by the START of January" and "Saturday night is mine".
+- Created: AFRIKAANS-PLAN.md, QUEUE.md (generated: S1–S6, G1, 91 translation rows in her 2027 Gr11
+  teaching order, G2), AF-LOG.md; scheduled task `blipwork-afrikaans-night` (cron 0 22 * * *, fires
+  22:10, bypass mode, no notifications; guards: start date Sun 18 Oct 21:30, night window 21:30–02:30,
+  clean repo, no ⏳ claimed row; never push / sw / Supabase / English edits). Memory: AF block at the
+  top of maths-homework-quest.md, MEMORY.md line, leave-uncommitted note.
+- Cost calibration used: the 14 Oct audit (~750k tokens ≈ 2 meter points → ~375k ≈ 1% of a 20x week).
+  A night ≈ 150–280k ≈ 0.4–0.75%; the S1–S3 head start ≈ 750k ≈ 2%.
+- Fable context this session ≈ 150k, no workers. Docs committed locally (not pushed). Title: Blipwork
+  Afrikaans translation plan.
+
 ## 2026-10-11 16:49–19:20 — Finance part 2: her play-test, three fixes, 2b, SHIP sw v96 (Fable; four workers, three checkers)
 - Catch-up (portfolio sweep: nothing new; every flagged item on the known-deliberate list).
   Local server started on 5191 for her play-test (`localhost:5191/?local=1`). Session titles
