@@ -12,6 +12,7 @@ import { closeActiveTour } from "./companion/tour.js";
 import { renderGallery } from "./gallery.js";
 import { registerServiceWorker } from "./pwa.js";
 import { mountFeedback } from "./feedback.js";
+import { onLangChange, mountLangToggle } from "./lang.js";   // core: runs the ?lang= override at startup (AFRIKAANS-PLAN.md, S1)
 
 const app = {
   root: null, state: null, screen: "login", params: {},
@@ -118,8 +119,15 @@ function chrome(app) {
   brand.addEventListener("click", () => app.go("blip"));
   c.querySelector(".hud").addEventListener("click", () => app.go("blip"));
   c.querySelector(".logout").addEventListener("click", () => app.logout());
+  // EN/AF button (js/lang.js): draws nothing while SHOW_TOGGLE is false.
+  mountLangToggle(c.querySelector(".chrome-right"), c.querySelector(".logout"));
   return c;
 }
+
+/* A language flip redraws the CURRENT screen through go(), the one choke
+   point (it also tears down a live Fun Functions mount first). Only the
+   hidden header button calls setLang(), so nothing fires this today. */
+onLangChange(() => app.go(app.screen, app.params));
 
 app.boot();
 window.__APP__ = app;

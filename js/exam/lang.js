@@ -24,13 +24,18 @@
    English or Afrikaans — it stays "Esplain" in both languages on
    purpose (her ruling: not a typo, never "fixed").
    ============================================================ */
+import { getLang } from "../lang.js";
 const LS_KEY = "mhq.examLang";   // dormant — nothing writes this key any more (session E)
 
-/* PINNED to "en" (session E, 2026-08-21, her ruling) — was a localStorage
-   read. Kept as a function, not a bare constant, so every existing
-   caller (js/screens.js, js/exam-play.js) needed no further change, and
-   flipping AF back on later is a one-line edit here, not a re-plumb. */
-export function getExamLang() { return "en"; }
+/* DEVICE LANGUAGE (2026-10-16, AFRIKAANS-PLAN.md, QUEUE.md row S1): this
+   replaces the session-E pin to "en" described in the header above. It now
+   reads the device key "mhq.lang" through js/lang.js ("en" by default; set
+   by ?lang=af / ?lang=en while the app's toggle stays hidden), so the cards'
+   {en, af} CONTENT follows the device through pick(). The tab's chrome does
+   not: uiStr() below stays English, because the UI is English (her ruling).
+   The AF content itself arrives row by row through QUEUE.md; a card with no
+   af side yet falls back to its English through pick(). */
+export function getExamLang() { return getLang(); }
 
 /* DORMANT — no caller remains after session E's toggle removal. Left in
    place for when AF returns (her word: next year). */
@@ -105,4 +110,8 @@ export const EXAM_UI = {
   },
 };
 
-export function uiStr(lang) { return EXAM_UI[lang === "af" ? "af" : "en"]; }
+/* UI stays English (2026-10-16, AFRIKAANS-PLAN.md "the UI stays English
+   throughout"): getExamLang() can now say "af", and both callers pass it
+   here, so this hands back the English chrome either way. The AF set above
+   stays dormant. Callers keep passing a lang, so neither had to change. */
+export function uiStr(lang) { return EXAM_UI.en; }

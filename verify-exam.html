@@ -216,6 +216,7 @@ import { tgraphLevel4Questions } from "./js/exam/tgraph-level4.js";
 import { renderHub, renderExamChapter, examChapterEligible } from "./js/screens.js";
 import { renderExamPlay } from "./js/exam-play.js";
 import { getExamLang, setExamLang } from "./js/exam/lang.js";
+import { getLang } from "./js/lang.js";
 import { api } from "./js/api.js";
 import { LocalBackend } from "./js/local-backend.js";
 import { setSession, clearSession } from "./js/session.js";
@@ -1010,11 +1011,13 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 
   tick(activeCard() && activeCard().querySelector(".exam-part-id").textContent.includes("b"), "part (b) is now the active part");
 
-  // ---- EN-only (session E, 2026-08-21): no toggle button anywhere on
-  // the player, and getExamLang() stays pinned to "en" ----
+  // ---- EN-only chrome (session E, 2026-08-21): no toggle button anywhere
+  // on the player. Since 2026-10-16 (AFRIKAANS-PLAN.md, QUEUE.md S1)
+  // getExamLang() follows the device key mhq.lang (js/lang.js) instead of
+  // the old pin to "en"; run this page with ?lang=af to exercise that ----
   tick(!host.querySelector(".exam-lang-btn"), "no EN/AF toggle button renders on the part player");
-  tick(getExamLang() === "en", "getExamLang() reads \"en\" while the player is live");
-  lines.push(`EN-only: exam-lang-btn present? ${!!host.querySelector(".exam-lang-btn")} (want false), getExamLang()="${getExamLang()}" (want "en")`);
+  tick(getExamLang() === getLang(), "getExamLang() follows the device language (js/lang.js) while the player is live");
+  lines.push(`EN-only: exam-lang-btn present? ${!!host.querySelector(".exam-lang-btn")} (want false), getExamLang()="${getExamLang()}" (want "${getLang()}", the device's)`);
 
   // ---- reveal (b) and (c), then the ★ level-4 note on (d) ----
   btnByText("Done! Show me the answer").click();
@@ -1443,7 +1446,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 
   // EN-only (session E, 2026-08-21): no toggle anywhere, even on real content
   tick(!host.querySelector(".exam-lang-btn"), "real eqn.nor.q1: no EN/AF toggle button anywhere on the player");
-  tick(getExamLang() === "en", "getExamLang() reads \"en\" while real content is live");
+  tick(getExamLang() === getLang(), "getExamLang() follows the device language while real content is live");
 
   lines.push(`real eqn.nor.q1 played end to end: partsOpened=${JSON.stringify(row && row.partsOpened)}, completed=${row && row.completed}, xp=${afterState.xp}, gold=${afterState.gold}, ★ count=${starCount}`);
 
@@ -1565,11 +1568,13 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   const host = document.getElementById("harnessHost");
   const eqnChapter = chapterById("eqn");
 
-  // ---- EN-only: getExamLang() is pinned, ignores the dormant setExamLang() ----
-  tick(getExamLang() === "en", "getExamLang() returns \"en\"");
-  setExamLang("af");
-  tick(getExamLang() === "en", "getExamLang() still returns \"en\" after calling the dormant setExamLang(\"af\") — the pin ignores it");
-  lines.push(`getExamLang() before/after calling dormant setExamLang("af"): both "en"? ${getExamLang() === "en"}`);
+  // ---- getExamLang() follows the device (js/lang.js, 2026-10-16) and
+  // ignores the dormant setExamLang() / mhq.examLang key ----
+  const devLang = getLang();
+  tick(getExamLang() === devLang, `getExamLang() returns the device language ("${devLang}")`);
+  setExamLang(devLang === "af" ? "en" : "af");
+  tick(getExamLang() === devLang, "getExamLang() is unchanged after calling the dormant setExamLang() with the other language: only mhq.lang counts");
+  lines.push(`getExamLang() before/after calling dormant setExamLang(other): both "${devLang}"? ${getExamLang() === devLang}`);
 
   // ---- no lang-toggle button anywhere in the tab's nav screens ----
   const navApp = { state: { openQuests: ["eq8"] }, screen: "hub", params: {},

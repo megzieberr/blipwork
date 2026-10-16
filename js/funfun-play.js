@@ -43,6 +43,7 @@ import { lazyImport } from "./lazy.js";
 import { api } from "./api.js";
 import { getSession } from "./session.js";
 import { el, showToast } from "./ui.js";
+import { getLang } from "./lang.js";
 
 /* Seam fact (a) from the Part-1 review: graph-quest's own sheet carries
    `.ff-root .view{min-height:100vh}` because standalone it OWNS the page.
@@ -160,9 +161,11 @@ export function renderFunfunPlay(app, host, params) {
   /* the mount sets the language itself, but only once mountFunFunctions runs
      — and the top bar's title is read BEFORE that. Fun Functions defaults to
      Afrikaans from a localStorage key it shares with its standalone on this
-     same origin, so set English for this read too (persist:false, never
-     written back — brief D6). */
-  setLang("en", { persist: false });
+     same origin, so set blipwork's own choice for this read too: the device
+     language from js/lang.js ("en" unless ?lang=af set it, 2026-10-16), the
+     same value the mount is handed below (persist:false, never written
+     back — brief D6). */
+  setLang(getLang(), { persist: false });
   const topbar = el("div", "ff-play-top");     // NOT `top`: a global by that name shadows window.top
   topbar.innerHTML = `<button class="link-btn ff-back" aria-label="Back">‹</button>
     <div class="ptitle">${L(q.title)}</div>`;
@@ -192,10 +195,12 @@ export function renderFunfunPlay(app, host, params) {
 
   const mountHost = {
     questId,
-    /* brief D6 — blipwork is English and IEB Grade 11: no semicircles,
-       and Fun Functions' own AF/EN toggle is never shown (mounted mode
-       does not draw the chrome that carries it) */
-    lang: "en",
+    /* brief D6 — IEB Grade 11: no semicircles, and Fun Functions' own
+       AF/EN toggle is never shown (mounted mode does not draw the chrome
+       that carries it). The language is blipwork's device choice from
+       js/lang.js: "en" unless ?lang=af set this device (AFRIKAANS-PLAN.md,
+       2026-10-16; was pinned to "en"). */
+    lang: getLang(),
     semicircles: false,
 
     async profile() {

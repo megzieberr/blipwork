@@ -8,7 +8,8 @@ async def main():
             ctx=await b.new_context(viewport={"width":375,"height":812}); pg=await ctx.new_page()
             errs=[]; pg.on("pageerror", lambda e: errs.append(str(e)[:100]))
             try:
-                await pg.goto(f"http://localhost:5191/{name}.html", wait_until="load", timeout=120000)
+                base,_,query=name.partition("?")   # "verify-exam?lang=af": .html goes before the ?
+                await pg.goto(f"http://localhost:5191/{base}.html"+(f"?{query}" if query else ""), wait_until="load", timeout=120000)
                 for _ in range(400):
                     txt=await pg.evaluate("document.body.innerText")
                     if re.search(r'ALL GOOD|checks passed|\d+/\d+ passed|✗|FAIL', txt): break
