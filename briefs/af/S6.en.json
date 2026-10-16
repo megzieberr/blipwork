@@ -1,0 +1,558 @@
+{
+  "unit": "S6",
+  "generated": "2026-10-16T22:47:43.917Z",
+  "files": [
+    "js/quests/questnp1-spot.js"
+  ],
+  "items": {
+    "questnp1-spot#1": {
+      "en": "arithmetic (linear)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "optionList"
+      ],
+      "where": [
+        "questnp1-spot.js:16:16",
+        "questnp1-spot.js:26:7",
+        "questnp1-spot.js:26:40"
+      ]
+    },
+    "questnp1-spot#2": {
+      "en": "quadratic",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "optionList"
+      ],
+      "where": [
+        "questnp1-spot.js:16:39",
+        "questnp1-spot.js:42:7",
+        "questnp1-spot.js:42:30"
+      ]
+    },
+    "questnp1-spot#3": {
+      "en": "geometric",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "optionList"
+      ],
+      "where": [
+        "questnp1-spot.js:16:52",
+        "questnp1-spot.js:57:7",
+        "questnp1-spot.js:57:30"
+      ]
+    },
+    "questnp1-spot#4": {
+      "en": "none of these",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "optionList"
+      ],
+      "where": [
+        "questnp1-spot.js:16:65"
+      ]
+    },
+    "questnp1-spot#5": {
+      "en": "Look at the pattern:<br><b>${list(seq)}</b><br>What kind of pattern is it?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp1-spot.js:25:7",
+        "questnp1-spot.js:41:7",
+        "questnp1-spot.js:56:7"
+      ]
+    },
+    "questnp1-spot#6": {
+      "en": "Find the FIRST differences yourself. If they are all the same, it is arithmetic.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp1-spot.js:28:15"
+      ]
+    },
+    "questnp1-spot#7": {
+      "en": "Arithmetic — the first difference is constant.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp1-spot.js:29:22"
+      ]
+    },
+    "questnp1-spot#8": {
+      "en": "First differences: ${list(fd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:31:16",
+        "questnp1-spot.js:47:16",
+        "questnp1-spot.js:78:16"
+      ]
+    },
+    "questnp1-spot#9": {
+      "en": "next − previous",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:31:53",
+        "questnp1-spot.js:93:74"
+      ]
+    },
+    "questnp1-spot#10": {
+      "en": "Every one is ${C(d)}, so the first difference is constant",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:32:16"
+      ]
+    },
+    "questnp1-spot#11": {
+      "en": "constant 1st difference → arithmetic",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:32:80"
+      ]
+    },
+    "questnp1-spot#12": {
+      "en": "Work out the first differences — they change. Their differences (the second differences) are constant → quadratic.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp1-spot.js:44:15"
+      ]
+    },
+    "questnp1-spot#13": {
+      "en": "Quadratic — the second difference is constant.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp1-spot.js:45:22"
+      ]
+    },
+    "questnp1-spot#14": {
+      "en": "they change, so not arithmetic",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:47:53"
+      ]
+    },
+    "questnp1-spot#15": {
+      "en": "Second differences: ${list(sd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:48:16",
+        "questnp1-spot.js:79:16"
+      ]
+    },
+    "questnp1-spot#16": {
+      "en": "constant 2nd difference → quadratic",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:48:54"
+      ]
+    },
+    "questnp1-spot#17": {
+      "en": "Divide each term by the one before it (${C(seq[1])} ÷ ${C(seq[0])} = …). A constant ratio means geometric.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp1-spot.js:58:15"
+      ]
+    },
+    "questnp1-spot#18": {
+      "en": "Geometric — you multiply by ${C(r)} each time.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp1-spot.js:59:22"
+      ]
+    },
+    "questnp1-spot#19": {
+      "en": "The differences are not constant, so divide instead",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:61:16"
+      ]
+    },
+    "questnp1-spot#20": {
+      "en": "next ÷ previous",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:61:74"
+      ]
+    },
+    "questnp1-spot#21": {
+      "en": "${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)} and ${C(seq[2])} ÷ ${C(seq[1])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:62:16"
+      ]
+    },
+    "questnp1-spot#22": {
+      "en": "same ratio each time → geometric",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:62:102"
+      ]
+    },
+    "questnp1-spot#23": {
+      "en": "For the quadratic pattern <b>${list(seq)}</b>, which differences are constant?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp1-spot.js:71:7"
+      ]
+    },
+    "questnp1-spot#24": {
+      "en": "the second differences",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questnp1-spot.js:72:7"
+      ]
+    },
+    "questnp1-spot#25": {
+      "en": "the first differences",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp1-spot.js:73:8"
+      ]
+    },
+    "questnp1-spot#26": {
+      "en": "the terms themselves",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp1-spot.js:73:33"
+      ]
+    },
+    "questnp1-spot#27": {
+      "en": "none of them",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp1-spot.js:73:57"
+      ]
+    },
+    "questnp1-spot#28": {
+      "en": "Work out the first differences (they change), then their differences (those stay the same).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp1-spot.js:75:15"
+      ]
+    },
+    "questnp1-spot#29": {
+      "en": "The second differences are constant.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp1-spot.js:76:22"
+      ]
+    },
+    "questnp1-spot#30": {
+      "en": "not all the same",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:78:53"
+      ]
+    },
+    "questnp1-spot#31": {
+      "en": "all the same → this is the constant row",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:79:54"
+      ]
+    },
+    "questnp1-spot#32": {
+      "en": "What is the constant first difference of <b>${list(seq)}</b>?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp1-spot.js:87:7"
+      ]
+    },
+    "questnp1-spot#33": {
+      "en": "Subtract any term from the one after it (next − previous).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp1-spot.js:90:15"
+      ]
+    },
+    "questnp1-spot#34": {
+      "en": "d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp1-spot.js:91:22"
+      ]
+    },
+    "questnp1-spot#35": {
+      "en": "d = T₂ − T₁ = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:93:16"
+      ]
+    },
+    "questnp1-spot#36": {
+      "en": "Check: T₃ − T₂ = ${C(seq[2])} − ${P(seq[1])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:94:16"
+      ]
+    },
+    "questnp1-spot#37": {
+      "en": "same, so the difference is constant",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:94:77"
+      ]
+    },
+    "questnp1-spot#38": {
+      "en": "Tap the <b>first difference between T₂ and T₃</b> (the middle of the top difference row).",
+      "kind": "string",
+      "slots": [
+        "tapQ.prompt"
+      ],
+      "where": [
+        "questnp1-spot.js:102:7"
+      ]
+    },
+    "questnp1-spot#39": {
+      "en": "First differences sit between two terms. The one between the 2nd and 3rd terms is the middle cell.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questnp1-spot.js:105:18"
+      ]
+    },
+    "questnp1-spot#40": {
+      "en": "Look at the top difference row: its middle cell sits between T₂ and T₃.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp1-spot.js:106:15"
+      ]
+    },
+    "questnp1-spot#41": {
+      "en": "It is ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp1-spot.js:107:22"
+      ]
+    },
+    "questnp1-spot#42": {
+      "en": "A first difference sits between two terms",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:109:16"
+      ]
+    },
+    "questnp1-spot#43": {
+      "en": "${seq.length} terms → ${seq.length - 1} cells in the row",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:109:64"
+      ]
+    },
+    "questnp1-spot#44": {
+      "en": "Between T₂ and T₃: ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:110:16"
+      ]
+    },
+    "questnp1-spot#45": {
+      "en": "the middle cell",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:110:93"
+      ]
+    },
+    "questnp1-spot#46": {
+      "en": "By what do you multiply to move along <b>${list(seq)}</b>?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp1-spot.js:118:7"
+      ]
+    },
+    "questnp1-spot#47": {
+      "en": "Divide a term by the one before it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp1-spot.js:120:15"
+      ]
+    },
+    "questnp1-spot#48": {
+      "en": "r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp1-spot.js:121:22"
+      ]
+    },
+    "questnp1-spot#49": {
+      "en": "r = T₂ ÷ T₁ = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:123:16"
+      ]
+    },
+    "questnp1-spot#50": {
+      "en": "divide by the term before",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:123:74"
+      ]
+    },
+    "questnp1-spot#51": {
+      "en": "Check: ${C(seq[2])} ÷ ${C(seq[1])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp1-spot.js:124:16"
+      ]
+    },
+    "questnp1-spot#52": {
+      "en": "the ratio is constant",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp1-spot.js:124:67"
+      ]
+    }
+  },
+  "optionLists": {
+    "questnp1-spot.js:KINDS": [
+      "questnp1-spot#1",
+      "questnp1-spot#2",
+      "questnp1-spot#3",
+      "questnp1-spot#4"
+    ]
+  },
+  "leftovers": [],
+  "words": 282
+}

@@ -1,0 +1,12 @@
+# Blipwork Afrikaans: night-run log (one line per run; newest at the bottom)
+
+Format: `YYYY-MM-DD HH:MM | row | done / red / skipped / waiting | ~tokens | one note for Megan or -`
+
+2026-10-16 23:05 | setup | plan + queue written (Fable, "Blipwork Afrikaans translation plan" session) | - | the routine is created tonight; head-start runs Fri + Sat by Fable; nightly 22:00 after that
+2026-10-16 23:48 | S1 | done | ~190k | hidden switch in (commit above); ?lang=af on the address bar sets the device; iPhone: test in Safari, the home-screen app has its own storage; verify-store already had 6 old failures (dress-lock / care-day checks) before S1, not from it
+2026-10-17 00:15 | S2 | done | ~315k | extract + inject tools in (commit 96f85ad); round trip green twice (worker + Fable); queue gained S7 (finance checker must read the af side) + T92 (prose in the lib files); the plan said 129 af fields in nature-of-roots, it is 102
+2026-10-17 00:18 | ship | sw v97 pushed by Fable (her "ship it now"; the Paper 1 / Paper 2 hub-tab session) | - | S1 + S2 are live now, switch still hidden; the next ship needs its own sw bump as usual
+2026-10-17 00:36 | S3 | done | ~270k | checker + glossary tool in (commit 20951e0); REAL finding for you: your August Afrikaans in the nature-of-roots cards has em-dashes in 31 cards (your own no-em-dash rule flags them); default = row T15 swaps them for commas or colons, words untouched; say "keep" if you want them left
+2026-10-17 00:50 | S4 | done | ~165k | concept cards split per chapter (commit 78847d2), 150 cards proven identical; concept rows now carry real word counts (10 013 in total, the plan guessed 12 500); login screen loads 13 more small files (+9 KB), your parked lazy-load item
+2026-10-17 01:10 | S5 | done | ~270k | AF-GLOSSARY.md seeded (commit 512a268): 285 terms + 28 rules; 137 are standard CAPS terms no app of yours has used yet (marked "not yet hers", for G2); where your own sources disagree the file picked one and says so (undefined: onbepaald vs ongedefinieerd; hyperbola branches: vlerkies vs takke); a tap is "klik op" per your Aug ruling; review fix: "sywaarts" no longer auto-replaced
+2026-10-17 01:20 | S6 | done | ~150k | PILOT green: Number Patterns round 1 has its 52 Afrikaans twins (af_check clean, verify-patterns 41/41 in EN and AF); Fable read every line and tightened two; your G1 play needs S3 to S6 live first (your next ship, sw bump) or a local play; twins 153 / items 11805 at the end of the night

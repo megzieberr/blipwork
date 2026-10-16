@@ -36,7 +36,7 @@ Tags in Note: FF = Fun Functions (her approved app words), CQ = Circle Quest, G7
 | sign (+ or −) | teken, tekens | General: FF "Regte letter, verkeerde teken" | |
 | product, quotient | produk, kwosiënt | General: FF "produk"; kwosiënt is a CAPS term, not yet hers | |
 | numerator, denominator | teller, noemer | General: FF "noemer"; teller is a CAPS term, not yet hers | |
-| sideways | links of regs | General: never "sywaarts" (mem); FF "Trek die punt links of regs" | sywaarts |
+| sideways | links of regs | General: never "sywaarts" (mem); FF "Trek die punt links of regs"; retired form sywaarts is NOT auto-replaced (not a drop-in word), a translator rewrites the sentence | |
 | lies on | lê op | General: FF "P lê op f" | |
 | cut, intersect | sny | General: verb; FF "Hulle sny mekaar by A" | |
 | height | hoogte, hoogtes | General: FF, MB (a person's height is lengte, MB) | |
