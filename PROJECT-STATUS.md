@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-17 00:15 (🗂️ hub tabs = Paper 1 / Paper 2, committed local, NOT shipped; 🇿🇦 Afrikaans plan + nightly routine SET UP, nothing built; 🚀 sw v96 still LIVE `a4621b5`, f8–f13 live CLOSED; she opens each from the admin page as she teaches it)
+# Project status — updated 2026-10-17 00:25 (🚀 sw v97 LIVE `5cf9433`: hub tabs = Paper 1 / Paper 2, the hidden AF switch (S1) and the S2 tools; 🇿🇦 Afrikaans routine nightly from Sun 18 Oct, S1–S2 done; f8–f13 live CLOSED, she opens each from the admin page as she teaches it)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,13 +9,17 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
-- **🗂️ Sat 2026-10-17 00:15: HUB TABS = PAPER 1 / PAPER 2 (one local commit on main, NOT shipped).** The
+- **🚀 Sat 2026-10-17 00:18: sw v97 LIVE (`5cf9433`): HUB TABS = PAPER 1 / PAPER 2 (`9ef7f91`), plus the AF
+  queue's S1 (hidden language switch) and S2 (extract / inject tools, no app code).** The
   Term 3 / Revision pair is gone; each tab lists its chapters in the paper's own order (js/screens.js
   PAPER_TABS: P1 exp, eqn, pat, func, finance, prob; P2 stats, analytical, gtrig, tgraph, trig, meas; an
   unlisted id follows in CHAPTERS order). The chapter `term` field in js/config.js is untouched, nothing
   reads it. Checks: verify-exam 678/678 (new order ticks), verify-wrap 56658/56658, verify-store only its
   6 old dress-lock / care-day failures; hub DOM + render at 375 px: two tabs per row, six cards each, no
-  page errors. Goes live with her next ship (sw bump + sw_check), which also carries the hidden AF switch.
+  page errors. Shipped on her "ship it now" (00:13): bump commit `5cf9433`, sw_check OK, push `9f073ba..5cf9433`;
+  live checks 00:20: live sw.js mhq-v97 on the second poll; sw.js / js/screens.js / js/app.js / js/lang.js /
+  css/styles.css / index.html byte-identical to HEAD; the LIVE hub at 375 px shows Paper 1 / Paper 2 with the
+  paper order under each, no page errors.
 - **🇿🇦 Fri 2026-10-16 23:20: AFRIKAANS TRANSLATION planned, nothing built.** For her 2027 Gr11s, done by
   the START of January: the UI stays English, only the maths content gets Afrikaans twins in the same
   files (`L(en, af)` in hub rounds, `af:` beside `en:` in exam cards, hub tiles too), behind a HIDDEN
@@ -121,6 +125,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   af_check → the chapter's verify page in EN and AF).
 - 2026-10-16 (hers, 23:48): the hub's Term 3 / Revision tabs become Paper 1 / Paper 2, chapters in the
   paper's own order; Fable typed it itself (tiny), committed local as its own commit, no push.
+- 2026-10-17 (hers, 00:13): "ship it now": sw v97 `5cf9433` pushed 00:18, live checks 00:20; the ship carries the
+  AF queue's S1 + S2 live (the switch stays hidden), as the 16 Oct "ship as we go" ruling says.
 
 ## ⏳ Pending on Megan
 - 📱 3 min [after the head start; blocks the routine]: open Blipwork with `?lang=af` on your phone → play
@@ -128,9 +134,9 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 💻 1 min [Sunday morning, whenever]: read AF-LOG.md, one line per row the night did.
 - 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13, one at a time, the
   day you teach it (they are live but CLOSED, learners cannot see them yet).
-- 📱 3 min [whenever]: on your phone close Blipwork, open it, close it, open it again (v96
-  lands on the second open) → play round 8's first card as a learner would: tap the jug
-  twice, read the three captions, answer the chips.
+- 📱 3 min [whenever]: on your phone close Blipwork, open it, close it, open it again (v97
+  lands on the second open) → the hub shows Paper 1 / Paper 2 → then round 8's first card as
+  a learner would: tap the jug twice, read the three captions, answer the chips.
 - 💻 1 min [after exams]: admin page → Term toggle ON again (OFF since 2026-09-05).
 - 📱 3 min [whenever]: 📝 Exam Focus → one card; your Blip's outline in his body colour; the
   exponential card reads y = a·b^(x − p) + q.
