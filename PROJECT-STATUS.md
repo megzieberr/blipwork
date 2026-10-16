@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-16 23:20 (🇿🇦 Afrikaans plan + nightly routine SET UP, nothing built; 🚀 sw v96 still LIVE `a4621b5`, f8–f13 live CLOSED; she opens each from the admin page as she teaches it)
+# Project status — updated 2026-10-17 00:15 (🗂️ hub tabs = Paper 1 / Paper 2, committed local, NOT shipped; 🇿🇦 Afrikaans plan + nightly routine SET UP, nothing built; 🚀 sw v96 still LIVE `a4621b5`, f8–f13 live CLOSED; she opens each from the admin page as she teaches it)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,6 +9,13 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **🗂️ Sat 2026-10-17 00:15: HUB TABS = PAPER 1 / PAPER 2 (one local commit on main, NOT shipped).** The
+  Term 3 / Revision pair is gone; each tab lists its chapters in the paper's own order (js/screens.js
+  PAPER_TABS: P1 exp, eqn, pat, func, finance, prob; P2 stats, analytical, gtrig, tgraph, trig, meas; an
+  unlisted id follows in CHAPTERS order). The chapter `term` field in js/config.js is untouched, nothing
+  reads it. Checks: verify-exam 678/678 (new order ticks), verify-wrap 56658/56658, verify-store only its
+  6 old dress-lock / care-day failures; hub DOM + render at 375 px: two tabs per row, six cards each, no
+  page errors. Goes live with her next ship (sw bump + sw_check), which also carries the hidden AF switch.
 - **🇿🇦 Fri 2026-10-16 23:20: AFRIKAANS TRANSLATION planned, nothing built.** For her 2027 Gr11s, done by
   the START of January: the UI stays English, only the maths content gets Afrikaans twins in the same
   files (`L(en, af)` in hub rounds, `af:` beside `en:` in exam cards, hub tiles too), behind a HIDDEN
@@ -112,6 +119,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   share one ("translation chapter" is a unit in her one-unit rule); two rows a night, a third only when
   both were small, hard stop ~300k; translators never read code (extract → table → Opus → inject →
   af_check → the chapter's verify page in EN and AF).
+- 2026-10-16 (hers, 23:48): the hub's Term 3 / Revision tabs become Paper 1 / Paper 2, chapters in the
+  paper's own order; Fable typed it itself (tiny), committed local as its own commit, no push.
 
 ## ⏳ Pending on Megan
 - 📱 3 min [after the head start; blocks the routine]: open Blipwork with `?lang=af` on your phone → play

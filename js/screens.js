@@ -165,31 +165,44 @@ export function examChapterEligible(app, ch) {
 }
 
 /* ---------------- HUB ---------------- */
-/* the three tabs; current term first, revision (already-taught chapters)
-   below, Circle Geo last. Circle Geo isn't chapter-based (CQ-BRIDGE-PLAN.md
-   Part 2 — it's an out-link, not a chapter), so it's excluded from the
-   byTerm() filter below and drawn by circleGeoCard() instead. */
+/* the five tabs; the two exam papers first (her ruling 2026-10-16: the hub
+   files its chapters by PAPER now, Paper 1 / Paper 2 replaced the old
+   Term 3 / Revision pair; a chapter's `term` field in js/config.js stays
+   as it was, nothing in the hub reads it any more), then Exam Focus,
+   Circle Geo and Papers. Circle Geo isn't chapter-based (CQ-BRIDGE-PLAN.md
+   Part 2, it's an out-link, not a chapter), so it's excluded from the
+   byPaper() filter below and drawn by circleGeoCard() instead. */
 const TABS = [
-  { id: "term3", label: "Term 3", sub: "This term’s homework" },
-  { id: "revision", label: "Revision", sub: "Earlier chapters to revise" },
+  { id: "p1", label: "Paper 1", sub: "Algebra, patterns, functions, finance, probability" },
+  { id: "p2", label: "Paper 2", sub: "Statistics, analytical, trig, measurement" },
   // EXAM-FOCUS-PLAN.md, session 0 (2026-08-21): the tab only ever shows
   // when at least one chapter is ELIGIBLE — session E ruling (2026-08-21)
   // widened this from "flagged on" to "flagged on AND has an open quest"
   // (examChapterEligible() above) — "if Probability is closed, its Exam
-  // Focus rounds are closed too." NOT chapter-based the way term3/
-  // revision are (a chapter here is exam-focus content, not a quest
-  // chapter), so it's excluded from the byTerm() filter below, same as
+  // Focus rounds are closed too." NOT chapter-based the way the paper
+  // tabs are (a chapter here is exam-focus content, not a quest
+  // chapter), so it's excluded from the byPaper() filter below, same as
   // Circle Geo.
   { id: "exam", label: "📝 Exam Focus", sub: "Real exam questions, one part at a time" },
   { id: "cgeo", label: "⭕ Circle Geo", sub: "Circle Quest" },
   // FEEDBACK-PAPERS-BRIEF.md (2026-08-24): practice + past papers,
   // downloadable from a PRIVATE bucket. Not chapter-based either, so it
-  // is excluded from the byTerm() filter exactly like cgeo — and it is
+  // is excluded from the byPaper() filter exactly like cgeo — and it is
   // additionally gated on PAPERS_ENABLED, so it does not exist at all
   // until the edge functions are deployed and she has uploaded one.
   { id: "papers", label: "📄 Papers", sub: "Practice + past papers" },
 ];
-let hubTab = "term3";                                   // remembered across hub visits
+/* which chapters each paper tab lists, in the paper's own order (her ruling
+   2026-10-16): Paper 1 runs algebra, patterns, functions, finance,
+   probability; Paper 2 runs statistics, analytical, trig (general, graphs,
+   2D), measurement. A chapter whose `paper` matches but whose id is not
+   listed here still shows, after the listed ones, in js/config.js CHAPTERS
+   order, so a new chapter can never fall off the hub. */
+const PAPER_TABS = {
+  p1: { paper: "Paper 1", order: ["exp", "eqn", "pat", "func", "finance", "prob"] },
+  p2: { paper: "Paper 2", order: ["stats", "analytical", "gtrig", "tgraph", "trig", "meas"] },
+};
+let hubTab = "p1";                                      // remembered across hub visits
 
 function chapterCard(app, ch, open) {
   const live = ch.open && !ch.comingSoon;
@@ -343,22 +356,32 @@ export function renderHub(app, host) {
   mountInbox(app, head.querySelector(".hub-head-row"));
 
   const open = openSet(app);
-  const byTerm = (t) => CHAPTERS.filter(ch => (ch.term || "term3") === t);
+  // the paper tabs read CHAPTERS only (an exam-only chapter is not in
+  // CHAPTERS, so Euclidean / Algebraic Expressions can never land here),
+  // filtered by the chapter's `paper` field and sorted into PAPER_TABS'
+  // paper order; ids not listed there keep their CHAPTERS order, after.
+  const byPaper = (t) => {
+    const tab = PAPER_TABS[t];
+    if (!tab) return [];
+    const rank = ch => { const i = tab.order.indexOf(ch.id); return i < 0 ? tab.order.length : i; };
+    return CHAPTERS.map((ch, i) => [ch, i]).filter(x => x[0].paper === tab.paper)
+      .sort((a, b) => (rank(a[0]) - rank(b[0])) || (a[1] - b[1])).map(x => x[0]);
+  };
 
   // only show tabs that actually have chapters — except Circle Geo, which
   // isn't chapter-based and always shows (CQ-BRIDGE-PLAN.md Part 2); Exam
   // Focus is examChapterEligible()-gated instead (EXAM-FOCUS-PLAN.md,
   // session 0's flag-only gate, widened session E, 2026-08-21, to also
   // require an open quest) — hidden entirely, not just empty, when no
-  // flagged chapter has one. (The `t.id === "cgeo" || byTerm(t.id).length`
+  // flagged chapter has one. (The `t.id === "cgeo" || byPaper(t.id).length`
   // prefix is kept byte-for-byte — verify-store.html regex-checks that
   // exact substring.)
   // 📄 Papers rides on the same "not chapter-based" exemption as cgeo, on
   // its build flag alone — but its clause goes on the END: the
-  // `t.id === "cgeo" || byTerm(t.id).length` prefix is kept byte-for-byte
+  // `t.id === "cgeo" || byPaper(t.id).length` prefix is kept byte-for-byte
   // because verify-store.html regex-checks that exact substring.
-  const tabs = TABS.filter(t => t.id === "cgeo" || byTerm(t.id).length || (t.id === "exam" && examChapters().some(ch => examChapterEligible(app, ch))) || (t.id === "papers" && PAPERS_ENABLED));
-  if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "term3";
+  const tabs = TABS.filter(t => t.id === "cgeo" || byPaper(t.id).length || (t.id === "exam" && examChapters().some(ch => examChapterEligible(app, ch))) || (t.id === "papers" && PAPERS_ENABLED));
+  if (!tabs.some(t => t.id === hubTab)) hubTab = tabs[0] ? tabs[0].id : "p1";
 
   const tabbar = el("div", "hub-tabs");
   const cards = el("div", "chapter-cards");
@@ -367,11 +390,11 @@ export function renderHub(app, host) {
     if (hubTab === "cgeo") { cards.appendChild(circleGeoCard(app)); return; }
     if (hubTab === "papers") { cards.appendChild(papersCard(app)); return; }
     // EXAM-ONLY CHAPTERS (2026-08-22): examChapters() = CHAPTERS + the
-    // exam-only list, so Euclidean shows HERE and only here. byTerm()
-    // below still reads CHAPTERS, so it can never reach a Term 3 or
-    // Revision tab — an exam-only chapter has no term to be filed under.
+    // exam-only list, so Euclidean shows HERE and only here. byPaper()
+    // below still reads CHAPTERS, so it can never reach a Paper 1 or
+    // Paper 2 tab: an exam-only chapter is not in CHAPTERS at all.
     if (hubTab === "exam") { examChapters().filter(ch => examChapterEligible(app, ch)).forEach(ch => cards.appendChild(examChapterCard(app, ch))); return; }
-    byTerm(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
+    byPaper(hubTab).forEach(ch => cards.appendChild(chapterCard(app, ch, open)));
   };
   tabs.forEach(t => {
     const b = el("button", "hub-tab" + (t.id === hubTab ? " active" : ""));

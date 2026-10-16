@@ -1952,8 +1952,8 @@ for (const o of outfits) {
     "js/screens.js does not import CQ_URL from ./config.js");
   tick(/id:\s*"cgeo"/.test(screensSrc), 'js/screens.js: TABS is missing the "cgeo" tab');
   tick(/label:\s*"⭕ Circle Geo"/.test(screensSrc), 'js/screens.js: the cgeo tab is missing its "⭕ Circle Geo" label');
-  tick(/t\.id === "cgeo" \|\| byTerm\(t\.id\)\.length/.test(screensSrc),
-    "js/screens.js: the cgeo tab must always show — it should bypass the byTerm() chapter-count filter other tabs use");
+  tick(/t\.id === "cgeo" \|\| byPaper\(t\.id\)\.length/.test(screensSrc),
+    "js/screens.js: the cgeo tab must always show — it should bypass the byPaper() chapter-count filter other tabs use");
   tick(/function circleGeoCard/.test(screensSrc), "js/screens.js is missing circleGeoCard()");
   tick(/href="\$\{CQ_URL\}"[^>]*target="_blank"[^>]*rel="noopener"/.test(screensSrc),
     'js/screens.js: the "Open Circle Quest" anchor must have href={CQ_URL}, target="_blank" and rel="noopener" together');

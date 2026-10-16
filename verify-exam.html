@@ -1695,7 +1695,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   }
 
   // every quest in the app open — the most generous possible state, so a
-  // leak into Term 3 / Revision would definitely show
+  // leak into Paper 1 / Paper 2 would definitely show
   const allQuestIds = CHAPTERS.flatMap(c => (c.quests || []).map(q => q.id));
   const app11 = makeApp11(allQuestIds);
   renderCurrent11(app11);
@@ -1704,16 +1704,24 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
     const b = tabButtons.find(x => label.test(x.textContent));
     if (!b) return null;
     b.click();
-    return [...host.querySelectorAll(".chapter-cards .ch-card")].map(c => c.querySelector("h2").textContent.trim());
+    // the card's h2 is "<name> <pill>": read the name without the Open / Soon pill
+    return [...host.querySelectorAll(".chapter-cards .ch-card")].map(c => { const h = c.querySelector("h2").cloneNode(true); h.querySelectorAll(".pill").forEach(p => p.remove()); return h.textContent.trim(); });
   };
-  const term3Cards = textOfTab(/term 3/i) || [];
-  tick(!term3Cards.some(t => /euclid/i.test(t)), `Term 3 tab must not show a Euclidean card, got [${term3Cards.join(" | ")}]`);
-  const revisionCards = textOfTab(/revision/i) || [];
-  tick(!revisionCards.some(t => /euclid/i.test(t)), `Revision tab must not show a Euclidean card, got [${revisionCards.join(" | ")}]`);
+  // 2026-10-16 (her ruling): Paper 1 / Paper 2 replaced Term 3 / Revision,
+  // each tab in the paper's own order (js/screens.js PAPER_TABS)
+  const paper1Cards = textOfTab(/^paper 1/i);
+  tick(Array.isArray(paper1Cards), "the hub has a Paper 1 tab");
+  tick(!(paper1Cards || []).some(t => /euclid|algebraic expressions/i.test(t)), `Paper 1 tab must not show an exam-only card, got [${(paper1Cards || []).join(" | ")}]`);
+  tick((paper1Cards || []).join(" | ") === "Exponents & Surds | Equations & Inequalities | Number Patterns | Functions | Finance | Probability", `Paper 1 lists its chapters in the paper's own order, got [${(paper1Cards || []).join(" | ")}]`);
+  const paper2Cards = textOfTab(/^paper 2/i);
+  tick(Array.isArray(paper2Cards), "the hub has a Paper 2 tab");
+  tick(!(paper2Cards || []).some(t => /euclid/i.test(t)), `Paper 2 tab must not show a Euclidean card, got [${(paper2Cards || []).join(" | ")}]`);
+  tick((paper2Cards || []).join(" | ") === "Statistics | Analytical Geometry | General Trig | Trig Graphs | 2D Trigonometry | Measurement", `Paper 2 lists its chapters in the paper's own order, got [${(paper2Cards || []).join(" | ")}]`);
+  tick(textOfTab(/term 3|revision/i) === null, "no Term 3 or Revision tab is left on the hub");
   const examCards = textOfTab(/exam focus/i) || [];
   tick(examCards.some(t => /euclidean/i.test(t)), `Exam Focus tab MUST show the Euclidean card, got [${examCards.join(" | ")}]`);
-  lines.push(`hub tabs with EVERY quest open — Term 3: [${term3Cards.join(", ")}]`);
-  lines.push(`  Revision: [${revisionCards.join(", ")}]`);
+  lines.push(`hub tabs with EVERY quest open — Paper 1: [${(paper1Cards || []).join(", ")}]`);
+  lines.push(`  Paper 2: [${(paper2Cards || []).join(", ")}]`);
   lines.push(`  Exam Focus: [${examCards.join(", ")}]`);
 
   /* the admin page's own grid, checked the same way admin.js builds it */
