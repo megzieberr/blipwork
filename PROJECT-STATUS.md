@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-17 00:25 (🚀 sw v97 LIVE `5cf9433`: hub tabs = Paper 1 / Paper 2, the hidden AF switch (S1) and the S2 tools; 🇿🇦 Afrikaans routine nightly from Sun 18 Oct, S1–S2 done; f8–f13 live CLOSED, she opens each from the admin page as she teaches it)
+# Project status — updated 2026-10-17 01:30 (🇿🇦 AF HEAD START DONE: S1–S6 + the pilot green, S3–S6 sit LOCAL and ride her next ship; the routine waits at gate G1 = her phone play; 🚀 sw v97 LIVE `5cf9433`: hub tabs = Paper 1 / Paper 2 + the hidden AF switch (S1) + the S2 tools; f8–f13 live CLOSED, she opens each from the admin page as she teaches it)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -20,16 +20,25 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   live checks 00:20: live sw.js mhq-v97 on the second poll; sw.js / js/screens.js / js/app.js / js/lang.js /
   css/styles.css / index.html byte-identical to HEAD; the LIVE hub at 375 px shows Paper 1 / Paper 2 with the
   paper order under each, no page errors.
-- **🇿🇦 Fri 2026-10-16 23:20: AFRIKAANS TRANSLATION planned, nothing built.** For her 2027 Gr11s, done by
-  the START of January: the UI stays English, only the maths content gets Afrikaans twins in the same
-  files (`L(en, af)` in hub rounds, `af:` beside `en:` in exam cards, hub tiles too), behind a HIDDEN
-  Circle Quest style device toggle (`mhq.lang`; `?lang=af` on the URL is how she tests). Runs as the LOCAL
-  scheduled task `blipwork-afrikaans-night`: nightly 22:10 from Sun 18 Oct (start-date guard), up to two
-  QUEUE.md rows a night, one Opus worker each, commits LOCAL on main, never pushes, never bumps sw.js.
-  Files in the root: AFRIKAANS-PLAN.md (the brief, its rulings are law, stays untracked), QUEUE.md (6 setup
-  rows S1–S6, pilot gate G1, 91 translation rows of ≤ 4 000 words, gate G2) and AF-LOG.md (one line per
-  row), both committed by the routine's first green row. Head start Fri 16 + Sat 17 Oct in a fresh Fable
-  session (S1–S3, then S4–S6 + the pilot). Measured ~225k English words; a night ≈ 150–280k tokens.
+- **🇿🇦 Sat 2026-10-17 01:30: AFRIKAANS HEAD START DONE, S1–S6 + the pilot all green** (Fable foreman, one
+  Opus worker per row, each reviewed with fresh proof before the next): S1 `f3cc903` `js/lang.js` (key
+  `mhq.lang`, `L(en, af)`, `?lang=af` sets the device, button hidden behind `SHOW_TOGGLE`; exam + Fun Functions
+  read it; `tools/lang_smoke.py` 5/5) · S2 `96f85ad` `tools/af_extract.mjs` + `af_inject.mjs` + the round trip
+  (acorn; tables `briefs/af/<row>.en.json` / `.af.json`; manual `tools/AF-TOOLS.md`; English bytes identical
+  by construction) · S3 `20951e0` `tools/af_check.mjs` (twins, placeholders, tags, English leak, her wording
+  rules, length ratio; `--unit <row>` must exit 0, `--all` = the debt report) + `af_glossary_apply.mjs`
+  (Retired column, dry by default) · S4 `78847d2` the 150 concept cards split into `js/concepts/<id>.js`
+  (`tools/concepts_split_check.mjs`: identical, key by key; login loads 13 more small files, +9 KB) · S5
+  `512a268` `AF-GLOSSARY.md` (285 terms + 28 rules; 137 CAPS terms "not yet hers" for G2) · S6 `581b78d`
+  the PILOT: `questnp1-spot` has its 52 twins, af_check clean, verify-patterns 41/41 in EN and `?lang=af`;
+  Fable read all 52 lines and tightened two. Foreman review commit `a15f823` (harness_run prints each page's
+  real banner; CLAUDE.md points new cards at `js/concepts/<id>.js`). S1 + S2 went LIVE hidden in HER sw v97
+  ship (00:18); S3–S6 + `a15f823` are the 5 unpushed commits, they ride her next ship. Tracked from now on:
+  QUEUE.md, AF-LOG.md (one line per row, her morning view), AF-GLOSSARY.md; AFRIKAANS-PLAN.md stays local.
+  Debt line at 01:20: twins 153 / items 11 792. Cost: ≈1.3M worker tokens (S1 180k, S2 314k, S3 269k, S4 166k,
+  S5 271k, S6 117k) plus the foreman session; the weekly meter moved 31 → 37 %, the 5-hour window 24 → ~47 %.
+  The routine `blipwork-afrikaans-night` (nightly 22:10, does nothing before Sun 18 Oct 21:30) has the real
+  commands in its prompt now and STOPS at the ⏸ G1 gate until she ticks it.
 - 🚀 sw v96 (2026-10-11 `a4621b5`): finance part 2 (f8 the jug with a discovery slide, f9–f11, f12 Build the
   timeline, f13 the one equation), her play-test fixes and the harness numbers: STATUS-ARCHIVE.md 2026-10-11.
 - **📥 Inbox for the 💬 notes LIVE as sw v95 (2026-10-04)**, 🧮 Calculator Builds 9 + 10
@@ -100,10 +109,24 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 2026-10-17 (hers, 00:13): "ship it now": sw v97 `5cf9433` pushed 00:18, live checks 00:20; the ship carries the
   AF queue's S1 + S2 live (the switch stays hidden), as the 16 Oct "ship as we go" ruling says.
 - 2026-10-17 (hers, 00:17): "it looks great": the Paper 1 / Paper 2 hub is signed off.
+- 2026-10-16 (hers, 23:20): the head start runs "QUEUE.md rows S1 to S6 and the pilot tonight one Opus worker at
+  a time, you review each, claim each row with ⏳ first, commits local on main, no push, no sw bump" (S6 IS the
+  pilot; G1 is her gate).
+- 2026-10-17 (foreman, flagged, default keep): a screen tap is "klik op" (her Aug 2026 ruling), "tik … in" is
+  typing only; "sywaarts" is out of the glossary's auto-replace column (not a drop-in word); her August
+  Afrikaans in eqn-nature-of-roots holds 36 em-dashes in 31 cards: row T15 swaps them for commas or colons,
+  words untouched, unless she says "keep"; queue gained S7 (the finance checker must read the af side before
+  any finance row) and T92 (prose that lives in js/*lib.js); T66 / T73 closed (euclid and algx have no concept
+  cards); workers' commit trailer is `Claude Opus 5.5`; `tools/lang_smoke.py`, `tools/concepts_split_check.mjs`
+  and the banner-reading `tools/harness_run.py` are permanent.
 
 ## ⏳ Pending on Megan
-- 📱 3 min [after the head start; blocks the routine]: open Blipwork with `?lang=af` on your phone → play
-  Number Patterns round 1 in Afrikaans → tick row G1 in QUEUE.md (or write the fixes under it).
+- 💻 5 min then 📱 3 min [blocks the routine from Sunday night]: "ship it" in a fresh session (sw v98 carries
+  S3–S6 live, still hidden; sw_check OK first) → open Blipwork with `?lang=af` in Safari on your phone (the
+  home-screen app has its own storage) → play Number Patterns round 1 in Afrikaans → tick row G1 in QUEUE.md
+  (or write the fixes under it). Until G1 is ticked the routine logs "waiting on Megan" each night.
+- 💬 one word [whenever, before row T15 in a few weeks]: "keep" if the em-dashes in your August nature-of-roots
+  Afrikaans must stay; silence = that row turns them into commas or colons, words untouched.
 - 💻 1 min [Sunday morning, whenever]: read AF-LOG.md, one line per row the night did.
 - 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13, one at a time, the
   day you teach it (they are live but CLOSED, learners cannot see them yet).
@@ -118,10 +141,17 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (137 MB, git-excluded, never ships).
 
 ## Next up
-- **🇿🇦 Afrikaans queue (nightly from 18 Oct, AFRIKAANS-PLAN.md + QUEUE.md):** the routine works the queue
-  top to bottom; her part = the pilot gate, then one AF round per chapter on her phone; wording she hates →
-  a row in AF-GLOSSARY.md (`tools/af_glossary_apply.mjs` back-fills earlier chapters). G2 after the
-  queue: wording sweep, `SHOW_TOGGLE` on, ship. DECEMBER: the Gr12 layer planning session
+- **🇿🇦 Afrikaans queue (AFRIKAANS-PLAN.md + QUEUE.md + tools/AF-TOOLS.md):** Saturday night 17 Oct is hers
+  (optional manual rows in a fresh session: S7, then T01 exp concepts, T02 …; same recipe as the routine's
+  prompt). From Sun 18 Oct 22:10 the routine works the queue top to bottom but waits at ⏸ G1 until she ticks
+  it; then two rows a night. Her part = one AF round per chapter on her phone; wording she hates → a term
+  row (and a Retired form only for a one-meaning word) in AF-GLOSSARY.md, `tools/af_glossary_apply.mjs
+  --write` back-fills earlier chapters. G2 after the queue: the wording sweep (the 137 "not yet hers" rows,
+  the source disagreements the glossary lists: undefined onbepaald / ongedefinieerd, hyperbola branches
+  vlerkies / takke, IQR, box-and-whisker, contingency table, surface area, the sine rule's name), `SHOW_TOGGLE`
+  on, ship. Known gaps for later rows: T91's exam engine files need a hand scan (af_extract reads js/exam
+  pair-only); T44's "Area" pad cell is frame data (hand `L()`); the two jug captions in
+  `js/concepts/_finance-pictures.js` (leftovers). DECEMBER: the Gr12 layer planning session
   (GR12-LAYER-PLAN.md, not started).
 - **Parked cosmetic lists, her one-line call, nothing blocking:** `briefs/finance-2/
   brief-3b-f10-review.md`, `brief-4b-f8-review.md`, `brief-5b-f12-review.md` (H4 is done by
@@ -154,6 +184,5 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   (Soek-die-fout mechanic in graph-quest first).
 - (carried) CRON_SECRET tidy-up; banked play.js method-link gate; stale nits (dice-gtrig.js
   "48 chains" header, verify-dice-exp prints ALL GOOD twice, verify-feedback-papers 4 stale
-  fails, gt2 lone "Cash" step, `tools/harness_run.py` last-line trick on verify-exam /
-  verify-funfun-backend: read the page's `#banner` for those two, a Playwright wait on
-  "ALL GOOD — n/n" works).
+  fails, gt2 lone "Cash" step; the `tools/harness_run.py` last-line trick is FIXED 2026-10-17, it
+  prints each page's own banner now).
