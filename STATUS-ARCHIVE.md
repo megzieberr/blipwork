@@ -1,5 +1,29 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-16 23:45–2026-10-17 00:20 — Hub tabs: Paper 1 / Paper 2 replace Term 3 / Revision; SHIP sw v97 (Fable; no workers)
+- Her ask at 23:45, with the Afrikaans session live on the same checkout: swap the Term 3 / Revision tabs
+  for Paper 1 / Paper 2 with the rounds under them, "something quick?". Catch-up: sweep nothing new; the AF
+  session had committed S1 and claimed S2 at 23:48 (tools/ only), so no file overlap; the one real risk was
+  an uncommitted edit of mine being swept into an "AF:" commit, so: edit and commit in one go, no push.
+- Build (Fable itself, ~20 lines): js/screens.js TABS p1 / p2 read the chapter's `paper` field, PAPER_TABS
+  gives each tab its order (P1 exp, eqn, pat, func, finance, prob; P2 stats, analytical, gtrig, tgraph,
+  trig, meas; unlisted ids follow in CHAPTERS order), byTerm renamed byPaper; the chapter `term` field
+  stays, nothing reads it. verify-exam's tab checks retargeted plus order ticks (673 → 678/678);
+  verify-store's cgeo-bypass regex renamed; one CSS comment. Checks: verify-wrap 56658/56658; verify-store
+  only its six old dress-lock / care-day failures (AF-LOG notes them from before S1). Hub DOM + render at
+  375 px (local backend, demo learner): two tabs per row, six cards each in order, no page errors. Commit
+  `9ef7f91`, landed on top of the AF session's S2 commit `96f85ad`, neither touched the other's files.
+- Paper 2 order: at the assessment I had guessed trig first; the paper's own order starts with Statistics,
+  so that is what shipped (one list in PAPER_TABS if she ever wants it different).
+- Her "ship it now" 00:13: bump `5cf9433` (mhq-v97), sw_check OK, push `9f073ba..5cf9433` (carries the 16 Oct
+  docs commit, S1, S2 and the tabs). Live checks 00:20: sw.js v97 on the second poll; sw.js / screens.js /
+  app.js / lang.js / styles.css / index.html byte-identical to HEAD; HTTP 200; the live hub at 375 px shows
+  the two paper tabs in order, no page errors. Docs commit `73bc7cc` pushed after a second sw_check OK.
+  AF-LOG.md got one "ship" line. Her 00:17: "it looks great".
+- Memory: Blipwork block + description (v97), leave-uncommitted (0 unpushed), MEMORY.md line. Wrap-up rolled
+  the sw v96 block out of PROJECT-STATUS.md (it was 15.8 KB; the 2026-10-11 entry below has it in full).
+- Fable alone, no workers. Session title: Blipwork, Paper 1 / Paper 2 hub tabs, shipped v97.
+
 ## 2026-10-16 22:32–23:20 — Blipwork in Afrikaans: the plan, the queue, the nightly routine (Fable; no workers, nothing built)
 - Catch-up: portfolio sweep nothing new except the non-git `mindbourne-gr4-textbook` folder (her ruling:
   local on purpose, nothing online → NON_GIT_BY_DESIGN + memory). Read the 15 Oct session's transcript

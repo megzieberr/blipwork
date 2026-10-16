@@ -30,36 +30,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   rows S1–S6, pilot gate G1, 91 translation rows of ≤ 4 000 words, gate G2) and AF-LOG.md (one line per
   row), both committed by the routine's first green row. Head start Fri 16 + Sat 17 Oct in a fresh Fable
   session (S1–S3, then S4–S6 + the pilot). Measured ~225k English words; a night ≈ 150–280k tokens.
-- **🚀 Sun 2026-10-11 19:12: sw v96 LIVE (`a4621b5`), 26 commits since the inbox ship
-  (v95, 4 Oct).** The finance chapter now holds f1–f13: the 10 Oct rounds (f9 Car or no car,
-  f10 In or out, f11 Pick the meeting day), the 11 Oct foreman day (renumber, Fix A real
-  superscripts, f10 taught form only, f8 the jug with her drawing, f12 Build the timeline,
-  f13 the one equation with road colours) and the play-test fixes from this evening (below).
-  Live DB seeded 19:04: f8–f13 CLOSED, sort 94–99 (93 → 99 rows; grants unchanged: quests
-  is postgres + service_role only, as after the inbox ship). Live checks 19:15: live `sw.js`
-  mhq-v96 one second after the push; questf8 / questf12 / questf13 / finlib / styles.css /
-  questions.js / feedback.js / sw.js byte-identical to HEAD; both jug WebPs served as
-  image/webp; the live page loads at 375 px with no page errors.
-- **Her play-test 16:49–17:02 → three fixes, all built, checked and in the ship:**
-  `40e6d97` f8 opens with a DISCOVERY SLIDE (three `q.reveal` frames, replace mode, no
-  engine change: empty jug + "the total (the lumpsum)" lines → tap: savings fills, "the total
-  sits at the END" → tap: the loan jug drains, "the total sits at the beginning"; the chips
-  appear only after; a tap on the jug itself advances; `tools/shoot_round.py` now clicks
-  reveal Next buttons before answering); `52956bf` f12 keeps ONE timeline pinned under the
-  paragraph and every answered step folds to a line (two opt-in steps-engine flags
-  `q.stepGraphPinned` + `q.collapseSteps` in js/questions.js, only f12 sets them; card height
-  at 360 px 2 675 → 1 041 px); `5840846` f8 polish (the loan jug drains to EMPTY; once the
-  drain ends the caption fades to "Payments are coins. The total is the jug." with its height
-  held so the chips never jump); `926c86e` the parked 2b list (the "Tell your teacher"
-  snapshot writes every sup back with its caret `)^36` / `)^(−12)`; f5 money and "N% p.a."
-  unbreakable, option labels with the thousands space; concept-card wraps; `i<sub>eff</sub>`;
-  half‑yearly / T‑points with U+2011; f13's "a car is the …" line unbracketed).
-- Harness at the ship: verify-finance **692/692**, verify-feedback-snapshot 136/136,
-  verify-exam 673/673, verify-steps-ux 33/33, verify-store 4074, verify-inbox-learner
-  131/131, verify-dice-finance 89/89, verify-lazy-load 52/52, verify-wrap green.
-  Four capped checkers (f8; f12 + f10/f13 untouched; f5 + f8 slide + f13 snapshot): nothing
-  blocking at 390 and 360 px. Cost of the evening ≈ 1.45M worker tokens (Opus 248k / 271k /
-  179k / 279k, Sonnet checkers 152k / 141k / 182k).
+- 🚀 sw v96 (2026-10-11 `a4621b5`): finance part 2 (f8 the jug with a discovery slide, f9–f11, f12 Build the
+  timeline, f13 the one equation), her play-test fixes and the harness numbers: STATUS-ARCHIVE.md 2026-10-11.
 - **📥 Inbox for the 💬 notes LIVE as sw v95 (2026-10-04)**, 🧮 Calculator Builds 9 + 10
   LIVE as v94: details in STATUS-ARCHIVE.md. 12 hub chapters + 2 exam-only; 🎲 dice on 8
   chapters; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live; roster 20, megzieberr visible
@@ -127,6 +99,7 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   paper's own order; Fable typed it itself (tiny), committed local as its own commit, no push.
 - 2026-10-17 (hers, 00:13): "ship it now": sw v97 `5cf9433` pushed 00:18, live checks 00:20; the ship carries the
   AF queue's S1 + S2 live (the switch stays hidden), as the 16 Oct "ship as we go" ruling says.
+- 2026-10-17 (hers, 00:17): "it looks great": the Paper 1 / Paper 2 hub is signed off.
 
 ## ⏳ Pending on Megan
 - 📱 3 min [after the head start; blocks the routine]: open Blipwork with `?lang=af` on your phone → play
