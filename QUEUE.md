@@ -12,11 +12,11 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 S4 | split `js/concepts.js` into `js/concepts/<chapter>.js` with js/concepts.js re-exporting the same object | check: verify-store + verify-wrap unchanged, concept text byte-identical
 - ☑ 2026-10-17 S5 | `AF-GLOSSARY.md` seeded from Fun Functions' AF strings (js/funfun), Circle Quest's js/i18n.js, maths-quest-grade7's vocabulary and every wording ruling listed in AFRIKAANS-PLAN.md; one line per term | check: every standing rule in the plan appears as a row
 - ☑ 2026-10-17 S6 | PILOT: `js/quests/questnp1-spot.js` through the whole pipeline (extract → Opus translate → inject → af_check → verify-patterns EN + AF) | check: pipeline green, one commit
-- ⏸ G1 | Megan plays questnp1 in Afrikaans on her phone (`?lang=af`) and ticks this row, or writes the fixes under it
+- ☑ 2026-10-17 18:36 G1 | Megan played questnp1 in Afrikaans on her phone (`?lang=af`, Chrome on Android, sw v98): "the wording of the questions looks fine" (her word, no fixes)
 
 ## Translation (her 2027 Gr11 teaching order; inside a chapter: concepts → hub rounds → exam cards)
 ### Hub tiles first (her ruling 2026-10-17 18:33: she sees each tile in Afrikaans when she opens a round to play, so a weird name is caught chapter by chapter, not at the end)
-- ☐ T89 | hub tiles: js/config.js chapter names, round titles, blurbs | ~1 383 words | verify-wrap (moved up from "Everything else" 2026-10-17 18:35)
+- ☑ 2026-10-17 T89 | hub tiles: js/config.js chapter names, round titles, blurbs | 225 items, 1 469 words | verify-wrap (moved up from "Everything else" 2026-10-17 18:35; done 18:50, Fable catchup session, one Opus translator ~60k; af_check clean, verify-wrap EN = baseline and AF green; G2 items it leaned on: mond-en-snor, vlerkies, onbepaald, inklinasiehoek, tweerigtingtabel, DP for TP)
 ### Exponents & Surds
 - ☐ T01 | concepts: the `exp` block (js/concepts/exp.js after S4) | ~860 words | counted by af_extract 2026-10-17
 - ☐ T02 | hub rounds: queses1-laws … queses5-surds (5 files) | ~3 420 words | verify page: verify-exp.html

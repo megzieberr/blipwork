@@ -1,0 +1,2268 @@
+{
+  "unit": "T89",
+  "generated": "2026-10-17T16:38:04.542Z",
+  "files": [
+    "js/config.js"
+  ],
+  "items": {
+    "config#1": {
+      "en": "Statistics",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:33:24"
+      ]
+    },
+    "config#2": {
+      "en": "Data, spread, graphs and the shape of a distribution.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:35:12"
+      ]
+    },
+    "config#3": {
+      "en": "Calculator skills",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:37:32"
+      ]
+    },
+    "config#4": {
+      "en": "Clear it, frequency on/off, read values back.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:37:60"
+      ]
+    },
+    "config#5": {
+      "en": "Centre & spread",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:38:32"
+      ]
+    },
+    "config#6": {
+      "en": "Mean, mode, median, range from a list.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:38:58"
+      ]
+    },
+    "config#7": {
+      "en": "Quartiles & box plots",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:39:32"
+      ]
+    },
+    "config#8": {
+      "en": "Quartile positions, IQR, outliers, box-and-whisker.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:39:64"
+      ]
+    },
+    "config#9": {
+      "en": "Skewness & shape",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:40:32"
+      ]
+    },
+    "config#10": {
+      "en": "Normal vs skewed, the mean–median rule.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:40:59"
+      ]
+    },
+    "config#11": {
+      "en": "Grouped data",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:41:32"
+      ]
+    },
+    "config#12": {
+      "en": "Estimated mean, modal & median class.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:41:55"
+      ]
+    },
+    "config#13": {
+      "en": "Ogives",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:42:32"
+      ]
+    },
+    "config#14": {
+      "en": "Plot points, read median, quartiles, percentiles.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:42:49"
+      ]
+    },
+    "config#15": {
+      "en": "Standard deviation",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:43:32"
+      ]
+    },
+    "config#16": {
+      "en": "σ, variance, values within one σ.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:43:61"
+      ]
+    },
+    "config#17": {
+      "en": "Mixed exam favourites",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:44:32"
+      ]
+    },
+    "config#18": {
+      "en": "Compare plots, effect of changes, the tough ones.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:44:64"
+      ]
+    },
+    "config#19": {
+      "en": "Finance",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:48:26"
+      ]
+    },
+    "config#20": {
+      "en": "Interest, growth and the time value of money.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:50:12"
+      ]
+    },
+    "config#21": {
+      "en": "Words & formulas",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:52:32"
+      ]
+    },
+    "config#22": {
+      "en": "P, A, i, n and which formula fits.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:52:59"
+      ]
+    },
+    "config#23": {
+      "en": "Simple, compound & depreciation",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:53:32"
+      ]
+    },
+    "config#24": {
+      "en": "Interest on the original vs the growing balance; the two depreciation graphs.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:53:74"
+      ]
+    },
+    "config#25": {
+      "en": "Compounding periods",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:54:32"
+      ]
+    },
+    "config#26": {
+      "en": "Rate per period and the exponent — monthly, quarterly, …",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:54:62"
+      ]
+    },
+    "config#27": {
+      "en": "Timelines: counting moves",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:55:32"
+      ]
+    },
+    "config#28": {
+      "en": "How many periods, forward or backward.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:55:68"
+      ]
+    },
+    "config#29": {
+      "en": "Timelines: building the move",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:56:32"
+      ]
+    },
+    "config#30": {
+      "en": "× or ÷, the exponent's sign, and rate changes.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:56:71"
+      ]
+    },
+    "config#31": {
+      "en": "Deposits & hire purchase",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:57:32"
+      ]
+    },
+    "config#32": {
+      "en": "The deposit and what's still owed.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:57:67"
+      ]
+    },
+    "config#33": {
+      "en": "Effective vs nominal",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:58:32"
+      ]
+    },
+    "config#34": {
+      "en": "Annual vs a frequency, and the conversion formula.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:58:63"
+      ]
+    },
+    "config#35": {
+      "en": "Which one is the total?",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:59:32"
+      ]
+    },
+    "config#36": {
+      "en": "Payments are coins, the total is the jug: find the jug in the words first.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:59:66"
+      ]
+    },
+    "config#37": {
+      "en": "Car or no car?",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:60:32"
+      ]
+    },
+    "config#38": {
+      "en": "The meeting day, forward or reverse gear, and one car per road.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:60:57"
+      ]
+    },
+    "config#39": {
+      "en": "In or out?",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:61:34"
+      ]
+    },
+    "config#40": {
+      "en": "Deposits go in, withdrawals and repayments come out; the total stands alone on the left.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:61:55"
+      ]
+    },
+    "config#41": {
+      "en": "Pick the meeting day",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:62:34"
+      ]
+    },
+    "config#42": {
+      "en": "Any T can be the meeting day: count the cars and pick the day with the fewest. The answer is the same anywhere.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:62:65"
+      ]
+    },
+    "config#43": {
+      "en": "Build the timeline",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:63:34"
+      ]
+    },
+    "config#44": {
+      "en": "The exam hands you words: build the whole timeline, tap by tap, before any equation.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:63:63"
+      ]
+    },
+    "config#45": {
+      "en": "Build the one equation",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:64:34"
+      ]
+    },
+    "config#46": {
+      "en": "The exam shape: the whole equation in one line, typed once, rounded once.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:64:67"
+      ]
+    },
+    "config#47": {
+      "en": "Probability",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:68:23"
+      ]
+    },
+    "config#48": {
+      "en": "Chance, Venn diagrams, tree diagrams and the rules that tie them together.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:70:12"
+      ]
+    },
+    "config#49": {
+      "en": "Chance & the scale",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:72:32"
+      ]
+    },
+    "config#50": {
+      "en": "Sample space, theoretical probability, relative frequency.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:72:61"
+      ]
+    },
+    "config#51": {
+      "en": "Venn diagrams: regions",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:73:32"
+      ]
+    },
+    "config#52": {
+      "en": "∩, ∪, complement and the regions of a Venn diagram.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:73:65"
+      ]
+    },
+    "config#53": {
+      "en": "Venn diagrams: probabilities",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:74:32"
+      ]
+    },
+    "config#54": {
+      "en": "Sort outcomes into regions and read probabilities off.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:74:71"
+      ]
+    },
+    "config#55": {
+      "en": "The probability rules",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:75:32"
+      ]
+    },
+    "config#56": {
+      "en": "Addition rule, complement, mutually exclusive vs inclusive.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:75:64"
+      ]
+    },
+    "config#57": {
+      "en": "Independent events",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:76:32"
+      ]
+    },
+    "config#58": {
+      "en": "The product rule, the test, and contingency tables.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:76:61"
+      ]
+    },
+    "config#59": {
+      "en": "Tree diagrams",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:77:32"
+      ]
+    },
+    "config#60": {
+      "en": "Multiply along a path, add paths, ‘at least one’.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:77:56"
+      ]
+    },
+    "config#61": {
+      "en": "With & without replacement",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:78:32"
+      ]
+    },
+    "config#62": {
+      "en": "When the denominators stay the same — and when they drop.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:78:69"
+      ]
+    },
+    "config#63": {
+      "en": "2D Trigonometry",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:82:23"
+      ]
+    },
+    "config#64": {
+      "en": "Sine, cosine and area rules — solving any triangle, drawn to scale.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:84:12"
+      ]
+    },
+    "config#65": {
+      "en": "Which rule fits?",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:86:32"
+      ]
+    },
+    "config#66": {
+      "en": "Label the friends; choose sine, cosine or area for the given case.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:86:59"
+      ]
+    },
+    "config#67": {
+      "en": "Sine rule: sides",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:87:32"
+      ]
+    },
+    "config#68": {
+      "en": "Two angles and a side → find a missing side.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:87:59"
+      ]
+    },
+    "config#69": {
+      "en": "Sine rule: angles & the ambiguous case",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:88:32"
+      ]
+    },
+    "config#70": {
+      "en": "Find an angle, and when two triangles are possible.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:88:81"
+      ]
+    },
+    "config#71": {
+      "en": "Cosine rule: sides",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:89:32"
+      ]
+    },
+    "config#72": {
+      "en": "Two sides and the included angle → the third side.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:89:61"
+      ]
+    },
+    "config#73": {
+      "en": "Cosine rule: angles",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:90:32"
+      ]
+    },
+    "config#74": {
+      "en": "All three sides → any angle, acute or obtuse.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:90:62"
+      ]
+    },
+    "config#75": {
+      "en": "Area rule",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:91:32"
+      ]
+    },
+    "config#76": {
+      "en": "Triangles, quadrilaterals and regular polygons.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:91:52"
+      ]
+    },
+    "config#77": {
+      "en": "Mixed problems",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:92:32"
+      ]
+    },
+    "config#78": {
+      "en": "Pick the rule, combine steps, shortest-distance and area.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:92:57"
+      ]
+    },
+    "config#79": {
+      "en": "Measurement",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:96:23"
+      ]
+    },
+    "config#80": {
+      "en": "Surface area and volume — read the solid, then choose the right formula.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:98:12"
+      ]
+    },
+    "config#81": {
+      "en": "Name it & its formula",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:100:32"
+      ]
+    },
+    "config#82": {
+      "en": "Recognise each solid and match its volume / surface-area formula.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:100:64"
+      ]
+    },
+    "config#83": {
+      "en": "Slant vs perpendicular height",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:101:32"
+      ]
+    },
+    "config#84": {
+      "en": "Which height goes where — volume uses H, the slanted face uses h.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:101:72"
+      ]
+    },
+    "config#85": {
+      "en": "Open tops & bottoms",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:102:32"
+      ]
+    },
+    "config#86": {
+      "en": "Closed, open-top, or a pipe — add a circle only for each closed end.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:102:62"
+      ]
+    },
+    "config#87": {
+      "en": "Composite solids",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:103:32"
+      ]
+    },
+    "config#88": {
+      "en": "Join two solids: add volumes, but leave out the hidden joining face.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:103:59"
+      ]
+    },
+    "config#89": {
+      "en": "Find the perpendicular height",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:104:32"
+      ]
+    },
+    "config#90": {
+      "en": "Slant vs perpendicular — find H with the hidden right-angled triangle (cone & pyramid).",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:104:72"
+      ]
+    },
+    "config#91": {
+      "en": "Mixed: read it & pick the formula",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:105:32"
+      ]
+    },
+    "config#92": {
+      "en": "All of it, plus scaling: ×k → area ×k², volume ×k³.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:105:76"
+      ]
+    },
+    "config#93": {
+      "en": "Functions",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:110:23"
+      ]
+    },
+    "config#94": {
+      "en": "The four graphs — read them, transform them, and solve inequalities off them.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:112:12"
+      ]
+    },
+    "config#95": {
+      "en": "The four families",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:114:33"
+      ]
+    },
+    "config#96": {
+      "en": "Line, parabola, hyperbola, exponential — from the equation and the graph.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:114:61"
+      ]
+    },
+    "config#97": {
+      "en": "Line & parabola",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:115:33"
+      ]
+    },
+    "config#98": {
+      "en": "Gradient, intercepts, happy/sad, turning point, axis of symmetry, range.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:115:59"
+      ]
+    },
+    "config#99": {
+      "en": "Hyperbola & exponential",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:116:33"
+      ]
+    },
+    "config#100": {
+      "en": "Asymptotes, branches, growth vs decay, domain & range.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:116:67"
+      ]
+    },
+    "config#101": {
+      "en": "Reading a graph",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:117:33"
+      ]
+    },
+    "config#102": {
+      "en": "Read intercepts, turning point, asymptotes, domain & range straight off the graph.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:117:59"
+      ]
+    },
+    "config#103": {
+      "en": "Inequalities off a graph",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:118:33"
+      ]
+    },
+    "config#104": {
+      "en": "Increasing/decreasing, f(x) > 0 or < 0, and the f·g and x·f sign rules.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:118:68"
+      ]
+    },
+    "config#105": {
+      "en": "Transformations",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:119:33"
+      ]
+    },
+    "config#106": {
+      "en": "Shifts, reflections and stretches — the rule and what it does.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:119:59"
+      ]
+    },
+    "config#107": {
+      "en": "Graphs together",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:120:33"
+      ]
+    },
+    "config#108": {
+      "en": "Intersections, f vs g, nature of roots, average gradient, max length.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:120:59"
+      ]
+    },
+    "config#109": {
+      "en": "Trig Graphs",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:124:25"
+      ]
+    },
+    "config#110": {
+      "en": "Sine, cosine and tangent graphs — period, amplitude, range, shifts, drawn to scale.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:126:12"
+      ]
+    },
+    "config#111": {
+      "en": "The three parent graphs",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:128:33"
+      ]
+    },
+    "config#112": {
+      "en": "Recognise sin, cos & tan and their key features.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:128:67"
+      ]
+    },
+    "config#113": {
+      "en": "What a, b and q do",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:129:33"
+      ]
+    },
+    "config#114": {
+      "en": "Reflect, stretch, squash and slide the graph.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:129:62"
+      ]
+    },
+    "config#115": {
+      "en": "Period, amplitude & range",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:130:33"
+      ]
+    },
+    "config#116": {
+      "en": "Find all three — from the equation and off the graph.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:130:69"
+      ]
+    },
+    "config#117": {
+      "en": "Horizontal & vertical shifts",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:131:33"
+      ]
+    },
+    "config#118": {
+      "en": "Which way and how far — and factoring b out first.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:131:72"
+      ]
+    },
+    "config#119": {
+      "en": "The tangent graph",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:132:33"
+      ]
+    },
+    "config#120": {
+      "en": "Asymptotes, intercepts, period 180° and finding a.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:132:61"
+      ]
+    },
+    "config#121": {
+      "en": "Find the equation",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:133:33"
+      ]
+    },
+    "config#122": {
+      "en": "Read a, b and q off a graph and write the equation.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:133:61"
+      ]
+    },
+    "config#123": {
+      "en": "Putting it together",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:134:33",
+        "config.js:148:33"
+      ]
+    },
+    "config#124": {
+      "en": "Two graphs at once: higher/lower, positive, intersections.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:134:63"
+      ]
+    },
+    "config#125": {
+      "en": "Analytical Geometry",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:138:29"
+      ]
+    },
+    "config#126": {
+      "en": "Points, lines and gradients on the grid — the right formula, drawn to scale.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:140:12"
+      ]
+    },
+    "config#127": {
+      "en": "Which formula, and what it tells you",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:142:33"
+      ]
+    },
+    "config#128": {
+      "en": "Gradient, distance or midpoint — and what each answer looks like.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:142:80"
+      ]
+    },
+    "config#129": {
+      "en": "Gradient: sign & special lines",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:143:33"
+      ]
+    },
+    "config#130": {
+      "en": "Positive, negative, zero or undefined — and the horizontal/vertical traps.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:143:74"
+      ]
+    },
+    "config#131": {
+      "en": "Parallel & perpendicular",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:144:33"
+      ]
+    },
+    "config#132": {
+      "en": "Equal gradients vs the −1 product, and the negative reciprocal.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:144:68"
+      ]
+    },
+    "config#133": {
+      "en": "Angle of inclination",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:145:33"
+      ]
+    },
+    "config#134": {
+      "en": "Acute or obtuse? When to take 180° − the SHIFT tan answer, and don’t type the negative in.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:145:64"
+      ]
+    },
+    "config#135": {
+      "en": "Perpendicular bisector",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:146:33"
+      ]
+    },
+    "config#136": {
+      "en": "Through the midpoint AND at right angles — spot it and tap it.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:146:66"
+      ]
+    },
+    "config#137": {
+      "en": "Area of a triangle",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:147:33"
+      ]
+    },
+    "config#138": {
+      "en": "Read the base and the ⊥height — altitude vs median.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:147:62"
+      ]
+    },
+    "config#139": {
+      "en": "Median/altitude/bisector, and the ‘to prove…, show…’ table.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:148:63"
+      ]
+    },
+    "config#140": {
+      "en": "Number Patterns",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:152:22"
+      ]
+    },
+    "config#141": {
+      "en": "Linear, quadratic and geometric patterns — the difference pyramid and the general term.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:154:12"
+      ]
+    },
+    "config#142": {
+      "en": "Spot the pattern",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:156:33"
+      ]
+    },
+    "config#143": {
+      "en": "First & second differences, constant ratio — arithmetic, quadratic or geometric?",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:156:60"
+      ]
+    },
+    "config#144": {
+      "en": "Arithmetic patterns",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:157:33"
+      ]
+    },
+    "config#145": {
+      "en": "Constant difference, Tₙ = an + c, find a term and which term.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:157:63"
+      ]
+    },
+    "config#146": {
+      "en": "Quadratic patterns",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:158:33"
+      ]
+    },
+    "config#147": {
+      "en": "The difference pyramid → a, b, c and Tₙ = an² + bn + c.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:158:62"
+      ]
+    },
+    "config#148": {
+      "en": "Find a missing term",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:159:33"
+      ]
+    },
+    "config#149": {
+      "en": "The second difference is constant — use it to fill the gap.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:159:63"
+      ]
+    },
+    "config#150": {
+      "en": "Minimum & maximum",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:160:33"
+      ]
+    },
+    "config#151": {
+      "en": "The turning point of the pattern: which term, and its value.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:160:61"
+      ]
+    },
+    "config#152": {
+      "en": "Gaps between terms",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:161:33"
+      ]
+    },
+    "config#153": {
+      "en": "The first differences are their own linear pattern.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:161:62"
+      ]
+    },
+    "config#154": {
+      "en": "Geometric patterns",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:162:33"
+      ]
+    },
+    "config#155": {
+      "en": "Constant ratio, Tₙ = a·rⁿ⁻¹, and the r-as-a-fraction traps.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:162:62"
+      ]
+    },
+    "config#156": {
+      "en": "Exponents & Surds",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:166:22"
+      ]
+    },
+    "config#157": {
+      "en": "The laws, the traps, and the theory — which rule, which factorising, the conjugate, and when there's no solution.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:168:12"
+      ]
+    },
+    "config#158": {
+      "en": "The exponent laws",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:170:33"
+      ]
+    },
+    "config#159": {
+      "en": "Name the law and say what happens to the exponents — zero, negative, fractional, brackets.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:170:61"
+      ]
+    },
+    "config#160": {
+      "en": "Spot the trap",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:171:33"
+      ]
+    },
+    "config#161": {
+      "en": "Is this step legal? The base that mustn't change, x⁰, negative ≠ negative, (x+y)² ≠ x²+y².",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:171:57"
+      ]
+    },
+    "config#162": {
+      "en": "First step & which method",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:172:33"
+      ]
+    },
+    "config#163": {
+      "en": "Prime factors first; one-term simplify vs factorise when there's a + or −; the cancelling rule.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:172:69"
+      ]
+    },
+    "config#164": {
+      "en": "Which “divorce”?",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:173:33"
+      ]
+    },
+    "config#165": {
+      "en": "Classify the factorising: common factor, difference of squares, trinomial or grouping — and let k = baseˣ.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:173:60"
+      ]
+    },
+    "config#166": {
+      "en": "Surd laws & traps",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:174:33"
+      ]
+    },
+    "config#167": {
+      "en": "Same-root × and ÷, the BIG NO-NO, like surds, inside/outside, non-real roots and ± answers.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:174:61"
+      ]
+    },
+    "config#168": {
+      "en": "Conjugates & rationalising",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:175:33"
+      ]
+    },
+    "config#169": {
+      "en": "What the conjugate is, why it works, rationalising one- and two-term denominators, the a + b√c form.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:175:70"
+      ]
+    },
+    "config#170": {
+      "en": "Rational-exponent equations",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:176:33"
+      ]
+    },
+    "config#171": {
+      "en": "Raise to the reciprocal; when the answer is ±, a single (negative) value, or no real solution.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:176:71"
+      ]
+    },
+    "config#172": {
+      "en": "No-solution & strategy",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:177:33"
+      ]
+    },
+    "config#173": {
+      "en": "Exponential & surd equations: same base, common factor, let k, isolate-square-TEST, and every no-solution trap.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:177:66"
+      ]
+    },
+    "config#174": {
+      "en": "Equations & Inequalities",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:181:22"
+      ]
+    },
+    "config#175": {
+      "en": "Which method, which move — brackets = 0, the k-method, restrictions, the bowl, and Δ. Theory and traps, no crunching.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:183:12"
+      ]
+    },
+    "config#176": {
+      "en": "Standard form & brackets = 0",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:185:33"
+      ]
+    },
+    "config#177": {
+      "en": "Everything to one side; each bracket = 0 (don't multiply out!); roots ↔ factors; EQN mode.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:185:72"
+      ]
+    },
+    "config#178": {
+      "en": "The special cases",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:186:33"
+      ]
+    },
+    "config#179": {
+      "en": "No b, no c, x² = negative; same-base exponents, 2ˣ = −4, and where x^(2/3) = 16 gets its ±.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:186:61"
+      ]
+    },
+    "config#180": {
+      "en": "The k-method",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:187:33"
+      ]
+    },
+    "config#181": {
+      "en": "A repeated bracket → let k stand for it. What k is, why you're not done at k, and the restriction that rides along.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:187:56"
+      ]
+    },
+    "config#182": {
+      "en": "Fractions & restrictions",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:188:33"
+      ]
+    },
+    "config#183": {
+      "en": "Factorise the denominators, the negative twin, the LCD — and restrictions BEFORE you solve.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:188:68"
+      ]
+    },
+    "config#184": {
+      "en": "Perfect squares & the turning point",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:189:33"
+      ]
+    },
+    "config#185": {
+      "en": "c = (b/2)² (only when a = 1!), the k sign trap, and reading TP(p ; q) — p flips, q doesn't.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:189:79"
+      ]
+    },
+    "config#186": {
+      "en": "The formula & simultaneous",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:190:33"
+      ]
+    },
+    "config#187": {
+      "en": "When to use it, the two lines you must show, signs into the calculator, and the substitution method.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:190:70"
+      ]
+    },
+    "config#188": {
+      "en": "Inequalities: flip & the bowl",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:191:33"
+      ]
+    },
+    "config#189": {
+      "en": "Switch the sign on × or ÷ negative; CP; inside the bowl vs left/right — read it off the sketch.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:191:73"
+      ]
+    },
+    "config#190": {
+      "en": "Nature of roots & know the difference",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:192:33"
+      ]
+    },
+    "config#191": {
+      "en": "Δ = b² − 4ac, the three pictures, the three question types — and no solution vs undefined vs non-real vs N.A.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:192:81"
+      ]
+    },
+    "config#192": {
+      "en": "Two, one or no solution?",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:197:33"
+      ]
+    },
+    "config#193": {
+      "en": "Rational-exponent equations: even numerator → ±, odd-only → a negative is fine, even anywhere with a negative → no solution.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:197:68"
+      ]
+    },
+    "config#194": {
+      "en": "General Trig",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:210:24"
+      ]
+    },
+    "config#195": {
+      "en": "Reductions, co-functions, special angles, general solutions — the angle is the whole story.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:212:12"
+      ]
+    },
+    "config#196": {
+      "en": "Introduction",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:214:33"
+      ]
+    },
+    "config#197": {
+      "en": "What trig means, and where the ratios come from.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:214:56"
+      ]
+    },
+    "config#198": {
+      "en": "The Cartesian plane",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:215:33"
+      ]
+    },
+    "config#199": {
+      "en": "All Strippers Take Cash — why each ratio is + or −.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:215:63"
+      ]
+    },
+    "config#200": {
+      "en": "Special angles & identities",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:216:33"
+      ]
+    },
+    "config#201": {
+      "en": "The two triangles, Oats Are Healthy, and the masked identities.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:216:71"
+      ]
+    },
+    "config#202": {
+      "en": "Co-functions",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:217:33"
+      ]
+    },
+    "config#203": {
+      "en": "Convert between sin and cos — and the cos(90°+x) trap.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:217:56"
+      ]
+    },
+    "config#204": {
+      "en": "Reductions TIP Chips",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:221:33"
+      ]
+    },
+    "config#205": {
+      "en": "The five TIP Chips, revised.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:221:64"
+      ]
+    },
+    "config#206": {
+      "en": "Reductions: variables",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:222:33"
+      ]
+    },
+    "config#207": {
+      "en": "Reductions with x or θ instead of a number.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:222:65"
+      ]
+    },
+    "config#208": {
+      "en": "Reductions: numbers",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:223:33"
+      ]
+    },
+    "config#209": {
+      "en": "Quadrant, formula, sign, ratio — the reduction routine, step by step.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:223:63"
+      ]
+    },
+    "config#210": {
+      "en": "Special sums",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:224:33"
+      ]
+    },
+    "config#211": {
+      "en": "Pick the quadrant, the app draws the triangle, evaluate.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:224:56"
+      ]
+    },
+    "config#212": {
+      "en": "Identities: the next step",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:225:33"
+      ]
+    },
+    "config#213": {
+      "en": "Spot the move — LCD, masked identity, what simplifies.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:225:69"
+      ]
+    },
+    "config#214": {
+      "en": "Super special sums",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:226:35"
+      ]
+    },
+    "config#215": {
+      "en": "Where 1 and k (or t) go on the triangle.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:226:64"
+      ]
+    },
+    "config#216": {
+      "en": "General solution: the six types",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:227:35"
+      ]
+    },
+    "config#217": {
+      "en": "Name the type, pick the method.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:227:77"
+      ]
+    },
+    "config#218": {
+      "en": "General solution: last steps",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:228:35"
+      ]
+    },
+    "config#219": {
+      "en": "The quadrant cross, then the reference angle.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:228:74"
+      ]
+    },
+    "config#220": {
+      "en": "Undefined values",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "config.js:229:35"
+      ]
+    },
+    "config#221": {
+      "en": "Which terms must be equated to zero.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:229:62"
+      ]
+    },
+    "config#222": {
+      "en": "Euclidean Geometry",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:262:25"
+      ]
+    },
+    "config#223": {
+      "en": "Circle theorems, tangents and cyclic quads — real exam questions, one part at a time.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:264:12"
+      ]
+    },
+    "config#224": {
+      "en": "Algebraic Expressions",
+      "kind": "string",
+      "slots": [
+        "name"
+      ],
+      "where": [
+        "config.js:282:23"
+      ]
+    },
+    "config#225": {
+      "en": "Expanding, factorising and algebraic fractions — the Grade 10 skills the exam still expects.",
+      "kind": "string",
+      "slots": [
+        "blurb"
+      ],
+      "where": [
+        "config.js:284:12"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1469,
+  "skippedLists": [
+    "config.js:EXAM_TAB_ORDER [algx, exp, eqn, func, tgraph, gtrig, euclid]",
+    "config.js:DICE_CHAPTERS [stats, finance, pat, trig, eqn, exp, func, gtrig]",
+    "config.js:EXAM_CHAPTERS [algx, eqn, exp, func, tgraph, gtrig, euclid]"
+  ]
+}
