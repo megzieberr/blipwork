@@ -1,0 +1,4267 @@
+{
+  "unit": "T11",
+  "generated": "2026-10-17T17:48:03.765Z",
+  "files": [
+    "js/quests/queseq7-inequalities.js",
+    "js/quests/queseq8-nature.js"
+  ],
+  "items": {
+    "queseq7-inequalities#1": {
+      "en": "When solving an inequality, WHEN must you switch the direction of the sign?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:22:12"
+      ]
+    },
+    "queseq7-inequalities#2": {
+      "en": "When you multiply or divide both sides by a NEGATIVE number",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:22:100"
+      ]
+    },
+    "queseq7-inequalities#3": {
+      "en": "Whenever you move a term across",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:22:172"
+      ]
+    },
+    "queseq7-inequalities#4": {
+      "en": "When you add a negative number to both sides",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:22:207"
+      ]
+    },
+    "queseq7-inequalities#5": {
+      "en": "Every time there is a fraction",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:22:255"
+      ]
+    },
+    "queseq7-inequalities#6": {
+      "en": "Only × or ÷ by a negative flips the sign. Adding/subtracting anything, or ×/÷ by a positive, leaves the sign alone.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:22:295"
+      ]
+    },
+    "queseq7-inequalities#7": {
+      "en": "Start from something true: 2 &lt; 5",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:23:20"
+      ]
+    },
+    "queseq7-inequalities#8": {
+      "en": "Multiply both sides by −1: −2 and −5. On the number line −2 sits to the RIGHT of −5, so now −2 > −5",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:24:20"
+      ]
+    },
+    "queseq7-inequalities#9": {
+      "en": "The order really did reverse, so the sign must reverse with it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:25:20"
+      ]
+    },
+    "queseq7-inequalities#10": {
+      "en": "adding or subtracting slides both sides equally and changes no order",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:25:89"
+      ]
+    },
+    "queseq7-inequalities#11": {
+      "en": "You divide both sides of <b>6x &lt; 18</b> by 6. Does the sign flip?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:26:12"
+      ]
+    },
+    "queseq7-inequalities#12": {
+      "en": "No — dividing by a POSITIVE number never flips the sign",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:26:93"
+      ]
+    },
+    "queseq7-inequalities#13": {
+      "en": "Yes — dividing always flips",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:26:161"
+      ]
+    },
+    "queseq7-inequalities#14": {
+      "en": "Yes — 18 is bigger than 6",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:26:192"
+      ]
+    },
+    "queseq7-inequalities#15": {
+      "en": "Only if x is negative",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:26:221"
+      ]
+    },
+    "queseq7-inequalities#16": {
+      "en": "6 is positive, so nothing flips: x < 3. The flip is reserved for × or ÷ by a NEGATIVE.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:26:252"
+      ]
+    },
+    "queseq7-inequalities#17": {
+      "en": "Ask only one thing: is the number you are dividing by negative?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:27:20"
+      ]
+    },
+    "queseq7-inequalities#18": {
+      "en": "6 is positive, so the order of the two sides is untouched",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:28:20"
+      ]
+    },
+    "queseq7-inequalities#19": {
+      "en": "6x &lt; 18  →  x &lt; 3, sign unchanged",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:29:20"
+      ]
+    },
+    "queseq7-inequalities#20": {
+      "en": "the size of the number makes no difference — only its sign does",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:29:66"
+      ]
+    },
+    "queseq7-inequalities#21": {
+      "en": "Subtracting 9x from both sides of an inequality flips the sign. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:31:9"
+      ]
+    },
+    "queseq7-inequalities#22": {
+      "en": "Adding or subtracting never flips.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:33:17"
+      ]
+    },
+    "queseq7-inequalities#23": {
+      "en": "False — moving terms across (adding/subtracting) never flips the sign. Only MULTIPLYING or DIVIDING by a negative does.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:34:24"
+      ]
+    },
+    "queseq7-inequalities#24": {
+      "en": "Subtracting the same thing from both sides slides both of them the same distance along the number line",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:36:18"
+      ]
+    },
+    "queseq7-inequalities#25": {
+      "en": "Sliding both by the same amount cannot change which one is bigger",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:37:18"
+      ]
+    },
+    "queseq7-inequalities#26": {
+      "en": "∴ false — only × or ÷ by a NEGATIVE reverses the order, and so the sign",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:38:18"
+      ]
+    },
+    "queseq7-inequalities#27": {
+      "en": "× or ÷ with a negative = switch direction.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:43:15"
+      ]
+    },
+    "queseq7-inequalities#28": {
+      "en": "Solve for x: <b>−${C(a)}x &lt; ${C(bb)}</b>",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:51:20"
+      ]
+    },
+    "queseq7-inequalities#29": {
+      "en": "x > −${frac(bb, a)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:52:21",
+        "queseq7-inequalities.js:64:16"
+      ]
+    },
+    "queseq7-inequalities#30": {
+      "en": "x &lt; −${frac(bb, a)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:54:7"
+      ]
+    },
+    "queseq7-inequalities#31": {
+      "en": "x > ${frac(bb, a)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:55:7"
+      ]
+    },
+    "queseq7-inequalities#32": {
+      "en": "x &lt; ${frac(bb, a)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:56:7"
+      ]
+    },
+    "queseq7-inequalities#33": {
+      "en": "Divide both sides by the NEGATIVE coefficient — and switch the sign as you do.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:59:15"
+      ]
+    },
+    "queseq7-inequalities#34": {
+      "en": "Divide by −${C(a)} and flip: x > −${frac(bb, a)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:60:22"
+      ]
+    },
+    "queseq7-inequalities#35": {
+      "en": "To get x alone you must divide both sides by −${C(a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:62:16"
+      ]
+    },
+    "queseq7-inequalities#36": {
+      "en": "That divisor is NEGATIVE, so the sign switches direction as you divide",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:63:16"
+      ]
+    },
+    "queseq7-inequalities#37": {
+      "en": "&lt; becomes >",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:63:93"
+      ]
+    },
+    "queseq7-inequalities#38": {
+      "en": "x on the left, and the fraction is already in lowest terms",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:64:42"
+      ]
+    },
+    "queseq7-inequalities#39": {
+      "en": "Solve <b>−5 ≤ 1 − 3x &lt; 10</b>. After subtracting 1 from ALL THREE parts you divide by −3. What happens?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:71:12"
+      ]
+    },
+    "queseq7-inequalities#40": {
+      "en": "BOTH inequality signs flip: 2 ≥ x > −3",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:71:131"
+      ]
+    },
+    "queseq7-inequalities#41": {
+      "en": "Only the left sign flips",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:71:182"
+      ]
+    },
+    "queseq7-inequalities#42": {
+      "en": "Nothing flips — division is by 3",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:71:210"
+      ]
+    },
+    "queseq7-inequalities#43": {
+      "en": "The middle and right swap places",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:71:246"
+      ]
+    },
+    "queseq7-inequalities#44": {
+      "en": "Dividing all three parts by −3 flips BOTH signs: −6 ≤ −3x < 9 becomes 2 ≥ x > −3, i.e. −3 < x ≤ 2.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:71:288"
+      ]
+    },
+    "queseq7-inequalities#45": {
+      "en": "You end a compound inequality with <b>2 ≥ x > −3</b>. How should the final answer be written?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:72:12"
+      ]
+    },
+    "queseq7-inequalities#46": {
+      "en": "−3 &lt; x ≤ 2 (natural left-to-right order)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:72:118"
+      ]
+    },
+    "queseq7-inequalities#47": {
+      "en": "2 ≥ x > −3 is already the final form",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:72:174"
+      ]
+    },
+    "queseq7-inequalities#48": {
+      "en": "x ≤ 2 or x > −3",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:72:214"
+      ]
+    },
+    "queseq7-inequalities#49": {
+      "en": "−3 > x ≥ 2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:72:233"
+      ]
+    },
+    "queseq7-inequalities#50": {
+      "en": "Rewrite in natural number-line order, small to large: −3 < x ≤ 2.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:72:253"
+      ]
+    },
+    "queseq7-inequalities#51": {
+      "en": "In a compound inequality like −5 ≤ 1 − 3x < 10, every operation must be done to ALL THREE parts. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:74:9"
+      ]
+    },
+    "queseq7-inequalities#52": {
+      "en": "It's a sandwich — all three layers move together.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:76:17"
+      ]
+    },
+    "queseq7-inequalities#53": {
+      "en": "True — subtract the 1 from all three parts, divide all three by −3 (flipping both signs).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:77:24"
+      ]
+    },
+    "queseq7-inequalities#54": {
+      "en": "All three parts together; ÷ by negative flips BOTH signs; finish in natural order.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:81:15"
+      ]
+    },
+    "queseq7-inequalities#55": {
+      "en": "On a number line, what does an OPEN circle at an endpoint mean?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:87:12"
+      ]
+    },
+    "queseq7-inequalities#56": {
+      "en": "The endpoint is NOT included (&lt; or >)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:87:88"
+      ]
+    },
+    "queseq7-inequalities#57": {
+      "en": "The endpoint is included (≤ or ≥)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:87:141"
+      ]
+    },
+    "queseq7-inequalities#58": {
+      "en": "The answer is undefined there",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:87:178"
+      ]
+    },
+    "queseq7-inequalities#59": {
+      "en": "The graph continues forever",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:87:211"
+      ]
+    },
+    "queseq7-inequalities#60": {
+      "en": "Open circle = not included (strict < or >). Filled circle = included (≤ or ≥).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:87:248"
+      ]
+    },
+    "queseq7-inequalities#61": {
+      "en": "The circle's job is to say whether the endpoint itself is part of the answer",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:88:20"
+      ]
+    },
+    "queseq7-inequalities#62": {
+      "en": "A strict sign (&lt; or >) means x gets as close as it likes but never lands there",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:89:20"
+      ]
+    },
+    "queseq7-inequalities#63": {
+      "en": "So the circle is drawn hollow — open",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:90:20"
+      ]
+    },
+    "queseq7-inequalities#64": {
+      "en": "≤ or ≥ would fill it in",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:90:63"
+      ]
+    },
+    "queseq7-inequalities#65": {
+      "en": "Which endpoints does <b>−3 &lt; x ≤ 2</b> put on the number line?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:91:12"
+      ]
+    },
+    "queseq7-inequalities#66": {
+      "en": "Open circle at −3, filled circle at 2",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:91:90"
+      ]
+    },
+    "queseq7-inequalities#67": {
+      "en": "Filled circle at −3, open circle at 2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:91:140"
+      ]
+    },
+    "queseq7-inequalities#68": {
+      "en": "Open circles at both",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:91:181"
+      ]
+    },
+    "queseq7-inequalities#69": {
+      "en": "Filled circles at both",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:91:205"
+      ]
+    },
+    "queseq7-inequalities#70": {
+      "en": "< at −3 → open (not included); ≤ at 2 → filled (included).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:91:237"
+      ]
+    },
+    "queseq7-inequalities#71": {
+      "en": "Take the two ends one at a time",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:92:20"
+      ]
+    },
+    "queseq7-inequalities#72": {
+      "en": "At −3 the sign is &lt;, strict, so −3 itself is not allowed — open circle",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:93:20"
+      ]
+    },
+    "queseq7-inequalities#73": {
+      "en": "At 2 the sign is ≤, so 2 IS allowed — filled circle",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:94:20"
+      ]
+    },
+    "queseq7-inequalities#74": {
+      "en": "then shade the stretch between them",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:94:78"
+      ]
+    },
+    "queseq7-inequalities#75": {
+      "en": "Strict sign → open circle. 'Or equal' sign → filled circle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:98:15"
+      ]
+    },
+    "queseq7-inequalities#76": {
+      "en": "Setting up a QUADRATIC inequality before sketching the bowl — which list is right?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:104:12"
+      ]
+    },
+    "queseq7-inequalities#77": {
+      "en": "Everything to the left (0 on the right); no negative in front of x²; CP from = 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:104:107"
+      ]
+    },
+    "queseq7-inequalities#78": {
+      "en": "Everything to the right; negative x² is fine; CP from < 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:104:200"
+      ]
+    },
+    "queseq7-inequalities#79": {
+      "en": "Divide by x first; then factorise; CP from = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:104:261"
+      ]
+    },
+    "queseq7-inequalities#80": {
+      "en": "Sketch first, factorise afterwards",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:104:311"
+      ]
+    },
+    "queseq7-inequalities#81": {
+      "en": "The routine: 0 on the right → kill any negative in front of x² (divide by −1 and FLIP) → factorise → CP: each factor = 0 → sketch/calculator.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:104:355"
+      ]
+    },
+    "queseq7-inequalities#82": {
+      "en": "① Take everything to the left so 0 sits on the right",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:105:20"
+      ]
+    },
+    "queseq7-inequalities#83": {
+      "en": "the bowl picture is about where the curve is above or below the axis",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:105:79"
+      ]
+    },
+    "queseq7-inequalities#84": {
+      "en": "② No negative in front of x²: divide it away and change the direction of the sign",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:106:20"
+      ]
+    },
+    "queseq7-inequalities#85": {
+      "en": "③ Factorise, then ④ CP must be =: set each factor equal to 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:107:20"
+      ]
+    },
+    "queseq7-inequalities#86": {
+      "en": "Only then sketch the bowl and read the region off it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:108:20"
+      ]
+    },
+    "queseq7-inequalities#87": {
+      "en": "her TIP Chips checklist, in that order",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:108:79"
+      ]
+    },
+    "queseq7-inequalities#88": {
+      "en": "Where do the critical points (CP) of a quadratic inequality come from?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:109:12"
+      ]
+    },
+    "queseq7-inequalities#89": {
+      "en": "Setting each factor equal to 0 — an EQUATION, even though the question is an inequality",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:109:95"
+      ]
+    },
+    "queseq7-inequalities#90": {
+      "en": "Setting each factor &lt; 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:109:195"
+      ]
+    },
+    "queseq7-inequalities#91": {
+      "en": "The turning point of the parabola",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:109:225"
+      ]
+    },
+    "queseq7-inequalities#92": {
+      "en": "The y-intercept",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:109:262"
+      ]
+    },
+    "queseq7-inequalities#93": {
+      "en": "CP come from factor = 0. The inequality only decides WHICH region between/outside the CPs you keep.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:109:287"
+      ]
+    },
+    "queseq7-inequalities#94": {
+      "en": "The critical points are where the curve actually crosses the x-axis",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:110:20"
+      ]
+    },
+    "queseq7-inequalities#95": {
+      "en": "Crossing means the value is 0, so each factor is set = 0 — an equation, even though the question is an inequality",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:111:20"
+      ]
+    },
+    "queseq7-inequalities#96": {
+      "en": "The inequality sign has a different job: it decides which side of those points you shade",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:112:20"
+      ]
+    },
+    "queseq7-inequalities#97": {
+      "en": "CP must be =",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:112:115"
+      ]
+    },
+    "queseq7-inequalities#98": {
+      "en": "There is a negative in front of x². You divide every term by −1 — does the inequality sign flip?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:114:9"
+      ]
+    },
+    "queseq7-inequalities#99": {
+      "en": "÷ by a negative…",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:116:17"
+      ]
+    },
+    "queseq7-inequalities#100": {
+      "en": "Yes — dividing by −1 flips the sign: −x² + 3x − 2 ≥ 0 becomes x² − 3x + 2 ≤ 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:117:24"
+      ]
+    },
+    "queseq7-inequalities#101": {
+      "en": "−1 is a negative number, and dividing by a negative always reverses the order",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:119:18"
+      ]
+    },
+    "queseq7-inequalities#102": {
+      "en": "Every term goes through it, including the 0 on the right",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:120:18"
+      ]
+    },
+    "queseq7-inequalities#103": {
+      "en": "0 ÷ −1 is still 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:120:81"
+      ]
+    },
+    "queseq7-inequalities#104": {
+      "en": "−x² + 3x − 2 ≥ 0 becomes x² − 3x + 2 ≤ 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:121:18"
+      ]
+    },
+    "queseq7-inequalities#105": {
+      "en": "∴ yes, it flips — the whole point of dividing the negative away",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:121:65"
+      ]
+    },
+    "queseq7-inequalities#106": {
+      "en": "Left side, positive x², CP = 0, then sketch.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:126:15"
+      ]
+    },
+    "queseq7-inequalities#107": {
+      "en": "${C(r1)} ≤ x ≤ ${C(r2)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:134:52",
+        "queseq7-inequalities.js:137:16",
+        "queseq7-inequalities.js:161:38"
+      ]
+    },
+    "queseq7-inequalities#108": {
+      "en": "x ≤ ${C(r1)} or x ≥ ${C(r2)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:136:38",
+        "queseq7-inequalities.js:159:52"
+      ]
+    },
+    "queseq7-inequalities#109": {
+      "en": "x &lt; ${C(r2)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:138:16"
+      ]
+    },
+    "queseq7-inequalities#110": {
+      "en": "x ≤ ${C(r2)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:138:41"
+      ]
+    },
+    "queseq7-inequalities#111": {
+      "en": "<b>${factorStr(r1, r2)} ${sign} 0</b>. The sketch shades the solution. Read it off.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:141:7",
+        "queseq7-inequalities.js:166:7"
+      ]
+    },
+    "queseq7-inequalities#112": {
+      "en": "The expression must be ${strict ? \"NEGATIVE\" : \"negative or 0\"} — the bowl dips below the axis BETWEEN its critical points.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:143:15"
+      ],
+      "nested": [
+        "NEGATIVE",
+        "negative or 0"
+      ]
+    },
+    "queseq7-inequalities#113": {
+      "en": "Below the axis = inside the bowl: ${correct}${strict ? \"\" : \" (≤ keeps the critical points in)\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:144:22"
+      ],
+      "nested": [
+        " (≤ keeps the critical points in)"
+      ]
+    },
+    "queseq7-inequalities#114": {
+      "en": "CP: set each bracket = 0  →  x = ${C(r1)} or x = ${C(r2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:146:16",
+        "queseq7-inequalities.js:171:16"
+      ]
+    },
+    "queseq7-inequalities#115": {
+      "en": "The sign is ${sign} 0, so you want the parts where the bowl sits BELOW the axis",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:147:16"
+      ]
+    },
+    "queseq7-inequalities#116": {
+      "en": "A happy bowl only dips below between its two critical points",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:148:16"
+      ]
+    },
+    "queseq7-inequalities#117": {
+      "en": "her words: inside of bowl — x lies between",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:148:83"
+      ]
+    },
+    "queseq7-inequalities#118": {
+      "en": "strict signs, so the critical points themselves are out",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:149:44"
+      ]
+    },
+    "queseq7-inequalities#119": {
+      "en": "≤ keeps the critical points in",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:149:104"
+      ]
+    },
+    "queseq7-inequalities#120": {
+      "en": "x ${strict ? \"&lt;\" : \"≤\"} ${C(r1)} AND x ${strict ? \">\" : \"≥\"} ${C(r2)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:162:7"
+      ]
+    },
+    "queseq7-inequalities#121": {
+      "en": "x > ${C(r2)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:163:16"
+      ]
+    },
+    "queseq7-inequalities#122": {
+      "en": "x ≥ ${C(r2)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:163:38"
+      ]
+    },
+    "queseq7-inequalities#123": {
+      "en": "Positive = ABOVE the axis — the two arms to the left and right of the bowl. Two pieces need the word OR.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:168:15"
+      ]
+    },
+    "queseq7-inequalities#124": {
+      "en": "Above the axis = outside the CPs: ${correct}. Two separate pieces MUST be joined with \"or\" — no x can be in both at once, so \"and\" is impossible.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:169:22"
+      ]
+    },
+    "queseq7-inequalities#125": {
+      "en": "The sign is ${sign} 0, so you want the parts where the bowl sits ABOVE the axis",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:172:16"
+      ]
+    },
+    "queseq7-inequalities#126": {
+      "en": "That is both arms — to the LEFT of ${C(r1)} and to the RIGHT of ${C(r2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:173:16"
+      ]
+    },
+    "queseq7-inequalities#127": {
+      "en": "her words: outside of bowl; &lt; points left, > points right",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:173:95"
+      ]
+    },
+    "queseq7-inequalities#128": {
+      "en": "two separate stretches, so they are joined with “or”, never “and”",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:174:35"
+      ]
+    },
+    "queseq7-inequalities#129": {
+      "en": "A two-piece answer may be written “x ≤ 0 <b>and</b> x ≥ 6”. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:183:9"
+      ]
+    },
+    "queseq7-inequalities#130": {
+      "en": "Can one x be in both pieces at the same time?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:185:17"
+      ]
+    },
+    "queseq7-inequalities#131": {
+      "en": "False — no number is ≤ 0 AND ≥ 6 at once. Two separate pieces are joined with OR: x ≤ 0 or x ≥ 6.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:186:24"
+      ]
+    },
+    "queseq7-inequalities#132": {
+      "en": "“And” means one single x would have to satisfy both pieces at the same moment",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:188:18"
+      ]
+    },
+    "queseq7-inequalities#133": {
+      "en": "Try to find one: it would have to be 0 or below AND 6 or above — no such number exists",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:189:18"
+      ]
+    },
+    "queseq7-inequalities#134": {
+      "en": "∴ false — write x ≤ 0 or x ≥ 6",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:190:18"
+      ]
+    },
+    "queseq7-inequalities#135": {
+      "en": "her ruling: never leave it in the calculator's semicolon form",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:190:55"
+      ]
+    },
+    "queseq7-inequalities#136": {
+      "en": "Why must a two-piece solution use <b>or</b> instead of <b>and</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:192:12"
+      ]
+    },
+    "queseq7-inequalities#137": {
+      "en": "No single x can satisfy both pieces at once — each x lives in ONE piece",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:192:91"
+      ]
+    },
+    "queseq7-inequalities#138": {
+      "en": "'And' is just slang for 'or' here",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:192:175"
+      ]
+    },
+    "queseq7-inequalities#139": {
+      "en": "Because the pieces overlap",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:192:212"
+      ]
+    },
+    "queseq7-inequalities#140": {
+      "en": "It's tradition with no reason",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:192:242"
+      ]
+    },
+    "queseq7-inequalities#141": {
+      "en": "'And' means both at the same time — impossible for x ≤ 0 and x ≥ 6. Each solution sits in one piece OR the other.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:192:281"
+      ]
+    },
+    "queseq7-inequalities#142": {
+      "en": "Picture the two shaded arms on the number line — they never touch",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:193:20"
+      ]
+    },
+    "queseq7-inequalities#143": {
+      "en": "Any single x you pick lands in one arm or the other, never in both",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:194:20"
+      ]
+    },
+    "queseq7-inequalities#144": {
+      "en": "“And” would demand both at once, which is impossible, so the joining word is OR",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:195:20"
+      ]
+    },
+    "queseq7-inequalities#145": {
+      "en": "Two pieces → OR.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:199:15"
+      ]
+    },
+    "queseq7-inequalities#146": {
+      "en": "<b>(x − ${C(r)})(${C(s)} − x) ≥ 0</b>. What is hiding in the second bracket?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:206:12"
+      ]
+    },
+    "queseq7-inequalities#147": {
+      "en": "A negative x² — rewrite (${C(s)} − x) as −(x − ${C(s)}), so the inequality FLIPS to (x − ${C(r)})(x − ${C(s)}) ≤ 0",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:206:101"
+      ]
+    },
+    "queseq7-inequalities#148": {
+      "en": "Nothing — factorised form is ready for CPs as is",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:206:228"
+      ]
+    },
+    "queseq7-inequalities#149": {
+      "en": "The bracket just means x = ${C(s)} is a CP, sign unchanged",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:206:280"
+      ]
+    },
+    "queseq7-inequalities#150": {
+      "en": "A fraction that must be cleared first",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:206:342"
+      ]
+    },
+    "queseq7-inequalities#151": {
+      "en": "(${C(s)} − x) expanded gives −x². Take out the −1 (and flip!): (x − ${C(r)})(x − ${C(s)}) ≤ 0, giving ${C(r)} ≤ x ≤ ${C(s)}.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:206:389"
+      ]
+    },
+    "queseq7-inequalities#152": {
+      "en": "Multiply out in pencil: x·(−x) gives −x², so there IS a negative in front of the square",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:207:20"
+      ]
+    },
+    "queseq7-inequalities#153": {
+      "en": "Take −1 out of the second bracket: (${C(s)} − x) = −(x − ${C(s)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:208:20"
+      ]
+    },
+    "queseq7-inequalities#154": {
+      "en": "That −1 divides away and FLIPS the sign: (x − ${C(r)})(x − ${C(s)}) ≤ 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:209:20"
+      ]
+    },
+    "queseq7-inequalities#155": {
+      "en": "CP x = ${C(r)} and x = ${C(s)}, inside the bowl: ${C(r)} ≤ x ≤ ${C(s)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:210:20"
+      ]
+    },
+    "queseq7-inequalities#156": {
+      "en": "A bracket like (${C(s)} − x) can be used directly for the bowl sketch without any adjustment. True?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:212:9"
+      ]
+    },
+    "queseq7-inequalities#157": {
+      "en": "Multiply the brackets out in pencil — what is the coefficient of x²?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:214:17"
+      ]
+    },
+    "queseq7-inequalities#158": {
+      "en": "False — (${C(s)} − x) hides a NEGATIVE x², and the bowl method needs a positive one. Take −1 out of that bracket and flip the inequality sign.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:215:24"
+      ]
+    },
+    "queseq7-inequalities#159": {
+      "en": "Check the x² coefficient before sketching anything: an x times the −x in (${C(s)} − x) gives −x²",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:217:18"
+      ]
+    },
+    "queseq7-inequalities#160": {
+      "en": "A negative x² is a SAD parabola, and the bowl reading assumes a happy one",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:218:18"
+      ]
+    },
+    "queseq7-inequalities#161": {
+      "en": "∴ false — take the −1 out first: (${C(s)} − x) = −(x − ${C(s)}), and flip the sign as it goes",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:219:18"
+      ]
+    },
+    "queseq7-inequalities#162": {
+      "en": "(a − x) hides −x². Take out −1 and flip.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:224:15"
+      ]
+    },
+    "queseq7-inequalities#163": {
+      "en": "<b>(x + 1)(x + 2) ≤ 20</b>. The left side is already in brackets. May you take the critical points straight from them?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:230:12"
+      ]
+    },
+    "queseq7-inequalities#164": {
+      "en": "No — the brackets equal 20, not 0. Multiply out, bring the 20 across, factorise AGAIN",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:230:143"
+      ]
+    },
+    "queseq7-inequalities#165": {
+      "en": "Yes — the CPs are x = −1 and x = −2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:230:241"
+      ]
+    },
+    "queseq7-inequalities#166": {
+      "en": "Yes, as long as you flip the inequality sign first",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:230:280"
+      ]
+    },
+    "queseq7-inequalities#167": {
+      "en": "No — first divide both sides by (x + 1)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:230:334"
+      ]
+    },
+    "queseq7-inequalities#168": {
+      "en": "Brackets only speak against 0. Expand: x² + 3x + 2 ≤ 20 → x² + 3x − 18 ≤ 0 → (x + 6)(x − 3) ≤ 0 → −6 ≤ x ≤ 3. (Notice −1 and −2 appear nowhere in the real answer!)",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:230:383"
+      ]
+    },
+    "queseq7-inequalities#169": {
+      "en": "When brackets multiply to something OTHER than 0 (like … ≤ 20), what is the routine?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:231:12"
+      ]
+    },
+    "queseq7-inequalities#170": {
+      "en": "Expand, bring everything to the left so 0 sits on the right, then factorise the NEW trinomial",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:231:109"
+      ]
+    },
+    "queseq7-inequalities#171": {
+      "en": "Read the CPs off the brackets as they stand",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:231:215"
+      ]
+    },
+    "queseq7-inequalities#172": {
+      "en": "Set each bracket ≤ 20 on its own",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:231:262"
+      ]
+    },
+    "queseq7-inequalities#173": {
+      "en": "Divide both sides by one of the brackets",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:231:298"
+      ]
+    },
+    "queseq7-inequalities#174": {
+      "en": "Same discipline as equations: the zero-product idea (and the bowl's CPs) only work against 0. Expand → 0 on the right → factorise again → CPs → sketch.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:231:348"
+      ]
+    },
+    "queseq7-inequalities#175": {
+      "en": "For <b>(x + 1)(x + 2) ≤ 20</b> a learner writes “x + 1 ≤ 20 or x + 2 ≤ 20”. Is that method legal?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:233:9"
+      ]
+    },
+    "queseq7-inequalities#176": {
+      "en": "Does splitting a product over its factors work against 20?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:235:17"
+      ]
+    },
+    "queseq7-inequalities#177": {
+      "en": "No — splitting up brackets is only legal against 0 (zero-product rule). Expand and rearrange: x² + 3x − 18 ≤ 0 → (x + 6)(x − 3) ≤ 0 → −6 ≤ x ≤ 3.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:236:24"
+      ]
+    },
+    "queseq7-inequalities#178": {
+      "en": "Brackets = 20 is NOT brackets = 0. Expand, rearrange to 0, factorise again.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:240:15"
+      ]
+    },
+    "queseq7-inequalities#179": {
+      "en": "Why may <b>(${C(m * m)} − x²)/x² ≥ 0</b> be read straight off the NUMERATOR (${C(m * m)} − x² ≥ 0)?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:247:12"
+      ]
+    },
+    "queseq7-inequalities#180": {
+      "en": "x² is positive for every x ≠ 0, so the fraction's sign IS the numerator's sign",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:247:124"
+      ]
+    },
+    "queseq7-inequalities#181": {
+      "en": "The denominator always cancels the numerator",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:247:215"
+      ]
+    },
+    "queseq7-inequalities#182": {
+      "en": "Fractions in inequalities may always be ignored",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:247:263"
+      ]
+    },
+    "queseq7-inequalities#183": {
+      "en": "Because the numerator is bigger",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:247:314"
+      ]
+    },
+    "queseq7-inequalities#184": {
+      "en": "A square denominator is positive for every non-zero x, so dividing by it never changes the sign. Solve ${C(m * m)} − x² ≥ 0 — but CARRY x ≠ 0 into the final answer.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:247:355"
+      ]
+    },
+    "queseq7-inequalities#185": {
+      "en": "Dividing only flips an inequality when the divisor is NEGATIVE",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:248:20"
+      ]
+    },
+    "queseq7-inequalities#186": {
+      "en": "x² is a square, so it is positive for every x except 0 — it can never be negative",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:249:20"
+      ]
+    },
+    "queseq7-inequalities#187": {
+      "en": "So the sign of the whole fraction is the sign of the top: solve ${C(m * m)} − x² ≥ 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:250:20"
+      ]
+    },
+    "queseq7-inequalities#188": {
+      "en": "Then carry x ≠ 0 into the answer after a semicolon",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:251:20"
+      ]
+    },
+    "queseq7-inequalities#189": {
+      "en": "the denominator's restriction never disappears",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:251:77"
+      ]
+    },
+    "queseq7-inequalities#190": {
+      "en": "An inequality has x in a DENOMINATOR. What must ride along into the final answer?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq7-inequalities.js:252:12"
+      ]
+    },
+    "queseq7-inequalities#191": {
+      "en": "The restriction (e.g. x ≠ 0) — even if the rest of the interval includes it",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq7-inequalities.js:252:106"
+      ]
+    },
+    "queseq7-inequalities#192": {
+      "en": "Nothing — restrictions are only for equations",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:252:194"
+      ]
+    },
+    "queseq7-inequalities#193": {
+      "en": "A ± sign",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:252:243"
+      ]
+    },
+    "queseq7-inequalities#194": {
+      "en": "The LCD",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:252:255"
+      ]
+    },
+    "queseq7-inequalities#195": {
+      "en": "A denominator's restriction belongs to the original inequality, so the final answer must exclude it: e.g. −3 ≤ x ≤ 3 with x ≠ 0.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:252:272"
+      ]
+    },
+    "queseq7-inequalities#196": {
+      "en": "The banned value comes from the ORIGINAL inequality, before any working",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:253:20"
+      ]
+    },
+    "queseq7-inequalities#197": {
+      "en": "Clearing or simplifying the fraction hides the denominator, but it does not un-ban that x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:254:20"
+      ]
+    },
+    "queseq7-inequalities#198": {
+      "en": "So the restriction is written after a semicolon: −3 ≤ x ≤ 3 ; x ≠ 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:255:20"
+      ]
+    },
+    "queseq7-inequalities#199": {
+      "en": "even when the interval would otherwise swallow it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:255:94"
+      ]
+    },
+    "queseq7-inequalities#200": {
+      "en": "A factor that appears in BOTH the numerator and the denominator simplifies away (it equals 1 for any non-zero value). True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:257:9"
+      ]
+    },
+    "queseq7-inequalities#201": {
+      "en": "Anything non-zero over itself is 1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:259:17"
+      ]
+    },
+    "queseq7-inequalities#202": {
+      "en": "True — e.g. (x³ − 2x² − 3x)/x simplifies to x² − 2x − 3 for x ≠ 0. Simplify first, keep the restriction.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:260:24"
+      ]
+    },
+    "queseq7-inequalities#203": {
+      "en": "A factor that multiplies the WHOLE top and the WHOLE bottom is the same thing over itself, which is 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:262:18"
+      ]
+    },
+    "queseq7-inequalities#204": {
+      "en": "(x³ − 2x² − 3x)/x = x(x² − 2x − 3)/x = x² − 2x − 3",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:263:18"
+      ]
+    },
+    "queseq7-inequalities#205": {
+      "en": "the + and − are caged in the bracket first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:263:75"
+      ]
+    },
+    "queseq7-inequalities#206": {
+      "en": "∴ true — but the x ≠ 0 that made it legal stays in the final answer",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:264:18"
+      ]
+    },
+    "queseq7-inequalities#207": {
+      "en": "A square denominator can't change the sign; a denominator's restriction always survives.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:269:15"
+      ]
+    },
+    "queseq7-inequalities#208": {
+      "en": "(x − ${C(r)})",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq7-inequalities.js:275:25"
+      ]
+    },
+    "queseq7-inequalities#209": {
+      "en": "(x + ${C(-r)})",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq7-inequalities.js:275:43"
+      ]
+    },
+    "queseq7-inequalities#210": {
+      "en": "Solve <b>${br}² > 0</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq7-inequalities.js:276:20"
+      ]
+    },
+    "queseq7-inequalities#211": {
+      "en": "x ∈ ℝ, x ≠ ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:277:21"
+      ]
+    },
+    "queseq7-inequalities#212": {
+      "en": "x > ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:279:7"
+      ]
+    },
+    "queseq7-inequalities#213": {
+      "en": "No solution — a square can't be positive",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:280:7"
+      ]
+    },
+    "queseq7-inequalities#214": {
+      "en": "x ∈ ℝ (every x works, including ${C(r)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq7-inequalities.js:281:7"
+      ]
+    },
+    "queseq7-inequalities#215": {
+      "en": "A square is 0 or positive. Where is it exactly 0?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq7-inequalities.js:284:15"
+      ]
+    },
+    "queseq7-inequalities#216": {
+      "en": "${br}² is positive EVERYWHERE except at its one critical point x = ${C(r)}, where it is 0 (and 0 > 0 is false). So x ∈ ℝ, x ≠ ${C(r)}. Compare: two DIFFERENT brackets would give two CPs and an outside answer.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq7-inequalities.js:285:22"
+      ]
+    },
+    "queseq7-inequalities#217": {
+      "en": "Both brackets are the same, so there is only ONE critical point: x = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:287:16"
+      ]
+    },
+    "queseq7-inequalities#218": {
+      "en": "A square is never negative, so ${br}² is positive for every other x",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:288:16"
+      ]
+    },
+    "queseq7-inequalities#219": {
+      "en": "At x = ${C(r)} it is exactly 0, and 0 > 0 is false",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:289:16"
+      ]
+    },
+    "queseq7-inequalities#220": {
+      "en": "so that single point is thrown out",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:289:73"
+      ]
+    },
+    "queseq7-inequalities#221": {
+      "en": "∴ x ∈ ℝ, x ≠ ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq7-inequalities.js:290:16"
+      ]
+    },
+    "queseq7-inequalities#222": {
+      "en": "the restriction rides after a semicolon",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq7-inequalities.js:290:43"
+      ]
+    },
+    "queseq8-nature#1": {
+      "en": "What is the <b>discriminant</b> Δ?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq8-nature.js:18:12"
+      ]
+    },
+    "queseq8-nature#2": {
+      "en": "Δ = b² − 4ac",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:18:59"
+      ]
+    },
+    "queseq8-nature#3": {
+      "en": "Δ = b² + 4ac",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:18:84"
+      ]
+    },
+    "queseq8-nature#4": {
+      "en": "Δ = √(b² − 4ac)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:18:100"
+      ]
+    },
+    "queseq8-nature#5": {
+      "en": "Δ = −b / 2a",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:18:119"
+      ]
+    },
+    "queseq8-nature#6": {
+      "en": "Δ = b² − 4ac — the part UNDER the root in the quadratic formula (without the root itself).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:18:140"
+      ]
+    },
+    "queseq8-nature#7": {
+      "en": "Look at the formula: x = (−b ± √(b² − 4ac)) / 2a",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:19:20"
+      ]
+    },
+    "queseq8-nature#8": {
+      "en": "Δ is the piece sitting UNDER the root, on its own: b² − 4ac",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:20:20"
+      ]
+    },
+    "queseq8-nature#9": {
+      "en": "the root sign is not part of Δ",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:20:86"
+      ]
+    },
+    "queseq8-nature#10": {
+      "en": "It is a MINUS 4ac — a plus there could never come out negative, and the whole point of Δ is that it can",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:21:20"
+      ]
+    },
+    "queseq8-nature#11": {
+      "en": "Where does Δ live inside the quadratic formula?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq8-nature.js:22:12"
+      ]
+    },
+    "queseq8-nature#12": {
+      "en": "Under the square root",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:22:72"
+      ]
+    },
+    "queseq8-nature#13": {
+      "en": "In the denominator",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:22:106"
+      ]
+    },
+    "queseq8-nature#14": {
+      "en": "In front of the ±",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:22:128"
+      ]
+    },
+    "queseq8-nature#15": {
+      "en": "It isn't in the formula",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:22:149"
+      ]
+    },
+    "queseq8-nature#16": {
+      "en": "x = (−b ± √Δ)/2a with Δ = b² − 4ac. Its sign decides whether the root (and so the answers) exist.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:22:182"
+      ]
+    },
+    "queseq8-nature#17": {
+      "en": "Write the formula with Δ in it: x = (−b ± √Δ) / 2a",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:23:20"
+      ]
+    },
+    "queseq8-nature#18": {
+      "en": "Δ sits under the square root, which is why its SIGN matters so much",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:24:20"
+      ]
+    },
+    "queseq8-nature#19": {
+      "en": "Negative under the root → non-real; zero → the ± adds nothing; positive → two different answers",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:25:20"
+      ]
+    },
+    "queseq8-nature#20": {
+      "en": "What do the ROOTS of a quadratic look like on its graph?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq8-nature.js:26:12"
+      ]
+    },
+    "queseq8-nature#21": {
+      "en": "The x-intercepts — where the parabola cuts the x-axis",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:26:81"
+      ]
+    },
+    "queseq8-nature#22": {
+      "en": "The turning point",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:26:147"
+      ]
+    },
+    "queseq8-nature#23": {
+      "en": "The y-intercept",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:26:168"
+      ]
+    },
+    "queseq8-nature#24": {
+      "en": "The axis of symmetry",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:26:187"
+      ]
+    },
+    "queseq8-nature#25": {
+      "en": "Roots = x-intercepts. That's why Δ (which counts the real roots) tells you how the parabola meets the x-axis.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:26:217"
+      ]
+    },
+    "queseq8-nature#26": {
+      "en": "A root is an x that makes the expression equal 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:27:20"
+      ]
+    },
+    "queseq8-nature#27": {
+      "en": "On the graph, y = 0 IS the x-axis",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:28:20"
+      ]
+    },
+    "queseq8-nature#28": {
+      "en": "her heading: nature of roots ↳ where the graph intersects the x-axis",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:28:60"
+      ]
+    },
+    "queseq8-nature#29": {
+      "en": "So the roots are exactly the x-intercepts, and counting them counts the crossings",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:29:20"
+      ]
+    },
+    "queseq8-nature#30": {
+      "en": "Δ is the b² − 4ac sitting under the root.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:33:15"
+      ]
+    },
+    "queseq8-nature#31": {
+      "en": "Δ > 0 — two real, unequal roots",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:40:24",
+        "queseq8-nature.js:44:7"
+      ]
+    },
+    "queseq8-nature#32": {
+      "en": "Δ = 0 — real, equal roots (it touches at the TP)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:41:26",
+        "queseq8-nature.js:45:7"
+      ]
+    },
+    "queseq8-nature#33": {
+      "en": "Δ < 0 — non-real roots",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:42:7",
+        "queseq8-nature.js:46:7"
+      ]
+    },
+    "queseq8-nature#34": {
+      "en": "Δ ≥ 0 — nothing can be said",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:47:7"
+      ]
+    },
+    "queseq8-nature#35": {
+      "en": "The sketch shows how this parabola meets the x-axis. What does it tell you about Δ and the roots?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:50:20"
+      ]
+    },
+    "queseq8-nature#36": {
+      "en": "Cuts twice → Δ > 0. Touches once → Δ = 0. Floats clear → Δ < 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:52:15"
+      ]
+    },
+    "queseq8-nature#37": {
+      "en": "It CUTS the x-axis at two points → two real, unequal roots → Δ > 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:54:13"
+      ]
+    },
+    "queseq8-nature#38": {
+      "en": "It TOUCHES the x-axis at exactly one point (the turning point) → real, equal roots → Δ = 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:56:15"
+      ]
+    },
+    "queseq8-nature#39": {
+      "en": "It never reaches the x-axis → no x-intercepts → non-real roots → Δ < 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:57:15"
+      ]
+    },
+    "queseq8-nature#40": {
+      "en": "Count the x-intercepts on the sketch — the roots ARE the crossings",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:59:16"
+      ]
+    },
+    "queseq8-nature#41": {
+      "en": "It cuts clean through the axis in two places, so there are two different real roots",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:61:17"
+      ]
+    },
+    "queseq8-nature#42": {
+      "en": "It just kisses the axis at one point, its turning point — the two roots have landed on top of each other",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:63:19"
+      ]
+    },
+    "queseq8-nature#43": {
+      "en": "It never reaches the axis at all, so no real x makes it 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:64:19"
+      ]
+    },
+    "queseq8-nature#44": {
+      "en": "Two different answers need a real, non-zero ± , so Δ > 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:66:17"
+      ]
+    },
+    "queseq8-nature#45": {
+      "en": "The ± must be adding nothing, so Δ = 0 — real, rational, EQUAL",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:68:19"
+      ]
+    },
+    "queseq8-nature#46": {
+      "en": "That means a negative under the root: Δ < 0 — non-real / imaginary",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:69:19"
+      ]
+    },
+    "queseq8-nature#47": {
+      "en": "her Δ table, read backwards from the picture",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:70:16"
+      ]
+    },
+    "queseq8-nature#48": {
+      "en": "${C(d)} > 0 AND ${C(d)} = ${C(k)}² is a perfect square → rational, and unequal because Δ ≠ 0.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:89:13"
+      ]
+    },
+    "queseq8-nature#49": {
+      "en": "${C(d)} > 0 but ${C(d)} is NOT a perfect square → the roots keep a surd: real, irrational, unequal.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:93:13"
+      ]
+    },
+    "queseq8-nature#50": {
+      "en": "Δ = 0 → the ± adds nothing: one repeated rational root (the parabola touches the axis).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:96:13"
+      ]
+    },
+    "queseq8-nature#51": {
+      "en": "Δ < 0 → a negative under the root → non-real roots.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:99:13"
+      ]
+    },
+    "queseq8-nature#52": {
+      "en": "Non-real",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:101:42",
+        "queseq8-nature.js:104:99",
+        "queseq8-nature.js:209:79",
+        "queseq8-nature.js:210:104",
+        "queseq8-nature.js:211:40",
+        "queseq8-nature.js:212:150",
+        "queseq8-nature.js:213:140"
+      ]
+    },
+    "queseq8-nature#53": {
+      "en": "Real, rational, equal",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:102:26",
+        "queseq8-nature.js:104:74"
+      ]
+    },
+    "queseq8-nature#54": {
+      "en": "Real, rational, unequal",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:103:31",
+        "queseq8-nature.js:104:18"
+      ]
+    },
+    "queseq8-nature#55": {
+      "en": "Real, irrational, unequal",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:103:59",
+        "queseq8-nature.js:104:45"
+      ]
+    },
+    "queseq8-nature#56": {
+      "en": "You work out <b>Δ = ${C(d)}</b>. What is the nature of the roots?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:105:20"
+      ]
+    },
+    "queseq8-nature#57": {
+      "en": "Sign first (≥ 0 real, < 0 non-real), then perfect square → rational, then 0 → equal.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:107:15"
+      ]
+    },
+    "queseq8-nature#58": {
+      "en": "Question 1 — what is the SIGN of Δ? Here Δ = ${C(d)}, which is ${d < 0 ? \"negative\" : d === 0 ? \"zero\" : \"positive\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:110:16"
+      ],
+      "nested": [
+        "negative",
+        "zero",
+        "positive"
+      ]
+    },
+    "queseq8-nature#59": {
+      "en": "a negative under the root → stop here, the roots are non-real",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:111:24"
+      ]
+    },
+    "queseq8-nature#60": {
+      "en": "so the roots are real",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:111:90"
+      ]
+    },
+    "queseq8-nature#61": {
+      "en": "Question 2 — is Δ zero? It is, so the ± adds nothing and the two roots collapse into one",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:113:17"
+      ]
+    },
+    "queseq8-nature#62": {
+      "en": "Question 2 — is Δ a perfect square? ${C(d)} ${cat === \"perfect\" ? \"is\" : \"is NOT\"} one",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:114:17"
+      ],
+      "nested": [
+        "perfect",
+        "is",
+        "is NOT"
+      ]
+    },
+    "queseq8-nature#63": {
+      "en": "equal roots — the parabola touches the axis at its turning point",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:115:26"
+      ]
+    },
+    "queseq8-nature#64": {
+      "en": "so the root comes out whole: rational",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:116:47"
+      ]
+    },
+    "queseq8-nature#65": {
+      "en": "so a surd survives: irrational",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:116:89"
+      ]
+    },
+    "queseq8-nature#66": {
+      "en": "her exact wording from the Δ table",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:117:35"
+      ]
+    },
+    "queseq8-nature#67": {
+      "en": "EQUAL roots",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:124:15"
+      ]
+    },
+    "queseq8-nature#68": {
+      "en": "Δ = 0",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:124:39",
+        "queseq8-nature.js:125:60",
+        "queseq8-nature.js:126:65",
+        "queseq8-nature.js:127:124",
+        "queseq8-nature.js:128:78"
+      ]
+    },
+    "queseq8-nature#69": {
+      "en": "Δ < 0",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:124:57",
+        "queseq8-nature.js:125:42",
+        "queseq8-nature.js:126:74"
+      ]
+    },
+    "queseq8-nature#70": {
+      "en": "Δ ≥ 0",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:124:66",
+        "queseq8-nature.js:126:38",
+        "queseq8-nature.js:127:115",
+        "queseq8-nature.js:128:69"
+      ]
+    },
+    "queseq8-nature#71": {
+      "en": "Δ > 0",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:124:75",
+        "queseq8-nature.js:125:69",
+        "queseq8-nature.js:126:56",
+        "queseq8-nature.js:128:51"
+      ]
+    },
+    "queseq8-nature#72": {
+      "en": "NON-REAL roots",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:125:15"
+      ]
+    },
+    "queseq8-nature#73": {
+      "en": "Δ ≤ 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:125:78"
+      ]
+    },
+    "queseq8-nature#74": {
+      "en": "REAL roots",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:126:15"
+      ]
+    },
+    "queseq8-nature#75": {
+      "en": "real, RATIONAL and UNEQUAL roots",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:127:15"
+      ]
+    },
+    "queseq8-nature#76": {
+      "en": "Δ > 0 and Δ a perfect square",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:127:60"
+      ]
+    },
+    "queseq8-nature#77": {
+      "en": "Δ > 0 only",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:127:101"
+      ]
+    },
+    "queseq8-nature#78": {
+      "en": "two real, UNEQUAL roots",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:128:15"
+      ]
+    },
+    "queseq8-nature#79": {
+      "en": "Δ ≠ 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:128:87"
+      ]
+    },
+    "queseq8-nature#80": {
+      "en": "The question says the roots must be <b>${it.want}</b>. Which condition do you write down?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:131:20"
+      ]
+    },
+    "queseq8-nature#81": {
+      "en": "Translate the words into a Δ statement FIRST, then solve it for the unknown.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:133:15"
+      ]
+    },
+    "queseq8-nature#82": {
+      "en": "${it.want} → ${it.correct}. Then substitute a, b and c (with the parameter) and solve.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:134:22"
+      ]
+    },
+    "queseq8-nature#83": {
+      "en": "Turn the words into a Δ statement before touching any algebra: ${it.want} → ${it.correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:136:16"
+      ]
+    },
+    "queseq8-nature#84": {
+      "en": "Then write Δ = b² − 4ac, substituting a, b and c with the parameter still in them",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:137:16"
+      ]
+    },
+    "queseq8-nature#85": {
+      "en": "Set that expression ${it.correct.includes(\"perfect\") ? \"greater than 0 (and check for a perfect square)\" : it.correct.replace(\"Δ \", \"\")} and solve for the unknown",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:138:16"
+      ],
+      "nested": [
+        "perfect",
+        "greater than 0 (and check for a perfect square)",
+        "Δ "
+      ]
+    },
+    "queseq8-nature#86": {
+      "en": "if you divide by a negative on the way, the inequality sign flips",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:139:16"
+      ]
+    },
+    "queseq8-nature#87": {
+      "en": "“Determine the nature of the roots of 3x² − x + 4 = 0 WITHOUT solving.”",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:146:15"
+      ]
+    },
+    "queseq8-nature#88": {
+      "en": "Type 1: work out Δ and classify it with the table",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:146:99"
+      ]
+    },
+    "queseq8-nature#89": {
+      "en": "Type 2: set up a condition and solve for the unknown",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:146:161"
+      ]
+    },
+    "queseq8-nature#90": {
+      "en": "Type 3: prove Δ always has a certain sign",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:146:217"
+      ]
+    },
+    "queseq8-nature#91": {
+      "en": "None — it must be solved fully",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:146:262"
+      ]
+    },
+    "queseq8-nature#92": {
+      "en": "“For which values of h will 3x² − 2hx + 3 = 0 have non-real roots?”",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:147:15"
+      ]
+    },
+    "queseq8-nature#93": {
+      "en": "Type 2: write the condition (Δ < 0) and solve it for h",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:147:95"
+      ]
+    },
+    "queseq8-nature#94": {
+      "en": "Type 1: work out Δ as a number and classify",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:147:162"
+      ]
+    },
+    "queseq8-nature#95": {
+      "en": "Type 3: prove Δ is always negative",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:147:209"
+      ]
+    },
+    "queseq8-nature#96": {
+      "en": "Solve the quadratic with the formula",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:147:247"
+      ]
+    },
+    "queseq8-nature#97": {
+      "en": "“Show that x² − px + p = 2 has two real, unequal roots for ALL p.”",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:148:15"
+      ]
+    },
+    "queseq8-nature#98": {
+      "en": "Type 3: work out Δ in terms of p and show it is ALWAYS positive",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:148:94"
+      ]
+    },
+    "queseq8-nature#99": {
+      "en": "Type 2: solve Δ > 0 for a few values of p",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:148:170"
+      ]
+    },
+    "queseq8-nature#100": {
+      "en": "Type 1: pick p = 1 and classify",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:148:215"
+      ]
+    },
+    "queseq8-nature#101": {
+      "en": "Impossible — p is unknown",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:148:250"
+      ]
+    },
+    "queseq8-nature#102": {
+      "en": "Which type of nature-of-roots question is this?<br>${it.stem}",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:151:20"
+      ]
+    },
+    "queseq8-nature#103": {
+      "en": "1: classify a number. 2: nature given, find the variable. 3: prove it for every value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:152:15"
+      ]
+    },
+    "queseq8-nature#104": {
+      "en": "In a Type-3 proof you reach <b>Δ = (p − 2)² + 4</b>. Why is Δ ALWAYS positive?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq8-nature.js:159:12"
+      ]
+    },
+    "queseq8-nature#105": {
+      "en": "A square is never negative, and adding 4 lifts it to at least 4 — above 0 for every p",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:159:103"
+      ]
+    },
+    "queseq8-nature#106": {
+      "en": "Because p must be positive",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:159:201"
+      ]
+    },
+    "queseq8-nature#107": {
+      "en": "Because Δ has a bracket in it",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:159:231"
+      ]
+    },
+    "queseq8-nature#108": {
+      "en": "It isn't — at p = 2 it fails",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:159:264"
+      ]
+    },
+    "queseq8-nature#109": {
+      "en": "(p − 2)² ≥ 0 for every p, so Δ ≥ 4 > 0 always. (At p = 2, Δ = 4 — still positive.) That proves real, unequal roots for ALL p.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:159:302"
+      ]
+    },
+    "queseq8-nature#110": {
+      "en": "You reach <b>Δ = 169m²</b> and m ≠ 0. What is the nature of the roots?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq8-nature.js:160:12"
+      ]
+    },
+    "queseq8-nature#111": {
+      "en": "Real, rational and unequal — 169m² = (13m)² is a positive perfect square",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:160:95"
+      ]
+    },
+    "queseq8-nature#112": {
+      "en": "Real and irrational — there's an m in it",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:160:180"
+      ]
+    },
+    "queseq8-nature#113": {
+      "en": "Non-real — m could be negative",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:160:224"
+      ]
+    },
+    "queseq8-nature#114": {
+      "en": "Equal — squares mean equal roots",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:160:258"
+      ]
+    },
+    "queseq8-nature#115": {
+      "en": "169m² = (13m)², a perfect square → rational. And for m ≠ 0 it is strictly positive → unequal. (m negative doesn't matter: m² is positive.)",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:160:300"
+      ]
+    },
+    "queseq8-nature#116": {
+      "en": "To PROVE Δ is always positive when Δ = p² − 4p + 8, what is the standard move?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq8-nature.js:161:12"
+      ]
+    },
+    "queseq8-nature#117": {
+      "en": "Complete the square on Δ: p² − 4p + 8 = (p − 2)² + 4",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "correct",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:161:103"
+      ]
+    },
+    "queseq8-nature#118": {
+      "en": "Substitute p = 0, 1, 2 and check each",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:161:168"
+      ]
+    },
+    "queseq8-nature#119": {
+      "en": "Factorise Δ into two brackets",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:161:209"
+      ]
+    },
+    "queseq8-nature#120": {
+      "en": "Divide Δ by p",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:161:242"
+      ]
+    },
+    "queseq8-nature#121": {
+      "en": "Testing a few p-values proves nothing about ALL p. Complete the square: (p − 2)² + 4 ≥ 4 > 0 for every p.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:161:265"
+      ]
+    },
+    "queseq8-nature#122": {
+      "en": "A square is ≥ 0; a square plus a positive number is > 0. That works for EVERY value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:165:15"
+      ]
+    },
+    "queseq8-nature#123": {
+      "en": "A parameter value that makes the original equation's denominator 0 must still be kept if the algebra produced it. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:179:9"
+      ]
+    },
+    "queseq8-nature#124": {
+      "en": "Restrictions outrank algebra.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:181:17"
+      ]
+    },
+    "queseq8-nature#125": {
+      "en": "False — restrictions from the ORIGINAL equation stand. A value that breaks them is rejected (N.A.), exactly like a rejected x.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:182:24"
+      ]
+    },
+    "queseq8-nature#126": {
+      "en": "The restriction comes from the ORIGINAL equation, before any working started",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:184:18"
+      ]
+    },
+    "queseq8-nature#127": {
+      "en": "The algebra cannot un-ban a value — it only shows which values would have solved the changed equation",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:185:18"
+      ]
+    },
+    "queseq8-nature#128": {
+      "en": "∴ false — a parameter that breaks a restriction is rejected as N.A., exactly like a rejected x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:186:18"
+      ]
+    },
+    "queseq8-nature#129": {
+      "en": "k + ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:191:27"
+      ]
+    },
+    "queseq8-nature#130": {
+      "en": "k − ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:191:43"
+      ]
+    },
+    "queseq8-nature#131": {
+      "en": "Equal roots demand Δ = 0, which gives <b>k(${inner}) = 0</b>, so k = 0 or k = ${C(other)}. But the ORIGINAL equation had kx in a denominator. Final answer?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:193:7"
+      ]
+    },
+    "queseq8-nature#132": {
+      "en": "k = ${C(other)} only — reject k = 0",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq8-nature.js:194:7"
+      ]
+    },
+    "queseq8-nature#133": {
+      "en": "k = 0 or k = ${C(other)}, both count",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:195:8"
+      ]
+    },
+    "queseq8-nature#134": {
+      "en": "k = 0 only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:195:48"
+      ]
+    },
+    "queseq8-nature#135": {
+      "en": "No valid k exists",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:195:62"
+      ]
+    },
+    "queseq8-nature#136": {
+      "en": "Check every parameter answer against the original equation's restrictions.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:196:15"
+      ]
+    },
+    "queseq8-nature#137": {
+      "en": "kx in a denominator means k ≠ 0 from the start (and at k = 0 the equation isn't even a quadratic). Reject k = 0: the answer is k = ${C(other)} only.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:197:22"
+      ]
+    },
+    "queseq8-nature#138": {
+      "en": "The algebra gives two candidates: k = 0 or k = ${C(other)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:199:16"
+      ]
+    },
+    "queseq8-nature#139": {
+      "en": "Now check them against the original equation: kx sat in a denominator, so k ≠ 0 from the very start",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:200:16"
+      ]
+    },
+    "queseq8-nature#140": {
+      "en": "k = 0 breaks that restriction, so it is N.A.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:201:16"
+      ]
+    },
+    "queseq8-nature#141": {
+      "en": "at k = 0 the equation is not even a quadratic any more",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:201:67"
+      ]
+    },
+    "queseq8-nature#142": {
+      "en": "∴ k = ${C(other)} only",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:202:16"
+      ]
+    },
+    "queseq8-nature#143": {
+      "en": "<b>3ˣ = −1</b>",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:209:15"
+      ]
+    },
+    "queseq8-nature#144": {
+      "en": "No solution",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:209:42",
+        "queseq8-nature.js:210:89",
+        "queseq8-nature.js:211:74",
+        "queseq8-nature.js:212:162",
+        "queseq8-nature.js:213:152"
+      ]
+    },
+    "queseq8-nature#145": {
+      "en": "Undefined",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:209:66",
+        "queseq8-nature.js:210:67",
+        "queseq8-nature.js:211:61",
+        "queseq8-nature.js:212:137",
+        "queseq8-nature.js:213:127"
+      ]
+    },
+    "queseq8-nature#146": {
+      "en": "Not applicable (N.A.)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:209:91",
+        "queseq8-nature.js:210:116",
+        "queseq8-nature.js:211:89",
+        "queseq8-nature.js:212:103",
+        "queseq8-nature.js:213:93"
+      ]
+    },
+    "queseq8-nature#147": {
+      "en": "A power with a positive base can never be negative — the statement can NEVER be true: no solution.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "queseq8-nature.js:209:122"
+      ]
+    },
+    "queseq8-nature#148": {
+      "en": "<b>x ÷ 0</b> (a denominator equal to 0)",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:210:15"
+      ]
+    },
+    "queseq8-nature#149": {
+      "en": "Division by 0 is undefined — the ghost under the bed. Find it by setting the denominator = 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "queseq8-nature.js:210:147"
+      ]
+    },
+    "queseq8-nature#150": {
+      "en": "A negative under an even root has no real value → non-real. Find it by setting the inside of the root < 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "queseq8-nature.js:211:120"
+      ]
+    },
+    "queseq8-nature#151": {
+      "en": "An answer from a surd equation that FAILS the test in the original equation",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:212:15"
+      ]
+    },
+    "queseq8-nature#152": {
+      "en": "Squaring can invent extra answers. A candidate that fails the original equation is rejected: N.A.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "queseq8-nature.js:212:183"
+      ]
+    },
+    "queseq8-nature#153": {
+      "en": "An answer that equals one of the fraction equation's restrictions",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:213:15"
+      ]
+    },
+    "queseq8-nature#154": {
+      "en": "The value itself is rejected — mark it N.A. and keep only the valid answer(s).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "queseq8-nature.js:213:173"
+      ]
+    },
+    "queseq8-nature#155": {
+      "en": "KNOW THE DIFFERENCE: which word describes this?<br>${it.case}",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:216:20"
+      ]
+    },
+    "queseq8-nature#156": {
+      "en": "No solution = never true. Undefined = denominator 0. Non-real = negative under √. N.A. = a rejected candidate answer.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:217:15"
+      ]
+    },
+    "queseq8-nature#157": {
+      "en": "Run the four words in order and see which one this case actually fits",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:220:16"
+      ]
+    },
+    "queseq8-nature#158": {
+      "en": "No solution = the statement can never be true · undefined = a denominator hits 0 · non-real = a negative sits under an even root · N.A. = a candidate answer that fails the original",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:221:16"
+      ]
+    },
+    "queseq8-nature#159": {
+      "en": "the four are not interchangeable — she gives this its own titled box",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:222:27"
+      ]
+    },
+    "queseq8-nature#160": {
+      "en": "√(x + ${C(n)}) / (x + ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq8-nature.js:231:18"
+      ]
+    },
+    "queseq8-nature#161": {
+      "en": "For which x is <b>${expr}</b> UNDEFINED?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:233:22"
+      ]
+    },
+    "queseq8-nature#162": {
+      "en": "x = −${C(m)} (the denominator becomes 0)",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq8-nature.js:234:9"
+      ]
+    },
+    "queseq8-nature#163": {
+      "en": "x &lt; −${C(n)} (inside of the root negative)",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:235:10"
+      ]
+    },
+    "queseq8-nature#164": {
+      "en": "x = −${C(n)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:235:59",
+        "queseq8-nature.js:246:56"
+      ]
+    },
+    "queseq8-nature#165": {
+      "en": "x = ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:235:75"
+      ]
+    },
+    "queseq8-nature#166": {
+      "en": "Undefined is about the BOTTOM: set the denominator equal to 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:236:17"
+      ]
+    },
+    "queseq8-nature#167": {
+      "en": "Undefined = denominator 0: x + ${C(m)} = 0 → x = −${C(m)}. (x < −${C(n)} is where it's NON-real — a different question!)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:237:24"
+      ]
+    },
+    "queseq8-nature#168": {
+      "en": "Undefined has one cause only: dividing by 0 — the ghost under the bed",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:239:18"
+      ]
+    },
+    "queseq8-nature#169": {
+      "en": "So look at the BOTTOM and set it to 0: x + ${C(m)} = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:240:18"
+      ]
+    },
+    "queseq8-nature#170": {
+      "en": "x = −${C(m)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:241:18"
+      ]
+    },
+    "queseq8-nature#171": {
+      "en": "the root is a different question — that one gives NON-real, at x &lt; −${C(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:241:37"
+      ]
+    },
+    "queseq8-nature#172": {
+      "en": "For which x is <b>${expr}</b> NON-REAL?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq8-nature.js:244:20"
+      ]
+    },
+    "queseq8-nature#173": {
+      "en": "x &lt; −${C(n)} (the inside of the root is negative)",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq8-nature.js:245:7"
+      ]
+    },
+    "queseq8-nature#174": {
+      "en": "x = −${C(m)} (denominator 0)",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:246:8"
+      ]
+    },
+    "queseq8-nature#175": {
+      "en": "x > −${C(n)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq8-nature.js:246:40"
+      ]
+    },
+    "queseq8-nature#176": {
+      "en": "Non-real is about the ROOT: set what's under it less than 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq8-nature.js:247:15"
+      ]
+    },
+    "queseq8-nature#177": {
+      "en": "Non-real = negative inside the root: x + ${C(n)} < 0 → x < −${C(n)}. (x = −${C(m)} is where it's UNDEFINED — a different question!)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq8-nature.js:248:22"
+      ]
+    },
+    "queseq8-nature#178": {
+      "en": "Non-real has one cause only: a negative sitting under an even root",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:250:16"
+      ]
+    },
+    "queseq8-nature#179": {
+      "en": "So look INSIDE the root and make it negative: x + ${C(n)} &lt; 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:251:16"
+      ]
+    },
+    "queseq8-nature#180": {
+      "en": "x &lt; −${C(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq8-nature.js:252:16"
+      ]
+    },
+    "queseq8-nature#181": {
+      "en": "the denominator is a different question — that one gives UNDEFINED, at x = −${C(m)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq8-nature.js:252:38"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "queseq7-inequalities.js:143:63",
+      "text": "negative or 0",
+      "in": "The expression must be ${strict ? \"NEGATIVE\" : \"negative or "
+    },
+    {
+      "where": "queseq7-inequalities.js:144:83",
+      "text": " (≤ keeps the critical points in)",
+      "in": "Below the axis = inside the bowl: ${correct}${strict ? \"\" : "
+    },
+    {
+      "where": "queseq8-nature.js:114:91",
+      "text": "is NOT",
+      "in": "Question 2 — is Δ a perfect square? ${C(d)} ${cat === \"perfe"
+    },
+    {
+      "where": "queseq8-nature.js:138:72",
+      "text": "greater than 0 (and check for a perfect square)",
+      "in": "Set that expression ${it.correct.includes(\"perfect\") ? \"grea"
+    }
+  ],
+  "words": 3413
+}
