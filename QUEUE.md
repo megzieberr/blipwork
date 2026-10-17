@@ -36,7 +36,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T13 | exam: cards-eqn, eqn-fractions-and-restrictions, eqn-inequalities-2, eqn-inequalities, eqn-k-method (5 files) | ~3 473 words | verify-exam.html
 - ☑ 2026-10-17 T14 | exam: eqn-level4, eqn-nature-of-roots-2 (2 files) | ~3 512 words | verify-exam.html
 - ☑ 2026-10-17 S8 | before T15 (setup, one Opus worker): tools/af_check.mjs reads an optional briefs/af/allow.json ({ rule: [file globs or keys] }); findings listed there become WARN, not ERROR; seed it with wording:em-dash for js/exam/eqn-nature-of-roots.js (her ruling 2026-10-17: her August em-dashes stay) | check: af_check on that file exits 0 with 31 WARN lines; negative copy still fails on other rules
-- ☐ T15 | exam: eqn-nature-of-roots | ~3 382 words | verify-exam.html ⚠ her August af sides hold 36 em-dashes: HER RULING 2026-10-17 = KEEP them; S8 (above) teaches af_check to allow them first
+- ⏳ 2026-10-17 22:33 T15 | exam: eqn-nature-of-roots | ~3 382 words | verify-exam.html ⚠ her August af sides hold 36 em-dashes: HER RULING 2026-10-17 = KEEP them; S8 (above) teaches af_check to allow them first
 - ☑ 2026-10-17 T16 | exam: eqn-siblings-delta-in-p, eqn-siblings-fraction-equations (2 files) | ~3 370 words | verify-exam.html
 - ☑ 2026-10-17 T17 | exam: eqn-siblings-inequalities, eqn-siblings-k-equal-roots (2 files) | ~2 445 words | verify-exam.html
 - ☑ 2026-10-17 T18 | exam: eqn-siblings-k-for-nature, eqn-siblings-nature-chain (2 files) | ~3 831 words | verify-exam.html
@@ -87,7 +87,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### General Trig
 - ☑ 2026-10-17 T53 | concepts: the `gtrig` block (js/concepts/gtrig.js after S4) | ~1 555 words | counted by af_extract 2026-10-17
-- ⏳ 2026-10-17 22:27 S10 | before T54 (setup, one Opus worker; added 2026-10-17 21:25 after T54 went red): verify-gtrig.html reads English wording out of the mc step text ("becomes …", "stays X" / "changes to X", "Quadrant: / Sign: / Ratio:"), so ?lang=af fails 2862 checks (2857 "could read a claimed ratio off the mc steps" in gt4 co*, gt5 pos/neg/coFn/rotationPool, gt7 item1-7; 5 "gt6.threeBoxes confirm side fills all three boxes"); make those checks read the English side (L's en) or accept both languages, like S9 did for verify-exam; no js/ change | check: verify-gtrig ALL GOOD in EN and ?lang=af, then T54 re-runs inject + af_check + harness from its saved .af.json
+- ☑ 2026-10-17 S10 | before T54 (setup, one Opus worker; added 2026-10-17 21:25 after T54 went red): verify-gtrig.html reads English wording out of the mc step text ("becomes …", "stays X" / "changes to X", "Quadrant: / Sign: / Ratio:"), so ?lang=af fails 2862 checks (2857 "could read a claimed ratio off the mc steps" in gt4 co*, gt5 pos/neg/coFn/rotationPool, gt7 item1-7; 5 "gt6.threeBoxes confirm side fills all three boxes"); make those checks read the English side (L's en) or accept both languages, like S9 did for verify-exam; no js/ change | check: verify-gtrig ALL GOOD in EN and ?lang=af, then T54 re-runs inject + af_check + harness from its saved .af.json
 - ☐ T54 | hub rounds: questgt1-intro … questgt9-identities (9 files) | ~3 976 words | verify page: verify-gtrig.html ⚠ verify-gtrig?lang=af fails 2862 checks because the page reads English step wording (see S10, the harness fix); briefs/af/T54.af.json is COMPLETE (560 keys): after S10, inject + af_check + harness only
 - ☑ 2026-10-17 T55 | hub rounds: questgt10-super-special … questgt13-undefined (4 files) | ~1 256 words | verify page: verify-gtrig.html
 - ☑ 2026-10-17 T56 | exam: cards-gtrig, gtrig-level4 (2 files) | ~3 324 words | verify-exam.html
@@ -97,8 +97,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T60 | exam: gtrig-siblings-identities | ~2 265 words | verify-exam.html
 - ☑ 2026-10-17 T61 | exam: gtrig-siblings-reduction | ~2 108 words | verify-exam.html
 - ☑ 2026-10-17 T62 | exam: gtrig-siblings-special-angles | ~2 444 words | verify-exam.html
-- ☐ T63 | exam: gtrig-siblings-special-sums | ~2 521 words | verify-exam.html
-- ☐ T64 | exam: gtrig-siblings-super-special-sums, trig-general-solutions (2 files) | ~3 848 words | verify-exam.html
+- ⏳ 2026-10-17 22:33 T63 | exam: gtrig-siblings-special-sums | ~2 521 words | verify-exam.html
+- ⏳ 2026-10-17 22:33 T64 | exam: gtrig-siblings-super-special-sums, trig-general-solutions (2 files) | ~3 848 words | verify-exam.html
 - ☐ T65 | exam: trig-mixed-problems, trig-reduction-and-ratios (2 files) | ~1 577 words | verify-exam.html
 
 ### Euclidean Geometry (exam-only)

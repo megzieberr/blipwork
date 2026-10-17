@@ -1082,16 +1082,26 @@ function refAngleIndependent(angle) {
   return a;
 }
 
-function claimedFromSteps(q, signRe, ratioRe) {
-  const signStep = q.steps.find(s => s.kind === "mc" && signRe.test(s.prompt));
-  const ratioStep = q.steps.find(s => s.kind === "mc" && ratioRe.test(s.prompt));
+/* The sign step and the ratio step are found by what the learner can
+   TAP, not by the wording of the question (S10, 2026-10-17): the step
+   prompts now come in English or Afrikaans ("What's the sign?" /
+   "Wat is die teken?", "sin becomes…" / "sin word…"), but the options
+   are the same in every language. Sign step = the mc whose two options
+   are exactly + and −; ratio step = the other mc whose correct option
+   names a ratio (sin, "stays cos", "verander na tan", …). */
+const isSignStep = s => s.kind === "mc" && s.options.length === 2
+  && s.options.some(o => o.label === "+") && s.options.some(o => o.label === "−");
+function claimedFromSteps(q) {
+  const signStep = q.steps.find(isSignStep);
+  const ratioStep = q.steps.find(s => s.kind === "mc" && !isSignStep(s)
+    && /(sin|cos|tan)$/.test((s.options.find(o => o.correct) || {}).label || ""));
   const sign = (signStep && signStep.options.find(o => o.correct) || {}).label === "+" ? 1 : -1;
   const ratioLabel = (ratioStep && ratioStep.options.find(o => o.correct) || {}).label || "";
   const fn2 = (ratioLabel.match(/(sin|cos|tan)$/) || [, null])[1];
   return { sign, fn2 };
 }
 
-function recomputeRound(qid, signRe, ratioRe, note) {
+function recomputeRound(qid, note) {
   const skills = QUEST_DEFS[qid].skills;
   for (let i = 0; i < RECOMPUTE_N; i++) {
     const skill = skills[i % skills.length];
@@ -1100,7 +1110,7 @@ function recomputeRound(qid, signRe, ratioRe, note) {
     if (q.type !== "steps") continue;              // e.g. gt4's twoLabelTriangle is a plain mc, not a chain
     const dbg = q._dbg;
     if (!tick(!!dbg, `${ctx}: exposes _dbg for independent recompute`)) continue;
-    const { sign, fn2 } = claimedFromSteps(q, signRe, ratioRe);
+    const { sign, fn2 } = claimedFromSteps(q);
     if (!tick(!!fn2, `${ctx}: could read a claimed ratio off the mc steps`)) continue;
     const original = FN_JS[dbg.fn](rad(dbg.angle));
     const evalAt = dbg.theta != null ? dbg.theta : refAngleIndependent(dbg.angle);
@@ -1110,9 +1120,9 @@ function recomputeRound(qid, signRe, ratioRe, note) {
   }
 }
 
-recomputeRound("gt4", /sign/i, /becomes/i, "co-function");
-recomputeRound("gt5", /sign/i, /ratio|stay|change/i, "reduction or co-function");
-recomputeRound("gt7", /sign/i, /ratio/i, "variable reduction");
+recomputeRound("gt4", "co-function");
+recomputeRound("gt5", "reduction or co-function");
+recomputeRound("gt7", "variable reduction");
 
 section("recompute", `gt4 + gt5 + gt7 independent numeric recompute (${3 * RECOMPUTE_N} items)`, m11);
 
@@ -1584,7 +1594,11 @@ const m20 = mark();
     tick(!/clockwise/i.test(ask), `gt6.threeBoxes #${i}: the ask side never says which way anything turns`);
     tick(/positive angles/.test(ask) && /negative angles/.test(ask) && /co-functions/.test(ask),
       `gt6.threeBoxes #${i}: the three headings still open the card`);
-    tick(/(^|[^-])clockwise/.test(conf) && /anti-clockwise/.test(conf) && /sin and cos/.test(conf),
+    // both languages' fills (briefs/af/T54.af.json): a bare "clockwise" / "kloksgewys"
+    // that is NOT the tail of "anti-clockwise" / "antikloksgewys", the anti- one itself,
+    // and the co-function box ("sin and cos", or "sin en cos" once that box is translated)
+    tick((/(^|[^-])clockwise/.test(conf) || /(^|[^-a-z])kloksgewys/.test(conf))
+      && /anti-clockwise|antikloksgewys/.test(conf) && /sin (and|en) cos/.test(conf),
       `gt6.threeBoxes #${i}: the confirm side fills all three boxes in`);
     tick(!/clockwise/i.test(q.hint), `gt6.threeBoxes #${i}: the hint nudges towards the numbering, it does not hand the direction over`);
   }
