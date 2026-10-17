@@ -114,9 +114,9 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T73 | concepts: the `algx` block: NONE EXISTS (exam-only chapter, no concept cards), nothing to translate
 - ☑ 2026-10-17 T74 | exam: algx-level4 | ~2 860 words | verify-exam.html
 - ☑ 2026-10-17 T75 | exam: algx-siblings-expand | ~1 915 words | verify-exam.html
-- ⏳ 2026-10-17 23:00 T76 | exam: algx-siblings-factorise-advanced | ~2 126 words | verify-exam.html
+- ☑ 2026-10-17 T76 | exam: algx-siblings-factorise-advanced | ~2 126 words | verify-exam.html
 - ⏳ 2026-10-17 23:03 T77 | exam: algx-siblings-factorise-basics | ~2 237 words | verify-exam.html
-- ☐ T78 | exam: algx-siblings-fractions-add-subtract | ~2 216 words | verify-exam.html
+- ⏳ 2026-10-17 23:04 T78 | exam: algx-siblings-fractions-add-subtract | ~2 216 words | verify-exam.html
 - ☐ T79 | exam: algx-siblings-fractions-multiply-divide | ~2 363 words | verify-exam.html
 
 ### Finance
