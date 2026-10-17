@@ -1,0 +1,714 @@
+{
+  "unit": "T61",
+  "generated": "2026-10-17T19:24:36.597Z",
+  "files": [
+    "js/exam/gtrig-siblings-reduction.js"
+  ],
+  "items": {
+    "gtrig-siblings-reduction#1": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Determine the value of &nbsp;sin 480°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:82:13"
+      ]
+    },
+    "gtrig-siblings-reduction#2": {
+      "en": "480° is more than one full turn, so take a whole 360° off first and see where you land. Then it is the ordinary routine: which quadrant, which reduction formula, plus or minus.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:85:13"
+      ]
+    },
+    "gtrig-siblings-reduction#3": {
+      "en": "Take one full turn off: &nbsp;sin 480° &nbsp;[−360°]&nbsp; = sin 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:88:37"
+      ]
+    },
+    "gtrig-siblings-reduction#4": {
+      "en": "120° is a <b>second-quadrant</b> angle, 180° − 60°, and in S <b>sine is positive</b>: &nbsp;sin 120° = sin 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:89:37"
+      ]
+    },
+    "gtrig-siblings-reduction#5": {
+      "en": "= √3/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:90:39",
+        "gtrig-siblings-reduction.js:257:39"
+      ]
+    },
+    "gtrig-siblings-reduction#6": {
+      "en": "REMEMBER: write the turn above the angle, one 360° at a time — [−360°] — never a single [−480°] jump. The marker is looking for the angle you actually landed on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:92:15"
+      ]
+    },
+    "gtrig-siblings-reduction#7": {
+      "en": "480° is just a walk round the circle that did not stop at the finish line. One full turn brings you back to exactly where you started, so sin 480° and sin 120° are the same height on the sine curve — take 360° off and nothing changes. Now you are inside one turn and the ordinary routine takes over: 120° sits in the second quadrant, which is S on All Strippers Take Cash, and S is the quadrant where sine stays positive. Split it as 180° − 60° so the acute angle 60° shows up, and because sine is positive there, no minus comes along. That leaves sin 60°, which is one of the eight values you read straight off her two triangles: √3 over 2. Three small moves, no calculator, and the only place it goes wrong is if you subtract 360° twice by accident.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:96:13"
+      ]
+    },
+    "gtrig-siblings-reduction#8": {
+      "en": "Determine the value of &nbsp;tan 405°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:104:13"
+      ]
+    },
+    "gtrig-siblings-reduction#9": {
+      "en": "Same first move as (a): one turn off. What is left is a special angle you know by heart from the square triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:107:13"
+      ]
+    },
+    "gtrig-siblings-reduction#10": {
+      "en": "tan 405° &nbsp;[−360°]&nbsp; = tan 45°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:110:37"
+      ]
+    },
+    "gtrig-siblings-reduction#11": {
+      "en": "= 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:111:39"
+      ]
+    },
+    "gtrig-siblings-reduction#12": {
+      "en": "This one is short on purpose. 405° is 360° plus 45°, so one turn round the circle takes you straight back to 45° — and 45° needs no reduction at all, because it is already acute and already sitting in the first quadrant where everything is positive. From the square triangle, the one with two 45° angles and sides 1, 1 and √2, tan 45° is opposite over adjacent, which is 1 over 1. So the answer is 1. Notice what did NOT happen: there was no quadrant to argue about and no sign to pick, because after the rotation the angle landed in A. That is the whole reason the rotation goes first — it turns a scary-looking angle into one of the four you already know.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:114:13"
+      ]
+    },
+    "gtrig-siblings-reduction#13": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Simplify: &nbsp;<span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">sin(180° + x) · cos(360° − x)</span><span class=\\\"sf-d\\\">cos²(180° − x)</span></span>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:140:13"
+      ]
+    },
+    "gtrig-siblings-reduction#14": {
+      "en": "Three reductions, three separate lines, and write the split above each angle before you write anything else. The squared one goes into block brackets FIRST — reduce inside the brackets, then square.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:143:13"
+      ]
+    },
+    "gtrig-siblings-reduction#15": {
+      "en": "Take the three reductions one at a time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:146:37"
+      ]
+    },
+    "gtrig-siblings-reduction#16": {
+      "en": "sin(180° + x) = −sin x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:147:37"
+      ]
+    },
+    "gtrig-siblings-reduction#17": {
+      "en": "cos(360° − x) = cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:148:37"
+      ]
+    },
+    "gtrig-siblings-reduction#18": {
+      "en": "cos(180° − x) = −cos x &nbsp;⟹&nbsp; cos²(180° − x) = [−cos x]² = cos²x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:149:37",
+        "gtrig-siblings-reduction.js:170:37"
+      ]
+    },
+    "gtrig-siblings-reduction#19": {
+      "en": "(−sin x · cos x)/cos²x = −sin x/cos x = −tan x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:150:39"
+      ]
+    },
+    "gtrig-siblings-reduction#20": {
+      "en": "WATCH OUT: squaring kills the minus. [−cos x]² = +cos²x, never −cos²x. Reduce inside the block brackets first and then square, and the sign looks after itself.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:152:15"
+      ]
+    },
+    "gtrig-siblings-reduction#21": {
+      "en": "A reduction is nothing more sinister than rewriting an angle as an acute angle, and her three steps handle every single one: quadrant, reduction formula, sign. Do them one factor at a time, on their own lines, and never in your head. 180° + x is in T, where only tan survives, so a sine there turns negative. 360° − x is in C, where only cos survives, so the cosine comes out clean. The third one is where the marks go missing. cos(180° − x) is in S, so it collects a minus and becomes −cos x — but the question squares it, and a square with a minus inside is a trap unless you put block brackets round it first. Write [−cos x]², square it, and the minus dies: cos²x, positive. Now everything cancels down to −sin x over cos x, and sin over cos has a name. It is tan.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:156:13"
+      ]
+    },
+    "gtrig-siblings-reduction#22": {
+      "en": "Simplify: &nbsp;cos²(180° − x) − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:164:13"
+      ]
+    },
+    "gtrig-siblings-reduction#23": {
+      "en": "Block brackets before you square, then look hard at what is left. Something minus 1, when the something is a squared ratio, is almost always one of the masked identities in disguise.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:167:13"
+      ]
+    },
+    "gtrig-siblings-reduction#24": {
+      "en": "cos²x − 1 = −(1 − cos²x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:171:37"
+      ]
+    },
+    "gtrig-siblings-reduction#25": {
+      "en": "= −sin²x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:172:39"
+      ]
+    },
+    "gtrig-siblings-reduction#26": {
+      "en": "REMEMBER: sin²x + cos²x = 1 has two masked twins — 1 − cos²x = sin²x and 1 − sin²x = cos²x. The minute you see a square next to a 1, one of the three is standing right in front of you.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:174:15"
+      ]
+    },
+    "gtrig-siblings-reduction#27": {
+      "en": "Two moves, and both of them are habits rather than cleverness. First the block brackets: cos(180° − x) is a second-quadrant angle, so it reduces to −cos x, and squaring that gives cos²x with the minus gone. Now you are looking at cos²x − 1, which is nearly the masked identity but the wrong way round. So pull a minus out the front and read it again: −(1 − cos²x). Inside the bracket is 1 − cos²x, and that is one of the two masked identities — it is sin²x. Put it back and the whole thing is −sin²x. The pattern worth remembering is the shape, not the answer: a squared trig ratio sitting next to a 1 is nearly always sin²θ + cos²θ = 1 wearing a mask, and the only skill is spotting which of its three faces you are looking at.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:178:13"
+      ]
+    },
+    "gtrig-siblings-reduction#28": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Simplify: &nbsp;<span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">sin(180° + θ) · cos(θ − 90°) · tan(360° − θ)</span><span class=\\\"sf-d\\\">cos(180° − θ) · sin(90° + θ) · tan(540° + θ)</span></span>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:204:13"
+      ]
+    },
+    "gtrig-siblings-reduction#29": {
+      "en": "Six factors, six separate lines — do not try to hold any of it in your head. One of the six is bigger than 360°, so it needs a turn taken off before it can be reduced at all. Two of the six are 90° angles, and those are the only ones that change sin into cos or cos into sin.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:207:13"
+      ]
+    },
+    "gtrig-siblings-reduction#30": {
+      "en": "Reduce every factor in place, one line each, keeping the minus signs visible.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:210:37"
+      ]
+    },
+    "gtrig-siblings-reduction#31": {
+      "en": "sin(180° + θ) = −sin θ &nbsp;&nbsp;·&nbsp;&nbsp; cos(θ − 90°) = sin θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:211:37"
+      ]
+    },
+    "gtrig-siblings-reduction#32": {
+      "en": "tan(360° − θ) = −tan θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:212:37"
+      ]
+    },
+    "gtrig-siblings-reduction#33": {
+      "en": "cos(180° − θ) = −cos θ &nbsp;&nbsp;·&nbsp;&nbsp; sin(90° + θ) = cos θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:213:37"
+      ]
+    },
+    "gtrig-siblings-reduction#34": {
+      "en": "tan(540° + θ) &nbsp;[−360°]&nbsp; = tan(180° + θ) = tan θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:214:37"
+      ]
+    },
+    "gtrig-siblings-reduction#35": {
+      "en": "Now put them back: &nbsp;(−sin θ · sin θ · −tan θ)/(−cos θ · cos θ · tan θ) = (sin²θ · tan θ)/(−cos²θ · tan θ)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:215:37"
+      ]
+    },
+    "gtrig-siblings-reduction#36": {
+      "en": "= −sin²θ/cos²θ = −tan²θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:216:39"
+      ]
+    },
+    "gtrig-siblings-reduction#37": {
+      "en": "WATCH OUT: cos(θ − 90°) = +sin θ, but sin(θ − 90°) = −cos θ. The two negative co-functions do NOT behave the same way — one keeps its plus and the other does not.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:218:15"
+      ]
+    },
+    "gtrig-siblings-reduction#38": {
+      "en": "Six factors looks like six problems, but it is one problem done six times, and the trick is refusing to rush. Give every factor its own line. Two of them, cos(θ − 90°) and sin(90° + θ), are 90° angles, which is the only kind that converts between sin and cos — that is what a co-function is. The other four leave the ratio alone and only decide a sign. And one of them, tan(540° + θ), is too big to be on the wheel at all, so a full turn comes off first: 540° − 360° is 180°, which puts it in T where tan is positive, so it is simply tan θ. Once every factor is reduced, look for what cancels before you multiply anything out. There is a tan θ on the top and a tan θ underneath — gone. That leaves sin²θ over −cos²θ, and sin over cos is tan, so the whole monster is −tan²θ. Two minus signs on top made a plus; the single minus underneath is the one that survives.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:222:13"
+      ]
+    },
+    "gtrig-siblings-reduction#39": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Determine the value of &nbsp;cos(−750°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:248:13"
+      ]
+    },
+    "gtrig-siblings-reduction#40": {
+      "en": "Her rule for negative angles: anything below −90° gets 360° ADDED, and you keep adding turns until you are back inside one revolution. Write each turn above the angle separately. Then remember that −θ is a fourth-quadrant form.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:251:13"
+      ]
+    },
+    "gtrig-siblings-reduction#41": {
+      "en": "The angle is below −90°, so add whole turns until it is back inside one revolution:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:254:37"
+      ]
+    },
+    "gtrig-siblings-reduction#42": {
+      "en": "cos(−750°) &nbsp;[+360° +360°]&nbsp; = cos(−30°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:255:37"
+      ]
+    },
+    "gtrig-siblings-reduction#43": {
+      "en": "−θ is a <b>fourth-quadrant</b> form, and in C <b>cosine is positive</b>: &nbsp;cos(−30°) = cos 30°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:256:37"
+      ]
+    },
+    "gtrig-siblings-reduction#44": {
+      "en": "WATCH OUT: cos(−θ) = +cos θ, but sin(−θ) = −sin θ and tan(−θ) = −tan θ. Cosine is the one that survives a negative angle unharmed, because −θ lands in C.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:259:15"
+      ]
+    },
+    "gtrig-siblings-reduction#45": {
+      "en": "A negative angle just means you walked round the circle clockwise instead of anticlockwise, and −750° means you walked more than two full turns that way. Adding 360° puts one of those turns back without moving where you finished, so add one turn to get −390°, and another to get −30°. Write them above the angle one at a time — [+360° +360°] — because that is how you keep count and how the marker sees what you did. Now −30° is small enough to read off the wheel, and −θ is a fourth-quadrant form, which is C. In C only cosine is positive, and cosine is exactly what you have, so no minus appears: cos(−30°) is simply cos 30°, and that is √3 over 2 off the long triangle. If the question had asked for sin(−750°) the answer would have picked up a minus, because sine does not survive in C.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:263:13"
+      ]
+    },
+    "gtrig-siblings-reduction#46": {
+      "en": "Determine the value of &nbsp;<span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">sin 300° · cos 225°</span><span class=\\\"sf-d\\\">tan 240°</span></span>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:271:13"
+      ]
+    },
+    "gtrig-siblings-reduction#47": {
+      "en": "Three angles, three reductions, three lines — split each one above the angle first. Every acute angle you are left with is one of the special ones, so nothing here needs a calculator. Two negatives on top will look after themselves.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:274:13"
+      ]
+    },
+    "gtrig-siblings-reduction#48": {
+      "en": "sin 300° &nbsp;[360° − 60°]&nbsp; = −sin 60° = −√3/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:277:37"
+      ]
+    },
+    "gtrig-siblings-reduction#49": {
+      "en": "cos 225° &nbsp;[180° + 45°]&nbsp; = −cos 45° = −1/√2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:278:37"
+      ]
+    },
+    "gtrig-siblings-reduction#50": {
+      "en": "tan 240° &nbsp;[180° + 60°]&nbsp; = tan 60° = √3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:279:37"
+      ]
+    },
+    "gtrig-siblings-reduction#51": {
+      "en": "Top: &nbsp;(−√3/2) × (−1/√2) = √3/(2√2) &nbsp;— and that √3 cancels the √3 underneath",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:280:37"
+      ]
+    },
+    "gtrig-siblings-reduction#52": {
+      "en": "= 1/(2√2) = √2/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:281:39"
+      ]
+    },
+    "gtrig-siblings-reduction#53": {
+      "en": "REMEMBER: the two minus signs on top multiply to a plus, so the answer is positive. Losing one of them is the single most common way this question goes wrong.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:283:15"
+      ]
+    },
+    "gtrig-siblings-reduction#54": {
+      "en": "Nothing new here — it is her three steps run three times, and then ordinary arithmetic with surds. 300° splits as 360° − 60°, which is C, where sine is negative, so sin 300° is −sin 60°. 225° splits as 180° + 45°, which is T, where cosine is negative, so cos 225° is −cos 45°. 240° splits as 180° + 60°, which is T again — and T is tan's own quadrant, so tan 240° stays positive and equals tan 60°. Now swap in the special-angle values off her two triangles and the calculator stays in your bag. The two minuses on top cancel each other, √3 on top cancels the √3 underneath, and you are left with 1 over 2√2. Multiply top and bottom by √2 to tidy the surd out of the denominator and it becomes √2 over 4. Both forms are correct; the rationalised one is the one she writes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:287:13"
+      ]
+    },
+    "gtrig-siblings-reduction#55": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>Simplify: &nbsp;sin²(x − 90°) + cos²(180° + x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:312:13"
+      ]
+    },
+    "gtrig-siblings-reduction#56": {
+      "en": "Block brackets on both terms before you square anything. Then look at what the two brackets actually contain — you may find you are adding the same thing to itself.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:315:13"
+      ]
+    },
+    "gtrig-siblings-reduction#57": {
+      "en": "sin(x − 90°) = −cos x &nbsp;⟹&nbsp; sin²(x − 90°) = [−cos x]² = cos²x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:318:37"
+      ]
+    },
+    "gtrig-siblings-reduction#58": {
+      "en": "cos(180° + x) = −cos x &nbsp;⟹&nbsp; cos²(180° + x) = [−cos x]² = cos²x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:319:37"
+      ]
+    },
+    "gtrig-siblings-reduction#59": {
+      "en": "cos²x + cos²x = 2cos²x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:320:39"
+      ]
+    },
+    "gtrig-siblings-reduction#60": {
+      "en": "WATCH OUT: this is NOT sin²x + cos²x = 1. Reduce first and you can see both terms turned into the same cosine — a learner who reaches for the identity without reducing writes 1 and loses every mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:322:15"
+      ]
+    },
+    "gtrig-siblings-reduction#61": {
+      "en": "The whole question is a test of whether you reduce before you reach for an identity. It looks like sin² plus cos², which is the most famous 1 in the syllabus, so the temptation is to write 1 and move on. But those are not the same angle, and an identity only works when the angles match. So reduce each one first, inside block brackets. sin(x − 90°) is one of her negative co-functions and it comes out as −cos x; squaring kills the minus and leaves cos²x. cos(180° + x) is a third-quadrant angle where cosine is negative, so it is also −cos x, and squaring it also leaves cos²x. Now the two terms really are the same thing, and the same thing added to itself is twice itself: 2cos²x. The lesson is the order — reduce, then identify, never the other way round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:326:13"
+      ]
+    },
+    "gtrig-siblings-reduction#62": {
+      "en": "Simplify: &nbsp;<span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">tan(−x) · cos(720° − x)</span><span class=\\\"sf-d\\\">tan(180° + x) · cos(x − 180°)</span></span>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:334:13"
+      ]
+    },
+    "gtrig-siblings-reduction#63": {
+      "en": "Four factors, four lines. One of them is over 720°, so take the turns off one at a time before you reduce it. And cos(x − 180°) is not a typo — cosine does not care which way round a subtraction goes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:337:13"
+      ]
+    },
+    "gtrig-siblings-reduction#64": {
+      "en": "tan(−x) = −tan x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:340:37"
+      ]
+    },
+    "gtrig-siblings-reduction#65": {
+      "en": "cos(720° − x) &nbsp;[−360° −360°]&nbsp; = cos(−x) = cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:341:37"
+      ]
+    },
+    "gtrig-siblings-reduction#66": {
+      "en": "tan(180° + x) = tan x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:342:37"
+      ]
+    },
+    "gtrig-siblings-reduction#67": {
+      "en": "cos(x − 180°) = cos(180° − x) = −cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:343:37"
+      ]
+    },
+    "gtrig-siblings-reduction#68": {
+      "en": "(−tan x · cos x)/(tan x · −cos x) = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:344:39"
+      ]
+    },
+    "gtrig-siblings-reduction#69": {
+      "en": "REMEMBER: cosine is the only ratio that reads the same backwards — cos(x − 180°) = cos(180° − x), and cos(−x) = cos x. Sine and tan both flip sign when you turn the bracket round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:346:15"
+      ]
+    },
+    "gtrig-siblings-reduction#70": {
+      "en": "Every factor here reduces to plus or minus tan x, or plus or minus cos x, and once they have, the whole fraction is just arithmetic. tan(−x) is a fourth-quadrant form, where tan is negative, so it is −tan x. cos(720° − x) is two full turns too big — take them off one at a time and you land on cos(−x), which is cos x, because cosine survives in C. tan(180° + x) sits in T, tan's own quadrant, so it stays positive. And cos(x − 180°) is the sneaky one: cosine does not mind which order you subtract in, so it is the same as cos(180° − x), which is a second-quadrant angle and comes out as −cos x. Now count the minus signs: one on top, one underneath. They cancel, tan x cancels tan x, cos x cancels cos x, and the whole thing collapses to 1. When a reduction question has the same factors above and below, the answer is usually a number rather than a ratio — that is your check.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-reduction.js:350:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1996
+}
