@@ -18,6 +18,7 @@ import { rng } from "../rng.js";
    re-typed so a glyph change can never leave this frame drawing a
    character the pad no longer recognises. */
 import { SLOT } from "../tokenpad.js";
+import { L } from "../lang.js";
 
 const ACC = "#4d7c0f";
 const sq = n => n * n;
@@ -97,25 +98,25 @@ const SKILLS = {
     for (let tries = 0; tries < 20 && t.slant === t.r; tries++) t = safeConeTriple();
     return {
       type: "steps", concept: "findHeight",
-      prompt: "Calculate the <b>perpendicular height H</b> of this cone.",
+      prompt: L("Calculate the <b>perpendicular height H</b> of this cone.", "Bereken die <b>loodregte hoogte H</b> van hierdie keël."),
       graph: coneFig(t, "H"),
       steps: [
-        heightStep("Build the rearranged equation for H². Tap a piece to drop it into the next box.",
+        heightStep(L("Build the rearranged equation for H². Tap a piece to drop it into the next box.", "Bou die herrangskikte vergelyking vir H². Klik op 'n stuk om dit in die volgende blokkie te plaas."),
           ["H²", "=", SLOT, "²", "−", SLOT, "²"],
           [t.slant, t.r], [t.slant, t.r],
-          "The slant is the hypotenuse, so it goes first and stands alone."),
-        calcStep("H² = ?", sq(t.slant) - sq(t.r),
-          "Square the slant, square r, then subtract.", { dp: 0, tol: 0.001 }),
-        calcStep("H = ?", t.H,
-          "Take the square root.", { dp: 0, tol: 0.001 }),
+          L("The slant is the hypotenuse, so it goes first and stands alone.", "Die skuinshoogte is die skuinssy, so dit kom eerste en staan alleen.")),
+        calcStep(L("H² = ?", "H² = ?"), sq(t.slant) - sq(t.r),
+          L("Square the slant, square r, then subtract.", "Kwadreer die skuinshoogte, kwadreer r, trek dan af."), { dp: 0, tol: 0.001 }),
+        calcStep(L("H = ?", "H = ?"), t.H,
+          L("Take the square root.", "Neem die vierkantswortel."), { dp: 0, tol: 0.001 }),
       ],
       expected: t.H, dp: 0,
-      hint: "r, H and the slant h make a right-angled triangle with the slant as the hypotenuse: h² = H² + r². So H = √(h² − r²).",
-      answerLabel: `H = √(${t.slant}² − ${t.r}²) = √${sq(t.slant) - sq(t.r)} = ${t.H}`,
+      hint: L("r, H and the slant h make a right-angled triangle with the slant as the hypotenuse: h² = H² + r². So H = √(h² − r²).", "r, H en die skuinshoogte h vorm 'n reghoekige driehoek met die skuinshoogte as die skuinssy: h² = H² + r². Dus H = √(h² − r²)."),
+      answerLabel: L(`H = √(${t.slant}² − ${t.r}²) = √${sq(t.slant) - sq(t.r)} = ${t.H}`, `H = √(${t.slant}² − ${t.r}²) = √${sq(t.slant) - sq(t.r)} = ${t.H}`),
       solution: [
-        { s: "h² = H² + r²  →  H² = h² − r²", r: "the slant is the hypotenuse" },
-        { s: `H² = ${t.slant}² − ${t.r}² = ${sq(t.slant)} − ${sq(t.r)} = ${sq(t.slant) - sq(t.r)}` },
-        { s: `H = √${sq(t.slant) - sq(t.r)} = ${t.H}` },
+        { s: L("h² = H² + r²  →  H² = h² − r²", "h² = H² + r²  →  H² = h² − r²"), r: L("the slant is the hypotenuse", "die skuinshoogte is die skuinssy") },
+        { s: L(`H² = ${t.slant}² − ${t.r}² = ${sq(t.slant)} − ${sq(t.r)} = ${sq(t.slant) - sq(t.r)}`, `H² = ${t.slant}² − ${t.r}² = ${sq(t.slant)} − ${sq(t.r)} = ${sq(t.slant) - sq(t.r)}`) },
+        { s: L(`H = √${sq(t.slant) - sq(t.r)} = ${t.H}`, `H = √${sq(t.slant) - sq(t.r)} = ${t.H}`) },
       ],
     };
   },
@@ -126,25 +127,25 @@ const SKILLS = {
     for (let tries = 0; tries < 20 && t.H === t.r; tries++) t = safeConeTriple();
     return {
       type: "steps", concept: "findHeight",
-      prompt: "Calculate the <b>slant height h</b> of this cone.",
+      prompt: L("Calculate the <b>slant height h</b> of this cone.", "Bereken die <b>skuinshoogte h</b> van hierdie keël."),
       graph: coneFig(t, "slant"),
       steps: [
-        heightStep("Build the Pythagoras equation for h². Tap a piece to drop it into the next box.",
+        heightStep(L("Build the Pythagoras equation for h². Tap a piece to drop it into the next box.", "Bou die Pythagoras-vergelyking vir h². Klik op 'n stuk om dit in die volgende blokkie te plaas."),
           ["h²", "=", SLOT, "²", "+", SLOT, "²"],
           [t.H, t.r], [t.H, t.r],
-          "Addition commutes — H² and r² can go in either box.", true),
-        calcStep("h² = ?", sq(t.H) + sq(t.r),
-          "Square H, square r, then add.", { dp: 0, tol: 0.001 }),
-        calcStep("h = ?", t.slant,
-          "Take the square root.", { dp: 0, tol: 0.001 }),
+          L("Addition commutes — H² and r² can go in either box.", "By optel maak die volgorde nie saak nie: H² en r² kan in enige blokkie gaan."), true),
+        calcStep(L("h² = ?", "h² = ?"), sq(t.H) + sq(t.r),
+          L("Square H, square r, then add.", "Kwadreer H, kwadreer r, tel dan op."), { dp: 0, tol: 0.001 }),
+        calcStep(L("h = ?", "h = ?"), t.slant,
+          L("Take the square root.", "Neem die vierkantswortel."), { dp: 0, tol: 0.001 }),
       ],
       expected: t.slant, dp: 0,
-      hint: "The slant is the hypotenuse, so it sits alone: h² = H² + r², giving h = √(H² + r²).",
-      answerLabel: `h = √(${t.H}² + ${t.r}²) = √${sq(t.H) + sq(t.r)} = ${t.slant}`,
+      hint: L("The slant is the hypotenuse, so it sits alone: h² = H² + r², giving h = √(H² + r²).", "Die skuinshoogte is die skuinssy, so dit staan alleen: h² = H² + r², wat h = √(H² + r²) gee."),
+      answerLabel: L(`h = √(${t.H}² + ${t.r}²) = √${sq(t.H) + sq(t.r)} = ${t.slant}`, `h = √(${t.H}² + ${t.r}²) = √${sq(t.H) + sq(t.r)} = ${t.slant}`),
       solution: [
-        { s: "h² = H² + r²", r: "Pythagoras" },
-        { s: `h² = ${t.H}² + ${t.r}² = ${sq(t.H)} + ${sq(t.r)} = ${sq(t.H) + sq(t.r)}` },
-        { s: `h = √${sq(t.H) + sq(t.r)} = ${t.slant}` },
+        { s: L("h² = H² + r²", "h² = H² + r²"), r: L("Pythagoras", "Pythagoras") },
+        { s: L(`h² = ${t.H}² + ${t.r}² = ${sq(t.H)} + ${sq(t.r)} = ${sq(t.H) + sq(t.r)}`, `h² = ${t.H}² + ${t.r}² = ${sq(t.H)} + ${sq(t.r)} = ${sq(t.H) + sq(t.r)}`) },
+        { s: L(`h = √${sq(t.H) + sq(t.r)} = ${t.slant}`, `h = √${sq(t.H) + sq(t.r)} = ${t.slant}`) },
       ],
     };
   },
@@ -158,58 +159,58 @@ const SKILLS = {
     for (let tries = 0; tries < 20 && new Set([t.slant, t.half, t.s]).size !== 3; tries++) t = safePyramidTriple();
     return {
       type: "steps", concept: "findHeight",
-      prompt: "Calculate the <b>perpendicular height H</b> of this square-based pyramid.",
+      prompt: L("Calculate the <b>perpendicular height H</b> of this square-based pyramid.", "Bereken die <b>loodregte hoogte H</b> van hierdie piramide met 'n vierkantige basis."),
       graph: figPyramidHeight(ACC, t, "H"),
       steps: [
-        calcStep("First: half the base.", t.half,
-          "Divide the full base ℓ by 2.", { dp: 0, tol: 0.001 }),
-        heightStep("Build the equation for H², using HALF the base you just found. Tap a piece to drop it into the next box.",
+        calcStep(L("First: half the base.", "Eers: die helfte van die basis."), t.half,
+          L("Divide the full base ℓ by 2.", "Deel die hele basis ℓ deur 2."), { dp: 0, tol: 0.001 }),
+        heightStep(L("Build the equation for H², using HALF the base you just found. Tap a piece to drop it into the next box.", "Bou die vergelyking vir H² met die HALWE basis wat jy pas gekry het. Klik op 'n stuk om dit in die volgende blokkie te plaas."),
           ["H²", "=", SLOT, "²", "−", SLOT, "²"],
           [t.slant, t.half, t.s], [t.slant, t.half],
-          "The slant is the hypotenuse. The bottom leg is HALF the base — the whole base is on the pad to tempt you."),
-        calcStep("H² = ?", sq(t.slant) - sq(t.half),
-          "Square the slant, square half the base, then subtract.", { dp: 0, tol: 0.001 }),
-        calcStep("H = ?", t.H,
-          "Take the square root.", { dp: 0, tol: 0.001 }),
+          L("The slant is the hypotenuse. The bottom leg is HALF the base — the whole base is on the pad to tempt you.", "Die skuinshoogte is die skuinssy. Die onderste sy is die HALWE basis: die hele basis is ook daar om jou te flous.")),
+        calcStep(L("H² = ?", "H² = ?"), sq(t.slant) - sq(t.half),
+          L("Square the slant, square half the base, then subtract.", "Kwadreer die skuinshoogte, kwadreer die halwe basis, trek dan af."), { dp: 0, tol: 0.001 }),
+        calcStep(L("H = ?", "H = ?"), t.H,
+          L("Take the square root.", "Neem die vierkantswortel."), { dp: 0, tol: 0.001 }),
       ],
       expected: t.H, dp: 0,
-      hint: "The slant h, the height H and HALF the base (ℓ/2) form a right triangle: h² = H² + (ℓ/2)². Use HALF the base, not the whole side!",
-      answerLabel: `½ℓ = ${t.half}, so H = √(${t.slant}² − ${t.half}²) = √${sq(t.slant) - sq(t.half)} = ${t.H}`,
+      hint: L("The slant h, the height H and HALF the base (ℓ/2) form a right triangle: h² = H² + (ℓ/2)². Use HALF the base, not the whole side!", "Die skuinshoogte h, die hoogte H en die HALWE basis (ℓ/2) vorm 'n reghoekige driehoek: h² = H² + (ℓ/2)². Gebruik die HALWE basis, nie die hele sy nie!"),
+      answerLabel: L(`½ℓ = ${t.half}, so H = √(${t.slant}² − ${t.half}²) = √${sq(t.slant) - sq(t.half)} = ${t.H}`, `½ℓ = ${t.half}, dus H = √(${t.slant}² − ${t.half}²) = √${sq(t.slant) - sq(t.half)} = ${t.H}`),
       solution: [
-        { s: `half the base: ℓ/2 = ${t.s} ÷ 2 = ${t.half}`, r: "the bottom leg is HALF the base" },
-        { s: `h² = H² + (ℓ/2)²  →  H² = ${t.slant}² − ${t.half}² = ${sq(t.slant) - sq(t.half)}` },
-        { s: `H = √${sq(t.slant) - sq(t.half)} = ${t.H}` },
+        { s: L(`half the base: ℓ/2 = ${t.s} ÷ 2 = ${t.half}`, `halwe basis: ℓ/2 = ${t.s} ÷ 2 = ${t.half}`), r: L("the bottom leg is HALF the base", "die onderste sy is die HALWE basis") },
+        { s: L(`h² = H² + (ℓ/2)²  →  H² = ${t.slant}² − ${t.half}² = ${sq(t.slant) - sq(t.half)}`, `h² = H² + (ℓ/2)²  →  H² = ${t.slant}² − ${t.half}² = ${sq(t.slant) - sq(t.half)}`) },
+        { s: L(`H = √${sq(t.slant) - sq(t.half)} = ${t.H}`, `H = √${sq(t.slant) - sq(t.half)} = ${t.H}`) },
       ],
     };
   },
 
   /* the cone relationship */
   coneRelation: () => mc("findHeight",
-    "For a cone, how are the radius r, perpendicular height H and slant height h related?",
-    "h² = H² + r²", ["H² = h² + r²", "h² = H² − r²", "h = H + r"],
+    L("For a cone, how are the radius r, perpendicular height H and slant height h related?", "Hoe hang die radius r, loodregte hoogte H en skuinshoogte h van 'n keël saam?"),
+    L("h² = H² + r²", "h² = H² + r²"), [L("H² = h² + r²", "H² = h² + r²"), L("h² = H² − r²", "h² = H² − r²"), L("h = H + r", "h = H + r")],
     { graph: coneFig(safeConeTriple(), null, true), layout: "grid2",
-      hint: "The slant h is the longest side (opposite the right angle), so it sits alone as the c in a² + b² = c².",
-      answerLabel: "h² = H² + r² — the slant is the hypotenuse.",
-      solution: [{ s: "legs r and H, hypotenuse h → h² = H² + r²" }] }),
+      hint: L("The slant h is the longest side (opposite the right angle), so it sits alone as the c in a² + b² = c².", "Die skuinshoogte h is die langste sy (teenoor die regte hoek), so dit staan alleen as die c in a² + b² = c²."),
+      answerLabel: L("h² = H² + r² — the slant is the hypotenuse.", "h² = H² + r²: die skuinshoogte is die skuinssy."),
+      solution: [{ s: L("legs r and H, hypotenuse h → h² = H² + r²", "sye r en H, skuinssy h → h² = H² + r²") }] }),
 
   /* the pyramid trap: which is the bottom leg */
   pyramidWhichLeg: () => mc("findHeight",
-    "To find a square pyramid's perpendicular height from the slant height of a face, what is the <b>bottom</b> of the right-angled triangle?",
-    "half the base side (½ℓ)", ["the full base side (ℓ)", "the diagonal of the base", "the slant height (h)"],
+    L("To find a square pyramid's perpendicular height from the slant height of a face, what is the <b>bottom</b> of the right-angled triangle?", "Om 'n vierkantige piramide se loodregte hoogte uit 'n vlak se skuinshoogte te kry: wat is die <b>onderste sy</b> van die reghoekige driehoek?"),
+    L("half the base side (½ℓ)", "die helfte van die basissy (½ℓ)"), [L("the full base side (ℓ)", "die hele basissy (ℓ)"), L("the diagonal of the base", "die hoeklyn van die basis"), L("the slant height (h)", "die skuinshoogte (h)")],
     { graph: figPyramidHeight(ACC, safePyramidTriple(), null, true),
-      hint: "The slant runs to the MIDDLE of a base edge, so the bottom leg only reaches halfway across — ½ℓ.",
-      answerLabel: "Half the base side, ½ℓ — the slant meets the base at the midpoint of an edge.",
-      solution: [{ s: "h² = H² + (ℓ/2)²  →  bottom leg is ½ℓ, not the whole ℓ" }] }),
+      hint: L("The slant runs to the MIDDLE of a base edge, so the bottom leg only reaches halfway across — ½ℓ.", "Die skuinshoogte loop na die MIDDEL van 'n basisrand, so die onderste sy strek net halfpad oor: ½ℓ."),
+      answerLabel: L("Half the base side, ½ℓ — the slant meets the base at the midpoint of an edge.", "Die helfte van die basissy, ½ℓ: die skuinshoogte tref die basis by die middelpunt van 'n rand."),
+      solution: [{ s: L("h² = H² + (ℓ/2)²  →  bottom leg is ½ℓ, not the whole ℓ", "h² = H² + (ℓ/2)²  →  onderste sy is ½ℓ, nie die hele ℓ nie") }] }),
 
   /* the slant is the hypotenuse */
   hypIs: () => ({
     type: "yesno", concept: "findHeight",
-    prompt: "In the right-angled triangle inside this solid, is the <b>slant height</b> the hypotenuse (the longest side)?",
+    prompt: L("In the right-angled triangle inside this solid, is the <b>slant height</b> the hypotenuse (the longest side)?", "Is die <b>skuinshoogte</b> in die reghoekige driehoek binne hierdie liggaam die skuinssy (die langste sy)?"),
     graph: coneFig(safeConeTriple(), null, true),
     yes: true,
-    hint: "The right angle sits between the radius and the perpendicular height, so the side opposite it is the slant.",
-    answerLabel: "Yes — the slant is opposite the right angle, so it is the hypotenuse and the longest of the three.",
-    solution: [{ s: "right angle between r and H → slant is the hypotenuse, so slant > H and slant > r" }],
+    hint: L("The right angle sits between the radius and the perpendicular height, so the side opposite it is the slant.", "Die regte hoek lê tussen die radius en die loodregte hoogte, so die sy teenoor die regte hoek is die skuinshoogte."),
+    answerLabel: L("Yes — the slant is opposite the right angle, so it is the hypotenuse and the longest of the three.", "Ja: die skuinshoogte is teenoor die regte hoek, so dit is die skuinssy en die langste van die drie."),
+    solution: [{ s: L("right angle between r and H → slant is the hypotenuse, so slant > H and slant > r", "regte hoek tussen r en H → skuinshoogte is die skuinssy, so skuinshoogte > H en skuinshoogte > r") }],
   }),
 };
 

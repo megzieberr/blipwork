@@ -1,0 +1,2284 @@
+{
+  "unit": "T88",
+  "generated": "2026-10-17T21:23:07.662Z",
+  "files": [
+    "js/quests/questm1-name-formula.js",
+    "js/quests/questm2-heights.js",
+    "js/quests/questm3-open.js",
+    "js/quests/questm4-composite.js",
+    "js/quests/questm5-mixed.js",
+    "js/quests/questm6-height.js"
+  ],
+  "items": {
+    "questm1-name-formula#1": {
+      "en": "What solid is this?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm1-name-formula.js:44:7"
+      ]
+    },
+    "questm1-name-formula#2": {
+      "en": "Look at the faces: flat polygons make a prism/pyramid; a curved face means a cylinder, cone or sphere.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm1-name-formula.js:47:15"
+      ]
+    },
+    "questm1-name-formula#3": {
+      "en": "This is a ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm1-name-formula.js:48:22"
+      ]
+    },
+    "questm1-name-formula#4": {
+      "en": "A ${correct} — read it off the faces and the cross-section.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm1-name-formula.js:49:25"
+      ]
+    },
+    "questm1-name-formula#5": {
+      "en": "Which is the correct <b>volume</b> formula for this ${s.name}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm1-name-formula.js:57:7"
+      ]
+    },
+    "questm1-name-formula#6": {
+      "en": "Volume fills the inside (cubic units). Prisms & cylinders: base area × height. Cones & pyramids: a third of that.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm1-name-formula.js:60:15"
+      ]
+    },
+    "questm1-name-formula#7": {
+      "en": "Volume of a ${s.name} = ${s.vol}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm1-name-formula.js:61:22"
+      ]
+    },
+    "questm1-name-formula#8": {
+      "en": "V = ${s.vol}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm1-name-formula.js:62:25"
+      ]
+    },
+    "questm1-name-formula#9": {
+      "en": "Which is the correct <b>total surface area</b> formula for this closed ${s.name}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm1-name-formula.js:70:7"
+      ]
+    },
+    "questm1-name-formula#10": {
+      "en": "Surface area adds up every outside face (square units). Curved faces unroll: a cylinder's side becomes a 2πr × h rectangle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm1-name-formula.js:73:15"
+      ]
+    },
+    "questm1-name-formula#11": {
+      "en": "Total surface area of a closed ${s.name} = ${s.sa}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm1-name-formula.js:74:22"
+      ]
+    },
+    "questm1-name-formula#12": {
+      "en": "SA = ${s.sa}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm1-name-formula.js:75:25"
+      ]
+    },
+    "questm1-name-formula#13": {
+      "en": "For <b>any</b> prism or a cylinder, is the volume always (area of the base) × (perpendicular height)?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm1-name-formula.js:81:13"
+      ]
+    },
+    "questm1-name-formula#14": {
+      "en": "A prism keeps the same cross-section all the way up, so you just stack the base area through the height.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm1-name-formula.js:84:11"
+      ]
+    },
+    "questm1-name-formula#15": {
+      "en": "Yes — for a prism or cylinder, V = base area × height.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm1-name-formula.js:85:18"
+      ]
+    },
+    "questm1-name-formula#16": {
+      "en": "Same cross-section all the way up → V = A_base × H.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm1-name-formula.js:86:21"
+      ]
+    },
+    "questm1-name-formula#17": {
+      "en": "A cone holds how much of a cylinder that has the <b>same base and height</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm1-name-formula.js:91:5"
+      ]
+    },
+    "questm1-name-formula#18": {
+      "en": "one third (⅓)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm1-name-formula.js:92:5"
+      ]
+    },
+    "questm1-name-formula#19": {
+      "en": "one half (½)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm1-name-formula.js:92:23"
+      ]
+    },
+    "questm1-name-formula#20": {
+      "en": "two thirds (⅔)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm1-name-formula.js:92:39"
+      ]
+    },
+    "questm1-name-formula#21": {
+      "en": "the same amount",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm1-name-formula.js:92:57"
+      ]
+    },
+    "questm1-name-formula#22": {
+      "en": "Cones and pyramids are the ‘pointy’ third — V = ⅓ × (matching prism or cylinder).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm1-name-formula.js:94:13"
+      ]
+    },
+    "questm1-name-formula#23": {
+      "en": "⅓ — a cone is ⅓ of the cylinder with the same base and height, so V = ⅓πr²H.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm1-name-formula.js:95:20"
+      ]
+    },
+    "questm1-name-formula#24": {
+      "en": "V(cone) = ⅓ × V(cylinder) = ⅓πr²H",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm1-name-formula.js:96:23"
+      ]
+    },
+    "questm2-heights#1": {
+      "en": "cone",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:33:26",
+        "questm2-heights.js:49:26"
+      ]
+    },
+    "questm2-heights#2": {
+      "en": "pyramid",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:33:35",
+        "questm2-heights.js:49:35"
+      ]
+    },
+    "questm2-heights#3": {
+      "en": "⅓πr²H",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:34:24"
+      ]
+    },
+    "questm2-heights#4": {
+      "en": "⅓ℓ²H",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:34:34"
+      ]
+    },
+    "questm2-heights#5": {
+      "en": "For the <b>volume</b> of this ${shape} (${vol}), which height do you use?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm2-heights.js:36:7"
+      ]
+    },
+    "questm2-heights#6": {
+      "en": "H — the perpendicular height",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:37:7",
+        "questm2-heights.js:54:8"
+      ]
+    },
+    "questm2-heights#7": {
+      "en": "h — the slant height",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:38:8",
+        "questm2-heights.js:53:7"
+      ]
+    },
+    "questm2-heights#8": {
+      "en": "neither; you use the radius r",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:38:39"
+      ]
+    },
+    "questm2-heights#9": {
+      "en": "neither; you use the base side ℓ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:38:73"
+      ]
+    },
+    "questm2-heights#10": {
+      "en": "you may use either one",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:38:109",
+        "questm2-heights.js:54:83"
+      ]
+    },
+    "questm2-heights#11": {
+      "en": "Volume is about how much fills the inside, so you need the true straight-up height H, not the longer slanted one.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm2-heights.js:40:15"
+      ]
+    },
+    "questm2-heights#12": {
+      "en": "The perpendicular height H — it runs straight from the apex down to the centre of the base.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm2-heights.js:41:22"
+      ]
+    },
+    "questm2-heights#13": {
+      "en": "V = ${vol} uses the perpendicular height H (the dashed line down the middle).",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm2-heights.js:42:25"
+      ]
+    },
+    "questm2-heights#14": {
+      "en": "curved surface (πrh)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:50:25"
+      ]
+    },
+    "questm2-heights#15": {
+      "en": "triangular side faces (½·p·h)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:50:50"
+      ]
+    },
+    "questm2-heights#16": {
+      "en": "For the <b>${face}</b> of this ${shape}, which height do you use?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm2-heights.js:52:7"
+      ]
+    },
+    "questm2-heights#17": {
+      "en": "the radius r",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:54:47"
+      ]
+    },
+    "questm2-heights#18": {
+      "en": "the base side ℓ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:54:64"
+      ]
+    },
+    "questm2-heights#19": {
+      "en": "The slanted face lies along the slope, so its area needs the length measured along that slope — the slant height h.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm2-heights.js:56:15"
+      ]
+    },
+    "questm2-heights#20": {
+      "en": "The slant height h — it runs along the sloping face, from the apex to the edge of the base.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm2-heights.js:57:22"
+      ]
+    },
+    "questm2-heights#21": {
+      "en": "The sloping face is measured with the slant height h, not the perpendicular H.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm2-heights.js:58:25"
+      ]
+    },
+    "questm2-heights#22": {
+      "en": "from the apex, down the sloping side, to the rim of the base",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:66:9"
+      ]
+    },
+    "questm2-heights#23": {
+      "en": "from the apex, down the middle of a triangular face, to a base edge",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm2-heights.js:67:9"
+      ]
+    },
+    "questm2-heights#24": {
+      "en": "On this diagram, which length is the <b>slant height h</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm2-heights.js:69:7"
+      ]
+    },
+    "questm2-heights#25": {
+      "en": "the slanted line ${desc}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm2-heights.js:70:7"
+      ]
+    },
+    "questm2-heights#26": {
+      "en": "the dashed line straight down the middle",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:71:8"
+      ]
+    },
+    "questm2-heights#27": {
+      "en": "the line across the base (the radius / side)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:71:52"
+      ]
+    },
+    "questm2-heights#28": {
+      "en": "the longest edge of the whole solid",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:71:100"
+      ]
+    },
+    "questm2-heights#29": {
+      "en": "h is the one drawn along the slope; the dashed straight-down line is the perpendicular height H.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm2-heights.js:73:15"
+      ]
+    },
+    "questm2-heights#30": {
+      "en": "The slant height h is the slanting line ${desc}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm2-heights.js:74:22"
+      ]
+    },
+    "questm2-heights#31": {
+      "en": "h = slant (along the face); H = perpendicular (dashed, straight down).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm2-heights.js:75:25"
+      ]
+    },
+    "questm2-heights#32": {
+      "en": "Is the slant height h always <b>longer</b> than the perpendicular height H?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm2-heights.js:81:13"
+      ]
+    },
+    "questm2-heights#33": {
+      "en": "h, H and the radius form a right-angled triangle with h as the hypotenuse (h² = H² + r²).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm2-heights.js:84:11"
+      ]
+    },
+    "questm2-heights#34": {
+      "en": "Yes — h is the hypotenuse of the right triangle h² = H² + r², so h > H.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm2-heights.js:85:18"
+      ]
+    },
+    "questm2-heights#35": {
+      "en": "h² = H² + r²  →  h is the hypotenuse, so it is the longest of the three.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm2-heights.js:86:21"
+      ]
+    },
+    "questm2-heights#36": {
+      "en": "All lengths on a solid are in <b>cm</b>. Its <b>volume</b> is measured in …",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm2-heights.js:94:11"
+      ]
+    },
+    "questm2-heights#37": {
+      "en": "All lengths on a solid are in <b>cm</b>. Its <b>surface area</b> is measured in …",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm2-heights.js:95:11"
+      ]
+    },
+    "questm2-heights#38": {
+      "en": "cm³ (cubic)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:96:13",
+        "questm2-heights.js:97:56"
+      ]
+    },
+    "questm2-heights#39": {
+      "en": "cm² (square)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:96:29",
+        "questm2-heights.js:97:14"
+      ]
+    },
+    "questm2-heights#40": {
+      "en": "cm (just cm)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:97:30",
+        "questm2-heights.js:97:71"
+      ]
+    },
+    "questm2-heights#41": {
+      "en": "cm⁴",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm2-heights.js:97:46",
+        "questm2-heights.js:97:87"
+      ]
+    },
+    "questm2-heights#42": {
+      "en": "Area covers a flat region (length × length → squared); volume fills space (length × length × length → cubed).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm2-heights.js:98:15"
+      ]
+    },
+    "questm2-heights#43": {
+      "en": "Volume is a cubic measure → cm³.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm2-heights.js:99:28"
+      ]
+    },
+    "questm2-heights#44": {
+      "en": "Surface area is a square measure → cm².",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm2-heights.js:99:65"
+      ]
+    },
+    "questm2-heights#45": {
+      "en": "length³ → cm³",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm2-heights.js:100:31"
+      ]
+    },
+    "questm2-heights#46": {
+      "en": "length² → cm²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm2-heights.js:100:49"
+      ]
+    },
+    "questm3-open#1": {
+      "en": "none",
+      "kind": "string",
+      "slots": [
+        "cylSA.open"
+      ],
+      "where": [
+        "questm3-open.js:23:16",
+        "questm3-open.js:40:23",
+        "questm3-open.js:46:26",
+        "questm3-open.js:53:24",
+        "questm3-open.js:54:30"
+      ],
+      "data": true
+    },
+    "questm3-open#2": {
+      "en": "Look at the diagram. Which formula gives this cylinder's <b>total surface area</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm3-open.js:33:5"
+      ]
+    },
+    "questm3-open#3": {
+      "en": "Start with the curved side 2πrh (always there). Then add one circle πr² for <i>each end that is closed</i> — a solid lid, not an open rim.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm3-open.js:36:13"
+      ]
+    },
+    "questm3-open#4": {
+      "en": "It is ${CYL_SA_LABEL[open]} → SA = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm3-open.js:37:20"
+      ]
+    },
+    "questm3-open#5": {
+      "en": "curved side = 2πrh",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:39:14"
+      ]
+    },
+    "questm3-open#6": {
+      "en": "always present",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questm3-open.js:39:39"
+      ]
+    },
+    "questm3-open#7": {
+      "en": "two closed ends → + 2πr²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:40:32"
+      ]
+    },
+    "questm3-open#8": {
+      "en": "top",
+      "kind": "string",
+      "slots": [
+        "cylSA.open"
+      ],
+      "where": [
+        "questm3-open.js:40:70",
+        "questm3-open.js:47:27",
+        "questm3-open.js:53:32"
+      ],
+      "data": true
+    },
+    "questm3-open#9": {
+      "en": "one closed end (bottom) → + πr²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:40:78"
+      ]
+    },
+    "questm3-open#10": {
+      "en": "no closed ends → add nothing",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:40:114"
+      ]
+    },
+    "questm3-open#11": {
+      "en": "SA = ${correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:41:14"
+      ]
+    },
+    "questm3-open#12": {
+      "en": "both",
+      "kind": "string",
+      "slots": [
+        "cylSA.open"
+      ],
+      "where": [
+        "questm3-open.js:48:28",
+        "questm3-open.js:53:39",
+        "questm3-open.js:75:22"
+      ]
+    },
+    "questm3-open#13": {
+      "en": "Look at the top of this cylinder. Do you include the <b>top circle</b> in its surface area?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm3-open.js:57:15"
+      ]
+    },
+    "questm3-open#14": {
+      "en": "A solid lid is a real surface to count; an open rim you can see into has no lid there to cover.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm3-open.js:60:13"
+      ]
+    },
+    "questm3-open#15": {
+      "en": "Yes — the top is a closed lid, so its circle counts: + πr².",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm3-open.js:62:11"
+      ]
+    },
+    "questm3-open#16": {
+      "en": "No — the top is open, so there is no top circle to include.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm3-open.js:63:11"
+      ]
+    },
+    "questm3-open#17": {
+      "en": "Closed top (solid lid) → count its circle: + πr².",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:65:11"
+      ]
+    },
+    "questm3-open#18": {
+      "en": "Open top → leave out πr² for the top; only count ends that are closed.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:66:11"
+      ]
+    },
+    "questm3-open#19": {
+      "en": "This pipe is open at <b>both</b> ends. Which surface(s) make up its outer area?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm3-open.js:72:5"
+      ]
+    },
+    "questm3-open#20": {
+      "en": "only the curved side → 2πrh",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm3-open.js:73:5"
+      ]
+    },
+    "questm3-open#21": {
+      "en": "the curved side + both circles → 2πr² + 2πrh",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm3-open.js:74:6"
+      ]
+    },
+    "questm3-open#22": {
+      "en": "the curved side + one circle → πr² + 2πrh",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm3-open.js:74:54"
+      ]
+    },
+    "questm3-open#23": {
+      "en": "only the two circles → 2πr²",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm3-open.js:74:99"
+      ]
+    },
+    "questm3-open#24": {
+      "en": "No lids at all — you can see straight through. So no circles are counted.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm3-open.js:76:13"
+      ]
+    },
+    "questm3-open#25": {
+      "en": "Just the curved side, 2πrh — a pipe has no closed ends.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm3-open.js:77:20"
+      ]
+    },
+    "questm3-open#26": {
+      "en": "0 closed ends → SA = 2πrh",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:78:23"
+      ]
+    },
+    "questm3-open#27": {
+      "en": "A rectangular fish tank is open at the top (no lid). How many faces make up the glass surface?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm3-open.js:82:5"
+      ]
+    },
+    "questm3-open#28": {
+      "en": "5 faces",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm3-open.js:83:5"
+      ]
+    },
+    "questm3-open#29": {
+      "en": "6 faces",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm3-open.js:83:17"
+      ]
+    },
+    "questm3-open#30": {
+      "en": "4 faces",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm3-open.js:83:28"
+      ]
+    },
+    "questm3-open#31": {
+      "en": "5 faces and a circle",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm3-open.js:83:39"
+      ]
+    },
+    "questm3-open#32": {
+      "en": "A closed box has 6 faces. Remove the lid and one face is gone.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm3-open.js:84:13"
+      ]
+    },
+    "questm3-open#33": {
+      "en": "5 — the base and the 4 sides; the top (lid) is left out.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm3-open.js:85:20"
+      ]
+    },
+    "questm3-open#34": {
+      "en": "6 faces − 1 missing lid = 5 faces.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm3-open.js:86:23"
+      ]
+    },
+    "questm4-composite#1": {
+      "en": "cone",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm4-composite.js:14:31",
+        "questm4-composite.js:25:31",
+        "questm4-composite.js:25:40"
+      ],
+      "data": true
+    },
+    "questm4-composite#2": {
+      "en": "hemisphere",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questm4-composite.js:25:49"
+      ]
+    },
+    "questm4-composite#3": {
+      "en": "For the <b>total surface area</b>, do you include the dashed circle where the ${topName} sits on the cylinder?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm4-composite.js:28:15"
+      ]
+    },
+    "questm4-composite#4": {
+      "en": "That circle is sealed inside the solid — no one could paint it. Joined faces are left out.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm4-composite.js:31:13"
+      ]
+    },
+    "questm4-composite#5": {
+      "en": "No — the joining face is hidden inside, so it is not part of the outer surface.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm4-composite.js:32:20"
+      ]
+    },
+    "questm4-composite#6": {
+      "en": "Two solids joined → add the outer surfaces, omit the shared (hidden) face.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:33:23"
+      ]
+    },
+    "questm4-composite#7": {
+      "en": "What is the <b>total volume</b> of this silo (a cylinder with a cone on top)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm4-composite.js:39:5"
+      ]
+    },
+    "questm4-composite#8": {
+      "en": "πr²h + ⅓πr²H",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm4-composite.js:40:5"
+      ]
+    },
+    "questm4-composite#9": {
+      "en": "πr²h + πr²H",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:41:6"
+      ]
+    },
+    "questm4-composite#10": {
+      "en": "⅓πr²h + ⅓πr²H",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:41:21"
+      ]
+    },
+    "questm4-composite#11": {
+      "en": "πr²h − ⅓πr²H",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:41:38"
+      ]
+    },
+    "questm4-composite#12": {
+      "en": "Add the two parts: cylinder (πr²h) plus cone (⅓πr²H). h is the cylinder height, H the cone height.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm4-composite.js:43:13"
+      ]
+    },
+    "questm4-composite#13": {
+      "en": "Add the parts: cylinder πr²h + cone ⅓πr²H.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm4-composite.js:44:20"
+      ]
+    },
+    "questm4-composite#14": {
+      "en": "cylinder = πr²h",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:46:14"
+      ]
+    },
+    "questm4-composite#15": {
+      "en": "cone = ⅓πr²H",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:46:40"
+      ]
+    },
+    "questm4-composite#16": {
+      "en": "total = πr²h + ⅓πr²H",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:46:63"
+      ]
+    },
+    "questm4-composite#17": {
+      "en": "What is the <b>total volume</b> of this tank (a cylinder with a hemisphere on top)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm4-composite.js:51:5"
+      ]
+    },
+    "questm4-composite#18": {
+      "en": "πr²h + ⅔πr³",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm4-composite.js:52:5"
+      ]
+    },
+    "questm4-composite#19": {
+      "en": "πr²h + 4/3·πr³",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:53:6"
+      ]
+    },
+    "questm4-composite#20": {
+      "en": "πr²h + ⅓πr³",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:53:24"
+      ]
+    },
+    "questm4-composite#21": {
+      "en": "πr²h + 2πr³",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:53:39"
+      ]
+    },
+    "questm4-composite#22": {
+      "en": "A hemisphere is HALF a sphere, so ½ × 4/3·πr³ = ⅔πr³. Add it to the cylinder πr²h.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm4-composite.js:55:13"
+      ]
+    },
+    "questm4-composite#23": {
+      "en": "Cylinder πr²h + hemisphere ⅔πr³.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm4-composite.js:56:20"
+      ]
+    },
+    "questm4-composite#24": {
+      "en": "hemisphere = ½ × 4/3·πr³ = ⅔πr³",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:58:14"
+      ]
+    },
+    "questm4-composite#25": {
+      "en": "total = πr²h + ⅔πr³",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:58:56"
+      ]
+    },
+    "questm4-composite#26": {
+      "en": "Which surfaces add up to the <b>total surface area</b> of this silo (closed flat bottom, cone on top)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm4-composite.js:63:5"
+      ]
+    },
+    "questm4-composite#27": {
+      "en": "bottom circle + cylinder's curved side + cone's slanted surface",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm4-composite.js:64:5"
+      ]
+    },
+    "questm4-composite#28": {
+      "en": "bottom circle + cylinder's curved side + cone's slanted surface + the join circle",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:65:6"
+      ]
+    },
+    "questm4-composite#29": {
+      "en": "two circles + cylinder's curved side + cone's slanted surface",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:66:6"
+      ]
+    },
+    "questm4-composite#30": {
+      "en": "cylinder's curved side + cone's slanted surface only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm4-composite.js:67:6"
+      ]
+    },
+    "questm4-composite#31": {
+      "en": "Count every OUTSIDE face: the base, the wrapping cylinder wall, the cone's slope. The circle where they join is hidden.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm4-composite.js:69:13"
+      ]
+    },
+    "questm4-composite#32": {
+      "en": "Base circle + cylinder side + cone slant. The cylinder's top is covered by the cone, so it is left out.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm4-composite.js:70:20"
+      ]
+    },
+    "questm4-composite#33": {
+      "en": "outer faces only: πr² (base) + 2πrh (cylinder side) + πr·(slant) (cone)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:71:23"
+      ]
+    },
+    "questm4-composite#34": {
+      "en": "To find the volume of a composite solid, do you <b>add</b> the volumes of its parts?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm4-composite.js:76:13"
+      ]
+    },
+    "questm4-composite#35": {
+      "en": "Volume is just how much space is filled, so the parts simply add up — nothing is hidden for volume.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm4-composite.js:79:11"
+      ]
+    },
+    "questm4-composite#36": {
+      "en": "Yes — total volume = sum of the parts' volumes.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm4-composite.js:80:18"
+      ]
+    },
+    "questm4-composite#37": {
+      "en": "V(total) = V(part 1) + V(part 2)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm4-composite.js:81:21"
+      ]
+    },
+    "questm5-mixed#1": {
+      "en": "none",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:27:96",
+        "questm5-mixed.js:75:24",
+        "questm5-mixed.js:79:18"
+      ],
+      "data": true
+    },
+    "questm5-mixed#2": {
+      "en": "Name this solid.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm5-mixed.js:44:29"
+      ]
+    },
+    "questm5-mixed#3": {
+      "en": "Flat faces only → prism or pyramid. A curved face → cylinder, cone, sphere or hemisphere.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm5-mixed.js:47:15"
+      ]
+    },
+    "questm5-mixed#4": {
+      "en": "A ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm5-mixed.js:48:22"
+      ]
+    },
+    "questm5-mixed#5": {
+      "en": "Pick the <b>volume</b> formula for this ${s.name}.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm5-mixed.js:55:29"
+      ]
+    },
+    "questm5-mixed#6": {
+      "en": "Prisms/cylinder: base × height. Cone/pyramid: ⅓ of that. Sphere 4/3·πr³, hemisphere half of it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm5-mixed.js:58:15"
+      ]
+    },
+    "questm5-mixed#7": {
+      "en": "V = ${s.vol}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm5-mixed.js:59:22"
+      ]
+    },
+    "questm5-mixed#8": {
+      "en": "V = ${s.vol}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:59:55"
+      ]
+    },
+    "questm5-mixed#9": {
+      "en": "Pick the <b>total surface area</b> formula for this closed ${s.name}.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm5-mixed.js:66:28"
+      ]
+    },
+    "questm5-mixed#10": {
+      "en": "Add every outside face. Curved sides unroll into rectangles; round ends are circles.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm5-mixed.js:69:15"
+      ]
+    },
+    "questm5-mixed#11": {
+      "en": "SA = ${s.sa}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm5-mixed.js:70:22"
+      ]
+    },
+    "questm5-mixed#12": {
+      "en": "SA = ${s.sa}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:70:55"
+      ]
+    },
+    "questm5-mixed#13": {
+      "en": "top",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:75:32"
+      ]
+    },
+    "questm5-mixed#14": {
+      "en": "both",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:75:39"
+      ]
+    },
+    "questm5-mixed#15": {
+      "en": "Read the diagram — which surface-area formula fits this cylinder?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm5-mixed.js:82:31"
+      ]
+    },
+    "questm5-mixed#16": {
+      "en": "Curved side 2πrh always; add πr² for each CLOSED end.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm5-mixed.js:85:15"
+      ]
+    },
+    "questm5-mixed#17": {
+      "en": "${CYL_SA_LABEL[open]} → SA = ${correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:87:25"
+      ]
+    },
+    "questm5-mixed#18": {
+      "en": "Every dimension of a solid is multiplied by ${k}. Its <b>volume</b> becomes how many times as big?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm5-mixed.js:95:7"
+      ]
+    },
+    "questm5-mixed#19": {
+      "en": "Volume uses three lengths, so it scales by k × k × k = k³.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm5-mixed.js:97:15"
+      ]
+    },
+    "questm5-mixed#20": {
+      "en": "×${ans} — volume scales by k³ = ${k}³ = ${ans}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm5-mixed.js:98:22"
+      ]
+    },
+    "questm5-mixed#21": {
+      "en": "k³ = ${k}³ = ${ans}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:99:25"
+      ]
+    },
+    "questm5-mixed#22": {
+      "en": "Every dimension of a solid is multiplied by ${k}. Its <b>surface area</b> becomes how many times as big?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm5-mixed.js:107:7"
+      ]
+    },
+    "questm5-mixed#23": {
+      "en": "Area uses two lengths, so it scales by k × k = k².",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm5-mixed.js:109:15"
+      ]
+    },
+    "questm5-mixed#24": {
+      "en": "×${ans} — surface area scales by k² = ${k}² = ${ans}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm5-mixed.js:110:22"
+      ]
+    },
+    "questm5-mixed#25": {
+      "en": "k² = ${k}² = ${ans}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm5-mixed.js:111:25"
+      ]
+    },
+    "questm6-height#1": {
+      "en": "Calculate the <b>perpendicular height H</b> of this cone.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm6-height.js:100:15"
+      ]
+    },
+    "questm6-height#2": {
+      "en": "Build the rearranged equation for H². Tap a piece to drop it into the next box.",
+      "kind": "string",
+      "slots": [
+        "heightStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:103:20"
+      ]
+    },
+    "questm6-height#3": {
+      "en": "The slant is the hypotenuse, so it goes first and stands alone.",
+      "kind": "string",
+      "slots": [
+        "heightStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:106:11"
+      ]
+    },
+    "questm6-height#4": {
+      "en": "H² = ?",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:107:18",
+        "questm6-height.js:170:18"
+      ]
+    },
+    "questm6-height#5": {
+      "en": "Square the slant, square r, then subtract.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:108:11"
+      ]
+    },
+    "questm6-height#6": {
+      "en": "H = ?",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:109:18",
+        "questm6-height.js:172:18"
+      ]
+    },
+    "questm6-height#7": {
+      "en": "Take the square root.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:110:11",
+        "questm6-height.js:139:11",
+        "questm6-height.js:173:11"
+      ]
+    },
+    "questm6-height#8": {
+      "en": "r, H and the slant h make a right-angled triangle with the slant as the hypotenuse: h² = H² + r². So H = √(h² − r²).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm6-height.js:113:13"
+      ]
+    },
+    "questm6-height#9": {
+      "en": "H = √(${t.slant}² − ${t.r}²) = √${sq(t.slant) - sq(t.r)} = ${t.H}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm6-height.js:114:20"
+      ]
+    },
+    "questm6-height#10": {
+      "en": "h² = H² + r²  →  H² = h² − r²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:116:14"
+      ]
+    },
+    "questm6-height#11": {
+      "en": "the slant is the hypotenuse",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questm6-height.js:116:50"
+      ]
+    },
+    "questm6-height#12": {
+      "en": "H² = ${t.slant}² − ${t.r}² = ${sq(t.slant)} − ${sq(t.r)} = ${sq(t.slant) - sq(t.r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:117:14"
+      ]
+    },
+    "questm6-height#13": {
+      "en": "H = √${sq(t.slant) - sq(t.r)} = ${t.H}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:118:14"
+      ]
+    },
+    "questm6-height#14": {
+      "en": "Calculate the <b>slant height h</b> of this cone.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm6-height.js:129:15"
+      ]
+    },
+    "questm6-height#15": {
+      "en": "Build the Pythagoras equation for h². Tap a piece to drop it into the next box.",
+      "kind": "string",
+      "slots": [
+        "heightStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:132:20"
+      ]
+    },
+    "questm6-height#16": {
+      "en": "Addition commutes — H² and r² can go in either box.",
+      "kind": "string",
+      "slots": [
+        "heightStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:135:11"
+      ]
+    },
+    "questm6-height#17": {
+      "en": "h² = ?",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:136:18"
+      ]
+    },
+    "questm6-height#18": {
+      "en": "Square H, square r, then add.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:137:11"
+      ]
+    },
+    "questm6-height#19": {
+      "en": "h = ?",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:138:18"
+      ]
+    },
+    "questm6-height#20": {
+      "en": "The slant is the hypotenuse, so it sits alone: h² = H² + r², giving h = √(H² + r²).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm6-height.js:142:13"
+      ]
+    },
+    "questm6-height#21": {
+      "en": "h = √(${t.H}² + ${t.r}²) = √${sq(t.H) + sq(t.r)} = ${t.slant}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm6-height.js:143:20"
+      ]
+    },
+    "questm6-height#22": {
+      "en": "h² = H² + r²",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:145:14",
+        "questm6-height.js:189:5"
+      ]
+    },
+    "questm6-height#23": {
+      "en": "Pythagoras",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questm6-height.js:145:33"
+      ]
+    },
+    "questm6-height#24": {
+      "en": "h² = ${t.H}² + ${t.r}² = ${sq(t.H)} + ${sq(t.r)} = ${sq(t.H) + sq(t.r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:146:14"
+      ]
+    },
+    "questm6-height#25": {
+      "en": "h = √${sq(t.H) + sq(t.r)} = ${t.slant}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:147:14"
+      ]
+    },
+    "questm6-height#26": {
+      "en": "Calculate the <b>perpendicular height H</b> of this square-based pyramid.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm6-height.js:161:15"
+      ]
+    },
+    "questm6-height#27": {
+      "en": "First: half the base.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:164:18"
+      ]
+    },
+    "questm6-height#28": {
+      "en": "Divide the full base ℓ by 2.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:165:11"
+      ]
+    },
+    "questm6-height#29": {
+      "en": "Build the equation for H², using HALF the base you just found. Tap a piece to drop it into the next box.",
+      "kind": "string",
+      "slots": [
+        "heightStep.prompt"
+      ],
+      "where": [
+        "questm6-height.js:166:20"
+      ]
+    },
+    "questm6-height#30": {
+      "en": "The slant is the hypotenuse. The bottom leg is HALF the base — the whole base is on the pad to tempt you.",
+      "kind": "string",
+      "slots": [
+        "heightStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:169:11"
+      ]
+    },
+    "questm6-height#31": {
+      "en": "Square the slant, square half the base, then subtract.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questm6-height.js:171:11"
+      ]
+    },
+    "questm6-height#32": {
+      "en": "The slant h, the height H and HALF the base (ℓ/2) form a right triangle: h² = H² + (ℓ/2)². Use HALF the base, not the whole side!",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm6-height.js:176:13"
+      ]
+    },
+    "questm6-height#33": {
+      "en": "½ℓ = ${t.half}, so H = √(${t.slant}² − ${t.half}²) = √${sq(t.slant) - sq(t.half)} = ${t.H}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm6-height.js:177:20"
+      ]
+    },
+    "questm6-height#34": {
+      "en": "half the base: ℓ/2 = ${t.s} ÷ 2 = ${t.half}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:179:14"
+      ]
+    },
+    "questm6-height#35": {
+      "en": "the bottom leg is HALF the base",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questm6-height.js:179:64"
+      ]
+    },
+    "questm6-height#36": {
+      "en": "h² = H² + (ℓ/2)²  →  H² = ${t.slant}² − ${t.half}² = ${sq(t.slant) - sq(t.half)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:180:14"
+      ]
+    },
+    "questm6-height#37": {
+      "en": "H = √${sq(t.slant) - sq(t.half)} = ${t.H}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:181:14"
+      ]
+    },
+    "questm6-height#38": {
+      "en": "For a cone, how are the radius r, perpendicular height H and slant height h related?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm6-height.js:188:5"
+      ]
+    },
+    "questm6-height#39": {
+      "en": "H² = h² + r²",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm6-height.js:189:22"
+      ]
+    },
+    "questm6-height#40": {
+      "en": "h² = H² − r²",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm6-height.js:189:38"
+      ]
+    },
+    "questm6-height#41": {
+      "en": "h = H + r",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm6-height.js:189:54"
+      ]
+    },
+    "questm6-height#42": {
+      "en": "The slant h is the longest side (opposite the right angle), so it sits alone as the c in a² + b² = c².",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm6-height.js:191:13"
+      ]
+    },
+    "questm6-height#43": {
+      "en": "h² = H² + r² — the slant is the hypotenuse.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm6-height.js:192:20"
+      ]
+    },
+    "questm6-height#44": {
+      "en": "legs r and H, hypotenuse h → h² = H² + r²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:193:23"
+      ]
+    },
+    "questm6-height#45": {
+      "en": "To find a square pyramid's perpendicular height from the slant height of a face, what is the <b>bottom</b> of the right-angled triangle?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questm6-height.js:197:5"
+      ]
+    },
+    "questm6-height#46": {
+      "en": "half the base side (½ℓ)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questm6-height.js:198:5"
+      ]
+    },
+    "questm6-height#47": {
+      "en": "the full base side (ℓ)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm6-height.js:198:33"
+      ]
+    },
+    "questm6-height#48": {
+      "en": "the diagonal of the base",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm6-height.js:198:59"
+      ]
+    },
+    "questm6-height#49": {
+      "en": "the slant height (h)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questm6-height.js:198:87"
+      ]
+    },
+    "questm6-height#50": {
+      "en": "The slant runs to the MIDDLE of a base edge, so the bottom leg only reaches halfway across — ½ℓ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm6-height.js:200:13"
+      ]
+    },
+    "questm6-height#51": {
+      "en": "Half the base side, ½ℓ — the slant meets the base at the midpoint of an edge.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm6-height.js:201:20"
+      ]
+    },
+    "questm6-height#52": {
+      "en": "h² = H² + (ℓ/2)²  →  bottom leg is ½ℓ, not the whole ℓ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:202:23"
+      ]
+    },
+    "questm6-height#53": {
+      "en": "In the right-angled triangle inside this solid, is the <b>slant height</b> the hypotenuse (the longest side)?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questm6-height.js:207:13"
+      ]
+    },
+    "questm6-height#54": {
+      "en": "The right angle sits between the radius and the perpendicular height, so the side opposite it is the slant.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questm6-height.js:210:11"
+      ]
+    },
+    "questm6-height#55": {
+      "en": "Yes — the slant is opposite the right angle, so it is the hypotenuse and the longest of the three.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questm6-height.js:211:18"
+      ]
+    },
+    "questm6-height#56": {
+      "en": "right angle between r and H → slant is the hypotenuse, so slant > H and slant > r",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questm6-height.js:212:21"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1660
+}

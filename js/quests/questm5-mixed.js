@@ -10,6 +10,7 @@ import {
   figCube, figPrism, figTriPrism, figCylinder, figCone, figPyramid, figSphere, figHemisphere,
   pick, shuffled,
 } from "../measlib.js";
+import { L } from "../lang.js";
 
 const ACC = "#65a30d";
 /* Label-safe figure tweaks — same as quest m1: a few proportions land a
@@ -24,7 +25,7 @@ const figTriPrismSafe = a => {
   return g;
 };
 const FIG = {
-  cube: figCube, prism: figPrismSafe, triPrism: figTriPrismSafe, cylinder: a => figCylinder(a, "none"),
+  cube: figCube, prism: figPrismSafe, triPrism: figTriPrismSafe, cylinder: a => figCylinder(a, L("none", "none")),
   cone: figCone, pyramid: figPyramid, sphere: figSphere, hemisphere: figHemisphere,
 };
 /* for SURFACE-AREA questions the slant height h is part of the cone/pyramid
@@ -41,50 +42,50 @@ const SKILLS = {
   mixName: () => {
     const key = pick(Object.keys(SOLID));
     const correct = SOLID[key].name;
-    return mc("measNaming", "Name this solid.", correct,
+    return mc("measNaming", L("Name this solid.", "Benoem hierdie liggaam."), correct,
       shuffled(NAMES.filter(n => n !== correct)).slice(0, 3),
       { graph: FIG[key](ACC),
-        hint: "Flat faces only → prism or pyramid. A curved face → cylinder, cone, sphere or hemisphere.",
-        answerLabel: `A ${correct}.`, solution: [{ s: correct }] });
+        hint: L("Flat faces only → prism or pyramid. A curved face → cylinder, cone, sphere or hemisphere.", "Net plat vlakke → prisma of piramide. 'n Geboë vlak → silinder, keël, sfeer of halfsfeer."),
+        answerLabel: L(`A ${correct}.`, `'n ${correct}.`), solution: [{ s: correct }] });
   },
 
   /* volume formula, any solid */
   mixVolume: () => {
     const key = pick(Object.keys(SOLID));
     const s = SOLID[key];
-    return mc("volFormula", `Pick the <b>volume</b> formula for this ${s.name}.`,
+    return mc("volFormula", L(`Pick the <b>volume</b> formula for this ${s.name}.`, `Kies die formule vir die <b>volume</b> van hierdie ${s.name}.`),
       s.vol, wrongs(VOL_WRONG[key], s.vol),
       { graph: FIG[key](ACC), layout: "grid2",
-        hint: "Prisms/cylinder: base × height. Cone/pyramid: ⅓ of that. Sphere 4/3·πr³, hemisphere half of it.",
-        answerLabel: `V = ${s.vol}.`, solution: [{ s: `V = ${s.vol}`, r: s.name }] });
+        hint: L("Prisms/cylinder: base × height. Cone/pyramid: ⅓ of that. Sphere 4/3·πr³, hemisphere half of it.", "Prismas/silinder: basis × hoogte. Keël/piramide: ⅓ daarvan. Sfeer 4/3·πr³, halfsfeer die helfte daarvan."),
+        answerLabel: L(`V = ${s.vol}.`, `V = ${s.vol}.`), solution: [{ s: L(`V = ${s.vol}`, `V = ${s.vol}`), r: s.name }] });
   },
 
   /* surface-area formula, any solid */
   mixSA: () => {
     const key = pick(["cube", "prism", "triPrism", "cylinder", "cone", "pyramid", "sphere", "hemisphere"]);
     const s = SOLID[key];
-    return mc("saFormula", `Pick the <b>total surface area</b> formula for this closed ${s.name}.`,
+    return mc("saFormula", L(`Pick the <b>total surface area</b> formula for this closed ${s.name}.`, `Kies die formule vir die <b>totale buite-oppervlakte</b> van hierdie geslote ${s.name}.`),
       s.sa, wrongs(SA_WRONG[key], s.sa),
       { graph: FIG_SA[key](ACC), layout: "grid2",
-        hint: "Add every outside face. Curved sides unroll into rectangles; round ends are circles.",
-        answerLabel: `SA = ${s.sa}.`, solution: [{ s: `SA = ${s.sa}`, r: s.name }] });
+        hint: L("Add every outside face. Curved sides unroll into rectangles; round ends are circles.", "Tel elke buitenste vlak op. Geboë sye rol oop in reghoeke; ronde ente is sirkels."),
+        answerLabel: L(`SA = ${s.sa}.`, `SA = ${s.sa}.`), solution: [{ s: L(`SA = ${s.sa}`, `SA = ${s.sa}`), r: s.name }] });
   },
 
   /* open vs closed cylinder */
   mixOpen: () => {
-    const open = pick(["none", "top", "both"]);
+    const open = pick([L("none", "none"), L("top", "top"), L("both", "both")]);
     const { correct, wrongs: w } = cylSaOptions(open);
     // open cylinders must stay wide enough for the engine's "r" label (see m3)
     const g = figCylinder(ACC, open);
-    if (open !== "none" && !((g.r === 4 && g.h === 7) || (g.r === 5 && g.h <= 9))) {
+    if (open !== L("none", "none") && !((g.r === 4 && g.h === 7) || (g.r === 5 && g.h <= 9))) {
       [g.r, g.h] = pick([[4, 7], [5, 7], [5, 8], [5, 9], [6, 9], [6, 10], [6, 11]]);
     }
-    return mc("openSurfaces", "Read the diagram — which surface-area formula fits this cylinder?",
+    return mc("openSurfaces", L("Read the diagram — which surface-area formula fits this cylinder?", "Lees die diagram: watter formule vir buite-oppervlakte pas by hierdie silinder?"),
       correct, w,
       { graph: g, layout: "grid2",
-        hint: "Curved side 2πrh always; add πr² for each CLOSED end.",
+        hint: L("Curved side 2πrh always; add πr² for each CLOSED end.", "Geboë sy 2πrh altyd; tel πr² by vir elke GESLOTE ent."),
         answerLabel: `${CYL_SA_LABEL[open]} → ${correct}.`,
-        solution: [{ s: `${CYL_SA_LABEL[open]} → SA = ${correct}` }] });
+        solution: [{ s: L(`${CYL_SA_LABEL[open]} → SA = ${correct}`, `${CYL_SA_LABEL[open]} → SA = ${correct}`) }] });
   },
 
   /* scaling effect on volume (×k³) */
@@ -92,11 +93,11 @@ const SKILLS = {
     const k = pick([2, 3]);
     const ans = k ** 3;
     return mc("scaleFactor",
-      `Every dimension of a solid is multiplied by ${k}. Its <b>volume</b> becomes how many times as big?`,
+      L(`Every dimension of a solid is multiplied by ${k}. Its <b>volume</b> becomes how many times as big?`, `Elke afmeting van 'n liggaam word met ${k} vermenigvuldig. Hoeveel keer so groot word sy <b>volume</b>?`),
       `×${ans}`, [`×${k}`, `×${k * k}`, `×${k * k + k}`],
-      { hint: "Volume uses three lengths, so it scales by k × k × k = k³.",
-        answerLabel: `×${ans} — volume scales by k³ = ${k}³ = ${ans}.`,
-        solution: [{ s: `k³ = ${k}³ = ${ans}` }] });
+      { hint: L("Volume uses three lengths, so it scales by k × k × k = k³.", "Volume gebruik drie lengtes, so dit skaleer met k × k × k = k³."),
+        answerLabel: L(`×${ans} — volume scales by k³ = ${k}³ = ${ans}.`, `×${ans}: volume skaleer met k³ = ${k}³ = ${ans}.`),
+        solution: [{ s: L(`k³ = ${k}³ = ${ans}`, `k³ = ${k}³ = ${ans}`) }] });
   },
 
   /* scaling effect on surface area (×k²) */
@@ -104,11 +105,11 @@ const SKILLS = {
     const k = pick([2, 3]);
     const ans = k ** 2;
     return mc("scaleFactor",
-      `Every dimension of a solid is multiplied by ${k}. Its <b>surface area</b> becomes how many times as big?`,
+      L(`Every dimension of a solid is multiplied by ${k}. Its <b>surface area</b> becomes how many times as big?`, `Elke afmeting van 'n liggaam word met ${k} vermenigvuldig. Hoeveel keer so groot word sy <b>buite-oppervlakte</b>?`),
       `×${ans}`, [`×${k}`, `×${k ** 3}`, `×${k * k + 1}`],
-      { hint: "Area uses two lengths, so it scales by k × k = k².",
-        answerLabel: `×${ans} — surface area scales by k² = ${k}² = ${ans}.`,
-        solution: [{ s: `k² = ${k}² = ${ans}` }] });
+      { hint: L("Area uses two lengths, so it scales by k × k = k².", "Oppervlakte gebruik twee lengtes, so dit skaleer met k × k = k²."),
+        answerLabel: L(`×${ans} — surface area scales by k² = ${k}² = ${ans}.`, `×${ans}: buite-oppervlakte skaleer met k² = ${k}² = ${ans}.`),
+        solution: [{ s: L(`k² = ${k}² = ${ans}`, `k² = ${k}² = ${ans}`) }] });
   },
 };
 
