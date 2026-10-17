@@ -98,8 +98,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T61 | exam: gtrig-siblings-reduction | ~2 108 words | verify-exam.html
 - ☑ 2026-10-17 T62 | exam: gtrig-siblings-special-angles | ~2 444 words | verify-exam.html
 - ☑ 2026-10-17 T63 | exam: gtrig-siblings-special-sums | ~2 521 words | verify-exam.html
-- ⏳ 2026-10-17 22:33 T64 | exam: gtrig-siblings-super-special-sums, trig-general-solutions (2 files) | ~3 848 words | verify-exam.html
-- ☐ T65 | exam: trig-mixed-problems, trig-reduction-and-ratios (2 files) | ~1 577 words | verify-exam.html
+- ☑ 2026-10-17 T64 | exam: gtrig-siblings-super-special-sums, trig-general-solutions (2 files) | ~3 848 words | verify-exam.html
+- ⏳ 2026-10-17 22:39 T65 | exam: trig-mixed-problems, trig-reduction-and-ratios (2 files) | ~1 577 words | verify-exam.html
 
 ### Euclidean Geometry (exam-only)
 - ☑ 2026-10-17 T66 | concepts: the `euclid` block: NONE EXISTS (exam-only chapter, no concept cards), nothing to translate

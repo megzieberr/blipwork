@@ -1,0 +1,1273 @@
+{
+  "unit": "T64",
+  "generated": "2026-10-17T20:33:43.931Z",
+  "files": [
+    "js/exam/gtrig-siblings-super-special-sums.js",
+    "js/exam/trig-general-solutions.js"
+  ],
+  "items": {
+    "gtrig-siblings-super-special-sums#1": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;cos 57° = t.<br><br>Draw a right-angled triangle in the first quadrant to represent this, and write down the length of the third side in terms of t.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:136:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#2": {
+      "en": "Stand the t on a 1 — the flamingo. Once cos 57° reads as t over 1, you know which side is which, and (pyth) does the rest.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:139:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#3": {
+      "en": "① <b>Stand the t on a 1</b> — the <b>flamingo</b>: &nbsp;cos 57° = t/1 = A/H. &nbsp;So the side next to 57° is t and the hypotenuse is 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:142:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#4": {
+      "en": "② &nbsp;y² = 1² − t² &nbsp;(pyth) &nbsp;⟹&nbsp; √y² = √(1 − t²) &nbsp;⟹&nbsp; y = ±√(1 − t²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:143:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#5": {
+      "en": "57° is acute, so the triangle sits in the first quadrant where every side is positive &nbsp;∴&nbsp; the side opposite 57° is √(1 − t²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:144:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#6": {
+      "en": "A bare number cannot be read as a ratio, so the first move is to give it a bottom. She calls it the flamingo: stand the t on a 1. cos 57° = t becomes cos 57° = t over 1, and now it reads as adjacent over hypotenuse — so the side next to 57° is t and the hypotenuse is 1. Draw that triangle in the first quadrant with the 57° at the origin, and the only side left is the opposite one, which Pythagoras hands you: y² = 1² − t², so y = √(1 − t²). Because the triangle is in the first quadrant every side is positive, so there is no sign to argue about. Fill that third side in on your sketch — from here on, every part of the question is read off this one picture.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:147:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#7": {
+      "en": "Hence write &nbsp;sin 57°&nbsp; in terms of t.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:155:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#8": {
+      "en": "Everything you need is on the sketch already. sin is opposite over hypotenuse — which two sides is that?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:158:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#9": {
+      "en": "sin 57° = O/H = √(1 − t²)/1 = √(1 − t²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:161:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#10": {
+      "en": "Nothing new to work out — the sketch already carries all three sides. sin 57° is opposite over hypotenuse, and on this triangle that is √(1 − t²) over 1, which is just √(1 − t²). That is the whole point of drawing the triangle first: one sketch answers every part of the question. It also explains why she calls these super special sums rather than something harder sounding. The maths is the same maths as an ordinary special sum — draw, Pythagoras, read off — the only difference is that the sides are letters instead of numbers, so nothing ever turns into a decimal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:164:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#11": {
+      "en": "Hence write &nbsp;sin 33°&nbsp; in terms of t.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:172:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#12": {
+      "en": "Add the two angles. 33° is the other corner of the very triangle you have just drawn.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:175:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#13": {
+      "en": "57° and 33° add to 90°, so this is a co-function: &nbsp;sin 33° = sin(90° − 57°)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:178:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#14": {
+      "en": "= cos 57° = t",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:179:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#15": {
+      "en": "REMEMBER: you can also read this one straight off the sketch. From the 33° corner the opposite side is t and the hypotenuse is 1, so sin 33° = t. Same answer, and a marker takes either route.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:181:15"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#16": {
+      "en": "57° and 33° add up to 90°, which means they are the two acute angles of the very triangle you have just drawn. So sin 33° is asking about the same picture from the other corner: what is opposite 33° is the side next to 57°, and the hypotenuse does not move. That is a co-function — sin 33° = sin(90° − 57°) = cos 57° — and cos 57° is what you were given, namely t. You could also read it straight off the sketch: from the 33° corner the opposite side is t and the hypotenuse is 1. Both routes give t, and a marker takes either one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:185:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#17": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;sin 41° = p.<br><br>Draw a right-angled triangle in the first quadrant to represent this, and write down the length of the third side in terms of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:215:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#18": {
+      "en": "Flamingo first, but watch which side the p lands on — sine is opposite over hypotenuse, not adjacent over hypotenuse.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:218:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#19": {
+      "en": "① <b>Stand the p on a 1</b> — the <b>flamingo</b>: &nbsp;sin 41° = p/1 = O/H. &nbsp;So the side <b>opposite</b> 41° is p and the hypotenuse is 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:221:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#20": {
+      "en": "② &nbsp;x² = 1² − p² &nbsp;(pyth) &nbsp;⟹&nbsp; √x² = √(1 − p²) &nbsp;⟹&nbsp; x = ±√(1 − p²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:222:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#21": {
+      "en": "The triangle is in the first quadrant, so every side is positive &nbsp;∴&nbsp; the side next to 41° is √(1 − p²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:223:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#22": {
+      "en": "Same flamingo, different side. sin 41° = p becomes p over 1, and sine is opposite over hypotenuse, so this time it is the side OPPOSITE 41° that is p, with the hypotenuse still 1. That is the one thing to be careful about with these: which side the letter lands on depends entirely on which ratio you were given. Then Pythagoras finds the side next to 41°: x² = 1² − p², so x = √(1 − p²). Notice it is 1 − p² again and not p² − 1. That happens whenever the letter sits on a short side and the 1 is the hypotenuse, because the hypotenuse is the biggest side, so you are always taking the smaller square away from the bigger one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:226:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#23": {
+      "en": "Hence write &nbsp;cos 401°&nbsp; in terms of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:234:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#24": {
+      "en": "401° is more than a full turn. Deal with that before anything else, then read the sketch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:237:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#25": {
+      "en": "401° is past a full turn, so <b>rotate</b> first — write the −360° above the angle: &nbsp;cos 401° = cos 41°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:240:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#26": {
+      "en": "cos 41° = A/H = √(1 − p²)/1 = √(1 − p²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:241:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#27": {
+      "en": "401° is more than a full turn, so the first job is a rotation: take 360° off and you are back at 41°, the very angle your triangle is built on. She writes the subtraction above the angle, once per 360°, so the counting stays visible. cos 41° is then adjacent over hypotenuse, which on this sketch is √(1 − p²) over 1, or simply √(1 − p²). Two habits are doing the work here. One is dealing with the rotation before anything else — an angle bigger than 360°, or smaller than −90°, gets fixed first. The other is never rushing at the answer before the triangle has been drawn, because once it is drawn a question like this takes one line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:244:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#28": {
+      "en": "Hence write &nbsp;tan 49°&nbsp; in terms of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:252:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#29": {
+      "en": "49° is the other corner of the same triangle. Relabel the picture from that corner — the hypotenuse does not move, but opposite and adjacent swap.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:255:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#30": {
+      "en": "41° and 49° add to 90°, so 49° is the <b>other acute angle of the same triangle</b> — and the two acute angles share the sides.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:258:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#31": {
+      "en": "Label it from the 49° corner: the side <b>opposite</b> 49° is √(1 − p²) and the side <b>next to</b> 49° is p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:259:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#32": {
+      "en": "tan 49° = O/A = √(1 − p²)/p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:260:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#33": {
+      "en": "49° is not a new angle at all — it is the other corner of the same triangle, because 41° and 49° add to 90°. Turn the picture round in your head and label it from the 49° corner: what was opposite 41° is now the side next to 49°, and what was next to 41° is now the side opposite 49°. The hypotenuse never moves. So from the 49° corner the opposite side is √(1 − p²) and the adjacent side is p, and tan is opposite over adjacent, giving √(1 − p²) over p. If you prefer the formal route, tan 49° is sin 49° over cos 49°, and each of those converts by a co-function to cos 41° and sin 41°. Same answer, more writing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:263:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#34": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;tan 38° = 1/m.<br><br>Draw a right-angled triangle in the first quadrant to represent this, and write down the length of the hypotenuse in terms of m.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:293:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#35": {
+      "en": "No flamingo needed here — 1 over m already reads as a ratio. Decide which side is 1 and which is m, then ask which side is missing before you write the (pyth) line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:296:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#36": {
+      "en": "① &nbsp;tan 38° = 1/m = O/A, &nbsp;so the side <b>opposite</b> 38° is 1 and the side <b>next to</b> it is m.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:299:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#37": {
+      "en": "② The missing side is the hypotenuse, so Pythagoras <b>adds</b>: &nbsp;h² = 1² + m² &nbsp;(pyth) &nbsp;⟹&nbsp; √h² = √(m² + 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:300:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#38": {
+      "en": "h = √(m² + 1) &nbsp;— always positive, because it is a length",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:301:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#39": {
+      "en": "WATCH OUT: this template ADDS. When the two legs are known and the hypotenuse is missing you add the squares; when the hypotenuse is known and a leg is missing you subtract. Ask which side is missing BEFORE you write the (pyth) line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:303:15"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#40": {
+      "en": "This one is given the other way up, and that is deliberate. tan 38° = 1 over m already looks like a ratio, so no flamingo is needed — the 1 is on top and the m is underneath. tan is opposite over adjacent, so the side opposite 38° is 1 and the side next to it is m. Now the missing side is the hypotenuse, and this time Pythagoras ADDS: h² = 1² + m², so h = √(m² + 1). That plus is the whole difference between this template and the last two. When the letter sits on a leg and the hypotenuse is the unknown, you add; when the hypotenuse is known and a leg is unknown, you subtract. Ask which side is missing before you write the Pythagoras line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:307:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#41": {
+      "en": "Hence write &nbsp;sin 38°&nbsp; in terms of m.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:315:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#42": {
+      "en": "Read it straight off the sketch — sin is opposite over hypotenuse.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:318:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#43": {
+      "en": "From the sketch: the side opposite 38° is 1 and the hypotenuse is √(m² + 1).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:321:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#44": {
+      "en": "sin 38° = O/H = 1/√(m² + 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:322:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#45": {
+      "en": "With the triangle drawn there is nothing left to think about. sin 38° is opposite over hypotenuse, and on this sketch the opposite side is 1 and the hypotenuse is √(m² + 1), so sin 38° is 1 over √(m² + 1). It is worth noticing that the answer is allowed to keep a surd underneath here — this is an in-terms-of answer, not a special-sums value, so nothing needs rationalising unless the question asks for it. If a later part of a paper does ask for a rationalised form, multiply top and bottom by √(m² + 1) and the surd moves upstairs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:325:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#46": {
+      "en": "Hence write &nbsp;cos 218°&nbsp; in terms of m.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:333:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#47": {
+      "en": "Write the split above 218° first and decide the sign. Only then go to the triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:336:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#48": {
+      "en": "218° = 180° + 38°, which lands in <b>T</b>, where only tan is positive — so cosine takes the minus: &nbsp;cos 218° = −cos 38°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:339:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#49": {
+      "en": "Now read cos 38° off the sketch: &nbsp;cos 38° = A/H = m/√(m² + 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:340:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#50": {
+      "en": "cos 218° = −m/√(m² + 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:341:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#51": {
+      "en": "Two jobs again, in the usual order. First reduce: 218° is 180° + 38°, which lands in T, where only tan is positive — so cosine picks up a minus and cos 218° = −cos 38°. Only then go to the sketch. cos 38° is adjacent over hypotenuse, which is m over √(m² + 1). Put the minus back and you have −m over √(m² + 1). The order matters more than it looks. If you read the sketch first, you are reading a picture of an acute angle to answer a question about an angle in the third quadrant, and the sign goes missing. Write the split above the angle, reduce, then read.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:344:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#52": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;cos 65° = 1/k.<br><br>Draw a right-angled triangle in the first quadrant to represent this, and write down the length of the third side in terms of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:375:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#53": {
+      "en": "Careful with this one: cos = 1 over k puts the letter on the HYPOTENUSE. That changes which way round the Pythagoras subtraction goes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:378:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#54": {
+      "en": "① &nbsp;cos 65° = 1/k = A/H, &nbsp;so the side <b>next to</b> 65° is 1 and the <b>hypotenuse</b> is k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:381:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#55": {
+      "en": "② The hypotenuse is the known side now, so Pythagoras <b>subtracts</b> the other way round: &nbsp;y² = k² − 1² &nbsp;(pyth) &nbsp;⟹&nbsp; √y² = √(k² − 1) &nbsp;⟹&nbsp; y = ±√(k² − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:382:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#56": {
+      "en": "First quadrant, so every side is positive &nbsp;∴&nbsp; the side opposite 65° is √(k² − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:383:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#57": {
+      "en": "WATCH OUT: √(k² − 1), NOT √(1 − k²). The hypotenuse is always the longest side, so the bigger square goes first. Getting this the wrong way round is the most common slip on the whole tile.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:385:15"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#58": {
+      "en": "This is her third template, and it is the one that catches people. cos 65° = 1 over k means adjacent over hypotenuse is 1 over k, so the side next to 65° is 1 and the HYPOTENUSE is k. That is the difference: here the letter sits on the hypotenuse, not on a leg. So Pythagoras takes the small square away from the big one in the other order: y² = k² − 1², giving y = √(k² − 1), not √(1 − k²). Getting that the wrong way round is the single most common mistake on this tile, and there is an easy check — the hypotenuse is always the longest side, so whatever sits under the square root has to be the bigger square minus the smaller one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:389:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#59": {
+      "en": "Hence write &nbsp;tan 65°&nbsp; in terms of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:397:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#60": {
+      "en": "Opposite over adjacent — and tidy the answer if a 1 ends up underneath.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:400:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#61": {
+      "en": "From the sketch: the side opposite 65° is √(k² − 1) and the side next to it is 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:403:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#62": {
+      "en": "tan 65° = O/A = √(k² − 1)/1 = √(k² − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:404:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#63": {
+      "en": "Read it straight off the sketch. tan 65° is opposite over adjacent, the opposite side is √(k² − 1) and the adjacent side is 1, so tan 65° is √(k² − 1) over 1 — and dividing by 1 changes nothing, so it is simply √(k² − 1). Answers that come out with a 1 underneath are worth tidying, because a marker wants the simplest form. This is also a good moment to sanity check the triangle: k is the hypotenuse, so k has to be bigger than 1, which means k² − 1 is positive and the square root is a real number. If your k had come out smaller than 1, the triangle could not exist.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:407:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#64": {
+      "en": "Hence write &nbsp;sin 245°&nbsp; in terms of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:415:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#65": {
+      "en": "Reduce 245° first, then read the sketch. The reduction's only job is the sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:418:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#66": {
+      "en": "245° = 180° + 65°, which lands in <b>T</b>, where only tan is positive — so sine takes the minus: &nbsp;sin 245° = −sin 65°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:421:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#67": {
+      "en": "Now read sin 65° off the sketch: &nbsp;sin 65° = O/H = √(k² − 1)/k",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:422:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#68": {
+      "en": "sin 245° = −√(k² − 1)/k",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:423:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#69": {
+      "en": "Reduce first, then read the sketch. 245° is 180° + 65°, which lands in T, where only tan is positive — so sine picks up a minus and sin 245° = −sin 65°. Now go to the picture: sin 65° is opposite over hypotenuse, which is √(k² − 1) over k. Put the minus back on and you have that whole thing negative. Notice how little of the work was actually about 245°. Every question on this tile ends up back at the same acute-angle triangle; the reduction is only there to decide which sign the answer wears. Draw the triangle once, carefully, and the rest of the question is a sign and a read-off.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:426:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#70": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;sin 47° = d.<br><br>Draw a right-angled triangle in the first quadrant to represent this, and write down the length of the third side in terms of d.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:457:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#71": {
+      "en": "Stand the d on a 1. Sine is opposite over hypotenuse, so decide which side the d belongs to before you draw anything.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:460:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#72": {
+      "en": "① <b>Stand the d on a 1</b> — the <b>flamingo</b>: &nbsp;sin 47° = d/1 = O/H. &nbsp;So the side opposite 47° is d and the hypotenuse is 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:463:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#73": {
+      "en": "② &nbsp;x² = 1² − d² &nbsp;(pyth) &nbsp;⟹&nbsp; √x² = √(1 − d²) &nbsp;⟹&nbsp; x = ±√(1 − d²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:464:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#74": {
+      "en": "First quadrant, so every side is positive &nbsp;∴&nbsp; the side next to 47° is √(1 − d²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:465:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#75": {
+      "en": "Flamingo again: sin 47° = d becomes d over 1, and sine is opposite over hypotenuse, so the side opposite 47° is d and the hypotenuse is 1. Pythagoras then gives the side next to 47°: x² = 1² − d², so x = √(1 − d²). Draw it, fill it in, and stop — every part that follows is read off this one picture. It really is worth taking the extra thirty seconds to draw it properly and label all three sides, because otherwise each later part sends you back to first principles. Her own instruction on the page is exactly that: re-draw with the third side filled in, then use the sketch to answer the questions.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:468:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#76": {
+      "en": "Hence write &nbsp;cos 227°&nbsp; in terms of d.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:476:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#77": {
+      "en": "Split 227° first and decide the sign, then read cos 47° off your triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:479:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#78": {
+      "en": "227° = 180° + 47°, which lands in <b>T</b>, where only tan is positive — so cosine takes the minus: &nbsp;cos 227° = −cos 47°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:482:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#79": {
+      "en": "cos 47° = A/H = √(1 − d²)/1 &nbsp;∴&nbsp; cos 227° = −√(1 − d²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:483:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#80": {
+      "en": "227° is 180° + 47°, which lands in T, where only tan is positive — so cosine turns negative and cos 227° = −cos 47°. Now read cos 47° off the sketch: adjacent over hypotenuse, which is √(1 − d²) over 1, or just √(1 − d²). Put the minus back and the answer is that whole root, negative. One small thing to watch: the minus belongs to the whole square root, not to what is inside it. Writing the root of d² − 1 instead would be a completely different number, and for most values of d it would not even be a real one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:486:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#81": {
+      "en": "Hence write &nbsp;sin²137°&nbsp; in terms of d.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:494:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#82": {
+      "en": "Do the angle before the square. Which quadrant is 90° + 47° in, and does sine survive there?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:497:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#83": {
+      "en": "137° = 90° + 47°, which lands in <b>S</b>, where sine is positive — and a 90° split converts sin to cos: &nbsp;sin 137° = cos 47°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:500:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#84": {
+      "en": "Read cos 47° off the sketch: &nbsp;cos 47° = A/H = √(1 − d²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:501:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#85": {
+      "en": "sin²137° = [√(1 − d²)]² = 1 − d²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:502:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#86": {
+      "en": "REMEMBER: reduce inside <b>block brackets</b> first, then square. And the square undoes the square root completely — if a √ survives your squaring, you squared only part of the expression.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:504:15"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#87": {
+      "en": "Do the angle first, then the square. 137° is 90° + 47°, which lands in S, where sine is positive — so sin 137° = sin(90° + 47°) = cos 47°, with no minus. From the sketch, cos 47° is √(1 − d²). Now square it, in block brackets: the square and the square root undo each other, so you are left with 1 − d². That is a satisfying answer because the surd disappears completely, which is a good sign you have done it right. If a square root survives a squaring, go back and check whether you squared the whole expression or only part of it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:508:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#88": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;cos 58° = k.<br><br>Draw a right-angled triangle in the first quadrant to represent this, and write down the length of the third side in terms of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:540:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#89": {
+      "en": "Same flamingo as always — stand the k on a 1 and use (pyth). Label all three sides carefully; you are about to read this picture backwards.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:543:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#90": {
+      "en": "① <b>Stand the k on a 1</b> — the <b>flamingo</b>: &nbsp;cos 58° = k/1 = A/H. &nbsp;So the side next to 58° is k and the hypotenuse is 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:546:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#91": {
+      "en": "② &nbsp;y² = 1² − k² &nbsp;(pyth) &nbsp;⟹&nbsp; √y² = √(1 − k²) &nbsp;⟹&nbsp; y = ±√(1 − k²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:547:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#92": {
+      "en": "First quadrant, so every side is positive &nbsp;∴&nbsp; the side opposite 58° is √(1 − k²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:548:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#93": {
+      "en": "Nothing new here — cos 58° = k stands on a 1, so the side next to 58° is k, the hypotenuse is 1, and Pythagoras gives the opposite side as √(1 − k²). Draw it and label all three sides. What makes this card different is what comes next: instead of asking you to write a ratio in terms of k, it is going to hand you an expression in k and ask WHICH ratio it is. Same triangle, read backwards. So take extra care with the labelling here, because the picture is the dictionary the rest of the question gets translated with.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:551:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#94": {
+      "en": "Hence write &nbsp;√(1 − k²)&nbsp; as a single trigonometric ratio of 58°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:559:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#95": {
+      "en": "This one is asked backwards. Find √(1 − k²) on your sketch — which side is it? Then SOHCAHTOA names the ratio.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:562:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#96": {
+      "en": "Find the expression on the sketch: &nbsp;√(1 − k²) is the side <b>opposite</b> 58°, and the hypotenuse is 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:565:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#97": {
+      "en": "O/H = √(1 − k²)/1 &nbsp;∴&nbsp; √(1 − k²) = sin 58°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:566:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#98": {
+      "en": "Read the sketch the other way round. Instead of asking what sin 58° is, the question shows you √(1 − k²) and asks which ratio that is. Look at the triangle: √(1 − k²) is the side opposite 58°, and the hypotenuse is 1. Opposite over hypotenuse is sine, and dividing by 1 changes nothing, so √(1 − k²) is exactly sin 58°. Questions asked backwards feel harder than they are, and the cure is always the same — draw the picture first, then hunt for the expression on it. Once you can see which sides the expression is built from, SOHCAHTOA names the ratio for you.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:569:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#99": {
+      "en": "Hence write &nbsp;√(1 − k²)/k&nbsp; as a single trigonometric ratio of 58°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:577:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#100": {
+      "en": "Find both parts of the expression on your sketch, top and bottom. Opposite over adjacent has a name.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:580:13"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#101": {
+      "en": "On the sketch, √(1 − k²) is the side <b>opposite</b> 58°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:583:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#102": {
+      "en": "and k is the side <b>next to</b> 58°, so the expression is opposite over adjacent.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:584:37"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#103": {
+      "en": "O/A &nbsp;∴&nbsp; √(1 − k²)/k = tan 58°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:585:39"
+      ]
+    },
+    "gtrig-siblings-super-special-sums#104": {
+      "en": "Same trick as (b), one step further. √(1 − k²) is the side opposite 58° and k is the side next to it, so the expression is opposite over adjacent — which SOHCAHTOA calls tan. So the whole thing is tan 58°. It is worth pausing on why a question like this is asked at all: it is checking that you understand a trig ratio IS a ratio of sides, not a button on a calculator. Once the triangle is in front of you, an expression in k and a ratio of an angle are two ways of saying the same thing, and you can translate freely in either direction.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-siblings-super-special-sums.js:588:13"
+      ]
+    },
+    "trig-general-solutions#1": {
+      "en": "Determine the general solution of &nbsp;2 cos²θ + 5 cos θ − 3 = 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:64:13"
+      ]
+    },
+    "trig-general-solutions#2": {
+      "en": "Three terms, one function squared and the other one not — that is a type ⑤: trinomial, K-method. Let K = cos θ and what is left is an ordinary trinomial to factorise. Then read both branches properly before the calculator comes out; one of them may be asking cos for something cos simply does not have.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:67:13"
+      ]
+    },
+    "trig-general-solutions#3": {
+      "en": "It is an ordinary quadratic — the letter just happens to be cos θ:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:70:37"
+      ]
+    },
+    "trig-general-solutions#4": {
+      "en": "2 cos²θ + 5 cos θ − 3 = 0 &nbsp;⟹&nbsp; (2 cos θ − 1)(cos θ + 3) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:71:37"
+      ]
+    },
+    "trig-general-solutions#5": {
+      "en": "cos θ = 1/2 &nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp; cos θ = −3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:72:37"
+      ]
+    },
+    "trig-general-solutions#6": {
+      "en": "cos θ can never be smaller than −1, so cos θ = −3 has <b>no solution</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:73:37"
+      ]
+    },
+    "trig-general-solutions#7": {
+      "en": "Reference angle: <span class=\\\"nowrap\\\">SHIFT cos (1/2)</span> gives 60°, and cos is positive in the first and fourth quadrants:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:74:37"
+      ]
+    },
+    "trig-general-solutions#8": {
+      "en": "θ = 60° + k · 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:75:39"
+      ]
+    },
+    "trig-general-solutions#9": {
+      "en": "or &nbsp;θ = 300° + k · 360°, &nbsp;&nbsp;k ∈ ℤ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:76:39"
+      ]
+    },
+    "trig-general-solutions#10": {
+      "en": "<b>OR</b> — written as one line: &nbsp;θ = ± 60° + k · 360°, &nbsp;k ∈ ℤ. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:77:37"
+      ]
+    },
+    "trig-general-solutions#11": {
+      "en": "WATCH OUT: cos θ = −3 has <b>no solution</b>. It is not “undefined” and it is not zero — there simply is no angle whose cosine is −3. Write that sentence down; it is a mark on its own, and every year somebody does <span class=\\\"nowrap\\\">SHIFT cos (−3)</span> on the calculator, gets an error, and leaves the whole branch out silently.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:79:15"
+      ]
+    },
+    "trig-general-solutions#12": {
+      "en": "REMEMBER: k ∈ ℤ belongs on the end of <i>every</i> general solution. Without it you have written down two angles, not a general solution.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:82:15"
+      ]
+    },
+    "trig-general-solutions#13": {
+      "en": "Name the type first and the question stops feeling new. Three terms, one function squared and the other one not — that is a type ⑤, trinomial, and the K-method is the way through it. Let K = cos θ, and 2 cos²θ + 5 cos θ − 3 turns into 2K² + 5K − 3, an ordinary trinomial you have factorised a hundred times. None of it is trig until you put cos θ back at the end — and putting it back is not optional, because an answer left sitting on K answers a question nobody asked. That gives you two branches, side by side with an <b>or</b> between them, and each one gets its own treatment. cos θ = −3 is asking cosine for a value it does not own: cos is a side over the hypotenuse, the hypotenuse is the longest side, so cos θ lives between −1 and 1 and nowhere else. Write <b>no solution</b> — those two words, not “undefined” and not “no real solution” — because that line is a mark, and the marker wants to see you turned the branch down on purpose rather than quietly losing it. That leaves cos θ = 1/2. Take the reference angle from the size of the number, never from a minus (don't type − into your calculator), so ref. ∠ = 60°. Then the cross: cos is positive down the right-hand side of the bow tie, so tick I and IV, and write one line for each ticked quadrant. The k · 360° on the end is what turns two angles into every angle — cosine repeats itself every full turn, forever, in both directions — and one k ∈ ℤ at the bottom of the last line closes the whole thing off.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:86:13"
+      ]
+    },
+    "trig-general-solutions#14": {
+      "en": "Hence write down the values of θ ∈ [−360° ; 0°] that satisfy the equation in (a).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:94:13"
+      ]
+    },
+    "trig-general-solutions#15": {
+      "en": "Nothing new gets solved here. The general solution you already wrote is the machine and k is the handle — take one branch at a time and feed it whole numbers. The interval sits entirely below zero, so k = 0 is not going to land; walk k downwards until you overshoot.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:97:13"
+      ]
+    },
+    "trig-general-solutions#16": {
+      "en": "Walk k down from 0 in each branch and keep whatever lands inside the interval:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:100:37"
+      ]
+    },
+    "trig-general-solutions#17": {
+      "en": "θ = 60° + k · 360°: &nbsp;&nbsp;k = 0 → 60° (out), &nbsp;&nbsp;k = −1 → −300°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:101:37"
+      ]
+    },
+    "trig-general-solutions#18": {
+      "en": "θ = 300° + k · 360°: &nbsp;k = 0 → 300° (out), &nbsp;k = −1 → −60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:102:37"
+      ]
+    },
+    "trig-general-solutions#19": {
+      "en": "θ = −300°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:103:39"
+      ]
+    },
+    "trig-general-solutions#20": {
+      "en": "and &nbsp;θ = −60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:104:39"
+      ]
+    },
+    "trig-general-solutions#21": {
+      "en": "WATCH OUT: k = 0 gives 60° and 300° — both <i>outside</i> [−360° ; 0°]. Only k = −1 lands inside. Do not stop at k = 0 just because it is the easy one to substitute.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:106:15"
+      ]
+    },
+    "trig-general-solutions#22": {
+      "en": "This is what the general solution is FOR, and it is why the general solution always comes first and the interval is read off it afterwards, never the other way round. You are not hunting for angles any more — you already own a formula that generates every single one of them, so the only thing left to decide is which whole numbers to feed it. One branch at a time. Start at k = 0 and step in the direction the interval lies; here everything is negative, so step downwards. Each substitution either lands inside [−360° ; 0°], in which case you write it down, or it does not and you move on — and the moment you overshoot the far end you are finished with that branch. Two branches, one hit each. Then look at what came out: −300° and −60° are 60° and 300° reached by turning the other way. Same two arms of the bow tie, same two positions on the circle; you simply walked clockwise to get there instead of anticlockwise. That is also why k ∈ ℤ has to be on the end of the general solution in the first place — without it you had two angles, not every angle, and there would have been nothing here to feed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "trig-general-solutions.js:110:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3666
+}
