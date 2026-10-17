@@ -1,0 +1,602 @@
+{
+  "unit": "T42",
+  "generated": "2026-10-17T18:44:28.020Z",
+  "files": [
+    "js/exam/func-siblings-topup.js"
+  ],
+  "items": {
+    "func-siblings-topup#1": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² + 2x − 3, &nbsp;cutting the x-axis at (−3 ; 0) and (1 ; 0).<br><br>Write down the nature of the roots of &nbsp;f(x) = 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:97:13"
+      ]
+    },
+    "func-siblings-topup#2": {
+      "en": "The roots of f(x) = 0 are exactly the x-values where the graph meets the x-axis. So count the crossings on the sketch first — and then look at what kind of numbers they are.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:100:13"
+      ]
+    },
+    "func-siblings-topup#3": {
+      "en": "The roots of f(x) = 0 are the x-values where the graph MEETS the x-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:103:37"
+      ]
+    },
+    "func-siblings-topup#4": {
+      "en": "the sketch shows two <b>different</b> crossings, so the roots are real and unequal",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:104:39"
+      ]
+    },
+    "func-siblings-topup#5": {
+      "en": "the crossings are at −3 and 1, which are whole numbers &nbsp;&nbsp;∴&nbsp; the roots are real, unequal and <b>rational</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:105:39"
+      ]
+    },
+    "func-siblings-topup#6": {
+      "en": "WATCH OUT: \\\"nature of the roots\\\" is asking what KIND of numbers they are, not what they are. Writing x = −3 and x = 1 answers a different question and earns nothing here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:107:15"
+      ]
+    },
+    "func-siblings-topup#7": {
+      "en": "There are only ever four answers to a nature-of-roots question, and a sketch usually settles it faster than a discriminant. If the graph crosses the x-axis twice, the roots are real and unequal. If it touches once and turns away, they are real and equal. If it misses the axis altogether, they are non-real. And the extra word — rational or irrational — comes from whether those crossings sit on nice numbers or on surd-looking ones. Here two clean crossings at −3 and 1 give you the full answer: real, unequal, rational. If you would rather prove it with algebra, the discriminant says the same thing: b² − 4ac = 4 + 12 = 16, which is positive, so two real roots, and it is a perfect square, which is what makes them rational. Both roads are worth full marks; the sketch is just quicker when a sketch is given.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:111:13"
+      ]
+    },
+    "func-siblings-topup#8": {
+      "en": "Determine the value of k for which the equation &nbsp;f(x) = k&nbsp; will have <b>equal</b> roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:119:13"
+      ]
+    },
+    "func-siblings-topup#9": {
+      "en": "f(x) = k is a horizontal line sliding up and down across f. Equal roots means it meets the parabola at one point only — so where does a horizontal line touch a parabola exactly once?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:122:13"
+      ]
+    },
+    "func-siblings-topup#10": {
+      "en": "f(x) = k is the horizontal line y = k sliding up and down across f. It meets the graph ONCE only when it rests on the turning point, so find that point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:125:37"
+      ]
+    },
+    "func-siblings-topup#11": {
+      "en": "x = −b/(2a) = −2/(2(1)) = −1 &nbsp;&nbsp;⟹&nbsp;&nbsp; f(−1) = 1 − 2 − 3 = −4 &nbsp;&nbsp;TP(−1 ; −4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:126:37"
+      ]
+    },
+    "func-siblings-topup#12": {
+      "en": "∴ k = −4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:127:39"
+      ]
+    },
+    "func-siblings-topup#13": {
+      "en": "REMEMBER: it is the HEIGHT of the turning point that answers this, not its x. Writing k = −1 gives the line the wrong number entirely.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:129:15"
+      ]
+    },
+    "func-siblings-topup#14": {
+      "en": "Do not solve x² + 2x − 3 = k for x here; picture the line instead. Every horizontal line either cuts this parabola twice, touches it once, or misses it, and which of the three happens depends only on where the line sits compared with the turning point. Slide it down from high above: it cuts twice, then twice with the crossings creeping together, and at exactly the turning point's height the two crossings merge into one. That is what \\\"equal roots\\\" means on a picture — the two roots have become the same number. Below that height the line passes underneath and there is nothing to meet. So the answer is always the y-value of the turning point, which makes this really a turning-point question wearing a nature-of-roots hat. Work out the x with −b over 2a, substitute back for the height, and answer with the height.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:133:13"
+      ]
+    },
+    "func-siblings-topup#15": {
+      "en": "The sketch shows the exponential graph g, defined by &nbsp;g(x) = 3ˣ − 9. &nbsp;Its asymptote is the dashed line y = −9, and it cuts the y-axis at (0 ; −8) and the x-axis at (2 ; 0).<br><br>Determine the value(s) of k for which the equation &nbsp;g(x) = k&nbsp; will have <b>exactly one</b> real root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:190:13"
+      ]
+    },
+    "func-siblings-topup#16": {
+      "en": "g(x) = k is a horizontal line sliding up and down. An exponential graph never turns around, so ask yourself how many times a flat line can possibly meet it — and which heights the graph actually reaches.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:193:13"
+      ]
+    },
+    "func-siblings-topup#17": {
+      "en": "g(x) = k is the horizontal line y = k sliding up and down. An exponential never turns, so a horizontal line can only ever cut it ONCE — or miss it completely.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:196:37"
+      ]
+    },
+    "func-siblings-topup#18": {
+      "en": "g lives entirely above its asymptote, so the line cuts it exactly once whenever it sits above that asymptote: &nbsp;k &gt; −9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:197:39"
+      ]
+    },
+    "func-siblings-topup#19": {
+      "en": "A parabola turns, so a horizontal line can meet it twice; an exponential never turns, so it climbs (or falls) once and keeps going. That single fact answers the whole question. Reading g from left to right it starts down near its asymptote at −9, creeps upward, passes through (0 ; −8) and (2 ; 0), and then rises without limit. So every height ABOVE −9 is reached exactly once, and no height is ever reached twice. The line y = k therefore cuts g once for every k greater than −9, which is exactly the range of g written a different way. Notice how this question is really the range question in disguise: \\\"which heights does the graph reach\\\" and \\\"which horizontal lines cut it\\\" are the same thing said two ways, and spotting that saves you a lot of work in a test.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:200:13"
+      ]
+    },
+    "func-siblings-topup#20": {
+      "en": "Determine the value(s) of k for which the equation &nbsp;g(x) = k&nbsp; will have <b>no</b> real root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:208:13"
+      ]
+    },
+    "func-siblings-topup#21": {
+      "en": "Everything not covered by (a) belongs here — but be careful about the one height right on the boundary, and whether the graph ever actually gets there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:211:13"
+      ]
+    },
+    "func-siblings-topup#22": {
+      "en": "Below the asymptote there is no graph at all, so a line down there meets nothing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:214:37"
+      ]
+    },
+    "func-siblings-topup#23": {
+      "en": "and at k = −9 exactly, the line IS the asymptote — g creeps towards it forever but never reaches it, so even that line misses",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:215:37"
+      ]
+    },
+    "func-siblings-topup#24": {
+      "en": "∴ k ≤ −9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:216:39"
+      ]
+    },
+    "func-siblings-topup#25": {
+      "en": "WATCH OUT: the equals sign belongs on THIS side. k = −9 gives NO root, because a graph never touches its own asymptote — so it is k ≤ −9 here and k &gt; −9 in (a), not the other way round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:218:15"
+      ]
+    },
+    "func-siblings-topup#26": {
+      "en": "The two parts together cover every possible height, so the answers must fit side by side with no gap and no overlap — and the only real decision is which of them gets to keep the boundary value. Ask what actually happens at k = −9. The line y = −9 is the asymptote itself, and the whole meaning of an asymptote is that the curve gets closer and closer without ever arriving: at x = −100 the graph is at −8,999999… and still climbing, and it will never be exactly −9. So the line and the curve never meet, which means no root, which puts the boundary in this part's answer. That is why (a) is a strict inequality and (b) is not. Getting the boundary the wrong way round is the single most common mistake in this whole topic, and the fix is always the same: go back to what the graph physically does at that one height.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:222:13"
+      ]
+    },
+    "func-siblings-topup#27": {
+      "en": "The graph of h is defined by &nbsp;h(x) = g(x) + t, &nbsp;where t is a constant. Determine the value(s) of t for which h will have <b>no</b> x-intercept.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:230:13"
+      ]
+    },
+    "func-siblings-topup#28": {
+      "en": "An x-intercept is where the height is zero, so set h(x) = 0 and get the power on its own. Then ask what values that power is allowed to take.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:233:13"
+      ]
+    },
+    "func-siblings-topup#29": {
+      "en": "An x-intercept means h(x) = 0: &nbsp;3ˣ − 9 + t = 0 &nbsp;⟹&nbsp; 3ˣ = 9 − t",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:236:37"
+      ]
+    },
+    "func-siblings-topup#30": {
+      "en": "3ˣ is always <b>positive</b>, so there is an x-intercept only when 9 − t &gt; 0. No x-intercept therefore needs &nbsp;9 − t ≤ 0 &nbsp;⟹&nbsp; t ≥ 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:237:39"
+      ]
+    },
+    "func-siblings-topup#31": {
+      "en": "REMEMBER: 3ˣ can be enormous and it can be very close to zero, but it is never zero and never negative. That one fact is what decides this question — and it is the same fact that gives every exponential graph its asymptote.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:239:15"
+      ]
+    },
+    "func-siblings-topup#32": {
+      "en": "This time it is the GRAPH that slides, not the line. Adding t lifts the whole of g by t units, and lifting it also lifts its asymptote, from y = −9 up to y = −9 + t. Now picture the x-axis staying still while the curve rides upwards. As long as the asymptote is still below the x-axis, the curve has to cross the axis on its way up, so there is an x-intercept. The moment the asymptote reaches the x-axis or goes above it, the whole graph is above the axis and there is nothing to cross. That happens when −9 + t ≥ 0, which is t ≥ 9 — the same answer the algebra gives. Doing it algebraically is just as good: set the height to zero, get the power alone, and use the one thing you always know about a power with a positive base, which is that it can never be zero or negative.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:243:13"
+      ]
+    },
+    "func-siblings-topup#33": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = 2x² − 4x − 6, &nbsp;cutting the x-axis at (−1 ; 0) and (3 ; 0).<br><br>Determine the coordinates of the turning point of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:294:13"
+      ]
+    },
+    "func-siblings-topup#34": {
+      "en": "Find the x first — either with the formula or by taking the midpoint of the two crossings — and then substitute it back to get the height.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:297:13"
+      ]
+    },
+    "func-siblings-topup#35": {
+      "en": "x = −b/(2a) = 4/(2(2)) = 1 &nbsp;&nbsp;(or read it as the midpoint of −1 and 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:300:37"
+      ]
+    },
+    "func-siblings-topup#36": {
+      "en": "f(1) = 2(1)² − 4(1) − 6 = 2 − 4 − 6 = −8 &nbsp;&nbsp;∴&nbsp; TP(1 ; −8)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:301:39"
+      ]
+    },
+    "func-siblings-topup#37": {
+      "en": "A parabola is perfectly symmetrical about the vertical line through its turning point, so the turning point always sits exactly halfway between the two x-intercepts. With crossings at −1 and 3, halfway is 1, and you can write that down without touching a formula. The formula is still worth doing as a check, because it works even when the graph has no x-intercepts to average. Then substitute to get the height — and be careful with the 2 in front, because 2 times 1 squared is 2, not 4. The height is what the next part actually needs: everything about how far this graph can slide up or down before it stops meeting the x-axis is decided by how deep its lowest point sits.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:304:13"
+      ]
+    },
+    "func-siblings-topup#38": {
+      "en": "The graph of p is defined by &nbsp;p(x) = f(x) + k. &nbsp;Determine the values of k for which p will have <b>two unequal</b> x-intercepts.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:312:13"
+      ]
+    },
+    "func-siblings-topup#39": {
+      "en": "An x-intercept of p is a solution of f(x) + k = 0, which is f(x) = −k. So this is the sliding-line question again — but watch what happens to the inequality sign when you move the minus.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:315:13"
+      ]
+    },
+    "func-siblings-topup#40": {
+      "en": "p(x) = 0 means f(x) + k = 0, that is &nbsp;f(x) = −k&nbsp; — a horizontal line at height −k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:318:37"
+      ]
+    },
+    "func-siblings-topup#41": {
+      "en": "f is <b>happy</b> with a minimum of −8, so that line cuts it twice only when it sits above the minimum: &nbsp;−k &gt; −8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:319:37"
+      ]
+    },
+    "func-siblings-topup#42": {
+      "en": "−k &gt; −8 &nbsp;⟹&nbsp; k &lt; 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:320:39"
+      ]
+    },
+    "func-siblings-topup#43": {
+      "en": "<b>OR</b> — think of the graph moving instead: adding k lifts f by k units, so its minimum moves to −8 + k. For two x-intercepts that minimum must still be below the x-axis: −8 + k &lt; 0 ⟹ k &lt; 8.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:321:37"
+      ]
+    },
+    "func-siblings-topup#44": {
+      "en": "WATCH OUT: multiplying or dividing an inequality by −1 turns the sign around. −k &gt; −8 becomes k &lt; 8, not k &gt; 8. At k = 8 exactly, p just touches the x-axis at (1 ; 0) — that is ONE (equal) root, not two, so 8 itself is out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:323:15"
+      ]
+    },
+    "func-siblings-topup#45": {
+      "en": "This is the k-question the other way round. Usually the graph stays still and a line y = k slides across it; here the line is the x-axis, which cannot move, so the graph does the sliding instead. Both pictures give the same answer, and it is worth being able to tell the same story both ways. The algebraic road: an x-intercept means the height is zero, so f(x) + k = 0, which rearranges to f(x) = −k, and now you are back to a familiar horizontal line — it has to sit above the minimum of −8 for two crossings, so −k > −8. The picture road: adding k lifts everything by k, dragging the lowest point from −8 up to −8 + k, and two crossings need that lowest point to still be underneath the axis. Either way you end at k < 8. The one thing that costs marks is the sign flip when the minus moves — deal with it deliberately rather than in your head.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:327:13"
+      ]
+    },
+    "func-siblings-topup#46": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 2x − 8. &nbsp;A and B are the points where f cuts the x-axis, with A to the left of B.<br><br>Determine the length of AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:379:13"
+      ]
+    },
+    "func-siblings-topup#47": {
+      "en": "A and B are on the x-axis, so their heights are both zero — set f(x) = 0 and factorise. Then remember that a horizontal length is just the gap between two x-values.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:382:13"
+      ]
+    },
+    "func-siblings-topup#48": {
+      "en": "A and B are on the x-axis, so their heights are zero: &nbsp;x² − 2x − 8 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:385:37"
+      ]
+    },
+    "func-siblings-topup#49": {
+      "en": "(x − 4)(x + 2) = 0 &nbsp;⟹&nbsp; x = 4 or x = −2 &nbsp;&nbsp;∴&nbsp; A(−2 ; 0) and B(4 ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:386:37"
+      ]
+    },
+    "func-siblings-topup#50": {
+      "en": "AB is horizontal, so its length is the gap between the two x-values: &nbsp;AB = 4 − (−2) = 6 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:387:39"
+      ]
+    },
+    "func-siblings-topup#51": {
+      "en": "WATCH OUT: subtracting the two x-values the other way round gives −6, and a length is never negative. If you get a minus, swap them — or just say the answer is the size of the difference.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:389:15"
+      ]
+    },
+    "func-siblings-topup#52": {
+      "en": "Two small ideas, both worth saying out loud before you start. The first is what an x-intercept actually is: a point where the graph's height is zero, which is why finding one always means solving f(x) = 0 rather than doing anything clever. This one factorises straight away — you need two numbers that multiply to −8 and add to −2, which are −4 and 2 — so the crossings are at 4 and −2. The second is that a distance along a horizontal line does not need the distance formula at all: both ends have the same height, so the vertical part of Pythagoras is zero and only the x-values matter. Count from −2 across to 4 and you have taken six steps to the right. Keep the answer positive and remember to say \\\"units\\\" — the question is about a length, not about a coordinate.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:393:13"
+      ]
+    },
+    "func-siblings-topup#53": {
+      "en": "The horizontal line &nbsp;y = 7&nbsp; cuts f at C and D. Determine the length of CD.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:401:13"
+      ]
+    },
+    "func-siblings-topup#54": {
+      "en": "C and D are on f AND on the line, so their height is 7. Put 7 in for the height, bring everything to one side, and solve the quadratic you get.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:404:13"
+      ]
+    },
+    "func-siblings-topup#55": {
+      "en": "At C and D the height is 7, so &nbsp;f(x) = 7: &nbsp;&nbsp;x² − 2x − 8 = 7 &nbsp;⟹&nbsp; x² − 2x − 15 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:407:37"
+      ]
+    },
+    "func-siblings-topup#56": {
+      "en": "(x − 5)(x + 3) = 0 &nbsp;⟹&nbsp; x = 5 or x = −3 &nbsp;&nbsp;∴&nbsp; C(−3 ; 7) and D(5 ; 7)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:408:37"
+      ]
+    },
+    "func-siblings-topup#57": {
+      "en": "CD is horizontal too: &nbsp;CD = 5 − (−3) = 8 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:409:39"
+      ]
+    },
+    "func-siblings-topup#58": {
+      "en": "WATCH OUT: bring the 7 across before you factorise. Factorising x² − 2x − 8 and then trying to use the 7 afterwards gives nonsense — the equation to solve is x² − 2x − 15 = 0, with a different constant and different brackets.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:411:15"
+      ]
+    },
+    "func-siblings-topup#59": {
+      "en": "This is the same question as (a) with the ruler slid up the page. In (a) the two ends had height 0; here they have height 7, and that is the only change. So the method is identical: put the height into the equation, bring everything to one side so that you have a quadratic equal to zero, factorise, and read off the two x-values. The one habit that saves marks is doing the \\\"bring the 7 across\\\" step deliberately and writing the new equation down, because the brackets change completely — x² − 2x − 8 factorises as (x − 4)(x + 2), while x² − 2x − 15 factorises as (x − 5)(x + 3), and rushing means using the wrong pair. Then finish the same way: both ends are at the same height, so the length is just the gap between the x-values. Notice the answer is bigger than AB, which makes sense — the higher you cut a happy parabola, the wider it is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-topup.js:415:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2152
+}
