@@ -1,0 +1,3365 @@
+{
+  "unit": "T23",
+  "generated": "2026-10-17T18:10:42.126Z",
+  "files": [
+    "js/quests/questnp1-spot.js",
+    "js/quests/questnp2-arithmetic.js",
+    "js/quests/questnp3-quadratic.js",
+    "js/quests/questnp4-missing.js",
+    "js/quests/questnp5-minmax.js",
+    "js/quests/questnp6-gaps.js",
+    "js/quests/questnp7-geometric.js"
+  ],
+  "items": {
+    "questnp1-spot#1": {
+      "en": "arithmetic (linear)",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:17:18",
+        "questnp1-spot.js:27:9",
+        "questnp1-spot.js:27:69"
+      ],
+      "af": "rekenkundig (lineêr)"
+    },
+    "questnp1-spot#2": {
+      "en": "quadratic",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:17:68",
+        "questnp1-spot.js:43:9",
+        "questnp1-spot.js:43:49"
+      ],
+      "af": "kwadraties"
+    },
+    "questnp1-spot#3": {
+      "en": "geometric",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:17:98",
+        "questnp1-spot.js:58:9",
+        "questnp1-spot.js:58:49"
+      ],
+      "af": "meetkundig"
+    },
+    "questnp1-spot#4": {
+      "en": "none of these",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:17:128"
+      ],
+      "af": "geen van hierdie"
+    },
+    "questnp1-spot#5": {
+      "en": "Look at the pattern:<br><b>${list(seq)}</b><br>What kind of pattern is it?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:26:9",
+        "questnp1-spot.js:42:9",
+        "questnp1-spot.js:57:9"
+      ],
+      "af": "Kyk na die patroon:<br><b>${list(seq)}</b><br>Watter soort patroon is dit?"
+    },
+    "questnp1-spot#6": {
+      "en": "Find the FIRST differences yourself. If they are all the same, it is arithmetic.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:29:17"
+      ],
+      "af": "Werk self die EERSTE verskille uit. As hulle almal dieselfde is, is dit rekenkundig."
+    },
+    "questnp1-spot#7": {
+      "en": "Arithmetic — the first difference is constant.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:30:24"
+      ],
+      "af": "Rekenkundig: die eerste verskil is konstant."
+    },
+    "questnp1-spot#8": {
+      "en": "First differences: ${list(fd)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:32:18",
+        "questnp1-spot.js:48:18",
+        "questnp1-spot.js:79:18"
+      ],
+      "af": "Eerste verskille: ${list(fd)}"
+    },
+    "questnp1-spot#9": {
+      "en": "next − previous",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:32:91",
+        "questnp1-spot.js:94:134"
+      ],
+      "af": "volgende − vorige"
+    },
+    "questnp1-spot#10": {
+      "en": "Every one is ${C(d)}, so the first difference is constant",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:33:18"
+      ],
+      "af": "Elkeen is ${C(d)}, dus is die eerste verskil konstant"
+    },
+    "questnp1-spot#11": {
+      "en": "constant 1st difference → arithmetic",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:33:142"
+      ],
+      "af": "konstante 1ste verskil → rekenkundig"
+    },
+    "questnp1-spot#12": {
+      "en": "Work out the first differences — they change. Their differences (the second differences) are constant → quadratic.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:45:17"
+      ],
+      "af": "Werk die eerste verskille uit: hulle verander. Hul verskille (die tweede verskille) is konstant → kwadraties."
+    },
+    "questnp1-spot#13": {
+      "en": "Quadratic — the second difference is constant.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:46:24"
+      ],
+      "af": "Kwadraties: die tweede verskil is konstant."
+    },
+    "questnp1-spot#14": {
+      "en": "they change, so not arithmetic",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:48:91"
+      ],
+      "af": "hulle verander, dus nie rekenkundig nie"
+    },
+    "questnp1-spot#15": {
+      "en": "Second differences: ${list(sd)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:49:18",
+        "questnp1-spot.js:80:18"
+      ],
+      "af": "Tweede verskille: ${list(sd)}"
+    },
+    "questnp1-spot#16": {
+      "en": "constant 2nd difference → quadratic",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:49:92"
+      ],
+      "af": "konstante 2de verskil → kwadraties"
+    },
+    "questnp1-spot#17": {
+      "en": "Divide each term by the one before it (${C(seq[1])} ÷ ${C(seq[0])} = …). A constant ratio means geometric.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:59:17"
+      ],
+      "af": "Deel elke term deur die vorige een (${C(seq[1])} ÷ ${C(seq[0])} = …). 'n Konstante verhouding beteken dit is meetkundig."
+    },
+    "questnp1-spot#18": {
+      "en": "Geometric — you multiply by ${C(r)} each time.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:60:24"
+      ],
+      "af": "Meetkundig: jy vermenigvuldig elke keer met ${C(r)}."
+    },
+    "questnp1-spot#19": {
+      "en": "The differences are not constant, so divide instead",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:62:18"
+      ],
+      "af": "Die verskille is nie konstant nie, deel dus eerder"
+    },
+    "questnp1-spot#20": {
+      "en": "next ÷ previous",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:62:133"
+      ],
+      "af": "volgende ÷ vorige"
+    },
+    "questnp1-spot#21": {
+      "en": "${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)} and ${C(seq[2])} ÷ ${C(seq[1])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:63:18"
+      ],
+      "af": "${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)} en ${C(seq[2])} ÷ ${C(seq[1])} = ${C(r)}"
+    },
+    "questnp1-spot#22": {
+      "en": "same ratio each time → geometric",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:63:189"
+      ],
+      "af": "elke keer dieselfde verhouding → meetkundig"
+    },
+    "questnp1-spot#23": {
+      "en": "For the quadratic pattern <b>${list(seq)}</b>, which differences are constant?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:72:9"
+      ],
+      "af": "In die kwadratiese patroon <b>${list(seq)}</b>, watter verskille is konstant?"
+    },
+    "questnp1-spot#24": {
+      "en": "the second differences",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:73:9"
+      ],
+      "af": "die tweede verskille"
+    },
+    "questnp1-spot#25": {
+      "en": "the first differences",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:74:10"
+      ],
+      "af": "die eerste verskille"
+    },
+    "questnp1-spot#26": {
+      "en": "the terms themselves",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:74:62"
+      ],
+      "af": "die terme self"
+    },
+    "questnp1-spot#27": {
+      "en": "none of them",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:74:107"
+      ],
+      "af": "geen van hulle"
+    },
+    "questnp1-spot#28": {
+      "en": "Work out the first differences (they change), then their differences (those stay the same).",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:76:17"
+      ],
+      "af": "Werk die eerste verskille uit (hulle verander), en dan hul verskille (dié bly dieselfde)."
+    },
+    "questnp1-spot#29": {
+      "en": "The second differences are constant.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:77:24"
+      ],
+      "af": "Die tweede verskille is konstant."
+    },
+    "questnp1-spot#30": {
+      "en": "not all the same",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:79:91"
+      ],
+      "af": "nie almal dieselfde nie"
+    },
+    "questnp1-spot#31": {
+      "en": "all the same → this is the constant row",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:80:92"
+      ],
+      "af": "almal dieselfde → dit is die konstante ry"
+    },
+    "questnp1-spot#32": {
+      "en": "What is the constant first difference of <b>${list(seq)}</b>?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:88:9"
+      ],
+      "af": "Wat is die konstante eerste verskil van <b>${list(seq)}</b>?"
+    },
+    "questnp1-spot#33": {
+      "en": "Subtract any term from the one after it (next − previous).",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:91:17"
+      ],
+      "af": "Trek enige term van die volgende een af (volgende − vorige)."
+    },
+    "questnp1-spot#34": {
+      "en": "d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:92:24"
+      ],
+      "af": "d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}."
+    },
+    "questnp1-spot#35": {
+      "en": "d = T₂ − T₁ = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:94:18"
+      ],
+      "af": "d = T₂ − T₁ = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}"
+    },
+    "questnp1-spot#36": {
+      "en": "Check: T₃ − T₂ = ${C(seq[2])} − ${P(seq[1])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:95:18"
+      ],
+      "af": "Kontroleer: T₃ − T₂ = ${C(seq[2])} − ${P(seq[1])} = ${C(d)}"
+    },
+    "questnp1-spot#37": {
+      "en": "same, so the difference is constant",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:95:145"
+      ],
+      "af": "dieselfde, dus is die verskil konstant"
+    },
+    "questnp1-spot#38": {
+      "en": "Tap the <b>first difference between T₂ and T₃</b> (the middle of the top difference row).",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:103:9"
+      ],
+      "af": "Klik op die <b>eerste verskil tussen T₂ en T₃</b> (die middel van die boonste verskilry)."
+    },
+    "questnp1-spot#39": {
+      "en": "First differences sit between two terms. The one between the 2nd and 3rd terms is the middle cell.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:106:20"
+      ],
+      "af": "Eerste verskille staan tussen twee terme. Die een tussen die 2de en 3de terme is die middelste sel."
+    },
+    "questnp1-spot#40": {
+      "en": "Look at the top difference row: its middle cell sits between T₂ and T₃.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:107:17"
+      ],
+      "af": "Kyk na die boonste verskilry: die middelste sel staan tussen T₂ en T₃."
+    },
+    "questnp1-spot#41": {
+      "en": "It is ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:108:24"
+      ],
+      "af": "Dit is ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}."
+    },
+    "questnp1-spot#42": {
+      "en": "A first difference sits between two terms",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:110:18"
+      ],
+      "af": "'n Eerste verskil staan tussen twee terme"
+    },
+    "questnp1-spot#43": {
+      "en": "${seq.length} terms → ${seq.length - 1} cells in the row",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:110:114"
+      ],
+      "af": "${seq.length} terme → ${seq.length - 1} selle in die ry"
+    },
+    "questnp1-spot#44": {
+      "en": "Between T₂ and T₃: ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:111:18"
+      ],
+      "af": "Tussen T₂ en T₃: ${C(seq[2])} − ${P(seq[1])} = ${C(seq[2] - seq[1])}"
+    },
+    "questnp1-spot#45": {
+      "en": "the middle cell",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:111:170"
+      ],
+      "af": "die middelste sel"
+    },
+    "questnp1-spot#46": {
+      "en": "By what do you multiply to move along <b>${list(seq)}</b>?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:119:9"
+      ],
+      "af": "Waarmee vermenigvuldig jy elke keer in die patroon <b>${list(seq)}</b>?"
+    },
+    "questnp1-spot#47": {
+      "en": "Divide a term by the one before it.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:121:17"
+      ],
+      "af": "Deel 'n term deur die vorige een."
+    },
+    "questnp1-spot#48": {
+      "en": "r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:122:24"
+      ],
+      "af": "r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}."
+    },
+    "questnp1-spot#49": {
+      "en": "r = T₂ ÷ T₁ = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:124:18"
+      ],
+      "af": "r = T₂ ÷ T₁ = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}"
+    },
+    "questnp1-spot#50": {
+      "en": "divide by the term before",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:124:134"
+      ],
+      "af": "deel deur die vorige term"
+    },
+    "questnp1-spot#51": {
+      "en": "Check: ${C(seq[2])} ÷ ${C(seq[1])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:125:18"
+      ],
+      "af": "Kontroleer: ${C(seq[2])} ÷ ${C(seq[1])} = ${C(r)}"
+    },
+    "questnp1-spot#52": {
+      "en": "the ratio is constant",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "questnp1-spot.js:125:125"
+      ],
+      "af": "die verhouding is konstant"
+    },
+    "questnp2-arithmetic#1": {
+      "en": "Find the common difference of <b>${list(seq)}</b>.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:21:7"
+      ]
+    },
+    "questnp2-arithmetic#2": {
+      "en": "d = any term minus the term before it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:24:15"
+      ]
+    },
+    "questnp2-arithmetic#3": {
+      "en": "d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:25:22"
+      ]
+    },
+    "questnp2-arithmetic#4": {
+      "en": "d = T₂ − T₁ = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:27:16"
+      ]
+    },
+    "questnp2-arithmetic#5": {
+      "en": "next − previous",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:27:74"
+      ]
+    },
+    "questnp2-arithmetic#6": {
+      "en": "Check: T₃ − T₂ = ${C(seq[2])} − ${P(seq[1])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:28:16"
+      ]
+    },
+    "questnp2-arithmetic#7": {
+      "en": "same, so d is the common difference",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:28:77"
+      ]
+    },
+    "questnp2-arithmetic#8": {
+      "en": "What is the next term of <b>${list(seq)}</b>?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:37:7"
+      ]
+    },
+    "questnp2-arithmetic#9": {
+      "en": "Add the common difference (${C(d)}) to the last term.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:39:15"
+      ]
+    },
+    "questnp2-arithmetic#10": {
+      "en": "d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:42:16"
+      ]
+    },
+    "questnp2-arithmetic#11": {
+      "en": "common difference",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:42:64"
+      ]
+    },
+    "questnp2-arithmetic#12": {
+      "en": "next = last term + d = ${C(last)} + ${P(d)} = ${C(last + d)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:43:16"
+      ]
+    },
+    "questnp2-arithmetic#13": {
+      "en": "Find the general term Tₙ of <b>${list(seq)}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:55:7"
+      ]
+    },
+    "questnp2-arithmetic#14": {
+      "en": "Tₙ = an + c: a is the constant difference (so start with that many n), and c = T₀ — step BACK one difference from T₁.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:58:15"
+      ]
+    },
+    "questnp2-arithmetic#15": {
+      "en": "a = ${C(d)} and c = T₀ = ${C(a1)} − ${P(d)} = ${C(c)}, so Tₙ = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:59:22"
+      ]
+    },
+    "questnp2-arithmetic#16": {
+      "en": "a = d = ${C(seq[1])} − ${P(seq[0])} = ${C(d)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:61:16"
+      ]
+    },
+    "questnp2-arithmetic#17": {
+      "en": "a is the constant difference",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:61:68"
+      ]
+    },
+    "questnp2-arithmetic#18": {
+      "en": "c = T₀ = T₁ − d = ${C(a1)} − ${P(d)} = ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:62:16"
+      ]
+    },
+    "questnp2-arithmetic#19": {
+      "en": "step BACK one difference from T₁",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:62:69"
+      ]
+    },
+    "questnp2-arithmetic#20": {
+      "en": "Tₙ = an + c = ${correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:63:16"
+      ]
+    },
+    "questnp2-arithmetic#21": {
+      "en": "For the pattern <b>${list(seq)}</b>, find T${C(n)}.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:73:7"
+      ]
+    },
+    "questnp2-arithmetic#22": {
+      "en": "First build Tₙ = an + c: a = the difference (${C(d)}), c = T₀ = ${C(a1)} − ${P(d)} = ${C(a1 - d)}. Then put n = ${C(n)} in.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:76:15"
+      ]
+    },
+    "questnp2-arithmetic#23": {
+      "en": "Tₙ = ${form}, so T${C(n)} = ${form.replace(\"n\", `(${C(n)})`)} = ${C(arithTn(a1, d)(n))}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:77:22"
+      ],
+      "nested": [
+        "n"
+      ]
+    },
+    "questnp2-arithmetic#24": {
+      "en": "a = ${C(d)} and c = T₀ = ${C(a1)} − ${P(d)} = ${C(c0)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:79:16"
+      ]
+    },
+    "questnp2-arithmetic#25": {
+      "en": "build Tₙ = an + c first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:79:77"
+      ]
+    },
+    "questnp2-arithmetic#26": {
+      "en": "Tₙ = ${form}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:80:16"
+      ]
+    },
+    "questnp2-arithmetic#27": {
+      "en": "T${C(n)} = ${form.replace(\"n\", `(${C(n)})`)} = ${C(arithTn(a1, d)(n))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:81:16"
+      ],
+      "nested": [
+        "n"
+      ]
+    },
+    "questnp2-arithmetic#28": {
+      "en": "substitute n = ${C(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:81:93"
+      ]
+    },
+    "questnp2-arithmetic#29": {
+      "en": "A pattern has Tₙ = <b>${form}</b>. Find T${C(n)}.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:92:7"
+      ]
+    },
+    "questnp2-arithmetic#30": {
+      "en": "Substitute n = ${C(n)} into the formula.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:94:15"
+      ]
+    },
+    "questnp2-arithmetic#31": {
+      "en": "T${C(n)} = ${form.replace(\"n\", `(${C(n)})`)} = ${C(a * n + c)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:95:22"
+      ],
+      "nested": [
+        "n"
+      ]
+    },
+    "questnp2-arithmetic#32": {
+      "en": "T${C(n)} = ${form.replace(\"n\", `(${C(n)})`)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:97:16"
+      ],
+      "nested": [
+        "n"
+      ]
+    },
+    "questnp2-arithmetic#33": {
+      "en": "put n = ${C(n)} in",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:97:67"
+      ]
+    },
+    "questnp2-arithmetic#34": {
+      "en": "T${C(n)} = ${C(a * n)} ${c < 0 ? \"−\" : \"+\"} ${C(Math.abs(c))} = ${C(a * n + c)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:98:16"
+      ]
+    },
+    "questnp2-arithmetic#35": {
+      "en": "In <b>${list(seq)} ; …</b>, which term is equal to ${C(value)}? (Find n.)",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:110:7"
+      ]
+    },
+    "questnp2-arithmetic#36": {
+      "en": "Build Tₙ = an + c first (a = ${C(d)}, c = T₀ = ${C(a1 - d)}), then set it equal to ${C(value)} and solve for n.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:113:15"
+      ]
+    },
+    "questnp2-arithmetic#37": {
+      "en": "${C(value)} = ${linStr(d, a1 - d)}  →  n = ${C(n)} (the ${ord(n)} term).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:114:22"
+      ]
+    },
+    "questnp2-arithmetic#38": {
+      "en": "a = ${C(d)}, c = T₀ = ${C(a1)} − ${P(d)} = ${C(c0)}  →  Tₙ = ${form}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:116:16"
+      ]
+    },
+    "questnp2-arithmetic#39": {
+      "en": "build the general term first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:116:91"
+      ]
+    },
+    "questnp2-arithmetic#40": {
+      "en": "Set it equal to the value: ${form} = ${C(value)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:117:16"
+      ]
+    },
+    "questnp2-arithmetic#41": {
+      "en": "${C(d)}n = ${C(value - c0)}  →  n = ${C(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:118:16"
+      ]
+    },
+    "questnp2-arithmetic#42": {
+      "en": "the ${ord(n)} term",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:118:66"
+      ]
+    },
+    "questnp2-arithmetic#43": {
+      "en": "In the form Tₙ = an + c, what does <b>c</b> equal?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:125:7"
+      ]
+    },
+    "questnp2-arithmetic#44": {
+      "en": "T₀ — the term that would sit before T₁",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:126:7"
+      ]
+    },
+    "questnp2-arithmetic#45": {
+      "en": "the first term T₁",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:127:8"
+      ]
+    },
+    "questnp2-arithmetic#46": {
+      "en": "the common difference",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:127:29"
+      ]
+    },
+    "questnp2-arithmetic#47": {
+      "en": "the last term",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:127:54"
+      ]
+    },
+    "questnp2-arithmetic#48": {
+      "en": "Put n = 0 into an + c. You get c — the ‘zero-th’ term, one step before T₁.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:128:15"
+      ]
+    },
+    "questnp2-arithmetic#49": {
+      "en": "c = T₀ (and a is the common difference).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp2-arithmetic.js:129:22"
+      ]
+    },
+    "questnp3-quadratic#1": {
+      "en": "What is the constant second difference of <b>${list(seq)}</b>?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp3-quadratic.js:26:7"
+      ]
+    },
+    "questnp3-quadratic#2": {
+      "en": "Take the differences of the first differences (bottom row of the pyramid).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp3-quadratic.js:29:15"
+      ]
+    },
+    "questnp3-quadratic#3": {
+      "en": "The second difference is ${C(sd)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp3-quadratic.js:30:22"
+      ]
+    },
+    "questnp3-quadratic#4": {
+      "en": "First differences: ${list(fd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:32:16"
+      ]
+    },
+    "questnp3-quadratic#5": {
+      "en": "next − previous",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:32:53"
+      ]
+    },
+    "questnp3-quadratic#6": {
+      "en": "Second differences: ${list(firstDiffs(fd))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:33:16"
+      ]
+    },
+    "questnp3-quadratic#7": {
+      "en": "differences of the differences",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:33:66"
+      ]
+    },
+    "questnp3-quadratic#8": {
+      "en": "They are all ${C(sd)}, so the second difference is ${C(sd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:34:16"
+      ]
+    },
+    "questnp3-quadratic#9": {
+      "en": "For <b>${list(seq)}</b>, use 2a = second difference to find <b>a</b>.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp3-quadratic.js:42:7"
+      ]
+    },
+    "questnp3-quadratic#10": {
+      "en": "Read the second difference off the pyramid, then halve it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp3-quadratic.js:45:15"
+      ]
+    },
+    "questnp3-quadratic#11": {
+      "en": "2a = ${C(2 * a)}, so a = ${C(a)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp3-quadratic.js:46:22"
+      ]
+    },
+    "questnp3-quadratic#12": {
+      "en": "Second difference = ${C(2 * a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:48:16"
+      ]
+    },
+    "questnp3-quadratic#13": {
+      "en": "bottom row of the pyramid",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:48:54"
+      ]
+    },
+    "questnp3-quadratic#14": {
+      "en": "2a = ${C(2 * a)}  →  a = ${C(a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:49:16"
+      ]
+    },
+    "questnp3-quadratic#15": {
+      "en": "halve it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:49:55"
+      ]
+    },
+    "questnp3-quadratic#16": {
+      "en": "For <b>${list(seq)}</b>, with a = ${C(a)}, use 3a + b = T₂ − T₁ to find <b>b</b>.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp3-quadratic.js:58:7"
+      ]
+    },
+    "questnp3-quadratic#17": {
+      "en": "3a + b = T₂ − T₁. So b = (T₂ − T₁) − 3a = ${C(seq[1] - seq[0])} − 3(${C(a)}).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp3-quadratic.js:61:15"
+      ]
+    },
+    "questnp3-quadratic#18": {
+      "en": "b = ${C(seq[1] - seq[0])} − ${P(3 * a)} = ${C(b)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp3-quadratic.js:62:22"
+      ]
+    },
+    "questnp3-quadratic#19": {
+      "en": "T₂ − T₁ = ${C(seq[1])} − ${P(seq[0])} = ${C(g1)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:64:16"
+      ]
+    },
+    "questnp3-quadratic#20": {
+      "en": "the first gap",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:64:71"
+      ]
+    },
+    "questnp3-quadratic#21": {
+      "en": "3a + b = ${C(g1)}, with a = ${C(a)}:  ${C(3 * a)} + b = ${C(g1)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:65:16"
+      ]
+    },
+    "questnp3-quadratic#22": {
+      "en": "b = ${C(g1)} − ${P(3 * a)} = ${C(b)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:66:16"
+      ]
+    },
+    "questnp3-quadratic#23": {
+      "en": "For <b>${list(seq)}</b>, with a = ${C(a)} and b = ${C(b)}, use a + b + c = T₁ to find <b>c</b>.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp3-quadratic.js:74:7"
+      ]
+    },
+    "questnp3-quadratic#24": {
+      "en": "a + b + c = T₁. So c = T₁ − a − b = ${C(seq[0])} − (${C(a)}) − (${C(b)}).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp3-quadratic.js:77:15"
+      ]
+    },
+    "questnp3-quadratic#25": {
+      "en": "c = ${C(seq[0])} − ${P(a)} − ${P(b)} = ${C(c)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp3-quadratic.js:78:22"
+      ]
+    },
+    "questnp3-quadratic#26": {
+      "en": "a + b + c = T₁ = ${C(seq[0])}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:80:16"
+      ]
+    },
+    "questnp3-quadratic#27": {
+      "en": "put n = 1 into an² + bn + c",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:80:52"
+      ]
+    },
+    "questnp3-quadratic#28": {
+      "en": "${P(a)} + ${P(b)} + c = ${C(seq[0])}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:81:16"
+      ]
+    },
+    "questnp3-quadratic#29": {
+      "en": "c = ${C(seq[0])} − ${P(a)} − ${P(b)} = ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:82:16"
+      ]
+    },
+    "questnp3-quadratic#30": {
+      "en": "Find the general term Tₙ of <b>${list(seq)}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp3-quadratic.js:99:7"
+      ]
+    },
+    "questnp3-quadratic#31": {
+      "en": "Find a, then b, then c with the three relationships, and write an² + bn + c.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp3-quadratic.js:102:15"
+      ]
+    },
+    "questnp3-quadratic#32": {
+      "en": "Tₙ = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp3-quadratic.js:103:22"
+      ]
+    },
+    "questnp3-quadratic#33": {
+      "en": "2a = second difference = ${C(sd)}  →  a = ${C(a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:105:16"
+      ]
+    },
+    "questnp3-quadratic#34": {
+      "en": "3a + b = T₂ − T₁ = ${C(g1)}  →  b = ${C(g1)} − ${P(3 * a)} = ${C(b)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:106:16"
+      ]
+    },
+    "questnp3-quadratic#35": {
+      "en": "a + b + c = T₁ = ${C(seq[0])}  →  c = ${C(seq[0])} − ${P(a)} − ${P(b)} = ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:107:16"
+      ]
+    },
+    "questnp3-quadratic#36": {
+      "en": "Tₙ = ${correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:108:16"
+      ]
+    },
+    "questnp3-quadratic#37": {
+      "en": "an² + bn + c",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:108:38"
+      ]
+    },
+    "questnp3-quadratic#38": {
+      "en": "A pattern has Tₙ = <b>${quadStr(a, b, c)}</b>. Find T${C(n)}.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp3-quadratic.js:120:7"
+      ]
+    },
+    "questnp3-quadratic#39": {
+      "en": "Substitute n = ${C(n)} (square it first): a(${C(n)})² + b(${C(n)}) + c.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp3-quadratic.js:122:15"
+      ]
+    },
+    "questnp3-quadratic#40": {
+      "en": "T${C(n)} = ${C(quadTn(a, b, c)(n))}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp3-quadratic.js:123:22"
+      ]
+    },
+    "questnp3-quadratic#41": {
+      "en": "T${C(n)} = ${quadStr(a, b, c, `(${C(n)})`)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:125:16"
+      ]
+    },
+    "questnp3-quadratic#42": {
+      "en": "put n = ${C(n)} in",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:125:66"
+      ]
+    },
+    "questnp3-quadratic#43": {
+      "en": "T${C(n)} = ${parts} = ${C(quadTn(a, b, c)(n))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp3-quadratic.js:126:16"
+      ]
+    },
+    "questnp3-quadratic#44": {
+      "en": "square first, then multiply",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp3-quadratic.js:126:69"
+      ]
+    },
+    "questnp4-missing#1": {
+      "en": "x = ${C(answer)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp4-missing.js:39:31"
+      ]
+    },
+    "questnp4-missing#2": {
+      "en": "${C(coeff)}x = ${C(rhs)}  →  x = ${C(answer)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp4-missing.js:39:52"
+      ]
+    },
+    "questnp4-missing#3": {
+      "en": "First differences: ${dE.join(\" ; \")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp4-missing.js:41:10"
+      ]
+    },
+    "questnp4-missing#4": {
+      "en": "some gaps contain x",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp4-missing.js:41:53"
+      ]
+    },
+    "questnp4-missing#5": {
+      "en": "Second differences are equal: (${dE[1]}) − (${dE[0]}) = (${dE[2]}) − (${dE[1]})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp4-missing.js:42:10"
+      ]
+    },
+    "questnp4-missing#6": {
+      "en": "full pattern: ${list(seq)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp4-missing.js:43:20"
+      ]
+    },
+    "questnp4-missing#7": {
+      "en": "This is a <b>quadratic</b> pattern. Find the missing term <b>x</b>.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp4-missing.js:52:7",
+        "questnp4-missing.js:65:7"
+      ]
+    },
+    "questnp4-missing#8": {
+      "en": "second difference is constant",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "questnp4-missing.js:55:19",
+        "questnp4-missing.js:68:19"
+      ]
+    },
+    "questnp4-missing#9": {
+      "en": "Write the first differences (some contain x), then set the two second differences EQUAL and solve for x.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp4-missing.js:56:15"
+      ]
+    },
+    "questnp4-missing#10": {
+      "en": "Keeping the second difference constant gives x = ${C(answer)} (full pattern: ${list(seq)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp4-missing.js:57:22"
+      ]
+    },
+    "questnp4-missing#11": {
+      "en": "Form the first differences around x, then make the two second differences equal.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp4-missing.js:69:15"
+      ]
+    },
+    "questnp4-missing#12": {
+      "en": "x = ${C(answer)}  (full pattern: ${list(seq)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp4-missing.js:70:22"
+      ]
+    },
+    "questnp4-missing#13": {
+      "en": "A quadratic pattern starts T₁ = ${C(t1)}, T₂ = ${C(t2)}, and its constant second difference is ${C(sd)}. Find T₃.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp4-missing.js:82:7"
+      ]
+    },
+    "questnp4-missing#14": {
+      "en": "Next first difference = (T₂ − T₁) + second difference = ${C(t2 - t1)} + ${P(sd)}. Add that to T₂.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp4-missing.js:84:15"
+      ]
+    },
+    "questnp4-missing#15": {
+      "en": "T₃ = ${C(t2)} + (${C(t2 - t1)} + ${P(sd)}) = ${C(seq[2])}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp4-missing.js:85:22"
+      ]
+    },
+    "questnp4-missing#16": {
+      "en": "First gap: T₂ − T₁ = ${C(t2)} − ${P(t1)} = ${C(t2 - t1)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp4-missing.js:87:16"
+      ]
+    },
+    "questnp4-missing#17": {
+      "en": "Next gap = first gap + second difference = ${C(t2 - t1)} + ${P(sd)} = ${C(t2 - t1 + sd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp4-missing.js:88:16"
+      ]
+    },
+    "questnp4-missing#18": {
+      "en": "the second difference is constant",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp4-missing.js:88:111"
+      ]
+    },
+    "questnp4-missing#19": {
+      "en": "T₃ = T₂ + next gap = ${C(t2)} + ${P(t2 - t1 + sd)} = ${C(seq[2])}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp4-missing.js:89:16"
+      ]
+    },
+    "questnp4-missing#20": {
+      "en": "To find a missing term in a quadratic pattern, which value do you keep constant?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp4-missing.js:96:7"
+      ]
+    },
+    "questnp4-missing#21": {
+      "en": "the second difference",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questnp4-missing.js:97:7"
+      ]
+    },
+    "questnp4-missing#22": {
+      "en": "the first difference",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp4-missing.js:98:8"
+      ]
+    },
+    "questnp4-missing#23": {
+      "en": "the ratio between terms",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp4-missing.js:98:32"
+      ]
+    },
+    "questnp4-missing#24": {
+      "en": "the term values",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp4-missing.js:98:59"
+      ]
+    },
+    "questnp4-missing#25": {
+      "en": "Quadratic ⇒ the SECOND difference is the same throughout.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp4-missing.js:99:15"
+      ]
+    },
+    "questnp4-missing#26": {
+      "en": "Keep the second difference constant.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp4-missing.js:100:22"
+      ]
+    },
+    "questnp4-missing#27": {
+      "en": "In a quadratic number pattern, are the second differences always equal to each other?",
+      "kind": "string",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questnp4-missing.js:106:7"
+      ]
+    },
+    "questnp4-missing#28": {
+      "en": "That constant second difference is exactly what makes a pattern quadratic.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp4-missing.js:108:15"
+      ]
+    },
+    "questnp4-missing#29": {
+      "en": "Yes — a constant second difference is the defining feature.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp4-missing.js:109:22"
+      ]
+    },
+    "questnp5-minmax#1": {
+      "en": "The pattern Tₙ = <b>${quadStr(a, b, c)}</b> has a turning point. Is it a minimum or a maximum?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp5-minmax.js:32:7"
+      ]
+    },
+    "questnp5-minmax#2": {
+      "en": "a minimum",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp5-minmax.js:33:28",
+        "questnp5-minmax.js:34:43"
+      ]
+    },
+    "questnp5-minmax#3": {
+      "en": "a maximum",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp5-minmax.js:33:42",
+        "questnp5-minmax.js:34:29"
+      ]
+    },
+    "questnp5-minmax#4": {
+      "en": "neither — it keeps rising",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp5-minmax.js:34:56"
+      ]
+    },
+    "questnp5-minmax#5": {
+      "en": "both",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp5-minmax.js:34:85"
+      ]
+    },
+    "questnp5-minmax#6": {
+      "en": "a > 0 → ‘happy’ parabola → minimum.  a < 0 → ‘sad’ parabola → maximum.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp5-minmax.js:35:15"
+      ]
+    },
+    "questnp5-minmax#7": {
+      "en": "a = ${C(a)} ${a > 0 ? \"> 0 → minimum\" : \"< 0 → maximum\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp5-minmax.js:36:22"
+      ],
+      "nested": [
+        "> 0 → minimum",
+        "< 0 → maximum"
+      ]
+    },
+    "questnp5-minmax#8": {
+      "en": "The coefficient of n² is a = ${C(a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:38:16"
+      ]
+    },
+    "questnp5-minmax#9": {
+      "en": "look at the n² term only",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:38:59"
+      ]
+    },
+    "questnp5-minmax#10": {
+      "en": "a = ${C(a)} > 0 → the parabola opens upward",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:40:17"
+      ]
+    },
+    "questnp5-minmax#11": {
+      "en": "a = ${C(a)} < 0 → the parabola opens downward",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:41:17"
+      ]
+    },
+    "questnp5-minmax#12": {
+      "en": "lowest point → a minimum",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:42:24"
+      ]
+    },
+    "questnp5-minmax#13": {
+      "en": "highest point → a maximum",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:42:53"
+      ]
+    },
+    "questnp5-minmax#14": {
+      "en": "For Tₙ = <b>${quadStr(a, b, c)}</b>, which term n is the turning point? Use n = −b ÷ (2a).",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp5-minmax.js:50:7"
+      ]
+    },
+    "questnp5-minmax#15": {
+      "en": "n = −b ÷ (2a) = −(${C(b)}) ÷ (2 × ${C(a)}).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp5-minmax.js:53:15"
+      ]
+    },
+    "questnp5-minmax#16": {
+      "en": "n = ${C(-b)} ÷ ${P(2 * a)} = ${C(k)} — the ${ord(k)} term.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp5-minmax.js:54:22"
+      ]
+    },
+    "questnp5-minmax#17": {
+      "en": "a = ${C(a)} and b = ${C(b)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:56:16"
+      ]
+    },
+    "questnp5-minmax#18": {
+      "en": "read them off Tₙ = an² + bn + c",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:56:50"
+      ]
+    },
+    "questnp5-minmax#19": {
+      "en": "n = −b ÷ (2a) = ${C(-b)} ÷ ${P(2 * a)} = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:57:16"
+      ]
+    },
+    "questnp5-minmax#20": {
+      "en": "the ${ord(k)} term",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:57:71"
+      ]
+    },
+    "questnp5-minmax#21": {
+      "en": "For Tₙ = <b>${quadStr(a, b, c)}</b>, which term n has the ${kind} value? (n must be a whole number.)",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp5-minmax.js:70:7"
+      ]
+    },
+    "questnp5-minmax#22": {
+      "en": "Work out n = −b ÷ (2a). It is NOT a whole number — a term number must be, so take the nearest whole n.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp5-minmax.js:73:15"
+      ]
+    },
+    "questnp5-minmax#23": {
+      "en": "n = ${C(-b)} ÷ ${P(2 * a)} = ${C(nStar)} — not a whole number, so the ${kind} term is the nearest: n = ${C(k)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp5-minmax.js:74:22"
+      ]
+    },
+    "questnp5-minmax#24": {
+      "en": "n = −b ÷ (2a) = ${C(-b)} ÷ ${P(2 * a)} = ${C(nStar)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:76:16"
+      ]
+    },
+    "questnp5-minmax#25": {
+      "en": "A term number must be a natural number → nearest whole n = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:77:16"
+      ]
+    },
+    "questnp5-minmax#26": {
+      "en": "T${toSub(k)} = ${C(quadTn(a, b, c)(k))} is the ${kind} term",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:77:89"
+      ]
+    },
+    "questnp5-minmax#27": {
+      "en": "The pattern Tₙ = <b>${quadStr(a, b, c)}</b> turns at n = ${C(k)}. What is its ${kind} value?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp5-minmax.js:85:7"
+      ]
+    },
+    "questnp5-minmax#28": {
+      "en": "Substitute n = ${C(k)} into the formula.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp5-minmax.js:87:15"
+      ]
+    },
+    "questnp5-minmax#29": {
+      "en": "T${toSub(k)} = ${C(value)} — the ${kind} value.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp5-minmax.js:88:22"
+      ]
+    },
+    "questnp5-minmax#30": {
+      "en": "T${toSub(k)} = ${quadStr(a, b, c, `(${C(k)})`)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:90:16"
+      ]
+    },
+    "questnp5-minmax#31": {
+      "en": "substitute the turning term n = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:90:70"
+      ]
+    },
+    "questnp5-minmax#32": {
+      "en": "T${toSub(k)} = ${C(value)} — the ${kind} value",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:91:16"
+      ]
+    },
+    "questnp5-minmax#33": {
+      "en": "The graph shows the terms of a pattern. At which term number n is the turning point?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp5-minmax.js:99:7"
+      ]
+    },
+    "questnp5-minmax#34": {
+      "en": "Tₙ plotted against n · each grid block is 1",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "questnp5-minmax.js:103:19",
+        "questnp5-minmax.js:119:19"
+      ]
+    },
+    "questnp5-minmax#35": {
+      "en": "Follow the dashed line from the turning point down to the horizontal axis and count the blocks from 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp5-minmax.js:104:15"
+      ]
+    },
+    "questnp5-minmax#36": {
+      "en": "The turning point is at n = ${C(k)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp5-minmax.js:105:22"
+      ]
+    },
+    "questnp5-minmax#37": {
+      "en": "The turning point is the ${a > 0 ? \"lowest\" : \"highest\"} point of the curve",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:107:16",
+        "questnp5-minmax.js:123:16"
+      ],
+      "nested": [
+        "lowest",
+        "highest"
+      ]
+    },
+    "questnp5-minmax#38": {
+      "en": "where the pattern turns around",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp5-minmax.js:107:98",
+        "questnp5-minmax.js:123:98"
+      ]
+    },
+    "questnp5-minmax#39": {
+      "en": "Follow it straight down to the n-axis and count the blocks from 0:  n = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:108:16"
+      ]
+    },
+    "questnp5-minmax#40": {
+      "en": "The graph shows the terms of a pattern. What is the value of the turning point?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp5-minmax.js:116:7"
+      ]
+    },
+    "questnp5-minmax#41": {
+      "en": "Count the grid blocks from the horizontal axis (each block is 1) up or down to the turning point.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp5-minmax.js:120:15"
+      ]
+    },
+    "questnp5-minmax#42": {
+      "en": "The turning point value is ${C(value)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp5-minmax.js:121:22"
+      ]
+    },
+    "questnp5-minmax#43": {
+      "en": "Count the blocks from the n-axis ${value < 0 ? \"down\" : \"up\"} to it (each block is 1):  Tₙ = ${C(value)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp5-minmax.js:124:16"
+      ],
+      "nested": [
+        "down",
+        "up"
+      ]
+    },
+    "questnp5-minmax#44": {
+      "en": "A number pattern has a <b>minimum</b> term when…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp5-minmax.js:131:7"
+      ]
+    },
+    "questnp5-minmax#45": {
+      "en": "a > 0 (the coefficient of n² is positive)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questnp5-minmax.js:132:7"
+      ]
+    },
+    "questnp5-minmax#46": {
+      "en": "a < 0 (the coefficient of n² is negative)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp5-minmax.js:133:8"
+      ]
+    },
+    "questnp5-minmax#47": {
+      "en": "b > 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp5-minmax.js:133:53"
+      ]
+    },
+    "questnp5-minmax#48": {
+      "en": "c > 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp5-minmax.js:133:62"
+      ]
+    },
+    "questnp5-minmax#49": {
+      "en": "Same rule as a parabola: a positive ‘opens up’, so the turning point is the lowest point.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp5-minmax.js:134:15"
+      ]
+    },
+    "questnp5-minmax#50": {
+      "en": "When a > 0 (positive n² coefficient) the turning point is a minimum.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp5-minmax.js:135:22"
+      ]
+    },
+    "questnp6-gaps#1": {
+      "en": "For the quadratic pattern <b>${list(seq)} ; …</b>, find the gap between T${C(k)} and T${C(k + 1)}, that is T${C(k + 1)} − T${C(k)}.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp6-gaps.js:30:7"
+      ]
+    },
+    "questnp6-gaps#2": {
+      "en": "The gaps form a linear pattern: first gap = ${C(g1)}, changing by ${C(sd)} each time. Build gapₙ = an + c: a = ${C(sd)}, c = gap₀ = ${C(g1)} − ${P(sd)} = ${C(gapC0(g1, sd))}. Then put n = ${C(k)} in.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp6-gaps.js:33:15"
+      ]
+    },
+    "questnp6-gaps#3": {
+      "en": "gapₙ = ${gapForm(g1, sd)}, so gap ${C(k)} = ${gapForm(g1, sd).replace(\"n\", `(${C(k)})`)} = ${C(gapAt(g1, sd, k))}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp6-gaps.js:34:22"
+      ],
+      "nested": [
+        "n"
+      ]
+    },
+    "questnp6-gaps#4": {
+      "en": "The gaps are ${list(firstDiffs(seq))} — an arithmetic pattern",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:36:16"
+      ]
+    },
+    "questnp6-gaps#5": {
+      "en": "they change by ${C(sd)} each time",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:36:84"
+      ]
+    },
+    "questnp6-gaps#6": {
+      "en": "a = ${C(sd)} and c = gap₀ = ${C(g1)} − ${P(sd)} = ${C(gapC0(g1, sd))}  →  gapₙ = ${gapForm(g1, sd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:37:16"
+      ]
+    },
+    "questnp6-gaps#7": {
+      "en": "Tₙ = an + c",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:37:122",
+        "questnp6-gaps.js:55:114"
+      ]
+    },
+    "questnp6-gaps#8": {
+      "en": "Gap ${C(k)} = ${gapForm(g1, sd).replace(\"n\", `(${C(k)})`)} = ${C(gapAt(g1, sd, k))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:38:16"
+      ],
+      "nested": [
+        "n"
+      ]
+    },
+    "questnp6-gaps#9": {
+      "en": "the gap between T${C(k)} and T${C(k + 1)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:38:106"
+      ]
+    },
+    "questnp6-gaps#10": {
+      "en": "For <b>${list(seq)} ; …</b>, the gap Tₙ₊₁ − Tₙ between two consecutive terms is ${C(value)}. Find n.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp6-gaps.js:49:7"
+      ]
+    },
+    "questnp6-gaps#11": {
+      "en": "Build gapₙ = an + c first (a = ${C(sd)}, c = gap₀ = ${C(gapC0(g1, sd))}), then set it equal to ${C(value)} and solve for n.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp6-gaps.js:52:15"
+      ]
+    },
+    "questnp6-gaps#12": {
+      "en": "n = ${C(n)} (the gap between T${C(n)} and T${C(n + 1)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp6-gaps.js:53:22"
+      ]
+    },
+    "questnp6-gaps#13": {
+      "en": "The gaps are arithmetic: a = ${C(sd)}, c = gap₀ = ${C(g1)} − ${P(sd)} = ${C(gapC0(g1, sd))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:55:16"
+      ]
+    },
+    "questnp6-gaps#14": {
+      "en": "gapₙ = ${gapForm(g1, sd)}, so set ${gapForm(g1, sd)} = ${C(value)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:56:16"
+      ]
+    },
+    "questnp6-gaps#15": {
+      "en": "${C(sd)}n = ${C(value - gapC0(g1, sd))}  →  n = ${C(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:57:16"
+      ]
+    },
+    "questnp6-gaps#16": {
+      "en": "the gap between T${C(n)} and T${C(n + 1)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:57:78"
+      ]
+    },
+    "questnp6-gaps#17": {
+      "en": "The first differences (gaps) of a quadratic pattern form what kind of pattern?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp6-gaps.js:66:7"
+      ]
+    },
+    "questnp6-gaps#18": {
+      "en": "an arithmetic (linear) pattern",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questnp6-gaps.js:67:7"
+      ]
+    },
+    "questnp6-gaps#19": {
+      "en": "another quadratic pattern",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp6-gaps.js:68:8"
+      ]
+    },
+    "questnp6-gaps#20": {
+      "en": "a geometric pattern",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp6-gaps.js:68:37"
+      ]
+    },
+    "questnp6-gaps#21": {
+      "en": "a constant pattern",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp6-gaps.js:68:60"
+      ]
+    },
+    "questnp6-gaps#22": {
+      "en": "Look at the gaps (first-difference row): do they change by the same amount each time?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp6-gaps.js:70:15"
+      ]
+    },
+    "questnp6-gaps#23": {
+      "en": "Arithmetic — the gaps change by the constant second difference each time.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp6-gaps.js:71:22"
+      ]
+    },
+    "questnp6-gaps#24": {
+      "en": "The gaps of ${list(seq)} are ${list(fd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:73:16"
+      ]
+    },
+    "questnp6-gaps#25": {
+      "en": "first differences",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:73:63",
+        "questnp6-gaps.js:89:47"
+      ]
+    },
+    "questnp6-gaps#26": {
+      "en": "Each gap changes by ${C(sd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:74:16"
+      ]
+    },
+    "questnp6-gaps#27": {
+      "en": "a constant difference → arithmetic (linear)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:74:51"
+      ]
+    },
+    "questnp6-gaps#28": {
+      "en": "By how much does each gap change in <b>${list(seq)}</b>? (the common difference of the gap-pattern)",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp6-gaps.js:83:7"
+      ]
+    },
+    "questnp6-gaps#29": {
+      "en": "That is exactly the constant second difference.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp6-gaps.js:86:15"
+      ]
+    },
+    "questnp6-gaps#30": {
+      "en": "The gaps change by ${C(sd)} each time (the second difference).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp6-gaps.js:87:22"
+      ]
+    },
+    "questnp6-gaps#31": {
+      "en": "The gaps are ${list(fd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:89:16"
+      ]
+    },
+    "questnp6-gaps#32": {
+      "en": "that is the constant second difference",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:90:59"
+      ]
+    },
+    "questnp6-gaps#33": {
+      "en": "The gap between T${C(k)} and T${C(k + 1)} is which term of the gap-pattern?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp6-gaps.js:98:7"
+      ]
+    },
+    "questnp6-gaps#34": {
+      "en": "the ${ord(k)} term",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questnp6-gaps.js:99:7"
+      ]
+    },
+    "questnp6-gaps#35": {
+      "en": "the ${ord(k + 1)} term",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp6-gaps.js:100:8"
+      ]
+    },
+    "questnp6-gaps#36": {
+      "en": "the ${ord(k - 1)} term",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp6-gaps.js:100:34"
+      ]
+    },
+    "questnp6-gaps#37": {
+      "en": "the 1st term",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp6-gaps.js:100:60"
+      ]
+    },
+    "questnp6-gaps#38": {
+      "en": "The gap between Tₖ and Tₖ₊₁ is the kth gap.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp6-gaps.js:101:15"
+      ]
+    },
+    "questnp6-gaps#39": {
+      "en": "The gap between T${C(k)} and T${C(k + 1)} is the ${ord(k)} term of the gap-pattern.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp6-gaps.js:102:22"
+      ]
+    },
+    "questnp6-gaps#40": {
+      "en": "Gap 1 sits between T₁ and T₂, gap 2 between T₂ and T₃, and so on",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:104:16"
+      ]
+    },
+    "questnp6-gaps#41": {
+      "en": "a gap takes the number of the term on its LEFT",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp6-gaps.js:104:87"
+      ]
+    },
+    "questnp6-gaps#42": {
+      "en": "So the gap between T${C(k)} and T${C(k + 1)} is gap ${C(k)} — the ${ord(k)} term",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp6-gaps.js:105:16"
+      ]
+    },
+    "questnp7-geometric#1": {
+      "en": "Find the constant ratio r of <b>${list(seq)}</b>.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp7-geometric.js:24:7"
+      ]
+    },
+    "questnp7-geometric#2": {
+      "en": "Divide any term by the term before it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp7-geometric.js:26:15"
+      ]
+    },
+    "questnp7-geometric#3": {
+      "en": "r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp7-geometric.js:27:22"
+      ]
+    },
+    "questnp7-geometric#4": {
+      "en": "r = T₂ ÷ T₁ = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:29:16"
+      ]
+    },
+    "questnp7-geometric#5": {
+      "en": "divide by the term before",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:29:74"
+      ]
+    },
+    "questnp7-geometric#6": {
+      "en": "Check: ${C(seq[2])} ÷ ${C(seq[1])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:30:16"
+      ]
+    },
+    "questnp7-geometric#7": {
+      "en": "the ratio is constant",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:30:67"
+      ]
+    },
+    "questnp7-geometric#8": {
+      "en": "What is the next term of <b>${list(seq)}</b>?",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp7-geometric.js:39:7"
+      ]
+    },
+    "questnp7-geometric#9": {
+      "en": "Multiply the last term by the ratio (${C(r)}).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp7-geometric.js:41:15"
+      ]
+    },
+    "questnp7-geometric#10": {
+      "en": "r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:44:16",
+        "questnp7-geometric.js:71:16"
+      ]
+    },
+    "questnp7-geometric#11": {
+      "en": "constant ratio",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:44:64",
+        "questnp7-geometric.js:71:64"
+      ]
+    },
+    "questnp7-geometric#12": {
+      "en": "next = last term × r = ${C(last)} × ${C(r)} = ${C(last * r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:45:16"
+      ]
+    },
+    "questnp7-geometric#13": {
+      "en": "n ${MINUS} 1",
+      "kind": "template",
+      "slots": [
+        "SUP.ex"
+      ],
+      "where": [
+        "questnp7-geometric.js:59:29"
+      ]
+    },
+    "questnp7-geometric#14": {
+      "en": "n",
+      "kind": "string",
+      "slots": [
+        "SUP.ex"
+      ],
+      "where": [
+        "questnp7-geometric.js:60:28"
+      ]
+    },
+    "questnp7-geometric#15": {
+      "en": "n + 1",
+      "kind": "template",
+      "slots": [
+        "SUP.ex"
+      ],
+      "where": [
+        "questnp7-geometric.js:61:28"
+      ]
+    },
+    "questnp7-geometric#16": {
+      "en": "Find the general term Tₙ of <b>${list(seq)}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp7-geometric.js:64:7"
+      ]
+    },
+    "questnp7-geometric#17": {
+      "en": "Tₙ = a·rⁿ⁻¹ with a = T₁ and r the ratio. Keep a and r separate.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp7-geometric.js:67:15"
+      ]
+    },
+    "questnp7-geometric#18": {
+      "en": "Tₙ = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp7-geometric.js:68:22"
+      ]
+    },
+    "questnp7-geometric#19": {
+      "en": "a = T₁ = ${C(a1)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:70:16"
+      ]
+    },
+    "questnp7-geometric#20": {
+      "en": "the first term",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:70:40"
+      ]
+    },
+    "questnp7-geometric#21": {
+      "en": "Tₙ = a·rⁿ⁻¹ = ${correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:72:16"
+      ]
+    },
+    "questnp7-geometric#22": {
+      "en": "keep a and r apart — the power sits on r only",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:72:47"
+      ]
+    },
+    "questnp7-geometric#23": {
+      "en": "For <b>${list(seq)} ; …</b>, find T${C(k)}.",
+      "kind": "template",
+      "slots": [
+        "calcQ.prompt"
+      ],
+      "where": [
+        "questnp7-geometric.js:84:7"
+      ]
+    },
+    "questnp7-geometric#24": {
+      "en": "Tₙ = a·rⁿ⁻¹ = ${C(a1)} × ${C(r)}^(${C(k)} − 1). Do the power first.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp7-geometric.js:87:15"
+      ]
+    },
+    "questnp7-geometric#25": {
+      "en": "T${C(k)} = ${C(a1)} × ${C(r)}${SUP(\"\", C(k - 1))} = ${C(geoTn(a1, r)(k))}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp7-geometric.js:88:22"
+      ]
+    },
+    "questnp7-geometric#26": {
+      "en": "a = ${C(a1)} and r = ${C(seq[1])} ÷ ${C(seq[0])} = ${C(r)}  →  Tₙ = ${geoStr(a1, r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:90:16"
+      ]
+    },
+    "questnp7-geometric#27": {
+      "en": "Tₙ = a·rⁿ⁻¹",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:90:107"
+      ]
+    },
+    "questnp7-geometric#28": {
+      "en": "T${C(k)} = ${C(a1)} × ${C(r)}${SUP(\"\", `${C(k)} ${MINUS} 1`)} = ${C(a1)} × ${C(r)}${SUP(\"\", C(k - 1))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:91:16"
+      ]
+    },
+    "questnp7-geometric#29": {
+      "en": "T${C(k)} = ${C(a1)} × ${C(power)} = ${C(geoTn(a1, r)(k))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:92:16"
+      ]
+    },
+    "questnp7-geometric#30": {
+      "en": "power first, then multiply by a",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:92:80"
+      ]
+    },
+    "questnp7-geometric#31": {
+      "en": "In <b>${list(seq)}</b> each term is divided by ${C(div)}. Written as a multiplication, what is r?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp7-geometric.js:103:7"
+      ]
+    },
+    "questnp7-geometric#32": {
+      "en": "Dividing by ${C(div)} is the same as multiplying by 1 over ${C(div)}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp7-geometric.js:105:15"
+      ]
+    },
+    "questnp7-geometric#33": {
+      "en": "r = ${correct} (multiply by one ${div === 2 ? \"half\" : \"over \" + C(div)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp7-geometric.js:106:22"
+      ],
+      "nested": [
+        "half",
+        "over "
+      ]
+    },
+    "questnp7-geometric#34": {
+      "en": "Dividing by ${C(div)} is the same as multiplying by 1/${C(div)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:108:16"
+      ]
+    },
+    "questnp7-geometric#35": {
+      "en": "÷ a number = × its reciprocal",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:108:86"
+      ]
+    },
+    "questnp7-geometric#36": {
+      "en": "Check: ${C(seq[0])} × 1/${C(div)} = ${C(seq[1])}  →  r = ${correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:109:16"
+      ]
+    },
+    "questnp7-geometric#37": {
+      "en": "In Tₙ = a·rⁿ⁻¹, should you multiply a and r together <b>before</b> raising to the power?",
+      "kind": "string",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questnp7-geometric.js:116:7"
+      ]
+    },
+    "questnp7-geometric#38": {
+      "en": "Order of operations: powers before multiplication. Do rⁿ⁻¹ first, THEN multiply by a.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp7-geometric.js:118:15"
+      ]
+    },
+    "questnp7-geometric#39": {
+      "en": "No — raise r to the power first, then multiply by a.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp7-geometric.js:119:22"
+      ]
+    },
+    "questnp7-geometric#40": {
+      "en": "none of these",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questnp7-geometric.js:130:43",
+        "questnp7-geometric.js:131:67"
+      ]
+    },
+    "questnp7-geometric#41": {
+      "en": "arithmetic (linear)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp7-geometric.js:131:18"
+      ]
+    },
+    "questnp7-geometric#42": {
+      "en": "quadratic",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp7-geometric.js:131:41",
+        "questnp7-geometric.js:137:18"
+      ],
+      "data": true
+    },
+    "questnp7-geometric#43": {
+      "en": "geometric",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questnp7-geometric.js:131:54"
+      ]
+    },
+    "questnp7-geometric#44": {
+      "en": "First differences: ${list(fd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:135:15",
+        "questnp7-geometric.js:138:17"
+      ]
+    },
+    "questnp7-geometric#45": {
+      "en": "next − previous",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:135:52"
+      ]
+    },
+    "questnp7-geometric#46": {
+      "en": "They are all the same",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:136:15"
+      ]
+    },
+    "questnp7-geometric#47": {
+      "en": "constant 1st difference → arithmetic (linear)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:136:43"
+      ]
+    },
+    "questnp7-geometric#48": {
+      "en": "they change → not arithmetic",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:138:54"
+      ]
+    },
+    "questnp7-geometric#49": {
+      "en": "Second differences: ${list(firstDiffs(fd))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:139:17"
+      ]
+    },
+    "questnp7-geometric#50": {
+      "en": "constant 2nd difference → quadratic",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:139:67"
+      ]
+    },
+    "questnp7-geometric#51": {
+      "en": "The differences are not constant, so divide instead",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:140:17"
+      ]
+    },
+    "questnp7-geometric#52": {
+      "en": "next ÷ previous",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:140:75"
+      ]
+    },
+    "questnp7-geometric#53": {
+      "en": "${C(seq[1])} ÷ ${C(seq[0])} = ${C(seq[1] / seq[0])} and ${C(seq[2])} ÷ ${C(seq[1])} = ${C(seq[2] / seq[1])}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questnp7-geometric.js:141:17"
+      ]
+    },
+    "questnp7-geometric#54": {
+      "en": "same ratio → geometric",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questnp7-geometric.js:141:131"
+      ]
+    },
+    "questnp7-geometric#55": {
+      "en": "Classify the pattern <b>${list(seq)}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questnp7-geometric.js:143:7"
+      ]
+    },
+    "questnp7-geometric#56": {
+      "en": "Constant first difference → arithmetic. Constant second difference → quadratic. Constant ratio → geometric.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questnp7-geometric.js:145:15"
+      ]
+    },
+    "questnp7-geometric#57": {
+      "en": "It is ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questnp7-geometric.js:146:22"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1626
+}

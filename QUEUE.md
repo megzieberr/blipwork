@@ -46,7 +46,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### Number Patterns
 - ☑ 2026-10-17 T22 | concepts: the `pat` block (js/concepts/pat.js after S4) | ~511 words | counted by af_extract 2026-10-17
-- ⏳ 2026-10-17 20:10 T23 | hub rounds: questnp1-spot … questnp7-geometric (7 files) | ~1 767 words | verify page: verify-patterns.html
+- ☑ 2026-10-17 T23 | hub rounds: questnp1-spot … questnp7-geometric (7 files) | ~1 767 words | verify page: verify-patterns.html
 
 ### Analytical Geometry
 - ☑ 2026-10-17 T24 | concepts: the `analytical` block (js/concepts/analytical.js after S4) | ~455 words | counted by af_extract 2026-10-17
@@ -55,7 +55,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 ### Functions
 - ☑ 2026-10-17 T26 | concepts: the `func` block (js/concepts/func.js after S4) | ~734 words | counted by af_extract 2026-10-17
 - ⏳ 2026-10-17 20:17 T27 | hub rounds: questfn1-families … questfn6-transformations (6 files) | ~3 719 words | verify page: verify-func.html
-- ☐ T28 | hub rounds: questfn7-together | ~667 words | verify page: verify-func.html
+- ⏳ 2026-10-17 20:18 T28 | hub rounds: questfn7-together | ~667 words | verify page: verify-func.html
 - ☐ T29 | exam: cards-func, func-graphs-together, func-hyperbola-and-exponential-2, func-hyperbola-and-exponential (4 files) | ~3 442 words | verify-exam.html
 - ☐ T30 | exam: func-level4 | ~3 087 words | verify-exam.html
 - ☐ T31 | exam: func-line-and-parabola, func-siblings-asymptotes-domain-range (2 files) | ~2 920 words | verify-exam.html
