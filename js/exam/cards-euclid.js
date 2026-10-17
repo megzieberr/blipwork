@@ -219,7 +219,7 @@ export const euclidCards = [
        setup, then the two results (b) and (c) handed it. Written out
        rather than referenced, so the card reads complete on its own. */
     intro: {
-      en: "O is the centre of the circle. TA and TB are tangents to the circle at A and B. C is a point on the major arc AB, and CA and CB are chords. &nbsp;∠ATB = x.<br><br>Earlier parts of this question established that <b>OATB is a cyclic quadrilateral</b> (both tangents meet their radii at 90°), and that <b>∠AOB = 180° − x</b>.",
+      en: "O is the centre of the circle. TA and TB are tangents to the circle at A and B. C is a point on the major arc AB, and CA and CB are chords. &nbsp;∠ATB = x.<br><br>Earlier parts of this question established that <b>OATB is a cyclic quadrilateral</b> (both tangents meet their radii at 90°), and that <b>∠AOB = 180° − x</b>.", af: "O is die middelpunt van die sirkel. TA en TB is raaklyne aan die sirkel by A en B. C is 'n punt op die groot boog AB, en CA en CB is koorde. &nbsp;∠ATB = x.<br><br>Vroeëre dele van hierdie vraag het vasgestel dat <b>OATB 'n koordevierhoek is</b> (albei raaklyne maak 90° met hul radii), en dat <b>∠AOB = 180° − x</b>.",
     },
   }),
   chained("level-4", "euclid.l4.q3"),

@@ -149,7 +149,7 @@ const bw1 = {
   lostQuest: LOST_PENDING,
   marks: 5,
   intro: {
-    en: "In the diagram, O is the centre of the circle. AB is a chord of the circle and M is a point on AB such that &nbsp;OM ⊥ AB.",
+    en: "In the diagram, O is the centre of the circle. AB is a chord of the circle and M is a point on AB such that &nbsp;OM ⊥ AB.", af: "In die diagram is O die middelpunt van die sirkel. AB is 'n koord van die sirkel en M is 'n punt op AB sodat &nbsp;OM ⊥ AB.",
   },
   diagram: {
     parts: {
@@ -181,40 +181,40 @@ const bw1 = {
       marks: 5,
       level: 1,
       prompt: {
-        en: "Prove the theorem which states that a line drawn from the centre of a circle perpendicular to a chord bisects the chord. &nbsp;That is, prove that &nbsp;<b>AM = MB</b>.",
+        en: "Prove the theorem which states that a line drawn from the centre of a circle perpendicular to a chord bisects the chord. &nbsp;That is, prove that &nbsp;<b>AM = MB</b>.", af: "Bewys die stelling wat sê dat die lyn wat vanuit die middelpunt van 'n sirkel loodreg op 'n koord getrek word, die koord halveer. &nbsp;Dit wil sê, bewys dat &nbsp;<b>AM = MB</b>.",
       },
       hint: {
-        en: "Two triangles are hiding in this picture, but only once you draw two more lines. Which two lines from O would turn OM into a shared side of a pair of triangles — and what do you already know about their lengths?",
+        en: "Two triangles are hiding in this picture, but only once you draw two more lines. Which two lines from O would turn OM into a shared side of a pair of triangles — and what do you already know about their lengths?", af: "Twee driehoeke skuil in hierdie prent, maar eers wanneer jy nog twee lyne trek. Watter twee lyne vanuit O sal OM 'n gedeelde sy van twee driehoeke maak, en wat weet jy reeds van hul lengtes?",
       },
       memo: [
         /* the two lines appear, plain ink, nothing claimed about them yet */
-        { type: "step", text: { en: "<b>Construction:</b> join OA and OB." }, ticks: ["ca"],
+        { type: "step", text: { en: "<b>Construction:</b> join OA and OB.", af: "<b>Konstruksie:</b> verbind OA en OB." }, ticks: ["ca"],
           hl: { construction: BW1_CON } },
         /* both right angles at M — the spec only ever drew ∠OMB's square,
            so this is where ∠OMA's appears and where the pair reads as a pair */
-        { type: "step", text: { en: "In △OMA and △OMB:<br>∠OMA = ∠OMB = 90° &nbsp;&nbsp;<i>(given: OM ⊥ AB)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "In △OMA and △OMB:<br>∠OMA = ∠OMB = 90° &nbsp;&nbsp;<i>(given: OM ⊥ AB)</i>", af: "In △OMA en △OMB:<br>∠OMA = ∠OMB = 90° &nbsp;&nbsp;<i>(gegee: OM ⊥ AB)</i>" }, ticks: ["ca"],
           hl: { construction: BW1_CON, angles: BW1_RIGHT_ANGLES } },
         /* the radii light, and the ‖ ticks that SAY "equal" arrive with
            the sentence that says it */
-        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>", af: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" }, ticks: ["ca"],
           hl: { construction: BW1_CON_TICKED, chords: [["O", "A"], ["O", "B"]], angles: BW1_RIGHT_ANGLES } },
         /* the shared side. The radii keep their ticks (ink) but hand the
            marker over to OM, so the amber is always the line being talked
            about — by now the picture holds all three facts of the RHS. */
-        { type: "step", text: { en: "OM = OM &nbsp;&nbsp;<i>(common)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "OM = OM &nbsp;&nbsp;<i>(common)</i>", af: "OM = OM &nbsp;&nbsp;<i>(gemeen)</i>" }, ticks: ["ca"],
           hl: { construction: BW1_CON_TICKED, chords: [["O", "M"]], angles: BW1_RIGHT_ANGLES } },
         /* no `hl`: an answer block falls through to `reveal`, so the walk
            ends on exactly the figure the Done path draws */
-        { type: "answer", text: { en: "∴ △OMA ≡ △OMB &nbsp;&nbsp;<i>(RHS)</i><br>∴ AM = MB" }, ticks: ["a"] },
+        { type: "answer", text: { en: "∴ △OMA ≡ △OMB &nbsp;&nbsp;<i>(RHS)</i><br>∴ AM = MB", af: "∴ △OMA ≡ △OMB &nbsp;&nbsp;<i>(RHS)</i><br>∴ AM = MB" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: <b>the construction line is a mark.</b> The printed figure never shows OA and OB — you draw them and you write “join OA and OB” as your first line. A proof that starts at “OA = OB” has already lost a mark for a line that takes three seconds.",
+          en: "WATCH OUT: <b>the construction line is a mark.</b> The printed figure never shows OA and OB — you draw them and you write “join OA and OB” as your first line. A proof that starts at “OA = OB” has already lost a mark for a line that takes three seconds.", af: "PASOP: <b>die konstruksielyn is 'n punt werd.</b> Die gedrukte figuur wys nooit OA en OB nie: jy trek hulle self en jy skryf “verbind OA en OB” as jou eerste reël. 'n Bewys wat by “OA = OB” begin, het reeds 'n punt verloor vir 'n lyn wat drie sekondes vat.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: congruency needs <b>three</b> facts and the right label. Right angle, hypotenuse, side &nbsp;⟹&nbsp; <b>RHS</b>. Writing SSS or SAS here scores nothing, even though the triangles really are congruent.",
+          en: "REMEMBER: congruency needs <b>three</b> facts and the right label. Right angle, hypotenuse, side &nbsp;⟹&nbsp; <b>RHS</b>. Writing SSS or SAS here scores nothing, even though the triangles really are congruent.", af: "ONTHOU: kongruensie het <b>drie</b> feite en die regte etiket nodig. Regte hoek, hipotenusa (skuinssy), sy &nbsp;⟹&nbsp; <b>RHS</b>. As jy hier SSS of SHS skryf, kry jy niks, al is die driehoeke regtig kongruent.",
         } },
       ],
       esplain: {
-        en: "This is the shortest of the four proofs, and it is really just a congruency question wearing a circle. The whole trick is the construction: the moment you join OA and OB, you have two triangles that share the side OM, and their long sides OA and OB have to be equal because both are radii. Add the right angle that was handed to you, and you have a right angle, a hypotenuse and a matching side — which is exactly RHS. Congruent triangles have all their matching parts equal, so AM must equal MB, and that is the theorem. Learn it as a picture: two radii dropped in, one shared upright, one right angle. If you can draw that picture from memory you can write the proof from memory, and it is worth five marks every time it is asked.",
+        en: "This is the shortest of the four proofs, and it is really just a congruency question wearing a circle. The whole trick is the construction: the moment you join OA and OB, you have two triangles that share the side OM, and their long sides OA and OB have to be equal because both are radii. Add the right angle that was handed to you, and you have a right angle, a hypotenuse and a matching side — which is exactly RHS. Congruent triangles have all their matching parts equal, so AM must equal MB, and that is the theorem. Learn it as a picture: two radii dropped in, one shared upright, one right angle. If you can draw that picture from memory you can write the proof from memory, and it is worth five marks every time it is asked.", af: "Dit is die kortste van die vier bewyse, en dit is eintlik net 'n kongruensievraag met 'n sirkel aan. Die hele truuk is die konstruksie: sodra jy OA en OB verbind, het jy twee driehoeke wat die sy OM deel, en hul lang sye OA en OB moet gelyk wees omdat albei radii is. Tel die regte hoek by wat jy gegee is, en jy het 'n regte hoek, 'n skuinssy en 'n ooreenstemmende sy: presies RHS. Kongruente driehoeke het al hul ooreenstemmende dele gelyk, dus moet AM gelyk wees aan MB, en dit is die stelling. Leer dit as 'n prent: twee radii ingetrek, een gedeelde regop lyn, een regte hoek. As jy daardie prent uit jou kop kan teken, kan jy die bewys uit jou kop skryf, en dit is elke keer vyf punte werd as dit gevra word.",
       },
     },
   ],
@@ -308,7 +308,7 @@ const bw3 = {
   lostQuest: LOST_PENDING,
   marks: 6,
   intro: {
-    en: "In the diagram, ABCD is a cyclic quadrilateral of the circle with centre O.",
+    en: "In the diagram, ABCD is a cyclic quadrilateral of the circle with centre O.", af: "In die diagram is ABCD 'n koordevierhoek van die sirkel met middelpunt O.",
   },
   diagram: {
     parts: {
@@ -371,40 +371,40 @@ const bw3 = {
       marks: 6,
       level: 1,
       prompt: {
-        en: "Prove the theorem which states that the opposite angles of a cyclic quadrilateral are supplementary. &nbsp;That is, prove that &nbsp;<b>Â + Ĉ = 180°</b>.",
+        en: "Prove the theorem which states that the opposite angles of a cyclic quadrilateral are supplementary. &nbsp;That is, prove that &nbsp;<b>Â + Ĉ = 180°</b>.", af: "Bewys die stelling wat sê dat die teenoorstaande hoeke van 'n koordevierhoek supplementêr is. &nbsp;Dit wil sê, bewys dat &nbsp;<b>Â + Ĉ = 180°</b>.",
       },
       hint: {
-        en: "Â and Ĉ both stand on the same chord, BD — one from each side of it. So join the centre to B and to D, and use the one theorem that turns an angle at the circumference into an angle at the centre. Twice.",
+        en: "Â and Ĉ both stand on the same chord, BD — one from each side of it. So join the centre to B and to D, and use the one theorem that turns an angle at the circumference into an angle at the centre. Twice.", af: "Â en Ĉ word albei deur dieselfde koord, BD, onderspan: een van elke kant af. Verbind dus die middelpunt met B en met D, en gebruik die een stelling wat 'n omtrekshoek in 'n middelpuntshoek omsit. Twee keer.",
       },
       memo: [
         /* the two lines to the centre appear, and the two wedges they
            create are NAMED — which is exactly what the sentence does */
-        { type: "step", text: { en: "<b>Construction:</b> join OB and OD. &nbsp;Call the angle at O on C's side of BD &nbsp;Ô₁, and the angle on A's side &nbsp;Ô₂." }, ticks: ["ca"],
+        { type: "step", text: { en: "<b>Construction:</b> join OB and OD. &nbsp;Call the angle at O on C's side of BD &nbsp;Ô₁, and the angle on A's side &nbsp;Ô₂.", af: "<b>Konstruksie:</b> verbind OB en OD. &nbsp;Noem die hoek by O aan C se kant van BD &nbsp;Ô₁, en die hoek aan A se kant &nbsp;Ô₂." }, ticks: ["ca"],
           hl: { bare: true, construction: BW2_CON, angles: bw2Centre("1", "2") } },
         /* now the two angles the theorem is about get their letters */
-        { type: "step", text: { en: "Let &nbsp;Â = x&nbsp; and &nbsp;Ĉ = y." },
+        { type: "step", text: { en: "Let &nbsp;Â = x&nbsp; and &nbsp;Ĉ = y.", af: "Stel &nbsp;Â = x&nbsp; en &nbsp;Ĉ = y." },
           hl: { bare: true, construction: BW2_CON, angles: bw2Centre("1", "2").concat(BW2_XY) } },
         /* O-hat-1 stops being a name and becomes a value */
-        { type: "step", text: { en: "Ô₁ = 2x &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "Ô₁ = 2x &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>", af: "Ô₁ = 2x &nbsp;&nbsp;<i>(Midpt∠ = 2 × Omtreks∠)</i>" }, ticks: ["ca"],
           hl: { bare: true, construction: BW2_CON, angles: bw2Centre("2x", "2").concat(BW2_XY) } },
         /* and so does O-hat-2 — from here the picture IS the proof */
-        { type: "step", text: { en: "Ô₂ = 2y &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "Ô₂ = 2y &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>", af: "Ô₂ = 2y &nbsp;&nbsp;<i>(Midpt∠ = 2 × Omtreks∠)</i>" }, ticks: ["ca"],
           hl: { bare: true, construction: BW2_CON, angles: bw2Centre("2x", "2y").concat(BW2_XY) } },
         /* no `hl` on the next two: "they fill the revolution" and the
            algebra that follows add nothing a picture can show that the
            two wedges meeting round O are not already showing */
-        { type: "step", text: { en: "Ô₁ + Ô₂ = 360° &nbsp;&nbsp;<i>(∠s round a pt)</i>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "∴ 2x + 2y = 360°" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "∴ x + y = 180°<br>∴ Â + Ĉ = 180°" }, ticks: ["a"] },
+        { type: "step", text: { en: "Ô₁ + Ô₂ = 360° &nbsp;&nbsp;<i>(∠s round a pt)</i>", af: "Ô₁ + Ô₂ = 360° &nbsp;&nbsp;<i>(∠e om 'n punt)</i>" }, ticks: ["ca"] },
+        { type: "step", text: { en: "∴ 2x + 2y = 360°", af: "∴ 2x + 2y = 360°" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "∴ x + y = 180°<br>∴ Â + Ĉ = 180°", af: "∴ x + y = 180°<br>∴ Â + Ĉ = 180°" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: <b>the construction line is a mark.</b> Nothing in this proof works until OB and OD are drawn, so “join OB and OD” is your first written line — before any x or y appears.",
+          en: "WATCH OUT: <b>the construction line is a mark.</b> Nothing in this proof works until OB and OD are drawn, so “join OB and OD” is your first written line — before any x or y appears.", af: "PASOP: <b>die konstruksielyn is 'n punt werd.</b> Niks in hierdie bewys werk voordat OB en OD getrek is nie, dus is “verbind OB en OD” jou eerste geskrewe reël, nog voordat enige x of y verskyn.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: the two angles at O are on <b>opposite sides of BD</b>, and together they fill the whole revolution — that is why the reason is <i>∠s round a pt</i> and the total is 360°, not 180°. Writing 180° here is the slip that costs the last three marks.",
+          en: "REMEMBER: the two angles at O are on <b>opposite sides of BD</b>, and together they fill the whole revolution — that is why the reason is <i>∠s round a pt</i> and the total is 360°, not 180°. Writing 180° here is the slip that costs the last three marks.", af: "ONTHOU: die twee hoeke by O lê aan <b>teenoorgestelde kante van BD</b>, en saam vul hulle die hele omwenteling: dis hoekom die rede <i>∠e om 'n punt</i> is en die totaal 360° is, nie 180° nie. Om hier 180° te skryf, is die glips wat die laaste drie punte kos.",
         } },
       ],
       esplain: {
-        en: "Both of the angles you care about stand on the same chord, BD — Â from one side of it and Ĉ from the other. That is the clue to join the centre to B and to D, because then each of those angles has a partner at the centre standing on the very same arc, and the angle-at-centre theorem doubles it. So the C-side angle at O is 2x and the A-side one is 2y. Now look at the point O itself: those two angles are all there is, and going once around a point always adds to 360°. So 2x + 2y = 360°, and halving gives x + y = 180°. Notice the proof never touches B̂ or D̂ at all — the same argument run on the other chord, AC, is what proves that second pair. Learn this one as: same chord, two centres, one revolution, halve it.",
+        en: "Both of the angles you care about stand on the same chord, BD — Â from one side of it and Ĉ from the other. That is the clue to join the centre to B and to D, because then each of those angles has a partner at the centre standing on the very same arc, and the angle-at-centre theorem doubles it. So the C-side angle at O is 2x and the A-side one is 2y. Now look at the point O itself: those two angles are all there is, and going once around a point always adds to 360°. So 2x + 2y = 360°, and halving gives x + y = 180°. Notice the proof never touches B̂ or D̂ at all — the same argument run on the other chord, AC, is what proves that second pair. Learn this one as: same chord, two centres, one revolution, halve it.", af: "Albei die hoeke waaroor dit gaan, word deur dieselfde koord, BD, onderspan: Â van die een kant af en Ĉ van die ander kant af. Dit is die leidraad om die middelpunt met B en met D te verbind, want dan het elkeen van daardie hoeke 'n maat by die middelpunt wat op presies dieselfde boog staan, en die middelpuntshoek is dubbel die omtrekshoek. Die hoek by O aan C se kant is dus 2x en die een aan A se kant is 2y. Kyk nou na die punt O self: daardie twee hoeke is al wat daar is, en een keer om 'n punt tel altyd op tot 360°. Dus is 2x + 2y = 360°, en as jy halveer, kry jy x + y = 180°. Let op dat die bewys glad nie aan B̂ of D̂ raak nie: dieselfde redenasie op die ander koord, AC, bewys daardie tweede paar. Leer hierdie een as: dieselfde koord, twee middelpuntshoeke, een omwenteling, halveer dit.",
       },
     },
   ],
@@ -476,7 +476,7 @@ const bw4 = {
   lostQuest: LOST_PENDING,
   marks: 6,
   intro: {
-    en: "In the diagram, O is the centre of the circle and &nbsp;SR&nbsp; is a tangent to the circle at T. &nbsp;TA is a chord, and B is a point on the circle in the alternate segment — the far side of TA from R.",
+    en: "In the diagram, O is the centre of the circle and &nbsp;SR&nbsp; is a tangent to the circle at T. &nbsp;TA is a chord, and B is a point on the circle in the alternate segment — the far side of TA from R.", af: "In die diagram is O die middelpunt van die sirkel en is &nbsp;SR&nbsp; 'n raaklyn aan die sirkel by T. &nbsp;TA is 'n koord, en B is 'n punt op die sirkel in die oorstaande segment: aan die ander kant van TA as R.",
   },
   diagram: {
     parts: {
@@ -510,44 +510,44 @@ const bw4 = {
       marks: 6,
       level: 1,
       prompt: {
-        en: "Prove the theorem which states that the angle between a tangent to a circle and a chord drawn from the point of contact is equal to the angle in the alternate segment. &nbsp;That is, prove that &nbsp;<b>∠ATR = ∠ABT</b>.",
+        en: "Prove the theorem which states that the angle between a tangent to a circle and a chord drawn from the point of contact is equal to the angle in the alternate segment. &nbsp;That is, prove that &nbsp;<b>∠ATR = ∠ABT</b>.", af: "Bewys die stelling wat sê dat die hoek tussen 'n raaklyn aan 'n sirkel en 'n koord wat vanuit die raakpunt getrek word, gelyk is aan die hoek in die oorstaande segment. &nbsp;Dit wil sê, bewys dat &nbsp;<b>∠ATR = ∠ABT</b>.",
       },
       hint: {
-        en: "Start at T and draw the one line through the centre — a diameter. That hands you a right angle where it meets the tangent, and a second right angle at the far end of the chord. Everything else is angles of a triangle.",
+        en: "Start at T and draw the one line through the centre — a diameter. That hands you a right angle where it meets the tangent, and a second right angle at the far end of the chord. Everything else is angles of a triangle.", af: "Begin by T en trek die een lyn deur die middelpunt: 'n middellyn. Dit gee vir jou 'n regte hoek waar dit die raaklyn ontmoet, en 'n tweede regte hoek aan die verste ent van die koord. Al die res is hoeke van 'n driehoek.",
       },
       memo: [
         /* C appears at the far end of the diameter, and CA is joined —
            new ink, no claims yet */
-        { type: "step", text: { en: "<b>Construction:</b> draw the diameter TC through O, and join AC." }, ticks: ["ca"],
+        { type: "step", text: { en: "<b>Construction:</b> draw the diameter TC through O, and join AC.", af: "<b>Konstruksie:</b> trek die middellyn TC deur O, en verbind AC." }, ticks: ["ca"],
           hl: { bare: true, construction: BW3_CON } },
         /* the given angle gets its name */
-        { type: "step", text: { en: "Let &nbsp;∠ATR = x." },
+        { type: "step", text: { en: "Let &nbsp;∠ATR = x.", af: "Stel &nbsp;∠ATR = x." },
           hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T] } },
         /* the first right angle: tangent meets diameter */
-        { type: "step", text: { en: "∠CTR = 90° &nbsp;&nbsp;<i>(tan ⊥ diameter)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "∠CTR = 90° &nbsp;&nbsp;<i>(tan ⊥ diameter)</i>", af: "∠CTR = 90° &nbsp;&nbsp;<i>(raaklyn ⊥ middellyn)</i>" }, ticks: ["ca"],
           hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT] } },
         /* what is left of that right angle, written on the figure */
-        { type: "step", text: { en: "∴ ∠CTA = 90° − x" }, ticks: ["ca"],
+        { type: "step", text: { en: "∴ ∠CTA = 90° − x", af: "∴ ∠CTA = 90° − x" }, ticks: ["ca"],
           hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT, BW3_CTA] } },
         /* the second right angle: the angle in the semi-circle */
-        { type: "step", text: { en: "∠TAC = 90° &nbsp;&nbsp;<i>(∠s in semi-circle)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "∠TAC = 90° &nbsp;&nbsp;<i>(∠s in semi-circle)</i>", af: "∠TAC = 90° &nbsp;&nbsp;<i>(∠ in halwe sirkel)</i>" }, ticks: ["ca"],
           hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT, BW3_CTA, BW3_SEMI_RIGHT] } },
         /* the triangle's third angle turns out to be x again — the far
            end of the bridge, one step short of walking it across to B */
-        { type: "step", text: { en: "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(int. ∠s of △)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(int. ∠s of △)</i>", af: "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(binne ∠e △)</i>" }, ticks: ["ca"],
           hl: { bare: true, construction: BW3_CON, angles: [BW3_X_AT_T, BW3_TAN_RIGHT, BW3_CTA, BW3_SEMI_RIGHT, BW3_X_AT_C] } },
         /* no `hl`: the answer IS the reveal, which is the first and only
            time the angle at B is marked */
-        { type: "answer", text: { en: "∠ABT = ∠TCA &nbsp;&nbsp;<i>(∠s in the same seg)</i><br>∴ ∠ABT = x = ∠ATR" }, ticks: ["a"] },
+        { type: "answer", text: { en: "∠ABT = ∠TCA &nbsp;&nbsp;<i>(∠s in the same seg)</i><br>∴ ∠ABT = x = ∠ATR", af: "∠ABT = ∠TCA &nbsp;&nbsp;<i>(∠e in dieselfde segment)</i><br>∴ ∠ABT = x = ∠ATR" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: <b>the construction line is a mark.</b> “Draw the diameter TC and join AC” is the first thing on the page — and it has to be a <b>diameter</b>, through O. Any other line through T gives you no right angle and no proof.",
+          en: "WATCH OUT: <b>the construction line is a mark.</b> “Draw the diameter TC and join AC” is the first thing on the page — and it has to be a <b>diameter</b>, through O. Any other line through T gives you no right angle and no proof.", af: "PASOP: <b>die konstruksielyn is 'n punt werd.</b> “Trek die middellyn TC en verbind AC” is die eerste ding op die bladsy, en dit moet 'n <b>middellyn</b> wees, deur O. Enige ander lyn deur T gee jou geen regte hoek en geen bewys nie.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: the last step needs C and B on the <b>same side</b> of the chord TA — that is what makes ∠TCA and ∠ABT angles in the same segment. Saying “same segment” for two angles on opposite sides of the chord is the classic way to lose the final mark.",
+          en: "REMEMBER: the last step needs C and B on the <b>same side</b> of the chord TA — that is what makes ∠TCA and ∠ABT angles in the same segment. Saying “same segment” for two angles on opposite sides of the chord is the classic way to lose the final mark.", af: "ONTHOU: vir die laaste stap moet C en B aan <b>dieselfde kant</b> van die koord TA lê: dit is wat ∠TCA en ∠ABT hoeke in dieselfde segment maak. Om “dieselfde segment” te sê vir twee hoeke aan teenoorgestelde kante van die koord, is die klassieke manier om die laaste punt te verloor.",
         } },
       ],
       esplain: {
-        en: "The tangent–chord theorem looks like magic because the two equal angles are nowhere near each other, so the proof builds a bridge between them out of two right angles. Drawing the diameter from the point of contact gives you the first one, because a tangent always meets a diameter at 90°. That splits the right angle at T into your x and whatever is left, which is 90° − x. The second right angle is free: any angle standing on a diameter from the circle is 90°, so the angle at A in triangle TAC is a right angle. Now the angles of that triangle must add to 180°, and the only thing left over for the angle at C is x itself. The last step just walks x across to B, because C and B sit on the same side of the chord TA and so see it at equal angles. Two right angles and a triangle — that is the whole bridge.",
+        en: "The tangent–chord theorem looks like magic because the two equal angles are nowhere near each other, so the proof builds a bridge between them out of two right angles. Drawing the diameter from the point of contact gives you the first one, because a tangent always meets a diameter at 90°. That splits the right angle at T into your x and whatever is left, which is 90° − x. The second right angle is free: any angle standing on a diameter from the circle is 90°, so the angle at A in triangle TAC is a right angle. Now the angles of that triangle must add to 180°, and the only thing left over for the angle at C is x itself. The last step just walks x across to B, because C and B sit on the same side of the chord TA and so see it at equal angles. Two right angles and a triangle — that is the whole bridge.", af: "Die raaklyn koord stelling lyk soos towerkuns, want die twee gelyke hoeke is glad nie naby mekaar nie, dus bou die bewys 'n brug tussen hulle uit twee regte hoeke. As jy die middellyn vanuit die raakpunt trek, kry jy die eerste een, want 'n raaklyn maak altyd 90° met 'n middellyn. Dit verdeel die regte hoek by T in jou x en wat oorbly, en dit is 90° − x. Die tweede regte hoek is verniet: enige omtrekshoek wat deur 'n middellyn onderspan word, is 90°, dus is die hoek by A in driehoek TAC 'n regte hoek. Die hoeke van daardie driehoek moet nou optel tot 180°, en al wat vir die hoek by C oorbly, is x self. Die laaste stap dra x net oor na B, want C en B lê aan dieselfde kant van die koord TA en sien dit dus teen gelyke hoeke. Twee regte hoeke en 'n driehoek: dit is die hele brug.",
       },
     },
   ],

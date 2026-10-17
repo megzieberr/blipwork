@@ -188,43 +188,43 @@ const t2q4 = {
       marks: 5,
       level: 1,
       prompt: {
-        en: "In the diagram, O is the centre of the circle. A, B and C are points on the circle. BO is produced to D.<br><br>Prove the theorem which states that &nbsp;∠AOC = 2 · ∠ABC.",
+        en: "In the diagram, O is the centre of the circle. A, B and C are points on the circle. BO is produced to D.<br><br>Prove the theorem which states that &nbsp;∠AOC = 2 · ∠ABC.", af: "In die diagram is O die middelpunt van die sirkel. A, B en C is punte op die sirkel. BO is verleng tot by D.<br><br>Bewys die stelling wat sê dat &nbsp;∠AOC = 2 · ∠ABC.",
       },
       hint: {
-        en: "Start by naming the two halves of the angle at B — call them x and y — and look for the isosceles triangles hiding in the radii. Then remember what an exterior angle of a triangle is worth.",
+        en: "Start by naming the two halves of the angle at B — call them x and y — and look for the isosceles triangles hiding in the radii. Then remember what an exterior angle of a triangle is worth.", af: "Begin deur die twee dele van die hoek by B 'n naam te gee, noem hulle x en y, en soek die gelykbenige driehoeke wat in die radii skuil. Onthou dan wat 'n buitehoek van 'n driehoek werd is.",
       },
       memo: [
         /* the two halves of the angle at B get their names — the first
            thing that appears on a figure that started completely bare */
-        { type: "step", text: { en: "Let ∠ABO = x &nbsp;and&nbsp; ∠CBO = y." },
+        { type: "step", text: { en: "Let ∠ABO = x &nbsp;and&nbsp; ∠CBO = y.", af: "Stel ∠ABO = x &nbsp;en&nbsp; ∠CBO = y." },
           hl: { bare: true, angles: Q4A_XY_AT_B } },
         /* the two radii light, with the ticks that say they are equal */
-        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" },
+        { type: "step", text: { en: "OA = OB &nbsp;&nbsp;<i>(radii)</i>", af: "OA = OB &nbsp;&nbsp;<i>(radii)</i>" },
           hl: { bare: true, angles: Q4A_XY_AT_B, chords: Q4A_OA_OB } },
         /* the base angle the isosceles triangle hands back */
-        { type: "step", text: { en: "∴ ∠OAB = x &nbsp;&nbsp;<i>(∠s opposite equal sides)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "∴ ∠OAB = x &nbsp;&nbsp;<i>(∠s opposite equal sides)</i>", af: "∴ ∠OAB = x &nbsp;&nbsp;<i>(∠e teenoor gelyke sye)</i>" }, ticks: ["ca"],
           hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A]), chords: Q4A_OA_OB } },
         /* the first half of the angle at the centre */
-        { type: "step", text: { en: "∠AOD = x + x = 2x &nbsp;&nbsp;<i>(exterior ∠ of △AOB)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "∠AOD = x + x = 2x &nbsp;&nbsp;<i>(exterior ∠ of △AOB)</i>", af: "∠AOD = x + x = 2x &nbsp;&nbsp;<i>(buite ∠ van △AOB)</i>" }, ticks: ["ca"],
           hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A, Q4A_2X_AT_O]), chords: Q4A_OA_OB } },
         /* the same move on the other side: third radius, second base angle */
-        { type: "step", text: { en: "OC = OB, so ∠OCB = y &nbsp;&nbsp;<i>(radii; ∠s opposite equal sides)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "OC = OB, so ∠OCB = y &nbsp;&nbsp;<i>(radii; ∠s opposite equal sides)</i>", af: "OC = OB, dus ∠OCB = y &nbsp;&nbsp;<i>(radii; ∠e teenoor gelyke sye)</i>" }, ticks: ["ca"],
           hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A, Q4A_2X_AT_O, Q4A_Y_AT_C]), chords: Q4A_OA_OB_OC } },
         /* and the second half of the angle at the centre */
-        { type: "step", text: { en: "∠COD = y + y = 2y &nbsp;&nbsp;<i>(exterior ∠ of △COB)</i>" }, ticks: ["ca"],
+        { type: "step", text: { en: "∠COD = y + y = 2y &nbsp;&nbsp;<i>(exterior ∠ of △COB)</i>", af: "∠COD = y + y = 2y &nbsp;&nbsp;<i>(buite ∠ van △COB)</i>" }, ticks: ["ca"],
           hl: { bare: true, angles: Q4A_XY_AT_B.concat([Q4A_X_AT_A, Q4A_2X_AT_O, Q4A_Y_AT_C, Q4A_2Y_AT_O]), chords: Q4A_OA_OB_OC } },
         /* no `hl`: the answer falls through to `reveal`, which is where
            ∠AOC and ∠ABC themselves are drawn for the first time */
-        { type: "answer", text: { en: "∠AOC = 2x + 2y = 2(x + y) = 2 · ∠ABC" }, ticks: ["a"] },
+        { type: "answer", text: { en: "∠AOC = 2x + 2y = 2(x + y) = 2 · ∠ABC", af: "∠AOC = 2x + 2y = 2(x + y) = 2 · ∠ABC" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: in bookwork the <b>reasons</b> carry the marks, not the algebra. “∠s opposite equal sides” and “exterior ∠ of a triangle” must appear in words. A proof written as five lines of x's and y's with no reasons scores almost nothing.",
+          en: "WATCH OUT: in bookwork the <b>reasons</b> carry the marks, not the algebra. “∠s opposite equal sides” and “exterior ∠ of a triangle” must appear in words. A proof written as five lines of x's and y's with no reasons scores almost nothing.", af: "PASOP: by stellingbewyse dra die <b>redes</b> die punte, nie die algebra nie. “∠e teenoor gelyke sye” en “buite ∠ van 'n driehoek” moet in woorde verskyn. 'n Bewys van vyf reëls x'e en y'e sonder redes kry amper niks.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: the whole proof is one pattern used twice — <b>isosceles triangle, then exterior angle</b>. Learn it as that pattern and you can rebuild it under pressure, even if you have forgotten the exact letters.",
+          en: "REMEMBER: the whole proof is one pattern used twice — <b>isosceles triangle, then exterior angle</b>. Learn it as that pattern and you can rebuild it under pressure, even if you have forgotten the exact letters.", af: "ONTHOU: die hele bewys is een patroon wat twee keer gebruik word: <b>gelykbenige driehoek, dan buitehoek</b>. Leer dit as daardie patroon en jy kan dit onder druk weer opbou, selfs al het jy die presiese letters vergeet.",
         } },
       ],
       esplain: {
-        en: "Bookwork is the most learnable five marks on any Paper 2, because the proof never changes — only the letters do. The engine of this one is that every radius is the same length, so the moment you draw OA and OB you have an isosceles triangle, and the two angles at its base must be equal. That is where the second x comes from; you did not calculate it, you deduced it. Then the exterior angle of a triangle equals the sum of the two opposite interior angles, so the angle at O sitting outside triangle AOB is x + x = 2x. Do exactly the same on the other side and you get 2y. Add the two pieces at the centre and the two pieces at B, and the centre's total is twice B's total. The reason D is drawn at all is to give you that exterior angle to point at — and the reason D has to sit between A and C is that this is the acute case, the only one the syllabus examines. Write the reasons in words next to every statement; they are literally what is being marked.",
+        en: "Bookwork is the most learnable five marks on any Paper 2, because the proof never changes — only the letters do. The engine of this one is that every radius is the same length, so the moment you draw OA and OB you have an isosceles triangle, and the two angles at its base must be equal. That is where the second x comes from; you did not calculate it, you deduced it. Then the exterior angle of a triangle equals the sum of the two opposite interior angles, so the angle at O sitting outside triangle AOB is x + x = 2x. Do exactly the same on the other side and you get 2y. Add the two pieces at the centre and the two pieces at B, and the centre's total is twice B's total. The reason D is drawn at all is to give you that exterior angle to point at — and the reason D has to sit between A and C is that this is the acute case, the only one the syllabus examines. Write the reasons in words next to every statement; they are literally what is being marked.", af: "Stellingbewyse is die maklikste vyf punte om te leer in enige Vraestel 2, want die bewys verander nooit nie, net die letters. Die enjin van hierdie een is dat elke radius ewe lank is, dus sodra jy OA en OB trek, het jy 'n gelykbenige driehoek, en die twee hoeke by sy basis moet gelyk wees. Dit is waar die tweede x vandaan kom; jy het dit nie bereken nie, jy het dit afgelei. Die buitehoek van 'n driehoek is dan gelyk aan die som van die twee teenoorstaande binnehoeke, dus is die hoek by O wat buite driehoek AOB lê, x + x = 2x. Doen presies dieselfde aan die ander kant en jy kry 2y. Tel die twee stukke by die middelpunt en die twee stukke by B op, en die middelpunt se totaal is twee keer B se totaal. D is net daar om jou daardie buitehoek te gee om na te wys, en D moet tussen A en C lê omdat dit die skerp geval is, die enigste een wat die sillabus eksamineer. Skryf die redes in woorde langs elke bewering; dit is letterlik waarvoor die punte gegee word.",
       },
     },
     {
@@ -232,21 +232,21 @@ const t2q4 = {
       marks: 3,
       level: 3,
       prompt: {
-        en: "In the diagram, O is the centre of a circle. PQ is a chord and M is a point on PQ such that OM ⊥ PQ. OM is produced to meet the circle at T. &nbsp;OM = 9 mm and PQ = 24 mm.<br><br>Calculate the length of the radius of the circle.",
+        en: "In the diagram, O is the centre of a circle. PQ is a chord and M is a point on PQ such that OM ⊥ PQ. OM is produced to meet the circle at T. &nbsp;OM = 9 mm and PQ = 24 mm.<br><br>Calculate the length of the radius of the circle.", af: "In die diagram is O die middelpunt van 'n sirkel. PQ is 'n koord en M is 'n punt op PQ sodat OM ⊥ PQ. OM is verleng om die sirkel by T te ontmoet. &nbsp;OM = 9 mm en PQ = 24 mm.<br><br>Bereken die lengte van die radius van die sirkel.",
       },
       hint: {
-        en: "OM ⊥ PQ is not just a right angle — there is a theorem attached to it that tells you something about where M sits on PQ. Get that first, then you have a right-angled triangle with two known sides.",
+        en: "OM ⊥ PQ is not just a right angle — there is a theorem attached to it that tells you something about where M sits on PQ. Get that first, then you have a right-angled triangle with two known sides.", af: "OM ⊥ PQ is nie net 'n regte hoek nie: daar is 'n stelling aan gekoppel wat jou iets vertel oor waar M op PQ lê. Kry dit eers, dan het jy 'n reghoekige driehoek met twee bekende sye.",
       },
       memo: [
-        { type: "step", text: { en: "PM = MQ = 12 mm &nbsp;&nbsp;<i>(line from the centre ⊥ to a chord bisects the chord)</i>" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "∠OMP = 90°, so Pythagoras applies in △OMP: &nbsp;OP² = OM² + PM² = 9² + 12² = 81 + 144 = 225" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "OP = 15 mm &nbsp;&nbsp;∴ radius = 15 mm" }, ticks: ["a"] },
+        { type: "step", text: { en: "PM = MQ = 12 mm &nbsp;&nbsp;<i>(line from the centre ⊥ to a chord bisects the chord)</i>", af: "PM = MQ = 12 mm &nbsp;&nbsp;<i>(lyn vanuit die middelpunt ⊥ op 'n koord halveer die koord)</i>" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "∠OMP = 90°, so Pythagoras applies in △OMP: &nbsp;OP² = OM² + PM² = 9² + 12² = 81 + 144 = 225", af: "∠OMP = 90°, dus geld Pythagoras in △OMP: &nbsp;OP² = OM² + PM² = 9² + 12² = 81 + 144 = 225" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "OP = 15 mm &nbsp;&nbsp;∴ radius = 15 mm", af: "OP = 15 mm &nbsp;&nbsp;∴ radius = 15 mm" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: PM is 12, not 24. The perpendicular from the centre <i>halves</i> the chord — using the whole 24 gives OP = 25,63…, which is the single most common wrong answer to this question.",
+          en: "WATCH OUT: PM is 12, not 24. The perpendicular from the centre <i>halves</i> the chord — using the whole 24 gives OP = 25,63…, which is the single most common wrong answer to this question.", af: "PASOP: PM is 12, nie 24 nie. Die loodlyn vanuit die middelpunt <i>halveer</i> die koord: as jy die hele 24 gebruik, kry jy OP = 25,63…, en dit is die heel algemeenste verkeerde antwoord op hierdie vraag.",
         } },
       ],
       esplain: {
-        en: "Two facts have to be joined here, and the theorem is the one people skip. A perpendicular dropped from the centre onto a chord always lands exactly in the middle of it — so OM ⊥ PQ is quietly telling you that PM is half of PQ, which is 12, not 24. That is a mark on its own and it needs its reason written in words. Once you have it, the picture is an ordinary right-angled triangle: OM = 9 up the middle, PM = 12 along the chord, and OP is the hypotenuse, which is also a radius because P is on the circle. Pythagoras finishes it, and 9 : 12 : 15 is just the 3 : 4 : 5 triangle scaled by three — worth recognising, because it means no rounding is involved anywhere.",
+        en: "Two facts have to be joined here, and the theorem is the one people skip. A perpendicular dropped from the centre onto a chord always lands exactly in the middle of it — so OM ⊥ PQ is quietly telling you that PM is half of PQ, which is 12, not 24. That is a mark on its own and it needs its reason written in words. Once you have it, the picture is an ordinary right-angled triangle: OM = 9 up the middle, PM = 12 along the chord, and OP is the hypotenuse, which is also a radius because P is on the circle. Pythagoras finishes it, and 9 : 12 : 15 is just the 3 : 4 : 5 triangle scaled by three — worth recognising, because it means no rounding is involved anywhere.", af: "Twee feite moet hier saamwerk, en die stelling is die een wat mense oorslaan. 'n Loodlyn vanuit die middelpunt op 'n koord land altyd presies in die middel daarvan, dus sê OM ⊥ PQ stilletjies vir jou dat PM die helfte van PQ is, en dit is 12, nie 24 nie. Dit is op sy eie 'n punt werd en dit het sy rede in woorde nodig. Sodra jy dit het, is die prent 'n gewone reghoekige driehoek: OM = 9 in die middel op, PM = 12 langs die koord, en OP is die skuinssy, wat ook 'n radius is omdat P op die sirkel lê. Pythagoras maak dit klaar, en 9 : 12 : 15 is net die driehoek 3 : 4 : 5 maal drie: die moeite werd om te herken, want dit beteken daar is nêrens afronding nodig nie.",
       },
     },
     {
@@ -254,17 +254,17 @@ const t2q4 = {
       marks: 1,
       level: 2,
       prompt: {
-        en: "Hence calculate the length of MT.",
+        en: "Hence calculate the length of MT.", af: "Bereken gevolglik die lengte van MT.",
       },
       hint: {
-        en: "T is on the circle and O is the centre, so what does that make OT? And notice where M sits along that line.",
+        en: "T is on the circle and O is the centre, so what does that make OT? And notice where M sits along that line.", af: "T lê op die sirkel en O is die middelpunt: wat is OT dan? Let ook op waar M op daardie lyn lê.",
       },
       memo: [
-        { type: "step", text: { en: "OT is a radius as well, so OT = 15 mm, and M lies on OT:" } },
-        { type: "answer", text: { en: "MT = OT − OM = 15 − 9 = 6 mm" }, ticks: ["a"] },
+        { type: "step", text: { en: "OT is a radius as well, so OT = 15 mm, and M lies on OT:", af: "OT is ook 'n radius, dus OT = 15 mm, en M lê op OT:" } },
+        { type: "answer", text: { en: "MT = OT − OM = 15 − 9 = 6 mm", af: "MT = OT − OM = 15 − 9 = 6 mm" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "The word “hence” is telling you this part rides on the last one, and it does — the whole job is realising that OT is a radius too, so the 15 you just worked out belongs to it as well. Then M is simply a point sitting on that radius, 9 mm from O, so what is left over is 15 − 9. One mark, one subtraction, and the follow-through rule means that even if your radius in (b)(1) had come out wrong, subtracting 9 from it correctly still earns this mark.",
+        en: "The word “hence” is telling you this part rides on the last one, and it does — the whole job is realising that OT is a radius too, so the 15 you just worked out belongs to it as well. Then M is simply a point sitting on that radius, 9 mm from O, so what is left over is 15 − 9. One mark, one subtraction, and the follow-through rule means that even if your radius in (b)(1) had come out wrong, subtracting 9 from it correctly still earns this mark.", af: "Die woord “gevolglik” sê vir jou dat hierdie deel op die vorige een bou, en dit doen: die hele werk is om te besef dat OT ook 'n radius is, dus behoort die 15 wat jy pas uitgewerk het ook aan OT. M is dan net 'n punt op daardie radius, 9 mm van O af, dus is wat oorbly 15 − 9. Een punt, een aftrekking, en die ca-reël beteken dat selfs as jou radius in (b)(1) verkeerd uitgekom het, jy steeds hierdie punt kry as jy 9 korrek daarvan aftrek.",
       },
     },
   ],

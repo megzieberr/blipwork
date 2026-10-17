@@ -103,8 +103,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### Euclidean Geometry (exam-only)
 - ☑ 2026-10-17 T66 | concepts: the `euclid` block: NONE EXISTS (exam-only chapter, no concept cards), nothing to translate
-- ⏳ 2026-10-17 22:41 T67 | exam: cards-euclid, euclid-bookwork-proofs, euclid-circle-theorems (3 files) | ~1 965 words | verify-exam.html
-- ☐ T68 | exam: euclid-level4 | ~3 960 words | verify-exam.html
+- ☑ 2026-10-17 T67 | exam: cards-euclid, euclid-bookwork-proofs, euclid-circle-theorems (3 files) | ~1 965 words | verify-exam.html
+- ⏳ 2026-10-17 22:43 T68 | exam: euclid-level4 | ~3 960 words | verify-exam.html
 - ☐ T69 | exam: euclid-siblings-chords-and-angles | ~4 735 words | verify-exam.html
 - ☐ T70 | exam: euclid-siblings-cyclic-quads | ~5 790 words | verify-exam.html
 - ☐ T71 | exam: euclid-siblings-tangents | ~4 566 words | verify-exam.html

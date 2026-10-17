@@ -1,0 +1,634 @@
+{
+  "unit": "T67",
+  "generated": "2026-10-17T20:41:59.577Z",
+  "files": [
+    "js/exam/cards-euclid.js",
+    "js/exam/euclid-bookwork-proofs.js",
+    "js/exam/euclid-circle-theorems.js"
+  ],
+  "items": {
+    "cards-euclid#1": {
+      "en": "O is the centre of the circle. TA and TB are tangents to the circle at A and B. C is a point on the major arc AB, and CA and CB are chords. &nbsp;∠ATB = x.<br><br>Earlier parts of this question established that <b>OATB is a cyclic quadrilateral</b> (both tangents meet their radii at 90°), and that <b>∠AOB = 180° − x</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "cards-euclid.js:222:11"
+      ]
+    },
+    "euclid-bookwork-proofs#1": {
+      "en": "In the diagram, O is the centre of the circle. AB is a chord of the circle and M is a point on AB such that &nbsp;OM ⊥ AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:152:9"
+      ]
+    },
+    "euclid-bookwork-proofs#2": {
+      "en": "Prove the theorem which states that a line drawn from the centre of a circle perpendicular to a chord bisects the chord. &nbsp;That is, prove that &nbsp;<b>AM = MB</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:184:13"
+      ]
+    },
+    "euclid-bookwork-proofs#3": {
+      "en": "Two triangles are hiding in this picture, but only once you draw two more lines. Which two lines from O would turn OM into a shared side of a pair of triangles — and what do you already know about their lengths?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:187:13"
+      ]
+    },
+    "euclid-bookwork-proofs#4": {
+      "en": "<b>Construction:</b> join OA and OB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:191:37"
+      ]
+    },
+    "euclid-bookwork-proofs#5": {
+      "en": "In △OMA and △OMB:<br>∠OMA = ∠OMB = 90° &nbsp;&nbsp;<i>(given: OM ⊥ AB)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:195:37"
+      ]
+    },
+    "euclid-bookwork-proofs#6": {
+      "en": "OA = OB &nbsp;&nbsp;<i>(radii)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:199:37"
+      ]
+    },
+    "euclid-bookwork-proofs#7": {
+      "en": "OM = OM &nbsp;&nbsp;<i>(common)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:204:37"
+      ]
+    },
+    "euclid-bookwork-proofs#8": {
+      "en": "∴ △OMA ≡ △OMB &nbsp;&nbsp;<i>(RHS)</i><br>∴ AM = MB",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:208:39"
+      ]
+    },
+    "euclid-bookwork-proofs#9": {
+      "en": "WATCH OUT: <b>the construction line is a mark.</b> The printed figure never shows OA and OB — you draw them and you write “join OA and OB” as your first line. A proof that starts at “OA = OB” has already lost a mark for a line that takes three seconds.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:210:15"
+      ]
+    },
+    "euclid-bookwork-proofs#10": {
+      "en": "REMEMBER: congruency needs <b>three</b> facts and the right label. Right angle, hypotenuse, side &nbsp;⟹&nbsp; <b>RHS</b>. Writing SSS or SAS here scores nothing, even though the triangles really are congruent.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:213:15"
+      ]
+    },
+    "euclid-bookwork-proofs#11": {
+      "en": "This is the shortest of the four proofs, and it is really just a congruency question wearing a circle. The whole trick is the construction: the moment you join OA and OB, you have two triangles that share the side OM, and their long sides OA and OB have to be equal because both are radii. Add the right angle that was handed to you, and you have a right angle, a hypotenuse and a matching side — which is exactly RHS. Congruent triangles have all their matching parts equal, so AM must equal MB, and that is the theorem. Learn it as a picture: two radii dropped in, one shared upright, one right angle. If you can draw that picture from memory you can write the proof from memory, and it is worth five marks every time it is asked.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:217:13"
+      ]
+    },
+    "euclid-bookwork-proofs#12": {
+      "en": "In the diagram, ABCD is a cyclic quadrilateral of the circle with centre O.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:311:9"
+      ]
+    },
+    "euclid-bookwork-proofs#13": {
+      "en": "Prove the theorem which states that the opposite angles of a cyclic quadrilateral are supplementary. &nbsp;That is, prove that &nbsp;<b>Â + Ĉ = 180°</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:374:13"
+      ]
+    },
+    "euclid-bookwork-proofs#14": {
+      "en": "Â and Ĉ both stand on the same chord, BD — one from each side of it. So join the centre to B and to D, and use the one theorem that turns an angle at the circumference into an angle at the centre. Twice.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:377:13"
+      ]
+    },
+    "euclid-bookwork-proofs#15": {
+      "en": "<b>Construction:</b> join OB and OD. &nbsp;Call the angle at O on C's side of BD &nbsp;Ô₁, and the angle on A's side &nbsp;Ô₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:382:37"
+      ]
+    },
+    "euclid-bookwork-proofs#16": {
+      "en": "Let &nbsp;Â = x&nbsp; and &nbsp;Ĉ = y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:385:37"
+      ]
+    },
+    "euclid-bookwork-proofs#17": {
+      "en": "Ô₁ = 2x &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:388:37"
+      ]
+    },
+    "euclid-bookwork-proofs#18": {
+      "en": "Ô₂ = 2y &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:391:37"
+      ]
+    },
+    "euclid-bookwork-proofs#19": {
+      "en": "Ô₁ + Ô₂ = 360° &nbsp;&nbsp;<i>(∠s round a pt)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:396:37"
+      ]
+    },
+    "euclid-bookwork-proofs#20": {
+      "en": "∴ 2x + 2y = 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:397:37"
+      ]
+    },
+    "euclid-bookwork-proofs#21": {
+      "en": "∴ x + y = 180°<br>∴ Â + Ĉ = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:398:39"
+      ]
+    },
+    "euclid-bookwork-proofs#22": {
+      "en": "WATCH OUT: <b>the construction line is a mark.</b> Nothing in this proof works until OB and OD are drawn, so “join OB and OD” is your first written line — before any x or y appears.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:400:15"
+      ]
+    },
+    "euclid-bookwork-proofs#23": {
+      "en": "REMEMBER: the two angles at O are on <b>opposite sides of BD</b>, and together they fill the whole revolution — that is why the reason is <i>∠s round a pt</i> and the total is 360°, not 180°. Writing 180° here is the slip that costs the last three marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:403:15"
+      ]
+    },
+    "euclid-bookwork-proofs#24": {
+      "en": "Both of the angles you care about stand on the same chord, BD — Â from one side of it and Ĉ from the other. That is the clue to join the centre to B and to D, because then each of those angles has a partner at the centre standing on the very same arc, and the angle-at-centre theorem doubles it. So the C-side angle at O is 2x and the A-side one is 2y. Now look at the point O itself: those two angles are all there is, and going once around a point always adds to 360°. So 2x + 2y = 360°, and halving gives x + y = 180°. Notice the proof never touches B̂ or D̂ at all — the same argument run on the other chord, AC, is what proves that second pair. Learn this one as: same chord, two centres, one revolution, halve it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:407:13"
+      ]
+    },
+    "euclid-bookwork-proofs#25": {
+      "en": "In the diagram, O is the centre of the circle and &nbsp;SR&nbsp; is a tangent to the circle at T. &nbsp;TA is a chord, and B is a point on the circle in the alternate segment — the far side of TA from R.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:479:9"
+      ]
+    },
+    "euclid-bookwork-proofs#26": {
+      "en": "Prove the theorem which states that the angle between a tangent to a circle and a chord drawn from the point of contact is equal to the angle in the alternate segment. &nbsp;That is, prove that &nbsp;<b>∠ATR = ∠ABT</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:513:13"
+      ]
+    },
+    "euclid-bookwork-proofs#27": {
+      "en": "Start at T and draw the one line through the centre — a diameter. That hands you a right angle where it meets the tangent, and a second right angle at the far end of the chord. Everything else is angles of a triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:516:13"
+      ]
+    },
+    "euclid-bookwork-proofs#28": {
+      "en": "<b>Construction:</b> draw the diameter TC through O, and join AC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:521:37"
+      ]
+    },
+    "euclid-bookwork-proofs#29": {
+      "en": "Let &nbsp;∠ATR = x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:524:37"
+      ]
+    },
+    "euclid-bookwork-proofs#30": {
+      "en": "∠CTR = 90° &nbsp;&nbsp;<i>(tan ⊥ diameter)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:527:37"
+      ]
+    },
+    "euclid-bookwork-proofs#31": {
+      "en": "∴ ∠CTA = 90° − x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:530:37"
+      ]
+    },
+    "euclid-bookwork-proofs#32": {
+      "en": "∠TAC = 90° &nbsp;&nbsp;<i>(∠s in semi-circle)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:533:37"
+      ]
+    },
+    "euclid-bookwork-proofs#33": {
+      "en": "∴ ∠TCA = 180° − 90° − (90° − x) = x &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:537:37"
+      ]
+    },
+    "euclid-bookwork-proofs#34": {
+      "en": "∠ABT = ∠TCA &nbsp;&nbsp;<i>(∠s in the same seg)</i><br>∴ ∠ABT = x = ∠ATR",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:541:39"
+      ]
+    },
+    "euclid-bookwork-proofs#35": {
+      "en": "WATCH OUT: <b>the construction line is a mark.</b> “Draw the diameter TC and join AC” is the first thing on the page — and it has to be a <b>diameter</b>, through O. Any other line through T gives you no right angle and no proof.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:543:15"
+      ]
+    },
+    "euclid-bookwork-proofs#36": {
+      "en": "REMEMBER: the last step needs C and B on the <b>same side</b> of the chord TA — that is what makes ∠TCA and ∠ABT angles in the same segment. Saying “same segment” for two angles on opposite sides of the chord is the classic way to lose the final mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:546:15"
+      ]
+    },
+    "euclid-bookwork-proofs#37": {
+      "en": "The tangent–chord theorem looks like magic because the two equal angles are nowhere near each other, so the proof builds a bridge between them out of two right angles. Drawing the diameter from the point of contact gives you the first one, because a tangent always meets a diameter at 90°. That splits the right angle at T into your x and whatever is left, which is 90° − x. The second right angle is free: any angle standing on a diameter from the circle is 90°, so the angle at A in triangle TAC is a right angle. Now the angles of that triangle must add to 180°, and the only thing left over for the angle at C is x itself. The last step just walks x across to B, because C and B sit on the same side of the chord TA and so see it at equal angles. Two right angles and a triangle — that is the whole bridge.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-bookwork-proofs.js:550:13"
+      ]
+    },
+    "euclid-circle-theorems#1": {
+      "en": "In the diagram, O is the centre of the circle. A, B and C are points on the circle. BO is produced to D.<br><br>Prove the theorem which states that &nbsp;∠AOC = 2 · ∠ABC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:191:13"
+      ]
+    },
+    "euclid-circle-theorems#2": {
+      "en": "Start by naming the two halves of the angle at B — call them x and y — and look for the isosceles triangles hiding in the radii. Then remember what an exterior angle of a triangle is worth.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:194:13"
+      ]
+    },
+    "euclid-circle-theorems#3": {
+      "en": "Let ∠ABO = x &nbsp;and&nbsp; ∠CBO = y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:199:37"
+      ]
+    },
+    "euclid-circle-theorems#4": {
+      "en": "OA = OB &nbsp;&nbsp;<i>(radii)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:202:37"
+      ]
+    },
+    "euclid-circle-theorems#5": {
+      "en": "∴ ∠OAB = x &nbsp;&nbsp;<i>(∠s opposite equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:205:37"
+      ]
+    },
+    "euclid-circle-theorems#6": {
+      "en": "∠AOD = x + x = 2x &nbsp;&nbsp;<i>(exterior ∠ of △AOB)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:208:37"
+      ]
+    },
+    "euclid-circle-theorems#7": {
+      "en": "OC = OB, so ∠OCB = y &nbsp;&nbsp;<i>(radii; ∠s opposite equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:211:37"
+      ]
+    },
+    "euclid-circle-theorems#8": {
+      "en": "∠COD = y + y = 2y &nbsp;&nbsp;<i>(exterior ∠ of △COB)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:214:37"
+      ]
+    },
+    "euclid-circle-theorems#9": {
+      "en": "∠AOC = 2x + 2y = 2(x + y) = 2 · ∠ABC",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:218:39"
+      ]
+    },
+    "euclid-circle-theorems#10": {
+      "en": "WATCH OUT: in bookwork the <b>reasons</b> carry the marks, not the algebra. “∠s opposite equal sides” and “exterior ∠ of a triangle” must appear in words. A proof written as five lines of x's and y's with no reasons scores almost nothing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:220:15"
+      ]
+    },
+    "euclid-circle-theorems#11": {
+      "en": "REMEMBER: the whole proof is one pattern used twice — <b>isosceles triangle, then exterior angle</b>. Learn it as that pattern and you can rebuild it under pressure, even if you have forgotten the exact letters.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:223:15"
+      ]
+    },
+    "euclid-circle-theorems#12": {
+      "en": "Bookwork is the most learnable five marks on any Paper 2, because the proof never changes — only the letters do. The engine of this one is that every radius is the same length, so the moment you draw OA and OB you have an isosceles triangle, and the two angles at its base must be equal. That is where the second x comes from; you did not calculate it, you deduced it. Then the exterior angle of a triangle equals the sum of the two opposite interior angles, so the angle at O sitting outside triangle AOB is x + x = 2x. Do exactly the same on the other side and you get 2y. Add the two pieces at the centre and the two pieces at B, and the centre's total is twice B's total. The reason D is drawn at all is to give you that exterior angle to point at — and the reason D has to sit between A and C is that this is the acute case, the only one the syllabus examines. Write the reasons in words next to every statement; they are literally what is being marked.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:227:13"
+      ]
+    },
+    "euclid-circle-theorems#13": {
+      "en": "In the diagram, O is the centre of a circle. PQ is a chord and M is a point on PQ such that OM ⊥ PQ. OM is produced to meet the circle at T. &nbsp;OM = 9 mm and PQ = 24 mm.<br><br>Calculate the length of the radius of the circle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:235:13"
+      ]
+    },
+    "euclid-circle-theorems#14": {
+      "en": "OM ⊥ PQ is not just a right angle — there is a theorem attached to it that tells you something about where M sits on PQ. Get that first, then you have a right-angled triangle with two known sides.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:238:13"
+      ]
+    },
+    "euclid-circle-theorems#15": {
+      "en": "PM = MQ = 12 mm &nbsp;&nbsp;<i>(line from the centre ⊥ to a chord bisects the chord)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:241:37"
+      ]
+    },
+    "euclid-circle-theorems#16": {
+      "en": "∠OMP = 90°, so Pythagoras applies in △OMP: &nbsp;OP² = OM² + PM² = 9² + 12² = 81 + 144 = 225",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:242:37"
+      ]
+    },
+    "euclid-circle-theorems#17": {
+      "en": "OP = 15 mm &nbsp;&nbsp;∴ radius = 15 mm",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:243:39"
+      ]
+    },
+    "euclid-circle-theorems#18": {
+      "en": "WATCH OUT: PM is 12, not 24. The perpendicular from the centre <i>halves</i> the chord — using the whole 24 gives OP = 25,63…, which is the single most common wrong answer to this question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:245:15"
+      ]
+    },
+    "euclid-circle-theorems#19": {
+      "en": "Two facts have to be joined here, and the theorem is the one people skip. A perpendicular dropped from the centre onto a chord always lands exactly in the middle of it — so OM ⊥ PQ is quietly telling you that PM is half of PQ, which is 12, not 24. That is a mark on its own and it needs its reason written in words. Once you have it, the picture is an ordinary right-angled triangle: OM = 9 up the middle, PM = 12 along the chord, and OP is the hypotenuse, which is also a radius because P is on the circle. Pythagoras finishes it, and 9 : 12 : 15 is just the 3 : 4 : 5 triangle scaled by three — worth recognising, because it means no rounding is involved anywhere.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:249:13"
+      ]
+    },
+    "euclid-circle-theorems#20": {
+      "en": "Hence calculate the length of MT.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:257:13"
+      ]
+    },
+    "euclid-circle-theorems#21": {
+      "en": "T is on the circle and O is the centre, so what does that make OT? And notice where M sits along that line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:260:13"
+      ]
+    },
+    "euclid-circle-theorems#22": {
+      "en": "OT is a radius as well, so OT = 15 mm, and M lies on OT:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:263:37"
+      ]
+    },
+    "euclid-circle-theorems#23": {
+      "en": "MT = OT − OM = 15 − 9 = 6 mm",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:264:39"
+      ]
+    },
+    "euclid-circle-theorems#24": {
+      "en": "The word “hence” is telling you this part rides on the last one, and it does — the whole job is realising that OT is a radius too, so the 15 you just worked out belongs to it as well. Then M is simply a point sitting on that radius, 9 mm from O, so what is left over is 15 − 9. One mark, one subtraction, and the follow-through rule means that even if your radius in (b)(1) had come out wrong, subtracting 9 from it correctly still earns this mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-circle-theorems.js:267:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1805
+}
