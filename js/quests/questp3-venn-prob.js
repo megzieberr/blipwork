@@ -7,6 +7,7 @@
 import { mc } from "./_shared.js";
 import { pick, randInt } from "../ui.js";
 import { range1, multiplesOf, factorsOf, vennRegions, frac } from "../problib.js";
+import { L } from "../lang.js";
 
 const READ = "vennRead";
 
@@ -19,11 +20,11 @@ function scenario() {
     const B = factorsOf(N);                       // "a factor of N"
     const r = vennRegions(N, A, B);
     if (r.nOnlyA && r.nOnlyB && r.nInter && r.nOutside)
-      return { N, A, B, descA: `a multiple of ${m}`, descB: `a factor of ${N}`, r };
+      return { N, A, B, descA: L(`a multiple of ${m}`, `'n veelvoud van ${m}`), descB: L(`a factor of ${N}`, `'n faktor van ${N}`), r };
   }
   // guaranteed fallback (the workbook's own 12-die example)
   const N = 12, A = multiplesOf(4, 12), B = factorsOf(12);
-  return { N, A, B, descA: "a multiple of 4", descB: "a factor of 12", r: vennRegions(N, A, B) };
+  return { N, A, B, descA: L("a multiple of 4", "'n veelvoud van 4"), descB: L("a factor of 12", "'n faktor van 12"), r: vennRegions(N, A, B) };
 }
 
 /* venn spec with the region COUNTS filled in */
@@ -56,12 +57,12 @@ const SKILLS = {
     const sc = scenario();
     return {
       type: "calc", concept: READ, dp: 0,
-      prompt: `Roll a fair ${sc.N}-sided die. A = "${sc.descA}" = {${sc.A.join("; ")}}, B = "${sc.descB}" = {${sc.B.join("; ")}}.<br>How many outcomes are in <b>A ∩ B</b>?`,
+      prompt: L(`Roll a fair ${sc.N}-sided die. A = "${sc.descA}" = {${sc.A.join("; ")}}, B = "${sc.descB}" = {${sc.B.join("; ")}}.<br>How many outcomes are in <b>A ∩ B</b>?`, `Gooi 'n regverdige ${sc.N}-kantige dobbelsteen. A = "${sc.descA}" = {${sc.A.join("; ")}}, B = "${sc.descB}" = {${sc.B.join("; ")}}.<br>Hoeveel uitkomste is in <b>A ∩ B</b>?`),
       graph: vennEmpty(),
       expected: sc.r.nInter,
-      hint: "A ∩ B = the values that appear in BOTH lists.",
-      answerLabel: `A ∩ B = {${sc.A.filter(x => sc.B.includes(x)).join("; ")}} → ${sc.r.nInter}`,
-      solution: [{ s: `Shared values: {${sc.A.filter(x => sc.B.includes(x)).join("; ")}} → n(A ∩ B) = ${sc.r.nInter}.` }],
+      hint: L("A ∩ B = the values that appear in BOTH lists.", "A ∩ B = die waardes wat in ALBEI lyste voorkom."),
+      answerLabel: L(`A ∩ B = {${sc.A.filter(x => sc.B.includes(x)).join("; ")}} → ${sc.r.nInter}`, `A ∩ B = {${sc.A.filter(x => sc.B.includes(x)).join("; ")}} → ${sc.r.nInter}`),
+      solution: [{ s: L(`Shared values: {${sc.A.filter(x => sc.B.includes(x)).join("; ")}} → n(A ∩ B) = ${sc.r.nInter}.`, `Gemeenskaplike waardes: {${sc.A.filter(x => sc.B.includes(x)).join("; ")}} → n(A ∩ B) = ${sc.r.nInter}.`) }],
     };
   },
 
@@ -70,42 +71,42 @@ const SKILLS = {
     const only = sc.A.filter(x => !sc.B.includes(x));
     return {
       type: "calc", concept: READ, dp: 0,
-      prompt: `Roll a fair ${sc.N}-sided die. A = "${sc.descA}" = {${sc.A.join("; ")}}, B = "${sc.descB}" = {${sc.B.join("; ")}}.<br>How many outcomes are in <b>A but not B</b> (only A)?`,
+      prompt: L(`Roll a fair ${sc.N}-sided die. A = "${sc.descA}" = {${sc.A.join("; ")}}, B = "${sc.descB}" = {${sc.B.join("; ")}}.<br>How many outcomes are in <b>A but not B</b> (only A)?`, `Gooi 'n regverdige ${sc.N}-kantige dobbelsteen. A = "${sc.descA}" = {${sc.A.join("; ")}}, B = "${sc.descB}" = {${sc.B.join("; ")}}.<br>Hoeveel uitkomste is in <b>A maar nie in B nie</b> (slegs A)?`),
       graph: vennEmpty(),
       expected: sc.r.nOnlyA,
-      hint: "Take A and remove anything that is also in B.",
-      answerLabel: `only A = {${only.join("; ")}} → ${sc.r.nOnlyA}`,
-      solution: [{ s: `Only A = {${only.join("; ")}} → ${sc.r.nOnlyA}.` }],
+      hint: L("Take A and remove anything that is also in B.", "Neem A en haal alles uit wat ook in B is."),
+      answerLabel: L(`only A = {${only.join("; ")}} → ${sc.r.nOnlyA}`, `slegs A = {${only.join("; ")}} → ${sc.r.nOnlyA}`),
+      solution: [{ s: L(`Only A = {${only.join("; ")}} → ${sc.r.nOnlyA}.`, `Slegs A = {${only.join("; ")}} → ${sc.r.nOnlyA}.`) }],
     };
   },
 
   pA: () => {
     const sc = scenario();
-    return fracMC(`Use the Venn diagram. Write <b>P(A)</b> as a fraction in simplest form.`,
+    return fracMC(L(`Use the Venn diagram. Write <b>P(A)</b> as a fraction in simplest form.`, `Gebruik die Venn-diagram. Skryf <b>P(A)</b> as 'n breuk in eenvoudigste vorm.`),
       sc.r.nA, sc.N, vennCounts(sc),
-      { hint: "P(A) = (only A + overlap) ÷ n(S). Don't forget the overlap!",
-        solution: [{ s: `n(A) = ${sc.r.nOnlyA} + ${sc.r.nInter} = ${sc.r.nA}` }, { s: `P(A) = ${sc.r.nA}/${sc.N} = ${frac(sc.r.nA, sc.N).str}` }],
-        answerLabel: `P(A) = ${sc.r.nA}/${sc.N} = ${frac(sc.r.nA, sc.N).str}` },
+      { hint: L("P(A) = (only A + overlap) ÷ n(S). Don't forget the overlap!", "P(A) = (slegs A + oorvleueling) ÷ n(S). Moenie die oorvleueling vergeet nie!"),
+        solution: [{ s: L(`n(A) = ${sc.r.nOnlyA} + ${sc.r.nInter} = ${sc.r.nA}`, `n(A) = ${sc.r.nOnlyA} + ${sc.r.nInter} = ${sc.r.nA}`) }, { s: L(`P(A) = ${sc.r.nA}/${sc.N} = ${frac(sc.r.nA, sc.N).str}`, `P(A) = ${sc.r.nA}/${sc.N} = ${frac(sc.r.nA, sc.N).str}`) }],
+        answerLabel: L(`P(A) = ${sc.r.nA}/${sc.N} = ${frac(sc.r.nA, sc.N).str}`, `P(A) = ${sc.r.nA}/${sc.N} = ${frac(sc.r.nA, sc.N).str}`) },
       [sc.r.nOnlyA, sc.r.nInter]);                  // common slip: forgetting the overlap
   },
 
   pIntersection: () => {
     const sc = scenario();
-    return fracMC(`Use the Venn diagram. Write <b>P(A ∩ B)</b> as a fraction in simplest form.`,
+    return fracMC(L(`Use the Venn diagram. Write <b>P(A ∩ B)</b> as a fraction in simplest form.`, `Gebruik die Venn-diagram. Skryf <b>P(A ∩ B)</b> as 'n breuk in eenvoudigste vorm.`),
       sc.r.nInter, sc.N, vennCounts(sc),
-      { hint: "P(A ∩ B) = the overlap count ÷ n(S).",
-        answerLabel: `P(A ∩ B) = ${sc.r.nInter}/${sc.N} = ${frac(sc.r.nInter, sc.N).str}` },
+      { hint: L("P(A ∩ B) = the overlap count ÷ n(S).", "P(A ∩ B) = die aantal in die oorvleueling ÷ n(S)."),
+        answerLabel: L(`P(A ∩ B) = ${sc.r.nInter}/${sc.N} = ${frac(sc.r.nInter, sc.N).str}`, `P(A ∩ B) = ${sc.r.nInter}/${sc.N} = ${frac(sc.r.nInter, sc.N).str}`) },
       [sc.r.nA, sc.r.nOnlyA]);
   },
 
   pUnion: () => {
     const sc = scenario();
     const nU = sc.r.nOnlyA + sc.r.nInter + sc.r.nOnlyB;
-    return fracMC(`Use the Venn diagram. Write <b>P(A ∪ B)</b> as a fraction in simplest form.`,
+    return fracMC(L(`Use the Venn diagram. Write <b>P(A ∪ B)</b> as a fraction in simplest form.`, `Gebruik die Venn-diagram. Skryf <b>P(A ∪ B)</b> as 'n breuk in eenvoudigste vorm.`),
       nU, sc.N, vennCounts(sc),
-      { hint: "P(A ∪ B) = only A + overlap + only B, all ÷ n(S).",
-        solution: [{ s: `n(A ∪ B) = ${sc.r.nOnlyA} + ${sc.r.nInter} + ${sc.r.nOnlyB} = ${nU}` }, { s: `P = ${nU}/${sc.N} = ${frac(nU, sc.N).str}` }],
-        answerLabel: `P(A ∪ B) = ${nU}/${sc.N} = ${frac(nU, sc.N).str}` },
+      { hint: L("P(A ∪ B) = only A + overlap + only B, all ÷ n(S).", "P(A ∪ B) = slegs A + oorvleueling + slegs B, alles ÷ n(S)."),
+        solution: [{ s: L(`n(A ∪ B) = ${sc.r.nOnlyA} + ${sc.r.nInter} + ${sc.r.nOnlyB} = ${nU}`, `n(A ∪ B) = ${sc.r.nOnlyA} + ${sc.r.nInter} + ${sc.r.nOnlyB} = ${nU}`) }, { s: L(`P = ${nU}/${sc.N} = ${frac(nU, sc.N).str}`, `P = ${nU}/${sc.N} = ${frac(nU, sc.N).str}`) }],
+        answerLabel: L(`P(A ∪ B) = ${nU}/${sc.N} = ${frac(nU, sc.N).str}`, `P(A ∪ B) = ${nU}/${sc.N} = ${frac(nU, sc.N).str}`) },
       [sc.r.nA + sc.r.nB, sc.r.nInter]);            // slip: double-counting the overlap
   },
 
@@ -113,29 +114,29 @@ const SKILLS = {
     const sc = scenario();
     const useA = pick([true, false]);
     const n = useA ? sc.N - sc.r.nA : sc.N - sc.r.nB;
-    const lbl = useA ? "A′" : "B′";
-    return fracMC(`Use the Venn diagram. Write <b>P(${lbl})</b> (not ${useA ? "A" : "B"}) as a fraction in simplest form.`,
+    const lbl = useA ? L("A′", "A′") : L("B′", "B′");
+    return fracMC(L(`Use the Venn diagram. Write <b>P(${lbl})</b> (not ${useA ? "A" : "B"}) as a fraction in simplest form.`, `Gebruik die Venn-diagram. Skryf <b>P(${lbl})</b> (nie ${useA ? "A" : "B"}) as 'n breuk in eenvoudigste vorm.`),
       n, sc.N, vennCounts(sc),
-      { hint: `P(${lbl}) = everything that is NOT in ${useA ? "A" : "B"}, ÷ n(S). Or use 1 − P(${useA ? "A" : "B"}).`,
-        answerLabel: `P(${lbl}) = ${n}/${sc.N} = ${frac(n, sc.N).str}` },
+      { hint: L(`P(${lbl}) = everything that is NOT in ${useA ? "A" : "B"}, ÷ n(S). Or use 1 − P(${useA ? "A" : "B"}).`, `P(${lbl}) = alles wat NIE in ${useA ? "A" : "B"} is nie, ÷ n(S). Of gebruik 1 − P(${useA ? "A" : "B"}).`),
+        answerLabel: L(`P(${lbl}) = ${n}/${sc.N} = ${frac(n, sc.N).str}`, `P(${lbl}) = ${n}/${sc.N} = ${frac(n, sc.N).str}`) },
       [useA ? sc.r.nA : sc.r.nB, sc.r.nOutside]);
   },
 
   pNeither: () => {
     const sc = scenario();
-    return fracMC(`Use the Venn diagram. Write <b>P((A ∪ B)′)</b> — in neither A nor B — as a fraction in simplest form.`,
+    return fracMC(L(`Use the Venn diagram. Write <b>P((A ∪ B)′)</b> — in neither A nor B — as a fraction in simplest form.`, `Gebruik die Venn-diagram. Skryf <b>P((A ∪ B)′)</b>, in nóg A nóg B, as 'n breuk in eenvoudigste vorm.`),
       sc.r.nOutside, sc.N, vennCounts(sc),
-      { hint: "“Neither” is the count OUTSIDE both circles ÷ n(S).",
-        answerLabel: `P(neither) = ${sc.r.nOutside}/${sc.N} = ${frac(sc.r.nOutside, sc.N).str}` },
+      { hint: L("“Neither” is the count OUTSIDE both circles ÷ n(S).", "“Geen van albei” is die aantal BUITE albei sirkels ÷ n(S)."),
+        answerLabel: L(`P(neither) = ${sc.r.nOutside}/${sc.N} = ${frac(sc.r.nOutside, sc.N).str}`, `P(geen van albei) = ${sc.r.nOutside}/${sc.N} = ${frac(sc.r.nOutside, sc.N).str}`) },
       [sc.r.nInter, sc.r.nOnlyA + sc.r.nOnlyB]);
   },
 
   pOnlyB: () => {
     const sc = scenario();
-    return fracMC(`Use the Venn diagram. Write <b>P(only B)</b> — in B but not A — as a fraction in simplest form.`,
+    return fracMC(L(`Use the Venn diagram. Write <b>P(only B)</b> — in B but not A — as a fraction in simplest form.`, `Gebruik die Venn-diagram. Skryf <b>P(slegs B)</b>, in B maar nie in A nie, as 'n breuk in eenvoudigste vorm.`),
       sc.r.nOnlyB, sc.N, vennCounts(sc),
-      { hint: "Take the part of B that is OUTSIDE the overlap ÷ n(S).",
-        answerLabel: `P(only B) = ${sc.r.nOnlyB}/${sc.N} = ${frac(sc.r.nOnlyB, sc.N).str}` },
+      { hint: L("Take the part of B that is OUTSIDE the overlap ÷ n(S).", "Neem die deel van B wat BUITE die oorvleueling is ÷ n(S)."),
+        answerLabel: L(`P(only B) = ${sc.r.nOnlyB}/${sc.N} = ${frac(sc.r.nOnlyB, sc.N).str}`, `P(slegs B) = ${sc.r.nOnlyB}/${sc.N} = ${frac(sc.r.nOnlyB, sc.N).str}`) },
       [sc.r.nB, sc.r.nInter]);
   },
 };

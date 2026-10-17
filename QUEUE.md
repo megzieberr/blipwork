@@ -131,11 +131,11 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### Probability
 - ☑ 2026-10-17 T85 | concepts: the `prob` block (js/concepts/prob.js after S4) | ~532 words | counted by af_extract 2026-10-17
-- ⏳ 2026-10-17 23:15 T86 | hub rounds: questp1-basics … questp7-replacement (7 files) | ~2 008 words | verify page: verify-prob.html
+- ☑ 2026-10-17 T86 | hub rounds: questp1-basics … questp7-replacement (7 files) | ~2 008 words | verify page: verify-prob.html
 
 ### Measurement
 - ☑ 2026-10-17 T87 | concepts: the `meas` block (js/concepts/meas.js after S4) | ~569 words | counted by af_extract 2026-10-17
-- ☐ T88 | hub rounds: questm1-name-formula … questm6-height (6 files) | ~1 632 words | verify page: verify-meas.html
+- ⏳ 2026-10-17 23:22 T88 | hub rounds: questm1-name-formula … questm6-height (6 files) | ~1 632 words | verify page: verify-meas.html
 
 ### Everything else
 - (T89 the hub tiles moved to the FRONT of the Translation section on her 2026-10-17 18:33 ruling; see "Hub tiles first" above T01)

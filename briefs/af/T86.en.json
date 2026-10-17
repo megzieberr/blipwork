@@ -1,0 +1,3241 @@
+{
+  "unit": "T86",
+  "generated": "2026-10-17T21:16:11.011Z",
+  "files": [
+    "js/quests/questp1-basics.js",
+    "js/quests/questp2-venn-regions.js",
+    "js/quests/questp3-venn-prob.js",
+    "js/quests/questp4-rules.js",
+    "js/quests/questp5-independence.js",
+    "js/quests/questp6-trees.js",
+    "js/quests/questp7-replacement.js"
+  ],
+  "items": {
+    "questp1-basics#1": {
+      "en": "A fair <b>${N}-sided</b> die is rolled once. How many outcomes are in the sample space, <b>n(S)</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp1-basics.js:33:15"
+      ]
+    },
+    "questp1-basics#2": {
+      "en": "The sample space is every value the die could land on.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:35:13"
+      ]
+    },
+    "questp1-basics#3": {
+      "en": "n(S) = ${N}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp1-basics.js:36:20"
+      ]
+    },
+    "questp1-basics#4": {
+      "en": "S = {1; 2; … ; ${N}}, so n(S) = ${N}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp1-basics.js:37:23"
+      ]
+    },
+    "questp1-basics#5": {
+      "en": "A fair ${N}-sided die is rolled. How many outcomes give <b>${e.desc}</b>? (that is n(E))",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp1-basics.js:45:15"
+      ]
+    },
+    "questp1-basics#6": {
+      "en": "List the values that fit, then count them.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:47:13"
+      ]
+    },
+    "questp1-basics#7": {
+      "en": "${e.desc} = {${e.set.join(\"; \")}}, so n(E) = ${e.set.length}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp1-basics.js:48:20"
+      ]
+    },
+    "questp1-basics#8": {
+      "en": "The outcomes are {${e.set.join(\"; \")}} → n(E) = ${e.set.length}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp1-basics.js:49:23"
+      ]
+    },
+    "questp1-basics#9": {
+      "en": "A fair ${N}-sided die is rolled. Write <b>P(${e.desc})</b> as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp1-basics.js:71:7"
+      ]
+    },
+    "questp1-basics#10": {
+      "en": "P(E) = n(E) / n(S). Then simplify.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:73:15"
+      ]
+    },
+    "questp1-basics#11": {
+      "en": "P = ${n}/${N} = ${f.str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questp1-basics.js:74:22",
+        "questp1-basics.js:75:60"
+      ]
+    },
+    "questp1-basics#12": {
+      "en": "n(E) = ${n}, n(S) = ${N}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp1-basics.js:75:25"
+      ]
+    },
+    "questp1-basics#13": {
+      "en": "A fair ${N}-sided die is rolled. Write <b>P(${e.desc})</b> as a decimal (2 places).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp1-basics.js:85:15"
+      ]
+    },
+    "questp1-basics#14": {
+      "en": "Work out n(E) / n(S), then divide it out.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:87:13"
+      ]
+    },
+    "questp1-basics#15": {
+      "en": "P = ${e.set.length}/${N} = ${dec(v, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questp1-basics.js:88:20",
+        "questp1-basics.js:89:23"
+      ]
+    },
+    "questp1-basics#16": {
+      "en": "A fair ${N}-sided die is rolled. Write <b>P(${e.desc})</b> as a percentage${pdp ? \" (1 decimal place)\" : \"\"}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp1-basics.js:99:15"
+      ],
+      "nested": [
+        " (1 decimal place)"
+      ]
+    },
+    "questp1-basics#17": {
+      "en": "Find P as a decimal, then × 100 for a percentage.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:101:13"
+      ]
+    },
+    "questp1-basics#18": {
+      "en": "P = ${dec(v)} = ${pctOf(v, pdp)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp1-basics.js:102:20"
+      ]
+    },
+    "questp1-basics#19": {
+      "en": "P = ${e.set.length}/${N} = ${dec(v)} = ${pctOf(v, pdp)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp1-basics.js:103:23"
+      ]
+    },
+    "questp1-basics#20": {
+      "en": "heads",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp1-basics.js:109:49"
+      ]
+    },
+    "questp1-basics#21": {
+      "en": "a six",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp1-basics.js:109:58"
+      ]
+    },
+    "questp1-basics#22": {
+      "en": "red",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp1-basics.js:109:67"
+      ]
+    },
+    "questp1-basics#23": {
+      "en": "a win",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp1-basics.js:109:74"
+      ]
+    },
+    "questp1-basics#24": {
+      "en": "An experiment is run <b>${total}</b> times and \"${thing}\" happens <b>${hits}</b> times. What is the <b>relative frequency</b> of \"${thing}\"? (decimal, 2 places)",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp1-basics.js:112:15"
+      ]
+    },
+    "questp1-basics#25": {
+      "en": "relative frequency = times it happened ÷ total trials.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:114:13"
+      ]
+    },
+    "questp1-basics#26": {
+      "en": "relative frequency = ${hits} ÷ ${total} = ${dec(v, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp1-basics.js:116:23"
+      ]
+    },
+    "questp1-basics#27": {
+      "en": "Which one is worked out <b>before</b> doing any experiment — just from the possible outcomes?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp1-basics.js:121:5"
+      ]
+    },
+    "questp1-basics#28": {
+      "en": "theoretical probability",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questp1-basics.js:122:5"
+      ]
+    },
+    "questp1-basics#29": {
+      "en": "relative frequency",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp1-basics.js:123:6"
+      ]
+    },
+    "questp1-basics#30": {
+      "en": "the relative frequency, always",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp1-basics.js:123:28"
+      ]
+    },
+    "questp1-basics#31": {
+      "en": "neither — both need data first",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp1-basics.js:123:62"
+      ]
+    },
+    "questp1-basics#32": {
+      "en": "One is a prediction; the other is what actually happened.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:124:13"
+      ]
+    },
+    "questp1-basics#33": {
+      "en": "Theoretical probability is the prediction; relative frequency comes from real data.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp1-basics.js:125:20"
+      ]
+    },
+    "questp1-basics#34": {
+      "en": "120% (as a probability)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questp1-basics.js:128:38"
+      ]
+    },
+    "questp1-basics#35": {
+      "en": "A probability must lie between 0 and 1. Which of these <b>cannot</b> be a probability?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp1-basics.js:130:7"
+      ]
+    },
+    "questp1-basics#36": {
+      "en": "0 = impossible, 1 = certain. Nothing can be more likely than certain.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp1-basics.js:133:15"
+      ]
+    },
+    "questp1-basics#37": {
+      "en": "${bad} is outside the 0–1 range, so it is impossible as a probability.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp1-basics.js:134:22"
+      ]
+    },
+    "questp2-venn-regions#1": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:14:62",
+        "questp2-venn-regions.js:50:35",
+        "questp2-venn-regions.js:50:61"
+      ]
+    },
+    "questp2-venn-regions#2": {
+      "en": "B",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:14:70",
+        "questp2-venn-regions.js:50:40",
+        "questp2-venn-regions.js:50:56"
+      ]
+    },
+    "questp2-venn-regions#3": {
+      "en": "On a Venn diagram, the symbol <b>∩</b> (the overlap of the circles) is read as…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:18:5"
+      ]
+    },
+    "questp2-venn-regions#4": {
+      "en": "and",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:19:5",
+        "questp2-venn-regions.js:26:12"
+      ]
+    },
+    "questp2-venn-regions#5": {
+      "en": "or",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:19:13",
+        "questp2-venn-regions.js:26:5"
+      ]
+    },
+    "questp2-venn-regions#6": {
+      "en": "not",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:19:19",
+        "questp2-venn-regions.js:26:19"
+      ]
+    },
+    "questp2-venn-regions#7": {
+      "en": "equals",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:19:26"
+      ]
+    },
+    "questp2-venn-regions#8": {
+      "en": "It's the region that is in BOTH circles at once.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:21:13"
+      ]
+    },
+    "questp2-venn-regions#9": {
+      "en": "∩ means “and” — the outcomes in A and B at the same time.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:22:20"
+      ]
+    },
+    "questp2-venn-regions#10": {
+      "en": "The symbol <b>∪</b> (everything in either circle) is read as…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:25:5"
+      ]
+    },
+    "questp2-venn-regions#11": {
+      "en": "minus",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:26:26"
+      ]
+    },
+    "questp2-venn-regions#12": {
+      "en": "onlyA",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:27:28",
+        "questp2-venn-regions.js:43:42",
+        "questp2-venn-regions.js:50:26",
+        "questp2-venn-regions.js:55:45",
+        "questp2-venn-regions.js:66:44",
+        "questp2-venn-regions.js:75:17"
+      ]
+    },
+    "questp2-venn-regions#13": {
+      "en": "onlyB",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:27:46",
+        "questp2-venn-regions.js:43:60",
+        "questp2-venn-regions.js:50:47",
+        "questp2-venn-regions.js:55:63",
+        "questp2-venn-regions.js:66:62",
+        "questp2-venn-regions.js:75:35"
+      ]
+    },
+    "questp2-venn-regions#14": {
+      "en": "It's everything in A together with everything in B.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:28:13"
+      ]
+    },
+    "questp2-venn-regions#15": {
+      "en": "∪ means “or” — everything in A or B (or both).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:29:20"
+      ]
+    },
+    "questp2-venn-regions#16": {
+      "en": "What does <b>A′</b> (“A complement”) mean?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:32:5"
+      ]
+    },
+    "questp2-venn-regions#17": {
+      "en": "everything that is not in A",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questp2-venn-regions.js:33:5"
+      ]
+    },
+    "questp2-venn-regions#18": {
+      "en": "everything in both A and B",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:34:6"
+      ]
+    },
+    "questp2-venn-regions#19": {
+      "en": "everything in A",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:34:36"
+      ]
+    },
+    "questp2-venn-regions#20": {
+      "en": "the overlap of A and B",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:34:55"
+      ]
+    },
+    "questp2-venn-regions#21": {
+      "en": "The little dash means “not”.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:36:13"
+      ]
+    },
+    "questp2-venn-regions#22": {
+      "en": "A′ = not A = everything outside circle A.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:37:20"
+      ]
+    },
+    "questp2-venn-regions#23": {
+      "en": "Tap the region that represents <b>A ∩ B</b> (A and B).",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:41:13"
+      ]
+    },
+    "questp2-venn-regions#24": {
+      "en": "“A and B” is where the two circles overlap.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:44:14"
+      ]
+    },
+    "questp2-venn-regions#25": {
+      "en": "Look for the lens-shaped overlap in the middle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:45:11"
+      ]
+    },
+    "questp2-venn-regions#26": {
+      "en": "A ∩ B is the overlap of the two circles.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:46:18"
+      ]
+    },
+    "questp2-venn-regions#27": {
+      "en": "Tap the region that is in <b>${which[1]} but not ${which[2]}</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:53:15"
+      ]
+    },
+    "questp2-venn-regions#28": {
+      "en": "That is the part of circle ${which[1]} that does NOT overlap ${which[2]}.",
+      "kind": "template",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:56:16"
+      ]
+    },
+    "questp2-venn-regions#29": {
+      "en": "Avoid the overlap — you want one circle only.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:57:13"
+      ]
+    },
+    "questp2-venn-regions#30": {
+      "en": "“Only ${which[1]}” is the part of ${which[1]} outside the overlap.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:58:20"
+      ]
+    },
+    "questp2-venn-regions#31": {
+      "en": "Tap the region for <b>(A ∪ B)′</b> — outcomes in <b>neither</b> A nor B.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:64:13"
+      ]
+    },
+    "questp2-venn-regions#32": {
+      "en": "Inside the rectangle, but outside both circles.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:67:14"
+      ]
+    },
+    "questp2-venn-regions#33": {
+      "en": "“Neither” lives in the rectangle, outside every circle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:68:11"
+      ]
+    },
+    "questp2-venn-regions#34": {
+      "en": "Neither A nor B = inside S but outside both circles.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:69:18"
+      ]
+    },
+    "questp2-venn-regions#35": {
+      "en": "A ∩ B  (A and B)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:74:36",
+        "questp2-venn-regions.js:75:82",
+        "questp2-venn-regions.js:76:74",
+        "questp2-venn-regions.js:77:89"
+      ]
+    },
+    "questp2-venn-regions#36": {
+      "en": "A ∪ B  (A or B)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:74:65",
+        "questp2-venn-regions.js:75:54",
+        "questp2-venn-regions.js:77:70"
+      ]
+    },
+    "questp2-venn-regions#37": {
+      "en": "A′  (not A)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:74:84",
+        "questp2-venn-regions.js:75:102",
+        "questp2-venn-regions.js:76:35",
+        "questp2-venn-regions.js:77:109"
+      ]
+    },
+    "questp2-venn-regions#38": {
+      "en": "neither A nor B",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:74:99",
+        "questp2-venn-regions.js:75:117"
+      ]
+    },
+    "questp2-venn-regions#39": {
+      "en": "A  (only A)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:76:59"
+      ]
+    },
+    "questp2-venn-regions#40": {
+      "en": "B′  (not B)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questp2-venn-regions.js:76:94"
+      ]
+    },
+    "questp2-venn-regions#41": {
+      "en": "(A ∪ B)′  (neither)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:77:38"
+      ]
+    },
+    "questp2-venn-regions#42": {
+      "en": "Which set does the <b>shaded</b> region represent?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:81:7"
+      ]
+    },
+    "questp2-venn-regions#43": {
+      "en": "Name exactly the part that is filled in.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:84:15"
+      ]
+    },
+    "questp2-venn-regions#44": {
+      "en": "The shaded region is ${c.correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:85:22"
+      ]
+    },
+    "questp2-venn-regions#45": {
+      "en": "For any event A and its complement A′, what is <b>P(A) + P(A′)</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:89:5"
+      ]
+    },
+    "questp2-venn-regions#46": {
+      "en": "A and A′ together fill the whole sample space.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:91:13"
+      ]
+    },
+    "questp2-venn-regions#47": {
+      "en": "P(A) + P(A′) = 1 — together they cover everything.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:92:20"
+      ]
+    },
+    "questp2-venn-regions#48": {
+      "en": "FORMULA",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:95:24"
+      ]
+    },
+    "questp2-venn-regions#49": {
+      "en": "NUMBERS",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:95:35"
+      ]
+    },
+    "questp2-venn-regions#50": {
+      "en": "TRIANGLE",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:95:46"
+      ]
+    },
+    "questp2-venn-regions#51": {
+      "en": "DIAMETER",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp2-venn-regions.js:95:58"
+      ]
+    },
+    "questp2-venn-regions#52": {
+      "en": "One card of the word <b>${word}</b> is drawn at random. Using the diagram, write <b>P(vowel)</b> as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp2-venn-regions.js:114:7"
+      ]
+    },
+    "questp2-venn-regions#53": {
+      "en": "Count the vowels inside the circle over the total number of letters.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp2-venn-regions.js:118:15"
+      ]
+    },
+    "questp2-venn-regions#54": {
+      "en": "${vowels.length} vowels out of ${letters.length} letters → ${vowels.length}/${letters.length} = ${f.str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp2-venn-regions.js:119:22"
+      ]
+    },
+    "questp2-venn-regions#55": {
+      "en": "vowels = {${vowels.join(\"; \")}} → ${vowels.length}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp2-venn-regions.js:120:25"
+      ]
+    },
+    "questp2-venn-regions#56": {
+      "en": "P = ${vowels.length}/${letters.length} = ${f.str}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp2-venn-regions.js:120:86"
+      ]
+    },
+    "questp3-venn-prob#1": {
+      "en": "a multiple of ${m}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp3-venn-prob.js:22:32"
+      ]
+    },
+    "questp3-venn-prob#2": {
+      "en": "a factor of ${N}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp3-venn-prob.js:22:61"
+      ]
+    },
+    "questp3-venn-prob#3": {
+      "en": "a multiple of 4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp3-venn-prob.js:26:28"
+      ]
+    },
+    "questp3-venn-prob#4": {
+      "en": "a factor of 12",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp3-venn-prob.js:26:54"
+      ]
+    },
+    "questp3-venn-prob#5": {
+      "en": "Roll a fair ${sc.N}-sided die. A = \"${sc.descA}\" = {${sc.A.join(\"; \")}}, B = \"${sc.descB}\" = {${sc.B.join(\"; \")}}.<br>How many outcomes are in <b>A ∩ B</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:59:15"
+      ]
+    },
+    "questp3-venn-prob#6": {
+      "en": "A ∩ B = the values that appear in BOTH lists.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:62:13"
+      ]
+    },
+    "questp3-venn-prob#7": {
+      "en": "A ∩ B = {${sc.A.filter(x => sc.B.includes(x)).join(\"; \")}} → ${sc.r.nInter}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp3-venn-prob.js:63:20"
+      ]
+    },
+    "questp3-venn-prob#8": {
+      "en": "Shared values: {${sc.A.filter(x => sc.B.includes(x)).join(\"; \")}} → n(A ∩ B) = ${sc.r.nInter}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp3-venn-prob.js:64:23"
+      ]
+    },
+    "questp3-venn-prob#9": {
+      "en": "Roll a fair ${sc.N}-sided die. A = \"${sc.descA}\" = {${sc.A.join(\"; \")}}, B = \"${sc.descB}\" = {${sc.B.join(\"; \")}}.<br>How many outcomes are in <b>A but not B</b> (only A)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:73:15"
+      ]
+    },
+    "questp3-venn-prob#10": {
+      "en": "Take A and remove anything that is also in B.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:76:13"
+      ]
+    },
+    "questp3-venn-prob#11": {
+      "en": "only A = {${only.join(\"; \")}} → ${sc.r.nOnlyA}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp3-venn-prob.js:77:20"
+      ]
+    },
+    "questp3-venn-prob#12": {
+      "en": "Only A = {${only.join(\"; \")}} → ${sc.r.nOnlyA}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp3-venn-prob.js:78:23"
+      ]
+    },
+    "questp3-venn-prob#13": {
+      "en": "Use the Venn diagram. Write <b>P(A)</b> as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "fracMC.prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:84:19"
+      ]
+    },
+    "questp3-venn-prob#14": {
+      "en": "P(A) = (only A + overlap) ÷ n(S). Don't forget the overlap!",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:86:15"
+      ]
+    },
+    "questp3-venn-prob#15": {
+      "en": "n(A) = ${sc.r.nOnlyA} + ${sc.r.nInter} = ${sc.r.nA}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp3-venn-prob.js:87:25"
+      ]
+    },
+    "questp3-venn-prob#16": {
+      "en": "P(A) = ${sc.r.nA}/${sc.N} = ${frac(sc.r.nA, sc.N).str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questp3-venn-prob.js:87:87",
+        "questp3-venn-prob.js:88:22"
+      ]
+    },
+    "questp3-venn-prob#17": {
+      "en": "Use the Venn diagram. Write <b>P(A ∩ B)</b> as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "fracMC.prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:94:19"
+      ]
+    },
+    "questp3-venn-prob#18": {
+      "en": "P(A ∩ B) = the overlap count ÷ n(S).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:96:15"
+      ]
+    },
+    "questp3-venn-prob#19": {
+      "en": "P(A ∩ B) = ${sc.r.nInter}/${sc.N} = ${frac(sc.r.nInter, sc.N).str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp3-venn-prob.js:97:22"
+      ]
+    },
+    "questp3-venn-prob#20": {
+      "en": "Use the Venn diagram. Write <b>P(A ∪ B)</b> as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "fracMC.prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:104:19"
+      ]
+    },
+    "questp3-venn-prob#21": {
+      "en": "P(A ∪ B) = only A + overlap + only B, all ÷ n(S).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:106:15"
+      ]
+    },
+    "questp3-venn-prob#22": {
+      "en": "n(A ∪ B) = ${sc.r.nOnlyA} + ${sc.r.nInter} + ${sc.r.nOnlyB} = ${nU}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp3-venn-prob.js:107:25"
+      ]
+    },
+    "questp3-venn-prob#23": {
+      "en": "P = ${nU}/${sc.N} = ${frac(nU, sc.N).str}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp3-venn-prob.js:107:103"
+      ]
+    },
+    "questp3-venn-prob#24": {
+      "en": "P(A ∪ B) = ${nU}/${sc.N} = ${frac(nU, sc.N).str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp3-venn-prob.js:108:22"
+      ]
+    },
+    "questp3-venn-prob#25": {
+      "en": "A′",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp3-venn-prob.js:116:24"
+      ]
+    },
+    "questp3-venn-prob#26": {
+      "en": "B′",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp3-venn-prob.js:116:31"
+      ]
+    },
+    "questp3-venn-prob#27": {
+      "en": "Use the Venn diagram. Write <b>P(${lbl})</b> (not ${useA ? \"A\" : \"B\"}) as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "fracMC.prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:117:19"
+      ],
+      "nested": [
+        "A",
+        "B"
+      ]
+    },
+    "questp3-venn-prob#28": {
+      "en": "P(${lbl}) = everything that is NOT in ${useA ? \"A\" : \"B\"}, ÷ n(S). Or use 1 − P(${useA ? \"A\" : \"B\"}).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:119:15"
+      ],
+      "nested": [
+        "A",
+        "B",
+        "A",
+        "B"
+      ]
+    },
+    "questp3-venn-prob#29": {
+      "en": "P(${lbl}) = ${n}/${sc.N} = ${frac(n, sc.N).str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp3-venn-prob.js:120:22"
+      ]
+    },
+    "questp3-venn-prob#30": {
+      "en": "Use the Venn diagram. Write <b>P((A ∪ B)′)</b> — in neither A nor B — as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "fracMC.prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:126:19"
+      ]
+    },
+    "questp3-venn-prob#31": {
+      "en": "“Neither” is the count OUTSIDE both circles ÷ n(S).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:128:15"
+      ]
+    },
+    "questp3-venn-prob#32": {
+      "en": "P(neither) = ${sc.r.nOutside}/${sc.N} = ${frac(sc.r.nOutside, sc.N).str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp3-venn-prob.js:129:22"
+      ]
+    },
+    "questp3-venn-prob#33": {
+      "en": "Use the Venn diagram. Write <b>P(only B)</b> — in B but not A — as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "fracMC.prompt"
+      ],
+      "where": [
+        "questp3-venn-prob.js:135:19"
+      ]
+    },
+    "questp3-venn-prob#34": {
+      "en": "Take the part of B that is OUTSIDE the overlap ÷ n(S).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp3-venn-prob.js:137:15"
+      ]
+    },
+    "questp3-venn-prob#35": {
+      "en": "P(only B) = ${sc.r.nOnlyB}/${sc.N} = ${frac(sc.r.nOnlyB, sc.N).str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp3-venn-prob.js:138:22"
+      ]
+    },
+    "questp4-rules#1": {
+      "en": "Given P(A) = <b>${dec(s.pA)}</b>, P(B) = <b>${dec(s.pB)}</b> and P(A ∩ B) = <b>${dec(s.pAB)}</b>, find <b>P(A ∪ B)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp4-rules.js:35:15"
+      ]
+    },
+    "questp4-rules#2": {
+      "en": "P(A ∪ B) = P(A) + P(B) − P(A ∩ B). Subtract the overlap once.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:37:13"
+      ]
+    },
+    "questp4-rules#3": {
+      "en": "P(A ∪ B) = P(A) + P(B) − P(A ∩ B)",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "solution.s"
+      ],
+      "where": [
+        "questp4-rules.js:39:23",
+        "questp4-rules.js:115:5"
+      ]
+    },
+    "questp4-rules#4": {
+      "en": "Given P(A) = <b>${dec(s.pA)}</b>, P(B) = <b>${dec(s.pB)}</b> and P(A ∪ B) = <b>${dec(s.pUnion)}</b>, find <b>P(A ∩ B)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp4-rules.js:47:15"
+      ]
+    },
+    "questp4-rules#5": {
+      "en": "Rearrange the addition rule: P(A ∩ B) = P(A) + P(B) − P(A ∪ B).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:49:13"
+      ]
+    },
+    "questp4-rules#6": {
+      "en": "P(A ∩ B) = P(A) + P(B) − P(A ∪ B)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp4-rules.js:51:23"
+      ]
+    },
+    "questp4-rules#7": {
+      "en": "Event B is the complement of A. If P(A) = <b>${dec(s.pA)}</b>, find <b>P(B)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp4-rules.js:59:15"
+      ]
+    },
+    "questp4-rules#8": {
+      "en": "Complements add to 1: P(B) = 1 − P(A).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:61:13"
+      ]
+    },
+    "questp4-rules#9": {
+      "en": "P(A) + P(A′) = 1 → P(B) = 1 − ${dec(s.pA)} = ${dec(1 - s.pA, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp4-rules.js:63:23"
+      ]
+    },
+    "questp4-rules#10": {
+      "en": "A and B are <b>mutually exclusive</b>. If P(A) = <b>${dec(s.pA)}</b> and P(B) = <b>${dec(s.pB)}</b>, find <b>P(A ∪ B)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp4-rules.js:71:15"
+      ]
+    },
+    "questp4-rules#11": {
+      "en": "Mutually exclusive → P(A ∩ B) = 0, so P(A ∪ B) = P(A) + P(B).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:73:13"
+      ]
+    },
+    "questp4-rules#12": {
+      "en": "No overlap → P(A ∪ B) = P(A) + P(B) = ${dec(s.pA)} + ${dec(s.pB)} = ${dec(s.pUnion, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp4-rules.js:75:23"
+      ]
+    },
+    "questp4-rules#13": {
+      "en": "Two events have P(A ∩ B) = <b>${dec(s.pAB)}</b>. Are they mutually exclusive or mutually inclusive?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp4-rules.js:83:7"
+      ]
+    },
+    "questp4-rules#14": {
+      "en": "mutually exclusive",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:84:14",
+        "questp4-rules.js:85:72"
+      ]
+    },
+    "questp4-rules#15": {
+      "en": "mutually inclusive",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:84:37",
+        "questp4-rules.js:85:15"
+      ]
+    },
+    "questp4-rules#16": {
+      "en": "independent",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:85:37"
+      ]
+    },
+    "questp4-rules#17": {
+      "en": "complementary",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:85:52",
+        "questp4-rules.js:85:94"
+      ]
+    },
+    "questp4-rules#18": {
+      "en": "exhaustive",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:85:111"
+      ]
+    },
+    "questp4-rules#19": {
+      "en": "Overlap of 0 → exclusive (can't happen together). Overlap ≠ 0 → inclusive.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:86:15"
+      ]
+    },
+    "questp4-rules#20": {
+      "en": "P(A ∩ B) = 0 → mutually exclusive.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp4-rules.js:87:29"
+      ]
+    },
+    "questp4-rules#21": {
+      "en": "P(A ∩ B) ≠ 0 → mutually inclusive.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp4-rules.js:87:68"
+      ]
+    },
+    "questp4-rules#22": {
+      "en": "The Venn diagram shows the counts in each region. Are A and B <b>mutually exclusive</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp4-rules.js:97:15"
+      ]
+    },
+    "questp4-rules#23": {
+      "en": "Mutually exclusive means the overlap (A ∩ B) is empty — a 0 in the middle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:100:13"
+      ]
+    },
+    "questp4-rules#24": {
+      "en": "The overlap is 0, so yes — mutually exclusive.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp4-rules.js:101:27"
+      ]
+    },
+    "questp4-rules#25": {
+      "en": "The overlap is not 0, so no — they can happen together.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp4-rules.js:101:78"
+      ]
+    },
+    "questp4-rules#26": {
+      "en": "n(A ∩ B) = 0 → A and B cannot happen together → mutually exclusive.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp4-rules.js:102:30"
+      ]
+    },
+    "questp4-rules#27": {
+      "en": "n(A ∩ B) = ${inter} ≠ 0 → A and B can happen together → NOT mutually exclusive.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp4-rules.js:102:102"
+      ]
+    },
+    "questp4-rules#28": {
+      "en": "Two events are <b>exhaustive</b> when…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp4-rules.js:107:5"
+      ]
+    },
+    "questp4-rules#29": {
+      "en": "together they cover the whole sample space (nothing is left outside)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questp4-rules.js:108:5"
+      ]
+    },
+    "questp4-rules#30": {
+      "en": "they can never happen together",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:109:6"
+      ]
+    },
+    "questp4-rules#31": {
+      "en": "P(A) × P(B) = P(A ∩ B)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:109:40"
+      ]
+    },
+    "questp4-rules#32": {
+      "en": "they have exactly the same outcomes",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:109:66"
+      ]
+    },
+    "questp4-rules#33": {
+      "en": "“Exhaustive” = nothing left over outside the events.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:110:13"
+      ]
+    },
+    "questp4-rules#34": {
+      "en": "Exhaustive events leave no outcome outside — together they fill S.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp4-rules.js:111:20"
+      ]
+    },
+    "questp4-rules#35": {
+      "en": "Which is the correct <b>addition rule</b> for any two events?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp4-rules.js:114:5"
+      ]
+    },
+    "questp4-rules#36": {
+      "en": "P(A ∪ B) = P(A) + P(B) + P(A ∩ B)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:116:6"
+      ]
+    },
+    "questp4-rules#37": {
+      "en": "P(A ∪ B) = P(A) × P(B)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:116:43"
+      ]
+    },
+    "questp4-rules#38": {
+      "en": "P(A ∪ B) = P(A) + P(B)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp4-rules.js:116:69"
+      ]
+    },
+    "questp4-rules#39": {
+      "en": "You must remove the overlap once so it isn't counted twice.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp4-rules.js:117:13"
+      ]
+    },
+    "questp4-rules#40": {
+      "en": "P(A ∪ B) = P(A) + P(B) − P(A ∩ B). The last option only works when there's no overlap.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp4-rules.js:118:20"
+      ]
+    },
+    "questp5-independence#1": {
+      "en": "Male",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:14"
+      ]
+    },
+    "questp5-independence#2": {
+      "en": "Female",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:22"
+      ]
+    },
+    "questp5-independence#3": {
+      "en": "Older than 40",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:40"
+      ]
+    },
+    "questp5-independence#4": {
+      "en": "Younger than 40",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:57"
+      ]
+    },
+    "questp5-independence#5": {
+      "en": "male",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:81"
+      ]
+    },
+    "questp5-independence#6": {
+      "en": "older than 40",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:93"
+      ]
+    },
+    "questp5-independence#7": {
+      "en": "M",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:116"
+      ]
+    },
+    "questp5-independence#8": {
+      "en": "O",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:31:127"
+      ]
+    },
+    "questp5-independence#9": {
+      "en": "Walks",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:14"
+      ]
+    },
+    "questp5-independence#10": {
+      "en": "Drives",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:23"
+      ]
+    },
+    "questp5-independence#11": {
+      "en": "Junior",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:41"
+      ]
+    },
+    "questp5-independence#12": {
+      "en": "Senior",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:51"
+      ]
+    },
+    "questp5-independence#13": {
+      "en": "walks",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:66"
+      ]
+    },
+    "questp5-independence#14": {
+      "en": "junior",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:79"
+      ]
+    },
+    "questp5-independence#15": {
+      "en": "W",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:95"
+      ]
+    },
+    "questp5-independence#16": {
+      "en": "J",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:32:106"
+      ]
+    },
+    "questp5-independence#17": {
+      "en": "Wears glasses",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:14"
+      ]
+    },
+    "questp5-independence#18": {
+      "en": "No glasses",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:31"
+      ]
+    },
+    "questp5-independence#19": {
+      "en": "Left-handed",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:53"
+      ]
+    },
+    "questp5-independence#20": {
+      "en": "Right-handed",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:68"
+      ]
+    },
+    "questp5-independence#21": {
+      "en": "wears glasses",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:89"
+      ]
+    },
+    "questp5-independence#22": {
+      "en": "left-handed",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:110"
+      ]
+    },
+    "questp5-independence#23": {
+      "en": "G",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:131"
+      ]
+    },
+    "questp5-independence#24": {
+      "en": "L",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:33:142"
+      ]
+    },
+    "questp5-independence#25": {
+      "en": "<table class=\"q-table\">\n    <tr><th></th><th>${x.cols[0]}</th><th>${x.cols[1]}</th><th>Total</th></tr>\n    <tr><td>${x.rows[0]}</td><td>${t.c00}</td><td>${t.c01}</td><td>${t.R0}</td></tr>\n    <tr><td>${x.rows[1]}</td><td>${t.c10}</td><td>${t.c11}</td><td>${t.R1}</td></tr>\n    <tr><td>Total</td><td>${t.C0}</td><td>${t.C1}</td><td>${t.grand}</td></tr>\n  </table>",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp5-independence.js:41:10"
+      ]
+    },
+    "questp5-independence#26": {
+      "en": "What is the <b>test</b> for whether two events A and B are independent?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp5-independence.js:51:5"
+      ]
+    },
+    "questp5-independence#27": {
+      "en": "check whether P(A ∩ B) = P(A) × P(B)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questp5-independence.js:52:5"
+      ]
+    },
+    "questp5-independence#28": {
+      "en": "check whether P(A ∩ B) = 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp5-independence.js:53:6"
+      ]
+    },
+    "questp5-independence#29": {
+      "en": "check whether P(A) + P(B) = 1",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp5-independence.js:53:36"
+      ]
+    },
+    "questp5-independence#30": {
+      "en": "check whether P(A ∪ B) = P(A) × P(B)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp5-independence.js:53:69"
+      ]
+    },
+    "questp5-independence#31": {
+      "en": "Independent events multiply.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp5-independence.js:54:13"
+      ]
+    },
+    "questp5-independence#32": {
+      "en": "Independent ⇔ P(A ∩ B) = P(A) × P(B).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp5-independence.js:55:20"
+      ]
+    },
+    "questp5-independence#33": {
+      "en": "A and B are <b>independent</b> with P(A) = <b>${dec(pA)}</b> and P(B) = <b>${dec(pB)}</b>. Find <b>P(A ∩ B)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp5-independence.js:61:15"
+      ]
+    },
+    "questp5-independence#34": {
+      "en": "Independent → multiply: P(A ∩ B) = P(A) × P(B).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp5-independence.js:63:13"
+      ]
+    },
+    "questp5-independence#35": {
+      "en": "P(A ∩ B) = P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(pA * pB, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp5-independence.js:65:23"
+      ]
+    },
+    "questp5-independence#36": {
+      "en": "P(A) = <b>${dec(pA)}</b>, P(B) = <b>${dec(pB)}</b> and P(A ∩ B) = <b>${dec(pAB)}</b>. Are A and B independent?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp5-independence.js:76:15"
+      ]
+    },
+    "questp5-independence#37": {
+      "en": "Work out P(A) × P(B) = ${dec(prod, 2)} and compare it with P(A ∩ B).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp5-independence.js:78:13"
+      ]
+    },
+    "questp5-independence#38": {
+      "en": "P(A) × P(B) = ${dec(prod, 2)}; P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? \"equal, so independent\" : \"not equal, so NOT independent\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp5-independence.js:79:20"
+      ],
+      "nested": [
+        "equal, so independent",
+        "not equal, so NOT independent"
+      ]
+    },
+    "questp5-independence#39": {
+      "en": "P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(prod, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp5-independence.js:80:23"
+      ]
+    },
+    "questp5-independence#40": {
+      "en": "Compare with P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? \"independent\" : \"not independent\"}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp5-independence.js:80:89"
+      ],
+      "nested": [
+        "independent",
+        "not independent"
+      ]
+    },
+    "questp5-independence#41": {
+      "en": "${tableHTML(t)}One person is chosen at random. Write <b>P(${x.rL})</b> as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp5-independence.js:102:7"
+      ]
+    },
+    "questp5-independence#42": {
+      "en": "P(${x.rL}) = that row's total ÷ the grand total.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp5-independence.js:104:15"
+      ]
+    },
+    "questp5-independence#43": {
+      "en": "${tableHTML(t)}Write <b>P(${x.rL} and ${x.cL})</b> as a fraction in simplest form.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp5-independence.js:126:7"
+      ]
+    },
+    "questp5-independence#44": {
+      "en": "Use the single overlap cell ÷ the grand total.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp5-independence.js:128:15"
+      ]
+    },
+    "questp5-independence#45": {
+      "en": "${tableHTML(t)}Let ${x.rSym} = \"${x.rL}\" and ${x.cSym} = \"${x.cL}\". Are ${x.rSym} and ${x.cSym} <b>independent</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp5-independence.js:137:15"
+      ]
+    },
+    "questp5-independence#46": {
+      "en": "Compare P(${x.rSym}) × P(${x.cSym}) with P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp5-independence.js:139:13"
+      ]
+    },
+    "questp5-independence#47": {
+      "en": "P(${x.rSym})×P(${x.cSym}) = ${dec(t.prodInter, 4).replace(/0+$/, \"\")} and P(${x.rSym} ∩ ${x.cSym}) = ${dec(t.realInter, 4).replace(/0+$/, \"\")} → ${t.independent ? \"equal, so independent\" : \"not equal, so NOT independent\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp5-independence.js:140:20"
+      ],
+      "nested": [
+        "equal, so independent",
+        "not equal, so NOT independent"
+      ]
+    },
+    "questp5-independence#48": {
+      "en": "P(${x.rSym}) = ${t.R0}/${t.grand}, P(${x.cSym}) = ${t.C0}/${t.grand} → product = ${dec(t.prodInter, 4).replace(/0+$/, \"\")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp5-independence.js:142:14"
+      ]
+    },
+    "questp5-independence#49": {
+      "en": "P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand} = ${dec(t.realInter, 4).replace(/0+$/, \"\")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp5-independence.js:143:14"
+      ]
+    },
+    "questp5-independence#50": {
+      "en": "Equal → independent.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp5-independence.js:144:33"
+      ]
+    },
+    "questp5-independence#51": {
+      "en": "Not equal → not independent.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp5-independence.js:144:58"
+      ]
+    },
+    "questp5-independence#52": {
+      "en": "If P(A ∩ B) is <b>not equal</b> to P(A) × P(B), what can you say?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp5-independence.js:150:5"
+      ]
+    },
+    "questp5-independence#53": {
+      "en": "A and B are not independent",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questp5-independence.js:151:5"
+      ]
+    },
+    "questp5-independence#54": {
+      "en": "A and B are mutually exclusive",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp5-independence.js:152:6"
+      ]
+    },
+    "questp5-independence#55": {
+      "en": "A and B are complementary",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp5-independence.js:152:40"
+      ]
+    },
+    "questp5-independence#56": {
+      "en": "A and B are exhaustive",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp5-independence.js:152:69"
+      ]
+    },
+    "questp5-independence#57": {
+      "en": "The product rule only holds when events are independent.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp5-independence.js:153:13"
+      ]
+    },
+    "questp5-independence#58": {
+      "en": "Product rule fails → the events are not independent.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp5-independence.js:154:20"
+      ]
+    },
+    "questp6-trees#1": {
+      "en": "On a tree diagram, the probabilities on the branches leaving any <b>single point</b> must add up to…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:27:5"
+      ]
+    },
+    "questp6-trees#2": {
+      "en": "the number of branches",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp6-trees.js:28:23"
+      ]
+    },
+    "questp6-trees#3": {
+      "en": "Those branches cover every option from that point.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:30:13"
+      ]
+    },
+    "questp6-trees#4": {
+      "en": "Branches from one point are exhaustive → they add up to 1.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp6-trees.js:31:20"
+      ]
+    },
+    "questp6-trees#5": {
+      "en": "HH",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp6-trees.js:35:24",
+        "questp6-trees.js:50:27"
+      ]
+    },
+    "questp6-trees#6": {
+      "en": "HT",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp6-trees.js:35:30",
+        "questp6-trees.js:50:38"
+      ]
+    },
+    "questp6-trees#7": {
+      "en": "TH",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp6-trees.js:35:36",
+        "questp6-trees.js:50:49"
+      ]
+    },
+    "questp6-trees#8": {
+      "en": "TT",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questp6-trees.js:35:42",
+        "questp6-trees.js:50:60"
+      ]
+    },
+    "questp6-trees#9": {
+      "en": "A biased coin has P(H) = <b>${dec(pH)}</b>. Using the tree, find <b>P(${path[0]}, ${path[1]})</b> — the path ${path}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp6-trees.js:40:15"
+      ]
+    },
+    "questp6-trees#10": {
+      "en": "Multiply the two branch probabilities ALONG the path.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:43:13"
+      ]
+    },
+    "questp6-trees#11": {
+      "en": "P(${path}) = ${dec(f(path[0]))} × ${dec(f(path[1]))} = ${dec(v, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:45:23"
+      ]
+    },
+    "questp6-trees#12": {
+      "en": "Two tosses of a coin. Tap the path that gives the outcome <b>${target[0][0]} then ${target[0][1]}</b> (${target[0]}).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp6-trees.js:53:15"
+      ]
+    },
+    "questp6-trees#13": {
+      "en": "Follow the first letter on the first set of branches, then the second.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questp6-trees.js:56:16"
+      ]
+    },
+    "questp6-trees#14": {
+      "en": "Read the outcome labels on the right: ${target[0]}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:57:13"
+      ]
+    },
+    "questp6-trees#15": {
+      "en": "The ${target[0]} path is highlighted.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp6-trees.js:58:20"
+      ]
+    },
+    "questp6-trees#16": {
+      "en": "A coin with P(H) = <b>${dec(pH)}</b> is tossed twice. Using the tree, find <b>P(exactly one head)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp6-trees.js:69:15"
+      ]
+    },
+    "questp6-trees#17": {
+      "en": "Which paths give exactly one head?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:76:16"
+      ]
+    },
+    "questp6-trees#18": {
+      "en": "HT and TH",
+      "kind": "string",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questp6-trees.js:76:54"
+      ]
+    },
+    "questp6-trees#19": {
+      "en": "HH and TT",
+      "kind": "string",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questp6-trees.js:77:12"
+      ]
+    },
+    "questp6-trees#20": {
+      "en": "HT only",
+      "kind": "string",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questp6-trees.js:77:25"
+      ]
+    },
+    "questp6-trees#21": {
+      "en": "HH, HT and TH",
+      "kind": "string",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questp6-trees.js:77:36"
+      ]
+    },
+    "questp6-trees#22": {
+      "en": "Exactly one head means one H and one T — either order counts.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questp6-trees.js:78:11"
+      ]
+    },
+    "questp6-trees#23": {
+      "en": "Find <b>P(HT)</b>.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:79:18"
+      ]
+    },
+    "questp6-trees#24": {
+      "en": "Multiply ALONG the path: P(H) × P(T).",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questp6-trees.js:80:11"
+      ]
+    },
+    "questp6-trees#25": {
+      "en": "Find <b>P(TH)</b>.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:81:18"
+      ]
+    },
+    "questp6-trees#26": {
+      "en": "Multiply ALONG the path: P(T) × P(H).",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questp6-trees.js:82:11"
+      ]
+    },
+    "questp6-trees#27": {
+      "en": "Now <b>P(exactly one head)</b> — add the two paths.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:83:18"
+      ]
+    },
+    "questp6-trees#28": {
+      "en": "ADD the paths: P(HT) + P(TH).",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questp6-trees.js:84:11"
+      ]
+    },
+    "questp6-trees#29": {
+      "en": "Exactly one head = the HT path OR the TH path. Multiply along each path, then ADD the two paths.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:87:13"
+      ]
+    },
+    "questp6-trees#30": {
+      "en": "P(HT) + P(TH) = ${dec(pHT, 2)} + ${dec(pTH, 2)} = ${dec(v, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp6-trees.js:88:20"
+      ]
+    },
+    "questp6-trees#31": {
+      "en": "P(HT) = ${dec(pH)} × ${dec(1 - pH)} = ${dec(pHT, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:90:14"
+      ]
+    },
+    "questp6-trees#32": {
+      "en": "P(TH) = ${dec(1 - pH)} × ${dec(pH)} = ${dec(pTH, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:91:14"
+      ]
+    },
+    "questp6-trees#33": {
+      "en": "P(exactly one H) = ${dec(pHT, 2)} + ${dec(pTH, 2)} = ${dec(v, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:92:14"
+      ]
+    },
+    "questp6-trees#34": {
+      "en": "A fair coin is tossed <b>twice</b>. Using the tree, find <b>P(at least one head)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp6-trees.js:99:13"
+      ]
+    },
+    "questp6-trees#35": {
+      "en": "Add the three paths with a head, or do 1 − P(no heads).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:102:11"
+      ]
+    },
+    "questp6-trees#36": {
+      "en": "1 − P(TT) = 1 − 0,25 = 0,75",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp6-trees.js:103:18"
+      ]
+    },
+    "questp6-trees#37": {
+      "en": "P(at least one H) = P(HH) + P(HT) + P(TH) = 0,25 + 0,25 + 0,25 = 0,75",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:104:21"
+      ]
+    },
+    "questp6-trees#38": {
+      "en": "(or 1 − P(no H) = 1 − 0,25 = 0,75)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:104:101"
+      ]
+    },
+    "questp6-trees#39": {
+      "en": "What is the quickest way to work out <b>P(at least one)</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:108:5"
+      ]
+    },
+    "questp6-trees#40": {
+      "en": "1 − P(none)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questp6-trees.js:109:5"
+      ]
+    },
+    "questp6-trees#41": {
+      "en": "P(none) − 1",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp6-trees.js:110:6"
+      ]
+    },
+    "questp6-trees#42": {
+      "en": "1 − P(all)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp6-trees.js:110:21"
+      ]
+    },
+    "questp6-trees#43": {
+      "en": "P(one) + P(none)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questp6-trees.js:110:35"
+      ]
+    },
+    "questp6-trees#44": {
+      "en": "The opposite of “at least one” is “none at all”.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:111:13"
+      ]
+    },
+    "questp6-trees#45": {
+      "en": "P(at least one) = 1 − P(none).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp6-trees.js:112:20"
+      ]
+    },
+    "questp6-trees#46": {
+      "en": "A coin with P(H) = <b>${dec(pH)}</b> is tossed twice. Find <b>P(no heads)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp6-trees.js:119:15"
+      ]
+    },
+    "questp6-trees#47": {
+      "en": "No heads = tails then tails: multiply the two tail branches.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:122:13"
+      ]
+    },
+    "questp6-trees#48": {
+      "en": "P(no H) = P(T) × P(T) = ${dec(1 - pH)} × ${dec(1 - pH)} = ${dec(v, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:124:23"
+      ]
+    },
+    "questp6-trees#49": {
+      "en": "Two identical biased coins are tossed. It is found that <b>P(both heads) = ${dec(pHH)}</b>. Find <b>P(both tails)</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp6-trees.js:134:15"
+      ]
+    },
+    "questp6-trees#50": {
+      "en": "Find <b>P(H)</b>.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:138:18"
+      ]
+    },
+    "questp6-trees#51": {
+      "en": "The coins are identical, so P(H) × P(H) = ${dec(pHH)} — take the square root to find P(H) first.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint",
+        "hint"
+      ],
+      "where": [
+        "questp6-trees.js:139:11",
+        "questp6-trees.js:147:13"
+      ]
+    },
+    "questp6-trees#52": {
+      "en": "Now find <b>P(T)</b>.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:141:18"
+      ]
+    },
+    "questp6-trees#53": {
+      "en": "P(T) = 1 − P(H).",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questp6-trees.js:142:11"
+      ]
+    },
+    "questp6-trees#54": {
+      "en": "Now find <b>P(both tails)</b>.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questp6-trees.js:143:18"
+      ]
+    },
+    "questp6-trees#55": {
+      "en": "P(TT) = P(T) × P(T).",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questp6-trees.js:144:11"
+      ]
+    },
+    "questp6-trees#56": {
+      "en": "P(H) = √${dec(pHH)} = ${dec(pH)} → P(TT) = ${dec(pT)}² = ${dec(pTT, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp6-trees.js:148:20"
+      ]
+    },
+    "questp6-trees#57": {
+      "en": "P(H) × P(H) = ${dec(pHH)} → P(H) = ${dec(pH)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:149:23"
+      ]
+    },
+    "questp6-trees#58": {
+      "en": "P(T) = 1 − ${dec(pH)} = ${dec(pT)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:149:79"
+      ]
+    },
+    "questp6-trees#59": {
+      "en": "P(TT) = ${dec(pT)} × ${dec(pT)} = ${dec(pTT, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp6-trees.js:149:124"
+      ]
+    },
+    "questp7-replacement#1": {
+      "en": "A bag holds <b>${N}</b> balls. One is drawn and <b>not replaced</b>. How many balls are there for the <b>second</b> draw?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp7-replacement.js:46:15"
+      ]
+    },
+    "questp7-replacement#2": {
+      "en": "Without replacement, the ball is kept out — the total drops by one.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:48:13"
+      ]
+    },
+    "questp7-replacement#3": {
+      "en": "Without replacement the total falls from ${N} to ${N - 1}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp7-replacement.js:50:23"
+      ]
+    },
+    "questp7-replacement#4": {
+      "en": "A bag has <b>${env.b.counts[c.k]} ${c.name}</b> balls. One ${c.name} ball is drawn and <b>not replaced</b>. How many ${c.name} balls remain for the next draw?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp7-replacement.js:58:15"
+      ]
+    },
+    "questp7-replacement#5": {
+      "en": "The colour you took also drops by one.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:60:13"
+      ]
+    },
+    "questp7-replacement#6": {
+      "en": "Two balls are drawn from ${N}, <b>${replace ? \"with\" : \"without\"} replacement</b>. Does the <b>denominator change</b> between the first and second draw?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp7-replacement.js:70:15"
+      ],
+      "nested": [
+        "with",
+        "without"
+      ]
+    },
+    "questp7-replacement#7": {
+      "en": "With replacement, the ball goes back — nothing changes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:72:23"
+      ]
+    },
+    "questp7-replacement#8": {
+      "en": "Without replacement, one ball is gone — the total changes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:72:83"
+      ]
+    },
+    "questp7-replacement#9": {
+      "en": "With replacement the total stays ${N}, so the denominator does NOT change.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp7-replacement.js:73:30"
+      ]
+    },
+    "questp7-replacement#10": {
+      "en": "Without replacement it drops from ${N} to ${N - 1}, so the denominator DOES change.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp7-replacement.js:73:109"
+      ]
+    },
+    "questp7-replacement#11": {
+      "en": "A bag holds ${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>with replacement</b>. Using the tree, find <b>P(${p.k1}, ${p.k2})</b> in simplest form.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp7-replacement.js:85:7"
+      ]
+    },
+    "questp7-replacement#12": {
+      "en": "With replacement, both draws use the same total. Multiply along the path.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:88:15"
+      ]
+    },
+    "questp7-replacement#13": {
+      "en": "A bag holds ${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>without replacement</b>. Using the tree, find <b>P(${p.k1}, ${p.k2})</b> in simplest form.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp7-replacement.js:100:7"
+      ]
+    },
+    "questp7-replacement#14": {
+      "en": "Without replacement, the second denominator is one smaller — and the first colour drops by one.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:103:15"
+      ]
+    },
+    "questp7-replacement#15": {
+      "en": "A bag holds ${env.b.counts[env.cols[0].k]} ${env.cols[0].name} and ${env.b.counts[env.cols[1].k]} ${env.cols[1].name} balls. Two are drawn <b>${replace ? \"with\" : \"without\"} replacement</b>. Find <b>P(at least one ${c.name})</b> in simplest form.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questp7-replacement.js:113:7"
+      ],
+      "nested": [
+        "with",
+        "without"
+      ]
+    },
+    "questp7-replacement#16": {
+      "en": "Quickest: P(at least one) = 1 − P(no ${c.name}).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:118:15"
+      ]
+    },
+    "questp7-replacement#17": {
+      "en": "1 − P(no ${c.name}) = 1 − ${res.pNone.str} = ${res.pAtLeast.str}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp7-replacement.js:119:22"
+      ]
+    },
+    "questp7-replacement#18": {
+      "en": "P(no ${c.name}) = ${res.pNone.str}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp7-replacement.js:120:25"
+      ]
+    },
+    "questp7-replacement#19": {
+      "en": "P(at least one ${c.name}) = 1 − ${res.pNone.str} = ${res.pAtLeast.str}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questp7-replacement.js:120:70"
+      ]
+    },
+    "questp7-replacement#20": {
+      "en": "Two balls drawn <b>without replacement</b>. Tap the path for <b>${env.name(p.k1)} then ${env.name(p.k2)}</b> (${p.path}).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questp7-replacement.js:130:15"
+      ]
+    },
+    "questp7-replacement#21": {
+      "en": "Match the outcome label on the right.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questp7-replacement.js:133:16"
+      ]
+    },
+    "questp7-replacement#22": {
+      "en": "Read the outcome labels: ${p.path}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questp7-replacement.js:134:13"
+      ]
+    },
+    "questp7-replacement#23": {
+      "en": "The ${p.path} path is highlighted.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questp7-replacement.js:135:20"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "questp1-basics.js:17:20",
+      "text": "an odd number"
+    },
+    {
+      "where": "questp1-basics.js:18:20",
+      "text": "an even number"
+    },
+    {
+      "where": "questp1-basics.js:19:55",
+      "text": "a multiple of ${m}"
+    },
+    {
+      "where": "questp1-basics.js:20:20",
+      "text": "a factor of ${N}"
+    },
+    {
+      "where": "questp1-basics.js:21:57",
+      "text": "greater than ${k}"
+    },
+    {
+      "where": "questp1-basics.js:22:57",
+      "text": "at most ${k}"
+    },
+    {
+      "where": "questp1-basics.js:99:98",
+      "text": " (1 decimal place)",
+      "in": "A fair ${N}-sided die is rolled. Write <b>P(${e.desc})</b> a"
+    },
+    {
+      "where": "questp5-independence.js:79:109",
+      "text": "equal, so independent",
+      "in": "P(A) × P(B) = ${dec(prod, 2)}; P(A ∩ B) = ${dec(pAB)} → ${Ma"
+    },
+    {
+      "where": "questp5-independence.js:79:135",
+      "text": "not equal, so NOT independent",
+      "in": "P(A) × P(B) = ${dec(prod, 2)}; P(A ∩ B) = ${dec(pAB)} → ${Ma"
+    },
+    {
+      "where": "questp5-independence.js:80:176",
+      "text": "not independent",
+      "in": "Compare with P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod)"
+    },
+    {
+      "where": "questp5-independence.js:140:184",
+      "text": "equal, so independent",
+      "in": "P(${x.rSym})×P(${x.cSym}) = ${dec(t.prodInter, 4).replace(/0"
+    },
+    {
+      "where": "questp5-independence.js:140:210",
+      "text": "not equal, so NOT independent",
+      "in": "P(${x.rSym})×P(${x.cSym}) = ${dec(t.prodInter, 4).replace(/0"
+    }
+  ],
+  "words": 1531
+}

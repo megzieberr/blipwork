@@ -7,6 +7,7 @@
 import { mc } from "./_shared.js";
 import { pick, randInt } from "../ui.js";
 import { dec, frac } from "../problib.js";
+import { L } from "../lang.js";
 
 const IND = "independence";
 const TAB = "contingency";
@@ -28,9 +29,9 @@ function table(indep) {
   }
   const c01 = R0 - c00, c10 = C0 - c00, c11 = grand - R0 - C0 + c00;
   const ctx = pick([
-    { rows: ["Male", "Female"], cols: ["Older than 40", "Younger than 40"], rL: "male", cL: "older than 40", rSym: "M", cSym: "O" },
-    { rows: ["Walks", "Drives"], cols: ["Junior", "Senior"], rL: "walks", cL: "junior", rSym: "W", cSym: "J" },
-    { rows: ["Wears glasses", "No glasses"], cols: ["Left-handed", "Right-handed"], rL: "wears glasses", cL: "left-handed", rSym: "G", cSym: "L" },
+    { rows: [L("Male", "Manlik"), L("Female", "Vroulik")], cols: [L("Older than 40", "Ouer as 40"), L("Younger than 40", "Jonger as 40")], rL: L("male", "manlik"), cL: L("older than 40", "ouer as 40"), rSym: L("M", "M"), cSym: L("O", "O") },
+    { rows: [L("Walks", "Stap"), L("Drives", "Ry motor")], cols: [L("Junior", "Junior"), L("Senior", "Senior")], rL: L("walks", "stap"), cL: L("junior", "junior"), rSym: L("W", "W"), cSym: L("J", "J") },
+    { rows: [L("Wears glasses", "Dra 'n bril"), L("No glasses", "Geen bril")], cols: [L("Left-handed", "Linkshandig"), L("Right-handed", "Regshandig")], rL: L("wears glasses", "dra 'n bril"), cL: L("left-handed", "linkshandig"), rSym: L("G", "G"), cSym: L("L", "L") },
   ]);
   return { grand, R0, R1: grand - R0, C0, C1: grand - C0, c00, c01, c10, c11, ctx,
     realInter: c00 / grand, prodInter: (R0 / grand) * (C0 / grand), independent: indep };
@@ -38,31 +39,36 @@ function table(indep) {
 
 function tableHTML(t) {
   const x = t.ctx;
-  return `<table class="q-table">
+  return L(`<table class="q-table">
     <tr><th></th><th>${x.cols[0]}</th><th>${x.cols[1]}</th><th>Total</th></tr>
     <tr><td>${x.rows[0]}</td><td>${t.c00}</td><td>${t.c01}</td><td>${t.R0}</td></tr>
     <tr><td>${x.rows[1]}</td><td>${t.c10}</td><td>${t.c11}</td><td>${t.R1}</td></tr>
     <tr><td>Total</td><td>${t.C0}</td><td>${t.C1}</td><td>${t.grand}</td></tr>
-  </table>`;
+  </table>`, `<table class="q-table">
+    <tr><th></th><th>${x.cols[0]}</th><th>${x.cols[1]}</th><th>Totaal</th></tr>
+    <tr><td>${x.rows[0]}</td><td>${t.c00}</td><td>${t.c01}</td><td>${t.R0}</td></tr>
+    <tr><td>${x.rows[1]}</td><td>${t.c10}</td><td>${t.c11}</td><td>${t.R1}</td></tr>
+    <tr><td>Totaal</td><td>${t.C0}</td><td>${t.C1}</td><td>${t.grand}</td></tr>
+  </table>`);
 }
 
 const SKILLS = {
   defTest: () => mc(IND,
-    "What is the <b>test</b> for whether two events A and B are independent?",
-    "check whether P(A ∩ B) = P(A) × P(B)",
-    ["check whether P(A ∩ B) = 0", "check whether P(A) + P(B) = 1", "check whether P(A ∪ B) = P(A) × P(B)"],
-    { hint: "Independent events multiply.",
-      answerLabel: "Independent ⇔ P(A ∩ B) = P(A) × P(B)." }),
+    L("What is the <b>test</b> for whether two events A and B are independent?", "Wat is die <b>toets</b> of twee gebeurtenisse A en B onafhanklik is?"),
+    L("check whether P(A ∩ B) = P(A) × P(B)", "kyk of P(A ∩ B) = P(A) × P(B)"),
+    [L("check whether P(A ∩ B) = 0", "kyk of P(A ∩ B) = 0"), L("check whether P(A) + P(B) = 1", "kyk of P(A) + P(B) = 1"), L("check whether P(A ∪ B) = P(A) × P(B)", "kyk of P(A ∪ B) = P(A) × P(B)")],
+    { hint: L("Independent events multiply.", "Onafhanklike gebeurtenisse vermenigvuldig."),
+      answerLabel: L("Independent ⇔ P(A ∩ B) = P(A) × P(B).", "Onafhanklik ⇔ P(A ∩ B) = P(A) × P(B).") }),
 
   productRule: () => {
     const [pA, pB] = pick(PAIRS);
     return {
       type: "calc", concept: IND, dp: 2,
-      prompt: `A and B are <b>independent</b> with P(A) = <b>${dec(pA)}</b> and P(B) = <b>${dec(pB)}</b>. Find <b>P(A ∩ B)</b>.`,
+      prompt: L(`A and B are <b>independent</b> with P(A) = <b>${dec(pA)}</b> and P(B) = <b>${dec(pB)}</b>. Find <b>P(A ∩ B)</b>.`, `A en B is <b>onafhanklik</b> met P(A) = <b>${dec(pA)}</b> en P(B) = <b>${dec(pB)}</b>. Vind <b>P(A ∩ B)</b>.`),
       expected: pA * pB,
-      hint: "Independent → multiply: P(A ∩ B) = P(A) × P(B).",
+      hint: L("Independent → multiply: P(A ∩ B) = P(A) × P(B).", "Onafhanklik → vermenigvuldig: P(A ∩ B) = P(A) × P(B)."),
       answerLabel: `${dec(pA)} × ${dec(pB)} = ${dec(pA * pB, 2)}`,
-      solution: [{ s: `P(A ∩ B) = P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(pA * pB, 2)}` }],
+      solution: [{ s: L(`P(A ∩ B) = P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(pA * pB, 2)}`, `P(A ∩ B) = P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(pA * pB, 2)}`) }],
     };
   },
 
@@ -73,11 +79,11 @@ const SKILLS = {
     const pAB = indep ? prod : Math.max(0.1, Math.min(pA, pB, prod + pick([0.1, -0.1])));
     return {
       type: "yesno", concept: IND,
-      prompt: `P(A) = <b>${dec(pA)}</b>, P(B) = <b>${dec(pB)}</b> and P(A ∩ B) = <b>${dec(pAB)}</b>. Are A and B independent?`,
+      prompt: L(`P(A) = <b>${dec(pA)}</b>, P(B) = <b>${dec(pB)}</b> and P(A ∩ B) = <b>${dec(pAB)}</b>. Are A and B independent?`, `P(A) = <b>${dec(pA)}</b>, P(B) = <b>${dec(pB)}</b> en P(A ∩ B) = <b>${dec(pAB)}</b>. Is A en B onafhanklik?`),
       yes: Math.abs(pAB - prod) < 1e-9,
-      hint: `Work out P(A) × P(B) = ${dec(prod, 2)} and compare it with P(A ∩ B).`,
-      answerLabel: `P(A) × P(B) = ${dec(prod, 2)}; P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? "equal, so independent" : "not equal, so NOT independent"}.`,
-      solution: [{ s: `P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(prod, 2)}` }, { s: `Compare with P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? "independent" : "not independent"}.` }],
+      hint: L(`Work out P(A) × P(B) = ${dec(prod, 2)} and compare it with P(A ∩ B).`, `Werk P(A) × P(B) = ${dec(prod, 2)} uit en vergelyk dit met P(A ∩ B).`),
+      answerLabel: L(`P(A) × P(B) = ${dec(prod, 2)}; P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? "equal, so independent" : "not equal, so NOT independent"}.`, `P(A) × P(B) = ${dec(prod, 2)}; P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? "gelyk, dus onafhanklik" : "nie gelyk nie, dus NIE onafhanklik nie"}.`),
+      solution: [{ s: L(`P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(prod, 2)}`, `P(A) × P(B) = ${dec(pA)} × ${dec(pB)} = ${dec(prod, 2)}`) }, { s: L(`Compare with P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? "independent" : "not independent"}.`, `Vergelyk met P(A ∩ B) = ${dec(pAB)} → ${Math.abs(pAB - prod) < 1e-9 ? "onafhanklik" : "nie onafhanklik nie"}.`) }],
     };
   },
 
@@ -99,9 +105,9 @@ const SKILLS = {
       if (wrongs.length === 3) break;
     }
     return mc(TAB,
-      `${tableHTML(t)}One person is chosen at random. Write <b>P(${x.rL})</b> as a fraction in simplest form.`,
+      L(`${tableHTML(t)}One person is chosen at random. Write <b>P(${x.rL})</b> as a fraction in simplest form.`, `${tableHTML(t)}Een persoon word lukraak gekies. Skryf <b>P(${x.rL})</b> as 'n breuk in eenvoudigste vorm.`),
       f.str, wrongs,
-      { hint: `P(${x.rL}) = that row's total ÷ the grand total.`,
+      { hint: L(`P(${x.rL}) = that row's total ÷ the grand total.`, `P(${x.rL}) = daardie ry se totaal ÷ die groottotaal.`),
         answerLabel: `${t.R0}/${t.grand} = ${f.str}` });
   },
 
@@ -123,9 +129,9 @@ const SKILLS = {
       if (wrongs.length === 3) break;
     }
     return mc(TAB,
-      `${tableHTML(t)}Write <b>P(${x.rL} and ${x.cL})</b> as a fraction in simplest form.`,
+      L(`${tableHTML(t)}Write <b>P(${x.rL} and ${x.cL})</b> as a fraction in simplest form.`, `${tableHTML(t)}Skryf <b>P(${x.rL} en ${x.cL})</b> as 'n breuk in eenvoudigste vorm.`),
       f.str, wrongs,
-      { hint: "Use the single overlap cell ÷ the grand total.",
+      { hint: L("Use the single overlap cell ÷ the grand total.", "Gebruik die een sel waar hulle oorvleuel ÷ die groottotaal."),
         answerLabel: `${t.c00}/${t.grand} = ${f.str}` });
   },
 
@@ -134,24 +140,24 @@ const SKILLS = {
     const x = t.ctx;
     return {
       type: "yesno", concept: TAB,
-      prompt: `${tableHTML(t)}Let ${x.rSym} = "${x.rL}" and ${x.cSym} = "${x.cL}". Are ${x.rSym} and ${x.cSym} <b>independent</b>?`,
+      prompt: L(`${tableHTML(t)}Let ${x.rSym} = "${x.rL}" and ${x.cSym} = "${x.cL}". Are ${x.rSym} and ${x.cSym} <b>independent</b>?`, `${tableHTML(t)}Stel ${x.rSym} = "${x.rL}" en ${x.cSym} = "${x.cL}". Is ${x.rSym} en ${x.cSym} <b>onafhanklik</b>?`),
       yes: t.independent,
-      hint: `Compare P(${x.rSym}) × P(${x.cSym}) with P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand}.`,
-      answerLabel: `P(${x.rSym})×P(${x.cSym}) = ${dec(t.prodInter, 4).replace(/0+$/, "")} and P(${x.rSym} ∩ ${x.cSym}) = ${dec(t.realInter, 4).replace(/0+$/, "")} → ${t.independent ? "equal, so independent" : "not equal, so NOT independent"}.`,
+      hint: L(`Compare P(${x.rSym}) × P(${x.cSym}) with P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand}.`, `Vergelyk P(${x.rSym}) × P(${x.cSym}) met P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand}.`),
+      answerLabel: L(`P(${x.rSym})×P(${x.cSym}) = ${dec(t.prodInter, 4).replace(/0+$/, "")} and P(${x.rSym} ∩ ${x.cSym}) = ${dec(t.realInter, 4).replace(/0+$/, "")} → ${t.independent ? "equal, so independent" : "not equal, so NOT independent"}.`, `P(${x.rSym})×P(${x.cSym}) = ${dec(t.prodInter, 4).replace(/0+$/, "")} en P(${x.rSym} ∩ ${x.cSym}) = ${dec(t.realInter, 4).replace(/0+$/, "")} → ${t.independent ? "gelyk, dus onafhanklik" : "nie gelyk nie, dus NIE onafhanklik nie"}.`),
       solution: [
-        { s: `P(${x.rSym}) = ${t.R0}/${t.grand}, P(${x.cSym}) = ${t.C0}/${t.grand} → product = ${dec(t.prodInter, 4).replace(/0+$/, "")}` },
-        { s: `P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand} = ${dec(t.realInter, 4).replace(/0+$/, "")}` },
-        { s: `${t.independent ? "Equal → independent." : "Not equal → not independent."}` },
+        { s: L(`P(${x.rSym}) = ${t.R0}/${t.grand}, P(${x.cSym}) = ${t.C0}/${t.grand} → product = ${dec(t.prodInter, 4).replace(/0+$/, "")}`, `P(${x.rSym}) = ${t.R0}/${t.grand}, P(${x.cSym}) = ${t.C0}/${t.grand} → produk = ${dec(t.prodInter, 4).replace(/0+$/, "")}`) },
+        { s: L(`P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand} = ${dec(t.realInter, 4).replace(/0+$/, "")}`, `P(${x.rSym} ∩ ${x.cSym}) = ${t.c00}/${t.grand} = ${dec(t.realInter, 4).replace(/0+$/, "")}`) },
+        { s: `${t.independent ? L("Equal → independent.", "Gelyk → onafhanklik.") : L("Not equal → not independent.", "Nie gelyk nie → nie onafhanklik nie.")}` },
       ],
     };
   },
 
   notIndependentMeaning: () => mc(IND,
-    "If P(A ∩ B) is <b>not equal</b> to P(A) × P(B), what can you say?",
-    "A and B are not independent",
-    ["A and B are mutually exclusive", "A and B are complementary", "A and B are exhaustive"],
-    { hint: "The product rule only holds when events are independent.",
-      answerLabel: "Product rule fails → the events are not independent." }),
+    L("If P(A ∩ B) is <b>not equal</b> to P(A) × P(B), what can you say?", "As P(A ∩ B) <b>nie gelyk</b> is aan P(A) × P(B) nie, wat kan jy sê?"),
+    L("A and B are not independent", "A en B is nie onafhanklik nie"),
+    [L("A and B are mutually exclusive", "A en B is onderling uitsluitend"), L("A and B are complementary", "A en B is komplementêr"), L("A and B are exhaustive", "A en B is uitputtend")],
+    { hint: L("The product rule only holds when events are independent.", "Die produkreël geld net as die gebeurtenisse onafhanklik is."),
+      answerLabel: L("Product rule fails → the events are not independent.", "Produkreël geld nie → die gebeurtenisse is nie onafhanklik nie.") }),
 };
 
 export const questP5 = {
