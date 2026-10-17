@@ -1,0 +1,853 @@
+{
+  "unit": "T32",
+  "generated": "2026-10-17T18:26:46.522Z",
+  "files": [
+    "js/exam/func-siblings-average-gradient.js"
+  ],
+  "items": {
+    "func-siblings-average-gradient#1": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 4. &nbsp;A and B are the two marked points on f, with x-coordinates &nbsp;−1&nbsp; and&nbsp; 3&nbsp; respectively.<br><br>Determine the coordinates of A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:95:13"
+      ]
+    },
+    "func-siblings-average-gradient#2": {
+      "en": "Both points sit on f, so their heights come from the equation. Put each x-value into f and work out the y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:98:13"
+      ]
+    },
+    "func-siblings-average-gradient#3": {
+      "en": "f(−1) = (−1)² − 4 = 1 − 4 = −3 &nbsp;&nbsp;∴&nbsp; A(−1 ; −3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:101:39"
+      ]
+    },
+    "func-siblings-average-gradient#4": {
+      "en": "f(3) = (3)² − 4 = 9 − 4 = 5 &nbsp;&nbsp;∴&nbsp; B(3 ; 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:102:39"
+      ]
+    },
+    "func-siblings-average-gradient#5": {
+      "en": "WATCH OUT: (−1)² is +1, not −1. The bracket matters — the whole of −1 is being squared, and a negative times a negative is positive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:104:15"
+      ]
+    },
+    "func-siblings-average-gradient#6": {
+      "en": "Before you can measure anything between two points you have to know where both of them are, and that is what this part is for. A point sitting on a graph always has its height decided by the equation, so being told the x is the same as being told the whole point — put the x in and out comes the y. The one place marks go missing is the negative x. Squaring −1 means multiplying −1 by −1, which is +1, so the height at x = −1 is 1 − 4 = −3. Writing (−1)² with the bracket, rather than −1², is a small habit that saves that mark every time. Finish by writing each answer as a coordinate pair, because a point is a place and a place needs both numbers.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:108:13"
+      ]
+    },
+    "func-siblings-average-gradient#7": {
+      "en": "Hence determine the average gradient of f between A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:116:13"
+      ]
+    },
+    "func-siblings-average-gradient#8": {
+      "en": "Average gradient is just the gradient of the straight line joining the two points — so it is change in y over change in x. Subtract in the SAME order top and bottom.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:119:13"
+      ]
+    },
+    "func-siblings-average-gradient#9": {
+      "en": "average gradient = (y₂ − y₁)/(x₂ − x₁)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:122:37",
+        "func-siblings-average-gradient.js:274:37"
+      ]
+    },
+    "func-siblings-average-gradient#10": {
+      "en": "= (5 − (−3))/(3 − (−1)) = 8/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:123:37"
+      ]
+    },
+    "func-siblings-average-gradient#11": {
+      "en": "= 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:124:39"
+      ]
+    },
+    "func-siblings-average-gradient#12": {
+      "en": "REMEMBER: keep the same order top and bottom. Taking B first on top and A first on the bottom flips the sign of the whole answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:126:15"
+      ]
+    },
+    "func-siblings-average-gradient#13": {
+      "en": "The word “average” is doing real work here. A curve does not have one gradient — it is steeper in some places than others — so asking “how steep is f?” has no single answer. What you CAN ask is: if I joined A to B with a ruler, how steep would that ruler be? That straight line is called a chord, and its gradient is the average gradient between the two points. Which means you already know how to do this: it is the same rise-over-run you use for any straight line, change in y over change in x. The two cautions are the order of subtraction, which must match top and bottom, and the double negatives — 5 − (−3) is 8, not 2. An answer of 2 says the curve climbs, on average, two units up for every one across between those points.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:130:13"
+      ]
+    },
+    "func-siblings-average-gradient#14": {
+      "en": "The sketch shows the hyperbola h, defined by &nbsp;h(x) = 6/(x − 2) + 1, &nbsp;with asymptotes &nbsp;x = 2&nbsp; and&nbsp; y = 1. &nbsp;A and B lie on h, with x-coordinates &nbsp;3&nbsp; and&nbsp; 5&nbsp; respectively.<br><br>Determine the average gradient of h between A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:176:13"
+      ]
+    },
+    "func-siblings-average-gradient#15": {
+      "en": "Work out both heights before you reach for the formula — put x = 3 and then x = 5 into h. After that it is change in y over change in x, exactly as for a parabola.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:179:13"
+      ]
+    },
+    "func-siblings-average-gradient#16": {
+      "en": "h(3) = 6/(3 − 2) + 1 = 6 + 1 = 7 &nbsp;&nbsp;∴&nbsp; A(3 ; 7)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:182:37"
+      ]
+    },
+    "func-siblings-average-gradient#17": {
+      "en": "h(5) = 6/(5 − 2) + 1 = 2 + 1 = 3 &nbsp;&nbsp;∴&nbsp; B(5 ; 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:183:37"
+      ]
+    },
+    "func-siblings-average-gradient#18": {
+      "en": "average gradient = (y₂ − y₁)/(x₂ − x₁) = (3 − 7)/(5 − 3) = −4/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:184:37"
+      ]
+    },
+    "func-siblings-average-gradient#19": {
+      "en": "= −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:185:39"
+      ]
+    },
+    "func-siblings-average-gradient#20": {
+      "en": "The graph being a hyperbola changes nothing about the method — average gradient is always the steepness of the straight line joining two points, whatever curve they happen to be sitting on. What does change is the arithmetic getting there, because working out a height now means a fraction. Take it one piece at a time: the bottom of the fraction first, then divide, then add the number on the end. Both points are on the same branch here, to the right of the vertical asymptote, which matters more than it looks: joining two points on OPPOSITE branches would draw a line straight across a gap the graph never crosses, and the answer would be meaningless. Once you have the two heights, the formula is the same one as always.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:188:13"
+      ]
+    },
+    "func-siblings-average-gradient#21": {
+      "en": "What does the sign of your answer tell you about h between A and B?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:196:13"
+      ]
+    },
+    "func-siblings-average-gradient#22": {
+      "en": "Think about what a negative gradient looks like on any straight line, and then look at the chord you have just drawn between A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:199:13"
+      ]
+    },
+    "func-siblings-average-gradient#23": {
+      "en": "The average gradient is negative, so h is <b>decreasing</b> between A and B — it falls as you move from left to right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:202:39"
+      ]
+    },
+    "func-siblings-average-gradient#24": {
+      "en": "A gradient is a direction as well as a size. Positive means going up as you move right; negative means going down. So the answer of −2 is telling you two separate things at once: the chord from A to B falls, and it falls two units for every one unit across. Look at the picture and it agrees — A is up at height 7 and B is down at 3, so of course the line between them slopes down. This is the free sanity check on every average-gradient answer you will ever work out. Decide from the picture whether the answer should be positive or negative BEFORE you do the arithmetic, and if the sign comes out the other way, you have subtracted in the wrong order somewhere.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:205:13"
+      ]
+    },
+    "func-siblings-average-gradient#25": {
+      "en": "Consider the parabola f, defined by &nbsp;f(x) = x² − 6x + 5.<br><br>Determine the coordinates of the turning point of f and of the point where f cuts the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:249:13"
+      ]
+    },
+    "func-siblings-average-gradient#26": {
+      "en": "The turning point sits on &nbsp;x = −b/(2a); &nbsp;work that out first and then substitute back for its height. The y-intercept is the number on the end of the equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:252:13"
+      ]
+    },
+    "func-siblings-average-gradient#27": {
+      "en": "a = 1, &nbsp;b = −6: &nbsp;x = −b/(2a) = 6/2 = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:255:37"
+      ]
+    },
+    "func-siblings-average-gradient#28": {
+      "en": "f(3) = 9 − 18 + 5 = −4 &nbsp;&nbsp;∴&nbsp; TP(3 ; −4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:256:39"
+      ]
+    },
+    "func-siblings-average-gradient#29": {
+      "en": "y-intercept: &nbsp;f(0) = 5 &nbsp;&nbsp;∴&nbsp; (0 ; 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:257:39"
+      ]
+    },
+    "func-siblings-average-gradient#30": {
+      "en": "Two points, two very different amounts of work. The y-intercept is free: put x = 0 and everything with an x in it vanishes, leaving the last number behind. The turning point takes one formula and one substitution — half of b, sign swapped, over a gives its x, and putting that x back into the equation gives its height. Do them in that order and keep them clearly labelled, because the next part is going to subtract one from the other and it matters which is which. A quick check while you are here: the parabola is happy, so the turning point is its lowest point, and −4 being below 5 agrees with that. From (0 ; 5) down to (3 ; −4) the graph is falling, so expect a negative answer next.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:260:13"
+      ]
+    },
+    "func-siblings-average-gradient#31": {
+      "en": "Hence determine the average gradient of f between the y-intercept and the turning point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:268:13"
+      ]
+    },
+    "func-siblings-average-gradient#32": {
+      "en": "You now have two points, so this is the ordinary formula. Take the y-intercept as your first point and the turning point as your second, and keep that order top and bottom.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:271:13"
+      ]
+    },
+    "func-siblings-average-gradient#33": {
+      "en": "= (−4 − 5)/(3 − 0) = −9/3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:275:37"
+      ]
+    },
+    "func-siblings-average-gradient#34": {
+      "en": "= −3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:276:39"
+      ]
+    },
+    "func-siblings-average-gradient#35": {
+      "en": "REMEMBER: the answer being negative is not a mistake. Over this stretch the graph really is falling, and a distance would never be negative but a gradient certainly can be.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:278:15"
+      ]
+    },
+    "func-siblings-average-gradient#36": {
+      "en": "Once you have two points, the graph they came from stops mattering — average gradient is a question about the two points, and the formula is the same one you used for straight lines all last year. What makes this version worth practising is that neither point was handed to you: one had to be read off the end of the equation and the other had to be worked out. That is how a paper usually asks it. The answer, −3, says that over that stretch the curve drops three units for every one unit across, on average. It is not the steepness anywhere in particular — near the y-axis the curve is falling faster than that, and near the turning point it has almost flattened out — it is the steepness of the straight line joining the two ends.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:282:13"
+      ]
+    },
+    "func-siblings-average-gradient#37": {
+      "en": "The sketch shows the exponential graph g, defined by &nbsp;g(x) = 2ˣ + 1, &nbsp;with asymptote &nbsp;y = 1. &nbsp;A, B and C are the marked points on g, with x-coordinates &nbsp;1, &nbsp;3&nbsp; and&nbsp; 4.<br><br>Determine the average gradient of g between A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:337:13"
+      ]
+    },
+    "func-siblings-average-gradient#38": {
+      "en": "Work out both heights first — put x = 1 and then x = 3 into g. Then it is change in y over change in x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:340:13"
+      ]
+    },
+    "func-siblings-average-gradient#39": {
+      "en": "g(1) = 2<sup>1</sup> + 1 = 3 &nbsp;&nbsp;∴&nbsp; A(1 ; 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:343:37"
+      ]
+    },
+    "func-siblings-average-gradient#40": {
+      "en": "g(3) = 2<sup>3</sup> + 1 = 9 &nbsp;&nbsp;∴&nbsp; B(3 ; 9)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:344:37"
+      ]
+    },
+    "func-siblings-average-gradient#41": {
+      "en": "average gradient = (y₂ − y₁)/(x₂ − x₁) = (9 − 3)/(3 − 1) = 6/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:345:37"
+      ]
+    },
+    "func-siblings-average-gradient#42": {
+      "en": "= 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:346:39"
+      ]
+    },
+    "func-siblings-average-gradient#43": {
+      "en": "Heights first, always. On an exponential that means working out a power, and the two places people slip are forgetting that the number added on the end is part of the height, and reading 2 cubed as 6 instead of 8. Once both points are down the rest is the ordinary formula. The answer of 3 says that between x = 1 and x = 3 the graph climbs, on average, three units up for every one across. Hold on to that number, because the next part measures the same graph over a different stretch and gets something very different — and comparing the two is the whole point of the card.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:349:13"
+      ]
+    },
+    "func-siblings-average-gradient#44": {
+      "en": "Determine the average gradient of g between B and C, and explain what your two answers together tell you about how g is growing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:357:13"
+      ]
+    },
+    "func-siblings-average-gradient#45": {
+      "en": "Work out C's height the same way and use the formula again. Then put the two gradients side by side and ask what it means that the second one is so much bigger.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:360:13"
+      ]
+    },
+    "func-siblings-average-gradient#46": {
+      "en": "g(4) = 2<sup>4</sup> + 1 = 17 &nbsp;&nbsp;∴&nbsp; C(4 ; 17)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:363:37"
+      ]
+    },
+    "func-siblings-average-gradient#47": {
+      "en": "average gradient = (17 − 9)/(4 − 3) = 8/1 = 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:364:37"
+      ]
+    },
+    "func-siblings-average-gradient#48": {
+      "en": "8 is much bigger than 3, so g is getting steeper as x increases — the graph is <b>taking off</b>, climbing faster and faster the further right you go.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:365:39"
+      ]
+    },
+    "func-siblings-average-gradient#49": {
+      "en": "REMEMBER: an average gradient belongs to the two points you measured between, not to the graph as a whole. “The gradient of g is 3” is not a true sentence — it depends entirely on which stretch you measure.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:367:15"
+      ]
+    },
+    "func-siblings-average-gradient#50": {
+      "en": "This is what “taking off” looks like once you put numbers on it. Between x = 1 and x = 3 the graph climbed at an average of 3 units per step across; between x = 3 and x = 4 it climbed at 8 — nearly three times as steep, over a stretch half as long. A straight line could never do that, because a straight line has one gradient everywhere. A parabola gets steeper too, but an exponential does it faster and keeps doing it forever, doubling every time x goes up by one. On the picture you can see it in the two dashed chords: the first is a gentle slope, the second is nearly a wall. And the same story runs the other way — go far enough left and the average gradient becomes almost nothing, which is the graph flattening out towards its asymptote.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:371:13"
+      ]
+    },
+    "func-siblings-average-gradient#51": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 3, &nbsp;with A and B marked on it at &nbsp;x = 1&nbsp; and&nbsp; x = 3.<br><br>Determine the average gradient of f between &nbsp;x = 1&nbsp; and&nbsp; x = 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:426:13"
+      ]
+    },
+    "func-siblings-average-gradient#52": {
+      "en": "Work out f(1) and f(3), then use change in y over change in x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:429:13"
+      ]
+    },
+    "func-siblings-average-gradient#53": {
+      "en": "f(1) = 1 − 3 = −2 &nbsp;and&nbsp; f(3) = 9 − 3 = 6, &nbsp;so&nbsp; A(1 ; −2)&nbsp; and&nbsp; B(3 ; 6)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:432:37"
+      ]
+    },
+    "func-siblings-average-gradient#54": {
+      "en": "average gradient = (6 − (−2))/(3 − 1) = 8/2 = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:433:39"
+      ]
+    },
+    "func-siblings-average-gradient#55": {
+      "en": "This is the warm-up, and it is here for a reason: the next part does exactly the same job in letters instead of numbers, and it is much easier to follow if you have just watched it happen with numbers. Two heights, one subtraction on top, one on the bottom, divide. The answer, 4, is the steepness of the dashed line joining A to B. Notice what it is NOT: it is not how steep the curve is at A, and it is not how steep it is at B. The curve is gentler than that at A and steeper than that at B; 4 is the in-between figure you would get by joining the two ends with a ruler.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:436:13"
+      ]
+    },
+    "func-siblings-average-gradient#56": {
+      "en": "Determine the average gradient of f between &nbsp;x = 1&nbsp; and&nbsp; x = 1 + h. &nbsp;Give your answer in its simplest form.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:444:13"
+      ]
+    },
+    "func-siblings-average-gradient#57": {
+      "en": "Do exactly what you did in (a), but with 1 + h in place of 3. Work out f(1 + h) first — expand the square carefully — and remember that the change in x is (1 + h) − 1, which is just h.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:447:13"
+      ]
+    },
+    "func-siblings-average-gradient#58": {
+      "en": "f(1 + h) = (1 + h)² − 3 = 1 + 2h + h² − 3 = h² + 2h − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:450:37"
+      ]
+    },
+    "func-siblings-average-gradient#59": {
+      "en": "f(1) = 1 − 3 = −2, &nbsp;so the change in y is &nbsp;(h² + 2h − 2) − (−2) = h² + 2h",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:451:37"
+      ]
+    },
+    "func-siblings-average-gradient#60": {
+      "en": "the change in x is &nbsp;(1 + h) − 1 = h, &nbsp;so &nbsp;average gradient = (h² + 2h)/h",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:452:37"
+      ]
+    },
+    "func-siblings-average-gradient#61": {
+      "en": "= (h(h + 2))/h = h + 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:453:39"
+      ]
+    },
+    "func-siblings-average-gradient#62": {
+      "en": "WATCH OUT: (1 + h)² is NOT 1 + h². The square of a bracket has a middle term — 1 + 2h + h² — and losing it is what makes this answer come out as h instead of h + 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:455:15"
+      ]
+    },
+    "func-siblings-average-gradient#63": {
+      "en": "Nothing new is happening; the second x-value simply has a letter in it. Work out the height there the same way you would for a number, being careful with the square of the bracket: (1 + h)² means (1 + h)(1 + h), which gives 1 + 2h + h². Then subtract the two heights, and watch the double negative — taking away −2 adds 2, which is what makes the constants cancel and leaves h² + 2h. The bottom is the easy half: the distance from 1 to 1 + h is h. Now factorise the top so the h can cancel, and you are left with h + 2. Check it against part (a): going from x = 1 to x = 3 means h = 2, and h + 2 gives 4 — exactly the number you already had.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:459:13"
+      ]
+    },
+    "func-siblings-average-gradient#64": {
+      "en": "Hence write down the average gradient of f between &nbsp;x = 1&nbsp; and&nbsp; x = 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:467:13"
+      ]
+    },
+    "func-siblings-average-gradient#65": {
+      "en": "Your answer to (b) is a formula that works for any h. Ask yourself what h has to be to get from x = 1 to x = 2, and put that number in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:470:13"
+      ]
+    },
+    "func-siblings-average-gradient#66": {
+      "en": "from &nbsp;x = 1&nbsp; to&nbsp; x = 2&nbsp; the step is &nbsp;h = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:473:37"
+      ]
+    },
+    "func-siblings-average-gradient#67": {
+      "en": "average gradient = h + 2 = 1 + 2 = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:474:39"
+      ]
+    },
+    "func-siblings-average-gradient#68": {
+      "en": "This is the reward for doing (b) in letters: you now have a formula that answers the same question for any second point you like, without starting again. Getting from x = 1 to x = 2 is a step of 1, so h = 1, and the average gradient is 3. Compare the three chords on the picture and a pattern shows itself — a step of 2 gave a gradient of 4, a step of 1 gives 3, and a smaller step would give something smaller still, always 2 more than the step. The chords are lying flatter and flatter as the second point slides back towards A. What they are heading towards is how steep the curve is right AT x = 1, which is a Grade 12 conversation; for now, noticing the pattern is enough.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:477:13"
+      ]
+    },
+    "func-siblings-average-gradient#69": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 1, &nbsp;with the point A(1 ; 0) marked on it. B is another point on f, and the average gradient of f between A and B is 4.<br><br>Determine the x-coordinate of B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:527:13"
+      ]
+    },
+    "func-siblings-average-gradient#70": {
+      "en": "Call B's x-coordinate b. Its height is then f(b), so write the average gradient formula out in terms of b, put it equal to 4, and solve. There is a factorising shortcut hiding in the top of the fraction.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:530:13"
+      ]
+    },
+    "func-siblings-average-gradient#71": {
+      "en": "Let B's x-coordinate be b, so B is the point &nbsp;(b ; b² − 1), &nbsp;and A is (1 ; 0):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:533:37"
+      ]
+    },
+    "func-siblings-average-gradient#72": {
+      "en": "average gradient = ((b² − 1) − 0)/(b − 1) = (b² − 1)/(b − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:534:37"
+      ]
+    },
+    "func-siblings-average-gradient#73": {
+      "en": "the top is a difference of two squares: &nbsp;((b − 1)(b + 1))/(b − 1) = b + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:535:37"
+      ]
+    },
+    "func-siblings-average-gradient#74": {
+      "en": "b + 1 = 4 &nbsp;&nbsp;∴&nbsp; b = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:536:39"
+      ]
+    },
+    "func-siblings-average-gradient#75": {
+      "en": "<b>OR</b> — cross-multiply instead of cancelling:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:537:37"
+      ]
+    },
+    "func-siblings-average-gradient#76": {
+      "en": "b² − 1 = 4(b − 1) &nbsp;⟹&nbsp; b² − 4b + 3 = 0 &nbsp;⟹&nbsp; (b − 1)(b − 3) = 0 &nbsp;⟹&nbsp; b = 1&nbsp; or&nbsp; b = 3, &nbsp;and b = 1 is rejected &nbsp;∴&nbsp; b = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:538:37"
+      ]
+    },
+    "func-siblings-average-gradient#77": {
+      "en": "WATCH OUT on the second road: b = 1 must be thrown away. If b were 1 then B would BE A, there would be no chord at all, and the fraction's bottom would be zero. Say why you are rejecting it — that is where the mark is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:540:15"
+      ]
+    },
+    "func-siblings-average-gradient#78": {
+      "en": "Every “find the missing point” question works the same way: give the thing you do not know a letter, write down what you DO know using that letter, and solve. Here B's x gets called b, and because B is on the graph its height must be b² − 1 — you are never told that, you work it out. Now the average gradient formula can be written entirely in b, set equal to the 4 you were given, and solved. The tidy road spots that b² − 1 is a difference of two squares, so the (b − 1) on the bottom cancels and what is left is a one-line equation. The other road cross-multiplies and ends in a quadratic with two answers, one of which is nonsense — b = 1 would put B on top of A. Both roads earn full marks; the second one just asks you to explain the rejection.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:544:13"
+      ]
+    },
+    "func-siblings-average-gradient#79": {
+      "en": "Hence write down the coordinates of B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:552:13"
+      ]
+    },
+    "func-siblings-average-gradient#80": {
+      "en": "You have B's x-coordinate, and B sits on f — so put that x into f to get its height.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:555:13"
+      ]
+    },
+    "func-siblings-average-gradient#81": {
+      "en": "f(3) = (3)² − 1 = 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:558:37"
+      ]
+    },
+    "func-siblings-average-gradient#82": {
+      "en": "∴ &nbsp;B(3 ; 8)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:559:39"
+      ]
+    },
+    "func-siblings-average-gradient#83": {
+      "en": "REMEMBER: 4 is the average GRADIENT, not B's height. Writing B(3 ; 4) mixes up the steepness of the chord with the position of its far end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:561:15"
+      ]
+    },
+    "func-siblings-average-gradient#84": {
+      "en": "One substitution finishes the job, but it is worth checking the answer rather than just writing it. From A(1 ; 0) to B(3 ; 8) the change in y is 8 and the change in x is 2, so the chord's gradient is 8 divided by 2, which is 4 — exactly what the question said it should be. That check costs five seconds and catches every arithmetic slip in the part before. The other thing to keep straight is which number is which. The 4 measures how STEEP the line from A to B is; the 8 is how HIGH B sits. They are different kinds of number and they live in different places on the picture, and mixing them up is the most common way this question is lost.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-average-gradient.js:565:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2414
+}
