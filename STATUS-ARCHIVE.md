@@ -1,5 +1,47 @@
 # STATUS ARCHIVE — the full session-by-session history of Blipwork
 
+## 2026-10-17 18:18–18:30 — sw v98 ship: the Afrikaans head start goes live, hidden (Fable, catchup session)
+- Her ask at 18:18: /catchup on the Blipwork translation work, "can I do the playtest now so we can continue". Catch-up: S1–S6 + the pilot green but S3–S6 only local, so a phone play with ?lang=af would have shown no Afrikaans; offered the v98 ship (GitHub only) or a local play; her "Ship it" at 18:20.
+- Pre-flight: 9 commits ahead (8 AF/status + the bump), no supabase/migration file in the set, the diff scanned for emails, service keys and learner names (clean); the 13 js/concepts/<id>.js files load as ES module imports and the service worker caches js at runtime cache-first inside the versioned cache, so no precache edit was needed. Boot check: `python -m http.server 5191` in the repo root (the harness needs it) then `PYTHONUTF8=1 python tools/harness_run.py verify-patterns "verify-patterns?lang=af"`: both 41/41, 11 000 generations clean, errs=[]. Without PYTHONUTF8 the harness dies on its own ✓ banner (cp1252 console), a laptop quirk, not a red run.
+- Bump `const CACHE = "mhq-v98"`, commit `98a02bd` via a message file, `tools/sw_check.py` OK, push 18:21 (d0aa6f4..98a02bd). Pages served v98 at 18:22:54 (a 15 s poll). Live checks 18:23: sw.js v98; js/quests/questnp1-spot.js carries "Watter soort patroon is dit" (3 hits); js/concepts.js, js/concepts/pat.js, js/lang.js (SHOW_TOGGLE = false), tools/af_check.mjs, AF-GLOSSARY.md all HTTP 200. Local server stopped afterwards.
+- Bookkeeping: AF-LOG.md ship line; PROJECT-STATUS.md head, Where-we-are block, decision line, G1 pending item rewritten as a pure phone play; memory (project file, leave-uncommitted list, index) updated; the status file was 17.2 KB, so the 2026-10-10 / 2026-10-11 finance decision one-liners moved here (below) to get it back under the 15 KB gate.
+- Decision one-liners moved here from PROJECT-STATUS.md on 2026-10-17 18:30 (finance part 2, 2026-10-10 to 2026-10-11; their full write-ups sit further down under those dates), verbatim:
+- 2026-10-10 (hers, 17:55 / 19:10 / 19:19 / 18:02): Fable manages the finance workers, she
+  play-tests each round; f8 NOT approved (total drawn like a payment), a payment CAN land on
+  the total's day; one real learner's name removed from the plan file (public repo); the
+  Stats Quest calculator copy waits (on hold).
+- 2026-10-10 (mine, flagged): saving jug form was `deposits − withdrawal = A` (now archived);
+  f13 writes exponents worked out, f9 keeps `3×4`; workers' commits carry the model's own
+  co-author line.
+- 2026-10-11 (hers, 11:22–12:02): real superscripts; f10 jug form = HOW SHE TEACHES IN 2027,
+  archived, this year taught form only; words → timeline → equation, so Build the timeline =
+  f12 and the one equation = f13; f8 = the jug ("lump sum" retired: it means ONE payment;
+  the total = the one amount worth all the payments together on one day; coins = payments,
+  jug = the total; words first, timeline after); she draws the jug PNG; a fresh session runs
+  the build.
+- 2026-10-11 (hers, 12:12): "Yebo, all looks good... run it": Fable dispatches the six-worker
+  queue itself, one at a time, reviews each; the ship stays its own yes.
+- 2026-10-11 (hers, 16:32): wrap now; she play-tests locally in a bit; a FRESH session ships.
+- 2026-10-11 (foreman, flagged, default keep): f12 answers a down payment "nowhere" (never
+  enters the account; matches f10/f13); f8's concept card rides on card 1 via `q.reveal` and
+  "I'm lost"; checker briefs get a budget section after the first one spent 400k.
+- 2026-10-11 (hers, 16:54–17:02, play-test): "lumpsum" is PHASED OUT, not cold-turkeyed: f8's
+  first frame says "the total (the lumpsum)" plus one line that the lumpsum is the total and
+  from now on we call it the total; nowhere else. f8 opens with a discovery slide, just the
+  jug (tap: savings fills, the total at the END; tap: the loan drains, the total at the
+  START), the questions after. f12: an answered step collapses; only the paragraph and ONE
+  timeline stay. "The rest looks perfect."
+- 2026-10-11 (hers, 18:12–18:13): the two f8 polish items (drain to empty; neutral caption
+  once the chips appear) and the 2b list run BEFORE the ship; 3b / 4b / 5b stay parked;
+  f12's auto-scroll (the paragraph scrolls off at the rates step) stays as is; then ship.
+- 2026-10-11 (mine, flagged, default keep): `q.stepGraphPinned` / `q.collapseSteps` are opt-in
+  engine flags (only f12 sets them; with both off every branch is the old code); in pinned
+  mode the next-step scroll keeps the picture at the top; f8's reminder caption swaps on the
+  drain's `animationend` (6 s fallback) with the caption height held; the 2b worker also
+  made "times‑per‑year" unbreakable in f5/f3.
+- 2026-10-11 19:12: SHIPPED sw v96 `a4621b5` (migration 19:04, sw_check OK, live checks
+  19:15). `FINANCE-ROUNDS-2-PLAN.md` stays untracked/local (her 10 Oct call stands).
+
 ## 2026-10-16 23:20–2026-10-17 01:35 — Afrikaans head start: S1–S6 + the pilot, all green (Fable foreman, six Opus workers, one at a time)
 - Her ask at 23:20: "run QUEUE.md rows S1 to S6 and the pilot tonight one Opus worker at a time, you review each, claim each row with ⏳ first, commits local on main, no push, no sw bump. Happy days?" S6 is the pilot, G1 her gate. Catch-up: the plan and queue were 15 minutes old, nothing built; the portfolio sweep flagged only known-deliberate items plus study-hub's modified status file (retired project, not touched). Cost line given before the first worker (≈1.2–1.8M tokens, 3–5 % of the week); the delegation block was minted the foreman way (she picked dispatch mode in her message) and pasted at the top of every brief.
 - Her other session worked the same checkout in parallel (hub tabs Paper 1 / Paper 2, then the sw v97 ship at 00:18 that carried S1 + S2 live, hidden). No file overlap: every worker had an explicit touch list and committed with explicit paths only.

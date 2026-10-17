@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-17 01:30 (🇿🇦 AF HEAD START DONE: S1–S6 + the pilot green, S3–S6 sit LOCAL and ride her next ship; the routine waits at gate G1 = her phone play; 🚀 sw v97 LIVE `5cf9433`: hub tabs = Paper 1 / Paper 2 + the hidden AF switch (S1) + the S2 tools; f8–f13 live CLOSED, she opens each from the admin page as she teaches it)
+# Project status — updated 2026-10-17 18:25 (🚀 sw v98 LIVE `98a02bd`: the whole 🇿🇦 AF head start S1–S6 + the Number Patterns pilot are live, switch still HIDDEN; gate G1 is OPEN = her phone play of Number Patterns round 1 with `?lang=af`; the routine starts Sun 18 Oct 22:10 and waits at G1; hub tabs = Paper 1 / Paper 2 since v97; f8–f13 live CLOSED, she opens each from the admin page as she teaches it)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -9,6 +9,14 @@ stops being current, move it to the top of the archive instead of letting
 it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Where we are
+- **🚀 Sat 2026-10-17 18:21: sw v98 LIVE (`98a02bd`): the AF rows S3–S6, the foreman review `a15f823`, the
+  Number Patterns pilot and her keep-the-em-dashes ruling are live, the language switch still hidden
+  (`SHOW_TOGGLE = false`).** Her "ship it" 18:20 in the catchup session (Fable typed it: bump, commit, sw_check OK,
+  push 18:21, Pages served v98 at 18:22:54). Pre-flight: no migration in the 9 commits, public-repo scan clean,
+  verify-patterns 41/41 in EN and `?lang=af` headless with 0 console errors before the bump. Live checks 18:23:
+  sw.js says mhq-v98; `js/quests/questnp1-spot.js` carries its Afrikaans lines; `js/concepts.js` + the 13
+  `js/concepts/<id>.js` files, `js/lang.js`, `tools/af_check.mjs`, AF-GLOSSARY.md all 200. 0 unpushed after the
+  docs commit. Gate G1 is now a pure phone play (below).
 - **🚀 Sat 2026-10-17 00:18: sw v97 LIVE (`5cf9433`): HUB TABS = PAPER 1 / PAPER 2 (`9ef7f91`), plus the AF
   queue's S1 (hidden language switch) and S2 (extract / inject tools).** Each tab lists its chapters in the
   paper's own order (js/screens.js PAPER_TABS); the chapter `term` field stays, nothing reads it. Shipped on
@@ -27,7 +35,7 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   the PILOT: `questnp1-spot` has its 52 twins, af_check clean, verify-patterns 41/41 in EN and `?lang=af`;
   Fable read all 52 lines and tightened two. Foreman review commit `a15f823` (harness_run prints each page's
   real banner; CLAUDE.md points new cards at `js/concepts/<id>.js`). S1 + S2 went LIVE hidden in HER sw v97
-  ship (00:18); S3–S6 + `a15f823` are the 5 unpushed commits, they ride her next ship. Tracked from now on:
+  ship (00:18); S3–S6 + `a15f823` went live in sw v98 (18:21, above). Tracked from now on:
   QUEUE.md, AF-LOG.md (one line per row, her morning view), AF-GLOSSARY.md; AFRIKAANS-PLAN.md stays local.
   Debt line at 01:20: twins 153 / items 11 792. Cost: ≈1.3M worker tokens (S1 180k, S2 314k, S3 269k, S4 166k,
   S5 271k, S6 117k) plus the foreman session; the weekly meter moved 31 → 37 %, the 5-hour window 24 → ~47 %.
@@ -46,45 +54,10 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   Workers → Unregister); the app's preview pane refuses service workers, the headless tools
   start clean.
 
-## Decisions (append-only; entries before 2026-10-10 are in STATUS-ARCHIVE.md)
+## Decisions (append-only; entries before 2026-10-15 are in STATUS-ARCHIVE.md)
 - 2026-10-07 (hers): 2D Trig comes back into Exam Focus; round-two tile map agreed; build
   order = exam order (Paper 1 26 Oct first); the next fresh session does the three prep jobs
   BEFORE any cards.
-- 2026-10-10 (hers, 17:55 / 19:10 / 19:19 / 18:02): Fable manages the finance workers, she
-  play-tests each round; f8 NOT approved (total drawn like a payment), a payment CAN land on
-  the total's day; one real learner's name removed from the plan file (public repo); the
-  Stats Quest calculator copy waits (on hold).
-- 2026-10-10 (mine, flagged): saving jug form was `deposits − withdrawal = A` (now archived);
-  f13 writes exponents worked out, f9 keeps `3×4`; workers' commits carry the model's own
-  co-author line.
-- 2026-10-11 (hers, 11:22–12:02): real superscripts; f10 jug form = HOW SHE TEACHES IN 2027,
-  archived, this year taught form only; words → timeline → equation, so Build the timeline =
-  f12 and the one equation = f13; f8 = the jug ("lump sum" retired: it means ONE payment;
-  the total = the one amount worth all the payments together on one day; coins = payments,
-  jug = the total; words first, timeline after); she draws the jug PNG; a fresh session runs
-  the build.
-- 2026-10-11 (hers, 12:12): "Yebo, all looks good... run it": Fable dispatches the six-worker
-  queue itself, one at a time, reviews each; the ship stays its own yes.
-- 2026-10-11 (hers, 16:32): wrap now; she play-tests locally in a bit; a FRESH session ships.
-- 2026-10-11 (foreman, flagged, default keep): f12 answers a down payment "nowhere" (never
-  enters the account; matches f10/f13); f8's concept card rides on card 1 via `q.reveal` and
-  "I'm lost"; checker briefs get a budget section after the first one spent 400k.
-- 2026-10-11 (hers, 16:54–17:02, play-test): "lumpsum" is PHASED OUT, not cold-turkeyed: f8's
-  first frame says "the total (the lumpsum)" plus one line that the lumpsum is the total and
-  from now on we call it the total; nowhere else. f8 opens with a discovery slide, just the
-  jug (tap: savings fills, the total at the END; tap: the loan drains, the total at the
-  START), the questions after. f12: an answered step collapses; only the paragraph and ONE
-  timeline stay. "The rest looks perfect."
-- 2026-10-11 (hers, 18:12–18:13): the two f8 polish items (drain to empty; neutral caption
-  once the chips appear) and the 2b list run BEFORE the ship; 3b / 4b / 5b stay parked;
-  f12's auto-scroll (the paragraph scrolls off at the rates step) stays as is; then ship.
-- 2026-10-11 (mine, flagged, default keep): `q.stepGraphPinned` / `q.collapseSteps` are opt-in
-  engine flags (only f12 sets them; with both off every branch is the old code); in pinned
-  mode the next-step scroll keeps the picture at the top; f8's reminder caption swaps on the
-  drain's `animationend` (6 s fallback) with the caption height held; the 2b worker also
-  made "times‑per‑year" unbreakable in f5/f3.
-- 2026-10-11 19:12: SHIPPED sw v96 `a4621b5` (migration 19:04, sw_check OK, live checks
-  19:15). `FINANCE-ROUNDS-2-PLAN.md` stays untracked/local (her 10 Oct call stands).
 - 2026-10-15 (hers): Blipwork for Afrikaans learners = app UI English, maths content Afrikaans; never a
   copy of the app.
 - 2026-10-16 (hers): translate bit by bit, done by the START of January 2027, for her 2027 Gr11s (chapter
@@ -115,12 +88,15 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   any finance row) and T92 (prose that lives in js/*lib.js); T66 / T73 closed (euclid and algx have no concept
   cards); workers' commit trailer is `Claude Opus 5.5`; `tools/lang_smoke.py`, `tools/concepts_split_check.mjs`
   and the banner-reading `tools/harness_run.py` are permanent.
+- 2026-10-17 (hers, 18:20): "Ship it": sw v98 `98a02bd` pushed 18:21, live 18:22:54, live checks 18:23 green; the AF
+  head start S3–S6 + the pilot are live, the switch stays hidden; the docs commit after it is pushed too (docs only,
+  sw_check unaffected). The harness needs `PYTHONUTF8=1` on this laptop (its ✓ banner trips the console codec).
 
 ## ⏳ Pending on Megan
-- 💻 5 min then 📱 3 min [blocks the routine from Sunday night]: "ship it" in a fresh session (sw v98 carries
-  S3–S6 live, still hidden; sw_check OK first) → open Blipwork with `?lang=af` in Safari on your phone (the
-  home-screen app has its own storage) → play Number Patterns round 1 in Afrikaans → tick row G1 in QUEUE.md
-  (or write the fixes under it). Until G1 is ticked the routine logs "waiting on Megan" each night.
+- 📱 3 min [blocks the routine from Sunday night]: in Safari on your phone open
+  https://megzieberr.github.io/blipwork/?lang=af (the home-screen app has its own storage, so Safari, not the
+  icon) → play Number Patterns round 1 in Afrikaans → tick row G1 in QUEUE.md (or write the fixes under it).
+  Until G1 is ticked the routine logs "waiting on Megan" each night.
 - 💻 1 min [Sunday morning, whenever]: read AF-LOG.md, one line per row the night did.
 - 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13, one at a time, the
   day you teach it (they are live but CLOSED, learners cannot see them yet).
