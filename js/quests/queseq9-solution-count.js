@@ -42,13 +42,14 @@
    instead of _shared.js's mc(), which shuffles.
    ============================================================ */
 import { pick, randInt, C } from "./_eq.js";
+import { L } from "../lang.js";
 
 const CON = "eqSolutionCount";
 
 /* ---------- the three fixed options, in her order ---------- */
-export const OPT_TWO = "Two solutions (a ± answer)";
-export const OPT_ONE = "One solution";
-export const OPT_NONE = "No solution";
+export const OPT_TWO = L("Two solutions (a ± answer)", "Twee oplossings ('n ± antwoord)");
+export const OPT_ONE = L("One solution", "Een oplossing");
+export const OPT_NONE = L("No solution", "Geen oplossing");
 const TRIO = [OPT_TWO, OPT_ONE, OPT_NONE];
 const LABEL = { two: OPT_TWO, one: OPT_ONE, none: OPT_NONE };
 
@@ -69,7 +70,7 @@ export function solutionCount(p, q, neg) {
    ready-made .sfrac alone — the same escape hatch js/exam/eqn-k-method.js
    uses for 2x^(3/4)) */
 const sf = (n, d) => `<span class="sfrac"><span class="sf-n">${n}</span><span class="sf-d">${d}</span></span>`;
-const xpow = (p, q) => `x<sup>${sf(p, q)}</sup>`;
+const xpow = (p, q) => L(`x<sup>${sf(p, q)}</sup>`, `x<sup>${sf(p, q)}</sup>`);
 /* the right-hand side: a small integer, or a simple fraction */
 const rhs = (c) => (c.d ? `${c.neg ? "−" : ""}${sf(c.n, c.d)}` : C(c.neg ? -c.n : c.n));
 const eqn = (p, q, c) => `${xpow(p, q)} = ${rhs(c)}`;
@@ -99,18 +100,18 @@ function randC(neg) {
 /* ---------- her rule, in her words, for the answer line ---------- */
 function why(p, q, neg, kind) {
   if (kind === "two") {
-    return `The numerator is <b>${p}</b> — an <b>even numerator → ± answer</b>. The right-hand side is positive, so both a plus and a minus value work: <b>two solutions</b>.`;
+    return L(`The numerator is <b>${p}</b> — an <b>even numerator → ± answer</b>. The right-hand side is positive, so both a plus and a minus value work: <b>two solutions</b>.`, `Die teller is <b>${p}</b>: 'n <b>ewe teller → ± antwoord</b>. Die regterkant is positief, so 'n plus- en 'n minuswaarde werk albei: <b>twee oplossings</b>.`);
   }
   if (kind === "one" && !neg) {
-    return `The numerator is <b>${p}</b>, an <b>odd</b> number, so there is no ±. Raise both sides to the reciprocal ${p === 1 ? q : sf(q, p)} and you get <b>one solution</b>.`;
+    return L(`The numerator is <b>${p}</b>, an <b>odd</b> number, so there is no ±. Raise both sides to the reciprocal ${p === 1 ? q : sf(q, p)} and you get <b>one solution</b>.`, `Die teller is <b>${p}</b>, 'n <b>onewe</b> getal, so daar is geen ± nie. Verhef albei kante tot die resiprook ${p === 1 ? q : sf(q, p)} en jy kry <b>een oplossing</b>.`);
   }
   if (kind === "one" && neg) {
-    return `<b>Only odd numbers</b> in the numerator and the denominator (${p} and ${q}), so a <b>negative answer is fine</b> 🙂 — an odd root of a negative number really is negative. <b>One solution</b>.`;
+    return L(`<b>Only odd numbers</b> in the numerator and the denominator (${p} and ${q}), so a <b>negative answer is fine</b> 🙂 — an odd root of a negative number really is negative. <b>One solution</b>.`, `<b>Net onewe getalle</b> in die teller en die noemer (${p} en ${q}), so 'n <b>negatiewe antwoord is in orde</b> 🙂: 'n onewe wortel van 'n negatiewe getal is regtig negatief. <b>Een oplossing</b>.`);
   }
   if (p % 2 === 0) {
-    return `The numerator is <b>${p}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even numerator cannot be ⊖</b> 🙁 — ${root(p, `x<sup>${p}</sup>`)} can never come out negative. <b>No solution</b>.`;
+    return L(`The numerator is <b>${p}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even numerator cannot be ⊖</b> 🙁 — ${root(p, `x<sup>${p}</sup>`)} can never come out negative. <b>No solution</b>.`, `Die teller is <b>${p}</b>, 'n <b>ewe getal</b>, en die regterkant is negatief. 'n <b>Ewe teller kan nie ⊖ wees nie</b> 🙁: ${root(p, `x<sup>${p}</sup>`)} kan nooit negatief uitkom nie. <b>Geen oplossing</b>.`);
   }
-  return `The denominator is <b>${q}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even denominator cannot ONLY be ⊖</b> 🙁 — ${root(q, "x")} is never negative. <b>No solution</b>.`;
+  return L(`The denominator is <b>${q}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even denominator cannot ONLY be ⊖</b> 🙁 — ${root(q, "x")} is never negative. <b>No solution</b>.`, `Die noemer is <b>${q}</b>, 'n <b>ewe getal</b>, en die regterkant is negatief. 'n <b>Ewe noemer kan nie NET ⊖ wees nie</b> 🙁: ${root(q, "x")} is nooit negatief nie. <b>Geen oplossing</b>.`);
 }
 
 /* ------------------------------------------------------------
@@ -121,11 +122,11 @@ function why(p, q, neg, kind) {
    string building over values the caller has already rolled — no
    randomness, so the seeded rng stream is untouched. */
 function countLadder(p, q, neg, kind) {
-  const ev = (n) => (n % 2 === 0 ? "EVEN" : "odd");
+  const ev = (n) => (n % 2 === 0 ? L("EVEN", "EWE") : L("odd", "onewe"));
   const steps = [
-    { s: `Read the exponent: top = ${p} (${ev(p)}), bottom = ${q} (${ev(q)})`,
-      r: "you never have to solve it — the rules only ask odd or even" },
-    { s: `Read the sign on the right: it is ${neg ? "NEGATIVE" : "positive"}` },
+    { s: L(`Read the exponent: top = ${p} (${ev(p)}), bottom = ${q} (${ev(q)})`, `Lees die eksponent: bo = ${p} (${ev(p)}), onder = ${q} (${ev(q)})`),
+      r: L("you never have to solve it — the rules only ask odd or even", "jy hoef dit nooit op te los nie: die reëls vra net onewe of ewe") },
+    { s: L(`Read the sign on the right: it is ${neg ? "NEGATIVE" : "positive"}`, `Lees die teken regs: dit is ${neg ? "NEGATIEF" : "positief"}`) },
   ];
   if (kind === "two") {
     steps.push({ s: "Even numerator with a positive right-hand side → ± answer",
@@ -148,10 +149,10 @@ function countLadder(p, q, neg, kind) {
 }
 
 const HINTS = [
-  "Look at the <b>top</b> and the <b>bottom</b> of the exponent — odd or even? — and then at the sign on the right.",
-  "Even numerator → ± answer. Only odd numbers → a negative answer is fine. An even number anywhere, with a negative on the right → it cannot happen.",
-  "You never have to solve it. The three rules only ask two things: is the top number even, or the bottom one — and is the right-hand side negative?",
-  "An even <i>power</i> is never negative, and an even <i>root</i> is never negative. Everything else is allowed.",
+  L("Look at the <b>top</b> and the <b>bottom</b> of the exponent — odd or even? — and then at the sign on the right.", "Kyk na die <b>boonste</b> en die <b>onderste</b> getal van die eksponent: onewe of ewe? Kyk dan na die teken regs."),
+  L("Even numerator → ± answer. Only odd numbers → a negative answer is fine. An even number anywhere, with a negative on the right → it cannot happen.", "Ewe teller → ± antwoord. Net onewe getalle → 'n negatiewe antwoord is in orde. 'n Ewe getal enige plek, met 'n negatief regs → dit kan nie gebeur nie."),
+  L("You never have to solve it. The three rules only ask two things: is the top number even, or the bottom one — and is the right-hand side negative?", "Jy hoef dit nooit op te los nie. Die drie reëls vra net twee dinge: is die boonste getal ewe, of die onderste een, en is die regterkant negatief?"),
+  L("An even <i>power</i> is never negative, and an even <i>root</i> is never negative. Everything else is allowed.", "'n Ewe <i>mag</i> is nooit negatief nie, en 'n ewe <i>wortel</i> is nooit negatief nie. Alles anders is toegelaat."),
 ];
 
 /* ---------- the fixed-order three-option builder ---------- */
@@ -214,20 +215,20 @@ function solveWorking(p, q, cAbs, neg, A, kind) {
      would hide the minus and hand you a number that does not work. You
      read the root and stop. ²√x¹ = −3 ✗ */
   if (kind === "none" && q % 2 === 0) {
-    return `${root(q, `x<sup>${p}</sup>`)} = ${C(c)} &nbsp;✗ &nbsp;— an even root is <b>never</b> negative, so nothing works.`;
+    return L(`${root(q, `x<sup>${p}</sup>`)} = ${C(c)} &nbsp;✗ &nbsp;— an even root is <b>never</b> negative, so nothing works.`, `${root(q, `x<sup>${p}</sup>`)} = ${C(c)} &nbsp;✗ &nbsp;want 'n ewe wortel is <b>nooit</b> negatief nie, so niks werk nie.`);
   }
 
   /* p = 1: there is no p-th root left to take once both sides are raised,
      so it is two lines and no more. */
   if (p === 1) {
     const line = `${root(q, "x<sup>1</sup>")} = ${C(c)}`;
-    return `${line} &nbsp;→&nbsp; <b>x = ${val}</b>`;
+    return L(`${line} &nbsp;→&nbsp; <b>x = ${val}</b>`, `${line} &nbsp;→&nbsp; <b>x = ${val}</b>`);
   }
 
   const line1 = `(${root(q, `x<sup>${p}</sup>`)})<sup>${q}</sup> = (${C(c)})<sup>${q}</sup>`;
   const line2 = `${root(p, `x<sup>${p}</sup>`)} = ${root(p, big(cq))}`;
-  if (kind === "none") return `${line1} &nbsp;→&nbsp; ${line2} &nbsp;— <b>cannot happen</b>.`;
-  return `${line1} &nbsp;→&nbsp; ${line2} &nbsp;→&nbsp; <b>x = ${val}</b>`;
+  if (kind === "none") return L(`${line1} &nbsp;→&nbsp; ${line2} &nbsp;— <b>cannot happen</b>.`, `${line1} &nbsp;→&nbsp; ${line2}: &nbsp;<b>kan nie gebeur nie</b>.`);
+  return L(`${line1} &nbsp;→&nbsp; ${line2} &nbsp;→&nbsp; <b>x = ${val}</b>`, `${line1} &nbsp;→&nbsp; ${line2} &nbsp;→&nbsp; <b>x = ${val}</b>`);
 }
 
 function solveItem(neg) {
@@ -239,21 +240,21 @@ function solveItem(neg) {
   const e = eqn(it.p, it.q, c);
   const A = it.A;
   const options = [
-    { label: `x = ±${C(A)}`, correct: kind === "two" },
-    { label: `x = ${C(A)}`, correct: kind === "one" && !neg },
-    { label: `x = ${C(-A)}`, correct: kind === "one" && neg },
+    { label: L(`x = ±${C(A)}`, `x = ±${C(A)}`), correct: kind === "two" },
+    { label: L(`x = ${C(A)}`, `x = ${C(A)}`), correct: kind === "one" && !neg },
+    { label: L(`x = ${C(-A)}`, `x = ${C(-A)}`), correct: kind === "one" && neg },
     { label: OPT_NONE, correct: kind === "none" },
   ];
   return {
     type: "mc", concept: CON,
-    prompt: `Two, one or none — and then finish it off.<br>Solve for x: &nbsp;<b>${e}</b>`,
+    prompt: L(`Two, one or none — and then finish it off.<br>Solve for x: &nbsp;<b>${e}</b>`, `Twee, een of geen? Maak dit dan klaar.<br>Los op vir x: &nbsp;<b>${e}</b>`),
     options,
-    hint: "Decide two / one / none FIRST, then multiply the exponent by its reciprocal — whatever you do to the left, do to the right.",
+    hint: L("Decide two / one / none FIRST, then multiply the exponent by its reciprocal — whatever you do to the left, do to the right.", "Besluit EERS twee / een / geen, en vermenigvuldig dan die eksponent met sy resiprook: wat jy links doen, doen jy regs."),
     answerLabel: `${why(it.p, it.q, neg, kind)}<br>${solveWorking(it.p, it.q, it.cAbs, neg, A, kind)}`,
     solution: [
       ...countLadder(it.p, it.q, neg, kind),
       { s: solveWorking(it.p, it.q, it.cAbs, neg, A, kind),
-        r: "her layout — whatever you do to the left, do to the right" },
+        r: L("her layout — whatever you do to the left, do to the right", "haar uitleg: wat jy links doen, doen jy regs") },
     ],
     meta: { p: it.p, q: it.q, neg, kind, A, four: true },
   };

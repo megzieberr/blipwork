@@ -1,0 +1,416 @@
+{
+  "unit": "T12",
+  "generated": "2026-10-17T17:52:01.983Z",
+  "files": [
+    "js/quests/queseq9-solution-count.js"
+  ],
+  "items": {
+    "queseq9-solution-count#1": {
+      "en": "Two solutions (a ± answer)",
+      "kind": "string",
+      "slots": [
+        "options",
+        "options.label",
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:49:24"
+      ]
+    },
+    "queseq9-solution-count#2": {
+      "en": "One solution",
+      "kind": "string",
+      "slots": [
+        "options",
+        "options.label",
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:50:24"
+      ]
+    },
+    "queseq9-solution-count#3": {
+      "en": "No solution",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options",
+        "options.label",
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:51:25"
+      ]
+    },
+    "queseq9-solution-count#4": {
+      "en": "x<sup>${sf(p, q)}</sup>",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "placeholder"
+      ],
+      "where": [
+        "queseq9-solution-count.js:72:24"
+      ]
+    },
+    "queseq9-solution-count#5": {
+      "en": "The numerator is <b>${p}</b> — an <b>even numerator → ± answer</b>. The right-hand side is positive, so both a plus and a minus value work: <b>two solutions</b>.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq9-solution-count.js:102:12"
+      ]
+    },
+    "queseq9-solution-count#6": {
+      "en": "The numerator is <b>${p}</b>, an <b>odd</b> number, so there is no ±. Raise both sides to the reciprocal ${p === 1 ? q : sf(q, p)} and you get <b>one solution</b>.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq9-solution-count.js:105:12"
+      ]
+    },
+    "queseq9-solution-count#7": {
+      "en": "<b>Only odd numbers</b> in the numerator and the denominator (${p} and ${q}), so a <b>negative answer is fine</b> 🙂 — an odd root of a negative number really is negative. <b>One solution</b>.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq9-solution-count.js:108:12"
+      ]
+    },
+    "queseq9-solution-count#8": {
+      "en": "The numerator is <b>${p}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even numerator cannot be ⊖</b> 🙁 — ${root(p, `x<sup>${p}</sup>`)} can never come out negative. <b>No solution</b>.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq9-solution-count.js:111:12"
+      ],
+      "nested": [
+        "x<sup>${p}</sup>"
+      ]
+    },
+    "queseq9-solution-count#9": {
+      "en": "The denominator is <b>${q}</b>, an <b>even number</b>, and the right-hand side is negative. An <b>even denominator cannot ONLY be ⊖</b> 🙁 — ${root(q, \"x\")} is never negative. <b>No solution</b>.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq9-solution-count.js:113:10"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq9-solution-count#10": {
+      "en": "EVEN",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq9-solution-count.js:124:36"
+      ]
+    },
+    "queseq9-solution-count#11": {
+      "en": "odd",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq9-solution-count.js:124:45"
+      ]
+    },
+    "queseq9-solution-count#12": {
+      "en": "Read the exponent: top = ${p} (${ev(p)}), bottom = ${q} (${ev(q)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:126:10"
+      ]
+    },
+    "queseq9-solution-count#13": {
+      "en": "you never have to solve it — the rules only ask odd or even",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq9-solution-count.js:127:10"
+      ]
+    },
+    "queseq9-solution-count#14": {
+      "en": "Read the sign on the right: it is ${neg ? \"NEGATIVE\" : \"positive\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:128:10"
+      ],
+      "nested": [
+        "NEGATIVE",
+        "positive"
+      ]
+    },
+    "queseq9-solution-count#15": {
+      "en": "Look at the <b>top</b> and the <b>bottom</b> of the exponent — odd or even? — and then at the sign on the right.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "optionList"
+      ],
+      "where": [
+        "queseq9-solution-count.js:151:3"
+      ]
+    },
+    "queseq9-solution-count#16": {
+      "en": "Even numerator → ± answer. Only odd numbers → a negative answer is fine. An even number anywhere, with a negative on the right → it cannot happen.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "optionList"
+      ],
+      "where": [
+        "queseq9-solution-count.js:152:3"
+      ]
+    },
+    "queseq9-solution-count#17": {
+      "en": "You never have to solve it. The three rules only ask two things: is the top number even, or the bottom one — and is the right-hand side negative?",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "optionList"
+      ],
+      "where": [
+        "queseq9-solution-count.js:153:3"
+      ]
+    },
+    "queseq9-solution-count#18": {
+      "en": "An even <i>power</i> is never negative, and an even <i>root</i> is never negative. Everything else is allowed.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "optionList"
+      ],
+      "where": [
+        "queseq9-solution-count.js:154:3"
+      ]
+    },
+    "queseq9-solution-count#19": {
+      "en": "${root(q, `x<sup>${p}</sup>`)} = ${C(c)} &nbsp;✗ &nbsp;— an even root is <b>never</b> negative, so nothing works.",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:217:12"
+      ],
+      "nested": [
+        "x<sup>${p}</sup>"
+      ]
+    },
+    "queseq9-solution-count#20": {
+      "en": "${line} &nbsp;→&nbsp; <b>x = ${val}</b>",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:224:12"
+      ]
+    },
+    "queseq9-solution-count#21": {
+      "en": "${line1} &nbsp;→&nbsp; ${line2} &nbsp;— <b>cannot happen</b>.",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:229:31"
+      ]
+    },
+    "queseq9-solution-count#22": {
+      "en": "${line1} &nbsp;→&nbsp; ${line2} &nbsp;→&nbsp; <b>x = ${val}</b>",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "queseq9-solution-count.js:230:10"
+      ]
+    },
+    "queseq9-solution-count#23": {
+      "en": "x = ±${C(A)}",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "queseq9-solution-count.js:242:14"
+      ]
+    },
+    "queseq9-solution-count#24": {
+      "en": "x = ${C(A)}",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "queseq9-solution-count.js:243:14"
+      ]
+    },
+    "queseq9-solution-count#25": {
+      "en": "x = ${C(-A)}",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "queseq9-solution-count.js:244:14"
+      ]
+    },
+    "queseq9-solution-count#26": {
+      "en": "Two, one or none — and then finish it off.<br>Solve for x: &nbsp;<b>${e}</b>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "queseq9-solution-count.js:249:13"
+      ]
+    },
+    "queseq9-solution-count#27": {
+      "en": "Decide two / one / none FIRST, then multiply the exponent by its reciprocal — whatever you do to the left, do to the right.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq9-solution-count.js:251:11"
+      ]
+    },
+    "queseq9-solution-count#28": {
+      "en": "her layout — whatever you do to the left, do to the right",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq9-solution-count.js:256:12"
+      ]
+    }
+  },
+  "optionLists": {
+    "queseq9-solution-count.js:HINTS": [
+      "queseq9-solution-count#15",
+      "queseq9-solution-count#16",
+      "queseq9-solution-count#17",
+      "queseq9-solution-count#18"
+    ]
+  },
+  "leftovers": [
+    {
+      "where": "queseq9-solution-count.js:131:21",
+      "text": "Even numerator with a positive right-hand side → ± answer"
+    },
+    {
+      "where": "queseq9-solution-count.js:132:10",
+      "text": "the even power hides the sign, so both a plus and a minus value work"
+    },
+    {
+      "where": "queseq9-solution-count.js:134:21",
+      "text": "Odd numerator, so nothing is hidden and there is no ±"
+    },
+    {
+      "where": "queseq9-solution-count.js:135:10",
+      "text": "raise both sides to the reciprocal ${p === 1 ? q : `${q}/${p}`} and one value comes out"
+    },
+    {
+      "where": "queseq9-solution-count.js:137:21",
+      "text": "Only odd numbers, top (${p}) and bottom (${q}), so a negative answer is allowed 🙂"
+    },
+    {
+      "where": "queseq9-solution-count.js:138:10",
+      "text": "an odd root of a negative really is negative"
+    },
+    {
+      "where": "queseq9-solution-count.js:140:21",
+      "text": "The numerator ${p} is even, and an even power can never be ⊖ 🙁"
+    },
+    {
+      "where": "queseq9-solution-count.js:141:10",
+      "text": "nothing you square (or raise to any even power) comes out negative"
+    },
+    {
+      "where": "queseq9-solution-count.js:143:21",
+      "text": "The denominator ${q} is even, and an even root is never ⊖ 🙁"
+    },
+    {
+      "where": "queseq9-solution-count.js:144:10",
+      "text": "so the left side can never reach a negative value"
+    },
+    {
+      "where": "queseq9-solution-count.js:180:26",
+      "text": "How many solutions does <b>${s}</b> have?"
+    },
+    {
+      "where": "queseq9-solution-count.js:270:7",
+      "text": "<b>Equations with rational exponents</b><br>\n    Multiply with the <b>reciprocal</b> of the exponent &mdash; switch numerator and denominator.<br>\n    ${sf(3, 4)} × ${sf(4, 3)} = 1 &nbsp;<span style=\"…"
+    },
+    {
+      "where": "queseq9-solution-count.js:278:7",
+      "text": "👀 <b>IMPORTANT NOTES</b><br>\n    <span style=\"color:#3aa0ff\"><b>even numerator</b></span> &nbsp;⟶&nbsp; <b>± answer</b><br>\n    ${xpow(2, 3)} = 2 &nbsp;/&nbsp; ${xpow(4, 7)} = 5"
+    },
+    {
+      "where": "queseq9-solution-count.js:281:7",
+      "text": "<span style=\"color:#f43f7f\"><b>only odd numbers</b></span> in num. <b>and</b> denom. &nbsp;⟶&nbsp; ✓ negative answer 🙂<br>\n    ${xpow(1, 3)} = −2 &nbsp;/&nbsp; ${xpow(5, 7)} = −9"
+    },
+    {
+      "where": "queseq9-solution-count.js:283:7",
+      "text": "<span style=\"color:#22d3ee\"><b>even number</b></span> in num. <b>or</b> denom. &nbsp;⟶&nbsp; ✗ negative answer <b>(no solution)</b> 🙁<br>\n    ${xpow(1, 2)} = −3 &nbsp;/&nbsp; ${xpow(4, 3)} = −4"
+    },
+    {
+      "where": "queseq9-solution-count.js:288:7",
+      "text": "<b>1)</b> &nbsp;${xpow(2, 3)} = 2 &nbsp;&nbsp;<span style=\"opacity:.75\">even in numerator = ± answer</span><br>\n    (${root(3, \"x²\")})³ = (2)³<br>\n    √(x²) = √8<br>\n    x = <b>±2√2</b>"
+    },
+    {
+      "where": "queseq9-solution-count.js:292:7",
+      "text": "<b>2)</b> &nbsp;${xpow(5, 7)} = −9 &nbsp;&nbsp;<span style=\"opacity:.75\">odd numbers can be ⊖</span><br>\n    (${root(7, \"x⁵\")})⁷ = (−9)⁷<br>\n    ${root(5, \"x⁵\")} = ${root(5, \"−4 782 969\")}<br>\n    x =…"
+    },
+    {
+      "where": "queseq9-solution-count.js:296:7",
+      "text": "<b>3)</b> &nbsp;${xpow(4, 3)} = −4 &nbsp;&nbsp;<span style=\"opacity:.75\">even numerator cannot be ⊖</span><br>\n    (${root(3, \"x⁴\")})³ = (−4)³<br>\n    ${root(4, \"x⁴\")} = ${root(4, \"−64\")}<br>\n    ↑ <b…"
+    },
+    {
+      "where": "queseq9-solution-count.js:300:7",
+      "text": "<b>4)</b> &nbsp;${xpow(1, 2)} = −3 &nbsp;&nbsp;<span style=\"opacity:.75\">even denominator cannot ONLY be ⊖</span><br>\n    <sup>2</sup>√(x¹) = −3 &nbsp;✗"
+    },
+    {
+      "where": "queseq9-solution-count.js:315:14",
+      "text": "Read the rules first, then answer this:<br>how many solutions does <b>${e}</b> have?"
+    },
+    {
+      "where": "queseq9-solution-count.js:321:14",
+      "text": "Same four rules, a fresh equation. How many solutions does <b>${e}</b> have?"
+    }
+  ],
+  "words": 301
+}
