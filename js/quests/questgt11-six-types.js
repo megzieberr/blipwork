@@ -32,6 +32,7 @@
    `∴ no solution` twice, which teaches nothing about the type.
    ============================================================ */
 import { pick, randInt, shuffled, T, F, F2, eqHtml, eqPlain } from "./_gtrig.js";
+import { L as afL } from "../lang.js";
 
 const CON = "gtrigSixTypes";
 const LETTERS = ["θ", "x", "α", "A"];
@@ -40,12 +41,12 @@ const LETTERS = ["θ", "x", "α", "A"];
    "seperately" → separately), which is the standing ruling for
    anything a learner reads. */
 const TYPES = [
-  { n: 1, mark: "①", name: "function alone", cue: "isolate the function, then ref ∠ and quadrants — and don't type − into the calculator.", alt: null },
-  { n: 2, mark: "②", name: "same angles", cue: "same angle on both sides — divide away with cos θ and it turns into a tan.", alt: "divide by cos (tan θ)" },
-  { n: 3, mark: "③", name: "common factor", cue: "take the common factor out, then each bracket separately = 0 — and take 0 as +.", alt: null },
-  { n: 4, mark: "④", name: "grouping", cue: "four terms — group them in pairs, and the brackets left over must come out the same.", alt: null },
-  { n: 5, mark: "⑤", name: "trinomial", cue: "three terms, one function squared and one not — K-method, and a masked identity if the middle term differs.", alt: "trinomial (K-method) · trinomial with a masked identity" },
-  { n: 6, mark: "⑥", name: "co-functions", cue: "sin and cos with different ∠s — make both the same function. No ref. ∠ here.", alt: "make both cos" },
+  { n: 1, mark: "①", name: "function alone", cue: afL("isolate the function, then ref ∠ and quadrants — and don't type − into the calculator.", "isoleer die funksie, dan verwysingshoek en kwadrante, en moenie − in die sakrekenaar intik nie."), alt: null },
+  { n: 2, mark: "②", name: "same angles", cue: afL("same angle on both sides — divide away with cos θ and it turns into a tan.", "dieselfde hoek aan albei kante: deel deur cos θ en dit word 'n tan."), alt: "divide by cos (tan θ)" },
+  { n: 3, mark: "③", name: "common factor", cue: afL("take the common factor out, then each bracket separately = 0 — and take 0 as +.", "haal die gemene faktor uit, dan elke hakie apart = 0, en neem 0 as +."), alt: null },
+  { n: 4, mark: "④", name: "grouping", cue: afL("four terms — group them in pairs, and the brackets left over must come out the same.", "vier terme: groepeer hulle in pare, en die hakies wat oorbly moet dieselfde uitkom."), alt: null },
+  { n: 5, mark: "⑤", name: "trinomial", cue: afL("three terms, one function squared and one not — K-method, and a masked identity if the middle term differs.", "drie terme, een funksie in die kwadraat en een nie: K-metode, en 'n gemaskerde identiteit as die middelterm verskil."), alt: "trinomial (K-method) · trinomial with a masked identity" },
+  { n: 6, mark: "⑥", name: "co-functions", cue: afL("sin and cos with different ∠s — make both the same function. No ref. ∠ here.", "sin en cos met verskillende ∠e: maak albei dieselfde funksie. Geen verwysingshoek hier nie."), alt: "make both cos" },
 ];
 const OPTION_LABELS = TYPES.map(t => `${t.mark} ${t.name}`);
 
@@ -176,13 +177,13 @@ function typeQuestion(n) {
   return {
     type: "mc", concept: CON,
     _dbg: { type: n, plain, letter: L },
-    prompt: `${eqHtml(eq, L)}<br><span class="muted small">Which of the six types is this?</span>`,
+    prompt: afL(`${eqHtml(eq, L)}<br><span class="muted small">Which of the six types is this?</span>`, `${eqHtml(eq, L)}<br><span class="muted small">Watter een van die ses tipes is dit?</span>`),
     options: sixOptions(n),
     hint: ty.cue,
-    answerLabel: `${ty.mark} ${ty.name} — ${ty.cue}${ty.alt ? ` <span class="muted">(also written as: ${ty.alt})</span>` : ""}`,
+    answerLabel: `${ty.mark} ${ty.name} — ${ty.cue}${ty.alt ? afL(` <span class="muted">(also written as: ${ty.alt})</span>`, ` <span class="muted">(ook geskryf as: ${ty.alt})</span>`) : ""}`,
     solution: [
-      { s: `${eqHtml(eq, L)} → type ${ty.mark}`, r: ty.name },
-      { s: ty.cue, r: "the cue for this type." },
+      { s: afL(`${eqHtml(eq, L)} → type ${ty.mark}`, `${eqHtml(eq, L)} → tipe ${ty.mark}`), r: ty.name },
+      { s: ty.cue, r: afL("the cue for this type.", "die leidraad vir hierdie tipe.") },
     ],
   };
 }

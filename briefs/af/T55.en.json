@@ -1,0 +1,1525 @@
+{
+  "unit": "T55",
+  "generated": "2026-10-17T19:11:51.177Z",
+  "files": [
+    "js/quests/questgt10-super-special.js",
+    "js/quests/questgt11-six-types.js",
+    "js/quests/questgt12-last-steps.js",
+    "js/quests/questgt13-undefined.js"
+  ],
+  "items": {
+    "questgt10-super-special#1": {
+      "en": "t",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "options.label",
+        "placeholder",
+        "shapes.L",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:32:15"
+      ]
+    },
+    "questgt10-super-special#2": {
+      "en": "k",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "options.label",
+        "placeholder",
+        "shapes.L",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:32:20"
+      ]
+    },
+    "questgt10-super-special#3": {
+      "en": "p",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "options.label",
+        "placeholder",
+        "shapes.L",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:32:25"
+      ]
+    },
+    "questgt10-super-special#4": {
+      "en": "The 1 is the flamingo's leg — the value was standing on it. In cos θ = t/1, the 1 is the h of a/h; in tan θ = t/1, it is the a of o/a.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "tapSideStep.hint"
+      ],
+      "where": [
+        "questgt10-super-special.js:37:15"
+      ]
+    },
+    "questgt10-super-special#5": {
+      "en": "The letter sits on whichever side the ratio names: cos is a/h, sin is o/h, tan is o/a.",
+      "kind": "string",
+      "slots": [
+        "tapSideStep.hint"
+      ],
+      "where": [
+        "questgt10-super-special.js:38:15"
+      ]
+    },
+    "questgt10-super-special#6": {
+      "en": "Pythagoras decides the shape of the answer: the HYPOTENUSE squared is the one that gets the plus. If the 1 is the hypotenuse, the missing leg is √(1 − t²); if the letter is the hypotenuse, it is √(t² − 1).",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questgt10-super-special.js:39:17"
+      ]
+    },
+    "questgt10-super-special#7": {
+      "en": "Read it straight off the sketch — o, a and h are all written on it now.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt10-super-special.js:40:16"
+      ]
+    },
+    "questgt10-super-special#8": {
+      "en": "cos ${ang}° = ${L}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:54:14"
+      ]
+    },
+    "questgt10-super-special#9": {
+      "en": "hyp",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:54:43",
+        "questgt10-super-special.js:55:12",
+        "questgt10-super-special.js:62:43",
+        "questgt10-super-special.js:63:12",
+        "questgt10-super-special.js:71:41",
+        "questgt10-super-special.js:79:27",
+        "questgt10-super-special.js:90:26"
+      ],
+      "data": true
+    },
+    "questgt10-super-special#10": {
+      "en": "adj",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:55:27",
+        "questgt10-super-special.js:63:41",
+        "questgt10-super-special.js:70:43",
+        "questgt10-super-special.js:71:12",
+        "questgt10-super-special.js:78:45",
+        "questgt10-super-special.js:79:12"
+      ]
+    },
+    "questgt10-super-special#11": {
+      "en": "opp",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:55:41",
+        "questgt10-super-special.js:63:27",
+        "questgt10-super-special.js:71:27",
+        "questgt10-super-special.js:79:41"
+      ]
+    },
+    "questgt10-super-special#12": {
+      "en": "sin ${ang}° = ${L}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:62:14"
+      ]
+    },
+    "questgt10-super-special#13": {
+      "en": "tan ${ang}° = ${L}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:70:14"
+      ]
+    },
+    "questgt10-super-special#14": {
+      "en": "cos ${ang}° = 1/${L}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:78:14"
+      ]
+    },
+    "questgt10-super-special#15": {
+      "en": "You are told cos ${ang}° = ${L}. Why do we immediately write it as ${L}/1?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt10-super-special.js:121:13"
+      ]
+    },
+    "questgt10-super-special#16": {
+      "en": "<div><b>The flamingo.</b> A bare value cannot be read off a triangle. Stand it on a 1 and it becomes a ratio:</div>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questgt10-super-special.js:123:14"
+      ]
+    },
+    "questgt10-super-special#17": {
+      "en": "<div class=\"formula\">cos ${ang}° = ${L} = ${L}/1 = a/h</div>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questgt10-super-special.js:124:9"
+      ]
+    },
+    "questgt10-super-special#18": {
+      "en": "<div class=\"muted small\">Now the ${L} is the <b>a</b>, the 1 is the <b>h</b>, and the triangle draws itself.</div>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questgt10-super-special.js:125:9"
+      ]
+    },
+    "questgt10-super-special#19": {
+      "en": "so the bare number becomes a ratio you can read as a/h",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt10-super-special.js:127:16"
+      ]
+    },
+    "questgt10-super-special#20": {
+      "en": "so the ${L} cancels later on",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt10-super-special.js:128:16"
+      ]
+    },
+    "questgt10-super-special#21": {
+      "en": "because every hypotenuse is 1",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt10-super-special.js:129:16"
+      ]
+    },
+    "questgt10-super-special#22": {
+      "en": "to turn ${L} into a whole number",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt10-super-special.js:130:16"
+      ]
+    },
+    "questgt10-super-special#23": {
+      "en": "Ratios are the only thing a triangle understands. A single value has to be given a bottom before it can name two sides.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt10-super-special.js:132:11"
+      ]
+    },
+    "questgt10-super-special#24": {
+      "en": "Standing ${L} on a 1 turns it into a ratio — ${L}/1 = a/h — so ${L} is the adjacent side and 1 is the hypotenuse. That is the flamingo.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt10-super-special.js:133:18"
+      ]
+    },
+    "questgt10-super-special#25": {
+      "en": "cos ${ang}° = ${L}/1 = a/h",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:134:21"
+      ]
+    },
+    "questgt10-super-special#26": {
+      "en": "flamingo — a value standing on a 1.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:134:54"
+      ]
+    },
+    "questgt10-super-special#27": {
+      "en": "${shape.given}. Build the triangle.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt10-super-special.js:149:15"
+      ]
+    },
+    "questgt10-super-special#28": {
+      "en": "Where does the 1 go?",
+      "kind": "string",
+      "slots": [
+        "tapSideStep.prompt"
+      ],
+      "where": [
+        "questgt10-super-special.js:152:21"
+      ]
+    },
+    "questgt10-super-special#29": {
+      "en": "Tap the side it belongs on.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questgt10-super-special.js:152:91",
+        "questgt10-super-special.js:153:95"
+      ]
+    },
+    "questgt10-super-special#30": {
+      "en": "And where does ${L} go?",
+      "kind": "template",
+      "slots": [
+        "tapSideStep.prompt"
+      ],
+      "where": [
+        "questgt10-super-special.js:153:21"
+      ]
+    },
+    "questgt10-super-special#31": {
+      "en": "So the third side is…",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt10-super-special.js:154:16"
+      ]
+    },
+    "questgt10-super-special#32": {
+      "en": "${shape.given} → ${shape.one === \"hyp\" ? \"1 on the hypotenuse\" : \"1 on the adjacent\"}, ${L} on the ${shape.letter === \"hyp\" ? \"hypotenuse\" : shape.letter === \"adj\" ? \"adjacent\" : \"opposite\"}, third side ${shape.thirdLabel} (pyth).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt10-super-special.js:157:20"
+      ],
+      "nested": [
+        "hyp",
+        "1 on the hypotenuse",
+        "1 on the adjacent",
+        "hyp",
+        "hypotenuse",
+        "adj",
+        "adjacent",
+        "opposite"
+      ]
+    },
+    "questgt10-super-special#33": {
+      "en": "flamingo — stand it on a 1.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:159:79"
+      ]
+    },
+    "questgt10-super-special#34": {
+      "en": "read the ratio: cos = a/h, sin = o/h, tan = o/a.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:160:61"
+      ]
+    },
+    "questgt10-super-special#35": {
+      "en": "third side = ${shape.thirdLabel}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:161:14"
+      ]
+    },
+    "questgt10-super-special#36": {
+      "en": "(pyth) — the hypotenuse squared is the one with the plus.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:161:53"
+      ]
+    },
+    "questgt10-super-special#37": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:191:21",
+        "questgt10-super-special.js:195:41",
+        "questgt10-super-special.js:196:28",
+        "questgt10-super-special.js:199:25",
+        "questgt10-super-special.js:238:32",
+        "questgt10-super-special.js:239:27",
+        "questgt10-super-special.js:239:35",
+        "questgt10-super-special.js:243:30",
+        "questgt10-super-special.js:249:37",
+        "questgt10-super-special.js:261:32",
+        "questgt10-super-special.js:286:29"
+      ],
+      "data": true
+    },
+    "questgt10-super-special#38": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:191:28",
+        "questgt10-super-special.js:196:21",
+        "questgt10-super-special.js:199:18",
+        "questgt10-super-special.js:238:25",
+        "questgt10-super-special.js:239:43",
+        "questgt10-super-special.js:243:23",
+        "questgt10-super-special.js:249:29",
+        "questgt10-super-special.js:249:45",
+        "questgt10-super-special.js:261:24",
+        "questgt10-super-special.js:261:40",
+        "questgt10-super-special.js:287:29"
+      ],
+      "data": true
+    },
+    "questgt10-super-special#39": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt10-super-special.js:191:35",
+        "questgt10-super-special.js:196:35",
+        "questgt10-super-special.js:199:32",
+        "questgt10-super-special.js:288:29"
+      ]
+    },
+    "questgt10-super-special#40": {
+      "en": "${shape.given}. Read ${ask} ${ang}° off the sketch, in terms of ${L}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt10-super-special.js:212:13"
+      ]
+    },
+    "questgt10-super-special#41": {
+      "en": "${ask} ${ang}° = ${shape.ratios[ask]} — every side is on the sketch now, so it is just o, a and h in the right places.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt10-super-special.js:216:18"
+      ]
+    },
+    "questgt10-super-special#42": {
+      "en": "read off the finished triangle.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:217:65"
+      ]
+    },
+    "questgt10-super-special#43": {
+      "en": "${givenFn} ${ang}° = ${L}. Write ${askFn}${argDeg(target)} in terms of ${L}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt10-super-special.js:271:13"
+      ]
+    },
+    "questgt10-super-special#44": {
+      "en": "Reduce it to an acute angle first — write the split above the angle — and only then read the answer off the triangle. If the acute angle that comes out is not the one you were given, a co-function is hiding in it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt10-super-special.js:273:11"
+      ]
+    },
+    "questgt10-super-special#45": {
+      "en": "the split: ${split}.",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:277:97"
+      ]
+    },
+    "questgt10-super-special#46": {
+      "en": "reduce to the acute angle first.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:277:122"
+      ]
+    },
+    "questgt10-super-special#47": {
+      "en": "co-function — the two angles add to 90°.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:278:69"
+      ]
+    },
+    "questgt10-super-special#48": {
+      "en": "read it off the triangle.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt10-super-special.js:279:33"
+      ]
+    },
+    "questgt11-six-types#1": {
+      "en": "isolate the function, then ref ∠ and quadrants — and don't type − into the calculator.",
+      "kind": "string",
+      "slots": [
+        "cue"
+      ],
+      "where": [
+        "questgt11-six-types.js:43:51"
+      ]
+    },
+    "questgt11-six-types#2": {
+      "en": "same angle on both sides — divide away with cos θ and it turns into a tan.",
+      "kind": "string",
+      "slots": [
+        "cue"
+      ],
+      "where": [
+        "questgt11-six-types.js:44:48"
+      ]
+    },
+    "questgt11-six-types#3": {
+      "en": "take the common factor out, then each bracket separately = 0 — and take 0 as +.",
+      "kind": "string",
+      "slots": [
+        "cue"
+      ],
+      "where": [
+        "questgt11-six-types.js:45:50"
+      ]
+    },
+    "questgt11-six-types#4": {
+      "en": "four terms — group them in pairs, and the brackets left over must come out the same.",
+      "kind": "string",
+      "slots": [
+        "cue"
+      ],
+      "where": [
+        "questgt11-six-types.js:46:45"
+      ]
+    },
+    "questgt11-six-types#5": {
+      "en": "three terms, one function squared and one not — K-method, and a masked identity if the middle term differs.",
+      "kind": "string",
+      "slots": [
+        "cue"
+      ],
+      "where": [
+        "questgt11-six-types.js:47:46"
+      ]
+    },
+    "questgt11-six-types#6": {
+      "en": "sin and cos with different ∠s — make both the same function. No ref. ∠ here.",
+      "kind": "string",
+      "slots": [
+        "cue"
+      ],
+      "where": [
+        "questgt11-six-types.js:48:49"
+      ]
+    },
+    "questgt11-six-types#7": {
+      "en": "${eqHtml(eq, L)}<br><span class=\"muted small\">Which of the six types is this?</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt11-six-types.js:179:13"
+      ]
+    },
+    "questgt11-six-types#8": {
+      "en": " <span class=\"muted\">(also written as: ${ty.alt})</span>",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt11-six-types.js:182:63"
+      ]
+    },
+    "questgt11-six-types#9": {
+      "en": "${eqHtml(eq, L)} → type ${ty.mark}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt11-six-types.js:184:12"
+      ]
+    },
+    "questgt11-six-types#10": {
+      "en": "the cue for this type.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt11-six-types.js:185:23"
+      ]
+    },
+    "questgt12-last-steps#1": {
+      "en": "θ",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:31:18"
+      ]
+    },
+    "questgt12-last-steps#2": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:31:23"
+      ]
+    },
+    "questgt12-last-steps#3": {
+      "en": "α",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:31:28"
+      ]
+    },
+    "questgt12-last-steps#4": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:31:33"
+      ]
+    },
+    "questgt12-last-steps#5": {
+      "en": "Sign first: All Strippers Take Cash says which two quadrants a positive or negative value lives in. Tick those on the cross.",
+      "kind": "string",
+      "slots": [
+        "crossStep.hint",
+        "hint"
+      ],
+      "where": [
+        "questgt12-last-steps.js:34:17"
+      ]
+    },
+    "questgt12-last-steps#6": {
+      "en": "Don't type − into the calculator — the ref ∠ comes from the SIZE of the number. The sign already chose the quadrants for you.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questgt12-last-steps.js:35:15"
+      ]
+    },
+    "questgt12-last-steps#7": {
+      "en": "tan repeats every 180°, so one line is enough — the second one is a waste of time! Ticking both is right too; ticking only the first is the short cut.",
+      "kind": "string",
+      "slots": [
+        "crossStep.hint",
+        "hint"
+      ],
+      "where": [
+        "questgt12-last-steps.js:36:15"
+      ]
+    },
+    "questgt12-last-steps#8": {
+      "en": "Two DIFFERENT angles, so there is nothing to take an inverse of. Make both sides the same function and match the brackets — no reference angle here at all.",
+      "kind": "string",
+      "slots": [
+        "crossStep.hint",
+        "hint"
+      ],
+      "where": [
+        "questgt12-last-steps.js:37:17"
+      ]
+    },
+    "questgt12-last-steps#9": {
+      "en": " and ",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:45:55"
+      ]
+    },
+    "questgt12-last-steps#10": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s",
+        "ticksText.qs"
+      ],
+      "where": [
+        "questgt12-last-steps.js:53:21",
+        "questgt12-last-steps.js:127:34",
+        "questgt12-last-steps.js:128:9",
+        "questgt12-last-steps.js:128:34",
+        "questgt12-last-steps.js:159:83",
+        "questgt12-last-steps.js:159:112",
+        "questgt12-last-steps.js:160:110",
+        "questgt12-last-steps.js:161:82",
+        "questgt12-last-steps.js:162:82"
+      ],
+      "data": true
+    },
+    "questgt12-last-steps#11": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s",
+        "ticksText.qs"
+      ],
+      "where": [
+        "questgt12-last-steps.js:53:28",
+        "questgt12-last-steps.js:127:9",
+        "questgt12-last-steps.js:127:60",
+        "questgt12-last-steps.js:128:59",
+        "questgt12-last-steps.js:160:81",
+        "questgt12-last-steps.js:161:112",
+        "questgt12-last-steps.js:162:108"
+      ],
+      "data": true
+    },
+    "questgt12-last-steps#12": {
+      "en": "Tick the quadrants on the cross.",
+      "kind": "string",
+      "slots": [
+        "crossStep.prompt"
+      ],
+      "where": [
+        "questgt12-last-steps.js:80:19",
+        "questgt12-last-steps.js:110:17",
+        "questgt12-last-steps.js:140:17",
+        "questgt12-last-steps.js:174:17"
+      ]
+    },
+    "questgt12-last-steps#13": {
+      "en": "ref. ∠ = ?",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questgt12-last-steps.js:81:18",
+        "questgt12-last-steps.js:111:16",
+        "questgt12-last-steps.js:141:16"
+      ]
+    },
+    "questgt12-last-steps#14": {
+      "en": "✓ in ${ticksText(quadrants)} · ref. ∠ = ${negNum(Math.round(ref * 100) / 100)}°",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt12-last-steps.js:84:20"
+      ]
+    },
+    "questgt12-last-steps#15": {
+      "en": "<br><span class=\"muted small\">${f} is ${sign > 0 ? \"+\" : \"−\"} in ${ticksText(quadrants)}; the ref ∠ comes from ${negNum(Math.abs(value))}, never from the minus.</span>",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt12-last-steps.js:85:11"
+      ]
+    },
+    "questgt12-last-steps#16": {
+      "en": "All Strippers Take Cash.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:87:106",
+        "questgt12-last-steps.js:116:72"
+      ]
+    },
+    "questgt12-last-steps#17": {
+      "en": "ref. ∠ = ${negNum(Math.round(ref * 100) / 100)}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:88:14",
+        "questgt12-last-steps.js:118:12"
+      ]
+    },
+    "questgt12-last-steps#18": {
+      "en": "taken from the size of the number, never from the minus.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:88:69"
+      ]
+    },
+    "questgt12-last-steps#19": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "ticksText.qs"
+      ],
+      "where": [
+        "questgt12-last-steps.js:102:39",
+        "questgt12-last-steps.js:103:24",
+        "questgt12-last-steps.js:104:29",
+        "questgt12-last-steps.js:107:17"
+      ],
+      "data": true
+    },
+    "questgt12-last-steps#20": {
+      "en": "✓ in ${ticksText(quadrants)} — and ${CIRC[quadrants[0] - 1]} on its own is accepted, because tan repeats every 180° and the second line is a waste of time! · ref. ∠ = ${negNum(Math.round(ref * 100) / 100)}°",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt12-last-steps.js:114:18"
+      ]
+    },
+    "questgt12-last-steps#21": {
+      "en": "tan ${L} = ${negNum(value)} → ${ticksText(quadrants)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:116:12"
+      ]
+    },
+    "questgt12-last-steps#22": {
+      "en": "${L} = ref. ∠ + K.180°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:117:12"
+      ]
+    },
+    "questgt12-last-steps#23": {
+      "en": "ONE line — tan repeats every 180°.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:117:41"
+      ]
+    },
+    "questgt12-last-steps#24": {
+      "en": "from the size of the number.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:118:67"
+      ]
+    },
+    "questgt12-last-steps#25": {
+      "en": "Same rule as always — All Strippers Take Cash. ${negNum(b.value)} is ${b.value < 0 ? \"negative\" : b.value > 0 ? \"positive\" : \"zero, which counts as +\"}, so tick every quadrant where ${b.fn} is ${b.value < 0 ? \"negative\" : \"positive\"}.",
+      "kind": "template",
+      "slots": [
+        "crossStep.hint"
+      ],
+      "where": [
+        "questgt12-last-steps.js:140:67"
+      ],
+      "nested": [
+        "negative",
+        "positive",
+        "zero, which counts as +",
+        "negative",
+        "positive"
+      ]
+    },
+    "questgt12-last-steps#26": {
+      "en": "0° or 90°. The ref ∠ of a boundary value is one of those two, and it comes out of the size of the value the same way as any other.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questgt12-last-steps.js:141:38"
+      ]
+    },
+    "questgt12-last-steps#27": {
+      "en": "Run the routine even here rather than reading the answer off a graph — that is what keeps it reliable.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt12-last-steps.js:143:11"
+      ]
+    },
+    "questgt12-last-steps#28": {
+      "en": "✓ in ${ticksText(bc.quadrants)} · ref. ∠ = ${bc.ref}°",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt12-last-steps.js:144:18"
+      ]
+    },
+    "questgt12-last-steps#29": {
+      "en": "<br><span class=\"muted small\">Run the routine here too — never read these off a graph.</span>",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt12-last-steps.js:145:9"
+      ]
+    },
+    "questgt12-last-steps#30": {
+      "en": "All Strippers Take Cash — the sign picks the quadrants, even for a boundary value.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:147:81"
+      ]
+    },
+    "questgt12-last-steps#31": {
+      "en": "ref. ∠ = ${bc.ref}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:148:12"
+      ]
+    },
+    "questgt12-last-steps#32": {
+      "en": "the boundary reference angle.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:148:38"
+      ]
+    },
+    "questgt12-last-steps#33": {
+      "en": "No reference angle. The two angles are different, so you make both sides the same function and match the brackets — there is no inverse to take.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt12-last-steps.js:177:18"
+      ]
+    },
+    "questgt12-last-steps#34": {
+      "en": "Different ∠s on the two sides",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:179:12"
+      ]
+    },
+    "questgt12-last-steps#35": {
+      "en": "that makes it a co-function question — type ⑥.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:179:48"
+      ]
+    },
+    "questgt12-last-steps#36": {
+      "en": "no ref. ∠",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt12-last-steps.js:180:12"
+      ]
+    },
+    "questgt12-last-steps#37": {
+      "en": "make both the same function, then match the brackets.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt12-last-steps.js:180:28"
+      ]
+    },
+    "questgt13-undefined#1": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "FACT_DECOY_POOL.L",
+        "NEVER_ZERO.L",
+        "placeholder"
+      ],
+      "where": [
+        "questgt13-undefined.js:30:18"
+      ]
+    },
+    "questgt13-undefined#2": {
+      "en": "θ",
+      "kind": "string",
+      "slots": [
+        "FACT_DECOY_POOL.L",
+        "NEVER_ZERO.L",
+        "placeholder"
+      ],
+      "where": [
+        "questgt13-undefined.js:30:23"
+      ]
+    },
+    "questgt13-undefined#3": {
+      "en": "Look at the BOTTOM of every fraction — those are the only things that can break. A tan does not get its own line: tan is sin over cos, so its cos is already on the list.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "mcMultiStep.hint"
+      ],
+      "where": [
+        "questgt13-undefined.js:32:16"
+      ]
+    },
+    "questgt13-undefined#4": {
+      "en": "A fraction dies when its bottom is nothing at all.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questgt13-undefined.js:33:16"
+      ]
+    },
+    "questgt13-undefined#5": {
+      "en": "Solve it like any other equation — get the ratio on its own, and then it is an ordinary general solution.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt13-undefined.js:34:16"
+      ]
+    },
+    "questgt13-undefined#6": {
+      "en": "List every denominator, set each one = 0, solve each as a general solution, then read the interval off the list.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt13-undefined.js:35:17"
+      ]
+    },
+    "questgt13-undefined#7": {
+      "en": "2 + sin ${L}",
+      "kind": "template",
+      "slots": [
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:42:12"
+      ]
+    },
+    "questgt13-undefined#8": {
+      "en": "2 − cos ${L}",
+      "kind": "template",
+      "slots": [
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:43:12"
+      ]
+    },
+    "questgt13-undefined#9": {
+      "en": "1 + cos²${L}",
+      "kind": "template",
+      "slots": [
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:44:12"
+      ]
+    },
+    "questgt13-undefined#10": {
+      "en": "sin²${L} + cos²${L}",
+      "kind": "template",
+      "slots": [
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:45:12"
+      ]
+    },
+    "questgt13-undefined#11": {
+      "en": "1 + sin ${L} = 0 gives…",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "questgt13-undefined.js:50:23"
+      ]
+    },
+    "questgt13-undefined#12": {
+      "en": "sin ${L} = −1",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "options",
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:50:59",
+        "questgt13-undefined.js:56:31"
+      ]
+    },
+    "questgt13-undefined#13": {
+      "en": "1 − sin ${L} = 0 gives…",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "questgt13-undefined.js:51:23"
+      ]
+    },
+    "questgt13-undefined#14": {
+      "en": "sin ${L} = 1",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "options",
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:51:59",
+        "questgt13-undefined.js:56:48"
+      ]
+    },
+    "questgt13-undefined#15": {
+      "en": "1 + cos ${L} = 0 gives…",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "questgt13-undefined.js:52:23"
+      ]
+    },
+    "questgt13-undefined#16": {
+      "en": "cos ${L} = −1",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "options",
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:52:59",
+        "questgt13-undefined.js:56:80"
+      ]
+    },
+    "questgt13-undefined#17": {
+      "en": "1 − cos ${L} = 0 gives…",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "questgt13-undefined.js:53:23"
+      ]
+    },
+    "questgt13-undefined#18": {
+      "en": "cos ${L} = 1",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "options",
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:53:59",
+        "questgt13-undefined.js:56:97"
+      ]
+    },
+    "questgt13-undefined#19": {
+      "en": "sin²${L} = 0 gives…",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "questgt13-undefined.js:54:22"
+      ]
+    },
+    "questgt13-undefined#20": {
+      "en": "sin ${L} = 0",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "options",
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:54:54",
+        "questgt13-undefined.js:56:64"
+      ]
+    },
+    "questgt13-undefined#21": {
+      "en": "cos ${L} = 0",
+      "kind": "template",
+      "slots": [
+        "options",
+        "options.label"
+      ],
+      "where": [
+        "questgt13-undefined.js:56:113"
+      ]
+    },
+    "questgt13-undefined#22": {
+      "en": "the tan does not get its own line — tan ${L} is sin ${L} over cos ${L}, so its cos ${L} is already on the list.",
+      "kind": "template",
+      "slots": [
+        "note"
+      ],
+      "where": [
+        "questgt13-undefined.js:73:11"
+      ]
+    },
+    "questgt13-undefined#23": {
+      "en": "three denominators, three conditions — and they collapse into one family, because the zeros sit 180° apart.",
+      "kind": "string",
+      "slots": [
+        "note"
+      ],
+      "where": [
+        "questgt13-undefined.js:78:11"
+      ]
+    },
+    "questgt13-undefined#24": {
+      "en": "both sides count — a denominator on the right breaks the identity just as thoroughly as one on the left.",
+      "kind": "string",
+      "slots": [
+        "note"
+      ],
+      "where": [
+        "questgt13-undefined.js:83:11"
+      ]
+    },
+    "questgt13-undefined#25": {
+      "en": "the cos ${L} on top of the first fraction is a numerator — numerators are allowed to be zero.",
+      "kind": "template",
+      "slots": [
+        "note"
+      ],
+      "where": [
+        "questgt13-undefined.js:88:11"
+      ]
+    },
+    "questgt13-undefined#26": {
+      "en": "two fractions, two bottoms, two conditions.",
+      "kind": "string",
+      "slots": [
+        "note"
+      ],
+      "where": [
+        "questgt13-undefined.js:93:11"
+      ]
+    },
+    "questgt13-undefined#27": {
+      "en": "sin²${L} counts too — a square is zero exactly where the thing inside it is.",
+      "kind": "template",
+      "slots": [
+        "note"
+      ],
+      "where": [
+        "questgt13-undefined.js:98:11"
+      ]
+    },
+    "questgt13-undefined#28": {
+      "en": "${factDen.label} = 0 gives…",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "questgt13-undefined.js:117:52"
+      ]
+    },
+    "questgt13-undefined#29": {
+      "en": "For which values of ${L} is this undefined?<br><span class=\"q-eq\">${shape.html}</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt13-undefined.js:131:13"
+      ]
+    },
+    "questgt13-undefined#30": {
+      "en": "Which expressions must we look at? Tap every one, then Submit.",
+      "kind": "string",
+      "slots": [
+        "mcMultiStep.prompt"
+      ],
+      "where": [
+        "questgt13-undefined.js:133:19"
+      ]
+    },
+    "questgt13-undefined#31": {
+      "en": "And each of those must be equated to…",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questgt13-undefined.js:134:16"
+      ]
+    },
+    "questgt13-undefined#32": {
+      "en": "Denominators: ${shape.dens.map(d => d.label).join(\", \")} — each one of them = 0.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt13-undefined.js:138:18"
+      ]
+    },
+    "questgt13-undefined#33": {
+      "en": "Denominators: ${shape.dens.map(d => d.label).join(\", \")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt13-undefined.js:141:12"
+      ]
+    },
+    "questgt13-undefined#34": {
+      "en": "undefined ↳ denominator = 0.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt13-undefined.js:141:75"
+      ]
+    },
+    "questgt13-undefined#35": {
+      "en": "  or  ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt13-undefined.js:142:55"
+      ]
+    },
+    "questgt13-undefined#36": {
+      "en": "set each one to zero.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt13-undefined.js:142:69"
+      ]
+    },
+    "questgt13-undefined#37": {
+      "en": "then solve each as an ordinary general solution.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt13-undefined.js:143:34"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "questgt10-super-special.js:157:62",
+      "text": "1 on the hypotenuse",
+      "in": "${shape.given} → ${shape.one === \"hyp\" ? \"1 on the hypotenus"
+    },
+    {
+      "where": "questgt10-super-special.js:157:86",
+      "text": "1 on the adjacent",
+      "in": "${shape.given} → ${shape.one === \"hyp\" ? \"1 on the hypotenus"
+    },
+    {
+      "where": "questgt11-six-types.js:43:28",
+      "text": "function alone"
+    },
+    {
+      "where": "questgt11-six-types.js:44:28",
+      "text": "same angles"
+    },
+    {
+      "where": "questgt11-six-types.js:44:131",
+      "text": "divide by cos (tan θ)"
+    },
+    {
+      "where": "questgt11-six-types.js:45:28",
+      "text": "common factor"
+    },
+    {
+      "where": "questgt11-six-types.js:47:162",
+      "text": "trinomial (K-method) · trinomial with a masked identity"
+    },
+    {
+      "where": "questgt11-six-types.js:48:134",
+      "text": "make both cos"
+    },
+    {
+      "where": "questgt12-last-steps.js:140:193",
+      "text": "zero, which counts as +",
+      "in": "Same rule as always — All Strippers Take Cash. ${negNum(b.va"
+    }
+  ],
+  "words": 1036,
+  "skippedLists": [
+    "questgt10-super-special.js:VARS [t, k, p]",
+    "questgt11-six-types.js:LETTERS [θ, x, α, A]",
+    "questgt12-last-steps.js:LETTERS [θ, x, α, A]",
+    "questgt13-undefined.js:LETTERS [x, θ]"
+  ]
+}

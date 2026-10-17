@@ -26,18 +26,19 @@
    ============================================================ */
 import { pick, shuffled, mcStep, tapSideStep, argDeg } from "./_gtrig.js";
 import { sinD, cosD, tanD, reduce } from "../triglib.js";
+import { L as afL } from "../lang.js";
 
 const CON = "gtrigSuperSpecial";
 const ANGLES = [35, 40, 50, 55];
-const VARS = ["t", "k", "p"];
+const VARS = [afL("t", "t"), afL("k", "k"), afL("p", "p")];
 const ACCENT = "#8b5cf6";
 const W = 360;          // the tappable sketches: square, biggest possible hot-spots
 const W_LABELLED = 470; // the read-off-it sketch: room for √(1 − t²) beside the leg
 
-const H_ONE = "The 1 is the flamingo's leg — the value was standing on it. In cos θ = t/1, the 1 is the h of a/h; in tan θ = t/1, it is the a of o/a.";
-const H_VAR = "The letter sits on whichever side the ratio names: cos is a/h, sin is o/h, tan is o/a.";
-const H_THIRD = "Pythagoras decides the shape of the answer: the HYPOTENUSE squared is the one that gets the plus. If the 1 is the hypotenuse, the missing leg is √(1 − t²); if the letter is the hypotenuse, it is √(t² − 1).";
-const H_READ = "Read it straight off the sketch — o, a and h are all written on it now.";
+const H_ONE = afL("The 1 is the flamingo's leg — the value was standing on it. In cos θ = t/1, the 1 is the h of a/h; in tan θ = t/1, it is the a of o/a.", "Die 1 is die flamingo se been: die waarde het daarop gestaan. In cos θ = t/1 is die 1 die h van a/h; in tan θ = t/1 is dit die a van o/a.");
+const H_VAR = afL("The letter sits on whichever side the ratio names: cos is a/h, sin is o/h, tan is o/a.", "Die letter kom op die sy wat die verhouding noem: cos is a/h, sin is o/h, tan is o/a.");
+const H_THIRD = afL("Pythagoras decides the shape of the answer: the HYPOTENUSE squared is the one that gets the plus. If the 1 is the hypotenuse, the missing leg is √(1 − t²); if the letter is the hypotenuse, it is √(t² − 1).", "Pythagoras besluit hoe die antwoord lyk: die SKUINSSY in die kwadraat is die een wat die plus kry. As die 1 die skuinssy is, is die ontbrekende sy √(1 − t²); as die letter die skuinssy is, is dit √(t² − 1).");
+const H_READ = afL("Read it straight off the sketch — o, a and h are all written on it now.", "Lees dit reguit van die skets af: o, a en h staan nou almal daarop.");
 
 /* ------------------------------------------------------------
    The three short-cut triangles (p36), plus her `cos θ = 1/t` one.
@@ -51,32 +52,32 @@ function shapes(L, ang) {
   const sq = `${L}²`;
   return {
     cos: {
-      given: `cos ${ang}° = ${L}`, scale: "hyp",
-      one: "hyp", letter: "adj", third: "opp",
+      given: afL(`cos ${ang}° = ${L}`, `cos ${ang}° = ${L}`), scale: afL("hyp", "hyp"),
+      one: afL("hyp", "hyp"), letter: afL("adj", "adj"), third: afL("opp", "opp"),
       thirdLabel: `√(1 − ${sq})`,
       decoys: [`√(${sq} − 1)`, `√(1 + ${sq})`, `1 − ${L}`],
       labels: { r: "1", x: L, y: `√(1 − ${sq})` },
       ratios: { sin: `√(1 − ${sq})`, cos: `${L}`, tan: `√(1 − ${sq})/${L}` },
     },
     sin: {
-      given: `sin ${ang}° = ${L}`, scale: "hyp",
-      one: "hyp", letter: "opp", third: "adj",
+      given: afL(`sin ${ang}° = ${L}`, `sin ${ang}° = ${L}`), scale: afL("hyp", "hyp"),
+      one: afL("hyp", "hyp"), letter: afL("opp", "opp"), third: afL("adj", "adj"),
       thirdLabel: `√(1 − ${sq})`,
       decoys: [`√(${sq} − 1)`, `√(1 + ${sq})`, `1 − ${L}`],
       labels: { r: "1", y: L, x: `√(1 − ${sq})` },
       ratios: { sin: `${L}`, cos: `√(1 − ${sq})`, tan: `${L}/√(1 − ${sq})` },
     },
     tan: {
-      given: `tan ${ang}° = ${L}`, scale: "adj",
-      one: "adj", letter: "opp", third: "hyp",
+      given: afL(`tan ${ang}° = ${L}`, `tan ${ang}° = ${L}`), scale: afL("adj", "adj"),
+      one: afL("adj", "adj"), letter: afL("opp", "opp"), third: afL("hyp", "hyp"),
       thirdLabel: `√(${sq} + 1)`,
       decoys: [`√(1 − ${sq})`, `√(${sq} − 1)`, `${L} + 1`],
       labels: { x: "1", y: L, r: `√(${sq} + 1)` },
       ratios: { sin: `${L}/√(${sq} + 1)`, cos: `1/√(${sq} + 1)`, tan: `${L}` },
     },
     cosinv: {
-      given: `cos ${ang}° = 1/${L}`, scale: "adj",
-      one: "adj", letter: "hyp", third: "opp",
+      given: afL(`cos ${ang}° = 1/${L}`, `cos ${ang}° = 1/${L}`), scale: afL("adj", "adj"),
+      one: afL("adj", "adj"), letter: afL("hyp", "hyp"), third: afL("opp", "opp"),
       thirdLabel: `√(${sq} − 1)`,
       decoys: [`√(1 − ${sq})`, `√(${sq} + 1)`, `${L} − 1`],
       labels: { x: "1", r: L, y: `√(${sq} − 1)` },
@@ -87,7 +88,7 @@ function shapes(L, ang) {
 
 /* the real first-quadrant coordinates for a shape, at its angle */
 function coords(shape, ang) {
-  return shape.scale === "hyp"
+  return shape.scale === afL("hyp", "hyp")
     ? { x: cosD(ang), y: sinD(ang) }
     : { x: 1, y: tanD(ang) };
 }
@@ -118,20 +119,20 @@ function flamingoCard() {
   return {
     type: "mc", concept: CON,
     _dbg: { equalities: [] },
-    prompt: `You are told cos ${ang}° = ${L}. Why do we immediately write it as ${L}/1?`,
+    prompt: afL(`You are told cos ${ang}° = ${L}. Why do we immediately write it as ${L}/1?`, `Jy kry cos ${ang}° = ${L}. Hoekom skryf ons dit dadelik as ${L}/1?`),
     // learner-facing copy: no page refs, no third person (foreman ruling)
-    reveal: [`<div><b>The flamingo.</b> A bare value cannot be read off a triangle. Stand it on a 1 and it becomes a ratio:</div>`
-      + `<div class="formula">cos ${ang}° = ${L} = ${L}/1 = a/h</div>`
-      + `<div class="muted small">Now the ${L} is the <b>a</b>, the 1 is the <b>h</b>, and the triangle draws itself.</div>`],
+    reveal: [afL(`<div><b>The flamingo.</b> A bare value cannot be read off a triangle. Stand it on a 1 and it becomes a ratio:</div>`, `<div><b>Die flamingo.</b> 'n Kaal waarde kan jy nie van 'n driehoek aflees nie. Laat dit op 'n 1 staan en dit word 'n verhouding:</div>`)
+      + afL(`<div class="formula">cos ${ang}° = ${L} = ${L}/1 = a/h</div>`, `<div class="formula">cos ${ang}° = ${L} = ${L}/1 = a/h</div>`)
+      + afL(`<div class="muted small">Now the ${L} is the <b>a</b>, the 1 is the <b>h</b>, and the triangle draws itself.</div>`, `<div class="muted small">Nou is die ${L} die <b>a</b>, die 1 is die <b>h</b>, en die driehoek teken homself.</div>`)],
     options: shuffled([
-      { label: "so the bare number becomes a ratio you can read as a/h", correct: true },
-      { label: `so the ${L} cancels later on`, correct: false },
-      { label: "because every hypotenuse is 1", correct: false },
-      { label: `to turn ${L} into a whole number`, correct: false },
+      { label: afL("so the bare number becomes a ratio you can read as a/h", "sodat die kaal getal 'n verhouding word wat jy as a/h kan lees"), correct: true },
+      { label: afL(`so the ${L} cancels later on`, `sodat die ${L} later uitkanselleer`), correct: false },
+      { label: afL("because every hypotenuse is 1", "want elke skuinssy is 1"), correct: false },
+      { label: afL(`to turn ${L} into a whole number`, `om ${L} 'n heelgetal te maak`), correct: false },
     ]),
-    hint: "Ratios are the only thing a triangle understands. A single value has to be given a bottom before it can name two sides.",
-    answerLabel: `Standing ${L} on a 1 turns it into a ratio — ${L}/1 = a/h — so ${L} is the adjacent side and 1 is the hypotenuse. That is the flamingo.`,
-    solution: [{ s: `cos ${ang}° = ${L}/1 = a/h`, r: "flamingo — a value standing on a 1." }],
+    hint: afL("Ratios are the only thing a triangle understands. A single value has to be given a bottom before it can name two sides.", "'n Driehoek verstaan net verhoudings. 'n Enkele waarde moet eers 'n onderkant kry voordat dit twee sye kan noem."),
+    answerLabel: afL(`Standing ${L} on a 1 turns it into a ratio — ${L}/1 = a/h — so ${L} is the adjacent side and 1 is the hypotenuse. That is the flamingo.`, `As ${L} op 'n 1 staan, word dit 'n verhouding (${L}/1 = a/h), dus is ${L} die aangrensende sy en 1 die skuinssy. Dit is die flamingo.`),
+    solution: [{ s: afL(`cos ${ang}° = ${L}/1 = a/h`, `cos ${ang}° = ${L}/1 = a/h`), r: afL("flamingo — a value standing on a 1.", "flamingo: 'n waarde wat op 'n 1 staan.") }],
   };
 }
 
@@ -146,19 +147,19 @@ function shortcutItem(key) {
     return {
       type: "steps", concept: CON,
       _dbg: { key, L, ang, one: shape.one, letter: shape.letter, third: shape.third, thirdLabel: shape.thirdLabel },
-      prompt: `${shape.given}. Build the triangle.`,
+      prompt: afL(`${shape.given}. Build the triangle.`, `${shape.given}. Bou die driehoek.`),
       graph: sketchSpec(shape, ang),
       steps: [
-        tapSideStep("Where does the 1 go?", shape.one, H_ONE, { placeLabel: "1", tapHint: "Tap the side it belongs on." }),
-        tapSideStep(`And where does ${L} go?`, shape.letter, H_VAR, { placeLabel: L, tapHint: "Tap the side it belongs on." }),
-        mcStep("So the third side is…", shape.thirdLabel, shape.decoys, H_THIRD),
+        tapSideStep(afL("Where does the 1 go?", "Waar kom die 1?"), shape.one, H_ONE, { placeLabel: "1", tapHint: afL("Tap the side it belongs on.", "Klik op die sy waar dit hoort.") }),
+        tapSideStep(afL(`And where does ${L} go?`, `En waar kom ${L}?`), shape.letter, H_VAR, { placeLabel: L, tapHint: afL("Tap the side it belongs on.", "Klik op die sy waar dit hoort.") }),
+        mcStep(afL("So the third side is…", "Dus is die derde sy…"), shape.thirdLabel, shape.decoys, H_THIRD),
       ],
       hint: H_ONE,
-      answerLabel: `${shape.given} → ${shape.one === "hyp" ? "1 on the hypotenuse" : "1 on the adjacent"}, ${L} on the ${shape.letter === "hyp" ? "hypotenuse" : shape.letter === "adj" ? "adjacent" : "opposite"}, third side ${shape.thirdLabel} (pyth).`,
+      answerLabel: afL(`${shape.given} → ${shape.one === "hyp" ? "1 on the hypotenuse" : "1 on the adjacent"}, ${L} on the ${shape.letter === "hyp" ? "hypotenuse" : shape.letter === "adj" ? "adjacent" : "opposite"}, third side ${shape.thirdLabel} (pyth).`, `${shape.given} → ${shape.one === "hyp" ? "1 op die skuinssy" : "1 op die aangrensende sy"}, ${L} op die ${shape.letter === "hyp" ? "skuinssy" : shape.letter === "adj" ? "aangrensende sy" : "teenoorstaande sy"}, derde sy ${shape.thirdLabel} (pyth).`),
       solution: [
-        { s: `${shape.given} = ${key === "cosinv" ? `1/${L}` : `${L}/1`}`, r: "flamingo — stand it on a 1." },
-        { s: `1 → ${shape.one}, ${L} → ${shape.letter}`, r: "read the ratio: cos = a/h, sin = o/h, tan = o/a." },
-        { s: `third side = ${shape.thirdLabel}`, r: "(pyth) — the hypotenuse squared is the one with the plus." },
+        { s: `${shape.given} = ${key === "cosinv" ? `1/${L}` : `${L}/1`}`, r: afL("flamingo — stand it on a 1.", "flamingo: laat dit op 'n 1 staan.") },
+        { s: `1 → ${shape.one}, ${L} → ${shape.letter}`, r: afL("read the ratio: cos = a/h, sin = o/h, tan = o/a.", "lees die verhouding: cos = a/h, sin = o/h, tan = o/a.") },
+        { s: afL(`third side = ${shape.thirdLabel}`, `derde sy = ${shape.thirdLabel}`), r: afL("(pyth) — the hypotenuse squared is the one with the plus.", "(pyth): die skuinssy in die kwadraat is die een met die plus.") },
       ],
     };
   };
@@ -188,15 +189,15 @@ function flipRatio(ratio) {
 
 function readRatio() {
   const L = pick(VARS), ang = pick(ANGLES);
-  const key = pick(["cos", "sin", "tan", "cosinv"]);
+  const key = pick([afL("cos", "cos"), afL("sin", "sin"), afL("tan", "tan"), "cosinv"]);
   const shape = shapes(L, ang)[key];
   // never ask back for the ratio the question just handed over —
   // "cos 40° = p, so cos 40° = ?" is a free mark, not a question
-  const givenRatio = key === "cosinv" ? "cos" : key;
-  const ask = pick(["sin", "cos", "tan"].filter(f => f !== givenRatio));
+  const givenRatio = key === "cosinv" ? afL("cos", "cos") : key;
+  const ask = pick([afL("sin", "sin"), afL("cos", "cos"), afL("tan", "tan")].filter(f => f !== givenRatio));
   const FNV = { sin: sinD, cos: cosD, tan: tanD };
   const trueValue = FNV[ask](ang);
-  const cands = ["sin", "cos", "tan"].filter(f => f !== ask)
+  const cands = [afL("sin", "sin"), afL("cos", "cos"), afL("tan", "tan")].filter(f => f !== ask)
     .map(f => ({ label: shape.ratios[f], value: FNV[f](ang) }));
   cands.push({ label: flipRatio(shape.ratios[ask]), value: 1 / trueValue });
   const seen = [trueValue];
@@ -209,12 +210,12 @@ function readRatio() {
   return {
     type: "mc", concept: CON,
     _dbg: { key, L, ang, ask, label: shape.ratios[ask], value: trueValue },
-    prompt: `${shape.given}. Read ${ask} ${ang}° off the sketch, in terms of ${L}.`,
+    prompt: afL(`${shape.given}. Read ${ask} ${ang}° off the sketch, in terms of ${L}.`, `${shape.given}. Lees ${ask} ${ang}° van die skets af, in terme van ${L}.`),
     graph: sketchSpec(shape, ang, { labels: shape.labels }),
     options: shuffled([{ label: shape.ratios[ask], correct: true }, ...decoys]),
     hint: H_READ,
-    answerLabel: `${ask} ${ang}° = ${shape.ratios[ask]} — every side is on the sketch now, so it is just o, a and h in the right places.`,
-    solution: [{ s: `${ask} ${ang}° = ${shape.ratios[ask]}`, r: "read off the finished triangle." }],
+    answerLabel: afL(`${ask} ${ang}° = ${shape.ratios[ask]} — every side is on the sketch now, so it is just o, a and h in the right places.`, `${ask} ${ang}° = ${shape.ratios[ask]}: elke sy is nou op die skets, dus is dit net o, a en h op die regte plekke.`),
+    solution: [{ s: `${ask} ${ang}° = ${shape.ratios[ask]}`, r: afL("read off the finished triangle.", "lees dit van die voltooide driehoek af.") }],
   };
 }
 
@@ -235,18 +236,18 @@ const TARGET_FORMS = [
 ];
 function reduceThenRead() {
   const L = pick(VARS), ang = pick(ANGLES);
-  const givenFn = pick(["sin", "cos"]);
-  const key = givenFn === "cos" ? "cos" : "sin";
+  const givenFn = pick([afL("sin", "sin"), afL("cos", "cos")]);
+  const key = givenFn === afL("cos", "cos") ? afL("cos", "cos") : afL("sin", "sin");
   const shape = shapes(L, ang)[key];
   const FNV = { sin: sinD, cos: cosD };
 
-  const askFn = pick(["sin", "cos"]);
+  const askFn = pick([afL("sin", "sin"), afL("cos", "cos")]);
   const form = pick(TARGET_FORMS);
   const target = form.f(ang);
   const want = FNV[askFn](target);
 
   /* the four things the triangle can say, as label + value */
-  const other = givenFn === "sin" ? "cos" : "sin";
+  const other = givenFn === afL("sin", "sin") ? afL("cos", "cos") : afL("sin", "sin");
   const pool = [
     { label: L, value: FNV[givenFn](ang) },
     { label: `−${L}`, value: -FNV[givenFn](ang) },
@@ -258,7 +259,7 @@ function reduceThenRead() {
 
   const r = reduce(askFn, target);
   const converts = Math.abs(r.ref - ang) > 1e-9;
-  const co = askFn === "sin" ? "cos" : "sin";       // what a co-function turns the asked ratio into
+  const co = askFn === afL("sin", "sin") ? afL("cos", "cos") : afL("sin", "sin");       // what a co-function turns the asked ratio into
   // her 0.1 habit: the split written in a small note ABOVE the angle
   const split = r.form === "θ" ? "" : r.form === "−θ" ? `−${r.ref}` : `${r.form}${r.ref}`;
 
@@ -268,24 +269,24 @@ function reduceThenRead() {
       L, ang, givenFn, askFn, target, label: hit.label, value: want,
       equalities: [{ a: () => FNV[askFn](target), b: () => hit.value, label: `${askFn}${argDeg(target)} = ${hit.label}` }],
     },
-    prompt: `${givenFn} ${ang}° = ${L}. Write ${askFn}${argDeg(target)} in terms of ${L}.`,
+    prompt: afL(`${givenFn} ${ang}° = ${L}. Write ${askFn}${argDeg(target)} in terms of ${L}.`, `${givenFn} ${ang}° = ${L}. Skryf ${askFn}${argDeg(target)} in terme van ${L}.`),
     options: shuffled(pool.map(p => ({ label: p.label, correct: p === hit }))),
-    hint: "Reduce it to an acute angle first — write the split above the angle — and only then read the answer off the triangle. If the acute angle that comes out is not the one you were given, a co-function is hiding in it.",
+    hint: afL("Reduce it to an acute angle first — write the split above the angle — and only then read the answer off the triangle. If the acute angle that comes out is not the one you were given, a co-function is hiding in it.", "Reduseer dit eers na 'n skerp hoek (skryf die opsplitsing bo die hoek), en lees dan pas die antwoord van die driehoek af. As die skerp hoek wat uitkom nie die een is wat jy gekry het nie, skuil daar 'n ko-funksie in."),
     answerLabel: `${askFn}${argDeg(target)} = ${hit.label}`
       + `<br><span class="muted small">${r.turns.length ? `[${r.turns.join(" ")}] → ` : ""}${split ? split + " → " : ""}${r.sign < 0 ? "−" : ""}${askFn} ${r.ref}°${converts ? ` = ${r.sign < 0 ? "−" : ""}${co} ${ang}°` : ""}</span>`,
     solution: [
-      { s: `${askFn}${argDeg(target)} = ${r.sign < 0 ? "−" : ""}${askFn} ${r.ref}°`, r: split ? `the split: ${split}.` : "reduce to the acute angle first." },
-      ...(converts ? [{ s: `${askFn} ${r.ref}° = ${co} ${ang}°`, r: "co-function — the two angles add to 90°." }] : []),
-      { s: `= ${hit.label}`, r: "read it off the triangle." },
+      { s: `${askFn}${argDeg(target)} = ${r.sign < 0 ? "−" : ""}${askFn} ${r.ref}°`, r: split ? afL(`the split: ${split}.`, `die opsplitsing: ${split}.`) : afL("reduce to the acute angle first.", "reduseer eers na die skerp hoek.") },
+      ...(converts ? [{ s: `${askFn} ${r.ref}° = ${co} ${ang}°`, r: afL("co-function — the two angles add to 90°.", "ko-funksie: die twee hoeke tel op tot 90°.") }] : []),
+      { s: `= ${hit.label}`, r: afL("read it off the triangle.", "lees dit van die driehoek af.") },
     ],
   };
 }
 
 const SKILLS = {
   flamingoCard,
-  shortcutCos: shortcutItem("cos"),
-  shortcutSin: shortcutItem("sin"),
-  shortcutTan: shortcutItem("tan"),
+  shortcutCos: shortcutItem(afL("cos", "cos")),
+  shortcutSin: shortcutItem(afL("sin", "sin")),
+  shortcutTan: shortcutItem(afL("tan", "tan")),
   shortcutCosInv: shortcutItem("cosinv"),
   readRatio,
   readRatio2: readRatio,
