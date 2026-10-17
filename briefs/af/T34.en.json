@@ -1,0 +1,1243 @@
+{
+  "unit": "T34",
+  "generated": "2026-10-17T18:31:20.998Z",
+  "files": [
+    "js/exam/func-siblings-distances.js",
+    "js/exam/func-siblings-find-equation.js"
+  ],
+  "items": {
+    "func-siblings-distances#1": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 4. &nbsp;The points A(−3 ; 5) and B(2 ; 0) both lie on f.<br><br>Write down the horizontal distance between A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:108:13"
+      ]
+    },
+    "func-siblings-distances#2": {
+      "en": "Horizontal means across, so only the x-coordinates matter. Count from one to the other — and remember a distance is never negative.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:111:13"
+      ]
+    },
+    "func-siblings-distances#3": {
+      "en": "horizontal distance = &nbsp;2 − (−3) = 5 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:114:39"
+      ]
+    },
+    "func-siblings-distances#4": {
+      "en": "Across means x, up and down means y — that is the whole idea, and it is worth saying to yourself before every distance question so that you reach for the right pair of numbers. Going from x = −3 to x = 2 you take five steps to the right, so the horizontal distance is 5. Subtracting in the other order would give −5, which is fine as a direction but not as a distance, because a length can never be negative. If you are ever unsure which way round to subtract, do it either way and drop the sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:117:13"
+      ]
+    },
+    "func-siblings-distances#5": {
+      "en": "Write down the vertical distance between A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:125:13"
+      ]
+    },
+    "func-siblings-distances#6": {
+      "en": "Vertical means up and down, so this time only the y-coordinates matter.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:128:13"
+      ]
+    },
+    "func-siblings-distances#7": {
+      "en": "vertical distance = &nbsp;5 − 0 = 5 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:131:39"
+      ]
+    },
+    "func-siblings-distances#8": {
+      "en": "Same idea, other axis. A is 5 above the x-axis and B is sitting on it, so the gap between their heights is 5. It happens to be the same number as the horizontal distance in this question, which is a coincidence of the points chosen — it makes the triangle in the next part a nice square-cornered one, but do not expect the two to match in general. Notice also that neither of these two answers needed the equation of f at all. Once you have been handed the coordinates of two points, the curve they sit on stops mattering; distance is a question about the points.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:134:13"
+      ]
+    },
+    "func-siblings-distances#9": {
+      "en": "Hence determine the length of AB. Leave your answer in simplest surd form.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:142:13"
+      ]
+    },
+    "func-siblings-distances#10": {
+      "en": "Your two answers so far are the two short sides of a right-angled triangle, and AB is the slanted side across from the right angle. Use Pythagoras — and simplify the surd at the end rather than reaching for a decimal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:145:13"
+      ]
+    },
+    "func-siblings-distances#11": {
+      "en": "The horizontal and the vertical distances are the two short sides of a right-angled triangle, and AB is the hypotenuse:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:148:37"
+      ]
+    },
+    "func-siblings-distances#12": {
+      "en": "AB² = (Δx)² + (Δy)² = (5)² + (5)² = 25 + 25 = 50",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:149:37"
+      ]
+    },
+    "func-siblings-distances#13": {
+      "en": "AB = √50 = √25·√2 = 5√2 units &nbsp;&nbsp;≈ 7,07 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:150:39"
+      ]
+    },
+    "func-siblings-distances#14": {
+      "en": "WATCH OUT: √50 is not 25. Take the square root at the very end, and split off the biggest perfect square inside — 50 = 25 × 2, so √50 = 5√2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:152:15"
+      ]
+    },
+    "func-siblings-distances#15": {
+      "en": "The distance between two points is Pythagoras wearing a different hat. Drop a vertical line from the higher point and run a horizontal line from the lower one, and the two meet at a right angle — so the straight-line distance between them is the hypotenuse of that triangle, and its two short sides are exactly the horizontal and vertical distances you already have. That is where AB² = (Δx)² + (Δy)² comes from, and it is worth remembering the picture rather than the formula, because the picture cannot be misremembered. Two habits to keep. Square first, add, and only then take the root — squaring after adding gives nonsense. And simplify the surd: pull out the largest perfect square hiding inside, so √50 becomes 5√2. A decimal is fine as an extra, but the exact answer is the one the marks are for.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:156:13"
+      ]
+    },
+    "func-siblings-distances#16": {
+      "en": "The sketch shows &nbsp;f(x) = −x² + 4x + 12&nbsp; and&nbsp; g(x) = 2x + 4, cutting each other at (−2 ; 0) and (4 ; 12). PQ is a line segment parallel to the y-axis, with P on f and Q on g.<br><br>Determine the length of PQ when &nbsp;x = 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:211:13"
+      ]
+    },
+    "func-siblings-distances#17": {
+      "en": "PQ is vertical, so its length is one height minus the other. Work out both heights at x = 1 first, then take the smaller one away from the bigger one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:214:13"
+      ]
+    },
+    "func-siblings-distances#18": {
+      "en": "PQ is vertical, so its length is <b>top graph minus bottom graph</b>. Work out both heights at x = 1:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:217:37"
+      ]
+    },
+    "func-siblings-distances#19": {
+      "en": "f(1) = −(1)² + 4(1) + 12 = −1 + 4 + 12 = 15",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:218:37"
+      ]
+    },
+    "func-siblings-distances#20": {
+      "en": "g(1) = 2(1) + 4 = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:219:37"
+      ]
+    },
+    "func-siblings-distances#21": {
+      "en": "between the two cutting points the parabola is on top, so &nbsp;PQ = f(1) − g(1) = 15 − 6 = 9 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:220:39"
+      ]
+    },
+    "func-siblings-distances#22": {
+      "en": "WATCH OUT: length is never negative. Subtracting the wrong way round here gives −9, and the minus sign is the warning that the two graphs were taken in the wrong order.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:222:15"
+      ]
+    },
+    "func-siblings-distances#23": {
+      "en": "A vertical segment is the simplest distance there is, because the two ends have the same x — so the horizontal part of Pythagoras is zero and all that is left is the difference in heights. That is why you never need the distance formula for one of these: work out both y-values and subtract. The only decision is which way round, and the picture settles it. Between the two crossing points the parabola is arching above the line, so f is the top and g is the bottom, and top minus bottom keeps the answer positive. Notice that x = 1 sits between −2 and 4, which is how you know you are in that region without having to guess.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:226:13"
+      ]
+    },
+    "func-siblings-distances#24": {
+      "en": "Determine the length of the vertical segment between f and g when &nbsp;x = 5.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:234:13"
+      ]
+    },
+    "func-siblings-distances#25": {
+      "en": "Work out both heights again — but before you subtract, check the sketch to see which graph is on top out there. It is not the same one as in (a).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:237:13"
+      ]
+    },
+    "func-siblings-distances#26": {
+      "en": "f(5) = −25 + 20 + 12 = 7 &nbsp;&nbsp;and&nbsp;&nbsp; g(5) = 2(5) + 4 = 14",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:240:37"
+      ]
+    },
+    "func-siblings-distances#27": {
+      "en": "x = 5 is past the crossing at x = 4, so the LINE is on top here: &nbsp;length = g(5) − f(5) = 14 − 7 = 7 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:241:39"
+      ]
+    },
+    "func-siblings-distances#28": {
+      "en": "REMEMBER: “top minus bottom” is not a fixed formula like f − g. Which graph is on top changes at every crossing point, so check the picture before you decide the order.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:243:15"
+      ]
+    },
+    "func-siblings-distances#29": {
+      "en": "This is the same question as (a), moved to the other side of a crossing, and that is the whole point of asking it twice. At a crossing the two graphs are level, and immediately afterwards they swap over — so the graph that was on top is now underneath. Past x = 4 the parabola is falling away steeply while the line keeps climbing, so g is the top one out there and the subtraction has to be turned around. The safe habit is not to memorise f − g, but to ask two questions every time: which x am I at, and which graph is drawn higher there. If you ever end up with a negative length, you have not made an arithmetic mistake — you have simply subtracted in the wrong order, and the fix is to swap them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:247:13"
+      ]
+    },
+    "func-siblings-distances#30": {
+      "en": "The sketch shows &nbsp;f(x) = −x² + 5x + 15&nbsp; and&nbsp; g(x) = x + 3, cutting each other at A(−2 ; 1) and B(6 ; 9). PQ is a line segment parallel to the y-axis, with P on f and Q on g, and PQ lies between A and B.<br><br>Determine the maximum length of PQ.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:303:13"
+      ]
+    },
+    "func-siblings-distances#31": {
+      "en": "PQ changes as you slide it, so write its length as an expression in x — top graph minus bottom graph. Then look carefully at what kind of graph that expression is, and where its own highest point is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:306:13"
+      ]
+    },
+    "func-siblings-distances#32": {
+      "en": "PQ is vertical, so its length is <b>top minus bottom</b>. Between A and B the parabola is on top:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:309:37"
+      ]
+    },
+    "func-siblings-distances#33": {
+      "en": "PQ = f(x) − g(x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:310:37"
+      ]
+    },
+    "func-siblings-distances#34": {
+      "en": "= (−x² + 5x + 15) − (x + 3) = −x² + 4x + 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:311:37"
+      ]
+    },
+    "func-siblings-distances#35": {
+      "en": "That is a brand-new <b>sad</b> parabola, so the longest PQ sits at ITS turning point:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:312:37"
+      ]
+    },
+    "func-siblings-distances#36": {
+      "en": "x = −b/(2a) = −4/(2(−1)) = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:313:37"
+      ]
+    },
+    "func-siblings-distances#37": {
+      "en": "PQ = −(2)² + 4(2) + 12 = −4 + 8 + 12 = 16 &nbsp;&nbsp;∴&nbsp; maximum PQ = 16 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:314:39"
+      ]
+    },
+    "func-siblings-distances#38": {
+      "en": "WATCH OUT: the longest PQ is NOT at the turning point of f. f turns at x = 2,5, but the widest gap is at x = 2 — the difference graph has its own turning point, and that is the one that matters.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:316:15"
+      ]
+    },
+    "func-siblings-distances#39": {
+      "en": "The fact you have to fetch here is that the gap between two graphs is itself a graph. PQ is not one fixed length; it depends on where you draw it, so write it as a formula in x — top minus bottom — and you are suddenly holding a brand-new parabola whose height at every x IS the length of PQ there. Finding the longest PQ is then just finding that new parabola's maximum, which is the same x = −b/(2a) move you have used all year, followed by substituting back. Two cautions. First, subtract in the right order, or your length comes out negative. Second, do not reach for a Grade 12 tool: the difference parabola plus −b/(2a) is all this needs, and it gives the same answer. And resist the tempting shortcut of using f's own turning point — the two are close together here, 2,5 against 2, which is exactly why it catches people out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:320:13"
+      ]
+    },
+    "func-siblings-distances#40": {
+      "en": "Write down the coordinates of P when PQ is at its longest.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:328:13"
+      ]
+    },
+    "func-siblings-distances#41": {
+      "en": "You already know the x where PQ is longest. P is the end of the segment that sits on f, so put that x into f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:331:13"
+      ]
+    },
+    "func-siblings-distances#42": {
+      "en": "P sits on f, and PQ is longest at x = 2:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:334:37"
+      ]
+    },
+    "func-siblings-distances#43": {
+      "en": "f(2) = −(2)² + 5(2) + 15 = −4 + 10 + 15 = 21",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:335:37"
+      ]
+    },
+    "func-siblings-distances#44": {
+      "en": "∴ P(2 ; 21)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:336:39"
+      ]
+    },
+    "func-siblings-distances#45": {
+      "en": "WATCH OUT: 16 is the LENGTH of PQ, not the height of P. Writing P(2 ; 16) mixes up the gap between the graphs with the position of the top end — put the x into f itself.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:338:15"
+      ]
+    },
+    "func-siblings-distances#46": {
+      "en": "Three different numbers live at x = 2, and keeping them apart is the whole of this part. There is 21, which is how high f is there. There is 5, which is how high g is there. And there is 16, which is the gap between them — the answer to (a). P is a point on f, so its height is the first of those three. The quickest way to stay out of trouble is to say out loud which graph the point belongs to before substituting, because the same x goes into two different equations depending on whether you want P or Q. A free check: 21 minus 5 is 16, which is the length you already found, so all three numbers agree.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:342:13"
+      ]
+    },
+    "func-siblings-distances#47": {
+      "en": "The sketch shows &nbsp;f(x) = x² − 2x + 6&nbsp; and&nbsp; g(x) = x − 2. &nbsp;PQ is a line segment parallel to the y-axis, with P on f and Q on g.<br><br>Determine the length of PQ when the x-coordinate of P is 4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:393:13"
+      ]
+    },
+    "func-siblings-distances#48": {
+      "en": "Both ends of PQ have the same x, so work out both heights at x = 4 and subtract. The parabola is drawn above the line everywhere here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:396:13"
+      ]
+    },
+    "func-siblings-distances#49": {
+      "en": "f(4) = (4)² − 2(4) + 6 = 16 − 8 + 6 = 14 &nbsp;&nbsp;and&nbsp;&nbsp; g(4) = 4 − 2 = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:399:37"
+      ]
+    },
+    "func-siblings-distances#50": {
+      "en": "f is on top, so &nbsp;PQ = 14 − 2 = 12 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:400:39"
+      ]
+    },
+    "func-siblings-distances#51": {
+      "en": "Nothing new here — it is the warm-up that makes the next part make sense. Both ends of PQ share an x, so the length is simply the difference in heights, and the picture says which way round to subtract. What is worth noticing while you do it is that the parabola stays above the line on both sides of this sketch, and never dips down to touch it. That is unusual, and it is exactly what makes the next question interesting: if the two graphs never meet, PQ can never shrink to zero, so there must be some smallest length it settles at.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:403:13"
+      ]
+    },
+    "func-siblings-distances#52": {
+      "en": "Determine the shortest possible length of PQ.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:411:13"
+      ]
+    },
+    "func-siblings-distances#53": {
+      "en": "Write the length of PQ as an expression in x, the same way you would for a maximum. Then look at the sign of the leading term — is the new graph happy or sad, and does that make its turning point a ceiling or a floor?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:414:13"
+      ]
+    },
+    "func-siblings-distances#54": {
+      "en": "Write the length as an expression in x, top minus bottom:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:417:37"
+      ]
+    },
+    "func-siblings-distances#55": {
+      "en": "PQ = f(x) − g(x) = (x² − 2x + 6) − (x − 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:418:37"
+      ]
+    },
+    "func-siblings-distances#56": {
+      "en": "= x² − 3x + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:419:37"
+      ]
+    },
+    "func-siblings-distances#57": {
+      "en": "a = 1 &gt; 0, so this difference graph is <b>happy</b> — its turning point is a MINIMUM, and that is the shortest PQ:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:420:37"
+      ]
+    },
+    "func-siblings-distances#58": {
+      "en": "x = −b/(2a) = −(−3)/(2(1)) = 1,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:421:37"
+      ]
+    },
+    "func-siblings-distances#59": {
+      "en": "PQ = (1,5)² − 3(1,5) + 8 = 2,25 − 4,5 + 8 = 5,75 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:422:39"
+      ]
+    },
+    "func-siblings-distances#60": {
+      "en": "REMEMBER: the answer being positive is not an accident — it PROVES the two graphs never meet. If they did cross, the shortest PQ would be 0, and the difference graph would have dipped below the x-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:424:15"
+      ]
+    },
+    "func-siblings-distances#61": {
+      "en": "The method is the same one you use for a maximum, and only one thing decides which answer you get: the sign of a in the difference graph. Subtract the two equations, tidy up, and look at what is in front of the x². Here it is positive, so the new parabola is happy — it falls to a turning point and climbs away again — which makes that turning point the smallest the gap ever gets. In the maximum version of this question the difference came out sad and the same turning point was the largest gap instead. Everything else is identical: x = −b/(2a), then substitute back, and never a derivative. There is a bonus buried in the answer. A shortest gap of 5,75 units says the graphs stay at least that far apart forever, so they can never cross — the same conclusion you would reach by setting them equal and finding a negative discriminant, but with more information in it, because this route also tells you exactly how close they get and where.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:428:13"
+      ]
+    },
+    "func-siblings-distances#62": {
+      "en": "The sketch shows the hyperbola h, defined by &nbsp;h(x) = 4/(x − 1) + 2. &nbsp;Its asymptotes x = 1 and y = 2 are the dashed lines.<br><br>Determine the coordinates of the two “TP” points of h — the point on each branch that lies closest to the other branch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:478:13"
+      ]
+    },
+    "func-siblings-distances#63": {
+      "en": "Line the equation up against y = a/(x − p) + q and read off a, p and q. The two points sit at (p ± √a ; q ± √a) — the same square root added to both coordinates for one point, and taken off both for the other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:481:13"
+      ]
+    },
+    "func-siblings-distances#64": {
+      "en": "Read the form off first: &nbsp;h(x) = a/(x − p) + q&nbsp; with&nbsp; a = 4, &nbsp;p = 1, &nbsp;q = 2, &nbsp;so&nbsp; √a = 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:484:37"
+      ]
+    },
+    "func-siblings-distances#65": {
+      "en": "The two “TP” points are &nbsp;(p + √a ; q + √a)&nbsp; and&nbsp; (p − √a ; q − √a):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:485:37"
+      ]
+    },
+    "func-siblings-distances#66": {
+      "en": "(1 + 2 ; 2 + 2) = (3 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:486:37"
+      ]
+    },
+    "func-siblings-distances#67": {
+      "en": "(1 − 2 ; 2 − 2) = (−1 ; 0) &nbsp;&nbsp;∴&nbsp; the two points are (3 ; 4) and (−1 ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:487:39"
+      ]
+    },
+    "func-siblings-distances#68": {
+      "en": "WATCH OUT: it is √a, not a. Here a = 4, so the step is 2 in each direction, not 4. Check your points on the curve if you are unsure — h(3) really is 4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:489:15"
+      ]
+    },
+    "func-siblings-distances#69": {
+      "en": "A hyperbola has no turning point in the parabola sense, but each branch does have one place where it comes closest to the corner where the asymptotes cross — and those are the two points she calls its “TP”. They are always found the same way: start at the corner (p ; q), then step √a to the right and √a up for one of them, and √a to the left and √a down for the other. Everything you need is already sitting in the equation, so the only work is reading a, p and q correctly, remembering that p is the opposite sign of the number in the denominator. The step being a square root is the one place people slip, so say it out loud: a is 4, so the step is 2. A quick honesty check costs five seconds — put your x into h and see whether the y really comes out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:493:13"
+      ]
+    },
+    "func-siblings-distances#70": {
+      "en": "Hence determine the shortest distance between the two branches of h. Leave your answer in simplest surd form.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:501:13"
+      ]
+    },
+    "func-siblings-distances#71": {
+      "en": "The shortest distance between the branches is the straight line joining the two points you found. That is an ordinary distance between two points, so use Pythagoras.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:504:13"
+      ]
+    },
+    "func-siblings-distances#72": {
+      "en": "The shortest distance between the branches is the straight line joining the two “TP” points, (3 ; 4) and (−1 ; 0).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:507:37"
+      ]
+    },
+    "func-siblings-distances#73": {
+      "en": "d² = (Δx)² + (Δy)² = (3 − (−1))² + (4 − 0)² = (4)² + (4)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:508:37"
+      ]
+    },
+    "func-siblings-distances#74": {
+      "en": "= 16 + 16 = 32",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:509:37"
+      ]
+    },
+    "func-siblings-distances#75": {
+      "en": "d = √32 = √16·√2 = 4√2 units &nbsp;&nbsp;≈ 5,66 units",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:510:39"
+      ]
+    },
+    "func-siblings-distances#76": {
+      "en": "REMEMBER: this is a diagonal distance, not a vertical one, so “top minus bottom” does not work here. Both coordinates change, so it has to be Pythagoras.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:512:15"
+      ]
+    },
+    "func-siblings-distances#77": {
+      "en": "Once the two points are found, this is the plainest distance question there is — square the change in x, square the change in y, add, and take the root. What is worth understanding is why those two particular points are the closest pair. Both of them lie on the same line, the axis of symmetry with gradient 1 through the corner, and that line is the shortest road from one branch to the other because the whole picture is a mirror image of itself in it. You can see it in the numbers: (−1 ; 0) and (3 ; 4) both satisfy y = x + 1. Simplify the surd at the end — 32 = 16 × 2, so √32 becomes 4√2 — and give the exact answer first, with the decimal as an extra if you want one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-distances.js:516:13"
+      ]
+    },
+    "func-siblings-find-equation#1": {
+      "en": "The sketch shows the parabola f. Its turning point is TP(−1 ; −8), and it passes through the point (1 ; 0).<br><br>Determine the equation of f in the form y = a(x − p)² + q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:92:13"
+      ]
+    },
+    "func-siblings-find-equation#2": {
+      "en": "You have been handed the turning point, so start from the turning-point form — p and q are the turning point's own coordinates. Watch the sign on p. That leaves one letter, and you have been given one extra point to pin it down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:95:13"
+      ]
+    },
+    "func-siblings-find-equation#3": {
+      "en": "The turning point is given, so start from &nbsp;y = a(x − p)² + q&nbsp; with TP(p ; q) = (−1 ; −8):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:98:37"
+      ]
+    },
+    "func-siblings-find-equation#4": {
+      "en": "y = a(x + 1)² − 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:99:37"
+      ]
+    },
+    "func-siblings-find-equation#5": {
+      "en": "the only unknown left is a, so substitute the point the graph passes through, (1 ; 0): &nbsp;0 = a(1 + 1)² − 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:100:37"
+      ]
+    },
+    "func-siblings-find-equation#6": {
+      "en": "0 = 4a − 8 &nbsp;⟹&nbsp; a = 2 &nbsp;&nbsp;∴&nbsp; f(x) = 2(x + 1)² − 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:101:39"
+      ]
+    },
+    "func-siblings-find-equation#7": {
+      "en": "WATCH OUT: p sits inside the bracket with the OPPOSITE sign. A turning point at x = −1 gives (x + 1)², not (x − 1)². Check it by asking which x makes the bracket zero — it must be your turning-point x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:103:15"
+      ]
+    },
+    "func-siblings-find-equation#8": {
+      "en": "Turning-point form is built for exactly this question. In y = a(x − p)² + q the p and the q are not mysterious constants — they ARE the turning point's coordinates, so the moment the sketch hands you TP(−1 ; −8) you can write two thirds of the equation down without doing any work. What the turning point cannot tell you is how wide or how narrow the parabola is, because a whole family of parabolas turn at the same point, some skinny, some fat, some upside down. That is the job of a, and one extra point is exactly enough to find one unknown: put its x and its y into the equation and solve. Same three-step pattern as the hyperbola question on this tile — read off what the picture gives, then use a point for whatever is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:107:13"
+      ]
+    },
+    "func-siblings-find-equation#9": {
+      "en": "Write the equation of f in the form y = ax² + bx + c.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:115:13"
+      ]
+    },
+    "func-siblings-find-equation#10": {
+      "en": "Nothing new to find here — this is the same graph, just written out. Square the bracket first, then multiply through and collect the numbers.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:118:13"
+      ]
+    },
+    "func-siblings-find-equation#11": {
+      "en": "Square the bracket first: &nbsp;(x + 1)² = x² + 2x + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:121:37"
+      ]
+    },
+    "func-siblings-find-equation#12": {
+      "en": "f(x) = 2(x² + 2x + 1) − 8 = 2x² + 4x + 2 − 8 = 2x² + 4x − 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:122:39"
+      ]
+    },
+    "func-siblings-find-equation#13": {
+      "en": "WATCH OUT: (x + 1)² is NOT x² + 1. Write the bracket out twice and multiply it properly, or use the pattern (x + k)² = x² + 2kx + k².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:124:15"
+      ]
+    },
+    "func-siblings-find-equation#14": {
+      "en": "The two forms are the same parabola wearing different clothes. Turning-point form shows you where the graph turns; standard form shows you the y-intercept sitting at the end as c. Neither is more correct, so read the question and give the form it asked for — an answer in the wrong form is working, not an answer. Here the −6 that drops out at the end is a free check: it should be the y-value where the graph crosses the y-axis, and if you put x = 0 into 2(x + 1)² − 8 you get 2 − 8 = −6, the same number. Whenever you change form, that little check costs five seconds and catches almost every expansion slip.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:128:13"
+      ]
+    },
+    "func-siblings-find-equation#15": {
+      "en": "The sketch shows a hyperbola h together with its two axes of symmetry, drawn as dashed lines. The axes of symmetry are &nbsp;y = x + 2&nbsp; and &nbsp;y = −x − 4, and h cuts the x-axis at (2 ; 0).<br><br>Determine the equation of h in the form y = a/(x − p) + q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:182:13"
+      ]
+    },
+    "func-siblings-find-equation#16": {
+      "en": "Both axes of symmetry run through the one point where the asymptotes cross — so find where the two given lines meet, and you have found that point. Its coordinates are p and q. Then one point on the curve finishes the job.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:185:13"
+      ]
+    },
+    "func-siblings-find-equation#17": {
+      "en": "Both axes of symmetry pass through the point where the asymptotes cross, so solve the two given lines simultaneously:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:188:37"
+      ]
+    },
+    "func-siblings-find-equation#18": {
+      "en": "x + 2 = −x − 4 &nbsp;⟹&nbsp; 2x = −6 &nbsp;⟹&nbsp; x = −3, &nbsp;and then&nbsp; y = −3 + 2 = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:189:37"
+      ]
+    },
+    "func-siblings-find-equation#19": {
+      "en": "so the asymptotes cross at (−3 ; −1), giving p = −3 and q = −1: &nbsp;h(x) = a/(x + 3) − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:190:37"
+      ]
+    },
+    "func-siblings-find-equation#20": {
+      "en": "the only unknown left is a, so substitute the x-intercept (2 ; 0): &nbsp;0 = a/(2 + 3) − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:191:37"
+      ]
+    },
+    "func-siblings-find-equation#21": {
+      "en": "a/5 = 1 &nbsp;⟹&nbsp; a = 5 &nbsp;&nbsp;∴&nbsp; h(x) = 5/(x + 3) − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:192:39"
+      ]
+    },
+    "func-siblings-find-equation#22": {
+      "en": "WATCH OUT: p is the OPPOSITE sign of the number next to the x. The crossing point x = −3 gives (x + 3) in the denominator, not (x − 3).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:194:15"
+      ]
+    },
+    "func-siblings-find-equation#23": {
+      "en": "This looks like a different question from the usual hyperbola one, but it is the same question with one extra step in front. Normally the asymptotes are handed to you and you read p and q straight off them. Here they are hidden, and what you are given instead are the two mirror lines. The useful fact is that everything about a hyperbola — both asymptotes and both mirror lines — passes through one single point, the corner of the whole picture, at (p ; q). So finding where the two mirror lines cross IS finding that corner, and that is an ordinary Grade 9 simultaneous-equations job: set the two right-hand sides equal, solve for x, then put x back into either line for y. From there you are on familiar ground — p and q are in, only a is missing, and the x-intercept is the point that pins it down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:198:13"
+      ]
+    },
+    "func-siblings-find-equation#24": {
+      "en": "The sketch shows the exponential graph g, defined by &nbsp;g(x) = a·bˣ + q. The dashed line y = −4 is its asymptote, g cuts the y-axis at (0 ; −2), and g passes through the point (2 ; 4).<br><br>Determine the values of a, b and q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:241:13"
+      ]
+    },
+    "func-siblings-find-equation#25": {
+      "en": "Take them in the order the picture hands them over: the asymptote gives one letter for free, the y-intercept gives the next — remember what any base to the power 0 is worth — and only then does the third point become useful.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:244:13"
+      ]
+    },
+    "func-siblings-find-equation#26": {
+      "en": "In &nbsp;y = a·bˣ + q&nbsp; the q is the asymptote, read straight off the dashed line: &nbsp;q = −4, &nbsp;so&nbsp; g(x) = a·bˣ − 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:247:37"
+      ]
+    },
+    "func-siblings-find-equation#27": {
+      "en": "the y-intercept has x = 0, and b⁰ = 1 whatever b is, so it hands you a at once: &nbsp;−2 = a(1) − 4 &nbsp;⟹&nbsp; a = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:248:37"
+      ]
+    },
+    "func-siblings-find-equation#28": {
+      "en": "now use the second point (2 ; 4): &nbsp;4 = 2·b² − 4 &nbsp;⟹&nbsp; 2b² = 8 &nbsp;⟹&nbsp; b² = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:249:37"
+      ]
+    },
+    "func-siblings-find-equation#29": {
+      "en": "b = 2 &nbsp;&nbsp;∴&nbsp; a = 2, &nbsp;b = 2, &nbsp;q = −4 &nbsp;&nbsp;(so g(x) = 2·2ˣ − 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:250:39"
+      ]
+    },
+    "func-siblings-find-equation#30": {
+      "en": "WATCH OUT: taking the square root of b² = 4 usually gives ±2, but the base of an exponential is ALWAYS positive — a negative base is not an exponential graph at all. So b = 2 only, and the −2 is thrown away.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:252:15"
+      ]
+    },
+    "func-siblings-find-equation#31": {
+      "en": "There are three letters, so you need three facts, and the sketch gives you exactly three — but the order matters, because each one only becomes easy once the one before it is in. The asymptote is the free one: q is the height the graph flattens out at, nothing to calculate. The y-intercept is next, and it is easy for a reason worth remembering: at x = 0 the power bˣ becomes b⁰, and anything to the power 0 is 1, so the b vanishes and only a is left. Now, with q and a both known, the third point has just one unknown in it and you can finally solve for b. If you had tried the third point first you would have had two unknowns in one equation and got stuck — not because the maths was hard, but because you spent your facts in the wrong order.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:256:13"
+      ]
+    },
+    "func-siblings-find-equation#32": {
+      "en": "Hence write the equation of g in the form &nbsp;y = b<sup>x − p</sup> + q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:264:13"
+      ]
+    },
+    "func-siblings-find-equation#33": {
+      "en": "Look at your a and your b — they are the same number. Write the a as that number to the power 1, and then use the exponent law for multiplying two powers of the same base.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:267:13"
+      ]
+    },
+    "func-siblings-find-equation#34": {
+      "en": "g(x) = 2·2ˣ − 4, &nbsp;and the front 2 is 2¹, so the two powers have the SAME base: &nbsp;2¹·2ˣ = 2<sup>x + 1</sup>&nbsp; — same base, so add the exponents",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:270:37"
+      ]
+    },
+    "func-siblings-find-equation#35": {
+      "en": "g(x) = 2<sup>x + 1</sup> − 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:271:39"
+      ]
+    },
+    "func-siblings-find-equation#36": {
+      "en": "REMEMBER: the − 4 stays exactly where it is. Only the two powers combine — the asymptote number is outside the power and never joins in. And 2<sup>x + 1</sup> − 4 IS the asked-for form: in &nbsp;y = b<sup>x − p</sup> + q&nbsp; the p sits in the exponent with the OPPOSITE sign, so x + 1 means p = −1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:273:15"
+      ]
+    },
+    "func-siblings-find-equation#37": {
+      "en": "This form catches people out because it looks like a new kind of graph, and it is not — it is the same graph, written more compactly. The move that gets you there is one exponent law you already know: powers of the same base multiply by adding their exponents. The only trick is spotting that the number in front, 2, is itself a power of 2, namely 2¹ — and that is exactly why this question was set up with a equal to b. If a had been 5 and b had been 2 you could not have done it, because 5 is not a power of 2. So the honest test before you start is: is the number in front a power of the base? If yes, the two collapse into one power and the +1 slides into the exponent. If no, the equation is already in its simplest form and you leave it alone.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:277:13"
+      ]
+    },
+    "func-siblings-find-equation#38": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = ax² + bx + c. It passes through the points (−2 ; −2), (0 ; −4) and (1 ; 1).<br><br>Determine the values of a, b and c.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:321:13"
+      ]
+    },
+    "func-siblings-find-equation#39": {
+      "en": "One of the three points is doing a special job — look at which one sits on the y-axis, and at what c means in y = ax² + bx + c. That leaves two unknowns, and you still have two points, so you get two equations to solve together.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:324:13"
+      ]
+    },
+    "func-siblings-find-equation#40": {
+      "en": "(0 ; −4) is the y-intercept, and in &nbsp;y = ax² + bx + c&nbsp; the c IS the y-intercept: &nbsp;c = −4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:327:37"
+      ]
+    },
+    "func-siblings-find-equation#41": {
+      "en": "substitute (1 ; 1): &nbsp;1 = a(1)² + b(1) − 4 &nbsp;⟹&nbsp; a + b = 5 &nbsp;&nbsp;…①",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:328:37"
+      ]
+    },
+    "func-siblings-find-equation#42": {
+      "en": "substitute (−2 ; −2): &nbsp;−2 = a(−2)² + b(−2) − 4 &nbsp;⟹&nbsp; 4a − 2b = 2 &nbsp;⟹&nbsp; 2a − b = 1 &nbsp;&nbsp;…②",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:329:37"
+      ]
+    },
+    "func-siblings-find-equation#43": {
+      "en": "① + ②&nbsp; eliminates b: &nbsp;3a = 6 &nbsp;⟹&nbsp; a = 2, &nbsp;and back into ①: &nbsp;b = 5 − 2 = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:330:37"
+      ]
+    },
+    "func-siblings-find-equation#44": {
+      "en": "a = 2, &nbsp;b = 3, &nbsp;c = −4 &nbsp;&nbsp;∴&nbsp; f(x) = 2x² + 3x − 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:331:39"
+      ]
+    },
+    "func-siblings-find-equation#45": {
+      "en": "WATCH OUT: do NOT reach for y = a(x − x₁)(x − x₂) here. That form needs the two x-INTERCEPTS, and you were not given them — this graph does not cross the x-axis at whole numbers at all. Three unknowns need three points and three equations.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:333:15"
+      ]
+    },
+    "func-siblings-find-equation#46": {
+      "en": "Three unknown letters means you need three separate facts, and three points on the curve are exactly that: each point, substituted in, becomes one equation. The reason this route feels heavier than the other two is that nothing is handed to you ready-made — no turning point to read p and q off, no x-intercepts to write the brackets from. So the strategy is to spend the cheapest fact first. The point on the y-axis is the cheapest by miles, because its x is 0, which kills both the ax² and the bx term and leaves c standing alone. With c known, the other two points each give a plain equation in a and b, and you solve those two together the way you always have — line them up, add or subtract to knock out one letter, then substitute back for the other. Slow, but it never fails, and it is the only route that works when the graph's intercepts are not friendly numbers.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-find-equation.js:337:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3827
+}
