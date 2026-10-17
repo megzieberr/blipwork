@@ -6,6 +6,7 @@
 import { mc, C, mcStep, calcStep } from "./_shared.js";
 import { pick } from "../ui.js";
 import { toFrac, effFromNom, COMPOUNDING, pow } from "../finlib.js";
+import { L } from "../lang.js";
 
 const CL = "effNom";
 /* the frequencies worth converting (k > 1) */
@@ -13,40 +14,40 @@ const OPTS = COMPOUNDING.filter(c => [2, 4, 12].includes(c.k));
 
 const SKILLS = {
   effectiveAnnual: () => mc(CL,
-    "An <b>effective</b> interest rate is always quoted…",
-    "annually (per year)",
-    ["monthly", "with a compounding frequency", "daily"],
-    { hint: "Effective = the true growth over one whole year.", answerLabel: "Effective rates are annual" }),
+    L("An <b>effective</b> interest rate is always quoted…", "'n <b>Effektiewe</b> rentekoers word altyd aangegee…"),
+    L("annually (per year)", "jaarliks (per jaar)"),
+    [L("monthly", "maandeliks"), L("with a compounding frequency", "met 'n samestellingsfrekwensie"), L("daily", "daagliks")],
+    { hint: L("Effective = the true growth over one whole year.", "Effektief = die ware groei oor een hele jaar."), answerLabel: L("Effective rates are annual", "Effektiewe koerse is jaarliks") }),
 
   nominalFreq: () => mc(CL,
-    "A <b>nominal</b> interest rate is quoted…",
-    "with a compounding frequency (e.g. monthly)",
-    ["always with no time period", "only ever annually", "as a rand amount"],
-    { hint: "“18% p.a. compounded monthly” is a nominal rate — it names the frequency." }),
+    L("A <b>nominal</b> interest rate is quoted…", "'n <b>Nominale</b> rentekoers word aangegee…"),
+    L("with a compounding frequency (e.g. monthly)", "met 'n samestellingsfrekwensie (bv. maandeliks)"),
+    [L("always with no time period", "altyd sonder 'n tydperk"), L("only ever annually", "altyd net jaarliks"), L("as a rand amount", "as 'n randbedrag")],
+    { hint: L("“18% p.a. compounded monthly” is a nominal rate — it names the frequency.", "“18% p.j. maandeliks saamgestel” is 'n nominale koers: dit noem die frekwensie.") }),
 
   bothCompound: () => mc(CL,
-    "Effective and nominal rates are both types of…",
-    "compound interest",
-    ["simple interest", "depreciation", "deposits"],
-    { hint: "Both describe compound growth, just quoted differently.", answerLabel: "Both are compound interest" }),
+    L("Effective and nominal rates are both types of…", "Effektiewe en nominale koerse is albei soorte…"),
+    L("compound interest", "saamgestelde rente"),
+    [L("simple interest", "enkelvoudige rente"), L("depreciation", "waardevermindering"), L("deposits", "deposito's")],
+    { hint: L("Both describe compound growth, just quoted differently.", "Albei beskryf saamgestelde groei, net anders aangegee."), answerLabel: L("Both are compound interest", "Albei is saamgestelde rente") }),
 
   conversionFormula: () => mc(CL,
-    "Which formula converts a <b>nominal</b> rate to an <b>effective</b> rate?",
-    "1 + i_eff = (1 + i_nom/n)ⁿ",
-    ["i_eff = i_nom × n", "1 + i_eff = (1 + i_nom·n)ⁿ", "i_eff = (1 + i_nom)/n"],
-    { hint: "Divide the nominal rate by n inside the bracket, raise to the power n.", answerLabel: "1 + i_eff = (1 + i_nom/n)ⁿ" }),
+    L("Which formula converts a <b>nominal</b> rate to an <b>effective</b> rate?", "Watter formule skakel 'n <b>nominale</b> koers om na 'n <b>effektiewe</b> koers?"),
+    L("1 + i_eff = (1 + i_nom/n)ⁿ", "1 + i_eff = (1 + i_nom/n)ⁿ"),
+    [L("i_eff = i_nom × n", "i_eff = i_nom × n"), L("1 + i_eff = (1 + i_nom·n)ⁿ", "1 + i_eff = (1 + i_nom·n)ⁿ"), L("i_eff = (1 + i_nom)/n", "i_eff = (1 + i_nom)/n")],
+    { hint: L("Divide the nominal rate by n inside the bracket, raise to the power n.", "Deel die nominale koers deur n binne die hakie, en verhef tot die mag n."), answerLabel: L("1 + i_eff = (1 + i_nom/n)ⁿ", "1 + i_eff = (1 + i_nom/n)ⁿ") }),
 
   nMeaning: () => mc(CL,
-    "In <b>1 + i_eff = (1 + i_nom/n)ⁿ</b>, what is <b>n</b>?",
-    "the number of compounding periods per year",
-    ["the number of years", "the principal amount", "the effective rate"],
-    { hint: "For monthly compounding n = 12; quarterly n = 4." }),
+    L("In <b>1 + i_eff = (1 + i_nom/n)ⁿ</b>, what is <b>n</b>?", "In <b>1 + i_eff = (1 + i_nom/n)ⁿ</b>, wat is <b>n</b>?"),
+    L("the number of compounding periods per year", "die aantal samestellingsperiodes per jaar"),
+    [L("the number of years", "die aantal jare"), L("the principal amount", "die hoofsom"), L("the effective rate", "die effektiewe koers")],
+    { hint: L("For monthly compounding n = 12; quarterly n = 4.", "Vir maandelikse samestelling is n = 12; kwartaalliks n = 4.") }),
 
   whyConvert: () => mc(CL,
-    "Why convert rates to their <b>effective</b> form?",
-    "To fairly compare rates that compound at different frequencies",
-    ["To make the rate bigger", "To turn compound into simple interest", "To avoid using a calculator"],
-    { hint: "Two nominal rates with different frequencies can't be compared directly." }),
+    L("Why convert rates to their <b>effective</b> form?", "Hoekom skakel ons koerse om na hul <b>effektiewe</b> vorm?"),
+    L("To fairly compare rates that compound at different frequencies", "Om koerse met verskillende samestellingsfrekwensies regverdig te vergelyk"),
+    [L("To make the rate bigger", "Om die koers groter te maak"), L("To turn compound into simple interest", "Om saamgestelde rente in enkelvoudige rente te verander"), L("To avoid using a calculator", "Om nie 'n sakrekenaar te gebruik nie")],
+    { hint: L("Two nominal rates with different frequencies can't be compared directly.", "Twee nominale koerse met verskillende frekwensies kan nie direk vergelyk word nie.") }),
 
   /* the rate rolls (2026-08-23) — the qualitative answer is
      rate-independent, so only the number in the sentence changes */
@@ -54,19 +55,19 @@ const SKILLS = {
     const nom = pick([8, 10, 12, 18]);
     const effM = (effFromNom(toFrac(nom), 12) * 100).toFixed(2).replace(".", ",");
     return mc(CL,
-      `${C(nom)}% p.a. compounded <b>monthly</b> vs ${C(nom)}% p.a. compounded <b>annually</b> — which has the higher <b>effective</b> rate?`,
-      "Compounded monthly",
-      ["Compounded annually", "They are exactly equal", "It depends on the principal"],
-      { hint: "More frequent compounding earns slightly more over a year.", answerLabel: "More frequent compounding → higher effective rate",
+      L(`${C(nom)}% p.a. compounded <b>monthly</b> vs ${C(nom)}% p.a. compounded <b>annually</b> — which has the higher <b>effective</b> rate?`, `${C(nom)}% p.j. <b>maandeliks</b> saamgestel vs ${C(nom)}% p.j. <b>jaarliks</b> saamgestel: watter een het die hoër <b>effektiewe</b> koers?`),
+      L("Compounded monthly", "Maandeliks saamgestel"),
+      [L("Compounded annually", "Jaarliks saamgestel"), L("They are exactly equal", "Hulle is presies gelyk"), L("It depends on the principal", "Dit hang van die hoofsom af")],
+      { hint: L("More frequent compounding earns slightly more over a year.", "Meer gereelde samestelling verdien oor 'n jaar effens meer."), answerLabel: L("More frequent compounding → higher effective rate", "Meer gereelde samestelling → hoër effektiewe koers"),
         /* Kept to SHORT statements on purpose: at 375 px a long line that
            contains "i_eff" wraps INSIDE the token and reads as "i_ / eff"
            (found in this session's phone screenshots). One idea per step
            keeps every line inside the phone on one row. */
         solution: [
-          { s: `Monthly: 1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/12)`, 12)}`, r: "n = 12, one equation" },
-          { s: `That gives ${effM}% a year`, r: "type the whole right side in one go" },
-          { s: `Annually: the ${C(nom)}% is already effective`, r: "interest is added once a year" },
-          { s: `${effM}% > ${C(nom)}% → monthly grows more`, r: "the earlier interest earns interest itself" },
+          { s: L(`Monthly: 1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/12)`, 12)}`, `Maandeliks: 1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/12)`, 12)}`), r: L("n = 12, one equation", "n = 12, een vergelyking") },
+          { s: L(`That gives ${effM}% a year`, `Dit gee ${effM}% per jaar`), r: L("type the whole right side in one go", "tik die hele regterkant in een slag in") },
+          { s: L(`Annually: the ${C(nom)}% is already effective`, `Jaarliks: die ${C(nom)}% is reeds effektief`), r: L("interest is added once a year", "rente word een keer per jaar bygetel") },
+          { s: L(`${effM}% > ${C(nom)}% → monthly grows more`, `${effM}% > ${C(nom)}% → maandeliks groei meer`), r: L("the earlier interest earns interest itself", "die vroeëre rente verdien self rente") },
         ] });
   },
 
@@ -84,30 +85,30 @@ const SKILLS = {
     const effC = eff.toFixed(2).replace(".", ",");   // always 2 dp, comma decimal
     return {
       type: "steps", concept: CL,
-      prompt: `Convert <b>${C(nom)}% p.a. compounded ${o.label}</b> to an <b>effective annual rate</b>. Give your answer as a %, to 2 decimal places.`,
+      prompt: L(`Convert <b>${C(nom)}% p.a. compounded ${o.label}</b> to an <b>effective annual rate</b>. Give your answer as a %, to 2 decimal places.`, `Skakel <b>${C(nom)}% p.j. ${o.label} saamgestel</b> om na 'n <b>effektiewe jaarlikse koers</b>. Gee jou antwoord as 'n %, tot 2 desimale plekke.`),
       steps: [
-        mcStep(`What is n for “compounded ${o.label}”?`, String(o.k),
+        mcStep(L(`What is n for “compounded ${o.label}”?`, `Wat is n vir “${o.label} saamgestel”?`), String(o.k),
           [1, 2, 4, 12].filter(k => k !== o.k).map(String),
-          "n = how many times a year interest is added."),
-        mcStep("Pick the correct set-up.",
-          `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`,
+          L("n = how many times a year interest is added.", "n = hoeveel keer per jaar rente bygetel word.")),
+        mcStep(L("Pick the correct set-up.", "Kies die korrekte opstelling."),
+          L(`1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`, `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`),
           [
-            `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))} × ${o.k})`, o.k)}`,
-            `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))})`, o.k)}`,
-            `i_eff = ${C(toFrac(nom))}/${o.k} × ${o.k}`,
+            L(`1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))} × ${o.k})`, o.k)}`, `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))} × ${o.k})`, o.k)}`),
+            L(`1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))})`, o.k)}`, `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))})`, o.k)}`),
+            L(`i_eff = ${C(toFrac(nom))}/${o.k} × ${o.k}`, `i_eff = ${C(toFrac(nom))}/${o.k} × ${o.k}`),
           ],
-          "Divide the nominal rate by n INSIDE the bracket, power n outside."),
-        calcStep("Now the effective rate, as a %, 2 decimals.", eff,
-          "Type the WHOLE right side in one go, subtract 1, × 100 — never round along the way.",
+          L("Divide the nominal rate by n INSIDE the bracket, power n outside.", "Deel die nominale koers deur n BINNE die hakie, mag n buite.")),
+        calcStep(L("Now the effective rate, as a %, 2 decimals.", "Nou die effektiewe koers, as 'n %, 2 desimale plekke."), eff,
+          L("Type the WHOLE right side in one go, subtract 1, × 100 — never round along the way.", "Tik die HELE regterkant in een slag in, trek 1 af, × 100: rond nooit tussenin af nie."),
           { dp: 2, tol: 0.001 }),
       ],
       expected: eff, dp: 2,
-      hint: `Use 1 + i_eff = (1 + i_nom/n)ⁿ with n = ${o.k}, then × 100 for a %.`,
-      answerLabel: `i_eff ≈ ${effC}%`,
+      hint: L(`Use 1 + i_eff = (1 + i_nom/n)ⁿ with n = ${o.k}, then × 100 for a %.`, `Gebruik 1 + i_eff = (1 + i_nom/n)ⁿ met n = ${o.k}, dan × 100 vir 'n %.`),
+      answerLabel: L(`i_eff ≈ ${effC}%`, `i_eff ≈ ${effC}%`),
       solution: [
-        { s: `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`, r: `n = ${o.k} because interest is added ${o.k} times a year` },
-        { s: `i_eff = ${pow(`(1 + ${C(toFrac(nom) / o.k)})`, o.k)} − 1` },
-        { s: `i_eff ≈ ${effC}%`, r: "× 100 to write it as a percentage" },
+        { s: L(`1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`, `1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}`), r: L(`n = ${o.k} because interest is added ${o.k} times a year`, `n = ${o.k} want rente word ${o.k} keer per jaar bygetel`) },
+        { s: L(`i_eff = ${pow(`(1 + ${C(toFrac(nom) / o.k)})`, o.k)} − 1`, `i_eff = ${pow(`(1 + ${C(toFrac(nom) / o.k)})`, o.k)} − 1`) },
+        { s: L(`i_eff ≈ ${effC}%`, `i_eff ≈ ${effC}%`), r: L("× 100 to write it as a percentage", "× 100 om dit as 'n persentasie te skryf") },
       ],
     };
   },

@@ -122,8 +122,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 ### Finance
 - ☑ 2026-10-17 S7 | before the first Finance row (setup, one Opus worker): js/quests/_finance-check.js reads prompts through the en side so verify-finance passes in ?lang=af; hoist the random draws out of questf8's templates (lines ~416-426, flagged impure by af_extract) into consts | check: verify-finance 692/692 in EN and ?lang=af, verify-dice-finance unchanged
 - ☑ 2026-10-17 T80 | concepts: the `finance` block (js/concepts/finance.js after S4) | ~1 474 words + the two jug captions in js/concepts/_finance-pictures.js (leftovers  hand L()) | counted by af_extract 2026-10-17
-- ⏳ 2026-10-17 23:13 T81 | hub rounds: questf1-words … questf9-car-or-no-car (9 files) | ~3 367 words | verify page: verify-finance.html
-- ☐ T82 | hub rounds: questf10-in-or-out … questf13-one-equation (4 files) | ~3 094 words | verify page: verify-finance.html
+- ☑ 2026-10-17 T81 | hub rounds: questf1-words … questf9-car-or-no-car (9 files) | ~3 367 words | verify page: verify-finance.html
+- ⏳ 2026-10-17 23:23 T82 | hub rounds: questf10-in-or-out … questf13-one-equation (4 files) | ~3 094 words | verify page: verify-finance.html
 
 ### Statistics
 - ☑ 2026-10-17 T83 | concepts: the `stats` block (js/concepts/stats.js after S4) | ~904 words | counted by af_extract 2026-10-17

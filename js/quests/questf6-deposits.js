@@ -5,6 +5,7 @@
 import { mc, mcNum, C, mcStep, calcStep } from "./_shared.js";
 import { pick } from "../ui.js";
 import { depositAmount, balanceAfterDeposit, simpleAmount, toFrac, rand } from "../finlib.js";
+import { L } from "../lang.js";
 
 const CL = "deposits";
 const PRICES = [4000, 5000, 6000, 8000, 10000, 12000];
@@ -16,10 +17,10 @@ const SKILLS = {
     const p = pick(PCTS), price = pick(PRICES), dep = depositAmount(toFrac(p), price);
     return {
       type: "calc", concept: CL, dp: 0,
-      prompt: `A <b>${p}%</b> deposit is paid on an item priced <b>R${money0(price)}</b>. How much is the deposit (in rand)?`,
+      prompt: L(`A <b>${p}%</b> deposit is paid on an item priced <b>R${money0(price)}</b>. How much is the deposit (in rand)?`, `'n Deposito van <b>${p}%</b> word betaal op 'n item wat <b>R${money0(price)}</b> kos. Hoeveel is die deposito (in rand)?`),
       expected: dep,
-      hint: "Deposit = (% ÷ 100) × price.",
-      answerLabel: `${p}% × R${money0(price)} = R${money0(dep)}`,
+      hint: L("Deposit = (% ÷ 100) × price.", "Deposito = (% ÷ 100) × prys."),
+      answerLabel: L(`${p}% × R${money0(price)} = R${money0(dep)}`, `${p}% × R${money0(price)} = R${money0(dep)}`),
       solution: [{ s: `${C(toFrac(p))} × ${price} = ${dep}` }],
     };
   },
@@ -28,13 +29,13 @@ const SKILLS = {
     const p = pick(PCTS), price = pick(PRICES), owed = balanceAfterDeposit(toFrac(p), price);
     return {
       type: "calc", concept: CL, dp: 0,
-      prompt: `After paying a <b>${p}%</b> deposit on <b>R${money0(price)}</b>, how much is still owed (in rand)?`,
+      prompt: L(`After paying a <b>${p}%</b> deposit on <b>R${money0(price)}</b>, how much is still owed (in rand)?`, `Ná 'n deposito van <b>${p}%</b> op <b>R${money0(price)}</b>, hoeveel is nog uitstaande (in rand)?`),
       expected: owed,
-      hint: "Amount owed = price − deposit = ((100 − %) ÷ 100) × price.",
-      answerLabel: `R${money0(price)} − R${money0(depositAmount(toFrac(p), price))} = R${money0(owed)}`,
+      hint: L("Amount owed = price − deposit = ((100 − %) ÷ 100) × price.", "Uitstaande bedrag = prys − deposito = ((100 − %) ÷ 100) × prys."),
+      answerLabel: L(`R${money0(price)} − R${money0(depositAmount(toFrac(p), price))} = R${money0(owed)}`, `R${money0(price)} − R${money0(depositAmount(toFrac(p), price))} = R${money0(owed)}`),
       solution: [
-        { s: `Deposit = ${C(toFrac(p))} × ${price} = ${depositAmount(toFrac(p), price)}` },
-        { s: `Still owed = ${price} − ${depositAmount(toFrac(p), price)} = ${owed}` },
+        { s: L(`Deposit = ${C(toFrac(p))} × ${price} = ${depositAmount(toFrac(p), price)}`, `Deposito = ${C(toFrac(p))} × ${price} = ${depositAmount(toFrac(p), price)}`) },
+        { s: L(`Still owed = ${price} − ${depositAmount(toFrac(p), price)} = ${owed}`, `Nog uitstaande = ${price} − ${depositAmount(toFrac(p), price)} = ${owed}`) },
       ],
     };
   },
@@ -43,36 +44,36 @@ const SKILLS = {
     const p = pick(PCTS);
     return {
       type: "mc", concept: CL,
-      prompt: `A <b>${p}%</b> deposit means the amount still owed is what <b>%</b> of the price?`,
+      prompt: L(`A <b>${p}%</b> deposit means the amount still owed is what <b>%</b> of the price?`, `'n Deposito van <b>${p}%</b> beteken die uitstaande bedrag is watter <b>%</b> van die prys?`),
       options: mcNum(100 - p, [p, 100, 100 + p]),
-      hint: "The deposit and the balance must add up to 100%.",
+      hint: L("The deposit and the balance must add up to 100%.", "Die deposito en die saldo moet saam 100% wees."),
       answerLabel: `100% − ${p}% = ${100 - p}%`,
       solution: [
-        { s: `The deposit and the balance together make up the whole price`, r: "deposit % + balance % = 100%" },
-        { s: `100% − ${p}% = ${100 - p}%`, r: "that is the part still owed" },
+        { s: L(`The deposit and the balance together make up the whole price`, `Die deposito en die saldo maak saam die hele prys uit`), r: L("deposit % + balance % = 100%", "deposito % + saldo % = 100%") },
+        { s: `100% − ${p}% = ${100 - p}%`, r: L("that is the part still owed", "dit is die deel wat nog uitstaande is") },
       ],
     };
   },
 
   depositInterest: () => ({
     type: "yesno", concept: CL,
-    prompt: "Does the <b>deposit</b> itself earn interest?",
+    prompt: L("Does the <b>deposit</b> itself earn interest?", "Verdien die <b>deposito</b> self rente?"),
     yes: false,
-    hint: "A deposit is paid upfront — it is money you no longer owe.",
-    answerLabel: "No — a deposit earns no interest",
+    hint: L("A deposit is paid upfront — it is money you no longer owe.", "'n Deposito word vooraf betaal: dit is geld wat jy nie meer skuld nie."),
+    answerLabel: L("No — a deposit earns no interest", "Nee: 'n deposito verdien geen rente nie"),
   }),
 
   interestOnWhat: () => mc(CL,
-    "In a hire-purchase deal, interest is charged on…",
-    "the amount still owed after the deposit",
-    ["the full price", "the deposit only", "nothing at all"],
-    { hint: "You only pay interest on what you still owe." }),
+    L("In a hire-purchase deal, interest is charged on…", "By 'n huurkoopooreenkoms word rente gehef op…"),
+    L("the amount still owed after the deposit", "die bedrag wat ná die deposito nog uitstaande is"),
+    [L("the full price", "die volle prys"), L("the deposit only", "net die deposito"), L("nothing at all", "glad niks nie")],
+    { hint: L("You only pay interest on what you still owe.", "Jy betaal net rente op wat jy nog skuld.") }),
 
   hpType: () => mc(CL,
-    "Hire purchase uses which type of interest?",
-    "Simple interest",
-    ["Compound interest", "Reducing-balance", "Effective interest"],
-    { hint: "Hire purchase is the simple-interest case: A = P(1 + i·n).", answerLabel: "Simple interest" }),
+    L("Hire purchase uses which type of interest?", "Watter soort rente gebruik huurkoop?"),
+    L("Simple interest", "Enkelvoudige rente"),
+    [L("Compound interest", "Saamgestelde rente"), L("Reducing-balance", "Verminderde saldo"), L("Effective interest", "Effektiewe rente")],
+    { hint: L("Hire purchase is the simple-interest case: A = P(1 + i·n).", "Huurkoop is die geval van enkelvoudige rente: A = P(1 + i·n)."), answerLabel: L("Simple interest", "Enkelvoudige rente") }),
 
   /* steps, 2026-08-30 audit-day split (Session 2) — prompt, numbers and
      the worked `solution` are unchanged; the solution's own three lines
@@ -89,24 +90,24 @@ const SKILLS = {
     const A = Math.round(simpleAmount(owed, toFrac(r), n));
     return {
       type: "steps", concept: CL,
-      prompt: `A fridge costs <b>R${money0(price)}</b>. A <b>${p}%</b> deposit is paid, and the balance is bought on hire purchase at <b>${r}% p.a. simple interest</b> for <b>${n} years</b>. How much is repaid on the balance in total (in rand, deposit not included)?`,
+      prompt: L(`A fridge costs <b>R${money0(price)}</b>. A <b>${p}%</b> deposit is paid, and the balance is bought on hire purchase at <b>${r}% p.a. simple interest</b> for <b>${n} years</b>. How much is repaid on the balance in total (in rand, deposit not included)?`, `'n Yskas kos <b>R${money0(price)}</b>. 'n Deposito van <b>${p}%</b> word betaal, en die saldo word op huurkoop gekoop teen <b>${r}% p.j. enkelvoudige rente</b> vir <b>${n} jaar</b>. Hoeveel word altesaam op die saldo terugbetaal (in rand, sonder die deposito)?`),
       steps: [
-        calcStep("First: the balance after the deposit (in rand).", owed,
-          "Interest is charged on what is still owed — balance = (100 − p)% × price.", { dp: 0, tol: 0.001 }),
-        mcStep("Hire purchase: which formula applies to that balance?",
-          "A = P(1 + i·n)",
-          ["A = P(1 + i)ⁿ", "A = P(1 − i·n)", "A = P × i × n"],
-          "Hire purchase is the simple-interest case."),
-        calcStep("The total repaid on the balance (in rand).", A,
-          `A = ${owed}(1 + ${C(toFrac(r))} × ${n}) — one line on the calculator.`, { dp: 0, tol: 0.001 }),
+        calcStep(L("First: the balance after the deposit (in rand).", "Eers: die saldo ná die deposito (in rand)."), owed,
+          L("Interest is charged on what is still owed — balance = (100 − p)% × price.", "Rente word gehef op wat nog uitstaande is: saldo = (100 − p)% × prys."), { dp: 0, tol: 0.001 }),
+        mcStep(L("Hire purchase: which formula applies to that balance?", "Huurkoop: watter formule geld vir daardie saldo?"),
+          L("A = P(1 + i·n)", "A = P(1 + i·n)"),
+          [L("A = P(1 + i)ⁿ", "A = P(1 + i)ⁿ"), L("A = P(1 − i·n)", "A = P(1 − i·n)"), L("A = P × i × n", "A = P × i × n")],
+          L("Hire purchase is the simple-interest case.", "Huurkoop is die geval van enkelvoudige rente.")),
+        calcStep(L("The total repaid on the balance (in rand).", "Die totaal wat op die saldo terugbetaal word (in rand)."), A,
+          L(`A = ${owed}(1 + ${C(toFrac(r))} × ${n}) — one line on the calculator.`, `A = ${owed}(1 + ${C(toFrac(r))} × ${n}): een reël op die sakrekenaar.`), { dp: 0, tol: 0.001 }),
       ],
       expected: A, dp: 0,
-      hint: `First find the balance after the deposit, then use A = P(1 + i·n) on that balance.`,
-      answerLabel: `A = R${money0(owed)}(1 + ${C(toFrac(r))}×${n}) = R${money0(A)}`,
+      hint: L(`First find the balance after the deposit, then use A = P(1 + i·n) on that balance.`, `Kry eers die saldo ná die deposito, en gebruik dan A = P(1 + i·n) op daardie saldo.`),
+      answerLabel: L(`A = R${money0(owed)}(1 + ${C(toFrac(r))}×${n}) = R${money0(A)}`, `A = R${money0(owed)}(1 + ${C(toFrac(r))}×${n}) = R${money0(A)}`),
       solution: [
-        { s: `Balance = ${C(toFrac(100 - p))} × ${price} = ${owed}`, r: "interest is charged on what is still owed" },
-        { s: `A = P(1 + i·n) = ${owed}(1 + ${C(toFrac(r))} × ${n})`, r: "hire purchase → simple interest" },
-        { s: `A = ${owed} × ${C(1 + toFrac(r) * n)} = ${A}` },
+        { s: L(`Balance = ${C(toFrac(100 - p))} × ${price} = ${owed}`, `Saldo = ${C(toFrac(100 - p))} × ${price} = ${owed}`), r: L("interest is charged on what is still owed", "rente word gehef op wat nog uitstaande is") },
+        { s: L(`A = P(1 + i·n) = ${owed}(1 + ${C(toFrac(r))} × ${n})`, `A = P(1 + i·n) = ${owed}(1 + ${C(toFrac(r))} × ${n})`), r: L("hire purchase → simple interest", "huurkoop → enkelvoudige rente") },
+        { s: L(`A = ${owed} × ${C(1 + toFrac(r) * n)} = ${A}`, `A = ${owed} × ${C(1 + toFrac(r) * n)} = ${A}`) },
       ],
     };
   },

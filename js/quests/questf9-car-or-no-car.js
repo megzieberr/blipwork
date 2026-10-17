@@ -39,13 +39,14 @@
 import { mc, mcNum, C, rng } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
 import { rand, toFrac, COMPOUNDING, pow } from "../finlib.js";
+import { L as afL } from "../lang.js";
 
 const CAR = "carOrNoCar";
 export const REFRAIN = "A car only if it has to move. Already there? No car.";
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = COMPOUNDING.filter(c => [1, 2, 4, 12].includes(c.k)).map(c => c.k);
-const HOW = k => (k === 2 ? "half‑yearly" : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (Fix A review, as f10)
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (Fix A review, as f10)
 const SAVE_AMTS = [1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 8000, 10000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500];
 /* every amount stays under R100 000 (7 glyphs at most), n ≤ 6: two labels
@@ -64,7 +65,7 @@ const rands = v => rand(v, 0).replace(/ /g, NB);                       // "R8 00
    _finance-check's f9Scene reads it) */
 const money = (v, bold = false) => nw(bold ? `<b>${rands(v)}</b>` : rands(v));
 const amt0 = v => rand(v, 0).slice(1).replace(/ /g, NB);               // "8 000", as it stands in an equation
-const pa = r => `${r}%${NB}p.a.`;
+const pa = r => afL(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`);
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, j) => lo + j);
 const yrs = y => `${y} year${y === 1 ? "" : "s"}`;
@@ -113,14 +114,14 @@ const graphOf = (sc, meet) => ({
   roads: sc.roads.map(r => ({ from: r.from, to: r.to, rate: `${r.r}% p.a.`, k: r.k })),
   leaders: true,                                   // a thin line from each lone amount down to its own T
 });
-const CAPTION = "T in years";
+const CAPTION = afL("T in years", "T in jare");
 
 function story(sc) {
   const [r0, r1] = sc.roads, { p } = sc;
-  const rate = `${pa(r0.r)} compounded ${HOW(r0.k)}${r1 ? `; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}` : ""}`;
+  const rate = afL(`${pa(r0.r)} compounded ${HOW(r0.k)}${r1 ? `; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}` : ""}`, `${pa(r0.r)} ${HOW(r0.k)} saamgestel${r1 ? `; vanaf T${r1.from} is die koers ${pa(r1.r)} ${HOW(r1.k)} saamgestel` : ""}`);
   return sc.saving
-    ? `${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.`
-    : `${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.`;
+    ? afL(`${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.`, `${cap(p.he)} spaar teen ${rate}. ${cap(p.his)} deposito's groei tot die totaal, A.`)
+    : afL(`${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.`, `${cap(p.he)} leen die totaal, P, teen ${rate}, en betaal dit in dele terug.`);
 }
 
 /* ---------- the trip: gear, and one leg per road driven over ---------- */
@@ -146,8 +147,8 @@ function bracket(l) {
    rides with its first car, a second car is a unit of its own, and the
    plain space between them is the only place the line may break */
 const term = (v, legs) => [nw(amt0(v) + (legs.length ? bracket(legs[0]) : "")), ...legs.slice(1).map(l => nw(bracket(l)))].join(" ");
-const roadName = l => `the ${l.r}% road`;
-const gearOf = dir => (dir > 0 ? "forward gear" : "reverse gear");
+const roadName = l => afL(`the ${l.r}% road`, `die ${l.r}%-pad`);
+const gearOf = dir => (dir > 0 ? afL("forward gear", "vorentoe") : afL("reverse gear", "trurat"));
 const expText = l => `${l.exp < 0 ? "−" : ""}${l.years} × ${l.k} = ${C(l.exp)}`;
 
 /* the worked solution, in the ONE-equation spirit: what moves, which gear,
@@ -156,7 +157,7 @@ const expText = l => `${l.exp < 0 ? "−" : ""}${l.years} × ${l.k} = ${C(l.exp)
    (the exponent cards), so that line is not said twice. */
 function carSolution(sc, a, meet, quiet = null) {
   const tr = trip(sc, a.t, meet);
-  const out = [{ s: `The meeting day is T${meet}. The ${money(a.v)} stands at T${a.t}.`, r: tr.dir === 0 ? "it is already there" : "it has to move" }];
+  const out = [{ s: afL(`The meeting day is T${meet}. The ${money(a.v)} stands at T${a.t}.`, `Die ontmoetingsdag is T${meet}. Die ${money(a.v)} staan by T${a.t}.`), r: tr.dir === 0 ? afL("it is already there", "dit is reeds daar") : afL("it has to move", "dit moet skuif") }];
   if (tr.dir === 0) {
     out.push({ s: `No car: in the one equation it is just ${nw(amt0(a.v))}, with no bracket.`, r: "it does not move" });
   } else {
@@ -210,17 +211,17 @@ function needsCar() {
   const yes = a.t !== meet;
   return {
     type: "yesno", concept: CAR,
-    prompt: `${story(sc)} Does the ${money(a.v, true)} need a car to reach the meeting day?`,
+    prompt: afL(`${story(sc)} Does the ${money(a.v, true)} need a car to reach the meeting day?`, `${story(sc)} Het die ${money(a.v, true)} 'n kar nodig om by die ontmoetingsdag te kom?`),
     yes,
-    ...extras(sc, a, meet, "Find the flag. Is the amount already standing on that T?",
-      yes ? `Yes: it has to move from T${a.t} to T${meet}` : `No: it already stands on the meeting day, T${meet}`),
+    ...extras(sc, a, meet, afL("Find the flag. Is the amount already standing on that T?", "Vind die vlag. Staan die bedrag reeds op daardie T?"),
+      yes ? afL(`Yes: it has to move from T${a.t} to T${meet}`, `Ja: dit moet van T${a.t} na T${meet} skuif`) : afL(`No: it already stands on the meeting day, T${meet}`, `Nee: dit staan reeds op die ontmoetingsdag, T${meet}`)),
   };
 }
 
 const GEAR = {
-  fwd: "Forward gear (×): the meeting day is later",
-  rev: "Reverse gear (÷): the meeting day is earlier",
-  none: "No car: it is already there",
+  fwd: afL("Forward gear (×): the meeting day is later", "Vorentoe (×): die ontmoetingsdag is later"),
+  rev: afL("Reverse gear (÷): the meeting day is earlier", "Trurat (÷): die ontmoetingsdag is vroeër"),
+  none: afL("No car: it is already there", "Geen kar nie: dit is reeds daar"),
 };
 /* mc: which gear? All three options on every card, so the "no car" option
    never gives a meeting-day card away */
@@ -232,23 +233,23 @@ function gear() {
   });
   const right = tr.dir > 0 ? GEAR.fwd : tr.dir < 0 ? GEAR.rev : GEAR.none;
   return mc(CAR,
-    `${story(sc)} Which gear moves the ${money(a.v, true)} to the meeting day?`,
+    afL(`${story(sc)} Which gear moves the ${money(a.v, true)} to the meeting day?`, `${story(sc)} Watter rat skuif die ${money(a.v, true)} na die ontmoetingsdag?`),
     right, Object.values(GEAR).filter(o => o !== right),
-    extras(sc, a, meet, "A later date: forward gear (×). An earlier date: reverse gear (÷). Already there: no car.",
-      tr.dir === 0 ? `No car: the ${money(a.v)} already stands on T${meet}` : `${cap(gearOf(tr.dir))}: from T${a.t} to T${meet}`));
+    extras(sc, a, meet, afL("A later date: forward gear (×). An earlier date: reverse gear (÷). Already there: no car.", "'n Latere datum: vorentoe (×). 'n Vroeëre datum: trurat (÷). Reeds daar: geen kar nie."),
+      tr.dir === 0 ? afL(`No car: the ${money(a.v)} already stands on T${meet}`, `Geen kar nie: die ${money(a.v)} staan reeds op T${meet}`) : afL(`${cap(gearOf(tr.dir))}: from T${a.t} to T${meet}`, `${cap(gearOf(tr.dir))}: van T${a.t} na T${meet}`)));
 }
 
 /* recall: an amount on the meeting day needs no car (yes/no or mc) */
-const ON_DAY = ["No car: it is already there", "A car in forward gear", "A car in reverse gear", "One car for each road"];
+const ON_DAY = [afL("No car: it is already there", "Geen kar nie: dit is reeds daar"), afL("A car in forward gear", "'n Kar wat vorentoe ry"), afL("A car in reverse gear", "'n Kar in trurat"), afL("One car for each road", "Een kar vir elke pad")];
 function onTheDay() {
   const { sc, a, meet } = deal({ two: rng() < 0.5, onDay: true, fix: [2, 6] });
-  const ex = extras(sc, a, meet, "Does it have to move at all?", `No car: the ${money(a.v)} already stands on the meeting day`);
+  const ex = extras(sc, a, meet, afL("Does it have to move at all?", "Moet dit enigsins skuif?"), afL(`No car: the ${money(a.v)} already stands on the meeting day`, `Geen kar nie: die ${money(a.v)} staan reeds op die ontmoetingsdag`));
   if (rng() < 0.5) return {
     type: "yesno", concept: CAR,
-    prompt: `An amount standing on the meeting day, like the ${money(a.v, true)} here: does it need a car?`,
+    prompt: afL(`An amount standing on the meeting day, like the ${money(a.v, true)} here: does it need a car?`, `'n Bedrag wat op die ontmoetingsdag staan, soos die ${money(a.v, true)} hier: het dit 'n kar nodig?`),
     yes: false, ...ex,
   };
-  return mc(CAR, `An amount standing on the meeting day, like the ${money(a.v, true)} here: car or no car?`,
+  return mc(CAR, afL(`An amount standing on the meeting day, like the ${money(a.v, true)} here: car or no car?`, `'n Bedrag wat op die ontmoetingsdag staan, soos die ${money(a.v, true)} hier: kar of geen kar?`),
     ON_DAY[0], ON_DAY.slice(1), ex);
 }
 
@@ -258,10 +259,10 @@ function exponent() {
   const L = tr.legs[0], e = L.exp, s = tr.dir, base = L.years * L.k;
   return {
     type: "mc", concept: CAR,
-    prompt: `${story(sc)} The ${money(a.v, true)} is moved to the meeting day. Its exponent is …`,
+    prompt: afL(`${story(sc)} The ${money(a.v, true)} is moved to the meeting day. Its exponent is …`, `${story(sc)} Die ${money(a.v, true)} word na die ontmoetingsdag geskuif. Sy eksponent is …`),
     /* decoys: the wrong sign, years without × k, one period off, a year off */
     options: mcNum(e, [-e, s * L.years, s * (base + 1), s * (base - 1), -s * L.years, s * (L.years + 1) * L.k]),
-    ...extras(sc, a, meet, "Exponent = years × k on its road, with a minus sign for reverse gear.", `exponent ${expText(L)}`, L.r),
+    ...extras(sc, a, meet, afL("Exponent = years × k on its road, with a minus sign for reverse gear.", "Eksponent = jare × k op sy pad, met 'n minusteken vir trurat."), afL(`exponent ${expText(L)}`, `eksponent ${expText(L)}`), L.r),
   };
 }
 
@@ -270,13 +271,13 @@ function roads() {
   const cross = rng() < 0.5;
   const { sc, a, meet, tr } = deal({ two: true, onDay: false, want: t => (t.legs.length === 2) === cross, fix: cross ? [0, 6] : [1, 6] });
   const [A, B] = sc.roads;
-  const only = r => `The ${r.r}% road only`;
-  const both = tr.dir > 0 ? `The ${A.r}% road, then the ${B.r}% road` : `The ${B.r}% road, then the ${A.r}% road`;
+  const only = r => afL(`The ${r.r}% road only`, `Net die ${r.r}%-pad`);
+  const both = tr.dir > 0 ? afL(`The ${A.r}% road, then the ${B.r}% road`, `Die ${A.r}%-pad, dan die ${B.r}%-pad`) : afL(`The ${B.r}% road, then the ${A.r}% road`, `Die ${B.r}%-pad, dan die ${A.r}%-pad`);
   const right = tr.legs.length === 2 ? both : only(tr.legs[0]);
   return mc(CAR,
-    `${story(sc)} Over which road(s) does the ${money(a.v, true)} travel to reach the meeting day?`,
-    right, [only(A), only(B), both, "No road: it is already on the meeting day"].filter(o => o !== right),
-    extras(sc, a, meet, "Follow the line from the amount to the flag. Which colours does it drive over?", right));
+    afL(`${story(sc)} Over which road(s) does the ${money(a.v, true)} travel to reach the meeting day?`, `${story(sc)} Oor watter pad of paaie ry die ${money(a.v, true)} om by die ontmoetingsdag te kom?`),
+    right, [only(A), only(B), both, afL("No road: it is already on the meeting day", "Geen pad nie: dit is reeds op die ontmoetingsdag")].filter(o => o !== right),
+    extras(sc, a, meet, afL("Follow the line from the amount to the flag. Which colours does it drive over?", "Volg die lyn van die bedrag na die vlag. Oor watter kleure ry dit?"), right));
 }
 
 /* mc: an amount that crosses the rate change gets TWO cars, one per road */
@@ -286,9 +287,9 @@ function twoCars() {
   const Y = tr.legs[0].years + tr.legs[1].years;
   const oneCar = l => term(a.v, [{ ...l, years: Y, exp: tr.dir * Y * l.k }]);       // the whole trip on one road's rate
   return mc(CAR,
-    `${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day? Pick the expression that shows them.`,
+    afL(`${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day? Pick the expression that shows them.`, `${story(sc)} Hoeveel karre het die ${money(a.v, true)} nodig om by die ontmoetingsdag te kom? Kies die uitdrukking wat hulle wys.`),
     right, [oneCar(tr.legs[0]), oneCar(tr.legs[1]), `${term(a.v, [tr.legs[0]])} + ${term(a.v, [tr.legs[1]])}`],
-    extras(sc, a, meet, "One car per road: every colour it drives over gets its own bracket, multiplied.", `2 cars: ${right}`));
+    extras(sc, a, meet, afL("One car per road: every colour it drives over gets its own bracket, multiplied.", "Een kar per pad: elke kleur waaroor dit ry, kry sy eie hakie, vermenigvuldig."), afL(`2 cars: ${right}`, `2 karre: ${right}`)));
 }
 
 /* mcNum: the exponent of ONE of the two cars of a crossing trip */
@@ -297,12 +298,12 @@ function roadExponent() {
   const j = randInt(0, 1), L = tr.legs[j], O = tr.legs[1 - j], s = tr.dir, Y = L.years + O.years;
   return {
     type: "mc", concept: CAR,
-    prompt: `${story(sc)} The ${money(a.v, true)} crosses the place where the road changes colour. On the <b>${L.r}% road</b>, its car's exponent is …`,
+    prompt: afL(`${story(sc)} The ${money(a.v, true)} crosses the place where the road changes colour. On the <b>${L.r}% road</b>, its car's exponent is …`, `${story(sc)} Die ${money(a.v, true)} gaan oor die plek waar die pad van kleur verander. Op die <b>${L.r}%-pad</b> is sy kar se eksponent …`),
     /* decoys: the wrong sign, the whole trip on this road, years without × k,
        this road's years with the other road's k, one period off */
     options: mcNum(L.exp, [-L.exp, s * Y * L.k, s * L.years, s * L.years * O.k, s * (L.years * L.k + 1), s * (L.years + 1) * L.k]),
-    ...extras(sc, a, meet, "Count only the years on that colour, times that road's k. Reverse gear makes it negative.",
-      `exponent on ${roadName(L)}: ${expText(L)}`, L.r),
+    ...extras(sc, a, meet, afL("Count only the years on that colour, times that road's k. Reverse gear makes it negative.", "Tel net die jare op daardie kleur, maal daardie pad se k. Trurat maak dit negatief."),
+      afL(`exponent on ${roadName(L)}: ${expText(L)}`, `eksponent op ${roadName(L)}: ${expText(L)}`), L.r),
   };
 }
 
@@ -316,10 +317,10 @@ function carCount() {
   const cars = tr.legs.length;
   return {
     type: "mc", concept: CAR,
-    prompt: `${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day?`,
+    prompt: afL(`${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day?`, `${story(sc)} Hoeveel karre het die ${money(a.v, true)} nodig om by die ontmoetingsdag te kom?`),
     options: mcNum(cars, [0, 1, 2, 3]),
-    ...extras(sc, a, meet, "Already there: no car. One colour: one car. Two colours: two cars.",
-      cars === 0 ? "0 cars, it already stands on the meeting day" : cars === 1 ? "1 car, it drives over one road" : "2 cars, one car per road"),
+    ...extras(sc, a, meet, afL("Already there: no car. One colour: one car. Two colours: two cars.", "Reeds daar: geen kar nie. Een kleur: een kar. Twee kleure: twee karre."),
+      cars === 0 ? afL("0 cars, it already stands on the meeting day", "0 karre, dit staan reeds op die ontmoetingsdag") : cars === 1 ? afL("1 car, it drives over one road", "1 kar, dit ry oor een pad") : afL("2 cars, one car per road", "2 karre, een kar per pad")),
   };
 }
 

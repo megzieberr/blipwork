@@ -67,6 +67,7 @@ import { mc } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
 import { rand, toFrac } from "../finlib.js";
 import { jugDiscover } from "../concepts.js";
+import { L } from "../lang.js";
 
 const TOTAL = "theTotal";
 
@@ -97,7 +98,7 @@ const WHO = {
   Brian: HE, Stephanie: SHE, Bob: HE, Arnold: HE, David: HE,
 };
 export const F8_NAMES = Object.keys(WHO);
-const ITEMS = ["lounge suite", "motorbike", "laptop", "fridge", "TV", "bed"];   // never "car": f9 to f13's car is the bracket
+const ITEMS = [L("lounge suite", "lounge suite"), L("motorbike", "motorbike"), L("laptop", "laptop"), L("fridge", "fridge"), L("TV", "TV"), L("bed", "bed")];   // never "car": f9 to f13's car is the bracket
 
 /* ---------- card 1 opens on a DISCOVERY slide (her notes, 11 Oct 16:54, 16:56) ----------
    "Make the first slide just the jug": three frames, one jug at a time
@@ -111,14 +112,14 @@ const ITEMS = ["lounge suite", "motorbike", "laptop", "fridge", "TV", "bed"];   
    js/concepts.js. NB keeps "the total", "the jug", "full jug", "the END" and
    "the START" on one line. */
 const DISCOVER = [
-  jugDiscover("empty") + `<div class="jd-cap">`
-    + `<p>Payments are <b>coins</b>. The${NB}total (the${NB}lumpsum) is <b>the${NB}jug</b>.</p>`
-    + `<p>Your textbook says “lump sum”. That is the${NB}total we are talking about. From now on we just call it the${NB}total.</p>`
-    + `<p class="muted small">Tap Next to see where the jug sits.</p></div>`,
-  jugDiscover("save") + `<div class="jd-cap">`
-    + `<p><b>Savings:</b> you fill the jug coin by coin. The${NB}total sits at <b>the${NB}END</b>.</p></div>`,
-  jugDiscover("loan") + `<div class="jd-cap">`
-    + `<p><b>A loan:</b> the bank hands you the full${NB}jug at <b>the${NB}START</b>. The${NB}total sits at the beginning, and your coins pay it back.</p></div>`,
+  jugDiscover(L("empty", "empty")) + `<div class="jd-cap">`
+    + L(`<p>Payments are <b>coins</b>. The${NB}total (the${NB}lumpsum) is <b>the${NB}jug</b>.</p>`, `<p>Paaiemente is <b>munte</b>. Die${NB}totaal (die${NB}enkelbedrag) is <b>die${NB}beker</b>.</p>`)
+    + L(`<p>Your textbook says “lump sum”. That is the${NB}total we are talking about. From now on we just call it the${NB}total.</p>`, `<p>Jou handboek sê “enkelbedrag”. Dit is die${NB}totaal waarvan ons praat. Van nou af noem ons dit net die${NB}totaal.</p>`)
+    + L(`<p class="muted small">Tap Next to see where the jug sits.</p></div>`, `<p class="muted small">Klik op Next om te sien waar die beker staan.</p></div>`),
+  jugDiscover(L("save", "save")) + `<div class="jd-cap">`
+    + L(`<p><b>Savings:</b> you fill the jug coin by coin. The${NB}total sits at <b>the${NB}END</b>.</p></div>`, `<p><b>Spaar:</b> jy vul die beker munt vir munt. Die${NB}totaal staan aan <b>die${NB}EINDE</b>.</p></div>`),
+  jugDiscover(L("loan", "loan")) + `<div class="jd-cap">`
+    + L(`<p><b>A loan:</b> the bank hands you the full${NB}jug at <b>the${NB}START</b>. The${NB}total sits at the beginning, and your coins pay it back.</p></div>`, `<p><b>'n Lening:</b> die bank gee jou die volle${NB}beker aan <b>die${NB}BEGIN</b>. Die${NB}totaal staan aan die begin, en jou munte betaal dit terug.</p></div>`),
 ];
 /* Frame 3 stays up for the whole card (replace mode), but card 1's own story
    is always savings: so once the loan has drained, its caption fades to the
@@ -163,15 +164,15 @@ if (typeof document !== "undefined" && !globalThis.__f8JugTap) {
    note: the pill a chip wears once it is answered; why: what a miss on it
    says; sol: its line in the worked solution */
 const KIND = {
-  jug:   { note: "the jug", sol: "the jug: what someone has, borrows or wants to have, the ONE total" },
-  in:    { note: "a coin: in", why: "That is a coin: money going in on its day.", sol: "a coin: money going in on its day" },
-  out:   { note: "a coin: out", why: "That is a coin: money coming out on its day.", sol: "a coin: money coming out on its day" },
-  repay: { note: "a coin: repayment", why: "That is a coin: a repayment, money going back to the bank on its day.", sol: "a coin: a repayment going back to the bank on its day" },
-  down:  { note: "a coin: down payment", why: "That is a coin: the down payment, paid on day one straight to the shop.", sol: "a coin: the down payment, paid on day one straight to the shop" },
-  rate:  { note: "rate and time", why: "That is a rate-and-time sentence, not an amount.", sol: "rate and time: not an amount" },
+  jug:   { note: L("the jug", "die beker"), sol: L("the jug: what someone has, borrows or wants to have, the ONE total", "die beker: wat iemand het, leen of wil hê, die EEN totaal") },
+  in:    { note: L("a coin: in", "'n munt: in"), why: L("That is a coin: money going in on its day.", "Dit is 'n munt: geld wat op sy dag ingaan."), sol: L("a coin: money going in on its day", "'n munt: geld wat op sy dag ingaan") },
+  out:   { note: L("a coin: out", "'n munt: uit"), why: L("That is a coin: money coming out on its day.", "Dit is 'n munt: geld wat op sy dag uitkom."), sol: L("a coin: money coming out on its day", "'n munt: geld wat op sy dag uitkom") },
+  repay: { note: L("a coin: repayment", "'n munt: terugbetaling"), why: L("That is a coin: a repayment, money going back to the bank on its day.", "Dit is 'n munt: 'n terugbetaling, geld wat op sy dag terug na die bank gaan."), sol: L("a coin: a repayment going back to the bank on its day", "'n munt: 'n terugbetaling wat op sy dag terug na die bank gaan") },
+  down:  { note: L("a coin: down payment", "'n munt: aanbetaling"), why: L("That is a coin: the down payment, paid on day one straight to the shop.", "Dit is 'n munt: die aanbetaling, op dag een reguit aan die winkel betaal."), sol: L("a coin: the down payment, paid on day one straight to the shop", "'n munt: die aanbetaling, op dag een reguit aan die winkel betaal") },
+  rate:  { note: L("rate and time", "koers en tyd"), why: L("That is a rate-and-time sentence, not an amount.", "Dit is 'n sin oor koers en tyd, nie 'n bedrag nie."), sol: L("rate and time: not an amount", "koers en tyd: nie 'n bedrag nie") },
 };
-const DEFINITION = "The total is the ONE amount worth the same as ALL the payments together, once they are all on the same day.";
-const JUG_HINT = "The jug is what someone HAS, BORROWS or WANTS TO HAVE. Coins are what they DO: deposit, withdraw, pay.";
+const DEFINITION = L("The total is the ONE amount worth the same as ALL the payments together, once they are all on the same day.", "Die totaal is die EEN bedrag wat net soveel werd is as AL die paaiemente saam, sodra hulle almal op dieselfde dag is.");
+const JUG_HINT = L("The jug is what someone HAS, BORROWS or WANTS TO HAVE. Coins are what they DO: deposit, withdraw, pay.", "Die beker is wat iemand HET, LEEN of WIL HÊ. Munte is wat hulle DOEN: deponeer, onttrek, betaal.");
 
 /* a sentence: { kind, say(who) } where who = { S, s }: the subject at the
    start of a sentence and in the middle of one. The FIRST sentence that names
@@ -196,7 +197,7 @@ const rateSen = (r, k, loan) => sen("rate", () => pick(loan
 /* ---------- the paragraph card ---------- */
 function paragraphCard(pos, { name, loan, hp = false, n, order }) {
   const chips = tell(order, name);
-  const jugAt = loan ? 0 : n, role = loan ? "P" : "A";
+  const jugAt = loan ? 0 : n, role = loan ? L("P", "P") : L("A", "A");
   const jugChip = chips.find(c => c.kind === "jug");
   /* steps 2 and 3 are two short side-by-side buttons: no pill (it would not fit
      half a 360-px row), only the miss sentence */
@@ -204,50 +205,50 @@ function paragraphCard(pos, { name, loan, hp = false, n, order }) {
 
   const step1 = {
     kind: "mc",
-    prompt: `Tap the sentence that is the jug.<br><span class="muted small">One of them is the total; the others are coins, or the rate and the time.</span>`,
+    prompt: L(`Tap the sentence that is the jug.<br><span class="muted small">One of them is the total; the others are coins, or the rate and the time.</span>`, `Klik op die sin wat die beker is.<br><span class="muted small">Een daarvan is die totaal; die ander is munte, of die koers en die tyd.</span>`),
     options: chips.map(c => opt(c.text, c.kind === "jug", KIND[c.kind].note, KIND[c.kind].why)),
     hint: JUG_HINT,
   };
   const step2 = {
     kind: "mc", layout: "grid2",
-    prompt: "Savings or loan?",
+    prompt: L("Savings or loan?", "Spaar of lening?"),
     options: shuffled([
-      opt("Savings", !loan, null,
-        loan ? (hp ? "Hire purchase is a loan: the down payment goes to the shop and the rest is borrowed." : "Somebody borrows here: the bank hands over the full jug, and the coins pay it back.") : null),
-      opt("Loan", loan, null,
-        loan ? null : "Nobody borrows here: the coins go into a savings account and fill the jug."),
+      opt(L("Savings", "Spaar"), !loan, null,
+        loan ? (hp ? L("Hire purchase is a loan: the down payment goes to the shop and the rest is borrowed.", "Huurkoop is 'n lening: die aanbetaling gaan na die winkel en die res word geleen.") : L("Somebody borrows here: the bank hands over the full jug, and the coins pay it back.", "Iemand leen hier: die bank gee die volle beker oor, en die munte betaal dit terug.")) : null),
+      opt(L("Loan", "Lening"), loan, null,
+        loan ? null : L("Nobody borrows here: the coins go into a savings account and fill the jug.", "Niemand leen hier nie: die munte gaan in 'n spaarrekening en vul die beker.")),
     ]),
-    hint: "Is someone filling an account, or did the bank hand money over? Hire purchase counts as a loan with a down payment.",
+    hint: L("Is someone filling an account, or did the bank hand money over? Hire purchase counts as a loan with a down payment.", "Vul iemand 'n rekening, of het die bank geld oorhandig? Huurkoop tel as 'n lening met 'n aanbetaling."),
   };
   const step3 = {
     kind: "mc", layout: "grid2",
-    prompt: "Does the jug sit at T0 or at the end?",
+    prompt: L("Does the jug sit at T0 or at the end?", "Staan die beker by T0 of aan die einde?"),
     options: [
-      opt("T0", loan, null,
-        loan ? null : "Savings fill the jug coin by coin: it is full at the END."),
-      opt(`T${n}`, !loan, null,
-        loan ? "The bank hands you the full jug at the START: the loan is the jug at T0." : null),
+      opt(L("T0", "T0"), loan, null,
+        loan ? null : L("Savings fill the jug coin by coin: it is full at the END.", "Spaargeld vul die beker munt vir munt: dit is vol aan die EINDE.")),
+      opt(L(`T${n}`, `T${n}`), !loan, null,
+        loan ? L("The bank hands you the full jug at the START: the loan is the jug at T0.", "Die bank gee jou die volle beker aan die BEGIN: die lening is die beker by T0.") : null),
     ],
-    hint: "Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.",
+    hint: L("Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.", "Spaar: jy vul die beker, so dit staan aan die einde. 'n Lening: die bank gee jou die beker aan die begin."),
     /* the feedback side: the jug on the timeline, "?" in its ring with its
        letter, no coins yet (js/questions.js draws it once the step is done) */
     graphAfter: { type: "timeline", n, nodes: [{ t: jugAt, label: "?", role }] },
-    graphAfterCap: "T in years",
+    graphAfterCap: L("T in years", "T in jare"),
   };
 
-  const kindWord = loan ? (hp ? "Hire purchase is a loan" : "A loan") : "Savings";
-  const where = loan ? "T0, the start" : `T${n}, the end`;
+  const kindWord = loan ? (hp ? L("Hire purchase is a loan", "Huurkoop is 'n lening") : L("A loan", "'n Lening")) : L("Savings", "Spaar");
+  const where = loan ? L("T0, the start", "T0, die begin") : L(`T${n}, the end`, `T${n}, die einde`);
   return {
     type: "steps", concept: TOTAL,
-    prompt: pos === 0 ? "First the idea. Then a finance question, cut into its sentences." : "A finance question, cut into its sentences.",
+    prompt: pos === 0 ? L("First the idea. Then a finance question, cut into its sentences.", "Eers die idee. Dan 'n vraag oor finansies, in sy sinne opgesny.") : L("A finance question, cut into its sentences.", "'n Vraag oor finansies, in sy sinne opgesny."),
     ...(pos === 0 ? { reveal: DISCOVER.slice(), revealMode: "replace" } : {}),
     steps: [step1, step2, step3],
-    hint: "Find the jug in the words first: what someone has, borrows or wants to have.",
-    answerLabel: `The jug: “${jugChip.text}” ${kindWord}, so the jug is ${role}, at ${where}.`,
+    hint: L("Find the jug in the words first: what someone has, borrows or wants to have.", "Vind eers die beker in die woorde: wat iemand het, leen of wil hê."),
+    answerLabel: L(`The jug: “${jugChip.text}” ${kindWord}, so the jug is ${role}, at ${where}.`, `Die beker: “${jugChip.text}” ${kindWord}, so die beker is ${role}, by ${where}.`),
     solution: [
       ...chips.map(ch => ({ s: ch.text, r: KIND[ch.kind].sol })),
-      { s: loan ? `${kindWord}: the bank hands over the full jug at the start, so the jug is P, at T0.`
-                : `Savings: the coins fill the jug, so the jug is A, at the end, T${n}.` },
+      { s: loan ? L(`${kindWord}: the bank hands over the full jug at the start, so the jug is P, at T0.`, `${kindWord}: die bank gee die volle beker aan die begin oor, so die beker is P, by T0.`)
+                : L(`Savings: the coins fill the jug, so the jug is A, at the end, T${n}.`, `Spaar: die munte vul die beker, so die beker is A, aan die einde, T${n}.`) },
       { s: DEFINITION },
     ],
   };
@@ -270,9 +271,9 @@ function jugTwoDeposits(pos) {
   };
   const make = ({ name, n, r, k, d1, d2, t2, shape, ask }) => {
     if (d1 === d2) return null;
-    const in1 = sen("in", w => `${w.S} deposits ${money(d1)} into a savings account now.`);
-    const in1b = sen("in", w => `${w.S} deposits ${money(d1)} into the account now.`);
-    const in2 = sen("in", w => `${w.S} deposits another ${money(d2)} after ${years(t2)}.`);
+    const in1 = sen(L("in", "in"), w => `${w.S} deposits ${money(d1)} into a savings account now.`);
+    const in1b = sen(L("in", "in"), w => `${w.S} deposits ${money(d1)} into the account now.`);
+    const in2 = sen(L("in", "in"), w => `${w.S} deposits another ${money(d2)} after ${years(t2)}.`);
     const rate = rateSen(r, k, false);
     const jugEnd = sen("jug", w => [
       `How much will ${w.s} have in the account after ${years(n)}?`,
@@ -320,9 +321,9 @@ function jugWithdrawal(pos) {
   const make = ({ name, n, r, k, d1, w, d2, tw, td, rateAt, ask }) => {
     if (w === d1 || w === d2 || d1 === d2) return null;
     const first = ask === 2;                                          // the jug can open the paragraph too
-    const in1 = sen("in", s => `${s.S} deposits ${money(d1)} into ${first ? "the" : "a savings"} account now.`);
-    const out = sen("out", s => pick([`${s.S} withdraws ${money(w)} after ${years(tw)}.`, `${s.S} takes ${money(w)} out of the account after ${years(tw)}.`]));
-    const in2 = d2 ? sen("in", s => `${s.S} deposits another ${money(d2)} after ${years(td)}.`) : null;
+    const in1 = sen(L("in", "in"), s => `${s.S} deposits ${money(d1)} into ${first ? "the" : "a savings"} account now.`);
+    const out = sen(L("out", "out"), s => pick([`${s.S} withdraws ${money(w)} after ${years(tw)}.`, `${s.S} takes ${money(w)} out of the account after ${years(tw)}.`]));
+    const in2 = d2 ? sen(L("in", "in"), s => `${s.S} deposits another ${money(d2)} after ${years(td)}.`) : null;
     const coins = [in1, ...[{ t: tw, x: out }, ...(in2 ? [{ t: td, x: in2 }] : [])].sort((a, b) => a.t - b.t).map(c => c.x)];
     const rate = rateSen(r, k, false);
     const jug = sen("jug", s => [
@@ -347,7 +348,7 @@ function jugHirePurchase(pos) {
     const loan = price - down;
     if (!(down > 0 && loan > 0) || !(grow(loan, r, k, t1) > r1)) return null;      // honest: x, the last repayment, is positive
     const a = /^[aeiou]/i.test(item) ? "an" : "a";
-    const downS = sen("down", s => `${s.S} buys ${a} ${item} for ${money(price)} and pays a down payment of ${money(down)} straight to the shop.`);
+    const downS = sen(L("down", "down"), s => `${s.S} buys ${a} ${item} for ${money(price)} and pays a down payment of ${money(down)} straight to the shop.`);
     const jug = sen("jug", s => statedLoan ? `${s.S} borrows the rest, ${money(loan)}, from the bank.` : `${s.S} borrows the rest of the price from the bank.`);
     const reps = split
       ? [sen("repay", s => `${s.S} pays back ${money(r1)} after ${years(t1)}.`), sen("repay", s => `${s.S} pays the rest, an amount x, after ${years(n)}.`)]
@@ -356,7 +357,7 @@ function jugHirePurchase(pos) {
     const order = rateFirst ? [rate, downS, jug, ...reps] : [downS, jug, ...reps, rate];
     return paragraphCard(pos, { name, loan: true, hp: true, n, order });
   };
-  return rolled(roll, make, { name: "Brenda", item: "lounge suite", n: 3, r: 14, k: 12, price: 18000, down: 3000, r1: 6000, t1: 1, statedLoan: true, split: true, rateFirst: false });
+  return rolled(roll, make, { name: "Brenda", item: L("lounge suite", "lounge suite"), n: 3, r: 14, k: 12, price: 18000, down: 3000, r1: 6000, t1: 1, statedLoan: true, split: true, rateFirst: false });
 }
 
 /* ⑤ a target amount ("wants to have", the jug, known) with one unknown
@@ -379,12 +380,12 @@ function jugTarget(pos) {
     const jug = sen("jug", s => `${s.S} wants to have ${money(T)} in a savings account after ${years(n)}.`);
     const rate = rateSen(r, k, false);
     if (askNow) {
-      const inK = sen("in", s => `${s.S} will also deposit ${money(d)} after ${years(t2)}.`);
-      const ask = sen("in", s => `How much must ${s.s} deposit now?`);
+      const inK = sen(L("in", "in"), s => `${s.S} will also deposit ${money(d)} after ${years(t2)}.`);
+      const ask = sen(L("in", "in"), s => `How much must ${s.s} deposit now?`);
       return paragraphCard(pos, { name, loan: false, n, order: [jug, inK, rate, ask] });
     }
-    const in1 = sen("in", s => `${s.S} deposits ${money(d)} now.`);
-    const inX = sen("in", s => pick([`${s.S} deposits an amount x after ${years(t2)}.`, `${s.S} will deposit one more amount, x, after ${years(t2)}.`]));
+    const in1 = sen(L("in", "in"), s => `${s.S} deposits ${money(d)} now.`);
+    const inX = sen(L("in", "in"), s => pick([`${s.S} deposits an amount x after ${years(t2)}.`, `${s.S} will deposit one more amount, x, after ${years(t2)}.`]));
     return paragraphCard(pos, { name, loan: false, n, order: jugFirst ? [jug, in1, inX, rate] : [in1, inX, rate, jug] });
   };
   return rolled(roll, make, { name: "Mandy", n: 6, r: 9, k: 4, T: 60000, d: 15000, t2: 3, askNow: false, jugFirst: true });
@@ -423,16 +424,16 @@ const JUGS = {
   owes: () => { const who = someone(), v = step500(10000, 90000); return `${who} owes the bank ${money(v)} now`; },
 };
 const COINS = {
-  in: () => { const who = someone(), v = step500(1000, 9000); return { kind: "in", text: `${who} deposits ${money(v)}` }; },
-  out: () => { const who = someone(), v = step500(1000, 9000); return { kind: "out", text: `${who} withdraws ${money(v)}` }; },
+  in: () => { const who = someone(), v = step500(1000, 9000); return { kind: L("in", "in"), text: `${who} deposits ${money(v)}` }; },
+  out: () => { const who = someone(), v = step500(1000, 9000); return { kind: L("out", "out"), text: `${who} withdraws ${money(v)}` }; },
   payAt: () => { const who = someone(), v = step500(2000, 9000), t = randInt(1, 6); return { kind: "repay", text: `${who} pays ${money(v)} at T${t}` }; },
   payBack: () => { const who = someone(), v = step500(2000, 9000), y = randInt(1, 6); return { kind: "repay", text: `${who} pays back ${money(v)} after ${years(y)}` }; },
-  down: () => { const who = someone(), v = step500(1000, 6000); return { kind: "down", text: `${who} pays a down payment of ${money(v)}` }; },
+  down: () => { const who = someone(), v = step500(1000, 6000); return { kind: L("down", "down"), text: `${who} pays a down payment of ${money(v)}` }; },
 };
 const RECALL = {
-  recallSaving: { jugs: ["has", "wants"], coins: ["in", "out", "payAt"] },
-  recallLoan: { jugs: ["borrows", "owes"], coins: ["payBack", "payAt", "down", "in"] },
-  recallMixed: { jugs: ["has", "wants", "borrows", "owes"], coins: ["in", "out", "payAt", "payBack", "down"] },
+  recallSaving: { jugs: ["has", "wants"], coins: [L("in", "in"), L("out", "out"), L("payAt", "payAt")] },
+  recallLoan: { jugs: ["borrows", "owes"], coins: [L("payBack", "payBack"), L("payAt", "payAt"), L("down", "down"), L("in", "in")] },
+  recallMixed: { jugs: ["has", "wants", "borrows", "owes"], coins: [L("in", "in"), L("out", "out"), L("payAt", "payAt"), L("payBack", "payBack"), L("down", "down")] },
 };
 function recallCard(which) {
   const spec = RECALL[which];
@@ -442,9 +443,9 @@ function recallCard(which) {
     const labels = [jug, ...coins.map(c => c.text)];
     const amounts = labels.map(l => (l.match(/R\d[\d ]*/) || [""])[0]);
     if (new Set(labels).size !== 4 || new Set(amounts).size !== 4) continue;     // four distinct phrases, four distinct amounts
-    const q = mc(TOTAL, "Which of these is the jug?", jug, coins.map(c => c.text), {
+    const q = mc(TOTAL, L("Which of these is the jug?", "Watter een hiervan is die beker?"), jug, coins.map(c => c.text), {
       hint: JUG_HINT,
-      answerLabel: `“${jug}” is the jug: the ONE total`,
+      answerLabel: L(`“${jug}” is the jug: the ONE total`, `“${jug}” is die beker: die EEN totaal`),
       solution: [
         { s: jug, r: KIND.jug.sol },
         ...coins.map(c => ({ s: c.text, r: KIND[c.kind].sol })),

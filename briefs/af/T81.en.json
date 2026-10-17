@@ -1,0 +1,4895 @@
+{
+  "unit": "T81",
+  "generated": "2026-10-17T21:14:12.367Z",
+  "files": [
+    "js/quests/questf1-words.js",
+    "js/quests/questf2-types.js",
+    "js/quests/questf3-compounding.js",
+    "js/quests/questf4-timeline-count.js",
+    "js/quests/questf5-timeline-build.js",
+    "js/quests/questf6-deposits.js",
+    "js/quests/questf7-eff-nom.js",
+    "js/quests/questf8-which-total.js",
+    "js/quests/questf9-car-or-no-car.js"
+  ],
+  "items": {
+    "questf1-words#1": {
+      "en": "In <b>A = P(1 + i)ⁿ</b>, what does <b>P</b> stand for?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf1-words.js:14:5"
+      ]
+    },
+    "questf1-words#2": {
+      "en": "The starting (principal) amount",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf1-words.js:15:5"
+      ]
+    },
+    "questf1-words#3": {
+      "en": "The end amount",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:16:6"
+      ]
+    },
+    "questf1-words#4": {
+      "en": "The interest rate",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:16:24",
+        "questf1-words.js:59:32"
+      ]
+    },
+    "questf1-words#5": {
+      "en": "The number of years",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:16:45"
+      ]
+    },
+    "questf1-words#6": {
+      "en": "P is where the money starts; A is where it ends up.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:17:13"
+      ]
+    },
+    "questf1-words#7": {
+      "en": "P = the principal (starting) amount",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf1-words.js:17:81"
+      ]
+    },
+    "questf1-words#8": {
+      "en": "In <b>A = P(1 + i)ⁿ</b>, what does <b>A</b> stand for?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf1-words.js:20:5"
+      ]
+    },
+    "questf1-words#9": {
+      "en": "The accumulated (end) amount",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf1-words.js:21:5"
+      ]
+    },
+    "questf1-words#10": {
+      "en": "The starting amount",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:22:6"
+      ]
+    },
+    "questf1-words#11": {
+      "en": "The annual rate",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:22:29"
+      ]
+    },
+    "questf1-words#12": {
+      "en": "The number of payments",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:22:48",
+        "questf1-words.js:59:6"
+      ]
+    },
+    "questf1-words#13": {
+      "en": "A is the amount you end with after the interest has been added.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:23:13"
+      ]
+    },
+    "questf1-words#14": {
+      "en": "Written as the value of <b>i</b> used in the formula, ${C(p)}% is…",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf1-words.js:30:15"
+      ]
+    },
+    "questf1-words#15": {
+      "en": "Turn a percentage into i by dividing by 100.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:33:13"
+      ]
+    },
+    "questf1-words#16": {
+      "en": "Which situation uses <b>simple</b> interest?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf1-words.js:39:5"
+      ]
+    },
+    "questf1-words#17": {
+      "en": "A hire-purchase agreement",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:40:5",
+        "questf1-words.js:47:6"
+      ]
+    },
+    "questf1-words#18": {
+      "en": "Money growing in a savings account",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:41:6",
+        "questf1-words.js:46:5"
+      ]
+    },
+    "questf1-words#19": {
+      "en": "Inflation on food prices",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:41:44"
+      ]
+    },
+    "questf1-words#20": {
+      "en": "A population growing each year",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:41:72"
+      ]
+    },
+    "questf1-words#21": {
+      "en": "Simple interest is the hire-purchase one.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:42:13"
+      ]
+    },
+    "questf1-words#22": {
+      "en": "Hire purchase → simple interest",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf1-words.js:42:71"
+      ]
+    },
+    "questf1-words#23": {
+      "en": "Which of these is worked out with <b>compound</b> interest?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf1-words.js:45:5"
+      ]
+    },
+    "questf1-words#24": {
+      "en": "A once-off deposit paid upfront",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:47:35"
+      ]
+    },
+    "questf1-words#25": {
+      "en": "An asset losing the same rand amount each year",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:47:70"
+      ]
+    },
+    "questf1-words#26": {
+      "en": "Savings, inflation and population growth all use compound interest.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:48:13"
+      ]
+    },
+    "questf1-words#27": {
+      "en": "Which formula gives the value of a <b>savings</b> account after n years?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf1-words.js:51:5"
+      ]
+    },
+    "questf1-words#28": {
+      "en": "A = P(1 + i)ⁿ",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf1-words.js:52:5"
+      ]
+    },
+    "questf1-words#29": {
+      "en": "A = P(1 + i·n)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:53:6"
+      ]
+    },
+    "questf1-words#30": {
+      "en": "A = P(1 − i)ⁿ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:53:24"
+      ]
+    },
+    "questf1-words#31": {
+      "en": "A = P(1 − i·n)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:53:41"
+      ]
+    },
+    "questf1-words#32": {
+      "en": "Savings grow by compound interest.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:54:13"
+      ]
+    },
+    "questf1-words#33": {
+      "en": "A = P(1 + i)ⁿ (compound interest)",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf1-words.js:54:64"
+      ]
+    },
+    "questf1-words#34": {
+      "en": "In this chapter, what does <b>n</b> count?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf1-words.js:57:5"
+      ]
+    },
+    "questf1-words#35": {
+      "en": "The number of compounding periods",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf1-words.js:58:5"
+      ]
+    },
+    "questf1-words#36": {
+      "en": "The number of rand",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:59:53"
+      ]
+    },
+    "questf1-words#37": {
+      "en": "n is how many times interest is added over the whole term.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:60:13"
+      ]
+    },
+    "questf1-words#38": {
+      "en": "Inflation is treated as which kind of interest?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf1-words.js:63:5"
+      ]
+    },
+    "questf1-words#39": {
+      "en": "Compound interest, compounded yearly",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf1-words.js:64:5"
+      ]
+    },
+    "questf1-words#40": {
+      "en": "Simple interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:65:6"
+      ]
+    },
+    "questf1-words#41": {
+      "en": "Reducing-balance depreciation",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:65:25"
+      ]
+    },
+    "questf1-words#42": {
+      "en": "It earns no interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf1-words.js:65:58"
+      ]
+    },
+    "questf1-words#43": {
+      "en": "Prices grow on the new price each year — that is compound growth.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf1-words.js:66:13"
+      ]
+    },
+    "questf2-types#1": {
+      "en": "<b>Simple</b> interest is calculated on…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:13:5"
+      ]
+    },
+    "questf2-types#2": {
+      "en": "the original amount P only",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf2-types.js:14:5"
+      ]
+    },
+    "questf2-types#3": {
+      "en": "the growing balance each period",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:15:6",
+        "questf2-types.js:20:5"
+      ]
+    },
+    "questf2-types#4": {
+      "en": "the interest earned so far",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:15:41"
+      ]
+    },
+    "questf2-types#5": {
+      "en": "the final amount A",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:15:71"
+      ]
+    },
+    "questf2-types#6": {
+      "en": "Simple interest uses the same P every period, so the interest never changes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:16:13"
+      ]
+    },
+    "questf2-types#7": {
+      "en": "Simple interest is on the original P only",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf2-types.js:16:106"
+      ]
+    },
+    "questf2-types#8": {
+      "en": "<b>Compound</b> interest is calculated on…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:19:5"
+      ]
+    },
+    "questf2-types#9": {
+      "en": "the original P only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:21:6"
+      ]
+    },
+    "questf2-types#10": {
+      "en": "the deposit only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:21:29"
+      ]
+    },
+    "questf2-types#11": {
+      "en": "the number of years",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:21:49"
+      ]
+    },
+    "questf2-types#12": {
+      "en": "Compound interest earns “interest on interest”.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:22:13"
+      ]
+    },
+    "questf2-types#13": {
+      "en": "On the same P and rate over many years, which earns <b>more</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:25:5"
+      ]
+    },
+    "questf2-types#14": {
+      "en": "Compound interest",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf2-types.js:26:5"
+      ]
+    },
+    "questf2-types#15": {
+      "en": "Simple interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:27:6"
+      ]
+    },
+    "questf2-types#16": {
+      "en": "They are always exactly equal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:27:25"
+      ]
+    },
+    "questf2-types#17": {
+      "en": "Whichever has the larger n only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:27:58"
+      ]
+    },
+    "questf2-types#18": {
+      "en": "Earning interest on interest pulls ahead over time.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:28:13"
+      ]
+    },
+    "questf2-types#19": {
+      "en": "Compound interest grows faster",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf2-types.js:28:81"
+      ]
+    },
+    "questf2-types#20": {
+      "en": "A car loses <b>15% of its current value</b> each year. Which method is this?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:31:5"
+      ]
+    },
+    "questf2-types#21": {
+      "en": "Reducing-balance:  A = P(1 − i)ⁿ",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:32:5",
+        "questf2-types.js:39:6"
+      ]
+    },
+    "questf2-types#22": {
+      "en": "Linear:  A = P(1 − i·n)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:33:6"
+      ]
+    },
+    "questf2-types#23": {
+      "en": "Compound growth:  A = P(1 + i)ⁿ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:33:33"
+      ]
+    },
+    "questf2-types#24": {
+      "en": "Simple interest:  A = P(1 + i·n)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:33:68"
+      ]
+    },
+    "questf2-types#25": {
+      "en": "“Percentage of its current value” → reducing-balance.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:34:13"
+      ]
+    },
+    "questf2-types#26": {
+      "en": "An asset loses the <b>same rand amount</b> every year. Which method is this?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:37:5"
+      ]
+    },
+    "questf2-types#27": {
+      "en": "Linear (straight-line):  A = P(1 − i·n)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf2-types.js:38:5"
+      ]
+    },
+    "questf2-types#28": {
+      "en": "Compound growth",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:39:42"
+      ]
+    },
+    "questf2-types#29": {
+      "en": "Effective interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:39:61"
+      ]
+    },
+    "questf2-types#30": {
+      "en": "Equal rand amounts each year → a straight line → linear method.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:40:13"
+      ]
+    },
+    "questf2-types#31": {
+      "en": "On a value-vs-time graph, <b>reducing-balance</b> depreciation looks like…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:43:5"
+      ]
+    },
+    "questf2-types#32": {
+      "en": "a curve that drops steeply, then flattens",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf2-types.js:44:5"
+      ]
+    },
+    "questf2-types#33": {
+      "en": "a straight line sloping down",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:45:6",
+        "questf2-types.js:50:5"
+      ]
+    },
+    "questf2-types#34": {
+      "en": "a straight line sloping up",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:45:38"
+      ]
+    },
+    "questf2-types#35": {
+      "en": "an S-shaped curve that rises",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:45:68"
+      ]
+    },
+    "questf2-types#36": {
+      "en": "Losing a % of a shrinking value means smaller drops each year — a flattening curve.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:46:13"
+      ]
+    },
+    "questf2-types#37": {
+      "en": "On a value-vs-time graph, <b>linear</b> depreciation looks like…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:49:5"
+      ]
+    },
+    "questf2-types#38": {
+      "en": "a curve that flattens out",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:51:6"
+      ]
+    },
+    "questf2-types#39": {
+      "en": "a horizontal line",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:51:35"
+      ]
+    },
+    "questf2-types#40": {
+      "en": "a rising curve",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:51:56"
+      ]
+    },
+    "questf2-types#41": {
+      "en": "The same drop every year plots as a straight line.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:52:13"
+      ]
+    },
+    "questf2-types#42": {
+      "en": "Depreciation means…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf2-types.js:55:5"
+      ]
+    },
+    "questf2-types#43": {
+      "en": "something loses value over time",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf2-types.js:56:5"
+      ]
+    },
+    "questf2-types#44": {
+      "en": "something gains value over time",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:57:6"
+      ]
+    },
+    "questf2-types#45": {
+      "en": "interest is added twice a year",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:57:41"
+      ]
+    },
+    "questf2-types#46": {
+      "en": "a deposit is paid upfront",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf2-types.js:57:75"
+      ]
+    },
+    "questf2-types#47": {
+      "en": "Cars, phones and machines depreciate — they are worth less as time passes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf2-types.js:58:13"
+      ]
+    },
+    "questf3-compounding#1": {
+      "en": "How many times a year is interest added when it is compounded <b>${o.label}</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf3-compounding.js:19:15"
+      ]
+    },
+    "questf3-compounding#2": {
+      "en": "${o.label} → ${o.k} time${o.k > 1 ? \"s\" : \"\"} a year",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf3-compounding.js:21:20"
+      ],
+      "nested": [
+        "s"
+      ]
+    },
+    "questf3-compounding#3": {
+      "en": "Annually 1, half‑yearly 2, quarterly 4, monthly 12.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf3-compounding.js:22:13"
+      ]
+    },
+    "questf3-compounding#4": {
+      "en": "${C(annual)}% p.a. compounded <b>${o.label}</b>. What is the rate <b>per period</b> (i)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf3-compounding.js:31:15"
+      ]
+    },
+    "questf3-compounding#5": {
+      "en": "i = ${C(annual)}% ÷ ${o.k} = ${C(i)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf3-compounding.js:33:20"
+      ]
+    },
+    "questf3-compounding#6": {
+      "en": "Divide the annual rate (as a fraction) by the number of times per year.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf3-compounding.js:34:13"
+      ]
+    },
+    "questf3-compounding#7": {
+      "en": "Compounded <b>${o.label}</b> for <b>${years} years</b>. What is the exponent (power)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf3-compounding.js:44:15"
+      ]
+    },
+    "questf3-compounding#8": {
+      "en": "Exponent = years × <span class=\"nowrap\">times‑per‑year</span>.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf3-compounding.js:47:13"
+      ]
+    },
+    "questf3-compounding#9": {
+      "en": "${years} years × ${o.k} per year = ${e}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf3-compounding.js:48:23"
+      ]
+    },
+    "questf3-compounding#10": {
+      "en": "Choose the correct setup for <b>R${P.toLocaleString(\"en-ZA\").replace(/,/g, \" \")}</b> at ${C(annual)}% p.a. compounded <b>${o.label}</b> for ${years} years.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf3-compounding.js:56:7"
+      ],
+      "nested": [
+        "en-ZA"
+      ]
+    },
+    "questf3-compounding#11": {
+      "en": "Divide the rate by k inside the bracket; multiply years by k in the power.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf3-compounding.js:59:15"
+      ]
+    },
+    "questf3-compounding#12": {
+      "en": "Rate per period = ${i}/${o.k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf3-compounding.js:61:16"
+      ]
+    },
+    "questf3-compounding#13": {
+      "en": "compounded ${o.label} → ${o.k} times a year",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf3-compounding.js:61:52"
+      ]
+    },
+    "questf3-compounding#14": {
+      "en": "Number of periods = ${years}×${o.k} = ${e}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf3-compounding.js:62:16"
+      ]
+    },
+    "questf3-compounding#15": {
+      "en": "years × <span class=\"nowrap\">times‑per‑year</span>",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf3-compounding.js:62:65"
+      ]
+    },
+    "questf3-compounding#16": {
+      "en": "A = ${P}${pow(`(1 + ${i}/${o.k})`, `${years}×${o.k}`)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf3-compounding.js:63:16"
+      ]
+    },
+    "questf3-compounding#17": {
+      "en": "build the WHOLE equation, then type it in one go",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf3-compounding.js:63:77"
+      ]
+    },
+    "questf3-compounding#18": {
+      "en": "${C(annual)}% p.a. compounded <b>monthly</b>. What is i per month?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf3-compounding.js:72:15"
+      ]
+    },
+    "questf3-compounding#19": {
+      "en": "Monthly means 12 times a year, so divide by 12.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf3-compounding.js:75:13"
+      ]
+    },
+    "questf3-compounding#20": {
+      "en": "${C(annual)}% as a fraction is ${C(toFrac(annual))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf3-compounding.js:77:14"
+      ]
+    },
+    "questf3-compounding#21": {
+      "en": "Monthly → interest is added 12 times a year",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf3-compounding.js:78:14"
+      ]
+    },
+    "questf3-compounding#22": {
+      "en": "so share the annual rate over 12",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf3-compounding.js:78:64"
+      ]
+    },
+    "questf3-compounding#23": {
+      "en": "i = ${C(toFrac(annual))} ÷ 12 = ${C(i)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf3-compounding.js:79:14"
+      ]
+    },
+    "questf3-compounding#24": {
+      "en": "Why do we divide the annual rate by 12 for <b>monthly</b> compounding?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf3-compounding.js:85:5"
+      ]
+    },
+    "questf3-compounding#25": {
+      "en": "Because interest is added 12 times a year, each time a twelfth of the annual rate",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf3-compounding.js:86:5"
+      ]
+    },
+    "questf3-compounding#26": {
+      "en": "Because there are 12 months in the question",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf3-compounding.js:87:6"
+      ]
+    },
+    "questf3-compounding#27": {
+      "en": "Because 12 is the number of years",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf3-compounding.js:87:53"
+      ]
+    },
+    "questf3-compounding#28": {
+      "en": "Because the rate must always be a whole number",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf3-compounding.js:87:90"
+      ]
+    },
+    "questf3-compounding#29": {
+      "en": "The yearly rate is shared out over the 12 times it is added.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf3-compounding.js:88:13"
+      ]
+    },
+    "questf4-timeline-count#1": {
+      "en": "The money sits at <b>T0</b> and is moved forward to <b>T${n}</b>. How many periods is that?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf4-timeline-count.js:23:15"
+      ]
+    },
+    "questf4-timeline-count#2": {
+      "en": "Count the gaps between the dots, not the dots themselves.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:26:13"
+      ]
+    },
+    "questf4-timeline-count#3": {
+      "en": "${n} periods",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf4-timeline-count.js:27:20"
+      ]
+    },
+    "questf4-timeline-count#4": {
+      "en": "From T0 to T${n} is ${n} equal jumps.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:28:23"
+      ]
+    },
+    "questf4-timeline-count#5": {
+      "en": "How many periods are there from <b>T${a}</b> to <b>T${b}</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf4-timeline-count.js:36:15"
+      ]
+    },
+    "questf4-timeline-count#6": {
+      "en": "Count the jumps from T${a} up to T${b}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:39:13"
+      ]
+    },
+    "questf4-timeline-count#7": {
+      "en": "${b} − ${a} = ${b - a} periods",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:40:20",
+        "questf4-timeline-count.js:43:14"
+      ]
+    },
+    "questf4-timeline-count#8": {
+      "en": "Count the JUMPS between the dots, not the dots themselves",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:42:14"
+      ]
+    },
+    "questf4-timeline-count#9": {
+      "en": "T${a} up to T${b}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:42:78"
+      ]
+    },
+    "questf4-timeline-count#10": {
+      "en": "An amount at <b>T${b}</b> is moved <b>back</b> to <b>T${a}</b>. How many periods does it move?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf4-timeline-count.js:52:15"
+      ]
+    },
+    "questf4-timeline-count#11": {
+      "en": "Direction does not change the count — still count the gaps.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:55:13"
+      ]
+    },
+    "questf4-timeline-count#12": {
+      "en": "${b - a} periods (backward)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf4-timeline-count.js:56:20"
+      ]
+    },
+    "questf4-timeline-count#13": {
+      "en": "Count the jumps between T${a} and T${b}: ${b} − ${a} = ${b - a}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:58:14"
+      ]
+    },
+    "questf4-timeline-count#14": {
+      "en": "Going backward does not change the COUNT — it is still ${b - a} periods",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:59:14"
+      ]
+    },
+    "questf4-timeline-count#15": {
+      "en": "direction changes the sign of the exponent, not the count",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:59:92"
+      ]
+    },
+    "questf4-timeline-count#16": {
+      "en": "To move the money from <b>T${a}</b> to <b>T${b}</b>, do you…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf4-timeline-count.js:67:7"
+      ]
+    },
+    "questf4-timeline-count#17": {
+      "en": "multiply by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:68:7",
+        "questf4-timeline-count.js:84:8"
+      ]
+    },
+    "questf4-timeline-count#18": {
+      "en": "divide by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:69:8",
+        "questf4-timeline-count.js:83:7"
+      ]
+    },
+    "questf4-timeline-count#19": {
+      "en": "subtract i each time",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:69:29"
+      ]
+    },
+    "questf4-timeline-count#20": {
+      "en": "leave it unchanged",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:69:53",
+        "questf4-timeline-count.js:84:50"
+      ]
+    },
+    "questf4-timeline-count#21": {
+      "en": "Moving to a LATER date means the money grows — multiply.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:71:15"
+      ]
+    },
+    "questf4-timeline-count#22": {
+      "en": "Later date → multiply by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf4-timeline-count.js:72:22"
+      ]
+    },
+    "questf4-timeline-count#23": {
+      "en": "T${b} is LATER than T${a}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:74:16"
+      ]
+    },
+    "questf4-timeline-count#24": {
+      "en": "the money has had more time to grow",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:74:48"
+      ]
+    },
+    "questf4-timeline-count#25": {
+      "en": "Forward → multiply by (1 + i)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:75:16"
+      ]
+    },
+    "questf4-timeline-count#26": {
+      "en": "${b - a} periods, so × ${pow(\"(1 + i)\", b - a)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:75:52"
+      ],
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf4-timeline-count#27": {
+      "en": "To move the money from <b>T${b}</b> back to <b>T${a}</b>, do you…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf4-timeline-count.js:82:7"
+      ]
+    },
+    "questf4-timeline-count#28": {
+      "en": "add i each time",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:84:31"
+      ]
+    },
+    "questf4-timeline-count#29": {
+      "en": "Moving to an EARLIER date means undoing growth — divide.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:86:15"
+      ]
+    },
+    "questf4-timeline-count#30": {
+      "en": "Earlier date → divide by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf4-timeline-count.js:87:22"
+      ]
+    },
+    "questf4-timeline-count#31": {
+      "en": "T${a} is EARLIER than T${b}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:89:16"
+      ]
+    },
+    "questf4-timeline-count#32": {
+      "en": "you are undoing growth, not adding it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:89:50"
+      ]
+    },
+    "questf4-timeline-count#33": {
+      "en": "Backward → divide by (1 + i)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:90:16"
+      ]
+    },
+    "questf4-timeline-count#34": {
+      "en": "${b - a} periods, so × ${pow(\"(1 + i)\", `−${b - a}`)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:90:51"
+      ],
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf4-timeline-count#35": {
+      "en": "R${rand(P, 0).slice(1)} is invested at T0. Tap the point that is <b>${k} periods</b> after the start.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf4-timeline-count.js:98:15"
+      ]
+    },
+    "questf4-timeline-count#36": {
+      "en": "Count the jumps from T0.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:101:16"
+      ]
+    },
+    "questf4-timeline-count#37": {
+      "en": "${k} periods after T0 is T${k}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:102:13"
+      ]
+    },
+    "questf4-timeline-count#38": {
+      "en": "T${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf4-timeline-count.js:103:20"
+      ]
+    },
+    "questf4-timeline-count#39": {
+      "en": "Start at T0 and count ${k} jumps to the right",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:105:14"
+      ]
+    },
+    "questf4-timeline-count#40": {
+      "en": "T0 is the start, not the first jump",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:105:66"
+      ]
+    },
+    "questf4-timeline-count#41": {
+      "en": "T0 → ${Array.from({ length: k }, (_, j) => `T${j + 1}`).join(\" → \")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf4-timeline-count.js:106:14"
+      ],
+      "nested": [
+        "T${j + 1}"
+      ]
+    },
+    "questf4-timeline-count#42": {
+      "en": "${k} periods after T0 is T${k}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf4-timeline-count.js:106:89"
+      ]
+    },
+    "questf4-timeline-count#43": {
+      "en": "Moving an amount to an <b>earlier</b> date means you are moving it…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf4-timeline-count.js:112:5"
+      ]
+    },
+    "questf4-timeline-count#44": {
+      "en": "backward — divide by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf4-timeline-count.js:113:5"
+      ]
+    },
+    "questf4-timeline-count#45": {
+      "en": "forward — multiply by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:114:6"
+      ]
+    },
+    "questf4-timeline-count#46": {
+      "en": "backward — multiply by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:114:39"
+      ]
+    },
+    "questf4-timeline-count#47": {
+      "en": "forward — divide by (1 + i)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf4-timeline-count.js:114:73"
+      ]
+    },
+    "questf4-timeline-count#48": {
+      "en": "Earlier = backward = divide.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf4-timeline-count.js:115:13"
+      ]
+    },
+    "questf4-timeline-count#49": {
+      "en": "Earlier → backward → divide",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf4-timeline-count.js:115:58"
+      ]
+    },
+    "questf5-timeline-build#1": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:28:20"
+      ]
+    },
+    "questf5-timeline-build#2": {
+      "en": "Moving an amount <b>forward</b> from T0 to <b>T${k}</b>: what exponent goes on (1 + i)?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:37:7"
+      ]
+    },
+    "questf5-timeline-build#3": {
+      "en": "Forward = positive exponent = the number of periods.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:41:15"
+      ]
+    },
+    "questf5-timeline-build#4": {
+      "en": "exponent = +${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf5-timeline-build.js:41:84"
+      ]
+    },
+    "questf5-timeline-build#5": {
+      "en": "From T0 to T${k} is ${k} periods",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:43:16"
+      ]
+    },
+    "questf5-timeline-build#6": {
+      "en": "count the jumps",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:43:55",
+        "questf5-timeline-build.js:57:72"
+      ]
+    },
+    "questf5-timeline-build#7": {
+      "en": "Forward means the money grows, so the exponent is positive: +${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:44:16"
+      ]
+    },
+    "questf5-timeline-build#8": {
+      "en": "(1 + i)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:44:97",
+        "questf5-timeline-build.js:58:96"
+      ]
+    },
+    "questf5-timeline-build#9": {
+      "en": "Moving an amount <b>back</b> from T${b} to <b>T${a}</b>: what exponent goes on (1 + i)?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:51:7"
+      ]
+    },
+    "questf5-timeline-build#10": {
+      "en": "Backward = negative exponent. Count the periods, then make it negative.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:55:15"
+      ]
+    },
+    "questf5-timeline-build#11": {
+      "en": "exponent = −${d}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf5-timeline-build.js:55:103"
+      ]
+    },
+    "questf5-timeline-build#12": {
+      "en": "From T${b} to T${a} is ${b} − ${a} = ${d} periods",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:57:16"
+      ]
+    },
+    "questf5-timeline-build#13": {
+      "en": "Backward undoes the growth, so the exponent goes negative: −${d}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:58:16"
+      ]
+    },
+    "questf5-timeline-build#14": {
+      "en": "Which expression gives the value at <b>T${k}</b> of ${money(P, 0, true)} invested at T0 (i = ${i})?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:67:7"
+      ]
+    },
+    "questf5-timeline-build#15": {
+      "en": "Forward → multiply, positive exponent equal to the number of periods.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:71:15"
+      ]
+    },
+    "questf5-timeline-build#16": {
+      "en": "T0 → T${k} is forward ${k} periods",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:73:16"
+      ]
+    },
+    "questf5-timeline-build#17": {
+      "en": "a later date, so the money grows",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:73:57"
+      ]
+    },
+    "questf5-timeline-build#18": {
+      "en": "Forward → multiply by ${pow(\"(1 + i)\", k)}, with i = ${i}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:74:16"
+      ],
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf5-timeline-build#19": {
+      "en": "Value at T${k} = ${right}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:75:16"
+      ]
+    },
+    "questf5-timeline-build#20": {
+      "en": "one equation, built completely before anything is worked out",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:75:48"
+      ]
+    },
+    "questf5-timeline-build#21": {
+      "en": "Forward: ${term(P, pow(`(1 + ${iC})`, k))} = ${money(fwd, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:99:12"
+      ]
+    },
+    "questf5-timeline-build#22": {
+      "en": "Back: ${term(P, pow(`(1 + ${iC})`, T), pow(`(1 + ${iC})`, `−${back}`))} = ${term(P, pow(`(1 + ${iC})`, k))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:100:12"
+      ]
+    },
+    "questf5-timeline-build#23": {
+      "en": "${T} − ${back} = ${k}, so it is the same value: ${money(fwd, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:101:12"
+      ]
+    },
+    "questf5-timeline-build#24": {
+      "en": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. To move the T${T} amount <b>back</b> to T${k}, you multiply by ${pow(\"(1 + i)\", `<b>+${back}</b>`)}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:107:11"
+      ],
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf5-timeline-build#25": {
+      "en": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. Moving <b>forward ${k}</b> from T0 and moving <b>back ${back}</b> from T${T} give ${claim === \"same\" ? \"the <b>same</b> value\" : \"<b>different</b> values\"} at T${k}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:108:11"
+      ],
+      "nested": [
+        "same",
+        "the <b>same</b> value",
+        "<b>different</b> values"
+      ]
+    },
+    "questf5-timeline-build#26": {
+      "en": "Moving to an EARLIER date undoes the growth — the exponent goes negative.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:120:11"
+      ]
+    },
+    "questf5-timeline-build#27": {
+      "en": "The same money has ONE value at each date, no matter which way you travel to it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:121:11"
+      ]
+    },
+    "questf5-timeline-build#28": {
+      "en": "False — moving back to T${k} is ${pow(\"(1 + i)\", `−${back}`)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf5-timeline-build.js:123:11"
+      ],
+      "nested": [
+        "(1 + i)"
+      ]
+    },
+    "questf5-timeline-build#29": {
+      "en": "True — both routes give the same value at T${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf5-timeline-build.js:125:13"
+      ]
+    },
+    "questf5-timeline-build#30": {
+      "en": "False — both routes give the same value at T${k}: ${money(fwd, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf5-timeline-build.js:126:13"
+      ]
+    },
+    "questf5-timeline-build#31": {
+      "en": "An amount grows at one rate for <b>${y1} years</b>, then a different rate for <b>${y2} years</b>. How many interest <b>brackets</b> will the expression have?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:135:15"
+      ]
+    },
+    "questf5-timeline-build#32": {
+      "en": "One bracket per segment of the timeline.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:137:13"
+      ]
+    },
+    "questf5-timeline-build#33": {
+      "en": "2 brackets — one per rate segment",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf5-timeline-build.js:138:20"
+      ]
+    },
+    "questf5-timeline-build#34": {
+      "en": "The rate changes once, so the timeline splits into 2 segments: ${y1} years, then ${y2} years",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:140:14"
+      ]
+    },
+    "questf5-timeline-build#35": {
+      "en": "One bracket per segment → 2 brackets",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:141:14"
+      ]
+    },
+    "questf5-timeline-build#36": {
+      "en": "multiplied together, never added",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:141:57"
+      ]
+    },
+    "questf5-timeline-build#37": {
+      "en": "One segment: ${pa(C(annual))} compounded <b>${HOW(o)}</b> for <b>${yrs} years</b>. The exponent on that bracket is…",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:151:15"
+      ]
+    },
+    "questf5-timeline-build#38": {
+      "en": "Exponent for the segment = years × ${nw(\"times‑per‑year\")}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:153:13"
+      ],
+      "nested": [
+        "times‑per‑year"
+      ]
+    },
+    "questf5-timeline-build#39": {
+      "en": "Compounded ${HOW(o)} → interest is added ${o.k} times a year",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:156:14"
+      ]
+    },
+    "questf5-timeline-build#40": {
+      "en": "Exponent = years × ${nw(\"times‑per‑year\")} = ${yrs} × ${o.k} = ${e}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:157:14"
+      ],
+      "nested": [
+        "times‑per‑year"
+      ]
+    },
+    "questf5-timeline-build#41": {
+      "en": "the ${C(annual)}% plays no part in the exponent",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:157:88"
+      ]
+    },
+    "questf5-timeline-build#42": {
+      "en": "${money(P, 0, true)} grows at ${pa(C(r1))} compounded <b>${HOW(o1)}</b> for ${y1} years, then at ${pa(C(r2))} compounded <b>${HOW(o2)}</b> for ${y2} years. Which expression gives its value at the end of the ${y1 + y2} years?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf5-timeline-build.js:172:7"
+      ]
+    },
+    "questf5-timeline-build#43": {
+      "en": "Split the timeline where the rate changes: ONE bracket per segment, multiplied together.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf5-timeline-build.js:178:15"
+      ]
+    },
+    "questf5-timeline-build#44": {
+      "en": "Segment 1: rate per period = ${i1}/${o1.k}, periods = ${y1}×${o1.k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:181:16"
+      ]
+    },
+    "questf5-timeline-build#45": {
+      "en": "Segment 2: rate per period = ${i2}/${o2.k}, periods = ${y2}×${o2.k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:182:16"
+      ]
+    },
+    "questf5-timeline-build#46": {
+      "en": "A = ${right}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf5-timeline-build.js:183:16"
+      ]
+    },
+    "questf5-timeline-build#47": {
+      "en": "one bracket per segment, multiplied — the money keeps moving forward",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf5-timeline-build.js:183:35"
+      ]
+    },
+    "questf6-deposits#1": {
+      "en": "A <b>${p}%</b> deposit is paid on an item priced <b>R${money0(price)}</b>. How much is the deposit (in rand)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:19:15"
+      ]
+    },
+    "questf6-deposits#2": {
+      "en": "Deposit = (% ÷ 100) × price.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf6-deposits.js:21:13"
+      ]
+    },
+    "questf6-deposits#3": {
+      "en": "${p}% × R${money0(price)} = R${money0(dep)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf6-deposits.js:22:20"
+      ]
+    },
+    "questf6-deposits#4": {
+      "en": "After paying a <b>${p}%</b> deposit on <b>R${money0(price)}</b>, how much is still owed (in rand)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:31:15"
+      ]
+    },
+    "questf6-deposits#5": {
+      "en": "Amount owed = price − deposit = ((100 − %) ÷ 100) × price.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf6-deposits.js:33:13"
+      ]
+    },
+    "questf6-deposits#6": {
+      "en": "R${money0(price)} − R${money0(depositAmount(toFrac(p), price))} = R${money0(owed)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf6-deposits.js:34:20"
+      ]
+    },
+    "questf6-deposits#7": {
+      "en": "Deposit = ${C(toFrac(p))} × ${price} = ${depositAmount(toFrac(p), price)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf6-deposits.js:36:14"
+      ]
+    },
+    "questf6-deposits#8": {
+      "en": "Still owed = ${price} − ${depositAmount(toFrac(p), price)} = ${owed}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf6-deposits.js:37:14"
+      ]
+    },
+    "questf6-deposits#9": {
+      "en": "A <b>${p}%</b> deposit means the amount still owed is what <b>%</b> of the price?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:46:15"
+      ]
+    },
+    "questf6-deposits#10": {
+      "en": "The deposit and the balance must add up to 100%.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf6-deposits.js:48:13"
+      ]
+    },
+    "questf6-deposits#11": {
+      "en": "The deposit and the balance together make up the whole price",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf6-deposits.js:51:14"
+      ]
+    },
+    "questf6-deposits#12": {
+      "en": "deposit % + balance % = 100%",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf6-deposits.js:51:81"
+      ]
+    },
+    "questf6-deposits#13": {
+      "en": "that is the part still owed",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf6-deposits.js:52:47"
+      ]
+    },
+    "questf6-deposits#14": {
+      "en": "Does the <b>deposit</b> itself earn interest?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:59:13"
+      ]
+    },
+    "questf6-deposits#15": {
+      "en": "A deposit is paid upfront — it is money you no longer owe.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf6-deposits.js:61:11"
+      ]
+    },
+    "questf6-deposits#16": {
+      "en": "No — a deposit earns no interest",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf6-deposits.js:62:18"
+      ]
+    },
+    "questf6-deposits#17": {
+      "en": "In a hire-purchase deal, interest is charged on…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:66:5"
+      ]
+    },
+    "questf6-deposits#18": {
+      "en": "the amount still owed after the deposit",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf6-deposits.js:67:5"
+      ]
+    },
+    "questf6-deposits#19": {
+      "en": "the full price",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:68:6"
+      ]
+    },
+    "questf6-deposits#20": {
+      "en": "the deposit only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:68:24"
+      ]
+    },
+    "questf6-deposits#21": {
+      "en": "nothing at all",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:68:44"
+      ]
+    },
+    "questf6-deposits#22": {
+      "en": "You only pay interest on what you still owe.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf6-deposits.js:69:13"
+      ]
+    },
+    "questf6-deposits#23": {
+      "en": "Hire purchase uses which type of interest?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:72:5"
+      ]
+    },
+    "questf6-deposits#24": {
+      "en": "Simple interest",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questf6-deposits.js:73:5",
+        "questf6-deposits.js:75:88"
+      ]
+    },
+    "questf6-deposits#25": {
+      "en": "Compound interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:74:6"
+      ]
+    },
+    "questf6-deposits#26": {
+      "en": "Reducing-balance",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:74:27"
+      ]
+    },
+    "questf6-deposits#27": {
+      "en": "Effective interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:74:47"
+      ]
+    },
+    "questf6-deposits#28": {
+      "en": "Hire purchase is the simple-interest case: A = P(1 + i·n).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf6-deposits.js:75:13"
+      ]
+    },
+    "questf6-deposits#29": {
+      "en": "A fridge costs <b>R${money0(price)}</b>. A <b>${p}%</b> deposit is paid, and the balance is bought on hire purchase at <b>${r}% p.a. simple interest</b> for <b>${n} years</b>. How much is repaid on the balance in total (in rand, deposit not included)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:92:15"
+      ]
+    },
+    "questf6-deposits#30": {
+      "en": "First: the balance after the deposit (in rand).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:94:18"
+      ]
+    },
+    "questf6-deposits#31": {
+      "en": "Interest is charged on what is still owed — balance = (100 − p)% × price.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questf6-deposits.js:95:11"
+      ]
+    },
+    "questf6-deposits#32": {
+      "en": "Hire purchase: which formula applies to that balance?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:96:16"
+      ]
+    },
+    "questf6-deposits#33": {
+      "en": "A = P(1 + i·n)",
+      "kind": "string",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questf6-deposits.js:97:11"
+      ]
+    },
+    "questf6-deposits#34": {
+      "en": "A = P(1 + i)ⁿ",
+      "kind": "string",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:98:12"
+      ]
+    },
+    "questf6-deposits#35": {
+      "en": "A = P(1 − i·n)",
+      "kind": "string",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:98:29"
+      ]
+    },
+    "questf6-deposits#36": {
+      "en": "A = P × i × n",
+      "kind": "string",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf6-deposits.js:98:47"
+      ]
+    },
+    "questf6-deposits#37": {
+      "en": "Hire purchase is the simple-interest case.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questf6-deposits.js:99:11"
+      ]
+    },
+    "questf6-deposits#38": {
+      "en": "The total repaid on the balance (in rand).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questf6-deposits.js:100:18"
+      ]
+    },
+    "questf6-deposits#39": {
+      "en": "A = ${owed}(1 + ${C(toFrac(r))} × ${n}) — one line on the calculator.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questf6-deposits.js:101:11"
+      ]
+    },
+    "questf6-deposits#40": {
+      "en": "First find the balance after the deposit, then use A = P(1 + i·n) on that balance.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf6-deposits.js:104:13"
+      ]
+    },
+    "questf6-deposits#41": {
+      "en": "A = R${money0(owed)}(1 + ${C(toFrac(r))}×${n}) = R${money0(A)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf6-deposits.js:105:20"
+      ]
+    },
+    "questf6-deposits#42": {
+      "en": "Balance = ${C(toFrac(100 - p))} × ${price} = ${owed}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf6-deposits.js:107:14"
+      ]
+    },
+    "questf6-deposits#43": {
+      "en": "interest is charged on what is still owed",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf6-deposits.js:107:73"
+      ]
+    },
+    "questf6-deposits#44": {
+      "en": "A = P(1 + i·n) = ${owed}(1 + ${C(toFrac(r))} × ${n})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf6-deposits.js:108:14"
+      ]
+    },
+    "questf6-deposits#45": {
+      "en": "hire purchase → simple interest",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf6-deposits.js:108:73"
+      ]
+    },
+    "questf6-deposits#46": {
+      "en": "A = ${owed} × ${C(1 + toFrac(r) * n)} = ${A}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf6-deposits.js:109:14"
+      ]
+    },
+    "questf7-eff-nom#1": {
+      "en": "An <b>effective</b> interest rate is always quoted…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:16:5"
+      ]
+    },
+    "questf7-eff-nom#2": {
+      "en": "annually (per year)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf7-eff-nom.js:17:5"
+      ]
+    },
+    "questf7-eff-nom#3": {
+      "en": "monthly",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:18:6"
+      ]
+    },
+    "questf7-eff-nom#4": {
+      "en": "with a compounding frequency",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:18:17"
+      ]
+    },
+    "questf7-eff-nom#5": {
+      "en": "daily",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:18:49"
+      ]
+    },
+    "questf7-eff-nom#6": {
+      "en": "Effective = the true growth over one whole year.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:19:13"
+      ]
+    },
+    "questf7-eff-nom#7": {
+      "en": "Effective rates are annual",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf7-eff-nom.js:19:78"
+      ]
+    },
+    "questf7-eff-nom#8": {
+      "en": "A <b>nominal</b> interest rate is quoted…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:22:5"
+      ]
+    },
+    "questf7-eff-nom#9": {
+      "en": "with a compounding frequency (e.g. monthly)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf7-eff-nom.js:23:5"
+      ]
+    },
+    "questf7-eff-nom#10": {
+      "en": "always with no time period",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:24:6"
+      ]
+    },
+    "questf7-eff-nom#11": {
+      "en": "only ever annually",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:24:36"
+      ]
+    },
+    "questf7-eff-nom#12": {
+      "en": "as a rand amount",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:24:58"
+      ]
+    },
+    "questf7-eff-nom#13": {
+      "en": "“18% p.a. compounded monthly” is a nominal rate — it names the frequency.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:25:13"
+      ]
+    },
+    "questf7-eff-nom#14": {
+      "en": "Effective and nominal rates are both types of…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:28:5"
+      ]
+    },
+    "questf7-eff-nom#15": {
+      "en": "compound interest",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf7-eff-nom.js:29:5"
+      ]
+    },
+    "questf7-eff-nom#16": {
+      "en": "simple interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:30:6"
+      ]
+    },
+    "questf7-eff-nom#17": {
+      "en": "depreciation",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:30:25"
+      ]
+    },
+    "questf7-eff-nom#18": {
+      "en": "deposits",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:30:41"
+      ]
+    },
+    "questf7-eff-nom#19": {
+      "en": "Both describe compound growth, just quoted differently.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:31:13"
+      ]
+    },
+    "questf7-eff-nom#20": {
+      "en": "Both are compound interest",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf7-eff-nom.js:31:85"
+      ]
+    },
+    "questf7-eff-nom#21": {
+      "en": "Which formula converts a <b>nominal</b> rate to an <b>effective</b> rate?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:34:5"
+      ]
+    },
+    "questf7-eff-nom#22": {
+      "en": "1 + i_eff = (1 + i_nom/n)ⁿ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questf7-eff-nom.js:35:5",
+        "questf7-eff-nom.js:37:100"
+      ]
+    },
+    "questf7-eff-nom#23": {
+      "en": "i_eff = i_nom × n",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:36:6"
+      ]
+    },
+    "questf7-eff-nom#24": {
+      "en": "1 + i_eff = (1 + i_nom·n)ⁿ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:36:27"
+      ]
+    },
+    "questf7-eff-nom#25": {
+      "en": "i_eff = (1 + i_nom)/n",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:36:57"
+      ]
+    },
+    "questf7-eff-nom#26": {
+      "en": "Divide the nominal rate by n inside the bracket, raise to the power n.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:37:13"
+      ]
+    },
+    "questf7-eff-nom#27": {
+      "en": "In <b>1 + i_eff = (1 + i_nom/n)ⁿ</b>, what is <b>n</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:40:5"
+      ]
+    },
+    "questf7-eff-nom#28": {
+      "en": "the number of compounding periods per year",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf7-eff-nom.js:41:5"
+      ]
+    },
+    "questf7-eff-nom#29": {
+      "en": "the number of years",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:42:6"
+      ]
+    },
+    "questf7-eff-nom#30": {
+      "en": "the principal amount",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:42:29"
+      ]
+    },
+    "questf7-eff-nom#31": {
+      "en": "the effective rate",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:42:53"
+      ]
+    },
+    "questf7-eff-nom#32": {
+      "en": "For monthly compounding n = 12; quarterly n = 4.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:43:13"
+      ]
+    },
+    "questf7-eff-nom#33": {
+      "en": "Why convert rates to their <b>effective</b> form?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:46:5"
+      ]
+    },
+    "questf7-eff-nom#34": {
+      "en": "To fairly compare rates that compound at different frequencies",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf7-eff-nom.js:47:5"
+      ]
+    },
+    "questf7-eff-nom#35": {
+      "en": "To make the rate bigger",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:48:6"
+      ]
+    },
+    "questf7-eff-nom#36": {
+      "en": "To turn compound into simple interest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:48:33"
+      ]
+    },
+    "questf7-eff-nom#37": {
+      "en": "To avoid using a calculator",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:48:74"
+      ]
+    },
+    "questf7-eff-nom#38": {
+      "en": "Two nominal rates with different frequencies can't be compared directly.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:49:13"
+      ]
+    },
+    "questf7-eff-nom#39": {
+      "en": "${C(nom)}% p.a. compounded <b>monthly</b> vs ${C(nom)}% p.a. compounded <b>annually</b> — which has the higher <b>effective</b> rate?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:57:7"
+      ]
+    },
+    "questf7-eff-nom#40": {
+      "en": "Compounded monthly",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questf7-eff-nom.js:58:7"
+      ]
+    },
+    "questf7-eff-nom#41": {
+      "en": "Compounded annually",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:59:8"
+      ]
+    },
+    "questf7-eff-nom#42": {
+      "en": "They are exactly equal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:59:31"
+      ]
+    },
+    "questf7-eff-nom#43": {
+      "en": "It depends on the principal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:59:57"
+      ]
+    },
+    "questf7-eff-nom#44": {
+      "en": "More frequent compounding earns slightly more over a year.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:60:15"
+      ]
+    },
+    "questf7-eff-nom#45": {
+      "en": "More frequent compounding → higher effective rate",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf7-eff-nom.js:60:90"
+      ]
+    },
+    "questf7-eff-nom#46": {
+      "en": "Monthly: 1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/12)`, 12)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf7-eff-nom.js:66:16"
+      ]
+    },
+    "questf7-eff-nom#47": {
+      "en": "n = 12, one equation",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf7-eff-nom.js:66:84"
+      ]
+    },
+    "questf7-eff-nom#48": {
+      "en": "That gives ${effM}% a year",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf7-eff-nom.js:67:16"
+      ]
+    },
+    "questf7-eff-nom#49": {
+      "en": "type the whole right side in one go",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf7-eff-nom.js:67:49"
+      ]
+    },
+    "questf7-eff-nom#50": {
+      "en": "Annually: the ${C(nom)}% is already effective",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf7-eff-nom.js:68:16"
+      ]
+    },
+    "questf7-eff-nom#51": {
+      "en": "interest is added once a year",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf7-eff-nom.js:68:68"
+      ]
+    },
+    "questf7-eff-nom#52": {
+      "en": "${effM}% > ${C(nom)}% → monthly grows more",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf7-eff-nom.js:69:16"
+      ]
+    },
+    "questf7-eff-nom#53": {
+      "en": "the earlier interest earns interest itself",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf7-eff-nom.js:69:65"
+      ]
+    },
+    "questf7-eff-nom#54": {
+      "en": "Convert <b>${C(nom)}% p.a. compounded ${o.label}</b> to an <b>effective annual rate</b>. Give your answer as a %, to 2 decimal places.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:87:15"
+      ]
+    },
+    "questf7-eff-nom#55": {
+      "en": "What is n for “compounded ${o.label}”?",
+      "kind": "template",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:89:16"
+      ]
+    },
+    "questf7-eff-nom#56": {
+      "en": "n = how many times a year interest is added.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:91:11"
+      ]
+    },
+    "questf7-eff-nom#57": {
+      "en": "Pick the correct set-up.",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:92:16"
+      ]
+    },
+    "questf7-eff-nom#58": {
+      "en": "1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))}/${o.k})`, o.k)}",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct",
+        "solution.s"
+      ],
+      "where": [
+        "questf7-eff-nom.js:93:11",
+        "questf7-eff-nom.js:108:14"
+      ]
+    },
+    "questf7-eff-nom#59": {
+      "en": "1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))} × ${o.k})`, o.k)}",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:95:13"
+      ]
+    },
+    "questf7-eff-nom#60": {
+      "en": "1 + i_eff = ${pow(`(1 + ${C(toFrac(nom))})`, o.k)}",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:96:13"
+      ]
+    },
+    "questf7-eff-nom#61": {
+      "en": "i_eff = ${C(toFrac(nom))}/${o.k} × ${o.k}",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf7-eff-nom.js:97:13"
+      ]
+    },
+    "questf7-eff-nom#62": {
+      "en": "Divide the nominal rate by n INSIDE the bracket, power n outside.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:99:11"
+      ]
+    },
+    "questf7-eff-nom#63": {
+      "en": "Now the effective rate, as a %, 2 decimals.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questf7-eff-nom.js:100:18"
+      ]
+    },
+    "questf7-eff-nom#64": {
+      "en": "Type the WHOLE right side in one go, subtract 1, × 100 — never round along the way.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:101:11"
+      ]
+    },
+    "questf7-eff-nom#65": {
+      "en": "Use 1 + i_eff = (1 + i_nom/n)ⁿ with n = ${o.k}, then × 100 for a %.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf7-eff-nom.js:105:13"
+      ]
+    },
+    "questf7-eff-nom#66": {
+      "en": "i_eff ≈ ${effC}%",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questf7-eff-nom.js:106:20",
+        "questf7-eff-nom.js:110:14"
+      ]
+    },
+    "questf7-eff-nom#67": {
+      "en": "n = ${o.k} because interest is added ${o.k} times a year",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf7-eff-nom.js:108:78"
+      ]
+    },
+    "questf7-eff-nom#68": {
+      "en": "i_eff = ${pow(`(1 + ${C(toFrac(nom) / o.k)})`, o.k)} − 1",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf7-eff-nom.js:109:14"
+      ]
+    },
+    "questf7-eff-nom#69": {
+      "en": "× 100 to write it as a percentage",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf7-eff-nom.js:110:37"
+      ]
+    },
+    "questf8-which-total#1": {
+      "en": "lounge suite",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf8-which-total.js:100:16",
+        "questf8-which-total.js:359:53"
+      ]
+    },
+    "questf8-which-total#2": {
+      "en": "motorbike",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf8-which-total.js:100:32"
+      ]
+    },
+    "questf8-which-total#3": {
+      "en": "laptop",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf8-which-total.js:100:45"
+      ]
+    },
+    "questf8-which-total#4": {
+      "en": "fridge",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf8-which-total.js:100:55"
+      ]
+    },
+    "questf8-which-total#5": {
+      "en": "TV",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf8-which-total.js:100:65"
+      ]
+    },
+    "questf8-which-total#6": {
+      "en": "bed",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf8-which-total.js:100:71"
+      ]
+    },
+    "questf8-which-total#7": {
+      "en": "empty",
+      "kind": "string",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:114:15"
+      ]
+    },
+    "questf8-which-total#8": {
+      "en": "<p>Payments are <b>coins</b>. The${NB}total (the${NB}lumpsum) is <b>the${NB}jug</b>.</p>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:115:7"
+      ]
+    },
+    "questf8-which-total#9": {
+      "en": "<p>Your textbook says “lump sum”. That is the${NB}total we are talking about. From now on we just call it the${NB}total.</p>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:116:7"
+      ]
+    },
+    "questf8-which-total#10": {
+      "en": "<p class=\"muted small\">Tap Next to see where the jug sits.</p></div>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:117:7"
+      ]
+    },
+    "questf8-which-total#11": {
+      "en": "save",
+      "kind": "string",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:118:15"
+      ]
+    },
+    "questf8-which-total#12": {
+      "en": "<p><b>Savings:</b> you fill the jug coin by coin. The${NB}total sits at <b>the${NB}END</b>.</p></div>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:119:7"
+      ]
+    },
+    "questf8-which-total#13": {
+      "en": "loan",
+      "kind": "string",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:120:15"
+      ]
+    },
+    "questf8-which-total#14": {
+      "en": "<p><b>A loan:</b> the bank hands you the full${NB}jug at <b>the${NB}START</b>. The${NB}total sits at the beginning, and your coins pay it back.</p></div>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questf8-which-total.js:121:7"
+      ]
+    },
+    "questf8-which-total#15": {
+      "en": "the jug",
+      "kind": "string",
+      "slots": [
+        "note",
+        "opt.note"
+      ],
+      "where": [
+        "questf8-which-total.js:166:18"
+      ]
+    },
+    "questf8-which-total#16": {
+      "en": "the jug: what someone has, borrows or wants to have, the ONE total",
+      "kind": "string",
+      "slots": [
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:166:34"
+      ]
+    },
+    "questf8-which-total#17": {
+      "en": "a coin: in",
+      "kind": "string",
+      "slots": [
+        "note",
+        "opt.note"
+      ],
+      "where": [
+        "questf8-which-total.js:167:18"
+      ]
+    },
+    "questf8-which-total#18": {
+      "en": "That is a coin: money going in on its day.",
+      "kind": "string",
+      "slots": [
+        "opt.why",
+        "why"
+      ],
+      "where": [
+        "questf8-which-total.js:167:37"
+      ]
+    },
+    "questf8-which-total#19": {
+      "en": "a coin: money going in on its day",
+      "kind": "string",
+      "slots": [
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:167:88"
+      ]
+    },
+    "questf8-which-total#20": {
+      "en": "a coin: out",
+      "kind": "string",
+      "slots": [
+        "note",
+        "opt.note"
+      ],
+      "where": [
+        "questf8-which-total.js:168:18"
+      ]
+    },
+    "questf8-which-total#21": {
+      "en": "That is a coin: money coming out on its day.",
+      "kind": "string",
+      "slots": [
+        "opt.why",
+        "why"
+      ],
+      "where": [
+        "questf8-which-total.js:168:38"
+      ]
+    },
+    "questf8-which-total#22": {
+      "en": "a coin: money coming out on its day",
+      "kind": "string",
+      "slots": [
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:168:91"
+      ]
+    },
+    "questf8-which-total#23": {
+      "en": "a coin: repayment",
+      "kind": "string",
+      "slots": [
+        "note",
+        "opt.note"
+      ],
+      "where": [
+        "questf8-which-total.js:169:18"
+      ]
+    },
+    "questf8-which-total#24": {
+      "en": "That is a coin: a repayment, money going back to the bank on its day.",
+      "kind": "string",
+      "slots": [
+        "opt.why",
+        "why"
+      ],
+      "where": [
+        "questf8-which-total.js:169:44"
+      ]
+    },
+    "questf8-which-total#25": {
+      "en": "a coin: a repayment going back to the bank on its day",
+      "kind": "string",
+      "slots": [
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:169:122"
+      ]
+    },
+    "questf8-which-total#26": {
+      "en": "a coin: down payment",
+      "kind": "string",
+      "slots": [
+        "note",
+        "opt.note"
+      ],
+      "where": [
+        "questf8-which-total.js:170:18"
+      ]
+    },
+    "questf8-which-total#27": {
+      "en": "That is a coin: the down payment, paid on day one straight to the shop.",
+      "kind": "string",
+      "slots": [
+        "opt.why",
+        "why"
+      ],
+      "where": [
+        "questf8-which-total.js:170:47"
+      ]
+    },
+    "questf8-which-total#28": {
+      "en": "a coin: the down payment, paid on day one straight to the shop",
+      "kind": "string",
+      "slots": [
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:170:127"
+      ]
+    },
+    "questf8-which-total#29": {
+      "en": "rate and time",
+      "kind": "string",
+      "slots": [
+        "note",
+        "opt.note"
+      ],
+      "where": [
+        "questf8-which-total.js:171:18"
+      ]
+    },
+    "questf8-which-total#30": {
+      "en": "That is a rate-and-time sentence, not an amount.",
+      "kind": "string",
+      "slots": [
+        "opt.why",
+        "why"
+      ],
+      "where": [
+        "questf8-which-total.js:171:40"
+      ]
+    },
+    "questf8-which-total#31": {
+      "en": "rate and time: not an amount",
+      "kind": "string",
+      "slots": [
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:171:97"
+      ]
+    },
+    "questf8-which-total#32": {
+      "en": "The total is the ONE amount worth the same as ALL the payments together, once they are all on the same day.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf8-which-total.js:173:20"
+      ]
+    },
+    "questf8-which-total#33": {
+      "en": "The jug is what someone HAS, BORROWS or WANTS TO HAVE. Coins are what they DO: deposit, withdraw, pay.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf8-which-total.js:174:18"
+      ]
+    },
+    "questf8-which-total#34": {
+      "en": "P",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf8-which-total.js:199:45"
+      ]
+    },
+    "questf8-which-total#35": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf8-which-total.js:199:51"
+      ]
+    },
+    "questf8-which-total#36": {
+      "en": "Tap the sentence that is the jug.<br><span class=\"muted small\">One of them is the total; the others are coins, or the rate and the time.</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf8-which-total.js:207:13"
+      ]
+    },
+    "questf8-which-total#37": {
+      "en": "Savings or loan?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf8-which-total.js:213:13"
+      ]
+    },
+    "questf8-which-total#38": {
+      "en": "Savings",
+      "kind": "string",
+      "slots": [
+        "opt.label",
+        "placeholder"
+      ],
+      "where": [
+        "questf8-which-total.js:215:11",
+        "questf8-which-total.js:238:73"
+      ]
+    },
+    "questf8-which-total#39": {
+      "en": "Hire purchase is a loan: the down payment goes to the shop and the rest is borrowed.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf8-which-total.js:216:22"
+      ]
+    },
+    "questf8-which-total#40": {
+      "en": "Somebody borrows here: the bank hands over the full jug, and the coins pay it back.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf8-which-total.js:216:111"
+      ]
+    },
+    "questf8-which-total#41": {
+      "en": "Loan",
+      "kind": "string",
+      "slots": [
+        "opt.label"
+      ],
+      "where": [
+        "questf8-which-total.js:217:11"
+      ]
+    },
+    "questf8-which-total#42": {
+      "en": "Nobody borrows here: the coins go into a savings account and fill the jug.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf8-which-total.js:218:23"
+      ]
+    },
+    "questf8-which-total#43": {
+      "en": "Is someone filling an account, or did the bank hand money over? Hire purchase counts as a loan with a down payment.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf8-which-total.js:220:11"
+      ]
+    },
+    "questf8-which-total#44": {
+      "en": "Does the jug sit at T0 or at the end?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf8-which-total.js:224:13"
+      ]
+    },
+    "questf8-which-total#45": {
+      "en": "T0",
+      "kind": "string",
+      "slots": [
+        "opt.label"
+      ],
+      "where": [
+        "questf8-which-total.js:226:11"
+      ]
+    },
+    "questf8-which-total#46": {
+      "en": "Savings fill the jug coin by coin: it is full at the END.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf8-which-total.js:227:23"
+      ]
+    },
+    "questf8-which-total#47": {
+      "en": "T${n}",
+      "kind": "template",
+      "slots": [
+        "opt.label"
+      ],
+      "where": [
+        "questf8-which-total.js:228:11"
+      ]
+    },
+    "questf8-which-total#48": {
+      "en": "The bank hands you the full jug at the START: the loan is the jug at T0.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf8-which-total.js:229:16"
+      ]
+    },
+    "questf8-which-total#49": {
+      "en": "Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf8-which-total.js:231:11"
+      ]
+    },
+    "questf8-which-total#50": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "graphAfterCap"
+      ],
+      "where": [
+        "questf8-which-total.js:235:20"
+      ]
+    },
+    "questf8-which-total#51": {
+      "en": "Hire purchase is a loan",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf8-which-total.js:238:33"
+      ]
+    },
+    "questf8-which-total#52": {
+      "en": "A loan",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf8-which-total.js:238:61"
+      ]
+    },
+    "questf8-which-total#53": {
+      "en": "T0, the start",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf8-which-total.js:239:24"
+      ]
+    },
+    "questf8-which-total#54": {
+      "en": "T${n}, the end",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf8-which-total.js:239:42"
+      ]
+    },
+    "questf8-which-total#55": {
+      "en": "First the idea. Then a finance question, cut into its sentences.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf8-which-total.js:242:25"
+      ]
+    },
+    "questf8-which-total#56": {
+      "en": "A finance question, cut into its sentences.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf8-which-total.js:242:94"
+      ]
+    },
+    "questf8-which-total#57": {
+      "en": "Find the jug in the words first: what someone has, borrows or wants to have.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf8-which-total.js:245:11"
+      ]
+    },
+    "questf8-which-total#58": {
+      "en": "The jug: “${jugChip.text}” ${kindWord}, so the jug is ${role}, at ${where}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf8-which-total.js:246:18"
+      ]
+    },
+    "questf8-which-total#59": {
+      "en": "${kindWord}: the bank hands over the full jug at the start, so the jug is P, at T0.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf8-which-total.js:249:19"
+      ]
+    },
+    "questf8-which-total#60": {
+      "en": "Savings: the coins fill the jug, so the jug is A, at the end, T${n}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf8-which-total.js:250:19"
+      ]
+    },
+    "questf8-which-total#61": {
+      "en": "in",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:273:21",
+        "questf8-which-total.js:274:22",
+        "questf8-which-total.js:275:21",
+        "questf8-which-total.js:323:21",
+        "questf8-which-total.js:325:26",
+        "questf8-which-total.js:382:23",
+        "questf8-which-total.js:383:23",
+        "questf8-which-total.js:386:21",
+        "questf8-which-total.js:387:21",
+        "questf8-which-total.js:426:78",
+        "questf8-which-total.js:433:51",
+        "questf8-which-total.js:434:80",
+        "questf8-which-total.js:435:69"
+      ],
+      "data": true
+    },
+    "questf8-which-total#62": {
+      "en": "out",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:324:21",
+        "questf8-which-total.js:427:79",
+        "questf8-which-total.js:433:57",
+        "questf8-which-total.js:435:75"
+      ],
+      "data": true
+    },
+    "questf8-which-total#63": {
+      "en": "down",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:350:23",
+        "questf8-which-total.js:430:80",
+        "questf8-which-total.js:434:72",
+        "questf8-which-total.js:435:102"
+      ],
+      "data": true
+    },
+    "questf8-which-total#64": {
+      "en": "payAt",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:433:64",
+        "questf8-which-total.js:434:63",
+        "questf8-which-total.js:435:82"
+      ]
+    },
+    "questf8-which-total#65": {
+      "en": "payBack",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "solution"
+      ],
+      "where": [
+        "questf8-which-total.js:434:52",
+        "questf8-which-total.js:435:91"
+      ]
+    },
+    "questf8-which-total#66": {
+      "en": "Which of these is the jug?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf8-which-total.js:445:25"
+      ]
+    },
+    "questf8-which-total#67": {
+      "en": "“${jug}” is the jug: the ONE total",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf8-which-total.js:447:20"
+      ]
+    },
+    "questf9-car-or-no-car#1": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:48:29"
+      ]
+    },
+    "questf9-car-or-no-car#2": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:67:17"
+      ]
+    },
+    "questf9-car-or-no-car#3": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:116:17"
+      ]
+    },
+    "questf9-car-or-no-car#4": {
+      "en": "${pa(r0.r)} compounded ${HOW(r0.k)}${r1 ? `; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}` : \"\"}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:120:16"
+      ],
+      "nested": [
+        "; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}"
+      ]
+    },
+    "questf9-car-or-no-car#5": {
+      "en": "${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:122:7"
+      ]
+    },
+    "questf9-car-or-no-car#6": {
+      "en": "${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:123:7"
+      ]
+    },
+    "questf9-car-or-no-car#7": {
+      "en": "the ${l.r}% road",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:149:23"
+      ]
+    },
+    "questf9-car-or-no-car#8": {
+      "en": "forward gear",
+      "kind": "string",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:150:34"
+      ]
+    },
+    "questf9-car-or-no-car#9": {
+      "en": "reverse gear",
+      "kind": "string",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:150:51"
+      ]
+    },
+    "questf9-car-or-no-car#10": {
+      "en": "The meeting day is T${meet}. The ${money(a.v)} stands at T${a.t}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:159:21"
+      ]
+    },
+    "questf9-car-or-no-car#11": {
+      "en": "it is already there",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:159:108"
+      ]
+    },
+    "questf9-car-or-no-car#12": {
+      "en": "it has to move",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:159:132"
+      ]
+    },
+    "questf9-car-or-no-car#13": {
+      "en": "${story(sc)} Does the ${money(a.v, true)} need a car to reach the meeting day?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:213:13"
+      ]
+    },
+    "questf9-car-or-no-car#14": {
+      "en": "Find the flag. Is the amount already standing on that T?",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:215:28"
+      ]
+    },
+    "questf9-car-or-no-car#15": {
+      "en": "Yes: it has to move from T${a.t} to T${meet}",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:216:13"
+      ]
+    },
+    "questf9-car-or-no-car#16": {
+      "en": "No: it already stands on the meeting day, T${meet}",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:216:62"
+      ]
+    },
+    "questf9-car-or-no-car#17": {
+      "en": "Forward gear (×): the meeting day is later",
+      "kind": "string",
+      "slots": [
+        "extras.answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:221:8"
+      ]
+    },
+    "questf9-car-or-no-car#18": {
+      "en": "Reverse gear (÷): the meeting day is earlier",
+      "kind": "string",
+      "slots": [
+        "extras.answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:222:8"
+      ]
+    },
+    "questf9-car-or-no-car#19": {
+      "en": "No car: it is already there",
+      "kind": "string",
+      "slots": [
+        "extras.answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "optionList",
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:223:9",
+        "questf9-car-or-no-car.js:242:17"
+      ]
+    },
+    "questf9-car-or-no-car#20": {
+      "en": "${story(sc)} Which gear moves the ${money(a.v, true)} to the meeting day?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:235:5"
+      ]
+    },
+    "questf9-car-or-no-car#21": {
+      "en": "A later date: forward gear (×). An earlier date: reverse gear (÷). Already there: no car.",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:237:25"
+      ]
+    },
+    "questf9-car-or-no-car#22": {
+      "en": "No car: the ${money(a.v)} already stands on T${meet}",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:238:22"
+      ]
+    },
+    "questf9-car-or-no-car#23": {
+      "en": "${cap(gearOf(tr.dir))}: from T${a.t} to T${meet}",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:238:79"
+      ]
+    },
+    "questf9-car-or-no-car#24": {
+      "en": "A car in forward gear",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "optionList"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:242:48"
+      ]
+    },
+    "questf9-car-or-no-car#25": {
+      "en": "A car in reverse gear",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "optionList"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:242:73"
+      ]
+    },
+    "questf9-car-or-no-car#26": {
+      "en": "One car for each road",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "optionList"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:242:98"
+      ]
+    },
+    "questf9-car-or-no-car#27": {
+      "en": "Does it have to move at all?",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:245:34"
+      ]
+    },
+    "questf9-car-or-no-car#28": {
+      "en": "No car: the ${money(a.v)} already stands on the meeting day",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:245:66"
+      ]
+    },
+    "questf9-car-or-no-car#29": {
+      "en": "An amount standing on the meeting day, like the ${money(a.v, true)} here: does it need a car?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:248:13"
+      ]
+    },
+    "questf9-car-or-no-car#30": {
+      "en": "An amount standing on the meeting day, like the ${money(a.v, true)} here: car or no car?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:251:18"
+      ]
+    },
+    "questf9-car-or-no-car#31": {
+      "en": "${story(sc)} The ${money(a.v, true)} is moved to the meeting day. Its exponent is …",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:261:13"
+      ]
+    },
+    "questf9-car-or-no-car#32": {
+      "en": "Exponent = years × k on its road, with a minus sign for reverse gear.",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:264:28"
+      ]
+    },
+    "questf9-car-or-no-car#33": {
+      "en": "exponent ${expText(L)}",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:264:101"
+      ]
+    },
+    "questf9-car-or-no-car#34": {
+      "en": "The ${r.r}% road only",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:273:21"
+      ]
+    },
+    "questf9-car-or-no-car#35": {
+      "en": "The ${A.r}% road, then the ${B.r}% road",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:274:29"
+      ]
+    },
+    "questf9-car-or-no-car#36": {
+      "en": "The ${B.r}% road, then the ${A.r}% road",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:274:73"
+      ]
+    },
+    "questf9-car-or-no-car#37": {
+      "en": "${story(sc)} Over which road(s) does the ${money(a.v, true)} travel to reach the meeting day?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:277:5"
+      ]
+    },
+    "questf9-car-or-no-car#38": {
+      "en": "No road: it is already on the meeting day",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:278:37"
+      ]
+    },
+    "questf9-car-or-no-car#39": {
+      "en": "Follow the line from the amount to the flag. Which colours does it drive over?",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:279:25"
+      ]
+    },
+    "questf9-car-or-no-car#40": {
+      "en": "${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day? Pick the expression that shows them.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:289:5"
+      ]
+    },
+    "questf9-car-or-no-car#41": {
+      "en": "One car per road: every colour it drives over gets its own bracket, multiplied.",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:291:25"
+      ]
+    },
+    "questf9-car-or-no-car#42": {
+      "en": "2 cars: ${right}",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:291:108"
+      ]
+    },
+    "questf9-car-or-no-car#43": {
+      "en": "${story(sc)} The ${money(a.v, true)} crosses the place where the road changes colour. On the <b>${L.r}% road</b>, its car's exponent is …",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:300:13"
+      ]
+    },
+    "questf9-car-or-no-car#44": {
+      "en": "Count only the years on that colour, times that road's k. Reverse gear makes it negative.",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:304:28"
+      ]
+    },
+    "questf9-car-or-no-car#45": {
+      "en": "exponent on ${roadName(L)}: ${expText(L)}",
+      "kind": "template",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:305:7"
+      ]
+    },
+    "questf9-car-or-no-car#46": {
+      "en": "${story(sc)} How many cars does the ${money(a.v, true)} need to reach the meeting day?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:319:13"
+      ]
+    },
+    "questf9-car-or-no-car#47": {
+      "en": "Already there: no car. One colour: one car. Two colours: two cars.",
+      "kind": "string",
+      "slots": [
+        "extras.hint"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:321:28"
+      ]
+    },
+    "questf9-car-or-no-car#48": {
+      "en": "0 cars, it already stands on the meeting day",
+      "kind": "string",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:322:20"
+      ]
+    },
+    "questf9-car-or-no-car#49": {
+      "en": "1 car, it drives over one road",
+      "kind": "string",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:322:82"
+      ]
+    },
+    "questf9-car-or-no-car#50": {
+      "en": "2 cars, one car per road",
+      "kind": "string",
+      "slots": [
+        "extras.answerLabel"
+      ],
+      "where": [
+        "questf9-car-or-no-car.js:322:117"
+      ]
+    }
+  },
+  "optionLists": {
+    "questf8-which-total.js:ITEMS": [
+      "questf8-which-total#1",
+      "questf8-which-total#2",
+      "questf8-which-total#3",
+      "questf8-which-total#4",
+      "questf8-which-total#5",
+      "questf8-which-total#6"
+    ],
+    "questf9-car-or-no-car.js:ON_DAY": [
+      "questf9-car-or-no-car#19",
+      "questf9-car-or-no-car#24",
+      "questf9-car-or-no-car#25",
+      "questf9-car-or-no-car#26"
+    ]
+  },
+  "leftovers": [
+    {
+      "where": "questf5-timeline-build.js:103:46",
+      "text": "A plus exponent gives ${money(wrongBack, 2)} — that is moving forward again."
+    },
+    {
+      "where": "questf5-timeline-build.js:108:167",
+      "text": "the <b>same</b> value",
+      "in": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. Moving <"
+    },
+    {
+      "where": "questf5-timeline-build.js:108:193",
+      "text": "<b>different</b> values",
+      "in": "${money(P)} at T0 is worth ${money(A, 2)} at T${T}. Moving <"
+    },
+    {
+      "where": "questf5-timeline-build.js:177:73",
+      "text": "rate changes"
+    },
+    {
+      "where": "questf8-which-total.js:77:34",
+      "text": "the total"
+    },
+    {
+      "where": "questf8-which-total.js:127:16",
+      "text": "<p>Payments are <b>coins</b>. The${NB}total is <b>the${NB}jug</b>.</p>"
+    },
+    {
+      "where": "questf8-which-total.js:193:6",
+      "text": "The bank charges ${paU(r)}, compounded ${HOW[k]}."
+    },
+    {
+      "where": "questf8-which-total.js:193:59",
+      "text": "The interest rate is ${paU(r)}, compounded ${HOW[k]}."
+    },
+    {
+      "where": "questf8-which-total.js:194:6",
+      "text": "The account earns interest at ${paU(r)}, compounded ${HOW[k]}."
+    },
+    {
+      "where": "questf8-which-total.js:194:72",
+      "text": "The interest rate is ${paU(r)}, compounded ${HOW[k]}."
+    },
+    {
+      "where": "questf8-which-total.js:273:32",
+      "text": "${w.S} deposits ${money(d1)} into a savings account now."
+    },
+    {
+      "where": "questf8-which-total.js:274:33",
+      "text": "${w.S} deposits ${money(d1)} into the account now."
+    },
+    {
+      "where": "questf8-which-total.js:275:32",
+      "text": "${w.S} deposits another ${money(d2)} after ${years(t2)}."
+    },
+    {
+      "where": "questf8-which-total.js:278:7",
+      "text": "How much will ${w.s} have in the account after ${years(n)}?"
+    },
+    {
+      "where": "questf8-which-total.js:279:7",
+      "text": "${w.S} wants to know how much is in the account after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:280:7",
+      "text": "What amount will ${w.s} have in the account after ${years(n)}?"
+    },
+    {
+      "where": "questf8-which-total.js:281:38",
+      "text": "${w.S} wants to know how much ${w.s === name ? WHO[name].he : w.s} will have in a savings account after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:298:25",
+      "text": "${w.S} borrows an amount, P, from the bank now."
+    },
+    {
+      "where": "questf8-which-total.js:299:31",
+      "text": "${w.S} borrows ${money(P)} from the bank now."
+    },
+    {
+      "where": "questf8-which-total.js:299:80",
+      "text": "${w.S} borrows ${money(P)} from a bank to start a business."
+    },
+    {
+      "where": "questf8-which-total.js:300:42",
+      "text": "${w.S} pays back ${money(r1)} after ${years(t1)}."
+    },
+    {
+      "where": "questf8-which-total.js:300:95",
+      "text": "${w.S} repays ${money(r1)} after ${years(t1)}."
+    },
+    {
+      "where": "questf8-which-total.js:302:27",
+      "text": "${w.S} pays back ${money(r2)} after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:303:27",
+      "text": "${w.S} pays back the rest, an amount x, after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:323:32",
+      "text": "${s.S} deposits ${money(d1)} into ${first ? \"the\" : \"a savings\"} account now."
+    },
+    {
+      "where": "questf8-which-total.js:324:39",
+      "text": "${s.S} withdraws ${money(w)} after ${years(tw)}."
+    },
+    {
+      "where": "questf8-which-total.js:324:91",
+      "text": "${s.S} takes ${money(w)} out of the account after ${years(tw)}."
+    },
+    {
+      "where": "questf8-which-total.js:325:37",
+      "text": "${s.S} deposits another ${money(d2)} after ${years(td)}."
+    },
+    {
+      "where": "questf8-which-total.js:329:7",
+      "text": "How much will ${s.s} have in the account after ${years(n)}?"
+    },
+    {
+      "where": "questf8-which-total.js:330:7",
+      "text": "${s.S} wants to know how much is in the account after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:331:7",
+      "text": "${s.S} wants to know how much ${WHO[name].he} will have in a savings account after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:350:36",
+      "text": "${s.S} buys ${a} ${item} for ${money(price)} and pays a down payment of ${money(down)} straight to the shop."
+    },
+    {
+      "where": "questf8-which-total.js:351:46",
+      "text": "${s.S} borrows the rest, ${money(loan)}, from the bank."
+    },
+    {
+      "where": "questf8-which-total.js:351:106",
+      "text": "${s.S} borrows the rest of the price from the bank."
+    },
+    {
+      "where": "questf8-which-total.js:353:28",
+      "text": "${s.S} pays back ${money(r1)} after ${years(t1)}."
+    },
+    {
+      "where": "questf8-which-total.js:353:100",
+      "text": "${s.S} pays the rest, an amount x, after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:354:28",
+      "text": "${s.S} pays the loan back with two repayments: ${money(r1)} after ${years(t1)} and an amount x after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:379:33",
+      "text": "${s.S} wants to have ${money(T)} in a savings account after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:382:34",
+      "text": "${s.S} will also deposit ${money(d)} after ${years(t2)}."
+    },
+    {
+      "where": "questf8-which-total.js:383:34",
+      "text": "How much must ${s.s} deposit now?"
+    },
+    {
+      "where": "questf8-which-total.js:386:32",
+      "text": "${s.S} deposits ${money(d)} now."
+    },
+    {
+      "where": "questf8-which-total.js:387:38",
+      "text": "${s.S} deposits an amount x after ${years(t2)}."
+    },
+    {
+      "where": "questf8-which-total.js:387:89",
+      "text": "${s.S} will deposit one more amount, x, after ${years(t2)}."
+    },
+    {
+      "where": "questf8-which-total.js:399:33",
+      "text": "${s.S} borrows ${money(P)} from the bank."
+    },
+    {
+      "where": "questf8-which-total.js:400:42",
+      "text": "${s.S} pays back ${money(r0)} on the same day."
+    },
+    {
+      "where": "questf8-which-total.js:400:92",
+      "text": "On the day of the loan ${s.s} pays back ${money(r0)}."
+    },
+    {
+      "where": "questf8-which-total.js:401:36",
+      "text": "${s.S} pays back ${money(r1)} after ${years(t1)}."
+    },
+    {
+      "where": "questf8-which-total.js:402:36",
+      "text": "${s.S} pays the rest, an amount x, after ${years(n)}."
+    },
+    {
+      "where": "questf8-which-total.js:420:92",
+      "text": "${who} has ${money(v)} in the account after ${years(y)}"
+    },
+    {
+      "where": "questf8-which-total.js:421:94",
+      "text": "${who} wants to have ${money(v)} after ${years(y)}"
+    },
+    {
+      "where": "questf8-which-total.js:423:74",
+      "text": "${who} owes the bank ${money(v)} now"
+    },
+    {
+      "where": "questf8-which-total.js:428:115",
+      "text": "${who} pays ${money(v)} at T${t}"
+    },
+    {
+      "where": "questf8-which-total.js:429:117",
+      "text": "${who} pays back ${money(v)} after ${years(y)}"
+    },
+    {
+      "where": "questf8-which-total.js:430:94",
+      "text": "${who} pays a down payment of ${money(v)}"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:44:24",
+      "text": "A car only if it has to move. Already there? No car."
+    },
+    {
+      "where": "questf9-car-or-no-car.js:120:59",
+      "text": "; from T${r1.from} the rate is ${pa(r1.r)} compounded ${HOW(r1.k)}",
+      "in": "${pa(r0.r)} compounded ${HOW(r0.k)}${r1 ? `; from T${r1.from"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:161:19",
+      "text": "No car: in the one equation it is just ${nw(amt0(a.v))}, with no bracket."
+    },
+    {
+      "where": "questf9-car-or-no-car.js:161:99",
+      "text": "it does not move"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:164:23",
+      "text": "a positive exponent"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:164:47",
+      "text": "a negative exponent"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:168:19",
+      "text": "Its piece of the one equation: ${term(a.v, tr.legs)}"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:168:99",
+      "text": "one car per road"
+    },
+    {
+      "where": "questf9-car-or-no-car.js:168:120",
+      "text": "one road, one car"
+    }
+  ],
+  "words": 2762
+}
