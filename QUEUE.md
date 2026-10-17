@@ -40,12 +40,12 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T16 | exam: eqn-siblings-delta-in-p, eqn-siblings-fraction-equations (2 files) | ~3 370 words | verify-exam.html
 - ☑ 2026-10-17 T17 | exam: eqn-siblings-inequalities, eqn-siblings-k-equal-roots (2 files) | ~2 445 words | verify-exam.html
 - ☑ 2026-10-17 T18 | exam: eqn-siblings-k-for-nature, eqn-siblings-nature-chain (2 files) | ~3 831 words | verify-exam.html
-- ⏳ 2026-10-17 20:03 T19 | exam: eqn-siblings-quadratic-solving | ~2 336 words | verify-exam.html
+- ☑ 2026-10-17 T19 | exam: eqn-siblings-quadratic-solving | ~2 336 words | verify-exam.html
 - ⏳ 2026-10-17 20:05 T20 | exam: eqn-siblings-rational-exponents-k, eqn-siblings-simultaneous (2 files) | ~3 495 words | verify-exam.html
 - ⏳ 2026-10-17 20:07 T21 | exam: eqn-siblings-solution-count, eqn-siblings-surd-equations (2 files) | ~3 877 words | verify-exam.html
 
 ### Number Patterns
-- ☐ T22 | concepts: the `pat` block (js/concepts/pat.js after S4) | ~511 words | counted by af_extract 2026-10-17
+- ⏳ 2026-10-17 20:07 T22 | concepts: the `pat` block (js/concepts/pat.js after S4) | ~511 words | counted by af_extract 2026-10-17
 - ☐ T23 | hub rounds: questnp1-spot … questnp7-geometric (7 files) | ~1 767 words | verify page: verify-patterns.html
 
 ### Analytical Geometry
