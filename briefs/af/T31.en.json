@@ -1,0 +1,813 @@
+{
+  "unit": "T31",
+  "generated": "2026-10-17T18:26:23.785Z",
+  "files": [
+    "js/exam/func-line-and-parabola.js",
+    "js/exam/func-siblings-asymptotes-domain-range.js"
+  ],
+  "items": {
+    "func-line-and-parabola#1": {
+      "en": "A parabola f cuts the x-axis at (−1 ; 0) and at (4 ; 0), and passes through the point (0 ; −8).<br><br>Determine the equation of f in the form y = ax² + bx + c.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:113:13"
+      ]
+    },
+    "func-line-and-parabola#2": {
+      "en": "When you are handed both x-intercepts, start from the factorised shape y = a(x − x₁)(x − x₂) — the brackets are already decided. The third point is there to pin down the only letter still missing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:116:13"
+      ]
+    },
+    "func-line-and-parabola#3": {
+      "en": "Two x-intercepts are given, so start from &nbsp;y = a(x − x₁)(x − x₂):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:119:37"
+      ]
+    },
+    "func-line-and-parabola#4": {
+      "en": "y = a(x + 1)(x − 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:120:37"
+      ]
+    },
+    "func-line-and-parabola#5": {
+      "en": "substitute the third point (0 ; −8): &nbsp;−8 = a(0 + 1)(0 − 4) = −4a &nbsp;⟹&nbsp; a = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:121:37"
+      ]
+    },
+    "func-line-and-parabola#6": {
+      "en": "f(x) = 2(x + 1)(x − 4) = 2x² − 6x − 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:122:39"
+      ]
+    },
+    "func-line-and-parabola#7": {
+      "en": "WATCH OUT: the bracket takes the OPPOSITE sign of the intercept. An x-intercept at −1 gives (x + 1), not (x − 1) — check it by asking what x would make the bracket zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:124:15"
+      ]
+    },
+    "func-line-and-parabola#8": {
+      "en": "Two x-intercepts tell you where the graph is zero, and a product is zero exactly when one of its factors is zero — so the two brackets write themselves. What they cannot tell you is how steep or how flat the curve is, because a whole family of parabolas passes through the same two points, some narrow, some wide, some upside down. That is what a is for, and that is why the question gives you a third point: put its x and y into the equation and the only unknown left is a. Once you have it, expand into the form you were asked for — the question said y = ax² + bx + c, so the factorised version is working, not the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:128:13"
+      ]
+    },
+    "func-line-and-parabola#9": {
+      "en": "Determine the coordinates of the turning point of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:136:13"
+      ]
+    },
+    "func-line-and-parabola#10": {
+      "en": "Find the x of the turning point first with x = −b/(2a), then substitute it back into f to get the y. (There is a quick check available: the turning point always sits exactly midway between the two x-intercepts.)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:139:13"
+      ]
+    },
+    "func-line-and-parabola#11": {
+      "en": "x = −b/(2a) = −(−6)/(2(2)) = 6/4 = 1,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:142:37"
+      ]
+    },
+    "func-line-and-parabola#12": {
+      "en": "y = 2(1,5)² − 6(1,5) − 8 = 4,5 − 9 − 8 = −12,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:143:37"
+      ]
+    },
+    "func-line-and-parabola#13": {
+      "en": "TP(1,5 ; −12,5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:144:39"
+      ]
+    },
+    "func-line-and-parabola#14": {
+      "en": "WATCH OUT: −b/(2a) gives you only the x of the turning point. Stopping there and writing TP(1,5) throws away the second half of the answer — you still have to substitute back to find the y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:146:15"
+      ]
+    },
+    "func-line-and-parabola#15": {
+      "en": "A parabola is perfectly symmetrical, so its turning point sits on the mirror line, exactly halfway between the two crossings — and −b/(2a) is the formula that finds that halfway x for you. You can check it here without any algebra: the intercepts are at −1 and 4, and halfway between them is 1,5. The y is a separate job. The formula only ever hands you an x, so put that x back into f and work out the height there. Write the answer as a coordinate, with the semicolon; the comma is doing decimal duty in both numbers.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:150:13"
+      ]
+    },
+    "func-line-and-parabola#16": {
+      "en": "Write down the range of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:158:13"
+      ]
+    },
+    "func-line-and-parabola#17": {
+      "en": "Range is about y. Which way up is this parabola — and does that make the turning y-value a floor or a ceiling?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:161:13"
+      ]
+    },
+    "func-line-and-parabola#18": {
+      "en": "a = 2 &gt; 0, so f is <b>happy</b> and −12,5 is its minimum &nbsp;∴ y ≥ −12,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:164:39"
+      ]
+    },
+    "func-line-and-parabola#19": {
+      "en": "The sign of a decides everything here. It is positive, so the arms point upwards: the graph falls to the turning point, then climbs forever, which makes that turning y-value the lowest the graph ever gets and everything above it reachable. So the range runs upward from it. Had a been negative the parabola would be sad and the same number would have been a ceiling instead, with the range running downwards. One mark, one decision — but it is the decision the whole answer hangs on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:167:13"
+      ]
+    },
+    "func-line-and-parabola#20": {
+      "en": "The graph of g is obtained by shifting f two units to the LEFT and five units UP.<br>Write down the equation of g in the form y = a(x − p)² + q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:175:13"
+      ]
+    },
+    "func-line-and-parabola#21": {
+      "en": "The answer is asked for in turning-point form, so write f in turning-point form first — you already have its turning point. Then move that point, and leave a exactly as it is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:178:13"
+      ]
+    },
+    "func-line-and-parabola#22": {
+      "en": "Write f in turning-point form first, using TP(1,5 ; −12,5): &nbsp;f(x) = 2(x − 1,5)² − 12,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:181:37"
+      ]
+    },
+    "func-line-and-parabola#23": {
+      "en": "two units left moves the turning point to x = 1,5 − 2 = −0,5 &nbsp;·&nbsp; five units up moves it to y = −12,5 + 5 = −7,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:182:37"
+      ]
+    },
+    "func-line-and-parabola#24": {
+      "en": "g(x) = 2(x + 0,5)² − 7,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:183:39"
+      ]
+    },
+    "func-line-and-parabola#25": {
+      "en": "REMEMBER: in y = a(x − p)² + q the p sits inside the bracket with the OPPOSITE sign. A turning point at x = −0,5 gives (x + 0,5)², not (x − 0,5)². The q, outside the bracket, keeps its own sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:185:15"
+      ]
+    },
+    "func-line-and-parabola#26": {
+      "en": "A shift does not bend a graph, it only carries it — so a never changes, and the width and direction stay exactly as they were. All that moves is the turning point, which makes turning-point form the natural place to work: p and q ARE the turning point's coordinates, so shifting the graph is just shifting two numbers. Two left takes 2 off the x-coordinate; five up adds 5 to the y-coordinate. The only place people lose the mark is the sign flip inside the bracket, and the safe check is to ask what value of x makes the bracket zero — it should be your new turning-point x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:189:13"
+      ]
+    },
+    "func-line-and-parabola#27": {
+      "en": "Determine the value(s) of k for which the equation f(x) = k will have NO real roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:197:13"
+      ]
+    },
+    "func-line-and-parabola#28": {
+      "en": "f(x) = k is a horizontal line y = k sliding up and down across f, and the roots are wherever it cuts. Picture it sliding downwards — at what height does it stop cutting the graph altogether?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:200:13"
+      ]
+    },
+    "func-line-and-parabola#29": {
+      "en": "f(x) = k is the horizontal line y = k sliding up and down across f. Its roots are the points where the line cuts the parabola, so the question is: where must the line sit to miss it completely?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:203:37"
+      ]
+    },
+    "func-line-and-parabola#30": {
+      "en": "f is <b>happy</b> with a minimum of −12,5 at TP(1,5 ; −12,5), so a line below that minimum never reaches the graph at all",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:204:37"
+      ]
+    },
+    "func-line-and-parabola#31": {
+      "en": "∴ k &lt; −12,5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:205:39"
+      ]
+    },
+    "func-line-and-parabola#32": {
+      "en": "REMEMBER: at k = −12,5 exactly, the line touches the turning point — that is ONE real (equal) root, not none. “No real roots” has to be strictly below the minimum: k &lt; −12,5, with no equals sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:207:15"
+      ]
+    },
+    "func-line-and-parabola#33": {
+      "en": "Do not solve 2x² − 6x − 8 = k for x — picture the line instead. Every horizontal line y = k either cuts the parabola twice, touches it once, or misses it, and which of the three happens depends only on where k sits relative to the turning point. This parabola is happy, so it has a floor at −12,5: any line above that floor cuts both arms, a line exactly on it touches at one point, and any line below it passes underneath the whole graph and never meets it. That last case is the one asked for. The fact that decides it, the minimum −12,5, is not something you calculate here — it's a leftover from earlier work, sitting quietly above as given information while this part asks something new of it, which is exactly why this part carries the star. If you would rather do it with algebra, the same answer comes out of Δ &lt; 0 for 2x² − 6x − 8 − k = 0, and both roads earn full marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-line-and-parabola.js:211:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#1": {
+      "en": "The sketch shows the hyperbola h, defined by &nbsp;h(x) = −4/(x − 1) + 3.<br><br>Write down the equations of the two asymptotes of h.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:103:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#2": {
+      "en": "Compare the equation with the shape y = a/(x − p) + q. One asymptote is the x-value the graph is not allowed to reach, the other is the y-value it never settles on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:106:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#3": {
+      "en": "A hyperbola is &nbsp;y = a/(x − p) + q, with a vertical asymptote at x = p and a horizontal one at y = q. Read both straight off:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:109:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#4": {
+      "en": "x = 1 &nbsp;&nbsp;and&nbsp;&nbsp; y = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:110:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#5": {
+      "en": "WATCH OUT: p takes the OPPOSITE sign to the number in the bracket. (x − 1) gives x = 1, but (x + 1) would have given x = −1. The safe check is always: which x makes the bottom zero?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:112:15"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#6": {
+      "en": "An asymptote is a line the graph creeps towards forever without ever arriving. A hyperbola has two of them, and they are the crosshairs of the whole picture. The vertical one is easy to justify: the graph is a fraction, and a fraction with zero on the bottom is undefined, so at that one x-value the graph simply cannot exist — it flies off instead. The horizontal one comes from the tail end: as x gets huge in either direction the fraction −4/(x − 1) shrinks towards nothing, so the whole expression settles down onto the leftover number, which is the 3. Notice the a, the −4, played no part at all in this answer — a controls how far the branches sit from the crosshairs and which pair of corners they live in, never where the crosshairs themselves are.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:116:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#7": {
+      "en": "Write down the domain and the range of h.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:124:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#8": {
+      "en": "Domain is the x-values allowed in, range is the y-values that come out. For a hyperbola each of them is everything except one number — and you already found both numbers in (a).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:127:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#9": {
+      "en": "The graph is undefined where the bottom is zero, and it never actually settles on its horizontal asymptote — so each answer is “everything except one number”:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:130:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#10": {
+      "en": "domain: &nbsp;x ∈ ℝ ; x ≠ 1 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y ∈ ℝ ; y ≠ 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:131:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#11": {
+      "en": "These two answers are the asymptotes in different clothing. The vertical asymptote said “x may not be 1”, and the domain is precisely the list of x-values that are allowed, so it says the same thing: all the reals, except that one. The horizontal asymptote said “y never becomes 3”, and the range is the list of y-values that actually come out, so again, all the reals except that one. That is why she teaches asymptotes first and domain and range straight afterwards — for a hyperbola the second pair is free once you have the first. Watch the layout, because she marks it: the set of numbers first, then the exclusion riding after a semicolon.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:134:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#12": {
+      "en": "The graph of k is given by &nbsp;k(x) = h(x + 3) − 2.<br><br>Write down the equations of the two asymptotes of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:142:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#13": {
+      "en": "A shift picks the whole picture up and puts it down somewhere else — asymptotes and all. Work out which way each part of the instruction moves it, then move both of your answers from (a) the same way.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:145:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#14": {
+      "en": "h(x + 3) slides the whole graph 3 units LEFT, and the &nbsp;− 2&nbsp; outside slides it 2 units DOWN. The asymptotes are part of the picture, so they travel with it:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:148:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#15": {
+      "en": "x = 1 − 3 = −2 &nbsp;&nbsp;and&nbsp;&nbsp; y = 3 − 2 = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:149:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#16": {
+      "en": "REMEMBER: h(x + 3) moves the graph LEFT, not right. Anything done INSIDE the bracket, next to the x, does the opposite of what it looks like; anything outside behaves normally.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:151:15"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#17": {
+      "en": "The thing to hold on to is that a shift does not redraw the graph, it carries it. Nothing about the shape changes — same branches, same steepness, same gaps — so you do not need the equation of k at all. All you need is where the crosshairs went, and they went wherever the instruction sent everything else. The inside-versus-outside rule is the only fiddly part, and there is a reason for it rather than just a rule to memorise: k(0) is h(3), so the value the new graph shows at 0 is the one the old graph showed at 3 — the picture has slid left by 3 to bring that value across. If you ever forget which way, test one number like that and the answer falls out in ten seconds.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:155:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#18": {
+      "en": "The sketch shows the exponential graph f, defined by &nbsp;f(x) = 2·3ˣ − 5.<br><br>Write down the equation of the asymptote of f, and the range of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:216:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#19": {
+      "en": "In y = a·bˣ + q the leftover number is the asymptote. Then ask one question about the sign of a: does the graph sit above that line, or below it?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:219:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#20": {
+      "en": "In &nbsp;y = a·bˣ + q&nbsp; the q is the asymptote, and here q = −5. The sign of a decides which side of it the graph lives on — a = 2 is positive, so f sits entirely ABOVE the line:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:222:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#21": {
+      "en": "asymptote: &nbsp;y = −5 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &gt; −5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:223:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#22": {
+      "en": "An exponential graph is a very obedient thing: it has one flat line it hugs, and it stays on one side of that line forever. The line is the leftover number q, because the power part bˣ shrinks towards nothing at one end and the whole expression settles onto q. Which side it stays on is decided entirely by a: a positive a adds something positive to q every single time, so the graph is always above; a negative a would subtract, and it would hang below instead. That is why the range is written with a strict greater-than and no equals sign — the graph gets as close to −5 as you like but never actually gets there, so −5 itself is not a value the graph ever produces.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:226:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#23": {
+      "en": "A second graph g is defined by &nbsp;g(x) = 4(1/2)ˣ + 1, and is shown in the sketch.<br><br>Write down the equation of the asymptote of g, and the range of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:234:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#24": {
+      "en": "Read it the same way you read f. The base is smaller than 1 this time, which changes which way the graph runs — but ask yourself whether it changes which side of the asymptote the graph sits on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:237:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#25": {
+      "en": "Same reading: &nbsp;q = 1&nbsp; is the asymptote, and a = 4 is positive, so g is ABOVE it. The base 1/2 lies between 0 and 1, so g is <b>landing</b> — it falls towards the asymptote as x grows — but landing changes nothing about WHICH SIDE the graph sits on:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:240:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#26": {
+      "en": "asymptote: &nbsp;y = 1 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &gt; 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:241:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#27": {
+      "en": "WATCH OUT: a base between 0 and 1 does NOT make the range flip. The base decides which way round the graph runs (taking off or landing); only the sign of a decides which side of the asymptote it lives on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:243:15"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#28": {
+      "en": "This is the part learners get wrong most often, because “decreasing” feels like it should turn the answer upside down. It does not. Picture the two graphs side by side: f takes off to the right and flattens onto its line on the left; g does the mirror image — it flattens onto its line on the right and shoots up on the left. Both of them spend their whole lives above their own asymptote, because in both cases a is positive and a positive amount is being added to q. So both ranges are “greater than the asymptote”. The base changed the direction of travel, not the neighbourhood. Worth noticing too: (1/2)ˣ is the same thing as 2 to the power −x, which is exactly why it comes out as the mirror image of a taking-off graph.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:247:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#29": {
+      "en": "The domain of g is now restricted to &nbsp;x ≥ −2&nbsp; (the shaded strip).<br><br>Write down the range of g on this restricted domain.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:255:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#30": {
+      "en": "On a restricted domain the range runs between two things: the value at the end of the strip, and whatever the graph is heading for at the open side. Work out the first, remember the second from (b), and then decide which end may be closed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:258:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#31": {
+      "en": "g is landing, so it is at its HIGHEST at the left-hand end of the strip: &nbsp;g(−2) = 4(1/2)<sup>−2</sup> + 1 = 4(4) + 1 = 17",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:261:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#32": {
+      "en": "as x grows the graph keeps falling towards y = 1, but never reaches it",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:262:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#33": {
+      "en": "1 &lt; y ≤ 17",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:263:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#34": {
+      "en": "WATCH OUT: the two ends are not the same kind. x = −2 IS allowed, so the graph really does reach 17 and that end is CLOSED (≤). The asymptote is never reached, so that end stays OPEN (&lt;), whatever the domain says.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:265:15"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#35": {
+      "en": "Restricting the domain is like putting a fence across the x-axis and only looking at the graph inside the fence. The range is then just “how high and how low does the graph get in there”. Because g is landing, it is at its tallest at the left edge of the fence and it drops from there, so one end of the range is an actual, reachable value — you find it by substituting the fence post, x = −2, into g. The other end is not a value at all, it is the asymptote the graph is still creeping towards when the fence runs out, so it stays open no matter what. That mixture of one closed end and one open end in the same answer is the whole point of this question, and it is exactly the same decision as the one you make at the end of a hyperbola inequality.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:269:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#36": {
+      "en": "The sketch shows two graphs on the same set of axes: &nbsp;f(x) = −3·2ˣ + 6&nbsp; and &nbsp;g(x) = −3(1/2)ˣ + 6.<br><br>Write down the equation of the asymptote of f, and the range of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:320:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#37": {
+      "en": "The leftover number is still the asymptote. This time look hard at the sign in front of the power before you decide which side of that line the graph lives on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:323:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#38": {
+      "en": "The leftover number is the asymptote: &nbsp;q = 6. This time a = −3 is NEGATIVE, so something is being taken away from 6 every time — the graph hangs BELOW the line:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:326:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#39": {
+      "en": "asymptote: &nbsp;y = 6 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &lt; 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:327:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#40": {
+      "en": "Everything you did on the previous card still applies — the leftover number is the flat line, and the sign of a says which side of it the graph lives on. The only change is that a is negative now, so instead of adding a positive amount to 6 the graph is always subtracting one, and it therefore sits underneath. It is worth checking that against the picture: the curve comes in almost flat just under 6 on the left, then dives away downwards. It never crosses the line and never touches it, which is why the range is a strict less-than. And notice that the graph DOES cross the x-axis, at (1 ; 0) — an exponential can happily cross the x-axis; what it can never do is cross its own asymptote.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:330:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#41": {
+      "en": "Write down the range of g, and explain in words how the picture of g differs from the picture of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:338:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#42": {
+      "en": "Compare the two equations letter by letter. Two of the three numbers are identical — decide what those two settle before you say anything about the one that is different.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:341:13"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#43": {
+      "en": "g has the SAME q = 6 and the SAME negative a = −3, so g hangs below the same asymptote as f does",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:344:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#44": {
+      "en": "the only difference is the base. f has b = 2 &gt; 1, so f is <b>taking off</b> — it plunges away downwards on the RIGHT. g has b = 1/2, between 0 and 1, so g is <b>landing</b> — it plunges away downwards on the LEFT and flattens onto y = 6 on the right",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:345:37"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#45": {
+      "en": "range of g: &nbsp;y &lt; 6&nbsp; — exactly the same as f. &nbsp;g is the mirror image of f in the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:346:39"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#46": {
+      "en": "REMEMBER: two graphs can look like complete opposites and still have exactly the same range. The base decides which WAY round the graph runs; only a and q decide which y-values it can reach.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:348:15"
+      ]
+    },
+    "func-siblings-asymptotes-domain-range#47": {
+      "en": "This part is asking you to separate two things that beginners tend to bundle together: what a graph LOOKS like, and what y-values it produces. The look is decided by the base. A base bigger than 1 means each step to the right multiplies the power part, so the graph runs away on the right; a base between 0 and 1 means each step to the right shrinks it, so the running away happens on the left instead. Since (1/2)ˣ is just 2 to the power −x, swapping the base for its reciprocal flips the picture in the y-axis, which is exactly what you can see in the sketch — the two curves are reflections of one another. But the y-values are decided by a and q alone: both graphs subtract a positive amount from 6, and both can subtract as much as you like, so both sweep out everything below 6 and neither reaches it. Same range, opposite pictures.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-asymptotes-domain-range.js:352:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2859
+}

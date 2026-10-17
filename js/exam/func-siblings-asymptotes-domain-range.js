@@ -100,20 +100,20 @@ const q1 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "The sketch shows the hyperbola h, defined by &nbsp;h(x) = −4/(x − 1) + 3.<br><br>Write down the equations of the two asymptotes of h.",
+        en: "The sketch shows the hyperbola h, defined by &nbsp;h(x) = −4/(x − 1) + 3.<br><br>Write down the equations of the two asymptotes of h.", af: "Die skets toon die hiperbool h, gedefinieer deur &nbsp;h(x) = −4/(x − 1) + 3.<br><br>Skryf die vergelykings van die twee asimptote van h neer.",
       },
       hint: {
-        en: "Compare the equation with the shape y = a/(x − p) + q. One asymptote is the x-value the graph is not allowed to reach, the other is the y-value it never settles on.",
+        en: "Compare the equation with the shape y = a/(x − p) + q. One asymptote is the x-value the graph is not allowed to reach, the other is the y-value it never settles on.", af: "Vergelyk die vergelyking met die vorm y = a/(x − p) + q. Een asimptoot is die x-waarde wat die grafiek nie mag bereik nie, die ander is die y-waarde waarop dit nooit tot rus kom nie.",
       },
       memo: [
-        { type: "step", text: { en: "A hyperbola is &nbsp;y = a/(x − p) + q, with a vertical asymptote at x = p and a horizontal one at y = q. Read both straight off:" } },
-        { type: "answer", text: { en: "x = 1 &nbsp;&nbsp;and&nbsp;&nbsp; y = 3" }, ticks: ["a", "a"] },
+        { type: "step", text: { en: "A hyperbola is &nbsp;y = a/(x − p) + q, with a vertical asymptote at x = p and a horizontal one at y = q. Read both straight off:", af: "'n Hiperbool is &nbsp;y = a/(x − p) + q, met 'n vertikale asimptoot by x = p en 'n horisontale een by y = q. Lees albei reguit af:" } },
+        { type: "answer", text: { en: "x = 1 &nbsp;&nbsp;and&nbsp;&nbsp; y = 3", af: "x = 1 &nbsp;&nbsp;en&nbsp;&nbsp; y = 3" }, ticks: ["a", "a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: p takes the OPPOSITE sign to the number in the bracket. (x − 1) gives x = 1, but (x + 1) would have given x = −1. The safe check is always: which x makes the bottom zero?",
+          en: "WATCH OUT: p takes the OPPOSITE sign to the number in the bracket. (x − 1) gives x = 1, but (x + 1) would have given x = −1. The safe check is always: which x makes the bottom zero?", af: "PASOP: p kry die TEENOORGESTELDE teken van die getal in die hakie. (x − 1) gee x = 1, maar (x + 1) sou x = −1 gegee het. Die veilige kontrole is altyd: watter x maak die noemer nul?",
         } },
       ],
       esplain: {
-        en: "An asymptote is a line the graph creeps towards forever without ever arriving. A hyperbola has two of them, and they are the crosshairs of the whole picture. The vertical one is easy to justify: the graph is a fraction, and a fraction with zero on the bottom is undefined, so at that one x-value the graph simply cannot exist — it flies off instead. The horizontal one comes from the tail end: as x gets huge in either direction the fraction −4/(x − 1) shrinks towards nothing, so the whole expression settles down onto the leftover number, which is the 3. Notice the a, the −4, played no part at all in this answer — a controls how far the branches sit from the crosshairs and which pair of corners they live in, never where the crosshairs themselves are.",
+        en: "An asymptote is a line the graph creeps towards forever without ever arriving. A hyperbola has two of them, and they are the crosshairs of the whole picture. The vertical one is easy to justify: the graph is a fraction, and a fraction with zero on the bottom is undefined, so at that one x-value the graph simply cannot exist — it flies off instead. The horizontal one comes from the tail end: as x gets huge in either direction the fraction −4/(x − 1) shrinks towards nothing, so the whole expression settles down onto the leftover number, which is the 3. Notice the a, the −4, played no part at all in this answer — a controls how far the branches sit from the crosshairs and which pair of corners they live in, never where the crosshairs themselves are.", af: "'n Asimptoot is 'n lyn waarna die grafiek vir altyd aankruip sonder om ooit daar aan te kom. 'n Hiperbool het twee daarvan, en hulle is die kruisdrade van die hele prentjie. Die vertikale een is maklik om te verklaar: die grafiek is 'n breuk, en 'n breuk met nul in die noemer is onbepaald, dus kan die grafiek by daardie een x-waarde eenvoudig nie bestaan nie: dit skiet eerder weg. Die horisontale een kom van die verre ente: soos x in enige rigting baie groot word, krimp die breuk −4/(x − 1) tot amper niks, dus kom die hele uitdrukking tot rus op die oorblywende getal, en dit is die 3. Let op dat die a, die −4, glad nie 'n rol in hierdie antwoord gespeel het nie: a bepaal hoe ver die vlerkies van die kruisdrade af sit en in watter paar hoeke hulle woon, nooit waar die kruisdrade self is nie.",
       },
     },
     {
@@ -121,17 +121,17 @@ const q1 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "Write down the domain and the range of h.",
+        en: "Write down the domain and the range of h.", af: "Skryf die definisie- en waardeversameling van h neer.",
       },
       hint: {
-        en: "Domain is the x-values allowed in, range is the y-values that come out. For a hyperbola each of them is everything except one number — and you already found both numbers in (a).",
+        en: "Domain is the x-values allowed in, range is the y-values that come out. For a hyperbola each of them is everything except one number — and you already found both numbers in (a).", af: "Definisieversameling is die x-waardes wat in mag gaan, waardeversameling is die y-waardes wat uitkom. By 'n hiperbool is elkeen van hulle alles behalwe een getal, en jy het albei getalle reeds in (a) gekry.",
       },
       memo: [
-        { type: "step", text: { en: "The graph is undefined where the bottom is zero, and it never actually settles on its horizontal asymptote — so each answer is “everything except one number”:" } },
-        { type: "answer", text: { en: "domain: &nbsp;x ∈ ℝ ; x ≠ 1 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y ∈ ℝ ; y ≠ 3" }, ticks: ["a", "a"] },
+        { type: "step", text: { en: "The graph is undefined where the bottom is zero, and it never actually settles on its horizontal asymptote — so each answer is “everything except one number”:", af: "Die grafiek is onbepaald waar die noemer nul is, en dit kom nooit werklik op sy horisontale asimptoot tot rus nie, dus is elke antwoord “alles behalwe een getal”:" } },
+        { type: "answer", text: { en: "domain: &nbsp;x ∈ ℝ ; x ≠ 1 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y ∈ ℝ ; y ≠ 3", af: "definisieversameling: &nbsp;x ∈ ℝ ; x ≠ 1 &nbsp;&nbsp;·&nbsp;&nbsp; waardeversameling: &nbsp;y ∈ ℝ ; y ≠ 3" }, ticks: ["a", "a"] },
       ],
       esplain: {
-        en: "These two answers are the asymptotes in different clothing. The vertical asymptote said “x may not be 1”, and the domain is precisely the list of x-values that are allowed, so it says the same thing: all the reals, except that one. The horizontal asymptote said “y never becomes 3”, and the range is the list of y-values that actually come out, so again, all the reals except that one. That is why she teaches asymptotes first and domain and range straight afterwards — for a hyperbola the second pair is free once you have the first. Watch the layout, because she marks it: the set of numbers first, then the exclusion riding after a semicolon.",
+        en: "These two answers are the asymptotes in different clothing. The vertical asymptote said “x may not be 1”, and the domain is precisely the list of x-values that are allowed, so it says the same thing: all the reals, except that one. The horizontal asymptote said “y never becomes 3”, and the range is the list of y-values that actually come out, so again, all the reals except that one. That is why she teaches asymptotes first and domain and range straight afterwards — for a hyperbola the second pair is free once you have the first. Watch the layout, because she marks it: the set of numbers first, then the exclusion riding after a semicolon.", af: "Hierdie twee antwoorde is die asimptote in ander klere. Die vertikale asimptoot het gesê “x mag nie 1 wees nie”, en die definisieversameling is presies die lys x-waardes wat toegelaat word, dus sê dit dieselfde: al die reële getalle, behalwe daardie een. Die horisontale asimptoot het gesê “y word nooit 3 nie”, en die waardeversameling is die lys y-waardes wat werklik uitkom, dus weer: al die reële getalle behalwe daardie een. Dit is hoekom sy jou eers asimptote leer en dadelik daarna definisie- en waardeversameling: by 'n hiperbool kry jy die tweede paar verniet sodra jy die eerste het. Let op die uitleg, want sy gee punte daarvoor: eers die getalleversameling, dan die uitsondering agter 'n kommapunt.",
       },
     },
     {
@@ -139,20 +139,20 @@ const q1 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "The graph of k is given by &nbsp;k(x) = h(x + 3) − 2.<br><br>Write down the equations of the two asymptotes of k.",
+        en: "The graph of k is given by &nbsp;k(x) = h(x + 3) − 2.<br><br>Write down the equations of the two asymptotes of k.", af: "Die grafiek van k word gegee deur &nbsp;k(x) = h(x + 3) − 2.<br><br>Skryf die vergelykings van die twee asimptote van k neer.",
       },
       hint: {
-        en: "A shift picks the whole picture up and puts it down somewhere else — asymptotes and all. Work out which way each part of the instruction moves it, then move both of your answers from (a) the same way.",
+        en: "A shift picks the whole picture up and puts it down somewhere else — asymptotes and all. Work out which way each part of the instruction moves it, then move both of your answers from (a) the same way.", af: "'n Skuif tel die hele prentjie op en sit dit iewers anders neer, asimptote en al. Werk uit watter kant toe elke deel van die opdrag dit skuif, en skuif dan albei jou antwoorde van (a) op dieselfde manier.",
       },
       memo: [
-        { type: "step", text: { en: "h(x + 3) slides the whole graph 3 units LEFT, and the &nbsp;− 2&nbsp; outside slides it 2 units DOWN. The asymptotes are part of the picture, so they travel with it:" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "x = 1 − 3 = −2 &nbsp;&nbsp;and&nbsp;&nbsp; y = 3 − 2 = 1" }, ticks: ["a"] },
+        { type: "step", text: { en: "h(x + 3) slides the whole graph 3 units LEFT, and the &nbsp;− 2&nbsp; outside slides it 2 units DOWN. The asymptotes are part of the picture, so they travel with it:", af: "h(x + 3) skuif die hele grafiek 3 eenhede LINKS, en die &nbsp;− 2&nbsp; buite skuif dit 2 eenhede AF. Die asimptote is deel van die prentjie, dus skuif hulle saam:" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "x = 1 − 3 = −2 &nbsp;&nbsp;and&nbsp;&nbsp; y = 3 − 2 = 1", af: "x = 1 − 3 = −2 &nbsp;&nbsp;en&nbsp;&nbsp; y = 3 − 2 = 1" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: h(x + 3) moves the graph LEFT, not right. Anything done INSIDE the bracket, next to the x, does the opposite of what it looks like; anything outside behaves normally.",
+          en: "REMEMBER: h(x + 3) moves the graph LEFT, not right. Anything done INSIDE the bracket, next to the x, does the opposite of what it looks like; anything outside behaves normally.", af: "ONTHOU: h(x + 3) skuif die grafiek LINKS, nie regs nie. Enigiets wat BINNE die hakie, langs die x, gedoen word, doen die teenoorgestelde van hoe dit lyk; enigiets buite gedra hom normaal.",
         } },
       ],
       esplain: {
-        en: "The thing to hold on to is that a shift does not redraw the graph, it carries it. Nothing about the shape changes — same branches, same steepness, same gaps — so you do not need the equation of k at all. All you need is where the crosshairs went, and they went wherever the instruction sent everything else. The inside-versus-outside rule is the only fiddly part, and there is a reason for it rather than just a rule to memorise: k(0) is h(3), so the value the new graph shows at 0 is the one the old graph showed at 3 — the picture has slid left by 3 to bring that value across. If you ever forget which way, test one number like that and the answer falls out in ten seconds.",
+        en: "The thing to hold on to is that a shift does not redraw the graph, it carries it. Nothing about the shape changes — same branches, same steepness, same gaps — so you do not need the equation of k at all. All you need is where the crosshairs went, and they went wherever the instruction sent everything else. The inside-versus-outside rule is the only fiddly part, and there is a reason for it rather than just a rule to memorise: k(0) is h(3), so the value the new graph shows at 0 is the one the old graph showed at 3 — the picture has slid left by 3 to bring that value across. If you ever forget which way, test one number like that and the answer falls out in ten seconds.", af: "Die ding om aan vas te hou, is dat 'n skuif die grafiek nie oorteken nie, dit dra dit. Niks aan die vorm verander nie: dieselfde vlerkies, dieselfde steilte, dieselfde gapings, dus het jy glad nie die vergelyking van k nodig nie. Al wat jy nodig het, is waarheen die kruisdrade gegaan het, en hulle het gegaan waarheen die opdrag alles anders gestuur het. Die binne-teenoor-buite-reël is die enigste lastige deel, en daar is 'n rede daarvoor, nie net 'n reël om van buite te leer nie: k(0) is h(3), dus is die waarde wat die nuwe grafiek by 0 wys, die een wat die ou grafiek by 3 gewys het: die prentjie het 3 na links geskuif om daardie waarde oor te bring. As jy ooit vergeet watter kant toe, toets een getal so, en die antwoord val binne tien sekondes uit.",
       },
     },
   ],
@@ -213,17 +213,17 @@ const q2 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "The sketch shows the exponential graph f, defined by &nbsp;f(x) = 2·3ˣ − 5.<br><br>Write down the equation of the asymptote of f, and the range of f.",
+        en: "The sketch shows the exponential graph f, defined by &nbsp;f(x) = 2·3ˣ − 5.<br><br>Write down the equation of the asymptote of f, and the range of f.", af: "Die skets toon die eksponensiële grafiek f, gedefinieer deur &nbsp;f(x) = 2·3ˣ − 5.<br><br>Skryf die vergelyking van die asimptoot van f neer, en die waardeversameling van f.",
       },
       hint: {
-        en: "In y = a·bˣ + q the leftover number is the asymptote. Then ask one question about the sign of a: does the graph sit above that line, or below it?",
+        en: "In y = a·bˣ + q the leftover number is the asymptote. Then ask one question about the sign of a: does the graph sit above that line, or below it?", af: "In y = a·bˣ + q is die oorblywende getal die asimptoot. Vra dan een vraag oor die teken van a: lê die grafiek bo daardie lyn, of daaronder?",
       },
       memo: [
-        { type: "step", text: { en: "In &nbsp;y = a·bˣ + q&nbsp; the q is the asymptote, and here q = −5. The sign of a decides which side of it the graph lives on — a = 2 is positive, so f sits entirely ABOVE the line:" } },
-        { type: "answer", text: { en: "asymptote: &nbsp;y = −5 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &gt; −5" }, ticks: ["a", "a"] },
+        { type: "step", text: { en: "In &nbsp;y = a·bˣ + q&nbsp; the q is the asymptote, and here q = −5. The sign of a decides which side of it the graph lives on — a = 2 is positive, so f sits entirely ABOVE the line:", af: "In &nbsp;y = a·bˣ + q&nbsp; is die q die asimptoot, en hier is q = −5. Die teken van a besluit aan watter kant daarvan die grafiek woon: a = 2 is positief, dus lê f heeltemal BO die lyn:" } },
+        { type: "answer", text: { en: "asymptote: &nbsp;y = −5 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &gt; −5", af: "asimptoot: &nbsp;y = −5 &nbsp;&nbsp;·&nbsp;&nbsp; waardeversameling: &nbsp;y &gt; −5" }, ticks: ["a", "a"] },
       ],
       esplain: {
-        en: "An exponential graph is a very obedient thing: it has one flat line it hugs, and it stays on one side of that line forever. The line is the leftover number q, because the power part bˣ shrinks towards nothing at one end and the whole expression settles onto q. Which side it stays on is decided entirely by a: a positive a adds something positive to q every single time, so the graph is always above; a negative a would subtract, and it would hang below instead. That is why the range is written with a strict greater-than and no equals sign — the graph gets as close to −5 as you like but never actually gets there, so −5 itself is not a value the graph ever produces.",
+        en: "An exponential graph is a very obedient thing: it has one flat line it hugs, and it stays on one side of that line forever. The line is the leftover number q, because the power part bˣ shrinks towards nothing at one end and the whole expression settles onto q. Which side it stays on is decided entirely by a: a positive a adds something positive to q every single time, so the graph is always above; a negative a would subtract, and it would hang below instead. That is why the range is written with a strict greater-than and no equals sign — the graph gets as close to −5 as you like but never actually gets there, so −5 itself is not a value the graph ever produces.", af: "'n Eksponensiële grafiek is baie gehoorsaam: dit het een plat lyn waarteen dit aanlê, en dit bly vir altyd aan een kant van daardie lyn. Die lyn is die oorblywende getal q, want die magsdeel bˣ krimp aan een kant tot amper niks, en die hele uitdrukking kom op q tot rus. Aan watter kant dit bly, word heeltemal deur a besluit: 'n positiewe a tel elke keer iets positiefs by q, dus is die grafiek altyd bo; 'n negatiewe a sou aftrek, en dan sou dit eerder onder hang. Dit is hoekom die waardeversameling met 'n streng groter-as en sonder 'n gelykaanteken geskryf word: die grafiek kom so naby aan −5 as wat jy wil, maar kom nooit werklik daar nie, dus is −5 self nie 'n waarde wat die grafiek ooit lewer nie.",
       },
     },
     {
@@ -231,20 +231,20 @@ const q2 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "A second graph g is defined by &nbsp;g(x) = 4(1/2)ˣ + 1, and is shown in the sketch.<br><br>Write down the equation of the asymptote of g, and the range of g.",
+        en: "A second graph g is defined by &nbsp;g(x) = 4(1/2)ˣ + 1, and is shown in the sketch.<br><br>Write down the equation of the asymptote of g, and the range of g.", af: "'n Tweede grafiek g word gedefinieer deur &nbsp;g(x) = 4(1/2)ˣ + 1, en word in die skets getoon.<br><br>Skryf die vergelyking van die asimptoot van g neer, en die waardeversameling van g.",
       },
       hint: {
-        en: "Read it the same way you read f. The base is smaller than 1 this time, which changes which way the graph runs — but ask yourself whether it changes which side of the asymptote the graph sits on.",
+        en: "Read it the same way you read f. The base is smaller than 1 this time, which changes which way the graph runs — but ask yourself whether it changes which side of the asymptote the graph sits on.", af: "Lees dit op dieselfde manier as f. Die grondtal is hierdie keer kleiner as 1, en dit verander watter kant toe die grafiek loop, maar vra jouself of dit verander aan watter kant van die asimptoot die grafiek lê.",
       },
       memo: [
-        { type: "step", text: { en: "Same reading: &nbsp;q = 1&nbsp; is the asymptote, and a = 4 is positive, so g is ABOVE it. The base 1/2 lies between 0 and 1, so g is <b>landing</b> — it falls towards the asymptote as x grows — but landing changes nothing about WHICH SIDE the graph sits on:" } },
-        { type: "answer", text: { en: "asymptote: &nbsp;y = 1 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &gt; 1" }, ticks: ["a", "a"] },
+        { type: "step", text: { en: "Same reading: &nbsp;q = 1&nbsp; is the asymptote, and a = 4 is positive, so g is ABOVE it. The base 1/2 lies between 0 and 1, so g is <b>landing</b> — it falls towards the asymptote as x grows — but landing changes nothing about WHICH SIDE the graph sits on:", af: "Dieselfde lees: &nbsp;q = 1&nbsp; is die asimptoot, en a = 4 is positief, dus is g BO dit. Die grondtal 1/2 lê tussen 0 en 1, dus is g aan die <b>land</b>: dit daal na die asimptoot toe soos x groei, maar land verander niks aan WATTER KANT die grafiek lê nie:" } },
+        { type: "answer", text: { en: "asymptote: &nbsp;y = 1 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &gt; 1", af: "asimptoot: &nbsp;y = 1 &nbsp;&nbsp;·&nbsp;&nbsp; waardeversameling: &nbsp;y &gt; 1" }, ticks: ["a", "a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: a base between 0 and 1 does NOT make the range flip. The base decides which way round the graph runs (taking off or landing); only the sign of a decides which side of the asymptote it lives on.",
+          en: "WATCH OUT: a base between 0 and 1 does NOT make the range flip. The base decides which way round the graph runs (taking off or landing); only the sign of a decides which side of the asymptote it lives on.", af: "PASOP: 'n grondtal tussen 0 en 1 laat NIE die waardeversameling omdraai nie. Die grondtal besluit watter kant toe die grafiek loop (styg op of land); net die teken van a besluit aan watter kant van die asimptoot dit woon.",
         } },
       ],
       esplain: {
-        en: "This is the part learners get wrong most often, because “decreasing” feels like it should turn the answer upside down. It does not. Picture the two graphs side by side: f takes off to the right and flattens onto its line on the left; g does the mirror image — it flattens onto its line on the right and shoots up on the left. Both of them spend their whole lives above their own asymptote, because in both cases a is positive and a positive amount is being added to q. So both ranges are “greater than the asymptote”. The base changed the direction of travel, not the neighbourhood. Worth noticing too: (1/2)ˣ is the same thing as 2 to the power −x, which is exactly why it comes out as the mirror image of a taking-off graph.",
+        en: "This is the part learners get wrong most often, because “decreasing” feels like it should turn the answer upside down. It does not. Picture the two graphs side by side: f takes off to the right and flattens onto its line on the left; g does the mirror image — it flattens onto its line on the right and shoots up on the left. Both of them spend their whole lives above their own asymptote, because in both cases a is positive and a positive amount is being added to q. So both ranges are “greater than the asymptote”. The base changed the direction of travel, not the neighbourhood. Worth noticing too: (1/2)ˣ is the same thing as 2 to the power −x, which is exactly why it comes out as the mirror image of a taking-off graph.", af: "Dit is die deel wat leerders die meeste verkeerd doen, want “dalend” voel asof dit die antwoord onderstebo behoort te draai. Dit doen dit nie. Sien die twee grafieke langs mekaar: f styg op na regs en plat links af op sy lyn; g is die gereflekteerde beeld daarvan: dit plat regs af op sy lyn en skiet links op. Albei spandeer hul hele lewe bo hul eie asimptoot, want in albei gevalle is a positief en word 'n positiewe bedrag by q getel. Albei waardeversamelings is dus “groter as die asimptoot”. Die grondtal het die rigting van beweging verander, nie die buurt nie. Let ook op: (1/2)ˣ is dieselfde as 2 tot die mag −x, en dit is presies hoekom dit uitkom as die gereflekteerde beeld van 'n grafiek wat opstyg.",
       },
     },
     {
@@ -252,21 +252,21 @@ const q2 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "The domain of g is now restricted to &nbsp;x ≥ −2&nbsp; (the shaded strip).<br><br>Write down the range of g on this restricted domain.",
+        en: "The domain of g is now restricted to &nbsp;x ≥ −2&nbsp; (the shaded strip).<br><br>Write down the range of g on this restricted domain.", af: "Die definisieversameling van g is nou beperk tot &nbsp;x ≥ −2&nbsp; (die geskakeerde gebied).<br><br>Skryf die waardeversameling van g vir hierdie beperkte definisieversameling neer.",
       },
       hint: {
-        en: "On a restricted domain the range runs between two things: the value at the end of the strip, and whatever the graph is heading for at the open side. Work out the first, remember the second from (b), and then decide which end may be closed.",
+        en: "On a restricted domain the range runs between two things: the value at the end of the strip, and whatever the graph is heading for at the open side. Work out the first, remember the second from (b), and then decide which end may be closed.", af: "Op 'n beperkte definisieversameling loop die waardeversameling tussen twee dinge: die waarde aan die rand van die gebied, en wat die grafiek ook al aan die oop kant nader. Bereken die eerste, onthou die tweede van (b), en besluit dan watter kant geslote mag wees.",
       },
       memo: [
-        { type: "step", text: { en: "g is landing, so it is at its HIGHEST at the left-hand end of the strip: &nbsp;g(−2) = 4(1/2)<sup>−2</sup> + 1 = 4(4) + 1 = 17" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "as x grows the graph keeps falling towards y = 1, but never reaches it" } },
-        { type: "answer", text: { en: "1 &lt; y ≤ 17" }, ticks: ["a"] },
+        { type: "step", text: { en: "g is landing, so it is at its HIGHEST at the left-hand end of the strip: &nbsp;g(−2) = 4(1/2)<sup>−2</sup> + 1 = 4(4) + 1 = 17", af: "g is aan die land, dus is dit op sy HOOGSTE aan die linkerkant van die gebied: &nbsp;g(−2) = 4(1/2)<sup>−2</sup> + 1 = 4(4) + 1 = 17" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "as x grows the graph keeps falling towards y = 1, but never reaches it", af: "soos x groei, bly die grafiek na y = 1 toe daal, maar dit bereik dit nooit nie" } },
+        { type: "answer", text: { en: "1 &lt; y ≤ 17", af: "1 &lt; y ≤ 17" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the two ends are not the same kind. x = −2 IS allowed, so the graph really does reach 17 and that end is CLOSED (≤). The asymptote is never reached, so that end stays OPEN (&lt;), whatever the domain says.",
+          en: "WATCH OUT: the two ends are not the same kind. x = −2 IS allowed, so the graph really does reach 17 and that end is CLOSED (≤). The asymptote is never reached, so that end stays OPEN (&lt;), whatever the domain says.", af: "PASOP: die twee kante is nie dieselfde soort nie. x = −2 IS toegelaat, dus bereik die grafiek werklik 17 en daardie kant is GESLOTE (≤). Die asimptoot word nooit bereik nie, dus bly daardie kant OOP (&lt;), wat die definisieversameling ook al sê.",
         } },
       ],
       esplain: {
-        en: "Restricting the domain is like putting a fence across the x-axis and only looking at the graph inside the fence. The range is then just “how high and how low does the graph get in there”. Because g is landing, it is at its tallest at the left edge of the fence and it drops from there, so one end of the range is an actual, reachable value — you find it by substituting the fence post, x = −2, into g. The other end is not a value at all, it is the asymptote the graph is still creeping towards when the fence runs out, so it stays open no matter what. That mixture of one closed end and one open end in the same answer is the whole point of this question, and it is exactly the same decision as the one you make at the end of a hyperbola inequality.",
+        en: "Restricting the domain is like putting a fence across the x-axis and only looking at the graph inside the fence. The range is then just “how high and how low does the graph get in there”. Because g is landing, it is at its tallest at the left edge of the fence and it drops from there, so one end of the range is an actual, reachable value — you find it by substituting the fence post, x = −2, into g. The other end is not a value at all, it is the asymptote the graph is still creeping towards when the fence runs out, so it stays open no matter what. That mixture of one closed end and one open end in the same answer is the whole point of this question, and it is exactly the same decision as the one you make at the end of a hyperbola inequality.", af: "Om die definisieversameling te beperk, is soos om 'n heining oor die x-as te sit en net na die grafiek binne die heining te kyk. Die waardeversameling is dan net “hoe hoog en hoe laag kom die grafiek daar binne”. Omdat g aan die land is, is dit op sy hoogste by die linkerrand van die heining en daal dit van daar af, dus is een kant van die waardeversameling 'n werklike waarde wat bereik word: jy kry dit deur die heiningpaal, x = −2, in g te vervang. Die ander kant is glad nie 'n waarde nie; dit is die asimptoot waarna die grafiek nog steeds aankruip wanneer die heining ophou, dus bly dit oop, maak nie saak wat nie. Daardie mengsel van een geslote kant en een oop kant in dieselfde antwoord is die hele punt van hierdie vraag, en dit is presies dieselfde besluit as die een wat jy aan die einde van 'n hiperbool-ongelykheid neem.",
       },
     },
   ],
@@ -317,17 +317,17 @@ const q3 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "The sketch shows two graphs on the same set of axes: &nbsp;f(x) = −3·2ˣ + 6&nbsp; and &nbsp;g(x) = −3(1/2)ˣ + 6.<br><br>Write down the equation of the asymptote of f, and the range of f.",
+        en: "The sketch shows two graphs on the same set of axes: &nbsp;f(x) = −3·2ˣ + 6&nbsp; and &nbsp;g(x) = −3(1/2)ˣ + 6.<br><br>Write down the equation of the asymptote of f, and the range of f.", af: "Die skets toon twee grafieke op dieselfde assestelsel: &nbsp;f(x) = −3·2ˣ + 6&nbsp; en &nbsp;g(x) = −3(1/2)ˣ + 6.<br><br>Skryf die vergelyking van die asimptoot van f neer, en die waardeversameling van f.",
       },
       hint: {
-        en: "The leftover number is still the asymptote. This time look hard at the sign in front of the power before you decide which side of that line the graph lives on.",
+        en: "The leftover number is still the asymptote. This time look hard at the sign in front of the power before you decide which side of that line the graph lives on.", af: "Die oorblywende getal is steeds die asimptoot. Kyk hierdie keer mooi na die teken voor die mag voordat jy besluit aan watter kant van daardie lyn die grafiek woon.",
       },
       memo: [
-        { type: "step", text: { en: "The leftover number is the asymptote: &nbsp;q = 6. This time a = −3 is NEGATIVE, so something is being taken away from 6 every time — the graph hangs BELOW the line:" } },
-        { type: "answer", text: { en: "asymptote: &nbsp;y = 6 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &lt; 6" }, ticks: ["a", "a"] },
+        { type: "step", text: { en: "The leftover number is the asymptote: &nbsp;q = 6. This time a = −3 is NEGATIVE, so something is being taken away from 6 every time — the graph hangs BELOW the line:", af: "Die oorblywende getal is die asimptoot: &nbsp;q = 6. Hierdie keer is a = −3 NEGATIEF, dus word daar elke keer iets van 6 afgetrek: die grafiek hang ONDER die lyn:" } },
+        { type: "answer", text: { en: "asymptote: &nbsp;y = 6 &nbsp;&nbsp;·&nbsp;&nbsp; range: &nbsp;y &lt; 6", af: "asimptoot: &nbsp;y = 6 &nbsp;&nbsp;·&nbsp;&nbsp; waardeversameling: &nbsp;y &lt; 6" }, ticks: ["a", "a"] },
       ],
       esplain: {
-        en: "Everything you did on the previous card still applies — the leftover number is the flat line, and the sign of a says which side of it the graph lives on. The only change is that a is negative now, so instead of adding a positive amount to 6 the graph is always subtracting one, and it therefore sits underneath. It is worth checking that against the picture: the curve comes in almost flat just under 6 on the left, then dives away downwards. It never crosses the line and never touches it, which is why the range is a strict less-than. And notice that the graph DOES cross the x-axis, at (1 ; 0) — an exponential can happily cross the x-axis; what it can never do is cross its own asymptote.",
+        en: "Everything you did on the previous card still applies — the leftover number is the flat line, and the sign of a says which side of it the graph lives on. The only change is that a is negative now, so instead of adding a positive amount to 6 the graph is always subtracting one, and it therefore sits underneath. It is worth checking that against the picture: the curve comes in almost flat just under 6 on the left, then dives away downwards. It never crosses the line and never touches it, which is why the range is a strict less-than. And notice that the graph DOES cross the x-axis, at (1 ; 0) — an exponential can happily cross the x-axis; what it can never do is cross its own asymptote.", af: "Alles wat jy op die vorige kaart gedoen het, geld steeds: die oorblywende getal is die plat lyn, en die teken van a sê aan watter kant daarvan die grafiek woon. Die enigste verskil is dat a nou negatief is, dus tel die grafiek nie 'n positiewe bedrag by 6 nie, maar trek altyd een af, en daarom lê dit onder. Dit is die moeite werd om dit teen die prentjie te toets: die kurwe kom links amper plat net onder 6 in, en duik dan afwaarts weg. Dit kruis nooit die lyn nie en raak dit nooit nie, en dit is hoekom die waardeversameling 'n streng kleiner-as is. En let op dat die grafiek WEL die x-as kruis, by (1 ; 0): 'n eksponensiële grafiek kan gerus die x-as kruis; wat dit nooit kan doen nie, is om sy eie asimptoot te kruis.",
       },
     },
     {
@@ -335,21 +335,21 @@ const q3 = {
       marks: 3,
       level: 3,
       prompt: {
-        en: "Write down the range of g, and explain in words how the picture of g differs from the picture of f.",
+        en: "Write down the range of g, and explain in words how the picture of g differs from the picture of f.", af: "Skryf die waardeversameling van g neer, en verduidelik in woorde hoe die prentjie van g van die prentjie van f verskil.",
       },
       hint: {
-        en: "Compare the two equations letter by letter. Two of the three numbers are identical — decide what those two settle before you say anything about the one that is different.",
+        en: "Compare the two equations letter by letter. Two of the three numbers are identical — decide what those two settle before you say anything about the one that is different.", af: "Vergelyk die twee vergelykings letter vir letter. Twee van die drie getalle is identies: besluit wat daardie twee vasstel voordat jy iets sê oor die een wat verskil.",
       },
       memo: [
-        { type: "step", text: { en: "g has the SAME q = 6 and the SAME negative a = −3, so g hangs below the same asymptote as f does" }, ticks: ["ca"] },
-        { type: "step", text: { en: "the only difference is the base. f has b = 2 &gt; 1, so f is <b>taking off</b> — it plunges away downwards on the RIGHT. g has b = 1/2, between 0 and 1, so g is <b>landing</b> — it plunges away downwards on the LEFT and flattens onto y = 6 on the right" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "range of g: &nbsp;y &lt; 6&nbsp; — exactly the same as f. &nbsp;g is the mirror image of f in the y-axis." }, ticks: ["a"] },
+        { type: "step", text: { en: "g has the SAME q = 6 and the SAME negative a = −3, so g hangs below the same asymptote as f does", af: "g het DIESELFDE q = 6 en DIESELFDE negatiewe a = −3, dus hang g onder dieselfde asimptoot as f" }, ticks: ["ca"] },
+        { type: "step", text: { en: "the only difference is the base. f has b = 2 &gt; 1, so f is <b>taking off</b> — it plunges away downwards on the RIGHT. g has b = 1/2, between 0 and 1, so g is <b>landing</b> — it plunges away downwards on the LEFT and flattens onto y = 6 on the right", af: "die enigste verskil is die grondtal. f het b = 2 &gt; 1, dus is f aan die <b>opstyg</b>: dit duik afwaarts weg aan die REGTERKANT. g het b = 1/2, tussen 0 en 1, dus is g aan die <b>land</b>: dit duik afwaarts weg aan die LINKERKANT en plat regs af op y = 6" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "range of g: &nbsp;y &lt; 6&nbsp; — exactly the same as f. &nbsp;g is the mirror image of f in the y-axis.", af: "waardeversameling van g: &nbsp;y &lt; 6&nbsp; (presies dieselfde as f). &nbsp;g is die gereflekteerde beeld van f in die y-as." }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: two graphs can look like complete opposites and still have exactly the same range. The base decides which WAY round the graph runs; only a and q decide which y-values it can reach.",
+          en: "REMEMBER: two graphs can look like complete opposites and still have exactly the same range. The base decides which WAY round the graph runs; only a and q decide which y-values it can reach.", af: "ONTHOU: twee grafieke kan soos volkome teenoorgesteldes lyk en steeds presies dieselfde waardeversameling hê. Die grondtal besluit watter KANT TOE die grafiek loop; net a en q besluit watter y-waardes dit kan bereik.",
         } },
       ],
       esplain: {
-        en: "This part is asking you to separate two things that beginners tend to bundle together: what a graph LOOKS like, and what y-values it produces. The look is decided by the base. A base bigger than 1 means each step to the right multiplies the power part, so the graph runs away on the right; a base between 0 and 1 means each step to the right shrinks it, so the running away happens on the left instead. Since (1/2)ˣ is just 2 to the power −x, swapping the base for its reciprocal flips the picture in the y-axis, which is exactly what you can see in the sketch — the two curves are reflections of one another. But the y-values are decided by a and q alone: both graphs subtract a positive amount from 6, and both can subtract as much as you like, so both sweep out everything below 6 and neither reaches it. Same range, opposite pictures.",
+        en: "This part is asking you to separate two things that beginners tend to bundle together: what a graph LOOKS like, and what y-values it produces. The look is decided by the base. A base bigger than 1 means each step to the right multiplies the power part, so the graph runs away on the right; a base between 0 and 1 means each step to the right shrinks it, so the running away happens on the left instead. Since (1/2)ˣ is just 2 to the power −x, swapping the base for its reciprocal flips the picture in the y-axis, which is exactly what you can see in the sketch — the two curves are reflections of one another. But the y-values are decided by a and q alone: both graphs subtract a positive amount from 6, and both can subtract as much as you like, so both sweep out everything below 6 and neither reaches it. Same range, opposite pictures.", af: "Hierdie deel vra jou om twee dinge te skei wat beginners graag saambondel: hoe 'n grafiek LYK, en watter y-waardes dit lewer. Die voorkoms word deur die grondtal besluit. 'n Grondtal groter as 1 beteken elke stap na regs vermenigvuldig die magsdeel, dus hardloop die grafiek regs weg; 'n grondtal tussen 0 en 1 beteken elke stap na regs maak dit kleiner, dus gebeur die weghardloop eerder links. Omdat (1/2)ˣ net 2 tot die mag −x is, reflekteer die prentjie in die y-as as jy die grondtal met sy resiprook vervang, en dit is presies wat jy in die skets kan sien: die twee kurwes is refleksies van mekaar. Maar die y-waardes word deur a en q alleen besluit: albei grafieke trek 'n positiewe bedrag van 6 af, en albei kan soveel aftrek as wat jy wil, dus dek albei alles onder 6 en nie een van hulle bereik dit nie. Dieselfde waardeversameling, teenoorgestelde prentjies.",
       },
     },
   ],
