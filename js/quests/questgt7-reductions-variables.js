@@ -16,20 +16,21 @@
    tan into cot, which never appears in her rounds).
    ============================================================ */
 import { pick, mcStep, symbolicReduce, applyForm } from "./_gtrig.js";
+import { L } from "../lang.js";
 
 const CON = "gtrigReduceVar";
-const H1 = "which quadrant does the form land in? Read the sign off the story.";
-const H2 = "only 90 ± θ and θ − 90 convert; everything else stays.";
+const H1 = L("which quadrant does the form land in? Read the sign off the story.", "in watter kwadrant land die vorm? Lees die teken van die storie af.");
+const H2 = L("only 90 ± θ and θ − 90 convert; everything else stays.", "net 90 ± θ en θ − 90 skakel om; alles anders bly.");
 
-const FORMS = ["180−θ", "180+θ", "360−θ", "−θ", "θ−360", "θ−180", "−180−θ", "−360−θ", "90−θ", "90+θ", "θ−90"];
-const CO_FORMS = new Set(["90−θ", "90+θ", "θ−90"]);
-const LETTERS = ["θ", "x", "α", "A"];
+const FORMS = [L("180−θ", "180−θ"), L("180+θ", "180+θ"), L("360−θ", "360−θ"), L("−θ", "−θ"), L("θ−360", "θ−360"), L("θ−180", "θ−180"), L("−180−θ", "−180−θ"), L("−360−θ", "−360−θ"), L("90−θ", "90−θ"), L("90+θ", "90+θ"), L("θ−90", "θ−90")];
+const CO_FORMS = new Set([L("90−θ", "90−θ"), L("90+θ", "90+θ"), L("θ−90", "θ−90")]);
+const LETTERS = [L("θ", "θ"), L("x", "x"), L("α", "α"), L("A", "A")];
 const STAND_IN = 23;      // her stand-in θ the harness recomputes at
 const ARM = {
-  "180−θ": "S", "180+θ": "T", "360−θ": "C", "−θ": "C",
-  "θ−360": "A", "θ−180": "T", "−180−θ": "S", "−360−θ": "C",
+  "180−θ": L("S", "S"), "180+θ": L("T", "T"), "360−θ": L("C", "C"), "−θ": L("C", "C"),
+  "θ−360": L("A", "A"), "θ−180": L("T", "T"), "−180−θ": L("S", "S"), "−360−θ": L("C", "C"),
 };
-const ARM_WORD = { A: "All", S: "Strippers", T: "Take", C: "Cash" };
+const ARM_WORD = { A: L("All", "All"), S: L("Strippers", "Strippers"), T: L("Take", "Take"), C: L("Cash", "Cash") };
 
 /* the form written her way, WITH the learner's own letter dropped in */
 const FORM_TPL = {
@@ -49,27 +50,27 @@ const FORM_TPL = {
 function randomReduceVarQ() {
   const form = pick(FORMS);
   const isCoFn = CO_FORMS.has(form);
-  const fn = isCoFn ? pick(["sin", "cos"]) : pick(["sin", "cos", "tan"]);
+  const fn = isCoFn ? pick([L("sin", "sin"), L("cos", "cos")]) : pick([L("sin", "sin"), L("cos", "cos"), L("tan", "tan")]);
   const letter = pick(LETTERS);
   const { sign, fn2 } = symbolicReduce(fn, form);
   const argText = FORM_TPL[form](letter);
-  const armNote = isCoFn ? "co-function — converts" : `wheel arm ${ARM[form]} (${ARM_WORD[ARM[form]]})`;
+  const armNote = isCoFn ? L("co-function — converts", "ko-funksie: skakel om") : L(`wheel arm ${ARM[form]} (${ARM_WORD[ARM[form]]})`, `wielarm ${ARM[form]} (${ARM_WORD[ARM[form]]})`);
   const reduced = `${sign < 0 ? "−" : ""}${fn2} ${letter}`;
 
-  const otherFns = ["sin", "cos", "tan"].filter(f => f !== fn2);
+  const otherFns = [L("sin", "sin"), L("cos", "cos"), L("tan", "tan")].filter(f => f !== fn2);
   return {
     type: "steps", concept: CON,
     _dbg: { fn, angle: applyForm(form, STAND_IN), theta: STAND_IN },   // harness-only recompute hook
     prompt: `${fn}(${argText}) = ?`,
     steps: [
-      mcStep("What's the sign?", sign > 0 ? "+" : "−", [sign > 0 ? "−" : "+"], H1),
-      mcStep("Which ratio does it become?", fn2, otherFns, H2),
+      mcStep(L("What's the sign?", "Wat is die teken?"), sign > 0 ? "+" : "−", [sign > 0 ? "−" : "+"], H1),
+      mcStep(L("Which ratio does it become?", "Watter verhouding word dit?"), fn2, otherFns, H2),
     ],
     hint: H1,
     answerLabel: `${fn}(${argText}) = ${reduced} — ${armNote}.`,
     solution: [
-      { s: `Sign: ${sign < 0 ? "−" : "+"}`, r: armNote },
-      { s: `Ratio: ${fn} → ${fn2}`, r: isCoFn ? "co-functions convert sin ↔ cos." : "a plain reduction never swaps the ratio." },
+      { s: L(`Sign: ${sign < 0 ? "−" : "+"}`, `Teken: ${sign < 0 ? "−" : "+"}`), r: armNote },
+      { s: L(`Ratio: ${fn} → ${fn2}`, `Verhouding: ${fn} → ${fn2}`), r: isCoFn ? L("co-functions convert sin ↔ cos.", "ko-funksies skakel sin ↔ cos om.") : L("a plain reduction never swaps the ratio.", "'n gewone reduksie ruil nooit die verhouding om nie.") },
     ],
   };
 }

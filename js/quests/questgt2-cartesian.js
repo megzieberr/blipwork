@@ -9,11 +9,12 @@
    ============================================================ */
 import { mc, pick, astcWheelSvg, bowTieSvg, qbandsSpec, BAND, QSIGN } from "./_gtrig.js";
 import { astcSign, solutionQuadrants } from "../triglib.js";
+import { L } from "../lang.js";
 
 const CON = "gtrigAstc";
-const FN = ["sin", "cos", "tan"];
+const FN = [L("sin", "sin"), L("cos", "cos"), L("tan", "tan")];
 const CIRC = { 1: "①", 2: "②", 3: "③", 4: "④" };
-const WORD = { 1: "All", 2: "Strippers", 3: "Take", 4: "Cash" };
+const WORD = { 1: L("All", "All"), 2: L("Strippers", "Strippers"), 3: L("Take", "Take"), 4: L("Cash", "Cash") };
 
 /* ---- worked-method helpers (2026-09-02 methods batch, session S3) ----
    Both are pure string builders over values the skill has ALREADY rolled —
@@ -22,15 +23,15 @@ const WORD = { 1: "All", 2: "Strippers", 3: "Take", 4: "Cash" };
 const astcPositiveIn = quad => FN.filter(f => astcSign(f, quad) > 0);          // which ratios are + in a quadrant
 const xyWordsIn = (quad) => {                                                   // "x is negative and y is positive"
   const [x, y] = QSIGN[quad];
-  return { x: x > 0 ? "positive" : "negative", y: y > 0 ? "positive" : "negative" };
+  return { x: x > 0 ? L("positive", "positive") : L("negative", "negative"), y: y > 0 ? L("positive", "positive") : L("negative", "negative") };
 };
-const RATIO_OF = { sin: "y/r", cos: "x/r", tan: "y/x" };                        // METHODS-trig A5 (p04)
-const QLIST = qs => qs.map(q => CIRC[q]).join(" and ");
+const RATIO_OF = { sin: L("y/r", "y/r"), cos: L("x/r", "x/r"), tan: L("y/x", "y/x") };                        // METHODS-trig A5 (p04)
+const QLIST = qs => qs.map(q => CIRC[q]).join(L(" and ", " en "));
 /* why a ratio carries the sign it does — the r-is-never-negative argument */
 const SIGN_STORY = {
-  sin: "r is a radius, so it is never negative — the sign of sin follows y alone: y is + above the x-axis (① and ②), − below it (③ and ④)",
-  cos: "r is a radius, so it is never negative — the sign of cos follows x alone: x is + on the right (① and ④), − on the left (② and ③)",
-  tan: "tan = y/x has no r in it: it is + when x and y carry the SAME sign (① and ③), − when they differ (② and ④)",
+  sin: L("r is a radius, so it is never negative — the sign of sin follows y alone: y is + above the x-axis (① and ②), − below it (③ and ④)", "r is 'n radius en nooit negatief nie, dus volg die teken van sin net y: y is + bo die x-as (① en ②), − daaronder (③ en ④)"),
+  cos: L("r is a radius, so it is never negative — the sign of cos follows x alone: x is + on the right (① and ④), − on the left (② and ③)", "r is 'n radius en nooit negatief nie, dus volg die teken van cos net x: x is + regs (① en ④), − links (② en ③)"),
+  tan: L("tan = y/x has no r in it: it is + when x and y carry the SAME sign (① and ③), − when they differ (② and ④)", "tan = y/x het geen r nie: dit is + as x en y DIESELFDE teken het (① en ③), − as hulle verskil (② en ④)"),
 };
 
 function reveal(q, frames, mode) { q.reveal = frames; if (mode) q.revealMode = mode; return q; }
@@ -68,10 +69,10 @@ const SKILLS = {
     const q = pick([1, 2, 3, 4]);
     return revealAfter(
       reveal(
-        mc(CON, `Which word is quadrant ${CIRC[q]}?`, WORD[q],
+        mc(CON, L(`Which word is quadrant ${CIRC[q]}?`, `Watter woord is kwadrant ${CIRC[q]}?`), WORD[q],
           [1, 2, 3, 4].filter(x => x !== q).map(x => WORD[x]),
-          { hint: "All Strippers Take Cash — read anticlockwise from ①.",
-            answerLabel: `${CIRC[q]} is “${WORD[q]}” — All ① Strippers ② Take ③ Cash ④.` }),
+          { hint: L("All Strippers Take Cash — read anticlockwise from ①.", "All Strippers Take Cash: lees antikloksgewys vanaf ①."),
+            answerLabel: L(`${CIRC[q]} is “${WORD[q]}” — All ① Strippers ② Take ③ Cash ④.`, `${CIRC[q]} is “${WORD[q]}”: All ① Strippers ② Take ③ Cash ④.`) }),
         [WHEEL_BLANK]),
       WHEEL_FRAMES);
   },
@@ -82,18 +83,18 @@ const SKILLS = {
     const quad = pick([1, 2, 3, 4]);
     const [x0, x1] = BAND[quad];
     const sign = astcSign(fn, quad);
-    const posLabel = "above the x-axis, so " + fn + " is positive there";
-    const negLabel = "below the x-axis, so " + fn + " is negative there";
-    return mc(CON, `Between ${x0}° and ${x1}° the ${fn} curve is…`,
-      sign > 0 ? posLabel : negLabel, [sign > 0 ? negLabel : posLabel, `exactly zero throughout ${x0}°–${x1}°`],
-      { hint: "Read the shading and the picture — above the line is +, below is −.",
+    const posLabel = L("above the x-axis, so ", "bo die x-as, dus is ") + fn + L(" is positive there", " daar positief");
+    const negLabel = L("below the x-axis, so ", "onder die x-as, dus is ") + fn + L(" is negative there", " daar negatief");
+    return mc(CON, L(`Between ${x0}° and ${x1}° the ${fn} curve is…`, `Tussen ${x0}° en ${x1}° is die ${fn}-kurwe…`),
+      sign > 0 ? posLabel : negLabel, [sign > 0 ? negLabel : posLabel, L(`exactly zero throughout ${x0}°–${x1}°`, `presies nul oral van ${x0}° tot ${x1}°`)],
+      { hint: L("Read the shading and the picture — above the line is +, below is −.", "Lees die skakering en die prent: bo die lyn is +, onder is −."),
         graph: qbandsSpec(fn),
         answerLabel: `${CIRC[quad]} (${x0}°–${x1}°): ${sign > 0 ? posLabel : negLabel}.`,
         solution: [
-          { s: `${x0}° to ${x1}° is quadrant ${CIRC[quad]}`, r: `All ① Strippers ② Take ③ Cash ④ — ${CIRC[quad]} is “${WORD[quad]}”` },
-          { s: `In ${CIRC[quad]} the positive ratios are: ${astcPositiveIn(quad).join(", ")}` },
-          { s: `${fn} is ${sign > 0 ? "on that list, so it is positive" : "not on that list, so it is negative"} in ${CIRC[quad]}`,
-            r: `${sign > 0 ? "positive → the curve sits above the x-axis" : "negative → the curve dips below the x-axis"}` },
+          { s: L(`${x0}° to ${x1}° is quadrant ${CIRC[quad]}`, `${x0}° tot ${x1}° is kwadrant ${CIRC[quad]}`), r: L(`All ① Strippers ② Take ③ Cash ④ — ${CIRC[quad]} is “${WORD[quad]}”`, `All ① Strippers ② Take ③ Cash ④: ${CIRC[quad]} is “${WORD[quad]}”`) },
+          { s: L(`In ${CIRC[quad]} the positive ratios are: ${astcPositiveIn(quad).join(", ")}`, `In ${CIRC[quad]} is die positiewe verhoudings: ${astcPositiveIn(quad).join(", ")}`) },
+          { s: L(`${fn} is ${sign > 0 ? "on that list, so it is positive" : "not on that list, so it is negative"} in ${CIRC[quad]}`, `${fn} is ${sign > 0 ? "op daardie lys, dus is dit positief" : "nie op daardie lys nie, dus is dit negatief"} in ${CIRC[quad]}`),
+            r: `${sign > 0 ? L("positive → the curve sits above the x-axis", "positief → die kurwe lê bo die x-as") : L("negative → the curve dips below the x-axis", "negatief → die kurwe sak onder die x-as")}` },
         ] });
   },
 
@@ -105,15 +106,15 @@ const SKILLS = {
     const correct = solutionQuadrants(fn, sign);
     return {
       type: "tapcross", concept: CON,
-      prompt: `Tap every quadrant where ${fn} θ is ${sign > 0 ? "positive" : "negative"}.`,
+      prompt: L(`Tap every quadrant where ${fn} θ is ${sign > 0 ? "positive" : "negative"}.`, `Klik op elke kwadrant waar ${fn} θ ${sign > 0 ? "positief" : "negatief"} is.`),
       correct,
-      hint: "All Strippers Take Cash — the story word order tells you the sign in each quadrant.",
-      answerLabel: `${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${correct.map(q => CIRC[q]).join(" and ")}.`,
+      hint: L("All Strippers Take Cash — the story word order tells you the sign in each quadrant.", "All Strippers Take Cash: die volgorde van die woorde in die storie gee die teken in elke kwadrant."),
+      answerLabel: L(`${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${correct.map(q => CIRC[q]).join(" and ")}.`, `${fn} θ is ${sign > 0 ? "positief" : "negatief"} in ${correct.map(q => CIRC[q]).join(" en ")}.`),
       solution: [
-        { s: `${fn} θ = ${RATIO_OF[fn]}`, r: "start from what the ratio is made of" },
+        { s: L(`${fn} θ = ${RATIO_OF[fn]}`, `${fn} θ = ${RATIO_OF[fn]}`), r: L("start from what the ratio is made of", "begin by waaruit die verhouding bestaan") },
         { s: SIGN_STORY[fn] },
-        { s: `So ${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${QLIST(correct)}`,
-          r: `check it against All Strippers Take Cash — ${correct.map(q => WORD[q]).join(" and ")}` },
+        { s: L(`So ${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${QLIST(correct)}`, `Dus is ${fn} θ ${sign > 0 ? "positief" : "negatief"} in ${QLIST(correct)}`),
+          r: L(`check it against All Strippers Take Cash — ${correct.map(q => WORD[q]).join(" and ")}`, `toets dit teen All Strippers Take Cash: ${correct.map(q => WORD[q]).join(" en ")}`) },
       ],
     };
   },
@@ -123,60 +124,60 @@ const SKILLS = {
     const fn = pick(FN);
     const quad = pick([1, 2, 3, 4]);
     const sign = astcSign(fn, quad);
-    return mc(CON, `θ is in quadrant ${CIRC[quad]}. ${fn} θ is…`,
-      sign > 0 ? "positive" : "negative", [sign > 0 ? "negative" : "positive", "zero"],
-      { hint: "All Strippers Take Cash.", answerLabel: `${CIRC[quad]} → ${fn} θ is ${sign > 0 ? "positive" : "negative"}.`,
+    return mc(CON, L(`θ is in quadrant ${CIRC[quad]}. ${fn} θ is…`, `θ is in kwadrant ${CIRC[quad]}. ${fn} θ is…`),
+      sign > 0 ? L("positive", "positive") : L("negative", "negative"), [sign > 0 ? L("negative", "negative") : L("positive", "positive"), L("zero", "nul")],
+      { hint: L("All Strippers Take Cash.", "All Strippers Take Cash."), answerLabel: L(`${CIRC[quad]} → ${fn} θ is ${sign > 0 ? "positive" : "negative"}.`, `${CIRC[quad]} → ${fn} θ is ${sign > 0 ? "positief" : "negatief"}.`),
         solution: (() => {
           const w = xyWordsIn(quad);
           return [
             { s: `Put a point in ${CIRC[quad]} and drop x and y to the axes: x is ${w.x}, y is ${w.y}` },
-            { s: fn === "tan"
+            { s: fn === L("tan", "tan")
                 ? `tan θ = y/x, so divide a ${w.y} by a ${w.x}`
-                : `${fn} θ = ${RATIO_OF[fn]}, and r is never negative, so the sign comes from ${fn === "sin" ? `y (${w.y})` : `x (${w.x})`}` },
-            { s: `∴ ${fn} θ is ${sign > 0 ? "positive" : "negative"} in ${CIRC[quad]}`, r: `“${WORD[quad]}” in All Strippers Take Cash` },
+                : `${fn} θ = ${RATIO_OF[fn]}, and r is never negative, so the sign comes from ${fn === L("sin", "sin") ? `y (${w.y})` : `x (${w.x})`}` },
+            { s: `∴ ${fn} θ is ${sign > 0 ? L("positive", "positive") : L("negative", "negative")} in ${CIRC[quad]}`, r: `“${WORD[quad]}” in All Strippers Take Cash` },
           ];
         })() });
   },
 
   /* B5 — WHY: x/r or y/r sign, r always positive */
   whySign: () => {
-    const fn = pick(["sin", "cos"]);
+    const fn = pick([L("sin", "sin"), L("cos", "cos")]);
     const quad = pick([2, 3, 4]);
-    const xSign = quad === 1 || quad === 4 ? "positive" : "negative";
-    const ySign = quad === 1 || quad === 2 ? "positive" : "negative";
-    const reason = fn === "cos"
-      ? `x is ${xSign} and r is always positive`
-      : `y is ${ySign} and r is always positive`;
-    const wrongXSign = xSign === "positive" ? "negative" : "positive";
-    const wrongYSign = ySign === "positive" ? "negative" : "positive";
-    const decoy1 = fn === "cos" ? `x is ${wrongXSign} and r is always positive` : `y is ${wrongYSign} and r is always positive`;
-    const decoy2 = "r can be negative in some quadrants";
-    return mc(CON, `In quadrant ${CIRC[quad]}, ${fn} θ = ${fn === "cos" ? "x/r" : "y/r"} is ${astcSign(fn, quad) > 0 ? "positive" : "negative"} because…`,
+    const xSign = quad === 1 || quad === 4 ? L("positive", "positive") : L("negative", "negative");
+    const ySign = quad === 1 || quad === 2 ? L("positive", "positive") : L("negative", "negative");
+    const reason = fn === L("cos", "cos")
+      ? L(`x is ${xSign} and r is always positive`, `x is ${xSign} en r is altyd positief`)
+      : L(`y is ${ySign} and r is always positive`, `y is ${ySign} en r is altyd positief`);
+    const wrongXSign = xSign === L("positive", "positive") ? L("negative", "negative") : L("positive", "positive");
+    const wrongYSign = ySign === L("positive", "positive") ? L("negative", "negative") : L("positive", "positive");
+    const decoy1 = fn === L("cos", "cos") ? L(`x is ${wrongXSign} and r is always positive`, `x is ${wrongXSign} en r is altyd positief`) : L(`y is ${wrongYSign} and r is always positive`, `y is ${wrongYSign} en r is altyd positief`);
+    const decoy2 = L("r can be negative in some quadrants", "r kan in sommige kwadrante negatief wees");
+    return mc(CON, L(`In quadrant ${CIRC[quad]}, ${fn} θ = ${fn === "cos" ? "x/r" : "y/r"} is ${astcSign(fn, quad) > 0 ? "positive" : "negative"} because…`, `In kwadrant ${CIRC[quad]} is ${fn} θ = ${fn === "cos" ? "x/r" : "y/r"} ${astcSign(fn, quad) > 0 ? "positief" : "negatief"} omdat…`),
       reason, [decoy1, decoy2],
-      { hint: "\"always positive bc it is the radius\" — r never carries the minus. Only x or y can flip the sign.",
-        answerLabel: `${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}: ${reason}.`,
+      { hint: L("\"always positive bc it is the radius\" — r never carries the minus. Only x or y can flip the sign.", "\"altyd positief want dit is die radius\": r dra nooit die minus nie. Net x of y kan die teken omdraai."),
+        answerLabel: L(`${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}: ${reason}.`, `${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}: ${reason}.`),
         solution: [
-          { s: `Mark a point in ${CIRC[quad]} and drop x and y to the axes: x is ${xSign}, y is ${ySign}` },
-          { s: `r is the radius from the origin out to the point — a length`, r: "a length is never negative, so r stays positive in every quadrant" },
-          { s: `${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}, so only ${fn === "cos" ? "x" : "y"} can put a minus in`,
-            r: `here ${fn === "cos" ? `x is ${xSign}` : `y is ${ySign}`}, so ${fn} θ is ${astcSign(fn, quad) > 0 ? "positive" : "negative"}` },
+          { s: L(`Mark a point in ${CIRC[quad]} and drop x and y to the axes: x is ${xSign}, y is ${ySign}`, `Plaas 'n punt in ${CIRC[quad]} en laat x en y na die asse sak: x is ${xSign}, y is ${ySign}`) },
+          { s: L(`r is the radius from the origin out to the point — a length`, `r is die radius van die oorsprong uit na die punt: 'n lengte`), r: L("a length is never negative, so r stays positive in every quadrant", "'n lengte is nooit negatief nie, dus bly r positief in elke kwadrant") },
+          { s: L(`${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}, so only ${fn === "cos" ? "x" : "y"} can put a minus in`, `${fn} θ = ${fn === "cos" ? "x/r" : "y/r"}, dus kan net ${fn === "cos" ? "x" : "y"} 'n minus inbring`),
+            r: L(`here ${fn === "cos" ? `x is ${xSign}` : `y is ${ySign}`}, so ${fn} θ is ${astcSign(fn, quad) > 0 ? "positive" : "negative"}`, `hier ${fn === "cos" ? `is x ${xSign}` : `is y ${ySign}`}, dus is ${fn} θ ${astcSign(fn, quad) > 0 ? "positief" : "negatief"}`) },
         ] });
   },
 
   /* B6 — all positive / only one positive */
   onlyOne: () => {
     const items = [
-      { prompt: "Tap the quadrant where ALL three ratios are positive.", correct: [1] },
-      { prompt: "Tap the quadrant where ONLY tan θ is positive.", correct: [3] },
-      { prompt: "Tap the quadrant where ONLY sin θ is positive.", correct: [2] },
-      { prompt: "Tap the quadrant where ONLY cos θ is positive.", correct: [4] },
+      { prompt: L("Tap the quadrant where ALL three ratios are positive.", "Klik op die kwadrant waar AL drie verhoudings positief is."), correct: [1] },
+      { prompt: L("Tap the quadrant where ONLY tan θ is positive.", "Klik op die kwadrant waar NET tan θ positief is."), correct: [3] },
+      { prompt: L("Tap the quadrant where ONLY sin θ is positive.", "Klik op die kwadrant waar NET sin θ positief is."), correct: [2] },
+      { prompt: L("Tap the quadrant where ONLY cos θ is positive.", "Klik op die kwadrant waar NET cos θ positief is."), correct: [4] },
     ];
     const it = pick(items);
     return {
       type: "tapcross", concept: CON, single: true,
       prompt: it.prompt, correct: it.correct,
-      hint: "All Strippers Take Cash: ① all three, ② sin only, ③ tan only, ④ cos only.",
-      answerLabel: `${it.prompt.replace("Tap the quadrant where", "That's")} ${CIRC[it.correct[0]]}.`,
+      hint: L("All Strippers Take Cash: ① all three, ② sin only, ③ tan only, ④ cos only.", "All Strippers Take Cash: ① al drie, ② net sin, ③ net tan, ④ net cos."),
+      answerLabel: `${it.prompt.replace(L("Tap the quadrant where", "Klik op die kwadrant waar"), L("That's", "Dis die kwadrant waar"))} ${CIRC[it.correct[0]]}.`,
       solution: (() => {
         const q = it.correct[0], w = xyWordsIn(q), pos = astcPositiveIn(q);
         return [
@@ -195,15 +196,15 @@ const SKILLS = {
       { sin: -1, cos: -1, q: 3 }, { sin: -1, cos: 1, q: 4 },
     ];
     const p = pick(pairs);
-    const sinWord = p.sin > 0 ? "positive" : "negative", cosWord = p.cos > 0 ? "positive" : "negative";
-    return mc(CON, `sin θ is ${sinWord} and cos θ is ${cosWord}. Which quadrant is θ in?`,
+    const sinWord = p.sin > 0 ? L("positive", "positive") : L("negative", "negative"), cosWord = p.cos > 0 ? L("positive", "positive") : L("negative", "negative");
+    return mc(CON, L(`sin θ is ${sinWord} and cos θ is ${cosWord}. Which quadrant is θ in?`, `sin θ is ${sinWord} en cos θ is ${cosWord}. In watter kwadrant is θ?`),
       CIRC[p.q], [1, 2, 3, 4].filter(x => x !== p.q).map(x => CIRC[x]),
-      { hint: "Only one quadrant matches both signs at once — check each against All Strippers Take Cash.",
-        answerLabel: `sin ${sinWord}, cos ${cosWord} → only ${CIRC[p.q]} (${WORD[p.q]}) fits both.`,
+      { hint: L("Only one quadrant matches both signs at once — check each against All Strippers Take Cash.", "Net een kwadrant pas by albei tekens tegelyk: toets elkeen teen All Strippers Take Cash."),
+        answerLabel: L(`sin ${sinWord}, cos ${cosWord} → only ${CIRC[p.q]} (${WORD[p.q]}) fits both.`, `sin ${sinWord}, cos ${cosWord} → net ${CIRC[p.q]} (${WORD[p.q]}) pas by albei.`),
         solution: [
-          { s: `sin θ ${sinWord}: sin = y/r, so y must be ${sinWord} → ${QLIST(solutionQuadrants("sin", p.sin))}` },
-          { s: `cos θ ${cosWord}: cos = x/r, so x must be ${cosWord} → ${QLIST(solutionQuadrants("cos", p.cos))}` },
-          { s: `${CIRC[p.q]} is on both lists`, r: `∴ θ lies in ${CIRC[p.q]} — “${WORD[p.q]}”` },
+          { s: L(`sin θ ${sinWord}: sin = y/r, so y must be ${sinWord} → ${QLIST(solutionQuadrants("sin", p.sin))}`, `sin θ ${sinWord}: sin = y/r, dus moet y ${sinWord} wees → ${QLIST(solutionQuadrants("sin", p.sin))}`) },
+          { s: L(`cos θ ${cosWord}: cos = x/r, so x must be ${cosWord} → ${QLIST(solutionQuadrants("cos", p.cos))}`, `cos θ ${cosWord}: cos = x/r, dus moet x ${cosWord} wees → ${QLIST(solutionQuadrants("cos", p.cos))}`) },
+          { s: L(`${CIRC[p.q]} is on both lists`, `${CIRC[p.q]} is op albei lyste`), r: L(`∴ θ lies in ${CIRC[p.q]} — “${WORD[p.q]}”`, `∴ θ lê in ${CIRC[p.q]}: “${WORD[p.q]}”`) },
         ] });
   },
 };

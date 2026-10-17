@@ -1,0 +1,6266 @@
+{
+  "unit": "T54",
+  "generated": "2026-10-17T19:08:37.251Z",
+  "files": [
+    "js/quests/questgt1-intro.js",
+    "js/quests/questgt2-cartesian.js",
+    "js/quests/questgt3-special.js",
+    "js/quests/questgt4-cofunctions.js",
+    "js/quests/questgt5-reductions-numbers.js",
+    "js/quests/questgt6-tip-chips.js",
+    "js/quests/questgt7-reductions-variables.js",
+    "js/quests/questgt8-special-sums.js",
+    "js/quests/questgt9-identities.js"
+  ],
+  "items": {
+    "questgt1-intro#1": {
+      "en": "<div style=\"font-size:16px\"><b style=\"color:var(--accent)\">tri</b>gonometry &nbsp;→&nbsp; <b>three</b></div>",
+      "kind": "template",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questgt1-intro.js:19:3"
+      ]
+    },
+    "questgt1-intro#2": {
+      "en": "<div style=\"font-size:16px\">trigo<b style=\"color:var(--accent)\">no</b>metry &nbsp;→&nbsp; <b>angled</b></div>",
+      "kind": "template",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questgt1-intro.js:20:3"
+      ]
+    },
+    "questgt1-intro#3": {
+      "en": "<div style=\"font-size:16px\">trigono<b style=\"color:var(--accent)\">metry</b> &nbsp;→&nbsp; <b>measurement</b></div>",
+      "kind": "template",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questgt1-intro.js:21:3"
+      ]
+    },
+    "questgt1-intro#4": {
+      "en": "<div style=\"border-left:4px solid #3aa0ff;padding-left:10px\"><b>SOH</b> — Sine · Opposite · Hypotenuse<br>sin θ = O/H</div>",
+      "kind": "template",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questgt1-intro.js:25:3"
+      ]
+    },
+    "questgt1-intro#5": {
+      "en": "<div style=\"border-left:4px solid #8b5cf6;padding-left:10px\"><b>CAH</b> — Cosine · Adjacent · Hypotenuse<br>cos θ = A/H</div>",
+      "kind": "template",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questgt1-intro.js:26:3"
+      ]
+    },
+    "questgt1-intro#6": {
+      "en": "<div style=\"border-left:4px solid #22c55e;padding-left:10px\"><b>TOA</b> — Tangent · Opposite · Adjacent<br>tan θ = O/A</div>",
+      "kind": "template",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questgt1-intro.js:27:3"
+      ]
+    },
+    "questgt1-intro#7": {
+      "en": "So trigonometry is the study of…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:37:13"
+      ]
+    },
+    "questgt1-intro#8": {
+      "en": "angles and the angle relationships of triangles",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questgt1-intro.js:38:7"
+      ]
+    },
+    "questgt1-intro#9": {
+      "en": "circles and their radii",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:39:8"
+      ]
+    },
+    "questgt1-intro#10": {
+      "en": "the areas of triangles only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:39:35"
+      ]
+    },
+    "questgt1-intro#11": {
+      "en": "the sides of a right triangle, never the angles",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:39:66"
+      ]
+    },
+    "questgt1-intro#12": {
+      "en": "Put the three pieces together: three · angled · measurement.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:40:15"
+      ]
+    },
+    "questgt1-intro#13": {
+      "en": "tri (three) + gono (angled) + metry (measurement) = the study of angles and of the angular relationships of triangles.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:41:22"
+      ]
+    },
+    "questgt1-intro#14": {
+      "en": "Trig ratios (SOHCAHTOA) can only be used with right triangles. True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:46:5"
+      ]
+    },
+    "questgt1-intro#15": {
+      "en": "The boxed rule from class: ratios can ONLY be used with right triangles.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:47:13"
+      ]
+    },
+    "questgt1-intro#16": {
+      "en": "True — SOHCAHTOA only works inside a right triangle.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:47:102"
+      ]
+    },
+    "questgt1-intro#17": {
+      "en": "Tap the side that is OPPOSITE θ.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:53:28"
+      ]
+    },
+    "questgt1-intro#18": {
+      "en": "Tap the side that is ADJACENT to θ.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:53:69"
+      ]
+    },
+    "questgt1-intro#19": {
+      "en": "Tap the HYPOTENUSE.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:53:113"
+      ]
+    },
+    "questgt1-intro#20": {
+      "en": "Opposite = the side “across from” θ.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questgt1-intro.js:54:26"
+      ]
+    },
+    "questgt1-intro#21": {
+      "en": "Adjacent = the side “next to” θ (not the hypotenuse).",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questgt1-intro.js:54:71"
+      ]
+    },
+    "questgt1-intro#22": {
+      "en": "The hypotenuse is “across from” the right angle.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questgt1-intro.js:54:133"
+      ]
+    },
+    "questgt1-intro#23": {
+      "en": "Opposite θ is the side straight across from it.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:56:12"
+      ]
+    },
+    "questgt1-intro#24": {
+      "en": "Adjacent to θ is the side that touches θ but isn't the hypotenuse.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:57:12"
+      ]
+    },
+    "questgt1-intro#25": {
+      "en": "The hypotenuse is across from the right angle — the longest side, and it never touches it.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:58:12"
+      ]
+    },
+    "questgt1-intro#26": {
+      "en": "Opposite = across from θ; adjacent = next to θ; hypotenuse = across from the right angle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:67:13"
+      ]
+    },
+    "questgt1-intro#27": {
+      "en": "O/H",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:75:21",
+        "questgt1-intro.js:76:37",
+        "questgt1-intro.js:77:37"
+      ]
+    },
+    "questgt1-intro#28": {
+      "en": "A/H",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:75:37",
+        "questgt1-intro.js:76:21",
+        "questgt1-intro.js:77:44"
+      ]
+    },
+    "questgt1-intro#29": {
+      "en": "O/A",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:75:44",
+        "questgt1-intro.js:76:44",
+        "questgt1-intro.js:77:21"
+      ]
+    },
+    "questgt1-intro#30": {
+      "en": "H/A",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:75:51",
+        "questgt1-intro.js:76:51",
+        "questgt1-intro.js:77:51"
+      ]
+    },
+    "questgt1-intro#31": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt1-intro.js:79:22"
+      ]
+    },
+    "questgt1-intro#32": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt1-intro.js:79:29"
+      ]
+    },
+    "questgt1-intro#33": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt1-intro.js:79:36"
+      ]
+    },
+    "questgt1-intro#34": {
+      "en": "${fn} θ = ?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:82:15"
+      ]
+    },
+    "questgt1-intro#35": {
+      "en": "SOH · CAH · TOA — sine is O/H, cosine is A/H, tangent is O/A.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:83:17"
+      ]
+    },
+    "questgt1-intro#36": {
+      "en": "${fn} θ = ${it.ratio} (SOH-CAH-TOA).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:83:95"
+      ]
+    },
+    "questgt1-intro#37": {
+      "en": "What stays the same as the point moves round the circle?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:89:13"
+      ]
+    },
+    "questgt1-intro#38": {
+      "en": "the radius r",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questgt1-intro.js:90:7"
+      ]
+    },
+    "questgt1-intro#39": {
+      "en": "the x-coordinate",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:90:24"
+      ]
+    },
+    "questgt1-intro#40": {
+      "en": "the y-coordinate",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:90:44"
+      ]
+    },
+    "questgt1-intro#41": {
+      "en": "the size of θ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:90:64"
+      ]
+    },
+    "questgt1-intro#42": {
+      "en": "Everything changes except one thing — the length from the centre to the point.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:91:15"
+      ]
+    },
+    "questgt1-intro#43": {
+      "en": "The radius r stays the same — only θ, x and y change. That's why a ratio needs its angle: fix r, move the point, watch x and y.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:92:22"
+      ]
+    },
+    "questgt1-intro#44": {
+      "en": "sin θ = ?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:97:19"
+      ]
+    },
+    "questgt1-intro#45": {
+      "en": "y/r",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:97:32",
+        "questgt1-intro.js:99:40",
+        "questgt1-intro.js:101:47"
+      ]
+    },
+    "questgt1-intro#46": {
+      "en": "x/r",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:97:40",
+        "questgt1-intro.js:99:32",
+        "questgt1-intro.js:101:40"
+      ]
+    },
+    "questgt1-intro#47": {
+      "en": "y/x",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:97:47",
+        "questgt1-intro.js:99:47",
+        "questgt1-intro.js:101:32"
+      ]
+    },
+    "questgt1-intro#48": {
+      "en": "r/y",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:97:54",
+        "questgt1-intro.js:101:54"
+      ]
+    },
+    "questgt1-intro#49": {
+      "en": "sin is the y-coordinate over the radius.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:98:15"
+      ]
+    },
+    "questgt1-intro#50": {
+      "en": "sin θ = y/r — how the y-coordinate changes as θ changes (r stays the same).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:98:72"
+      ]
+    },
+    "questgt1-intro#51": {
+      "en": "cos θ = ?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:99:19"
+      ]
+    },
+    "questgt1-intro#52": {
+      "en": "r/x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:99:54"
+      ]
+    },
+    "questgt1-intro#53": {
+      "en": "cos is the x-coordinate over the radius.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:100:15"
+      ]
+    },
+    "questgt1-intro#54": {
+      "en": "cos θ = x/r — how the x-coordinate changes as θ changes.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:100:72"
+      ]
+    },
+    "questgt1-intro#55": {
+      "en": "tan θ = ?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:101:19"
+      ]
+    },
+    "questgt1-intro#56": {
+      "en": "tan compares the y- and x-coordinates directly — no r involved.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:102:15"
+      ]
+    },
+    "questgt1-intro#57": {
+      "en": "tan θ = y/x = sin θ / cos θ.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:102:95"
+      ]
+    },
+    "questgt1-intro#58": {
+      "en": "On the circle (r fixed): as the x-value gets bigger, the y-value gets smaller — and the other way round. True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:103:20"
+      ]
+    },
+    "questgt1-intro#59": {
+      "en": "Think of the point on the circle: r is fixed, so when x grows, y has to shrink.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:104:15"
+      ]
+    },
+    "questgt1-intro#60": {
+      "en": "True — as x grows, y shrinks (and back). That's exactly what tan θ = y/x is tracking.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:104:111"
+      ]
+    },
+    "questgt1-intro#61": {
+      "en": "Blip says: “the sine is 0,6.” What does that number tell you on its own?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt1-intro.js:109:5"
+      ]
+    },
+    "questgt1-intro#62": {
+      "en": "Nothing until you know the angle — a ratio only means something for its θ",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questgt1-intro.js:110:5"
+      ]
+    },
+    "questgt1-intro#63": {
+      "en": "The triangle's height is 0,6",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:111:6"
+      ]
+    },
+    "questgt1-intro#64": {
+      "en": "θ = 0,6°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:111:38"
+      ]
+    },
+    "questgt1-intro#65": {
+      "en": "r = 0,6",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt1-intro.js:111:50"
+      ]
+    },
+    "questgt1-intro#66": {
+      "en": "A ratio is a relationship, not a length or an angle by itself.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt1-intro.js:112:13"
+      ]
+    },
+    "questgt1-intro#67": {
+      "en": "Fix the radius, move the point, watch x and y — the ratio IS the angle. On its own, 0,6 means nothing.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt1-intro.js:113:20"
+      ]
+    },
+    "questgt2-cartesian#1": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "QLIST.qs",
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:14:13",
+        "questgt2-cartesian.js:135:104",
+        "questgt2-cartesian.js:143:22"
+      ],
+      "data": true
+    },
+    "questgt2-cartesian#2": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "QLIST.qs",
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:14:20",
+        "questgt2-cartesian.js:143:29",
+        "questgt2-cartesian.js:147:27",
+        "questgt2-cartesian.js:152:27"
+      ],
+      "data": true
+    },
+    "questgt2-cartesian#3": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "QLIST.qs",
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:14:27",
+        "questgt2-cartesian.js:133:25"
+      ],
+      "data": true
+    },
+    "questgt2-cartesian#4": {
+      "en": "All",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:16:19"
+      ]
+    },
+    "questgt2-cartesian#5": {
+      "en": "Strippers",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:16:29"
+      ]
+    },
+    "questgt2-cartesian#6": {
+      "en": "Take",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:16:45"
+      ]
+    },
+    "questgt2-cartesian#7": {
+      "en": "Cash",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:16:56"
+      ]
+    },
+    "questgt2-cartesian#8": {
+      "en": "positive",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:25:23",
+        "questgt2-cartesian.js:25:59",
+        "questgt2-cartesian.js:127:18",
+        "questgt2-cartesian.js:127:68",
+        "questgt2-cartesian.js:136:45",
+        "questgt2-cartesian.js:145:46",
+        "questgt2-cartesian.js:146:46",
+        "questgt2-cartesian.js:150:34",
+        "questgt2-cartesian.js:150:60",
+        "questgt2-cartesian.js:151:34",
+        "questgt2-cartesian.js:151:60",
+        "questgt2-cartesian.js:198:33",
+        "questgt2-cartesian.js:198:80"
+      ],
+      "data": true
+    },
+    "questgt2-cartesian#9": {
+      "en": "negative",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:25:36",
+        "questgt2-cartesian.js:25:72",
+        "questgt2-cartesian.js:127:31",
+        "questgt2-cartesian.js:127:55",
+        "questgt2-cartesian.js:136:58",
+        "questgt2-cartesian.js:145:59",
+        "questgt2-cartesian.js:146:59",
+        "questgt2-cartesian.js:150:47",
+        "questgt2-cartesian.js:151:47",
+        "questgt2-cartesian.js:198:46",
+        "questgt2-cartesian.js:198:93"
+      ]
+    },
+    "questgt2-cartesian#10": {
+      "en": "y/r",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:27:25"
+      ]
+    },
+    "questgt2-cartesian#11": {
+      "en": "x/r",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:27:37"
+      ]
+    },
+    "questgt2-cartesian#12": {
+      "en": "y/x",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:27:49"
+      ]
+    },
+    "questgt2-cartesian#13": {
+      "en": " and ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:28:47"
+      ]
+    },
+    "questgt2-cartesian#14": {
+      "en": "r is a radius, so it is never negative — the sign of sin follows y alone: y is + above the x-axis (① and ②), − below it (③ and ④)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:31:8"
+      ]
+    },
+    "questgt2-cartesian#15": {
+      "en": "r is a radius, so it is never negative — the sign of cos follows x alone: x is + on the right (① and ④), − on the left (② and ③)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:32:8"
+      ]
+    },
+    "questgt2-cartesian#16": {
+      "en": "tan = y/x has no r in it: it is + when x and y carry the SAME sign (① and ③), − when they differ (② and ④)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:33:8"
+      ]
+    },
+    "questgt2-cartesian#17": {
+      "en": "Which word is quadrant ${CIRC[q]}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:71:17"
+      ]
+    },
+    "questgt2-cartesian#18": {
+      "en": "All Strippers Take Cash — read anticlockwise from ①.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt2-cartesian.js:73:19"
+      ]
+    },
+    "questgt2-cartesian#19": {
+      "en": "${CIRC[q]} is “${WORD[q]}” — All ① Strippers ② Take ③ Cash ④.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt2-cartesian.js:74:26"
+      ]
+    },
+    "questgt2-cartesian#20": {
+      "en": "above the x-axis, so ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:85:22"
+      ]
+    },
+    "questgt2-cartesian#21": {
+      "en": " is positive there",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:85:53"
+      ]
+    },
+    "questgt2-cartesian#22": {
+      "en": "below the x-axis, so ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:86:22"
+      ]
+    },
+    "questgt2-cartesian#23": {
+      "en": " is negative there",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:86:53"
+      ]
+    },
+    "questgt2-cartesian#24": {
+      "en": "Between ${x0}° and ${x1}° the ${fn} curve is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:87:20"
+      ]
+    },
+    "questgt2-cartesian#25": {
+      "en": "exactly zero throughout ${x0}°–${x1}°",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:88:72"
+      ]
+    },
+    "questgt2-cartesian#26": {
+      "en": "Read the shading and the picture — above the line is +, below is −.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt2-cartesian.js:89:15"
+      ]
+    },
+    "questgt2-cartesian#27": {
+      "en": "${x0}° to ${x1}° is quadrant ${CIRC[quad]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:93:16"
+      ]
+    },
+    "questgt2-cartesian#28": {
+      "en": "All ① Strippers ② Take ③ Cash ④ — ${CIRC[quad]} is “${WORD[quad]}”",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:93:65"
+      ]
+    },
+    "questgt2-cartesian#29": {
+      "en": "In ${CIRC[quad]} the positive ratios are: ${astcPositiveIn(quad).join(\", \")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:94:16"
+      ]
+    },
+    "questgt2-cartesian#30": {
+      "en": "${fn} is ${sign > 0 ? \"on that list, so it is positive\" : \"not on that list, so it is negative\"} in ${CIRC[quad]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:95:16"
+      ],
+      "nested": [
+        "on that list, so it is positive",
+        "not on that list, so it is negative"
+      ]
+    },
+    "questgt2-cartesian#31": {
+      "en": "positive → the curve sits above the x-axis",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:96:30"
+      ]
+    },
+    "questgt2-cartesian#32": {
+      "en": "negative → the curve dips below the x-axis",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:96:77"
+      ]
+    },
+    "questgt2-cartesian#33": {
+      "en": "Tap every quadrant where ${fn} θ is ${sign > 0 ? \"positive\" : \"negative\"}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:108:15"
+      ],
+      "nested": [
+        "positive",
+        "negative"
+      ]
+    },
+    "questgt2-cartesian#34": {
+      "en": "All Strippers Take Cash — the story word order tells you the sign in each quadrant.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt2-cartesian.js:110:13"
+      ]
+    },
+    "questgt2-cartesian#35": {
+      "en": "${fn} θ is ${sign > 0 ? \"positive\" : \"negative\"} in ${correct.map(q => CIRC[q]).join(\" and \")}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt2-cartesian.js:111:20"
+      ],
+      "nested": [
+        "positive",
+        "negative",
+        " and "
+      ]
+    },
+    "questgt2-cartesian#36": {
+      "en": "${fn} θ = ${RATIO_OF[fn]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:113:14"
+      ]
+    },
+    "questgt2-cartesian#37": {
+      "en": "start from what the ratio is made of",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:113:46"
+      ]
+    },
+    "questgt2-cartesian#38": {
+      "en": "So ${fn} θ is ${sign > 0 ? \"positive\" : \"negative\"} in ${QLIST(correct)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:115:14"
+      ],
+      "nested": [
+        "positive",
+        "negative"
+      ]
+    },
+    "questgt2-cartesian#39": {
+      "en": "check it against All Strippers Take Cash — ${correct.map(q => WORD[q]).join(\" and \")}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:116:14"
+      ],
+      "nested": [
+        " and "
+      ]
+    },
+    "questgt2-cartesian#40": {
+      "en": "θ is in quadrant ${CIRC[quad]}. ${fn} θ is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:126:20"
+      ]
+    },
+    "questgt2-cartesian#41": {
+      "en": "zero",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:127:80"
+      ]
+    },
+    "questgt2-cartesian#42": {
+      "en": "All Strippers Take Cash.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt2-cartesian.js:128:15"
+      ]
+    },
+    "questgt2-cartesian#43": {
+      "en": "${CIRC[quad]} → ${fn} θ is ${sign > 0 ? \"positive\" : \"negative\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt2-cartesian.js:128:56"
+      ],
+      "nested": [
+        "positive",
+        "negative"
+      ]
+    },
+    "questgt2-cartesian#44": {
+      "en": "x is ${xSign} and r is always positive",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:148:9"
+      ]
+    },
+    "questgt2-cartesian#45": {
+      "en": "y is ${ySign} and r is always positive",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt2-cartesian.js:149:9"
+      ]
+    },
+    "questgt2-cartesian#46": {
+      "en": "x is ${wrongXSign} and r is always positive",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:152:35"
+      ]
+    },
+    "questgt2-cartesian#47": {
+      "en": "y is ${wrongYSign} and r is always positive",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:152:83"
+      ]
+    },
+    "questgt2-cartesian#48": {
+      "en": "r can be negative in some quadrants",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt2-cartesian.js:153:20"
+      ]
+    },
+    "questgt2-cartesian#49": {
+      "en": "In quadrant ${CIRC[quad]}, ${fn} θ = ${fn === \"cos\" ? \"x/r\" : \"y/r\"} is ${astcSign(fn, quad) > 0 ? \"positive\" : \"negative\"} because…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:154:20"
+      ],
+      "nested": [
+        "cos",
+        "x/r",
+        "y/r",
+        "positive",
+        "negative"
+      ]
+    },
+    "questgt2-cartesian#50": {
+      "en": "\\\"always positive bc it is the radius\\\" — r never carries the minus. Only x or y can flip the sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt2-cartesian.js:156:15"
+      ]
+    },
+    "questgt2-cartesian#51": {
+      "en": "${fn} θ = ${fn === \"cos\" ? \"x/r\" : \"y/r\"}: ${reason}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt2-cartesian.js:157:22"
+      ],
+      "nested": [
+        "cos",
+        "x/r",
+        "y/r"
+      ]
+    },
+    "questgt2-cartesian#52": {
+      "en": "Mark a point in ${CIRC[quad]} and drop x and y to the axes: x is ${xSign}, y is ${ySign}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:159:16"
+      ]
+    },
+    "questgt2-cartesian#53": {
+      "en": "r is the radius from the origin out to the point — a length",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:160:16"
+      ]
+    },
+    "questgt2-cartesian#54": {
+      "en": "a length is never negative, so r stays positive in every quadrant",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:160:82"
+      ]
+    },
+    "questgt2-cartesian#55": {
+      "en": "${fn} θ = ${fn === \"cos\" ? \"x/r\" : \"y/r\"}, so only ${fn === \"cos\" ? \"x\" : \"y\"} can put a minus in",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:161:16"
+      ],
+      "nested": [
+        "cos",
+        "x/r",
+        "y/r",
+        "cos",
+        "x",
+        "y"
+      ]
+    },
+    "questgt2-cartesian#56": {
+      "en": "here ${fn === \"cos\" ? `x is ${xSign}` : `y is ${ySign}`}, so ${fn} θ is ${astcSign(fn, quad) > 0 ? \"positive\" : \"negative\"}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:162:16"
+      ],
+      "nested": [
+        "cos",
+        "x is ${xSign}",
+        "y is ${ySign}",
+        "positive",
+        "negative"
+      ]
+    },
+    "questgt2-cartesian#57": {
+      "en": "Tap the quadrant where ALL three ratios are positive.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:169:17"
+      ]
+    },
+    "questgt2-cartesian#58": {
+      "en": "Tap the quadrant where ONLY tan θ is positive.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:170:17"
+      ]
+    },
+    "questgt2-cartesian#59": {
+      "en": "Tap the quadrant where ONLY sin θ is positive.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:171:17"
+      ]
+    },
+    "questgt2-cartesian#60": {
+      "en": "Tap the quadrant where ONLY cos θ is positive.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:172:17"
+      ]
+    },
+    "questgt2-cartesian#61": {
+      "en": "All Strippers Take Cash: ① all three, ② sin only, ③ tan only, ④ cos only.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt2-cartesian.js:178:13"
+      ]
+    },
+    "questgt2-cartesian#62": {
+      "en": "Tap the quadrant where",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt2-cartesian.js:179:41"
+      ]
+    },
+    "questgt2-cartesian#63": {
+      "en": "That's",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt2-cartesian.js:179:67"
+      ]
+    },
+    "questgt2-cartesian#64": {
+      "en": "sin θ is ${sinWord} and cos θ is ${cosWord}. Which quadrant is θ in?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt2-cartesian.js:199:20"
+      ]
+    },
+    "questgt2-cartesian#65": {
+      "en": "Only one quadrant matches both signs at once — check each against All Strippers Take Cash.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt2-cartesian.js:201:15"
+      ]
+    },
+    "questgt2-cartesian#66": {
+      "en": "sin ${sinWord}, cos ${cosWord} → only ${CIRC[p.q]} (${WORD[p.q]}) fits both.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt2-cartesian.js:202:22"
+      ]
+    },
+    "questgt2-cartesian#67": {
+      "en": "sin θ ${sinWord}: sin = y/r, so y must be ${sinWord} → ${QLIST(solutionQuadrants(\"sin\", p.sin))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:204:16"
+      ],
+      "nested": [
+        "sin"
+      ]
+    },
+    "questgt2-cartesian#68": {
+      "en": "cos θ ${cosWord}: cos = x/r, so x must be ${cosWord} → ${QLIST(solutionQuadrants(\"cos\", p.cos))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:205:16"
+      ],
+      "nested": [
+        "cos"
+      ]
+    },
+    "questgt2-cartesian#69": {
+      "en": "${CIRC[p.q]} is on both lists",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt2-cartesian.js:206:16"
+      ]
+    },
+    "questgt2-cartesian#70": {
+      "en": "∴ θ lies in ${CIRC[p.q]} — “${WORD[p.q]}”",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt2-cartesian.js:206:52"
+      ]
+    },
+    "questgt3-special#1": {
+      "en": "Take an equilateral triangle with sides of 2 and cut it straight down the middle",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:32:23"
+      ]
+    },
+    "questgt3-special#2": {
+      "en": "that cut is where the 30-60-90 comes from",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:32:110"
+      ]
+    },
+    "questgt3-special#3": {
+      "en": "Take a square with sides of 1 and cut it corner to corner",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:33:25"
+      ]
+    },
+    "questgt3-special#4": {
+      "en": "that cut is where the 45-45-90 comes from",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:33:89"
+      ]
+    },
+    "questgt3-special#5": {
+      "en": "In the 30-60-90 triangle, the side opposite 30° is…",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:35:13"
+      ]
+    },
+    "questgt3-special#6": {
+      "en": "The cut halves the 60° top angle into 30°, and halves the base of 2 into 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:37:12"
+      ]
+    },
+    "questgt3-special#7": {
+      "en": "That half-base lies straight across from the 30° corner, so it is 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:38:12"
+      ]
+    },
+    "questgt3-special#8": {
+      "en": "In the 30-60-90 triangle, the side opposite 60° is…",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:39:13"
+      ]
+    },
+    "questgt3-special#9": {
+      "en": "Base = 1, slanted side = 2, so height² = 2² − 1² = 3",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:41:12"
+      ]
+    },
+    "questgt3-special#10": {
+      "en": "(pyth)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:41:71",
+        "questgt3-special.js:53:73",
+        "questgt3-special.js:122:65"
+      ]
+    },
+    "questgt3-special#11": {
+      "en": "height = √3, and it sits across from the 60° corner, so that side is √3",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:42:12"
+      ]
+    },
+    "questgt3-special#12": {
+      "en": "In the 30-60-90 triangle, the side opposite 90° (the hypotenuse) is…",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:43:13"
+      ]
+    },
+    "questgt3-special#13": {
+      "en": "The cut does not touch the slanted side — it is still a whole side of the equilateral triangle",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:45:12"
+      ]
+    },
+    "questgt3-special#14": {
+      "en": "That slanted side faces the right angle, so the hypotenuse is 2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:46:12"
+      ]
+    },
+    "questgt3-special#15": {
+      "en": "In the 45-45-90 triangle, the side opposite a 45° angle is…",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:47:13"
+      ]
+    },
+    "questgt3-special#16": {
+      "en": "The two short sides of the new triangle are just sides of the square, so each is 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:49:12"
+      ]
+    },
+    "questgt3-special#17": {
+      "en": "Each of them faces one of the 45° corners, so that side is 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:50:12"
+      ]
+    },
+    "questgt3-special#18": {
+      "en": "In the 45-45-90 triangle, the side opposite 90° (the hypotenuse) is…",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:51:13"
+      ]
+    },
+    "questgt3-special#19": {
+      "en": "The two short sides are 1 and 1, so hyp² = 1² + 1² = 2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:53:12"
+      ]
+    },
+    "questgt3-special#20": {
+      "en": "hyp = √2, and it faces the right angle, so the hypotenuse is √2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:54:12"
+      ]
+    },
+    "questgt3-special#21": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.prompt",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:58:37",
+        "questgt3-special.js:85:24",
+        "questgt3-special.js:91:49"
+      ],
+      "data": true
+    },
+    "questgt3-special#22": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.prompt",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:58:44",
+        "questgt3-special.js:85:47",
+        "questgt3-special.js:91:56"
+      ],
+      "data": true
+    },
+    "questgt3-special#23": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.prompt",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:58:51"
+      ]
+    },
+    "questgt3-special#24": {
+      "en": "O",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:76:27",
+        "questgt3-special.js:76:61",
+        "questgt3-special.js:163:19"
+      ]
+    },
+    "questgt3-special#25": {
+      "en": "H",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:76:32",
+        "questgt3-special.js:76:49",
+        "questgt3-special.js:163:29"
+      ]
+    },
+    "questgt3-special#26": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:76:44",
+        "questgt3-special.js:76:66",
+        "questgt3-special.js:163:24"
+      ]
+    },
+    "questgt3-special#27": {
+      "en": "Pick the two letters SOHCAHTOA gives you, then read them off the table.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:82:13"
+      ]
+    },
+    "questgt3-special#28": {
+      "en": "${fn} ${angle}° = ${correct.text} (from the O-A-H table).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt3-special.js:83:20"
+      ]
+    },
+    "questgt3-special#29": {
+      "en": "SOH",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:85:32"
+      ]
+    },
+    "questgt3-special#30": {
+      "en": "CAH",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:85:55"
+      ]
+    },
+    "questgt3-special#31": {
+      "en": "TOA",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:85:63"
+      ]
+    },
+    "questgt3-special#32": {
+      "en": "SOHCAHTOA picks the two letters",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:85:112"
+      ]
+    },
+    "questgt3-special#33": {
+      "en": "In the ${angle}° column: ${LETTERS[0]} = ${cellTop} and ${LETTERS[1]} = ${cellBot}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:86:14"
+      ]
+    },
+    "questgt3-special#34": {
+      "en": "read the two cells off the O-A-H table",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:86:103"
+      ]
+    },
+    "questgt3-special#35": {
+      "en": "Read it straight off the picture (or type it into the calculator).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:107:13"
+      ]
+    },
+    "questgt3-special#36": {
+      "en": "${fn} ${angle}° = ${correct.text}, read off the graph.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt3-special.js:108:20"
+      ]
+    },
+    "questgt3-special#37": {
+      "en": "tan θ = ?",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:112:13"
+      ]
+    },
+    "questgt3-special#38": {
+      "en": "sin θ / cos θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt3-special.js:112:35"
+      ]
+    },
+    "questgt3-special#39": {
+      "en": "cos θ / sin θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:112:61"
+      ]
+    },
+    "questgt3-special#40": {
+      "en": "1 / sin θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:112:78"
+      ]
+    },
+    "questgt3-special#41": {
+      "en": "sin θ · cos θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:112:91",
+        "questgt3-special.js:119:62"
+      ]
+    },
+    "questgt3-special#42": {
+      "en": "tan is the ratio of sin to cos.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:112:115"
+      ]
+    },
+    "questgt3-special#43": {
+      "en": "sec θ = 1 / ?",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:113:13"
+      ]
+    },
+    "questgt3-special#44": {
+      "en": "cos θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:113:39",
+        "questgt3-special.js:114:59",
+        "questgt3-special.js:115:66"
+      ]
+    },
+    "questgt3-special#45": {
+      "en": "sin θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:113:57",
+        "questgt3-special.js:114:41",
+        "questgt3-special.js:115:57"
+      ]
+    },
+    "questgt3-special#46": {
+      "en": "tan θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:113:66",
+        "questgt3-special.js:114:68",
+        "questgt3-special.js:115:39"
+      ]
+    },
+    "questgt3-special#47": {
+      "en": "“Look at the 3rd letter” — se<b>c</b> → cos.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:113:82"
+      ]
+    },
+    "questgt3-special#48": {
+      "en": "cosec θ = 1 / ?",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:114:13"
+      ]
+    },
+    "questgt3-special#49": {
+      "en": "“Look at the 3rd letter” — co<b>s</b>ec → sin.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:114:84"
+      ]
+    },
+    "questgt3-special#50": {
+      "en": "cot θ = 1 / ?",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:115:13"
+      ]
+    },
+    "questgt3-special#51": {
+      "en": "“Look at the 3rd letter” — co<b>t</b> → tan.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:115:82"
+      ]
+    },
+    "questgt3-special#52": {
+      "en": "sin²θ + cos²θ = ?",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:119:13"
+      ]
+    },
+    "questgt3-special#53": {
+      "en": "The one identity that's true for every single θ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:119:91"
+      ]
+    },
+    "questgt3-special#54": {
+      "en": "Take any point on the circle: sin θ = y/r and cos θ = x/r",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:121:12"
+      ]
+    },
+    "questgt3-special#55": {
+      "en": "sin²θ + cos²θ = (y² + x²)/r², and x² + y² = r²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:122:12"
+      ]
+    },
+    "questgt3-special#56": {
+      "en": "So sin²θ + cos²θ = r²/r² = 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:123:12"
+      ]
+    },
+    "questgt3-special#57": {
+      "en": "true for every θ, which is why it is THE identity",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:123:47"
+      ]
+    },
+    "questgt3-special#58": {
+      "en": "Which of these is a masked identity?",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:125:13",
+        "questgt3-special.js:133:13"
+      ]
+    },
+    "questgt3-special#59": {
+      "en": "cos²θ = 1 − sin²θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt3-special.js:125:62"
+      ]
+    },
+    "questgt3-special#60": {
+      "en": "tan²θ = 1 − sin²θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:126:14"
+      ]
+    },
+    "questgt3-special#61": {
+      "en": "sin²θ = 1 + cos²θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:126:35"
+      ]
+    },
+    "questgt3-special#62": {
+      "en": "sin²θ − cos²θ = 1",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:126:56"
+      ]
+    },
+    "questgt3-special#63": {
+      "en": "Rearrange sin²θ + cos²θ = 1 — swap one squared term for “1 minus the other”.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:127:11"
+      ]
+    },
+    "questgt3-special#64": {
+      "en": "Start from sin²θ + cos²θ = 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:129:12",
+        "questgt3-special.js:137:12"
+      ]
+    },
+    "questgt3-special#65": {
+      "en": "Take sin²θ across to the other side: cos²θ = 1 − sin²θ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:130:12"
+      ]
+    },
+    "questgt3-special#66": {
+      "en": "the same identity wearing a mask",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:130:73"
+      ]
+    },
+    "questgt3-special#67": {
+      "en": "The two wrong-looking ones bring in tan, or turn the − into a +",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:131:12"
+      ]
+    },
+    "questgt3-special#68": {
+      "en": "only one term ever moves, and it changes sign",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:131:82"
+      ]
+    },
+    "questgt3-special#69": {
+      "en": "sin²θ = 1 − cos²θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt3-special.js:133:62"
+      ]
+    },
+    "questgt3-special#70": {
+      "en": "tan²θ = 1 − cos²θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:134:14"
+      ]
+    },
+    "questgt3-special#71": {
+      "en": "cos²θ = 1 + sin²θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:134:35"
+      ]
+    },
+    "questgt3-special#72": {
+      "en": "cos²θ − sin²θ = 1",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:134:56"
+      ]
+    },
+    "questgt3-special#73": {
+      "en": "Rearrange sin²θ + cos²θ = 1 the other way round.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:135:11"
+      ]
+    },
+    "questgt3-special#74": {
+      "en": "This time take cos²θ across: sin²θ = 1 − cos²θ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:138:12"
+      ]
+    },
+    "questgt3-special#75": {
+      "en": "the other mask of the same identity",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:138:65"
+      ]
+    },
+    "questgt3-special#76": {
+      "en": "Crossing the = always flips the sign, so it is 1 MINUS the other one",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:139:12"
+      ]
+    },
+    "questgt3-special#77": {
+      "en": "never 1 + …",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:139:87"
+      ]
+    },
+    "questgt3-special#78": {
+      "en": "1 − sin²θ = ?",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.prompt",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt3-special.js:141:13"
+      ]
+    },
+    "questgt3-special#79": {
+      "en": "cos²θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt3-special.js:141:39"
+      ]
+    },
+    "questgt3-special#80": {
+      "en": "sin²θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:141:57"
+      ]
+    },
+    "questgt3-special#81": {
+      "en": "1 + cos²θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:141:66"
+      ]
+    },
+    "questgt3-special#82": {
+      "en": "−cos²θ",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt3-special.js:141:79"
+      ]
+    },
+    "questgt3-special#83": {
+      "en": "A masked identity — swap it back to sin²θ + cos²θ = 1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:142:11"
+      ]
+    },
+    "questgt3-special#84": {
+      "en": "sin²θ + cos²θ = 1, so cos²θ = 1 − sin²θ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:144:12"
+      ]
+    },
+    "questgt3-special#85": {
+      "en": "Read that backwards: wherever you see 1 − sin²θ you may write cos²θ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt3-special.js:145:12"
+      ]
+    },
+    "questgt3-special#86": {
+      "en": "spotting the mask is the whole skill",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt3-special.js:145:86"
+      ]
+    },
+    "questgt3-special#87": {
+      "en": "Read the side straight across from the named angle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:156:17"
+      ]
+    },
+    "questgt3-special#88": {
+      "en": "Read the table: the ${row} value for ${col}° is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt3-special.js:168:15"
+      ]
+    },
+    "questgt3-special#89": {
+      "en": "Oats Are Healthy — O, A, H down the side; 30°, 45°, 60° across the top.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt3-special.js:169:17"
+      ]
+    },
+    "questgt3-special#90": {
+      "en": "${row} at ${col}° = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt3-special.js:169:105"
+      ]
+    },
+    "questgt3-special#91": {
+      "en": "${it.prompt.replace(\"?\", \"\")}${it.correct} — a masked identity.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt3-special.js:184:127"
+      ]
+    },
+    "questgt4-cofunctions#1": {
+      "en": "90 − θ is friendly — quadrant A, everything positive. 90 + θ has crossed into S: only sine stays positive.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "mcStep.hint"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:24:12"
+      ]
+    },
+    "questgt4-cofunctions#2": {
+      "en": "Co-functions CONVERT between sin and cos.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:25:12"
+      ]
+    },
+    "questgt4-cofunctions#3": {
+      "en": "The angle left over after the 90°.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:26:12"
+      ]
+    },
+    "questgt4-cofunctions#4": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "mcStep.wrongs",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:33:20",
+        "questgt4-cofunctions.js:67:30",
+        "questgt4-cofunctions.js:83:20",
+        "questgt4-cofunctions.js:115:30",
+        "questgt4-cofunctions.js:129:20",
+        "questgt4-cofunctions.js:183:20"
+      ]
+    },
+    "questgt4-cofunctions#5": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.wrongs",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:33:27",
+        "questgt4-cofunctions.js:59:14",
+        "questgt4-cofunctions.js:67:38",
+        "questgt4-cofunctions.js:83:27",
+        "questgt4-cofunctions.js:106:14",
+        "questgt4-cofunctions.js:115:38",
+        "questgt4-cofunctions.js:129:27",
+        "questgt4-cofunctions.js:183:27"
+      ]
+    },
+    "questgt4-cofunctions#6": {
+      "en": "Write ${fn} ${angle}° as a co-function (using 90° − θ).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:39:13"
+      ]
+    },
+    "questgt4-cofunctions#7": {
+      "en": "What's the sign?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:41:14",
+        "questgt4-cofunctions.js:66:14",
+        "questgt4-cofunctions.js:91:14",
+        "questgt4-cofunctions.js:114:14",
+        "questgt4-cofunctions.js:137:14",
+        "questgt4-cofunctions.js:191:14"
+      ]
+    },
+    "questgt4-cofunctions#8": {
+      "en": "${fn} becomes…",
+      "kind": "template",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:42:14",
+        "questgt4-cofunctions.js:92:14",
+        "questgt4-cofunctions.js:138:14",
+        "questgt4-cofunctions.js:192:14"
+      ]
+    },
+    "questgt4-cofunctions#9": {
+      "en": "Type the value.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:43:16",
+        "questgt4-cofunctions.js:68:16",
+        "questgt4-cofunctions.js:193:16"
+      ]
+    },
+    "questgt4-cofunctions#10": {
+      "en": "${fn} ${angle}° = ${cf.fn2} ${value}° — 90° − θ is quadrant A, everything positive.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:46:18"
+      ]
+    },
+    "questgt4-cofunctions#11": {
+      "en": "Sign: +",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:48:12",
+        "questgt4-cofunctions.js:97:12"
+      ]
+    },
+    "questgt4-cofunctions#12": {
+      "en": "90° − θ is quadrant A — everything positive.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:48:26"
+      ]
+    },
+    "questgt4-cofunctions#13": {
+      "en": "Ratio: ${fn} → ${cf.fn2}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:49:12",
+        "questgt4-cofunctions.js:98:12",
+        "questgt4-cofunctions.js:144:12",
+        "questgt4-cofunctions.js:199:12"
+      ]
+    },
+    "questgt4-cofunctions#14": {
+      "en": "co-functions convert sin ↔ cos.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:49:43",
+        "questgt4-cofunctions.js:74:35",
+        "questgt4-cofunctions.js:98:43",
+        "questgt4-cofunctions.js:121:35",
+        "questgt4-cofunctions.js:144:43",
+        "questgt4-cofunctions.js:199:43"
+      ]
+    },
+    "questgt4-cofunctions#15": {
+      "en": "Value: ${value}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:50:12"
+      ]
+    },
+    "questgt4-cofunctions#16": {
+      "en": "Write cos ${angle}° as a co-function (use 90° + θ).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:64:13"
+      ]
+    },
+    "questgt4-cofunctions#17": {
+      "en": "cos becomes…",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:67:14",
+        "questgt4-cofunctions.js:115:14"
+      ]
+    },
+    "questgt4-cofunctions#18": {
+      "en": "cos(90° + θ) is THE TRAP: 90° + θ has crossed into S, and cosine is not sine, so it's negative.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:70:11"
+      ]
+    },
+    "questgt4-cofunctions#19": {
+      "en": "cos ${angle}° = −sin ${theta}° — 90° + θ is quadrant S, cosine isn't sine, so it picks up the minus. (Contrast: sin ${angle}° = +cos ${theta}°.)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:71:18"
+      ]
+    },
+    "questgt4-cofunctions#20": {
+      "en": "Sign: −",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:73:12",
+        "questgt4-cofunctions.js:120:12"
+      ]
+    },
+    "questgt4-cofunctions#21": {
+      "en": "90° + θ is quadrant S — only sine stays positive, and cosine is not sine.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:73:26"
+      ]
+    },
+    "questgt4-cofunctions#22": {
+      "en": "Ratio: cos → sin",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:74:12",
+        "questgt4-cofunctions.js:121:12"
+      ]
+    },
+    "questgt4-cofunctions#23": {
+      "en": "Value: ${theta}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:75:12",
+        "questgt4-cofunctions.js:200:12"
+      ]
+    },
+    "questgt4-cofunctions#24": {
+      "en": "θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:82:24",
+        "questgt4-cofunctions.js:105:24",
+        "questgt4-cofunctions.js:128:24",
+        "questgt4-cofunctions.js:155:58"
+      ]
+    },
+    "questgt4-cofunctions#25": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:82:29",
+        "questgt4-cofunctions.js:105:29",
+        "questgt4-cofunctions.js:128:29"
+      ]
+    },
+    "questgt4-cofunctions#26": {
+      "en": "${fn}(90° − ${letter}) = ${cf.fn2} ${letter} — 90° − ${letter} is quadrant A, everything positive.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:95:18"
+      ]
+    },
+    "questgt4-cofunctions#27": {
+      "en": "90° − θ is quadrant A.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:97:26"
+      ]
+    },
+    "questgt4-cofunctions#28": {
+      "en": "cos(90° + ${letter}) = ?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:112:13"
+      ]
+    },
+    "questgt4-cofunctions#29": {
+      "en": "cos(90° + θ) = −sin θ — the single most useful trap in this chapter. 90 + θ crosses into S: only sine stays positive.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:117:11"
+      ]
+    },
+    "questgt4-cofunctions#30": {
+      "en": "cos(90° + ${letter}) = −sin ${letter} — THE TRAP: 90° + ${letter} is quadrant S, cosine isn't sine. (Contrast: sin(90° + ${letter}) = +cos ${letter}.)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:118:18"
+      ]
+    },
+    "questgt4-cofunctions#31": {
+      "en": "90° + θ is quadrant S.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:120:26"
+      ]
+    },
+    "questgt4-cofunctions#32": {
+      "en": "let K = 90° − θ — then θ − 90° = −K sits in quadrant IV, where cos survives and sin flips.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:140:11"
+      ]
+    },
+    "questgt4-cofunctions#33": {
+      "en": "Sign: ${cf.sign < 0 ? \"−\" : \"+\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:143:12",
+        "questgt4-cofunctions.js:198:12"
+      ]
+    },
+    "questgt4-cofunctions#34": {
+      "en": "let K = 90° − θ; θ − 90° = −K sits in quadrant IV.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:143:51"
+      ]
+    },
+    "questgt4-cofunctions#35": {
+      "en": "sin θ = √3/2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:160:12"
+      ]
+    },
+    "questgt4-cofunctions#36": {
+      "en": "cos(90° − θ)",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:160:33"
+      ]
+    },
+    "questgt4-cofunctions#37": {
+      "en": "cos θ = 1/2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:161:12"
+      ]
+    },
+    "questgt4-cofunctions#38": {
+      "en": "sin(90° − θ)",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:161:32"
+      ]
+    },
+    "questgt4-cofunctions#39": {
+      "en": "${it.given}. So ${it.ask} = ?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:170:13"
+      ]
+    },
+    "questgt4-cofunctions#40": {
+      "en": "The two acute angles of a right triangle share the SAME sides — they just call them different names.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:173:11"
+      ]
+    },
+    "questgt4-cofunctions#41": {
+      "en": "${it.ask} = ${it.correct} — same triangle, same sides, just relabelled.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:174:18"
+      ]
+    },
+    "questgt4-cofunctions#42": {
+      "en": "the shared-sides argument (D1).",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:175:53"
+      ]
+    },
+    "questgt4-cofunctions#43": {
+      "en": "Write ${fn}${argDeg(angle)} as a co-function.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:189:13"
+      ]
+    },
+    "questgt4-cofunctions#44": {
+      "en": "${fn}${argDeg(angle)} is a co-function form.",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:198:51"
+      ]
+    },
+    "questgt4-cofunctions#45": {
+      "en": "the angle left over after the 90°.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt4-cofunctions.js:200:35"
+      ]
+    },
+    "questgt5-reductions-numbers#1": {
+      "en": "determine the quadrant.",
+      "kind": "string",
+      "slots": [
+        "quadStep.hint"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:26:13"
+      ]
+    },
+    "questgt5-reductions-numbers#2": {
+      "en": "reduction formula — which wheel arm?",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "tokenStep.hint"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:27:13"
+      ]
+    },
+    "questgt5-reductions-numbers#3": {
+      "en": "+ or − sign: All Strippers Take Cash.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:28:13"
+      ]
+    },
+    "questgt5-reductions-numbers#4": {
+      "en": "does it stay, or is it a co-function that converts?",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "mcStep.hint"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:29:13"
+      ]
+    },
+    "questgt5-reductions-numbers#5": {
+      "en": "angles past a full turn — how many 360°s, in ONE chip, before you reduce?",
+      "kind": "string",
+      "slots": [
+        "tokenStep.hint"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:30:13"
+      ]
+    },
+    "questgt5-reductions-numbers#6": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "buildChain.fn",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:32:16",
+        "questgt5-reductions-numbers.js:112:20"
+      ]
+    },
+    "questgt5-reductions-numbers#7": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "buildChain.fn",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:32:23",
+        "questgt5-reductions-numbers.js:112:27"
+      ]
+    },
+    "questgt5-reductions-numbers#8": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "buildChain.fn",
+        "placeholder",
+        "wrongs"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:32:30"
+      ]
+    },
+    "questgt5-reductions-numbers#9": {
+      "en": "stays ${fn}",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct",
+        "mcStep.wrongs",
+        "wrongs"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:39:23",
+        "questgt5-reductions-numbers.js:42:51",
+        "questgt5-reductions-numbers.js:122:80"
+      ]
+    },
+    "questgt5-reductions-numbers#10": {
+      "en": "changes to ${f}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:39:62"
+      ]
+    },
+    "questgt5-reductions-numbers#11": {
+      "en": "changes to ${fn2}",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:42:21"
+      ]
+    },
+    "questgt5-reductions-numbers#12": {
+      "en": "changes to ${third}",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs",
+        "wrongs"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:42:66",
+        "questgt5-reductions-numbers.js:122:95"
+      ]
+    },
+    "questgt5-reductions-numbers#13": {
+      "en": "Rotate first — what do you add or subtract?",
+      "kind": "string",
+      "slots": [
+        "tokenStep.prompt"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:63:26"
+      ]
+    },
+    "questgt5-reductions-numbers#14": {
+      "en": "Which quadrant is it in now?",
+      "kind": "string",
+      "slots": [
+        "quadStep.prompt"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:66:23"
+      ]
+    },
+    "questgt5-reductions-numbers#15": {
+      "en": "Type the reduction formula.",
+      "kind": "string",
+      "slots": [
+        "tokenStep.prompt"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:67:24",
+        "questgt5-reductions-numbers.js:120:15"
+      ]
+    },
+    "questgt5-reductions-numbers#16": {
+      "en": "What's the sign?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:68:21",
+        "questgt5-reductions-numbers.js:121:12"
+      ]
+    },
+    "questgt5-reductions-numbers#17": {
+      "en": "Does the ratio stay, or does it change?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:70:21",
+        "questgt5-reductions-numbers.js:122:12"
+      ]
+    },
+    "questgt5-reductions-numbers#18": {
+      "en": "Which quadrant is it in?",
+      "kind": "string",
+      "slots": [
+        "quadStep.prompt"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:119:14"
+      ]
+    },
+    "questgt5-reductions-numbers#19": {
+      "en": "changes to ${cf.fn2}",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:122:55"
+      ]
+    },
+    "questgt5-reductions-numbers#20": {
+      "en": "Reduce ${fn} ${angle}° using a co-function (90° ± θ).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:128:13"
+      ]
+    },
+    "questgt5-reductions-numbers#21": {
+      "en": "Quadrant: ${CIRC[quadrant - 1]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:133:12"
+      ]
+    },
+    "questgt5-reductions-numbers#22": {
+      "en": "90° − θ is A.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:133:68"
+      ]
+    },
+    "questgt5-reductions-numbers#23": {
+      "en": "90° + θ is S.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:133:86"
+      ]
+    },
+    "questgt5-reductions-numbers#24": {
+      "en": "Formula: ${form}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:134:12"
+      ]
+    },
+    "questgt5-reductions-numbers#25": {
+      "en": "the co-function arm.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:134:35"
+      ]
+    },
+    "questgt5-reductions-numbers#26": {
+      "en": "Sign: ${cf.sign < 0 ? \"−\" : \"+\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:135:12"
+      ]
+    },
+    "questgt5-reductions-numbers#27": {
+      "en": "quadrant A — everything positive.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:135:69"
+      ]
+    },
+    "questgt5-reductions-numbers#28": {
+      "en": "quadrant S — only sine stays positive.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:135:107"
+      ]
+    },
+    "questgt5-reductions-numbers#29": {
+      "en": "Ratio: ${fn} → ${cf.fn2}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:136:12"
+      ]
+    },
+    "questgt5-reductions-numbers#30": {
+      "en": "co-functions convert sin ↔ cos.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt5-reductions-numbers.js:136:43"
+      ]
+    },
+    "questgt6-tip-chips#1": {
+      "en": "anti-clockwise",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:27:43",
+        "questgt6-tip-chips.js:35:56"
+      ]
+    },
+    "questgt6-tip-chips#2": {
+      "en": "clockwise",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:28:42",
+        "questgt6-tip-chips.js:35:42"
+      ]
+    },
+    "questgt6-tip-chips#3": {
+      "en": "A negative angle turns…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:35:15"
+      ]
+    },
+    "questgt6-tip-chips#4": {
+      "en": "Positive angles turn the way the quadrants are numbered — ① → ② → ③ → ④. A negative angle turns the other way.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:36:17"
+      ]
+    },
+    "questgt6-tip-chips#5": {
+      "en": "Negative angles turn clockwise; positive angles turn anti-clockwise.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:37:24"
+      ]
+    },
+    "questgt6-tip-chips#6": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.prompt",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:44:20",
+        "questgt6-tip-chips.js:61:20",
+        "questgt6-tip-chips.js:75:20",
+        "questgt6-tip-chips.js:90:20"
+      ]
+    },
+    "questgt6-tip-chips#7": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.prompt",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:44:27",
+        "questgt6-tip-chips.js:61:27",
+        "questgt6-tip-chips.js:75:27",
+        "questgt6-tip-chips.js:90:27"
+      ]
+    },
+    "questgt6-tip-chips#8": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.prompt",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:44:34",
+        "questgt6-tip-chips.js:61:34",
+        "questgt6-tip-chips.js:75:34"
+      ]
+    },
+    "questgt6-tip-chips#9": {
+      "en": "no move needed",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:47:97",
+        "questgt6-tip-chips.js:64:58"
+      ]
+    },
+    "questgt6-tip-chips#10": {
+      "en": "${fn} ${angle}° — first move?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:48:18"
+      ]
+    },
+    "questgt6-tip-chips#11": {
+      "en": "TIP Chip ① — positive angles > 360°: minus 360°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:49:13"
+      ]
+    },
+    "questgt6-tip-chips#12": {
+      "en": "${fn} ${angle}° = ${fn}${argDeg(angle - 360)} — take off 360° first.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:50:20"
+      ]
+    },
+    "questgt6-tip-chips#13": {
+      "en": "${angle}° is past 360°, so the arm has gone more than one full turn round",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:52:14"
+      ]
+    },
+    "questgt6-tip-chips#14": {
+      "en": "TIP Chip ① — positive angles > 360°",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:52:94"
+      ]
+    },
+    "questgt6-tip-chips#15": {
+      "en": "Take one turn off: ${angle}° − 360° = ${angle - 360}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:53:14"
+      ]
+    },
+    "questgt6-tip-chips#16": {
+      "en": "she writes [−360] above the angle, one per turn",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:53:74"
+      ]
+    },
+    "questgt6-tip-chips#17": {
+      "en": "same arm of the wheel, so the same value",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:54:66"
+      ]
+    },
+    "questgt6-tip-chips#18": {
+      "en": "${fn}(${fmtDeg(angle)}) — first move?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:65:18"
+      ]
+    },
+    "questgt6-tip-chips#19": {
+      "en": "TIP Chip ② — negative angles < −90°: add 360°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:66:13"
+      ]
+    },
+    "questgt6-tip-chips#20": {
+      "en": "${fn}(${fmtDeg(angle)}) = ${fn}${argDeg(angle + 360)} — add 360° first.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:67:20"
+      ]
+    },
+    "questgt6-tip-chips#21": {
+      "en": "${fmtDeg(angle)} is below −90°, so it has swung clockwise past the bottom of the wheel",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:69:14"
+      ]
+    },
+    "questgt6-tip-chips#22": {
+      "en": "TIP Chip ② — negative angles &lt; −90°",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:69:107"
+      ]
+    },
+    "questgt6-tip-chips#23": {
+      "en": "Add one turn: ${fmtDeg(angle)} + 360° = ${fmtDeg(angle + 360)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:70:14"
+      ]
+    },
+    "questgt6-tip-chips#24": {
+      "en": "she writes [+360] above the angle",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:70:83"
+      ]
+    },
+    "questgt6-tip-chips#25": {
+      "en": "a whole turn lands on the same arm",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:71:74"
+      ]
+    },
+    "questgt6-tip-chips#26": {
+      "en": "${fn}(${fmtDeg(angle)}): do you add 360° first?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:77:19"
+      ]
+    },
+    "questgt6-tip-chips#27": {
+      "en": "The −90° threshold is deliberate — an angle here is a C-angle straight off the wheel.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:78:13"
+      ]
+    },
+    "questgt6-tip-chips#28": {
+      "en": "No — ${fmtDeg(angle)} is not below −90°, so it's read straight off the wheel, no rotation.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:79:20"
+      ]
+    },
+    "questgt6-tip-chips#29": {
+      "en": "Check the threshold first: is ${fmtDeg(angle)} below −90°?",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:81:14"
+      ]
+    },
+    "questgt6-tip-chips#30": {
+      "en": "TIP Chip ② only fires below −90°",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:81:79"
+      ]
+    },
+    "questgt6-tip-chips#31": {
+      "en": "${fmtDeg(angle)} sits between −90° and 0°, so it is NOT below the threshold",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:82:14"
+      ]
+    },
+    "questgt6-tip-chips#32": {
+      "en": "−θ is already a C form on the wheel, so it reduces straight away",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:83:14"
+      ]
+    },
+    "questgt6-tip-chips#33": {
+      "en": "no rotation needed — adding 360° here just makes extra work",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:83:85"
+      ]
+    },
+    "questgt6-tip-chips#34": {
+      "en": "[${r.sign < 0 ? \"−\" : \"\"}${fn} ${r.ref}°]² = ${fn}²${r.ref}°, positive",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:94:19"
+      ]
+    },
+    "questgt6-tip-chips#35": {
+      "en": "T (only tan is positive)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:101:30"
+      ]
+    },
+    "questgt6-tip-chips#36": {
+      "en": "C (only cos is positive)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:101:59"
+      ]
+    },
+    "questgt6-tip-chips#37": {
+      "en": "TIP Chip ③ — reduce INSIDE block brackets first, then square: the minus dies.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:103:13"
+      ]
+    },
+    "questgt6-tip-chips#38": {
+      "en": "${correct} — reduce first, then square; the sign disappears.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:104:20"
+      ]
+    },
+    "questgt6-tip-chips#39": {
+      "en": "Split the angle above the line: ${angle}° = ${split}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:106:14"
+      ]
+    },
+    "questgt6-tip-chips#40": {
+      "en": "that lands in quadrant ${qname}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:106:73"
+      ]
+    },
+    "questgt6-tip-chips#41": {
+      "en": "Reduce inside block brackets: ${fn} ${angle}° = ${r.sign < 0 ? \"−\" : \"\"}${fn} ${r.ref}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:107:14"
+      ]
+    },
+    "questgt6-tip-chips#42": {
+      "en": "${fn} is ${r.sign < 0 ? \"negative\" : \"positive\"} there",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:107:108"
+      ],
+      "nested": [
+        "negative",
+        "positive"
+      ]
+    },
+    "questgt6-tip-chips#43": {
+      "en": "Now square the bracket: [${r.sign < 0 ? \"−\" : \"\"}${fn} ${r.ref}°]² = ${fn}²${r.ref}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:108:14"
+      ]
+    },
+    "questgt6-tip-chips#44": {
+      "en": "(−x)² = +x², so the minus dies — that is the whole chip",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:108:105"
+      ]
+    },
+    "questgt6-tip-chips#45": {
+      "en": "θ",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:114:24",
+        "questgt6-tip-chips.js:127:24",
+        "questgt6-tip-chips.js:138:24"
+      ]
+    },
+    "questgt6-tip-chips#46": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:114:29",
+        "questgt6-tip-chips.js:127:29",
+        "questgt6-tip-chips.js:138:29"
+      ]
+    },
+    "questgt6-tip-chips#47": {
+      "en": "cos(90° + ${letter}) = ?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:115:18"
+      ]
+    },
+    "questgt6-tip-chips#48": {
+      "en": "−sin ${letter}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:115:46",
+        "questgt6-tip-chips.js:128:83",
+        "questgt6-tip-chips.js:139:64"
+      ]
+    },
+    "questgt6-tip-chips#49": {
+      "en": "+sin ${letter}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:115:65",
+        "questgt6-tip-chips.js:128:101"
+      ]
+    },
+    "questgt6-tip-chips#50": {
+      "en": "−cos ${letter}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:115:83",
+        "questgt6-tip-chips.js:128:46",
+        "questgt6-tip-chips.js:139:99"
+      ]
+    },
+    "questgt6-tip-chips#51": {
+      "en": "+cos ${letter}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:115:101",
+        "questgt6-tip-chips.js:128:65"
+      ]
+    },
+    "questgt6-tip-chips#52": {
+      "en": "TIP Chip ④ — the co-functions trap.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:116:13"
+      ]
+    },
+    "questgt6-tip-chips#53": {
+      "en": "cos(90° + ${letter}) = −sin ${letter} — 90° + ${letter} is quadrant S, and cosine isn't sine.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:117:20"
+      ]
+    },
+    "questgt6-tip-chips#54": {
+      "en": "90° + ${letter} is an S angle",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:119:14"
+      ]
+    },
+    "questgt6-tip-chips#55": {
+      "en": "quadrant ②, where only sin is positive",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:119:50"
+      ]
+    },
+    "questgt6-tip-chips#56": {
+      "en": "cos is not sine, so in S it comes out negative",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:120:14"
+      ]
+    },
+    "questgt6-tip-chips#57": {
+      "en": "A 90° form also swaps the ratio: cos becomes sin",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:121:14"
+      ]
+    },
+    "questgt6-tip-chips#58": {
+      "en": "∴ cos(90° + ${letter}) = −sin ${letter}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:121:69"
+      ]
+    },
+    "questgt6-tip-chips#59": {
+      "en": "sin(${letter} − 90°) = ?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:128:18"
+      ]
+    },
+    "questgt6-tip-chips#60": {
+      "en": "TIP Chip ⑤ — co-functions with negative angles.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:129:13",
+        "questgt6-tip-chips.js:140:13"
+      ]
+    },
+    "questgt6-tip-chips#61": {
+      "en": "sin(${letter} − 90°) = −cos ${letter}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:129:77"
+      ]
+    },
+    "questgt6-tip-chips#62": {
+      "en": "sin(${letter} − 90°) = sin[−(90° − ${letter})]",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:131:14"
+      ]
+    },
+    "questgt6-tip-chips#63": {
+      "en": "take the minus outside",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:131:67",
+        "questgt6-tip-chips.js:142:67"
+      ]
+    },
+    "questgt6-tip-chips#64": {
+      "en": "let K = 90° − ${letter}, so this is sin(−K)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:132:14"
+      ]
+    },
+    "questgt6-tip-chips#65": {
+      "en": "−K is a IV-quadrant angle",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:132:64",
+        "questgt6-tip-chips.js:143:64"
+      ]
+    },
+    "questgt6-tip-chips#66": {
+      "en": "In IV cos survives and sin flips: sin(−K) = −sin K = −sin(90° − ${letter})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:133:14"
+      ]
+    },
+    "questgt6-tip-chips#67": {
+      "en": "90° − ${letter} is an A angle and swaps the ratio: sin(90° − ${letter}) = cos ${letter}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:134:14"
+      ]
+    },
+    "questgt6-tip-chips#68": {
+      "en": "∴ sin(${letter} − 90°) = −cos ${letter}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:134:108"
+      ]
+    },
+    "questgt6-tip-chips#69": {
+      "en": "cos(${letter} − 90°) = ?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:139:18"
+      ]
+    },
+    "questgt6-tip-chips#70": {
+      "en": "sin ${letter}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:139:46"
+      ]
+    },
+    "questgt6-tip-chips#71": {
+      "en": "cos ${letter}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:139:82"
+      ]
+    },
+    "questgt6-tip-chips#72": {
+      "en": "cos(${letter} − 90°) = sin ${letter}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:140:77"
+      ]
+    },
+    "questgt6-tip-chips#73": {
+      "en": "cos(${letter} − 90°) = cos[−(90° − ${letter})]",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:142:14"
+      ]
+    },
+    "questgt6-tip-chips#74": {
+      "en": "let K = 90° − ${letter}, so this is cos(−K)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:143:14"
+      ]
+    },
+    "questgt6-tip-chips#75": {
+      "en": "In IV cos survives, so cos(−K) = cos K = cos(90° − ${letter})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:144:14"
+      ]
+    },
+    "questgt6-tip-chips#76": {
+      "en": "no minus this time",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:144:82"
+      ]
+    },
+    "questgt6-tip-chips#77": {
+      "en": "90° − ${letter} is an A angle and swaps the ratio: cos(90° − ${letter}) = sin ${letter}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:145:14"
+      ]
+    },
+    "questgt6-tip-chips#78": {
+      "en": "∴ cos(${letter} − 90°) = sin ${letter}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:145:108"
+      ]
+    },
+    "questgt6-tip-chips#79": {
+      "en": "In quadrant IV, cos survives and sin flips. True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:173:16"
+      ]
+    },
+    "questgt6-tip-chips#80": {
+      "en": "That's the pivot of the whole derivation — −K sits in quadrant IV.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:174:17"
+      ]
+    },
+    "questgt6-tip-chips#81": {
+      "en": "True — that's why sin(θ − 90°) ends up as −cos θ.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt6-tip-chips.js:175:24"
+      ]
+    },
+    "questgt7-reductions-variables#1": {
+      "en": "which quadrant does the form land in? Read the sign off the story.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "mcStep.hint"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:21:12"
+      ]
+    },
+    "questgt7-reductions-variables#2": {
+      "en": "only 90 ± θ and θ − 90 convert; everything else stays.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:22:12"
+      ]
+    },
+    "questgt7-reductions-variables#3": {
+      "en": "180−θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:16"
+      ]
+    },
+    "questgt7-reductions-variables#4": {
+      "en": "180+θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:25"
+      ]
+    },
+    "questgt7-reductions-variables#5": {
+      "en": "360−θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:34"
+      ]
+    },
+    "questgt7-reductions-variables#6": {
+      "en": "−θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:43"
+      ]
+    },
+    "questgt7-reductions-variables#7": {
+      "en": "θ−360",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:49"
+      ]
+    },
+    "questgt7-reductions-variables#8": {
+      "en": "θ−180",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:58"
+      ]
+    },
+    "questgt7-reductions-variables#9": {
+      "en": "−180−θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:67"
+      ]
+    },
+    "questgt7-reductions-variables#10": {
+      "en": "−360−θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:77"
+      ]
+    },
+    "questgt7-reductions-variables#11": {
+      "en": "90−θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:87",
+        "questgt7-reductions-variables.js:25:27"
+      ]
+    },
+    "questgt7-reductions-variables#12": {
+      "en": "90+θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:95",
+        "questgt7-reductions-variables.js:25:35"
+      ]
+    },
+    "questgt7-reductions-variables#13": {
+      "en": "θ−90",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:24:103",
+        "questgt7-reductions-variables.js:25:43"
+      ]
+    },
+    "questgt7-reductions-variables#14": {
+      "en": "θ",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:26:18"
+      ]
+    },
+    "questgt7-reductions-variables#15": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:26:23"
+      ]
+    },
+    "questgt7-reductions-variables#16": {
+      "en": "α",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:26:28"
+      ]
+    },
+    "questgt7-reductions-variables#17": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:26:33",
+        "questgt7-reductions-variables.js:30:12"
+      ]
+    },
+    "questgt7-reductions-variables#18": {
+      "en": "S",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:29:12",
+        "questgt7-reductions-variables.js:30:41"
+      ]
+    },
+    "questgt7-reductions-variables#19": {
+      "en": "T",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:29:26",
+        "questgt7-reductions-variables.js:30:26"
+      ]
+    },
+    "questgt7-reductions-variables#20": {
+      "en": "C",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:29:40",
+        "questgt7-reductions-variables.js:29:51",
+        "questgt7-reductions-variables.js:30:56"
+      ]
+    },
+    "questgt7-reductions-variables#21": {
+      "en": "All",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:32:23"
+      ]
+    },
+    "questgt7-reductions-variables#22": {
+      "en": "Strippers",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:32:33"
+      ]
+    },
+    "questgt7-reductions-variables#23": {
+      "en": "Take",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:32:49"
+      ]
+    },
+    "questgt7-reductions-variables#24": {
+      "en": "Cash",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:32:60"
+      ]
+    },
+    "questgt7-reductions-variables#25": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "mcStep.wrongs",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:52:29",
+        "questgt7-reductions-variables.js:52:52",
+        "questgt7-reductions-variables.js:59:21"
+      ]
+    },
+    "questgt7-reductions-variables#26": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "mcStep.wrongs",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:52:36",
+        "questgt7-reductions-variables.js:52:59",
+        "questgt7-reductions-variables.js:59:28"
+      ]
+    },
+    "questgt7-reductions-variables#27": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mcStep.correct",
+        "mcStep.wrongs",
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:52:66",
+        "questgt7-reductions-variables.js:59:35"
+      ]
+    },
+    "questgt7-reductions-variables#28": {
+      "en": "co-function — converts",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "solution.r"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:56:28"
+      ]
+    },
+    "questgt7-reductions-variables#29": {
+      "en": "wheel arm ${ARM[form]} (${ARM_WORD[ARM[form]]})",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.r"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:56:55"
+      ]
+    },
+    "questgt7-reductions-variables#30": {
+      "en": "What's the sign?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:65:14"
+      ]
+    },
+    "questgt7-reductions-variables#31": {
+      "en": "Which ratio does it become?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:66:14"
+      ]
+    },
+    "questgt7-reductions-variables#32": {
+      "en": "Sign: ${sign < 0 ? \"−\" : \"+\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:71:12"
+      ]
+    },
+    "questgt7-reductions-variables#33": {
+      "en": "Ratio: ${fn} → ${fn2}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:72:12"
+      ]
+    },
+    "questgt7-reductions-variables#34": {
+      "en": "co-functions convert sin ↔ cos.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:72:49"
+      ]
+    },
+    "questgt7-reductions-variables#35": {
+      "en": "a plain reduction never swaps the ratio.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt7-reductions-variables.js:72:85"
+      ]
+    },
+    "questgt8-special-sums#1": {
+      "en": "θ",
+      "kind": "string",
+      "slots": [
+        "doubleTickStep.L",
+        "doubleTickStep.ivText",
+        "placeholder",
+        "prompt",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:37:18"
+      ]
+    },
+    "questgt8-special-sums#2": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "doubleTickStep.L",
+        "doubleTickStep.ivText",
+        "placeholder",
+        "prompt",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:37:23",
+        "questgt8-special-sums.js:156:55",
+        "questgt8-special-sums.js:164:31",
+        "questgt8-special-sums.js:165:30",
+        "questgt8-special-sums.js:171:19",
+        "questgt8-special-sums.js:206:16",
+        "questgt8-special-sums.js:206:69"
+      ],
+      "data": true
+    },
+    "questgt8-special-sums#3": {
+      "en": "α",
+      "kind": "string",
+      "slots": [
+        "doubleTickStep.L",
+        "doubleTickStep.ivText",
+        "placeholder",
+        "prompt",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:37:28"
+      ]
+    },
+    "questgt8-special-sums#4": {
+      "en": "Tick the quadrants the ratio's sign allows, then tick the quadrants the interval allows — in a second colour. The quadrant with TWO ticks is the one.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:40:16"
+      ]
+    },
+    "questgt8-special-sums#5": {
+      "en": "Read the size off the ratio; read the sign off the quadrant you just picked.",
+      "kind": "string",
+      "slots": [
+        "hint",
+        "placeholder"
+      ],
+      "where": [
+        "questgt8-special-sums.js:41:16"
+      ]
+    },
+    "questgt8-special-sums#6": {
+      "en": "r is always positive bc it is the radius — and it comes from Pythagoras: r² = x² + y² (pyth).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:42:13"
+      ]
+    },
+    "questgt8-special-sums#7": {
+      "en": "Read it straight off the sketch: sin = y/r, cos = x/r, tan = y/x. The minus comes with the side, not with the r.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:43:17"
+      ]
+    },
+    "questgt8-special-sums#8": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "doubleTickStep.fn",
+        "placeholder",
+        "ratioStep.f",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:54:22",
+        "questgt8-special-sums.js:95:14",
+        "questgt8-special-sums.js:156:47",
+        "questgt8-special-sums.js:176:30",
+        "questgt8-special-sums.js:183:11",
+        "questgt8-special-sums.js:286:13"
+      ],
+      "data": true
+    },
+    "questgt8-special-sums#9": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "doubleTickStep.fn",
+        "placeholder",
+        "ratioStep.f",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:54:29",
+        "questgt8-special-sums.js:96:14",
+        "questgt8-special-sums.js:176:37",
+        "questgt8-special-sums.js:179:23",
+        "questgt8-special-sums.js:183:18",
+        "questgt8-special-sums.js:286:38"
+      ],
+      "data": true
+    },
+    "questgt8-special-sums#10": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "doubleTickStep.fn",
+        "placeholder",
+        "ratioStep.f",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:54:36",
+        "questgt8-special-sums.js:64:16",
+        "questgt8-special-sums.js:156:26",
+        "questgt8-special-sums.js:176:44",
+        "questgt8-special-sums.js:180:23",
+        "questgt8-special-sums.js:183:25",
+        "questgt8-special-sums.js:283:25"
+      ],
+      "data": true
+    },
+    "questgt8-special-sums#11": {
+      "en": "POSITIVE",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt8-special-sums.js:107:31"
+      ]
+    },
+    "questgt8-special-sums#12": {
+      "en": "NEGATIVE",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt8-special-sums.js:107:44"
+      ]
+    },
+    "questgt8-special-sums#13": {
+      "en": "${fn} ${L} is ${signWord}, and ${ivText}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:111:13"
+      ]
+    },
+    "questgt8-special-sums#14": {
+      "en": "<div><b>The bow tie.</b> Two triangles meeting at the origin, one letter per quadrant: <b>A</b>ll · <b>S</b>trippers · <b>T</b>ake · <b>C</b>ash.</div>${bowTieSvg()}<div class=\"muted small\">You were given two things, so you tick twice on one cross — once for the sign, once for the interval. Where the two ticks land on top of each other, that is your quadrant.</div>",
+      "kind": "template",
+      "slots": [
+        "reveal"
+      ],
+      "where": [
+        "questgt8-special-sums.js:113:14"
+      ]
+    },
+    "questgt8-special-sums#15": {
+      "en": "${CIRC[quadrant - 1]} — ${fn} ${L} being ${sign > 0 ? \"+\" : \"−\"} ticks ${ratioQ.map(q => CIRC[q - 1]).join(\" and \")}; ${ivText} ticks ${iv.quadrants.map(q => CIRC[q - 1]).join(\" and \")}. Only ${CIRC[quadrant - 1]} carries both ticks.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt8-special-sums.js:116:18"
+      ],
+      "nested": [
+        " and ",
+        " and "
+      ]
+    },
+    "questgt8-special-sums#16": {
+      "en": "${fn} ${L} is ${sign > 0 ? \"+\" : \"−\"} → ${ratioQ.map(q => CIRC[q - 1]).join(\", \")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:118:12"
+      ]
+    },
+    "questgt8-special-sums#17": {
+      "en": "All Strippers Take Cash.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:118:101"
+      ]
+    },
+    "questgt8-special-sums#18": {
+      "en": "the second colour of tick.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:119:79"
+      ]
+    },
+    "questgt8-special-sums#19": {
+      "en": "the quadrant with two ticks.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:120:42"
+      ]
+    },
+    "questgt8-special-sums#20": {
+      "en": "Make the two ticks on the cross.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:131:13"
+      ]
+    },
+    "questgt8-special-sums#21": {
+      "en": "Tick every quadrant where ${fn} ${L} is ${sign > 0 ? \"positive\" : \"negative\"}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:133:17"
+      ],
+      "nested": [
+        "positive",
+        "negative"
+      ]
+    },
+    "questgt8-special-sums#22": {
+      "en": "Now tick every quadrant that ${ivText} allows.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:134:17"
+      ]
+    },
+    "questgt8-special-sums#23": {
+      "en": "Tap the quadrant that has BOTH ticks.",
+      "kind": "string",
+      "slots": [
+        "finalPrompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:136:18"
+      ]
+    },
+    "questgt8-special-sums#24": {
+      "en": "r",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt8-special-sums.js:156:34",
+        "questgt8-special-sums.js:161:21",
+        "questgt8-special-sums.js:171:35",
+        "questgt8-special-sums.js:208:16",
+        "questgt8-special-sums.js:300:65",
+        "questgt8-special-sums.js:302:25"
+      ],
+      "data": true
+    },
+    "questgt8-special-sums#25": {
+      "en": "y",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt8-special-sums.js:156:61",
+        "questgt8-special-sums.js:171:27",
+        "questgt8-special-sums.js:207:16",
+        "questgt8-special-sums.js:207:69"
+      ],
+      "data": true
+    },
+    "questgt8-special-sums#26": {
+      "en": "r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth)<br>√r² = √${x * x + y * y}<br>r = ${r} &nbsp;<span class=\"muted\">always positive bc it is the radius</span>",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt8-special-sums.js:162:14"
+      ]
+    },
+    "questgt8-special-sums#27": {
+      "en": "${derived}² = ${r}² − ${sq(known)}&nbsp;&nbsp;(pyth)<br>√${derived}² = √${outv * outv}<br>${derived} = ±${Math.abs(outv)}<br>∴ ${derived} = ${negNum(outv)} &nbsp;<span class=\"muted\">the sign comes from ${CIRC[quadrant - 1]}</span>",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questgt8-special-sums.js:166:12"
+      ]
+    },
+    "questgt8-special-sums#28": {
+      "en": "Now the sketch. Type each side — it appears on the drawing as you go.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:204:35"
+      ]
+    },
+    "questgt8-special-sums#29": {
+      "en": "x = ?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:206:29"
+      ]
+    },
+    "questgt8-special-sums#30": {
+      "en": "${H_SIDE} This is the one Pythagoras has to give you: x² = r² − y²  (pyth).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:206:75"
+      ]
+    },
+    "questgt8-special-sums#31": {
+      "en": "y = ?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:207:29"
+      ]
+    },
+    "questgt8-special-sums#32": {
+      "en": "${H_SIDE} This is the one Pythagoras has to give you: y² = r² − x²  (pyth).",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:207:75"
+      ]
+    },
+    "questgt8-special-sums#33": {
+      "en": "r = ?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:208:29",
+        "questgt8-special-sums.js:302:38"
+      ]
+    },
+    "questgt8-special-sums#34": {
+      "en": "${fn} ${L} = ${given.label} and ${ivText}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:218:13"
+      ]
+    },
+    "questgt8-special-sums#35": {
+      "en": "${CIRC[quadrant - 1]}, and the sketch is x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}.<br>${pythHtml()}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt8-special-sums.js:221:18"
+      ]
+    },
+    "questgt8-special-sums#36": {
+      "en": "${fn} ${L} is ${sign > 0 ? \"+\" : \"−\"} → ${ratioQ.map(q => CIRC[q - 1]).join(\", \")}; ${ivText} → ${iv.quadrants.map(q => CIRC[q - 1]).join(\", \")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:223:12"
+      ]
+    },
+    "questgt8-special-sums#37": {
+      "en": "② determine the quadrant — two colours of tick.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:223:163"
+      ]
+    },
+    "questgt8-special-sums#38": {
+      "en": "the double-ticked one.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:224:42"
+      ]
+    },
+    "questgt8-special-sums#39": {
+      "en": "x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:225:12"
+      ]
+    },
+    "questgt8-special-sums#40": {
+      "en": "③ sketch · ④ the unknown side (pyth).",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:225:63"
+      ]
+    },
+    "questgt8-special-sums#41": {
+      "en": "⑤ read them off the sketch.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:226:106"
+      ]
+    },
+    "questgt8-special-sums#42": {
+      "en": "${r} sin ${L} + ${r} cos ${L}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:243:13"
+      ]
+    },
+    "questgt8-special-sums#43": {
+      "en": "${r} cos ${L} − ${r} sin ${L}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:244:13"
+      ]
+    },
+    "questgt8-special-sums#44": {
+      "en": "${Math.abs(y)}/sin ${L}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:245:13"
+      ]
+    },
+    "questgt8-special-sums#45": {
+      "en": "The sketch is finished. Work out ${form.text}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:255:13"
+      ]
+    },
+    "questgt8-special-sums#46": {
+      "en": "⑤ substitute: sin = y/r, cos = x/r, tan = y/x, straight off the sketch — brackets round every negative before you square anything.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:263:11"
+      ]
+    },
+    "questgt8-special-sums#47": {
+      "en": "${form.text} = ${negNum(form.value)} &nbsp;<span class=\"muted\">with x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}</span>",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt8-special-sums.js:264:18"
+      ]
+    },
+    "questgt8-special-sums#48": {
+      "en": "sin ${L} = ${fracLabel(y, r)}, cos ${L} = ${fracLabel(x, r)}, tan ${L} = ${fracLabel(y, x)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:266:12"
+      ]
+    },
+    "questgt8-special-sums#49": {
+      "en": "read off the sketch.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:266:110"
+      ]
+    },
+    "questgt8-special-sums#50": {
+      "en": "⑤ substitute.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:267:55"
+      ]
+    },
+    "questgt8-special-sums#51": {
+      "en": "P(${negNum(x)} ; ${negNum(y)}) lies on the terminal arm of ${L}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:292:13"
+      ]
+    },
+    "questgt8-special-sums#52": {
+      "en": "Which quadrant does the arm swing into?",
+      "kind": "string",
+      "slots": [
+        "quadStep.prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:294:16"
+      ]
+    },
+    "questgt8-special-sums#53": {
+      "en": "The first coordinate is the x, the second is the y — the two signs put the point in exactly one quadrant.",
+      "kind": "string",
+      "slots": [
+        "quadStep.hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:295:9"
+      ]
+    },
+    "questgt8-special-sums#54": {
+      "en": "The point is on the sketch. Type r — it appears on the drawing.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:297:37"
+      ]
+    },
+    "questgt8-special-sums#55": {
+      "en": "tan ${L} = ?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt8-special-sums.js:304:29"
+      ]
+    },
+    "questgt8-special-sums#56": {
+      "en": "Plot the point, drop it onto the x-axis, and you have the same right triangle as always — x across, y up or down, r the arm itself.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt8-special-sums.js:306:11"
+      ]
+    },
+    "questgt8-special-sums#57": {
+      "en": "${CIRC[quadrant - 1]}, r = ${r}, tan ${L} = ${right.label}.<br>r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth) → r = ${r} <span class=\"muted\">always positive bc it is the radius</span>",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt8-special-sums.js:307:18"
+      ]
+    },
+    "questgt8-special-sums#58": {
+      "en": "P(${negNum(x)} ; ${negNum(y)}) → ${CIRC[quadrant - 1]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:309:12"
+      ]
+    },
+    "questgt8-special-sums#59": {
+      "en": "the two signs place the point.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:309:73"
+      ]
+    },
+    "questgt8-special-sums#60": {
+      "en": "r² = ${sq(x)} + ${sq(y)} = ${x * x + y * y}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:310:12"
+      ]
+    },
+    "questgt8-special-sums#61": {
+      "en": "(pyth)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:310:62"
+      ]
+    },
+    "questgt8-special-sums#62": {
+      "en": "r = ${r}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:311:12"
+      ]
+    },
+    "questgt8-special-sums#63": {
+      "en": "always positive bc it is the radius.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:311:27"
+      ]
+    },
+    "questgt8-special-sums#64": {
+      "en": "tan ${L} = y/x = ${right.label}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt8-special-sums.js:312:12"
+      ]
+    },
+    "questgt8-special-sums#65": {
+      "en": "read it off the sketch.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt8-special-sums.js:312:50"
+      ]
+    },
+    "questgt9-identities#1": {
+      "en": "θ",
+      "kind": "string",
+      "slots": [
+        "ex.h",
+        "placeholder",
+        "prompt",
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:27:18"
+      ]
+    },
+    "questgt9-identities#2": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "ex.h",
+        "placeholder",
+        "prompt",
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:27:23"
+      ]
+    },
+    "questgt9-identities#3": {
+      "en": "α",
+      "kind": "string",
+      "slots": [
+        "ex.h",
+        "placeholder",
+        "prompt",
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:27:28"
+      ]
+    },
+    "questgt9-identities#4": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "ex.h",
+        "placeholder",
+        "prompt",
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:27:33"
+      ]
+    },
+    "questgt9-identities#5": {
+      "en": "The pro-tip: <b>when in doubt, go LEFT</b>. You work the left-hand side, top to bottom, until it turns into the right-hand side.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:31:16"
+      ]
+    },
+    "questgt9-identities#6": {
+      "en": "Two fractions added together always want one bottom. The LCD is every different denominator multiplied together — nothing cancelled first.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:32:15"
+      ]
+    },
+    "questgt9-identities#7": {
+      "en": "The masked identities are just sin²θ + cos²θ = 1 rearranged: sin²θ = 1 − cos²θ and cos²θ = 1 − sin²θ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:33:16"
+      ]
+    },
+    "questgt9-identities#8": {
+      "en": "A bracket squared is a product waiting to be multiplied out — (a + b)² = a² + 2ab + b².",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:34:16"
+      ]
+    },
+    "questgt9-identities#9": {
+      "en": "Dividing by a fraction is multiplying by it upside down.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:35:15"
+      ]
+    },
+    "questgt9-identities#10": {
+      "en": "Prove that ${it.h(L)}.<br>Which side do you start from?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:87:13"
+      ]
+    },
+    "questgt9-identities#11": {
+      "en": "the LHS",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:89:16"
+      ]
+    },
+    "questgt9-identities#12": {
+      "en": "the RHS",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:90:16"
+      ]
+    },
+    "questgt9-identities#13": {
+      "en": "both sides, meeting in the middle",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:91:16"
+      ]
+    },
+    "questgt9-identities#14": {
+      "en": "whichever one is shorter",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:92:16"
+      ]
+    },
+    "questgt9-identities#15": {
+      "en": "the LHS — when in doubt, go LEFT. You work it top to bottom until it becomes the RHS, and you close with = RHS.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:95:18"
+      ]
+    },
+    "questgt9-identities#16": {
+      "en": "Start on the LHS",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:96:21"
+      ]
+    },
+    "questgt9-identities#17": {
+      "en": "when in doubt, go LEFT.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:96:44"
+      ]
+    },
+    "questgt9-identities#18": {
+      "en": "What is the next move?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:118:29",
+        "questgt9-identities.js:232:29"
+      ]
+    },
+    "questgt9-identities#19": {
+      "en": "find the LCD",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:120:20",
+        "questgt9-identities.js:235:20"
+      ]
+    },
+    "questgt9-identities#20": {
+      "en": "cross-multiply",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:121:20",
+        "questgt9-identities.js:337:20"
+      ]
+    },
+    "questgt9-identities#21": {
+      "en": "square both sides",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:122:20"
+      ]
+    },
+    "questgt9-identities#22": {
+      "en": "use a masked identity",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:123:20"
+      ]
+    },
+    "questgt9-identities#23": {
+      "en": "So the LCD is…",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:128:29"
+      ]
+    },
+    "questgt9-identities#24": {
+      "en": "LCD = (1 + ${f} ${L})(1 − ${f} ${L}) — the two different bottoms multiplied together. It tidies to 1 − ${f}²${L}, and a masked identity finishes the job.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:138:18"
+      ]
+    },
+    "questgt9-identities#25": {
+      "en": "Two fractions added → find the LCD",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:140:12"
+      ]
+    },
+    "questgt9-identities#26": {
+      "en": "the fractions move — one bottom for both.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:140:53"
+      ]
+    },
+    "questgt9-identities#27": {
+      "en": "LCD = (1 + ${f} ${L})(1 − ${f} ${L})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:141:12"
+      ]
+    },
+    "questgt9-identities#28": {
+      "en": "every different denominator, multiplied.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:141:55"
+      ]
+    },
+    "questgt9-identities#29": {
+      "en": "Which part do we work with first?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:164:29"
+      ]
+    },
+    "questgt9-identities#30": {
+      "en": "And that part comes to…",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:172:31"
+      ]
+    },
+    "questgt9-identities#31": {
+      "en": "${f}²${L} + ${g}²${L} = 1, so the top becomes ${f} ${L} + 1.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:175:18"
+      ]
+    },
+    "questgt9-identities#32": {
+      "en": "Spot ${f}²${L} + ${g}²${L}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:177:12"
+      ]
+    },
+    "questgt9-identities#33": {
+      "en": "the identity, sitting inside a longer top.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:177:45"
+      ]
+    },
+    "questgt9-identities#34": {
+      "en": "sin²θ + cos²θ = 1.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:178:22",
+        "questgt9-identities.js:256:33"
+      ]
+    },
+    "questgt9-identities#35": {
+      "en": "Which masked identity is ${sh.given}?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:207:13"
+      ]
+    },
+    "questgt9-identities#36": {
+      "en": "${sh.given} = ${sh.correct.h} — straight off sin²θ + cos²θ = 1, rearranged.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:210:18"
+      ]
+    },
+    "questgt9-identities#37": {
+      "en": "a masked identity.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:211:57"
+      ]
+    },
+    "questgt9-identities#38": {
+      "en": "(sin ${L} ${op} cos ${L})²",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:222:15"
+      ]
+    },
+    "questgt9-identities#39": {
+      "en": "1 ${op} 2 sin ${L} cos ${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:224:22"
+      ]
+    },
+    "questgt9-identities#40": {
+      "en": "multiply out (products)",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:234:20"
+      ]
+    },
+    "questgt9-identities#41": {
+      "en": "divide every term by cos ${L}",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:236:20"
+      ]
+    },
+    "questgt9-identities#42": {
+      "en": "take a common factor out",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:237:20"
+      ]
+    },
+    "questgt9-identities#43": {
+      "en": "And it comes to…",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:242:29"
+      ]
+    },
+    "questgt9-identities#44": {
+      "en": "1 ${sign > 0 ? \"−\" : \"+\"} 2 sin ${L} cos ${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:244:14"
+      ]
+    },
+    "questgt9-identities#45": {
+      "en": "sin²${L} ${op} cos²${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:245:14"
+      ]
+    },
+    "questgt9-identities#46": {
+      "en": "1 ${op} sin ${L} cos ${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:246:14"
+      ]
+    },
+    "questgt9-identities#47": {
+      "en": "${lhs} = sin²${L} ${op} 2 sin ${L} cos ${L} + cos²${L} = ${correct.h} — the two squares collapse to 1, the middle term is the one that survives.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:252:18"
+      ]
+    },
+    "questgt9-identities#48": {
+      "en": "A bracket squared → multiply out",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:254:12"
+      ]
+    },
+    "questgt9-identities#49": {
+      "en": "the products move.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:254:51"
+      ]
+    },
+    "questgt9-identities#50": {
+      "en": "= sin²${L} ${op} 2 sin ${L} cos ${L} + cos²${L}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:255:12"
+      ]
+    },
+    "questgt9-identities#51": {
+      "en": "(a + b)² = a² + 2ab + b².",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:255:66"
+      ]
+    },
+    "questgt9-identities#52": {
+      "en": "${lhs} = 1 × ${correct.h} = ${correct.h} — flip the bottom fraction and multiply.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:281:18"
+      ]
+    },
+    "questgt9-identities#53": {
+      "en": "dividing by a fraction = multiplying by its flip.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:282:53"
+      ]
+    },
+    "questgt9-identities#54": {
+      "en": "1/tan(90° − ${L})",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:292:22"
+      ]
+    },
+    "questgt9-identities#55": {
+      "en": "tan(90° − ${L})",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:292:44"
+      ]
+    },
+    "questgt9-identities#56": {
+      "en": "sin ${L}/cos ${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:295:10",
+        "questgt9-identities.js:303:67"
+      ]
+    },
+    "questgt9-identities#57": {
+      "en": "cos ${L}/sin ${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:296:10",
+        "questgt9-identities.js:303:17"
+      ]
+    },
+    "questgt9-identities#58": {
+      "en": "1/tan ${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:305:17"
+      ]
+    },
+    "questgt9-identities#59": {
+      "en": "tan ${L}",
+      "kind": "template",
+      "slots": [
+        "ex.h"
+      ],
+      "where": [
+        "questgt9-identities.js:305:54"
+      ]
+    },
+    "questgt9-identities#60": {
+      "en": "Write the tan out as sin over cos FIRST, then reduce the two co-functions separately: sin(90° − θ) = cos θ and cos(90° − θ) = sin θ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:307:11"
+      ]
+    },
+    "questgt9-identities#61": {
+      "en": "${lhs} = ${correct.h}${flip ? \" = tan \" + L : \" = 1/tan \" + L} — split the tan into sin over cos, reduce each one, and it turns itself over.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:308:18"
+      ],
+      "nested": [
+        " = tan ",
+        " = 1/tan "
+      ]
+    },
+    "questgt9-identities#62": {
+      "en": "tan(90° − ${L}) = sin(90° − ${L})/cos(90° − ${L})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:310:12"
+      ]
+    },
+    "questgt9-identities#63": {
+      "en": "tan θ = sin θ / cos θ.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:310:68"
+      ]
+    },
+    "questgt9-identities#64": {
+      "en": "= cos ${L}/sin ${L}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questgt9-identities.js:311:12"
+      ]
+    },
+    "questgt9-identities#65": {
+      "en": "the two co-functions, one each.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:311:38"
+      ]
+    },
+    "questgt9-identities#66": {
+      "en": "What is the first move?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:332:29"
+      ]
+    },
+    "questgt9-identities#67": {
+      "en": "write the 1 as 1/1, then take the LCD ${g}²${L}",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:334:20"
+      ]
+    },
+    "questgt9-identities#68": {
+      "en": "multiply out",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:335:20"
+      ]
+    },
+    "questgt9-identities#69": {
+      "en": "use a masked identity on the 1",
+      "kind": "string",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questgt9-identities.js:336:20"
+      ]
+    },
+    "questgt9-identities#70": {
+      "en": "A 1 with nothing under it cannot join a fraction. Give it a denominator of 1 first, then it can be brought to the same bottom as everything else.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:339:15"
+      ]
+    },
+    "questgt9-identities#71": {
+      "en": "Which leaves…",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questgt9-identities.js:342:29"
+      ]
+    },
+    "questgt9-identities#72": {
+      "en": "Give the 1 a denominator, take the LCD, then a masked identity finishes the top.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questgt9-identities.js:351:11"
+      ]
+    },
+    "questgt9-identities#73": {
+      "en": "${lhs} = (1 − ${g}²${L})/${g}²${L} = ${correct.h}${f === \"sin\" ? \" = tan²\" + L : \"\"} — the 1 gets a bottom, the LCD does the joining, the masked identity does the tidying.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questgt9-identities.js:352:18"
+      ],
+      "nested": [
+        "sin",
+        " = tan²"
+      ]
+    },
+    "questgt9-identities#74": {
+      "en": "the 1 gets a denominator.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:354:38"
+      ]
+    },
+    "questgt9-identities#75": {
+      "en": "LCD = ${g}²${L}.",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:355:46"
+      ]
+    },
+    "questgt9-identities#76": {
+      "en": "a masked identity on the top.",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questgt9-identities.js:356:33"
+      ]
+    }
+  },
+  "optionLists": {
+    "questgt1-intro.js:WORD_FRAMES": [
+      "questgt1-intro#1",
+      "questgt1-intro#2",
+      "questgt1-intro#3"
+    ],
+    "questgt1-intro.js:SOHCAHTOA_FRAMES": [
+      "questgt1-intro#4",
+      "questgt1-intro#5",
+      "questgt1-intro#6"
+    ]
+  },
+  "leftovers": [
+    {
+      "where": "questgt1-intro.js:32:3",
+      "text": "${circleFrame(d)}<div class=\"muted small\" style=\"margin-top:6px\">As the point moves along the circle (now at θ = ${d}°) the radius stays the same — but θ, the x-coordinate and the y-coordinate all cha…"
+    },
+    {
+      "where": "questgt2-cartesian.js:52:21",
+      "text": "<div>${bowTieSvg({ blankNames: true })}</div><div class=\"muted small\" style=\"margin-top:6px\">① is the top-right corner and the numbers run anticlockwise. One word of the story goes in each corner — wh…"
+    },
+    {
+      "where": "questgt2-cartesian.js:56:3",
+      "text": "<div style=\"font-size:15px;line-height:1.9\">\n     <span style=\"color:${\"#eab308\"}\">① All</span> →\n     <span style=\"color:${\"#3b82f6\"}\"> ② Strippers</span> →\n     <span style=\"color:${\"#22c55e\"}\"> ③ T…"
+    },
+    {
+      "where": "questgt2-cartesian.js:95:39",
+      "text": "on that list, so it is positive",
+      "in": "${fn} is ${sign > 0 ? \"on that list, so it is positive\" : \"n"
+    },
+    {
+      "where": "questgt2-cartesian.js:95:75",
+      "text": "not on that list, so it is negative",
+      "in": "${fn} is ${sign > 0 ? \"on that list, so it is positive\" : \"n"
+    },
+    {
+      "where": "questgt2-cartesian.js:132:18",
+      "text": "Put a point in ${CIRC[quad]} and drop x and y to the axes: x is ${w.x}, y is ${w.y}"
+    },
+    {
+      "where": "questgt2-cartesian.js:134:19",
+      "text": "tan θ = y/x, so divide a ${w.y} by a ${w.x}"
+    },
+    {
+      "where": "questgt2-cartesian.js:135:19",
+      "text": "${fn} θ = ${RATIO_OF[fn]}, and r is never negative, so the sign comes from ${fn === \"sin\" ? `y (${w.y})` : `x (${w.x})`}"
+    },
+    {
+      "where": "questgt2-cartesian.js:136:18",
+      "text": "∴ ${fn} θ is ${sign > 0 ? \"positive\" : \"negative\"} in ${CIRC[quad]}"
+    },
+    {
+      "where": "questgt2-cartesian.js:136:92",
+      "text": "“${WORD[quad]}” in All Strippers Take Cash"
+    },
+    {
+      "where": "questgt2-cartesian.js:183:16",
+      "text": "Go round the wheel and check what is positive in each quadrant"
+    },
+    {
+      "where": "questgt2-cartesian.js:184:16",
+      "text": "In ${CIRC[q]}, x is ${w.x} and y is ${w.y}, so the positive ratios are: ${pos.join(\", \")}"
+    },
+    {
+      "where": "questgt2-cartesian.js:185:16",
+      "text": "That is the only quadrant that matches"
+    },
+    {
+      "where": "questgt3-special.js:25:3",
+      "text": "<div style=\"font-size:14.5px;line-height:1.6\">Where they come from: cut a <b>square</b> corner to corner and you get 45-45-90; cut an <b>equilateral triangle</b> straight down the middle and you get 3…"
+    },
+    {
+      "where": "questgt5-reductions-numbers.js:71:62",
+      "text": "read it off the wheel."
+    },
+    {
+      "where": "questgt5-reductions-numbers.js:72:47",
+      "text": "the wheel arm this angle lands on."
+    },
+    {
+      "where": "questgt5-reductions-numbers.js:73:60",
+      "text": "All Strippers Take Cash."
+    },
+    {
+      "where": "questgt5-reductions-numbers.js:74:47",
+      "text": "reductions never swap the ratio — that's a co-function's job."
+    },
+    {
+      "where": "questgt6-tip-chips.js:27:19",
+      "text": "positive angles"
+    },
+    {
+      "where": "questgt6-tip-chips.js:28:18",
+      "text": "negative angles"
+    },
+    {
+      "where": "questgt6-tip-chips.js:29:42",
+      "text": "convert between sin and cos"
+    },
+    {
+      "where": "questgt6-tip-chips.js:31:15",
+      "text": "<div class=\"muted small\" style=\"margin-bottom:6px\">Three boxes decide every reduction:</div>"
+    },
+    {
+      "where": "questgt6-tip-chips.js:157:20",
+      "text": "<div style=\"font-size:13.5px;line-height:1.7\">\n      <b>but why?</b><br>\n      sin(θ − 90°) = sin[−(90° − θ)]<br>\n      let K = 90° − θ<br>\n      = sin(−K) — and −K sits in quadrant IV…<br>\n      = ?\n…"
+    },
+    {
+      "where": "questgt6-tip-chips.js:164:17",
+      "text": "<div style=\"font-size:13.5px;line-height:1.7\">\n      <b>but why?</b><br>\n      sin(θ − 90°) = sin[−(90° − θ)]<br>\n      let K = 90° − θ<br>\n      = sin(−K) — in quadrant IV<br>\n      = −sin K = −sin(9…"
+    },
+    {
+      "where": "questgt9-identities.js:75:13",
+      "text": "(sin ${L} + cos ${L})² = 1 + 2 sin ${L} cos ${L}"
+    }
+  ],
+  "words": 2923,
+  "skippedLists": [
+    "questgt2-cartesian.js:FN [sin, cos, tan]",
+    "questgt3-special.js:FNS [sin, cos, tan]",
+    "questgt3-special.js:QFNS [sin, cos]",
+    "questgt5-reductions-numbers.js:ALLFN [sin, cos, tan]",
+    "questgt7-reductions-variables.js:FORMS [180−θ, 180+θ, 360−θ, −θ, θ−360, θ−180, −180−θ, −360−θ, 90−θ, 90+θ, θ−90]",
+    "questgt7-reductions-variables.js:LETTERS [θ, x, α, A]",
+    "questgt8-special-sums.js:LETTERS [θ, x, α]",
+    "questgt9-identities.js:LETTERS [θ, x, α, A]"
+  ]
+}

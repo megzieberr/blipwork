@@ -31,16 +31,17 @@ import {
   PRIM_TRIPLES, SMALL_TRIPLES, QSIGN, INTERVALS, fracLabel, negNum, bowTieSvg,
 } from "./_gtrig.js";
 import { solutionQuadrants } from "../triglib.js";
+import { L as afL } from "../lang.js";
 
 const CON = "gtrigSpecialSums";
 const CIRC = ["①", "②", "③", "④"];
-const LETTERS = ["θ", "x", "α"];
+const LETTERS = [afL("θ", "θ"), afL("x", "x"), afL("α", "α")];
 const ACCENT = "#8b5cf6";
 
-const H_TICK = "Tick the quadrants the ratio's sign allows, then tick the quadrants the interval allows — in a second colour. The quadrant with TWO ticks is the one.";
-const H_SIDE = "Read the size off the ratio; read the sign off the quadrant you just picked.";
-const H_R = "r is always positive bc it is the radius — and it comes from Pythagoras: r² = x² + y² (pyth).";
-const H_RATIO = "Read it straight off the sketch: sin = y/r, cos = x/r, tan = y/x. The minus comes with the side, not with the r.";
+const H_TICK = afL("Tick the quadrants the ratio's sign allows, then tick the quadrants the interval allows — in a second colour. The quadrant with TWO ticks is the one.", "Merk die kwadrante wat die verhouding se teken toelaat, merk dan in 'n tweede kleur die kwadrante wat die interval toelaat. Die kwadrant met TWEE regmerkies is die een.");
+const H_SIDE = afL("Read the size off the ratio; read the sign off the quadrant you just picked.", "Lees die grootte van die verhouding af; lees die teken af van die kwadrant wat jy pas gekies het.");
+const H_R = afL("r is always positive bc it is the radius — and it comes from Pythagoras: r² = x² + y² (pyth).", "r is altyd positief want dit is die radius, en dit kom van Pythagoras: r² = x² + y² (pyth).");
+const H_RATIO = afL("Read it straight off the sketch: sin = y/r, cos = x/r, tan = y/x. The minus comes with the side, not with the r.", "Lees dit reguit van die skets af: sin = y/r, cos = x/r, tan = y/x. Die minus kom saam met die sy, nie met die r nie.");
 
 /* ------------------------------------------------------------
    A (ratio-sign, interval) pair whose ticks overlap in EXACTLY one
@@ -51,7 +52,7 @@ const H_RATIO = "Read it straight off the sketch: sin = y/r, cos = x/r, tan = y/
    ------------------------------------------------------------ */
 function overlapPick() {
   for (let i = 0; i < 400; i++) {
-    const fn = pick(["sin", "cos", "tan"]);
+    const fn = pick([afL("sin", "sin"), afL("cos", "cos"), afL("tan", "tan")]);
     const sign = pick([1, -1]);
     const iv = pick(INTERVALS);
     const ratioQ = solutionQuadrants(fn, sign);
@@ -61,7 +62,7 @@ function overlapPick() {
   /* unreachable in practice — every ratio pair meets every interval pair
      in one quadrant for most combinations; kept so the generator can
      never return undefined */
-  return { fn: "tan", sign: 1, iv: INTERVALS[2], ratioQ: [1, 3], quadrant: 3 };
+  return { fn: afL("tan", "tan"), sign: 1, iv: INTERVALS[2], ratioQ: [1, 3], quadrant: 3 };
 }
 
 /* the four quadrant buttons, ALWAYS in her ①②③④ order (a list to
@@ -92,8 +93,8 @@ const sq = v => (v < 0 ? `(${negNum(v)})²` : `${v}²`);
 
 /* every ratio off a finished sketch, as label + value */
 function ratioOf(fn, x, y, r) {
-  if (fn === "sin") return { label: fracLabel(y, r), value: y / r };
-  if (fn === "cos") return { label: fracLabel(x, r), value: x / r };
+  if (fn === afL("sin", "sin")) return { label: fracLabel(y, r), value: y / r };
+  if (fn === afL("cos", "cos")) return { label: fracLabel(x, r), value: x / r };
   return { label: fracLabel(y, x), value: y / x };
 }
 
@@ -104,20 +105,20 @@ function bowTieCard() {
   const { fn, sign, iv, ratioQ, quadrant } = overlapPick();
   const L = pick(LETTERS);
   const ivText = iv.text.replace(/θ/g, L);
-  const signWord = sign > 0 ? "POSITIVE" : "NEGATIVE";
+  const signWord = sign > 0 ? afL("POSITIVE", "POSITIEF") : afL("NEGATIVE", "NEGATIEF");
   return {
     type: "steps", concept: CON,
     _dbg: { fn, sign, quadrant, ratioQ, intervalQ: iv.quadrants },
-    prompt: `${fn} ${L} is ${signWord}, and ${ivText}.`,
+    prompt: afL(`${fn} ${L} is ${signWord}, and ${ivText}.`, `${fn} ${L} is ${signWord}, en ${ivText}.`),
     // learner-facing copy: no page refs, no third person (foreman ruling)
-    reveal: [`<div><b>The bow tie.</b> Two triangles meeting at the origin, one letter per quadrant: <b>A</b>ll · <b>S</b>trippers · <b>T</b>ake · <b>C</b>ash.</div>${bowTieSvg()}<div class="muted small">You were given two things, so you tick twice on one cross — once for the sign, once for the interval. Where the two ticks land on top of each other, that is your quadrant.</div>`],
+    reveal: [afL(`<div><b>The bow tie.</b> Two triangles meeting at the origin, one letter per quadrant: <b>A</b>ll · <b>S</b>trippers · <b>T</b>ake · <b>C</b>ash.</div>${bowTieSvg()}<div class="muted small">You were given two things, so you tick twice on one cross — once for the sign, once for the interval. Where the two ticks land on top of each other, that is your quadrant.</div>`, `<div><b>Die strikdas.</b> Twee driehoeke wat by die oorsprong ontmoet, een letter per kwadrant: <b>A</b>ll · <b>S</b>trippers · <b>T</b>ake · <b>C</b>ash.</div>${bowTieSvg()}<div class="muted small">Jy het twee dinge gekry, dus merk jy twee keer op een kruis: een keer vir die teken, een keer vir die interval. Waar die twee regmerkies bo-op mekaar val, dis jou kwadrant.</div>`)],
     steps: [doubleTickStep(fn, L, sign, ratioQ, ivText, iv.quadrants, quadrant)],
     hint: H_TICK,
-    answerLabel: `${CIRC[quadrant - 1]} — ${fn} ${L} being ${sign > 0 ? "+" : "−"} ticks ${ratioQ.map(q => CIRC[q - 1]).join(" and ")}; ${ivText} ticks ${iv.quadrants.map(q => CIRC[q - 1]).join(" and ")}. Only ${CIRC[quadrant - 1]} carries both ticks.`,
+    answerLabel: afL(`${CIRC[quadrant - 1]} — ${fn} ${L} being ${sign > 0 ? "+" : "−"} ticks ${ratioQ.map(q => CIRC[q - 1]).join(" and ")}; ${ivText} ticks ${iv.quadrants.map(q => CIRC[q - 1]).join(" and ")}. Only ${CIRC[quadrant - 1]} carries both ticks.`, `${CIRC[quadrant - 1]}: ${fn} ${L} wat ${sign > 0 ? "+" : "−"} is, merk ${ratioQ.map(q => CIRC[q - 1]).join(" en ")}; ${ivText} merk ${iv.quadrants.map(q => CIRC[q - 1]).join(" en ")}. Net ${CIRC[quadrant - 1]} het albei regmerkies.`),
     solution: [
-      { s: `${fn} ${L} is ${sign > 0 ? "+" : "−"} → ${ratioQ.map(q => CIRC[q - 1]).join(", ")}`, r: "All Strippers Take Cash." },
-      { s: `${ivText} → ${iv.quadrants.map(q => CIRC[q - 1]).join(", ")}`, r: "the second colour of tick." },
-      { s: `∴ ${CIRC[quadrant - 1]}`, r: "the quadrant with two ticks." },
+      { s: afL(`${fn} ${L} is ${sign > 0 ? "+" : "−"} → ${ratioQ.map(q => CIRC[q - 1]).join(", ")}`, `${fn} ${L} is ${sign > 0 ? "+" : "−"} → ${ratioQ.map(q => CIRC[q - 1]).join(", ")}`), r: afL("All Strippers Take Cash.", "All Strippers Take Cash.") },
+      { s: `${ivText} → ${iv.quadrants.map(q => CIRC[q - 1]).join(", ")}`, r: afL("the second colour of tick.", "die tweede kleur regmerkie.") },
+      { s: `∴ ${CIRC[quadrant - 1]}`, r: afL("the quadrant with two ticks.", "die kwadrant met twee regmerkies.") },
     ],
   };
 }
@@ -128,12 +129,12 @@ function bowTieCard() {
 function doubleTickStep(fn, L, sign, ratioQ, ivText, ivQ, quadrant) {
   return {
     kind: "doubletick", correct: quadrant,
-    prompt: "Make the two ticks on the cross.",
+    prompt: afL("Make the two ticks on the cross.", "Maak die twee regmerkies op die kruis."),
     passes: [
-      { prompt: `Tick every quadrant where ${fn} ${L} is ${sign > 0 ? "positive" : "negative"}.`, correct: ratioQ },
-      { prompt: `Now tick every quadrant that ${ivText} allows.`, correct: ivQ },
+      { prompt: afL(`Tick every quadrant where ${fn} ${L} is ${sign > 0 ? "positive" : "negative"}.`, `Merk elke kwadrant waar ${fn} ${L} ${sign > 0 ? "positief" : "negatief"} is.`), correct: ratioQ },
+      { prompt: afL(`Now tick every quadrant that ${ivText} allows.`, `Merk nou elke kwadrant wat ${ivText} toelaat.`), correct: ivQ },
     ],
-    finalPrompt: "Tap the quadrant that has BOTH ticks.",
+    finalPrompt: afL("Tap the quadrant that has BOTH ticks.", "Klik op die kwadrant met ALBEI regmerkies."),
     hint: H_TICK,
   };
 }
@@ -153,34 +154,34 @@ function chainItem() {
 
   /* which side is NOT handed over by the ratio — the one Pythagoras
      has to produce (her step ④) */
-  const derived = fn === "tan" ? "r" : fn === "sin" ? "x" : "y";
+  const derived = fn === afL("tan", "tan") ? afL("r", "r") : fn === afL("sin", "sin") ? afL("x", "x") : afL("y", "y");
 
   /* her p26 layout for the derived side: the given negative stays
      INSIDE the square, then ± , then ∴ picks the sign off the quadrant */
   function pythHtml() {
-    if (derived === "r") {
-      return `r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth)<br>√r² = √${x * x + y * y}<br>r = ${r} &nbsp;<span class="muted">always positive bc it is the radius</span>`;
+    if (derived === afL("r", "r")) {
+      return afL(`r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth)<br>√r² = √${x * x + y * y}<br>r = ${r} &nbsp;<span class="muted">always positive bc it is the radius</span>`, `r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth)<br>√r² = √${x * x + y * y}<br>r = ${r} &nbsp;<span class="muted">altyd positief want dit is die radius</span>`);
     }
-    const known = derived === "x" ? y : x;
-    const outv = derived === "x" ? x : y;
-    return `${derived}² = ${r}² − ${sq(known)}&nbsp;&nbsp;(pyth)<br>√${derived}² = √${outv * outv}<br>${derived} = ±${Math.abs(outv)}<br>∴ ${derived} = ${negNum(outv)} &nbsp;<span class="muted">the sign comes from ${CIRC[quadrant - 1]}</span>`;
+    const known = derived === afL("x", "x") ? y : x;
+    const outv = derived === afL("x", "x") ? x : y;
+    return afL(`${derived}² = ${r}² − ${sq(known)}&nbsp;&nbsp;(pyth)<br>√${derived}² = √${outv * outv}<br>${derived} = ±${Math.abs(outv)}<br>∴ ${derived} = ${negNum(outv)} &nbsp;<span class="muted">the sign comes from ${CIRC[quadrant - 1]}</span>`, `${derived}² = ${r}² − ${sq(known)}&nbsp;&nbsp;(pyth)<br>√${derived}² = √${outv * outv}<br>${derived} = ±${Math.abs(outv)}<br>∴ ${derived} = ${negNum(outv)} &nbsp;<span class="muted">die teken kom van ${CIRC[quadrant - 1]}</span>`);
   }
 
   const sketch = {
     type: "quadtri", x, y, w: 300, h: 300, accent: ACCENT, theta: true,
-    letters: { x: "x", y: "y", r: "r" },      // LETTERS ONLY — nothing is typed yet
+    letters: { x: afL("x", "x"), y: afL("y", "y"), r: afL("r", "r") },      // LETTERS ONLY — nothing is typed yet
   };
 
   /* the two follow-up ratios: the two the question did NOT hand over —
      asking for the given one back would be a free mark */
-  const [fA, fB] = shuffled(["sin", "cos", "tan"].filter(f => f !== fn));
+  const [fA, fB] = shuffled([afL("sin", "sin"), afL("cos", "cos"), afL("tan", "tan")].filter(f => f !== fn));
   function ratioStep(f) {
     const right = ratioOf(f, x, y, r);
-    const num = f === "cos" ? x : y;               // the top of the true ratio
-    const den = f === "tan" ? x : r;               // the bottom of it
+    const num = f === afL("cos", "cos") ? x : y;               // the top of the true ratio
+    const den = f === afL("tan", "tan") ? x : r;               // the bottom of it
     const cands = [
       { label: fracLabel(-num, den), value: -right.value },          // sign flipped
-      ...["sin", "cos", "tan"].filter(o => o !== f).map(o => ratioOf(o, x, y, r)),   // the wrong ratio
+      ...[afL("sin", "sin"), afL("cos", "cos"), afL("tan", "tan")].filter(o => o !== f).map(o => ratioOf(o, x, y, r)),   // the wrong ratio
       { label: fracLabel(den, num), value: den / num },              // upside down
       { label: fracLabel(-den, num), value: -den / num },
       { label: fracLabel(Math.abs(num), Math.abs(den)), value: Math.abs(num / den) },
@@ -201,11 +202,11 @@ function chainItem() {
   const steps = [
     doubleTickStep(fn, L, sign, ratioQ, ivText, iv.quadrants, quadrant),
     {
-      kind: "sketchfill", prompt: "Now the sketch. Type each side — it appears on the drawing as you go.", graph: sketch, hint: H_SIDE,
+      kind: "sketchfill", prompt: afL("Now the sketch. Type each side — it appears on the drawing as you go.", "Nou die skets. Tik elke sy in: dit verskyn op die tekening soos jy aangaan."), graph: sketch, hint: H_SIDE,
       fields: [
-        { key: "x", prompt: "x = ?", expected: x, hint: derived === "x" ? `${H_SIDE} This is the one Pythagoras has to give you: x² = r² − y²  (pyth).` : H_SIDE },
-        { key: "y", prompt: "y = ?", expected: y, hint: derived === "y" ? `${H_SIDE} This is the one Pythagoras has to give you: y² = r² − x²  (pyth).` : H_SIDE },
-        { key: "r", prompt: "r = ?", expected: r, hint: H_R },
+        { key: afL("x", "x"), prompt: afL("x = ?", "x = ?"), expected: x, hint: derived === afL("x", "x") ? afL(`${H_SIDE} This is the one Pythagoras has to give you: x² = r² − y²  (pyth).`, `${H_SIDE} Dié een moet Pythagoras vir jou gee: x² = r² − y²  (pyth).`) : H_SIDE },
+        { key: afL("y", "y"), prompt: afL("y = ?", "y = ?"), expected: y, hint: derived === afL("y", "y") ? afL(`${H_SIDE} This is the one Pythagoras has to give you: y² = r² − x²  (pyth).`, `${H_SIDE} Dié een moet Pythagoras vir jou gee: y² = r² − x²  (pyth).`) : H_SIDE },
+        { key: afL("r", "r"), prompt: afL("r = ?", "r = ?"), expected: r, hint: H_R },
       ],
     },
     ratioStep(fA),
@@ -215,15 +216,15 @@ function chainItem() {
   return {
     type: "steps", concept: CON,
     _dbg: { fn, sign, quadrant, x, y, r, derived, ratios: [fA, fB] },
-    prompt: `${fn} ${L} = ${given.label} and ${ivText}.`,
+    prompt: afL(`${fn} ${L} = ${given.label} and ${ivText}.`, `${fn} ${L} = ${given.label} en ${ivText}.`),
     steps,
     hint: H_TICK,
-    answerLabel: `${CIRC[quadrant - 1]}, and the sketch is x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}.<br>${pythHtml()}`,
+    answerLabel: afL(`${CIRC[quadrant - 1]}, and the sketch is x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}.<br>${pythHtml()}`, `${CIRC[quadrant - 1]}, en die skets is x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}.<br>${pythHtml()}`),
     solution: [
-      { s: `${fn} ${L} is ${sign > 0 ? "+" : "−"} → ${ratioQ.map(q => CIRC[q - 1]).join(", ")}; ${ivText} → ${iv.quadrants.map(q => CIRC[q - 1]).join(", ")}`, r: "② determine the quadrant — two colours of tick." },
-      { s: `∴ ${CIRC[quadrant - 1]}`, r: "the double-ticked one." },
-      { s: `x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}`, r: "③ sketch · ④ the unknown side (pyth)." },
-      { s: `${fA} ${L} = ${ratioOf(fA, x, y, r).label} · ${fB} ${L} = ${ratioOf(fB, x, y, r).label}`, r: "⑤ read them off the sketch." },
+      { s: afL(`${fn} ${L} is ${sign > 0 ? "+" : "−"} → ${ratioQ.map(q => CIRC[q - 1]).join(", ")}; ${ivText} → ${iv.quadrants.map(q => CIRC[q - 1]).join(", ")}`, `${fn} ${L} is ${sign > 0 ? "+" : "−"} → ${ratioQ.map(q => CIRC[q - 1]).join(", ")}; ${ivText} → ${iv.quadrants.map(q => CIRC[q - 1]).join(", ")}`), r: afL("② determine the quadrant — two colours of tick.", "② bepaal die kwadrant: twee kleure regmerkies.") },
+      { s: `∴ ${CIRC[quadrant - 1]}`, r: afL("the double-ticked one.", "die een met twee regmerkies.") },
+      { s: afL(`x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}`, `x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}`), r: afL("③ sketch · ④ the unknown side (pyth).", "③ skets · ④ die onbekende sy (pyth).") },
+      { s: `${fA} ${L} = ${ratioOf(fA, x, y, r).label} · ${fB} ${L} = ${ratioOf(fB, x, y, r).label}`, r: afL("⑤ read them off the sketch.", "⑤ lees hulle van die skets af.") },
     ],
   };
 }
@@ -240,9 +241,9 @@ function substitute() {
   const L = pick(LETTERS);
 
   const forms = [
-    { text: `${r} sin ${L} + ${r} cos ${L}`, value: y + x, decoys: [y - x, x - y, -(x + y)] },
-    { text: `${r} cos ${L} − ${r} sin ${L}`, value: x - y, decoys: [x + y, y - x, -(x + y)] },
-    { text: `${Math.abs(y)}/sin ${L}`, value: Math.abs(y) * r / y, decoys: [-Math.abs(y) * r / y, Math.abs(y), -r * 2] },
+    { text: afL(`${r} sin ${L} + ${r} cos ${L}`, `${r} sin ${L} + ${r} cos ${L}`), value: y + x, decoys: [y - x, x - y, -(x + y)] },
+    { text: afL(`${r} cos ${L} − ${r} sin ${L}`, `${r} cos ${L} − ${r} sin ${L}`), value: x - y, decoys: [x + y, y - x, -(x + y)] },
+    { text: afL(`${Math.abs(y)}/sin ${L}`, `${Math.abs(y)}/sin ${L}`), value: Math.abs(y) * r / y, decoys: [-Math.abs(y) * r / y, Math.abs(y), -r * 2] },
   ];
   if (r === 5) forms.push({ text: `${r * r} sin²${L} − ${r} cos ${L}`, value: y * y - x, decoys: [y * y + x, x - y * y, -(y * y) - x] });
   const form = pick(forms);
@@ -252,7 +253,7 @@ function substitute() {
   return {
     type: "mc", concept: CON,
     _dbg: { x, y, r, quadrant, expr: form.text, value: form.value },
-    prompt: `The sketch is finished. Work out ${form.text}.`,
+    prompt: afL(`The sketch is finished. Work out ${form.text}.`, `Die skets is klaar. Bereken ${form.text}.`),
     graph: {
       // wider than it is tall: a numeric label like "−24" sits just
       // outside the vertical leg and needs somewhere to go at 375 px
@@ -260,11 +261,11 @@ function substitute() {
       labels: { x: negNum(x), y: negNum(y), r: String(r) },
     },
     options: byValue(negNum(form.value), form.value, cands),
-    hint: "⑤ substitute: sin = y/r, cos = x/r, tan = y/x, straight off the sketch — brackets round every negative before you square anything.",
-    answerLabel: `${form.text} = ${negNum(form.value)} &nbsp;<span class="muted">with x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}</span>`,
+    hint: afL("⑤ substitute: sin = y/r, cos = x/r, tan = y/x, straight off the sketch — brackets round every negative before you square anything.", "⑤ vervang: sin = y/r, cos = x/r, tan = y/x, reguit van die skets af; hakies om elke negatief voordat jy iets kwadreer."),
+    answerLabel: afL(`${form.text} = ${negNum(form.value)} &nbsp;<span class="muted">with x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}</span>`, `${form.text} = ${negNum(form.value)} &nbsp;<span class="muted">met x = ${negNum(x)}, y = ${negNum(y)}, r = ${r}</span>`),
     solution: [
-      { s: `sin ${L} = ${fracLabel(y, r)}, cos ${L} = ${fracLabel(x, r)}, tan ${L} = ${fracLabel(y, x)}`, r: "read off the sketch." },
-      { s: `${form.text} = ${negNum(form.value)}`, r: "⑤ substitute." },
+      { s: afL(`sin ${L} = ${fracLabel(y, r)}, cos ${L} = ${fracLabel(x, r)}, tan ${L} = ${fracLabel(y, x)}`, `sin ${L} = ${fracLabel(y, r)}, cos ${L} = ${fracLabel(x, r)}, tan ${L} = ${fracLabel(y, x)}`), r: afL("read off the sketch.", "lees van die skets af.") },
+      { s: `${form.text} = ${negNum(form.value)}`, r: afL("⑤ substitute.", "⑤ vervang.") },
     ],
   };
 }
@@ -280,36 +281,36 @@ function pointVariant() {
   const [sx, sy] = QSIGN[quadrant];
   const x = sx * a, y = sy * b;
   const L = pick(LETTERS);
-  const right = ratioOf("tan", x, y, r);
+  const right = ratioOf(afL("tan", "tan"), x, y, r);
   const cands = [
     { label: fracLabel(-y, x), value: -right.value },
-    ratioOf("sin", x, y, r), ratioOf("cos", x, y, r),
+    ratioOf(afL("sin", "sin"), x, y, r), ratioOf(afL("cos", "cos"), x, y, r),
     { label: fracLabel(x, y), value: x / y },
   ];
   return {
     type: "steps", concept: CON,
     _dbg: { x, y, r, quadrant, point: true },
-    prompt: `P(${negNum(x)} ; ${negNum(y)}) lies on the terminal arm of ${L}.`,
+    prompt: afL(`P(${negNum(x)} ; ${negNum(y)}) lies on the terminal arm of ${L}.`, `P(${negNum(x)} ; ${negNum(y)}) lê op die eindarm van ${L}.`),
     steps: [
-      quadStep("Which quadrant does the arm swing into?", quadrant,
-        "The first coordinate is the x, the second is the y — the two signs put the point in exactly one quadrant."),
+      quadStep(afL("Which quadrant does the arm swing into?", "In watter kwadrant swaai die arm?"), quadrant,
+        afL("The first coordinate is the x, the second is the y — the two signs put the point in exactly one quadrant.", "Die eerste koördinaat is die x, die tweede die y: die twee tekens plaas die punt in presies een kwadrant.")),
       {
-        kind: "sketchfill", prompt: "The point is on the sketch. Type r — it appears on the drawing.", hint: H_R,
+        kind: "sketchfill", prompt: afL("The point is on the sketch. Type r — it appears on the drawing.", "Die punt is op die skets. Tik r in: dit verskyn op die tekening."), hint: H_R,
         graph: {
           type: "quadtri", x, y, w: 380, h: 300, accent: ACCENT, theta: true,
-          labels: { x: negNum(x), y: negNum(y) }, letters: { r: "r" },
+          labels: { x: negNum(x), y: negNum(y) }, letters: { r: afL("r", "r") },
         },
-        fields: [{ key: "r", prompt: "r = ?", expected: r, hint: H_R }],
+        fields: [{ key: afL("r", "r"), prompt: afL("r = ?", "r = ?"), expected: r, hint: H_R }],
       },
-      { kind: "mc", prompt: `tan ${L} = ?`, options: byValue(right.label, right.value, cands), hint: H_RATIO },
+      { kind: "mc", prompt: afL(`tan ${L} = ?`, `tan ${L} = ?`), options: byValue(right.label, right.value, cands), hint: H_RATIO },
     ],
-    hint: "Plot the point, drop it onto the x-axis, and you have the same right triangle as always — x across, y up or down, r the arm itself.",
-    answerLabel: `${CIRC[quadrant - 1]}, r = ${r}, tan ${L} = ${right.label}.<br>r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth) → r = ${r} <span class="muted">always positive bc it is the radius</span>`,
+    hint: afL("Plot the point, drop it onto the x-axis, and you have the same right triangle as always — x across, y up or down, r the arm itself.", "Stip die punt, laat 'n lyn na die x-as sak, en jy het dieselfde reghoekige driehoek as altyd: x links of regs, y op of af, r die arm self."),
+    answerLabel: afL(`${CIRC[quadrant - 1]}, r = ${r}, tan ${L} = ${right.label}.<br>r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth) → r = ${r} <span class="muted">always positive bc it is the radius</span>`, `${CIRC[quadrant - 1]}, r = ${r}, tan ${L} = ${right.label}.<br>r² = ${sq(x)} + ${sq(y)}&nbsp;&nbsp;(pyth) → r = ${r} <span class="muted">altyd positief want dit is die radius</span>`),
     solution: [
-      { s: `P(${negNum(x)} ; ${negNum(y)}) → ${CIRC[quadrant - 1]}`, r: "the two signs place the point." },
-      { s: `r² = ${sq(x)} + ${sq(y)} = ${x * x + y * y}`, r: "(pyth)" },
-      { s: `r = ${r}`, r: "always positive bc it is the radius." },
-      { s: `tan ${L} = y/x = ${right.label}`, r: "read it off the sketch." },
+      { s: afL(`P(${negNum(x)} ; ${negNum(y)}) → ${CIRC[quadrant - 1]}`, `P(${negNum(x)} ; ${negNum(y)}) → ${CIRC[quadrant - 1]}`), r: afL("the two signs place the point.", "die twee tekens plaas die punt.") },
+      { s: afL(`r² = ${sq(x)} + ${sq(y)} = ${x * x + y * y}`, `r² = ${sq(x)} + ${sq(y)} = ${x * x + y * y}`), r: afL("(pyth)", "(pyth)") },
+      { s: afL(`r = ${r}`, `r = ${r}`), r: afL("always positive bc it is the radius.", "altyd positief want dit is die radius.") },
+      { s: afL(`tan ${L} = y/x = ${right.label}`, `tan ${L} = y/x = ${right.label}`), r: afL("read it off the sketch.", "lees dit van die skets af.") },
     ],
   };
 }

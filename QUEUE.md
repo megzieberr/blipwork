@@ -88,7 +88,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 ### General Trig
 - ☑ 2026-10-17 T53 | concepts: the `gtrig` block (js/concepts/gtrig.js after S4) | ~1 555 words | counted by af_extract 2026-10-17
 - ☑ 2026-10-17 S10 | before T54 (setup, one Opus worker; added 2026-10-17 21:25 after T54 went red): verify-gtrig.html reads English wording out of the mc step text ("becomes …", "stays X" / "changes to X", "Quadrant: / Sign: / Ratio:"), so ?lang=af fails 2862 checks (2857 "could read a claimed ratio off the mc steps" in gt4 co*, gt5 pos/neg/coFn/rotationPool, gt7 item1-7; 5 "gt6.threeBoxes confirm side fills all three boxes"); make those checks read the English side (L's en) or accept both languages, like S9 did for verify-exam; no js/ change | check: verify-gtrig ALL GOOD in EN and ?lang=af, then T54 re-runs inject + af_check + harness from its saved .af.json
-- ☐ T54 | hub rounds: questgt1-intro … questgt9-identities (9 files) | ~3 976 words | verify page: verify-gtrig.html ⚠ verify-gtrig?lang=af fails 2862 checks because the page reads English step wording (see S10, the harness fix); briefs/af/T54.af.json is COMPLETE (560 keys): after S10, inject + af_check + harness only
+- ☑ 2026-10-17 T54 | hub rounds: questgt1-intro … questgt9-identities (9 files) | ~3 976 words | verify page: verify-gtrig.html
 - ☑ 2026-10-17 T55 | hub rounds: questgt10-super-special … questgt13-undefined (4 files) | ~1 256 words | verify page: verify-gtrig.html
 - ☑ 2026-10-17 T56 | exam: cards-gtrig, gtrig-level4 (2 files) | ~3 324 words | verify-exam.html
 - ☑ 2026-10-17 T57 | exam: gtrig-siblings-co-functions | ~2 067 words | verify-exam.html

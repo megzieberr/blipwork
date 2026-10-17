@@ -21,25 +21,26 @@
 import {
   pick, randInt, mcStep, calcStep, tokenStep, quadStep, quadAngle, nonQuadrantalAngle, argDeg } from "./_gtrig.js";
 import { reduce, cofunction, fmtDeg } from "../triglib.js";
+import { L } from "../lang.js";
 
 const CON = "gtrigReduce";
-const SH1 = "determine the quadrant.";
-const SH2 = "reduction formula — which wheel arm?";
-const SH3 = "+ or − sign: All Strippers Take Cash.";
-const SH4 = "does it stay, or is it a co-function that converts?";
-const SHR = "angles past a full turn — how many 360°s, in ONE chip, before you reduce?";
+const SH1 = L("determine the quadrant.", "bepaal die kwadrant.");
+const SH2 = L("reduction formula — which wheel arm?", "reduksieformule: watter wielarm?");
+const SH3 = L("+ or − sign: All Strippers Take Cash.", "+ of − teken: All Strippers Take Cash.");
+const SH4 = L("does it stay, or is it a co-function that converts?", "bly dit, of is dit 'n ko-funksie wat omskakel?");
+const SHR = L("angles past a full turn — how many 360°s, in ONE chip, before you reduce?", "hoeke verby 'n volle draai: hoeveel 360°'s, in EEN chip, voordat jy reduseer?");
 const CIRC = ["①", "②", "③", "④"];
-const ALLFN = ["sin", "cos", "tan"];
+const ALLFN = [L("sin", "sin"), L("cos", "cos"), L("tan", "tan")];
 
 /* the mc options for the "stay / change" step — always exactly one
    correct label plus the two others, worded her way */
 function ratioOptions(fn, fn2) {
   if (fn2 === fn) {
     const others = ALLFN.filter(f => f !== fn);
-    return { correct: `stays ${fn}`, wrongs: others.map(f => `changes to ${f}`) };
+    return { correct: L(`stays ${fn}`, `bly ${fn}`), wrongs: others.map(f => L(`changes to ${f}`, `verander na ${f}`)) };
   }
   const third = ALLFN.find(f => f !== fn && f !== fn2);
-  return { correct: `changes to ${fn2}`, wrongs: [`stays ${fn}`, `changes to ${third}`] };
+  return { correct: L(`changes to ${fn2}`, `verander na ${fn2}`), wrongs: [L(`stays ${fn}`, `bly ${fn}`), L(`changes to ${third}`, `verander na ${third}`)] };
 }
 
 /* her 0.1 house habit — the split written in a small note ABOVE the
@@ -60,14 +61,14 @@ function buildChain(fn, angle) {
   const steps = [];
   const solution = [];
   if (r.turns.length) {
-    steps.push(tokenStep("Rotate first — what do you add or subtract?", r.turns[0], [], SHR, "θ"));
+    steps.push(tokenStep(L("Rotate first — what do you add or subtract?", "Draai eers: wat tel jy by of trek jy af?"), r.turns[0], [], SHR, "θ"));
     solution.push({ s: `Rotate: [${r.turns.join(" ")}]`, r: `${fn}${argDeg(angle)} → ${fn}${argDeg(r.rotated)}.` });
   }
-  steps.push(quadStep("Which quadrant is it in now?", r.quadrant, SH1));
-  steps.push(tokenStep("Type the reduction formula.", r.form, [r.form + "θ"], SH2));
-  steps.push(mcStep("What's the sign?", r.sign > 0 ? "+" : "−", [r.sign > 0 ? "−" : "+"], SH3));
+  steps.push(quadStep(L("Which quadrant is it in now?", "In watter kwadrant is dit nou?"), r.quadrant, SH1));
+  steps.push(tokenStep(L("Type the reduction formula.", "Tik die reduksieformule in."), r.form, [r.form + "θ"], SH2));
+  steps.push(mcStep(L("What's the sign?", "Wat is die teken?"), r.sign > 0 ? "+" : "−", [r.sign > 0 ? "−" : "+"], SH3));
   const ro = ratioOptions(fn, r.fn2);
-  steps.push(mcStep("Does the ratio stay, or does it change?", ro.correct, ro.wrongs, SH4));
+  steps.push(mcStep(L("Does the ratio stay, or does it change?", "Bly die verhouding, of verander dit?"), ro.correct, ro.wrongs, SH4));
   solution.push({ s: `Quadrant: ${CIRC[r.quadrant - 1]}`, r: "read it off the wheel." });
   solution.push({ s: `Formula: ${r.form}`, r: "the wheel arm this angle lands on." });
   solution.push({ s: `Sign: ${r.sign < 0 ? "−" : "+"}`, r: "All Strippers Take Cash." });
@@ -109,31 +110,31 @@ function rotationPool() {
 /* ---- items 5–6 — co-function pool: quadrant → formula → sign → ratio,
    but off cofunction() (the ratio SWAPS) rather than reduce() ---- */
 function coFnItem(which) {
-  const fn = pick(["sin", "cos"]);
+  const fn = pick([L("sin", "sin"), L("cos", "cos")]);
   let angle, theta, quadrant, form;
   if (which === "90+") { theta = randInt(2, 16) * 5; angle = 90 + theta; quadrant = 2; form = "90+"; }   // 100..170
   else { angle = randInt(2, 16) * 5; theta = 90 - angle; quadrant = 1; form = "90−"; }                   // 10..80
   const cf = cofunction(fn, form);
   const third = ALLFN.find(f => f !== fn && f !== cf.fn2);
   const steps = [
-    quadStep("Which quadrant is it in?", quadrant, SH1),
-    tokenStep("Type the reduction formula.", form, [form + "θ"], SH2),
-    mcStep("What's the sign?", cf.sign > 0 ? "+" : "−", [cf.sign > 0 ? "−" : "+"], SH3),
-    mcStep("Does the ratio stay, or does it change?", `changes to ${cf.fn2}`, [`stays ${fn}`, `changes to ${third}`], SH4),
+    quadStep(L("Which quadrant is it in?", "In watter kwadrant is dit?"), quadrant, SH1),
+    tokenStep(L("Type the reduction formula.", "Tik die reduksieformule in."), form, [form + "θ"], SH2),
+    mcStep(L("What's the sign?", "Wat is die teken?"), cf.sign > 0 ? "+" : "−", [cf.sign > 0 ? "−" : "+"], SH3),
+    mcStep(L("Does the ratio stay, or does it change?", "Bly die verhouding, of verander dit?"), L(`changes to ${cf.fn2}`, `verander na ${cf.fn2}`), [L(`stays ${fn}`, `bly ${fn}`), L(`changes to ${third}`, `verander na ${third}`)], SH4),
   ];
   const split = `${form}${theta}`;
   return {
     type: "steps", concept: CON,
     _dbg: { fn, angle, theta },   // harness-only: theta present ⇒ "co-function" identity, not a plain reduction
-    prompt: `Reduce ${fn} ${angle}° using a co-function (90° ± θ).`,
+    prompt: L(`Reduce ${fn} ${angle}° using a co-function (90° ± θ).`, `Reduseer ${fn} ${angle}° met 'n ko-funksie (90° ± θ).`),
     steps,
     hint: SH4,
     answerLabel: `<span style="display:block;font-size:11px;color:var(--muted)">${split}</span>${fn} ${angle}°<br>= ${cf.sign < 0 ? "−" : ""}${cf.fn2} ${theta}°.`,
     solution: [
-      { s: `Quadrant: ${CIRC[quadrant - 1]}`, r: which === "90−" ? "90° − θ is A." : "90° + θ is S." },
-      { s: `Formula: ${form}`, r: "the co-function arm." },
-      { s: `Sign: ${cf.sign < 0 ? "−" : "+"}`, r: which === "90−" ? "quadrant A — everything positive." : "quadrant S — only sine stays positive." },
-      { s: `Ratio: ${fn} → ${cf.fn2}`, r: "co-functions convert sin ↔ cos." },
+      { s: L(`Quadrant: ${CIRC[quadrant - 1]}`, `Kwadrant: ${CIRC[quadrant - 1]}`), r: which === "90−" ? L("90° − θ is A.", "90° − θ is A.") : L("90° + θ is S.", "90° + θ is S.") },
+      { s: L(`Formula: ${form}`, `Formule: ${form}`), r: L("the co-function arm.", "die ko-funksie-arm.") },
+      { s: L(`Sign: ${cf.sign < 0 ? "−" : "+"}`, `Teken: ${cf.sign < 0 ? "−" : "+"}`), r: which === "90−" ? L("quadrant A — everything positive.", "kwadrant A: alles positief.") : L("quadrant S — only sine stays positive.", "kwadrant S: net sin bly positief.") },
+      { s: L(`Ratio: ${fn} → ${cf.fn2}`, `Verhouding: ${fn} → ${cf.fn2}`), r: L("co-functions convert sin ↔ cos.", "ko-funksies skakel sin ↔ cos om.") },
     ],
   };
 }
