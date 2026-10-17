@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-17 21:50 (🇿🇦 AFRIKAANS SATURDAY PUSH DONE: 60 translation rows green and committed LOCAL on main, twins 378 → 8 070 of 11 792, 63 commits UNPUSHED, no sw bump, switch still HIDDEN; live site unchanged at sw v99 `7bc7ece`; the routine starts Sun 18 Oct 22:10 and takes S8 next; her decision open: S10 so the nine General Trig rounds can land)
+# Project status — updated 2026-10-17 22:20 (🚀 sw v100 `d983c83` LIVE 22:16: the Afrikaans Saturday push, 60 rows + S9 + the af-push kit, is on the live site, switch still HIDDEN, 0 unpushed; twins 8 070 of 11 792; the routine starts Sun 18 Oct 22:10 and takes S8 next; her decision open: S10 so the nine General Trig rounds can land)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -11,15 +11,17 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   this one session, her "Run it, up to 60 rows").** 60 translation rows green: Exponents, Equations (except T15),
   Patterns, Analytical, Functions, 2D Trig, Trig Graphs COMPLETE; General Trig except rounds 1–9 (T54, see S10).
   Every row: extract → Opus translate → inject → af_check exit 0 → the chapter's verify page ALL GOOD in EN and
-  `?lang=af`; one commit per row on main (Opus trailer), nothing pushed, no sw bump. Two tool fixes on her yes:
+  `?lang=af`; one commit per row on main (Opus trailer); shipped as sw v100 at 22:16. Two tool fixes on her yes:
   af_inject keeps the code inside `${...}` verbatim (`e62d038`) and S9 made verify-exam's hub checks language-aware
   (678/678 in both languages, `bc105aa`). AF-LOG.md holds one line per row: her wording list ("for your list"),
   the glossary conflicts between rows ("GLOSSARY CALL"), six English maths slips ("MATHS SLIP"), and the
   leftovers ("FOLLOW-UP ROW", collected into queue row T93). The foreman kit is in `tools/af-push/` (README).
   Full write-up: STATUS-ARCHIVE.md 2026-10-17 19:05.
-- **🚀 Live site = sw v99 `7bc7ece` (2026-10-17 18:49):** hub tiles T89 + S1–S6 + the Number Patterns pilot live,
-  hidden; hub tabs Paper 1 / Paper 2 since v97; f8–f13 live CLOSED (she opens each from the admin page).
-  Her next ship (sw v100: bump, `sw_check` OK, push) carries the 63 commits live, still hidden.
+- **🚀 Live site = sw v100 `d983c83` (2026-10-17 22:16):** the 60 Saturday-push rows + S9 + the af-push kit are LIVE,
+  hidden: `SHOW_TOGGLE` false, default "en", a phone shows Afrikaans only after it visited `?lang=af` once (her
+  phone did, at the 18:36 tile sign-off) and `?lang=en` flips it back; learners see English. Hub tiles T89 + S1–S6 +
+  the pilot since v99; hub tabs Paper 1 / Paper 2 since v97; f8–f13 live CLOSED (she opens each from the admin
+  page). 0 unpushed; the routine's nightly `AF:` commits ride with her next ship.
 - 🧮 Calculator Builds 9 + 10 live (v94), 📥 Inbox (v95), 💰 Finance part 2 f8–f13 (v96): STATUS-ARCHIVE.md.
   12 hub chapters + 2 exam-only; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live; roster 20.
 - ⚠️ **EVERY SHIP: `python tools/sw_check.py` must print OK before the push** (it counts only a COMMITTED bump).
@@ -45,10 +47,15 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   every worker calls); S10 added before T54 after verify-gtrig parsed English step wording (2 862 AF failures,
   T54's 560-key table saved, inject-only after S10); rows with leftovers ticked "done, PARTIAL" and the
   leftovers collected in T93; the routine's next first open row is S8, then T15, S10, T54, T63 onwards.
+- 2026-10-17 (hers, 22:14 / 22:15): the Afrikaans on her phone is that device's remembered `?lang=af`, learners see
+  English (js/lang.js, live = local); "Ship sw v100: bump, sw_check, push. The Afrikaans switch stays hidden."
+  Shipped `d983c83` 22:16, live-verified.
 
 ## ⏳ Pending on Megan
 - 🌐 1 word [your call, blocking T54]: "run S10" (one Opus worker, ~150k) so the nine General Trig rounds
   can land, or leave it for the routine (it will go red on T54 until S10 is done).
+- 📱 1 tap [whenever]: your phone remembers Afrikaans from tonight's test; open
+  megzieberr.github.io/blipwork/?lang=en once to flip it back (or keep it on for the play-through).
 - 💻 2 min [Sunday morning]: read AF-LOG.md from the 19:23 line down, one line per row; the "for your list"
   words are your G2 input, nothing to act on tonight.
 - 📱 [whenever]: any Afrikaans word you dislike as you play → tell a session the word and your word; it
@@ -74,8 +81,8 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   (a steep negative gradient cuts), reflections#87 (x = 1, y = 2), exp-level4#21 (0/0), questag7-mixed#43
   (centre vs midpoint both middelpunt); plus the per-row "report only" lines (loose wording, "her" with no
   name on learner cards, an internal card id shown in rational-exponents-k#22).
-- **Her next ship (sw v100)** when she says so: bump, commit, `sw_check` OK, push; 63 commits ride along,
-  hidden; after it, her play-through with `?lang=af` can start chapter by chapter.
+- **Her play-through with `?lang=af`** (after exams, her 19:17 ruling) can start chapter by chapter: sw v100 is
+  live. Nightly routine commits ride with whatever ship comes next.
 - **T92 lib prose** (`${ord()}` English ordinals in Patterns, FN_NAME sine/cosine in Trig Graphs, `${kind}`
   minimum/maximum, measlib / finlib / patternlib words) and **T93 leftovers** (file + line list in the row).
 - **Parked cosmetic lists, her one-line call:** `briefs/finance-2/brief-3b-f10-review.md`, `brief-4b-f8-review.md`,
