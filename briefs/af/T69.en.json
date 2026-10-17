@@ -1,0 +1,1448 @@
+{
+  "unit": "T69",
+  "generated": "2026-10-17T20:47:17.906Z",
+  "files": [
+    "js/exam/euclid-siblings-chords-and-angles.js"
+  ],
+  "items": {
+    "euclid-siblings-chords-and-angles#1": {
+      "en": "In the diagram, O is the centre of the circle and A, B and C are points on the circle. &nbsp;OA, OB, OC and the chords AB and BC are drawn. &nbsp;∠OAB = 35° &nbsp;and&nbsp; ∠OCB = 40°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:219:9"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#2": {
+      "en": "Determine, with a reason, the size of &nbsp;B̂₁.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:260:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#3": {
+      "en": "B̂₁ sits in triangle OAB. What do you know about the two sides OA and OB — and what does that force the two angles at the bottom of that triangle to do?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:261:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#4": {
+      "en": "OA = OB &nbsp;&nbsp;<i>(radii)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:263:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#5": {
+      "en": "∴ B̂₁ = ∠OAB = 35° &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:264:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#6": {
+      "en": "REMEMBER — this is the rule for the whole chapter: in Euclidean geometry <b>the statement earns a mark and the reason earns its own mark</b>. “B̂₁ = 35°” on a bare line is half an answer. Every size you write down gets a short reason in brackets beside it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:266:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#7": {
+      "en": "Every radius of a circle is the same length, so the moment a triangle has two radii for sides you already know it is isosceles — you did not have to measure anything. And in an isosceles triangle the two angles at the bottom, the ones opposite the equal sides, must be equal. Here OA and OB are both radii, so the angle at A and the angle at B are equal, which hands you B̂₁ for free. Get into the habit of marking every radius in a circle diagram the second you see it: half the angle chases in Grade 11 run entirely on hidden isosceles triangles, and the person who spots them first finishes the question in half the time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:270:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#8": {
+      "en": "Determine, with a reason, the size of &nbsp;Ô₁.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:277:21",
+        "euclid-siblings-chords-and-angles.js:848:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#9": {
+      "en": "You now know both of the bottom angles of triangle OAB. There is only one place left for the rest of the 180° to go.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:278:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#10": {
+      "en": "In △OAB: &nbsp;Ô₁ + 35° + 35° = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:280:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#11": {
+      "en": "∴ Ô₁ = 110°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:281:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#12": {
+      "en": "Nothing clever here, and that is the point — a chained geometry question is mostly a run of small, ordinary steps, and this is one of them. The three angles of any triangle add to 180°, you have two of them, so the third is whatever is left over. The one thing worth noticing is that Ô₁ came out obtuse, which is exactly what you would expect: the two base angles were fairly small, so the angle at the top had to be large to make up the total. If your answer had come out bigger than 180° or negative, that is a sign you added instead of subtracted somewhere, and checking the shape of the picture would have caught it immediately.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:284:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#13": {
+      "en": "OB = OC. &nbsp;Write down the size of &nbsp;B̂₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:291:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#14": {
+      "en": "The reason has been handed to you in the question. Which angle in the picture is B̂₂ forced to match?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:292:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#15": {
+      "en": "B̂₂ = ∠OCB = 40° &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:294:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#16": {
+      "en": "This is the same move as part (a), done on the other triangle — OB and OC are both radii, so triangle OBC is isosceles too, and the two angles opposite those equal sides must match. When a question says “write down”, it is telling you no working is expected: one line, the size, and the reason in brackets. It is also telling you the mark is quick, so take it and move on. Notice how the picture is now filling up: two triangles, both isosceles, and the angles at B are 35° on one side of OB and 40° on the other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:297:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#17": {
+      "en": "Determine, with a reason, the size of &nbsp;Ô₃.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:304:21",
+        "euclid-siblings-chords-and-angles.js:834:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#18": {
+      "en": "Same triangle as (c). You have both of its base angles now.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:305:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#19": {
+      "en": "In △OBC: &nbsp;Ô₃ + 40° + 40° = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:307:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#20": {
+      "en": "∴ Ô₃ = 100°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:308:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#21": {
+      "en": "Exactly the same reasoning as part (b), on the second isosceles triangle. It is worth pausing on how repetitive that is, because that repetition is the real skill: a long geometry question is not five clever ideas, it is one or two ideas used five times on different corners of the same picture. Once you have found the pattern “two radii, so isosceles, so equal base angles, so the top angle is 180° minus twice one of them”, you can run it on any triangle in the diagram that has the centre as a vertex.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:311:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#22": {
+      "en": "Determine, with a reason, the size of &nbsp;Ô₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:318:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#23": {
+      "en": "Look only at the point O now, and forget the circle for a second. How many angles are sitting around it, and what must they add up to?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:319:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#24": {
+      "en": "Ô₁ + Ô₂ + Ô₃ = 360° &nbsp;&nbsp;<i>(∠s round a pt)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:321:37",
+        "euclid-siblings-chords-and-angles.js:851:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#25": {
+      "en": "∴ Ô₂ = 360° − 110° − 100° = 150°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:322:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#26": {
+      "en": "WATCH OUT: it is <b>360°</b> round a point, not 180°. The 180° rule is for angles sitting on a straight line — three angles filling the whole space around O is a full revolution.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:324:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#27": {
+      "en": "This step has nothing to do with circles at all; it is the Grade 8 fact that going the whole way round a point takes 360°. The only thing that makes it feel like circle geometry is that the point happens to be the centre. Three angles meet at O and between them they fill the whole revolution, so once two of them are known the third is just subtraction. A good habit here is to check your answer against the picture: Ô₂ came out at 150°, and the wedge marked 2 does look like the biggest of the three — so the number and the drawing agree, which is a free sanity check the examiner has quietly given you.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:328:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#28": {
+      "en": "Determine, with a reason, the size of &nbsp;∠ABC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:335:21",
+        "euclid-siblings-chords-and-angles.js:656:21",
+        "euclid-siblings-chords-and-angles.js:889:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#29": {
+      "en": "There are two honest ways in: add the two pieces at B that you already own, or use the angle at the centre that stands on the same arc AC. Both are worth full marks — pick the one you can justify.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:336:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#30": {
+      "en": "∠ABC = ½ · Ô₂ &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i> — both stand on arc AC",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:338:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#31": {
+      "en": "∴ ∠ABC = ½ × 150° = 75°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:339:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#32": {
+      "en": "<b>OR</b> — straight off the two pieces you already have: &nbsp;∠ABC = B̂₁ + B̂₂ = 35° + 40° = 75°. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:340:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#33": {
+      "en": "REMEMBER: the two answers agreeing is not a coincidence — it <i>is</i> the angle-at-centre theorem. Whenever a chase gives you the same size two different ways, treat it as a free check that the earlier parts were right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:342:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#34": {
+      "en": "The angle at the centre standing on an arc is always double the angle that the same arc makes at the circumference. Here Ô₂ and ∠ABC both stand on arc AC — Ô₂ from the centre, ∠ABC from the far side of the circle — so ∠ABC has to be half of 150°. The reason the second route also works is that you already found the two halves of the angle at B, and 35 + 40 is the same 75. Seeing a result twice from two different directions is the single best confidence-builder in a geometry question, and it costs you almost nothing: if the two roads disagree, you know a mistake is sitting somewhere behind you and you can go back and find it before the marks run out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:346:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#35": {
+      "en": "In the diagram, AB is a diameter of the circle with centre O. &nbsp;C and D are points on the circle, and AC, AD, BC, BD and CD are drawn. &nbsp;∠ABC = 25° &nbsp;and&nbsp; ∠DBC = 40°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:417:9"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#36": {
+      "en": "Determine, with a reason, the size of &nbsp;Ĉ₁.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:458:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#37": {
+      "en": "Look at what AB is, not just where it is. An angle standing on that particular chord is never anything but one size.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:459:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#38": {
+      "en": "AB is a diameter, and Ĉ₁ = ∠ACB stands on it. &nbsp;&nbsp;<i>(∠s in semi-circle)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:461:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#39": {
+      "en": "∴ Ĉ₁ = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:462:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#40": {
+      "en": "WATCH OUT: this only works because AB goes <b>through the centre</b>. An angle standing on an ordinary chord can be any size at all — check that the chord really is a diameter before you write 90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:464:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#41": {
+      "en": "A diameter cuts the circle into two halves, and any point you pick on either half looks back at the two ends of that diameter through exactly a right angle. It is one of the most useful facts in the whole chapter, because it hands you a 90° with no working at all — and a right angle is what turns a triangle into something you can finish with the angle sum, or with Pythagoras if lengths are involved. The habit to build: whenever you see a chord that passes through the centre, immediately mark every angle standing on it with a little right angle, before you even read what the question wants.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:468:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#42": {
+      "en": "∠ADB = 90°. &nbsp;Give a reason for this.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:475:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#43": {
+      "en": "D is on the circle too. Which chord is that angle standing on?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:476:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#44": {
+      "en": "AB is a diameter and ∠ADB stands on it &nbsp;&nbsp;<i>(∠s in semi-circle)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:478:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#45": {
+      "en": "The theorem does not care which point on the circle you pick — every one of them sees a diameter at a right angle. So C gives you 90° and D gives you 90°, from the same one fact. Papers ask for the reason on its own like this on purpose: a learner who guesses the size from the look of the picture still cannot produce the reason, and the reason is what shows you understood. Two right angles in one diagram is also a gift worth noticing — it means there are two right-angled triangles in there, and every angle chase through them is one subtraction away.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:481:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#46": {
+      "en": "Use &nbsp;<i>∠s in the same seg</i>&nbsp; to write down the size of &nbsp;Â₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:488:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#47": {
+      "en": "Â₂ is the angle chord DC makes at A. Find the other angle in the picture that the same chord DC makes, on the same side of it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:489:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#48": {
+      "en": "Â₂ = ∠DBC = 40° &nbsp;&nbsp;<i>(∠s in the same seg)</i> — both stand on chord DC",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:491:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#49": {
+      "en": "A chord splits a circle into two segments, and every point in one segment sees the chord at the same angle as every other point in that segment. Here the chord is DC, and both A and B are sitting in the bigger segment on the far side of it — so the angle DC makes at A has to equal the angle it makes at B. That is why one given angle at B quietly hands you an angle at A, right across the diagram. The thing to check every single time is that the two points really are on the same side of the chord; if they are on opposite sides the angles are not equal at all, they are supplementary, which is a completely different theorem.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:494:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#50": {
+      "en": "Determine, with reasons, the size of &nbsp;Â₁.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:501:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#51": {
+      "en": "Work out the whole angle ∠CAB first — triangle ACB has a right angle and a 25° in it — and then remember that Â₁ is what is left of it once Â₂ is taken away.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:502:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#52": {
+      "en": "In △ACB: &nbsp;∠CAB + 25° + 90° = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:504:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#53": {
+      "en": "∴ ∠CAB = 65°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:505:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#54": {
+      "en": "Â₁ = ∠CAB − Â₂ = 65° − 40° = 25°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:506:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#55": {
+      "en": "The angle at A is split into two pieces by the chord AD, and the question only wants the lower one. So the plan is to get the whole angle first and subtract the piece you already know. Triangle ACB is the easiest place to find that whole angle, because part (a) gave you the right angle at C and the question gave you 25° at B, so the angle sum finishes it in one line. The habit worth building here is writing the split out loud as a sentence before you do any arithmetic: “the whole angle at A is Â₁ plus Â₂”. Learners who skip that sentence often subtract the wrong way round, or forget that the 65° was never Â₁ in the first place.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:509:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#56": {
+      "en": "Determine, with a reason, the size of &nbsp;Ĉ₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:516:21",
+        "euclid-siblings-chords-and-angles.js:700:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#57": {
+      "en": "Ĉ₂ stands on chord BD. So does one of the angles you have just worked out — and A and C are on the same side of BD.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:517:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#58": {
+      "en": "Ĉ₂ and Â₁ both stand on chord BD, and A and C are on the same side of it. &nbsp;&nbsp;<i>(∠s in the same seg)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:519:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#59": {
+      "en": "∴ Ĉ₂ = Â₁ = 25°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:520:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#60": {
+      "en": "Third use of the same-segment theorem in one question, and by now the routine should feel automatic: name the chord, check which side each point is on, then write the two angles equal. The chord this time is BD, and the two points looking at it are A and C. What makes this part slightly harder than (c) is that the angle you are matching, Â₁, was not given to you — you had to build it in part (d) first. That is what a chained question does: it makes each answer the raw material for the next one. If Â₁ had come out wrong, this answer would follow it, and the follow-through rule means the marker still pays you for the correct reasoning here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:523:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#61": {
+      "en": "Prove that &nbsp;CD ∥ AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:530:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#62": {
+      "en": "Treat AC as a transversal cutting the two chords. Add up the pieces of the angle at C on one side of it, add up the pieces of the angle at A on the same side, and see what the total does.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:531:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#63": {
+      "en": "∠DCA = Ĉ₁ + Ĉ₂ = 90° + 25° = 115°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:533:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#64": {
+      "en": "∠CAB = Â₁ + Â₂ = 25° + 40° = 65°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:534:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#65": {
+      "en": "∠DCA + ∠CAB = 115° + 65° = 180°<br>∴ CD ∥ AB &nbsp;&nbsp;<i>(co-int ∠s supp)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:535:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#66": {
+      "en": "WATCH OUT: the two angles have to be <b>co-interior</b> — both inside the two chords and both on the same side of the transversal AC. Adding any two angles that happen to make 180° proves nothing at all; say which transversal you used.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:537:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#67": {
+      "en": "Proving two lines are parallel is the reverse of the work you did in Grade 9, and the reasons run backwards too: instead of “these lines are parallel, so the angles do this”, you say “the angles do this, so the lines must be parallel”. The only line joining the two chords in this picture is AC, so that is your transversal, and the two angles it makes on the inside — one at C between CD and CA, one at A between AC and AB — are co-interior. Both of them are already built out of pieces you own, so it is pure addition. When they total 180° the lines cannot be doing anything except running parallel. Notice this part banked four earlier answers before it needed them; that is exactly why it comes last.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:541:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#68": {
+      "en": "In the diagram, O is the centre of the circle and A, B and C are points on the circle. &nbsp;OA, OC, AB, BC and AC are drawn. &nbsp;The reflex ∠AOC = 240° &nbsp;and&nbsp; Â₁ = 40°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:606:9"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#69": {
+      "en": "Determine, with a reason, the size of &nbsp;∠AOC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:642:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#70": {
+      "en": "The two angles at O — the one drawn inside the triangle and the big one going the long way round — together fill everything there is around the point O.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:643:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#71": {
+      "en": "∠AOC + reflex ∠AOC = 360° &nbsp;&nbsp;<i>(∠s round a pt)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:645:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#72": {
+      "en": "∴ ∠AOC = 360° − 240° = 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:646:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#73": {
+      "en": "Two rays out of one point always cut the space around that point into two angles, a smaller one and a bigger one, and together they must make a full turn of 360°. The bigger one is called the reflex angle, and it is nothing more mysterious than “the other way round”. So the moment a question hands you a reflex angle, the ordinary angle is one subtraction away. It is worth writing both onto your own copy of the sketch straight away, because the next few parts will need to know which of the two a theorem is talking about — and that is where most of the marks on this kind of question are won or lost.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:649:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#74": {
+      "en": "∠ABC and one of the angles at O stand on the same arc AC. Careful — which one? Look at which side of the chord AC the point B is sitting on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:657:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#75": {
+      "en": "B lies on the <b>minor</b> arc AC, so ∠ABC pairs with the reflex angle at the centre: &nbsp;reflex ∠AOC = 2 · ∠ABC &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:659:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#76": {
+      "en": "∴ ∠ABC = ½ × 240° = 120°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:660:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#77": {
+      "en": "WATCH OUT: halving the wrong one gives 60°, and that is the answer this question is fishing for. The theorem always pairs an angle at the circumference with the angle at the centre standing on <b>the arc on the other side</b> — B is on the small arc, so its partner is the big reflex angle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:662:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#78": {
+      "en": "The angle-at-centre theorem is usually met in its friendly form, with the point on the big arc and the ordinary angle at the centre. This question puts B on the small arc instead, and everything still works — you just have to pair it with the reflex angle. The safe way to decide, every time, is to ask which arc the angle at the circumference is standing on: B is looking across at the arc AC that does NOT contain B, which is the big one, and the angle at the centre standing on that same big arc is the reflex one. A quick reality check saves you here too: ∠ABC came out at 120°, and the wedge at B in the drawing is clearly obtuse, so 60° would have been visibly wrong.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:666:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#79": {
+      "en": "Determine, with reasons, the size of &nbsp;Ĉ₁.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:673:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#80": {
+      "en": "Ĉ₁ is a base angle of triangle OAC. Both of that triangle's slanted sides are radii, and you found its top angle in part (a).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:674:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#81": {
+      "en": "OA = OC &nbsp;&nbsp;<i>(radii)</i>, so Ĉ₁ = Â₂ &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:676:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#82": {
+      "en": "In △OAC: &nbsp;Ĉ₁ = (180° − 120°) ÷ 2 = 30° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:677:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#83": {
+      "en": "Every triangle with the centre at one corner and two points of the circle at the others is isosceles, because the two sides running to the circle are radii. That means its two base angles are equal, and once you know the angle at the centre the rest is arithmetic: take it off 180° and share what is left equally between the two. Here 180 − 120 leaves 60, and half of that is 30. Two reasons are needed, not one, and both earn marks — “∠s opp equal sides” to say the two base angles match, and “int. ∠s of △” to say why they come to 30° each.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:680:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#84": {
+      "en": "Write down the size of &nbsp;Â₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:687:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#85": {
+      "en": "It is the other base angle of the same isosceles triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:688:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#86": {
+      "en": "Â₂ = Ĉ₁ = 30° &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:690:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#87": {
+      "en": "One mark, one line — and the reason is the whole mark, because the size was already sitting there in part (c)'s working. Take the easy marks quickly and cleanly: examiners put them in on purpose so that a learner who is finding the question hard still leaves with something. The only way to lose this one is to write “30°” with nothing beside it, or to invent a longer reason than the question needs.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:693:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#88": {
+      "en": "Look at triangle ABC on its own. You were given one of its angles and you found another one in part (b).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:701:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#89": {
+      "en": "In △ABC: &nbsp;Â₁ + ∠ABC + Ĉ₂ = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:703:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#90": {
+      "en": "∴ Ĉ₂ = 180° − 40° − 120° = 20°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:704:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#91": {
+      "en": "After all the circle theorems, the question ends on the plainest fact there is: the angles of a triangle add to 180°. Triangle ABC has the given 40° at A, the 120° you built in part (b) at B, and Ĉ₂ is whatever is left. It is worth noticing what the diagram is now telling you — a 120° angle at B means ABC is a very flat, wide triangle, and both of the other angles have to be small, so an answer like 20° fits the picture. Getting into the habit of glancing back at the drawing before you write the final size catches almost every arithmetic slip.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:707:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#92": {
+      "en": "In the diagram, O is the centre of the circle and A, B and C are points on the circle. &nbsp;OA, OB, OC and AC are drawn, together with the chords AB and BC. &nbsp;AB = BC, as the matching ticks show, and &nbsp;Ô₂ = 130°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:798:9"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#93": {
+      "en": "The ticks on AB and BC are not decoration — they are telling you the two chords are the same length. What must two equal chords do to the angles they make at the centre?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:835:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#94": {
+      "en": "AB = BC, and equal chords subtend equal angles at the centre. &nbsp;&nbsp;<i>(equal chords; equal ∠s)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:837:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#95": {
+      "en": "∴ Ô₃ = Ô₂ = 130°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:838:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#96": {
+      "en": "Think of a chord as a bite taken out of the circle. Two bites of exactly the same size have to cut off arcs of exactly the same size, and the angle at the centre is nothing more than a way of measuring that arc — so equal chords give equal angles at the centre, every time. It works the other way round too, which is what makes the theorem so useful: if a question tells you two central angles are equal, you can immediately say the chords are equal. Whenever you see matching ticks on two chords, write down what they force before you read the rest of the question; that one line is usually the key that unlocks everything else.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:841:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#97": {
+      "en": "Three angles meet at O and there is nothing else there. How much space is there altogether around a single point?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:849:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#98": {
+      "en": "∴ Ô₁ = 360° − 130° − 130° = 100°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:852:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#99": {
+      "en": "Once the three radii are drawn, the point O is carved into exactly three angles, and a full turn round any point is 360°. So the third one is simply what is left after the two you know are taken away. Two things are worth noticing. First, the answer is smaller than the other two, and it should be — the arc AC that is not covered by the two equal chords is visibly the smallest of the three. Second, this is a Grade 8 fact doing heavy lifting in a Grade 11 question, which happens far more often than learners expect. The circle theorems get you started; the ordinary angle rules usually finish the job.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:855:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#100": {
+      "en": "Determine, with reasons, the size of &nbsp;∠OAC.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:862:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#101": {
+      "en": "∠OAC is a base angle of triangle OAC, and you have just found that triangle's angle at O.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:863:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#102": {
+      "en": "OA = OC &nbsp;&nbsp;<i>(radii)</i>, so ∠OAC = ∠ACO &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:865:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#103": {
+      "en": "In △OAC: &nbsp;∠OAC = (180° − 100°) ÷ 2 = 40° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:866:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#104": {
+      "en": "Same routine as always with a triangle that has the centre as one corner: two radii means isosceles, isosceles means matching base angles, and the angle sum shares out what is left of 180°. Here 180 − 100 leaves 80, split evenly into two 40s. Write both reasons down — the marker is paying for “∠s opp equal sides” and for “int. ∠s of △” separately, and a learner who writes only the arithmetic will get about half of what the working is worth. If you can see this pattern quickly you can fill in an enormous amount of a circle diagram in a couple of minutes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:869:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#105": {
+      "en": "Write down the size of &nbsp;∠ACO.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:876:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#106": {
+      "en": "The other base angle of the same triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:877:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#107": {
+      "en": "∠ACO = ∠OAC = 40° &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:879:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#108": {
+      "en": "A free mark, provided the reason is there. “Write down” means the examiner is not expecting any working at all — just the size and the short reason in brackets. It is also a small kindness in the middle of a long question, so take it at speed and keep your momentum. Notice that this angle was already sitting inside part (c)'s reasoning; the question simply splits it out so that a learner who got (c) partly right still gets paid here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:882:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#109": {
+      "en": "∠ABC is at the circumference. Which of the three angles at the centre is standing on the same arc as it is?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:890:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#110": {
+      "en": "∠ABC = ½ · Ô₁ &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i> — both stand on arc AC",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:892:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#111": {
+      "en": "∴ ∠ABC = ½ × 100° = 50°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:893:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#112": {
+      "en": "<b>OR</b> — the long way, through the two triangles that meet at B: &nbsp;OA = OB and OB = OC &nbsp;<i>(radii)</i>, so △OAB and △OBC are both isosceles and each gives a base angle of &nbsp;(180° − 130°) ÷ 2 = 25° &nbsp;<i>(∠s opp equal sides; int. ∠s of △)</i>. &nbsp;Then ∠ABC = 25° + 25° = 50°. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:894:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#113": {
+      "en": "WATCH OUT: the angle at the centre that pairs with ∠ABC is <b>Ô₁</b>, the one standing on arc AC — not one of the 130° wedges. B is looking across the circle at arc AC, so that is the one that gets halved.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:896:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#114": {
+      "en": "Both roads are worth full marks, and it is worth being able to walk each of them. The short road is the angle-at-centre theorem: ∠ABC and Ô₁ both stand on arc AC, so the one at the circumference is half the one at the centre, and 50° falls out in a single line. The long road goes through the two triangles that meet at B — OB is a radius, so both of them are isosceles in exactly the way triangle OAC was, each hands you a base angle of 25°, and adding the two halves gives the same 50°. The two answers agreeing is not luck, it is the theorem quietly checking your arithmetic. In an exam take the short road if you can see it, but write the reason carefully: the marker is paying for knowing which central angle belongs to which circumference angle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:900:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#115": {
+      "en": "In the diagram, O is the centre of the circle. &nbsp;A, B, C and D are points on the circle and AOD is a straight line. &nbsp;AB, AC, BC and OB are drawn. &nbsp;∠ACB = x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:964:9"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#116": {
+      "en": "Determine, with a reason, the size of &nbsp;Ô₁&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1000:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#117": {
+      "en": "Ô₁ and ∠ACB are standing on the same chord — one from the centre, one from the circle. There is exactly one theorem about that pair.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1001:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#118": {
+      "en": "Ô₁ and ∠ACB both stand on chord AB. &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1003:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#119": {
+      "en": "∴ Ô₁ = 2x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1004:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#120": {
+      "en": "REMEMBER: an answer in terms of x is a complete answer. There is no number coming, and no mark for stopping to look for one — write 2x and move on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1006:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#121": {
+      "en": "Working with a letter instead of a number changes absolutely nothing about the reasoning; it just means your answers are expressions. The angle at the centre is twice the angle at the circumference standing on the same chord, so if the one at C is x, the one at O is 2x — done, one line. What makes an “in terms of x” question feel harder is only that you cannot check your answer by looking at the picture the way you can with numbers, so the reason has to carry more of your confidence. Write the reason first if it helps, then the expression. And notice how much stronger the result is than a number would have been: 2x is true no matter what x turns out to be.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1010:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#122": {
+      "en": "Determine, with reasons, the size of &nbsp;∠ABO&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1017:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#123": {
+      "en": "∠ABO is a base angle of triangle AOB. Two of that triangle's sides are radii, and you have just found the angle between them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1018:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#124": {
+      "en": "OA = OB &nbsp;&nbsp;<i>(radii)</i>, so ∠ABO = ∠DAB &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1020:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#125": {
+      "en": "In △AOB: &nbsp;2 · ∠ABO + 2x = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1021:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#126": {
+      "en": "∴ ∠ABO = 90° − x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1022:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#127": {
+      "en": "The same isosceles-radii move as always, but with algebra doing the sharing out. The two base angles are equal, so call each of them the same thing and the three angles of the triangle come to that twice, plus 2x, which must be 180°. Solving it is ordinary Grade 9 algebra: twice the base angle is 180 − 2x, so the base angle is 90 − x. The step learners skip is the word “twice” — they write one base angle plus 2x equals 180 by accident and lose the whole thing. Say it out loud as you write: “both base angles, plus the top one, is 180”. And check the shape of the answer: 90 − x gets smaller as x grows, which is exactly what should happen, because a bigger angle at the centre squashes the base angles down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1025:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#128": {
+      "en": "Write down the size of &nbsp;∠DAB&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1032:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#129": {
+      "en": "It is the other base angle of the same triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1033:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#130": {
+      "en": "∠DAB = ∠ABO = 90° − x &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1035:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#131": {
+      "en": "One line, one mark, and the reason is the mark. ∠DAB and ∠ABO are the two base angles of the same isosceles triangle AOB, so they are equal whatever x happens to be. It is worth writing this one down even though it feels like it says nothing new, because the very next parts use ∠DAB by name — and a marker following your working needs to see where it came from.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1038:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#132": {
+      "en": "Determine, with a reason, the size of &nbsp;Ô₂&nbsp; in terms of x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1045:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#133": {
+      "en": "Ô₁ and Ô₂ sit next to each other along one straight line through the centre. What must a pair like that add up to?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1046:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#134": {
+      "en": "AOD is a straight line, so &nbsp;Ô₁ + Ô₂ = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1048:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#135": {
+      "en": "∴ Ô₂ = 180° − 2x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1049:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#136": {
+      "en": "WATCH OUT: 180° − 2x, not 180° − x. The thing sitting next to Ô₂ on that straight line is Ô₁, and Ô₁ is 2x — the doubling from part (a) has to travel with you.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1051:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#137": {
+      "en": "The words “straight line” in the given information are not decoration — they are telling you that A, O and D are collinear, so the two angles resting on that line at O are supplementary. Since Ô₁ is 2x, Ô₂ has to be 180° − 2x. The most common slip is carrying the wrong thing forward: learners remember that the angle at C was x and subtract that instead. A good defence is to write your answers onto the sketch as you get them, so that when you look at O you are reading 2x off the picture rather than off your memory. That is exactly why each part of this question hands the last one's answer back to you.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1055:13"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#138": {
+      "en": "Prove that &nbsp;Ô₂ = 2 · ∠DAB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1062:21"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#139": {
+      "en": "Ô₂ sits outside triangle AOB, on the far side of O. There is a theorem about an angle like that and the two angles at the far end of the triangle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1063:19"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#140": {
+      "en": "Ô₂ is the exterior angle of △AOB at O, so &nbsp;Ô₂ = ∠DAB + ∠ABO &nbsp;&nbsp;<i>(ext ∠ of Δ)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1065:37"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#141": {
+      "en": "∴ Ô₂ = (90° − x) + (90° − x) = 2(90° − x) = 2 · ∠DAB",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1066:39"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#142": {
+      "en": "REMEMBER: an exterior angle equals the sum of the two <b>interior opposite</b> angles — the two at the far end of the triangle, not the one next to it. Here those two happen to be equal, which is the only reason the answer collapses so neatly into twice one of them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1068:15"
+      ]
+    },
+    "euclid-siblings-chords-and-angles#143": {
+      "en": "This part is asking you to see the same angle a second way. In part (d) you got Ô₂ by treating AOD as a straight line; here you get it by treating it as the exterior angle of triangle AOB, which equals the two interior opposite angles added together. Both routes have to give the same thing, and they do — 180° − 2x and 2(90° − x) are the same expression written differently. What makes the result pretty is that the triangle is isosceles, so the two opposite angles are equal and their sum is simply double one of them. It is a small proof, but it is exactly the kind that closes a Paper 2 question: no new theorem, just two facts you already own pointed at each other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-chords-and-angles.js:1072:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 4582
+}
