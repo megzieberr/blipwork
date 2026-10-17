@@ -13,6 +13,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 S5 | `AF-GLOSSARY.md` seeded from Fun Functions' AF strings (js/funfun), Circle Quest's js/i18n.js, maths-quest-grade7's vocabulary and every wording ruling listed in AFRIKAANS-PLAN.md; one line per term | check: every standing rule in the plan appears as a row
 - ☑ 2026-10-17 S6 | PILOT: `js/quests/questnp1-spot.js` through the whole pipeline (extract → Opus translate → inject → af_check → verify-patterns EN + AF) | check: pipeline green, one commit
 - ☑ 2026-10-17 18:36 G1 | Megan played questnp1 in Afrikaans on her phone (`?lang=af`, Chrome on Android, sw v98): "the wording of the questions looks fine" (her word, no fixes)
+- ⏳ 2026-10-17 19:48 S9 | (setup, one Opus worker; added 2026-10-17 19:46 on her 'yes, add it tonight'): verify-exam.html's 12 hub-navigation checks compare chapter names against English literals and fail under ?lang=af since T89; make them read the expected names from js/config.js (the app's own L(en, af) source) or compare chapter ids, cards found by id; no js/ change | check: verify-exam 678/678 in EN and ?lang=af
 
 ## Translation (her 2027 Gr11 teaching order; inside a chapter: concepts → hub rounds → exam cards)
 ### Hub tiles first (her ruling 2026-10-17 18:33: she sees each tile in Afrikaans when she opens a round to play, so a weird name is caught chapter by chapter, not at the end)
@@ -27,10 +28,10 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T07 | exam: exp-siblings-rationalise, exp-siblings-surd-proofs, exp-siblings-surds (3 files) | ~3 173 words | verify-exam.html
 
 ### Equations & Inequalities
-- ⏳ 2026-10-17 19:40 T08 | concepts: the `eqn` block (js/concepts/eqn.js after S4) | ~1 255 words | counted by af_extract 2026-10-17
+- ☑ 2026-10-17 T08 | concepts: the `eqn` block (js/concepts/eqn.js after S4) | ~1 255 words | counted by af_extract 2026-10-17
 - ⏳ 2026-10-17 19:43 T09 | hub rounds: queseq1-zeroproduct … queseq3-kmethod (3 files) | ~3 307 words | verify page: verify-eq.html
 - ⏳ 2026-10-17 19:45 T10 | hub rounds: queseq4-fractions … queseq6-formula (3 files) | ~3 472 words | verify page: verify-eq.html
-- ☐ T11 | hub rounds: queseq7-inequalities … queseq8-nature (2 files) | ~3 446 words | verify page: verify-eq.html
+- ⏳ 2026-10-17 19:47 T11 | hub rounds: queseq7-inequalities … queseq8-nature (2 files) | ~3 446 words | verify page: verify-eq.html
 - ☐ T12 | hub rounds: queseq9-solution-count | ~681 words | verify page: verify-eq.html
 - ☐ T13 | exam: cards-eqn, eqn-fractions-and-restrictions, eqn-inequalities-2, eqn-inequalities, eqn-k-method (5 files) | ~3 473 words | verify-exam.html
 - ☐ T14 | exam: eqn-level4, eqn-nature-of-roots-2 (2 files) | ~3 512 words | verify-exam.html
