@@ -42,7 +42,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T18 | exam: eqn-siblings-k-for-nature, eqn-siblings-nature-chain (2 files) | ~3 831 words | verify-exam.html
 - ☑ 2026-10-17 T19 | exam: eqn-siblings-quadratic-solving | ~2 336 words | verify-exam.html
 - ☑ 2026-10-17 T20 | exam: eqn-siblings-rational-exponents-k, eqn-siblings-simultaneous (2 files) | ~3 495 words | verify-exam.html
-- ⏳ 2026-10-17 20:07 T21 | exam: eqn-siblings-solution-count, eqn-siblings-surd-equations (2 files) | ~3 877 words | verify-exam.html
+- ☑ 2026-10-17 T21 | exam: eqn-siblings-solution-count, eqn-siblings-surd-equations (2 files) | ~3 877 words | verify-exam.html
 
 ### Number Patterns
 - ☑ 2026-10-17 T22 | concepts: the `pat` block (js/concepts/pat.js after S4) | ~511 words | counted by af_extract 2026-10-17
@@ -50,7 +50,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### Analytical Geometry
 - ⏳ 2026-10-17 20:12 T24 | concepts: the `analytical` block (js/concepts/analytical.js after S4) | ~455 words | counted by af_extract 2026-10-17
-- ☐ T25 | hub rounds: questag1-formulas … questag7-mixed (7 files) | ~1 830 words | verify page: verify-analytical.html
+- ⏳ 2026-10-17 20:14 T25 | hub rounds: questag1-formulas … questag7-mixed (7 files) | ~1 830 words | verify page: verify-analytical.html
 
 ### Functions
 - ☐ T26 | concepts: the `func` block (js/concepts/func.js after S4) | ~734 words | counted by af_extract 2026-10-17

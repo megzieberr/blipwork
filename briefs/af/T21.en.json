@@ -1,0 +1,1313 @@
+{
+  "unit": "T21",
+  "generated": "2026-10-17T18:07:43.366Z",
+  "files": [
+    "js/exam/eqn-siblings-solution-count.js",
+    "js/exam/eqn-siblings-surd-equations.js"
+  ],
+  "items": {
+    "eqn-siblings-solution-count#1": {
+      "en": "<em>Without solving the equation:</em><br>How many real solutions does &nbsp;${xp(2, 5)} = −9 &nbsp;have? Give a reason for your answer.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:84:13"
+      ]
+    },
+    "eqn-siblings-solution-count#2": {
+      "en": "You are not being asked to solve it. Look at the number on TOP of the exponent, and then at the sign on the right — those two things decide it on their own.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:87:13"
+      ]
+    },
+    "eqn-siblings-solution-count#3": {
+      "en": "The numerator of the exponent is <b>2</b>, an <b>even</b> number, so ${xp(2, 5)} is an even power: &nbsp;${xp(2, 5)} = (<sup>5</sup>√x)²",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:90:37"
+      ]
+    },
+    "eqn-siblings-solution-count#4": {
+      "en": "An even power is never negative &nbsp;∴ <b>no solution</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:91:39"
+      ]
+    },
+    "eqn-siblings-solution-count#5": {
+      "en": "REMEMBER which of her four words this is. It is <b>no solution</b> — something that can never be negative has been asked to be negative. It is not “undefined”, which is only for dividing by zero, and it is not “non-real”, which is for taking an even root OF a negative number.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:93:15"
+      ]
+    },
+    "eqn-siblings-solution-count#6": {
+      "en": "There is a shortcut here and it is the whole point of the question. A fractional exponent is a root and a power stacked together: the bottom number is the root, the top number is the power. Here the top number is two, so whatever the fifth root of x turns out to be, it gets squared before it is compared with the right-hand side. Squaring anything real gives something that is zero or positive, never negative. So the left-hand side simply cannot reach minus nine, no matter what x is, and there is nothing to solve. Her rule says it faster: an even number on top, with a negative on the right, means no solution.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:97:13"
+      ]
+    },
+    "eqn-siblings-solution-count#7": {
+      "en": "${xp(4, 7)} = 5",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:122:21"
+      ]
+    },
+    "eqn-siblings-solution-count#8": {
+      "en": "Top number first: odd or even? Then the sign on the right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:123:19"
+      ]
+    },
+    "eqn-siblings-solution-count#9": {
+      "en": "<b>Two solutions.</b> The numerator 4 is EVEN and the right-hand side is positive, so the answer carries a ± &nbsp;(even numerator → ± answer)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:125:39"
+      ]
+    },
+    "eqn-siblings-solution-count#10": {
+      "en": "The bottom of the exponent is seven, which is an odd root, and an odd root is happy with any real number — so nothing is ruled out before you start. The top is four, which is an even power. Undoing an even power is where a plus-or-minus comes from, in exactly the same way that solving x squared equals nine gives both three and minus three. The right-hand side is positive, so both branches survive and there really are two answers. Her rule is the short version: an even numerator gives a ± answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:128:13"
+      ]
+    },
+    "eqn-siblings-solution-count#11": {
+      "en": "${xp(5, 3)} = −7",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:135:21"
+      ]
+    },
+    "eqn-siblings-solution-count#12": {
+      "en": "Are BOTH numbers in the exponent odd? If they are, a negative answer is allowed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:136:19"
+      ]
+    },
+    "eqn-siblings-solution-count#13": {
+      "en": "<b>One solution.</b> Only odd numbers in the exponent (5 and 3), so a negative answer is allowed &nbsp;— there is exactly one real value, and it is negative",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:138:39"
+      ]
+    },
+    "eqn-siblings-solution-count#14": {
+      "en": "Both numbers in this exponent are odd, and that is the friendly case. The bottom is a cube root, which keeps the sign of whatever is inside it, and the top is an odd power, which also keeps the sign. Nothing anywhere in the chain forces the left-hand side to be positive, so it can reach minus seven — and because odd powers and odd roots each give exactly one answer, there is no plus-or-minus to worry about either. One value of x, and it is a negative one. This is the case her notes cheer about: found one that works.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:141:13"
+      ]
+    },
+    "eqn-siblings-solution-count#15": {
+      "en": "${xp(1, 4)} = −6",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:148:21"
+      ]
+    },
+    "eqn-siblings-solution-count#16": {
+      "en": "The bottom number is the ROOT. What kind of root is a fourth root, and may it come out negative?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:149:19"
+      ]
+    },
+    "eqn-siblings-solution-count#17": {
+      "en": "<b>No solution.</b> The denominator 4 is EVEN, so the left-hand side is <sup>4</sup>√x, and an even root of a real number is never negative",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:151:39"
+      ]
+    },
+    "eqn-siblings-solution-count#18": {
+      "en": "The bottom of the exponent is four, so this equation is really the fourth root of x, and the top is a one, so nothing is done to it afterwards. An even root of a real number is never negative, for the same reason a square root never is: raising anything real to an even power gives something positive, so the root has to come back positive too. It can never equal minus six. Notice this is a different reason from the even-numerator case, even though the answer word is the same — here it is the ROOT that refuses, not the power.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:154:13"
+      ]
+    },
+    "eqn-siblings-solution-count#19": {
+      "en": "<em>Without the use of a calculator.</em><br>Solve for x: &nbsp;${xp(2, 3)} = 9",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:179:13"
+      ]
+    },
+    "eqn-siblings-solution-count#20": {
+      "en": "Raise both sides to the power of the DENOMINATOR first, then take the numerator-th root. And before you write the last line, check the numerator: is it odd or even?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:182:13"
+      ]
+    },
+    "eqn-siblings-solution-count#21": {
+      "en": "(<sup>3</sup>√(x²))³ = (9)³",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:185:37"
+      ]
+    },
+    "eqn-siblings-solution-count#22": {
+      "en": "√(x²) = √729 &nbsp;&nbsp;— the numerator is <b>2</b>, an EVEN number, so the answer carries a <b>±</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:186:37"
+      ]
+    },
+    "eqn-siblings-solution-count#23": {
+      "en": "∴ x = ±27",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:187:39"
+      ]
+    },
+    "eqn-siblings-solution-count#24": {
+      "en": "<b>OR</b> — the reciprocal route (same marks): &nbsp;multiply the exponent by ${f(\"3\", \"2\")}, so &nbsp;x = 9<sup>${f(\"3\", \"2\")}</sup> = (√9)³ = 3³ = 27, &nbsp;and the even numerator gives &nbsp;x = ±27",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:188:37"
+      ]
+    },
+    "eqn-siblings-solution-count#25": {
+      "en": "WATCH OUT: the ± is not decoration and it is not optional. Test the negative one and it works — the cube root of −27 is −3, and (−3)² = 9. Losing it costs the accuracy mark every time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:190:15"
+      ]
+    },
+    "eqn-siblings-solution-count#26": {
+      "en": "Her method is to undo the exponent in one move by multiplying it by its upside-down twin, because two thirds times three halves is one, and an exponent of one leaves a bare x. Whatever you do to the left you do to the right, so the nine gets the same treatment: nine to the three halves is the square root of nine, cubed, which is twenty-seven. Then comes the part people forget. The exponent you started with had a two on top, an even number, and undoing an even power always opens two doors. So the answer is plus or minus twenty-seven, not just the positive one, and the negative really does check out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:194:13"
+      ]
+    },
+    "eqn-siblings-solution-count#27": {
+      "en": "<em>Without the use of a calculator.</em><br>Solve for x: &nbsp;${xp(3, 5)} = −8",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:219:13"
+      ]
+    },
+    "eqn-siblings-solution-count#28": {
+      "en": "Do not throw this one out because of the minus. Check BOTH numbers in the exponent first — if they are both odd, a negative answer is allowed, and then it is an ordinary reciprocal question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:222:13"
+      ]
+    },
+    "eqn-siblings-solution-count#29": {
+      "en": "Both numbers in the exponent are ODD (3 and 5), so a negative answer is allowed here",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:225:37"
+      ]
+    },
+    "eqn-siblings-solution-count#30": {
+      "en": "(<sup>5</sup>√(x³))<sup>5</sup> = (−8)<sup>5</sup> = −32&nbsp;768",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:226:37"
+      ]
+    },
+    "eqn-siblings-solution-count#31": {
+      "en": "<sup>3</sup>√(x³) = <sup>3</sup>√(−32&nbsp;768) &nbsp;&nbsp;∴ x = −32",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:227:39"
+      ]
+    },
+    "eqn-siblings-solution-count#32": {
+      "en": "<b>OR</b> — the reciprocal route (same marks): &nbsp;x = (−8)<sup>${f(\"5\", \"3\")}</sup> = (<sup>3</sup>√(−8))<sup>5</sup> = (−2)<sup>5</sup> = −32",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:228:37"
+      ]
+    },
+    "eqn-siblings-solution-count#33": {
+      "en": "WATCH OUT: there is <b>no ±</b> here. The ± comes from an EVEN numerator, and this numerator is 3. Writing x = ±32 hands in an answer that fails: 32<sup>3/5</sup> = 2³ = 8, not −8.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:230:15"
+      ]
+    },
+    "eqn-siblings-solution-count#34": {
+      "en": "The minus sign is the whole test in this question, and it is allowed to stay. The bottom of the exponent is five, an odd root, and odd roots keep the sign of whatever is inside them. The top is three, an odd power, which also keeps the sign. So nothing in the chain forces the left-hand side to be positive, and a negative x is exactly what is needed. The tidiest route is her reciprocal: raise both sides to five thirds, take the cube root of minus eight to get minus two, then raise that to the fifth power to get minus thirty-two. Check it backwards if you like — the fifth root of minus thirty-two is minus two, and minus two cubed is minus eight.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:234:13"
+      ]
+    },
+    "eqn-siblings-solution-count#35": {
+      "en": "Solve for x: &nbsp;${xp(3, 2)} = −27, &nbsp;or show that the equation has no solution.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:259:13"
+      ]
+    },
+    "eqn-siblings-solution-count#36": {
+      "en": "The bottom number is the root. Write the left-hand side out as a root and a power and ask whether the root itself is ever allowed to be negative.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:262:13"
+      ]
+    },
+    "eqn-siblings-solution-count#37": {
+      "en": "The denominator is <b>2</b>, an EVEN number, so &nbsp;${xp(3, 2)} = (√x)³, &nbsp;and √x is never negative",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:265:37"
+      ]
+    },
+    "eqn-siblings-solution-count#38": {
+      "en": "(√x)³ can never equal −27 &nbsp;&nbsp;∴ <b>no solution</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:266:39"
+      ]
+    },
+    "eqn-siblings-solution-count#39": {
+      "en": "WATCH OUT: raising both sides to ${f(\"2\", \"3\")} anyway hands you x = 9, and 9 does not work — 9<sup>${f(\"3\", \"2\")}</sup> = (√9)³ = 27, which is <b>+</b>27. The reciprocal move hides the minus, exactly the way squaring both sides of a surd equation does. Her rule catches it before you start: an EVEN number anywhere in the exponent, with a negative on the right, means no solution.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:268:15"
+      ]
+    },
+    "eqn-siblings-solution-count#40": {
+      "en": "This one looks solvable and is not, which is why it is worth two marks rather than three. The bottom of the exponent is two, so the left-hand side starts with a square root, and a square root of a real number is never negative. Cubing something that is never negative still never gives a negative, so the left-hand side can never reach minus twenty-seven. There is no x that works. The dangerous move is to raise both sides to two thirds without thinking — that produces nine, which looks like an answer until you put it back and get plus twenty-seven. Checking your answer in the original equation catches it; her rule catches it sooner.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:272:13"
+      ]
+    },
+    "eqn-siblings-solution-count#41": {
+      "en": "One of the two equations has no real solution. State which one, and give a reason.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:298:13"
+      ]
+    },
+    "eqn-siblings-solution-count#42": {
+      "en": "The exponent is the same in both, so the exponent alone cannot decide it. What is different is the sign on the right — pair that with the number on TOP of the exponent.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:301:13"
+      ]
+    },
+    "eqn-siblings-solution-count#43": {
+      "en": "The numerator of the exponent is <b>4</b>, an EVEN number, so &nbsp;${xp(4, 3)} = (<sup>3</sup>√x)<sup>4</sup>, &nbsp;an even power",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:304:37"
+      ]
+    },
+    "eqn-siblings-solution-count#44": {
+      "en": "An even power is never negative &nbsp;∴ <b>A has no solution</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:305:39"
+      ]
+    },
+    "eqn-siblings-solution-count#45": {
+      "en": "Putting the two equations side by side is the fastest way to see what her rule is really saying. The exponent has a four on top, which means the last thing that happens on the left-hand side is a fourth power, and a fourth power of any real number is zero or positive. Equation A asks that positive thing to equal minus sixteen, which nothing can do, so A is finished before you touch it. Equation B asks it to equal plus sixteen, which is perfectly reasonable. Nothing about the exponent changed between them — only the sign on the right, and that sign was enough to decide the whole question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:308:13"
+      ]
+    },
+    "eqn-siblings-solution-count#46": {
+      "en": "Hence solve the other equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:316:13"
+      ]
+    },
+    "eqn-siblings-solution-count#47": {
+      "en": "Raise both sides to the power of the denominator, then take the fourth root. The same even numerator that killed A does a different job here — watch what it does to the final line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:319:13"
+      ]
+    },
+    "eqn-siblings-solution-count#48": {
+      "en": "<b>B:</b> &nbsp;(<sup>3</sup>√(x<sup>4</sup>))³ = (16)³",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:322:37"
+      ]
+    },
+    "eqn-siblings-solution-count#49": {
+      "en": "<sup>4</sup>√(x<sup>4</sup>) = <sup>4</sup>√4096 = 8 &nbsp;&nbsp;— the numerator is <b>4</b>, an EVEN number, so the answer carries a <b>±</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:323:37"
+      ]
+    },
+    "eqn-siblings-solution-count#50": {
+      "en": "∴ x = ±8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:324:39"
+      ]
+    },
+    "eqn-siblings-solution-count#51": {
+      "en": "<b>OR</b> — the reciprocal route (same marks): &nbsp;x = 16<sup>${f(\"3\", \"4\")}</sup> = (<sup>4</sup>√16)³ = 2³ = 8, &nbsp;and the even numerator gives &nbsp;x = ±8",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:325:37"
+      ]
+    },
+    "eqn-siblings-solution-count#52": {
+      "en": "REMEMBER: the even numerator did BOTH jobs on this card. In (a) it made a negative right-hand side impossible; here, with a positive right-hand side, the very same 4 is what puts the ± on the answer. One rule, two outcomes, and the sign on the right is what chooses between them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:327:15"
+      ]
+    },
+    "eqn-siblings-solution-count#53": {
+      "en": "Equation B is an ordinary rational-exponent solve, and the neat part is that the number which ruled A out is the number that gives B two answers. Raise both sides to the power three to clear the cube root, and sixteen cubed is four thousand and ninety-six. Now take the fourth root of both sides: the fourth root of four thousand and ninety-six is eight. Because the power you are undoing is even, both plus eight and minus eight work, and you can check that — the cube root of minus eight is minus two, and minus two to the fourth is plus sixteen. So B has two solutions while A has none, and only the sign on the right side ever changed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:331:13"
+      ]
+    },
+    "eqn-siblings-solution-count#54": {
+      "en": "For each of the equations below, state whether it has <b>two</b> solutions, <b>one</b> solution or <b>no</b> solutions. Give a reason in each case. Do not solve them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:344:9"
+      ]
+    },
+    "eqn-siblings-solution-count#55": {
+      "en": "Two equations, with the same exponent and only the sign on the right changed:<br><b>A:</b> &nbsp;${xp(4, 3)} = −16 &nbsp;&nbsp;&nbsp;<b>B:</b> &nbsp;${xp(4, 3)} = 16",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-solution-count.js:347:9"
+      ]
+    },
+    "eqn-siblings-surd-equations#1": {
+      "en": "Solve for x: &nbsp;√(x − 3) = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:76:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#2": {
+      "en": "A square root is undone by squaring. Square BOTH sides — the whole of each side, brackets and all — and see what is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:79:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#3": {
+      "en": "The √ is already alone, so square both sides, brackets on both sides:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:82:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#4": {
+      "en": "(√(x − 3))² = 4² &nbsp;&nbsp;⟹&nbsp;&nbsp; x − 3 = 16",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:83:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#5": {
+      "en": "∴&nbsp; x = 19",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:84:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#6": {
+      "en": "Test it in the ORIGINAL equation: &nbsp;√(19 − 3) = √16 = 4, and the right-hand side is 4. It works.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:85:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#7": {
+      "en": "REMEMBER: squaring both sides can invent an answer that was never really there, so the test is never optional — not even on an easy one like this. Get into the habit here, where it costs you nothing, so it is automatic when it matters.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:87:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#8": {
+      "en": "Squaring is the move that gets the x out from under the root. The root sign and the square undo each other, so the left side collapses to just what was inside, and the right side becomes sixteen. From there it is a one-step equation. The habit worth building is the last line: put your answer back into the equation you were given and check that both sides really do come out the same. Here nineteen minus three is sixteen, whose root is four, which matches. It feels unnecessary on a question this size, and that is exactly why it is the right place to practise it — on the harder ones the test is where the marks live.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:91:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#9": {
+      "en": "Solve for x: &nbsp;√(3x + 4) = x − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:99:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#10": {
+      "en": "Square both sides, but remember what happens to the right-hand side: squaring &nbsp;x − 2&nbsp; is not &nbsp;x² − 4. There is a middle term. Then test BOTH answers in the original equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:102:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#11": {
+      "en": "The √ is alone, so square both sides — brackets on both sides:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:105:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#12": {
+      "en": "3x + 4 = (x − 2)² = x² − 4x + 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:106:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#13": {
+      "en": "collect everything on the side that keeps x² positive: &nbsp;&nbsp;0 = x² − 7x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:107:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#14": {
+      "en": "0 = x(x − 7) &nbsp;&nbsp;∴&nbsp; x = 0 &nbsp;or&nbsp; x = 7",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:108:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#15": {
+      "en": "<b>Now test both</b>, in the ORIGINAL equation:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:109:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#16": {
+      "en": "x = 0: &nbsp;√(3(0) + 4) = √4 = 2, &nbsp;but&nbsp; x − 2 = −2. &nbsp;&nbsp;2 ≠ −2 &nbsp;&nbsp;∴&nbsp; x ≠ 0 &nbsp;&nbsp;N.A.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:110:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#17": {
+      "en": "x = 7: &nbsp;√(3(7) + 4) = √25 = 5, &nbsp;and&nbsp; x − 2 = 5. &nbsp;&nbsp;5 = 5 &nbsp;&nbsp;∴&nbsp; x = 7",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:111:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#18": {
+      "en": "WATCH OUT: a squared equation can INVENT a root — check BOTH answers in the original. Squaring cannot tell +2 apart from −2, so it happily accepts an answer that makes the two sides opposite instead of equal. That is what happened to &nbsp;x = 0&nbsp; here, and it is why the rejected root is marked N.A. rather than crossed out in silence.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:113:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#19": {
+      "en": "The left side of this equation is a square root, so it can never come out negative. The right side is x minus two, which is negative whenever x is smaller than two. So before any algebra you already know that any answer below two is going to be trouble. Squaring both sides is still the way forward, but squaring is careless: it treats two and negative two as the same thing, so it can let through an answer that makes the sides opposite rather than equal. That is exactly what zero does here — the root gives two, the other side gives negative two. Seven passes cleanly. Writing N.A. next to the failed one, with the struck equals, is how her memos show that you tested it and rejected it on purpose.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:117:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#20": {
+      "en": "Solve for x: &nbsp;√(7x − 20) = x − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:141:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#21": {
+      "en": "Same routine: square both sides, collect everything on one side, factorise. Then test both answers — and do not assume one of them has to fail.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:144:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#22": {
+      "en": "The √ is alone, so square both sides:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:147:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#23": {
+      "en": "7x − 20 = (x − 2)² = x² − 4x + 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:148:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#24": {
+      "en": "0 = x² − 11x + 24",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:149:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#25": {
+      "en": "0 = (x − 3)(x − 8) &nbsp;&nbsp;∴&nbsp; x = 3 &nbsp;or&nbsp; x = 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:150:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#26": {
+      "en": "x = 3: &nbsp;√(21 − 20) = √1 = 1, &nbsp;and&nbsp; x − 2 = 1. &nbsp;&nbsp;1 = 1 — it works.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:151:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#27": {
+      "en": "x = 8: &nbsp;√(56 − 20) = √36 = 6, &nbsp;and&nbsp; x − 2 = 6. &nbsp;&nbsp;6 = 6 — it works too. &nbsp;&nbsp;∴&nbsp; x = 3 &nbsp;or&nbsp; x = 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:152:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#28": {
+      "en": "REMEMBER: two surviving answers is NOT a mistake. Squaring only <i>sometimes</i> invents a root, and there is no rule that says one answer must be thrown away. Test both, keep whatever passes — throwing away a perfectly good answer because “there is always a false one” costs the same mark as keeping a bad one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:154:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#29": {
+      "en": "Everything here runs exactly as it did on the question with a false root, right up to the last two lines. Square both sides, watch the middle term when x minus two is squared, bring everything over so the quadratic reads equals zero, and factorise. What is different is the outcome of the test. Both three and eight make the right-hand side positive, and a positive right-hand side is what a square root can actually match, so neither one is a fake. The reason to test anyway is that you cannot know which case you are in until you look. Some learners start rejecting the smaller root automatically because that is what happened last time; here that habit would throw away half the marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:158:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#30": {
+      "en": "Solve for x: &nbsp;√(19 − 5x) = x − 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:182:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#31": {
+      "en": "Work it the usual way. When you get to the test, look carefully at the sign of the right-hand side at each answer before you decide what to write.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:185:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#32": {
+      "en": "Square both sides:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:188:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#33": {
+      "en": "19 − 5x = (x − 5)² = x² − 10x + 25",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:189:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#34": {
+      "en": "0 = x² − 5x + 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:190:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#35": {
+      "en": "0 = (x − 2)(x − 3) &nbsp;&nbsp;∴&nbsp; x = 2 &nbsp;or&nbsp; x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:191:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#36": {
+      "en": "x = 2: &nbsp;√(19 − 10) = √9 = 3, &nbsp;but&nbsp; x − 5 = −3. &nbsp;&nbsp;3 ≠ −3 &nbsp;&nbsp;∴&nbsp; x ≠ 2 &nbsp;&nbsp;N.A.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:192:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#37": {
+      "en": "x = 3: &nbsp;√(19 − 15) = √4 = 2, &nbsp;but&nbsp; x − 5 = −2. &nbsp;&nbsp;2 ≠ −2 &nbsp;&nbsp;∴&nbsp; x ≠ 3 &nbsp;&nbsp;N.A. &nbsp;&nbsp;Both fail &nbsp;∴&nbsp; the equation has <b>no solution</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:193:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#38": {
+      "en": "WATCH OUT: “no solution” is a real, complete, full-mark answer here — it is not a sign that you went wrong. What you must NOT do is hand in &nbsp;x = 2 or x = 3&nbsp; because the algebra produced them. Those two are what the SQUARED equation says; the original equation says neither of them works.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:195:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#39": {
+      "en": "Look at the two sides before you start. The left is a square root, so it is never negative. The right is x minus five, which is negative for every x below five. So the only x that could possibly work has to be at least five — and the squaring produces two answers, two and three, both well under five. Neither can be right, and the tests confirm it: each time the root gives a positive number and the other side gives its negative. So both are marked N.A. and the equation has no solution. This is the case that teaches what the check is really for. Without it you would hand in two answers that the original equation flatly rejects.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:199:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#40": {
+      "en": "Solve for x: &nbsp;√(x + 5) + x = 7",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:224:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#41": {
+      "en": "Do not square yet. Nothing may sit beside the root when you square — get the √ completely on its own first, then square.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:227:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#42": {
+      "en": "Isolate the √ first — nothing may be standing next to it when you square:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:230:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#43": {
+      "en": "√(x + 5) = 7 − x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:231:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#44": {
+      "en": "square both sides: &nbsp;&nbsp;x + 5 = (7 − x)² = 49 − 14x + x²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:232:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#45": {
+      "en": "0 = x² − 15x + 44 = (x − 4)(x − 11) &nbsp;&nbsp;∴&nbsp; x = 4 &nbsp;or&nbsp; x = 11",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:233:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#46": {
+      "en": "x = 4: &nbsp;√9 + 4 = 3 + 4 = 7 — it works.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:234:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#47": {
+      "en": "x = 11: &nbsp;√16 + 11 = 4 + 11 = 15, &nbsp;and&nbsp; 15 ≠ 7 &nbsp;&nbsp;∴&nbsp; x ≠ 11 &nbsp;&nbsp;N.A. &nbsp;&nbsp;∴&nbsp; x = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:235:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#48": {
+      "en": "WATCH OUT: &nbsp;(√(x + 5) + x)²&nbsp; is NOT &nbsp;(x + 5) + x². Squaring a SUM always produces a middle term, and squaring here without isolating first leaves you with a root still in the equation and a bigger mess than you started with. Isolate, then square.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:237:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#49": {
+      "en": "The reason for isolating first is simple: squaring only cleans up a root when the root is the whole of that side. If the x is still sitting next to it, squaring gives you the square of a sum, which has three terms and still contains a root in the middle. So move the x across first. After that it is the usual routine — square, mind the middle term of seven minus x squared, collect everything into a quadratic, factorise, and test both answers in the equation you were given. Eleven is the invented one: it makes the left-hand side fifteen instead of seven, which happened because seven minus eleven is negative and squaring hid that. Four passes and is the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:241:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#50": {
+      "en": "Solve for x: &nbsp;2x − 5√x − 3 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:266:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#51": {
+      "en": "Look at the shape rather than the letters: there is an x, a √x and a number. What do you get when you square √x? Give that thing a short name and the equation turns into one you have solved a hundred times.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:269:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#52": {
+      "en": "An x, a √x and a number — that is a quadratic in disguise, because (√x)² = x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:272:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#53": {
+      "en": "let K = √x &nbsp;&nbsp;(then K² = x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:273:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#54": {
+      "en": "2K² − 5K − 3 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:274:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#55": {
+      "en": "(2K + 1)(K − 3) = 0 &nbsp;&nbsp;∴&nbsp; K = −1/2 &nbsp;or&nbsp; K = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:275:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#56": {
+      "en": "K = 3: &nbsp;√x = 3 &nbsp;&nbsp;∴&nbsp; x = 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:276:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#57": {
+      "en": "K = −1/2: &nbsp;√x = −1/2 &nbsp;is impossible — a square root of a real number is never negative &nbsp;∴&nbsp; no solution from that branch",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:277:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#58": {
+      "en": "<b>OR</b> — isolate and square (same marks): &nbsp;2x − 3 = 5√x &nbsp;⟹&nbsp; (2x − 3)² = (5√x)² &nbsp;⟹&nbsp; 4x² − 12x + 9 = 25x &nbsp;⟹&nbsp; 4x² − 37x + 9 = 0 &nbsp;⟹&nbsp; (4x − 1)(x − 9) = 0 &nbsp;⟹&nbsp; x = 1/4 or x = 9. Squaring can invent a root, so test both in the original: &nbsp;x = 1/4 gives 2(1/4) − 5(1/2) − 3 = −5, not 0 &nbsp;⟹&nbsp; N.A.; &nbsp;x = 9 gives 18 − 15 − 3 = 0 &nbsp;⟹&nbsp; keep.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:278:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#59": {
+      "en": "REMEMBER: K is not the answer. You were asked for x, so every branch has to be walked back through &nbsp;√x = K. That walk back is where the second branch dies — and it dies with the words “<b>no solution</b>”, not “undefined” (that is for dividing by zero) and not “non-real” (that is for an even root of a negative).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:280:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#60": {
+      "en": "The k-method works here because root x squared is just x, so the two x-shaped things in the equation are really one thing and its square. Call root x by the short name K and what is left is an ordinary trinomial you can factorise. Then comes the part that costs marks: K is not what the question asked for. Each K has to be turned back into an x through root x equals K. Three works and gives nine. Negative a half does not, because a square root never comes out negative, so that branch simply has no answer. Her other road — moving the root across and squaring — is equally correct and equally marked; it invents a fake root along the way, so it must finish with both answers tested.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:284:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#61": {
+      "en": "For which values of x is &nbsp;√(3x + 12)&nbsp; real?<br>Give your answer in the form &nbsp;x ≥ …",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:310:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#62": {
+      "en": "An even root of a negative number is non-real. So whatever is sitting under that root sign is not allowed to be negative — write that down as an inequality and solve it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:313:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#63": {
+      "en": "A square root is only real when what is under it is not negative:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:316:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#64": {
+      "en": "3x + 12 ≥ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:317:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#65": {
+      "en": "3x ≥ −12 &nbsp;&nbsp;∴&nbsp; x ≥ −4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:318:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#66": {
+      "en": "REMEMBER: it is &nbsp;≥ 0, not &nbsp;&gt; 0. Zero is allowed under a root — √0 is 0, which is perfectly real. Only a NEGATIVE is out of bounds.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:320:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#67": {
+      "en": "Nothing real, multiplied by itself, gives a negative answer, so a square root of a negative number does not exist among the numbers we work with — she calls that non-real. That means the expression under the root sign has to be zero or more, and writing that down gives an ordinary linear inequality. Solve it exactly like an equation: take the twelve across and divide by three. Since three is positive the inequality sign does not flip; it would only flip if you multiplied or divided by a negative. The answer, x is greater than or equal to negative four, describes every x for which this expression is even allowed to exist.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:324:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#68": {
+      "en": "Hence solve for x: &nbsp;√(3x + 12) = x − 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:332:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#69": {
+      "en": "Square and solve as usual. When you test your two answers, check each one against BOTH things: the restriction from (a), and whether it really makes the two sides equal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:335:13"
+      ]
+    },
+    "eqn-siblings-surd-equations#70": {
+      "en": "Square both sides: &nbsp;&nbsp;3x + 12 = (x − 2)² = x² − 4x + 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:338:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#71": {
+      "en": "0 = x² − 7x − 8 = (x − 8)(x + 1) &nbsp;&nbsp;∴&nbsp; x = 8 &nbsp;or&nbsp; x = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:339:37"
+      ]
+    },
+    "eqn-siblings-surd-equations#72": {
+      "en": "x = 8: &nbsp;8 ≥ −4, and &nbsp;√(24 + 12) = √36 = 6 &nbsp;while&nbsp; x − 2 = 6. &nbsp;&nbsp;6 = 6 &nbsp;&nbsp;∴&nbsp; x = 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:340:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#73": {
+      "en": "x = −1: &nbsp;−1 ≥ −4, so it obeys (a) — but &nbsp;√(−3 + 12) = √9 = 3 &nbsp;while&nbsp; x − 2 = −3. &nbsp;&nbsp;3 ≠ −3 &nbsp;&nbsp;∴&nbsp; x ≠ −1 &nbsp;&nbsp;N.A.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:341:39"
+      ]
+    },
+    "eqn-siblings-surd-equations#74": {
+      "en": "REMEMBER: obeying the restriction is NOT the same as being a solution. The restriction from (a) only says the root exists at that x; it says nothing about whether the two sides are equal there. &nbsp;x = −1&nbsp; passes the first test and fails the second — which is exactly why the substitution check can never be skipped.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:343:15"
+      ]
+    },
+    "eqn-siblings-surd-equations#75": {
+      "en": "Part (a) told you where the left-hand side even exists: from negative four upwards. That is useful, but it is only half the story, because the right-hand side has its own demand. A square root is never negative, so x minus two has to be zero or more, meaning x must be at least two. Negative one clears the first hurdle and trips over the second. Eight clears both. This is worth noticing because a lot of learners treat the restriction as the check and stop there. The restriction rules out the impossible; the substitution test is what proves an answer is genuine. On this question you need both, and both carry marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-surd-equations.js:347:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3490
+}
