@@ -94,9 +94,9 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T57 | exam: gtrig-siblings-co-functions | ~2 067 words | verify-exam.html
 - ☑ 2026-10-17 T58 | exam: gtrig-siblings-general-solution | ~2 144 words | verify-exam.html
 - ⏳ 2026-10-17 21:22 T59 | exam: gtrig-siblings-identities-undefined | ~2 867 words | verify-exam.html
-- ⏳ 2026-10-17 21:22 T60 | exam: gtrig-siblings-identities | ~2 265 words | verify-exam.html
+- ☑ 2026-10-17 T60 | exam: gtrig-siblings-identities | ~2 265 words | verify-exam.html
 - ⏳ 2026-10-17 21:24 T61 | exam: gtrig-siblings-reduction | ~2 108 words | verify-exam.html
-- ☐ T62 | exam: gtrig-siblings-special-angles | ~2 444 words | verify-exam.html
+- ⏳ 2026-10-17 21:28 T62 | exam: gtrig-siblings-special-angles | ~2 444 words | verify-exam.html
 - ☐ T63 | exam: gtrig-siblings-special-sums | ~2 521 words | verify-exam.html
 - ☐ T64 | exam: gtrig-siblings-super-special-sums, trig-general-solutions (2 files) | ~3 848 words | verify-exam.html
 - ☐ T65 | exam: trig-mixed-problems, trig-reduction-and-ratios (2 files) | ~1 577 words | verify-exam.html
