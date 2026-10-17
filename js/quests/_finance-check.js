@@ -1682,8 +1682,10 @@ export const RECOMPUTE_IDS = Object.keys(RECOMPUTE);
      · the two must be ONE card (twinDiff): the same shape, every number,
        flag and id identical, and every text the same digits (as a set:
        Afrikaans may reorder words), the same money amounts outside an
-       unbreakable unit, the same em-dashes, HTML entities and
-       superscripts, and the same number of draws. Anything else throws;
+       unbreakable unit, the same HTML entities and superscripts (an
+       English em-dash may drop out of the Afrikaans: her no-em-dash rule
+       for new translations, 2026-10-17), and the same number of draws.
+       Anything else throws;
      · gen() then hands back the ENGLISH twin, so every check reads it
        exactly as it reads the English run, none skipped.
    Under English (the default) nothing is wrapped: the harness runs
@@ -1695,7 +1697,7 @@ export function twinResetRng() { TWIN_SRC = null; resetRngRaw(); }
 const twinDigits = s => (String(s).match(/\d+/g) || []).sort().join(",");
 const twinShape = s => {
   const t = String(s), out = t.replace(/<span class="nowrap">[^<]*<\/span>/g, "").replace(/<[^>]+>/g, "");
-  return [(out.match(/R\d/g) || []).length, (t.match(/—/g) || []).length, (t.match(/&(?:[a-z]+|#\d+);/gi) || []).length, (t.match(/<sup\b/g) || []).length].join("/");
+  return [(out.match(/R\d/g) || []).length, (t.match(/&(?:[a-z]+|#\d+);/gi) || []).length, (t.match(/<sup\b/g) || []).length].join("/");
 };
 /* null when the Afrikaans card a is the English card e in the other language, else where and why not */
 export function twinDiff(a, e, at = "card", seen = new Set()) {
@@ -1703,7 +1705,7 @@ export function twinDiff(a, e, at = "card", seen = new Set()) {
   if (typeof a === "string") {
     if (a === e) return null;
     if (twinDigits(a) !== twinDigits(e)) return `${at}: digits ${twinDigits(a) || "none"} here, ${twinDigits(e) || "none"} in English`;
-    if (twinShape(a) !== twinShape(e)) return `${at}: money outside a unit / em-dashes / entities / superscripts ${twinShape(a)} here, ${twinShape(e)} in English`;
+    if (twinShape(a) !== twinShape(e)) return `${at}: money outside a unit / entities / superscripts ${twinShape(a)} here, ${twinShape(e)} in English`;
     return null;
   }
   if (typeof a === "function") return null;
