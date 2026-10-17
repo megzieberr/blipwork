@@ -33,12 +33,12 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T10 | hub rounds: queseq4-fractions … queseq6-formula (3 files) | ~3 472 words | verify page: verify-eq.html
 - ☑ 2026-10-17 T11 | hub rounds: queseq7-inequalities … queseq8-nature (2 files) | ~3 446 words | verify page: verify-eq.html
 - ☑ 2026-10-17 T12 | hub rounds: queseq9-solution-count | ~681 words | verify page: verify-eq.html
-- ⏳ 2026-10-17 19:53 T13 | exam: cards-eqn, eqn-fractions-and-restrictions, eqn-inequalities-2, eqn-inequalities, eqn-k-method (5 files) | ~3 473 words | verify-exam.html
+- ☑ 2026-10-17 T13 | exam: cards-eqn, eqn-fractions-and-restrictions, eqn-inequalities-2, eqn-inequalities, eqn-k-method (5 files) | ~3 473 words | verify-exam.html
 - ⏳ 2026-10-17 19:54 T14 | exam: eqn-level4, eqn-nature-of-roots-2 (2 files) | ~3 512 words | verify-exam.html
 - ☐ S8 | before T15 (setup, one Opus worker): tools/af_check.mjs reads an optional briefs/af/allow.json ({ rule: [file globs or keys] }); findings listed there become WARN, not ERROR; seed it with wording:em-dash for js/exam/eqn-nature-of-roots.js (her ruling 2026-10-17: her August em-dashes stay) | check: af_check on that file exits 0 with 31 WARN lines; negative copy still fails on other rules
 - ☐ T15 | exam: eqn-nature-of-roots | ~3 382 words | verify-exam.html ⚠ her August af sides hold 36 em-dashes: HER RULING 2026-10-17 = KEEP them; S8 (above) teaches af_check to allow them first
 - ⏳ 2026-10-17 19:57 T16 | exam: eqn-siblings-delta-in-p, eqn-siblings-fraction-equations (2 files) | ~3 370 words | verify-exam.html
-- ☐ T17 | exam: eqn-siblings-inequalities, eqn-siblings-k-equal-roots (2 files) | ~2 445 words | verify-exam.html
+- ⏳ 2026-10-17 20:00 T17 | exam: eqn-siblings-inequalities, eqn-siblings-k-equal-roots (2 files) | ~2 445 words | verify-exam.html
 - ☐ T18 | exam: eqn-siblings-k-for-nature, eqn-siblings-nature-chain (2 files) | ~3 831 words | verify-exam.html
 - ☐ T19 | exam: eqn-siblings-quadratic-solving | ~2 336 words | verify-exam.html
 - ☐ T20 | exam: eqn-siblings-rational-exponents-k, eqn-siblings-simultaneous (2 files) | ~3 495 words | verify-exam.html

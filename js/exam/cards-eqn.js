@@ -124,7 +124,7 @@ export const eqnCards = [
      Its (d) was level 4 and moved to the level-4 tile (SESSION C1). */
   makeCard({
     skill: "k-for-nature", from: src("eqn.nor.q3"), parts: ["b", "c"],
-    intro: { en: "Given: &nbsp;2x² − 4x + k = 0, &nbsp;where k is a real number. Its discriminant is &nbsp;Δ = 16 − 8k." },
+    intro: { en: "Given: &nbsp;2x² − 4x + k = 0, &nbsp;where k is a real number. Its discriminant is &nbsp;Δ = 16 − 8k.", af: "Gegee: &nbsp;2x² − 4x + k = 0, &nbsp;waar k 'n reële getal is. Die diskriminant is &nbsp;Δ = 16 − 8k." },
   }),
   /* SESSION C1's five (2026-08-23): "real" with one sign flip,
      "non-real" with a fraction boundary, then the two cards where Δ is
@@ -302,27 +302,27 @@ export const eqnCards = [
      the range (b) produced, and nothing else. */
   makeCard({
     skill: "level-4", from: src("eqn.nor.q3"), parts: ["d"],
-    intro: { en: "Given: &nbsp;2x² − 4x + k = 0, &nbsp;where k is a real number. Its discriminant is &nbsp;Δ = 16 − 8k, &nbsp;and the roots are real and unequal when &nbsp;k &lt; 2." },
+    intro: { en: "Given: &nbsp;2x² − 4x + k = 0, &nbsp;where k is a real number. Its discriminant is &nbsp;Δ = 16 − 8k, &nbsp;and the roots are real and unequal when &nbsp;k &lt; 2.", af: "Gegee: &nbsp;2x² − 4x + k = 0, &nbsp;waar k 'n reële getal is. Die diskriminant is &nbsp;Δ = 16 − 8k, &nbsp;en die wortels is reëel en ongelyk as &nbsp;k &lt; 2." },
   }),
   /* nor.q4(b) opens "By completing the square on your answer to (a)…",
      and (a) is now a delta-in-p card. The intro hands that answer back. */
   makeCard({
     skill: "level-4", from: src("eqn.nor.q4"), parts: ["b", "c", "d"],
-    intro: { en: "Given: &nbsp;x² + px + (p − 2) = 0, &nbsp;where p is a real number. Its discriminant is &nbsp;Δ = p² − 4p + 8." },
+    intro: { en: "Given: &nbsp;x² + px + (p − 2) = 0, &nbsp;where p is a real number. Its discriminant is &nbsp;Δ = p² − 4p + 8.", af: "Gegee: &nbsp;x² + px + (p − 2) = 0, &nbsp;waar p 'n reële getal is. Die diskriminant is &nbsp;Δ = p² − 4p + 8." },
   }),
   /* nor.q5(d) names "the one value of m found in (b)", and (b) is now
      on a delta-in-p card. The intro carries the perfect-square Δ and
      that value. */
   makeCard({
     skill: "level-4", from: src("eqn.nor.q5"), parts: ["d"],
-    intro: { en: "Given: &nbsp;x² + (2m − 1)x − (4m + 2) = 0, &nbsp;where m is a real number. Its discriminant simplifies to &nbsp;Δ = 4m² + 12m + 9 = (2m + 3)², &nbsp;and in (b) that gave equal roots at &nbsp;m = −3/2." },
+    intro: { en: "Given: &nbsp;x² + (2m − 1)x − (4m + 2) = 0, &nbsp;where m is a real number. Its discriminant simplifies to &nbsp;Δ = 4m² + 12m + 9 = (2m + 3)², &nbsp;and in (b) that gave equal roots at &nbsp;m = −3/2.", af: "Gegee: &nbsp;x² + (2m − 1)x − (4m + 2) = 0, &nbsp;waar m 'n reële getal is. Die diskriminant vereenvoudig tot &nbsp;Δ = 4m² + 12m + 9 = (2m + 3)², &nbsp;en in (b) het dit gelyke wortels by &nbsp;m = −3/2 gegee." },
   }),
   /* fr.q1(d) keeps the intro it carried on the k-equal-roots tile: its
      memo checks the equal root against the LIMITS, which were found in
      part (a) and are not on this card. */
   makeCard({
     skill: "level-4", from: src("eqn.fr.q1"), parts: ["d"],
-    intro: { en: "In this equation &nbsp;x² − x − 2 = (x − 2)(x + 1), &nbsp;so the limits are &nbsp;x ≠ 2 &nbsp;and&nbsp; x ≠ −1." },
+    intro: { en: "In this equation &nbsp;x² − x − 2 = (x − 2)(x + 1), &nbsp;so the limits are &nbsp;x ≠ 2 &nbsp;and&nbsp; x ≠ −1.", af: "In hierdie vergelyking is &nbsp;x² − x − 2 = (x − 2)(x + 1), &nbsp;dus is die beperkings &nbsp;x ≠ 2 &nbsp;en&nbsp; x ≠ −1." },
   }),
   /* Both of these already stated their own "Given:" line when they were
      one-part cards on their old tiles, so neither needs an intro. */

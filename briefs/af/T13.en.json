@@ -1,0 +1,1176 @@
+{
+  "unit": "T13",
+  "generated": "2026-10-17T17:54:23.353Z",
+  "files": [
+    "js/exam/cards-eqn.js",
+    "js/exam/eqn-fractions-and-restrictions.js",
+    "js/exam/eqn-inequalities-2.js",
+    "js/exam/eqn-inequalities.js",
+    "js/exam/eqn-k-method.js"
+  ],
+  "items": {
+    "cards-eqn#1": {
+      "en": "Given: &nbsp;2x² − 4x + k = 0, &nbsp;where k is a real number. Its discriminant is &nbsp;Δ = 16 − 8k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "cards-eqn.js:127:18"
+      ]
+    },
+    "cards-eqn#2": {
+      "en": "Given: &nbsp;2x² − 4x + k = 0, &nbsp;where k is a real number. Its discriminant is &nbsp;Δ = 16 − 8k, &nbsp;and the roots are real and unequal when &nbsp;k &lt; 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "cards-eqn.js:305:18"
+      ]
+    },
+    "cards-eqn#3": {
+      "en": "Given: &nbsp;x² + px + (p − 2) = 0, &nbsp;where p is a real number. Its discriminant is &nbsp;Δ = p² − 4p + 8.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "cards-eqn.js:311:18"
+      ]
+    },
+    "cards-eqn#4": {
+      "en": "Given: &nbsp;x² + (2m − 1)x − (4m + 2) = 0, &nbsp;where m is a real number. Its discriminant simplifies to &nbsp;Δ = 4m² + 12m + 9 = (2m + 3)², &nbsp;and in (b) that gave equal roots at &nbsp;m = −3/2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "cards-eqn.js:318:18"
+      ]
+    },
+    "cards-eqn#5": {
+      "en": "In this equation &nbsp;x² − x − 2 = (x − 2)(x + 1), &nbsp;so the limits are &nbsp;x ≠ 2 &nbsp;and&nbsp; x ≠ −1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "cards-eqn.js:325:18"
+      ]
+    },
+    "eqn-fractions-and-restrictions#1": {
+      "en": "Given: &nbsp;x/(x − 2) + 2/(x + 1) = 6/(x² − x − 2)<br><br>Factorise x² − x − 2, and hence write down the limits — the values x is not allowed to take.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:61:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#2": {
+      "en": "Two numbers that multiply to −2 and add to −1. Once the third denominator is in brackets, the forbidden values are whatever would make any denominator equal zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:64:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#3": {
+      "en": "x² − x − 2 = (x − 2)(x + 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:67:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#4": {
+      "en": "limits: &nbsp;x ≠ 2 ; x ≠ −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:68:39"
+      ]
+    },
+    "eqn-fractions-and-restrictions#5": {
+      "en": "REMEMBER: the limits come from EVERY denominator in the equation, not just the big one. Here (x − 2) and (x + 1) each appear on their own as well, and they give the same two values — which is the clue that the third denominator is just those two multiplied together.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:70:15"
+      ]
+    },
+    "eqn-fractions-and-restrictions#6": {
+      "en": "Dividing by zero is the one thing arithmetic simply will not do, so before an equation with fractions can be solved at all, you have to say out loud which x-values would break it. Factorising the messiest denominator is what makes those values visible: x² − x − 2 looks like it could break anywhere, but (x − 2)(x + 1) tells you exactly two places. Notice they are the same two brackets that are already sitting under the other fractions — that is not a coincidence, it is what makes the LCD easy in the next part. Write the limits down at the top of your page now; you will need them again at the very end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:74:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#7": {
+      "en": "Solve for x: &nbsp;x/(x − 2) + 2/(x + 1) = 6/(x² − x − 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:82:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#8": {
+      "en": "The denominators are already factorised from (a), so the LCD is just the two brackets multiplied. Multiply every term by it, and keep your limits line in sight for the end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:85:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#9": {
+      "en": "The denominators are already factorised from (a), so the LCD is the product of the two brackets. Multiply each term by what it needs to reach the LCD; the denominators cancel and only the numerators are left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:88:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#10": {
+      "en": "LCD = (x − 2)(x + 1) &nbsp;&nbsp;⟹&nbsp;&nbsp; x(x + 1) + 2(x − 2) = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:89:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#11": {
+      "en": "x² + x + 2x − 4 = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:90:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#12": {
+      "en": "x² + 3x − 10 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:91:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#13": {
+      "en": "(x + 5)(x − 2) = 0 &nbsp;&nbsp;∴ x = −5 &nbsp;or&nbsp; x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:92:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#14": {
+      "en": "x = 2 is a limit, so it must be thrown away &nbsp;∴ x = −5 only",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:93:39"
+      ]
+    },
+    "eqn-fractions-and-restrictions#15": {
+      "en": "WATCH OUT: this is exactly why the limits line goes down FIRST. x = 2 solves the tidied-up quadratic perfectly — but it makes the original denominator x − 2 equal to zero, so it was never a solution of the equation you were actually given. Handing in both roots loses the last mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:95:15"
+      ]
+    },
+    "eqn-fractions-and-restrictions#16": {
+      "en": "Multiplying by the LCD is legal because every term on both sides gets the same treatment, so the balance never tips — and it is worth doing because three fractions turn into one ordinary quadratic. But the tidied-up equation is not quite the same animal as the one you started with: it has forgotten that x could never be 2. That is why it happily offers x = 2 back to you, and why the check at the end is not optional politeness. Put x = 2 into the original equation and the very first fraction reads 2 divided by 0 — undefined, not a solution. One root survives, and the honest answer says so.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:99:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#17": {
+      "en": "Hence write down the value of x for which the expression &nbsp;x/(x − 2) + 2/(x + 1) − 6/(x² − x − 2) &nbsp;is equal to zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:107:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#18": {
+      "en": "Do not start again. Compare this expression with the equation in (b) — what happens if you move the right-hand side of (b) across to the left?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:110:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#19": {
+      "en": "Setting this expression equal to 0 and taking the last term back across gives exactly the equation of (b)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:113:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#20": {
+      "en": "∴ x = −5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:114:39"
+      ]
+    },
+    "eqn-fractions-and-restrictions#21": {
+      "en": "“Where is this expression zero” and “solve this equation” are the same question asked in two voices. An equation A = B becomes A − B = 0 just by moving everything to one side, and that is precisely the expression you have been handed. So the answer is the answer you already have, and the two marks are for spotting it rather than for doing five minutes of work again. And the rejected root stays rejected: x = 2 does not make the expression zero, it makes the expression not exist.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:117:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#22": {
+      "en": "The equation &nbsp;x/(x − 2) + 2/(x + 1) = k/(x² − x − 2) &nbsp;has EQUAL roots for one value of k.<br>Determine that value of k, and write down the equal root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:125:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#23": {
+      "en": "Run the same LCD step — multiply through by (x − 2)(x + 1) — but leave k where the 6 was. You will get a quadratic with k in it — and equal roots always means one particular thing about Δ.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:128:13"
+      ]
+    },
+    "eqn-fractions-and-restrictions#24": {
+      "en": "Multiply through by the LCD (x − 2)(x + 1), with k in place of 6: &nbsp;x(x + 1) + 2(x − 2) = k &nbsp;⟹&nbsp; x² + 3x − 4 − k = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:131:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#25": {
+      "en": "for equal roots, Δ = 0: &nbsp;(3)² − 4(1)(−4 − k) = 9 + 16 + 4k = 25 + 4k = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:132:37"
+      ]
+    },
+    "eqn-fractions-and-restrictions#26": {
+      "en": "∴ k = −25/4 = −6,25",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:133:39"
+      ]
+    },
+    "eqn-fractions-and-restrictions#27": {
+      "en": "the equal root is x = −b/(2a) = −3/(2(1)) = −3/2 = −1,5 &nbsp;— and −1,5 is not a limit, so it stands",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:134:39"
+      ]
+    },
+    "eqn-fractions-and-restrictions#28": {
+      "en": "REMEMBER: even a root that falls out of a perfect Δ = 0 still has to be checked against the limits. A fraction equation will throw away an equal root just as happily as an unequal one — if −b/(2a) had come out as 2 or −1 here, the answer would have been that there is no valid root at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:136:15"
+      ]
+    },
+    "eqn-fractions-and-restrictions#29": {
+      "en": "Two topics meet in this part, which is why it carries the star. The fraction side is unchanged: clear the denominators exactly as before — multiply through by (x − 2)(x + 1) — and you are left with an ordinary quadratic — except the constant now carries an unknown k inside it. From there it is pure nature-of-roots: equal roots means Δ is exactly zero, no range and no inequality, so setting Δ = 0 pins k down to a single number. Once k is fixed the ± in the quadratic formula has nothing left to add or subtract, so the one surviving root is simply −b/(2a). The last line is the one that makes it a FRACTION question again: that root still has to clear the limits x ≠ 2 and x ≠ −1 before you are allowed to write it down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-fractions-and-restrictions.js:140:13"
+      ]
+    },
+    "eqn-inequalities-2#1": {
+      "en": "Solve for x: &nbsp;−3x + 7 &gt; 19",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:58:13"
+      ]
+    },
+    "eqn-inequalities-2#2": {
+      "en": "Treat it exactly like an ordinary equation right up to the last step — and then remember what dividing by a negative number does to the sign in the middle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:61:13"
+      ]
+    },
+    "eqn-inequalities-2#3": {
+      "en": "−3x &gt; 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:64:37"
+      ]
+    },
+    "eqn-inequalities-2#4": {
+      "en": "∴ x &lt; −4 &nbsp;&nbsp;(dividing by a negative flips the sign)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:65:39"
+      ]
+    },
+    "eqn-inequalities-2#5": {
+      "en": "REMEMBER: the sign only flips when you multiply or divide by a NEGATIVE. Subtracting 7 from both sides at the start does nothing to it — that step is completely ordinary.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:67:15"
+      ]
+    },
+    "eqn-inequalities-2#6": {
+      "en": "A linear inequality is solved the same way as a linear equation, with one extra rule at the end. Think about why the rule exists: 2 is less than 5, but multiply both by −1 and −2 is bigger than −5. Multiplying or dividing by a negative reverses the order of every number on the line, so the inequality sign has to reverse with it. Everything else — adding, subtracting, dividing by a positive — leaves the order alone and needs no flip at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:71:13"
+      ]
+    },
+    "eqn-inequalities-2#7": {
+      "en": "Solve for x: &nbsp;2x² + 5x &lt; 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:79:13"
+      ]
+    },
+    "eqn-inequalities-2#8": {
+      "en": "Everything to the left first, and check there is no negative in front of the x². Then the critical points come from setting each factor equal to zero — and the sketch tells you which piece to keep.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:82:13"
+      ]
+    },
+    "eqn-inequalities-2#9": {
+      "en": "Everything to the left, and there is no negative in front of the x², so no flip is needed:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:85:37"
+      ]
+    },
+    "eqn-inequalities-2#10": {
+      "en": "2x² + 5x − 3 &lt; 0 &nbsp;⟹&nbsp; (2x − 1)(x + 3) &lt; 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:86:37"
+      ]
+    },
+    "eqn-inequalities-2#11": {
+      "en": "CP: &nbsp;2x − 1 = 0 &nbsp;or&nbsp; x + 3 = 0 &nbsp;⟹&nbsp; x = 1/2 &nbsp;or&nbsp; x = −3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:87:37"
+      ]
+    },
+    "eqn-inequalities-2#12": {
+      "en": "It is a <b>happy</b> parabola cutting the x-axis at −3 and at 1/2, and &lt; 0 means below the axis — the <b>inside of the bowl</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:88:37"
+      ]
+    },
+    "eqn-inequalities-2#13": {
+      "en": "∴ −3 &lt; x &lt; 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:89:39"
+      ]
+    },
+    "eqn-inequalities-2#14": {
+      "en": "WATCH OUT: never write the answer as the calculator gives it — “x &lt; 1/2 ; −3 &lt; x” is not an answer. Rewrite it with x on the left, in one string, and use the word “or” when the answer really is two separate pieces.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:91:15"
+      ]
+    },
+    "eqn-inequalities-2#15": {
+      "en": "The brackets are not two small inequalities to be solved one at a time — they are one parabola, and the question is which stretch of it lies below the x-axis. The critical points are simply where the curve crosses, so they are the only places the sign can change. Because the leading coefficient is positive the parabola is happy, and a happy parabola dips below the axis only in the dip between its two crossings: the inside of the bowl. Note the direction of the answer, too — the smaller critical point goes on the left, exactly as the numbers sit on a number line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:95:13"
+      ]
+    },
+    "eqn-inequalities-2#16": {
+      "en": "Solve for x: &nbsp;(x − 1)/x² ≤ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:103:13"
+      ]
+    },
+    "eqn-inequalities-2#17": {
+      "en": "Have a good look at the denominator before you do anything. It is a square — what does that tell you about its sign, and which single value does it forbid?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:106:13"
+      ]
+    },
+    "eqn-inequalities-2#18": {
+      "en": "The denominator x² is a square, so it is positive for every x except 0 — it can never flip the sign of the fraction.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:109:37"
+      ]
+    },
+    "eqn-inequalities-2#19": {
+      "en": "x² &gt; 0 for all x ≠ 0, so drop it and carry the restriction: &nbsp;x − 1 ≤ 0 ; x ≠ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:110:37"
+      ]
+    },
+    "eqn-inequalities-2#20": {
+      "en": "x ≤ 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:111:37"
+      ]
+    },
+    "eqn-inequalities-2#21": {
+      "en": "∴ x ≤ 1 ; x ≠ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:112:39"
+      ]
+    },
+    "eqn-inequalities-2#22": {
+      "en": "WATCH OUT: never cross-multiply an inequality by a denominator that can change sign — you would have no idea whether to flip. x² is safe precisely because a square is never negative. But the x ≠ 0 has to ride along after a semicolon, or your answer is wrong at exactly one point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:114:15"
+      ]
+    },
+    "eqn-inequalities-2#23": {
+      "en": "A fraction's sign is decided by the top and the bottom together, so normally you cannot just ignore the denominator. This one is a special case, and it is worth knowing why: x² is a square, so wherever it exists it is positive, and multiplying an inequality by a positive number changes nothing at all. That lets you lift the denominator out of the way and work with the numerator alone. What the denominator does leave behind is a hole — x = 0 was never allowed, because that is where the fraction is undefined — and that hole has to be written into the answer. Her layout for that is the restriction after a semicolon, which is how you say “everything up to 1, except that one missing point”.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:118:13"
+      ]
+    },
+    "eqn-inequalities-2#24": {
+      "en": "The solution of &nbsp;x² + bx + c ≤ 0 &nbsp;is &nbsp;−2 ≤ x ≤ 5.<br>Determine the values of b and c.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:126:13"
+      ]
+    },
+    "eqn-inequalities-2#25": {
+      "en": "Run the method backwards. In an ordinary question the two ends of the answer come from somewhere — where exactly? Work out what those two numbers must be for this parabola, and build it back up from there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:129:13"
+      ]
+    },
+    "eqn-inequalities-2#26": {
+      "en": "The two ends of the answer are the CP, so they are the roots of the quadratic: &nbsp;x = −2 &nbsp;and&nbsp; x = 5 &nbsp;⟹&nbsp; (x + 2)(x − 5) ≤ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:132:37"
+      ]
+    },
+    "eqn-inequalities-2#27": {
+      "en": "(x + 2)(x − 5) = x² − 5x + 2x − 10 = x² − 3x − 10",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:133:37"
+      ]
+    },
+    "eqn-inequalities-2#28": {
+      "en": "∴ b = −3 &nbsp;and&nbsp; c = −10",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:134:39"
+      ]
+    },
+    "eqn-inequalities-2#29": {
+      "en": "REMEMBER: the answer being BETWEEN the two numbers is what tells you the region is the inside of the bowl. If the given solution had read x ≤ −2 or x ≥ 5 — the two arms — the same b and c would go with a ≥ sign instead. The numbers come from the roots; the sign comes from which region was kept.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:136:15"
+      ]
+    },
+    "eqn-inequalities-2#30": {
+      "en": "The fact you have to fetch here is that the two numbers in the answer are not decoration — they are the critical points, and the critical points are the roots of the quadratic. Once you see that, the question is no harder than Grade 10: you know the roots, so you know the factors, and multiplying the factors out hands you b and c. Two checks are worth doing before you write the answer down. First, the coefficient of x² is 1 in both the question and your expansion, so nothing needs scaling. Second, the answer runs BETWEEN the roots, which fits a happy parabola with ≤ 0 — and a happy parabola is exactly what x² with a coefficient of 1 gives you. Everything agrees, so the values stand.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities-2.js:140:13"
+      ]
+    },
+    "eqn-inequalities#1": {
+      "en": "Solve for x: &nbsp;(x + 1)(5 − x) ≥ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:70:13"
+      ]
+    },
+    "eqn-inequalities#2": {
+      "en": "It looks factorised already — but look at the second bracket. A −x in there means a −x² is hiding, and her rule is no negative in front of x². Fix that, and remember what it does to the sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:73:13"
+      ]
+    },
+    "eqn-inequalities#3": {
+      "en": "It is already factorised, but the second bracket has a −x in it, which means a −x² is hiding in there. Multiply that bracket by −1 and <b>turn the inequality sign around</b>:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:76:37"
+      ]
+    },
+    "eqn-inequalities#4": {
+      "en": "(x + 1)(5 − x) ≥ 0 &nbsp;⟹&nbsp; (x + 1)(x − 5) ≤ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:77:37"
+      ]
+    },
+    "eqn-inequalities#5": {
+      "en": "CP: &nbsp;x + 1 = 0 &nbsp;or&nbsp; x − 5 = 0 &nbsp;⟹&nbsp; x = −1 &nbsp;or&nbsp; x = 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:78:37"
+      ]
+    },
+    "eqn-inequalities#6": {
+      "en": "It is now a <b>happy</b> parabola cutting the x-axis at −1 and at 5, and ≤ 0 means below the axis — the <b>inside of the bowl</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:79:37"
+      ]
+    },
+    "eqn-inequalities#7": {
+      "en": "∴ −1 ≤ x ≤ 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:80:39"
+      ]
+    },
+    "eqn-inequalities#8": {
+      "en": "WATCH OUT: (x + 1)(5 − x) ≥ 0 does <b>not</b> mean x + 1 ≥ 0 <i>and</i> 5 − x ≥ 0. Two numbers whose product is positive do not each have to be positive. Take everything to the left, make sure there is no negative in front of the x², find the CP, then read the answer off the sketch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:82:15"
+      ]
+    },
+    "eqn-inequalities#9": {
+      "en": "The two brackets are not two little inequalities to be solved separately — they are one parabola, and the question is which stretch of it sits on the right side of the x-axis. That is why the sketch does all the work. First get the parabola the right way up: with a −x hiding in a bracket the curve is sad, so multiply that bracket by −1, and because you multiplied by a negative the inequality sign turns around. Now the critical points, where each bracket is zero, are just the two places the curve crosses the axis. A happy parabola dips below the axis only between its two crossings, so “≤ 0” is the piece between them — inside of the bowl. If the sign had been the other way round you would want the two arms instead, and the answer would read as two pieces joined by “or”.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:86:13"
+      ]
+    },
+    "eqn-inequalities#10": {
+      "en": "Given: &nbsp;x² + (p − 1)x + (p − 3) = 0, where p is a real number.<br>Show that the roots of this equation are real for ALL real values of p.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:94:13"
+      ]
+    },
+    "eqn-inequalities#11": {
+      "en": "“Real roots” is a statement about Δ, so write Δ down and see what it turns into. You will get a quadratic in p — and there is one move she uses on a quadratic when she wants to know how small it can possibly get.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:97:13"
+      ]
+    },
+    "eqn-inequalities#12": {
+      "en": "“Real roots” is a statement about Δ, so write Δ down and see what it turns into. Here a = 1, &nbsp;b = p − 1, &nbsp;c = p − 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:100:37"
+      ]
+    },
+    "eqn-inequalities#13": {
+      "en": "Δ = b² − 4ac = (p − 1)² − 4(1)(p − 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:101:37"
+      ]
+    },
+    "eqn-inequalities#14": {
+      "en": "= p² − 2p + 1 − 4p + 12 = p² − 6p + 13",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:102:37"
+      ]
+    },
+    "eqn-inequalities#15": {
+      "en": "Δ is itself a quadratic — in p this time — so <b>complete the square on it</b> and the answer falls out. &nbsp;b/2 = 6/2 = 3:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:103:37"
+      ]
+    },
+    "eqn-inequalities#16": {
+      "en": "Δ = p² − 6p + 3² − 3² + 13 = (p − 3)² + 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:104:37"
+      ]
+    },
+    "eqn-inequalities#17": {
+      "en": "Sketched as a graph of Δ against p, that is a happy parabola with its turning point at (3 ; 4). A square is never negative, so (p − 3)² ≥ 0, which makes Δ ≥ 4. The smallest Δ can ever be is 4 — and 4 > 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:105:37"
+      ]
+    },
+    "eqn-inequalities#18": {
+      "en": "∴ Δ > 0 for every real p &nbsp;⟹&nbsp; the roots are real (and unequal) for all real values of p",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:106:39"
+      ]
+    },
+    "eqn-inequalities#19": {
+      "en": "REMEMBER: Δ > 0 = real and unequal &nbsp;·&nbsp; Δ = 0 = real, rational and equal &nbsp;·&nbsp; Δ &lt; 0 = non-real. Naming the nature in <i>those</i> words is what earns the last mark — “it works” does not.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:108:15"
+      ]
+    },
+    "eqn-inequalities#20": {
+      "en": "You cannot test every value of p — there are infinitely many — so this question needs a move that covers them all in one line. Her move is to notice that Δ, once you multiply it out, is itself a quadratic in p, and completing the square on it tells you the one thing you actually need: the smallest value it can ever take. In (p − 3)² + 4 the bracket is a square, so it can be 0 but never less; that makes 4 the floor. Δ can be huge, Δ can be exactly 4 when p = 3, but Δ can never be zero and never negative — and Δ > 0 is exactly the condition for real, unequal roots. Bank the earlier marks first: 3(a) and the whole of Questions 1 and 2 are ordinary method work, and this one is the part to sit with once the rest of the paper is safely done.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-inequalities.js:112:13"
+      ]
+    },
+    "eqn-k-method#1": {
+      "en": "Solve for x: &nbsp;2x<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">3</span><span class=\\\"sf-d\\\">4</span></span></sup> = 54",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:79:13"
+      ]
+    },
+    "eqn-k-method#2": {
+      "en": "Get the power standing on its own first — the 2 in front has to go before you touch the exponent. Then think: what do you multiply 3/4 by to leave a plain x behind?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:82:13"
+      ]
+    },
+    "eqn-k-method#3": {
+      "en": "Get the power on its own first:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:85:37"
+      ]
+    },
+    "eqn-k-method#4": {
+      "en": "x<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">3</span><span class=\\\"sf-d\\\">4</span></span></sup> = 27",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:86:37"
+      ]
+    },
+    "eqn-k-method#5": {
+      "en": "Now multiply the exponent by its <b>reciprocal</b> — 3/4 × 4/3 = 1, so the x is left standing alone. Whatever you do to the left, you do to the right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:87:37"
+      ]
+    },
+    "eqn-k-method#6": {
+      "en": "(x<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">3</span><span class=\\\"sf-d\\\">4</span></span></sup>)<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">4</span><span class=\\\"sf-d\\\">3</span></span></sup> = 27<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">4</span><span class=\\\"sf-d\\\">3</span></span></sup> = (3³)<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">4</span><span class=\\\"sf-d\\\">3</span></span></sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:88:37"
+      ]
+    },
+    "eqn-k-method#7": {
+      "en": "x = 3⁴ = 81",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:89:39"
+      ]
+    },
+    "eqn-k-method#8": {
+      "en": "<b>OR</b> — raise, then root (same marks): x<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">3</span><span class=\\\"sf-d\\\">4</span></span></sup> = 27 &nbsp;⟹&nbsp; (⁴√(x³))⁴ = 27⁴ &nbsp;⟹&nbsp; x³ = 531 441 &nbsp;⟹&nbsp; x = ³√531 441 = 81",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:90:37"
+      ]
+    },
+    "eqn-k-method#9": {
+      "en": "REMEMBER: where does the ± go? Look at the <i>numerator</i> of the original exponent. Here it is 3, which is odd, so there is <b>no</b> ±. A ± only appears when that numerator is even — e.g. x<sup><span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">2</span><span class=\\\"sf-d\\\">3</span></span></sup> = 9 gives x = ±27.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:92:15"
+      ]
+    },
+    "eqn-k-method#10": {
+      "en": "A fractional exponent is doing two jobs at once: the bottom of the fraction is a root and the top is a power. You do not have to unpick them one at a time, though — multiplying the exponent by its upside-down twin cancels it to 1, and 1 is the exponent that leaves a bare x. That is why 3/4 gets hit with 4/3. The other road, raising to the 4 and then taking a cube root, is just as correct and earns exactly the same marks; some of your class prefer it, and it is printed under OR for that reason. The ± question is the one that decides marks: it depends on the NUMERATOR of the exponent you started with, not on the root you happen to take along the way. Odd numerator, one answer. Even numerator, two.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:96:13"
+      ]
+    },
+    "eqn-k-method#11": {
+      "en": "Solve for x: &nbsp;4/(x − 2) + x/(x + 2) = 23/(x² − 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:104:13"
+      ]
+    },
+    "eqn-k-method#12": {
+      "en": "Factorise every denominator before anything else — x² − 4 is a difference of squares. The limits line goes down on your page BEFORE you start solving, not after.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:107:13"
+      ]
+    },
+    "eqn-k-method#13": {
+      "en": "Factorise every denominator before anything else: &nbsp;x² − 4 = (x − 2)(x + 2).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:110:37"
+      ]
+    },
+    "eqn-k-method#14": {
+      "en": "LCD = (x − 2)(x + 2) &nbsp;&nbsp;·&nbsp;&nbsp; limits: x ≠ 2 ; x ≠ −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:111:37"
+      ]
+    },
+    "eqn-k-method#15": {
+      "en": "Multiply each term by what it needs to reach the LCD; the denominators then cancel and only the numerators are left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:112:37"
+      ]
+    },
+    "eqn-k-method#16": {
+      "en": "4(x + 2) + x(x − 2) = 23",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:113:37"
+      ]
+    },
+    "eqn-k-method#17": {
+      "en": "4x + 8 + x² − 2x = 23 &nbsp;⟹&nbsp; x² + 2x − 15 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:114:37"
+      ]
+    },
+    "eqn-k-method#18": {
+      "en": "(x + 5)(x − 3) = 0 &nbsp;∴ x = −5 &nbsp;or&nbsp; x = 3 &nbsp;— neither is a forbidden value, so both stay",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:115:39"
+      ]
+    },
+    "eqn-k-method#19": {
+      "en": "WATCH OUT: the <b>limits</b> line is a mark of its own, and it is the one learners leave out. Write it down at the top, then check every answer against it at the end — if a root had come out as 2 or −2 here, it would have had to be thrown away.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:117:15"
+      ]
+    },
+    "eqn-k-method#20": {
+      "en": "Multiplying an equation by the LCD is legal because you do it to every single term on both sides, so the balance never tips — and it is worth doing because it turns three fractions into an ordinary quadratic you already know how to solve. But there is a price. The moment you multiply the denominators away, the equation forgets that x was never allowed to be 2 or −2, and it will happily hand you one of those back as an “answer”. That is why the limits line is written first, from the factorised denominators, before a single term is multiplied out. Here both roots survive the check, so both stay — but the checking step is a mark whether or not it changes the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:121:13"
+      ]
+    },
+    "eqn-k-method#21": {
+      "en": "Solve for x: &nbsp;x − 3√x − 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:129:13"
+      ]
+    },
+    "eqn-k-method#22": {
+      "en": "Look at the shape, not the letters: there is an x, a √x and a number. What happens to √x when you square it? Give that thing a name and the equation turns into something familiar.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:132:13"
+      ]
+    },
+    "eqn-k-method#23": {
+      "en": "Look at the shape: there is an x, a √x and a number — that is a quadratic wearing a disguise, because (√x)² = x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:135:37"
+      ]
+    },
+    "eqn-k-method#24": {
+      "en": "let K = √x &nbsp;&nbsp;(then K² = x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:136:37"
+      ]
+    },
+    "eqn-k-method#25": {
+      "en": "K² − 3K − 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:137:37"
+      ]
+    },
+    "eqn-k-method#26": {
+      "en": "(K − 4)(K + 1) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:138:37"
+      ]
+    },
+    "eqn-k-method#27": {
+      "en": "∴ K = 4 &nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;&nbsp; K = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:139:37"
+      ]
+    },
+    "eqn-k-method#28": {
+      "en": "√x = 4 &nbsp;∴ x = 16",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:140:39"
+      ]
+    },
+    "eqn-k-method#29": {
+      "en": "√x ≠ −1 &nbsp;∴ no solution",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:141:39"
+      ]
+    },
+    "eqn-k-method#30": {
+      "en": "<b>OR</b> — isolate and square (same marks): x − 4 = 3√x &nbsp;⟹&nbsp; (x − 4)² = (3√x)² &nbsp;⟹&nbsp; x² − 8x + 16 = 9x &nbsp;⟹&nbsp; x² − 17x + 16 = 0 &nbsp;⟹&nbsp; (x − 1)(x − 16) = 0 &nbsp;⟹&nbsp; x = 1 or x = 16. Squaring can invent a root, so <b>always test both answers</b> in the <i>original</i> equation: x = 1 gives 1 − 3(1) − 4 = −6 ≠ 0 ⟹ N.A.; x = 16 gives 16 − 3(4) − 4 = 0 ⟹ keep.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:142:37"
+      ]
+    },
+    "eqn-k-method#31": {
+      "en": "REMEMBER: a square root can never be negative, so √x = −1 has <b>no solution</b>. A cube root may be negative — ³√x = −1 would give x = −1, and that branch would count. Know which root you are looking at.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:144:15"
+      ]
+    },
+    "eqn-k-method#32": {
+      "en": "This is the k-method, and the reason it works is that √x squared is x — so the two x-shaped things in the equation are really one thing and its square. Call √x by a short name, K, and what is left is K² − 3K − 4 = 0, a quadratic you have factorised a hundred times. The trap is stopping at K. K is not what you were asked for; you were asked for x, so every branch has to be walked back through √x = K. And that walk back is where the second branch dies: K = −1 would need a square root to come out negative, and a square root of a real number never does. That is “no solution” — not “undefined”, which is only for dividing by zero, and not “non-real”, which is for taking an even root of a negative. The other road, isolating the √ and squaring, is equally hers and equally correct, but it invents a fake root along the way, so it must end with both answers tested in the original equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-k-method.js:148:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3034
+}
