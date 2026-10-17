@@ -1,0 +1,3829 @@
+{
+  "unit": "T84",
+  "generated": "2026-10-17T21:14:20.538Z",
+  "files": [
+    "js/quests/quest01-calculator.js",
+    "js/quests/quest02-centre-spread.js",
+    "js/quests/quest03-quartiles.js",
+    "js/quests/quest04-skewness.js",
+    "js/quests/quest05-grouped.js",
+    "js/quests/quest06-ogives.js",
+    "js/quests/quest07-stddev.js",
+    "js/quests/quest08-mixed.js"
+  ],
+  "items": {
+    "quest01-calculator#1": {
+      "en": "Clear the calculator completely, so nothing is left in its memory.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:22:13"
+      ]
+    },
+    "quest01-calculator#2": {
+      "en": "Do it on the calculator below — press the keys yourself.",
+      "kind": "string",
+      "slots": [
+        "task"
+      ],
+      "where": [
+        "quest01-calculator.js:23:11"
+      ]
+    },
+    "quest01-calculator#3": {
+      "en": "Clear-all lives under SHIFT 9 (CLR): SHIFT, 9, then 3 (All), then = to confirm.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:25:11"
+      ]
+    },
+    "quest01-calculator#4": {
+      "en": "SHIFT, 9, 3, = (Reset All → Yes)",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:26:18"
+      ]
+    },
+    "quest01-calculator#5": {
+      "en": "Press SHIFT, then 9 — that opens the CLR menu.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:28:12"
+      ]
+    },
+    "quest01-calculator#6": {
+      "en": "Choose 3 (All).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:29:12"
+      ]
+    },
+    "quest01-calculator#7": {
+      "en": "Press = to confirm “Reset All?”.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:30:12"
+      ]
+    },
+    "quest01-calculator#8": {
+      "en": "Switch the frequency column (FREQ) <b>ON</b>, so you can record how often each value occurs.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:36:13"
+      ]
+    },
+    "quest01-calculator#9": {
+      "en": "Work through the SETUP menu on the calculator below.",
+      "kind": "string",
+      "slots": [
+        "task"
+      ],
+      "where": [
+        "quest01-calculator.js:37:11"
+      ]
+    },
+    "quest01-calculator#10": {
+      "en": "Frequency lives in SETUP: SHIFT, MODE (SETUP), scroll ▼, 4 (STAT), then 1 (ON).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:39:11"
+      ]
+    },
+    "quest01-calculator#11": {
+      "en": "SHIFT, MODE, ▼, 4 (STAT), 1 (ON)",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:40:18"
+      ]
+    },
+    "quest01-calculator#12": {
+      "en": "Press SHIFT, MODE to open SETUP.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:42:12"
+      ]
+    },
+    "quest01-calculator#13": {
+      "en": "Press ▼ to reach the second page.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:43:12"
+      ]
+    },
+    "quest01-calculator#14": {
+      "en": "Choose 4 (STAT), then 1 (ON).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:44:12"
+      ]
+    },
+    "quest01-calculator#15": {
+      "en": "Put the calculator into single-variable <b>Statistics</b> mode, ready to type a data set in.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:50:13"
+      ]
+    },
+    "quest01-calculator#16": {
+      "en": "Use the MODE menu on the calculator below.",
+      "kind": "string",
+      "slots": [
+        "task"
+      ],
+      "where": [
+        "quest01-calculator.js:51:11"
+      ]
+    },
+    "quest01-calculator#17": {
+      "en": "MODE opens the list of modes: MODE, 3 (STAT), 1 (1-VAR).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:53:11"
+      ]
+    },
+    "quest01-calculator#18": {
+      "en": "MODE, 3 (STAT), 1 (1-VAR)",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:54:18"
+      ]
+    },
+    "quest01-calculator#19": {
+      "en": "Press MODE.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:56:12"
+      ]
+    },
+    "quest01-calculator#20": {
+      "en": "Choose 3 (STAT).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:57:12"
+      ]
+    },
+    "quest01-calculator#21": {
+      "en": "Choose 1 (1-VAR) — now you can type the data.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:58:12"
+      ]
+    },
+    "quest01-calculator#22": {
+      "en": "Capture this data set on the calculator: <b>${list(data)}</b>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:66:15"
+      ]
+    },
+    "quest01-calculator#23": {
+      "en": "Get into 1-VAR mode, then type each value. It’s done once all of them are in.",
+      "kind": "string",
+      "slots": [
+        "task"
+      ],
+      "where": [
+        "quest01-calculator.js:67:13"
+      ]
+    },
+    "quest01-calculator#24": {
+      "en": "MODE, 3, 1 for 1-VAR. Type a value, then = (or ▼) to drop to the next row. Repeat for every number.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:69:13"
+      ]
+    },
+    "quest01-calculator#25": {
+      "en": "MODE, 3, 1 → type ${list(data)}, each followed by =",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:70:20"
+      ]
+    },
+    "quest01-calculator#26": {
+      "en": "MODE, 3 (STAT), 1 (1-VAR) opens the data table.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:72:14"
+      ]
+    },
+    "quest01-calculator#27": {
+      "en": "Type the first value, press = to move down a row.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:73:14"
+      ]
+    },
+    "quest01-calculator#28": {
+      "en": "Repeat until every value is entered.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:74:14"
+      ]
+    },
+    "quest01-calculator#29": {
+      "en": "The data <b>${list(data)}</b> is already captured. Read off <b>n</b> — how many values there are.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:83:15"
+      ]
+    },
+    "quest01-calculator#30": {
+      "en": "Use the STAT → Var menu on the calculator below.",
+      "kind": "string",
+      "slots": [
+        "task"
+      ],
+      "where": [
+        "quest01-calculator.js:84:13",
+        "quest01-calculator.js:102:13",
+        "quest01-calculator.js:120:13"
+      ]
+    },
+    "quest01-calculator#31": {
+      "en": "SHIFT, 1 (STAT), 4 (Var), 1 (n), then =.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:86:13"
+      ]
+    },
+    "quest01-calculator#32": {
+      "en": "n = ${data.length}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:87:20"
+      ]
+    },
+    "quest01-calculator#33": {
+      "en": "Press SHIFT, 1 to open the STAT menu.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:89:14"
+      ]
+    },
+    "quest01-calculator#34": {
+      "en": "Choose 4 (Var), then 1 (n).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:90:14"
+      ]
+    },
+    "quest01-calculator#35": {
+      "en": "Press = to show the count.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:91:14"
+      ]
+    },
+    "quest01-calculator#36": {
+      "en": "The data <b>${list(data)}</b> is already captured. Read off the <b>mean</b> (x̄).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:101:15"
+      ]
+    },
+    "quest01-calculator#37": {
+      "en": "SHIFT, 1 (STAT), 4 (Var), 2 (x̄), then =.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:104:13"
+      ]
+    },
+    "quest01-calculator#38": {
+      "en": "x̄ = ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:105:20"
+      ]
+    },
+    "quest01-calculator#39": {
+      "en": "Press SHIFT, 1 (STAT).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:107:14"
+      ]
+    },
+    "quest01-calculator#40": {
+      "en": "Choose 4 (Var), then 2 (x̄) — the mean symbol.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:108:14"
+      ]
+    },
+    "quest01-calculator#41": {
+      "en": "Press = to show the mean.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:109:14"
+      ]
+    },
+    "quest01-calculator#42": {
+      "en": "The data <b>${list(data)}</b> is already captured. Read off the <b>standard deviation</b> — use <b>σx</b>, not sx.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:119:15"
+      ]
+    },
+    "quest01-calculator#43": {
+      "en": "SHIFT, 1 (STAT), 4 (Var), 3 (σx), then =. (σx is option 3; sx is the wrong one.)",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:122:13"
+      ]
+    },
+    "quest01-calculator#44": {
+      "en": "σx = ${C(sd)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:123:20"
+      ]
+    },
+    "quest01-calculator#45": {
+      "en": "Press SHIFT, 1 (STAT), 4 (Var).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:125:14"
+      ]
+    },
+    "quest01-calculator#46": {
+      "en": "Choose 3 (σx) — the population standard deviation, not 4 (sx).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:126:14"
+      ]
+    },
+    "quest01-calculator#47": {
+      "en": "Press = to show σx.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:127:14"
+      ]
+    },
+    "quest01-calculator#48": {
+      "en": "The data <b>${list(data)}</b> is already captured. Use <b>MinMax</b> to read off the <b>median</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest01-calculator.js:137:15"
+      ]
+    },
+    "quest01-calculator#49": {
+      "en": "Use the STAT → MinMax menu on the calculator below.",
+      "kind": "string",
+      "slots": [
+        "task"
+      ],
+      "where": [
+        "quest01-calculator.js:138:13"
+      ]
+    },
+    "quest01-calculator#50": {
+      "en": "SHIFT, 1 (STAT), 6 (MinMax), 4 (med), then =.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest01-calculator.js:140:13"
+      ]
+    },
+    "quest01-calculator#51": {
+      "en": "median = ${C(med)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest01-calculator.js:141:20"
+      ]
+    },
+    "quest01-calculator#52": {
+      "en": "Press SHIFT, 1 (STAT), 6 (MinMax).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:143:14"
+      ]
+    },
+    "quest01-calculator#53": {
+      "en": "Choose 4 (med).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:144:14"
+      ]
+    },
+    "quest01-calculator#54": {
+      "en": "Press = to show the median.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest01-calculator.js:145:14"
+      ]
+    },
+    "quest02-centre-spread#1": {
+      "en": "the range",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest02-centre-spread.js:12:19"
+      ]
+    },
+    "quest02-centre-spread#2": {
+      "en": "the interquartile range",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest02-centre-spread.js:12:32"
+      ]
+    },
+    "quest02-centre-spread#3": {
+      "en": "the standard deviation",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest02-centre-spread.js:12:59"
+      ]
+    },
+    "quest02-centre-spread#4": {
+      "en": "the mean",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest02-centre-spread.js:13:19"
+      ]
+    },
+    "quest02-centre-spread#5": {
+      "en": "the median",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest02-centre-spread.js:13:31"
+      ]
+    },
+    "quest02-centre-spread#6": {
+      "en": "the mode",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest02-centre-spread.js:13:45"
+      ]
+    },
+    "quest02-centre-spread#7": {
+      "en": "mean",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest02-centre-spread.js:18:13",
+        "quest02-centre-spread.js:32:28",
+        "quest02-centre-spread.js:35:94",
+        "quest02-centre-spread.js:43:28",
+        "quest02-centre-spread.js:46:64",
+        "quest02-centre-spread.js:58:26",
+        "quest02-centre-spread.js:73:26",
+        "quest02-centre-spread.js:87:28",
+        "quest02-centre-spread.js:97:31",
+        "quest02-centre-spread.js:98:11",
+        "quest02-centre-spread.js:98:28",
+        "quest02-centre-spread.js:99:30",
+        "quest02-centre-spread.js:100:28",
+        "quest02-centre-spread.js:101:29",
+        "quest02-centre-spread.js:102:29"
+      ],
+      "data": true
+    },
+    "quest02-centre-spread#8": {
+      "en": "Which of these is a measure of <b>${ask === \"spread\" ? \"spread (dispersion)\" : \"central tendency (centre)\"}</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest02-centre-spread.js:19:5"
+      ],
+      "nested": [
+        "spread",
+        "spread (dispersion)",
+        "central tendency (centre)"
+      ]
+    },
+    "quest02-centre-spread#9": {
+      "en": "Spread tells you how scattered the data is.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest02-centre-spread.js:21:32"
+      ]
+    },
+    "quest02-centre-spread#10": {
+      "en": "Centre tells you a typical or middle value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest02-centre-spread.js:21:80"
+      ]
+    },
+    "quest02-centre-spread#11": {
+      "en": "${correct} is a measure of ${ask === \"spread\" ? \"spread\" : \"central tendency\"}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest02-centre-spread.js:22:23"
+      ],
+      "nested": [
+        "spread",
+        "spread",
+        "central tendency"
+      ]
+    },
+    "quest02-centre-spread#12": {
+      "en": "Calculate the <b>mean</b> of:<br><span class=\"num\">${list(data)}</span>${dp ? \"<br>(round to 1 decimal place)\" : \"\"}",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest02-centre-spread.js:33:13"
+      ],
+      "nested": [
+        "<br>(round to 1 decimal place)"
+      ]
+    },
+    "quest02-centre-spread#13": {
+      "en": "Add all the values, then divide by how many there are.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest02-centre-spread.js:34:11"
+      ]
+    },
+    "quest02-centre-spread#14": {
+      "en": "x̄ = Σx / n = ${sum(data)} / ${n} ${mR === m ? \"=\" : \"≈\"} ${C(mR)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest02-centre-spread.js:35:21"
+      ]
+    },
+    "quest02-centre-spread#15": {
+      "en": "The mean of <b>${n}</b> values is <b>${m}</b>. Calculate the <b>sum</b> of the values (Σx).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest02-centre-spread.js:44:13"
+      ]
+    },
+    "quest02-centre-spread#16": {
+      "en": "Rearrange x̄ = Σx / n into Σx = x̄ × n.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest02-centre-spread.js:45:11"
+      ]
+    },
+    "quest02-centre-spread#17": {
+      "en": "Σx = x̄ × n = ${m} × ${n} = ${total}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest02-centre-spread.js:46:21"
+      ]
+    },
+    "quest02-centre-spread#18": {
+      "en": "Find the <b>median</b> of:<br><span class=\"num\">${list(data)}</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest02-centre-spread.js:59:13"
+      ]
+    },
+    "quest02-centre-spread#19": {
+      "en": "median = ${C(med)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest02-centre-spread.js:61:18"
+      ]
+    },
+    "quest02-centre-spread#20": {
+      "en": "The data is already in order — the median is the middle value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest02-centre-spread.js:62:11"
+      ]
+    },
+    "quest02-centre-spread#21": {
+      "en": "n = ${n}, middle position = ${(n + 1) / 2} → median = ${C(med)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest02-centre-spread.js:63:21"
+      ]
+    },
+    "quest02-centre-spread#22": {
+      "en": "median",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest02-centre-spread.js:63:91",
+        "quest02-centre-spread.js:99:11"
+      ],
+      "data": true
+    },
+    "quest02-centre-spread#23": {
+      "en": "Find the <b>mode</b> of:<br><span class=\"num\">${list(arr)}</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest02-centre-spread.js:74:13"
+      ]
+    },
+    "quest02-centre-spread#24": {
+      "en": "mode = ${m}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest02-centre-spread.js:76:18"
+      ]
+    },
+    "quest02-centre-spread#25": {
+      "en": "The mode is the value that appears most often.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest02-centre-spread.js:77:11"
+      ]
+    },
+    "quest02-centre-spread#26": {
+      "en": "${m} appears most often → mode = ${m}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest02-centre-spread.js:78:21"
+      ]
+    },
+    "quest02-centre-spread#27": {
+      "en": "mode",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest02-centre-spread.js:78:65",
+        "quest02-centre-spread.js:100:11"
+      ],
+      "data": true
+    },
+    "quest02-centre-spread#28": {
+      "en": "Calculate the <b>range</b> of:<br><span class=\"num\">${list(data)}</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest02-centre-spread.js:88:13"
+      ]
+    },
+    "quest02-centre-spread#29": {
+      "en": "Range = largest value − smallest value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest02-centre-spread.js:89:11"
+      ]
+    },
+    "quest02-centre-spread#30": {
+      "en": "range = max − min = ${mx} − ${mn} = ${r}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest02-centre-spread.js:90:21"
+      ]
+    },
+    "quest02-centre-spread#31": {
+      "en": "range",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest02-centre-spread.js:90:68",
+        "quest02-centre-spread.js:101:11"
+      ],
+      "data": true
+    },
+    "quest03-quartiles#1": {
+      "en": "Q1 (the lower quartile)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:59:22"
+      ]
+    },
+    "quest03-quartiles#2": {
+      "en": "the median (Q2)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:59:53"
+      ]
+    },
+    "quest03-quartiles#3": {
+      "en": "Q3 (the upper quartile)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:59:76"
+      ]
+    },
+    "quest03-quartiles#4": {
+      "en": "(n + 1)/4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:60:24"
+      ]
+    },
+    "quest03-quartiles#5": {
+      "en": "(n + 1)/2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:60:41"
+      ]
+    },
+    "quest03-quartiles#6": {
+      "en": "3(n + 1)/4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:60:58"
+      ]
+    },
+    "quest03-quartiles#7": {
+      "en": "q1",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:62:20",
+        "quest03-quartiles.js:68:23",
+        "quest03-quartiles.js:70:28",
+        "quest03-quartiles.js:86:23",
+        "quest03-quartiles.js:99:19",
+        "quest03-quartiles.js:135:34",
+        "quest03-quartiles.js:182:33"
+      ],
+      "data": true
+    },
+    "quest03-quartiles#8": {
+      "en": "q2",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:62:54",
+        "quest03-quartiles.js:68:29",
+        "quest03-quartiles.js:70:53",
+        "quest03-quartiles.js:71:30",
+        "quest03-quartiles.js:86:29",
+        "quest03-quartiles.js:99:25"
+      ],
+      "data": true
+    },
+    "quest03-quartiles#9": {
+      "en": "q3",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:68:35",
+        "quest03-quartiles.js:86:35",
+        "quest03-quartiles.js:99:31",
+        "quest03-quartiles.js:135:66",
+        "quest03-quartiles.js:182:39",
+        "quest03-quartiles.js:309:7"
+      ],
+      "data": true
+    },
+    "quest03-quartiles#10": {
+      "en": "quartiles",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:73:26",
+        "quest03-quartiles.js:105:26",
+        "quest03-quartiles.js:142:50",
+        "quest03-quartiles.js:311:27",
+        "quest03-quartiles.js:312:29"
+      ],
+      "data": true
+    },
+    "quest03-quartiles#11": {
+      "en": "A data set has <b>${n}</b> values arranged in order. What is the <b>position</b> of ${QLABEL[which]}?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:74:13"
+      ]
+    },
+    "quest03-quartiles#12": {
+      "en": "position ${C(correct)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest03-quartiles.js:76:18"
+      ]
+    },
+    "quest03-quartiles#13": {
+      "en": "Use the position formula — it’s a fraction of (n + 1), not of n.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:77:11"
+      ]
+    },
+    "quest03-quartiles#14": {
+      "en": "position of ${which.toUpperCase()} = ${QFORMULA[which]} = ${posExpr(n, which)} = ${C(correct)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:78:21"
+      ]
+    },
+    "quest03-quartiles#15": {
+      "en": "quartile position",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:78:122",
+        "quest03-quartiles.js:111:86"
+      ]
+    },
+    "quest03-quartiles#16": {
+      "en": "An ordered data set:<br><span class=\"num\">${list(data)}</span><br>Find ${QLABEL[which]}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:106:13"
+      ]
+    },
+    "quest03-quartiles#17": {
+      "en": "Find the position first, apply the rounding rule, then count to that spot in the list.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:109:11"
+      ]
+    },
+    "quest03-quartiles#18": {
+      "en": "position of ${which.toUpperCase()} = ${QFORMULA[which]} = ${C(pos)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:111:12"
+      ]
+    },
+    "quest03-quartiles#19": {
+      "en": "For a data set, <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Calculate the interquartile range (IQR).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:124:13"
+      ]
+    },
+    "quest03-quartiles#20": {
+      "en": "The IQR is the spread of the middle half — subtract the lower quartile from the upper.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:126:11"
+      ]
+    },
+    "quest03-quartiles#21": {
+      "en": "IQR = Q3 − Q1 = ${q3} − ${q1} = ${ans}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:127:21"
+      ]
+    },
+    "quest03-quartiles#22": {
+      "en": "interquartile range",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:127:66",
+        "quest03-quartiles.js:143:66",
+        "quest03-quartiles.js:158:58",
+        "quest03-quartiles.js:261:59"
+      ]
+    },
+    "quest03-quartiles#23": {
+      "en": "An ordered data set:<br><span class=\"num\">${list(data)}</span><br>Calculate the IQR.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:138:13"
+      ]
+    },
+    "quest03-quartiles#24": {
+      "en": "IQR = ${C(ans)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest03-quartiles.js:139:33"
+      ]
+    },
+    "quest03-quartiles#25": {
+      "en": "Find Q1 and Q3 from the list first, then IQR = Q3 − Q1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:140:11"
+      ]
+    },
+    "quest03-quartiles#26": {
+      "en": "Q1 = ${C(q1)} and Q3 = ${C(q3)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:142:12"
+      ]
+    },
+    "quest03-quartiles#27": {
+      "en": "IQR = Q3 − Q1 = ${C(q3)} − ${C(q1)} = ${C(ans)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:143:12"
+      ]
+    },
+    "quest03-quartiles#28": {
+      "en": "For a data set, <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Calculate the <b>semi-quartile range</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:154:13"
+      ]
+    },
+    "quest03-quartiles#29": {
+      "en": "The semi-quartile range is HALF the interquartile range: (Q3 − Q1) ÷ 2.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:156:11"
+      ]
+    },
+    "quest03-quartiles#30": {
+      "en": "IQR = Q3 − Q1 = ${q3} − ${q1} = ${iqrV}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:158:12"
+      ]
+    },
+    "quest03-quartiles#31": {
+      "en": "semi-quartile range = IQR / 2 = ${iqrV} / 2 = ${ans}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:159:12"
+      ]
+    },
+    "quest03-quartiles#32": {
+      "en": "semi-quartile range",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:159:71"
+      ]
+    },
+    "quest03-quartiles#33": {
+      "en": "median",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:182:23",
+        "quest03-quartiles.js:184:26",
+        "quest03-quartiles.js:205:11",
+        "quest03-quartiles.js:212:41"
+      ],
+      "data": true
+    },
+    "quest03-quartiles#34": {
+      "en": "min",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:182:45"
+      ]
+    },
+    "quest03-quartiles#35": {
+      "en": "max",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:182:52"
+      ]
+    },
+    "quest03-quartiles#36": {
+      "en": "lower quartile (Q1)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:184:40"
+      ]
+    },
+    "quest03-quartiles#37": {
+      "en": "upper quartile (Q3)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:184:67"
+      ]
+    },
+    "quest03-quartiles#38": {
+      "en": "minimum",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:184:95"
+      ]
+    },
+    "quest03-quartiles#39": {
+      "en": "maximum",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:184:111"
+      ]
+    },
+    "quest03-quartiles#40": {
+      "en": "the line inside the box",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:186:13",
+        "quest03-quartiles.js:205:53"
+      ]
+    },
+    "quest03-quartiles#41": {
+      "en": "the left edge of the box",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:186:44"
+      ]
+    },
+    "quest03-quartiles#42": {
+      "en": "the right edge of the box",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:187:9"
+      ]
+    },
+    "quest03-quartiles#43": {
+      "en": "the left whisker end",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:187:43"
+      ]
+    },
+    "quest03-quartiles#44": {
+      "en": "the right whisker end",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:187:72"
+      ]
+    },
+    "quest03-quartiles#45": {
+      "en": "read the value off the number line",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "quest03-quartiles.js:192:15"
+      ]
+    },
+    "quest03-quartiles#46": {
+      "en": "Read the <b>${name}</b> off the box-and-whisker plot.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:193:13"
+      ]
+    },
+    "quest03-quartiles#47": {
+      "en": "Look at ${where}, then read straight down to the number line.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:195:11"
+      ]
+    },
+    "quest03-quartiles#48": {
+      "en": "The ${name} is ${where} — read it off as ≈ ${map[which]}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:196:21"
+      ]
+    },
+    "quest03-quartiles#49": {
+      "en": "Tap the part of the plot that shows the <b>interquartile range</b>.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:204:21"
+      ]
+    },
+    "quest03-quartiles#50": {
+      "en": "the box — from Q1 to Q3",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:204:95"
+      ]
+    },
+    "quest03-quartiles#51": {
+      "en": "Tap the <b>median</b>.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:205:24"
+      ]
+    },
+    "quest03-quartiles#52": {
+      "en": "Tap the section holding the <b>lowest 25%</b> of the data.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:206:26"
+      ]
+    },
+    "quest03-quartiles#53": {
+      "en": "the left whisker (minimum → Q1)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:206:91"
+      ]
+    },
+    "quest03-quartiles#54": {
+      "en": "Tap the section holding the <b>highest 25%</b> of the data.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:207:26"
+      ]
+    },
+    "quest03-quartiles#55": {
+      "en": "the right whisker (Q3 → maximum)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder"
+      ],
+      "where": [
+        "quest03-quartiles.js:207:92"
+      ]
+    },
+    "quest03-quartiles#56": {
+      "en": "Tap the matching part of the box-and-whisker plot.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "quest03-quartiles.js:214:14"
+      ]
+    },
+    "quest03-quartiles#57": {
+      "en": "The box is Q1→Q3 (the IQR); the line inside is the median; each whisker is a 25% tail.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:216:11"
+      ]
+    },
+    "quest03-quartiles#58": {
+      "en": "That is ${target.a}. Each of the four sections holds about 25% of the data.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:217:21"
+      ]
+    },
+    "quest03-quartiles#59": {
+      "en": "lower",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:234:23",
+        "quest03-quartiles.js:235:25",
+        "quest03-quartiles.js:237:33",
+        "quest03-quartiles.js:246:50",
+        "quest03-quartiles.js:252:19",
+        "quest03-quartiles.js:262:17"
+      ],
+      "data": true
+    },
+    "quest03-quartiles#60": {
+      "en": "upper",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:234:32"
+      ]
+    },
+    "quest03-quartiles#61": {
+      "en": "A data set has <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Calculate the <b>${which} boundary</b> for outliers.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:240:13"
+      ]
+    },
+    "quest03-quartiles#62": {
+      "en": "First the IQR.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:242:16"
+      ]
+    },
+    "quest03-quartiles#63": {
+      "en": "IQR = Q3 − Q1",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:242:41"
+      ]
+    },
+    "quest03-quartiles#64": {
+      "en": "Build the boundary. Tap a piece to drop it into the next box.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:245:17"
+      ]
+    },
+    "quest03-quartiles#65": {
+      "en": "Below Q1 for the lower boundary, above Q3 for the upper — always 1,5 × IQR.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:249:15"
+      ]
+    },
+    "quest03-quartiles#66": {
+      "en": "Now calculate the boundary itself (1 decimal).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:251:27"
+      ]
+    },
+    "quest03-quartiles#67": {
+      "en": "Now calculate the boundary itself.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:251:78"
+      ]
+    },
+    "quest03-quartiles#68": {
+      "en": "lower = Q1 − 1,5 × IQR = ${q1} − 1,5 × ${range}.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:253:13"
+      ]
+    },
+    "quest03-quartiles#69": {
+      "en": "upper = Q3 + 1,5 × IQR = ${q3} + 1,5 × ${range}.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:254:13"
+      ]
+    },
+    "quest03-quartiles#70": {
+      "en": "Find the IQR first, then go 1,5 × IQR beyond the quartile (below Q1, or above Q3).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:259:11"
+      ]
+    },
+    "quest03-quartiles#71": {
+      "en": "IQR = Q3 − Q1 = ${q3} − ${q1} = ${range}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:261:12"
+      ]
+    },
+    "quest03-quartiles#72": {
+      "en": "lower = Q1 − 1,5 × IQR = ${q1} − 1,5 × ${range} = ${C(lower)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:263:16"
+      ]
+    },
+    "quest03-quartiles#73": {
+      "en": "lower boundary",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:263:84"
+      ]
+    },
+    "quest03-quartiles#74": {
+      "en": "upper = Q3 + 1,5 × IQR = ${q3} + 1,5 × ${range} = ${C(upper)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:264:16"
+      ]
+    },
+    "quest03-quartiles#75": {
+      "en": "upper boundary",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:264:84"
+      ]
+    },
+    "quest03-quartiles#76": {
+      "en": "A data set has <b>Q1 = ${q1}</b> and <b>Q3 = ${q3}</b>. Is the value <b>${x}</b> an outlier?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:283:13"
+      ]
+    },
+    "quest03-quartiles#77": {
+      "en": "Yes — it lies outside the boundaries",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest03-quartiles.js:284:26"
+      ]
+    },
+    "quest03-quartiles#78": {
+      "en": "No — it lies within the boundaries",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest03-quartiles.js:284:67"
+      ]
+    },
+    "quest03-quartiles#79": {
+      "en": "Find the boundaries Q1 − 1,5×IQR and Q3 + 1,5×IQR. A value beyond them is an outlier.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:285:11"
+      ]
+    },
+    "quest03-quartiles#80": {
+      "en": "IQR = ${q3} − ${q1} = ${range}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:287:12"
+      ]
+    },
+    "quest03-quartiles#81": {
+      "en": "IQR",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:287:49"
+      ]
+    },
+    "quest03-quartiles#82": {
+      "en": "lower = ${C(lower)} and upper = ${C(upper)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:288:12"
+      ]
+    },
+    "quest03-quartiles#83": {
+      "en": "boundaries",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:288:62"
+      ]
+    },
+    "quest03-quartiles#84": {
+      "en": "${x} lies ${isOut ? \"outside\" : \"inside\"} [${C(lower)} ; ${C(upper)}] → ${isOut ? \"an outlier\" : \"not an outlier\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:289:12"
+      ],
+      "nested": [
+        "outside",
+        "inside",
+        "an outlier",
+        "not an outlier"
+      ]
+    },
+    "quest03-quartiles#85": {
+      "en": "A data set has <b>${n}</b> values in order. Calculate the <b>position</b> of the ${p}th percentile.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest03-quartiles.js:301:13"
+      ]
+    },
+    "quest03-quartiles#86": {
+      "en": "position ${C(ans)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest03-quartiles.js:302:33"
+      ]
+    },
+    "quest03-quartiles#87": {
+      "en": "Use position = (n + 1) × p/100.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest03-quartiles.js:303:11"
+      ]
+    },
+    "quest03-quartiles#88": {
+      "en": "position = (n + 1) × ${p}/100 = ${n + 1} × ${C(p / 100)} = ${C(ans)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest03-quartiles.js:304:21"
+      ]
+    },
+    "quest03-quartiles#89": {
+      "en": "percentile position",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest03-quartiles.js:304:96"
+      ]
+    },
+    "quest04-skewness#1": {
+      "en": "Skewed to the right (positively skewed)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest04-skewness.js:12:10"
+      ]
+    },
+    "quest04-skewness#2": {
+      "en": "Skewed to the left (negatively skewed)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest04-skewness.js:13:9"
+      ]
+    },
+    "quest04-skewness#3": {
+      "en": "Symmetric (normal)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest04-skewness.js:14:11"
+      ]
+    },
+    "quest04-skewness#4": {
+      "en": "normal",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:22:16",
+        "quest04-skewness.js:38:39",
+        "quest04-skewness.js:40:24",
+        "quest04-skewness.js:49:39",
+        "quest04-skewness.js:51:24",
+        "quest04-skewness.js:59:39",
+        "quest04-skewness.js:61:24",
+        "quest04-skewness.js:71:39",
+        "quest04-skewness.js:90:39",
+        "quest04-skewness.js:97:35"
+      ],
+      "data": true
+    },
+    "quest04-skewness#5": {
+      "en": "right",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:24:16",
+        "quest04-skewness.js:33:22",
+        "quest04-skewness.js:38:22",
+        "quest04-skewness.js:49:22",
+        "quest04-skewness.js:59:22",
+        "quest04-skewness.js:62:16",
+        "quest04-skewness.js:71:22",
+        "quest04-skewness.js:72:22",
+        "quest04-skewness.js:73:24",
+        "quest04-skewness.js:82:21",
+        "quest04-skewness.js:90:22",
+        "quest04-skewness.js:91:28"
+      ],
+      "data": true
+    },
+    "quest04-skewness#6": {
+      "en": "left",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:33:49",
+        "quest04-skewness.js:38:31",
+        "quest04-skewness.js:49:31",
+        "quest04-skewness.js:59:31",
+        "quest04-skewness.js:71:31",
+        "quest04-skewness.js:72:63",
+        "quest04-skewness.js:73:59",
+        "quest04-skewness.js:82:30",
+        "quest04-skewness.js:90:31",
+        "quest04-skewness.js:91:63"
+      ],
+      "data": true
+    },
+    "quest04-skewness#7": {
+      "en": "The box and whiskers are balanced about the median → symmetric.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:40:35"
+      ]
+    },
+    "quest04-skewness#8": {
+      "en": "The longer half and whisker (the tail) is on the ${skew} → skewed ${skew}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:41:7"
+      ]
+    },
+    "quest04-skewness#9": {
+      "en": "Look at the box-and-whisker plot. How is the distribution skewed?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest04-skewness.js:42:25"
+      ]
+    },
+    "quest04-skewness#10": {
+      "en": "shape of the distribution",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "quest04-skewness.js:44:90"
+      ]
+    },
+    "quest04-skewness#11": {
+      "en": "The skew is named for the tail — the longer whisker / bigger half.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest04-skewness.js:45:13"
+      ]
+    },
+    "quest04-skewness#12": {
+      "en": "The bars are roughly symmetric about the centre → normal.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:51:35"
+      ]
+    },
+    "quest04-skewness#13": {
+      "en": "The tall bars are on the ${skew === \"right\" ? \"left\" : \"right\"} and the low tail stretches ${skew} → skewed ${skew}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:52:7"
+      ],
+      "nested": [
+        "right",
+        "left",
+        "right"
+      ]
+    },
+    "quest04-skewness#14": {
+      "en": "Look at the histogram. How is the distribution skewed?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest04-skewness.js:53:25"
+      ]
+    },
+    "quest04-skewness#15": {
+      "en": "frequency",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "quest04-skewness.js:55:51"
+      ]
+    },
+    "quest04-skewness#16": {
+      "en": "Find the long low tail — the skew is named for it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest04-skewness.js:55:70"
+      ]
+    },
+    "quest04-skewness#17": {
+      "en": "The S-curve is symmetric → normal.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:61:35"
+      ]
+    },
+    "quest04-skewness#18": {
+      "en": "The curve rises steeply early then flattens at the top — the thin tail is on the right → skewed right.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:62:26"
+      ]
+    },
+    "quest04-skewness#19": {
+      "en": "The curve stays flat then rises steeply at the top — the thin tail is on the left → skewed left.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:63:9"
+      ]
+    },
+    "quest04-skewness#20": {
+      "en": "Look at the ogive. How is the distribution skewed?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest04-skewness.js:64:25"
+      ]
+    },
+    "quest04-skewness#21": {
+      "en": "cumulative frequency",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "quest04-skewness.js:66:52"
+      ]
+    },
+    "quest04-skewness#22": {
+      "en": "The flat end of the ogive is the tail.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest04-skewness.js:66:82"
+      ]
+    },
+    "quest04-skewness#23": {
+      "en": "x̄ > median",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:73:34",
+        "quest04-skewness.js:91:38",
+        "quest04-skewness.js:92:19"
+      ]
+    },
+    "quest04-skewness#24": {
+      "en": "x̄ < median",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:73:68",
+        "quest04-skewness.js:91:72",
+        "quest04-skewness.js:92:34"
+      ]
+    },
+    "quest04-skewness#25": {
+      "en": "x̄ = median",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:73:84",
+        "quest04-skewness.js:91:88",
+        "quest04-skewness.js:92:49"
+      ]
+    },
+    "quest04-skewness#26": {
+      "en": "For a data set, the mean x̄ = <b>${m}</b> and the median = <b>${med}</b>. How is it skewed?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest04-skewness.js:75:5"
+      ]
+    },
+    "quest04-skewness#27": {
+      "en": "Compare the mean and median — the mean is pulled toward the tail.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest04-skewness.js:77:13"
+      ]
+    },
+    "quest04-skewness#28": {
+      "en": "${rel} → ${skew === \"normal\" ? \"symmetric\" : \"skewed \" + skew} (the mean is pulled toward the tail).",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:78:23"
+      ],
+      "nested": [
+        "normal",
+        "symmetric",
+        "skewed "
+      ]
+    },
+    "quest04-skewness#29": {
+      "en": "Most of the data is bunched together, with a long thin <b>tail to the ${dir}</b>. How is the distribution described?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest04-skewness.js:84:5"
+      ]
+    },
+    "quest04-skewness#30": {
+      "en": "The skew is named for the tail.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest04-skewness.js:86:13"
+      ]
+    },
+    "quest04-skewness#31": {
+      "en": "The tail points ${dir} → skewed to the ${dir}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:86:64"
+      ]
+    },
+    "quest04-skewness#32": {
+      "en": "Which statement is true for a distribution that is <b>${skew === \"normal\" ? \"symmetric (normal)\" : \"skewed to the \" + skew}</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest04-skewness.js:94:5"
+      ],
+      "nested": [
+        "normal",
+        "symmetric (normal)",
+        "skewed to the "
+      ]
+    },
+    "quest04-skewness#33": {
+      "en": "Skew toward the tail pulls the mean past the median.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest04-skewness.js:96:13"
+      ]
+    },
+    "quest04-skewness#34": {
+      "en": "Symmetric",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:97:46"
+      ]
+    },
+    "quest04-skewness#35": {
+      "en": "Skewed ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest04-skewness.js:97:60"
+      ]
+    },
+    "quest05-grouped#1": {
+      "en": "${freqTable(classes, { total: false })}What is <b>n</b> (the total frequency, Σf)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest05-grouped.js:28:13"
+      ]
+    },
+    "quest05-grouped#2": {
+      "en": "Add up the frequency column.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest05-grouped.js:29:11"
+      ]
+    },
+    "quest05-grouped#3": {
+      "en": "n = Σf = ${classes.map(c => c.freq).join(\" + \")} = ${n}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:30:21"
+      ]
+    },
+    "quest05-grouped#4": {
+      "en": "total frequency",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest05-grouped.js:30:83"
+      ]
+    },
+    "quest05-grouped#5": {
+      "en": "What is the <b>midpoint</b> of the class <b>${lo} ≤ x &lt; ${up}</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest05-grouped.js:38:13"
+      ]
+    },
+    "quest05-grouped#6": {
+      "en": "Midpoint = (lower + upper) ÷ 2.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest05-grouped.js:39:11"
+      ]
+    },
+    "quest05-grouped#7": {
+      "en": "x = (${lo} + ${up}) / 2 = ${mid}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:40:21"
+      ]
+    },
+    "quest05-grouped#8": {
+      "en": "midpoint",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest05-grouped.js:40:60",
+        "quest05-grouped.js:115:11"
+      ],
+      "data": true
+    },
+    "quest05-grouped#9": {
+      "en": "For the class <b>${lo} ≤ x &lt; ${up}</b> with frequency <b>${f}</b>, calculate <b>f × x</b> (frequency × midpoint).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest05-grouped.js:48:13"
+      ]
+    },
+    "quest05-grouped#10": {
+      "en": "First find the midpoint x = (lower + upper)/2, then multiply by the frequency.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest05-grouped.js:49:11"
+      ]
+    },
+    "quest05-grouped#11": {
+      "en": "x = ${mid}, so f × x = ${f} × ${mid} = ${fx}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:50:21"
+      ]
+    },
+    "quest05-grouped#12": {
+      "en": "f × midpoint",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest05-grouped.js:50:72"
+      ]
+    },
+    "quest05-grouped#13": {
+      "en": "${freqTable(classes, { mid: true })}Calculate the <b>estimated mean</b> (to 2 decimal places).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest05-grouped.js:59:13"
+      ]
+    },
+    "quest05-grouped#14": {
+      "en": "Estimated mean = Σ(f × x) / n. Use each class midpoint x.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest05-grouped.js:60:11"
+      ]
+    },
+    "quest05-grouped#15": {
+      "en": "Σ(f × x) = ${fx}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:62:12"
+      ]
+    },
+    "quest05-grouped#16": {
+      "en": "using midpoints",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest05-grouped.js:62:35"
+      ]
+    },
+    "quest05-grouped#17": {
+      "en": "x̄ = Σfx / n = ${fx} / ${n} = ${C(Math.round(mean * 100) / 100)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:63:12"
+      ]
+    },
+    "quest05-grouped#18": {
+      "en": "estimated mean",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest05-grouped.js:63:83"
+      ]
+    },
+    "quest05-grouped#19": {
+      "en": "${freqTable(classes)}Which is the <b>modal class</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest05-grouped.js:74:5"
+      ]
+    },
+    "quest05-grouped#20": {
+      "en": "The modal class has the highest frequency.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest05-grouped.js:76:30"
+      ]
+    },
+    "quest05-grouped#21": {
+      "en": "${correct} has the highest frequency → modal class.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:77:23"
+      ]
+    },
+    "quest05-grouped#22": {
+      "en": "${freqTable(classes, { cum: true })}The median is at position n/2 = <b>${C(pos)}</b>. Which is the <b>median class</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest05-grouped.js:96:5"
+      ]
+    },
+    "quest05-grouped#23": {
+      "en": "Build up the cumulative frequency until you pass position n/2.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest05-grouped.js:98:30"
+      ]
+    },
+    "quest05-grouped#24": {
+      "en": "Position ${C(pos)} falls in ${correct} (where the cumulative frequency first reaches it).",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:99:23"
+      ]
+    },
+    "quest05-grouped#25": {
+      "en": "To get the estimated mean on the calculator with <b>frequency ON</b>, what do you enter into the two columns?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest05-grouped.js:104:5"
+      ]
+    },
+    "quest05-grouped#26": {
+      "en": "The midpoints in X and the frequencies in FREQ",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "quest05-grouped.js:105:5"
+      ]
+    },
+    "quest05-grouped#27": {
+      "en": "The frequencies in X and the midpoints in FREQ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest05-grouped.js:106:6"
+      ]
+    },
+    "quest05-grouped#28": {
+      "en": "The class boundaries in X and the totals in FREQ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest05-grouped.js:106:56"
+      ]
+    },
+    "quest05-grouped#29": {
+      "en": "The cumulative frequencies in FREQ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest05-grouped.js:106:108"
+      ]
+    },
+    "quest05-grouped#30": {
+      "en": "Each class is represented by its midpoint, occurring f times.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest05-grouped.js:107:13"
+      ]
+    },
+    "quest05-grouped#31": {
+      "en": "Midpoints go in the X column, frequencies in the FREQ column, then read x̄ (Var → 2).",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest05-grouped.js:108:23"
+      ]
+    },
+    "quest06-ogives#1": {
+      "en": "For the class <b>${lo} &lt; x ≤ ${up}</b> with a cumulative frequency of <b>${cf}</b>, which point do you plot on the ogive?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest06-ogives.js:30:5"
+      ]
+    },
+    "quest06-ogives#2": {
+      "en": "Plot at (upper boundary of the class ; cumulative frequency).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest06-ogives.js:32:13"
+      ]
+    },
+    "quest06-ogives#3": {
+      "en": "Plot (upper boundary ; cumulative frequency) = (${up} ; ${cf}).",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest06-ogives.js:33:23"
+      ]
+    },
+    "quest06-ogives#4": {
+      "en": "An ogive’s first class is <b>${lo} &lt; x ≤ ${up}</b>. At which point is the curve anchored (started at height 0)?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest06-ogives.js:39:5"
+      ]
+    },
+    "quest06-ogives#5": {
+      "en": "Anchor at the LOWER boundary of the first class, at cumulative frequency 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest06-ogives.js:41:13"
+      ]
+    },
+    "quest06-ogives#6": {
+      "en": "Anchor at (lower boundary of the first class ; 0) = (${lo} ; 0).",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest06-ogives.js:42:23"
+      ]
+    },
+    "quest06-ogives#7": {
+      "en": "${freqTable(classes, { notation: \"lt\", total: false })}What is the <b>cumulative frequency</b> up to and including the class ${classInterval(classes[k - 1], \"lt\")}?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest06-ogives.js:52:13"
+      ],
+      "nested": [
+        "lt",
+        "lt"
+      ]
+    },
+    "quest06-ogives#8": {
+      "en": "Cumulative frequency is the running total of the frequencies.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest06-ogives.js:53:11"
+      ]
+    },
+    "quest06-ogives#9": {
+      "en": "Add the frequencies up to that class = ${cum}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest06-ogives.js:54:21"
+      ]
+    },
+    "quest06-ogives#10": {
+      "en": "cumulative frequency",
+      "kind": "string",
+      "slots": [
+        "graphCap",
+        "solution.r"
+      ],
+      "where": [
+        "quest06-ogives.js:54:74",
+        "quest06-ogives.js:66:52",
+        "quest06-ogives.js:80:50",
+        "quest06-ogives.js:95:50",
+        "quest06-ogives.js:109:50"
+      ]
+    },
+    "quest06-ogives#11": {
+      "en": "On the ogive, the modal class is the <b>steepest</b> part. Which class interval is it?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest06-ogives.js:64:5"
+      ]
+    },
+    "quest06-ogives#12": {
+      "en": "The steepest rise = the biggest jump in cumulative frequency = the most data.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest06-ogives.js:67:13"
+      ]
+    },
+    "quest06-ogives#13": {
+      "en": "The steepest section is ${correct} — the class with the most values.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest06-ogives.js:68:23"
+      ]
+    },
+    "quest06-ogives#14": {
+      "en": "median",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest06-ogives.js:73:23",
+        "quest06-ogives.js:74:27",
+        "quest06-ogives.js:76:26",
+        "quest06-ogives.js:77:29"
+      ],
+      "data": true
+    },
+    "quest06-ogives#15": {
+      "en": "lower quartile (Q1)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest06-ogives.js:76:40"
+      ]
+    },
+    "quest06-ogives#16": {
+      "en": "upper quartile (Q3)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest06-ogives.js:76:67"
+      ]
+    },
+    "quest06-ogives#17": {
+      "en": "n/2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest06-ogives.js:77:40"
+      ]
+    },
+    "quest06-ogives#18": {
+      "en": "n/4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest06-ogives.js:77:65"
+      ]
+    },
+    "quest06-ogives#19": {
+      "en": "3n/4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest06-ogives.js:77:73"
+      ]
+    },
+    "quest06-ogives#20": {
+      "en": "Use the ogive to read off the <b>${name}</b>. (n = ${n}.)",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest06-ogives.js:81:13"
+      ]
+    },
+    "quest06-ogives#21": {
+      "en": "Find position ${C(level)} on the cumulative axis, read across to the curve, then straight down.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest06-ogives.js:83:11"
+      ]
+    },
+    "quest06-ogives#22": {
+      "en": "Position = ${formula} = ${C(level)}; read across to the curve and down → ≈ ${Math.round(val)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest06-ogives.js:84:21"
+      ]
+    },
+    "quest06-ogives#23": {
+      "en": "read off the ogive",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest06-ogives.js:84:122",
+        "quest06-ogives.js:113:97"
+      ]
+    },
+    "quest06-ogives#24": {
+      "en": "Use the ogive to read off the <b>${p}th percentile</b>. (n = ${n}.)",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest06-ogives.js:96:13"
+      ]
+    },
+    "quest06-ogives#25": {
+      "en": "The ${p}th percentile is at position n × ${p}/100 = ${C(level)} on the cumulative axis.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest06-ogives.js:98:11"
+      ]
+    },
+    "quest06-ogives#26": {
+      "en": "Position = n × ${p}/100 = ${C(level)}; read across and down → ≈ ${Math.round(val)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest06-ogives.js:99:21"
+      ]
+    },
+    "quest06-ogives#27": {
+      "en": "percentile",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest06-ogives.js:99:111"
+      ]
+    },
+    "quest06-ogives#28": {
+      "en": "Use the ogive: about how many data values are <b>at most ${X}</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest06-ogives.js:110:13"
+      ]
+    },
+    "quest06-ogives#29": {
+      "en": "Go up from ${X} on the horizontal axis to the curve, then across to the cumulative-frequency axis.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest06-ogives.js:112:11"
+      ]
+    },
+    "quest06-ogives#30": {
+      "en": "Read up from ${X} to the curve, then across → ≈ ${Math.round(cumAt)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest06-ogives.js:113:21"
+      ]
+    },
+    "quest07-stddev#1": {
+      "en": "What does the <b>standard deviation</b> measure?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest07-stddev.js:13:5"
+      ]
+    },
+    "quest07-stddev#2": {
+      "en": "How spread out the data is around the mean",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "quest07-stddev.js:14:5"
+      ]
+    },
+    "quest07-stddev#3": {
+      "en": "The middle value of the data",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest07-stddev.js:15:6"
+      ]
+    },
+    "quest07-stddev#4": {
+      "en": "The most common value",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest07-stddev.js:15:38"
+      ]
+    },
+    "quest07-stddev#5": {
+      "en": "The total of all the values",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest07-stddev.js:15:63"
+      ]
+    },
+    "quest07-stddev#6": {
+      "en": "A bigger σ means more spread; a smaller σ means more consistent.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:16:13"
+      ]
+    },
+    "quest07-stddev#7": {
+      "en": "The Var menu reads <span class=\\\"num\\\">1:n  2:x̄  3:σx  4:sx</span>. Which do you use for the <b>standard deviation</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest07-stddev.js:21:5"
+      ]
+    },
+    "quest07-stddev#8": {
+      "en": "3 (σx)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "quest07-stddev.js:22:5"
+      ]
+    },
+    "quest07-stddev#9": {
+      "en": "4 (sx)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest07-stddev.js:22:16"
+      ]
+    },
+    "quest07-stddev#10": {
+      "en": "2 (x̄)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest07-stddev.js:22:26"
+      ]
+    },
+    "quest07-stddev#11": {
+      "en": "1 (n)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest07-stddev.js:22:36"
+      ]
+    },
+    "quest07-stddev#12": {
+      "en": "Use the population standard deviation σx — option 3.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:23:13"
+      ]
+    },
+    "quest07-stddev#13": {
+      "en": "3 (σx) — the population standard deviation",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "quest07-stddev.js:23:82"
+      ]
+    },
+    "quest07-stddev#14": {
+      "en": "variance",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest07-stddev.js:29:28",
+        "quest07-stddev.js:32:57",
+        "quest07-stddev.js:39:28",
+        "quest07-stddev.js:96:33",
+        "quest07-stddev.js:97:33"
+      ],
+      "data": true
+    },
+    "quest07-stddev#15": {
+      "en": "A data set has standard deviation σ = <b>${sd}</b>. Calculate the <b>variance</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest07-stddev.js:30:13"
+      ]
+    },
+    "quest07-stddev#16": {
+      "en": "Variance is the standard deviation squared.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:31:11"
+      ]
+    },
+    "quest07-stddev#17": {
+      "en": "variance = σ² = ${sd}² = ${v}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest07-stddev.js:32:21"
+      ]
+    },
+    "quest07-stddev#18": {
+      "en": "A data set has variance <b>${v}</b>. Calculate the <b>standard deviation</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest07-stddev.js:40:13"
+      ]
+    },
+    "quest07-stddev#19": {
+      "en": "Standard deviation is the square root of the variance.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:41:11"
+      ]
+    },
+    "quest07-stddev#20": {
+      "en": "σ = √variance = √${v} = ${sd}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest07-stddev.js:42:21"
+      ]
+    },
+    "quest07-stddev#21": {
+      "en": "standard deviation",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest07-stddev.js:42:57"
+      ]
+    },
+    "quest07-stddev#22": {
+      "en": "lower",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest07-stddev.js:47:65",
+        "quest07-stddev.js:48:25",
+        "quest07-stddev.js:52:21",
+        "quest07-stddev.js:53:31"
+      ],
+      "data": true
+    },
+    "quest07-stddev#23": {
+      "en": "upper",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest07-stddev.js:47:74"
+      ]
+    },
+    "quest07-stddev#24": {
+      "en": "A data set has mean x̄ = <b>${m}</b> and standard deviation σ = <b>${sd}</b>. Calculate the <b>${which} boundary</b> (one σ ${which === \"lower\" ? \"below\" : \"above\"} the mean).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest07-stddev.js:51:13"
+      ],
+      "nested": [
+        "lower",
+        "below",
+        "above"
+      ]
+    },
+    "quest07-stddev#25": {
+      "en": "lower = x̄ − σ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:52:31"
+      ]
+    },
+    "quest07-stddev#26": {
+      "en": "upper = x̄ + σ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:52:51"
+      ]
+    },
+    "quest07-stddev#27": {
+      "en": "lower = x̄ − σ = ${m} − ${sd} = ${exp}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest07-stddev.js:53:41"
+      ]
+    },
+    "quest07-stddev#28": {
+      "en": "upper = x̄ + σ = ${m} + ${sd} = ${exp}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest07-stddev.js:53:84"
+      ]
+    },
+    "quest07-stddev#29": {
+      "en": "${which} boundary",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest07-stddev.js:53:129"
+      ]
+    },
+    "quest07-stddev#30": {
+      "en": "A data set:<br><span class=\"num\">${list(data)}</span><br>Here x̄ ≈ ${C(mR)} and σ ≈ ${C(sdR)}. How many values lie <b>within one standard deviation</b> of the mean?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest07-stddev.js:70:13"
+      ]
+    },
+    "quest07-stddev#31": {
+      "en": "Work out x̄ − σ and x̄ + σ, then count the values between them.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:71:11"
+      ]
+    },
+    "quest07-stddev#32": {
+      "en": "lower = x̄ − σ ≈ ${C(Math.round((mR - sdR) * 10) / 10)};  upper = x̄ + σ ≈ ${C(Math.round((mR + sdR) * 10) / 10)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest07-stddev.js:73:12"
+      ]
+    },
+    "quest07-stddev#33": {
+      "en": "boundaries",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest07-stddev.js:73:132"
+      ]
+    },
+    "quest07-stddev#34": {
+      "en": "Count the values inside that interval → ${count}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest07-stddev.js:74:12"
+      ]
+    },
+    "quest07-stddev#35": {
+      "en": "Set P",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest07-stddev.js:82:26",
+        "quest07-stddev.js:83:35"
+      ]
+    },
+    "quest07-stddev#36": {
+      "en": "Set Q",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest07-stddev.js:82:36",
+        "quest07-stddev.js:83:25"
+      ]
+    },
+    "quest07-stddev#37": {
+      "en": "Set P has σ = <b>${C(a)}</b> and Set Q has σ = <b>${C(b)}</b>. Which set is <b>more consistent</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest07-stddev.js:85:5"
+      ]
+    },
+    "quest07-stddev#38": {
+      "en": "They are equally consistent",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest07-stddev.js:86:21"
+      ]
+    },
+    "quest07-stddev#39": {
+      "en": "More consistent = less spread = the SMALLER standard deviation.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest07-stddev.js:87:13"
+      ]
+    },
+    "quest07-stddev#40": {
+      "en": "${better} has the smaller σ, so its data is more consistent.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest07-stddev.js:88:23"
+      ]
+    },
+    "quest08-mixed#1": {
+      "en": "mean",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:21:13"
+      ]
+    },
+    "quest08-mixed#2": {
+      "en": "median",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:21:41"
+      ]
+    },
+    "quest08-mixed#3": {
+      "en": "range",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:22:13"
+      ]
+    },
+    "quest08-mixed#4": {
+      "en": "interquartile range (IQR)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:22:43"
+      ]
+    },
+    "quest08-mixed#5": {
+      "en": "standard deviation",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:23:13"
+      ]
+    },
+    "quest08-mixed#6": {
+      "en": "variance",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:23:56"
+      ]
+    },
+    "quest08-mixed#7": {
+      "en": "It increases by ${k}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:26:26",
+        "quest08-mixed.js:29:8"
+      ]
+    },
+    "quest08-mixed#8": {
+      "en": "It stays the same",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:26:51",
+        "quest08-mixed.js:28:8"
+      ]
+    },
+    "quest08-mixed#9": {
+      "en": "It decreases by ${k}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest08-mixed.js:28:29",
+        "quest08-mixed.js:29:60"
+      ]
+    },
+    "quest08-mixed#10": {
+      "en": "It is multiplied by ${k}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest08-mixed.js:28:53",
+        "quest08-mixed.js:29:32"
+      ]
+    },
+    "quest08-mixed#11": {
+      "en": "Every value in a data set is increased by <b>${k}</b>. What happens to the <b>${m.name}</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:31:5"
+      ]
+    },
+    "quest08-mixed#12": {
+      "en": "Adding the same number to every value shifts the centre but not the spread.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:33:13"
+      ]
+    },
+    "quest08-mixed#13": {
+      "en": "The ${m.name} shifts up by ${k}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:34:30"
+      ]
+    },
+    "quest08-mixed#14": {
+      "en": "Spread is unchanged — the ${m.name} stays the same.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:34:67"
+      ]
+    },
+    "quest08-mixed#15": {
+      "en": "The mean of a data set is <b>${M}</b>. If <b>${k}</b> is ${add ? \"added to\" : \"subtracted from\"} every value, what is the new mean?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:43:13"
+      ],
+      "nested": [
+        "added to",
+        "subtracted from"
+      ]
+    },
+    "quest08-mixed#16": {
+      "en": "The mean shifts by the same amount you add to (or subtract from) every value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:44:11"
+      ]
+    },
+    "quest08-mixed#17": {
+      "en": "new mean = ${M} ${add ? \"+\" : \"−\"} ${k} = ${exp}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:45:21"
+      ]
+    },
+    "quest08-mixed#18": {
+      "en": "effect on the mean",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest08-mixed.js:45:76"
+      ]
+    },
+    "quest08-mixed#19": {
+      "en": "A data set has standard deviation σ = <b>${C(sd)}</b>. Every value is increased by <b>${k}</b>. What is the new standard deviation?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:53:5"
+      ]
+    },
+    "quest08-mixed#20": {
+      "en": "Shifting every value sideways does not change how spread out the data is.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:55:13"
+      ]
+    },
+    "quest08-mixed#21": {
+      "en": "Adding a constant leaves the spread unchanged → σ stays ${C(sd)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:56:23"
+      ]
+    },
+    "quest08-mixed#22": {
+      "en": "Set A",
+      "kind": "string",
+      "slots": [
+        "label",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:64:35",
+        "quest08-mixed.js:66:27",
+        "quest08-mixed.js:66:47",
+        "quest08-mixed.js:68:18",
+        "quest08-mixed.js:80:45",
+        "quest08-mixed.js:82:27",
+        "quest08-mixed.js:82:47",
+        "quest08-mixed.js:84:18"
+      ],
+      "data": true
+    },
+    "quest08-mixed#23": {
+      "en": "Set B",
+      "kind": "string",
+      "slots": [
+        "label",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "quest08-mixed.js:64:45",
+        "quest08-mixed.js:66:37",
+        "quest08-mixed.js:69:18",
+        "quest08-mixed.js:80:55",
+        "quest08-mixed.js:82:37",
+        "quest08-mixed.js:85:18"
+      ]
+    },
+    "quest08-mixed#24": {
+      "en": "Which set has the <b>higher median</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:65:27"
+      ]
+    },
+    "quest08-mixed#25": {
+      "en": "They are equal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest08-mixed.js:66:56"
+      ]
+    },
+    "quest08-mixed#26": {
+      "en": "The median is the line inside each box — which sits further right?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:71:13"
+      ]
+    },
+    "quest08-mixed#27": {
+      "en": "${correct} has its median line further along the scale.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:72:23"
+      ]
+    },
+    "quest08-mixed#28": {
+      "en": "Which set is <b>more spread out</b> (larger range)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:81:27"
+      ]
+    },
+    "quest08-mixed#29": {
+      "en": "They are equally spread",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "quest08-mixed.js:82:56"
+      ]
+    },
+    "quest08-mixed#30": {
+      "en": "Range = distance from the left whisker end to the right whisker end.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:87:13"
+      ]
+    },
+    "quest08-mixed#31": {
+      "en": "${correct} stretches further from minimum to maximum → larger range.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:88:23"
+      ]
+    },
+    "quest08-mixed#32": {
+      "en": "A data set has an IQR of <b>${iqrV}</b> and <b>Q1 = ${q1}</b>. Find <b>Q3</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:98:15"
+      ]
+    },
+    "quest08-mixed#33": {
+      "en": "IQR = Q3 − Q1, so Q3 = Q1 + IQR.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:99:13"
+      ]
+    },
+    "quest08-mixed#34": {
+      "en": "Q3 = Q1 + IQR = ${q1} + ${iqrV} = ${q3}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:100:23"
+      ]
+    },
+    "quest08-mixed#35": {
+      "en": "interquartile range",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest08-mixed.js:100:69",
+        "quest08-mixed.js:108:67"
+      ]
+    },
+    "quest08-mixed#36": {
+      "en": "A data set has an IQR of <b>${iqrV}</b> and <b>Q3 = ${q3}</b>. Find <b>Q1</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:106:13"
+      ]
+    },
+    "quest08-mixed#37": {
+      "en": "IQR = Q3 − Q1, so Q1 = Q3 − IQR.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:107:11"
+      ]
+    },
+    "quest08-mixed#38": {
+      "en": "Q1 = Q3 − IQR = ${q3} − ${iqrV} = ${q1}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:108:21"
+      ]
+    },
+    "quest08-mixed#39": {
+      "en": "A data set has variance <b>${v}</b>. Every value is increased by <b>${k}</b>. What is the new variance?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "quest08-mixed.js:117:13"
+      ]
+    },
+    "quest08-mixed#40": {
+      "en": "Adding a constant doesn’t change the spread — so the variance is unchanged.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "quest08-mixed.js:118:11"
+      ]
+    },
+    "quest08-mixed#41": {
+      "en": "Adding a constant leaves the spread unchanged → variance stays ${v}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "quest08-mixed.js:119:21"
+      ]
+    },
+    "quest08-mixed#42": {
+      "en": "effect on spread",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "quest08-mixed.js:119:96"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "quest02-centre-spread.js:19:85",
+      "text": "central tendency (centre)",
+      "in": "Which of these is a measure of <b>${ask === \"spread\" ? \"spre"
+    },
+    {
+      "where": "quest02-centre-spread.js:22:83",
+      "text": "central tendency",
+      "in": "${correct} is a measure of ${ask === \"spread\" ? \"spread\" : \""
+    },
+    {
+      "where": "quest02-centre-spread.js:33:92",
+      "text": "<br>(round to 1 decimal place)",
+      "in": "Calculate the <b>mean</b> of:<br><span class=\"num\">${list(da"
+    },
+    {
+      "where": "quest03-quartiles.js:289:95",
+      "text": "an outlier",
+      "in": "${x} lies ${isOut ? \"outside\" : \"inside\"} [${C(lower)} ; ${C"
+    },
+    {
+      "where": "quest03-quartiles.js:289:110",
+      "text": "not an outlier",
+      "in": "${x} lies ${isOut ? \"outside\" : \"inside\"} [${C(lower)} ; ${C"
+    },
+    {
+      "where": "quest04-skewness.js:94:105",
+      "text": "skewed to the ",
+      "in": "Which statement is true for a distribution that is <b>${skew"
+    },
+    {
+      "where": "quest08-mixed.js:43:79",
+      "text": "added to",
+      "in": "The mean of a data set is <b>${M}</b>. If <b>${k}</b> is ${a"
+    },
+    {
+      "where": "quest08-mixed.js:43:92",
+      "text": "subtracted from",
+      "in": "The mean of a data set is <b>${M}</b>. If <b>${k}</b> is ${a"
+    }
+  ],
+  "words": 2025
+}
