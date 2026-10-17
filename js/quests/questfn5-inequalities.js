@@ -10,6 +10,7 @@ import { parabolaGraph, randParabola } from "./_func.js";
 import {
   paraTP, paraRoots, paraStd, ineqBetween, ineqOutside, C, pick,
 } from "../funclib.js";
+import { L } from "../lang.js";
 
 const ACC = "#0d9488";
 
@@ -27,22 +28,22 @@ const SKILLS = {
     const g = parabolaGraph(cv, { accent: ACC, label: "f" });
     const askInc = pick([true, false]);
     // happy: decreasing x<p, increasing x>p.  sad: increasing x<p, decreasing x>p.
-    const incSide = happy ? `x > ${C(tp.x)}` : `x &lt; ${C(tp.x)}`;
-    const decSide = happy ? `x &lt; ${C(tp.x)}` : `x > ${C(tp.x)}`;
+    const incSide = happy ? L(`x > ${C(tp.x)}`, `x > ${C(tp.x)}`) : L(`x &lt; ${C(tp.x)}`, `x &lt; ${C(tp.x)}`);
+    const decSide = happy ? L(`x &lt; ${C(tp.x)}`, `x &lt; ${C(tp.x)}`) : L(`x > ${C(tp.x)}`, `x > ${C(tp.x)}`);
     const correct = askInc ? incSide : decSide;
     const other = askInc ? decSide : incSide;
-    return mc("incDec", `For ${"<b>f</b>"} below, for which x-values is the graph <b>${askInc ? "increasing" : "decreasing"}</b>?`,
-      correct, [other, `x = ${C(tp.x)}`, "all real x"],
+    return mc("incDec", L(`For ${"<b>f</b>"} below, for which x-values is the graph <b>${askInc ? "increasing" : "decreasing"}</b>?`, `Vir ${"<b>f</b>"} hieronder, vir watter x-waardes is die grafiek <b>${askInc ? "stygend" : "dalend"}</b>?`),
+      correct, [other, L(`x = ${C(tp.x)}`, `x = ${C(tp.x)}`), L("all real x", "alle reële x")],
       { graph: g.spec,
-        hint: "Read left-to-right and split at the turning point x = " + C(tp.x) + ". One side climbs, the other falls.",
-        answerLabel: `${askInc ? "Increasing" : "Decreasing"}: ${correct}.`,
+        hint: L("Read left-to-right and split at the turning point x = ", "Lees van links na regs en verdeel by die draaipunt x = ") + C(tp.x) + L(". One side climbs, the other falls.", ". Een kant klim, die ander val."),
+        answerLabel: `${askInc ? L("Increasing", "Stygend") : L("Decreasing", "Dalend")}: ${correct}.`,
         solution: [
-          { s: `Find the turning point first: x = ${C(tp.x)}`, r: "that is the only place the graph changes direction" },
-          { s: `Cut a line straight down through x = ${C(tp.x)} and read the graph left to right` },
+          { s: L(`Find the turning point first: x = ${C(tp.x)}`, `Kry eers die draaipunt: x = ${C(tp.x)}`), r: L("that is the only place the graph changes direction", "dit is die enigste plek waar die grafiek van rigting verander") },
+          { s: L(`Cut a line straight down through x = ${C(tp.x)} and read the graph left to right`, `Sny met 'n vertikale lyn deur x = ${C(tp.x)} en lees die grafiek van links na regs`) },
           { s: happy
-              ? `It is a happy parabola, so it falls on the left of the cut and climbs on the right`
-              : `It is a sad parabola, so it climbs on the left of the cut and falls on the right` },
-          { s: `∴ ${askInc ? "increasing" : "decreasing"} for ${correct}`, r: "always write x first" },
+              ? L(`It is a happy parabola, so it falls on the left of the cut and climbs on the right`, `Dit is 'n happy parabool, dus val dit links van die snylyn en klim dit regs daarvan`)
+              : L(`It is a sad parabola, so it climbs on the left of the cut and falls on the right`, `Dit is 'n sad parabool, dus klim dit links van die snylyn en val dit regs daarvan`) },
+          { s: L(`∴ ${askInc ? "increasing" : "decreasing"} for ${correct}`, `∴ ${askInc ? "stygend" : "dalend"} vir ${correct}`), r: L("always write x first", "skryf altyd x eerste") },
         ] });
   },
 
@@ -52,18 +53,18 @@ const SKILLS = {
     const g = parabolaGraph(cv, { accent: ACC, label: "f" });
     const correct = happy ? ineqOutside(r1, r2) : ineqBetween(r1, r2);
     const wrong = happy ? ineqBetween(r1, r2) : ineqOutside(r1, r2);
-    return mc("posNeg", `Use the graph. For which x-values is <b>f(x) &gt; 0</b> (above the x-axis)?`,
-      correct, [wrong, `x > ${C(r2)}`, "all real x"],
+    return mc("posNeg", L(`Use the graph. For which x-values is <b>f(x) &gt; 0</b> (above the x-axis)?`, `Gebruik die grafiek. Vir watter x-waardes is <b>f(x) &gt; 0</b> (bo die x-as)?`),
+      correct, [wrong, L(`x > ${C(r2)}`, `x > ${C(r2)}`), L("all real x", "alle reële x")],
       { graph: g.spec,
-        hint: "f(x) &gt; 0 means the graph is ABOVE the x-axis. The x-intercepts are the boundaries.",
-        answerLabel: `f(x) &gt; 0 for ${correct}.`,
+        hint: L("f(x) &gt; 0 means the graph is ABOVE the x-axis. The x-intercepts are the boundaries.", "f(x) &gt; 0 beteken die grafiek is BO die x-as. Die x-afsnitte is die grense."),
+        answerLabel: L(`f(x) &gt; 0 for ${correct}.`, `f(x) &gt; 0 vir ${correct}.`),
         solution: [
-          { s: `f(x) &gt; 0 means “where is the curve ABOVE the x-axis?”`, r: "f(x) is just another name for the y-value" },
-          { s: `Cut a line down through every x-intercept: x = ${C(r1)} and x = ${C(r2)}` },
+          { s: L(`f(x) &gt; 0 means “where is the curve ABOVE the x-axis?”`, `f(x) &gt; 0 beteken “waar is die kurwe BO die x-as?”`), r: L("f(x) is just another name for the y-value", "f(x) is net nog 'n naam vir die y-waarde") },
+          { s: L(`Cut a line down through every x-intercept: x = ${C(r1)} and x = ${C(r2)}`, `Sny met 'n vertikale lyn deur elke x-afsnit: x = ${C(r1)} en x = ${C(r2)}`) },
           { s: happy
-              ? `The parabola is happy, so it dips below the axis BETWEEN the cuts and rides above on both arms`
-              : `The parabola is sad, so the only stretch above the axis is BETWEEN the cuts` },
-          { s: `∴ ${correct}`, r: happy ? "two separate stretches, so they are joined with “or”" : "one single stretch, so it is written as a double inequality" },
+              ? L(`The parabola is happy, so it dips below the axis BETWEEN the cuts and rides above on both arms`, `Die parabool is happy, dus duik dit TUSSEN die snylyne onder die as en lê dit bo die as op albei arms`)
+              : L(`The parabola is sad, so the only stretch above the axis is BETWEEN the cuts`, `Die parabool is sad, dus is die enigste stuk bo die as TUSSEN die snylyne`) },
+          { s: `∴ ${correct}`, r: happy ? L("two separate stretches, so they are joined with “or”", "twee aparte stukke, dus word hulle met “of” verbind") : L("one single stretch, so it is written as a double inequality", "een enkele stuk, dus word dit as 'n dubbele ongelykheid geskryf") },
         ] });
   },
 
@@ -73,43 +74,43 @@ const SKILLS = {
     const g = parabolaGraph(cv, { accent: ACC, label: "f" });
     const correct = happy ? ineqBetween(r1, r2) : ineqOutside(r1, r2);
     const wrong = happy ? ineqOutside(r1, r2) : ineqBetween(r1, r2);
-    return mc("posNeg", `Use the graph. For which x-values is <b>f(x) &lt; 0</b> (below the x-axis)?`,
-      correct, [wrong, `x &lt; ${C(r1)}`, "all real x"],
+    return mc("posNeg", L(`Use the graph. For which x-values is <b>f(x) &lt; 0</b> (below the x-axis)?`, `Gebruik die grafiek. Vir watter x-waardes is <b>f(x) &lt; 0</b> (onder die x-as)?`),
+      correct, [wrong, L(`x &lt; ${C(r1)}`, `x &lt; ${C(r1)}`), L("all real x", "alle reële x")],
       { graph: g.spec,
-        hint: "f(x) &lt; 0 means the graph is BELOW the x-axis, between or outside the x-intercepts.",
-        answerLabel: `f(x) &lt; 0 for ${correct}.`,
+        hint: L("f(x) &lt; 0 means the graph is BELOW the x-axis, between or outside the x-intercepts.", "f(x) &lt; 0 beteken die grafiek is ONDER die x-as, tussen of buite die x-afsnitte."),
+        answerLabel: L(`f(x) &lt; 0 for ${correct}.`, `f(x) &lt; 0 vir ${correct}.`),
         solution: [
-          { s: `f(x) &lt; 0 means “where is the curve BELOW the x-axis?”`, r: "a negative y-value" },
-          { s: `Cut a line down through every x-intercept: x = ${C(r1)} and x = ${C(r2)}` },
+          { s: L(`f(x) &lt; 0 means “where is the curve BELOW the x-axis?”`, `f(x) &lt; 0 beteken “waar is die kurwe ONDER die x-as?”`), r: L("a negative y-value", "'n negatiewe y-waarde") },
+          { s: L(`Cut a line down through every x-intercept: x = ${C(r1)} and x = ${C(r2)}`, `Sny met 'n vertikale lyn deur elke x-afsnit: x = ${C(r1)} en x = ${C(r2)}`) },
           { s: happy
-              ? `The parabola is happy, so the only stretch under the axis is BETWEEN the cuts`
-              : `The parabola is sad, so it pokes above the axis between the cuts and drops below on both arms` },
-          { s: `∴ ${correct}`, r: happy ? "one single stretch, so it is written as a double inequality" : "two separate stretches, so they are joined with “or”" },
+              ? L(`The parabola is happy, so the only stretch under the axis is BETWEEN the cuts`, `Die parabool is happy, dus is die enigste stuk onder die as TUSSEN die snylyne`)
+              : L(`The parabola is sad, so it pokes above the axis between the cuts and drops below on both arms`, `Die parabool is sad, dus steek dit tussen die snylyne bo die as uit en sak dit onder die as op albei arms`) },
+          { s: `∴ ${correct}`, r: happy ? L("one single stretch, so it is written as a double inequality", "een enkele stuk, dus word dit as 'n dubbele ongelykheid geskryf") : L("two separate stretches, so they are joined with “or”", "twee aparte stukke, dus word hulle met “of” verbind") },
         ] });
   },
 
   /* the meaning of a product inequality */
   productSign: () => {
     const cases = [
-      { p: "<b>f(x)·g(x) &gt; 0</b> happens where the two graphs are…", c: "on the same side of the x-axis (both above, or both below)",
-        w: ["on different sides of the x-axis", "both equal to zero", "parallel"],
-        sol: [{ s: "A product is positive only two ways: (+)(+) or (−)(−)", r: "the two factors must carry the SAME sign" },
-              { s: "f(x) is + where f is above the x-axis and − where it is below — same for g(x)" },
-              { s: "So paint + and − on both curves and keep the stretches where the two paints match", r: "both above, or both below" }] },
-      { p: "<b>f(x)·g(x) &lt; 0</b> happens where the two graphs are…", c: "on different sides of the x-axis (one above, one below)",
-        w: ["on the same side of the x-axis", "both positive", "both negative"],
-        sol: [{ s: "A product is negative only two ways: (+)(−) or (−)(+)", r: "the two factors must carry DIFFERENT signs" },
-              { s: "f(x) is + above the x-axis and − below it — same for g(x)" },
-              { s: "So keep the stretches where the paints disagree", r: "one curve above the axis, the other below" }] },
-      { p: "<b>f(x)/g(x) &gt; 0</b> happens where the two graphs are…", c: "on the same side of the x-axis (and g(x) ≠ 0)",
-        w: ["on different sides of the x-axis", "both zero", "equal to each other"],
-        sol: [{ s: "Dividing follows exactly the same sign rules as multiplying: same signs → +" },
-              { s: "So the two curves must be on the same side of the x-axis" },
-              { s: "One extra thing: g is in the denominator, so g(x) ≠ 0", r: "the restriction rides after a semicolon" }] },
+      { p: L("<b>f(x)·g(x) &gt; 0</b> happens where the two graphs are…", "<b>f(x)·g(x) &gt; 0</b> gebeur waar die twee grafieke…"), c: L("on the same side of the x-axis (both above, or both below)", "aan dieselfde kant van die x-as is (albei bo, of albei onder)"),
+        w: [L("on different sides of the x-axis", "aan verskillende kante van die x-as is"), L("both equal to zero", "albei gelyk aan nul is"), L("parallel", "ewewydig is")],
+        sol: [{ s: L("A product is positive only two ways: (+)(+) or (−)(−)", "'n Produk is net op twee maniere positief: (+)(+) of (−)(−)"), r: L("the two factors must carry the SAME sign", "die twee faktore moet DIESELFDE teken hê") },
+              { s: L("f(x) is + where f is above the x-axis and − where it is below — same for g(x)", "f(x) is + waar f bo die x-as is en − waar dit onder is: dieselfde vir g(x)") },
+              { s: L("So paint + and − on both curves and keep the stretches where the two paints match", "Verf dus + en − op albei kurwes en hou die stukke waar die twee kleure ooreenstem"), r: L("both above, or both below", "albei bo, of albei onder") }] },
+      { p: L("<b>f(x)·g(x) &lt; 0</b> happens where the two graphs are…", "<b>f(x)·g(x) &lt; 0</b> gebeur waar die twee grafieke…"), c: L("on different sides of the x-axis (one above, one below)", "aan verskillende kante van die x-as is (een bo, een onder)"),
+        w: [L("on the same side of the x-axis", "aan dieselfde kant van die x-as is"), L("both positive", "albei positief is"), L("both negative", "albei negatief is")],
+        sol: [{ s: L("A product is negative only two ways: (+)(−) or (−)(+)", "'n Produk is net op twee maniere negatief: (+)(−) of (−)(+)"), r: L("the two factors must carry DIFFERENT signs", "die twee faktore moet VERSKILLENDE tekens hê") },
+              { s: L("f(x) is + above the x-axis and − below it — same for g(x)", "f(x) is + bo die x-as en − daaronder: dieselfde vir g(x)") },
+              { s: L("So keep the stretches where the paints disagree", "Hou dus die stukke waar die kleure verskil"), r: L("one curve above the axis, the other below", "een kurwe bo die as, die ander onder") }] },
+      { p: L("<b>f(x)/g(x) &gt; 0</b> happens where the two graphs are…", "<b>f(x)/g(x) &gt; 0</b> gebeur waar die twee grafieke…"), c: L("on the same side of the x-axis (and g(x) ≠ 0)", "aan dieselfde kant van die x-as is (en g(x) ≠ 0)"),
+        w: [L("on different sides of the x-axis", "aan verskillende kante van die x-as is"), L("both zero", "albei nul is"), L("equal to each other", "gelyk aan mekaar is")],
+        sol: [{ s: L("Dividing follows exactly the same sign rules as multiplying: same signs → +", "Deel volg presies dieselfde tekenreëls as vermenigvuldig: dieselfde tekens → +") },
+              { s: L("So the two curves must be on the same side of the x-axis", "Die twee kurwes moet dus aan dieselfde kant van die x-as wees") },
+              { s: L("One extra thing: g is in the denominator, so g(x) ≠ 0", "Een ekstra ding: g is in die noemer, dus g(x) ≠ 0"), r: L("the restriction rides after a semicolon", "die beperking kom ná 'n kommapunt") }] },
     ];
     const k = pick(cases);
     return mc("ineqCombined", k.p, k.c, k.w,
-      { hint: "A product (or quotient) is positive when the two factors have the SAME sign, negative when they have DIFFERENT signs.",
+      { hint: L("A product (or quotient) is positive when the two factors have the SAME sign, negative when they have DIFFERENT signs.", "'n Produk (of kwosiënt) is positief wanneer die twee faktore DIESELFDE teken het, negatief wanneer hulle VERSKILLENDE tekens het."),
         answerLabel: k.c,
         solution: k.sol });
   },
@@ -117,20 +118,20 @@ const SKILLS = {
   /* x·f(x) — the quadrant rule */
   xfSign: () => {
     const cases = [
-      { p: "<b>x·f(x) &gt; 0</b> means x and f(x) (the y-value) have…", c: "the same sign — the graph is in the 1st & 3rd quadrants",
-        w: ["different signs — the 2nd & 4th quadrants", "always a positive product", "a turning point"],
-        sol: [{ s: "x·f(x) is the x-coordinate multiplied by the y-coordinate of the same point" },
-              { s: "For that product to be positive the two must match: (+)(+) or (−)(−)" },
-              { s: "x and y both + is the 1st quadrant; both − is the 3rd", r: "∴ the parts of the curve lying in quadrants 1 and 3" }] },
-      { p: "<b>x·f(x) &lt; 0</b> means x and f(x) (the y-value) have…", c: "different signs — the graph is in the 2nd & 4th quadrants",
-        w: ["the same sign — the 1st & 3rd quadrants", "always a negative x", "no solution"],
-        sol: [{ s: "x·f(x) is the x-coordinate multiplied by the y-coordinate of the same point" },
-              { s: "For that product to be negative the two must differ: (+)(−) or (−)(+)" },
-              { s: "x negative with y positive is the 2nd quadrant; x positive with y negative is the 4th", r: "∴ the parts of the curve lying in quadrants 2 and 4" }] },
+      { p: L("<b>x·f(x) &gt; 0</b> means x and f(x) (the y-value) have…", "<b>x·f(x) &gt; 0</b> beteken x en f(x) (die y-waarde) het…"), c: L("the same sign — the graph is in the 1st & 3rd quadrants", "dieselfde teken: die grafiek is in die 1ste & 3de kwadrant"),
+        w: [L("different signs — the 2nd & 4th quadrants", "verskillende tekens: die 2de & 4de kwadrant"), L("always a positive product", "altyd 'n positiewe produk"), L("a turning point", "'n draaipunt")],
+        sol: [{ s: L("x·f(x) is the x-coordinate multiplied by the y-coordinate of the same point", "x·f(x) is die x-koördinaat maal die y-koördinaat van dieselfde punt") },
+              { s: L("For that product to be positive the two must match: (+)(+) or (−)(−)", "Vir 'n positiewe produk moet die twee ooreenstem: (+)(+) of (−)(−)") },
+              { s: L("x and y both + is the 1st quadrant; both − is the 3rd", "x en y albei + is die 1ste kwadrant; albei − is die 3de"), r: L("∴ the parts of the curve lying in quadrants 1 and 3", "∴ die dele van die kurwe in kwadrante 1 en 3") }] },
+      { p: L("<b>x·f(x) &lt; 0</b> means x and f(x) (the y-value) have…", "<b>x·f(x) &lt; 0</b> beteken x en f(x) (die y-waarde) het…"), c: L("different signs — the graph is in the 2nd & 4th quadrants", "verskillende tekens: die grafiek is in die 2de & 4de kwadrant"),
+        w: [L("the same sign — the 1st & 3rd quadrants", "dieselfde teken: die 1ste & 3de kwadrant"), L("always a negative x", "altyd 'n negatiewe x"), L("no solution", "geen oplossing")],
+        sol: [{ s: L("x·f(x) is the x-coordinate multiplied by the y-coordinate of the same point", "x·f(x) is die x-koördinaat maal die y-koördinaat van dieselfde punt") },
+              { s: L("For that product to be negative the two must differ: (+)(−) or (−)(+)", "Vir 'n negatiewe produk moet die twee verskil: (+)(−) of (−)(+)") },
+              { s: L("x negative with y positive is the 2nd quadrant; x positive with y negative is the 4th", "x negatief met y positief is die 2de kwadrant; x positief met y negatief is die 4de"), r: L("∴ the parts of the curve lying in quadrants 2 and 4", "∴ die dele van die kurwe in kwadrante 2 en 4") }] },
     ];
     const k = pick(cases);
     return mc("ineqCombined", k.p, k.c, k.w,
-      { hint: "x·f(x) looks at the sign of the x-coordinate times the sign of the y-coordinate — same sign → quadrants 1 & 3.",
+      { hint: L("x·f(x) looks at the sign of the x-coordinate times the sign of the y-coordinate — same sign → quadrants 1 & 3.", "x·f(x) kyk na die teken van die x-koördinaat maal die teken van die y-koördinaat: dieselfde teken → kwadrante 1 & 3."),
         answerLabel: k.c,
         solution: k.sol });
   },
@@ -138,15 +139,15 @@ const SKILLS = {
   /* boundaries when comparing two graphs */
   compareBoundary: () => {
     return mc("ineqCombined",
-      "When you read <b>f(x) &gt; g(x)</b> off a graph, the boundary x-values are…",
-      "the x-coordinates of the points where the graphs intersect",
-      ["the y-intercepts", "the turning points", "the asymptotes"],
-      { hint: "f &gt; g is where one curve is above the other. The switch-over happens exactly at their intersection points.",
-        answerLabel: "The x-values of the intersection points.",
+      L("When you read <b>f(x) &gt; g(x)</b> off a graph, the boundary x-values are…", "As jy <b>f(x) &gt; g(x)</b> van 'n grafiek aflees, is die grens-x-waardes…"),
+      L("the x-coordinates of the points where the graphs intersect", "die x-koördinate van die punte waar die grafieke mekaar sny"),
+      [L("the y-intercepts", "die y-afsnitte"), L("the turning points", "die draaipunte"), L("the asymptotes", "die asimptote")],
+      { hint: L("f &gt; g is where one curve is above the other. The switch-over happens exactly at their intersection points.", "f &gt; g is waar een kurwe bo die ander is. Die oorskakeling gebeur presies by hul snypunte."),
+        answerLabel: L("The x-values of the intersection points.", "Die x-waardes van die snypunte."),
         solution: [
-          { s: "f(x) &gt; g(x) asks: where is f drawn ABOVE g?" },
-          { s: "f can only stop being above g by crossing it, and crossing happens exactly at an intersection point" },
-          { s: "So cut a line down through every intersection, then read which side keeps f on top", r: "the answer comes out in x, written x first" },
+          { s: L("f(x) &gt; g(x) asks: where is f drawn ABOVE g?", "f(x) &gt; g(x) vra: waar is f BO g geteken?") },
+          { s: L("f can only stop being above g by crossing it, and crossing happens exactly at an intersection point", "f kan net ophou om bo g te wees deur hom te kruis, en dit gebeur presies by 'n snypunt") },
+          { s: L("So cut a line down through every intersection, then read which side keeps f on top", "Sny dus met 'n vertikale lyn deur elke snypunt en lees dan aan watter kant f bo bly"), r: L("the answer comes out in x, written x first", "die antwoord kom in x uit, met x eerste geskryf") },
         ] });
   },
 };

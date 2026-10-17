@@ -1,0 +1,5468 @@
+{
+  "unit": "T27",
+  "generated": "2026-10-17T18:17:53.238Z",
+  "files": [
+    "js/quests/questfn1-families.js",
+    "js/quests/questfn2-line-parabola.js",
+    "js/quests/questfn3-hyperbola-exp.js",
+    "js/quests/questfn4-read-graph.js",
+    "js/quests/questfn5-inequalities.js",
+    "js/quests/questfn6-transformations.js"
+  ],
+  "items": {
+    "questfn1-families#1": {
+      "en": "line",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:13:16",
+        "questfn1-families.js:37:15"
+      ],
+      "data": true
+    },
+    "questfn1-families#2": {
+      "en": "parabola",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:13:24",
+        "questfn1-families.js:38:15"
+      ],
+      "data": true
+    },
+    "questfn1-families#3": {
+      "en": "hyperbola",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:13:36",
+        "questfn1-families.js:39:15"
+      ],
+      "data": true
+    },
+    "questfn1-families#4": {
+      "en": "exp",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:13:49"
+      ]
+    },
+    "questfn1-families#5": {
+      "en": "there is just an x: no square, nothing in a denominator, nothing in an exponent",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:19:9"
+      ]
+    },
+    "questfn1-families#6": {
+      "en": "there is an x² (or a squared bracket)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:20:13"
+      ]
+    },
+    "questfn1-families#7": {
+      "en": "the x sits in the DENOMINATOR",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:21:14"
+      ]
+    },
+    "questfn1-families#8": {
+      "en": "the x sits in the EXPONENT",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:22:8"
+      ]
+    },
+    "questfn1-families#9": {
+      "en": "y = ax + q",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:25:9"
+      ]
+    },
+    "questfn1-families#10": {
+      "en": "y = ax² + bx + c, or y = a(x − p)² + q",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:26:13"
+      ]
+    },
+    "questfn1-families#11": {
+      "en": "y = a/(x − p) + q",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:27:14"
+      ]
+    },
+    "questfn1-families#12": {
+      "en": "y = a·b^(x − p) + q",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:28:8"
+      ]
+    },
+    "questfn1-families#13": {
+      "en": "it is dead straight — the same slope the whole way",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:31:9"
+      ]
+    },
+    "questfn1-families#14": {
+      "en": "it turns once and is symmetric about a vertical line",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:32:13"
+      ]
+    },
+    "questfn1-families#15": {
+      "en": "it comes in two separate branches, hugging a vertical and a horizontal dashed asymptote",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:33:14"
+      ]
+    },
+    "questfn1-families#16": {
+      "en": "it never turns — it keeps rising (or keeps falling) and flattens onto one horizontal asymptote",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questfn1-families.js:34:8"
+      ]
+    },
+    "questfn1-families#17": {
+      "en": "What type of function is <b>${eqStr(cv)}</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:46:28"
+      ]
+    },
+    "questfn1-families#18": {
+      "en": "x in the exponent → exponential; x in the denominator → hyperbola; an x² → parabola; just x → straight line.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn1-families.js:48:15"
+      ]
+    },
+    "questfn1-families#19": {
+      "en": "Ask the one sorting question: where is the x?",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:51:16"
+      ]
+    },
+    "questfn1-families#20": {
+      "en": "that alone splits the four families",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:51:68"
+      ]
+    },
+    "questfn1-families#21": {
+      "en": "In ${eqStr(cv)}, ${WHERE_X[kind]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:52:16"
+      ]
+    },
+    "questfn1-families#22": {
+      "en": "That is the ${FAMILY[kind]} shape: ${STD_FORM[kind]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:53:16"
+      ]
+    },
+    "questfn1-families#23": {
+      "en": "Which type of function is graphed here?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:62:28"
+      ]
+    },
+    "questfn1-families#24": {
+      "en": "Two straight branches around dashed asymptotes → hyperbola; a U/∩ shape → parabola; a J that flattens to an asymptote → exponential.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn1-families.js:65:15"
+      ]
+    },
+    "questfn1-families#25": {
+      "en": "Go by the shape: count the turning points, then look for dashed asymptotes",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:68:16"
+      ]
+    },
+    "questfn1-families#26": {
+      "en": "Here ${SHAPE_TELL[kind]}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:69:16"
+      ]
+    },
+    "questfn1-families#27": {
+      "en": "Only the ${FAMILY[kind]} does that",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:70:16"
+      ]
+    },
+    "questfn1-families#28": {
+      "en": "equation form ${STD_FORM[kind]}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:70:57"
+      ]
+    },
+    "questfn1-families#29": {
+      "en": "Which graph has a <b>turning point</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:77:12"
+      ]
+    },
+    "questfn1-families#30": {
+      "en": "Parabola",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:77:58",
+        "questfn1-families.js:81:105",
+        "questfn1-families.js:85:113",
+        "questfn1-families.js:89:111",
+        "questfn1-families.js:93:88"
+      ]
+    },
+    "questfn1-families#31": {
+      "en": "Straight line",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:77:74",
+        "questfn1-families.js:81:117",
+        "questfn1-families.js:85:125",
+        "questfn1-families.js:89:90",
+        "questfn1-families.js:93:100"
+      ]
+    },
+    "questfn1-families#32": {
+      "en": "Hyperbola",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:77:91",
+        "questfn1-families.js:81:88",
+        "questfn1-families.js:85:142",
+        "questfn1-families.js:89:123",
+        "questfn1-families.js:93:71"
+      ]
+    },
+    "questfn1-families#33": {
+      "en": "Exponential graph",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:77:104",
+        "questfn1-families.js:81:134",
+        "questfn1-families.js:85:88",
+        "questfn1-families.js:89:136",
+        "questfn1-families.js:93:117"
+      ]
+    },
+    "questfn1-families#34": {
+      "en": "A turning point means the graph stops going one way and comes back the other way",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:78:20"
+      ]
+    },
+    "questfn1-families#35": {
+      "en": "A line never turns, an exponential never turns, and a hyperbola's branches just run away to their asymptotes",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:79:20"
+      ]
+    },
+    "questfn1-families#36": {
+      "en": "Only the parabola turns — at its vertex (p ; q)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:80:20"
+      ]
+    },
+    "questfn1-families#37": {
+      "en": "happy → minimum, sad → maximum",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:80:74"
+      ]
+    },
+    "questfn1-families#38": {
+      "en": "Which graph has <b>two asymptotes</b> (one vertical, one horizontal)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:81:12"
+      ]
+    },
+    "questfn1-families#39": {
+      "en": "y = a/(x − p) + q breaks down when the denominator is 0, i.e. at x = p",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:82:20"
+      ]
+    },
+    "questfn1-families#40": {
+      "en": "the vertical asymptote",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:82:97"
+      ]
+    },
+    "questfn1-families#41": {
+      "en": "And a/(x − p) can shrink towards 0 but never reach it, so y never reaches q",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:83:20"
+      ]
+    },
+    "questfn1-families#42": {
+      "en": "the horizontal asymptote",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:83:102"
+      ]
+    },
+    "questfn1-families#43": {
+      "en": "Two asymptotes → hyperbola",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:84:20"
+      ]
+    },
+    "questfn1-families#44": {
+      "en": "the exponential has only the horizontal one",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:84:53"
+      ]
+    },
+    "questfn1-families#45": {
+      "en": "Which graph has <b>one horizontal asymptote</b> and no turning point?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:85:12"
+      ]
+    },
+    "questfn1-families#46": {
+      "en": "In y = a·b^(x − p) + q the power term shrinks towards 0 on one side, so y flattens onto y = q",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:86:20"
+      ]
+    },
+    "questfn1-families#47": {
+      "en": "one horizontal asymptote",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:86:120"
+      ]
+    },
+    "questfn1-families#48": {
+      "en": "It is defined for every x, so nothing breaks and there is no vertical asymptote",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:87:20"
+      ]
+    },
+    "questfn1-families#49": {
+      "en": "It also never turns — it is taking off or landing the whole way",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:88:20"
+      ]
+    },
+    "questfn1-families#50": {
+      "en": "∴ the exponential graph",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:88:90"
+      ]
+    },
+    "questfn1-families#51": {
+      "en": "Which graph has a <b>constant gradient</b> (the same slope everywhere)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:89:12"
+      ]
+    },
+    "questfn1-families#52": {
+      "en": "Gradient = rise/run between two points on the graph",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:90:20"
+      ]
+    },
+    "questfn1-families#53": {
+      "en": "On a curve that answer changes depending on which two points you pick",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:91:20"
+      ]
+    },
+    "questfn1-families#54": {
+      "en": "curves get steeper or flatter",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:91:96"
+      ]
+    },
+    "questfn1-families#55": {
+      "en": "Only a straight line gives the same rise/run everywhere — that is a of y = ax + q",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:92:20"
+      ]
+    },
+    "questfn1-families#56": {
+      "en": "Which graph is made of <b>two separate branches</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:93:12"
+      ]
+    },
+    "questfn1-families#57": {
+      "en": "y = a/(x − p) + q is undefined at x = p",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:94:20"
+      ]
+    },
+    "questfn1-families#58": {
+      "en": "you cannot divide by 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:94:66"
+      ]
+    },
+    "questfn1-families#59": {
+      "en": "So the graph has a hole right through it at that x-value and cannot cross over",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:95:20"
+      ]
+    },
+    "questfn1-families#60": {
+      "en": "It is forced into two separate branches, one each side of x = p",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:96:20"
+      ]
+    },
+    "questfn1-families#61": {
+      "en": "Turning point → parabola; two asymptotes & two branches → hyperbola; one asymptote, always rising or falling → exponential; constant slope → line.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn1-families.js:100:15"
+      ]
+    },
+    "questfn1-families#62": {
+      "en": "In f(x) = 2x − 1, what does <b>f(3)</b> mean?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:108:12"
+      ]
+    },
+    "questfn1-families#63": {
+      "en": "The y-value when x = 3",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questfn1-families.js:108:64"
+      ]
+    },
+    "questfn1-families#64": {
+      "en": "Multiply f by 3",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:108:94"
+      ]
+    },
+    "questfn1-families#65": {
+      "en": "The x-value when y = 3",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:108:113"
+      ]
+    },
+    "questfn1-families#66": {
+      "en": "The gradient at x = 3",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:108:139"
+      ]
+    },
+    "questfn1-families#67": {
+      "en": "f(x) = 2x − 1 is a machine: an x goes in, a y comes out",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:109:20"
+      ]
+    },
+    "questfn1-families#68": {
+      "en": "The bracket holds whatever you feed it, so f(3) = 2(3) − 1 = 5",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:110:20"
+      ]
+    },
+    "questfn1-families#69": {
+      "en": "That 5 is a y-value, so f(3) is the y-value when x = 3",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:111:20"
+      ]
+    },
+    "questfn1-families#70": {
+      "en": "the point (3 ; 5) is on the graph",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:111:81"
+      ]
+    },
+    "questfn1-families#71": {
+      "en": "f(x), g(x) and h(x) are different names for which variable?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:112:12"
+      ]
+    },
+    "questfn1-families#72": {
+      "en": "y",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questfn1-families.js:112:78"
+      ]
+    },
+    "questfn1-families#73": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:112:87"
+      ]
+    },
+    "questfn1-families#74": {
+      "en": "the gradient",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:112:92"
+      ]
+    },
+    "questfn1-families#75": {
+      "en": "the x-intercept",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:112:108"
+      ]
+    },
+    "questfn1-families#76": {
+      "en": "y = 2x − 1 and f(x) = 2x − 1 say exactly the same thing",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:113:20"
+      ]
+    },
+    "questfn1-families#77": {
+      "en": "The letter in front is just the graph's NAME, so f, g and h can share one set of axes",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:114:20"
+      ]
+    },
+    "questfn1-families#78": {
+      "en": "that is how f(x) > g(x) questions are written",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:114:112"
+      ]
+    },
+    "questfn1-families#79": {
+      "en": "Whatever the name, the bracket gives back a y-value",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:115:20"
+      ]
+    },
+    "questfn1-families#80": {
+      "en": "“The y-intercept” is the point where…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:116:12"
+      ]
+    },
+    "questfn1-families#81": {
+      "en": "x = 0",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:116:56",
+        "questfn1-families.js:120:75"
+      ]
+    },
+    "questfn1-families#82": {
+      "en": "y = 0",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:116:69",
+        "questfn1-families.js:120:62"
+      ]
+    },
+    "questfn1-families#83": {
+      "en": "the graph turns",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:116:78",
+        "questfn1-families.js:120:84"
+      ]
+    },
+    "questfn1-families#84": {
+      "en": "the asymptote is",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:116:97"
+      ]
+    },
+    "questfn1-families#85": {
+      "en": "The y-axis IS the line x = 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:117:20"
+      ]
+    },
+    "questfn1-families#86": {
+      "en": "every point on it has x-coordinate 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:117:55"
+      ]
+    },
+    "questfn1-families#87": {
+      "en": "So the graph meets the y-axis where x = 0 — substitute x = 0 into the equation",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:118:20"
+      ]
+    },
+    "questfn1-families#88": {
+      "en": "The answer is a point: (0 ; the value you got)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:119:20"
+      ]
+    },
+    "questfn1-families#89": {
+      "en": "“The x-intercept(s)” (the roots) are where…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn1-families.js:120:12"
+      ]
+    },
+    "questfn1-families#90": {
+      "en": "y is biggest",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn1-families.js:120:103"
+      ]
+    },
+    "questfn1-families#91": {
+      "en": "The x-axis IS the line y = 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:121:20"
+      ]
+    },
+    "questfn1-families#92": {
+      "en": "every point on it has y-coordinate 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:121:55"
+      ]
+    },
+    "questfn1-families#93": {
+      "en": "So put y = 0 and solve the equation for x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:122:20"
+      ]
+    },
+    "questfn1-families#94": {
+      "en": "that is why roots and x-intercepts are the same thing",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn1-families.js:122:68"
+      ]
+    },
+    "questfn1-families#95": {
+      "en": "Each answer is a point: (the x you got ; 0)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn1-families.js:123:20"
+      ]
+    },
+    "questfn1-families#96": {
+      "en": "f(3) substitutes x = 3 and gives back the y-value. y-intercept: let x = 0. x-intercepts: let y = 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn1-families.js:127:15"
+      ]
+    },
+    "questfn2-line-parabola#1": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:16:24"
+      ]
+    },
+    "questfn2-line-parabola#2": {
+      "en": "For <b>${eqStr(cv, \"f(x)\")}</b>, the line is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:25:30"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#3": {
+      "en": "increasing (slopes up)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:26:13",
+        "questfn2-line-parabola.js:27:43"
+      ]
+    },
+    "questfn2-line-parabola#4": {
+      "en": "decreasing (slopes down)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:26:40",
+        "questfn2-line-parabola.js:27:14"
+      ]
+    },
+    "questfn2-line-parabola#5": {
+      "en": "horizontal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:27:69"
+      ]
+    },
+    "questfn2-line-parabola#6": {
+      "en": "vertical",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:27:83"
+      ]
+    },
+    "questfn2-line-parabola#7": {
+      "en": "In y = ax + q the gradient is a. a &gt; 0 → up, a &lt; 0 → down.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:29:15"
+      ]
+    },
+    "questfn2-line-parabola#8": {
+      "en": "a = ${C(cv.a)} ${inc ? \"&gt; 0, so increasing\" : \"&lt; 0, so decreasing\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:30:22"
+      ],
+      "nested": [
+        "&gt; 0, so increasing",
+        "&lt; 0, so decreasing"
+      ]
+    },
+    "questfn2-line-parabola#9": {
+      "en": "Compare with y = ax + q: here a = ${C(cv.a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:32:16"
+      ]
+    },
+    "questfn2-line-parabola#10": {
+      "en": "a is the gradient, q is the y-intercept",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:32:67"
+      ]
+    },
+    "questfn2-line-parabola#11": {
+      "en": "a is ${inc ? \"positive\" : \"negative\"}, and it is the gradient that decides the direction",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:33:16"
+      ],
+      "nested": [
+        "positive",
+        "negative"
+      ]
+    },
+    "questfn2-line-parabola#12": {
+      "en": "a &gt; 0 climbs left to right, a &lt; 0 falls",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:34:16"
+      ]
+    },
+    "questfn2-line-parabola#13": {
+      "en": "∴ the line is ${inc ? \"increasing — it slopes up\" : \"decreasing — it slopes down\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:35:16"
+      ],
+      "nested": [
+        "increasing — it slopes up",
+        "decreasing — it slopes down"
+      ]
+    },
+    "questfn2-line-parabola#14": {
+      "en": "What is the <b>x-intercept</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:51:27"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#15": {
+      "en": "x-intercept: let y = 0 and solve for x.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:53:34"
+      ]
+    },
+    "questfn2-line-parabola#16": {
+      "en": "x-intercept ${ptStr(xi, 0)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:53:90"
+      ]
+    },
+    "questfn2-line-parabola#17": {
+      "en": "The x-axis is the line y = 0, so put y = 0 into ${eqStr(cv, \"f(x)\")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:55:20"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#18": {
+      "en": "take q across",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:56:96"
+      ]
+    },
+    "questfn2-line-parabola#19": {
+      "en": "x = ${C(xi)}, so the x-intercept is ${ptStr(xi, 0)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:57:20"
+      ]
+    },
+    "questfn2-line-parabola#20": {
+      "en": "write it as a point, with a semicolon",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:57:78"
+      ]
+    },
+    "questfn2-line-parabola#21": {
+      "en": "What is the <b>y-intercept</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:59:27"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#22": {
+      "en": "y-intercept: let x = 0. For y = ax + q that is just q.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:61:34"
+      ]
+    },
+    "questfn2-line-parabola#23": {
+      "en": "y-intercept ${ptStr(0, yi)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:61:105"
+      ]
+    },
+    "questfn2-line-parabola#24": {
+      "en": "The y-axis is the line x = 0, so put x = 0 into ${eqStr(cv, \"f(x)\")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:63:20"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#25": {
+      "en": "f(0) = ${axTerm(cv.a, \"(0)\")} ${signed(cv.q)} = ${C(yi)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:64:20"
+      ]
+    },
+    "questfn2-line-parabola#26": {
+      "en": "the x-term falls away",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:64:83"
+      ]
+    },
+    "questfn2-line-parabola#27": {
+      "en": "y-intercept ${ptStr(0, yi)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:65:20"
+      ]
+    },
+    "questfn2-line-parabola#28": {
+      "en": "in y = ax + q the y-intercept is always just q",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:65:54"
+      ]
+    },
+    "questfn2-line-parabola#29": {
+      "en": "The parabola <b>${eqStr(cv, \"f(x)\")}</b> is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:74:32"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#30": {
+      "en": "“happy” (opens up) — it has a minimum",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:75:15",
+        "questfn2-line-parabola.js:76:58"
+      ]
+    },
+    "questfn2-line-parabola#31": {
+      "en": "“sad” (opens down) — it has a maximum",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:75:57",
+        "questfn2-line-parabola.js:76:16"
+      ]
+    },
+    "questfn2-line-parabola#32": {
+      "en": "a straight line",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:77:8"
+      ]
+    },
+    "questfn2-line-parabola#33": {
+      "en": "always increasing",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:77:27"
+      ]
+    },
+    "questfn2-line-parabola#34": {
+      "en": "a &gt; 0 → opens up (minimum); a &lt; 0 → opens down (maximum).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:79:15"
+      ]
+    },
+    "questfn2-line-parabola#35": {
+      "en": "a = ${C(paraStd(cv).a)}, so ${happy ? \"happy → minimum\" : \"sad → maximum\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:80:22"
+      ],
+      "nested": [
+        "happy → minimum",
+        "sad → maximum"
+      ]
+    },
+    "questfn2-line-parabola#36": {
+      "en": "Only one number decides the shape: a, the number in front of x². Here a = ${C(paraStd(cv).a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:82:16"
+      ]
+    },
+    "questfn2-line-parabola#37": {
+      "en": "a is ${happy ? \"positive, so the arms point UP\" : \"negative, so the arms point DOWN\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:83:16"
+      ],
+      "nested": [
+        "positive, so the arms point UP",
+        "negative, so the arms point DOWN"
+      ]
+    },
+    "questfn2-line-parabola#38": {
+      "en": "a happy parabola, and its turning point is the LOWEST point → a minimum",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:84:29"
+      ]
+    },
+    "questfn2-line-parabola#39": {
+      "en": "a sad parabola, and its turning point is the HIGHEST point → a maximum",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:84:105"
+      ]
+    },
+    "questfn2-line-parabola#40": {
+      "en": "What is the <b>turning point</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:93:32"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#41": {
+      "en": "x of the turning point = −b/(2a); substitute it back to get the y-value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:96:15"
+      ]
+    },
+    "questfn2-line-parabola#42": {
+      "en": "Turning point ${ptStr(tp.x, tp.y)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:97:22"
+      ]
+    },
+    "questfn2-line-parabola#43": {
+      "en": "<b>${paraTPString(cv)}</b> is in turning-point form. What is its <b>turning point</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:115:32"
+      ]
+    },
+    "questfn2-line-parabola#44": {
+      "en": "In y = a(x − p)² + q the turning point is (p ; q) — the sign inside the bracket flips: (x − 2)² turns at x = +2, (x + 2)² at x = −2.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:118:15"
+      ]
+    },
+    "questfn2-line-parabola#45": {
+      "en": "Turning point ${ptStr(p, q)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:119:22"
+      ]
+    },
+    "questfn2-line-parabola#46": {
+      "en": "Compare with y = a(x − p)² + q",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:121:16"
+      ]
+    },
+    "questfn2-line-parabola#47": {
+      "en": "The bracket reads (x ${p > 0 ? \"−\" : \"+\"} ${C(Math.abs(p))}), so p = ${C(p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:122:16"
+      ]
+    },
+    "questfn2-line-parabola#48": {
+      "en": "OPPOSITE sign to what you see inside the bracket",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:122:99"
+      ]
+    },
+    "questfn2-line-parabola#49": {
+      "en": "The number sitting outside the bracket is q = ${C(q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:123:16"
+      ]
+    },
+    "questfn2-line-parabola#50": {
+      "en": "that one keeps its own sign",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:123:76"
+      ]
+    },
+    "questfn2-line-parabola#51": {
+      "en": "∴ turning point (p ; q) = ${ptStr(p, q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:124:16"
+      ]
+    },
+    "questfn2-line-parabola#52": {
+      "en": "What is the <b>axis of symmetry</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:133:32"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#53": {
+      "en": "x = ${C(tp.x)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:134:7"
+      ]
+    },
+    "questfn2-line-parabola#54": {
+      "en": "y = ${C(tp.x)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:135:8"
+      ]
+    },
+    "questfn2-line-parabola#55": {
+      "en": "x = ${C(tp.x - 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:136:21",
+        "questfn2-line-parabola.js:137:29"
+      ]
+    },
+    "questfn2-line-parabola#56": {
+      "en": "x = ${C(-tp.x)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:136:44"
+      ]
+    },
+    "questfn2-line-parabola#57": {
+      "en": "x = ${C(tp.x + 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:137:52"
+      ]
+    },
+    "questfn2-line-parabola#58": {
+      "en": "The axis of symmetry is the vertical line through the turning point: x = (the x of the TP).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:139:15"
+      ]
+    },
+    "questfn2-line-parabola#59": {
+      "en": "x = ${C(tp.x)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:140:22"
+      ]
+    },
+    "questfn2-line-parabola#60": {
+      "en": "y ≤ ${C(tp.y)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:158:15"
+      ]
+    },
+    "questfn2-line-parabola#61": {
+      "en": "y ≥ ${C(tp.y)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:158:34"
+      ]
+    },
+    "questfn2-line-parabola#62": {
+      "en": "y ∈ ℝ",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:159:7"
+      ]
+    },
+    "questfn2-line-parabola#63": {
+      "en": "y ≥ ${C(-tp.y)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:160:15"
+      ]
+    },
+    "questfn2-line-parabola#64": {
+      "en": "y ≤ ${C(-tp.y)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:160:35"
+      ]
+    },
+    "questfn2-line-parabola#65": {
+      "en": "What is the <b>range</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:162:30"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn2-line-parabola#66": {
+      "en": "Range = the y-values covered. A happy parabola starts at its minimum y and goes up (y ≥ min); a sad one (y ≤ max).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:165:15"
+      ]
+    },
+    "questfn2-line-parabola#67": {
+      "en": "Range: ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:166:22"
+      ]
+    },
+    "questfn2-line-parabola#68": {
+      "en": "Range means: which y-values does the graph actually reach? So find the turning point first",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:168:16"
+      ]
+    },
+    "questfn2-line-parabola#69": {
+      "en": "x = −b/(2a) = ${C(tp.x)}, and putting that back in gives y = ${C(tp.y)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:169:16"
+      ]
+    },
+    "questfn2-line-parabola#70": {
+      "en": "a = ${C(a)} is ${a > 0 ? `positive → happy, so ${C(tp.y)} is the LOWEST y and the arms climb from there` : `negative → sad, so ${C(tp.y)} is the HIGHEST y and the arms fall away`}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:170:16"
+      ],
+      "nested": [
+        "positive → happy, so ${C(tp.y)} is the LOWEST y and the arms climb from there",
+        "negative → sad, so ${C(tp.y)} is the HIGHEST y and the arms fall away"
+      ]
+    },
+    "questfn2-line-parabola#71": {
+      "en": "the turning point y is included, so it is ≥ / ≤, not &gt; / &lt;",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn2-line-parabola.js:171:35"
+      ]
+    },
+    "questfn3-hyperbola-exp#1": {
+      "en": "What are the <b>asymptotes</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:17:33"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn3-hyperbola-exp#2": {
+      "en": "x = ${C(cv.p)} and y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:18:7"
+      ]
+    },
+    "questfn3-hyperbola-exp#3": {
+      "en": "x = ${C(cv.q)} and y = ${C(cv.p)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:19:8"
+      ]
+    },
+    "questfn3-hyperbola-exp#4": {
+      "en": "x = ${C(cv.p)} and y = ${C(cv.q + 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:19:45"
+      ]
+    },
+    "questfn3-hyperbola-exp#5": {
+      "en": "x = ${C(cv.p + 1)} and y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:19:86"
+      ]
+    },
+    "questfn3-hyperbola-exp#6": {
+      "en": "For y = a/(x − p) + q the vertical asymptote is x = p and the horizontal asymptote is y = q.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:21:15"
+      ]
+    },
+    "questfn3-hyperbola-exp#7": {
+      "en": "x = ${C(cv.p)} and y = ${C(cv.q)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:22:22"
+      ]
+    },
+    "questfn3-hyperbola-exp#8": {
+      "en": "Compare with y = a/(x − p) + q: here p = ${C(cv.p)} and q = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:24:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#9": {
+      "en": "The denominator is just x, and you cannot divide by 0, so x = 0 is forbidden",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:26:17"
+      ]
+    },
+    "questfn3-hyperbola-exp#10": {
+      "en": "The denominator is 0 when x ${cv.p < 0 ? \"+\" : \"−\"} ${C(Math.abs(cv.p))} = 0, i.e. x = ${C(cv.p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:27:17"
+      ]
+    },
+    "questfn3-hyperbola-exp#11": {
+      "en": "that forbidden x is the VERTICAL asymptote",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:28:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#12": {
+      "en": "The fraction can shrink towards 0 but never reaches it, so y never quite reaches ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:29:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#13": {
+      "en": "that is the HORIZONTAL asymptote",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:29:114"
+      ]
+    },
+    "questfn3-hyperbola-exp#14": {
+      "en": "∴ x = ${C(cv.p)} and y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:30:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#15": {
+      "en": "What is the <b>domain</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:41:27"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn3-hyperbola-exp#16": {
+      "en": "x ∈ ℝ",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:42:27"
+      ]
+    },
+    "questfn3-hyperbola-exp#17": {
+      "en": "x ∈ ℝ, x ≠ ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:42:36"
+      ]
+    },
+    "questfn3-hyperbola-exp#18": {
+      "en": "x ≠ ${C(cv.p)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:42:61"
+      ]
+    },
+    "questfn3-hyperbola-exp#19": {
+      "en": "The graph exists for every x except at the vertical asymptote x = p.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:43:34"
+      ]
+    },
+    "questfn3-hyperbola-exp#20": {
+      "en": "Domain asks: which x-values am I allowed to put in?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:45:20"
+      ]
+    },
+    "questfn3-hyperbola-exp#21": {
+      "en": "Only one x breaks the formula — the one that makes the denominator 0, x = ${C(cv.p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:46:20"
+      ]
+    },
+    "questfn3-hyperbola-exp#22": {
+      "en": "you cannot divide by 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:46:111"
+      ]
+    },
+    "questfn3-hyperbola-exp#23": {
+      "en": "Everything else is fine, so ${domainStr(cv)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:47:20"
+      ]
+    },
+    "questfn3-hyperbola-exp#24": {
+      "en": "the restriction rides after a semicolon",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:47:71"
+      ]
+    },
+    "questfn3-hyperbola-exp#25": {
+      "en": "What is the <b>range</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:49:27",
+        "questfn3-hyperbola-exp.js:121:30"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn3-hyperbola-exp#26": {
+      "en": "y ∈ ℝ",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:50:26",
+        "questfn3-hyperbola-exp.js:123:56"
+      ]
+    },
+    "questfn3-hyperbola-exp#27": {
+      "en": "y ∈ ℝ, y ≠ ${C(cv.p)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:50:35"
+      ]
+    },
+    "questfn3-hyperbola-exp#28": {
+      "en": "y ≠ ${C(-cv.q)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:50:60"
+      ]
+    },
+    "questfn3-hyperbola-exp#29": {
+      "en": "The y-values cover everything except the horizontal asymptote y = q.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:51:34"
+      ]
+    },
+    "questfn3-hyperbola-exp#30": {
+      "en": "Range asks: which y-values does the graph actually reach?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:53:20"
+      ]
+    },
+    "questfn3-hyperbola-exp#31": {
+      "en": "In y = a/(x − p) + q the fraction part can get tiny, but it can never be exactly 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:54:20"
+      ]
+    },
+    "questfn3-hyperbola-exp#32": {
+      "en": "So y can never be exactly ${C(cv.q)}, but it reaches everything else",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:55:20"
+      ]
+    },
+    "questfn3-hyperbola-exp#33": {
+      "en": "For ${eqStr(cv, \"f(x)\")}, each branch is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:64:33"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn3-hyperbola-exp#34": {
+      "en": "decreasing",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:65:13",
+        "questfn3-hyperbola-exp.js:66:29"
+      ]
+    },
+    "questfn3-hyperbola-exp#35": {
+      "en": "increasing",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:65:28",
+        "questfn3-hyperbola-exp.js:66:14"
+      ]
+    },
+    "questfn3-hyperbola-exp#36": {
+      "en": "horizontal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:66:43"
+      ]
+    },
+    "questfn3-hyperbola-exp#37": {
+      "en": "a straight line",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:66:57"
+      ]
+    },
+    "questfn3-hyperbola-exp#38": {
+      "en": "a &gt; 0 → the branches sit top-right & bottom-left and each one decreases; a &lt; 0 → top-left & bottom-right, each increases.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:68:15"
+      ]
+    },
+    "questfn3-hyperbola-exp#39": {
+      "en": "a = ${C(cv.a)} ${dec ? \"&gt; 0 → decreasing\" : \"&lt; 0 → increasing\"} on each branch.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:69:22"
+      ],
+      "nested": [
+        "&gt; 0 → decreasing",
+        "&lt; 0 → increasing"
+      ]
+    },
+    "questfn3-hyperbola-exp#40": {
+      "en": "In y = a/(x − p) + q it is a that places the branches. Here a = ${C(cv.a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:71:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#41": {
+      "en": "a is ${dec ? \"positive, so the branches sit top-right and bottom-left\" : \"negative, so the branches sit top-left and bottom-right\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:72:16"
+      ],
+      "nested": [
+        "positive, so the branches sit top-right and bottom-left",
+        "negative, so the branches sit top-left and bottom-right"
+      ]
+    },
+    "questfn3-hyperbola-exp#42": {
+      "en": "Trace one branch from left to right: it ${dec ? \"falls\" : \"climbs\"} the whole way",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:73:16"
+      ],
+      "nested": [
+        "falls",
+        "climbs"
+      ]
+    },
+    "questfn3-hyperbola-exp#43": {
+      "en": "∴ each branch is ${dec ? \"decreasing\" : \"increasing\"} — say it per branch, never “the graph”",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:74:16"
+      ],
+      "nested": [
+        "decreasing",
+        "increasing"
+      ]
+    },
+    "questfn3-hyperbola-exp#44": {
+      "en": "Is <b>${eqStr(cv, \"f(x)\")}</b> growth or decay?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:84:35"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn3-hyperbola-exp#45": {
+      "en": "Growth (increasing — “taking off”)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:85:15",
+        "questfn3-hyperbola-exp.js:86:51"
+      ]
+    },
+    "questfn3-hyperbola-exp#46": {
+      "en": "Decay (decreasing — “landing”)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:85:54",
+        "questfn3-hyperbola-exp.js:86:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#47": {
+      "en": "Neither — it’s a straight line",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:87:8"
+      ]
+    },
+    "questfn3-hyperbola-exp#48": {
+      "en": "It has a turning point",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:87:42"
+      ]
+    },
+    "questfn3-hyperbola-exp#49": {
+      "en": "Aeroplane idea: b &gt; 1 takes off (growth); 0 &lt; b &lt; 1 lands (decay).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:89:15"
+      ]
+    },
+    "questfn3-hyperbola-exp#50": {
+      "en": "b = ${C(cv.b)} → ${grows ? \"growth\" : \"decay\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:90:22"
+      ],
+      "nested": [
+        "growth",
+        "decay"
+      ]
+    },
+    "questfn3-hyperbola-exp#51": {
+      "en": "b is the base — the number carrying the x. Here b = ${C(cv.b)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:92:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#52": {
+      "en": "b &gt; 1, so every step to the right multiplies the y-value by more than 1 and it climbs",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:94:17"
+      ]
+    },
+    "questfn3-hyperbola-exp#53": {
+      "en": "0 &lt; b &lt; 1, so every step to the right multiplies the y-value by less than 1 and it shrinks",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:95:17"
+      ]
+    },
+    "questfn3-hyperbola-exp#54": {
+      "en": "growth — the graph is taking off",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:96:29"
+      ]
+    },
+    "questfn3-hyperbola-exp#55": {
+      "en": "decay — the graph is landing",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:96:66"
+      ]
+    },
+    "questfn3-hyperbola-exp#56": {
+      "en": "the aeroplane picture",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:96:103"
+      ]
+    },
+    "questfn3-hyperbola-exp#57": {
+      "en": "What is the <b>asymptote</b> of ${eqStr(cv, \"f(x)\")}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:104:35"
+      ],
+      "nested": [
+        "f(x)"
+      ]
+    },
+    "questfn3-hyperbola-exp#58": {
+      "en": "y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:105:7"
+      ]
+    },
+    "questfn3-hyperbola-exp#59": {
+      "en": "x = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:105:26"
+      ]
+    },
+    "questfn3-hyperbola-exp#60": {
+      "en": "y = ${C(cv.q + 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:105:44"
+      ]
+    },
+    "questfn3-hyperbola-exp#61": {
+      "en": "y = ${C(cv.q - 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:105:66"
+      ]
+    },
+    "questfn3-hyperbola-exp#62": {
+      "en": "In y = a·bˣ + q the graph flattens towards the horizontal line y = q.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:107:15"
+      ]
+    },
+    "questfn3-hyperbola-exp#63": {
+      "en": "y = ${C(cv.q)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:108:22"
+      ]
+    },
+    "questfn3-hyperbola-exp#64": {
+      "en": "Compare with y = a·b^(x − p) + q: here q = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:110:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#65": {
+      "en": "On one side the power term shrinks towards 0, but a power of a positive base is never actually 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:111:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#66": {
+      "en": "So y creeps towards ${C(cv.q)} + 0 and flattens out just short of it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:112:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#67": {
+      "en": "∴ the asymptote is y = ${C(cv.q)} — horizontal, so it is y = …",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:112:91"
+      ]
+    },
+    "questfn3-hyperbola-exp#68": {
+      "en": "y &lt; ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:123:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#69": {
+      "en": "y > ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:123:38"
+      ]
+    },
+    "questfn3-hyperbola-exp#70": {
+      "en": "y ≠ ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:123:65"
+      ]
+    },
+    "questfn3-hyperbola-exp#71": {
+      "en": "The graph sits entirely on one side of its asymptote y = q. a &gt; 0 → above (y &gt; q); a &lt; 0 → below (y &lt; q).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:125:15"
+      ]
+    },
+    "questfn3-hyperbola-exp#72": {
+      "en": "Start at the asymptote: q = ${C(cv.q)}, so the graph flattens onto y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:128:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#73": {
+      "en": "a = ${C(cv.a)} says which side it lives on: ${above ? \"a is positive, so the whole graph sits ABOVE the asymptote\" : \"a is negative, so the whole graph sits BELOW the asymptote\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:129:16"
+      ],
+      "nested": [
+        "a is positive, so the whole graph sits ABOVE the asymptote",
+        "a is negative, so the whole graph sits BELOW the asymptote"
+      ]
+    },
+    "questfn3-hyperbola-exp#74": {
+      "en": "It gets as close as you like but never lands on it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:130:16"
+      ]
+    },
+    "questfn3-hyperbola-exp#75": {
+      "en": "∴ ${rangeStr(cv)} — a strict sign, never ≥ or ≤",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn3-hyperbola-exp.js:130:73"
+      ]
+    },
+    "questfn4-read-graph#1": {
+      "en": "Read the <b>y-intercept</b> off the graph.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn4-read-graph.js:39:28"
+      ]
+    },
+    "questfn4-read-graph#2": {
+      "en": "The y-intercept is where the graph crosses the y-axis (x = 0). Follow the dashed line.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn4-read-graph.js:41:28"
+      ]
+    },
+    "questfn4-read-graph#3": {
+      "en": "y-intercept ${ptStr(0, yi)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn4-read-graph.js:42:22"
+      ]
+    },
+    "questfn4-read-graph#4": {
+      "en": "The y-intercept is where the curve crosses the y-axis, and every point on that axis has x = 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:44:16"
+      ]
+    },
+    "questfn4-read-graph#5": {
+      "en": "Follow the dashed line from the marked point across to the y-axis: it lands on ${C(yi)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:45:16"
+      ]
+    },
+    "questfn4-read-graph#6": {
+      "en": "∴ y-intercept ${ptStr(0, yi)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:46:16"
+      ]
+    },
+    "questfn4-read-graph#7": {
+      "en": "x first, then y, with a semicolon between them",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:46:52"
+      ]
+    },
+    "questfn4-read-graph#8": {
+      "en": "Read the <b>x-intercept</b> off the graph.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn4-read-graph.js:57:28"
+      ]
+    },
+    "questfn4-read-graph#9": {
+      "en": "The x-intercept is where the graph crosses the x-axis (y = 0).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn4-read-graph.js:59:28"
+      ]
+    },
+    "questfn4-read-graph#10": {
+      "en": "x-intercept ${ptStr(xi, 0)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn4-read-graph.js:60:22"
+      ]
+    },
+    "questfn4-read-graph#11": {
+      "en": "The x-intercept is where the line cuts the x-axis, and every point on that axis has y = 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:62:16"
+      ]
+    },
+    "questfn4-read-graph#12": {
+      "en": "Drop the dashed line from the marked point down to the x-axis: it lands on ${C(xi)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:63:16"
+      ]
+    },
+    "questfn4-read-graph#13": {
+      "en": "∴ x-intercept ${ptStr(xi, 0)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:64:16"
+      ]
+    },
+    "questfn4-read-graph#14": {
+      "en": "the 0 goes SECOND here — it is the y-coordinate",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:64:52"
+      ]
+    },
+    "questfn4-read-graph#15": {
+      "en": "Read the <b>turning point</b> off the graph.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn4-read-graph.js:74:28"
+      ]
+    },
+    "questfn4-read-graph#16": {
+      "en": "The turning point is the lowest (or highest) point of the parabola. Read the dashed lines to both axes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn4-read-graph.js:76:28"
+      ]
+    },
+    "questfn4-read-graph#17": {
+      "en": "Turning point ${ptStr(tp.x, tp.y)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn4-read-graph.js:77:22"
+      ]
+    },
+    "questfn4-read-graph#18": {
+      "en": "The turning point is where the parabola stops and comes back — the ${paraStd(cv).a > 0 ? \"lowest\" : \"highest\"} point of the curve",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:79:16"
+      ],
+      "nested": [
+        "lowest",
+        "highest"
+      ]
+    },
+    "questfn4-read-graph#19": {
+      "en": "a is ${paraStd(cv).a > 0 ? \"positive → happy, so it is a minimum\" : \"negative → sad, so it is a maximum\"}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:80:16"
+      ],
+      "nested": [
+        "positive → happy, so it is a minimum",
+        "negative → sad, so it is a maximum"
+      ]
+    },
+    "questfn4-read-graph#20": {
+      "en": "Follow the dashed line DOWN to the x-axis: x = ${C(tp.x)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:81:16"
+      ]
+    },
+    "questfn4-read-graph#21": {
+      "en": "Follow the dashed line ACROSS to the y-axis: y = ${C(tp.y)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:82:16"
+      ]
+    },
+    "questfn4-read-graph#22": {
+      "en": "∴ turning point ${ptStr(tp.x, tp.y)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:82:82"
+      ]
+    },
+    "questfn4-read-graph#23": {
+      "en": "Read the <b>asymptotes</b> off the graph (the dashed lines).",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn4-read-graph.js:95:25"
+      ]
+    },
+    "questfn4-read-graph#24": {
+      "en": "x = ${C(cv.p)} and y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn4-read-graph.js:96:11"
+      ]
+    },
+    "questfn4-read-graph#25": {
+      "en": "x = ${C(cv.q)} and y = ${C(cv.p)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:97:12"
+      ]
+    },
+    "questfn4-read-graph#26": {
+      "en": "x = ${C(cv.p)} and y = ${C(cv.q + 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:97:49"
+      ]
+    },
+    "questfn4-read-graph#27": {
+      "en": "x = ${C(cv.p + 1)} and y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:97:90"
+      ]
+    },
+    "questfn4-read-graph#28": {
+      "en": "The vertical dashed line is x = …; the horizontal dashed line is y = ….",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn4-read-graph.js:98:34"
+      ]
+    },
+    "questfn4-read-graph#29": {
+      "en": "x = ${C(cv.p)} and y = ${C(cv.q)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn4-read-graph.js:99:26"
+      ]
+    },
+    "questfn4-read-graph#30": {
+      "en": "A hyperbola has two dashed lines: one standing up, one lying flat",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:101:20"
+      ]
+    },
+    "questfn4-read-graph#31": {
+      "en": "The upright one crosses the x-axis at ${C(cv.p)}, and an upright line is written x = …",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:102:20"
+      ]
+    },
+    "questfn4-read-graph#32": {
+      "en": "so x = ${C(cv.p)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:102:113"
+      ]
+    },
+    "questfn4-read-graph#33": {
+      "en": "The flat one crosses the y-axis at ${C(cv.q)}, and a flat line is written y = …",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:103:20"
+      ]
+    },
+    "questfn4-read-graph#34": {
+      "en": "so y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:103:106"
+      ]
+    },
+    "questfn4-read-graph#35": {
+      "en": "Read the <b>asymptote</b> off the graph (the dashed line).",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn4-read-graph.js:105:25"
+      ]
+    },
+    "questfn4-read-graph#36": {
+      "en": "y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn4-read-graph.js:106:11"
+      ]
+    },
+    "questfn4-read-graph#37": {
+      "en": "x = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:106:30"
+      ]
+    },
+    "questfn4-read-graph#38": {
+      "en": "y = ${C(cv.q + 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:106:48"
+      ]
+    },
+    "questfn4-read-graph#39": {
+      "en": "y = ${C(cv.q - 1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:106:70"
+      ]
+    },
+    "questfn4-read-graph#40": {
+      "en": "An exponential graph flattens towards one horizontal dashed line, y = ….",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn4-read-graph.js:107:34"
+      ]
+    },
+    "questfn4-read-graph#41": {
+      "en": "y = ${C(cv.q)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn4-read-graph.js:108:26"
+      ]
+    },
+    "questfn4-read-graph#42": {
+      "en": "An exponential graph has ONE dashed line, and it lies flat — the level the curve flattens onto",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:110:20"
+      ]
+    },
+    "questfn4-read-graph#43": {
+      "en": "Follow it across to the y-axis: it sits at ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:111:20"
+      ]
+    },
+    "questfn4-read-graph#44": {
+      "en": "A flat line is written y = …",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:112:20"
+      ]
+    },
+    "questfn4-read-graph#45": {
+      "en": "∴ y = ${C(cv.q)}, not x = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:112:55"
+      ]
+    },
+    "questfn4-read-graph#46": {
+      "en": "y ≤ ${C(paraTP(cv).y)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:125:30"
+      ]
+    },
+    "questfn4-read-graph#47": {
+      "en": "y ≥ ${C(paraTP(cv).y)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:125:57"
+      ]
+    },
+    "questfn4-read-graph#48": {
+      "en": "y &lt; ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:126:21"
+      ]
+    },
+    "questfn4-read-graph#49": {
+      "en": "y > ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:126:43"
+      ]
+    },
+    "questfn4-read-graph#50": {
+      "en": "y ∈ ℝ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:128:20",
+        "questfn4-read-graph.js:129:20"
+      ]
+    },
+    "questfn4-read-graph#51": {
+      "en": "y ≠ 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:128:29"
+      ]
+    },
+    "questfn4-read-graph#52": {
+      "en": "y ≠ ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn4-read-graph.js:129:29"
+      ]
+    },
+    "questfn4-read-graph#53": {
+      "en": "Read the <b>range</b> off the graph.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn4-read-graph.js:130:30"
+      ]
+    },
+    "questfn4-read-graph#54": {
+      "en": "Range = the y-values the graph reaches. Look at the lowest/highest point or the asymptote.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn4-read-graph.js:132:30"
+      ]
+    },
+    "questfn4-read-graph#55": {
+      "en": "Range: ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn4-read-graph.js:133:22"
+      ]
+    },
+    "questfn4-read-graph#56": {
+      "en": "Range = the y-values the graph reaches, so slide your eye up and down the y-axis",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:136:20",
+        "questfn4-read-graph.js:141:20"
+      ]
+    },
+    "questfn4-read-graph#57": {
+      "en": "The parabola is ${paraStd(cv).a > 0 ? \"happy, so it stops at its lowest point and climbs from there\" : \"sad, so it stops at its highest point and falls away from there\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:137:20"
+      ],
+      "nested": [
+        "happy, so it stops at its lowest point and climbs from there",
+        "sad, so it stops at its highest point and falls away from there"
+      ]
+    },
+    "questfn4-read-graph#58": {
+      "en": "That turning point sits at y = ${C(paraTP(cv).y)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:138:20"
+      ]
+    },
+    "questfn4-read-graph#59": {
+      "en": "∴ ${correct} — the turning point itself IS reached, so the sign carries the line under it",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:138:76"
+      ]
+    },
+    "questfn4-read-graph#60": {
+      "en": "The curve flattens onto the dashed line y = ${C(cv.q)} and stays ${cv.a > 0 ? \"above\" : \"below\"} it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:142:20"
+      ],
+      "nested": [
+        "above",
+        "below"
+      ]
+    },
+    "questfn4-read-graph#61": {
+      "en": "It never actually lands on the asymptote",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn4-read-graph.js:143:20"
+      ]
+    },
+    "questfn4-read-graph#62": {
+      "en": "∴ ${correct} — a strict sign, never ≥ or ≤",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn4-read-graph.js:143:67"
+      ]
+    },
+    "questfn5-inequalities#1": {
+      "en": "x > ${C(tp.x)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:30:29",
+        "questfn5-inequalities.js:31:51"
+      ]
+    },
+    "questfn5-inequalities#2": {
+      "en": "x &lt; ${C(tp.x)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:30:48",
+        "questfn5-inequalities.js:31:29"
+      ]
+    },
+    "questfn5-inequalities#3": {
+      "en": "For ${\"<b>f</b>\"} below, for which x-values is the graph <b>${askInc ? \"increasing\" : \"decreasing\"}</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:34:25"
+      ],
+      "nested": [
+        "<b>f</b>",
+        "increasing",
+        "decreasing"
+      ]
+    },
+    "questfn5-inequalities#4": {
+      "en": "x = ${C(tp.x)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:35:24"
+      ]
+    },
+    "questfn5-inequalities#5": {
+      "en": "all real x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:35:42",
+        "questfn5-inequalities.js:56:40",
+        "questfn5-inequalities.js:77:43"
+      ]
+    },
+    "questfn5-inequalities#6": {
+      "en": "Read left-to-right and split at the turning point x = ",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn5-inequalities.js:37:15"
+      ]
+    },
+    "questfn5-inequalities#7": {
+      "en": ". One side climbs, the other falls.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn5-inequalities.js:37:84"
+      ]
+    },
+    "questfn5-inequalities#8": {
+      "en": "Increasing",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn5-inequalities.js:38:34"
+      ]
+    },
+    "questfn5-inequalities#9": {
+      "en": "Decreasing",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn5-inequalities.js:38:49"
+      ]
+    },
+    "questfn5-inequalities#10": {
+      "en": "Find the turning point first: x = ${C(tp.x)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:40:16"
+      ]
+    },
+    "questfn5-inequalities#11": {
+      "en": "that is the only place the graph changes direction",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:40:67"
+      ]
+    },
+    "questfn5-inequalities#12": {
+      "en": "Cut a line straight down through x = ${C(tp.x)} and read the graph left to right",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:41:16"
+      ]
+    },
+    "questfn5-inequalities#13": {
+      "en": "It is a happy parabola, so it falls on the left of the cut and climbs on the right",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:43:17"
+      ]
+    },
+    "questfn5-inequalities#14": {
+      "en": "It is a sad parabola, so it climbs on the left of the cut and falls on the right",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:44:17"
+      ]
+    },
+    "questfn5-inequalities#15": {
+      "en": "∴ ${askInc ? \"increasing\" : \"decreasing\"} for ${correct}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:45:16"
+      ],
+      "nested": [
+        "increasing",
+        "decreasing"
+      ]
+    },
+    "questfn5-inequalities#16": {
+      "en": "always write x first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:45:79"
+      ]
+    },
+    "questfn5-inequalities#17": {
+      "en": "Use the graph. For which x-values is <b>f(x) &gt; 0</b> (above the x-axis)?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:55:25"
+      ]
+    },
+    "questfn5-inequalities#18": {
+      "en": "x > ${C(r2)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:56:24"
+      ]
+    },
+    "questfn5-inequalities#19": {
+      "en": "f(x) &gt; 0 means the graph is ABOVE the x-axis. The x-intercepts are the boundaries.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn5-inequalities.js:58:15"
+      ]
+    },
+    "questfn5-inequalities#20": {
+      "en": "f(x) &gt; 0 for ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn5-inequalities.js:59:22"
+      ]
+    },
+    "questfn5-inequalities#21": {
+      "en": "f(x) &gt; 0 means “where is the curve ABOVE the x-axis?”",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:61:16"
+      ]
+    },
+    "questfn5-inequalities#22": {
+      "en": "f(x) is just another name for the y-value",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:61:79"
+      ]
+    },
+    "questfn5-inequalities#23": {
+      "en": "Cut a line down through every x-intercept: x = ${C(r1)} and x = ${C(r2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:62:16",
+        "questfn5-inequalities.js:83:16"
+      ]
+    },
+    "questfn5-inequalities#24": {
+      "en": "The parabola is happy, so it dips below the axis BETWEEN the cuts and rides above on both arms",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:64:17"
+      ]
+    },
+    "questfn5-inequalities#25": {
+      "en": "The parabola is sad, so the only stretch above the axis is BETWEEN the cuts",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:65:17"
+      ]
+    },
+    "questfn5-inequalities#26": {
+      "en": "two separate stretches, so they are joined with “or”",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:66:43",
+        "questfn5-inequalities.js:87:107"
+      ]
+    },
+    "questfn5-inequalities#27": {
+      "en": "one single stretch, so it is written as a double inequality",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:66:100",
+        "questfn5-inequalities.js:87:43"
+      ]
+    },
+    "questfn5-inequalities#28": {
+      "en": "Use the graph. For which x-values is <b>f(x) &lt; 0</b> (below the x-axis)?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:76:25"
+      ]
+    },
+    "questfn5-inequalities#29": {
+      "en": "x &lt; ${C(r1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:77:24"
+      ]
+    },
+    "questfn5-inequalities#30": {
+      "en": "f(x) &lt; 0 means the graph is BELOW the x-axis, between or outside the x-intercepts.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn5-inequalities.js:79:15"
+      ]
+    },
+    "questfn5-inequalities#31": {
+      "en": "f(x) &lt; 0 for ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn5-inequalities.js:80:22"
+      ]
+    },
+    "questfn5-inequalities#32": {
+      "en": "f(x) &lt; 0 means “where is the curve BELOW the x-axis?”",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:82:16"
+      ]
+    },
+    "questfn5-inequalities#33": {
+      "en": "a negative y-value",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:82:79"
+      ]
+    },
+    "questfn5-inequalities#34": {
+      "en": "The parabola is happy, so the only stretch under the axis is BETWEEN the cuts",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:85:17"
+      ]
+    },
+    "questfn5-inequalities#35": {
+      "en": "The parabola is sad, so it pokes above the axis between the cuts and drops below on both arms",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:86:17"
+      ]
+    },
+    "questfn5-inequalities#36": {
+      "en": "<b>f(x)·g(x) &gt; 0</b> happens where the two graphs are…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:94:12"
+      ]
+    },
+    "questfn5-inequalities#37": {
+      "en": "on the same side of the x-axis (both above, or both below)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questfn5-inequalities.js:94:76"
+      ]
+    },
+    "questfn5-inequalities#38": {
+      "en": "on different sides of the x-axis",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:95:13",
+        "questfn5-inequalities.js:105:13"
+      ]
+    },
+    "questfn5-inequalities#39": {
+      "en": "both equal to zero",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:95:49"
+      ]
+    },
+    "questfn5-inequalities#40": {
+      "en": "parallel",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:95:71"
+      ]
+    },
+    "questfn5-inequalities#41": {
+      "en": "A product is positive only two ways: (+)(+) or (−)(−)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:96:20"
+      ]
+    },
+    "questfn5-inequalities#42": {
+      "en": "the two factors must carry the SAME sign",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:96:80"
+      ]
+    },
+    "questfn5-inequalities#43": {
+      "en": "f(x) is + where f is above the x-axis and − where it is below — same for g(x)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:97:20"
+      ]
+    },
+    "questfn5-inequalities#44": {
+      "en": "So paint + and − on both curves and keep the stretches where the two paints match",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:98:20"
+      ]
+    },
+    "questfn5-inequalities#45": {
+      "en": "both above, or both below",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:98:108"
+      ]
+    },
+    "questfn5-inequalities#46": {
+      "en": "<b>f(x)·g(x) &lt; 0</b> happens where the two graphs are…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:99:12"
+      ]
+    },
+    "questfn5-inequalities#47": {
+      "en": "on different sides of the x-axis (one above, one below)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questfn5-inequalities.js:99:76"
+      ]
+    },
+    "questfn5-inequalities#48": {
+      "en": "on the same side of the x-axis",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:100:13"
+      ]
+    },
+    "questfn5-inequalities#49": {
+      "en": "both positive",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:100:47"
+      ]
+    },
+    "questfn5-inequalities#50": {
+      "en": "both negative",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:100:64"
+      ]
+    },
+    "questfn5-inequalities#51": {
+      "en": "A product is negative only two ways: (+)(−) or (−)(+)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:101:20"
+      ]
+    },
+    "questfn5-inequalities#52": {
+      "en": "the two factors must carry DIFFERENT signs",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:101:80"
+      ]
+    },
+    "questfn5-inequalities#53": {
+      "en": "f(x) is + above the x-axis and − below it — same for g(x)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:102:20"
+      ]
+    },
+    "questfn5-inequalities#54": {
+      "en": "So keep the stretches where the paints disagree",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:103:20"
+      ]
+    },
+    "questfn5-inequalities#55": {
+      "en": "one curve above the axis, the other below",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:103:74"
+      ]
+    },
+    "questfn5-inequalities#56": {
+      "en": "<b>f(x)/g(x) &gt; 0</b> happens where the two graphs are…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:104:12"
+      ]
+    },
+    "questfn5-inequalities#57": {
+      "en": "on the same side of the x-axis (and g(x) ≠ 0)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questfn5-inequalities.js:104:76"
+      ]
+    },
+    "questfn5-inequalities#58": {
+      "en": "both zero",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:105:49"
+      ]
+    },
+    "questfn5-inequalities#59": {
+      "en": "equal to each other",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:105:62"
+      ]
+    },
+    "questfn5-inequalities#60": {
+      "en": "Dividing follows exactly the same sign rules as multiplying: same signs → +",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:106:20"
+      ]
+    },
+    "questfn5-inequalities#61": {
+      "en": "So the two curves must be on the same side of the x-axis",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:107:20"
+      ]
+    },
+    "questfn5-inequalities#62": {
+      "en": "One extra thing: g is in the denominator, so g(x) ≠ 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:108:20"
+      ]
+    },
+    "questfn5-inequalities#63": {
+      "en": "the restriction rides after a semicolon",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:108:80"
+      ]
+    },
+    "questfn5-inequalities#64": {
+      "en": "A product (or quotient) is positive when the two factors have the SAME sign, negative when they have DIFFERENT signs.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn5-inequalities.js:112:15"
+      ]
+    },
+    "questfn5-inequalities#65": {
+      "en": "<b>x·f(x) &gt; 0</b> means x and f(x) (the y-value) have…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:120:12"
+      ]
+    },
+    "questfn5-inequalities#66": {
+      "en": "the same sign — the graph is in the 1st & 3rd quadrants",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questfn5-inequalities.js:120:76"
+      ]
+    },
+    "questfn5-inequalities#67": {
+      "en": "different signs — the 2nd & 4th quadrants",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:121:13"
+      ]
+    },
+    "questfn5-inequalities#68": {
+      "en": "always a positive product",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:121:58"
+      ]
+    },
+    "questfn5-inequalities#69": {
+      "en": "a turning point",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:121:87"
+      ]
+    },
+    "questfn5-inequalities#70": {
+      "en": "x·f(x) is the x-coordinate multiplied by the y-coordinate of the same point",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:122:20",
+        "questfn5-inequalities.js:127:20"
+      ]
+    },
+    "questfn5-inequalities#71": {
+      "en": "For that product to be positive the two must match: (+)(+) or (−)(−)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:123:20"
+      ]
+    },
+    "questfn5-inequalities#72": {
+      "en": "x and y both + is the 1st quadrant; both − is the 3rd",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:124:20"
+      ]
+    },
+    "questfn5-inequalities#73": {
+      "en": "∴ the parts of the curve lying in quadrants 1 and 3",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:124:80"
+      ]
+    },
+    "questfn5-inequalities#74": {
+      "en": "<b>x·f(x) &lt; 0</b> means x and f(x) (the y-value) have…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:125:12"
+      ]
+    },
+    "questfn5-inequalities#75": {
+      "en": "different signs — the graph is in the 2nd & 4th quadrants",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questfn5-inequalities.js:125:76"
+      ]
+    },
+    "questfn5-inequalities#76": {
+      "en": "the same sign — the 1st & 3rd quadrants",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:126:13"
+      ]
+    },
+    "questfn5-inequalities#77": {
+      "en": "always a negative x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:126:56"
+      ]
+    },
+    "questfn5-inequalities#78": {
+      "en": "no solution",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:126:79"
+      ]
+    },
+    "questfn5-inequalities#79": {
+      "en": "For that product to be negative the two must differ: (+)(−) or (−)(+)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:128:20"
+      ]
+    },
+    "questfn5-inequalities#80": {
+      "en": "x negative with y positive is the 2nd quadrant; x positive with y negative is the 4th",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:129:20"
+      ]
+    },
+    "questfn5-inequalities#81": {
+      "en": "∴ the parts of the curve lying in quadrants 2 and 4",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:129:112"
+      ]
+    },
+    "questfn5-inequalities#82": {
+      "en": "x·f(x) looks at the sign of the x-coordinate times the sign of the y-coordinate — same sign → quadrants 1 & 3.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn5-inequalities.js:133:15"
+      ]
+    },
+    "questfn5-inequalities#83": {
+      "en": "When you read <b>f(x) &gt; g(x)</b> off a graph, the boundary x-values are…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn5-inequalities.js:141:7"
+      ]
+    },
+    "questfn5-inequalities#84": {
+      "en": "the x-coordinates of the points where the graphs intersect",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn5-inequalities.js:142:7"
+      ]
+    },
+    "questfn5-inequalities#85": {
+      "en": "the y-intercepts",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:143:8"
+      ]
+    },
+    "questfn5-inequalities#86": {
+      "en": "the turning points",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:143:28"
+      ]
+    },
+    "questfn5-inequalities#87": {
+      "en": "the asymptotes",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn5-inequalities.js:143:50"
+      ]
+    },
+    "questfn5-inequalities#88": {
+      "en": "f &gt; g is where one curve is above the other. The switch-over happens exactly at their intersection points.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn5-inequalities.js:144:15"
+      ]
+    },
+    "questfn5-inequalities#89": {
+      "en": "The x-values of the intersection points.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn5-inequalities.js:145:22"
+      ]
+    },
+    "questfn5-inequalities#90": {
+      "en": "f(x) &gt; g(x) asks: where is f drawn ABOVE g?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:147:16"
+      ]
+    },
+    "questfn5-inequalities#91": {
+      "en": "f can only stop being above g by crossing it, and crossing happens exactly at an intersection point",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:148:16"
+      ]
+    },
+    "questfn5-inequalities#92": {
+      "en": "So cut a line down through every intersection, then read which side keeps f on top",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn5-inequalities.js:149:16"
+      ]
+    },
+    "questfn5-inequalities#93": {
+      "en": "the answer comes out in x, written x first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn5-inequalities.js:149:105"
+      ]
+    },
+    "questfn6-transformations#1": {
+      "en": "How do you shift f(x) <b>up</b> by ${k}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:17:12"
+      ]
+    },
+    "questfn6-transformations#2": {
+      "en": "f(x) + ${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:17:59",
+        "questfn6-transformations.js:20:80",
+        "questfn6-transformations.js:23:111",
+        "questfn6-transformations.js:27:95"
+      ]
+    },
+    "questfn6-transformations#3": {
+      "en": "f(x) − ${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:17:78",
+        "questfn6-transformations.js:20:61",
+        "questfn6-transformations.js:23:96",
+        "questfn6-transformations.js:27:110"
+      ]
+    },
+    "questfn6-transformations#4": {
+      "en": "f(x + ${k})",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:17:93",
+        "questfn6-transformations.js:20:110",
+        "questfn6-transformations.js:23:81",
+        "questfn6-transformations.js:27:61"
+      ]
+    },
+    "questfn6-transformations#5": {
+      "en": "f(x − ${k})",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:17:108",
+        "questfn6-transformations.js:20:95",
+        "questfn6-transformations.js:23:62",
+        "questfn6-transformations.js:27:80"
+      ]
+    },
+    "questfn6-transformations#6": {
+      "en": "Up and down change the ANSWER, so the number goes OUTSIDE the bracket",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:18:20",
+        "questfn6-transformations.js:21:20"
+      ]
+    },
+    "questfn6-transformations#7": {
+      "en": "Every y-value has to come out ${k} bigger: f(x) + ${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:19:20"
+      ]
+    },
+    "questfn6-transformations#8": {
+      "en": "nothing happens to x, so nothing moves sideways",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:19:81",
+        "questfn6-transformations.js:22:82"
+      ]
+    },
+    "questfn6-transformations#9": {
+      "en": "How do you shift f(x) <b>down</b> by ${k}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:20:12"
+      ]
+    },
+    "questfn6-transformations#10": {
+      "en": "Every y-value has to come out ${k} smaller: f(x) − ${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:22:20"
+      ]
+    },
+    "questfn6-transformations#11": {
+      "en": "How do you shift f(x) <b>right</b> by ${k}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:23:12"
+      ]
+    },
+    "questfn6-transformations#12": {
+      "en": "Left and right change what you FEED IN, so the number goes INSIDE the bracket with the x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:24:20",
+        "questfn6-transformations.js:28:20"
+      ]
+    },
+    "questfn6-transformations#13": {
+      "en": "Moving right means the value that used to appear at 0 must now appear at ${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:25:20"
+      ]
+    },
+    "questfn6-transformations#14": {
+      "en": "So the bracket has to take that ${k} back off again: f(x − ${k})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:26:20"
+      ]
+    },
+    "questfn6-transformations#15": {
+      "en": "that is why “right” is written with a minus",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:26:91"
+      ]
+    },
+    "questfn6-transformations#16": {
+      "en": "How do you shift f(x) <b>left</b> by ${k}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:27:12"
+      ]
+    },
+    "questfn6-transformations#17": {
+      "en": "Moving left means the value that used to appear at 0 must now appear at −${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:29:20"
+      ]
+    },
+    "questfn6-transformations#18": {
+      "en": "So the bracket has to add the ${k} back on: f(x + ${k})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:30:20"
+      ]
+    },
+    "questfn6-transformations#19": {
+      "en": "that is why “left” is written with a plus",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:30:82"
+      ]
+    },
+    "questfn6-transformations#20": {
+      "en": "Up/down change the WHOLE function: f(x) ± k. Left/right go INSIDE with x: left is f(x + k), right is f(x − k).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:34:15"
+      ]
+    },
+    "questfn6-transformations#21": {
+      "en": "<b>f(x) + ${k}</b> shifts the graph…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:43:12"
+      ]
+    },
+    "questfn6-transformations#22": {
+      "en": "up by ${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:43:55",
+        "questfn6-transformations.js:46:75",
+        "questfn6-transformations.js:49:92",
+        "questfn6-transformations.js:53:108"
+      ]
+    },
+    "questfn6-transformations#23": {
+      "en": "down by ${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:43:73",
+        "questfn6-transformations.js:46:55",
+        "questfn6-transformations.js:49:106",
+        "questfn6-transformations.js:53:92"
+      ]
+    },
+    "questfn6-transformations#24": {
+      "en": "right by ${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:43:89",
+        "questfn6-transformations.js:46:105",
+        "questfn6-transformations.js:49:55",
+        "questfn6-transformations.js:53:75"
+      ]
+    },
+    "questfn6-transformations#25": {
+      "en": "left by ${k}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:43:106",
+        "questfn6-transformations.js:46:89",
+        "questfn6-transformations.js:49:76",
+        "questfn6-transformations.js:53:55"
+      ]
+    },
+    "questfn6-transformations#26": {
+      "en": "The ${k} sits OUTSIDE the bracket, so it changes the answer, not the input",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:44:20",
+        "questfn6-transformations.js:47:20"
+      ]
+    },
+    "questfn6-transformations#27": {
+      "en": "Every y-value comes out ${k} bigger, so the whole graph lifts",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:45:20"
+      ]
+    },
+    "questfn6-transformations#28": {
+      "en": "∴ up by ${k}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:45:88"
+      ]
+    },
+    "questfn6-transformations#29": {
+      "en": "<b>f(x) − ${k}</b> shifts the graph…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:46:12"
+      ]
+    },
+    "questfn6-transformations#30": {
+      "en": "Every y-value comes out ${k} smaller, so the whole graph drops",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:48:20"
+      ]
+    },
+    "questfn6-transformations#31": {
+      "en": "∴ down by ${k}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:48:89"
+      ]
+    },
+    "questfn6-transformations#32": {
+      "en": "<b>f(x − ${k})</b> shifts the graph…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:49:12"
+      ]
+    },
+    "questfn6-transformations#33": {
+      "en": "The ${k} is INSIDE the bracket with the x, so it changes what gets fed in",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:50:20",
+        "questfn6-transformations.js:54:20"
+      ]
+    },
+    "questfn6-transformations#34": {
+      "en": "Put x = ${k} in and the bracket gives f(0) — the value that used to sit at 0 now shows up at ${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:51:20"
+      ]
+    },
+    "questfn6-transformations#35": {
+      "en": "Everything slides ${k} to the RIGHT",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:52:20"
+      ]
+    },
+    "questfn6-transformations#36": {
+      "en": "the minus inside the bracket moves the graph the opposite way",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:52:62"
+      ]
+    },
+    "questfn6-transformations#37": {
+      "en": "<b>f(x + ${k})</b> shifts the graph…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:53:12"
+      ]
+    },
+    "questfn6-transformations#38": {
+      "en": "Put x = −${k} in and the bracket gives f(0) — the value that used to sit at 0 now shows up at −${k}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:55:20"
+      ]
+    },
+    "questfn6-transformations#39": {
+      "en": "Everything slides ${k} to the LEFT",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:56:20"
+      ]
+    },
+    "questfn6-transformations#40": {
+      "en": "the plus inside the bracket moves the graph the opposite way",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:56:61"
+      ]
+    },
+    "questfn6-transformations#41": {
+      "en": "± outside the bracket = up/down. The bit with x flips the direction: (x − k) moves right, (x + k) moves left.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:60:15"
+      ]
+    },
+    "questfn6-transformations#42": {
+      "en": "Reflection in the <b>x-axis</b> is written…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:68:12"
+      ]
+    },
+    "questfn6-transformations#43": {
+      "en": "−f(x)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:68:62",
+        "questfn6-transformations.js:71:75"
+      ]
+    },
+    "questfn6-transformations#44": {
+      "en": "f(−x)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:68:75",
+        "questfn6-transformations.js:71:62"
+      ]
+    },
+    "questfn6-transformations#45": {
+      "en": "f(x)⁻¹",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:68:84"
+      ]
+    },
+    "questfn6-transformations#46": {
+      "en": "−f(−x)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:68:94",
+        "questfn6-transformations.js:71:96"
+      ]
+    },
+    "questfn6-transformations#47": {
+      "en": "Folding over the x-axis turns a point (x ; y) into (x ; −y)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:69:20"
+      ]
+    },
+    "questfn6-transformations#48": {
+      "en": "only the y-value flips",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:69:86"
+      ]
+    },
+    "questfn6-transformations#49": {
+      "en": "The y-value is the ANSWER, so the minus goes in front of the whole function",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:70:20"
+      ]
+    },
+    "questfn6-transformations#50": {
+      "en": "∴ −f(x)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:70:102"
+      ]
+    },
+    "questfn6-transformations#51": {
+      "en": "Reflection in the <b>y-axis</b> is written…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:71:12"
+      ]
+    },
+    "questfn6-transformations#52": {
+      "en": "f(x) − 1",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:71:84"
+      ]
+    },
+    "questfn6-transformations#53": {
+      "en": "Folding over the y-axis turns a point (x ; y) into (−x ; y)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:72:20"
+      ]
+    },
+    "questfn6-transformations#54": {
+      "en": "only the x-value flips",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:72:86"
+      ]
+    },
+    "questfn6-transformations#55": {
+      "en": "The x-value is the INPUT, so the minus goes on the x only",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:73:20"
+      ]
+    },
+    "questfn6-transformations#56": {
+      "en": "∴ f(−x)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:73:84"
+      ]
+    },
+    "questfn6-transformations#57": {
+      "en": "<b>−f(x)</b> reflects the graph in the…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:74:12"
+      ]
+    },
+    "questfn6-transformations#58": {
+      "en": "x-axis (the y-values change sign)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:74:58",
+        "questfn6-transformations.js:78:99"
+      ]
+    },
+    "questfn6-transformations#59": {
+      "en": "y-axis (the x-values change sign)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:74:99",
+        "questfn6-transformations.js:78:58"
+      ]
+    },
+    "questfn6-transformations#60": {
+      "en": "line y = x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:74:136",
+        "questfn6-transformations.js:78:136"
+      ]
+    },
+    "questfn6-transformations#61": {
+      "en": "origin only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:74:150",
+        "questfn6-transformations.js:78:150"
+      ]
+    },
+    "questfn6-transformations#62": {
+      "en": "The minus sits on the whole function, so every answer comes out with its sign flipped",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:75:20"
+      ]
+    },
+    "questfn6-transformations#63": {
+      "en": "(x ; y) becomes (x ; −y): the point keeps its place left-to-right and swaps top for bottom",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:76:20"
+      ]
+    },
+    "questfn6-transformations#64": {
+      "en": "That fold is over the x-axis",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:77:20"
+      ]
+    },
+    "questfn6-transformations#65": {
+      "en": "<b>f(−x)</b> reflects the graph in the…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:78:12"
+      ]
+    },
+    "questfn6-transformations#66": {
+      "en": "The minus sits on the x only, so every input goes in with its sign flipped",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:79:20"
+      ]
+    },
+    "questfn6-transformations#67": {
+      "en": "(x ; y) becomes (−x ; y): the point keeps its height and swaps left for right",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:80:20"
+      ]
+    },
+    "questfn6-transformations#68": {
+      "en": "That fold is over the y-axis",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:81:20"
+      ]
+    },
+    "questfn6-transformations#69": {
+      "en": "Negative on the WHOLE function → reflect in the x-axis. Negative on the x only → reflect in the y-axis.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:85:15"
+      ]
+    },
+    "questfn6-transformations#70": {
+      "en": "What does <b>k·f(x)</b> with k &gt; 1 do to the graph?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:93:7"
+      ]
+    },
+    "questfn6-transformations#71": {
+      "en": "Stretches it vertically (the y-values grow)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn6-transformations.js:94:7"
+      ]
+    },
+    "questfn6-transformations#72": {
+      "en": "Shifts it up by k",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:95:8"
+      ]
+    },
+    "questfn6-transformations#73": {
+      "en": "Reflects it in the x-axis",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:95:29"
+      ]
+    },
+    "questfn6-transformations#74": {
+      "en": "Shifts it right by k",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:95:58"
+      ]
+    },
+    "questfn6-transformations#75": {
+      "en": "Multiplying the whole function by k scales every y-value by k — a vertical stretch (k &gt; 1) or shrink (0 &lt; k &lt; 1).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:96:15"
+      ]
+    },
+    "questfn6-transformations#76": {
+      "en": "A vertical stretch by a factor of k.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn6-transformations.js:97:22"
+      ]
+    },
+    "questfn6-transformations#77": {
+      "en": "k·f(x) multiplies the ANSWER by k, so every y-value becomes k times as big",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:99:16"
+      ]
+    },
+    "questfn6-transformations#78": {
+      "en": "The x is untouched, so no point moves left or right",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:100:16"
+      ]
+    },
+    "questfn6-transformations#79": {
+      "en": "the x-intercepts stay exactly where they were",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:100:74"
+      ]
+    },
+    "questfn6-transformations#80": {
+      "en": "With k &gt; 1 every point is pulled further from the x-axis — a vertical stretch",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:101:16"
+      ]
+    },
+    "questfn6-transformations#81": {
+      "en": "0 &lt; k &lt; 1 would squash it towards the axis instead",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:101:103"
+      ]
+    },
+    "questfn6-transformations#82": {
+      "en": "f has turning point ${ptStr(tp.x, tp.y)}. After reflecting f in the <b>${inX ? \"x-axis\" : \"y-axis\"}</b>, the new turning point is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:113:7"
+      ],
+      "nested": [
+        "x-axis",
+        "y-axis"
+      ]
+    },
+    "questfn6-transformations#83": {
+      "en": "Reflection in the x-axis is −f(x): only the y-coordinate changes sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:117:21"
+      ]
+    },
+    "questfn6-transformations#84": {
+      "en": "Reflection in the y-axis is f(−x): only the x-coordinate changes sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:118:21"
+      ]
+    },
+    "questfn6-transformations#85": {
+      "en": "New turning point ${ptStr(nx, ny)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn6-transformations.js:119:22"
+      ]
+    },
+    "questfn6-transformations#86": {
+      "en": "Reflection in the x-axis is −f(x): every y-value changes sign and x stays put",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:121:22"
+      ]
+    },
+    "questfn6-transformations#87": {
+      "en": "Reflection in the y-axis is f(−x): every x-value changes sign and y stays put",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:122:22"
+      ]
+    },
+    "questfn6-transformations#88": {
+      "en": "Do that to the turning point ${ptStr(tp.x, tp.y)}: ${inX ? `y goes ${C(tp.y)} → ${C(ny)}, x stays ${C(nx)}` : `x goes ${C(tp.x)} → ${C(nx)}, y stays ${C(ny)}`}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:123:16"
+      ],
+      "nested": [
+        "y goes ${C(tp.y)} → ${C(ny)}, x stays ${C(nx)}",
+        "x goes ${C(tp.x)} → ${C(nx)}, y stays ${C(ny)}"
+      ]
+    },
+    "questfn6-transformations#89": {
+      "en": "∴ new turning point ${ptStr(nx, ny)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:124:16"
+      ]
+    },
+    "questfn6-transformations#90": {
+      "en": "only ONE coordinate ever changes in a reflection like this",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:124:59"
+      ]
+    },
+    "questfn6-transformations#91": {
+      "en": "f has turning point ${ptStr(tp.x, tp.y)}. If f is shifted <b>${up ? \"up\" : \"down\"} by ${k}</b>, the new turning point is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:135:7"
+      ],
+      "nested": [
+        "up",
+        "down"
+      ]
+    },
+    "questfn6-transformations#92": {
+      "en": "Up/down only changes the y-coordinate. x stays the same.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:138:15"
+      ]
+    },
+    "questfn6-transformations#93": {
+      "en": "New turning point ${ptStr(tp.x, ny)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn6-transformations.js:139:22"
+      ]
+    },
+    "questfn6-transformations#94": {
+      "en": "Shifting ${up ? \"up\" : \"down\"} moves everything vertically, so only the y-coordinate changes",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:141:16"
+      ],
+      "nested": [
+        "up",
+        "down"
+      ]
+    },
+    "questfn6-transformations#95": {
+      "en": "y: ${C(tp.y)} ${up ? \"+\" : \"−\"} ${C(k)} = ${C(ny)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:142:16"
+      ]
+    },
+    "questfn6-transformations#96": {
+      "en": "∴ new turning point ${ptStr(tp.x, ny)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:143:16"
+      ]
+    },
+    "questfn6-transformations#97": {
+      "en": "the x-coordinate is still ${C(tp.x)}, and so is the axis of symmetry",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:143:61"
+      ]
+    },
+    "questfn6-transformations#98": {
+      "en": "f has asymptotes x = ${C(cv.p)} and y = ${C(cv.q)}. After shifting <b>${up ? \"up\" : \"down\"} by ${k}</b>, the asymptotes are…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questfn6-transformations.js:154:7"
+      ],
+      "nested": [
+        "up",
+        "down"
+      ]
+    },
+    "questfn6-transformations#99": {
+      "en": "x = ${C(cv.p)} and y = ${C(nq)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questfn6-transformations.js:155:7"
+      ]
+    },
+    "questfn6-transformations#100": {
+      "en": "x = ${C(up ? cv.p + k : cv.p - k)} and y = ${C(cv.q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:156:8"
+      ]
+    },
+    "questfn6-transformations#101": {
+      "en": "x = ${C(cv.p)} and y = ${C(up ? cv.q - k : cv.q + k)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:156:65"
+      ]
+    },
+    "questfn6-transformations#102": {
+      "en": "x = ${C(cv.q)} and y = ${C(cv.p)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questfn6-transformations.js:156:122"
+      ]
+    },
+    "questfn6-transformations#103": {
+      "en": "A vertical shift moves the horizontal asymptote y = q only; the vertical asymptote x = p stays put.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questfn6-transformations.js:158:15"
+      ]
+    },
+    "questfn6-transformations#104": {
+      "en": "x = ${C(cv.p)} and y = ${C(nq)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questfn6-transformations.js:159:22"
+      ]
+    },
+    "questfn6-transformations#105": {
+      "en": "Shifting ${up ? \"up\" : \"down\"} by ${k} lifts every part of the picture, the flat asymptote included",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:161:16"
+      ],
+      "nested": [
+        "up",
+        "down"
+      ]
+    },
+    "questfn6-transformations#106": {
+      "en": "y = ${C(cv.q)} ${up ? \"+\" : \"−\"} ${C(k)} → y = ${C(nq)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:162:16"
+      ]
+    },
+    "questfn6-transformations#107": {
+      "en": "The upright asymptote x = ${C(cv.p)} is a left-right position, so a vertical shift cannot touch it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questfn6-transformations.js:163:16"
+      ]
+    },
+    "questfn6-transformations#108": {
+      "en": "∴ x = ${C(cv.p)} and y = ${C(nq)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questfn6-transformations.js:164:16"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "questfn2-line-parabola.js:30:46",
+      "text": "&gt; 0, so increasing",
+      "in": "a = ${C(cv.a)} ${inc ? \"&gt; 0, so increasing\" : \"&lt; 0, so"
+    },
+    {
+      "where": "questfn2-line-parabola.js:30:72",
+      "text": "&lt; 0, so decreasing",
+      "in": "a = ${C(cv.a)} ${inc ? \"&gt; 0, so increasing\" : \"&lt; 0, so"
+    },
+    {
+      "where": "questfn2-line-parabola.js:35:39",
+      "text": "increasing — it slopes up",
+      "in": "∴ the line is ${inc ? \"increasing — it slopes up\" : \"decreas"
+    },
+    {
+      "where": "questfn2-line-parabola.js:35:69",
+      "text": "decreasing — it slopes down",
+      "in": "∴ the line is ${inc ? \"increasing — it slopes up\" : \"decreas"
+    },
+    {
+      "where": "questfn2-line-parabola.js:83:32",
+      "text": "positive, so the arms point UP",
+      "in": "a is ${happy ? \"positive, so the arms point UP\" : \"negative,"
+    },
+    {
+      "where": "questfn2-line-parabola.js:83:67",
+      "text": "negative, so the arms point DOWN",
+      "in": "a is ${happy ? \"positive, so the arms point UP\" : \"negative,"
+    },
+    {
+      "where": "questfn2-line-parabola.js:101:18",
+      "text": "Read off the standard form y = ax² + bx + c: a = ${C(st.a)}, b = ${C(st.b)}, c = ${C(st.c)}"
+    },
+    {
+      "where": "questfn2-line-parabola.js:102:18",
+      "text": "x of the TP = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}"
+    },
+    {
+      "where": "questfn2-line-parabola.js:102:91",
+      "text": "the shortcut, not a derivative"
+    },
+    {
+      "where": "questfn2-line-parabola.js:103:18",
+      "text": "Substitute that x back into f: f(${C(tp.x)}) = ${C(tp.y)}"
+    },
+    {
+      "where": "questfn2-line-parabola.js:104:18",
+      "text": "∴ turning point ${ptStr(tp.x, tp.y)}"
+    },
+    {
+      "where": "questfn2-line-parabola.js:144:18",
+      "text": "The axis of symmetry is the vertical line the parabola folds onto — it runs through the turning point"
+    },
+    {
+      "where": "questfn2-line-parabola.js:145:18",
+      "text": "So all you need is the x of the TP: x = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}"
+    },
+    {
+      "where": "questfn2-line-parabola.js:146:41",
+      "text": "a vertical line is written x = …, never y = …"
+    },
+    {
+      "where": "questfn2-line-parabola.js:170:42",
+      "text": "positive → happy, so ${C(tp.y)} is the LOWEST y and the arms climb from there",
+      "in": "a = ${C(a)} is ${a > 0 ? `positive → happy, so ${C(tp.y)} is"
+    },
+    {
+      "where": "questfn2-line-parabola.js:170:124",
+      "text": "negative → sad, so ${C(tp.y)} is the HIGHEST y and the arms fall away",
+      "in": "a = ${C(a)} is ${a > 0 ? `positive → happy, so ${C(tp.y)} is"
+    },
+    {
+      "where": "questfn3-hyperbola-exp.js:72:30",
+      "text": "positive, so the branches sit top-right and bottom-left",
+      "in": "a is ${dec ? \"positive, so the branches sit top-right and bo"
+    },
+    {
+      "where": "questfn3-hyperbola-exp.js:72:90",
+      "text": "negative, so the branches sit top-left and bottom-right",
+      "in": "a is ${dec ? \"positive, so the branches sit top-right and bo"
+    },
+    {
+      "where": "questfn3-hyperbola-exp.js:129:71",
+      "text": "a is positive, so the whole graph sits ABOVE the asymptote",
+      "in": "a = ${C(cv.a)} says which side it lives on: ${above ? \"a is "
+    },
+    {
+      "where": "questfn3-hyperbola-exp.js:129:134",
+      "text": "a is negative, so the whole graph sits BELOW the asymptote",
+      "in": "a = ${C(cv.a)} says which side it lives on: ${above ? \"a is "
+    },
+    {
+      "where": "questfn4-read-graph.js:80:44",
+      "text": "positive → happy, so it is a minimum",
+      "in": "a is ${paraStd(cv).a > 0 ? \"positive → happy, so it is a min"
+    },
+    {
+      "where": "questfn4-read-graph.js:80:85",
+      "text": "negative → sad, so it is a maximum",
+      "in": "a is ${paraStd(cv).a > 0 ? \"positive → happy, so it is a min"
+    },
+    {
+      "where": "questfn4-read-graph.js:137:59",
+      "text": "happy, so it stops at its lowest point and climbs from there",
+      "in": "The parabola is ${paraStd(cv).a > 0 ? \"happy, so it stops at"
+    },
+    {
+      "where": "questfn4-read-graph.js:137:124",
+      "text": "sad, so it stops at its highest point and falls away from there",
+      "in": "The parabola is ${paraStd(cv).a > 0 ? \"happy, so it stops at"
+    }
+  ],
+  "words": 3236,
+  "skippedLists": [
+    "questfn1-families.js:KINDS [line, parabola, hyperbola, exp]"
+  ]
+}
