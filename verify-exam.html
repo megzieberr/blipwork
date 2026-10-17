@@ -900,15 +900,18 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
      chapters are eligible in this test (algx and euclid are exam-only,
      so the build flag is their whole gate; eqn qualifies because eq8
      is open), and they must appear in EXAM_TAB_ORDER's order. */
+  /* S9 (2026-10-17): cards are matched by the config's own `name` for a
+     chapter id (js/config.js wraps names in L(en, af) since T89), never
+     an English literal, so these checks hold under ?lang=af too. */
   const examCards = [...host.querySelectorAll(".chapter-cards .ch-card")];
   const cardNames = examCards.map(c => c.querySelector("h2").textContent.trim());
-  tick(!!examCards.length && /algebraic expressions/i.test(cardNames[0] || ""),
+  tick(!!examCards.length && cardNames[0] === examChapterById("algx").name,
     `flag ON: the FIRST Exam Focus chapter card is Algebraic Expressions (EXAM_TAB_ORDER, basics first) — got "${cardNames[0]}"`);
   tick(cardNames.some(n => /euclidean/i.test(n)) ? /euclidean/i.test(cardNames[cardNames.length - 1]) : true,
     `…and Euclidean is last — got [${cardNames.join(", ")}]`);
   lines.push(`exam chapter cards, in EXAM_TAB_ORDER: [${cardNames.join(", ")}]`);
 
-  const examCard = examCards.find(c => /equations/i.test(c.textContent));
+  const examCard = examCards.find((c, i) => cardNames[i] === chapterById("eqn").name);
   tick(!!examCard, "flag ON: the flagged chapter's card (Equations & Inequalities) is on the grid");
 
   if (examCard) examCard.querySelector("button").click();
@@ -922,10 +925,14 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   const topicCards = tileEls(host);
   tick(topicCards.length === wantEqnTiles, `examChapter screen shows all ${wantEqnTiles} skill tiles for eqn, got ${topicCards.length}`);
   const lastTile = topicCards[topicCards.length - 1];
-  tick(!!lastTile && /level 4/i.test(lastTile.textContent), `the LAST tile on the grid is the Level 4 one, got "${lastTile ? tileText(lastTile) : "(none)"}"`);
+  // tile labels come from js/exam/skills.js (the registry the screen draws
+  // from), in whatever language that file speaks, never a literal here
+  const eqnL4Label = (skillsForChapter("eqn").find(s => isLevel4Skill(s.id)) || {}).label;
+  const eqnNatureLabel = (skillsForChapter("eqn").find(s => s.id === "nature-chain") || {}).label;
+  tick(!!lastTile && tileText(lastTile) === eqnL4Label, `the LAST tile on the grid is the Level 4 one, got "${lastTile ? tileText(lastTile) : "(none)"}"`);
   tick(!!lastTile && lastTile.classList.contains("exam-tile-l4"), "the Level 4 tile carries the exam-tile-l4 class (full-width, amber)");
   tick(!!lastTile && /mixed hard questions/i.test(lastTile.textContent), "the Level 4 tile carries its one-line muted sub-line");
-  tick(topicCards.some(c => /nature of roots/i.test(c.textContent)), "one of eqn's tiles is the nature-of-roots chain, with her own label");
+  tick(!!eqnNatureLabel && topicCards.some(c => tileText(c) === eqnNatureLabel), "one of eqn's tiles is the nature-of-roots chain, with her own label");
   lines.push(`examChapter screen skill tiles: [${topicCards.map(tileText).join(", ")}]`);
 
   const backBtn = host.querySelector(".back");
@@ -1510,7 +1517,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   if (tabHiddenBtn) tabHiddenBtn.click();
   const hiddenCards = [...host.querySelectorAll(".chapter-cards .ch-card")].map(c => c.querySelector("h2").textContent.trim());
   tick(!hiddenCards.some(t => /equations/i.test(t)), "hub: with NO quest open, the flagged QUEST chapter (Equations & Inequalities) contributes no Exam Focus card — the session-E gate still holds");
-  tick(hiddenCards.some(t => /euclidean/i.test(t)), "hub: with NO quest open, the exam-only Euclidean chapter is the card that remains");
+  tick(hiddenCards.includes(examChapterById("euclid").name), "hub: with NO quest open, the exam-only Euclidean chapter is the card that remains");
   lines.push(`hub, 0 open quests → Exam Focus cards: [${hiddenCards.join(" | ")}] (want Euclidean only)`);
 
   const appShownTab = makeApp9(["eq8"]);
@@ -1709,17 +1716,19 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   };
   // 2026-10-16 (her ruling): Paper 1 / Paper 2 replaced Term 3 / Revision,
   // each tab in the paper's own order (js/screens.js PAPER_TABS)
+  // her paper order as chapter ids, read back as the config's own names
+  const namesInOrder = ids => ids.map(id => (chapterById(id) || {}).name).join(" | ");
   const paper1Cards = textOfTab(/^paper 1/i);
   tick(Array.isArray(paper1Cards), "the hub has a Paper 1 tab");
   tick(!(paper1Cards || []).some(t => /euclid|algebraic expressions/i.test(t)), `Paper 1 tab must not show an exam-only card, got [${(paper1Cards || []).join(" | ")}]`);
-  tick((paper1Cards || []).join(" | ") === "Exponents & Surds | Equations & Inequalities | Number Patterns | Functions | Finance | Probability", `Paper 1 lists its chapters in the paper's own order, got [${(paper1Cards || []).join(" | ")}]`);
+  tick((paper1Cards || []).join(" | ") === namesInOrder(["exp", "eqn", "pat", "func", "finance", "prob"]), `Paper 1 lists its chapters in the paper's own order, got [${(paper1Cards || []).join(" | ")}]`);
   const paper2Cards = textOfTab(/^paper 2/i);
   tick(Array.isArray(paper2Cards), "the hub has a Paper 2 tab");
   tick(!(paper2Cards || []).some(t => /euclid/i.test(t)), `Paper 2 tab must not show a Euclidean card, got [${(paper2Cards || []).join(" | ")}]`);
-  tick((paper2Cards || []).join(" | ") === "Statistics | Analytical Geometry | General Trig | Trig Graphs | 2D Trigonometry | Measurement", `Paper 2 lists its chapters in the paper's own order, got [${(paper2Cards || []).join(" | ")}]`);
+  tick((paper2Cards || []).join(" | ") === namesInOrder(["stats", "analytical", "gtrig", "tgraph", "trig", "meas"]), `Paper 2 lists its chapters in the paper's own order, got [${(paper2Cards || []).join(" | ")}]`);
   tick(textOfTab(/term 3|revision/i) === null, "no Term 3 or Revision tab is left on the hub");
   const examCards = textOfTab(/exam focus/i) || [];
-  tick(examCards.some(t => /euclidean/i.test(t)), `Exam Focus tab MUST show the Euclidean card, got [${examCards.join(" | ")}]`);
+  tick(examCards.includes(examChapterById("euclid").name), `Exam Focus tab MUST show the Euclidean card, got [${examCards.join(" | ")}]`);
   lines.push(`hub tabs with EVERY quest open — Paper 1: [${(paper1Cards || []).join(", ")}]`);
   lines.push(`  Paper 2: [${(paper2Cards || []).join(", ")}]`);
   lines.push(`  Exam Focus: [${examCards.join(", ")}]`);
