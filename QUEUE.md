@@ -76,9 +76,9 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ⏳ 2026-10-17 20:46 T44 | hub rounds: questt1-choose … questt7-mixed (7 files) | ~3 381 words | verify page: verify-trig.html ⚠ the Area pad cell in areaSetupStep is frame data, not a slot: hand L() in this row's review
 
 ### Trig Graphs
-- ⏳ 2026-10-17 20:48 T45 | concepts: the `tgraph` block (js/concepts/tgraph.js after S4) | ~576 words | counted by af_extract 2026-10-17
+- ☑ 2026-10-17 T45 | concepts: the `tgraph` block (js/concepts/tgraph.js after S4) | ~576 words | counted by af_extract 2026-10-17
 - ⏳ 2026-10-17 20:48 T46 | hub rounds: questtg1-parents … questtg7-mixed (7 files) | ~1 528 words | verify page: verify-tgraph.html
-- ☐ T47 | exam: cards-tgraph, tgraph-level4 (2 files) | ~2 962 words | verify-exam.html
+- ⏳ 2026-10-17 20:51 T47 | exam: cards-tgraph, tgraph-level4 (2 files) | ~2 962 words | verify-exam.html
 - ☐ T48 | exam: tgraph-siblings-intersections-inequalities | ~3 186 words | verify-exam.html
 - ☐ T49 | exam: tgraph-siblings-period-amplitude-range | ~3 535 words | verify-exam.html
 - ☐ T50 | exam: tgraph-siblings-read-parameters | ~3 131 words | verify-exam.html

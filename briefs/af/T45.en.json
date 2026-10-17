@@ -1,0 +1,232 @@
+{
+  "unit": "T45",
+  "generated": "2026-10-17T18:48:34.277Z",
+  "files": [
+    "js/concepts/tgraph.js"
+  ],
+  "items": {
+    "tgraph#1": {
+      "en": "The three parent graphs",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:9:12"
+      ]
+    },
+    "tgraph#2": {
+      "en": "\n      <p>Three shapes to know by heart (for x from 0° to 360°):</p>\n      <ul>\n        <li><b>y = sin x</b> — starts at 0, peak +1 at 90°, back to 0 at 180°, low −1 at 270°.</li>\n        <li><b>y = cos x</b> — starts at its peak +1 at 0°, 0 at 90°, low −1 at 180°. Cosine is sine shifted 90° left.</li>\n        <li><b>y = tan x</b> — climbs through 0 at 0°, 180° and 360°, with vertical <b>asymptotes</b> at 90° and 270°.</li>\n      </ul>\n      <p>Sine and cosine are \"identical twins\": same amplitude (1), same period (360°), same range [−1 ; 1].</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:10:11"
+      ]
+    },
+    "tgraph#3": {
+      "en": "What a, b and q do",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:20:12"
+      ]
+    },
+    "tgraph#4": {
+      "en": "\n      <p>Every graph is written as <b>y = a·sin b(x − p) + q</b> — cos and tan use the same form:</p>\n      <ul>\n        <li><b>a</b> — sets the amplitude: its <b>size</b> |a| is the height from the midline to a peak. A <b>negative a</b> flips the graph upside-down.</li>\n        <li><b>b</b> — squashes the graph sideways: a bigger b means more cycles (a shorter graph).</li>\n        <li><b>q</b> — slides the whole graph up (q &gt; 0) or down (q &lt; 0). The midline becomes y = q.</li>\n      </ul>\n      <div class=\"eg\">y = 2sin x is twice as tall as sin x; y = −sin x is sin x flipped; y = sin x + 3 sits 3 units higher.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:21:11"
+      ]
+    },
+    "tgraph#5": {
+      "en": "Period",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:31:12"
+      ]
+    },
+    "tgraph#6": {
+      "en": "\n      <p>The <b>period</b> is the length of <b>one full cycle</b> (one complete wave).</p>\n      <div class=\"formula\">sin &amp; cos: period = 360° ÷ b   ·   tan: period = 180° ÷ b</div>\n      <p>A larger b gives a shorter graph (more cycles squeezed into 360°); a smaller b gives a longer graph.</p>\n      <div class=\"eg\">y = cos 3x → 360° ÷ 3 = 120°.  y = tan 2x → 180° ÷ 2 = 90°.  y = sin ½x → 360° ÷ ½ = 720°.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:32:11"
+      ]
+    },
+    "tgraph#7": {
+      "en": "Amplitude",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:39:12"
+      ]
+    },
+    "tgraph#8": {
+      "en": "\n      <p>The <b>amplitude</b> is the height from the midline up to a peak — always positive.</p>\n      <div class=\"formula\">amplitude = |a| = (y max − y min) ÷ 2</div>\n      <p>The sign of a only flips the graph; it does not change the amplitude. <b>Tangent has no amplitude</b> (it has no maximum or minimum) — its amplitude is undefined.</p>\n      <div class=\"eg\">y = −3cos x → amplitude 3.  y = ½sin x → amplitude ½.  y = tan 2x → undefined.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:40:11"
+      ]
+    },
+    "tgraph#9": {
+      "en": "Range",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:47:12"
+      ]
+    },
+    "tgraph#10": {
+      "en": "\n      <p>The <b>range</b> is the set of y-values the graph reaches.</p>\n      <div class=\"formula\">sin &amp; cos: from (q − amplitude) up to (q + amplitude)   ·   tan: y ∈ ℝ</div>\n      <p>Start with the midline y = q, then go one amplitude down and one amplitude up. Tangent reaches every real value, so its range is always ℝ.</p>\n      <div class=\"eg\">y = 2sin x − 1 → midline −1, amplitude 2 → range [−3 ; 1].  y = tan x + 5 → y ∈ ℝ.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:48:11"
+      ]
+    },
+    "tgraph#11": {
+      "en": "How many cycles (curves)",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:55:12"
+      ]
+    },
+    "tgraph#12": {
+      "en": "\n      <p>The number of complete cycles over an interval is the interval length divided by the period.</p>\n      <div class=\"formula\">number of cycles = interval length ÷ period</div>\n      <p>Over a 360° interval this is just equal to b (since period = 360° ÷ b).</p>\n      <div class=\"eg\">y = sin 2x on [0° ; 360°] → 360 ÷ 180 = 2 cycles.  y = cos 3x → 3 cycles.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:56:11"
+      ]
+    },
+    "tgraph#13": {
+      "en": "Horizontal & vertical shifts",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:63:12"
+      ]
+    },
+    "tgraph#14": {
+      "en": "\n      <p><b>Vertical (q):</b> q &gt; 0 shifts up, q &lt; 0 shifts down — the midline moves to y = q.</p>\n      <p><b>Horizontal (p):</b> the bracket is (x − p). Read p as the number after the sign, and the graph moves the <b>opposite</b> way:</p>\n      <ul>\n        <li>sin(x − 30°) → shifts 30° to the <b>right</b>.</li>\n        <li>sin(x + 30°) → shifts 30° to the <b>left</b>.</li>\n      </ul>\n      <p>If b ≠ 1, factor it out first: sin(2x − 60°) = sin 2(x − 30°), so the real shift is 30°, not 60°.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:64:11"
+      ]
+    },
+    "tgraph#15": {
+      "en": "The tangent graph",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:74:12"
+      ]
+    },
+    "tgraph#16": {
+      "en": "\n      <p>tan x = sin x ÷ cos x, so:</p>\n      <ul>\n        <li><b>x-intercepts</b> where the top is zero: sin x = 0 (at 0°, 180°, 360°, …).</li>\n        <li><b>Asymptotes</b> where the bottom is zero: cos x = 0 (at 90°, 270°, …) — the graph is undefined there.</li>\n      </ul>\n      <div class=\"formula\">period = 180°   ·   asymptotes are 180° apart   ·   range y ∈ ℝ</div>\n      <p>It has no amplitude — there is no highest or lowest point.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:75:11"
+      ]
+    },
+    "tgraph#17": {
+      "en": "Finding a for a tan graph",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:85:12"
+      ]
+    },
+    "tgraph#18": {
+      "en": "\n      <p>A tan graph has no max or min, so use two reference points <b>45° on either side</b> of an inflection point (where a branch crosses its midline).</p>\n      <div class=\"formula\">a = (\"y at +45°\" − \"y at −45°\") ÷ 2</div>\n      <p>This works because tan 45° = 1 and tan(−45°) = −1, so 45° from the centre the graph sits one a above (or below) the midline.</p>\n      <div class=\"eg\">If the references are 3 and −1, then a = (3 − (−1)) ÷ 2 = 2.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:86:11"
+      ]
+    },
+    "tgraph#19": {
+      "en": "Finding the equation from a graph",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:93:12"
+      ]
+    },
+    "tgraph#20": {
+      "en": "\n      <p>Compare the graph with the parent (sin, cos or tan) and read off, in turn:</p>\n      <ul>\n        <li><b>a</b> — amplitude = (y max − y min) ÷ 2; make it negative if the graph is flipped.</li>\n        <li><b>q</b> — the midline: q = (y max + y min) ÷ 2.</li>\n        <li><b>b</b> — from the period: b = 360° ÷ period (use 180° for tan).</li>\n        <li><b>p</b> — how far it has shifted left or right.</li>\n      </ul>\n      <p>Then write y = a·sin b(x − p) + q.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:94:11"
+      ]
+    },
+    "tgraph#21": {
+      "en": "Two graphs together",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "tgraph.js:105:12"
+      ]
+    },
+    "tgraph#22": {
+      "en": "\n      <p>When two trig graphs share a set of axes:</p>\n      <ul>\n        <li><b>Intersections</b> are the x-values where f(x) = g(x) — read them where the curves cross.</li>\n        <li><b>f(x) &gt; g(x)</b> wherever the f-curve is <b>above</b> the g-curve.</li>\n        <li><b>f(x) &gt; 0</b> wherever the curve is above the x-axis (between its x-intercepts).</li>\n      </ul>\n      <p>Always work within the interval the question gives you.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "tgraph.js:106:11"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 576
+}
