@@ -126,11 +126,11 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☐ T82 | hub rounds: questf10-in-or-out … questf13-one-equation (4 files) | ~3 094 words | verify page: verify-finance.html
 
 ### Statistics
-- ⏳ 2026-10-17 23:09 T83 | concepts: the `stats` block (js/concepts/stats.js after S4) | ~904 words | counted by af_extract 2026-10-17
+- ☑ 2026-10-17 T83 | concepts: the `stats` block (js/concepts/stats.js after S4) | ~904 words | counted by af_extract 2026-10-17
 - ☐ T84 | hub rounds: quest01-calculator … quest08-mixed (8 files) | ~2 231 words | verify page: verify.html
 
 ### Probability
-- ☐ T85 | concepts: the `prob` block (js/concepts/prob.js after S4) | ~532 words | counted by af_extract 2026-10-17
+- ⏳ 2026-10-17 23:10 T85 | concepts: the `prob` block (js/concepts/prob.js after S4) | ~532 words | counted by af_extract 2026-10-17
 - ☐ T86 | hub rounds: questp1-basics … questp7-replacement (7 files) | ~2 008 words | verify page: verify-prob.html
 
 ### Measurement
