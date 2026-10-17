@@ -1,0 +1,560 @@
+{
+  "unit": "T91",
+  "generated": "2026-10-17T21:37:11.568Z",
+  "files": [
+    "js/exam/circle-engine.js",
+    "js/exam/function-diagram.js",
+    "js/exam/quadtri-diagram.js",
+    "js/exam/trig-diagram.js",
+    "js/exam/skills.js"
+  ],
+  "items": {},
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "circle-engine.js:822:23",
+      "text": "${label}: spec does not resolve (${e && e.message})"
+    },
+    {
+      "where": "circle-engine.js:829:19",
+      "text": "${label}.construction: must be a { pts?, chords? } object"
+    },
+    {
+      "where": "circle-engine.js:834:32",
+      "text": "${at}: must be a degree on the circle, or an {x,y} free point"
+    },
+    {
+      "where": "circle-engine.js:835:62",
+      "text": "${at}: \"${name}\" is already a point in this spec — a construction ADDS geometry, it never redefines it"
+    },
+    {
+      "where": "circle-engine.js:836:39",
+      "text": "${at}: the centre is always addressable and can never be constructed"
+    },
+    {
+      "where": "circle-engine.js:840:78",
+      "text": "${at}: must be [a,b] or [a,b,mark]"
+    },
+    {
+      "where": "circle-engine.js:842:78",
+      "text": "${at}: chord mark \"${mk}\" must be t1/t2/t3 (equal ticks) or p1/p2 (parallel arrows)"
+    },
+    {
+      "where": "circle-engine.js:843:40",
+      "text": "${at}: \"${a}\" is not a point in this spec or its construction"
+    },
+    {
+      "where": "circle-engine.js:844:40",
+      "text": "${at}: \"${b}\" is not a point in this spec or its construction"
+    },
+    {
+      "where": "circle-engine.js:851:47",
+      "text": "${at}: vertex \"${a && a.at}\" is not a point in this spec"
+    },
+    {
+      "where": "circle-engine.js:852:70",
+      "text": "${at}: legs must be a pair"
+    },
+    {
+      "where": "circle-engine.js:855:44",
+      "text": "${at}: leg \"${leg}\" needs the vertex to sit ON the circle"
+    },
+    {
+      "where": "circle-engine.js:858:40",
+      "text": "${at}: leg \"${leg}\" is not a point in this spec"
+    },
+    {
+      "where": "circle-engine.js:860:46",
+      "text": "${at}: highlight must declare its true value v (a number) so verifyDiagram can check it"
+    },
+    {
+      "where": "circle-engine.js:865:74",
+      "text": "${at}: must be [a,b] or [a,b,mark]"
+    },
+    {
+      "where": "circle-engine.js:867:74",
+      "text": "${at}: chord mark \"${mk}\" must be t1/t2/t3 (equal ticks) or p1/p2 (parallel arrows)"
+    },
+    {
+      "where": "circle-engine.js:868:36",
+      "text": "${at}: \"${a}\" is not a point in this spec"
+    },
+    {
+      "where": "circle-engine.js:869:36",
+      "text": "${at}: \"${b}\" is not a point in this spec"
+    },
+    {
+      "where": "circle-engine.js:871:19",
+      "text": "${at}: ${a}${b} is not a segment this spec draws, nor a piece of one"
+    },
+    {
+      "where": "circle-engine.js:875:74",
+      "text": "${label}.bare: must be true/false"
+    },
+    {
+      "where": "function-diagram.js:85:74",
+      "text": "${label}.bare: must be true/false"
+    },
+    {
+      "where": "function-diagram.js:88:48",
+      "text": "${label}.curves: must be an array"
+    },
+    {
+      "where": "function-diagram.js:91:54",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "function-diagram.js:92:62",
+      "text": "${at}.kind: must be a curve kind string"
+    },
+    {
+      "where": "function-diagram.js:93:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "function-diagram.js:94:79",
+      "text": "${at}.labelAt: a named curve needs a numeric labelAt"
+    },
+    {
+      "where": "function-diagram.js:95:82",
+      "text": "${at}.tone: must be \"a\", \"b\" or \"c\""
+    },
+    {
+      "where": "function-diagram.js:100:48",
+      "text": "${label}.points: must be an array"
+    },
+    {
+      "where": "function-diagram.js:103:54",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "function-diagram.js:104:48",
+      "text": "${at}.x: must be a number"
+    },
+    {
+      "where": "function-diagram.js:105:48",
+      "text": "${at}.y: must be a number"
+    },
+    {
+      "where": "function-diagram.js:106:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "function-diagram.js:111:52",
+      "text": "${label}.asymptotes: must be an array"
+    },
+    {
+      "where": "function-diagram.js:114:54",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "function-diagram.js:116:39",
+      "text": "${at}: must have a numeric x (vertical) or y (horizontal)"
+    },
+    {
+      "where": "function-diagram.js:117:37",
+      "text": "${at}: set x OR y, not both — one line per entry"
+    },
+    {
+      "where": "function-diagram.js:118:71",
+      "text": "${at}.of: must be a curve index (number)"
+    },
+    {
+      "where": "function-diagram.js:119:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "function-diagram.js:124:48",
+      "text": "${label}.shades: must be an array"
+    },
+    {
+      "where": "function-diagram.js:127:83",
+      "text": "${at}: must have numeric x0, x1"
+    },
+    {
+      "where": "function-diagram.js:132:48",
+      "text": "${label}.vlines: must be an array"
+    },
+    {
+      "where": "function-diagram.js:135:54",
+      "text": "${at}: must have a numeric x"
+    },
+    {
+      "where": "function-diagram.js:136:82",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "function-diagram.js:143:50",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "function-diagram.js:145:48",
+      "text": "${at}.x: must be a number"
+    },
+    {
+      "where": "function-diagram.js:146:56",
+      "text": "${at}.fromCurve: must be a curve index (number)"
+    },
+    {
+      "where": "function-diagram.js:147:54",
+      "text": "${at}.toCurve: must be a curve index (number)"
+    },
+    {
+      "where": "function-diagram.js:148:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "quadtri-diagram.js:79:74",
+      "text": "${label}.bare: must be true/false"
+    },
+    {
+      "where": "quadtri-diagram.js:81:17",
+      "text": "${label}: bare:true strips the numeric labels, so setting bare AND labels contradicts itself — pick one"
+    },
+    {
+      "where": "quadtri-diagram.js:88:72",
+      "text": "${at}: must be an object keyed by x / y / r"
+    },
+    {
+      "where": "quadtri-diagram.js:90:47",
+      "text": "${at}.${k}: unknown side — only x, y and r exist on this figure"
+    },
+    {
+      "where": "quadtri-diagram.js:91:70",
+      "text": "${at}.${k}: must be a non-empty string (the engine prints it as it stands)"
+    },
+    {
+      "where": "quadtri-diagram.js:92:46",
+      "text": "${at}.${k}: contains a hyphen before a digit — use the real minus sign −"
+    },
+    {
+      "where": "quadtri-diagram.js:97:72",
+      "text": "${label}.${k}: must be true/false"
+    },
+    {
+      "where": "quadtri-diagram.js:100:90",
+      "text": "${label}.${k}: must be a non-empty string"
+    },
+    {
+      "where": "quadtri-diagram.js:104:17",
+      "text": "${label}.thetaLabel: there is no θ arc to label — set theta:true here or on the base spec"
+    },
+    {
+      "where": "quadtri-diagram.js:107:17",
+      "text": "${label}.refLabel: there is no reference-angle arc to label — set refAngle:true here or on the base spec"
+    },
+    {
+      "where": "trig-diagram.js:91:74",
+      "text": "${label}.bare: must be true/false"
+    },
+    {
+      "where": "trig-diagram.js:94:48",
+      "text": "${label}.curves: must be an array"
+    },
+    {
+      "where": "trig-diagram.js:97:54",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "trig-diagram.js:98:62",
+      "text": "${at}.fn: must be \"sin\", \"cos\" or \"tan\" (got \"${c && c.fn}\")"
+    },
+    {
+      "where": "trig-diagram.js:99:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "trig-diagram.js:100:79",
+      "text": "${at}.labelAt: a named curve needs a numeric labelAt"
+    },
+    {
+      "where": "trig-diagram.js:101:77",
+      "text": "${at}.tone: must be \"a\" or \"b\""
+    },
+    {
+      "where": "trig-diagram.js:106:48",
+      "text": "${label}.points: must be an array"
+    },
+    {
+      "where": "trig-diagram.js:109:54",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "trig-diagram.js:110:48",
+      "text": "${at}.x: must be a number (degrees)"
+    },
+    {
+      "where": "trig-diagram.js:111:48",
+      "text": "${at}.y: must be a number"
+    },
+    {
+      "where": "trig-diagram.js:112:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "trig-diagram.js:113:95",
+      "text": "${at}.on: must be a curve index (number) or an array of them"
+    },
+    {
+      "where": "trig-diagram.js:118:48",
+      "text": "${label}.shades: must be an array"
+    },
+    {
+      "where": "trig-diagram.js:121:83",
+      "text": "${at}: must have numeric x0, x1 (degrees)"
+    },
+    {
+      "where": "trig-diagram.js:122:44",
+      "text": "${at}: x1 must be greater than x0 (a band has a left edge and a right edge)"
+    },
+    {
+      "where": "trig-diagram.js:127:48",
+      "text": "${label}.vlines: must be an array"
+    },
+    {
+      "where": "trig-diagram.js:130:54",
+      "text": "${at}: must have a numeric x (degrees)"
+    },
+    {
+      "where": "trig-diagram.js:131:82",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "trig-diagram.js:136:48",
+      "text": "${label}.hlines: must be an array"
+    },
+    {
+      "where": "trig-diagram.js:139:54",
+      "text": "${at}: must have a numeric y"
+    },
+    {
+      "where": "trig-diagram.js:140:82",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "trig-diagram.js:146:104",
+      "text": "${at}: must be { y: <number> }"
+    },
+    {
+      "where": "trig-diagram.js:151:50",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "trig-diagram.js:153:49",
+      "text": "${at}.x0: must be a number (degrees)"
+    },
+    {
+      "where": "trig-diagram.js:154:49",
+      "text": "${at}.x1: must be a number (degrees)"
+    },
+    {
+      "where": "trig-diagram.js:155:48",
+      "text": "${at}.y: must be a number (the height the arrow is drawn at)"
+    },
+    {
+      "where": "trig-diagram.js:156:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "trig-diagram.js:162:50",
+      "text": "${at}: must be an object"
+    },
+    {
+      "where": "trig-diagram.js:164:48",
+      "text": "${at}.x: must be a number (degrees)"
+    },
+    {
+      "where": "trig-diagram.js:165:49",
+      "text": "${at}.y0: must be a number"
+    },
+    {
+      "where": "trig-diagram.js:166:49",
+      "text": "${at}.y1: must be a number"
+    },
+    {
+      "where": "trig-diagram.js:167:77",
+      "text": "${at}.label: must be a string"
+    },
+    {
+      "where": "skills.js:53:49",
+      "text": "Factorise: common factor, squares, trinomials"
+    },
+    {
+      "where": "skills.js:55:49",
+      "text": "Algebraic fractions: × and ÷"
+    },
+    {
+      "where": "skills.js:56:49",
+      "text": "Algebraic fractions: + and −"
+    },
+    {
+      "where": "skills.js:57:49",
+      "text": "Level 4 ★ — the brave round"
+    },
+    {
+      "where": "skills.js:62:50",
+      "text": "Rational & negative exponents (no calculator)"
+    },
+    {
+      "where": "skills.js:63:50",
+      "text": "Simplify exponent expressions"
+    },
+    {
+      "where": "skills.js:64:50",
+      "text": "Exponential equations"
+    },
+    {
+      "where": "skills.js:65:50",
+      "text": "Working with surds"
+    },
+    {
+      "where": "skills.js:66:50",
+      "text": "Rationalise the denominator"
+    },
+    {
+      "where": "skills.js:67:50",
+      "text": "Surd “show that” & number tricks"
+    },
+    {
+      "where": "skills.js:68:50",
+      "text": "Level 4 ★ — the brave round"
+    },
+    {
+      "where": "skills.js:73:44",
+      "text": "Solve quadratic equations"
+    },
+    {
+      "where": "skills.js:74:44",
+      "text": "Fraction equations with restrictions"
+    },
+    {
+      "where": "skills.js:75:44",
+      "text": "Surd equations (check the false root)"
+    },
+    {
+      "where": "skills.js:76:44",
+      "text": "Rational exponents & k-method"
+    },
+    {
+      "where": "skills.js:82:44",
+      "text": "Two, one or no solution?"
+    },
+    {
+      "where": "skills.js:83:44",
+      "text": "Simultaneous equations"
+    },
+    {
+      "where": "skills.js:85:44",
+      "text": "Standard form → Δ → nature of roots"
+    },
+    {
+      "where": "skills.js:86:44",
+      "text": "Find k for equal roots"
+    },
+    {
+      "where": "skills.js:87:44",
+      "text": "Values of k for a given nature"
+    },
+    {
+      "where": "skills.js:88:44",
+      "text": "Δ in terms of p → prove real for all p"
+    },
+    {
+      "where": "skills.js:89:44",
+      "text": "Level 4 ★ — the brave round"
+    },
+    {
+      "where": "skills.js:95:48",
+      "text": "Find the equation"
+    },
+    {
+      "where": "skills.js:97:48",
+      "text": "Intercepts & turning point"
+    },
+    {
+      "where": "skills.js:98:48",
+      "text": "Axis of symmetry"
+    },
+    {
+      "where": "skills.js:99:48",
+      "text": "Shift the graph"
+    },
+    {
+      "where": "skills.js:101:48",
+      "text": "Nature of roots"
+    },
+    {
+      "where": "skills.js:103:48",
+      "text": "Sketch the graph"
+    },
+    {
+      "where": "skills.js:104:48",
+      "text": "Intersections (solve together)"
+    },
+    {
+      "where": "skills.js:105:48",
+      "text": "Average gradient"
+    },
+    {
+      "where": "skills.js:107:48",
+      "text": "Level 4 ★ — the brave round"
+    },
+    {
+      "where": "skills.js:114:50",
+      "text": "Period, amplitude & range (equations only)"
+    },
+    {
+      "where": "skills.js:115:50",
+      "text": "Read a, b, p, q off the graph"
+    },
+    {
+      "where": "skills.js:116:50",
+      "text": "Sketch the graph"
+    },
+    {
+      "where": "skills.js:119:50",
+      "text": "Level 4 ★ — the brave round"
+    },
+    {
+      "where": "skills.js:125:44",
+      "text": "Special angles (no calculator)"
+    },
+    {
+      "where": "skills.js:127:44",
+      "text": "Special Sums"
+    },
+    {
+      "where": "skills.js:128:44",
+      "text": "Super Special Sums"
+    },
+    {
+      "where": "skills.js:130:44",
+      "text": "Identities: undefined values"
+    },
+    {
+      "where": "skills.js:131:44",
+      "text": "General solution"
+    },
+    {
+      "where": "skills.js:132:44",
+      "text": "Level 4 ★ — the brave round"
+    },
+    {
+      "where": "skills.js:140:40",
+      "text": "Cosine rule & area"
+    },
+    {
+      "where": "skills.js:148:41",
+      "text": "The four bookwork proofs"
+    },
+    {
+      "where": "skills.js:150:41",
+      "text": "Cyclic quadrilaterals"
+    },
+    {
+      "where": "skills.js:152:41",
+      "text": "Level 4 ★ — the brave round"
+    }
+  ],
+  "words": 0
+}

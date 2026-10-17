@@ -1747,10 +1747,11 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
      single "Circle geometry" skill. */
   const euclidTopicCards = tileEls(host).map(tileText);
   tick(euclidTopicCards.length === 5, `euclid shows 5 skill tiles after the 2026-08-23 re-cut, got ${euclidTopicCards.length}`);
-  tick(["The four bookwork proofs", "Chords, centre & angles", "Cyclic quadrilaterals", "Tangents"].every(l => euclidTopicCards.includes(l)),
+  // T91: the tile labels are L(en, af) twins now, so each one is accepted in either language
+  tick([["The four bookwork proofs", "Die vier stellingbewyse"], ["Chords, centre & angles", "Koorde, middelpunt & hoeke"], ["Cyclic quadrilaterals", "Koordevierhoeke"], ["Tangents", "Raaklyne"]].every(pair => pair.some(l => euclidTopicCards.includes(l))),
     `the four real euclid tiles are hers, got [${euclidTopicCards.join(", ")}]`);
   tick(!euclidTopicCards.some(t => /^circle geometry$/i.test(t)), "the old single \"Circle geometry\" tile is gone");
-  tick(/level 4/i.test(euclidTopicCards[euclidTopicCards.length - 1] || ""), `euclid's LAST tile is the Level 4 one, got "${euclidTopicCards[euclidTopicCards.length - 1]}"`);
+  tick(/level 4|vlak 4/i.test(euclidTopicCards[euclidTopicCards.length - 1] || ""), `euclid's LAST tile is the Level 4 one, got "${euclidTopicCards[euclidTopicCards.length - 1]}"`);
   lines.push(`euclid skill tiles: [${euclidTopicCards.join(", ")}]`);
   clear(host);
 
@@ -1952,7 +1953,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
   tick(appAlgx.screen === "examChapter", "renderExamChapter reaches algx with NO quest open anywhere");
   const algxTiles = tileEls(host).map(tileText);
   tick(algxTiles.length === 6, `algx shows its 6 skill tiles, got ${algxTiles.length}`);
-  tick(algxTiles.every((t, i) => i === algxTiles.length - 1 || !/level 4/i.test(t)) && /level 4/i.test(algxTiles[algxTiles.length - 1] || ""),
+  tick(algxTiles.every((t, i) => i === algxTiles.length - 1 || !/level 4|vlak 4/i.test(t)) && /level 4|vlak 4/i.test(algxTiles[algxTiles.length - 1] || ""),
     `algx's Level 4 tile is last and there is only one, got [${algxTiles.join(", ")}]`);
   /* SEEDED 2026-08-23 (wave 1, session A): all six algx tiles now hold
      cards, so NONE of them may still be muted. This check used to
@@ -2517,7 +2518,7 @@ const tileText = t => (t.querySelector("h3, h2, .exam-skill-label") || t).textCo
 
   /* ---- 10. skillsForChapter / skillLabel ---- */
   tick(skillsForChapter("eqn").length === 12 && skillsForChapter("stats").length === 0, "skillsForChapter returns her list for a seeded chapter (eqn: 12 tiles — the 2026-08-23 map plus session H's solution-count) and [] for an unseeded one");
-  tick(skillLabel("func", "axis-of-symmetry") === "Axis of symmetry", `skillLabel reads her label, got "${skillLabel("func", "axis-of-symmetry")}"`);
+  tick(["Axis of symmetry", "Simmetrie-as"].includes(skillLabel("func", "axis-of-symmetry")), `skillLabel reads her label, got "${skillLabel("func", "axis-of-symmetry")}"`);
   tick(skillLabel("func", "not-a-real-skill") === "Not A Real Skill", "skillLabel falls back to a title-cased slug rather than rendering blank");
 
   say("cardChecks", lines);
