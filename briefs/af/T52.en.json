@@ -1,0 +1,788 @@
+{
+  "unit": "T52",
+  "generated": "2026-10-17T19:06:49.724Z",
+  "files": [
+    "js/exam/tgraph-siblings-sketch.js"
+  ],
+  "items": {
+    "tgraph-siblings-sketch#1": {
+      "en": "Consider the function &nbsp;f(x) = 2 sin x.<br><br>Write down the coordinates of the turning points of f for &nbsp;x ∈ [−180° ; 180°].",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:85:21"
+      ]
+    },
+    "tgraph-siblings-sketch#2": {
+      "en": "A sine graph turns a quarter of a period after it starts, and again three quarters of the way through. The height of a turning point is the midline plus or minus the amplitude.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:86:19"
+      ]
+    },
+    "tgraph-siblings-sketch#3": {
+      "en": "The period is 360°, so the turning points sit a quarter of a period either side of the origin: at x = 90° and x = −90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:88:37"
+      ]
+    },
+    "tgraph-siblings-sketch#4": {
+      "en": "maximum (90° ; 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:89:39"
+      ]
+    },
+    "tgraph-siblings-sketch#5": {
+      "en": "minimum (−90° ; −2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:90:39"
+      ]
+    },
+    "tgraph-siblings-sketch#6": {
+      "en": "Turning points are the easiest features to place because a sine graph always turns in the same rhythm: it starts at the midline, reaches its highest point a quarter of a period later, comes back through the midline at the halfway mark, and reaches its lowest point three quarters of the way through. Here a quarter of 360° is 90°, so the maximum is at x = 90°. The interval also runs backwards from the origin, and the same rhythm applies going left, which puts a minimum at x = −90°. The heights are the amplitude above and below the midline, and with a midline of 0 and an amplitude of 2 that is 2 and −2. Working the x and the y separately like this is much safer than trying to picture the whole graph at once.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:92:22"
+      ]
+    },
+    "tgraph-siblings-sketch#7": {
+      "en": "Sketch the graph of f for &nbsp;x ∈ [−180° ; 180°], &nbsp;clearly showing the intercepts with the axes and the turning points.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:96:21",
+        "tgraph-siblings-sketch.js:277:21"
+      ]
+    },
+    "tgraph-siblings-sketch#8": {
+      "en": "Plot the five landmarks first — the three x-intercepts and the two turning points — and only then join them with a smooth wave. Never join them with straight lines.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:97:19"
+      ]
+    },
+    "tgraph-siblings-sketch#9": {
+      "en": "x-intercepts: the graph is on the midline at &nbsp;x = −180°, 0° and 180°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:99:37"
+      ]
+    },
+    "tgraph-siblings-sketch#10": {
+      "en": "Turning points: maximum (90° ; 2) and minimum (−90° ; −2).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:100:37"
+      ]
+    },
+    "tgraph-siblings-sketch#11": {
+      "en": "Join them with one smooth wave, drawn to scale, with the endpoints of the interval reached and the axes labelled in degrees.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:101:39"
+      ]
+    },
+    "tgraph-siblings-sketch#12": {
+      "en": "WATCH OUT: a sketch mark is a mark for the SHAPE, not for artistry. Stop the graph exactly at −180° and 180° — carrying it past the interval you were given loses the mark just as surely as leaving out a turning point does.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:102:37"
+      ]
+    },
+    "tgraph-siblings-sketch#13": {
+      "en": "A sketch question is a plotting question wearing a friendlier name, so do it in the same order every time. First mark the interval on the x-axis and put the ticks where the landmarks will be. Then plot the landmarks themselves: the places where the graph crosses the x-axis, and the turning points. Only then draw the curve through them, smoothly, with rounded tops rather than pointed ones. Two things earn the marks and both are easy to forget. Label the turning points with their coordinates rather than leaving bare dots, and stop at the ends of the interval you were given. If the amplitude is 2, make sure the top of your wave really is level with 2 on the y-axis — a sketch still has to be roughly to scale.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:104:22"
+      ]
+    },
+    "tgraph-siblings-sketch#14": {
+      "en": "Consider the function &nbsp;g(x) = cos 2x.<br><br>Write down the period of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:147:21"
+      ]
+    },
+    "tgraph-siblings-sketch#15": {
+      "en": "The 2 is multiplying the x, so it belongs to the period. Divide, do not multiply.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:148:19"
+      ]
+    },
+    "tgraph-siblings-sketch#16": {
+      "en": "Period = 360° ÷ 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:150:37"
+      ]
+    },
+    "tgraph-siblings-sketch#17": {
+      "en": "period = <b>180°</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:151:39"
+      ]
+    },
+    "tgraph-siblings-sketch#18": {
+      "en": "Working the period out before you sketch is the single best habit on this tile, because the period tells you how many waves have to fit into the window. Here the period is 180°, and the window is 360° wide, so exactly two complete waves have to appear in your sketch. That is a check you can do with your eyes the moment you have drawn it: if you only see one wave, the 2 has been ignored, and if you see four, you have divided the wrong way round. It also spaces the landmarks for you — the turning points come every half period, which is 90°, and the x-intercepts come halfway between them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:153:22"
+      ]
+    },
+    "tgraph-siblings-sketch#19": {
+      "en": "Sketch the graph of g for &nbsp;x ∈ [−180° ; 180°], &nbsp;clearly showing the intercepts with the axes and the turning points.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:157:21"
+      ]
+    },
+    "tgraph-siblings-sketch#20": {
+      "en": "Two complete waves have to fit. Start at the y-axis — a plain cosine begins at its maximum — then step across in quarter periods of 45° each: maximum, intercept, minimum, intercept, maximum.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:158:19"
+      ]
+    },
+    "tgraph-siblings-sketch#21": {
+      "en": "The period is 180°, so a quarter period is 45° and the landmarks repeat every 45°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:160:37"
+      ]
+    },
+    "tgraph-siblings-sketch#22": {
+      "en": "y-intercept (0 ; 1) — a cosine starts at its maximum.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:161:37"
+      ]
+    },
+    "tgraph-siblings-sketch#23": {
+      "en": "x-intercepts: &nbsp;x = −135°, −45°, 45°, 135°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:162:37"
+      ]
+    },
+    "tgraph-siblings-sketch#24": {
+      "en": "Minima at (−90° ; −1) and (90° ; −1); maxima at (−180° ; 1), (0 ; 1) and (180° ; 1).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:163:37"
+      ]
+    },
+    "tgraph-siblings-sketch#25": {
+      "en": "Two complete smooth waves across the interval, amplitude 1, drawn to scale.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:164:39"
+      ]
+    },
+    "tgraph-siblings-sketch#26": {
+      "en": "WATCH OUT: the 2 squashes the graph, it does not stretch it. If your sketch shows one long wave instead of two short ones, you have used 360° × 2 instead of 360° ÷ 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:165:37"
+      ]
+    },
+    "tgraph-siblings-sketch#27": {
+      "en": "The quarter-period walk is what makes a squashed graph easy to draw. Work out the period, quarter it, and then step across the axis marking one landmark at a time in the order a cosine always visits them: maximum, x-intercept, minimum, x-intercept, maximum. Here a quarter of 180° is 45°, so the landmarks land on 0°, 45°, 90°, 135°, 180° going right, and mirror onto the negative side going left. Because a cosine is symmetrical about the y-axis, the left half of your sketch is the mirror image of the right half, which halves the work and gives you a free check. The amplitude is untouched by the 2, so the wave still reaches only as high as 1 and as low as −1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:167:22"
+      ]
+    },
+    "tgraph-siblings-sketch#28": {
+      "en": "Consider the function &nbsp;h(x) = tan x − 1.<br><br>Write down the equations of the asymptotes of h for &nbsp;x ∈ [−180° ; 180°].",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:208:21"
+      ]
+    },
+    "tgraph-siblings-sketch#29": {
+      "en": "A tangent graph breaks where the plain tangent is undefined, and the − 1 does not move those places at all. Write each answer as a vertical line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:209:19"
+      ]
+    },
+    "tgraph-siblings-sketch#30": {
+      "en": "A tangent is undefined at 90° and at every 180° from there. The &nbsp;− 1&nbsp; only slides the graph down, so it does not move the asymptotes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:211:37"
+      ]
+    },
+    "tgraph-siblings-sketch#31": {
+      "en": "x = −90° &nbsp;and&nbsp; x = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:212:39"
+      ]
+    },
+    "tgraph-siblings-sketch#32": {
+      "en": "The asymptotes of a tangent graph are decided entirely by what is inside the function. A plain tangent breaks at 90°, and then again every 180° after that, which puts breaks at −90° and 90° inside this interval. The − 1 is outside the tangent, so it moves every point of the graph one unit down — but sliding a picture downwards cannot move a vertical line sideways, so the asymptotes stay exactly where they were. That is the useful distinction: a number added or subtracted OUTSIDE never touches a vertical asymptote, while a number inside the bracket with the x slides it. Write each answer as x equals a value; a bare number does not describe a line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:214:22"
+      ]
+    },
+    "tgraph-siblings-sketch#33": {
+      "en": "Sketch the graph of h for &nbsp;x ∈ [−180° ; 180°], &nbsp;clearly showing the asymptotes, the y-intercept and the x-intercepts.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:218:21"
+      ]
+    },
+    "tgraph-siblings-sketch#34": {
+      "en": "Draw the two dashed asymptotes first — they are the fence posts. Then plot where the graph cuts the y-axis, and where it cuts the x-axis (that is where tan x = 1).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:219:19"
+      ]
+    },
+    "tgraph-siblings-sketch#35": {
+      "en": "Draw the asymptotes &nbsp;x = −90°&nbsp; and &nbsp;x = 90°&nbsp; as dashed vertical lines.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:221:37"
+      ]
+    },
+    "tgraph-siblings-sketch#36": {
+      "en": "y-intercept: &nbsp;h(0) = tan 0° − 1 = −1 &nbsp;⟹&nbsp; (0 ; −1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:222:37"
+      ]
+    },
+    "tgraph-siblings-sketch#37": {
+      "en": "x-intercepts: &nbsp;tan x − 1 = 0 &nbsp;⟹&nbsp; tan x = 1 &nbsp;⟹&nbsp; x = 45° &nbsp;and&nbsp; x = −135°. &nbsp;Three branches, each rising from its left asymptote to its right one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:223:39"
+      ]
+    },
+    "tgraph-siblings-sketch#38": {
+      "en": "REMEMBER: a tangent graph never touches an asymptote and never crosses one. Each branch must be drawn as a separate piece of curve — joining them across an asymptote turns a tangent graph into something that does not exist.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:224:37"
+      ]
+    },
+    "tgraph-siblings-sketch#39": {
+      "en": "Sketching a tangent is a different job from sketching a sine, so use a different order. The asymptotes come first, dashed, because they divide the interval into the separate branches you are going to draw. Between −180° and 180° the two asymptotes at −90° and 90° cut the interval into three pieces, so your sketch will have three branches. Then plot the two kinds of intercept. The y-intercept is a straight substitution: put x = 0 in and get −1. The x-intercepts need you to solve tan x = 1, which is 45° from the special angles, and then 45° − 180° = −135° for the branch on the left. Every branch climbs from bottom left to top right, and none of them touches a dashed line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:226:22"
+      ]
+    },
+    "tgraph-siblings-sketch#40": {
+      "en": "Consider the function &nbsp;f(x) = −3 cos x.<br><br>Write down the amplitude of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:267:21"
+      ]
+    },
+    "tgraph-siblings-sketch#41": {
+      "en": "Amplitude is a distance, so it is never negative. Take the size of the number in front.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:268:19"
+      ]
+    },
+    "tgraph-siblings-sketch#42": {
+      "en": "Amplitude = |a| = |−3|",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:270:37"
+      ]
+    },
+    "tgraph-siblings-sketch#43": {
+      "en": "amplitude = <b>3</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:271:39"
+      ]
+    },
+    "tgraph-siblings-sketch#44": {
+      "en": "The number in front of the cos does two separate jobs, and only one of them is the amplitude. Its SIZE is the amplitude, so the graph swings 3 units above and 3 units below the midline. Its SIGN flips the graph upside down, which changes where the graph is high and where it is low but not how far it goes. So the answer here is 3, not −3. Getting this straight before you sketch matters, because it tells you two useful things at once: your wave has to reach 3 and −3 on the y-axis, and it has to start at the BOTTOM on the y-axis rather than the top, which is the opposite of a plain cosine.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:273:22"
+      ]
+    },
+    "tgraph-siblings-sketch#45": {
+      "en": "A plain cosine starts at the top on the y-axis. The minus flips it, so this one starts at the bottom. Everything else about the rhythm stays the same.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:278:19"
+      ]
+    },
+    "tgraph-siblings-sketch#46": {
+      "en": "The minus flips the cosine, so the y-axis value is a MINIMUM: &nbsp;f(0) = −3(1) = −3 &nbsp;⟹&nbsp; (0 ; −3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:280:37"
+      ]
+    },
+    "tgraph-siblings-sketch#47": {
+      "en": "x-intercepts: &nbsp;cos x = 0 &nbsp;⟹&nbsp; x = −90° and x = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:281:37"
+      ]
+    },
+    "tgraph-siblings-sketch#48": {
+      "en": "Maxima at the ends of the interval: &nbsp;(−180° ; 3) and (180° ; 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:282:37"
+      ]
+    },
+    "tgraph-siblings-sketch#49": {
+      "en": "One smooth wave, amplitude 3, starting and ending at the top and dipping to −3 on the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:283:39"
+      ]
+    },
+    "tgraph-siblings-sketch#50": {
+      "en": "WATCH OUT: the minus does not move the x-intercepts. Wherever the plain cosine crossed the x-axis, the flipped one crosses it too — the graph passes through the same points, it just arrives at them going the other way.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:284:37"
+      ]
+    },
+    "tgraph-siblings-sketch#51": {
+      "en": "The quickest way to sketch a reflected graph is to sketch the plain one in your head first and then turn it over. A plain cosine starts at its maximum on the y-axis, falls to zero at 90°, drops to its minimum at 180° and comes back. Turning that upside down means this graph starts at its MINIMUM on the y-axis, rises to zero at 90° and reaches its maximum at 180°. The x-intercepts do not move at all, because a value of zero stays zero when you multiply it by −3. What does change is the height everywhere else, stretched to three times as far from the midline. Check your finished sketch against the y-axis: it should dip to −3 exactly where a plain cosine would have peaked.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:286:22"
+      ]
+    },
+    "tgraph-siblings-sketch#52": {
+      "en": "Consider the function &nbsp;f(x) = sin x + 2.<br><br>Sketch the graph of f for &nbsp;x ∈ [−180° ; 180°], &nbsp;clearly showing the turning points and the intercept with the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:330:21"
+      ]
+    },
+    "tgraph-siblings-sketch#53": {
+      "en": "Draw the midline first — the + 2 tells you where it is — and then build the wave one amplitude above and below it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:331:19"
+      ]
+    },
+    "tgraph-siblings-sketch#54": {
+      "en": "The &nbsp;+ 2&nbsp; lifts the whole graph, so the midline is &nbsp;y = 2&nbsp; and the amplitude is 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:333:37"
+      ]
+    },
+    "tgraph-siblings-sketch#55": {
+      "en": "y-intercept: &nbsp;f(0) = sin 0° + 2 = 2 &nbsp;⟹&nbsp; (0 ; 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:334:37"
+      ]
+    },
+    "tgraph-siblings-sketch#56": {
+      "en": "Maximum (90° ; 3) &nbsp;and&nbsp; minimum (−90° ; 1).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:335:37"
+      ]
+    },
+    "tgraph-siblings-sketch#57": {
+      "en": "One smooth wave rocking about &nbsp;y = 2, &nbsp;from 1 up to 3, across the whole interval.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:336:39"
+      ]
+    },
+    "tgraph-siblings-sketch#58": {
+      "en": "Whenever a number is added on the end, draw the midline before you draw anything else. It is a faint horizontal line at y = 2 here, and once it is on the page the rest of the sketch is exactly the plain sine graph you already know, just measured from that line instead of from the x-axis. Start on the midline at the y-axis, rise one amplitude to a maximum at 90°, come back to the midline at 180°, and mirror the same rhythm going left to a minimum at −90°. The amplitude is 1, so the top of the wave is at 3 and the bottom is at 1. Learners who skip the midline usually end up drawing the wave about the x-axis and then trying to shift it afterwards, which is where the mistakes creep in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:338:22"
+      ]
+    },
+    "tgraph-siblings-sketch#59": {
+      "en": "Explain why the graph of f has no x-intercepts.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:342:21"
+      ]
+    },
+    "tgraph-siblings-sketch#60": {
+      "en": "An x-intercept happens where y = 0. Ask yourself what the smallest value f can ever take is, and compare it with 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:343:19"
+      ]
+    },
+    "tgraph-siblings-sketch#61": {
+      "en": "The smallest value of &nbsp;sin x&nbsp; is −1, so the smallest value of f is &nbsp;−1 + 2 = 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:345:37"
+      ]
+    },
+    "tgraph-siblings-sketch#62": {
+      "en": "The range is &nbsp;y ∈ [1 ; 3], &nbsp;so f never reaches 0 — the whole graph lies above the x-axis, and therefore it has no x-intercepts.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:346:39"
+      ]
+    },
+    "tgraph-siblings-sketch#63": {
+      "en": "REMEMBER: \\\"explain\\\" wants a REASON, not a drawing. Saying \\\"because the graph does not touch the x-axis\\\" just repeats the question. The reason is that the lowest value the function can take is 1, and 1 is above 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:347:37"
+      ]
+    },
+    "tgraph-siblings-sketch#64": {
+      "en": "An x-intercept is a place where the output of the function is zero, so the question is really asking whether f can ever equal 0. The largest and smallest values of sin x are 1 and −1, and that never changes no matter what x you feed it. Adding 2 pushes those two extremes up to 3 and 1, so the whole function is trapped between 1 and 3. Zero is not in that interval, so there is no x that makes f equal zero, and the graph never crosses the axis. Writing the range down is the cleanest way to say all of that in one line. This kind of argument comes up again and again in trig — the fact that sine and cosine are locked between −1 and 1 is what makes equations like sin x = 2 impossible.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:349:22"
+      ]
+    },
+    "tgraph-siblings-sketch#65": {
+      "en": "Consider the functions &nbsp;f(x) = sin 2x&nbsp; and &nbsp;g(x) = cos x.<br><br>On the same set of axes, sketch the graphs of f and g for &nbsp;x ∈ [−180° ; 180°], &nbsp;clearly showing the intercepts with the axes and the turning points of each graph. Label each graph.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:403:21"
+      ]
+    },
+    "tgraph-siblings-sketch#66": {
+      "en": "Work out each graph's period first, so you know how many waves of each have to fit. Then draw them one at a time, and label them — an unlabelled pair of curves cannot be marked.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:404:19"
+      ]
+    },
+    "tgraph-siblings-sketch#67": {
+      "en": "f: &nbsp;period = 360° ÷ 2 = 180°, &nbsp;so TWO complete waves fit the interval. x-intercepts at −180°, −90°, 0°, 90°, 180°; maximum (45° ; 1); minimum (135° ; −1) — and their mirror images on the left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:406:37"
+      ]
+    },
+    "tgraph-siblings-sketch#68": {
+      "en": "g: &nbsp;period = 360°, &nbsp;so ONE complete wave fits. Maximum (0 ; 1); minima at (−180° ; −1) and (180° ; −1); x-intercepts at −90° and 90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:407:37"
+      ]
+    },
+    "tgraph-siblings-sketch#69": {
+      "en": "Both curves drawn to the same scale on one set of axes, each one labelled f or g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:408:39"
+      ]
+    },
+    "tgraph-siblings-sketch#70": {
+      "en": "WATCH OUT: the two graphs must be to the SAME scale on the SAME axes. Drawing f small and g large, or forgetting the labels, throws away marks even when both shapes are right — and it makes the next part impossible to answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:409:37"
+      ]
+    },
+    "tgraph-siblings-sketch#71": {
+      "en": "Two graphs on one set of axes is really two separate sketching jobs plus one piece of care. Do the jobs one at a time. Work out f's period, which is 180°, so two waves fit; find its landmarks by quartering that period; draw it and label it. Then do the same for g, whose period is the plain 360°, so only one wave fits. The piece of care is the scale: both curves must be measured against the same y-axis, otherwise the picture stops telling the truth about where they cross, and crossings are almost always what the next part asks about. Labelling matters for the same reason — a question about f is unanswerable if the marker cannot tell which curve you meant. Notice both graphs happen to pass through the x-axis at −90° and 90°, which is a real feature and not a drawing error.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:411:22"
+      ]
+    },
+    "tgraph-siblings-sketch#72": {
+      "en": "Use your sketch to write down the number of solutions of &nbsp;sin 2x = cos x&nbsp; for &nbsp;x ∈ [−180° ; 180°].",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:415:21"
+      ]
+    },
+    "tgraph-siblings-sketch#73": {
+      "en": "Two graphs are equal exactly where they cut each other. You do not have to solve anything — count the crossings on your own sketch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:416:19"
+      ]
+    },
+    "tgraph-siblings-sketch#74": {
+      "en": "sin 2x = cos x&nbsp; means &nbsp;f(x) = g(x), &nbsp;which happens wherever the two curves cut each other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:418:37"
+      ]
+    },
+    "tgraph-siblings-sketch#75": {
+      "en": "The curves cut at four places in the interval &nbsp;∴&nbsp; there are <b>4</b> solutions.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:419:39"
+      ]
+    },
+    "tgraph-siblings-sketch#76": {
+      "en": "REMEMBER: a point where the two graphs merely touch the x-axis at the same moment still counts as a crossing — at x = −90° and x = 90° both graphs are at zero, so they really are equal there. Count every place the curves meet, not only the obvious ones.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:420:37"
+      ]
+    },
+    "tgraph-siblings-sketch#77": {
+      "en": "Whenever a question asks how many solutions an equation has and you have both graphs in front of you, the answer is a counting job rather than an algebra job. Two functions are equal exactly where their graphs meet, so every crossing point is one solution and there are no others. On this pair there are four: two of them are the places where both curves pass through zero together, at −90° and 90°, and the other two are ordinary crossings, one on each side of 90°. Do not try to solve this equation algebraically — turning sin 2x into something you can work with needs the double-angle formula, which is Grade 12 work. Reading the answer off an honest, to-scale sketch is the intended method here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "tgraph-siblings-sketch.js:422:22"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "tgraph-siblings-sketch.js:323:43",
+      "text": "lowest value y = 1"
+    }
+  ],
+  "words": 2504
+}

@@ -83,13 +83,13 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T49 | exam: tgraph-siblings-period-amplitude-range | ~3 535 words | verify-exam.html
 - ☑ 2026-10-17 T50 | exam: tgraph-siblings-read-parameters | ~3 131 words | verify-exam.html
 - ☑ 2026-10-17 T51 | exam: tgraph-siblings-shift-reflect | ~2 603 words | verify-exam.html
-- ⏳ 2026-10-17 21:03 T52 | exam: tgraph-siblings-sketch | ~2 603 words | verify-exam.html
+- ☑ 2026-10-17 T52 | exam: tgraph-siblings-sketch | ~2 603 words | verify-exam.html
 
 ### General Trig
 - ☑ 2026-10-17 T53 | concepts: the `gtrig` block (js/concepts/gtrig.js after S4) | ~1 555 words | counted by af_extract 2026-10-17
 - ⏳ 2026-10-17 21:08 T54 | hub rounds: questgt1-intro … questgt9-identities (9 files) | ~3 976 words | verify page: verify-gtrig.html
 - ⏳ 2026-10-17 21:11 T55 | hub rounds: questgt10-super-special … questgt13-undefined (4 files) | ~1 256 words | verify page: verify-gtrig.html
-- ☐ T56 | exam: cards-gtrig, gtrig-level4 (2 files) | ~3 324 words | verify-exam.html
+- ⏳ 2026-10-17 21:11 T56 | exam: cards-gtrig, gtrig-level4 (2 files) | ~3 324 words | verify-exam.html
 - ☐ T57 | exam: gtrig-siblings-co-functions | ~2 067 words | verify-exam.html
 - ☐ T58 | exam: gtrig-siblings-general-solution | ~2 144 words | verify-exam.html
 - ☐ T59 | exam: gtrig-siblings-identities-undefined | ~2 867 words | verify-exam.html
