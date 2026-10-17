@@ -1,0 +1,1076 @@
+{
+  "unit": "T05",
+  "generated": "2026-10-17T17:30:54.466Z",
+  "files": [
+    "js/exam/exp-level4.js",
+    "js/exam/exp-no-solution-and-strategy.js"
+  ],
+  "items": {
+    "exp-level4#1": {
+      "en": "<em>Without the use of a calculator.</em><br>Solve for x: &nbsp;4<sup>x+1</sup> − 9 · 2<sup>x</sup> + 2 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:77:13"
+      ]
+    },
+    "exp-level4#2": {
+      "en": "Nothing in the question says the two bases are related — that is the bit you have to fetch. Split the first term so the exponent is a plain x, write it in base 2, and then look for the quadratic hiding underneath.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:80:13"
+      ]
+    },
+    "exp-level4#3": {
+      "en": "<b>Divorce</b> the first term so its exponent is a plain x, then write it in base 2: &nbsp;4<sup>x+1</sup> = 4 · 4<sup>x</sup> = 4 · (2²)<sup>x</sup> = 4 · (2<sup>x</sup>)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:83:37"
+      ]
+    },
+    "exp-level4#4": {
+      "en": "let K = 2<sup>x</sup> &nbsp;&nbsp;(then K² = (2<sup>x</sup>)²) &nbsp;⟹&nbsp; 4K² − 9K + 2 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:84:37"
+      ]
+    },
+    "exp-level4#5": {
+      "en": "(4K − 1)(K − 2) = 0 &nbsp;&nbsp;∴ K = 1/4 &nbsp;or&nbsp; K = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:85:37"
+      ]
+    },
+    "exp-level4#6": {
+      "en": "2<sup>x</sup> = 1/4 = 2⁻² &nbsp;&nbsp;∴ x = −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:86:39"
+      ]
+    },
+    "exp-level4#7": {
+      "en": "2<sup>x</sup> = 2¹ &nbsp;&nbsp;∴ x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:87:39"
+      ]
+    },
+    "exp-level4#8": {
+      "en": "REMEMBER: K is not the answer. <b>Both</b> branches survive here — a positive base reaches 1/4 quite happily, because a fraction is still positive — so both have to be walked back through 2<sup>x</sup> = K. Stopping at K = 1/4 and K = 2 throws away two marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:89:15"
+      ]
+    },
+    "exp-level4#9": {
+      "en": "Two hidden facts have to be fetched before this looks like anything you have solved before, and neither is written down for you. The first is that the exponent on the 4 is not a plain x, so the term has to be divorced: 4 to the x plus one is 4 times 4 to the x. The second is that 4 is 2 squared, so 4 to the x is 2 to the x, squared. Once both of those are in place the equation holds one thing and its square, which is the shape of a quadratic, and naming that thing K makes it visible. Factorise, and then walk every branch back — that is where the marks live. This time neither branch dies, because a quarter is a perfectly reachable value for a power of 2: you just have to feed it a negative exponent.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:93:13"
+      ]
+    },
+    "exp-level4#10": {
+      "en": "<em>No calculator.</em><br>Consider the expression &nbsp;√(x − 2)/(x − 5).<br><br>For which value(s) of x is the expression <b>undefined</b>?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:121:13"
+      ]
+    },
+    "exp-level4#11": {
+      "en": "Undefined has one meaning and one meaning only in this chapter. Ask what a fraction is never allowed to have underneath it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:124:13"
+      ]
+    },
+    "exp-level4#12": {
+      "en": "<b>Undefined</b> means a denominator of zero — nothing else.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:127:37"
+      ]
+    },
+    "exp-level4#13": {
+      "en": "x − 5 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:128:37"
+      ]
+    },
+    "exp-level4#14": {
+      "en": "∴ x = 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:129:39"
+      ]
+    },
+    "exp-level4#15": {
+      "en": "Her four no-answer words each have exactly one job, and undefined is the one reserved for dividing by zero. So this part is not asking you to look at the root at all — it is asking which value of x makes the bottom of the fraction disappear. Set the denominator equal to zero and solve, and x equals five falls straight out. Writing non-real here would be wrong even though there is a root in the question, because non-real belongs to a negative under an even root, which is a different failure altogether. Getting the word right is half of what this kind of question is testing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:132:13"
+      ]
+    },
+    "exp-level4#16": {
+      "en": "For which value(s) of x is the expression equal to <b>zero</b>?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:140:13"
+      ]
+    },
+    "exp-level4#17": {
+      "en": "A fraction is zero exactly when its top is zero — the bottom can never make it zero, only break it. So set the numerator to zero, then check the value you get is actually allowed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:143:13"
+      ]
+    },
+    "exp-level4#18": {
+      "en": "A fraction is zero when its <b>numerator</b> is zero (and the denominator is not).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:146:37"
+      ]
+    },
+    "exp-level4#19": {
+      "en": "√(x − 2) = 0 &nbsp;⟹&nbsp; x − 2 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:147:37"
+      ]
+    },
+    "exp-level4#20": {
+      "en": "∴ x = 2 &nbsp;&nbsp;— and x = 2 does not make the denominator zero, so it is allowed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:148:39"
+      ]
+    },
+    "exp-level4#21": {
+      "en": "Think about what a fraction is: a top divided by a bottom. The only way that can come out as zero is if the top itself is zero, because dividing zero by anything at all still gives zero. So the whole part is about the numerator, and a square root is zero exactly when what is underneath it is zero. That gives x equals two. The last sentence is not optional though — you always check that the value you found does not also break the denominator, because a value that makes the top AND the bottom zero gives you nothing at all. Here two and five are different numbers, so it is safe.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:151:13"
+      ]
+    },
+    "exp-level4#22": {
+      "en": "For which values of x is the expression <b>real</b>?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:159:13"
+      ]
+    },
+    "exp-level4#23": {
+      "en": "Two separate things have to be true at the same time here, and each one comes from a different part of the expression. Write both down before you write an answer — and then check whether they overlap.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:162:13"
+      ]
+    },
+    "exp-level4#24": {
+      "en": "Two conditions must hold <b>at the same time</b>, and missing either one is what makes this the ★ part.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:165:37"
+      ]
+    },
+    "exp-level4#25": {
+      "en": "You may not have a negative under an even root: &nbsp;x − 2 ≥ 0 &nbsp;&nbsp;∴ x ≥ 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:166:37"
+      ]
+    },
+    "exp-level4#26": {
+      "en": "And it must still be defined, so the denominator may not be zero: &nbsp;x ≠ 5 &nbsp;— and 5 IS inside x ≥ 2, so it has to be thrown out by hand.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:167:37"
+      ]
+    },
+    "exp-level4#27": {
+      "en": "x ≥ 2 ; &nbsp;x ≠ 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:168:39"
+      ]
+    },
+    "exp-level4#28": {
+      "en": "WATCH OUT: know which word does which job. <b>Non-real</b> is an even root of a negative; <b>undefined</b> is dividing by zero. This part needs BOTH handled at once, and the excluded value rides after a semicolon — x ≥ 2 ; x ≠ 5, never just x ≥ 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:170:15"
+      ]
+    },
+    "exp-level4#29": {
+      "en": "The word real is doing two jobs at once, and that is exactly why this one is starred. For the expression to be a real number, the root has to be real, which needs whatever is under it to be zero or positive, giving x greater than or equal to two. But it also has to exist at all, which needs the bottom not to be zero, giving x not equal to five. Now look carefully at how those two sit together. Five is bigger than two, so it is sitting right inside the interval you just found — the second condition does not come free, it has to be written down separately and punched out of the answer. Her house style puts that restriction after a semicolon, and a marker looks for it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:174:13"
+      ]
+    },
+    "exp-level4#30": {
+      "en": "<em>No calculator.</em><br>Solve for x: &nbsp;√(2<sup>x</sup> + 5) = 2<sup>x</sup> − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:198:13"
+      ]
+    },
+    "exp-level4#31": {
+      "en": "The x is stuck in an exponent AND under a root, which is two problems at once — so get rid of one of them. Give 2<sup>x</sup> a short name and read the equation again; you will recognise what is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:201:13"
+      ]
+    },
+    "exp-level4#32": {
+      "en": "The x is in an exponent and under a root, so name the exponential first: &nbsp;let K = 2<sup>x</sup>. &nbsp;⟹&nbsp; √(K + 5) = K − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:204:37"
+      ]
+    },
+    "exp-level4#33": {
+      "en": "The root is already alone on one side, so square both sides — brackets on both: &nbsp;(√(K + 5))² = (K − 1)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:205:37"
+      ]
+    },
+    "exp-level4#34": {
+      "en": "K + 5 = K² − 2K + 1 &nbsp;⟹&nbsp; 0 = K² − 3K − 4 = (K − 4)(K + 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:206:37"
+      ]
+    },
+    "exp-level4#35": {
+      "en": "∴ K = 4 &nbsp;or&nbsp; K = −1. &nbsp;&nbsp;2<sup>x</sup> ≠ −1, because a positive base can never reach a negative value &nbsp;∴ <b>no solution</b> on that branch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:207:37"
+      ]
+    },
+    "exp-level4#36": {
+      "en": "2<sup>x</sup> = 4 = 2² &nbsp;∴ x = 2. &nbsp;&nbsp;TEST in the original: &nbsp;√(2² + 5) = √9 = 3 &nbsp;and&nbsp; 2² − 1 = 3, &nbsp;and 3 = 3 ✓",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:208:39"
+      ]
+    },
+    "exp-level4#37": {
+      "en": "REMEMBER: squaring both sides can invent roots that were never there, so ALWAYS test in the ORIGINAL equation. And pick the right word for the dead branch — it is <b>no solution</b> (a positive base cannot be negative), not “undefined”, which is only ever for dividing by zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:210:15"
+      ]
+    },
+    "exp-level4#38": {
+      "en": "Two whole topics are folded into one line here, and the way through is to deal with them one at a time rather than both at once. Naming 2 to the x as K removes the exponent problem completely: what is left is an ordinary surd equation, root of K plus five equals K minus one. From there it is her usual routine — the root is already by itself, so square both sides with brackets on both, tidy up into a quadratic and factorise. Then the walk back. K equals four is fine and gives x equals two. K equals minus one is not: a positive base raised to any power stays positive, so that branch is no solution, not a forgotten answer. And because squaring can create false roots, the surviving answer still has to be tested in the equation you started with.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:214:13"
+      ]
+    },
+    "exp-level4#39": {
+      "en": "<em>No calculator.</em><br>Show that &nbsp;2<sup>n+2</sup> + 2<sup>n</sup>&nbsp; is divisible by 5 for every natural number n.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:237:13"
+      ]
+    },
+    "exp-level4#40": {
+      "en": "Divisible by 5 means it can be written as 5 times a whole number — so aim for that shape. Divorce the first term so both terms carry the same power of 2, and see what comes out as a common factor.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:240:13"
+      ]
+    },
+    "exp-level4#41": {
+      "en": "Work one side only. <b>Divorce</b> the first term so both terms carry the same power of 2:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:243:37"
+      ]
+    },
+    "exp-level4#42": {
+      "en": "2<sup>n+2</sup> = 2<sup>n</sup> · 2² = 4 · 2<sup>n</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:244:37"
+      ]
+    },
+    "exp-level4#43": {
+      "en": "2<sup>n+2</sup> + 2<sup>n</sup> = 4 · 2<sup>n</sup> + 2<sup>n</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:245:37"
+      ]
+    },
+    "exp-level4#44": {
+      "en": "Take out the common factor — always the base with the variable exponent:<br>= 2<sup>n</sup>(4 + 1) = 5 · 2<sup>n</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:246:37"
+      ]
+    },
+    "exp-level4#45": {
+      "en": "2<sup>n</sup> is a whole number for every n ∈ ℕ, so 5 · 2<sup>n</sup> is 5 × a whole number &nbsp;&nbsp;∴ the expression is divisible by 5 for every natural number n.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:247:39"
+      ]
+    },
+    "exp-level4#46": {
+      "en": "WATCH OUT: the last line is a mark on its own. Reaching 5 · 2<sup>n</sup> is not yet a proof — you have to SAY that 2<sup>n</sup> is a whole number, because that is what turns “5 times something” into “a multiple of 5”.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:249:15"
+      ]
+    },
+    "exp-level4#47": {
+      "en": "Divisible by five means the expression can be written as five multiplied by a whole number, so that is the shape to aim at from the very first line. The two terms are not the same power of 2, so divorce the bigger one: 2 to the n plus two is 2 to the n times four. Now both terms carry 2 to the n, and it can be taken out as a common factor, leaving four plus one inside the bracket. That bracket is where the five comes from, and it is the same five whatever n happens to be. The final sentence is what makes it a proof rather than a rearrangement: because n is a natural number, 2 to the n is a whole number, so the whole expression really is five times a whole number.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:253:13"
+      ]
+    },
+    "exp-level4#48": {
+      "en": "<em>No calculator.</em><br>Write &nbsp;∛(√64)&nbsp; as a single power of 64, and evaluate it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:277:13"
+      ]
+    },
+    "exp-level4#49": {
+      "en": "A root inside a root is still just one root — the two indexes multiply together. Then remember that the bottom of a fractional exponent is the root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:280:13"
+      ]
+    },
+    "exp-level4#50": {
+      "en": "A root inside a root <b>multiplies</b> the two indexes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:283:37"
+      ]
+    },
+    "exp-level4#51": {
+      "en": "Taking a square root and then a cube root sounds like two separate jobs, and it is really one: the indexes multiply, so a cube root of a square root is a sixth root. Written as an exponent that is 64 to the power one sixth, because the bottom number of a fractional exponent is always the root. From there, prime factors do the rest of the work — 64 is 2 to the sixth, and taking the sixth root of 2 to the sixth simply cancels the six against the sixth, leaving 2. It is also worth noticing that the order does not matter: the square root of the cube root of 64 gives exactly the same 2, which is one of the surd laws written on her page.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:288:13"
+      ]
+    },
+    "exp-level4#52": {
+      "en": "Turn each exponent back into a root and look only at the bottom number — is that root even or odd? A negative sitting under those two kinds of root behaves completely differently.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:299:13"
+      ]
+    },
+    "exp-level4#53": {
+      "en": "Turn each exponent back into a root: the bottom of the fraction is the root, and the question is whether that root is <b>even</b> or <b>odd</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:302:37"
+      ]
+    },
+    "exp-level4#54": {
+      "en": "Part (a) worked because everything in sight was positive. Put a minus in front of the 64 and the two roots part company completely. A sixth root asks for a number that, multiplied by itself six times, gives minus sixty-four — and six is even, so whatever that number was, positive or negative, the answer would come out positive. No real number can do it, so the expression is non-real. A cube root asks for a number multiplied by itself three times, and three is odd, so a negative stays negative: minus four times minus four times minus four really is minus sixty-four. That is the whole of her negatives box in two lines, and the deciding factor is only ever whether the root is even or odd.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:311:13"
+      ]
+    },
+    "exp-level4#55": {
+      "en": "Multiply the exponent by its reciprocal to strip it off the x — and do exactly the same to the other side. Then look hard at the TOP of the original exponent before you decide how many answers there are.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:338:13"
+      ]
+    },
+    "exp-level4#56": {
+      "en": "Multiply the exponent by its <b>reciprocal</b> — switch numerator and denominator — and do the same to the other side:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:341:37"
+      ]
+    },
+    "exp-level4#57": {
+      "en": "∴ x = 125 &nbsp;or&nbsp; x = −125",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:345:39"
+      ]
+    },
+    "exp-level4#58": {
+      "en": "REMEMBER: the ± is decided by the NUMERATOR of the original exponent. Here it is 2, which is even, so BOTH signs work and dropping the −125 throws away half the answer. If that numerator had been odd there would be no ± at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:348:15"
+      ]
+    },
+    "exp-level4#59": {
+      "en": "The exponent two over three is a cube root and then a square, and the neatest way to peel it off is to raise both sides to its upside-down version, three over two, because two thirds times three halves is exactly one. That leaves a bare x on the left. The right-hand side becomes 25 to the three over two, which is the square root of 25, cubed, so 125. Now the part that is easy to miss. Because the top of the original exponent is even, the left-hand side squares something at the end, and squaring hides a sign — so a negative x works just as well as a positive one. Her rule is to look at that numerator and nothing else: even numerator, put a ±. The check confirms it, and it is worth writing down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:352:13"
+      ]
+    },
+    "exp-level4#60": {
+      "en": "Read the exponent as two instructions in order: cube root first, then square. Ask what the last of those two can possibly produce.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:363:13"
+      ]
+    },
+    "exp-level4#61": {
+      "en": "Whatever ∛x comes to — positive, negative or zero — squaring it can never give a negative answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:367:37"
+      ]
+    },
+    "exp-level4#62": {
+      "en": "REMEMBER: an EVEN number in the numerator means the left-hand side can never come out negative, so a negative right-hand side gives <b>no solution</b>. Not “undefined”, which is only for dividing by zero, and not “non-real”, which is only for an even root of a negative.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:370:15"
+      ]
+    },
+    "exp-level4#63": {
+      "en": "Part (a) is the reason this one is easy, if you read the exponent the same way. Two over three means take the cube root first, then square the result. The cube root is perfectly happy with a negative x, so nothing goes wrong there — but the squaring at the end is a one-way door: squares are never negative. So the left-hand side can be zero or positive and nothing else, and asking it to equal minus twenty-five is asking for something impossible. That is her third no-answer word: no solution. Notice how differently the same equation behaves with an odd numerator — x to the one third equals minus twenty-five has a perfectly ordinary answer, because nothing gets squared on the way.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-level4.js:374:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#1": {
+      "en": "<em>Answer the WHOLE of this question without a calculator.</em><br>Solve for x: &nbsp;2<sup>x−3</sup> = 16",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:53:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#2": {
+      "en": "Write the right-hand side as a power of 2 as well. Once both guns are the same, the helmets fall to the ground.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:56:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#3": {
+      "en": "2<sup>x−3</sup> = 2⁴ &nbsp;&nbsp;— the <b>guns</b> are now equal, so they shoot each other and the <b>helmets</b> fall to the ground",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:59:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#4": {
+      "en": "x − 3 = 4 &nbsp;&nbsp;∴ x = 7",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:60:39"
+      ]
+    },
+    "exp-no-solution-and-strategy#5": {
+      "en": "An exponential equation is only solvable by hand when both sides can be made into powers of the SAME base — that is the one move the whole topic stands on. 16 is 2⁴, so both sides become powers of 2, and once the bases match the only way the two sides can be equal is if the exponents are equal too. The exponents drop down to become an ordinary little equation, and that is where the x is waiting. Do not skip writing 2⁴ down; that line is a mark on its own, because it is the line that makes the comparison legal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:63:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#6": {
+      "en": "<em>No calculator.</em><br>Solve for x: &nbsp;9<sup>x+1</sup> = 27<sup>x−1</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:71:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#7": {
+      "en": "Neither side is a power of the other, but both are built from the same small prime. Break 9 and 27 down first, and remember that a power raised to a power multiplies the exponents.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:74:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#8": {
+      "en": "Prime factors first: &nbsp;9 = 3² &nbsp;and&nbsp; 27 = 3³.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:77:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#9": {
+      "en": "(3²)<sup>x+1</sup> = (3³)<sup>x−1</sup> &nbsp;⟹&nbsp; 3<sup>2x+2</sup> = 3<sup>3x−3</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:78:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#10": {
+      "en": "the guns are equal, so equate the exponents: &nbsp;2x + 2 = 3x − 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:79:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#11": {
+      "en": "∴ x = 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:80:39"
+      ]
+    },
+    "exp-no-solution-and-strategy#12": {
+      "en": "WATCH OUT: (3²)<sup>x+1</sup> is 3<sup>2x+2</sup>, not 3<sup>x+3</sup>. A power raised to a power <b>multiplies</b> the exponents, and the 2 has to reach both terms inside the bracket.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:82:15"
+      ]
+    },
+    "exp-no-solution-and-strategy#13": {
+      "en": "Nine and twenty-seven look like different worlds, but they are both made of 3s, and that is what makes this solvable without a calculator. Once each side is written as 3 to something, the equation is only asking when those two somethings are the same number. The one place to slow down is the bracket: raising 3² to the power (x + 1) multiplies the exponents, so the 2 has to be handed to BOTH the x and the 1. Get that expansion right and the rest is a linear equation you could have solved in Grade 9.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:86:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#14": {
+      "en": "<em>No calculator.</em><br>Solve for x: &nbsp;2<sup>2x</sup> − 10 · 2<sup>x</sup> + 16 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:94:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#15": {
+      "en": "Look at the shape rather than the numbers. What is 2<sup>2x</sup> the square of? Give that thing a short name and read the equation again.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:97:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#16": {
+      "en": "2<sup>2x</sup> is (2<sup>x</sup>)², so this is a quadratic wearing a disguise.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:100:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#17": {
+      "en": "let K = 2<sup>x</sup> &nbsp;&nbsp;(then K² = 2<sup>2x</sup>) &nbsp;⟹&nbsp; K² − 10K + 16 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:101:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#18": {
+      "en": "(K − 8)(K − 2) = 0 &nbsp;&nbsp;∴ K = 8 &nbsp;or&nbsp; K = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:102:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#19": {
+      "en": "2<sup>x</sup> = 2³ &nbsp;∴ x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:103:39"
+      ]
+    },
+    "exp-no-solution-and-strategy#20": {
+      "en": "2<sup>x</sup> = 2¹ &nbsp;∴ x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:104:39"
+      ]
+    },
+    "exp-no-solution-and-strategy#21": {
+      "en": "WATCH OUT: K is not the answer. Stopping at K = 8 and K = 2 loses the last two marks — you were asked for x, so every branch has to be walked back through 2<sup>x</sup> = K.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:106:15"
+      ]
+    },
+    "exp-no-solution-and-strategy#22": {
+      "en": "The k-method is for equations that are secretly quadratics. Here 2<sup>2x</sup> is (2<sup>x</sup>)², so the equation holds one thing and its square — exactly the shape of ax² + bx + c. Naming the repeated thing K makes that visible, and then it factorises like any other trinomial. The discipline is in the walk back: K stands for 2<sup>x</sup>, so each K-value becomes its own little same-base equation. Both branches survive this time because 8 and 2 are both positive powers of 2 — which is worth noticing, because the next part is built around a branch that does not survive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:110:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#23": {
+      "en": "<em>No calculator.</em><br>Solve for x: &nbsp;4<sup>x</sup> − 3 · 2<sup>x</sup> − 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:118:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#24": {
+      "en": "The two bases are not the same yet — but one of them is built out of the other. Rewrite 4<sup>x</sup> as (2<sup>x</sup>)², let K = 2<sup>x</sup>, and an ordinary quadratic in K appears. Then think hard about what a power of 2 is allowed to equal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:121:13"
+      ]
+    },
+    "exp-no-solution-and-strategy#25": {
+      "en": "The fact you have to fetch: &nbsp;4<sup>x</sup> = (2²)<sup>x</sup> = 2<sup>2x</sup> = (2<sup>x</sup>)². Once both bases are 2, the same K trick as (c) works.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:124:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#26": {
+      "en": "let K = 2<sup>x</sup> &nbsp;⟹&nbsp; K² − 3K − 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:125:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#27": {
+      "en": "(K − 4)(K + 1) = 0 &nbsp;&nbsp;∴ K = 4 &nbsp;or&nbsp; K = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:126:37"
+      ]
+    },
+    "exp-no-solution-and-strategy#28": {
+      "en": "2<sup>x</sup> = 2² &nbsp;∴ x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:127:39"
+      ]
+    },
+    "exp-no-solution-and-strategy#29": {
+      "en": "2<sup>x</sup> ≠ −1 &nbsp;∴ no solution",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:128:39"
+      ]
+    },
+    "exp-no-solution-and-strategy#30": {
+      "en": "REMEMBER: a positive base can never reach a negative value, so 2<sup>x</sup> = −1 has <b>no solution</b>. Know which of her four words you need: “no solution” for this; “undefined” only for dividing by zero; “non-real” only for an even root of a negative; “N.A.” only for a surd-equation root that fails the test.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:130:15"
+      ]
+    },
+    "exp-no-solution-and-strategy#31": {
+      "en": "Two things make this the starred one. First, nothing in the question tells you the bases are related — you have to notice that 4 is 2², so 4<sup>x</sup> is (2<sup>x</sup>)², and only then does the k-method become available. Second, the second branch dies. K = −1 would need 2<sup>x</sup> to come out negative, and a positive base raised to any power is always positive: it can get enormous, it can get microscopically small, but it never crosses zero. So that branch is not an answer you forgot to find — it is genuinely no solution, and saying so IS the mark. Writing “undefined” there loses it, because undefined is reserved for dividing by zero. Bank the earlier marks first; this part is the one to sit with last.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-no-solution-and-strategy.js:134:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "exp-level4.js:296:13",
+      "text": "Determine, with a reason in each case, whether &nbsp;(−64)"
+    },
+    {
+      "where": "exp-level4.js:296:125",
+      "text": "&nbsp; are real numbers, and give the value of each one that is."
+    },
+    {
+      "where": "exp-level4.js:303:58",
+      "text": " = <sup>6</sup>√(−64) — an <b>even</b> root of a negative, and no real number multiplied by itself six times can come out negative &nbsp;∴ <b>non-real</b>."
+    },
+    {
+      "where": "exp-level4.js:304:58",
+      "text": " = ∛(−64) — an <b>odd</b> root of a negative, which is allowed, and the answer comes out negative."
+    },
+    {
+      "where": "exp-level4.js:305:60",
+      "text": " is <b>non-real</b>; &nbsp;&nbsp;(−64)"
+    },
+    {
+      "where": "exp-level4.js:307:15",
+      "text": "REMEMBER: <b>non-real</b> is the word for an even root of a negative — not “no solution” and not “undefined”. And a minus inside the bracket is never something you may quietly drop: (−64)"
+    },
+    {
+      "where": "exp-level4.js:335:13",
+      "text": "<em>No calculator.</em><br>Solve for x: &nbsp;x"
+    },
+    {
+      "where": "exp-level4.js:343:37",
+      "text": "The original exponent has an <b>even numerator</b> (the 2), so the answer carries a ±:<br>x = ±25"
+    },
+    {
+      "where": "exp-level4.js:344:37",
+      "text": "CHECK both: &nbsp;125"
+    },
+    {
+      "where": "exp-level4.js:346:37",
+      "text": "<b>OR</b> — raise, then root (same marks): &nbsp;x"
+    },
+    {
+      "where": "exp-level4.js:360:13",
+      "text": "Hence explain why &nbsp;x"
+    },
+    {
+      "where": "exp-level4.js:360:54",
+      "text": " = −25&nbsp; has no solution."
+    },
+    {
+      "where": "exp-level4.js:366:37",
+      "text": "Read the exponent in order: &nbsp;x"
+    },
+    {
+      "where": "exp-level4.js:366:88",
+      "text": "&nbsp; is the cube root of x, and then that answer <b>squared</b>."
+    },
+    {
+      "where": "exp-level4.js:368:56",
+      "text": " ≠ −25 &nbsp;&nbsp;∴ <b>no solution</b>."
+    }
+  ],
+  "words": 2842,
+  "nonLiteralPairs": [
+    {
+      "where": "exp-level4.js:284:33",
+      "src": "\"∛(√64) = <sup>6</sup>√64 = 64\" + RX(1, 6)"
+    },
+    {
+      "where": "exp-level4.js:285:35",
+      "src": "\"64 = 2⁶ &nbsp;&nbsp;∴ 64\" + RX(1, 6) + \" = (2⁶)\" + RX(1, 6) + \" = 2\""
+    },
+    {
+      "where": "exp-level4.js:296:9",
+      "src": "\"Determine, with a reason in each case, whether &nbsp;(−64)\" + RX(1, 6) + \"&nbsp"
+    },
+    {
+      "where": "exp-level4.js:303:33",
+      "src": "\"(−64)\" + RX(1, 6) + \" = <sup>6</sup>√(−64) — an <b>even</b> root of a negative,"
+    },
+    {
+      "where": "exp-level4.js:304:33",
+      "src": "\"(−64)\" + RX(1, 3) + \" = ∛(−64) — an <b>odd</b> root of a negative, which is all"
+    },
+    {
+      "where": "exp-level4.js:305:35",
+      "src": "\"(−64)\" + RX(1, 6) + \" is <b>non-real</b>; &nbsp;&nbsp;(−64)\" + RX(1, 3) + \" = −"
+    },
+    {
+      "where": "exp-level4.js:307:11",
+      "src": "\"REMEMBER: <b>non-real</b> is the word for an even root of a negative — not “no "
+    },
+    {
+      "where": "exp-level4.js:335:9",
+      "src": "\"<em>No calculator.</em><br>Solve for x: &nbsp;x\" + RX(2, 3) + \" = 25\""
+    },
+    {
+      "where": "exp-level4.js:342:33",
+      "src": "\"(x\" + RX(2, 3) + \")\" + RX(3, 2) + \" = 25\" + RX(3, 2)"
+    },
+    {
+      "where": "exp-level4.js:343:33",
+      "src": "\"The original exponent has an <b>even numerator</b> (the 2), so the answer carri"
+    },
+    {
+      "where": "exp-level4.js:344:33",
+      "src": "\"CHECK both: &nbsp;125\" + RX(2, 3) + \" = (∛125)² = 5² = 25 ✓ &nbsp;&nbsp;and&nbs"
+    },
+    {
+      "where": "exp-level4.js:346:33",
+      "src": "\"<b>OR</b> — raise, then root (same marks): &nbsp;x\" + RX(2, 3) + \" = 25 &nbsp;⟹"
+    },
+    {
+      "where": "exp-level4.js:360:9",
+      "src": "\"Hence explain why &nbsp;x\" + RX(2, 3) + \" = −25&nbsp; has no solution.\""
+    },
+    {
+      "where": "exp-level4.js:366:33",
+      "src": "\"Read the exponent in order: &nbsp;x\" + RX(2, 3) + \"&nbsp; is the cube root of x"
+    },
+    {
+      "where": "exp-level4.js:368:35",
+      "src": "\"x\" + RX(2, 3) + \" ≠ −25 &nbsp;&nbsp;∴ <b>no solution</b>.\""
+    }
+  ]
+}
