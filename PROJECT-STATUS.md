@@ -93,10 +93,11 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   sw_check unaffected). The harness needs `PYTHONUTF8=1` on this laptop (its ✓ banner trips the console codec).
 
 ## ⏳ Pending on Megan
-- 📱 3 min [blocks the routine from Sunday night]: in Safari on your phone open
-  https://megzieberr.github.io/blipwork/?lang=af (the home-screen app has its own storage, so Safari, not the
-  icon) → play Number Patterns round 1 in Afrikaans → tick row G1 in QUEUE.md (or write the fixes under it).
-  Until G1 is ticked the routine logs "waiting on Megan" each night.
+- 📱 3 min [blocks the routine from Sunday night]: in Chrome on your Android open
+  https://megzieberr.github.io/blipwork/?lang=af (the setting then sticks on the phone; the home-screen app shares
+  Chrome's storage on Android, so after a close-open-close-open it is in Afrikaans too) → play Number Patterns
+  round 1 in Afrikaans → tick row G1 in QUEUE.md (or write the fixes under it). Until G1 is ticked the routine
+  logs "waiting on Megan" each night.
 - 💻 1 min [Sunday morning, whenever]: read AF-LOG.md, one line per row the night did.
 - 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13, one at a time, the
   day you teach it (they are live but CLOSED, learners cannot see them yet).
