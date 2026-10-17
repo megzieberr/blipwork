@@ -1,0 +1,592 @@
+{
+  "unit": "T35",
+  "generated": "2026-10-17T18:31:57.237Z",
+  "files": [
+    "js/exam/func-siblings-inequalities.js"
+  ],
+  "items": {
+    "func-siblings-inequalities#1": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = −x² + 2x + 8. &nbsp;It cuts the x-axis at (−2 ; 0) and (4 ; 0).<br><br>For which values of x is &nbsp;f(x) &gt; 0?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:100:13"
+      ]
+    },
+    "func-siblings-inequalities#2": {
+      "en": "f(x) is the HEIGHT of the graph, so f(x) &gt; 0 is asking where the curve is above the x-axis. Cut a line through each x-intercept and look at the piece in the middle.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:103:13"
+      ]
+    },
+    "func-siblings-inequalities#3": {
+      "en": "Cut a line through <b>every x-intercept</b> — here x = −2 and x = 4 — then <b>paint</b> the sign of f on each piece:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:106:37"
+      ]
+    },
+    "func-siblings-inequalities#4": {
+      "en": "left of −2: &nbsp;<b>−</b> &nbsp;&nbsp;·&nbsp;&nbsp; between −2 and 4: &nbsp;<b>+</b> &nbsp;&nbsp;·&nbsp;&nbsp; right of 4: &nbsp;<b>−</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:107:37"
+      ]
+    },
+    "func-siblings-inequalities#5": {
+      "en": "f(x) &gt; 0 is the painted + piece &nbsp;&nbsp;∴&nbsp; −2 &lt; x &lt; 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:108:39"
+      ]
+    },
+    "func-siblings-inequalities#6": {
+      "en": "WATCH OUT: the answer is about x, so write x. Answering “y &gt; 0” or just “above the axis” earns nothing — and because the sign is a strict &gt;, both ends stay open.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:110:15"
+      ]
+    },
+    "func-siblings-inequalities#7": {
+      "en": "f(x) is not a mysterious symbol here — it is the height of the curve above or below the x-axis at that x. So asking where f(x) is positive is asking where the curve is drawn above the axis, which you can see. The reason the cut lines work is that a graph can only change from + to − by passing through the axis, so once you know where the crossings are, the sign cannot change anywhere in between. That is why one glance settles a whole piece. This parabola is sad, so it climbs above the axis between its two crossings and drops below on both sides — the + piece is the middle one. Two habits she marks: write the answer in x, and read the inequality sign before you close any bracket. Strictly greater than zero means the crossings themselves are out, because at −2 and at 4 the height is exactly zero, not more than zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:114:13"
+      ]
+    },
+    "func-siblings-inequalities#8": {
+      "en": "For which values of x is &nbsp;f(x) ≤ 0?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:122:13"
+      ]
+    },
+    "func-siblings-inequalities#9": {
+      "en": "Same cut lines, same painted signs — you want the other pieces this time. Then look hard at the equals half of the ≤ and decide whether the two crossings are in or out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:125:13"
+      ]
+    },
+    "func-siblings-inequalities#10": {
+      "en": "The painted − pieces are the two outside ones. And because the sign is ≤, the values where f is exactly 0 are included as well — that is both crossings.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:128:37"
+      ]
+    },
+    "func-siblings-inequalities#11": {
+      "en": "∴ x ≤ −2 &nbsp;&nbsp;or&nbsp;&nbsp; x ≥ 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:129:39"
+      ]
+    },
+    "func-siblings-inequalities#12": {
+      "en": "WATCH OUT: this answer is two separate pieces, joined by the word <b>or</b>. Writing −2 ≥ x ≥ 4 says nothing at all — no number is both smaller than −2 and bigger than 4 at the same time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:131:15"
+      ]
+    },
+    "func-siblings-inequalities#13": {
+      "en": "Nothing new has to be worked out here: the cut lines and the painted signs from (a) do the whole job, and all that changes is which pieces you hand in and whether the ends are closed. The ≤ is doing two things at once — less than zero, which is the two outside pieces, and equal to zero, which happens at exactly the two crossings. So both crossings come inside the answer and the brackets close. The other half of the marks is in how you write it. An answer made of two separate pieces cannot be squeezed into one chain of inequalities; it needs the word or, because a number qualifies by being in one piece or the other, never both. Say it out loud as “x is at most −2, or x is at least 4” and the shape of the written answer follows.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:135:13"
+      ]
+    },
+    "func-siblings-inequalities#14": {
+      "en": "The sketch shows &nbsp;f(x) = x² − 9&nbsp; and&nbsp; g(x) = x + 1. &nbsp;f cuts the x-axis at (−3 ; 0) and (3 ; 0), and g cuts it at (−1 ; 0).<br><br>For which values of x is &nbsp;f(x)·g(x) ≥ 0?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:194:13"
+      ]
+    },
+    "func-siblings-inequalities#15": {
+      "en": "A product is positive when the two graphs have the SAME sign and negative when they have opposite signs. So cut a line through every x-intercept of both graphs — that is three cut lines — and paint f and g separately on each piece.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:197:13"
+      ]
+    },
+    "func-siblings-inequalities#16": {
+      "en": "Cut a line through <b>every x-intercept of both graphs</b>: &nbsp;x = −3, &nbsp;x = −1&nbsp; and&nbsp; x = 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:200:37"
+      ]
+    },
+    "func-siblings-inequalities#17": {
+      "en": "Paint f and g on each piece, then multiply the two signs:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:201:37"
+      ]
+    },
+    "func-siblings-inequalities#18": {
+      "en": "x &lt; −3: &nbsp;f <b>+</b>, g <b>−</b> → <b>−</b> &nbsp;·&nbsp; −3 to −1: &nbsp;f <b>−</b>, g <b>−</b> → <b>+</b> &nbsp;·&nbsp; −1 to 3: &nbsp;f <b>−</b>, g <b>+</b> → <b>−</b> &nbsp;·&nbsp; x &gt; 3: &nbsp;f <b>+</b>, g <b>+</b> → <b>+</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:202:37"
+      ]
+    },
+    "func-siblings-inequalities#19": {
+      "en": "≥ 0 takes the painted + pieces AND the places where the product is exactly 0, which is all three cut points &nbsp;&nbsp;∴&nbsp; −3 ≤ x ≤ −1 &nbsp;or&nbsp; x ≥ 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:203:39"
+      ]
+    },
+    "func-siblings-inequalities#20": {
+      "en": "REMEMBER: g's x-intercept is a cut line too, even though the question never mentions g on its own. Miss the cut at −1 and the middle piece comes out as one long stretch with the wrong sign in half of it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:205:15"
+      ]
+    },
+    "func-siblings-inequalities#21": {
+      "en": "The only new idea in a product question is that you are painting two graphs instead of one, and then multiplying the two colours. Everything else is the method you already have. The cut lines go wherever EITHER graph crosses the x-axis, because those are the only places where either sign can flip — so three crossings means three cuts and four pieces. On each piece, ask twice: is f above or below the axis here, and is g above or below? Two minuses make a plus, which is why the piece between −3 and −1 comes out positive even though both graphs are underneath the axis there. The ends are the last decision. The question says greater than OR EQUAL TO zero, and a product is zero the moment either factor is zero — so all three cut points get closed brackets, including the one that came from g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:209:13"
+      ]
+    },
+    "func-siblings-inequalities#22": {
+      "en": "For which values of x is &nbsp;f(x)/g(x) &lt; 0?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:217:13"
+      ]
+    },
+    "func-siblings-inequalities#23": {
+      "en": "Dividing two numbers and multiplying them give exactly the same sign, so you do not have to paint anything again — the pieces you found in (a) still hold. What DOES change is the ends: think about what g is allowed to be.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:220:13"
+      ]
+    },
+    "func-siblings-inequalities#24": {
+      "en": "A quotient has the same sign as the product, so the painted pieces are the ones from (a):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:223:37"
+      ]
+    },
+    "func-siblings-inequalities#25": {
+      "en": "x &lt; −3: <b>−</b> &nbsp;·&nbsp; −3 to −1: <b>+</b> &nbsp;·&nbsp; −1 to 3: <b>−</b> &nbsp;·&nbsp; x &gt; 3: <b>+</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:224:37"
+      ]
+    },
+    "func-siblings-inequalities#26": {
+      "en": "&lt; 0 takes the painted − pieces. Now the ends: &nbsp;x = −3 and x = 3 make the top zero, and 0 is not less than 0, so they are out. &nbsp;x = −1 makes the BOTTOM zero, so it can never be in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:225:37"
+      ]
+    },
+    "func-siblings-inequalities#27": {
+      "en": "∴ x &lt; −3 &nbsp;&nbsp;or&nbsp;&nbsp; −1 &lt; x &lt; 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:226:39"
+      ]
+    },
+    "func-siblings-inequalities#28": {
+      "en": "WATCH OUT: never multiply both sides by g(x) to “get rid of” the fraction. You do not know whether g is positive or negative, so you do not know whether to turn the inequality sign around. Paint the pieces instead.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:228:15"
+      ]
+    },
+    "func-siblings-inequalities#29": {
+      "en": "Put the two parts side by side and the lesson lands: a product and a quotient of the same two graphs have exactly the same sign everywhere, because dividing by a negative and multiplying by a negative both flip you to the other side of zero. So the painting work in (a) is not repeated — it is reused. What genuinely differs is the ends, and for one reason only: a fraction is allowed to have a zero on top but never on the bottom. So the crossing that belongs to g, at x = −1, is excluded no matter what inequality sign the question uses — even a ≤ or a ≥ would leave it out. Here the sign is a strict less-than anyway, so all three ends are open, but it is worth knowing WHY each one is open, because the version of this question with a ≥ is the one that catches people. And the warning in the trap card is the biggest one in the whole topic: clearing a fraction in an inequality is only safe when you know the sign of what you multiplied by, and here you do not.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:232:13"
+      ]
+    },
+    "func-siblings-inequalities#30": {
+      "en": "The sketch shows the hyperbola h, defined by &nbsp;h(x) = 4/(x − 1) − 2. &nbsp;Its asymptotes x = 1 and y = −2 are the dashed lines, and h cuts the axes at (3 ; 0) and (0 ; −6).<br><br>For which values of x is &nbsp;h(x) ≥ 0?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:283:13"
+      ]
+    },
+    "func-siblings-inequalities#31": {
+      "en": "Cut a line through the x-intercept AND through the asymptote — those are the only two places the sign can change. Then decide separately about each end, because the two cut points are not the same kind of thing at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:286:13"
+      ]
+    },
+    "func-siblings-inequalities#32": {
+      "en": "Cut a line through <b>every x-intercept and every asymptote</b> — here x = 1 and x = 3 — then <b>paint</b> the sign of h on each piece:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:289:37"
+      ]
+    },
+    "func-siblings-inequalities#33": {
+      "en": "left of 1: &nbsp;<b>−</b> &nbsp;&nbsp;·&nbsp;&nbsp; between 1 and 3: &nbsp;<b>+</b> &nbsp;&nbsp;·&nbsp;&nbsp; right of 3: &nbsp;<b>−</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:290:37"
+      ]
+    },
+    "func-siblings-inequalities#34": {
+      "en": "h(x) ≥ 0 is the painted + piece. &nbsp;x = 3 <i>is</i> included, because h(3) = 0. &nbsp;x = 1 is <b>never</b> included — h does not exist there. &nbsp;&nbsp;∴&nbsp; 1 &lt; x ≤ 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:291:39"
+      ]
+    },
+    "func-siblings-inequalities#35": {
+      "en": "WATCH OUT: never close the bracket on an asymptote. Writing 1 ≤ x ≤ 3 loses the mark, because h(1) does not exist — no inequality sign can change that.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:293:15"
+      ]
+    },
+    "func-siblings-inequalities#36": {
+      "en": "A graph can only swap from positive to negative in two ways: by crossing the x-axis, or by jumping across a vertical asymptote. Both happen here, so both get a cut line, and between two cuts nothing can change — one glance per piece is enough. The interesting part is the ends, because the two cut points behave completely differently. At x = 3 the graph genuinely touches down on the axis, so its height really is 0 there; the question said greater than OR EQUAL TO zero, so 3 comes inside and the bracket closes. At x = 1 there is no graph at all — the fraction would be dividing by zero — so nothing can be true about h there, and that end stays open however the inequality is written. One end closed and one end open in the same answer is exactly what this question is built to test.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:297:13"
+      ]
+    },
+    "func-siblings-inequalities#37": {
+      "en": "For which values of x is &nbsp;x·h(x) ≤ 0?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:305:13"
+      ]
+    },
+    "func-siblings-inequalities#38": {
+      "en": "This is a product, so the same rule applies: same signs give +, opposite signs give −. But one of the two things being multiplied is just x, and x changes sign at the y-axis — so you have a third cut line to add.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:308:13"
+      ]
+    },
+    "func-siblings-inequalities#39": {
+      "en": "x·h(x) is a product, so paint the sign of <b>x</b> and the sign of <b>h</b> separately. x changes sign at x = 0, so the cut lines are now x = 0, x = 1 and x = 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:311:37"
+      ]
+    },
+    "func-siblings-inequalities#40": {
+      "en": "x &lt; 0: &nbsp;x <b>−</b>, h <b>−</b> → <b>+</b> &nbsp;·&nbsp; 0 to 1: &nbsp;x <b>+</b>, h <b>−</b> → <b>−</b> &nbsp;·&nbsp; 1 to 3: &nbsp;x <b>+</b>, h <b>+</b> → <b>+</b> &nbsp;·&nbsp; x &gt; 3: &nbsp;x <b>+</b>, h <b>−</b> → <b>−</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:312:37"
+      ]
+    },
+    "func-siblings-inequalities#41": {
+      "en": "≤ 0 takes the painted − pieces plus wherever the product is exactly 0 — that is x = 0 and x = 3, but never x = 1 &nbsp;&nbsp;∴&nbsp; 0 ≤ x &lt; 1 &nbsp;or&nbsp; x ≥ 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:313:39"
+      ]
+    },
+    "func-siblings-inequalities#42": {
+      "en": "REMEMBER: the extra cut line at x = 0 is the y-axis itself. Forgetting it is the standard slip on this question — the pieces on either side of the y-axis get painted the same colour and half the answer disappears.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:315:15"
+      ]
+    },
+    "func-siblings-inequalities#43": {
+      "en": "The extra factor here is the plainest graph there is: the line y = x, negative on the left of the y-axis and positive on the right. So x·h(x) is a product like any other, and her quadrant idea says it neatly — the product is positive where x and h agree in sign, in the first and third quadrants' sense, and negative where they disagree. What makes this the harder version is that one of the cut lines does not come from the picture of h at all; it comes from the other factor, and it sits on the y-axis. Add it and you have four pieces instead of three. The ends then need three separate decisions, one per cut point. At x = 0 the product is 0 times something, which is 0, and ≤ 0 accepts 0, so it closes. At x = 3 the product is something times 0, also 0, so that closes too. At x = 1 there is no h to multiply by, so it can never be included — the same rule as in part (a), and the same one that catches people every year.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:319:13"
+      ]
+    },
+    "func-siblings-inequalities#44": {
+      "en": "The sketch shows &nbsp;f(x) = x² − 2x − 3&nbsp; and&nbsp; g(x) = x + 1.<br><br>Determine the coordinates of the two points where f and g cut each other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:372:13"
+      ]
+    },
+    "func-siblings-inequalities#45": {
+      "en": "Where the graphs cut, both equations are true at the same x — so set the two expressions equal to each other. Bring everything to one side and factorise what is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:375:13"
+      ]
+    },
+    "func-siblings-inequalities#46": {
+      "en": "At a point of intersection both graphs have the same y, so set them equal:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:378:37"
+      ]
+    },
+    "func-siblings-inequalities#47": {
+      "en": "x² − 2x − 3 = x + 1 &nbsp;⟹&nbsp; x² − 3x − 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:379:37"
+      ]
+    },
+    "func-siblings-inequalities#48": {
+      "en": "(x − 4)(x + 1) = 0 &nbsp;⟹&nbsp; x = 4 &nbsp;or&nbsp; x = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:380:37"
+      ]
+    },
+    "func-siblings-inequalities#49": {
+      "en": "put each x back into the easier equation, g: &nbsp;g(4) = 5 &nbsp;and&nbsp; g(−1) = 0 &nbsp;&nbsp;∴&nbsp; (4 ; 5) &nbsp;and&nbsp; (−1 ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:381:39"
+      ]
+    },
+    "func-siblings-inequalities#50": {
+      "en": "WATCH OUT: solving gives you the x-values only. The question asked for COORDINATES, so each x still has to be substituted back to find its y — and the line is the cheaper of the two to substitute into.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:383:15"
+      ]
+    },
+    "func-siblings-inequalities#51": {
+      "en": "An intersection is the one place where the two graphs agree about the height, so writing f(x) = g(x) is not a trick, it is the definition. Once everything is on one side you are holding an ordinary quadratic, and its solutions are the x-coordinates of the crossings — nothing more. That is why the last step is not optional: a crossing is a place on the page, and a place needs both numbers. Substitute back into whichever equation is less work, which is almost always the line, and check the pair looks right against the picture. Here −1 lands on the x-axis and 4 lands high up on the right, which is exactly what the sketch shows.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:387:13"
+      ]
+    },
+    "func-siblings-inequalities#52": {
+      "en": "For which values of x is &nbsp;f(x) ≥ g(x)?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:395:13"
+      ]
+    },
+    "func-siblings-inequalities#53": {
+      "en": "f(x) ≥ g(x) asks where the parabola is ON TOP of the line, so cut a line through each intersection and look at which graph is higher on each piece.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:398:13"
+      ]
+    },
+    "func-siblings-inequalities#54": {
+      "en": "For f against g, cut a line through <b>every intersection</b> — here x = −1 and x = 4 — then read off which graph is on top on each piece:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:401:37"
+      ]
+    },
+    "func-siblings-inequalities#55": {
+      "en": "left of −1: &nbsp;f on top &nbsp;&nbsp;·&nbsp;&nbsp; between −1 and 4: &nbsp;g on top &nbsp;&nbsp;·&nbsp;&nbsp; right of 4: &nbsp;f on top",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:402:37"
+      ]
+    },
+    "func-siblings-inequalities#56": {
+      "en": "f is on top on the two outside pieces, and ≥ lets the two crossings in, where the graphs are level &nbsp;&nbsp;∴&nbsp; x ≤ −1 &nbsp;or&nbsp; x ≥ 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:403:39"
+      ]
+    },
+    "func-siblings-inequalities#57": {
+      "en": "REMEMBER: for f against g the cut lines go through the INTERSECTIONS, not through the x-intercepts. The x-axis has nothing to do with this question — the line g is the new baseline.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:405:15"
+      ]
+    },
+    "func-siblings-inequalities#58": {
+      "en": "The method has not changed at all, only what counts as “zero”. In part (a) of the earlier cards the baseline was the x-axis, and the cut lines went through the crossings with it. Here the baseline is the graph g, so the cut lines go through the crossings with g instead — and between two crossings the graphs cannot swap over, so one look per piece settles it. If you would rather do it with algebra, subtract: f(x) − g(x) = x² − 3x − 4, and asking where f is on top is asking where that difference is positive, which brings you straight back to the cut lines at −1 and 4. Same answer, same picture, and it is a good check when the sketch is hard to read. The ends are closed because ≥ allows the graphs to be exactly level, which is precisely what happens at an intersection.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-inequalities.js:409:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2114
+}
