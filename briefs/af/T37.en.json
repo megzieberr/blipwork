@@ -1,0 +1,932 @@
+{
+  "unit": "T37",
+  "generated": "2026-10-17T18:36:08.487Z",
+  "files": [
+    "js/exam/func-siblings-intersection.js"
+  ],
+  "items": {
+    "func-siblings-intersection#1": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 4x + 6, &nbsp;and the straight line g, defined by &nbsp;g(x) = x + 2. &nbsp;They cut each other at P and Q.<br><br>Show that the x-coordinates of P and Q are the solutions of &nbsp;x² − 5x + 4 = 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:110:13"
+      ]
+    },
+    "func-siblings-intersection#2": {
+      "en": "At a point where two graphs cross, both graphs give the SAME height for the same x. So set the two expressions equal to each other and bring everything to one side.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:113:13"
+      ]
+    },
+    "func-siblings-intersection#3": {
+      "en": "At P and Q the two graphs have the same y-value, so put &nbsp;f(x) = g(x):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:116:37"
+      ]
+    },
+    "func-siblings-intersection#4": {
+      "en": "x² − 4x + 6 = x + 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:117:37"
+      ]
+    },
+    "func-siblings-intersection#5": {
+      "en": "bring everything to the left: &nbsp;x² − 4x − x + 6 − 2 = 0 &nbsp;&nbsp;∴&nbsp; x² − 5x + 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:118:39"
+      ]
+    },
+    "func-siblings-intersection#6": {
+      "en": "WATCH OUT: every term must change sign as it crosses over. The + 2 becomes − 2 and the x becomes −x — losing one of those is what turns this into a quadratic that does not factorise.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:120:15"
+      ]
+    },
+    "func-siblings-intersection#7": {
+      "en": "A point where two graphs cross belongs to both of them, which means it satisfies both equations at once. So it has the same x and the same y in each — and putting the two expressions for y equal to each other is simply saying that out loud. From there it is ordinary algebra: collect everything on one side so the equation reads “something = 0”, because that is the only form a quadratic can be factorised from. In a “show that” question the answer is printed for you, so the marks are entirely for the working that gets there. Never write the given line down and call it done, and never work backwards from it. Start at f(x) = g(x), tidy up one step at a time, and let your last line be the line you were asked to show.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:124:13"
+      ]
+    },
+    "func-siblings-intersection#8": {
+      "en": "Hence determine the coordinates of P and Q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:132:13"
+      ]
+    },
+    "func-siblings-intersection#9": {
+      "en": "Factorise the quadratic you were given and solve it — that gives you the two x-values. Then put each one back into the EASIER of the two equations to get its height.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:135:13"
+      ]
+    },
+    "func-siblings-intersection#10": {
+      "en": "x² − 5x + 4 = 0 &nbsp;⟹&nbsp; (x − 1)(x − 4) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:138:37"
+      ]
+    },
+    "func-siblings-intersection#11": {
+      "en": "x = 1&nbsp; or&nbsp; x = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:139:37"
+      ]
+    },
+    "func-siblings-intersection#12": {
+      "en": "heights from the line: &nbsp;g(1) = 3&nbsp; and&nbsp; g(4) = 6 &nbsp;&nbsp;∴&nbsp; P(1 ; 3)&nbsp; and&nbsp; Q(4 ; 6)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:140:39"
+      ]
+    },
+    "func-siblings-intersection#13": {
+      "en": "REMEMBER: the question asks for COORDINATES, not for x. Stopping at x = 1 and x = 4 leaves the last mark on the table every time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:142:15"
+      ]
+    },
+    "func-siblings-intersection#14": {
+      "en": "Solving the quadratic gives the two x-values where the graphs meet, but an intersection is a place, so each one still needs its height. Substitute into whichever equation is less work — here the straight line, every time, because g(1) is one small sum while f(1) is three terms. It does not matter which you choose: the whole point of an intersection is that both equations give the same answer there, so if you have time, doing it in both is a free check. One habit worth building: write the two answers as named points, P(1 ; 3) and Q(4 ; 6), in the order the sketch shows them from left to right. It makes the next part of an exam question much easier to talk about.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:146:13"
+      ]
+    },
+    "func-siblings-intersection#15": {
+      "en": "The sketch shows the exponential graph g, defined by &nbsp;g(x) = 2ˣ − 4, &nbsp;with asymptote &nbsp;y = −4. &nbsp;The parabola &nbsp;f(x) = x² − 5x + c&nbsp; cuts the x-axis at the same point A as g does. (f is not drawn.)<br><br>Determine the coordinates of A.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:201:13"
+      ]
+    },
+    "func-siblings-intersection#16": {
+      "en": "A is where g cuts the x-axis, so put y = 0 in g's equation. Get the power on its own, then write the other side as a power of 2 as well.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:204:13"
+      ]
+    },
+    "func-siblings-intersection#17": {
+      "en": "A is on the x-axis, so put &nbsp;y = 0&nbsp; into g: &nbsp;2ˣ − 4 = 0 &nbsp;⟹&nbsp; 2ˣ = 4 = 2<sup>2</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:207:37"
+      ]
+    },
+    "func-siblings-intersection#18": {
+      "en": "same base, so the powers are equal: &nbsp;x = 2 &nbsp;&nbsp;∴&nbsp; A(2 ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:208:39"
+      ]
+    },
+    "func-siblings-intersection#19": {
+      "en": "This is an ordinary x-intercept, dressed up. The x-axis is the line y = 0, so anything sitting on it has a height of zero, and that is all “cuts the x-axis” ever means. Once the 4 is moved across you are left with 2 to the power of something equalling 4, and the way through an exponential equation is always the same: make both sides powers of the SAME base. Since 4 is 2 squared, both sides are now powers of 2, and two equal powers of the same base must have equal exponents. That turns the whole thing into x = 2. Write the answer as a point, because A is a place on the picture, and the next part is going to need both of its coordinates.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:211:13"
+      ]
+    },
+    "func-siblings-intersection#20": {
+      "en": "Hence determine the value of c.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:219:13"
+      ]
+    },
+    "func-siblings-intersection#21": {
+      "en": "A is on the parabola as well, so A's coordinates must make the parabola's equation true. Substitute them in and solve the little equation for c.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:222:13"
+      ]
+    },
+    "func-siblings-intersection#22": {
+      "en": "A(2 ; 0) lies on f as well, so its coordinates satisfy f's equation:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:225:37"
+      ]
+    },
+    "func-siblings-intersection#23": {
+      "en": "0 = (2)² − 5(2) + c &nbsp;⟹&nbsp; 0 = 4 − 10 + c",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:226:37"
+      ]
+    },
+    "func-siblings-intersection#24": {
+      "en": "0 = −6 + c &nbsp;&nbsp;∴&nbsp; c = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:227:39"
+      ]
+    },
+    "func-siblings-intersection#25": {
+      "en": "REMEMBER: a point being ON a graph is a fact you can SUBSTITUTE. Every “find the missing constant” question in this chapter starts the same way — put the point's x in for x and its y in for y.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:229:15"
+      ]
+    },
+    "func-siblings-intersection#26": {
+      "en": "Everything in this chapter that asks for a missing letter works the same way, so it is worth saying as a rule: if a point lies on a graph, its coordinates make that graph's equation true. Here A(2 ; 0) is on both graphs, and you already know everything about g, so the useful half is that A is on f. Put x = 2 and y = 0 into f's equation and the only unknown left is c, which makes it a one-line equation instead of a graphs problem. Keep the substitution visible in your working — the marker gives a mark for the substituting, not only for the answer. And notice how little you needed: no factorising, no turning point, just one point and one equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:233:13"
+      ]
+    },
+    "func-siblings-intersection#27": {
+      "en": "Determine the coordinates of the other point where f cuts the x-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:241:13"
+      ]
+    },
+    "func-siblings-intersection#28": {
+      "en": "Now that you know c, f is an ordinary trinomial. Factorise it — you already know one of its brackets, because you know one of its roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:244:13"
+      ]
+    },
+    "func-siblings-intersection#29": {
+      "en": "f(x) = x² − 5x + 6 = (x − 2)(x − 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:247:37"
+      ]
+    },
+    "func-siblings-intersection#30": {
+      "en": "x = 2&nbsp; or&nbsp; x = 3, and x = 2 is A &nbsp;&nbsp;∴&nbsp; the other point is (3 ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:248:39"
+      ]
+    },
+    "func-siblings-intersection#31": {
+      "en": "With c found, f is just x² − 5x + 6, and its x-intercepts come from factorising as usual: two numbers that multiply to 6 and add to −5, which are −2 and −3. There is a lovely check hiding in here. You already knew that x = 2 was a root, because A is on the graph — so one of your brackets HAD to come out as (x − 2). If it does not, something earlier went wrong, and you have caught it before it cost you anything. The second root is the new information: the parabola crosses the x-axis again at x = 3, one unit further along, which is also why the sketch shows the curve dipping below the axis in between.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:251:13"
+      ]
+    },
+    "func-siblings-intersection#32": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = −(x − 3)² + 4, &nbsp;and the dashed horizontal line &nbsp;y = 3.<br><br>Write down the coordinates of the turning point of f, and state whether it is a maximum or a minimum.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:296:13"
+      ]
+    },
+    "func-siblings-intersection#33": {
+      "en": "The equation is already in turning-point form, so read (p ; q) straight off it — remembering that p is the opposite sign of the number inside the bracket. The sign in front decides happy or sad.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:299:13"
+      ]
+    },
+    "func-siblings-intersection#34": {
+      "en": "(x − 3)² gives p = 3, and q = 4 &nbsp;&nbsp;∴&nbsp; TP(3 ; 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:302:39"
+      ]
+    },
+    "func-siblings-intersection#35": {
+      "en": "a = −1, and a &lt; 0, so f is <b>sad</b> &nbsp;∴&nbsp; the turning point is a MAXIMUM",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:303:39"
+      ]
+    },
+    "func-siblings-intersection#36": {
+      "en": "Reading the turning point off turning-point form is the free mark in this question, but it is also the fact that makes the rest of the question sensible. The highest f ever gets is 4. The dashed line sits at 3, which is lower than 4 but higher than the arms of the parabola further out — so the line has to slice through the curve, and it has to do it twice, once on the way up and once on the way down. You can see all of that before doing any algebra, and it is worth seeing, because it tells you how many answers to expect in the next part. If the line had been drawn at y = 5, above the peak, there would have been no crossings at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:306:13"
+      ]
+    },
+    "func-siblings-intersection#37": {
+      "en": "The line &nbsp;y = 3&nbsp; cuts f at C and D. Determine the coordinates of C and D.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:314:13"
+      ]
+    },
+    "func-siblings-intersection#38": {
+      "en": "Put the two equations equal to each other. Get the squared bracket on its own before you square-root, and remember the ± — the line cuts the curve twice.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:317:13"
+      ]
+    },
+    "func-siblings-intersection#39": {
+      "en": "At C and D the heights are equal, so put &nbsp;f(x) = 3:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:320:37"
+      ]
+    },
+    "func-siblings-intersection#40": {
+      "en": "−(x − 3)² + 4 = 3 &nbsp;⟹&nbsp; −(x − 3)² = −1 &nbsp;⟹&nbsp; (x − 3)² = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:321:37"
+      ]
+    },
+    "func-siblings-intersection#41": {
+      "en": "x − 3 = ±1 &nbsp;⟹&nbsp; x = 4&nbsp; or&nbsp; x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:322:37"
+      ]
+    },
+    "func-siblings-intersection#42": {
+      "en": "both points sit on the line, so both heights are 3 &nbsp;&nbsp;∴&nbsp; C(2 ; 3)&nbsp; and&nbsp; D(4 ; 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:323:39"
+      ]
+    },
+    "func-siblings-intersection#43": {
+      "en": "WATCH OUT: dividing by −1 flips BOTH sides. −(x − 3)² = −1 becomes (x − 3)² = 1, not (x − 3)² = −1 — and a square can never equal a negative, so that slip ends in “no solution” on a question that clearly has two.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:325:15"
+      ]
+    },
+    "func-siblings-intersection#44": {
+      "en": "A horizontal line is the friendliest thing that can cut a graph, because you already know both heights: they are both k. So the only unknown is where. Set the parabola equal to 3, tidy until the squared bracket stands alone, and square-root both sides — with the ±, which is where the two crossings come from. Notice that you never needed to expand the bracket; turning-point form is doing you a favour, so take it. When you write the answers down, both of them keep the same y, because both points lie on the line y = 3. That is a useful self-check: if one of your two points came out with a different height, you have substituted into the wrong thing somewhere.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:329:13"
+      ]
+    },
+    "func-siblings-intersection#45": {
+      "en": "Hence write down the values of x for which &nbsp;f(x) &gt; 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:337:13"
+      ]
+    },
+    "func-siblings-intersection#46": {
+      "en": "Draw a cut line down through each of C and D, then look at the picture: on which side of those lines is the curve drawn ABOVE the dashed line?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:340:13"
+      ]
+    },
+    "func-siblings-intersection#47": {
+      "en": "Cut lines through C and D at &nbsp;x = 2&nbsp; and&nbsp; x = 4. Between them the parabola is drawn ABOVE the line &nbsp;y = 3:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:343:37"
+      ]
+    },
+    "func-siblings-intersection#48": {
+      "en": "2 &lt; x &lt; 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:344:39"
+      ]
+    },
+    "func-siblings-intersection#49": {
+      "en": "REMEMBER: the question says &gt;, not ≥, so x = 2 and x = 4 are NOT included — at those two x-values f is exactly 3, not more than 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:346:15"
+      ]
+    },
+    "func-siblings-intersection#50": {
+      "en": "This is her cut-line-and-paint method in its simplest form. The two points where the graphs meet are the only places the answer can change from true to false, so cut a vertical line through each of them and the whole x-axis is divided into three stretches. Then just look: to the left of x = 2 the parabola is below the dashed line, between 2 and 4 it arches above it, and to the right of 4 it drops below again. So the answer is the middle stretch. Write the x-values in order, smallest first, with x in the middle — “2 &lt; x &lt; 4” rather than “x &gt; 2 and x &lt; 4”. And check the ends against the sign in the question: a strict &gt; means open ends.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:350:13"
+      ]
+    },
+    "func-siblings-intersection#51": {
+      "en": "The sketch shows &nbsp;f(x) = x² − 4&nbsp; and&nbsp; g(x) = x + 2&nbsp; drawn on the same grid. They cut each other at A and B.<br><br>Use the sketch to write down the values of x for which &nbsp;f(x) = g(x).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:396:13"
+      ]
+    },
+    "func-siblings-intersection#52": {
+      "en": "f(x) = g(x) happens exactly where the two graphs touch each other. Find those two places on the grid and read straight down to the x-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:399:13"
+      ]
+    },
+    "func-siblings-intersection#53": {
+      "en": "The graphs cross in two places. Read each one down to the x-axis:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:402:37"
+      ]
+    },
+    "func-siblings-intersection#54": {
+      "en": "x = −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:403:39"
+      ]
+    },
+    "func-siblings-intersection#55": {
+      "en": "x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:404:39"
+      ]
+    },
+    "func-siblings-intersection#56": {
+      "en": "“f(x) = g(x)” is a sentence about heights: it asks where the two graphs are at the same height at the same x. On a picture that is exactly where they touch, so the answer is sitting there to be read. Find each crossing, run your eye straight down to the x-axis, and write the value down. Two things worth noticing. The answer is a list of x-VALUES, not points, because that is what the question asked for — the y's belong to a different question. And reading off is only trustworthy when the crossings land on grid lines, as they do here; when they do not, the picture can only tell you roughly, which is exactly why the next part exists.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:407:13"
+      ]
+    },
+    "func-siblings-intersection#57": {
+      "en": "Confirm your answer to (a) algebraically, and hence write down the coordinates of A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:415:13"
+      ]
+    },
+    "func-siblings-intersection#58": {
+      "en": "Set the two expressions equal, bring everything to one side, and factorise. Your two answers should be exactly the ones you read off the picture — if they are not, one of the two is wrong and it is worth finding out which.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:418:13"
+      ]
+    },
+    "func-siblings-intersection#59": {
+      "en": "Put &nbsp;f(x) = g(x):&nbsp; x² − 4 = x + 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:421:37"
+      ]
+    },
+    "func-siblings-intersection#60": {
+      "en": "x² − x − 6 = 0 &nbsp;⟹&nbsp; (x − 3)(x + 2) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:422:37"
+      ]
+    },
+    "func-siblings-intersection#61": {
+      "en": "x = 3&nbsp; or&nbsp; x = −2 &nbsp;&nbsp;— the same two values read off in (a)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:423:37"
+      ]
+    },
+    "func-siblings-intersection#62": {
+      "en": "heights from the line: &nbsp;g(−2) = 0&nbsp; and&nbsp; g(3) = 5 &nbsp;&nbsp;∴&nbsp; A(−2 ; 0)&nbsp; and&nbsp; B(3 ; 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:424:39"
+      ]
+    },
+    "func-siblings-intersection#63": {
+      "en": "REMEMBER: a picture is evidence, not proof. In a paper, “confirm algebraically” means the marks are for the equation and the factorising — an answer that only says “I read it off the graph” scores nothing here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:426:15"
+      ]
+    },
+    "func-siblings-intersection#64": {
+      "en": "This part exists to show you that the two methods are the same idea wearing different clothes. Reading off asks where the graphs touch; solving asks which x makes the two expressions equal. They must agree, and when they do you can trust both. The algebra is the ordinary routine: equate, collect everything on one side so it reads “= 0”, factorise, and set each bracket to zero. Then finish the job the picture started by getting the heights, using the straight line because it is less work. Keep the habit of checking your algebra against the sketch even when a question does not ask you to. A quadratic that gives x = 3 and x = 7 when the picture clearly shows a crossing left of the y-axis is telling you about a sign slip, immediately, for free.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:430:13"
+      ]
+    },
+    "func-siblings-intersection#65": {
+      "en": "The sketch shows the hyperbola h, defined by &nbsp;h(x) = 8/(x − 1) + 3, &nbsp;with its asymptotes &nbsp;x = 1&nbsp; and&nbsp; y = 3&nbsp; drawn dashed, and the straight line g, defined by &nbsp;g(x) = 2x + 1. &nbsp;They cut each other at P and Q.<br><br>Determine the coordinates of P and Q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:487:13"
+      ]
+    },
+    "func-siblings-intersection#66": {
+      "en": "Put the two equations equal, then get rid of the fraction by multiplying EVERY term by (x − 1). What is left is an ordinary quadratic — tidy it up and factorise.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:490:13"
+      ]
+    },
+    "func-siblings-intersection#67": {
+      "en": "At P and Q the heights are equal, so put &nbsp;h(x) = g(x):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:493:37"
+      ]
+    },
+    "func-siblings-intersection#68": {
+      "en": "8/(x − 1) + 3 = 2x + 1, &nbsp;&nbsp;× (x − 1) &nbsp;on every term: &nbsp;8 + 3(x − 1) = (2x + 1)(x − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:494:37"
+      ]
+    },
+    "func-siblings-intersection#69": {
+      "en": "3x + 5 = 2x² − x − 1 &nbsp;⟹&nbsp; 2x² − 4x − 6 = 0 &nbsp;⟹&nbsp; x² − 2x − 3 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:495:37"
+      ]
+    },
+    "func-siblings-intersection#70": {
+      "en": "(x − 3)(x + 1) = 0 &nbsp;⟹&nbsp; x = 3&nbsp; or&nbsp; x = −1 &nbsp;&nbsp;(neither is 1, so both are allowed)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:496:37"
+      ]
+    },
+    "func-siblings-intersection#71": {
+      "en": "heights from the line: &nbsp;g(−1) = −1&nbsp; and&nbsp; g(3) = 7 &nbsp;&nbsp;∴&nbsp; P(−1 ; −1)&nbsp; and&nbsp; Q(3 ; 7)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:497:39"
+      ]
+    },
+    "func-siblings-intersection#72": {
+      "en": "WATCH OUT: multiply EVERY term by (x − 1), including the lonely + 3 and both terms of the line. Multiplying only the fraction is the mistake that turns this into an equation that does not factorise. And divide the whole quadratic by 2 before factorising — it makes the brackets obvious.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:499:15"
+      ]
+    },
+    "func-siblings-intersection#73": {
+      "en": "A hyperbola meeting a line is the one intersection question where a fraction gets in the way, and the fix is the same as in any fraction equation: multiply every single term by the bottom. The bracket (x − 1) cancels the fraction and multiplies out everything else, and what falls out is an ordinary quadratic — which is why this question really belongs to both chapters at once. Two habits keep it clean. Multiply the WHOLE of both sides, not just the piece with the fraction, and use brackets while you do it. Then, before factorising, look for a common factor: dividing 2x² − 4x − 6 by 2 turns an awkward trinomial into a friendly one. Last, check that neither answer is the forbidden x-value, x = 1 — because the graph does not exist there, a root landing on it would have to be thrown away.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:503:13"
+      ]
+    },
+    "func-siblings-intersection#74": {
+      "en": "Determine the coordinates of M, the midpoint of PQ.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:511:13"
+      ]
+    },
+    "func-siblings-intersection#75": {
+      "en": "The midpoint of two points is the average of their x-values and the average of their y-values. Work them out and then look at where your answer lands on the picture.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:514:13"
+      ]
+    },
+    "func-siblings-intersection#76": {
+      "en": "M = ((x₁ + x₂)/2 ; (y₁ + y₂)/2) = ((−1 + 3)/2 ; (−1 + 7)/2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:517:37"
+      ]
+    },
+    "func-siblings-intersection#77": {
+      "en": "M(1 ; 3) &nbsp;&nbsp;— which is exactly where the two asymptotes cross",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:518:39"
+      ]
+    },
+    "func-siblings-intersection#78": {
+      "en": "The arithmetic here is two averages, and it takes ten seconds. What is worth your attention is where the answer lands: M(1 ; 3) is the point where the asymptotes cross, the corner the whole hyperbola is built around. That is not luck. A hyperbola is symmetrical about its corner — turn the picture half a turn about that point and it lands on itself — so any straight line that passes THROUGH the corner must cut the two branches at two points the same distance out on either side. Check that g really does pass through it: g(1) = 2 + 1 = 3, yes. So the corner had to be the midpoint. It is a good fact to carry: if a line through a hyperbola's corner cuts one branch somewhere, you already know a lot about where it cuts the other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:521:13"
+      ]
+    },
+    "func-siblings-intersection#79": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 2x − 3, &nbsp;and the straight line g, defined by &nbsp;g(x) = x + 1. &nbsp;They cut each other at A and B.<br><br>Determine the coordinates of A and B.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:574:13"
+      ]
+    },
+    "func-siblings-intersection#80": {
+      "en": "Set the two expressions equal to each other, bring everything to one side so it reads “= 0”, and factorise. Then find each height from the line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:577:13"
+      ]
+    },
+    "func-siblings-intersection#81": {
+      "en": "At A and B the heights are equal, so put &nbsp;f(x) = g(x):&nbsp; x² − 2x − 3 = x + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:580:37"
+      ]
+    },
+    "func-siblings-intersection#82": {
+      "en": "x² − 3x − 4 = 0 &nbsp;⟹&nbsp; (x − 4)(x + 1) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:581:37"
+      ]
+    },
+    "func-siblings-intersection#83": {
+      "en": "x = 4&nbsp; or&nbsp; x = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:582:37"
+      ]
+    },
+    "func-siblings-intersection#84": {
+      "en": "heights from the line: &nbsp;g(−1) = 0&nbsp; and&nbsp; g(4) = 5 &nbsp;&nbsp;∴&nbsp; A(−1 ; 0)&nbsp; and&nbsp; B(4 ; 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:583:39"
+      ]
+    },
+    "func-siblings-intersection#85": {
+      "en": "The routine is now familiar and it is worth being able to do it without thinking, because the interesting part of the question is always what comes after. Equate the two expressions, collect everything on one side, factorise, solve, then substitute back for the heights. The only decision is which equation to substitute into, and the answer is always the simpler one — the straight line. Write the points in left-to-right order as the sketch shows them, A first at x = −1 and B second at x = 4. That ordering is what makes the next part readable: an inequality answer is a statement about stretches of the x-axis, and stretches are much easier to describe when your two boundary numbers are already in order.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:586:13"
+      ]
+    },
+    "func-siblings-intersection#86": {
+      "en": "Hence, or otherwise, solve for x: &nbsp;f(x) &gt; g(x).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:594:13"
+      ]
+    },
+    "func-siblings-intersection#87": {
+      "en": "Cut a vertical line down through each of A and B. That splits the x-axis into three stretches — now look at each stretch and ask which graph is drawn on top there.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:597:13"
+      ]
+    },
+    "func-siblings-intersection#88": {
+      "en": "Cut a line through every intersection: &nbsp;x = −1&nbsp; and&nbsp; x = 4. That leaves three stretches to look at.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:600:37"
+      ]
+    },
+    "func-siblings-intersection#89": {
+      "en": "Left of −1 the parabola is drawn ABOVE the line; between −1 and 4 it is below; right of 4 it is above again.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:601:37"
+      ]
+    },
+    "func-siblings-intersection#90": {
+      "en": "x &lt; −1 &nbsp;or&nbsp; x &gt; 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:602:39"
+      ]
+    },
+    "func-siblings-intersection#91": {
+      "en": "WATCH OUT: the answer is TWO separate stretches, joined by the word “or”. Writing −1 &gt; x &gt; 4 says a single stretch and is impossible — no number is both less than −1 and more than 4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:604:15"
+      ]
+    },
+    "func-siblings-intersection#92": {
+      "en": "“f(x) &gt; g(x)” asks where the first graph is drawn higher than the second, so the answer is always a set of x-values, never a set of points. Her method turns it into looking rather than algebra. The only places the answer can flip from true to false are the places the graphs cross, so cut a vertical line down through each of them; here that leaves three stretches. Then read the picture stretch by stretch: outside the two crossings the parabola has climbed above the line, and between them it has dipped underneath. So the answer is the two outer stretches, joined by “or”, with open ends because a strict &gt; excludes the crossings themselves, where the two graphs are equal rather than one being bigger. Say the answer out loud as a sentence and it will not come out backwards.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-intersection.js:608:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2800
+}

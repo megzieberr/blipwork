@@ -107,21 +107,21 @@ const q1 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 4x + 6, &nbsp;and the straight line g, defined by &nbsp;g(x) = x + 2. &nbsp;They cut each other at P and Q.<br><br>Show that the x-coordinates of P and Q are the solutions of &nbsp;x² − 5x + 4 = 0.",
+        en: "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 4x + 6, &nbsp;and the straight line g, defined by &nbsp;g(x) = x + 2. &nbsp;They cut each other at P and Q.<br><br>Show that the x-coordinates of P and Q are the solutions of &nbsp;x² − 5x + 4 = 0.", af: "Die skets toon die parabool f, gedefinieer deur &nbsp;f(x) = x² − 4x + 6, &nbsp;en die reguit lyn g, gedefinieer deur &nbsp;g(x) = x + 2. &nbsp;Hulle sny mekaar by P en Q.<br><br>Toon aan dat die x-koördinate van P en Q die oplossings is van &nbsp;x² − 5x + 4 = 0.",
       },
       hint: {
-        en: "At a point where two graphs cross, both graphs give the SAME height for the same x. So set the two expressions equal to each other and bring everything to one side.",
+        en: "At a point where two graphs cross, both graphs give the SAME height for the same x. So set the two expressions equal to each other and bring everything to one side.", af: "Waar twee grafieke mekaar sny, gee albei grafieke DIESELFDE hoogte vir dieselfde x. Stel dus die twee uitdrukkings gelyk aan mekaar en bring alles na een kant.",
       },
       memo: [
-        { type: "step", text: { en: "At P and Q the two graphs have the same y-value, so put &nbsp;f(x) = g(x):" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "x² − 4x + 6 = x + 2" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "bring everything to the left: &nbsp;x² − 4x − x + 6 − 2 = 0 &nbsp;&nbsp;∴&nbsp; x² − 5x + 4 = 0" }, ticks: ["a"] },
+        { type: "step", text: { en: "At P and Q the two graphs have the same y-value, so put &nbsp;f(x) = g(x):", af: "By P en Q het die twee grafieke dieselfde y-waarde, dus stel &nbsp;f(x) = g(x):" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "x² − 4x + 6 = x + 2", af: "x² − 4x + 6 = x + 2" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "bring everything to the left: &nbsp;x² − 4x − x + 6 − 2 = 0 &nbsp;&nbsp;∴&nbsp; x² − 5x + 4 = 0", af: "bring alles na links: &nbsp;x² − 4x − x + 6 − 2 = 0 &nbsp;&nbsp;∴&nbsp; x² − 5x + 4 = 0" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: every term must change sign as it crosses over. The + 2 becomes − 2 and the x becomes −x — losing one of those is what turns this into a quadratic that does not factorise.",
+          en: "WATCH OUT: every term must change sign as it crosses over. The + 2 becomes − 2 and the x becomes −x — losing one of those is what turns this into a quadratic that does not factorise.", af: "PASOP: elke term moet van teken verander as dit oorkant toe gaan. Die + 2 word − 2 en die x word −x: as jy een daarvan verloor, kry jy 'n kwadratiese vergelyking wat nie faktoriseer nie.",
         } },
       ],
       esplain: {
-        en: "A point where two graphs cross belongs to both of them, which means it satisfies both equations at once. So it has the same x and the same y in each — and putting the two expressions for y equal to each other is simply saying that out loud. From there it is ordinary algebra: collect everything on one side so the equation reads “something = 0”, because that is the only form a quadratic can be factorised from. In a “show that” question the answer is printed for you, so the marks are entirely for the working that gets there. Never write the given line down and call it done, and never work backwards from it. Start at f(x) = g(x), tidy up one step at a time, and let your last line be the line you were asked to show.",
+        en: "A point where two graphs cross belongs to both of them, which means it satisfies both equations at once. So it has the same x and the same y in each — and putting the two expressions for y equal to each other is simply saying that out loud. From there it is ordinary algebra: collect everything on one side so the equation reads “something = 0”, because that is the only form a quadratic can be factorised from. In a “show that” question the answer is printed for you, so the marks are entirely for the working that gets there. Never write the given line down and call it done, and never work backwards from it. Start at f(x) = g(x), tidy up one step at a time, and let your last line be the line you were asked to show.", af: "'n Punt waar twee grafieke mekaar sny, behoort aan albei, wat beteken dat dit tegelyk aan albei vergelykings voldoen. Dit het dus dieselfde x en dieselfde y in elkeen, en om die twee uitdrukkings vir y aan mekaar gelyk te stel, is net om dit hardop te sê. Daarna is dit gewone algebra: bring alles na een kant sodat die vergelyking “iets = 0” lees, want dit is die enigste vorm waaruit 'n kwadratiese vergelyking gefaktoriseer kan word. In 'n “toon aan”-vraag is die antwoord vir jou gedruk, so die punte is heeltemal vir die werk wat daarheen lei. Moet nooit net die gegewe reël neerskryf en sê jy is klaar nie, en werk nooit daarvandaan terug nie. Begin by f(x) = g(x), vereenvoudig een stap op 'n slag, en laat jou laaste reël die reël wees wat jy moes aantoon.",
       },
     },
     {
@@ -129,21 +129,21 @@ const q1 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "Hence determine the coordinates of P and Q.",
+        en: "Hence determine the coordinates of P and Q.", af: "Bepaal gevolglik die koördinate van P en Q.",
       },
       hint: {
-        en: "Factorise the quadratic you were given and solve it — that gives you the two x-values. Then put each one back into the EASIER of the two equations to get its height.",
+        en: "Factorise the quadratic you were given and solve it — that gives you the two x-values. Then put each one back into the EASIER of the two equations to get its height.", af: "Faktoriseer die kwadratiese vergelyking wat jy gekry het en los dit op: dit gee jou die twee x-waardes. Vervang dan elkeen terug in die MAKLIKER van die twee vergelykings om sy hoogte te kry.",
       },
       memo: [
-        { type: "step", text: { en: "x² − 5x + 4 = 0 &nbsp;⟹&nbsp; (x − 1)(x − 4) = 0" }, ticks: ["ca"] },
-        { type: "step", text: { en: "x = 1&nbsp; or&nbsp; x = 4" }, ticks: ["a"] },
-        { type: "answer", text: { en: "heights from the line: &nbsp;g(1) = 3&nbsp; and&nbsp; g(4) = 6 &nbsp;&nbsp;∴&nbsp; P(1 ; 3)&nbsp; and&nbsp; Q(4 ; 6)" }, ticks: ["a"] },
+        { type: "step", text: { en: "x² − 5x + 4 = 0 &nbsp;⟹&nbsp; (x − 1)(x − 4) = 0", af: "x² − 5x + 4 = 0 &nbsp;⟹&nbsp; (x − 1)(x − 4) = 0" }, ticks: ["ca"] },
+        { type: "step", text: { en: "x = 1&nbsp; or&nbsp; x = 4", af: "x = 1&nbsp; of&nbsp; x = 4" }, ticks: ["a"] },
+        { type: "answer", text: { en: "heights from the line: &nbsp;g(1) = 3&nbsp; and&nbsp; g(4) = 6 &nbsp;&nbsp;∴&nbsp; P(1 ; 3)&nbsp; and&nbsp; Q(4 ; 6)", af: "hoogtes uit die lyn: &nbsp;g(1) = 3&nbsp; en&nbsp; g(4) = 6 &nbsp;&nbsp;∴&nbsp; P(1 ; 3)&nbsp; en&nbsp; Q(4 ; 6)" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: the question asks for COORDINATES, not for x. Stopping at x = 1 and x = 4 leaves the last mark on the table every time.",
+          en: "REMEMBER: the question asks for COORDINATES, not for x. Stopping at x = 1 and x = 4 leaves the last mark on the table every time.", af: "ONTHOU: die vraag vra KOÖRDINATE, nie x nie. As jy by x = 1 en x = 4 stop, verloor jy elke keer die laaste punt.",
         } },
       ],
       esplain: {
-        en: "Solving the quadratic gives the two x-values where the graphs meet, but an intersection is a place, so each one still needs its height. Substitute into whichever equation is less work — here the straight line, every time, because g(1) is one small sum while f(1) is three terms. It does not matter which you choose: the whole point of an intersection is that both equations give the same answer there, so if you have time, doing it in both is a free check. One habit worth building: write the two answers as named points, P(1 ; 3) and Q(4 ; 6), in the order the sketch shows them from left to right. It makes the next part of an exam question much easier to talk about.",
+        en: "Solving the quadratic gives the two x-values where the graphs meet, but an intersection is a place, so each one still needs its height. Substitute into whichever equation is less work — here the straight line, every time, because g(1) is one small sum while f(1) is three terms. It does not matter which you choose: the whole point of an intersection is that both equations give the same answer there, so if you have time, doing it in both is a free check. One habit worth building: write the two answers as named points, P(1 ; 3) and Q(4 ; 6), in the order the sketch shows them from left to right. It makes the next part of an exam question much easier to talk about.", af: "As jy die kwadratiese vergelyking oplos, kry jy die twee x-waardes waar die grafieke mekaar ontmoet, maar 'n snypunt is 'n plek, so elkeen het nog sy hoogte nodig. Vervang in die vergelyking wat die minste werk is: hier elke keer die reguit lyn, want g(1) is een klein somtjie terwyl f(1) drie terme het. Dit maak nie saak watter een jy kies nie: die hele idee van 'n snypunt is dat albei vergelykings daar dieselfde antwoord gee, so as jy tyd het, is dit 'n gratis kontrole om dit in albei te doen. Een gewoonte wat die moeite werd is: skryf die twee antwoorde as benoemde punte, P(1 ; 3) en Q(4 ; 6), in die volgorde waarin die skets hulle van links na regs wys. Dit maak die volgende deel van 'n eksamenvraag baie makliker om oor te praat.",
       },
     },
   ],
@@ -198,17 +198,17 @@ const q2 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "The sketch shows the exponential graph g, defined by &nbsp;g(x) = 2ˣ − 4, &nbsp;with asymptote &nbsp;y = −4. &nbsp;The parabola &nbsp;f(x) = x² − 5x + c&nbsp; cuts the x-axis at the same point A as g does. (f is not drawn.)<br><br>Determine the coordinates of A.",
+        en: "The sketch shows the exponential graph g, defined by &nbsp;g(x) = 2ˣ − 4, &nbsp;with asymptote &nbsp;y = −4. &nbsp;The parabola &nbsp;f(x) = x² − 5x + c&nbsp; cuts the x-axis at the same point A as g does. (f is not drawn.)<br><br>Determine the coordinates of A.", af: "Die skets toon die eksponensiële grafiek g, gedefinieer deur &nbsp;g(x) = 2ˣ − 4, &nbsp;met asimptoot &nbsp;y = −4. &nbsp;Die parabool &nbsp;f(x) = x² − 5x + c&nbsp; sny die x-as by dieselfde punt A as g. (f is nie geteken nie.)<br><br>Bepaal die koördinate van A.",
       },
       hint: {
-        en: "A is where g cuts the x-axis, so put y = 0 in g's equation. Get the power on its own, then write the other side as a power of 2 as well.",
+        en: "A is where g cuts the x-axis, so put y = 0 in g's equation. Get the power on its own, then write the other side as a power of 2 as well.", af: "A is waar g die x-as sny, dus stel y = 0 in g se vergelyking. Kry die mag alleen, en skryf dan die ander kant ook as 'n mag van 2.",
       },
       memo: [
-        { type: "step", text: { en: "A is on the x-axis, so put &nbsp;y = 0&nbsp; into g: &nbsp;2ˣ − 4 = 0 &nbsp;⟹&nbsp; 2ˣ = 4 = 2<sup>2</sup>" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "same base, so the powers are equal: &nbsp;x = 2 &nbsp;&nbsp;∴&nbsp; A(2 ; 0)" }, ticks: ["a"] },
+        { type: "step", text: { en: "A is on the x-axis, so put &nbsp;y = 0&nbsp; into g: &nbsp;2ˣ − 4 = 0 &nbsp;⟹&nbsp; 2ˣ = 4 = 2<sup>2</sup>", af: "A lê op die x-as, dus stel &nbsp;y = 0&nbsp; in g: &nbsp;2ˣ − 4 = 0 &nbsp;⟹&nbsp; 2ˣ = 4 = 2<sup>2</sup>" }, ticks: ["s/f"] },
+        { type: "answer", text: { en: "same base, so the powers are equal: &nbsp;x = 2 &nbsp;&nbsp;∴&nbsp; A(2 ; 0)", af: "dieselfde grondtal, dus is die eksponente gelyk: &nbsp;x = 2 &nbsp;&nbsp;∴&nbsp; A(2 ; 0)" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "This is an ordinary x-intercept, dressed up. The x-axis is the line y = 0, so anything sitting on it has a height of zero, and that is all “cuts the x-axis” ever means. Once the 4 is moved across you are left with 2 to the power of something equalling 4, and the way through an exponential equation is always the same: make both sides powers of the SAME base. Since 4 is 2 squared, both sides are now powers of 2, and two equal powers of the same base must have equal exponents. That turns the whole thing into x = 2. Write the answer as a point, because A is a place on the picture, and the next part is going to need both of its coordinates.",
+        en: "This is an ordinary x-intercept, dressed up. The x-axis is the line y = 0, so anything sitting on it has a height of zero, and that is all “cuts the x-axis” ever means. Once the 4 is moved across you are left with 2 to the power of something equalling 4, and the way through an exponential equation is always the same: make both sides powers of the SAME base. Since 4 is 2 squared, both sides are now powers of 2, and two equal powers of the same base must have equal exponents. That turns the whole thing into x = 2. Write the answer as a point, because A is a place on the picture, and the next part is going to need both of its coordinates.", af: "Dit is 'n gewone x-afsnit, net anders aangetrek. Die x-as is die lyn y = 0, so enigiets wat daarop sit, het 'n hoogte van nul, en dit is al wat “sny die x-as” ooit beteken. Sodra die 4 oorgebring is, bly jy met 2 tot die mag van iets gelyk aan 4 oor, en die pad deur 'n eksponensiële vergelyking is altyd dieselfde: maak albei kante magte van DIESELFDE grondtal. Omdat 4 gelyk is aan 2 kwadraat, is albei kante nou magte van 2, en twee gelyke magte van dieselfde grondtal moet gelyke eksponente hê. Dit maak die hele ding x = 2. Skryf die antwoord as 'n punt, want A is 'n plek op die prentjie, en die volgende deel gaan albei sy koördinate nodig hê.",
       },
     },
     {
@@ -216,21 +216,21 @@ const q2 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "Hence determine the value of c.",
+        en: "Hence determine the value of c.", af: "Bepaal gevolglik die waarde van c.",
       },
       hint: {
-        en: "A is on the parabola as well, so A's coordinates must make the parabola's equation true. Substitute them in and solve the little equation for c.",
+        en: "A is on the parabola as well, so A's coordinates must make the parabola's equation true. Substitute them in and solve the little equation for c.", af: "A lê ook op die parabool, dus moet A se koördinate die parabool se vergelyking waar maak. Vervang hulle en los die klein vergelyking op vir c.",
       },
       memo: [
-        { type: "step", text: { en: "A(2 ; 0) lies on f as well, so its coordinates satisfy f's equation:" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "0 = (2)² − 5(2) + c &nbsp;⟹&nbsp; 0 = 4 − 10 + c" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "0 = −6 + c &nbsp;&nbsp;∴&nbsp; c = 6" }, ticks: ["a"] },
+        { type: "step", text: { en: "A(2 ; 0) lies on f as well, so its coordinates satisfy f's equation:", af: "A(2 ; 0) lê ook op f, dus voldoen sy koördinate aan f se vergelyking:" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "0 = (2)² − 5(2) + c &nbsp;⟹&nbsp; 0 = 4 − 10 + c", af: "0 = (2)² − 5(2) + c &nbsp;⟹&nbsp; 0 = 4 − 10 + c" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "0 = −6 + c &nbsp;&nbsp;∴&nbsp; c = 6", af: "0 = −6 + c &nbsp;&nbsp;∴&nbsp; c = 6" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: a point being ON a graph is a fact you can SUBSTITUTE. Every “find the missing constant” question in this chapter starts the same way — put the point's x in for x and its y in for y.",
+          en: "REMEMBER: a point being ON a graph is a fact you can SUBSTITUTE. Every “find the missing constant” question in this chapter starts the same way — put the point's x in for x and its y in for y.", af: "ONTHOU: dat 'n punt OP 'n grafiek lê, is 'n feit wat jy kan VERVANG. Elke “vind die ontbrekende konstante”-vraag in hierdie hoofstuk begin op dieselfde manier: sit die punt se x in vir x en sy y vir y.",
         } },
       ],
       esplain: {
-        en: "Everything in this chapter that asks for a missing letter works the same way, so it is worth saying as a rule: if a point lies on a graph, its coordinates make that graph's equation true. Here A(2 ; 0) is on both graphs, and you already know everything about g, so the useful half is that A is on f. Put x = 2 and y = 0 into f's equation and the only unknown left is c, which makes it a one-line equation instead of a graphs problem. Keep the substitution visible in your working — the marker gives a mark for the substituting, not only for the answer. And notice how little you needed: no factorising, no turning point, just one point and one equation.",
+        en: "Everything in this chapter that asks for a missing letter works the same way, so it is worth saying as a rule: if a point lies on a graph, its coordinates make that graph's equation true. Here A(2 ; 0) is on both graphs, and you already know everything about g, so the useful half is that A is on f. Put x = 2 and y = 0 into f's equation and the only unknown left is c, which makes it a one-line equation instead of a graphs problem. Keep the substitution visible in your working — the marker gives a mark for the substituting, not only for the answer. And notice how little you needed: no factorising, no turning point, just one point and one equation.", af: "Alles in hierdie hoofstuk wat vir 'n ontbrekende letter vra, werk op dieselfde manier, so dit is die moeite werd om dit as 'n reël te sê: as 'n punt op 'n grafiek lê, maak sy koördinate daardie grafiek se vergelyking waar. Hier lê A(2 ; 0) op albei grafieke, en jy weet reeds alles van g, so die nuttige helfte is dat A op f lê. Sit x = 2 en y = 0 in f se vergelyking, en die enigste onbekende wat oorbly, is c, wat dit 'n eenreël-vergelyking maak eerder as 'n grafiekprobleem. Hou die vervanging sigbaar in jou werk: die nasiener gee 'n punt vir die vervanging, nie net vir die antwoord nie. En let op hoe min jy nodig gehad het: geen faktorisering nie, geen draaipunt nie, net een punt en een vergelyking.",
       },
     },
     {
@@ -238,17 +238,17 @@ const q2 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "Determine the coordinates of the other point where f cuts the x-axis.",
+        en: "Determine the coordinates of the other point where f cuts the x-axis.", af: "Bepaal die koördinate van die ander punt waar f die x-as sny.",
       },
       hint: {
-        en: "Now that you know c, f is an ordinary trinomial. Factorise it — you already know one of its brackets, because you know one of its roots.",
+        en: "Now that you know c, f is an ordinary trinomial. Factorise it — you already know one of its brackets, because you know one of its roots.", af: "Noudat jy c ken, is f 'n gewone drieterm. Faktoriseer dit: jy ken reeds een van sy hakies, want jy ken een van sy wortels.",
       },
       memo: [
-        { type: "step", text: { en: "f(x) = x² − 5x + 6 = (x − 2)(x − 3)" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "x = 2&nbsp; or&nbsp; x = 3, and x = 2 is A &nbsp;&nbsp;∴&nbsp; the other point is (3 ; 0)" }, ticks: ["a"] },
+        { type: "step", text: { en: "f(x) = x² − 5x + 6 = (x − 2)(x − 3)", af: "f(x) = x² − 5x + 6 = (x − 2)(x − 3)" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "x = 2&nbsp; or&nbsp; x = 3, and x = 2 is A &nbsp;&nbsp;∴&nbsp; the other point is (3 ; 0)", af: "x = 2&nbsp; of&nbsp; x = 3, en x = 2 is A &nbsp;&nbsp;∴&nbsp; die ander punt is (3 ; 0)" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "With c found, f is just x² − 5x + 6, and its x-intercepts come from factorising as usual: two numbers that multiply to 6 and add to −5, which are −2 and −3. There is a lovely check hiding in here. You already knew that x = 2 was a root, because A is on the graph — so one of your brackets HAD to come out as (x − 2). If it does not, something earlier went wrong, and you have caught it before it cost you anything. The second root is the new information: the parabola crosses the x-axis again at x = 3, one unit further along, which is also why the sketch shows the curve dipping below the axis in between.",
+        en: "With c found, f is just x² − 5x + 6, and its x-intercepts come from factorising as usual: two numbers that multiply to 6 and add to −5, which are −2 and −3. There is a lovely check hiding in here. You already knew that x = 2 was a root, because A is on the graph — so one of your brackets HAD to come out as (x − 2). If it does not, something earlier went wrong, and you have caught it before it cost you anything. The second root is the new information: the parabola crosses the x-axis again at x = 3, one unit further along, which is also why the sketch shows the curve dipping below the axis in between.", af: "Noudat c bekend is, is f net x² − 5x + 6, en sy x-afsnitte kom soos gewoonlik uit faktorisering: twee getalle met 'n produk van 6 en 'n som van −5, en dit is −2 en −3. Hier skuil 'n pragtige kontrole. Jy het reeds geweet dat x = 2 'n wortel is, want A lê op die grafiek, so een van jou hakies MOES as (x − 2) uitkom. As dit nie so is nie, het iets vroeër verkeerd geloop, en jy het dit gevang voordat dit jou iets gekos het. Die tweede wortel is die nuwe inligting: die parabool sny die x-as weer by x = 3, een eenheid verder aan, en dit is ook hoekom die skets wys hoe die kurwe tussenin onder die as insak.",
       },
     },
   ],
@@ -293,17 +293,17 @@ const q3 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "The sketch shows the parabola f, defined by &nbsp;f(x) = −(x − 3)² + 4, &nbsp;and the dashed horizontal line &nbsp;y = 3.<br><br>Write down the coordinates of the turning point of f, and state whether it is a maximum or a minimum.",
+        en: "The sketch shows the parabola f, defined by &nbsp;f(x) = −(x − 3)² + 4, &nbsp;and the dashed horizontal line &nbsp;y = 3.<br><br>Write down the coordinates of the turning point of f, and state whether it is a maximum or a minimum.", af: "Die skets toon die parabool f, gedefinieer deur &nbsp;f(x) = −(x − 3)² + 4, &nbsp;en die horisontale stippellyn &nbsp;y = 3.<br><br>Skryf die koördinate van die draaipunt van f neer, en dui aan of dit 'n maksimum of 'n minimum is.",
       },
       hint: {
-        en: "The equation is already in turning-point form, so read (p ; q) straight off it — remembering that p is the opposite sign of the number inside the bracket. The sign in front decides happy or sad.",
+        en: "The equation is already in turning-point form, so read (p ; q) straight off it — remembering that p is the opposite sign of the number inside the bracket. The sign in front decides happy or sad.", af: "Die vergelyking is reeds in draaipunt-vorm, dus lees (p ; q) reguit daaruit af, en onthou dat p die teenoorgestelde teken het van die getal binne die hakie. Die teken voor die hakie besluit of dit happy of sad is.",
       },
       memo: [
-        { type: "answer", text: { en: "(x − 3)² gives p = 3, and q = 4 &nbsp;&nbsp;∴&nbsp; TP(3 ; 4)" }, ticks: ["a"] },
-        { type: "answer", text: { en: "a = −1, and a &lt; 0, so f is <b>sad</b> &nbsp;∴&nbsp; the turning point is a MAXIMUM" }, ticks: ["a"] },
+        { type: "answer", text: { en: "(x − 3)² gives p = 3, and q = 4 &nbsp;&nbsp;∴&nbsp; TP(3 ; 4)", af: "(x − 3)² gee p = 3, en q = 4 &nbsp;&nbsp;∴&nbsp; DP(3 ; 4)" }, ticks: ["a"] },
+        { type: "answer", text: { en: "a = −1, and a &lt; 0, so f is <b>sad</b> &nbsp;∴&nbsp; the turning point is a MAXIMUM", af: "a = −1, en a &lt; 0, dus is f <b>sad</b> &nbsp;∴&nbsp; die draaipunt is 'n MAKSIMUM" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "Reading the turning point off turning-point form is the free mark in this question, but it is also the fact that makes the rest of the question sensible. The highest f ever gets is 4. The dashed line sits at 3, which is lower than 4 but higher than the arms of the parabola further out — so the line has to slice through the curve, and it has to do it twice, once on the way up and once on the way down. You can see all of that before doing any algebra, and it is worth seeing, because it tells you how many answers to expect in the next part. If the line had been drawn at y = 5, above the peak, there would have been no crossings at all.",
+        en: "Reading the turning point off turning-point form is the free mark in this question, but it is also the fact that makes the rest of the question sensible. The highest f ever gets is 4. The dashed line sits at 3, which is lower than 4 but higher than the arms of the parabola further out — so the line has to slice through the curve, and it has to do it twice, once on the way up and once on the way down. You can see all of that before doing any algebra, and it is worth seeing, because it tells you how many answers to expect in the next part. If the line had been drawn at y = 5, above the peak, there would have been no crossings at all.", af: "Om die draaipunt uit draaipunt-vorm af te lees, is die gratis punt in hierdie vraag, maar dit is ook die feit wat die res van die vraag sinvol maak. Die hoogste wat f ooit kom, is 4. Die stippellyn lê by 3, wat laer as 4 is maar hoër as die parabool se arms verder uit, so die lyn moet deur die kurwe sny, en dit moet twee keer gebeur: een keer op pad op en een keer op pad af. Jy kan dit alles sien voordat jy enige algebra doen, en dit is die moeite werd om te sien, want dit sê vir jou hoeveel antwoorde jy in die volgende deel kan verwag. As die lyn by y = 5 geteken was, bo die piek, sou daar glad geen snypunte gewees het nie.",
       },
     },
     {
@@ -311,22 +311,22 @@ const q3 = {
       marks: 4,
       level: 2,
       prompt: {
-        en: "The line &nbsp;y = 3&nbsp; cuts f at C and D. Determine the coordinates of C and D.",
+        en: "The line &nbsp;y = 3&nbsp; cuts f at C and D. Determine the coordinates of C and D.", af: "Die lyn &nbsp;y = 3&nbsp; sny f by C en D. Bepaal die koördinate van C en D.",
       },
       hint: {
-        en: "Put the two equations equal to each other. Get the squared bracket on its own before you square-root, and remember the ± — the line cuts the curve twice.",
+        en: "Put the two equations equal to each other. Get the squared bracket on its own before you square-root, and remember the ± — the line cuts the curve twice.", af: "Stel die twee vergelykings gelyk aan mekaar. Kry die gekwadreerde hakie alleen voordat jy die vierkantswortel neem, en onthou die ±: die lyn sny die kurwe twee keer.",
       },
       memo: [
-        { type: "step", text: { en: "At C and D the heights are equal, so put &nbsp;f(x) = 3:" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "−(x − 3)² + 4 = 3 &nbsp;⟹&nbsp; −(x − 3)² = −1 &nbsp;⟹&nbsp; (x − 3)² = 1" }, ticks: ["ca"] },
-        { type: "step", text: { en: "x − 3 = ±1 &nbsp;⟹&nbsp; x = 4&nbsp; or&nbsp; x = 2" }, ticks: ["a"] },
-        { type: "answer", text: { en: "both points sit on the line, so both heights are 3 &nbsp;&nbsp;∴&nbsp; C(2 ; 3)&nbsp; and&nbsp; D(4 ; 3)" }, ticks: ["a"] },
+        { type: "step", text: { en: "At C and D the heights are equal, so put &nbsp;f(x) = 3:", af: "By C en D is die hoogtes gelyk, dus stel &nbsp;f(x) = 3:" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "−(x − 3)² + 4 = 3 &nbsp;⟹&nbsp; −(x − 3)² = −1 &nbsp;⟹&nbsp; (x − 3)² = 1", af: "−(x − 3)² + 4 = 3 &nbsp;⟹&nbsp; −(x − 3)² = −1 &nbsp;⟹&nbsp; (x − 3)² = 1" }, ticks: ["ca"] },
+        { type: "step", text: { en: "x − 3 = ±1 &nbsp;⟹&nbsp; x = 4&nbsp; or&nbsp; x = 2", af: "x − 3 = ±1 &nbsp;⟹&nbsp; x = 4&nbsp; of&nbsp; x = 2" }, ticks: ["a"] },
+        { type: "answer", text: { en: "both points sit on the line, so both heights are 3 &nbsp;&nbsp;∴&nbsp; C(2 ; 3)&nbsp; and&nbsp; D(4 ; 3)", af: "albei punte lê op die lyn, dus is albei hoogtes 3 &nbsp;&nbsp;∴&nbsp; C(2 ; 3)&nbsp; en&nbsp; D(4 ; 3)" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: dividing by −1 flips BOTH sides. −(x − 3)² = −1 becomes (x − 3)² = 1, not (x − 3)² = −1 — and a square can never equal a negative, so that slip ends in “no solution” on a question that clearly has two.",
+          en: "WATCH OUT: dividing by −1 flips BOTH sides. −(x − 3)² = −1 becomes (x − 3)² = 1, not (x − 3)² = −1 — and a square can never equal a negative, so that slip ends in “no solution” on a question that clearly has two.", af: "PASOP: as jy deur −1 deel, verander ALBEI kante van teken. −(x − 3)² = −1 word (x − 3)² = 1, nie (x − 3)² = −1 nie, en 'n vierkant kan nooit gelyk wees aan 'n negatiewe getal nie, so daardie fout eindig in “geen oplossing” by 'n vraag wat duidelik twee het.",
         } },
       ],
       esplain: {
-        en: "A horizontal line is the friendliest thing that can cut a graph, because you already know both heights: they are both k. So the only unknown is where. Set the parabola equal to 3, tidy until the squared bracket stands alone, and square-root both sides — with the ±, which is where the two crossings come from. Notice that you never needed to expand the bracket; turning-point form is doing you a favour, so take it. When you write the answers down, both of them keep the same y, because both points lie on the line y = 3. That is a useful self-check: if one of your two points came out with a different height, you have substituted into the wrong thing somewhere.",
+        en: "A horizontal line is the friendliest thing that can cut a graph, because you already know both heights: they are both k. So the only unknown is where. Set the parabola equal to 3, tidy until the squared bracket stands alone, and square-root both sides — with the ±, which is where the two crossings come from. Notice that you never needed to expand the bracket; turning-point form is doing you a favour, so take it. When you write the answers down, both of them keep the same y, because both points lie on the line y = 3. That is a useful self-check: if one of your two points came out with a different height, you have substituted into the wrong thing somewhere.", af: "'n Horisontale lyn is die vriendelikste ding wat 'n grafiek kan sny, want jy ken reeds albei hoogtes: hulle is albei k. Die enigste onbekende is dus waar. Stel die parabool gelyk aan 3, vereenvoudig tot die gekwadreerde hakie alleen staan, en neem die vierkantswortel van albei kante, met die ±: dit is waar die twee snypunte vandaan kom. Let op dat jy nooit die hakie hoef uit te brei nie; draaipunt-vorm doen jou 'n guns, so aanvaar dit. As jy die antwoorde neerskryf, hou albei dieselfde y, want albei punte lê op die lyn y = 3. Dit is 'n nuttige selfkontrole: as een van jou twee punte met 'n ander hoogte uitkom, het jy iewers in die verkeerde ding vervang.",
       },
     },
     {
@@ -334,20 +334,20 @@ const q3 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "Hence write down the values of x for which &nbsp;f(x) &gt; 3.",
+        en: "Hence write down the values of x for which &nbsp;f(x) &gt; 3.", af: "Skryf gevolglik die waardes van x neer waarvoor &nbsp;f(x) &gt; 3.",
       },
       hint: {
-        en: "Draw a cut line down through each of C and D, then look at the picture: on which side of those lines is the curve drawn ABOVE the dashed line?",
+        en: "Draw a cut line down through each of C and D, then look at the picture: on which side of those lines is the curve drawn ABOVE the dashed line?", af: "Teken 'n snylyn reguit af deur C en deur D, en kyk dan na die prentjie: aan watter kant van daardie lyne is die kurwe BO die stippellyn geteken?",
       },
       memo: [
-        { type: "step", text: { en: "Cut lines through C and D at &nbsp;x = 2&nbsp; and&nbsp; x = 4. Between them the parabola is drawn ABOVE the line &nbsp;y = 3:" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "2 &lt; x &lt; 4" }, ticks: ["a"] },
+        { type: "step", text: { en: "Cut lines through C and D at &nbsp;x = 2&nbsp; and&nbsp; x = 4. Between them the parabola is drawn ABOVE the line &nbsp;y = 3:", af: "Snylyne deur C en D by &nbsp;x = 2&nbsp; en&nbsp; x = 4. Tussen hulle is die parabool BO die lyn &nbsp;y = 3 geteken:" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "2 &lt; x &lt; 4", af: "2 &lt; x &lt; 4" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: the question says &gt;, not ≥, so x = 2 and x = 4 are NOT included — at those two x-values f is exactly 3, not more than 3.",
+          en: "REMEMBER: the question says &gt;, not ≥, so x = 2 and x = 4 are NOT included — at those two x-values f is exactly 3, not more than 3.", af: "ONTHOU: die vraag sê &gt;, nie ≥ nie, dus is x = 2 en x = 4 NIE ingesluit nie: by daardie twee x-waardes is f presies 3, nie meer as 3 nie.",
         } },
       ],
       esplain: {
-        en: "This is her cut-line-and-paint method in its simplest form. The two points where the graphs meet are the only places the answer can change from true to false, so cut a vertical line through each of them and the whole x-axis is divided into three stretches. Then just look: to the left of x = 2 the parabola is below the dashed line, between 2 and 4 it arches above it, and to the right of 4 it drops below again. So the answer is the middle stretch. Write the x-values in order, smallest first, with x in the middle — “2 &lt; x &lt; 4” rather than “x &gt; 2 and x &lt; 4”. And check the ends against the sign in the question: a strict &gt; means open ends.",
+        en: "This is her cut-line-and-paint method in its simplest form. The two points where the graphs meet are the only places the answer can change from true to false, so cut a vertical line through each of them and the whole x-axis is divided into three stretches. Then just look: to the left of x = 2 the parabola is below the dashed line, between 2 and 4 it arches above it, and to the right of 4 it drops below again. So the answer is the middle stretch. Write the x-values in order, smallest first, with x in the middle — “2 &lt; x &lt; 4” rather than “x &gt; 2 and x &lt; 4”. And check the ends against the sign in the question: a strict &gt; means open ends.", af: "Dit is haar snylyn-en-verf-metode in sy eenvoudigste vorm. Die twee punte waar die grafieke mekaar ontmoet, is die enigste plekke waar die antwoord van waar na onwaar kan verander, so sny met 'n vertikale lyn deur elkeen, en die hele x-as word in drie intervalle verdeel. Kyk dan net: links van x = 2 is die parabool onder die stippellyn, tussen 2 en 4 styg dit daarbo uit, en regs van 4 sak dit weer onder. Die antwoord is dus die middelste interval. Skryf die x-waardes in volgorde, die kleinste eerste, met x in die middel: “2 &lt; x &lt; 4” eerder as “x &gt; 2 en x &lt; 4”. En toets die ente teen die teken in die vraag: 'n streng &gt; beteken oop ente.",
       },
     },
   ],
@@ -393,18 +393,18 @@ const q4 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "The sketch shows &nbsp;f(x) = x² − 4&nbsp; and&nbsp; g(x) = x + 2&nbsp; drawn on the same grid. They cut each other at A and B.<br><br>Use the sketch to write down the values of x for which &nbsp;f(x) = g(x).",
+        en: "The sketch shows &nbsp;f(x) = x² − 4&nbsp; and&nbsp; g(x) = x + 2&nbsp; drawn on the same grid. They cut each other at A and B.<br><br>Use the sketch to write down the values of x for which &nbsp;f(x) = g(x).", af: "Die skets toon &nbsp;f(x) = x² − 4&nbsp; en&nbsp; g(x) = x + 2&nbsp; op dieselfde rooster geteken. Hulle sny mekaar by A en B.<br><br>Gebruik die skets om die waardes van x neer te skryf waarvoor &nbsp;f(x) = g(x).",
       },
       hint: {
-        en: "f(x) = g(x) happens exactly where the two graphs touch each other. Find those two places on the grid and read straight down to the x-axis.",
+        en: "f(x) = g(x) happens exactly where the two graphs touch each other. Find those two places on the grid and read straight down to the x-axis.", af: "f(x) = g(x) gebeur presies waar die twee grafieke mekaar ontmoet. Vind daardie twee plekke op die rooster en lees reguit af na die x-as.",
       },
       memo: [
-        { type: "step", text: { en: "The graphs cross in two places. Read each one down to the x-axis:" } },
-        { type: "answer", text: { en: "x = −2" }, ticks: ["a"] },
-        { type: "answer", text: { en: "x = 3" }, ticks: ["a"] },
+        { type: "step", text: { en: "The graphs cross in two places. Read each one down to the x-axis:", af: "Die grafieke sny mekaar op twee plekke. Lees elkeen af na die x-as:" } },
+        { type: "answer", text: { en: "x = −2", af: "x = −2" }, ticks: ["a"] },
+        { type: "answer", text: { en: "x = 3", af: "x = 3" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "“f(x) = g(x)” is a sentence about heights: it asks where the two graphs are at the same height at the same x. On a picture that is exactly where they touch, so the answer is sitting there to be read. Find each crossing, run your eye straight down to the x-axis, and write the value down. Two things worth noticing. The answer is a list of x-VALUES, not points, because that is what the question asked for — the y's belong to a different question. And reading off is only trustworthy when the crossings land on grid lines, as they do here; when they do not, the picture can only tell you roughly, which is exactly why the next part exists.",
+        en: "“f(x) = g(x)” is a sentence about heights: it asks where the two graphs are at the same height at the same x. On a picture that is exactly where they touch, so the answer is sitting there to be read. Find each crossing, run your eye straight down to the x-axis, and write the value down. Two things worth noticing. The answer is a list of x-VALUES, not points, because that is what the question asked for — the y's belong to a different question. And reading off is only trustworthy when the crossings land on grid lines, as they do here; when they do not, the picture can only tell you roughly, which is exactly why the next part exists.", af: "“f(x) = g(x)” is 'n sin oor hoogtes: dit vra waar die twee grafieke by dieselfde x ewe hoog is. Op 'n prentjie is dit presies waar hulle mekaar ontmoet, so die antwoord lê daar en wag om gelees te word. Vind elke snypunt, laat jou oog reguit af na die x-as loop, en skryf die waarde neer. Twee dinge is die moeite werd om raak te sien. Die antwoord is 'n lys x-WAARDES, nie punte nie, want dit is wat die vraag gevra het: die y's behoort aan 'n ander vraag. En aflees is net betroubaar as die snypunte op roosterlyne val, soos hier; as hulle nie doen nie, kan die prentjie jou net ongeveer sê, en dit is presies hoekom die volgende deel bestaan.",
       },
     },
     {
@@ -412,22 +412,22 @@ const q4 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "Confirm your answer to (a) algebraically, and hence write down the coordinates of A and B.",
+        en: "Confirm your answer to (a) algebraically, and hence write down the coordinates of A and B.", af: "Bevestig jou antwoord op (a) algebraïes, en skryf gevolglik die koördinate van A en B neer.",
       },
       hint: {
-        en: "Set the two expressions equal, bring everything to one side, and factorise. Your two answers should be exactly the ones you read off the picture — if they are not, one of the two is wrong and it is worth finding out which.",
+        en: "Set the two expressions equal, bring everything to one side, and factorise. Your two answers should be exactly the ones you read off the picture — if they are not, one of the two is wrong and it is worth finding out which.", af: "Stel die twee uitdrukkings gelyk, bring alles na een kant, en faktoriseer. Jou twee antwoorde behoort presies dié te wees wat jy van die prentjie afgelees het: as hulle nie is nie, is een van die twee verkeerd, en dit is die moeite werd om uit te vind watter een.",
       },
       memo: [
-        { type: "step", text: { en: "Put &nbsp;f(x) = g(x):&nbsp; x² − 4 = x + 2" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "x² − x − 6 = 0 &nbsp;⟹&nbsp; (x − 3)(x + 2) = 0" }, ticks: ["ca"] },
-        { type: "step", text: { en: "x = 3&nbsp; or&nbsp; x = −2 &nbsp;&nbsp;— the same two values read off in (a)" }, ticks: ["a"] },
-        { type: "answer", text: { en: "heights from the line: &nbsp;g(−2) = 0&nbsp; and&nbsp; g(3) = 5 &nbsp;&nbsp;∴&nbsp; A(−2 ; 0)&nbsp; and&nbsp; B(3 ; 5)" }, ticks: ["a"] },
+        { type: "step", text: { en: "Put &nbsp;f(x) = g(x):&nbsp; x² − 4 = x + 2", af: "Stel &nbsp;f(x) = g(x):&nbsp; x² − 4 = x + 2" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "x² − x − 6 = 0 &nbsp;⟹&nbsp; (x − 3)(x + 2) = 0", af: "x² − x − 6 = 0 &nbsp;⟹&nbsp; (x − 3)(x + 2) = 0" }, ticks: ["ca"] },
+        { type: "step", text: { en: "x = 3&nbsp; or&nbsp; x = −2 &nbsp;&nbsp;— the same two values read off in (a)", af: "x = 3&nbsp; of&nbsp; x = −2, &nbsp;&nbsp;dieselfde twee waardes wat in (a) afgelees is" }, ticks: ["a"] },
+        { type: "answer", text: { en: "heights from the line: &nbsp;g(−2) = 0&nbsp; and&nbsp; g(3) = 5 &nbsp;&nbsp;∴&nbsp; A(−2 ; 0)&nbsp; and&nbsp; B(3 ; 5)", af: "hoogtes uit die lyn: &nbsp;g(−2) = 0&nbsp; en&nbsp; g(3) = 5 &nbsp;&nbsp;∴&nbsp; A(−2 ; 0)&nbsp; en&nbsp; B(3 ; 5)" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: a picture is evidence, not proof. In a paper, “confirm algebraically” means the marks are for the equation and the factorising — an answer that only says “I read it off the graph” scores nothing here.",
+          en: "REMEMBER: a picture is evidence, not proof. In a paper, “confirm algebraically” means the marks are for the equation and the factorising — an answer that only says “I read it off the graph” scores nothing here.", af: "ONTHOU: 'n prentjie is 'n aanduiding, nie 'n bewys nie. In 'n vraestel beteken “bevestig algebraïes” dat die punte vir die vergelyking en die faktorisering is: 'n antwoord wat net sê “ek het dit van die grafiek afgelees”, kry hier niks.",
         } },
       ],
       esplain: {
-        en: "This part exists to show you that the two methods are the same idea wearing different clothes. Reading off asks where the graphs touch; solving asks which x makes the two expressions equal. They must agree, and when they do you can trust both. The algebra is the ordinary routine: equate, collect everything on one side so it reads “= 0”, factorise, and set each bracket to zero. Then finish the job the picture started by getting the heights, using the straight line because it is less work. Keep the habit of checking your algebra against the sketch even when a question does not ask you to. A quadratic that gives x = 3 and x = 7 when the picture clearly shows a crossing left of the y-axis is telling you about a sign slip, immediately, for free.",
+        en: "This part exists to show you that the two methods are the same idea wearing different clothes. Reading off asks where the graphs touch; solving asks which x makes the two expressions equal. They must agree, and when they do you can trust both. The algebra is the ordinary routine: equate, collect everything on one side so it reads “= 0”, factorise, and set each bracket to zero. Then finish the job the picture started by getting the heights, using the straight line because it is less work. Keep the habit of checking your algebra against the sketch even when a question does not ask you to. A quadratic that gives x = 3 and x = 7 when the picture clearly shows a crossing left of the y-axis is telling you about a sign slip, immediately, for free.", af: "Hierdie deel bestaan om vir jou te wys dat die twee metodes dieselfde idee in ander klere is. Aflees vra waar die grafieke mekaar ontmoet; oplos vra watter x die twee uitdrukkings gelyk maak. Hulle moet saamstem, en as hulle doen, kan jy albei vertrou. Die algebra is die gewone roetine: stel gelyk, bring alles na een kant sodat dit “= 0” lees, faktoriseer, en stel elke hakie gelyk aan nul. Voltooi dan die werk wat die prentjie begin het deur die hoogtes te kry, met die reguit lyn, want dit is minder werk. Hou die gewoonte om jou algebra teen die skets te toets, selfs as 'n vraag dit nie vra nie. 'n Kwadratiese vergelyking wat x = 3 en x = 7 gee terwyl die prentjie duidelik 'n snypunt links van die y-as wys, vertel jou dadelik en verniet van 'n tekenfout.",
       },
     },
   ],
@@ -484,23 +484,23 @@ const q5 = {
       marks: 5,
       level: 3,
       prompt: {
-        en: "The sketch shows the hyperbola h, defined by &nbsp;h(x) = 8/(x − 1) + 3, &nbsp;with its asymptotes &nbsp;x = 1&nbsp; and&nbsp; y = 3&nbsp; drawn dashed, and the straight line g, defined by &nbsp;g(x) = 2x + 1. &nbsp;They cut each other at P and Q.<br><br>Determine the coordinates of P and Q.",
+        en: "The sketch shows the hyperbola h, defined by &nbsp;h(x) = 8/(x − 1) + 3, &nbsp;with its asymptotes &nbsp;x = 1&nbsp; and&nbsp; y = 3&nbsp; drawn dashed, and the straight line g, defined by &nbsp;g(x) = 2x + 1. &nbsp;They cut each other at P and Q.<br><br>Determine the coordinates of P and Q.", af: "Die skets toon die hiperbool h, gedefinieer deur &nbsp;h(x) = 8/(x − 1) + 3, &nbsp;met sy asimptote &nbsp;x = 1&nbsp; en&nbsp; y = 3&nbsp; as stippellyne geteken, en die reguit lyn g, gedefinieer deur &nbsp;g(x) = 2x + 1. &nbsp;Hulle sny mekaar by P en Q.<br><br>Bepaal die koördinate van P en Q.",
       },
       hint: {
-        en: "Put the two equations equal, then get rid of the fraction by multiplying EVERY term by (x − 1). What is left is an ordinary quadratic — tidy it up and factorise.",
+        en: "Put the two equations equal, then get rid of the fraction by multiplying EVERY term by (x − 1). What is left is an ordinary quadratic — tidy it up and factorise.", af: "Stel die twee vergelykings gelyk, en raak dan ontslae van die breuk deur ELKE term met (x − 1) te vermenigvuldig. Wat oorbly, is 'n gewone kwadratiese vergelyking: vereenvoudig dit en faktoriseer.",
       },
       memo: [
-        { type: "step", text: { en: "At P and Q the heights are equal, so put &nbsp;h(x) = g(x):" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "8/(x − 1) + 3 = 2x + 1, &nbsp;&nbsp;× (x − 1) &nbsp;on every term: &nbsp;8 + 3(x − 1) = (2x + 1)(x − 1)" }, ticks: ["ca"] },
-        { type: "step", text: { en: "3x + 5 = 2x² − x − 1 &nbsp;⟹&nbsp; 2x² − 4x − 6 = 0 &nbsp;⟹&nbsp; x² − 2x − 3 = 0" }, ticks: ["ca"] },
-        { type: "step", text: { en: "(x − 3)(x + 1) = 0 &nbsp;⟹&nbsp; x = 3&nbsp; or&nbsp; x = −1 &nbsp;&nbsp;(neither is 1, so both are allowed)" }, ticks: ["a"] },
-        { type: "answer", text: { en: "heights from the line: &nbsp;g(−1) = −1&nbsp; and&nbsp; g(3) = 7 &nbsp;&nbsp;∴&nbsp; P(−1 ; −1)&nbsp; and&nbsp; Q(3 ; 7)" }, ticks: ["a"] },
+        { type: "step", text: { en: "At P and Q the heights are equal, so put &nbsp;h(x) = g(x):", af: "By P en Q is die hoogtes gelyk, dus stel &nbsp;h(x) = g(x):" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "8/(x − 1) + 3 = 2x + 1, &nbsp;&nbsp;× (x − 1) &nbsp;on every term: &nbsp;8 + 3(x − 1) = (2x + 1)(x − 1)", af: "8/(x − 1) + 3 = 2x + 1, &nbsp;&nbsp;× (x − 1) &nbsp;op elke term: &nbsp;8 + 3(x − 1) = (2x + 1)(x − 1)" }, ticks: ["ca"] },
+        { type: "step", text: { en: "3x + 5 = 2x² − x − 1 &nbsp;⟹&nbsp; 2x² − 4x − 6 = 0 &nbsp;⟹&nbsp; x² − 2x − 3 = 0", af: "3x + 5 = 2x² − x − 1 &nbsp;⟹&nbsp; 2x² − 4x − 6 = 0 &nbsp;⟹&nbsp; x² − 2x − 3 = 0" }, ticks: ["ca"] },
+        { type: "step", text: { en: "(x − 3)(x + 1) = 0 &nbsp;⟹&nbsp; x = 3&nbsp; or&nbsp; x = −1 &nbsp;&nbsp;(neither is 1, so both are allowed)", af: "(x − 3)(x + 1) = 0 &nbsp;⟹&nbsp; x = 3&nbsp; of&nbsp; x = −1 &nbsp;&nbsp;(geeneen is 1 nie, dus is albei toegelaat)" }, ticks: ["a"] },
+        { type: "answer", text: { en: "heights from the line: &nbsp;g(−1) = −1&nbsp; and&nbsp; g(3) = 7 &nbsp;&nbsp;∴&nbsp; P(−1 ; −1)&nbsp; and&nbsp; Q(3 ; 7)", af: "hoogtes uit die lyn: &nbsp;g(−1) = −1&nbsp; en&nbsp; g(3) = 7 &nbsp;&nbsp;∴&nbsp; P(−1 ; −1)&nbsp; en&nbsp; Q(3 ; 7)" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: multiply EVERY term by (x − 1), including the lonely + 3 and both terms of the line. Multiplying only the fraction is the mistake that turns this into an equation that does not factorise. And divide the whole quadratic by 2 before factorising — it makes the brackets obvious.",
+          en: "WATCH OUT: multiply EVERY term by (x − 1), including the lonely + 3 and both terms of the line. Multiplying only the fraction is the mistake that turns this into an equation that does not factorise. And divide the whole quadratic by 2 before factorising — it makes the brackets obvious.", af: "PASOP: vermenigvuldig ELKE term met (x − 1), ook die eensame + 3 en albei terme van die lyn. As jy net die breuk vermenigvuldig, kry jy 'n vergelyking wat nie faktoriseer nie. En deel die hele kwadratiese vergelyking deur 2 voordat jy faktoriseer: dan is die hakies voor die hand liggend.",
         } },
       ],
       esplain: {
-        en: "A hyperbola meeting a line is the one intersection question where a fraction gets in the way, and the fix is the same as in any fraction equation: multiply every single term by the bottom. The bracket (x − 1) cancels the fraction and multiplies out everything else, and what falls out is an ordinary quadratic — which is why this question really belongs to both chapters at once. Two habits keep it clean. Multiply the WHOLE of both sides, not just the piece with the fraction, and use brackets while you do it. Then, before factorising, look for a common factor: dividing 2x² − 4x − 6 by 2 turns an awkward trinomial into a friendly one. Last, check that neither answer is the forbidden x-value, x = 1 — because the graph does not exist there, a root landing on it would have to be thrown away.",
+        en: "A hyperbola meeting a line is the one intersection question where a fraction gets in the way, and the fix is the same as in any fraction equation: multiply every single term by the bottom. The bracket (x − 1) cancels the fraction and multiplies out everything else, and what falls out is an ordinary quadratic — which is why this question really belongs to both chapters at once. Two habits keep it clean. Multiply the WHOLE of both sides, not just the piece with the fraction, and use brackets while you do it. Then, before factorising, look for a common factor: dividing 2x² − 4x − 6 by 2 turns an awkward trinomial into a friendly one. Last, check that neither answer is the forbidden x-value, x = 1 — because the graph does not exist there, a root landing on it would have to be thrown away.", af: "'n Hiperbool wat 'n lyn ontmoet, is die een snypuntvraag waar 'n breuk in die pad staan, en die raat is dieselfde as by enige breukvergelyking: vermenigvuldig elke enkele term met die noemer. Die hakie (x − 1) kanselleer die breuk en vermenigvuldig alles anders uit, en wat uitval, is 'n gewone kwadratiese vergelyking: daarom behoort hierdie vraag eintlik aan albei hoofstukke tegelyk. Twee gewoontes hou dit netjies. Vermenigvuldig albei kante HEELTEMAL, nie net die stuk met die breuk nie, en gebruik hakies terwyl jy dit doen. Soek dan, voordat jy faktoriseer, 'n gemene faktor: as jy 2x² − 4x − 6 deur 2 deel, word 'n lastige drieterm 'n vriendelike een. Laastens, maak seker dat geeneen van die antwoorde die verbode x-waarde, x = 1, is nie: omdat die grafiek nie daar bestaan nie, sou 'n wortel wat daarop land, weggegooi moes word.",
       },
     },
     {
@@ -508,17 +508,17 @@ const q5 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "Determine the coordinates of M, the midpoint of PQ.",
+        en: "Determine the coordinates of M, the midpoint of PQ.", af: "Bepaal die koördinate van M, die middelpunt van PQ.",
       },
       hint: {
-        en: "The midpoint of two points is the average of their x-values and the average of their y-values. Work them out and then look at where your answer lands on the picture.",
+        en: "The midpoint of two points is the average of their x-values and the average of their y-values. Work them out and then look at where your answer lands on the picture.", af: "Die middelpunt van twee punte is die gemiddelde van hul x-waardes en die gemiddelde van hul y-waardes. Werk dit uit en kyk dan waar jou antwoord op die prentjie land.",
       },
       memo: [
-        { type: "step", text: { en: "M = ((x₁ + x₂)/2 ; (y₁ + y₂)/2) = ((−1 + 3)/2 ; (−1 + 7)/2)" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "M(1 ; 3) &nbsp;&nbsp;— which is exactly where the two asymptotes cross" }, ticks: ["a"] },
+        { type: "step", text: { en: "M = ((x₁ + x₂)/2 ; (y₁ + y₂)/2) = ((−1 + 3)/2 ; (−1 + 7)/2)", af: "M = ((x₁ + x₂)/2 ; (y₁ + y₂)/2) = ((−1 + 3)/2 ; (−1 + 7)/2)" }, ticks: ["s/f"] },
+        { type: "answer", text: { en: "M(1 ; 3) &nbsp;&nbsp;— which is exactly where the two asymptotes cross", af: "M(1 ; 3), &nbsp;&nbsp;presies waar die twee asimptote mekaar sny" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "The arithmetic here is two averages, and it takes ten seconds. What is worth your attention is where the answer lands: M(1 ; 3) is the point where the asymptotes cross, the corner the whole hyperbola is built around. That is not luck. A hyperbola is symmetrical about its corner — turn the picture half a turn about that point and it lands on itself — so any straight line that passes THROUGH the corner must cut the two branches at two points the same distance out on either side. Check that g really does pass through it: g(1) = 2 + 1 = 3, yes. So the corner had to be the midpoint. It is a good fact to carry: if a line through a hyperbola's corner cuts one branch somewhere, you already know a lot about where it cuts the other.",
+        en: "The arithmetic here is two averages, and it takes ten seconds. What is worth your attention is where the answer lands: M(1 ; 3) is the point where the asymptotes cross, the corner the whole hyperbola is built around. That is not luck. A hyperbola is symmetrical about its corner — turn the picture half a turn about that point and it lands on itself — so any straight line that passes THROUGH the corner must cut the two branches at two points the same distance out on either side. Check that g really does pass through it: g(1) = 2 + 1 = 3, yes. So the corner had to be the midpoint. It is a good fact to carry: if a line through a hyperbola's corner cuts one branch somewhere, you already know a lot about where it cuts the other.", af: "Die rekenwerk hier is twee gemiddeldes, en dit vat tien sekondes. Wat jou aandag werd is, is waar die antwoord land: M(1 ; 3) is die punt waar die asimptote mekaar sny, die hoek waarom die hele hiperbool gebou is. Dit is nie geluk nie. 'n Hiperbool is simmetries om sy hoek: draai die prentjie 'n halwe draai om daardie punt en dit land op homself. Dus moet enige reguit lyn wat DEUR die hoek gaan, die twee vlerkies sny by twee punte wat ewe ver aan weerskante lê. Kontroleer dat g regtig daardeur gaan: g(1) = 2 + 1 = 3, ja. Dus moes die hoek die middelpunt wees. Dit is 'n goeie feit om saam te dra: as 'n lyn deur 'n hiperbool se hoek een vlerkie iewers sny, weet jy reeds baie oor waar dit die ander een sny.",
       },
     },
   ],
@@ -571,19 +571,19 @@ const q6 = {
       marks: 4,
       level: 2,
       prompt: {
-        en: "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 2x − 3, &nbsp;and the straight line g, defined by &nbsp;g(x) = x + 1. &nbsp;They cut each other at A and B.<br><br>Determine the coordinates of A and B.",
+        en: "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 2x − 3, &nbsp;and the straight line g, defined by &nbsp;g(x) = x + 1. &nbsp;They cut each other at A and B.<br><br>Determine the coordinates of A and B.", af: "Die skets toon die parabool f, gedefinieer deur &nbsp;f(x) = x² − 2x − 3, &nbsp;en die reguit lyn g, gedefinieer deur &nbsp;g(x) = x + 1. &nbsp;Hulle sny mekaar by A en B.<br><br>Bepaal die koördinate van A en B.",
       },
       hint: {
-        en: "Set the two expressions equal to each other, bring everything to one side so it reads “= 0”, and factorise. Then find each height from the line.",
+        en: "Set the two expressions equal to each other, bring everything to one side so it reads “= 0”, and factorise. Then find each height from the line.", af: "Stel die twee uitdrukkings gelyk aan mekaar, bring alles na een kant sodat dit “= 0” lees, en faktoriseer. Kry dan elke hoogte uit die lyn.",
       },
       memo: [
-        { type: "step", text: { en: "At A and B the heights are equal, so put &nbsp;f(x) = g(x):&nbsp; x² − 2x − 3 = x + 1" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "x² − 3x − 4 = 0 &nbsp;⟹&nbsp; (x − 4)(x + 1) = 0" }, ticks: ["ca"] },
-        { type: "step", text: { en: "x = 4&nbsp; or&nbsp; x = −1" }, ticks: ["a"] },
-        { type: "answer", text: { en: "heights from the line: &nbsp;g(−1) = 0&nbsp; and&nbsp; g(4) = 5 &nbsp;&nbsp;∴&nbsp; A(−1 ; 0)&nbsp; and&nbsp; B(4 ; 5)" }, ticks: ["a"] },
+        { type: "step", text: { en: "At A and B the heights are equal, so put &nbsp;f(x) = g(x):&nbsp; x² − 2x − 3 = x + 1", af: "By A en B is die hoogtes gelyk, dus stel &nbsp;f(x) = g(x):&nbsp; x² − 2x − 3 = x + 1" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "x² − 3x − 4 = 0 &nbsp;⟹&nbsp; (x − 4)(x + 1) = 0", af: "x² − 3x − 4 = 0 &nbsp;⟹&nbsp; (x − 4)(x + 1) = 0" }, ticks: ["ca"] },
+        { type: "step", text: { en: "x = 4&nbsp; or&nbsp; x = −1", af: "x = 4&nbsp; of&nbsp; x = −1" }, ticks: ["a"] },
+        { type: "answer", text: { en: "heights from the line: &nbsp;g(−1) = 0&nbsp; and&nbsp; g(4) = 5 &nbsp;&nbsp;∴&nbsp; A(−1 ; 0)&nbsp; and&nbsp; B(4 ; 5)", af: "hoogtes uit die lyn: &nbsp;g(−1) = 0&nbsp; en&nbsp; g(4) = 5 &nbsp;&nbsp;∴&nbsp; A(−1 ; 0)&nbsp; en&nbsp; B(4 ; 5)" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "The routine is now familiar and it is worth being able to do it without thinking, because the interesting part of the question is always what comes after. Equate the two expressions, collect everything on one side, factorise, solve, then substitute back for the heights. The only decision is which equation to substitute into, and the answer is always the simpler one — the straight line. Write the points in left-to-right order as the sketch shows them, A first at x = −1 and B second at x = 4. That ordering is what makes the next part readable: an inequality answer is a statement about stretches of the x-axis, and stretches are much easier to describe when your two boundary numbers are already in order.",
+        en: "The routine is now familiar and it is worth being able to do it without thinking, because the interesting part of the question is always what comes after. Equate the two expressions, collect everything on one side, factorise, solve, then substitute back for the heights. The only decision is which equation to substitute into, and the answer is always the simpler one — the straight line. Write the points in left-to-right order as the sketch shows them, A first at x = −1 and B second at x = 4. That ordering is what makes the next part readable: an inequality answer is a statement about stretches of the x-axis, and stretches are much easier to describe when your two boundary numbers are already in order.", af: "Die roetine is nou bekend, en dit is die moeite werd om dit sonder dink te kan doen, want die interessante deel van die vraag is altyd wat daarna kom. Stel die twee uitdrukkings gelyk, bring alles na een kant, faktoriseer, los op, en vervang dan terug vir die hoogtes. Die enigste besluit is in watter vergelyking om te vervang, en die antwoord is altyd die eenvoudigste een: die reguit lyn. Skryf die punte van links na regs neer soos die skets hulle wys, A eerste by x = −1 en B tweede by x = 4. Dié volgorde maak die volgende deel leesbaar: 'n ongelykheid se antwoord is 'n bewering oor intervalle van die x-as, en intervalle is baie makliker om te beskryf as jou twee grensgetalle reeds in volgorde is.",
       },
     },
     {
@@ -591,21 +591,21 @@ const q6 = {
       marks: 3,
       level: 3,
       prompt: {
-        en: "Hence, or otherwise, solve for x: &nbsp;f(x) &gt; g(x).",
+        en: "Hence, or otherwise, solve for x: &nbsp;f(x) &gt; g(x).", af: "Los gevolglik, of andersins, op vir x: &nbsp;f(x) &gt; g(x).",
       },
       hint: {
-        en: "Cut a vertical line down through each of A and B. That splits the x-axis into three stretches — now look at each stretch and ask which graph is drawn on top there.",
+        en: "Cut a vertical line down through each of A and B. That splits the x-axis into three stretches — now look at each stretch and ask which graph is drawn on top there.", af: "Sny met 'n vertikale lyn af deur A en deur B. Dit verdeel die x-as in drie intervalle: kyk nou na elke interval en vra watter grafiek daar bo geteken is.",
       },
       memo: [
-        { type: "step", text: { en: "Cut a line through every intersection: &nbsp;x = −1&nbsp; and&nbsp; x = 4. That leaves three stretches to look at." }, ticks: ["ca"] },
-        { type: "step", text: { en: "Left of −1 the parabola is drawn ABOVE the line; between −1 and 4 it is below; right of 4 it is above again." }, ticks: ["ca"] },
-        { type: "answer", text: { en: "x &lt; −1 &nbsp;or&nbsp; x &gt; 4" }, ticks: ["a"] },
+        { type: "step", text: { en: "Cut a line through every intersection: &nbsp;x = −1&nbsp; and&nbsp; x = 4. That leaves three stretches to look at.", af: "Sny met 'n lyn deur elke snypunt: &nbsp;x = −1&nbsp; en&nbsp; x = 4. Dit laat drie intervalle om na te kyk." }, ticks: ["ca"] },
+        { type: "step", text: { en: "Left of −1 the parabola is drawn ABOVE the line; between −1 and 4 it is below; right of 4 it is above again.", af: "Links van −1 is die parabool BO die lyn geteken; tussen −1 en 4 is dit onder; regs van 4 is dit weer bo." }, ticks: ["ca"] },
+        { type: "answer", text: { en: "x &lt; −1 &nbsp;or&nbsp; x &gt; 4", af: "x &lt; −1 &nbsp;of&nbsp; x &gt; 4" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the answer is TWO separate stretches, joined by the word “or”. Writing −1 &gt; x &gt; 4 says a single stretch and is impossible — no number is both less than −1 and more than 4.",
+          en: "WATCH OUT: the answer is TWO separate stretches, joined by the word “or”. Writing −1 &gt; x &gt; 4 says a single stretch and is impossible — no number is both less than −1 and more than 4.", af: "PASOP: die antwoord is TWEE aparte intervalle, verbind deur die woord “of”. As jy −1 &gt; x &gt; 4 skryf, beskryf jy een enkele interval, en dit is onmoontlik: geen getal is tegelyk kleiner as −1 en groter as 4 nie.",
         } },
       ],
       esplain: {
-        en: "“f(x) &gt; g(x)” asks where the first graph is drawn higher than the second, so the answer is always a set of x-values, never a set of points. Her method turns it into looking rather than algebra. The only places the answer can flip from true to false are the places the graphs cross, so cut a vertical line down through each of them; here that leaves three stretches. Then read the picture stretch by stretch: outside the two crossings the parabola has climbed above the line, and between them it has dipped underneath. So the answer is the two outer stretches, joined by “or”, with open ends because a strict &gt; excludes the crossings themselves, where the two graphs are equal rather than one being bigger. Say the answer out loud as a sentence and it will not come out backwards.",
+        en: "“f(x) &gt; g(x)” asks where the first graph is drawn higher than the second, so the answer is always a set of x-values, never a set of points. Her method turns it into looking rather than algebra. The only places the answer can flip from true to false are the places the graphs cross, so cut a vertical line down through each of them; here that leaves three stretches. Then read the picture stretch by stretch: outside the two crossings the parabola has climbed above the line, and between them it has dipped underneath. So the answer is the two outer stretches, joined by “or”, with open ends because a strict &gt; excludes the crossings themselves, where the two graphs are equal rather than one being bigger. Say the answer out loud as a sentence and it will not come out backwards.", af: "“f(x) &gt; g(x)” vra waar die eerste grafiek hoër as die tweede geteken is, so die antwoord is altyd 'n versameling x-waardes, nooit 'n versameling punte nie. Haar metode maak dit 'n kwessie van kyk eerder as algebra. Die enigste plekke waar die antwoord van waar na onwaar kan omslaan, is die plekke waar die grafieke mekaar sny, so sny met 'n vertikale lyn af deur elkeen; hier laat dit drie intervalle. Lees dan die prentjie interval vir interval: buite die twee snypunte het die parabool bo die lyn uitgeklim, en tussen hulle het dit onderdeur gesak. Die antwoord is dus die twee buitenste intervalle, verbind deur “of”, met oop ente, want 'n streng &gt; sluit die snypunte self uit, waar die twee grafieke gelyk is eerder as dat een groter is. Sê die antwoord hardop as 'n sin, en dit sal nie agterstevoor uitkom nie.",
       },
     },
   ],
