@@ -66,10 +66,10 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T36 | exam: func-siblings-intercepts-turning-point | ~2 163 words | verify-exam.html
 - ☑ 2026-10-17 T37 | exam: func-siblings-intersection | ~2 992 words | verify-exam.html
 - ☑ 2026-10-17 T38 | exam: func-siblings-nature-of-roots | ~1 689 words | verify-exam.html
-- ⏳ 2026-10-17 20:37 T39 | exam: func-siblings-reflections | ~3 175 words | verify-exam.html
+- ☑ 2026-10-17 T39 | exam: func-siblings-reflections | ~3 175 words | verify-exam.html
 - ⏳ 2026-10-17 20:40 T40 | exam: func-siblings-shift | ~1 985 words | verify-exam.html
 - ⏳ 2026-10-17 20:42 T41 | exam: func-siblings-sketch | ~3 900 words | verify-exam.html
-- ☐ T42 | exam: func-siblings-topup | ~2 253 words | verify-exam.html
+- ⏳ 2026-10-17 20:44 T42 | exam: func-siblings-topup | ~2 253 words | verify-exam.html
 
 ### 2D Trigonometry
 - ☐ T43 | concepts: the `trig` block (js/concepts/trig.js after S4) | ~588 words | counted by af_extract 2026-10-17

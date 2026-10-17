@@ -1,0 +1,883 @@
+{
+  "unit": "T39",
+  "generated": "2026-10-17T18:37:49.700Z",
+  "files": [
+    "js/exam/func-siblings-reflections.js"
+  ],
+  "items": {
+    "func-siblings-reflections#1": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 2x − 8. &nbsp;It cuts the x-axis at (−2 ; 0) and (4 ; 0), and its turning point is TP(1 ; −9).<br><br>The graph of g is the reflection of f in the <b>x-axis</b>, so &nbsp;g(x) = −f(x). &nbsp;Write down the equation of g in the form &nbsp;y = ax² + bx + c, &nbsp;and the coordinates of its turning point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:132:13"
+      ]
+    },
+    "func-siblings-reflections#2": {
+      "en": "The minus sits outside f, so it happens to the answer the machine gives, not to the x it is fed. Multiply the whole equation by −1 — every term, not just the first one — and then ask what that does to the turning point's height.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:135:13"
+      ]
+    },
+    "func-siblings-reflections#3": {
+      "en": "−f(x) means multiply the <b>whole</b> equation by −1:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:138:37"
+      ]
+    },
+    "func-siblings-reflections#4": {
+      "en": "g(x) = −(x² − 2x − 8) = −x² + 2x + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:139:39"
+      ]
+    },
+    "func-siblings-reflections#5": {
+      "en": "a reflection in the x-axis keeps every x and flips every height, so the turning point keeps its 1 and swaps the sign of its −9 &nbsp;&nbsp;∴&nbsp; TP(1 ; 9)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:140:39"
+      ]
+    },
+    "func-siblings-reflections#6": {
+      "en": "WATCH OUT: the − 8 has to change sign as well. Writing −x² + 2x − 8 is the most common slip on this question — the minus belongs to every term inside the bracket, not only to the squared one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:142:15"
+      ]
+    },
+    "func-siblings-reflections#7": {
+      "en": "A reflection in the x-axis is a mirror, and the x-axis is the mirror. Whatever height f reached at some x, g reaches the same distance the other side of the axis — a point that was 9 below lands 9 above, and a point that was 3 above lands 3 below. Two things follow without any algebra at all. First, the graph flips from happy to sad, because every arm that pointed up now points down. Second, the turning point keeps its x-coordinate and only swaps the sign of its y, because it is a point like any other. Nothing moves sideways, which is the whole difference between this and a shift. When you write the new equation, put brackets around the old one first and only then multiply through — that one habit stops the last term being forgotten.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:146:13"
+      ]
+    },
+    "func-siblings-reflections#8": {
+      "en": "Write down the coordinates of the points where g cuts the x-axis and the point where it cuts the y-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:154:13"
+      ]
+    },
+    "func-siblings-reflections#9": {
+      "en": "Think about what the mirror does to a point that is already sitting ON the x-axis — how far does it move? Then work out g's y-intercept by putting x = 0 into the new equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:157:13"
+      ]
+    },
+    "func-siblings-reflections#10": {
+      "en": "A reflection in the x-axis leaves every x alone and flips every y. A point on the x-axis has y = 0, and 0 flipped is still 0 — so an x-intercept cannot move.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:160:37"
+      ]
+    },
+    "func-siblings-reflections#11": {
+      "en": "g cuts the x-axis at (−2 ; 0) and (4 ; 0) — exactly the same two points as f",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:161:39"
+      ]
+    },
+    "func-siblings-reflections#12": {
+      "en": "the y-intercept does move: &nbsp;g(0) = −(0)² + 2(0) + 8 = 8 &nbsp;&nbsp;∴&nbsp; (0 ; 8)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:162:39"
+      ]
+    },
+    "func-siblings-reflections#13": {
+      "en": "REMEMBER: the x-intercepts of −f(x) are always the same as the x-intercepts of f. If your two answers here came out as (2 ; 0) and (−4 ; 0), you have reflected in the wrong axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:164:15"
+      ]
+    },
+    "func-siblings-reflections#14": {
+      "en": "This part is really one question in disguise: which points does the mirror leave alone? A mirror always leaves the points ON it exactly where they are, and here the mirror is the x-axis — so every point of f that was already sitting on the x-axis stays put, and those points are the x-intercepts. That is why the roots of a parabola never change when you write −f(x): the graph turns upside down, but it still crosses in the same two places. The y-intercept is a different story, because it is not on the mirror. It sits 8 units below the x-axis on f, so it lands 8 units above on g. You can get it either by flipping the sign of f's y-intercept or by substituting x = 0 into the new equation, and doing both is a free check.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:168:13"
+      ]
+    },
+    "func-siblings-reflections#15": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = x² − 6x + 5, &nbsp;with x-intercepts (1 ; 0) and (5 ; 0) and turning point TP(3 ; −4).<br><br>The graph of g is the reflection of f in the <b>y-axis</b>, so &nbsp;g(x) = f(−x). &nbsp;Determine the equation of g in the form &nbsp;y = ax² + bx + c.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:228:13"
+      ]
+    },
+    "func-siblings-reflections#16": {
+      "en": "The minus is inside f this time, so it acts on the x before the machine starts. Write −x into every x slot — brackets and all — and then tidy up one term at a time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:231:13"
+      ]
+    },
+    "func-siblings-reflections#17": {
+      "en": "g(x) = f(−x) means: wherever f has an x, write −x instead.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:234:37",
+        "func-siblings-reflections.js:318:37"
+      ]
+    },
+    "func-siblings-reflections#18": {
+      "en": "g(x) = (−x)² − 6(−x) + 5 &nbsp;&nbsp;— and (−x)² = x², &nbsp;while &nbsp;−6 × (−x) = +6x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:235:37"
+      ]
+    },
+    "func-siblings-reflections#19": {
+      "en": "g(x) = x² + 6x + 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:236:39"
+      ]
+    },
+    "func-siblings-reflections#20": {
+      "en": "WATCH OUT: only the ODD powers of x change sign. The x² term is untouched because a negative squared is positive, and the +5 has no x in it at all, so it stays exactly as it is. Only the middle term flips.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:238:15"
+      ]
+    },
+    "func-siblings-reflections#21": {
+      "en": "Function notation is an instruction sheet for the machine. g(x) = f(−x) says: take the x you were handed, change its sign, and then run f on that. So the answer g gives at x = −3 is the answer f used to give at x = 3, and that is why the whole picture swings across the y-axis like a page turning. Doing the algebra is a matter of being literal: put the whole of −x into every x slot, keep the brackets while you do it, and only tidy up afterwards. Then check each term separately. The squared term cannot change, because squaring kills a minus. The plain-x term must change, because a minus times a minus is a plus. The constant has no x in it, so nothing can happen to it. That three-line check is quicker than re-doing the whole expansion, and it catches nearly every slip.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:242:13"
+      ]
+    },
+    "func-siblings-reflections#22": {
+      "en": "Write down the coordinates of the turning point of g and of the two points where g cuts the x-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:250:13"
+      ]
+    },
+    "func-siblings-reflections#23": {
+      "en": "A mirror in the y-axis leaves every height alone. So write down f's landmarks and change only one of the two numbers in each pair.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:253:13"
+      ]
+    },
+    "func-siblings-reflections#24": {
+      "en": "A reflection in the y-axis keeps every HEIGHT and flips every x-coordinate: &nbsp;(x ; y) &nbsp;→&nbsp; (−x ; y).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:256:37"
+      ]
+    },
+    "func-siblings-reflections#25": {
+      "en": "TP(3 ; −4) &nbsp;→&nbsp; TP(−3 ; −4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:257:39"
+      ]
+    },
+    "func-siblings-reflections#26": {
+      "en": "(1 ; 0) &nbsp;→&nbsp; (−1 ; 0) &nbsp;and&nbsp; (5 ; 0) &nbsp;→&nbsp; (−5 ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:258:39"
+      ]
+    },
+    "func-siblings-reflections#27": {
+      "en": "Once you know which mirror you are using, this part needs no working at all. A reflection in the y-axis sends every point (x ; y) to (−x ; y): the height is untouched, only the side changes. So f's turning point, four units below the axis and three to the right, becomes a turning point four units below the axis and three to the left. Same for the two roots. A useful check is to read the new equation instead: g(x) = x² + 6x + 5 factorises as (x + 1)(x + 5), which gives roots at −1 and −5, and its axis of symmetry sits at x = −b/(2a) = −3. Getting the same answers two different ways is the cheapest confidence there is, and it takes about twenty seconds.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:261:13"
+      ]
+    },
+    "func-siblings-reflections#28": {
+      "en": "The sketch shows the exponential graph f, defined by &nbsp;f(x) = 2·3ˣ − 6. &nbsp;Its asymptote is the dashed line y = −6, it cuts the y-axis at (0 ; −4) and the x-axis at (1 ; 0).<br><br>The graph of g is the reflection of f in the <b>y-axis</b>, so &nbsp;g(x) = f(−x). &nbsp;Determine the equation of g in the form &nbsp;y = a·b<sup>x</sup> + q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:312:13"
+      ]
+    },
+    "func-siblings-reflections#29": {
+      "en": "The minus is inside f, and only the x feels it, so it lands in the exponent. Then remember what a negative exponent does to a base — it turns it upside down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:315:13"
+      ]
+    },
+    "func-siblings-reflections#30": {
+      "en": "g(x) = 2·3<sup>−x</sup> − 6, &nbsp;and a negative exponent flips the base: &nbsp;3<sup>−x</sup> = (1/3)ˣ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:319:37"
+      ]
+    },
+    "func-siblings-reflections#31": {
+      "en": "g(x) = 2(1/3)ˣ − 6 &nbsp;&nbsp;— the base is now between 0 and 1, so g is <b>landing</b> where f was <b>taking off</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:320:39"
+      ]
+    },
+    "func-siblings-reflections#32": {
+      "en": "The base of an exponential is the whole personality of the graph. A base bigger than 1 means the graph is taking off — it climbs as you read to the right. A base between 0 and 1 means it is landing — it falls as you read to the right, flattening towards its asymptote. Reflecting in the y-axis swaps left for right, so of course it swaps taking off for landing; the picture does the same thing, just the other way round. The algebra says the same thing in one line. Writing 3 to the power −x looks unfamiliar, but a negative exponent means one over the thing, and one over 3 is a third — so the equation lands neatly in the standard form with a base of a third. The 2 in front never enters the conversation: it decides how far the curve sits from its asymptote, and a mirror does not stretch anything.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:323:13"
+      ]
+    },
+    "func-siblings-reflections#33": {
+      "en": "Write down the equation of the asymptote of g and the coordinates of the point where g cuts the x-axis.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:331:13"
+      ]
+    },
+    "func-siblings-reflections#34": {
+      "en": "An asymptote is a statement about HEIGHTS. Ask yourself whether this mirror changed any heights at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:334:13"
+      ]
+    },
+    "func-siblings-reflections#35": {
+      "en": "A reflection in the y-axis flips x-coordinates and leaves heights alone.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:337:37"
+      ]
+    },
+    "func-siblings-reflections#36": {
+      "en": "the asymptote is about height, so it does not move: &nbsp;y = −6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:338:39"
+      ]
+    },
+    "func-siblings-reflections#37": {
+      "en": "f cuts the x-axis at (1 ; 0), so g cuts it at the mirror image &nbsp;(−1 ; 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:339:39"
+      ]
+    },
+    "func-siblings-reflections#38": {
+      "en": "REMEMBER: f(−x) is a mirror in the y-AXIS, so only the x-coordinates change sign. The − 6 on the end never moves, which is exactly why the asymptote stays where it is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:341:15"
+      ]
+    },
+    "func-siblings-reflections#39": {
+      "en": "Keep the two exponential reflections apart by asking where the minus is sitting. A minus OUTSIDE, −f(x), flips the answers, so the whole graph turns over the x-axis and the asymptote goes with it. A minus INSIDE, f(−x), flips the inputs, so the graph swings over the y-axis while every height stays exactly as it was — and an asymptote is nothing but a height the graph creeps towards, so it cannot budge. That is the one sentence worth memorising here. The x-intercept is the opposite case: it is a statement about which x, so it does move, straight across to the other side, keeping its y of 0. You can check it in the new equation if you like: 2(1/3)ˣ − 6 = 0 gives (1/3)ˣ = 3, which is true at x = −1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:345:13"
+      ]
+    },
+    "func-siblings-reflections#40": {
+      "en": "The sketch shows the hyperbola g, defined by &nbsp;g(x) = 6/(x − 2) + 3.<br><br>Write down the equations of the two asymptotes of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:396:13"
+      ]
+    },
+    "func-siblings-reflections#41": {
+      "en": "Read the equation against the standard shape &nbsp;y = a/(x − p) + q. One asymptote is the x the fraction cannot cope with; the other is the number sitting on the end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:399:13"
+      ]
+    },
+    "func-siblings-reflections#42": {
+      "en": "In &nbsp;y = a/(x − p) + q&nbsp; the vertical asymptote is x = p and the horizontal one is y = q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:402:37"
+      ]
+    },
+    "func-siblings-reflections#43": {
+      "en": "the denominator x − 2 is zero at x = 2, and dividing by zero is impossible &nbsp;&nbsp;∴&nbsp; x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:403:39"
+      ]
+    },
+    "func-siblings-reflections#44": {
+      "en": "the number on the end is 3, and the fraction shrinks towards zero as x runs away &nbsp;&nbsp;∴&nbsp; y = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:404:39"
+      ]
+    },
+    "func-siblings-reflections#45": {
+      "en": "A hyperbola is easiest to think about as a corner rather than a curve: two invisible lines cross at one point, and the two branches wrap around that corner. Finding the corner is the whole of this question. The vertical line comes from the one x the equation cannot survive — put x = 2 into the denominator and you are dividing by zero, which is why the graph shoots away instead of crossing there. The horizontal line comes from the far ends. Push x out to a thousand and the fraction 6 over 998 is almost nothing, so the height is almost exactly 3; push x out to minus a thousand and the same thing happens from below. So the graph creeps towards y = 3 forever without ever arriving. Write the equation in the standard form and both numbers are simply sitting there waiting to be read.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:407:13"
+      ]
+    },
+    "func-siblings-reflections#46": {
+      "en": "The graph of h is the reflection of g about its own <b>horizontal asymptote</b>. Determine the equation of h.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:415:13"
+      ]
+    },
+    "func-siblings-reflections#47": {
+      "en": "The mirror is the line y = 3, not the x-axis. A point 5 above that line has to land 5 below it — write that as a rule for the new height in terms of the old one, then use it on the whole equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:418:13"
+      ]
+    },
+    "func-siblings-reflections#48": {
+      "en": "The mirror is the line y = 3. Every point keeps its x, and its distance from y = 3 flips over:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:421:37"
+      ]
+    },
+    "func-siblings-reflections#49": {
+      "en": "new y = 3 − (old y − 3) = 6 − old y &nbsp;&nbsp;∴&nbsp; h(x) = 6 − g(x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:422:37"
+      ]
+    },
+    "func-siblings-reflections#50": {
+      "en": "h(x) = 6 − (6/(x − 2) + 3) = 6 − 6/(x − 2) − 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:423:37"
+      ]
+    },
+    "func-siblings-reflections#51": {
+      "en": "h(x) = −6/(x − 2) + 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:424:39"
+      ]
+    },
+    "func-siblings-reflections#52": {
+      "en": "REMEMBER: only the number on TOP of the fraction changed sign — 6 became −6. Both asymptotes stay exactly where they were: the horizontal one because you reflected IN it, and the vertical one because no x was touched. If your answer moved an asymptote, something has gone wrong.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:426:15"
+      ]
+    },
+    "func-siblings-reflections#53": {
+      "en": "Reflecting in the x-axis is the case everyone practises, and it is the special case where the mirror happens to be at height zero. Here the mirror sits at height 3, so the rule has to be adjusted, and the safest way is to think in distances rather than signs. A point that is 5 units above the mirror must end up 5 units below it, so its new height is 3 minus 5, which is −2. Turn that sentence into algebra and you get new y = 3 − (old y − 3), which simplifies to 6 minus the old height. Now apply it to the whole function, not to one point, and simplify. What comes out is beautifully tidy: only the a on top has changed sign, and the two asymptotes are untouched. That makes sense once you picture it — the branches simply swap corners, from the top-right and bottom-left pair to the top-left and bottom-right pair, around the very same crossing point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:430:13"
+      ]
+    },
+    "func-siblings-reflections#54": {
+      "en": "The sketch shows the exponential graph f, defined by &nbsp;f(x) = 2ˣ − 8. &nbsp;Its asymptote is the dashed line y = −8, and it cuts the y-axis at (0 ; −7) and the x-axis at (3 ; 0).<br><br>The graph of g is defined by &nbsp;g(x) = −f(x). &nbsp;Write down the equation of g and the equation of its asymptote.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:496:13"
+      ]
+    },
+    "func-siblings-reflections#55": {
+      "en": "The minus is outside f, so the whole picture turns over the x-axis — and the asymptote is part of the picture, so it turns over too.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:499:13"
+      ]
+    },
+    "func-siblings-reflections#56": {
+      "en": "−f(x) means multiply the whole equation by −1:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:502:37"
+      ]
+    },
+    "func-siblings-reflections#57": {
+      "en": "g(x) = −(2ˣ − 8) = −2ˣ + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:503:39"
+      ]
+    },
+    "func-siblings-reflections#58": {
+      "en": "the asymptote flips with the graph: &nbsp;y = −8 &nbsp;becomes&nbsp; y = 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:504:39"
+      ]
+    },
+    "func-siblings-reflections#59": {
+      "en": "An exponential graph flattens out towards one horizontal line and never quite reaches it, and that line is the number sitting on the end of the equation. So the quickest way to handle a reflection in the x-axis is to stop looking at the curve and look at that number: −8 becomes 8, and there is both the new equation and the new asymptote. What has actually happened to the picture is worth saying out loud, though. f sits ABOVE its asymptote and takes off upwards; g sits BELOW its asymptote and dives downwards, because every height has been turned over. The base is still 2, so the graph is still doing its exponential thing at exactly the same rate — a mirror never changes the shape, only which way up it is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:507:13"
+      ]
+    },
+    "func-siblings-reflections#60": {
+      "en": "Write down the range of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:515:13"
+      ]
+    },
+    "func-siblings-reflections#61": {
+      "en": "Range is a statement about y. Ask which side of its asymptote g lives on, and whether it ever actually reaches it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:518:13"
+      ]
+    },
+    "func-siblings-reflections#62": {
+      "en": "f sits ABOVE its asymptote, so after the flip g sits BELOW its own asymptote y = 8.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:521:37"
+      ]
+    },
+    "func-siblings-reflections#63": {
+      "en": "g gets closer and closer to 8 but never reaches it, and every height under 8 is reachable &nbsp;&nbsp;∴&nbsp; y &lt; 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:522:39"
+      ]
+    },
+    "func-siblings-reflections#64": {
+      "en": "WATCH OUT: no equals sign. y ≤ 8 would claim the graph actually touches its asymptote, and it never does. And the range must be written in y — writing x &lt; 8 scores nothing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:524:15"
+      ]
+    },
+    "func-siblings-reflections#65": {
+      "en": "Range means: which heights does this graph actually reach? For an exponential the answer is always \\\"everything on one side of the asymptote\\\", and the only two decisions are which side and whether the boundary is included. Which side comes from the sign of a — a positive a puts the graph above its asymptote, a negative a puts it below — and here a is −1, so g lives below y = 8. Whether the boundary is included is the easy half: never. The whole point of an asymptote is that the graph creeps towards it forever, so it can get to 7,9999 and closer, but 8 itself is out of reach. That is why the answer is a strict inequality. Notice too that f's own range is y > −8 for exactly the same reasons the other way up, so the flip turns the inequality sign around as well as the number.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:528:13"
+      ]
+    },
+    "func-siblings-reflections#66": {
+      "en": "The graph of p is defined by &nbsp;p(x) = −f(−x). &nbsp;Determine the equation of p and write down its range.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:536:13"
+      ]
+    },
+    "func-siblings-reflections#67": {
+      "en": "Two mirrors, one after the other. Do the inside one first — replace x by −x and flip the base — then multiply the whole thing by −1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:539:13"
+      ]
+    },
+    "func-siblings-reflections#68": {
+      "en": "First the INSIDE minus: &nbsp;f(−x) = 2<sup>−x</sup> − 8 = (1/2)ˣ − 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:542:37"
+      ]
+    },
+    "func-siblings-reflections#69": {
+      "en": "then the OUTSIDE minus: &nbsp;p(x) = −((1/2)ˣ − 8) = −(1/2)ˣ + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:543:39"
+      ]
+    },
+    "func-siblings-reflections#70": {
+      "en": "p sits below the asymptote y = 8 and never reaches it &nbsp;&nbsp;∴&nbsp; range: y &lt; 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:544:39"
+      ]
+    },
+    "func-siblings-reflections#71": {
+      "en": "REMEMBER: the y-axis mirror cannot change a range, because it never touches a single height. So p has exactly the same range as g — all the range work was done by the minus on the OUTSIDE.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:546:15"
+      ]
+    },
+    "func-siblings-reflections#72": {
+      "en": "Two reflections in one instruction looks alarming, so take them one at a time and in the order the notation gives them. The inner −x is applied to the input, so it happens first: it turns 2 to the x into 2 to the −x, which is a half to the x, and the graph swings over the y-axis so that landing replaces taking off. The outer minus is applied to the answer, so it happens second: it turns every height over, which drags the asymptote from −8 up to 8 and puts the graph underneath it. Now the range. A mirror in the y-axis rearranges which x gives which height, but it never invents a new height or removes one, so it cannot change a range at all. Everything about the range came from the outer minus, which is why p and g share the answer y < 8 even though they are different-looking curves.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:550:13"
+      ]
+    },
+    "func-siblings-reflections#73": {
+      "en": "The sketch shows two hyperbolas. f is defined by &nbsp;f(x) = 6/(x − 1) − 2, &nbsp;and its asymptotes x = 1 and y = −2 are the dashed lines. g is the second graph.<br><br>Describe fully the single transformation that maps f onto g, and write that transformation in function notation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:612:13"
+      ]
+    },
+    "func-siblings-reflections#74": {
+      "en": "Pick one landmark and follow it. The two graphs cross the x-axis at the same place, and everywhere else g is the same distance from the x-axis as f — but on the other side. What kind of move does that?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:615:13"
+      ]
+    },
+    "func-siblings-reflections#75": {
+      "en": "Compare heights at the same x. Where f is 3 above the x-axis, g is 3 below it; where f is 5 below, g is 5 above. Nothing has moved sideways at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:618:37"
+      ]
+    },
+    "func-siblings-reflections#76": {
+      "en": "g is the <b>reflection of f in the x-axis</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:619:39"
+      ]
+    },
+    "func-siblings-reflections#77": {
+      "en": "in function notation: &nbsp;g(x) = −f(x)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:620:39"
+      ]
+    },
+    "func-siblings-reflections#78": {
+      "en": "WATCH OUT: this is NOT a shift. A shift would carry the vertical asymptote sideways or the branches up as a whole, and here the branches have swapped corners around a fixed crossing point — that only happens with a mirror.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:622:15"
+      ]
+    },
+    "func-siblings-reflections#79": {
+      "en": "Reading a transformation backwards off a picture is a matter of choosing the right thing to look at. The whole curve is too much to hold in your head, so pick landmarks. Start with anything that has not moved: both graphs cut the x-axis at the same point, and both use the same vertical dashed line, so nothing has gone sideways — that rules out every horizontal move at once. Now look at heights. Above the x-axis f has a branch where g has none, and directly below it g has a branch where f has none, at matching distances. Points swapping to the opposite side of a line at equal distance is the definition of a mirror, and the line they are swapping across is the x-axis. Writing it in function notation is then just naming which minus you mean: outside f, because the heights changed and the inputs did not.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:626:13"
+      ]
+    },
+    "func-siblings-reflections#80": {
+      "en": "Write down the equation of g and the equations of both its asymptotes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:634:13"
+      ]
+    },
+    "func-siblings-reflections#81": {
+      "en": "Use the notation you wrote in (a): multiply the whole of f's equation by −1. Then ask each asymptote separately whether a mirror in the x-axis could possibly move it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:637:13"
+      ]
+    },
+    "func-siblings-reflections#82": {
+      "en": "g(x) = −f(x), so multiply the whole equation by −1 — every term:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:640:37"
+      ]
+    },
+    "func-siblings-reflections#83": {
+      "en": "g(x) = −(6/(x − 1) − 2) = −6/(x − 1) + 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:641:39"
+      ]
+    },
+    "func-siblings-reflections#84": {
+      "en": "the vertical asymptote cannot move, because no x was touched: &nbsp;x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:642:39"
+      ]
+    },
+    "func-siblings-reflections#85": {
+      "en": "the horizontal one flips over with the graph: &nbsp;y = −2 &nbsp;becomes&nbsp; y = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:643:39"
+      ]
+    },
+    "func-siblings-reflections#86": {
+      "en": "WATCH OUT: the − 2 has to change sign too. Writing −6/(x − 1) − 2 keeps the graph's asymptote where f's was, which the sketch plainly contradicts — g's branches flatten out ABOVE the x-axis, not below.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:645:15"
+      ]
+    },
+    "func-siblings-reflections#87": {
+      "en": "Two habits make this part safe. The first is bracketing: write −(the whole of f) before you do anything else, so the minus has no chance of reaching only the first term. The second is answering the two asymptotes as two separate questions rather than one. A reflection in the x-axis changes heights and leaves inputs alone. The vertical asymptote is a statement about which x breaks the fraction, and no x changed, so it stays at −2. The horizontal asymptote is a statement about which height the branches settle towards, and every height was turned over, so −1 becomes 1. Finally, sanity-check against the drawing: g's two branches should now sit in the corners f's did not, wrapped around the same crossing point but the other way up. If your equation disagrees with the picture, trust the picture and hunt for the sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-reflections.js:649:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3056
+}
