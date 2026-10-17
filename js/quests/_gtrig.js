@@ -361,6 +361,7 @@ export function argDeg(angle) { return angle < 0 ? `(${_fmtDeg(angle)})` : ` ${_
    Everything below is shared by those six quest files.
    ============================================================ */
 import { fmtComma } from "../check.js";
+import { L as afL } from "../lang.js";
 
 /* a real minus in front of a magnitude, never a hyphen (house rule) */
 export const negNum = v => (v < 0 ? "−" : "") + fmtComma(Math.abs(v));
@@ -439,7 +440,7 @@ export function tapSideStep(prompt, correct, hint, opts = {}) {
   return {
     kind: "tapside", prompt, correct, hint,
     targets: opts.targets || ["opp", "adj", "hyp"],
-    tapHint: opts.tapHint || "Tap that side on the sketch.",
+    tapHint: opts.tapHint || afL("Tap that side on the sketch.", "Klik op daardie sy op die skets."),
     placeLabel: opts.placeLabel,
   };
 }

@@ -18,6 +18,7 @@ import { rng } from "../rng.js";
    builder drawing a character the pad no longer recognises. */
 import { SLOT } from "../tokenpad.js";
 import { computeTriangle } from "../engine/triangle-graph.js";
+import { L as afL } from "../lang.js";
 
 /* Solve + place a triangle, bound to display letters.
    given:  { sides:{a,b,c}, angles:{A,B,C} }   (side a is opposite A …)
@@ -154,7 +155,7 @@ export function sineSetupStep(pair, known, decoys, hint) {
   }
   return {
     kind: "tokenpad",
-    prompt: "Build the set-up, <b>sides on top</b>. Tap a piece to drop it into the next box.",
+    prompt: afL("Build the set-up, <b>sides on top</b>. Tap a piece to drop it into the next box.", "Bou die opstelling, <b>sye bo</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas."),
     frame,
     keys: shuffleChips(chips),
     expected: join([pair.side, pair.sin, known.side, known.sin]),
@@ -226,7 +227,7 @@ export function sineAngleSetupStep(pair, known, decoys, hint) {
   const frame = [SLOT, "/", SLOT, "=", SLOT, "/", SLOT];
   return {
     kind: "tokenpad",
-    prompt: "Build the set-up, <b>sines on top</b>. Tap a piece to drop it into the next box.",
+    prompt: afL("Build the set-up, <b>sines on top</b>. Tap a piece to drop it into the next box.", "Bou die opstelling, <b>sin-terme bo</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas."),
     frame,
     keys: shuffleChips(chipsOf([pair.sin, known.sin, pair.side, known.side, ...(decoys || [])])),
     expected: joinThin([pair.sin, pair.side, known.sin, known.side]),
@@ -247,7 +248,7 @@ export function cosineSideSetupStep(lhs, s1, s2, angTxt, hint) {
   const accepted = [...new Set(fills)];       // s1 === s2 would collapse these; callers keep them distinct
   return {
     kind: "tokenpad",
-    prompt: `Build the cosine rule for <b>${lhs}</b>. Tap a piece to drop it into the next box.`,
+    prompt: afL(`Build the cosine rule for <b>${lhs}</b>. Tap a piece to drop it into the next box.`, `Bou die cosinusreël vir <b>${lhs}</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas.`),
     frame,
     keys: shuffleChips(chipsOf([s1, s2, angTxt])),
     expected: accepted[0],
@@ -270,7 +271,7 @@ export function cosineAngleSetupStep(lhsTxt, opp, o1, o2, hint) {
   const accepted = [...new Set(fills)];
   return {
     kind: "tokenpad",
-    prompt: `Build the rearranged cosine rule for <b>${lhsTxt}</b>. Which side is subtracted?`,
+    prompt: afL(`Build the rearranged cosine rule for <b>${lhsTxt}</b>. Which side is subtracted?`, `Bou die herrangskikte cosinusreël vir <b>${lhsTxt}</b>. Watter sy word afgetrek?`),
     frame,
     keys: shuffleChips(chipsOf([o1, o2, opp])),
     expected: accepted[0],
@@ -282,12 +283,12 @@ export function cosineAngleSetupStep(lhsTxt, opp, o1, o2, hint) {
 /* ---------- area rule ----------
    Area = ½ · ☐ · ☐ · sin ☐   with chips s1, s2, angTxt. */
 export function areaSetupStep(s1, s2, angTxt, hint) {
-  const frame = ["Area", "=", "½", "·", SLOT, "·", SLOT, "·", "sin", SLOT];
+  const frame = [afL("Area", "Oppervlakte"), "=", "½", "·", SLOT, "·", SLOT, "·", "sin", SLOT];
   const fills = [[s1, s2, angTxt], [s2, s1, angTxt]].map(f => joinThin(f));
   const accepted = [...new Set(fills)];
   return {
     kind: "tokenpad",
-    prompt: "Build the area rule. Tap a piece to drop it into the next box.",
+    prompt: afL("Build the area rule. Tap a piece to drop it into the next box.", "Bou die oppervlakreël. Klik op 'n stuk om dit in die volgende blokkie te plaas."),
     frame,
     keys: shuffleChips(chipsOf([s1, s2, angTxt])),
     expected: accepted[0],

@@ -1,0 +1,314 @@
+{
+  "unit": "T90",
+  "generated": "2026-10-17T21:45:50.310Z",
+  "files": [
+    "js/quests/_gtrig.js",
+    "js/quests/_shared.js",
+    "js/quests/_trig.js",
+    "js/quests/dice-eqn.js",
+    "js/quests/dice-exp.js",
+    "js/quests/dice-finance.js",
+    "js/quests/dice-func.js",
+    "js/quests/dice-gtrig.js",
+    "js/quests/dice-patterns.js",
+    "js/quests/dice-stats.js",
+    "js/quests/dice-stub.js",
+    "js/quests/dice-trig.js"
+  ],
+  "items": {
+    "_gtrig#1": {
+      "en": "Tap that side on the sketch.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "_gtrig.js:443:34"
+      ],
+      "af": "Klik op daardie sy op die skets."
+    },
+    "_trig#1": {
+      "en": "Build the set-up, <b>sides on top</b>. Tap a piece to drop it into the next box.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "_trig.js:158:17"
+      ],
+      "af": "Bou die opstelling, <b>sye bo</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas."
+    },
+    "_trig#2": {
+      "en": "Build the set-up, <b>sines on top</b>. Tap a piece to drop it into the next box.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "_trig.js:230:17"
+      ],
+      "af": "Bou die opstelling, <b>sin-terme bo</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas."
+    },
+    "_trig#3": {
+      "en": "Build the cosine rule for <b>${lhs}</b>. Tap a piece to drop it into the next box.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "_trig.js:251:17"
+      ],
+      "af": "Bou die cosinusreël vir <b>${lhs}</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas."
+    },
+    "_trig#4": {
+      "en": "Build the rearranged cosine rule for <b>${lhsTxt}</b>. Which side is subtracted?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "_trig.js:274:17"
+      ],
+      "af": "Bou die herrangskikte cosinusreël vir <b>${lhsTxt}</b>. Watter sy word afgetrek?"
+    },
+    "_trig#5": {
+      "en": "Area",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "_trig.js:286:22"
+      ],
+      "af": "Oppervlakte"
+    },
+    "_trig#6": {
+      "en": "Build the area rule. Tap a piece to drop it into the next box.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "_trig.js:291:17"
+      ],
+      "af": "Bou die oppervlakreël. Klik op 'n stuk om dit in die volgende blokkie te plaas."
+    },
+    "dice-stub#1": {
+      "en": "Which is bigger: <b>${a}</b> or <b>${b}</b>?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:26:23"
+      ],
+      "af": "Watter een is groter: <b>${a}</b> of <b>${b}</b>?"
+    },
+    "dice-stub#2": {
+      "en": "Compare the two numbers.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:27:15"
+      ],
+      "af": "Vergelyk die twee getalle."
+    },
+    "dice-stub#3": {
+      "en": "Find the sum of:<br><span class=\"num\">${data.join(\"  ;  \")}</span>",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:35:15"
+      ],
+      "af": "Vind die som van:<br><span class=\"num\">${data.join(\"  ;  \")}</span>"
+    },
+    "dice-stub#4": {
+      "en": "Add every value.",
+      "kind": "string",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:36:13"
+      ],
+      "af": "Tel elke waarde op."
+    },
+    "dice-stub#5": {
+      "en": "Add every value in the list: ${data.join(\" + \")} = ${total}. That is the whole method — nothing else to it.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:37:15"
+      ],
+      "af": "Tel elke waarde in die lys op: ${data.join(\" + \")} = ${total}. Dis die hele metode, niks meer nie."
+    },
+    "dice-stub#6": {
+      "en": "sum = ${data.join(\" + \")} = ${total}",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:38:23"
+      ],
+      "af": "som = ${data.join(\" + \")} = ${total}"
+    },
+    "dice-stub#7": {
+      "en": "Is <b>${n}</b> even?",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:47:15"
+      ],
+      "af": "Is <b>${n}</b> ewe?"
+    },
+    "dice-stub#8": {
+      "en": "${n} is ${isEven ? \"even\" : \"odd\"}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:48:23"
+      ],
+      "af": "${n} is ${isEven ? \"ewe\" : \"onewe\"}.",
+      "nested": [
+        "even",
+        "odd"
+      ]
+    },
+    "dice-stub#9": {
+      "en": "Round <b>${n}</b> to the nearest 10.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:58:15"
+      ],
+      "af": "Rond <b>${n}</b> af tot die naaste 10."
+    },
+    "dice-stub#10": {
+      "en": "${n} rounds to ${correct}.",
+      "kind": "template",
+      "slots": [
+        "L"
+      ],
+      "where": [
+        "dice-stub.js:61:23"
+      ],
+      "af": "${n} word afgerond tot ${correct}."
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "dice-eqn.js:226:20",
+      "text": "STATIC — 3 worded scenarios, each with its own reasoning"
+    },
+    {
+      "where": "dice-eqn.js:227:25",
+      "text": "STATIC — 3 multi-bracket worked examples"
+    },
+    {
+      "where": "dice-eqn.js:228:23",
+      "text": "STATIC — the hidden-repeat trick taught on one example"
+    },
+    {
+      "where": "dice-eqn.js:229:21",
+      "text": "STATIC — 4 items that are one step each of ONE walkthrough"
+    },
+    {
+      "where": "dice-eqn.js:230:19",
+      "text": "STATIC — 3 angles on ONE compound inequality"
+    },
+    {
+      "where": "dice-eqn.js:231:22",
+      "text": "STATIC — 3 angles on ONE example, (x+1)(x+2) ≤ 20"
+    },
+    {
+      "where": "dice-eqn.js:232:21",
+      "text": "STATIC — 3 exam-question stems; the stems are the content"
+    },
+    {
+      "where": "dice-eqn.js:233:21",
+      "text": "STATIC — 3 distinct worked proofs"
+    },
+    {
+      "where": "dice-eqn.js:234:19",
+      "text": "TEACH-FIRST — 5 reveal frames; its question is eq9.evenTop, which is in"
+    },
+    {
+      "where": "dice-eqn.js:235:25",
+      "text": "TEACH-FIRST — 4 reveal frames; its question is eq9.evenWithNegative, which is in"
+    },
+    {
+      "where": "dice-gtrig.js:226:38",
+      "text": "gt1 out of the pool — audit §6 option C"
+    },
+    {
+      "where": "dice-gtrig.js:227:38",
+      "text": "gt1 out of the pool — audit §6 option C"
+    },
+    {
+      "where": "dice-gtrig.js:228:38",
+      "text": "gt1 out of the pool — audit §6 option C"
+    },
+    {
+      "where": "dice-gtrig.js:229:38",
+      "text": "gt1 out of the pool — audit §6 option C"
+    },
+    {
+      "where": "dice-gtrig.js:230:38",
+      "text": "gt1 out of the pool — audit §6 option C"
+    },
+    {
+      "where": "dice-gtrig.js:231:38",
+      "text": "gt1 out of the pool — audit §6 option C"
+    },
+    {
+      "where": "dice-gtrig.js:232:38",
+      "text": "gt1 out of the pool — audit §6 option C"
+    },
+    {
+      "where": "dice-gtrig.js:235:32",
+      "text": "same pickValueQ() as gt3.pickValue1"
+    },
+    {
+      "where": "dice-gtrig.js:237:26",
+      "text": "same positivePool as gt5.pos1"
+    },
+    {
+      "where": "dice-gtrig.js:247:32",
+      "text": "the same function object as gt10.readRatio"
+    },
+    {
+      "where": "dice-gtrig.js:248:28",
+      "text": "the same `mixed` generator as gt11.mixedA"
+    },
+    {
+      "where": "dice-gtrig.js:252:27",
+      "text": "slot(3,0) — shapes 3 and 0 already covered by item3 and item1"
+    },
+    {
+      "where": "dice-gtrig.js:253:27",
+      "text": "slot(4,1) — shapes 4 and 1 already covered by item1 and item2"
+    },
+    {
+      "where": "dice-gtrig.js:254:27",
+      "text": "slot(5,2) — shapes 5 and 2 already covered by item2 and item3"
+    }
+  ],
+  "words": 118,
+  "skippedLists": [
+    "dice-gtrig.js:PURE_RECALL [gt6.butWhy, gt6.threeBoxes]"
+  ]
+}

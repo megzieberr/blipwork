@@ -1,0 +1,19 @@
+{
+  "_gtrig#1": "Klik op daardie sy op die skets.",
+  "_trig#1": "Bou die opstelling, <b>sye bo</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas.",
+  "_trig#2": "Bou die opstelling, <b>sin-terme bo</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas.",
+  "_trig#3": "Bou die cosinusreël vir <b>${lhs}</b>. Klik op 'n stuk om dit in die volgende blokkie te plaas.",
+  "_trig#4": "Bou die herrangskikte cosinusreël vir <b>${lhsTxt}</b>. Watter sy word afgetrek?",
+  "_trig#5": "Oppervlakte",
+  "_trig#6": "Bou die oppervlakreël. Klik op 'n stuk om dit in die volgende blokkie te plaas.",
+  "dice-stub#1": "Watter een is groter: <b>${a}</b> of <b>${b}</b>?",
+  "dice-stub#2": "Vergelyk die twee getalle.",
+  "dice-stub#3": "Vind die som van:<br><span class=\"num\">${data.join(\"  ;  \")}</span>",
+  "dice-stub#4": "Tel elke waarde op.",
+  "dice-stub#5": "Tel elke waarde in die lys op: ${data.join(\" + \")} = ${total}. Dis die hele metode, niks meer nie.",
+  "dice-stub#6": "som = ${data.join(\" + \")} = ${total}",
+  "dice-stub#7": "Is <b>${n}</b> ewe?",
+  "dice-stub#8": "${n} is ${isEven ? \"ewe\" : \"onewe\"}.",
+  "dice-stub#9": "Rond <b>${n}</b> af tot die naaste 10.",
+  "dice-stub#10": "${n} word afgerond tot ${correct}."
+}

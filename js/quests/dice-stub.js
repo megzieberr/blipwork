@@ -17,13 +17,14 @@
    ============================================================ */
 import { randInt, pick } from "../ui.js";
 import { C, mc, mcNum, dataset } from "./_shared.js";
+import { L } from "../lang.js";
 
 function genPickBigger() {
   const a = randInt(2, 40), b = randInt(2, 40);
   if (a === b) return genPickBigger();
   const correct = Math.max(a, b);
-  return mc("mean", `Which is bigger: <b>${a}</b> or <b>${b}</b>?`, String(correct), [String(Math.min(a, b))],
-    { hint: "Compare the two numbers.", solution: [{ s: `${correct} > ${Math.min(a, b)}` }] });
+  return mc("mean", L(`Which is bigger: <b>${a}</b> or <b>${b}</b>?`, `Watter een is groter: <b>${a}</b> of <b>${b}</b>?`), String(correct), [String(Math.min(a, b))],
+    { hint: L("Compare the two numbers.", "Vergelyk die twee getalle."), solution: [{ s: `${correct} > ${Math.min(a, b)}` }] });
 }
 
 function genSum() {
@@ -31,10 +32,10 @@ function genSum() {
   const total = data.reduce((s, v) => s + v, 0);
   return {
     type: "calc", concept: null, dp: 0, expected: total, answerLabel: `${total}`,
-    prompt: `Find the sum of:<br><span class="num">${data.join("  ;  ")}</span>`,
-    hint: "Add every value.",
-    method: `Add every value in the list: ${data.join(" + ")} = ${total}. That is the whole method — nothing else to it.`,
-    solution: [{ s: `sum = ${data.join(" + ")} = ${total}` }],
+    prompt: L(`Find the sum of:<br><span class="num">${data.join("  ;  ")}</span>`, `Vind die som van:<br><span class="num">${data.join("  ;  ")}</span>`),
+    hint: L("Add every value.", "Tel elke waarde op."),
+    method: L(`Add every value in the list: ${data.join(" + ")} = ${total}. That is the whole method — nothing else to it.`, `Tel elke waarde in die lys op: ${data.join(" + ")} = ${total}. Dis die hele metode, niks meer nie.`),
+    solution: [{ s: L(`sum = ${data.join(" + ")} = ${total}`, `som = ${data.join(" + ")} = ${total}`) }],
   };
 }
 
@@ -43,8 +44,8 @@ function genIsEven() {
   const isEven = n % 2 === 0;
   return {
     type: "yesno", concept: null, yes: isEven,
-    prompt: `Is <b>${n}</b> even?`,
-    solution: [{ s: `${n} is ${isEven ? "even" : "odd"}.` }],
+    prompt: L(`Is <b>${n}</b> even?`, `Is <b>${n}</b> ewe?`),
+    solution: [{ s: L(`${n} is ${isEven ? "even" : "odd"}.`, `${n} is ${isEven ? "ewe" : "onewe"}.`) }],
   };
 }
 
@@ -54,10 +55,10 @@ function genNearestTen() {
   const decoys = [correct + 10, correct - 10, n];
   return {
     type: "mc", concept: null,
-    prompt: `Round <b>${n}</b> to the nearest 10.`,
+    prompt: L(`Round <b>${n}</b> to the nearest 10.`, `Rond <b>${n}</b> af tot die naaste 10.`),
     options: mcNum(correct, decoys),
     answerLabel: C(correct),
-    solution: [{ s: `${n} rounds to ${correct}.` }],
+    solution: [{ s: L(`${n} rounds to ${correct}.`, `${n} word afgerond tot ${correct}.`) }],
   };
 }
 
