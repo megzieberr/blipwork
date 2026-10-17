@@ -1,0 +1,993 @@
+{
+  "unit": "T56",
+  "generated": "2026-10-17T19:12:19.763Z",
+  "files": [
+    "js/exam/cards-gtrig.js",
+    "js/exam/gtrig-level4.js"
+  ],
+  "items": {
+    "gtrig-level4#1": {
+      "en": "<em>Answer this ENTIRE question WITHOUT using a calculator.</em><br>It is given that &nbsp;cos 68° = m − 4.<br><br>Determine &nbsp;cos 22°&nbsp; in terms of m, leaving your answer in surd form.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:79:13"
+      ]
+    },
+    "gtrig-level4#2": {
+      "en": "Add the two angles first. If they make 90° you have been handed a co-function, and a co-function converts between sin and cos. After that it is Pythagoras in disguise — the identity that links sin² and cos².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:82:13"
+      ]
+    },
+    "gtrig-level4#3": {
+      "en": "68° and 22° add to 90°, so this is a co-function: &nbsp;cos 22° = sin 68°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:85:37"
+      ]
+    },
+    "gtrig-level4#4": {
+      "en": "sin²68° + cos²68° = 1 &nbsp;⟹&nbsp; sin²68° = 1 − cos²68°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:86:37"
+      ]
+    },
+    "gtrig-level4#5": {
+      "en": "= 1 − (m − 4)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:87:37"
+      ]
+    },
+    "gtrig-level4#6": {
+      "en": "68° is a first-quadrant angle, so sin 68° is positive: &nbsp;cos 22° = √(1 − (m − 4)²)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:88:39"
+      ]
+    },
+    "gtrig-level4#7": {
+      "en": "WATCH OUT: (m − 4)² is not m² − 16, and you do not need to multiply it out here — leaving it as a bracket keeps the next part short. But you DO have to choose the positive square root, and the reason is that 68° sits in the first quadrant where every ratio is positive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:90:15"
+      ]
+    },
+    "gtrig-level4#8": {
+      "en": "Two moves, and the first one is spotting that 68° and 22° are partners. Any two angles that add to 90° are co-functions of each other, so the cosine of one is the sine of the other — cos 22° is sin 68°, and now everything is about the same angle. The second move is the identity sin²θ + cos²θ = 1, which is just Pythagoras written in ratios. Rearrange it: sin²68° is 1 − cos²68°, and you were handed cos 68° as m − 4, so drop that straight in. Take the square root and you have your answer in terms of m. The one decision worth thinking about is the plus-or-minus. A square root normally offers both, but 68° lies in the first quadrant, where every ratio is positive, so the negative root is thrown away. That habit — check the quadrant before you choose a sign — is what part (b) is built on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:94:13"
+      ]
+    },
+    "gtrig-level4#9": {
+      "en": "Determine the values of m for which &nbsp;cos 22°&nbsp; would be <b>non-real</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:102:13"
+      ]
+    },
+    "gtrig-level4#10": {
+      "en": "You already have cos 22° written as a square root. A square root goes non-real for exactly one reason. Turn that reason into an inequality, multiply the bracket out, and factorise — it is an ordinary quadratic inequality wearing trig clothes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:105:13"
+      ]
+    },
+    "gtrig-level4#11": {
+      "en": "A square root is non-real exactly when what sits under it is negative:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:108:37"
+      ]
+    },
+    "gtrig-level4#12": {
+      "en": "1 − (m − 4)² &lt; 0 &nbsp;⟹&nbsp; (m − 4)² &gt; 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:109:37"
+      ]
+    },
+    "gtrig-level4#13": {
+      "en": "m² − 8m + 16 &gt; 1 &nbsp;⟹&nbsp; m² − 8m + 15 &gt; 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:110:37"
+      ]
+    },
+    "gtrig-level4#14": {
+      "en": "(m − 3)(m − 5) &gt; 0, &nbsp;so the critical values are m = 3 and m = 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:111:37"
+      ]
+    },
+    "gtrig-level4#15": {
+      "en": "m &lt; 3 &nbsp;&nbsp;or&nbsp;&nbsp; m &gt; 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:112:39"
+      ]
+    },
+    "gtrig-level4#16": {
+      "en": "WATCH OUT: a quadratic inequality that is GREATER than zero gives you the two OUTSIDE pieces, not the middle. Sketch the happy parabola through 3 and 5 and shade what is above the x-axis — the answer is the two arms, joined by \\\"or\\\", never by \\\"and\\\".",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:114:15"
+      ]
+    },
+    "gtrig-level4#17": {
+      "en": "This question is really asking one thing: do you know that a cosine can never be bigger than 1 or smaller than −1? From (a), cos 22° is the square root of 1 − (m − 4)², and a square root stops being a real number the moment what is under it goes below zero. So write that down as an inequality and the trig disappears — you are left with 1 − (m − 4)² less than 0, which rearranges to (m − 4)² greater than 1. Multiply out, tidy up, and you have m² − 8m + 15 greater than 0, which factorises into (m − 3)(m − 5). Sketch the happy parabola: it cuts the x-axis at 3 and 5 and is above the axis on either side of them, so the answer is the two outer arms. There is a lovely check hiding here. cos 68° = m − 4, and a cosine must sit between −1 and 1, so m must sit between 3 and 5 for the given statement to make sense at all — which is exactly the piece your answer left out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:118:13"
+      ]
+    },
+    "gtrig-level4#18": {
+      "en": "The general solution of the equation &nbsp;b sin θ = 5 cos θ&nbsp; is &nbsp;θ = 51,34° + k · 180°, &nbsp;k&nbsp;∈&nbsp;ℤ.<br><br>Show that &nbsp;b = 4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:142:13"
+      ]
+    },
+    "gtrig-level4#19": {
+      "en": "Solve the equation the ordinary way first, as if b were a number you knew — the angle in both functions is the same, so there is only one type it can be. Then read the answer they gave you: what does the k · 180° tell you about which ratio you ended up with, and what does 51,34° have to BE?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:145:13"
+      ]
+    },
+    "gtrig-level4#20": {
+      "en": "Both angles are θ, so it is <b>type ②: same angles</b> — divide the whole line by cos θ.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:148:37"
+      ]
+    },
+    "gtrig-level4#21": {
+      "en": "b tan θ = 5 &nbsp;⟹&nbsp; tan θ = 5/b",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:149:37"
+      ]
+    },
+    "gtrig-level4#22": {
+      "en": "The given answer closes with k · 180°, which is the tan family, and a tan general solution is &nbsp;θ = ref. ∠ + k · 180°. &nbsp;So the reference angle is 51,34°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:150:37"
+      ]
+    },
+    "gtrig-level4#23": {
+      "en": "tan 51,34° = 5/b &nbsp;⟹&nbsp; 1,25 = 5/b",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:151:37"
+      ]
+    },
+    "gtrig-level4#24": {
+      "en": "b = 5/1,25 = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:152:39"
+      ]
+    },
+    "gtrig-level4#25": {
+      "en": "WATCH OUT: 51,34° is the REFERENCE angle, not b and not anything you can substitute directly. The equation you actually build is tan 51,34° = 5/b — one line, and the whole question turns on writing it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:154:15"
+      ]
+    },
+    "gtrig-level4#26": {
+      "en": "Every general solution you have ever written went forwards: equation in, families out. This one runs the film backwards, and the trick is to do the forward journey anyway and then compare. Both functions carry the same angle θ, so it is type ②: divide the whole line by cos θ and the sine turns into a tan, leaving tan θ = 5 over b. Now look at what you were given. The answer closes with k · 180°, and only the tan family repeats every 180°, so that confirms you are on the right road. And a tan general solution is always the reference angle plus k · 180°, which means 51,34° IS the reference angle — the angle whose tan is 5 over b. Put that on a line: tan 51,34° = 5 over b. Your calculator says tan 51,34° is 1,25, so 5 divided by b is 1,25, and b is 4. One equation, built by reading somebody else's answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:158:13"
+      ]
+    },
+    "gtrig-level4#27": {
+      "en": "Hence determine the values of &nbsp;θ&nbsp;∈&nbsp;[−180°&nbsp;;&nbsp;180°]&nbsp; for which &nbsp;4 sin θ = 5 cos θ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:166:13"
+      ]
+    },
+    "gtrig-level4#28": {
+      "en": "Nothing new gets solved. You now own the general solution the question handed you — feed it whole numbers and keep what lands inside the interval, remembering that this family steps 180° at a time, not 360°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:169:13"
+      ]
+    },
+    "gtrig-level4#29": {
+      "en": "With b = 4 the general solution is the one given: &nbsp;θ = 51,34° + k · 180°, &nbsp;k&nbsp;∈&nbsp;ℤ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:172:37"
+      ]
+    },
+    "gtrig-level4#30": {
+      "en": "k = 0 → 51,34°, &nbsp;&nbsp;k = −1 → −128,66°, &nbsp;&nbsp;k = 1 → 231,34° (out), &nbsp;&nbsp;k = −2 → −308,66° (out)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:173:37"
+      ]
+    },
+    "gtrig-level4#31": {
+      "en": "θ = 51,34°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:174:39"
+      ]
+    },
+    "gtrig-level4#32": {
+      "en": "and &nbsp;θ = −128,66°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:175:39"
+      ]
+    },
+    "gtrig-level4#33": {
+      "en": "WATCH OUT: this family steps 180°, not 360°, so an interval 360° wide holds TWO answers rather than one. Walk k both ways until you overshoot at each end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:177:15"
+      ]
+    },
+    "gtrig-level4#34": {
+      "en": "The word \\\"hence\\\" means the hard work is behind you. Part (a) confirmed that b is 4, so the general solution printed in the question is the real one, and all that is left is turning the handle. Start at k = 0, which gives 51,34°, comfortably inside the interval. Step downwards: k = −1 gives 51,34° − 180°, which is −128,66°, also inside. Step again and you get −308,66°, which has overshot the left-hand end. Go the other way from zero and k = 1 gives 231,34°, past the right-hand end. So two answers. The thing worth noticing is the step size. A sine or cosine family steps 360°, so a 360°-wide interval usually holds one answer per branch; a tan family steps 180°, so the same interval holds two. If your tan question produces only one answer, you probably stopped one k too early.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:181:13"
+      ]
+    },
+    "gtrig-level4#35": {
+      "en": "Determine the general solution of &nbsp;sin(x + 20°) · cos(y − 40°) = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:206:13"
+      ]
+    },
+    "gtrig-level4#36": {
+      "en": "You cannot factorise this and you cannot divide your way out of it — there are two different unknowns. So think about SIZE instead. How big can each of those two factors ever get, and what does that force if their product is exactly −1?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:209:13"
+      ]
+    },
+    "gtrig-level4#37": {
+      "en": "Neither factor can leave the strip between −1 and 1: &nbsp;−1 ≤ sin(x + 20°) ≤ 1 &nbsp;and&nbsp; −1 ≤ cos(y − 40°) ≤ 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:212:37"
+      ]
+    },
+    "gtrig-level4#38": {
+      "en": "So a product of exactly −1 is only possible if BOTH factors are at their limits — one of them 1 and the other −1. That is two cases.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:213:37"
+      ]
+    },
+    "gtrig-level4#39": {
+      "en": "<b>Case 1:</b> &nbsp;sin(x + 20°) = 1 &nbsp;⟹&nbsp; x + 20° = 90° + k · 360° &nbsp;⟹&nbsp; x = 70° + k · 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:214:37"
+      ]
+    },
+    "gtrig-level4#40": {
+      "en": "&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp; cos(y − 40°) = −1 &nbsp;⟹&nbsp; y − 40° = 180° + k · 360° &nbsp;⟹&nbsp; y = 220° + k · 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:215:37"
+      ]
+    },
+    "gtrig-level4#41": {
+      "en": "<b>Case 2:</b> &nbsp;sin(x + 20°) = −1 &nbsp;⟹&nbsp; x + 20° = 270° + k · 360° &nbsp;⟹&nbsp; x = 250° + k · 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:216:37"
+      ]
+    },
+    "gtrig-level4#42": {
+      "en": "&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp; cos(y − 40°) = 1 &nbsp;⟹&nbsp; y − 40° = 0° + k · 360° &nbsp;⟹&nbsp; y = 40° + k · 360°, &nbsp;k&nbsp;∈&nbsp;ℤ",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:217:39"
+      ]
+    },
+    "gtrig-level4#43": {
+      "en": "WATCH OUT: the two answers in each case belong TOGETHER. x = 70° only works with y = 220°, and x = 250° only works with y = 40°. Mixing one case's x with the other case's y gives a product of +1, not −1 — so write each case as a pair.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:219:15"
+      ]
+    },
+    "gtrig-level4#44": {
+      "en": "There is nothing to factorise, nothing to divide, and two different letters, so the usual roads are all shut. What opens it is a fact you already know: a sine and a cosine both live between −1 and 1, and never step outside. Now think about multiplying two numbers from that strip. The biggest size a product can possibly reach is 1 × 1, so getting exactly −1 is only possible if both factors are sitting right on the edge — one at 1 and the other at −1. There is no other way. That splits the question into two cases, and each case is two small type ① general solutions run side by side. sin(something) = 1 happens at 90°, sin(something) = −1 at 270°, cos(something) = 1 at 0°, cos(something) = −1 at 180°. Keep each case's x and y written as a pair, because they only produce −1 together — swap them around and you get +1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:223:13"
+      ]
+    },
+    "gtrig-level4#45": {
+      "en": "It is given that &nbsp;sin θ/(1 − cos θ) = m.<br><br>Prove that &nbsp;(1 − cos θ)/(1 + cos θ) = 1/m²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:248:13"
+      ]
+    },
+    "gtrig-level4#46": {
+      "en": "Look at what you want and at what you were given, and notice the m is SQUARED on one side and not on the other. So square the given statement — you are allowed to, because it is given, not something you are proving. Then the masked identity and a difference of two squares do the rest.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:251:13"
+      ]
+    },
+    "gtrig-level4#47": {
+      "en": "The m in the answer is squared, so square the GIVEN statement — that is legal, because it is given rather than being proved:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:254:37"
+      ]
+    },
+    "gtrig-level4#48": {
+      "en": "m² = <span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">sin²θ</span><span class=\\\"sf-d\\\">(1 − cos θ)²</span></span>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:255:37"
+      ]
+    },
+    "gtrig-level4#49": {
+      "en": "sin²θ = 1 − cos²θ &nbsp;(masked identity)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:256:37"
+      ]
+    },
+    "gtrig-level4#50": {
+      "en": "1 − cos²θ = (1 − cos θ)(1 + cos θ) &nbsp;(difference of two squares)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:257:37"
+      ]
+    },
+    "gtrig-level4#51": {
+      "en": "m² = <span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">(1 − cos θ)(1 + cos θ)</span><span class=\\\"sf-d\\\">(1 − cos θ)²</span></span> = (1 + cos θ)/(1 − cos θ)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:258:37"
+      ]
+    },
+    "gtrig-level4#52": {
+      "en": "Turn both sides upside down: &nbsp;1/m² = (1 − cos θ)/(1 + cos θ)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:259:37"
+      ]
+    },
+    "gtrig-level4#53": {
+      "en": "∴ (1 − cos θ)/(1 + cos θ) = 1/m² = RHS",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:260:39"
+      ]
+    },
+    "gtrig-level4#54": {
+      "en": "REMEMBER: you may square the GIVEN statement as much as you like, because it is handed to you as true. What you may never do is cross-multiply the thing you are being asked to PROVE — that assumes the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:262:15"
+      ]
+    },
+    "gtrig-level4#55": {
+      "en": "The whole question turns on one observation: the m you are given is not squared, but the m in the target is. So square the given statement. That is completely legal — it is given as true, so anything true of it is true of its square, and it is a different thing entirely from cross-multiplying the statement you are trying to prove. Squaring gives m² = sin²θ over (1 − cos θ)². Now the top is a squared sine, which is the masked identity 1 − cos²θ, and that in turn is a difference of two squares: (1 − cos θ)(1 + cos θ). Look at the bottom — (1 − cos θ) twice. One of them cancels, and m² comes out as (1 + cos θ) over (1 − cos θ). Compare that with what you want and you will see it is upside down, so flip both sides. Flipping an equation is fair as long as neither side is zero, and there you are.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:266:13"
+      ]
+    },
+    "gtrig-level4#56": {
+      "en": "Determine the values of &nbsp;θ&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; for which the statement in (a) is <b>not valid</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:274:13"
+      ]
+    },
+    "gtrig-level4#57": {
+      "en": "Hunt for every denominator in the whole question, including the given statement — and do not forget that m itself sits underneath in the answer, so m may not be zero either.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:277:13"
+      ]
+    },
+    "gtrig-level4#58": {
+      "en": "The statement holds only where every denominator survives and where m itself is not zero. List them:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:280:37"
+      ]
+    },
+    "gtrig-level4#59": {
+      "en": "1 − cos θ = 0 &nbsp;⟹&nbsp; cos θ = 1 &nbsp;⟹&nbsp; θ = 0° or 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:281:37"
+      ]
+    },
+    "gtrig-level4#60": {
+      "en": "1 + cos θ = 0 &nbsp;⟹&nbsp; cos θ = −1 &nbsp;⟹&nbsp; θ = 180°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:282:37"
+      ]
+    },
+    "gtrig-level4#61": {
+      "en": "and m sits underneath in 1/m², so m ≠ 0: &nbsp;sin θ = 0 &nbsp;⟹&nbsp; θ = 0°, 180° or 360° — the same three values again",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:283:37"
+      ]
+    },
+    "gtrig-level4#62": {
+      "en": "θ = 0°, &nbsp;180° &nbsp;or&nbsp; 360°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:284:39"
+      ]
+    },
+    "gtrig-level4#63": {
+      "en": "WATCH OUT: m appears in the answer as 1 over m², so m = 0 breaks the statement just as surely as a zero denominator does. Checking only the two written-out denominators is an incomplete answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:286:15"
+      ]
+    },
+    "gtrig-level4#64": {
+      "en": "A proof is only true where everything in it exists, so the job is to hunt down every denominator in the whole question — the given statement counts too. There are three things that can go wrong. The given fraction has 1 − cos θ underneath, which is zero when cos θ = 1, at 0° and again at 360°. The target fraction has 1 + cos θ underneath, which is zero when cos θ = −1, at 180°. And there is a sneaky third one: the answer is 1 over m², so m itself may not be zero, and m is sin θ over something, which is zero wherever sin θ is zero — 0°, 180° and 360°. That third condition happens to hand you exactly the same three values, which is a nice check that you have not missed anything. Three values in all, and each is written once.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:290:13"
+      ]
+    },
+    "gtrig-level4#65": {
+      "en": "Simplify &nbsp;<span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">sin(180° − x) · cos(360° − x)</span><span class=\\\"sf-d\\\">cos(180° + x) · sin(x − 90°)</span></span>&nbsp; to a single trigonometric ratio",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:316:13"
+      ]
+    },
+    "gtrig-level4#66": {
+      "en": "Four factors, four separate lines, and write the split above each angle before anything else. Two of the four are going to come out as the same thing with a minus in front — watch what happens when you multiply those two together.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:319:13"
+      ]
+    },
+    "gtrig-level4#67": {
+      "en": "sin(180° − x) = sin x &nbsp;&nbsp;·&nbsp;&nbsp; cos(360° − x) = cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:322:37"
+      ]
+    },
+    "gtrig-level4#68": {
+      "en": "cos(180° + x) = −cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:323:37"
+      ]
+    },
+    "gtrig-level4#69": {
+      "en": "sin(x − 90°) = −cos x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:324:37"
+      ]
+    },
+    "gtrig-level4#70": {
+      "en": "(sin x · cos x)/((−cos x)(−cos x)) = (sin x · cos x)/cos²x = tan x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:325:39"
+      ]
+    },
+    "gtrig-level4#71": {
+      "en": "REMEMBER: sin(x − 90°) = −cos x, but cos(x − 90°) = +sin x. The two negative co-functions do not behave the same way, and this question quietly depends on getting that one right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:327:15"
+      ]
+    },
+    "gtrig-level4#72": {
+      "en": "Four factors, so four lines, one at a time — her three steps on each: which quadrant, which reduction formula, plus or minus. 180° − x is in S where sine is positive, so the first factor stays sin x. 360° − x is in C where cosine is positive, so the second stays cos x. 180° + x is in T, so the cosine there turns negative: −cos x. And sin(x − 90°) is one of the negative co-functions, which converts sine into cosine and collects a minus: −cos x again. Now look at the bottom — two identical brackets, each carrying a minus. Multiplied together the minuses cancel and you get cos²x, positive. One cos x from the bottom cancels the cos x on top, leaving sin x over cos x, which is tan x. When a four-factor fraction is going to give a single clean ratio, this is usually the shape of it: something cancels, and a pair of minus signs quietly kill each other.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:331:13"
+      ]
+    },
+    "gtrig-level4#73": {
+      "en": "Hence determine the values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;360°]&nbsp; for which the expression in (a) is equal to &nbsp;−√3, &nbsp;and state whether the original expression is defined at each of them",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:339:13"
+      ]
+    },
+    "gtrig-level4#74": {
+      "en": "The \\\"hence\\\" is doing real work — solve the tidy version, not the original. Then remember that tidying an expression does not remove its restrictions: go back to the four factors and ask what is underneath.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:342:13"
+      ]
+    },
+    "gtrig-level4#75": {
+      "en": "By (a) the expression is simply tan x, so: &nbsp;tan x = −√3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:345:37"
+      ]
+    },
+    "gtrig-level4#76": {
+      "en": "ref.&nbsp;∠&nbsp;= 60° &nbsp;(from the SIZE of the number, √3, never from the minus)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:346:37"
+      ]
+    },
+    "gtrig-level4#77": {
+      "en": "tan is negative in <b>II and IV</b>: &nbsp;x = 180° − 60° = 120° &nbsp;&nbsp;or&nbsp;&nbsp; x = 360° − 60° = 300°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:347:37"
+      ]
+    },
+    "gtrig-level4#78": {
+      "en": "Now check the original. Its denominator is cos(180° + x) · sin(x − 90°), and both of those are −cos x, so the expression only fails where cos x = 0 — at 90° and 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:348:37"
+      ]
+    },
+    "gtrig-level4#79": {
+      "en": "x = 120° &nbsp;and&nbsp; x = 300°, &nbsp;and the original expression is defined at both",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:349:39"
+      ]
+    },
+    "gtrig-level4#80": {
+      "en": "WATCH OUT: an interval question on a TAN still only has one family, x = 120° + k · 180°, but that family lands TWICE inside [0°&nbsp;;&nbsp;360°]. Finding only 120° means you stopped one step too early.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:351:15"
+      ]
+    },
+    "gtrig-level4#81": {
+      "en": "Two jobs, and most people only do the first. Job one: the word \\\"hence\\\" tells you to use part (a), so you are solving tan x = −√3 and not wrestling with four reduced factors. Take the reference angle from the size of the number — tan 60° is √3, so ref.&nbsp;∠&nbsp;= 60° — and let the cross handle the minus. Tan is negative in the second and fourth quadrants, which gives 180° − 60° = 120° and 360° − 60° = 300°. Job two is the part that earns the star. Tidying an expression never removes its restrictions, so go back to the original and ask what sits underneath: cos(180° + x) times sin(x − 90°), which is (−cos x)(−cos x). That dies only where cos x = 0, at 90° and 270°. Neither of your two answers is one of those, so both are genuinely allowed — and saying so is part of the answer, not an optional extra.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:355:13"
+      ]
+    },
+    "gtrig-level4#82": {
+      "en": "It is given that &nbsp;E = <span class=\\\"sfrac\\\"><span class=\\\"sf-n\\\">√(sin x · cos x)</span><span class=\\\"sf-d\\\">2 sin x − 1</span></span>, &nbsp;where&nbsp; x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;270°].<br><br>Determine the values of x for which E is <b>undefined</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:381:13"
+      ]
+    },
+    "gtrig-level4#83": {
+      "en": "Undefined means one thing only: division by zero. Ignore the root completely for this part and solve the bottom — it needs the ratio on its own first, then a reference angle and a cross.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:384:13"
+      ]
+    },
+    "gtrig-level4#84": {
+      "en": "Set the denominator equal to zero: &nbsp;2 sin x − 1 = 0 &nbsp;⟹&nbsp; sin x = 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:387:37"
+      ]
+    },
+    "gtrig-level4#85": {
+      "en": "ref.&nbsp;∠&nbsp;= 30°, and sin is positive, so tick the cross at the <b>top</b>: I and II",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:388:37"
+      ]
+    },
+    "gtrig-level4#86": {
+      "en": "x = 30° &nbsp;&nbsp;or&nbsp;&nbsp; x = 180° − 30° = 150°, &nbsp;and both lie inside [0°&nbsp;;&nbsp;270°]",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:389:37"
+      ]
+    },
+    "gtrig-level4#87": {
+      "en": "E is undefined at &nbsp;x = 30° &nbsp;and&nbsp; x = 150°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:390:39"
+      ]
+    },
+    "gtrig-level4#88": {
+      "en": "Undefined has exactly one meaning in this syllabus: the bottom of a fraction is zero. The square root on top cannot make anything undefined — at worst it makes it non-real, which is a different word and part (b)'s problem. So ignore the top completely. Set 2 sin x − 1 equal to zero and get the ratio on its own: sin x is a half. Now it is a small general solution inside a fixed interval. ref.&nbsp;∠&nbsp;= 30° off her second special triangle, sine is positive so tick the top two quadrants, and first quadrant gives 30° while second gives 180° − 30° = 150°. Both are inside [0°&nbsp;;&nbsp;270°], so both count. Hold on to those two values — part (b) needs them, and one of them is going to matter and the other is not.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:393:13"
+      ]
+    },
+    "gtrig-level4#89": {
+      "en": "Determine the values of &nbsp;x&nbsp;∈&nbsp;[0°&nbsp;;&nbsp;270°]&nbsp; for which E is <b>real</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:401:13"
+      ]
+    },
+    "gtrig-level4#90": {
+      "en": "Two things must be true at the same time, not one. What is under the root may not be negative, and the bottom may not be zero. Do the root condition by asking when a product of two ratios is positive — that is a question about SIGNS, so it is a question about quadrants.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:404:13"
+      ]
+    },
+    "gtrig-level4#91": {
+      "en": "Two conditions have to hold together: what is under the root may not be negative, AND the denominator may not be zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:407:37"
+      ]
+    },
+    "gtrig-level4#92": {
+      "en": "sin x · cos x ≥ 0 means sin x and cos x must have the <b>same sign</b>, or one of them is zero",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:408:37"
+      ]
+    },
+    "gtrig-level4#93": {
+      "en": "Both positive is quadrant I; both negative is quadrant III: &nbsp;0° ≤ x ≤ 90° &nbsp;or&nbsp; 180° ≤ x ≤ 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:409:37"
+      ]
+    },
+    "gtrig-level4#94": {
+      "en": "At the four boundary values 0°, 90°, 180° and 270° one ratio is zero, so the product is zero — and √0 = 0, which is real, so all four stay IN",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:410:37"
+      ]
+    },
+    "gtrig-level4#95": {
+      "en": "From (a), 30° and 150° are not allowed. 150° is already outside the set above, so only 30° has to be taken out",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:411:37"
+      ]
+    },
+    "gtrig-level4#96": {
+      "en": "0° ≤ x ≤ 90°, &nbsp;x ≠ 30° &nbsp;&nbsp;or&nbsp;&nbsp; 180° ≤ x ≤ 270°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:412:39"
+      ]
+    },
+    "gtrig-level4#97": {
+      "en": "WATCH OUT: \\\"real\\\" and \\\"defined\\\" are two different questions and this expression needs both answered. The root decides real; the denominator decides defined. An answer that only shades the quadrants has done half the work.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:414:15"
+      ]
+    },
+    "gtrig-level4#98": {
+      "en": "The word \\\"real\\\" is asking two questions at once and you have to answer both. First: is what is under the root ever negative? sin x · cos x is a product, and a product is positive only when the two things have the same sign. Both are positive in the first quadrant and both are negative in the third, so the root is happy on 0° to 90° and on 180° to 270°. The four boundary values are fine too — one ratio is zero there, the product is zero, and the square root of zero is zero, which is a perfectly real number. Second: does E exist at all? Part (a) said no at 30° and at 150°. Now compare: 150° sits in the second quadrant, which the root already threw out, so it changes nothing. But 30° is right in the middle of the piece you just kept, so it has to be cut out on its own. That single missing point is the whole difference between a level 3 answer and this one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "gtrig-level4.js:418:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2868
+}
