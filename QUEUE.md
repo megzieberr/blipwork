@@ -15,6 +15,8 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ⏸ G1 | Megan plays questnp1 in Afrikaans on her phone (`?lang=af`) and ticks this row, or writes the fixes under it
 
 ## Translation (her 2027 Gr11 teaching order; inside a chapter: concepts → hub rounds → exam cards)
+### Hub tiles first (her ruling 2026-10-17 18:33: she sees each tile in Afrikaans when she opens a round to play, so a weird name is caught chapter by chapter, not at the end)
+- ☐ T89 | hub tiles: js/config.js chapter names, round titles, blurbs | ~1 383 words | verify-wrap (moved up from "Everything else" 2026-10-17 18:35)
 ### Exponents & Surds
 - ☐ T01 | concepts: the `exp` block (js/concepts/exp.js after S4) | ~860 words | counted by af_extract 2026-10-17
 - ☐ T02 | hub rounds: queses1-laws … queses5-surds (5 files) | ~3 420 words | verify page: verify-exp.html
@@ -134,7 +136,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☐ T88 | hub rounds: questm1-name-formula … questm6-height (6 files) | ~1 632 words | verify page: verify-meas.html
 
 ### Everything else
-- ☐ T89 | hub tiles: js/config.js chapter names, round titles, blurbs | ~1 383 words | verify-wrap
+- (T89 the hub tiles moved to the FRONT of the Translation section on her 2026-10-17 18:33 ruling; see "Hub tiles first" above T01)
 - ☐ T90 | hub helpers + dice lines: _gtrig, _shared, _trig, dice-eqn, dice-exp, dice-finance, dice-func, dice-gtrig, dice-patterns, dice-stats, dice-stub, dice-trig (12 files; content slots only) | ~1 299 words | all verify-dice-*.html
 - ☐ T91 | exam engines + skills.js (extractor scan, content slots only, expected small): circle-engine, function-diagram, quadtri-diagram, trig-diagram, skills (5 files) | ~997 words | verify-exam.html ⚠ af_extract reads js/exam files pair-only, so these engine files need a hand scan for bare label strings first
 - ☐ T92 | libs with learner prose reached by import (af_check --all shows the debt; most of it sits in leftovers, so hand-scan): js/measlib.js (wrongs, VOL_WRONG, SA_WRONG, CYL_SA_LABEL), js/finlib.js (COMPOUNDING), js/patternlib.js (classifyName), js/quests/_patterns.js (ord suffixes), js/tgraphlib.js (FN_NAME) and the other js/*lib.js | words: count with af_extract first | every text comparison across files checked by hand; all verify-*.html

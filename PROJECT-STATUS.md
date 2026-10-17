@@ -91,6 +91,10 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 2026-10-17 (hers, 18:20): "Ship it": sw v98 `98a02bd` pushed 18:21, live 18:22:54, live checks 18:23 green; the AF
   head start S3–S6 + the pilot are live, the switch stays hidden; the docs commit after it is pushed too (docs only,
   sw_check unaffected). The harness needs `PYTHONUTF8=1` on this laptop (its ✓ banner trips the console codec).
+- 2026-10-17 (hers, 18:33): the hub tiles row T89 (js/config.js chapter names, round titles, blurbs) runs FIRST in the
+  translation queue, before T01: she sees each tile in Afrikaans when she opens a round to play, so a weird name is
+  caught chapter by chapter instead of at the end. Only the questions inside Number Patterns round 1 are Afrikaans
+  so far; tiles and the pattern concept card (T22) are still English for tonight's G1 play.
 
 ## ⏳ Pending on Megan
 - 📱 3 min [blocks the routine from Sunday night]: in Chrome on your Android open
@@ -113,8 +117,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 
 ## Next up
 - **🇿🇦 Afrikaans queue (AFRIKAANS-PLAN.md + QUEUE.md + tools/AF-TOOLS.md):** Saturday night 17 Oct is hers
-  (optional manual rows in a fresh session: S7, then T01 exp concepts, T02 …; same recipe as the routine's
-  prompt). From Sun 18 Oct 22:10 the routine works the queue top to bottom but waits at ⏸ G1 until she ticks
+  (optional manual rows in a fresh session: S7, then T89 the hub tiles (moved to the FRONT of the translation
+  queue on her 18:33 ruling), then T01 exp concepts, T02 …; same recipe as the routine's prompt). From Sun 18 Oct 22:10 the routine works the queue top to bottom but waits at ⏸ G1 until she ticks
   it; then two rows a night. Her part = one AF round per chapter on her phone; wording she hates → a term
   row (and a Retired form only for a one-meaning word) in AF-GLOSSARY.md, `tools/af_glossary_apply.mjs
   --write` back-fills earlier chapters. G2 after the queue: the wording sweep (the 137 "not yet hers" rows,
