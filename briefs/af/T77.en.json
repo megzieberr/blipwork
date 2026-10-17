@@ -1,0 +1,782 @@
+{
+  "unit": "T77",
+  "generated": "2026-10-17T21:03:57.970Z",
+  "files": [
+    "js/exam/algx-siblings-factorise-basics.js"
+  ],
+  "items": {
+    "algx-siblings-factorise-basics#1": {
+      "en": "Factorise the following fully.<br><br>12x³y − 18x²y²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:63:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#2": {
+      "en": "Go hunting three times: the biggest number that divides into both, then the most x's both terms have, then the most y's both terms have. Take all three out together.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:66:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#3": {
+      "en": "Biggest number into 12 and 18: &nbsp;6. &nbsp;Smallest power of x in both: &nbsp;x². &nbsp;Smallest power of y in both: &nbsp;y. &nbsp;So the highest common factor is <b>6x²y</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:69:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#4": {
+      "en": "∴&nbsp; 6x²y(2x − 3y)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:70:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#5": {
+      "en": "WATCH OUT: “fully” means the biggest common factor, not just any common factor. 2x²y(6x − 9y) is not wrong arithmetic, but it is not finished — there is still a 3 sitting inside the bracket.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:72:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#6": {
+      "en": "Taking out a common factor is just undoing the distributive law, so the check is easy: multiply your answer back out and you must land exactly where you started. Hunt for the factor in three separate passes so nothing gets missed. First the numbers — the biggest one that divides into both 12 and 18 is 6. Then the x's — one term has three, the other has two, so two is all they share. Then the y's — one has one, the other has two, so one is all they share. Whatever is left of each term goes inside the bracket. If the bracket still has something in common when you look at it again, you did not take out enough.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:76:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#7": {
+      "en": "−5a² − 20a",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:84:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#8": {
+      "en": "Both terms are negative, so take the minus out with the rest of the factor. Then check every sign inside the bracket — they all change.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:87:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#9": {
+      "en": "Both terms are negative, so take out &nbsp;−5a&nbsp; and let the signs inside flip.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:90:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#10": {
+      "en": "∴&nbsp; −5a(a + 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:91:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#11": {
+      "en": "WATCH OUT: −20a divided by −5a is +4, not −4. When the minus comes out, every sign inside the bracket swaps. Multiply back to check: −5a × a = −5a² and −5a × 4 = −20a. Correct.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:93:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#12": {
+      "en": "You are allowed to take out a negative common factor, and here it is the tidier choice because it leaves the a² with a plus in front of it, which makes everything afterwards easier to read. The rule to hold on to is that dividing a negative by a negative gives a positive. So −5a² divided by −5a is +a, and −20a divided by −5a is +4. Both signs inside the bracket end up positive even though both terms started negative. Whenever a sign flip makes you nervous, do the one-line check: multiply your answer back out. It takes five seconds and it settles the question completely.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:97:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#13": {
+      "en": "Factorise the following fully.<br><br>4x² − 9y²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:122:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#14": {
+      "en": "Two terms, both perfect squares, with a minus between them. Ask what squares to give 4x², and what squares to give 9y².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:125:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#15": {
+      "en": "Both terms are perfect squares with a minus between them: &nbsp;4x² = (2x)²&nbsp; and&nbsp; 9y² = (3y)². &nbsp;So &nbsp;a² − b² = (a − b)(a + b).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:128:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#16": {
+      "en": "∴&nbsp; (2x − 3y)(2x + 3y)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:129:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#17": {
+      "en": "REMEMBER: it only works with a MINUS between the two squares. 4x² + 9y² does not factorise at all in Grade 10 — a sum of two squares has no brackets to find.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:131:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#18": {
+      "en": "This is the fastest factorising there is, and it is worth training your eye to spot it. Three things have to be true: exactly two terms, both of them perfect squares, and a minus sign between them. If all three hold, write down two brackets that are twins except for the middle sign, and inside them put whatever squares to give each term. Here the square root of 4x² is 2x, because 2 times 2 is 4 and x times x is x². The square root of 9y² is 3y for the same reason. Watch that you take the root of the whole term including the number, not just of the letter — a very common half-mark loss.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:135:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#19": {
+      "en": "1 − 64t²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:143:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#20": {
+      "en": "One is a perfect square too — it is one squared. Keep the terms in the order they are written so the signs land where they belong.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:146:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#21": {
+      "en": "1 = 1²&nbsp; and&nbsp; 64t² = (8t)², &nbsp;so this is again &nbsp;a² − b²&nbsp; with a = 1 and b = 8t.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:149:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#22": {
+      "en": "∴&nbsp; (1 − 8t)(1 + 8t)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:150:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#23": {
+      "en": "A plain 1 counts as a perfect square, because 1 times 1 is 1 — and so do 4, 9, 16, 25 and every other square number. That is the only trick here. Once you have named the two squares as 1 and 8t, the brackets write themselves. Keep them in the order the question gave you: 1 first, 8t second. You may also write it as (1 + 8t)(1 − 8t), because multiplying is the same either way round, and a marker will accept both. What you may not do is turn it into (8t − 1)(8t + 1) — that would be the negative of the right answer, since it expands to 64t² − 1 instead.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:153:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#24": {
+      "en": "Factorise the following fully.<br><br>3x(x − 4) + 7(x − 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:178:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#25": {
+      "en": "A whole bracket can be a common factor, exactly like a number or a letter. Cover up (x − 4) with your finger and see what is left standing next to it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:181:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#26": {
+      "en": "Both terms carry the same bracket (x − 4), so the whole bracket comes out as the common factor.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:184:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#27": {
+      "en": "∴&nbsp; (x − 4)(3x + 7)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:185:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#28": {
+      "en": "The word factor does not only mean a number or a letter — it means anything that both terms are being multiplied by. Here both terms are being multiplied by the bracket (x − 4), so that bracket is a common factor and it can be pulled out to the front just like a 6 or an x would be. What is left behind is whatever was standing next to it in each term: 3x from the first, and +7 from the second, and those two go together in the second bracket. If it helps, temporarily call the bracket K. Then the expression reads 3xK + 7K, which is obviously K(3x + 7), and you swap the bracket back in at the end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:188:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#29": {
+      "en": "2a(y − 3) − 5(3 − y)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:196:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#30": {
+      "en": "The two brackets are back to front versions of each other. Turning one round costs you a minus sign — and there is already a minus outside waiting to absorb it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:199:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#31": {
+      "en": "(3 − y) is the reverse of (y − 3), and reversing a bracket costs a minus: &nbsp;(3 − y) = −(y − 3).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:202:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#32": {
+      "en": "= 2a(y − 3) − 5 · [−(y − 3)] = 2a(y − 3) + 5(y − 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:203:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#33": {
+      "en": "∴&nbsp; (y − 3)(2a + 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:204:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#34": {
+      "en": "WATCH OUT: two minuses meet here and make a plus. −5 × −(y − 3) is +5(y − 3), so the second bracket ends up as (2a + 5), not (2a − 5). Check by expanding: (y − 3)(2a + 5) = 2ay − 6a + 5y − 15, which is exactly what you started with.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:206:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#35": {
+      "en": "Two brackets that hold the same letters in the opposite order are not the same, but they are only a minus sign apart. Test it with numbers: put y equal to 10 and (y − 3) is 7 while (3 − y) is −7. Same size, opposite sign. So you may rewrite either one as minus the other, and that is what unlocks the question — once both brackets read (y − 3), they are a genuine common factor. The place marks go missing is the sign bookkeeping, because the flip introduces a minus while there is already a minus sitting in front of the 5. Two minuses multiply to a plus. Write that middle line out in full rather than doing it in your head.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:210:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#36": {
+      "en": "Factorise the following fully.<br><br>x² − 7x + 12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:235:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#37": {
+      "en": "You need two numbers that multiply to give the last number and add to give the middle number. The last number is positive and the middle one is negative — so what must both signs be?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:238:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#38": {
+      "en": "Two numbers with a <b>product</b> of +12 and a <b>sum</b> of −7: &nbsp;−3 and −4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:241:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#39": {
+      "en": "∴&nbsp; (x − 3)(x − 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:242:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#40": {
+      "en": "REMEMBER: a positive last term with a negative middle term means BOTH numbers are negative. −3 and −4 multiply to +12 and add to −7; +3 and +4 multiply to +12 but add to +7, which is the wrong middle term.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:244:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#41": {
+      "en": "When the x² has nothing in front of it, both brackets start with a plain x, and the only decision left is what two numbers to put in them. Those two numbers have to do two jobs at once: multiply to the last number and add to the middle one. Reading the signs first narrows the search a lot. A positive product means the two numbers have the same sign as each other. A negative sum then tells you that sign is negative. So you are only looking at negative pairs that multiply to twelve: −1 and −12, −2 and −6, −3 and −4. The last pair adds to −7. Always check by expanding the middle term back out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:248:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#42": {
+      "en": "3x² − 12x − 63",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:256:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#43": {
+      "en": "Before you look for two numbers, look at all three terms and ask whether something divides into every one of them. Doing that first turns a nasty trinomial into an easy one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:259:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#44": {
+      "en": "3 divides into all three terms, so take it out FIRST: &nbsp;= 3(x² − 4x − 21)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:262:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#45": {
+      "en": "Now two numbers with a product of −21 and a sum of −4: &nbsp;−7 and +3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:263:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#46": {
+      "en": "∴&nbsp; 3(x − 7)(x + 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:264:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#47": {
+      "en": "WATCH OUT: the 3 does not disappear once it is outside. A final answer of (x − 7)(x + 3) is worth less than half, because it is only a third of the expression you were given.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:266:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#48": {
+      "en": "The first move in every factorising question is the same: look for a common factor in all the terms before you do anything clever. Here 3 goes into 3, into 12 and into 63, so out it comes, and what is left inside is a trinomial with a plain x², which you already know how to handle. Skipping this step is not fatal but it makes the work far harder, because you would be hunting for a pair of numbers multiplying to −189. Once the 3 is parked outside, find the pair for the easy trinomial: product −21, sum −4, so −7 and +3. Then write the 3 back in front of your two brackets. It is part of the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:270:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#49": {
+      "en": "Factorise the following fully.<br><br>(x + 1)² − 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:295:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#50": {
+      "en": "It is still two squares with a minus between them — one of them just happens to be a bracket. Treat the whole bracket as your first term and do not expand anything.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:298:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#51": {
+      "en": "Two squares with a minus between: &nbsp;a = (x + 1)&nbsp; and&nbsp; b = 2. &nbsp;So &nbsp;a² − b² = (a − b)(a + b).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:301:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#52": {
+      "en": "∴&nbsp; ((x + 1) − 2)((x + 1) + 2) = (x − 1)(x + 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:302:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#53": {
+      "en": "REMEMBER: tidy each bracket at the end. Leaving the answer as ((x + 1) − 2)((x + 1) + 2) is not fully factorised — “fully” includes simplifying what is inside.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:304:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#54": {
+      "en": "You do not have to expand the bracket, and you will lose time and probably a sign if you do. The difference-of-squares shape does not care what the two squared things are — a number, a letter, or a whole bracket. Here the first square is (x + 1) and the second is 2, because 4 is 2 squared. So the answer is the two of them subtracted in one bracket and added in the other. Then, and only then, tidy up: x plus one minus two is x minus one, and x plus one plus two is x plus three. Expanding first would have given x² + 2x − 3, which factorises to the same thing — but the long way round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:308:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#55": {
+      "en": "(2a − 3)² − (a + 5)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:316:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#56": {
+      "en": "Both squares are brackets this time. Write the two new brackets first, being very careful with the minus in front of the second one, and only then simplify inside each.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:319:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#57": {
+      "en": "Difference of two squares with &nbsp;A = (2a − 3)&nbsp; and&nbsp; B = (a + 5): &nbsp;A² − B² = (A − B)(A + B).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:322:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#58": {
+      "en": "= [(2a − 3) − (a + 5)] · [(2a − 3) + (a + 5)]",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:323:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#59": {
+      "en": "∴&nbsp; (a − 8)(3a + 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:324:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#60": {
+      "en": "WATCH OUT: in the first new bracket the minus reaches the whole of (a + 5), so it becomes 2a − 3 − a − 5 = a − 8. Writing 2a − 3 − a + 5 = a + 2 is the slip this question is built to catch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:326:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#61": {
+      "en": "This looks alarming and is actually the same two-line job as before, provided you keep the brackets whole. Call the first square A and the second one B, write down (A minus B) times (A plus B), and only then put the real brackets back in. The difficult bracket is the subtraction one, because a minus sitting in front of a bracket has to reach every term inside it: minus (a plus 5) is minus a minus 5. Do that carefully and you get a − 8. The addition bracket is easy, since nothing changes sign: 2a plus a is 3a, and minus 3 plus 5 is plus 2. Multiplying both answers back out is a good check if you have time.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:330:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#62": {
+      "en": "Factorise the following fully.<br><br>6x² − 17x + 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:355:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#63": {
+      "en": "Multiply the number in front of x² by the last number. Then find two numbers that multiply to give THAT, and still add to give the middle number — and use them to split the middle term into two.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:358:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#64": {
+      "en": "Multiply the first and last numbers: &nbsp;6 × 5 = 30. &nbsp;Now two numbers with a product of +30 and a sum of −17: &nbsp;−15 and −2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:361:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#65": {
+      "en": "Split the middle term and group in pairs: &nbsp;6x² − 15x − 2x + 5 = 3x(2x − 5) − 1(2x − 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:362:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#66": {
+      "en": "<b>OR</b> — by trial (same marks). The x² term must come from 2x × 3x or 6x × x, and the +5 from two negatives. Try (2x − 5)(3x − 1) — the middle term is −2x − 15x = −17x. ✔ That is the pair.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:363:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#67": {
+      "en": "∴&nbsp; (2x − 5)(3x − 1)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:364:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#68": {
+      "en": "WATCH OUT: the −1 in the second group is easy to lose. 6x² − 15x − 2x + 5 groups as 3x(2x − 5) − 1(2x − 5) — writing just −(2x − 5) with nothing in front leaves you with (2x − 5)(3x) and a missing term.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:366:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#69": {
+      "en": "When there is a number in front of the x², the two-numbers trick still works, but you have to change what you multiply to. Instead of the last number on its own, use the first number times the last number — here six times five, which is thirty. Then find a pair that multiplies to thirty and adds to the middle number, minus seventeen. Since the product is positive and the sum negative, both are negative: minus fifteen and minus two. Now use them to split the middle term into two pieces, so you have four terms instead of three, and factorise in pairs. The two pairs must leave the SAME bracket behind — if they do not, you split it the wrong way round, so try again.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:370:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#70": {
+      "en": "8x² + 2x − 15",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:378:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#71": {
+      "en": "Same method. The number you are aiming at is 8 × (−15), and it is negative — so the two numbers you are hunting have opposite signs, and the bigger one carries the sign of the middle term.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:381:13"
+      ]
+    },
+    "algx-siblings-factorise-basics#72": {
+      "en": "8 × (−15) = −120. &nbsp;Two numbers with a product of −120 and a sum of +2: &nbsp;+12 and −10.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:384:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#73": {
+      "en": "Split and group: &nbsp;8x² + 12x − 10x − 15 = 4x(2x + 3) − 5(2x + 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:385:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#74": {
+      "en": "<b>OR</b> — by trial (same marks). Try (2x + 3)(4x − 5) — the middle term is −10x + 12x = +2x. ✔",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:386:37"
+      ]
+    },
+    "algx-siblings-factorise-basics#75": {
+      "en": "∴&nbsp; (2x + 3)(4x − 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:387:39"
+      ]
+    },
+    "algx-siblings-factorise-basics#76": {
+      "en": "REMEMBER: the order you write the split in does not matter. 8x² − 10x + 12x − 15 groups as 2x(4x − 5) + 3(4x − 5) and gives exactly the same two brackets — so if one grouping looks ugly, swap the two middle terms round and try again.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:389:15"
+      ]
+    },
+    "algx-siblings-factorise-basics#77": {
+      "en": "A negative product tells you the two numbers have opposite signs, which halves the hunting. You want a pair multiplying to a hundred and twenty, one plus and one minus, whose difference is two: twelve and ten do it, and since the sum must be positive the bigger one is the positive one. Split the middle term into plus twelve x and minus ten x, then factorise the first two terms and the last two terms separately. The bracket that falls out of both pairs is the one that goes on the outside; whatever is left in front of each pair goes in the other bracket. Both ways of ordering the split give the same answer, so if your two pairs disagree, check your arithmetic rather than the method.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-factorise-basics.js:393:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2234
+}
