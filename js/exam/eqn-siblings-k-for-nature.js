@@ -67,21 +67,21 @@ const q1 = {
       marks: 3,
       level: 1,
       prompt: {
-        en: "Determine the values of k for which the roots of &nbsp;x² − 6x + k = 0&nbsp; are real.",
+        en: "Determine the values of k for which the roots of &nbsp;x² − 6x + k = 0&nbsp; are real.", af: "Bepaal die waardes van k waarvoor die wortels van &nbsp;x² − 6x + k = 0&nbsp; reëel is.",
       },
       hint: {
-        en: "“Real” is a statement about the SIGN of Δ, not its value — real roots need Δ to be zero or bigger. Write Δ in terms of k, then solve an inequality instead of an equation.",
+        en: "“Real” is a statement about the SIGN of Δ, not its value — real roots need Δ to be zero or bigger. Write Δ in terms of k, then solve an inequality instead of an equation.", af: "“Reëel” sê iets oor die TEKEN van Δ, nie oor sy waarde nie: reële wortels vereis dat Δ nul of groter is. Skryf Δ in terme van k en los dan 'n ongelykheid op in plaas van 'n vergelyking.",
       },
       memo: [
-        { type: "step", text: { en: "Real roots need &nbsp;Δ ≥ 0. &nbsp;&nbsp;a = 1 ; b = −6 ; c = k &nbsp;&nbsp;∴&nbsp; Δ = (−6)² − 4(1)(k) = 36 − 4k" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "36 − 4k ≥ 0 &nbsp;⟹&nbsp; −4k ≥ −36" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "∴ k ≤ 9 &nbsp;&nbsp;(dividing by a negative turns the sign around)" }, ticks: ["a"] },
+        { type: "step", text: { en: "Real roots need &nbsp;Δ ≥ 0. &nbsp;&nbsp;a = 1 ; b = −6 ; c = k &nbsp;&nbsp;∴&nbsp; Δ = (−6)² − 4(1)(k) = 36 − 4k", af: "Reële wortels vereis &nbsp;Δ ≥ 0. &nbsp;&nbsp;a = 1 ; b = −6 ; c = k &nbsp;&nbsp;∴&nbsp; Δ = (−6)² − 4(1)(k) = 36 − 4k" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "36 − 4k ≥ 0 &nbsp;⟹&nbsp; −4k ≥ −36", af: "36 − 4k ≥ 0 &nbsp;⟹&nbsp; −4k ≥ −36" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "∴ k ≤ 9 &nbsp;&nbsp;(dividing by a negative turns the sign around)", af: "∴ k ≤ 9 &nbsp;&nbsp;(deling deur 'n negatief draai die teken om)" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: dividing both sides by −4 FLIPS the inequality sign — k ≤ 9, not k ≥ 9. Test it if you are unsure: k = 0 gives Δ = 36, real roots ✓, and 0 really is less than 9.",
+          en: "WATCH OUT: dividing both sides by −4 FLIPS the inequality sign — k ≤ 9, not k ≥ 9. Test it if you are unsure: k = 0 gives Δ = 36, real roots ✓, and 0 really is less than 9.", af: "PASOP: as jy albei kante deur −4 deel, DRAAI die ongelykheidsteken OM: k ≤ 9, nie k ≥ 9 nie. Toets dit as jy onseker is: k = 0 gee Δ = 36, reële wortels ✓, en 0 is wel kleiner as 9.",
         } },
       ],
       esplain: {
-        en: "There are only three natures a quadratic can have, and each one is a statement about the sign of Δ rather than its size. Real means Δ is zero or above; non-real means Δ is below zero; equal is the single point where Δ is exactly zero. So “for which k are the roots real” is asking you to solve an inequality, not an equation, and the only new thing to watch is the flip. When you divide both sides of an inequality by a negative number, every number changes places on the number line, so the sign has to turn around with them. Two is smaller than five, but minus two is bigger than minus five. That is the whole reason for the rule.",
+        en: "There are only three natures a quadratic can have, and each one is a statement about the sign of Δ rather than its size. Real means Δ is zero or above; non-real means Δ is below zero; equal is the single point where Δ is exactly zero. So “for which k are the roots real” is asking you to solve an inequality, not an equation, and the only new thing to watch is the flip. When you divide both sides of an inequality by a negative number, every number changes places on the number line, so the sign has to turn around with them. Two is smaller than five, but minus two is bigger than minus five. That is the whole reason for the rule.", af: "Die aard van die wortels van 'n kwadratiese vergelyking het net drie moontlikhede, en elkeen sê iets oor die teken van Δ eerder as sy grootte. Reëel beteken Δ is nul of groter; nie-reëel beteken Δ is kleiner as nul; gelyk is die enkele punt waar Δ presies nul is. Dus vra “vir watter k is die wortels reëel” jou om 'n ongelykheid op te los, nie 'n vergelyking nie, en die enigste nuwe ding om dop te hou, is die omdraai. As jy albei kante van 'n ongelykheid deur 'n negatiewe getal deel, ruil elke getal plek op die getallelyn, dus moet die teken saam met hulle omdraai. Twee is kleiner as vyf, maar minus twee is groter as minus vyf. Dit is die hele rede vir die reël.",
       },
     },
   ],
@@ -105,21 +105,21 @@ const q2 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "Determine the values of k for which the roots of &nbsp;2x² + 5x + k = 0&nbsp; are non-real.",
+        en: "Determine the values of k for which the roots of &nbsp;2x² + 5x + k = 0&nbsp; are non-real.", af: "Bepaal die waardes van k waarvoor die wortels van &nbsp;2x² + 5x + k = 0&nbsp; nie-reëel is.",
       },
       hint: {
-        en: "Non-real means Δ is strictly below zero. Watch the a — it is 2 here, not 1, so it goes into the 4ac term.",
+        en: "Non-real means Δ is strictly below zero. Watch the a — it is 2 here, not 1, so it goes into the 4ac term.", af: "Nie-reëel beteken Δ is streng kleiner as nul. Let op die a: dit is 2 hier, nie 1 nie, dus gaan dit in die 4ac-term in.",
       },
       memo: [
-        { type: "step", text: { en: "Non-real roots need &nbsp;Δ &lt; 0. &nbsp;&nbsp;a = 2 ; b = 5 ; c = k &nbsp;&nbsp;∴&nbsp; Δ = 5² − 4(2)(k) = 25 − 8k" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "25 − 8k &lt; 0 &nbsp;⟹&nbsp; −8k &lt; −25" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "∴ k &gt; 25/8 &nbsp;&nbsp;(= 3,125) &nbsp;— the sign turned around when both sides were divided by −8" }, ticks: ["a"] },
+        { type: "step", text: { en: "Non-real roots need &nbsp;Δ &lt; 0. &nbsp;&nbsp;a = 2 ; b = 5 ; c = k &nbsp;&nbsp;∴&nbsp; Δ = 5² − 4(2)(k) = 25 − 8k", af: "Nie-reële wortels vereis &nbsp;Δ &lt; 0. &nbsp;&nbsp;a = 2 ; b = 5 ; c = k &nbsp;&nbsp;∴&nbsp; Δ = 5² − 4(2)(k) = 25 − 8k" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "25 − 8k &lt; 0 &nbsp;⟹&nbsp; −8k &lt; −25", af: "25 − 8k &lt; 0 &nbsp;⟹&nbsp; −8k &lt; −25" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "∴ k &gt; 25/8 &nbsp;&nbsp;(= 3,125) &nbsp;— the sign turned around when both sides were divided by −8", af: "∴ k &gt; 25/8 &nbsp;&nbsp;(= 3,125), &nbsp;die teken het omgedraai toe albei kante deur −8 gedeel is" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: a = 2, so 4ac is 8k and not 4k. Using a = 1 out of habit gives k &gt; 25/4, which is a whole different boundary. Read a, b and c off the equation every single time.",
+          en: "WATCH OUT: a = 2, so 4ac is 8k and not 4k. Using a = 1 out of habit gives k &gt; 25/4, which is a whole different boundary. Read a, b and c off the equation every single time.", af: "PASOP: a = 2, dus is 4ac gelyk aan 8k en nie 4k nie. As jy uit gewoonte a = 1 gebruik, kry jy k &gt; 25/4, wat 'n heel ander grens is. Lees a, b en c elke keer van die vergelyking af.",
         } },
       ],
       esplain: {
-        en: "Non-real is the case where the discriminant drops below zero, because a root is a square root of Δ and no real number squares to something negative. So the condition is Δ less than zero, strictly — the boundary itself is not included, since Δ exactly zero would give real, equal roots. The arithmetic here has two places to be careful. First, a is two, so the four a c term is eight k rather than four k. Second, dividing by minus eight flips the sign. The boundary comes out as a fraction, twenty-five over eight, and that is a perfectly good final answer; the decimal three comma one two five is there if you want to picture it, but the fraction is exact and exact is better.",
+        en: "Non-real is the case where the discriminant drops below zero, because a root is a square root of Δ and no real number squares to something negative. So the condition is Δ less than zero, strictly — the boundary itself is not included, since Δ exactly zero would give real, equal roots. The arithmetic here has two places to be careful. First, a is two, so the four a c term is eight k rather than four k. Second, dividing by minus eight flips the sign. The boundary comes out as a fraction, twenty-five over eight, and that is a perfectly good final answer; the decimal three comma one two five is there if you want to picture it, but the fraction is exact and exact is better.", af: "Nie-reëel is die geval waar die diskriminant onder nul sak, want 'n wortel is 'n vierkantswortel van Δ, en geen reële getal gee 'n negatiewe antwoord as jy dit kwadreer nie. Die voorwaarde is dus Δ kleiner as nul, streng: die grens self is nie ingesluit nie, want Δ presies nul sou reële, gelyke wortels gee. Die rekenwerk hier het twee plekke waar jy versigtig moet wees. Eerstens is a twee, dus is die vier a c-term agt k eerder as vier k. Tweedens draai die teken om as jy deur minus agt deel. Die grens kom uit as 'n breuk, vyf-en-twintig oor agt, en dit is 'n heeltemal goeie finale antwoord; die desimaal drie komma een twee vyf is daar as jy dit wil voorstel, maar die breuk is presies, en presies is beter.",
       },
     },
   ],
@@ -144,19 +144,19 @@ const q3 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "Given: &nbsp;x² + kx + (2k + 5) = 0, &nbsp;where k is a real number.<br><br>Show that &nbsp;Δ = k² − 8k − 20.",
+        en: "Given: &nbsp;x² + kx + (2k + 5) = 0, &nbsp;where k is a real number.<br><br>Show that &nbsp;Δ = k² − 8k − 20.", af: "Gegee: &nbsp;x² + kx + (2k + 5) = 0, &nbsp;waar k 'n reële getal is.<br><br>Toon aan dat &nbsp;Δ = k² − 8k − 20.",
       },
       hint: {
-        en: "Take the whole of 2k + 5 as c, bracket and all, and let the −4 reach both of its terms.",
+        en: "Take the whole of 2k + 5 as c, bracket and all, and let the −4 reach both of its terms.", af: "Neem die hele 2k + 5 as c, hakie en al, en laat die −4 albei sy terme bereik.",
       },
       memo: [
-        { type: "step", text: { en: "a = 1 ; &nbsp;b = k ; &nbsp;c = 2k + 5" } },
-        { type: "step", text: { en: "Δ = b² − 4ac = k² − 4(1)(2k + 5)" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "= k² − (8k + 20)" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "∴ Δ = k² − 8k − 20" }, ticks: ["a"] },
+        { type: "step", text: { en: "a = 1 ; &nbsp;b = k ; &nbsp;c = 2k + 5", af: "a = 1 ; &nbsp;b = k ; &nbsp;c = 2k + 5" } },
+        { type: "step", text: { en: "Δ = b² − 4ac = k² − 4(1)(2k + 5)", af: "Δ = b² − 4ac = k² − 4(1)(2k + 5)" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "= k² − (8k + 20)", af: "= k² − (8k + 20)" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "∴ Δ = k² − 8k − 20", af: "∴ Δ = k² − 8k − 20" }, ticks: ["a"] },
       ],
       esplain: {
-        en: "The substitution is ordinary; the interesting part is what comes out. Because k sits in the b slot as well as inside the c, squaring b produces a k squared term and the four a c term produces a k term — so Δ is not a straight line in k any more, it is a parabola in k. That changes the shape of every question that follows, because asking where a parabola is below zero is a different job from asking where a straight line is. Keep the brackets around 2k + 5 while the minus four goes in, so that both the eight k and the twenty come out negative. Losing the second sign there is the single most common way this question goes wrong.",
+        en: "The substitution is ordinary; the interesting part is what comes out. Because k sits in the b slot as well as inside the c, squaring b produces a k squared term and the four a c term produces a k term — so Δ is not a straight line in k any more, it is a parabola in k. That changes the shape of every question that follows, because asking where a parabola is below zero is a different job from asking where a straight line is. Keep the brackets around 2k + 5 while the minus four goes in, so that both the eight k and the twenty come out negative. Losing the second sign there is the single most common way this question goes wrong.", af: "Die vervanging is gewoon; die interessante deel is wat uitkom. Omdat k in die b-plek sit sowel as binne die c, gee b kwadreer 'n k-kwadraat-term en die vier a c-term 'n k-term, dus is Δ nie meer 'n reguit lyn in k nie: dit is 'n parabool in k. Dit verander die vorm van elke vraag wat volg, want om te vra waar 'n parabool onder nul is, is 'n ander werk as om te vra waar 'n reguit lyn is. Hou die hakies om 2k + 5 terwyl die minus vier ingaan, sodat albei die agt k en die twintig negatief uitkom. Om die tweede teken daar te verloor, is die heel algemeenste manier waarop hierdie vraag verkeerd loop.",
       },
     },
     {
@@ -164,23 +164,23 @@ const q3 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "Hence determine the values of k for which the roots of the equation are non-real.",
+        en: "Hence determine the values of k for which the roots of the equation are non-real.", af: "Bepaal vervolgens die waardes van k waarvoor die wortels van die vergelyking nie-reëel is.",
       },
       hint: {
-        en: "Non-real needs Δ &lt; 0, and Δ is a quadratic now — so this is a quadratic inequality, in k instead of x. Everything on the left, factorise, find the CP, then read the answer off the bowl.",
+        en: "Non-real needs Δ &lt; 0, and Δ is a quadratic now — so this is a quadratic inequality, in k instead of x. Everything on the left, factorise, find the CP, then read the answer off the bowl.", af: "Nie-reëel vereis Δ &lt; 0, en Δ is nou kwadraties, dus is dit 'n kwadratiese ongelykheid, in k in plaas van x. Alles na links, faktoriseer, vind die kritieke waardes, en lees dan die antwoord van die bak af.",
       },
       memo: [
-        { type: "step", text: { en: "Non-real roots need &nbsp;Δ &lt; 0: &nbsp;&nbsp;k² − 8k − 20 &lt; 0" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "Everything is already on the left and there is no negative in front of the k², so factorise: &nbsp;(k − 10)(k + 2) &lt; 0" }, ticks: ["ca"] },
-        { type: "step", text: { en: "CP: &nbsp;k − 10 = 0 &nbsp;or&nbsp; k + 2 = 0 &nbsp;⟹&nbsp; k = 10 &nbsp;or&nbsp; k = −2" }, ticks: ["ca"] },
-        { type: "step", text: { en: "Sketch it as a <b>happy</b> parabola in k, cutting the k-axis at −2 and at 10. &lt; 0 means below the axis — the <b>inside of the bowl</b>." } },
-        { type: "answer", text: { en: "∴ −2 &lt; k &lt; 10" }, ticks: ["a"] },
+        { type: "step", text: { en: "Non-real roots need &nbsp;Δ &lt; 0: &nbsp;&nbsp;k² − 8k − 20 &lt; 0", af: "Nie-reële wortels vereis &nbsp;Δ &lt; 0: &nbsp;&nbsp;k² − 8k − 20 &lt; 0" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Everything is already on the left and there is no negative in front of the k², so factorise: &nbsp;(k − 10)(k + 2) &lt; 0", af: "Alles is reeds links en daar is geen negatief voor die k² nie, dus faktoriseer: &nbsp;(k − 10)(k + 2) &lt; 0" }, ticks: ["ca"] },
+        { type: "step", text: { en: "CP: &nbsp;k − 10 = 0 &nbsp;or&nbsp; k + 2 = 0 &nbsp;⟹&nbsp; k = 10 &nbsp;or&nbsp; k = −2", af: "Kritieke waardes: &nbsp;k − 10 = 0 &nbsp;of&nbsp; k + 2 = 0 &nbsp;⟹&nbsp; k = 10 &nbsp;of&nbsp; k = −2" }, ticks: ["ca"] },
+        { type: "step", text: { en: "Sketch it as a <b>happy</b> parabola in k, cutting the k-axis at −2 and at 10. &lt; 0 means below the axis — the <b>inside of the bowl</b>.", af: "Skets dit as 'n <b>happy</b> parabool in k wat die k-as by −2 en by 10 sny. &lt; 0 beteken onder die as: <b>binne die bak</b>." } },
+        { type: "answer", text: { en: "∴ −2 &lt; k &lt; 10", af: "∴ −2 &lt; k &lt; 10" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the bowl you are sketching is a picture of Δ against k, NOT of the original equation against x. The critical points −2 and 10 are values of k, not roots of the equation — at k = −2 the equation is x² − 2x + 1 = 0, whose root is x = 1.",
+          en: "WATCH OUT: the bowl you are sketching is a picture of Δ against k, NOT of the original equation against x. The critical points −2 and 10 are values of k, not roots of the equation — at k = −2 the equation is x² − 2x + 1 = 0, whose root is x = 1.", af: "PASOP: die bak wat jy skets, is 'n prentjie van Δ teenoor k, NIE van die oorspronklike vergelyking teenoor x nie. Die kritieke waardes −2 en 10 is waardes van k, nie wortels van die vergelyking nie: by k = −2 is die vergelyking x² − 2x + 1 = 0, met wortel x = 1.",
         } },
       ],
       esplain: {
-        en: "Two different quadratics are living in this question and keeping them apart is the whole skill. The first is the equation you were given, whose unknown is x. The second is the discriminant, whose unknown is k — and it is that second one you are now sketching. Everything her TIP Chips checklist says still applies, just with k where x usually goes: get it all on the left, check there is no minus in front of the squared term, factorise, and set each bracket equal to zero to find the critical points. Because the k squared is positive, the picture is a happy parabola crossing at minus two and ten, and a happy parabola only dips below the axis between its two crossings. Below zero therefore means between them: the inside of the bowl.",
+        en: "Two different quadratics are living in this question and keeping them apart is the whole skill. The first is the equation you were given, whose unknown is x. The second is the discriminant, whose unknown is k — and it is that second one you are now sketching. Everything her TIP Chips checklist says still applies, just with k where x usually goes: get it all on the left, check there is no minus in front of the squared term, factorise, and set each bracket equal to zero to find the critical points. Because the k squared is positive, the picture is a happy parabola crossing at minus two and ten, and a happy parabola only dips below the axis between its two crossings. Below zero therefore means between them: the inside of the bowl.", af: "Twee verskillende kwadratiese uitdrukkings woon in hierdie vraag, en om hulle uitmekaar te hou, is die hele vaardigheid. Die eerste is die vergelyking wat jy gekry het, met x as onbekende. Die tweede is die diskriminant, met k as onbekende, en dit is daardie tweede een wat jy nou skets. Alles wat haar TIP Chips-kontrolelys sê, geld steeds, net met k waar x gewoonlik staan: kry alles na links, maak seker daar is geen minus voor die kwadraatterm nie, faktoriseer, en stel elke hakie gelyk aan nul om die kritieke waardes te kry. Omdat die k-kwadraat positief is, is die prentjie 'n happy parabool wat by minus twee en tien sny, en 'n happy parabool sak net tussen sy twee snypunte onder die as in. Onder nul beteken dus tussen hulle: binne die bak.",
       },
     },
   ],
@@ -204,21 +204,21 @@ const q4 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "Given: &nbsp;x² − 4x + (k − 1) = 0, &nbsp;where k is a real number.<br><br>Determine the values of k for which the equation has two distinct real roots.",
+        en: "Given: &nbsp;x² − 4x + (k − 1) = 0, &nbsp;where k is a real number.<br><br>Determine the values of k for which the equation has two distinct real roots.", af: "Gegee: &nbsp;x² − 4x + (k − 1) = 0, &nbsp;waar k 'n reële getal is.<br><br>Bepaal die waardes van k waarvoor die vergelyking twee verskillende reële wortels het.",
       },
       hint: {
-        en: "“Two distinct real roots” is exam wording for real and unequal — which is Δ bigger than zero, not Δ bigger than or equal to zero.",
+        en: "“Two distinct real roots” is exam wording for real and unequal — which is Δ bigger than zero, not Δ bigger than or equal to zero.", af: "“Twee verskillende reële wortels” is eksamentaal vir reëel en ongelyk, en dit is Δ groter as nul, nie Δ groter as of gelyk aan nul nie.",
       },
       memo: [
-        { type: "step", text: { en: "Two distinct real roots need &nbsp;Δ &gt; 0. &nbsp;&nbsp;Δ = (−4)² − 4(1)(k − 1) = 16 − 4k + 4 = 20 − 4k" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "20 − 4k &gt; 0 &nbsp;⟹&nbsp; −4k &gt; −20" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "∴ k &lt; 5 &nbsp;&nbsp;(dividing by a negative turns the sign around)" }, ticks: ["a"] },
+        { type: "step", text: { en: "Two distinct real roots need &nbsp;Δ &gt; 0. &nbsp;&nbsp;Δ = (−4)² − 4(1)(k − 1) = 16 − 4k + 4 = 20 − 4k", af: "Twee verskillende reële wortels vereis &nbsp;Δ &gt; 0. &nbsp;&nbsp;Δ = (−4)² − 4(1)(k − 1) = 16 − 4k + 4 = 20 − 4k" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "20 − 4k &gt; 0 &nbsp;⟹&nbsp; −4k &gt; −20", af: "20 − 4k &gt; 0 &nbsp;⟹&nbsp; −4k &gt; −20" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "∴ k &lt; 5 &nbsp;&nbsp;(dividing by a negative turns the sign around)", af: "∴ k &lt; 5 &nbsp;&nbsp;(deling deur 'n negatief draai die teken om)" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: “distinct” rules out the boundary. At k = 5, Δ = 0 and the roots are real but EQUAL, so 5 itself is not part of the answer — that is why the sign is &lt; and not ≤.",
+          en: "WATCH OUT: “distinct” rules out the boundary. At k = 5, Δ = 0 and the roots are real but EQUAL, so 5 itself is not part of the answer — that is why the sign is &lt; and not ≤.", af: "PASOP: “verskillende” sluit die grens uit. By k = 5 is Δ = 0 en die wortels is reëel maar GELYK, dus is 5 self nie deel van die antwoord nie: dit is hoekom die teken &lt; is en nie ≤ nie.",
         } },
       ],
       esplain: {
-        en: "Exam papers have several ways of saying the same thing, and “two distinct real roots” is one of them. Distinct means different from each other, so this is real and unequal, which is the strictly-bigger-than-zero case. The word matters, because it decides whether the boundary belongs in your answer. Watch the c as well: it is the whole of k minus one, so minus four times it gives minus four k plus four, and that plus four joins the sixteen to make twenty. Then it is the usual flip at the end. As a check, feed a value back in. With k equal to four the equation becomes x squared minus four x plus three, which factorises to x minus one times x minus three — two different roots, exactly as promised.",
+        en: "Exam papers have several ways of saying the same thing, and “two distinct real roots” is one of them. Distinct means different from each other, so this is real and unequal, which is the strictly-bigger-than-zero case. The word matters, because it decides whether the boundary belongs in your answer. Watch the c as well: it is the whole of k minus one, so minus four times it gives minus four k plus four, and that plus four joins the sixteen to make twenty. Then it is the usual flip at the end. As a check, feed a value back in. With k equal to four the equation becomes x squared minus four x plus three, which factorises to x minus one times x minus three — two different roots, exactly as promised.", af: "Eksamenvraestelle het verskeie maniere om dieselfde ding te sê, en “twee verskillende reële wortels” is een daarvan. Verskillend beteken anders as mekaar, dus is dit reëel en ongelyk, die geval waar Δ streng groter as nul is. Die woord maak saak, want dit besluit of die grens in jou antwoord hoort. Let ook op die c: dit is die hele k minus een, dus gee minus vier keer dit minus vier k plus vier, en daardie plus vier sluit by die sestien aan om twintig te maak. Dan is dit die gewone omdraai aan die einde. Kontroleer deur 'n waarde terug te vervang. Met k gelyk aan vier word die vergelyking x kwadraat minus vier x plus drie, wat faktoriseer na x minus een maal x minus drie: twee verskillende wortels, presies soos belowe.",
       },
     },
     {
@@ -226,20 +226,20 @@ const q4 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "Hence write down all the natural-number values of k for which the roots are real and unequal.",
+        en: "Hence write down all the natural-number values of k for which the roots are real and unequal.", af: "Skryf vervolgens al die natuurlike getalwaardes van k neer waarvoor die wortels reëel en ongelyk is.",
       },
       hint: {
-        en: "The natural numbers are the counting numbers. Which of them are smaller than the boundary you found in (a)?",
+        en: "The natural numbers are the counting numbers. Which of them are smaller than the boundary you found in (a)?", af: "Die natuurlike getalle is die getalle waarmee jy tel. Watter van hulle is kleiner as die grens wat jy in (a) gekry het?",
       },
       memo: [
-        { type: "step", text: { en: "The natural numbers are &nbsp;1 ; 2 ; 3 ; 4 ; 5 ; … &nbsp;and they must satisfy &nbsp;k &lt; 5" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "∴ k = 1 ; &nbsp;2 ; &nbsp;3 ; &nbsp;4" }, ticks: ["a"] },
+        { type: "step", text: { en: "The natural numbers are &nbsp;1 ; 2 ; 3 ; 4 ; 5 ; … &nbsp;and they must satisfy &nbsp;k &lt; 5", af: "Die natuurlike getalle is &nbsp;1 ; 2 ; 3 ; 4 ; 5 ; … &nbsp;en hulle moet voldoen aan &nbsp;k &lt; 5" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "∴ k = 1 ; &nbsp;2 ; &nbsp;3 ; &nbsp;4", af: "∴ k = 1 ; &nbsp;2 ; &nbsp;3 ; &nbsp;4" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: ℕ starts at 1, so 0 and every negative number are out even though they satisfy k &lt; 5. And 5 is out too, because at k = 5 the roots stop being unequal. Read the number set AND the inequality — the question is testing both.",
+          en: "REMEMBER: ℕ starts at 1, so 0 and every negative number are out even though they satisfy k &lt; 5. And 5 is out too, because at k = 5 the roots stop being unequal. Read the number set AND the inequality — the question is testing both.", af: "ONTHOU: ℕ begin by 1, dus is 0 en elke negatiewe getal uit, al voldoen hulle aan k &lt; 5. En 5 is ook uit, want by k = 5 is die wortels nie meer ongelyk nie. Lees die getalversameling EN die ongelykheid: die vraag toets albei.",
         } },
       ],
       esplain: {
-        en: "This part looks like an afterthought and it is really a second question hiding behind the first. Part (a) gave you a whole stretch of the number line; this part asks which members of one particular set of numbers live inside that stretch. The natural numbers are the counting numbers, starting at one and going up in ones, so the candidates are one, two, three, four, five and onwards. The condition cuts them off below five, and five itself is excluded because the inequality is strict. That leaves four values. It is worth reading your own answer back against the question wording — “natural number” and “real and unequal” are two separate filters, and dropping either one costs a mark.",
+        en: "This part looks like an afterthought and it is really a second question hiding behind the first. Part (a) gave you a whole stretch of the number line; this part asks which members of one particular set of numbers live inside that stretch. The natural numbers are the counting numbers, starting at one and going up in ones, so the candidates are one, two, three, four, five and onwards. The condition cuts them off below five, and five itself is excluded because the inequality is strict. That leaves four values. It is worth reading your own answer back against the question wording — “natural number” and “real and unequal” are two separate filters, and dropping either one costs a mark.", af: "Hierdie deel lyk soos 'n nagedagte, maar dit is eintlik 'n tweede vraag wat agter die eerste wegkruip. Deel (a) het vir jou 'n hele stuk van die getallelyn gegee; hierdie deel vra watter lede van een bepaalde getalversameling binne daardie stuk woon. Die natuurlike getalle is die getalle waarmee jy tel, wat by een begin en met een op 'n slag opgaan, dus is die kandidate een, twee, drie, vier, vyf en verder. Die voorwaarde sny hulle onder vyf af, en vyf self is uitgesluit omdat die ongelykheid streng is. Dit los vier waardes. Dit is die moeite werd om jou eie antwoord teen die vraag se bewoording terug te lees: “natuurlike getal” en “reëel en ongelyk” is twee aparte filters, en as jy een laat val, kos dit 'n punt.",
       },
     },
   ],
@@ -264,21 +264,21 @@ const q5 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "Given: &nbsp;x² + (k − 2)x + (k + 1) = 0, &nbsp;where k is a real number.<br><br>Show that &nbsp;Δ = k² − 8k.",
+        en: "Given: &nbsp;x² + (k − 2)x + (k + 1) = 0, &nbsp;where k is a real number.<br><br>Show that &nbsp;Δ = k² − 8k.", af: "Gegee: &nbsp;x² + (k − 2)x + (k + 1) = 0, &nbsp;waar k 'n reële getal is.<br><br>Toon aan dat &nbsp;Δ = k² − 8k.",
       },
       hint: {
-        en: "b is a whole bracket here, so squaring it needs the middle term: (k − 2)² = k² − 4k + 4. Then take the whole of k + 1 as c.",
+        en: "b is a whole bracket here, so squaring it needs the middle term: (k − 2)² = k² − 4k + 4. Then take the whole of k + 1 as c.", af: "b is hier 'n hele hakie, dus het die kwadraat die middelterm nodig: (k − 2)² = k² − 4k + 4. Neem dan die hele k + 1 as c.",
       },
       memo: [
-        { type: "step", text: { en: "a = 1 ; &nbsp;b = k − 2 ; &nbsp;c = k + 1 &nbsp;&nbsp;∴&nbsp; Δ = (k − 2)² − 4(1)(k + 1)" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "= k² − 4k + 4 − 4k − 4" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "the +4 and the −4 cancel &nbsp;&nbsp;∴ Δ = k² − 8k" }, ticks: ["a"] },
+        { type: "step", text: { en: "a = 1 ; &nbsp;b = k − 2 ; &nbsp;c = k + 1 &nbsp;&nbsp;∴&nbsp; Δ = (k − 2)² − 4(1)(k + 1)", af: "a = 1 ; &nbsp;b = k − 2 ; &nbsp;c = k + 1 &nbsp;&nbsp;∴&nbsp; Δ = (k − 2)² − 4(1)(k + 1)" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "= k² − 4k + 4 − 4k − 4", af: "= k² − 4k + 4 − 4k − 4" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "the +4 and the −4 cancel &nbsp;&nbsp;∴ Δ = k² − 8k", af: "die +4 en die −4 kanselleer &nbsp;&nbsp;∴ Δ = k² − 8k" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT for the middle term. (k − 2)² is k² − 4k + 4, not k² + 4. Squaring a bracket means multiplying it by itself, and the two “outside–inside” products are what give the −4k.",
+          en: "WATCH OUT for the middle term. (k − 2)² is k² − 4k + 4, not k² + 4. Squaring a bracket means multiplying it by itself, and the two “outside–inside” products are what give the −4k.", af: "PASOP vir die middelterm. (k − 2)² is k² − 4k + 4, nie k² + 4 nie. Om 'n hakie te kwadreer, beteken om dit met homself te vermenigvuldig, en die twee “buite-binne”-produkte is wat die −4k gee.",
         } },
       ],
       esplain: {
-        en: "This is the busiest substitution on the tile, because k appears twice and both appearances have to be handled with brackets. Squaring b is the first job, and a squared bracket always has three terms: the first thing squared, twice the product of the two things, and the last thing squared. That gives k squared minus four k plus four. Then minus four times the bracket k plus one gives minus four k minus four. Line the two up and the plus four and minus four wipe each other out, leaving something surprisingly tidy. That tidiness is not luck — the numbers were chosen so the constant vanishes, which is what makes the next part factorise with a common factor rather than a trinomial.",
+        en: "This is the busiest substitution on the tile, because k appears twice and both appearances have to be handled with brackets. Squaring b is the first job, and a squared bracket always has three terms: the first thing squared, twice the product of the two things, and the last thing squared. That gives k squared minus four k plus four. Then minus four times the bracket k plus one gives minus four k minus four. Line the two up and the plus four and minus four wipe each other out, leaving something surprisingly tidy. That tidiness is not luck — the numbers were chosen so the constant vanishes, which is what makes the next part factorise with a common factor rather than a trinomial.", af: "Dit is die besigste vervanging op die teël, want k verskyn twee keer en albei kere moet met hakies hanteer word. Om b te kwadreer, is die eerste werk, en 'n gekwadreerde hakie het altyd drie terme: die eerste ding gekwadreer, twee keer die produk van die twee dinge, en die laaste ding gekwadreer. Dit gee k kwadraat minus vier k plus vier. Dan gee minus vier keer die hakie k plus een minus vier k minus vier. Sit die twee onder mekaar, en die plus vier en minus vier vee mekaar uit, en wat oorbly, is verrassend netjies. Daardie netheid is nie geluk nie: die getalle is so gekies dat die konstante verdwyn, en dit is wat die volgende deel met 'n gemene faktor laat faktoriseer eerder as met 'n drieterm.",
       },
     },
     {
@@ -286,23 +286,23 @@ const q5 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "Hence determine the values of k for which the roots of the equation are real.",
+        en: "Hence determine the values of k for which the roots of the equation are real.", af: "Bepaal vervolgens die waardes van k waarvoor die wortels van die vergelyking reëel is.",
       },
       hint: {
-        en: "Real needs Δ ≥ 0, and Δ has no constant term — so a common factor comes out instead of a trinomial. Find the CP, then decide which part of the bowl you want.",
+        en: "Real needs Δ ≥ 0, and Δ has no constant term — so a common factor comes out instead of a trinomial. Find the CP, then decide which part of the bowl you want.", af: "Reëel vereis Δ ≥ 0, en Δ het geen konstante term nie, dus kom 'n gemene faktor uit in plaas van 'n drieterm. Vind die kritieke waardes en besluit dan watter deel van die bak jy wil hê.",
       },
       memo: [
-        { type: "step", text: { en: "Real roots need &nbsp;Δ ≥ 0: &nbsp;&nbsp;k² − 8k ≥ 0" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "Common factor: &nbsp;k(k − 8) ≥ 0" }, ticks: ["ca"] },
-        { type: "step", text: { en: "CP: &nbsp;k = 0 &nbsp;or&nbsp; k − 8 = 0 &nbsp;⟹&nbsp; k = 0 &nbsp;or&nbsp; k = 8" }, ticks: ["ca"] },
-        { type: "step", text: { en: "Sketch it as a <b>happy</b> parabola in k, cutting the k-axis at 0 and at 8. ≥ 0 means on or above the axis — the <b>outside of the bowl</b>, both arms." } },
-        { type: "answer", text: { en: "∴ k ≤ 0 &nbsp;&nbsp;or&nbsp;&nbsp; k ≥ 8" }, ticks: ["a"] },
+        { type: "step", text: { en: "Real roots need &nbsp;Δ ≥ 0: &nbsp;&nbsp;k² − 8k ≥ 0", af: "Reële wortels vereis &nbsp;Δ ≥ 0: &nbsp;&nbsp;k² − 8k ≥ 0" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Common factor: &nbsp;k(k − 8) ≥ 0", af: "Gemene faktor: &nbsp;k(k − 8) ≥ 0" }, ticks: ["ca"] },
+        { type: "step", text: { en: "CP: &nbsp;k = 0 &nbsp;or&nbsp; k − 8 = 0 &nbsp;⟹&nbsp; k = 0 &nbsp;or&nbsp; k = 8", af: "Kritieke waardes: &nbsp;k = 0 &nbsp;of&nbsp; k − 8 = 0 &nbsp;⟹&nbsp; k = 0 &nbsp;of&nbsp; k = 8" }, ticks: ["ca"] },
+        { type: "step", text: { en: "Sketch it as a <b>happy</b> parabola in k, cutting the k-axis at 0 and at 8. ≥ 0 means on or above the axis — the <b>outside of the bowl</b>, both arms.", af: "Skets dit as 'n <b>happy</b> parabool in k wat die k-as by 0 en by 8 sny. ≥ 0 beteken op of bo die as: <b>buite die bak</b>, albei arms." } },
+        { type: "answer", text: { en: "∴ k ≤ 0 &nbsp;&nbsp;or&nbsp;&nbsp; k ≥ 8", af: "∴ k ≤ 0 &nbsp;&nbsp;of&nbsp;&nbsp; k ≥ 8" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER her rule about writing it down: never hand in the calculator's form “k ≤ 0 ; 8 ≤ k”. Rewrite it with k on the left in both pieces and the word <b>or</b> between them, because the answer really is two separate stretches of the number line.",
+          en: "REMEMBER her rule about writing it down: never hand in the calculator's form “k ≤ 0 ; 8 ≤ k”. Rewrite it with k on the left in both pieces and the word <b>or</b> between them, because the answer really is two separate stretches of the number line.", af: "ONTHOU haar reël oor hoe jy dit neerskryf: gee nooit die sakrekenaar se vorm “k ≤ 0 ; 8 ≤ k” in nie. Herskryf dit met k links in albei stukke en die woord <b>of</b> tussen hulle, want die antwoord is regtig twee aparte stukke van die getallelyn.",
         } },
       ],
       esplain: {
-        en: "Compare this with the non-real card and the pair teaches the whole method. There the sign was less than zero and the answer was the dip between the two crossings; here the sign is greater than or equal to zero and the answer is everything else — the two arms that climb away on either side. Both come from the same picture, so once the critical points are down, choosing the right region is just a matter of looking. Two details earn marks. The equals-sign is included, because Δ exactly zero still counts as real (equal roots are real roots). And the answer is written as two pieces joined by “or”, with k on the left both times, which is her ruling about never handing in the calculator's semicolon version.",
+        en: "Compare this with the non-real card and the pair teaches the whole method. There the sign was less than zero and the answer was the dip between the two crossings; here the sign is greater than or equal to zero and the answer is everything else — the two arms that climb away on either side. Both come from the same picture, so once the critical points are down, choosing the right region is just a matter of looking. Two details earn marks. The equals-sign is included, because Δ exactly zero still counts as real (equal roots are real roots). And the answer is written as two pieces joined by “or”, with k on the left both times, which is her ruling about never handing in the calculator's semicolon version.", af: "Vergelyk dit met die nie-reële kaart, en die paar leer die hele metode. Daar was die teken kleiner as nul en die antwoord was die duik tussen die twee snypunte; hier is die teken groter as of gelyk aan nul en die antwoord is alles anders: die twee arms wat aan albei kante wegklim. Albei kom uit dieselfde prentjie, so sodra die kritieke waardes neergeskryf is, is die regte gebied kies net 'n kwessie van kyk. Twee besonderhede verdien punte. Die gelykaanteken is ingesluit, want Δ presies nul tel steeds as reëel (gelyke wortels is reële wortels). En die antwoord word as twee stukke geskryf wat met “of” verbind is, met k albei kere links, en dit is haar reël om nooit die sakrekenaar se kommapunt-weergawe in te gee nie.",
       },
     },
   ],
