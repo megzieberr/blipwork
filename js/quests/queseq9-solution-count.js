@@ -129,20 +129,20 @@ function countLadder(p, q, neg, kind) {
     { s: L(`Read the sign on the right: it is ${neg ? "NEGATIVE" : "positive"}`, `Lees die teken regs: dit is ${neg ? "NEGATIEF" : "positief"}`) },
   ];
   if (kind === "two") {
-    steps.push({ s: "Even numerator with a positive right-hand side → ± answer",
-      r: "the even power hides the sign, so both a plus and a minus value work" });
+    steps.push({ s: L("Even numerator with a positive right-hand side → ± answer", "Ewe teller met 'n positiewe regterkant → ± antwoord"),
+      r: L("the even power hides the sign, so both a plus and a minus value work", "die ewe mag versteek die teken, so 'n plus- en 'n minuswaarde werk albei") });
   } else if (kind === "one" && !neg) {
-    steps.push({ s: "Odd numerator, so nothing is hidden and there is no ±",
-      r: `raise both sides to the reciprocal ${p === 1 ? q : `${q}/${p}`} and one value comes out` });
+    steps.push({ s: L("Odd numerator, so nothing is hidden and there is no ±", "Onewe teller, so niks word versteek nie en daar is geen ± nie"),
+      r: L(`raise both sides to the reciprocal ${p === 1 ? q : `${q}/${p}`} and one value comes out`, `verhef albei kante tot die resiprook ${p === 1 ? q : `${q}/${p}`} en een waarde kom uit`) });
   } else if (kind === "one") {
-    steps.push({ s: `Only odd numbers, top (${p}) and bottom (${q}), so a negative answer is allowed 🙂`,
-      r: "an odd root of a negative really is negative" });
+    steps.push({ s: L(`Only odd numbers, top (${p}) and bottom (${q}), so a negative answer is allowed 🙂`, `Net onewe getalle, bo (${p}) en onder (${q}), so 'n negatiewe antwoord is toegelaat 🙂`),
+      r: L("an odd root of a negative really is negative", "'n onewe wortel van 'n negatief is regtig negatief") });
   } else if (p % 2 === 0) {
-    steps.push({ s: `The numerator ${p} is even, and an even power can never be ⊖ 🙁`,
-      r: "nothing you square (or raise to any even power) comes out negative" });
+    steps.push({ s: L(`The numerator ${p} is even, and an even power can never be ⊖ 🙁`, `Die teller ${p} is ewe, en 'n ewe mag kan nooit ⊖ wees nie 🙁`),
+      r: L("nothing you square (or raise to any even power) comes out negative", "niks wat jy kwadreer (of tot enige ewe mag verhef) kom negatief uit nie") });
   } else {
-    steps.push({ s: `The denominator ${q} is even, and an even root is never ⊖ 🙁`,
-      r: "so the left side can never reach a negative value" });
+    steps.push({ s: L(`The denominator ${q} is even, and an even root is never ⊖ 🙁`, `Die noemer ${q} is ewe, en 'n ewe wortel is nooit ⊖ nie 🙁`),
+      r: L("so the left side can never reach a negative value", "so die linkerkant kan nooit 'n negatiewe waarde bereik nie") });
   }
   steps.push({ s: `∴ ${LABEL[kind]}` });
   return steps;
@@ -178,9 +178,9 @@ function classify(force, promptFn) {
   const k = solutionCount(p, q, neg);
   const e = eqn(p, q, c);
   return mc3(
-    (promptFn || ((s) => `How many solutions does <b>${s}</b> have?`))(e),
+    (promptFn || ((s) => L(`How many solutions does <b>${s}</b> have?`, `Hoeveel oplossings het <b>${s}</b>?`)))(e),
     k,
-    { answerLabel: `${e} — ${why(p, q, neg, k)}`,
+    { answerLabel: `${e}${L(" — ", ": ")}${why(p, q, neg, k)}`,
       solution: countLadder(p, q, neg, k),
       meta: { p, q, neg, kind: k, three: true } },
   );
@@ -268,38 +268,58 @@ const box = (body, tone) =>
   `<div style="border:1.5px solid ${tone};border-radius:12px;padding:10px 12px;line-height:1.7">${body}</div>`;
 
 const RULE_FRAMES = [
-  box(`<b>Equations with rational exponents</b><br>
+  box(L(`<b>Equations with rational exponents</b><br>
     Multiply with the <b>reciprocal</b> of the exponent &mdash; switch numerator and denominator.<br>
-    ${sf(3, 4)} × ${sf(4, 3)} = 1 &nbsp;<span style="opacity:.75">(cancels out)</span>`, "#34d399"),
-  box(`<b>${xpow(2, 3)} = 4</b><br>
+    ${sf(3, 4)} × ${sf(4, 3)} = 1 &nbsp;<span style="opacity:.75">(cancels out)</span>`, `<b>Vergelykings met rasionale eksponente</b><br>
+    Vermenigvuldig met die <b>resiprook</b> van die eksponent &mdash; ruil die teller en noemer om.<br>
+    ${sf(3, 4)} × ${sf(4, 3)} = 1 &nbsp;<span style="opacity:.75">(kanselleer mekaar uit)</span>`), "#34d399"),
+  box(L(`<b>${xpow(2, 3)} = 4</b><br>
     (${root(3, "x²")})³ = (4)³<br>
     √(x²) = √64<br>
     x = <b>±8</b><br>
-    <span style="opacity:.75">x<sup>even</sup> = ± answer.</span>`, "#34d399"),
-  box(`👀 <b>IMPORTANT NOTES</b><br>
+    <span style="opacity:.75">x<sup>even</sup> = ± answer.</span>`, `<b>${xpow(2, 3)} = 4</b><br>
+    (${root(3, "x²")})³ = (4)³<br>
+    √(x²) = √64<br>
+    x = <b>±8</b><br>
+    <span style="opacity:.75">x<sup>ewe</sup> = ± antwoord.</span>`), "#34d399"),
+  box(L(`👀 <b>IMPORTANT NOTES</b><br>
     <span style="color:#3aa0ff"><b>even numerator</b></span> &nbsp;⟶&nbsp; <b>± answer</b><br>
-    ${xpow(2, 3)} = 2 &nbsp;/&nbsp; ${xpow(4, 7)} = 5`, "#3aa0ff"),
-  box(`<span style="color:#f43f7f"><b>only odd numbers</b></span> in num. <b>and</b> denom. &nbsp;⟶&nbsp; ✓ negative answer 🙂<br>
-    ${xpow(1, 3)} = −2 &nbsp;/&nbsp; ${xpow(5, 7)} = −9`, "#f43f7f"),
-  box(`<span style="color:#22d3ee"><b>even number</b></span> in num. <b>or</b> denom. &nbsp;⟶&nbsp; ✗ negative answer <b>(no solution)</b> 🙁<br>
-    ${xpow(1, 2)} = −3 &nbsp;/&nbsp; ${xpow(4, 3)} = −4`, "#22d3ee"),
+    ${xpow(2, 3)} = 2 &nbsp;/&nbsp; ${xpow(4, 7)} = 5`, `👀 <b>BELANGRIKE NOTAS</b><br>
+    <span style="color:#3aa0ff"><b>ewe teller</b></span> &nbsp;⟶&nbsp; <b>± antwoord</b><br>
+    ${xpow(2, 3)} = 2 &nbsp;/&nbsp; ${xpow(4, 7)} = 5`), "#3aa0ff"),
+  box(L(`<span style="color:#f43f7f"><b>only odd numbers</b></span> in num. <b>and</b> denom. &nbsp;⟶&nbsp; ✓ negative answer 🙂<br>
+    ${xpow(1, 3)} = −2 &nbsp;/&nbsp; ${xpow(5, 7)} = −9`, `<span style="color:#f43f7f"><b>net onewe getalle</b></span> in teller <b>en</b> noemer &nbsp;⟶&nbsp; ✓ negatiewe antwoord 🙂<br>
+    ${xpow(1, 3)} = −2 &nbsp;/&nbsp; ${xpow(5, 7)} = −9`), "#f43f7f"),
+  box(L(`<span style="color:#22d3ee"><b>even number</b></span> in num. <b>or</b> denom. &nbsp;⟶&nbsp; ✗ negative answer <b>(no solution)</b> 🙁<br>
+    ${xpow(1, 2)} = −3 &nbsp;/&nbsp; ${xpow(4, 3)} = −4`, `<span style="color:#22d3ee"><b>ewe getal</b></span> in teller <b>of</b> noemer &nbsp;⟶&nbsp; ✗ negatiewe antwoord <b>(geen oplossing)</b> 🙁<br>
+    ${xpow(1, 2)} = −3 &nbsp;/&nbsp; ${xpow(4, 3)} = −4`), "#22d3ee"),
 ];
 
 const WORKED_FRAMES = [
-  box(`<b>1)</b> &nbsp;${xpow(2, 3)} = 2 &nbsp;&nbsp;<span style="opacity:.75">even in numerator = ± answer</span><br>
+  box(L(`<b>1)</b> &nbsp;${xpow(2, 3)} = 2 &nbsp;&nbsp;<span style="opacity:.75">even in numerator = ± answer</span><br>
     (${root(3, "x²")})³ = (2)³<br>
     √(x²) = √8<br>
-    x = <b>±2√2</b>`, "#3aa0ff"),
-  box(`<b>2)</b> &nbsp;${xpow(5, 7)} = −9 &nbsp;&nbsp;<span style="opacity:.75">odd numbers can be ⊖</span><br>
+    x = <b>±2√2</b>`, `<b>1)</b> &nbsp;${xpow(2, 3)} = 2 &nbsp;&nbsp;<span style="opacity:.75">ewe in teller = ± antwoord</span><br>
+    (${root(3, "x²")})³ = (2)³<br>
+    √(x²) = √8<br>
+    x = <b>±2√2</b>`), "#3aa0ff"),
+  box(L(`<b>2)</b> &nbsp;${xpow(5, 7)} = −9 &nbsp;&nbsp;<span style="opacity:.75">odd numbers can be ⊖</span><br>
     (${root(7, "x⁵")})⁷ = (−9)⁷<br>
     ${root(5, "x⁵")} = ${root(5, "−4 782 969")}<br>
-    x = <b>−21,67</b>`, "#f43f7f"),
-  box(`<b>3)</b> &nbsp;${xpow(4, 3)} = −4 &nbsp;&nbsp;<span style="opacity:.75">even numerator cannot be ⊖</span><br>
+    x = <b>−21,67</b>`, `<b>2)</b> &nbsp;${xpow(5, 7)} = −9 &nbsp;&nbsp;<span style="opacity:.75">onewe getalle kan ⊖ wees</span><br>
+    (${root(7, "x⁵")})⁷ = (−9)⁷<br>
+    ${root(5, "x⁵")} = ${root(5, "−4 782 969")}<br>
+    x = <b>−21,67</b>`), "#f43f7f"),
+  box(L(`<b>3)</b> &nbsp;${xpow(4, 3)} = −4 &nbsp;&nbsp;<span style="opacity:.75">even numerator cannot be ⊖</span><br>
     (${root(3, "x⁴")})³ = (−4)³<br>
     ${root(4, "x⁴")} = ${root(4, "−64")}<br>
-    ↑ <b>cannot happen</b>`, "#22d3ee"),
-  box(`<b>4)</b> &nbsp;${xpow(1, 2)} = −3 &nbsp;&nbsp;<span style="opacity:.75">even denominator cannot ONLY be ⊖</span><br>
-    <sup>2</sup>√(x¹) = −3 &nbsp;✗`, "#22d3ee"),
+    ↑ <b>cannot happen</b>`, `<b>3)</b> &nbsp;${xpow(4, 3)} = −4 &nbsp;&nbsp;<span style="opacity:.75">ewe teller kan nie ⊖ wees nie</span><br>
+    (${root(3, "x⁴")})³ = (−4)³<br>
+    ${root(4, "x⁴")} = ${root(4, "−64")}<br>
+    ↑ <b>kan nie gebeur nie</b>`), "#22d3ee"),
+  box(L(`<b>4)</b> &nbsp;${xpow(1, 2)} = −3 &nbsp;&nbsp;<span style="opacity:.75">even denominator cannot ONLY be ⊖</span><br>
+    <sup>2</sup>√(x¹) = −3 &nbsp;✗`, `<b>4)</b> &nbsp;${xpow(1, 2)} = −3 &nbsp;&nbsp;<span style="opacity:.75">ewe noemer kan nie NET ⊖ wees nie</span><br>
+    <sup>2</sup>√(x¹) = −3 &nbsp;✗`), "#22d3ee"),
 ];
 
 const reveal = (q, frames) => { q.reveal = frames; q.revealMode = "replace"; return q; };
@@ -313,13 +333,13 @@ const SKILLS = {
   /* 1 — teach the reciprocal move and her three rules, then ask */
   theRules: () => reveal(
     classify({ kind: "two", neg: false },
-      (e) => `Read the rules first, then answer this:<br>how many solutions does <b>${e}</b> have?`),
+      (e) => L(`Read the rules first, then answer this:<br>how many solutions does <b>${e}</b> have?`, `Lees eers die reëls en antwoord dan hierdie een:<br>hoeveel oplossings het <b>${e}</b>?`)),
     RULE_FRAMES),
 
   /* 2 — her four worked examples, then a no-solution one */
   workedExamples: () => reveal(
     classify({ kind: "none", neg: true },
-      (e) => `Same four rules, a fresh equation. How many solutions does <b>${e}</b> have?`),
+      (e) => L(`Same four rules, a fresh equation. How many solutions does <b>${e}</b> have?`, `Dieselfde vier reëls, 'n nuwe vergelyking. Hoeveel oplossings het <b>${e}</b>?`)),
     WORKED_FRAMES),
 
   /* 3 — one solution, positive side (odd numerator) */

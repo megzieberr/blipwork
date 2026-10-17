@@ -128,14 +128,20 @@ const SKILLS = {
     else if (which === "quad") { const g = randQuad(); seq = g.seq; }
     else { const g = randGeo({ integerR: true }); seq = g.seq; }
     const kind = classify(seq);
-    const correct = classifyName[kind] || L("none of these", "geen van hierdie");
-    const all = [L("arithmetic (linear)", "rekenkundig (lineêr)"), L("quadratic", "quadratic"), L("geometric", "meetkundig"), L("none of these", "geen van hierdie")];
+    /* the names the learner reads (row T93): English = patternlib's classifyName
+       word for word; kind itself stays the English id the comparisons below use */
+    const NAME = {
+      arithmetic: L("arithmetic (linear)", "rekenkundig (lineêr)"), quadratic: L(classifyName.quadratic, "kwadraties"),
+      geometric: L("geometric", "meetkundig"), constant: L("constant", "konstant"), other: L("none of these", "geen van hierdie"),
+    };
+    const correct = NAME[kind] || L("none of these", "geen van hierdie");
+    const all = [NAME.arithmetic, NAME.quadratic, NAME.geometric, NAME.other];
     /* the actual test the learner should run, on THIS rolled sequence */
     const fd = firstDiffs(seq);
     const sol = kind === "arithmetic"
       ? [{ s: L(`First differences: ${list(fd)}`, `Eerste verskille: ${list(fd)}`), r: L("next − previous", "volgende − vorige") },
          { s: L(`They are all the same`, `Hulle is almal dieselfde`), r: L("constant 1st difference → arithmetic (linear)", "konstante 1ste verskil → rekenkundig (lineêr)") }]
-      : kind === L("quadratic", "quadratic")
+      : kind === "quadratic"
         ? [{ s: L(`First differences: ${list(fd)}`, `Eerste verskille: ${list(fd)}`), r: L("they change → not arithmetic", "hulle verander → nie rekenkundig nie") },
            { s: L(`Second differences: ${list(firstDiffs(fd))}`, `Tweede verskille: ${list(firstDiffs(fd))}`), r: L("constant 2nd difference → quadratic", "konstante 2de verskil → kwadraties") }]
         : [{ s: L(`The differences are not constant, so divide instead`, `Die verskille is nie konstant nie, deel dus eerder`), r: L("next ÷ previous", "volgende ÷ vorige") },

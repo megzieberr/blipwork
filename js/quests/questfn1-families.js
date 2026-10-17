@@ -5,12 +5,18 @@
    ============================================================ */
 import { mc } from "./_shared.js";
 import {
-  FAMILY, randCurveOf, lineGraph, parabolaGraph, hyperbolaGraph, expGraph,
+  randCurveOf, lineGraph, parabolaGraph, hyperbolaGraph, expGraph,
 } from "./_func.js";
 import { eqStr, pick } from "../funclib.js";
 import { L } from "../lang.js";
 
 const ACC = "#14b8a6";
+/* The family NAMES the learner reads, with their Afrikaans twins (row T93).
+   The English is _func.js's FAMILY word for word; the ids stay in KINDS. */
+const FAMILY = {
+  line: L("Straight line", "Reguit lyn"), parabola: L("Parabola", "Parabool"),
+  hyperbola: L("Hyperbola", "Hiperbool"), exp: L("Exponential graph", "Eksponensiële grafiek"),
+};
 const KINDS = [L("line", "line"), L("parabola", "parabola"), L("hyperbola", "hyperbola"), L("exp", "exp")];
 
 /* ---- worked-method text (2026-09-02 methods batch, session S3) ----
@@ -51,7 +57,7 @@ const SKILLS = {
         solution: [
           { s: L(`Ask the one sorting question: where is the x?`, `Vra die een sorteervraag: waar is die x?`), r: L("that alone splits the four families", "dit alleen skei die vier families") },
           { s: L(`In ${eqStr(cv)}, ${WHERE_X[kind]}`, `In ${eqStr(cv)}, ${WHERE_X[kind]}`) },
-          { s: L(`That is the ${FAMILY[kind]} shape: ${STD_FORM[kind]}`, `Dit is die vorm van die ${FAMILY[kind]}: ${STD_FORM[kind]}`) },
+          { s: L(`That is the ${FAMILY[kind]} shape: ${STD_FORM[kind]}`, `Dit is die familie ${FAMILY[kind]}: ${STD_FORM[kind]}`) },
         ] });
   },
 
@@ -68,7 +74,7 @@ const SKILLS = {
         solution: [
           { s: L("Go by the shape: count the turning points, then look for dashed asymptotes", "Gaan volgens die vorm: tel die draaipunte en soek dan asimptote (stippellyne)") },
           { s: L(`Here ${SHAPE_TELL[kind]}`, `Hier ${SHAPE_TELL[kind]}`) },
-          { s: L(`Only the ${FAMILY[kind]} does that`, `Net die ${FAMILY[kind]} doen dit`), r: L(`equation form ${STD_FORM[kind]}`, `vergelykingsvorm ${STD_FORM[kind]}`) },
+          { s: L(`Only the ${FAMILY[kind]} does that`, `Net die familie ${FAMILY[kind]} doen dit`), r: L(`equation form ${STD_FORM[kind]}`, `vergelykingsvorm ${STD_FORM[kind]}`) },
         ] });
   },
 

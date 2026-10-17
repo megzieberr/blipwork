@@ -293,18 +293,18 @@ const q5 = {
       marks: 3,
       level: 4,
       prompt: {
-        en: "Determine, with a reason in each case, whether &nbsp;(−64)" + RX(1, 6) + "&nbsp; and &nbsp;(−64)" + RX(1, 3) + "&nbsp; are real numbers, and give the value of each one that is.",
+        en: "Determine, with a reason in each case, whether &nbsp;(−64)" + RX(1, 6) + "&nbsp; and &nbsp;(−64)" + RX(1, 3) + "&nbsp; are real numbers, and give the value of each one that is.", af: `Bepaal, met 'n rede in elke geval, of &nbsp;(−64)${RX(1, 6)}&nbsp; en &nbsp;(−64)${RX(1, 3)}&nbsp; reële getalle is, en gee die waarde van elkeen wat wel reëel is.`,
       },
       hint: {
         en: "Turn each exponent back into a root and look only at the bottom number — is that root even or odd? A negative sitting under those two kinds of root behaves completely differently.", af: "Maak van elke eksponent weer 'n wortel en kyk net na die onderste getal: is daardie wortel ewe of onewe? 'n Negatief onder daardie twee soorte wortels gedra hom heeltemal anders.",
       },
       memo: [
         { type: "step", text: { en: "Turn each exponent back into a root: the bottom of the fraction is the root, and the question is whether that root is <b>even</b> or <b>odd</b>.", af: "Maak van elke eksponent weer 'n wortel: die onderste getal van die breuk is die wortel, en die vraag is of daardie wortel <b>ewe</b> of <b>onewe</b> is." } },
-        { type: "step", text: { en: "(−64)" + RX(1, 6) + " = <sup>6</sup>√(−64) — an <b>even</b> root of a negative, and no real number multiplied by itself six times can come out negative &nbsp;∴ <b>non-real</b>." }, ticks: ["s/f"] },
-        { type: "step", text: { en: "(−64)" + RX(1, 3) + " = ∛(−64) — an <b>odd</b> root of a negative, which is allowed, and the answer comes out negative." }, ticks: ["ca"] },
-        { type: "answer", text: { en: "(−64)" + RX(1, 6) + " is <b>non-real</b>; &nbsp;&nbsp;(−64)" + RX(1, 3) + " = −4, &nbsp;because (−4)³ = −64." }, ticks: ["a"] },
+        { type: "step", text: { en: "(−64)" + RX(1, 6) + " = <sup>6</sup>√(−64) — an <b>even</b> root of a negative, and no real number multiplied by itself six times can come out negative &nbsp;∴ <b>non-real</b>.", af: `(−64)${RX(1, 6)} = <sup>6</sup>√(−64): 'n <b>ewe</b> wortel van 'n negatief, en geen reële getal wat ses keer met homself vermenigvuldig word, kan negatief uitkom nie &nbsp;∴ <b>nie-reëel</b>.` }, ticks: ["s/f"] },
+        { type: "step", text: { en: "(−64)" + RX(1, 3) + " = ∛(−64) — an <b>odd</b> root of a negative, which is allowed, and the answer comes out negative.", af: `(−64)${RX(1, 3)} = ∛(−64): 'n <b>onewe</b> wortel van 'n negatief, wat toegelaat is, en die antwoord kom negatief uit.` }, ticks: ["ca"] },
+        { type: "answer", text: { en: "(−64)" + RX(1, 6) + " is <b>non-real</b>; &nbsp;&nbsp;(−64)" + RX(1, 3) + " = −4, &nbsp;because (−4)³ = −64.", af: `(−64)${RX(1, 6)} is <b>nie-reëel</b>; &nbsp;&nbsp;(−64)${RX(1, 3)} = −4, &nbsp;want (−4)³ = −64.` }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: <b>non-real</b> is the word for an even root of a negative — not “no solution” and not “undefined”. And a minus inside the bracket is never something you may quietly drop: (−64)" + RX(1, 3) + " is −4, while 64" + RX(1, 3) + " is 4.",
+          en: "REMEMBER: <b>non-real</b> is the word for an even root of a negative — not “no solution” and not “undefined”. And a minus inside the bracket is never something you may quietly drop: (−64)" + RX(1, 3) + " is −4, while 64" + RX(1, 3) + " is 4.", af: `ONTHOU: <b>nie-reëel</b> is die woord vir 'n ewe wortel van 'n negatief, nie “geen oplossing” nie en ook nie “onbepaald” nie. En 'n minus binne die hakie mag jy nooit stilletjies weglaat nie: (−64)${RX(1, 3)} is −4, maar 64${RX(1, 3)} is 4.`,
         } },
       ],
       esplain: {
@@ -332,7 +332,7 @@ const q6 = {
       marks: 4,
       level: 4,
       prompt: {
-        en: "<em>No calculator.</em><br>Solve for x: &nbsp;x" + RX(2, 3) + " = 25",
+        en: "<em>No calculator.</em><br>Solve for x: &nbsp;x" + RX(2, 3) + " = 25", af: `<em>Sonder 'n sakrekenaar.</em><br>Los op vir x: &nbsp;x${RX(2, 3)} = 25`,
       },
       hint: {
         en: "Multiply the exponent by its reciprocal to strip it off the x — and do exactly the same to the other side. Then look hard at the TOP of the original exponent before you decide how many answers there are.", af: "Vermenigvuldig die eksponent met sy resiprook om dit van die x af te stroop, en doen presies dieselfde aan die ander kant. Kyk dan mooi na die BOONSTE getal van die oorspronklike eksponent voordat jy besluit hoeveel antwoorde daar is.",
@@ -340,10 +340,10 @@ const q6 = {
       memo: [
         { type: "step", text: { en: "Multiply the exponent by its <b>reciprocal</b> — switch numerator and denominator — and do the same to the other side:", af: "Vermenigvuldig die eksponent met sy <b>resiprook</b> (ruil die teller en noemer om), en doen dieselfde aan die ander kant:" } },
         { type: "step", text: { en: "(x" + RX(2, 3) + ")" + RX(3, 2) + " = 25" + RX(3, 2) }, ticks: ["s/f"] },
-        { type: "step", text: { en: "The original exponent has an <b>even numerator</b> (the 2), so the answer carries a ±:<br>x = ±25" + RX(3, 2) + " = ±(√25)³ = ±5³ = ±125" }, ticks: ["ca"] },
-        { type: "step", text: { en: "CHECK both: &nbsp;125" + RX(2, 3) + " = (∛125)² = 5² = 25 ✓ &nbsp;&nbsp;and&nbsp;&nbsp; (−125)" + RX(2, 3) + " = (∛(−125))² = (−5)² = 25 ✓" }, ticks: ["ca"] },
+        { type: "step", text: { en: "The original exponent has an <b>even numerator</b> (the 2), so the answer carries a ±:<br>x = ±25" + RX(3, 2) + " = ±(√25)³ = ±5³ = ±125", af: `Die oorspronklike eksponent het 'n <b>ewe teller</b> (die 2), dus kry die antwoord 'n ±:<br>x = ±25${RX(3, 2)} = ±(√25)³ = ±5³ = ±125` }, ticks: ["ca"] },
+        { type: "step", text: { en: "CHECK both: &nbsp;125" + RX(2, 3) + " = (∛125)² = 5² = 25 ✓ &nbsp;&nbsp;and&nbsp;&nbsp; (−125)" + RX(2, 3) + " = (∛(−125))² = (−5)² = 25 ✓", af: `TOETS albei: &nbsp;125${RX(2, 3)} = (∛125)² = 5² = 25 ✓ &nbsp;&nbsp;en&nbsp;&nbsp; (−125)${RX(2, 3)} = (∛(−125))² = (−5)² = 25 ✓` }, ticks: ["ca"] },
         { type: "answer", text: { en: "∴ x = 125 &nbsp;or&nbsp; x = −125", af: "∴ x = 125 &nbsp;of&nbsp; x = −125" }, ticks: ["a"] },
-        { type: "step", text: { en: "<b>OR</b> — raise, then root (same marks): &nbsp;x" + RX(2, 3) + " = 25 &nbsp;⟹&nbsp; (∛(x²))³ = 25³ &nbsp;⟹&nbsp; x² = <span class=\"nowrap\">15&nbsp;625</span> &nbsp;⟹&nbsp; x = ±125" } },
+        { type: "step", text: { en: "<b>OR</b> — raise, then root (same marks): &nbsp;x" + RX(2, 3) + " = 25 &nbsp;⟹&nbsp; (∛(x²))³ = 25³ &nbsp;⟹&nbsp; x² = <span class=\"nowrap\">15&nbsp;625</span> &nbsp;⟹&nbsp; x = ±125", af: `<b>OF</b>, verhef eers en trek dan die wortel (dieselfde punte): &nbsp;x${RX(2, 3)} = 25 &nbsp;⟹&nbsp; (∛(x²))³ = 25³ &nbsp;⟹&nbsp; x² = <span class="nowrap">15&nbsp;625</span> &nbsp;⟹&nbsp; x = ±125` } },
         { type: "trap", text: {
           en: "REMEMBER: the ± is decided by the NUMERATOR of the original exponent. Here it is 2, which is even, so BOTH signs work and dropping the −125 throws away half the answer. If that numerator had been odd there would be no ± at all.", af: "ONTHOU: die TELLER van die oorspronklike eksponent besluit oor die ±. Hier is dit 2, wat ewe is, dus werk ALBEI tekens, en as jy die −125 weglaat, gooi jy die helfte van die antwoord weg. As daardie teller onewe was, sou daar glad geen ± wees nie.",
         } },
@@ -357,15 +357,15 @@ const q6 = {
       marks: 2,
       level: 3,
       prompt: {
-        en: "Hence explain why &nbsp;x" + RX(2, 3) + " = −25&nbsp; has no solution.",
+        en: "Hence explain why &nbsp;x" + RX(2, 3) + " = −25&nbsp; has no solution.", af: `Verduidelik gevolglik waarom &nbsp;x${RX(2, 3)} = −25&nbsp; geen oplossing het nie.`,
       },
       hint: {
         en: "Read the exponent as two instructions in order: cube root first, then square. Ask what the last of those two can possibly produce.", af: "Lees die eksponent as twee opdragte in volgorde: eers die derdemagswortel, dan kwadreer. Vra wat die laaste van die twee moontlik kan oplewer.",
       },
       memo: [
-        { type: "step", text: { en: "Read the exponent in order: &nbsp;x" + RX(2, 3) + "&nbsp; is the cube root of x, and then that answer <b>squared</b>." } },
+        { type: "step", text: { en: "Read the exponent in order: &nbsp;x" + RX(2, 3) + "&nbsp; is the cube root of x, and then that answer <b>squared</b>.", af: `Lees die eksponent in volgorde: &nbsp;x${RX(2, 3)}&nbsp; is die derdemagswortel van x, en dan word daardie antwoord <b>gekwadreer</b>.` } },
         { type: "step", text: { en: "Whatever ∛x comes to — positive, negative or zero — squaring it can never give a negative answer.", af: "Wat ∛x ook al is (positief, negatief of nul), die kwadraat daarvan kan nooit negatief wees nie." }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "x" + RX(2, 3) + " ≠ −25 &nbsp;&nbsp;∴ <b>no solution</b>." }, ticks: ["a"] },
+        { type: "answer", text: { en: "x" + RX(2, 3) + " ≠ −25 &nbsp;&nbsp;∴ <b>no solution</b>.", af: `x${RX(2, 3)} ≠ −25 &nbsp;&nbsp;∴ <b>geen oplossing</b>.` }, ticks: ["a"] },
         { type: "trap", text: {
           en: "REMEMBER: an EVEN number in the numerator means the left-hand side can never come out negative, so a negative right-hand side gives <b>no solution</b>. Not “undefined”, which is only for dividing by zero, and not “non-real”, which is only for an even root of a negative.", af: "ONTHOU: 'n EWE getal in die teller beteken die linkerkant kan nooit negatief wees nie, dus is daar by 'n negatiewe regterkant <b>geen oplossing</b> nie. Nie “onbepaald” nie, wat net vir deling deur nul is, en nie “nie-reëel” nie, wat net vir 'n ewe wortel van 'n negatief is.",
         } },

@@ -72,7 +72,7 @@ const q1 = {
       marks: 3,
       level: 1,
       prompt: {
-        en: "Simplify, and leave your answer with positive exponents only: <br>&nbsp;" + F("(2a³b⁻²)⁴", "8a⁵b⁻³"),
+        en: "Simplify, and leave your answer with positive exponents only: <br>&nbsp;" + F("(2a³b⁻²)⁴", "8a⁵b⁻³"), af: `Vereenvoudig, en laat jou antwoord met net positiewe eksponente: <br>&nbsp;${F("(2a³b⁻²)⁴", "8a⁵b⁻³")}`,
       },
       hint: {
         en: "Deal with the bracket first — every base inside it gets the outside exponent, the 2 included. Only then take the top away from the bottom, base by base.", af: "Hanteer eers die hakie: elke grondtal daarin kry die buitenste eksponent, die 2 ingesluit. Trek eers dan die eksponente af, onder van bo, grondtal vir grondtal.",
@@ -111,7 +111,7 @@ const q2 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "<em>No calculator.</em><br>Simplify: &nbsp;" + F("5<sup>m+1</sup> − 5<sup>m−1</sup>", "5<sup>m</sup>"),
+        en: "<em>No calculator.</em><br>Simplify: &nbsp;" + F("5<sup>m+1</sup> − 5<sup>m−1</sup>", "5<sup>m</sup>"), af: `<em>Sonder 'n sakrekenaar.</em><br>Vereenvoudig: &nbsp;${F("5<sup>m+1</sup> − 5<sup>m−1</sup>", "5<sup>m</sup>")}`,
       },
       hint: {
         en: "There is a − between the two terms on top, so nothing may cancel yet. Divorce each power into 5<sup>m</sup> times a small number first, and then look for what they have in common.", af: "Daar is 'n − tussen die twee terme bo, dus mag niks nog kanselleer nie. Skei eers elke mag in 5<sup>m</sup> maal 'n klein getal, en soek dan wat hulle gemeen het.",
@@ -119,7 +119,7 @@ const q2 = {
       memo: [
         { type: "step", text: { en: "There is a − between the terms, so every power gets <b>divorced</b> first: &nbsp;5<sup>m+1</sup> = 5<sup>m</sup> · 5 &nbsp;and&nbsp; 5<sup>m−1</sup> = 5<sup>m</sup> · 5⁻¹.", af: "Daar is 'n − tussen die terme, dus word elke mag eers <b>geskei</b>: &nbsp;5<sup>m+1</sup> = 5<sup>m</sup> · 5 &nbsp;en&nbsp; 5<sup>m−1</sup> = 5<sup>m</sup> · 5⁻¹." }, ticks: ["s/f"] },
         { type: "step", text: { en: "= " + F("5<sup>m</sup> · 5 − 5<sup>m</sup> · 5⁻¹", "5<sup>m</sup>") } },
-        { type: "step", text: { en: "Take out the common factor — always the base carrying the variable exponent. The − is now <b>caged</b>, so 5<sup>m</sup> may cancel: &nbsp;= " + F("5<sup>m</sup>(5 − 1/5)", "5<sup>m</sup>") }, ticks: ["ca"] },
+        { type: "step", text: { en: "Take out the common factor — always the base carrying the variable exponent. The − is now <b>caged</b>, so 5<sup>m</sup> may cancel: &nbsp;= " + F("5<sup>m</sup>(5 − 1/5)", "5<sup>m</sup>"), af: `Haal die gemene faktor uit: altyd die grondtal met die veranderlike eksponent. Die − is nou <b>vasgekeer</b>, dus mag 5<sup>m</sup> kanselleer: &nbsp;= ${F("5<sup>m</sup>(5 − 1/5)", "5<sup>m</sup>")}` }, ticks: ["ca"] },
         { type: "answer", text: { en: "= 5 − 1/5 = 25/5 − 1/5 = 24/5", af: "= 5 − 1/5 = 25/5 − 1/5 = 24/5" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "REMEMBER: 5<sup>m−1</sup> means 5<sup>m</sup> <i>divided</i> by 5, not 5<sup>m</sup> <i>minus</i> 5. Divorcing splits a power into a product — a plus or minus in the exponent becomes a multiply or a divide outside it.", af: "ONTHOU: 5<sup>m−1</sup> beteken 5<sup>m</sup> <i>gedeel</i> deur 5, nie 5<sup>m</sup> <i>minus</i> 5 nie. Egskeiding breek 'n mag op in 'n produk: 'n plus of minus in die eksponent word 'n maal of 'n deel daarbuite.",
@@ -190,7 +190,7 @@ const q4 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Simplify: &nbsp;" + F("9<sup>n+1</sup> · 8<sup>n</sup>", "6<sup>n</sup> · 12<sup>n+1</sup>"),
+        en: "<em>No calculator.</em><br>Simplify: &nbsp;" + F("9<sup>n+1</sup> · 8<sup>n</sup>", "6<sup>n</sup> · 12<sup>n+1</sup>"), af: `<em>Sonder 'n sakrekenaar.</em><br>Vereenvoudig: &nbsp;${F("9<sup>n+1</sup> · 8<sup>n</sup>", "6<sup>n</sup> · 12<sup>n+1</sup>")}`,
       },
       hint: {
         en: "Four different bases, but only two primes hiding behind them. Break every base into 2s and 3s first, then hand each bracket its outside exponent before you go anywhere near the subtraction.", af: "Vier verskillende grondtalle, maar net twee priemgetalle wat agter hulle wegkruip. Breek eers elke grondtal op in 2'e en 3'e, en gee dan elke hakie sy buitenste eksponent voordat jy naby die aftrekking kom.",

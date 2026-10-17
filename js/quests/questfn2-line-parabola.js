@@ -99,10 +99,10 @@ const SKILLS = {
         solution: (() => {
           const st = paraStd(cv);
           return [
-            { s: `Read off the standard form y = ax² + bx + c: a = ${C(st.a)}, b = ${C(st.b)}, c = ${C(st.c)}` },
-            { s: `x of the TP = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}`, r: "the shortcut, not a derivative" },
-            { s: `Substitute that x back into f: f(${C(tp.x)}) = ${C(tp.y)}` },
-            { s: `∴ turning point ${ptStr(tp.x, tp.y)}` },
+            { s: L(`Read off the standard form y = ax² + bx + c: a = ${C(st.a)}, b = ${C(st.b)}, c = ${C(st.c)}`, `Lees die standaardvorm y = ax² + bx + c af: a = ${C(st.a)}, b = ${C(st.b)}, c = ${C(st.c)}`) },
+            { s: L(`x of the TP = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}`, `x van die DP = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}`), r: L("the shortcut, not a derivative", "die kortpad, nie 'n afgeleide nie") },
+            { s: L(`Substitute that x back into f: f(${C(tp.x)}) = ${C(tp.y)}`, `Vervang daardie x terug in f: f(${C(tp.x)}) = ${C(tp.y)}`) },
+            { s: L(`∴ turning point ${ptStr(tp.x, tp.y)}`, `∴ draaipunt ${ptStr(tp.x, tp.y)}`) },
           ];
         })() });
   },
@@ -142,9 +142,9 @@ const SKILLS = {
         solution: (() => {
           const st = paraStd(cv);
           return [
-            { s: "The axis of symmetry is the vertical line the parabola folds onto — it runs through the turning point" },
-            { s: `So all you need is the x of the TP: x = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}` },
-            { s: `∴ x = ${C(tp.x)}`, r: "a vertical line is written x = …, never y = …" },
+            { s: L("The axis of symmetry is the vertical line the parabola folds onto — it runs through the turning point", "Die simmetrie-as is die vertikale lyn waarop die parabool vou: dit loop deur die draaipunt") },
+            { s: L(`So all you need is the x of the TP: x = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}`, `Al wat jy dus nodig het, is die x van die DP: x = −b/(2a) = −(${C(st.b)})/(2(${C(st.a)})) = ${C(tp.x)}`) },
+            { s: `∴ x = ${C(tp.x)}`, r: L("a vertical line is written x = …, never y = …", "'n vertikale lyn word as x = … geskryf, nooit as y = … nie") },
           ];
         })() });
   },

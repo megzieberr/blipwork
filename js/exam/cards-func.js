@@ -110,9 +110,9 @@ const src = id => {
    memo — the parabola's equation and turning point from func.lp.q1
    (a) and (b), the hyperbola's equation from func.hyp.t1q4(a) and its
    x-intercept from (c), and the T2 hyperbola from its own stem. */
-const PARABOLA = "f is the parabola &nbsp;f(x) = 2x² − 6x − 8, &nbsp;with turning point TP(1,5 ; −12,5).";
-const HYP_T1 = "h is the hyperbola &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;Its asymptotes are x = −2 and y = 1.";
-const HYP_T2 = "f is the hyperbola &nbsp;f(x) = 4/(x + 1) + 2.";
+const PARABOLA = { en: "f is the parabola &nbsp;f(x) = 2x² − 6x − 8, &nbsp;with turning point TP(1,5 ; −12,5).", af: "f is die parabool &nbsp;f(x) = 2x² − 6x − 8, &nbsp;met draaipunt DP(1,5 ; −12,5)." };
+const HYP_T1 = { en: "h is the hyperbola &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;Its asymptotes are x = −2 and y = 1.", af: "h is die hiperbool &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;Sy asimptote is x = −2 en y = 1." };
+const HYP_T2 = { en: "f is the hyperbola &nbsp;f(x) = 4/(x + 1) + 2.", af: "f is die hiperbool &nbsp;f(x) = 4/(x + 1) + 2." };
 
 export const funcCards = [
   /* ---- 1. Find the equation ------------------------------------
@@ -135,14 +135,14 @@ export const funcCards = [
   makeCard({ skill: "asymptotes-domain-range", from: src("func.hyp.t2q3"), parts: ["a"] }),
   makeCard({
     skill: "asymptotes-domain-range", from: src("func.hyp.t1q4"), parts: ["b"],
-    intro: { en: HYP_T1 },
+    intro: { en: HYP_T1.en, af: HYP_T1.af },
   }),
   /* "Write down the range of f" leans on BOTH the sign of a and the
      turning y-value, and the turning point was (b)'s job — a different
      card now. Both go in the intro. */
   makeCard({
     skill: "asymptotes-domain-range", from: src("func.lp.q1"), parts: ["c"],
-    intro: { en: PARABOLA },
+    intro: { en: PARABOLA.en, af: PARABOLA.af },
   }),
   /* SIBLINGS (session 2a) — a NEGATIVE-a hyperbola (plus what a shift
      does to its asymptotes), then the exponentials: all four
@@ -190,7 +190,7 @@ export const funcCards = [
   }),
   makeCard({
     skill: "axis-of-symmetry", from: src("func.hyp.t1q4"), parts: ["d"],
-    intro: { en: HYP_T1 },
+    intro: { en: HYP_T1.en, af: HYP_T1.af },
   }),
   /* SIBLINGS (session 2a) — the parabola side first (turning-point
      form, then standard form with the vertical-shift-changes-nothing
@@ -206,11 +206,11 @@ export const funcCards = [
      needs its turning point; the hyperbola card needs only f itself. */
   makeCard({
     skill: "shift", from: src("func.lp.q1"), parts: ["d"],
-    intro: { en: PARABOLA },
+    intro: { en: PARABOLA.en, af: PARABOLA.af },
   }),
   makeCard({
     skill: "shift", from: src("func.hyp.t2q3"), parts: ["c"],
-    intro: { en: HYP_T2 },
+    intro: { en: HYP_T2.en, af: HYP_T2.af },
   }),
   /* SIBLINGS (session 2b) — the two cards above both hand the shift
      over in WORDS. These four give it in FUNCTION NOTATION, which is
@@ -234,7 +234,7 @@ export const funcCards = [
     // (d) asks about h, and h only exists once (c) has built it — so
     // the two travel together, exactly as she ruled.
     skill: "inequalities", from: src("func.hyp.t2q3"), parts: ["c", "d"],
-    intro: { en: HYP_T2 },
+    intro: { en: HYP_T2.en, af: HYP_T2.af },
   }),
   /* SIBLINGS (session 2b) — both cards above are one hyperbola against
      a number. These four widen the tile to the rest of her pp46–51
@@ -388,7 +388,7 @@ export const funcCards = [
      up to the two-graph fetches. */
   makeCard({
     skill: "level-4", from: src("func.lp.q1"), parts: ["e"],
-    intro: { en: PARABOLA },
+    intro: { en: PARABOLA.en, af: PARABOLA.af },
   }),
   makeCard({
     skill: "level-4", from: src("func.gt.t1q5"), parts: ["c"],
@@ -408,7 +408,7 @@ export const funcCards = [
   makeCard({ skill: "level-4", from: src("func.l4.q1"), parts: ["a", "b"] }),
   makeCard({
     skill: "level-4", from: src("func.hyp.t2q3"), parts: ["e"],
-    intro: { en: HYP_T2 },
+    intro: { en: HYP_T2.en, af: HYP_T2.af },
   }),
   makeCard({ skill: "level-4", from: src("func.l4.q4"), parts: ["a", "b"] }),
   makeCard({ skill: "level-4", from: src("func.l4.q5"), parts: ["a"] }),

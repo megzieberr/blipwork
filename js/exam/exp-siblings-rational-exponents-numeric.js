@@ -67,7 +67,7 @@ const q1 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "<em>Without the use of a calculator.</em><br>Evaluate: &nbsp;25" + RX(3, 2),
+        en: "<em>Without the use of a calculator.</em><br>Evaluate: &nbsp;25" + RX(3, 2), af: `<em>Sonder die gebruik van 'n sakrekenaar.</em><br>Bereken: &nbsp;25${RX(3, 2)}`,
       },
       hint: {
         en: "Prime factors first, as always — what is 25 built out of? Then remember which half of the little fraction is the root and which half is the power.", af: "Priemfaktore eerste, soos altyd: waaruit is 25 gebou? Onthou dan watter helfte van die breukie die wortel is en watter helfte die mag.",
@@ -77,7 +77,7 @@ const q1 = {
         { type: "step", text: { en: "Now read the exponent her way: <b>inside the √ is the top of the fraction, outside the √ is the bottom</b>. The bottom is the root, the top is the power.", af: "Lees nou die eksponent op haar manier: <b>binne die √ is bo in die breuk, buite die √ is onder</b>. Die onderste getal is die wortel, die boonste is die mag." } },
         { type: "answer", text: { en: "25" + RX(3, 2) + " = (5²)" + RX(3, 2) + " = 5³ = 125" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: power of a power <b>multiplies</b> the exponents. 2 × " + F(3, 2) + " = 3, which is where the 5³ comes from — not 5⁵ and not 5" + RX(3, 2) + ".",
+          en: "REMEMBER: power of a power <b>multiplies</b> the exponents. 2 × " + F(3, 2) + " = 3, which is where the 5³ comes from — not 5⁵ and not 5" + RX(3, 2) + ".", af: `ONTHOU: 'n mag van 'n mag <b>vermenigvuldig</b> die eksponente. 2 × ${F(3, 2)} = 3, en dit is waar die 5³ vandaan kom, nie 5⁵ nie en ook nie 5${RX(3, 2)} nie.`,
         } },
       ],
       esplain: {
@@ -141,7 +141,7 @@ const q3 = {
       marks: 3,
       level: 2,
       prompt: {
-        en: "<em>No calculator.</em><br>Evaluate: &nbsp;27" + RXN(2, 3),
+        en: "<em>No calculator.</em><br>Evaluate: &nbsp;27" + RXN(2, 3), af: `<em>Sonder 'n sakrekenaar.</em><br>Bereken: &nbsp;27${RXN(2, 3)}`,
       },
       hint: {
         en: "Get rid of the minus in the exponent first — flip it and change the sign. Only then worry about what two over three is asking you to do.", af: "Raak eers ontslae van die minus in die eksponent: draai om en verander die teken. Kyk eers dan wat twee oor drie van jou vra.",
@@ -149,7 +149,7 @@ const q3 = {
       memo: [
         { type: "step", text: { en: "Depressed exponent first: flip it, and the exponent turns positive.", af: "Neerslagtige eksponent eerste: draai dit om, en die eksponent word positief." } },
         { type: "step", text: { en: "27" + RXN(2, 3) + " = " + F("1", "27" + RX(2, 3)) }, ticks: ["s/f"] },
-        { type: "step", text: { en: "Prime factors: &nbsp;27 = 3³, &nbsp;so 27" + RX(2, 3) + " = (3³)" + RX(2, 3) + " = 3² = 9" }, ticks: ["ca"] },
+        { type: "step", text: { en: "Prime factors: &nbsp;27 = 3³, &nbsp;so 27" + RX(2, 3) + " = (3³)" + RX(2, 3) + " = 3² = 9", af: `Priemfaktore: &nbsp;27 = 3³, &nbsp;dus 27${RX(2, 3)} = (3³)${RX(2, 3)} = 3² = 9` }, ticks: ["ca"] },
         { type: "answer", text: { en: "= 1/9", af: "= 1/9" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "WATCH OUT: the minus in the exponent sends the whole thing to the bottom of a fraction — it never makes the answer negative. The answer is 1/9, not −9 and not −1/9.", af: "PASOP: die minus in die eksponent stuur die hele ding na onder in 'n breuk; dit maak die antwoord nooit negatief nie. Die antwoord is 1/9, nie −9 nie en nie −1/9 nie.",
@@ -180,7 +180,7 @@ const q4 = {
       marks: 4,
       level: 2,
       prompt: {
-        en: "<em>No calculator.</em><br>Evaluate: &nbsp;32" + RX(2, 5) + " · 9" + RXN(1, 2),
+        en: "<em>No calculator.</em><br>Evaluate: &nbsp;32" + RX(2, 5) + " · 9" + RXN(1, 2), af: `<em>Sonder 'n sakrekenaar.</em><br>Bereken: &nbsp;32${RX(2, 5)} · 9${RXN(1, 2)}`,
       },
       hint: {
         en: "Two bases, so do them one at a time. Break each number into prime factors and choose the prime that makes the root come out whole — 32 wants a fifth root, 9 wants a square root.", af: "Twee grondtalle, dus doen hulle een op 'n slag. Breek elke getal op in priemfaktore en kies die priemgetal wat die wortel heel laat uitkom: 32 wil 'n vyfdemagswortel hê, 9 'n vierkantswortel.",

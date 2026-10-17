@@ -162,14 +162,14 @@ const q3 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Show that &nbsp;" + N("86&nbsp;420&nbsp;865²") + " − " + A3M + " × " + A3P + " = 9",
+        en: "<em>No calculator.</em><br>Show that &nbsp;" + N("86&nbsp;420&nbsp;865²") + " − " + A3M + " × " + A3P + " = 9", af: `<em>Sonder 'n sakrekenaar.</em><br>Toon aan dat &nbsp;${N("86&nbsp;420&nbsp;865²")} − ${A3M} × ${A3P} = 9`,
       },
       hint: {
         en: "Nobody is expected to multiply those out. Look at how far the second and third numbers sit from the first one, give the first one a letter, and write the other two in terms of it.", af: "Niemand verwag dat jy dit uitvermenigvuldig nie. Kyk hoe ver die tweede en derde getalle van die eerste een af is, gee die eerste een 'n letter, en skryf die ander twee in terme daarvan.",
       },
       memo: [
-        { type: "step", text: { en: "Never multiply these out. Give the middle-sized number a name: &nbsp;let a = " + A + "." }, ticks: ["s/f"] },
-        { type: "step", text: { en: "Each of the other two sits 3 away from it:<br>a − 3 = " + A3M + " &nbsp;and&nbsp; a + 3 = " + A3P }, ticks: ["ca"] },
+        { type: "step", text: { en: "Never multiply these out. Give the middle-sized number a name: &nbsp;let a = " + A + ".", af: `Moet dit nooit uitvermenigvuldig nie. Gee die middelste getal (in grootte) 'n naam: &nbsp;stel a = ${A}.` }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Each of the other two sits 3 away from it:<br>a − 3 = " + A3M + " &nbsp;and&nbsp; a + 3 = " + A3P, af: `Elk van die ander twee lê 3 daarvandaan:<br>a − 3 = ${A3M} &nbsp;en&nbsp; a + 3 = ${A3P}` }, ticks: ["ca"] },
         { type: "step", text: { en: "So the expression is &nbsp;a² − (a − 3)(a + 3), &nbsp;and (a − 3)(a + 3) is a <b>diff in □'s</b> = a² − 9.", af: "Die uitdrukking is dus &nbsp;a² − (a − 3)(a + 3), &nbsp;en (a − 3)(a + 3) is 'n <b>verskil van □'e</b> = a² − 9." }, ticks: ["ca"] },
         { type: "answer", text: { en: "= a² − (a² − 9) = a² − a² + 9 = 9 &nbsp;as required", af: "= a² − (a² − 9) = a² − a² + 9 = 9 &nbsp;soos vereis" }, ticks: ["a"] },
         { type: "trap", text: {
