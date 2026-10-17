@@ -122,21 +122,21 @@ const t1q5 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "f(x) = −x² + 6x + 7 &nbsp;and&nbsp; g(x) = 2x + 2. The two graphs cut each other at A(−1 ; 0) and at C. A is also the x-intercept of both graphs.<br>PQ is a line segment drawn parallel to the y-axis, with P on f and Q on g, and with PQ lying between A and C.<br><br>Determine the range of f.",
+        en: "f(x) = −x² + 6x + 7 &nbsp;and&nbsp; g(x) = 2x + 2. The two graphs cut each other at A(−1 ; 0) and at C. A is also the x-intercept of both graphs.<br>PQ is a line segment drawn parallel to the y-axis, with P on f and Q on g, and with PQ lying between A and C.<br><br>Determine the range of f.", af: "f(x) = −x² + 6x + 7 &nbsp;en&nbsp; g(x) = 2x + 2. Die twee grafieke sny mekaar by A(−1 ; 0) en by C. A is ook die x-afsnit van albei grafieke.<br>PQ is 'n lynstuk wat ewewydig aan die y-as geteken is, met P op f en Q op g, en PQ lê tussen A en C.<br><br>Bepaal die waardeversameling van f.",
       },
       hint: {
-        en: "Look at the sign of a first — that tells you whether this parabola is happy or sad, and therefore whether the range runs upwards or downwards. Then you need the one y-value it turns at.",
+        en: "Look at the sign of a first — that tells you whether this parabola is happy or sad, and therefore whether the range runs upwards or downwards. Then you need the one y-value it turns at.", af: "Kyk eers na die teken van a: dit sê vir jou of hierdie parabool happy of sad is, en dus of die waardeversameling opwaarts of afwaarts loop. Dan het jy die een y-waarde nodig waar dit draai.",
       },
       memo: [
-        { type: "step", text: { en: "a = −1 &lt; 0, so f is a <b>sad</b> parabola: it has a maximum, and the range runs from that maximum downwards. So find the turning point." } },
-        { type: "step", text: { en: "x = −b/(2a) = −6/(2(−1)) = 3 &nbsp;&nbsp;⟹&nbsp;&nbsp; y = −(3)² + 6(3) + 7 = −9 + 18 + 7 = 16 &nbsp;&nbsp;TP (3 ; 16)" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "∴ y ≤ 16" }, ticks: ["a"] },
+        { type: "step", text: { en: "a = −1 &lt; 0, so f is a <b>sad</b> parabola: it has a maximum, and the range runs from that maximum downwards. So find the turning point.", af: "a = −1 &lt; 0, dus is f 'n <b>sad</b> parabool: dit het 'n maksimum, en die waardeversameling loop van daardie maksimum af afwaarts. Vind dus die draaipunt." } },
+        { type: "step", text: { en: "x = −b/(2a) = −6/(2(−1)) = 3 &nbsp;&nbsp;⟹&nbsp;&nbsp; y = −(3)² + 6(3) + 7 = −9 + 18 + 7 = 16 &nbsp;&nbsp;TP (3 ; 16)", af: "x = −b/(2a) = −6/(2(−1)) = 3 &nbsp;&nbsp;⟹&nbsp;&nbsp; y = −(3)² + 6(3) + 7 = −9 + 18 + 7 = 16 &nbsp;&nbsp;DP (3 ; 16)" }, ticks: ["s/f"] },
+        { type: "answer", text: { en: "∴ y ≤ 16", af: "∴ y ≤ 16" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the range is a statement about y, so it must be written in y. Writing x ≤ 16 here scores nothing.",
+          en: "WATCH OUT: the range is a statement about y, so it must be written in y. Writing x ≤ 16 here scores nothing.", af: "PASOP: die waardeversameling is 'n bewering oor y, dus moet dit in y geskryf word. As jy hier x ≤ 16 skryf, kry jy geen punte nie.",
         } },
       ],
       esplain: {
-        en: "Range means “which y-values does this graph actually reach”. A parabola only ever turns once, so its turning point is the ceiling or the floor of everything it does — and which of the two depends entirely on the sign of a. Here a is negative, so the arms point down: the graph climbs to the turning point and then falls away forever, which makes that y-value the highest it ever gets and everything below it reachable. So the range is “y less than or equal to the turning y-value”. Notice you only need the y of the turning point for a range question — the x is just the road you travel to get there.",
+        en: "Range means “which y-values does this graph actually reach”. A parabola only ever turns once, so its turning point is the ceiling or the floor of everything it does — and which of the two depends entirely on the sign of a. Here a is negative, so the arms point down: the graph climbs to the turning point and then falls away forever, which makes that y-value the highest it ever gets and everything below it reachable. So the range is “y less than or equal to the turning y-value”. Notice you only need the y of the turning point for a range question — the x is just the road you travel to get there.", af: "Waardeversameling beteken “watter y-waardes bereik hierdie grafiek werklik”. 'n Parabool draai net een keer, dus is sy draaipunt die plafon of die vloer van alles wat dit doen, en watter een van die twee hang heeltemal af van die teken van a. Hier is a negatief, dus wys die arms af: die grafiek klim tot by die draaipunt en val dan vir altyd weg, wat daardie y-waarde die hoogste maak wat dit ooit bereik, en alles daaronder bereikbaar. Die waardeversameling is dus “y kleiner as of gelyk aan die y-waarde van die draaipunt”. Let op dat jy vir 'n vraag oor die waardeversameling net die y van die draaipunt nodig het: die x is net die pad wat jy loop om daar te kom.",
       },
     },
     {
@@ -144,24 +144,24 @@ const t1q5 = {
       marks: 4,
       level: 4,
       prompt: {
-        en: "Determine the maximum length of PQ.",
+        en: "Determine the maximum length of PQ.", af: "Bepaal die maksimum lengte van PQ.",
       },
       hint: {
-        en: "PQ is vertical, so its length is one graph's y-value minus the other's — top minus bottom. Write that difference down as a single new expression and look at what kind of graph it is.",
+        en: "PQ is vertical, so its length is one graph's y-value minus the other's — top minus bottom. Write that difference down as a single new expression and look at what kind of graph it is.", af: "PQ is vertikaal, dus is sy lengte die een grafiek se y-waarde minus die ander s'n: bo minus onder. Skryf daardie verskil as een nuwe uitdrukking neer en kyk watter soort grafiek dit is.",
       },
       memo: [
-        { type: "step", text: { en: "PQ is vertical, so its length is simply <b>top graph minus bottom graph</b>. Between A and C the parabola is on top." } },
-        { type: "step", text: { en: "PQ = f(x) − g(x)" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "= (−x² + 6x + 7) − (2x + 2) = −x² + 4x + 5" }, ticks: ["ca"] },
-        { type: "step", text: { en: "That is a brand-new sad parabola, so the longest PQ sits at <i>its</i> turning point:" } },
-        { type: "step", text: { en: "x = −b/(2a) = −4/(2(−1)) = 2" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "PQ = −(2)² + 4(2) + 5 = −4 + 8 + 5 = 9 &nbsp;&nbsp;∴&nbsp; maximum PQ = 9 units" }, ticks: ["a"] },
+        { type: "step", text: { en: "PQ is vertical, so its length is simply <b>top graph minus bottom graph</b>. Between A and C the parabola is on top.", af: "PQ is vertikaal, dus is sy lengte eenvoudig <b>boonste grafiek minus onderste grafiek</b>. Tussen A en C is die parabool bo." } },
+        { type: "step", text: { en: "PQ = f(x) − g(x)", af: "PQ = f(x) − g(x)" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "= (−x² + 6x + 7) − (2x + 2) = −x² + 4x + 5", af: "= (−x² + 6x + 7) − (2x + 2) = −x² + 4x + 5" }, ticks: ["ca"] },
+        { type: "step", text: { en: "That is a brand-new sad parabola, so the longest PQ sits at <i>its</i> turning point:", af: "Dit is 'n splinternuwe sad parabool, dus lê die langste PQ by <i>sy</i> draaipunt:" } },
+        { type: "step", text: { en: "x = −b/(2a) = −4/(2(−1)) = 2", af: "x = −b/(2a) = −4/(2(−1)) = 2" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "PQ = −(2)² + 4(2) + 5 = −4 + 8 + 5 = 9 &nbsp;&nbsp;∴&nbsp; maximum PQ = 9 units", af: "PQ = −(2)² + 4(2) + 5 = −4 + 8 + 5 = 9 &nbsp;&nbsp;∴&nbsp; maksimum PQ = 9 eenhede" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: length is never negative. If you subtract the wrong way round you get x² − 4x − 5 and a <i>minimum</i> of −9 — the minus sign is the warning that the graphs were the wrong way round.",
+          en: "WATCH OUT: length is never negative. If you subtract the wrong way round you get x² − 4x − 5 and a <i>minimum</i> of −9 — the minus sign is the warning that the graphs were the wrong way round.", af: "PASOP: lengte is nooit negatief nie. As jy verkeerd om aftrek, kry jy x² − 4x − 5 en 'n <i>minimum</i> van −9: die minusteken is die waarskuwing dat die grafieke verkeerd om was.",
         } },
       ],
       esplain: {
-        en: "The fact you have to fetch here is that the gap between two graphs is itself a graph. PQ is not a fixed length; it depends on where you draw it, so write it as a formula in x — f(x) minus g(x) — and suddenly you are holding a brand-new parabola whose height at every x IS the length of PQ there. Finding the longest PQ is then just finding that new parabola's maximum, which is the same x = −b/(2a) move you have used all year. Two cautions. First, top minus bottom, in that order, or your “length” comes out negative. Second, do not go hunting for a Grade 12 tool — the difference parabola plus −b/(2a) is all this needs. Bank the earlier marks first: finish (a) and everything in Questions 1 to 4 before you sit down with this one.",
+        en: "The fact you have to fetch here is that the gap between two graphs is itself a graph. PQ is not a fixed length; it depends on where you draw it, so write it as a formula in x — f(x) minus g(x) — and suddenly you are holding a brand-new parabola whose height at every x IS the length of PQ there. Finding the longest PQ is then just finding that new parabola's maximum, which is the same x = −b/(2a) move you have used all year. Two cautions. First, top minus bottom, in that order, or your “length” comes out negative. Second, do not go hunting for a Grade 12 tool — the difference parabola plus −b/(2a) is all this needs. Bank the earlier marks first: finish (a) and everything in Questions 1 to 4 before you sit down with this one.", af: "Die feit wat jy hier moet gaan haal, is dat die gaping tussen twee grafieke self 'n grafiek is. PQ is nie 'n vaste lengte nie; dit hang af van waar jy dit teken, dus skryf dit as 'n formule in x, f(x) minus g(x), en skielik hou jy 'n splinternuwe parabool vas waarvan die hoogte by elke x die lengte van PQ daar IS. Om die langste PQ te vind, is dan net om daardie nuwe parabool se maksimum te vind, met dieselfde x = −b/(2a)-stap wat jy die hele jaar al gebruik. Twee waarskuwings. Eerstens: bo minus onder, in daardie volgorde, anders kom jou “lengte” negatief uit. Tweedens: moenie 'n Graad 12-hulpmiddel gaan soek nie: die verskilparabool plus −b/(2a) is al wat hierdie een nodig het. Kry eers die vroeëre punte in die sak: maak (a) en alles in Vrae 1 tot 4 klaar voordat jy met hierdie een gaan sit.",
       },
     },
     {
@@ -169,23 +169,23 @@ const t1q5 = {
       marks: 3,
       level: 4,
       prompt: {
-        en: "Determine the value(s) of t for which the equation f(x) = t will have two unequal <b>positive</b> roots.",
+        en: "Determine the value(s) of t for which the equation f(x) = t will have two unequal <b>positive</b> roots.", af: "Bepaal die waarde(s) van t waarvoor die vergelyking f(x) = t twee ongelyke <b>positiewe</b> wortels sal hê.",
       },
       hint: {
-        en: "f(x) = t is a horizontal line y = t sliding up and down across f, and the roots are where it cuts. Ask the question twice: how high may the line go before it stops cutting twice, and how low may it drop before one of the cuts crosses to the left of the y-axis?",
+        en: "f(x) = t is a horizontal line y = t sliding up and down across f, and the roots are where it cuts. Ask the question twice: how high may the line go before it stops cutting twice, and how low may it drop before one of the cuts crosses to the left of the y-axis?", af: "f(x) = t is 'n horisontale lyn y = t wat op en af oor f skuif, en die wortels is waar dit sny. Vra die vraag twee keer: hoe hoog mag die lyn gaan voordat dit ophou om twee keer te sny, en hoe laag mag dit sak voordat een van die snypunte na links van die y-as oorgaan?",
       },
       memo: [
-        { type: "step", text: { en: "f(x) = t is the horizontal line y = t sliding up and down across f. The roots are where that line cuts the parabola, so the question is really: <i>where must the line sit?</i> Two conditions, one at a time." } },
-        { type: "step", text: { en: "<b>Two unequal roots.</b> The line must cut f twice, so it has to stay below the maximum: &nbsp;t &lt; 16" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "<b>Both roots positive.</b> Both cutting points must lie to the right of the y-axis. f cuts the y-axis at f(0) = 7, so the line has to sit <i>above</i> that: &nbsp;t &gt; 7" }, ticks: ["ca"] },
-        { type: "step", text: { en: "At t = 7 exactly, one root is x = 0 — and zero is not positive. Below 7, one root turns negative." } },
-        { type: "answer", text: { en: "∴ 7 &lt; t &lt; 16" }, ticks: ["a"] },
+        { type: "step", text: { en: "f(x) = t is the horizontal line y = t sliding up and down across f. The roots are where that line cuts the parabola, so the question is really: <i>where must the line sit?</i> Two conditions, one at a time.", af: "f(x) = t is die horisontale lyn y = t wat op en af oor f skuif. Die wortels is waar daardie lyn die parabool sny, dus is die vraag eintlik: <i>waar moet die lyn lê?</i> Twee voorwaardes, een op 'n slag." } },
+        { type: "step", text: { en: "<b>Two unequal roots.</b> The line must cut f twice, so it has to stay below the maximum: &nbsp;t &lt; 16", af: "<b>Twee ongelyke wortels.</b> Die lyn moet f twee keer sny, dus moet dit onder die maksimum bly: &nbsp;t &lt; 16" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "<b>Both roots positive.</b> Both cutting points must lie to the right of the y-axis. f cuts the y-axis at f(0) = 7, so the line has to sit <i>above</i> that: &nbsp;t &gt; 7", af: "<b>Albei wortels positief.</b> Albei snypunte moet regs van die y-as lê. f sny die y-as by f(0) = 7, dus moet die lyn <i>bo</i> dit lê: &nbsp;t &gt; 7" }, ticks: ["ca"] },
+        { type: "step", text: { en: "At t = 7 exactly, one root is x = 0 — and zero is not positive. Below 7, one root turns negative.", af: "By presies t = 7 is een wortel x = 0, en nul is nie positief nie. Onder 7 word een wortel negatief." } },
+        { type: "answer", text: { en: "∴ 7 &lt; t &lt; 16", af: "∴ 7 &lt; t &lt; 16" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: the two facts you needed — the maximum 16 and the y-intercept 7 — are nowhere in the question. On a starred part, that is always the job: work out what the sketch knows before you try to answer.",
+          en: "REMEMBER: the two facts you needed — the maximum 16 and the y-intercept 7 — are nowhere in the question. On a starred part, that is always the job: work out what the sketch knows before you try to answer.", af: "ONTHOU: die twee feite wat jy nodig gehad het, die maksimum 16 en die y-afsnit 7, staan nêrens in die vraag nie. By 'n deel met 'n ster is dit altyd die taak: werk uit wat die skets weet voordat jy probeer antwoord.",
         } },
       ],
       esplain: {
-        en: "Do not solve −x² + 6x + 7 = t for x here; picture it instead. The equation f(x) = t is asking where a flat line at height t meets the curve, so slide that line in your head. Up at the very top, at the turning point, the line touches once — that is equal roots, not two unequal ones — and above that it misses entirely, so t has to stay under 16. Now slide it down. As the line drops, the left-hand cut travels left, and the moment the line passes through the y-intercept at 7 that left cut lands exactly on x = 0. Zero is not positive, so 7 is out and anything lower is worse. Squeeze the two conditions together and the line has to live strictly between them. Both numbers, 16 and 7, had to be worked out from the equation of f — the question never handed you either one, which is precisely why this part carries the star.",
+        en: "Do not solve −x² + 6x + 7 = t for x here; picture it instead. The equation f(x) = t is asking where a flat line at height t meets the curve, so slide that line in your head. Up at the very top, at the turning point, the line touches once — that is equal roots, not two unequal ones — and above that it misses entirely, so t has to stay under 16. Now slide it down. As the line drops, the left-hand cut travels left, and the moment the line passes through the y-intercept at 7 that left cut lands exactly on x = 0. Zero is not positive, so 7 is out and anything lower is worse. Squeeze the two conditions together and the line has to live strictly between them. Both numbers, 16 and 7, had to be worked out from the equation of f — the question never handed you either one, which is precisely why this part carries the star.", af: "Moenie hier −x² + 6x + 7 = t vir x oplos nie; stel dit eerder voor. Die vergelyking f(x) = t vra waar 'n plat lyn op hoogte t die kurwe ontmoet, dus skuif daardie lyn in jou kop. Heel bo, by die draaipunt, raak die lyn een keer: dit is gelyke wortels, nie twee ongelyke nie, en daarbo mis dit heeltemal, dus moet t onder 16 bly. Skuif dit nou af. Soos die lyn sak, beweeg die linkse snypunt na links, en die oomblik dat die lyn deur die y-afsnit by 7 gaan, land daardie linkse snypunt presies op x = 0. Nul is nie positief nie, dus is 7 uit, en enigiets laer is erger. Druk die twee voorwaardes saam en die lyn moet streng tussen hulle bly. Albei getalle, 16 en 7, moes uit die vergelyking van f uitgewerk word: die vraag het jou nie een van die twee gegee nie, en dit is presies hoekom hierdie deel die ster dra.",
       },
     },
   ],

@@ -186,20 +186,20 @@ const t2q3 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "The graph of f is defined by &nbsp;f(x) = 4/(x + 1) + 2.<br><br>Write down the equations of the asymptotes of f.",
+        en: "The graph of f is defined by &nbsp;f(x) = 4/(x + 1) + 2.<br><br>Write down the equations of the asymptotes of f.", af: "Die grafiek van f word gedefinieer deur &nbsp;f(x) = 4/(x + 1) + 2.<br><br>Skryf die vergelykings van die asimptote van f neer.",
       },
       hint: {
-        en: "Line the equation up against the standard shape y = a/(x − p) + q and read p and q straight off. Look hard at the sign in the denominator.",
+        en: "Line the equation up against the standard shape y = a/(x − p) + q and read p and q straight off. Look hard at the sign in the denominator.", af: "Vergelyk die vergelyking met die standaardvorm y = a/(x − p) + q en lees p en q reguit af. Kyk mooi na die teken in die noemer.",
       },
       memo: [
-        { type: "step", text: { en: "Read the form off first: &nbsp;f(x) = a/(x − p) + q &nbsp;with&nbsp; a = 4, &nbsp;p = −1, &nbsp;q = 2. The vertical asymptote is x = p and the horizontal asymptote is y = q." } },
-        { type: "answer", text: { en: "x = −1 &nbsp;&nbsp;and&nbsp;&nbsp; y = 2" }, ticks: ["a", "a"] },
+        { type: "step", text: { en: "Read the form off first: &nbsp;f(x) = a/(x − p) + q &nbsp;with&nbsp; a = 4, &nbsp;p = −1, &nbsp;q = 2. The vertical asymptote is x = p and the horizontal asymptote is y = q.", af: "Lees eers die vorm af: &nbsp;f(x) = a/(x − p) + q &nbsp;met&nbsp; a = 4, &nbsp;p = −1, &nbsp;q = 2. Die vertikale asimptoot is x = p en die horisontale asimptoot is y = q." } },
+        { type: "answer", text: { en: "x = −1 &nbsp;&nbsp;and&nbsp;&nbsp; y = 2", af: "x = −1 &nbsp;&nbsp;en&nbsp;&nbsp; y = 2" }, ticks: ["a", "a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: (x + 1) in the denominator means p = −1, not +1 — the bracket always shows the <i>opposite</i> sign. Same trap as the turning point of a parabola.",
+          en: "WATCH OUT: (x + 1) in the denominator means p = −1, not +1 — the bracket always shows the <i>opposite</i> sign. Same trap as the turning point of a parabola.", af: "PASOP: (x + 1) in die noemer beteken p = −1, nie +1 nie: die hakie wys altyd die <i>teenoorgestelde</i> teken. Dieselfde slaggat as by die draaipunt van 'n parabool.",
         } },
       ],
       esplain: {
-        en: "The asymptotes are the two lines the graph creeps towards but never touches, and both are already sitting in the equation once you line it up with the standard shape. The vertical one comes from the denominator: x + 1 is zero at x = −1, and dividing by zero is the one thing the graph cannot do, so it goes around that line forever. The horizontal one is the + 2 on the end. Make the fraction as tiny as you like by pushing x out towards infinity, and what is left is 2 — so the graph settles towards y = 2 without ever arriving. The sign flip on p is the only place marks go missing: the standard form says (x − p), so a bracket reading (x + 1) means p is negative one.",
+        en: "The asymptotes are the two lines the graph creeps towards but never touches, and both are already sitting in the equation once you line it up with the standard shape. The vertical one comes from the denominator: x + 1 is zero at x = −1, and dividing by zero is the one thing the graph cannot do, so it goes around that line forever. The horizontal one is the + 2 on the end. Make the fraction as tiny as you like by pushing x out towards infinity, and what is left is 2 — so the graph settles towards y = 2 without ever arriving. The sign flip on p is the only place marks go missing: the standard form says (x − p), so a bracket reading (x + 1) means p is negative one.", af: "Die asimptote is die twee lyne waarna die grafiek nader kruip maar wat dit nooit raak nie, en albei staan reeds in die vergelyking sodra jy dit met die standaardvorm vergelyk. Die vertikale een kom van die noemer: x + 1 is nul by x = −1, en deling deur nul is die een ding wat die grafiek nie kan doen nie, dus gaan dit vir altyd om daardie lyn. Die horisontale een is die + 2 aan die einde. Maak die breuk so klein as wat jy wil deur x na oneindig toe uit te stoot, en wat oorbly, is 2: dus kom die grafiek al nader aan y = 2 sonder om ooit daar aan te kom. Die tekenomruiling by p is die enigste plek waar punte verlore gaan: die standaardvorm sê (x − p), dus beteken 'n hakie wat (x + 1) lees dat p negatief een is.",
       },
     },
     {
@@ -207,24 +207,24 @@ const t2q3 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "Determine the equation of the axis of symmetry of f that has a <b>negative</b> gradient.",
+        en: "Determine the equation of the axis of symmetry of f that has a <b>negative</b> gradient.", af: "Bepaal die vergelyking van die simmetrie-as van f wat 'n <b>negatiewe</b> gradiënt het.",
       },
       hint: {
-        en: "Both axes of symmetry go through the point where the asymptotes cross — x = −1 and y = 2, so that point is (−1 ; 2). A negative gradient on a hyperbola means one particular value; put it and the point into y = mx + c.",
+        en: "Both axes of symmetry go through the point where the asymptotes cross — x = −1 and y = 2, so that point is (−1 ; 2). A negative gradient on a hyperbola means one particular value; put it and the point into y = mx + c.", af: "Albei simmetrie-asse gaan deur die punt waar die asimptote kruis: x = −1 en y = 2, dus is daardie punt (−1 ; 2). 'n Negatiewe gradiënt by 'n hiperbool beteken een bepaalde waarde; vervang dit en die punt in y = mx + c.",
       },
       memo: [
-        { type: "step", text: { en: "Both axes of symmetry go through the point where the asymptotes cross, (−1 ; 2). The one with a negative gradient is y = −x + c:" } },
-        { type: "step", text: { en: "2 = −(−1) + c" }, ticks: ["s/f"] },
-        { type: "answer", text: { en: "2 = 1 + c &nbsp;⟹&nbsp; c = 1 &nbsp;&nbsp;∴&nbsp; y = −x + 1" }, ticks: ["a"] },
+        { type: "step", text: { en: "Both axes of symmetry go through the point where the asymptotes cross, (−1 ; 2). The one with a negative gradient is y = −x + c:", af: "Albei simmetrie-asse gaan deur die punt waar die asimptote kruis, (−1 ; 2). Die een met 'n negatiewe gradiënt is y = −x + c:" } },
+        { type: "step", text: { en: "2 = −(−1) + c", af: "2 = −(−1) + c" }, ticks: ["s/f"] },
+        { type: "answer", text: { en: "2 = 1 + c &nbsp;⟹&nbsp; c = 1 &nbsp;&nbsp;∴&nbsp; y = −x + 1", af: "2 = 1 + c &nbsp;⟹&nbsp; c = 1 &nbsp;&nbsp;∴&nbsp; y = −x + 1" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the centre is (−1 ; 2), not (1 ; 2). Substitute the point you actually read off the asymptotes, and substitute it with its own signs.",
+          en: "WATCH OUT: the centre is (−1 ; 2), not (1 ; 2). Substitute the point you actually read off the asymptotes, and substitute it with its own signs.", af: "PASOP: die middelpunt is (−1 ; 2), nie (1 ; 2) nie. Vervang die punt wat jy werklik van die asimptote afgelees het, en vervang dit met sy eie tekens.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: every hyperbola has <b>two</b> axes of symmetry through (p ; q) — y = x + c and y = −x + c. Read which one the question wants before you start.",
+          en: "REMEMBER: every hyperbola has <b>two</b> axes of symmetry through (p ; q) — y = x + c and y = −x + c. Read which one the question wants before you start.", af: "ONTHOU: elke hiperbool het <b>twee</b> simmetrie-asse deur (p ; q): y = x + c en y = −x + c. Lees watter een die vraag wil hê voordat jy begin.",
         } },
       ],
       esplain: {
-        en: "A hyperbola's two mirror lines are the diagonals through the corner where the asymptotes meet — one rising at 45°, one falling at 45°. That is why their gradients are always exactly 1 and −1, whatever a happens to be, and why “the one with a negative gradient” picks one out without any further information. From there it is Grade 9 work: you have a gradient and a point on the line, so put them into y = mx + c and solve for c. The one place to slow down is substituting a negative x into −x, which turns into +1 — write the brackets in rather than doing it in your head.",
+        en: "A hyperbola's two mirror lines are the diagonals through the corner where the asymptotes meet — one rising at 45°, one falling at 45°. That is why their gradients are always exactly 1 and −1, whatever a happens to be, and why “the one with a negative gradient” picks one out without any further information. From there it is Grade 9 work: you have a gradient and a point on the line, so put them into y = mx + c and solve for c. The one place to slow down is substituting a negative x into −x, which turns into +1 — write the brackets in rather than doing it in your head.", af: "'n Hiperbool se twee simmetrie-asse is die diagonale deur die hoek waar die asimptote ontmoet: een wat teen 45° styg, een wat teen 45° daal. Dit is hoekom hulle gradiënte altyd presies 1 en −1 is, wat a ook al is, en hoekom “die een met 'n negatiewe gradiënt” een uitkies sonder enige verdere inligting. Van daar af is dit Graad 9-werk: jy het 'n gradiënt en 'n punt op die lyn, dus vervang hulle in y = mx + c en los op vir c. Die een plek om stadiger te gaan, is wanneer jy 'n negatiewe x in −x vervang, wat +1 word: skryf die hakies in eerder as om dit in jou kop te doen.",
       },
     },
     {
@@ -232,22 +232,22 @@ const t2q3 = {
       marks: 2,
       level: 2,
       prompt: {
-        en: "The graph of h is obtained by shifting the graph of f two units to the LEFT and four units DOWN.<br>Write down the equation of h.",
+        en: "The graph of h is obtained by shifting the graph of f two units to the LEFT and four units DOWN.<br>Write down the equation of h.", af: "Die grafiek van h word verkry deur die grafiek van f twee eenhede na LINKS en vier eenhede AF te skuif.<br>Skryf die vergelyking van h neer.",
       },
       hint: {
-        en: "Handle the two shifts separately, and in the right places: a sideways shift happens inside the bracket, a vertical one outside. The sideways direction is the one that feels backwards.",
+        en: "Handle the two shifts separately, and in the right places: a sideways shift happens inside the bracket, a vertical one outside. The sideways direction is the one that feels backwards.", af: "Hanteer die twee skuiwe apart, en op die regte plekke: 'n horisontale skuif gebeur binne die hakie, 'n vertikale een buite. Die horisontale rigting is die een wat agterstevoor voel.",
       },
       memo: [
-        { type: "step", text: { en: "Two units to the left replaces x by x + 2:" } },
-        { type: "step", text: { en: "4/((x + 2) + 1) + 2 = 4/(x + 3) + 2" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "Four units down subtracts 4 from the whole thing:" } },
-        { type: "answer", text: { en: "h(x) = 4/(x + 3) + 2 − 4 = 4/(x + 3) − 2" }, ticks: ["a"] },
+        { type: "step", text: { en: "Two units to the left replaces x by x + 2:", af: "Twee eenhede na links vervang x deur x + 2:" } },
+        { type: "step", text: { en: "4/((x + 2) + 1) + 2 = 4/(x + 3) + 2", af: "4/((x + 2) + 1) + 2 = 4/(x + 3) + 2" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Four units down subtracts 4 from the whole thing:", af: "Vier eenhede af trek 4 van die hele ding af:" } },
+        { type: "answer", text: { en: "h(x) = 4/(x + 3) + 2 − 4 = 4/(x + 3) − 2", af: "h(x) = 4/(x + 3) + 2 − 4 = 4/(x + 3) − 2" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: LEFT is +2 <i>inside</i> the bracket. It feels backwards and it is not: the whole picture slides left, so every x has to be fed a bigger number to land where it used to. Down is −4 <i>outside</i>, where it behaves the way you expect.",
+          en: "WATCH OUT: LEFT is +2 <i>inside</i> the bracket. It feels backwards and it is not: the whole picture slides left, so every x has to be fed a bigger number to land where it used to. Down is −4 <i>outside</i>, where it behaves the way you expect.", af: "PASOP: LINKS is +2 <i>binne</i> die hakie. Dit voel agterstevoor, maar dit is nie: die hele prentjie skuif links, dus moet elke x 'n groter getal gevoer word om te land waar dit voorheen was. Af is −4 <i>buite</i>, waar dit optree soos jy verwag.",
         } },
       ],
       esplain: {
-        en: "The reason a horizontal shift looks inside-out is worth getting straight once, because it comes back every year. The graph does not move because x changes; the graph moves because you have changed what the machine does to each x. Slide the picture two units left and the point that used to sit above x = 0 now sits above x = −2 — so to get the old output at the new place, the machine has to add 2 to whatever it is handed first. Hence x + 2 inside. A vertical shift has no such trickery: after the machine has finished, you simply take 4 off the answer, so the −4 sits outside and does exactly what it says. A quick sanity check on your answer: the asymptotes should have moved the same way as the graph, and they have — x = −1 became x = −3, and y = 2 became y = −2.",
+        en: "The reason a horizontal shift looks inside-out is worth getting straight once, because it comes back every year. The graph does not move because x changes; the graph moves because you have changed what the machine does to each x. Slide the picture two units left and the point that used to sit above x = 0 now sits above x = −2 — so to get the old output at the new place, the machine has to add 2 to whatever it is handed first. Hence x + 2 inside. A vertical shift has no such trickery: after the machine has finished, you simply take 4 off the answer, so the −4 sits outside and does exactly what it says. A quick sanity check on your answer: the asymptotes should have moved the same way as the graph, and they have — x = −1 became x = −3, and y = 2 became y = −2.", af: "Die rede hoekom 'n horisontale skuif binne-buite lyk, is die moeite werd om een keer reg te kry, want dit kom elke jaar terug. Die grafiek beweeg nie omdat x verander nie; die grafiek beweeg omdat jy verander het wat die masjien met elke x doen. Skuif die prentjie twee eenhede links, en die punt wat bo x = 0 was, is nou bo x = −2: om die ou uitset op die nuwe plek te kry, moet die masjien dus eers 2 bytel by wat dit ook al gegee word. Daarom x + 2 binne. 'n Vertikale skuif het nie sulke streke nie: nadat die masjien klaar is, trek jy eenvoudig 4 van die antwoord af, dus staan die −4 buite en doen dit presies wat dit sê. 'n Vinnige toets vir jou antwoord: die asimptote moes dieselfde kant toe geskuif het as die grafiek, en dit het: x = −1 het x = −3 geword, en y = 2 het y = −2 geword.",
       },
     },
     {
@@ -255,22 +255,22 @@ const t2q3 = {
       marks: 2,
       level: 3,
       prompt: {
-        en: "Determine the values of x for which &nbsp;h(x) &lt; −2.",
+        en: "Determine the values of x for which &nbsp;h(x) &lt; −2.", af: "Bepaal die waardes van x waarvoor &nbsp;h(x) &lt; −2.",
       },
       hint: {
-        en: "Look at what −2 actually is for h — you worked it out in (c). Get one side to zero rather than multiplying anything across, then cut the line at the asymptote and paint each section.",
+        en: "Look at what −2 actually is for h — you worked it out in (c). Get one side to zero rather than multiplying anything across, then cut the line at the asymptote and paint each section.", af: "Kyk wat −2 eintlik vir h is: jy het dit in (c) uitgewerk. Kry een kant gelyk aan nul eerder as om iets te kruisvermenigvuldig, sny dan die lyn by die asimptoot en verf elke interval.",
       },
       memo: [
-        { type: "step", text: { en: "−2 is exactly h's horizontal asymptote, so the question is really “where does h lie <i>below</i> its own asymptote?”" } },
-        { type: "step", text: { en: "4/(x + 3) − 2 &lt; −2 &nbsp;⟹&nbsp; 4/(x + 3) &lt; 0" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "4 is positive, so the fraction can only be negative when the denominator is negative. Cut the line at the asymptote x = −3 and <b>paint</b> each side: left of −3 the fraction is <b>−</b> (h is below y = −2), right of −3 it is <b>+</b> (h is above y = −2)." } },
-        { type: "answer", text: { en: "the painted − section is the left one: &nbsp;x + 3 &lt; 0 &nbsp;⟹&nbsp; x &lt; −3" }, ticks: ["a"] },
+        { type: "step", text: { en: "−2 is exactly h's horizontal asymptote, so the question is really “where does h lie <i>below</i> its own asymptote?”", af: "−2 is presies h se horisontale asimptoot, dus is die vraag eintlik “waar lê h <i>onder</i> sy eie asimptoot?”" } },
+        { type: "step", text: { en: "4/(x + 3) − 2 &lt; −2 &nbsp;⟹&nbsp; 4/(x + 3) &lt; 0", af: "4/(x + 3) − 2 &lt; −2 &nbsp;⟹&nbsp; 4/(x + 3) &lt; 0" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "4 is positive, so the fraction can only be negative when the denominator is negative. Cut the line at the asymptote x = −3 and <b>paint</b> each side: left of −3 the fraction is <b>−</b> (h is below y = −2), right of −3 it is <b>+</b> (h is above y = −2).", af: "4 is positief, dus kan die breuk net negatief wees wanneer die noemer negatief is. Sny die lyn by die asimptoot x = −3 en <b>verf</b> elke kant: links van −3 is die breuk <b>−</b> (h is onder y = −2), regs van −3 is dit <b>+</b> (h is bo y = −2)." } },
+        { type: "answer", text: { en: "the painted − section is the left one: &nbsp;x + 3 &lt; 0 &nbsp;⟹&nbsp; x &lt; −3", af: "die interval wat − geverf is, is die linkse een: &nbsp;x + 3 &lt; 0 &nbsp;⟹&nbsp; x &lt; −3" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: never multiply an inequality by (x + 3) — you do not know whether it is positive or negative, so you do not know whether to turn the sign around. Get one side to 0, then paint the sections.",
+          en: "WATCH OUT: never multiply an inequality by (x + 3) — you do not know whether it is positive or negative, so you do not know whether to turn the sign around. Get one side to 0, then paint the sections.", af: "PASOP: moet nooit 'n ongelykheid met (x + 3) vermenigvuldig nie: jy weet nie of dit positief of negatief is nie, dus weet jy nie of jy die teken moet omdraai nie. Kry een kant gelyk aan 0, verf dan die intervalle.",
         } },
       ],
       esplain: {
-        en: "Two small ideas do all the work. The first is noticing that −2 is not a random number: it is h's own horizontal asymptote, so subtracting it wipes out the whole tail of the expression and leaves a bare fraction. That is why the inequality collapses to “when is 4/(x + 3) negative?” instead of turning into anything messy. The second is her paint method. A fraction can only change sign where its top is zero or its bottom is zero, so you cut the line at those places — here only at the asymptote x = −3 — and then each section can be painted with a single + or − because nothing inside a section can change. The top is a fixed positive 4, so the sign of the whole fraction is simply the sign of the bottom: negative to the left of −3, positive to the right. Read the painted − section off and you are done. And notice the answer has no closed end — x = −3 is an asymptote, so it can never be included.",
+        en: "Two small ideas do all the work. The first is noticing that −2 is not a random number: it is h's own horizontal asymptote, so subtracting it wipes out the whole tail of the expression and leaves a bare fraction. That is why the inequality collapses to “when is 4/(x + 3) negative?” instead of turning into anything messy. The second is her paint method. A fraction can only change sign where its top is zero or its bottom is zero, so you cut the line at those places — here only at the asymptote x = −3 — and then each section can be painted with a single + or − because nothing inside a section can change. The top is a fixed positive 4, so the sign of the whole fraction is simply the sign of the bottom: negative to the left of −3, positive to the right. Read the painted − section off and you are done. And notice the answer has no closed end — x = −3 is an asymptote, so it can never be included.", af: "Twee klein idees doen al die werk. Die eerste is om raak te sien dat −2 nie 'n lukrake getal is nie: dit is h se eie horisontale asimptoot, dus vee dit die hele stert van die uitdrukking uit wanneer jy dit aftrek, en 'n kaal breuk bly oor. Dit is hoekom die ongelykheid ineenstort tot “wanneer is 4/(x + 3) negatief?” in plaas daarvan om iets morsigs te word. Die tweede is haar verfmetode. 'n Breuk kan net van teken verander waar sy teller nul of sy noemer nul is, dus sny jy die lyn op daardie plekke, hier net by die asimptoot x = −3, en dan kan elke interval met 'n enkele + of − geverf word, want niks binne 'n interval kan verander nie. Die teller is 'n vaste positiewe 4, dus is die teken van die hele breuk eenvoudig die teken van die noemer: negatief links van −3, positief regs daarvan. Lees die interval wat − geverf is af, en jy is klaar. En let op dat die antwoord geen geslote kant het nie: x = −3 is 'n asimptoot, dus kan dit nooit ingesluit word nie.",
       },
     },
     {
@@ -278,26 +278,26 @@ const t2q3 = {
       marks: 4,
       level: 4,
       prompt: {
-        en: "Determine the values of k for which the line &nbsp;y = −x + k&nbsp; will NOT cut the graph of f.",
+        en: "Determine the values of k for which the line &nbsp;y = −x + k&nbsp; will NOT cut the graph of f.", af: "Bepaal die waardes van k waarvoor die lyn &nbsp;y = −x + k&nbsp; die grafiek van f NIE sal sny nie.",
       },
       hint: {
-        en: "“Does not cut” is a statement about how many solutions the two equations have together. Set them equal, clear the fraction to get an ordinary quadratic, and then think about what the discriminant has to do.",
+        en: "“Does not cut” is a statement about how many solutions the two equations have together. Set them equal, clear the fraction to get an ordinary quadratic, and then think about what the discriminant has to do.", af: "“Sny nie” is 'n bewering oor hoeveel oplossings die twee vergelykings saam het. Stel hulle gelyk, raak ontslae van die breuk om 'n gewone kwadratiese vergelyking te kry, en dink dan oor wat die diskriminant moet doen.",
       },
       memo: [
-        { type: "step", text: { en: "“Does not cut” means the two equations have <b>no real solution</b> together. So set them equal and force the discriminant negative." } },
-        { type: "step", text: { en: "4/(x + 1) + 2 = −x + k &nbsp;&nbsp;— multiply everything by (x + 1), &nbsp;x ≠ −1: &nbsp;&nbsp;4 + 2(x + 1) = (−x + k)(x + 1)" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "2x + 6 = −x² − x + kx + k &nbsp;⟹&nbsp; x² + (3 − k)x + (6 − k) = 0" }, ticks: ["ca"] },
-        { type: "step", text: { en: "No real roots means Δ &lt; 0: &nbsp;Δ = (3 − k)² − 4(1)(6 − k) = 9 − 6k + k² − 24 + 4k = k² − 2k − 15 = (k − 5)(k + 3)" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "(k − 5)(k + 3) &lt; 0 &nbsp;⟹&nbsp; −3 &lt; k &lt; 5" }, ticks: ["a"] },
+        { type: "step", text: { en: "“Does not cut” means the two equations have <b>no real solution</b> together. So set them equal and force the discriminant negative.", af: "“Sny nie” beteken die twee vergelykings het saam <b>geen reële oplossing</b> nie. Stel hulle dus gelyk en dwing die diskriminant om negatief te wees." } },
+        { type: "step", text: { en: "4/(x + 1) + 2 = −x + k &nbsp;&nbsp;— multiply everything by (x + 1), &nbsp;x ≠ −1: &nbsp;&nbsp;4 + 2(x + 1) = (−x + k)(x + 1)", af: "4/(x + 1) + 2 = −x + k, &nbsp;&nbsp;vermenigvuldig alles met (x + 1), &nbsp;x ≠ −1: &nbsp;&nbsp;4 + 2(x + 1) = (−x + k)(x + 1)" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "2x + 6 = −x² − x + kx + k &nbsp;⟹&nbsp; x² + (3 − k)x + (6 − k) = 0", af: "2x + 6 = −x² − x + kx + k &nbsp;⟹&nbsp; x² + (3 − k)x + (6 − k) = 0" }, ticks: ["ca"] },
+        { type: "step", text: { en: "No real roots means Δ &lt; 0: &nbsp;Δ = (3 − k)² − 4(1)(6 − k) = 9 − 6k + k² − 24 + 4k = k² − 2k − 15 = (k − 5)(k + 3)", af: "Geen reële wortels beteken Δ &lt; 0: &nbsp;Δ = (3 − k)² − 4(1)(6 − k) = 9 − 6k + k² − 24 + 4k = k² − 2k − 15 = (k − 5)(k + 3)" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "(k − 5)(k + 3) &lt; 0 &nbsp;⟹&nbsp; −3 &lt; k &lt; 5", af: "(k − 5)(k + 3) &lt; 0 &nbsp;⟹&nbsp; −3 &lt; k &lt; 5" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: Δ &lt; 0, not Δ ≤ 0. At k = −3 and at k = 5 the discriminant is zero, which means <i>equal roots</i> — the line touches the graph once. Touching is still meeting, so those two values must be left out.",
+          en: "WATCH OUT: Δ &lt; 0, not Δ ≤ 0. At k = −3 and at k = 5 the discriminant is zero, which means <i>equal roots</i> — the line touches the graph once. Touching is still meeting, so those two values must be left out.", af: "PASOP: Δ &lt; 0, nie Δ ≤ 0 nie. By k = −3 en by k = 5 is die diskriminant nul, wat <i>gelyke wortels</i> beteken: die lyn raak die grafiek een keer. Raak is steeds ontmoet, dus moet daardie twee waardes uitgelaat word.",
         } },
         { type: "trap", text: {
-          en: "REMEMBER: “does not cut” = “no real solution” = Δ &lt; 0. It is the same sentence you use on a parabola-and-line question; the only extra step here is clearing the fraction first.",
+          en: "REMEMBER: “does not cut” = “no real solution” = Δ &lt; 0. It is the same sentence you use on a parabola-and-line question; the only extra step here is clearing the fraction first.", af: "ONTHOU: “sny nie” = “geen reële oplossing” = Δ &lt; 0. Dit is dieselfde sin wat jy by 'n parabool-en-lyn-vraag gebruik; die enigste ekstra stap hier is om eers van die breuk ontslae te raak.",
         } },
       ],
       esplain: {
-        en: "The fact you have to fetch is that “cutting” and “solving” are the same thing said two ways. Wherever the line meets the curve, both equations are true at once, so setting them equal turns a picture question into an algebra question — and once the fraction is cleared it is an ordinary quadratic. Now the discriminant is doing what it always does: two real roots means two crossings, one repeated root means the line just touches, and no real roots means the line and the curve never meet at all. The question asked for the last case, so Δ has to be strictly negative. Two details decide the marks. The first is the strictness — at Δ = 0 the line grazes the graph, and grazing counts as meeting, so the endpoints are out. The second is what happens after you factorise Δ: (k − 5)(k + 3) &lt; 0 is itself a quadratic inequality, so it is a happy parabola in k and “less than zero” is the inside of the bowl, between −3 and 5. Bank the earlier marks first — (a) to (d) are all straightforward, and this is the one to come back to.",
+        en: "The fact you have to fetch is that “cutting” and “solving” are the same thing said two ways. Wherever the line meets the curve, both equations are true at once, so setting them equal turns a picture question into an algebra question — and once the fraction is cleared it is an ordinary quadratic. Now the discriminant is doing what it always does: two real roots means two crossings, one repeated root means the line just touches, and no real roots means the line and the curve never meet at all. The question asked for the last case, so Δ has to be strictly negative. Two details decide the marks. The first is the strictness — at Δ = 0 the line grazes the graph, and grazing counts as meeting, so the endpoints are out. The second is what happens after you factorise Δ: (k − 5)(k + 3) &lt; 0 is itself a quadratic inequality, so it is a happy parabola in k and “less than zero” is the inside of the bowl, between −3 and 5. Bank the earlier marks first — (a) to (d) are all straightforward, and this is the one to come back to.", af: "Die feit wat jy moet gaan haal, is dat “sny” en “oplos” dieselfde ding is, op twee maniere gesê. Waar die lyn ook al die kurwe ontmoet, is albei vergelykings tegelyk waar, dus verander jy 'n prentjievraag in 'n algebravraag deur hulle gelyk te stel, en sodra die breuk weg is, is dit 'n gewone kwadratiese vergelyking. Nou doen die diskriminant wat dit altyd doen: twee reële wortels beteken twee snypunte, een herhaalde wortel beteken die lyn raak net, en geen reële wortels beteken die lyn en die kurwe ontmoet mekaar nooit nie. Die vraag het na die laaste geval gevra, dus moet Δ streng negatief wees. Twee besonderhede bepaal die punte. Die eerste is die strengheid: by Δ = 0 skuur die lyn net aan die grafiek, en skuur tel as ontmoet, dus is die eindpunte uit. Die tweede is wat gebeur nadat jy Δ gefaktoriseer het: (k − 5)(k + 3) &lt; 0 is self 'n kwadratiese ongelykheid, dus is dit 'n happy parabool in k, en “kleiner as nul” is binne die bak, tussen −3 en 5. Kry eers die vroeëre punte in die sak: (a) tot (d) is almal eenvoudig, en hierdie een is die een om na terug te kom.",
       },
     },
   ],

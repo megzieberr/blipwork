@@ -165,12 +165,12 @@ export const funcCards = [
     skill: "intercepts-turning-point", from: src("func.lp.q1"), parts: ["b"],
     // the turning point is what this card ASKS for, so the intro stops
     // at the equation — it must not hand the answer over.
-    intro: { en: "f is the parabola &nbsp;f(x) = 2x² − 6x − 8." },
+    intro: { en: "f is the parabola &nbsp;f(x) = 2x² − 6x − 8.", af: "f is die parabool &nbsp;f(x) = 2x² − 6x − 8." },
   }),
   makeCard({
     skill: "intercepts-turning-point", from: src("func.hyp.t1q4"), parts: ["c"],
     // B is the answer here, so the intro says only where B lives.
-    intro: { en: "h is the hyperbola &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;B is the point where h cuts the x-axis." },
+    intro: { en: "h is the hyperbola &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;B is the point where h cuts the x-axis.", af: "h is die hiperbool &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;B is die punt waar h die x-as sny." },
   }),
   /* SIBLINGS (session 2a) — the standard-form route first, then the
      parabola that has NO x-intercepts (the √ of a negative worked out
@@ -186,7 +186,7 @@ export const funcCards = [
      both intros must carry the asymptotes. */
   makeCard({
     skill: "axis-of-symmetry", from: src("func.hyp.t2q3"), parts: ["b"],
-    intro: { en: "f is the hyperbola &nbsp;f(x) = 4/(x + 1) + 2. &nbsp;Its asymptotes are x = −1 and y = 2." },
+    intro: { en: "f is the hyperbola &nbsp;f(x) = 4/(x + 1) + 2. &nbsp;Its asymptotes are x = −1 and y = 2.", af: "f is die hiperbool &nbsp;f(x) = 4/(x + 1) + 2. &nbsp;Sy asimptote is x = −1 en y = 2." },
   }),
   makeCard({
     skill: "axis-of-symmetry", from: src("func.hyp.t1q4"), parts: ["d"],
@@ -228,7 +228,7 @@ export const funcCards = [
     skill: "inequalities", from: src("func.hyp.t1q4"), parts: ["e"],
     // the paint method cuts the line at the asymptote AND the
     // x-intercept, so this one intro carries B as well.
-    intro: { en: "h is the hyperbola &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;Its asymptotes are x = −2 and y = 1, and h cuts the x-axis at B(−8 ; 0)." },
+    intro: { en: "h is the hyperbola &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;Its asymptotes are x = −2 and y = 1, and h cuts the x-axis at B(−8 ; 0).", af: "h is die hiperbool &nbsp;h(x) = 6/(x + 2) + 1. &nbsp;Sy asimptote is x = −2 en y = 1, en h sny die x-as by B(−8 ; 0)." },
   }),
   makeCard({
     // (d) asks about h, and h only exists once (c) has built it — so
@@ -395,14 +395,14 @@ export const funcCards = [
     // the maximum 16 and the y-intercept 7 are the two facts this part
     // has to FETCH (its own memo says so, and it is why the part is
     // starred) — so the intro stops at the equation.
-    intro: { en: "f is the parabola &nbsp;f(x) = −x² + 6x + 7." },
+    intro: { en: "f is the parabola &nbsp;f(x) = −x² + 6x + 7.", af: "f is die parabool &nbsp;f(x) = −x² + 6x + 7." },
   }),
   makeCard({ skill: "level-4", from: src("func.l4.q3"), parts: ["a", "b"] }),
   makeCard({
     // (b) used to travel with (a), which carried the whole stem. On its
     // own it needs all of it: both equations, A, C, and what PQ is.
     skill: "level-4", from: src("func.gt.t1q5"), parts: ["b"],
-    intro: { en: "f is the parabola &nbsp;f(x) = −x² + 6x + 7&nbsp; and g is the line &nbsp;g(x) = 2x + 2. &nbsp;The two graphs cut each other at A(−1 ; 0) and at C, and A is also the x-intercept of both graphs. PQ is a line segment drawn parallel to the y-axis, with P on f and Q on g, and with PQ lying between A and C." },
+    intro: { en: "f is the parabola &nbsp;f(x) = −x² + 6x + 7&nbsp; and g is the line &nbsp;g(x) = 2x + 2. &nbsp;The two graphs cut each other at A(−1 ; 0) and at C, and A is also the x-intercept of both graphs. PQ is a line segment drawn parallel to the y-axis, with P on f and Q on g, and with PQ lying between A and C.", af: "f is die parabool &nbsp;f(x) = −x² + 6x + 7&nbsp; en g is die lyn &nbsp;g(x) = 2x + 2. &nbsp;Die twee grafieke sny mekaar by A(−1 ; 0) en by C, en A is ook die x-afsnit van albei grafieke. PQ is 'n lynstuk wat ewewydig aan die y-as geteken is, met P op f en Q op g, en PQ lê tussen A en C." },
   }),
   makeCard({ skill: "level-4", from: src("func.l4.q2"), parts: ["a"] }),
   makeCard({ skill: "level-4", from: src("func.l4.q1"), parts: ["a", "b"] }),

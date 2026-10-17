@@ -56,9 +56,9 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T26 | concepts: the `func` block (js/concepts/func.js after S4) | ~734 words | counted by af_extract 2026-10-17
 - ⏳ 2026-10-17 20:17 T27 | hub rounds: questfn1-families … questfn6-transformations (6 files) | ~3 719 words | verify page: verify-func.html
 - ☑ 2026-10-17 T28 | hub rounds: questfn7-together | ~667 words | verify page: verify-func.html
-- ⏳ 2026-10-17 20:20 T29 | exam: cards-func, func-graphs-together, func-hyperbola-and-exponential-2, func-hyperbola-and-exponential (4 files) | ~3 442 words | verify-exam.html
+- ☑ 2026-10-17 T29 | exam: cards-func, func-graphs-together, func-hyperbola-and-exponential-2, func-hyperbola-and-exponential (4 files) | ~3 442 words | verify-exam.html
 - ⏳ 2026-10-17 20:20 T30 | exam: func-level4 | ~3 087 words | verify-exam.html
-- ☐ T31 | exam: func-line-and-parabola, func-siblings-asymptotes-domain-range (2 files) | ~2 920 words | verify-exam.html
+- ⏳ 2026-10-17 20:25 T31 | exam: func-line-and-parabola, func-siblings-asymptotes-domain-range (2 files) | ~2 920 words | verify-exam.html
 - ☐ T32 | exam: func-siblings-average-gradient | ~2 532 words | verify-exam.html
 - ☐ T33 | exam: func-siblings-axis-of-symmetry | ~2 173 words | verify-exam.html
 - ☐ T34 | exam: func-siblings-distances, func-siblings-find-equation (2 files) | ~3 962 words | verify-exam.html
