@@ -1,0 +1,1041 @@
+{
+  "unit": "T06",
+  "generated": "2026-10-17T17:30:54.028Z",
+  "files": [
+    "js/exam/exp-siblings-exponent-expressions.js",
+    "js/exam/exp-siblings-exponential-equations.js",
+    "js/exam/exp-siblings-rational-exponents-numeric.js"
+  ],
+  "items": {
+    "exp-siblings-exponent-expressions#1": {
+      "en": "Deal with the bracket first — every base inside it gets the outside exponent, the 2 included. Only then take the top away from the bottom, base by base.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:78:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#2": {
+      "en": "Multiply the bracket out first — <b>each base gets the exponent</b>, and that includes the 2:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:81:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#3": {
+      "en": "(2a³b⁻²)⁴ = 2⁴ · a¹² · b⁻⁸ = 16a¹²b⁻⁸",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:82:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#4": {
+      "en": "Now the quotient rule — <b>subtract exponents</b>, one base at a time:<br>16 ÷ 8 = 2, &nbsp;a<sup>12 − 5</sup> = a⁷, &nbsp;b<sup>−8 − (−3)</sup> = b⁻⁵",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:83:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#5": {
+      "en": "= 2a⁷b⁻⁵ = 2a⁷/b⁵",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:84:39"
+      ]
+    },
+    "exp-siblings-exponent-expressions#6": {
+      "en": "WATCH OUT: (2a³b⁻²)⁴ is 16a¹²b⁻⁸, not 2a¹²b⁻⁸. The coefficient is a base like any other and it gets the exponent too — that missing 2⁴ is the most common lost mark on this question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:86:15"
+      ]
+    },
+    "exp-siblings-exponent-expressions#7": {
+      "en": "Nothing here is clever; it is four laws applied in a sensible order. The bracket goes first because a power of a product hands the outside exponent to every single thing inside — the 2, the a and the b — so 2 becomes 16 and the two exponents get multiplied by 4. Then the fraction bar means subtract, base by base, and the only fiddly one is the b: minus eight take away minus three is minus five, because subtracting a negative turns into adding. Finally the question asks for positive exponents, so the b to the minus five flips downstairs and the answer sits as two a to the seventh over b to the fifth. Doing the bracket before the division is what keeps the arithmetic small enough to trust.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:90:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#8": {
+      "en": "There is a − between the two terms on top, so nothing may cancel yet. Divorce each power into 5<sup>m</sup> times a small number first, and then look for what they have in common.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:117:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#9": {
+      "en": "There is a − between the terms, so every power gets <b>divorced</b> first: &nbsp;5<sup>m+1</sup> = 5<sup>m</sup> · 5 &nbsp;and&nbsp; 5<sup>m−1</sup> = 5<sup>m</sup> · 5⁻¹.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:120:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#10": {
+      "en": "= 5 − 1/5 = 25/5 − 1/5 = 24/5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:123:39"
+      ]
+    },
+    "exp-siblings-exponent-expressions#11": {
+      "en": "REMEMBER: 5<sup>m−1</sup> means 5<sup>m</sup> <i>divided</i> by 5, not 5<sup>m</sup> <i>minus</i> 5. Divorcing splits a power into a product — a plus or minus in the exponent becomes a multiply or a divide outside it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:125:15"
+      ]
+    },
+    "exp-siblings-exponent-expressions#12": {
+      "en": "Cancelling is division, and you may only divide a whole top by a whole bottom. While the top is two separate things with a minus between them, the 5 to the m is not a factor of it and crossing it out would be cheating. Divorcing fixes that in one line: 5 to the m plus one is nothing more mysterious than 5 to the m times 5, and 5 to the m minus one is 5 to the m times a fifth. Now every term on top has a visible 5 to the m, so it can be bracketed out — caged, in her word — and only then is it a genuine factor of the whole top and the whole bottom. What is left is 5 take away a fifth, and the m has vanished completely: the answer is the same twenty-four fifths whatever m happens to be.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:129:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#13": {
+      "en": "<em>No calculator.</em><br>Simplify: &nbsp;2/(4⁻¹ + 12⁻¹)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:153:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#14": {
+      "en": "The + underneath is what stops you moving the 4 and the 12 upstairs. Break the fraction up into a division instead, add the two little fractions properly, and finish with keep–flip–change.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:156:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#15": {
+      "en": "The + in the denominator stops you taking the 4 and the 12 to the top. Break it up with ÷ instead:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:159:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#16": {
+      "en": "= 2 ÷ (1/4 + 1/12)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:160:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#17": {
+      "en": "LCD = 12: &nbsp;1/4 becomes 3/12, &nbsp;so &nbsp;3/12 + 1/12 = 4/12 = 1/3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:161:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#18": {
+      "en": "Dividing by a fraction is <b>KFC</b> — keep, flip, change:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:162:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#19": {
+      "en": "= 2 × 3/1 = 6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:163:39"
+      ]
+    },
+    "exp-siblings-exponent-expressions#20": {
+      "en": "WATCH OUT: this is <b>not</b> 2(4 + 12) = 32. Sending a depressed exponent to the other side of the bar is a rule about multiplying and dividing; the + between the two terms blocks it completely, which is exactly why the ÷ and the LCD have to come first.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:165:15"
+      ]
+    },
+    "exp-siblings-exponent-expressions#21": {
+      "en": "Her notes call this an exam favourite, and the whole page exists to stop one reflex. Seeing 4 to the minus one plus 12 to the minus one underneath, the hand wants to fling both numbers to the top and write 4 plus 12. It cannot: flipping is a multiply-and-divide rule, and a plus sign is standing in the way. So rewrite the fraction as a division — 2 divided by whatever that bracket comes to — turn each depressed exponent into an honest fraction, and add them with a lowest common denominator. A quarter plus a twelfth is a third. Then dividing by a third is keep, flip, change: keep the 2, flip the third into three over one, change the divide into a times. Two times three is six.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:169:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#22": {
+      "en": "Four different bases, but only two primes hiding behind them. Break every base into 2s and 3s first, then hand each bracket its outside exponent before you go anywhere near the subtraction.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:196:13"
+      ]
+    },
+    "exp-siblings-exponent-expressions#23": {
+      "en": "Prime factors first — always: &nbsp;9 = 3², &nbsp;8 = 2³, &nbsp;6 = 2 · 3, &nbsp;12 = 2² · 3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:199:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#24": {
+      "en": "Multiply the brackets out — power of a power <b>multiplies</b> the exponents, and every base inside gets its share:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:201:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#25": {
+      "en": "Now subtract exponents with the same base, and write the arithmetic out <i>in the exponent</i> on its own line before simplifying it:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:203:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#26": {
+      "en": "= 2<sup>3n − n − (2n+2)</sup> · 3<sup>2n+2 − n − (n+1)</sup><br>= 2<sup>−2</sup> · 3<sup>1</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:204:37"
+      ]
+    },
+    "exp-siblings-exponent-expressions#27": {
+      "en": "= 3/2² = 3/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:205:39"
+      ]
+    },
+    "exp-siblings-exponent-expressions#28": {
+      "en": "WATCH OUT: 12<sup>n+1</sup> is (2² · 3)<sup>n+1</sup>, so <b>both</b> the 2² and the 3 take the whole exponent — 2<sup>2n+2</sup> · 3<sup>n+1</sup>. Giving the exponent to only the first factor is the single most expensive slip on this question.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:207:15"
+      ]
+    },
+    "exp-siblings-exponent-expressions#29": {
+      "en": "Nine, eight, six and twelve look like four different worlds, but they are all built out of twos and threes, and that is the only reason this can be done without a calculator. Prime factors are step one, every time. Once each base is a power of 2 or a power of 3, the brackets can be opened by multiplying exponents, and the whole expression becomes a pile of 2s over a pile of 2s and a pile of 3s over a pile of 3s. Then it is subtraction, and her layout is worth copying exactly: write the exponent arithmetic out on its own line inside the exponent before you work it out, because that is where sign mistakes get caught. The n disappears completely, and what survives is 2 to the minus two times 3, which flips into three quarters.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponent-expressions.js:211:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#1": {
+      "en": "<em>Without the use of a calculator.</em><br>Solve for x: &nbsp;2<sup>x</sup> · 2<sup>x+4</sup> = 64",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:65:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#2": {
+      "en": "The left-hand side is two powers of the same base being multiplied, so it can be written as ONE power first. Then make the right-hand side a power of 2 as well.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:68:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#3": {
+      "en": "Same base on the left, so the <b>product rule</b> first — add the exponents, and the base stays the same:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:71:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#4": {
+      "en": "2<sup>x</sup> · 2<sup>x+4</sup> = 2<sup>2x+4</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:72:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#5": {
+      "en": "Now write 64 as a power of 2 as well: &nbsp;2<sup>2x+4</sup> = 2⁶ &nbsp;&nbsp;— the <b>guns</b> are equal, so they shoot each other and the <b>helmets</b> fall to the ground",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:73:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#6": {
+      "en": "2x + 4 = 6 &nbsp;&nbsp;∴ x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:74:39"
+      ]
+    },
+    "exp-siblings-exponential-equations#7": {
+      "en": "REMEMBER: 2<sup>x</sup> · 2<sup>x+4</sup> is 2<sup>2x+4</sup>, not 4<sup>2x+4</sup>. Multiplying powers of the same base <b>adds</b> the exponents and leaves the base exactly as it was — the bases only ever get multiplied together when the EXPONENTS are the same.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:76:15"
+      ]
+    },
+    "exp-siblings-exponential-equations#8": {
+      "en": "An exponential equation can only be solved by hand once both sides are a single power of the same base, so the first job is always to see whether either side needs tidying. Here the left is two powers of 2 multiplied together, and the product rule squashes them into one: add the exponents, keep the base. That gives 2 to the two x plus four. The right is 64, which is 2 to the sixth. Now both sides are guns of the same kind, so they cancel each other out and the helmets — the exponents — drop to the ground as an ordinary little equation. Two x plus four equals six gives x equals one. Write the 2 to the sixth down; that line is a mark on its own, because it is what makes the comparison legal.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:80:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#9": {
+      "en": "<em>No calculator.</em><br>Solve for x: &nbsp;(1/4)<sup>x−1</sup> = 64",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:103:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#10": {
+      "en": "A fraction base is a base with a hidden negative exponent — 1/4 is 4 to the power of what? Once the left-hand side is a plain power of 4, both sides can be compared.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:106:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#11": {
+      "en": "Get rid of the fraction base first: &nbsp;1/4 = 4⁻¹, &nbsp;so a <b>flipped fraction</b> turns the whole exponent around:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:109:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#12": {
+      "en": "(1/4)<sup>x−1</sup> = (4⁻¹)<sup>x−1</sup> = 4<sup>−(x−1)</sup> = 4<sup>1−x</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:110:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#13": {
+      "en": "64 = 4³, &nbsp;so &nbsp;4<sup>1−x</sup> = 4³ &nbsp;&nbsp;— the guns are equal, so equate the helmets: &nbsp;1 − x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:111:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#14": {
+      "en": "∴ x = −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:112:39"
+      ]
+    },
+    "exp-siblings-exponential-equations#15": {
+      "en": "WATCH OUT: the minus reaches BOTH terms in the bracket, so (1/4)<sup>x−1</sup> is 4<sup>1−x</sup>, not 4<sup>x−1</sup>. Check it on the answer: at x = −2 the left-hand side is (1/4)⁻³, which really is 64.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:114:15"
+      ]
+    },
+    "exp-siblings-exponential-equations#16": {
+      "en": "A fraction base looks like a whole new kind of question and it is not — it is the same question wearing a disguise. A quarter is 4 to the minus one, so raising a quarter to the power x minus one is really 4 raised to minus one times x minus one, which is 4 to the one minus x. That single line is where the marks are, and it is also where the mistakes are, because the minus has to reach both terms inside the bracket. After that everything is ordinary: 64 is 4 cubed, the two bases match, so the exponents must match too, and one minus x equals three gives x equals minus two. A negative answer is completely normal here — a fraction base has to be fed a negative exponent before it can grow big.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:118:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#17": {
+      "en": "<em>No calculator.</em><br>Solve for x: &nbsp;3<sup>x+2</sup> − 3<sup>x</sup> = 72",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:142:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#18": {
+      "en": "There is a − between two terms, so no guns can be equal yet. Divorce the first power so both terms carry 3<sup>x</sup>, then take that out as a common factor and see what is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:145:13"
+      ]
+    },
+    "exp-siblings-exponential-equations#19": {
+      "en": "A − sits between the two terms, so <b>divorce</b> first: &nbsp;3<sup>x+2</sup> = 3<sup>x</sup> · 3² = 9 · 3<sup>x</sup>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:148:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#20": {
+      "en": "9 · 3<sup>x</sup> − 3<sup>x</sup> = 72 &nbsp;⟹&nbsp; take out the common factor — always the base with the variable exponent: &nbsp;3<sup>x</sup>(9 − 1) = 72",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:149:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#21": {
+      "en": "8 · 3<sup>x</sup> = 72 &nbsp;&nbsp;∴ 3<sup>x</sup> = 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:150:37"
+      ]
+    },
+    "exp-siblings-exponential-equations#22": {
+      "en": "3<sup>x</sup> = 3² &nbsp;&nbsp;∴ x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:151:39"
+      ]
+    },
+    "exp-siblings-exponential-equations#23": {
+      "en": "WATCH OUT: you may not drop the exponents while there is still a − in the way. 3<sup>x+2</sup> − 3<sup>x</sup> = 72 is <b>not</b> (x + 2) − x = 72. Guns can only shoot each other when each side is ONE single power.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:153:15"
+      ]
+    },
+    "exp-siblings-exponential-equations#24": {
+      "en": "Everything about this question is decided by that minus sign. The helmets-fall trick only works when each side of the equation is one single power, and a subtraction of two powers is not one power. So the plan is to turn the whole left-hand side into one thing being multiplied. Divorce splits 3 to the x plus two into 3 to the x times 9, and now both terms carry a visible 3 to the x, which can be bracketed out. What is left inside the bracket is a plain 9 minus 1, which is 8, so the equation says 8 lots of 3 to the x make 72 — and one lot must therefore be 9. Only now is each side a single power of 3, and only now may the exponents be compared.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-exponential-equations.js:157:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#1": {
+      "en": "Prime factors first, as always — what is 25 built out of? Then remember which half of the little fraction is the root and which half is the power.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:73:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#2": {
+      "en": "Prime factors first — always. &nbsp;25 = 5²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:76:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#3": {
+      "en": "Now read the exponent her way: <b>inside the √ is the top of the fraction, outside the √ is the bottom</b>. The bottom is the root, the top is the power.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:77:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#4": {
+      "en": "A fraction in the exponent is two instructions squashed into one symbol. The bottom number is a root and the top number is a power, so 25 to the three over two means take the square root of 25 and then cube it. Her memory hook is worth saying out loud every time: inside the root sign is the top of the fraction, outside the root sign is the bottom. The reason you break 25 into 5² first is that it turns the whole thing into one clean power law instead of two separate jobs — raising a power to a power just multiplies the exponents, and 2 times three over two is a plain 3. So the answer is 5³. You can also do it the long way, √25 = 5 and then 5³ = 125, and get exactly the same 125.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:84:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#5": {
+      "en": "<em>No calculator.</em><br>Evaluate: &nbsp;√(36⁻¹)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:107:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#6": {
+      "en": "Deal with the depressed exponent before you touch the root. What does a negative exponent do to a number — does it change its sign, or does it move it?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:110:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#7": {
+      "en": "A <b>depressed exponent</b> flips the number and changes the sign of the exponent: &nbsp;36⁻¹ = 1/36",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:113:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#8": {
+      "en": "A root spreads over a quotient — <b>each base gets the exponent</b>: &nbsp;√(1/36) = √1/√36",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:114:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#9": {
+      "en": "= 1/6",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:115:39"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#10": {
+      "en": "REMEMBER: 36⁻¹ is <b>not</b> −36. A negative exponent has nothing to do with a negative answer — it flips the number to the other side of the fraction bar, and the answer stays perfectly positive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:117:15"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#11": {
+      "en": "Two little laws, one after the other, and neither of them is difficult once you stop reading the minus sign as a subtraction. A negative exponent is her depressed exponent: it flips the number over the fraction bar and comes back up positive, so 36 to the minus one is one over 36. Then the square root is allowed to spread over a top and a bottom separately, because a root is really just a power and a power of a quotient hands the exponent to each base. Root of one is one, root of 36 is six, and the answer is one sixth. Notice that nothing anywhere in this question is negative — the sign lives in the exponent, and its only job is to say which way up the number goes.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:121:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#12": {
+      "en": "Get rid of the minus in the exponent first — flip it and change the sign. Only then worry about what two over three is asking you to do.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:147:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#13": {
+      "en": "Depressed exponent first: flip it, and the exponent turns positive.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:150:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#14": {
+      "en": "= 1/9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:153:39"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#15": {
+      "en": "WATCH OUT: the minus in the exponent sends the whole thing to the bottom of a fraction — it never makes the answer negative. The answer is 1/9, not −9 and not −1/9.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:155:15"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#16": {
+      "en": "There are two things going on in that exponent, and doing them one at a time is what keeps it easy. The minus is a depressed exponent, so the 27 goes underneath a 1 and the exponent comes back up as two over three. Now only the fraction is left, and the bottom of it is the root: the cube root of 27 is 3, and then the top of it says square that, giving 9. So the whole thing is one over nine. Splitting 27 into 3³ first is what lets you do both steps in a single power law, and it is also the safety net — a number written in prime factors cannot hide a root from you. The most common lost mark on this question is a stray minus in the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:159:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#17": {
+      "en": "Two bases, so do them one at a time. Break each number into prime factors and choose the prime that makes the root come out whole — 32 wants a fifth root, 9 wants a square root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:186:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#18": {
+      "en": "Prime factors first: &nbsp;32 = 2⁵ &nbsp;and&nbsp; 9 = 3².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:189:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#19": {
+      "en": "4 · 1/3 = 4/3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:192:39"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#20": {
+      "en": "REMEMBER: √9 = 3 here, with no ±. The ± only turns up when you are <b>solving</b> an equation — it comes from the equation having two solutions, not from the √ sign itself. You are <b>simplifying</b>, so one positive value is the whole answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:194:15"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#21": {
+      "en": "A product like this is really two separate little questions standing next to each other, so resist the urge to do anything clever across the dot. Take 32 apart: it is 2 multiplied by itself five times, and the five on the bottom of the exponent is asking for exactly that fifth root, so it comes out as a clean 2, and the top says square it, giving 4. Take 9 apart: it is 3², the half asks for a square root and the minus flips it, so it lands on one third. Only now do you multiply, and 4 lots of a third is four thirds. The habit to build is choosing the prime that matches the root — if you had broken 32 into 4 × 8 instead, the fifth root would have had nowhere clean to go.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:198:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#22": {
+      "en": "<em>No calculator.</em><br>Evaluate: &nbsp;(3⁻¹ + 6⁻¹)⁻²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:222:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#23": {
+      "en": "The + inside the bracket is the whole difficulty. It stops you moving the 3 and the 6 anywhere, so turn each of them into an ordinary fraction first and add them the way you have always added fractions.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:225:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#24": {
+      "en": "The + inside the bracket stops you taking the 3 and the 6 to the top. Break it up first — depressed exponents, then LCD.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:228:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#25": {
+      "en": "= (1/3 + 1/6)⁻²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:229:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#26": {
+      "en": "LCD = 6: &nbsp;1/3 becomes 2/6, &nbsp;so &nbsp;2/6 + 1/6 = 3/6 = 1/2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:230:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#27": {
+      "en": "= (1/2)⁻² &nbsp;&nbsp;— a <b>flipped fraction</b>: &nbsp;(1/2)⁻² = (2/1)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:231:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#28": {
+      "en": "= 2² = 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:232:39"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#29": {
+      "en": "WATCH OUT: (3⁻¹ + 6⁻¹)⁻² is <b>not</b> (3 + 6)². A depressed exponent may only be moved when the terms are multiplied — never across a + or a −. That single move is what her whole LCD page exists to stop.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:234:15"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#30": {
+      "en": "This is the question her notes call an exam favourite, and the trap is set in the first half second. Seeing 3 to the minus one plus 6 to the minus one, the hand wants to fling both numbers upstairs and write 3 plus 6. It cannot: flipping is a rule about multiplying and dividing, and there is a plus sign sitting in the way. So do the honest thing instead. Write each one as an ordinary fraction, a third and a sixth, find the lowest common denominator, and add them to get a half. Now the bracket holds one single number, the plus sign is gone, and the outside minus two is free to act: a flipped fraction turns a half upside down into two, and squaring gives four.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:238:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#31": {
+      "en": "<em>No calculator.</em><br>Write each term with a positive exponent and then evaluate: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:262:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#32": {
+      "en": "Three terms, three different laws — take them one at a time and write each one down before you add anything. Look carefully at what the zero exponent is sitting on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:265:13"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#33": {
+      "en": "One term at a time, and each one gets its own law.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:268:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#34": {
+      "en": "4⁻¹ = 1/4 &nbsp;&nbsp;— a <b>depressed exponent</b>: flip it",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:269:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#35": {
+      "en": "(−4)⁰ = 1 &nbsp;&nbsp;— <b>anything to the zero is always one</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:270:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#36": {
+      "en": "(1/2)⁻³ = (2/1)³ = 8 &nbsp;&nbsp;— a <b>flipped fraction</b>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:271:37"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#37": {
+      "en": "1/4 + 1 − 8 = 1/4 − 7 = −27/4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:272:39"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#38": {
+      "en": "REMEMBER: (−4)⁰ = 1, not −1 and not 0. The bracket is what is being raised to the power zero, minus sign and all — so the minus disappears with everything else.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:274:15"
+      ]
+    },
+    "exp-siblings-rational-exponents-numeric#39": {
+      "en": "Three terms, three separate laws, and the only real danger is rushing them together. The first term has a depressed exponent, so the 4 flips underneath a 1 and becomes a quarter. The second has a zero exponent, and the rule is beautifully blunt: anything to the power zero is one. Because the minus four is inside the bracket, the whole minus four is what gets flattened to 1 — if the bracket were not there, the minus would survive outside and the term would be minus one instead. The third is a flipped fraction: a half raised to minus three turns upside down into two cubed, which is 8. Then it is ordinary arithmetic — a quarter plus one is five quarters, take away eight, and you land on minus twenty-seven over four.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "exp-siblings-rational-exponents-numeric.js:278:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "exp-siblings-exponent-expressions.js:75:13",
+      "text": "Simplify, and leave your answer with positive exponents only: <br>&nbsp;"
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:114:13",
+      "text": "<em>No calculator.</em><br>Simplify: &nbsp;"
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:122:37",
+      "text": "Take out the common factor — always the base carrying the variable exponent. The − is now <b>caged</b>, so 5<sup>m</sup> may cancel: &nbsp;= "
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:193:13",
+      "text": "<em>No calculator.</em><br>Simplify: &nbsp;"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:70:13",
+      "text": "<em>Without the use of a calculator.</em><br>Evaluate: &nbsp;25"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:80:15",
+      "text": "REMEMBER: power of a power <b>multiplies</b> the exponents. 2 × "
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:80:94",
+      "text": " = 3, which is where the 5³ comes from — not 5⁵ and not 5"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:144:13",
+      "text": "<em>No calculator.</em><br>Evaluate: &nbsp;27"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:152:37",
+      "text": "Prime factors: &nbsp;27 = 3³, &nbsp;so 27"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:183:13",
+      "text": "<em>No calculator.</em><br>Evaluate: &nbsp;32"
+    }
+  ],
+  "words": 2790,
+  "nonLiteralPairs": [
+    {
+      "where": "exp-siblings-exponent-expressions.js:75:9",
+      "src": "\"Simplify, and leave your answer with positive exponents only: <br>&nbsp;\" + F(\""
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:114:9",
+      "src": "\"<em>No calculator.</em><br>Simplify: &nbsp;\" + F(\"5<sup>m+1</sup> − 5<sup>m−1</"
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:121:33",
+      "src": "\"= \" + F(\"5<sup>m</sup> · 5 − 5<sup>m</sup> · 5⁻¹\", \"5<sup>m</sup>\")"
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:122:33",
+      "src": "\"Take out the common factor — always the base carrying the variable exponent. Th"
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:193:9",
+      "src": "\"<em>No calculator.</em><br>Simplify: &nbsp;\" + F(\"9<sup>n+1</sup> · 8<sup>n</su"
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:200:33",
+      "src": "\"= \" + F(\"(3²)<sup>n+1</sup> · (2³)<sup>n</sup>\", \"(2 · 3)<sup>n</sup> · (2² · 3"
+    },
+    {
+      "where": "exp-siblings-exponent-expressions.js:202:33",
+      "src": "\"= \" + F(\"3<sup>2n+2</sup> · 2<sup>3n</sup>\", \"2<sup>n</sup> · 3<sup>n</sup> · 2"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:70:9",
+      "src": "\"<em>Without the use of a calculator.</em><br>Evaluate: &nbsp;25\" + RX(3, 2)"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:78:35",
+      "src": "\"25\" + RX(3, 2) + \" = (5²)\" + RX(3, 2) + \" = 5³ = 125\""
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:80:11",
+      "src": "\"REMEMBER: power of a power <b>multiplies</b> the exponents. 2 × \" + F(3, 2) + \""
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:144:9",
+      "src": "\"<em>No calculator.</em><br>Evaluate: &nbsp;27\" + RXN(2, 3)"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:151:33",
+      "src": "\"27\" + RXN(2, 3) + \" = \" + F(\"1\", \"27\" + RX(2, 3))"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:152:33",
+      "src": "\"Prime factors: &nbsp;27 = 3³, &nbsp;so 27\" + RX(2, 3) + \" = (3³)\" + RX(2, 3) + "
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:183:9",
+      "src": "\"<em>No calculator.</em><br>Evaluate: &nbsp;32\" + RX(2, 5) + \" · 9\" + RXN(1, 2)"
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:190:33",
+      "src": "\"32\" + RX(2, 5) + \" = (2⁵)\" + RX(2, 5) + \" = 2² = 4\""
+    },
+    {
+      "where": "exp-siblings-rational-exponents-numeric.js:191:33",
+      "src": "\"9\" + RXN(1, 2) + \" = (3²)\" + RXN(1, 2) + \" = 3⁻¹ = 1/3\""
+    }
+  ]
+}

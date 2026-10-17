@@ -70,18 +70,18 @@ const q1 = {
         en: "<em>Without the use of a calculator.</em><br>Evaluate: &nbsp;25" + RX(3, 2),
       },
       hint: {
-        en: "Prime factors first, as always — what is 25 built out of? Then remember which half of the little fraction is the root and which half is the power.",
+        en: "Prime factors first, as always — what is 25 built out of? Then remember which half of the little fraction is the root and which half is the power.", af: "Priemfaktore eerste, soos altyd: waaruit is 25 gebou? Onthou dan watter helfte van die breukie die wortel is en watter helfte die mag.",
       },
       memo: [
-        { type: "step", text: { en: "Prime factors first — always. &nbsp;25 = 5²" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "Now read the exponent her way: <b>inside the √ is the top of the fraction, outside the √ is the bottom</b>. The bottom is the root, the top is the power." } },
+        { type: "step", text: { en: "Prime factors first — always. &nbsp;25 = 5²", af: "Priemfaktore eerste, altyd. &nbsp;25 = 5²" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Now read the exponent her way: <b>inside the √ is the top of the fraction, outside the √ is the bottom</b>. The bottom is the root, the top is the power.", af: "Lees nou die eksponent op haar manier: <b>binne die √ is bo in die breuk, buite die √ is onder</b>. Die onderste getal is die wortel, die boonste is die mag." } },
         { type: "answer", text: { en: "25" + RX(3, 2) + " = (5²)" + RX(3, 2) + " = 5³ = 125" }, ticks: ["a"] },
         { type: "trap", text: {
           en: "REMEMBER: power of a power <b>multiplies</b> the exponents. 2 × " + F(3, 2) + " = 3, which is where the 5³ comes from — not 5⁵ and not 5" + RX(3, 2) + ".",
         } },
       ],
       esplain: {
-        en: "A fraction in the exponent is two instructions squashed into one symbol. The bottom number is a root and the top number is a power, so 25 to the three over two means take the square root of 25 and then cube it. Her memory hook is worth saying out loud every time: inside the root sign is the top of the fraction, outside the root sign is the bottom. The reason you break 25 into 5² first is that it turns the whole thing into one clean power law instead of two separate jobs — raising a power to a power just multiplies the exponents, and 2 times three over two is a plain 3. So the answer is 5³. You can also do it the long way, √25 = 5 and then 5³ = 125, and get exactly the same 125.",
+        en: "A fraction in the exponent is two instructions squashed into one symbol. The bottom number is a root and the top number is a power, so 25 to the three over two means take the square root of 25 and then cube it. Her memory hook is worth saying out loud every time: inside the root sign is the top of the fraction, outside the root sign is the bottom. The reason you break 25 into 5² first is that it turns the whole thing into one clean power law instead of two separate jobs — raising a power to a power just multiplies the exponents, and 2 times three over two is a plain 3. So the answer is 5³. You can also do it the long way, √25 = 5 and then 5³ = 125, and get exactly the same 125.", af: "'n Breuk in die eksponent is twee opdragte in een simbool saamgedruk. Die onderste getal is 'n wortel en die boonste getal is 'n mag, dus beteken 25 tot die mag drie oor twee: trek die vierkantswortel van 25 en verhef dit dan tot die derde mag. Haar geheuetruuk is die moeite werd om elke keer hardop te sê: binne die wortelteken is bo in die breuk, buite die wortelteken is onder. Jy breek 25 eers op in 5², want dit maak van die hele ding een skoon eksponentwet in plaas van twee aparte take: 'n mag tot 'n mag verhef vermenigvuldig net die eksponente, en 2 maal drie oor twee is 'n gewone 3. Die antwoord is dus 5³. Jy kan dit ook die lang pad doen, √25 = 5 en dan 5³ = 125, en presies dieselfde 125 kry.",
       },
     },
   ],
@@ -104,21 +104,21 @@ const q2 = {
       marks: 2,
       level: 1,
       prompt: {
-        en: "<em>No calculator.</em><br>Evaluate: &nbsp;√(36⁻¹)",
+        en: "<em>No calculator.</em><br>Evaluate: &nbsp;√(36⁻¹)", af: "<em>Sonder sakrekenaar.</em><br>Bereken: &nbsp;√(36⁻¹)",
       },
       hint: {
-        en: "Deal with the depressed exponent before you touch the root. What does a negative exponent do to a number — does it change its sign, or does it move it?",
+        en: "Deal with the depressed exponent before you touch the root. What does a negative exponent do to a number — does it change its sign, or does it move it?", af: "Hanteer die neerslagtige eksponent voordat jy aan die wortel raak. Wat doen 'n negatiewe eksponent aan 'n getal: verander dit sy teken, of beweeg dit die getal?",
       },
       memo: [
-        { type: "step", text: { en: "A <b>depressed exponent</b> flips the number and changes the sign of the exponent: &nbsp;36⁻¹ = 1/36" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "A root spreads over a quotient — <b>each base gets the exponent</b>: &nbsp;√(1/36) = √1/√36" } },
-        { type: "answer", text: { en: "= 1/6" }, ticks: ["a"] },
+        { type: "step", text: { en: "A <b>depressed exponent</b> flips the number and changes the sign of the exponent: &nbsp;36⁻¹ = 1/36", af: "'n <b>Neerslagtige eksponent</b> draai die getal om en verander die teken van die eksponent: &nbsp;36⁻¹ = 1/36" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "A root spreads over a quotient — <b>each base gets the exponent</b>: &nbsp;√(1/36) = √1/√36", af: "'n Wortel versprei oor 'n kwosiënt, want <b>elke grondtal kry die eksponent</b>: &nbsp;√(1/36) = √1/√36" } },
+        { type: "answer", text: { en: "= 1/6", af: "= 1/6" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: 36⁻¹ is <b>not</b> −36. A negative exponent has nothing to do with a negative answer — it flips the number to the other side of the fraction bar, and the answer stays perfectly positive.",
+          en: "REMEMBER: 36⁻¹ is <b>not</b> −36. A negative exponent has nothing to do with a negative answer — it flips the number to the other side of the fraction bar, and the answer stays perfectly positive.", af: "ONTHOU: 36⁻¹ is <b>nie</b> −36 nie. 'n Negatiewe eksponent het niks met 'n negatiewe antwoord te doen nie: dit draai die getal om na die ander kant van die breukstreep, en die antwoord bly heeltemal positief.",
         } },
       ],
       esplain: {
-        en: "Two little laws, one after the other, and neither of them is difficult once you stop reading the minus sign as a subtraction. A negative exponent is her depressed exponent: it flips the number over the fraction bar and comes back up positive, so 36 to the minus one is one over 36. Then the square root is allowed to spread over a top and a bottom separately, because a root is really just a power and a power of a quotient hands the exponent to each base. Root of one is one, root of 36 is six, and the answer is one sixth. Notice that nothing anywhere in this question is negative — the sign lives in the exponent, and its only job is to say which way up the number goes.",
+        en: "Two little laws, one after the other, and neither of them is difficult once you stop reading the minus sign as a subtraction. A negative exponent is her depressed exponent: it flips the number over the fraction bar and comes back up positive, so 36 to the minus one is one over 36. Then the square root is allowed to spread over a top and a bottom separately, because a root is really just a power and a power of a quotient hands the exponent to each base. Root of one is one, root of 36 is six, and the answer is one sixth. Notice that nothing anywhere in this question is negative — the sign lives in the exponent, and its only job is to say which way up the number goes.", af: "Twee wetjies, een na die ander, en nie een is moeilik sodra jy ophou om die minusteken as aftrek te lees nie. 'n Negatiewe eksponent is haar neerslagtige eksponent: dit draai die getal oor die breukstreep om en kom positief terug, dus is 36 tot die mag minus een gelyk aan een oor 36. Dan mag die vierkantswortel apart oor 'n teller en 'n noemer versprei, want 'n wortel is eintlik net 'n mag, en 'n mag van 'n kwosiënt gee die eksponent aan elke grondtal. Die wortel van een is een, die wortel van 36 is ses, en die antwoord is een sesde. Let op dat niks in hierdie vraag negatief is nie: die teken woon in die eksponent, en sy enigste taak is om te sê watter kant bo die getal staan.",
       },
     },
   ],
@@ -144,19 +144,19 @@ const q3 = {
         en: "<em>No calculator.</em><br>Evaluate: &nbsp;27" + RXN(2, 3),
       },
       hint: {
-        en: "Get rid of the minus in the exponent first — flip it and change the sign. Only then worry about what two over three is asking you to do.",
+        en: "Get rid of the minus in the exponent first — flip it and change the sign. Only then worry about what two over three is asking you to do.", af: "Raak eers ontslae van die minus in die eksponent: draai om en verander die teken. Kyk eers dan wat twee oor drie van jou vra.",
       },
       memo: [
-        { type: "step", text: { en: "Depressed exponent first: flip it, and the exponent turns positive." } },
+        { type: "step", text: { en: "Depressed exponent first: flip it, and the exponent turns positive.", af: "Neerslagtige eksponent eerste: draai dit om, en die eksponent word positief." } },
         { type: "step", text: { en: "27" + RXN(2, 3) + " = " + F("1", "27" + RX(2, 3)) }, ticks: ["s/f"] },
         { type: "step", text: { en: "Prime factors: &nbsp;27 = 3³, &nbsp;so 27" + RX(2, 3) + " = (3³)" + RX(2, 3) + " = 3² = 9" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "= 1/9" }, ticks: ["a"] },
+        { type: "answer", text: { en: "= 1/9", af: "= 1/9" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: the minus in the exponent sends the whole thing to the bottom of a fraction — it never makes the answer negative. The answer is 1/9, not −9 and not −1/9.",
+          en: "WATCH OUT: the minus in the exponent sends the whole thing to the bottom of a fraction — it never makes the answer negative. The answer is 1/9, not −9 and not −1/9.", af: "PASOP: die minus in die eksponent stuur die hele ding na onder in 'n breuk; dit maak die antwoord nooit negatief nie. Die antwoord is 1/9, nie −9 nie en nie −1/9 nie.",
         } },
       ],
       esplain: {
-        en: "There are two things going on in that exponent, and doing them one at a time is what keeps it easy. The minus is a depressed exponent, so the 27 goes underneath a 1 and the exponent comes back up as two over three. Now only the fraction is left, and the bottom of it is the root: the cube root of 27 is 3, and then the top of it says square that, giving 9. So the whole thing is one over nine. Splitting 27 into 3³ first is what lets you do both steps in a single power law, and it is also the safety net — a number written in prime factors cannot hide a root from you. The most common lost mark on this question is a stray minus in the answer.",
+        en: "There are two things going on in that exponent, and doing them one at a time is what keeps it easy. The minus is a depressed exponent, so the 27 goes underneath a 1 and the exponent comes back up as two over three. Now only the fraction is left, and the bottom of it is the root: the cube root of 27 is 3, and then the top of it says square that, giving 9. So the whole thing is one over nine. Splitting 27 into 3³ first is what lets you do both steps in a single power law, and it is also the safety net — a number written in prime factors cannot hide a root from you. The most common lost mark on this question is a stray minus in the answer.", af: "Daar gebeur twee dinge in daardie eksponent, en om hulle een op 'n slag te doen, hou dit maklik. Die minus is 'n neerslagtige eksponent, dus gaan die 27 onder 'n 1 in, en die eksponent kom terug as twee oor drie. Nou bly net die breuk oor, en die onderste getal is die wortel: die derdemagswortel van 27 is 3, en dan sê die boonste getal kwadreer dit, wat 9 gee. Die hele ding is dus een oor nege. Om 27 eers as 3³ te skryf, laat jou albei stappe in een eksponentwet doen, en dit is ook die veiligheidsnet: 'n getal in priemfaktore kan nie 'n wortel vir jou wegsteek nie. Die punt wat die meeste op hierdie vraag verloor word, is 'n verdwaalde minus in die antwoord.",
       },
     },
   ],
@@ -183,19 +183,19 @@ const q4 = {
         en: "<em>No calculator.</em><br>Evaluate: &nbsp;32" + RX(2, 5) + " · 9" + RXN(1, 2),
       },
       hint: {
-        en: "Two bases, so do them one at a time. Break each number into prime factors and choose the prime that makes the root come out whole — 32 wants a fifth root, 9 wants a square root.",
+        en: "Two bases, so do them one at a time. Break each number into prime factors and choose the prime that makes the root come out whole — 32 wants a fifth root, 9 wants a square root.", af: "Twee grondtalle, dus doen hulle een op 'n slag. Breek elke getal op in priemfaktore en kies die priemgetal wat die wortel heel laat uitkom: 32 wil 'n vyfdemagswortel hê, 9 'n vierkantswortel.",
       },
       memo: [
-        { type: "step", text: { en: "Prime factors first: &nbsp;32 = 2⁵ &nbsp;and&nbsp; 9 = 3²." }, ticks: ["s/f"] },
+        { type: "step", text: { en: "Prime factors first: &nbsp;32 = 2⁵ &nbsp;and&nbsp; 9 = 3².", af: "Priemfaktore eerste: &nbsp;32 = 2⁵ &nbsp;en&nbsp; 9 = 3²." }, ticks: ["s/f"] },
         { type: "step", text: { en: "32" + RX(2, 5) + " = (2⁵)" + RX(2, 5) + " = 2² = 4" }, ticks: ["ca"] },
         { type: "step", text: { en: "9" + RXN(1, 2) + " = (3²)" + RXN(1, 2) + " = 3⁻¹ = 1/3" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "4 · 1/3 = 4/3" }, ticks: ["a"] },
+        { type: "answer", text: { en: "4 · 1/3 = 4/3", af: "4 · 1/3 = 4/3" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: √9 = 3 here, with no ±. The ± only turns up when you are <b>solving</b> an equation — it comes from the equation having two solutions, not from the √ sign itself. You are <b>simplifying</b>, so one positive value is the whole answer.",
+          en: "REMEMBER: √9 = 3 here, with no ±. The ± only turns up when you are <b>solving</b> an equation — it comes from the equation having two solutions, not from the √ sign itself. You are <b>simplifying</b>, so one positive value is the whole answer.", af: "ONTHOU: √9 = 3 hier, sonder ±. Die ± kom net op as jy 'n vergelyking <b>oplos</b>: dit kom daarvandaan dat die vergelyking twee oplossings het, nie van die √-teken self nie. Jy <b>vereenvoudig</b>, dus is een positiewe waarde die hele antwoord.",
         } },
       ],
       esplain: {
-        en: "A product like this is really two separate little questions standing next to each other, so resist the urge to do anything clever across the dot. Take 32 apart: it is 2 multiplied by itself five times, and the five on the bottom of the exponent is asking for exactly that fifth root, so it comes out as a clean 2, and the top says square it, giving 4. Take 9 apart: it is 3², the half asks for a square root and the minus flips it, so it lands on one third. Only now do you multiply, and 4 lots of a third is four thirds. The habit to build is choosing the prime that matches the root — if you had broken 32 into 4 × 8 instead, the fifth root would have had nowhere clean to go.",
+        en: "A product like this is really two separate little questions standing next to each other, so resist the urge to do anything clever across the dot. Take 32 apart: it is 2 multiplied by itself five times, and the five on the bottom of the exponent is asking for exactly that fifth root, so it comes out as a clean 2, and the top says square it, giving 4. Take 9 apart: it is 3², the half asks for a square root and the minus flips it, so it lands on one third. Only now do you multiply, and 4 lots of a third is four thirds. The habit to build is choosing the prime that matches the root — if you had broken 32 into 4 × 8 instead, the fifth root would have had nowhere clean to go.", af: "'n Produk soos hierdie is eintlik twee aparte vragies langs mekaar, dus weerstaan die drang om iets slims oor die kolletjie heen te doen. Haal 32 uitmekaar: dit is 2 vyf keer met homself vermenigvuldig, en die vyf onder in die eksponent vra presies daardie vyfdemagswortel, dus kom dit uit as 'n skoon 2, en die boonste getal sê kwadreer dit, wat 4 gee. Haal 9 uitmekaar: dit is 3², die helfte vra 'n vierkantswortel en die minus draai dit om, dus land dit op een derde. Eers nou vermenigvuldig jy, en 4 keer 'n derde is vier derdes. Die gewoonte om te bou, is om die priemgetal te kies wat by die wortel pas: as jy 32 eerder in 4 × 8 opgebreek het, sou die vyfdemagswortel nêrens skoon kon gaan nie.",
       },
     },
   ],
@@ -219,23 +219,23 @@ const q5 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Evaluate: &nbsp;(3⁻¹ + 6⁻¹)⁻²",
+        en: "<em>No calculator.</em><br>Evaluate: &nbsp;(3⁻¹ + 6⁻¹)⁻²", af: "<em>Sonder sakrekenaar.</em><br>Bereken: &nbsp;(3⁻¹ + 6⁻¹)⁻²",
       },
       hint: {
-        en: "The + inside the bracket is the whole difficulty. It stops you moving the 3 and the 6 anywhere, so turn each of them into an ordinary fraction first and add them the way you have always added fractions.",
+        en: "The + inside the bracket is the whole difficulty. It stops you moving the 3 and the 6 anywhere, so turn each of them into an ordinary fraction first and add them the way you have always added fractions.", af: "Die + in die hakie is die hele probleem. Dit keer dat jy die 3 en die 6 enige plek heen neem, dus maak eers van elkeen 'n gewone breuk en tel hulle op soos jy nog altyd breuke opgetel het.",
       },
       memo: [
-        { type: "step", text: { en: "The + inside the bracket stops you taking the 3 and the 6 to the top. Break it up first — depressed exponents, then LCD." } },
-        { type: "step", text: { en: "= (1/3 + 1/6)⁻²" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "LCD = 6: &nbsp;1/3 becomes 2/6, &nbsp;so &nbsp;2/6 + 1/6 = 3/6 = 1/2" }, ticks: ["ca"] },
-        { type: "step", text: { en: "= (1/2)⁻² &nbsp;&nbsp;— a <b>flipped fraction</b>: &nbsp;(1/2)⁻² = (2/1)²" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "= 2² = 4" }, ticks: ["a"] },
+        { type: "step", text: { en: "The + inside the bracket stops you taking the 3 and the 6 to the top. Break it up first — depressed exponents, then LCD.", af: "Die + in die hakie keer dat jy die 3 en die 6 na bo neem. Breek dit eers op: neerslagtige eksponente, dan KGV." } },
+        { type: "step", text: { en: "= (1/3 + 1/6)⁻²", af: "= (1/3 + 1/6)⁻²" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "LCD = 6: &nbsp;1/3 becomes 2/6, &nbsp;so &nbsp;2/6 + 1/6 = 3/6 = 1/2", af: "KGV = 6: &nbsp;1/3 word 2/6, &nbsp;dus &nbsp;2/6 + 1/6 = 3/6 = 1/2" }, ticks: ["ca"] },
+        { type: "step", text: { en: "= (1/2)⁻² &nbsp;&nbsp;— a <b>flipped fraction</b>: &nbsp;(1/2)⁻² = (2/1)²", af: "= (1/2)⁻² &nbsp;&nbsp;('n <b>omgedraaide breuk</b>): &nbsp;(1/2)⁻² = (2/1)²" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "= 2² = 4", af: "= 2² = 4" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "WATCH OUT: (3⁻¹ + 6⁻¹)⁻² is <b>not</b> (3 + 6)². A depressed exponent may only be moved when the terms are multiplied — never across a + or a −. That single move is what her whole LCD page exists to stop.",
+          en: "WATCH OUT: (3⁻¹ + 6⁻¹)⁻² is <b>not</b> (3 + 6)². A depressed exponent may only be moved when the terms are multiplied — never across a + or a −. That single move is what her whole LCD page exists to stop.", af: "PASOP: (3⁻¹ + 6⁻¹)⁻² is <b>nie</b> (3 + 6)² nie. 'n Neerslagtige eksponent mag net verplaas word as die terme vermenigvuldig word, nooit oor 'n + of 'n − nie. Haar hele KGV-bladsy bestaan net om daardie een stap te keer.",
         } },
       ],
       esplain: {
-        en: "This is the question her notes call an exam favourite, and the trap is set in the first half second. Seeing 3 to the minus one plus 6 to the minus one, the hand wants to fling both numbers upstairs and write 3 plus 6. It cannot: flipping is a rule about multiplying and dividing, and there is a plus sign sitting in the way. So do the honest thing instead. Write each one as an ordinary fraction, a third and a sixth, find the lowest common denominator, and add them to get a half. Now the bracket holds one single number, the plus sign is gone, and the outside minus two is free to act: a flipped fraction turns a half upside down into two, and squaring gives four.",
+        en: "This is the question her notes call an exam favourite, and the trap is set in the first half second. Seeing 3 to the minus one plus 6 to the minus one, the hand wants to fling both numbers upstairs and write 3 plus 6. It cannot: flipping is a rule about multiplying and dividing, and there is a plus sign sitting in the way. So do the honest thing instead. Write each one as an ordinary fraction, a third and a sixth, find the lowest common denominator, and add them to get a half. Now the bracket holds one single number, the plus sign is gone, and the outside minus two is free to act: a flipped fraction turns a half upside down into two, and squaring gives four.", af: "Dit is die vraag wat haar notas 'n eksamengunsteling noem, en die slaggat word in die eerste halwe sekonde gestel. As jy 3 tot die mag minus een plus 6 tot die mag minus een sien, wil die hand albei getalle na bo gooi en 3 plus 6 skryf. Dit mag nie: omdraai is 'n reël vir maal en deel, en daar sit 'n plusteken in die pad. Doen dus eerder die eerlike ding. Skryf elkeen as 'n gewone breuk, 'n derde en 'n sesde, kry die KGV, en tel hulle op om 'n helfte te kry. Nou hou die hakie een enkele getal, die plusteken is weg, en die minus twee buite is vry om te werk: 'n omgedraaide breuk draai 'n helfte onderstebo na twee, en kwadreer gee vier.",
       },
     },
   ],
@@ -259,23 +259,23 @@ const q6 = {
       marks: 4,
       level: 3,
       prompt: {
-        en: "<em>No calculator.</em><br>Write each term with a positive exponent and then evaluate: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³",
+        en: "<em>No calculator.</em><br>Write each term with a positive exponent and then evaluate: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³", af: "<em>Sonder sakrekenaar.</em><br>Skryf elke term met 'n positiewe eksponent en bereken dan: <br>&nbsp;4⁻¹ + (−4)⁰ − (1/2)⁻³",
       },
       hint: {
-        en: "Three terms, three different laws — take them one at a time and write each one down before you add anything. Look carefully at what the zero exponent is sitting on.",
+        en: "Three terms, three different laws — take them one at a time and write each one down before you add anything. Look carefully at what the zero exponent is sitting on.", af: "Drie terme, drie verskillende wette: doen hulle een op 'n slag en skryf elkeen neer voordat jy iets optel. Kyk mooi waarop die nul-eksponent sit.",
       },
       memo: [
-        { type: "step", text: { en: "One term at a time, and each one gets its own law." } },
-        { type: "step", text: { en: "4⁻¹ = 1/4 &nbsp;&nbsp;— a <b>depressed exponent</b>: flip it" }, ticks: ["s/f"] },
-        { type: "step", text: { en: "(−4)⁰ = 1 &nbsp;&nbsp;— <b>anything to the zero is always one</b>" }, ticks: ["ca"] },
-        { type: "step", text: { en: "(1/2)⁻³ = (2/1)³ = 8 &nbsp;&nbsp;— a <b>flipped fraction</b>" }, ticks: ["ca"] },
-        { type: "answer", text: { en: "1/4 + 1 − 8 = 1/4 − 7 = −27/4" }, ticks: ["a"] },
+        { type: "step", text: { en: "One term at a time, and each one gets its own law.", af: "Een term op 'n slag, en elkeen kry sy eie wet." } },
+        { type: "step", text: { en: "4⁻¹ = 1/4 &nbsp;&nbsp;— a <b>depressed exponent</b>: flip it", af: "4⁻¹ = 1/4 &nbsp;&nbsp;('n <b>neerslagtige eksponent</b>: draai dit om)" }, ticks: ["s/f"] },
+        { type: "step", text: { en: "(−4)⁰ = 1 &nbsp;&nbsp;— <b>anything to the zero is always one</b>", af: "(−4)⁰ = 1 &nbsp;&nbsp;(<b>enigiets tot die mag nul is altyd een</b>)" }, ticks: ["ca"] },
+        { type: "step", text: { en: "(1/2)⁻³ = (2/1)³ = 8 &nbsp;&nbsp;— a <b>flipped fraction</b>", af: "(1/2)⁻³ = (2/1)³ = 8 &nbsp;&nbsp;('n <b>omgedraaide breuk</b>)" }, ticks: ["ca"] },
+        { type: "answer", text: { en: "1/4 + 1 − 8 = 1/4 − 7 = −27/4", af: "1/4 + 1 − 8 = 1/4 − 7 = −27/4" }, ticks: ["a"] },
         { type: "trap", text: {
-          en: "REMEMBER: (−4)⁰ = 1, not −1 and not 0. The bracket is what is being raised to the power zero, minus sign and all — so the minus disappears with everything else.",
+          en: "REMEMBER: (−4)⁰ = 1, not −1 and not 0. The bracket is what is being raised to the power zero, minus sign and all — so the minus disappears with everything else.", af: "ONTHOU: (−4)⁰ = 1, nie −1 nie en nie 0 nie. Die hakie word tot die mag nul verhef, minusteken en al, dus verdwyn die minus saam met alles anders.",
         } },
       ],
       esplain: {
-        en: "Three terms, three separate laws, and the only real danger is rushing them together. The first term has a depressed exponent, so the 4 flips underneath a 1 and becomes a quarter. The second has a zero exponent, and the rule is beautifully blunt: anything to the power zero is one. Because the minus four is inside the bracket, the whole minus four is what gets flattened to 1 — if the bracket were not there, the minus would survive outside and the term would be minus one instead. The third is a flipped fraction: a half raised to minus three turns upside down into two cubed, which is 8. Then it is ordinary arithmetic — a quarter plus one is five quarters, take away eight, and you land on minus twenty-seven over four.",
+        en: "Three terms, three separate laws, and the only real danger is rushing them together. The first term has a depressed exponent, so the 4 flips underneath a 1 and becomes a quarter. The second has a zero exponent, and the rule is beautifully blunt: anything to the power zero is one. Because the minus four is inside the bracket, the whole minus four is what gets flattened to 1 — if the bracket were not there, the minus would survive outside and the term would be minus one instead. The third is a flipped fraction: a half raised to minus three turns upside down into two cubed, which is 8. Then it is ordinary arithmetic — a quarter plus one is five quarters, take away eight, and you land on minus twenty-seven over four.", af: "Drie terme, drie aparte wette, en die enigste regte gevaar is om hulle saam te jaag. Die eerste term het 'n neerslagtige eksponent, dus draai die 4 om onder 'n 1 en word 'n kwart. Die tweede het 'n nul-eksponent, en die reël is heerlik reguit: enigiets tot die mag nul is een. Omdat die minus vier binne die hakie is, word die hele minus vier platgeslaan tot 1; as die hakie nie daar was nie, sou die minus buite oorleef en sou die term eerder minus een wees. Die derde is 'n omgedraaide breuk: 'n helfte tot die mag minus drie draai onderstebo na twee tot die derde, wat 8 is. Dan is dit gewone rekenwerk: 'n kwart plus een is vyf kwarte, min agt, en jy land op minus sewe-en-twintig oor vier.",
       },
     },
   ],
