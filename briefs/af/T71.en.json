@@ -1,0 +1,1543 @@
+{
+  "unit": "T71",
+  "generated": "2026-10-17T20:51:47.943Z",
+  "files": [
+    "js/exam/euclid-siblings-tangents.js"
+  ],
+  "items": {
+    "euclid-siblings-tangents#1": {
+      "en": "In the diagram, O is the centre of the circle and &nbsp;SU&nbsp; is a tangent to the circle at T. &nbsp;A and B are points on the circle, and TA, TB, AB, OA and OB are drawn. &nbsp;T̂₁ = 70° &nbsp;and&nbsp; T̂₃ = 35°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:152:9"
+      ]
+    },
+    "euclid-siblings-tangents#2": {
+      "en": "Determine, with a reason, the size of &nbsp;∠ABT.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:188:21"
+      ]
+    },
+    "euclid-siblings-tangents#3": {
+      "en": "T̂₃ is the angle between the tangent and the chord TA. There is one theorem that says which angle somewhere else in the circle it matches.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:189:19"
+      ]
+    },
+    "euclid-siblings-tangents#4": {
+      "en": "T̂₃ is the angle between tangent SU and chord TA, and ∠ABT is the angle in the alternate segment. &nbsp;&nbsp;<i>(tan chord theorem)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:191:37"
+      ]
+    },
+    "euclid-siblings-tangents#5": {
+      "en": "∴ ∠ABT = T̂₃ = 35°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:192:39"
+      ]
+    },
+    "euclid-siblings-tangents#6": {
+      "en": "REMEMBER — the rule for the whole chapter: <b>the statement earns a mark and the reason earns its own mark</b>. “∠ABT = 35°” on a bare line is half an answer. Every size you write down gets its short reason in brackets beside it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:194:15"
+      ]
+    },
+    "euclid-siblings-tangents#7": {
+      "en": "The tangent–chord theorem is the one that looks like magic, because the two equal angles are nowhere near each other. The angle squeezed between the tangent and a chord at the point of contact equals the angle that same chord makes at any point in the segment on the OTHER side of it. Here the chord is TA, the tangent angle is T̂₃, and B is sitting across the circle in the alternate segment, so ∠ABT has to be 35°. The way to use it reliably is to name the chord out loud first — “the chord is TA” — then look for the point on the far side. Learners who skip that step reliably pair the tangent angle with the wrong vertex.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:198:13"
+      ]
+    },
+    "euclid-siblings-tangents#8": {
+      "en": "Determine, with a reason, the size of &nbsp;∠BAT.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:205:21"
+      ]
+    },
+    "euclid-siblings-tangents#9": {
+      "en": "Same theorem, other side of the tangent. This time the chord is TB — so which point is in its alternate segment?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:206:19"
+      ]
+    },
+    "euclid-siblings-tangents#10": {
+      "en": "T̂₁ is the angle between tangent SU and chord TB, and ∠BAT is the angle in the alternate segment. &nbsp;&nbsp;<i>(tan chord theorem)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:208:37"
+      ]
+    },
+    "euclid-siblings-tangents#11": {
+      "en": "∴ ∠BAT = T̂₁ = 70°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:209:39"
+      ]
+    },
+    "euclid-siblings-tangents#12": {
+      "en": "One tangent point gives you the theorem twice, once on each side, because there are two chords running out of T and each of them has its own alternate segment. Chord TA sends its angle across to B; chord TB sends its angle across to A. Learners often think the theorem is about “the tangent angle”, singular, and then cannot see where the second one comes from. It is about a CHORD and the tangent, so count your chords: two chords out of the contact point means two tangent–chord pairs, and this question uses both.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:212:13"
+      ]
+    },
+    "euclid-siblings-tangents#13": {
+      "en": "Determine, with a reason, the size of &nbsp;T̂₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:219:21"
+      ]
+    },
+    "euclid-siblings-tangents#14": {
+      "en": "The three angles at T sit side by side along one straight line — the tangent SU.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:220:19"
+      ]
+    },
+    "euclid-siblings-tangents#15": {
+      "en": "SU is a straight line, so &nbsp;T̂₁ + T̂₂ + T̂₃ = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:222:37"
+      ]
+    },
+    "euclid-siblings-tangents#16": {
+      "en": "∴ T̂₂ = 180° − 70° − 35° = 75°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:223:39"
+      ]
+    },
+    "euclid-siblings-tangents#17": {
+      "en": "<b>OR</b> — through the triangle instead: &nbsp;in △ABT, &nbsp;T̂₂ = 180° − ∠ABT − ∠BAT = 180° − 35° − 70° = 75° &nbsp;<i>(int. ∠s of △)</i>. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:224:37"
+      ]
+    },
+    "euclid-siblings-tangents#18": {
+      "en": "Two honest roads, and both earn full marks. The straight-line road uses only the fact that S, T and U are collinear, so the three angles resting on that line at T must total 180°. The triangle road uses the two angles you have just found at A and at B. They agree, and that is not a coincidence — it is the tangent–chord theorem quietly checking your arithmetic. Whenever a chase gives you the same size two different ways, treat it as a free confidence check: if the two roads disagree, a mistake is sitting somewhere behind you and you can go and find it before the marks run out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:227:13"
+      ]
+    },
+    "euclid-siblings-tangents#19": {
+      "en": "Determine, with a reason, the size of &nbsp;∠AOB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:234:21",
+        "euclid-siblings-tangents.js:560:21"
+      ]
+    },
+    "euclid-siblings-tangents#20": {
+      "en": "∠AOB is at the centre. T̂₂ is at the circumference. Which chord are both of them standing on?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:235:19"
+      ]
+    },
+    "euclid-siblings-tangents#21": {
+      "en": "∠AOB and T̂₂ both stand on chord AB, with T on the far arc. &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:237:37"
+      ]
+    },
+    "euclid-siblings-tangents#22": {
+      "en": "∴ ∠AOB = 2 × 75° = 150°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:238:39"
+      ]
+    },
+    "euclid-siblings-tangents#23": {
+      "en": "The tangent has done its work and the question hands over to the ordinary circle theorems. T̂₂ is the angle chord AB makes at T, out on the circumference, and ∠AOB is the angle the same chord makes at the centre — so the one at the centre is double. Check it against the picture before moving on: 150° is very nearly a straight line, and the wedge at O does look almost flat, so the number and the drawing agree. That habit of glancing back at the figure catches almost every arithmetic slip in a chase this long.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:241:13"
+      ]
+    },
+    "euclid-siblings-tangents#24": {
+      "en": "Determine, with reasons, the size of &nbsp;∠OAB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:248:21"
+      ]
+    },
+    "euclid-siblings-tangents#25": {
+      "en": "Look at triangle OAB on its own. What can you say about its two slanted sides, and what does that force its two base angles to do?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:249:19"
+      ]
+    },
+    "euclid-siblings-tangents#26": {
+      "en": "OA = OB &nbsp;&nbsp;<i>(radii)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:251:37"
+      ]
+    },
+    "euclid-siblings-tangents#27": {
+      "en": "∴ ∠OAB = ∠OBA &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:252:37"
+      ]
+    },
+    "euclid-siblings-tangents#28": {
+      "en": "In △OAB: &nbsp;∠OAB = (180° − 150°) ÷ 2 = 15°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:253:39"
+      ]
+    },
+    "euclid-siblings-tangents#29": {
+      "en": "WATCH OUT: the marker pays for “∠s opp equal sides” AND for “int. ∠s of △” as separate reasons. A learner who writes only the arithmetic — (180 − 150) ÷ 2 — collects about a third of what this part is worth.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:255:15"
+      ]
+    },
+    "euclid-siblings-tangents#30": {
+      "en": "Every triangle with the centre at one corner and two points of the circle at the others is isosceles, because the two sides running out to the circle are radii and every radius is the same length. That means the two base angles match, and once you know the angle at the centre the rest is arithmetic: take it off 180° and share what is left equally between the two. Here 180 − 150 leaves 30, and half of that is 15. It is a very small answer, and the picture agrees — the triangle OAB is a long thin sliver, so its base angles have to be tiny. Marking every radius the second you see one is the habit that makes questions like this quick.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:259:13"
+      ]
+    },
+    "euclid-siblings-tangents#31": {
+      "en": "In the diagram, O is the centre of the circle and &nbsp;ST&nbsp; is a tangent to the circle at P. &nbsp;Q and R are points on the circle, and PQ, PR, QR, OQ and OR are drawn. &nbsp;P̂₁ = 2x, &nbsp;∠PRQ = x + 25° &nbsp;and&nbsp; P̂₃ = 60°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:322:9"
+      ]
+    },
+    "euclid-siblings-tangents#32": {
+      "en": "Determine the value of &nbsp;x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:358:21"
+      ]
+    },
+    "euclid-siblings-tangents#33": {
+      "en": "P̂₁ sits between the tangent and the chord PQ. ∠PRQ is the angle that same chord makes across the circle. If one theorem says those two are the same angle, you have an equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:359:19"
+      ]
+    },
+    "euclid-siblings-tangents#34": {
+      "en": "P̂₁ = ∠PRQ &nbsp;&nbsp;<i>(tan chord theorem)</i> — chord PQ, with R in the alternate segment",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:361:37"
+      ]
+    },
+    "euclid-siblings-tangents#35": {
+      "en": "∴ 2x = x + 25°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:362:37"
+      ]
+    },
+    "euclid-siblings-tangents#36": {
+      "en": "∴ x = 25°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:363:39"
+      ]
+    },
+    "euclid-siblings-tangents#37": {
+      "en": "WATCH OUT: the theorem is what MAKES the equation — write it down as your first line. A learner who starts at “2x = x + 25” has thrown away the reason mark, which is a third of this part.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:365:15"
+      ]
+    },
+    "euclid-siblings-tangents#38": {
+      "en": "This is the shape a paper uses when it wants to check that you can turn geometry into algebra. Nothing is being measured; two different names have been printed for one and the same angle, and the theorem is the sentence that says so. Once you have written “P̂₁ = ∠PRQ (tan chord theorem)”, the rest is Grade 8 equation solving: take an x off both sides and the 25° is left standing on its own. The habit worth building is to hunt for the theorem BEFORE you hunt for the equation, because the equation is worthless without it — and in geometry the reason is always where the marks are.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:369:13"
+      ]
+    },
+    "euclid-siblings-tangents#39": {
+      "en": "Write down the size of &nbsp;P̂₁.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:376:21"
+      ]
+    },
+    "euclid-siblings-tangents#40": {
+      "en": "You have x now. P̂₁ was given in terms of it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:377:19"
+      ]
+    },
+    "euclid-siblings-tangents#41": {
+      "en": "P̂₁ = 2x = 2 × 25° = 50°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:379:39"
+      ]
+    },
+    "euclid-siblings-tangents#42": {
+      "en": "A one-mark part that exists to make sure you actually finish the job. Learners solve for x, feel pleased, and then forget that x was never the angle — it was a letter standing inside an expression for the angle. Always read back what the letter was doing before you write your final line. And take the free check while you are here: ∠PRQ was x + 25°, which is also 50°, so the two expressions really have landed on the same number, exactly as the theorem promised.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:382:13"
+      ]
+    },
+    "euclid-siblings-tangents#43": {
+      "en": "Determine, with a reason, the size of &nbsp;∠PQR.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:389:21"
+      ]
+    },
+    "euclid-siblings-tangents#44": {
+      "en": "The other chord out of P. P̂₃ is the tangent–chord angle on that side — so which point sits in its alternate segment?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:390:19"
+      ]
+    },
+    "euclid-siblings-tangents#45": {
+      "en": "P̂₃ is the angle between tangent ST and chord PR, and ∠PQR is the angle in the alternate segment. &nbsp;&nbsp;<i>(tan chord theorem)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:392:37"
+      ]
+    },
+    "euclid-siblings-tangents#46": {
+      "en": "∴ ∠PQR = P̂₃ = 60°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:393:39"
+      ]
+    },
+    "euclid-siblings-tangents#47": {
+      "en": "The same theorem as part (a), now used the ordinary way round: the tangent angle is known and the alternate-segment angle is what you want. Two chords leave P, so there are two tangent–chord pairs in this figure and the question uses both — chord PQ sending its angle to R, and chord PR sending its angle to Q. Say the chord's name out loud before you match anything, because the commonest mistake here is pairing P̂₃ with R instead of Q.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:396:13"
+      ]
+    },
+    "euclid-siblings-tangents#48": {
+      "en": "Determine, with a reason, the size of &nbsp;P̂₂.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:403:21"
+      ]
+    },
+    "euclid-siblings-tangents#49": {
+      "en": "The three angles at P sit side by side along the tangent ST.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:404:19"
+      ]
+    },
+    "euclid-siblings-tangents#50": {
+      "en": "ST is a straight line, so &nbsp;P̂₁ + P̂₂ + P̂₃ = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:406:37"
+      ]
+    },
+    "euclid-siblings-tangents#51": {
+      "en": "∴ P̂₂ = 180° − 50° − 60° = 70°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:407:39"
+      ]
+    },
+    "euclid-siblings-tangents#52": {
+      "en": "<b>OR</b> — in △PQR: &nbsp;P̂₂ = 180° − ∠PQR − ∠PRQ = 180° − 60° − 50° = 70° &nbsp;<i>(int. ∠s of △)</i>. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:408:37"
+      ]
+    },
+    "euclid-siblings-tangents#53": {
+      "en": "Both roads are ordinary and both are worth full marks. Notice the pattern the two of them make together, because it is the real content of the tangent–chord theorem: the three angles on the tangent line at P are 50°, 70° and 60°, and the three angles of triangle PQR are 50°, 70° and 60° as well — the same three numbers, just standing in different places. The theorem is what shuffles them across the circle. Seeing that once makes the theorem far harder to forget than any amount of chanting it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:411:13"
+      ]
+    },
+    "euclid-siblings-tangents#54": {
+      "en": "Determine, with reasons, the size of &nbsp;∠OQR.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:418:21"
+      ]
+    },
+    "euclid-siblings-tangents#55": {
+      "en": "First get the angle at the centre standing on the same chord as P̂₂. Then look at the triangle that angle sits in.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:419:19"
+      ]
+    },
+    "euclid-siblings-tangents#56": {
+      "en": "∠QOR = 2 · P̂₂ = 2 × 70° = 140° &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i> — both stand on chord QR",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:421:37"
+      ]
+    },
+    "euclid-siblings-tangents#57": {
+      "en": "OQ = OR &nbsp;<i>(radii)</i>, so ∠OQR = ∠ORQ &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:422:37"
+      ]
+    },
+    "euclid-siblings-tangents#58": {
+      "en": "In △OQR: &nbsp;∠OQR = (180° − 140°) ÷ 2 = 20°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:423:39"
+      ]
+    },
+    "euclid-siblings-tangents#59": {
+      "en": "The last part strings three separate facts together, and being able to see all three from the start is what separates a hard part from an easy one. First, P̂₂ and ∠QOR stand on the same chord QR, one from the circle and one from the centre, so the centre one is double. Second, OQ and OR are radii, so triangle OQR is isosceles and its two base angles match. Third, the angles of that triangle add to 180°. None of the three is hard on its own; the work is noticing that they chain. When you meet a part like this, write the chain down as three short lines before you calculate anything — the marker is paying for each of them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:426:13"
+      ]
+    },
+    "euclid-siblings-tangents#60": {
+      "en": "In the diagram, PA and PB are tangents to the circle with centre O, touching the circle at A and at B. &nbsp;OA, OB, AB and OP are drawn. &nbsp;∠APB = 48°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:503:9"
+      ]
+    },
+    "euclid-siblings-tangents#61": {
+      "en": "Give a reason why &nbsp;∠OAP = 90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:544:21"
+      ]
+    },
+    "euclid-siblings-tangents#62": {
+      "en": "Look at what the two lines meeting at A actually are — one is a tangent, the other runs to the centre.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:545:19"
+      ]
+    },
+    "euclid-siblings-tangents#63": {
+      "en": "PA is a tangent and OA is the radius to the point of contact &nbsp;&nbsp;<i>(tan ⊥ radius)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:547:39"
+      ]
+    },
+    "euclid-siblings-tangents#64": {
+      "en": "REMEMBER: pencil the right-angle square onto <b>every</b> tangent-and-radius pair the instant you read a diagram, before you even look at what is being asked. In this figure that is two right angles for free, and everything else is built on them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:549:15"
+      ]
+    },
+    "euclid-siblings-tangents#65": {
+      "en": "A tangent touches the circle at exactly one point, and the radius to that point is the shortest possible line from the centre down to the tangent — and the shortest line from a point to a line is always the perpendicular one. That is the whole reason the angle is a right angle. In an exam this is one mark and thirty seconds, but its real value is what it unlocks: the moment you write 90° at A and 90° at B you have a quadrilateral with two right angles in it, and both of the next two parts live off that.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:553:13"
+      ]
+    },
+    "euclid-siblings-tangents#66": {
+      "en": "O, A, P and B make a four-sided shape, and you already know three of its angles.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:561:19"
+      ]
+    },
+    "euclid-siblings-tangents#67": {
+      "en": "In quadrilateral OAPB: &nbsp;∠AOB + ∠OAP + ∠APB + ∠OBP = 360° &nbsp;&nbsp;<i>(sum of ∠s in quad)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:563:37"
+      ]
+    },
+    "euclid-siblings-tangents#68": {
+      "en": "∴ ∠AOB = 360° − 90° − 48° − 90° = 132°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:564:39"
+      ]
+    },
+    "euclid-siblings-tangents#69": {
+      "en": "Two tangents from one point always trap a four-sided shape between them: centre, contact point, external point, other contact point. Two of its corners are right angles, so once the angle at the outside point is given, the angle at the centre has nowhere to hide — it is 360° minus the other three. Worth noticing for later: the angle at O and the angle at P add to 180° here, which is exactly why OAPB is always a cyclic quadrilateral, whatever the numbers are.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:567:13"
+      ]
+    },
+    "euclid-siblings-tangents#70": {
+      "en": "Determine, with reasons, the size of &nbsp;∠PAB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:574:21"
+      ]
+    },
+    "euclid-siblings-tangents#71": {
+      "en": "How do the two tangent lengths PA and PB compare? And what does that make triangle APB?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:575:19"
+      ]
+    },
+    "euclid-siblings-tangents#72": {
+      "en": "PA = PB &nbsp;<i>(tans from common pt)</i>, so ∠PAB = ∠PBA &nbsp;&nbsp;<i>(∠s opp equal sides)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:577:37"
+      ]
+    },
+    "euclid-siblings-tangents#73": {
+      "en": "In △APB: &nbsp;∠PAB = (180° − 48°) ÷ 2 = 66°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:578:39"
+      ]
+    },
+    "euclid-siblings-tangents#74": {
+      "en": "Two tangents drawn to a circle from the same outside point are always exactly the same length — think of the two ends of a piece of string pulled taut round a ball. That one fact turns triangle APB into an isosceles triangle for free, which means its two base angles match, which means the given 48° at the top shares out the remaining 132° evenly between them. Whenever you see two tangents from one point, write “PA = PB (tans from common pt)” straight away, even before you know what the question wants — it is nearly always the line the rest of the answer hangs on.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:581:13"
+      ]
+    },
+    "euclid-siblings-tangents#75": {
+      "en": "Determine, with a reason, the size of &nbsp;∠OAB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:588:21"
+      ]
+    },
+    "euclid-siblings-tangents#76": {
+      "en": "The chord AB cuts the right angle at A into two pieces, and you have just found one of them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:589:19"
+      ]
+    },
+    "euclid-siblings-tangents#77": {
+      "en": "∠OAP = ∠OAB + ∠PAB &nbsp;&nbsp;<i>(tan ⊥ radius)</i> gives ∠OAP = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:591:37"
+      ]
+    },
+    "euclid-siblings-tangents#78": {
+      "en": "∴ ∠OAB = 90° − 66° = 24°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:592:39"
+      ]
+    },
+    "euclid-siblings-tangents#79": {
+      "en": "<b>OR</b> — through the isosceles triangle at the centre: &nbsp;OA = OB &nbsp;<i>(radii)</i>, so in △OAB, &nbsp;∠OAB = (180° − 132°) ÷ 2 = 24° &nbsp;<i>(∠s opp equal sides; int. ∠s of △)</i>. &nbsp;Same marks.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:593:37"
+      ]
+    },
+    "euclid-siblings-tangents#80": {
+      "en": "REMEMBER: the two roads agreeing is not luck — it is the figure being consistent with itself. If your two answers had disagreed, a mistake would be sitting somewhere behind you, and finding it then is far cheaper than finding it at the end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:595:15"
+      ]
+    },
+    "euclid-siblings-tangents#81": {
+      "en": "The chord AB splits the right angle at A into an inside piece and an outside piece: ∠OAB leaning towards the centre and ∠PAB leaning towards P. Since the whole thing is 90°, knowing one hands you the other. The second road is worth knowing too, because it never touches the tangents at all — it just uses the isosceles triangle the two radii make. Two independent routes to the same 24° is the sort of thing that should make you confident rather than suspicious: the picture is behaving exactly as the theorems say it must.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:599:13"
+      ]
+    },
+    "euclid-siblings-tangents#82": {
+      "en": "Prove that &nbsp;∠APO = ∠BPO.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:606:21"
+      ]
+    },
+    "euclid-siblings-tangents#83": {
+      "en": "Compare triangle OAP with triangle OBP. What do they share, and what do you already know about each of them?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:607:19"
+      ]
+    },
+    "euclid-siblings-tangents#84": {
+      "en": "In △OAP and △OBP: &nbsp;∠OAP = ∠OBP = 90° &nbsp;<i>(tan ⊥ radius)</i>; &nbsp;OP = OP &nbsp;<i>(common)</i>; &nbsp;OA = OB &nbsp;<i>(radii)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:609:37"
+      ]
+    },
+    "euclid-siblings-tangents#85": {
+      "en": "∴ △OAP ≡ △OBP &nbsp;&nbsp;<i>(RHS)</i><br>∴ ∠APO = ∠BPO",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:610:39"
+      ]
+    },
+    "euclid-siblings-tangents#86": {
+      "en": "REMEMBER: congruency needs <b>three</b> facts and the right label. Right angle, hypotenuse, side &nbsp;⟹&nbsp; <b>RHS</b>. Writing SSS or SAS here scores nothing, even though the two triangles really are congruent.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:612:15"
+      ]
+    },
+    "euclid-siblings-tangents#87": {
+      "en": "This is where the kite in the picture becomes a proof rather than a feeling. The two triangles OAP and OBP each have a right angle, they share the whole line OP as a hypotenuse, and their remaining sides OA and OB are radii, so they are the same length. Right angle, hypotenuse, side — that is RHS, and congruent triangles have every matching part equal, including the two angles at P. What you have really proved is that OP bisects the angle between the two tangents, which is true of every pair of tangents from a point and is worth remembering as a fact in its own right.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:616:13"
+      ]
+    },
+    "euclid-siblings-tangents#88": {
+      "en": "Prove that &nbsp;OP&nbsp; is the perpendicular bisector of &nbsp;AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:623:21"
+      ]
+    },
+    "euclid-siblings-tangents#89": {
+      "en": "Call the point where OP cuts AB &nbsp;M. Look at the two small triangles PAM and PBM — you now own a side, the angle between them, and another side in each.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:624:19"
+      ]
+    },
+    "euclid-siblings-tangents#90": {
+      "en": "Let OP cut AB at M. &nbsp;In △PAM and △PBM: &nbsp;PA = PB &nbsp;<i>(tans from common pt)</i>; &nbsp;∠APM = ∠BPM &nbsp;<i>(proved in (e))</i>; &nbsp;PM = PM &nbsp;<i>(common)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:626:37"
+      ]
+    },
+    "euclid-siblings-tangents#91": {
+      "en": "∴ △PAM ≡ △PBM &nbsp;&nbsp;<i>(SAS)</i>, &nbsp;so &nbsp;AM = MB &nbsp;and&nbsp; ∠AMP = ∠BMP",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:627:37"
+      ]
+    },
+    "euclid-siblings-tangents#92": {
+      "en": "∠AMP + ∠BMP = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>, so each is 90°<br>∴ OP bisects AB and OP ⊥ AB — OP is the perpendicular bisector of AB",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:628:39"
+      ]
+    },
+    "euclid-siblings-tangents#93": {
+      "en": "WATCH OUT: for <b>SAS</b> the angle has to sit BETWEEN the two sides you named. ∠APM is squeezed between PA and PM, and ∠BPM between PB and PM, so the label is honest. An angle anywhere else in the triangle would not be SAS at all. And “perpendicular bisector” is TWO claims — cut in half AND at right angles — so both have to be written down.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:630:15"
+      ]
+    },
+    "euclid-siblings-tangents#94": {
+      "en": "The last part is the pay-off for part (e): once you know OP splits the angle at P into two equal halves, the two little triangles either side of it match on a side, the angle between, and another side — which is SAS. Congruent triangles have equal everything, so the two halves of AB are equal AND the two angles at the crossing point are equal — and since those two also sit on a straight line, each of them must be 90°. What you have proved is true of every pair of tangents from an outside point: the line from the centre to that point always cuts the chord of contact in half and at right angles. Bank the earlier marks first — this part needs three of them before it can start.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:634:13"
+      ]
+    },
+    "euclid-siblings-tangents#95": {
+      "en": "In the diagram, O is the centre of the circle and &nbsp;SU&nbsp; is a tangent to the circle at T. &nbsp;TD is a diameter and A is a point on the circle. &nbsp;TA, AD and OA are drawn. &nbsp;∠ATU = 55°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:695:9"
+      ]
+    },
+    "euclid-siblings-tangents#96": {
+      "en": "Give a reason why &nbsp;∠DTS = 90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:736:21"
+      ]
+    },
+    "euclid-siblings-tangents#97": {
+      "en": "TD is not just any chord — the question tells you what it is. And SU is not just any line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:737:19"
+      ]
+    },
+    "euclid-siblings-tangents#98": {
+      "en": "SU is a tangent and TD is the diameter through the point of contact &nbsp;&nbsp;<i>(tan ⊥ diameter)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:739:39"
+      ]
+    },
+    "euclid-siblings-tangents#99": {
+      "en": "This is the same theorem as “tangent perpendicular to radius” — a diameter is only two radii laid end to end, so a line at right angles to the radius at T is at right angles to the whole diameter as well. The SAG lists both wordings and a marker accepts either, so use whichever matches the picture in front of you: if the question drew the radius, say radius; if it drew the diameter, say diameter. Small thing, but it is the difference between a reason that reads naturally and one the marker has to translate.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:742:13"
+      ]
+    },
+    "euclid-siblings-tangents#100": {
+      "en": "Determine, with a reason, the size of &nbsp;∠ATD.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:749:21"
+      ]
+    },
+    "euclid-siblings-tangents#101": {
+      "en": "The three angles at T sit side by side along the straight tangent line SU.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:750:19"
+      ]
+    },
+    "euclid-siblings-tangents#102": {
+      "en": "SU is a straight line, so &nbsp;∠DTS + ∠ATD + ∠ATU = 180° &nbsp;&nbsp;<i>(∠s on a str line)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:752:37"
+      ]
+    },
+    "euclid-siblings-tangents#103": {
+      "en": "∴ ∠ATD = 180° − 90° − 55° = 35°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:753:39"
+      ]
+    },
+    "euclid-siblings-tangents#104": {
+      "en": "Nothing about circles at all — just the Grade 8 fact that angles resting on a straight line add to 180°. The only skill is reading which three angles are sharing that line at T: the right angle up to the diameter, the piece between the diameter and the chord TA, and the given 55° between TA and the tangent's far end. Writing the three of them out in order before you subtract stops you taking 55° off 90° and calling it a day when the picture has three pieces, not two.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:756:13"
+      ]
+    },
+    "euclid-siblings-tangents#105": {
+      "en": "Determine, with a reason, the size of &nbsp;∠TAD.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:763:21"
+      ]
+    },
+    "euclid-siblings-tangents#106": {
+      "en": "A is on the circle, and ∠TAD is standing on TD. What is special about TD?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:764:19"
+      ]
+    },
+    "euclid-siblings-tangents#107": {
+      "en": "TD is a diameter and ∠TAD stands on it. &nbsp;&nbsp;<i>(∠s in semi-circle)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:766:37"
+      ]
+    },
+    "euclid-siblings-tangents#108": {
+      "en": "∴ ∠TAD = 90°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:767:39"
+      ]
+    },
+    "euclid-siblings-tangents#109": {
+      "en": "WATCH OUT: this only works because TD goes <b>through the centre</b>. An angle standing on an ordinary chord can be any size at all — check that the chord really is a diameter before you write 90°.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:769:15"
+      ]
+    },
+    "euclid-siblings-tangents#110": {
+      "en": "A diameter cuts the circle into two halves, and any point you pick on either half looks back at the two ends of that diameter through exactly a right angle. It is one of the most useful facts in the chapter, because it hands you a 90° with no working — and a right angle turns a triangle into something you can finish with the angle sum, or with Pythagoras if lengths are involved. The habit to build: whenever you see a chord that passes through the centre, mark every angle standing on it with a little right angle before you even read what the question wants.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:773:13"
+      ]
+    },
+    "euclid-siblings-tangents#111": {
+      "en": "Determine, with a reason, the size of &nbsp;∠ADT.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:780:21"
+      ]
+    },
+    "euclid-siblings-tangents#112": {
+      "en": "Triangle ATD now has two of its three angles on your page.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:781:19"
+      ]
+    },
+    "euclid-siblings-tangents#113": {
+      "en": "In △ATD: &nbsp;∠ADT + ∠TAD + ∠ATD = 180° &nbsp;&nbsp;<i>(int. ∠s of △)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:783:37"
+      ]
+    },
+    "euclid-siblings-tangents#114": {
+      "en": "∴ ∠ADT = 180° − 90° − 35° = 55°",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:784:39"
+      ]
+    },
+    "euclid-siblings-tangents#115": {
+      "en": "The right angle you found in part (c) is what makes this a one-line part rather than a hunt: a triangle with a known right angle and one other known angle is completely determined. Look at the answer for a second before you move on — 55°, which is exactly the given angle between the tangent and the chord TA at the other end of the picture. That is the tangent–chord theorem showing up on its own, without being invited, and the next part is going to ask you to notice it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:787:13"
+      ]
+    },
+    "euclid-siblings-tangents#116": {
+      "en": "Write down another angle in the figure that is equal to &nbsp;∠ADT, and give a reason.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:794:21"
+      ]
+    },
+    "euclid-siblings-tangents#117": {
+      "en": "∠ADT sits in the segment on the far side of chord TA. Is there an angle squeezed between that chord and the tangent?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:795:19"
+      ]
+    },
+    "euclid-siblings-tangents#118": {
+      "en": "∠ATU = ∠ADT = 55° &nbsp;&nbsp;<i>(tan chord theorem)</i> — the tangent–chord angle on chord TA, and the angle in the alternate segment",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:797:39"
+      ]
+    },
+    "euclid-siblings-tangents#119": {
+      "en": "REMEMBER: the marker pays for the ANGLE and for the REASON separately. Writing “∠ATU” with nothing beside it collects half of this part.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:799:15"
+      ]
+    },
+    "euclid-siblings-tangents#120": {
+      "en": "Two marks for spotting a theorem you were not told to use. The chord is TA; the angle it makes with the tangent at T is the given 55°; and D is sitting on the far side of TA, in the alternate segment — so the angle chord TA makes at D has to be that same 55°. What is nice about this figure is that you found ∠ADT the long way round, through a right angle and an angle sum, and the tangent–chord theorem would have handed it to you in one line. Both are worth full marks, but in an exam the one-line route leaves you time for the parts that need it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:803:13"
+      ]
+    },
+    "euclid-siblings-tangents#121": {
+      "en": "Write down the size of &nbsp;∠AOD.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:810:21"
+      ]
+    },
+    "euclid-siblings-tangents#122": {
+      "en": "∠AOD is at the centre, standing on chord AD. Which angle at the circumference stands on that same chord?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:811:19"
+      ]
+    },
+    "euclid-siblings-tangents#123": {
+      "en": "∠AOD = 2 · ∠ATD = 2 × 35° = 70° &nbsp;&nbsp;<i>(∠ at centre = 2 × ∠ at circumference)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:813:39"
+      ]
+    },
+    "euclid-siblings-tangents#124": {
+      "en": "One mark, one line, and the reason is the mark. The chord is AD; T is out on the circumference looking at it, O is the centre looking at it, so the one at the centre is double. The only thing to be careful about is picking the right angle at T: it is ∠ATD, the piece between the two chords, and not the 55° between the chord and the tangent. When a figure has several angles at one vertex, always name the chord first and then choose the angle that stands on it — never the other way round.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:816:13"
+      ]
+    },
+    "euclid-siblings-tangents#125": {
+      "en": "In the diagram, PA and PB are tangents to the circle with centre O, touching the circle at A and at B. &nbsp;OA, OB, AB and OP are drawn. &nbsp;OP cuts AB at M, and OP ⊥ AB. &nbsp;OA = 9 cm &nbsp;and&nbsp; OP = 15 cm.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:869:9"
+      ]
+    },
+    "euclid-siblings-tangents#126": {
+      "en": "Calculate the length of &nbsp;PA.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:905:21"
+      ]
+    },
+    "euclid-siblings-tangents#127": {
+      "en": "What kind of triangle is OAP? Once you know the angle at A, there is only one tool for a missing side.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:906:19"
+      ]
+    },
+    "euclid-siblings-tangents#128": {
+      "en": "∠OAP = 90° &nbsp;&nbsp;<i>(tan ⊥ radius)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:908:37"
+      ]
+    },
+    "euclid-siblings-tangents#129": {
+      "en": "In △OAP: &nbsp;PA² = OP² − OA² = 15² − 9² = 225 − 81 = 144 &nbsp;&nbsp;<i>(Pythagoras)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:909:37"
+      ]
+    },
+    "euclid-siblings-tangents#130": {
+      "en": "∴ PA = 12 cm",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:910:39"
+      ]
+    },
+    "euclid-siblings-tangents#131": {
+      "en": "WATCH OUT: OP is the <b>hypotenuse</b>, because the right angle is at A. So it is 15² − 9², not 15² + 9². Adding gives 17,5 cm, which is longer than the line from O to P — impossible, and a quick look at the picture would have caught it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:912:15"
+      ]
+    },
+    "euclid-siblings-tangents#132": {
+      "en": "The tangent–radius right angle is what turns a circle question into a Pythagoras question. Once you have written 90° at A, triangle OAP is right-angled, and the side you want is one of the short ones — so you subtract rather than add. Deciding which side is the hypotenuse is the whole skill: it is always the one OPPOSITE the right angle, which here is OP running from the centre out to P. Sketching the triangle on its own, away from the circle, is a good habit when a figure gets busy; the numbers 9, 12 and 15 are just three times the 3, 4, 5 triangle, which is worth recognising on sight.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:916:13"
+      ]
+    },
+    "euclid-siblings-tangents#133": {
+      "en": "Write down the length of &nbsp;PB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:923:21"
+      ]
+    },
+    "euclid-siblings-tangents#134": {
+      "en": "There is a theorem about the two tangents drawn to a circle from the same point outside it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:924:19"
+      ]
+    },
+    "euclid-siblings-tangents#135": {
+      "en": "PB = PA = 12 cm &nbsp;&nbsp;<i>(tans from common pt)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:926:39"
+      ]
+    },
+    "euclid-siblings-tangents#136": {
+      "en": "Two tangents from the same outside point are always the same length — picture a piece of string pulled taut round a ball from one hand. It is a one-line, one-mark fact, and “write down” is the examiner telling you no working is expected. The reason is where the mark actually is, so never leave it off. It is also the fact that makes the whole figure a kite: two pairs of equal adjacent sides, OA = OB and PA = PB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:929:13"
+      ]
+    },
+    "euclid-siblings-tangents#137": {
+      "en": "Calculate the area of quadrilateral &nbsp;OAPB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:936:21"
+      ]
+    },
+    "euclid-siblings-tangents#138": {
+      "en": "The two right angles cut the shape into two triangles you can find the area of without any trigonometry at all.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:937:19"
+      ]
+    },
+    "euclid-siblings-tangents#139": {
+      "en": "area OAPB = area △OAP + area △OBP = 2 × ½ × OA × PA &nbsp;&nbsp;<i>(RHS)</i> makes the two triangles identical",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:939:37"
+      ]
+    },
+    "euclid-siblings-tangents#140": {
+      "en": "= 2 × ½ × 9 × 12 = 108 cm²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:940:39"
+      ]
+    },
+    "euclid-siblings-tangents#141": {
+      "en": "Area questions inside circle geometry look alarming until you notice the right angles. A right-angled triangle's area is half of one short side times the other, no formula sheet needed. Here the two triangles OAP and OBP are congruent — same right angle, same shared hypotenuse OP, same radius — so working out one and doubling it is enough. Watch your units: lengths were in centimetres, so the area comes out in square centimetres, and dropping the little 2 costs marks in every subject that uses it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:943:13"
+      ]
+    },
+    "euclid-siblings-tangents#142": {
+      "en": "Calculate the length of &nbsp;AM.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:950:21"
+      ]
+    },
+    "euclid-siblings-tangents#143": {
+      "en": "Find the area of triangle OAP twice — once using the two sides round the right angle, and once using OP as the base with AM as its height.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:951:19"
+      ]
+    },
+    "euclid-siblings-tangents#144": {
+      "en": "area △OAP = ½ × OA × PA = ½ × 9 × 12 = 54 cm²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:953:37"
+      ]
+    },
+    "euclid-siblings-tangents#145": {
+      "en": "AM ⊥ OP, so the same triangle has base OP and height AM: &nbsp;area △OAP = ½ × OP × AM = ½ × 15 × AM",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:954:37"
+      ]
+    },
+    "euclid-siblings-tangents#146": {
+      "en": "∴ ½ × 15 × AM = 54 &nbsp;&nbsp;⟹&nbsp;&nbsp; AM = 7,2 cm",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:955:39"
+      ]
+    },
+    "euclid-siblings-tangents#147": {
+      "en": "WATCH OUT: a triangle has three bases and three matching heights, and its area is the same whichever pair you use. The height that goes with base OP is the perpendicular from A down to OP — which is AM, and only because the question told you OP ⊥ AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:957:15"
+      ]
+    },
+    "euclid-siblings-tangents#148": {
+      "en": "This is the trick worth learning from this question: the area of one triangle, worked out two different ways, gives you an equation. Using the two sides round the right angle is easy, and it gives a number. Using OP as the base needs the perpendicular height from A, which is exactly AM — so the second version is an expression containing the thing you want. Setting them equal and solving is ordinary algebra. It comes up again and again in geometry and in Grade 12 trigonometry, and it saves you from having to find an angle first.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:961:13"
+      ]
+    },
+    "euclid-siblings-tangents#149": {
+      "en": "Hence determine, with a reason, the length of &nbsp;AB.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:968:21"
+      ]
+    },
+    "euclid-siblings-tangents#150": {
+      "en": "OP comes from the centre and meets the chord AB at right angles. There is a theorem about what a line like that does to a chord.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:969:19"
+      ]
+    },
+    "euclid-siblings-tangents#151": {
+      "en": "OM ⊥ AB, so &nbsp;AM = MB &nbsp;&nbsp;<i>(line from centre ⊥ to chord)</i>",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:971:37"
+      ]
+    },
+    "euclid-siblings-tangents#152": {
+      "en": "∴ AB = 2 × 7,2 = 14,4 cm",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:972:39"
+      ]
+    },
+    "euclid-siblings-tangents#153": {
+      "en": "The last piece is a chord theorem rather than a tangent one: a line drawn from the centre at right angles to a chord always cuts that chord exactly in half. So AM is not just some piece of AB, it is precisely half of it, and doubling finishes the question. Check the answer against the picture — AB should be a bit longer than the radius of 9 cm and a good deal shorter than the diameter of 18 cm, and 14,4 cm sits comfortably between them. That kind of quick reasonableness check is worth doing on every length you calculate.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "euclid-siblings-tangents.js:975:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 4421
+}
