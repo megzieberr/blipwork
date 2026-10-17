@@ -1,0 +1,783 @@
+{
+  "unit": "T17",
+  "generated": "2026-10-17T18:01:07.898Z",
+  "files": [
+    "js/exam/eqn-siblings-inequalities.js",
+    "js/exam/eqn-siblings-k-equal-roots.js"
+  ],
+  "items": {
+    "eqn-siblings-inequalities#1": {
+      "en": "Solve for x: &nbsp;(x + 6)(x − 1) &lt; 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:88:13"
+      ]
+    },
+    "eqn-siblings-inequalities#2": {
+      "en": "Check the TIP Chips list first: everything is already on the left, and multiplying the brackets out would give a positive x², so nothing has to be flipped. Go straight to the critical points, then sketch.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:91:13"
+      ]
+    },
+    "eqn-siblings-inequalities#3": {
+      "en": "Everything is already on the left, and there is no negative in front of the x², so nothing needs flipping.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:94:37"
+      ]
+    },
+    "eqn-siblings-inequalities#4": {
+      "en": "CP: &nbsp;x + 6 = 0 &nbsp;or&nbsp; x − 1 = 0 &nbsp;⟹&nbsp; x = −6 &nbsp;or&nbsp; x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:95:37"
+      ]
+    },
+    "eqn-siblings-inequalities#5": {
+      "en": "It is a <b>happy</b> parabola cutting the x-axis at −6 and at 1, and &lt; 0 means below the axis — the <b>inside of the bowl</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:96:37"
+      ]
+    },
+    "eqn-siblings-inequalities#6": {
+      "en": "∴ −6 &lt; x &lt; 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:97:39"
+      ]
+    },
+    "eqn-siblings-inequalities#7": {
+      "en": "WATCH OUT: (x + 6)(x − 1) &lt; 0 does <b>not</b> mean x + 6 &lt; 0 <i>and</i> x − 1 &lt; 0. Two numbers whose product is negative do not both have to be negative — one of them is, and that is exactly what the sketch shows you.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:99:15"
+      ]
+    },
+    "eqn-siblings-inequalities#8": {
+      "en": "The two brackets are not two little inequalities to solve separately — together they are one parabola, and the question is which stretch of it lies below the x-axis. That is why the sketch does all the work. The critical points are simply where each bracket is zero, which is where the curve crosses the axis, and crossings are the only places the sign can change. Because the x squared term would be positive if you multiplied out, the parabola is happy, and a happy parabola dips below the axis only in the dip between its two crossings. So “less than zero” is the piece between them. Write it with the smaller number on the left, exactly as the two values sit on a number line.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:103:13"
+      ]
+    },
+    "eqn-siblings-inequalities#9": {
+      "en": "Write down the value of x for which the expression &nbsp;3/(x − 2)&nbsp; is undefined.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:130:13"
+      ]
+    },
+    "eqn-siblings-inequalities#10": {
+      "en": "A fraction breaks in one place only: where its denominator is zero. Set the denominator equal to zero and solve.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:133:13"
+      ]
+    },
+    "eqn-siblings-inequalities#11": {
+      "en": "A fraction is undefined where its denominator is zero: &nbsp;x − 2 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:136:37"
+      ]
+    },
+    "eqn-siblings-inequalities#12": {
+      "en": "∴ x = 2 &nbsp;— this value can never be part of any answer",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:137:39"
+      ]
+    },
+    "eqn-siblings-inequalities#13": {
+      "en": "Dividing by zero is the one thing arithmetic simply refuses to do, so before you touch a fraction inequality you say out loud which x-value would break it. Here the denominator is x minus two, which is zero when x is two, so two is the forbidden value. Her word for what happens there is undefined — not “no solution”, which is for a positive base that cannot reach a negative value, and not “non-real”, which is for an even root of a negative number. Getting that word right matters, and so does writing the value down before you start solving, because at the end it has to be taken out of the answer whether or not it wanted to be in it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:140:13"
+      ]
+    },
+    "eqn-siblings-inequalities#14": {
+      "en": "Hence solve for x: &nbsp;3/(x − 2) ≤ 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:148:13"
+      ]
+    },
+    "eqn-siblings-inequalities#15": {
+      "en": "Do NOT multiply both sides by x − 2 — you have no idea whether it is positive or negative, so you would not know whether to flip the sign. Take everything to the left and make it one single fraction instead.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:151:13"
+      ]
+    },
+    "eqn-siblings-inequalities#16": {
+      "en": "Never multiply an inequality by x − 2: it can be positive or negative, so you would not know whether to turn the sign around. Take everything to the LEFT instead and make it one fraction.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:154:37"
+      ]
+    },
+    "eqn-siblings-inequalities#17": {
+      "en": "3/(x − 2) − 1 ≤ 0 &nbsp;⟹&nbsp; (3 − x + 2)/(x − 2) ≤ 0 &nbsp;⟹&nbsp; (5 − x)/(x − 2) ≤ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:155:37"
+      ]
+    },
+    "eqn-siblings-inequalities#18": {
+      "en": "There is a hidden −x² in that numerator, so multiply the whole inequality by −1 and <b>turn the sign around</b>: &nbsp;(x − 5)/(x − 2) ≥ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:156:37"
+      ]
+    },
+    "eqn-siblings-inequalities#19": {
+      "en": "(x − 2)² is a square, so it is positive for every x ≠ 2 and can never flip the sign — multiply both sides by it: &nbsp;(x − 5)(x − 2) ≥ 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:157:37"
+      ]
+    },
+    "eqn-siblings-inequalities#20": {
+      "en": "CP: &nbsp;x = 5 &nbsp;or&nbsp; x = 2. &nbsp;A <b>happy</b> parabola cutting the x-axis at 2 and at 5, and ≥ 0 means on or above the axis — the <b>outside of the bowl</b>.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:158:37"
+      ]
+    },
+    "eqn-siblings-inequalities#21": {
+      "en": "∴ x &lt; 2 &nbsp;&nbsp;or&nbsp;&nbsp; x ≥ 5 &nbsp;&nbsp;— x = 2 is left out, because from (a) the fraction is undefined there",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:159:39"
+      ]
+    },
+    "eqn-siblings-inequalities#22": {
+      "en": "WATCH OUT for the one point that is NOT in the answer. The critical point x = 2 came from a DENOMINATOR, so it can never be included, no matter how friendly the ≤ sign looks — that piece is x &lt; 2, with a strict sign. The other critical point, x = 5, came from a numerator, so there the ≥ really does include it: at x = 5 the left-hand side is 3/3 = 1, and 1 ≤ 1 is true.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:161:15"
+      ]
+    },
+    "eqn-siblings-inequalities#23": {
+      "en": "The rule that makes this question safe is a rule about not doing something. You may not multiply both sides by x minus two, because you do not know its sign, and multiplying an inequality by a negative turns the sign around while multiplying by a positive does not. So instead you take everything to the left and squash it into one fraction, which changes the question into “where is this fraction negative or zero”. From there two safe moves finish it. Multiplying by minus one straightens out the hidden minus x squared and flips the sign once, deliberately. Multiplying by the denominator squared is always safe, because a square is never negative, and it turns the fraction into an ordinary product you can sketch. The last step is remembering that the forbidden value from part (a) stays forbidden.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-inequalities.js:165:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#1": {
+      "en": "Given: &nbsp;x² + 8x + k = 0, &nbsp;where k is a real number.<br><br>Determine the value of k for which this equation has equal roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:73:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#2": {
+      "en": "Equal roots always mean one thing about the discriminant. Write Δ down with k standing in the c slot, then set that expression equal to exactly zero and solve for k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:76:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#3": {
+      "en": "a = 1 ; &nbsp;b = 8 ; &nbsp;c = k &nbsp;&nbsp;∴&nbsp; Δ = b² − 4ac = 8² − 4(1)(k) = 64 − 4k",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:79:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#4": {
+      "en": "For equal roots, &nbsp;Δ = 0: &nbsp;&nbsp;64 − 4k = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:80:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#5": {
+      "en": "∴ k = 16",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:81:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#6": {
+      "en": "Swapping a number for a letter does not change the method at all — Δ is still b squared minus four a c, it just comes out as a small expression instead of a single number. The one thing you have to hold on to is what “equal roots” means. It means the two roots have landed on top of each other, which happens only when the plus-or-minus in the formula has nothing to add or subtract, which happens only when Δ is exactly zero. Not nearly zero, not less than zero — exactly. So you set the expression equal to zero and solve an ordinary little equation for k. Sixty-four take away four k is zero, so four k is sixty-four, so k is sixteen.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:84:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#7": {
+      "en": "Write down the equal root of the equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:92:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#8": {
+      "en": "With Δ = 0 the ± part of the quadratic formula disappears, because there is nothing left to add or take away. What is left of the formula?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:95:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#9": {
+      "en": "With Δ = 0 the ± disappears, so the one root left standing is &nbsp;x = −b/(2a)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:98:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#10": {
+      "en": "x = −8/2 = −4 &nbsp;&nbsp;∴ the equal root is x = −4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:99:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#11": {
+      "en": "REMEMBER: k = 16 is NOT the root — it is the number that makes the equation have equal roots. The root is the x-value. Check it if you like: with k = 16 the equation is x² + 8x + 16 = 0, which factorises to (x + 4)², so x = −4, twice.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:101:15"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#12": {
+      "en": "The quadratic formula has two halves: minus b over two a, and then plus or minus the root of Δ over two a. When Δ is zero the second half vanishes completely, so only the first half survives — and that is why an equal root is always just minus b over two a. It is also the x-value of the turning point, which makes sense: equal roots mean the parabola is resting on the x-axis at exactly one point, and the only point where a parabola touches without crossing is its turning point. Two things to keep apart in your answer: k is the value that makes it happen, and x is where it happens. The question here asks for x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:105:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#13": {
+      "en": "Given: &nbsp;x² + 2kx + (3k + 4) = 0, &nbsp;where k is a real number.<br><br>Show that &nbsp;Δ = 4k² − 12k − 16.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:130:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#14": {
+      "en": "Write a, b and c down before you touch the formula, and take the WHOLE of 3k + 4 as c, bracket and all. Then square the b carefully — the 2 gets squared too.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:133:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#15": {
+      "en": "a = 1 ; &nbsp;b = 2k ; &nbsp;c = 3k + 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:136:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#16": {
+      "en": "Δ = b² − 4ac = (2k)² − 4(1)(3k + 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:137:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#17": {
+      "en": "(2k)² = 4k², &nbsp;and &nbsp;−4(3k + 4) = −12k − 16",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:138:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#18": {
+      "en": "∴ Δ = 4k² − 12k − 16",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:139:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#19": {
+      "en": "WATCH OUT: (2k)² is 4k², not 2k². The bracket means the 2 is squared as well as the k. And the −4 has to reach BOTH terms of 3k + 4, so it is −12k − 16, not −12k + 4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:141:15"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#20": {
+      "en": "Nothing new is happening here — it is the same substitution you have done all year, except b and c are little expressions instead of plain numbers. Two habits keep it safe. First, write a, b and c on their own line before going near the formula, so you can see that c is the whole bracket rather than just the 3k. Second, keep the brackets on while you square and while you multiply, because that is where the marks quietly leak away. Squaring 2k means squaring both the 2 and the k, and multiplying minus four into a two-term bracket means both terms change. What you end up with is a quadratic expression in k, and the shape of that expression is the whole point of the next part.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:145:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#21": {
+      "en": "Hence determine the values of k for which the equation has equal roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:153:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#22": {
+      "en": "Equal roots still means Δ = 0 — but this time setting it to zero gives you a quadratic in k, not a linear one. Look for a common factor first, then factorise what is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:156:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#23": {
+      "en": "For equal roots, &nbsp;Δ = 0: &nbsp;&nbsp;4k² − 12k − 16 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:159:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#24": {
+      "en": "Divide right through by 4: &nbsp;k² − 3k − 4 = 0 &nbsp;⟹&nbsp; (k − 4)(k + 1) = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:160:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#25": {
+      "en": "∴ k = 4 &nbsp;&nbsp;or&nbsp;&nbsp; k = −1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:161:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#26": {
+      "en": "REMEMBER: “equal roots” is still Δ = 0 EXACTLY — but Δ = 0 is only a single-answer question when Δ is linear in k. Here Δ is quadratic in k, so there are TWO values of k that do the job, and both of them are part of the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:163:15"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#27": {
+      "en": "This is the card where the equal-roots rule stops being a recipe and starts being a real question. The rule itself has not moved: equal roots still means the discriminant is exactly zero. What has changed is what that sentence gives you. Because k appeared in two places in the original equation, Δ came out with a k squared in it — so setting it to zero is solving an ordinary quadratic, and an ordinary quadratic has two solutions. Take the common factor of four out first; it makes the trinomial small and friendly. Then two numbers that multiply to minus four and add to minus three are minus four and plus one. Both answers count, and each one produces a completely different equation with its own equal root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:167:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#28": {
+      "en": "For each of your values of k, write down the equal root of the equation.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:175:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#29": {
+      "en": "Use x = −b/(2a) again, but leave k in it first — that gives you one short expression you can use twice.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:178:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#30": {
+      "en": "The equal root is &nbsp;x = −b/(2a) = −2k/2 = −k",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:181:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#31": {
+      "en": "k = 4 &nbsp;gives&nbsp; x = −4 &nbsp;&nbsp;(x² + 8x + 16 = 0)&nbsp;&nbsp;·&nbsp;&nbsp; k = −1 &nbsp;gives&nbsp; x = 1 &nbsp;&nbsp;(x² − 2x + 1 = 0)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:182:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#32": {
+      "en": "Because b is 2k, minus b over two a tidies up beautifully: minus two k over two is just minus k. So the equal root is always the opposite of whatever k turns out to be, and one line of work covers both answers instead of two separate calculations. It is worth writing the two finished equations out beside the roots, as the answer line does. With k equal to four the equation becomes x squared plus eight x plus sixteen, which is x plus four all squared. With k equal to minus one it becomes x squared minus two x plus one, which is x minus one all squared. Both are perfect squares, and a perfect square is exactly what equal roots look like when you factorise them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:185:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#33": {
+      "en": "The line &nbsp;y = kx + 1&nbsp; and the parabola &nbsp;y = x² + 3x + 5&nbsp; are drawn on the same set of axes.<br><br>Show that the x-coordinate of any point where they meet satisfies &nbsp;x² + (3 − k)x + 4 = 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:210:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#34": {
+      "en": "At a point where two graphs meet, they share the same x AND the same y. So put the two right-hand sides equal to each other and bring everything to one side.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:213:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#35": {
+      "en": "Where the graphs meet, the two y-values are the same, so put the two expressions equal:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:216:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#36": {
+      "en": "x² + 3x + 5 = kx + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:217:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#37": {
+      "en": "Everything to the left: &nbsp;x² + 3x − kx + 5 − 1 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:218:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#38": {
+      "en": "The two x terms share an x, so take it out: &nbsp;x² + (3 − k)x + 4 = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:219:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#39": {
+      "en": "Two graphs meeting is not a new idea dressed up as one — it is the ordinary “solve them together” move. A point that is on both graphs has one x and one y, so whatever the line says y is must equal whatever the parabola says y is. Setting the two expressions equal turns a picture question into an equation question in a single line. After that it is bookkeeping: take everything to the left so the equation reads equals zero, and notice that 3x and −kx are both x terms, so they collect into one bracket. What you are left with looks like an ordinary quadratic with a slightly odd b — and that odd b is where all the information about the line is hiding.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:222:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#40": {
+      "en": "Hence determine the values of k for which the line is a <b>tangent</b> to the parabola.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:230:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#41": {
+      "en": "A tangent touches a curve at exactly ONE point. How many solutions does that mean the equation in (a) has — and what does that say about its discriminant?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:233:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#42": {
+      "en": "A tangent touches the parabola at exactly <b>one</b> point, so the equation in (a) has <b>equal roots</b> &nbsp;⟹&nbsp; Δ = 0",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:236:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#43": {
+      "en": "Δ = (3 − k)² − 4(1)(4) = 0 &nbsp;⟹&nbsp; (3 − k)² = 16",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:237:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#44": {
+      "en": "Take the square root of both sides — and because you are <b>solving</b>, the ± appears: &nbsp;3 − k = ±4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:238:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#45": {
+      "en": "3 − k = 4 &nbsp;gives&nbsp; k = −1, &nbsp;and&nbsp; 3 − k = −4 &nbsp;gives&nbsp; k = 7 &nbsp;&nbsp;∴ k = −1 &nbsp;or&nbsp; k = 7",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:239:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#46": {
+      "en": "REMEMBER: the word “equal roots” never appears in this question — “tangent” and “touches at one point” are how a paper says it. And the ± is worth its own mark, so both values of k have to be handed in. Losing the negative branch here loses half the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:241:15"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#47": {
+      "en": "The whole difficulty of this question is spotting what is being asked, and once you see it there is no new maths at all. A line can miss a parabola, cut through it twice, or touch it once. Those three pictures are exactly the three discriminant cases of the equation you built in part (a): no real roots, two real roots, or equal roots. Touching once is the middle case, so Δ has to be zero. From there it is arithmetic. The bracket squared equals sixteen, and when you take the square root of both sides to SOLVE, both the plus and the minus branch count — four squared is sixteen and so is minus four squared. That hands you two lines, one sloping down and one sloping up, each resting against the parabola at a single point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:245:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#48": {
+      "en": "Determine the value(s) of k for which &nbsp;3x² − kx + 12 = 0&nbsp; has two equal roots.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:269:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#49": {
+      "en": "This time k sits where b usually is, so it gets squared. Set Δ = 0 and remember that a square root taken while SOLVING has two branches.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:272:13"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#50": {
+      "en": "a = 3 ; &nbsp;b = −k ; &nbsp;c = 12 &nbsp;&nbsp;∴&nbsp; Δ = (−k)² − 4(3)(12) = k² − 144",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:275:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#51": {
+      "en": "For equal roots, &nbsp;Δ = 0: &nbsp;&nbsp;k² − 144 = 0 &nbsp;⟹&nbsp; k² = 144",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:276:37"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#52": {
+      "en": "∴ k = 12 &nbsp;&nbsp;or&nbsp;&nbsp; k = −12",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:277:39"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#53": {
+      "en": "REMEMBER: (−k)² is k², not −k². Squaring kills the minus sign. And k² = 144 has TWO answers — a ± appears whenever you SOLVE by taking an even root, even though √144 on its own is simply 12.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:279:15"
+      ]
+    },
+    "eqn-siblings-k-equal-roots#54": {
+      "en": "When k lands in the b slot it gets squared, and that changes the shape of the answer. Everything up to the last line is the usual routine: substitute, keeping the minus k inside its own brackets, and notice that squaring it makes the minus disappear. Setting Δ to zero then leaves k squared equal to one hundred and forty-four. Here is the moment worth being careful about. Twelve squared is one hundred and forty-four, and so is minus twelve squared, so both are genuine answers. That is the difference her notes draw between simplifying and solving: the root sign on its own means the positive one, but an equation with a squared unknown has two solutions and both belong in your answer. Two different equations, each with its own equal root.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "eqn-siblings-k-equal-roots.js:283:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2317
+}
