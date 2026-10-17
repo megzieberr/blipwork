@@ -1,0 +1,622 @@
+{
+  "unit": "T33",
+  "generated": "2026-10-17T18:27:45.770Z",
+  "files": [
+    "js/exam/func-siblings-axis-of-symmetry.js"
+  ],
+  "items": {
+    "func-siblings-axis-of-symmetry#1": {
+      "en": "The sketch shows the parabola g, defined by &nbsp;g(x) = 2(x − 3)² − 5.<br><br>Write down the equation of the axis of symmetry of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:103:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#2": {
+      "en": "In turning-point form the turning point is sitting right there in the equation. The axis of symmetry is the vertical line straight through it — so you only need its x.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:106:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#3": {
+      "en": "In &nbsp;y = a(x − p)² + q&nbsp; the turning point is (p ; q), and the axis of symmetry is the vertical line through it, &nbsp;x = p. Here (x − 3)² gives p = 3:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:109:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#4": {
+      "en": "x = 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:110:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#5": {
+      "en": "A parabola is a perfect mirror image of itself about one vertical line, and that line passes through the turning point — so “axis of symmetry” and “the x of the turning point” are two names for the same number. Turning-point form hands it to you without any work, because p IS that x. Notice what the answer looks like: an axis of symmetry is a LINE, so it has to be written as an equation, x = 3. Writing just 3, or writing y = 3, both lose the mark — and y = 3 would be a horizontal line, which a parabola's mirror line never is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:113:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#6": {
+      "en": "A second parabola h is defined by &nbsp;h(x) = −(x + 4)² + 1, and is shown in the sketch.<br><br>Write down the equation of the axis of symmetry of h.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:121:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#7": {
+      "en": "Same idea as (a), but read the bracket carefully — the number inside it is not the answer as it stands.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:124:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#8": {
+      "en": "(x + 4)² gives p = −4 — the OPPOSITE sign to the number written in the bracket:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:127:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#9": {
+      "en": "x = −4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:128:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#10": {
+      "en": "WATCH OUT: p is the opposite sign of the number in the bracket, so (x + 4)² gives −4, not 4. And the answer must be an EQUATION — x = −4, never just −4.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:130:15"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#11": {
+      "en": "The sign flip catches almost everybody at least once, so it helps to know why it happens rather than just to remember it. The bracket is squared, and a square is at its smallest when whatever is inside it is zero. So the turning point sits at the x that makes (x + 4) equal zero, and that x is −4. Ask yourself that question every single time — “which x makes the bracket zero?” — and you will never have to remember which way the sign goes. Notice too that the minus in front of the bracket makes this parabola sad, arms opening downwards; that changes where the graph goes, but it changes nothing at all about where the mirror line is.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:134:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#12": {
+      "en": "The graph of g is shifted 2 units to the LEFT and 6 units UP to give k.<br><br>Write down the equation of k in the form &nbsp;y = a(x − p)² + q, and the equation of the axis of symmetry of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:142:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#13": {
+      "en": "A shift carries the graph without bending it, so a does not change. Move the turning point instead — and then the new mirror line goes through the new turning point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:145:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#14": {
+      "en": "A shift never changes the shape, so a stays 2. Only the turning point moves: from (3 ; −5), two units left is &nbsp;x = 3 − 2 = 1, six units up is &nbsp;y = −5 + 6 = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:148:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#15": {
+      "en": "k(x) = 2(x − 1)² + 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:149:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#16": {
+      "en": "the axis of symmetry is the vertical line through the new turning point: &nbsp;x = 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:150:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#17": {
+      "en": "REMEMBER the sign flip again on the way back IN: a turning point at x = 1 is written (x − 1)², not (x + 1)². Check it the same way — which x makes the bracket zero?",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:152:15"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#18": {
+      "en": "Turning-point form is the natural place to do a shift, because p and q ARE the turning point's coordinates — so moving the graph is nothing more than moving two numbers. Two units left takes 2 off the x-coordinate; six up adds 6 to the y-coordinate; a is untouched because a controls the width and the direction, and a shift changes neither. Once the new turning point is in, the axis of symmetry follows automatically, since it is always the vertical line through it. The reveal sketch shows both lines together, the old one at x = 3 and the new one at x = 1 — the mirror line slid exactly as far as the graph did, which is the whole idea worth taking away from this card.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:156:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#19": {
+      "en": "The sketch shows the parabola f, defined by &nbsp;f(x) = −2x² + 8x − 3.<br><br>Determine the equation of the axis of symmetry of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:227:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#20": {
+      "en": "This one is not in turning-point form, so use the formula that finds the turning point's x directly. Take care with the signs — both a and b bring one along.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:230:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#21": {
+      "en": "For &nbsp;y = ax² + bx + c&nbsp; the axis of symmetry is &nbsp;x = −b/(2a). Here a = −2 and b = 8:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:233:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#22": {
+      "en": "x = −8/(2(−2)) = −8/(−4) = 2 &nbsp;&nbsp;∴&nbsp; x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:234:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#23": {
+      "en": "WATCH OUT: two minus signs are in play at once — the minus in the formula and the negative a underneath. Work the top and the bottom out separately before you divide.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:236:15"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#24": {
+      "en": "In standard form nothing is handed over: the equation tells you the shape and the y-intercept, but not where the graph turns. The formula x = −b/(2a) is the shortcut that finds that x without having to complete the square first — and because the axis of symmetry is the vertical line through the turning point, the same formula answers this question directly. You do not need the y here at all, which is why this is a two-mark question and not a three-mark one. Write the answer as an equation of a line, x = 2, and keep it as x = something; a parabola's mirror line is always vertical.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:240:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#25": {
+      "en": "The graph of m is given by &nbsp;m(x) = f(x) − 4.<br><br>Write down the equation of the axis of symmetry of m.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:248:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#26": {
+      "en": "Work out which direction this shift moves the graph before you touch the answer. Then ask whether moving a graph in that direction could possibly move a vertical line sideways.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:251:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#27": {
+      "en": "The &nbsp;− 4&nbsp; sits OUTSIDE the function, so it slides the whole graph 4 units DOWN. Sliding a parabola straight down does not move it sideways at all, so the mirror line stays exactly where it was:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:254:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#28": {
+      "en": "x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:255:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#29": {
+      "en": "WATCH OUT: this one is built to look as if it changes. A VERTICAL shift never moves the axis of symmetry, and a vertical shift is any number added or subtracted OUTSIDE the function. Only a HORIZONTAL shift moves it.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:257:15"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#30": {
+      "en": "The useful habit here is to picture the movement before you write anything. Subtracting 4 outside lowers every single point of the graph by 4 — the turning point drops from (2 ; 5) to (2 ; 1), the y-intercept drops, the whole curve drops. But every one of those points keeps its own x. The axis of symmetry is a statement about x only, so it cannot notice a purely up-and-down move. That is the real content of this part: not arithmetic, but knowing which transformations your answer is sensitive to. A question worth two marks that many learners answer with a changed number, purely because a change appeared in the equation and they assumed it had to show up somewhere.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:261:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#31": {
+      "en": "The graph of k is given by &nbsp;k(x) = f(x + 5).<br><br>Write down the equation of the axis of symmetry of k.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:269:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#32": {
+      "en": "This time the change is inside, sitting next to the x. Decide which way that moves the graph — it is the opposite of what it looks like — and move your answer from (a) the same way.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:272:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#33": {
+      "en": "The &nbsp;+ 5&nbsp; is INSIDE, next to the x, so it slides the graph 5 units LEFT — anything inside does the opposite of what it looks like:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:275:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#34": {
+      "en": "x = 2 − 5 = −3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:276:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#35": {
+      "en": "WATCH OUT: f(x + 5) moves the graph LEFT, not right. If you are unsure, test one value: k(−3) = f(2), so whatever f was doing at x = 2, k is doing at x = −3 — the picture has slid 5 to the left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:278:15"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#36": {
+      "en": "Inside-the-bracket changes are the ones everybody gets backwards, and the cure is to stop trying to remember the rule and start testing a number instead. k(−3) means f(−3 + 5), which is f(2) — so the height that f had at x = 2 now appears at x = −3 on k. The graph has moved 5 units to the LEFT, even though the equation says plus. Once you have settled the direction, the axis of symmetry travels with everything else, so you simply move your x = 2 the same 5 units left and land on x = −3. Put this part next to (b) and you have the whole story of shifts and mirror lines: outside changes leave the axis alone, inside changes move it, and inside changes go the opposite way from what they look like.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:282:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#37": {
+      "en": "The sketch shows the hyperbola h, defined by &nbsp;h(x) = 8/(x − 2) − 3, with its asymptotes drawn as dashed lines.<br><br>Determine the equation of the axis of symmetry of h that has a NEGATIVE gradient.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:329:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#38": {
+      "en": "Both axes of symmetry go through the one point where the asymptotes cross — find that point first. A hyperbola's mirror lines only ever have two possible gradients, and you have been told which one you want.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:332:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#39": {
+      "en": "Both axes of symmetry pass through the point where the asymptotes cross, which is (p ; q) = (2 ; −3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:335:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#40": {
+      "en": "a negative gradient means m = −1, so the line is &nbsp;y = −x + c&nbsp; through (2 ; −3):",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:336:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#41": {
+      "en": "−3 = −(2) + c &nbsp;⟹&nbsp; c = −1 &nbsp;&nbsp;∴&nbsp; y = −x − 1",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:337:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#42": {
+      "en": "A hyperbola has two mirror lines, and they are the two diagonals through the corner where the asymptotes meet — one running up at 45°, one running down at 45°. That is why their gradients are always exactly 1 and −1, no matter how big a is: a decides how far the branches sit from the corner, not which way the diagonals lean. So “the one with a negative gradient” is enough information to pin down m completely. From there it is an ordinary Grade 9 job you have done a hundred times: you have a gradient and a point, so put them into y = mx + c and solve for c. The only place to slip is the substitution — with m = −1 the term is −(2), not 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:340:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#43": {
+      "en": "Determine the equation of the other axis of symmetry of h.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:348:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#44": {
+      "en": "The other one runs through exactly the same point. Only its gradient is different — and for a hyperbola there is only one other gradient it could have.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:351:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#45": {
+      "en": "The other one has m = 1 and goes through the same point (2 ; −3): &nbsp;y = x + c",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:354:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#46": {
+      "en": "−3 = 2 + c &nbsp;⟹&nbsp; c = −5 &nbsp;&nbsp;∴&nbsp; y = x − 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:355:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#47": {
+      "en": "REMEMBER: both lines go through (p ; q), and their gradients are always 1 and −1. Only the c changes between them — so if your two answers have the same c, one of them is wrong.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:357:15"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#48": {
+      "en": "This part costs almost nothing once (a) is done, and that is the point of asking it: the two mirror lines are twins. They share the same point, they differ only in which way they lean, and both leans are fixed at 45°. So the only new work is one substitution with m = 1 instead of m = −1. It is worth a quick sanity check on the sketch when you have both: the two lines should cross exactly where the two dashed asymptotes cross, and each branch of the hyperbola should sit neatly folded across one of them. If your two c values come out the same, you have almost certainly substituted the same gradient twice.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:361:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#49": {
+      "en": "The sketch shows the hyperbola f, defined by &nbsp;f(x) = 6/x.<br><br>Write down the equations of the two axes of symmetry of f.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:424:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#50": {
+      "en": "Compare 6/x with y = a/(x − p) + q. There is nothing next to the x and nothing added on the end — so where do the asymptotes cross? Both mirror lines go through that point.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:427:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#51": {
+      "en": "f(x) = 6/x&nbsp; is &nbsp;y = a/(x − p) + q&nbsp; with p = 0 and q = 0, so the asymptotes cross at the origin (0 ; 0). Both axes of symmetry are the 45° diagonals through that point, with gradients 1 and −1:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:430:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#52": {
+      "en": "y = x &nbsp;&nbsp;and&nbsp;&nbsp; y = −x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:431:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#53": {
+      "en": "y = 6/x is the plainest hyperbola there is — the one every other hyperbola is a moved copy of. Nothing has been added inside the bracket and nothing on the end, so p and q are both zero and the crosshairs sit right at the origin. That makes the two mirror lines as simple as they ever get: the two 45° diagonals through the origin, which are y = x and y = −x, with no c to work out at all. Worth fixing in your memory as the baseline picture, because the next part is nothing more than this same picture picked up and put down somewhere else.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:434:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#54": {
+      "en": "A second hyperbola g is defined by &nbsp;g(x) = 6/(x − 4) − 1, and is shown in the sketch with its asymptotes dashed.<br><br>Describe the shift that moves f onto g, and determine the equations of the two axes of symmetry of g.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:442:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#55": {
+      "en": "Compare g with f piece by piece — one change is inside the bracket and one is on the end, and they move the graph in different directions. Once you know where the crosshairs have landed, both lines follow from the same two gradients as before.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:445:13"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#56": {
+      "en": "Compare g with f: &nbsp;the (x − 4) slides the graph 4 units RIGHT, and the &nbsp;− 1&nbsp; on the end slides it 1 unit DOWN",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:448:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#57": {
+      "en": "so the asymptotes now cross at (4 ; −1), and both axes of symmetry pass through that point. The gradients are still 1 and −1:",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:449:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#58": {
+      "en": "m = 1: &nbsp;&nbsp;−1 = 4 + c &nbsp;⟹&nbsp; c = −5 &nbsp;⟹&nbsp; y = x − 5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:450:37"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#59": {
+      "en": "m = −1: &nbsp;&nbsp;−1 = −(4) + c &nbsp;⟹&nbsp; c = 3 &nbsp;⟹&nbsp; y = −x + 3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:451:39"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#60": {
+      "en": "WATCH OUT: a shift MOVES the mirror lines but never TILTS them. The gradients stay 1 and −1 — only c changes, and it changes only because the point the lines run through has moved.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:453:15"
+      ]
+    },
+    "func-siblings-axis-of-symmetry#61": {
+      "en": "Everything on this card hangs on one idea: a shift carries the entire picture, crosshairs and mirror lines included, without changing its shape. So you never have to rebuild g from scratch — you work out where the corner went and everything else follows. The (x − 4) is inside the bracket, and inside changes go the opposite way to how they read, so that is 4 units to the right; the − 1 is outside and behaves normally, 1 unit down. The corner therefore travels from (0 ; 0) to (4 ; −1). The mirror lines started as y = x and y = −x, and they are still leaning at exactly 45°, because tilting is not something a shift can do — so all that is left is to find the new c for each by substituting the new corner. This is the part that carries the extra thinking on this tile: two lines, one shift, and the discipline not to let the sign on the shift or the sign on the gradient trip you at the last step.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "func-siblings-axis-of-symmetry.js:457:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2076
+}

@@ -60,9 +60,9 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T30 | exam: func-level4 | ~3 087 words | verify-exam.html
 - ⏳ 2026-10-17 20:25 T31 | exam: func-line-and-parabola, func-siblings-asymptotes-domain-range (2 files) | ~2 920 words | verify-exam.html
 - ☑ 2026-10-17 T32 | exam: func-siblings-average-gradient | ~2 532 words | verify-exam.html
-- ⏳ 2026-10-17 20:27 T33 | exam: func-siblings-axis-of-symmetry | ~2 173 words | verify-exam.html
+- ☑ 2026-10-17 T33 | exam: func-siblings-axis-of-symmetry | ~2 173 words | verify-exam.html
 - ⏳ 2026-10-17 20:31 T34 | exam: func-siblings-distances, func-siblings-find-equation (2 files) | ~3 962 words | verify-exam.html
-- ☐ T35 | exam: func-siblings-inequalities | ~2 264 words | verify-exam.html
+- ⏳ 2026-10-17 20:31 T35 | exam: func-siblings-inequalities | ~2 264 words | verify-exam.html
 - ☐ T36 | exam: func-siblings-intercepts-turning-point | ~2 163 words | verify-exam.html
 - ☐ T37 | exam: func-siblings-intersection | ~2 992 words | verify-exam.html
 - ☐ T38 | exam: func-siblings-nature-of-roots | ~1 689 words | verify-exam.html
