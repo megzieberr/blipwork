@@ -1,0 +1,192 @@
+{
+  "unit": "T24",
+  "generated": "2026-10-17T18:13:13.036Z",
+  "files": [
+    "js/concepts/analytical.js"
+  ],
+  "items": {
+    "analytical#1": {
+      "en": "Which formula — and what its answer looks like",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:9:12"
+      ]
+    },
+    "analytical#2": {
+      "en": "\n      <p>Three formulas do three different jobs. Ask yourself what you’re after:</p>\n      <ul>\n        <li><b>Distance</b> → a <b>length</b> (one positive number): AB = √[(x<sub>B</sub>−x<sub>A</sub>)² + (y<sub>B</sub>−y<sub>A</sub>)²]</li>\n        <li><b>Midpoint</b> → a <b>coordinate</b> (x ; y): M = ( (x<sub>A</sub>+x<sub>B</sub>)/2 ; (y<sub>A</sub>+y<sub>B</sub>)/2 )</li>\n        <li><b>Gradient</b> → a <b>slope number</b>: m = (y<sub>B</sub>−y<sub>A</sub>)/(x<sub>B</sub>−x<sub>A</sub>)</li>\n      </ul>\n      <p>Small <b>m</b> = gradient. Capital <b>M</b> = midpoint. Keep the points in the SAME order: top and bottom in the gradient formula, and in BOTH brackets of the distance formula.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:10:11"
+      ]
+    },
+    "analytical#3": {
+      "en": "The sign of a gradient",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:20:12"
+      ]
+    },
+    "analytical#4": {
+      "en": "\n      <p>Gradient = rise ÷ run. Read the line from <b>left to right</b>:</p>\n      <ul>\n        <li><b>Positive</b> — the line goes <b>up</b> ↗ (increasing).</li>\n        <li><b>Negative</b> — the line goes <b>down</b> ↘ (decreasing).</li>\n      </ul>\n      <p>Steepness is the <b>size</b> of the gradient (ignore the sign): a gradient of −4 is steeper than one of 2.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:21:11"
+      ]
+    },
+    "analytical#5": {
+      "en": "Horizontal & vertical lines",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:30:12"
+      ]
+    },
+    "analytical#6": {
+      "en": "\n      <p>The two lines learners mix up:</p>\n      <ul>\n        <li><b>Horizontal</b> line — no rise, only run → gradient = <b>0</b> (e.g. 0 ÷ 6 = 0).</li>\n        <li><b>Vertical</b> line — no run → you’d divide by 0, so the gradient is <b>undefined</b>.</li>\n      </ul>\n      <div class=\"eg\">Flat = zero. Straight up = undefined.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:31:11"
+      ]
+    },
+    "analytical#7": {
+      "en": "Parallel & perpendicular (the gradient rules)",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:40:12"
+      ]
+    },
+    "analytical#8": {
+      "en": "\n      <p>Compare the gradients:</p>\n      <div class=\"formula\">Parallel:  m<sub>1</sub> = m<sub>2</sub><br>Perpendicular:  m<sub>1</sub> × m<sub>2</sub> = −1</div>\n      <p>So perpendicular lines have gradients that are <b>negative reciprocals</b> of each other.</p>\n      <div class=\"eg\">e.g. m = 2/3 → the perpendicular gradient is −3/2 (flip it over, change the sign). Check: 2/3 × −3/2 = −1. ✓</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:41:11"
+      ]
+    },
+    "analytical#9": {
+      "en": "The negative reciprocal",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:48:12"
+      ]
+    },
+    "analytical#10": {
+      "en": "\n      <p>To get the gradient <b>perpendicular</b> to a given one: <b>switch</b> the top and bottom of the fraction, then <b>change the sign</b>.</p>\n      <ul>\n        <li>m = 2/3 → −3/2</li>\n        <li>m = −4 = −4/1 → +1/4</li>\n      </ul>\n      <p>Reading a gradient from <b>ax + by = 0</b>: make y the subject (y = mx + c); the gradient is <b>−a/b</b>.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:49:11"
+      ]
+    },
+    "analytical#11": {
+      "en": "Angle of inclination",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:58:12"
+      ]
+    },
+    "analytical#12": {
+      "en": "\n      <p>θ is the angle the line makes with the <b>positive x-axis</b>, measured anti-clockwise, and</p>\n      <div class=\"formula\">tan θ = m</div>\n      <ul>\n        <li><b>Positive</b> gradient → θ is <b>acute</b>: SHIFT tan the gradient and that IS θ.</li>\n        <li><b>Negative</b> gradient → θ is <b>obtuse</b>: SHIFT tan the gradient <b>without</b> its minus, then θ = 180° − that.</li>\n      </ul>\n      <p><b>Do not</b> put the negative gradient into the calculator with its minus in — drop the sign, get the acute reference angle, then take 180° − that.</p>\n      <div class=\"eg\">e.g. m = −4/5 → tan θ = −4/5, and <span class=\"nowrap\">SHIFT tan (4/5)</span> = 38,66°, so θ = 180° − 38,66° = 141,34°.</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:59:11"
+      ]
+    },
+    "analytical#13": {
+      "en": "Perpendicular bisector",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:70:12"
+      ]
+    },
+    "analytical#14": {
+      "en": "\n      <p>The perpendicular bisector of AB does <b>two</b> things at once:</p>\n      <ul>\n        <li>it passes through the <b>midpoint</b> of AB, and</li>\n        <li>it is <b>perpendicular</b> to AB (crosses it at 90°).</li>\n      </ul>\n      <p>So its gradient is the <b>negative reciprocal</b> of AB’s gradient, and it goes through M, the midpoint. Every point on it is the same distance from A as from B.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:71:11"
+      ]
+    },
+    "analytical#15": {
+      "en": "Area of a triangle — base & ⊥height",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:80:12"
+      ]
+    },
+    "analytical#16": {
+      "en": "\n      <div class=\"formula\">Area = ½ × base × ⊥height</div>\n      <p>Pick any side as the <b>base</b>. The <b>perpendicular height</b> (the altitude) is then drawn from the <b>opposite vertex</b>, meeting that base at <b>90°</b>.</p>\n      <ul>\n        <li>An <b>altitude</b> makes a right angle with the base — that’s the height.</li>\n        <li>A <b>median</b> goes to the midpoint — that is <b>not</b> the height.</li>\n      </ul>\n      <p>Except in a right-angled triangle, the height is a NEW segment inside the triangle, not one of the sides.</p>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:81:11"
+      ]
+    },
+    "analytical#17": {
+      "en": "Lines in a triangle & ‘prove that…’",
+      "kind": "string",
+      "slots": [
+        "title"
+      ],
+      "where": [
+        "analytical.js:91:12"
+      ]
+    },
+    "analytical#18": {
+      "en": "\n      <ul>\n        <li><b>Median</b> — vertex to the <b>midpoint</b> of the opposite side.</li>\n        <li><b>Altitude</b> — vertex, <b>perpendicular</b> to the opposite side (the height).</li>\n        <li><b>Perpendicular bisector</b> — through a side’s <b>midpoint</b> AND perpendicular to it.</li>\n      </ul>\n      <p>To prove things, show:</p>\n      <div class=\"formula\">∥ : m<sub>AB</sub> = m<sub>CD</sub><br>⊥ : m<sub>AB</sub> × m<sub>CD</sub> = −1<br>collinear : m<sub>AB</sub> = m<sub>BC</sub><br>parallelogram : diagonals share a midpoint</div>",
+      "kind": "template",
+      "slots": [
+        "body"
+      ],
+      "where": [
+        "analytical.js:92:11"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 455
+}
