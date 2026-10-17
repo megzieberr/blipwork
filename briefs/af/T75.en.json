@@ -1,0 +1,709 @@
+{
+  "unit": "T75",
+  "generated": "2026-10-17T21:00:07.733Z",
+  "files": [
+    "js/exam/algx-siblings-expand.js"
+  ],
+  "items": {
+    "algx-siblings-expand#1": {
+      "en": "Expand and simplify: &nbsp;(2x − 3)(x² + 4x − 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:78:13"
+      ]
+    },
+    "algx-siblings-expand#2": {
+      "en": "Every term in the front bracket has to meet every term in the back bracket — that is six little products, not three. Do the 2x row first, then the −3 row, and only collect like terms right at the end.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:81:13"
+      ]
+    },
+    "algx-siblings-expand#3": {
+      "en": "Take each term of the first bracket into the <b>whole</b> of the second bracket — the 2x row, then the −3 row.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:84:37"
+      ]
+    },
+    "algx-siblings-expand#4": {
+      "en": "= 2x(x² + 4x − 5) − 3(x² + 4x − 5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:85:37"
+      ]
+    },
+    "algx-siblings-expand#5": {
+      "en": "= 2x³ + 8x² − 10x − 3x² − 12x + 15",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:86:37"
+      ]
+    },
+    "algx-siblings-expand#6": {
+      "en": "∴&nbsp; 2x³ + 5x² − 22x + 15",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:87:39"
+      ]
+    },
+    "algx-siblings-expand#7": {
+      "en": "WATCH OUT: the −3 keeps its minus the whole way through. −3 × (−5) = +15, so the last term is <b>plus</b> fifteen. Count your terms before you collect: six products in, six terms out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:89:15"
+      ]
+    },
+    "algx-siblings-expand#8": {
+      "en": "Think of the front bracket as two visitors and the back bracket as three houses. Every visitor must knock on every door, so there are 2 × 3 = 6 knocks. If you end up with fewer than six terms before you tidy up, you skipped a door. The safest way to keep track is to split the job in two: send the 2x round first, then send the −3 round, and write each row on its own line. That way the minus travels with the 3 instead of getting lost. Only once all six terms are on the page do you look for like terms — the x² pair and the x pair — and add them. Nothing is allowed to combine before that.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:93:13"
+      ]
+    },
+    "algx-siblings-expand#9": {
+      "en": "Expand and simplify each of the following.<br><br>(5x − 2)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:118:13"
+      ]
+    },
+    "algx-siblings-expand#10": {
+      "en": "A square means the bracket times itself, so there are three pieces in the answer, not two. Write down the first term squared, then twice the two terms multiplied, then the last term squared.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:121:13"
+      ]
+    },
+    "algx-siblings-expand#11": {
+      "en": "Use the pattern &nbsp;(a − b)² = a² − 2ab + b², &nbsp;with a = 5x and b = 2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:124:37"
+      ]
+    },
+    "algx-siblings-expand#12": {
+      "en": "= (5x)² − 2(5x)(2) + 2²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:125:37"
+      ]
+    },
+    "algx-siblings-expand#13": {
+      "en": "∴&nbsp; 25x² − 20x + 4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:126:39"
+      ]
+    },
+    "algx-siblings-expand#14": {
+      "en": "WATCH OUT: (5x − 2)² is NOT 25x² − 4. Squaring a bracket is never done term by term — the middle term −20x is a real part of the answer and it is where the mark usually goes missing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:128:15"
+      ]
+    },
+    "algx-siblings-expand#15": {
+      "en": "A square is just a bracket standing next to a copy of itself, so the same every-visitor-knocks-on-every-door rule applies. Four knocks this time: 5x with 5x, 5x with −2, −2 with 5x, and −2 with −2. The two middle knocks are identical twins, which is exactly why the pattern has a 2 in front of the middle term. Notice the last term: −2 times −2 is +4, so a minus in the bracket still leaves a plus on the end. That is worth remembering, because it means the answer to (5x − 2)² and the answer to (5x + 2)² differ only in the sign of the middle term.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:132:13"
+      ]
+    },
+    "algx-siblings-expand#16": {
+      "en": "(x/3 + 6)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:140:13"
+      ]
+    },
+    "algx-siblings-expand#17": {
+      "en": "Nothing changes because one of the terms is a fraction — it is still first squared, twice the product, last squared. Square the top and the bottom of the fraction separately.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:143:13"
+      ]
+    },
+    "algx-siblings-expand#18": {
+      "en": "Same pattern, &nbsp;(a + b)² = a² + 2ab + b², &nbsp;with a = x/3 and b = 6.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:146:37"
+      ]
+    },
+    "algx-siblings-expand#19": {
+      "en": "= (x/3)² + 2(x/3)(6) + 6²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:147:37"
+      ]
+    },
+    "algx-siblings-expand#20": {
+      "en": "= ${sf(\"x²\", \"9\")} + ${sf(\"12x\", \"3\")} + 36",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:148:37"
+      ],
+      "nested": [
+        "x²",
+        "12x"
+      ]
+    },
+    "algx-siblings-expand#21": {
+      "en": "∴&nbsp; ${sf(\"x²\", \"9\")} + 4x + 36",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:149:39"
+      ],
+      "nested": [
+        "x²"
+      ]
+    },
+    "algx-siblings-expand#22": {
+      "en": "REMEMBER: squaring a fraction squares the bottom as well as the top, so (x/3)² is x² over 9, never x² over 3. And tidy the middle term at the end — 12x over 3 is 4x, and leaving it unsimplified costs the last mark.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:151:15"
+      ]
+    },
+    "algx-siblings-expand#23": {
+      "en": "A fraction inside a bracket often makes learners freeze, but the bracket cannot tell the difference. Treat x over 3 as one single object called a, run the same three-step pattern, and only then deal with the fraction arithmetic. Squaring a fraction hits both floors of the building: the top becomes x² and the bottom becomes 9. The middle term is where the fraction actually helps you — 2 times x over 3 times 6 gives 12x over 3, and 3 divides into 12 four times, so a whole number falls out. The last term has no fraction in it at all, because the 6 was never over anything. Take one line to tidy, and the answer looks friendly again.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:155:13"
+      ]
+    },
+    "algx-siblings-expand#24": {
+      "en": "Expand and simplify each of the following, writing your answer down in one line.<br><br>(4x − 7)(4x + 7)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:180:13"
+      ]
+    },
+    "algx-siblings-expand#25": {
+      "en": "Look at the two brackets side by side. They are identical except for one sign in the middle — that is the signal that the two middle terms are about to cancel each other out.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:183:13"
+      ]
+    },
+    "algx-siblings-expand#26": {
+      "en": "The brackets are the same except for the middle sign, so this is a <b>difference of two squares</b>: &nbsp;(a − b)(a + b) = a² − b².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:186:37"
+      ]
+    },
+    "algx-siblings-expand#27": {
+      "en": "∴&nbsp; (4x)² − 7² = 16x² − 49",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:187:39"
+      ]
+    },
+    "algx-siblings-expand#28": {
+      "en": "WATCH OUT: there is no middle term at all. The long way gives 16x² + 28x − 28x − 49, and the two x terms wipe each other out — which is the only reason this shortcut is allowed. Also square the 4 as well as the x: (4x)² is 16x², not 4x².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:189:15"
+      ]
+    },
+    "algx-siblings-expand#29": {
+      "en": "This is the one product in Grade 10 you are allowed to write down without any working, and it is worth spotting on sight. The reason it works is short: the four knocks give 16x², then +28x, then −28x, then −49. The two middle ones are the same size with opposite signs, so they vanish. All that survives is the first term squared minus the last term squared. Two things to be careful about. First, the whole term gets squared, coefficient included, so 4x becomes 16x². Second, the shortcut only works when the brackets are twins with one sign flipped. If the numbers differ at all, you are back to knocking on every door.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:193:13"
+      ]
+    },
+    "algx-siblings-expand#30": {
+      "en": "(2m + 9n)(2m − 9n)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:201:13"
+      ]
+    },
+    "algx-siblings-expand#31": {
+      "en": "Same twins, same shortcut. The letters being different does not change anything — square the first term, square the second, and put a minus between them.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:204:13"
+      ]
+    },
+    "algx-siblings-expand#32": {
+      "en": "= (2m)² − (9n)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:207:37"
+      ]
+    },
+    "algx-siblings-expand#33": {
+      "en": "∴&nbsp; 4m² − 81n²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:208:39"
+      ]
+    },
+    "algx-siblings-expand#34": {
+      "en": "Two letters instead of one letter and a number changes nothing about the pattern, and that is the whole point of learning it as a shape rather than as a fact about x. Square the front term: 2m times 2m is 4m². Square the back term: 9n times 9n is 81n². Put the minus between them and you are finished. The order the brackets are written in does not matter either — a plus bracket first and a minus bracket second gives exactly the same answer, because the two middle terms cancel whichever way round they appear. If you ever doubt it, test with easy numbers: let m be 1 and n be 1 and check that both sides agree.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:211:13"
+      ]
+    },
+    "algx-siblings-expand#35": {
+      "en": "Expand and simplify: &nbsp;−3x(2x − 5) − (x − 4)(x + 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:235:13"
+      ]
+    },
+    "algx-siblings-expand#36": {
+      "en": "Do the two products separately on two lines first, keeping the second one inside a bracket. Only once you can see it whole do you let the minus in front of it loose.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:238:13"
+      ]
+    },
+    "algx-siblings-expand#37": {
+      "en": "−3x(2x − 5) = −6x² + 15x",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:241:37"
+      ]
+    },
+    "algx-siblings-expand#38": {
+      "en": "(x − 4)(x + 2) = x² − 2x − 8 &nbsp;&nbsp;— keep it in a bracket, the minus outside is still waiting",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:242:37"
+      ]
+    },
+    "algx-siblings-expand#39": {
+      "en": "= −6x² + 15x − (x² − 2x − 8) = −6x² + 15x − x² + 2x + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:243:37"
+      ]
+    },
+    "algx-siblings-expand#40": {
+      "en": "∴&nbsp; −7x² + 17x + 8",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:244:39"
+      ]
+    },
+    "algx-siblings-expand#41": {
+      "en": "WATCH OUT: the minus in front of the bracket belongs to <b>every</b> term inside it, not just the first one. − (x² − 2x − 8) is −x² + 2x + 8. Changing only the x² and leaving the other two alone is the single most common way this question is lost.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:246:15"
+      ]
+    },
+    "algx-siblings-expand#42": {
+      "en": "There are two separate jobs here and the marks come from keeping them apart. Job one is a single term times a bracket: −3x meets 2x and then −5, and the minus travels with the 3x both times, so you get −6x² and +15x. Job two is a bracket times a bracket, four knocks, giving x² − 2x − 8. Now comes the moment the question was built for. That whole answer sits behind a minus sign, so you must write it inside a bracket first and then flip every sign inside. Think of the minus as an instruction saying take away all of this, not take away the first bit. Once the signs are flipped, collecting like terms is ordinary arithmetic.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:250:13"
+      ]
+    },
+    "algx-siblings-expand#43": {
+      "en": "Expand and simplify: &nbsp;(x + 5)(x − 5) − (x − 3)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:275:13"
+      ]
+    },
+    "algx-siblings-expand#44": {
+      "en": "Two shapes you already know, one after the other: the twins make a difference of two squares, and the square makes three terms. Keep the second answer in a bracket until the minus has been dealt with.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:278:13"
+      ]
+    },
+    "algx-siblings-expand#45": {
+      "en": "(x + 5)(x − 5) = x² − 25 &nbsp;&nbsp;and&nbsp;&nbsp; (x − 3)² = x² − 6x + 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:281:37"
+      ]
+    },
+    "algx-siblings-expand#46": {
+      "en": "= x² − 25 − (x² − 6x + 9) = x² − 25 − x² + 6x − 9",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:282:37"
+      ]
+    },
+    "algx-siblings-expand#47": {
+      "en": "∴&nbsp; 6x − 34",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:283:39"
+      ]
+    },
+    "algx-siblings-expand#48": {
+      "en": "REMEMBER: the x² terms cancel. If your answer still has an x² in it, the minus did not reach the whole of the second bracket — check that the + 9 became a − 9.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:285:15"
+      ]
+    },
+    "algx-siblings-expand#49": {
+      "en": "Something surprising happens here and it is the reason the question exists. You start with two squared brackets, so you expect an answer with an x² in it — and then the x² from the first part and the x² from the second part cancel out, leaving something much smaller and much easier. That only happens if the minus is handled properly, so the cancelling is really a check on your sign work. Work in this order: expand the twins with the difference-of-squares shortcut, expand the square with the three-term pattern, write the second answer inside a bracket, flip every sign inside it, then collect. Six x, minus twenty five, minus nine. Thirty four altogether.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:289:13"
+      ]
+    },
+    "algx-siblings-expand#50": {
+      "en": "<em>No calculator.</em><br>Hence calculate the value of &nbsp;105 × 95 − 97².",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:297:13"
+      ]
+    },
+    "algx-siblings-expand#51": {
+      "en": "The word “hence” means you are meant to use the answer to (a), not start again. Look at 105, 95 and 97 and ask what one number they are all sitting close to.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:300:13"
+      ]
+    },
+    "algx-siblings-expand#52": {
+      "en": "105 = 100 + 5, &nbsp;95 = 100 − 5&nbsp; and&nbsp; 97 = 100 − 3, &nbsp;so this is exactly the expression in (a) with x = 100.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:303:37"
+      ]
+    },
+    "algx-siblings-expand#53": {
+      "en": "∴&nbsp; 6(100) − 34 = 600 − 34 = 566",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:304:39"
+      ]
+    },
+    "algx-siblings-expand#54": {
+      "en": "WATCH OUT: “hence” is an instruction, not a suggestion. Multiplying 105 by 95 by hand may get you there, but it is not what the marks are for — and 97² by hand is exactly the kind of long multiplication this question is designed to let you skip.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:306:15"
+      ]
+    },
+    "algx-siblings-expand#55": {
+      "en": "This is the whole reason algebra exists, shown in two lines. Three ugly numbers turn out to be one friendly number wearing three disguises: a hundred plus five, a hundred minus five, and a hundred minus three. Once you spot the hundred, the question you already answered in part (a) does all the work, because the algebra was never about x in particular — it was about any number at all. Substituting a hundred into 6x − 34 takes about two seconds. The habit worth taking away is the noticing. Whenever a no-calculator question hands you numbers clustered around a round hundred or thousand, the examiner is asking you to name that round number and let the algebra swallow the mess.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:310:13"
+      ]
+    },
+    "algx-siblings-expand#56": {
+      "en": "<em>No calculator.</em><br>Expand and simplify, leaving your answer in simplest surd form: &nbsp;(2√3 + 5)(√3 − 4)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:335:13"
+      ]
+    },
+    "algx-siblings-expand#57": {
+      "en": "Expand it exactly like any other pair of brackets — four products. The only new thing is that √3 × √3 is a whole number, so watch for that one collapsing.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:338:13"
+      ]
+    },
+    "algx-siblings-expand#58": {
+      "en": "Four products, exactly as usual: &nbsp;2√3·√3 &nbsp;−&nbsp; 8√3 &nbsp;+&nbsp; 5√3 &nbsp;−&nbsp; 20",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:341:37"
+      ]
+    },
+    "algx-siblings-expand#59": {
+      "en": "√3 · √3 = 3, &nbsp;so&nbsp; 2√3·√3 = 2(3) = 6, &nbsp;and the two surd terms collect: &nbsp;−8√3 + 5√3 = −3√3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:342:37"
+      ]
+    },
+    "algx-siblings-expand#60": {
+      "en": "∴&nbsp; 6 − 20 − 3√3 = −14 − 3√3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:343:39"
+      ]
+    },
+    "algx-siblings-expand#61": {
+      "en": "REMEMBER: only the whole numbers may be added to the whole numbers, and only the √3 terms to the √3 terms. −14 and −3√3 cannot be squashed into one term, so the answer stays as two pieces — that is what “simplest surd form” means here.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:345:15"
+      ]
+    },
+    "algx-siblings-expand#62": {
+      "en": "A surd behaves like a letter right up until two identical surds meet each other. So while you are expanding, treat √3 as if it were an x: 2x times x, 2x times −4, 5 times x, 5 times −4. Now the one place a surd is different. Two of the same root multiplied together undo the root, so √3 times √3 is simply 3 and that term stops being a surd at all. It joins the whole numbers. Everything else keeps its √3 and joins the other surd term. You end with two piles that cannot be mixed — the plain numbers, which give −14, and the √3 pile, which gives −3√3.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:349:13"
+      ]
+    },
+    "algx-siblings-expand#63": {
+      "en": "Expand and simplify: &nbsp;(√7 − √2)²",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:357:13"
+      ]
+    },
+    "algx-siblings-expand#64": {
+      "en": "It is still first squared, minus twice the product, plus last squared. Squaring a square root cancels it — and the middle term needs the surd law that lets two roots become one.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:360:13"
+      ]
+    },
+    "algx-siblings-expand#65": {
+      "en": "Use &nbsp;(a − b)² = a² − 2ab + b², &nbsp;with a = √7 and b = √2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:363:37"
+      ]
+    },
+    "algx-siblings-expand#66": {
+      "en": "= (√7)² − 2(√7)(√2) + (√2)² = 7 − 2√14 + 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:364:37"
+      ]
+    },
+    "algx-siblings-expand#67": {
+      "en": "∴&nbsp; 9 − 2√14",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:365:39"
+      ]
+    },
+    "algx-siblings-expand#68": {
+      "en": "WATCH OUT: (√7 − √2)² is NOT 7 − 2. The middle term is where two of the three marks live. And √7 · √2 = √14, not √9 — roots multiply underneath, they never add.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:367:15"
+      ]
+    },
+    "algx-siblings-expand#69": {
+      "en": "Two rules meet in this one line, and both of them are easy to say out loud. The first: squaring a square root cancels it, so √7 squared is just 7 and √2 squared is just 2. The second: two roots multiplied together join underneath one root sign, so √7 times √2 is √14. Put those into the three-term square pattern and the answer builds itself. The number in front of the middle term is the 2 from the pattern, not anything to do with the 2 under the root — that coincidence catches people, so write the pattern out in letters first and substitute afterwards. Finally, 7 and 2 add to 9, and √14 will not simplify further because 14 has no square factor.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-expand.js:371:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1844
+}
