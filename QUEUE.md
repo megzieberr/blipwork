@@ -20,7 +20,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 ### Exponents & Surds
 - ☑ 2026-10-17 T01 | concepts: the `exp` block (js/concepts/exp.js after S4) | ~860 words | counted by af_extract 2026-10-17
 - ☑ 2026-10-17 T02 | hub rounds: queses1-laws … queses5-surds (5 files) | ~3 420 words | verify page: verify-exp.html
-- ⏳ 2026-10-17 19:37 T03 | hub rounds: queses6-conjugates … queses8-nosolution (3 files) | ~1 692 words | verify page: verify-exp.html
+- ☑ 2026-10-17 T03 | hub rounds: queses6-conjugates … queses8-nosolution (3 files) | ~1 692 words | verify page: verify-exp.html
 - ☑ 2026-10-17 T04 | exam: cards-exp, exp-conjugates-and-rationalising, exp-first-step-and-method (3 files) | ~1 818 words | verify-exam.html
 - ☑ 2026-10-17 T05 | exam: exp-level4, exp-no-solution-and-strategy (2 files) | ~3 266 words | verify-exam.html
 - ☑ 2026-10-17 T06 | exam: exp-siblings-exponent-expressions, exp-siblings-exponential-equations, exp-siblings-rational-exponents-numeric (3 files) | ~3 163 words | verify-exam.html
@@ -28,7 +28,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### Equations & Inequalities
 - ⏳ 2026-10-17 19:40 T08 | concepts: the `eqn` block (js/concepts/eqn.js after S4) | ~1 255 words | counted by af_extract 2026-10-17
-- ☐ T09 | hub rounds: queseq1-zeroproduct … queseq3-kmethod (3 files) | ~3 307 words | verify page: verify-eq.html
+- ⏳ 2026-10-17 19:43 T09 | hub rounds: queseq1-zeroproduct … queseq3-kmethod (3 files) | ~3 307 words | verify page: verify-eq.html
 - ☐ T10 | hub rounds: queseq4-fractions … queseq6-formula (3 files) | ~3 472 words | verify page: verify-eq.html
 - ☐ T11 | hub rounds: queseq7-inequalities … queseq8-nature (2 files) | ~3 446 words | verify page: verify-eq.html
 - ☐ T12 | hub rounds: queseq9-solution-count | ~681 words | verify page: verify-eq.html

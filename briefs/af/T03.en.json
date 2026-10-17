@@ -1,0 +1,2410 @@
+{
+  "unit": "T03",
+  "generated": "2026-10-17T17:38:09.562Z",
+  "files": [
+    "js/quests/queses6-conjugates.js",
+    "js/quests/queses7-ratexp.js",
+    "js/quests/queses8-nosolution.js"
+  ],
+  "items": {
+    "queses6-conjugates#1": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:23:15"
+      ]
+    },
+    "queses6-conjugates#2": {
+      "en": "y",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:23:20"
+      ]
+    },
+    "queses6-conjugates#3": {
+      "en": "a",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:23:25"
+      ]
+    },
+    "queses6-conjugates#4": {
+      "en": "m",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "correct",
+        "placeholder",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:23:30"
+      ]
+    },
+    "queses6-conjugates#5": {
+      "en": "What is the <b>conjugate</b> of √${a} + ${b}?",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:35:14"
+      ]
+    },
+    "queses6-conjugates#6": {
+      "en": "Flip the middle sign: the conjugate of √${a} + ${b} is √${a} − ${b}. (The ${sgn(p)} is the conjugate PRODUCT (√${a}+${b})(√${a}−${b}), not the conjugate itself.)",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses6-conjugates.js:37:16"
+      ]
+    },
+    "queses6-conjugates#7": {
+      "en": "The conjugate keeps BOTH terms exactly as they are — only the middle sign flips",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:39:18"
+      ]
+    },
+    "queses6-conjugates#8": {
+      "en": "Multiplying the two together is what kills the surd: (√${a})² − ${b}² = ${sgn(p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:41:18"
+      ]
+    },
+    "queses6-conjugates#9": {
+      "en": "${sgn(p)} is the PRODUCT, not the conjugate",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:41:106"
+      ]
+    },
+    "queses6-conjugates#10": {
+      "en": "What is the <b>conjugate</b> of √${a} − √${b}?",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:51:14"
+      ]
+    },
+    "queses6-conjugates#11": {
+      "en": "Flip the middle sign: √${a} − √${b} → √${a} + √${b}. (${sgn(p)} is the conjugate PRODUCT (√${a})² − (√${b})², not the conjugate.)",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses6-conjugates.js:53:16"
+      ]
+    },
+    "queses6-conjugates#12": {
+      "en": "Both terms stay where they are — the order does not change and neither term gains a minus",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:55:18"
+      ]
+    },
+    "queses6-conjugates#13": {
+      "en": "Only the middle sign flips: √${a} − √${b} → √${a} + √${b}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:56:18"
+      ]
+    },
+    "queses6-conjugates#14": {
+      "en": "Their product is (√${a})² − (√${b})² = ${a} − ${b} = ${sgn(p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:57:18"
+      ]
+    },
+    "queses6-conjugates#15": {
+      "en": "that is the point of the conjugate — both roots die",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:57:87"
+      ]
+    },
+    "queses6-conjugates#16": {
+      "en": "What is the <b>conjugate</b> of ${b} + √${a}?",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:65:14"
+      ]
+    },
+    "queses6-conjugates#17": {
+      "en": "Same two terms, opposite middle sign: ${b} − √${a}. (${sgn(p)} is the conjugate PRODUCT ${b}² − (√${a})², not the conjugate.)",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses6-conjugates.js:67:16"
+      ]
+    },
+    "queses6-conjugates#18": {
+      "en": "The conjugate keeps both terms and only flips the middle sign",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:69:18"
+      ]
+    },
+    "queses6-conjugates#19": {
+      "en": "the minus goes in the MIDDLE, not in front of the ${b}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:70:52"
+      ]
+    },
+    "queses6-conjugates#20": {
+      "en": "Their product is ${b}² − (√${a})² = ${sgn(p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:71:18"
+      ]
+    },
+    "queses6-conjugates#21": {
+      "en": "no surd left — which is why we use it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:71:70"
+      ]
+    },
+    "queses6-conjugates#22": {
+      "en": "Keep both terms exactly the same; just change the + to − (or − to +).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses6-conjugates.js:77:58"
+      ]
+    },
+    "queses6-conjugates#23": {
+      "en": "Why do we multiply by the conjugate when rationalising a two-term denominator?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses6-conjugates.js:82:5"
+      ]
+    },
+    "queses6-conjugates#24": {
+      "en": "The denominator becomes a difference of squares, so the surd disappears",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses6-conjugates.js:83:5"
+      ]
+    },
+    "queses6-conjugates#25": {
+      "en": "It makes the numerator a perfect square",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:84:6"
+      ]
+    },
+    "queses6-conjugates#26": {
+      "en": "It cancels the whole fraction",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:84:49"
+      ]
+    },
+    "queses6-conjugates#27": {
+      "en": "It changes the value to a whole number",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:84:82"
+      ]
+    },
+    "queses6-conjugates#28": {
+      "en": "(√a + b)(√a − b) = (√a)² − b² — what happens to the root?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses6-conjugates.js:85:13"
+      ]
+    },
+    "queses6-conjugates#29": {
+      "en": "(√a + b)(√a − b) = a − b², a difference of squares with NO surd left on the bottom.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses6-conjugates.js:86:20"
+      ]
+    },
+    "queses6-conjugates#30": {
+      "en": "Multiply the two brackets out: (√a + b)(√a − b) = a − b√a + b√a − b²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:88:14"
+      ]
+    },
+    "queses6-conjugates#31": {
+      "en": "The two middle terms are opposites, so they cancel",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:89:14"
+      ]
+    },
+    "queses6-conjugates#32": {
+      "en": "that only happens because the signs are opposite",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:89:71"
+      ]
+    },
+    "queses6-conjugates#33": {
+      "en": "What is left is a − b² — a plain number with no root in it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:90:14"
+      ]
+    },
+    "queses6-conjugates#34": {
+      "en": "so the denominator is rationalised",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:90:79"
+      ]
+    },
+    "queses6-conjugates#35": {
+      "en": "Simplify <b>(√${a} + ${b})(√${a} − ${b})</b>.",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:104:14"
+      ]
+    },
+    "queses6-conjugates#36": {
+      "en": "Difference of squares: (√${a})² − ${b}² = ${a} − ${b * b} = ${a - b * b}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses6-conjugates.js:106:16"
+      ]
+    },
+    "queses6-conjugates#37": {
+      "en": "Same two terms with opposite middle signs, so the cross terms cancel",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:108:18"
+      ]
+    },
+    "queses6-conjugates#38": {
+      "en": "diff in □'s",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:108:93",
+        "queses6-conjugates.js:123:77",
+        "queses6-conjugates.js:137:73"
+      ]
+    },
+    "queses6-conjugates#39": {
+      "en": "squaring a root undoes it, so no surd survives",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:110:39"
+      ]
+    },
+    "queses6-conjugates#40": {
+      "en": "Simplify <b>(√${a} + √${b})(√${a} − √${b})</b>.",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:119:14"
+      ]
+    },
+    "queses6-conjugates#41": {
+      "en": "Opposite middle signs, so the two cross terms cancel",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:123:18"
+      ]
+    },
+    "queses6-conjugates#42": {
+      "en": "both roots are squared away — the answer is a plain number",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:125:35"
+      ]
+    },
+    "queses6-conjugates#43": {
+      "en": "Simplify <b>(√${v} + ${c})(√${v} − ${c})</b>.",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:133:14"
+      ]
+    },
+    "queses6-conjugates#44": {
+      "en": "Opposite middle signs, so the cross terms cancel",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:137:18"
+      ]
+    },
+    "queses6-conjugates#45": {
+      "en": "The √${v} squared gives just ${v}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:139:18"
+      ]
+    },
+    "queses6-conjugates#46": {
+      "en": "and ${c}² = ${c * c}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:139:58"
+      ]
+    },
+    "queses6-conjugates#47": {
+      "en": "(first)² − (second)² — the cross terms cancel.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses6-conjugates.js:145:58"
+      ]
+    },
+    "queses6-conjugates#48": {
+      "en": "To rationalise <b>${c}/√${a}</b>, multiply top and bottom by:",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses6-conjugates.js:154:20"
+      ]
+    },
+    "queses6-conjugates#49": {
+      "en": "Multiply by the surd over itself — that’s multiplying by 1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses6-conjugates.js:156:15"
+      ]
+    },
+    "queses6-conjugates#50": {
+      "en": "Multiply by √${a}/√${a} (= 1): ${c}/√${a} × √${a}/√${a} = ${c === 1 ? \"\" : c}√${a}/${a}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses6-conjugates.js:157:22"
+      ]
+    },
+    "queses6-conjugates#51": {
+      "en": "The bottom is a single surd, √${a}, so multiply top and bottom by that same surd",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:159:16"
+      ]
+    },
+    "queses6-conjugates#52": {
+      "en": "√${a}/√${a} is just 1, so the VALUE does not change — only the form does",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:160:16"
+      ]
+    },
+    "queses6-conjugates#53": {
+      "en": "√${a} × √${a} = ${a}, so the bottom is rational",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:161:79"
+      ]
+    },
+    "queses6-conjugates#54": {
+      "en": "To rationalise <b>${c}/(${p} + √${a})</b>, multiply top and bottom by:",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:172:14"
+      ]
+    },
+    "queses6-conjugates#55": {
+      "en": "Multiply by the conjugate over itself: (${p} − √${a})/(${p} − √${a}). It must be the SAME thing top and bottom (×1), or the value changes.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses6-conjugates.js:175:16"
+      ]
+    },
+    "queses6-conjugates#56": {
+      "en": "The bottom has TWO terms, so a single surd will not clear it — use the conjugate",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:177:18"
+      ]
+    },
+    "queses6-conjugates#57": {
+      "en": "Conjugate of ${p} + √${a} is ${p} − √${a}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:178:18"
+      ]
+    },
+    "queses6-conjugates#58": {
+      "en": "flip the middle sign only",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:178:66"
+      ]
+    },
+    "queses6-conjugates#59": {
+      "en": "Put it top AND bottom: (${p} − √${a})/(${p} − √${a}) = 1",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:179:18"
+      ]
+    },
+    "queses6-conjugates#60": {
+      "en": "the bottom becomes ${p}² − ${a}, with no surd",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:179:81"
+      ]
+    },
+    "queses6-conjugates#61": {
+      "en": "To rationalise <b>${c}/(√${a} − ${p})</b>, multiply top and bottom by:",
+      "kind": "template",
+      "slots": [
+        "q"
+      ],
+      "where": [
+        "queses6-conjugates.js:186:14"
+      ]
+    },
+    "queses6-conjugates#62": {
+      "en": "Use the conjugate of √${a} − ${p}, which is √${a} + ${p}.",
+      "kind": "template",
+      "slots": [
+        "ans"
+      ],
+      "where": [
+        "queses6-conjugates.js:189:16"
+      ]
+    },
+    "queses6-conjugates#63": {
+      "en": "Two terms on the bottom, so the conjugate is the tool",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:191:18"
+      ]
+    },
+    "queses6-conjugates#64": {
+      "en": "Conjugate of √${a} − ${p} is √${a} + ${p}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:192:18"
+      ]
+    },
+    "queses6-conjugates#65": {
+      "en": "same terms, middle sign flipped",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:192:66"
+      ]
+    },
+    "queses6-conjugates#66": {
+      "en": "Multiply top AND bottom by it, so you are multiplying by 1",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:193:18"
+      ]
+    },
+    "queses6-conjugates#67": {
+      "en": "the bottom becomes ${a} − ${p * p}, with no surd",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:193:83"
+      ]
+    },
+    "queses6-conjugates#68": {
+      "en": "Two terms on the bottom → use the conjugate (flip the middle sign) over itself.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses6-conjugates.js:199:57"
+      ]
+    },
+    "queses6-conjugates#69": {
+      "en": "Multiplying the numerator and denominator by the <b>same</b> surd changes the <b>value</b> of the fraction. True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queses6-conjugates.js:204:5"
+      ]
+    },
+    "queses6-conjugates#70": {
+      "en": "Anything over itself is 1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses6-conjugates.js:206:13"
+      ]
+    },
+    "queses6-conjugates#71": {
+      "en": "False — it’s the same as multiplying by 1, so the value is unchanged; only the form changes.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses6-conjugates.js:206:56"
+      ]
+    },
+    "queses6-conjugates#72": {
+      "en": "Anything over itself equals 1 — √7/√7 = 1, just like 5/5 = 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:208:14"
+      ]
+    },
+    "queses6-conjugates#73": {
+      "en": "Multiplying by 1 cannot change what a number is worth",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:209:14"
+      ]
+    },
+    "queses6-conjugates#74": {
+      "en": "∴ false — only the FORM changes, which is exactly why rationalising is allowed",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:210:14"
+      ]
+    },
+    "queses6-conjugates#75": {
+      "en": "a = ${sgn(A)}, b = ${sgn(B)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses6-conjugates.js:225:27"
+      ]
+    },
+    "queses6-conjugates#76": {
+      "en": "A rationalised answer is <b>${expr}</b>. Written as a + b√c, what are a and b?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses6-conjugates.js:227:20"
+      ]
+    },
+    "queses6-conjugates#77": {
+      "en": "a is the plain (rational) part; b is the number in front of the surd — keep its sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses6-conjugates.js:229:15"
+      ]
+    },
+    "queses6-conjugates#78": {
+      "en": "${expr} = ${sgn(m)} + ${bTerm}·√${r}, so a = ${sgn(m)} and b = ${sgn(n)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses6-conjugates.js:230:22"
+      ]
+    },
+    "queses6-conjugates#79": {
+      "en": "Line the answer up with the pattern a + b√c: ${expr} = ${sgn(m)} + ${bTerm}·√${r}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:232:16"
+      ]
+    },
+    "queses6-conjugates#80": {
+      "en": "a is the plain part with no root on it, so a = ${sgn(m)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:233:16"
+      ]
+    },
+    "queses6-conjugates#81": {
+      "en": "b is the number sitting in front of the root, sign and all, so b = ${sgn(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses6-conjugates.js:234:16"
+      ]
+    },
+    "queses6-conjugates#82": {
+      "en": "c is ${r}, the number INSIDE the root",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses6-conjugates.js:234:99"
+      ]
+    },
+    "queses7-ratexp#1": {
+      "en": "x = ± (two answers)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses7-ratexp.js:12:11"
+      ]
+    },
+    "queses7-ratexp#2": {
+      "en": "exactly one real answer (no ±)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses7-ratexp.js:13:11"
+      ]
+    },
+    "queses7-ratexp#3": {
+      "en": "no real solution",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses7-ratexp.js:14:11"
+      ]
+    },
+    "queses7-ratexp#4": {
+      "en": "only x = 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses7-ratexp.js:15:11"
+      ]
+    },
+    "queses7-ratexp#5": {
+      "en": "x^(2/3) = 4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:19:8"
+      ]
+    },
+    "queses7-ratexp#6": {
+      "en": "Numerator 2 is even and the right side is positive → x = ±8 (two answers).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:19:36"
+      ]
+    },
+    "queses7-ratexp#7": {
+      "en": "x^(2/3) = 9",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:20:8"
+      ]
+    },
+    "queses7-ratexp#8": {
+      "en": "Even numerator, positive right side → x = ±27 (two answers).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:20:36"
+      ]
+    },
+    "queses7-ratexp#9": {
+      "en": "x^(2/5) = 16",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:21:8"
+      ]
+    },
+    "queses7-ratexp#10": {
+      "en": "Even numerator, positive right side → ± two answers.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:21:37"
+      ]
+    },
+    "queses7-ratexp#11": {
+      "en": "x^(3/5) = −2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:22:8"
+      ]
+    },
+    "queses7-ratexp#12": {
+      "en": "Top and bottom both odd → a single real answer, and here it is negative.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:22:37"
+      ]
+    },
+    "queses7-ratexp#13": {
+      "en": "x^(1/3) = −2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:23:8"
+      ]
+    },
+    "queses7-ratexp#14": {
+      "en": "Odd top and odd bottom → one real (negative) answer: x = −8.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:23:37"
+      ]
+    },
+    "queses7-ratexp#15": {
+      "en": "x^(3/7) = −5",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:24:8"
+      ]
+    },
+    "queses7-ratexp#16": {
+      "en": "All odd → one real, negative answer.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:24:37"
+      ]
+    },
+    "queses7-ratexp#17": {
+      "en": "x^(3/2) = 8",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:25:8"
+      ]
+    },
+    "queses7-ratexp#18": {
+      "en": "Odd numerator (3) → one answer: raise to 2/3 → x = 4. The even denominator only means x can’t be negative — it does NOT give ±.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:25:36"
+      ]
+    },
+    "queses7-ratexp#19": {
+      "en": "x^(3/5) = 2",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:26:8"
+      ]
+    },
+    "queses7-ratexp#20": {
+      "en": "Top and bottom both odd → exactly one real answer: x = 2^(5/3) (positive, because the right side is positive).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:26:36"
+      ]
+    },
+    "queses7-ratexp#21": {
+      "en": "x^(1/2) = −5",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:27:8"
+      ]
+    },
+    "queses7-ratexp#22": {
+      "en": "Even root (denominator 2) of a negative → non-real → no solution.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:27:37"
+      ]
+    },
+    "queses7-ratexp#23": {
+      "en": "x^(3/4) = −8",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:28:8"
+      ]
+    },
+    "queses7-ratexp#24": {
+      "en": "Even root (denominator 4) of a negative → no real solution.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:28:37"
+      ]
+    },
+    "queses7-ratexp#25": {
+      "en": "x^(2/5) = −4",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses7-ratexp.js:29:8"
+      ]
+    },
+    "queses7-ratexp#26": {
+      "en": "Even power (numerator 2) can’t equal a negative → no real solution.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "queses7-ratexp.js:29:37"
+      ]
+    },
+    "queses7-ratexp#27": {
+      "en": "Solve <b>${it.e}</b>. What does the solution look like?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses7-ratexp.js:33:60",
+        "queses7-ratexp.js:34:60",
+        "queses7-ratexp.js:35:60"
+      ]
+    },
+    "queses7-ratexp#28": {
+      "en": "Even numerator + positive → ±. All odd → one (can be negative). Even root/power of a negative → none.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses7-ratexp.js:33:177"
+      ]
+    },
+    "queses7-ratexp#29": {
+      "en": "Look at whether the top and bottom of the exponent are odd or even, and the sign of the right side.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses7-ratexp.js:34:177"
+      ]
+    },
+    "queses7-ratexp#30": {
+      "en": "An even root of a negative is non-real; an even power is never negative.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses7-ratexp.js:35:177"
+      ]
+    },
+    "queses7-ratexp#31": {
+      "en": "To solve <b>x^(${p}/${q}) = ${k}</b>, raise both sides to the power:",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses7-ratexp.js:49:20"
+      ]
+    },
+    "queses7-ratexp#32": {
+      "en": "Multiply the exponent by its reciprocal so it becomes 1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses7-ratexp.js:51:15"
+      ]
+    },
+    "queses7-ratexp#33": {
+      "en": "Use the reciprocal of ${p}/${q}, which is ${q}/${p}; then (${p}/${q})·(${q}/${p}) = 1 and x is on its own.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses7-ratexp.js:52:22"
+      ]
+    },
+    "queses7-ratexp#34": {
+      "en": "x is stuck under the exponent ${p}/${q}, so you need a power that cancels it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:54:16"
+      ]
+    },
+    "queses7-ratexp#35": {
+      "en": "Switch the numerator and denominator: the reciprocal of ${p}/${q} is ${q}/${p}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:55:16"
+      ]
+    },
+    "queses7-ratexp#36": {
+      "en": "Raising to that power gives (${p}/${q})·(${q}/${p}) = 1, so x¹ = x stands alone",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:56:16"
+      ]
+    },
+    "queses7-ratexp#37": {
+      "en": "then the right side becomes ${k}^(${q}/${p})",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses7-ratexp.js:57:16"
+      ]
+    },
+    "queses7-ratexp#38": {
+      "en": "Why do we raise both sides to the <b>reciprocal</b> of the exponent?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses7-ratexp.js:63:5"
+      ]
+    },
+    "queses7-ratexp#39": {
+      "en": "So the exponents multiply to 1 and x is left on its own",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses7-ratexp.js:64:5"
+      ]
+    },
+    "queses7-ratexp#40": {
+      "en": "To make the right side a whole number",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses7-ratexp.js:65:6"
+      ]
+    },
+    "queses7-ratexp#41": {
+      "en": "To change x into a surd",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses7-ratexp.js:65:47"
+      ]
+    },
+    "queses7-ratexp#42": {
+      "en": "To remove the negative sign",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses7-ratexp.js:65:74"
+      ]
+    },
+    "queses7-ratexp#43": {
+      "en": "(p/q) × (q/p) = ?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses7-ratexp.js:66:13"
+      ]
+    },
+    "queses7-ratexp#44": {
+      "en": "(p/q)·(q/p) = 1, so x¹ = x is isolated.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses7-ratexp.js:66:47"
+      ]
+    },
+    "queses7-ratexp#45": {
+      "en": "Raising a power to a power MULTIPLIES the exponents: (x^(p/q))^(q/p) = x^((p/q)·(q/p))",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:68:14"
+      ]
+    },
+    "queses7-ratexp#46": {
+      "en": "A fraction times its own reciprocal is 1, because the tops and bottoms cancel",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:69:14"
+      ]
+    },
+    "queses7-ratexp#47": {
+      "en": "So the exponent becomes 1 and you are left with plain x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:70:14"
+      ]
+    },
+    "queses7-ratexp#48": {
+      "en": "that is the only reason the reciprocal is chosen",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses7-ratexp.js:70:76"
+      ]
+    },
+    "queses7-ratexp#49": {
+      "en": "An <b>even root</b> of a <b>negative</b> number (like x^(1/2) = −4) gives a non-real result, so there is no real solution. True or false?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queses7-ratexp.js:75:5"
+      ]
+    },
+    "queses7-ratexp#50": {
+      "en": "Can the square root of a negative be a real number?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses7-ratexp.js:77:13"
+      ]
+    },
+    "queses7-ratexp#51": {
+      "en": "True — an even root of a negative is non-real, so the equation has no real solution.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses7-ratexp.js:77:81"
+      ]
+    },
+    "queses7-ratexp#52": {
+      "en": "x^(1/2) means √x, and the 2 underneath is an EVEN root",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:79:14"
+      ]
+    },
+    "queses7-ratexp#53": {
+      "en": "Squaring any real number gives a positive answer, so no real number squares back to a negative",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:80:14"
+      ]
+    },
+    "queses7-ratexp#54": {
+      "en": "∴ true — the even root of a negative is non-real, so there is no real solution",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses7-ratexp.js:81:14"
+      ]
+    },
+    "queses7-ratexp#55": {
+      "en": "an ODD root would be fine: ³√(−8) = −2",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses7-ratexp.js:82:14"
+      ]
+    },
+    "queses8-nosolution#1": {
+      "en": "To solve <b>${upw(b, \"x\")} = ${v}</b>, what is the plan?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses8-nosolution.js:29:7"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#2": {
+      "en": "Write both sides with the same base, then equate the exponents",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:30:7"
+      ]
+    },
+    "queses8-nosolution#3": {
+      "en": "Take the square root of both sides",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:31:8"
+      ]
+    },
+    "queses8-nosolution#4": {
+      "en": "Divide both sides by x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:31:46"
+      ]
+    },
+    "queses8-nosolution#5": {
+      "en": "Subtract ${v} from both sides",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:31:72"
+      ]
+    },
+    "queses8-nosolution#6": {
+      "en": "Make the “guns” (bases) the same; once they match, the bases fall away and the exponents are equal.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses8-nosolution.js:32:15"
+      ]
+    },
+    "queses8-nosolution#7": {
+      "en": "${upw(b, \"x\")} = ${upw(b, n)} → equate the exponents → x = ${n}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:33:22"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#8": {
+      "en": "Write ${v} as a power of the same base: ${v} = ${upw(b, n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:35:16"
+      ]
+    },
+    "queses8-nosolution#9": {
+      "en": "prime factors first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:35:82"
+      ]
+    },
+    "queses8-nosolution#10": {
+      "en": "Now it reads ${upw(b, \"x\")} = ${upw(b, n)} — the guns are equal, so they shoot each other",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:36:16"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#11": {
+      "en": "The helmets fall to the ground: x = ${n}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:37:16"
+      ]
+    },
+    "queses8-nosolution#12": {
+      "en": "same bases → equate the exponents",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:37:63"
+      ]
+    },
+    "queses8-nosolution#13": {
+      "en": "Solve <b>${upw(b, \"x\")} = −${v}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses8-nosolution.js:46:21"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#14": {
+      "en": "No solution",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:46:61"
+      ]
+    },
+    "queses8-nosolution#15": {
+      "en": "x = ${n}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:47:8"
+      ]
+    },
+    "queses8-nosolution#16": {
+      "en": "x = −${n}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:47:20"
+      ]
+    },
+    "queses8-nosolution#17": {
+      "en": "x = ${n + 1}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:47:33"
+      ]
+    },
+    "queses8-nosolution#18": {
+      "en": "What values can a positive base raised to a power take? Can it ever be negative?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses8-nosolution.js:48:15"
+      ]
+    },
+    "queses8-nosolution#19": {
+      "en": "No solution — a positive base (${upw(b, \"x\")}) is always positive, so it can never equal −${v}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:49:22"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#20": {
+      "en": "Look at the left side on its own: ${b} is a positive base",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:51:16"
+      ]
+    },
+    "queses8-nosolution#21": {
+      "en": "A positive base gives a positive answer for EVERY x — a big x makes it huge, a negative x makes it a small fraction, but it never turns negative",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:52:16"
+      ]
+    },
+    "queses8-nosolution#22": {
+      "en": "${upw(b, \"x\")} ≠ −${v} ∴ no solution",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:53:16"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#23": {
+      "en": "her word for this one: no solution — not undefined, not non-real",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:53:59"
+      ]
+    },
+    "queses8-nosolution#24": {
+      "en": "2ˣ⁺¹ + 2ˣ = 192",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses8-nosolution.js:60:12"
+      ]
+    },
+    "queses8-nosolution#25": {
+      "en": "Common factor (take out 2ˣ)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:60:40"
+      ]
+    },
+    "queses8-nosolution#26": {
+      "en": "Difference of squares",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:60:80",
+        "queses8-nosolution.js:68:135"
+      ]
+    },
+    "queses8-nosolution#27": {
+      "en": "Equate the exponents directly",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:60:105",
+        "queses8-nosolution.js:64:102",
+        "queses8-nosolution.js:68:102"
+      ]
+    },
+    "queses8-nosolution#28": {
+      "en": "Square both sides",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:60:138",
+        "queses8-nosolution.js:64:135"
+      ]
+    },
+    "queses8-nosolution#29": {
+      "en": "Both terms contain 2ˣ → 2ˣ(2 + 1) = 192.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:60:165"
+      ]
+    },
+    "queses8-nosolution#30": {
+      "en": "There is a + between the terms, so no law fires yet — it has to be factorised",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:61:20"
+      ]
+    },
+    "queses8-nosolution#31": {
+      "en": "Divorce the first power: 2ˣ⁺¹ = 2ˣ·2¹",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:62:20"
+      ]
+    },
+    "queses8-nosolution#32": {
+      "en": "split x^(a+b) into xᵃ·xᵇ",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:62:64"
+      ]
+    },
+    "queses8-nosolution#33": {
+      "en": "Both terms now carry 2ˣ, so take it out: 2ˣ(2 + 1) = 192",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:63:20"
+      ]
+    },
+    "queses8-nosolution#34": {
+      "en": "common factor — always the base with the variable exponent",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:63:83"
+      ]
+    },
+    "queses8-nosolution#35": {
+      "en": "3²ˣ + 6·3ˣ − 27 = 0",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses8-nosolution.js:64:12"
+      ]
+    },
+    "queses8-nosolution#36": {
+      "en": "Let k = 3ˣ (trinomial)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:64:44"
+      ]
+    },
+    "queses8-nosolution#37": {
+      "en": "Common factor of 27",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:64:79"
+      ]
+    },
+    "queses8-nosolution#38": {
+      "en": "Three terms in 3ˣ → let k = 3ˣ → k² + 6k − 27 = 0.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:64:162"
+      ]
+    },
+    "queses8-nosolution#39": {
+      "en": "Count the terms: three of them, and 3²ˣ is the square of 3ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:65:20"
+      ]
+    },
+    "queses8-nosolution#40": {
+      "en": "That is the K², K, constant shape — so let K = 3ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:66:20"
+      ]
+    },
+    "queses8-nosolution#41": {
+      "en": "It becomes K² + 6K − 27 = 0, an ordinary trinomial",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:67:20"
+      ]
+    },
+    "queses8-nosolution#42": {
+      "en": "factorise it, then always substitute back to x",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:67:77"
+      ]
+    },
+    "queses8-nosolution#43": {
+      "en": "2²ˣ⁺² − 5·2ˣ + 1 = 0",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queses8-nosolution.js:68:12"
+      ]
+    },
+    "queses8-nosolution#44": {
+      "en": "Let k = 2ˣ (trinomial)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:68:45"
+      ]
+    },
+    "queses8-nosolution#45": {
+      "en": "Common factor of 1",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:68:80"
+      ]
+    },
+    "queses8-nosolution#46": {
+      "en": "Rewrite as 4·2²ˣ − 5·2ˣ + 1; let k = 2ˣ → 4k² − 5k + 1 = 0.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:68:166"
+      ]
+    },
+    "queses8-nosolution#47": {
+      "en": "Divorce the + 2 out of the exponent first: 2²ˣ⁺² = 2²ˣ·2² = 4·2²ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:69:20"
+      ]
+    },
+    "queses8-nosolution#48": {
+      "en": "The three terms are now 4·2²ˣ − 5·2ˣ + 1, and 2²ˣ is the square of 2ˣ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:70:20"
+      ]
+    },
+    "queses8-nosolution#49": {
+      "en": "let K = 2ˣ → 4K² − 5K + 1 = 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:71:20"
+      ]
+    },
+    "queses8-nosolution#50": {
+      "en": "a trinomial in K, then substitute back",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:71:56"
+      ]
+    },
+    "queses8-nosolution#51": {
+      "en": "Which method solves <b>${it.e}</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses8-nosolution.js:74:21"
+      ]
+    },
+    "queses8-nosolution#52": {
+      "en": "A + or − between terms means factorise: common factor (shared power) or trinomial (let k = baseˣ).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses8-nosolution.js:75:15"
+      ]
+    },
+    "queses8-nosolution#53": {
+      "en": "Solving a trinomial gives <b>k = ${r}</b> or <b>k = −${s}</b>, where k = ${upw(b, \"x\")}. Both give a value of x. True or false?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queses8-nosolution.js:84:7"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#54": {
+      "en": "Can ${upw(b, \"x\")} equal a negative number?",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses8-nosolution.js:86:15"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#55": {
+      "en": "False — ${upw(b, \"x\")} is always positive, so k = −${s} is rejected. Only ${upw(b, \"x\")} = ${r} gives a solution.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:87:22"
+      ],
+      "nested": [
+        "x",
+        "x"
+      ]
+    },
+    "queses8-nosolution#56": {
+      "en": "Substitute back — stopping at k loses the mark. The two branches read ${upw(b, \"x\")} = ${r} and ${upw(b, \"x\")} = −${s}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:89:16"
+      ],
+      "nested": [
+        "x",
+        "x"
+      ]
+    },
+    "queses8-nosolution#57": {
+      "en": "${b} is a positive base, so ${upw(b, \"x\")} can never come out negative",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:90:16"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#58": {
+      "en": "${upw(b, \"x\")} ≠ −${s} ∴ no solution on that branch",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:90:93"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#59": {
+      "en": "∴ false — only ${upw(b, \"x\")} = ${r} survives",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:91:16"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queses8-nosolution#60": {
+      "en": "Solve <b>√(x − ${c}) + ${d} = 0</b>. What happens?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses8-nosolution.js:99:7"
+      ]
+    },
+    "queses8-nosolution#61": {
+      "en": "Isolate the root → √(x − ${c}) = −${d} → no solution (a root can’t be negative)",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:100:7"
+      ]
+    },
+    "queses8-nosolution#62": {
+      "en": "Square both sides to get x − ${c} = ${d * d}, so x = ${c + d * d}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:101:8"
+      ]
+    },
+    "queses8-nosolution#63": {
+      "en": "x = ${c}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:101:77"
+      ]
+    },
+    "queses8-nosolution#64": {
+      "en": "x = ${sgn(c - d * d)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:101:89"
+      ]
+    },
+    "queses8-nosolution#65": {
+      "en": "Get the root alone first, then look at the sign on the other side.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses8-nosolution.js:102:15"
+      ]
+    },
+    "queses8-nosolution#66": {
+      "en": "√(x − ${c}) = −${d} is impossible (a square root is never negative) → no solution.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:103:22"
+      ]
+    },
+    "queses8-nosolution#67": {
+      "en": "Isolate the root first — always: √(x − ${c}) = −${d}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:105:16"
+      ]
+    },
+    "queses8-nosolution#68": {
+      "en": "Now look at the sign BEFORE squaring anything: a square-root sign never gives a negative answer",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:106:16"
+      ]
+    },
+    "queses8-nosolution#69": {
+      "en": "∴ no solution",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:107:16"
+      ]
+    },
+    "queses8-nosolution#70": {
+      "en": "square first and you get a false answer that the test then has to throw out",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:107:36"
+      ]
+    },
+    "queses8-nosolution#71": {
+      "en": "After squaring both sides of a surd equation, what must you <b>always</b> do?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses8-nosolution.js:113:5"
+      ]
+    },
+    "queses8-nosolution#72": {
+      "en": "Test every answer in the original equation and reject the extraneous ones",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:114:5"
+      ]
+    },
+    "queses8-nosolution#73": {
+      "en": "Square the answers again",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:115:6"
+      ]
+    },
+    "queses8-nosolution#74": {
+      "en": "Add the two answers together",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:115:34"
+      ]
+    },
+    "queses8-nosolution#75": {
+      "en": "Take the square root of the answers",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:115:66"
+      ]
+    },
+    "queses8-nosolution#76": {
+      "en": "Squaring can introduce answers that don’t actually fit the original.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses8-nosolution.js:116:13"
+      ]
+    },
+    "queses8-nosolution#77": {
+      "en": "Always substitute back into the original — squaring can create extraneous (false) answers.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:117:20"
+      ]
+    },
+    "queses8-nosolution#78": {
+      "en": "Squaring hides signs: 3 ≠ −3, but 3² = (−3)²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:119:14"
+      ]
+    },
+    "queses8-nosolution#79": {
+      "en": "so a squared equation can pick up answers the original never had",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:119:65"
+      ]
+    },
+    "queses8-nosolution#80": {
+      "en": "Put each answer back into the ORIGINAL equation and work out both sides",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:120:14"
+      ]
+    },
+    "queses8-nosolution#81": {
+      "en": "Join them with = if it checks, and mark the failing one N.A. with a struck ≠",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:121:14"
+      ]
+    },
+    "queses8-nosolution#82": {
+      "en": "her words: ALWAYS test both answers!! — it is a marked step, not an optional check",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:121:97"
+      ]
+    },
+    "queses8-nosolution#83": {
+      "en": "For what values of x is <b>√x</b> a real number?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queses8-nosolution.js:126:5"
+      ]
+    },
+    "queses8-nosolution#84": {
+      "en": "x ≥ 0",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queses8-nosolution.js:127:5"
+      ]
+    },
+    "queses8-nosolution#85": {
+      "en": "x &gt; 0 only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:128:6"
+      ]
+    },
+    "queses8-nosolution#86": {
+      "en": "x ≤ 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:128:23"
+      ]
+    },
+    "queses8-nosolution#87": {
+      "en": "all real x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queses8-nosolution.js:128:32"
+      ]
+    },
+    "queses8-nosolution#88": {
+      "en": "You can take the square root of 0 and of positives, but not of negatives.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queses8-nosolution.js:129:13"
+      ]
+    },
+    "queses8-nosolution#89": {
+      "en": "√x is real for x ≥ 0 (including 0); a negative inside an even root is non-real.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queses8-nosolution.js:130:20"
+      ]
+    },
+    "queses8-nosolution#90": {
+      "en": "√x asks for the number that squares back to x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:132:14"
+      ]
+    },
+    "queses8-nosolution#91": {
+      "en": "Squaring any real number gives 0 or a positive, so a negative x has no real root",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:133:14"
+      ]
+    },
+    "queses8-nosolution#92": {
+      "en": "non-real",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:133:101"
+      ]
+    },
+    "queses8-nosolution#93": {
+      "en": "x = 0 works, because √0 = 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queses8-nosolution.js:134:14"
+      ]
+    },
+    "queses8-nosolution#94": {
+      "en": "∴ x ≥ 0, with the 0 included — not x > 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queses8-nosolution.js:134:48"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1726,
+  "skippedLists": [
+    "queses6-conjugates.js:VARS [x, y, a, m]"
+  ]
+}
