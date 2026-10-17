@@ -1,0 +1,3118 @@
+{
+  "unit": "T25",
+  "generated": "2026-10-17T18:14:21.084Z",
+  "files": [
+    "js/quests/questag1-formulas.js",
+    "js/quests/questag2-gradient.js",
+    "js/quests/questag3-parallel-perp.js",
+    "js/quests/questag4-inclination.js",
+    "js/quests/questag5-perp-bisector.js",
+    "js/quests/questag6-triangle-area.js",
+    "js/quests/questag7-mixed.js"
+  ],
+  "items": {
+    "questag1-formulas#1": {
+      "en": "AB = √[(x<sub>B</sub> − x<sub>A</sub>)² + (y<sub>B</sub> − y<sub>A</sub>)²]",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:17:13"
+      ]
+    },
+    "questag1-formulas#2": {
+      "en": "M = ( (x<sub>A</sub> + x<sub>B</sub>)/2 ; (y<sub>A</sub> + y<sub>B</sub>)/2 )",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:18:13"
+      ]
+    },
+    "questag1-formulas#3": {
+      "en": "m = (y<sub>B</sub> − y<sub>A</sub>) / (x<sub>B</sub> − x<sub>A</sub>)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:19:13"
+      ]
+    },
+    "questag1-formulas#4": {
+      "en": "the <b>length</b> of line AB",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag1-formulas.js:37:12"
+      ]
+    },
+    "questag1-formulas#5": {
+      "en": "distance",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag1-formulas.js:37:49"
+      ],
+      "data": true
+    },
+    "questag1-formulas#6": {
+      "en": "the <b>midpoint</b> of AB",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag1-formulas.js:38:12"
+      ]
+    },
+    "questag1-formulas#7": {
+      "en": "midpoint",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag1-formulas.js:38:46"
+      ],
+      "data": true
+    },
+    "questag1-formulas#8": {
+      "en": "the <b>gradient</b> (slope) of AB",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag1-formulas.js:39:12"
+      ]
+    },
+    "questag1-formulas#9": {
+      "en": "gradient",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag1-formulas.js:39:54"
+      ],
+      "data": true
+    },
+    "questag1-formulas#10": {
+      "en": "Which formula would you use to find ${j.q}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:43:31"
+      ]
+    },
+    "questag1-formulas#11": {
+      "en": "Length → distance. Halfway point → midpoint. Steepness → gradient.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag1-formulas.js:46:15"
+      ]
+    },
+    "questag1-formulas#12": {
+      "en": "Use the ${j.key} formula.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag1-formulas.js:47:22"
+      ]
+    },
+    "questag1-formulas#13": {
+      "en": "The <b>distance</b> between two points is…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:53:12"
+      ]
+    },
+    "questag1-formulas#14": {
+      "en": "a length — one positive number (in units)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questag1-formulas.js:53:61"
+      ]
+    },
+    "questag1-formulas#15": {
+      "en": "a coordinate (x ; y)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:53:110",
+        "questag1-formulas.js:54:55",
+        "questag1-formulas.js:55:94"
+      ]
+    },
+    "questag1-formulas#16": {
+      "en": "an angle in degrees",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:53:134"
+      ]
+    },
+    "questag1-formulas#17": {
+      "en": "The <b>midpoint</b> of a segment is…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:54:12"
+      ]
+    },
+    "questag1-formulas#18": {
+      "en": "a single length",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:54:83"
+      ]
+    },
+    "questag1-formulas#19": {
+      "en": "a gradient (a slope number)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:54:102"
+      ]
+    },
+    "questag1-formulas#20": {
+      "en": "A <b>gradient</b> is…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:55:12"
+      ]
+    },
+    "questag1-formulas#21": {
+      "en": "a number that tells you the slope (rise ÷ run)",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questag1-formulas.js:55:40"
+      ]
+    },
+    "questag1-formulas#22": {
+      "en": "a length in units",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:55:118"
+      ]
+    },
+    "questag1-formulas#23": {
+      "en": "Distance → a length. Midpoint → a point. Gradient → a slope number.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag1-formulas.js:59:15"
+      ]
+    },
+    "questag1-formulas#24": {
+      "en": "On the formula sheet, lower-case <b>m</b> stands for…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:65:12"
+      ]
+    },
+    "questag1-formulas#25": {
+      "en": "the gradient",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:65:72",
+        "questag1-formulas.js:66:89"
+      ]
+    },
+    "questag1-formulas#26": {
+      "en": "the midpoint",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:65:92",
+        "questag1-formulas.js:66:69"
+      ]
+    },
+    "questag1-formulas#27": {
+      "en": "a length",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:65:108",
+        "questag1-formulas.js:66:105"
+      ]
+    },
+    "questag1-formulas#28": {
+      "en": "an angle",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:65:120"
+      ]
+    },
+    "questag1-formulas#29": {
+      "en": "On the formula sheet, capital <b>M</b> stands for…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:66:12"
+      ]
+    },
+    "questag1-formulas#30": {
+      "en": "the maximum",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:66:117"
+      ]
+    },
+    "questag1-formulas#31": {
+      "en": "Small m = gradient (m for ‘slope’). Big M = Midpoint.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag1-formulas.js:69:15"
+      ]
+    },
+    "questag1-formulas#32": {
+      "en": "To find the length of a circle’s <b>radius</b>, you use the…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:75:12"
+      ]
+    },
+    "questag1-formulas#33": {
+      "en": "distance formula",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:75:79",
+        "questag1-formulas.js:76:119",
+        "questag1-formulas.js:78:90"
+      ]
+    },
+    "questag1-formulas#34": {
+      "en": "midpoint formula",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:75:103",
+        "questag1-formulas.js:76:95",
+        "questag1-formulas.js:78:114"
+      ]
+    },
+    "questag1-formulas#35": {
+      "en": "gradient formula",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:75:123",
+        "questag1-formulas.js:76:139",
+        "questag1-formulas.js:78:134"
+      ]
+    },
+    "questag1-formulas#36": {
+      "en": "The <b>centre</b> of a circle is the midpoint of a diameter, so you use the…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:76:12"
+      ]
+    },
+    "questag1-formulas#37": {
+      "en": "To check whether two lines are <b>parallel</b>, you compare their…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:77:12"
+      ]
+    },
+    "questag1-formulas#38": {
+      "en": "gradients",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct"
+      ],
+      "where": [
+        "questag1-formulas.js:77:85"
+      ]
+    },
+    "questag1-formulas#39": {
+      "en": "lengths",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:77:102"
+      ]
+    },
+    "questag1-formulas#40": {
+      "en": "midpoints",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:77:113"
+      ]
+    },
+    "questag1-formulas#41": {
+      "en": "To prove a triangle is <b>isosceles</b> (two equal sides), you use the…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:78:12"
+      ]
+    },
+    "questag1-formulas#42": {
+      "en": "Ask: am I after a length, a point, or a slope?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag1-formulas.js:82:15"
+      ]
+    },
+    "questag1-formulas#43": {
+      "en": "In the gradient formula, if you write <b>y<sub>A</sub></b> first on the top, what must you write first on the bottom?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:88:7"
+      ]
+    },
+    "questag1-formulas#44": {
+      "en": "x<sub>A</sub> (keep the same point first top and bottom)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag1-formulas.js:89:7"
+      ]
+    },
+    "questag1-formulas#45": {
+      "en": "x<sub>B</sub> (swap the order)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:90:8"
+      ]
+    },
+    "questag1-formulas#46": {
+      "en": "either one — order never matters",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:90:42"
+      ]
+    },
+    "questag1-formulas#47": {
+      "en": "the bigger x-value",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:90:78"
+      ]
+    },
+    "questag1-formulas#48": {
+      "en": "Keep the points in the SAME order top and bottom, or the sign of the gradient flips.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag1-formulas.js:91:15"
+      ]
+    },
+    "questag1-formulas#49": {
+      "en": "x<sub>A</sub> — same point first, top and bottom.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag1-formulas.js:92:22"
+      ]
+    },
+    "questag1-formulas#50": {
+      "en": "P",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:102:18"
+      ]
+    },
+    "questag1-formulas#51": {
+      "en": "Q",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:102:23"
+      ]
+    },
+    "questag1-formulas#52": {
+      "en": "R",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag1-formulas.js:102:28"
+      ]
+    },
+    "questag1-formulas#53": {
+      "en": "Which point is at <b>${ptStr(target.p)}</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag1-formulas.js:108:31"
+      ]
+    },
+    "questag1-formulas#54": {
+      "en": "Count across for x, then up/down for y.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag1-formulas.js:111:15"
+      ]
+    },
+    "questag1-formulas#55": {
+      "en": "${target.id} is at ${ptStr(target.p)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag1-formulas.js:112:22"
+      ]
+    },
+    "questag2-gradient#1": {
+      "en": "zero",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questag2-gradient.js:17:16",
+        "questag2-gradient.js:31:59",
+        "questag2-gradient.js:36:38",
+        "questag2-gradient.js:67:32"
+      ],
+      "data": true
+    },
+    "questag2-gradient#2": {
+      "en": "positive",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questag2-gradient.js:31:24"
+      ]
+    },
+    "questag2-gradient#3": {
+      "en": "negative",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questag2-gradient.js:31:41",
+        "questag2-gradient.js:78:25"
+      ]
+    },
+    "questag2-gradient#4": {
+      "en": "undefined",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questag2-gradient.js:31:74",
+        "questag2-gradient.js:69:8",
+        "questag2-gradient.js:77:81"
+      ]
+    },
+    "questag2-gradient#5": {
+      "en": "Look at the line. Its gradient is…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:40:31"
+      ]
+    },
+    "questag2-gradient#6": {
+      "en": "Read left → right. Going up = positive, down = negative, flat = 0, straight up = undefined.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:42:15"
+      ]
+    },
+    "questag2-gradient#7": {
+      "en": "The gradient is ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:43:22"
+      ]
+    },
+    "questag2-gradient#8": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag2-gradient.js:55:39"
+      ]
+    },
+    "questag2-gradient#9": {
+      "en": "B",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag2-gradient.js:55:44"
+      ]
+    },
+    "questag2-gradient#10": {
+      "en": "Which line has a <b>${KINDLAB[want]}</b> gradient?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:58:7"
+      ]
+    },
+    "questag2-gradient#11": {
+      "en": "Line ${letter[want]}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag2-gradient.js:59:7"
+      ]
+    },
+    "questag2-gradient#12": {
+      "en": "Line ${letter[want === \"pos\" ? \"neg\" : \"pos\"]}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:59:32"
+      ],
+      "nested": [
+        "pos",
+        "neg",
+        "pos"
+      ]
+    },
+    "questag2-gradient#13": {
+      "en": "A positive-gradient line rises ↗ and a negative one falls ↘ as you read left → right.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:61:15"
+      ]
+    },
+    "questag2-gradient#14": {
+      "en": "Line ${letter[want]} — the ${KINDLAB[want]}-gradient line ${want === \"pos\" ? \"rises ↗\" : \"falls ↘\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:62:22"
+      ],
+      "nested": [
+        "pos",
+        "rises ↗",
+        "falls ↘"
+      ]
+    },
+    "questag2-gradient#15": {
+      "en": "A <b>horizontal</b> line has a gradient of…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:68:31"
+      ]
+    },
+    "questag2-gradient#16": {
+      "en": "0 (zero)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:68:78",
+        "questag2-gradient.js:78:8"
+      ]
+    },
+    "questag2-gradient#17": {
+      "en": "a very big number",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:69:26"
+      ]
+    },
+    "questag2-gradient#18": {
+      "en": "No rise, only run → 0 ÷ run = 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:71:15"
+      ]
+    },
+    "questag2-gradient#19": {
+      "en": "Horizontal → gradient 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:71:64"
+      ]
+    },
+    "questag2-gradient#20": {
+      "en": "A <b>vertical</b> line has a gradient that is…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:77:31"
+      ]
+    },
+    "questag2-gradient#21": {
+      "en": "No run → you would divide by 0, which is undefined.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:80:15"
+      ]
+    },
+    "questag2-gradient#22": {
+      "en": "Vertical → undefined gradient.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:80:83"
+      ]
+    },
+    "questag2-gradient#23": {
+      "en": "Which line has gradient <b>0</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:86:7"
+      ]
+    },
+    "questag2-gradient#24": {
+      "en": "a horizontal line",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag2-gradient.js:86:44"
+      ]
+    },
+    "questag2-gradient#25": {
+      "en": "a vertical line",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:87:8"
+      ]
+    },
+    "questag2-gradient#26": {
+      "en": "a line at 45°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:87:27"
+      ]
+    },
+    "questag2-gradient#27": {
+      "en": "every straight line",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:87:44"
+      ]
+    },
+    "questag2-gradient#28": {
+      "en": "Horizontal = flat = 0. Vertical = undefined (divide by zero).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:88:15"
+      ]
+    },
+    "questag2-gradient#29": {
+      "en": "A horizontal line has gradient 0 (a vertical line is undefined).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:89:22"
+      ]
+    },
+    "questag2-gradient#30": {
+      "en": "falls ↘",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag2-gradient.js:98:31"
+      ]
+    },
+    "questag2-gradient#31": {
+      "en": "rises ↗",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag2-gradient.js:98:43"
+      ]
+    },
+    "questag2-gradient#32": {
+      "en": "A line with a <b>${negative ? \"negative\" : \"positive\"}</b> gradient <b>${saysFalls ? \"falls\" : \"rises\"}</b> as you read from left to right. True?",
+      "kind": "template",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:100:7"
+      ],
+      "nested": [
+        "negative",
+        "positive",
+        "falls",
+        "rises"
+      ]
+    },
+    "questag2-gradient#33": {
+      "en": "Positive gradient climbs ↗, negative gradient drops ↘.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:102:15"
+      ]
+    },
+    "questag2-gradient#34": {
+      "en": "Yes — a ${negative ? \"negative\" : \"positive\"} gradient ${really}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:104:13"
+      ],
+      "nested": [
+        "negative",
+        "positive"
+      ]
+    },
+    "questag2-gradient#35": {
+      "en": "No — a ${negative ? \"negative\" : \"positive\"} gradient ${really}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:105:13"
+      ],
+      "nested": [
+        "negative",
+        "positive"
+      ]
+    },
+    "questag2-gradient#36": {
+      "en": "A${ptStr(A)} and B${ptStr(B)} lie on a line. The gradient of AB is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:122:7"
+      ]
+    },
+    "questag2-gradient#37": {
+      "en": "m = (y<sub>B</sub> − y<sub>A</sub>) / (x<sub>B</sub> − x<sub>A</sub>) — keep the points in the SAME order top and bottom.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:128:15"
+      ]
+    },
+    "questag2-gradient#38": {
+      "en": "m<sub>AB</sub> = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:129:22"
+      ]
+    },
+    "questag2-gradient#39": {
+      "en": "m<sub>AB</sub> = (y<sub>B</sub> − y<sub>A</sub>) / (x<sub>B</sub> − x<sub>A</sub>)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questag2-gradient.js:131:16"
+      ]
+    },
+    "questag2-gradient#40": {
+      "en": "substitute B then A, top and bottom",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questag2-gradient.js:132:90"
+      ]
+    },
+    "questag2-gradient#41": {
+      "en": "Which line is <b>steeper</b>: one with gradient ${show(g1)} or one with gradient ${show(g2)}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag2-gradient.js:146:7"
+      ]
+    },
+    "questag2-gradient#42": {
+      "en": "gradient ${show(steeper)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag2-gradient.js:147:7"
+      ]
+    },
+    "questag2-gradient#43": {
+      "en": "gradient ${show(steeper === g1 ? g2 : g1)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:147:37"
+      ]
+    },
+    "questag2-gradient#44": {
+      "en": "they are equally steep",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag2-gradient.js:147:83"
+      ]
+    },
+    "questag2-gradient#45": {
+      "en": "Steepness is about the SIZE of the gradient — ignore the minus sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag2-gradient.js:148:15"
+      ]
+    },
+    "questag2-gradient#46": {
+      "en": "Gradient ${show(steeper)} is steeper (bigger size, ignoring the sign).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag2-gradient.js:149:22"
+      ]
+    },
+    "questag3-parallel-perp#1": {
+      "en": "Two lines have gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b>. Are the lines <b>parallel</b>?",
+      "kind": "template",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:50:7"
+      ]
+    },
+    "questag3-parallel-perp#2": {
+      "en": "Parallel lines have EQUAL gradients.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:52:15"
+      ]
+    },
+    "questag3-parallel-perp#3": {
+      "en": "Yes — equal gradients, so parallel.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:53:28"
+      ]
+    },
+    "questag3-parallel-perp#4": {
+      "en": "No — the gradients are different.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:53:68"
+      ]
+    },
+    "questag3-parallel-perp#5": {
+      "en": "Two lines have gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b>. Are the lines <b>perpendicular</b>?",
+      "kind": "template",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:67:7"
+      ]
+    },
+    "questag3-parallel-perp#6": {
+      "en": "Perpendicular ⇔ the gradients multiply to −1 (switch the fraction AND change the sign).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:69:15"
+      ]
+    },
+    "questag3-parallel-perp#7": {
+      "en": "Yes — the gradients multiply to −1.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:70:28"
+      ]
+    },
+    "questag3-parallel-perp#8": {
+      "en": "No — multiply them: you don’t get −1.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:70:68"
+      ]
+    },
+    "questag3-parallel-perp#9": {
+      "en": "A line has gradient <b>${gradFrac(g.dy, g.dx).str}</b>. The gradient <b>perpendicular</b> to it is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:84:7"
+      ]
+    },
+    "questag3-parallel-perp#10": {
+      "en": "Negative reciprocal: turn the fraction upside-down AND flip the sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:86:15"
+      ]
+    },
+    "questag3-parallel-perp#11": {
+      "en": "Perpendicular gradient = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:87:22"
+      ]
+    },
+    "questag3-parallel-perp#12": {
+      "en": "neither",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:93:39",
+        "questag3-parallel-perp.js:96:105",
+        "questag3-parallel-perp.js:99:46"
+      ]
+    },
+    "questag3-parallel-perp#13": {
+      "en": "parallel",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:96:48",
+        "questag3-parallel-perp.js:99:17"
+      ]
+    },
+    "questag3-parallel-perp#14": {
+      "en": "perpendicular",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:96:87",
+        "questag3-parallel-perp.js:99:29"
+      ]
+    },
+    "questag3-parallel-perp#15": {
+      "en": "Lines with gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b> are…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:98:7"
+      ]
+    },
+    "questag3-parallel-perp#16": {
+      "en": "Equal → parallel. Multiply to −1 → perpendicular. Otherwise neither.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:100:15"
+      ]
+    },
+    "questag3-parallel-perp#17": {
+      "en": "They are ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:101:22"
+      ]
+    },
+    "questag3-parallel-perp#18": {
+      "en": "Are the two lines <b>perpendicular</b> (do they cross at a right angle)?",
+      "kind": "string",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:111:7"
+      ]
+    },
+    "questag3-parallel-perp#19": {
+      "en": "The picture is exactly to scale — a true right angle looks square.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:114:15"
+      ]
+    },
+    "questag3-parallel-perp#20": {
+      "en": "Yes — they meet at 90°.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:115:31"
+      ]
+    },
+    "questag3-parallel-perp#21": {
+      "en": "No — they don’t meet at 90°.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:115:59"
+      ]
+    },
+    "questag3-parallel-perp#22": {
+      "en": "The line <b>${a < 0 ? \"−\" + Math.abs(a) : a}x + ${b}y = 0</b> can be written y = mx + c. Its gradient is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:126:7"
+      ]
+    },
+    "questag3-parallel-perp#23": {
+      "en": "Make y the subject: ${b}y = ${-a < 0 ? \"−\" : \"\"}${Math.abs(a)}x, so m = −a/b.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:128:15"
+      ]
+    },
+    "questag3-parallel-perp#24": {
+      "en": "Gradient = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:129:22"
+      ]
+    },
+    "questag3-parallel-perp#25": {
+      "en": "Two lines are <b>perpendicular</b> exactly when their gradients…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:135:7"
+      ]
+    },
+    "questag3-parallel-perp#26": {
+      "en": "multiply to give −1",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:136:7"
+      ]
+    },
+    "questag3-parallel-perp#27": {
+      "en": "are equal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:137:8"
+      ]
+    },
+    "questag3-parallel-perp#28": {
+      "en": "add up to 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:137:21"
+      ]
+    },
+    "questag3-parallel-perp#29": {
+      "en": "are both positive",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:137:36"
+      ]
+    },
+    "questag3-parallel-perp#30": {
+      "en": "Parallel: equal gradients. Perpendicular: m₁ × m₂ = −1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:138:15"
+      ]
+    },
+    "questag3-parallel-perp#31": {
+      "en": "m₁ × m₂ = −1.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag3-parallel-perp.js:139:22"
+      ]
+    },
+    "questag4-inclination#1": {
+      "en": "Look at the angle of inclination θ. Is it <b>acute</b> or <b>obtuse</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag4-inclination.js:27:35"
+      ]
+    },
+    "questag4-inclination#2": {
+      "en": "obtuse (between 90° and 180°)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:28:16",
+        "questag4-inclination.js:29:48"
+      ]
+    },
+    "questag4-inclination#3": {
+      "en": "acute (between 0° and 90°)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:28:50",
+        "questag4-inclination.js:29:17"
+      ]
+    },
+    "questag4-inclination#4": {
+      "en": "exactly 90°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:29:81"
+      ]
+    },
+    "questag4-inclination#5": {
+      "en": "Positive gradient (line rises) → acute. Negative gradient (line falls) → obtuse.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:31:15"
+      ]
+    },
+    "questag4-inclination#6": {
+      "en": "${obtuse ? \"Negative\" : \"Positive\"} gradient → θ is ${obtuse ? \"obtuse\" : \"acute\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag4-inclination.js:32:22"
+      ],
+      "nested": [
+        "Negative",
+        "Positive",
+        "obtuse",
+        "acute"
+      ]
+    },
+    "questag4-inclination#7": {
+      "en": "A line has a <b>negative</b> gradient. To find its angle of inclination θ, what do you do?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag4-inclination.js:39:7"
+      ]
+    },
+    "questag4-inclination#8": {
+      "en": "SHIFT tan the gradient <b>without</b> its minus, then 180° − that answer",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag4-inclination.js:40:7"
+      ]
+    },
+    "questag4-inclination#9": {
+      "en": "SHIFT tan the gradient <b>with</b> its minus in, and take that answer",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:41:8"
+      ]
+    },
+    "questag4-inclination#10": {
+      "en": "SHIFT tan the gradient <b>without</b> its minus, and stop there",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:42:8"
+      ]
+    },
+    "questag4-inclination#11": {
+      "en": "SHIFT tan the gradient, then <b>add</b> that answer to 90°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:43:8"
+      ]
+    },
+    "questag4-inclination#12": {
+      "en": "A falling line is obtuse. Find the acute reference angle from the SIZE of m, then subtract from 180°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:44:15"
+      ]
+    },
+    "questag4-inclination#13": {
+      "en": "Drop the minus, SHIFT tan the size of the gradient, then 180° − that. θ is obtuse.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag4-inclination.js:45:22"
+      ]
+    },
+    "questag4-inclination#14": {
+      "en": "The line has gradient <b>${gradFrac(c.dy, c.dx).str}</b>. Its angle of inclination θ is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag4-inclination.js:58:7"
+      ]
+    },
+    "questag4-inclination#15": {
+      "en": "Negative gradient → obtuse. Drop the minus, SHIFT tan the size of the gradient for the reference angle, then θ = 180° − that.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:62:13"
+      ]
+    },
+    "questag4-inclination#16": {
+      "en": "Positive gradient → acute. SHIFT tan the gradient and that IS θ, straight off.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:63:13"
+      ]
+    },
+    "questag4-inclination#17": {
+      "en": "θ = ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag4-inclination.js:64:22"
+      ]
+    },
+    "questag4-inclination#18": {
+      "en": "To get the reference angle, should you SHIFT tan the <b>negative</b> gradient exactly as it is, minus sign and all?",
+      "kind": "string",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questag4-inclination.js:70:7"
+      ]
+    },
+    "questag4-inclination#19": {
+      "en": "Typing a negative gives a negative angle. Use the SIZE of the gradient (drop the sign), then do 180° − that.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:72:15"
+      ]
+    },
+    "questag4-inclination#20": {
+      "en": "No — drop the sign, SHIFT tan the size of the gradient, then 180° − that.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag4-inclination.js:73:22"
+      ]
+    },
+    "questag4-inclination#21": {
+      "en": "The angle of inclination θ is linked to the gradient m by…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag4-inclination.js:79:7"
+      ]
+    },
+    "questag4-inclination#22": {
+      "en": "tan θ = m",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag4-inclination.js:80:7"
+      ]
+    },
+    "questag4-inclination#23": {
+      "en": "sin θ = m",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:81:8"
+      ]
+    },
+    "questag4-inclination#24": {
+      "en": "θ = m",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:81:21"
+      ]
+    },
+    "questag4-inclination#25": {
+      "en": "cos θ = m",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:81:30"
+      ]
+    },
+    "questag4-inclination#26": {
+      "en": "Build a right triangle under the line: tan θ = opposite/adjacent = rise/run = m.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:82:15"
+      ]
+    },
+    "questag4-inclination#27": {
+      "en": "tan θ = m.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag4-inclination.js:83:22"
+      ]
+    },
+    "questag4-inclination#28": {
+      "en": "The line has gradient <b>${ex.dy < 0 ? \"−1\" : \"1\"}</b>. Its angle of inclination is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag4-inclination.js:93:7"
+      ]
+    },
+    "questag4-inclination#29": {
+      "en": "m = −1 is negative → obtuse → 180° − 45°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:97:27"
+      ]
+    },
+    "questag4-inclination#30": {
+      "en": "m = 1 → SHIFT tan (1) = 45°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:97:73"
+      ]
+    },
+    "questag4-inclination#31": {
+      "en": "θ = ${deg0(ex.theta)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag4-inclination.js:98:22"
+      ]
+    },
+    "questag4-inclination#32": {
+      "en": "Which line has an <b>obtuse</b> angle of inclination (more than 90°)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag4-inclination.js:116:7"
+      ]
+    },
+    "questag4-inclination#33": {
+      "en": "Line ${letter.obtuse}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag4-inclination.js:117:7"
+      ]
+    },
+    "questag4-inclination#34": {
+      "en": "Line ${letter.acute}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag4-inclination.js:117:33"
+      ]
+    },
+    "questag4-inclination#35": {
+      "en": "Obtuse inclination ⇔ the line falls left → right (negative gradient).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag4-inclination.js:119:15"
+      ]
+    },
+    "questag4-inclination#36": {
+      "en": "Line ${letter.obtuse} — the falling (negative-gradient) line has the obtuse angle.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag4-inclination.js:120:22"
+      ]
+    },
+    "questag5-perp-bisector#1": {
+      "en": "A <b>perpendicular bisector</b> of AB must…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:24:7"
+      ]
+    },
+    "questag5-perp-bisector#2": {
+      "en": "pass through the midpoint of AB AND be perpendicular to AB",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:25:7"
+      ]
+    },
+    "questag5-perp-bisector#3": {
+      "en": "pass through the midpoint only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:26:8"
+      ]
+    },
+    "questag5-perp-bisector#4": {
+      "en": "be perpendicular to AB only",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:26:42"
+      ]
+    },
+    "questag5-perp-bisector#5": {
+      "en": "pass through A and through B",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:26:73"
+      ]
+    },
+    "questag5-perp-bisector#6": {
+      "en": "Two jobs at once: cut AB exactly in half, AND cross it at 90°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:27:15"
+      ]
+    },
+    "questag5-perp-bisector#7": {
+      "en": "Through the midpoint AND perpendicular.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:28:22"
+      ]
+    },
+    "questag5-perp-bisector#8": {
+      "en": "it misses the midpoint and isn’t at 90°",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:37:39"
+      ]
+    },
+    "questag5-perp-bisector#9": {
+      "en": "it doesn’t pass through the midpoint",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:38:21"
+      ]
+    },
+    "questag5-perp-bisector#10": {
+      "en": "it isn’t perpendicular to AB",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:38:62"
+      ]
+    },
+    "questag5-perp-bisector#11": {
+      "en": "Is the orange line the <b>perpendicular bisector</b> of AB?",
+      "kind": "string",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:40:7"
+      ]
+    },
+    "questag5-perp-bisector#12": {
+      "en": "Check BOTH: does it cut AB in half, and does it cross at a right angle?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:42:15"
+      ]
+    },
+    "questag5-perp-bisector#13": {
+      "en": "Yes — through the midpoint and at 90°.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:43:37"
+      ]
+    },
+    "questag5-perp-bisector#14": {
+      "en": "No — ${why}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:43:80"
+      ]
+    },
+    "questag5-perp-bisector#15": {
+      "en": "AB has gradient <b>${mab}</b>. The <b>perpendicular bisector</b> of AB has gradient…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:56:7"
+      ]
+    },
+    "questag5-perp-bisector#16": {
+      "en": "It is perpendicular to AB → use the negative reciprocal of AB’s gradient.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:60:15"
+      ]
+    },
+    "questag5-perp-bisector#17": {
+      "en": "Gradient = ${correct} (negative reciprocal of ${mab}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:61:22"
+      ]
+    },
+    "questag5-perp-bisector#18": {
+      "en": "A${ptStr(A)} and B${ptStr(B)}. The perpendicular bisector of AB passes through the midpoint M. Find <b>M</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:78:7"
+      ]
+    },
+    "questag5-perp-bisector#19": {
+      "en": "A${ptStr(A)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:82:45",
+        "questag5-perp-bisector.js:103:8"
+      ]
+    },
+    "questag5-perp-bisector#20": {
+      "en": "B${ptStr(B)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:82:103",
+        "questag5-perp-bisector.js:103:24"
+      ]
+    },
+    "questag5-perp-bisector#21": {
+      "en": "Midpoint = the AVERAGE of the two x’s and the two y’s: add them, then divide by 2.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:83:15"
+      ]
+    },
+    "questag5-perp-bisector#22": {
+      "en": "M = ${ptStr(M)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:84:22"
+      ]
+    },
+    "questag5-perp-bisector#23": {
+      "en": "M = ( (x<sub>A</sub> + x<sub>B</sub>)/2 ; (y<sub>A</sub> + y<sub>B</sub>)/2 )",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:86:16"
+      ]
+    },
+    "questag5-perp-bisector#24": {
+      "en": "The perpendicular bisector of AB passes through which point?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:101:7"
+      ]
+    },
+    "questag5-perp-bisector#25": {
+      "en": "the midpoint M${ptStr(M)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:102:7"
+      ]
+    },
+    "questag5-perp-bisector#26": {
+      "en": "the origin O(0 ; 0)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:103:40"
+      ]
+    },
+    "questag5-perp-bisector#27": {
+      "en": "‘Bisector’ → it goes through the midpoint M.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:107:15"
+      ]
+    },
+    "questag5-perp-bisector#28": {
+      "en": "Through the midpoint M${ptStr(M)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:108:22"
+      ]
+    },
+    "questag5-perp-bisector#29": {
+      "en": "Both lines <b>1</b> and <b>2</b> cut AB in half. Which one is the <b>perpendicular bisector</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:132:7"
+      ]
+    },
+    "questag5-perp-bisector#30": {
+      "en": "Line ${letter.pb}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:133:7"
+      ]
+    },
+    "questag5-perp-bisector#31": {
+      "en": "Line ${letter.skew}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:133:29"
+      ]
+    },
+    "questag5-perp-bisector#32": {
+      "en": "The perpendicular bisector also crosses AB at a right angle (90°).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:135:15"
+      ]
+    },
+    "questag5-perp-bisector#33": {
+      "en": "Line ${letter.pb} — the one that meets AB at 90°.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:136:22"
+      ]
+    },
+    "questag5-perp-bisector#34": {
+      "en": "Every point on the perpendicular bisector of AB is…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:142:7"
+      ]
+    },
+    "questag5-perp-bisector#35": {
+      "en": "the same distance from A as from B",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:143:7"
+      ]
+    },
+    "questag5-perp-bisector#36": {
+      "en": "closer to A than to B",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:144:8"
+      ]
+    },
+    "questag5-perp-bisector#37": {
+      "en": "on the line AB",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:144:33"
+      ]
+    },
+    "questag5-perp-bisector#38": {
+      "en": "the midpoint of AB",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:144:51"
+      ]
+    },
+    "questag5-perp-bisector#39": {
+      "en": "That’s the whole point of it — it’s the set of points equidistant from A and B.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:145:15"
+      ]
+    },
+    "questag5-perp-bisector#40": {
+      "en": "Equally far from A and from B.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag5-perp-bisector.js:146:22"
+      ]
+    },
+    "questag6-triangle-area#1": {
+      "en": "B",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:33:21",
+        "questag6-triangle-area.js:33:48",
+        "questag6-triangle-area.js:33:60",
+        "questag6-triangle-area.js:110:21"
+      ]
+    },
+    "questag6-triangle-area#2": {
+      "en": "C",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:33:26",
+        "questag6-triangle-area.js:33:38",
+        "questag6-triangle-area.js:33:65",
+        "questag6-triangle-area.js:110:26"
+      ]
+    },
+    "questag6-triangle-area#3": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:33:31",
+        "questag6-triangle-area.js:33:43",
+        "questag6-triangle-area.js:33:55",
+        "questag6-triangle-area.js:110:16"
+      ]
+    },
+    "questag6-triangle-area#4": {
+      "en": "The area of a triangle is…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag6-triangle-area.js:53:7"
+      ]
+    },
+    "questag6-triangle-area#5": {
+      "en": "½ × base × ⊥height",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag6-triangle-area.js:54:7"
+      ]
+    },
+    "questag6-triangle-area#6": {
+      "en": "base × ⊥height",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:55:8"
+      ]
+    },
+    "questag6-triangle-area#7": {
+      "en": "½ × base × slant side",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:55:26"
+      ]
+    },
+    "questag6-triangle-area#8": {
+      "en": "base + ⊥height",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:55:51"
+      ]
+    },
+    "questag6-triangle-area#9": {
+      "en": "Half the base times the PERPENDICULAR height (not a slanted side).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag6-triangle-area.js:56:15"
+      ]
+    },
+    "questag6-triangle-area#10": {
+      "en": "Area = ½ × base × ⊥height.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag6-triangle-area.js:57:22"
+      ]
+    },
+    "questag6-triangle-area#11": {
+      "en": "The dashed line is the perpendicular height (drawn from <b>${t.apex}</b>). Which <b>side</b> is the base it is measured to?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag6-triangle-area.js:65:7"
+      ]
+    },
+    "questag6-triangle-area#12": {
+      "en": "side ${t.baseId}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag6-triangle-area.js:66:7"
+      ]
+    },
+    "questag6-triangle-area#13": {
+      "en": "side ${id}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:66:81",
+        "questag6-triangle-area.js:78:76"
+      ]
+    },
+    "questag6-triangle-area#14": {
+      "en": "The base is the side the dashed height makes a right angle with.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag6-triangle-area.js:68:15"
+      ]
+    },
+    "questag6-triangle-area#15": {
+      "en": "The base is side ${t.baseId}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag6-triangle-area.js:69:22"
+      ]
+    },
+    "questag6-triangle-area#16": {
+      "en": "Which line is the <b>perpendicular height</b> (the altitude) of this triangle?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag6-triangle-area.js:77:7"
+      ]
+    },
+    "questag6-triangle-area#17": {
+      "en": "the dashed line (with the right-angle mark)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag6-triangle-area.js:78:7"
+      ]
+    },
+    "questag6-triangle-area#18": {
+      "en": "It runs from a vertex and meets the opposite side at 90° — look for the right-angle mark.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag6-triangle-area.js:80:15"
+      ]
+    },
+    "questag6-triangle-area#19": {
+      "en": "The dashed segment with the right-angle mark is the perpendicular height.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag6-triangle-area.js:81:22"
+      ]
+    },
+    "questag6-triangle-area#20": {
+      "en": "The perpendicular height must…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag6-triangle-area.js:87:7"
+      ]
+    },
+    "questag6-triangle-area#21": {
+      "en": "make a right angle (90°) with the base",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag6-triangle-area.js:88:7"
+      ]
+    },
+    "questag6-triangle-area#22": {
+      "en": "be one of the three sides",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:89:8"
+      ]
+    },
+    "questag6-triangle-area#23": {
+      "en": "be the longest side",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:89:37"
+      ]
+    },
+    "questag6-triangle-area#24": {
+      "en": "join the two base corners",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:89:60"
+      ]
+    },
+    "questag6-triangle-area#25": {
+      "en": "‘Perpendicular’ height = a 90° drop onto the base from the opposite vertex.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag6-triangle-area.js:90:15"
+      ]
+    },
+    "questag6-triangle-area#26": {
+      "en": "It meets the base at 90°.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag6-triangle-area.js:91:22"
+      ]
+    },
+    "questag6-triangle-area#27": {
+      "en": "Which line is used as the <b>perpendicular height</b> — the median or the altitude?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag6-triangle-area.js:97:7"
+      ]
+    },
+    "questag6-triangle-area#28": {
+      "en": "the altitude (it meets the base at 90°)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag6-triangle-area.js:98:7"
+      ]
+    },
+    "questag6-triangle-area#29": {
+      "en": "the median (it goes to the midpoint)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:99:8"
+      ]
+    },
+    "questag6-triangle-area#30": {
+      "en": "either one",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:99:48"
+      ]
+    },
+    "questag6-triangle-area#31": {
+      "en": "the longest side",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag6-triangle-area.js:99:62"
+      ]
+    },
+    "questag6-triangle-area#32": {
+      "en": "Median → midpoint. Altitude → right angle. Height = altitude.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag6-triangle-area.js:100:15"
+      ]
+    },
+    "questag6-triangle-area#33": {
+      "en": "The altitude (perpendicular to the base).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag6-triangle-area.js:101:22"
+      ]
+    },
+    "questag6-triangle-area#34": {
+      "en": "If side <b>${t.baseId}</b> is the base, which <b>vertex</b> must the perpendicular height be drawn from?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag6-triangle-area.js:109:7"
+      ]
+    },
+    "questag6-triangle-area#35": {
+      "en": "The height drops from the corner OPPOSITE the base.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag6-triangle-area.js:112:15"
+      ]
+    },
+    "questag6-triangle-area#36": {
+      "en": "From the opposite vertex, ${t.apex}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag6-triangle-area.js:113:22"
+      ]
+    },
+    "questag6-triangle-area#37": {
+      "en": "In a triangle that is <b>not</b> right-angled, is the perpendicular height ever one of the three sides?",
+      "kind": "string",
+      "slots": [
+        "yesnoQ.prompt"
+      ],
+      "where": [
+        "questag6-triangle-area.js:119:7"
+      ]
+    },
+    "questag6-triangle-area#38": {
+      "en": "A side can only BE the height if it meets the base at 90° — and that makes the triangle right-angled.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag6-triangle-area.js:121:15"
+      ]
+    },
+    "questag6-triangle-area#39": {
+      "en": "No — you must draw a NEW segment (the altitude). Only in a right-angled triangle is a side already the height.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag6-triangle-area.js:122:22"
+      ]
+    },
+    "questag7-mixed#1": {
+      "en": "A line from a vertex to the <b>midpoint</b> of the opposite side is a…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:68:12"
+      ]
+    },
+    "questag7-mixed#2": {
+      "en": "median",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:68:89",
+        "questag7-mixed.js:69:106",
+        "questag7-mixed.js:70:133"
+      ]
+    },
+    "questag7-mixed#3": {
+      "en": "altitude",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:68:103",
+        "questag7-mixed.js:69:90",
+        "questag7-mixed.js:70:143"
+      ]
+    },
+    "questag7-mixed#4": {
+      "en": "perpendicular bisector",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:68:115",
+        "questag7-mixed.js:69:116",
+        "questag7-mixed.js:70:103"
+      ]
+    },
+    "questag7-mixed#5": {
+      "en": "A line from a vertex, <b>perpendicular</b> to the opposite side, is an…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:69:12"
+      ]
+    },
+    "questag7-mixed#6": {
+      "en": "A line through the <b>midpoint</b> of a segment AND <b>perpendicular</b> to it is a…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:70:12"
+      ]
+    },
+    "questag7-mixed#7": {
+      "en": "Median → midpoint. Altitude → right angle. Perpendicular bisector → midpoint AND right angle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag7-mixed.js:74:15"
+      ]
+    },
+    "questag7-mixed#8": {
+      "en": "What is the dashed line inside the triangle?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:84:7"
+      ]
+    },
+    "questag7-mixed#9": {
+      "en": "an altitude (it meets the side at 90°)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:85:15",
+        "questag7-mixed.js:86:85"
+      ]
+    },
+    "questag7-mixed#10": {
+      "en": "a median (it goes to the midpoint)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:85:58",
+        "questag7-mixed.js:86:16"
+      ]
+    },
+    "questag7-mixed#11": {
+      "en": "a perpendicular bisector",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:86:54"
+      ]
+    },
+    "questag7-mixed#12": {
+      "en": "a side of the triangle",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:86:127"
+      ]
+    },
+    "questag7-mixed#13": {
+      "en": "Right-angle mark → altitude. Equal tick marks (equal halves) → median.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag7-mixed.js:88:15"
+      ]
+    },
+    "questag7-mixed#14": {
+      "en": "An altitude — note the right-angle mark.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag7-mixed.js:89:30"
+      ]
+    },
+    "questag7-mixed#15": {
+      "en": "A median — note the equal halves.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag7-mixed.js:89:75"
+      ]
+    },
+    "questag7-mixed#16": {
+      "en": "To prove <b>AB ∥ CD</b> (parallel), you show…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:95:7"
+      ]
+    },
+    "questag7-mixed#17": {
+      "en": "m<sub>AB</sub> = m<sub>CD</sub> (equal gradients)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag7-mixed.js:96:7"
+      ]
+    },
+    "questag7-mixed#18": {
+      "en": "m<sub>AB</sub> × m<sub>CD</sub> = −1",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:97:8",
+        "questag7-mixed.js:105:7"
+      ]
+    },
+    "questag7-mixed#19": {
+      "en": "AB = CD (equal lengths)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:97:48"
+      ]
+    },
+    "questag7-mixed#20": {
+      "en": "they share a midpoint",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:97:75"
+      ]
+    },
+    "questag7-mixed#21": {
+      "en": "Parallel lines have EQUAL gradients.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag7-mixed.js:98:15"
+      ]
+    },
+    "questag7-mixed#22": {
+      "en": "Equal gradients: m_AB = m_CD.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag7-mixed.js:98:68"
+      ]
+    },
+    "questag7-mixed#23": {
+      "en": "To prove <b>AB ⊥ CD</b> (perpendicular), you show…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:104:7"
+      ]
+    },
+    "questag7-mixed#24": {
+      "en": "m<sub>AB</sub> = m<sub>CD</sub>",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:106:8"
+      ]
+    },
+    "questag7-mixed#25": {
+      "en": "AB = CD",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:106:43"
+      ]
+    },
+    "questag7-mixed#26": {
+      "en": "they have the same midpoint",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:106:54"
+      ]
+    },
+    "questag7-mixed#27": {
+      "en": "Perpendicular gradients multiply to −1.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag7-mixed.js:107:15"
+      ]
+    },
+    "questag7-mixed#28": {
+      "en": "m_AB × m_CD = −1.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag7-mixed.js:107:71"
+      ]
+    },
+    "questag7-mixed#29": {
+      "en": "To prove A, B and C are <b>collinear</b> (on one straight line), you show…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:113:7"
+      ]
+    },
+    "questag7-mixed#30": {
+      "en": "m<sub>AB</sub> = m<sub>BC</sub> (same gradient, shared point B)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag7-mixed.js:114:7"
+      ]
+    },
+    "questag7-mixed#31": {
+      "en": "m<sub>AB</sub> × m<sub>BC</sub> = −1",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:115:8"
+      ]
+    },
+    "questag7-mixed#32": {
+      "en": "AB = BC",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:115:48"
+      ]
+    },
+    "questag7-mixed#33": {
+      "en": "B is the midpoint of AC",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:115:59"
+      ]
+    },
+    "questag7-mixed#34": {
+      "en": "Same straight line → the little segments have the SAME gradient.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag7-mixed.js:116:15"
+      ]
+    },
+    "questag7-mixed#35": {
+      "en": "m_AB = m_BC (they share point B).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag7-mixed.js:117:22"
+      ]
+    },
+    "questag7-mixed#36": {
+      "en": "To prove a quadrilateral is a <b>parallelogram</b> using the diagonals, you show…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:123:7"
+      ]
+    },
+    "questag7-mixed#37": {
+      "en": "the diagonals bisect each other (same midpoint)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questag7-mixed.js:124:7"
+      ]
+    },
+    "questag7-mixed#38": {
+      "en": "the diagonals are equal in length",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:125:8"
+      ]
+    },
+    "questag7-mixed#39": {
+      "en": "the diagonals are perpendicular",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:125:45"
+      ]
+    },
+    "questag7-mixed#40": {
+      "en": "all four sides are equal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:125:80"
+      ]
+    },
+    "questag7-mixed#41": {
+      "en": "Diagonals of a parallelogram share a midpoint — they bisect each other.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag7-mixed.js:126:15"
+      ]
+    },
+    "questag7-mixed#42": {
+      "en": "The diagonals have the same midpoint.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questag7-mixed.js:127:22"
+      ]
+    },
+    "questag7-mixed#43": {
+      "en": "The <b>centre</b> of a circle is the … of a diameter.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:133:12"
+      ]
+    },
+    "questag7-mixed#44": {
+      "en": "midpoint",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:133:72",
+        "questag7-mixed.js:134:98"
+      ]
+    },
+    "questag7-mixed#45": {
+      "en": "gradient",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:133:88",
+        "questag7-mixed.js:134:110"
+      ]
+    },
+    "questag7-mixed#46": {
+      "en": "length",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:133:100"
+      ]
+    },
+    "questag7-mixed#47": {
+      "en": "distance",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:133:110",
+        "questag7-mixed.js:134:82"
+      ]
+    },
+    "questag7-mixed#48": {
+      "en": "To find the length of the <b>radius</b>, you use the … formula.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questag7-mixed.js:134:12"
+      ]
+    },
+    "questag7-mixed#49": {
+      "en": "area",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questag7-mixed.js:134:122"
+      ]
+    },
+    "questag7-mixed#50": {
+      "en": "Centre = midpoint of a diameter. Radius is a length → distance formula.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questag7-mixed.js:137:15"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 1731
+}

@@ -10,6 +10,7 @@
 import { mc } from "./_shared.js";
 import { yesnoQ, triangleAltitude, winFor, AG } from "./_analytical.js";
 import { triArea, randPoint, pick } from "../analyticslib.js";
+import { L } from "../lang.js";
 
 const ACC = AG[5];
 
@@ -30,7 +31,7 @@ function niceTriangle() {
     const A = randPoint(-5, 5), B = randPoint(-5, 5), C = randPoint(-5, 5);
     if (triArea(A, B, C) < 7) continue;
     const P = { A, B, C };
-    const bases = [["B", "C", "A"], ["C", "A", "B"], ["A", "B", "C"]]
+    const bases = [[L("B", "B"), L("C", "C"), L("A", "A")], [L("C", "C"), L("A", "A"), L("B", "B")], [L("A", "A"), L("B", "B"), L("C", "C")]]
       .filter(([b1, b2, ap]) => {
         const t = footT(P[ap], P[b1], P[b2]);
         if (t <= 0.2 || t >= 0.8) return false;
@@ -50,11 +51,11 @@ const SKILLS = {
   /* the formula */
   formula: () => {
     return mc("triangleArea",
-      "The area of a triangle is…",
-      "½ × base × ⊥height",
-      ["base × ⊥height", "½ × base × slant side", "base + ⊥height"],
-      { hint: "Half the base times the PERPENDICULAR height (not a slanted side).",
-        answerLabel: "Area = ½ × base × ⊥height." });
+      L("The area of a triangle is…", "Die oppervlakte van 'n driehoek is…"),
+      L("½ × base × ⊥height", "½ × basis × ⊥hoogte"),
+      [L("base × ⊥height", "basis × ⊥hoogte"), L("½ × base × slant side", "½ × basis × skuins sy"), L("base + ⊥height", "basis + ⊥hoogte")],
+      { hint: L("Half the base times the PERPENDICULAR height (not a slanted side).", "Die helfte van die basis maal die LOODREGTE hoogte (nie 'n skuins sy nie)."),
+        answerLabel: L("Area = ½ × base × ⊥height.", "Oppervlakte = ½ × basis × ⊥hoogte.") });
   },
 
   /* which side is the base the height is measured to */
@@ -62,11 +63,11 @@ const SKILLS = {
     const { P, base } = niceTriangle();
     const t = triangleAltitude(P, base, { accent: ACC });
     return mc("triangleArea",
-      `The dashed line is the perpendicular height (drawn from <b>${t.apex}</b>). Which <b>side</b> is the base it is measured to?`,
-      `side ${t.baseId}`, t.sideIds.filter((id) => id !== t.baseId).map((id) => `side ${id}`),
+      L(`The dashed line is the perpendicular height (drawn from <b>${t.apex}</b>). Which <b>side</b> is the base it is measured to?`, `Die stippellyn is die loodregte hoogte (vanaf <b>${t.apex}</b> geteken). Watter <b>sy</b> is die basis waarop dit gemeet word?`),
+      L(`side ${t.baseId}`, `sy ${t.baseId}`), t.sideIds.filter((id) => id !== t.baseId).map((id) => L(`side ${id}`, `sy ${id}`)),
       { graph: t.spec,
-        hint: "The base is the side the dashed height makes a right angle with.",
-        answerLabel: `The base is side ${t.baseId}.` });
+        hint: L("The base is the side the dashed height makes a right angle with.", "Die basis is die sy waarmee die gestippelde hoogte 'n regte hoek maak."),
+        answerLabel: L(`The base is side ${t.baseId}.`, `Die basis is sy ${t.baseId}.`) });
   },
 
   /* which line is the perpendicular height itself */
@@ -74,31 +75,31 @@ const SKILLS = {
     const { P, base } = niceTriangle();
     const t = triangleAltitude(P, base, { accent: ACC });
     return mc("triangleArea",
-      "Which line is the <b>perpendicular height</b> (the altitude) of this triangle?",
-      "the dashed line (with the right-angle mark)", t.sideIds.map((id) => `side ${id}`),
+      L("Which line is the <b>perpendicular height</b> (the altitude) of this triangle?", "Watter lyn is die <b>loodregte hoogte</b> (die hoogtelyn) van hierdie driehoek?"),
+      L("the dashed line (with the right-angle mark)", "die stippellyn (met die regtehoekteken)"), t.sideIds.map((id) => L(`side ${id}`, `sy ${id}`)),
       { graph: t.spec,
-        hint: "It runs from a vertex and meets the opposite side at 90° — look for the right-angle mark.",
-        answerLabel: "The dashed segment with the right-angle mark is the perpendicular height." });
+        hint: L("It runs from a vertex and meets the opposite side at 90° — look for the right-angle mark.", "Dit loop van 'n hoekpunt af en tref die teenoorstaande sy teen 90°: soek die regtehoekteken."),
+        answerLabel: L("The dashed segment with the right-angle mark is the perpendicular height.", "Die gestippelde lynstuk met die regtehoekteken is die loodregte hoogte.") });
   },
 
   /* what the height must do */
   heightMustBe: () => {
     return mc("triangleArea",
-      "The perpendicular height must…",
-      "make a right angle (90°) with the base",
-      ["be one of the three sides", "be the longest side", "join the two base corners"],
-      { hint: "‘Perpendicular’ height = a 90° drop onto the base from the opposite vertex.",
-        answerLabel: "It meets the base at 90°." });
+      L("The perpendicular height must…", "Die loodregte hoogte moet…"),
+      L("make a right angle (90°) with the base", "'n regte hoek (90°) met die basis maak"),
+      [L("be one of the three sides", "een van die drie sye wees"), L("be the longest side", "die langste sy wees"), L("join the two base corners", "die twee hoekpunte van die basis verbind")],
+      { hint: L("‘Perpendicular’ height = a 90° drop onto the base from the opposite vertex.", "‘Loodregte’ hoogte = 'n 90°-val op die basis vanaf die teenoorstaande hoekpunt."),
+        answerLabel: L("It meets the base at 90°.", "Dit tref die basis teen 90°.") });
   },
 
   /* altitude vs median */
   medianVsAltitude: () => {
     return mc("triangleArea",
-      "Which line is used as the <b>perpendicular height</b> — the median or the altitude?",
-      "the altitude (it meets the base at 90°)",
-      ["the median (it goes to the midpoint)", "either one", "the longest side"],
-      { hint: "Median → midpoint. Altitude → right angle. Height = altitude.",
-        answerLabel: "The altitude (perpendicular to the base)." });
+      L("Which line is used as the <b>perpendicular height</b> — the median or the altitude?", "Watter lyn word as die <b>loodregte hoogte</b> gebruik: die swaartelyn of die hoogtelyn?"),
+      L("the altitude (it meets the base at 90°)", "die hoogtelyn (dit tref die basis teen 90°)"),
+      [L("the median (it goes to the midpoint)", "die swaartelyn (dit gaan na die middelpunt)"), L("either one", "enige een"), L("the longest side", "die langste sy")],
+      { hint: L("Median → midpoint. Altitude → right angle. Height = altitude.", "Swaartelyn → middelpunt. Hoogtelyn → regte hoek. Hoogte = hoogtelyn."),
+        answerLabel: L("The altitude (perpendicular to the base).", "Die hoogtelyn (loodreg op die basis).") });
   },
 
   /* the height comes from the opposite vertex */
@@ -106,20 +107,20 @@ const SKILLS = {
     const { P, base } = niceTriangle();
     const t = triangleAltitude(P, base, { accent: ACC, showAlt: false });
     return mc("triangleArea",
-      `If side <b>${t.baseId}</b> is the base, which <b>vertex</b> must the perpendicular height be drawn from?`,
-      t.apex, ["A", "B", "C"].filter((v) => v !== t.apex),
+      L(`If side <b>${t.baseId}</b> is the base, which <b>vertex</b> must the perpendicular height be drawn from?`, `As sy <b>${t.baseId}</b> die basis is, vanaf watter <b>hoekpunt</b> moet die loodregte hoogte geteken word?`),
+      t.apex, [L("A", "A"), L("B", "B"), L("C", "C")].filter((v) => v !== t.apex),
       { graph: t.spec,
-        hint: "The height drops from the corner OPPOSITE the base.",
-        answerLabel: `From the opposite vertex, ${t.apex}.` });
+        hint: L("The height drops from the corner OPPOSITE the base.", "Die hoogte val van die hoekpunt TEENOOR die basis af."),
+        answerLabel: L(`From the opposite vertex, ${t.apex}.`, `Vanaf die teenoorstaande hoekpunt, ${t.apex}.`) });
   },
 
   /* is the height one of the sides? */
   notASide: () => {
     return yesnoQ("triangleArea",
-      "In a triangle that is <b>not</b> right-angled, is the perpendicular height ever one of the three sides?",
+      L("In a triangle that is <b>not</b> right-angled, is the perpendicular height ever one of the three sides?", "Is die loodregte hoogte in 'n driehoek wat <b>nie</b> reghoekig is nie, ooit een van die drie sye?"),
       false,
-      { hint: "A side can only BE the height if it meets the base at 90° — and that makes the triangle right-angled.",
-        answerLabel: "No — you must draw a NEW segment (the altitude). Only in a right-angled triangle is a side already the height." });
+      { hint: L("A side can only BE the height if it meets the base at 90° — and that makes the triangle right-angled.", "'n Sy kan net die hoogte WEES as dit die basis teen 90° tref, en dan is die driehoek reghoekig."),
+        answerLabel: L("No — you must draw a NEW segment (the altitude). Only in a right-angled triangle is a side already the height.", "Nee: jy moet 'n NUWE lynstuk teken (die hoogtelyn). Net in 'n reghoekige driehoek is 'n sy reeds die hoogte.") });
   },
 };
 

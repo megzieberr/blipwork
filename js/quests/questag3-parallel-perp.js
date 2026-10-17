@@ -9,6 +9,7 @@
 import { mc } from "./_shared.js";
 import { yesnoQ, winFor, AG } from "./_analytical.js";
 import { gradFrac, isPerpendicular, gradFromStandard, pick } from "../analyticslib.js";
+import { L } from "../lang.js";
 
 const ACC = AG[2];
 
@@ -47,10 +48,10 @@ const SKILLS = {
     const g2 = same ? { ...g } : cleanGrad();
     const yes = Math.abs(mOf(g) - mOf(g2)) < 1e-9;
     return yesnoQ("parallelPerp",
-      `Two lines have gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b>. Are the lines <b>parallel</b>?`,
+      L(`Two lines have gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b>. Are the lines <b>parallel</b>?`, `Twee lyne het gradiënte <b>${gradFrac(g.dy, g.dx).str}</b> en <b>${gradFrac(g2.dy, g2.dx).str}</b>. Is die lyne <b>ewewydig</b>?`),
       yes,
-      { hint: "Parallel lines have EQUAL gradients.",
-        answerLabel: yes ? "Yes — equal gradients, so parallel." : "No — the gradients are different." });
+      { hint: L("Parallel lines have EQUAL gradients.", "Ewewydige lyne het GELYKE gradiënte."),
+        answerLabel: yes ? L("Yes — equal gradients, so parallel.", "Ja: gelyke gradiënte, dus ewewydig.") : L("No — the gradients are different.", "Nee: die gradiënte verskil.") });
   },
 
   /* perpendicular test from two gradients */
@@ -64,10 +65,10 @@ const SKILLS = {
     else g2 = { ...g };
     const yes = isPerpendicular(mOf(g), mOf(g2));
     return yesnoQ("parallelPerp",
-      `Two lines have gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b>. Are the lines <b>perpendicular</b>?`,
+      L(`Two lines have gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b>. Are the lines <b>perpendicular</b>?`, `Twee lyne het gradiënte <b>${gradFrac(g.dy, g.dx).str}</b> en <b>${gradFrac(g2.dy, g2.dx).str}</b>. Is die lyne <b>loodreg</b>?`),
       yes,
-      { hint: "Perpendicular ⇔ the gradients multiply to −1 (switch the fraction AND change the sign).",
-        answerLabel: yes ? "Yes — the gradients multiply to −1." : "No — multiply them: you don’t get −1." });
+      { hint: L("Perpendicular ⇔ the gradients multiply to −1 (switch the fraction AND change the sign).", "Loodreg ⇔ die gradiënte se produk is −1 (draai die breuk om EN verander die teken)."),
+        answerLabel: yes ? L("Yes — the gradients multiply to −1.", "Ja: die gradiënte se produk is −1.") : L("No — multiply them: you don’t get −1.", "Nee: vermenigvuldig hulle, jy kry nie −1 nie.") });
   },
 
   /* the negative reciprocal */
@@ -81,24 +82,24 @@ const SKILLS = {
       gradFrac(g.dy, g.dx).str,                 // unchanged
     ];
     return mc("perpGradient",
-      `A line has gradient <b>${gradFrac(g.dy, g.dx).str}</b>. The gradient <b>perpendicular</b> to it is…`,
+      L(`A line has gradient <b>${gradFrac(g.dy, g.dx).str}</b>. The gradient <b>perpendicular</b> to it is…`, `'n Lyn het gradiënt <b>${gradFrac(g.dy, g.dx).str}</b>. Die gradiënt <b>loodreg</b> daarop is…`),
       correct, decoys,
-      { hint: "Negative reciprocal: turn the fraction upside-down AND flip the sign.",
-        answerLabel: `Perpendicular gradient = ${correct}.` });
+      { hint: L("Negative reciprocal: turn the fraction upside-down AND flip the sign.", "Negatiewe resiprook: draai die breuk onderstebo EN verander die teken."),
+        answerLabel: L(`Perpendicular gradient = ${correct}.`, `Loodregte gradiënt = ${correct}.`) });
   },
 
   /* classify: parallel / perpendicular / neither */
   classify: () => {
     const g = cleanGrad();
-    const make = pick(["par", "perp", "neither"]);
+    const make = pick(["par", "perp", L("neither", "nie een van die twee nie")]);
     const g2 = make === "par" ? { ...g } : make === "perp" ? perpFrac(g) : cleanGrad();
     const m1 = mOf(g), m2 = mOf(g2);
-    const correct = Math.abs(m1 - m2) < 1e-9 ? "parallel" : isPerpendicular(m1, m2) ? "perpendicular" : "neither";
+    const correct = Math.abs(m1 - m2) < 1e-9 ? L("parallel", "ewewydig") : isPerpendicular(m1, m2) ? L("perpendicular", "loodreg") : L("neither", "nie een van die twee nie");
     return mc("parallelPerp",
-      `Lines with gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b> are…`,
-      correct, ["parallel", "perpendicular", "neither"].filter((x) => x !== correct),
-      { hint: "Equal → parallel. Multiply to −1 → perpendicular. Otherwise neither.",
-        answerLabel: `They are ${correct}.` });
+      L(`Lines with gradients <b>${gradFrac(g.dy, g.dx).str}</b> and <b>${gradFrac(g2.dy, g2.dx).str}</b> are…`, `Lyne met gradiënte <b>${gradFrac(g.dy, g.dx).str}</b> en <b>${gradFrac(g2.dy, g2.dx).str}</b> is…`),
+      correct, [L("parallel", "ewewydig"), L("perpendicular", "loodreg"), L("neither", "nie een van die twee nie")].filter((x) => x !== correct),
+      { hint: L("Equal → parallel. Multiply to −1 → perpendicular. Otherwise neither.", "Gelyk → ewewydig. Produk −1 → loodreg. Anders nie een van die twee nie."),
+        answerLabel: L(`They are ${correct}.`, `Hulle is ${correct}.`) });
   },
 
   /* judge perpendicular straight off a to-scale diagram */
@@ -108,11 +109,11 @@ const SKILLS = {
     const g2 = perp ? perpFrac(g) : (pick([true, false]) ? { dy: Math.abs(g.dy), dx: Math.abs(g.dx) } : cleanGrad());
     const really = isPerpendicular(mOf(g), mOf(g2));
     return yesnoQ("parallelPerp",
-      "Are the two lines <b>perpendicular</b> (do they cross at a right angle)?",
+      L("Are the two lines <b>perpendicular</b> (do they cross at a right angle)?", "Is die twee lyne <b>loodreg</b> (sny hulle mekaar teen 'n regte hoek)?"),
       really,
       { graph: twoLines(g, g2, really),
-        hint: "The picture is exactly to scale — a true right angle looks square.",
-        answerLabel: really ? "Yes — they meet at 90°." : "No — they don’t meet at 90°." });
+        hint: L("The picture is exactly to scale — a true right angle looks square.", "Die prent is presies op skaal: 'n ware regte hoek lyk vierkantig."),
+        answerLabel: really ? L("Yes — they meet at 90°.", "Ja: hulle sny mekaar teen 90°.") : L("No — they don’t meet at 90°.", "Nee: hulle sny mekaar nie teen 90° nie.") });
   },
 
   /* read a gradient from standard form */
@@ -123,20 +124,20 @@ const SKILLS = {
     const m = gradFromStandard(a, b);                  // −a/b
     const correct = gradFrac(-a, b).str;
     return mc("perpGradient",
-      `The line <b>${a < 0 ? "−" + Math.abs(a) : a}x + ${b}y = 0</b> can be written y = mx + c. Its gradient is…`,
+      L(`The line <b>${a < 0 ? "−" + Math.abs(a) : a}x + ${b}y = 0</b> can be written y = mx + c. Its gradient is…`, `Die lyn <b>${a < 0 ? "−" + Math.abs(a) : a}x + ${b}y = 0</b> kan as y = mx + c geskryf word. Sy gradiënt is…`),
       correct, [gradFrac(a, b).str, gradFrac(b, a).str, gradFrac(-b, a).str],
-      { hint: `Make y the subject: ${b}y = ${-a < 0 ? "−" : ""}${Math.abs(a)}x, so m = −a/b.`,
-        answerLabel: `Gradient = ${correct}.` });
+      { hint: L(`Make y the subject: ${b}y = ${-a < 0 ? "−" : ""}${Math.abs(a)}x, so m = −a/b.`, `Maak y die onderwerp: ${b}y = ${-a < 0 ? "−" : ""}${Math.abs(a)}x, dus m = −a/b.`),
+        answerLabel: L(`Gradient = ${correct}.`, `Gradiënt = ${correct}.`) });
   },
 
   /* the rule, stated */
   perpRule: () => {
     return mc("parallelPerp",
-      "Two lines are <b>perpendicular</b> exactly when their gradients…",
-      "multiply to give −1",
-      ["are equal", "add up to 0", "are both positive"],
-      { hint: "Parallel: equal gradients. Perpendicular: m₁ × m₂ = −1.",
-        answerLabel: "m₁ × m₂ = −1." });
+      L("Two lines are <b>perpendicular</b> exactly when their gradients…", "Twee lyne is <b>loodreg</b> presies wanneer hulle gradiënte…"),
+      L("multiply to give −1", "vermenigvuldig om −1 te gee"),
+      [L("are equal", "gelyk is"), L("add up to 0", "tot 0 optel"), L("are both positive", "albei positief is")],
+      { hint: L("Parallel: equal gradients. Perpendicular: m₁ × m₂ = −1.", "Ewewydig: gelyke gradiënte. Loodreg: m₁ × m₂ = −1."),
+        answerLabel: L("m₁ × m₂ = −1.", "m₁ × m₂ = −1.") });
   },
 };
 

@@ -10,6 +10,7 @@
 import { mc } from "./_shared.js";
 import { triangleAltitude, winFor, layoutPointLabels, AG } from "./_analytical.js";
 import { midpoint, footOfPerp, triArea, randPoint, pick } from "../analyticslib.js";
+import { L } from "../lang.js";
 
 const ACC = AG[6];
 
@@ -65,13 +66,13 @@ const SKILLS = {
   /* name the special line from its description */
   lineNames: () => {
     const cases = [
-      { p: "A line from a vertex to the <b>midpoint</b> of the opposite side is a…", c: "median", w: ["altitude", "perpendicular bisector"] },
-      { p: "A line from a vertex, <b>perpendicular</b> to the opposite side, is an…", c: "altitude", w: ["median", "perpendicular bisector"] },
-      { p: "A line through the <b>midpoint</b> of a segment AND <b>perpendicular</b> to it is a…", c: "perpendicular bisector", w: ["median", "altitude"] },
+      { p: L("A line from a vertex to the <b>midpoint</b> of the opposite side is a…", "'n Lyn van 'n hoekpunt na die <b>middelpunt</b> van die teenoorstaande sy is 'n…"), c: L("median", "swaartelyn"), w: [L("altitude", "hoogtelyn"), L("perpendicular bisector", "middelloodlyn")] },
+      { p: L("A line from a vertex, <b>perpendicular</b> to the opposite side, is an…", "'n Lyn van 'n hoekpunt af, <b>loodreg</b> op die teenoorstaande sy, is 'n…"), c: L("altitude", "hoogtelyn"), w: [L("median", "swaartelyn"), L("perpendicular bisector", "middelloodlyn")] },
+      { p: L("A line through the <b>midpoint</b> of a segment AND <b>perpendicular</b> to it is a…", "'n Lyn deur die <b>middelpunt</b> van 'n lynstuk EN <b>loodreg</b> daarop, is 'n…"), c: L("perpendicular bisector", "middelloodlyn"), w: [L("median", "swaartelyn"), L("altitude", "hoogtelyn")] },
     ];
     const k = pick(cases);
     return mc("proofWords", k.p, k.c, k.w,
-      { hint: "Median → midpoint. Altitude → right angle. Perpendicular bisector → midpoint AND right angle.",
+      { hint: L("Median → midpoint. Altitude → right angle. Perpendicular bisector → midpoint AND right angle.", "Swaartelyn → middelpunt. Hoogtelyn → regte hoek. Middelloodlyn → middelpunt EN regte hoek."),
         answerLabel: k.c });
   },
 
@@ -81,60 +82,60 @@ const SKILLS = {
     const isAlt = pick([true, false]);
     const spec = isAlt ? triangleAltitude(P, base, { accent: ACC }).spec : medianDiagram(P, base);
     return mc("proofWords",
-      "What is the dashed line inside the triangle?",
-      isAlt ? "an altitude (it meets the side at 90°)" : "a median (it goes to the midpoint)",
-      isAlt ? ["a median (it goes to the midpoint)", "a perpendicular bisector"] : ["an altitude (it meets the side at 90°)", "a side of the triangle"],
+      L("What is the dashed line inside the triangle?", "Wat is die stippellyn binne die driehoek?"),
+      isAlt ? L("an altitude (it meets the side at 90°)", "'n hoogtelyn (dit tref die sy teen 90°)") : L("a median (it goes to the midpoint)", "'n swaartelyn (dit gaan na die middelpunt)"),
+      isAlt ? [L("a median (it goes to the midpoint)", "'n swaartelyn (dit gaan na die middelpunt)"), L("a perpendicular bisector", "'n middelloodlyn")] : [L("an altitude (it meets the side at 90°)", "'n hoogtelyn (dit tref die sy teen 90°)"), L("a side of the triangle", "'n sy van die driehoek")],
       { graph: spec,
-        hint: "Right-angle mark → altitude. Equal tick marks (equal halves) → median.",
-        answerLabel: isAlt ? "An altitude — note the right-angle mark." : "A median — note the equal halves." });
+        hint: L("Right-angle mark → altitude. Equal tick marks (equal halves) → median.", "Regtehoekteken → hoogtelyn. Gelyke strepies (gelyke helftes) → swaartelyn."),
+        answerLabel: isAlt ? L("An altitude — note the right-angle mark.", "'n Hoogtelyn: let op die regtehoekteken.") : L("A median — note the equal halves.", "'n Swaartelyn: let op die gelyke helftes.") });
   },
 
   /* prove parallel */
   proveParallel: () => {
     return mc("proofWords",
-      "To prove <b>AB ∥ CD</b> (parallel), you show…",
-      "m<sub>AB</sub> = m<sub>CD</sub> (equal gradients)",
-      ["m<sub>AB</sub> × m<sub>CD</sub> = −1", "AB = CD (equal lengths)", "they share a midpoint"],
-      { hint: "Parallel lines have EQUAL gradients.", answerLabel: "Equal gradients: m_AB = m_CD." });
+      L("To prove <b>AB ∥ CD</b> (parallel), you show…", "Om <b>AB ∥ CD</b> (ewewydig) te bewys, toon jy aan…"),
+      L("m<sub>AB</sub> = m<sub>CD</sub> (equal gradients)", "m<sub>AB</sub> = m<sub>CD</sub> (gelyke gradiënte)"),
+      [L("m<sub>AB</sub> × m<sub>CD</sub> = −1", "m<sub>AB</sub> × m<sub>CD</sub> = −1"), L("AB = CD (equal lengths)", "AB = CD (gelyke lengtes)"), L("they share a midpoint", "hulle deel 'n middelpunt")],
+      { hint: L("Parallel lines have EQUAL gradients.", "Ewewydige lyne het GELYKE gradiënte."), answerLabel: L("Equal gradients: m_AB = m_CD.", "Gelyke gradiënte: m_AB = m_CD.") });
   },
 
   /* prove perpendicular */
   provePerp: () => {
     return mc("proofWords",
-      "To prove <b>AB ⊥ CD</b> (perpendicular), you show…",
-      "m<sub>AB</sub> × m<sub>CD</sub> = −1",
-      ["m<sub>AB</sub> = m<sub>CD</sub>", "AB = CD", "they have the same midpoint"],
-      { hint: "Perpendicular gradients multiply to −1.", answerLabel: "m_AB × m_CD = −1." });
+      L("To prove <b>AB ⊥ CD</b> (perpendicular), you show…", "Om <b>AB ⊥ CD</b> (loodreg) te bewys, toon jy aan…"),
+      L("m<sub>AB</sub> × m<sub>CD</sub> = −1", "m<sub>AB</sub> × m<sub>CD</sub> = −1"),
+      [L("m<sub>AB</sub> = m<sub>CD</sub>", "m<sub>AB</sub> = m<sub>CD</sub>"), L("AB = CD", "AB = CD"), L("they have the same midpoint", "hulle het dieselfde middelpunt")],
+      { hint: L("Perpendicular gradients multiply to −1.", "Loodregte gradiënte se produk is −1."), answerLabel: L("m_AB × m_CD = −1.", "m_AB × m_CD = −1.") });
   },
 
   /* prove collinear */
   proveCollinear: () => {
     return mc("proofWords",
-      "To prove A, B and C are <b>collinear</b> (on one straight line), you show…",
-      "m<sub>AB</sub> = m<sub>BC</sub> (same gradient, shared point B)",
-      ["m<sub>AB</sub> × m<sub>BC</sub> = −1", "AB = BC", "B is the midpoint of AC"],
-      { hint: "Same straight line → the little segments have the SAME gradient.",
-        answerLabel: "m_AB = m_BC (they share point B)." });
+      L("To prove A, B and C are <b>collinear</b> (on one straight line), you show…", "Om te bewys dat A, B en C <b>saamlynig</b> is (op een reguit lyn), toon jy aan…"),
+      L("m<sub>AB</sub> = m<sub>BC</sub> (same gradient, shared point B)", "m<sub>AB</sub> = m<sub>BC</sub> (dieselfde gradiënt, gedeelde punt B)"),
+      [L("m<sub>AB</sub> × m<sub>BC</sub> = −1", "m<sub>AB</sub> × m<sub>BC</sub> = −1"), L("AB = BC", "AB = BC"), L("B is the midpoint of AC", "B is die middelpunt van AC")],
+      { hint: L("Same straight line → the little segments have the SAME gradient.", "Dieselfde reguit lyn → die stukkies het DIESELFDE gradiënt."),
+        answerLabel: L("m_AB = m_BC (they share point B).", "m_AB = m_BC (hulle deel punt B).") });
   },
 
   /* prove parallelogram (diagonal method) */
   proveParallelogram: () => {
     return mc("proofWords",
-      "To prove a quadrilateral is a <b>parallelogram</b> using the diagonals, you show…",
-      "the diagonals bisect each other (same midpoint)",
-      ["the diagonals are equal in length", "the diagonals are perpendicular", "all four sides are equal"],
-      { hint: "Diagonals of a parallelogram share a midpoint — they bisect each other.",
-        answerLabel: "The diagonals have the same midpoint." });
+      L("To prove a quadrilateral is a <b>parallelogram</b> using the diagonals, you show…", "Om met die hoeklyne te bewys dat 'n vierhoek 'n <b>parallelogram</b> is, toon jy aan…"),
+      L("the diagonals bisect each other (same midpoint)", "die hoeklyne halveer mekaar (dieselfde middelpunt)"),
+      [L("the diagonals are equal in length", "die hoeklyne is ewe lank"), L("the diagonals are perpendicular", "die hoeklyne is loodreg"), L("all four sides are equal", "al vier sye is gelyk")],
+      { hint: L("Diagonals of a parallelogram share a midpoint — they bisect each other.", "'n Parallelogram se hoeklyne deel 'n middelpunt: hulle halveer mekaar."),
+        answerLabel: L("The diagonals have the same midpoint.", "Die hoeklyne het dieselfde middelpunt.") });
   },
 
   /* circle jobs */
   circleFormulas: () => {
     const ask = pick([
-      { p: "The <b>centre</b> of a circle is the … of a diameter.", c: "midpoint", w: ["gradient", "length", "distance"] },
-      { p: "To find the length of the <b>radius</b>, you use the … formula.", c: "distance", w: ["midpoint", "gradient", "area"] },
+      { p: L("The <b>centre</b> of a circle is the … of a diameter.", "Die <b>middelpunt</b> van 'n sirkel is die … van 'n middellyn."), c: L("midpoint", "middelpunt"), w: [L("gradient", "gradiënt"), L("length", "lengte"), L("distance", "afstand")] },
+      { p: L("To find the length of the <b>radius</b>, you use the … formula.", "Om die lengte van die <b>radius</b> te kry, gebruik jy die formule vir…"), c: L("distance", "afstand"), w: [L("midpoint", "middelpunt"), L("gradient", "gradiënt"), L("area", "oppervlakte")] },
     ]);
     return mc("proofWords", ask.p, ask.c, ask.w,
-      { hint: "Centre = midpoint of a diameter. Radius is a length → distance formula.", answerLabel: ask.c });
+      { hint: L("Centre = midpoint of a diameter. Radius is a length → distance formula.", "Sirkel se middelpunt = middelpunt van 'n middellyn. Radius is 'n lengte → afstandsformule."), answerLabel: ask.c });
   },
 };
 
