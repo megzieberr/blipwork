@@ -1,0 +1,2752 @@
+{
+  "unit": "T46",
+  "generated": "2026-10-17T18:48:49.034Z",
+  "files": [
+    "js/quests/questtg1-parents.js",
+    "js/quests/questtg2-params.js",
+    "js/quests/questtg3-period-amp-range.js",
+    "js/quests/questtg4-shifts.js",
+    "js/quests/questtg5-tan.js",
+    "js/quests/questtg6-find-equation.js",
+    "js/quests/questtg7-mixed.js"
+  ],
+  "items": {
+    "questtg1-parents#1": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questtg1-parents.js:16:22",
+        "questtg1-parents.js:19:23",
+        "questtg1-parents.js:27:22",
+        "questtg1-parents.js:38:22",
+        "questtg1-parents.js:49:22",
+        "questtg1-parents.js:70:22",
+        "questtg1-parents.js:74:26",
+        "questtg1-parents.js:75:28",
+        "questtg1-parents.js:76:26"
+      ],
+      "data": true
+    },
+    "questtg1-parents#2": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questtg1-parents.js:16:29",
+        "questtg1-parents.js:19:30",
+        "questtg1-parents.js:27:29",
+        "questtg1-parents.js:38:29",
+        "questtg1-parents.js:49:29",
+        "questtg1-parents.js:70:29"
+      ]
+    },
+    "questtg1-parents#3": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questtg1-parents.js:16:36",
+        "questtg1-parents.js:19:37",
+        "questtg1-parents.js:27:36",
+        "questtg1-parents.js:38:36",
+        "questtg1-parents.js:39:28",
+        "questtg1-parents.js:49:36",
+        "questtg1-parents.js:63:33"
+      ],
+      "data": true
+    },
+    "questtg1-parents#4": {
+      "en": "Which graph is shown?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg1-parents.js:18:30"
+      ]
+    },
+    "questtg1-parents#5": {
+      "en": "y = ${fn} x",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg1-parents.js:19:7"
+      ]
+    },
+    "questtg1-parents#6": {
+      "en": "y = ${f} x",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg1-parents.js:19:79"
+      ]
+    },
+    "questtg1-parents#7": {
+      "en": "Cosine starts at its peak (at 0°); sine starts at 0 and rises; tangent has vertical asymptotes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg1-parents.js:21:15"
+      ]
+    },
+    "questtg1-parents#8": {
+      "en": "This is y = ${fn} x.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg1-parents.js:22:22"
+      ]
+    },
+    "questtg1-parents#9": {
+      "en": "What is the period of y = ${fn} x?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg1-parents.js:29:29"
+      ]
+    },
+    "questtg1-parents#10": {
+      "en": "The period is one full cycle. Sine & cosine repeat every 360°; tangent every 180°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg1-parents.js:32:15"
+      ]
+    },
+    "questtg1-parents#11": {
+      "en": "Period of y = ${fn} x is ${P}°.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg1-parents.js:33:22"
+      ]
+    },
+    "questtg1-parents#12": {
+      "en": "y ∈ ℝ",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questtg1-parents.js:39:36",
+        "questtg1-parents.js:41:17"
+      ]
+    },
+    "questtg1-parents#13": {
+      "en": "y ∈ [−1 ; 1]",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questtg1-parents.js:39:46",
+        "questtg1-parents.js:41:26"
+      ]
+    },
+    "questtg1-parents#14": {
+      "en": "What is the range of y = ${fn} x?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg1-parents.js:40:28"
+      ]
+    },
+    "questtg1-parents#15": {
+      "en": "y ∈ [0 ; 1]",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg1-parents.js:41:42"
+      ]
+    },
+    "questtg1-parents#16": {
+      "en": "y ∈ [−1 ; 0]",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg1-parents.js:41:57"
+      ]
+    },
+    "questtg1-parents#17": {
+      "en": "Sine & cosine stay between −1 and 1. Tangent reaches every real value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg1-parents.js:43:15"
+      ]
+    },
+    "questtg1-parents#18": {
+      "en": "Range of y = ${fn} x is ${correct}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg1-parents.js:44:22"
+      ]
+    },
+    "questtg1-parents#19": {
+      "en": "undefined",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questtg1-parents.js:51:33",
+        "questtg1-parents.js:53:22"
+      ]
+    },
+    "questtg1-parents#20": {
+      "en": "What is the amplitude of y = ${fn} x?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg1-parents.js:52:32"
+      ]
+    },
+    "questtg1-parents#21": {
+      "en": "Amplitude is the height from the middle to a peak. Tangent has no peak, so it is undefined.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg1-parents.js:55:15"
+      ]
+    },
+    "questtg1-parents#22": {
+      "en": "Tangent has no amplitude (undefined).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg1-parents.js:56:34"
+      ]
+    },
+    "questtg1-parents#23": {
+      "en": "Amplitude of y = ${fn} x is 1.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg1-parents.js:56:76"
+      ]
+    },
+    "questtg1-parents#24": {
+      "en": "Where are the asymptotes of y = tan x for x ∈ [0° ; 360°]?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg1-parents.js:61:27"
+      ]
+    },
+    "questtg1-parents#25": {
+      "en": "90° and 270°",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg1-parents.js:62:7"
+      ]
+    },
+    "questtg1-parents#26": {
+      "en": "0° and 180°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg1-parents.js:62:24"
+      ]
+    },
+    "questtg1-parents#27": {
+      "en": "180° and 360°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg1-parents.js:62:39"
+      ]
+    },
+    "questtg1-parents#28": {
+      "en": "45° and 135°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg1-parents.js:62:56"
+      ]
+    },
+    "questtg1-parents#29": {
+      "en": "tan x = sin x ÷ cos x. The graph is undefined where cos x = 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg1-parents.js:64:15"
+      ]
+    },
+    "questtg1-parents#30": {
+      "en": "Asymptotes at 90° and 270° (where cos x = 0).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg1-parents.js:65:22"
+      ]
+    },
+    "questtg1-parents#31": {
+      "en": "Tap the <b>maximum</b> (peak) of y = ${fn} x.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg1-parents.js:88:15"
+      ]
+    },
+    "questtg1-parents#32": {
+      "en": "The peak is the highest point — where the graph reaches +1.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questtg1-parents.js:89:16"
+      ]
+    },
+    "questtg1-parents#33": {
+      "en": "The peak of y = ${fn} x is at (${peakX}° ; 1).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg1-parents.js:90:20"
+      ]
+    },
+    "questtg1-parents#34": {
+      "en": "y = ${fn} x reaches its maximum of 1 at x = ${peakX}°.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg1-parents.js:91:23"
+      ]
+    },
+    "questtg2-params#1": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg2-params.js:15:22",
+        "questtg2-params.js:28:22",
+        "questtg2-params.js:41:22",
+        "questtg2-params.js:54:22",
+        "questtg2-params.js:68:22",
+        "questtg2-params.js:82:22"
+      ]
+    },
+    "questtg2-params#2": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg2-params.js:15:29",
+        "questtg2-params.js:28:29",
+        "questtg2-params.js:41:29",
+        "questtg2-params.js:54:29",
+        "questtg2-params.js:68:29",
+        "questtg2-params.js:82:29"
+      ]
+    },
+    "questtg2-params#3": {
+      "en": "${eqStr(cv)}<br>What does the <b>negative</b> in front do?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg2-params.js:18:29"
+      ]
+    },
+    "questtg2-params#4": {
+      "en": "Reflects the graph in the x-axis (flips it upside-down)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg2-params.js:19:7"
+      ]
+    },
+    "questtg2-params#5": {
+      "en": "Shifts the graph downwards",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:20:8"
+      ]
+    },
+    "questtg2-params#6": {
+      "en": "Makes the period shorter",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:20:38"
+      ]
+    },
+    "questtg2-params#7": {
+      "en": "Halves the amplitude",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:20:66"
+      ]
+    },
+    "questtg2-params#8": {
+      "en": "A negative a only flips the graph over the x-axis; it does not move it or change the period.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg2-params.js:22:15"
+      ]
+    },
+    "questtg2-params#9": {
+      "en": "A negative a reflects the graph in the x-axis.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg2-params.js:23:22"
+      ]
+    },
+    "questtg2-params#10": {
+      "en": "Compared with y = ${fn} x, the graph ${eqStr(cv)} is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg2-params.js:31:29"
+      ]
+    },
+    "questtg2-params#11": {
+      "en": "${a} times as tall (amplitude ${a})",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg2-params.js:32:7"
+      ]
+    },
+    "questtg2-params#12": {
+      "en": "${a} times as wide",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:33:8"
+      ]
+    },
+    "questtg2-params#13": {
+      "en": "shifted up ${a} units",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:33:30"
+      ]
+    },
+    "questtg2-params#14": {
+      "en": "reflected in the x-axis",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:33:55"
+      ]
+    },
+    "questtg2-params#15": {
+      "en": "a stretches the graph vertically — it sets the amplitude (the height to a peak).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg2-params.js:35:15"
+      ]
+    },
+    "questtg2-params#16": {
+      "en": "a = ${a} stretches the height: amplitude ${a}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg2-params.js:36:22"
+      ]
+    },
+    "questtg2-params#17": {
+      "en": "${eqStr(cv)}<br>What does the <b>${b}</b> do?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg2-params.js:44:29"
+      ]
+    },
+    "questtg2-params#18": {
+      "en": "Squashes it sideways → ${b} cycles in 360° (shorter period)",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg2-params.js:45:7"
+      ]
+    },
+    "questtg2-params#19": {
+      "en": "Stretches it wider (longer period)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:46:8"
+      ]
+    },
+    "questtg2-params#20": {
+      "en": "Shifts it ${b} units up",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:46:46"
+      ]
+    },
+    "questtg2-params#21": {
+      "en": "Makes it ${b} times as tall",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:46:73"
+      ]
+    },
+    "questtg2-params#22": {
+      "en": "b changes the period: period = 360° ÷ b. A bigger b means more cycles squeezed into 360°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg2-params.js:48:15"
+      ]
+    },
+    "questtg2-params#23": {
+      "en": "b = ${b} → ${b} cycles in 360° (period ${360 / b}°).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg2-params.js:49:22"
+      ]
+    },
+    "questtg2-params#24": {
+      "en": "up",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg2-params.js:57:25"
+      ]
+    },
+    "questtg2-params#25": {
+      "en": "down",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg2-params.js:57:32"
+      ]
+    },
+    "questtg2-params#26": {
+      "en": "How is ${eqStr(cv)} different from y = ${fn} x?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg2-params.js:58:29"
+      ]
+    },
+    "questtg2-params#27": {
+      "en": "Shifted ${Math.abs(q)} units ${dir}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg2-params.js:59:7"
+      ]
+    },
+    "questtg2-params#28": {
+      "en": "Shifted ${Math.abs(q)} units ${q > 0 ? \"down\" : \"up\"}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:60:8"
+      ],
+      "nested": [
+        "down",
+        "up"
+      ]
+    },
+    "questtg2-params#29": {
+      "en": "Shifted ${Math.abs(q)}° to the right",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:60:65"
+      ]
+    },
+    "questtg2-params#30": {
+      "en": "Reflected in the x-axis",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:60:105"
+      ]
+    },
+    "questtg2-params#31": {
+      "en": "q slides the whole graph vertically. q > 0 up, q < 0 down. The midline becomes y = q.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg2-params.js:62:15"
+      ]
+    },
+    "questtg2-params#32": {
+      "en": "q = ${q} shifts the graph ${Math.abs(q)} units ${dir}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg2-params.js:63:22"
+      ]
+    },
+    "questtg2-params#33": {
+      "en": "y = ${String(v).replace(\"-\", \"−\")}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:72:23"
+      ]
+    },
+    "questtg2-params#34": {
+      "en": "${eqStr(cv)}<br>What is the equation of the <b>midline</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg2-params.js:73:29"
+      ]
+    },
+    "questtg2-params#35": {
+      "en": "y = 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg2-params.js:74:35"
+      ]
+    },
+    "questtg2-params#36": {
+      "en": "The midline runs through the middle of the wave at y = q (the dashed line).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg2-params.js:76:15"
+      ]
+    },
+    "questtg2-params#37": {
+      "en": "Midline: y = ${String(q).replace(\"-\", \"−\")}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg2-params.js:77:22"
+      ]
+    },
+    "questtg2-params#38": {
+      "en": "Is ${eqStr(cv)} the graph of y = ${fn} x reflected in the x-axis?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg2-params.js:87:15"
+      ]
+    },
+    "questtg2-params#39": {
+      "en": "A reflection in the x-axis flips the graph upside-down — that happens when a is negative.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg2-params.js:90:13"
+      ]
+    },
+    "questtg2-params#40": {
+      "en": "Yes — a = −1 flips y = ${fn} x in the x-axis.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg2-params.js:91:30"
+      ]
+    },
+    "questtg2-params#41": {
+      "en": "No — a = 1, so it is just y = ${fn} x (not flipped).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg2-params.js:91:80"
+      ]
+    },
+    "questtg2-params#42": {
+      "en": "a is negative, so the graph is reflected in the x-axis.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg2-params.js:92:33"
+      ]
+    },
+    "questtg2-params#43": {
+      "en": "a is positive, so the graph is the normal way up.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg2-params.js:92:93"
+      ]
+    },
+    "questtg3-period-amp-range#1": {
+      "en": "${eqStr(cv)}<br>What is the <b>period</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:30:15"
+      ]
+    },
+    "questtg3-period-amp-range#2": {
+      "en": "Period = ${base}° ÷ b. ${fn === \"tan\" ? \"Tangent uses 180°.\" : \"Sine and cosine use 360°.\"}",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:33:13"
+      ],
+      "nested": [
+        "tan",
+        "Tangent uses 180°.",
+        "Sine and cosine use 360°."
+      ]
+    },
+    "questtg3-period-amp-range#3": {
+      "en": "Period = ${base}° ÷ ${nstr(b)} = ${periodOf(cv)}°.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:34:20"
+      ]
+    },
+    "questtg3-period-amp-range#4": {
+      "en": "period = ${base}° ÷ ${nstr(b)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:35:23"
+      ]
+    },
+    "questtg3-period-amp-range#5": {
+      "en": "${eqStr(cv)}<br>What is the <b>amplitude</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:44:34",
+        "questtg3-period-amp-range.js:50:32"
+      ]
+    },
+    "questtg3-period-amp-range#6": {
+      "en": "undefined",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:45:9",
+        "questtg3-period-amp-range.js:45:28",
+        "questtg3-period-amp-range.js:51:135",
+        "questtg3-period-amp-range.js:63:81"
+      ]
+    },
+    "questtg3-period-amp-range#7": {
+      "en": "Tangent has no maximum or minimum, so it has no amplitude.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:46:24"
+      ]
+    },
+    "questtg3-period-amp-range#8": {
+      "en": "Amplitude: undefined (tan has no max/min).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:47:24"
+      ]
+    },
+    "questtg3-period-amp-range#9": {
+      "en": "Amplitude = |a| (always positive). The sign of a only flips the graph.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:52:22"
+      ]
+    },
+    "questtg3-period-amp-range#10": {
+      "en": "Amplitude = ${ampStr(cv)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:53:22"
+      ]
+    },
+    "questtg3-period-amp-range#11": {
+      "en": "${eqStr(cv)}<br>What is the <b>range</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:62:30",
+        "questtg3-period-amp-range.js:67:28",
+        "questtg3-period-amp-range.js:77:28"
+      ]
+    },
+    "questtg3-period-amp-range#12": {
+      "en": "y ∈ ℝ",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:63:9",
+        "questtg3-period-amp-range.js:63:24",
+        "questtg3-period-amp-range.js:68:120",
+        "questtg3-period-amp-range.js:125:155"
+      ]
+    },
+    "questtg3-period-amp-range#13": {
+      "en": "y ∈ [−1 ; 1]",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:63:65"
+      ]
+    },
+    "questtg3-period-amp-range#14": {
+      "en": "y ∈ (−${half}° ; ${half}°)",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:63:94"
+      ]
+    },
+    "questtg3-period-amp-range#15": {
+      "en": "Tangent reaches every real y-value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:64:24"
+      ]
+    },
+    "questtg3-period-amp-range#16": {
+      "en": "Range: y ∈ ℝ.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:64:76"
+      ]
+    },
+    "questtg3-period-amp-range#17": {
+      "en": "Range = [q − amplitude ; q + amplitude]. Start at the midline, go one amplitude each way.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:69:22"
+      ]
+    },
+    "questtg3-period-amp-range#18": {
+      "en": "Range: ${rangeStr(cv)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:70:22",
+        "questtg3-period-amp-range.js:128:22"
+      ]
+    },
+    "questtg3-period-amp-range#19": {
+      "en": "Midline is y = ${nstr(q)}. Range = [${nstr(q)} − ${A} ; ${nstr(q)} + ${A}].",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:80:15"
+      ]
+    },
+    "questtg3-period-amp-range#20": {
+      "en": "Range: ${rangeStr(cv)} (midline ${nstr(q)}, amplitude ${A}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:81:22"
+      ]
+    },
+    "questtg3-period-amp-range#21": {
+      "en": "${eqStr(cv)}<br>How many complete <b>cycles</b> does this graph make for x ∈ [0° ; 360°]?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:89:15"
+      ]
+    },
+    "questtg3-period-amp-range#22": {
+      "en": "Number of cycles = interval length ÷ period = 360° ÷ period.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:92:13"
+      ]
+    },
+    "questtg3-period-amp-range#23": {
+      "en": "360° ÷ ${periodOf(cv)}° = ${cyclesIn(cv, 0, 360)} cycles.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:93:20"
+      ]
+    },
+    "questtg3-period-amp-range#24": {
+      "en": "cycles = 360° ÷ period = 360° ÷ ${periodOf(cv)}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:94:23"
+      ]
+    },
+    "questtg3-period-amp-range#25": {
+      "en": "Read the <b>period</b> off the graph. The arrow marks one full cycle.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:102:29"
+      ]
+    },
+    "questtg3-period-amp-range#26": {
+      "en": "The period is the width of one complete wave (peak to the next peak).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:105:15"
+      ]
+    },
+    "questtg3-period-amp-range#27": {
+      "en": "Period = ${P}°.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:106:22"
+      ]
+    },
+    "questtg3-period-amp-range#28": {
+      "en": "Read the <b>amplitude</b> off the graph (use the marked peak and trough).",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:113:32"
+      ]
+    },
+    "questtg3-period-amp-range#29": {
+      "en": "Amplitude = (y max − y min) ÷ 2. Read y max and y min off the y-axis (the dashed guides).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:116:15"
+      ]
+    },
+    "questtg3-period-amp-range#30": {
+      "en": "Amplitude = (${nstr(q + A)} − (${nstr(q - A)})) ÷ 2 = ${A}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:117:22"
+      ]
+    },
+    "questtg3-period-amp-range#31": {
+      "en": "Read the <b>range</b> off the graph (the marked peak and trough).",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:124:28"
+      ]
+    },
+    "questtg3-period-amp-range#32": {
+      "en": "Range = from the lowest y-value (trough) up to the highest (peak).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:127:15"
+      ]
+    },
+    "questtg3-period-amp-range#33": {
+      "en": "Does ${eqStr(cv)} have an amplitude?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:136:15"
+      ]
+    },
+    "questtg3-period-amp-range#34": {
+      "en": "Amplitude needs a highest and lowest point. Tangent has neither.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:138:13"
+      ]
+    },
+    "questtg3-period-amp-range#35": {
+      "en": "No — tangent has no maximum or minimum, so its amplitude is undefined.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:139:20"
+      ]
+    },
+    "questtg3-period-amp-range#36": {
+      "en": "tan climbs without bound between its asymptotes, so there is no peak or trough — no amplitude.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg3-period-amp-range.js:140:23"
+      ]
+    },
+    "questtg4-shifts#1": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg4-shifts.js:16:22",
+        "questtg4-shifts.js:31:22",
+        "questtg4-shifts.js:44:26",
+        "questtg4-shifts.js:44:62",
+        "questtg4-shifts.js:46:21",
+        "questtg4-shifts.js:66:22",
+        "questtg4-shifts.js:81:22",
+        "questtg4-shifts.js:95:22"
+      ],
+      "data": true
+    },
+    "questtg4-shifts#2": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg4-shifts.js:16:29",
+        "questtg4-shifts.js:31:29",
+        "questtg4-shifts.js:44:34",
+        "questtg4-shifts.js:44:54",
+        "questtg4-shifts.js:46:64",
+        "questtg4-shifts.js:66:29",
+        "questtg4-shifts.js:81:29",
+        "questtg4-shifts.js:95:29"
+      ],
+      "data": true
+    },
+    "questtg4-shifts#3": {
+      "en": "right",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg4-shifts.js:20:25",
+        "questtg4-shifts.js:45:34"
+      ]
+    },
+    "questtg4-shifts#4": {
+      "en": "left",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg4-shifts.js:20:35",
+        "questtg4-shifts.js:45:25"
+      ]
+    },
+    "questtg4-shifts#5": {
+      "en": "${eqStr(cv)}<br>Describe the shift from y = ${fn} x.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg4-shifts.js:21:29"
+      ]
+    },
+    "questtg4-shifts#6": {
+      "en": "${mag}° to the ${dir}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg4-shifts.js:22:7"
+      ]
+    },
+    "questtg4-shifts#7": {
+      "en": "${mag}° to the ${p > 0 ? \"left\" : \"right\"}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:23:8"
+      ],
+      "nested": [
+        "left",
+        "right"
+      ]
+    },
+    "questtg4-shifts#8": {
+      "en": "${mag} units up",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:23:54"
+      ]
+    },
+    "questtg4-shifts#9": {
+      "en": "${mag} units down",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:23:73"
+      ]
+    },
+    "questtg4-shifts#10": {
+      "en": "The bracket is (x − p). The graph moves the OPPOSITE way to the sign: (x − 30°) → right, (x + 30°) → left.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg4-shifts.js:25:15"
+      ]
+    },
+    "questtg4-shifts#11": {
+      "en": "${eqStr(cv)} shifts y = ${fn} x ${mag}° to the ${dir}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:26:22"
+      ]
+    },
+    "questtg4-shifts#12": {
+      "en": "Which equation shifts y = ${fn} x <b>${mag}° to the left</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg4-shifts.js:35:29"
+      ]
+    },
+    "questtg4-shifts#13": {
+      "en": "y = ${fn} x + ${mag}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:36:35"
+      ]
+    },
+    "questtg4-shifts#14": {
+      "en": "y = ${fn} x − ${mag}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:36:59"
+      ]
+    },
+    "questtg4-shifts#15": {
+      "en": "Left means the bracket reads (x + …). A vertical (+ outside the function) does not move it sideways.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg4-shifts.js:37:15"
+      ]
+    },
+    "questtg4-shifts#16": {
+      "en": "${eqStr(left)} shifts ${mag}° left.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:38:22"
+      ]
+    },
+    "questtg4-shifts#17": {
+      "en": "f = sin x and g = cos x are drawn. How must y = ${from} x be shifted to give y = ${to} x?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg4-shifts.js:52:7"
+      ]
+    },
+    "questtg4-shifts#18": {
+      "en": "90° to the ${dir}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg4-shifts.js:53:7"
+      ]
+    },
+    "questtg4-shifts#19": {
+      "en": "90° to the ${toCos ? \"right\" : \"left\"}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:54:8"
+      ],
+      "nested": [
+        "right",
+        "left"
+      ]
+    },
+    "questtg4-shifts#20": {
+      "en": "180° to the ${dir}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:54:50"
+      ]
+    },
+    "questtg4-shifts#21": {
+      "en": "1 unit up",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:54:72"
+      ]
+    },
+    "questtg4-shifts#22": {
+      "en": "Cosine peaks at 0°, sine only at 90° — cosine is 90° 'ahead'. Slide the peaks onto each other.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg4-shifts.js:56:15"
+      ]
+    },
+    "questtg4-shifts#23": {
+      "en": "cos x = sin(x + 90°): shift sin x 90° left.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:57:30"
+      ]
+    },
+    "questtg4-shifts#24": {
+      "en": "sin x = cos(x − 90°): shift cos x 90° right.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:57:78"
+      ]
+    },
+    "questtg4-shifts#25": {
+      "en": "sin x peaks at 90°; cos x peaks at 0°",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg4-shifts.js:59:24"
+      ]
+    },
+    "questtg4-shifts#26": {
+      "en": "cos x peaks at 0°; sin x peaks at 90°",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg4-shifts.js:59:66"
+      ]
+    },
+    "questtg4-shifts#27": {
+      "en": "every feature must move 90° left: cos x = sin(x + 90°)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg4-shifts.js:60:24"
+      ]
+    },
+    "questtg4-shifts#28": {
+      "en": "every feature must move 90° right: sin x = cos(x − 90°)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg4-shifts.js:60:83"
+      ]
+    },
+    "questtg4-shifts#29": {
+      "en": "Rewrite y = ${fn}(${b}x − ${inner}°) as y = ${fn} b(x − p). What is the <b>real</b> horizontal shift?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg4-shifts.js:71:7"
+      ]
+    },
+    "questtg4-shifts#30": {
+      "en": "${shift}° to the right",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg4-shifts.js:72:7"
+      ]
+    },
+    "questtg4-shifts#31": {
+      "en": "${inner}° to the right",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:73:8"
+      ]
+    },
+    "questtg4-shifts#32": {
+      "en": "${shift}° to the left",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:73:34"
+      ]
+    },
+    "questtg4-shifts#33": {
+      "en": "${inner}° to the left",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:73:59"
+      ]
+    },
+    "questtg4-shifts#34": {
+      "en": "Factor b out: ${fn}(${b}x − ${inner}°) = ${fn} ${b}(x − ${shift}°). The shift is ${shift}°, not ${inner}°.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg4-shifts.js:75:15"
+      ]
+    },
+    "questtg4-shifts#35": {
+      "en": "${fn} ${b}(x − ${shift}°): shift ${shift}° right.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:76:22"
+      ]
+    },
+    "questtg4-shifts#36": {
+      "en": "tan",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg4-shifts.js:81:36"
+      ]
+    },
+    "questtg4-shifts#37": {
+      "en": "up",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg4-shifts.js:84:25"
+      ]
+    },
+    "questtg4-shifts#38": {
+      "en": "down",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg4-shifts.js:84:32"
+      ]
+    },
+    "questtg4-shifts#39": {
+      "en": "${eqStr(cv)}<br>How is it shifted from y = ${fn} x?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg4-shifts.js:85:29"
+      ]
+    },
+    "questtg4-shifts#40": {
+      "en": "${Math.abs(q)} units ${dir}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg4-shifts.js:86:7"
+      ]
+    },
+    "questtg4-shifts#41": {
+      "en": "${Math.abs(q)} units ${q > 0 ? \"down\" : \"up\"}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:87:8"
+      ],
+      "nested": [
+        "down",
+        "up"
+      ]
+    },
+    "questtg4-shifts#42": {
+      "en": "${Math.abs(q)}° to the right",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:87:57"
+      ]
+    },
+    "questtg4-shifts#43": {
+      "en": "${Math.abs(q)}° to the left",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:87:89"
+      ]
+    },
+    "questtg4-shifts#44": {
+      "en": "q is added outside the function, so it slides the graph vertically (+ up, − down).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg4-shifts.js:89:15"
+      ]
+    },
+    "questtg4-shifts#45": {
+      "en": "q = ${nstr(q)} shifts it ${Math.abs(q)} units ${dir}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:90:22"
+      ]
+    },
+    "questtg4-shifts#46": {
+      "en": "Start with y = ${a}${fn} x, then shift it ${Math.abs(q)} ${q > 0 ? \"up\" : \"down\"}. What is the new <b>range</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg4-shifts.js:101:7"
+      ],
+      "nested": [
+        "up",
+        "down"
+      ]
+    },
+    "questtg4-shifts#47": {
+      "en": "y ∈ ℝ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg4-shifts.js:102:124"
+      ]
+    },
+    "questtg4-shifts#48": {
+      "en": "Amplitude stays ${A}; the midline moves to y = ${nstr(q)}. Range = [${nstr(q - A)} ; ${nstr(q + A)}].",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg4-shifts.js:104:15"
+      ]
+    },
+    "questtg4-shifts#49": {
+      "en": "New range: ${rangeStr(cv)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:105:22"
+      ]
+    },
+    "questtg4-shifts#50": {
+      "en": "Does shifting a graph left, right, up or down change its <b>period</b>?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg4-shifts.js:112:15"
+      ]
+    },
+    "questtg4-shifts#51": {
+      "en": "Only b changes the period. Shifting just slides the same wave to a new place.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg4-shifts.js:114:13"
+      ]
+    },
+    "questtg4-shifts#52": {
+      "en": "No — shifts move the graph but the period (set by b) stays the same.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg4-shifts.js:115:20"
+      ]
+    },
+    "questtg4-shifts#53": {
+      "en": "Period = 360° ÷ b. Shifts change p and q, not b, so the period is unchanged.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg4-shifts.js:116:23"
+      ]
+    },
+    "questtg5-tan#1": {
+      "en": "${eqStr(cv)}<br>What is the <b>period</b>?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg5-tan.js:19:15"
+      ]
+    },
+    "questtg5-tan#2": {
+      "en": "Tangent's period = 180° ÷ b.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg5-tan.js:22:13"
+      ]
+    },
+    "questtg5-tan#3": {
+      "en": "Period = 180° ÷ ${nstr(cv.b)} = ${periodOf(cv)}°.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg5-tan.js:23:20"
+      ]
+    },
+    "questtg5-tan#4": {
+      "en": "period = 180° ÷ ${nstr(cv.b)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg5-tan.js:24:23"
+      ]
+    },
+    "questtg5-tan#5": {
+      "en": "y = tan x is undefined (has a vertical asymptote) wherever…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg5-tan.js:30:27"
+      ]
+    },
+    "questtg5-tan#6": {
+      "en": "cos x = 0",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg5-tan.js:31:7"
+      ]
+    },
+    "questtg5-tan#7": {
+      "en": "sin x = 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:31:21"
+      ]
+    },
+    "questtg5-tan#8": {
+      "en": "tan x = 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:31:34"
+      ]
+    },
+    "questtg5-tan#9": {
+      "en": "x = 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:31:47"
+      ]
+    },
+    "questtg5-tan#10": {
+      "en": "tan x = sin x ÷ cos x. A fraction is undefined when its denominator is 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg5-tan.js:33:15"
+      ]
+    },
+    "questtg5-tan#11": {
+      "en": "Asymptotes occur where cos x = 0 (at 90°, 270°, …).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg5-tan.js:34:22"
+      ]
+    },
+    "questtg5-tan#12": {
+      "en": "What are the x-intercepts of y = tan x for x ∈ [0° ; 360°]?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg5-tan.js:39:27"
+      ]
+    },
+    "questtg5-tan#13": {
+      "en": "0°, 180° and 360°",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg5-tan.js:40:7"
+      ]
+    },
+    "questtg5-tan#14": {
+      "en": "90° and 270°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:40:29"
+      ]
+    },
+    "questtg5-tan#15": {
+      "en": "45° and 135°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:40:45"
+      ]
+    },
+    "questtg5-tan#16": {
+      "en": "only at 0°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:40:61"
+      ]
+    },
+    "questtg5-tan#17": {
+      "en": "tan x = 0 where the numerator sin x = 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg5-tan.js:42:15"
+      ]
+    },
+    "questtg5-tan#18": {
+      "en": "x-intercepts where sin x = 0: 0°, 180°, 360°.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg5-tan.js:43:22"
+      ]
+    },
+    "questtg5-tan#19": {
+      "en": "${eqStr(cv)}<br>What is the <b>range</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg5-tan.js:50:28"
+      ]
+    },
+    "questtg5-tan#20": {
+      "en": "y ∈ ℝ",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:51:7",
+        "questtg5-tan.js:51:22"
+      ]
+    },
+    "questtg5-tan#21": {
+      "en": "y ∈ [−1 ; 1]",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:51:63"
+      ]
+    },
+    "questtg5-tan#22": {
+      "en": "undefined",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:51:79"
+      ]
+    },
+    "questtg5-tan#23": {
+      "en": "y ∈ (−${half}° ; ${half}°)",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg5-tan.js:51:92"
+      ]
+    },
+    "questtg5-tan#24": {
+      "en": "Tangent climbs without bound between its asymptotes, so it reaches every real value.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg5-tan.js:53:15"
+      ]
+    },
+    "questtg5-tan#25": {
+      "en": "Range: y ∈ ℝ (any a, b, p, q).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg5-tan.js:54:22"
+      ]
+    },
+    "questtg5-tan#26": {
+      "en": "A tan graph crosses its midline at an inflection point. 45° to the <b>right</b> it sits at y = ${nstr(hi)}; 45° to the <b>left</b> it sits at y = ${nstr(lo)}. Find <b>a</b>.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg5-tan.js:64:15"
+      ]
+    },
+    "questtg5-tan#27": {
+      "en": "a = (the value 45° right − the value 45° left) ÷ 2.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg5-tan.js:66:13"
+      ]
+    },
+    "questtg5-tan#28": {
+      "en": "a = (${nstr(hi)} − (${nstr(lo)})) ÷ 2 = ${a}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg5-tan.js:67:20"
+      ]
+    },
+    "questtg5-tan#29": {
+      "en": "a = (\"y at +45°\" − \"y at −45°\") ÷ 2 = (${nstr(hi)} − (${nstr(lo)})) ÷ 2",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg5-tan.js:68:23"
+      ]
+    },
+    "questtg5-tan#30": {
+      "en": "For a tan graph, does a <b>larger size</b> of a make the branches steeper?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg5-tan.js:76:15"
+      ]
+    },
+    "questtg5-tan#31": {
+      "en": "Tangent has no amplitude, but a still stretches it vertically — that makes each branch steeper.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg5-tan.js:78:13"
+      ]
+    },
+    "questtg5-tan#32": {
+      "en": "Yes — a bigger a makes a tan graph steeper (it has no amplitude, but a sets the steepness).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg5-tan.js:79:20"
+      ]
+    },
+    "questtg5-tan#33": {
+      "en": "a stretches tan vertically: larger a → steeper branches; smaller a → flatter.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg5-tan.js:80:23"
+      ]
+    },
+    "questtg6-find-equation#1": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg6-find-equation.js:15:22",
+        "questtg6-find-equation.js:18:36",
+        "questtg6-find-equation.js:18:52",
+        "questtg6-find-equation.js:26:22",
+        "questtg6-find-equation.js:38:22",
+        "questtg6-find-equation.js:50:22",
+        "questtg6-find-equation.js:62:22",
+        "questtg6-find-equation.js:72:33",
+        "questtg6-find-equation.js:72:49"
+      ],
+      "data": true
+    },
+    "questtg6-find-equation#2": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questtg6-find-equation.js:15:29",
+        "questtg6-find-equation.js:18:44",
+        "questtg6-find-equation.js:26:29",
+        "questtg6-find-equation.js:38:29",
+        "questtg6-find-equation.js:50:29",
+        "questtg6-find-equation.js:62:29",
+        "questtg6-find-equation.js:72:41"
+      ]
+    },
+    "questtg6-find-equation#3": {
+      "en": "Is this the graph of sine, cosine or tangent?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg6-find-equation.js:17:35"
+      ]
+    },
+    "questtg6-find-equation#4": {
+      "en": "tangent",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg6-find-equation.js:18:60"
+      ]
+    },
+    "questtg6-find-equation#5": {
+      "en": "Cosine starts at a peak (at 0°); sine starts at 0 and rises; tangent has asymptotes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg6-find-equation.js:20:15"
+      ]
+    },
+    "questtg6-find-equation#6": {
+      "en": "This is a ${FN_NAME[fn]} graph.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg6-find-equation.js:21:22"
+      ]
+    },
+    "questtg6-find-equation#7": {
+      "en": "The graph shows y = a·${fn} x + q.<br>Read the value of <b>a</b> (watch the sign).",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg6-find-equation.js:29:35"
+      ]
+    },
+    "questtg6-find-equation#8": {
+      "en": "a = (y max − y min) ÷ 2, made negative if the graph is flipped (starts the wrong way up).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg6-find-equation.js:32:15"
+      ]
+    },
+    "questtg6-find-equation#9": {
+      "en": "a = ${nstr(a)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg6-find-equation.js:33:22"
+      ]
+    },
+    "questtg6-find-equation#10": {
+      "en": "The graph shows y = a·${fn} x + q.<br>Read the value of <b>q</b> (the vertical shift).",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg6-find-equation.js:41:35"
+      ]
+    },
+    "questtg6-find-equation#11": {
+      "en": "q = (y max + y min) ÷ 2 — the height of the midline (the dashed line).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg6-find-equation.js:44:15"
+      ]
+    },
+    "questtg6-find-equation#12": {
+      "en": "q = ${nstr(q)} (the midline).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg6-find-equation.js:45:22"
+      ]
+    },
+    "questtg6-find-equation#13": {
+      "en": "The graph shows y = a·${fn} bx.<br>Read the value of <b>b</b> (use the marked cycle to find the period first).",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg6-find-equation.js:53:35"
+      ]
+    },
+    "questtg6-find-equation#14": {
+      "en": "First read the period, then b = 360° ÷ period.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg6-find-equation.js:56:15"
+      ]
+    },
+    "questtg6-find-equation#15": {
+      "en": "Period ${periodOf(cv)}° → b = 360° ÷ ${periodOf(cv)}° = ${b}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg6-find-equation.js:57:22"
+      ]
+    },
+    "questtg6-find-equation#16": {
+      "en": "Which equation matches the graph?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg6-find-equation.js:74:35"
+      ]
+    },
+    "questtg6-find-equation#17": {
+      "en": "Find a (height + sign), q (midline) and b (from the period), then read off sin vs cos.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg6-find-equation.js:77:15"
+      ]
+    },
+    "questtg6-find-equation#18": {
+      "en": "Equation: ${eqStr(cv)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg6-find-equation.js:78:22"
+      ]
+    },
+    "questtg6-find-equation#19": {
+      "en": "The graph shows y = a·tan bx.<br>Read the value of <b>b</b> (use the spacing of the asymptotes).",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg6-find-equation.js:85:35"
+      ]
+    },
+    "questtg6-find-equation#20": {
+      "en": "Tangent's asymptotes are one period apart. Period = 180° ÷ b, so b = 180° ÷ period.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg6-find-equation.js:88:15"
+      ]
+    },
+    "questtg6-find-equation#21": {
+      "en": "Period ${periodOf(cv)}° → b = 180° ÷ ${periodOf(cv)}° = ${b}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg6-find-equation.js:89:22"
+      ]
+    },
+    "questtg7-mixed#1": {
+      "en": "sin",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questtg7-mixed.js:18:21",
+        "questtg7-mixed.js:31:21",
+        "questtg7-mixed.js:44:21",
+        "questtg7-mixed.js:54:22",
+        "questtg7-mixed.js:73:21",
+        "questtg7-mixed.js:97:22"
+      ],
+      "data": true
+    },
+    "questtg7-mixed#2": {
+      "en": "cos",
+      "kind": "string",
+      "slots": [
+        "placeholder",
+        "solution.s"
+      ],
+      "where": [
+        "questtg7-mixed.js:18:65",
+        "questtg7-mixed.js:31:64",
+        "questtg7-mixed.js:54:29",
+        "questtg7-mixed.js:73:64",
+        "questtg7-mixed.js:97:29"
+      ],
+      "data": true
+    },
+    "questtg7-mixed#3": {
+      "en": "f",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:20:65",
+        "questtg7-mixed.js:22:17",
+        "questtg7-mixed.js:22:45",
+        "questtg7-mixed.js:33:38",
+        "questtg7-mixed.js:78:42"
+      ]
+    },
+    "questtg7-mixed#4": {
+      "en": "g",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:20:92",
+        "questtg7-mixed.js:22:23",
+        "questtg7-mixed.js:22:39",
+        "questtg7-mixed.js:33:65",
+        "questtg7-mixed.js:78:89"
+      ]
+    },
+    "questtg7-mixed#5": {
+      "en": "Which graph has the <b>larger amplitude</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg7-mixed.js:21:31"
+      ]
+    },
+    "questtg7-mixed#6": {
+      "en": "They are equal",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:22:50",
+        "questtg7-mixed.js:37:82"
+      ]
+    },
+    "questtg7-mixed#7": {
+      "en": "Neither has an amplitude",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:22:68"
+      ]
+    },
+    "questtg7-mixed#8": {
+      "en": "Amplitude is the height from the middle to a peak. The taller wave has the larger amplitude.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg7-mixed.js:23:28"
+      ]
+    },
+    "questtg7-mixed#9": {
+      "en": "${af > ag ? \"f\" : \"g\"} is taller — amplitude ${Math.max(af, ag)} vs ${Math.min(af, ag)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg7-mixed.js:24:22"
+      ],
+      "nested": [
+        "f",
+        "g"
+      ]
+    },
+    "questtg7-mixed#10": {
+      "en": "At x = ${X}°, which graph is <b>higher</b>?  (f = sin x, g = cos x)",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg7-mixed.js:36:31"
+      ]
+    },
+    "questtg7-mixed#11": {
+      "en": "f (sin x)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:37:17",
+        "questtg7-mixed.js:37:69"
+      ]
+    },
+    "questtg7-mixed#12": {
+      "en": "g (cos x)",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:37:31",
+        "questtg7-mixed.js:37:55"
+      ]
+    },
+    "questtg7-mixed#13": {
+      "en": "Read straight up from x on the dashed line — the higher dot is the higher graph.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg7-mixed.js:38:28"
+      ]
+    },
+    "questtg7-mixed#14": {
+      "en": "At ${X}°, ${fv > gv ? \"f = sin\" : \"g = cos\"} is higher.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg7-mixed.js:39:22"
+      ],
+      "nested": [
+        "f = sin",
+        "g = cos"
+      ]
+    },
+    "questtg7-mixed#15": {
+      "en": "For which interval is <b>sin x &gt; 0</b> on [0° ; 360°]?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg7-mixed.js:45:31"
+      ]
+    },
+    "questtg7-mixed#16": {
+      "en": "0° &lt; x &lt; 180°",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questtg7-mixed.js:46:7"
+      ]
+    },
+    "questtg7-mixed#17": {
+      "en": "180° &lt; x &lt; 360°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:46:31"
+      ]
+    },
+    "questtg7-mixed#18": {
+      "en": "90° &lt; x &lt; 270°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:46:56"
+      ]
+    },
+    "questtg7-mixed#19": {
+      "en": "0° &lt; x &lt; 90°",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:46:80"
+      ]
+    },
+    "questtg7-mixed#20": {
+      "en": "sin x > 0 where the graph is ABOVE the x-axis (between its x-intercepts at 0° and 180°).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg7-mixed.js:48:15"
+      ]
+    },
+    "questtg7-mixed#21": {
+      "en": "sin x > 0 for 0° < x < 180°.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg7-mixed.js:49:22"
+      ]
+    },
+    "questtg7-mixed#22": {
+      "en": "Does the point (${X}° ; ${nstr(Y)}) lie on y = ${fn} x?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg7-mixed.js:62:15"
+      ]
+    },
+    "questtg7-mixed#23": {
+      "en": "Work out ${fn} ${X}° and compare it with ${nstr(Y)}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg7-mixed.js:65:13"
+      ]
+    },
+    "questtg7-mixed#24": {
+      "en": "${fn} ${X}° = ${nstr(trueY)}, so the point ${Y === trueY ? \"does\" : \"does not\"} lie on the graph.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg7-mixed.js:66:20"
+      ],
+      "nested": [
+        "does",
+        "does not"
+      ]
+    },
+    "questtg7-mixed#25": {
+      "en": "matches",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questtg7-mixed.js:67:72"
+      ]
+    },
+    "questtg7-mixed#26": {
+      "en": "Tap a point where <b>f(x) = g(x)</b> (the curves cross).  f = sin x, g = cos x.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questtg7-mixed.js:88:15"
+      ]
+    },
+    "questtg7-mixed#27": {
+      "en": "An intersection is where the two curves meet — the dot that sits on BOTH.",
+      "kind": "string",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questtg7-mixed.js:89:16"
+      ]
+    },
+    "questtg7-mixed#28": {
+      "en": "f = g at x = 45° (where sin x and cos x cross).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questtg7-mixed.js:90:20"
+      ]
+    },
+    "questtg7-mixed#29": {
+      "en": "The graphs cross at x = 45°, where sin 45° = cos 45°.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questtg7-mixed.js:91:23"
+      ]
+    },
+    "questtg7-mixed#30": {
+      "en": "Vertical stretch — amplitude becomes ${stretchK}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:102:16"
+      ]
+    },
+    "questtg7-mixed#31": {
+      "en": "Shifted ${Math.abs(shiftD)} units ${shiftD > 0 ? \"up\" : \"down\"}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:103:14"
+      ],
+      "nested": [
+        "up",
+        "down"
+      ]
+    },
+    "questtg7-mixed#32": {
+      "en": "Reflected in the x-axis",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:104:16"
+      ]
+    },
+    "questtg7-mixed#33": {
+      "en": "Squashed sideways — ${bK} cycles in 360° (period ${360 / bK}°)",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questtg7-mixed.js:105:15"
+      ]
+    },
+    "questtg7-mixed#34": {
+      "en": "Describe the transformation from y = ${fn} x to ${eqStr(cv)}.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questtg7-mixed.js:113:29"
+      ]
+    },
+    "questtg7-mixed#35": {
+      "en": "Compare amplitude (a), midline (q), orientation (sign of a) and period (b).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questtg7-mixed.js:116:15"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "questtg3-period-amp-range.js:33:54",
+      "text": "Tangent uses 180°.",
+      "in": "Period = ${base}° ÷ b. ${fn === \"tan\" ? \"Tangent uses 180°.\""
+    },
+    {
+      "where": "questtg3-period-amp-range.js:33:77",
+      "text": "Sine and cosine use 360°.",
+      "in": "Period = ${base}° ÷ b. ${fn === \"tan\" ? \"Tangent uses 180°.\""
+    },
+    {
+      "where": "questtg7-mixed.js:66:89",
+      "text": "does not",
+      "in": "${fn} ${X}° = ${nstr(trueY)}, so the point ${Y === trueY ? \""
+    }
+  ],
+  "words": 1336
+}
