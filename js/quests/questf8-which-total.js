@@ -412,18 +412,22 @@ function jugSameDay(pos) {
    FOUR short phrases, one jug (a state), three coins (actions), each with
    fresh numbers; mc() shuffles, so the jug lands in a different slot */
 const someone = () => pick(["she", "he"]);
+/* S7 (2026-10-17): every draw sits in a const just above its phrase, made
+   in the order the phrase used to make it (who, then the amount, then the
+   year or T), so the words hold no draw and an L(en, af) twin of a phrase
+   draws once for both sides. Same words, same odds, same cards */
 const JUGS = {
-  has: () => `${someone()} has ${money(step500(10000, 90000))} in the account after ${years(randInt(3, 8))}`,
-  wants: () => `${someone()} wants to have ${money(5000 * randInt(4, 30))} after ${years(randInt(3, 8))}`,
-  borrows: () => `${someone()} borrows ${money(5000 * randInt(4, 30))}`,
-  owes: () => `${someone()} owes the bank ${money(step500(10000, 90000))} now`,
+  has: () => { const who = someone(), v = step500(10000, 90000), y = randInt(3, 8); return `${who} has ${money(v)} in the account after ${years(y)}`; },
+  wants: () => { const who = someone(), v = 5000 * randInt(4, 30), y = randInt(3, 8); return `${who} wants to have ${money(v)} after ${years(y)}`; },
+  borrows: () => { const who = someone(), v = 5000 * randInt(4, 30); return `${who} borrows ${money(v)}`; },
+  owes: () => { const who = someone(), v = step500(10000, 90000); return `${who} owes the bank ${money(v)} now`; },
 };
 const COINS = {
-  in: () => ({ kind: "in", text: `${someone()} deposits ${money(step500(1000, 9000))}` }),
-  out: () => ({ kind: "out", text: `${someone()} withdraws ${money(step500(1000, 9000))}` }),
-  payAt: () => ({ kind: "repay", text: `${someone()} pays ${money(step500(2000, 9000))} at T${randInt(1, 6)}` }),
-  payBack: () => ({ kind: "repay", text: `${someone()} pays back ${money(step500(2000, 9000))} after ${years(randInt(1, 6))}` }),
-  down: () => ({ kind: "down", text: `${someone()} pays a down payment of ${money(step500(1000, 6000))}` }),
+  in: () => { const who = someone(), v = step500(1000, 9000); return { kind: "in", text: `${who} deposits ${money(v)}` }; },
+  out: () => { const who = someone(), v = step500(1000, 9000); return { kind: "out", text: `${who} withdraws ${money(v)}` }; },
+  payAt: () => { const who = someone(), v = step500(2000, 9000), t = randInt(1, 6); return { kind: "repay", text: `${who} pays ${money(v)} at T${t}` }; },
+  payBack: () => { const who = someone(), v = step500(2000, 9000), y = randInt(1, 6); return { kind: "repay", text: `${who} pays back ${money(v)} after ${years(y)}` }; },
+  down: () => { const who = someone(), v = step500(1000, 6000); return { kind: "down", text: `${who} pays a down payment of ${money(v)}` }; },
 };
 const RECALL = {
   recallSaving: { jugs: ["has", "wants"], coins: ["in", "out", "payAt"] },

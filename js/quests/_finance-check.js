@@ -33,6 +33,8 @@ import {
 } from "../finlib.js";
 import { fmtComma } from "../check.js";
 import { computeTimeline, renderTimeline, verifyTimeline, PHONE_360, TAP_MIN, RING_MIN_PX, LABEL_MIN_PX } from "../engine/timeline-graph.js";
+import { setRng as setRngRaw, resetRng as resetRngRaw } from "../rng.js";
+import { getLang } from "../lang.js";
 
 const C = v => fmtComma(v);
 export const near = (a, b, tol = 1e-6) => Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
@@ -1660,3 +1662,125 @@ export function f13EquationsOf(q) {
 /* the skills with no rolled numbers — nothing to recompute (they are
    the same 26 listed as PURE_RECALL in js/quests/dice-finance.js) */
 export const RECOMPUTE_IDS = Object.keys(RECOMPUTE);
+
+/* ============================================================
+   AFRIKAANS TWINS (QUEUE.md row S7, 2026-10-17). Every reader above,
+   and verify-finance.html's own, reads ENGLISH words out of a card
+   ("compounded monthly", "withdraws", "That is a coin", "+ on the
+   right"). Under ?lang=af the rounds speak Afrikaans (L(en, af),
+   js/lang.js), so verify-finance reads every card through its ENGLISH
+   TWIN: the same card, built from the very same random draws, in English.
+     · the English side lives in a hidden same-origin iframe: its own
+       module map, every module (lang.js too) evaluated afresh on "en", so
+       even a module-level L(...) table (evaluated once, at import) is
+       English there;
+     · financeTwins() wraps every finance skill's gen() and f13's family
+       builders on the page: the Afrikaans card is built first, on the
+       page's own randomness (Math.random, or the seeded stream a check put
+       in with twinSetRng), every draw recorded; the iframe then builds the
+       English card from those same draws, replayed in order;
+     · the two must be ONE card (twinDiff): the same shape, every number,
+       flag and id identical, and every text the same digits (as a set:
+       Afrikaans may reorder words), the same money amounts outside an
+       unbreakable unit, the same em-dashes, HTML entities and
+       superscripts, and the same number of draws. Anything else throws;
+     · gen() then hands back the ENGLISH twin, so every check reads it
+       exactly as it reads the English run, none skipped.
+   Under English (the default) nothing is wrapped: the harness runs
+   byte-for-byte as before. The app never imports this file.
+   ============================================================ */
+let TWIN_SRC = null;                                     // the rng a check installed (null: Math.random)
+export function twinSetRng(fn) { TWIN_SRC = fn; setRngRaw(fn); }
+export function twinResetRng() { TWIN_SRC = null; resetRngRaw(); }
+const twinDigits = s => (String(s).match(/\d+/g) || []).sort().join(",");
+const twinShape = s => {
+  const t = String(s), out = t.replace(/<span class="nowrap">[^<]*<\/span>/g, "").replace(/<[^>]+>/g, "");
+  return [(out.match(/R\d/g) || []).length, (t.match(/—/g) || []).length, (t.match(/&(?:[a-z]+|#\d+);/gi) || []).length, (t.match(/<sup\b/g) || []).length].join("/");
+};
+/* null when the Afrikaans card a is the English card e in the other language, else where and why not */
+export function twinDiff(a, e, at = "card", seen = new Set()) {
+  if (typeof a !== typeof e) return `${at}: ${typeof a} here, ${typeof e} in English`;
+  if (typeof a === "string") {
+    if (a === e) return null;
+    if (twinDigits(a) !== twinDigits(e)) return `${at}: digits ${twinDigits(a) || "none"} here, ${twinDigits(e) || "none"} in English`;
+    if (twinShape(a) !== twinShape(e)) return `${at}: money outside a unit / em-dashes / entities / superscripts ${twinShape(a)} here, ${twinShape(e)} in English`;
+    return null;
+  }
+  if (typeof a === "function") return null;
+  if (a === null || e === null || typeof a !== "object") return Object.is(a, e) ? null : `${at}: ${String(a)} here, ${String(e)} in English`;
+  if (seen.has(a)) return null;
+  seen.add(a);
+  if (Array.isArray(a) !== Array.isArray(e)) return `${at}: an array on one side only`;
+  const ka = Object.keys(a).sort(), ke = Object.keys(e).sort();
+  if (ka.join("|") !== ke.join("|")) return `${at}: keys ${ka.join(",")} here, ${ke.join(",")} in English`;
+  for (const k of ka) { const why = twinDiff(a[k], e[k], Array.isArray(a) ? `${at}[${k}]` : `${at}.${k}`, seen); if (why) return why; }
+  return null;
+}
+let TWIN = null, TWIN_DEPTH = 0;
+/* here: the page's builder; there: the same builder in the English iframe */
+function twinOf(here, there, where) {
+  return function (...args) {
+    if (TWIN_DEPTH) return here.apply(this, args);        // called from inside a wrapped builder: its draws are recorded already
+    const src = TWIN_SRC || Math.random, draws = [];
+    let af, en, k = 0;
+    TWIN_DEPTH++;
+    try { setRngRaw(() => { const v = src(); draws.push(v); return v; }); af = here.apply(this, args); }
+    finally { TWIN_DEPTH--; if (TWIN_SRC) setRngRaw(TWIN_SRC); else resetRngRaw(); }
+    try {
+      TWIN.setRng(() => { if (k >= draws.length) throw new Error(`${where}: the English twin wants more random draws than the ${draws.length} the Afrikaans card made`); return draws[k++]; });
+      en = there(...args);
+    } finally { TWIN.resetRng(); }
+    if (k !== draws.length) throw new Error(`${where}: the English twin made ${k} random draws, the Afrikaans card ${draws.length}`);
+    const why = twinDiff(af, en);
+    if (why) throw new Error(`${where}: the Afrikaans card is not its English twin: ${why}`);
+    return en;
+  };
+}
+/* the English module map, in a hidden same-origin iframe; the device key
+   reads "en" while it loads, then goes back to what it was */
+function englishRealm() {
+  return new Promise((resolve, reject) => {
+    const KEY = "mhq.lang", CB = "__s7EnglishTwin", root = new URL("../../", import.meta.url).href;
+    let had = null;
+    try { had = localStorage.getItem(KEY); localStorage.setItem(KEY, "en"); } catch { /* private mode: the iframe's lang.js falls back to "en" */ }
+    const done = (fn, v) => { clearTimeout(timer); delete window[CB]; try { if (had == null) localStorage.removeItem(KEY); else localStorage.setItem(KEY, had); } catch { /* private mode */ } fn(v); };
+    const timer = setTimeout(() => done(reject, new Error("the English twin iframe did not load in 60 s")), 60000);
+    window[CB] = api => (api.lang === "en" ? done(resolve, api) : done(reject, new Error(`the English twin iframe came up in "${api.lang}"`)));
+    const f = document.createElement("iframe");
+    f.hidden = true;
+    f.title = "English twins (verify harness)";
+    f.srcdoc = `<!doctype html><meta charset="utf-8"><script type="module">
+import { questDef } from "${root}js/quests/index.js";
+import { F13_FAMILIES, f13Story, f13GraphOf } from "${root}js/quests/questf13-one-equation.js";
+import { BUILD_TIMELINE_EXAMPLE } from "${root}js/concepts.js";
+import { setRng, resetRng } from "${root}js/rng.js";
+import { getLang } from "${root}js/lang.js";
+parent.${CB}({ questDef, F13_FAMILIES, f13Story, f13GraphOf, BUILD_TIMELINE_EXAMPLE, setRng, resetRng, lang: getLang() });
+<\/script>`;
+    document.body.appendChild(f);
+  });
+}
+/* the page's finance builders, twinned in place under any language but
+   English. Returns null under English, else the English twins of the
+   page's direct f13 imports: { f13Story, f13GraphOf, BUILD_TIMELINE_EXAMPLE } */
+export async function financeTwins({ questDef, quests, F13_FAMILIES, f13Story, f13GraphOf, BUILD_TIMELINE_EXAMPLE }) {
+  if (getLang() === "en") return null;
+  TWIN = await englishRealm();
+  for (const id of quests) {
+    const here = questDef(id), there = TWIN.questDef(id);
+    if (!here || !there || here.skills.length !== there.skills.length) throw new Error(`twins: quest ${id} is not the same in English`);
+    here.skills.forEach((sk, j) => {
+      const tk = there.skills[j];
+      if (tk.id !== sk.id) throw new Error(`twins: ${id} skill ${j + 1} is ${sk.id} here, ${tk.id} in English`);
+      sk.gen = twinOf(sk.gen, (...a) => tk.gen(...a), `${id}.${sk.id}`);
+    });
+  }
+  Object.keys(F13_FAMILIES).forEach(fam => { F13_FAMILIES[fam] = twinOf(F13_FAMILIES[fam], (...a) => TWIN.F13_FAMILIES[fam](...a), `f13 family ${fam}`); });
+  const ex = twinDiff(BUILD_TIMELINE_EXAMPLE, TWIN.BUILD_TIMELINE_EXAMPLE, "BUILD_TIMELINE_EXAMPLE");
+  if (ex) throw new Error(`twins: the concept card's example is not its English twin: ${ex}`);
+  return {
+    f13Story: twinOf(f13Story, (...a) => TWIN.f13Story(...a), "f13Story"),
+    f13GraphOf: twinOf(f13GraphOf, (...a) => TWIN.f13GraphOf(...a), "f13GraphOf"),
+    BUILD_TIMELINE_EXAMPLE: TWIN.BUILD_TIMELINE_EXAMPLE,
+  };
+}

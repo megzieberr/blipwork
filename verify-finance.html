@@ -227,13 +227,28 @@ import { CHAPTERS } from "./js/config.js";
 import { getConcept } from "./js/concepts.js";
 import { answerCorrect } from "./js/check.js";
 import { renderTimeline, verifyTimeline, computeTimeline } from "./js/engine/timeline-graph.js";
-import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f13EquationsOf, f13OptionColours, f11Scene, f11Diagnose, unsup, f8Diagnose, f13Words } from "./js/quests/_finance-check.js";
-import { F13_FAMILIES, f13GraphOf, f13Story } from "./js/quests/questf13-one-equation.js";
-import { BUILD_TIMELINE_EXAMPLE } from "./js/concepts.js";
-import { setRng, resetRng } from "./js/rng.js";
+import { RECOMPUTE, RECOMPUTE_IDS, graphIssues, labelFitIssues, numOf, correctOption, f10EquationsOf, f13Diagnose, f13EquationsOf, f13OptionColours, f11Scene, f11Diagnose, unsup, f8Diagnose, f13Words, financeTwins, twinSetRng as setRng, twinResetRng as resetRng } from "./js/quests/_finance-check.js";
+import { F13_FAMILIES, f13GraphOf as f13GraphOfHere, f13Story as f13StoryHere } from "./js/quests/questf13-one-equation.js";
+import { BUILD_TIMELINE_EXAMPLE as BUILD_TIMELINE_EXAMPLE_HERE } from "./js/concepts.js";
+import { getLang } from "./js/lang.js";
 import { checkStep, normalizeTokens } from "./js/steps-check.js";
 import { formulaHtml, fracHtml, xbarHtml } from "./js/ui.js";
 import { mountQuestion } from "./js/questions.js";
+
+/* S7 (2026-10-17): under ?lang=af every finance card is read through its ENGLISH twin, the same card from the same
+   draws (financeTwins in js/quests/_finance-check.js): the Afrikaans card is built, checked against its twin, and the
+   twin is what every check below reads. setRng / resetRng above are its tracked stand-ins for js/rng.js's, so a seeded
+   check seeds both languages alike. Under English nothing is wrapped. A twin that is not the same card throws; outside
+   a try, the banner then says so instead of the harness waiting for a banner that never comes */
+if (getLang() !== "en") addEventListener("error", e => {
+  const b = document.getElementById("banner");
+  if (b.className) return;
+  b.className = "fail";
+  b.textContent = `✗ checks FAILED: the page stopped (${e.message})`;
+});
+const TWINS = await financeTwins({ questDef, quests: CHAPTERS.find(c => c.id === "finance").quests.map(m => m.id), F13_FAMILIES,
+  f13Story: f13StoryHere, f13GraphOf: f13GraphOfHere, BUILD_TIMELINE_EXAMPLE: BUILD_TIMELINE_EXAMPLE_HERE });
+const { f13Story, f13GraphOf, BUILD_TIMELINE_EXAMPLE } = TWINS || { f13Story: f13StoryHere, f13GraphOf: f13GraphOfHere, BUILD_TIMELINE_EXAMPLE: BUILD_TIMELINE_EXAMPLE_HERE };
 
 const ACC = "#8b5cf6";
 let total = 0, passed = 0; const fails = [];

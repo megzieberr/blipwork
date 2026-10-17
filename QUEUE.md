@@ -105,7 +105,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T66 | concepts: the `euclid` block: NONE EXISTS (exam-only chapter, no concept cards), nothing to translate
 - ☑ 2026-10-17 T67 | exam: cards-euclid, euclid-bookwork-proofs, euclid-circle-theorems (3 files) | ~1 965 words | verify-exam.html
 - ⏳ 2026-10-17 22:43 T68 | exam: euclid-level4 | ~3 960 words | verify-exam.html
-- ☐ T69 | exam: euclid-siblings-chords-and-angles | ~4 735 words | verify-exam.html
+- ⏳ 2026-10-17 22:47 T69 | exam: euclid-siblings-chords-and-angles | ~4 735 words | verify-exam.html
 - ☐ T70 | exam: euclid-siblings-cyclic-quads | ~5 790 words | verify-exam.html
 - ☐ T71 | exam: euclid-siblings-tangents | ~4 566 words | verify-exam.html
 - ☐ T72 | exam: euclid-tangents-and-cyclic-quads | ~1 071 words | verify-exam.html
@@ -120,7 +120,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☐ T79 | exam: algx-siblings-fractions-multiply-divide | ~2 363 words | verify-exam.html
 
 ### Finance
-- ⏳ 2026-10-17 22:27 S7 | before the first Finance row (setup, one Opus worker): js/quests/_finance-check.js reads prompts through the en side so verify-finance passes in ?lang=af; hoist the random draws out of questf8's templates (lines ~416-426, flagged impure by af_extract) into consts | check: verify-finance 692/692 in EN and ?lang=af, verify-dice-finance unchanged
+- ☑ 2026-10-17 S7 | before the first Finance row (setup, one Opus worker): js/quests/_finance-check.js reads prompts through the en side so verify-finance passes in ?lang=af; hoist the random draws out of questf8's templates (lines ~416-426, flagged impure by af_extract) into consts | check: verify-finance 692/692 in EN and ?lang=af, verify-dice-finance unchanged
 - ☐ T80 | concepts: the `finance` block (js/concepts/finance.js after S4) | ~1 474 words + the two jug captions in js/concepts/_finance-pictures.js (leftovers  hand L()) | counted by af_extract 2026-10-17
 - ☐ T81 | hub rounds: questf1-words … questf9-car-or-no-car (9 files) | ~3 367 words | verify page: verify-finance.html
 - ☐ T82 | hub rounds: questf10-in-or-out … questf13-one-equation (4 files) | ~3 094 words | verify page: verify-finance.html
