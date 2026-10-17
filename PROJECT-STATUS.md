@@ -103,6 +103,8 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
 - 2026-10-17 (hers, 00:13): "ship it now": sw v97 `5cf9433` pushed 00:18, live checks 00:20; the ship carries the
   AF queue's S1 + S2 live (the switch stays hidden), as the 16 Oct "ship as we go" ruling says.
 - 2026-10-17 (hers, 00:17): "it looks great": the Paper 1 / Paper 2 hub is signed off.
+- 2026-10-17 (hers, 06:38): "keep em-dashes": the em-dashes in her August nature-of-roots Afrikaans STAY; new
+  translations still avoid them (plan rule); row S8 (an af_check allow-list) runs before T15. Play-test this afternoon.
 - 2026-10-16 (hers, 23:20): the head start runs "QUEUE.md rows S1 to S6 and the pilot tonight one Opus worker at
   a time, you review each, claim each row with ⏳ first, commits local on main, no push, no sw bump" (S6 IS the
   pilot; G1 is her gate).
@@ -119,8 +121,6 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   S3–S6 live, still hidden; sw_check OK first) → open Blipwork with `?lang=af` in Safari on your phone (the
   home-screen app has its own storage) → play Number Patterns round 1 in Afrikaans → tick row G1 in QUEUE.md
   (or write the fixes under it). Until G1 is ticked the routine logs "waiting on Megan" each night.
-- 💬 one word [whenever, before row T15 in a few weeks]: "keep" if the em-dashes in your August nature-of-roots
-  Afrikaans must stay; silence = that row turns them into commas or colons, words untouched.
 - 💻 1 min [Sunday morning, whenever]: read AF-LOG.md, one line per row the night did.
 - 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13, one at a time, the
   day you teach it (they are live but CLOSED, learners cannot see them yet).
