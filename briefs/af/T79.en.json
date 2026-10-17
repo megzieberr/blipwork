@@ -1,0 +1,811 @@
+{
+  "unit": "T79",
+  "generated": "2026-10-17T21:04:52.226Z",
+  "files": [
+    "js/exam/algx-siblings-fractions-multiply-divide.js"
+  ],
+  "items": {
+    "algx-siblings-fractions-multiply-divide#1": {
+      "en": "Consider the expression &nbsp;${sf(\"x² − 25\", \"x + 5\")}<br><br>Write down the value of x for which the expression is <b>undefined</b>.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:67:13"
+      ],
+      "nested": [
+        "x² − 25",
+        "x + 5"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#2": {
+      "en": "A fraction is undefined when its bottom is zero — nothing else can break it. So put the denominator equal to zero and solve.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:70:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#3": {
+      "en": "A fraction is <b>undefined</b> when the denominator is zero, so set &nbsp;x + 5 = 0.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:73:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#4": {
+      "en": "∴&nbsp; x = −5",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:74:39"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#5": {
+      "en": "Dividing by zero is the one thing arithmetic will not do, so any value of x that makes the bottom of a fraction zero has to be thrown out. That is what undefined means — it is not that the answer is big or small, it is that there is no answer at all. Finding it is quick: take the denominator on its own, put it equal to zero, and solve. Here x plus five is zero when x is minus five. Notice you look only at the bottom. It does not matter what the top does at x equals minus five; a zero on top is perfectly fine and just makes the fraction zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:77:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#6": {
+      "en": "Simplify the expression.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:85:13",
+        "algx-siblings-fractions-multiply-divide.js:143:13",
+        "algx-siblings-fractions-multiply-divide.js:202:13",
+        "algx-siblings-fractions-multiply-divide.js:262:13",
+        "algx-siblings-fractions-multiply-divide.js:318:13",
+        "algx-siblings-fractions-multiply-divide.js:376:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#7": {
+      "en": "Factorise the top first. Then look for a bracket that appears on the top and on the bottom — that is the only kind of thing you are allowed to cancel.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:88:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#8": {
+      "en": "Factorise the top — it is a difference of two squares: &nbsp;= ${sf(\"(x − 5)(x + 5)\", \"x + 5\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:91:37"
+      ],
+      "nested": [
+        "(x − 5)(x + 5)",
+        "x + 5"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#9": {
+      "en": "The bracket (x + 5) cancels &nbsp;∴&nbsp; x − 5&nbsp;&nbsp;&nbsp;(x ≠ −5)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:92:39"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#10": {
+      "en": "WATCH OUT: you may only cancel FACTORS, never terms. In x² − 25 over x + 5 you cannot cross out the x with the x, or the 25 with the 5 — the + and − must be <b>caged</b> inside brackets first, and that is exactly what factorising does.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:94:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#11": {
+      "en": "Cancelling is really just dividing top and bottom by the same thing, and you can only divide by something that is multiplying — never by something that is being added or subtracted. That is why factorising comes first: it turns a sum into a product, and only then is cancelling legal. Once the top is written as x minus five times x plus five, the bracket x plus five is sitting on both floors, so it divides out and leaves a 1. What is left is x minus five. Keep the restriction with the answer if there is room; the simplified form works at x equals minus five but the original one never did, so they are not quite the same expression.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:98:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#12": {
+      "en": "Consider the expression &nbsp;${sf(\"2x + 6\", \"x² + 5x + 6\")}<br><br>Write down the values of x for which the expression is <b>undefined</b>.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:122:13"
+      ],
+      "nested": [
+        "2x + 6",
+        "x² + 5x + 6"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#13": {
+      "en": "Factorise the denominator first — a trinomial with two brackets can be zero in two different ways, so expect two answers.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:125:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#14": {
+      "en": "Factorise the denominator: &nbsp;x² + 5x + 6 = (x + 2)(x + 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:128:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#15": {
+      "en": "A product is zero when either bracket is zero &nbsp;∴&nbsp; x = −2&nbsp; or&nbsp; x = −3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:129:39"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#16": {
+      "en": "REMEMBER: two brackets means two forbidden values. Writing only one of them is half an answer — and both of them still count even though one of the brackets is about to cancel away.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:131:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#17": {
+      "en": "You cannot read the forbidden values off a trinomial by looking at it, so the first job is always to factorise the bottom. Two numbers with product six and sum five are two and three, so the denominator is x plus two times x plus three. Now the question is simple: when is a product zero? Whenever any one of its factors is zero. So the fraction breaks at x equals minus two and again at x equals minus three, and both must be written down. Do this before you simplify anything, because in a moment the x plus three bracket is going to cancel and disappear — but the value that broke it is still forbidden in the original expression.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:135:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#18": {
+      "en": "The top has a common factor waiting to come out. Once both floors are written as products, look for a matching bracket.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:146:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#19": {
+      "en": "Take out the common factor on top: &nbsp;= ${sf(\"2(x + 3)\", \"(x + 2)(x + 3)\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:149:37"
+      ],
+      "nested": [
+        "2(x + 3)",
+        "(x + 2)(x + 3)"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#20": {
+      "en": "The bracket (x + 3) cancels &nbsp;∴&nbsp; ${sf(\"2\", \"x + 2\")}&nbsp;&nbsp;&nbsp;(x ≠ −2, x ≠ −3)",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:150:39"
+      ],
+      "nested": [
+        "x + 2"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#21": {
+      "en": "WATCH OUT: when the whole top cancels away you are left with the 2, not with nothing. A cancelled factor leaves a 1 behind, so 2(x + 3) over (x + 2)(x + 3) becomes 2 over (x + 2) — never just 1 over (x + 2).",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:152:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#22": {
+      "en": "Factorise both floors before you touch anything. On top, 2 divides into both terms, leaving x plus three. On the bottom you already have x plus two times x plus three. The bracket x plus three now appears on both floors, so it divides out. What people lose here is the 2. Cancelling x plus three does not remove the 2 — it was multiplying, so it stays. Think of six over nine: cancelling the three leaves two over three, not one over three. The same logic holds with brackets. If you are ever unsure, put an easy number in, like x equals one, and check the original and your answer give the same value.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:156:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#23": {
+      "en": "Consider the expression &nbsp;${sf(\"x² − 4\", \"3x + 9\")} &nbsp;×&nbsp; ${sf(\"x² + 6x + 9\", \"x² + 2x\")}<br><br>Write down the values of x for which the expression is <b>undefined</b>.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:181:13"
+      ],
+      "nested": [
+        "x² − 4",
+        "3x + 9",
+        "x² + 6x + 9",
+        "x² + 2x"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#24": {
+      "en": "Both bottoms count, not just the second one. Factorise each denominator and set every bracket equal to zero.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:184:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#25": {
+      "en": "Factorise BOTH denominators: &nbsp;3x + 9 = 3(x + 3)&nbsp; and&nbsp; x² + 2x = x(x + 2)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:187:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#26": {
+      "en": "∴&nbsp; x = −3, &nbsp;x = 0&nbsp; and&nbsp; x = −2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:188:39"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#27": {
+      "en": "WATCH OUT: x(x + 2) gives TWO forbidden values, not one. A lone x on the bottom is a factor like any other, so x = 0 is just as forbidden as x = −2.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:190:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#28": {
+      "en": "When two fractions are multiplied, both of them have to exist before you can start, so every denominator in sight is a source of forbidden values. Factorise them one at a time. Three x plus nine has a common factor of three, leaving x plus three, so x cannot be minus three. The 3 itself is a plain number and can never be zero, so it contributes nothing. The second denominator, x squared plus two x, has a common factor of x, leaving x plus two, so x cannot be zero and cannot be minus two. Three forbidden values altogether, and all three belong to the original expression, before any cancelling.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:194:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#29": {
+      "en": "Factorise every top and every bottom first — four factorisations in all — and only then start cancelling. Anything on any top may cancel with anything on any bottom.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:205:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#30": {
+      "en": "Factorise everything first: &nbsp;= ${sf(\"(x − 2)(x + 2)\", \"3(x + 3)\")} &nbsp;×&nbsp; ${sf(\"(x + 3)(x + 3)\", \"x(x + 2)\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:208:37"
+      ],
+      "nested": [
+        "(x − 2)(x + 2)",
+        "3(x + 3)",
+        "(x + 3)(x + 3)",
+        "x(x + 2)"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#31": {
+      "en": "Now cancel across the whole product: &nbsp;the (x + 2) on the first top goes with the (x + 2) on the second bottom, and ONE of the (x + 3) brackets on the second top goes with the (x + 3) on the first bottom.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:209:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#32": {
+      "en": "∴&nbsp; ${sf(\"(x − 2)(x + 3)\", \"3x\")}&nbsp;&nbsp;&nbsp;(x ≠ −3, x ≠ 0, x ≠ −2)",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:210:39"
+      ],
+      "nested": [
+        "(x − 2)(x + 3)",
+        "3x"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#33": {
+      "en": "REMEMBER: when you multiply, everything on the top is multiplying everything on the top. So a bracket on the FIRST top may cancel with a bracket on the SECOND bottom — you are not stuck cancelling inside one fraction.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:212:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#34": {
+      "en": "Multiplying fractions is the friendly operation: tops go with tops, bottoms go with bottoms, and nothing has to match up first. So the real work is factorising all four expressions, and then the cancelling is just crossing off pairs. Because it is all one big product, a bracket on the first top is free to cancel with a bracket on the second bottom. Notice that x plus three appears twice on the second top, so only one of them cancels and one survives into the answer. What is left is x minus two times x plus three on top and three x on the bottom, and there is nothing common between those, so it is finished.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:216:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#35": {
+      "en": "Consider the expression &nbsp;${sf(\"x² − 16\", \"x² − x − 6\")} &nbsp;÷&nbsp; ${sf(\"x + 4\", \"x − 3\")}<br><br>Write down the values of x for which the expression is <b>undefined</b>.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:241:13"
+      ],
+      "nested": [
+        "x² − 16",
+        "x² − x − 6",
+        "x + 4",
+        "x − 3"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#36": {
+      "en": "Two bottoms to check, and one extra thing: you are dividing by the second fraction, so that fraction itself may not be zero either.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:244:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#37": {
+      "en": "Denominators: &nbsp;x² − x − 6 = (x − 3)(x + 2) &nbsp;⟹&nbsp; x = 3&nbsp; or&nbsp; x = −2; &nbsp;and&nbsp; x − 3 = 0 &nbsp;⟹&nbsp; x = 3 again.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:247:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#38": {
+      "en": "You may not divide BY zero either, so x + 4 ≠ 0 &nbsp;∴&nbsp; x = 3, &nbsp;x = −2&nbsp; and&nbsp; x = −4",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:248:39"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#39": {
+      "en": "WATCH OUT for the hidden one. In a division, the NUMERATOR of the second fraction also lands on a bottom the moment you flip it — so x + 4 = 0 is forbidden too, even though x + 4 starts life on a top.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:250:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#40": {
+      "en": "Division questions hide an extra forbidden value and examiners love it. Start with the obvious two: the first fraction's denominator factorises into x minus three times x plus two, so three and minus two are out; and the second fraction's denominator is x minus three, which repeats one you already have. Now the sneaky one. Dividing by something means multiplying by its upside-down version, so x plus four is about to move to the bottom. Anything that is going to sit on a bottom must not be zero, so minus four is forbidden as well. Say it as a rule: in a division, check the divisor's top too.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:254:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#41": {
+      "en": "Dividing by a fraction is KFC — Keep the first one, Flip the second one, Change the ÷ to a ×. Do that before you factorise anything, then treat it as an ordinary multiplication.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:265:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#42": {
+      "en": "<b>KFC</b> — Keep, Flip, Change: &nbsp;= ${sf(\"x² − 16\", \"x² − x − 6\")} &nbsp;×&nbsp; ${sf(\"x − 3\", \"x + 4\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:268:37"
+      ],
+      "nested": [
+        "x² − 16",
+        "x² − x − 6",
+        "x − 3",
+        "x + 4"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#43": {
+      "en": "Factorise: &nbsp;= ${sf(\"(x − 4)(x + 4)\", \"(x − 3)(x + 2)\")} &nbsp;×&nbsp; ${sf(\"x − 3\", \"x + 4\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:269:37"
+      ],
+      "nested": [
+        "(x − 4)(x + 4)",
+        "(x − 3)(x + 2)",
+        "x − 3",
+        "x + 4"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#44": {
+      "en": "(x + 4) and (x − 3) both cancel &nbsp;∴&nbsp; ${sf(\"x − 4\", \"x + 2\")}&nbsp;&nbsp;&nbsp;(x ≠ 3, x ≠ −2, x ≠ −4)",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:270:39"
+      ],
+      "nested": [
+        "x − 4",
+        "x + 2"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#45": {
+      "en": "REMEMBER: flip the SECOND fraction only. Flipping both, or flipping the first one, changes the value completely — and never start cancelling while the ÷ is still there, because cancelling across a division sign is not allowed.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:272:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#46": {
+      "en": "There is only one new idea in dividing fractions and it has a name: KFC. Keep the first fraction exactly as it is, Flip the second one upside down, and Change the divide sign into a multiply. After that you are doing the multiplication question you already know. Do the flip before you factorise, so you never have to think about a division sign again — and never cancel while the divide sign is still on the page, because top and bottom mean different things on the two sides of it. Once flipped, factorise all four expressions, cross off the matching brackets, and read off what is left.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:276:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#47": {
+      "en": "Consider the expression &nbsp;${sf(\"3 − x\", \"x² − 9\")}<br><br>Write down the values of x for which the expression is <b>undefined</b>.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:300:13"
+      ],
+      "nested": [
+        "3 − x",
+        "x² − 9"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#48": {
+      "en": "Only the bottom decides. It is a difference of two squares, so it has two brackets and therefore two forbidden values.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:303:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#49": {
+      "en": "x² − 9 = (x − 3)(x + 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:306:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#50": {
+      "en": "∴&nbsp; x = 3&nbsp; or&nbsp; x = −3",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:307:39"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#51": {
+      "en": "The top of a fraction is allowed to be zero, so ignore it completely when you are hunting for forbidden values — look only at the bottom. Here the bottom is a difference of two squares, which factorises into x minus three times x plus three, and a product is zero the moment either factor is zero. So three and minus three are both out. It is worth noticing that the top happens to be zero at x equals three as well. That does not rescue anything: zero divided by zero is still undefined, and three stays forbidden.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:310:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#52": {
+      "en": "Look at the top and at the first bracket on the bottom. They hold the same two things in the opposite order — and turning a bracket round costs exactly one minus sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:321:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#53": {
+      "en": "Factorise the bottom: &nbsp;= ${sf(\"3 − x\", \"(x − 3)(x + 3)\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:324:37"
+      ],
+      "nested": [
+        "3 − x",
+        "(x − 3)(x + 3)"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#54": {
+      "en": "The top is the reverse of (x − 3), and reversing a bracket costs a minus: &nbsp;3 − x = −(x − 3)",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:325:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#55": {
+      "en": "= ${sf(\"−(x − 3)\", \"(x − 3)(x + 3)\")}&nbsp;&nbsp; and now (x − 3) cancels",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:326:37"
+      ],
+      "nested": [
+        "−(x − 3)",
+        "(x − 3)(x + 3)"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#56": {
+      "en": "∴&nbsp; ${sf(\"−1\", \"x + 3\")}&nbsp;&nbsp;&nbsp;(x ≠ 3, x ≠ −3)",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:327:39"
+      ],
+      "nested": [
+        "x + 3"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#57": {
+      "en": "WATCH OUT: cancelling (3 − x) against (x − 3) as though they were the same gives +1 over (x + 3) — the right shape with the wrong sign, and no marks. They are opposites, so cancelling them leaves −1, not 1.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:329:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#58": {
+      "en": "Two brackets holding the same letters in the opposite order are not equal, but they are only a minus apart. Test it: at x equals ten, three minus x is minus seven and x minus three is plus seven. So you may swap either one for minus the other, and doing that is what makes the cancelling legal here. Rewrite three minus x as minus the bracket x minus three, and now that bracket appears on both floors and divides out — leaving the minus sign behind, because the minus was never part of the bracket. That stray minus is the whole question. An answer of one over x plus three is the same size but the wrong sign.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:333:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#59": {
+      "en": "Consider the expression &nbsp;${sf(\"2x² − 8\", \"x² + x − 6\")} &nbsp;÷&nbsp; ${sf(\"4 − 2x\", \"x + 3\")}<br><br>Write down the values of x for which the expression is <b>undefined</b>.",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:358:13"
+      ],
+      "nested": [
+        "2x² − 8",
+        "x² + x − 6",
+        "4 − 2x",
+        "x + 3"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#60": {
+      "en": "Check both denominators, and then remember the divide sign: the top of the second fraction is about to become a bottom, so it may not be zero either.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:361:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#61": {
+      "en": "Denominators: &nbsp;x² + x − 6 = (x + 3)(x − 2) &nbsp;⟹&nbsp; x = −3&nbsp; or&nbsp; x = 2; &nbsp;and&nbsp; x + 3 = 0 &nbsp;⟹&nbsp; x = −3 again.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:364:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#62": {
+      "en": "Dividing by zero is not allowed either, so 4 − 2x ≠ 0 &nbsp;⟹&nbsp; x ≠ 2 &nbsp;∴&nbsp; x = −3&nbsp; or&nbsp; x = 2",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:365:39"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#63": {
+      "en": "Three separate places can break this expression and two of them land on the same value, which is why the final list is short. The first fraction's bottom factorises into x plus three times x minus two, so minus three and two are out. The second fraction's bottom is x plus three, which repeats minus three. Then the divisor check: four minus two x must not be zero, and it is zero at x equals two, which repeats the other one. So the answer is just minus three and two — but you have to look at all three places to know that nothing new turned up.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:368:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#64": {
+      "en": "KFC first, then factorise everything — including a common factor out of 4 − 2x. One of the brackets you get will be back to front, and turning it round costs a minus.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:379:13"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#65": {
+      "en": "<b>KFC</b> — Keep, Flip, Change: &nbsp;= ${sf(\"2x² − 8\", \"x² + x − 6\")} &nbsp;×&nbsp; ${sf(\"x + 3\", \"4 − 2x\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:382:37"
+      ],
+      "nested": [
+        "2x² − 8",
+        "x² + x − 6",
+        "x + 3",
+        "4 − 2x"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#66": {
+      "en": "Factorise everything: &nbsp;2x² − 8 = 2(x − 2)(x + 2), &nbsp;x² + x − 6 = (x + 3)(x − 2), &nbsp;4 − 2x = 2(2 − x)",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:383:37"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#67": {
+      "en": "(2 − x) is the reverse of (x − 2), so &nbsp;2(2 − x) = −2(x − 2), &nbsp;giving &nbsp;${sf(\"2(x − 2)(x + 2)\", \"(x + 3)(x − 2)\")} &nbsp;×&nbsp; ${sf(\"x + 3\", \"−2(x − 2)\")}",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:384:37"
+      ],
+      "nested": [
+        "2(x − 2)(x + 2)",
+        "(x + 3)(x − 2)",
+        "x + 3",
+        "−2(x − 2)"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#68": {
+      "en": "The 2s cancel, both (x + 3) cancel, and two of the three (x − 2) cancel &nbsp;∴&nbsp; ${sf(\"−(x + 2)\", \"x − 2\")}&nbsp;&nbsp;&nbsp;(x ≠ −3, x ≠ 2)",
+      "kind": "template",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:385:39"
+      ],
+      "nested": [
+        "−(x + 2)",
+        "x − 2"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#69": {
+      "en": "REMEMBER: take the 2 out of 4 − 2x BEFORE you turn the bracket round, otherwise the minus and the 2 get tangled. And there are three (x − 2) brackets in play — two on top and one on the bottom — so one of them survives into the answer.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:387:15"
+      ]
+    },
+    "algx-siblings-fractions-multiply-divide#70": {
+      "en": "This is every idea on the tile in one question, so do them strictly in order and it stays calm. First KFC: keep, flip, change, so the divide becomes a multiply. Second, factorise every single top and bottom, including taking the 2 out of four minus two x. Third, deal with the back-to-front bracket: two minus x is minus the bracket x minus two, and that minus now belongs to the whole expression. Fourth, cancel. The x plus three brackets go, and two of the three x minus two brackets go, leaving one on the bottom. The 2 on top cancels with the 2 on the bottom. What survives is minus x plus two over x minus two.",
+      "kind": "string",
+      "slots": [
+        "exam.en"
+      ],
+      "where": [
+        "algx-siblings-fractions-multiply-divide.js:391:13"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 2141
+}

@@ -117,7 +117,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T76 | exam: algx-siblings-factorise-advanced | ~2 126 words | verify-exam.html
 - ☑ 2026-10-17 T77 | exam: algx-siblings-factorise-basics | ~2 237 words | verify-exam.html
 - ☑ 2026-10-17 T78 | exam: algx-siblings-fractions-add-subtract | ~2 216 words | verify-exam.html
-- ⏳ 2026-10-17 23:04 T79 | exam: algx-siblings-fractions-multiply-divide | ~2 363 words | verify-exam.html
+- ☑ 2026-10-17 T79 | exam: algx-siblings-fractions-multiply-divide | ~2 363 words | verify-exam.html
 
 ### Finance
 - ☑ 2026-10-17 S7 | before the first Finance row (setup, one Opus worker): js/quests/_finance-check.js reads prompts through the en side so verify-finance passes in ?lang=af; hoist the random draws out of questf8's templates (lines ~416-426, flagged impure by af_extract) into consts | check: verify-finance 692/692 in EN and ?lang=af, verify-dice-finance unchanged
@@ -126,7 +126,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☐ T82 | hub rounds: questf10-in-or-out … questf13-one-equation (4 files) | ~3 094 words | verify page: verify-finance.html
 
 ### Statistics
-- ☐ T83 | concepts: the `stats` block (js/concepts/stats.js after S4) | ~904 words | counted by af_extract 2026-10-17
+- ⏳ 2026-10-17 23:09 T83 | concepts: the `stats` block (js/concepts/stats.js after S4) | ~904 words | counted by af_extract 2026-10-17
 - ☐ T84 | hub rounds: quest01-calculator … quest08-mixed (8 files) | ~2 231 words | verify page: verify.html
 
 ### Probability
