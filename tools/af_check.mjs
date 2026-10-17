@@ -48,6 +48,9 @@
    and two housekeeping ones: af-conflict (same English, different af in
    two places: WARN), af-not-literal (a twin that is not a literal, so it
    cannot be checked: WARN). A file that does not parse is ERROR parse.
+   Allow-list (row S8): briefs/af/allow.json, optional, { "<rule>": [<file or
+   item key, * glob>] } ("_" keys are notes) prints that rule's ERROR there as a
+   WARN tagged (allowed: ...); --strict still fails it; never for missing.
    ============================================================ */
 import fs from "node:fs";
 import path from "node:path";
@@ -349,6 +352,27 @@ export function checkFile(abs, opts = {}) {
   return res;
 }
 
+/* ---------------- the allow-list (briefs/af/allow.json, row S8) ----------------
+   Her standing exceptions, e.g. her own August em-dashes (ruling 2026-10-17).
+   A plain path or item key matches exactly; * matches anything. */
+const ALLOW_JSON = path.join(REPO, "briefs", "af", "allow.json");
+function loadAllow() {
+  if (!fs.existsSync(ALLOW_JSON)) return null;
+  const bad = (why) => { console.error(`af_check: ${repoRel(ALLOW_JSON)}: ${why}`); process.exit(2); };
+  let j;
+  try { j = JSON.parse(fs.readFileSync(ALLOW_JSON, "utf8")); } catch (e) { bad(`does not parse: ${e.message}`); }
+  const out = new Map();
+  for (const [rule, list] of Object.entries(j)) {
+    if (rule.startsWith("_")) continue;
+    if (!Array.isArray(list)) bad(`"${rule}" must be a list`);
+    out.set(rule, list.map((x) => new RegExp("^" + String(x).replace(/\\/g, "/").split("*")
+      .map((t) => t.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*") + "$")));
+  }
+  return out;
+}
+const isAllowed = (allow, f, res) => !!allow && f.rule !== "missing" &&
+  (allow.get(f.rule) || []).some((re) => re.test(res.file) || (res.as && re.test(res.as)) || re.test(f.key));
+
 /* ---------------- the CLI ---------------- */
 function parseArgs(argv) {
   const o = { unit: null, dir: path.join(REPO, "briefs", "af"), all: false, strict: false, json: false, verbose: false, as: null, files: [] };
@@ -392,6 +416,7 @@ function main() {
     asAbs = path.resolve(REPO, o.as);
   }
 
+  const allow = loadAllow();
   const results = [];
   const tot = { files: 0, items: 0, twins: 0, missing: 0, errors: 0, warns: 0 };
   for (const abs of files) {
@@ -400,6 +425,7 @@ function main() {
     res.debt = debt;
     for (const f of res.findings) {
       if (f.rule === "missing") { f.sev = debt ? "DEBT" : "ERROR"; continue; }
+      if (f.sev === "ERROR" && isAllowed(allow, f, res)) { f.sev = "WARN"; f.allowed = true; }
       if (o.strict && f.sev === "WARN") { f.sev = "ERROR"; f.strict = true; }
     }
     res.errors = res.findings.filter((f) => f.sev === "ERROR").length;
@@ -412,7 +438,7 @@ function main() {
     console.log(res.file + (res.as ? `  (checked as ${res.as})` : "") + (isFunfunFile(asAbs || abs) ? "  (Fun Functions, read-only: B(en, af) pairs)" : ""));
     for (const f of shown) {
       const sev = f.sev === "DEBT" ? "DEBT " : f.sev === "WARN" ? "WARN " : "ERROR";
-      console.log(`  ${sev} ${f.rule} ${f.key} ${res.file}:${f.line}${f.detail ? ` [${f.detail}]` : ""} ${f.snippet}`);
+      console.log(`  ${sev} ${f.rule} ${f.key} ${res.file}:${f.line}${f.detail ? ` [${f.detail}]` : ""}${f.allowed ? ` (allowed: ${repoRel(ALLOW_JSON)})` : ""} ${f.snippet}`);
     }
     console.log(`  items ${res.items} / twins ${res.twins} / missing ${res.missing}${debt && res.missing ? " (debt)" : ""} / errors ${res.errors} / warns ${res.warns}`);
   }

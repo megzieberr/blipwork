@@ -35,7 +35,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☑ 2026-10-17 T12 | hub rounds: queseq9-solution-count | ~681 words | verify page: verify-eq.html
 - ☑ 2026-10-17 T13 | exam: cards-eqn, eqn-fractions-and-restrictions, eqn-inequalities-2, eqn-inequalities, eqn-k-method (5 files) | ~3 473 words | verify-exam.html
 - ☑ 2026-10-17 T14 | exam: eqn-level4, eqn-nature-of-roots-2 (2 files) | ~3 512 words | verify-exam.html
-- ☐ S8 | before T15 (setup, one Opus worker): tools/af_check.mjs reads an optional briefs/af/allow.json ({ rule: [file globs or keys] }); findings listed there become WARN, not ERROR; seed it with wording:em-dash for js/exam/eqn-nature-of-roots.js (her ruling 2026-10-17: her August em-dashes stay) | check: af_check on that file exits 0 with 31 WARN lines; negative copy still fails on other rules
+- ☑ 2026-10-17 S8 | before T15 (setup, one Opus worker): tools/af_check.mjs reads an optional briefs/af/allow.json ({ rule: [file globs or keys] }); findings listed there become WARN, not ERROR; seed it with wording:em-dash for js/exam/eqn-nature-of-roots.js (her ruling 2026-10-17: her August em-dashes stay) | check: af_check on that file exits 0 with 31 WARN lines; negative copy still fails on other rules
 - ☐ T15 | exam: eqn-nature-of-roots | ~3 382 words | verify-exam.html ⚠ her August af sides hold 36 em-dashes: HER RULING 2026-10-17 = KEEP them; S8 (above) teaches af_check to allow them first
 - ☑ 2026-10-17 T16 | exam: eqn-siblings-delta-in-p, eqn-siblings-fraction-equations (2 files) | ~3 370 words | verify-exam.html
 - ☑ 2026-10-17 T17 | exam: eqn-siblings-inequalities, eqn-siblings-k-equal-roots (2 files) | ~2 445 words | verify-exam.html
@@ -87,7 +87,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### General Trig
 - ☑ 2026-10-17 T53 | concepts: the `gtrig` block (js/concepts/gtrig.js after S4) | ~1 555 words | counted by af_extract 2026-10-17
-- ☐ S10 | before T54 (setup, one Opus worker; added 2026-10-17 21:25 after T54 went red): verify-gtrig.html reads English wording out of the mc step text ("becomes …", "stays X" / "changes to X", "Quadrant: / Sign: / Ratio:"), so ?lang=af fails 2862 checks (2857 "could read a claimed ratio off the mc steps" in gt4 co*, gt5 pos/neg/coFn/rotationPool, gt7 item1-7; 5 "gt6.threeBoxes confirm side fills all three boxes"); make those checks read the English side (L's en) or accept both languages, like S9 did for verify-exam; no js/ change | check: verify-gtrig ALL GOOD in EN and ?lang=af, then T54 re-runs inject + af_check + harness from its saved .af.json
+- ⏳ 2026-10-17 22:27 S10 | before T54 (setup, one Opus worker; added 2026-10-17 21:25 after T54 went red): verify-gtrig.html reads English wording out of the mc step text ("becomes …", "stays X" / "changes to X", "Quadrant: / Sign: / Ratio:"), so ?lang=af fails 2862 checks (2857 "could read a claimed ratio off the mc steps" in gt4 co*, gt5 pos/neg/coFn/rotationPool, gt7 item1-7; 5 "gt6.threeBoxes confirm side fills all three boxes"); make those checks read the English side (L's en) or accept both languages, like S9 did for verify-exam; no js/ change | check: verify-gtrig ALL GOOD in EN and ?lang=af, then T54 re-runs inject + af_check + harness from its saved .af.json
 - ☐ T54 | hub rounds: questgt1-intro … questgt9-identities (9 files) | ~3 976 words | verify page: verify-gtrig.html ⚠ verify-gtrig?lang=af fails 2862 checks because the page reads English step wording (see S10, the harness fix); briefs/af/T54.af.json is COMPLETE (560 keys): after S10, inject + af_check + harness only
 - ☑ 2026-10-17 T55 | hub rounds: questgt10-super-special … questgt13-undefined (4 files) | ~1 256 words | verify page: verify-gtrig.html
 - ☑ 2026-10-17 T56 | exam: cards-gtrig, gtrig-level4 (2 files) | ~3 324 words | verify-exam.html
@@ -120,7 +120,7 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 - ☐ T79 | exam: algx-siblings-fractions-multiply-divide | ~2 363 words | verify-exam.html
 
 ### Finance
-- ☐ S7 | before the first Finance row (setup, one Opus worker): js/quests/_finance-check.js reads prompts through the en side so verify-finance passes in ?lang=af; hoist the random draws out of questf8's templates (lines ~416-426, flagged impure by af_extract) into consts | check: verify-finance 692/692 in EN and ?lang=af, verify-dice-finance unchanged
+- ⏳ 2026-10-17 22:27 S7 | before the first Finance row (setup, one Opus worker): js/quests/_finance-check.js reads prompts through the en side so verify-finance passes in ?lang=af; hoist the random draws out of questf8's templates (lines ~416-426, flagged impure by af_extract) into consts | check: verify-finance 692/692 in EN and ?lang=af, verify-dice-finance unchanged
 - ☐ T80 | concepts: the `finance` block (js/concepts/finance.js after S4) | ~1 474 words + the two jug captions in js/concepts/_finance-pictures.js (leftovers  hand L()) | counted by af_extract 2026-10-17
 - ☐ T81 | hub rounds: questf1-words … questf9-car-or-no-car (9 files) | ~3 367 words | verify page: verify-finance.html
 - ☐ T82 | hub rounds: questf10-in-or-out … questf13-one-equation (4 files) | ~3 094 words | verify page: verify-finance.html
