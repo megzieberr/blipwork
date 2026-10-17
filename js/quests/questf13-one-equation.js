@@ -81,13 +81,14 @@ import { C, rng, mcStep, calcStep } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
 import { rand, toFrac, moveMoney, ratePerPeriod, COMPOUNDING, pow } from "../finlib.js";
 import { computeTimeline, verifyTimeline } from "../engine/timeline-graph.js";
+import { L as afL } from "../lang.js";
 
 const CON = "oneEquation";
 export const REFRAIN = "Build the whole equation first. Type it once. Round once, at the end.";
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20];        // whole % only
 const KS = [1, 2, 4, 12];                                               // annually, half-yearly, quarterly, monthly
-const HOW = k => (k === 2 ? "half‑yearly" : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
 const CALC_TOL = 0.001;                                                 // the app's calc tolerance (TOL.calcEps): the cent must match
 /* the keypad lets in 6 digits unless told more; an answer to the cent here
    runs to 8 (R104 072,38), so every typed step asks for 9 (js/keypad.js) */
@@ -100,16 +101,16 @@ const WD_AMTS = [1000, 1500, 2000, 2500, 3000, 4000, 5000];
 const REPAY_AMTS = [2000, 2300, 2500, 3000, 3500, 4000, 4200, 4500, 5000, 6000, 7000, 8000, 9000];
 const TARGETS = [100000, 150000, 200000, 250000, 300000, 400000, 500000, 750000, 1000000];
 const DOWNS = [1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000];
-const ITEMS = ["lounge suite", "motorbike", "laptop", "fridge", "TV", "bed"];   // never a car: "car" is the bracket
+const ITEMS = [afL("lounge suite", "sitkamerstel"), afL("motorbike", "motorfiets"), afL("laptop", "skootrekenaar"), afL("fridge", "yskas"), afL("TV", "TV"), afL("bed", "bed")];   // never a car: "car" is the bracket
 const D0_AMTS = [10000, 15000, 20000, 25000, 30000, 40000];
 const DEND_AMTS = [10000, 20000, 25000, 30000, 40000, 50000];
 const XGUESS = [20000, 25000, 30000, 40000, 50000, 60000, 80000, 100000];
 
 /* the ten textbook names (CLASS-DIGEST examples bank) and their pronouns;
    Mvelo is named again rather than given a pronoun */
-const SHE = { he: "she", his: "her" }, HE = { he: "he", his: "his" };
+const SHE = { he: afL("she", "sy"), his: "her" }, HE = { he: afL("he", "hy"), his: "his" };
 const WHO = {
-  Brenda: SHE, Mvelo: { he: "Mvelo", his: "Mvelo’s" }, Bradley: HE, Jason: HE, Mandy: SHE,
+  Brenda: SHE, Mvelo: { he: afL("Mvelo", "Mvelo"), his: "Mvelo’s" }, Bradley: HE, Jason: HE, Mandy: SHE,
   Brian: HE, Stephanie: SHE, Bob: HE, Arnold: HE, David: HE,
 };
 
@@ -119,22 +120,22 @@ const rands = (v, dp = 0) => rand(v, dp).replace(/ /g, NB);            // "R8 00
 const money = (v, dp = 0) => nw(rands(v, dp));                         // EVERY money amount in this round
 const amt0 = v => rands(v, 0).slice(1);                                // "8 000", as it stands in an equation
 const amt2 = v => rands(v, 2).slice(1);                                // "9 914,71"
-const pa = r => `${r}%${NB}p.a.`;
+const pa = r => afL(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`);
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-const yrs = y => `${y}${NB}year${y === 1 ? "" : "s"}`;                 // f10's no-break glue
-const perYear = k => `${k}${NB}time${k === 1 ? "" : "s"}${NB}a${NB}year`;
+const yrs = y => afL(`${y}${NB}year${y === 1 ? "" : "s"}`, `${y}${NB}jaar${y === 1 ? "" : ""}`);                 // f10's no-break glue
+const perYear = k => afL(`${k}${NB}time${k === 1 ? "" : "s"}${NB}a${NB}year`, `${k}${NB}keer${k === 1 ? "" : ""}${NB}per${NB}jaar`);
 /* f12 review 1: in running text a number and its unit are ONE unit ("2 years",
    "8% p.a.", "2 decimal places"). The no-break space alone did not hold:
    formulaHtml wraps the bare number in its own inline-block, the space is
    left outside it, and the line broke between them ("after 2 | years") */
 const years = y => nw(yrs(y));
 const paU = r => nw(pa(r));
-const DP2 = nw("2 decimal places");
+const DP2 = nw(afL("2 decimal places", "2 desimale plekke"));
 const when = t => (t === 0 ? "now" : `after ${years(t)}`);
-const andList = xs => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
-const CAPTION = "T in years";
+const andList = xs => (xs.length === 1 ? xs[0] : afL(`${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`, `${xs.slice(0, -1).join(", ")} en ${xs[xs.length - 1]}`));
+const CAPTION = afL("T in years", "T in jare");
 /* f10 review 1: the first time a solution says "car", it says what one is */
-const CAR_IS = `a car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day`;
+const CAR_IS = afL(`a car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day`, `die kar is die hakie ${nw(pow("(1 + i)", "n"))} wat 'n bedrag na die ontmoetingsdag skuif`);
 
 /* ---------- roads, cars, terms ---------- */
 
@@ -372,9 +373,9 @@ function roll(make, fix) {
 /* ---------- the words ---------- */
 
 function rateSentence(roads) {
-  const one = r => `${paU(r.r)} compounded ${HOW(r.k)}`;
+  const one = r => afL(`${paU(r.r)} compounded ${HOW(r.k)}`, `${paU(r.r)} ${HOW(r.k)} saamgestel`);
   const [a, b] = roads;
-  return b ? `The interest rate is ${one(a)} for the first ${years(a.to)}, then ${one(b)}.` : `The interest rate is ${one(a)}.`;
+  return b ? afL(`The interest rate is ${one(a)} for the first ${years(a.to)}, then ${one(b)}.`, `Die rentekoers is ${one(a)} vir die eerste ${years(a.to)}, dan ${one(b)}.`) : afL(`The interest rate is ${one(a)}.`, `Die rentekoers is ${one(a)}.`);
 }
 const at = x => (typeof x.v === "number" ? `${money(x.v)} ${when(x.t)}` : `an amount ${x.v} ${when(x.t)}`);
 
@@ -385,24 +386,24 @@ function story(sc) {
   const sameDay = sc.pays.some(x => x.t === sc.n && sc.kind === "save");
   switch (sc.fam) {
     case "targetAmount":
-      return `${N} wants ${money(sc.total.value)} in a savings account after ${years(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?`;
+      return afL(`${N} wants ${money(sc.total.value)} in a savings account after ${years(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?`, `${N} wil ${money(sc.total.value)} na ${years(sc.n)} in 'n spaarrekening hê. Dit is die totaal, A. ${rate} Hoeveel, P, moet ${p.he} nou deponeer?`);
     case "hirePurchase": {
-      const a = /^[aeiou]/i.test(sc.item) ? "an" : "a";
-      return `${N} buys ${a} ${sc.item}. ${He} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} Find the loan, P, and then the price of the ${sc.item}.`;
+      const a = /^[aeiou]/i.test(sc.item) ? afL("an", "'n") : afL("a", "'n");
+      return afL(`${N} buys ${a} ${sc.item}. ${He} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} Find the loan, P, and then the price of the ${sc.item}.`, `${N} koop ${a} ${sc.item}. ${He} betaal 'n aanbetaling van ${money(sc.down)} reguit aan die winkel en leen die res. Die lening, P, is die totaal. ${He} betaal dit af met twee terugbetalings: ${andList(reps.map(at))}. ${rate} Vind die lening, P, en dan die prys van die ${sc.item}.`);
     }
     case "loanTwoRepayments":
-      return `${N} borrows money now. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} How much did ${p.he} borrow?`;
+      return afL(`${N} borrows money now. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} How much did ${p.he} borrow?`, `${N} leen nou geld. Die lening, P, is die totaal. ${He} betaal dit af met twee terugbetalings: ${andList(reps.map(at))}. ${rate} Hoeveel het ${p.he} geleen?`);
     case "unknownPayment":
-      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${years(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.`;
+      return afL(`${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${years(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.`, `${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}. ${He} wil ${money(sc.total.value)} na ${years(sc.n)} in die rekening hê, net na die laaste deposito. Dit is die totaal, A. ${rate} Vind x.`);
     default: {                                                        // twoDeposits, withdrawal, mixed: find A
-      const out = wds.length ? ` ${He} withdraws ${andList(wds.map(at))}.` : "";
-      return `${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${years(sc.n)}${sameDay ? ", straight after the last deposit" : ""}? That is the total, A.`;
+      const out = wds.length ? afL(` ${He} withdraws ${andList(wds.map(at))}.`, ` ${He} onttrek ${andList(wds.map(at))}.`) : "";
+      return afL(`${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${years(sc.n)}${sameDay ? ", straight after the last deposit" : ""}? That is the total, A.`, `${N} open 'n spaarrekening. ${He} deponeer ${andList(deps.map(at))}.${out} ${rate} Hoeveel is in die rekening na ${years(sc.n)}${sameDay ? ", net na die laaste deposito" : ""}? Dit is die totaal, A.`);
     }
   }
 }
 
-const dayOf = sc => (sc.kind === "loan" ? "the day of the loan" : "the day of A");
-const WHAT = { dep: "the deposit", wd: "the withdrawal", repay: "the repayment" };
+const dayOf = sc => (sc.kind === "loan" ? afL("the day of the loan", "die dag van die lening") : afL("the day of A", "die dag van A"));
+const WHAT = { dep: afL("the deposit", "die deposito"), wd: afL("the withdrawal", "die onttrekking"), repay: afL("the repayment", "die terugbetaling") };
 
 /* "3 years × 12 times a year = 36", one per car, with the stretch of the
    line it drives over (two roads may share a rate) */
@@ -428,16 +429,16 @@ function meetLine(sc) {
   return {
     /* Fix A review: a plain sentence, never in brackets (as f10): formulaHtml read "(a car is …)" as a formula
        bracket and left its "(" alone at a line end at 360 px */
-    s: `The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car: ${CAR_IS}.`,
-    r: sc.kind === "loan" ? "back to T0: reverse gear, negative exponents" : "everything moves forward to the end, so every exponent is positive",
+    s: afL(`The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car: ${CAR_IS}.`, `Die ontmoetingsdag is T${sc.meet}, ${dayOf(sc)}. Elke bedrag ry in sy kar daarheen: ${CAR_IS}.`),
+    r: sc.kind === "loan" ? afL("back to T0: reverse gear, negative exponents", "terug na T0: trurat, negatiewe eksponente") : afL("everything moves forward to the end, so every exponent is positive", "alles skuif vorentoe na die einde, dus is elke eksponent positief"),
   };
 }
 function leftNote(sc) {
-  if (sc.kind === "loan") return "the loan, P, alone on the left; the repayments positive on the right";
-  if (sc.total.value != null) return "the total, A, alone on the left, even though it is known";
-  return "the total, A, alone on the left; a deposit plus, a withdrawal minus";
+  if (sc.kind === "loan") return afL("the loan, P, alone on the left; the repayments positive on the right", "die lening, P, alleen links; die terugbetalings positief regs");
+  if (sc.total.value != null) return afL("the total, A, alone on the left, even though it is known", "die totaal, A, alleen links, al is dit bekend");
+  return afL("the total, A, alone on the left; a deposit plus, a withdrawal minus", "die totaal, A, alleen links; 'n deposito plus, 'n onttrekking minus");
 }
-const unknownOf = sc => (sc.kind === "loan" ? "P" : sc.unknown);
+const unknownOf = sc => (sc.kind === "loan" ? afL("P", "P") : sc.unknown);
 const solves = sc => sc.total.value != null;                          // the unknown is a payment inside the line
 
 /* ---------- one card ---------- */
@@ -448,26 +449,26 @@ function build(sc, { timeline = false } = {}) {
   const val = solve(sc), U = unknownOf(sc), p = WHO[sc.name];
   const price = sc.down != null ? val + sc.down : null;
   const hint1 = sc.kind === "loan"
-    ? "The loan, P, alone on the left. Every repayment drives back to T0 in reverse gear (a negative exponent) and stands positive on the right."
-    : "The total alone on the left. Every other amount drives to the meeting day in forward gear: a deposit plus, a withdrawal minus. Already on the meeting day? No car.";
-  const ask = sc.kind === "loan" ? "How much is the loan, P?"
-    : sc.unknown === "A" ? "How much is A?"
-    : sc.unknown === "x" ? `${U} sits inside the one equation: SHIFT SOLVE finds it. How much is x?`
-    : `${U} sits inside the one equation: SHIFT SOLVE finds it. How much must ${p.he} deposit now?`;
+    ? afL("The loan, P, alone on the left. Every repayment drives back to T0 in reverse gear (a negative exponent) and stands positive on the right.", "Die lening, P, alleen links. Elke terugbetaling ry in trurat terug na T0 ('n negatiewe eksponent) en staan positief regs.")
+    : afL("The total alone on the left. Every other amount drives to the meeting day in forward gear: a deposit plus, a withdrawal minus. Already on the meeting day? No car.", "Die totaal alleen links. Elke ander bedrag ry vorentoe na die ontmoetingsdag: 'n deposito plus, 'n onttrekking minus. Reeds op die ontmoetingsdag? Geen kar nie.");
+  const ask = sc.kind === "loan" ? afL("How much is the loan, P?", "Hoeveel is die lening, P?")
+    : sc.unknown === "A" ? afL("How much is A?", "Hoeveel is A?")
+    : sc.unknown === "x" ? afL(`${U} sits inside the one equation: SHIFT SOLVE finds it. How much is x?`, `${U} sit binne-in die een vergelyking: SHIFT SOLVE vind dit. Hoeveel is x?`)
+    : afL(`${U} sits inside the one equation: SHIFT SOLVE finds it. How much must ${p.he} deposit now?`, `${U} sit binne-in die een vergelyking: SHIFT SOLVE vind dit. Hoeveel moet ${p.he} nou deponeer?`);
   const steps = [
-    mcStep(`The meeting day is T${sc.meet}, ${dayOf(sc)}. Which line is the one equation?`, right, wrongs, hint1),
-    typed(`${ask} Give it in rand, to ${DP2}.`, val,
-      solves(sc) ? "Type the whole equation, then SHIFT SOLVE. Never round along the way: round once, at the end."
-        : "Type the whole right side in one go. Never round along the way: round once, at the end."),
+    mcStep(afL(`The meeting day is T${sc.meet}, ${dayOf(sc)}. Which line is the one equation?`, `Die ontmoetingsdag is T${sc.meet}, ${dayOf(sc)}. Watter reël is die een vergelyking?`), right, wrongs, hint1),
+    typed(afL(`${ask} Give it in rand, to ${DP2}.`, `${ask} Gee dit in rand, tot ${DP2}.`), val,
+      solves(sc) ? afL("Type the whole equation, then SHIFT SOLVE. Never round along the way: round once, at the end.", "Tik die hele vergelyking in, dan SHIFT SOLVE. Moenie langs die pad afrond nie: rond een keer af, aan die einde.")
+        : afL("Type the whole right side in one go. Never round along the way: round once, at the end.", "Tik die hele regterkant in een slag in. Moenie langs die pad afrond nie: rond een keer af, aan die einde.")),
   ];
-  if (price != null) steps.push(typed(`Price = loan + down${NB}payment. What is the price of the ${sc.item}, in rand, to ${DP2}?`, price,
-    "The down payment never enters the account: it just adds on to the loan."));
+  if (price != null) steps.push(typed(afL(`Price = loan + down${NB}payment. What is the price of the ${sc.item}, in rand, to ${DP2}?`, `Prys = lening +${NB}aanbetaling. Wat is die prys van die ${sc.item}, in rand, tot ${DP2}?`), price,
+    afL("The down payment never enters the account: it just adds on to the loan.", "Die aanbetaling kom nooit in die rekening nie: dit tel net by die lening by.")));
   const answer = nw(`${U} = ${rands(val, 2)}`);
   const solution = [
     meetLine(sc),
     ...eq.R.map(termLine),
-    { s: `The one equation: ${right}`, r: leftNote(sc) },
-    { s: answer, r: `${solves(sc) ? "SHIFT SOLVE on the one line" : "typed in once"}, rounded once, at the end (${DP2})` },
+    { s: afL(`The one equation: ${right}`, `Die een vergelyking: ${right}`), r: leftNote(sc) },
+    { s: answer, r: afL(`${solves(sc) ? "SHIFT SOLVE on the one line" : "typed in once"}, rounded once, at the end (${DP2})`, `${solves(sc) ? "SHIFT SOLVE op die een reël" : "een keer ingetik"}, een keer afgerond, aan die einde (${DP2})`) },
   ];
   if (price != null) solution.push({
     s: `Price${NB}= loan +${NB}down${NB}payment${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}`,
@@ -480,8 +481,8 @@ function build(sc, { timeline = false } = {}) {
     ...(timeline ? { graph: graphOf(sc), graphCap: CAPTION } : {}),
     steps,
     expected: price != null ? price : val, dp: 2,
-    hint: "Meeting day, cars, then ONE line: the total alone on the left, the payments on the right. Type it once, round once.",
-    answerLabel: price != null ? `${answer}, so the price is ${money(price, 2)}` : answer,
+    hint: afL("Meeting day, cars, then ONE line: the total alone on the left, the payments on the right. Type it once, round once.", "Ontmoetingsdag, karre, dan EEN reël: die totaal alleen links, die paaiemente regs. Tik dit een keer in, rond een keer af."),
+    answerLabel: price != null ? afL(`${answer}, so the price is ${money(price, 2)}`, `${answer}, dus is die prys ${money(price, 2)}`) : answer,
     solution,
   };
 }
@@ -491,7 +492,7 @@ const saveScene = (fam, name, n, roads, pays, extra = {}) => ({
   fam, name, kind: "save", n, meet: n, roads, total: { t: n, role: "A", value: null }, unknown: "A", pays, ...extra,
 });
 const loanScene = (fam, name, n, roads, pays, extra = {}) => ({
-  fam, name, kind: "loan", n, meet: 0, roads, total: { t: 0, role: "P", value: null }, unknown: "P", pays, ...extra,
+  fam, name, kind: "loan", n, meet: 0, roads, total: { t: 0, role: afL("P", "P"), value: null }, unknown: afL("P", "P"), pays, ...extra,
 });
 const dep = (t, v) => ({ t, v, kind: "dep" }), wd = (t, v) => ({ t, v, kind: "wd" }), repay = (t, v) => ({ t, v, kind: "repay" });
 
@@ -501,8 +502,8 @@ const FIX = {
   withdrawal: () => saveScene("withdrawal", "Bradley", 6, [{ from: 0, to: 6, r: 8, k: 12 }], [dep(0, 14000), wd(2, 2000)]),
   mixed: () => saveScene("mixed", "Mandy", 7, [{ from: 0, to: 3, r: 8, k: 12 }, { from: 3, to: 7, r: 9, k: 4 }], [dep(0, 5000), dep(2, 6000), wd(5, 3000)]),
   loanTwoRepayments: () => loanScene("loanTwoRepayments", "Brian", 6, [{ from: 0, to: 4, r: 16, k: 4 }, { from: 4, to: 6, r: 14, k: 2 }], [repay(4, 5000), repay(6, 6000)]),
-  targetAmount: () => ({ ...saveScene("targetAmount", "Bob", 10, [{ from: 0, to: 4, r: 18, k: 12 }, { from: 4, to: 10, r: 20, k: 4 }], [dep(0, "P")]), total: { t: 10, role: "A", value: 1000000 }, unknown: "P" }),
-  hirePurchase: () => loanScene("hirePurchase", "Arnold", 4, [{ from: 0, to: 2, r: 18, k: 12 }, { from: 2, to: 4, r: 19, k: 12 }], [repay(2, 8000), repay(4, 9000)], { down: 6000, item: "lounge suite" }),
+  targetAmount: () => ({ ...saveScene("targetAmount", "Bob", 10, [{ from: 0, to: 4, r: 18, k: 12 }, { from: 4, to: 10, r: 20, k: 4 }], [dep(0, afL("P", "P"))]), total: { t: 10, role: "A", value: 1000000 }, unknown: afL("P", "P") }),
+  hirePurchase: () => loanScene("hirePurchase", "Arnold", 4, [{ from: 0, to: 2, r: 18, k: 12 }, { from: 2, to: 4, r: 19, k: 12 }], [repay(2, 8000), repay(4, 9000)], { down: 6000, item: afL("lounge suite", "sitkamerstel") }),
   /* David's bank shape keeps 18% and changes only the compounding; a road is
      drawn as its rate, so the fallback changes the rate as every roll does */
   unknownPayment: () => ({ ...saveScene("unknownPayment", "David", 7, [{ from: 0, to: 3, r: 18, k: 12 }, { from: 3, to: 7, r: 16, k: 2 }], [dep(0, 30000), dep(5, "x"), dep(7, 50000)]), total: { t: 7, role: "A", value: 300000 }, unknown: "x" }),
@@ -513,7 +514,7 @@ function twoDepositsScene() {
   return roll(() => {
     const mvelo = rng() < 0.5, n = randInt(mvelo ? 5 : 4, 10), m = randInt(1, n - 1);
     const vals = shuffled(DEP_AMTS).slice(0, mvelo ? 3 : 2), times = mvelo ? [0, m, n] : [0, m];
-    return saveScene("twoDeposits", mvelo ? "Mvelo" : "Brenda", n, rollRoads(n, true), times.map((t, j) => dep(t, vals[j])));
+    return saveScene("twoDeposits", mvelo ? afL("Mvelo", "Mvelo") : "Brenda", n, rollRoads(n, true), times.map((t, j) => dep(t, vals[j])));
   }, FIX.twoDeposits);
 }
 /* Bradley / Jason: a deposit, then a withdrawal; one rate; find A */
@@ -543,7 +544,7 @@ function loanTwoRepaymentsScene() {
 function targetAmountScene() {
   return roll(() => {
     const n = randInt(5, 10);
-    return { ...saveScene("targetAmount", "Bob", n, rollRoads(n, true), [dep(0, "P")]), total: { t: n, role: "A", value: pick(TARGETS) }, unknown: "P" };
+    return { ...saveScene("targetAmount", "Bob", n, rollRoads(n, true), [dep(0, afL("P", "P"))]), total: { t: n, role: "A", value: pick(TARGETS) }, unknown: afL("P", "P") };
   }, FIX.targetAmount);
 }
 /* Arnold: a down payment straight to the shop, the loan paid off with two

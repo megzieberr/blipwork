@@ -1,0 +1,3316 @@
+{
+  "unit": "T82",
+  "generated": "2026-10-17T21:23:49.964Z",
+  "files": [
+    "js/quests/questf10-in-or-out.js",
+    "js/quests/questf11-meeting-day.js",
+    "js/quests/questf12-build-timeline.js",
+    "js/quests/questf13-one-equation.js"
+  ],
+  "items": {
+    "questf10-in-or-out#1": {
+      "en": "Repayments stand plus on the right. The loan is the total, P: it stands alone on the left.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:66:24"
+      ]
+    },
+    "questf10-in-or-out#2": {
+      "en": "Deposits go IN: plus. Withdrawals come OUT: minus. The total, A, stands alone on the left.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:67:31"
+      ]
+    },
+    "questf10-in-or-out#3": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:72:29"
+      ]
+    },
+    "questf10-in-or-out#4": {
+      "en": "laptop",
+      "kind": "string",
+      "slots": [
+        "optionList",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:76:16",
+        "questf10-in-or-out.js:474:129"
+      ]
+    },
+    "questf10-in-or-out#5": {
+      "en": "motorbike",
+      "kind": "string",
+      "slots": [
+        "optionList",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:76:26"
+      ]
+    },
+    "questf10-in-or-out#6": {
+      "en": "fridge",
+      "kind": "string",
+      "slots": [
+        "optionList",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:76:39"
+      ]
+    },
+    "questf10-in-or-out#7": {
+      "en": "lounge suite",
+      "kind": "string",
+      "slots": [
+        "optionList",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:76:49"
+      ]
+    },
+    "questf10-in-or-out#8": {
+      "en": "TV",
+      "kind": "string",
+      "slots": [
+        "optionList",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:76:65"
+      ]
+    },
+    "questf10-in-or-out#9": {
+      "en": "bed",
+      "kind": "string",
+      "slots": [
+        "optionList",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:76:71"
+      ]
+    },
+    "questf10-in-or-out#10": {
+      "en": "a car is the ${nw(pow(\"(1 + i)\", \"n\"))} bracket that moves an amount to the meeting day",
+      "kind": "template",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:87:16"
+      ],
+      "nested": [
+        "(1 + i)",
+        "n"
+      ]
+    },
+    "questf10-in-or-out#11": {
+      "en": "${y} year${y === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:90:18"
+      ],
+      "nested": [
+        "s"
+      ]
+    },
+    "questf10-in-or-out#12": {
+      "en": "${k} time${k === 1 ? \"\" : \"s\"} a year",
+      "kind": "template",
+      "slots": [
+        "placeholder",
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:91:22"
+      ],
+      "nested": [
+        "s"
+      ]
+    },
+    "questf10-in-or-out#13": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:97:17"
+      ]
+    },
+    "questf10-in-or-out#14": {
+      "en": "she",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:100:34",
+        "questf10-in-or-out.js:418:60"
+      ]
+    },
+    "questf10-in-or-out#15": {
+      "en": "her",
+      "kind": "string",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:100:46",
+        "questf10-in-or-out.js:418:72"
+      ]
+    },
+    "questf10-in-or-out#16": {
+      "en": "he",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:100:61",
+        "questf10-in-or-out.js:474:66"
+      ]
+    },
+    "questf10-in-or-out#17": {
+      "en": "his",
+      "kind": "string",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:100:72",
+        "questf10-in-or-out.js:474:77"
+      ]
+    },
+    "questf10-in-or-out#18": {
+      "en": "${xs.slice(0, -1).join(\", \")} and ${xs[xs.length - 1]}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:101:50"
+      ]
+    },
+    "questf10-in-or-out#19": {
+      "en": "an",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:102:45"
+      ]
+    },
+    "questf10-in-or-out#20": {
+      "en": "a",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:102:52"
+      ]
+    },
+    "questf10-in-or-out#21": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "questf10-in-or-out.js:103:17"
+      ]
+    },
+    "questf10-in-or-out#22": {
+      "en": "${pa(sc.r)} compounded ${HOW(sc.k)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:220:24"
+      ]
+    },
+    "questf10-in-or-out#23": {
+      "en": "${money(x.v)} at T${x.t}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:221:17"
+      ]
+    },
+    "questf10-in-or-out#24": {
+      "en": "${cap(p.he)} buys ${article(sc.item)} ${sc.item}. ${cap(p.he)} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest, the total P, at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and that pays off the loan.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:224:34"
+      ]
+    },
+    "questf10-in-or-out#25": {
+      "en": "${cap(p.he)} borrows the total, P, at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and that pays off the loan.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:225:23"
+      ]
+    },
+    "questf10-in-or-out#26": {
+      "en": "${cap(p.he)} saves at ${rateText(sc)}. ${cap(p.he)} deposits ${andList(deps.map(at))}${wds.length ? `, and withdraws ${andList(wds.map(at))}` : \"\"}. ${cap(p.his)} savings grow into the total, A, at T${sc.n}.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:227:10"
+      ],
+      "nested": [
+        ", and withdraws ${andList(wds.map(at))}"
+      ]
+    },
+    "questf10-in-or-out#27": {
+      "en": "the day of the loan",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:229:32"
+      ]
+    },
+    "questf10-in-or-out#28": {
+      "en": "the day of A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:229:56"
+      ]
+    },
+    "questf10-in-or-out#29": {
+      "en": "the repayment",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:233:23"
+      ]
+    },
+    "questf10-in-or-out#30": {
+      "en": "the deposit",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:233:45"
+      ]
+    },
+    "questf10-in-or-out#31": {
+      "en": "the withdrawal",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:233:64"
+      ]
+    },
+    "questf10-in-or-out#32": {
+      "en": "no car: it already stands on the meeting day",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:236:20"
+      ]
+    },
+    "questf10-in-or-out#33": {
+      "en": "a car from T${t.t} to T${sc.meet}: ${carSum(sc.meet - t.t, sc.k)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:238:7"
+      ]
+    },
+    "questf10-in-or-out#34": {
+      "en": "a car back from T${t.t} to T0: ${carSum(t.t, sc.k)}, written ${nw(`−${-t.e}`)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:239:7"
+      ]
+    },
+    "questf10-in-or-out#35": {
+      "en": "comes OUT, so minus",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:243:32"
+      ]
+    },
+    "questf10-in-or-out#36": {
+      "en": "stands plus on the right",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:243:77"
+      ]
+    },
+    "questf10-in-or-out#37": {
+      "en": "goes IN, so plus",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:243:106"
+      ]
+    },
+    "questf10-in-or-out#38": {
+      "en": "${cap(WHAT[t.kind])} at T${t.t}, ${money(t.c)}, ${io}: ${nw((t.s < 0 ? \"−\" : \"+\") + termText(sc, t))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:244:15"
+      ]
+    },
+    "questf10-in-or-out#39": {
+      "en": "The meeting day is T0, the day of the loan, so P stands there alone. Every repayment drives back there in its car, in reverse gear. ${cap(CAR_IS)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:250:8"
+      ]
+    },
+    "questf10-in-or-out#40": {
+      "en": "${yrs(sc.n)} × ${perYear(sc.k)} = ${sc.n * sc.k}, written ${nw(`−${sc.n * sc.k}`)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:251:8"
+      ]
+    },
+    "questf10-in-or-out#41": {
+      "en": "The meeting day is T${sc.n}, the day of A, so A stands there alone. Every amount drives there in its car, in forward gear. ${cap(CAR_IS)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:255:8"
+      ]
+    },
+    "questf10-in-or-out#42": {
+      "en": "The one equation: ${eqHtml(sc, q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:260:6"
+      ]
+    },
+    "questf10-in-or-out#43": {
+      "en": "the loan, P, alone on the left; the repayments plus on the right",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:261:22"
+      ]
+    },
+    "questf10-in-or-out#44": {
+      "en": "the total, A, alone on the left; a deposit plus, a withdrawal minus",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:261:91"
+      ]
+    },
+    "questf10-in-or-out#45": {
+      "en": "The down payment of ${money(sc.down)} never enters the account: it is paid straight to the shop, so it has no place in the equation.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:263:30"
+      ]
+    },
+    "questf10-in-or-out#46": {
+      "en": "it comes off the price: loan = price − down payment",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:263:169"
+      ]
+    },
+    "questf10-in-or-out#47": {
+      "en": "+ (in)",
+      "kind": "string",
+      "slots": [
+        "mcStep.correct",
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf10-in-or-out.js:271:16"
+      ]
+    },
+    "questf10-in-or-out#48": {
+      "en": "− (out)",
+      "kind": "string",
+      "slots": [
+        "mcStep.correct",
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf10-in-or-out.js:271:36"
+      ]
+    },
+    "questf10-in-or-out#49": {
+      "en": "<b>${at(sc.pays[j])}</b>: in or out?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}",
+      "kind": "template",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:277:5"
+      ]
+    },
+    "questf10-in-or-out#50": {
+      "en": "A deposit goes IN: plus. A withdrawal comes OUT: minus. On the timeline a withdrawal is drawn with its minus.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:279:5"
+      ]
+    },
+    "questf10-in-or-out#51": {
+      "en": "${story(sc)} The meeting day is T${sc.n}, the day of A. Every amount drives there in its car, and A stands alone on the left. Give each amount its sign.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:282:13"
+      ]
+    },
+    "questf10-in-or-out#52": {
+      "en": "A deposit goes IN: plus. A withdrawal comes OUT: minus. The total, A, stands alone on the left.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:284:11"
+      ]
+    },
+    "questf10-in-or-out#53": {
+      "en": "+ on the right",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "mcStep.correct"
+      ],
+      "where": [
+        "questf10-in-or-out.js:295:16"
+      ]
+    },
+    "questf10-in-or-out#54": {
+      "en": "− on the right",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf10-in-or-out.js:295:44"
+      ]
+    },
+    "questf10-in-or-out#55": {
+      "en": "alone on the left",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questf10-in-or-out.js:295:72"
+      ]
+    },
+    "questf10-in-or-out#56": {
+      "en": "<b>${at(sc.pays[j])}</b>: where does it go?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}",
+      "kind": "template",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:300:5"
+      ]
+    },
+    "questf10-in-or-out#57": {
+      "en": "A repayment stands plus on the right, as taught. Alone on the left? That is a coin: only the total stands alone.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:302:5"
+      ]
+    },
+    "questf10-in-or-out#58": {
+      "en": "${story(sc)} The meeting day is T0, the day of the loan. Every repayment drives back there in its car, and P stands alone on the left. Where does each repayment go?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:305:13"
+      ]
+    },
+    "questf10-in-or-out#59": {
+      "en": "The loan, P, is the total: it stands alone on the left. Every repayment goes plus on the right.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:307:11"
+      ]
+    },
+    "questf10-in-or-out#60": {
+      "en": "${story(sc)} The meeting day is T${sc.meet}, ${dayOf(sc)}. ${He} writes:<br>${eqHtml(sc, shown)}<br>Is this equation correct?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:328:24"
+      ]
+    },
+    "questf10-in-or-out#61": {
+      "en": "The total stands alone on the left. On the right: a deposit or a repayment plus, a withdrawal minus.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:329:16"
+      ]
+    },
+    "questf10-in-or-out#62": {
+      "en": "Yes: the total alone on the left, and every sign is right",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf10-in-or-out.js:334:20"
+      ]
+    },
+    "questf10-in-or-out#63": {
+      "en": "No: the withdrawal at T${W.t} needs a minus: it comes OUT",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf10-in-or-out.js:343:13"
+      ]
+    },
+    "questf10-in-or-out#64": {
+      "en": "The slip: ${money(W.c)} at T${W.t} is the withdrawal. It comes OUT, so it needs a minus.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:344:17"
+      ]
+    },
+    "questf10-in-or-out#65": {
+      "en": "out is minus",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:344:112"
+      ]
+    },
+    "questf10-in-or-out#66": {
+      "en": "No: ${WHAT[M.kind]} at T${M.t} is written on ${P.c}'s side: only the total stands alone on the left",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf10-in-or-out.js:348:13"
+      ]
+    },
+    "questf10-in-or-out#67": {
+      "en": "The slip: ${money(M.c)} at T${M.t} is ${WHAT[M.kind]}, a payment, but it is written on the left with ${P.c}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:349:17"
+      ]
+    },
+    "questf10-in-or-out#68": {
+      "en": "only the total stands alone on the left",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:349:132"
+      ]
+    },
+    "questf10-in-or-out#69": {
+      "en": "The right equation: ${eqHtml(sc, right)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:355:27"
+      ]
+    },
+    "questf10-in-or-out#70": {
+      "en": "${story(sc)} The meeting day is T${sc.n}, the day of A. Which equation gives A?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:376:5"
+      ]
+    },
+    "questf10-in-or-out#71": {
+      "en": "A deposit goes IN (plus), a withdrawal comes OUT (minus). Each one drives to the meeting day in forward gear.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:379:13"
+      ]
+    },
+    "questf10-in-or-out#72": {
+      "en": "The withdrawal needs a car too: the ${money(W.c)} left the account at T${W.t}, so the interest it would have earned is gone as well.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:383:14"
+      ]
+    },
+    "questf10-in-or-out#73": {
+      "en": "forward gear, exponent ${W.e}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:383:153"
+      ]
+    },
+    "questf10-in-or-out#74": {
+      "en": "nowhere: it never enters the account",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf10-in-or-out.js:392:17"
+      ]
+    },
+    "questf10-in-or-out#75": {
+      "en": "A deposit into savings",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:394:11"
+      ]
+    },
+    "questf10-in-or-out#76": {
+      "en": "A deposit is money put into the account. It goes IN: plus on the right.",
+      "kind": "string",
+      "slots": [
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "questf10-in-or-out.js:394:68"
+      ]
+    },
+    "questf10-in-or-out#77": {
+      "en": "A withdrawal from savings",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:395:11"
+      ]
+    },
+    "questf10-in-or-out#78": {
+      "en": "A withdrawal is money taken out of the account. It comes OUT: minus on the right.",
+      "kind": "string",
+      "slots": [
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "questf10-in-or-out.js:395:72"
+      ]
+    },
+    "questf10-in-or-out#79": {
+      "en": "The total, A, that savings grow into",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:396:11"
+      ]
+    },
+    "questf10-in-or-out#80": {
+      "en": "A is the total. The total stands alone on the left: A = …",
+      "kind": "string",
+      "slots": [
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "questf10-in-or-out.js:396:83"
+      ]
+    },
+    "questf10-in-or-out#81": {
+      "en": "A repayment on a loan",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:397:11"
+      ]
+    },
+    "questf10-in-or-out#82": {
+      "en": "A repayment pays the loan back. In the equation it stands plus on the right: P = …",
+      "kind": "string",
+      "slots": [
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "questf10-in-or-out.js:397:66"
+      ]
+    },
+    "questf10-in-or-out#83": {
+      "en": "The loan itself (the amount borrowed)",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:398:11"
+      ]
+    },
+    "questf10-in-or-out#84": {
+      "en": "The loan is the total, P. The total stands alone on the left: P = …",
+      "kind": "string",
+      "slots": [
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "questf10-in-or-out.js:398:83"
+      ]
+    },
+    "questf10-in-or-out#85": {
+      "en": "A down payment on a fridge bought on hire purchase",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf10-in-or-out.js:399:11"
+      ]
+    },
+    "questf10-in-or-out#86": {
+      "en": "A down payment is paid straight to the seller. It never enters the account: no car, no place in the equation. ${cap(CAR_IS)}. It comes off the price: loan = price − down payment.",
+      "kind": "template",
+      "slots": [
+        "solution.s",
+        "why"
+      ],
+      "where": [
+        "questf10-in-or-out.js:400:10"
+      ]
+    },
+    "questf10-in-or-out#87": {
+      "en": "<b>${w.what}</b>: where does it go in the equation?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:405:5"
+      ]
+    },
+    "questf10-in-or-out#88": {
+      "en": "The total stands alone on the left. On the right: plus for money in and for a repayment, minus for money out.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:407:13"
+      ]
+    },
+    "questf10-in-or-out#89": {
+      "en": "${cap(p.he)} borrowed ${money(loan, 2)} at ${pa(sc.r)} compounded ${HOW(sc.k)}. ${cap(p.he)} paid back ${andList(pays.map(at))}, and that paid off the loan. How much interest did ${p.he} pay?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:440:5"
+      ]
+    },
+    "questf10-in-or-out#90": {
+      "en": "Interest = what was paid back − what was borrowed.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:443:13"
+      ]
+    },
+    "questf10-in-or-out#91": {
+      "en": "${lab(intC)} of interest",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf10-in-or-out.js:444:20"
+      ]
+    },
+    "questf10-in-or-out#92": {
+      "en": "Paid back (OUT): ${nw(amt0(sc.vals[0]))} + ${nw(`${amt0(sc.vals[1])} = ${amt0(paidC / 100)}`)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:446:14"
+      ]
+    },
+    "questf10-in-or-out#93": {
+      "en": "the repayments cover the loan AND its interest",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:446:115"
+      ]
+    },
+    "questf10-in-or-out#94": {
+      "en": "Borrowed (IN): ${nw(amt2(loan))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:447:14"
+      ]
+    },
+    "questf10-in-or-out#95": {
+      "en": "no interest in the loan",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:447:53"
+      ]
+    },
+    "questf10-in-or-out#96": {
+      "en": "Interest = paid back − borrowed = ${nw(amt0(paidC / 100))} − ${nw(`${amt2(loan)} = ${rands(intC / 100, 2)}`)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:448:14"
+      ]
+    },
+    "questf10-in-or-out#97": {
+      "en": "${cap(p.he)} buys ${article(sc.item)} ${sc.item} for ${money(sc.price)}. ${cap(p.he)} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and a last repayment, x, at T${n} pays off the loan. The meeting day is T0, the day of the loan. Which equation is right?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:487:5"
+      ]
+    },
+    "questf10-in-or-out#98": {
+      "en": "Price = loan + down payment. Only the loan is the total: it stands alone on the left.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:489:13"
+      ]
+    },
+    "questf10-in-or-out#99": {
+      "en": "Price = loan + down payment, so the loan = ${nw(amt0(sc.price))} − ${nw(`${amt0(sc.down)} = ${amt0(sc.ln)}`)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:491:14"
+      ]
+    },
+    "questf10-in-or-out#100": {
+      "en": "the down payment never enters the account, so it gets no car; ${CAR_IS}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:491:130"
+      ]
+    },
+    "questf10-in-or-out#101": {
+      "en": "The loan is the total. It stands alone on the left, on the meeting day, with no car: ${nw(amt0(sc.ln))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:492:14"
+      ]
+    },
+    "questf10-in-or-out#102": {
+      "en": "the meeting day is T0, the day of the loan",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:492:124"
+      ]
+    },
+    "questf10-in-or-out#103": {
+      "en": "The repayment at T${t.t} stands plus on the right: ${nw(termText(sc, t))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:493:32"
+      ]
+    },
+    "questf10-in-or-out#104": {
+      "en": "The last repayment, x, stands plus on the right too: ${nw(termText(sc, xT))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf10-in-or-out.js:494:14"
+      ]
+    },
+    "questf10-in-or-out#105": {
+      "en": "the loan, ${nw(amt0(sc.ln))}, alone on the left; the repayments plus on the right",
+      "kind": "template",
+      "slots": [
+        "oneLine.r"
+      ],
+      "where": [
+        "questf10-in-or-out.js:495:28"
+      ]
+    },
+    "questf10-in-or-out#106": {
+      "en": "${cap(p.he)} saves at ${rateText(sc)}. On the timeline a plain amount is a deposit and an amount marked with a minus is a withdrawal. ${cap(p.his)} savings grow into the total, A, at T${sc.n}, the meeting day. Which equation matches the picture?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf10-in-or-out.js:521:5"
+      ]
+    },
+    "questf10-in-or-out#107": {
+      "en": "A plain amount is a deposit: plus. The amount marked − is a withdrawal: minus.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf10-in-or-out.js:524:13"
+      ]
+    },
+    "questf11-meeting-day#1": {
+      "en": "The answer is the same wherever you meet; picking the day is only about typing less.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:74:24"
+      ]
+    },
+    "questf11-meeting-day#2": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:78:29"
+      ]
+    },
+    "questf11-meeting-day#3": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:88:17"
+      ]
+    },
+    "questf11-meeting-day#4": {
+      "en": "${r}%${NB}road",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:90:23"
+      ]
+    },
+    "questf11-meeting-day#5": {
+      "en": "${k}${NB}car${k === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "nw.s",
+        "placeholder",
+        "unitList.parts"
+      ],
+      "where": [
+        "questf11-meeting-day.js:94:23"
+      ],
+      "nested": [
+        "s"
+      ]
+    },
+    "questf11-meeting-day#6": {
+      "en": "A car is the ${nw(pow(\"(1 + i)\", \"n\"))} bracket that moves an amount to the meeting day.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:97:16"
+      ],
+      "nested": [
+        "(1 + i)",
+        "n"
+      ]
+    },
+    "questf11-meeting-day#7": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "questf11-meeting-day.js:98:17"
+      ]
+    },
+    "questf11-meeting-day#8": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:120:53",
+        "questf11-meeting-day.js:205:82",
+        "questf11-meeting-day.js:213:81",
+        "questf11-meeting-day.js:220:85",
+        "questf11-meeting-day.js:227:84"
+      ],
+      "data": true
+    },
+    "questf11-meeting-day#9": {
+      "en": "P",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:120:59"
+      ]
+    },
+    "questf11-meeting-day#10": {
+      "en": "${paU(r.r)} compounded ${HOW(r.k)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:237:20"
+      ]
+    },
+    "questf11-meeting-day#11": {
+      "en": "${one(r0)}; from T${r1.from} the rate is ${one(r1)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:238:21"
+      ]
+    },
+    "questf11-meeting-day#12": {
+      "en": "${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:240:7"
+      ]
+    },
+    "questf11-meeting-day#13": {
+      "en": "${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:241:7"
+      ]
+    },
+    "questf11-meeting-day#14": {
+      "en": "already there: no car",
+      "kind": "string",
+      "slots": [
+        "unitList.parts"
+      ],
+      "where": [
+        "questf11-meeting-day.js:243:19",
+        "questf11-meeting-day.js:244:19"
+      ]
+    },
+    "questf11-meeting-day#15": {
+      "en": "one colour: ${carsWord(1)}",
+      "kind": "template",
+      "slots": [
+        "unitList.parts"
+      ],
+      "where": [
+        "questf11-meeting-day.js:243:44"
+      ]
+    },
+    "questf11-meeting-day#16": {
+      "en": "across the colour change: ${carsWord(2)}",
+      "kind": "template",
+      "slots": [
+        "unitList.parts"
+      ],
+      "where": [
+        "questf11-meeting-day.js:243:74"
+      ]
+    },
+    "questf11-meeting-day#17": {
+      "en": "it has to move: ${carsWord(1)}",
+      "kind": "template",
+      "slots": [
+        "unitList.parts"
+      ],
+      "where": [
+        "questf11-meeting-day.js:244:44"
+      ]
+    },
+    "questf11-meeting-day#18": {
+      "en": "one road, one colour",
+      "kind": "string",
+      "slots": [
+        "solution.r",
+        "unitList.parts"
+      ],
+      "where": [
+        "questf11-meeting-day.js:244:78",
+        "questf11-meeting-day.js:338:26"
+      ]
+    },
+    "questf11-meeting-day#19": {
+      "en": "the total ${nw(`${it.role} at T${it.t}`)}",
+      "kind": "template",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:249:33"
+      ],
+      "nested": [
+        "${it.role} at T${it.t}"
+      ]
+    },
+    "questf11-meeting-day#20": {
+      "en": "${rands(it.v)} at T${it.t}",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:249:82"
+      ]
+    },
+    "questf11-meeting-day#21": {
+      "en": "no car",
+      "kind": "string",
+      "slots": [
+        "solution.s",
+        "unitList.parts"
+      ],
+      "where": [
+        "questf11-meeting-day.js:253:68",
+        "questf11-meeting-day.js:335:43"
+      ]
+    },
+    "questf11-meeting-day#22": {
+      "en": "Meet at T${D}${tag}: ${cars(countAt(sc, D))}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:257:8"
+      ]
+    },
+    "questf11-meeting-day#23": {
+      "en": "count per amount",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:257:59"
+      ]
+    },
+    "questf11-meeting-day#24": {
+      "en": "${story(sc)} Which meeting day needs the fewest cars?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf11-meeting-day.js:302:13"
+      ]
+    },
+    "questf11-meeting-day#25": {
+      "en": "T${D}",
+      "kind": "template",
+      "slots": [
+        "label",
+        "options.label"
+      ],
+      "where": [
+        "questf11-meeting-day.js:303:38",
+        "questf11-meeting-day.js:407:38"
+      ]
+    },
+    "questf11-meeting-day#26": {
+      "en": "Count the cars for each day. An amount already there needs none; every other amount needs ${cars(1)}. The total counts too.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:306:9"
+      ]
+    },
+    "questf11-meeting-day#27": {
+      "en": "Count the cars for each day. Already there: none. One colour: ${cars(1)}. Across the colour change: ${cars(2)}. The total counts too.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:307:9"
+      ]
+    },
+    "questf11-meeting-day#28": {
+      "en": "T${b.D}: ${cars(b.min)}, the fewest",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf11-meeting-day.js:308:18"
+      ]
+    },
+    "questf11-meeting-day#29": {
+      "en": "T${b.D} needs the fewest: ${cars(b.min)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:312:12"
+      ]
+    },
+    "questf11-meeting-day#30": {
+      "en": "it already stands on T${D}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:336:21"
+      ]
+    },
+    "questf11-meeting-day#31": {
+      "en": "it crosses the colour change at T${sc.c}: one car per road",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:337:22"
+      ]
+    },
+    "questf11-meeting-day#32": {
+      "en": "it stays on the ${roadU(roadOf(sc, it.t, D).r)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:338:51"
+      ]
+    },
+    "questf11-meeting-day#33": {
+      "en": "${story(sc)} If we meet at T${D}, how many cars are needed altogether?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf11-meeting-day.js:343:13"
+      ]
+    },
+    "questf11-meeting-day#34": {
+      "en": "Go amount by amount, the total too. Already on T${D}: no car. One colour, so one car for each amount that has to move.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:348:9"
+      ]
+    },
+    "questf11-meeting-day#35": {
+      "en": "Go amount by amount, the total too. Already on T${D}: no car. One colour: ${cars(1)}. Across the colour change: ${cars(2)}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:349:9"
+      ]
+    },
+    "questf11-meeting-day#36": {
+      "en": "${cars(k)} if we meet at T${D}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf11-meeting-day.js:350:18"
+      ]
+    },
+    "questf11-meeting-day#37": {
+      "en": "Meet at T${D}: ${cars(k)} altogether",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:354:12"
+      ]
+    },
+    "questf11-meeting-day#38": {
+      "en": "add them up",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:354:55"
+      ]
+    },
+    "questf11-meeting-day#39": {
+      "en": "The total, ${sc.total.role}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:375:17"
+      ]
+    },
+    "questf11-meeting-day#40": {
+      "en": "Nothing: no amount stands on T${D}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf11-meeting-day.js:375:55"
+      ]
+    },
+    "questf11-meeting-day#41": {
+      "en": "no amount",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:377:24",
+        "questf11-meeting-day.js:476:45"
+      ]
+    },
+    "questf11-meeting-day#42": {
+      "en": "the total, ${sc.total.role} (the ? in its ring)",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf11-meeting-day.js:377:49"
+      ]
+    },
+    "questf11-meeting-day#43": {
+      "en": "${story(sc)} Meeting where someone already stands saves a car. Which amount is already standing on T${D}?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf11-meeting-day.js:379:5"
+      ]
+    },
+    "questf11-meeting-day#44": {
+      "en": "Look straight up from T${D}. The ? in its ring is the total.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:383:13"
+      ]
+    },
+    "questf11-meeting-day#45": {
+      "en": "Nothing stands on T${D}: meeting there saves no car",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf11-meeting-day.js:384:26"
+      ]
+    },
+    "questf11-meeting-day#46": {
+      "en": "${at.total ? TOTAL : money(at.v)}: meet at T${D} and it needs no car",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf11-meeting-day.js:385:11"
+      ]
+    },
+    "questf11-meeting-day#47": {
+      "en": "an amount already on the meeting day needs no car",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:387:25"
+      ]
+    },
+    "questf11-meeting-day#48": {
+      "en": "On T${D}: ${stands}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:388:14"
+      ]
+    },
+    "questf11-meeting-day#49": {
+      "en": "read straight up from the T label",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:388:40"
+      ]
+    },
+    "questf11-meeting-day#50": {
+      "en": "${story(sc)} Meeting where the road changes colour saves two‑car trips. Which T is that?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf11-meeting-day.js:406:13"
+      ]
+    },
+    "questf11-meeting-day#51": {
+      "en": "Follow the road from T0. Where does its colour change? The story says it too: that is where the rate changes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:409:11"
+      ]
+    },
+    "questf11-meeting-day#52": {
+      "en": "T${c}: the ${roadU(r0.r)} ends and the ${roadU(r1.r)} starts",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf11-meeting-day.js:410:18"
+      ]
+    },
+    "questf11-meeting-day#53": {
+      "en": "an amount that crosses the colour change needs two cars, one per road",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:412:23"
+      ]
+    },
+    "questf11-meeting-day#54": {
+      "en": "The road changes colour at T${c}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:413:12"
+      ]
+    },
+    "questf11-meeting-day#55": {
+      "en": "the ${roadU(r0.r)} ends there and the ${roadU(r1.r)} starts",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:413:51"
+      ]
+    },
+    "questf11-meeting-day#56": {
+      "en": "Meet at T${c}: ${cars(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:414:12"
+      ]
+    },
+    "questf11-meeting-day#57": {
+      "en": "no amount crosses the change, so none needs two cars",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:414:44"
+      ]
+    },
+    "questf11-meeting-day#58": {
+      "en": "${story(sc)} If we meet at T${a} instead of T${b}, does the final answer for ${R} change?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf11-meeting-day.js:433:13"
+      ]
+    },
+    "questf11-meeting-day#59": {
+      "en": "Another meeting day changes the brackets you type, not the value of the total.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:436:11"
+      ]
+    },
+    "questf11-meeting-day#60": {
+      "en": "No: ${R} comes out the same; only the typing changes",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf11-meeting-day.js:437:18"
+      ]
+    },
+    "questf11-meeting-day#61": {
+      "en": "The same ${R} either way: every amount moves at the same rates",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:442:12"
+      ]
+    },
+    "questf11-meeting-day#62": {
+      "en": "${cars(ka)} either way",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:442:93"
+      ]
+    },
+    "questf11-meeting-day#63": {
+      "en": "T${ka < kb ? a : b} has fewer cars: less to type",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:442:120"
+      ]
+    },
+    "questf11-meeting-day#64": {
+      "en": "An amount already stands there, so it needs no car",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf11-meeting-day.js:453:11"
+      ]
+    },
+    "questf11-meeting-day#65": {
+      "en": "The road changes colour there, so no amount needs two cars",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf11-meeting-day.js:454:11"
+      ]
+    },
+    "questf11-meeting-day#66": {
+      "en": "Both: an amount stands there, and the road changes colour there",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf11-meeting-day.js:455:9"
+      ]
+    },
+    "questf11-meeting-day#67": {
+      "en": "It is the end of the timeline",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf11-meeting-day.js:456:8"
+      ]
+    },
+    "questf11-meeting-day#68": {
+      "en": "The biggest amount stands there",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questf11-meeting-day.js:457:12"
+      ]
+    },
+    "questf11-meeting-day#69": {
+      "en": "${story(sc)} Why is T${D} a good meeting day here?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questf11-meeting-day.js:478:5"
+      ]
+    },
+    "questf11-meeting-day#70": {
+      "en": "Look at T${D}. Does an amount stand there? Does the road change colour there?",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf11-meeting-day.js:482:13"
+      ]
+    },
+    "questf11-meeting-day#71": {
+      "en": "On T${D}: ${here}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:486:14"
+      ]
+    },
+    "questf11-meeting-day#72": {
+      "en": "and the road changes colour at T${D}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:486:51"
+      ]
+    },
+    "questf11-meeting-day#73": {
+      "en": "one road: the colour never changes",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:486:107"
+      ]
+    },
+    "questf11-meeting-day#74": {
+      "en": "the road changes colour at T${sc.c}, not here",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:486:146"
+      ]
+    },
+    "questf11-meeting-day#75": {
+      "en": " (the end)",
+      "kind": "string",
+      "slots": [
+        "dayLine.tag"
+      ],
+      "where": [
+        "questf11-meeting-day.js:488:27"
+      ]
+    },
+    "questf11-meeting-day#76": {
+      "en": "T${D} needs ${cars(min)}, ${ties === 1 ? \"the fewest of any day\" : \"as few as any day\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf11-meeting-day.js:489:14"
+      ],
+      "nested": [
+        "the fewest of any day",
+        "as few as any day"
+      ]
+    },
+    "questf11-meeting-day#77": {
+      "en": "an amount already stands there: it needs no car",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:490:34"
+      ]
+    },
+    "questf11-meeting-day#78": {
+      "en": "nobody crosses the colour change on the way there",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:491:35"
+      ]
+    },
+    "questf11-meeting-day#79": {
+      "en": "an amount stands there, and nobody crosses the colour change",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf11-meeting-day.js:492:15"
+      ]
+    },
+    "questf12-build-timeline#1": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "graphAfterCap",
+        "graphCap"
+      ],
+      "where": [
+        "questf12-build-timeline.js:98:17"
+      ]
+    },
+    "questf12-build-timeline#2": {
+      "en": "nowhere: it never enters the account",
+      "kind": "string",
+      "slots": [
+        "opt.label"
+      ],
+      "where": [
+        "questf12-build-timeline.js:102:17"
+      ]
+    },
+    "questf12-build-timeline#3": {
+      "en": "no change",
+      "kind": "string",
+      "slots": [
+        "opt.label"
+      ],
+      "where": [
+        "questf12-build-timeline.js:103:19"
+      ]
+    },
+    "questf12-build-timeline#4": {
+      "en": "annually",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:105:18"
+      ]
+    },
+    "questf12-build-timeline#5": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:105:33"
+      ]
+    },
+    "questf12-build-timeline#6": {
+      "en": "quarterly",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:105:51"
+      ]
+    },
+    "questf12-build-timeline#7": {
+      "en": "monthly",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:105:68"
+      ]
+    },
+    "questf12-build-timeline#8": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:111:23"
+      ]
+    },
+    "questf12-build-timeline#9": {
+      "en": "${y}${NB}year${y === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:113:23"
+      ],
+      "nested": [
+        "s"
+      ]
+    },
+    "questf12-build-timeline#10": {
+      "en": "now",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:114:30",
+        "questf12-build-timeline.js:129:20"
+      ]
+    },
+    "questf12-build-timeline#11": {
+      "en": "after ${years(t)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:114:38"
+      ]
+    },
+    "questf12-build-timeline#12": {
+      "en": "T${t}",
+      "kind": "template",
+      "slots": [
+        "opt.label",
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:116:16"
+      ]
+    },
+    "questf12-build-timeline#13": {
+      "en": "deposit",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:117:21"
+      ]
+    },
+    "questf12-build-timeline#14": {
+      "en": "withdrawal",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:117:36",
+        "questf12-build-timeline.js:308:4",
+        "questf12-build-timeline.js:308:18"
+      ]
+    },
+    "questf12-build-timeline#15": {
+      "en": "repayment",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:117:57"
+      ]
+    },
+    "questf12-build-timeline#16": {
+      "en": "How far does the timeline go?<br><span class=\"muted small\">Pick the last T.</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:167:13"
+      ]
+    },
+    "questf12-build-timeline#17": {
+      "en": "The last day the words name is the end of the timeline. Count in years from now: now is T0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:169:11"
+      ]
+    },
+    "questf12-build-timeline#18": {
+      "en": "Where does the interest rate change?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:186:13"
+      ]
+    },
+    "questf12-build-timeline#19": {
+      "en": "The words give TWO rates: the rate does change.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf12-build-timeline.js:187:67"
+      ]
+    },
+    "questf12-build-timeline#20": {
+      "en": "Read the rate sentence. The first rate lasts the years it names, counted from T0. One rate for the whole time: no change.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:188:11"
+      ]
+    },
+    "questf12-build-timeline#21": {
+      "en": "Which rate goes on which road?<br><span class=\"muted small\">Two roads: T0 to ${T(c)}, then ${T(c)} to ${T(sc.n)}.</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:198:19"
+      ]
+    },
+    "questf12-build-timeline#22": {
+      "en": "Which rate goes on which road?<br><span class=\"muted small\">One road: T0 to ${T(sc.n)}.</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:199:9"
+      ]
+    },
+    "questf12-build-timeline#23": {
+      "en": "The first road wears the rate the words give for the first years; the second road wears the rate after the change.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:203:17"
+      ]
+    },
+    "questf12-build-timeline#24": {
+      "en": "One rate for the whole time: the one the words give.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:204:9"
+      ]
+    },
+    "questf12-build-timeline#25": {
+      "en": "Where does the total (the jug) go?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:213:13"
+      ]
+    },
+    "questf12-build-timeline#26": {
+      "en": "T0",
+      "kind": "string",
+      "slots": [
+        "opt.label"
+      ],
+      "where": [
+        "questf12-build-timeline.js:215:11"
+      ]
+    },
+    "questf12-build-timeline#27": {
+      "en": "Savings fill the jug coin by coin: it is full at the END.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf12-build-timeline.js:215:37"
+      ]
+    },
+    "questf12-build-timeline#28": {
+      "en": "The bank hands you the full jug at the START: a loan's jug sits on the loan's own day.",
+      "kind": "string",
+      "slots": [
+        "opt.why"
+      ],
+      "where": [
+        "questf12-build-timeline.js:216:31"
+      ]
+    },
+    "questf12-build-timeline#29": {
+      "en": "Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:218:11"
+      ]
+    },
+    "questf12-build-timeline#30": {
+      "en": "${first ? \"Where does each coin go?<br>\" : \"\"}${cap(coinName(x))}: which T?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:230:13"
+      ],
+      "nested": [
+        "Where does each coin go?<br>"
+      ]
+    },
+    "questf12-build-timeline#31": {
+      "en": "Find the coin's day in the words: now is T0, and “after so many years” is that many T's on from T0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:232:11"
+      ]
+    },
+    "questf12-build-timeline#32": {
+      "en": "${money(sc.down)} down payment: which T?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:245:13"
+      ]
+    },
+    "questf12-build-timeline#33": {
+      "en": "A down payment is paid straight to the shop: it never enters the account. It comes off the price: ${nw(\"loan = price − down payment\")}.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:247:11"
+      ],
+      "nested": [
+        "loan = price − down payment"
+      ]
+    },
+    "questf12-build-timeline#34": {
+      "en": "the jug, ${role} = ${money(sc.total.value)}",
+      "kind": "template",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:277:44"
+      ]
+    },
+    "questf12-build-timeline#35": {
+      "en": "the jug, ${role}",
+      "kind": "template",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf12-build-timeline.js:277:92"
+      ]
+    },
+    "questf12-build-timeline#36": {
+      "en": "The timeline runs from T0 to ${T(n)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:283:10"
+      ]
+    },
+    "questf12-build-timeline#37": {
+      "en": "the last day the words name: ${when(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf12-build-timeline.js:283:54"
+      ]
+    },
+    "questf12-build-timeline#38": {
+      "en": "The rate changes at ${T(c)}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:284:16"
+      ]
+    },
+    "questf12-build-timeline#39": {
+      "en": "the first rate lasts the first ${years(c)}",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf12-build-timeline.js:284:51"
+      ]
+    },
+    "questf12-build-timeline#40": {
+      "en": "The rate never changes.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:284:105"
+      ]
+    },
+    "questf12-build-timeline#41": {
+      "en": "the words give one rate for the whole time",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf12-build-timeline.js:284:135"
+      ]
+    },
+    "questf12-build-timeline#42": {
+      "en": "Road 1, T0 to ${T(c)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}. Road 2, ${T(c)} to ${T(n)}: ${paU(sc.roads[1].r)} compounded ${HOW[sc.roads[1].k]}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:286:14"
+      ]
+    },
+    "questf12-build-timeline#43": {
+      "en": "each road one rate, in its own colour",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf12-build-timeline.js:286:183"
+      ]
+    },
+    "questf12-build-timeline#44": {
+      "en": "One road, T0 to ${T(n)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:287:14"
+      ]
+    },
+    "questf12-build-timeline#45": {
+      "en": "one rate, one colour",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf12-build-timeline.js:287:101"
+      ]
+    },
+    "questf12-build-timeline#46": {
+      "en": "${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? \", the day of the loan\" : \", the end\"}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf12-build-timeline.js:288:10"
+      ],
+      "nested": [
+        ", the day of the loan",
+        ", the end"
+      ]
+    },
+    "questf12-build-timeline#47": {
+      "en": "the bank hands over the full jug at the start; its day is the meeting day (the flag)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf12-build-timeline.js:288:113"
+      ]
+    },
+    "questf12-build-timeline#48": {
+      "en": "savings fill the jug coin by coin; its day is the meeting day (the flag)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf12-build-timeline.js:288:202"
+      ]
+    },
+    "questf12-build-timeline#49": {
+      "en": "${f13Story(sc)}<br><span class=\"muted small\">Build its timeline first, tap by tap. No equation yet.</span>",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf12-build-timeline.js:295:13"
+      ]
+    },
+    "questf12-build-timeline#50": {
+      "en": "How far, where the rate changes, which rate on which road, where the jug goes, where each coin goes.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf12-build-timeline.js:298:11"
+      ]
+    },
+    "questf12-build-timeline#51": {
+      "en": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no rate change\"}; ${jugWord}, at ${T(sc.total.t)}; ${coins.map(x => `${coinName(x)} at ${T(x.t)}`).join(\", \")}${sc.down != null ? `; the ${money(sc.down)} down payment: nowhere` : \"\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf12-build-timeline.js:299:18"
+      ],
+      "nested": [
+        "the rate changes at ${T(c)}",
+        "no rate change",
+        "${coinName(x)} at ${T(x.t)}",
+        "; the ${money(sc.down)} down payment: nowhere"
+      ]
+    },
+    "questf13-one-equation#1": {
+      "en": "half‑yearly",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:90:29"
+      ]
+    },
+    "questf13-one-equation#2": {
+      "en": "lounge suite",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf13-one-equation.js:103:16",
+        "questf13-one-equation.js:505:186"
+      ]
+    },
+    "questf13-one-equation#3": {
+      "en": "motorbike",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf13-one-equation.js:103:32"
+      ]
+    },
+    "questf13-one-equation#4": {
+      "en": "laptop",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf13-one-equation.js:103:45"
+      ]
+    },
+    "questf13-one-equation#5": {
+      "en": "fridge",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf13-one-equation.js:103:55"
+      ]
+    },
+    "questf13-one-equation#6": {
+      "en": "TV",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf13-one-equation.js:103:65"
+      ]
+    },
+    "questf13-one-equation#7": {
+      "en": "bed",
+      "kind": "string",
+      "slots": [
+        "optionList"
+      ],
+      "where": [
+        "questf13-one-equation.js:103:71"
+      ]
+    },
+    "questf13-one-equation#8": {
+      "en": "she",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:110:19"
+      ]
+    },
+    "questf13-one-equation#9": {
+      "en": "he",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:110:51"
+      ]
+    },
+    "questf13-one-equation#10": {
+      "en": "Mvelo",
+      "kind": "string",
+      "slots": [
+        "cap.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:112:29",
+        "questf13-one-equation.js:516:45"
+      ]
+    },
+    "questf13-one-equation#11": {
+      "en": "${r}%${NB}p.a.",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:122:17"
+      ]
+    },
+    "questf13-one-equation#12": {
+      "en": "${y}${NB}year${y === 1 ? \"\" : \"s\"}",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:124:18"
+      ],
+      "nested": [
+        "s"
+      ]
+    },
+    "questf13-one-equation#13": {
+      "en": "${k}${NB}time${k === 1 ? \"\" : \"s\"}${NB}a${NB}year",
+      "kind": "template",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:125:22"
+      ],
+      "nested": [
+        "s"
+      ]
+    },
+    "questf13-one-equation#14": {
+      "en": "2 decimal places",
+      "kind": "string",
+      "slots": [
+        "nw.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:132:16"
+      ]
+    },
+    "questf13-one-equation#15": {
+      "en": "${xs.slice(0, -1).join(\", \")} and ${xs[xs.length - 1]}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:134:50"
+      ]
+    },
+    "questf13-one-equation#16": {
+      "en": "T in years",
+      "kind": "string",
+      "slots": [
+        "graphCap"
+      ],
+      "where": [
+        "questf13-one-equation.js:135:17"
+      ]
+    },
+    "questf13-one-equation#17": {
+      "en": "a car is the ${nw(pow(\"(1 + i)\", \"n\"))} bracket that moves an amount to the meeting day",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:137:16"
+      ],
+      "nested": [
+        "(1 + i)",
+        "n"
+      ]
+    },
+    "questf13-one-equation#18": {
+      "en": "${paU(r.r)} compounded ${HOW(r.k)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:375:20"
+      ]
+    },
+    "questf13-one-equation#19": {
+      "en": "The interest rate is ${one(a)} for the first ${years(a.to)}, then ${one(b)}.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:377:14"
+      ]
+    },
+    "questf13-one-equation#20": {
+      "en": "The interest rate is ${one(a)}.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:377:95"
+      ]
+    },
+    "questf13-one-equation#21": {
+      "en": "${N} wants ${money(sc.total.value)} in a savings account after ${years(sc.n)}. That is the total, A. ${rate} How much, P, must ${p.he} deposit now?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:388:14"
+      ]
+    },
+    "questf13-one-equation#22": {
+      "en": "an",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:390:45"
+      ]
+    },
+    "questf13-one-equation#23": {
+      "en": "a",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:390:52"
+      ]
+    },
+    "questf13-one-equation#24": {
+      "en": "${N} buys ${a} ${sc.item}. ${He} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} Find the loan, P, and then the price of the ${sc.item}.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:391:14"
+      ]
+    },
+    "questf13-one-equation#25": {
+      "en": "${N} borrows money now. The loan, P, is the total. ${He} pays it off with two repayments: ${andList(reps.map(at))}. ${rate} How much did ${p.he} borrow?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:394:14"
+      ]
+    },
+    "questf13-one-equation#26": {
+      "en": "${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}. ${He} wants ${money(sc.total.value)} in the account after ${years(sc.n)}, straight after the last deposit. That is the total, A. ${rate} Find x.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:396:14"
+      ]
+    },
+    "questf13-one-equation#27": {
+      "en": " ${He} withdraws ${andList(wds.map(at))}.",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:398:32"
+      ]
+    },
+    "questf13-one-equation#28": {
+      "en": "${N} opens a savings account. ${He} deposits ${andList(deps.map(at))}.${out} ${rate} How much is in the account after ${years(sc.n)}${sameDay ? \", straight after the last deposit\" : \"\"}? That is the total, A.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:399:14"
+      ],
+      "nested": [
+        ", straight after the last deposit"
+      ]
+    },
+    "questf13-one-equation#29": {
+      "en": "the day of the loan",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:404:43"
+      ]
+    },
+    "questf13-one-equation#30": {
+      "en": "the day of A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:404:67"
+      ]
+    },
+    "questf13-one-equation#31": {
+      "en": "the deposit",
+      "kind": "string",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:405:21"
+      ]
+    },
+    "questf13-one-equation#32": {
+      "en": "the withdrawal",
+      "kind": "string",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:405:40"
+      ]
+    },
+    "questf13-one-equation#33": {
+      "en": "the repayment",
+      "kind": "string",
+      "slots": [
+        "cap.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:405:65"
+      ]
+    },
+    "questf13-one-equation#34": {
+      "en": "The meeting day is T${sc.meet}, ${dayOf(sc)}. Every amount drives there in its car: ${CAR_IS}.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:431:8"
+      ]
+    },
+    "questf13-one-equation#35": {
+      "en": "back to T0: reverse gear, negative exponents",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf13-one-equation.js:432:29"
+      ]
+    },
+    "questf13-one-equation#36": {
+      "en": "everything moves forward to the end, so every exponent is positive",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf13-one-equation.js:432:78"
+      ]
+    },
+    "questf13-one-equation#37": {
+      "en": "the loan, P, alone on the left; the repayments positive on the right",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf13-one-equation.js:436:34"
+      ]
+    },
+    "questf13-one-equation#38": {
+      "en": "the total, A, alone on the left, even though it is known",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf13-one-equation.js:437:38"
+      ]
+    },
+    "questf13-one-equation#39": {
+      "en": "the total, A, alone on the left; a deposit plus, a withdrawal minus",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf13-one-equation.js:438:10"
+      ]
+    },
+    "questf13-one-equation#40": {
+      "en": "P",
+      "kind": "string",
+      "slots": [
+        "nw.s",
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:440:47",
+        "questf13-one-equation.js:494:68",
+        "questf13-one-equation.js:494:97",
+        "questf13-one-equation.js:504:144",
+        "questf13-one-equation.js:504:206",
+        "questf13-one-equation.js:546:81",
+        "questf13-one-equation.js:546:148"
+      ],
+      "data": true
+    },
+    "questf13-one-equation#41": {
+      "en": "The loan, P, alone on the left. Every repayment drives back to T0 in reverse gear (a negative exponent) and stands positive on the right.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questf13-one-equation.js:451:7"
+      ]
+    },
+    "questf13-one-equation#42": {
+      "en": "The total alone on the left. Every other amount drives to the meeting day in forward gear: a deposit plus, a withdrawal minus. Already on the meeting day? No car.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questf13-one-equation.js:452:7"
+      ]
+    },
+    "questf13-one-equation#43": {
+      "en": "How much is the loan, P?",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:453:36"
+      ]
+    },
+    "questf13-one-equation#44": {
+      "en": "How much is A?",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:454:28"
+      ]
+    },
+    "questf13-one-equation#45": {
+      "en": "${U} sits inside the one equation: SHIFT SOLVE finds it. How much is x?",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:455:28"
+      ]
+    },
+    "questf13-one-equation#46": {
+      "en": "${U} sits inside the one equation: SHIFT SOLVE finds it. How much must ${p.he} deposit now?",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questf13-one-equation.js:456:7"
+      ]
+    },
+    "questf13-one-equation#47": {
+      "en": "The meeting day is T${sc.meet}, ${dayOf(sc)}. Which line is the one equation?",
+      "kind": "template",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:458:12"
+      ]
+    },
+    "questf13-one-equation#48": {
+      "en": "${ask} Give it in rand, to ${DP2}.",
+      "kind": "template",
+      "slots": [
+        "typed.prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:459:11"
+      ]
+    },
+    "questf13-one-equation#49": {
+      "en": "Type the whole equation, then SHIFT SOLVE. Never round along the way: round once, at the end.",
+      "kind": "string",
+      "slots": [
+        "typed.hint"
+      ],
+      "where": [
+        "questf13-one-equation.js:460:20"
+      ]
+    },
+    "questf13-one-equation#50": {
+      "en": "Type the whole right side in one go. Never round along the way: round once, at the end.",
+      "kind": "string",
+      "slots": [
+        "typed.hint"
+      ],
+      "where": [
+        "questf13-one-equation.js:461:11"
+      ]
+    },
+    "questf13-one-equation#51": {
+      "en": "Price = loan + down${NB}payment. What is the price of the ${sc.item}, in rand, to ${DP2}?",
+      "kind": "template",
+      "slots": [
+        "typed.prompt"
+      ],
+      "where": [
+        "questf13-one-equation.js:463:39"
+      ]
+    },
+    "questf13-one-equation#52": {
+      "en": "The down payment never enters the account: it just adds on to the loan.",
+      "kind": "string",
+      "slots": [
+        "typed.hint"
+      ],
+      "where": [
+        "questf13-one-equation.js:464:5"
+      ]
+    },
+    "questf13-one-equation#53": {
+      "en": "The one equation: ${right}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questf13-one-equation.js:469:10"
+      ]
+    },
+    "questf13-one-equation#54": {
+      "en": "${solves(sc) ? \"SHIFT SOLVE on the one line\" : \"typed in once\"}, rounded once, at the end (${DP2})",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questf13-one-equation.js:470:21"
+      ],
+      "nested": [
+        "SHIFT SOLVE on the one line",
+        "typed in once"
+      ]
+    },
+    "questf13-one-equation#55": {
+      "en": "Meeting day, cars, then ONE line: the total alone on the left, the payments on the right. Type it once, round once.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questf13-one-equation.js:483:11"
+      ]
+    },
+    "questf13-one-equation#56": {
+      "en": "${answer}, so the price is ${money(price, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questf13-one-equation.js:484:34"
+      ]
+    }
+  },
+  "optionLists": {
+    "questf10-in-or-out.js:ITEMS": [
+      "questf10-in-or-out#4",
+      "questf10-in-or-out#5",
+      "questf10-in-or-out#6",
+      "questf10-in-or-out#7",
+      "questf10-in-or-out#8",
+      "questf10-in-or-out#9"
+    ],
+    "questf13-one-equation.js:ITEMS": [
+      "questf13-one-equation#2",
+      "questf13-one-equation#3",
+      "questf13-one-equation#4",
+      "questf13-one-equation#5",
+      "questf13-one-equation#6",
+      "questf13-one-equation#7"
+    ]
+  },
+  "leftovers": [
+    {
+      "where": "questf10-in-or-out.js:227:111",
+      "text": ", and withdraws ${andList(wds.map(at))}",
+      "in": "${cap(p.he)} saves at ${rateText(sc)}. ${cap(p.he)} deposits"
+    },
+    {
+      "where": "questf11-meeting-day.js:296:25",
+      "text": "the road changes colour at T${b.D}, and ${whoAt(itemsAt(sc, b.D)[0])} already stands there"
+    },
+    {
+      "where": "questf11-meeting-day.js:297:23",
+      "text": "the road changes colour at T${b.D}: no amount crosses the change, so none needs two cars"
+    },
+    {
+      "where": "questf11-meeting-day.js:298:19",
+      "text": "two amounts already stand on T${b.D}: neither of them needs a car"
+    },
+    {
+      "where": "questf11-meeting-day.js:489:56",
+      "text": "the fewest of any day",
+      "in": "T${D} needs ${cars(min)}, ${ties === 1 ? \"the fewest of any "
+    },
+    {
+      "where": "questf11-meeting-day.js:489:82",
+      "text": "as few as any day",
+      "in": "T${D} needs ${cars(min)}, ${ties === 1 ? \"the fewest of any "
+    },
+    {
+      "where": "questf12-build-timeline.js:97:24",
+      "text": "Words first. Then the timeline. Then the one equation."
+    },
+    {
+      "where": "questf12-build-timeline.js:125:42",
+      "text": "the jug's day"
+    },
+    {
+      "where": "questf12-build-timeline.js:126:71",
+      "text": "the day of the ${coinName(x)}"
+    },
+    {
+      "where": "questf12-build-timeline.js:127:64",
+      "text": "where the rate changes"
+    },
+    {
+      "where": "questf12-build-timeline.js:129:28",
+      "text": "${years(t)} from now"
+    },
+    {
+      "where": "questf12-build-timeline.js:162:55",
+      "text": "${T(t)} counts ${PER[k]}: this timeline counts years."
+    },
+    {
+      "where": "questf12-build-timeline.js:163:15",
+      "text": "${T(t)} is past the end: nothing in the words happens ${when(t)}."
+    },
+    {
+      "where": "questf12-build-timeline.js:164:7",
+      "text": "${T(t)} is ${whatAt(sc, t, { jug: false })}, not the last day the words name."
+    },
+    {
+      "where": "questf12-build-timeline.js:181:20",
+      "text": "${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change."
+    },
+    {
+      "where": "questf12-build-timeline.js:182:9",
+      "text": "${T(t)} is ${years(t)} from now. The rate sentence says how long the first rate lasts."
+    },
+    {
+      "where": "questf12-build-timeline.js:183:22",
+      "text": "${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change. "
+    },
+    {
+      "where": "questf12-build-timeline.js:183:7",
+      "text": "${coinOn(t) ? `${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change. ` : \"\"}The words give ONE rate for the whole time: nothing changes at ${T(t)}."
+    },
+    {
+      "where": "questf12-build-timeline.js:230:24",
+      "text": "Where does each coin go?<br>",
+      "in": "${first ? \"Where does each coin go?<br>\" : \"\"}${cap(coinName"
+    },
+    {
+      "where": "questf12-build-timeline.js:241:31",
+      "text": "Paid on day one, but straight to the shop: it never enters the account, so the loan’s timeline has no place for it."
+    },
+    {
+      "where": "questf12-build-timeline.js:242:7",
+      "text": "${T(t)} is ${whatAt(sc, t)}. The down payment is paid straight to the shop."
+    },
+    {
+      "where": "questf12-build-timeline.js:247:115",
+      "text": "loan = price − down payment",
+      "in": "A down payment is paid straight to the shop: it never enters"
+    },
+    {
+      "where": "questf12-build-timeline.js:280:41",
+      "text": "; a coin going out, drawn with its minus"
+    },
+    {
+      "where": "questf12-build-timeline.js:280:117",
+      "text": "; ${x.v} is still a coin, on its day"
+    },
+    {
+      "where": "questf12-build-timeline.js:288:61",
+      "text": ", the day of the loan",
+      "in": "${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? \", the day"
+    },
+    {
+      "where": "questf12-build-timeline.js:288:87",
+      "text": ", the end",
+      "in": "${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? \", the day"
+    },
+    {
+      "where": "questf12-build-timeline.js:291:43",
+      "text": "The ${money(sc.down)} down payment: nowhere on the timeline."
+    },
+    {
+      "where": "questf12-build-timeline.js:291:110",
+      "text": "paid straight to the shop, it never enters the account; it comes off the price"
+    },
+    {
+      "where": "questf12-build-timeline.js:299:42",
+      "text": "the rate changes at ${T(c)}",
+      "in": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no r"
+    },
+    {
+      "where": "questf12-build-timeline.js:299:74",
+      "text": "no rate change",
+      "in": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no r"
+    },
+    {
+      "where": "questf12-build-timeline.js:299:205",
+      "text": "; the ${money(sc.down)} down payment: nowhere",
+      "in": "T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : \"no r"
+    },
+    {
+      "where": "questf13-one-equation.js:86:24",
+      "text": "Build the whole equation first. Type it once. Round once, at the end."
+    },
+    {
+      "where": "questf13-one-equation.js:379:75",
+      "text": "an amount ${x.v} ${when(x.t)}"
+    },
+    {
+      "where": "questf13-one-equation.js:399:159",
+      "text": ", straight after the last deposit",
+      "in": "${N} opens a savings account. ${He} deposits ${andList(deps."
+    },
+    {
+      "where": "questf13-one-equation.js:410:30",
+      "text": "no car: it already stands on the meeting day"
+    },
+    {
+      "where": "questf13-one-equation.js:419:31",
+      "text": "reverse gear"
+    },
+    {
+      "where": "questf13-one-equation.js:419:48",
+      "text": "forward gear"
+    },
+    {
+      "where": "questf13-one-equation.js:419:87",
+      "text": "one car per road; "
+    },
+    {
+      "where": "questf13-one-equation.js:423:41",
+      "text": "${cap(WHAT[t.kind])} of ${money(t.c)} at T${t.t}"
+    },
+    {
+      "where": "questf13-one-equation.js:424:32",
+      "text": "comes OUT, so minus"
+    },
+    {
+      "where": "questf13-one-equation.js:424:77",
+      "text": "stands positive on the right"
+    },
+    {
+      "where": "questf13-one-equation.js:424:110",
+      "text": "goes IN, so plus"
+    },
+    {
+      "where": "questf13-one-equation.js:470:37",
+      "text": "SHIFT SOLVE on the one line",
+      "in": "${solves(sc) ? \"SHIFT SOLVE on the one line\" : \"typed in onc"
+    },
+    {
+      "where": "questf13-one-equation.js:470:69",
+      "text": "typed in once",
+      "in": "${solves(sc) ? \"SHIFT SOLVE on the one line\" : \"typed in onc"
+    },
+    {
+      "where": "questf13-one-equation.js:473:8",
+      "text": "Price${NB}= loan +${NB}down${NB}payment${NB}= ${nw(amt2(val))} ${nw(`+ ${amt0(sc.down)} = ${rands(price, 2)}`)}"
+    },
+    {
+      "where": "questf13-one-equation.js:474:8",
+      "text": "the down payment never enters the account: no car, no sign"
+    }
+  ],
+  "words": 2285
+}

@@ -69,13 +69,14 @@ import { mc, mcNum, rng } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
 import { rand, COMPOUNDING, pow } from "../finlib.js";
 import { computeTimeline, verifyTimeline } from "../engine/timeline-graph.js";
+import { L as afL } from "../lang.js";
 
 const CON = "meetingDay";
-export const REFRAIN = "The answer is the same wherever you meet; picking the day is only about typing less.";
+export const REFRAIN = afL("The answer is the same wherever you meet; picking the day is only about typing less.", "Die antwoord bly dieselfde, waar jy ook al ontmoet; die keuse van die dag gaan net oor minder tikwerk.");
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = [1, 2, 4, 12];                                              // annually, half-yearly, quarterly, monthly
-const HOW = k => (k === 2 ? "half‑yearly" : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
 const SAVE_AMTS = [1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 8000, 10000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500];
 
@@ -85,17 +86,17 @@ const NB = " ";
 const nw = s => `<span class="nowrap">${s}</span>`;
 const rands = v => rand(v, 0).replace(/ /g, NB);                       // "R8 000"
 const money = v => nw(rands(v));                                       // EVERY money amount in this round
-const pa = r => `${r}%${NB}p.a.`;
+const pa = r => afL(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`);
 const paU = r => nw(pa(r));                                            // f12 review 1: "8% p.a." is one unit
-const roadU = r => nw(`${r}%${NB}road`);                               // "the 8% road"
+const roadU = r => nw(afL(`${r}%${NB}road`, `${r}%${NB}pad`));                               // "the 8% road"
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, j) => lo + j);
 const person = () => pick([{ he: "she", his: "her" }, { he: "he", his: "his" }]);
-const carsWord = k => `${k}${NB}car${k === 1 ? "" : "s"}`;            // "2 cars"
+const carsWord = k => afL(`${k}${NB}car${k === 1 ? "" : "s"}`, `${k}${NB}kar${k === 1 ? "" : "re"}`);            // "2 cars"
 const cars = k => nw(carsWord(k));
 /* f10 review 1: the first time a solution says "car", it says what one is */
-const CAR_IS = `A car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day.`;
-const CAPTION = "T in years";
+const CAR_IS = afL(`A car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day.`, `'n Kar is die hakie ${nw(pow("(1 + i)", "n"))} wat 'n bedrag na die ontmoetingsdag skuif.`);
+const CAPTION = afL("T in years", "T in jare");
 /* review 1: a UNIT LIST, a line of its own in a worked step (css .ulist).
    Each part is one unbreakable unit with its own "·" in front (drawn by the
    css, inside the unit; the one that starts a line is clipped away). A unit
@@ -117,7 +118,7 @@ function rollScene({ two = rng() < 0.65, saving = rng() < 0.55, share = null, cn
   const roads = two
     ? [{ from: 0, to: c, r: r1, k: pick(KS) }, { from: c, to: n, r: r2, k: pick(KS) }]
     : [{ from: 0, to: n, r: r1, k: pick(KS) }];
-  const total = { t: saving ? n : 0, role: saving ? "A" : "P" };
+  const total = { t: saving ? n : 0, role: saving ? afL("A", "A") : afL("P", "P") };
   const sh = saving && (share == null ? rng() < 0.25 : share);
   /* saving: deposits from T0 to T(n−1), plus (sometimes) one ON the day of A;
      a loan: repayments from T1, the last one ending it at Tn, never on T0 */
@@ -202,7 +203,7 @@ const FIX = {
      A at T6. Counts T0..T6: 4 3 4 2 4 4 3, so T3 alone needs 2 cars
      (the road changes colour there AND R3 000 stands there) */
   colourStands: () => ({
-    saving: true, n: 6, c: 3, p: { he: "she", his: "her" }, total: { t: 6, role: "A" },
+    saving: true, n: 6, c: 3, p: { he: "she", his: "her" }, total: { t: 6, role: afL("A", "A") },
     roads: [{ from: 0, to: 3, r: 8, k: 4 }, { from: 3, to: 6, r: 10, k: 12 }],
     pays: [{ t: 1, v: 5000 }, { t: 3, v: 3000 }],
   }),
@@ -210,21 +211,21 @@ const FIX = {
      T1, R6 000 at T5, A at T6. Counts: 5 5 6 4 6 5 5, so T3 alone needs 4
      (two amounts on each side, nobody crosses) */
   colourOnly: () => ({
-    saving: true, n: 6, c: 3, p: { he: "he", his: "his" }, total: { t: 6, role: "A" },
+    saving: true, n: 6, c: 3, p: { he: "he", his: "his" }, total: { t: 6, role: afL("A", "A") },
     roads: [{ from: 0, to: 3, r: 9, k: 2 }, { from: 3, to: 6, r: 12, k: 12 }],
     pays: [{ t: 0, v: 2000 }, { t: 1, v: 4000 }, { t: 5, v: 6000 }],
   }),
   /* saving, one road 9% quarterly; R3 000 at T1, R5 000 at T3, R2 000 on the
      day of A (T5). Counts: 4 3 4 3 4 2, so T5 alone needs 2 */
   shared: () => ({
-    saving: true, n: 5, c: null, p: { he: "she", his: "her" }, total: { t: 5, role: "A" },
+    saving: true, n: 5, c: null, p: { he: "she", his: "her" }, total: { t: 5, role: afL("A", "A") },
     roads: [{ from: 0, to: 5, r: 9, k: 4 }],
     pays: [{ t: 1, v: 3000 }, { t: 3, v: 5000 }, { t: 5, v: 2000 }],
   }),
   /* saving, one road 8% monthly; R4 000 at T2, R6 000 at T4, A at T6.
      Counts: 3 3 2 3 2 3 2 (T2, T4 and T6 tie at 2) */
   oneRoad: () => ({
-    saving: true, n: 6, c: null, p: { he: "he", his: "his" }, total: { t: 6, role: "A" },
+    saving: true, n: 6, c: null, p: { he: "he", his: "his" }, total: { t: 6, role: afL("A", "A") },
     roads: [{ from: 0, to: 6, r: 8, k: 12 }],
     pays: [{ t: 2, v: 4000 }, { t: 4, v: 6000 }],
   }),
@@ -234,27 +235,27 @@ const FIX = {
 
 function story(sc) {
   const [r0, r1] = sc.roads, { p } = sc;
-  const one = r => `${paU(r.r)} compounded ${HOW(r.k)}`;
-  const rate = r1 ? `${one(r0)}; from T${r1.from} the rate is ${one(r1)}` : one(r0);
+  const one = r => afL(`${paU(r.r)} compounded ${HOW(r.k)}`, `${paU(r.r)} ${HOW(r.k)} saamgestel`);
+  const rate = r1 ? afL(`${one(r0)}; from T${r1.from} the rate is ${one(r1)}`, `${one(r0)}; vanaf T${r1.from} is die koers ${one(r1)}`) : one(r0);
   return sc.saving
-    ? `${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.`
-    : `${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.`;
+    ? afL(`${cap(p.he)} saves at ${rate}. ${cap(p.his)} deposits grow into the total, A.`, `${cap(p.he)} spaar teen ${rate}. ${cap(p.his)} deposito's groei tot die totaal, A.`)
+    : afL(`${cap(p.he)} borrows the total, P, at ${rate}, and pays it back in parts.`, `${cap(p.he)} leen die totaal, P, teen ${rate}, en betaal dit in dele terug.`);
 }
-const RULE_TWO = ["already there: no car", `one colour: ${carsWord(1)}`, `across the colour change: ${carsWord(2)}`];
-const RULE_ONE = ["already there: no car", `it has to move: ${carsWord(1)}`, "one road, one colour"];
+const RULE_TWO = [afL("already there: no car", "reeds daar: geen kar nie"), afL(`one colour: ${carsWord(1)}`, `een kleur: ${carsWord(1)}`), afL(`across the colour change: ${carsWord(2)}`, `oor die kleurverandering: ${carsWord(2)}`)];
+const RULE_ONE = [afL("already there: no car", "reeds daar: geen kar nie"), afL(`it has to move: ${carsWord(1)}`, `dit moet skuif: ${carsWord(1)}`), afL("one road, one colour", "een pad, een kleur")];
 /* review 1: what a car is, then the rule as a unit list on a line of its own (two steps) */
 const carLine = sc => [{ s: CAR_IS }, { s: unitList(sc.c == null ? RULE_ONE : RULE_TWO) }];
 
 /* "R5 000 at T1", "A at T6": who stands where, ONE unit */
-const whoAt = it => (it.total ? `the total ${nw(`${it.role} at T${it.t}`)}` : nw(`${rands(it.v)} at T${it.t}`));
+const whoAt = it => (it.total ? afL(`the total ${nw(`${it.role} at T${it.t}`)}`, `die totaal ${nw(`${it.role} by T${it.t}`)}`) : nw(afL(`${rands(it.v)} at T${it.t}`, `${rands(it.v)} by T${it.t}`)));
 /* the per-day breakdown, one unit per amount: "R5 000: 2 cars", "R3 000: no car", "A: 1 car" */
 const breakdown = (sc, D) => itemsOf(sc).map(it => {
   const k = carsFor(it.t, D, sc.c);
-  return `${it.total ? it.role : rands(it.v)}: ${k ? carsWord(k) : "no car"}`;
+  return `${it.total ? it.role : rands(it.v)}: ${k ? carsWord(k) : afL("no car", "geen kar nie")}`;
 });
 /* review 1: a day's count with a short aside, then its breakdown as a unit list (two steps) */
 const dayLine = (sc, D, tag = "") => [
-  { s: `Meet at T${D}${tag}: ${cars(countAt(sc, D))}`, r: "count per amount" },
+  { s: afL(`Meet at T${D}${tag}: ${cars(countAt(sc, D))}`, `Ontmoet by T${D}${tag}: ${cars(countAt(sc, D))}`), r: afL("count per amount", "tel per bedrag") },
   { s: unitList(breakdown(sc, D)) },
 ];
 /* the road an amount drives on when it stays on one colour */
@@ -299,17 +300,17 @@ function fewestCars() {
   };
   return {
     type: "mc", concept: CON, layout: "grid2",
-    prompt: `${story(sc)} Which meeting day needs the fewest cars?`,
-    options: opts.map(D => ({ label: `T${D}`, correct: D === b.D, note: cars(cs[D]) })),
+    prompt: afL(`${story(sc)} Which meeting day needs the fewest cars?`, `${story(sc)} Watter ontmoetingsdag het die minste karre nodig?`),
+    options: opts.map(D => ({ label: afL(`T${D}`, `T${D}`), correct: D === b.D, note: cars(cs[D]) })),
     graph: graphOf(sc), graphCap: CAPTION,
     hint: sc.c == null
-      ? `Count the cars for each day. An amount already there needs none; every other amount needs ${cars(1)}. The total counts too.`
-      : `Count the cars for each day. Already there: none. One colour: ${cars(1)}. Across the colour change: ${cars(2)}. The total counts too.`,
-    answerLabel: `T${b.D}: ${cars(b.min)}, the fewest`,
+      ? afL(`Count the cars for each day. An amount already there needs none; every other amount needs ${cars(1)}. The total counts too.`, `Tel die karre vir elke dag. 'n Bedrag wat reeds daar is, het geeneen nodig nie; elke ander bedrag het ${cars(1)} nodig. Die totaal tel ook.`)
+      : afL(`Count the cars for each day. Already there: none. One colour: ${cars(1)}. Across the colour change: ${cars(2)}. The total counts too.`, `Tel die karre vir elke dag. Reeds daar: geen. Een kleur: ${cars(1)}. Oor die kleurverandering: ${cars(2)}. Die totaal tel ook.`),
+    answerLabel: afL(`T${b.D}: ${cars(b.min)}, the fewest`, `T${b.D}: ${cars(b.min)}, die minste`),
     solution: [
       ...carLine(sc),
       ...opts.flatMap(D => dayLine(sc, D)),
-      { s: `T${b.D} needs the fewest: ${cars(b.min)}`, r: WHY[b.kind]() },
+      { s: afL(`T${b.D} needs the fewest: ${cars(b.min)}`, `T${b.D} het die minste nodig: ${cars(b.min)}`), r: WHY[b.kind]() },
       { s: REFRAIN },
     ],
   };
@@ -332,26 +333,26 @@ function carCountAt({ cross = false } = {}) {
   const lines = items.map(it => {
     const kk = carsFor(it.t, D, sc.c);
     return {
-      s: `${cap(whoAt(it))}: ${kk === 0 ? "no car" : cars(kk)}`,
-      r: kk === 0 ? `it already stands on T${D}`
-        : kk === 2 ? `it crosses the colour change at T${sc.c}: one car per road`
-        : sc.c == null ? "one road, one colour" : `it stays on the ${roadU(roadOf(sc, it.t, D).r)}`,
+      s: `${cap(whoAt(it))}: ${kk === 0 ? afL("no car", "geen kar nie") : cars(kk)}`,
+      r: kk === 0 ? afL(`it already stands on T${D}`, `dit staan reeds op T${D}`)
+        : kk === 2 ? afL(`it crosses the colour change at T${sc.c}: one car per road`, `dit gaan oor die kleurverandering by T${sc.c}: een kar per pad`)
+        : sc.c == null ? afL("one road, one colour", "een pad, een kleur") : afL(`it stays on the ${roadU(roadOf(sc, it.t, D).r)}`, `dit bly op die ${roadU(roadOf(sc, it.t, D).r)}`),
     };
   });
   return {
     type: "mc", concept: CON,
-    prompt: `${story(sc)} If we meet at T${D}, how many cars are needed altogether?`,
+    prompt: afL(`${story(sc)} If we meet at T${D}, how many cars are needed altogether?`, `${story(sc)} As ons by T${D} ontmoet, hoeveel karre is altesaam nodig?`),
     options: mcNum(k, [moved, items.length, k + 1, k - 1, k + 2]),
     graph: graphOf(sc), graphCap: CAPTION,
     /* review 1: a one-colour road has no colour change to cross */
     hint: sc.c == null
-      ? `Go amount by amount, the total too. Already on T${D}: no car. One colour, so one car for each amount that has to move.`
-      : `Go amount by amount, the total too. Already on T${D}: no car. One colour: ${cars(1)}. Across the colour change: ${cars(2)}.`,
-    answerLabel: `${cars(k)} if we meet at T${D}`,
+      ? afL(`Go amount by amount, the total too. Already on T${D}: no car. One colour, so one car for each amount that has to move.`, `Gaan bedrag vir bedrag, die totaal ook. Reeds op T${D}: geen kar nie. Een kleur, dus een kar vir elke bedrag wat moet skuif.`)
+      : afL(`Go amount by amount, the total too. Already on T${D}: no car. One colour: ${cars(1)}. Across the colour change: ${cars(2)}.`, `Gaan bedrag vir bedrag, die totaal ook. Reeds op T${D}: geen kar nie. Een kleur: ${cars(1)}. Oor die kleurverandering: ${cars(2)}.`),
+    answerLabel: afL(`${cars(k)} if we meet at T${D}`, `${cars(k)} as ons by T${D} ontmoet`),
     solution: [
       ...carLine(sc),
       ...lines,
-      { s: `Meet at T${D}: ${cars(k)} altogether`, r: "add them up" },
+      { s: afL(`Meet at T${D}: ${cars(k)} altogether`, `Ontmoet by T${D}: altesaam ${cars(k)}`), r: afL("add them up", "tel hulle op") },
       { s: nw(`${parts.join(" + ")} = ${k}`) },
       { s: REFRAIN },
     ],
@@ -372,20 +373,20 @@ function whereStands() {
   const { sc, w } = deal(() => rollScene({ share: want === "total" ? false : null }), choose, FIX.colourStands);
   const D = w ? w.D : 3;
   const at = itemsAt(sc, D)[0] || null;
-  const TOTAL = `The total, ${sc.total.role}`, NONE = `Nothing: no amount stands on T${D}`;
+  const TOTAL = afL(`The total, ${sc.total.role}`, `Die totaal, ${sc.total.role}`), NONE = afL(`Nothing: no amount stands on T${D}`, `Niks: geen bedrag staan op T${D} nie`);
   const right = !at ? NONE : at.total ? TOTAL : money(at.v);
-  const stands = !at ? "no amount" : at.total ? `the total, ${sc.total.role} (the ? in its ring)` : money(at.v);
+  const stands = !at ? afL("no amount", "geen bedrag nie") : at.total ? afL(`the total, ${sc.total.role} (the ? in its ring)`, `die totaal, ${sc.total.role} (die ? in sy ring)`) : money(at.v);
   return mc(CON,
-    `${story(sc)} Meeting where someone already stands saves a car. Which amount is already standing on T${D}?`,
+    afL(`${story(sc)} Meeting where someone already stands saves a car. Which amount is already standing on T${D}?`, `${story(sc)} As jy ontmoet waar iemand reeds staan, spaar jy 'n kar. Watter bedrag staan reeds op T${D}?`),
     right, [...sc.pays.map(p => money(p.v)), TOTAL, NONE].filter(o => o !== right),
     {
       graph: graphOf(sc), graphCap: CAPTION,
-      hint: `Look straight up from T${D}. The ? in its ring is the total.`,
-      answerLabel: !at ? `Nothing stands on T${D}: meeting there saves no car`
-        : `${at.total ? TOTAL : money(at.v)}: meet at T${D} and it needs no car`,
+      hint: afL(`Look straight up from T${D}. The ? in its ring is the total.`, `Kyk reguit op vanaf T${D}. Die ? in sy ring is die totaal.`),
+      answerLabel: !at ? afL(`Nothing stands on T${D}: meeting there saves no car`, `Niks staan op T${D} nie: om daar te ontmoet, spaar geen kar nie`)
+        : afL(`${at.total ? TOTAL : money(at.v)}: meet at T${D} and it needs no car`, `${at.total ? TOTAL : money(at.v)}: ontmoet by T${D} en dit het geen kar nodig nie`),
       solution: [
-        { s: CAR_IS, r: "an amount already on the meeting day needs no car" },
-        { s: `On T${D}: ${stands}`, r: "read straight up from the T label" },
+        { s: CAR_IS, r: afL("an amount already on the meeting day needs no car", "'n bedrag wat reeds op die ontmoetingsdag is, het geen kar nodig nie") },
+        { s: afL(`On T${D}: ${stands}`, `Op T${D}: ${stands}`), r: afL("read straight up from the T label", "lees reguit op vanaf die T-etiket") },
         ...dayLine(sc, D),
         { s: REFRAIN },
       ],
@@ -403,15 +404,15 @@ function colourChange() {
   const k = countAt(sc, c);
   return {
     type: "mc", concept: CON, layout: "grid2",
-    prompt: `${story(sc)} Meeting where the road changes colour saves two‑car trips. Which T is that?`,
-    options: opts.map(D => ({ label: `T${D}`, correct: D === c })),
+    prompt: afL(`${story(sc)} Meeting where the road changes colour saves two‑car trips. Which T is that?`, `${story(sc)} As jy ontmoet waar die pad van kleur verander, spaar jy ritte met twee karre. Watter T is dit?`),
+    options: opts.map(D => ({ label: afL(`T${D}`, `T${D}`), correct: D === c })),
     graph: graphOf(sc), graphCap: CAPTION,
-    hint: "Follow the road from T0. Where does its colour change? The story says it too: that is where the rate changes.",
-    answerLabel: `T${c}: the ${roadU(r0.r)} ends and the ${roadU(r1.r)} starts`,
+    hint: afL("Follow the road from T0. Where does its colour change? The story says it too: that is where the rate changes.", "Volg die pad vanaf T0. Waar verander sy kleur? Die storie sê dit ook: dit is waar die koers verander."),
+    answerLabel: afL(`T${c}: the ${roadU(r0.r)} ends and the ${roadU(r1.r)} starts`, `T${c}: die ${roadU(r0.r)} eindig en die ${roadU(r1.r)} begin`),
     solution: [
-      { s: CAR_IS, r: "an amount that crosses the colour change needs two cars, one per road" },
-      { s: `The road changes colour at T${c}`, r: `the ${roadU(r0.r)} ends there and the ${roadU(r1.r)} starts` },
-      { s: `Meet at T${c}: ${cars(k)}`, r: "no amount crosses the change, so none needs two cars" },
+      { s: CAR_IS, r: afL("an amount that crosses the colour change needs two cars, one per road", "'n bedrag wat oor die kleurverandering gaan, het twee karre nodig, een per pad") },
+      { s: afL(`The road changes colour at T${c}`, `Die pad verander van kleur by T${c}`), r: afL(`the ${roadU(r0.r)} ends there and the ${roadU(r1.r)} starts`, `die ${roadU(r0.r)} eindig daar en die ${roadU(r1.r)} begin`) },
+      { s: afL(`Meet at T${c}: ${cars(k)}`, `Ontmoet by T${c}: ${cars(k)}`), r: afL("no amount crosses the change, so none needs two cars", "geen bedrag gaan oor die verandering nie, dus het geeneen twee karre nodig nie") },
       { s: unitList(breakdown(sc, c)) },
       { s: REFRAIN },
     ],
@@ -430,16 +431,16 @@ function sameAnswer() {
   const R = sc.total.role, ka = countAt(sc, a), kb = countAt(sc, b);
   return {
     type: "yesno", concept: CON,
-    prompt: `${story(sc)} If we meet at T${a} instead of T${b}, does the final answer for ${R} change?`,
+    prompt: afL(`${story(sc)} If we meet at T${a} instead of T${b}, does the final answer for ${R} change?`, `${story(sc)} As ons by T${a} in plaas van T${b} ontmoet, verander die finale antwoord vir ${R}?`),
     yes: false,
     graph: graphOf(sc), graphCap: CAPTION,
-    hint: "Another meeting day changes the brackets you type, not the value of the total.",
-    answerLabel: `No: ${R} comes out the same; only the typing changes`,
+    hint: afL("Another meeting day changes the brackets you type, not the value of the total.", "'n Ander ontmoetingsdag verander die hakies wat jy intik, nie die waarde van die totaal nie."),
+    answerLabel: afL(`No: ${R} comes out the same; only the typing changes`, `Nee: ${R} kom dieselfde uit; net die tikwerk verander`),
     solution: [
       ...carLine(sc),
       ...dayLine(sc, b),
       ...dayLine(sc, a),
-      { s: `The same ${R} either way: every amount moves at the same rates`, r: ka === kb ? `${cars(ka)} either way` : `T${ka < kb ? a : b} has fewer cars: less to type` },
+      { s: afL(`The same ${R} either way: every amount moves at the same rates`, `Dieselfde ${R} in albei gevalle: elke bedrag skuif teen dieselfde koerse`), r: ka === kb ? afL(`${cars(ka)} either way`, `${cars(ka)} in albei gevalle`) : afL(`T${ka < kb ? a : b} has fewer cars: less to type`, `T${ka < kb ? a : b} het minder karre: minder om in te tik`) },
       { s: REFRAIN },
     ],
   };
@@ -450,11 +451,11 @@ function sameAnswer() {
    or the end, and never the day of the biggest payment, so the decoys "it is
    the end" and "the biggest amount stands there" are plainly false */
 const REASONS = {
-  stands: "An amount already stands there, so it needs no car",
-  colour: "The road changes colour there, so no amount needs two cars",
-  both: "Both: an amount stands there, and the road changes colour there",
-  end: "It is the end of the timeline",
-  biggest: "The biggest amount stands there",
+  stands: afL("An amount already stands there, so it needs no car", "'n Bedrag staan reeds daar, dus het dit geen kar nodig nie"),
+  colour: afL("The road changes colour there, so no amount needs two cars", "Die pad verander daar van kleur, dus het geen bedrag twee karre nodig nie"),
+  both: afL("Both: an amount stands there, and the road changes colour there", "Albei: 'n bedrag staan daar, en die pad verander daar van kleur"),
+  end: afL("It is the end of the timeline", "Dit is die einde van die tydlyn"),
+  biggest: afL("The biggest amount stands there", "Die grootste bedrag staan daar"),
 };
 function bestReason() {
   const kind = pick(["stands", "colour", "both"]);
@@ -473,23 +474,23 @@ function bestReason() {
   const { D, min, cs } = w;
   const { n } = sc, at = itemsAt(sc, D);
   const ties = range(0, n).filter(x => cs[x] === min).length;
-  const here = at.length ? money(at[0].v) : "no amount";
+  const here = at.length ? money(at[0].v) : afL("no amount", "geen bedrag nie");
   return mc(CON,
-    `${story(sc)} Why is T${D} a good meeting day here?`,
+    afL(`${story(sc)} Why is T${D} a good meeting day here?`, `${story(sc)} Hoekom is T${D} hier 'n goeie ontmoetingsdag?`),
     REASONS[kind], Object.keys(REASONS).filter(k => k !== kind).map(k => REASONS[k]),
     {
       graph: graphOf(sc), graphCap: CAPTION,
-      hint: `Look at T${D}. Does an amount stand there? Does the road change colour there?`,
+      hint: afL(`Look at T${D}. Does an amount stand there? Does the road change colour there?`, `Kyk na T${D}. Staan 'n bedrag daar? Verander die pad daar van kleur?`),
       answerLabel: REASONS[kind],
       solution: [
         ...carLine(sc),
-        { s: `On T${D}: ${here}`, r: sc.c === D ? `and the road changes colour at T${D}` : sc.c == null ? "one road: the colour never changes" : `the road changes colour at T${sc.c}, not here` },
+        { s: afL(`On T${D}: ${here}`, `Op T${D}: ${here}`), r: sc.c === D ? afL(`and the road changes colour at T${D}`, `en die pad verander van kleur by T${D}`) : sc.c == null ? afL("one road: the colour never changes", "een pad: die kleur verander nooit") : afL(`the road changes colour at T${sc.c}, not here`, `die pad verander van kleur by T${sc.c}, nie hier nie`) },
         ...dayLine(sc, D),
-        ...dayLine(sc, n, " (the end)"),
-        { s: `T${D} needs ${cars(min)}, ${ties === 1 ? "the fewest of any day" : "as few as any day"}`,
-          r: kind === "stands" ? "an amount already stands there: it needs no car"
-            : kind === "colour" ? "nobody crosses the colour change on the way there"
-            : "an amount stands there, and nobody crosses the colour change" },
+        ...dayLine(sc, n, afL(" (the end)", " (die einde)")),
+        { s: afL(`T${D} needs ${cars(min)}, ${ties === 1 ? "the fewest of any day" : "as few as any day"}`, `T${D} het ${cars(min)} nodig, ${ties === 1 ? "die minste van enige dag" : "so min soos enige dag"}`),
+          r: kind === "stands" ? afL("an amount already stands there: it needs no car", "'n bedrag staan reeds daar: dit het geen kar nodig nie")
+            : kind === "colour" ? afL("nobody crosses the colour change on the way there", "niemand gaan op pad daarheen oor die kleurverandering nie")
+            : afL("an amount stands there, and nobody crosses the colour change", "'n bedrag staan daar, en niemand gaan oor die kleurverandering nie") },
         { s: REFRAIN },
       ],
     });

@@ -92,29 +92,30 @@
 import { pick, shuffled } from "../ui.js";
 import { rand } from "../finlib.js";
 import { F13_SCENES, f13Story, f13GraphOf } from "./questf13-one-equation.js";
+import { L } from "../lang.js";
 
 const CON = "buildTimeline";
 export const REFRAIN = "Words first. Then the timeline. Then the one equation.";
-const CAPTION = "T in years";
+const CAPTION = L("T in years", "T in jare");
 const SLOT = "☐";                                 // a frame box (js/tokenpad.js SLOT)
 const THIN = " ";                                 // U+2009: the token pad joins its chips with a thin space
 const NB = " ";                                   // U+00A0: the literal no-break space inside every unit
-const NOWHERE = "nowhere: it never enters the account";   // f10's own words
-const NO_CHANGE = "no change";
+const NOWHERE = L("nowhere: it never enters the account", "nêrens: dit kom nooit in die rekening nie");   // f10's own words
+const NO_CHANGE = L("no change", "geen verandering nie");
 const RATES = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20];   // f13's rates: a decoy chip comes from here
-const HOW = { 1: "annually", 2: "half‑yearly", 4: "quarterly", 12: "monthly" };   // a non-breaking hyphen (U+2011)
+const HOW = { 1: L("annually", "jaarliks"), 2: L("half‑yearly", "halfjaarliks"), 4: L("quarterly", "kwartaalliks"), 12: L("monthly", "maandeliks") };   // a non-breaking hyphen (U+2011)
 const PER = { 2: "half‑years", 4: "quarters", 12: "months" };
 
 /* ---------- words ---------- */
 const nw = s => `<span class="nowrap">${s}</span>`;                    // ONE unbreakable unit
 const money = v => nw(rand(v, 0).replace(/ /g, NB));                   // "R8 000"
-const rateChip = r => `${r}%${NB}p.a.`;                                // a chip: the rate as its road draws it
+const rateChip = r => L(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`);                                // a chip: the rate as its road draws it
 const paU = r => nw(rateChip(r));
-const years = y => nw(`${y}${NB}year${y === 1 ? "" : "s"}`);
-const when = t => (t === 0 ? "now" : `after ${years(t)}`);
+const years = y => nw(L(`${y}${NB}year${y === 1 ? "" : "s"}`, `${y}${NB}jaar${y === 1 ? "" : ""}`));
+const when = t => (t === 0 ? L("now", "nou") : L(`after ${years(t)}`, `na ${years(t)}`));
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-const T = t => `T${t}`;
-const KIND = { dep: "deposit", wd: "withdrawal", repay: "repayment" };
+const T = t => L(`T${t}`, `T${t}`);
+const KIND = { dep: L("deposit", "deposit"), wd: L("withdrawal", "withdrawal"), repay: L("repayment", "repayment") };
 /* "R3 000 deposit", "deposit x" (the unknown coin is still a coin) */
 const coinName = x => (typeof x.v === "number" ? `${money(x.v)} ${KIND[x.kind]}` : `${KIND[x.kind]} ${x.v}`);
 
@@ -126,7 +127,7 @@ function whatAt(sc, t, { jug = true, skip = null } = {}) {
   sc.pays.filter(x => x.t === t && x !== skip).forEach(x => bits.push(`the day of the ${coinName(x)}`));
   if (sc.roads.length === 2 && t === sc.roads[0].to) bits.push("where the rate changes");
   if (bits.length) return bits.join(" and ");
-  return t === 0 ? "now" : `${years(t)} from now`;
+  return t === 0 ? L("now", "nou") : `${years(t)} from now`;
 }
 
 /* ---------- the pictures: f13's drawing, with the later parts left out ---------- */
@@ -164,9 +165,9 @@ function farStep(sc) {
     : `${T(t)} is ${whatAt(sc, t, { jug: false })}, not the last day the words name.`);
   return {
     kind: "mc", layout: "grid2",
-    prompt: `How far does the timeline go?<br><span class="muted small">Pick the last T.</span>`,
+    prompt: L(`How far does the timeline go?<br><span class="muted small">Pick the last T.</span>`, `Hoe ver strek die tydlyn?<br><span class="muted small">Kies die laaste T.</span>`),
     options: tOptions([n, past, ...near], n, why),
-    hint: "The last day the words name is the end of the timeline. Count in years from now: now is T0.",
+    hint: L("The last day the words name is the end of the timeline. Count in years from now: now is T0.", "Die laaste dag wat die woorde noem, is die einde van die tydlyn. Tel in jare vanaf nou: nou is T0."),
   };
 }
 
@@ -183,9 +184,9 @@ function changeStep(sc) {
     : `${coinOn(t) ? `${T(t)} is ${whatAt(sc, t, { jug: false })}: a coin, not a rate change. ` : ""}The words give ONE rate for the whole time: nothing changes at ${T(t)}.`);
   return {
     kind: "mc", layout: "grid2",
-    prompt: "Where does the interest rate change?",
-    options: [...tOptions(ts, c, why), opt(NO_CHANGE, !two, two ? "The words give TWO rates: the rate does change." : null)],
-    hint: "Read the rate sentence. The first rate lasts the years it names, counted from T0. One rate for the whole time: no change.",
+    prompt: L("Where does the interest rate change?", "Waar verander die rentekoers?"),
+    options: [...tOptions(ts, c, why), opt(NO_CHANGE, !two, two ? L("The words give TWO rates: the rate does change.", "Die woorde gee TWEE koerse: die koers verander wel.") : null)],
+    hint: L("Read the rate sentence. The first rate lasts the years it names, counted from T0. One rate for the whole time: no change.", "Lees die koerssin. Die eerste koers duur die jare wat dit noem, getel vanaf T0. Een koers vir die hele tyd: geen verandering nie."),
   };
 }
 
@@ -195,13 +196,13 @@ function ratesStep(sc) {
   const used = sc.roads.map(r => r.r), c = sc.roads[0].to;
   return {
     kind: "tokenpad",
-    prompt: two ? `Which rate goes on which road?<br><span class="muted small">Two roads: T0 to ${T(c)}, then ${T(c)} to ${T(sc.n)}.</span>`
-      : `Which rate goes on which road?<br><span class="muted small">One road: T0 to ${T(sc.n)}.</span>`,
+    prompt: two ? L(`Which rate goes on which road?<br><span class="muted small">Two roads: T0 to ${T(c)}, then ${T(c)} to ${T(sc.n)}.</span>`, `Watter koers gaan op watter pad?<br><span class="muted small">Twee paaie: T0 tot ${T(c)}, dan ${T(c)} tot ${T(sc.n)}.</span>`)
+      : L(`Which rate goes on which road?<br><span class="muted small">One road: T0 to ${T(sc.n)}.</span>`, `Watter koers gaan op watter pad?<br><span class="muted small">Een pad: T0 tot ${T(sc.n)}.</span>`),
     keys: shuffled([...chips, rateChip(pick(RATES.filter(r => !used.includes(r))))]),
     frame: two ? [SLOT, "then", SLOT] : [SLOT],
     expected: chips.join(THIN),
-    hint: two ? "The first road wears the rate the words give for the first years; the second road wears the rate after the change."
-      : "One rate for the whole time: the one the words give.",
+    hint: two ? L("The first road wears the rate the words give for the first years; the second road wears the rate after the change.", "Die eerste pad dra die koers wat die woorde vir die eerste jare gee; die tweede pad dra die koers ná die verandering.")
+      : L("One rate for the whole time: the one the words give.", "Een koers vir die hele tyd: die een wat die woorde gee."),
   };
 }
 
@@ -210,12 +211,12 @@ function jugStep(sc) {
   const loan = sc.kind === "loan", n = sc.n;
   return {
     kind: "mc", layout: "grid2",
-    prompt: "Where does the total (the jug) go?",
+    prompt: L("Where does the total (the jug) go?", "Waar gaan die totaal (die beker)?"),
     options: [
-      opt("T0", loan, loan ? null : "Savings fill the jug coin by coin: it is full at the END."),
-      opt(T(n), !loan, loan ? "The bank hands you the full jug at the START: a loan's jug sits on the loan's own day." : null),
+      opt(L("T0", "T0"), loan, loan ? null : L("Savings fill the jug coin by coin: it is full at the END.", "Spaargeld vul die beker munt vir munt: dit is vol aan die EINDE.")),
+      opt(T(n), !loan, loan ? L("The bank hands you the full jug at the START: a loan's jug sits on the loan's own day.", "Die bank gee jou die volle beker aan die BEGIN: 'n lening se beker staan op die lening se eie dag.") : null),
     ],
-    hint: "Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.",
+    hint: L("Savings: you fill the jug, so it sits at the end. A loan: the bank hands you the jug at the start.", "Spaar: jy vul die beker, so dit staan aan die einde. 'n Lening: die bank gee jou die beker aan die begin."),
   };
 }
 
@@ -227,9 +228,9 @@ function coinStep(sc, x, first) {
   const ts = [x.t, ...take([[...others, ...(c != null ? [c] : [])], [0, n, x.t - 1, x.t + 1].filter(t => t >= 0 && t <= n), all], 3, [x.t])];
   return {
     kind: "mc", layout: "grid2",
-    prompt: `${first ? "Where does each coin go?<br>" : ""}${cap(coinName(x))}: which T?`,
+    prompt: L(`${first ? "Where does each coin go?<br>" : ""}${cap(coinName(x))}: which T?`, `${first ? "Waar gaan elke munt?<br>" : ""}${cap(coinName(x))}: watter T?`),
     options: tOptions(ts, x.t, t => `${T(t)} is ${whatAt(sc, t, { skip: x })}.`),
-    hint: "Find the coin's day in the words: now is T0, and “after so many years” is that many T's on from T0.",
+    hint: L("Find the coin's day in the words: now is T0, and “after so many years” is that many T's on from T0.", "Vind die munt se dag in die woorde: nou is T0, en “na soveel jaar” is soveel T's verder as T0."),
   };
 }
 
@@ -242,9 +243,9 @@ function downStep(sc) {
     : `${T(t)} is ${whatAt(sc, t)}. The down payment is paid straight to the shop.`);
   return {
     kind: "mc",
-    prompt: `${money(sc.down)} down payment: which T?`,
+    prompt: L(`${money(sc.down)} down payment: which T?`, `Die aanbetaling van ${money(sc.down)}: watter T?`),
     options: [...tOptions([0, ...take([reps, [n]], 2, [0])], -1, why), opt(NOWHERE, true)],
-    hint: `A down payment is paid straight to the shop: it never enters the account. It comes off the price: ${nw("loan = price − down payment")}.`,
+    hint: L(`A down payment is paid straight to the shop: it never enters the account. It comes off the price: ${nw("loan = price − down payment")}.`, `'n Aanbetaling word reguit aan die winkel betaal: dit kom nooit in die rekening nie. Dit kom van die prys af: ${nw("lening = prys − aanbetaling")}.`),
   };
 }
 
@@ -274,29 +275,29 @@ export function f12Card(sc) {
   if (!same(final, shown)) Object.assign(steps[steps.length - 1], { graphAfter: final, graphAfterCap: CAPTION, graphWide: true });
 
   const role = sc.total.role;
-  const jugWord = sc.total.value != null ? `the jug, ${role} = ${money(sc.total.value)}` : `the jug, ${role}`;
+  const jugWord = sc.total.value != null ? L(`the jug, ${role} = ${money(sc.total.value)}`, `die beker, ${role} = ${money(sc.total.value)}`) : L(`the jug, ${role}`, `die beker, ${role}`);
   const coinLine = x => ({
     s: `${cap(coinName(x))}: ${T(x.t)}`,
     r: `${when(x.t)}${x.kind === "wd" ? "; a coin going out, drawn with its minus" : typeof x.v === "number" ? "" : `; ${x.v} is still a coin, on its day`}`,
   });
   const solution = [
-    { s: `The timeline runs from T0 to ${T(n)}.`, r: `the last day the words name: ${when(n)}` },
-    two ? { s: `The rate changes at ${T(c)}.`, r: `the first rate lasts the first ${years(c)}` } : { s: "The rate never changes.", r: "the words give one rate for the whole time" },
+    { s: L(`The timeline runs from T0 to ${T(n)}.`, `Die tydlyn loop van T0 tot ${T(n)}.`), r: L(`the last day the words name: ${when(n)}`, `die laaste dag wat die woorde noem: ${when(n)}`) },
+    two ? { s: L(`The rate changes at ${T(c)}.`, `Die koers verander by ${T(c)}.`), r: L(`the first rate lasts the first ${years(c)}`, `die eerste koers duur die eerste ${years(c)}`) } : { s: L("The rate never changes.", "Die koers verander nooit."), r: L("the words give one rate for the whole time", "die woorde gee een koers vir die hele tyd") },
     two
-      ? { s: `Road 1, T0 to ${T(c)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}. Road 2, ${T(c)} to ${T(n)}: ${paU(sc.roads[1].r)} compounded ${HOW[sc.roads[1].k]}.`, r: "each road one rate, in its own colour" }
-      : { s: `One road, T0 to ${T(n)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}.`, r: "one rate, one colour" },
-    { s: `${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? ", the day of the loan" : ", the end"}.`, r: loan ? "the bank hands over the full jug at the start; its day is the meeting day (the flag)" : "savings fill the jug coin by coin; its day is the meeting day (the flag)" },
+      ? { s: L(`Road 1, T0 to ${T(c)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}. Road 2, ${T(c)} to ${T(n)}: ${paU(sc.roads[1].r)} compounded ${HOW[sc.roads[1].k]}.`, `Pad 1, T0 tot ${T(c)}: ${paU(sc.roads[0].r)} ${HOW[sc.roads[0].k]} saamgestel. Pad 2, ${T(c)} tot ${T(n)}: ${paU(sc.roads[1].r)} ${HOW[sc.roads[1].k]} saamgestel.`), r: L("each road one rate, in its own colour", "elke pad een koers, in sy eie kleur") }
+      : { s: L(`One road, T0 to ${T(n)}: ${paU(sc.roads[0].r)} compounded ${HOW[sc.roads[0].k]}.`, `Een pad, T0 tot ${T(n)}: ${paU(sc.roads[0].r)} ${HOW[sc.roads[0].k]} saamgestel.`), r: L("one rate, one colour", "een koers, een kleur") },
+    { s: L(`${cap(jugWord)}, sits at ${T(sc.total.t)}${loan ? ", the day of the loan" : ", the end"}.`, `${cap(jugWord)}, staan by ${T(sc.total.t)}${loan ? ", die dag van die lening" : ", die einde"}.`), r: loan ? L("the bank hands over the full jug at the start; its day is the meeting day (the flag)", "die bank gee die volle beker aan die begin oor; sy dag is die ontmoetingsdag (die vlag)") : L("savings fill the jug coin by coin; its day is the meeting day (the flag)", "spaargeld vul die beker munt vir munt; sy dag is die ontmoetingsdag (die vlag)") },
     ...coins.map(coinLine),
   ];
   if (sc.down != null) solution.push({ s: `The ${money(sc.down)} down payment: nowhere on the timeline.`, r: "paid straight to the shop, it never enters the account; it comes off the price" });
   solution.push({ s: REFRAIN });
   return {
     type: "steps", concept: CON,
-    prompt: `${f13Story(sc)}<br><span class="muted small">Build its timeline first, tap by tap. No equation yet.</span>`,
+    prompt: L(`${f13Story(sc)}<br><span class="muted small">Build its timeline first, tap by tap. No equation yet.</span>`, `${f13Story(sc)}<br><span class="muted small">Bou eers sy tydlyn, klik vir klik. Nog geen vergelyking nie.</span>`),
     stepGraphPinned: true, collapseSteps: true,    // one timeline under the paragraph; answered steps fold to a line
     steps,
-    hint: "How far, where the rate changes, which rate on which road, where the jug goes, where each coin goes.",
-    answerLabel: `T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : "no rate change"}; ${jugWord}, at ${T(sc.total.t)}; ${coins.map(x => `${coinName(x)} at ${T(x.t)}`).join(", ")}${sc.down != null ? `; the ${money(sc.down)} down payment: nowhere` : ""}.`,
+    hint: L("How far, where the rate changes, which rate on which road, where the jug goes, where each coin goes.", "Hoe ver, waar die koers verander, watter koers op watter pad, waar die beker gaan, waar elke munt gaan."),
+    answerLabel: L(`T0 to ${T(n)}; ${two ? `the rate changes at ${T(c)}` : "no rate change"}; ${jugWord}, at ${T(sc.total.t)}; ${coins.map(x => `${coinName(x)} at ${T(x.t)}`).join(", ")}${sc.down != null ? `; the ${money(sc.down)} down payment: nowhere` : ""}.`, `T0 tot ${T(n)}; ${two ? `die koers verander by ${T(c)}` : "geen koersverandering nie"}; ${jugWord}, by ${T(sc.total.t)}; ${coins.map(x => `${coinName(x)} by ${T(x.t)}`).join(", ")}${sc.down != null ? `; die aanbetaling van ${money(sc.down)}: nêrens` : ""}.`),
     solution,
   };
 }
@@ -305,7 +306,7 @@ export function f12Card(sc) {
 const ROUND = [
   ["twoDeposits", "twoDeposits"],                 // card 1 · Brenda's two deposits, or Mvelo's three (the last stacks on A's day)
   ["loanTwoRepayments", "loanTwoRepayments"],     // card 2 · a loan, the jug at T0
-  ["withdrawal", "withdrawal"],                   // card 3 · one rate: "no change"; a coin going out
+  [L("withdrawal", "withdrawal"), L("withdrawal", "withdrawal")],                   // card 3 · one rate: "no change"; a coin going out
   ["hirePurchase", "hirePurchase"],               // card 4 · a loan with a down payment: nowhere on the timeline
   ["mixed", "mixed"],                             // card 5 · two deposits and a withdrawal
   ["targetAmount", "targetAmount"],               // card 6 · a known total; the deposit P is the coin

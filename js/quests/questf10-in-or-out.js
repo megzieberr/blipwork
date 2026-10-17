@@ -59,21 +59,22 @@
 import { mc, mcStep, C, rng } from "./_shared.js";
 import { randInt, pick, shuffled } from "../ui.js";
 import { rand, toFrac, COMPOUNDING, pow } from "../finlib.js";
+import { L as afL } from "../lang.js";
 
 const CON = "inOrOut";
 /* the refrain: its closing line depends on the kind (f10 review 1; the
    taught form since 2026-10-11) */
-export const REFRAIN = "Repayments stand plus on the right. The loan is the total, P: it stands alone on the left.";   // a loan
-export const REFRAIN_SAVING = "Deposits go IN: plus. Withdrawals come OUT: minus. The total, A, stands alone on the left.";
+export const REFRAIN = afL("Repayments stand plus on the right. The loan is the total, P: it stands alone on the left.", "Terugbetalings staan plus regs. Die lening is die totaal, P: dit staan alleen links.");   // a loan
+export const REFRAIN_SAVING = afL("Deposits go IN: plus. Withdrawals come OUT: minus. The total, A, stands alone on the left.", "Deposito's gaan IN: plus. Onttrekkings kom UIT: minus. Die totaal, A, staan alleen links.");
 const refrain = loan => ({ s: loan ? REFRAIN : REFRAIN_SAVING });
 
 const RATES = [6, 7, 8, 9, 10, 11, 12, 14, 15];                       // whole % only
 const KS = COMPOUNDING.filter(c => [1, 2, 4, 12].includes(c.k)).map(c => c.k);
-const HOW = k => (k === 2 ? "half‑yearly" : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
+const HOW = k => (k === 2 ? afL("half‑yearly", "halfjaarliks") : COMPOUNDING.find(c => c.k === k).label);   // a non-breaking hyphen (f10 review 1)
 const DEP_AMTS = [3000, 4000, 5000, 6000, 8000, 10000, 12000, 14000, 15000, 20000];
 const WD_AMTS = [500, 1000, 1500, 2000, 2500, 3000];
 const REPAY_AMTS = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7500, 8000, 9000];
-const ITEMS = ["laptop", "motorbike", "fridge", "lounge suite", "TV", "bed"];
+const ITEMS = [afL("laptop", "skootrekenaar"), afL("motorbike", "motorfiets"), afL("fridge", "yskas"), afL("lounge suite", "sitkamerstel"), afL("TV", "TV"), afL("bed", "bed")];
 const DOWNS = [1000, 1500, 2000, 2500, 3000, 4000, 5000];
 /* every amount on a timeline stays at 7 glyphs or fewer ("R20 000",
    "−R3 000") on n ≤ 5, and the one 2-dp loan stays under R10 000 on
@@ -84,23 +85,23 @@ const nw = s => `<span class="nowrap">${s}</span>`;                    // ONE un
 const SLOT = "☐";                                                     // the sign still to choose (cards 1 and 2)
 /* f10 review 1: the first time a solution says "car", it says what one is.
    Never inside brackets: formulaHtml split "(" from "a car is" at 360 px */
-const CAR_IS = `a car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day`;
+const CAR_IS = afL(`a car is the ${nw(pow("(1 + i)", "n"))} bracket that moves an amount to the meeting day`, `die kar is die hakie ${nw(pow("(1 + i)", "n"))} wat 'n bedrag na die ontmoetingsdag skuif`);
 /* "3 years × 12 times a year = 36" (never a bare k). A line may break only
    before the "×" (an operator leads its piece) or after the "=" */
-const yrs = y => `${y} year${y === 1 ? "" : "s"}`;
-const perYear = k => `${k} time${k === 1 ? "" : "s"} a year`;
+const yrs = y => afL(`${y} year${y === 1 ? "" : "s"}`, `${y} jaar${y === 1 ? "" : ""}`);
+const perYear = k => afL(`${k} time${k === 1 ? "" : "s"} a year`, `${k} keer${k === 1 ? "" : ""} per jaar`);
 const carSum = (y, k) => `${yrs(y)} × ${k} = ${y * k}`;              // "2 years × 12 = 24"
 const rands = (v, dp = 0) => rand(v, dp).replace(/ /g, NB);            // "R8 000", "R3 587,42"
 const money = (v, dp = 0) => nw(rands(v, dp));                         // EVERY money amount in this round
 const amt0 = v => rands(v, 0).slice(1);                                // "8 000", as it stands in an equation
 const amt2 = v => rands(v, 2).slice(1);                                // "3 587,42"
-const pa = r => `${r}%${NB}p.a.`;
+const pa = r => afL(`${r}%${NB}p.a.`, `${r}%${NB}p.j.`);
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const range = (lo, hi) => Array.from({ length: Math.max(0, hi - lo + 1) }, (_, j) => lo + j);
-const person = () => pick([{ he: "she", his: "her" }, { he: "he", his: "his" }]);
-const andList = xs => (xs.length === 1 ? xs[0] : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
-const article = w => (/^[aeiou]/i.test(w) ? "an" : "a");
-const CAPTION = "T in years";
+const person = () => pick([{ he: afL("she", "sy"), his: afL("her", "haar") }, { he: afL("he", "hy"), his: afL("his", "sy") }]);
+const andList = xs => (xs.length === 1 ? xs[0] : afL(`${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`, `${xs.slice(0, -1).join(", ")} en ${xs[xs.length - 1]}`));
+const article = w => (/^[aeiou]/i.test(w) ? afL("an", "'n") : afL("a", "'n"));
+const CAPTION = afL("T in years", "T in jare");
 
 /* ---------- the one equation: terms, sides, equality ---------- */
 
@@ -217,50 +218,50 @@ function graphOf(sc, { meet = true, total = null } = {}) {
   };
 }
 
-const rateText = sc => `${pa(sc.r)} compounded ${HOW(sc.k)}`;
-const at = x => `${money(x.v)} at T${x.t}`;
+const rateText = sc => afL(`${pa(sc.r)} compounded ${HOW(sc.k)}`, `${pa(sc.r)} ${HOW(sc.k)} saamgestel`);
+const at = x => afL(`${money(x.v)} at T${x.t}`, `${money(x.v)} by T${x.t}`);
 function story(sc) {
   const { p } = sc;
-  if (sc.loan && sc.item) return `${cap(p.he)} buys ${article(sc.item)} ${sc.item}. ${cap(p.he)} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest, the total P, at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and that pays off the loan.`;
-  if (sc.loan) return `${cap(p.he)} borrows the total, P, at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and that pays off the loan.`;
+  if (sc.loan && sc.item) return afL(`${cap(p.he)} buys ${article(sc.item)} ${sc.item}. ${cap(p.he)} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest, the total P, at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and that pays off the loan.`, `${cap(p.he)} koop ${article(sc.item)} ${sc.item}. ${cap(p.he)} betaal 'n aanbetaling van ${money(sc.down)} reguit aan die winkel en leen die res, die totaal P, teen ${rateText(sc)}. ${cap(p.he)} betaal ${andList(sc.pays.map(at))} terug, en dit betaal die lening af.`);
+  if (sc.loan) return afL(`${cap(p.he)} borrows the total, P, at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and that pays off the loan.`, `${cap(p.he)} leen die totaal, P, teen ${rateText(sc)}. ${cap(p.he)} betaal ${andList(sc.pays.map(at))} terug, en dit betaal die lening af.`);
   const deps = sc.pays.filter(x => x.kind === "dep"), wds = sc.pays.filter(x => x.kind === "wd");
-  return `${cap(p.he)} saves at ${rateText(sc)}. ${cap(p.he)} deposits ${andList(deps.map(at))}${wds.length ? `, and withdraws ${andList(wds.map(at))}` : ""}. ${cap(p.his)} savings grow into the total, A, at T${sc.n}.`;
+  return afL(`${cap(p.he)} saves at ${rateText(sc)}. ${cap(p.he)} deposits ${andList(deps.map(at))}${wds.length ? `, and withdraws ${andList(wds.map(at))}` : ""}. ${cap(p.his)} savings grow into the total, A, at T${sc.n}.`, `${cap(p.he)} spaar teen ${rateText(sc)}. ${cap(p.he)} deponeer ${andList(deps.map(at))}${wds.length ? `, en onttrek ${andList(wds.map(at))}` : ""}. ${cap(p.his)} spaargeld groei tot die totaal, A, by T${sc.n}.`);
 }
-const dayOf = sc => (sc.loan ? "the day of the loan" : "the day of A");
+const dayOf = sc => (sc.loan ? afL("the day of the loan", "die dag van die lening") : afL("the day of A", "die dag van A"));
 
 /* ---------- the worked solutions ---------- */
 
-const WHAT = { repay: "the repayment", dep: "the deposit", wd: "the withdrawal" };
+const WHAT = { repay: afL("the repayment", "die terugbetaling"), dep: afL("the deposit", "die deposito"), wd: afL("the withdrawal", "die onttrekking") };
 /* where a car drives: forward to the day of A, or back to T0 */
 function carNote(sc, t) {
-  if (!t.e) return "no car: it already stands on the meeting day";
+  if (!t.e) return afL("no car: it already stands on the meeting day", "geen kar nie: dit staan reeds op die ontmoetingsdag");
   return t.e > 0
-    ? `a car from T${t.t} to T${sc.meet}: ${carSum(sc.meet - t.t, sc.k)}`
-    : `a car back from T${t.t} to T0: ${carSum(t.t, sc.k)}, written ${nw(`−${-t.e}`)}`;
+    ? afL(`a car from T${t.t} to T${sc.meet}: ${carSum(sc.meet - t.t, sc.k)}`, `'n kar van T${t.t} na T${sc.meet}: ${carSum(sc.meet - t.t, sc.k)}`)
+    : afL(`a car back from T${t.t} to T0: ${carSum(t.t, sc.k)}, written ${nw(`−${-t.e}`)}`, `'n kar terug van T${t.t} na T0: ${carSum(t.t, sc.k)}, geskryf as ${nw(`−${-t.e}`)}`);
 }
 /* one line per payment: what it is, its sign, its car */
 function termLine(sc, t) {
-  const io = t.kind === "wd" ? "comes OUT, so minus" : t.kind === "repay" ? "stands plus on the right" : "goes IN, so plus";
-  return { s: `${cap(WHAT[t.kind])} at T${t.t}, ${money(t.c)}, ${io}: ${nw((t.s < 0 ? "−" : "+") + termText(sc, t))}`, r: carNote(sc, t) };
+  const io = t.kind === "wd" ? afL("comes OUT, so minus", "kom UIT, dus minus") : t.kind === "repay" ? afL("stands plus on the right", "staan plus regs") : afL("goes IN, so plus", "gaan IN, dus plus");
+  return { s: afL(`${cap(WHAT[t.kind])} at T${t.t}, ${money(t.c)}, ${io}: ${nw((t.s < 0 ? "−" : "+") + termText(sc, t))}`, `${cap(WHAT[t.kind])} by T${t.t}, ${money(t.c)}, ${io}: ${nw((t.s < 0 ? "−" : "+") + termText(sc, t))}`), r: carNote(sc, t) };
 }
 /* the first line of a worked solution: the meeting day, what a car is, and
    the exponent the way the learner sees it, on the longest trip */
 function meetLine(sc) {
   if (sc.loan) return {
-    s: `The meeting day is T0, the day of the loan, so P stands there alone. Every repayment drives back there in its car, in reverse gear. ${cap(CAR_IS)}.`,
-    r: `${yrs(sc.n)} × ${perYear(sc.k)} = ${sc.n * sc.k}, written ${nw(`−${sc.n * sc.k}`)}`,
+    s: afL(`The meeting day is T0, the day of the loan, so P stands there alone. Every repayment drives back there in its car, in reverse gear. ${cap(CAR_IS)}.`, `Die ontmoetingsdag is T0, die dag van die lening, dus staan P alleen daar. Elke terugbetaling ry in sy kar terug daarheen, in trurat. ${cap(CAR_IS)}.`),
+    r: afL(`${yrs(sc.n)} × ${perYear(sc.k)} = ${sc.n * sc.k}, written ${nw(`−${sc.n * sc.k}`)}`, `${yrs(sc.n)} × ${perYear(sc.k)} = ${sc.n * sc.k}, geskryf as ${nw(`−${sc.n * sc.k}`)}`),
   };
   const y = sc.n - Math.min(...sc.pays.map(x => x.t));
   return {
-    s: `The meeting day is T${sc.n}, the day of A, so A stands there alone. Every amount drives there in its car, in forward gear. ${cap(CAR_IS)}.`,
+    s: afL(`The meeting day is T${sc.n}, the day of A, so A stands there alone. Every amount drives there in its car, in forward gear. ${cap(CAR_IS)}.`, `Die ontmoetingsdag is T${sc.n}, die dag van A, dus staan A alleen daar. Elke bedrag ry in sy kar vorentoe daarheen. ${cap(CAR_IS)}.`),
     r: `${yrs(y)} × ${perYear(sc.k)} = ${y * sc.k}`,
   };
 }
 const oneLine = (sc, q, r = null) => ({
-  s: `The one equation: ${eqHtml(sc, q)}`,
-  r: r || (sc.loan ? "the loan, P, alone on the left; the repayments plus on the right" : "the total, A, alone on the left; a deposit plus, a withdrawal minus"),
+  s: afL(`The one equation: ${eqHtml(sc, q)}`, `Die een vergelyking: ${eqHtml(sc, q)}`),
+  r: r || (sc.loan ? afL("the loan, P, alone on the left; the repayments plus on the right", "die lening, P, alleen links; die terugbetalings plus regs") : afL("the total, A, alone on the left; a deposit plus, a withdrawal minus", "die totaal, A, alleen links; 'n deposito plus, 'n onttrekking minus")),
 });
-const downLine = sc => ({ s: `The down payment of ${money(sc.down)} never enters the account: it is paid straight to the shop, so it has no place in the equation.`, r: "it comes off the price: loan = price − down payment" });
+const downLine = sc => ({ s: afL(`The down payment of ${money(sc.down)} never enters the account: it is paid straight to the shop, so it has no place in the equation.`, `Die aanbetaling van ${money(sc.down)} kom nooit in die rekening nie: dit word reguit aan die winkel betaal, dus het dit geen plek in die vergelyking nie.`), r: afL("it comes off the price: loan = price − down payment", "dit kom van die prys af: lening = prys − aanbetaling") });
 
 /* ---------- the skills ---------- */
 
@@ -268,20 +269,20 @@ const downLine = sc => ({ s: `The down payment of ${money(sc.down)} never enters
    half the rolls), ONE step per amount in time order, "+ (in)" or
    "− (out)". Each step shows the taught form so far with this amount's
    sign still a ☐; the answer is the finished equation */
-const IN_OPT = "+ (in)", OUT_OPT = "− (out)";
+const IN_OPT = afL("+ (in)", "+ (in)"), OUT_OPT = afL("− (out)", "− (uit)");
 function inOrOutSaving() {
   const wd = rng() < 0.5, cnt = randInt(2, 3);
   const sc = saveScene({ dep: wd ? cnt - 1 : cnt, wd });
   const eq = taughtOf(sc), R = eq.R;
   const steps = R.map((t, j) => mcStep(
-    `<b>${at(sc.pays[j])}</b>: in or out?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}`,
+    afL(`<b>${at(sc.pays[j])}</b>: in or out?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}`, `<b>${at(sc.pays[j])}</b>: in of uit?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}`),
     t.s > 0 ? IN_OPT : OUT_OPT, [t.s > 0 ? OUT_OPT : IN_OPT],
-    "A deposit goes IN: plus. A withdrawal comes OUT: minus. On the timeline a withdrawal is drawn with its minus."));
+    afL("A deposit goes IN: plus. A withdrawal comes OUT: minus. On the timeline a withdrawal is drawn with its minus.", "'n Deposito gaan IN: plus. 'n Onttrekking kom UIT: minus. Op die tydlyn word 'n onttrekking met sy minus geteken.")));
   return {
     type: "steps", concept: CON,
-    prompt: `${story(sc)} The meeting day is T${sc.n}, the day of A. Every amount drives there in its car, and A stands alone on the left. Give each amount its sign.`,
+    prompt: afL(`${story(sc)} The meeting day is T${sc.n}, the day of A. Every amount drives there in its car, and A stands alone on the left. Give each amount its sign.`, `${story(sc)} Die ontmoetingsdag is T${sc.n}, die dag van A. Elke bedrag ry in sy kar daarheen, en A staan alleen links. Gee elke bedrag sy teken.`),
     steps, graph: graphOf(sc), graphCap: CAPTION,
-    hint: "A deposit goes IN: plus. A withdrawal comes OUT: minus. The total, A, stands alone on the left.",
+    hint: afL("A deposit goes IN: plus. A withdrawal comes OUT: minus. The total, A, stands alone on the left.", "'n Deposito gaan IN: plus. 'n Onttrekking kom UIT: minus. Die totaal, A, staan alleen links."),
     answerLabel: eqHtml(sc, eq),
     solution: [meetLine(sc), ...R.map(t => termLine(sc, t)), oneLine(sc, eq), refrain(false)],
   };
@@ -292,19 +293,19 @@ function inOrOutSaving() {
    "− on the right" or "alone on the left". The form shown has P alone on
    the left. A step has one hint, shown on any wrong pick, so it answers
    both wrong options ("alone on the left": that is a coin) */
-const PLUS_R = "+ on the right", MINUS_R = "− on the right", ALONE_L = "alone on the left";
+const PLUS_R = afL("+ on the right", "+ regs"), MINUS_R = afL("− on the right", "− regs"), ALONE_L = afL("alone on the left", "alleen links");
 function inOrOutLoan() {
   const sc = loanScene({ cnt: 2, hp: rng() < 0.4 });
   const eq = taughtOf(sc), R = eq.R;
   const steps = R.map((t, j) => mcStep(
-    `<b>${at(sc.pays[j])}</b>: where does it go?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}`,
+    afL(`<b>${at(sc.pays[j])}</b>: where does it go?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}`, `<b>${at(sc.pays[j])}</b>: waar gaan dit?<br>${eqHtml(sc, { L: eq.L, R: R.slice(0, j) }, t)}`),
     PLUS_R, [MINUS_R, ALONE_L],
-    "A repayment stands plus on the right, as taught. Alone on the left? That is a coin: only the total stands alone."));
+    afL("A repayment stands plus on the right, as taught. Alone on the left? That is a coin: only the total stands alone.", "'n Terugbetaling staan plus regs, soos geleer. Alleen links? Dit is 'n munt: net die totaal staan alleen.")));
   return {
     type: "steps", concept: CON,
-    prompt: `${story(sc)} The meeting day is T0, the day of the loan. Every repayment drives back there in its car, and P stands alone on the left. Where does each repayment go?`,
+    prompt: afL(`${story(sc)} The meeting day is T0, the day of the loan. Every repayment drives back there in its car, and P stands alone on the left. Where does each repayment go?`, `${story(sc)} Die ontmoetingsdag is T0, die dag van die lening. Elke terugbetaling ry in sy kar terug daarheen, en P staan alleen links. Waar gaan elke terugbetaling?`),
     steps, graph: graphOf(sc), graphCap: CAPTION,
-    hint: "The loan, P, is the total: it stands alone on the left. Every repayment goes plus on the right.",
+    hint: afL("The loan, P, is the total: it stands alone on the left. Every repayment goes plus on the right.", "Die lening, P, is die totaal: dit staan alleen links. Elke terugbetaling gaan plus regs."),
     answerLabel: eqHtml(sc, eq),
     solution: [meetLine(sc), ...(sc.item ? [downLine(sc)] : []), ...R.map(t => termLine(sc, t)), oneLine(sc, eq), refrain(true)],
   };
@@ -325,13 +326,13 @@ function equationYesNo() {
     : rng() < 0.6 ? saveScene({ dep: randInt(1, 2), wd: true }) : saveScene({ dep: randInt(2, 3), wd: false });
   const right = taughtOf(sc), R = right.R, P = right.L[0];
   const He = cap(sc.p.he);
-  const ask = shown => `${story(sc)} The meeting day is T${sc.meet}, ${dayOf(sc)}. ${He} writes:<br>${eqHtml(sc, shown)}<br>Is this equation correct?`;
-  const hint = "The total stands alone on the left. On the right: a deposit or a repayment plus, a withdrawal minus.";
+  const ask = shown => afL(`${story(sc)} The meeting day is T${sc.meet}, ${dayOf(sc)}. ${He} writes:<br>${eqHtml(sc, shown)}<br>Is this equation correct?`, `${story(sc)} Die ontmoetingsdag is T${sc.meet}, ${dayOf(sc)}. ${He} skryf:<br>${eqHtml(sc, shown)}<br>Is hierdie vergelyking korrek?`);
+  const hint = afL("The total stands alone on the left. On the right: a deposit or a repayment plus, a withdrawal minus.", "Die totaal staan alleen links. Regs: 'n deposito of 'n terugbetaling plus, 'n onttrekking minus.");
   if (rng() < 0.5) {
     return {
       type: "yesno", concept: CON, prompt: ask(right), yes: true,
       graph: graphOf(sc), graphCap: CAPTION, hint,
-      answerLabel: "Yes: the total alone on the left, and every sign is right",
+      answerLabel: afL("Yes: the total alone on the left, and every sign is right", "Ja: die totaal alleen links, en elke teken is reg"),
       solution: [meetLine(sc), ...R.map(t => termLine(sc, t)), oneLine(sc, right), refrain(sc.loan)],
     };
   }
@@ -340,19 +341,19 @@ function equationYesNo() {
   if (w >= 0 && rng() < 0.5) {
     const W = R[w];
     shown = { L: right.L, R: R.map((t, j) => (j === w ? { ...t, s: 1 } : t)) };
-    label = `No: the withdrawal at T${W.t} needs a minus: it comes OUT`;
-    slip = { s: `The slip: ${money(W.c)} at T${W.t} is the withdrawal. It comes OUT, so it needs a minus.`, r: "out is minus" };
+    label = afL(`No: the withdrawal at T${W.t} needs a minus: it comes OUT`, `Nee: die onttrekking by T${W.t} kort 'n minus: dit kom UIT`);
+    slip = { s: afL(`The slip: ${money(W.c)} at T${W.t} is the withdrawal. It comes OUT, so it needs a minus.`, `Die fout: ${money(W.c)} by T${W.t} is die onttrekking. Dit kom UIT, dus kort dit 'n minus.`), r: afL("out is minus", "uit is minus") };
   } else {
     const j = randInt(1, R.length - 1), M = R[j];                       // never the first, so the right side starts plus
     shown = { L: [P, M], R: R.filter((_, i) => i !== j) };
-    label = `No: ${WHAT[M.kind]} at T${M.t} is written on ${P.c}'s side: only the total stands alone on the left`;
-    slip = { s: `The slip: ${money(M.c)} at T${M.t} is ${WHAT[M.kind]}, a payment, but it is written on the left with ${P.c}.`, r: "only the total stands alone on the left" };
+    label = afL(`No: ${WHAT[M.kind]} at T${M.t} is written on ${P.c}'s side: only the total stands alone on the left`, `Nee: ${WHAT[M.kind]} by T${M.t} is aan ${P.c} se kant geskryf: net die totaal staan alleen links`);
+    slip = { s: afL(`The slip: ${money(M.c)} at T${M.t} is ${WHAT[M.kind]}, a payment, but it is written on the left with ${P.c}.`, `Die fout: ${money(M.c)} by T${M.t} is ${WHAT[M.kind]}, 'n paaiement, maar dit is links by ${P.c} geskryf.`), r: afL("only the total stands alone on the left", "net die totaal staan alleen links") };
   }
   return {
     type: "yesno", concept: CON, prompt: ask(shown), yes: false,
     graph: graphOf(sc), graphCap: CAPTION, hint,
     answerLabel: label,
-    solution: [slip, { s: `The right equation: ${eqHtml(sc, right)}`, r: oneLine(sc, right).r }, refrain(sc.loan)],
+    solution: [slip, { s: afL(`The right equation: ${eqHtml(sc, right)}`, `Die regte vergelyking: ${eqHtml(sc, right)}`), r: oneLine(sc, right).r }, refrain(sc.loan)],
   };
 }
 
@@ -373,14 +374,14 @@ function withdrawal() {
   const wrongs = decoysOf(right, cands).map(d => eqHtml(sc, d));
   const W = right.R[w];
   return mc(CON,
-    `${story(sc)} The meeting day is T${sc.n}, the day of A. Which equation gives A?`,
+    afL(`${story(sc)} The meeting day is T${sc.n}, the day of A. Which equation gives A?`, `${story(sc)} Die ontmoetingsdag is T${sc.n}, die dag van A. Watter vergelyking gee A?`),
     eqHtml(sc, right), wrongs, {
       graph: graphOf(sc), graphCap: CAPTION,
-      hint: "A deposit goes IN (plus), a withdrawal comes OUT (minus). Each one drives to the meeting day in forward gear.",
+      hint: afL("A deposit goes IN (plus), a withdrawal comes OUT (minus). Each one drives to the meeting day in forward gear.", "'n Deposito gaan IN (plus), 'n onttrekking kom UIT (minus). Elkeen ry vorentoe na die ontmoetingsdag."),
       solution: [
         meetLine(sc),
         ...right.R.map(t => termLine(sc, t)),
-        { s: `The withdrawal needs a car too: the ${money(W.c)} left the account at T${W.t}, so the interest it would have earned is gone as well.`, r: `forward gear, exponent ${W.e}` },
+        { s: afL(`The withdrawal needs a car too: the ${money(W.c)} left the account at T${W.t}, so the interest it would have earned is gone as well.`, `Die onttrekking het ook 'n kar nodig: die ${money(W.c)} het die rekening by T${W.t} verlaat, dus is die rente wat dit sou verdien het ook weg.`), r: afL(`forward gear, exponent ${W.e}`, `vorentoe, eksponent ${W.e}`) },
         oneLine(sc, right),
         refrain(false),
       ],
@@ -389,22 +390,22 @@ function withdrawal() {
 
 /* mc: plain recall, one item per card: where does it go in the one
    equation? (the taught form: the total alone on the left) */
-const NOWHERE = "nowhere: it never enters the account";
+const NOWHERE = afL("nowhere: it never enters the account", "nêrens: dit kom nooit in die rekening nie");
 const WORDS = [
-  { what: "A deposit into savings", ans: PLUS_R, loan: false, why: "A deposit is money put into the account. It goes IN: plus on the right." },
-  { what: "A withdrawal from savings", ans: MINUS_R, loan: false, why: "A withdrawal is money taken out of the account. It comes OUT: minus on the right." },
-  { what: "The total, A, that savings grow into", ans: ALONE_L, loan: false, why: "A is the total. The total stands alone on the left: A = …" },
-  { what: "A repayment on a loan", ans: PLUS_R, loan: true, why: "A repayment pays the loan back. In the equation it stands plus on the right: P = …" },
-  { what: "The loan itself (the amount borrowed)", ans: ALONE_L, loan: true, why: "The loan is the total, P. The total stands alone on the left: P = …" },
-  { what: "A down payment on a fridge bought on hire purchase", ans: NOWHERE, loan: true,
-    why: `A down payment is paid straight to the seller. It never enters the account: no car, no place in the equation. ${cap(CAR_IS)}. It comes off the price: loan = price − down payment.` },
+  { what: afL("A deposit into savings", "'n Deposito in 'n spaarrekening"), ans: PLUS_R, loan: false, why: afL("A deposit is money put into the account. It goes IN: plus on the right.", "'n Deposito is geld wat in die rekening gesit word. Dit gaan IN: plus regs.") },
+  { what: afL("A withdrawal from savings", "'n Onttrekking uit 'n spaarrekening"), ans: MINUS_R, loan: false, why: afL("A withdrawal is money taken out of the account. It comes OUT: minus on the right.", "'n Onttrekking is geld wat uit die rekening gehaal word. Dit kom UIT: minus regs.") },
+  { what: afL("The total, A, that savings grow into", "Die totaal, A, waartoe spaargeld groei"), ans: ALONE_L, loan: false, why: afL("A is the total. The total stands alone on the left: A = …", "A is die totaal. Die totaal staan alleen links: A = …") },
+  { what: afL("A repayment on a loan", "'n Terugbetaling op 'n lening"), ans: PLUS_R, loan: true, why: afL("A repayment pays the loan back. In the equation it stands plus on the right: P = …", "'n Terugbetaling betaal die lening terug. In die vergelyking staan dit plus regs: P = …") },
+  { what: afL("The loan itself (the amount borrowed)", "Die lening self (die bedrag wat geleen is)"), ans: ALONE_L, loan: true, why: afL("The loan is the total, P. The total stands alone on the left: P = …", "Die lening is die totaal, P. Die totaal staan alleen links: P = …") },
+  { what: afL("A down payment on a fridge bought on hire purchase", "'n Aanbetaling op 'n yskas wat op huurkoop gekoop is"), ans: NOWHERE, loan: true,
+    why: afL(`A down payment is paid straight to the seller. It never enters the account: no car, no place in the equation. ${cap(CAR_IS)}. It comes off the price: loan = price − down payment.`, `'n Aanbetaling word reguit aan die verkoper betaal. Dit kom nooit in die rekening nie: geen kar nie, geen plek in die vergelyking nie. ${cap(CAR_IS)}. Dit kom van die prys af: lening = prys − aanbetaling.`) },
 ];
 function inOrOutWord() {
   const w = pick(WORDS);
   return mc(CON,
-    `<b>${w.what}</b>: where does it go in the equation?`,      // the item first (f10 review 1)
+    afL(`<b>${w.what}</b>: where does it go in the equation?`, `<b>${w.what}</b>: waar gaan dit in die vergelyking?`),      // the item first (f10 review 1)
     w.ans, [PLUS_R, MINUS_R, ALONE_L, NOWHERE].filter(o => o !== w.ans), {
-      hint: "The total stands alone on the left. On the right: plus for money in and for a repayment, minus for money out.",
+      hint: afL("The total stands alone on the left. On the right: plus for money in and for a repayment, minus for money out.", "Die totaal staan alleen links. Regs: plus vir geld in en vir 'n terugbetaling, minus vir geld uit."),
       answerLabel: w.ans,
       solution: [{ s: w.why }, refrain(w.loan)],
     });
@@ -415,7 +416,7 @@ function inOrOutWord() {
    rate, to the cent, so the story is true and the answer is 2 dp. Decoys:
    the loan minus the payments (a negative), one payment minus the loan,
    the sum of the payments */
-const FIX_INTEREST = () => ({ n: 3, r: 12, k: 12, p: { he: "she", his: "her" }, times: [1, 3], vals: [2300, 4200] });
+const FIX_INTEREST = () => ({ n: 3, r: 12, k: 12, p: { he: afL("she", "sy"), his: afL("her", "haar") }, times: [1, 3], vals: [2300, 4200] });
 function interestPaid() {
   let sc = null;
   for (let tries = 0; tries < 200 && !sc; tries++) {
@@ -437,15 +438,15 @@ function interestPaid() {
   const pays = sc.vals.map((v, j) => ({ t: sc.times[j], v, kind: "repay" }));
   const g = graphOf({ loan: true, n: sc.n, meet: 0, r: sc.r, k: sc.k, pays }, { meet: false, total: { t: 0, amount: loan, dp: 2, role: "P" } });
   return mc(CON,
-    `${cap(p.he)} borrowed ${money(loan, 2)} at ${pa(sc.r)} compounded ${HOW(sc.k)}. ${cap(p.he)} paid back ${andList(pays.map(at))}, and that paid off the loan. How much interest did ${p.he} pay?`,
+    afL(`${cap(p.he)} borrowed ${money(loan, 2)} at ${pa(sc.r)} compounded ${HOW(sc.k)}. ${cap(p.he)} paid back ${andList(pays.map(at))}, and that paid off the loan. How much interest did ${p.he} pay?`, `${cap(p.he)} het ${money(loan, 2)} geleen teen ${pa(sc.r)} ${HOW(sc.k)} saamgestel. ${cap(p.he)} het ${andList(pays.map(at))} terugbetaal, en dit het die lening afbetaal. Hoeveel rente het ${p.he} betaal?`),
     lab(intC), wrongs, {
       graph: g, graphCap: CAPTION,
-      hint: "Interest = what was paid back − what was borrowed.",
-      answerLabel: `${lab(intC)} of interest`,
+      hint: afL("Interest = what was paid back − what was borrowed.", "Rente = wat terugbetaal is − wat geleen is."),
+      answerLabel: afL(`${lab(intC)} of interest`, `${lab(intC)} rente`),
       solution: [
-        { s: `Paid back (OUT): ${nw(amt0(sc.vals[0]))} + ${nw(`${amt0(sc.vals[1])} = ${amt0(paidC / 100)}`)}`, r: "the repayments cover the loan AND its interest" },
-        { s: `Borrowed (IN): ${nw(amt2(loan))}`, r: "no interest in the loan" },
-        { s: `Interest = paid back − borrowed = ${nw(amt0(paidC / 100))} − ${nw(`${amt2(loan)} = ${rands(intC / 100, 2)}`)}` },
+        { s: afL(`Paid back (OUT): ${nw(amt0(sc.vals[0]))} + ${nw(`${amt0(sc.vals[1])} = ${amt0(paidC / 100)}`)}`, `Terugbetaal (UIT): ${nw(amt0(sc.vals[0]))} + ${nw(`${amt0(sc.vals[1])} = ${amt0(paidC / 100)}`)}`), r: afL("the repayments cover the loan AND its interest", "die terugbetalings dek die lening EN sy rente") },
+        { s: afL(`Borrowed (IN): ${nw(amt2(loan))}`, `Geleen (IN): ${nw(amt2(loan))}`), r: afL("no interest in the loan", "geen rente in die lening nie") },
+        { s: afL(`Interest = paid back − borrowed = ${nw(amt0(paidC / 100))} − ${nw(`${amt2(loan)} = ${rands(intC / 100, 2)}`)}`, `Rente = terugbetaal − geleen = ${nw(amt0(paidC / 100))} − ${nw(`${amt2(loan)} = ${rands(intC / 100, 2)}`)}`) },
         refrain(true),
       ],
     });
@@ -471,7 +472,7 @@ function hirePurchasePrice() {
     const cars2 = times.every(t => t * k >= 2);                          // f10 review 1: no car is ever ^−1
     if (vals.length === cnt && x > 500 && cars2) sc = { loan: true, n, meet: 0, r, k, p, price, down, ln: loan, item: pick(ITEMS), pays: times.map((t, j) => ({ t, v: vals[j], kind: "repay" })) };
   }
-  sc = sc || { loan: true, n: 3, meet: 0, r: 12, k: 12, p: { he: "he", his: "his" }, price: 15000, down: 3000, ln: 12000, item: "laptop", pays: [{ t: 1, v: 5000, kind: "repay" }] };
+  sc = sc || { loan: true, n: 3, meet: 0, r: 12, k: 12, p: { he: afL("he", "hy"), his: afL("his", "sy") }, price: 15000, down: 3000, ln: 12000, item: afL("laptop", "skootrekenaar"), pays: [{ t: 1, v: 5000, kind: "repay" }] };
   const { p, n } = sc, E = n * sc.k;
   const xT = { s: 1, c: "x", e: -E, kind: "repay", t: n };
   const pays = sc.pays.map(x => termOf(sc, x));
@@ -484,15 +485,15 @@ function hirePurchasePrice() {
   ];
   const wrongs = decoysOf(right, shuffled(cands)).map(d => eqHtml(sc, d));   // any three of the four slips
   return mc(CON,
-    `${cap(p.he)} buys ${article(sc.item)} ${sc.item} for ${money(sc.price)}. ${cap(p.he)} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and a last repayment, x, at T${n} pays off the loan. The meeting day is T0, the day of the loan. Which equation is right?`,
+    afL(`${cap(p.he)} buys ${article(sc.item)} ${sc.item} for ${money(sc.price)}. ${cap(p.he)} pays a down payment of ${money(sc.down)} straight to the shop and borrows the rest at ${rateText(sc)}. ${cap(p.he)} pays back ${andList(sc.pays.map(at))}, and a last repayment, x, at T${n} pays off the loan. The meeting day is T0, the day of the loan. Which equation is right?`, `${cap(p.he)} koop ${article(sc.item)} ${sc.item} vir ${money(sc.price)}. ${cap(p.he)} betaal 'n aanbetaling van ${money(sc.down)} reguit aan die winkel en leen die res teen ${rateText(sc)}. ${cap(p.he)} betaal ${andList(sc.pays.map(at))} terug, en 'n laaste terugbetaling, x, by T${n} betaal die lening af. Die ontmoetingsdag is T0, die dag van die lening. Watter vergelyking is reg?`),
     eqHtml(sc, right), wrongs, {
-      hint: "Price = loan + down payment. Only the loan is the total: it stands alone on the left.",
+      hint: afL("Price = loan + down payment. Only the loan is the total: it stands alone on the left.", "Prys = lening + aanbetaling. Net die lening is die totaal: dit staan alleen links."),
       solution: [
-        { s: `Price = loan + down payment, so the loan = ${nw(amt0(sc.price))} − ${nw(`${amt0(sc.down)} = ${amt0(sc.ln)}`)}`, r: `the down payment never enters the account, so it gets no car; ${CAR_IS}` },
-        { s: `The loan is the total. It stands alone on the left, on the meeting day, with no car: ${nw(amt0(sc.ln))}`, r: "the meeting day is T0, the day of the loan" },
-        ...pays.map(t => ({ s: `The repayment at T${t.t} stands plus on the right: ${nw(termText(sc, t))}`, r: carNote(sc, t) })),
-        { s: `The last repayment, x, stands plus on the right too: ${nw(termText(sc, xT))}`, r: carNote(sc, xT) },
-        oneLine(sc, right, `the loan, ${nw(amt0(sc.ln))}, alone on the left; the repayments plus on the right`),
+        { s: afL(`Price = loan + down payment, so the loan = ${nw(amt0(sc.price))} − ${nw(`${amt0(sc.down)} = ${amt0(sc.ln)}`)}`, `Prys = lening + aanbetaling, dus is die lening = ${nw(amt0(sc.price))} − ${nw(`${amt0(sc.down)} = ${amt0(sc.ln)}`)}`), r: afL(`the down payment never enters the account, so it gets no car; ${CAR_IS}`, `die aanbetaling kom nooit in die rekening nie, dus kry dit geen kar nie; ${CAR_IS}`) },
+        { s: afL(`The loan is the total. It stands alone on the left, on the meeting day, with no car: ${nw(amt0(sc.ln))}`, `Die lening is die totaal. Dit staan alleen links, op die ontmoetingsdag, sonder 'n kar: ${nw(amt0(sc.ln))}`), r: afL("the meeting day is T0, the day of the loan", "die ontmoetingsdag is T0, die dag van die lening") },
+        ...pays.map(t => ({ s: afL(`The repayment at T${t.t} stands plus on the right: ${nw(termText(sc, t))}`, `Die terugbetaling by T${t.t} staan plus regs: ${nw(termText(sc, t))}`), r: carNote(sc, t) })),
+        { s: afL(`The last repayment, x, stands plus on the right too: ${nw(termText(sc, xT))}`, `Die laaste terugbetaling, x, staan ook plus regs: ${nw(termText(sc, xT))}`), r: carNote(sc, xT) },
+        oneLine(sc, right, afL(`the loan, ${nw(amt0(sc.ln))}, alone on the left; the repayments plus on the right`, `die lening, ${nw(amt0(sc.ln))}, alleen links; die terugbetalings plus regs`)),
         refrain(true),
       ],
     });
@@ -518,10 +519,10 @@ function signOnTimeline() {
   const wrongs = decoysOf(right, cands).map(d => eqHtml(sc, d));
   const { p } = sc;
   return mc(CON,
-    `${cap(p.he)} saves at ${rateText(sc)}. On the timeline a plain amount is a deposit and an amount marked with a minus is a withdrawal. ${cap(p.his)} savings grow into the total, A, at T${sc.n}, the meeting day. Which equation matches the picture?`,
+    afL(`${cap(p.he)} saves at ${rateText(sc)}. On the timeline a plain amount is a deposit and an amount marked with a minus is a withdrawal. ${cap(p.his)} savings grow into the total, A, at T${sc.n}, the meeting day. Which equation matches the picture?`, `${cap(p.he)} spaar teen ${rateText(sc)}. Op die tydlyn is 'n gewone bedrag 'n deposito en 'n bedrag met 'n minus 'n onttrekking. ${cap(p.his)} spaargeld groei tot die totaal, A, by T${sc.n}, die ontmoetingsdag. Watter vergelyking pas by die prent?`),
     eqHtml(sc, right), wrongs, {
       graph: graphOf(sc), graphCap: CAPTION,
-      hint: "A plain amount is a deposit: plus. The amount marked − is a withdrawal: minus.",
+      hint: afL("A plain amount is a deposit: plus. The amount marked − is a withdrawal: minus.", "'n Gewone bedrag is 'n deposito: plus. Die bedrag gemerk − is 'n onttrekking: minus."),
       solution: [
         meetLine(sc),
         ...R.map(t => termLine(sc, t)),
