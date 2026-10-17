@@ -49,10 +49,20 @@ export function afLiteral(enSrc, kind, afText, eol) {
   const t = String(afText).replace(/\r\n|\r|\n/g, "\n");
   let lit;
   if (kind === "template") {
-    let out = "";
+    // Prose is escaped; the code inside ${...} is copied as written (its braces are
+    // tracked, so a nested template literal such as ${upw(v, `-${n}`)} keeps its own
+    // backticks). af_check guarantees the ${...} sequence equals the English one.
+    // Fix 2026-10-17 (Saturday push): escaping those inner backticks made the twin unparsable.
+    let out = "", depth = 0;
     for (let i = 0; i < t.length; i++) {
       const c = t[i];
-      if (c === "\\") { out += i + 1 < t.length ? c + t[++i] : "\\\\"; }
+      if (depth > 0) {
+        if (c === "{") depth++;
+        else if (c === "}") depth--;
+        out += c;
+      }
+      else if (c === "$" && t[i + 1] === "{") { out += "${"; i++; depth = 1; }
+      else if (c === "\\") { out += i + 1 < t.length ? c + t[++i] : "\\\\"; }
       else if (c === "`") out += "\\`";
       else if (c === "\n") out += eol;
       else out += c;
