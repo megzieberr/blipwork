@@ -101,12 +101,12 @@ it pile up. Durable laws also live in CLAUDE.md and the auto-memory.
   tweerigtingtabel are CAPS forms "not yet hers", G2 rules on them); chapter names keep the English capitals
   ("Analitiese Meetkunde") except after a hyphen ("2D-trigonometrie", "Trig-grafieke"); "trap" = "slaggat";
   device names (Oats Are Healthy, All Strippers Take Cash, TIP Chips, happy/sad) and calculator words stay English.
+- 2026-10-17 (hers, 18:56): "the Afrikaans tiles look fine on my phone": T89 signed off on the live site (sw v99);
+  session closed for the night.
 
 ## ⏳ Pending on Megan
-- 📱 2 min [whenever, tonight if you like]: close Blipwork on your phone, open it, close it, open it again (v99 lands
-  on the second open) → the hub tiles read Statistiek / Finansies / Getalpatrone … (the language setting from your
-  18:36 play is still on the phone) → any tile word you hate: tell the next session the word and what you'd rather
-  say, it becomes a glossary row and back-fills.
+- 📱 [whenever]: any Afrikaans word you dislike as you play the rounds: tell the next session the word and what
+  you'd rather say, it becomes a glossary row and back-fills every chapter (the tiles passed on your phone 18:56).
 - 💻 1 min [Sunday morning, whenever]: read AF-LOG.md, one line per row the night did.
 - 🌐 1 toggle each [as you teach]: admin page → open f8, then f9 … f13, one at a time, the
   day you teach it (they are live but CLOSED, learners cannot see them yet).
