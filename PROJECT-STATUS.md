@@ -1,4 +1,4 @@
-# Project status — updated 2026-10-18 00:20 (🇿🇦 SECOND PUSH DONE: the WHOLE Afrikaans queue is translated, twins 12 071 of 12 074 (the 3 left are inside a test helper), 37 commits local on main UNPUSHED, switch still HIDDEN; live site = sw v100 `d983c83`; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her next ship = sw v101)
+# Project status — updated 2026-10-18 01:22 (🚀 sw v101 `f7d832b` LIVE 01:22: the WHOLE Afrikaans translation is on the live site, switch still HIDDEN, 0 unpushed; twins 12 071 of 12 074; open: T94 small leftovers (the routine takes it Sun 22:10), S11 dice test pages (her call), G2 her wording sweep; her play-through with ?lang=af can start)
 
 ## How this file works (since 2026-08-30)
 Head only. The full session-by-session history — every old entry, every old
@@ -28,11 +28,11 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   the glossary conflicts between rows ("GLOSSARY CALL"), six English maths slips ("MATHS SLIP"), and the
   leftovers ("FOLLOW-UP ROW", collected into queue row T93). The foreman kit is in `tools/af-push/` (README).
   Full write-up: STATUS-ARCHIVE.md 2026-10-17 19:05.
-- **🚀 Live site = sw v100 `d983c83` (2026-10-17 22:16):** the 60 Saturday-push rows + S9 + the af-push kit are LIVE,
-  hidden: `SHOW_TOGGLE` false, default "en", a phone shows Afrikaans only after it visited `?lang=af` once (her
+- **🚀 Live site = sw v101 `f7d832b` (2026-10-18 01:22):** the whole Afrikaans translation (both pushes, 93 rows) is LIVE,
+  hidden (Pages built within 20 s; live sw.js reads mhq-v101; live js/lang.js SHOW_TOGGLE = false; index 200; live euclid-siblings-cyclic-quads.js and skills.js sha1 = local, live questf12-build-timeline.js sha1 = the committed blob b565c53fac56); before it sw v100 `d983c83` (22:16) carried the Saturday push. Still: `SHOW_TOGGLE` false, default "en", a phone shows Afrikaans only after it visited `?lang=af` once (her
   phone did, at the 18:36 tile sign-off) and `?lang=en` flips it back; learners see English. Hub tiles T89 + S1–S6 +
   the pilot since v99; hub tabs Paper 1 / Paper 2 since v97; f8–f13 live CLOSED (she opens each from the admin
-  page). 37 unpushed (the second push); her next ship (sw v101) carries them, still hidden.
+  page). 0 unpushed; the routine's nightly `AF:` commits (T94 next) ride with whatever ship comes next.
 - 🧮 Calculator Builds 9 + 10 live (v94), 📥 Inbox (v95), 💰 Finance part 2 f8–f13 (v96): STATUS-ARCHIVE.md.
   12 hub chapters + 2 exam-only; 📝 Exam Focus 7 chapters / 360 cards; 🔔 push live; roster 20.
 - ⚠️ **EVERY SHIP: `python tools/sw_check.py` must print OK before the push** (it counts only a COMMITTED bump).
@@ -70,12 +70,14 @@ the archive. Durable laws also live in CLAUDE.md and the auto-memory.
   three halves under one queue row; S11 added as a GATED row (her call), T94 as an open row; Circle Quest's reason bank won
   over the SAG where they differ (logged as GLOSSARY CALLs for G2); five workers overlapped for ten minutes at 22:33 (wave 1's
   setup rows + wave 2), three at a time after that.
+- 2026-10-18 (hers, 01:20): "Ship sw v101: bump, sw_check, push. The Afrikaans switch stays hidden." Shipped `f7d832b`,
+  live-verified 01:22.
 
 ## ⏳ Pending on Megan
 - 🌐 1 word [your call, whenever]: "run S11" (one Opus worker, about 200k) so the seven dice test pages can check the
   Afrikaans dice rounds too, or leave it (the app renders them; only the harness can't read Afrikaans there).
-- 💻 1 word [when you want it live]: "ship it" → sw v101 carries the 37 commits, still hidden; then your play-through
-  with `?lang=af` can cover every chapter.
+- 📱 [after exams, your 19:17 ruling]: play Blipwork start to finish with `?lang=af` (your phone already remembers it) and
+  tell a session every word you dislike; close and reopen the app twice first so the phone picks up v101.
 - 📱 1 tap [whenever]: your phone remembers Afrikaans from tonight's test; open
   megzieberr.github.io/blipwork/?lang=en once to flip it back (or keep it on for the play-through).
 - 💻 5 min [Sunday]: read AF-LOG.md from the 19:23 line down (both pushes, one line per row); the "for your list" and
