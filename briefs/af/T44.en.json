@@ -1,0 +1,4856 @@
+{
+  "unit": "T44",
+  "generated": "2026-10-17T18:47:06.456Z",
+  "files": [
+    "js/quests/questt1-choose.js",
+    "js/quests/questt2-sine-sides.js",
+    "js/quests/questt3-sine-angles.js",
+    "js/quests/questt4-cosine-sides.js",
+    "js/quests/questt5-cosine-angles.js",
+    "js/quests/questt6-area.js",
+    "js/quests/questt7-mixed.js"
+  ],
+  "items": {
+    "questt1-choose#1": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questt1-choose.js:14:138",
+        "questt1-choose.js:15:124",
+        "questt1-choose.js:20:44",
+        "questt1-choose.js:28:41",
+        "questt1-choose.js:36:41",
+        "questt1-choose.js:36:93",
+        "questt1-choose.js:36:142",
+        "questt1-choose.js:44:88",
+        "questt1-choose.js:44:137",
+        "questt1-choose.js:52:41",
+        "questt1-choose.js:52:93",
+        "questt1-choose.js:52:142",
+        "questt1-choose.js:73:26",
+        "questt1-choose.js:101:23",
+        "questt1-choose.js:101:107",
+        "questt1-choose.js:105:8",
+        "questt1-choose.js:107:67",
+        "questt1-choose.js:107:110"
+      ]
+    },
+    "questt1-choose#2": {
+      "en": "B",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questt1-choose.js:14:143",
+        "questt1-choose.js:15:129",
+        "questt1-choose.js:20:49",
+        "questt1-choose.js:28:85",
+        "questt1-choose.js:28:137",
+        "questt1-choose.js:36:98",
+        "questt1-choose.js:44:39",
+        "questt1-choose.js:44:142",
+        "questt1-choose.js:52:98",
+        "questt1-choose.js:73:31",
+        "questt1-choose.js:101:28",
+        "questt1-choose.js:105:13",
+        "questt1-choose.js:107:24",
+        "questt1-choose.js:107:115"
+      ]
+    },
+    "questt1-choose#3": {
+      "en": "C",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder"
+      ],
+      "where": [
+        "questt1-choose.js:14:148",
+        "questt1-choose.js:15:134",
+        "questt1-choose.js:20:54",
+        "questt1-choose.js:28:142",
+        "questt1-choose.js:36:147",
+        "questt1-choose.js:44:44",
+        "questt1-choose.js:44:93",
+        "questt1-choose.js:52:147",
+        "questt1-choose.js:73:36",
+        "questt1-choose.js:101:33",
+        "questt1-choose.js:105:18",
+        "questt1-choose.js:107:29",
+        "questt1-choose.js:107:72"
+      ]
+    },
+    "questt1-choose#4": {
+      "en": "Sine rule",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:27:44",
+        "questt1-choose.js:63:8",
+        "questt1-choose.js:120:21"
+      ]
+    },
+    "questt1-choose#5": {
+      "en": "You have two angles and a side — sine rule.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "questt1-choose.js:27:62"
+      ]
+    },
+    "questt1-choose#6": {
+      "en": "Two angles and a side are known and you must find another side. Which rule?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "prompt"
+      ],
+      "where": [
+        "questt1-choose.js:34:17"
+      ]
+    },
+    "questt1-choose#7": {
+      "en": "Cosine rule",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:35:44",
+        "questt1-choose.js:43:44",
+        "questt1-choose.js:63:21",
+        "questt1-choose.js:120:5"
+      ]
+    },
+    "questt1-choose#8": {
+      "en": "Two sides and the angle between them, finding the third side — cosine rule.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "questt1-choose.js:35:64"
+      ]
+    },
+    "questt1-choose#9": {
+      "en": "Two sides and the angle between them are known; find the third side. Which rule?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "prompt"
+      ],
+      "where": [
+        "questt1-choose.js:42:17"
+      ]
+    },
+    "questt1-choose#10": {
+      "en": "All three sides known, finding an angle — cosine rule (rearranged).",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "questt1-choose.js:43:64"
+      ]
+    },
+    "questt1-choose#11": {
+      "en": "All three sides are known and you must find an angle. Which rule?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "prompt"
+      ],
+      "where": [
+        "questt1-choose.js:50:17"
+      ]
+    },
+    "questt1-choose#12": {
+      "en": "Area rule",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:51:45",
+        "questt1-choose.js:63:36",
+        "questt1-choose.js:120:34",
+        "questt1-choose.js:145:41"
+      ]
+    },
+    "questt1-choose#13": {
+      "en": "Two sides and the included angle, finding the AREA — area rule.",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "why"
+      ],
+      "where": [
+        "questt1-choose.js:51:63"
+      ]
+    },
+    "questt1-choose#14": {
+      "en": "Two sides and the angle between them are known; find the AREA. Which rule?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "prompt"
+      ],
+      "where": [
+        "questt1-choose.js:58:17"
+      ]
+    },
+    "questt1-choose#15": {
+      "en": "Sine rule pairs a side with its opposite angle. Cosine rule needs an included angle (or all 3 sides). Area rule finds area from 2 sides + included angle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt1-choose.js:65:15"
+      ]
+    },
+    "questt1-choose#16": {
+      "en": "BC",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt1-choose.js:74:22",
+        "questt1-choose.js:76:23",
+        "questt1-choose.js:77:29",
+        "questt1-choose.js:82:60"
+      ]
+    },
+    "questt1-choose#17": {
+      "en": "CA",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt1-choose.js:74:31",
+        "questt1-choose.js:76:33",
+        "questt1-choose.js:77:35",
+        "questt1-choose.js:82:66"
+      ]
+    },
+    "questt1-choose#18": {
+      "en": "AB",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt1-choose.js:74:40",
+        "questt1-choose.js:76:43",
+        "questt1-choose.js:77:23",
+        "questt1-choose.js:82:54"
+      ]
+    },
+    "questt1-choose#19": {
+      "en": "Tap the side that is <b>opposite ${target}̂</b> (its “friend”).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt1-choose.js:80:15"
+      ]
+    },
+    "questt1-choose#20": {
+      "en": "Look straight across the triangle from vertex ${target} to the side facing it.",
+      "kind": "template",
+      "slots": [
+        "tapHint"
+      ],
+      "where": [
+        "questt1-choose.js:83:16"
+      ]
+    },
+    "questt1-choose#21": {
+      "en": "Each side is named after the angle it faces across the triangle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt1-choose.js:84:13"
+      ]
+    },
+    "questt1-choose#22": {
+      "en": "The side opposite ${target}̂ is ${opp.split(\"\").join(\"\")} — they are “friends”.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt1-choose.js:85:20"
+      ]
+    },
+    "questt1-choose#23": {
+      "en": "${touching[0]} and ${touching[1]} both touch corner ${target}̂",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:87:14"
+      ]
+    },
+    "questt1-choose#24": {
+      "en": "those are the sides NEXT to the angle",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:87:83"
+      ]
+    },
+    "questt1-choose#25": {
+      "en": "${opp} is the one left over, straight across the triangle from ${target}̂",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:88:14"
+      ]
+    },
+    "questt1-choose#26": {
+      "en": "so ${opp} is opposite ${target}̂ — its “friend”",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:88:94"
+      ]
+    },
+    "questt1-choose#27": {
+      "en": "The biggest angle always sits opposite the <b>longest</b> side. Using the side lengths shown, which angle is the biggest?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt1-choose.js:103:7"
+      ]
+    },
+    "questt1-choose#28": {
+      "en": "Find the longest side, then name the angle facing it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt1-choose.js:108:15"
+      ]
+    },
+    "questt1-choose#29": {
+      "en": "The longest side is opposite ${longest}̂, so ${longest}̂ is the biggest angle.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt1-choose.js:109:22"
+      ]
+    },
+    "questt1-choose#30": {
+      "en": "Sides: a = ${Math.round(s.a)}, b = ${Math.round(s.b)}, c = ${Math.round(s.c)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:111:16"
+      ]
+    },
+    "questt1-choose#31": {
+      "en": "a faces Â, b faces B̂, c faces Ĉ",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:111:100"
+      ]
+    },
+    "questt1-choose#32": {
+      "en": "The longest of the three is ${Math.round(s[longest.toLowerCase()])}, which is side ${longest.toLowerCase()}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:112:16"
+      ]
+    },
+    "questt1-choose#33": {
+      "en": "Side ${longest.toLowerCase()} sits opposite ${longest}̂, so ${longest}̂ is the biggest angle",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:113:16"
+      ]
+    },
+    "questt1-choose#34": {
+      "en": "biggest angle faces the longest side",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:113:115"
+      ]
+    },
+    "questt1-choose#35": {
+      "en": "You know two sides and the angle <b>between</b> them, and want the third side. Which rule?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt1-choose.js:119:5"
+      ]
+    },
+    "questt1-choose#36": {
+      "en": "Sine rule always needs a side paired with its OPPOSITE angle. Here the angle is between the two sides.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt1-choose.js:121:13"
+      ]
+    },
+    "questt1-choose#37": {
+      "en": "Two sides + the included angle → cosine rule: a² = b² + c² − 2bc·cosA.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt1-choose.js:122:20"
+      ]
+    },
+    "questt1-choose#38": {
+      "en": "Try the sine rule first: it needs a side paired with the angle OPPOSITE it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:124:14"
+      ]
+    },
+    "questt1-choose#39": {
+      "en": "Here the known angle lies BETWEEN the two known sides, so there is no such pair",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:125:14"
+      ]
+    },
+    "questt1-choose#40": {
+      "en": "sine rule cannot start",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:125:100"
+      ]
+    },
+    "questt1-choose#41": {
+      "en": "a² = b² + c² − 2bc·cosA is built for exactly this set-up",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:126:14"
+      ]
+    },
+    "questt1-choose#42": {
+      "en": "two sides and the angle between them",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:126:77"
+      ]
+    },
+    "questt1-choose#43": {
+      "en": "Which information lets you use the <b>area rule</b> straight away?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt1-choose.js:131:5"
+      ]
+    },
+    "questt1-choose#44": {
+      "en": "Two sides and the angle between them",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt1-choose.js:132:5"
+      ]
+    },
+    "questt1-choose#45": {
+      "en": "All three angles",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:133:6"
+      ]
+    },
+    "questt1-choose#46": {
+      "en": "Two angles and a side",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:133:26"
+      ]
+    },
+    "questt1-choose#47": {
+      "en": "All three sides",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:133:51"
+      ]
+    },
+    "questt1-choose#48": {
+      "en": "Area = ½ × (side) × (side) × sin(included angle).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt1-choose.js:134:13"
+      ]
+    },
+    "questt1-choose#49": {
+      "en": "Area rule needs two sides and the INCLUDED angle: Area = ½·b·c·sinA.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt1-choose.js:135:20"
+      ]
+    },
+    "questt1-choose#50": {
+      "en": "Read the formula itself: Area = ½·b·c·sinA",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:137:14"
+      ]
+    },
+    "questt1-choose#51": {
+      "en": "It asks for two side lengths (b and c) and the sine of A, the angle sitting between them",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:138:14"
+      ]
+    },
+    "questt1-choose#52": {
+      "en": "so that is the information it needs",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:138:109"
+      ]
+    },
+    "questt1-choose#53": {
+      "en": "You are given two sides and an angle that is <b>not</b> between them. Which rule applies (and what must you watch for)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt1-choose.js:143:5"
+      ]
+    },
+    "questt1-choose#54": {
+      "en": "Sine rule — the ambiguous case",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt1-choose.js:144:5"
+      ]
+    },
+    "questt1-choose#55": {
+      "en": "Cosine rule — always one answer",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:145:6"
+      ]
+    },
+    "questt1-choose#56": {
+      "en": "Sine rule — never ambiguous",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt1-choose.js:145:54"
+      ]
+    },
+    "questt1-choose#57": {
+      "en": "An angle opposite a known side points to the sine rule; two sides + non-included angle can give two triangles.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt1-choose.js:146:13"
+      ]
+    },
+    "questt1-choose#58": {
+      "en": "Two sides + a non-included angle → sine rule, and it may give TWO possible triangles (ambiguous case).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt1-choose.js:147:20"
+      ]
+    },
+    "questt1-choose#59": {
+      "en": "The angle is opposite one of the two known sides, so you DO have a side–angle pair",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:149:14"
+      ]
+    },
+    "questt1-choose#60": {
+      "en": "that points at the sine rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:149:103"
+      ]
+    },
+    "questt1-choose#61": {
+      "en": "But the second side can swing down and meet the base in two different places",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:150:14"
+      ]
+    },
+    "questt1-choose#62": {
+      "en": "So: sine rule, then check h = b·sinA against a — if h &lt; a &lt; b, two triangles fit",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt1-choose.js:151:14"
+      ]
+    },
+    "questt1-choose#63": {
+      "en": "the ambiguous case",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt1-choose.js:151:107"
+      ]
+    },
+    "questt2-sine-sides#1": {
+      "en": "x = (${known} · ${sinTop}) / ${sinBottom}",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questt2-sine-sides.js:53:17"
+      ]
+    },
+    "questt2-sine-sides#2": {
+      "en": "Now make <b>x</b> the subject.",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:55:5"
+      ]
+    },
+    "questt2-sine-sides#3": {
+      "en": "x = (${known} · ${sinBottom}) / ${sinTop}",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:57:6"
+      ]
+    },
+    "questt2-sine-sides#4": {
+      "en": "x = ${known} / (${sinTop} · ${sinBottom})",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:58:6"
+      ]
+    },
+    "questt2-sine-sides#5": {
+      "en": "x = ${sinTop} / (${known} · ${sinBottom})",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:59:6"
+      ]
+    },
+    "questt2-sine-sides#6": {
+      "en": "Use the sine rule to find <b>x</b> (correct to 2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:99:15"
+      ]
+    },
+    "questt2-sine-sides#7": {
+      "en": "sin ${B}°",
+      "kind": "template",
+      "slots": [
+        "rearrangeStep.sinTop"
+      ],
+      "where": [
+        "questt2-sine-sides.js:106:41",
+        "questt2-sine-sides.js:109:29",
+        "questt2-sine-sides.js:144:12",
+        "questt2-sine-sides.js:182:80"
+      ]
+    },
+    "questt2-sine-sides#8": {
+      "en": "sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "rearrangeStep.sinBottom"
+      ],
+      "where": [
+        "questt2-sine-sides.js:106:75",
+        "questt2-sine-sides.js:109:42",
+        "questt2-sine-sides.js:143:77",
+        "questt2-sine-sides.js:146:44",
+        "questt2-sine-sides.js:182:41"
+      ]
+    },
+    "questt2-sine-sides#9": {
+      "en": "x is opposite B̂ = ${B}°, and ${aTxt} is opposite Â = ${A}°. Each side sits over the sine of the angle opposite it.",
+      "kind": "template",
+      "slots": [
+        "sineSetupStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:108:11"
+      ]
+    },
+    "questt2-sine-sides#10": {
+      "en": "Multiply both sides by sin B̂ — it is dividing x, so it moves up to the other side.",
+      "kind": "string",
+      "slots": [
+        "rearrangeStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:110:11"
+      ]
+    },
+    "questt2-sine-sides#11": {
+      "en": "Now work it out (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:111:18",
+        "questt2-sine-sides.js:148:18",
+        "questt2-sine-sides.js:191:18"
+      ]
+    },
+    "questt2-sine-sides#12": {
+      "en": "x = ${aTxt} × sin ${B}° ÷ sin ${A}°. Check your calculator is in DEG.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:112:11"
+      ]
+    },
+    "questt2-sine-sides#13": {
+      "en": "x is opposite B̂. Pair it with the side you know and its opposite angle: x/sinB̂ = a/sinÂ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:115:13"
+      ]
+    },
+    "questt2-sine-sides#14": {
+      "en": "x = ${fix(x, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:116:20",
+        "questt2-sine-sides.js:121:14",
+        "questt2-sine-sides.js:153:20",
+        "questt2-sine-sides.js:158:14"
+      ]
+    },
+    "questt2-sine-sides#15": {
+      "en": "x is opposite B̂; the known side is opposite Â.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:118:14"
+      ]
+    },
+    "questt2-sine-sides#16": {
+      "en": "pick the friends",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt2-sine-sides.js:118:68"
+      ]
+    },
+    "questt2-sine-sides#17": {
+      "en": "x / sin ${B}° = ${fix(t.sides.a, 0)} / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:119:14"
+      ]
+    },
+    "questt2-sine-sides#18": {
+      "en": "x = (${fix(t.sides.a, 0)} · sin ${B}°) / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:120:14"
+      ]
+    },
+    "questt2-sine-sides#19": {
+      "en": "side on top",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt2-sine-sides.js:121:37"
+      ]
+    },
+    "questt2-sine-sides#20": {
+      "en": "Find <b>x</b> (the side opposite Ĉ), correct to 2 decimals. You will need Ĉ first.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:134:15"
+      ]
+    },
+    "questt2-sine-sides#21": {
+      "en": "First find Ĉ.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:141:18"
+      ]
+    },
+    "questt2-sine-sides#22": {
+      "en": "The three angles add to 180°: Ĉ = 180° − ${A}° − ${B}°.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:141:39"
+      ]
+    },
+    "questt2-sine-sides#23": {
+      "en": "sin ${Cc}°",
+      "kind": "template",
+      "slots": [
+        "rearrangeStep.sinTop"
+      ],
+      "where": [
+        "questt2-sine-sides.js:143:41",
+        "questt2-sine-sides.js:146:30"
+      ]
+    },
+    "questt2-sine-sides#24": {
+      "en": "x is opposite Ĉ = ${Cc}°, and ${aTxt2} is opposite Â = ${A}°. B̂ is not one of x's friends here.",
+      "kind": "template",
+      "slots": [
+        "sineSetupStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:145:11"
+      ]
+    },
+    "questt2-sine-sides#25": {
+      "en": "sin Ĉ is dividing x, so multiply both sides by it.",
+      "kind": "string",
+      "slots": [
+        "rearrangeStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:147:11"
+      ]
+    },
+    "questt2-sine-sides#26": {
+      "en": "x = ${aTxt2} × sin ${Cc}° ÷ sin ${A}°. Calculator in DEG.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:149:11"
+      ]
+    },
+    "questt2-sine-sides#27": {
+      "en": "First Ĉ = 180° − Â − B̂. Then x/sinĈ = a/sinÂ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:152:13"
+      ]
+    },
+    "questt2-sine-sides#28": {
+      "en": "Ĉ = 180° − ${A}° − ${B}° = ${Cc}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:155:14"
+      ]
+    },
+    "questt2-sine-sides#29": {
+      "en": "angle sum",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt2-sine-sides.js:155:54"
+      ]
+    },
+    "questt2-sine-sides#30": {
+      "en": "x / sin ${Cc}° = ${fix(t.sides.a, 0)} / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:156:14"
+      ]
+    },
+    "questt2-sine-sides#31": {
+      "en": "x = (${fix(t.sides.a, 0)} · sin ${Cc}°) / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:157:14"
+      ]
+    },
+    "questt2-sine-sides#32": {
+      "en": "In △ABC, Â = ${A}°, Ĉ = ${C}° and b = ${b}. Calculate <b>a</b> (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:176:15"
+      ]
+    },
+    "questt2-sine-sides#33": {
+      "en": "First find B̂.",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:178:18"
+      ]
+    },
+    "questt2-sine-sides#34": {
+      "en": "The three angles add to 180°: B̂ = 180° − ${A}° − ${C}°.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:178:39"
+      ]
+    },
+    "questt2-sine-sides#35": {
+      "en": "a is opposite Â = ${A}°, and b = ${b} is opposite B̂ = ${B}°.",
+      "kind": "template",
+      "slots": [
+        "sineSetupStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:184:11"
+      ]
+    },
+    "questt2-sine-sides#36": {
+      "en": "Now make <b>a</b> the subject.",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:185:16"
+      ]
+    },
+    "questt2-sine-sides#37": {
+      "en": "a = (${b} · sin ${A}°) / sin ${B}°",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questt2-sine-sides.js:186:11"
+      ]
+    },
+    "questt2-sine-sides#38": {
+      "en": "a = (${b} · sin ${B}°) / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:187:12"
+      ]
+    },
+    "questt2-sine-sides#39": {
+      "en": "a = ${b} / (sin ${A}° · sin ${B}°)",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:188:12"
+      ]
+    },
+    "questt2-sine-sides#40": {
+      "en": "a = sin ${A}° / (${b} · sin ${B}°)",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:189:12"
+      ]
+    },
+    "questt2-sine-sides#41": {
+      "en": "sin B̂ is dividing a, so multiply both sides by it.",
+      "kind": "string",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:190:11"
+      ]
+    },
+    "questt2-sine-sides#42": {
+      "en": "a = ${b} × sin ${A}° ÷ sin ${B}°. Calculator in DEG.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:192:11"
+      ]
+    },
+    "questt2-sine-sides#43": {
+      "en": "B̂ = 180° − Â − Ĉ. Then a/sinÂ = b/sinB̂.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:195:13"
+      ]
+    },
+    "questt2-sine-sides#44": {
+      "en": "a = ${fix(a, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt2-sine-sides.js:196:20"
+      ]
+    },
+    "questt2-sine-sides#45": {
+      "en": "B̂ = 180° − ${A}° − ${C}° = ${B}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:198:14"
+      ]
+    },
+    "questt2-sine-sides#46": {
+      "en": "a / sin ${A}° = ${b} / sin ${B}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:199:14"
+      ]
+    },
+    "questt2-sine-sides#47": {
+      "en": "a = (${b} · sin ${A}°) / sin ${B}° = ${fix(a, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:200:14"
+      ]
+    },
+    "questt2-sine-sides#48": {
+      "en": "When you are solving for a <b>side</b>, the sine rule should be written with…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:207:5"
+      ]
+    },
+    "questt2-sine-sides#49": {
+      "en": "the sides on top (a/sinÂ = b/sinB̂)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt2-sine-sides.js:208:5"
+      ]
+    },
+    "questt2-sine-sides#50": {
+      "en": "the sines on top (sinÂ/a = sinB̂/b)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:209:6"
+      ]
+    },
+    "questt2-sine-sides#51": {
+      "en": "everything multiplied",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:209:45"
+      ]
+    },
+    "questt2-sine-sides#52": {
+      "en": "the angles added first",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:209:70"
+      ]
+    },
+    "questt2-sine-sides#53": {
+      "en": "Put the thing you are solving for on top.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:210:13"
+      ]
+    },
+    "questt2-sine-sides#54": {
+      "en": "Finding a side → sides in the numerators: a/sinÂ = b/sinB̂ = c/sinĈ.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt2-sine-sides.js:211:20"
+      ]
+    },
+    "questt2-sine-sides#55": {
+      "en": "You are solving for a SIDE, so put the side you want on top",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:213:14"
+      ]
+    },
+    "questt2-sine-sides#56": {
+      "en": "a/sinÂ = b/sinB̂ = c/sinĈ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:214:14"
+      ]
+    },
+    "questt2-sine-sides#57": {
+      "en": "each side over the sine of the angle facing it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt2-sine-sides.js:214:46"
+      ]
+    },
+    "questt2-sine-sides#58": {
+      "en": "Then one multiply frees x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:215:14"
+      ]
+    },
+    "questt2-sine-sides#59": {
+      "en": "with x underneath you would have to flip the fraction first",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt2-sine-sides.js:215:46"
+      ]
+    },
+    "questt2-sine-sides#60": {
+      "en": "x / sin ${B}° = ${a} / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt2-sine-sides.js:223:21"
+      ]
+    },
+    "questt2-sine-sides#61": {
+      "en": "x is opposite B̂ = ${B}°. The known side ${a} is opposite Â = ${A}°. Which set-up is correct?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt2-sine-sides.js:225:7"
+      ]
+    },
+    "questt2-sine-sides#62": {
+      "en": "x / sin ${A}° = ${a} / sin ${B}°",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:227:8"
+      ]
+    },
+    "questt2-sine-sides#63": {
+      "en": "x · sin ${B}° = ${a} · sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:227:44"
+      ]
+    },
+    "questt2-sine-sides#64": {
+      "en": "sin ${B}° / x = ${a} / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt2-sine-sides.js:227:80"
+      ]
+    },
+    "questt2-sine-sides#65": {
+      "en": "Each side sits over the sine of the angle opposite it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt2-sine-sides.js:228:15"
+      ]
+    },
+    "questt2-sine-sides#66": {
+      "en": "x is opposite ${B}°, so x/sin${B}° = ${a}/sin${A}°.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt2-sine-sides.js:229:22"
+      ]
+    },
+    "questt2-sine-sides#67": {
+      "en": "Pair each side with the angle it faces: x with ${B}°, and ${a} with ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:231:16"
+      ]
+    },
+    "questt2-sine-sides#68": {
+      "en": "friends",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt2-sine-sides.js:231:96"
+      ]
+    },
+    "questt2-sine-sides#69": {
+      "en": "Solving for a side, so sides on top: x/sin${B}° = ${a}/sin${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:232:16"
+      ]
+    },
+    "questt2-sine-sides#70": {
+      "en": "Check the pairing before you press anything",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt2-sine-sides.js:233:16"
+      ]
+    },
+    "questt2-sine-sides#71": {
+      "en": "x under sin${A}° would pair x with the wrong angle",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt2-sine-sides.js:233:66"
+      ]
+    },
+    "questt3-sine-angles#1": {
+      "en": "Use the sine rule to find <b>θ</b> (the angle at B), correct to 1 decimal.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:40:15"
+      ]
+    },
+    "questt3-sine-angles#2": {
+      "en": "θ is opposite ${b}, and ${a} is opposite Â = ${A}°. Each sine sits over the side opposite its angle.",
+      "kind": "template",
+      "slots": [
+        "sineAngleSetupStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:47:11"
+      ]
+    },
+    "questt3-sine-angles#3": {
+      "en": "Now get <b>sin θ</b> on its own.",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:48:16"
+      ]
+    },
+    "questt3-sine-angles#4": {
+      "en": "sin θ = (${b} · sin ${A}°) / ${a}",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questt3-sine-angles.js:49:11"
+      ]
+    },
+    "questt3-sine-angles#5": {
+      "en": "sin θ = (${a} · sin ${A}°) / ${b}",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:50:12"
+      ]
+    },
+    "questt3-sine-angles#6": {
+      "en": "sin θ = ${b} / (${a} · sin ${A}°)",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:51:12"
+      ]
+    },
+    "questt3-sine-angles#7": {
+      "en": "sin θ = (${b} · ${a}) / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:52:12"
+      ]
+    },
+    "questt3-sine-angles#8": {
+      "en": "${b} is dividing sin θ, so it multiplies up to the other side.",
+      "kind": "template",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:53:11"
+      ]
+    },
+    "questt3-sine-angles#9": {
+      "en": "Work out the value of <b>sin θ</b> (4 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:54:18"
+      ]
+    },
+    "questt3-sine-angles#10": {
+      "en": "sin θ = ${b} × sin ${A}° ÷ ${a}. This is not θ yet — it is sin θ.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:55:11"
+      ]
+    },
+    "questt3-sine-angles#11": {
+      "en": "Now find <b>θ</b> (1 decimal).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:56:18"
+      ]
+    },
+    "questt3-sine-angles#12": {
+      "en": "SHIFT sin that value on the calculator and you have θ.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:57:11"
+      ]
+    },
+    "questt3-sine-angles#13": {
+      "en": "θ is opposite b. Sines on top: sinθ/b = sinÂ/a, so sinθ = b·sinÂ/a.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:60:13"
+      ]
+    },
+    "questt3-sine-angles#14": {
+      "en": "θ = ${ang(B)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:61:20",
+        "questt3-sine-angles.js:65:14"
+      ]
+    },
+    "questt3-sine-angles#15": {
+      "en": "sin θ / ${b} = sin ${A}° / ${a}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:63:14"
+      ]
+    },
+    "questt3-sine-angles#16": {
+      "en": "sines on top",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:63:52",
+        "questt3-sine-angles.js:133:53"
+      ]
+    },
+    "questt3-sine-angles#17": {
+      "en": "sin θ = ${b} · sin ${A}° / ${a} = ${fix(sinVal, 4)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:64:14"
+      ]
+    },
+    "questt3-sine-angles#18": {
+      "en": "no triangle",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:84:23",
+        "questt3-sine-angles.js:87:14"
+      ]
+    },
+    "questt3-sine-angles#19": {
+      "en": "one triangle",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:84:41",
+        "questt3-sine-angles.js:87:29"
+      ]
+    },
+    "questt3-sine-angles#20": {
+      "en": "two triangles",
+      "kind": "string",
+      "slots": [
+        "mc.correct",
+        "mc.wrongs",
+        "placeholder",
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:84:60",
+        "questt3-sine-angles.js:87:45"
+      ]
+    },
+    "questt3-sine-angles#21": {
+      "en": "Â = ${A}°, the side opposite Â is a = ${a}, and another side b = ${b}. How many triangles fit this data?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:86:7"
+      ]
+    },
+    "questt3-sine-angles#22": {
+      "en": "Compare a with h = b·sinÂ. a < h → none; a = h → one (right-angled); h < a < b → two; a ≥ b → one.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:88:15"
+      ]
+    },
+    "questt3-sine-angles#23": {
+      "en": "h = b·sinÂ = ${fix(res.h, 2)}. Here ${res.count === 0 ? `a (${a}) < h` : res.count === 2 ? `h < a (${a}) < b (${b})` : `a (${a}) ≥ b (${b})`}, so ${word}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt3-sine-angles.js:89:22"
+      ],
+      "nested": [
+        "a (${a}) < h",
+        "h < a (${a}) < b (${b})",
+        "a (${a}) ≥ b (${b})"
+      ]
+    },
+    "questt3-sine-angles#24": {
+      "en": "Drop the height from the top of side b: h = b·sinÂ = ${b}·sin${A}° = ${fix(res.h, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:91:16"
+      ]
+    },
+    "questt3-sine-angles#25": {
+      "en": "the shortest a could possibly be",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:91:108"
+      ]
+    },
+    "questt3-sine-angles#26": {
+      "en": "Now place a = ${a} against h = ${fix(res.h, 2)} and b = ${b}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:92:16"
+      ]
+    },
+    "questt3-sine-angles#27": {
+      "en": "a = ${a} is shorter than h = ${fix(res.h, 2)}, so it never reaches the base",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:94:17"
+      ]
+    },
+    "questt3-sine-angles#28": {
+      "en": "h = ${fix(res.h, 2)} &lt; a = ${a} &lt; b = ${b}, so a swings down and cuts the base twice",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:96:19"
+      ]
+    },
+    "questt3-sine-angles#29": {
+      "en": "a = ${a} is at least as long as b = ${b}, so it can only reach past the foot on one side",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:97:19"
+      ]
+    },
+    "questt3-sine-angles#30": {
+      "en": "In △ABC, Â = ${A}°, a = ${a} (opposite Â) and b = ${b}. Two triangles are possible. Calculate the <b>obtuse</b> possibility of B̂ (1 decimal).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:113:15"
+      ]
+    },
+    "questt3-sine-angles#31": {
+      "en": "B̂ is opposite b = ${b}, and the known Â = ${A}° is opposite a = ${a}.",
+      "kind": "template",
+      "slots": [
+        "sineAngleSetupStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:117:11"
+      ]
+    },
+    "questt3-sine-angles#32": {
+      "en": "Get <b>sin B̂</b> on its own.",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:118:16"
+      ]
+    },
+    "questt3-sine-angles#33": {
+      "en": "sin B̂ = (${b} · sin ${A}°) / ${a}",
+      "kind": "template",
+      "slots": [
+        "mcStep.correct"
+      ],
+      "where": [
+        "questt3-sine-angles.js:119:11"
+      ]
+    },
+    "questt3-sine-angles#34": {
+      "en": "sin B̂ = (${a} · sin ${A}°) / ${b}",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:120:12"
+      ]
+    },
+    "questt3-sine-angles#35": {
+      "en": "sin B̂ = ${b} / (${a} · sin ${A}°)",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:121:12"
+      ]
+    },
+    "questt3-sine-angles#36": {
+      "en": "sin B̂ = (${b} · ${a}) / sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:122:12"
+      ]
+    },
+    "questt3-sine-angles#37": {
+      "en": "${b} is dividing sin B̂, so it multiplies up to the other side.",
+      "kind": "template",
+      "slots": [
+        "mcStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:123:11"
+      ]
+    },
+    "questt3-sine-angles#38": {
+      "en": "First the <b>acute</b> possibility of B̂ (1 decimal).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:124:18"
+      ]
+    },
+    "questt3-sine-angles#39": {
+      "en": "SHIFT sin always hands you the acute answer first.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:125:11"
+      ]
+    },
+    "questt3-sine-angles#40": {
+      "en": "Now the <b>obtuse</b> possibility (1 decimal).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:126:18"
+      ]
+    },
+    "questt3-sine-angles#41": {
+      "en": "The two possibilities are supplementary: 180° − the acute answer.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:127:11"
+      ]
+    },
+    "questt3-sine-angles#42": {
+      "en": "Sine rule first: sinB̂ = b·sinÂ/a gives the ACUTE B̂. The obtuse partner is 180° − (that angle).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:130:13"
+      ]
+    },
+    "questt3-sine-angles#43": {
+      "en": "obtuse B̂ = ${ang(obtuse)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt3-sine-angles.js:131:20"
+      ]
+    },
+    "questt3-sine-angles#44": {
+      "en": "sin B̂ / ${b} = sin ${A}° / ${a}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:133:14"
+      ]
+    },
+    "questt3-sine-angles#45": {
+      "en": "sin B̂ = ${b} · sin ${A}° / ${a} = ${fix(b * sinD(A) / a, 4)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:134:14"
+      ]
+    },
+    "questt3-sine-angles#46": {
+      "en": "acute B̂ = ${ang(res.acute)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:135:14"
+      ]
+    },
+    "questt3-sine-angles#47": {
+      "en": "obtuse B̂ = 180° − ${ang(res.acute)} = ${ang(obtuse)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:136:14"
+      ]
+    },
+    "questt3-sine-angles#48": {
+      "en": "supplementary pair",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:136:74",
+        "questt3-sine-angles.js:151:87"
+      ]
+    },
+    "questt3-sine-angles#49": {
+      "en": "In the ambiguous case the acute answer is B̂ = ${fix(acute, 1)}°. Give the <b>obtuse</b> possibility (1 decimal).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:147:15"
+      ]
+    },
+    "questt3-sine-angles#50": {
+      "en": "The two possible angles are supplementary — they add to 180°.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:149:13"
+      ]
+    },
+    "questt3-sine-angles#51": {
+      "en": "B̂ = 180° − ${fix(acute, 1)}° = ${fix(obtuse, 1)}°",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt3-sine-angles.js:150:20"
+      ]
+    },
+    "questt3-sine-angles#52": {
+      "en": "obtuse B̂ = 180° − ${fix(acute, 1)}° = ${fix(obtuse, 1)}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:151:23"
+      ]
+    },
+    "questt3-sine-angles#53": {
+      "en": "When you are solving for an <b>angle</b>, the sine rule is best written with…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:157:5"
+      ]
+    },
+    "questt3-sine-angles#54": {
+      "en": "the sines on top (sinÂ/a = sinB̂/b)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt3-sine-angles.js:158:5"
+      ]
+    },
+    "questt3-sine-angles#55": {
+      "en": "the sides on top (a/sinÂ = b/sinB̂)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:159:6"
+      ]
+    },
+    "questt3-sine-angles#56": {
+      "en": "the angle sum first",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:159:45"
+      ]
+    },
+    "questt3-sine-angles#57": {
+      "en": "the cosine rule",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:159:68"
+      ]
+    },
+    "questt3-sine-angles#58": {
+      "en": "Put the thing you want on top — here, the sine of the angle.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:160:13"
+      ]
+    },
+    "questt3-sine-angles#59": {
+      "en": "Finding an angle → sines in the numerators: sinÂ/a = sinB̂/b = sinĈ/c.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt3-sine-angles.js:161:20"
+      ]
+    },
+    "questt3-sine-angles#60": {
+      "en": "You are solving for an ANGLE, so the sine you want goes on top",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:163:14"
+      ]
+    },
+    "questt3-sine-angles#61": {
+      "en": "sinÂ/a = sinB̂/b = sinĈ/c",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:164:14"
+      ]
+    },
+    "questt3-sine-angles#62": {
+      "en": "still the same rule, just turned upside down",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:164:46"
+      ]
+    },
+    "questt3-sine-angles#63": {
+      "en": "One multiply gives sinÂ, then shift-sin gives Â",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:165:14"
+      ]
+    },
+    "questt3-sine-angles#64": {
+      "en": "with the sine underneath you would flip first, which is where marks go",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:165:68"
+      ]
+    },
+    "questt3-sine-angles#65": {
+      "en": "The ambiguous case (two possible triangles) can only happen when…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt3-sine-angles.js:170:5"
+      ]
+    },
+    "questt3-sine-angles#66": {
+      "en": "you use the sine rule with two sides and a non-included angle",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt3-sine-angles.js:171:5"
+      ]
+    },
+    "questt3-sine-angles#67": {
+      "en": "you use the cosine rule",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:172:6"
+      ]
+    },
+    "questt3-sine-angles#68": {
+      "en": "you know all three angles",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:172:33"
+      ]
+    },
+    "questt3-sine-angles#69": {
+      "en": "you use the area rule",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt3-sine-angles.js:172:62"
+      ]
+    },
+    "questt3-sine-angles#70": {
+      "en": "Only the sine rule, and only with SSA (two sides + a non-included angle).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt3-sine-angles.js:173:13"
+      ]
+    },
+    "questt3-sine-angles#71": {
+      "en": "Ambiguous case = sine rule + SSA. The cosine rule always gives a single answer.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt3-sine-angles.js:174:20"
+      ]
+    },
+    "questt3-sine-angles#72": {
+      "en": "sinθ has the same value at θ and at 180° − θ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:176:14"
+      ]
+    },
+    "questt3-sine-angles#73": {
+      "en": "that is where the second triangle comes from",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:176:65"
+      ]
+    },
+    "questt3-sine-angles#74": {
+      "en": "So a sine-rule answer always has an obtuse partner you have to test",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:177:14"
+      ]
+    },
+    "questt3-sine-angles#75": {
+      "en": "cos does NOT do this — a cosine-rule angle comes out negative when it is obtuse",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt3-sine-angles.js:178:14"
+      ]
+    },
+    "questt3-sine-angles#76": {
+      "en": "so the cosine rule gives one answer only",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt3-sine-angles.js:178:100"
+      ]
+    },
+    "questt4-cosine-sides#1": {
+      "en": "Use the cosine rule to find <b>x</b> (correct to 2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:39:15"
+      ]
+    },
+    "questt4-cosine-sides#2": {
+      "en": "The two sides you know fill the squares AND the 2·…·… product; the included angle rides with cos.",
+      "kind": "string",
+      "slots": [
+        "cosineSideSetupStep.hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:45:11"
+      ]
+    },
+    "questt4-cosine-sides#3": {
+      "en": "Work out <b>x²</b> first (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:46:18"
+      ]
+    },
+    "questt4-cosine-sides#4": {
+      "en": "x² = ${b}² + ${c}² − ${2 * b * c}·cos ${A}° — type the whole right-hand side in one go.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:47:11"
+      ]
+    },
+    "questt4-cosine-sides#5": {
+      "en": "Now <b>x</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:49:18"
+      ]
+    },
+    "questt4-cosine-sides#6": {
+      "en": "x = √(that number). x² is not the answer yet.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:50:11"
+      ]
+    },
+    "questt4-cosine-sides#7": {
+      "en": "x is opposite the known angle. x² = b² + c² − 2bc·cos(angle).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:53:13"
+      ]
+    },
+    "questt4-cosine-sides#8": {
+      "en": "x = ${fix(x, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:54:20",
+        "questt4-cosine-sides.js:58:14"
+      ]
+    },
+    "questt4-cosine-sides#9": {
+      "en": "x² = ${b}² + ${c}² − 2(${b})(${c})·cos ${A}°",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:56:14",
+        "questt4-cosine-sides.js:110:7"
+      ]
+    },
+    "questt4-cosine-sides#10": {
+      "en": "cosine rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:56:65"
+      ]
+    },
+    "questt4-cosine-sides#11": {
+      "en": "x² = ${fix(b * b + c * c, 0)} − ${fix(2 * b * c, 0)}·cos ${A}° = ${fix(x * x, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:57:14"
+      ]
+    },
+    "questt4-cosine-sides#12": {
+      "en": "take the square root",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:58:37"
+      ]
+    },
+    "questt4-cosine-sides#13": {
+      "en": "In △ABC, b = ${b}, c = ${c} and Â = ${A}°. Calculate <b>a</b> (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:71:15"
+      ]
+    },
+    "questt4-cosine-sides#14": {
+      "en": "Â sits between b and c, so a is opposite it — b and c fill the squares and the product.",
+      "kind": "template",
+      "slots": [
+        "cosineSideSetupStep.hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:74:11"
+      ]
+    },
+    "questt4-cosine-sides#15": {
+      "en": "Work out <b>a²</b> first (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:75:18"
+      ]
+    },
+    "questt4-cosine-sides#16": {
+      "en": "a² = ${b}² + ${c}² − ${2 * b * c}·cos ${A}° — the whole right-hand side in one go.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:76:11"
+      ]
+    },
+    "questt4-cosine-sides#17": {
+      "en": "Now <b>a</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:78:18"
+      ]
+    },
+    "questt4-cosine-sides#18": {
+      "en": "a = √(that number).",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:79:11"
+      ]
+    },
+    "questt4-cosine-sides#19": {
+      "en": "Â sits between b and c, so a is opposite it: a² = b² + c² − 2bc·cosÂ.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:82:13"
+      ]
+    },
+    "questt4-cosine-sides#20": {
+      "en": "a = ${fix(a, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:83:20",
+        "questt4-cosine-sides.js:87:14"
+      ]
+    },
+    "questt4-cosine-sides#21": {
+      "en": "a² = ${b}² + ${c}² − 2(${b})(${c})·cos ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:85:14"
+      ]
+    },
+    "questt4-cosine-sides#22": {
+      "en": "a² = ${fix(b * b + c * c - 2 * b * c * cosD(A), 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:86:14"
+      ]
+    },
+    "questt4-cosine-sides#23": {
+      "en": "To use the cosine rule to find a side, the known angle must be…",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:94:5"
+      ]
+    },
+    "questt4-cosine-sides#24": {
+      "en": "between the two known sides (the included angle)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:95:5"
+      ]
+    },
+    "questt4-cosine-sides#25": {
+      "en": "opposite a known side",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:96:6"
+      ]
+    },
+    "questt4-cosine-sides#26": {
+      "en": "the biggest angle",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:96:31"
+      ]
+    },
+    "questt4-cosine-sides#27": {
+      "en": "any angle you like",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:96:52"
+      ]
+    },
+    "questt4-cosine-sides#28": {
+      "en": "The − 2bc·cosA term only works when A is the angle between b and c.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:97:13"
+      ]
+    },
+    "questt4-cosine-sides#29": {
+      "en": "Cosine rule needs the INCLUDED angle — the one between the two known sides.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:98:20"
+      ]
+    },
+    "questt4-cosine-sides#30": {
+      "en": "Look at what the − 2bc·cosA term is made of: the two sides b and c, and the angle A",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:100:14"
+      ]
+    },
+    "questt4-cosine-sides#31": {
+      "en": "In the rule, b and c are the two arms that MEET at A",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:101:14"
+      ]
+    },
+    "questt4-cosine-sides#32": {
+      "en": "that is the only way the term is built",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:101:73"
+      ]
+    },
+    "questt4-cosine-sides#33": {
+      "en": "So the known angle has to sit between the two known sides",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:102:14"
+      ]
+    },
+    "questt4-cosine-sides#34": {
+      "en": "an angle somewhere else does not fit the formula",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:102:78"
+      ]
+    },
+    "questt4-cosine-sides#35": {
+      "en": "x is opposite Â = ${A}°, with the two sides ${b} and ${c} meeting at Â. Which formula is correct?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:109:7"
+      ]
+    },
+    "questt4-cosine-sides#36": {
+      "en": "x² = ${b}² + ${c}² + 2(${b})(${c})·cos ${A}°",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:111:8"
+      ]
+    },
+    "questt4-cosine-sides#37": {
+      "en": "x² = ${b}² − ${c}² − 2(${b})(${c})·cos ${A}°",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:112:8"
+      ]
+    },
+    "questt4-cosine-sides#38": {
+      "en": "x = ${b} + ${c} − 2(${b})(${c})·cos ${A}°",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:113:8"
+      ]
+    },
+    "questt4-cosine-sides#39": {
+      "en": "It is a MINUS in the middle, and you square first (x², not x).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:114:15"
+      ]
+    },
+    "questt4-cosine-sides#40": {
+      "en": "x² = ${b}² + ${c}² − 2(${b})(${c})·cos${A}° — sum of squares minus the 2bc·cos term.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:115:22"
+      ]
+    },
+    "questt4-cosine-sides#41": {
+      "en": "x is opposite Â, and the two sides ${b} and ${c} meet at Â",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:117:16"
+      ]
+    },
+    "questt4-cosine-sides#42": {
+      "en": "so x plays the part of a, and the sides are b and c",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:117:81"
+      ]
+    },
+    "questt4-cosine-sides#43": {
+      "en": "a² = b² + c² − 2bc·cosÂ",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:118:16"
+      ]
+    },
+    "questt4-cosine-sides#44": {
+      "en": "write the rule before any numbers go in",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:118:46"
+      ]
+    },
+    "questt4-cosine-sides#45": {
+      "en": "x² = ${b}² + ${c}² − 2(${b})(${c})·cos${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:119:16"
+      ]
+    },
+    "questt4-cosine-sides#46": {
+      "en": "plus between the squares, MINUS in front of the 2bc term",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt4-cosine-sides.js:119:66"
+      ]
+    },
+    "questt5-cosine-angles#1": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:34:49",
+        "questt5-cosine-angles.js:35:26",
+        "questt5-cosine-angles.js:45:53",
+        "questt5-cosine-angles.js:45:82",
+        "questt5-cosine-angles.js:73:49",
+        "questt5-cosine-angles.js:81:53",
+        "questt5-cosine-angles.js:81:82"
+      ]
+    },
+    "questt5-cosine-angles#2": {
+      "en": "B",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:34:54",
+        "questt5-cosine-angles.js:35:31",
+        "questt5-cosine-angles.js:45:24",
+        "questt5-cosine-angles.js:45:87",
+        "questt5-cosine-angles.js:73:54",
+        "questt5-cosine-angles.js:81:24",
+        "questt5-cosine-angles.js:81:87"
+      ]
+    },
+    "questt5-cosine-angles#3": {
+      "en": "C",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:34:59",
+        "questt5-cosine-angles.js:35:36",
+        "questt5-cosine-angles.js:45:29",
+        "questt5-cosine-angles.js:45:58",
+        "questt5-cosine-angles.js:73:59",
+        "questt5-cosine-angles.js:80:26",
+        "questt5-cosine-angles.js:81:29",
+        "questt5-cosine-angles.js:81:58"
+      ]
+    },
+    "questt5-cosine-angles#4": {
+      "en": "Use the cosine rule to find <b>θ</b> (the angle at ${t.L(target)}), correct to 1 decimal.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:42:15"
+      ]
+    },
+    "questt5-cosine-angles#5": {
+      "en": "The side OPPOSITE θ is the one subtracted on top; the two sides beside θ do everything else.",
+      "kind": "string",
+      "slots": [
+        "cosineAngleSetupStep.hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:48:11"
+      ]
+    },
+    "questt5-cosine-angles#6": {
+      "en": "Work out the value of <b>cos θ</b> (4 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:49:18",
+        "questt5-cosine-angles.js:85:18"
+      ]
+    },
+    "questt5-cosine-angles#7": {
+      "en": "cos θ = (${others[0]}² + ${others[1]}² − ${opp}²) ÷ (2 × ${others[0]} × ${others[1]}). A minus answer is allowed here.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:50:11"
+      ]
+    },
+    "questt5-cosine-angles#8": {
+      "en": "Now find <b>θ</b> (1 decimal).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:52:18",
+        "questt5-cosine-angles.js:88:18"
+      ]
+    },
+    "questt5-cosine-angles#9": {
+      "en": "SHIFT cos that value and you have θ. If cos θ came out negative, θ is obtuse all by itself.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:53:11"
+      ]
+    },
+    "questt5-cosine-angles#10": {
+      "en": "The side opposite θ is the one that gets subtracted: cosθ = (sum of the other two squared − opposite²)/(2·those two).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:57:13"
+      ]
+    },
+    "questt5-cosine-angles#11": {
+      "en": "θ = ${ang(val)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:58:20",
+        "questt5-cosine-angles.js:62:14",
+        "questt5-cosine-angles.js:94:20",
+        "questt5-cosine-angles.js:98:14"
+      ]
+    },
+    "questt5-cosine-angles#12": {
+      "en": "cos θ = (${others[0]}² + ${others[1]}² − ${opp}²) / (2·${others[0]}·${others[1]})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:60:14"
+      ]
+    },
+    "questt5-cosine-angles#13": {
+      "en": "rearranged cosine rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:60:102"
+      ]
+    },
+    "questt5-cosine-angles#14": {
+      "en": "cos θ = ${fix(cosVal, 4)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:61:14",
+        "questt5-cosine-angles.js:97:14"
+      ]
+    },
+    "questt5-cosine-angles#15": {
+      "en": "obtuse (cos was negative)",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:62:47"
+      ]
+    },
+    "questt5-cosine-angles#16": {
+      "en": "acute",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:62:77"
+      ]
+    },
+    "questt5-cosine-angles#17": {
+      "en": "Find the <b>obtuse</b> angle θ (at ${t.L(\"C\")}), correct to 1 decimal. The diagram is to scale.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:78:15"
+      ],
+      "nested": [
+        "C"
+      ]
+    },
+    "questt5-cosine-angles#18": {
+      "en": "θ is opposite the LONGEST side — that side is the one subtracted on top.",
+      "kind": "string",
+      "slots": [
+        "cosineAngleSetupStep.hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:84:11"
+      ]
+    },
+    "questt5-cosine-angles#19": {
+      "en": "cos θ = (${a}² + ${b}² − ${c}²) ÷ (2 × ${a} × ${b}). It comes out negative — that is the point.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:86:11"
+      ]
+    },
+    "questt5-cosine-angles#20": {
+      "en": "SHIFT cos that negative value — the calculator hands you the obtuse angle directly.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:89:11"
+      ]
+    },
+    "questt5-cosine-angles#21": {
+      "en": "θ is opposite the longest side. cosθ comes out negative — your calculator gives the obtuse angle directly.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:93:13"
+      ]
+    },
+    "questt5-cosine-angles#22": {
+      "en": "cos θ = (${a}² + ${b}² − ${c}²) / (2·${a}·${b})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:96:14"
+      ]
+    },
+    "questt5-cosine-angles#23": {
+      "en": "negative → obtuse",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:97:46"
+      ]
+    },
+    "questt5-cosine-angles#24": {
+      "en": "Rearranged to find an angle, the cosine rule says cosÂ = …",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:105:5"
+      ]
+    },
+    "questt5-cosine-angles#25": {
+      "en": "(b² + c² − a²) / (2bc)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:106:5"
+      ]
+    },
+    "questt5-cosine-angles#26": {
+      "en": "(a² + c² − b²) / (2ac)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:107:6"
+      ]
+    },
+    "questt5-cosine-angles#27": {
+      "en": "(b² + c² + a²) / (2bc)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:107:32"
+      ]
+    },
+    "questt5-cosine-angles#28": {
+      "en": "(a² − b² − c²) / (2bc)",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:107:58"
+      ]
+    },
+    "questt5-cosine-angles#29": {
+      "en": "The side opposite the angle you want (a, opposite Â) is the one subtracted on top.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:108:13"
+      ]
+    },
+    "questt5-cosine-angles#30": {
+      "en": "cosÂ = (b² + c² − a²)/(2bc) — opposite side a² is subtracted; 2bc uses the two sides next to Â.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:109:20"
+      ]
+    },
+    "questt5-cosine-angles#31": {
+      "en": "Start from the side version: a² = b² + c² − 2bc·cosÂ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:111:14"
+      ]
+    },
+    "questt5-cosine-angles#32": {
+      "en": "Move the cos term across and a² back: 2bc·cosÂ = b² + c² − a²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:112:14"
+      ]
+    },
+    "questt5-cosine-angles#33": {
+      "en": "the only negative term left is a²",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:112:82"
+      ]
+    },
+    "questt5-cosine-angles#34": {
+      "en": "Divide both sides by 2bc: cosÂ = (b² + c² − a²)/(2bc)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:113:14"
+      ]
+    },
+    "questt5-cosine-angles#35": {
+      "en": "In cosÂ = (b² + c² − a²)/(2bc), which side is a (the one being subtracted)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:118:5"
+      ]
+    },
+    "questt5-cosine-angles#36": {
+      "en": "the side opposite Â",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:119:5"
+      ]
+    },
+    "questt5-cosine-angles#37": {
+      "en": "the longest side",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:120:6"
+      ]
+    },
+    "questt5-cosine-angles#38": {
+      "en": "either side next to Â",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:120:26"
+      ]
+    },
+    "questt5-cosine-angles#39": {
+      "en": "the shortest side",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:120:51"
+      ]
+    },
+    "questt5-cosine-angles#40": {
+      "en": "a is opposite Â — its “friend”.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:121:13"
+      ]
+    },
+    "questt5-cosine-angles#41": {
+      "en": "a is the side opposite the angle you are finding; b and c are the two sides next to it.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:122:20"
+      ]
+    },
+    "questt5-cosine-angles#42": {
+      "en": "The bottom is 2bc, and b and c are the two sides that MEET at Â",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:124:14"
+      ]
+    },
+    "questt5-cosine-angles#43": {
+      "en": "the arms of the angle",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:124:84"
+      ]
+    },
+    "questt5-cosine-angles#44": {
+      "en": "That leaves only one side unaccounted for — the one across from Â",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:125:14"
+      ]
+    },
+    "questt5-cosine-angles#45": {
+      "en": "So a, the side opposite Â, is the one being subtracted on top",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:126:14"
+      ]
+    },
+    "questt5-cosine-angles#46": {
+      "en": "same “friends” pairing as the sine rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt5-cosine-angles.js:126:82"
+      ]
+    },
+    "questt6-area#1": {
+      "en": "Calculate the <b>area</b> of the triangle (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt6-area.js:33:15"
+      ]
+    },
+    "questt6-area#2": {
+      "en": "Two sides and the SINE of the angle between them.",
+      "kind": "string",
+      "slots": [
+        "areaSetupStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:39:11"
+      ]
+    },
+    "questt6-area#3": {
+      "en": "Work out the <b>area</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:40:18",
+        "questt6-area.js:65:18"
+      ]
+    },
+    "questt6-area#4": {
+      "en": "Area = ½ × ${b} × ${c} × sin ${A}°.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:41:11"
+      ]
+    },
+    "questt6-area#5": {
+      "en": "Area = ½ × (side) × (side) × sin(angle between them).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt6-area.js:44:13"
+      ]
+    },
+    "questt6-area#6": {
+      "en": "Area = ${fix(area, 2)} square units",
+      "kind": "template",
+      "slots": [
+        "answerLabel",
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:45:20",
+        "questt6-area.js:48:14",
+        "questt6-area.js:70:20",
+        "questt6-area.js:104:20",
+        "questt6-area.js:109:14"
+      ]
+    },
+    "questt6-area#7": {
+      "en": "Area = ½ · ${b} · ${c} · sin ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:47:14"
+      ]
+    },
+    "questt6-area#8": {
+      "en": "two sides + included angle",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt6-area.js:47:55"
+      ]
+    },
+    "questt6-area#9": {
+      "en": "In △MNP, MN = ${c}, MP = ${b} and M̂ = ${A}°. Calculate the area of △MNP (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt6-area.js:61:15"
+      ]
+    },
+    "questt6-area#10": {
+      "en": "M̂ sits between MN and MP — those two sides, and the sine of M̂.",
+      "kind": "string",
+      "slots": [
+        "areaSetupStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:64:11"
+      ]
+    },
+    "questt6-area#11": {
+      "en": "Area = ½ × ${c} × ${b} × sin ${A}°.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:66:11"
+      ]
+    },
+    "questt6-area#12": {
+      "en": "M̂ is between the two given sides, so Area = ½·MN·MP·sinM̂.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt6-area.js:69:13"
+      ]
+    },
+    "questt6-area#13": {
+      "en": "Area = ½ · ${c} · ${b} · sin ${A}° = ${fix(area, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:71:23"
+      ]
+    },
+    "questt6-area#14": {
+      "en": "pentagon",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt6-area.js:80:23"
+      ]
+    },
+    "questt6-area#15": {
+      "en": "hexagon",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt6-area.js:80:38"
+      ]
+    },
+    "questt6-area#16": {
+      "en": "octagon",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt6-area.js:80:52"
+      ]
+    },
+    "questt6-area#17": {
+      "en": "Calculate the area of this regular <b>${name}</b> with side length ${s} (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt6-area.js:86:15"
+      ]
+    },
+    "questt6-area#18": {
+      "en": "Split it into ${n} equal triangles from the centre. What is each triangle's <b>centre angle</b> (whole number)?",
+      "kind": "template",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:89:18"
+      ]
+    },
+    "questt6-area#19": {
+      "en": "The ${n} triangles share the full 360° at the centre: 360° ÷ ${n}.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:90:17"
+      ]
+    },
+    "questt6-area#20": {
+      "en": "Each triangle is isosceles, with two equal legs <b>R</b> out to the corners. Find R (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:92:18"
+      ]
+    },
+    "questt6-area#21": {
+      "en": "Half a side over the sine of half the centre angle: R = (${s} ÷ 2) ÷ sin ${fix(180 / n, 1)}°.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:93:14"
+      ]
+    },
+    "questt6-area#22": {
+      "en": "The area of <b>one</b> triangle (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:95:18"
+      ]
+    },
+    "questt6-area#23": {
+      "en": "½ · R² · sin ${fix(apex, 0)}° — keep R unrounded on the calculator.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:96:17"
+      ]
+    },
+    "questt6-area#24": {
+      "en": "All ${n} together — the <b>total area</b> (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:98:18"
+      ]
+    },
+    "questt6-area#25": {
+      "en": "${n} × one triangle. (Check: n·s² ÷ (4·tan(180°/n)) gives it in one step.)",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:99:17"
+      ]
+    },
+    "questt6-area#26": {
+      "en": "Split it into ${n} equal triangles from the centre. Each has a centre angle of 360°/${n} = ${fix(360 / n, 0)}°.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt6-area.js:103:13"
+      ]
+    },
+    "questt6-area#27": {
+      "en": "${n} isosceles triangles from the centre, each with apex angle 360°/${n} = ${fix(360 / n, 0)}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:106:14"
+      ]
+    },
+    "questt6-area#28": {
+      "en": "equal legs R = (s/2) / sin(180°/${n}), then each triangle = ½·R²·sin ${fix(360 / n, 0)}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:107:14"
+      ]
+    },
+    "questt6-area#29": {
+      "en": "keep R unrounded",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt6-area.js:107:109"
+      ]
+    },
+    "questt6-area#30": {
+      "en": "in one step: Area = n·s² / (4·tan(180°/n)) = ${n}·${s}² / (4·tan ${fix(180 / n, 1)}°)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:108:14"
+      ]
+    },
+    "questt6-area#31": {
+      "en": "Find the total <b>area</b> of the figure (2 decimals): a rectangle below an isosceles-triangle roof.",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt6-area.js:122:15"
+      ]
+    },
+    "questt6-area#32": {
+      "en": "First the roof's <b>base</b> — the cosine rule, with r twice (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:125:18"
+      ]
+    },
+    "questt6-area#33": {
+      "en": "base² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°, then the square root.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:126:17"
+      ]
+    },
+    "questt6-area#34": {
+      "en": "The <b>rectangle</b>: base × ${h} (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:128:18"
+      ]
+    },
+    "questt6-area#35": {
+      "en": "Keep the unrounded base if it is still on the calculator — the 2-decimal one is accepted too.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:129:25"
+      ]
+    },
+    "questt6-area#36": {
+      "en": "The <b>roof</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:131:18"
+      ]
+    },
+    "questt6-area#37": {
+      "en": "½ · ${r}² · sin ${theta}°.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:132:25"
+      ]
+    },
+    "questt6-area#38": {
+      "en": "Add them — the <b>total area</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt6-area.js:133:18"
+      ]
+    },
+    "questt6-area#39": {
+      "en": "Rectangle + roof.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt6-area.js:134:18"
+      ]
+    },
+    "questt6-area#40": {
+      "en": "Roof area = ½·r²·sinθ. For the rectangle you first need its width — the roof's base, by the cosine rule.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt6-area.js:137:13"
+      ]
+    },
+    "questt6-area#41": {
+      "en": "Area = ${fix(total, 2)} square units",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt6-area.js:138:20"
+      ]
+    },
+    "questt6-area#42": {
+      "en": "base² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°  →  base = ${fix(base, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:140:14"
+      ]
+    },
+    "questt6-area#43": {
+      "en": "cosine rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt6-area.js:140:99"
+      ]
+    },
+    "questt6-area#44": {
+      "en": "rectangle = base · ${h} = ${fix(fig.areaWall, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:141:14"
+      ]
+    },
+    "questt6-area#45": {
+      "en": "keep the unrounded base",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt6-area.js:141:70"
+      ]
+    },
+    "questt6-area#46": {
+      "en": "roof = ½·${r}²·sin ${theta}° = ${fix(fig.areaRoof, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:142:14"
+      ]
+    },
+    "questt6-area#47": {
+      "en": "total = ${fix(total, 2)} square units",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:143:14"
+      ]
+    },
+    "questt6-area#48": {
+      "en": "The area rule for △ABC says Area = …",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt6-area.js:150:5"
+      ]
+    },
+    "questt6-area#49": {
+      "en": "½·b·c·sinÂ",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "questt6-area.js:151:5"
+      ]
+    },
+    "questt6-area#50": {
+      "en": "½·b·c·cosÂ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt6-area.js:152:6"
+      ]
+    },
+    "questt6-area#51": {
+      "en": "b·c·sinÂ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt6-area.js:152:20"
+      ]
+    },
+    "questt6-area#52": {
+      "en": "½·b·c·tanÂ",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "questt6-area.js:152:32"
+      ]
+    },
+    "questt6-area#53": {
+      "en": "Half, two sides, and the SINE of the angle between them.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt6-area.js:153:13"
+      ]
+    },
+    "questt6-area#54": {
+      "en": "Area = ½·b·c·sinÂ — two sides and the sine of their included angle.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt6-area.js:154:20"
+      ]
+    },
+    "questt6-area#55": {
+      "en": "Area of any triangle = ½ × base × height, so take b as the base",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:156:14"
+      ]
+    },
+    "questt6-area#56": {
+      "en": "Drop the height from the top corner: h = c·sinÂ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:157:14"
+      ]
+    },
+    "questt6-area#57": {
+      "en": "sinÂ = O/H in the little right triangle",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt6-area.js:157:68"
+      ]
+    },
+    "questt6-area#58": {
+      "en": "Area = ½·b·h = ½·b·c·sinÂ",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:158:14"
+      ]
+    },
+    "questt6-area#59": {
+      "en": "that is where the sine comes from — never cos, never tan",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt6-area.js:158:46"
+      ]
+    },
+    "questt6-area#60": {
+      "en": "You know two sides of a triangle but the given angle is <b>not</b> between them. Can you use the area rule directly?",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt6-area.js:164:13"
+      ]
+    },
+    "questt6-area#61": {
+      "en": "The area rule needs the angle BETWEEN the two sides.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt6-area.js:166:11"
+      ]
+    },
+    "questt6-area#62": {
+      "en": "No — the area rule needs the included angle. Find it first (e.g. via the sine/cosine rule).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt6-area.js:167:18"
+      ]
+    },
+    "questt6-area#63": {
+      "en": "Area rule needs the angle between the two sides; without it, solve for that angle first.",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt6-area.js:168:21"
+      ]
+    },
+    "questt7-mixed#1": {
+      "en": "First: which rule fits?",
+      "kind": "string",
+      "slots": [
+        "mcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:31:10"
+      ]
+    },
+    "questt7-mixed#2": {
+      "en": "Sine rule",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "mcStep.wrongs",
+        "whichRuleStep.correct"
+      ],
+      "where": [
+        "questt7-mixed.js:32:6",
+        "questt7-mixed.js:58:25",
+        "questt7-mixed.js:236:74",
+        "questt7-mixed.js:257:8"
+      ]
+    },
+    "questt7-mixed#3": {
+      "en": "Cosine rule",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "mcStep.wrongs",
+        "whichRuleStep.correct"
+      ],
+      "where": [
+        "questt7-mixed.js:32:19",
+        "questt7-mixed.js:84:25",
+        "questt7-mixed.js:109:23",
+        "questt7-mixed.js:211:23",
+        "questt7-mixed.js:230:71",
+        "questt7-mixed.js:248:89",
+        "questt7-mixed.js:257:21"
+      ]
+    },
+    "questt7-mixed#4": {
+      "en": "Area rule",
+      "kind": "string",
+      "slots": [
+        "answerLabel",
+        "mc.correct",
+        "mc.wrongs",
+        "mcStep.wrongs"
+      ],
+      "where": [
+        "questt7-mixed.js:32:34",
+        "questt7-mixed.js:242:83",
+        "questt7-mixed.js:257:36"
+      ]
+    },
+    "questt7-mixed#5": {
+      "en": "A",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt7-mixed.js:49:63",
+        "questt7-mixed.js:55:28",
+        "questt7-mixed.js:56:55",
+        "questt7-mixed.js:75:63",
+        "questt7-mixed.js:81:28",
+        "questt7-mixed.js:82:26",
+        "questt7-mixed.js:82:55",
+        "questt7-mixed.js:100:49",
+        "questt7-mixed.js:106:26",
+        "questt7-mixed.js:107:53",
+        "questt7-mixed.js:107:82",
+        "questt7-mixed.js:126:61",
+        "questt7-mixed.js:130:36",
+        "questt7-mixed.js:133:24",
+        "questt7-mixed.js:133:77",
+        "questt7-mixed.js:134:22",
+        "questt7-mixed.js:134:51",
+        "questt7-mixed.js:137:56",
+        "questt7-mixed.js:169:49",
+        "questt7-mixed.js:176:53",
+        "questt7-mixed.js:176:82"
+      ]
+    },
+    "questt7-mixed#6": {
+      "en": "B",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt7-mixed.js:49:68",
+        "questt7-mixed.js:55:51",
+        "questt7-mixed.js:56:26",
+        "questt7-mixed.js:75:68",
+        "questt7-mixed.js:82:60",
+        "questt7-mixed.js:82:84",
+        "questt7-mixed.js:100:54",
+        "questt7-mixed.js:107:24",
+        "questt7-mixed.js:107:87",
+        "questt7-mixed.js:126:66",
+        "questt7-mixed.js:130:53",
+        "questt7-mixed.js:133:87",
+        "questt7-mixed.js:134:56",
+        "questt7-mixed.js:169:54",
+        "questt7-mixed.js:176:24",
+        "questt7-mixed.js:176:87"
+      ]
+    },
+    "questt7-mixed#7": {
+      "en": "C",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "questt7-mixed.js:49:73",
+        "questt7-mixed.js:56:31",
+        "questt7-mixed.js:56:60",
+        "questt7-mixed.js:75:73",
+        "questt7-mixed.js:82:31",
+        "questt7-mixed.js:82:89",
+        "questt7-mixed.js:100:59",
+        "questt7-mixed.js:107:29",
+        "questt7-mixed.js:107:58",
+        "questt7-mixed.js:126:71",
+        "questt7-mixed.js:130:70",
+        "questt7-mixed.js:134:27",
+        "questt7-mixed.js:169:59",
+        "questt7-mixed.js:176:29",
+        "questt7-mixed.js:176:58"
+      ]
+    },
+    "questt7-mixed#8": {
+      "en": "Find <b>x</b> (2 decimals). First decide which rule fits.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:53:17",
+        "questt7-mixed.js:79:17"
+      ]
+    },
+    "questt7-mixed#9": {
+      "en": "A side paired with the angle opposite it → sine rule.",
+      "kind": "string",
+      "slots": [
+        "whichRuleStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:58:38"
+      ]
+    },
+    "questt7-mixed#10": {
+      "en": "x is opposite B̂ = ${B}°, and ${a} is opposite Â = ${A}°.",
+      "kind": "template",
+      "slots": [
+        "sineSetupStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:61:13"
+      ]
+    },
+    "questt7-mixed#11": {
+      "en": "Work out <b>x</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:62:20",
+        "questt7-mixed.js:87:20"
+      ]
+    },
+    "questt7-mixed#12": {
+      "en": "x = ${a} × sin ${B}° ÷ sin ${A}°. Calculator in DEG.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:63:13"
+      ]
+    },
+    "questt7-mixed#13": {
+      "en": "A side paired with its opposite angle → sine rule.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt7-mixed.js:66:15"
+      ]
+    },
+    "questt7-mixed#14": {
+      "en": "x = ${fix(x, 2)} (sine rule)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt7-mixed.js:67:22"
+      ]
+    },
+    "questt7-mixed#15": {
+      "en": "two angles + a side → sine rule",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:68:25"
+      ]
+    },
+    "questt7-mixed#16": {
+      "en": "x = ${a}·sin ${B}°/sin ${A}° = ${fix(x, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:68:67"
+      ]
+    },
+    "questt7-mixed#17": {
+      "en": "Two sides and the angle BETWEEN them → cosine rule.",
+      "kind": "string",
+      "slots": [
+        "whichRuleStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:84:40"
+      ]
+    },
+    "questt7-mixed#18": {
+      "en": "The known sides fill the squares and the product; the included angle rides with cos.",
+      "kind": "string",
+      "slots": [
+        "cosineSideSetupStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:86:13"
+      ]
+    },
+    "questt7-mixed#19": {
+      "en": "x² first, then the square root.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:88:13"
+      ]
+    },
+    "questt7-mixed#20": {
+      "en": "Two sides + the angle between them → cosine rule.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt7-mixed.js:91:15"
+      ]
+    },
+    "questt7-mixed#21": {
+      "en": "x = ${fix(x, 2)} (cosine rule)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt7-mixed.js:92:22"
+      ]
+    },
+    "questt7-mixed#22": {
+      "en": "two sides + included angle → cosine rule",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:93:25"
+      ]
+    },
+    "questt7-mixed#23": {
+      "en": "x² = ${b}²+${c}²−2(${b})(${c})cos ${A}° → x = ${fix(x, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:93:76"
+      ]
+    },
+    "questt7-mixed#24": {
+      "en": "Find <b>θ</b> (the angle at A), 1 decimal. First decide which rule fits.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:104:15"
+      ]
+    },
+    "questt7-mixed#25": {
+      "en": "All three sides, hunting an angle → the rearranged cosine rule.",
+      "kind": "string",
+      "slots": [
+        "whichRuleStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:109:38"
+      ]
+    },
+    "questt7-mixed#26": {
+      "en": "θ is at A, so its OPPOSITE side is the one subtracted on top.",
+      "kind": "string",
+      "slots": [
+        "cosineAngleSetupStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:111:11"
+      ]
+    },
+    "questt7-mixed#27": {
+      "en": "Work out <b>θ</b> (1 decimal).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:112:18"
+      ]
+    },
+    "questt7-mixed#28": {
+      "en": "cos θ first, then SHIFT cos it.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:113:11"
+      ]
+    },
+    "questt7-mixed#29": {
+      "en": "All three sides, finding an angle → cosine rule (rearranged).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt7-mixed.js:116:13"
+      ]
+    },
+    "questt7-mixed#30": {
+      "en": "θ = ${ang(val)} (cosine rule)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt7-mixed.js:117:20"
+      ]
+    },
+    "questt7-mixed#31": {
+      "en": "three sides → cosine rule for the angle",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:118:23"
+      ]
+    },
+    "questt7-mixed#32": {
+      "en": "cosθ = (${b}²+${c}²−${a}²)/(2·${b}·${c}) → θ = ${ang(val)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:118:73"
+      ]
+    },
+    "questt7-mixed#33": {
+      "en": "Calculate the <b>shortest distance</b> from ${t.L(\"A\")} to ${t.L(\"B\")}${t.L(\"C\")} (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:141:15"
+      ],
+      "nested": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "questt7-mixed#34": {
+      "en": "Step 1 — the <b>area</b> of the triangle (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:144:18"
+      ]
+    },
+    "questt7-mixed#35": {
+      "en": "Area = ½ · ${b} · ${c} · sin ${A}°.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:145:11"
+      ]
+    },
+    "questt7-mixed#36": {
+      "en": "Step 2 — the base ${t.L(\"B\")}${t.L(\"C\")}, by the cosine rule (2 decimals).",
+      "kind": "template",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:146:18"
+      ],
+      "nested": [
+        "B",
+        "C"
+      ]
+    },
+    "questt7-mixed#37": {
+      "en": "${t.L(\"B\")}${t.L(\"C\")}² = ${b}² + ${c}² − 2(${b})(${c})·cos ${A}°, then the square root.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:147:11"
+      ],
+      "nested": [
+        "B",
+        "C"
+      ]
+    },
+    "questt7-mixed#38": {
+      "en": "Step 3 — the <b>shortest distance</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:149:18"
+      ]
+    },
+    "questt7-mixed#39": {
+      "en": "Area = ½ · base · height, so height = 2·Area ÷ base. The dashed line IS that height.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:150:11"
+      ]
+    },
+    "questt7-mixed#40": {
+      "en": "Shortest distance = the perpendicular height. Area = ½·base·height, so height = 2·Area / base.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt7-mixed.js:154:13"
+      ]
+    },
+    "questt7-mixed#41": {
+      "en": "shortest distance = ${fix(h, 2)}",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt7-mixed.js:155:20"
+      ]
+    },
+    "questt7-mixed#42": {
+      "en": "Area = ½·${b}·${c}·sin ${A}° = ${fix(area, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:157:14"
+      ]
+    },
+    "questt7-mixed#43": {
+      "en": "area rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt7-mixed.js:157:67"
+      ]
+    },
+    "questt7-mixed#44": {
+      "en": "base ${t.L(\"B\")}${t.L(\"C\")} = ${fix(a, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:158:14"
+      ],
+      "nested": [
+        "B",
+        "C"
+      ]
+    },
+    "questt7-mixed#45": {
+      "en": "cosine rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt7-mixed.js:158:63",
+        "questt7-mixed.js:190:78"
+      ]
+    },
+    "questt7-mixed#46": {
+      "en": "height = 2·Area / base = ${fix(h, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:159:14"
+      ]
+    },
+    "questt7-mixed#47": {
+      "en": "½·base·height",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt7-mixed.js:159:58"
+      ]
+    },
+    "questt7-mixed#48": {
+      "en": "Calculate the <b>area</b> of this triangle (2 decimals). You only have the three sides.",
+      "kind": "string",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:174:15"
+      ]
+    },
+    "questt7-mixed#49": {
+      "en": "No angle in sight, so make one: Â's opposite side is subtracted on top, the two beside it do the rest.",
+      "kind": "string",
+      "slots": [
+        "cosineAngleSetupStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:179:11"
+      ]
+    },
+    "questt7-mixed#50": {
+      "en": "Find <b>Â</b> (1 decimal).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:180:18"
+      ]
+    },
+    "questt7-mixed#51": {
+      "en": "cos Â first, then SHIFT cos it.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:181:11"
+      ]
+    },
+    "questt7-mixed#52": {
+      "en": "Now the <b>area</b> (2 decimals).",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:182:18"
+      ]
+    },
+    "questt7-mixed#53": {
+      "en": "Area = ½ · ${b} · ${c} · sin Â — the two sides AROUND Â, and keep Â unrounded.",
+      "kind": "template",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:183:11"
+      ]
+    },
+    "questt7-mixed#54": {
+      "en": "First find an angle with the cosine rule, then use the area rule with the two sides around it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt7-mixed.js:187:13"
+      ]
+    },
+    "questt7-mixed#55": {
+      "en": "Area = ${fix(area, 2)} square units",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt7-mixed.js:188:20"
+      ]
+    },
+    "questt7-mixed#56": {
+      "en": "cos Â = (${b}²+${c}²−${a}²)/(2·${b}·${c}) → Â = ${ang(A)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:190:14"
+      ]
+    },
+    "questt7-mixed#57": {
+      "en": "Area = ½·${b}·${c}·sin Â = ${fix(area, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:191:14"
+      ]
+    },
+    "questt7-mixed#58": {
+      "en": "area rule — keep Â unrounded",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt7-mixed.js:191:63"
+      ]
+    },
+    "questt7-mixed#59": {
+      "en": "Two hikers leave the same point along straight paths. One walks ${b} m, the other ${c} m, and the angle between their paths is ${A}°. How far apart are they (2 decimals)?",
+      "kind": "template",
+      "slots": [
+        "prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:209:15"
+      ]
+    },
+    "questt7-mixed#60": {
+      "en": "Two distances and the angle between them — that is SAS.",
+      "kind": "string",
+      "slots": [
+        "whichRuleStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:211:38"
+      ]
+    },
+    "questt7-mixed#61": {
+      "en": "The two walked distances fill the squares and the product; the angle between the paths rides with cos.",
+      "kind": "string",
+      "slots": [
+        "cosineSideSetupStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:213:11"
+      ]
+    },
+    "questt7-mixed#62": {
+      "en": "How far apart are they (2 decimals)?",
+      "kind": "string",
+      "slots": [
+        "calcStep.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:214:18"
+      ]
+    },
+    "questt7-mixed#63": {
+      "en": "d² first, then the square root.",
+      "kind": "string",
+      "slots": [
+        "calcStep.hint"
+      ],
+      "where": [
+        "questt7-mixed.js:215:11"
+      ]
+    },
+    "questt7-mixed#64": {
+      "en": "The two distances and the angle between them are SAS → cosine rule for the third side.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt7-mixed.js:218:13"
+      ]
+    },
+    "questt7-mixed#65": {
+      "en": "${fix(dapart, 2)} m apart",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "questt7-mixed.js:219:20"
+      ]
+    },
+    "questt7-mixed#66": {
+      "en": "d² = ${b}² + ${c}² − 2(${b})(${c})·cos ${A}°",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:221:14"
+      ]
+    },
+    "questt7-mixed#67": {
+      "en": "d = ${fix(dapart, 2)} m",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:222:14"
+      ]
+    },
+    "questt7-mixed#68": {
+      "en": "You know all three sides and want the biggest angle.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:230:12"
+      ]
+    },
+    "questt7-mixed#69": {
+      "en": "Three sides given, no angle at all",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:232:16"
+      ]
+    },
+    "questt7-mixed#70": {
+      "en": "the sine rule needs an angle to start",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt7-mixed.js:232:57"
+      ]
+    },
+    "questt7-mixed#71": {
+      "en": "cosÂ = (b² + c² − a²)/(2bc) works from sides only",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:233:16"
+      ]
+    },
+    "questt7-mixed#72": {
+      "en": "Put the LONGEST side in the a slot",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:234:16"
+      ]
+    },
+    "questt7-mixed#73": {
+      "en": "the biggest angle faces the longest side",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt7-mixed.js:234:57"
+      ]
+    },
+    "questt7-mixed#74": {
+      "en": "You know two angles and one side and want another side.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:236:12"
+      ]
+    },
+    "questt7-mixed#75": {
+      "en": "Two angles and a side: the third angle is 180° − the other two, so every angle is known",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:238:16"
+      ]
+    },
+    "questt7-mixed#76": {
+      "en": "That gives a side paired with the angle opposite it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:239:16"
+      ]
+    },
+    "questt7-mixed#77": {
+      "en": "friends — exactly what the sine rule needs",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "questt7-mixed.js:239:74"
+      ]
+    },
+    "questt7-mixed#78": {
+      "en": "Solving for a side, so sides on top: a/sinÂ = b/sinB̂",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:240:16"
+      ]
+    },
+    "questt7-mixed#79": {
+      "en": "You know two sides and the angle between them and want the area.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:242:12"
+      ]
+    },
+    "questt7-mixed#80": {
+      "en": "The question asks for AREA, which rules out the sine and cosine rules straight away",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:244:16"
+      ]
+    },
+    "questt7-mixed#81": {
+      "en": "Area = ½·b·c·sinÂ needs two sides and the angle between them",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:245:16"
+      ]
+    },
+    "questt7-mixed#82": {
+      "en": "That is exactly what you were given, so it goes straight in",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:246:16"
+      ]
+    },
+    "questt7-mixed#83": {
+      "en": "You know two sides and the angle between them and want the third side.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:248:12"
+      ]
+    },
+    "questt7-mixed#84": {
+      "en": "The angle sits BETWEEN the two known sides, so no side is paired with a known opposite angle",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:250:16"
+      ]
+    },
+    "questt7-mixed#85": {
+      "en": "No pair means the sine rule cannot start",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:251:16"
+      ]
+    },
+    "questt7-mixed#86": {
+      "en": "a² = b² + c² − 2bc·cosÂ is built for two sides plus the angle between them",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "questt7-mixed.js:252:16"
+      ]
+    },
+    "questt7-mixed#87": {
+      "en": " Which rule?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "questt7-mixed.js:256:38"
+      ]
+    },
+    "questt7-mixed#88": {
+      "en": "Side + opposite angle → sine. Included angle (or 3 sides) → cosine. Area from 2 sides + included angle → area rule.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "questt7-mixed.js:258:15"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "questt1-choose.js:30:16",
+      "text": "Given: Â = ${Math.round(t.angles.A)}°, B̂ = ${Math.round(t.angles.B)}° and the side a = ${Math.round(t.sides.a)}"
+    },
+    {
+      "where": "questt1-choose.js:30:135",
+      "text": "write down what you have first"
+    },
+    {
+      "where": "questt1-choose.js:31:16",
+      "text": "a sits opposite Â, so a and Â are a matched pair"
+    },
+    {
+      "where": "questt1-choose.js:31:71",
+      "text": "a side with the angle facing it"
+    },
+    {
+      "where": "questt1-choose.js:32:16",
+      "text": "A matched pair is exactly what the sine rule needs: a/sinÂ = b/sinB̂"
+    },
+    {
+      "where": "questt1-choose.js:38:16",
+      "text": "Given: b = ${Math.round(t.sides.b)}, c = ${Math.round(t.sides.c)} and Â = ${Math.round(t.angles.A)}° between them"
+    },
+    {
+      "where": "questt1-choose.js:39:16",
+      "text": "Â is BETWEEN the two known sides, so no side is paired with a known opposite angle"
+    },
+    {
+      "where": "questt1-choose.js:39:105",
+      "text": "the sine rule cannot start"
+    },
+    {
+      "where": "questt1-choose.js:46:16",
+      "text": "Given: a = ${Math.round(t.sides.a)}, b = ${Math.round(t.sides.b)}, c = ${Math.round(t.sides.c)} — three sides and not one angle"
+    },
+    {
+      "where": "questt1-choose.js:47:16",
+      "text": "The sine rule needs an angle to start with, and there is none"
+    },
+    {
+      "where": "questt1-choose.js:47:84",
+      "text": "so it is out"
+    },
+    {
+      "where": "questt1-choose.js:48:50",
+      "text": "the cosine rule rearranged to give an angle"
+    },
+    {
+      "where": "questt1-choose.js:54:16",
+      "text": "The question wants the AREA, not a side or an angle"
+    },
+    {
+      "where": "questt1-choose.js:54:74",
+      "text": "that already picks the rule"
+    },
+    {
+      "where": "questt1-choose.js:55:16",
+      "text": "Area = ½·b·c·sinÂ needs two sides and the angle between them"
+    },
+    {
+      "where": "questt1-choose.js:56:16",
+      "text": "You have b = ${Math.round(t.sides.b)}, c = ${Math.round(t.sides.c)} and Â = ${Math.round(t.angles.A)}° between them, so it fits straight away"
+    }
+  ],
+  "words": 3200
+}

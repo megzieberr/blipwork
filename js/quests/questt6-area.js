@@ -7,6 +7,7 @@
 import { mc } from "./_shared.js";
 import { placeTri, houseFigure, regularPolygonFigure, areaSetupStep, calcStep } from "./_trig.js";
 import { areaSAS, regularPolygonArea, cosineRuleSide, sinD, cosD, fix, randInt, pick } from "../triglib.js";
+import { L } from "../lang.js";
 
 const ACC = "#0369a1";
 const NOTE = "areaRule";
@@ -30,22 +31,22 @@ const SKILLS = {
     const area = areaSAS(b, c, A);
     return {
       type: "steps", concept: NOTE,
-      prompt: `Calculate the <b>area</b> of the triangle (2 decimals).`,
+      prompt: L(`Calculate the <b>area</b> of the triangle (2 decimals).`, `Bereken die <b>oppervlakte</b> van die driehoek (2 desimale).`),
       graph: { type: "triangle", accent: ACC, pts: t.pts, poly: t.poly,
         angles: [t.angle("A", `${A}°`)],
         sides: [t.side("A", "C", String(b)), t.side("A", "B", String(c))] },
       steps: [
         areaSetupStep(String(b), String(c), `${A}°`,
-          "Two sides and the SINE of the angle between them."),
-        calcStep("Work out the <b>area</b> (2 decimals).", area,
-          `Area = ½ × ${b} × ${c} × sin ${A}°.`, { dp: 2, tol: 0.015 }),
+          L("Two sides and the SINE of the angle between them.", "Twee sye en die SIN van die hoek tussen hulle.")),
+        calcStep(L("Work out the <b>area</b> (2 decimals).", "Bereken die <b>oppervlakte</b> (2 desimale)."), area,
+          L(`Area = ½ × ${b} × ${c} × sin ${A}°.`, `Oppervlakte = ½ × ${b} × ${c} × sin ${A}°.`), { dp: 2, tol: 0.015 }),
       ],
       expected: area, dp: 2, tol: 0.015,   // absorb the last-cent flip if a learner works with a 4-dp sine
-      hint: "Area = ½ × (side) × (side) × sin(angle between them).",
-      answerLabel: `Area = ${fix(area, 2)} square units`,
+      hint: L("Area = ½ × (side) × (side) × sin(angle between them).", "Oppervlakte = ½ × (sy) × (sy) × sin(hoek tussen hulle)."),
+      answerLabel: L(`Area = ${fix(area, 2)} square units`, `Oppervlakte = ${fix(area, 2)} vierkante eenhede`),
       solution: [
-        { s: `Area = ½ · ${b} · ${c} · sin ${A}°`, r: "two sides + included angle" },
-        { s: `Area = ${fix(area, 2)} square units` },
+        { s: L(`Area = ½ · ${b} · ${c} · sin ${A}°`, `Oppervlakte = ½ · ${b} · ${c} · sin ${A}°`), r: L("two sides + included angle", "twee sye + ingeslote hoek") },
+        { s: L(`Area = ${fix(area, 2)} square units`, `Oppervlakte = ${fix(area, 2)} vierkante eenhede`) },
       ],
     };
   },
@@ -58,17 +59,17 @@ const SKILLS = {
     const area = areaSAS(b, c, A);
     return {
       type: "steps", concept: NOTE,
-      prompt: `In △MNP, MN = ${c}, MP = ${b} and M̂ = ${A}°. Calculate the area of △MNP (2 decimals).`,
+      prompt: L(`In △MNP, MN = ${c}, MP = ${b} and M̂ = ${A}°. Calculate the area of △MNP (2 decimals).`, `In △MNP is MN = ${c}, MP = ${b} en M̂ = ${A}°. Bereken die oppervlakte van △MNP (2 desimale).`),
       steps: [
         areaSetupStep(String(c), String(b), `${A}°`,
-          "M̂ sits between MN and MP — those two sides, and the sine of M̂."),
-        calcStep("Work out the <b>area</b> (2 decimals).", area,
-          `Area = ½ × ${c} × ${b} × sin ${A}°.`, { dp: 2, tol: 0.015 }),
+          L("M̂ sits between MN and MP — those two sides, and the sine of M̂.", "M̂ lê tussen MN en MP: daardie twee sye, en die sin van M̂.")),
+        calcStep(L("Work out the <b>area</b> (2 decimals).", "Bereken die <b>oppervlakte</b> (2 desimale)."), area,
+          L(`Area = ½ × ${c} × ${b} × sin ${A}°.`, `Oppervlakte = ½ × ${c} × ${b} × sin ${A}°.`), { dp: 2, tol: 0.015 }),
       ],
       expected: area, dp: 2, tol: 0.015,
-      hint: "M̂ is between the two given sides, so Area = ½·MN·MP·sinM̂.",
-      answerLabel: `Area = ${fix(area, 2)} square units`,
-      solution: [{ s: `Area = ½ · ${c} · ${b} · sin ${A}° = ${fix(area, 2)}` }],
+      hint: L("M̂ is between the two given sides, so Area = ½·MN·MP·sinM̂.", "M̂ lê tussen die twee gegewe sye, dus Oppervlakte = ½·MN·MP·sinM̂."),
+      answerLabel: L(`Area = ${fix(area, 2)} square units`, `Oppervlakte = ${fix(area, 2)} vierkante eenhede`),
+      solution: [{ s: L(`Area = ½ · ${c} · ${b} · sin ${A}° = ${fix(area, 2)}`, `Oppervlakte = ½ · ${c} · ${b} · sin ${A}° = ${fix(area, 2)}`) }],
     };
   },
 
@@ -77,36 +78,36 @@ const SKILLS = {
     const n = pick([5, 6, 8]);
     const s = randInt(6, 14);
     const area = regularPolygonArea(n, s);
-    const name = { 5: "pentagon", 6: "hexagon", 8: "octagon" }[n];
+    const name = { 5: L("pentagon", "vyfhoek"), 6: L("hexagon", "seshoek"), 8: L("octagon", "agthoek") }[n];
     const apex = 360 / n;                      // 72 / 60 / 45 — integers for all three n
     const R = s / (2 * sinD(180 / n));         // circumradius (the equal legs)
     const triA = 0.5 * R * R * sinD(apex);     // one centre triangle
     return {
       type: "steps", concept: "areaPolygon",
-      prompt: `Calculate the area of this regular <b>${name}</b> with side length ${s} (2 decimals).`,
+      prompt: L(`Calculate the area of this regular <b>${name}</b> with side length ${s} (2 decimals).`, `Bereken die oppervlakte van hierdie reëlmatige <b>${name}</b> met sylengte ${s} (2 desimale).`),
       graph: regularPolygonFigure(n, s, ACC),
       steps: [
-        calcStep(`Split it into ${n} equal triangles from the centre. What is each triangle's <b>centre angle</b> (whole number)?`,
-          apex, `The ${n} triangles share the full 360° at the centre: 360° ÷ ${n}.`,
+        calcStep(L(`Split it into ${n} equal triangles from the centre. What is each triangle's <b>centre angle</b> (whole number)?`, `Verdeel dit in ${n} gelyke driehoeke vanaf die middelpunt. Wat is elke driehoek se <b>middelpuntshoek</b> (heelgetal)?`),
+          apex, L(`The ${n} triangles share the full 360° at the centre: 360° ÷ ${n}.`, `Die ${n} driehoeke deel die volle 360° by die middelpunt: 360° ÷ ${n}.`),
           { dp: 0, tol: 0.5, unit: "°" }),
-        calcStep("Each triangle is isosceles, with two equal legs <b>R</b> out to the corners. Find R (2 decimals).",
-          R, `Half a side over the sine of half the centre angle: R = (${s} ÷ 2) ÷ sin ${fix(180 / n, 1)}°.`,
+        calcStep(L("Each triangle is isosceles, with two equal legs <b>R</b> out to the corners. Find R (2 decimals).", "Elke driehoek is gelykbenig, met twee gelyke bene <b>R</b> uit na die hoekpunte. Vind R (2 desimale)."),
+          R, L(`Half a side over the sine of half the centre angle: R = (${s} ÷ 2) ÷ sin ${fix(180 / n, 1)}°.`, `Halwe sy oor die sin van die halwe middelpuntshoek: R = (${s} ÷ 2) ÷ sin ${fix(180 / n, 1)}°.`),
           { dp: 2, tol: 0.02 }),
-        calcStep("The area of <b>one</b> triangle (2 decimals).",
-          triA, `½ · R² · sin ${fix(apex, 0)}° — keep R unrounded on the calculator.`,
+        calcStep(L("The area of <b>one</b> triangle (2 decimals).", "Die oppervlakte van <b>een</b> driehoek (2 desimale)."),
+          triA, L(`½ · R² · sin ${fix(apex, 0)}° — keep R unrounded on the calculator.`, `½ · R² · sin ${fix(apex, 0)}°: hou R onafgerond op die sakrekenaar.`),
           { dp: 2, tol: 0.1 }),
-        calcStep(`All ${n} together — the <b>total area</b> (2 decimals).`,
-          area, `${n} × one triangle. (Check: n·s² ÷ (4·tan(180°/n)) gives it in one step.)`,
+        calcStep(L(`All ${n} together — the <b>total area</b> (2 decimals).`, `Al ${n} saam: die <b>totale oppervlakte</b> (2 desimale).`),
+          area, L(`${n} × one triangle. (Check: n·s² ÷ (4·tan(180°/n)) gives it in one step.)`, `${n} × een driehoek. (Kontrole: n·s² ÷ (4·tan(180°/n)) gee dit in een stap.)`),
           { dp: 2, tol: 0.5 }),
       ],
       expected: area, dp: 2, tol: 0.5,   // triangle-method answers drift if R is rounded — accept them
-      hint: `Split it into ${n} equal triangles from the centre. Each has a centre angle of 360°/${n} = ${fix(360 / n, 0)}°.`,
-      answerLabel: `Area = ${fix(area, 2)} square units`,
+      hint: L(`Split it into ${n} equal triangles from the centre. Each has a centre angle of 360°/${n} = ${fix(360 / n, 0)}°.`, `Verdeel dit in ${n} gelyke driehoeke vanaf die middelpunt. Elkeen het 'n middelpuntshoek van 360°/${n} = ${fix(360 / n, 0)}°.`),
+      answerLabel: L(`Area = ${fix(area, 2)} square units`, `Oppervlakte = ${fix(area, 2)} vierkante eenhede`),
       solution: [
-        { s: `${n} isosceles triangles from the centre, each with apex angle 360°/${n} = ${fix(360 / n, 0)}°` },
-        { s: `equal legs R = (s/2) / sin(180°/${n}), then each triangle = ½·R²·sin ${fix(360 / n, 0)}°`, r: "keep R unrounded" },
-        { s: `in one step: Area = n·s² / (4·tan(180°/n)) = ${n}·${s}² / (4·tan ${fix(180 / n, 1)}°)` },
-        { s: `Area = ${fix(area, 2)} square units` },
+        { s: L(`${n} isosceles triangles from the centre, each with apex angle 360°/${n} = ${fix(360 / n, 0)}°`, `${n} gelykbenige driehoeke vanaf die middelpunt, elk met tophoek 360°/${n} = ${fix(360 / n, 0)}°`) },
+        { s: L(`equal legs R = (s/2) / sin(180°/${n}), then each triangle = ½·R²·sin ${fix(360 / n, 0)}°`, `gelyke bene R = (s/2) / sin(180°/${n}), dan elke driehoek = ½·R²·sin ${fix(360 / n, 0)}°`), r: L("keep R unrounded", "hou R onafgerond") },
+        { s: L(`in one step: Area = n·s² / (4·tan(180°/n)) = ${n}·${s}² / (4·tan ${fix(180 / n, 1)}°)`, `in een stap: Oppervlakte = n·s² / (4·tan(180°/n)) = ${n}·${s}² / (4·tan ${fix(180 / n, 1)}°)`) },
+        { s: L(`Area = ${fix(area, 2)} square units`, `Oppervlakte = ${fix(area, 2)} vierkante eenhede`) },
       ],
     };
   },
@@ -119,53 +120,53 @@ const SKILLS = {
     const total = fig.areaWall + fig.areaRoof;
     return {
       type: "steps", concept: "areaQuad",
-      prompt: `Find the total <b>area</b> of the figure (2 decimals): a rectangle below an isosceles-triangle roof.`,
+      prompt: L(`Find the total <b>area</b> of the figure (2 decimals): a rectangle below an isosceles-triangle roof.`, `Vind die totale <b>oppervlakte</b> van die figuur (2 desimale): 'n reghoek onder 'n gelykbenige driehoek as dak.`),
       graph: fig.graph,
       steps: [
-        calcStep("First the roof's <b>base</b> — the cosine rule, with r twice (2 decimals).",
-          base, `base² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°, then the square root.`,
+        calcStep(L("First the roof's <b>base</b> — the cosine rule, with r twice (2 decimals).", "Eers die dak se <b>basis</b>: die cosinusreël, met r twee keer (2 desimale)."),
+          base, L(`base² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°, then the square root.`, `basis² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°, dan die vierkantswortel.`),
           { dp: 2, tol: 0.015 }),
-        calcStep(`The <b>rectangle</b>: base × ${h} (2 decimals).`,
-          fig.areaWall, "Keep the unrounded base if it is still on the calculator — the 2-decimal one is accepted too.",
+        calcStep(L(`The <b>rectangle</b>: base × ${h} (2 decimals).`, `Die <b>reghoek</b>: basis × ${h} (2 desimale).`),
+          fig.areaWall, L("Keep the unrounded base if it is still on the calculator — the 2-decimal one is accepted too.", "Hou die onafgeronde basis as dit nog op die sakrekenaar is: die een met 2 desimale word ook aanvaar."),
           { dp: 2, tol: 0.06 }),
-        calcStep("The <b>roof</b> (2 decimals).",
-          fig.areaRoof, `½ · ${r}² · sin ${theta}°.`, { dp: 2, tol: 0.015 }),
-        calcStep("Add them — the <b>total area</b> (2 decimals).",
-          total, "Rectangle + roof.", { dp: 2, tol: 0.1 }),
+        calcStep(L("The <b>roof</b> (2 decimals).", "Die <b>dak</b> (2 desimale)."),
+          fig.areaRoof, L(`½ · ${r}² · sin ${theta}°.`, `½ · ${r}² · sin ${theta}°.`), { dp: 2, tol: 0.015 }),
+        calcStep(L("Add them — the <b>total area</b> (2 decimals).", "Tel hulle op: die <b>totale oppervlakte</b> (2 desimale)."),
+          total, L("Rectangle + roof.", "Reghoek + dak."), { dp: 2, tol: 0.1 }),
       ],
       expected: total, dp: 2, tol: 0.1,   // matches the last step: a 2-dp base carried through is accepted
-      hint: "Roof area = ½·r²·sinθ. For the rectangle you first need its width — the roof's base, by the cosine rule.",
-      answerLabel: `Area = ${fix(total, 2)} square units`,
+      hint: L("Roof area = ½·r²·sinθ. For the rectangle you first need its width — the roof's base, by the cosine rule.", "Dak se oppervlakte = ½·r²·sinθ. Vir die reghoek het jy eers sy breedte nodig: die dak se basis, met die cosinusreël."),
+      answerLabel: L(`Area = ${fix(total, 2)} square units`, `Oppervlakte = ${fix(total, 2)} vierkante eenhede`),
       solution: [
-        { s: `base² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°  →  base = ${fix(base, 2)}`, r: "cosine rule" },
-        { s: `rectangle = base · ${h} = ${fix(fig.areaWall, 2)}`, r: "keep the unrounded base" },
-        { s: `roof = ½·${r}²·sin ${theta}° = ${fix(fig.areaRoof, 2)}` },
-        { s: `total = ${fix(total, 2)} square units` },
+        { s: L(`base² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°  →  base = ${fix(base, 2)}`, `basis² = ${r}² + ${r}² − 2(${r})(${r})·cos ${theta}°  →  basis = ${fix(base, 2)}`), r: L("cosine rule", "cosinusreël") },
+        { s: L(`rectangle = base · ${h} = ${fix(fig.areaWall, 2)}`, `reghoek = basis · ${h} = ${fix(fig.areaWall, 2)}`), r: L("keep the unrounded base", "hou die onafgeronde basis") },
+        { s: L(`roof = ½·${r}²·sin ${theta}° = ${fix(fig.areaRoof, 2)}`, `dak = ½·${r}²·sin ${theta}° = ${fix(fig.areaRoof, 2)}`) },
+        { s: L(`total = ${fix(total, 2)} square units`, `totaal = ${fix(total, 2)} vierkante eenhede`) },
       ],
     };
   },
 
   /* the formula */
   areaFormula: () => mc(NOTE,
-    "The area rule for △ABC says Area = …",
-    "½·b·c·sinÂ",
-    ["½·b·c·cosÂ", "b·c·sinÂ", "½·b·c·tanÂ"],
-    { hint: "Half, two sides, and the SINE of the angle between them.",
-      answerLabel: "Area = ½·b·c·sinÂ — two sides and the sine of their included angle.",
+    L("The area rule for △ABC says Area = …", "Die oppervlakreël vir △ABC sê Oppervlakte = …"),
+    L("½·b·c·sinÂ", "½·b·c·sinÂ"),
+    [L("½·b·c·cosÂ", "½·b·c·cosÂ"), L("b·c·sinÂ", "b·c·sinÂ"), L("½·b·c·tanÂ", "½·b·c·tanÂ")],
+    { hint: L("Half, two sides, and the SINE of the angle between them.", "Die helfte, twee sye, en die SIN van die hoek tussen hulle."),
+      answerLabel: L("Area = ½·b·c·sinÂ — two sides and the sine of their included angle.", "Oppervlakte = ½·b·c·sinÂ: twee sye en die sin van hulle ingeslote hoek."),
       solution: [
-        { s: "Area of any triangle = ½ × base × height, so take b as the base" },
-        { s: "Drop the height from the top corner: h = c·sinÂ", r: "sinÂ = O/H in the little right triangle" },
-        { s: "Area = ½·b·h = ½·b·c·sinÂ", r: "that is where the sine comes from — never cos, never tan" },
+        { s: L("Area of any triangle = ½ × base × height, so take b as the base", "Oppervlakte van enige driehoek = ½ × basis × hoogte, dus neem b as die basis") },
+        { s: L("Drop the height from the top corner: h = c·sinÂ", "Laat die hoogte val van die boonste hoekpunt: h = c·sinÂ"), r: L("sinÂ = O/H in the little right triangle", "sinÂ = O/H in die klein reghoekige driehoek") },
+        { s: L("Area = ½·b·h = ½·b·c·sinÂ", "Oppervlakte = ½·b·h = ½·b·c·sinÂ"), r: L("that is where the sine comes from — never cos, never tan", "daar kom die sin vandaan: nooit cos nie, nooit tan nie") },
       ] }),
 
   /* need the included angle */
   needIncluded: () => ({
     type: "yesno", concept: NOTE,
-    prompt: "You know two sides of a triangle but the given angle is <b>not</b> between them. Can you use the area rule directly?",
+    prompt: L("You know two sides of a triangle but the given angle is <b>not</b> between them. Can you use the area rule directly?", "Jy ken twee sye van 'n driehoek, maar die gegewe hoek lê <b>nie</b> tussen hulle nie. Kan jy die oppervlakreël direk gebruik?"),
     yes: false,
-    hint: "The area rule needs the angle BETWEEN the two sides.",
-    answerLabel: "No — the area rule needs the included angle. Find it first (e.g. via the sine/cosine rule).",
-    solution: [{ s: "Area rule needs the angle between the two sides; without it, solve for that angle first." }],
+    hint: L("The area rule needs the angle BETWEEN the two sides.", "Die oppervlakreël het die hoek TUSSEN die twee sye nodig."),
+    answerLabel: L("No — the area rule needs the included angle. Find it first (e.g. via the sine/cosine rule).", "Nee: die oppervlakreël het die ingeslote hoek nodig. Vind dit eers (bv. met die sinus-/cosinusreël)."),
+    solution: [{ s: L("Area rule needs the angle between the two sides; without it, solve for that angle first.", "Die oppervlakreël het die hoek tussen die twee sye nodig; sonder dit los jy eers vir daardie hoek op.") }],
   }),
 };
 
