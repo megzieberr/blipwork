@@ -1,0 +1,4293 @@
+{
+  "unit": "T10",
+  "generated": "2026-10-17T17:45:45.397Z",
+  "files": [
+    "js/quests/queseq4-fractions.js",
+    "js/quests/queseq5-square.js",
+    "js/quests/queseq6-formula.js"
+  ],
+  "items": {
+    "queseq4-fractions#1": {
+      "en": "An equation full of algebraic fractions. What is the FIRST move?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:17:12"
+      ]
+    },
+    "queseq4-fractions#2": {
+      "en": "Factorise every numerator and denominator",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:17:89"
+      ]
+    },
+    "queseq4-fractions#3": {
+      "en": "Multiply everything out",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:17:143"
+      ]
+    },
+    "queseq4-fractions#4": {
+      "en": "Guess a value of x and test it",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:17:170"
+      ]
+    },
+    "queseq4-fractions#5": {
+      "en": "Flip every fraction upside down",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:17:204"
+      ]
+    },
+    "queseq4-fractions#6": {
+      "en": "Factorise top and bottom FIRST — only then can you see matching denominators, the LCD, and the restrictions.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:17:245"
+      ]
+    },
+    "queseq4-fractions#7": {
+      "en": "Nothing about a fraction equation can be decided while the denominators are still lumps",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:18:20"
+      ]
+    },
+    "queseq4-fractions#8": {
+      "en": "Factorise every top and every bottom — turn 3 + 2x into 2x + 3, and 4x² − 9 into (2x + 3)(2x − 3)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:19:20"
+      ]
+    },
+    "queseq4-fractions#9": {
+      "en": "Only now can you see which denominators share factors, what the LCD is, and which x-values are banned",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:20:20"
+      ]
+    },
+    "queseq4-fractions#10": {
+      "en": "Why factorise the denominators before anything else?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:21:12"
+      ]
+    },
+    "queseq4-fractions#11": {
+      "en": "To find the LCD and to read off the restrictions",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:21:77"
+      ]
+    },
+    "queseq4-fractions#12": {
+      "en": "Because it makes the numbers smaller",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:21:138"
+      ]
+    },
+    "queseq4-fractions#13": {
+      "en": "So the fractions cancel to 1",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:21:178"
+      ]
+    },
+    "queseq4-fractions#14": {
+      "en": "It's optional — the LCD works either way",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:21:210"
+      ]
+    },
+    "queseq4-fractions#15": {
+      "en": "The factors show which denominators match, what the LCD is, and which x-values are forbidden.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:21:260"
+      ]
+    },
+    "queseq4-fractions#16": {
+      "en": "A factorised denominator is a list of the things that could each be 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:22:20"
+      ]
+    },
+    "queseq4-fractions#17": {
+      "en": "That list gives you the limits straight away, one x ≠ … per factor",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:23:20"
+      ]
+    },
+    "queseq4-fractions#18": {
+      "en": "And the LCD is built from those same factors, each taken once at its highest power",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:24:20"
+      ]
+    },
+    "queseq4-fractions#19": {
+      "en": "so factorising does two jobs at once",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:24:109"
+      ]
+    },
+    "queseq4-fractions#20": {
+      "en": "Factorise first — tops AND bottoms.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:28:15"
+      ]
+    },
+    "queseq4-fractions#21": {
+      "en": "One denominator is <b>${C(m * m)} − x²</b> and another is <b>x² − ${C(m * m)}</b>. What is the trick?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:35:12"
+      ]
+    },
+    "queseq4-fractions#22": {
+      "en": "${C(m * m)} − x² = −(x² − ${C(m * m)}) — take out the negative so the denominators match",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:35:126"
+      ]
+    },
+    "queseq4-fractions#23": {
+      "en": "They are the same thing, no change needed",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:35:227"
+      ]
+    },
+    "queseq4-fractions#24": {
+      "en": "Cancel them against each other immediately",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:35:272"
+      ]
+    },
+    "queseq4-fractions#25": {
+      "en": "Replace both with x − ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:35:318"
+      ]
+    },
+    "queseq4-fractions#26": {
+      "en": "${C(m * m)} − x² is the NEGATIVE of x² − ${C(m * m)}. Take out −1, then both denominators share the factors (x + ${C(m)})(x − ${C(m)}).",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:35:357"
+      ]
+    },
+    "queseq4-fractions#27": {
+      "en": "Compare the two: ${C(m * m)} − x² is the same terms as x² − ${C(m * m)} with both signs flipped",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:36:20"
+      ]
+    },
+    "queseq4-fractions#28": {
+      "en": "So ${C(m * m)} − x² = −(x² − ${C(m * m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:37:20"
+      ]
+    },
+    "queseq4-fractions#29": {
+      "en": "take the −1 out in front",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:37:68"
+      ]
+    },
+    "queseq4-fractions#30": {
+      "en": "Now both denominators are built from (x + ${C(m)})(x − ${C(m)}), and the −1 rides up into the numerator",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:38:20"
+      ]
+    },
+    "queseq4-fractions#31": {
+      "en": "this is where learners lose the sign, so write the −1 down",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:39:20"
+      ]
+    },
+    "queseq4-fractions#32": {
+      "en": "One denominator is <b>${C(m)} − x</b> and another is <b>x − ${C(m)}</b>. What is the trick?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:40:12"
+      ]
+    },
+    "queseq4-fractions#33": {
+      "en": "${C(m)} − x = −(x − ${C(m)}) — take out −1 so they match",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:40:116"
+      ]
+    },
+    "queseq4-fractions#34": {
+      "en": "Multiply both denominators together",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:40:185"
+      ]
+    },
+    "queseq4-fractions#35": {
+      "en": "They can never match — use the formula",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:40:224"
+      ]
+    },
+    "queseq4-fractions#36": {
+      "en": "Swap the two fractions around",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:40:266"
+      ]
+    },
+    "queseq4-fractions#37": {
+      "en": "${C(m)} − x = −(x − ${C(m)}). Taking the −1 out (it can hop up to the numerator or out front) makes the denominators identical.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:40:305"
+      ]
+    },
+    "queseq4-fractions#38": {
+      "en": "${C(m)} − x and x − ${C(m)} are the same two terms with the signs swapped",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:41:20"
+      ]
+    },
+    "queseq4-fractions#39": {
+      "en": "So ${C(m)} − x = −(x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:42:20"
+      ]
+    },
+    "queseq4-fractions#40": {
+      "en": "Take that −1 out and the two denominators become identical",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:43:20"
+      ]
+    },
+    "queseq4-fractions#41": {
+      "en": "the minus hops up to the numerator — it does not vanish",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:43:85"
+      ]
+    },
+    "queseq4-fractions#42": {
+      "en": "A denominator that is the NEGATIVE of another: take out −1 and they match.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:47:15"
+      ]
+    },
+    "queseq4-fractions#43": {
+      "en": "Denominators are <b>x</b> and <b>(x − ${C(m)})</b>. What is the LCD?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:54:12"
+      ]
+    },
+    "queseq4-fractions#44": {
+      "en": "x(x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:54:93"
+      ]
+    },
+    "queseq4-fractions#45": {
+      "en": "x − ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "frameFrac.bot",
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:54:120"
+      ]
+    },
+    "queseq4-fractions#46": {
+      "en": "x",
+      "kind": "string",
+      "slots": [
+        "frameFrac.bot",
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:54:135",
+        "queseq4-fractions.js:62:103"
+      ]
+    },
+    "queseq4-fractions#47": {
+      "en": "x + (x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:54:140"
+      ]
+    },
+    "queseq4-fractions#48": {
+      "en": "They share no factor, so the LCD is their product: x(x − ${C(m)}).",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:54:167"
+      ]
+    },
+    "queseq4-fractions#49": {
+      "en": "List the factors: one denominator is x, the other is (x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:55:20"
+      ]
+    },
+    "queseq4-fractions#50": {
+      "en": "They have nothing in common, so nothing can be shared",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:56:20"
+      ]
+    },
+    "queseq4-fractions#51": {
+      "en": "LCD = x(x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:57:20"
+      ]
+    },
+    "queseq4-fractions#52": {
+      "en": "each different factor once, at its highest power",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:57:47"
+      ]
+    },
+    "queseq4-fractions#53": {
+      "en": "Denominators are <b>(x + ${C(m)})</b>, <b>(x − ${C(m)})</b> and <b>x² − ${C(m * m)}</b>. What is the LCD?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:58:12"
+      ]
+    },
+    "queseq4-fractions#54": {
+      "en": "(x + ${C(m)})(x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:58:130"
+      ]
+    },
+    "queseq4-fractions#55": {
+      "en": "(x + ${C(m)})(x − ${C(m)})(x² − ${C(m * m)})",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:58:169"
+      ]
+    },
+    "queseq4-fractions#56": {
+      "en": "x² + ${C(m * m)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:58:217"
+      ]
+    },
+    "queseq4-fractions#57": {
+      "en": "(x + ${C(m)})² (x − ${C(m)})²",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:58:237"
+      ]
+    },
+    "queseq4-fractions#58": {
+      "en": "x² − ${C(m * m)} already IS (x + ${C(m)})(x − ${C(m)}), so the LCD is just (x + ${C(m)})(x − ${C(m)}) — don't double-count factors.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:58:276"
+      ]
+    },
+    "queseq4-fractions#59": {
+      "en": "Factorise the third denominator first: x² − ${C(m * m)} = (x + ${C(m)})(x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:59:20"
+      ]
+    },
+    "queseq4-fractions#60": {
+      "en": "diff in □'s",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:59:111"
+      ]
+    },
+    "queseq4-fractions#61": {
+      "en": "So the whole list of factors is just (x + ${C(m)}) and (x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:60:20"
+      ]
+    },
+    "queseq4-fractions#62": {
+      "en": "LCD = (x + ${C(m)})(x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:61:20"
+      ]
+    },
+    "queseq4-fractions#63": {
+      "en": "multiplying all three denominators would count the same factors twice",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:61:59"
+      ]
+    },
+    "queseq4-fractions#64": {
+      "en": "Denominators are <b>x</b> and <b>x²</b>. What is the LCD?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:62:12"
+      ]
+    },
+    "queseq4-fractions#65": {
+      "en": "x²",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:62:82"
+      ]
+    },
+    "queseq4-fractions#66": {
+      "en": "x³",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:62:97"
+      ]
+    },
+    "queseq4-fractions#67": {
+      "en": "2x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:62:108"
+      ]
+    },
+    "queseq4-fractions#68": {
+      "en": "x² already contains x, so the LCD is x² — take each factor at its HIGHEST power, don't multiply blindly.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:62:120"
+      ]
+    },
+    "queseq4-fractions#69": {
+      "en": "There is only one different factor here, and that is x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:63:20"
+      ]
+    },
+    "queseq4-fractions#70": {
+      "en": "It appears once in the first denominator and twice in the second",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:64:20"
+      ]
+    },
+    "queseq4-fractions#71": {
+      "en": "Take it at its highest power: LCD = x²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:65:20"
+      ]
+    },
+    "queseq4-fractions#72": {
+      "en": "x² already divides by x, so x³ would be doing extra work for nothing",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:65:65"
+      ]
+    },
+    "queseq4-fractions#73": {
+      "en": "Each different factor once, at its highest power.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:69:15"
+      ]
+    },
+    "queseq4-fractions#74": {
+      "en": "You've found the LCD. How do you clear the fractions?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:81:23"
+      ]
+    },
+    "queseq4-fractions#75": {
+      "en": "Multiply EVERY term on both sides by the LCD",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:81:89"
+      ]
+    },
+    "queseq4-fractions#76": {
+      "en": "Multiply only the fraction terms by the LCD",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:81:146"
+      ]
+    },
+    "queseq4-fractions#77": {
+      "en": "Add the LCD to both sides",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:81:193"
+      ]
+    },
+    "queseq4-fractions#78": {
+      "en": "Divide both sides by the LCD",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:81:222"
+      ]
+    },
+    "queseq4-fractions#79": {
+      "en": "Every single term gets multiplied by the LCD — including the lonely whole-number terms. Then the denominators cancel and it's an ordinary equation.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:81:260"
+      ]
+    },
+    "queseq4-fractions#80": {
+      "en": "The LCD hits every term, fractions and non-fractions alike.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:83:17"
+      ]
+    },
+    "queseq4-fractions#81": {
+      "en": "Give every term a denominator first — a whole number gets a denominator of 1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:85:18"
+      ]
+    },
+    "queseq4-fractions#82": {
+      "en": "Under each term write the multiplier it needs to reach the LCD, and a ✓ where it already has it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:86:18"
+      ]
+    },
+    "queseq4-fractions#83": {
+      "en": "Multiplying EVERY term keeps the equation balanced, and the denominators then cancel",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:87:18"
+      ]
+    },
+    "queseq4-fractions#84": {
+      "en": "multiply only some of them and the equation is no longer the same equation",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:88:18"
+      ]
+    },
+    "queseq4-fractions#85": {
+      "en": "In ${C(A)}/x + ${C(B)}x/(x − ${C(m)}) = ${C(K)}, the ${C(K)} also gets multiplied by the LCD x(x − ${C(m)}). True?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq4-fractions.js:93:7"
+      ]
+    },
+    "queseq4-fractions#86": {
+      "en": "EVERY term…",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:95:15"
+      ]
+    },
+    "queseq4-fractions#87": {
+      "en": "True — ${C(A)}(x − ${C(m)}) + ${C(B)}x·x = ${C(K)}x(x − ${C(m)}). Forgetting to multiply the ${C(K)} is the classic slip.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:96:22"
+      ]
+    },
+    "queseq4-fractions#88": {
+      "en": "Write the ${C(K)} over 1 so it looks like the others: ${C(K)}/1",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:98:16"
+      ]
+    },
+    "queseq4-fractions#89": {
+      "en": "Now every term is multiplied by the LCD x(x − ${C(m)}) — the ${C(K)} included",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:99:16"
+      ]
+    },
+    "queseq4-fractions#90": {
+      "en": "${C(A)}(x − ${C(m)}) + ${C(B)}x·x = ${C(K)}x(x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:100:16"
+      ]
+    },
+    "queseq4-fractions#91": {
+      "en": "∴ true — skipping the lonely term unbalances the equation",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:100:80"
+      ]
+    },
+    "queseq4-fractions#92": {
+      "en": "WHEN do you state the restrictions of a fraction equation?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:107:12"
+      ]
+    },
+    "queseq4-fractions#93": {
+      "en": "Before you start solving",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:107:83"
+      ]
+    },
+    "queseq4-fractions#94": {
+      "en": "After solving, only if an answer looks odd",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:107:120"
+      ]
+    },
+    "queseq4-fractions#95": {
+      "en": "Only if the question asks for them",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:107:166"
+      ]
+    },
+    "queseq4-fractions#96": {
+      "en": "Never — restrictions are for inequalities",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:107:204"
+      ]
+    },
+    "queseq4-fractions#97": {
+      "en": "Restrictions come FIRST: any x that makes a denominator 0 is banned from the start, and you check your answers against them at the end.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:107:255"
+      ]
+    },
+    "queseq4-fractions#98": {
+      "en": "The banned x-values belong to the ORIGINAL equation — they are true before you do anything",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:108:20"
+      ]
+    },
+    "queseq4-fractions#99": {
+      "en": "So the limits line goes down right next to the LCD line, before any solving starts",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:109:20"
+      ]
+    },
+    "queseq4-fractions#100": {
+      "en": "Then at the end you check each answer against that line and reject any that breaks it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:110:20"
+      ]
+    },
+    "queseq4-fractions#101": {
+      "en": "her memos mark the limits line",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:110:112"
+      ]
+    },
+    "queseq4-fractions#102": {
+      "en": "You may write the restrictions at the end, once you've seen the answers. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq4-fractions.js:112:9"
+      ]
+    },
+    "queseq4-fractions#103": {
+      "en": "The restriction exists before you solve anything.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:114:17"
+      ]
+    },
+    "queseq4-fractions#104": {
+      "en": "False — the restriction is part of the original equation. State it up front, then use it to reject any N.A. answer at the end.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:115:24"
+      ]
+    },
+    "queseq4-fractions#105": {
+      "en": "The forbidden x-values come from the denominators, which exist before any solving happens",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:117:18"
+      ]
+    },
+    "queseq4-fractions#106": {
+      "en": "Written up front, the limits line is there to catch a bad answer at the end",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:118:18"
+      ]
+    },
+    "queseq4-fractions#107": {
+      "en": "∴ false — write LCD = … and limits: x ≠ … on the same line, at the start",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:119:18"
+      ]
+    },
+    "queseq4-fractions#108": {
+      "en": "it carries its own mark",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:119:97"
+      ]
+    },
+    "queseq4-fractions#109": {
+      "en": "Restrictions first, solve second, check last.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:124:15"
+      ]
+    },
+    "queseq4-fractions#110": {
+      "en": "What are the restrictions for <b>${frameFrac(\"10\", \"x\")} + ${frameFrac(\"3x\", `x − ${C(m)}`)} = 7</b>?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq4-fractions.js:130:20"
+      ],
+      "nested": [
+        "x",
+        "3x",
+        "x − ${C(m)}"
+      ]
+    },
+    "queseq4-fractions#111": {
+      "en": "x ≠ 0 and x ≠ ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:131:21"
+      ]
+    },
+    "queseq4-fractions#112": {
+      "en": "x ≠ ${C(m)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:133:7"
+      ]
+    },
+    "queseq4-fractions#113": {
+      "en": "x ≠ 0 only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:134:7"
+      ]
+    },
+    "queseq4-fractions#114": {
+      "en": "x ≠ −${C(m)} and x ≠ 0",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:135:7"
+      ]
+    },
+    "queseq4-fractions#115": {
+      "en": "Set EACH denominator equal to 0 — those x-values are banned.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:138:15"
+      ]
+    },
+    "queseq4-fractions#116": {
+      "en": "Denominators are x and (x − ${C(m)}): x ≠ 0 and x ≠ ${C(m)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:139:22"
+      ]
+    },
+    "queseq4-fractions#117": {
+      "en": "List the denominators: x, and (x − ${C(m)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:141:16"
+      ]
+    },
+    "queseq4-fractions#118": {
+      "en": "the 7 on the right has denominator 1, which can never be 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:141:66"
+      ]
+    },
+    "queseq4-fractions#119": {
+      "en": "Set each one to 0: x = 0, and x − ${C(m)} = 0 → x = ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:142:16"
+      ]
+    },
+    "queseq4-fractions#120": {
+      "en": "Those are the banned values: x ≠ 0 and x ≠ ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:143:16"
+      ]
+    },
+    "queseq4-fractions#121": {
+      "en": "both of them — one restriction per denominator",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:143:73"
+      ]
+    },
+    "queseq4-fractions#122": {
+      "en": "WHY is an x that makes a denominator 0 not allowed?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:150:12"
+      ]
+    },
+    "queseq4-fractions#123": {
+      "en": "Division by 0 is undefined",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:150:76"
+      ]
+    },
+    "queseq4-fractions#124": {
+      "en": "It makes the answer negative",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:150:115"
+      ]
+    },
+    "queseq4-fractions#125": {
+      "en": "It makes the fraction equal to 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:150:147"
+      ]
+    },
+    "queseq4-fractions#126": {
+      "en": "Because the LCD would be too big",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:150:183"
+      ]
+    },
+    "queseq4-fractions#127": {
+      "en": "a/0 is undefined — the ghost under the bed. Any x that turns a denominator into 0 breaks the whole expression.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:150:225"
+      ]
+    },
+    "queseq4-fractions#128": {
+      "en": "Dividing asks “how many of these fit into that?” — and 0 fits in no times at all",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:151:20"
+      ]
+    },
+    "queseq4-fractions#129": {
+      "en": "So a/0 has no value: it is undefined, the ghost under the bed",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:152:20"
+      ]
+    },
+    "queseq4-fractions#130": {
+      "en": "An x that turns a denominator into 0 breaks the expression, so it is banned from the start",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:153:20"
+      ]
+    },
+    "queseq4-fractions#131": {
+      "en": "To find where an expression is UNDEFINED, what do you solve?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq4-fractions.js:154:12"
+      ]
+    },
+    "queseq4-fractions#132": {
+      "en": "Denominator = 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:154:85"
+      ]
+    },
+    "queseq4-fractions#133": {
+      "en": "Numerator = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:154:113"
+      ]
+    },
+    "queseq4-fractions#134": {
+      "en": "The whole expression = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:154:130"
+      ]
+    },
+    "queseq4-fractions#135": {
+      "en": "Denominator < 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:154:158"
+      ]
+    },
+    "queseq4-fractions#136": {
+      "en": "Undefined = ghost under the bed = denominator equals 0. Set the bottom equal to 0 and solve.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:154:183"
+      ]
+    },
+    "queseq4-fractions#137": {
+      "en": "Undefined happens in exactly one place: when you are asked to divide by 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:155:20"
+      ]
+    },
+    "queseq4-fractions#138": {
+      "en": "So look at the BOTTOM of the fraction and set it equal to 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:156:20"
+      ]
+    },
+    "queseq4-fractions#139": {
+      "en": "Solving that gives the x-values where the expression is undefined",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:157:20"
+      ]
+    },
+    "queseq4-fractions#140": {
+      "en": "the numerator = 0 answers a different question — that is where the expression equals 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:158:20"
+      ]
+    },
+    "queseq4-fractions#141": {
+      "en": "Undefined means dividing by 0 — look at the bottom.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:162:15"
+      ]
+    },
+    "queseq4-fractions#142": {
+      "en": "A fraction equation has restrictions <b>x ≠ 0 and x ≠ ${C(m)}</b>. Solving gives x = ${C(m)} or x = ${C(other)}. What is the final answer?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq4-fractions.js:168:20"
+      ]
+    },
+    "queseq4-fractions#143": {
+      "en": "Only x = ${C(other)} — mark x = ${C(m)} as N.A.",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq4-fractions.js:169:21"
+      ]
+    },
+    "queseq4-fractions#144": {
+      "en": "x = ${C(m)} or x = ${C(other)} — both count",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:171:7"
+      ]
+    },
+    "queseq4-fractions#145": {
+      "en": "No solution — one answer broke a restriction, so both die",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:172:7"
+      ]
+    },
+    "queseq4-fractions#146": {
+      "en": "x = ${C(m)} only",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq4-fractions.js:173:7"
+      ]
+    },
+    "queseq4-fractions#147": {
+      "en": "An answer that equals a restriction is rejected; the other survives.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq4-fractions.js:176:15"
+      ]
+    },
+    "queseq4-fractions#148": {
+      "en": "x = ${C(m)} makes a denominator 0 → not applicable (N.A.). The valid answer is x = ${C(other)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq4-fractions.js:177:22"
+      ]
+    },
+    "queseq4-fractions#149": {
+      "en": "Check each answer against the limits line: x ≠ 0 and x ≠ ${C(m)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:179:16"
+      ]
+    },
+    "queseq4-fractions#150": {
+      "en": "x = ${C(m)} is on the banned list — it makes a denominator 0, so it is N.A.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:180:16"
+      ]
+    },
+    "queseq4-fractions#151": {
+      "en": "write it with a struck equals",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:180:98"
+      ]
+    },
+    "queseq4-fractions#152": {
+      "en": "x = ${C(other)} breaks nothing, so it stands",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq4-fractions.js:181:16"
+      ]
+    },
+    "queseq4-fractions#153": {
+      "en": "one bad answer never kills the other one",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq4-fractions.js:181:67"
+      ]
+    },
+    "queseq5-square#1": {
+      "en": "Which constant completes the square?<br><b>x² ${sign} ${C(bb)}x + □</b>",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:17:20"
+      ]
+    },
+    "queseq5-square#2": {
+      "en": "Half the middle coefficient, then square it: (b/2)².",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:23:15"
+      ]
+    },
+    "queseq5-square#3": {
+      "en": "(${C(bb)} ÷ 2)² = ${C(half)}² = ${C(half * half)}. Then x² ${sign} ${C(bb)}x + ${C(half * half)} = (x ${sign} ${C(half)})².",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:24:22"
+      ]
+    },
+    "queseq5-square#4": {
+      "en": "Check a first: the coefficient of x² is 1, so the half-and-square rule is allowed",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:26:16"
+      ]
+    },
+    "queseq5-square#5": {
+      "en": "b/2 = ${C(bb)} ÷ 2 = ${C(half)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:27:16"
+      ]
+    },
+    "queseq5-square#6": {
+      "en": "she writes this in a small boxed working at the top right",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:27:54"
+      ]
+    },
+    "queseq5-square#7": {
+      "en": "Square it: ${C(half)}² = ${C(half * half)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:28:16"
+      ]
+    },
+    "queseq5-square#8": {
+      "en": "x² ${sign} ${C(bb)}x + ${C(half * half)} = (x ${sign} ${C(half)})²",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:29:16"
+      ]
+    },
+    "queseq5-square#9": {
+      "en": "x and b/2 fall into the new bracket; the sign of b comes with them",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:29:89"
+      ]
+    },
+    "queseq5-square#10": {
+      "en": "The rule c = (b/2)² works for ANY quadratic ax² + bx + c, whatever a is. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:44:9"
+      ]
+    },
+    "queseq5-square#11": {
+      "en": "Try it on 2x² + 8x + … — does 16 complete that square?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:46:17"
+      ]
+    },
+    "queseq5-square#12": {
+      "en": "False — c = (b/2)² only works when the coefficient of x² is 1. With a coefficient, factor it out FIRST (or use b² = 4ac).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:47:24"
+      ]
+    },
+    "queseq5-square#13": {
+      "en": "Test it on 2x² + 8x + 16: half-and-square says the constant should be (8/2)² = 16",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:49:18"
+      ]
+    },
+    "queseq5-square#14": {
+      "en": "But 2(x + 2)² = 2x² + 8x + 8, so the constant that actually works is 8, not 16",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:50:18"
+      ]
+    },
+    "queseq5-square#15": {
+      "en": "the rule has failed",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:50:103"
+      ]
+    },
+    "queseq5-square#16": {
+      "en": "∴ false — half-and-square is an a = 1 rule; with a coefficient on x², factor it out first",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:51:18"
+      ]
+    },
+    "queseq5-square#17": {
+      "en": "You want to complete the square on <b>${C(a)}x² − ${C(bb)}x + ${C(cc)}</b>. What must happen FIRST?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:60:7"
+      ]
+    },
+    "queseq5-square#18": {
+      "en": "Factor the ${C(a)} out of the terms",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:61:7"
+      ]
+    },
+    "queseq5-square#19": {
+      "en": "Add (${C(bb)}/2)² straight away",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:62:8"
+      ]
+    },
+    "queseq5-square#20": {
+      "en": "Divide only the ${C(cc)} by ${C(a)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:62:43"
+      ]
+    },
+    "queseq5-square#21": {
+      "en": "Swap the ${C(bb)}x and the ${C(cc)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:62:82"
+      ]
+    },
+    "queseq5-square#22": {
+      "en": "c = (b/2)² is an a = 1 rule.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:63:15"
+      ]
+    },
+    "queseq5-square#23": {
+      "en": "With a coefficient on x², factor it out first: ${C(a)}(x² − ${C(bb)}/${C(a)}·x + ${C(t)}) — THEN half-and-square the new middle coefficient inside.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:64:22"
+      ]
+    },
+    "queseq5-square#24": {
+      "en": "The coefficient of x² is ${C(a)}, not 1, so half-and-square cannot be used as it stands",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:66:16"
+      ]
+    },
+    "queseq5-square#25": {
+      "en": "Factor the ${C(a)} out of the WHOLE expression, constant included: ${C(a)}(x² − ${C(bb)}/${C(a)}·x + ${C(t)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:67:16"
+      ]
+    },
+    "queseq5-square#26": {
+      "en": "accept the fraction it creates — that is normal here",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:68:16"
+      ]
+    },
+    "queseq5-square#27": {
+      "en": "Now the inside has a coefficient of 1, so half-and-square the new middle number",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:69:16"
+      ]
+    },
+    "queseq5-square#28": {
+      "en": "Switch to square brackets once the inner bracket is formed, and multiply the ${C(a)} back in at the very end",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:70:16"
+      ]
+    },
+    "queseq5-square#29": {
+      "en": "<b>x² ${sign} ${C(bb)}x + ${C(half * half)} = (x □ ${C(half)})²</b>. Which sign goes in the bracket?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:77:20"
+      ]
+    },
+    "queseq5-square#30": {
+      "en": "+, because the middle term is +${C(bb)}x",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:78:36"
+      ]
+    },
+    "queseq5-square#31": {
+      "en": "−, because the middle term is −${C(bb)}x",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:78:81"
+      ]
+    },
+    "queseq5-square#32": {
+      "en": "−, because squares make things negative",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:80:22"
+      ]
+    },
+    "queseq5-square#33": {
+      "en": "+, because squares are always positive",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:80:66"
+      ]
+    },
+    "queseq5-square#34": {
+      "en": "Either sign works",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:81:7"
+      ]
+    },
+    "queseq5-square#35": {
+      "en": "±, both brackets at once",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:82:7"
+      ]
+    },
+    "queseq5-square#36": {
+      "en": "The sign inside the bracket MATCHES the sign of the middle term.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:85:15"
+      ]
+    },
+    "queseq5-square#37": {
+      "en": "(x ${sign} ${C(half)})² expands to x² ${sign} ${C(bb)}x + ${C(half * half)} — the bracket's sign is the middle term's sign.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:86:22"
+      ]
+    },
+    "queseq5-square#38": {
+      "en": "Work backwards: expand (x ${sign} ${C(half)})² = x² ${sign} ${C(bb)}x + ${C(half * half)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:88:16"
+      ]
+    },
+    "queseq5-square#39": {
+      "en": "The middle term came out as ${sign}${C(bb)}x, matching the question",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:89:16"
+      ]
+    },
+    "queseq5-square#40": {
+      "en": "So the bracket takes ${sign}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:90:16"
+      ]
+    },
+    "queseq5-square#41": {
+      "en": "the sign of b falls into the bracket — the squared constant is positive either way",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:90:51"
+      ]
+    },
+    "queseq5-square#42": {
+      "en": "If <b>x² − ${C(odd)}x + c = (x + k)²</b>, what is k?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:97:20"
+      ]
+    },
+    "queseq5-square#43": {
+      "en": "k = −${frac(odd, 2)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:98:21",
+        "queseq5-square.js:106:16"
+      ]
+    },
+    "queseq5-square#44": {
+      "en": "k = ${frac(odd, 2)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:99:21"
+      ]
+    },
+    "queseq5-square#45": {
+      "en": "k = −${C(odd)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:99:44"
+      ]
+    },
+    "queseq5-square#46": {
+      "en": "k = ${frac(String(odd * odd), 4)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:99:62"
+      ]
+    },
+    "queseq5-square#47": {
+      "en": "Expand (x + k)² = x² + 2kx + k² and MATCH the middle terms — sign included.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:101:15"
+      ]
+    },
+    "queseq5-square#48": {
+      "en": "2k = −${C(odd)}, so k = −${frac(odd, 2)} (negative, because the middle term is −${C(odd)}x). And c = k² = ${frac(String(odd * odd), 4)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:102:22"
+      ]
+    },
+    "queseq5-square#49": {
+      "en": "Expand the right side: (x + k)² = x² + 2kx + k²",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:104:16"
+      ]
+    },
+    "queseq5-square#50": {
+      "en": "Match the middle terms, sign and all: 2k = −${C(odd)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:105:16"
+      ]
+    },
+    "queseq5-square#51": {
+      "en": "the bracket is written (x + k), so a middle term of −${C(odd)}x forces k to be NEGATIVE",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:106:43"
+      ]
+    },
+    "queseq5-square#52": {
+      "en": "And then c = k² = ${frac(String(odd * odd), 4)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:107:16"
+      ]
+    },
+    "queseq5-square#53": {
+      "en": "squaring makes c positive",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:107:70"
+      ]
+    },
+    "queseq5-square#54": {
+      "en": "x − ${C(p)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq5-square.js:116:28"
+      ]
+    },
+    "queseq5-square#55": {
+      "en": "x + ${C(-p)}",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq5-square.js:116:44"
+      ]
+    },
+    "queseq5-square#56": {
+      "en": "Read the turning point of <b>y = ${aStr}(${inner})² ${q >= 0 ? \"+\" : \"−\"} ${C(Math.abs(q))}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:118:20"
+      ]
+    },
+    "queseq5-square#57": {
+      "en": "TP(${C(p)} ; ${C(q)})",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:119:21"
+      ]
+    },
+    "queseq5-square#58": {
+      "en": "TP(${C(p)} ; ${C(-q)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:121:7"
+      ]
+    },
+    "queseq5-square#59": {
+      "en": "TP(${C(-p)} ; ${C(q)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:122:7"
+      ]
+    },
+    "queseq5-square#60": {
+      "en": "TP(${C(-p)} ; ${C(-q)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:123:7"
+      ]
+    },
+    "queseq5-square#61": {
+      "en": "p is read with the OPPOSITE sign of what's in the bracket; q keeps its own sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:126:15"
+      ]
+    },
+    "queseq5-square#62": {
+      "en": "The bracket (${inner}) gives p = ${C(p)} (opposite sign); the constant outside gives q = ${C(q)} (its OWN sign — never flip q). TP(${C(p)} ; ${C(q)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:127:22"
+      ]
+    },
+    "queseq5-square#63": {
+      "en": "Line it up with y = a(x − p)² + q",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:129:16"
+      ]
+    },
+    "queseq5-square#64": {
+      "en": "The bracket reads (${inner}), so p = ${C(p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:130:16"
+      ]
+    },
+    "queseq5-square#65": {
+      "en": "OPPOSITE sign to what you see inside the bracket",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:130:67"
+      ]
+    },
+    "queseq5-square#66": {
+      "en": "The constant outside the bracket is q = ${C(q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:131:16"
+      ]
+    },
+    "queseq5-square#67": {
+      "en": "q keeps its own sign — never flip it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:131:70"
+      ]
+    },
+    "queseq5-square#68": {
+      "en": "∴ TP(${C(p)} ; ${C(q)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:132:16"
+      ]
+    },
+    "queseq5-square#69": {
+      "en": "coordinates take a semicolon, not a comma",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:132:46"
+      ]
+    },
+    "queseq5-square#70": {
+      "en": "In turning-point form <b>y = a(x − p)² + q</b>, which value is read with the OPPOSITE sign?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq5-square.js:145:23"
+      ]
+    },
+    "queseq5-square#71": {
+      "en": "Only p (the x-value of the TP)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:145:127"
+      ]
+    },
+    "queseq5-square#72": {
+      "en": "Only q (the y-value of the TP)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:145:170"
+      ]
+    },
+    "queseq5-square#73": {
+      "en": "Both p and q",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:145:204"
+      ]
+    },
+    "queseq5-square#74": {
+      "en": "Neither — read both as written",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:145:220"
+      ]
+    },
+    "queseq5-square#75": {
+      "en": "p flips: (x + 4) means p = −4. q keeps its own sign: … − 1 means q = −1. In words: p is WHERE the TP is, q is WHAT it is.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:145:260"
+      ]
+    },
+    "queseq5-square#76": {
+      "en": "Flip p. Never flip q.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:147:17"
+      ]
+    },
+    "queseq5-square#77": {
+      "en": "The form is y = a(x − p)² + q, and p is written with a MINUS built into it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:149:18"
+      ]
+    },
+    "queseq5-square#78": {
+      "en": "So (x + 4) is really (x − (−4)), which is why p reads as −4 — the flip comes from that hidden minus",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:150:18"
+      ]
+    },
+    "queseq5-square#79": {
+      "en": "q has no hidden minus: it is written + q, so … − 1 simply means q = −1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:151:18"
+      ]
+    },
+    "queseq5-square#80": {
+      "en": "∴ only p flips",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:151:95"
+      ]
+    },
+    "queseq5-square#81": {
+      "en": "For y = ${C(a)}(x + ${C(h)})² − ${C(k)} the turning point is (${C(-h)} ; ${C(k)}). True?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:156:7"
+      ]
+    },
+    "queseq5-square#82": {
+      "en": "Which of p and q flips its sign?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:158:15"
+      ]
+    },
+    "queseq5-square#83": {
+      "en": "False — the y-value never flips. The constant outside is ${C(-k)}, so the TP is (${C(-h)} ; ${C(-k)}). Only p gets the opposite sign.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:159:22"
+      ]
+    },
+    "queseq5-square#84": {
+      "en": "The bracket is (x + ${C(h)}), so p = ${C(-h)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:161:16"
+      ]
+    },
+    "queseq5-square#85": {
+      "en": "that part of the claim is right",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:161:68"
+      ]
+    },
+    "queseq5-square#86": {
+      "en": "The constant outside is − ${C(k)}, so q = ${C(-k)} — it keeps its own sign",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:162:16"
+      ]
+    },
+    "queseq5-square#87": {
+      "en": "∴ the TP is (${C(-h)} ; ${C(-k)}), not (${C(-h)} ; ${C(k)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:163:16"
+      ]
+    },
+    "queseq5-square#88": {
+      "en": "the y-value never flips",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:163:82"
+      ]
+    },
+    "queseq5-square#89": {
+      "en": "In <b>y = ${aStr}(x − 1)² + 3</b>, is the turning point a minimum or a maximum?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq5-square.js:172:20"
+      ]
+    },
+    "queseq5-square#90": {
+      "en": "A minimum — a > 0 makes a happy parabola (opens up)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:173:26"
+      ]
+    },
+    "queseq5-square#91": {
+      "en": "A maximum — a < 0 makes a sad parabola (opens down)",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:173:82"
+      ]
+    },
+    "queseq5-square#92": {
+      "en": "A maximum — a > 0 makes a sad parabola",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:175:12"
+      ]
+    },
+    "queseq5-square#93": {
+      "en": "A minimum — a < 0 makes a happy parabola",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:175:55"
+      ]
+    },
+    "queseq5-square#94": {
+      "en": "Neither — turning points are only for graphs of lines",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:176:7"
+      ]
+    },
+    "queseq5-square#95": {
+      "en": "You cannot tell without the roots",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:177:7"
+      ]
+    },
+    "queseq5-square#96": {
+      "en": "a > 0 → happy bowl → the TP is the LOWEST point. a < 0 → sad → highest.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:180:15"
+      ]
+    },
+    "queseq5-square#97": {
+      "en": "a = ${C(a)} is ${up ? \"positive → happy parabola, so the TP is a MINIMUM\" : \"negative → sad parabola, so the TP is a MAXIMUM\"}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:181:22"
+      ],
+      "nested": [
+        "positive → happy parabola, so the TP is a MINIMUM",
+        "negative → sad parabola, so the TP is a MAXIMUM"
+      ]
+    },
+    "queseq5-square#98": {
+      "en": "Only a decides the shape. Here a = ${C(a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:183:16"
+      ]
+    },
+    "queseq5-square#99": {
+      "en": "a is ${up ? \"positive, so the arms point up — a happy parabola\" : \"negative, so the arms point down — a sad parabola\"}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:184:16"
+      ],
+      "nested": [
+        "positive, so the arms point up — a happy parabola",
+        "negative, so the arms point down — a sad parabola"
+      ]
+    },
+    "queseq5-square#100": {
+      "en": "A happy parabola sits in its lowest point at the turning point, so it is a MINIMUM",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:185:24"
+      ]
+    },
+    "queseq5-square#101": {
+      "en": "A sad parabola reaches its highest point at the turning point, so it is a MAXIMUM",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq5-square.js:185:111"
+      ]
+    },
+    "queseq5-square#102": {
+      "en": "the bracket and the constant move the TP around, but they cannot change the shape",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq5-square.js:186:16"
+      ]
+    },
+    "queseq5-square#103": {
+      "en": "Solving <b>−x² + 10x − 22 = 0</b> by completing the square. FIRST step?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq5-square.js:193:12"
+      ]
+    },
+    "queseq5-square#104": {
+      "en": "Divide every term by −1 (no negative may sit in front of x²)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:193:96"
+      ]
+    },
+    "queseq5-square#105": {
+      "en": "Add (10/2)² to both sides immediately",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:193:169"
+      ]
+    },
+    "queseq5-square#106": {
+      "en": "Take the 22 across first, keep the −x²",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:193:210"
+      ]
+    },
+    "queseq5-square#107": {
+      "en": "Square-root both sides",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:193:252",
+        "queseq5-square.js:196:246"
+      ]
+    },
+    "queseq5-square#108": {
+      "en": "Kill the negative first: x² − 10x + 22 = 0. Only then take the constant across and add (b/2)² to both sides.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:193:284"
+      ]
+    },
+    "queseq5-square#109": {
+      "en": "You've reached <b>x² − 10x = −22</b>. What is the next step?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq5-square.js:194:12"
+      ]
+    },
+    "queseq5-square#110": {
+      "en": "Add (10/2)² = 25 to BOTH sides",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:194:85"
+      ]
+    },
+    "queseq5-square#111": {
+      "en": "Add 25 to the left side only",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:194:128"
+      ]
+    },
+    "queseq5-square#112": {
+      "en": "Square-root both sides now",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:194:160"
+      ]
+    },
+    "queseq5-square#113": {
+      "en": "Factor out x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:194:190"
+      ]
+    },
+    "queseq5-square#114": {
+      "en": "Add (b/2)² to BOTH sides: x² − 10x + 25 = 3, which packs into (x − 5)² = 3.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:194:212"
+      ]
+    },
+    "queseq5-square#115": {
+      "en": "You've reached <b>(x − 5)² = 3</b>. What is the next step?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq5-square.js:195:12"
+      ]
+    },
+    "queseq5-square#116": {
+      "en": "Square-root both sides and keep the ±: x − 5 = ±√3",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:195:83"
+      ]
+    },
+    "queseq5-square#117": {
+      "en": "Square both sides",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:195:146"
+      ]
+    },
+    "queseq5-square#118": {
+      "en": "x − 5 = √3 only",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:195:167"
+      ]
+    },
+    "queseq5-square#119": {
+      "en": "Expand the bracket again",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:195:186"
+      ]
+    },
+    "queseq5-square#120": {
+      "en": "√ both sides (remember ±): x − 5 = ±√3, so x = 5 ± √3.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:195:220"
+      ]
+    },
+    "queseq5-square#121": {
+      "en": "You rewrote <b>x² − 8x</b> as <b>(x − 4)² − 16</b>. How do you CHECK the rewrite?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq5-square.js:196:12"
+      ]
+    },
+    "queseq5-square#122": {
+      "en": "Multiply the bracket back out — it must return exactly x² − 8x",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq5-square.js:196:106"
+      ]
+    },
+    "queseq5-square#123": {
+      "en": "Substitute x = 4 and see if you get 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:196:181"
+      ]
+    },
+    "queseq5-square#124": {
+      "en": "No check is possible",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq5-square.js:196:222"
+      ]
+    },
+    "queseq5-square#125": {
+      "en": "(x − 4)² − 16 = x² − 8x + 16 − 16 = x² − 8x ✓. Completing the square only REWRITES the expression — expanding back must give the original, or something was changed.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq5-square.js:196:278"
+      ]
+    },
+    "queseq5-square#126": {
+      "en": "No negative on x² → constant across → +(b/2)² both sides → perfect square → √ with ±.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq5-square.js:200:15"
+      ]
+    },
+    "queseq6-formula#1": {
+      "en": "When do you reach for the <b>quadratic formula</b>?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq6-formula.js:22:12"
+      ]
+    },
+    "queseq6-formula#2": {
+      "en": "When the trinomial cannot be factorised",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:22:76"
+      ]
+    },
+    "queseq6-formula#3": {
+      "en": "For every quadratic — factorising is never allowed",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:22:128"
+      ]
+    },
+    "queseq6-formula#4": {
+      "en": "Only when the equation has fractions",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:22:182"
+      ]
+    },
+    "queseq6-formula#5": {
+      "en": "Only when a = 1",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:22:222"
+      ]
+    },
+    "queseq6-formula#6": {
+      "en": "Try to factorise first. If it won't factorise (or the question says 'correct to two decimals'), use the formula. Completing the square only if the question asks for it.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:22:247"
+      ]
+    },
+    "queseq6-formula#7": {
+      "en": "Standard form first, then try to factorise — that is always the quickest road when it works",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:23:20"
+      ]
+    },
+    "queseq6-formula#8": {
+      "en": "If no pair of numbers fits, the roots are not rational and factorising cannot reach them",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:24:20"
+      ]
+    },
+    "queseq6-formula#9": {
+      "en": "That is what the formula is for",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:25:20"
+      ]
+    },
+    "queseq6-formula#10": {
+      "en": "complete the square only when the question actually asks for it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:25:58"
+      ]
+    },
+    "queseq6-formula#11": {
+      "en": "The question says 'give your answers correct to TWO DECIMALS'. What is that hinting?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq6-formula.js:26:12"
+      ]
+    },
+    "queseq6-formula#12": {
+      "en": "The trinomial probably won't factorise — use the quadratic formula",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:26:109"
+      ]
+    },
+    "queseq6-formula#13": {
+      "en": "The answers must be whole numbers",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:26:188"
+      ]
+    },
+    "queseq6-formula#14": {
+      "en": "You must complete the square",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:26:225"
+      ]
+    },
+    "queseq6-formula#15": {
+      "en": "You must round every step",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:26:257"
+      ]
+    },
+    "queseq6-formula#16": {
+      "en": "Decimal answers signal irrational roots — the formula (or EQN mode) is the tool. Round only the FINAL answers, with a decimal comma.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:26:292"
+      ]
+    },
+    "queseq6-formula#17": {
+      "en": "A factorising answer comes out exact, so it would never need rounding",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:27:20"
+      ]
+    },
+    "queseq6-formula#18": {
+      "en": "Asking for decimals is a hint that the roots are irrational — something like 1 ± √2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:28:20"
+      ]
+    },
+    "queseq6-formula#19": {
+      "en": "So go straight for the formula, and round only the final line, to two decimals with a decimal comma",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:29:20"
+      ]
+    },
+    "queseq6-formula#20": {
+      "en": "Factorise if you can; formula when you can't (or when decimals are asked).",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:33:15"
+      ]
+    },
+    "queseq6-formula#21": {
+      "en": "x = ( −b ± √(b² − 4ac) ) / 2a",
+      "kind": "string",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:38:21"
+      ]
+    },
+    "queseq6-formula#22": {
+      "en": "x = ( b ± √(b² − 4ac) ) / 2a",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:40:7"
+      ]
+    },
+    "queseq6-formula#23": {
+      "en": "x = ( −b ± √(b² + 4ac) ) / 2a",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:41:7"
+      ]
+    },
+    "queseq6-formula#24": {
+      "en": "x = −b ± √(b² − 4ac) / 2",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:42:7"
+      ]
+    },
+    "queseq6-formula#25": {
+      "en": "Pick the CORRECT quadratic formula.",
+      "kind": "string",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:44:20"
+      ]
+    },
+    "queseq6-formula#26": {
+      "en": "Minus b, plus-minus, root of b² MINUS 4ac, ALL over 2a.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:45:15"
+      ]
+    },
+    "queseq6-formula#27": {
+      "en": "x = (−b ± √(b² − 4ac)) / 2a — the whole top is divided by 2a, and it's minus 4ac under the root.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:46:22"
+      ]
+    },
+    "queseq6-formula#28": {
+      "en": "Check it piece by piece. It opens with −b, not b",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:48:16"
+      ]
+    },
+    "queseq6-formula#29": {
+      "en": "so a positive b gives a negative start",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:48:71"
+      ]
+    },
+    "queseq6-formula#30": {
+      "en": "Under the root sits b² − 4ac, with a MINUS",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:49:16"
+      ]
+    },
+    "queseq6-formula#31": {
+      "en": "that expression is Δ, and a plus there would never give non-real roots",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:49:65"
+      ]
+    },
+    "queseq6-formula#32": {
+      "en": "And the WHOLE top is divided by 2a, so the top needs its own bracket when you type it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:50:16"
+      ]
+    },
+    "queseq6-formula#33": {
+      "en": "Using the quadratic formula, which TWO lines must always be shown?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq6-formula.js:57:12"
+      ]
+    },
+    "queseq6-formula#34": {
+      "en": "The formula itself, then the substitution of a, b and c",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:57:91"
+      ]
+    },
+    "queseq6-formula#35": {
+      "en": "Only the final answers",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:57:159"
+      ]
+    },
+    "queseq6-formula#36": {
+      "en": "The factorising attempt and the answer",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:57:185"
+      ]
+    },
+    "queseq6-formula#37": {
+      "en": "The formula only — substitution is optional",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:57:227"
+      ]
+    },
+    "queseq6-formula#38": {
+      "en": "Always: write the formula, then show the substitution line with a, b and c in brackets — THEN the answers (calculator allowed for the values).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:57:280"
+      ]
+    },
+    "queseq6-formula#39": {
+      "en": "Marks are given for the written steps, not for the final number",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:58:20"
+      ]
+    },
+    "queseq6-formula#40": {
+      "en": "So write the formula out first, exactly as it stands",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:59:20"
+      ]
+    },
+    "queseq6-formula#41": {
+      "en": "Then the substitution line, with every negative in its own brackets, before you work anything out",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:60:20"
+      ]
+    },
+    "queseq6-formula#42": {
+      "en": "You may use EQN mode on the calculator to get the values — as long as the formula and substitution are written down. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:62:9"
+      ]
+    },
+    "queseq6-formula#43": {
+      "en": "Marks are for the working; the calculator just checks the arithmetic.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:64:17"
+      ]
+    },
+    "queseq6-formula#44": {
+      "en": "True — write formula + substitution for the marks, then let EQN mode confirm X₁ and X₂.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:65:24"
+      ]
+    },
+    "queseq6-formula#45": {
+      "en": "Her notes teach the EQN route themselves, so the calculator is allowed here",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:67:18"
+      ]
+    },
+    "queseq6-formula#46": {
+      "en": "But the marks sit on the formula line and the substitution line, which the calculator does not write for you",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:68:18"
+      ]
+    },
+    "queseq6-formula#47": {
+      "en": "∴ true — write both lines, then let EQN check X₁ and X₂",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:69:18"
+      ]
+    },
+    "queseq6-formula#48": {
+      "en": "answers alone score almost nothing",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:69:80"
+      ]
+    },
+    "queseq6-formula#49": {
+      "en": "Formula line + substitution line, every time.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:74:15"
+      ]
+    },
+    "queseq6-formula#50": {
+      "en": "For <b>x² − ${C(bb)}x − ${C(cc)} = 0</b>, what are a, b and c?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:80:20"
+      ]
+    },
+    "queseq6-formula#51": {
+      "en": "a = 1, b = −${C(bb)}, c = −${C(cc)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:81:21",
+        "queseq6-formula.js:93:16"
+      ]
+    },
+    "queseq6-formula#52": {
+      "en": "a = 1, b = −${C(bb)}, c = ${C(cc)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:83:7"
+      ]
+    },
+    "queseq6-formula#53": {
+      "en": "a = 1, b = ${C(bb)}, c = −${C(cc)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:84:7"
+      ]
+    },
+    "queseq6-formula#54": {
+      "en": "a = 0, b = −${C(bb)}, c = −${C(cc)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:85:7"
+      ]
+    },
+    "queseq6-formula#55": {
+      "en": "Every coefficient keeps the sign sitting in front of it.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:88:15"
+      ]
+    },
+    "queseq6-formula#56": {
+      "en": "b and c BOTH carry their minus signs: b = −${C(bb)}, c = −${C(cc)}. (Typing c = ${C(cc)} into the calculator solves a different equation!)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:89:22"
+      ]
+    },
+    "queseq6-formula#57": {
+      "en": "Standard form is ax² + bx + c = 0, with PLUS signs written between the terms",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:91:16"
+      ]
+    },
+    "queseq6-formula#58": {
+      "en": "So read x² − ${C(bb)}x − ${C(cc)} = 0 as x² + (−${C(bb)})x + (−${C(cc)}) = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:92:16"
+      ]
+    },
+    "queseq6-formula#59": {
+      "en": "each coefficient keeps the sign standing in front of it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:93:58"
+      ]
+    },
+    "queseq6-formula#60": {
+      "en": "You should round every in-between step to two decimals as you go. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:109:9"
+      ]
+    },
+    "queseq6-formula#61": {
+      "en": "Early rounding snowballs.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:111:17"
+      ]
+    },
+    "queseq6-formula#62": {
+      "en": "False — round only at the END. Rounding along the way builds up error; carry the exact values (or full calculator display) until the final line.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:112:24"
+      ]
+    },
+    "queseq6-formula#63": {
+      "en": "Every rounding throws a little bit away, and the next step multiplies whatever is left",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:114:18"
+      ]
+    },
+    "queseq6-formula#64": {
+      "en": "Two or three rounded steps and the last decimal is already wrong",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:115:18"
+      ]
+    },
+    "queseq6-formula#65": {
+      "en": "∴ false — carry the exact value or the full calculator display, and round ONCE at the end",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:116:18"
+      ]
+    },
+    "queseq6-formula#66": {
+      "en": "The formula gives x = ${surd}. The question wants decimals. How do you write the answers?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:127:7"
+      ]
+    },
+    "queseq6-formula#67": {
+      "en": "x ≈ ${d2(hi)} or x ≈ ${d2(lo)} — two decimals, decimal comma",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:128:7"
+      ]
+    },
+    "queseq6-formula#68": {
+      "en": "x ≈ ${dot(d2(hi))} or x ≈ ${dot(d2(lo))} — decimal point",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:129:8"
+      ]
+    },
+    "queseq6-formula#69": {
+      "en": "x ≈ ${d1(hi)} or x ≈ ${d1(lo)} — one decimal",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:130:9"
+      ]
+    },
+    "queseq6-formula#70": {
+      "en": "Leave them as ${surd} always",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:131:9"
+      ]
+    },
+    "queseq6-formula#71": {
+      "en": "Two decimals, decimal comma, final answers only.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:132:15"
+      ]
+    },
+    "queseq6-formula#72": {
+      "en": "Round FINAL answers to two decimals with the decimal comma (SA style): ${d2(hi)} and ${d2(lo)}. Keep the surd form only if the question asks for it.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:133:22"
+      ]
+    },
+    "queseq6-formula#73": {
+      "en": "Split the ± into its two answers first: x = ${C(m)} + √${C(r)} or x = ${C(m)} − √${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:135:16"
+      ]
+    },
+    "queseq6-formula#74": {
+      "en": "Work each one out and round ONCE, at the end, to two decimals: ${d2(hi)} and ${d2(lo)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:136:16"
+      ]
+    },
+    "queseq6-formula#75": {
+      "en": "Write the decimals with a COMMA, and join each to its surd line with ≈",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:137:16"
+      ]
+    },
+    "queseq6-formula#76": {
+      "en": "exact line with =, rounded line with ≈",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:137:93"
+      ]
+    },
+    "queseq6-formula#77": {
+      "en": "The roots of <b>x² + bx + c = 0</b> are <b>−${C(m)}</b> and <b>${C(n)}</b>. What is c?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:145:20"
+      ]
+    },
+    "queseq6-formula#78": {
+      "en": "c = (${C(m)})(−${C(n)}) = ${C(cVal)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:146:21"
+      ]
+    },
+    "queseq6-formula#79": {
+      "en": "c = ${C(m)} × ${C(n)} = ${C(m * n)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:148:7"
+      ]
+    },
+    "queseq6-formula#80": {
+      "en": "c = −${C(m)} + ${C(n)} = ${C(-m + n)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:149:7"
+      ]
+    },
+    "queseq6-formula#81": {
+      "en": "c = −${C(m)} − ${C(n)} = ${C(-m - n)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:150:7"
+      ]
+    },
+    "queseq6-formula#82": {
+      "en": "Build the factors from the roots first: (x + ${C(m)})(x − ${C(n)}), then expand.",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:153:15"
+      ]
+    },
+    "queseq6-formula#83": {
+      "en": "Roots −${C(m)} and ${C(n)} → factors (x + ${C(m)})(x − ${C(n)}). The constant is the product of the FACTOR constants: (${C(m)})(−${C(n)}) = ${C(cVal)}. (And b = ${C(bVal)}, the sum of roots with opposite sign.)",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:154:22"
+      ]
+    },
+    "queseq6-formula#84": {
+      "en": "Turn each root into its factor, opposite sign: −${C(m)} gives (x + ${C(m)}), and ${C(n)} gives (x − ${C(n)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:156:16"
+      ]
+    },
+    "queseq6-formula#85": {
+      "en": "So the equation is (x + ${C(m)})(x − ${C(n)}) = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:157:16"
+      ]
+    },
+    "queseq6-formula#86": {
+      "en": "Multiply out and read off c: (${C(m)})(−${C(n)}) = ${C(cVal)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:158:16"
+      ]
+    },
+    "queseq6-formula#87": {
+      "en": "c is the product of the numbers INSIDE the brackets, signs and all",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:158:84"
+      ]
+    },
+    "queseq6-formula#88": {
+      "en": "The same expansion gives b = ${C(bVal)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:159:16"
+      ]
+    },
+    "queseq6-formula#89": {
+      "en": "build the brackets — do not try to remember a sum-and-product formula",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:159:62"
+      ]
+    },
+    "queseq6-formula#90": {
+      "en": "Simultaneous equations (substitution method). Which equation do you make a variable the subject of?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq6-formula.js:171:23"
+      ]
+    },
+    "queseq6-formula#91": {
+      "en": "The simpler one — usually the LINEAR equation",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:171:135"
+      ]
+    },
+    "queseq6-formula#92": {
+      "en": "The quadratic one — it has more information",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:171:193"
+      ]
+    },
+    "queseq6-formula#93": {
+      "en": "Always the first one written",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:171:240"
+      ]
+    },
+    "queseq6-formula#94": {
+      "en": "Either — it makes no difference to the work",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:171:272"
+      ]
+    },
+    "queseq6-formula#95": {
+      "en": "Rearrange the LINEAR equation (least work, no squares), then substitute that expression into the other equation.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:171:325"
+      ]
+    },
+    "queseq6-formula#96": {
+      "en": "Pick the easy (linear) equation and make one variable the subject.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:173:17",
+        "queseq6-formula.js:186:15"
+      ]
+    },
+    "queseq6-formula#97": {
+      "en": "Making a variable the subject means getting it alone on one side",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:175:18"
+      ]
+    },
+    "queseq6-formula#98": {
+      "en": "In the linear equation nothing is squared, so it comes out in one or two moves",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:176:18"
+      ]
+    },
+    "queseq6-formula#99": {
+      "en": "Rearranging the quadratic would leave a root sign in your expression — much messier",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:177:18"
+      ]
+    },
+    "queseq6-formula#100": {
+      "en": "so rearrange the LINEAR one and substitute it into the other",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:178:18"
+      ]
+    },
+    "queseq6-formula#101": {
+      "en": "From <b>${C(a)}x − y = ${C(c)}</b>, the tidy subject to take is…",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:183:7"
+      ]
+    },
+    "queseq6-formula#102": {
+      "en": "y = ${C(a)}x − ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct",
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:184:7",
+        "queseq6-formula.js:191:16"
+      ]
+    },
+    "queseq6-formula#103": {
+      "en": "x = (${C(c)} + y)/${C(a)} — always take x",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:185:8"
+      ]
+    },
+    "queseq6-formula#104": {
+      "en": "y = ${C(c)} − ${C(a)}x",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:185:53"
+      ]
+    },
+    "queseq6-formula#105": {
+      "en": "${C(a)}x = y + ${C(c)} is already finished",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:185:79"
+      ]
+    },
+    "queseq6-formula#106": {
+      "en": "y = ${C(a)}x − ${C(c)} (watch the signs as it crosses). Substituting this into the other equation leaves one variable.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:187:22"
+      ]
+    },
+    "queseq6-formula#107": {
+      "en": "Choose the variable with nothing attached to it — here that is the y",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:189:16"
+      ]
+    },
+    "queseq6-formula#108": {
+      "en": "${C(a)}x − y = ${C(c)}  →  ${C(a)}x − ${C(c)} = y",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:190:16"
+      ]
+    },
+    "queseq6-formula#109": {
+      "en": "move the y across, move the number across",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:190:72"
+      ]
+    },
+    "queseq6-formula#110": {
+      "en": "taking x instead would drag in a division by ${C(a)} for no reason",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:191:45"
+      ]
+    },
+    "queseq6-formula#111": {
+      "en": "Linear + quadratic simultaneous equations: how many solution PAIRS can there be?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq6-formula.js:206:23"
+      ]
+    },
+    "queseq6-formula#112": {
+      "en": "Up to two — and each answer must be paired with its partner value",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:206:116"
+      ]
+    },
+    "queseq6-formula#113": {
+      "en": "Exactly one, always",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:206:194"
+      ]
+    },
+    "queseq6-formula#114": {
+      "en": "Up to four",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:206:217"
+      ]
+    },
+    "queseq6-formula#115": {
+      "en": "None — a line and a parabola can't be solved together",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:206:231"
+      ]
+    },
+    "queseq6-formula#116": {
+      "en": "Substituting the line into the quadratic gives a quadratic → up to two x-values, each with its own y. Write each as a coordinate pair (x ; y).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:206:294"
+      ]
+    },
+    "queseq6-formula#117": {
+      "en": "Substitute, solve the quadratic, back-substitute, pair up.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:208:17",
+        "queseq6-formula.js:234:15"
+      ]
+    },
+    "queseq6-formula#118": {
+      "en": "Substituting the line into the quadratic leaves one variable, in a quadratic equation",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:210:18"
+      ]
+    },
+    "queseq6-formula#119": {
+      "en": "A quadratic gives at most two answers, so there are at most two x-values",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:211:18"
+      ]
+    },
+    "queseq6-formula#120": {
+      "en": "Each x has its own y, so the answers come out as up to two pairs (x ; y)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:212:18"
+      ]
+    },
+    "queseq6-formula#121": {
+      "en": "picture it: a line can cut a parabola twice, touch it once, or miss it",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:213:18"
+      ]
+    },
+    "queseq6-formula#122": {
+      "en": "Final answers to simultaneous equations should be written as coordinate pairs, e.g. (3 ; −3). True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:218:9"
+      ]
+    },
+    "queseq6-formula#123": {
+      "en": "Each x belongs to a specific y.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq6-formula.js:220:17"
+      ]
+    },
+    "queseq6-formula#124": {
+      "en": "True — each solution is a PAIR that works in both equations, so write them together: (3 ; −3).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:221:24"
+      ]
+    },
+    "queseq6-formula#125": {
+      "en": "A solution has to satisfy BOTH equations, which takes an x and its own matching y",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:223:18"
+      ]
+    },
+    "queseq6-formula#126": {
+      "en": "Listing the x-values alone loses which y belongs to which x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:224:18"
+      ]
+    },
+    "queseq6-formula#127": {
+      "en": "∴ true — write each solution as a pair, with a SEMICOLON: (3 ; −3)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:225:18"
+      ]
+    },
+    "queseq6-formula#128": {
+      "en": "the comma is the decimal separator",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:225:91"
+      ]
+    },
+    "queseq6-formula#129": {
+      "en": "You solved x = ${C(x0)}. How do you find the matching y?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq6-formula.js:231:7"
+      ]
+    },
+    "queseq6-formula#130": {
+      "en": "Substitute x = ${C(x0)} back into the SUBJECT expression (the linear equation)",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq6-formula.js:232:7"
+      ]
+    },
+    "queseq6-formula#131": {
+      "en": "y is always 0",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:233:8"
+      ]
+    },
+    "queseq6-formula#132": {
+      "en": "Substitute into the discriminant",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:233:25"
+      ]
+    },
+    "queseq6-formula#133": {
+      "en": "Guess and check",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq6-formula.js:233:61"
+      ]
+    },
+    "queseq6-formula#134": {
+      "en": "Back-substitute into the linear equation (the easy one): e.g. y = ${C(a)}(${C(x0)}) − ${C(c)} = ${C(y0)}, giving the pair (${C(x0)} ; ${C(y0)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq6-formula.js:235:22"
+      ]
+    },
+    "queseq6-formula#135": {
+      "en": "Go back to the LINEAR equation — it is the easy one, and it is already y = …",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:237:16"
+      ]
+    },
+    "queseq6-formula#136": {
+      "en": "Put the x in, bracketed: y = ${C(a)}(${C(x0)}) − ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:238:16"
+      ]
+    },
+    "queseq6-formula#137": {
+      "en": "y = ${C(y0)}, so the pair is (${C(x0)} ; ${C(y0)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq6-formula.js:239:16"
+      ]
+    },
+    "queseq6-formula#138": {
+      "en": "do this fresh for each x-value you found",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq6-formula.js:239:73"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [
+    {
+      "where": "queseq5-square.js:181:45",
+      "text": "positive → happy parabola, so the TP is a MINIMUM",
+      "in": "a = ${C(a)} is ${up ? \"positive → happy parabola, so the TP "
+    },
+    {
+      "where": "queseq5-square.js:181:99",
+      "text": "negative → sad parabola, so the TP is a MAXIMUM",
+      "in": "a = ${C(a)} is ${up ? \"positive → happy parabola, so the TP "
+    },
+    {
+      "where": "queseq5-square.js:184:29",
+      "text": "positive, so the arms point up — a happy parabola",
+      "in": "a is ${up ? \"positive, so the arms point up — a happy parabo"
+    },
+    {
+      "where": "queseq5-square.js:184:83",
+      "text": "negative, so the arms point down — a sad parabola",
+      "in": "a is ${up ? \"positive, so the arms point up — a happy parabo"
+    }
+  ],
+  "words": 3396
+}
