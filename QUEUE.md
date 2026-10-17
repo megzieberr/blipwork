@@ -29,10 +29,10 @@ Words = English prose words inside string literals (slight overcount). Under 1 5
 
 ### Equations & Inequalities
 - ☑ 2026-10-17 T08 | concepts: the `eqn` block (js/concepts/eqn.js after S4) | ~1 255 words | counted by af_extract 2026-10-17
-- ⏳ 2026-10-17 19:43 T09 | hub rounds: queseq1-zeroproduct … queseq3-kmethod (3 files) | ~3 307 words | verify page: verify-eq.html
+- ☑ 2026-10-17 T09 | hub rounds: queseq1-zeroproduct … queseq3-kmethod (3 files) | ~3 307 words | verify page: verify-eq.html
 - ⏳ 2026-10-17 19:45 T10 | hub rounds: queseq4-fractions … queseq6-formula (3 files) | ~3 472 words | verify page: verify-eq.html
 - ⏳ 2026-10-17 19:47 T11 | hub rounds: queseq7-inequalities … queseq8-nature (2 files) | ~3 446 words | verify page: verify-eq.html
-- ☐ T12 | hub rounds: queseq9-solution-count | ~681 words | verify page: verify-eq.html
+- ⏳ 2026-10-17 19:51 T12 | hub rounds: queseq9-solution-count | ~681 words | verify page: verify-eq.html
 - ☐ T13 | exam: cards-eqn, eqn-fractions-and-restrictions, eqn-inequalities-2, eqn-inequalities, eqn-k-method (5 files) | ~3 473 words | verify-exam.html
 - ☐ T14 | exam: eqn-level4, eqn-nature-of-roots-2 (2 files) | ~3 512 words | verify-exam.html
 - ☐ S8 | before T15 (setup, one Opus worker): tools/af_check.mjs reads an optional briefs/af/allow.json ({ rule: [file globs or keys] }); findings listed there become WARN, not ERROR; seed it with wording:em-dash for js/exam/eqn-nature-of-roots.js (her ruling 2026-10-17: her August em-dashes stay) | check: af_check on that file exits 0 with 31 WARN lines; negative copy still fails on other rules

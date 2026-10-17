@@ -1,0 +1,4520 @@
+{
+  "unit": "T09",
+  "generated": "2026-10-17T17:44:00.843Z",
+  "files": [
+    "js/quests/queseq1-zeroproduct.js",
+    "js/quests/queseq2-special.js",
+    "js/quests/queseq3-kmethod.js"
+  ],
+  "items": {
+    "queseq1-zeroproduct#1": {
+      "en": "You must solve <b>x² + 3x = 10</b>. What is the FIRST step?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:21:12"
+      ]
+    },
+    "queseq1-zeroproduct#2": {
+      "en": "Take everything to one side so the other side is 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:21:84"
+      ]
+    },
+    "queseq1-zeroproduct#3": {
+      "en": "Divide both sides by x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:21:147"
+      ]
+    },
+    "queseq1-zeroproduct#4": {
+      "en": "Square-root both sides",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:21:173"
+      ]
+    },
+    "queseq1-zeroproduct#5": {
+      "en": "Substitute x = 0 to check",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:21:199"
+      ]
+    },
+    "queseq1-zeroproduct#6": {
+      "en": "Almost every quadratic starts the same way: rearrange into standard form ax² + bx + c = 0, THEN factorise.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:21:234"
+      ]
+    },
+    "queseq1-zeroproduct#7": {
+      "en": "What is the <b>standard form</b> of a quadratic equation?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:22:12"
+      ]
+    },
+    "queseq1-zeroproduct#8": {
+      "en": "ax² + bx + c = 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:22:82"
+      ]
+    },
+    "queseq1-zeroproduct#9": {
+      "en": "ax² + bx = c",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:22:111"
+      ]
+    },
+    "queseq1-zeroproduct#10": {
+      "en": "ax + b = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:22:127"
+      ]
+    },
+    "queseq1-zeroproduct#11": {
+      "en": "a(x − p)² + q = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:22:141"
+      ]
+    },
+    "queseq1-zeroproduct#12": {
+      "en": "Standard form is ax² + bx + c = 0 — everything on one side, 0 on the other.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:22:168"
+      ]
+    },
+    "queseq1-zeroproduct#13": {
+      "en": "Solve <b>10 + 3y − y² = 0</b>. What tidy-up makes it easiest to factorise?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:23:12"
+      ]
+    },
+    "queseq1-zeroproduct#14": {
+      "en": "Rearrange to y² − 3y − 10 = 0 (positive square term first)",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:23:99"
+      ]
+    },
+    "queseq1-zeroproduct#15": {
+      "en": "Leave it as it is and factorise",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:23:170"
+      ]
+    },
+    "queseq1-zeroproduct#16": {
+      "en": "Divide everything by y",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:23:205"
+      ]
+    },
+    "queseq1-zeroproduct#17": {
+      "en": "Move the 10 to the right first",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:23:231"
+      ]
+    },
+    "queseq1-zeroproduct#18": {
+      "en": "Rewrite with the square term positive and in front: y² − 3y − 10 = 0, which factorises to (y − 5)(y + 2) = 0.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:23:271"
+      ]
+    },
+    "queseq1-zeroproduct#19": {
+      "en": "Standard form first: everything to ONE side, 0 on the other.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:27:15"
+      ]
+    },
+    "queseq1-zeroproduct#20": {
+      "en": "On the calculator: <b>MODE → 5: EQN</b>. Which option solves a QUADRATIC (ax² + bx + c = 0)?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:33:12"
+      ]
+    },
+    "queseq1-zeroproduct#21": {
+      "en": "3: aX² + bX + c = 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:33:117"
+      ]
+    },
+    "queseq1-zeroproduct#22": {
+      "en": "4: aX³ + bX² + cX + d = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:33:149"
+      ]
+    },
+    "queseq1-zeroproduct#23": {
+      "en": "1: anX + bnY = cn",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:33:178"
+      ]
+    },
+    "queseq1-zeroproduct#24": {
+      "en": "2: anX + bnY + cnZ = dn",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:33:199"
+      ]
+    },
+    "queseq1-zeroproduct#25": {
+      "en": "Option 3 is the quadratic. Option 4 is the CUBIC — a common mis-pick. (Even the workbook wrote it wrong once!)",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:33:232"
+      ]
+    },
+    "queseq1-zeroproduct#26": {
+      "en": "Match the shape on the screen to the shape of your equation",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:34:20"
+      ]
+    },
+    "queseq1-zeroproduct#27": {
+      "en": "A quadratic's highest power is x², so you want the line that shows aX² + bX + c",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:35:20"
+      ]
+    },
+    "queseq1-zeroproduct#28": {
+      "en": "That is option 3",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:36:20"
+      ]
+    },
+    "queseq1-zeroproduct#29": {
+      "en": "option 4 shows aX³ — that is a CUBIC, and it will ask you for a fourth coefficient d",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:36:43"
+      ]
+    },
+    "queseq1-zeroproduct#30": {
+      "en": "In EQN mode you type in the coefficients a, b and c. How must you type them?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:37:12"
+      ]
+    },
+    "queseq1-zeroproduct#31": {
+      "en": "Each with its own sign",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:37:101"
+      ]
+    },
+    "queseq1-zeroproduct#32": {
+      "en": "Always positive — signs don't matter",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:37:136"
+      ]
+    },
+    "queseq1-zeroproduct#33": {
+      "en": "Only a gets a sign",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:37:176"
+      ]
+    },
+    "queseq1-zeroproduct#34": {
+      "en": "As fractions only",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:37:198"
+      ]
+    },
+    "queseq1-zeroproduct#35": {
+      "en": "Every coefficient goes in WITH its sign: for x² − 2x − 1 = 0 that's a = 1, b = −2, c = −1.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:37:225"
+      ]
+    },
+    "queseq1-zeroproduct#36": {
+      "en": "Standard form is ax² + bx + c = 0, with PLUS signs written between the terms",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:38:20"
+      ]
+    },
+    "queseq1-zeroproduct#37": {
+      "en": "So in x² − 2x − 1 = 0 the b term is + (−2)x and the c term is + (−1)",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:39:20"
+      ]
+    },
+    "queseq1-zeroproduct#38": {
+      "en": "Type a = 1, b = −2, c = −1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:40:20"
+      ]
+    },
+    "queseq1-zeroproduct#39": {
+      "en": "drop a minus and the calculator solves a different equation",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:40:53"
+      ]
+    },
+    "queseq1-zeroproduct#40": {
+      "en": "After entering a, b and c in EQN mode, what does the calculator show?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:41:12"
+      ]
+    },
+    "queseq1-zeroproduct#41": {
+      "en": "The two roots, X₁ and X₂",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:41:94"
+      ]
+    },
+    "queseq1-zeroproduct#42": {
+      "en": "The factors, e.g. (2x − 1)(x + 3)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:41:131"
+      ]
+    },
+    "queseq1-zeroproduct#43": {
+      "en": "The turning point",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:41:168"
+      ]
+    },
+    "queseq1-zeroproduct#44": {
+      "en": "Only whether solutions exist",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:41:189"
+      ]
+    },
+    "queseq1-zeroproduct#45": {
+      "en": "The calculator gives the ROOTS as numbers (X₁ and X₂) — turning them back into factors is your job.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:41:227"
+      ]
+    },
+    "queseq1-zeroproduct#46": {
+      "en": "EQN mode solves the equation, so what comes back are the x-values that make it 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:42:20"
+      ]
+    },
+    "queseq1-zeroproduct#47": {
+      "en": "They appear as X₁ and X₂ — two numbers, not brackets",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:43:20"
+      ]
+    },
+    "queseq1-zeroproduct#48": {
+      "en": "To get factors you do the next bit yourself: opposite signs in the brackets, and any denominator multiplies the x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:44:20"
+      ]
+    },
+    "queseq1-zeroproduct#49": {
+      "en": "MODE → 5: EQN → 3: aX² + bX + c = 0 → type a, b, c with their signs.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:48:15"
+      ]
+    },
+    "queseq1-zeroproduct#50": {
+      "en": "The calculator gives a root <b>x = ${C(r)}</b>. Which factor does it come from?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:69:9"
+      ]
+    },
+    "queseq1-zeroproduct#51": {
+      "en": "(x ${opp} ${C(k)})",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:70:9"
+      ]
+    },
+    "queseq1-zeroproduct#52": {
+      "en": "(x ${same} ${C(k)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:71:10"
+      ]
+    },
+    "queseq1-zeroproduct#53": {
+      "en": "(${C(k)}x ${opp} 1)",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:71:33"
+      ]
+    },
+    "queseq1-zeroproduct#54": {
+      "en": "(${C(k)}x ${same} 1)",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:71:56"
+      ]
+    },
+    "queseq1-zeroproduct#55": {
+      "en": "Put the OPPOSITE sign in the bracket. For a fraction root, the denominator multiplies the x.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:72:17",
+        "queseq1-zeroproduct.js:91:15"
+      ]
+    },
+    "queseq1-zeroproduct#56": {
+      "en": "Opposite sign of the root: x = ${C(r)} comes from (x ${opp} ${C(k)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:73:24"
+      ]
+    },
+    "queseq1-zeroproduct#57": {
+      "en": "A root is an x-value that makes its bracket equal 0, so start there: x = ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:75:18"
+      ]
+    },
+    "queseq1-zeroproduct#58": {
+      "en": "Take everything to one side: x ${opp} ${C(k)} = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:76:18"
+      ]
+    },
+    "queseq1-zeroproduct#59": {
+      "en": "That line IS the bracket: (x ${opp} ${C(k)})",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:77:18"
+      ]
+    },
+    "queseq1-zeroproduct#60": {
+      "en": "the bracket always carries the OPPOSITE sign to the root",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:77:69"
+      ]
+    },
+    "queseq1-zeroproduct#61": {
+      "en": "(x ${opp} ${C(d)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:86:31"
+      ]
+    },
+    "queseq1-zeroproduct#62": {
+      "en": "(${C(n)}x ${opp} ${C(d)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:86:54"
+      ]
+    },
+    "queseq1-zeroproduct#63": {
+      "en": "The calculator gives a root <b>x = ${rootStr}</b>. Which factor does it come from?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:88:7"
+      ]
+    },
+    "queseq1-zeroproduct#64": {
+      "en": "(${C(d)}x ${opp} ${C(n)})",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:89:7"
+      ]
+    },
+    "queseq1-zeroproduct#65": {
+      "en": "(${C(d)}x ${same} ${C(n)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:90:8"
+      ]
+    },
+    "queseq1-zeroproduct#66": {
+      "en": "(x ${opp} ${frac(n, d)})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:90:47"
+      ]
+    },
+    "queseq1-zeroproduct#67": {
+      "en": "Denominator ${C(d)} multiplies the x; numerator ${C(n)} crosses over with the opposite sign: (${C(d)}x ${opp} ${C(n)}).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:92:22"
+      ]
+    },
+    "queseq1-zeroproduct#68": {
+      "en": "Start from the root: x = ${rootStr}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:94:16"
+      ]
+    },
+    "queseq1-zeroproduct#69": {
+      "en": "Multiply the denominator to the x: ${C(d)}x = ${s < 0 ? \"−\" : \"\"}${C(n)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:95:16"
+      ]
+    },
+    "queseq1-zeroproduct#70": {
+      "en": "her calculator trick: multiply denom to x",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:95:95"
+      ]
+    },
+    "queseq1-zeroproduct#71": {
+      "en": "Take the numerator over the =: ${C(d)}x ${opp} ${C(n)} = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:96:16"
+      ]
+    },
+    "queseq1-zeroproduct#72": {
+      "en": "so the factor is (${C(d)}x ${opp} ${C(n)})",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:96:81"
+      ]
+    },
+    "queseq1-zeroproduct#73": {
+      "en": "Why may you set each bracket of <b>(x − 5)(x − 2) = 0</b> equal to 0 on its own?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:103:12"
+      ]
+    },
+    "queseq1-zeroproduct#74": {
+      "en": "A product is 0 only when at least one factor is 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:103:105"
+      ]
+    },
+    "queseq1-zeroproduct#75": {
+      "en": "Because both brackets must equal 0 at the same time",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:103:167"
+      ]
+    },
+    "queseq1-zeroproduct#76": {
+      "en": "Because the brackets are equal to each other",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:103:222"
+      ]
+    },
+    "queseq1-zeroproduct#77": {
+      "en": "Because 0 divided by anything is 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:103:270"
+      ]
+    },
+    "queseq1-zeroproduct#78": {
+      "en": "That's the zero-product rule: if A·B = 0 then A = 0 or B = 0 — nothing else can multiply to give 0.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:103:314"
+      ]
+    },
+    "queseq1-zeroproduct#79": {
+      "en": "Think about what makes a product come out as 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:104:20"
+      ]
+    },
+    "queseq1-zeroproduct#80": {
+      "en": "Two numbers multiply to 0 only if at least one of them IS 0 — no other pair can do it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:105:20"
+      ]
+    },
+    "queseq1-zeroproduct#81": {
+      "en": "So A·B = 0 forces A = 0 or B = 0, and each bracket may be solved on its own",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:106:20"
+      ]
+    },
+    "queseq1-zeroproduct#82": {
+      "en": "“or”, not “and” — they need not both be 0",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:106:102"
+      ]
+    },
+    "queseq1-zeroproduct#83": {
+      "en": "The equation is already factorised: <b>(x − 5)(x − 2) = 0</b>. What should you do?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:107:12"
+      ]
+    },
+    "queseq1-zeroproduct#84": {
+      "en": "Set each bracket equal to 0 separately and solve",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:107:107"
+      ]
+    },
+    "queseq1-zeroproduct#85": {
+      "en": "Multiply the brackets out first",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:107:168"
+      ]
+    },
+    "queseq1-zeroproduct#86": {
+      "en": "Divide both sides by (x − 5)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:107:203"
+      ]
+    },
+    "queseq1-zeroproduct#87": {
+      "en": "Add the brackets together",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:107:235"
+      ]
+    },
+    "queseq1-zeroproduct#88": {
+      "en": "Don't undo the gift! It's already factorised — set x − 5 = 0 or x − 2 = 0. (Dividing by (x − 5) throws the x = 5 answer away.)",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:107:270"
+      ]
+    },
+    "queseq1-zeroproduct#89": {
+      "en": "Factorised and equal to 0 is exactly the form the zero-product rule needs — the hard work is already done",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:108:20"
+      ]
+    },
+    "queseq1-zeroproduct#90": {
+      "en": "So split it: x − 5 = 0 or x − 2 = 0, giving x = 5 or x = 2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:109:20"
+      ]
+    },
+    "queseq1-zeroproduct#91": {
+      "en": "Multiplying out would put you back at the start, and dividing by (x − 5) would delete the x = 5 answer",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:110:20"
+      ]
+    },
+    "queseq1-zeroproduct#92": {
+      "en": "never divide a factor away",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:110:129"
+      ]
+    },
+    "queseq1-zeroproduct#93": {
+      "en": "Brackets = 0 → each bracket = 0 on its own. Don't multiply out; don't divide a factor away.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:114:15"
+      ]
+    },
+    "queseq1-zeroproduct#94": {
+      "en": "Solve: <b>(x − ${C(p)})(x + ${C(q)}) = 0</b>",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:121:20"
+      ]
+    },
+    "queseq1-zeroproduct#95": {
+      "en": "x = ${C(p)} or x = ${C(-q)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:122:21"
+      ]
+    },
+    "queseq1-zeroproduct#96": {
+      "en": "x = ${C(-p)} or x = ${C(q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:124:7"
+      ]
+    },
+    "queseq1-zeroproduct#97": {
+      "en": "x = ${C(p)} or x = ${C(q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:125:7"
+      ]
+    },
+    "queseq1-zeroproduct#98": {
+      "en": "x = ${C(-p)} or x = ${C(-q)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:126:7"
+      ]
+    },
+    "queseq1-zeroproduct#99": {
+      "en": "Each bracket = 0 → the answer has the OPPOSITE sign of the number in the bracket.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:129:15"
+      ]
+    },
+    "queseq1-zeroproduct#100": {
+      "en": "x − ${C(p)} = 0 gives x = ${C(p)}; x + ${C(q)} = 0 gives x = ${C(-q)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:130:22"
+      ]
+    },
+    "queseq1-zeroproduct#101": {
+      "en": "The product is already 0, so set each bracket to 0 on its own",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:132:16"
+      ]
+    },
+    "queseq1-zeroproduct#102": {
+      "en": "zero-product rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:132:84"
+      ]
+    },
+    "queseq1-zeroproduct#103": {
+      "en": "x − ${C(p)} = 0  →  x = ${C(p)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:133:16"
+      ]
+    },
+    "queseq1-zeroproduct#104": {
+      "en": "x + ${C(q)} = 0  →  x = ${C(-q)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:134:16"
+      ]
+    },
+    "queseq1-zeroproduct#105": {
+      "en": "the answer flips the sign that is inside the bracket",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:134:55"
+      ]
+    },
+    "queseq1-zeroproduct#106": {
+      "en": "Solve: <b>x(${C(a)}x − ${C(bb)})(−x + ${C(c)}) = 0</b>",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:142:20"
+      ]
+    },
+    "queseq1-zeroproduct#107": {
+      "en": "x = 0, x = ${frac(bb, a)} or x = ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:143:21"
+      ]
+    },
+    "queseq1-zeroproduct#108": {
+      "en": "x = ${frac(bb, a)} or x = ${C(c)} (only two answers)",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:145:7"
+      ]
+    },
+    "queseq1-zeroproduct#109": {
+      "en": "x = 0, x = ${frac(bb, a)} or x = ${C(-c)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:146:7"
+      ]
+    },
+    "queseq1-zeroproduct#110": {
+      "en": "x = 0, x = ${C(-bb)} or x = ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:147:7"
+      ]
+    },
+    "queseq1-zeroproduct#111": {
+      "en": "THREE factors → up to three answers. The lonely x in front is a factor too: x = 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:150:15"
+      ]
+    },
+    "queseq1-zeroproduct#112": {
+      "en": "x = 0; ${C(a)}x = ${C(bb)} gives x = ${frac(bb, a)}; −x = ${C(-c)} gives x = ${C(c)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:151:22"
+      ]
+    },
+    "queseq1-zeroproduct#113": {
+      "en": "Count the factors before you start: the lonely x, then two brackets — three of them",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:153:16"
+      ]
+    },
+    "queseq1-zeroproduct#114": {
+      "en": "so expect up to three answers",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:153:106"
+      ]
+    },
+    "queseq1-zeroproduct#115": {
+      "en": "The lonely x is a factor too: x = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:154:16"
+      ]
+    },
+    "queseq1-zeroproduct#116": {
+      "en": "${C(a)}x − ${C(bb)} = 0  →  ${C(a)}x = ${C(bb)}  →  x = ${frac(bb, a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:155:16"
+      ]
+    },
+    "queseq1-zeroproduct#117": {
+      "en": "−x + ${C(c)} = 0  →  x = ${C(c)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:156:16"
+      ]
+    },
+    "queseq1-zeroproduct#118": {
+      "en": "watch the negative x — dividing by −1 flips the sign",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:156:55"
+      ]
+    },
+    "queseq1-zeroproduct#119": {
+      "en": "<b>(x − 3)(x + 2) = ${C(k)}</b>. May you write x − 3 = ${C(k)} or x + 2 = ${C(k)}?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:165:9"
+      ]
+    },
+    "queseq1-zeroproduct#120": {
+      "en": "Does the zero-product rule work against ${C(k)}?",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:167:17"
+      ]
+    },
+    "queseq1-zeroproduct#121": {
+      "en": "No! Brackets may only be split up when the product is 0. Here you must first multiply out and bring the ${C(k)} across, so it equals 0.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:168:24"
+      ]
+    },
+    "queseq1-zeroproduct#122": {
+      "en": "The zero-product rule needs a product of 0, and this one equals ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:170:18"
+      ]
+    },
+    "queseq1-zeroproduct#123": {
+      "en": "Many pairs multiply to ${C(k)}, so knowing the product tells you nothing about either bracket",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:171:18"
+      ]
+    },
+    "queseq1-zeroproduct#124": {
+      "en": "Multiply out first, bring the ${C(k)} across so the right side is 0, THEN factorise again",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:172:18"
+      ]
+    },
+    "queseq1-zeroproduct#125": {
+      "en": "standard form before the rule",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:172:114"
+      ]
+    },
+    "queseq1-zeroproduct#126": {
+      "en": "The zero-product rule works for a product equal to ANY number, not just 0. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:175:9"
+      ]
+    },
+    "queseq1-zeroproduct#127": {
+      "en": "2 × 3 = 6, but so is 1 × 6 and 12 × ½ …",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:177:17"
+      ]
+    },
+    "queseq1-zeroproduct#128": {
+      "en": "False — lots of pairs multiply to 6, so the factors tell you nothing. Only 0 forces a factor to BE 0.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:178:24"
+      ]
+    },
+    "queseq1-zeroproduct#129": {
+      "en": "Try it on 6: 2 × 3 = 6, and so does 1 × 6, and so does 12 × ½",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:180:18"
+      ]
+    },
+    "queseq1-zeroproduct#130": {
+      "en": "Endlessly many pairs give 6, so neither factor is pinned down to anything",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:181:18"
+      ]
+    },
+    "queseq1-zeroproduct#131": {
+      "en": "0 is the only product that forces a factor to BE 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:182:18"
+      ]
+    },
+    "queseq1-zeroproduct#132": {
+      "en": "∴ false — the rule works against 0 and nothing else",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq1-zeroproduct.js:182:75"
+      ]
+    },
+    "queseq2-special#1": {
+      "en": "twice",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq2-special.js:21:20"
+      ]
+    },
+    "queseq2-special#2": {
+      "en": "three times",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq2-special.js:21:32"
+      ]
+    },
+    "queseq2-special#3": {
+      "en": "four times",
+      "kind": "string",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq2-special.js:21:50"
+      ]
+    },
+    "queseq2-special#4": {
+      "en": "You reach <b>x² = −${C(k)}</b>. What can you conclude?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:28:12"
+      ]
+    },
+    "queseq2-special#5": {
+      "en": "There is no real solution — a square is never negative",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:28:79"
+      ]
+    },
+    "queseq2-special#6": {
+      "en": "x = −√${C(k)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:28:146"
+      ]
+    },
+    "queseq2-special#7": {
+      "en": "x = ±√${C(k)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:28:163",
+        "queseq2-special.js:32:84"
+      ]
+    },
+    "queseq2-special#8": {
+      "en": "x = ${C(k)} or x = −${C(k)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:28:180"
+      ]
+    },
+    "queseq2-special#9": {
+      "en": "x² is 0 or positive for every real x, so x² = −${C(k)} can never be true. Write: no real solution.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:28:217"
+      ]
+    },
+    "queseq2-special#10": {
+      "en": "Ask the one question first: can a square ever come out negative?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:29:20"
+      ]
+    },
+    "queseq2-special#11": {
+      "en": "Positive² is positive, negative² is positive, and 0² = 0 — so x² is never below 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:30:20"
+      ]
+    },
+    "queseq2-special#12": {
+      "en": "x² = −${C(k)} is impossible ∴ no real solution",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:31:20"
+      ]
+    },
+    "queseq2-special#13": {
+      "en": "non-real, because the √ of a negative is non-real",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:31:73"
+      ]
+    },
+    "queseq2-special#14": {
+      "en": "Solve <b>x² + ${C(k)} = 0</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:32:12"
+      ]
+    },
+    "queseq2-special#15": {
+      "en": "No real solution",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:32:55"
+      ]
+    },
+    "queseq2-special#16": {
+      "en": "x = −${C(k)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:32:101"
+      ]
+    },
+    "queseq2-special#17": {
+      "en": "x = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:32:117",
+        "queseq2-special.js:191:237"
+      ]
+    },
+    "queseq2-special#18": {
+      "en": "Take the ${C(k)} across: x² = −${C(k)}. A square can't be negative → no real solution.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:32:132"
+      ]
+    },
+    "queseq2-special#19": {
+      "en": "Get x² on its own: x² + ${C(k)} = 0  →  x² = −${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:33:20"
+      ]
+    },
+    "queseq2-special#20": {
+      "en": "Now check the sign: a square is never negative",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:34:20"
+      ]
+    },
+    "queseq2-special#21": {
+      "en": "∴ no real solution",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:35:20"
+      ]
+    },
+    "queseq2-special#22": {
+      "en": "there is nothing to factorise and nothing to root",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:35:45"
+      ]
+    },
+    "queseq2-special#23": {
+      "en": "Ask: can a square ever be negative?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:39:15"
+      ]
+    },
+    "queseq2-special#24": {
+      "en": "<b>x² − ${C(k * k)} = 0</b> has no middle (b) term. Which methods work?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:46:12"
+      ]
+    },
+    "queseq2-special#25": {
+      "en": "Difference of squares, OR square-root both sides keeping ±",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:46:96"
+      ]
+    },
+    "queseq2-special#26": {
+      "en": "Only the quadratic formula",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:46:167"
+      ]
+    },
+    "queseq2-special#27": {
+      "en": "Take out the common factor x",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:46:197"
+      ]
+    },
+    "queseq2-special#28": {
+      "en": "Complete the square — nothing else works",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:46:229"
+      ]
+    },
+    "queseq2-special#29": {
+      "en": "(x + ${C(k)})(x − ${C(k)}) = 0, or square-root both sides: x = ±${C(k)}. Both give the same two answers.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:46:279"
+      ]
+    },
+    "queseq2-special#30": {
+      "en": "No middle term, and ${C(k * k)} is a perfect square, so it is a diff in □'s",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:47:20"
+      ]
+    },
+    "queseq2-special#31": {
+      "en": "x² − ${C(k * k)} = (x + ${C(k)})(x − ${C(k)}) = 0  →  x = −${C(k)} or x = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:48:20"
+      ]
+    },
+    "queseq2-special#32": {
+      "en": "OR go straight for the root: x² = ${C(k * k)}  →  x = ±${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:49:20"
+      ]
+    },
+    "queseq2-special#33": {
+      "en": "both roads are hers, and they give the same two answers",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:49:89"
+      ]
+    },
+    "queseq2-special#34": {
+      "en": "Solve <b>x² = ${C(k * k)}</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:50:12"
+      ]
+    },
+    "queseq2-special#35": {
+      "en": "x = ±${C(k)}",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "solution.s",
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:50:55",
+        "queseq2-special.js:52:20",
+        "queseq2-special.js:72:18",
+        "queseq2-special.js:96:119",
+        "queseq2-special.js:191:246"
+      ]
+    },
+    "queseq2-special#36": {
+      "en": "x = ${C(k)} only",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:50:80",
+        "queseq2-special.js:96:85"
+      ]
+    },
+    "queseq2-special#37": {
+      "en": "x = −${C(k)} only",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:50:100"
+      ]
+    },
+    "queseq2-special#38": {
+      "en": "x = ${C(k * k)} or x = −${C(k * k)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:50:121"
+      ]
+    },
+    "queseq2-special#39": {
+      "en": "Square-rooting BOTH sides of an equation gives both signs: x = ±${C(k)}, because (${C(k)})² and (−${C(k)})² both equal ${C(k * k)}.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:50:166"
+      ]
+    },
+    "queseq2-special#40": {
+      "en": "x² = ${C(k * k)}, so take the square root of BOTH sides",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:51:20"
+      ]
+    },
+    "queseq2-special#41": {
+      "en": "the ± appears the moment an even root is taken in an EQUATION",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:52:39"
+      ]
+    },
+    "queseq2-special#42": {
+      "en": "Check both: (${C(k)})² = ${C(k * k)} and (−${C(k)})² = ${C(k * k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:53:20"
+      ]
+    },
+    "queseq2-special#43": {
+      "en": "both really work, so both are answers",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:53:93"
+      ]
+    },
+    "queseq2-special#44": {
+      "en": "No b term → difference of squares, or √ both sides and keep the ±.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:57:15"
+      ]
+    },
+    "queseq2-special#45": {
+      "en": "A learner solves x² = ${C(k * k)} and writes only <b>x = ${C(k)}</b>. Is that full marks?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:65:9"
+      ]
+    },
+    "queseq2-special#46": {
+      "en": "Does (−${C(k)})² also equal ${C(k * k)}?",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:67:17"
+      ]
+    },
+    "queseq2-special#47": {
+      "en": "No — (−${C(k)})² = ${C(k * k)} too. When you square-root both sides of an EQUATION you must keep both signs: x = ±${C(k)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:68:24"
+      ]
+    },
+    "queseq2-special#48": {
+      "en": "Test the other sign: (−${C(k)})² = ${C(k * k)}, which fits the equation just as well",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:70:18"
+      ]
+    },
+    "queseq2-special#49": {
+      "en": "So the equation really has TWO solutions, and only one has been written down",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:71:18"
+      ]
+    },
+    "queseq2-special#50": {
+      "en": "the ± is not decoration — it is the second answer, and it carries a mark",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:72:37"
+      ]
+    },
+    "queseq2-special#51": {
+      "en": "When you square-root both sides of an equation, you must write ± on the answer. True?",
+      "kind": "string",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:75:9"
+      ]
+    },
+    "queseq2-special#52": {
+      "en": "Two different numbers can have the same square.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:77:17"
+      ]
+    },
+    "queseq2-special#53": {
+      "en": "True — both the positive and the negative value square to the same thing, so both are solutions.",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:78:24"
+      ]
+    },
+    "queseq2-special#54": {
+      "en": "Squaring throws away the sign: 4² = 16 and (−4)² = 16",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:80:18"
+      ]
+    },
+    "queseq2-special#55": {
+      "en": "So undoing a square has to put both possibilities back",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:81:18"
+      ]
+    },
+    "queseq2-special#56": {
+      "en": "∴ true — in an EQUATION the ± is compulsory",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:82:18"
+      ]
+    },
+    "queseq2-special#57": {
+      "en": "when you are only SIMPLIFYING, √9 = 3 with no ±",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:82:68"
+      ]
+    },
+    "queseq2-special#58": {
+      "en": "<b>x² + ${C(k)}x = 0</b> has no constant (c) term. What is the method?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:92:12"
+      ]
+    },
+    "queseq2-special#59": {
+      "en": "Take out the common factor: x(x + ${C(k)}) = 0",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:92:95"
+      ]
+    },
+    "queseq2-special#60": {
+      "en": "Divide both sides by x first",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:92:154"
+      ]
+    },
+    "queseq2-special#61": {
+      "en": "Difference of squares",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:92:186"
+      ]
+    },
+    "queseq2-special#62": {
+      "en": "It cannot be factorised — use the formula",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:92:211"
+      ]
+    },
+    "queseq2-special#63": {
+      "en": "Common factor: x(x + ${C(k)}) = 0, so x = 0 or x = −${C(k)}. Two answers — don't lose one!",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:92:262"
+      ]
+    },
+    "queseq2-special#64": {
+      "en": "There is no constant, so every term already carries an x — that is a common factor",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:93:20"
+      ]
+    },
+    "queseq2-special#65": {
+      "en": "x(x + ${C(k)}) = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:94:20"
+      ]
+    },
+    "queseq2-special#66": {
+      "en": "Zero-product: x = 0 or x + ${C(k)} = 0  →  x = 0 or x = −${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:95:20"
+      ]
+    },
+    "queseq2-special#67": {
+      "en": "the lonely x is a factor, so x = 0 is a real answer",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:95:91"
+      ]
+    },
+    "queseq2-special#68": {
+      "en": "Solve <b>x² = ${C(k)}x</b>.",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:96:12"
+      ]
+    },
+    "queseq2-special#69": {
+      "en": "x = 0 or x = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct",
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:96:52",
+        "queseq2-special.js:99:20"
+      ]
+    },
+    "queseq2-special#70": {
+      "en": "x = 0 only",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:96:105"
+      ]
+    },
+    "queseq2-special#71": {
+      "en": "Everything to one side: x² − ${C(k)}x = 0 → x(x − ${C(k)}) = 0 → x = 0 or x = ${C(k)}.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:96:141"
+      ]
+    },
+    "queseq2-special#72": {
+      "en": "Standard form first: x² − ${C(k)}x = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:97:20"
+      ]
+    },
+    "queseq2-special#73": {
+      "en": "everything to one side, 0 on the other",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:97:65"
+      ]
+    },
+    "queseq2-special#74": {
+      "en": "No constant term, so take out the common x: x(x − ${C(k)}) = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:98:20"
+      ]
+    },
+    "queseq2-special#75": {
+      "en": "two answers — dividing by x would have lost the first one",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:99:47"
+      ]
+    },
+    "queseq2-special#76": {
+      "en": "No c term → common factor. The factor x gives the answer x = 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:103:15"
+      ]
+    },
+    "queseq2-special#77": {
+      "en": "To solve <b>x² = ${C(k)}x</b>, may you divide both sides by x to get x = ${C(k)}?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:111:9"
+      ]
+    },
+    "queseq2-special#78": {
+      "en": "What if x itself is 0?",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:113:17"
+      ]
+    },
+    "queseq2-special#79": {
+      "en": "No — dividing by x throws the x = 0 answer away (and you can't divide by 0). Factorise instead: x(x − ${C(k)}) = 0 → x = 0 or x = ${C(k)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:114:24"
+      ]
+    },
+    "queseq2-special#80": {
+      "en": "Dividing by x is only allowed if x cannot be 0 — and here it can be",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:116:18"
+      ]
+    },
+    "queseq2-special#81": {
+      "en": "Check: x = 0 gives 0 = 0, so x = 0 IS a solution, and dividing deletes it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:117:18"
+      ]
+    },
+    "queseq2-special#82": {
+      "en": "Factorise instead: x² − ${C(k)}x = 0  →  x(x − ${C(k)}) = 0  →  x = 0 or x = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:118:18"
+      ]
+    },
+    "queseq2-special#83": {
+      "en": "factorising keeps both",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:118:109"
+      ]
+    },
+    "queseq2-special#84": {
+      "en": "A learner divides <b>x² = ${C(k)}x</b> by x and gets x = ${C(k)}. What went missing?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:120:12"
+      ]
+    },
+    "queseq2-special#85": {
+      "en": "The solution x = 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:120:109"
+      ]
+    },
+    "queseq2-special#86": {
+      "en": "Nothing — it's correct",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:120:140"
+      ]
+    },
+    "queseq2-special#87": {
+      "en": "The solution x = −${C(k)}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:120:166"
+      ]
+    },
+    "queseq2-special#88": {
+      "en": "The ± sign",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:120:195"
+      ]
+    },
+    "queseq2-special#89": {
+      "en": "x = 0 also satisfies x² = ${C(k)}x (both sides 0). Dividing by x silently deleted it. Common factor keeps both.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:120:215"
+      ]
+    },
+    "queseq2-special#90": {
+      "en": "Put x = 0 into the original: left side 0, right side 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:121:20"
+      ]
+    },
+    "queseq2-special#91": {
+      "en": "so x = 0 is a genuine solution",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:121:81"
+      ]
+    },
+    "queseq2-special#92": {
+      "en": "Dividing both sides by x quietly assumed x was not 0, which deleted that answer",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:122:20"
+      ]
+    },
+    "queseq2-special#93": {
+      "en": "The common-factor route keeps it: x(x − ${C(k)}) = 0  →  x = 0 or x = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:123:20"
+      ]
+    },
+    "queseq2-special#94": {
+      "en": "Dividing by the variable deletes a solution.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:127:15"
+      ]
+    },
+    "queseq2-special#95": {
+      "en": "One bracket gives <b>${pw(String(base), \"x\")} = √${C(cube)}</b>. What is the correct first move?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:143:9"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#96": {
+      "en": "Write √${C(cube)} as a power of ${C(base)}: ${pw(String(base), \"x\")} = ${pw(String(base), \"3/2\")}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:144:9"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#97": {
+      "en": "Square both sides",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:145:10"
+      ]
+    },
+    "queseq2-special#98": {
+      "en": "Take logs",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:145:31"
+      ]
+    },
+    "queseq2-special#99": {
+      "en": "Divide both sides by ${C(base)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:145:44"
+      ]
+    },
+    "queseq2-special#100": {
+      "en": "Make the bases the SAME (prime factors / powers), then equate the exponents.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:146:17",
+        "queseq2-special.js:160:17",
+        "queseq2-special.js:178:15"
+      ]
+    },
+    "queseq2-special#101": {
+      "en": "√${C(cube)} = √(${C(base)}³) = ${pw(String(base), \"3/2\")}. Same base on both sides → equate the exponents: x = ${frac(3, 2)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:147:24"
+      ]
+    },
+    "queseq2-special#102": {
+      "en": "Prime-factorise the right side: ${C(cube)} = ${C(base)}³, so √${C(cube)} = √(${C(base)}³)",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:149:18"
+      ]
+    },
+    "queseq2-special#103": {
+      "en": "Inside the root goes on top, the root index underneath: √(${C(base)}³) = ${pw(String(base), \"3/2\")}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:150:18"
+      ]
+    },
+    "queseq2-special#104": {
+      "en": "Now both sides are powers of ${C(base)}, so the bases fall away and the exponents are equal: x = ${frac(3, 2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:151:18"
+      ]
+    },
+    "queseq2-special#105": {
+      "en": "One bracket gives <b>${pw(String(base), \"x\")} = 1</b>. What is x?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:157:9"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#106": {
+      "en": "x = 0, because ${C(base)}⁰ = 1",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:158:9"
+      ]
+    },
+    "queseq2-special#107": {
+      "en": "x = 1",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:159:10"
+      ]
+    },
+    "queseq2-special#108": {
+      "en": "No solution",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:159:19"
+      ]
+    },
+    "queseq2-special#109": {
+      "en": "x = ${frac(1, base)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:159:34"
+      ]
+    },
+    "queseq2-special#110": {
+      "en": "Write 1 as a power of ${C(base)}: 1 = ${C(base)}⁰. Same base → x = 0.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:161:24"
+      ]
+    },
+    "queseq2-special#111": {
+      "en": "The right side has to become a power of ${C(base)} before anything can happen",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:163:18"
+      ]
+    },
+    "queseq2-special#112": {
+      "en": "Anything to the zero is 1, so 1 = ${C(base)}⁰",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:164:18"
+      ]
+    },
+    "queseq2-special#113": {
+      "en": "${pw(String(base), \"x\")} = ${C(base)}⁰, same base, so x = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:165:18"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#114": {
+      "en": "x = 1 would give ${C(base)}, not 1",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:165:84"
+      ]
+    },
+    "queseq2-special#115": {
+      "en": "One bracket gives <b>${pw(String(base), \"x\")} = ${C(v)}</b>. What is the correct move?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:173:7"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#116": {
+      "en": "Write ${C(v)} as ${pw(String(base), String(k))}, then equate exponents: x = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:174:7"
+      ]
+    },
+    "queseq2-special#117": {
+      "en": "Divide both sides by ${C(base)} ${TIMES[k]} and count",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:177:8"
+      ]
+    },
+    "queseq2-special#118": {
+      "en": "Square-root both sides",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:177:65"
+      ]
+    },
+    "queseq2-special#119": {
+      "en": "x = ${C(half)}, because ${C(v)} ÷ ${C(base)} = ${C(half)}",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:177:91"
+      ]
+    },
+    "queseq2-special#120": {
+      "en": "${C(v)} = ${C(base)}${supDigits(k)}, so ${pw(String(base), \"x\")} = ${pw(String(base), String(k))} → x = ${C(k)}. Same base, then the bases fall away.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:179:22"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#121": {
+      "en": "Write the right side as a power of the SAME base: ${C(v)} = ${C(base)}${supDigits(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:181:16"
+      ]
+    },
+    "queseq2-special#122": {
+      "en": "prime factors",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:181:108"
+      ]
+    },
+    "queseq2-special#123": {
+      "en": "${pw(String(base), \"x\")} = ${pw(String(base), String(k))} — the guns are equal, so they shoot each other",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:182:16"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#124": {
+      "en": "The helmets fall to the ground: x = ${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:183:16"
+      ]
+    },
+    "queseq2-special#125": {
+      "en": "never ${C(v)} ÷ ${C(base)} — that is not what a power means",
+      "kind": "template",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:183:66"
+      ]
+    },
+    "queseq2-special#126": {
+      "en": "One bracket gives <b>${pw(String(base), \"x\")} = −${C(k)}</b>. What can you conclude?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:191:12"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#127": {
+      "en": "No solution — a power with a positive base is never negative",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:191:109"
+      ]
+    },
+    "queseq2-special#128": {
+      "en": "x = −${C(Math.round(Math.log(k) / Math.log(base)))}",
+      "kind": "template",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:191:182"
+      ]
+    },
+    "queseq2-special#129": {
+      "en": "${base} to ANY power stays positive (it never even reaches 0), so ${pw(String(base), \"x\")} = −${C(k)} is impossible. Write: no solution.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:191:268"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#130": {
+      "en": "Look at the left side alone: ${base} is a positive base",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:192:20"
+      ]
+    },
+    "queseq2-special#131": {
+      "en": "A big x makes it huge, a negative x makes it a small fraction — but it never reaches 0, let alone goes below it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:193:20"
+      ]
+    },
+    "queseq2-special#132": {
+      "en": "${pw(String(base), \"x\")} ≠ −${C(k)} ∴ no solution",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:194:20"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#133": {
+      "en": "this bracket simply contributes no answer",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:194:76"
+      ]
+    },
+    "queseq2-special#134": {
+      "en": "<b>${pw(String(base), \"x\")} = −${C(k)}</b>. Does this bracket give a solution?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:196:9"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#135": {
+      "en": "Can ${base}^x ever be negative?",
+      "kind": "template",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:198:17"
+      ]
+    },
+    "queseq2-special#136": {
+      "en": "No — a positive base to any real power is always positive. This bracket contributes NO solution (the workbook writes it with ≠ and \"no solution\").",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:199:24"
+      ]
+    },
+    "queseq2-special#137": {
+      "en": "${base} is a positive base, and a positive base raised to any real power stays positive",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:201:18"
+      ]
+    },
+    "queseq2-special#138": {
+      "en": "So no x makes ${pw(String(base), \"x\")} equal −${C(k)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:202:18"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#139": {
+      "en": "Write it the way she does: ${pw(String(base), \"x\")} ≠ −${C(k)} ∴ no solution",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:203:18"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#140": {
+      "en": "the other bracket still gives its own answer",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:203:101"
+      ]
+    },
+    "queseq2-special#141": {
+      "en": "Positive base → the power is always positive.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:208:15"
+      ]
+    },
+    "queseq2-special#142": {
+      "en": "<b>${pw(\"x\", `${p}/${q}`)} = ${C(k)}</b>. The top of the exponent (${C(p)}) is ODD. Does this equation get a ± answer?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:227:9"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#143": {
+      "en": "The ± appears only when an EVEN power hides the sign.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:229:17"
+      ]
+    },
+    "queseq2-special#144": {
+      "en": "No — an odd power keeps the sign, so there is exactly ONE answer. The ± only appears when the numerator is even (like 2/3).",
+      "kind": "string",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:230:24"
+      ]
+    },
+    "queseq2-special#145": {
+      "en": "The ± comes from undoing an EVEN power, because an even power hides the sign",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:232:18"
+      ]
+    },
+    "queseq2-special#146": {
+      "en": "Here the top of the exponent is ${C(p)}, which is odd — an odd power keeps the sign it was given",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:233:18"
+      ]
+    },
+    "queseq2-special#147": {
+      "en": "So nothing was hidden and nothing has to be put back: exactly one answer, no ±",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:234:18"
+      ]
+    },
+    "queseq2-special#148": {
+      "en": "<b>${pw(\"x\", \"2/3\")} = ${C(rhs)}</b> has the answers x = ±${C(ans)}. WHERE does the ± come from?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:240:9"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#149": {
+      "en": "The exponent ⅔ contains an EVEN power: (∛x)² = ${C(rhs)}, so ∛x = ±${C(a)}, so x = ±${C(ans)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:241:9"
+      ]
+    },
+    "queseq2-special#150": {
+      "en": "Every rational-exponent equation gets a ±",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:242:10"
+      ]
+    },
+    "queseq2-special#151": {
+      "en": "From square-rooting the ${C(rhs)} at the start",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:242:55"
+      ]
+    },
+    "queseq2-special#152": {
+      "en": "It doesn't — only +${C(ans)} is correct",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:242:105"
+      ]
+    },
+    "queseq2-special#153": {
+      "en": "x^(2/3) = (∛x)². Undoing an even power → ±.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:243:17",
+        "queseq2-special.js:255:15"
+      ]
+    },
+    "queseq2-special#154": {
+      "en": "Read x^(2/3) as (∛x)². Undoing the SQUARE gives ∛x = ±${C(a)}, and cubing keeps both signs: x = ±${C(ans)}. The even power on top hides the sign.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:244:24"
+      ]
+    },
+    "queseq2-special#155": {
+      "en": "Read the exponent properly: top = the power inside, bottom = the root, so x^(2/3) = (∛x)²",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:246:18"
+      ]
+    },
+    "queseq2-special#156": {
+      "en": "Undo the SQUARE first — and an even power hides the sign, so both come back: ∛x = ±${C(a)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:247:18"
+      ]
+    },
+    "queseq2-special#157": {
+      "en": "Now cube both sides: x = ±${C(ans)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:248:18"
+      ]
+    },
+    "queseq2-special#158": {
+      "en": "cubing keeps whatever sign it is given, so the ± survives to the end",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:248:60"
+      ]
+    },
+    "queseq2-special#159": {
+      "en": "To undo the exponent in <b>${pw(\"x\", \"2/3\")} = ${C(rhs)}</b>, you raise both sides to which power?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq2-special.js:252:7"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#160": {
+      "en": "The reciprocal, ${frac(3, 2)}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:253:7"
+      ]
+    },
+    "queseq2-special#161": {
+      "en": "${frac(2, 3)} again",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:254:8"
+      ]
+    },
+    "queseq2-special#162": {
+      "en": "Raise to the reciprocal ${frac(3, 2)}: (x^(2/3))^(3/2) = x. But remember the even power on top means the final answer is ±${C(ans)}, not just +${C(ans)}.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:256:22"
+      ]
+    },
+    "queseq2-special#163": {
+      "en": "x is stuck under the exponent ${frac(2, 3)}, so you need the power that cancels it",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:258:16"
+      ]
+    },
+    "queseq2-special#164": {
+      "en": "Switch numerator and denominator: the reciprocal is ${frac(3, 2)}, and (${frac(2, 3)})·(${frac(3, 2)}) = 1",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:259:16"
+      ]
+    },
+    "queseq2-special#165": {
+      "en": "So x is left alone — but the even top means the answer is ±${C(ans)}, not just ${C(ans)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq2-special.js:260:16"
+      ]
+    },
+    "queseq2-special#166": {
+      "en": "the ± rides all the way to the final line",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq2-special.js:260:111"
+      ]
+    },
+    "queseq2-special#167": {
+      "en": "How many REAL solutions does <b>(x² − 5)(${pw(\"2\", \"x\")} − 16) = 0</b> have?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:267:12"
+      ],
+      "nested": [
+        "x"
+      ]
+    },
+    "queseq2-special#168": {
+      "en": "3: x = ±√5 and x = 4",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:267:101"
+      ]
+    },
+    "queseq2-special#169": {
+      "en": "2: x = √5 and x = 4",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:267:134"
+      ]
+    },
+    "queseq2-special#170": {
+      "en": "4: x = ±√5 and x = ±4",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:267:157"
+      ]
+    },
+    "queseq2-special#171": {
+      "en": "1: x = 4 only",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:267:182"
+      ]
+    },
+    "queseq2-special#172": {
+      "en": "x² = 5 gives TWO answers (x = ±√5); 2ˣ = 16 = 2⁴ gives x = 4. Three in total.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:267:205"
+      ]
+    },
+    "queseq2-special#173": {
+      "en": "How many REAL solutions does <b>(${pw(\"3\", \"x\")} − 1)(${pw(\"2\", \"x\")} + 4) = 0</b> have?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:268:12"
+      ],
+      "nested": [
+        "x",
+        "x"
+      ]
+    },
+    "queseq2-special#174": {
+      "en": "1: x = 0 only",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:268:113"
+      ]
+    },
+    "queseq2-special#175": {
+      "en": "2: x = 0 and x = −2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:268:139"
+      ]
+    },
+    "queseq2-special#176": {
+      "en": "0: neither bracket can be 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:268:162"
+      ]
+    },
+    "queseq2-special#177": {
+      "en": "2: x = ±1",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:268:193"
+      ]
+    },
+    "queseq2-special#178": {
+      "en": "3ˣ = 1 = 3⁰ gives x = 0. But 2ˣ = −4 is impossible (positive base) → no solution from that bracket. One answer.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:268:212"
+      ]
+    },
+    "queseq2-special#179": {
+      "en": "How many REAL solutions does <b>(x² + 9)(x − 2) = 0</b> have?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq2-special.js:269:12"
+      ]
+    },
+    "queseq2-special#180": {
+      "en": "1: x = 2 only",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq2-special.js:269:86"
+      ]
+    },
+    "queseq2-special#181": {
+      "en": "3: x = ±3 and x = 2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:269:112"
+      ]
+    },
+    "queseq2-special#182": {
+      "en": "2: x = −9 and x = 2",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:269:135"
+      ]
+    },
+    "queseq2-special#183": {
+      "en": "0: no solutions",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq2-special.js:269:158"
+      ]
+    },
+    "queseq2-special#184": {
+      "en": "x² = −9 has NO real solution (a square can't be negative); x = 2 works. One answer.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq2-special.js:269:183"
+      ]
+    },
+    "queseq2-special#185": {
+      "en": "Set each bracket = 0 on its own — then check which brackets actually CAN be 0.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq2-special.js:273:15"
+      ]
+    },
+    "queseq3-kmethod#1": {
+      "en": "x² ${sign} ${m === 1 ? \"\" : C(m)}x",
+      "kind": "template",
+      "slots": [
+        "placeholder"
+      ],
+      "where": [
+        "queseq3-kmethod.js:16:10"
+      ]
+    },
+    "queseq3-kmethod#2": {
+      "en": "When is the <b>k-substitution</b> the right tool?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:23:12"
+      ]
+    },
+    "queseq3-kmethod#3": {
+      "en": "When the SAME bracket or expression appears two or more times",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:23:74"
+      ]
+    },
+    "queseq3-kmethod#4": {
+      "en": "Whenever there is an x²",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:23:148"
+      ]
+    },
+    "queseq3-kmethod#5": {
+      "en": "Whenever the equation has brackets",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:23:175"
+      ]
+    },
+    "queseq3-kmethod#6": {
+      "en": "Only when there is a fraction",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:23:213"
+      ]
+    },
+    "queseq3-kmethod#7": {
+      "en": "The k-method is for a REPEATED expression — call the repeat k, and the equation collapses to a simple quadratic in k.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:23:252"
+      ]
+    },
+    "queseq3-kmethod#8": {
+      "en": "Scan the equation for the same expression appearing more than once",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:24:20"
+      ]
+    },
+    "queseq3-kmethod#9": {
+      "en": "If it does, give that repeat one short name: let K = the repeated bracket",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:25:20"
+      ]
+    },
+    "queseq3-kmethod#10": {
+      "en": "The whole equation shrinks to a plain quadratic in K, which you can factorise",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:26:20"
+      ]
+    },
+    "queseq3-kmethod#11": {
+      "en": "and then always substitute back to x",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:26:104"
+      ]
+    },
+    "queseq3-kmethod#12": {
+      "en": "Which equation is begging for a k-substitution?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:27:12"
+      ]
+    },
+    "queseq3-kmethod#13": {
+      "en": "(x² − x)² − 8(x² − x) + 12 = 0",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:27:72"
+      ]
+    },
+    "queseq3-kmethod#14": {
+      "en": "x² − 8x + 12 = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:27:115"
+      ]
+    },
+    "queseq3-kmethod#15": {
+      "en": "(x − 2)(x + 3) = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:27:135"
+      ]
+    },
+    "queseq3-kmethod#16": {
+      "en": "x² − 8 = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:27:157"
+      ]
+    },
+    "queseq3-kmethod#17": {
+      "en": "The bracket (x² − x) appears TWICE — let k = x² − x and it becomes k² − 8k + 12 = 0.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:27:177"
+      ]
+    },
+    "queseq3-kmethod#18": {
+      "en": "Look at each option and ask: does one expression appear twice?",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:28:20"
+      ]
+    },
+    "queseq3-kmethod#19": {
+      "en": "In (x² − x)² − 8(x² − x) + 12 = 0 the bracket (x² − x) shows up in both the squared term and the middle term",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:29:20"
+      ]
+    },
+    "queseq3-kmethod#20": {
+      "en": "let K = x² − x → K² − 8K + 12 = 0",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:30:20"
+      ]
+    },
+    "queseq3-kmethod#21": {
+      "en": "the others are already ordinary quadratics with nothing repeating",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:30:60"
+      ]
+    },
+    "queseq3-kmethod#22": {
+      "en": "Look for the same expression appearing more than once.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:34:15"
+      ]
+    },
+    "queseq3-kmethod#23": {
+      "en": "<b>(${inner})² − ${C(A)}(${inner}) + ${C(B)} = 0</b>.<br>You decide to substitute. What should k be?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq3-kmethod.js:41:20"
+      ]
+    },
+    "queseq3-kmethod#24": {
+      "en": "k = ${inner}",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:42:21"
+      ]
+    },
+    "queseq3-kmethod#25": {
+      "en": "k = (${inner})²",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:43:21"
+      ]
+    },
+    "queseq3-kmethod#26": {
+      "en": "k = ${C(A)}(${inner})",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:43:40"
+      ]
+    },
+    "queseq3-kmethod#27": {
+      "en": "k = x",
+      "kind": "string",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:43:65"
+      ]
+    },
+    "queseq3-kmethod#28": {
+      "en": "k stands for the repeated expression itself — the plain bracket, not its square.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:45:15"
+      ]
+    },
+    "queseq3-kmethod#29": {
+      "en": "Let k = ${inner}. Then the equation is k² − ${C(A)}k + ${C(B)} = 0 — an ordinary quadratic in k.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:46:22"
+      ]
+    },
+    "queseq3-kmethod#30": {
+      "en": "Find the part that repeats: (${inner}) appears in the squared term AND in the middle term",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:48:16"
+      ]
+    },
+    "queseq3-kmethod#31": {
+      "en": "Let K be that plain bracket: K = ${inner}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:49:16"
+      ]
+    },
+    "queseq3-kmethod#32": {
+      "en": "not its square — the square is already shown by the ² outside",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:49:64"
+      ]
+    },
+    "queseq3-kmethod#33": {
+      "en": "Then (${inner})² is K², and the equation reads K² − ${C(A)}K + ${C(B)} = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:50:16"
+      ]
+    },
+    "queseq3-kmethod#34": {
+      "en": "<b>(${inner})² − ${C(A)}(${inner}) + ${C(B)} = 0</b> with k = ${inner} becomes…?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt"
+      ],
+      "where": [
+        "queseq3-kmethod.js:58:20"
+      ]
+    },
+    "queseq3-kmethod#35": {
+      "en": "k² − ${C(A)}k + ${C(B)} = 0",
+      "kind": "template",
+      "slots": [
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:59:21"
+      ]
+    },
+    "queseq3-kmethod#36": {
+      "en": "k² − ${C(A)}k² + ${C(B)} = 0",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:61:7"
+      ]
+    },
+    "queseq3-kmethod#37": {
+      "en": "k − ${C(A)}k + ${C(B)} = 0",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:62:7"
+      ]
+    },
+    "queseq3-kmethod#38": {
+      "en": "k² + ${C(A)}k − ${C(B)} = 0",
+      "kind": "template",
+      "slots": [
+        "mc.wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:63:7"
+      ]
+    },
+    "queseq3-kmethod#39": {
+      "en": "Replace every copy of the bracket with k — signs and numbers stay exactly as they were.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:66:15"
+      ]
+    },
+    "queseq3-kmethod#40": {
+      "en": "Each (${inner}) becomes a k: k² − ${C(A)}k + ${C(B)} = 0. Solve for k, then go back to x.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:67:22"
+      ]
+    },
+    "queseq3-kmethod#41": {
+      "en": "Swap every copy of (${inner}) for K, and change nothing else",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:69:16"
+      ]
+    },
+    "queseq3-kmethod#42": {
+      "en": "(${inner})² → K², and ${C(A)}(${inner}) → ${C(A)}K",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:70:16"
+      ]
+    },
+    "queseq3-kmethod#43": {
+      "en": "the ² stays on the bracket, so it lands on the K",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:70:73"
+      ]
+    },
+    "queseq3-kmethod#44": {
+      "en": "K² − ${C(A)}K + ${C(B)} = 0",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:71:16"
+      ]
+    },
+    "queseq3-kmethod#45": {
+      "en": "every sign and number is exactly as it was — that is the whole trick",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:71:50"
+      ]
+    },
+    "queseq3-kmethod#46": {
+      "en": "You substituted k = x² − x and solved: <b>k = ${C(k1)} or k = ${C(k2)}</b>. Are you finished?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq3-kmethod.js:80:9"
+      ]
+    },
+    "queseq3-kmethod#47": {
+      "en": "The question asked for x, not k.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:82:17"
+      ]
+    },
+    "queseq3-kmethod#48": {
+      "en": "No! k was YOUR invention. Put the bracket back: x² − x = ${C(k1)} and x² − x = ${C(k2)}, and solve each one for x.",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:83:24"
+      ]
+    },
+    "queseq3-kmethod#49": {
+      "en": "k was your own invention — the question never asked for it",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:85:18"
+      ]
+    },
+    "queseq3-kmethod#50": {
+      "en": "Substitute back: x² − x = ${C(k1)}, and separately x² − x = ${C(k2)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:86:18"
+      ]
+    },
+    "queseq3-kmethod#51": {
+      "en": "Each of those is its own quadratic to solve for x",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:87:18"
+      ]
+    },
+    "queseq3-kmethod#52": {
+      "en": "stopping at k is where the marks go missing",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:87:74"
+      ]
+    },
+    "queseq3-kmethod#53": {
+      "en": "After solving k = ${C(k1)} or k = ${C(k2)}, what is the next step?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:89:12"
+      ]
+    },
+    "queseq3-kmethod#54": {
+      "en": "Replace k with the original bracket and solve each equation for x",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:89:91"
+      ]
+    },
+    "queseq3-kmethod#55": {
+      "en": "Write the answers down — x = k",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:89:169"
+      ]
+    },
+    "queseq3-kmethod#56": {
+      "en": "Add the two k values",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:89:203"
+      ]
+    },
+    "queseq3-kmethod#57": {
+      "en": "Substitute the k values into each other",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:89:227"
+      ]
+    },
+    "queseq3-kmethod#58": {
+      "en": "k stood for the repeated bracket, so each k-value becomes its own little equation in x. Solve both.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:89:276"
+      ]
+    },
+    "queseq3-kmethod#59": {
+      "en": "You have solved the quadratic in K, but K is not what was asked for",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:90:20"
+      ]
+    },
+    "queseq3-kmethod#60": {
+      "en": "Put the bracket back in place of K, once for each K-value",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:91:20"
+      ]
+    },
+    "queseq3-kmethod#61": {
+      "en": "That gives two separate equations in x — solve both, and you may end up with up to four answers",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:92:20"
+      ]
+    },
+    "queseq3-kmethod#62": {
+      "en": "k is a stand-in. Swap the bracket back in and keep solving.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:96:15"
+      ]
+    },
+    "queseq3-kmethod#63": {
+      "en": "Rule of thumb: the equation's highest power is <b>x⁴</b>. AT MOST how many real solutions?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:102:12"
+      ]
+    },
+    "queseq3-kmethod#64": {
+      "en": "The highest power tells you the maximum: x⁴ → up to 4 real solutions (equal roots count as one value).",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:102:150"
+      ]
+    },
+    "queseq3-kmethod#65": {
+      "en": "Fully factorised, an equation splits into one bracket per power",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:103:20",
+        "queseq3-kmethod.js:107:20",
+        "queseq3-kmethod.js:111:20"
+      ]
+    },
+    "queseq3-kmethod#66": {
+      "en": "x⁴ means four brackets, and each one can give at most one x-value",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:104:20"
+      ]
+    },
+    "queseq3-kmethod#67": {
+      "en": "∴ at most 4 real solutions",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:105:20"
+      ]
+    },
+    "queseq3-kmethod#68": {
+      "en": "fewer if some are non-real or repeat",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:105:53"
+      ]
+    },
+    "queseq3-kmethod#69": {
+      "en": "Rule of thumb: the equation's highest power is <b>x²</b>. AT MOST how many real solutions?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:106:12"
+      ]
+    },
+    "queseq3-kmethod#70": {
+      "en": "A square → up to 2 real solutions.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:106:150"
+      ]
+    },
+    "queseq3-kmethod#71": {
+      "en": "x² means two brackets, so at most two x-values",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:108:20"
+      ]
+    },
+    "queseq3-kmethod#72": {
+      "en": "∴ at most 2 real solutions",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:109:20"
+      ]
+    },
+    "queseq3-kmethod#73": {
+      "en": "Δ decides whether you get two, one or none",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:109:53"
+      ]
+    },
+    "queseq3-kmethod#74": {
+      "en": "Rule of thumb: the equation's highest power is <b>x³</b>. AT MOST how many real solutions?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:110:12"
+      ]
+    },
+    "queseq3-kmethod#75": {
+      "en": "A cube → up to 3 real solutions.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:110:150"
+      ]
+    },
+    "queseq3-kmethod#76": {
+      "en": "x³ means three brackets, so at most three x-values",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:112:20"
+      ]
+    },
+    "queseq3-kmethod#77": {
+      "en": "∴ at most 3 real solutions",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:113:20"
+      ]
+    },
+    "queseq3-kmethod#78": {
+      "en": "Solving gives <b>x = 2, x = 2 and x = −1</b>. How many DIFFERENT solutions is that?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:114:12"
+      ]
+    },
+    "queseq3-kmethod#79": {
+      "en": "2 — equal roots count as ONE value",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:114:108"
+      ]
+    },
+    "queseq3-kmethod#80": {
+      "en": "3 — every answer counts",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:114:155"
+      ]
+    },
+    "queseq3-kmethod#81": {
+      "en": "1 — only the repeated one",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:114:182"
+      ]
+    },
+    "queseq3-kmethod#82": {
+      "en": "4 — the repeat doubles",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:114:211"
+      ]
+    },
+    "queseq3-kmethod#83": {
+      "en": "x = 2 twice is still just the value 2. Different solutions: x = 2 and x = −1 — two of them.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:114:243"
+      ]
+    },
+    "queseq3-kmethod#84": {
+      "en": "List the values you actually got: 2, 2 and −1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:115:20"
+      ]
+    },
+    "queseq3-kmethod#85": {
+      "en": "The question asks how many are DIFFERENT, and 2 written twice is still the single value 2",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:116:20"
+      ]
+    },
+    "queseq3-kmethod#86": {
+      "en": "∴ two different solutions: x = 2 and x = −1",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:117:20"
+      ]
+    },
+    "queseq3-kmethod#87": {
+      "en": "a repeated root counts once — equal roots",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:117:70"
+      ]
+    },
+    "queseq3-kmethod#88": {
+      "en": "Highest power = the most real answers you can expect; a repeated answer counts once.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:121:15"
+      ]
+    },
+    "queseq3-kmethod#89": {
+      "en": "The equation contains <b>(y² − 2y)²</b> … and later the terms <b>−2y² + 4y</b>. Where is the second copy of the bracket?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:127:12"
+      ]
+    },
+    "queseq3-kmethod#90": {
+      "en": "−2y² + 4y = −2(y² − 2y) — factor out −2 and the repeat appears",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:127:145"
+      ]
+    },
+    "queseq3-kmethod#91": {
+      "en": "There is no second copy — the k-method can't be used",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:127:220"
+      ]
+    },
+    "queseq3-kmethod#92": {
+      "en": "−2y² + 4y is already (y² − 2y)",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:127:276"
+      ]
+    },
+    "queseq3-kmethod#93": {
+      "en": "Swap it to 4y − 2y² and it becomes the bracket",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:127:310"
+      ]
+    },
+    "queseq3-kmethod#94": {
+      "en": "Take out the common factor −2: −2y² + 4y = −2(y² − 2y). Now (y² − 2y) appears twice, so let k = y² − 2y.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:127:366"
+      ]
+    },
+    "queseq3-kmethod#95": {
+      "en": "Before deciding an equation has no repeated bracket, what should you try?",
+      "kind": "string",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:128:12"
+      ]
+    },
+    "queseq3-kmethod#96": {
+      "en": "Factor a constant out of the loose terms — the repeat often hides behind a −2 or a 3",
+      "kind": "string",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:128:98"
+      ]
+    },
+    "queseq3-kmethod#97": {
+      "en": "Multiply all the brackets out",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:128:195"
+      ]
+    },
+    "queseq3-kmethod#98": {
+      "en": "Substitute x = 0",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:128:228"
+      ]
+    },
+    "queseq3-kmethod#99": {
+      "en": "Take the square root of every term",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:128:248"
+      ]
+    },
+    "queseq3-kmethod#100": {
+      "en": "A repeated expression often hides behind a common factor: −2y² + 4y hides (y² − 2y). Factor constants out FIRST, then look again.",
+      "kind": "string",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:128:292"
+      ]
+    },
+    "queseq3-kmethod#101": {
+      "en": "Factor a number out of the loose x-terms and compare with the bracket.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:132:15"
+      ]
+    },
+    "queseq3-kmethod#102": {
+      "en": "The original equation had the repeated bracket in a DENOMINATOR, with restriction (bracket) ≠ ${C(r)}. Does the restriction carry over to k?",
+      "kind": "template",
+      "slots": [
+        "ynQ.prompt"
+      ],
+      "where": [
+        "queseq3-kmethod.js:140:9"
+      ]
+    },
+    "queseq3-kmethod#103": {
+      "en": "k IS the bracket.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:142:17"
+      ]
+    },
+    "queseq3-kmethod#104": {
+      "en": "Yes — k stands for that bracket, so k ≠ ${C(r)} rides along. If solving gives k = ${C(r)}, reject it (N.A.).",
+      "kind": "template",
+      "slots": [
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:143:24"
+      ]
+    },
+    "queseq3-kmethod#105": {
+      "en": "k is not a new quantity — it is just a short name for that bracket",
+      "kind": "string",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:145:18"
+      ]
+    },
+    "queseq3-kmethod#106": {
+      "en": "So anything true of the bracket is true of k, including (bracket) ≠ ${C(r)}",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:146:18"
+      ]
+    },
+    "queseq3-kmethod#107": {
+      "en": "∴ k ≠ ${C(r)} rides along, and a k-value of ${C(r)} would have to be rejected as N.A.",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:147:18"
+      ]
+    },
+    "queseq3-kmethod#108": {
+      "en": "While using the k-method you find k = ${C(r)}, but the restriction was k ≠ ${C(r)}. What do you do?",
+      "kind": "template",
+      "slots": [
+        "mc.prompt",
+        "q"
+      ],
+      "where": [
+        "queseq3-kmethod.js:149:12"
+      ]
+    },
+    "queseq3-kmethod#109": {
+      "en": "Reject k = ${C(r)} (mark it N.A.) and keep only the other k-value",
+      "kind": "template",
+      "slots": [
+        "correct",
+        "mc.correct"
+      ],
+      "where": [
+        "queseq3-kmethod.js:149:124"
+      ]
+    },
+    "queseq3-kmethod#110": {
+      "en": "Keep it — restrictions are about x, not k",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:149:202"
+      ]
+    },
+    "queseq3-kmethod#111": {
+      "en": "Change the restriction",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:149:247"
+      ]
+    },
+    "queseq3-kmethod#112": {
+      "en": "Start over with a different letter",
+      "kind": "string",
+      "slots": [
+        "wrongs"
+      ],
+      "where": [
+        "queseq3-kmethod.js:149:273"
+      ]
+    },
+    "queseq3-kmethod#113": {
+      "en": "A value that breaks a restriction is not applicable — cross it out with N.A. and continue with the surviving k-value.",
+      "kind": "template",
+      "slots": [
+        "ans",
+        "answerLabel"
+      ],
+      "where": [
+        "queseq3-kmethod.js:149:317"
+      ]
+    },
+    "queseq3-kmethod#114": {
+      "en": "The restriction says the bracket may not be ${C(r)}, and k IS the bracket",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:150:20"
+      ]
+    },
+    "queseq3-kmethod#115": {
+      "en": "So k = ${C(r)} would make a denominator 0 — it cannot be used",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:151:20"
+      ]
+    },
+    "queseq3-kmethod#116": {
+      "en": "Mark it N.A. with a struck equals and carry on with the other k-value only",
+      "kind": "template",
+      "slots": [
+        "solution.s"
+      ],
+      "where": [
+        "queseq3-kmethod.js:152:20"
+      ]
+    },
+    "queseq3-kmethod#117": {
+      "en": "the restriction was set before solving, and it still holds afterwards",
+      "kind": "string",
+      "slots": [
+        "solution.r"
+      ],
+      "where": [
+        "queseq3-kmethod.js:152:101"
+      ]
+    },
+    "queseq3-kmethod#118": {
+      "en": "k inherits everything the bracket had — including its restriction.",
+      "kind": "string",
+      "slots": [
+        "hint"
+      ],
+      "where": [
+        "queseq3-kmethod.js:156:15"
+      ]
+    }
+  },
+  "optionLists": {},
+  "leftovers": [],
+  "words": 3205
+}
